@@ -22,7 +22,7 @@
  * cangw -A -s vcan0 -d vcan1 -e
  * cangw -A -s vcan1 -d vcan0 -e
  * 
- * CAN bounce test resuls (done 12th, April 2013):
+ * CAN bounce test resutls (done 12th, April 2013):
  *
  * Platform        CPU             Clock [MHZ]     Bogomips        p/sec [1000]    Mbit
  * RaspberryPI     ARMv6           700             700             21.36           1.69
