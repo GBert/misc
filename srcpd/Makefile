@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 
 # Sart make install at build time
 
-define Package/srcp
+define Package/srcpd
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=srcpd
