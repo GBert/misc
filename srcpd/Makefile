@@ -11,8 +11,8 @@ PKG_NAME:=srcpd
 PKG_VERSION:=2.1.2
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-tar.gz
-PKG_SOURCE_URL:=@SF/srcpd/2.1.2
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=@SF/srcpd/srcpd/2.1.2
 PKG_MD5SUM:=bda8741db2c99b247a371daeee29d667
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
@@ -26,7 +26,7 @@ define Package/srcpd
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=srcpd
-  DEPENDS:=
+  DEPENDS:=+libxml2 +libz +libpthread
   URL:=http://srcpd.sourceforge.net/srcpd
   MAINTAINER:=Gerhard Bertelsmann
 endef
@@ -37,15 +37,19 @@ define Package/srcpd/description
   development. IANA assigned TCP port 4303 to it.
 endef
 
+define Build/Configure
+  $(call Build/Configure/Default,--disable-ddl --disable-ddls88)
+endef
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)"
+		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -lpthread"
 endef
 
 define Package/srcpd/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/srcpd $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/srcpd $(1)/usr/bin/
 endef
 
 
