@@ -57,11 +57,7 @@
 #define CAN_EXTENDED_FRAME_BITS(a)  ((67 + a*8))
 
 void handler(int v) {
-    /* uint32_t counter; */
     signal(SIGINT, handler);
-
-    /* counter=ntohl(*(uint32_t *)&can_frame->data[0]); */
-
     exit(0);
 }
 
