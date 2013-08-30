@@ -1,7 +1,7 @@
-OpenWrt bitstream generator aka serializer
-==========================================
+Bitstream generator (aka serializer) for Ralink RT305x/RT5350
+=============================================================
 
-Proof of Concept - Bit Stream Serializer to generater bit streams defined thru clockrate and bits via I2S
+Proof of Concept - Bit Stream Serializer to generate bit streams defined thru clockrate and bits via I2S
 
 Ralink low cost WLAN SoCs offer an I2S interface which could be used to generate bitstream. Because
 of the wide range of frequency (20MHz down to 20Khz) and the 32 byte FIFO the I2S offers an
