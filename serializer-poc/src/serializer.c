@@ -1,6 +1,8 @@
 /*
- * Copyright (C) 2012 Žilvinas Valinskas
+ * Copyright (C) 2012 Zilvinas Valinskas
  * See LICENSE for more information.
+ *
+ * mod
  */
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -18,80 +20,71 @@
 #include "utils.h"
 #include "mmio.h"
 
+#define BIT(x) (1UL << (x))
+#define BIT_MASK(a, b) (((unsigned) -1 >> (31 - (b))) & ~((1U << (a)) - 1))
+
+#define RT5350_I2S_CFG			0x0a00
+#define RT5350_I2S_INT_STATUS		0x0a04
+#define RT5350_I2S_TXRX_FIFO_STATUS	0x0a0C
+#define RT5350_I2S_TX_FIFO_WREG		0x0a10
+#define RT5350_I2S_RX_FIFO_WREG		0x0a14
+
+#define RT5350_I2S_DIVCOM_CFG		0x0a20
+#define RT5350_I2S_DIVINT_CFG		0x0a24
+
+#define I2S_CFG_I2S_EN		BIT(31)
+#define I2S_DIVCOMP_CLK_EN	BIT(31)
+#define I2S_DIVCOMP_MASK	BIT_MASK(0,8)
+#define I2S_DIVINT_MASK		BIT_MASK(0,9)
+
 #define MSECS                   1000ULL
 #define USECS                   1000000ULL
 #define NSECS                   1000000000ULL
 
-static void inline
-timespec_from_ms(struct timespec *ts, unsigned long ms)
-{
-        ts->tv_sec = ms / MSECS;
-        ts->tv_nsec = (ms % MSECS) * USECS;
+static void inline timespec_from_ms(struct timespec *ts, unsigned long ms) {
+    ts->tv_sec = ms / MSECS;
+    ts->tv_nsec = (ms % MSECS) * USECS;
 }
 
-int main(int argc, char *argv[])
-{
-	char chip[16];
-	int period;
-	uint32_t magic1, magic2;
-	struct mmio io;
+static void inline i2s_start(struct mmio *io) {
+    mmio_writel(io, RT5350_I2S_CFG, mmio_readl(io, RT5350_I2S_CFG) | I2S_CFG_I2S_EN);
+}
 
-	if (argc > 2)
-		die("too many arguments.");
-	if (argc == 2)
-		period = atoi(argv[1]) * 1000;
-	else
-		period = 1000;
+static void inline i2s_set_divider(struct mmio *io, unsigned long period) {
+    period = (period * 20) & I2S_DIVINT_MASK;
+    mmio_writel(io, RT5350_I2S_DIVINT_CFG, period);
+}
 
-	if (mmio_map(&io, 0x10000000, 0x1000))
-		die_errno("mmio_map() failed");
+int main(int argc, char *argv[]) {
+    char chip[16];
+    uint32_t period;
+    uint32_t magic1, magic2;
+    struct mmio io;
 
-	memset(chip, 0, sizeof(chip));
+    if (argc > 2) die("too many arguments.");
+    if (argc == 2)
+        period = atoi(argv[1]);
+    else
+        period = 10;
 
-	magic1 = mmio_readl(&io, 0x0);
-	memcpy(chip + 0, &magic1, sizeof(magic1));
+    if (mmio_map(&io, 0x10000000, 0x1000))
+	die_errno("mmio_map() failed");
 
-	magic2 = mmio_readl(&io, 0x4);
-	memcpy(chip + 4, &magic2, sizeof(magic2));
+    memset(chip, 0, sizeof(chip));
 
-	if (strncmp(chip, "RT3050  ", 8) != 0 &&
-	    strncmp(chip, "RT3052  ", 8) != 0 &&
-	    strncmp(chip, "RT3350  ", 8) != 0 &&
-	    strncmp(chip, "RT3352  ", 8) != 0)
-		die("unknown chip: %08X/%08X", magic1, magic2);
+    magic1 = mmio_readl(&io, 0x0);
+    memcpy(chip + 0, &magic1, sizeof(magic1));
 
-	printf("chip: %08X/%08X\n", magic1, magic2);
-	mmio_unmap(&io);
+    magic2 = mmio_readl(&io, 0x4);
+    memcpy(chip + 4, &magic2, sizeof(magic2));
 
-	if (mmio_map(&io, 0x10180000, 0x4000))
-		die_errno("mmio_map() failed");
+    if (strncmp(chip, "RT5350  ", 8) != 0) die("unsupported chip: %08X/%08X", magic1, magic2);
 
-#define RTS_SUCCESS(x) ((x) & 0xFFFF)
-#define RTS_FAILURE(x) ((x) >> 16)
+    i2s_set_divider(&io, 10);
+    i2s_start(&io);
+    printf("i2s started ...\n");
 
-	mmio_readl(&io, 0x1744);	/* clear initial value */
-	while (1) {
-		struct timespec ts;
-		uint32_t v1, v2;
-		uint16_t success, failure;
+    mmio_unmap(&io);
 
-		timespec_from_ms(&ts, period);
-
-		v1 = mmio_readl(&io, 0x1744);
-		nanosleep(&ts, NULL);
-		v2 = mmio_readl(&io, 0x1744);
-
-		success = RTS_SUCCESS(v2) - RTS_SUCCESS(v1);
-		failure = RTS_FAILURE(v2) - RTS_FAILURE(v1);
-
-		printf("RTS/CTS success: %hu, failure: %hu\n",
-		       success, failure);
-	}
-
-	printf("RTS/CTS: %08X, %08X\n",
-	       mmio_readl(&io, 0x1744),
-	       mmio_readl(&io, 0x1744));
-
-	mmio_unmap(&io);
-	return 0;
+    return 0;
 }
