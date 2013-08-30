@@ -1,4 +1,5 @@
-=== Bitstream generator (aka serializer) for Ralink RT5350
+Bitstream generator (aka serializer) for Ralink RT5350
+------------------------------------------------------
 
 Proof of Concept - Bit Stream Serializer to generate bit streams defined thru clockrate and bits via I2S
 
