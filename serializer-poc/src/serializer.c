@@ -60,6 +60,7 @@ int main(int argc, char *argv[])
 	    strncmp(chip, "RT3352  ", 8) != 0)
 		die("unknown chip: %08X/%08X", magic1, magic2);
 
+	printf("chip: %08X/%08X\n", magic1, magic2);
 	mmio_unmap(&io);
 
 	if (mmio_map(&io, 0x10180000, 0x4000))
