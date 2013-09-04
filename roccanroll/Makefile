@@ -41,8 +41,8 @@ endef
 
 define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/trunk/new_framework/drehscheibe/drehscheibe $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/trunk/new_framework/client_zentrale/mrzentrale $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/trunk/new_framework/new_framework/drehscheibe/drehscheibe $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/trunk/new_framework/new_framework/client_zentrale/mrzentrale $(1)/usr/bin
 endef
 
 $(eval $(call BuildPackage,$(PKG_NAME)))
