@@ -16,7 +16,6 @@ PKG_SOURCE_URL:=http://bazaar.launchpad.net/~rocrail-project/rocrail/Rocrail
 PKG_SOURCE_PROTO:=bzr
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_BUILD_PARALLEL:=1
 
