@@ -29,6 +29,11 @@ define Package/$(PKG_NAME)
   URL:=https://code.google.com/p/usb2rail/
 endef
 
+MAKE_OPTS:= \
+        PATH="$(TARGET_PATH)" \
+        CROSS_COMPILE="$(TARGET_CROSS)" \
+        SUBDIRS="$(PKG_BUILD_DIR)/trunk/can-utils"
+
 define Build/Compile
 	mkdir -p $(PKG_BUILD_DIR)/trunk/new_framework/new_framework/include
 	$(MAKE)	-C $(PKG_BUILD_DIR)/trunk/new_framework/new_framework \
