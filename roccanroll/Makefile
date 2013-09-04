@@ -35,14 +35,14 @@ MAKE_OPTS:= \
 	SUBDIRS="$(PKG_BUILD_DIR)/trunk/roccanroll"
 
 define Build/Compile
-	mkdir -p $(PKG_BUILD_DIR)/trunk/roccanroll/include
-	$(MAKE)	-C $(PKG_BUILD_DIR)/trunk/roccanroll CC=$(TARGET_CC) $(TARGET_CONFIGURE_OPTS) $(MAKE_OPTS)
+	mkdir -p $(PKG_BUILD_DIR)/trunk/new_framework/include
+	$(MAKE)	-C $(PKG_BUILD_DIR)/trunk/new_framework CC=$(TARGET_CC) $(TARGET_CONFIGURE_OPTS) $(MAKE_OPTS)
 endef
 
 define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/drehscheibe/drehscheibe $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client_zentrale/mrzentrale $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/trunk/new_framework/drehscheibe/drehscheibe $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/trunk/new_framework/client_zentrale/mrzentrale $(1)/usr/bin
 endef
 
 $(eval $(call BuildPackage,$(PKG_NAME)))
