@@ -35,7 +35,7 @@ MAKE_OPTS:= \
 	SUBDIRS="$(PKG_BUILD_DIR)/trunk/roccanroll"
 
 define Build/Compile
-	mkdir -p $(PKG_BUILD_DIR)/trunk/new_framework/include
+	mkdir -p $(PKG_BUILD_DIR)/trunk/new_framework/new_framework/include
 	$(MAKE)	-C $(PKG_BUILD_DIR)/trunk/new_framework/new_framework CC=$(TARGET_CC) $(TARGET_CONFIGURE_OPTS) $(MAKE_OPTS)
 endef
 
