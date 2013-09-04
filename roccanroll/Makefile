@@ -32,10 +32,10 @@ endef
 MAKE_OPTS:= \
 	PATH="$(TARGET_PATH)" \
 	CROSS_COMPILE="$(TARGET_CROSS)" \
-	SUBDIRS="$(PKG_BUILD_DIR)/trunk/new-framework"
+	SUBDIRS="$(PKG_BUILD_DIR)/trunk/"
 
 define Build/Compile
-	mkdir -p $(PKG_BUILD_DIR)/trunk/include
+	mkdir -p $(PKG_BUILD_DIR)/trunk/new_framework/include
 	$(MAKE)	-C $(PKG_BUILD_DIR)/trunk/new_framework CC=$(TARGET_CC) $(TARGET_CONFIGURE_OPTS) $(MAKE_OPTS)
 endef
 
