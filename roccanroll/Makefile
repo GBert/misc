@@ -16,9 +16,9 @@ PKG_SOURCE_MIRROR:=0
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_URL:=http://code.google.com/p/usb2rail/
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)/
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)/trunk/roccanroll
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)/trunk
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -32,11 +32,11 @@ endef
 MAKE_OPTS:= \
 	PATH="$(TARGET_PATH)" \
 	CROSS_COMPILE="$(TARGET_CROSS)" \
-	SUBDIRS="$(PKG_BUILD_DIR)/"
+	SUBDIRS="$(PKG_BUILD_DIR)/trunk/roccanroll"
 
 define Build/Compile
-	mkdir -p $(PKG_BUILD_DIR)/include
-	$(MAKE)	-C $(PKG_BUILD_DIR) CC=$(TARGET_CC) $(TARGET_CONFIGURE_OPTS) $(MAKE_OPTS)
+	mkdir -p $(PKG_BUILD_DIR)/trunk/roccanroll/include
+	$(MAKE)	-C $(PKG_BUILD_DIR)/trunk/roccanroll CC=$(TARGET_CC) $(TARGET_CONFIGURE_OPTS) $(MAKE_OPTS)
 endef
 
 define Package/$(PKG_NAME)/install
