@@ -29,15 +29,10 @@ define Package/$(PKG_NAME)
   URL:=https://code.google.com/p/usb2rail/
 endef
 
-MAKE_OPTS:= \
-        PATH="$(TARGET_PATH)" \
-        CROSS_COMPILE="$(TARGET_CROSS)" \
-        SUBDIRS="$(PKG_BUILD_DIR)/"
-
 define Build/Compile
 	mkdir -p $(PKG_BUILD_DIR)/new_framework/include
 	$(MAKE)	-C $(PKG_BUILD_DIR)/new_framework \
-	CC=$(TARGET_CC) CFLGAS=+"$(TARGET_CFLAGS) -fhonour-copts" $(TARGET_CONFIGURE_OPTS) $(MAKE_OPTS)
+	CC=$(TARGET_CC) CFLGAS=+"$(TARGET_CFLAGS) -fhonour-copts" $(TARGET_CONFIGURE_OPTS)
 endef
 
 define Package/$(PKG_NAME)/install
