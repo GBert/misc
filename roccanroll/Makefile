@@ -36,9 +36,7 @@ MAKE_OPTS:= \
 
 define Build/Compile
 	mkdir -p $(PKG_BUILD_DIR)/trunk/new_framework/new_framework/include
-	$(MAKE)	-C $(PKG_BUILD_DIR)/trunk/new_framework/new_framework \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -fhonour-copts"
+	$(MAKE)	-C $(PKG_BUILD_DIR)/trunk/new_framework/new_framework CC=$(TARGET_CC) $(TARGET_CONFIGURE_OPTS) $(MAKE_OPTS)
 endef
 
 define Package/$(PKG_NAME)/install
