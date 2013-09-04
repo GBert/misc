@@ -35,15 +35,15 @@ MAKE_OPTS:= \
         SUBDIRS="$(PKG_BUILD_DIR)/trunk/can-utils"
 
 define Build/Compile
-	mkdir -p $(PKG_BUILD_DIR)/trunk/new_framework/include
-	$(MAKE)	-C $(PKG_BUILD_DIR)/trunk/new_framework \
+	mkdir -p $(PKG_BUILD_DIR)/trunk/new_framework/new_framework/include
+	$(MAKE)	-C $(PKG_BUILD_DIR)/trunk/new_framework/new_framework \
 	CC=$(TARGET_CC) CFLGAS="$(TARGET_CFLAGS) -fhonour-copts" $(TARGET_CONFIGURE_OPTS) $(MAKE_OPTS)
 endef
 
 define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/trunk/new_framework/drehscheibe/drehscheibe $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/trunk/new_framework/client_zentrale/mrzentrale $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/trunk/new_framework/new_framework/drehscheibe/drehscheibe $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/trunk/new_framework/new_framework/client_zentrale/mrzentrale $(1)/usr/bin
 endef
 
 $(eval $(call BuildPackage,$(PKG_NAME)))
