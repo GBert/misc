@@ -32,7 +32,7 @@ define Package/rocrail/description
   Rocrail - Innovative Model Railroad Control System
 endef
 
-define Build/Prepare
+define Build/Compile
         cd $(PKG_BUILD_DIR)/rocs
 	make fromtar PLATFORM=LINUX all
 	cp bin/ogen bin/ogen_x86
@@ -40,10 +40,6 @@ define Build/Prepare
 	cp bin/xml2cstr bin/xml2cstr_x86
 	cp bin/png2wx bin/png2wx_x86
 	make clean
-endef
-
-
-define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" 
