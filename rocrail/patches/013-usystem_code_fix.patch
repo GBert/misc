@@ -1,0 +1,20 @@
+--- a/rocs/impl/unx/usystem.c
++++ b/rocs/impl/unx/usystem.c
+@@ -133,7 +133,7 @@ void rocs_system_writePort( int port, by
+ #if defined __APPLE__ || defined __OpenBSD__
+   return;
+ #else
+-  outb(val,port);
++/*  outb(val,port); */
+ #endif
+ }
+ 
+@@ -141,7 +141,7 @@ byte rocs_system_readPort( int port ) {
+ #if defined __APPLE__ || defined __OpenBSD__
+   return 0;
+ #else
+-  return inb(port);
++/*  return inb(port);*/
+ #endif
+ }
+ 

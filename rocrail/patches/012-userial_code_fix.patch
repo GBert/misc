@@ -1,0 +1,20 @@
+--- a/rocs/impl/unx/userial.c
++++ b/rocs/impl/unx/userial.c
+@@ -54,7 +54,7 @@
+ #include <termio.h>
+ #include <termios.h>
+ #include "linux/serial.h"
+-#include <sys/io.h>
++/* #include <sys/io.h> */
+ #endif
+ 
+ #ifndef __ROCS_SERIAL__
+@@ -321,7 +321,7 @@ static void __printmsr(int msr) {
+ static int __last_val = 0;
+ static Boolean __printport(iOSerial inst, int* richg) {
+   iOSerialData o = Data(inst);
+-#if defined __APPLE__ || defined __OpenBSD__
++#if defined __APPLE__ || defined __OpenBSD__ || !defined __ROCS_SERIAL__
+     return True;
+ #else
+   if( ioperm(o->portbase, 7, 1) == 0 ) {
