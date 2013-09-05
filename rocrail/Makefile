@@ -25,7 +25,7 @@ define Package/rocrail
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Rocrail
-  DEPENDS:=+lpthread
+  DEPENDS:=+libpthread
   MAINTAINER:=Gerhard Bertelsmann
 endef
 
@@ -39,7 +39,10 @@ define Build/Compile
 	cp $(PKG_BUILD_DIR)/rocs/bin/wgen $(PKG_BUILD_DIR)/rocs/bin/wgen_x86
 	cp $(PKG_BUILD_DIR)/rocs/bin/xml2cstr $(PKG_BUILD_DIR)/rocs/bin/xml2cstr_x86
 	cp $(PKG_BUILD_DIR)/rocs/bin/png2wx $(PKG_BUILD_DIR)/rocs/bin/png2wx_x86
-	$(MAKE) -C $(PKG_BUILD_DIR) $(TARGET_CONFIGURE_OPTS) GENSUFFIX=_x86 DEBUG= CC_EXTRA_FLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -fPIC" TOOLPREFIX=$(TARGET_CROSS) PLATFORM=LINUX server
+	$(MAKE) -C $(PKG_BUILD_DIR) $(TARGET_CONFIGURE_OPTS) \
+		GENSUFFIX=_x86 DEBUG= CC_EXTRA_FLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -fPIC" \
+		TOOLPREFIX=$(TARGET_CROSS) \
+		PLATFORM=LINUX server
 endef
 
 define Package/rocrail/install
