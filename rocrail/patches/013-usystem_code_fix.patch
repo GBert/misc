@@ -1,5 +1,14 @@
 --- a/rocs/impl/unx/usystem.c
 +++ b/rocs/impl/unx/usystem.c
+@@ -32,7 +32,7 @@
+ #if defined __APPLE__ || defined __OpenBSD__
+   /*#include </Developer/SDKs/MacOSX10.5.sdk/System/Library/Frameworks/Kernel.framework/Versions/A/Headers/architecture/i386/io.h>*/
+ #else
+-  #include <sys/io.h>
++/*  #include <sys/io.h> */
+ #endif
+ #include <unistd.h>
+ 
 @@ -133,7 +133,7 @@ void rocs_system_writePort( int port, by
  #if defined __APPLE__ || defined __OpenBSD__
    return;
