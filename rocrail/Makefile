@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rocrail
-PKG_REV:=5872
+PKG_REV:=5874
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -25,7 +25,8 @@ define Package/rocrail
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Rocrail
-  DEPENDS:=
+  DEPENDS:=+lpthread
+  MAINTAINER:=Gerhard Bertelsmann
 endef
 
 define Package/rocrail/description
@@ -33,14 +34,13 @@ define Package/rocrail/description
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)/rocs
-	cp $(PKG_BUILD_DIR)/bin/ogen $(PKG_BUILD_DIR)/bin/ogen_x86
-	cp $(PKG_BUILD_DIR)/bin/wgen $(PKG_BUILD_DIR)/bin/wgen_x86
-	cp $(PKG_BUILD_DIR)/bin/xml2cstr $(PKG_BUILD_DIR)/bin/xml2cstr_x86
-	cp $(PKG_BUILD_DIR)/bin/png2wx $(PKG_BUILD_DIR)/bin/png2wx_x86
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" 
+	$(MAKE) -C $(PKG_BUILD_DIR)/rocs fromtar PLATFORM=LINUX all
+	cp $(PKG_BUILD_DIR)/rocs/bin/ogen $(PKG_BUILD_DIR)/rocs/bin/ogen_x86
+	cp $(PKG_BUILD_DIR)/rocs/bin/wgen $(PKG_BUILD_DIR)/rocs/bin/wgen_x86
+	cp $(PKG_BUILD_DIR)/rocs/bin/xml2cstr $(PKG_BUILD_DIR)/rocs/bin/xml2cstr_x86
+	cp $(PKG_BUILD_DIR)/rocs/bin/png2wx $(PKG_BUILD_DIR)/rocs/bin/png2wx_x86
+	$(MAKE) -C $(PKG_BUILD_DIR)/rocs clean
+	$(MAKE) -C $(PKG_BUILD_DIR)/rocs $(TARGET_CONFIGURE_OPTS) DEBUG= CC_EXTRA_FLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" fromtar TOOLPREFIX=$(TARGET_CROSS) GENSUFFIX=_x86 PLATFORM=LINUX all
 endef
 
 define Package/rocrail/install
