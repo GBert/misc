@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rocrail
-PKG_REV:=5865
+PKG_REV:=5872
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -33,13 +33,11 @@ define Package/rocrail/description
 endef
 
 define Build/Compile
-        cd $(PKG_BUILD_DIR)/rocs
-	make fromtar PLATFORM=LINUX all
-	cp bin/ogen bin/ogen_x86
-	cp bin/wgen bin/wgen_x86
-	cp bin/xml2cstr bin/xml2cstr_x86
-	cp bin/png2wx bin/png2wx_x86
-	make clean
+	$(MAKE) -C $(PKG_BUILD_DIR)/rocs
+	cp $(PKG_BUILD_DIR)/bin/ogen $(PKG_BUILD_DIR)/bin/ogen_x86
+	cp $(PKG_BUILD_DIR)/bin/wgen $(PKG_BUILD_DIR)/bin/wgen_x86
+	cp $(PKG_BUILD_DIR)/bin/xml2cstr $(PKG_BUILD_DIR)/bin/xml2cstr_x86
+	cp $(PKG_BUILD_DIR)/bin/png2wx $(PKG_BUILD_DIR)/bin/png2wx_x86
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" 
