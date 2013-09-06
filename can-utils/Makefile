@@ -35,7 +35,7 @@ MAKE_OPTS:= \
 	SUBDIRS="$(PKG_BUILD_DIR)/trunk/can-utils"
 
 define Build/Compile
-	$(MAKE)	-C $(PKG_BUILD_DIR)/trunk/can-utils CC=$(TARGET_CC) $(TARGET_CONFIGURE_OPTS) $(MAKE_OPTS)
+	$(MAKE)	-C $(PKG_BUILD_DIR)/trunk/can-utils CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS) -Iinclude -DSO_RXQ_OVFL=40 -DPF_CAN=29 -DAF_CAN=PF_CAN" $(TARGET_CONFIGURE_OPTS) $(MAKE_OPTS)
 endef
 
 # if you need more, add following below
