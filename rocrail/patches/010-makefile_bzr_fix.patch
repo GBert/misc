@@ -5,7 +5,7 @@
  version:
  	echo $(QUOT)const int bzr = $(QUOT) > common$(FS)version.h
 -	bzr revno >> common$(FS)version.h
-+	echo $(QUOT)5874$(QUOT) >> common$(FS)version.h
++	echo $(QUOT)5919$(QUOT) >> common$(FS)version.h
 +#	bzr revno >> common$(FS)version.h
  	echo $(QUOT);$(QUOT) >> common$(FS)version.h
  
