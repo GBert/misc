@@ -31,7 +31,7 @@ endef
 
 define Build/Compile
 	mkdir -p $(PKG_BUILD_DIR)/new_framework/include
-	$(MAKE)	-C $(PKG_BUILD_DIR)/new_framework "$(TARGET_CONFIGURE_OPTS)"
+	$(MAKE)	-C $(PKG_BUILD_DIR)/new_framework $(TARGET_CONFIGURE_OPTS)
 endef
 
 define Package/$(PKG_NAME)/install
