@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=roccanroll
-PKG_REV:=82dce4803363
+PKG_REV:=7c8e96f756a3
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
