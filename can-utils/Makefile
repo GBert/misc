@@ -69,7 +69,6 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/trunk/can-utils/cangw $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/trunk/can-utils/cansend $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/trunk/can-utils/log2long $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/trunk/can-utils/slcan_attach $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/trunk/can-utils/slcand $(1)/usr/bin
 endef
 
