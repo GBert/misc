@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=can-utils
-PKG_REV:=35d2bc1
+PKG_REV:=16c970d
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
