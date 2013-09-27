@@ -6,7 +6,7 @@
  	echo $(QUOT)const int bzr = $(QUOT) > common$(FS)version.h
 -	bzr revno . >> common$(FS)version.h
 +#	bzr revno . >> common$(FS)version.h
-+	echo $(QUOT)6054$(QUOT) >> common$(FS)version.h
++	echo $(QUOT)6058$(QUOT) >> common$(FS)version.h
  	echo $(QUOT);$(QUOT) >> common$(FS)version.h
  
 --- a/rocint/makefile
@@ -52,6 +52,6 @@
  	echo $(QUOT)const int bzr = $(QUOT) > ..$(FS)common$(FS)version.h
 -	bzr revno . >> ..$(FS)common$(FS)version.h
 +#	bzr revno . >> ..$(FS)common$(FS)version.h
-+	echo $(QUOT)6054$(QUOT) >> ..$(FS)common$(FS)version.h
++	echo $(QUOT)6058$(QUOT) >> ..$(FS)common$(FS)version.h
  	echo $(QUOT);$(QUOT) >> ..$(FS)common$(FS)version.h
  
