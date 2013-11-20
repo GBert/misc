@@ -1,15 +1,15 @@
 --- a/rocs/impl/unx/userial.c
 +++ b/rocs/impl/unx/userial.c
-@@ -54,7 +54,7 @@
+@@ -57,7 +57,7 @@
  #include <termio.h>
  #include <termios.h>
  #include "linux/serial.h"
 -#include <sys/io.h>
 +/* #include <sys/io.h> */
  #endif
- 
+
  #ifndef __ROCS_SERIAL__
-@@ -321,7 +321,7 @@ static void __printmsr(int msr) {
+@@ -362,7 +362,7 @@
  static int __last_val = 0;
  static Boolean __printport(iOSerial inst, int* richg) {
    iOSerialData o = Data(inst);
