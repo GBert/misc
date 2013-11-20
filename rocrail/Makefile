@@ -7,13 +7,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rocrail
-PKG_REV:=6318
+PKG_REV:=a5fe6c08c1
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
+PKG_SOURCE_PROTO:=git
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://bazaar.launchpad.net/~rocrail-project/rocrail/Rocrail
-PKG_SOURCE_PROTO:=bzr
+PKG_SOURCE_URL:=http://github.com/rocrail/Rocrail
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)

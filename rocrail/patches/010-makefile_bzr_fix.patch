@@ -1,14 +1,3 @@
---- a/makefile
-+++ b/makefile
-@@ -72,6 +72,7 @@
- 
- version:
- 	echo $(QUOT)const int bzr = $(QUOT) > common$(FS)version.h
--	bzr revno --tree >> common$(FS)version.h
-+#	bzr revno --tree >> common$(FS)version.h
-+	echo $(QUOT)6318$(QUOT) >> common$(FS)version.h
- 	echo $(QUOT);$(QUOT) >> common$(FS)version.h
- 
 --- a/rocint/makefile
 +++ b/rocint/makefile
 @@ -76,8 +76,8 @@ TMPOUTDIR=$(GENDIR)$(FS)rocint$(FS)bin
@@ -44,14 +33,4 @@
  	SHAREDSUFFIX=.so
  endif
 
---- a/rocnetnode/makefile
-+++ b/rocnetnode/makefile
-@@ -131,6 +131,7 @@
- 
- version:
- 	echo $(QUOT)const int bzr = $(QUOT) > ..$(FS)common$(FS)version.h
--	bzr revno --tree >> ..$(FS)common$(FS)version.h
-+#	bzr revno --tree >> ..$(FS)common$(FS)version.h
-+	echo $(QUOT)6318$(QUOT) >> ..$(FS)common$(FS)version.h
- 	echo $(QUOT);$(QUOT) >> ..$(FS)common$(FS)version.h
  
