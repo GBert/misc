@@ -1,0 +1,22 @@
+--- a/rocdigs/makefile
++++ b/rocdigs/makefile
+@@ -86,7 +86,7 @@
+ 	DIRPREFIX=unx
+ 	CC_EXTRA_FLAGS=-fPIC
+ 	LNK_FLAGS=-shared
+-	LNK=gcc
++	LNK=$(TOOLPREFIX)gcc
+ 	SHAREDSUFFIX=.so
+ endif
+ 
+--- a/roclcdr/makefile
++++ b/roclcdr/makefile
+@@ -86,7 +86,7 @@
+ 	DIRPREFIX=unx
+ 	CC_EXTRA_FLAGS=-fPIC
+ 	LNK_FLAGS=-shared
+-	LNK=gcc
++	LNK=$(TOOLPREFIX)gcc
+ 	SHAREDSUFFIX=.so
+ endif
+ 
