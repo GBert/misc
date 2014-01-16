@@ -17,7 +17,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/can2udp
   SECTION:=utils
   CATEGORY:=Utilities
-  TITLE:=can2udp gateway
+  TITLE:=can2udp/can2lan gateway
   DEPENDS:=
 endef
 
@@ -38,6 +38,7 @@ endef
 define Package/can2udp/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/can2udp $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/can2lan $(1)/usr/bin/
 endef
 
 
