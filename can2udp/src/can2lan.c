@@ -51,7 +51,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "   Version 0.3\n");
     fprintf(stderr, "\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
-    fprintf(stderr, "         -t <port>           listening UDP port for the server - default 15731\n");
+    fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default 15730\n");
     fprintf(stderr, "         -b <broadcast_addr> broadcast address - default 255.255.255.255\n");
     fprintf(stderr, "         -i <can int>        can interface - default can0\n");
