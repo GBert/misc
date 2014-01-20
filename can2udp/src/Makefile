@@ -13,10 +13,5 @@ can2udp: $(OBJ_CAN2UDP)
 can2lan: $(OBJ_CAN2LAN)
 	$(CC) $(CFLAGS) -o $@ $(OBJ_CAN2LAN) $(LDFLAGS)
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $<
-
-.PHONY: clean
-
 clean:
 	rm -rf $(CAN2UDP_BIN) $(CAN2LAN_BIN) $(OBJ_CAN2UDP) $(OBJ_CAN2LAN)
