@@ -35,6 +35,8 @@
 #define debug_print(...) \
             do { if (DEBUG) fprintf(stderr, ##__VA_ARGS__); } while (0)
 
+unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE [] = {0x00,0x36,0x03,0x01,0x05,0x00,0x00,0x00,0x00,0x11,0x00,0x00,0x00};
+
 static const int MAXPENDING = 16; /* max outstanding tcp connections */
 unsigned char netframe[MAXDG];
 
@@ -63,27 +65,52 @@ void print_usage(char *prg) {
     fprintf(stderr, "\n");
 }
 
-void send_magic_start_60113_frame(int can_socket, int verbose) {
-    struct can_frame frame;
-    int nbytes;
+int frame_to_net(int net_socket, struct can_frame *frame) {
+    return 0;
+}
 
-    frame.can_id = 0x360301UL;
-    /* use EFF */
+int frame_to_can(int can_socket, unsigned char *netframe, int debug) {
+    uint32_t canid;
+    int nbytes,i;
+    struct can_frame frame;
+    /* Maerklin TCP/UDP Format: always 13 bytes
+     *   byte 0 - 3  CAN ID
+     *   byte 4      DLC
+     *   byte 5 - 12 CAN data
+     */
+    memcpy(&canid, netframe, 4);
+    /* CAN is stored in network big endian format */
+    frame.can_id = ntohl(canid);
     frame.can_id &= CAN_EFF_MASK;
     frame.can_id |= CAN_EFF_FLAG;
-    frame.can_dlc = 5;
-    frame.data[0] = 0;
-    frame.data[1] = 0;
-    frame.data[2] = 0;
-    frame.data[3] = 0;
-    frame.data[4] = 0x11;
-    if ((nbytes =
-	write(can_socket, &frame, sizeof(frame))) != sizeof(frame)) {
+    frame.can_dlc = netframe[4];
+    memcpy(&frame.data, &netframe[5], 8);
+
+    /* send CAN frame */
+    if ((nbytes = write(can_socket, &frame, sizeof(frame))) != sizeof(frame))
+	perror("error writing CAN frame\n");
+	return -1;
+
+    if (debug) {
+	printf("<-UDP>CAN CANID 0x%06X  ", frame.can_id & CAN_EFF_MASK);
+	printf(" [%d]", netframe[4]);
+	for (i = 5; i < 5 + frame.can_dlc; i++) {
+	    printf(" %02x", netframe[i]);
+	}
+	printf("\n");
+    }
+    return 0;
+}
+
+int send_magic_start_60113_frame(int can_socket, int verbose) {
+    if (frame_to_can(can_socket, &M_GLEISBOX_MAGIC_START_SEQUENCE[0], verbose)) {
 	perror("error CAN magic 60113 start write\n");
+	return -1;
     } else {
 	if (verbose)
 	    printf("CAN magic 60113 start write\n");
     }
+    return 0;
 }
 
 int main(int argc, char **argv) {
@@ -107,7 +134,6 @@ int main(int argc, char **argv) {
     int destination_port = 15730;
     int verbose = 1;
     int background = 1;
-    int canid = 0;
     const int on = 1;
     char udp_dst_address[] = "255.255.255.255";
     strcpy(ifr.ifr_name, "can0");
@@ -285,31 +311,8 @@ int main(int argc, char **argv) {
 	/* received a UDP packet */
 	if (FD_ISSET(sa, &readfds)) {
 	    if (read(sa, netframe, MAXDG) == 13) {
-		/* Maerklin TCP/UDP Format: always 13 bytes
-		 *   byte 0 - 3  CAN ID
-		 *   byte 4      DLC
-		 *   byte 5 - 12 CAN data
-		 */
-		memcpy(&canid, &netframe[0], 4);
-		/* CAN is stored in network big endian format */
-		frame.can_id = ntohl(canid);
-		frame.can_id &= CAN_EFF_MASK;
-		frame.can_id |= CAN_EFF_FLAG;
-		frame.can_dlc = netframe[4];
-		memcpy(&frame.data, &netframe[5], 8);
-
-		/* send CAN frame */
-		if ((nbytes = write(sc, &frame, sizeof(frame))) != sizeof(frame))
-		    perror("error writing CAN frame\n");
-
-		if (verbose && !background) {
-		    printf("<-UDP>CAN CANID 0x%06X  ", frame.can_id & CAN_EFF_MASK);
-		    printf(" [%d]", netframe[4]);
-		    for (i = 5; i < 5 + frame.can_dlc; i++) {
-			printf(" %02x", netframe[i]);
-		    }
-		    printf("\n");
-		}
+		/* send packet on CAN */
+		ret = frame_to_can(sc, (unsigned char *) &netframe, verbose & !background);
 
 		/* answer to CAN ping from LAN to LAN */
 		if (((frame.can_id & 0x00FF0000UL) == 0x00310000UL) 
