@@ -30,6 +30,7 @@
 
 #define MAXDG   4096		/* maximum datagram size */
 #define MAXUDP  16		/* maximum datagram size */
+#define MAX(a,b)	((a) > (b) ? (a) : (b))
 
 static const int MAXPENDING = 16; /* max outstanding tcp connections */
 unsigned char netframe[MAXDG];
@@ -247,7 +248,7 @@ int main(int argc, char **argv) {
 	FD_SET(sa, &readfds);
 	FD_SET(st, &readfds);
 
-	ret = select(MAX(sc, sa, st) + 1 , &readfds, NULL, NULL, NULL);
+	ret = select(MAX(MAX(sa, st),sc) + 1 , &readfds, NULL, NULL, NULL);
 
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &readfds)) {
