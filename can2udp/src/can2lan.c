@@ -31,6 +31,8 @@
 #define MAXDG   4096		/* maximum datagram size */
 #define MAXUDP  16		/* maximum datagram size */
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
+#define debug_print(...) \
+            do { if (DEBUG) fprintf(stderr, ##__VA_ARGS__); } while (0)
 
 static const int MAXPENDING = 16; /* max outstanding tcp connections */
 unsigned char netframe[MAXDG];
@@ -153,7 +155,6 @@ int main(int argc, char **argv) {
     baddr.sin_family = AF_INET;
     baddr.sin_port = htons(destination_port);
     s = inet_pton(AF_INET, udp_dst_address, &baddr.sin_addr);
-	perror("UDP inet_pton error\n");
     if (s <= 0) {
 	if (s == 0) {
 	    fprintf(stderr, "error: UDP sending port not in presentation format\n");
