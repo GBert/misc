@@ -35,12 +35,15 @@
 #define debug_print(...) \
             do { if (DEBUG) fprintf(stderr, ##__VA_ARGS__); } while (0)
 
+char *CAN_FORMAT_STRG="->CAN>UDP CANID 0x%06X R [%d]";
+char *UDP_FORMAT_STRG="<-CAN>UDP CANID 0x%06X   [%d]";
+
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE [] = {0x00,0x36,0x03,0x01,0x05,0x00,0x00,0x00,0x00,0x11,0x00,0x00,0x00};
 
-static const int MAXPENDING = 16; /* max outstanding tcp connections */
+static const int MAXPENDING = 16;	/* max outstanding tcp connections */
 unsigned char netframe[MAXDG];
 
-void Signal_Handler(sig) {	/* signal handler function */
+void Signal_Handler(sig) {		/* signal handler function */
     switch (sig) {
     case SIGHUP:
 	/* rehash the server */
@@ -65,14 +68,21 @@ void print_usage(char *prg) {
     fprintf(stderr, "\n");
 }
 
-void print_can_frame(unsigned char *netframe, char *format_string) {
+void print_can_frame(char *format_string, unsigned char *netframe) {
     uint32_t canid;
     int i, dlc;
     memcpy(&canid, netframe, 4);
-    dlc = netframe[5];   
+    dlc = netframe[4];   
     printf(format_string, ntohl(canid) & CAN_EFF_MASK, netframe[4]);
     for (i = 5; i < 5 + dlc; i++) {
 	printf(" %02x", netframe[i]);
+    }
+    if (dlc < 8) {
+	printf(" (");
+	for (i = 5 + dlc ; i <= 13 ; i++) {
+	    printf(" %02x", netframe[i]);
+        }
+	printf(" )");
     }
     printf("\n");
 }
@@ -87,12 +97,12 @@ int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *fr
 
     /* send UDP frame */
     s = sendto(net_socket, netframe, 13, 0, net_addr, sizeof(&net_addr));
-    if (s != 13)
+    if (s != 13) {
 	perror("error sending UDP data\n");
-
-    if (verbose) {
-	print_can_frame("->CAN>UDP CANID 0x%06X R [%d]", &netframe[0]);
+	return -1;
     }
+    if (verbose) 
+	print_can_frame(CAN_FORMAT_STRG, &netframe[0]);
     return 0;
 }
 
@@ -118,9 +128,8 @@ int frame_to_can(int can_socket, unsigned char *netframe, int verbose) {
 	perror("error writing CAN frame\n");
 	return -1;
     }
-    if (verbose) {
-	print_can_frame("<-CAN>UDP CANID 0x%06X   [%d]", &netframe[0]);
-    }
+    if (verbose)
+	print_can_frame(UDP_FORMAT_STRG, &netframe[0]);
     return 0;
 }
 
