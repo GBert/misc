@@ -91,7 +91,7 @@ int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *fr
 	perror("error sending UDP data\n");
 
     if (verbose) {
-	print_can_frame("->CAN>UDP CANID 0x%06X R", netframe);
+	print_can_frame("->CAN>UDP CANID 0x%06X R [%d]", &netframe[0]);
     }
     return 0;
 }
@@ -119,7 +119,7 @@ int frame_to_can(int can_socket, unsigned char *netframe, int verbose) {
 	return -1;
     }
     if (verbose) {
-	print_can_frame("<-CAN>UDP CANID 0x%06X R", netframe);
+	print_can_frame("<-CAN>UDP CANID 0x%06X   [%d]", &netframe[0]);
     }
     return 0;
 }
