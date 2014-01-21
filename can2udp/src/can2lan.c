@@ -65,8 +65,20 @@ void print_usage(char *prg) {
     fprintf(stderr, "\n");
 }
 
+void print_can_frame(unsigned char *netframe, char *format_string) {
+    uint32_t canid;
+    int i, dlc;
+    memcpy(&canid, netframe, 4);
+    dlc = netframe[5];   
+    printf(format_string, ntohl(canid) & CAN_EFF_MASK, netframe[4]);
+    for (i = 5; i < 5 + dlc; i++) {
+	printf(" %02x", netframe[i]);
+    }
+    printf("\n");
+}
+    
 int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *frame, int verbose) {
-    int s, i;
+    int s;
     frame->can_id &= CAN_EFF_MASK;
     bzero(netframe, 13);
     memcpy(&netframe[0], &frame->can_id, 4);
@@ -79,19 +91,14 @@ int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *fr
 	perror("error sending UDP data\n");
 
     if (verbose) {
-	printf("->CAN>UDP CANID 0x%06X R", frame->can_id);
-	printf(" [%d]", netframe[4]);
-	for (i = 5; i < 5 + frame->can_dlc; i++) {
-	    printf(" %02x", netframe[i]);
-	}
-	printf("\n");
+	print_can_frame("->CAN>UDP CANID 0x%06X R", netframe);
     }
     return 0;
 }
 
 int frame_to_can(int can_socket, unsigned char *netframe, int verbose) {
     uint32_t canid;
-    int nbytes,i;
+    int nbytes;
     struct can_frame frame;
     /* Maerklin TCP/UDP Format: always 13 bytes
      *   byte 0 - 3  CAN ID
@@ -99,7 +106,7 @@ int frame_to_can(int can_socket, unsigned char *netframe, int verbose) {
      *   byte 5 - 12 CAN data
      */
     memcpy(&canid, netframe, 4);
-    /* CAN is stored in network big endian format */
+    /* CAN uses (network) big endian format */
     frame.can_id = ntohl(canid);
     frame.can_id &= CAN_EFF_MASK;
     frame.can_id |= CAN_EFF_FLAG;
@@ -112,12 +119,7 @@ int frame_to_can(int can_socket, unsigned char *netframe, int verbose) {
 	return -1;
     }
     if (verbose) {
-	printf("<-UDP>CAN CANID 0x%06X  ", frame.can_id & CAN_EFF_MASK);
-	printf(" [%d]", netframe[4]);
-	for (i = 5; i < 5 + frame.can_dlc; i++) {
-	    printf(" %02x", netframe[i]);
-	}
-	printf("\n");
+	print_can_frame("<-CAN>UDP CANID 0x%06X R", netframe);
     }
     return 0;
 }
@@ -305,7 +307,7 @@ int main(int argc, char **argv) {
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &readfds)) {
             if ((nbytes = read(sc, &frame, sizeof(struct can_frame))) < 0) {
-		perror("error reading CAN frame");
+		perror("error reading CAN frame\n");
 	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		/* send UDP frame */
 		frame_to_net(sb, (struct sockaddr *) &baddr, (struct can_frame *) &frame, verbose & !background);
