@@ -18,6 +18,7 @@
 #include <string.h>
 #include <signal.h>
 #include <errno.h>
+#include <ctype.h>
 
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -26,7 +27,8 @@
 #include <net/if.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-
+#include <sys/time.h>
+#include <time.h>
 #include <linux/can.h>
 
 #define MAXDG   4096		/* maximum datagram size */
@@ -69,22 +71,47 @@ void print_usage(char *prg) {
     fprintf(stderr, "\n");
 }
 
+char *time_stamp(){
+    char *timestamp = (char *)malloc(sizeof(char) * 16);
+    struct timeval  tv;
+    struct timezone tz;
+    struct tm      *tm;
+
+    gettimeofday(&tv, &tz);
+    tm = localtime(&tv.tv_sec);
+
+    sprintf(timestamp,"%02d:%02d:%02d.%03d", tm->tm_hour, tm->tm_min, tm->tm_sec, tv.tv_usec/1000);
+    return timestamp;
+}
+
 void print_can_frame(char *format_string, unsigned char *netframe) {
     uint32_t canid;
     int i, dlc;
+
     memcpy(&canid, netframe, 4);
-    dlc = netframe[4];   
+    dlc = netframe[4];
+    printf("%s   ",time_stamp()); 
     printf(format_string, ntohl(canid) & CAN_EFF_MASK, netframe[4]);
     for (i = 5; i < 5 + dlc; i++) {
 	printf(" %02x", netframe[i]);
     }
     if (dlc < 8) {
-	printf(" (");
-	for (i = 5 + dlc ; i <= 13 ; i++) {
+	printf("(%02x", netframe[i]);
+	for (i = 6 + dlc ; i < 13 ; i++) {
 	    printf(" %02x", netframe[i]);
         }
-	printf(" )");
+	printf(")");
+    } else {
+	printf(" ");
     }
+    printf("  ");
+    for (i = 5; i < 13; i++) {
+	if(isprint(netframe[i]))
+	    printf("%c",netframe[i]);
+        else
+	    putchar(46);
+    }
+
     printf("\n");
 }
     
@@ -142,7 +169,7 @@ int send_magic_start_60113_frame(int can_socket, int verbose) {
 	return -1;
     } else {
 	if (verbose)
-	    printf("CAN magic 60113 start write\n");
+	    printf("                CAN magic 60113 start write\n");
     }
     return 0;
 }
@@ -335,7 +362,7 @@ int main(int argc, char **argv) {
     		canid=ntohl(canid);
 		if (((canid & 0x00FF0000UL) == 0x00310000UL) 
 		      && (netframe[11] = 0xEE) && (netframe[12] = 0xEE)) {
-		    printf("  received CAN ping\n");
+		    printf("                received CAN ping\n");
 		    netframe[0] = 0x00;
 		    netframe[1] = 0x30;
 		    netframe[2] = 0x00;
@@ -346,7 +373,7 @@ int main(int argc, char **argv) {
 			perror("error sending UDP data (CAN Ping)\n");
 		    } else {
 			print_can_frame(TCP_UDP_FORMAT_STRG, &netframe[0]);
-			printf("  replied to CAN ping\n");
+			printf("                replied CAN ping\n");
 		    }
 		}
 	    }
