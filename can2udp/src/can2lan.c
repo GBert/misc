@@ -65,26 +65,23 @@ void print_usage(char *prg) {
     fprintf(stderr, "\n");
 }
 
-int frame_to_net(int can_socket, struct n_frame *frame, verbose) {
-    /* prepare UDP frame */
+int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *frame, int verbose) {
+    int s, i;
+    frame->can_id &= CAN_EFF_MASK;
     bzero(netframe, 13);
-    frame.can_id &= CAN_EFF_MASK;
-    netframe[0] = (frame.can_id >> 24) & 0x000000FF;
-    netframe[1] = (frame.can_id >> 16) & 0x000000FF;
-    netframe[2] = (frame.can_id >> 8) & 0x000000FF;
-    netframe[3] = frame.can_id & 0x000000FF;
-    netframe[4] = frame.can_dlc;
-    memcpy(&netframe[5], &frame.data, frame.can_dlc);
+    memcpy(&netframe[0], &frame->can_id, 4);
+    netframe[4] = frame->can_dlc;
+    memcpy(&netframe[5], &frame->data, frame->can_dlc);
 
     /* send UDP frame */
-    s = sendto(sb, netframe, 13, 0, (struct sockaddr *) &baddr, sizeof(baddr));
+    s = sendto(net_socket, netframe, 13, 0, net_addr, sizeof(&net_addr));
     if (s != 13)
 	perror("error sending UDP data\n");
 
-    if (verbose && !background) {
-	printf("->CAN>UDP CANID 0x%06X R", frame.can_id);
+    if (verbose) {
+	printf("->CAN>UDP CANID 0x%06X R", frame->can_id);
 	printf(" [%d]", netframe[4]);
-	for (i = 5; i < 5 + frame.can_dlc; i++) {
+	for (i = 5; i < 5 + frame->can_dlc; i++) {
 	    printf(" %02x", netframe[i]);
 	}
 	printf("\n");
@@ -92,7 +89,7 @@ int frame_to_net(int can_socket, struct n_frame *frame, verbose) {
     return 0;
 }
 
-int frame_to_can(int can_socket, unsigned char *netframe, int debug) {
+int frame_to_can(int can_socket, unsigned char *netframe, int verbose) {
     uint32_t canid;
     int nbytes,i;
     struct can_frame frame;
@@ -110,11 +107,11 @@ int frame_to_can(int can_socket, unsigned char *netframe, int debug) {
     memcpy(&frame.data, &netframe[5], 8);
 
     /* send CAN frame */
-    if ((nbytes = write(can_socket, &frame, sizeof(frame))) != sizeof(frame))
+    if ((nbytes = write(can_socket, &frame, sizeof(frame))) != sizeof(frame)) {
 	perror("error writing CAN frame\n");
 	return -1;
-
-    if (debug) {
+    }
+    if (verbose) {
 	printf("<-UDP>CAN CANID 0x%06X  ", frame.can_id & CAN_EFF_MASK);
 	printf(" [%d]", netframe[4]);
 	for (i = 5; i < 5 + frame.can_dlc; i++) {
@@ -126,7 +123,9 @@ int frame_to_can(int can_socket, unsigned char *netframe, int debug) {
 }
 
 int send_magic_start_60113_frame(int can_socket, int verbose) {
-    if (frame_to_can(can_socket, &M_GLEISBOX_MAGIC_START_SEQUENCE[0], verbose)) {
+    int ret;
+    ret = frame_to_can(can_socket, &M_GLEISBOX_MAGIC_START_SEQUENCE[0], verbose);
+    if (ret < 0 ) {
 	perror("error CAN magic 60113 start write\n");
 	return -1;
     } else {
@@ -150,7 +149,7 @@ int main(int argc, char **argv) {
 
     fd_set readfds;
 
-    int i, s, nbytes, ret;
+    int s, nbytes, ret;
 
     int local_udp_port = 15731;
     int local_tcp_port = 15731;
@@ -300,44 +299,25 @@ int main(int argc, char **argv) {
 	FD_SET(st, &readfds);
 
 	ret = select(MAX(MAX(sa, st),sc) + 1 , &readfds, NULL, NULL, NULL);
+	if (ret<0)
+	    perror("select error\n");
 
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &readfds)) {
             if ((nbytes = read(sc, &frame, sizeof(struct can_frame))) < 0) {
 		perror("error reading CAN frame");
 	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
-		/* prepare UDP frame */
-		bzero(netframe, 13);
-		frame.can_id &= CAN_EFF_MASK;
-		netframe[0] = (frame.can_id >> 24) & 0x000000FF;
-		netframe[1] = (frame.can_id >> 16) & 0x000000FF;
-		netframe[2] = (frame.can_id >> 8) & 0x000000FF;
-		netframe[3] = frame.can_id & 0x000000FF;
-		netframe[4] = frame.can_dlc;
-		memcpy(&netframe[5], &frame.data, frame.can_dlc);
-
 		/* send UDP frame */
-		s = sendto(sb, netframe, 13, 0, (struct sockaddr *) &baddr, sizeof(baddr));
-		if (s != 13)
-		    perror("error sending UDP data\n");
-
-		if (verbose && !background) {
-		    printf("->CAN>UDP CANID 0x%06X R", frame.can_id);
-		    printf(" [%d]", netframe[4]);
-		    for (i = 5; i < 5 + frame.can_dlc; i++) {
-			printf(" %02x", netframe[i]);
-		    }
-		    printf("\n");
-		}
+		frame_to_net(sb, (struct sockaddr *) &baddr, (struct can_frame *) &frame, verbose & !background);
 	    }
 	}
 	/* received a UDP packet */
 	if (FD_ISSET(sa, &readfds)) {
 	    if (read(sa, netframe, MAXDG) == 13) {
 		/* send packet on CAN */
-		ret = frame_to_can(sc, (unsigned char *) &netframe, verbose & !background);
+		ret = frame_to_can(sc, netframe, verbose & !background);
 
-		/* answer to CAN ping from LAN to LAN */
+		/* answer to encapsulated CAN ping from LAN to LAN */
 		if (((frame.can_id & 0x00FF0000UL) == 0x00310000UL) 
 		      && (netframe[11] = 0xEE) && (netframe[12] = 0xEE)) {
 		    printf("  received CAN ping\n");
