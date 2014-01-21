@@ -35,8 +35,9 @@
 #define debug_print(...) \
             do { if (DEBUG) fprintf(stderr, ##__VA_ARGS__); } while (0)
 
-char *CAN_FORMAT_STRG="->CAN>UDP CANID 0x%06X R [%d]";
-char *UDP_FORMAT_STRG="<-CAN>UDP CANID 0x%06X   [%d]";
+char *CAN_FORMAT_STRG    ="->CAN>UDP CANID 0x%06X R [%d]";
+char *UDP_FORMAT_STRG    ="<-CAN<UDP CANID 0x%06X   [%d]";
+char *TCP_UDP_FORMAT_STRG="->TCP>UDP CANID 0x%06X   [%d]";
 
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE [] = {0x00,0x36,0x03,0x01,0x05,0x00,0x00,0x00,0x00,0x11,0x00,0x00,0x00};
 
@@ -160,6 +161,7 @@ int main(int argc, char **argv) {
 
     fd_set readfds;
 
+    uint32_t	canid;
     int s, nbytes, ret;
 
     int local_udp_port = 15731;
@@ -307,7 +309,7 @@ int main(int argc, char **argv) {
 	FD_ZERO(&readfds);
 	FD_SET(sc, &readfds);
 	FD_SET(sa, &readfds);
-	FD_SET(st, &readfds);
+//	FD_SET(st, &readfds);
 
 	ret = select(MAX(MAX(sa, st),sc) + 1 , &readfds, NULL, NULL, NULL);
 	if (ret<0)
@@ -329,7 +331,9 @@ int main(int argc, char **argv) {
 		ret = frame_to_can(sc, netframe, verbose & !background);
 
 		/* answer to encapsulated CAN ping from LAN to LAN */
-		if (((frame.can_id & 0x00FF0000UL) == 0x00310000UL) 
+    		memcpy(&canid, netframe, 4);
+    		canid=ntohl(canid);
+		if (((canid & 0x00FF0000UL) == 0x00310000UL) 
 		      && (netframe[11] = 0xEE) && (netframe[12] = 0xEE)) {
 		    printf("  received CAN ping\n");
 		    netframe[0] = 0x00;
@@ -341,6 +345,7 @@ int main(int argc, char **argv) {
 		    if (s != 13) {
 			perror("error sending UDP data (CAN Ping)\n");
 		    } else {
+			print_can_frame(TCP_UDP_FORMAT_STRG, &netframe[0]);
 			printf("  replied to CAN ping\n");
 		    }
 		}
