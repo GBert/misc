@@ -65,7 +65,30 @@ void print_usage(char *prg) {
     fprintf(stderr, "\n");
 }
 
-int frame_to_net(int net_socket, struct can_frame *frame) {
+int frame_to_net(int can_socket, struct n_frame *frame, verbose) {
+    /* prepare UDP frame */
+    bzero(netframe, 13);
+    frame.can_id &= CAN_EFF_MASK;
+    netframe[0] = (frame.can_id >> 24) & 0x000000FF;
+    netframe[1] = (frame.can_id >> 16) & 0x000000FF;
+    netframe[2] = (frame.can_id >> 8) & 0x000000FF;
+    netframe[3] = frame.can_id & 0x000000FF;
+    netframe[4] = frame.can_dlc;
+    memcpy(&netframe[5], &frame.data, frame.can_dlc);
+
+    /* send UDP frame */
+    s = sendto(sb, netframe, 13, 0, (struct sockaddr *) &baddr, sizeof(baddr));
+    if (s != 13)
+	perror("error sending UDP data\n");
+
+    if (verbose && !background) {
+	printf("->CAN>UDP CANID 0x%06X R", frame.can_id);
+	printf(" [%d]", netframe[4]);
+	for (i = 5; i < 5 + frame.can_dlc; i++) {
+	    printf(" %02x", netframe[i]);
+	}
+	printf("\n");
+    }
     return 0;
 }
 
@@ -281,7 +304,7 @@ int main(int argc, char **argv) {
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &readfds)) {
             if ((nbytes = read(sc, &frame, sizeof(struct can_frame))) < 0) {
-		perror("error readind CAN frame");
+		perror("error reading CAN frame");
 	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		/* prepare UDP frame */
 		bzero(netframe, 13);
