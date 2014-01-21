@@ -39,7 +39,7 @@
 
 char *CAN_FORMAT_STRG    ="->CAN>UDP CANID 0x%06X R [%d]";
 char *UDP_FORMAT_STRG    ="<-CAN<UDP CANID 0x%06X   [%d]";
-char *TCP_UDP_FORMAT_STRG="->TCP>UDP CANID 0x%06X   [%d]";
+char *NET_UDP_FORMAT_STRG="     >UDP CANID 0x%06X   [%d]";
 
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE [] = {0x00,0x36,0x03,0x01,0x05,0x00,0x00,0x00,0x00,0x11,0x00,0x00,0x00};
 
@@ -372,7 +372,7 @@ int main(int argc, char **argv) {
 		    if (s != 13) {
 			perror("error sending UDP data (CAN Ping)\n");
 		    } else {
-			print_can_frame(TCP_UDP_FORMAT_STRG, &netframe[0]);
+			print_can_frame(NET_UDP_FORMAT_STRG, &netframe[0]);
 			printf("                replied CAN ping\n");
 		    }
 		}
