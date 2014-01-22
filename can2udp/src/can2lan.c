@@ -272,7 +272,6 @@ int main(int argc, char **argv) {
 	perror("error creating UDP reading socket\n");
 	exit(1);
     }
-
     while (bind(sa, (struct sockaddr *) &saddr, sizeof(saddr)) < 0) {
 	printf(".");
 	fflush(NULL);
@@ -287,7 +286,6 @@ int main(int argc, char **argv) {
     tcp_addr.sin_family = AF_INET;
     tcp_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     tcp_addr.sin_port = htons(local_tcp_port);
-
     if (bind(st, (struct sockaddr *)&tcp_addr, sizeof(tcp_addr)) < 0) {
 	perror("error binding TCP socket\n");	
 	exit(1);
@@ -302,7 +300,6 @@ int main(int argc, char **argv) {
 	perror("error creating CAN socket\n");
 	exit(1);
     }
-
     caddr.can_family = AF_CAN;
     if (ioctl(sc, SIOCGIFINDEX, &ifr) < 0) {
 	perror("SIOCGIFINDEX error\n");
@@ -315,17 +312,17 @@ int main(int argc, char **argv) {
 	exit(1);
     }
 
-
     /* start Maerklin 60113 box */
     send_magic_start_60113_frame(sc, verbose);
 
+    /* daemonize the process if requested */
     if (background) {
-	/* Fork off the parent process */
+	/* fork off the parent process */
 	pid = fork();
 	if (pid < 0) {
 	    exit(EXIT_FAILURE);
 	}
-	/* If we got a good PID, then we can exit the parent process */
+	/* if we got a good PID, then we can exit the parent process */
 	if (pid > 0) {
 	    printf("Going into background ...\n");
 	    exit(EXIT_SUCCESS);
@@ -357,9 +354,9 @@ int main(int argc, char **argv) {
 		/* send packet on CAN */
 		ret = frame_to_can(sc, netframe, verbose & !background);
 
-		/* answer to encapsulated CAN ping from LAN to LAN */
     		memcpy(&canid, netframe, 4);
     		canid=ntohl(canid);
+		/* answer to encapsulated CAN ping from LAN to LAN */
 		if (((canid & 0x00FF0000UL) == 0x00310000UL) 
 		      && (netframe[11] = 0xEE) && (netframe[12] = 0xEE)) {
 		    printf("                received CAN ping\n");
