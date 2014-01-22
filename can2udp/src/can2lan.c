@@ -31,7 +31,6 @@
 #include <time.h>
 #include <linux/can.h>
 
-#define MAXLINE		4096
 #define MAX_TCP_CONN	16		/* max TCP clients */
 #define MAXDG   	4096		/* maximum datagram size */
 #define MAXUDP  	16		/* maximum datagram size */
@@ -41,6 +40,7 @@
 
 char *CAN_FORMAT_STRG    ="->CAN>UDP CANID 0x%06X R [%d]";
 char *UDP_FORMAT_STRG    ="<-CAN<UDP CANID 0x%06X   [%d]";
+char *TCP_FORMAT_STRG    ="<-CAN<TCP CANID 0x%06X   [%d]";
 char *NET_UDP_FORMAT_STRG="     >UDP CANID 0x%06X   [%d]";
 
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE [] = {0x00,0x36,0x03,0x01,0x05,0x00,0x00,0x00,0x00,0x11,0x00,0x00,0x00};
@@ -183,7 +183,6 @@ int main(int argc, char **argv) {
     struct can_frame frame;
 
     int sa, sc, sb, st, tcp_socket;		/* UDP socket , CAN socket, UDP Broadcast Socket, TCP Socket */
-    char line[MAXLINE];
     struct sockaddr_in saddr, baddr, tcp_addr;
     struct sockaddr_can caddr;
     struct ifreq ifr;
@@ -415,17 +414,19 @@ int main(int argc, char **argv) {
 	    if ( (tcp_socket = tcp_client[i]) < 0)
 		continue;
 	    if (FD_ISSET(tcp_socket, &read_fds)) {
-		if ( (n = read(tcp_socket, line, MAXLINE)) == 0) {
-                /* TODO */
-		/* if (read(st, netframe, MAXDG) == 13) { */
+		if ( (n = read(tcp_socket, netframe, MAXDG)) == 0) {
 		    /* connection closed by client */
 		    close(tcp_socket);
 		    FD_CLR(tcp_socket, &all_fds);
 		    tcp_client[i] = -1;
 		}
+		if (read(tcp_socket, netframe, MAXDG) == 13) {
+		    print_can_frame(TCP_FORMAT_STRG, &netframe[0]);
+		    ret = frame_to_can(sc, netframe, verbose & !background);
+		}
 	    }
 	    /* TODO */
-	    write(tcp_socket, line, n);
+	    /* write(tcp_socket, line, n); */
 
 	    if (--nready <= 0)
                break;                  /* no more readable descriptors */
