@@ -390,8 +390,8 @@ int main(int argc, char **argv) {
 	    printf("client connect ...\n");
 	    conn_fd = accept(st, (struct sockaddr *) &tcp_addr, &tcp_client_length);
 	    if (verbose) {
-		/* printf("new client: %s, port %d\n", inet_ntop(AF_INET,
-		    &tcp_addr.sin_addr, 4, NULL), ntohs(tcp_addr.sin_port)); */
+		printf("new client: %s, port %d\n", inet_ntop(AF_INET,
+		    &tcp_addr.sin_addr, NULL, 4), ntohs(tcp_addr.sin_port));
 	    }
 	    for (i = 0; i < MAX_TCP_CONN; i++) {
 		if (tcp_client[i] < 0) {
