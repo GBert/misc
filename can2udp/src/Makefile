@@ -3,7 +3,7 @@ OBJ_CAN2LAN = can2lan.o
 CAN2UDP_BIN = can2udp
 CAN2LAN_BIN = can2lan
 
-PROGS = can2udp can2lan s88udp
+PROGS = can2udp can2lan
 
 all:	${PROGS}
 
