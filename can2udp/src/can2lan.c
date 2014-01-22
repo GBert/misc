@@ -31,8 +31,10 @@
 #include <time.h>
 #include <linux/can.h>
 
-#define MAXDG   4096		/* maximum datagram size */
-#define MAXUDP  16		/* maximum datagram size */
+#define MAXLINE		4096
+#define MAX_TCP_CONN	16		/* max TCP clients */
+#define MAXDG   	4096		/* maximum datagram size */
+#define MAXUDP  	16		/* maximum datagram size */
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
 #define debug_print(...) \
             do { if (DEBUG) fprintf(stderr, ##__VA_ARGS__); } while (0)
@@ -177,16 +179,18 @@ int send_magic_start_60113_frame(int can_socket, int verbose) {
 int main(int argc, char **argv) {
     pid_t pid;
     extern int optind, opterr, optopt;
-    int opt;
+    int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, tcp_client[MAX_TCP_CONN];;
     struct can_frame frame;
 
-    int sa, sc, sb, st;		/* UDP socket , CAN socket, UDP Broadcast Socket, TCP Socket */
+    int sa, sc, sb, st, tcp_socket;		/* UDP socket , CAN socket, UDP Broadcast Socket, TCP Socket */
+    char line[MAXLINE];
     struct sockaddr_in saddr, baddr, tcp_addr;
     struct sockaddr_can caddr;
     struct ifreq ifr;
     socklen_t caddrlen = sizeof(caddr);
+    socklen_t tcp_client_length = sizeof(tcp_addr);
 
-    fd_set readfds;
+    fd_set all_fds, read_fds;
 
     uint32_t	canid;
     int s, nbytes, ret;
@@ -294,6 +298,10 @@ int main(int argc, char **argv) {
 	perror("error starting TCP listener\n");
 	exit(1);
     }
+    /* prepare TCP clients array */
+    max_tcp_i = -1;			/* index into client[] array */
+    for (i = 0; i < MAX_TCP_CONN; i++)
+	tcp_client[i] = -1;		/* -1 indicates available entry */
 
     /* prepare CAN socket */
     if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
@@ -329,18 +337,20 @@ int main(int argc, char **argv) {
 	}
     }
 
-    while (1) {
-	FD_ZERO(&readfds);
-	FD_SET(sc, &readfds);
-	FD_SET(sa, &readfds);
-//	FD_SET(st, &readfds);
+    FD_ZERO(&all_fds);
+    FD_SET(sc, &all_fds);
+    FD_SET(sa, &all_fds);
+    FD_SET(st, &all_fds);
+    max_fds = MAX(MAX(sc, sa),st);
 
-	ret = select(MAX(MAX(sa, st),sc) + 1 , &readfds, NULL, NULL, NULL);
+    while (1) {
+	read_fds = all_fds;
+	ret = select(max_fds + 1 , &read_fds, NULL, NULL, NULL);
 	if (ret<0)
 	    perror("select error\n");
 
 	/* received a CAN frame */
-	if (FD_ISSET(sc, &readfds)) {
+	if (FD_ISSET(sc, &read_fds)) {
             if ((nbytes = read(sc, &frame, sizeof(struct can_frame))) < 0) {
 		perror("error reading CAN frame\n");
 	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
@@ -349,7 +359,7 @@ int main(int argc, char **argv) {
 	    }
 	}
 	/* received a UDP packet */
-	if (FD_ISSET(sa, &readfds)) {
+	if (FD_ISSET(sa, &read_fds)) {
 	    if (read(sa, netframe, MAXDG) == 13) {
 		/* send packet on CAN */
 		ret = frame_to_can(sc, netframe, verbose & !background);
@@ -376,9 +386,49 @@ int main(int argc, char **argv) {
 	    }
 	}
 	/* received a TCP packet */
-        if (FD_ISSET(st, &readfds)) {
-            if (read(st, netframe, MAXDG) == 13) {
-            }
+        if (FD_ISSET(st, &read_fds)) {
+	    printf("client connect ...\n");
+	    conn_fd = accept(st, (struct sockaddr *) &tcp_addr, &tcp_client_length);
+	    if (verbose) {
+		/* printf("new client: %s, port %d\n", inet_ntop(AF_INET,
+		    &tcp_addr.sin_addr, 4, NULL), ntohs(tcp_addr.sin_port)); */
+	    }
+	    for (i = 0; i < MAX_TCP_CONN; i++) {
+		if (tcp_client[i] < 0) {
+		    tcp_client[i] = conn_fd;		/* save new TCP client descriptor */
+		    break;
+		}
+		if (i == MAX_TCP_CONN)
+		    perror("too many TCP clients\n");
+
+		FD_SET(conn_fd, &all_fds);		/* add new descriptor to set */
+		if (conn_fd > max_fds)
+		    max_fds = conn_fd;			/* for select */
+		if (i > max_tcp_i)
+		    max_tcp_i = i;			/* max index in tcp_client[] array */
+		if (--nready <= 0)
+		    continue;				/* no more readable descriptors */
+	    }
+	}
+	/* check for already connected TCP clients */
+	for (i = 0; i <= max_tcp_i; i++) {                   /* check all clients for data */
+	    if ( (tcp_socket = tcp_client[i]) < 0)
+		continue;
+	    if (FD_ISSET(tcp_socket, &read_fds)) {
+		if ( (n = read(tcp_socket, line, MAXLINE)) == 0) {
+                /* TODO */
+		/* if (read(st, netframe, MAXDG) == 13) { */
+		    /* connection closed by client */
+		    close(tcp_socket);
+		    FD_CLR(tcp_socket, &all_fds);
+		    tcp_client[i] = -1;
+		}
+	    }
+	    /* TODO */
+	    write(tcp_socket, line, n);
+
+	    if (--nready <= 0)
+               break;                  /* no more readable descriptors */
 	}
     }
     close(sc);
