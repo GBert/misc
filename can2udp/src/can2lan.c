@@ -411,9 +411,14 @@ int main(int argc, char **argv) {
 	}
 	/* check for already connected TCP clients */
 	for (i = 0; i <= max_tcp_i; i++) {                   /* check all clients for data */
+	    printf("tcp packet received %d\n",i);
 	    if ( (tcp_socket = tcp_client[i]) < 0)
 		continue;
 	    if (FD_ISSET(tcp_socket, &read_fds)) {
+		if (verbose) {
+		    printf("packet from: %s, port %d\n", inet_ntop(AF_INET,
+			&tcp_addr.sin_addr, NULL, 4), ntohs(tcp_addr.sin_port));
+		}
 		if ( (n = read(tcp_socket, netframe, MAXDG)) == 0) {
 		    /* connection closed by client */
 		    close(tcp_socket);
