@@ -203,10 +203,10 @@ int main(int argc, char **argv) {
 		    print_can_frame(F_CAN_FORMAT_STRG, &frame);
 		}
 
-		switch ((frame.can_id & 0x00FF0000UL ) >> 16) {
-		case 0x80:	/* loco speed		*/
-		case 0xA0:	/* loco direction	*/
-		case 0xC0:	/* loco funtion		*/
+		switch ((frame.can_id & 0x00FF0000UL ) >> 17) {
+		case 0x04:	/* loco speed		*/
+		case 0x05:	/* loco direction	*/
+		case 0x06:	/* loco funtion		*/
 		    frame.can_id |= 0x00010000UL; 
 		    send_can_frame(sc, &frame, verbose);
 		default:
