@@ -433,7 +433,7 @@ int main(int argc, char **argv) {
 		}
 		if (read(tcp_socket, netframe, MAXDG) == 13) {
 		    print_can_frame(TCP_FORMAT_STRG, &netframe[0]);
-		    ret = frame_to_can(sc, netframe, verbose & !background);
+		    ret = frame_to_can(sc, netframe, 0);
 		}
 	    }
 	    /* TODO */

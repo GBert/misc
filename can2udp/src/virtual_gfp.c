@@ -207,6 +207,8 @@ int main(int argc, char **argv) {
 		case 0x04:	/* loco speed		*/
 		case 0x05:	/* loco direction	*/
 		case 0x06:	/* loco function	*/
+		case 0x0B:	/* extension	 	*/
+		    frame.can_id &= 0xFFFF0000UL; 
 		    frame.can_id |= 0x00010000UL; 
 		    send_can_frame(sc, &frame, verbose);
 		default:
