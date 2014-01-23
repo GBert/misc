@@ -9,7 +9,7 @@
  *
  *
  * this code emulates the M*rklin Gleisbox to some extend . Only for testing
- *  the M*rklinApp and gateway code
+ *  the M*rklinApp and gateway (can2lan) code
  *
  *  Usage: eg. verbose, running in foreground and listening to default vcan0:
  *    ./virtual_gfp -v -f
@@ -206,7 +206,7 @@ int main(int argc, char **argv) {
 		switch ((frame.can_id & 0x00FF0000UL ) >> 17) {
 		case 0x04:	/* loco speed		*/
 		case 0x05:	/* loco direction	*/
-		case 0x06:	/* loco funtion		*/
+		case 0x06:	/* loco function	*/
 		    frame.can_id |= 0x00010000UL; 
 		    send_can_frame(sc, &frame, verbose);
 		default:

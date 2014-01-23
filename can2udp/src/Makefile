@@ -1,17 +1,11 @@
-OBJ_CAN2UDP = can2udp.o
-OBJ_CAN2LAN = can2lan.o
-CAN2UDP_BIN = can2udp
-CAN2LAN_BIN = can2lan
+BINS := can2udp can2lan virtual_gfp
 
-PROGS = can2udp can2lan
+BIN = $@
 
-all:	${PROGS}
+%.o : %.c
 
-can2udp: $(OBJ_CAN2UDP)
-	$(CC) $(CFLAGS) -o $@ $(OBJ_CAN2UDP) $(LDFLAGS)
-
-can2lan: $(OBJ_CAN2LAN)
-	$(CC) $(CFLAGS) -o $@ $(OBJ_CAN2LAN) $(LDFLAGS)
+all:	$(BINS)
 
 clean:
-	rm -rf $(CAN2UDP_BIN) $(CAN2LAN_BIN) $(OBJ_CAN2UDP) $(OBJ_CAN2LAN)
+	$(RM) $(BINS)
+
