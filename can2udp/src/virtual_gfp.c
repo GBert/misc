@@ -6,6 +6,14 @@
  * and you think this stuff is worth it, you can buy me a beer in return
  * Gerhard Bertelsmann
  * ----------------------------------------------------------------------------
+ *
+ *
+ * this code emulates the M*rklin Gleisbox to some extend . Only for testing
+ *  the M*rklinApp and gateway code
+ *
+ *  Usage: eg. verbose, running in foreground and listening to default vcan0:
+ *    ./virtual_gfp -v -f
+ *
  */
 
 /* Thanks to Stefan Krauss and the SocketCAN team
