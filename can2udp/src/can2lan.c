@@ -201,6 +201,7 @@ int main(int argc, char **argv) {
     int background = 1;
     const int on = 1;
     char udp_dst_address[] = "255.255.255.255";
+    char buffer[64];
     strcpy(ifr.ifr_name, "can0");
 
     while ((opt = getopt(argc, argv, "u:t:d:b:i:vf?")) != -1) {
@@ -298,7 +299,7 @@ int main(int argc, char **argv) {
 	exit(1);
     }
     /* prepare TCP clients array */
-    max_tcp_i = -1;			/* index into client[] array */
+    max_tcp_i = -1;			/* index into tcp_client[] array */
     for (i = 0; i < MAX_TCP_CONN; i++)
 	tcp_client[i] = -1;		/* -1 indicates available entry */
 
@@ -386,11 +387,10 @@ int main(int argc, char **argv) {
 	}
 	/* received a TCP packet */
         if (FD_ISSET(st, &read_fds)) {
-	    printf("client connect ...\n");
 	    conn_fd = accept(st, (struct sockaddr *) &tcp_addr, &tcp_client_length);
 	    if (verbose) {
-		printf("new client: %s, port %d\n", inet_ntop(AF_INET,
-		    &tcp_addr.sin_addr, NULL, 4), ntohs(tcp_addr.sin_port));
+		printf("new client: %s, port %d conn fd: %d max fds: %d\n", inet_ntop(AF_INET,
+		    &(tcp_addr.sin_addr), buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port), conn_fd, max_fds);
 	    }
 	    for (i = 0; i < MAX_TCP_CONN; i++) {
 		if (tcp_client[i] < 0) {
