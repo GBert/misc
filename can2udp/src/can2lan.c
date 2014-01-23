@@ -119,9 +119,11 @@ void print_can_frame(char *format_string, unsigned char *netframe) {
     
 int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *frame, int verbose) {
     int s;
+    uint32_t canid;
     frame->can_id &= CAN_EFF_MASK;
     bzero(netframe, 13);
-    memcpy(&netframe[0], &frame->can_id, 4);
+    canid=htonl(frame->can_id);
+    memcpy(netframe,&canid,4);
     netframe[4] = frame->can_dlc;
     memcpy(&netframe[5], &frame->data, frame->can_dlc);
 
