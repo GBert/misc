@@ -393,6 +393,7 @@ int main(int argc, char **argv) {
 		    &(tcp_addr.sin_addr), buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port), conn_fd, max_fds);
 	    }
 	    for (i = 0; i < MAX_TCP_CONN; i++) {
+		printf(" walk: %d tcp_client[i]: %d\n", i , tcp_client[i]);
 		if (tcp_client[i] < 0) {
 		    tcp_client[i] = conn_fd;		/* save new TCP client descriptor */
 		    break;
@@ -411,6 +412,7 @@ int main(int argc, char **argv) {
 	}
 	/* check for already connected TCP clients */
 	for (i = 0; i <= max_tcp_i; i++) {                   /* check all clients for data */
+	    printf(" walk: %d tcp_client[i]: %d\n", i , tcp_client[i]);
 	    printf("tcp packet received %d\n",i);
 	    if ( (tcp_socket = tcp_client[i]) < 0)
 		continue;
