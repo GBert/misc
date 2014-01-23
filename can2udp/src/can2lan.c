@@ -398,17 +398,19 @@ int main(int argc, char **argv) {
 		    tcp_client[i] = conn_fd;		/* save new TCP client descriptor */
 		    break;
 		}
-		if (i == MAX_TCP_CONN)
-		    perror("too many TCP clients\n");
-
-		FD_SET(conn_fd, &all_fds);		/* add new descriptor to set */
-		if (conn_fd > max_fds)
-		    max_fds = conn_fd;			/* for select */
-		if (i > max_tcp_i)
-		    max_tcp_i = i;			/* max index in tcp_client[] array */
-		if (--nready <= 0)
-		    continue;				/* no more readable descriptors */
 	    }
+	    if (i == MAX_TCP_CONN)
+		perror("too many TCP clients\n");
+
+	    printf(" >1 tcp fd %d, max_fds %d\n", conn_fd , max_fds);
+	    FD_SET(conn_fd, &all_fds);		/* add new descriptor to set */
+	    if (conn_fd > max_fds)
+		max_fds = conn_fd;			/* for select */
+	    if (i > max_tcp_i)
+		max_tcp_i = i;			/* max index in tcp_client[] array */
+	    printf(" >2 tcp fd %d, max_fds %d\n", conn_fd , max_fds);
+	    if (--nready <= 0)
+		continue;				/* no more readable descriptors */
 	}
 	/* check for already connected TCP clients */
 	for (i = 0; i <= max_tcp_i; i++) {                   /* check all clients for data */
@@ -418,8 +420,8 @@ int main(int argc, char **argv) {
 		continue;
 	    if (FD_ISSET(tcp_socket, &read_fds)) {
 		if (verbose) {
-		    printf("packet from: %s, port %d\n", inet_ntop(AF_INET,
-			&tcp_addr.sin_addr, NULL, 4), ntohs(tcp_addr.sin_port));
+		    printf("%s packet from: %s, port %d\n", time_stamp(),  inet_ntop(AF_INET,
+			&tcp_addr.sin_addr, buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port));
 		}
 		if ( (n = read(tcp_socket, netframe, MAXDG)) == 0) {
 		    /* connection closed by client */
