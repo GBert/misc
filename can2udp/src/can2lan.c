@@ -126,7 +126,7 @@ int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *fr
     memcpy(&netframe[5], &frame->data, frame->can_dlc);
 
     /* send UDP frame */
-    s = sendto(net_socket, netframe, 13, 0, net_addr, sizeof(&net_addr));
+    s = sendto(net_socket, netframe, 13, 0, net_addr, sizeof(*net_addr));
     if (s != 13) {
 	perror("error sending UDP data\n");
 	return -1;
