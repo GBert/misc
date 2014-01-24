@@ -42,6 +42,7 @@ char *CAN_FORMAT_STRG       ="      CAN->  CANID 0x%06X R [%d]";
 char *TO_CAN_FORMAT_STRG    ="      CAN    CANID 0x%06X   [%d]";
 char *UDP_FORMAT_STRG       ="->CAN>UDP    CANID 0x%06X   [%d]";
 char *TCP_FORMAT_STRG       ="->TCP>CAN    CANID 0x%06X   [%d]";
+char *CAN_TCP_FORMAT_STRG   ="->CAN>TCP    CANID 0x%06X   [%d]";
 char *NET_UDP_FORMAT_STRG   ="      UDP->  CANID 0x%06X   [%d]";
 
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE [] = {0x00,0x36,0x03,0x01,0x05,0x00,0x00,0x00,0x00,0x11,0x00,0x00,0x00};
@@ -359,6 +360,16 @@ int main(int argc, char **argv) {
 		frame_to_net(sb, (struct sockaddr *) &baddr, (struct can_frame *) &frame);
 		if (verbose && !background)
 	            print_can_frame(UDP_FORMAT_STRG, netframe);
+		/* send CAN frame to all connected TCP clients */
+		/* TODO: need all clients the packets ? */ 
+		for (i = 0; i <= max_tcp_i; i++) {	/* check all clients for data */
+		    if ( (tcp_socket = tcp_client[i]) < 0)
+			continue;
+		    frame_to_net(tcp_socket, (struct sockaddr *) &tcp_addr, (struct can_frame *) &frame);
+		    if (verbose && !background)
+			print_can_frame(CAN_TCP_FORMAT_STRG, netframe);
+		}
+	    // printf("%s tcp packet received from client #%d  max_tcp_i:%d todo:%d\n", time_stamp(), i, max_tcp_i,nready);
 	    }
 	}
 	/* received a UDP packet */
