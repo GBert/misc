@@ -414,12 +414,10 @@ int main(int argc, char **argv) {
 	}
 	/* check for already connected TCP clients */
 	for (i = 0; i <= max_tcp_i; i++) {                   /* check all clients for data */
-	    // printf(" walk: %d tcp_client[i]: %d\n", i , tcp_client[i]);
-	    printf("%s tcp packet received from client #%d\n", time_stamp(), i);
 	    if ( (tcp_socket = tcp_client[i]) < 0)
 		continue;
 	    if (FD_ISSET(tcp_socket, &read_fds)) {
-		if (verbose) {
+		if (verbose && !background) {
 		    printf("%s packet from: %s, port %d\n", time_stamp(),  inet_ntop(AF_INET,
 			&tcp_addr.sin_addr, buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port));
 		}
@@ -428,16 +426,16 @@ int main(int argc, char **argv) {
 		    close(tcp_socket);
 		    FD_CLR(tcp_socket, &all_fds);
 		    tcp_client[i] = -1;
-		}
-		if (read(tcp_socket, netframe, MAXDG) == 13) {
-		    ret = frame_to_can(sc, netframe);
-		    if ((ret == 0) && (verbose && !background))
-			 print_can_frame(TCP_FORMAT_STRG, &netframe[0]);
+		} else {
+		    if (n == 13) {
+			ret = frame_to_can(sc, netframe);
+			if ((ret == 0) && (verbose && !background))
+			    print_can_frame(TCP_FORMAT_STRG, &netframe[0]);
+		    } else {
+			fprintf(stderr, "%s received short package: %d\n", time_stamp(), n);
+		    }
 		}
 	    }
-	    /* TODO */
-	    /* write(tcp_socket, line, n); */
-
 	    if (--nready <= 0)
                break;                  /* no more readable descriptors */
 	}
