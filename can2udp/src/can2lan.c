@@ -63,7 +63,7 @@ void Signal_Handler(sig) {		/* signal handler function */
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 0.3\n");
+    fprintf(stderr, "   Version 0.5\n");
     fprintf(stderr, "\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
@@ -204,7 +204,7 @@ int main(int argc, char **argv) {
     char buffer[64];
     strcpy(ifr.ifr_name, "can0");
 
-    while ((opt = getopt(argc, argv, "u:t:d:b:i:vf?")) != -1) {
+    while ((opt = getopt(argc, argv, "u:t:d:b:i:vhf?")) != -1) {
 	switch (opt) {
 	case 'u':
 	    local_udp_port = strtoul(optarg, (char **) NULL, 10);
@@ -231,6 +231,7 @@ int main(int argc, char **argv) {
 	case 'f':
 	    background = 0;
 	    break;
+	case 'h':
 	case '?':
 	    print_usage(basename(argv[0]));
 	    exit(0);

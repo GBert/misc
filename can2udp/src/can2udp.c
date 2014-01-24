@@ -50,18 +50,13 @@ void print_usage(char *prg)
 {
     fprintf(stderr, "\nUsage: %s -l <port> -d <port> -i <can interface>\n",
 	    prg);
-    fprintf(stderr, "   Version 0.1\n");
+    fprintf(stderr, "   Version 0.2\n");
     fprintf(stderr, "\n");
-    fprintf(stderr,
-	    "         -l <port>           listening UDP port for the server - default 15731\n");
-    fprintf(stderr,
-	    "         -d <port>           destination UDP port for the server - default 15730\n");
-    fprintf(stderr,
-	    "         -b <broadcast_addr> broadcast address - default 255.255.255.255\n");
-    fprintf(stderr,
-	    "         -i <can int>        can interface - default can0\n");
-    fprintf(stderr,
-	    "         -f                  running in foreground\n");
+    fprintf(stderr, "         -l <port>           listening UDP port for the server - default 15731\n");
+    fprintf(stderr, "         -d <port>           destination UDP port for the server - default 15730\n");
+    fprintf(stderr, "         -b <broadcast_addr> broadcast address - default 255.255.255.255\n");
+    fprintf(stderr, "         -i <can int>        can interface - default can0\n");
+    fprintf(stderr, "         -f                  running in foreground\n");
     fprintf(stderr, "\n");
 
 }
