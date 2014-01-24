@@ -383,7 +383,7 @@ int main(int argc, char **argv) {
 		    if (s != 13) {
 			perror("error sending UDP data (CAN Ping)\n");
 		    } else if (verbose & !background) {
-			print_can_frame(NET_UDP_FORMAT_STRG, &netframe[0]);
+			print_can_frame(NET_UDP_FORMAT_STRG, netframe);
 			printf("                replied CAN ping\n");
 		    }
 		}
@@ -406,12 +406,10 @@ int main(int argc, char **argv) {
 		perror("too many TCP clients\n");
 
 	    FD_SET(conn_fd, &all_fds);		/* add new descriptor to set */
-	    if (conn_fd > max_fds)
-		max_fds = conn_fd;			/* for select */
-	    if (i > max_tcp_i)
-		max_tcp_i = i;			/* max index in tcp_client[] array */
+	    max_fds = MAX(conn_fd,max_fds);	/* for select */
+	    max_tcp_i = MAX(i, max_tcp_i);	/* max index in tcp_client[] array */
 	    if (--nready <= 0)
-		continue;				/* no more readable descriptors */
+		continue;			/* no more readable descriptors */
 	}
 	/* check for already connected TCP clients */
 	for (i = 0; i <= max_tcp_i; i++) {                   /* check all clients for data */
@@ -432,7 +430,7 @@ int main(int argc, char **argv) {
 		    if (n == 13) {
 			ret = frame_to_can(sc, netframe);
 			if ((ret == 0) && (verbose && !background))
-			    print_can_frame(TCP_FORMAT_STRG, &netframe[0]);
+			    print_can_frame(TCP_FORMAT_STRG, netframe);
 		    } else {
 			fprintf(stderr, "%s received package =!13 : %d\n", time_stamp(), n);
 		    }
