@@ -395,7 +395,6 @@ int main(int argc, char **argv) {
 		    &(tcp_addr.sin_addr), buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port), conn_fd, max_fds);
 	    }
 	    for (i = 0; i < MAX_TCP_CONN; i++) {
-		printf(" walk: %d tcp_client[i]: %d\n", i , tcp_client[i]);
 		if (tcp_client[i] < 0) {
 		    tcp_client[i] = conn_fd;		/* save new TCP client descriptor */
 		    break;
@@ -404,20 +403,18 @@ int main(int argc, char **argv) {
 	    if (i == MAX_TCP_CONN)
 		perror("too many TCP clients\n");
 
-	    printf(" >1 tcp fd %d, max_fds %d\n", conn_fd , max_fds);
 	    FD_SET(conn_fd, &all_fds);		/* add new descriptor to set */
 	    if (conn_fd > max_fds)
 		max_fds = conn_fd;			/* for select */
 	    if (i > max_tcp_i)
 		max_tcp_i = i;			/* max index in tcp_client[] array */
-	    printf(" >2 tcp fd %d, max_fds %d\n", conn_fd , max_fds);
 	    if (--nready <= 0)
 		continue;				/* no more readable descriptors */
 	}
 	/* check for already connected TCP clients */
 	for (i = 0; i <= max_tcp_i; i++) {                   /* check all clients for data */
-	    printf(" walk: %d tcp_client[i]: %d\n", i , tcp_client[i]);
-	    printf("tcp packet received %d\n",i);
+	    // printf(" walk: %d tcp_client[i]: %d\n", i , tcp_client[i]);
+	    printf("%s tcp packet received from client #%d\n", time_stamp(), i);
 	    if ( (tcp_socket = tcp_client[i]) < 0)
 		continue;
 	    if (FD_ISSET(tcp_socket, &read_fds)) {
