@@ -345,8 +345,8 @@ int main(int argc, char **argv) {
 
     while (1) {
 	read_fds = all_fds;
-	ret = select(max_fds + 1 , &read_fds, NULL, NULL, NULL);
-	if (ret<0)
+	nready = select(max_fds + 1 , &read_fds, NULL, NULL, NULL);
+	if (nready<0)
 	    perror("select error\n");
 
 	/* received a CAN frame */
@@ -416,10 +416,11 @@ int main(int argc, char **argv) {
 	for (i = 0; i <= max_tcp_i; i++) {                   /* check all clients for data */
 	    if ( (tcp_socket = tcp_client[i]) < 0)
 		continue;
+	    // printf("%s tcp packet received from client #%d  max_tcp_i:%d todo:%d\n", time_stamp(), i, max_tcp_i,nready);
 	    if (FD_ISSET(tcp_socket, &read_fds)) {
 		if (verbose && !background) {
-		    printf("%s packet from: %s, port %d\n", time_stamp(),  inet_ntop(AF_INET,
-			&tcp_addr.sin_addr, buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port));
+		    printf("%s packet from: %s\n", time_stamp(),  inet_ntop(AF_INET,
+			&tcp_addr.sin_addr, buffer, sizeof(buffer)));
 		}
 		if ( (n = read(tcp_socket, netframe, MAXDG)) == 0) {
 		    /* connection closed by client */
@@ -432,12 +433,12 @@ int main(int argc, char **argv) {
 			if ((ret == 0) && (verbose && !background))
 			    print_can_frame(TCP_FORMAT_STRG, &netframe[0]);
 		    } else {
-			fprintf(stderr, "%s received short package: %d\n", time_stamp(), n);
+			fprintf(stderr, "%s received package =!13 : %d\n", time_stamp(), n);
 		    }
 		}
+		if (--nready <= 0)
+		    break;                  /* no more readable descriptors */
 	    }
-	    if (--nready <= 0)
-               break;                  /* no more readable descriptors */
 	}
     }
     close(sc);
