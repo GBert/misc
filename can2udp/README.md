@@ -12,7 +12,7 @@ The other files are for testing or pre-alpha state.
 
 ### Using
 <pre><code>
-Usage: can2udp -l <port> -d <port> -i <can interface>
+Usage: can2udp -l \<port\> -d \<port\> -i \<can interface\>
    Version 0.2
 
          -l <port>           listening UDP port for the server - default 15731
@@ -22,7 +22,7 @@ Usage: can2udp -l <port> -d <port> -i <can interface>
          -f                  running in foreground
 </pre></code>
 <pre><code>
-Usage: can2lan -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>
+Usage: can2lan -u \<udp_port\> -t \<tcp_port\> -d \<udp_dest_port\> -i \<can interface\>
    Version 0.5
 
          -u <port>           listening UDP port for the server - default 15731
