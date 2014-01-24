@@ -45,9 +45,9 @@
 #define debug_print(...) \
             do { if (DEBUG) fprintf(stderr, ##__VA_ARGS__); } while (0)
 
-char *F_CAN_FORMAT_STRG    ="      <-CAN CANID 0x%08X R [%d]";
-char *F_S_CAN_FORMAT_STRG  ="short <-CAN CANID 0x%08X R [%d]";
-char *T_CAN_FORMAT_STRG    ="      ->CAN CANID 0x%08X   [%d]";
+char *F_CAN_FORMAT_STRG    ="      CAN->  CANID 0x%08X R [%d]";
+char *F_S_CAN_FORMAT_STRG  ="short CAN->  CANID 0x%08X R [%d]";
+char *T_CAN_FORMAT_STRG    ="    ->CAN    CANID 0x%08X   [%d]";
 
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE [] = {0x00,0x36,0x03,0x01,0x05,0x00,0x00,0x00,0x00,0x11,0x00,0x00,0x00};
 
@@ -128,7 +128,7 @@ int main(int argc, char **argv) {
     fd_set read_fds;
 
     int verbose = 1;
-    int background = 1;
+    int background = 0;
     strcpy(ifr.ifr_name, "vcan0");
 
     while ((opt = getopt(argc, argv, "u:t:d:b:i:vf?")) != -1) {

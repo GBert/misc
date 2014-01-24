@@ -38,10 +38,11 @@
 #define debug_print(...) \
             do { if (DEBUG) fprintf(stderr, ##__VA_ARGS__); } while (0)
 
-char *CAN_FORMAT_STRG    ="->CAN>UDP CANID 0x%06X R [%d]";
-char *UDP_FORMAT_STRG    ="<-CAN<UDP CANID 0x%06X   [%d]";
-char *TCP_FORMAT_STRG    ="<-CAN<TCP CANID 0x%06X   [%d]";
-char *NET_UDP_FORMAT_STRG="     >UDP CANID 0x%06X   [%d]";
+char *CAN_FORMAT_STRG       ="      CAN->  CANID 0x%06X R [%d]";
+char *TO_CAN_FORMAT_STRG    ="      CAN    CANID 0x%06X   [%d]";
+char *UDP_FORMAT_STRG       ="->CAN>UDP    CANID 0x%06X   [%d]";
+char *TCP_FORMAT_STRG       ="->TCP>CAN    CANID 0x%06X   [%d]";
+char *NET_UDP_FORMAT_STRG   ="      UDP->  CANID 0x%06X   [%d]";
 
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE [] = {0x00,0x36,0x03,0x01,0x05,0x00,0x00,0x00,0x00,0x11,0x00,0x00,0x00};
 
@@ -117,7 +118,7 @@ void print_can_frame(char *format_string, unsigned char *netframe) {
     printf("\n");
 }
     
-int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *frame, int verbose) {
+int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *frame) {
     int s;
     uint32_t canid;
     frame->can_id &= CAN_EFF_MASK;
@@ -133,12 +134,10 @@ int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *fr
 	perror("error sending UDP data\n");
 	return -1;
     }
-    if (verbose) 
-	print_can_frame(CAN_FORMAT_STRG, &netframe[0]);
     return 0;
 }
 
-int frame_to_can(int can_socket, unsigned char *netframe, int verbose) {
+int frame_to_can(int can_socket, unsigned char *netframe) {
     uint32_t canid;
     int nbytes;
     struct can_frame frame;
@@ -160,20 +159,19 @@ int frame_to_can(int can_socket, unsigned char *netframe, int verbose) {
 	perror("error writing CAN frame\n");
 	return -1;
     }
-    if (verbose)
-	print_can_frame(UDP_FORMAT_STRG, &netframe[0]);
     return 0;
 }
 
 int send_magic_start_60113_frame(int can_socket, int verbose) {
     int ret;
-    ret = frame_to_can(can_socket, &M_GLEISBOX_MAGIC_START_SEQUENCE[0], verbose);
+    ret = frame_to_can(can_socket, &M_GLEISBOX_MAGIC_START_SEQUENCE[0]);
     if (ret < 0 ) {
 	perror("error CAN magic 60113 start write\n");
 	return -1;
     } else {
 	if (verbose)
 	    printf("                CAN magic 60113 start write\n");
+	    print_can_frame(CAN_FORMAT_STRG, M_GLEISBOX_MAGIC_START_SEQUENCE);
     }
     return 0;
 }
@@ -357,15 +355,18 @@ int main(int argc, char **argv) {
 		perror("error reading CAN frame\n");
 	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		/* send UDP frame */
-		frame_to_net(sb, (struct sockaddr *) &baddr, (struct can_frame *) &frame, verbose & !background);
+		frame_to_net(sb, (struct sockaddr *) &baddr, (struct can_frame *) &frame);
+		if (verbose && !background)
+	            print_can_frame(UDP_FORMAT_STRG, netframe);
 	    }
 	}
 	/* received a UDP packet */
 	if (FD_ISSET(sa, &read_fds)) {
 	    if (read(sa, netframe, MAXDG) == 13) {
 		/* send packet on CAN */
-		ret = frame_to_can(sc, netframe, verbose & !background);
-
+		ret = frame_to_can(sc, netframe);
+		if (verbose && !background)
+		    print_can_frame(NET_UDP_FORMAT_STRG, netframe);
     		memcpy(&canid, netframe, 4);
     		canid=ntohl(canid);
 		/* answer to encapsulated CAN ping from LAN to LAN */
@@ -380,7 +381,7 @@ int main(int argc, char **argv) {
 		    s = sendto(sb, netframe, 13, 0, (struct sockaddr *) &baddr, sizeof(baddr));
 		    if (s != 13) {
 			perror("error sending UDP data (CAN Ping)\n");
-		    } else {
+		    } else if (verbose & !background) {
 			print_can_frame(NET_UDP_FORMAT_STRG, &netframe[0]);
 			printf("                replied CAN ping\n");
 		    }
@@ -390,7 +391,7 @@ int main(int argc, char **argv) {
 	/* received a TCP packet */
         if (FD_ISSET(st, &read_fds)) {
 	    conn_fd = accept(st, (struct sockaddr *) &tcp_addr, &tcp_client_length);
-	    if (verbose) {
+	    if (verbose && !background) {
 		printf("new client: %s, port %d conn fd: %d max fds: %d\n", inet_ntop(AF_INET,
 		    &(tcp_addr.sin_addr), buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port), conn_fd, max_fds);
 	    }
@@ -429,8 +430,9 @@ int main(int argc, char **argv) {
 		    tcp_client[i] = -1;
 		}
 		if (read(tcp_socket, netframe, MAXDG) == 13) {
-		    print_can_frame(TCP_FORMAT_STRG, &netframe[0]);
-		    ret = frame_to_can(sc, netframe, 0);
+		    ret = frame_to_can(sc, netframe);
+		    if ((ret == 0) && (verbose && !background))
+			 print_can_frame(TCP_FORMAT_STRG, &netframe[0]);
 		}
 	    }
 	    /* TODO */
