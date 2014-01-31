@@ -52,9 +52,19 @@
 
 #include <linux/can.h>
 
+/*
+ * CFL_WORSTCASE corresponds to Ken Tindells *worst* case calculation
+ * for stuff-bits (see "Guaranteeing Message Latencies on Controller
+ * Area Network" 1st ICC'94) the needed bits on the wire can be
+ * calculated as:
+ *
+ * (34 + 8n)/5 + 47 + 8n for SFF frames (11 bit CAN-ID) => (269 + 48n)/5
+ * (54 + 8n)/5 + 67 + 8n for EFF frames (29 bit CAN-ID) => (389 + 48n)/5
+ */
+
 #define NUM_OF_FRAMES        1000000
-#define CAN_NORMAL_FRAME_BITS(a)    ((47 + a*8))
-#define CAN_EXTENDED_FRAME_BITS(a)  ((67 + a*8))
+#define CAN_NORMAL_FRAME_BITS(a)    ((269 + 48*a)/5)
+#define CAN_EXTENDED_FRAME_BITS(a)  ((389 + 48*a)/5)
 
 void handler(int v) {
     signal(SIGINT, handler);
