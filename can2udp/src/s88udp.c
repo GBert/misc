@@ -1,10 +1,16 @@
 /*
- * Copyright 2013, Siegfried Lohberg
+ * Copyright 2013 - 2014, Siegfried Lohberg
  *
  * "THE BEER-WARE LICENSE" (Revision 42):
- * <siggi@soft-chip.de> wrote this file. As long as you retain this notice you
+ * Siegfried Lohberg wrote this file. As long as you retain this notice you
  * can do whatever you want with this stuff. If we meet some day, and you think
  * this stuff is worth it, you can buy me a beer in return.
+ */
+/*
+ * Credit: 
+ * In dieses Programm flossen Ideen von Gerhard Bertelsmann 
+ * und seinem can2udp Projekt ebenso wie aus dem railuino 
+ * Projekt von Jörg Pleumann.
  */
 
 #include <stdio.h>
@@ -28,7 +34,7 @@
 
 void usage() {
   fprintf(stderr, "\nUsage: s88udp -vf [-d <destination>][-p <port>][-m <s88modules>][-o <offset>]\n");
-  fprintf(stderr, "   Version 1.02\n");
+  fprintf(stderr, "   Version 1.03\n");
   fprintf(stderr, "\n");
   fprintf(stderr, "         -d <destination>    IP Address of the server - default 127.0.0.1\n");
   fprintf(stderr, "         -p <port>           Destination port of the server - default 15730\n");
@@ -98,6 +104,7 @@ main(int argc, char **argv)
   int udpsock;
   struct hostent *hp;
   struct sockaddr_in destaddr;
+  const int on = 1;
   const char destip[] = "127.0.0.1";
   int destination_port = 15730;
 
@@ -187,6 +194,12 @@ main(int argc, char **argv)
     perror("Open UDP socket");
     exit(1);
   }
+
+  if (setsockopt(udpsock, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0){
+     perror("setsockopt");
+     exit(1);
+  }
+
 
   if (background) {
     pid_t pid;
