@@ -7,8 +7,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rocrail
-PKG_REV:=e61476a384
-PKG_REV:=e562ced7f2
+PKG_REV:=31e85a9996
+PKG_REV:=3f127f373f
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -26,7 +26,7 @@ define Package/rocrail
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Rocrail
-  DEPENDS:=+libpthread +libusb-compat
+  DEPENDS:=+libpthread +libusb-1.0
   MAINTAINER:=Gerhard Bertelsmann
 endef
 
