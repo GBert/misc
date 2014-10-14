@@ -1,0 +1,6 @@
+config BIT_BANG_GPIO
+    tristate "S88 GPIO"
+    depends on GENERIC_GPIO
+    select S88_GPIO
+    help
+      Railroad S88 GPIO
