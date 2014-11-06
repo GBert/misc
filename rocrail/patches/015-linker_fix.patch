@@ -1,6 +1,6 @@
 --- a/rocdigs/makefile
 +++ b/rocdigs/makefile
-@@ -86,7 +86,7 @@
+@@ -88,7 +88,7 @@
  	DIRPREFIX=unx
  	CC_EXTRA_FLAGS=-fPIC
  	LNK_FLAGS=-shared
