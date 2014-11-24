@@ -7,8 +7,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rocrail
-PKG_REV:=cd3d8dc47c
 PKG_REV:=acc5e6d342
+PKG_REV:=41b31960a5
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -66,6 +66,17 @@ endef
 
 define Package/rocrail-cs-mcs2/description
  Command Station Maerklin CS2
+endef
+
+define Package/rocrail-cs-mgbox
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=Gleisbox as Command Station
+  DEPENDS:=rocrail-server
+endef
+
+define Package/rocrail-cs-mgbox/description
+ Using a Gleisbox as Command Station (needs CAN)
 endef
 
 define Package/rocrail-cs-ddx
@@ -126,6 +137,11 @@ define Package/rocrail-cs-mcs2/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/mcs2.so $(1)/opt/rocrail
 endef
 
+define Package/rocrail-cs-mgbox/install
+	$(INSTALL_DIR) $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/mgbox.so $(1)/opt/rocrail
+endef
+
 define Package/rocrail-cs-srcp/install
 	$(INSTALL_DIR) $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/srcp.so $(1)/opt/rocrail
@@ -137,4 +153,5 @@ $(eval $(call BuildPackage,rocrail-server))
 $(eval $(call BuildPackage,rocnetnode))
 $(eval $(call BuildPackage,rocrail-cs-ddx))
 $(eval $(call BuildPackage,rocrail-cs-mcs2))
+$(eval $(call BuildPackage,rocrail-cs-mgbox))
 $(eval $(call BuildPackage,rocrail-cs-srcp))
