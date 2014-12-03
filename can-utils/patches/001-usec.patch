@@ -1,7 +1,7 @@
-diff --git a/cangen.c b/cangen.c
+diff --git a/trunk/can-tils/cangen.c b/trunk/can-utils/cangen.c
 index db4c803..8adfcb2 100644
---- a/cangen.c
-+++ b/cangen.c
+--- a/trunk/can-utils/cangen.c
++++ b/trunk/can-utils/cangen.c
 @@ -64,7 +64,7 @@
  #include <linux/can/raw.h>
  #include "lib.h"
