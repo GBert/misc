@@ -40,8 +40,13 @@
 #define debug_print(...) \
             do { if (DEBUG) fprintf(stderr, ##__VA_ARGS__); } while (0)
 
+#define	CRC		0x01
+#define COMPRESSED	0x02
 
 static const int MAXPENDING = 16;	/* max outstanding tcp connections */
 unsigned char netframe[MAXDG];
+
+uint8_t * read_config_file(char *filename, uint32_t *nbytes, char compressed, uint16_t *crc);
+
 #endif /* _CAN2LAN_H_ */
 

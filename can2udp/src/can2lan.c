@@ -149,6 +149,24 @@ int send_magic_start_60113_frame(int can_socket, int verbose) {
     return 0;
 }
 
+int check_data(int tcp_socket, unsigned char *netframe) {
+    uint32_t canid;
+    char config_name[8];
+    memcpy(&canid, netframe, 4);
+    canid &= 0x00ff0000;
+    switch (canid) {
+        case (0x00400000) : /* config data */
+             strncpy(config_name,(char *) &netframe[5], 8);
+             if (strcmp(config_name, "gbs-0")) {
+                 send_tcp_config_data("gleisbild", tcp_socket, CRC|COMPRESSED);
+             }
+	     break;
+    }
+    return 0;
+}
+
+
+
 int main(int argc, char **argv) {
     pid_t pid;
     extern int optind, opterr, optopt;
