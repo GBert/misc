@@ -132,7 +132,7 @@ int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *fr
     /* send UDP frame */
     s = sendto(net_socket, netframe, 13, 0, net_addr, sizeof(*net_addr));
     if (s != 13) {
-	perror("error sending UDP data\n");
+	perror("error sending TCP/UDP data\n");
 	return -1;
     }
     return 0;
