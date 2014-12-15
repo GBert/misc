@@ -10,9 +10,11 @@
 
 #include "can2lan.h"
 
-#define POLY 0x1021
+#define POLYNOM 0x1021
 
-uint16_t UpdateCRC(unsigned short CRC_acc, unsigned char CRC_input) {
+/* based on the "Kommunkationsprotokoll ..." Maerklin cs2CAN-Protokoll-2_0.pdf page 49 */
+
+uint16_t UpdateCRC(uint16_t CRC_acc, uint8_t CRC_input) {
     int i;
 
     /* Create the CRC "dividend" for polynomial arithmetic
@@ -29,7 +31,7 @@ uint16_t UpdateCRC(unsigned short CRC_acc, unsigned char CRC_input) {
         {
            /* if so, shift the CRC value, and XOR "subtract" the poly */
            CRC_acc = CRC_acc << 1;
-           CRC_acc ^= POLY;
+           CRC_acc ^= POLYNOM;
         }
         else
         {
