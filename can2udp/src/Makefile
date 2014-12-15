@@ -2,11 +2,16 @@ BINS := can2udp can2lan virtual_gfp
 
 BIN = $@
 
-%.o : %.c
-	$(CC) $(CFLAGS) -o $@
-
 all:	$(BINS)
 
-clean:
-	$(RM) $(BINS)
+can2udp: can2udp.o
+	$(CC) $(CFLAGS) -o can2udp can2udp.o
 
+can2lan: gio.o can2lan.o
+	$(CC) $(CFLAGS) -o can2lan gio.o can2lan.o
+
+virtual_gfp: virtual_gfp.o
+	$(CC) $(CFLAGS) -o virtual_gfp virtual_gfp.o
+
+clean:
+	$(RM) *.o $(BINS)
