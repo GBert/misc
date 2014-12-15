@@ -154,11 +154,12 @@ int check_data(int tcp_socket, unsigned char *netframe) {
     char config_name[8];
     memcpy(&canid, netframe, 4);
     canid = ntohl(canid);
-    canid &= 0x00ff0000;
+    canid &= 0x00FF0000UL;
     printf("%s ID 0x%08x\n", __func__, canid);
     switch (canid) {
-        case (0x00400000) : /* config data */
+        case (0x00400000UL) : /* config data */
              strncpy(config_name,(char *) &netframe[5], 8);
+             printf("%s ID 0x%08x %s\n", __func__, canid, (char *) &netframe[5]);
              if (strcmp(config_name, "gbs-0")) {
                  send_tcp_config_data("gleisbild", tcp_socket, CRC|COMPRESSED);
              }
