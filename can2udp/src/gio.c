@@ -9,6 +9,30 @@
  */
 
 #include "can2lan.h"
+#include <stdio.h>
+#include <zlib.h>
+#include <stdlib.h>
+#include <string.h>
+
+/* CHUNK is the size of the memory chunk used by the zlib routines. */
+
+#define CHUNK 0x4000
+
+/* The following macro calls a zlib routine and checks the return
+   value. If the return value ("status") is not OK, it prints an error
+   message and exits the program. Zlib's error statuses are all less
+   than zero. */
+
+#define CALL_ZLIB(x) {                                                  \
+        int status;                                                     \
+        status = x;                                                     \
+        if (status < 0) {                                               \
+            fprintf (stderr,                                            \
+                     "%s:%d: %s returned a bad status of %d.\n",        \
+                     __FILE__, __LINE__, #x, status);                   \
+            exit (EXIT_FAILURE);                                        \
+        }                                                               \
+    }
 
 #define POLYNOM 0x1021
 
