@@ -153,7 +153,9 @@ int check_data(int tcp_socket, unsigned char *netframe) {
     uint32_t canid;
     char config_name[8];
     memcpy(&canid, netframe, 4);
+    canid = ntohl(canid);
     canid &= 0x00ff0000;
+    printf("%s ID 0x%08x\n", __func__, canid);
     switch (canid) {
         case (0x00400000) : /* config data */
              strncpy(config_name,(char *) &netframe[5], 8);
@@ -430,6 +432,7 @@ int main(int argc, char **argv) {
 		} else {
 		    if (n == 13) {
 			ret = frame_to_can(sc, netframe);
+                        check_data(tcp_socket, netframe);
 			if ((ret == 0) && (verbose && !background))
 			    print_can_frame(TCP_FORMAT_STRG, netframe);
 		    } else {
