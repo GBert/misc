@@ -369,7 +369,7 @@ int main(int argc, char **argv) {
 		    if (verbose && !background)
 			print_can_frame(CAN_TCP_FORMAT_STRG, netframe);
 		}
-	    // printf("%s tcp packet received from client #%d  max_tcp_i:%d todo:%d\n", time_stamp(), i, max_tcp_i,nready);
+	    /* printf("%s tcp packet received from client #%d  max_tcp_i:%d todo:%d\n", time_stamp(), i, max_tcp_i,nready); */
 	    }
 	}
 	/* received a UDP packet */
@@ -426,7 +426,7 @@ int main(int argc, char **argv) {
 	for (i = 0; i <= max_tcp_i; i++) {                   /* check all clients for data */
 	    if ( (tcp_socket = tcp_client[i]) < 0)
 		continue;
-	    // printf("%s tcp packet received from client #%d  max_tcp_i:%d todo:%d\n", time_stamp(), i, max_tcp_i,nready);
+	    /* printf("%s tcp packet received from client #%d  max_tcp_i:%d todo:%d\n", time_stamp(), i, max_tcp_i,nready); */
 	    if (FD_ISSET(tcp_socket, &read_fds)) {
 		if (verbose && !background) {
 		    printf("%s packet from: %s\n", time_stamp(),  inet_ntop(AF_INET,
