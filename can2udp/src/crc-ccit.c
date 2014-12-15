@@ -47,12 +47,13 @@ static uint16_t crc_table [256] = {
 0x2e93, 0x3eb2, 0x0ed1, 0x1ef0
 };
 
+/* Maerklin uses CCIT CRC, which is polynom 0x1021 -> x^16 + x^12 +x^5 + 1 */
 uint16_t CRCCCITT(unsigned char *data, size_t length, unsigned short seed)
 { 
 
    size_t count;
-   unsigned int crc = seed;
-   unsigned int temp;
+   uint16_t crc = seed;
+   uint16_t temp;
 
    for (count = 0; count < length; ++count)
    {
