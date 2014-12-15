@@ -24,6 +24,7 @@
 #include <sys/ioctl.h>
 #include <net/if.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 
 #include <linux/can.h>
 
@@ -33,7 +34,7 @@
 unsigned char udpframe[MAXDG];
 unsigned char udpframe_reply[MAXDG];
 
-void Signal_Handler(sig)
+void Signal_Handler(int sig)
 {				/* signal handler function */
     switch (sig) {
     case SIGHUP:
@@ -97,7 +98,7 @@ int main(int argc, char **argv)
     struct sockaddr_in saddr, baddr;
     struct sockaddr_can caddr;
     struct ifreq ifr;
-    // socklen_t sin_size = sizeof(clientaddr);
+    /* socklen_t sin_size = sizeof(clientaddr); */
     socklen_t caddrlen = sizeof(caddr);
 
     fd_set readfds;
@@ -106,7 +107,7 @@ int main(int argc, char **argv)
 
     int local_port = 15731;
     int destination_port = 15730;
-    // int broadcast_address;
+    /* int broadcast_address; */
     int verbose = 1;
     int background = 1;
     int canid = 0;
@@ -230,9 +231,10 @@ int main(int argc, char **argv)
 	FD_SET(sc, &readfds);
 	FD_SET(sa, &readfds);
 
-	ret =
-	    select((sc > sa) ? sc + 1 : sa + 1, &readfds, NULL, NULL,
-		   NULL);
+	ret = select((sc > sa) ? sc + 1 : sa + 1, &readfds, NULL, NULL, NULL);
+	if (ret == -1) {
+            perror("select error");
+        };
 
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &readfds)) {
@@ -266,7 +268,7 @@ int main(int argc, char **argv)
 		}
 	    }
 	}
-	// received a UDP packet
+	/* received a UDP packet */
 	if (FD_ISSET(sa, &readfds)) {
 	    if (read(sa, udpframe, MAXDG) == 13) {
 		/* Maerklin UDP Format: always 13 bytes

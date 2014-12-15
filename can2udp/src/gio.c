@@ -45,7 +45,7 @@ uint8_t * read_config_file(char *filename, uint32_t *nbytes, char compressed, ui
     int rc;
     struct stat st;
     FILE *fp;
-    char *s;
+    /* char *s; */
     uint8_t *config;
 
     rc = stat(filename, &st);

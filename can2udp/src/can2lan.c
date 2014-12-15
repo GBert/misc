@@ -22,7 +22,7 @@ char *NET_UDP_FORMAT_STRG   ="      UDP->  CANID 0x%06X   [%d]";
 
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE [] = {0x00,0x36,0x03,0x01,0x05,0x00,0x00,0x00,0x00,0x11,0x00,0x00,0x00};
 
-void Signal_Handler(sig) {		/* signal handler function */
+void Signal_Handler(int sig) {		/* signal handler function */
     switch (sig) {
     case SIGHUP:
 	/* rehash the server */

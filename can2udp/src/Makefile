@@ -4,6 +4,8 @@ BIN = $@
 
 all:	$(BINS)
 
+CFLAGS+=-Wall -pedantic -std=gnu99
+
 can2udp: can2udp.o
 	$(CC) $(CFLAGS) -o can2udp can2udp.o
 
