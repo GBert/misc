@@ -9,8 +9,8 @@ CFLAGS+=-Wall -pedantic -std=gnu99
 can2udp: can2udp.o
 	$(CC) $(CFLAGS) -o can2udp can2udp.o
 
-can2lan: crc-ccit.o gio.o can2lan.o
-	$(CC) $(CFLAGS) -o can2lan crc-ccit.o gio.o can2lan.o
+can2lan: crc-ccitt.o gio.o can2lan.o
+	$(CC) $(CFLAGS) -o can2lan crc-ccitt.o gio.o can2lan.o
 
 virtual_gfp: virtual_gfp.o
 	$(CC) $(CFLAGS) -o virtual_gfp virtual_gfp.o
