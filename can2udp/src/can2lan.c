@@ -438,6 +438,8 @@ int main(int argc, char **argv) {
 			    print_can_frame(TCP_FORMAT_STRG, netframe);
 		    } else {
 			fprintf(stderr, "%s received package =!13 : %d\n", time_stamp(), n);
+			print_can_frame(TCP_FORMAT_STRG, netframe);
+			print_can_frame(TCP_FORMAT_STRG, &netframe[13]);
 		    }
 		}
 		if (--nready <= 0)
