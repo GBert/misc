@@ -56,9 +56,14 @@ uint16_t CRCCCITT(uint8_t *data, size_t length, uint16_t seed, uint16_t final)
 
    for (count = 0; count < length; ++count)
    {
+     if ((count % 16) == 0) {
+       printf("\n");
+     }
+     printf("%02x ", *data);
      temp = (*data++ ^ (crc >> 8)) & 0xff;
      crc = crc_table[temp] ^ (crc << 8);
    }
+   printf("\n");
 
    return (uint16_t)(crc ^ final);
 
@@ -99,23 +104,73 @@ uint16_t UpdateCRC(uint16_t CRC_acc, uint8_t CRC_input) {
 
 int main(int argc, char **argv) { 
 
-   FILE *fin;
-   size_t how_many;
-   uint16_t the_crc;
-   uint8_t  buff[2] = {0x41,0x41};
+  FILE *fp;
+  int temp,i,ret,inflated_size;
+  struct stat st;
+  uint16_t the_crc;
 
-   the_crc = CRCCCITT(buff, 0, 0xffff, 0);
-   printf("lookup CRC value is 0x%04X\n", the_crc);
-   the_crc = CRCCCITT(buff, 2, 0xffff, 0);
+  uint8_t *data;
+  int nbytes, padded_nbytes;
 
-   printf("lookup CRC value is 0x%04X\n", the_crc);
+  if (argc != 3) {
+    printf("error: usage %s filename inflated_filesize\n", argv[0]);
+    return -1;
+  }
 
-   the_crc = 0xffff;
-   the_crc = UpdateCRC(the_crc, buff[0]);
-   printf("Maerklin CRC value is 0x%04X\n", the_crc);
-   the_crc = UpdateCRC(the_crc, buff[1]);
-   
-   printf("Maerklin CRC value is 0x%04X\n", the_crc);
+  ret = sscanf(argv[2],"%d", &inflated_size);
+  if (ret < 0) {
+    printf("error: can't get inflated_filesize from %s\n", argv[2]);
+    return -1;
+  }
 
-   return EXIT_SUCCESS;
+  ret = stat(argv[1], &st);
+  if (ret < 0) {
+    printf("error: stat failed for %s\n", argv[1]);
+    return -1;
+  }
+
+  nbytes = st.st_size;
+  padded_nbytes = nbytes + 12 - ((nbytes +4 ) % 8);
+  printf("filesize %d padded (+ 4 bytes inflated filesze) %d\n",nbytes, padded_nbytes);
+
+  data = (uint8_t *)calloc(padded_nbytes , sizeof(uint8_t));
+  if (data == NULL) {
+    printf("fatal error: calloc failed\n");
+    return -1;
+  }
+  fp = fopen(argv[1], "rb");
+  if (fp == NULL) {
+    printf("error: fopen failed for %s\n", argv[1]);
+    return -1;
+  }
+  /* store inflated size at the beginning */
+  temp=htonl(inflated_size);
+  memcpy(data,&temp,4);
+
+  ret = fread((void *)data + 4, 1, nbytes, fp);
+  if (ret != nbytes) {
+    printf("error: fread failed for %s\n", argv[1]);
+    return -1;
+  }
+  fclose(fp);
+  /* pad bytes until frame is full */
+  for (i = nbytes + 4; i < padded_nbytes; i++) {
+      printf("padd byte %d -> 0\n", i+1);
+      data[i]=0x0;
+  }
+
+  the_crc = CRCCCITT(data, padded_nbytes, 0xffff, 0);
+  printf("lookup table CRC CCITT value is 0x%04X\n", the_crc);
+
+  the_crc = 0xffff;
+  for (i=0; i< padded_nbytes; i++) {
+    if (( i % 16 ) == 0) {
+       printf("\n");
+    }
+    printf("%02x ", data[i]);
+    the_crc=UpdateCRC(the_crc, data[i]);
+  }
+  printf("\nMaerklin CRC value is 0x%04X\n", the_crc);
+  free(data);
+  return 1;
 }
