@@ -47,7 +47,7 @@ static uint16_t crc_table [256] = {
 0x2e93, 0x3eb2, 0x0ed1, 0x1ef0
 };
 
-uint16_t CRCCCITT(uint8_t *data, size_t length, uint16_t seed, uint16_t final)
+uint16_t CRCCCITT(uint8_t *data, size_t length, uint16_t seed)
 { 
 
    size_t count;
@@ -65,7 +65,7 @@ uint16_t CRCCCITT(uint8_t *data, size_t length, uint16_t seed, uint16_t final)
    }
    printf("\n");
 
-   return (uint16_t)(crc ^ final);
+   return (uint16_t)crc;
 
 } 
 
@@ -159,7 +159,7 @@ int main(int argc, char **argv) {
       data[i]=0x0;
   }
 
-  the_crc = CRCCCITT(data, padded_nbytes, 0xffff, 0);
+  the_crc = CRCCCITT(data, padded_nbytes, 0xffff);
   printf("lookup table CRC CCITT value is 0x%04X\n", the_crc);
 
   the_crc = 0xffff;
