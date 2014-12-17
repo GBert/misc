@@ -1,0 +1,15 @@
+[gleisbildseite]
+version
+ .major=1
+element
+ .id=0x406
+ .typ=gerade
+ .artikel=-1
+element
+ .id=0x407
+ .typ=gerade
+ .artikel=-1
+element
+ .id=0x408
+ .typ=gerade
+ .artikel=-1
