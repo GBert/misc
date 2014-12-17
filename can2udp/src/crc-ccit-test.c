@@ -172,5 +172,5 @@ int main(int argc, char **argv) {
   }
   printf("\nMaerklin CRC value is 0x%04X\n", the_crc);
   free(data);
-  return 1;
+  return 0;
 }
