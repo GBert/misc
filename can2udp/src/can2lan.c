@@ -17,6 +17,7 @@ char *CAN_FORMAT_STRG       ="      CAN->  CANID 0x%06X R [%d]";
 char *TO_CAN_FORMAT_STRG    ="      CAN    CANID 0x%06X   [%d]";
 char *UDP_FORMAT_STRG       ="->CAN>UDP    CANID 0x%06X   [%d]";
 char *TCP_FORMAT_STRG       ="->TCP>CAN    CANID 0x%06X   [%d]";
+char *TCP_FORMATS_STRG      ="->TCP>CAN*   CANID 0x%06X   [%d]";
 char *CAN_TCP_FORMAT_STRG   ="->CAN>TCP    CANID 0x%06X   [%d]";
 char *NET_UDP_FORMAT_STRG   ="      UDP->  CANID 0x%06X   [%d]";
 
@@ -434,11 +435,14 @@ int main(int argc, char **argv) {
 		    if (n % 13) {
 			fprintf(stderr, "%s received package %% 13 : %d\n", time_stamp(), n);
 		    } else {
-			for (i = 0; i <= n; i +=13 ) {
+			for (i = 0; i < n; i +=13 ) {
 			    ret = frame_to_can(sc, &netframe[i]);
                             check_data(tcp_socket, &netframe[i]);
 		            if ((ret == 0) && (verbose && !background)) {
-			        print_can_frame(TCP_FORMAT_STRG, &netframe[i]);
+                                if (i > 0)
+			             print_can_frame(TCP_FORMATS_STRG, &netframe[i]);
+                                else
+                                     print_can_frame(TCP_FORMAT_STRG, &netframe[i]);
                             }
                         }
 		    }
