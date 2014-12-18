@@ -159,7 +159,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
     switch (canid) {
         case (0x00400000UL) : /* config data */
              strncpy(config_name,(char *) &netframe[5], 8);
-             printf("%s ID 0x%08x %s\n", __func__, canid, (char *) &netframe[5]);
+             /* printf("%s ID 0x%08x %s\n", __func__, canid, (char *) &netframe[5]); */
              if (strcmp(config_name, "gbs-0")) {
                  send_tcp_config_data("gleisbild", tcp_socket, CRC|COMPRESSED);
              }
@@ -431,15 +431,16 @@ int main(int argc, char **argv) {
 		    FD_CLR(tcp_socket, &all_fds);
 		    tcp_client[i] = -1;
 		} else {
-		    if (n == 13) {
-			ret = frame_to_can(sc, netframe);
-                        check_data(tcp_socket, netframe);
-			if ((ret == 0) && (verbose && !background))
-			    print_can_frame(TCP_FORMAT_STRG, netframe);
+		    if (n % 13) {
+			fprintf(stderr, "%s received package %% 13 : %d\n", time_stamp(), n);
 		    } else {
-			fprintf(stderr, "%s received package =!13 : %d\n", time_stamp(), n);
-			print_can_frame(TCP_FORMAT_STRG, netframe);
-			print_can_frame(TCP_FORMAT_STRG, &netframe[13]);
+			for (i = 0; i <= n; i +=13 ) {
+			    ret = frame_to_can(sc, &netframe[i]);
+                            check_data(tcp_socket, &netframe[i]);
+		            if ((ret == 0) && (verbose && !background)) {
+			        print_can_frame(TCP_FORMAT_STRG, &netframe[i]);
+                            }
+                        }
 		    }
 		}
 		if (--nready <= 0)
