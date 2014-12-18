@@ -9,10 +9,7 @@
  */
 
 #include "can2lan.h"
-#include <stdio.h>
 #include <zlib.h>
-#include <stdlib.h>
-#include <string.h>
 
 /* CHUNK is the size of the memory chunk used by the zlib routines. */
 
@@ -43,34 +40,36 @@ uint8_t * read_config_file(char *filename, uint32_t *nbytes, char compressed, ui
 
     rc = stat(filename, &st);
     if (rc < 0) {
-        printf("%s: error stat failed for %s\n", __func__, filename);
+        printf("%s: error stat failed for file %s\n", __func__, filename);
         return NULL;
     }
     fp = fopen(filename, "rb");
     if (fp == NULL) {
-        printf("%s: error fopen failed for %s\n", __func__, filename);
+        printf("%s: error fopen failed for file %s\n", __func__, filename);
         return NULL;
     }
     *nbytes = st.st_size;
     config = (uint8_t *)calloc(*nbytes, sizeof(uint8_t));
     if (config == NULL) {
-        printf("%s: error calloc failed for %s\n", __func__, filename);
+        printf("%s: error calloc failed creatig config buffer for %s\n", __func__, filename);
         return NULL;
     }
     rc = fread((void *)config, 1, *nbytes, fp);
     if ((rc != *nbytes)) {
-        printf("%s: error fread failed for %s\n", __func__, filename);
+        printf("%s: error fread failed reading %s\n", __func__, filename);
         return NULL;
     }
     return config;
 }
 
 int send_tcp_config_data(char *filename, int tcp_socket, int flags) {
-   uint16_t crc;
-   uint32_t *nbytes = NULL;
+    uint16_t crc;
+    uint32_t *nbytes = NULL;
 
-   if (read_config_file(filename, nbytes, 1, &crc)) {
-       printf("%s read config file %s\n", __func__, filename);
-   }
-   return 0;
+    if (read_config_file(filename, nbytes, 1, &crc)) {
+        printf("%s read config file %s\n", __func__, filename);
+    } else {
+         printf("%s: error reading config %s\n", __func__, filename);
+    }
+    return 0;
 }
