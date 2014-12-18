@@ -130,8 +130,11 @@ int main(int argc, char **argv) {
   }
 
   nbytes = st.st_size;
-  padded_nbytes = nbytes + 12 - ((nbytes +4 ) % 8);
-  printf("filesize %d padded (+ 4 bytes inflated filesze) %d\n",nbytes, padded_nbytes);
+  padded_nbytes = nbytes + 4;
+  if (padded_nbytes % 8 ) {
+      padded_nbytes += 8 - (padded_nbytes % 8);
+  }
+  printf("deflated size %d padded (+ 4 bytes inflated file size) %d\n",nbytes, padded_nbytes);
 
   data = (uint8_t *)calloc(padded_nbytes , sizeof(uint8_t));
   if (data == NULL) {
