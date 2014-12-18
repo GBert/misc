@@ -47,7 +47,7 @@
 
 char *F_CAN_FORMAT_STRG    ="      CAN->  CANID 0x%08X R [%d]";
 char *F_S_CAN_FORMAT_STRG  ="short CAN->  CANID 0x%08X R [%d]";
-char *T_CAN_FORMAT_STRG    ="    ->CAN    CANID 0x%08X   [%d]";
+char *T_CAN_FORMAT_STRG    ="      CAN<-  CANID 0x%08X   [%d]";
 
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE [] = {0x00,0x36,0x03,0x01,0x05,0x00,0x00,0x00,0x00,0x11,0x00,0x00,0x00};
 
@@ -251,10 +251,12 @@ int main(int argc, char **argv) {
 		    frame.can_id &= 0xFFFF0000UL; 
 		    frame.can_id |= 0x00010000UL; 
 		    send_can_frame(sc, &frame, verbose);
+                    break;
 		case 0x30:	/* ping / ID /software 	*/
                     send_defined_can_frame(sc, M_GLEISBOX_ID, verbose);
+                    break;
 		case 0x3A:	/* status	 	*/
-                    if (memcmp(&frame.data[0], &M_GLEISBOX_ID[5], 4) == 4 ) {
+                    if (memcmp(&frame.data[0], &M_GLEISBOX_ID[5], 4) == 0 ) {
                         switch(frame.data[4]) {
                         case 0x00:
                             send_defined_can_frame(sc, M_GLEISBOX_STATUS1, verbose);
