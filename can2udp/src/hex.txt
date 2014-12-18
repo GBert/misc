@@ -1,0 +1,12 @@
+78 9c 8b 4e
+cf 49 cd 2c 4e ca cc 49
+29 4e cd 2c 49 8d e5 2a
+4b 2d 2a ce cc cf e3 52
+d0 cb 4d cc ca 2f b2 35
+e4 4a cd 49 cd 4d cd 2b
+01 8a 64 a6 d8 1a 54 98
+18 98 01 99 25 95 05 b6
+e9 a9 45 89 29 a9 40 4e
+62 51 49 66 76 6a 8e ad
+2e 16 c5 e6 a4 28 b6 c0
+a3 18 00 a1 16 35 f1
