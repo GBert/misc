@@ -265,6 +265,7 @@ int main(int argc, char **argv) {
                             send_defined_can_frame(sc, M_GLEISBOX_STATUS4, verbose);
                             send_defined_can_frame(sc, M_GLEISBOX_STATUS5, verbose);
                             send_defined_can_frame(sc, M_GLEISBOX_STATUS6, verbose);
+                            break;
                         case 0x01:
                             send_defined_can_frame(sc, M_GLEISBOX_INDEX1_1, verbose);
                             send_defined_can_frame(sc, M_GLEISBOX_INDEX1_2, verbose);
@@ -272,6 +273,7 @@ int main(int argc, char **argv) {
                             send_defined_can_frame(sc, M_GLEISBOX_INDEX1_4, verbose);
                             send_defined_can_frame(sc, M_GLEISBOX_INDEX1_5, verbose);
                             send_defined_can_frame(sc, M_GLEISBOX_INDEX1_6, verbose);
+                            break;
                         case 0x02:
                             send_defined_can_frame(sc, M_GLEISBOX_INDEX2_1, verbose);
                             send_defined_can_frame(sc, M_GLEISBOX_INDEX2_2, verbose);
@@ -285,6 +287,7 @@ int main(int argc, char **argv) {
                             send_defined_can_frame(sc, M_GLEISBOX_INDEX3_3, verbose);
                             send_defined_can_frame(sc, M_GLEISBOX_INDEX3_4, verbose);
                             send_defined_can_frame(sc, M_GLEISBOX_INDEX3_5, verbose);
+                            break;
                         default:
                             break;
                         }
