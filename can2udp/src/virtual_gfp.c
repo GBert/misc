@@ -144,14 +144,15 @@ int send_can_frame(int can_socket, struct can_frame *frame, int verbose) {
 int send_defined_can_frame(int can_socket, unsigned char *data, int verbose) {
 
     struct can_frame frame;
-    memcpy(&frame.can_id, &data[0], 4);
+    uint32_t can_id;
+    memcpy(&can_id, &data[0], 4);
+    frame.can_id = htonl(can_id);
     frame.can_dlc=data[4];
     memcpy(&frame.data, &data[5], 8);
     send_can_frame(can_socket, &frame, verbose);
     return 0;
 }
 
-    
 int main(int argc, char **argv) {
     pid_t pid;
     extern int optind, opterr, optopt;
@@ -242,18 +243,18 @@ int main(int argc, char **argv) {
 		    print_can_frame(F_CAN_FORMAT_STRG, &frame);
 		}
 
-		switch ((frame.can_id & 0x00FF0000UL ) >> 17) {
-		case 0x04:	/* loco speed		*/
-		case 0x05:	/* loco direction	*/
-		case 0x06:	/* loco function	*/
-		case 0x0B:	/* extension	 	*/
+		switch ((frame.can_id & 0x00FF0000UL ) >> 16) {
+		case 0x08:	/* loco speed		*/
+		case 0x0A:	/* loco direction	*/
+		case 0x0C:	/* loco function	*/
+		case 0x16:	/* extension	 	*/
 		    frame.can_id &= 0xFFFF0000UL; 
 		    frame.can_id |= 0x00010000UL; 
 		    send_can_frame(sc, &frame, verbose);
-		case 0x18:	/* ping / ID /software 	*/
+		case 0x30:	/* ping / ID /software 	*/
                     send_defined_can_frame(sc, M_GLEISBOX_ID, verbose);
-		case 0x1D:	/* status	 	*/
-                    if (memcmp(&frame.data[0], &M_GLEISBOX_ID[5], 4)) {
+		case 0x3A:	/* status	 	*/
+                    if (memcmp(&frame.data[0], &M_GLEISBOX_ID[5], 4) == 4 ) {
                         switch(frame.data[4]) {
                         case 0x00:
                             send_defined_can_frame(sc, M_GLEISBOX_STATUS1, verbose);
