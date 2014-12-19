@@ -31,7 +31,7 @@
         }                                                               \
     }
 
-uint8_t * read_config_file(char *filename, uint32_t *nbytes, char compressed, uint16_t *crc) {
+uint8_t * read_config_file(char *filename, uint32_t *nbytes) {
     int rc;
     struct stat st;
     FILE *fp;
@@ -63,10 +63,10 @@ uint8_t * read_config_file(char *filename, uint32_t *nbytes, char compressed, ui
 }
 
 int send_tcp_config_data(char *filename, int tcp_socket, int flags) {
-    uint16_t crc;
+    /* uint16_t crc; */
     uint32_t *nbytes = NULL;
 
-    if (read_config_file(filename, nbytes, 1, &crc)) {
+    if (read_config_file(filename, nbytes))  {
         printf("%s read config file %s\n", __func__, filename);
     } else {
          printf("%s: error reading config %s\n", __func__, filename);
