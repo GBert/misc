@@ -19,6 +19,22 @@
 /* Thanks to Stefan Krauss and the SocketCAN team
  */
 
+/*
+ *  Test setup:
+
+  sudo modprobe can
+  sudo modprobe vcan
+  sudo modprobe can-raw
+  sudo modprobe can-gw
+  sudo ip link add dev vcan0 type vcan
+  sudo ip link add dev vcan1 type vcan
+  sudo cangw -A -s vcan0 -d vcan1 -e
+  sudo cangw -A -s vcan1 -d vcan0 -e
+  ./virtual_gfp -f -i vcan1
+  ./can2lan -f -i vcan0
+
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <libgen.h>
