@@ -51,6 +51,7 @@ char *T_CAN_FORMAT_STRG    ="      CAN<-  CANID 0x%08X   [%d]";
 
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE [] = {0x00,0x36,0x03,0x01,0x05,0x00,0x00,0x00,0x00,0x11,0x00,0x00,0x00};
 
+unsigned char M_ALL_ID []            = {0x00,0x00,0x00,0x00};
 unsigned char M_GLEISBOX_ID []       = {0x00,0x31,0x9B,0x32,0x08,0x47,0x42,0xF5,0xDA,0x00,0x00,0x00,0x10};
 
 unsigned char M_GLEISBOX_STATUS1  [] = {0x00,0x3B,0x03,0x01,0x08,0x03,0x00,0x00,0x00,0x00,0x00,0xC3,0xDA};
@@ -244,6 +245,14 @@ int main(int argc, char **argv) {
 		}
 
 		switch ((frame.can_id & 0x00FF0000UL ) >> 16) {
+                case 0x00:
+                    if ((memcmp(&frame.data[0], &M_GLEISBOX_ID[5], 4) == 0 ) ||
+                        (memcmp(&frame.data[0], M_ALL_ID, 4) == 0 ) ) {
+                        frame.can_id &= 0xFFFF0000UL;
+                        frame.can_id |= 0x00010000UL;
+                        send_can_frame(sc, &frame, verbose);
+                    }
+                    break;
 		case 0x08:	/* loco speed		*/
 		case 0x0A:	/* loco direction	*/
 		case 0x0C:	/* loco function	*/
