@@ -162,7 +162,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
              strncpy(config_name,(char *) &netframe[5], 8);
              printf("%s ID 0x%08x %s\n", __func__, canid, (char *) &netframe[5]);
              if (strcmp(config_name, "gbs-0")) {
-                 send_tcp_config_data("gleisbild", tcp_socket, CRC|COMPRESSED);
+                 send_tcp_config_data("gleisbild.cs2", tcp_socket, CRC|COMPRESSED);
              }
 	     break;
     }
