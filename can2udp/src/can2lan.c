@@ -37,7 +37,7 @@ void Signal_Handler(int sig) {		/* signal handler function */
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 0.5\n");
+    fprintf(stderr, "   Version 0.9\n");
     fprintf(stderr, "\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
