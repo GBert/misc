@@ -266,7 +266,7 @@ int main(int argc, char **argv) {
                 case 0x00:
                     if ((memcmp(&frame.data[0], &M_GLEISBOX_ID[5], 4) == 0 ) ||
                         (memcmp(&frame.data[0], M_ALL_ID, 4) == 0 ) ) {
-                        frame.can_id &= 0xFFFF0000UL;
+                        /* frame.can_id &= 0xFFFF0000UL; */
                         frame.can_id |= 0x00010000UL;
                         send_can_frame(sc, &frame, verbose);
                     }
@@ -275,7 +275,7 @@ int main(int argc, char **argv) {
 		case 0x0A:	/* loco direction	*/
 		case 0x0C:	/* loco function	*/
 		case 0x16:	/* extension	 	*/
-		    frame.can_id &= 0xFFFF0000UL; 
+		    /* frame.can_id &= 0xFFFF0000UL; */
 		    frame.can_id |= 0x00010000UL; 
 		    send_can_frame(sc, &frame, verbose);
                     break;
