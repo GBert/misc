@@ -101,6 +101,7 @@ int send_tcp_config_data(char *filename, int tcp_socket, int flags) {
         strm.next_in = config;
         strm.avail_in = *nbytes;
         strm.avail_out = CHUNK;
+        /* store deflated file beginning at byte 5 */
         strm.next_out = &out[4];
         CALL_ZLIB (deflate (& strm, Z_FINISH));
         if (strm.avail_out != 0) {
@@ -110,9 +111,10 @@ int send_tcp_config_data(char *filename, int tcp_socket, int flags) {
             return -1;
         }
         deflateEnd (& strm);
-        /* now prepare the senind buffer */
+        /* now prepare the send buffer */
         inflated_size = htonl(*nbytes);
         memcpy(out, &inflated_size, 4);
+
     }
     free(config);
     free(out);
