@@ -111,8 +111,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "\n");
 }
 
-char *time_stamp(){
-    char *timestamp = (char *)malloc(sizeof(char) * 16);
+int time_stamp(char *timestamp){
     struct timeval  tv;
     struct tm      *tm;
 
@@ -120,12 +119,14 @@ char *time_stamp(){
     tm = localtime(&tv.tv_sec);
 
     sprintf(timestamp,"%02d:%02d:%02d.%03d", tm->tm_hour, tm->tm_min, tm->tm_sec, (int) tv.tv_usec/1000);
-    return timestamp;
+    return 0;
 }
 
 void print_can_frame(char *format_string, struct can_frame *frame) {
     int i;
-    printf("%s ",time_stamp()); 
+    char timestamp[16];
+    time_stamp(timestamp);
+    printf("%s ",timestamp);
     printf(format_string, frame->can_id & CAN_EFF_MASK, frame->can_dlc);
     for (i = 0; i < frame->can_dlc; i++) {
 	printf(" %02x", frame->data[i]);

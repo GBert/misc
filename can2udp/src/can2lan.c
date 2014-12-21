@@ -48,8 +48,8 @@ void print_usage(char *prg) {
     fprintf(stderr, "\n");
 }
 
-char *time_stamp(){
-    char *timestamp = (char *)malloc(sizeof(char) * 16);
+int time_stamp(char *timestamp){
+    /* char *timestamp = (char *)malloc(sizeof(char) * 16); */
     struct timeval  tv;
     struct tm      *tm;
 
@@ -57,16 +57,18 @@ char *time_stamp(){
     tm = localtime(&tv.tv_sec);
 
     sprintf(timestamp,"%02d:%02d:%02d.%03d", tm->tm_hour, tm->tm_min, tm->tm_sec, (int) tv.tv_usec/1000);
-    return timestamp;
+    return 0;
 }
 
 void print_can_frame(char *format_string, unsigned char *netframe) {
     uint32_t canid;
     int i, dlc;
+    char timestamp[16];
 
     memcpy(&canid, netframe, 4);
     dlc = netframe[4];
-    printf("%s   ",time_stamp()); 
+    time_stamp(timestamp);
+    printf("%s   ",timestamp);
     printf(format_string, ntohl(canid) & CAN_EFF_MASK, netframe[4]);
     for (i = 5; i < 5 + dlc; i++) {
 	printf(" %02x", netframe[i]);
@@ -175,6 +177,7 @@ int main(int argc, char **argv) {
     extern int optind, opterr, optopt;
     int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, tcp_client[MAX_TCP_CONN];;
     struct can_frame frame;
+    char timestamp[16];
 
     int sa, sc, sb, st, tcp_socket;		/* UDP socket , CAN socket, UDP Broadcast Socket, TCP Socket */
     struct sockaddr_in saddr, baddr, tcp_addr;
@@ -362,7 +365,7 @@ int main(int argc, char **argv) {
 		    if (verbose && !background)
 			print_can_frame(CAN_TCP_FORMAT_STRG, netframe);
 		}
-	    /* printf("%s tcp packet received from client #%d  max_tcp_i:%d todo:%d\n", time_stamp(), i, max_tcp_i,nready); */
+	    /* printf("%s tcp packet received from client #%d  max_tcp_i:%d todo:%d\n", time_stamp(timestamp), i, max_tcp_i,nready); */
 	    }
 	}
 	/* received a UDP packet */
@@ -419,10 +422,11 @@ int main(int argc, char **argv) {
 	for (i = 0; i <= max_tcp_i; i++) {                   /* check all clients for data */
 	    if ( (tcp_socket = tcp_client[i]) < 0)
 		continue;
-	    /* printf("%s tcp packet received from client #%d  max_tcp_i:%d todo:%d\n", time_stamp(), i, max_tcp_i,nready); */
+	    /* printf("%s tcp packet received from client #%d  max_tcp_i:%d todo:%d\n", time_stamp(timestamp), i, max_tcp_i,nready); */
 	    if (FD_ISSET(tcp_socket, &read_fds)) {
 		if (verbose && !background) {
-		    printf("%s packet from: %s\n", time_stamp(),  inet_ntop(AF_INET,
+                    time_stamp(timestamp);
+		    printf("%s packet from: %s\n", timestamp,  inet_ntop(AF_INET,
 			&tcp_addr.sin_addr, buffer, sizeof(buffer)));
 		}
 		if ( (n = read(tcp_socket, netframe, MAXDG)) == 0) {
@@ -432,7 +436,8 @@ int main(int argc, char **argv) {
 		    tcp_client[i] = -1;
 		} else {
 		    if (n % 13) {
-			fprintf(stderr, "%s received package %% 13 : %d\n", time_stamp(), n);
+                        time_stamp(timestamp);
+			fprintf(stderr, "%s received package %% 13 : %d\n", timestamp, n);
 		    } else {
 			for (i = 0; i < n; i +=13 ) {
 			    ret = frame_to_can(sc, &netframe[i]);
