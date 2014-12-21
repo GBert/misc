@@ -114,10 +114,9 @@ void print_usage(char *prg) {
 char *time_stamp(){
     char *timestamp = (char *)malloc(sizeof(char) * 16);
     struct timeval  tv;
-    struct timezone tz;
     struct tm      *tm;
 
-    gettimeofday(&tv, &tz);
+    gettimeofday(&tv, NULL);
     tm = localtime(&tv.tv_sec);
 
     sprintf(timestamp,"%02d:%02d:%02d.%03d", tm->tm_hour, tm->tm_min, tm->tm_sec, (int) tv.tv_usec/1000);
