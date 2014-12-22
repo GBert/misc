@@ -33,6 +33,95 @@
         }                                                               \
     }
 
+int time_stamp(char *timestamp){
+    /* char *timestamp = (char *)malloc(sizeof(char) * 16); */
+    struct timeval  tv;
+    struct tm      *tm;
+
+    gettimeofday(&tv, NULL);
+    tm = localtime(&tv.tv_sec);
+
+    sprintf(timestamp,"%02d:%02d:%02d.%03d", tm->tm_hour, tm->tm_min, tm->tm_sec, (int) tv.tv_usec/1000);
+    return 0;
+}
+
+void print_can_frame(char *format_string, unsigned char *netframe) {
+    uint32_t canid;
+    int i, dlc;
+    char timestamp[16];
+
+    memcpy(&canid, netframe, 4);
+    dlc = netframe[4];
+    time_stamp(timestamp);
+    printf("%s   ",timestamp);
+    printf(format_string, ntohl(canid) & CAN_EFF_MASK, netframe[4]);
+    for (i = 5; i < 5 + dlc; i++) {
+        printf(" %02x", netframe[i]);
+    }
+    if (dlc < 8) {
+        printf("(%02x", netframe[i]);
+        for (i = 6 + dlc ; i < 13 ; i++) {
+            printf(" %02x", netframe[i]);
+        }
+        printf(")");
+    } else {
+        printf(" ");
+    }
+    printf("  ");
+    for (i = 5; i < 13; i++) {
+        if(isprint(netframe[i]))
+            printf("%c",netframe[i]);
+        else
+            putchar(46);
+    }
+
+    printf("\n");
+}
+
+int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *frame) {
+    int s;
+    uint32_t canid;
+    frame->can_id &= CAN_EFF_MASK;
+    bzero(netframe, 13);
+    canid=htonl(frame->can_id);
+    memcpy(netframe,&canid,4);
+    netframe[4] = frame->can_dlc;
+    memcpy(&netframe[5], &frame->data, frame->can_dlc);
+
+    /* send UDP frame */
+    s = sendto(net_socket, netframe, 13, 0, net_addr, sizeof(*net_addr));
+    if (s != 13) {
+        perror("error sending TCP/UDP data\n");
+        return -1;
+    }
+    return 0;
+}
+
+int frame_to_can(int can_socket, unsigned char *netframe) {
+    uint32_t canid;
+    int nbytes;
+    struct can_frame frame;
+    /* Maerklin TCP/UDP Format: always 13 bytes
+     *   byte 0 - 3  CAN ID
+     *   byte 4      DLC
+     *   byte 5 - 12 CAN data
+     */
+    memcpy(&canid, netframe, 4);
+    /* CAN uses (network) big endian format */
+    frame.can_id = ntohl(canid);
+    frame.can_id &= CAN_EFF_MASK;
+    frame.can_id |= CAN_EFF_FLAG;
+    frame.can_dlc = netframe[4];
+    memcpy(&frame.data, &netframe[5], 8);
+
+    /* send CAN frame */
+    if ((nbytes = write(can_socket, &frame, sizeof(frame))) != sizeof(frame)) {
+        perror("error writing CAN frame\n");
+        return -1;
+    }
+    return 0;
+}
+
 uint8_t * read_config_file(char *filename, uint32_t *nbytes) {
     int rc;
     struct stat st;

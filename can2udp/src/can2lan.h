@@ -47,7 +47,10 @@ static const int MAXPENDING = 16;	/* max outstanding tcp connections */
 unsigned char netframe[MAXDG];
 
 uint8_t * read_config_file(char *filename, uint32_t *nbytes);
+int time_stamp(char *timestamp);
 int send_tcp_config_data(char *filename, int tcp_socket, int flags);
-
+void print_can_frame(char *format_string, unsigned char *netframe);
+int frame_to_can(int can_socket, unsigned char *netframe);
+int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *frame);
 #endif /* _CAN2LAN_H_ */
 
