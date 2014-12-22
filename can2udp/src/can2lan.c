@@ -50,7 +50,7 @@ void print_usage(char *prg) {
 
 int send_magic_start_60113_frame(int can_socket, int verbose) {
     int ret;
-    ret = frame_to_can(can_socket, &M_GLEISBOX_MAGIC_START_SEQUENCE[0]);
+    ret = frame_to_can(can_socket, M_GLEISBOX_MAGIC_START_SEQUENCE);
     if (ret < 0 ) {
 	perror("error CAN magic 60113 start write\n");
 	return -1;
@@ -67,14 +67,13 @@ int check_data(int tcp_socket, unsigned char *netframe) {
     char config_name[8];
     memcpy(&canid, netframe, 4);
     canid = ntohl(canid);
-    canid &= 0x00FF0000UL;
-    /* printf("%s ID 0x%08x\n", __func__, canid); */
-    switch (canid) {
+    printf("%s ID 0x%08x\n", __func__, canid);
+    switch (canid & 0x00FF0000UL) {
         case (0x00400000UL) : /* config data */
              strncpy(config_name,(char *) &netframe[5], 8);
              printf("%s ID 0x%08x %s\n", __func__, canid, (char *) &netframe[5]);
-             if (strcmp(config_name, "gbs-0")) {
-                 send_tcp_config_data("gleisbild.cs2", tcp_socket, CRC|COMPRESSED);
+             if (strcmp(config_name, "gbs-0")==0) {
+                 send_tcp_config_data("./gleisbild.cs2\0", canid, tcp_socket, CRC|COMPRESSED);
              }
 	     break;
     }
@@ -211,6 +210,7 @@ int main(int argc, char **argv) {
 	tcp_client[i] = -1;		/* -1 indicates available entry */
 
     /* prepare CAN socket */
+    bzero(&caddr, sizeof(caddr));
     if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
 	perror("error creating CAN socket\n");
 	exit(1);

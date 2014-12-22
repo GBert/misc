@@ -33,8 +33,9 @@
 #include <time.h>
 #include <linux/can.h>
 
-#define MAX_TCP_CONN	16		/* max TCP clients */
+#define MAX_TCP_CONN	16		/* max TCP clients       */
 #define MAXDG   	4096		/* maximum datagram size */
+#define MAXMTU   	1400		/* maximum MTU           */
 #define MAXUDP  	16		/* maximum datagram size */
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
 #define debug_print(...) \
@@ -48,9 +49,10 @@ unsigned char netframe[MAXDG];
 
 uint8_t * read_config_file(char *filename, uint32_t *nbytes);
 int time_stamp(char *timestamp);
-int send_tcp_config_data(char *filename, int tcp_socket, int flags);
+int send_tcp_config_data(char *filename, uint32_t canid, int tcp_socket, int flags);
 void print_can_frame(char *format_string, unsigned char *netframe);
 int frame_to_can(int can_socket, unsigned char *netframe);
 int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *frame);
+uint16_t CRCCCITT(uint8_t *data, size_t length, uint16_t seed);
 #endif /* _CAN2LAN_H_ */
 
