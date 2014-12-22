@@ -412,14 +412,14 @@ int main(int argc, char **argv) {
 	    if (i == MAX_TCP_CONN)
 		perror("too many TCP clients\n");
 
-	    FD_SET(conn_fd, &all_fds);		/* add new descriptor to set */
-	    max_fds = MAX(conn_fd,max_fds);	/* for select */
-	    max_tcp_i = MAX(i, max_tcp_i);	/* max index in tcp_client[] array */
+	    FD_SET(conn_fd, &all_fds);			/* add new descriptor to set */
+	    max_fds = MAX(conn_fd,max_fds);		/* for select */
+	    max_tcp_i = MAX(i, max_tcp_i);		/* max index in tcp_client[] array */
 	    if (--nready <= 0)
-		continue;			/* no more readable descriptors */
+		continue;				/* no more readable descriptors */
 	}
 	/* check for already connected TCP clients */
-	for (i = 0; i <= max_tcp_i; i++) {                   /* check all clients for data */
+	for (i = 0; i <= max_tcp_i; i++) {		/* check all clients for data */
 	    if ( (tcp_socket = tcp_client[i]) < 0)
 		continue;
 	    /* printf("%s tcp packet received from client #%d  max_tcp_i:%d todo:%d\n", time_stamp(timestamp), i, max_tcp_i,nready); */
@@ -435,9 +435,11 @@ int main(int argc, char **argv) {
 		    FD_CLR(tcp_socket, &all_fds);
 		    tcp_client[i] = -1;
 		} else {
+                    /* check the whole TCP packet, if there are more than one CAN frame included */
+                    /* TCP packets with size modulo 13 !=0 are ignored though */
 		    if (n % 13) {
                         time_stamp(timestamp);
-			fprintf(stderr, "%s received package %% 13 : %d\n", timestamp, n);
+			fprintf(stderr, "%s received packet %% 13 : length %d\n", timestamp, n);
 		    } else {
 			for (i = 0; i < n; i +=13 ) {
 			    ret = frame_to_can(sc, &netframe[i]);
