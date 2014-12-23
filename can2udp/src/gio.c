@@ -78,6 +78,16 @@ void print_can_frame(char *format_string, unsigned char *netframe) {
     printf("\n");
 }
 
+int net_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *netframe) {
+    int s;
+    s = sendto(net_socket, netframe, 13, 0, net_addr, sizeof(*net_addr));
+    if (s != 13) {
+        printf("%s: error sending TCP/UDP data\n", __func__);
+        return -1;
+    }
+    return 0;
+}
+
 int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *frame) {
     int s;
     uint32_t canid;
@@ -91,7 +101,7 @@ int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *fr
     /* send TCP/UDP frame */
     s = sendto(net_socket, netframe, 13, 0, net_addr, sizeof(*net_addr));
     if (s != 13) {
-        perror("error sending TCP/UDP data\n");
+        printf("%s: error sending TCP/UDP data\n", __func__);
         return -1;
     }
     return 0;
@@ -117,7 +127,7 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
 
     /* send CAN frame */
     if ((nbytes = write(can_socket, &frame, sizeof(frame))) != sizeof(frame)) {
-        perror("error writing CAN frame\n");
+        printf("%s: error writing CAN frame\n", __func__);
         return -1;
     }
     return 0;
@@ -210,7 +220,7 @@ int send_tcp_config_data(char *filename, uint32_t canid, int tcp_socket, int fla
         /* now prepare the send buffer */
         inflated_size = htonl(nbytes);
         memcpy(out, &inflated_size, 4);
-        /*prepare padding */
+        /* prepare padding */
         padded_nbytes = deflated_size + 4;
         if (padded_nbytes % 8 ) {
             padded_nbytes +=  8 - (padded_nbytes % 8);
@@ -225,20 +235,18 @@ int send_tcp_config_data(char *filename, uint32_t canid, int tcp_socket, int fla
         bzero(netframe,MAXMTU);
         /* prepare first CAN frame   */
         /* set response bit to canid */
-        canid_be = htonl(canid | 0x00010000UL);
+        canid_be = htonl((canid & 0x00FE0000UL) | 0x00020000UL);
         memcpy(&netframe[0], &canid_be, 4);
-        /* CAN DLC is 7 */
-        netframe[4] = 0x07;
+        /* CAN DLC is 6 */
+        netframe[4] = 0x06;
         temp32 = htonl(deflated_size + 4 );
         memcpy(&netframe[5], &temp32, 4);
         temp16 = htons(crc);
         memcpy(&netframe[9], &temp16, 2);
-        /* magic: meaning unclear - always 0x7b */
-        netframe[11] = 0x7b;
+        netframe[11] = 0x00;
         netframe[12] = 0x00;
-        temp32 = send(tcp_socket, netframe, 13, 0);
-        if (temp32 != 13) {
-             perror("error sending TCP data\n");
+
+        if (net_to_net(tcp_socket, NULL, netframe)) {
              deflateEnd (& strm);
              free(config);
              free(out);

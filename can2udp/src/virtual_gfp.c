@@ -213,6 +213,8 @@ int main(int argc, char **argv) {
 	}
     }
 
+    bzero(&caddr, sizeof(caddr));
+
     /* prepare CAN socket */
     if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
 	perror("error creating CAN socket\n");

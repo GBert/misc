@@ -72,8 +72,10 @@ int check_data(int tcp_socket, unsigned char *netframe) {
         case (0x00400000UL) : /* config data */
              strncpy(config_name,(char *) &netframe[5], 8);
              printf("%s ID 0x%08x %s\n", __func__, canid, (char *) &netframe[5]);
+             netframe[1] |= 1;
+             net_to_net(tcp_socket, NULL, netframe);
              if (strcmp(config_name, "gbs-0")==0) {
-                 send_tcp_config_data("./gleisbild.cs2\0", canid, tcp_socket, CRC|COMPRESSED);
+                 send_tcp_config_data("./gleisbilder/Tastenmatrix.cs2\0", canid, tcp_socket, CRC|COMPRESSED);
              }
 	     break;
     }
@@ -295,8 +297,7 @@ int main(int argc, char **argv) {
 		    netframe[2] = 0x00;
 		    netframe[3] = 0x00;
 		    netframe[4] = 0x00;
-		    s = sendto(sb, netframe, 13, 0, (struct sockaddr *) &baddr, sizeof(baddr));
-		    if (s != 13) {
+		    if (net_to_net(sb,(struct sockaddr *) &baddr, netframe)) {
 			perror("error sending UDP data (CAN Ping)\n");
 		    } else if (verbose & !background) {
 			print_can_frame(NET_UDP_FORMAT_STRG, netframe);
