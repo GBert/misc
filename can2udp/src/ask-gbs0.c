@@ -42,7 +42,7 @@ int main(int argc, char**argv) {
 
     if (connect(sockfd, (struct sockaddr *)&servaddr, sizeof(servaddr))) {
         printf("can't connect to socket - terminating\n");
-        return -1;
+        exit(1);
     }
     /* netframe_to_net(sockfd, GBS0, 13); */
     netframe_to_net(sockfd, GBSSTAT, 13);
