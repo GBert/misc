@@ -268,8 +268,7 @@ int send_tcp_config_data(char *filename, uint32_t canid, int tcp_socket, int fla
                 n_packets++;
             } while ((src_i < padded_nbytes) && n_packets < MAX_PACKETS);
             /* don't use frame_to_net because we have more then 13 bytes to send */
-            temp32 = send(tcp_socket, netframe, i, 0);
-            if (temp32 != i) {
+            if (net_to_net(tcp_socket, NULL, netframe, i)) {
                 perror("error sending TCP data\n");
                 deflateEnd (& strm);
                 free(config);
