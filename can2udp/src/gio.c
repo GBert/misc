@@ -213,8 +213,6 @@ int send_tcp_config_data(char *filename, uint32_t canid, int tcp_socket, int fla
             free(config);
             free(out);
             return -1;
-        } else {
-            printf("%s: filesize %d deflated size: %d\n", __func__, nbytes, deflated_size);
         }
  
         /* now prepare the send buffer */

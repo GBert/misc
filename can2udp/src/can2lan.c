@@ -67,7 +67,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
     char config_name[8];
     memcpy(&canid, netframe, 4);
     canid = ntohl(canid);
-    printf("%s ID 0x%08x\n", __func__, canid);
+    /* printf("%s ID 0x%08x\n", __func__, canid); */
     switch (canid & 0x00FF0000UL) {
         case (0x00400000UL) : /* config data */
              strncpy(config_name,(char *) &netframe[5], 8);
@@ -76,6 +76,9 @@ int check_data(int tcp_socket, unsigned char *netframe) {
              net_to_net(tcp_socket, NULL, netframe);
              if (strcmp(config_name, "gbs-0")==0) {
                  send_tcp_config_data("./gleisbilder/Tastenmatrix.cs2\0", canid, tcp_socket, CRC|COMPRESSED);
+             }
+             if (strcmp(config_name, "gbsstat")==0) {
+                 send_tcp_config_data("./gbsstat.sr2\0", canid, tcp_socket, CRC|COMPRESSED);
              }
 	     break;
     }

@@ -1,7 +1,8 @@
 #include "can2lan.h"
 
 
-unsigned char GBS0[]= {0x00,0x40,0x03,0x00,0x08,0x67,0x62,0x73,0x2d,0x30,0x00,0x00,0x00};
+unsigned char GBS0[]   = {0x00,0x40,0x03,0x00,0x08,0x67,0x62,0x73,0x2d,0x30,0x00,0x00,0x00};
+unsigned char GBSSTAT[]= {0x00,0x40,0x03,0x00,0x08,0x67,0x62,0x73,0x73,0x74,0x61,0x74,0x00};
 
 int netframe_to_net(int net_socket, unsigned char *netframe, int length) {
     int s;
@@ -33,7 +34,8 @@ int main(int argc, char**argv)
    servaddr.sin_port=htons(15731);
 
    connect(sockfd, (struct sockaddr *)&servaddr, sizeof(servaddr));
-   netframe_to_net(sockfd, GBS0, 13);
+   /* netframe_to_net(sockfd, GBS0, 13); */
+   netframe_to_net(sockfd, GBSSTAT, 13);
    while(n) {
       n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
       for ( i=0; i<n; i++) {
