@@ -36,6 +36,7 @@
 #define MAX_TCP_CONN	16		/* max TCP clients       */
 #define MAXDG   	4096		/* maximum datagram size */
 #define MAXMTU   	1400		/* maximum MTU           */
+#define MAX_PACKETS	40		/* maximum number of CAN frames per TCP packet */
 #define MAXUDP  	16		/* maximum datagram size */
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
 #define debug_print(...) \

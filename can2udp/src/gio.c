@@ -179,7 +179,7 @@ int send_tcp_config_data(char *filename, uint32_t canid, int tcp_socket, int fla
     uint8_t *config;
     uint8_t *out;
     z_stream strm;
-    int inflated_size, deflated_size, padded_nbytes, i, src_i;
+    int inflated_size, deflated_size, padded_nbytes, i, src_i, n_packets;
     uint16_t crc, temp16;
     uint8_t netframe[MAXMTU];
 
@@ -245,35 +245,38 @@ int send_tcp_config_data(char *filename, uint32_t canid, int tcp_socket, int fla
         netframe[12] = 0x00;
 
         if (net_to_net(tcp_socket, NULL, netframe)) {
-             deflateEnd (& strm);
-             free(config);
-             free(out);
-             return -1;
+            deflateEnd (& strm);
+            free(config);
+            free(out);
+            return -1;
         }
 
         /* loop until all packets send */
-        i = 0;
         src_i = 0 ;
         do {
-           memcpy(&netframe[i], &canid_be, 4);
-           i += 4;
-           /* CAN DLC is always 8 */
-           netframe[i] = 0x08;
-           i++;
-           memcpy(&netframe[i], &out[src_i], 8);
-           i += 8;
-           src_i += 8;
-	}
-        while (src_i < padded_nbytes);
-        /* don't use frame_to_net because we have more then 13 bytes to send */
-        temp32 = send(tcp_socket, netframe, i, 0);
-        if (temp32 != i) {
-             perror("error sending TCP data\n");
-             deflateEnd (& strm);
-             free(config);
-             free(out);
-             return -1;
-        }
+            n_packets = 0;
+            i = 0;
+            do {
+                memcpy(&netframe[i], &canid_be, 4);
+                i += 4;
+                /* CAN DLC is always 8 */
+                netframe[i] = 0x08;
+                i++;
+                memcpy(&netframe[i], &out[src_i], 8);
+                i += 8;
+                src_i += 8;
+                n_packets++;
+            } while ((src_i < padded_nbytes) && n_packets < MAX_PACKETS);
+            /* don't use frame_to_net because we have more then 13 bytes to send */
+            temp32 = send(tcp_socket, netframe, i, 0);
+            if (temp32 != i) {
+                perror("error sending TCP data\n");
+                deflateEnd (& strm);
+                free(config);
+                free(out);
+                return -1;
+            }
+        } while (src_i < padded_nbytes);
 #if 0
         /* print compressed data */
         temp32 = i;
