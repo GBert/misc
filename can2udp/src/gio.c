@@ -78,10 +78,10 @@ void print_can_frame(char *format_string, unsigned char *netframe) {
     printf("\n");
 }
 
-int net_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *netframe) {
+int net_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *netframe, int length) {
     int s;
-    s = sendto(net_socket, netframe, 13, 0, net_addr, sizeof(*net_addr));
-    if (s != 13) {
+    s = sendto(net_socket, netframe, length, 0, net_addr, sizeof(*net_addr));
+    if (s != length) {
         printf("%s: error sending TCP/UDP data\n", __func__);
         return -1;
     }
@@ -244,7 +244,7 @@ int send_tcp_config_data(char *filename, uint32_t canid, int tcp_socket, int fla
         netframe[11] = 0x00;
         netframe[12] = 0x00;
 
-        if (net_to_net(tcp_socket, NULL, netframe)) {
+        if (net_to_net(tcp_socket, NULL, netframe, 13)) {
             deflateEnd (& strm);
             free(config);
             free(out);
