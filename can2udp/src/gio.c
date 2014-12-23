@@ -224,7 +224,7 @@ int send_tcp_config_data(char *filename, uint32_t canid, int tcp_socket, int fla
         printf("%s: canid 0x%08x filesize %d deflated size: %d crc 0x%04x\n", __func__, canid, nbytes, deflated_size, crc);
         bzero(netframe,MAXMTU);
         /* prepare first CAN frame   */
-        /* set response bit tp canid */
+        /* set response bit to canid */
         canid_be = htonl(canid | 0x00010000UL);
         memcpy(&netframe[0], &canid_be, 4);
         /* CAN DLC is 7 */
@@ -236,8 +236,17 @@ int send_tcp_config_data(char *filename, uint32_t canid, int tcp_socket, int fla
         /* magic: meaning unclear - always 0x7b */
         netframe[11] = 0x7b;
         netframe[12] = 0x00;
+        temp32 = send(tcp_socket, netframe, 13, 0);
+        if (temp32 != 13) {
+             perror("error sending TCP data\n");
+             deflateEnd (& strm);
+             free(config);
+             free(out);
+             return -1;
+        }
+
         /* loop until all packets send */
-        i = 13;
+        i = 0;
         src_i = 0 ;
         do {
            memcpy(&netframe[i], &canid_be, 4);
@@ -250,13 +259,16 @@ int send_tcp_config_data(char *filename, uint32_t canid, int tcp_socket, int fla
            src_i += 8;
 	}
         while (src_i < padded_nbytes);
-#if 0
-        temp32 = sendto(tcp_socket, netframe, i, 0, net_addr, sizeof(*net_addr));
+        /* don't use frame_to_net because we have more then 13 bytes to send */
+        temp32 = send(tcp_socket, netframe, i, 0);
         if (temp32 != i) {
-             perror("error sending TCP/UDP data\n");
+             perror("error sending TCP data\n");
+             deflateEnd (& strm);
+             free(config);
+             free(out);
              return -1;
         }
-#endif
+#if 0
         /* print compressed data */
         temp32 = i;
 	for (i=0 ; i < temp32 ; i++) {
@@ -266,6 +278,7 @@ int send_tcp_config_data(char *filename, uint32_t canid, int tcp_socket, int fla
             printf("%02x ", netframe[i]);
         }
         printf("\n");
+#endif
         deflateEnd (& strm);
     }
     free(config);
