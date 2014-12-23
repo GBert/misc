@@ -234,8 +234,8 @@ int send_tcp_config_data(char *filename, uint32_t canid, int tcp_socket, int fla
         printf("%s: canid 0x%08x filesize %d deflated size: %d crc 0x%04x\n", __func__, canid, nbytes, deflated_size, crc);
         bzero(netframe,MAXMTU);
         /* prepare first CAN frame   */
-        /* set response bit to canid */
-        canid_be = htonl((canid & 0x00FE0000UL) | 0x00020000UL);
+        /* delete response bit and set canid to config data stream */
+        canid_be = htonl((canid & 0xFFFEFFFFUL) | 0x00020000UL);
         memcpy(&netframe[0], &canid_be, 4);
         /* CAN DLC is 6 */
         netframe[4] = 0x06;
