@@ -11,7 +11,10 @@
 
 #define FRAME_SIZE	13
 #define MAXSIZE		16384
-unsigned char GETCONFIG[] = {0x00,0x40,0x03,0x00,0x08};
+unsigned char GETCONFIG[]          = {0x00,0x40,0x03,0x00,0x08};
+unsigned char GETCONFIG_DATA[]     = {0x00,0x42,0x03,0x00,0x08};
+unsigned char GETCONFIG_RESPONSE[] = {0x00,0x42,0x03,0x00,0x06};
+unsigned char GZIP_HEADER[]        = {0x1f,0x8b,0x08,0x00,0x00,0x00,0x00,0x00};
 
 int netframe_to_net(int net_socket, unsigned char *netframe, int length) {
     int s;
@@ -23,11 +26,14 @@ int netframe_to_net(int net_socket, unsigned char *netframe, int length) {
 }
 
 int main(int argc, char**argv) {
-    int sockfd, i, tcp_packet_nr, n =1;
+    int sockfd, i, tcp_packet_nr, n=1;
+    FILE *config_fp;
+    int temp, config_data_start, inflated_size, deflated_size;
     struct sockaddr_in servaddr;
     fd_set rset;
     unsigned char netframe[FRAME_SIZE];
     unsigned char recvline[MAXSIZE];
+    char *config_file;
     
     if (argc != 3)
     {
@@ -38,6 +44,15 @@ int main(int argc, char**argv) {
     if (strlen(argv[1])>7) {
         printf("config name to long\n");
         exit(1);
+    } else {
+        if (( config_file = malloc(strlen(argv[1]+2)))) {
+            config_file[0]= '\0';
+            strcat(config_file, argv[1]);
+            strcat(config_file, ".z");
+        } else {
+            printf("can't malloc config %s.z file name\n", argv[1]);
+            exit(1);
+        }
     }
 
     if((sockfd=socket(AF_INET,SOCK_STREAM,0)) < 0) {
@@ -70,6 +85,7 @@ int main(int argc, char**argv) {
     FD_ZERO(&rset);
     FD_SET(0,&rset);
     tcp_packet_nr=0;
+    config_data_start=0;
 
     for(;;) {
         FD_SET(sockfd,&rset);
@@ -81,6 +97,27 @@ int main(int argc, char**argv) {
         tcp_packet_nr++;
         if (FD_ISSET(sockfd,&rset)) {
             if ((n=recv(sockfd,recvline,MAXSIZE,0)) > 0) {
+                if (memcmp(recvline,GETCONFIG_RESPONSE,5)==0) {
+                    memcpy(&temp,&recvline[5],4);
+                    deflated_size=ntohl(temp);
+                    printf("\nstart of config - deflated size: 0x%08x", deflated_size);
+                    config_data_start=1;
+                    config_fp = fopen(argv[1],"wb");
+                    if (!config_fp) {
+                        printf("\ncan't open file %s for writing\n", config_file);
+                        exit(1);
+                    } else {
+                        fwrite(GZIP_HEADER, sizeof(GZIP_HEADER), 8, config_fp);
+                    }
+                }
+                if (config_data_start) {
+                    if (memcmp(recvline,GETCONFIG_DATA,5)==0) {
+                        memcpy(&temp,&recvline[5],4);
+                        inflated_size=ntohl(temp);
+                        printf("\ninflated size: 0x%08x", inflated_size);
+                        config_data_start=0;
+                    }
+                }
                 for ( i=0; i<n; i++) {
                     if (( i % FRAME_SIZE ) == 0) {
                         printf("\n %04d: ", tcp_packet_nr);
