@@ -10,6 +10,7 @@
 #include <sys/time.h>
 
 #define FRAME_SIZE	13
+#define MAXSIZE		16384
 unsigned char GETCONFIG[] = {0x00,0x40,0x03,0x00,0x08};
 
 int netframe_to_net(int net_socket, unsigned char *netframe, int length) {
@@ -26,7 +27,7 @@ int main(int argc, char**argv) {
     struct sockaddr_in servaddr;
     fd_set rset;
     unsigned char netframe[FRAME_SIZE];
-    unsigned char recvline[1000];
+    unsigned char recvline[MAXSIZE];
     
     if (argc != 3)
     {
@@ -79,9 +80,9 @@ int main(int argc, char**argv) {
         }
         tcp_packet_nr++;
         if (FD_ISSET(sockfd,&rset)) {
-            if ((n=recv(sockfd,recvline,10000,0)) > 0) {
+            if ((n=recv(sockfd,recvline,MAXSIZE,0)) > 0) {
                 for ( i=0; i<n; i++) {
-                    if (( i % 13 ) == 0) {
+                    if (( i % FRAME_SIZE ) == 0) {
                         printf("\n %04d: ", tcp_packet_nr);
                     }
                     printf("%02x ", recvline[i]);
