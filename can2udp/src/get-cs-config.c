@@ -15,8 +15,7 @@ int netframe_to_net(int net_socket, unsigned char *netframe, int length) {
     int s;
     s = send(net_socket, netframe, length, 0);
     if (s != length) {
-        printf("%s: error sending TCP/UDP data\n", __func__);
-        return -1;
+        return 1;
     }
     return 0;
 }
@@ -39,7 +38,7 @@ int main(int argc, char**argv) {
     }
 
     if((sockfd=socket(AF_INET,SOCK_STREAM,0)) < 0) {
-        printf("can't crate TCP socket\n");
+        printf("can't create TCP socket\n");
         exit(1);
     }
 
@@ -60,10 +59,13 @@ int main(int argc, char**argv) {
     bzero(netframe, sizeof(netframe));
     memcpy(netframe, GETCONFIG,5);
     memcpy(&netframe[5], argv[1], strlen(argv[1]));
-    netframe_to_net(sockfd, netframe, FRAME_SIZE);
+    if (netframe_to_net(sockfd, netframe, FRAME_SIZE)) {
+        printf("can't send data on TCP socket - terminating\n");
+        exit(1);
+    }
 
     while(n) {
-        n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
+        if ((n=recv(sockfd,recvline,10000,0)) > 0);
         for ( i=0; i<n; i++) {
             if (( i % 13 ) == 0) {
                 printf("\n");
