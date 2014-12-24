@@ -65,14 +65,15 @@ int main(int argc, char**argv) {
     }
 
     while(n) {
-        if ((n=recv(sockfd,recvline,10000,0)) > 0);
-        for ( i=0; i<n; i++) {
-            if (( i % 13 ) == 0) {
-                printf("\n");
+        if ((n=recv(sockfd,recvline,10000,0)) > 0) {
+            for ( i=0; i<n; i++) {
+                if (( i % 13 ) == 0) {
+                    printf("\n");
+                }
+                printf("%02x ", recvline[i]);
             }
-            printf("%02x ", recvline[i]);
+            printf("\n");
         }
-        printf("\n");
     }
     return 1;
 }
