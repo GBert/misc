@@ -102,7 +102,7 @@ int main(int argc, char**argv) {
                     deflated_size=ntohl(temp);
                     printf("\nstart of config - deflated size: 0x%08x", deflated_size);
                     config_data_start=1;
-                    config_fp = fopen(argv[1],"wb");
+                    config_fp = fopen(config_file,"wb");
                     if (!config_fp) {
                         printf("\ncan't open file %s for writing\n", config_file);
                         exit(1);
