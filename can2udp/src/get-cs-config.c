@@ -83,7 +83,6 @@ int main(int argc, char**argv) {
     }
 
     FD_ZERO(&rset);
-    FD_SET(0,&rset);
     tcp_packet_nr=0;
     config_data_start=0;
 
