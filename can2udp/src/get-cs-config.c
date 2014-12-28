@@ -123,7 +123,7 @@ int main(int argc, char**argv) {
                                 fwrite(&recvline[i+9], 1, 4, config_fp);
                             } 
                         } else {
-                            if ((config_data_stream) && (deflated_size > 0)) {
+                            if (config_data_stream) {
                                 fwrite(&recvline[i+5], 1, 8, config_fp);
                                 deflated_size -= 8;
                                 if (deflated_size <=0) {
