@@ -28,7 +28,7 @@ int netframe_to_net(int net_socket, unsigned char *netframe, int length) {
 int main(int argc, char**argv) {
     int sockfd, i, tcp_packet_nr, n=1;
     FILE *config_fp;
-    int temp, config_data_start, inflated_size, deflated_size;
+    int temp, config_data_start, config_data_stream, inflated_size, deflated_size;
     struct sockaddr_in servaddr;
     fd_set rset;
     unsigned char netframe[FRAME_SIZE];
@@ -85,6 +85,7 @@ int main(int argc, char**argv) {
     FD_ZERO(&rset);
     tcp_packet_nr=0;
     config_data_start=0;
+    config_data_stream=0;
 
     for(;;) {
         FD_SET(sockfd,&rset);
@@ -106,19 +107,31 @@ int main(int argc, char**argv) {
                         printf("\ncan't open file %s for writing\n", config_file);
                         exit(1);
                     } else {
-                        fwrite(GZIP_HEADER, sizeof(GZIP_HEADER), 8, config_fp);
-                    }
-                }
-                if (config_data_start) {
-                    if (memcmp(recvline,GETCONFIG_DATA,5)==0) {
-                        memcpy(&temp,&recvline[5],4);
-                        inflated_size=ntohl(temp);
-                        printf("\ninflated size: 0x%08x", inflated_size);
-                        config_data_start=0;
+                        fwrite(GZIP_HEADER, 1, 8, config_fp);
                     }
                 }
                 for ( i=0; i<n; i++) {
                     if (( i % FRAME_SIZE ) == 0) {
+                        if (config_data_start) {
+                            if (memcmp(&recvline[i],GETCONFIG_DATA,5)==0) {
+                                memcpy(&temp,&recvline[i+5],4);
+                                inflated_size=ntohl(temp);
+                                printf("\ninflated size: 0x%08x", inflated_size);
+                                config_data_start=0;
+                                config_data_stream=1;
+                                deflated_size -= 4;
+                                fwrite(&recvline[i+9], 1, 4, config_fp);
+                            } 
+                        } else {
+                            if ((config_data_stream) && (deflated_size > 0)) {
+                                fwrite(&recvline[i+5], 1, 8, config_fp);
+                                deflated_size -= 8;
+                                if (deflated_size <=0) {
+                                    fclose(config_fp);
+                                    config_data_stream=0;
+                                } 
+                            }
+                        }
                         printf("\n %04d: ", tcp_packet_nr);
                     }
                     printf("%02x ", recvline[i]);
