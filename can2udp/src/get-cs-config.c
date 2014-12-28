@@ -119,16 +119,18 @@ int main(int argc, char**argv) {
                                 printf("\ninflated size: 0x%08x", inflated_size);
                                 config_data_start=0;
                                 config_data_stream=1;
-                                deflated_size -= 4;
+                                deflated_size -= 8;
                                 fwrite(&recvline[i+9], 1, 4, config_fp);
                             } 
                         } else {
                             if (config_data_stream) {
-                                fwrite(&recvline[i+5], 1, 8, config_fp);
-                                deflated_size -= 8;
-                                if (deflated_size <=0) {
+                                if (deflated_size <= 8) {
+                                    fwrite(&recvline[i+5], 1, deflated_size, config_fp);
                                     fclose(config_fp);
                                     config_data_stream=0;
+                                } else {
+                                    fwrite(&recvline[i+5], 1, 8, config_fp);
+                                    deflated_size -= 8;
                                 } 
                             }
                         }
