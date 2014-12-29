@@ -16,6 +16,19 @@ unsigned char GETCONFIG_DATA[]     = {0x00,0x42,0x03,0x00,0x08};
 unsigned char GETCONFIG_RESPONSE[] = {0x00,0x42,0x03,0x00,0x06};
 unsigned char GZIP_HEADER[]        = {0x1f,0x8b,0x08,0x00,0x00,0x00,0x00,0x00};
 
+struct config_data {
+    int deflated_stream_size;
+    int deflated_size;
+    int inflated_size;
+    uint16_t crc;
+    char *name;
+    uint8_t *deflated_data;
+    uint8_t *inflated_data;
+};
+
+
+uint16_t CRCCCITT(unsigned char *data, size_t length, unsigned short seed);
+
 int netframe_to_net(int net_socket, unsigned char *netframe, int length) {
     int s;
     s = send(net_socket, netframe, length, 0);
@@ -25,15 +38,38 @@ int netframe_to_net(int net_socket, unsigned char *netframe, int length) {
     return 0;
 }
 
-int main(int argc, char**argv) {
-    int sockfd, i, tcp_packet_nr, n=1;
+int config_write(struct config_data *config_data) {
     FILE *config_fp;
-    int temp, config_data_start, config_data_stream, inflated_size, deflated_size;
+    int i;
+
+    printf("\n  writing to %s - size 0x%04x crc 0x%04x\n", config_data->name, config_data->deflated_stream_size, config_data->crc);
+
+    config_fp = fopen(config_data->name,"wb");
+    if (!config_fp) {
+        printf("\ncan't open file %s for writing\n", config_data->name);
+        exit(1);
+    } else {
+        for (i = 0; i <= config_data->deflated_stream_size ; i++) {
+            if ((i % 8 ) == 0 ) {
+               printf("\n");
+            } else {
+               printf("%02x ", config_data->deflated_data[i]);
+            }
+        }
+        printf("\n");
+    }
+    return 1;
+}
+
+int main(int argc, char**argv) {
+    int sockfd, ddi, i, tcp_packet_nr, n=1;
+    FILE *config_fp;
+    int temp, config_data_start, config_data_stream, deflated_size;
+    struct config_data config_data;
     struct sockaddr_in servaddr;
     fd_set rset;
     unsigned char netframe[FRAME_SIZE];
     unsigned char recvline[MAXSIZE];
-    char *config_file;
     
     if (argc != 3)
     {
@@ -45,10 +81,10 @@ int main(int argc, char**argv) {
         printf("config name to long\n");
         exit(1);
     } else {
-        if (( config_file = malloc(strlen(argv[1]+2)))) {
-            config_file[0]= '\0';
-            strcat(config_file, argv[1]);
-            strcat(config_file, ".z");
+        if (( config_data.name = malloc(strlen(argv[1]+2)))) {
+            config_data.name[0]= '\0';
+            strcat(config_data.name, argv[1]);
+            strcat(config_data.name, ".z");
         } else {
             printf("can't malloc config %s.z file name\n", argv[1]);
             exit(1);
@@ -100,37 +136,46 @@ int main(int argc, char**argv) {
                 if (memcmp(recvline,GETCONFIG_RESPONSE,5)==0) {
                     memcpy(&temp,&recvline[5],4);
                     deflated_size=ntohl(temp);
-                    printf("\nstart of config - deflated size: 0x%08x", deflated_size);
+                    config_data.deflated_size=deflated_size;
+                    memcpy(&temp,&recvline[9],2);
+                    config_data.crc=ntohs(temp);
+                    printf("\nstart of config - deflated size: 0x%08x crc 0x%04x", deflated_size, config_data.crc);
                     config_data_start=1;
-                    config_fp = fopen(config_file,"wb");
-                    if (!config_fp) {
-                        printf("\ncan't open file %s for writing\n", config_file);
+                    /* we alloc 8 bytes more to be sure that it fits */
+                    config_data.deflated_data = malloc(deflated_size + 16);
+                    if (config_data.deflated_data == NULL) {
+                        printf("can't malloc config data buffer - size 0x%04x\n", deflated_size + 8);
                         exit(1);
-                    } else {
-                        fwrite(GZIP_HEADER, 1, 8, config_fp);
                     }
+                    /* deflated data index */
+                    ddi=0;
                 }
                 for ( i=0; i<n; i++) {
                     if (( i % FRAME_SIZE ) == 0) {
-                        if (config_data_start) {
-                            if (memcmp(&recvline[i],GETCONFIG_DATA,5)==0) {
+                        if (memcmp(&recvline[i],GETCONFIG_DATA,5)==0) {
+                            printf("\ni 0x%04x ddi 0x%04x", i, ddi);
+                            memcpy(&config_data.deflated_data[ddi],&recvline[i+5],8);
+                            ddi +=8;
+                            if (config_data_start) {
                                 memcpy(&temp,&recvline[i+5],4);
-                                inflated_size=ntohl(temp);
-                                printf("\ninflated size: 0x%08x", inflated_size);
+                                config_data.inflated_size=ntohl(temp);
+                                printf("\ninflated size: 0x%08x", config_data.inflated_size);
                                 config_data_start=0;
                                 config_data_stream=1;
                                 deflated_size -= 8;
-                                fwrite(&recvline[i+9], 1, 4, config_fp);
-                            } 
-                        } else {
-                            if (config_data_stream) {
-                                if (deflated_size <= 8) {
-                                    fwrite(&recvline[i+5], 1, deflated_size, config_fp);
-                                    fclose(config_fp);
-                                    config_data_stream=0;
-                                } else {
-                                    fwrite(&recvline[i+5], 1, 8, config_fp);
-                                    deflated_size -= 8;
+                    /*            fwrite(&recvline[i+9], 1, 4, config_fp); */
+                            } else {
+                                if (config_data_stream) {
+                                    if (deflated_size <= 8) {
+                                    /*    fwrite(&recvline[i+5], 1, deflated_size, config_fp);
+                                        fclose(config_fp); */
+                                        config_data_stream=0;
+                                        config_data.deflated_stream_size=ddi -1;
+                                        config_write(&config_data);
+                                    } else {
+                                    /*    fwrite(&recvline[i+5], 1, 8, config_fp); */
+                                        deflated_size -= 8;
+                                    }
                                 } 
                             }
                         }
