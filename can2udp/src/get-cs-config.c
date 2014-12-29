@@ -41,20 +41,22 @@ int netframe_to_net(int net_socket, unsigned char *netframe, int length) {
 int config_write(struct config_data *config_data) {
     FILE *config_fp;
     int i;
+    uint16_t crc;
 
-    printf("\n  writing to %s - size 0x%04x crc 0x%04x\n", config_data->name, config_data->deflated_stream_size, config_data->crc);
+    crc = CRCCCITT(config_data->deflated_data, config_data->deflated_stream_size, 0xFFFF);
+
+    printf("\n  writing to %s - size 0x%04x crc 0x%04x 0x%04x\n", config_data->name, config_data->deflated_stream_size, config_data->crc, crc);
 
     config_fp = fopen(config_data->name,"wb");
     if (!config_fp) {
         printf("\ncan't open file %s for writing\n", config_data->name);
         exit(1);
     } else {
-        for (i = 0; i <= config_data->deflated_stream_size ; i++) {
+        for (i = 0; i < config_data->deflated_stream_size ; i++) {
             if ((i % 8 ) == 0 ) {
                printf("\n");
-            } else {
-               printf("%02x ", config_data->deflated_data[i]);
             }
+            printf("%02x ", config_data->deflated_data[i]);
         }
         printf("\n");
     }
@@ -153,7 +155,6 @@ int main(int argc, char**argv) {
                 for ( i=0; i<n; i++) {
                     if (( i % FRAME_SIZE ) == 0) {
                         if (memcmp(&recvline[i],GETCONFIG_DATA,5)==0) {
-                            printf("\ni 0x%04x ddi 0x%04x", i, ddi);
                             memcpy(&config_data.deflated_data[ddi],&recvline[i+5],8);
                             ddi +=8;
                             if (config_data_start) {
@@ -170,7 +171,7 @@ int main(int argc, char**argv) {
                                     /*    fwrite(&recvline[i+5], 1, deflated_size, config_fp);
                                         fclose(config_fp); */
                                         config_data_stream=0;
-                                        config_data.deflated_stream_size=ddi -1;
+                                        config_data.deflated_stream_size=ddi;
                                         config_write(&config_data);
                                     } else {
                                     /*    fwrite(&recvline[i+5], 1, 8, config_fp); */
