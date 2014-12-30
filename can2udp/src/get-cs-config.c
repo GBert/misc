@@ -8,13 +8,15 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <sys/time.h>
+#include <assert.h>
+
+#include <zlib.h>
 
 #define FRAME_SIZE	13
 #define MAXSIZE		16384
 unsigned char GETCONFIG[]          = {0x00,0x40,0x03,0x00,0x08};
 unsigned char GETCONFIG_DATA[]     = {0x00,0x42,0x03,0x00,0x08};
 unsigned char GETCONFIG_RESPONSE[] = {0x00,0x42,0x03,0x00,0x06};
-unsigned char GZIP_HEADER[]        = {0x1f,0x8b,0x08,0x00,0x00,0x00,0x00,0x00};
 
 struct config_data {
     int deflated_stream_size;
@@ -26,7 +28,6 @@ struct config_data {
     uint8_t *inflated_data;
 };
 
-
 uint16_t CRCCCITT(unsigned char *data, size_t length, unsigned short seed);
 
 int netframe_to_net(int net_socket, unsigned char *netframe, int length) {
@@ -37,6 +38,38 @@ int netframe_to_net(int net_socket, unsigned char *netframe, int length) {
     }
     return 0;
 }
+
+int inflate_data(struct config_data *config_data) {
+    int ret;
+    z_stream strm;
+
+    strm.zalloc = Z_NULL;
+    strm.zfree = Z_NULL;
+    strm.opaque = Z_NULL;
+    strm.avail_in = 0;
+    strm.next_in = Z_NULL;
+    ret = inflateInit(&strm);
+    if (ret != Z_OK)
+        return ret;
+    strm.avail_in = config_data->deflated_size;
+    strm.avail_out = config_data->inflated_size;
+    strm.next_in = config_data->deflated_data + 4;
+    strm.next_out = config_data->inflated_data;
+    ret = inflate(&strm, Z_NO_FLUSH);
+
+    assert(ret != Z_STREAM_ERROR);  /* state not clobbered */
+    switch (ret) {
+        case Z_NEED_DICT:
+            ret = Z_DATA_ERROR;     /* and fall through */
+        case Z_DATA_ERROR:
+        case Z_MEM_ERROR:
+            (void)inflateEnd(&strm);
+            return ret;
+        }
+
+    return 0;
+}
+
 
 int config_write(struct config_data *config_data) {
     FILE *config_fp;
@@ -60,12 +93,14 @@ int config_write(struct config_data *config_data) {
         }
         printf("\n");
     }
+    inflate_data(config_data);
+    fwrite(config_data->inflated_data, 1, config_data->inflated_size, config_fp);
+    fclose(config_fp);
     return 1;
 }
 
 int main(int argc, char**argv) {
     int sockfd, ddi, i, tcp_packet_nr, n=1;
-    FILE *config_fp;
     int temp, config_data_start, config_data_stream, deflated_size;
     struct config_data config_data;
     struct sockaddr_in servaddr;
@@ -83,10 +118,10 @@ int main(int argc, char**argv) {
         printf("config name to long\n");
         exit(1);
     } else {
-        if (( config_data.name = malloc(strlen(argv[1]+2)))) {
+        if (( config_data.name = malloc(strlen(argv[1]+4)))) {
             config_data.name[0]= '\0';
             strcat(config_data.name, argv[1]);
-            strcat(config_data.name, ".z");
+            strcat(config_data.name, ".cs2");
         } else {
             printf("can't malloc config %s.z file name\n", argv[1]);
             exit(1);
@@ -146,9 +181,15 @@ int main(int argc, char**argv) {
                     /* we alloc 8 bytes more to be sure that it fits */
                     config_data.deflated_data = malloc(deflated_size + 16);
                     if (config_data.deflated_data == NULL) {
-                        printf("can't malloc config data buffer - size 0x%04x\n", deflated_size + 8);
+                        printf("can't malloc deflated config data buffer - size 0x%04x\n", deflated_size + 8);
                         exit(1);
                     }
+                    config_data.inflated_data = malloc(config_data.inflated_size + 16384);
+                    if (config_data.inflated_data == NULL) {
+                        printf("can't malloc inflated config data buffer - size 0x%04x\n", config_data.inflated_size);
+                        exit(1);
+                    }
+                    
                     /* deflated data index */
                     ddi=0;
                 }
