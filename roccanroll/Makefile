@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 OpenWrt.org
+# Copyright (C) 2014 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=roccanroll
-PKG_REV:=1401f500bb99
 PKG_REV:=5b36e5a63403
+PKG_REV:=d892c56d00c6
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
