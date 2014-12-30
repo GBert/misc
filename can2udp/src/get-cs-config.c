@@ -205,16 +205,14 @@ int main(int argc, char**argv) {
                                 config_data_start=0;
                                 config_data_stream=1;
                                 deflated_size -= 8;
-                            } else {
-                                if (config_data_stream) {
-                                    if (deflated_size <= 8) {
-                                        config_data_stream=0;
-                                        config_data.deflated_stream_size=ddi;
-                                        config_write(&config_data);
-                                    } else {
-                                        deflated_size -= 8;
-                                    }
-                                } 
+                            } else if (config_data_stream) {
+                                if (deflated_size <= 8) {
+                                    config_data_stream=0;
+                                    config_data.deflated_stream_size=ddi;
+                                    config_write(&config_data);
+                                } else {
+                                    deflated_size -= 8;
+                                }
                             }
                         }
                         printf("\n %04d: ", tcp_packet_nr);
