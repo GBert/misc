@@ -18,7 +18,7 @@ define Package/can2udp
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=can2udp/can2lan gateway
-  DEPENDS:=
+  DEPENDS:= +zlib
 endef
 
 define Package/can2udp/description
