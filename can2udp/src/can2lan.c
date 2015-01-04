@@ -74,11 +74,43 @@ int check_data(int tcp_socket, unsigned char *netframe) {
              printf("%s ID 0x%08x %s\n", __func__, canid, (char *) &netframe[5]);
              netframe[1] |= 1;
              net_to_net(tcp_socket, NULL, netframe, 13);
-             if (strcmp(config_name, "gbs-0")==0) {
-                 send_tcp_config_data("./gleisbilder/Tastenmatrix.cs2\0", canid, tcp_socket, CRC|COMPRESSED);
+             if (strcmp(config_name, "loks")==0) {
+                 send_tcp_config_data("./lokomotive.cs2", canid, tcp_socket, CRC|COMPRESSED);
+                 break;
+             }
+             if (strcmp(config_name, "mags")==0) {
+                 send_tcp_config_data("./magnetartikel.cs2", canid, tcp_socket, CRC|COMPRESSED);
+                 break;
+             }
+             if (strcmp(config_name, "gbs")==0) {
+                 send_tcp_config_data("./gleisbild.cs2", canid, tcp_socket, CRC|COMPRESSED);
+                 break;
+             }
+             /* TODO : needs reading track files ...*/
+             if (strcmp(config_name, "gbs-")==0) {
+                 break;
+             }
+             if (strcmp(config_name, "fs")==0) {
+                 send_tcp_config_data("./fahrstrassen.cs2", canid, tcp_socket, CRC|COMPRESSED);
+                 break;
+             }
+             /* TODO : these files depends on different internal states - to complex for now */
+             if (strcmp(config_name, "lokstat")==0) {
+                 send_tcp_config_data("./lokomotive.sr2", canid, tcp_socket, CRC|COMPRESSED);
+                 break;
+             }
+             if (strcmp(config_name, "magstat")==0) {
+                 send_tcp_config_data("./magnetartikel.sr2", canid, tcp_socket, CRC|COMPRESSED);
+                 break;
              }
              if (strcmp(config_name, "gbsstat")==0) {
-                 send_tcp_config_data("./gbsstat.sr2\0", canid, tcp_socket, CRC|COMPRESSED);
+                 send_tcp_config_data("./gbsstat.sr2", canid, tcp_socket, CRC|COMPRESSED);
+                 break;
+             }
+	     break;
+             if (strcmp(config_name, "fsstat")==0) {
+                 send_tcp_config_data("./fahrstrassen.sr2", canid, tcp_socket, CRC|COMPRESSED);
+                 break;
              }
 	     break;
     }
