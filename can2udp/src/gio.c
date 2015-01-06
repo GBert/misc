@@ -33,6 +33,22 @@
         }                                                               \
     }
 
+/*
+ * return string with CRLF removed from end
+ */
+char * rmcrlf(char *s, int slen) {
+        int l;
+
+        s[slen - 1] = '\0';
+
+        l = strlen(s) - 1;
+
+        while (l >= 0 && (s[l]=='\r' || s[l]=='\n'))
+                s[l--]= '\0';
+
+        return s;
+}
+
 int time_stamp(char *timestamp){
     /* char *timestamp = (char *)malloc(sizeof(char) * 16); */
     struct timeval  tv;
@@ -43,6 +59,41 @@ int time_stamp(char *timestamp){
 
     sprintf(timestamp,"%02d:%02d:%02d.%03d", tm->tm_hour, tm->tm_min, tm->tm_sec, (int) tv.tv_usec/1000);
     return 0;
+}
+
+int read_track_file(char *filename) {
+    FILE *fp;
+    int id = 0;
+    int page = 0;
+    char line[MAXLINE];
+    char gs_name[MAXLINE];
+
+    if((fp = fopen(filename,"r")) != NULL){
+        while(fgets(line,MAXLINE,fp)!=NULL){
+            if (strstr(line, "seite") == line ) {
+                page=1;
+            }
+            else if (strstr(line, " .id=") == line ) {
+                id=strtoul(&line[5], NULL,0);
+            }
+            else if (strstr(line, " .name=") == line ) {
+                rmcrlf(line,MAXLINE);
+                strncpy(gs_name, &line[7], MAXLINE);
+                /* TODO: save names in array */
+                if (page)
+                    printf("%02d %s.cs2\n", id, gs_name);
+            }
+        }
+        /* fgets returned null */
+        if(errno != 0){
+            fprintf(stderr, "error reading line\n");
+            return -1;
+        }
+        return 1;                /* EOF found, normal exit */
+    } else {                    /* there was an error on open */
+        fprintf(stderr, "error reading file %s\n", filename);
+        return -1;
+    }
 }
 
 void print_can_frame(char *format_string, unsigned char *netframe) {

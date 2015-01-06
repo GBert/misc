@@ -23,6 +23,9 @@ char *NET_UDP_FORMAT_STRG   ="      UDP->  CANID 0x%06X   [%d]";
 
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE [] = {0x00,0x36,0x03,0x01,0x05,0x00,0x00,0x00,0x00,0x11,0x00,0x00,0x00};
 
+char config_dir[MAXLINE];
+char line[MAXLINE];
+
 void Signal_Handler(int sig) {		/* signal handler function */
     switch (sig) {
     case SIGHUP:
@@ -36,9 +39,10 @@ void Signal_Handler(int sig) {		/* signal handler function */
 }
 
 void print_usage(char *prg) {
-    fprintf(stderr, "\nUsage: %s -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 0.9\n");
+    fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
+    fprintf(stderr, "   Version 0.91\n");
     fprintf(stderr, "\n");
+    fprintf(stderr, "         -s <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default 15730\n");
@@ -146,8 +150,16 @@ int main(int argc, char **argv) {
     char buffer[64];
     strcpy(ifr.ifr_name, "can0");
 
-    while ((opt = getopt(argc, argv, "u:t:d:b:i:vhf?")) != -1) {
+    while ((opt = getopt(argc, argv, "s:u:t:d:b:i:vhf?")) != -1) {
 	switch (opt) {
+	case 's':
+            if (strlen(optarg) <MAXLINE) {
+	        strcpy(config_dir, optarg);
+            } else {
+                fprintf(stderr, "config file dir to long\n");
+                exit(1);
+            }
+	    break;
 	case 'u':
 	    local_udp_port = strtoul(optarg, (char **) NULL, 10);
 	    break;
@@ -162,6 +174,7 @@ int main(int argc, char **argv) {
 		strcpy(udp_dst_address, optarg);
 	    } else {
 		fprintf(stderr, "UDP broadcast address error: %s\n", optarg);
+                exit(1);
 	    }
 	    break;
 	case 'i':

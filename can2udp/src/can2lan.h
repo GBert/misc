@@ -33,6 +33,7 @@
 #include <time.h>
 #include <linux/can.h>
 
+#define MAXLINE		1024		/* max string length     */
 #define MAX_TCP_CONN	16		/* max TCP clients       */
 #define MAXDG   	4096		/* maximum datagram size */
 #define MAXMTU   	1400		/* maximum MTU           */
