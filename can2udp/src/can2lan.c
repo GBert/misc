@@ -108,7 +108,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
                  send_tcp_config_data("fahrstrassen.cs2", config_dir, canid, tcp_socket, CRC|COMPRESSED);
                  break;
              }
-             /* TODO : these files depends on different internal states - to complex for now */
+             /* TODO : these files depends on different internal states */
              else if (strcmp("lokstat", config_name)==0) {
                  fprintf(stderr, "%s: lokstat (lokomotive.sr2) not implemented yet\n", __func__); 
                  send_tcp_config_data("lokomotive.sr2", config_dir, canid, tcp_socket, CRC|COMPRESSED);
@@ -120,7 +120,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
                  break;
              }
              else if (strcmp("gbsstat", config_name)==0) {
-                 fprintf(stderr, "%s: gbsstat (gbssta.sr2) not implemented yet\n\n", __func__); 
+                 fprintf(stderr, "%s: gbsstat (gbsstat.sr2) not implemented yet\n\n", __func__); 
                  send_tcp_config_data("gbsstat.sr2", config_dir, canid, tcp_socket, CRC|COMPRESSED);
                  break;
              }
@@ -135,6 +135,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 
 int main(int argc, char **argv) {
     pid_t pid;
+    struct cs2_config cs2_config;
     extern int optind, opterr, optopt;
     int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, tcp_client[MAX_TCP_CONN];;
     struct can_frame frame;
