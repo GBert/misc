@@ -24,8 +24,9 @@ char *NET_UDP_FORMAT_STRG   ="      UDP->  CANID 0x%06X   [%d]";
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE [] = {0x00,0x36,0x03,0x01,0x05,0x00,0x00,0x00,0x00,0x11,0x00,0x00,0x00};
 
 char config_dir[MAXLINE];
+char config_file[MAXLINE];
 char line[MAXLINE];
-char *pages[64];
+char **page_name;
 
 void Signal_Handler(int sig) {		/* signal handler function */
     switch (sig) {
@@ -70,6 +71,10 @@ int send_magic_start_60113_frame(int can_socket, int verbose) {
 int check_data(int tcp_socket, unsigned char *netframe) {
     uint32_t canid;
     char config_name[8];
+    int page_number;
+    char gbs_name[MAXLINE];
+    gbs_name[0]='\0';
+
     memcpy(&canid, netframe, 4);
     canid = ntohl(canid);
     /* printf("%s ID 0x%08x\n", __func__, canid); */
@@ -79,41 +84,49 @@ int check_data(int tcp_socket, unsigned char *netframe) {
              printf("%s ID 0x%08x %s\n", __func__, canid, (char *) &netframe[5]);
              netframe[1] |= 1;
              net_to_net(tcp_socket, NULL, netframe, 13);
-             if (strcmp(config_name, "loks")==0) {
-                 send_tcp_config_data("./lokomotive.cs2", canid, tcp_socket, CRC|COMPRESSED);
+             if (strcmp("loks", config_name)==0) {
+                 send_tcp_config_data("lokomotive.cs2", config_dir, canid, tcp_socket, CRC|COMPRESSED);
                  break;
              }
-             if (strcmp(config_name, "mags")==0) {
-                 send_tcp_config_data("./magnetartikel.cs2", canid, tcp_socket, CRC|COMPRESSED);
+             else if (strcmp("mags", config_name)==0) {
+                 send_tcp_config_data("magnetartikel.cs2", config_dir, canid, tcp_socket, CRC|COMPRESSED);
                  break;
              }
-             if (strcmp(config_name, "gbs")==0) {
-                 send_tcp_config_data("./gleisbild.cs2", canid, tcp_socket, CRC|COMPRESSED);
+             else if (strncmp("gbs-", config_name,4)==0) {
+                 page_number=atoi(&config_name[5]);
+                 strcat(gbs_name,"gleisbilder/");
+                 strcat(gbs_name,page_name[page_number]);
+                 strcat(gbs_name,".cs2");
+                 send_tcp_config_data(gbs_name, config_dir, canid, tcp_socket, CRC|COMPRESSED);
                  break;
              }
-             /* TODO : needs reading track files ...*/
-             if (strcmp(config_name, "gbs-")==0) {
+             else if (strcmp("gbs", config_name)==0) {
+                 send_tcp_config_data("gleisbild.cs2", config_dir, canid, tcp_socket, CRC|COMPRESSED);
                  break;
              }
-             if (strcmp(config_name, "fs")==0) {
-                 send_tcp_config_data("./fahrstrassen.cs2", canid, tcp_socket, CRC|COMPRESSED);
+             else if (strcmp("fs", config_name)==0) {
+                 send_tcp_config_data("fahrstrassen.cs2", config_dir, canid, tcp_socket, CRC|COMPRESSED);
                  break;
              }
              /* TODO : these files depends on different internal states - to complex for now */
-             if (strcmp(config_name, "lokstat")==0) {
-                 send_tcp_config_data("./lokomotive.sr2", canid, tcp_socket, CRC|COMPRESSED);
+             else if (strcmp("lokstat", config_name)==0) {
+                 fprintf(stderr, "%s: lokstat (lokomotive.sr2) not implemented yet\n", __func__); 
+                 send_tcp_config_data("lokomotive.sr2", config_dir, canid, tcp_socket, CRC|COMPRESSED);
                  break;
              }
-             if (strcmp(config_name, "magstat")==0) {
-                 send_tcp_config_data("./magnetartikel.sr2", canid, tcp_socket, CRC|COMPRESSED);
+             else if (strcmp("magstat", config_name)==0) {
+                 fprintf(stderr, "%s: magstat (magnetartikel.sr2) not implemented yet\n\n", __func__); 
+                 send_tcp_config_data("magnetartikel.sr2", config_dir, canid, tcp_socket, CRC|COMPRESSED);
                  break;
              }
-             if (strcmp(config_name, "gbsstat")==0) {
-                 send_tcp_config_data("./gbsstat.sr2", canid, tcp_socket, CRC|COMPRESSED);
+             else if (strcmp("gbsstat", config_name)==0) {
+                 fprintf(stderr, "%s: gbsstat (gbssta.sr2) not implemented yet\n\n", __func__); 
+                 send_tcp_config_data("gbsstat.sr2", config_dir, canid, tcp_socket, CRC|COMPRESSED);
                  break;
              }
-             if (strcmp(config_name, "fsstat")==0) {
-                 send_tcp_config_data("./fahrstrassen.sr2", canid, tcp_socket, CRC|COMPRESSED);
+             else if (strcmp("fsstat", config_name)==0) {
+                 fprintf(stderr, "%s: fsstat (fahrstrassen.sr2) not implemented yet\n\n", __func__); 
+                 send_tcp_config_data("fahrstrassen.sr2", config_dir, canid, tcp_socket, CRC|COMPRESSED);
                  break;
              }
     }
@@ -147,7 +160,10 @@ int main(int argc, char **argv) {
     const int on = 1;
     char udp_dst_address[] = "255.255.255.255";
     char buffer[64];
+    page_name = calloc(64, sizeof(char *));
+
     strcpy(ifr.ifr_name, "can0");
+    config_file[0] = '\0';
 
     while ((opt = getopt(argc, argv, "s:u:t:d:b:i:vhf?")) != -1) {
 	switch (opt) {
@@ -197,6 +213,18 @@ int main(int argc, char **argv) {
 	    break;
 	}
     }
+
+    /* read track file */
+    if (config_dir[0] == 0) {
+        strcat(config_file, ".");
+    }
+    strcat(config_file, config_dir);
+    if (config_file[strlen(config_dir)] != '/') {
+        strcat(config_file, "/");
+    }
+    strcat(config_file, "gleisbild.cs2");
+
+    page_name=read_track_file(config_file, page_name);
 
     /* prepare udp sending socket struct */
     bzero(&baddr, sizeof(baddr));

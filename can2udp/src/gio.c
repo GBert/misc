@@ -61,12 +61,11 @@ int time_stamp(char *timestamp){
     return 0;
 }
 
-int read_track_file(char *filename) {
+char **read_track_file(char *filename, char **page_name) {
     FILE *fp;
     int id = 0;
     int page = 0;
     char line[MAXLINE];
-    char gs_name[MAXLINE];
 
     if((fp = fopen(filename,"r")) != NULL){
         while(fgets(line,MAXLINE,fp)!=NULL){
@@ -78,21 +77,25 @@ int read_track_file(char *filename) {
             }
             else if (strstr(line, " .name=") == line ) {
                 rmcrlf(line,MAXLINE);
-                strncpy(gs_name, &line[7], MAXLINE);
-                /* TODO: save names in array */
-                if (page)
-                    printf("%02d %s.cs2\n", id, gs_name);
+                if (page) {
+                    page_name[id] = calloc(strlen(&line[7]) , sizeof(char));
+                    if (page_name[id] == NULL) {
+                        printf("%s: error calloc failed creating config buffer for %s\n", __func__, filename);
+                        return NULL;
+                    }
+                    strcpy(page_name[id], &line[7]);
+                }
             }
         }
         /* fgets returned null */
         if(errno != 0){
             fprintf(stderr, "error reading line\n");
-            return -1;
+            return NULL;
         }
-        return 1;                /* EOF found, normal exit */
+        return page_name;                /* EOF found, normal exit */
     } else {                    /* there was an error on open */
         fprintf(stderr, "error reading file %s\n", filename);
-        return -1;
+        return NULL;
     }
 }
 
@@ -184,19 +187,27 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
     return 0;
 }
 
-uint8_t * read_config_file(char *filename, uint32_t *nbytes) {
+uint8_t * read_config_file(char *filename, char *config_dir, uint32_t *nbytes) {
     int rc;
     struct stat st;
     FILE *fp;
     /* char *s; */
     uint8_t *config;
+    char *file_name;
 
-    rc = stat(filename, &st);
+    file_name=calloc(MAXLINE,1);
+
+    strcat(file_name, config_dir );
+    strcat(file_name, filename);
+
+    printf("%s: try reading file %s\n", __func__, file_name);
+
+    rc = stat(file_name, &st);
     if (rc < 0) {
         printf("%s: error stat failed for file %s\n", __func__, filename);
         return NULL;
     }
-    fp = fopen(filename, "rb");
+    fp = fopen(file_name, "rb");
     if (fp == NULL) {
         printf("%s: error fopen failed for file %s\n", __func__, filename);
         return NULL;
@@ -204,7 +215,7 @@ uint8_t * read_config_file(char *filename, uint32_t *nbytes) {
     *nbytes = st.st_size;
     config = (uint8_t *)calloc(*nbytes, sizeof(uint8_t));
     if (config == NULL) {
-        printf("%s: error calloc failed creatig config buffer for %s\n", __func__, filename);
+        printf("%s: error calloc failed creating config buffer for %s\n", __func__, filename);
         return NULL;
     }
     rc = fread((void *)config, 1, *nbytes, fp);
@@ -224,7 +235,7 @@ static void strm_init (z_stream * strm) {
                              Z_DEFAULT_STRATEGY));
 }
 
-int send_tcp_config_data(char *filename, uint32_t canid, int tcp_socket, int flags) {
+int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int tcp_socket, int flags) {
     /* uint16_t crc; */
     uint32_t temp32, canid_be, nbytes=0;
     uint8_t *config;
@@ -234,7 +245,7 @@ int send_tcp_config_data(char *filename, uint32_t canid, int tcp_socket, int fla
     uint16_t crc, temp16;
     uint8_t netframe[MAXMTU];
 
-    config=read_config_file(filename, &nbytes);
+    config=read_config_file(filename, config_dir, &nbytes);
     if (config)  {
         printf("%s read config file %s\n", __func__, filename);
     } else {

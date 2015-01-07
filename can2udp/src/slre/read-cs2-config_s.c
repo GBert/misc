@@ -29,14 +29,16 @@ char * rmcrlf(char *s, int slen) {
 int main(int argc, char ** argv) {
     int count = 0;
     int id = 0;
-    int seite = 0;
-    char gs_name[MAXLINE];
+    int length, seite = 0;
+    char **page_name;
  
     if (argc != 2)
     {
        printf("usage: %s <config>\n", argv[0]);
        exit(1);
     }
+
+    page_name=(char **)malloc(64 * sizeof(char *));
 
     if((fp = fopen(argv[1],"r")) != NULL){
         while(fgets(line,MAXLINE,fp)!=NULL){
@@ -48,10 +50,14 @@ int main(int argc, char ** argv) {
                 id=strtoul(&line[5], NULL,0);
             }
             else if (strstr(line, " .name=") == line ) {
-                rmcrlf(line,MAXLINE);
-                strncpy(gs_name, &line[7], MAXLINE);
-                if (seite)
-                    printf("%02d %s.cs2\n", id, gs_name);
+                if (seite) {
+                    rmcrlf(line,MAXLINE);
+                    length=strlen(&line[7]);
+                    printf(">>> %02d %d %s\n", id, length, &line[7]);
+                    page_name[id]=(char *)malloc(strlen(&line[7])+1);
+                    strcpy(page_name[id],&line[7]);
+                    printf("%02d %s\n", id, page_name[id]);
+                }
             }
         }
         /* fgets returned null */
