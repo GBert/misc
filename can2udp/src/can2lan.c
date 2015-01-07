@@ -25,6 +25,7 @@ unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE [] = {0x00,0x36,0x03,0x01,0x05,0x0
 
 char config_dir[MAXLINE];
 char line[MAXLINE];
+char *pages[64];
 
 void Signal_Handler(int sig) {		/* signal handler function */
     switch (sig) {
@@ -111,12 +112,10 @@ int check_data(int tcp_socket, unsigned char *netframe) {
                  send_tcp_config_data("./gbsstat.sr2", canid, tcp_socket, CRC|COMPRESSED);
                  break;
              }
-	     break;
              if (strcmp(config_name, "fsstat")==0) {
                  send_tcp_config_data("./fahrstrassen.sr2", canid, tcp_socket, CRC|COMPRESSED);
                  break;
              }
-	     break;
     }
     return 0;
 }
