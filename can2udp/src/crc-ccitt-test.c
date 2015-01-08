@@ -144,6 +144,7 @@ int main(int argc, char **argv) {
   fp = fopen(argv[1], "rb");
   if (fp == NULL) {
     printf("error: fopen failed for %s\n", argv[1]);
+    free(data)
     return -1;
   }
   /* store inflated size at the beginning */

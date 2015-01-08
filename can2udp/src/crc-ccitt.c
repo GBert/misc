@@ -53,11 +53,10 @@ uint16_t CRCCCITT(unsigned char *data, size_t length, unsigned short seed)
 
    size_t count;
    uint16_t crc = seed;
-   uint16_t temp;
 
    for (count = 0; count < length; ++count)
    {
-     temp = (*data++ ^ (crc >> 8)) & 0xff;
+     uint16_t temp = (*data++ ^ (crc >> 8)) & 0xff;
      crc = crc_table[temp] ^ (crc << 8);
    }
 

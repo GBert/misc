@@ -73,7 +73,6 @@ int inflate_data(struct config_data *config_data) {
 
 int config_write(struct config_data *config_data) {
     FILE *config_fp;
-    int i;
     uint16_t crc;
 
     crc = CRCCCITT(config_data->deflated_data, config_data->deflated_stream_size, 0xFFFF);
@@ -85,7 +84,7 @@ int config_write(struct config_data *config_data) {
         printf("\ncan't open file %s for writing\n", config_data->name);
         exit(1);
     } else {
-        for (i = 0; i < config_data->deflated_stream_size ; i++) {
+        for (int i = 0; i < config_data->deflated_stream_size ; i++) {
             if ((i % 8 ) == 0 ) {
                printf("\n");
             }
