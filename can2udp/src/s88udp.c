@@ -50,7 +50,6 @@ void send_sensor_event(int sock, const struct sockaddr *destaddr, int verbose, i
 {
   unsigned char udpframe [32];
   unsigned long can_id;
-  int nbytes,i;
 
   can_id = 0x80220B01 + offset;
 
@@ -77,7 +76,7 @@ void send_sensor_event(int sock, const struct sockaddr *destaddr, int verbose, i
   udpframe[12] = 0;
 
   if ( verbose ) {
-    printf("->S88>UDP CANID 0x%06X R",can_id);
+    printf("->S88>UDP CANID 0x%06lX R",can_id);
     printf(" [%d]", udpframe[4]);
     for (i=5; i < 13; i++) {
       printf(" %02x", udpframe[i]);
