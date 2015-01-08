@@ -147,11 +147,10 @@ void print_can_frame(char *format_string, struct can_frame *frame) {
 }
 
 int send_can_frame(int can_socket, struct can_frame *frame, int verbose) {
-    int nbytes;
     frame->can_id &= CAN_EFF_MASK;
     frame->can_id |= CAN_EFF_FLAG;
     /* send CAN frame */
-    if ((nbytes = write(can_socket, frame, sizeof(*frame))) != sizeof(*frame)) {
+    if (write(can_socket, frame, sizeof(*frame)) != sizeof(*frame)) {
         perror("error writing CAN frame\n");
         return -1;
     }
@@ -176,7 +175,6 @@ int main(int argc, char **argv) {
     pid_t pid;
     extern int optind, opterr, optopt;
     int max_fds, opt;
-    int nbytes, ret;
     struct can_frame frame;
 
     int sc;
@@ -251,13 +249,11 @@ int main(int argc, char **argv) {
     max_fds = sc;
 
     while (1) {
-	ret = select(max_fds + 1 , &read_fds, NULL, NULL, NULL);
-	if (ret<0)
-	    perror("select error\n");
-
+	if (select(max_fds + 1 , &read_fds, NULL, NULL, NULL) < 0)
+	    perror("select error");
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &read_fds)) {
-            if ((nbytes = read(sc, &frame, sizeof(struct can_frame))) < 0) {
+            if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
 		perror("error reading CAN frame\n");
 	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
                 if (verbose) {
