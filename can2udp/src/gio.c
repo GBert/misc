@@ -92,6 +92,7 @@ char **read_track_file(char *filename, char **page_name) {
             fprintf(stderr, "error reading line\n");
             return NULL;
         }
+        fclose(fp);
         return page_name;                /* EOF found, normal exit */
     } else {                    /* there was an error on open */
         fprintf(stderr, "error reading file %s\n", filename);
@@ -163,7 +164,6 @@ int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *fr
 
 int frame_to_can(int can_socket, unsigned char *netframe) {
     uint32_t canid;
-    int nbytes;
     struct can_frame frame;
     /* Maerklin TCP/UDP Format: always 13 bytes
      *   byte 0 - 3  CAN ID
@@ -180,7 +180,7 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
     memcpy(&frame.data, &netframe[5], 8);
 
     /* send CAN frame */
-    if ((nbytes = write(can_socket, &frame, sizeof(frame))) != sizeof(frame)) {
+    if (write(can_socket, &frame, sizeof(frame)) != sizeof(frame)) {
         printf("%s: error writing CAN frame\n", __func__);
         return -1;
     }
@@ -216,13 +216,17 @@ uint8_t * read_config_file(char *filename, char *config_dir, uint32_t *nbytes) {
     config = (uint8_t *)calloc(*nbytes, sizeof(uint8_t));
     if (config == NULL) {
         fprintf(stderr, "%s: error calloc failed creating config buffer for %s\n", __func__, filename);
+        fclose(fp);
         return NULL;
     }
     rc = fread((void *)config, 1, *nbytes, fp);
     if ((rc != *nbytes)) {
         fprintf(stderr, "%s: error fread failed reading %s\n", __func__, filename);
+        fclose(fp);
+        free(config);
         return NULL;
     }
+    fclose(fp);
     return config;
 }
 
