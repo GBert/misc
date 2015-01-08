@@ -78,9 +78,9 @@ char **read_track_file(char *filename, char **page_name) {
             else if (strstr(line, " .name=") == line ) {
                 rmcrlf(line,MAXLINE);
                 if (page) {
-                    page_name[id] = calloc(strlen(&line[7]) , sizeof(char));
+                    page_name[id] = calloc(strlen(&line[7]) +1 ,sizeof(char));
                     if (page_name[id] == NULL) {
-                        printf("%s: error calloc failed creating config buffer for %s\n", __func__, filename);
+                        fprintf(stderr, "%s: error calloc failed creating config buffer for %s\n", __func__, filename);
                         return NULL;
                     }
                     strcpy(page_name[id], &line[7]);
