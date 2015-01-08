@@ -21,7 +21,7 @@ Usage: can2udp -l \<port\> -d \<port\> -i \<can interface\>
          -f                  running in foreground
 </pre></code>
 <pre><code>
-Usage: can2lan -u \<udp_port\> -t \<tcp_port\> -d \<udp_dest_port\> -i \<can interface\>
+Usage: can2lan -s \<config_dir\> -u \<udp_port\> -t \<tcp_port\> -d \<udp_dest_port\> -i \<can interface\>
    Version 0.92
          -s \<config_dir\>     set the config directory
          -u \<port\>           listening UDP port for the server - default 15731

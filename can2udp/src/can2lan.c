@@ -29,7 +29,7 @@ char line[MAXLINE];
 char **page_name;
 
 void print_usage(char *prg) {
-    fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
+    fprintf(stderr, "\nUsage: %s -s <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
     fprintf(stderr, "   Version 0.92\n");
     fprintf(stderr, "\n");
     fprintf(stderr, "         -s <config_dir>     set the config directory\n");
