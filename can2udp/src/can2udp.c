@@ -34,24 +34,11 @@
 unsigned char udpframe[MAXDG];
 unsigned char udpframe_reply[MAXDG];
 
-void Signal_Handler(int sig)
-{				/* signal handler function */
-    switch (sig) {
-    case SIGHUP:
-	/* rehash the server */
-	break;
-    case SIGTERM:
-	/* finalize the server */
-	exit(0);
-	break;
-    }
-}
-
 void print_usage(char *prg)
 {
     fprintf(stderr, "\nUsage: %s -l <port> -d <port> -i <can interface>\n",
 	    prg);
-    fprintf(stderr, "   Version 0.2\n");
+    fprintf(stderr, "   Version 0.9\n");
     fprintf(stderr, "\n");
     fprintf(stderr, "         -l <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default 15730\n");
@@ -66,7 +53,6 @@ void send_magic_start_60113_frame(int can_socket, int verbose)
 {
 
     struct can_frame frame;
-    int nbytes;
 
     frame.can_id = 0x360301UL;
     /* use EFF */
@@ -78,9 +64,8 @@ void send_magic_start_60113_frame(int can_socket, int verbose)
     frame.data[2] = 0;
     frame.data[3] = 0;
     frame.data[4] = 0x11;
-    if ((nbytes =
-	 write(can_socket, &frame, sizeof(frame))) != sizeof(frame)) {
-	perror("CAN magic 60113 start write __");
+    if (write(can_socket, &frame, sizeof(frame)) != sizeof(frame)) {
+	fprintf(stderr, "CAN magic 60113 start write error: %s\n", strerror(errno));
     } else {
 	if (verbose)
 	    printf("CAN magic 60113 start write\n");
@@ -103,7 +88,7 @@ int main(int argc, char **argv)
 
     fd_set readfds;
 
-    int i, s, nbytes, ret;
+    int i, s;
 
     int local_port = 15731;
     int destination_port = 15730;
@@ -119,8 +104,15 @@ int main(int argc, char **argv)
     bzero(&baddr, sizeof(baddr));
     baddr.sin_family = AF_INET;
     baddr.sin_port = htons(destination_port);
-    if (inet_pton(AF_INET, rocrail_server, &baddr.sin_addr))
-	perror("UDP inet_pton error");
+    s = inet_pton(AF_INET, rocrail_server, &baddr.sin_addr);
+    if (s <= 0) {
+        if (s == 0) {
+            fprintf(stderr, "UDP IP invalid\n");
+        } else {
+            fprintf(stderr, "invalid address family\n");
+        }
+        exit(1);
+    }
 
     while ((opt = getopt(argc, argv, "l:d:b:i:fv?")) != -1) {
 	switch (opt) {
@@ -135,9 +127,9 @@ int main(int argc, char **argv)
 	    s = inet_pton(AF_INET, optarg, &baddr.sin_addr);
 	    if (s <= 0) {
 		if (s == 0) {
-		    fprintf(stderr, "Not in presentation format");
+		    fprintf(stderr, "invalid IP address: %s\n", strerror(errno));
 		} else {
-		    perror("inet_pton error");
+		    fprintf(stderr, "inet_pton error: %s\n", strerror(errno));
 		}
 		exit(1);
 	    }
@@ -167,7 +159,7 @@ int main(int argc, char **argv)
     }
 
     if ((sa = socket(PF_INET, SOCK_DGRAM, 0)) < 0) {
-	perror("inetsocket srror");
+	fprintf(stderr, "UDP socket error: %s\n", strerror(errno));
 	exit(1);
     }
 
@@ -175,36 +167,35 @@ int main(int argc, char **argv)
     saddr.sin_addr.s_addr = htonl(INADDR_ANY);
     saddr.sin_port = htons(local_port);
 
-    while (bind(sa, (struct sockaddr *) &saddr, sizeof(saddr)) < 0) {
-	printf(".");
-	fflush(NULL);
-	usleep(100000);
+    if  (bind(sa, (struct sockaddr *) &saddr, sizeof(saddr)) < 0) {
+	fprintf(stderr, "UDP bind error: %s\n", strerror(errno));
+	exit(1);
     }
 
     if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
-	perror("CAN socket error");
+	fprintf(stderr, "CAN socket error: %s\n", strerror(errno));
 	exit(1);
     }
 
     caddr.can_family = AF_CAN;
     if (ioctl(sc, SIOCGIFINDEX, &ifr) < 0) {
-	perror("SIOCGIFINDEX error");
+	fprintf(stderr, "CAN setup error: %s\n", strerror(errno));
 	exit(1);
     }
     caddr.can_ifindex = ifr.ifr_ifindex;
 
     if (bind(sc, (struct sockaddr *) &caddr, caddrlen) < 0) {
-	perror("CAN bind error");
+	fprintf(stderr, "CAN bind error: %s\n", strerror(errno));
 	exit(1);
     }
 
     /* prepare UDP sending socket */
     if ((sb = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
-	perror("Send UDP socket error");
+	fprintf(stderr, "Send UDP socket error %s\n", strerror(errno));
 	exit(1);
     }
     if (setsockopt(sb, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0) {
-	perror("UDP setsockopt error");
+	fprintf(stderr, "UDP set socket option error: %s\n", strerror(errno));
 	exit(1);
     }
 
@@ -231,16 +222,15 @@ int main(int argc, char **argv)
 	FD_SET(sc, &readfds);
 	FD_SET(sa, &readfds);
 
-	ret = select((sc > sa) ? sc + 1 : sa + 1, &readfds, NULL, NULL, NULL);
-	if (ret == -1) {
-            perror("select error");
+	if (select((sc > sa) ? sc + 1 : sa + 1, &readfds, NULL, NULL, NULL) <0 ) {
+            fprintf(stderr, "select error: %s\n", strerror(errno));
         };
 
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &readfds)) {
 
-	    if ((nbytes = read(sc, &frame, sizeof(struct can_frame))) < 0) {
-		perror("CAN read error");
+	    if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
+		fprintf(stderr, "CAN read error: %s\n", strerror(errno));
 	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		/* prepare UDP frame */
 		bzero(udpframe, 13);
@@ -256,7 +246,7 @@ int main(int argc, char **argv)
 		s = sendto(sb, udpframe, 13, 0,
 			   (struct sockaddr *) &baddr, sizeof(baddr));
 		if (s != 13)
-		    perror("UDP write error");
+		    fprintf(stderr, "UDP write error: %s\n", strerror(errno));
 
 		if (verbose && !background) {
 		    printf("->CAN>UDP CANID 0x%06X R", frame.can_id);
@@ -304,15 +294,14 @@ int main(int argc, char **argv)
 		    s = sendto(sb, udpframe_reply, 13, 0,
 			       (struct sockaddr *) &baddr, sizeof(baddr));
 		    if (s != 13) {
-			perror("UDP write error");
+			fprintf(stderr, "UDP write error: %s\n", strerror(errno));
 		    } else {
 			printf("  replied to CAN ping\n");
 		    }
 		}
 
-		if ((nbytes =
-		     write(sc, &frame, sizeof(frame))) != sizeof(frame))
-		    perror("CAN write error");
+		if (write(sc, &frame, sizeof(frame)) != sizeof(frame))
+		    fprintf(stderr, "CAN write error: %s\n", strerror(errno));
 
 		if (verbose && !background) {
 		    printf("<-UDP>CAN CANID 0x%06X  ",

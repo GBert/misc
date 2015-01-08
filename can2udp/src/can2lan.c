@@ -58,8 +58,7 @@ int send_magic_start_60113_frame(int can_socket, int verbose) {
 
 int check_data(int tcp_socket, unsigned char *netframe) {
     uint32_t canid;
-    char config_name[8];
-    int page_number;
+    char config_name[9];
     char gbs_name[MAXLINE];
     gbs_name[0]='\0';
 
@@ -69,6 +68,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
     switch (canid & 0x00FF0000UL) {
         case (0x00400000UL) : /* config data */
              strncpy(config_name,(char *) &netframe[5], 8);
+             config_name[8]='\0';
              printf("%s ID 0x%08x %s\n", __func__, canid, (char *) &netframe[5]);
              netframe[1] |= 1;
              net_to_net(tcp_socket, NULL, netframe, 13);
@@ -81,6 +81,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
                  break;
              }
              else if (strncmp("gbs-", config_name,4)==0) {
+                 int page_number;
                  page_number=atoi(&config_name[5]);
                  strcat(gbs_name,"gleisbilder/");
                  strcat(gbs_name,page_name[page_number]);
@@ -139,7 +140,7 @@ int main(int argc, char **argv) {
     fd_set all_fds, read_fds;
 
     uint32_t	canid;
-    int s, nbytes, ret;
+    int s, ret;
 
     int local_udp_port = 15731;
     int local_tcp_port = 15731;
@@ -317,13 +318,13 @@ int main(int argc, char **argv) {
 
     while (1) {
 	read_fds = all_fds;
-	nready = select(max_fds + 1 , &read_fds, NULL, NULL, NULL);
-	if (nready<0)
+	if ((nready = select(max_fds + 1 , &read_fds, NULL, NULL, NULL)) < 0) {
 	    fprintf(stderr, "select error: %s\n", strerror(errno));
+        }
 
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &read_fds)) {
-            if ((nbytes = read(sc, &frame, sizeof(struct can_frame))) < 0) {
+            if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
 		fprintf(stderr, "reading CAN frame: %s\n", strerror(errno));
 	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		/* send UDP frame */

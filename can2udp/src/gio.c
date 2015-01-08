@@ -204,23 +204,23 @@ uint8_t * read_config_file(char *filename, char *config_dir, uint32_t *nbytes) {
 
     rc = stat(file_name, &st);
     if (rc < 0) {
-        printf("%s: error stat failed for file %s\n", __func__, filename);
+        fprintf(stderr, "%s: error stat failed for file %s\n", __func__, filename);
         return NULL;
     }
     fp = fopen(file_name, "rb");
     if (fp == NULL) {
-        printf("%s: error fopen failed for file %s\n", __func__, filename);
+        fprintf(stderr, "%s: error fopen failed for file %s\n", __func__, filename);
         return NULL;
     }
     *nbytes = st.st_size;
     config = (uint8_t *)calloc(*nbytes, sizeof(uint8_t));
     if (config == NULL) {
-        printf("%s: error calloc failed creating config buffer for %s\n", __func__, filename);
+        fprintf(stderr, "%s: error calloc failed creating config buffer for %s\n", __func__, filename);
         return NULL;
     }
     rc = fread((void *)config, 1, *nbytes, fp);
     if ((rc != *nbytes)) {
-        printf("%s: error fread failed reading %s\n", __func__, filename);
+        fprintf(stderr, "%s: error fread failed reading %s\n", __func__, filename);
         return NULL;
     }
     return config;
