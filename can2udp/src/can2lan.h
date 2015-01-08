@@ -46,6 +46,7 @@
 #define	CRC		0x01
 #define COMPRESSED	0x02
 
+#if 0
 struct cs2_config {
     int canid;
     int can_socket;
@@ -58,6 +59,7 @@ struct cs2_config {
     char **page_name;
     char *gleisbild_sr2;
 };
+#endif
 
 static const int MAXPENDING = 16;	/* max outstanding tcp connections */
 unsigned char netframe[MAXDG];

@@ -28,21 +28,9 @@ char config_file[MAXLINE];
 char line[MAXLINE];
 char **page_name;
 
-void Signal_Handler(int sig) {		/* signal handler function */
-    switch (sig) {
-    case SIGHUP:
-	/* rehash the server */
-	break;
-    case SIGTERM:
-	/* finalize the server */
-	exit(0);
-	break;
-    }
-}
-
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 0.91\n");
+    fprintf(stderr, "   Version 0.92\n");
     fprintf(stderr, "\n");
     fprintf(stderr, "         -s <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
@@ -58,11 +46,11 @@ int send_magic_start_60113_frame(int can_socket, int verbose) {
     int ret;
     ret = frame_to_can(can_socket, M_GLEISBOX_MAGIC_START_SEQUENCE);
     if (ret < 0 ) {
-	perror("error CAN magic 60113 start write\n");
+	fprintf(stderr, "can't send CAN magic 60113 start sequence\n");
 	return -1;
     } else {
 	if (verbose)
-	    printf("                CAN magic 60113 start write\n");
+	    printf("                CAN magic 60113 start written\n");
 	    print_can_frame(CAN_FORMAT_STRG, M_GLEISBOX_MAGIC_START_SEQUENCE);
     }
     return 0;
@@ -135,7 +123,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 
 int main(int argc, char **argv) {
     pid_t pid;
-    struct cs2_config cs2_config;
+    /* struct cs2_config cs2_config; */
     extern int optind, opterr, optopt;
     int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, tcp_client[MAX_TCP_CONN];;
     struct can_frame frame;
@@ -234,20 +222,20 @@ int main(int argc, char **argv) {
     s = inet_pton(AF_INET, udp_dst_address, &baddr.sin_addr);
     if (s <= 0) {
 	if (s == 0) {
-	    fprintf(stderr, "error: UDP sending port not in presentation format\n");
+	    fprintf(stderr, "UDP IP invalid\n");
 	} else {
-	    perror("inet_pton error\n");
+	    fprintf(stderr, "invalid address family\n");
 	}
     	exit(1);
     }
 
     /* prepare UDP sending socket */
     if ((sb = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
-	perror("error creating UDP sending socket");
+	fprintf(stderr, "error creating UDP sending socket: %s\n", strerror(errno));
 	exit(1);
     }
     if (setsockopt(sb, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0) {
-	perror("error setup UDP broadcast option\n");
+	fprintf(stderr, "error setup UDP broadcast option: %s\n", strerror(errno));
 	exit(1);
     }
 
@@ -257,29 +245,28 @@ int main(int argc, char **argv) {
     saddr.sin_addr.s_addr = htonl(INADDR_ANY);
     saddr.sin_port = htons(local_udp_port);
     if ((sa = socket(PF_INET, SOCK_DGRAM, 0)) < 0) {
-	perror("error creating UDP reading socket\n");
+	fprintf(stderr, "creating UDP reading socket error: %s\n", strerror(errno));
 	exit(1);
     }
-    while (bind(sa, (struct sockaddr *) &saddr, sizeof(saddr)) < 0) {
-	printf(".");
-	fflush(NULL);
-	usleep(100000);
+    if  ( bind(sa, (struct sockaddr *) &saddr, sizeof(saddr)) < 0) {
+	fprintf(stderr, "binding UDP reading socket error: %s\n", strerror(errno));
+	exit(1);
     }
 
     /* prepare TCP socket */
     if ((st = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0) {
-	perror("error creating TCP socket\n");
+	fprintf(stderr, "creating TCP socket error: %s\n", strerror(errno));
 	exit(1);
     }
     tcp_addr.sin_family = AF_INET;
     tcp_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     tcp_addr.sin_port = htons(local_tcp_port);
-    if (bind(st, (struct sockaddr *)&tcp_addr, sizeof(tcp_addr)) < 0) {
-	perror("error binding TCP socket\n");	
+    if ( bind(st, (struct sockaddr *)&tcp_addr, sizeof(tcp_addr)) < 0) {
+	fprintf(stderr, "binding TCP socket error: %s\n", strerror(errno));
 	exit(1);
     }
-    if (listen(st, MAXPENDING) < 0) {
-	perror("error starting TCP listener\n");
+    if ( listen(st, MAXPENDING) < 0) {
+	fprintf(stderr, "starting TCP listener error: %s\n", strerror(errno));
 	exit(1);
     }
     /* prepare TCP clients array */
@@ -290,18 +277,18 @@ int main(int argc, char **argv) {
     /* prepare CAN socket */
     bzero(&caddr, sizeof(caddr));
     if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
-	perror("error creating CAN socket\n");
+	fprintf(stderr, "creating CAN socket error: %s\n", strerror(errno));
 	exit(1);
     }
     caddr.can_family = AF_CAN;
-    if (ioctl(sc, SIOCGIFINDEX, &ifr) < 0) {
-	perror("SIOCGIFINDEX error\n");
+    if ( ioctl(sc, SIOCGIFINDEX, &ifr) < 0) {
+	fprintf(stderr, "setup CAN error: %s\n", strerror(errno));
 	exit(1);
     }
     caddr.can_ifindex = ifr.ifr_ifindex;
 
-    if (bind(sc, (struct sockaddr *) &caddr, caddrlen) < 0) {
-	perror("error binding CAN socket\n");
+    if ( bind(sc, (struct sockaddr *) &caddr, caddrlen) < 0) {
+	fprintf(stderr, "binding CAN socket error: %s\n", strerror(errno));
 	exit(1);
     }
 
@@ -332,12 +319,12 @@ int main(int argc, char **argv) {
 	read_fds = all_fds;
 	nready = select(max_fds + 1 , &read_fds, NULL, NULL, NULL);
 	if (nready<0)
-	    perror("select error\n");
+	    fprintf(stderr, "select error: %s\n", strerror(errno));
 
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &read_fds)) {
             if ((nbytes = read(sc, &frame, sizeof(struct can_frame))) < 0) {
-		perror("error reading CAN frame\n");
+		fprintf(stderr, "reading CAN frame: %s\n", strerror(errno));
 	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		/* send UDP frame */
 		frame_to_net(sb, (struct sockaddr *) &baddr, (struct can_frame *) &frame);
@@ -375,7 +362,7 @@ int main(int argc, char **argv) {
 		    netframe[3] = 0x00;
 		    netframe[4] = 0x00;
 		    if (net_to_net(sb,(struct sockaddr *) &baddr, netframe, 13)) {
-			perror("error sending UDP data (CAN Ping)\n");
+			fprintf(stderr, "sending UDP data (CAN Ping) error:%s \n", strerror(errno));
 		    } else if (verbose & !background) {
 			print_can_frame(NET_UDP_FORMAT_STRG, netframe);
 			printf("                replied CAN ping\n");
@@ -397,7 +384,7 @@ int main(int argc, char **argv) {
 		}
 	    }
 	    if (i == MAX_TCP_CONN)
-		perror("too many TCP clients\n");
+		fprintf(stderr, "too many TCP clients\n");
 
 	    FD_SET(conn_fd, &all_fds);			/* add new descriptor to set */
 	    max_fds = MAX(conn_fd,max_fds);		/* for select */
