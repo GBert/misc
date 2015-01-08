@@ -226,6 +226,7 @@ uint8_t * read_config_file(char *filename, char *config_dir, uint32_t *nbytes) {
         free(config);
         return NULL;
     }
+    free(file_name);
     fclose(fp);
     return config;
 }
