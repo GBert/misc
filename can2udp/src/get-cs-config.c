@@ -100,7 +100,7 @@ int config_write(struct config_data *config_data) {
 }
 
 int main(int argc, char**argv) {
-    int sockfd, ddi, i, tcp_packet_nr, n=1;
+    int sockfd, ddi, tcp_packet_nr, n=1;
     int temp, config_data_start, config_data_stream, deflated_size;
     struct config_data config_data;
     struct sockaddr_in servaddr;
@@ -193,7 +193,7 @@ int main(int argc, char**argv) {
                     /* deflated data index */
                     ddi=0;
                 }
-                for ( i=0; i<n; i++) {
+                for ( int i=0; i<n; i++) {
                     if (( i % FRAME_SIZE ) == 0) {
                         if (memcmp(&recvline[i],GETCONFIG_DATA,5)==0) {
                             memcpy(&config_data.deflated_data[ddi],&recvline[i+5],8);
