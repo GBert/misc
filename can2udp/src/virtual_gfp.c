@@ -163,6 +163,7 @@ int send_defined_can_frame(int can_socket, unsigned char *data, int verbose) {
 
     struct can_frame frame;
     uint32_t can_id;
+    bzero(&frame, sizeof(frame));
     memcpy(&can_id, &data[0], 4);
     frame.can_id = htonl(can_id);
     frame.can_dlc=data[4];
