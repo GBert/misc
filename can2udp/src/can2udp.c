@@ -36,17 +36,14 @@ unsigned char udpframe_reply[MAXDG];
 
 void print_usage(char *prg)
 {
-    fprintf(stderr, "\nUsage: %s -l <port> -d <port> -i <can interface>\n",
-	    prg);
+    fprintf(stderr, "\nUsage: %s -l <port> -d <port> -i <can interface>\n", prg);
     fprintf(stderr, "   Version 0.9\n");
     fprintf(stderr, "\n");
     fprintf(stderr, "         -l <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default 15730\n");
     fprintf(stderr, "         -b <broadcast_addr> broadcast address - default 255.255.255.255\n");
     fprintf(stderr, "         -i <can int>        can interface - default can0\n");
-    fprintf(stderr, "         -f                  running in foreground\n");
-    fprintf(stderr, "\n");
-
+    fprintf(stderr, "         -f                  running in foreground\n\n");
 }
 
 void send_magic_start_60113_frame(int can_socket, int verbose)
@@ -88,7 +85,7 @@ int main(int argc, char **argv)
 
     fd_set readfds;
 
-    int i, s;
+    int s, i;
 
     int local_port = 15731;
     int destination_port = 15730;
@@ -114,7 +111,7 @@ int main(int argc, char **argv)
         exit(1);
     }
 
-    while ((opt = getopt(argc, argv, "l:d:b:i:fv?")) != -1) {
+    while ((opt = getopt(argc, argv, "l:d:b:i:hfv?")) != -1) {
 	switch (opt) {
 	case 'l':
 	    local_port = strtoul(optarg, (char **) NULL, 10);
@@ -145,16 +142,15 @@ int main(int argc, char **argv)
 	    background = 0;
 	    break;
 
+	case 'h':
 	case '?':
 	    print_usage(basename(argv[0]));
 	    exit(0);
-	    break;
 
 	default:
 	    fprintf(stderr, "Unknown option %c\n", opt);
 	    print_usage(basename(argv[0]));
 	    exit(1);
-	    break;
 	}
     }
 
@@ -243,9 +239,7 @@ int main(int argc, char **argv)
 		memcpy(&udpframe[5], &frame.data, frame.can_dlc);
 
 		/* send UDP frame */
-		s = sendto(sb, udpframe, 13, 0,
-			   (struct sockaddr *) &baddr, sizeof(baddr));
-		if (s != 13)
+		if (sendto(sb, udpframe, 13, 0, (struct sockaddr *) &baddr, sizeof(baddr)) !=13)
 		    fprintf(stderr, "UDP write error: %s\n", strerror(errno));
 
 		if (verbose && !background) {
@@ -291,13 +285,10 @@ int main(int argc, char **argv)
 		    udpframe_reply[2] = 0x00;
 		    udpframe_reply[3] = 0x00;
 		    udpframe_reply[4] = 0x00;
-		    s = sendto(sb, udpframe_reply, 13, 0,
-			       (struct sockaddr *) &baddr, sizeof(baddr));
-		    if (s != 13) {
+		    if (sendto(sb, udpframe_reply, 13, 0, (struct sockaddr *) &baddr, sizeof(baddr)) != 13) 
 			fprintf(stderr, "UDP write error: %s\n", strerror(errno));
-		    } else {
+		    else
 			printf("  replied to CAN ping\n");
-		    }
 		}
 
 		if (write(sc, &frame, sizeof(frame)) != sizeof(frame))

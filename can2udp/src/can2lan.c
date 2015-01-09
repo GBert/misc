@@ -38,14 +38,11 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default 15730\n");
     fprintf(stderr, "         -b <broadcast_addr> broadcast address - default 255.255.255.255\n");
     fprintf(stderr, "         -i <can int>        can interface - default can0\n");
-    fprintf(stderr, "         -f                  running in foreground\n");
-    fprintf(stderr, "\n");
+    fprintf(stderr, "         -f                  running in foreground\n\n");
 }
 
 int send_magic_start_60113_frame(int can_socket, int verbose) {
-    int ret;
-    ret = frame_to_can(can_socket, M_GLEISBOX_MAGIC_START_SEQUENCE);
-    if (ret < 0 ) {
+    if (frame_to_can(can_socket, M_GLEISBOX_MAGIC_START_SEQUENCE) < 0) {
 	fprintf(stderr, "can't send CAN magic 60113 start sequence\n");
 	return -1;
     } else {
@@ -64,7 +61,6 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 
     memcpy(&canid, netframe, 4);
     canid = ntohl(canid);
-    /* printf("%s ID 0x%08x\n", __func__, canid); */
     switch (canid & 0x00FF0000UL) {
         case (0x00400000UL) : /* config data */
              strncpy(config_name,(char *) &netframe[5], 8);
@@ -195,12 +191,10 @@ int main(int argc, char **argv) {
 	case '?':
 	    print_usage(basename(argv[0]));
 	    exit(0);
-	    break;
 	default:
 	    fprintf(stderr, "Unknown option %c\n", opt);
 	    print_usage(basename(argv[0]));
 	    exit(1);
-	    break;
 	}
     }
 
@@ -223,7 +217,7 @@ int main(int argc, char **argv) {
     s = inet_pton(AF_INET, udp_dst_address, &baddr.sin_addr);
     if (s <= 0) {
 	if (s == 0) {
-	    fprintf(stderr, "UDP IP invalid\n");
+	    fprintf(stderr, "UDP IP address invalid\n");
 	} else {
 	    fprintf(stderr, "invalid address family\n");
 	}
