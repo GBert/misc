@@ -97,7 +97,7 @@ int main(int argc, char **argv) {
     bzero(&baddr, sizeof(baddr));
     bzero(&caddr, sizeof(caddr));
     bzero(&frame, sizeof(frame));
-    bzero(udpframe, sizeof(frame));
+    bzero(udpframe, sizeof(udpframe));
     bzero(udpframe_reply, sizeof(udpframe_reply));
 
     /* prepare udp destination struct with defaults */
