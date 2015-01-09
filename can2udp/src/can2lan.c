@@ -80,9 +80,11 @@ int check_data(int tcp_socket, unsigned char *netframe) {
                  int page_number;
                  page_number=atoi(&config_name[5]);
                  strcat(gbs_name,"gleisbilder/");
-                 strcat(gbs_name,page_name[page_number]);
-                 strcat(gbs_name,".cs2");
-                 send_tcp_config_data(gbs_name, config_dir, canid, tcp_socket, CRC|COMPRESSED);
+                 if (page_name) {
+                     strcat(gbs_name,page_name[page_number]);
+                     strcat(gbs_name,".cs2");
+                     send_tcp_config_data(gbs_name, config_dir, canid, tcp_socket, CRC|COMPRESSED);
+                 }
                  break;
              }
              else if (strcmp("gbs", config_name)==0) {
