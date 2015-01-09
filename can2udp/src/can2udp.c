@@ -258,6 +258,7 @@ int main(int argc, char **argv) {
 		 *   byte 4 DLC
 		 *   byte 5-12 CAN data
 		 */
+                bzero(&frame, sizeof(frame));
 		memcpy(&canid, &udpframe[0], 4);
 		/* CAN is stored in network Big Endian format */
 		frame.can_id = ntohl(canid);
