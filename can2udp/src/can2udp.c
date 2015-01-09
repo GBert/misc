@@ -90,7 +90,7 @@ int main(int argc, char **argv)
     int local_port = 15731;
     int destination_port = 15730;
     /* int broadcast_address; */
-    int verbose = 1;
+    int verbose = 0;
     int background = 1;
     int canid = 0;
     const int on = 1;

@@ -141,7 +141,7 @@ int main(int argc, char **argv) {
     int local_udp_port = 15731;
     int local_tcp_port = 15731;
     int destination_port = 15730;
-    int verbose = 1;
+    int verbose = 0;
     int background = 1;
     const int on = 1;
     char udp_dst_address[] = "255.255.255.255";
