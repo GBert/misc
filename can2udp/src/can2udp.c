@@ -34,8 +34,7 @@
 unsigned char udpframe[MAXDG];
 unsigned char udpframe_reply[MAXDG];
 
-void print_usage(char *prg)
-{
+void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -l <port> -d <port> -i <can interface>\n", prg);
     fprintf(stderr, "   Version 0.9\n");
     fprintf(stderr, "\n");
@@ -46,10 +45,9 @@ void print_usage(char *prg)
     fprintf(stderr, "         -f                  running in foreground\n\n");
 }
 
-void send_magic_start_60113_frame(int can_socket, int verbose)
-{
-
+void send_magic_start_60113_frame(int can_socket, int verbose) {
     struct can_frame frame;
+    bzero(&frame, sizeof(frame));
 
     frame.can_id = 0x360301UL;
     /* use EFF */
@@ -69,8 +67,7 @@ void send_magic_start_60113_frame(int can_socket, int verbose)
     }
 }
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     pid_t pid;
     extern int optind, opterr, optopt;
     int opt;
@@ -96,8 +93,11 @@ int main(int argc, char **argv)
     const char rocrail_server[] = "255.255.255.255";
     strcpy(ifr.ifr_name, "can0");
 
-    /* prepare udp destination struct with defaults */
+    bzero(&saddr, sizeof(saddr));
     bzero(&baddr, sizeof(baddr));
+    bzero(&caddr, sizeof(caddr));
+
+    /* prepare udp destination struct with defaults */
     baddr.sin_family = AF_INET;
     baddr.sin_port = htons(destination_port);
     s = inet_pton(AF_INET, rocrail_server, &baddr.sin_addr);
@@ -212,7 +212,6 @@ int main(int argc, char **argv)
     }
 
     while (1) {
-
 	FD_ZERO(&readfds);
 	FD_SET(sc, &readfds);
 	FD_SET(sa, &readfds);

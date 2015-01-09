@@ -11,12 +11,6 @@
  * this code emulates the M*rklin Gleisbox to some extend . Only for testing
  *  the M*rklinApp and gateway (can2lan) code
  *
- *  Usage: eg. verbose, running in foreground and listening to default vcan0:
- *    ./virtual_gfp -v -f
- *
- */
-
-/* Thanks to Stefan Krauss and the SocketCAN team
  */
 
 /*
@@ -106,12 +100,10 @@ unsigned char netframe[MAXDG];
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 0.1\n");
+    fprintf(stderr, "   Version 0.9\n");
     fprintf(stderr, "\n");
     fprintf(stderr, "         -i <can int>        can interface - default vcan0\n");
-    fprintf(stderr, "         -v                  running verbose\n");
-    fprintf(stderr, "         -f                  running in foreground\n");
-    fprintf(stderr, "\n");
+    fprintf(stderr, "         -d                  daemonize\n\n");
 }
 
 int time_stamp(char *timestamp){
@@ -154,7 +146,7 @@ int send_can_frame(int can_socket, struct can_frame *frame, int verbose) {
     frame->can_id |= CAN_EFF_FLAG;
     /* send CAN frame */
     if (write(can_socket, frame, sizeof(*frame)) != sizeof(*frame)) {
-        perror("error writing CAN frame\n");
+        fprintf(stderr, "error writing CAN frame: %s\n", strerror(errno));
         return -1;
     }
     if (verbose)
@@ -188,21 +180,20 @@ int main(int argc, char **argv) {
 
     fd_set read_fds;
 
-    int verbose = 1;
     int background = 0;
+    int verbose = 1;
     strcpy(ifr.ifr_name, "vcan0");
 
-    while ((opt = getopt(argc, argv, "u:t:d:b:i:vf?")) != -1) {
+    while ((opt = getopt(argc, argv, "i:dh?")) != -1) {
 	switch (opt) {
 	case 'i':
 	    strcpy(ifr.ifr_name, optarg);
 	    break;
-	case 'v':
-	    verbose = 1;
+	case 'd':
+	    verbose = 0;
+	    background = 1;
 	    break;
-	case 'f':
-	    background = 0;
-	    break;
+	case 'h':
 	case '?':
 	    print_usage(basename(argv[0]));
 	    exit(0);
@@ -211,7 +202,6 @@ int main(int argc, char **argv) {
 	    fprintf(stderr, "Unknown option %c\n", opt);
 	    print_usage(basename(argv[0]));
 	    exit(1);
-	    break;
 	}
     }
 
@@ -219,18 +209,18 @@ int main(int argc, char **argv) {
 
     /* prepare CAN socket */
     if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
-	perror("error creating CAN socket\n");
+	fprintf(stderr, "error creating CAN socket: %s\n", strerror(errno));
 	exit(1);
     }
     caddr.can_family = AF_CAN;
     if (ioctl(sc, SIOCGIFINDEX, &ifr) < 0) {
-	perror("SIOCGIFINDEX error\n");
+	fprintf(stderr, "setup CAN socket error: %s\n", strerror(errno));
 	exit(1);
     }
     caddr.can_ifindex = ifr.ifr_ifindex;
 
     if (bind(sc, (struct sockaddr *) &caddr, caddrlen) < 0) {
-	perror("error binding CAN socket\n");
+	fprintf(stderr, "error binding CAN socket: %s\n", strerror(errno));
 	exit(1);
     }
 
@@ -253,12 +243,14 @@ int main(int argc, char **argv) {
     max_fds = sc;
 
     while (1) {
-	if (select(max_fds + 1 , &read_fds, NULL, NULL, NULL) < 0)
-	    perror("select error");
+	if (select(max_fds + 1 , &read_fds, NULL, NULL, NULL) < 0) {
+	    fprintf(stderr, "select error: %s\n", strerror(errno));
+	    exit(1);
+        }
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &read_fds)) {
             if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
-		perror("error reading CAN frame\n");
+		fprintf(stderr, "error reading CAN frame: %s\n", strerror(errno));
 	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
                 if (verbose) {
 		    print_can_frame(F_CAN_FORMAT_STRG, &frame);
