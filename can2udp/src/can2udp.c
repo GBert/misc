@@ -36,7 +36,7 @@ unsigned char udpframe_reply[MAXDG];
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -l <port> -d <port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 0.9\n");
+    fprintf(stderr, "   Version 0.91\n");
     fprintf(stderr, "\n");
     fprintf(stderr, "         -l <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default 15730\n");
@@ -96,6 +96,9 @@ int main(int argc, char **argv) {
     bzero(&saddr, sizeof(saddr));
     bzero(&baddr, sizeof(baddr));
     bzero(&caddr, sizeof(caddr));
+    bzero(&frame, sizeof(frame));
+    bzero(udpframe, sizeof(frame));
+    bzero(udpframe_reply, sizeof(udpframe_reply));
 
     /* prepare udp destination struct with defaults */
     baddr.sin_family = AF_INET;
@@ -227,7 +230,6 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "CAN read error: %s\n", strerror(errno));
 	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		/* prepare UDP frame */
-		bzero(udpframe, 13);
 		frame.can_id &= CAN_EFF_MASK;
 		udpframe[0] = (frame.can_id >> 24) & 0x000000FF;
 		udpframe[1] = (frame.can_id >> 16) & 0x000000FF;
@@ -258,7 +260,6 @@ int main(int argc, char **argv) {
 		 *   byte 4 DLC
 		 *   byte 5-12 CAN data
 		 */
-                bzero(&frame, sizeof(frame));
 		memcpy(&canid, &udpframe[0], 4);
 		/* CAN is stored in network Big Endian format */
 		frame.can_id = ntohl(canid);
@@ -276,7 +277,6 @@ int main(int argc, char **argv) {
 		if (((frame.can_id & 0x00FF0000UL) ==
 		     0x00310000UL) && (udpframe[11] = 0xEE)
 		    && (udpframe[12] = 0xEE)) {
-		    bzero(&udpframe_reply, sizeof(udpframe_reply));
 		    printf("  received CAN ping\n");
 		    memcpy(udpframe_reply, udpframe, 13);
 		    udpframe_reply[0] = 0x00;
