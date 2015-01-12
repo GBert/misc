@@ -30,14 +30,15 @@ char **page_name;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -s <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 0.92\n");
+    fprintf(stderr, "   Version 0.93\n");
     fprintf(stderr, "\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default 15730\n");
     fprintf(stderr, "         -b <broadcast_addr> broadcast address - default 255.255.255.255\n");
-    fprintf(stderr, "         -i <can int>        can interface - default can0\n");
+    fprintf(stderr, "         -i <can int>        CAN interface - default can0\n");
+    fprintf(stderr, "         -s                  use simple CAN interface\n");
     fprintf(stderr, "         -f                  running in foreground\n\n");
 }
 
@@ -137,7 +138,7 @@ int main(int argc, char **argv) {
 
     fd_set all_fds, read_fds;
 
-    uint32_t	canid;
+    uint32_t canid;
     int s, ret;
 
     int local_udp_port = 15731;
@@ -146,14 +147,14 @@ int main(int argc, char **argv) {
     int verbose = 0;
     int background = 1;
     const int on = 1;
+    int can_simple = 0;
     char udp_dst_address[] = "255.255.255.255";
     char buffer[64];
     page_name = calloc(64, sizeof(char *));
 
-    strcpy(ifr.ifr_name, "can0");
     config_file[0] = '\0';
 
-    while ((opt = getopt(argc, argv, "c:u:t:d:b:i:vhf?")) != -1) {
+    while ((opt = getopt(argc, argv, "c:u:t:d:b:i:svhf?")) != -1) {
 	switch (opt) {
 	case 'c':
             if (strlen(optarg) <MAXLINE) {
@@ -183,6 +184,9 @@ int main(int argc, char **argv) {
 	case 'i':
 	    strcpy(ifr.ifr_name, optarg);
 	    break;
+	case 's':
+	    can_simple = 1;
+	    break;
 	case 'v':
 	    verbose = 1;
 	    break;
@@ -209,6 +213,9 @@ int main(int argc, char **argv) {
         strcat(config_file, "/");
     }
     strcat(config_file, "gleisbild.cs2");
+
+    if (can_simple)
+        fprintf(stderr, "not implemented yet\n");
 
     page_name=read_track_file(config_file, page_name);
 

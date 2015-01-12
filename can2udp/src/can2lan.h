@@ -54,6 +54,7 @@ struct cs2_config {
     int udp_socket;
     int tcp_socket;
     int config_flags;
+    int can_simple;
     char *config_dir;
     char *filename;
     char **page_name;
