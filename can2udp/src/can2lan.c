@@ -32,7 +32,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -s <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
     fprintf(stderr, "   Version 0.92\n");
     fprintf(stderr, "\n");
-    fprintf(stderr, "         -s <config_dir>     set the config directory\n");
+    fprintf(stderr, "         -c <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default 15730\n");
@@ -153,9 +153,9 @@ int main(int argc, char **argv) {
     strcpy(ifr.ifr_name, "can0");
     config_file[0] = '\0';
 
-    while ((opt = getopt(argc, argv, "s:u:t:d:b:i:vhf?")) != -1) {
+    while ((opt = getopt(argc, argv, "c:u:t:d:b:i:vhf?")) != -1) {
 	switch (opt) {
-	case 's':
+	case 'c':
             if (strlen(optarg) <MAXLINE) {
 	        strcpy(config_dir, optarg);
             } else {
