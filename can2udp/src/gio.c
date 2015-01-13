@@ -137,7 +137,7 @@ int net_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *netfram
     int s;
     s = sendto(net_socket, netframe, length, 0, net_addr, sizeof(*net_addr));
     if (s != length) {
-        printf("%s: error sending TCP/UDP data\n", __func__);
+        fprintf(stderr, "%s: error sending TCP/UDP data; %s\n", __func__, strerror(errno));
         return -1;
     }
     return 0;
