@@ -47,7 +47,7 @@
 
 #define	CRC		0x01
 #define COMPRESSED	0x02
-#define TERM_SPEED	500000
+#define TERM_SPEED	B500000
 
 #if 0
 struct cs2_config {

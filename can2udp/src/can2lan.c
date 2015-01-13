@@ -285,16 +285,24 @@ int main(int argc, char **argv) {
 	    exit(1);
 	} else {
             bzero(&term_attr, sizeof(term_attr));
-	    if (tcgetattr(sc, &term_attr) != 0) {
+	    if (tcgetattr(sc, &term_attr) < 0) {
 		fprintf(stderr, "can't get terminal settings error: %s\n", strerror(errno));
 		exit(1);
 	    }
-	    term_attr.c_cflag = TERM_SPEED | CS8 | CRTSCTS | CLOCAL | CREAD;
+	    term_attr.c_cflag = CS8 | CRTSCTS | CLOCAL | CREAD;
 	    term_attr.c_iflag = 0;
 	    term_attr.c_oflag = OPOST | ONLCR;
 	    term_attr.c_lflag = 0;
-	    if (tcsetattr(sc, TCSAFLUSH, &term_attr) != 0) {
-		fprintf(stderr, "can't get terminal settings error: %s\n", strerror(errno));
+	    if (cfsetospeed(&term_attr, TERM_SPEED) < 0) {
+		fprintf(stderr, "CAN interface ospeed error: %s\n", strerror(errno));
+		exit(1);
+	    }
+	    if (cfsetispeed(&term_attr, TERM_SPEED) < 0) {
+		fprintf(stderr, "CAN interface ispeed error: %s\n", strerror(errno));
+		exit(1);
+	    }
+	    if (tcsetattr(sc, TCSAFLUSH, &term_attr) < 0) {
+		fprintf(stderr, "CAN interface set error: %s\n", strerror(errno));
 		exit(1);
 	    }
 	}
