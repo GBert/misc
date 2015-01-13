@@ -156,7 +156,7 @@ int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *fr
     /* send TCP/UDP frame */
     s = sendto(net_socket, netframe, 13, 0, net_addr, sizeof(*net_addr));
     if (s != 13) {
-        printf("%s: error sending TCP/UDP data\n", __func__);
+        fprintf(stderr, "%s: error sending TCP/UDP data %s\n", __func__, strerror(errno));
         return -1;
     }
     return 0;
@@ -170,21 +170,26 @@ int frame_to_can(int can_socket, int simple_can, unsigned char *netframe) {
      *   byte 4      DLC
      *   byte 5 - 12 CAN data
      */
+    if (simple_can) {
+        if (write(can_socket, netframe, 13) != 13) {
+            fprintf(stderr, "%s: error sending CAN frame: %s\n", __func__, strerror(errno));
+            return -1;
+        }
+        return 0;
+    }
+
     bzero(&frame,sizeof(frame));
     memcpy(&canid, netframe, 4);
     /* CAN uses (network) big endian format */
     frame.can_id = ntohl(canid);
-    if (simple_can) {
-    } else {
-        frame.can_id &= CAN_EFF_MASK;
-        frame.can_id |= CAN_EFF_FLAG;
-    }
+    frame.can_id &= CAN_EFF_MASK;
+    frame.can_id |= CAN_EFF_FLAG;
     frame.can_dlc = netframe[4];
     memcpy(&frame.data, &netframe[5], 8);
 
     /* send CAN frame */
     if (write(can_socket, &frame, sizeof(frame)) != sizeof(frame)) {
-        printf("%s: error writing CAN frame\n", __func__);
+        fprintf(stderr, "%s: error writing CAN frame: %s\n", __func__, strerror(errno));
         return -1;
     }
     return 0;
