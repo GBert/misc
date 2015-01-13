@@ -162,7 +162,7 @@ int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *fr
     return 0;
 }
 
-int frame_to_can(int can_socket, unsigned char *netframe) {
+int frame_to_can(int can_socket, int simple_can, unsigned char *netframe) {
     uint32_t canid;
     struct can_frame frame;
     /* Maerklin TCP/UDP Format: always 13 bytes
@@ -174,8 +174,11 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
     memcpy(&canid, netframe, 4);
     /* CAN uses (network) big endian format */
     frame.can_id = ntohl(canid);
-    frame.can_id &= CAN_EFF_MASK;
-    frame.can_id |= CAN_EFF_FLAG;
+    if (simple_can) {
+    } else {
+        frame.can_id &= CAN_EFF_MASK;
+        frame.can_id |= CAN_EFF_FLAG;
+    }
     frame.can_dlc = netframe[4];
     memcpy(&frame.data, &netframe[5], 8);
 

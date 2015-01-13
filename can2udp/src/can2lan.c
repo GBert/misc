@@ -42,8 +42,8 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -f                  running in foreground\n\n");
 }
 
-int send_magic_start_60113_frame(int can_socket, int verbose) {
-    if (frame_to_can(can_socket, M_GLEISBOX_MAGIC_START_SEQUENCE) < 0) {
+int send_magic_start_60113_frame(int can_socket, int simple_can, int verbose) {
+    if (frame_to_can(can_socket, simple_can, M_GLEISBOX_MAGIC_START_SEQUENCE) < 0) {
 	fprintf(stderr, "can't send CAN magic 60113 start sequence\n");
 	return -1;
     } else {
@@ -128,6 +128,7 @@ int main(int argc, char **argv) {
     int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, tcp_client[MAX_TCP_CONN];;
     struct can_frame frame;
     char timestamp[16];
+    struct termios term_attr;
 
     int sa, sc, sb, st, tcp_socket;		/* UDP socket , CAN socket, UDP Broadcast Socket, TCP Socket */
     struct sockaddr_in saddr, baddr, tcp_addr;
@@ -147,7 +148,7 @@ int main(int argc, char **argv) {
     int verbose = 0;
     int background = 1;
     const int on = 1;
-    int can_simple = 0;
+    int simple_can = 0;
     char udp_dst_address[] = "255.255.255.255";
     char buffer[64];
     page_name = calloc(64, sizeof(char *));
@@ -187,7 +188,7 @@ int main(int argc, char **argv) {
 	    strcpy(ifr.ifr_name, optarg);
 	    break;
 	case 's':
-	    can_simple = 1;
+	    simple_can = 1;
 	    break;
 	case 'v':
 	    verbose = 1;
@@ -216,7 +217,7 @@ int main(int argc, char **argv) {
     }
     strcat(config_file, "gleisbild.cs2");
 
-    if (can_simple)
+    if (simple_can)
         fprintf(stderr, "not implemented yet\n");
 
     page_name=read_track_file(config_file, page_name);
@@ -280,26 +281,49 @@ int main(int argc, char **argv) {
     for (i = 0; i < MAX_TCP_CONN; i++)
 	tcp_client[i] = -1;		/* -1 indicates available entry */
 
-    /* prepare CAN socket */
-    bzero(&caddr, sizeof(caddr));
-    if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
-	fprintf(stderr, "creating CAN socket error: %s\n", strerror(errno));
-	exit(1);
-    }
-    caddr.can_family = AF_CAN;
-    if ( ioctl(sc, SIOCGIFINDEX, &ifr) < 0) {
-	fprintf(stderr, "setup CAN error: %s\n", strerror(errno));
-	exit(1);
-    }
-    caddr.can_ifindex = ifr.ifr_ifindex;
+    if (simple_can) {
+    /* prepare simple CAN interface */
+	if (( sc = open(ifr.ifr_name, O_RDWR)) < 0) {
+	    fprintf(stderr, "opening CAN interface error: %s\n", strerror(errno));
+	    exit(1);
+	} else {
+            bzero(&term_attr, sizeof(term_attr));
+	    if (tcgetattr(sc, &term_attr) != 0) {
+		fprintf(stderr, "can't get terminal settings error: %s\n", strerror(errno));
+		exit(1);
+	    }
+	    term_attr.c_cflag = TERM_SPEED | CS8 | CRTSCTS | CLOCAL | CREAD;
+	    term_attr.c_iflag = 0;
+	    term_attr.c_oflag = OPOST | ONLCR;
+	    term_attr.c_lflag = 0;
+	    if (tcsetattr(sc, TCSAFLUSH, &term_attr) != 0) {
+		fprintf(stderr, "can't get terminal settings error: %s\n", strerror(errno));
+		exit(1);
+	    }
+	}
 
-    if ( bind(sc, (struct sockaddr *) &caddr, caddrlen) < 0) {
-	fprintf(stderr, "binding CAN socket error: %s\n", strerror(errno));
-	exit(1);
+    /* prepare CAN socket */
+    } else {
+	bzero(&caddr, sizeof(caddr));
+        if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
+	    fprintf(stderr, "creating CAN socket error: %s\n", strerror(errno));
+	    exit(1);
+        }
+        caddr.can_family = AF_CAN;
+        if ( ioctl(sc, SIOCGIFINDEX, &ifr) < 0) {
+	    fprintf(stderr, "setup CAN error: %s\n", strerror(errno));
+	    exit(1);
+        }
+	caddr.can_ifindex = ifr.ifr_ifindex;
+
+        if ( bind(sc, (struct sockaddr *) &caddr, caddrlen) < 0) {
+	    fprintf(stderr, "binding CAN socket error: %s\n", strerror(errno));
+	    exit(1);
+	}
     }
 
     /* start Maerklin 60113 box */
-    send_magic_start_60113_frame(sc, verbose);
+    send_magic_start_60113_frame(sc, simple_can, verbose);
 
     /* daemonize the process if requested */
     if (background) {
@@ -352,7 +376,7 @@ int main(int argc, char **argv) {
 	if (FD_ISSET(sa, &read_fds)) {
 	    if (read(sa, netframe, MAXDG) == 13) {
 		/* send packet on CAN */
-		ret = frame_to_can(sc, netframe);
+		ret = frame_to_can(sc, simple_can, netframe);
 		if (verbose && !background)
 		    print_can_frame(NET_UDP_FORMAT_STRG, netframe);
     		memcpy(&canid, netframe, 4);
@@ -422,7 +446,7 @@ int main(int argc, char **argv) {
 			fprintf(stderr, "%s received packet %% 13 : length %d\n", timestamp, n);
 		    } else {
 			for (i = 0; i < n; i +=13 ) {
-			    ret = frame_to_can(sc, &netframe[i]);
+			    ret = frame_to_can(sc, simple_can, &netframe[i]);
                             check_data(tcp_socket, &netframe[i]);
 		            if ((ret == 0) && (verbose && !background)) {
                                 if (i > 0)
