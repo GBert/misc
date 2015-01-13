@@ -217,9 +217,6 @@ int main(int argc, char **argv) {
     }
     strcat(config_file, "gleisbild.cs2");
 
-    if (simple_can)
-        fprintf(stderr, "not implemented yet\n");
-
     page_name=read_track_file(config_file, page_name);
 
     /* prepare udp sending socket struct */
