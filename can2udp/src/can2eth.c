@@ -18,11 +18,9 @@
 #include <libgen.h>
 #include <unistd.h>
 #include <string.h>
-#include <signal.h>
 #include <errno.h>
 
 #include <sys/types.h>
-#include <sys/wait.h>
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <net/if.h>
@@ -68,7 +66,7 @@ int main(int argc, char **argv) {
     int destination_port = 7655;
     int verbose = 0;
     int background = 1;
-    int canid = 0;
+    uint32_t canid = 0;
     const int on = 1;
     const char broadcast_address[] = "255.255.255.255";
     strcpy(ifr.ifr_name, "can0");
@@ -207,9 +205,8 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "CAN read error: %s\n", strerror(errno));
 	    } else {
 		/* prepare UDP frame */
-                bzero(udpframe, sizeof(udpframe));
-                int temp_id = htonl(frame.can_id);
-		memcpy(udpframe, &temp_id, 4);
+		canid = htonl(frame.can_id);
+		memcpy(udpframe, &canid, 4);
 		udpframe[4] = frame.can_dlc;
 		memcpy(&udpframe[5], &frame.data, frame.can_dlc);
 
@@ -233,7 +230,6 @@ int main(int argc, char **argv) {
 	/* received a UDP packet */
 	if (FD_ISSET(sa, &readfds)) {
 	    if (read(sa, udpframe, MAXDG) == 13) {
-
 		memcpy(&canid, &udpframe[0], 4);
 		frame.can_id = ntohl(canid);
 		frame.can_dlc = udpframe[4];
