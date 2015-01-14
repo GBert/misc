@@ -1,10 +1,13 @@
-BINS := can2udp can4lnx2udp can2lan virtual_gfp get-cs-config
+BINS := can2eth can2udp can4lnx2udp can2lan virtual_gfp get-cs-config
 
 BIN = $@
 
 all:	$(BINS)
 
 CFLAGS+=-Wall -pedantic -std=gnu99 -g
+
+can2eth: can2eth.o
+	$(CC) $(CFLAGS) -o can2eth can2eth.o
 
 can2udp: can2udp.o
 	$(CC) $(CFLAGS) -o can2udp can2udp.o
