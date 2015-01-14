@@ -218,7 +218,10 @@ int main(int argc, char **argv) {
 		    fprintf(stderr, "UDP write error: %s\n", strerror(errno));
 
 		if (verbose && !background) {
-		    printf("->CAN>UDP CANID 0x%08X  ", frame.can_id);
+		    if (frame.can_id & CAN_EFF_FLAG)
+		        printf("->CAN>UDP CANID 0x%08X  ", frame.can_id & CAN_EFF_MASK);
+                    else
+		        printf("->CAN>UDP CANID 0x%03X       ", frame.can_id);
 		    printf(" [%d]", udpframe[4]);
 		    for (i = 5; i < 5 + frame.can_dlc; i++) {
 			printf(" %02x", udpframe[i]);
@@ -243,8 +246,10 @@ int main(int argc, char **argv) {
 		    fprintf(stderr, "CAN write error: %s\n", strerror(errno));
 
 		if (verbose && !background) {
-		    printf("<-UDP<CAN CANID 0x%08X  ",
-			   frame.can_id & CAN_EFF_MASK);
+                    if (frame.can_id & CAN_EFF_FLAG)
+			printf("<-UDP<CAN CANID 0x%08X  ", frame.can_id & CAN_EFF_MASK);
+		    else
+			printf("<-UDP<CAN CANID 0x%03X       ", frame.can_id);
 		    printf(" [%d]", udpframe[4]);
 		    for (i = 5; i < 5 + frame.can_dlc; i++) {
 			printf(" %02x", udpframe[i]);
