@@ -290,9 +290,9 @@ int main(int argc, char **argv) {
 		exit(1);
 	    }
 	    term_attr.c_cflag = CS8 | CRTSCTS | CLOCAL | CREAD;
-	    term_attr.c_iflag = 0;
-	    term_attr.c_oflag = OPOST | ONLCR;
-	    term_attr.c_lflag = 0;
+	    term_attr.c_iflag = INPCK;
+	    term_attr.c_oflag = 0;
+	    term_attr.c_lflag = NOFLSH;
 	    if (cfsetospeed(&term_attr, TERM_SPEED) < 0) {
 		fprintf(stderr, "CAN interface ospeed error: %s\n", strerror(errno));
 		exit(1);
@@ -301,7 +301,7 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "CAN interface ispeed error: %s\n", strerror(errno));
 		exit(1);
 	    }
-	    if (tcsetattr(sc, TCSAFLUSH, &term_attr) < 0) {
+	    if (tcsetattr(sc, TCSANOW, &term_attr) < 0) {
 		fprintf(stderr, "CAN interface set error: %s\n", strerror(errno));
 		exit(1);
 	    }
