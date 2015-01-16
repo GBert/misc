@@ -200,6 +200,7 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "CAN read error: %s\n", strerror(errno));
 	    } else {
 		/* prepare UDP frame */
+		bzero(udpframe, 13);
 		canid = htonl(frame.can_id);
 		memcpy(udpframe, &canid, 4);
 		udpframe[4] = frame.can_dlc;
@@ -231,8 +232,6 @@ int main(int argc, char **argv) {
 		memcpy(&frame.data, &udpframe[5], 8);
 
 		/* send CAN frame */
-		memcpy(&frame.data, &udpframe[5], 8);
-
 		if (write(sc, &frame, sizeof(frame)) != sizeof(frame))
 		    fprintf(stderr, "CAN write error: %s\n", strerror(errno));
 
