@@ -353,12 +353,12 @@ int main(int argc, char **argv) {
 	if (FD_ISSET(sc, &read_fds)) {
 	    if (simple_can) {
 		/* reading data direct to netframe as simple CAN interface uses the same format */
-		/* TODO: check if we need to read more than once ? */
+		/* TODO: do we need to read more than once ? */
 		/* if ((ret = read(sc, buffer, sizeof(buffer))) < 0) {
 		    fprintf(stderr, "reading CAN frame error: %s\n", strerror(errno));
 		} else {
 		*/
-		/* copy the CAN frames to UDP broadcast and all connect TCP clients */
+		/* copy the CAN frames to UDP broadcast and all connected TCP clients */
 		while ((ret = read(sc, buffer, sizeof(buffer))) > 0) {
 		    printf(">>> Read %d data lenght\n", ret);
 		    for (int eci = 0; eci < ret; eci++) {
