@@ -67,6 +67,7 @@ struct cs2_config {
 
 static const int MAXPENDING = 16;	/* max outstanding tcp connections */
 unsigned char netframe[MAXDG];
+unsigned char ec_frame[13];
 
 uint8_t * read_config_file(char *filename, char *config_dir, uint32_t *nbytes);
 int time_stamp(char *timestamp);

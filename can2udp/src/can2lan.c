@@ -29,8 +29,7 @@ char **page_name;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -s <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 0.93\n");
-    fprintf(stderr, "\n");
+    fprintf(stderr, "   Version 0.94\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
@@ -144,6 +143,7 @@ int main(int argc, char **argv) {
     int simple_can = 0;
     char udp_dst_address[] = "255.255.255.255";
     char buffer[64];
+    int ec_index = 0;
     page_name = calloc(64, sizeof(char *));
 
     strcpy(ifr.ifr_name, "can0");
@@ -353,33 +353,41 @@ int main(int argc, char **argv) {
 	if (FD_ISSET(sc, &read_fds)) {
 	    if (simple_can) {
 		/* reading data direct to netframe as simple CAN interface uses the same format */
-		if ((ret = read(sc, buffer, sizeof(buffer))) < 0) {
+		/* TODO: check if we need to read more than once ? */
+		/* if ((ret = read(sc, buffer, sizeof(buffer))) < 0) {
 		    fprintf(stderr, "reading CAN frame error: %s\n", strerror(errno));
 		} else {
-		    memcpy(netframe, buffer, 13);
+		*/
+		/* copy the CAN frames to UDP broadcast and all connect TCP clients */
+		while ((ret = read(sc, buffer, sizeof(buffer))) > 0) {
+		    printf(">>> Read %d data lenght\n", ret);
+		    for (int eci = 0; eci < ret; eci++) {
+			ec_frame[ec_index] = buffer[eci];
+			if ( ec_index == 13-1) {
+			    /* we got a complete CAN frame */
+			    ec_index = 0;
+			    if (net_to_net(sb, (struct sockaddr *)&baddr, ec_frame, 13)) {
+				fprintf(stderr, "sending UDP data error:%s \n", strerror(errno));
+			    } else if (verbose && !background) {
+				print_can_frame(UDP_FORMAT_STRG, ec_frame);
+			    }
+			    /* send CAN frame to all connected TCP clients */
+			    /* TODO: need all clients the packets ? */
+			    for (i = 0; i <= max_tcp_i; i++) {
+				if ((tcp_socket = tcp_client[i]) < 0)
+				    continue;
+				net_to_net(tcp_socket, (struct sockaddr *)&tcp_addr, ec_frame, 13);
+				if (verbose && !background)
+				    print_can_frame(CAN_TCP_FORMAT_STRG, ec_frame);
+			    }
+			}
+		    }
 		}
-		if (net_to_net(sb, (struct sockaddr *)&baddr, netframe, 13)) {
-		    fprintf(stderr, "sending UDP data error:%s \n", strerror(errno));
-		} else if (verbose && !background) {
-		    print_can_frame(UDP_FORMAT_STRG, netframe);
-		}
-		printf(">>> Read %d data lenght\n", ret);
-		/* send CAN frame to all connected TCP clients */
-		/* TODO: need all clients the packets ? */
-
-		/* check all clients for data */
-		for (i = 0; i <= max_tcp_i; i++) {
-		    if ((tcp_socket = tcp_client[i]) < 0)
-			continue;
-		    net_to_net(tcp_socket, (struct sockaddr *)&tcp_addr, netframe, 13);
-		    if (verbose && !background)
-			print_can_frame(CAN_TCP_FORMAT_STRG, netframe);
-		}
-		/* reading via SockatCAN */
+	    /* reading via SockatCAN */
 	    } else if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
 		fprintf(stderr, "reading CAN frame error: %s\n", strerror(errno));
 	    }
-	    /* CAN Frame is EFF now read it */
+	    /* if CAN Frame is EFF do it */
 	    else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		/* send UDP frame */
 		frame_to_net(sb, (struct sockaddr *)&baddr, (struct can_frame *)&frame);
