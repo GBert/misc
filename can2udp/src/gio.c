@@ -146,8 +146,9 @@ int net_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *netfram
 int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *frame) {
     int s;
     uint32_t canid;
-    frame->can_id &= CAN_EFF_MASK;
+
     bzero(netframe, 13);
+    frame->can_id &= CAN_EFF_MASK;
     canid=htonl(frame->can_id);
     memcpy(netframe,&canid,4);
     netframe[4] = frame->can_dlc;

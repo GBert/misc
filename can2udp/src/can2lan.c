@@ -25,7 +25,6 @@ unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE [] = {0x00,0x36,0x03,0x01,0x05,0x0
 
 char config_dir[MAXLINE];
 char config_file[MAXLINE];
-char line[MAXLINE];
 char **page_name;
 
 void print_usage(char *prg) {
@@ -280,7 +279,7 @@ int main(int argc, char **argv) {
 
     if (simple_can) {
     /* prepare simple CAN interface */
-	if (( sc = open(ifr.ifr_name, O_RDWR)) < 0) {
+	if (( sc = open(ifr.ifr_name, O_RDWR | O_TRUNC | O_NONBLOCK | O_NOCTTY )) < 0) {
 	    fprintf(stderr, "opening CAN interface error: %s\n", strerror(errno));
 	    exit(1);
 	} else {
@@ -290,7 +289,7 @@ int main(int argc, char **argv) {
 		exit(1);
 	    }
 	    term_attr.c_cflag = CS8 | CRTSCTS | CLOCAL | CREAD;
-	    term_attr.c_iflag = INPCK;
+	    term_attr.c_iflag = 0;
 	    term_attr.c_oflag = 0;
 	    term_attr.c_lflag = NOFLSH;
 	    if (cfsetospeed(&term_attr, TERM_SPEED) < 0) {
@@ -358,9 +357,36 @@ int main(int argc, char **argv) {
 
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &read_fds)) {
-            if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
-		fprintf(stderr, "reading CAN frame: %s\n", strerror(errno));
-	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
+	    if (simple_can) {
+                /* reading data direct to netframe as simple CAN interface uses the same format */
+		if ((ret = read(sc, buffer, sizeof(buffer))) < 0) { 
+		    fprintf(stderr, "reading CAN frame error: %s\n", strerror(errno));
+		} else {
+                    memcpy(netframe, buffer, 13);
+                }
+                if (net_to_net(sb,(struct sockaddr *) &baddr, netframe, 13)) {
+		    fprintf(stderr, "sending UDP data error:%s \n", strerror(errno));
+		} else if (verbose && !background) {
+			print_can_frame(UDP_FORMAT_STRG, netframe);
+                }
+                printf(">>> Read %d data lenght\n", ret);
+		/* send CAN frame to all connected TCP clients */
+		/* TODO: need all clients the packets ? */
+
+		/* check all clients for data */
+		for (i = 0; i <= max_tcp_i; i++) {
+		    if ( (tcp_socket = tcp_client[i]) < 0)
+			continue;
+		    net_to_net(tcp_socket, (struct sockaddr *) &tcp_addr, netframe, 13);
+		    if (verbose && !background)
+		        print_can_frame(CAN_TCP_FORMAT_STRG, netframe);
+                }
+            /* reading via SockatCAN */
+            } else if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
+		fprintf(stderr, "reading CAN frame error: %s\n", strerror(errno));
+                }
+            /* CAN Frame is EFF now read it */
+	    else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		/* send UDP frame */
 		frame_to_net(sb, (struct sockaddr *) &baddr, (struct can_frame *) &frame);
 		if (verbose && !background)
