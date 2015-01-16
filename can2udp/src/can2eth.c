@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
     int s, i, opt;
     struct can_frame frame;
 
-    int sa, sc, sb;		/* UDP socket , CAN socket, UDP Broadcast Socket */
+    int sa, sc, sb;		/* UDP socket , CAN socket, UDP broadcast socket */
     struct sockaddr_in saddr, baddr;
     struct sockaddr_can caddr;
     struct ifreq ifr;
@@ -73,26 +73,27 @@ int main(int argc, char **argv) {
     bzero(&caddr, sizeof(caddr));
     bzero(&frame, sizeof(frame));
     bzero(udpframe, sizeof(udpframe));
+
     /* prepare udp destination struct with defaults */
     baddr.sin_family = AF_INET;
     baddr.sin_port = htons(destination_port);
     s = inet_pton(AF_INET, broadcast_address, &baddr.sin_addr);
     if (s <= 0) {
-        if (s == 0) {
-            fprintf(stderr, "UDP IP invalid\n");
-        } else {
-            fprintf(stderr, "invalid address family\n");
-        }
-        exit(1);
+	if (s == 0) {
+	    fprintf(stderr, "UDP IP invalid\n");
+	} else {
+	    fprintf(stderr, "invalid address family\n");
+	}
+	exit(1);
     }
 
     while ((opt = getopt(argc, argv, "l:d:b:i:hfv?")) != -1) {
 	switch (opt) {
 	case 'l':
-	    local_port = strtoul(optarg, (char **) NULL, 10);
+	    local_port = strtoul(optarg, (char **)NULL, 10);
 	    break;
 	case 'd':
-	    destination_port = strtoul(optarg, (char **) NULL, 10);
+	    destination_port = strtoul(optarg, (char **)NULL, 10);
 	    baddr.sin_port = htons(destination_port);
 	    break;
 	case 'b':
@@ -138,7 +139,7 @@ int main(int argc, char **argv) {
     saddr.sin_addr.s_addr = htonl(INADDR_ANY);
     saddr.sin_port = htons(local_port);
 
-    if  (bind(sa, (struct sockaddr *) &saddr, sizeof(saddr)) < 0) {
+    if (bind(sa, (struct sockaddr *)&saddr, sizeof(saddr)) < 0) {
 	fprintf(stderr, "UDP bind error: %s\n", strerror(errno));
 	exit(1);
     }
@@ -155,7 +156,7 @@ int main(int argc, char **argv) {
     }
     caddr.can_ifindex = ifr.ifr_ifindex;
 
-    if (bind(sc, (struct sockaddr *) &caddr, caddrlen) < 0) {
+    if (bind(sc, (struct sockaddr *)&caddr, caddrlen) < 0) {
 	fprintf(stderr, "CAN bind error: %s\n", strerror(errno));
 	exit(1);
     }
@@ -189,9 +190,9 @@ int main(int argc, char **argv) {
 	FD_SET(sc, &readfds);
 	FD_SET(sa, &readfds);
 
-	if (select((sc > sa) ? sc + 1 : sa + 1, &readfds, NULL, NULL, NULL) <0 ) {
-            fprintf(stderr, "select error: %s\n", strerror(errno));
-        };
+	if (select((sc > sa) ? sc + 1 : sa + 1, &readfds, NULL, NULL, NULL) < 0) {
+	    fprintf(stderr, "select error: %s\n", strerror(errno));
+	};
 
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &readfds)) {
@@ -207,14 +208,14 @@ int main(int argc, char **argv) {
 		memcpy(&udpframe[5], &frame.data, frame.can_dlc);
 
 		/* send UDP frame */
-		if (sendto(sb, udpframe, 13, 0, (struct sockaddr *) &baddr, sizeof(baddr)) !=13)
+		if (sendto(sb, udpframe, 13, 0, (struct sockaddr *)&baddr, sizeof(baddr)) != 13)
 		    fprintf(stderr, "UDP write error: %s\n", strerror(errno));
 
 		if (verbose && !background) {
 		    if (frame.can_id & CAN_EFF_FLAG)
-		        printf("->CAN>UDP CANID 0x%08X  ", frame.can_id & CAN_EFF_MASK);
-                    else
-		        printf("->CAN>UDP CANID 0x%03X       ", frame.can_id);
+			printf("->CAN>UDP CANID 0x%08X  ", frame.can_id & CAN_EFF_MASK);
+		    else
+			printf("->CAN>UDP CANID 0x%03X       ", frame.can_id);
 		    printf(" [%d]", udpframe[4]);
 		    for (i = 5; i < 5 + frame.can_dlc; i++) {
 			printf(" %02x", udpframe[i]);
@@ -236,7 +237,7 @@ int main(int argc, char **argv) {
 		    fprintf(stderr, "CAN write error: %s\n", strerror(errno));
 
 		if (verbose && !background) {
-                    if (frame.can_id & CAN_EFF_FLAG)
+		    if (frame.can_id & CAN_EFF_FLAG)
 			printf("<-UDP<CAN CANID 0x%08X  ", frame.can_id & CAN_EFF_MASK);
 		    else
 			printf("<-UDP<CAN CANID 0x%03X       ", frame.can_id);
@@ -245,7 +246,6 @@ int main(int argc, char **argv) {
 			printf(" %02x", udpframe[i]);
 		    }
 		    printf("\n");
-
 		}
 	    }
 	}
