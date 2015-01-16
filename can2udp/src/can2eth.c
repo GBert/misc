@@ -33,7 +33,6 @@
 #define MAXUDP  16		/* maximum datagram size */
 
 unsigned char udpframe[MAXDG];
-unsigned char udpframe_reply[MAXDG];
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -l <port> -d <port> -i <can interface>\n", prg);
@@ -49,7 +48,7 @@ void print_usage(char *prg) {
 int main(int argc, char **argv) {
     pid_t pid;
     extern int optind, opterr, optopt;
-    int opt;
+    int s, i, opt;
     struct can_frame frame;
 
     int sa, sc, sb;		/* UDP socket , CAN socket, UDP Broadcast Socket */
@@ -59,8 +58,6 @@ int main(int argc, char **argv) {
     socklen_t caddrlen = sizeof(caddr);
 
     fd_set readfds;
-
-    int s, i;
 
     int local_port = 7654;
     int destination_port = 7655;
@@ -76,8 +73,6 @@ int main(int argc, char **argv) {
     bzero(&caddr, sizeof(caddr));
     bzero(&frame, sizeof(frame));
     bzero(udpframe, sizeof(udpframe));
-    bzero(udpframe_reply, sizeof(udpframe_reply));
-
     /* prepare udp destination struct with defaults */
     baddr.sin_family = AF_INET;
     baddr.sin_port = htons(destination_port);
