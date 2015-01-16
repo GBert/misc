@@ -360,10 +360,14 @@ int main(int argc, char **argv) {
 		*/
 		/* copy the CAN frames to UDP broadcast and all connected TCP clients */
 		while ((ret = read(sc, buffer, sizeof(buffer))) > 0) {
-		    printf(">>> Read %d data lenght\n", ret);
+		    printf(">>> Read %3d bytes  ", ret);
+                    for (i = 0 ; i < ret ; i++)
+                        printf(" 0x%02X",(unsigned char) buffer[i]);
+                    printf("\n");
 		    for (int eci = 0; eci < ret; eci++) {
-			ec_frame[ec_index] = buffer[eci];
-			if ( ec_index == 13-1) {
+			/* printf(">>> eci : %d  ec_index: %d  >%02x<\n", eci, ec_index, (unsigned char) buffer[eci]); */
+			ec_frame[ec_index++] = (unsigned char) buffer[eci];
+			if ( ec_index == 13) {
 			    /* we got a complete CAN frame */
 			    ec_index = 0;
 			    if (net_to_net(sb, (struct sockaddr *)&baddr, ec_frame, 13)) {
@@ -380,6 +384,7 @@ int main(int argc, char **argv) {
 				if (verbose && !background)
 				    print_can_frame(CAN_TCP_FORMAT_STRG, ec_frame);
 			    }
+			    printf("\n");
 			}
 		    }
 		}
