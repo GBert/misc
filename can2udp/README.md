@@ -3,7 +3,7 @@
 This Git (OpenWRT feed) contains files to emulate the M\*rklin CS2 Gateway:
 
 - can2udp only transfers CAN frames to UDP and vice versa
-- can2lan does the same as can2udp, but also listen on TCP (for M\*rklinApp)
+- can2lan does the same as can2udp, but also listen on TCP (for M\*rklinApp & Software)
 
 can2udp is working fine with Rocrail and Gleisbox (60113). The can2lan aims
 to emulate the CS2 (or more specific the CAN gateway of the CS2).
