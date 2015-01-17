@@ -172,6 +172,8 @@ int frame_to_can(int can_socket, int simple_can, unsigned char *netframe) {
      *   byte 5 - 12 CAN data
      */
     if (simple_can) {
+	/* TODO: do the simple CAN interface needs a long pause ? */
+	usleep(20000);
         if (write(can_socket, netframe, 13) != 13) {
             fprintf(stderr, "%s: error sending CAN frame: %s\n", __func__, strerror(errno));
             return -1;
