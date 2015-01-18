@@ -38,6 +38,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -i <can int>        CAN interface - default can0\n");
     fprintf(stderr, "         -s                  use simple CAN interface\n");
     fprintf(stderr, "         -f                  running in foreground\n\n");
+    fprintf(stderr, "         -v                  verbose output (in foreground)\n\n");
 }
 
 int send_magic_start_60113_frame(int can_socket, int simple_can, int verbose) {

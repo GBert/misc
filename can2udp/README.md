@@ -19,6 +19,7 @@ Usage: can2udp -l \<port\> -d \<port\> -i \<can interface\>
          -b \<broadcast_addr\> broadcast address - default 255.255.255.255
          -i \<can int\>        can interface - default can0
          -f                  running in foreground
+         -v                  verbose output (in foreground)
 </pre></code>
 <pre><code>
 Usage: can2lan -c \<config_dir\> -u \<udp_port\> -t \<tcp_port\> -d \<udp_dest_port\> -i \<can interface\>
@@ -31,4 +32,5 @@ Usage: can2lan -c \<config_dir\> -u \<udp_port\> -t \<tcp_port\> -d \<udp_dest_p
          -i \<can int\>        can interface - default can0
          -s                  use simple CAN interface
          -f                  running in foreground
+         -v                  verbose output (in foreground)
 </pre></code>

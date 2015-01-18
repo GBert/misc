@@ -43,6 +43,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -b <broadcast_addr> broadcast address - default 255.255.255.255\n");
     fprintf(stderr, "         -i <can int>        can interface - default can0\n");
     fprintf(stderr, "         -f                  running in foreground\n\n");
+    fprintf(stderr, "         -v                  verbose output (in foreground)\n\n");
 }
 
 void send_magic_start_60113_frame(int can_socket, int verbose) {
