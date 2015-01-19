@@ -63,7 +63,7 @@ void print_can_frame(struct can_frame *frame, int verbose) {
 int main(int argc, char **argv) {
     pid_t pid;
     extern int optind, opterr, optopt;
-    int s, opt;
+    int ret, s, opt;
     struct can_frame frame;
 
     int sa, sc, sb;		/* UDP socket , CAN socket, UDP broadcast socket */
@@ -211,7 +211,6 @@ int main(int argc, char **argv) {
 
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &readfds)) {
-
 	    if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
 		fprintf(stderr, "CAN read error: %s\n", strerror(errno));
 	    } else {
@@ -222,16 +221,20 @@ int main(int argc, char **argv) {
 		udpframe[4] = frame.can_dlc;
 		memcpy(&udpframe[5], &frame.data, frame.can_dlc);
 
-		/* send UDP frame */
+		/* send UDP packet */
 		if (sendto(sb, udpframe, 13, 0, (struct sockaddr *)&baddr, sizeof(baddr)) != 13)
 		    fprintf(stderr, "UDP write error: %s\n", strerror(errno));
+
 		print_can_frame(&frame, verbose & !background);
 	    }
 	}
 	/* received a UDP packet */
 	if (FD_ISSET(sa, &readfds)) {
-	    if (read(sa, udpframe, MAXDG) != 13) {
-		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
+	    if ((ret=read(sa, udpframe, MAXDG)) != 13) {
+		if (ret < 0)
+		    fprintf(stderr, "UDP read error: %s\n", strerror(errno));
+		else
+		    fprintf(stderr, "UDP packet size error: only got %d bytes\n", ret);
 	    } else {
 		/* prepare CAN frame */
 		memcpy(&canid, &udpframe[0], 4);
