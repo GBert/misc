@@ -36,7 +36,7 @@ unsigned char udpframe[MAXDG];
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -l <port> -d <port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 0.1\n\n");
+    fprintf(stderr, "   Version 1.0\n\n");
     fprintf(stderr, "         -l <port>           listening UDP port for the server - default 7654\n");
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default 7655\n");
     fprintf(stderr, "         -b <broadcast_addr> broadcast address - default 255.255.255.255\n");
@@ -234,7 +234,7 @@ int main(int argc, char **argv) {
 		if (ret < 0)
 		    fprintf(stderr, "UDP read error: %s\n", strerror(errno));
 		else
-		    fprintf(stderr, "UDP packet size error: only got %d bytes\n", ret);
+		    fprintf(stderr, "UDP packet size error: got %d bytes\n", ret);
 	    } else {
 		/* prepare CAN frame */
 		memcpy(&canid, &udpframe[0], 4);
