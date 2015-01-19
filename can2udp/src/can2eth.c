@@ -200,14 +200,13 @@ int main(int argc, char **argv) {
 	}
     }
 
+    FD_ZERO(&readfds);
     while (1) {
-	FD_ZERO(&readfds);
 	FD_SET(sc, &readfds);
 	FD_SET(sa, &readfds);
 
-	if (select((sc > sa) ? sc + 1 : sa + 1, &readfds, NULL, NULL, NULL) < 0) {
+	if (select((sc > sa) ? sc + 1 : sa + 1, &readfds, NULL, NULL, NULL) < 0)
 	    fprintf(stderr, "select error: %s\n", strerror(errno));
-	};
 
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &readfds)) {
