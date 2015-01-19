@@ -356,8 +356,8 @@ int main(int argc, char **argv) {
 		/* copy the CAN frame to UDP broadcast and all connected TCP clients */
 		while ((ret = read(sc, buffer, sizeof(buffer))) > 0) {
 		    for (int eci = 0; eci < ret; eci++) {
-			ec_frame[ec_index++] = (unsigned char) buffer[eci];
-			if ( ec_index == 13) {
+			ec_frame[ec_index++] = (unsigned char)buffer[eci];
+			if (ec_index == 13) {
 			    /* we got a complete CAN frame */
 			    ec_index = 0;
 			    if (net_to_net(sb, (struct sockaddr *)&baddr, ec_frame, 13)) {
@@ -456,8 +456,7 @@ int main(int argc, char **argv) {
 	    if (FD_ISSET(tcp_socket, &read_fds)) {
 		if (verbose && !background) {
 		    time_stamp(timestamp);
-		    printf("%s packet from: %s\n", timestamp, inet_ntop(AF_INET,
-									&tcp_addr.sin_addr, buffer, sizeof(buffer)));
+		    printf("%s packet from: %s\n", timestamp, inet_ntop(AF_INET, &tcp_addr.sin_addr, buffer, sizeof(buffer)));
 		}
 		if ((n = read(tcp_socket, netframe, MAXDG)) == 0) {
 		    /* connection closed by client */
