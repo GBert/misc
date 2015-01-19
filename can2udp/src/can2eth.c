@@ -45,10 +45,25 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -v                  verbose output (in forground)\n\n");
 }
 
+void print_can_frame(struct can_frame *frame, int verbose) {
+    int i;
+    if (verbose) {
+	if (frame->can_id & CAN_EFF_FLAG)
+	    printf("->CAN>UDP CANID 0x%08X  ", frame->can_id & CAN_EFF_MASK);
+	else
+	    printf("->CAN>UDP CANID 0x%03X       ", frame->can_id);
+	printf(" [%d]", frame->can_dlc);
+	for (i = 0; i < frame->can_dlc; i++) {
+	    printf(" %02x", frame->data[i]);
+	}
+	printf("\n");
+    }
+}
+
 int main(int argc, char **argv) {
     pid_t pid;
     extern int optind, opterr, optopt;
-    int s, i, opt;
+    int s,opt;
     struct can_frame frame;
 
     int sa, sc, sb;		/* UDP socket , CAN socket, UDP broadcast socket */
@@ -200,7 +215,7 @@ int main(int argc, char **argv) {
 	    if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
 		fprintf(stderr, "CAN read error: %s\n", strerror(errno));
 	    } else {
-		/* prepare UDP frame */
+		/* prepare UDP packet */
 		bzero(udpframe, 13);
 		canid = htonl(frame.can_id);
 		memcpy(udpframe, &canid, 4);
@@ -210,23 +225,15 @@ int main(int argc, char **argv) {
 		/* send UDP frame */
 		if (sendto(sb, udpframe, 13, 0, (struct sockaddr *)&baddr, sizeof(baddr)) != 13)
 		    fprintf(stderr, "UDP write error: %s\n", strerror(errno));
-
-		if (verbose && !background) {
-		    if (frame.can_id & CAN_EFF_FLAG)
-			printf("->CAN>UDP CANID 0x%08X  ", frame.can_id & CAN_EFF_MASK);
-		    else
-			printf("->CAN>UDP CANID 0x%03X       ", frame.can_id);
-		    printf(" [%d]", udpframe[4]);
-		    for (i = 5; i < 5 + frame.can_dlc; i++) {
-			printf(" %02x", udpframe[i]);
-		    }
-		    printf("\n");
-		}
+		print_can_frame(&frame, verbose & !background);
 	    }
 	}
 	/* received a UDP packet */
 	if (FD_ISSET(sa, &readfds)) {
-	    if (read(sa, udpframe, MAXDG) == 13) {
+	    if (read(sa, udpframe, MAXDG) != 13) {
+		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
+	    } else {
+		/* prepare CAN frame */
 		memcpy(&canid, &udpframe[0], 4);
 		frame.can_id = ntohl(canid);
 		frame.can_dlc = udpframe[4];
@@ -236,17 +243,7 @@ int main(int argc, char **argv) {
 		if (write(sc, &frame, sizeof(frame)) != sizeof(frame))
 		    fprintf(stderr, "CAN write error: %s\n", strerror(errno));
 
-		if (verbose && !background) {
-		    if (frame.can_id & CAN_EFF_FLAG)
-			printf("<-UDP<CAN CANID 0x%08X  ", frame.can_id & CAN_EFF_MASK);
-		    else
-			printf("<-UDP<CAN CANID 0x%03X       ", frame.can_id);
-		    printf(" [%d]", udpframe[4]);
-		    for (i = 5; i < 5 + frame.can_dlc; i++) {
-			printf(" %02x", udpframe[i]);
-		    }
-		    printf("\n");
-		}
+		print_can_frame(&frame, verbose & !background);
 	    }
 	}
     }
