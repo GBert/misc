@@ -123,7 +123,7 @@ int main(int argc, char **argv) {
     char timestamp[16];
     struct termios term_attr;
 
-    int sa, sc, sb, st, tcp_socket;	/* UDP socket , CAN socket, UDP Broadcast Socket, TCP Socket */
+    int sa, sc, sb, st, tcp_socket;	/* UDP incoming socket , CAN socket, UDP broadcast socket, TCP socket */
     struct sockaddr_in saddr, baddr, tcp_addr;
     struct sockaddr_can caddr;
     struct ifreq ifr;
@@ -301,8 +301,8 @@ int main(int argc, char **argv) {
 	    }
 	}
 
-	/* prepare CAN socket */
     } else {
+	/* prepare CAN socket */
 	bzero(&caddr, sizeof(caddr));
 	if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
 	    fprintf(stderr, "creating CAN socket error: %s\n", strerror(errno));

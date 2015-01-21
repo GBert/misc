@@ -101,8 +101,7 @@ unsigned char netframe[MAXDG];
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 0.9\n");
-    fprintf(stderr, "\n");
+    fprintf(stderr, "   Version 0.9\n\n");
     fprintf(stderr, "         -i <can int>        can interface - default vcan0\n");
     fprintf(stderr, "         -d                  daemonize\n\n");
 }
