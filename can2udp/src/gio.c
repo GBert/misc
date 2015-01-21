@@ -172,7 +172,6 @@ int frame_to_can(int can_socket, int simple_can, unsigned char *netframe) {
      *   byte 5 - 12 CAN data
      */
     if (simple_can) {
-        usleep(2000);
         if (write(can_socket, netframe, 13) != 13) {
             fprintf(stderr, "%s: error sending CAN frame: %s\n", __func__, strerror(errno));
             return -1;
@@ -194,6 +193,8 @@ int frame_to_can(int can_socket, int simple_can, unsigned char *netframe) {
         fprintf(stderr, "%s: error writing CAN frame: %s\n", __func__, strerror(errno));
         return -1;
     }
+    /* TODO : it seems Gleisbox needs a short break after every CAN message */
+    usleep(2000);
     return 0;
 }
 
