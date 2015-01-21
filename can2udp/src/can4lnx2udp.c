@@ -12,19 +12,15 @@
 #include <libgen.h>
 #include <fcntl.h>
 #include <string.h>
-#include <signal.h>
 #include <errno.h>
 #include <unistd.h>
 
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <sys/socket.h>
-#include <sys/ioctl.h>
 #include <net/if.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#include <linux/can.h>
 #include "can4linux.h"
 
 #define MAXDG   4096		/* maximum datagram size */
@@ -43,6 +39,18 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -f                  running in foreground\n\n");
 }
 
+void print_can_frame(char *str, canmsg_t *frame, int verbose) {
+    int i;
+    if (verbose) {
+	printf(str, frame->id);
+	printf(" [%d]", frame->length);
+	for (i = 0; i < frame->length; i++)
+	    printf(" %02x", frame->data[i]);
+	printf("\n");
+    }
+}
+
+
 int main(int argc, char **argv) {
     pid_t pid;
     extern int optind, opterr, optopt;
@@ -55,7 +63,7 @@ int main(int argc, char **argv) {
 
     fd_set readfds;
 
-    int s, i;
+    int s;
 
     int local_port = 15730;
     int destination_port = 15731;
@@ -183,53 +191,37 @@ int main(int argc, char **argv) {
 	/* received a CAN frame */
 	if (FD_ISSET(fdc, &readfds)) {
 
-	    if (read(fdc, &frame, 1) < 0) {
+	    if (read(fdc, &frame, 1) < 0)
 		fprintf(stderr, "CAN read error: %s\n", strerror(errno));
 
-		/* send UDP frame */
-		if (sendto(sb, udpframe, 13, 0, (struct sockaddr *) &baddr, sizeof(baddr)) !=13)
-		    fprintf(stderr, "UDP write error: %s\n", strerror(errno));
+	    /* prepare UDP packet - extended format */
+	    canid = htonl(frame.id);
+	    memcpy(udpframe, &canid, 4);
+	    udpframe[4] = frame.length;
+	    memcpy(&udpframe[5], &frame.data, 8);
 
-		if (verbose && !background) {
-		    printf("->CAN>UDP CANID 0x%08lX R", frame.id);
-		    printf(" [%d]", udpframe[4]);
-		    for (i = 5; i < 5 + frame.length; i++) {
-			printf(" %02x", udpframe[i]);
-		    }
-		    printf("\n");
-		}
-	    }
+	    /* send UDP frame */
+	    if (sendto(sb, udpframe, 13, 0, (struct sockaddr *) &baddr, sizeof(baddr)) !=13)
+		fprintf(stderr, "UDP write error: %s\n", strerror(errno));
+
+	    print_can_frame("->CAN>UDP CANID 0x%08lX R", &frame, verbose & !background);
 	}
 	/* received a UDP packet */
 	if (FD_ISSET(sa, &readfds)) {
 	    if (read(sa, udpframe, MAXDG) == 13) {
+		/* prepare CAN frame - extended format only */
 		memcpy(&canid, &udpframe[0], 4);
-		/* CAN is stored in network Big Endian format */
 		frame.id = ntohl(canid);
-
 		frame.id &= CAN_EFF_MASK;
-		frame.id |= CAN_EFF_FLAG;
-
+		frame.flags |= MSG_EXT;
 		frame.length = udpframe[4];
-
 		memcpy(&frame.data, &udpframe[5], 8);
 
 		/* send CAN frame */
-		memcpy(&frame.data, &udpframe[5], 8);
-
 		if (write(fdc, &frame, 1) != 1)
 		    fprintf(stderr, "CAN write error: %s\n", strerror(errno));
 
-		if (verbose && !background) {
-		    printf("<-UDP>CAN CANID 0x%08lX  ",
-			   frame.id & CAN_EFF_MASK);
-		    printf(" [%d]", udpframe[4]);
-		    for (i = 5; i < 5 + frame.length; i++) {
-			printf(" %02x", udpframe[i]);
-		    }
-		    printf("\n");
-
-		}
+		print_can_frame("->UDP>CAN CANID 0x%08lX  ", &frame, verbose & !background);
 	    }
 	}
     }
