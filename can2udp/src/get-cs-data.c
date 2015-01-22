@@ -160,8 +160,8 @@ int main(int argc, char **argv) {
 		    fprintf(stderr, "%s received packet %% 13 : length %d\n", timestamp, n);
 		} else {
 		    for (i = 0; i < n; i+=13) {
-			check_data(sockfd, &recvline[i]);
 			print_net_frame(TCP_FORMAT_STRG, &recvline[i]);
+			check_data(sockfd, &recvline[i]);
 		    }
 		}
 	    }
