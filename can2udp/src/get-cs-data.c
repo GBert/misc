@@ -97,7 +97,6 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 	memcpy(netframe_config, GET_GB1, 13);
 	/* copy Gleisbox ID */
 	memcpy(&netframe_config[5], &netframe[5], 4);
-	print_net_frame(TCP_FORMAT_STRG, netframe_config);
 	netframe_to_net(tcp_socket, netframe_config, 13);
 	break;
     default:
