@@ -16,19 +16,19 @@
 PATH=/bin:/usr/bin:/sbin:/usr/sbin
 DAEMON=/usr/bin/can2lan
 PIDFILE=/var/run/can2lan.pid
-OPTIONS="-s -c /var/www/html/cs2"
+OPTIONS="-s -c /var/www/html/cs2 -i /dev/ttyUSB0"
 test -x $DAEMON || exit 0
 
 . /lib/lsb/init-functions
 
 case "$1" in
   start)
-        log_daemon_msg "Starting deferred execution scheduler" "can2lan"
+        log_daemon_msg "Starting CAN to LAN gateway" "can2lan"
         start_daemon -p $PIDFILE $DAEMON $OPTIONS
         log_end_msg $?
     ;;
   stop)
-        log_daemon_msg "Stopping deferred execution scheduler" "can2lan"
+        log_daemon_msg "Stopping CAN to LAN" "can2lan"
         killproc -p $PIDFILE $DAEMON
         log_end_msg $?
     ;;
