@@ -1,4 +1,4 @@
-BINS := can2eth can2udp can4lnx2udp can2lan virtual_gfp get-cs-config
+BINS := can2eth can2udp can4lnx2udp can2lan virtual_gfp get-cs-data get-cs-config
 
 BIN = $@
 
@@ -20,6 +20,9 @@ can2lan: crc-ccitt.o gio.o can2lan.o
 
 virtual_gfp: virtual_gfp.o
 	$(CC) $(CFLAGS) -o virtual_gfp virtual_gfp.o
+
+get-cs-data: get-cs-data.o
+	$(CC) $(CFLAGS) -o get-cs-data get-cs-data.o
 
 get-cs-config: crc-ccitt.o get-cs-config.o
 	$(CC) $(CFLAGS) -o get-cs-config crc-ccitt.o get-cs-config.o -lz
