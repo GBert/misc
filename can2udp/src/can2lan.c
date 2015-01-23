@@ -59,11 +59,13 @@ int check_data(int tcp_socket, unsigned char *netframe) {
     char config_name[9];
     char gbs_name[MAXLINE];
     gbs_name[0] = '\0';
+    int ret=0;
 
     memcpy(&canid, netframe, 4);
     canid = ntohl(canid);
     switch (canid & 0x00FF0000UL) {
     case (0x00400000UL):	/* config data */
+	ret = 1;
 	strncpy(config_name, (char *)&netframe[5], 8);
 	config_name[8] = '\0';
 	printf("%s ID 0x%08x %s\n", __func__, canid, (char *)&netframe[5]);
@@ -111,7 +113,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 	    break;
 	}
     }
-    return 0;
+    return ret;
 }
 
 int main(int argc, char **argv) {
@@ -460,6 +462,11 @@ int main(int argc, char **argv) {
 		}
 		if ((n = read(tcp_socket, netframe, MAXDG)) == 0) {
 		    /* connection closed by client */
+		    if (verbose && !background) {
+			time_stamp(timestamp);
+			printf("%s client %s closed connection\n", timestamp,
+			    inet_ntop(AF_INET, &tcp_addr.sin_addr, buffer, sizeof(buffer)));
+		    }
 		    close(tcp_socket);
 		    FD_CLR(tcp_socket, &all_fds);
 		    tcp_client[i] = -1;
@@ -471,13 +478,15 @@ int main(int argc, char **argv) {
 			fprintf(stderr, "%s received packet %% 13 : length %d\n", timestamp, n);
 		    } else {
 			for (i = 0; i < n; i += 13) {
-			    ret = frame_to_can(sc, simple_can, &netframe[i]);
-			    check_data(tcp_socket, &netframe[i]);
-			    if ((ret == 0) && (verbose && !background)) {
-				if (i > 0)
-				    print_can_frame(TCP_FORMATS_STRG, &netframe[i]);
-				else
-				    print_can_frame(TCP_FORMAT_STRG, &netframe[i]);
+			    /* check if we need to forward the message to CAN */
+			    if (!check_data(tcp_socket, &netframe[i])) {
+				ret = frame_to_can(sc, simple_can, &netframe[i]);
+				if ((ret == 0) && (verbose && !background)) {
+				    if (i > 0)
+					print_can_frame(TCP_FORMATS_STRG, &netframe[i]);
+				    else
+					print_can_frame(TCP_FORMAT_STRG, &netframe[i]);
+				}
 			    }
 			}
 		    }
