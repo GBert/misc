@@ -100,10 +100,13 @@ char **read_track_file(char *filename, char **page_name) {
     }
 }
 
-void print_can_frame(char *format_string, unsigned char *netframe) {
+void print_can_frame(char *format_string, unsigned char *netframe, int verbose) {
     uint32_t canid;
     int i, dlc;
     char timestamp[16];
+
+    if (!verbose)
+	return;
 
     memcpy(&canid, netframe, 4);
     dlc = netframe[4];

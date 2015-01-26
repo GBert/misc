@@ -73,7 +73,7 @@ uint8_t * read_config_file(char *filename, char *config_dir, uint32_t *nbytes);
 int time_stamp(char *timestamp);
 char **read_track_file(char *filename, char **page_name);
 int send_tcp_config_data(char *filename, char *config_dir,  uint32_t canid, int tcp_socket, int flags);
-void print_can_frame(char *format_string, unsigned char *netframe);
+void print_can_frame(char *format_string, unsigned char *netframe, int verbose);
 int net_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *netframe, int length);
 int frame_to_can(int can_socket, int simple_can, unsigned char *netframe);
 int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *frame);

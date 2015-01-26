@@ -48,7 +48,7 @@ int send_magic_start_60113_frame(int can_socket, int simple_can, int verbose) {
     } else {
 	if (verbose) {
 	    printf("                CAN magic 60113 start written\n");
-	    print_can_frame(CAN_FORMAT_STRG, M_GLEISBOX_MAGIC_START_SEQUENCE);
+	    print_can_frame(CAN_FORMAT_STRG, M_GLEISBOX_MAGIC_START_SEQUENCE, verbose);
 	}
     }
     return 0;
@@ -148,6 +148,7 @@ int main(int argc, char **argv) {
     char buffer[64];
     int ec_index = 0;
     page_name = calloc(64, sizeof(char *));
+
 
     strcpy(ifr.ifr_name, "can0");
 
@@ -364,17 +365,15 @@ int main(int argc, char **argv) {
 			    ec_index = 0;
 			    if (net_to_net(sb, (struct sockaddr *)&baddr, ec_frame, 13)) {
 				fprintf(stderr, "sending UDP data error:%s \n", strerror(errno));
-			    } else if (verbose && !background) {
-				print_can_frame(UDP_FORMAT_STRG, ec_frame);
-			    }
+			    } else
+				print_can_frame(UDP_FORMAT_STRG, ec_frame, verbose & !background);
 			    /* send CAN frame to all connected TCP clients */
 			    /* TODO: need all clients the packets ? */
 			    for (i = 0; i <= max_tcp_i; i++) {
 				if ((tcp_socket = tcp_client[i]) < 0)
 				    continue;
 				net_to_net(tcp_socket, (struct sockaddr *)&tcp_addr, ec_frame, 13);
-				if (verbose && !background)
-				    print_can_frame(CAN_TCP_FORMAT_STRG, ec_frame);
+				print_can_frame(CAN_TCP_FORMAT_STRG, ec_frame, verbose & !background);
 			    }
 			}
 		    }
@@ -387,16 +386,14 @@ int main(int argc, char **argv) {
 	    else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		/* send UDP frame */
 		frame_to_net(sb, (struct sockaddr *)&baddr, (struct can_frame *)&frame);
-		if (verbose && !background)
-		    print_can_frame(UDP_FORMAT_STRG, netframe);
+		print_can_frame(UDP_FORMAT_STRG, netframe, verbose &!background);
 		/* send CAN frame to all connected TCP clients */
 		/* TODO: need all clients the packets ? */
 		for (i = 0; i <= max_tcp_i; i++) {	/* check all clients for data */
 		    if ((tcp_socket = tcp_client[i]) < 0)
 			continue;
 		    frame_to_net(tcp_socket, (struct sockaddr *)&tcp_addr, (struct can_frame *)&frame);
-		    if (verbose && !background)
-			print_can_frame(CAN_TCP_FORMAT_STRG, netframe);
+		    print_can_frame(CAN_TCP_FORMAT_STRG, netframe, verbose & !background);
 		}
 	    }
 	}
@@ -405,8 +402,7 @@ int main(int argc, char **argv) {
 	    if (read(sa, netframe, MAXDG) == 13) {
 		/* send packet on CAN */
 		ret = frame_to_can(sc, simple_can, netframe);
-		if (verbose && !background)
-		    print_can_frame(NET_UDP_FORMAT_STRG, netframe);
+		print_can_frame(NET_UDP_FORMAT_STRG, netframe, verbose & !background);
 		memcpy(&canid, netframe, 4);
 		canid = ntohl(canid);
 		/* answer to encapsulated CAN ping from LAN to LAN */
@@ -421,9 +417,10 @@ int main(int argc, char **argv) {
 		    netframe[4] = 0x00;
 		    if (net_to_net(sb, (struct sockaddr *)&baddr, netframe, 13)) {
 			fprintf(stderr, "sending UDP data (CAN Ping) error:%s \n", strerror(errno));
-		    } else if (verbose & !background) {
-			print_can_frame(NET_UDP_FORMAT_STRG, netframe);
-			printf("                replied CAN ping\n");
+		    } else {
+			print_can_frame(NET_UDP_FORMAT_STRG, netframe, verbose & !background);
+			if (verbose & !background)
+			    printf("                replied CAN ping\n");
 		    }
 		}
 	    }
@@ -480,12 +477,11 @@ int main(int argc, char **argv) {
 			for (i = 0; i < n; i += 13) {
 			    /* check if we need to forward the message to CAN */
 			    if (!check_data(tcp_socket, &netframe[i])) {
-				ret = frame_to_can(sc, simple_can, &netframe[i]);
-				if ((ret == 0) && (verbose && !background)) {
+				if ((ret = frame_to_can(sc, simple_can, &netframe[i])) == 0) {
 				    if (i > 0)
-					print_can_frame(TCP_FORMATS_STRG, &netframe[i]);
+					print_can_frame(TCP_FORMATS_STRG, &netframe[i], verbose & !background);
 				    else
-					print_can_frame(TCP_FORMAT_STRG, &netframe[i]);
+					print_can_frame(TCP_FORMAT_STRG, &netframe[i], verbose & !background);
 				}
 			    }
 			}
