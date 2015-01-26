@@ -269,7 +269,7 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
         return -1;
     }
 
-    if (flags && COMPRESSED) {
+    if (flags & COMPRESSED) {
         /* we need some more bytes to prepare send data (includes inflated file size and padding)    */
         /* assuming that out[CHUNK] is large enough to compress the whole file, otherwise don't send */
         out = (uint8_t *)calloc(CHUNK + 12, sizeof(uint8_t));
