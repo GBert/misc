@@ -30,19 +30,17 @@
 #include <linux/can.h>
 
 #define MAXDG   4096		/* maximum datagram size */
-#define MAXUDP  16		/* maximum datagram size */
 
 unsigned char udpframe[MAXDG];
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -l <port> -d <port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.0\n\n");
+    fprintf(stderr, "   Version 1.01\n\n");
     fprintf(stderr, "         -l <port>           listening UDP port for the server - default 7654\n");
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default 7655\n");
     fprintf(stderr, "         -b <broadcast_addr> broadcast address - default 255.255.255.255\n");
     fprintf(stderr, "         -i <can int>        can interface - default can0\n");
     fprintf(stderr, "         -f                  running in foreground\n\n");
-    fprintf(stderr, "         -v                  verbose output (in forground)\n\n");
 }
 
 void print_can_frame(struct can_frame *frame, int verbose) {
@@ -76,8 +74,7 @@ int main(int argc, char **argv) {
 
     int local_port = 7654;
     int destination_port = 7655;
-    int verbose = 0;
-    int background = 1;
+    int foreground = 0;
     uint32_t canid = 0;
     const int on = 1;
     const char broadcast_address[] = "255.255.255.255";
@@ -102,7 +99,7 @@ int main(int argc, char **argv) {
 	exit(1);
     }
 
-    while ((opt = getopt(argc, argv, "l:d:b:i:hfv?")) != -1) {
+    while ((opt = getopt(argc, argv, "l:d:b:i:hf?")) != -1) {
 	switch (opt) {
 	case 'l':
 	    local_port = strtoul(optarg, (char **)NULL, 10);
@@ -126,11 +123,8 @@ int main(int argc, char **argv) {
 	    strcpy(ifr.ifr_name, optarg);
 	    break;
 
-	case 'v':
-	    verbose = 1;
-	    break;
 	case 'f':
-	    background = 0;
+	    foreground = 1;
 	    break;
 
 	case 'h':
@@ -186,7 +180,7 @@ int main(int argc, char **argv) {
 	exit(1);
     }
 
-    if (background) {
+    if (!foreground) {
 	/* Fork off the parent process */
 	pid = fork();
 	if (pid < 0) {
@@ -224,7 +218,7 @@ int main(int argc, char **argv) {
 		if (sendto(sb, udpframe, 13, 0, (struct sockaddr *)&baddr, sizeof(baddr)) != 13)
 		    fprintf(stderr, "UDP write error: %s\n", strerror(errno));
 
-		print_can_frame(&frame, verbose & !background);
+		print_can_frame(&frame, foreground);
 	    }
 	}
 	/* received a UDP packet */
@@ -245,7 +239,7 @@ int main(int argc, char **argv) {
 		if (write(sc, &frame, sizeof(frame)) != sizeof(frame))
 		    fprintf(stderr, "CAN write error: %s\n", strerror(errno));
 
-		print_can_frame(&frame, verbose & !background);
+		print_can_frame(&frame, foreground);
 	    }
 	}
     }
