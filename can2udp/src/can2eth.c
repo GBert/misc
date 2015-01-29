@@ -51,9 +51,8 @@ void print_can_frame(struct can_frame *frame, int verbose) {
 	else
 	    printf("->CAN>UDP CANID 0x%03X       ", frame->can_id);
 	printf(" [%d]", frame->can_dlc);
-	for (i = 0; i < frame->can_dlc; i++) {
+	for (i = 0; i < frame->can_dlc; i++)
 	    printf(" %02x", frame->data[i]);
-	}
 	printf("\n");
     }
 }
@@ -91,11 +90,10 @@ int main(int argc, char **argv) {
     baddr.sin_port = htons(destination_port);
     s = inet_pton(AF_INET, broadcast_address, &baddr.sin_addr);
     if (s <= 0) {
-	if (s == 0) {
+	if (s == 0)
 	    fprintf(stderr, "UDP IP invalid\n");
-	} else {
+	else
 	    fprintf(stderr, "invalid address family\n");
-	}
 	exit(1);
     }
 
