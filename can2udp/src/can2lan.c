@@ -22,6 +22,7 @@ char *CAN_TCP_FORMAT_STRG  = "->CAN>TCP    CANID 0x%06X   [%d]";
 char *NET_UDP_FORMAT_STRG  = "      UDP->  CANID 0x%06X   [%d]";
 
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[] = { 0x00, 0x36, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
+unsigned char MS1_FAKE_PING[] = { 0x0C, 0x00, 0x07, 0x82, 0x08, 0x00, 0x00, 0x00, 0x02, 0x00, 0x04, 0xC6, 0xA7 };
 
 char config_dir[MAXLINE];
 char config_file[MAXLINE];
@@ -63,7 +64,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 
     memcpy(&canid, netframe, 4);
     canid = ntohl(canid);
-    switch (canid & 0x00FF0000UL) {
+    switch (canid & 0xFFFF0000UL) {
     case (0x00400000UL):	/* config data */
 	ret = 1;
 	strncpy(config_name, (char *)&netframe[5], 8);
@@ -112,6 +113,12 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 	    send_tcp_config_data("fahrstrassen.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 	    break;
 	}
+        break;
+    case (0x0C000000UL):	/* MS1 PING */
+	ret = 0;
+	printf("                sending faked MS1 ping response\n");
+	memcpy(netframe, MS1_FAKE_PING,13);
+        break;
     }
     return ret;
 }
