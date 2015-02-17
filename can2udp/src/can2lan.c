@@ -32,20 +32,19 @@ int verbose = 0;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 0.95\n\n");
+    fprintf(stderr, "   Version 0.97\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default 15730\n");
     fprintf(stderr, "         -b <broadcast_addr> broadcast address - default 255.255.255.255\n");
     fprintf(stderr, "         -i <can int>        CAN interface - default can0\n");
-    fprintf(stderr, "         -s                  use simple CAN interface\n");
     fprintf(stderr, "         -f                  running in foreground\n\n");
     fprintf(stderr, "         -v                  verbose output (in foreground)\n\n");
 }
 
-int send_magic_start_60113_frame(int can_socket, int simple_can) {
-    if (frame_to_can(can_socket, simple_can, M_GLEISBOX_MAGIC_START_SEQUENCE) < 0) {
+int send_magic_start_60113_frame(int can_socket) {
+    if (frame_to_can(can_socket, M_GLEISBOX_MAGIC_START_SEQUENCE) < 0) {
 	fprintf(stderr, "can't send CAN magic 60113 start sequence\n");
 	return -1;
     } else {
@@ -144,7 +143,6 @@ int main(int argc, char **argv) {
     int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, tcp_client[MAX_TCP_CONN];;
     struct can_frame frame;
     char timestamp[16];
-    struct termios term_attr;
 
     int sa, sc, sb, st, tcp_socket;	/* UDP incoming socket , CAN socket, UDP broadcast socket, TCP socket */
     struct sockaddr_in saddr, baddr, tcp_addr;
@@ -163,10 +161,8 @@ int main(int argc, char **argv) {
     int destination_port = 15730;
     int background = 1;
     const int on = 1;
-    int simple_can = 0;
     char udp_dst_address[] = "255.255.255.255";
     char buffer[64];
-    int ec_index = 0;
     page_name = calloc(64, sizeof(char *));
 
 
@@ -174,7 +170,7 @@ int main(int argc, char **argv) {
 
     config_file[0] = '\0';
 
-    while ((opt = getopt(argc, argv, "c:u:t:d:b:i:svhf?")) != -1) {
+    while ((opt = getopt(argc, argv, "c:u:t:d:b:i:vhf?")) != -1) {
 	switch (opt) {
 	case 'c':
 	    if (strlen(optarg) < MAXLINE) {
@@ -203,9 +199,6 @@ int main(int argc, char **argv) {
 	    break;
 	case 'i':
 	    strcpy(ifr.ifr_name, optarg);
-	    break;
-	case 's':
-	    simple_can = 1;
 	    break;
 	case 'v':
 	    verbose = 1;
@@ -295,57 +288,26 @@ int main(int argc, char **argv) {
     for (i = 0; i < MAX_TCP_CONN; i++)
 	tcp_client[i] = -1;	/* -1 indicates available entry */
 
-    if (simple_can) {
-	/* prepare simple CAN interface */
-	if ((sc = open(ifr.ifr_name, O_RDWR | O_TRUNC | O_NONBLOCK | O_NOCTTY)) < 0) {
-	    fprintf(stderr, "opening CAN interface error: %s\n", strerror(errno));
-	    exit(1);
-	} else {
-	    bzero(&term_attr, sizeof(term_attr));
-	    if (tcgetattr(sc, &term_attr) < 0) {
-		fprintf(stderr, "can't get terminal settings error: %s\n", strerror(errno));
-		exit(1);
-	    }
-	    term_attr.c_cflag = CS8 | CRTSCTS | CLOCAL | CREAD;
-	    term_attr.c_iflag = 0;
-	    term_attr.c_oflag = 0;
-	    term_attr.c_lflag = NOFLSH;
-	    if (cfsetospeed(&term_attr, TERM_SPEED) < 0) {
-		fprintf(stderr, "CAN interface ospeed error: %s\n", strerror(errno));
-		exit(1);
-	    }
-	    if (cfsetispeed(&term_attr, TERM_SPEED) < 0) {
-		fprintf(stderr, "CAN interface ispeed error: %s\n", strerror(errno));
-		exit(1);
-	    }
-	    if (tcsetattr(sc, TCSANOW, &term_attr) < 0) {
-		fprintf(stderr, "CAN interface set error: %s\n", strerror(errno));
-		exit(1);
-	    }
-	}
+    /* prepare CAN socket */
+    bzero(&caddr, sizeof(caddr));
+    if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
+	fprintf(stderr, "creating CAN socket error: %s\n", strerror(errno));
+	exit(1);
+    }
+    caddr.can_family = AF_CAN;
+    if (ioctl(sc, SIOCGIFINDEX, &ifr) < 0) {
+	fprintf(stderr, "setup CAN error: %s\n", strerror(errno));
+	exit(1);
+    }
+    caddr.can_ifindex = ifr.ifr_ifindex;
 
-    } else {
-	/* prepare CAN socket */
-	bzero(&caddr, sizeof(caddr));
-	if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
-	    fprintf(stderr, "creating CAN socket error: %s\n", strerror(errno));
-	    exit(1);
-	}
-	caddr.can_family = AF_CAN;
-	if (ioctl(sc, SIOCGIFINDEX, &ifr) < 0) {
-	    fprintf(stderr, "setup CAN error: %s\n", strerror(errno));
-	    exit(1);
-	}
-	caddr.can_ifindex = ifr.ifr_ifindex;
-
-	if (bind(sc, (struct sockaddr *)&caddr, caddrlen) < 0) {
-	    fprintf(stderr, "binding CAN socket error: %s\n", strerror(errno));
-	    exit(1);
-	}
+    if (bind(sc, (struct sockaddr *)&caddr, caddrlen) < 0) {
+	fprintf(stderr, "binding CAN socket error: %s\n", strerror(errno));
+	exit(1);
     }
 
     /* start Maerklin 60113 box */
-    send_magic_start_60113_frame(sc, simple_can);
+    send_magic_start_60113_frame(sc);
 
     /* daemonize the process if requested */
     if (background) {
@@ -375,35 +337,12 @@ int main(int argc, char **argv) {
 
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &read_fds)) {
-	    if (simple_can) {
-		/* copy the CAN frame to UDP broadcast and all connected TCP clients */
-		while ((ret = read(sc, buffer, sizeof(buffer))) > 0) {
-		    for (int eci = 0; eci < ret; eci++) {
-			ec_frame[ec_index++] = (unsigned char)buffer[eci];
-			if (ec_index == 13) {
-			    /* we got a complete CAN frame */
-			    ec_index = 0;
-			    if (net_to_net(sb, (struct sockaddr *)&baddr, ec_frame, 13)) {
-				fprintf(stderr, "sending UDP data error:%s \n", strerror(errno));
-			    } else
-				print_can_frame(UDP_FORMAT_STRG, ec_frame, verbose & !background);
-			    /* send CAN frame to all connected TCP clients */
-			    /* TODO: need all clients the packets ? */
-			    for (i = 0; i <= max_tcp_i; i++) {
-				if ((tcp_socket = tcp_client[i]) < 0)
-				    continue;
-				net_to_net(tcp_socket, (struct sockaddr *)&tcp_addr, ec_frame, 13);
-				print_can_frame(CAN_TCP_FORMAT_STRG, ec_frame, verbose & !background);
-			    }
-			}
-		    }
-		}
 	    /* reading via SockatCAN */
-	    } else if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
+	    if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
 		fprintf(stderr, "reading CAN frame error: %s\n", strerror(errno));
 	    }
 	    /* if CAN Frame is EFF do it */
-	    else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
+	    if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		/* send UDP frame */
 		frame_to_net(sb, (struct sockaddr *)&baddr, (struct can_frame *)&frame);
 		print_can_frame(UDP_FORMAT_STRG, netframe, verbose &!background);
@@ -421,7 +360,7 @@ int main(int argc, char **argv) {
 	if (FD_ISSET(sa, &read_fds)) {
 	    if (read(sa, netframe, MAXDG) == 13) {
 		/* send packet on CAN */
-		ret = frame_to_can(sc, simple_can, netframe);
+		ret = frame_to_can(sc, netframe);
 		print_can_frame(NET_UDP_FORMAT_STRG, netframe, verbose & !background);
 		memcpy(&canid, netframe, 4);
 		canid = ntohl(canid);
@@ -497,7 +436,7 @@ int main(int argc, char **argv) {
 			for (i = 0; i < n; i += 13) {
 			    /* check if we need to forward the message to CAN */
 			    if (!check_data(tcp_socket, &netframe[i])) {
-				if ((ret = frame_to_can(sc, simple_can, &netframe[i])) == 0) {
+				if ((ret = frame_to_can(sc, &netframe[i])) == 0) {
 				    if (i > 0)
 					print_can_frame(TCP_FORMATS_STRG, &netframe[i], verbose & !background);
 				    else

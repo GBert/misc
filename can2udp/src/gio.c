@@ -166,7 +166,7 @@ int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *fr
     return 0;
 }
 
-int frame_to_can(int can_socket, int simple_can, unsigned char *netframe) {
+int frame_to_can(int can_socket, unsigned char *netframe) {
     uint32_t canid;
     struct can_frame frame;
     /* Maerklin TCP/UDP Format: always 13 bytes
@@ -174,14 +174,6 @@ int frame_to_can(int can_socket, int simple_can, unsigned char *netframe) {
      *   byte 4      DLC
      *   byte 5 - 12 CAN data
      */
-    if (simple_can) {
-        if (write(can_socket, netframe, 13) != 13) {
-            fprintf(stderr, "%s: error sending CAN frame: %s\n", __func__, strerror(errno));
-            return -1;
-        }
-        return 0;
-    }
-
     bzero(&frame,sizeof(frame));
     memcpy(&canid, netframe, 4);
     /* CAN uses (network) big endian format */
