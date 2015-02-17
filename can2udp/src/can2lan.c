@@ -22,11 +22,13 @@ char *CAN_TCP_FORMAT_STRG  = "->CAN>TCP    CANID 0x%06X   [%d]";
 char *NET_UDP_FORMAT_STRG  = "      UDP->  CANID 0x%06X   [%d]";
 
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[] = { 0x00, 0x36, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
-unsigned char MS1_FAKE_PING[] = { 0x0C, 0x00, 0x07, 0x82, 0x08, 0x03, 0x00, 0x00, 0x02, 0x00, 0x04, 0xC6, 0xA7 };
+unsigned char MS1_FAKE_PING[] = { 0x0C, 0x00, 0x07, 0x82, 0x08, 0x03, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00 };
 
 char config_dir[MAXLINE];
 char config_file[MAXLINE];
 char **page_name;
+uint32_t ms1_id;
+int verbose = 0;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
@@ -42,7 +44,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -v                  verbose output (in foreground)\n\n");
 }
 
-int send_magic_start_60113_frame(int can_socket, int simple_can, int verbose) {
+int send_magic_start_60113_frame(int can_socket, int simple_can) {
     if (frame_to_can(can_socket, simple_can, M_GLEISBOX_MAGIC_START_SEQUENCE) < 0) {
 	fprintf(stderr, "can't send CAN magic 60113 start sequence\n");
 	return -1;
@@ -114,10 +116,22 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 	    break;
 	}
         break;
+    /* looking for CS1/MS1 protocol */
+    case (0x1C030000UL):
+	/* cut out MS1 id */
+	ret = 0;
+        if (canid == 0x1C0384FE) {
+	    memcpy(&ms1_id, &netframe[5], 4);
+	    if (verbose)
+		printf("                got MS1 ID : 0x%08X\n", ntohl(ms1_id));
+	}
+        break;
     case (0x0C000000UL):	/* MS1 PING */
 	ret = 0;
-	printf("                sending faked MS1 ping response\n");
-	memcpy(netframe, MS1_FAKE_PING,13);
+	if (verbose)
+	    printf("                sending faked MS1 ping response\n");
+	memcpy(netframe, MS1_FAKE_PING, 13);
+	memcpy(&netframe[9], &ms1_id, 4);
         break;
     }
     return ret;
@@ -147,7 +161,6 @@ int main(int argc, char **argv) {
     int local_udp_port = 15731;
     int local_tcp_port = 15731;
     int destination_port = 15730;
-    int verbose = 0;
     int background = 1;
     const int on = 1;
     int simple_can = 0;
@@ -332,7 +345,7 @@ int main(int argc, char **argv) {
     }
 
     /* start Maerklin 60113 box */
-    send_magic_start_60113_frame(sc, simple_can, verbose);
+    send_magic_start_60113_frame(sc, simple_can);
 
     /* daemonize the process if requested */
     if (background) {
