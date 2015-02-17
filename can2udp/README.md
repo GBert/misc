@@ -30,7 +30,6 @@ Usage: can2lan -c \<config_dir\> -u \<udp_port\> -t \<tcp_port\> -d \<udp_dest_p
          -d \<port\>           destination UDP port for the server - default 15730
          -b \<broadcast_addr\> broadcast address - default 255.255.255.255
          -i \<can int\>        can interface - default can0
-         -s                  use simple CAN interface
          -f                  running in foreground
          -v                  verbose output (in foreground)
 </pre></code>
