@@ -165,7 +165,6 @@ int main(int argc, char **argv) {
     char buffer[64];
     page_name = calloc(64, sizeof(char *));
 
-
     strcpy(ifr.ifr_name, "can0");
 
     config_file[0] = '\0';

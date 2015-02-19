@@ -64,6 +64,12 @@ struct cs2_config {
 };
 #endif
 
+struct id_node {
+    uint32_t id;
+    uint32_t master_handle;
+    struct id_node *next;
+};
+
 static const int MAXPENDING = 16;	/* max outstanding tcp connections */
 unsigned char netframe[MAXDG];
 unsigned char ec_frame[13];
