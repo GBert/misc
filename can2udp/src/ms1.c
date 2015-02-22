@@ -1,15 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
+#include "can2lan.h"
 
-struct id_node {
-    uint32_t id;
-    uint32_t master_handle;
-    struct id_node *next;
-};
+extern struct id_node *ms1_root_handle;
 
-struct id_node *ms1_root_handle=NULL;
- 
 int ms1_print_handles(struct id_node *node) {
     struct id_node *my_node = node;
     while (my_node != NULL) {
@@ -49,17 +41,5 @@ int ms1_add_id(struct id_node *root_node, uint32_t id, uint32_t master_handle) {
 	    return -1;
 	}
     }
-    return 0;
-}
-
-int main() {
-    ms1_add_id(ms1_root_handle, 0x01020304, 0x000882);
-    ms1_add_id(ms1_root_handle, 0x04050607, 0x000892);
-    ms1_add_id(ms1_root_handle, 0x04050607, 0x000892);
-    ms1_add_id(ms1_root_handle, 0x08090A0B, 0x0008A2);
-    ms1_add_id(ms1_root_handle, 0x01020304, 0x000882);
-    ms1_add_id(ms1_root_handle, 0x01020304, 0x000882);
-    ms1_print_handles(ms1_root_handle);
-
     return 0;
 }

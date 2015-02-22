@@ -18,8 +18,8 @@ can4lnx2udp: can4lnx2udp.o
 scan2lan: crc-ccitt.o sgio.o scan2lan.o
 	$(CC) $(CFLAGS) -o scan2lan crc-ccitt.o sgio.o scan2lan.o -lz
 
-can2lan: crc-ccitt.o gio.o can2lan.o
-	$(CC) $(CFLAGS) -o can2lan crc-ccitt.o gio.o can2lan.o -lz
+can2lan: crc-ccitt.o gio.o can2lan.o ms1.o
+	$(CC) $(CFLAGS) -o can2lan crc-ccitt.o gio.o can2lan.o ms1.o -lz
 
 virtual_gfp: virtual_gfp.o
 	$(CC) $(CFLAGS) -o virtual_gfp virtual_gfp.o

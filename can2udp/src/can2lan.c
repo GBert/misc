@@ -29,6 +29,7 @@ char config_file[MAXLINE];
 char **page_name;
 uint32_t ms1_id;
 int verbose = 0;
+struct id_node *ms1_root_handle=NULL;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
