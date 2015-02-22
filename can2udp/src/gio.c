@@ -189,7 +189,7 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
         return -1;
     }
     /* TODO : it seems Gleisbox needs a short break after every CAN message */
-    usleep(500);
+    usleep(2000);
     return 0;
 }
 
