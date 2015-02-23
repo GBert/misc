@@ -22,6 +22,7 @@ char *CAN_TCP_FORMAT_STRG  = "->CAN>TCP    CANID 0x%08X   [%d]";
 char *NET_UDP_FORMAT_STRG  = "      UDP->  CANID 0x%08X   [%d]";
 
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[] = { 0x00, 0x36, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
+unsigned char M_PING_RESPONSE[] = { 0x00, 0x30, 0x00, 0x00, 0x00 };
 
 char config_dir[MAXLINE];
 char config_file[MAXLINE];
@@ -376,15 +377,11 @@ int main(int argc, char **argv) {
 		memcpy(&canid, netframe, 4);
 		canid = ntohl(canid);
 		/* answer to encapsulated CAN ping from LAN to LAN */
-		if (((canid & 0x00FF0000UL) == 0x00310000UL)
+		if (((canid & 0xFFFF0000UL) == 0x00310000UL)
 		    && (netframe[11] = 0xEE) && (netframe[12] = 0xEE)) {
 		    if (verbose & !background)
 			printf("                received CAN ping\n");
-		    netframe[0] = 0x00;
-		    netframe[1] = 0x30;
-		    netframe[2] = 0x00;
-		    netframe[3] = 0x00;
-		    netframe[4] = 0x00;
+		    memcpy(netframe, M_PING_RESPONSE, 5);
 		    if (net_to_net(sb, (struct sockaddr *)&baddr, netframe, 13)) {
 			fprintf(stderr, "sending UDP data (CAN Ping) error:%s \n", strerror(errno));
 		    } else {
