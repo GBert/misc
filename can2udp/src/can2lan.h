@@ -8,8 +8,6 @@
  * ----------------------------------------------------------------------------
  */
 
-/* Thanks to Stefan Krauss and the SocketCAN team
- */
 #ifndef _CAN2LAN_H_
 #define _CAN2LAN_H_
 #include <stdio.h>
