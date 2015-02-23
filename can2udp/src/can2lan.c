@@ -139,7 +139,8 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 	/* mark CAN frame to send */
 	ret = 0;
 	/* get the next slave node id from fifo */
-	if ((ms1_node_buffer_out(&slave_node)) < -1);
+	slave_node=0;
+	if ((ms1_node_buffer_out(&slave_node)) < 0)
 	    fprintf(stderr, "can't get MS1 slave id\n");
 
 	if (verbose)
@@ -148,8 +149,8 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 	if ((ms1_node = ms1_search_for_slave(ms1_root_handle, slave_node)) != NULL) {
 	    memcpy(&netframe[9], &ms1_node->id, 4);
 	    if (verbose)
-		printf("                sending faked MS1 master response : \
-			slave id 0x%02X MS1 id 0x%08X\n", ntohl(ms1_node->id), ms1_node->id);
+		printf("                sending faked MS1 master response : "
+			"slave id 0x%02X MS1 id 0x%08X\n", ms1_node->slave_node, ntohl(ms1_node->id));
 	    /* fix data[0] response */
 	    netframe[5] = 0x03;
 	}
