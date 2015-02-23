@@ -22,12 +22,10 @@ char *CAN_TCP_FORMAT_STRG  = "->CAN>TCP    CANID 0x%08X   [%d]";
 char *NET_UDP_FORMAT_STRG  = "      UDP->  CANID 0x%08X   [%d]";
 
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[] = { 0x00, 0x36, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
-unsigned char MS1_FAKE_PING[] = { 0x0C, 0x00, 0x07, 0x82, 0x08, 0x03, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00 };
 
 char config_dir[MAXLINE];
 char config_file[MAXLINE];
 char **page_name;
-uint32_t ms1_id;
 int verbose = 0;
 struct id_node *ms1_root_handle=NULL;
 
@@ -63,6 +61,9 @@ int check_data(int tcp_socket, unsigned char *netframe) {
     char gbs_name[MAXLINE];
     gbs_name[0] = '\0';
     int ret=0;
+    uint32_t ms1_id;
+    uint8_t slave_node;
+    struct id_node *ms1_node;
 
     memcpy(&canid, netframe, 4);
     canid = ntohl(canid);
@@ -118,20 +119,30 @@ int check_data(int tcp_socket, unsigned char *netframe) {
         break;
     /* looking for CS1/MS1 protocol */
     case (0x1C030000UL):
-	/* cut out MS1 id */
 	ret = 0;
         if (canid == 0x1C0384FE) {
+	    /* cut out MS1 id */
 	    memcpy(&ms1_id, &netframe[5], 4);
+	    memcpy(&slave_node, &netframe[11], 1);
 	    if (verbose)
-		printf("                got MS1 ID : 0x%08X\n", ntohl(ms1_id));
+		printf("                got MS1 ID : 0x%08X slave node id:0x%02X\n", ntohl(ms1_id), slave_node);
+	    ms1_add_id(ms1_root_handle, ms1_id, slave_node);
 	}
         break;
-    case (0x0C000000UL):	/* MS1 PING */
+    /* fake cyclic MS1 slave monitoring response */
+    case (0x0C000000UL):
 	ret = 0;
-	if (verbose)
-	    printf("                sending faked MS1 ping response\n");
-	memcpy(netframe, MS1_FAKE_PING, 13);
-	memcpy(&netframe[9], &ms1_id, 4);
+	/* get slave node id */
+	memcpy(&slave_node, &netframe[3], 1);
+
+	if ((ms1_node = ms1_search_for_slave(ms1_root_handle, slave_node)) != NULL) {
+	    memcpy(&netframe[9], &ms1_node->id, 4);
+	    if (verbose)
+		printf("                sending faked MS1 ping response : \
+			slave id 0x%02X MS1 id 0x%08X\n", ntohl(ms1_node->id), ms1_node->id);
+	    /* fix response */
+	    netframe[5] = 0x03;
+	}
         break;
     }
     return ret;

@@ -66,7 +66,7 @@ struct cs2_config {
 
 struct id_node {
     uint32_t id;
-    uint32_t master_handle;
+    uint8_t slave_node;
     struct id_node *next;
 };
 
@@ -74,6 +74,7 @@ static const int MAXPENDING = 16;	/* max outstanding tcp connections */
 unsigned char netframe[MAXDG];
 unsigned char ec_frame[13];
 
+/* prototypes */
 uint8_t * read_config_file(char *filename, char *config_dir, uint32_t *nbytes);
 int time_stamp(char *timestamp);
 char **read_track_file(char *filename, char **page_name);
@@ -82,6 +83,10 @@ void print_can_frame(char *format_string, unsigned char *netframe, int verbose);
 int net_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *netframe, int length);
 int frame_to_can(int can_socket, unsigned char *netframe);
 int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *frame);
+int ms1_print_handles(struct id_node *node);
+struct id_node *ms1_search_for_id(struct id_node *node, uint32_t id);
+struct id_node *ms1_search_for_slave(struct id_node *node, uint8_t slave_node);
+int ms1_add_id(struct id_node *root_node, uint32_t id, uint8_t slave_node);
 uint16_t CRCCCITT(uint8_t *data, size_t length, uint16_t seed);
 #endif /* _CAN2LAN_H_ */
 
