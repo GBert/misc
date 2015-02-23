@@ -71,6 +71,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
     canid = ntohl(canid);
     switch (canid & 0xFFFF0000UL) {
     case (0x00400000UL):	/* config data */
+	/* marke CAN frame not to send */
 	ret = 1;
 	strncpy(config_name, (char *)&netframe[5], 8);
 	config_name[8] = '\0';
@@ -121,20 +122,23 @@ int check_data(int tcp_socket, unsigned char *netframe) {
         break;
     /* looking for CS1/MS1 protocol */
     case (0x1C030000UL):
+	/* mark CAN frame to send */
 	ret = 0;
         if (canid == 0x1C0384FE) {
-	    /* cut out MS1 id */
+	    /* cut out MS1 id & slave node */
 	    memcpy(&ms1_id, &netframe[5], 4);
 	    memcpy(&slave_node, &netframe[11], 1);
 	    if (verbose)
 		printf("                got MS1 ID : 0x%08X slave node id:0x%02X\n", ntohl(ms1_id), slave_node);
+	    /* save MS1 id and given slave id */
 	    ms1_add_id(ms1_root_handle, ms1_id, slave_node);
 	}
         break;
     /* fake cyclic MS1 slave monitoring response */
     case (0x0C000000UL):
+	/* mark CAN frame to send */
 	ret = 0;
-	/* get a slave node id */
+	/* get the next slave node id from fifo */
 	if ((ms1_node_buffer_out(&slave_node)) < -1);
 	    fprintf(stderr, "can't get MS1 slave id\n");
 
@@ -146,7 +150,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 	    if (verbose)
 		printf("                sending faked MS1 master response : \
 			slave id 0x%02X MS1 id 0x%08X\n", ntohl(ms1_node->id), ms1_node->id);
-	    /* fix response */
+	    /* fix data[0] response */
 	    netframe[5] = 0x03;
 	}
         break;
