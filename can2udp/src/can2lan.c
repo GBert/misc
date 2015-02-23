@@ -29,6 +29,7 @@ char config_file[MAXLINE];
 char **page_name;
 int verbose = 0;
 struct id_node *ms1_root_handle=NULL;
+struct MS1_Node_Buffer ms1_node_buffer;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
@@ -133,13 +134,17 @@ int check_data(int tcp_socket, unsigned char *netframe) {
     /* fake cyclic MS1 slave monitoring response */
     case (0x0C000000UL):
 	ret = 0;
-	/* get slave node id */
-	memcpy(&slave_node, &netframe[3], 1);
+	/* get a slave node id */
+	if ((ms1_node_buffer_out(&slave_node)) < -1);
+	    fprintf(stderr, "can't get MS1 slave id\n");
+
+	if (verbose)
+		printf("                search for MS1 ID of slave node: 0x%02X\n", slave_node);
 
 	if ((ms1_node = ms1_search_for_slave(ms1_root_handle, slave_node)) != NULL) {
 	    memcpy(&netframe[9], &ms1_node->id, 4);
 	    if (verbose)
-		printf("                sending faked MS1 ping response : \
+		printf("                sending faked MS1 master response : \
 			slave id 0x%02X MS1 id 0x%08X\n", ntohl(ms1_node->id), ms1_node->id);
 	    /* fix response */
 	    netframe[5] = 0x03;
@@ -147,6 +152,23 @@ int check_data(int tcp_socket, unsigned char *netframe) {
         break;
     }
     return ret;
+}
+
+/* this is the hook to check data from CAN interface */
+int check_can_frame(unsigned char *netframe) {
+    uint32_t canid;
+    uint8_t slave_node;
+    memcpy(&canid, netframe, 4);
+    canid = ntohl(canid);
+    /* check for cyclic MS1 slave monitor */
+    if ((canid & 0xFFFF0000UL) == 0x0C000000UL) {
+	memcpy(&slave_node, &netframe[3], 1);
+	if ((ms1_node_buffer_in(slave_node)) < 0)
+	    fprintf(stderr, "can't store MS1 slave node: 0x%02X\n", slave_node);
+	if (verbose)
+		printf("                put MS1 slave node: 0x%02X into FIFO\n", slave_node);
+    }
+    return 0;
 }
 
 int main(int argc, char **argv) {
@@ -228,6 +250,9 @@ int main(int argc, char **argv) {
 	    exit(1);
 	}
     }
+
+    /* init MS1 slave id fifo */
+    ms1_node_buffer_init();
 
     /* read track file */
     if (config_dir[0] == 0) {
@@ -357,6 +382,7 @@ int main(int argc, char **argv) {
 	    if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		/* send UDP frame */
 		frame_to_net(sb, (struct sockaddr *)&baddr, (struct can_frame *)&frame);
+		check_can_frame(netframe);
 		print_can_frame(UDP_FORMAT_STRG, netframe, verbose &!background);
 		/* send CAN frame to all connected TCP clients */
 		/* TODO: need all clients the packets ? */

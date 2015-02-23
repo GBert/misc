@@ -70,6 +70,15 @@ struct id_node {
     struct id_node *next;
 };
 
+#define MS1_BUFFER_SIZE 8
+#define MS1_BUFFER_MASK (MS1_BUFFER_SIZE-1)
+
+struct MS1_Node_Buffer {
+    uint8_t data[MS1_BUFFER_SIZE];
+    uint8_t read;
+    uint8_t write;
+};
+
 static const int MAXPENDING = 16;	/* max outstanding tcp connections */
 unsigned char netframe[MAXDG];
 unsigned char ec_frame[13];
@@ -83,6 +92,9 @@ void print_can_frame(char *format_string, unsigned char *netframe, int verbose);
 int net_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *netframe, int length);
 int frame_to_can(int can_socket, unsigned char *netframe);
 int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *frame);
+void ms1_node_buffer_init(void);
+int ms1_node_buffer_in(uint8_t node);
+int ms1_node_buffer_out(uint8_t *node);
 int ms1_print_handles(struct id_node *node);
 struct id_node *ms1_search_for_id(struct id_node *node, uint32_t id);
 struct id_node *ms1_search_for_slave(struct id_node *node, uint8_t slave_node);

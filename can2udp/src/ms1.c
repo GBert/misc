@@ -1,7 +1,33 @@
 #include "can2lan.h"
 
+#define MS1_BUFFER_SIZE 8
+#define MS1_BUFFER_MASK (MS1_BUFFER_SIZE-1)
+
+extern struct MS1_Node_Buffer ms1_node_buffer;
+
 extern struct id_node *ms1_root_handle;
 extern int verbose;
+
+void ms1_node_buffer_init(void) {
+    bzero(&ms1_node_buffer, sizeof(struct MS1_Node_Buffer));
+}
+
+int ms1_node_buffer_in(uint8_t node) {
+    uint8_t next = (ms1_node_buffer.write + 1) & MS1_BUFFER_MASK;
+    if (ms1_node_buffer.read == next)
+	return -1;
+    ms1_node_buffer.data[ms1_node_buffer.write & MS1_BUFFER_MASK] = node;
+    ms1_node_buffer.write = next;
+    return 1;
+}
+
+int ms1_node_buffer_out(uint8_t * node) {
+    if (ms1_node_buffer.read == ms1_node_buffer.write)
+	return -1;
+    *node = ms1_node_buffer.data[ms1_node_buffer.read];
+    ms1_node_buffer.read = (ms1_node_buffer.read + 1) & MS1_BUFFER_MASK;
+    return 1;
+}
 
 int ms1_print_handles(struct id_node *node) {
     struct id_node *my_node = node;
