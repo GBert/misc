@@ -124,6 +124,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
     case (0x1C030000UL):
 	/* mark CAN frame to send */
 	ret = 0;
+#if 0
         if (canid == 0x1C0384FE) {
 	    /* cut out MS1 id & slave node */
 	    memcpy(&ms1_id, &netframe[5], 4);
@@ -133,11 +134,13 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 	    /* save MS1 id and given slave id */
 	    ms1_add_id(ms1_root_handle, ms1_id, slave_node);
 	}
+#endif
         break;
     /* fake cyclic MS1 slave monitoring response */
     case (0x0C000000UL):
 	/* mark CAN frame to send */
 	ret = 0;
+#if 0
 	/* get the next slave node id from fifo */
 	slave_node=0;
 	if ((ms1_node_buffer_out(&slave_node)) < 0)
@@ -154,6 +157,8 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 	    /* fix data[0] response */
 	    netframe[5] = 0x03;
 	}
+#endif
+	netframe[5] = 0x03;
         break;
     }
     return ret;
@@ -161,6 +166,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 
 /* this is the hook to check data from CAN interface */
 int check_can_frame(unsigned char *netframe) {
+#if 0
     uint32_t canid;
     uint8_t slave_node;
     memcpy(&canid, netframe, 4);
@@ -173,6 +179,7 @@ int check_can_frame(unsigned char *netframe) {
 	if (verbose)
 		printf("                put MS1 slave node: 0x%02X into FIFO\n", slave_node);
     }
+#endif
     return 0;
 }
 
