@@ -1,0 +1,184 @@
+[p LITE_MODE AUTOSTATIC PIC14 PIC14E ]
+[d version 1.1 ]
+[d edition pro ]
+[d chip 16F1704 ]
+[d frameptr 6 ]
+"4 /opt/microchip/xc8/v1.33/sources/common/abdiv.c
+[v ___abdiv __abdiv `(c  1 e 1 0 ]
+"4 /opt/microchip/xc8/v1.33/sources/common/abmod.c
+[v ___abmod __abmod `(c  1 e 1 0 ]
+"33 /opt/microchip/xc8/v1.33/sources/common/abtoft.c
+[v ___abtoft __abtoft `(f  1 e 3 0 ]
+"6 /opt/microchip/xc8/v1.33/sources/common/aldiv.c
+[v ___aldiv __aldiv `(l  1 e 4 0 ]
+"5 /opt/microchip/xc8/v1.33/sources/common/almod.c
+[v ___almod __almod `(l  1 e 4 0 ]
+"42 /opt/microchip/xc8/v1.33/sources/common/altoft.c
+[v ___altoft __altoft `(f  1 e 3 0 ]
+"6 /opt/microchip/xc8/v1.33/sources/common/atdiv.c
+[v ___atdiv __atdiv `(m  1 e 3 0 ]
+"6 /opt/microchip/xc8/v1.33/sources/common/atmod.c
+[v ___atmod __atmod `(m  1 e 3 0 ]
+"37 /opt/microchip/xc8/v1.33/sources/common/attoft.c
+[v ___attoft __attoft `(f  1 e 3 0 ]
+"6 /opt/microchip/xc8/v1.33/sources/common/awdiv.c
+[v ___awdiv __awdiv `(i  1 e 2 0 ]
+"6 /opt/microchip/xc8/v1.33/sources/common/awmod.c
+[v ___awmod __awmod `(i  1 e 2 0 ]
+"32 /opt/microchip/xc8/v1.33/sources/common/awtoft.c
+[v ___awtoft __awtoft `(f  1 e 3 0 ]
+"62 /opt/microchip/xc8/v1.33/sources/common/float.c
+[v ___ftpack __ftpack `(f  1 e 3 0 ]
+"86 /opt/microchip/xc8/v1.33/sources/common/ftadd.c
+[v ___ftadd __ftadd `(f  1 e 3 0 ]
+"4 /opt/microchip/xc8/v1.33/sources/common/ftge.c
+[v ___ftge __ftge `(b  1 e 0 0 ]
+"62 /opt/microchip/xc8/v1.33/sources/common/ftmul.c
+[v ___ftmul __ftmul `(f  1 e 3 0 ]
+"15 /opt/microchip/xc8/v1.33/sources/common/ftneg.c
+[v ___ftneg __ftneg `(f  1 e 3 0 ]
+"18 /opt/microchip/xc8/v1.33/sources/common/ftsub.c
+[v ___ftsub __ftsub `(f  1 e 3 0 ]
+"44 /opt/microchip/xc8/v1.33/sources/common/fttol.c
+[v ___fttol __fttol `(l  1 e 4 0 ]
+"4 /opt/microchip/xc8/v1.33/sources/common/lbdiv.c
+[v ___lbdiv __lbdiv `(uc  1 e 1 0 ]
+"4 /opt/microchip/xc8/v1.33/sources/common/lbmod.c
+[v ___lbmod __lbmod `(uc  1 e 1 0 ]
+"27 /opt/microchip/xc8/v1.33/sources/common/lbtoft.c
+[v ___lbtoft __lbtoft `(f  1 e 3 0 ]
+"6 /opt/microchip/xc8/v1.33/sources/common/lldiv.c
+[v ___lldiv __lldiv `(ul  1 e 4 0 ]
+"6 /opt/microchip/xc8/v1.33/sources/common/llmod.c
+[v ___llmod __llmod `(ul  1 e 4 0 ]
+"35 /opt/microchip/xc8/v1.33/sources/common/lltoft.c
+[v ___lltoft __lltoft `(f  1 e 3 0 ]
+"6 /opt/microchip/xc8/v1.33/sources/common/ltdiv.c
+[v ___ltdiv __ltdiv `(um  1 e 3 0 ]
+"6 /opt/microchip/xc8/v1.33/sources/common/ltmod.c
+[v ___ltmod __ltmod `(um  1 e 3 0 ]
+"30 /opt/microchip/xc8/v1.33/sources/common/lttoft.c
+[v ___lttoft __lttoft `(f  1 e 3 0 ]
+"6 /opt/microchip/xc8/v1.33/sources/common/lwdiv.c
+[v ___lwdiv __lwdiv `(ui  1 e 2 0 ]
+"6 /opt/microchip/xc8/v1.33/sources/common/lwmod.c
+[v ___lwmod __lwmod `(ui  1 e 2 0 ]
+"28 /opt/microchip/xc8/v1.33/sources/common/lwtoft.c
+[v ___lwtoft __lwtoft `(f  1 e 3 0 ]
+"15 /opt/microchip/xc8/v1.33/sources/common/Umul16.c
+[v ___wmul __wmul `(ui  1 e 2 0 ]
+"15 /opt/microchip/xc8/v1.33/sources/common/Umul24.c
+[v ___tmul __tmul `(um  1 e 3 0 ]
+"15 /opt/microchip/xc8/v1.33/sources/common/Umul32.c
+[v ___lmul __lmul `(ul  1 e 4 0 ]
+"4 /opt/microchip/xc8/v1.33/sources/common/Umul8.c
+[v ___bmul __bmul `(uc  1 e 1 0 ]
+"49 /opt/microchip/xc8/v1.33/sources/pic/ftdiv.c
+[v ___ftdiv __ftdiv `(f  1 e 3 0 ]
+"8 /home/eh2be5j/projekte/misc/stream-dcc/src-xc8/main.c
+[v _system_init system_init `(v  1 e 0 0 ]
+"37
+[v _timer_init timer_init `(v  1 e 0 0 ]
+"51
+[v _main main `(v  1 e 0 0 ]
+[s S87 . 1 `uc 1 IOCIF 1 0 :1:0 
+`uc 1 INTF 1 0 :1:1 
+`uc 1 TMR0IF 1 0 :1:2 
+`uc 1 IOCIE 1 0 :1:3 
+`uc 1 INTE 1 0 :1:4 
+`uc 1 TMR0IE 1 0 :1:5 
+`uc 1 PEIE 1 0 :1:6 
+`uc 1 GIE 1 0 :1:7 
+]
+"358 /opt/microchip/xc8/v1.33/include/pic16f1704.h
+[s S96 . 1 `uc 1 . 1 0 :2:0 
+`uc 1 T0IF 1 0 :1:2 
+`uc 1 . 1 0 :2:3 
+`uc 1 T0IE 1 0 :1:5 
+]
+[u S101 . 1 `S87 1 . 1 0 `S96 1 . 1 0 ]
+[v _INTCONbits INTCONbits `VES101  1 e 1 @11 ]
+[s S31 . 1 `uc 1 TMR1IF 1 0 :1:0 
+`uc 1 TMR2IF 1 0 :1:1 
+`uc 1 CCP1IF 1 0 :1:2 
+`uc 1 SSP1IF 1 0 :1:3 
+`uc 1 TXIF 1 0 :1:4 
+`uc 1 RCIF 1 0 :1:5 
+`uc 1 ADIF 1 0 :1:6 
+`uc 1 TMR1GIF 1 0 :1:7 
+]
+"531
+[s S40 . 1 `uc 1 . 1 0 :2:0 
+`uc 1 CCPIF 1 0 :1:2 
+]
+[u S43 . 1 `S31 1 . 1 0 `S40 1 . 1 0 ]
+[v _PIR1bits PIR1bits `VES43  1 e 1 @17 ]
+"705
+[v _TMR1L TMR1L `VEuc  1 e 1 @22 ]
+"724
+[v _TMR1H TMR1H `VEuc  1 e 1 @23 ]
+"743
+[v _T1CON T1CON `VEuc  1 e 1 @24 ]
+[s S120 . 1 `uc 1 T1GSS 1 0 :2:0 
+`uc 1 T1GVAL 1 0 :1:2 
+`uc 1 T1GGO_nDONE 1 0 :1:3 
+`uc 1 T1GSPM 1 0 :1:4 
+`uc 1 T1GTM 1 0 :1:5 
+`uc 1 T1GPOL 1 0 :1:6 
+`uc 1 TMR1GE 1 0 :1:7 
+]
+"834
+[s S128 . 1 `uc 1 T1GSS0 1 0 :1:0 
+`uc 1 T1GSS1 1 0 :1:1 
+]
+[u S131 . 1 `S120 1 . 1 0 `S128 1 . 1 0 ]
+[v _T1GCONbits T1GCONbits `VES131  1 e 1 @25 ]
+"1105
+[v _PIE1bits PIE1bits `VES43  1 e 1 @145 ]
+"1507
+[v _OSCCON OSCCON `VEuc  1 e 1 @153 ]
+"1683
+[v _ADCON0 ADCON0 `VEuc  1 e 1 @157 ]
+"1762
+[v _ADCON1 ADCON1 `VEuc  1 e 1 @158 ]
+"1808
+[v _ADCON2 ADCON2 `VEuc  1 e 1 @159 ]
+"1948
+[v _CM1CON0 CM1CON0 `VEuc  1 e 1 @273 ]
+"2004
+[v _CM1CON1 CM1CON1 `VEuc  1 e 1 @274 ]
+"2079
+[v _CM2CON0 CM2CON0 `VEuc  1 e 1 @275 ]
+"2135
+[v _CM2CON1 CM2CON1 `VEuc  1 e 1 @276 ]
+"2615
+[v _ANSELA ANSELA `VEuc  1 e 1 @396 ]
+"2659
+[v _ANSELC ANSELC `VEuc  1 e 1 @398 ]
+"5315
+[v _CCPR1L CCPR1L `VEuc  1 e 1 @657 ]
+"5334
+[v _CCPR1H CCPR1H `VEuc  1 e 1 @658 ]
+"5353
+[v _CCP1CON CCP1CON `VEuc  1 e 1 @659 ]
+"12256
+[v _LATA5 LATA5 `VEb  1 e 0 @2149 ]
+"13100
+[v _TRISA5 TRISA5 `VEb  1 e 0 @1125 ]
+"13112
+[v _TRISC5 TRISC5 `VEb  1 e 0 @1141 ]
+"51 /home/eh2be5j/projekte/misc/stream-dcc/src-xc8/main.c
+[v _main main `(v  1 e 0 0 ]
+{
+"62
+} 0
+"37
+[v _timer_init timer_init `(v  1 e 0 0 ]
+{
+"49
+} 0
+"8
+[v _system_init system_init `(v  1 e 0 0 ]
+{
+"35
+} 0
