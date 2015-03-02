@@ -438,7 +438,6 @@ static unsigned int cp210x_quantise_baudrate(unsigned int baud)
 		baud = 300;
 	else if (baud > 2000000)
 		baud = 2000000;
-	baud = 10000;
 	return baud;
 }
 

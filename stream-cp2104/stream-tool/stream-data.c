@@ -76,7 +76,8 @@ int main(int argc, char *argv[]) {
 	options(fduart, &oldfduart, &newfduart, speed);
 
 	memset(buffer, 0x55, 64);
-	fdwrite(fduart, buffer, 64);
+/*	for (int i = 0; i<= 10; i++) */
+	    fdwrite(fduart, buffer, 64);
 
 	tcflush(fduart, TCIFLUSH);
 	tcsetattr(fduart, TCSANOW, &oldfduart);
