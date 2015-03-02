@@ -52,9 +52,9 @@ int fdwrite(int fd, char *buf, int buflen) {
 }
 
 int main(int argc, char *argv[]) {
-	int fdcons = STDIN_FILENO, fduart;
+	int fduart;
 	int speed = 10000;
-	struct termios oldfdcons, newfdcons, oldfduart, newfduart;
+	struct termios oldfduart, newfduart;
 	char buffer[1024];
 
 	if (argc < 2) {
@@ -72,19 +72,14 @@ int main(int argc, char *argv[]) {
 		speed = strtoul(argv[1], (char **)NULL, 10);
 	}
 
-	options(fdcons, &oldfdcons, &newfdcons, speed);
 	options(fduart, &oldfduart, &newfduart, speed);
 
 	memset(buffer, 0x55, 64);
 	fdwrite(fduart, buffer, 64);
 
-	tcflush(fduart, TCIFLUSH);
-	tcsetattr(fduart, TCSANOW, &oldfduart);
+	/* tcflush(fduart, TCIFLUSH);
+	tcsetattr(fduart, TCSANOW, &oldfduart); */
 	close(fduart);
-
-	tcflush(fdcons, TCIFLUSH);
-	tcsetattr(fdcons, TCSANOW, &oldfdcons);
-	close(fdcons);
 
 	return 0;
 }
