@@ -96,14 +96,14 @@ int main(int argc, char *argv[]) {
     gpio = GPIO_0_OFF;
     ioctl(fduart, IOCTL_GPIOSET, &gpio);
 
-    memset(buffer, 0x15, 16);
+    memset(buffer, 0x55, 16);
 /*	for (int i = 0; i<= 10; i++) */
     fdwrite(fduart, buffer, 16);
 
     gpio = GPIO_0_ON;
     ioctl(fduart, IOCTL_GPIOSET, &gpio);
 
-    memset(buffer, 0x46, 16);
+    memset(buffer, 0x66, 16);
 /*	for (int i = 0; i<= 10; i++) */
     fdwrite(fduart, buffer, 16);
 
