@@ -106,6 +106,10 @@ int main(int argc, char *argv[]) {
 	gpio = GPIO_0_ON;
 	ioctl(fduart, IOCTL_GPIOSET, &gpio);
 
+	memset(buffer, 0x46, 16);
+/*	for (int i = 0; i<= 10; i++) */
+	    fdwrite(fduart, buffer, 64);
+
 	close(fduart);
 
 	return 0;
