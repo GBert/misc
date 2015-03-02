@@ -19,7 +19,7 @@ void options(int fd, struct termios *old, struct termios *new, int speed) {
         new->c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
         new->c_oflag &= ~(OPOST);
         new->c_cflag &= ~(CSIZE | PARENB);
-        new->c_cflag |= (CS8);
+        new->c_cflag |= (CS6);
         /* new->c_cflag |= (BOTHER); */
         new->c_cflag &= ~CBAUD;;
         new->c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
@@ -75,7 +75,8 @@ int main(int argc, char *argv[]) {
 	options(fduart, &oldfduart, &newfduart, speed);
 
 	memset(buffer, 0x55, 64);
-	fdwrite(fduart, buffer, 64);
+/*	for (int i = 0; i<= 10; i++) */
+	    fdwrite(fduart, buffer, 64);
 
 	/* tcflush(fduart, TCIFLUSH);
 	tcsetattr(fduart, TCSANOW, &oldfduart); */
