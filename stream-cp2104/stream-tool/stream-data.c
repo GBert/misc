@@ -1,14 +1,29 @@
-
 #include <termios.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/ioctl.h>
 #include <sys/signal.h>
 #include <sys/types.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
 #include <errno.h>
+
+/* CP2104 IOCTLs */
+#define IOCTL_GPIOGET	0x8000
+#define IOCTL_GPIOSET	0x8001
+/* CP2104 GPIO */
+#define GPIO_0_ON	0x00010001
+#define GPIO_0_OFF	0x00000001
+#define GPIO_1_ON	GPIO_0_ON << 1
+#define GPIO_1_OFF	GPIO_0_OFF << 1
+#define GPIO_2_ON	GPIO_0_ON << 2
+#define GPIO_2_OFF	GPIO_0_OFF << 2
+#define GPIO_3_ON	GPIO_0_ON << 3
+#define GPIO_3_OFF	GPIO_0_OFF << 3
+
 
 void options(int fd, struct termios *old, struct termios *new, int speed) {
 	fcntl(fd, F_SETFL, O_NONBLOCK | fcntl(fd, F_GETFL));
@@ -54,6 +69,7 @@ int fdwrite(int fd, char *buf, int buflen) {
 int main(int argc, char *argv[]) {
 	int fduart;
 	int speed = 10000;
+	uint32_t gpio;
 	struct termios oldfduart, newfduart;
 	char buffer[1024];
 
@@ -74,12 +90,22 @@ int main(int argc, char *argv[]) {
 
 	options(fduart, &oldfduart, &newfduart, speed);
 
-	memset(buffer, 0x15, 64);
+	/* reset GPIOs */
+	gpio = 0x0000000F;
+	ioctl(fduart, IOCTL_GPIOSET, &gpio);
+
+	gpio = GPIO_0_OFF;
+	ioctl(fduart, IOCTL_GPIOSET, &gpio);
+
+	memset(buffer, 0x15, 16);
 /*	for (int i = 0; i<= 10; i++) */
 	    fdwrite(fduart, buffer, 64);
 
 	/* tcflush(fduart, TCIFLUSH);
 	tcsetattr(fduart, TCSANOW, &oldfduart); */
+	gpio = GPIO_0_ON;
+	ioctl(fduart, IOCTL_GPIOSET, &gpio);
+
 	close(fduart);
 
 	return 0;
