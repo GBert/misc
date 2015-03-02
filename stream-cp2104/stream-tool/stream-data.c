@@ -19,7 +19,7 @@ void options(int fd, struct termios *old, struct termios *new, int speed) {
         new->c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
         new->c_oflag &= ~(OPOST);
         new->c_cflag &= ~(CSIZE | PARENB);
-        new->c_cflag |= (CS8);
+        new->c_cflag |= (CS6);
         /* new->c_cflag |= (BOTHER); */
         new->c_cflag &= ~CBAUD;;
         new->c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
