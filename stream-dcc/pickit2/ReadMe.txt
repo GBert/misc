@@ -25,7 +25,7 @@ http://www.eevblog.com/forum/microcontrollers/pickit-2-device-data-file-editor/
 +------------+-------------+
 |   Device   |  Device ID  |
 +------------+-------------+
-| PIC16F1703 |   0x3062    |
+| PIC16F1703 |   0x3061    |
 +------------+-------------+
 | PIC16F1704 |   0x3043    |
 +------------+-------------+
