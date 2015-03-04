@@ -8,9 +8,9 @@
 void system_init() {
   // switch off analog
   OSCCON = 0b11110000; // Configure oscillator
-           //1------- use PLL to get 32Mhz (system clock)
+           //1------- use PLL to get 4x8 Mhz (system clock)
            //-1110--- 8 MHz internal oscillator (instruction clock)
-           //------00 Oscillator selected with INTOSC
+           //------00 oscillator selected with INTOSC
   ANSELA  = 0;
   ANSELC  = 0;
   ADCON0  = 0;
@@ -39,8 +39,8 @@ void timer_init() {
           //00------ FOSC/4 as counting source
           //--11---- prescaler 1:8 (counting every us)
   T1GCONbits.TMR1GE = 0; // timer is not controlled by gate.
-  TMR1H = 0; // reset timer1 High
-  TMR1L = 0; // and Low bytes - prescaler automatic reset
+  TMR1H = 0; // reset timer1 high
+  TMR1L = 0; // and low bytes - prescaler automatic reset
   CCP1CON = 0b00000010; // set up capture and compare
             //----0010 Toggle CCP1 pin. Set CCP1IF (TODO check if CCP1IF is set)
             // set ccp1 register to the highest value to avoid useless interrupt
@@ -51,7 +51,8 @@ void timer_init() {
 void main() {
   system_init();
   timer_init();
-  // 4 MHZ 
+  // Fcyc 8 MHZ
+  // 8 cycles per loop -> 1MHz square wave
   while(1) {
     LATA5 = 1;
     LATA5 = 1;  // add 3 CPU cycles to generate symetric signal
