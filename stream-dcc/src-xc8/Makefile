@@ -17,7 +17,7 @@ $(MAIN).hex: $(SRC)
 	$(CC) $(SRC) $(CC_FLAGS) $(OPTIMISATION) --chip=$(PROCESSOR) $(CC_INCLUDE) --ASMLIST -M
 
 flash: 
-	$(BOOTLOADER) --reset_rts --dev=/dev/ttyUSB0 --hex=$(MAIN).hex
+	pk2cmd -B/usr/share/pickit2 -PPIC16F1704 -Fmain.hex -A3.3 -M -R -T
 
 clean:
 	rm -f $(MAIN).hex funclist $(MAIN).cof $(MAIN).hxl *.p1 $(MAIN).sdb startup.* *.cmf *.rlf *.map *.as *.d *.obj *.lst *.pre $(MAIN).sym
