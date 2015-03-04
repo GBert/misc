@@ -7,10 +7,10 @@
 
 void system_init() {
   // switch off analog
-  OSCCON = 0b11111000; // Configure oscillator
+  OSCCON = 0b11110000; // Configure oscillator
            //1------- use PLL to get 32Mhz (system clock)
-           //-1110--- 8 MHz internal oscillator (insctruction clock)
-           //------00 Oscillator selected with FOSC
+           //-1110--- 8 MHz internal oscillator (instruction clock)
+           //------00 Oscillator selected with INTOSC
   ANSELA  = 0;
   ANSELC  = 0;
   ADCON0  = 0;

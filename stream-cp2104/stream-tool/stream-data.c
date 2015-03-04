@@ -47,6 +47,20 @@ void options(int fd, struct termios *old, struct termios *new, int speed) {
     tcsetattr(fd, TCSANOW, new);
 }
 
+void set_dtr(int serial_port, int dtr) {
+	int status;
+
+	ioctl(serial_port, TIOCMGET, &status);
+
+	if (dtr)
+		status |= TIOCM_DTR;
+	else
+		status &= ~TIOCM_DTR;
+
+	ioctl(serial_port, TIOCMSET, &status);
+}
+
+
 int fdwrite(int fd, char *buf, int buflen) {
     int rc, nb = 0;
 
@@ -68,7 +82,6 @@ int fdwrite(int fd, char *buf, int buflen) {
 int main(int argc, char *argv[]) {
     int fduart;
     int speed = 10000;
-    uint32_t gpio;
     struct termios oldfduart, newfduart;
     char buffer[1024];
 
@@ -89,23 +102,23 @@ int main(int argc, char *argv[]) {
 
     options(fduart, &oldfduart, &newfduart, speed);
 
-    /* reset GPIOs */
-    gpio = 0x0000000F;
-    ioctl(fduart, IOCTL_GPIOSET, &gpio);
-
-    gpio = GPIO_0_OFF;
-    ioctl(fduart, IOCTL_GPIOSET, &gpio);
+    set_dtr(fduart, 0);
 
     memset(buffer, 0x55, 16);
 /*	for (int i = 0; i<= 10; i++) */
     fdwrite(fduart, buffer, 16);
 
-    gpio = GPIO_0_ON;
-    ioctl(fduart, IOCTL_GPIOSET, &gpio);
-
+/*    set_dtr(fduart, 0);
+    set_dtr(fduart, 1);
+    set_dtr(fduart, 0);
+*/
     memset(buffer, 0x66, 16);
 /*	for (int i = 0; i<= 10; i++) */
     fdwrite(fduart, buffer, 16);
+    set_dtr(fduart, 1);
+
+
+    usleep(30000);
 
     /* tcflush(fduart, TCIFLUSH);
     tcsetattr(fduart, TCSANOW, &oldfduart); */
