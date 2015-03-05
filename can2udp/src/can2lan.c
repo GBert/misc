@@ -28,18 +28,18 @@ char config_dir[MAXLINE];
 char config_file[MAXLINE];
 char **page_name;
 int verbose = 0;
-struct id_node *ms1_root_handle=NULL;
-struct MS1_Node_Buffer ms1_node_buffer;
+int ms1_workaround = 0;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 0.97\n\n");
+    fprintf(stderr, "   Version 1.0\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default 15730\n");
     fprintf(stderr, "         -b <broadcast_addr> broadcast address - default 255.255.255.255\n");
     fprintf(stderr, "         -i <can int>        CAN interface - default can0\n");
+    fprintf(stderr, "         -m                  doing MS1 workaround - default: don't do it\n\n");
     fprintf(stderr, "         -f                  running in foreground\n\n");
     fprintf(stderr, "         -v                  verbose output (in foreground)\n\n");
 }
@@ -63,9 +63,6 @@ int check_data(int tcp_socket, unsigned char *netframe) {
     char gbs_name[MAXLINE];
     gbs_name[0] = '\0';
     int ret=0;
-    uint32_t ms1_id;
-    uint8_t slave_node;
-    struct id_node *ms1_node;
 
     memcpy(&canid, netframe, 4);
     canid = ntohl(canid);
@@ -120,67 +117,15 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 	    break;
 	}
         break;
-    /* looking for CS1/MS1 protocol */
-    case (0x1C030000UL):
-	/* mark CAN frame to send */
-	ret = 0;
-#if 0
-        if (canid == 0x1C0384FE) {
-	    /* cut out MS1 id & slave node */
-	    memcpy(&ms1_id, &netframe[5], 4);
-	    memcpy(&slave_node, &netframe[11], 1);
-	    if (verbose)
-		printf("                got MS1 ID : 0x%08X slave node id:0x%02X\n", ntohl(ms1_id), slave_node);
-	    /* save MS1 id and given slave id */
-	    ms1_add_id(ms1_root_handle, ms1_id, slave_node);
-	}
-#endif
-        break;
     /* fake cyclic MS1 slave monitoring response */
     case (0x0C000000UL):
 	/* mark CAN frame to send */
 	ret = 0;
-#if 0
-	/* get the next slave node id from fifo */
-	slave_node=0;
-	if ((ms1_node_buffer_out(&slave_node)) < 0)
-	    fprintf(stderr, "can't get MS1 slave id\n");
-
-	if (verbose)
-		printf("                search for MS1 ID of slave node: 0x%02X\n", slave_node);
-
-	if ((ms1_node = ms1_search_for_slave(ms1_root_handle, slave_node)) != NULL) {
-	    memcpy(&netframe[9], &ms1_node->id, 4);
-	    if (verbose)
-		printf("                sending faked MS1 master response : "
-			"slave id 0x%02X MS1 id 0x%08X\n", ms1_node->slave_node, ntohl(ms1_node->id));
-	    /* fix data[0] response */
+	if (ms1_workaround)
 	    netframe[5] = 0x03;
-	}
-#endif
-	netframe[5] = 0x03;
         break;
     }
     return ret;
-}
-
-/* this is the hook to check data from CAN interface */
-int check_can_frame(unsigned char *netframe) {
-#if 0
-    uint32_t canid;
-    uint8_t slave_node;
-    memcpy(&canid, netframe, 4);
-    canid = ntohl(canid);
-    /* check for cyclic MS1 slave monitor */
-    if ((canid & 0xFFFF0000UL) == 0x0C000000UL) {
-	memcpy(&slave_node, &netframe[3], 1);
-	if ((ms1_node_buffer_in(slave_node)) < 0)
-	    fprintf(stderr, "can't store MS1 slave node: 0x%02X\n", slave_node);
-	if (verbose)
-		printf("                put MS1 slave node: 0x%02X into FIFO\n", slave_node);
-    }
-#endif
-    return 0;
 }
 
 int main(int argc, char **argv) {
@@ -216,7 +161,7 @@ int main(int argc, char **argv) {
 
     config_file[0] = '\0';
 
-    while ((opt = getopt(argc, argv, "c:u:t:d:b:i:vhf?")) != -1) {
+    while ((opt = getopt(argc, argv, "c:u:t:d:b:i:mvhf?")) != -1) {
 	switch (opt) {
 	case 'c':
 	    if (strlen(optarg) < MAXLINE) {
@@ -246,6 +191,9 @@ int main(int argc, char **argv) {
 	case 'i':
 	    strcpy(ifr.ifr_name, optarg);
 	    break;
+	case 'm':
+	    ms1_workaround = 1;
+	    break;
 	case 'v':
 	    verbose = 1;
 	    break;
@@ -262,9 +210,6 @@ int main(int argc, char **argv) {
 	    exit(1);
 	}
     }
-
-    /* init MS1 slave id fifo */
-    ms1_node_buffer_init();
 
     /* read track file */
     if (config_dir[0] == 0) {
@@ -394,7 +339,6 @@ int main(int argc, char **argv) {
 	    if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		/* send UDP frame */
 		frame_to_net(sb, (struct sockaddr *)&baddr, (struct can_frame *)&frame);
-		check_can_frame(netframe);
 		print_can_frame(UDP_FORMAT_STRG, netframe, verbose &!background);
 		/* send CAN frame to all connected TCP clients */
 		/* TODO: need all clients the packets ? */
