@@ -173,12 +173,21 @@ unsigned int CPICkitFunctions::ReadDeviceID(void)
 {
     SetMCLR(true);		// assert /MCLR to prevent code execution before programming mode entered.
     VddOn();
+    unsigned int deviceID;
 
     RunScript(SCR_PROG_ENTRY, 1);
     RunScript(SCR_RD_DEVID, 1);
     UploadData();
     RunScript(SCR_PROG_EXIT, 1);
-    unsigned int deviceID = (unsigned int)(Usb_read_array[2] * 256 + Usb_read_array[1]);
+    // some PIC32 using greater masks
+    if (((unsigned int)DevFile.Families[ActiveFamily].DeviceIDMask) > 0xFFFFUL) {
+	deviceID = ((unsigned int)(Usb_read_array[4] <<24)) +
+		   ((unsigned int)(Usb_read_array[3] <<16)) +
+		   ((unsigned int)(Usb_read_array[2] << 8)) +
+		   Usb_read_array[1];
+    } else {
+	deviceID = (unsigned int)(Usb_read_array[2] * 256 + Usb_read_array[1]);
+    }
     for (int shift = 0; shift < DevFile.Families[ActiveFamily].ProgMemShift; shift++) {
 	deviceID >>= 1;		// midrange/baseline part results must be shifted by 1
     }
