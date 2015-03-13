@@ -1,4 +1,5 @@
-#include "can2lan.h"
+#include <stdint.h>
+#include <sys/types.h>
 
 static uint16_t crc_table [256] = {
 

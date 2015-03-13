@@ -1,4 +1,4 @@
-BINS := can2eth can2udp can4lnx2udp scan2lan can2lan virtual_gfp get-cs-data get-cs-config
+BINS := can2eth can2udp can4lnx2udp gb2-update scan2lan can2lan virtual_gfp get-cs-data get-cs-config
 
 BIN = $@
 
@@ -14,6 +14,9 @@ can2udp: can2udp.o
 
 can4lnx2udp: can4lnx2udp.o
 	$(CC) $(CFLAGS) -o can4lnx2udp can4lnx2udp.o
+
+gb2-update: crc-ccitt.o gb2-update.o
+	$(CC) $(CFLAGS) -o gb2-update crc-ccitt.o gb2-update.o
 
 scan2lan: crc-ccitt.o sgio.o scan2lan.o
 	$(CC) $(CFLAGS) -o scan2lan crc-ccitt.o sgio.o scan2lan.o -lz
