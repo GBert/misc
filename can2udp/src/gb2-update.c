@@ -149,7 +149,7 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
 }
 
 unsigned char *read_data(char *filename) {
-    int fsize;
+    int gb2_fsize, fsize;
     FILE *fp;
     unsigned char *data;
 
@@ -163,15 +163,15 @@ unsigned char *read_data(char *filename) {
     fsize = ftell(fp);
     fseek(fp, 0, SEEK_SET);
     /* for padding */
-    fsize = (fsize + 7) & 0xFFFFFFF8UL;
+    gb2_fsize = (fsize + 7) & 0xFFFFFFF8UL;
 
     if ((data = malloc(fsize)) == NULL) {
 	fprintf(stderr, "%s: can't alloc %d bytes for data\n", __func__, fsize);
 	return NULL;
     }
     /* padding with 0xff */
-    memset(&data[fsize-8], 0xff, 8);
-    if ((fread((void *)data, fsize, 1, fp)) != fsize) {
+    memset(&data[gb2_fsize-8], 0xff, 8);
+    if ((fread((void *)data, 1, fsize, fp)) != fsize) {
 	fprintf(stderr, "%s: error: fread failed for [%s]\n",__func__, filename);
 	return NULL;
     }
