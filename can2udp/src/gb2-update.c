@@ -42,12 +42,13 @@ unsigned char udpframe[MAXDG];
 unsigned char udpframe_reply[MAXDG];
 
 unsigned char *binfile;
+int gb2_fsize, fsize;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -u -d <port> -i <can interface>\n", prg);
     fprintf(stderr, "   Version 0.1\n");
     fprintf(stderr, "\n");
-    fprintf(stderr, "         -u                  use netowrk (UDP) for update\n");
+    fprintf(stderr, "         -u                  use network (UDP) for update\n");
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default 15731\n");
     fprintf(stderr, "         -i <can int>        can interface - default can0\n");
     fprintf(stderr, "         -v                  verbose output\n\n");
@@ -149,7 +150,6 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
 }
 
 unsigned char *read_data(char *filename) {
-    int gb2_fsize, fsize;
     FILE *fp;
     unsigned char *data;
 
@@ -176,18 +176,20 @@ unsigned char *read_data(char *filename) {
 	return NULL;
     }
     fclose(fp);
+    printf("Gleisbox File Version %d.%d\n", data[6], data[7]);
     return data;
 }
 
 int main(int argc, char **argv) {
     extern int optind, opterr, optopt;
-    int opt;
+    int crc, opt;
     struct can_frame frame;
 
     int sa, sc, sb;		/* UDP socket , CAN socket, UDP Broadcast Socket */
     struct sockaddr_in saddr, baddr;
     struct sockaddr_can caddr;
     struct ifreq ifr;
+
     /* socklen_t sin_size = sizeof(clientaddr); */
     socklen_t caddrlen = sizeof(caddr);
 
@@ -201,7 +203,8 @@ int main(int argc, char **argv) {
     int background = 1;
     int canid = 0;
     const int on = 1;
-    const char rocrail_server[] = "255.255.255.255";
+    const char broadcast_address[] = "255.255.255.255";
+    char file_name[] = "016-gb2.bin";
     strcpy(ifr.ifr_name, "can0");
 
     bzero(&saddr, sizeof(saddr));
@@ -214,7 +217,7 @@ int main(int argc, char **argv) {
     /* prepare udp destination struct with defaults */
     baddr.sin_family = AF_INET;
     baddr.sin_port = htons(destination_port);
-    s = inet_pton(AF_INET, rocrail_server, &baddr.sin_addr);
+    s = inet_pton(AF_INET, broadcast_address, &baddr.sin_addr);
     if (s <= 0) {
         if (s == 0) {
             fprintf(stderr, "UDP IP invalid\n");
@@ -265,6 +268,17 @@ int main(int argc, char **argv) {
 	    print_usage(basename(argv[0]));
 	    exit(1);
 	}
+    }
+    binfile=read_data(file_name);
+    int blocks=gb2_fsize>>9;
+    printf("%s: fsize 0x%04X gb2_fsize 0x%04X blocks 0x%02X last 0x%04X\n", file_name, fsize, gb2_fsize, blocks, gb2_fsize - blocks*512);
+    for (int i=blocks; i>=0; i--) {
+	if(i==blocks) { /* last block maybe smaller */
+	    crc=CRCCCITT(&binfile[i*512], gb2_fsize - blocks*512, 0xFFFF);
+	} else {
+	    crc=CRCCCITT(&binfile[i*512], 512, 0xFFFF);
+	}
+	printf("block: 0x%02X address: 0x%04X crc: 0x%04X\n", i+2, i*512, crc); 
     }
 
     if ((sa = socket(PF_INET, SOCK_DGRAM, 0)) < 0) {
