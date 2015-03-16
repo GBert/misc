@@ -52,7 +52,8 @@ unsigned char udpframe[MAXDG];
 
 unsigned char *binfile;
 int gb2_fsize, fsize;
-int verbose = 0;
+int force = 0, verbose = 0;
+uint16_t  version;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -l <port> -d <port> -b <broacast_addr> -i <can interface>\n", prg);
@@ -62,6 +63,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -l <port>           listening UDP port   - default 15730\n");
     fprintf(stderr, "         -b <broacast_addr>  broadcast address - default 255.255.255.255\n");
     fprintf(stderr, "         -i <can int>        switch to can using interface <can int>\n");
+    fprintf(stderr, "         -f                  force update even if devie has already the same Versio\n");
     fprintf(stderr, "         -v                  verbose output\n\n");
 }
 
@@ -111,8 +113,7 @@ void print_can_frame(char *format_string, unsigned char *netframe, int verbose) 
     printf("\n");
 }
 
-int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *frame) {
-    int s;
+void format_can_to_netframe(struct can_frame *frame, unsigned char *netframe) {
     uint32_t canid;
 
     bzero(netframe, 13);
@@ -121,14 +122,6 @@ int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *fr
     memcpy(netframe, &canid, 4);
     netframe[4] = frame->can_dlc;
     memcpy(&netframe[5], &frame->data, frame->can_dlc);
-
-    /* send UDP frame */
-    s = sendto(net_socket, netframe, 13, 0, net_addr, sizeof(*net_addr));
-    if (s != 13) {
-	fprintf(stderr, "%s: error sending UDP data %s\n", __func__, strerror(errno));
-	return -1;
-    }
-    return 0;
 }
 
 int netframe_to_net(int net_socket, unsigned char *netframe, int length) {
@@ -139,8 +132,7 @@ int netframe_to_net(int net_socket, unsigned char *netframe, int length) {
     return 0;
 }
 
-
-int frame_to_can(int can_socket, unsigned char *netframe) {
+int netframe_to_can(int can_socket, unsigned char *netframe) {
     uint32_t canid;
     struct can_frame frame;
     bzero(&frame, sizeof(frame));
@@ -193,6 +185,24 @@ unsigned char *read_data(char *filename) {
     return data;
 }
 
+void fsm(unsigned char *netframe) {
+    unsigned int canid;
+    unsigned int gb2_id;
+    memcpy(&canid, netframe, 4);
+    canid = ntohl(canid);
+    switch (canid & 0xFFFF0000UL) {
+    case (0x00310000UL):
+	printf("received CAN Ping answer\n");
+	print_can_frame(" ", netframe, 1);
+	if ((netframe[5] == 0x47 ) && (netframe[6] == 0x42 )) {
+	    memcpy(&gb2_id, &netframe[5], 4);
+	    gb2_id=ntohl(gb2_id);
+	    printf("found Gleisbox : 0x%08X  Version %d.%d\n", gb2_id, netframe[9], netframe[10]);
+	}
+	break;
+    }
+}
+
 int main(int argc, char **argv)
 {
     extern int optind, opterr, optopt;
@@ -235,7 +245,7 @@ int main(int argc, char **argv)
 	exit(1);
     }
 
-    while ((opt = getopt(argc, argv, "d:l:b:i:v?")) != -1) {
+    while ((opt = getopt(argc, argv, "d:l:b:i:fv?")) != -1) {
 	switch (opt) {
 	case 'l':
 	    local_port = strtoul(optarg, (char **)NULL, 10);
@@ -258,6 +268,10 @@ int main(int argc, char **argv)
 	case 'i':
 	    strcpy(ifr.ifr_name, optarg);
 	    can_mode = 1;
+	    break;
+
+	case 'f':
+	    force = 1;
 	    break;
 
 	case 'v':
@@ -310,12 +324,12 @@ int main(int argc, char **argv)
 	    exit(1);
 	}
 	/* start Maerklin 60113 box */
-	if (frame_to_can(sc, M_GLEISBOX_MAGIC_START_SEQUENCE) < 0) {
+	if (netframe_to_can(sc, M_GLEISBOX_MAGIC_START_SEQUENCE) < 0) {
 	    fprintf(stderr, "can't send CAN magic 60113 start sequence: %s\n", strerror(errno));
 	    return -1;
 	}
 	/* send CAN Ping */
-	if (frame_to_can(sc, M_CAN_PING) < 0) {
+	if (netframe_to_can(sc, M_CAN_PING) < 0) {
 	    fprintf(stderr, "can't send CAN Ping: %s\n", strerror(errno));
 	    return -1;
 	}
@@ -368,11 +382,14 @@ int main(int argc, char **argv)
 	    if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
 		fprintf(stderr, "CAN read error: %s\n", strerror(errno));
 	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
+		format_can_to_netframe(&frame, netframe);
+		fsm(netframe);
 	    }
 	}
 	/* received a UDP packet */
 	if (FD_ISSET(sa, &readfds)) {
 	    if (read(sa, udpframe, MAXDG) == 13) {
+		fsm(udpframe);
 	    }
 	}
     }
