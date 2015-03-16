@@ -38,6 +38,8 @@ unsigned char netframe[MAXDG];
 char *CAN_FORMAT_STRG      = "      CAN->  CANID 0x%08X R [%d]";
 char *TO_CAN_FORMAT_STRG   = "    ->CAN    CANID 0x%08X   [%d]";
 
+unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[] = { 0x00, 0x36, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
+
 unsigned char udpframe[MAXDG];
 unsigned char udpframe_reply[MAXDG];
 
@@ -310,6 +312,11 @@ int main(int argc, char **argv) {
     if (bind(sc, (struct sockaddr *) &caddr, caddrlen) < 0) {
 	fprintf(stderr, "CAN bind error: %s\n", strerror(errno));
 	exit(1);
+    }
+
+    if (frame_to_can(sc, M_GLEISBOX_MAGIC_START_SEQUENCE) < 0) {
+	fprintf(stderr, "can't send CAN magic 60113 start sequence\n");
+        return -1;
     }
 
     /* prepare UDP sending socket */
