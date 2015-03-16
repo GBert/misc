@@ -271,9 +271,12 @@ int main(int argc, char **argv) {
 	    exit(1);
 	}
     }
+
     binfile=read_data(file_name);
     int blocks=gb2_fsize>>9;
     printf("%s: fsize 0x%04X gb2_fsize 0x%04X blocks 0x%02X last 0x%04X\n", file_name, fsize, gb2_fsize, blocks, gb2_fsize - blocks*512);
+
+#if 1
     for (int i=blocks; i>=0; i--) {
 	if(i==blocks) { /* last block maybe smaller */
 	    crc=CRCCCITT(&binfile[i*512], gb2_fsize - blocks*512, 0xFFFF);
@@ -282,6 +285,7 @@ int main(int argc, char **argv) {
 	}
 	printf("block: 0x%02X address: 0x%04X crc: 0x%04X\n", i+2, i*512, crc); 
     }
+#endif
 
     if ((sa = socket(PF_INET, SOCK_DGRAM, 0)) < 0) {
 	fprintf(stderr, "UDP socket error: %s\n", strerror(errno));
