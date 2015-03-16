@@ -55,12 +55,13 @@ int gb2_fsize, fsize;
 int verbose = 0;
 
 void print_usage(char *prg) {
-    fprintf(stderr, "\nUsage: %s -u -d <port> -i <can interface>\n", prg);
+    fprintf(stderr, "\nUsage: %s -l <port> -d <port> -b <broacast_addr> -i <can interface>\n", prg);
     fprintf(stderr, "   Version 0.1\n");
     fprintf(stderr, "\n");
-    fprintf(stderr, "         -u                  use network (UDP) for update\n");
-    fprintf(stderr, "         -d <port>           destination UDP port for the server - default 15731\n");
-    fprintf(stderr, "         -i <can int>        can interface\n");
+    fprintf(stderr, "         -d <port>           destination UDP port - default 15731\n");
+    fprintf(stderr, "         -l <port>           listening UDP port   - default 15730\n");
+    fprintf(stderr, "         -b <broacast_addr>  broadcast address - default 255.255.255.255\n");
+    fprintf(stderr, "         -i <can int>        switch to can using interface <can int>\n");
     fprintf(stderr, "         -v                  verbose output\n\n");
 }
 
@@ -234,7 +235,7 @@ int main(int argc, char **argv)
 	exit(1);
     }
 
-    while ((opt = getopt(argc, argv, "d:i:uv?")) != -1) {
+    while ((opt = getopt(argc, argv, "d:l:b:i:v?")) != -1) {
 	switch (opt) {
 	case 'l':
 	    local_port = strtoul(optarg, (char **)NULL, 10);
@@ -280,7 +281,7 @@ int main(int argc, char **argv)
     printf("%s: fsize 0x%04X gb2_fsize 0x%04X blocks 0x%02X last 0x%04X\n", file_name, fsize, gb2_fsize, blocks,
 	   gb2_fsize - blocks * 512);
 
-#if 1
+#if 0
     for (int i = blocks; i >= 0; i--) {
 	if (i == blocks) {	/* last block maybe smaller */
 	    crc = CRCCCITT(&binfile[i * 512], gb2_fsize - blocks * 512, 0xFFFF);
