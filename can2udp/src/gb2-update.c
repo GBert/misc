@@ -37,6 +37,7 @@
 
 #define MAXDG   4096		/* maximum datagram size */
 #define MAXUDP  16		/* maximum datagram size */
+#define BOOT_BLOCK_SIZE	2
 
 extern uint16_t CRCCCITT(uint8_t * data, size_t length, uint16_t seed);
 
@@ -58,6 +59,11 @@ unsigned char *binfile;
 int gb2_fsize, fsize;
 int force = 0, verbose = 0;
 uint16_t version = 0;
+unsigned int gb2_id = 0;
+int sc, sb;		/* CAN socket, UDP Broadcast Socket */
+int can_mode = 0;
+unsigned char lastframe[13];
+int gb2_bin_blocks;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -l <port> -d <port> -b <broacast_addr> -i <can interface>\n", prg);
@@ -158,6 +164,15 @@ int netframe_to_can(int can_socket, unsigned char *netframe) {
     return 0;
 }
 
+int send_frame(unsigned char *netframe) {
+    int ret;
+    if(can_mode)
+	ret = netframe_to_can(sc, netframe);
+    else
+	ret = netframe_to_net(sb, netframe, 13);
+    return ret;
+}
+
 unsigned char *read_data(char *filename) {
     FILE *fp;
     unsigned char *data;
@@ -191,7 +206,7 @@ unsigned char *read_data(char *filename) {
 
 void fsm(unsigned char *netframe) {
     unsigned int canid;
-    unsigned int gb2_id;
+    unsigned char next_frame[13];
     memcpy(&canid, netframe, 4);
     canid = ntohl(canid);
     switch (canid & 0xFFFF0000UL) {
@@ -200,8 +215,26 @@ void fsm(unsigned char *netframe) {
 	print_can_frame(" ", netframe, 1);
 	if ((netframe[5] == 0x47 ) && (netframe[6] == 0x42 )) {
 	    memcpy(&gb2_id, &netframe[5], 4);
-	    gb2_id=ntohl(gb2_id);
-	    printf("found Gleisbox : 0x%08X  Version %d.%d\n", gb2_id, netframe[9], netframe[10]);
+	    printf("found Gleisbox : 0x%08X  Version %d.%d\n", ntohl(gb2_id), netframe[9], netframe[10]);
+	    printf("Start update ...\n");
+	    memcpy(next_frame, M_GB2_RESET, 13);
+	    memcpy(&next_frame[5], &gb2_id, 4);
+	    send_frame(next_frame);
+	    memcpy(next_frame, M_GB2_BOOTLOADER, 13);
+	    send_frame(next_frame);
+	}
+	break;
+    case (0x00370000UL):
+	/* should be always true */
+	if (gb2_id != 0 ) {
+	    if ((netframe[4] == 8) && ((uint32_t )netframe[5] == gb2_id) && (netframe[12] == 0x10)) {
+		printf("Gleisbox has version %d.%d\n", netframe[9], netframe[10]);
+		memcpy(lastframe, M_GB2_BLOCK, 13);
+		lastframe[10]= gb2_bin_blocks + BOOT_BLOCK_SIZE;
+		send_frame(lastframe);
+	    }
+	    if (memcmp(&netframe[2], &lastframe[2] , 11) == 11) {
+	    }
 	}
 	break;
     }
@@ -213,7 +246,7 @@ int main(int argc, char **argv)
     int s, opt;
     struct can_frame frame;
 
-    int sa, sc, sb;		/* UDP socket , CAN socket, UDP Broadcast Socket */
+    int sa;		/* UDP socket */
     struct sockaddr_in saddr, baddr;
     struct sockaddr_can caddr;
     struct ifreq ifr;
@@ -225,7 +258,6 @@ int main(int argc, char **argv)
 
     int local_port = 15731;
     int destination_port = 15730;
-    int can_mode = 0;
     const int on = 1;
     const char broadcast_address[] = "255.255.255.255";
     char file_name[] = "016-gb2.bin";
@@ -295,9 +327,9 @@ int main(int argc, char **argv)
     }
 
     binfile = read_data(file_name);
-    int blocks = gb2_fsize >> 9;
-    printf("%s: fsize 0x%04X gb2_fsize 0x%04X blocks 0x%02X last 0x%04X\n", file_name, fsize, gb2_fsize, blocks,
-	   gb2_fsize - blocks * 512);
+    gb2_bin_blocks = gb2_fsize >> 9;
+    printf("%s: fsize 0x%04X gb2_fsize 0x%04X blocks 0x%02X last 0x%04X\n", file_name, fsize, gb2_fsize,
+	   gb2_bin_blocks, gb2_fsize - gb2_bin_blocks * 512);
 
 #if 0
     for (int i = blocks; i >= 0; i--) {
