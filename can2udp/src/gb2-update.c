@@ -51,6 +51,7 @@ unsigned char M_CAN_PING[]       = { 0x00, 0x30, 0x47, 0x11, 0x00, 0x00, 0x00, 0
 unsigned char M_GB2_RESET[]      = { 0x00, 0x36, 0x47, 0x11, 0x06, 0x00, 0x00, 0x00, 0x00, 0x80, 0xff, 0x00, 0x00 };
 unsigned char M_GB2_BOOTLOADER[] = { 0x00, 0x36, 0x47, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 unsigned char M_GB2_BLOCK[]      = { 0x00, 0x36, 0x47, 0x11, 0x06, 0x00, 0x00, 0x00, 0x00, 0x44, 0x00, 0x00, 0x00 };
+unsigned char M_GB2_DATA[]       = { 0x00, 0x36, 0x03, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x88, 0x00, 0x00, 0x00 };
 unsigned char M_GB2_CRC[]        = { 0x00, 0x36, 0x47, 0x11, 0x07, 0x00, 0x00, 0x00, 0x00, 0x88, 0x00, 0x00, 0x00 };
 
 unsigned char udpframe[MAXDG];
@@ -64,6 +65,7 @@ int sc, sb;		/* CAN socket, UDP Broadcast Socket */
 int can_mode = 0;
 unsigned char lastframe[13];
 int gb2_bin_blocks;
+int last_bin_block;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -l <port> -d <port> -b <broacast_addr> -i <can interface>\n", prg);
@@ -227,18 +229,51 @@ void fsm(unsigned char *netframe) {
     case (0x00370000UL):
 	/* should be always true */
 	if (gb2_id != 0 ) {
-	    if ((netframe[4] == 8) && ((uint32_t )netframe[5] == gb2_id) && (netframe[12] == 0x10)) {
-		printf("Gleisbox has version %d.%d\n", netframe[9], netframe[10]);
+	    if ((netframe[4] == 8) && (memcmp(&netframe[5], &gb2_id, 4) == 0) && (netframe[12] == 0x10)) {
+		print_can_frame("bootloader", netframe, 1);
 		memcpy(lastframe, M_GB2_BLOCK, 13);
-		lastframe[10]= gb2_bin_blocks + BOOT_BLOCK_SIZE;
+		memcpy(&lastframe[5], &gb2_id,4);
+		last_bin_block = gb2_bin_blocks + BOOT_BLOCK_SIZE;
+		lastframe[10]= last_bin_block;
 		send_frame(lastframe);
-	    }
-	    if (memcmp(&netframe[2], &lastframe[2] , 11) == 11) {
+	    } else {
+		if (memcmp(&netframe[4], &lastframe[4] , 9) == 0) {
+		    uint8_t part = 0;
+		    if (last_bin_block == gb2_bin_blocks + BOOT_BLOCK_SIZE) {
+			printf("and now the data .... starting 0x%04X\n", gb2_bin_blocks * 512);
+			for (int i = 0; i < gb2_fsize - gb2_bin_blocks * 512; i+=8 ) {
+			    memcpy(lastframe, M_GB2_DATA, 5);
+			    lastframe[3]=part;
+			    part++;
+			    memcpy(&lastframe[5], &binfile[((last_bin_block - BOOT_BLOCK_SIZE) * 512) + i] , 8);
+			    send_frame(lastframe);
+			}
+			memcpy(lastframe, &M_GB2_CRC, 10);
+			memcpy(&lastframe[5], &gb2_id, 4);
+			uint16_t crc = htons(CRCCCITT(&binfile[(last_bin_block - BOOT_BLOCK_SIZE)* 512],
+					gb2_fsize - gb2_bin_blocks * 512, 0xFFFF));
+			memcpy(&lastframe[10], &crc, 2);
+			send_frame(lastframe);
+			last_bin_block--;
+		    }
+		}
 	    }
 	}
 	break;
+    default:
+	break;
     }
 }
+#if 0
+    for (int i = blocks; i >= 0; i--) {
+	if (i == blocks) {	/* last block maybe smaller */
+	    crc = CRCCCITT(&binfile[i * 512], gb2_fsize - blocks * 512, 0xFFFF);
+	} else {
+	    crc = CRCCCITT(&binfile[i * 512], 512, 0xFFFF);
+	}
+	printf("block: 0x%02X address: 0x%04X crc: 0x%04X\n", i + 2, i * 512, crc);
+    }
+#endif
 
 int main(int argc, char **argv)
 {

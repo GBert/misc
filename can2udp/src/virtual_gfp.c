@@ -334,8 +334,11 @@ int main(int argc, char **argv) {
 		case 0x36:	/* upgrade process) */
 		    if (frame.can_dlc == 0)
 			send_defined_can_frame(sc, M_GLEISBOX_BL_INIT, verbose);
+		    if ((frame.can_dlc == 6) && (frame.data[4] == 0x44)) {
+			frame.can_id = 0x00379B32UL;
+			send_can_frame(sc, &frame, verbose);
+		    }
 		    break;
-
 		default:
 		    break;
 		}
