@@ -37,6 +37,7 @@
 
 #define MAXDG   4096		/* maximum datagram size */
 #define MAXUDP  16		/* maximum datagram size */
+#define BLOCK_SIZE	512
 #define BOOT_BLOCK_SIZE	2
 
 extern uint16_t CRCCCITT(uint8_t * data, size_t length, uint16_t seed);
@@ -206,9 +207,20 @@ unsigned char *read_data(char *filename) {
     return data;
 }
 
+int send_next_block_id(int block, unsigned char *netframe) {
+    memcpy(netframe, M_GB2_BLOCK, 13);
+    memcpy(&netframe[5], &gb2_id,4);
+    netframe[10]= block;
+    send_frame(netframe);
+    return 0;
+}
+
+
+
 void fsm(unsigned char *netframe) {
     unsigned int canid;
     unsigned char next_frame[13];
+    uint8_t part;
     memcpy(&canid, netframe, 4);
     canid = ntohl(canid);
     switch (canid & 0xFFFF0000UL) {
@@ -231,31 +243,53 @@ void fsm(unsigned char *netframe) {
 	if (gb2_id != 0 ) {
 	    if ((netframe[4] == 8) && (memcmp(&netframe[5], &gb2_id, 4) == 0) && (netframe[12] == 0x10)) {
 		print_can_frame("bootloader", netframe, 1);
-		memcpy(lastframe, M_GB2_BLOCK, 13);
+		last_bin_block = gb2_bin_blocks;
+		send_next_block_id(last_bin_block + BOOT_BLOCK_SIZE, lastframe);
+		/* memcpy(lastframe, M_GB2_BLOCK, 13);
 		memcpy(&lastframe[5], &gb2_id,4);
-		last_bin_block = gb2_bin_blocks + BOOT_BLOCK_SIZE;
-		lastframe[10]= last_bin_block;
-		send_frame(lastframe);
+		lastframe[10]= last_bin_block + BOOT_BLOCK_SIZE;
+		send_frame(lastframe); */
 	    } else {
-		if (memcmp(&netframe[4], &lastframe[4] , 9) == 0) {
-		    uint8_t part = 0;
-		    if (last_bin_block == gb2_bin_blocks + BOOT_BLOCK_SIZE) {
-			printf("and now the data .... starting 0x%04X\n", gb2_bin_blocks * 512);
-			for (int i = 0; i < gb2_fsize - gb2_bin_blocks * 512; i+=8 ) {
+		/* first data block */
+		if ((memcmp(&netframe[4], &lastframe[4] , 9) == 0) && (last_bin_block == gb2_bin_blocks)) {
+		    part = 0;
+		    if (last_bin_block == gb2_bin_blocks) {
+			printf("and now the data .... starting 0x%04X\n", gb2_bin_blocks * BLOCK_SIZE);
+			printf("sending block 0x%02X 0x%04X\n", last_bin_block + BOOT_BLOCK_SIZE, last_bin_block * BLOCK_SIZE);
+			for (int i = 0; i < gb2_fsize - gb2_bin_blocks * BLOCK_SIZE; i+=8 ) {
 			    memcpy(lastframe, M_GB2_DATA, 5);
 			    lastframe[3]=part;
 			    part++;
-			    memcpy(&lastframe[5], &binfile[((last_bin_block - BOOT_BLOCK_SIZE) * 512) + i] , 8);
+			    memcpy(&lastframe[5], &binfile[((last_bin_block) * BLOCK_SIZE) + i] , 8);
 			    send_frame(lastframe);
 			}
 			memcpy(lastframe, &M_GB2_CRC, 10);
 			memcpy(&lastframe[5], &gb2_id, 4);
-			uint16_t crc = htons(CRCCCITT(&binfile[(last_bin_block - BOOT_BLOCK_SIZE)* 512],
-					gb2_fsize - gb2_bin_blocks * 512, 0xFFFF));
+			uint16_t crc = htons(CRCCCITT(&binfile[(last_bin_block)* BLOCK_SIZE],
+					gb2_fsize - gb2_bin_blocks * BLOCK_SIZE, 0xFFFF));
 			memcpy(&lastframe[10], &crc, 2);
 			send_frame(lastframe);
 			last_bin_block--;
 		    }
+		}
+		if ((memcmp(&netframe[4], &lastframe[4] , 8) == 0) && (last_bin_block >= 0)) {
+		    printf("sending block 0x%02X 0x%04X\n", last_bin_block + BOOT_BLOCK_SIZE, last_bin_block * BLOCK_SIZE);
+		    send_next_block_id(last_bin_block + BOOT_BLOCK_SIZE, lastframe);
+		    part = 0;
+		    for (int i = 0; i < BLOCK_SIZE; i+=8 ) {
+			memcpy(lastframe, M_GB2_DATA, 5);
+			lastframe[3]=part;
+			part++;
+			memcpy(&lastframe[5], &binfile[last_bin_block*BLOCK_SIZE + i], 8);
+			send_frame(lastframe);
+		    }
+		    memcpy(lastframe, &M_GB2_CRC, 10);
+		    memcpy(&lastframe[5], &gb2_id, 4);
+		    uint16_t crc = htons(CRCCCITT(&binfile[last_bin_block * BLOCK_SIZE],
+			BLOCK_SIZE, 0xFFFF));
+		    memcpy(&lastframe[10], &crc, 2);
+		    send_frame(lastframe);
+		    last_bin_block--;
 		}
 	    }
 	}
@@ -264,16 +298,6 @@ void fsm(unsigned char *netframe) {
 	break;
     }
 }
-#if 0
-    for (int i = blocks; i >= 0; i--) {
-	if (i == blocks) {	/* last block maybe smaller */
-	    crc = CRCCCITT(&binfile[i * 512], gb2_fsize - blocks * 512, 0xFFFF);
-	} else {
-	    crc = CRCCCITT(&binfile[i * 512], 512, 0xFFFF);
-	}
-	printf("block: 0x%02X address: 0x%04X crc: 0x%04X\n", i + 2, i * 512, crc);
-    }
-#endif
 
 int main(int argc, char **argv)
 {
@@ -364,18 +388,7 @@ int main(int argc, char **argv)
     binfile = read_data(file_name);
     gb2_bin_blocks = gb2_fsize >> 9;
     printf("%s: fsize 0x%04X gb2_fsize 0x%04X blocks 0x%02X last 0x%04X\n", file_name, fsize, gb2_fsize,
-	   gb2_bin_blocks, gb2_fsize - gb2_bin_blocks * 512);
-
-#if 0
-    for (int i = blocks; i >= 0; i--) {
-	if (i == blocks) {	/* last block maybe smaller */
-	    crc = CRCCCITT(&binfile[i * 512], gb2_fsize - blocks * 512, 0xFFFF);
-	} else {
-	    crc = CRCCCITT(&binfile[i * 512], 512, 0xFFFF);
-	}
-	printf("block: 0x%02X address: 0x%04X crc: 0x%04X\n", i + 2, i * 512, crc);
-    }
-#endif
+	   gb2_bin_blocks, gb2_fsize - gb2_bin_blocks * BLOCK_SIZE);
 
     if (can_mode) {
 	if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
