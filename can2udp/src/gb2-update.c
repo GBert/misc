@@ -215,7 +215,7 @@ int send_next_block_id(int block, unsigned char *netframe) {
     return 0;
 }
 
-int send_next_block(unsigned char *binfile, int length, unsigned char *netframe) {
+int send_block(unsigned char *binfile, int length, unsigned char *netframe) {
     int part = 0;
     for (int i = 0; i < length; i+=8 ) {
 	memcpy(netframe, M_GB2_DATA, 5);
@@ -224,10 +224,6 @@ int send_next_block(unsigned char *binfile, int length, unsigned char *netframe)
 	memcpy(&netframe[5], &binfile[i] , 8);
 	send_frame(netframe);
     }
-    return 0;
-}
-
-int send_block_crc(unsigned char *binfile, int length, unsigned char *netframe) {
     memcpy(netframe, &M_GB2_CRC, 10);
     memcpy(&netframe[5], &gb2_id, 4);
     uint16_t crc = htons(CRCCCITT(binfile, length, 0xFFFF));
@@ -239,7 +235,6 @@ int send_block_crc(unsigned char *binfile, int length, unsigned char *netframe) 
 void fsm(unsigned char *netframe) {
     unsigned int canid;
     unsigned char next_frame[13];
-    uint8_t part;
     memcpy(&canid, netframe, 4);
     canid = ntohl(canid);
     switch (canid & 0xFFFF0000UL) {
@@ -267,19 +262,11 @@ void fsm(unsigned char *netframe) {
 	    } else {
 		/* first data block */
 		if ((memcmp(&netframe[4], &lastframe[4] , 9) == 0) && (last_bin_block == gb2_bin_blocks)) {
-		    part = 0;
 		    if (last_bin_block == gb2_bin_blocks) {
 			printf("and now the data .... starting 0x%04X\n", gb2_bin_blocks * BLOCK_SIZE);
 			printf("sending block 0x%02X 0x%04X\n", last_bin_block + BOOT_BLOCK_SIZE,
 				last_bin_block * BLOCK_SIZE);
-			for (int i = 0; i < gb2_fsize - gb2_bin_blocks * BLOCK_SIZE; i+=8 ) {
-			    memcpy(lastframe, M_GB2_DATA, 5);
-			    lastframe[3]=part;
-			    part++;
-			    memcpy(&lastframe[5], &binfile[((last_bin_block) * BLOCK_SIZE) + i] , 8);
-			    send_frame(lastframe);
-			}
-			send_block_crc(&binfile[(last_bin_block)* BLOCK_SIZE],
+			send_block(&binfile[((last_bin_block) * BLOCK_SIZE)],
 				gb2_fsize - gb2_bin_blocks * BLOCK_SIZE, lastframe);
 			last_bin_block--;
 		    }
@@ -287,15 +274,7 @@ void fsm(unsigned char *netframe) {
 		if ((memcmp(&netframe[4], &lastframe[4] , 8) == 0) && (last_bin_block >= 0)) {
 		    printf("sending block 0x%02X 0x%04X\n", last_bin_block + BOOT_BLOCK_SIZE, last_bin_block * BLOCK_SIZE);
 		    send_next_block_id(last_bin_block + BOOT_BLOCK_SIZE, lastframe);
-		    part = 0;
-		    for (int i = 0; i < BLOCK_SIZE; i+=8 ) {
-			memcpy(lastframe, M_GB2_DATA, 5);
-			lastframe[3]=part;
-			part++;
-			memcpy(&lastframe[5], &binfile[last_bin_block*BLOCK_SIZE + i], 8);
-			send_frame(lastframe);
-		    }
-		    send_block_crc(&binfile[(last_bin_block)* BLOCK_SIZE], BLOCK_SIZE, lastframe);
+		    send_block(&binfile[((last_bin_block) * BLOCK_SIZE)], BLOCK_SIZE, lastframe);
 		    last_bin_block--;
 		}
 	    }
