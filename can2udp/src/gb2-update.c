@@ -214,8 +214,14 @@ int send_next_block_id(int block, unsigned char *netframe) {
     send_frame(netframe);
     return 0;
 }
-
-
+int send_block_crc(unsigned char *binfile, int length, unsigned char *netframe) {
+    memcpy(netframe, &M_GB2_CRC, 10);
+    memcpy(&netframe[5], &gb2_id, 4);
+    uint16_t crc = htons(CRCCCITT(binfile, length, 0xFFFF));
+    memcpy(&netframe[10], &crc, 2);
+    send_frame(netframe);
+    return 0;
+}
 
 void fsm(unsigned char *netframe) {
     unsigned int canid;
@@ -245,17 +251,14 @@ void fsm(unsigned char *netframe) {
 		print_can_frame("bootloader", netframe, 1);
 		last_bin_block = gb2_bin_blocks;
 		send_next_block_id(last_bin_block + BOOT_BLOCK_SIZE, lastframe);
-		/* memcpy(lastframe, M_GB2_BLOCK, 13);
-		memcpy(&lastframe[5], &gb2_id,4);
-		lastframe[10]= last_bin_block + BOOT_BLOCK_SIZE;
-		send_frame(lastframe); */
 	    } else {
 		/* first data block */
 		if ((memcmp(&netframe[4], &lastframe[4] , 9) == 0) && (last_bin_block == gb2_bin_blocks)) {
 		    part = 0;
 		    if (last_bin_block == gb2_bin_blocks) {
 			printf("and now the data .... starting 0x%04X\n", gb2_bin_blocks * BLOCK_SIZE);
-			printf("sending block 0x%02X 0x%04X\n", last_bin_block + BOOT_BLOCK_SIZE, last_bin_block * BLOCK_SIZE);
+			printf("sending block 0x%02X 0x%04X\n", last_bin_block + BOOT_BLOCK_SIZE,
+				last_bin_block * BLOCK_SIZE);
 			for (int i = 0; i < gb2_fsize - gb2_bin_blocks * BLOCK_SIZE; i+=8 ) {
 			    memcpy(lastframe, M_GB2_DATA, 5);
 			    lastframe[3]=part;
@@ -263,12 +266,8 @@ void fsm(unsigned char *netframe) {
 			    memcpy(&lastframe[5], &binfile[((last_bin_block) * BLOCK_SIZE) + i] , 8);
 			    send_frame(lastframe);
 			}
-			memcpy(lastframe, &M_GB2_CRC, 10);
-			memcpy(&lastframe[5], &gb2_id, 4);
-			uint16_t crc = htons(CRCCCITT(&binfile[(last_bin_block)* BLOCK_SIZE],
-					gb2_fsize - gb2_bin_blocks * BLOCK_SIZE, 0xFFFF));
-			memcpy(&lastframe[10], &crc, 2);
-			send_frame(lastframe);
+			send_block_crc(&binfile[(last_bin_block)* BLOCK_SIZE],
+				gb2_fsize - gb2_bin_blocks * BLOCK_SIZE, lastframe);
 			last_bin_block--;
 		    }
 		}
@@ -283,12 +282,7 @@ void fsm(unsigned char *netframe) {
 			memcpy(&lastframe[5], &binfile[last_bin_block*BLOCK_SIZE + i], 8);
 			send_frame(lastframe);
 		    }
-		    memcpy(lastframe, &M_GB2_CRC, 10);
-		    memcpy(&lastframe[5], &gb2_id, 4);
-		    uint16_t crc = htons(CRCCCITT(&binfile[last_bin_block * BLOCK_SIZE],
-			BLOCK_SIZE, 0xFFFF));
-		    memcpy(&lastframe[10], &crc, 2);
-		    send_frame(lastframe);
+		    send_block_crc(&binfile[(last_bin_block)* BLOCK_SIZE], BLOCK_SIZE, lastframe);
 		    last_bin_block--;
 		}
 	    }
