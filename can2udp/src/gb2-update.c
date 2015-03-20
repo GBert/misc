@@ -214,6 +214,19 @@ int send_next_block_id(int block, unsigned char *netframe) {
     send_frame(netframe);
     return 0;
 }
+
+int send_next_block(unsigned char *binfile, int length, unsigned char *netframe) {
+    int part = 0;
+    for (int i = 0; i < length; i+=8 ) {
+	memcpy(netframe, M_GB2_DATA, 5);
+	netframe[3]=part;
+	part++;
+	memcpy(&netframe[5], &binfile[i] , 8);
+	send_frame(netframe);
+    }
+    return 0;
+}
+
 int send_block_crc(unsigned char *binfile, int length, unsigned char *netframe) {
     memcpy(netframe, &M_GB2_CRC, 10);
     memcpy(&netframe[5], &gb2_id, 4);
@@ -245,7 +258,7 @@ void fsm(unsigned char *netframe) {
 	}
 	break;
     case (0x00370000UL):
-	/* should be always true */
+	/* should always be true */
 	if (gb2_id != 0 ) {
 	    if ((netframe[4] == 8) && (memcmp(&netframe[5], &gb2_id, 4) == 0) && (netframe[12] == 0x10)) {
 		print_can_frame("bootloader", netframe, 1);
