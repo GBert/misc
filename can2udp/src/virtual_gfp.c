@@ -339,6 +339,7 @@ int main(int argc, char **argv) {
 			send_can_frame(sc, &frame, verbose);
 		    }
 		    if ((frame.can_dlc == 7) && (frame.data[4] == 0x88)) {
+			frame.can_dlc = 5;
 			frame.can_id = 0x00379B32UL;
 			send_can_frame(sc, &frame, verbose);
 		    }

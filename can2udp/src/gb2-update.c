@@ -46,6 +46,7 @@ unsigned char netframe[MAXDG];
 
 char *CAN_FORMAT_STRG    = "      CAN->  CANID 0x%08X R [%d]";
 char *TO_CAN_FORMAT_STRG = "    ->CAN    CANID 0x%08X   [%d]";
+char *CECK_FORMAT_STRG   = "  CHEKCAN    CANID 0x%08X   [%d]";
 
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[] = { 0x00, 0x36, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
 unsigned char M_CAN_PING[]       = { 0x00, 0x30, 0x47, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -65,8 +66,10 @@ unsigned int gb2_id = 0;
 int sc, sb;		/* CAN socket, UDP Broadcast Socket */
 int can_mode = 0;
 unsigned char lastframe[13];
+unsigned char checkframe[13];
 int gb2_bin_blocks;
 int last_bin_block;
+int finished;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -l <port> -d <port> -b <broacast_addr> -i <can interface>\n", prg);
@@ -245,6 +248,12 @@ void fsm(unsigned char *netframe) {
 	    memcpy(&gb2_id, &netframe[5], 4);
 	    printf("found Gleisbox : 0x%08X  Version %d.%d\n", ntohl(gb2_id), netframe[9], netframe[10]);
 	    printf("Start update ...\n");
+	    /* prepare frmae to test for later testing */
+	    memcpy(checkframe, netframe, 13);
+	    checkframe[1]=0x37;
+	    checkframe[4]=5;
+	    checkframe[9]=0x88;
+	    print_can_frame(CECK_FORMAT_STRG, checkframe, 1);
 	    memcpy(next_frame, M_GB2_RESET, 13);
 	    memcpy(&next_frame[5], &gb2_id, 4);
 	    send_frame(next_frame);
@@ -271,11 +280,13 @@ void fsm(unsigned char *netframe) {
 			last_bin_block--;
 		    }
 		}
-		if ((memcmp(&netframe[4], &lastframe[4] , 8) == 0) && (last_bin_block >= 0)) {
+		if ((memcmp(netframe, checkframe , 10) == 0) && (last_bin_block >= 0)) {
 		    printf("sending block 0x%02X 0x%04X\n", last_bin_block + BOOT_BLOCK_SIZE, last_bin_block * BLOCK_SIZE);
 		    send_next_block_id(last_bin_block + BOOT_BLOCK_SIZE, lastframe);
 		    send_block(&binfile[((last_bin_block) * BLOCK_SIZE)], BLOCK_SIZE, lastframe);
 		    last_bin_block--;
+		    if (last_bin_block < 0)
+			finished = 1;
 		}
 	    }
 	}
@@ -454,12 +465,16 @@ int main(int argc, char **argv)
 	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		format_can_to_netframe(&frame, netframe);
 		fsm(netframe);
+		if (finished)
+		    return 0;
 	    }
 	}
 	/* received a UDP packet */
 	if (FD_ISSET(sa, &readfds)) {
 	    if (read(sa, udpframe, MAXDG) == 13) {
 		fsm(udpframe);
+		if (finished)
+		    return 0;
 	    }
 	}
     }
