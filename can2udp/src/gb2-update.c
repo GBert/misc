@@ -263,14 +263,13 @@ void fsm(unsigned char *netframe) {
 	/* should always be true */
 	if (gb2_id != 0 ) {
 	    if ((netframe[4] == 8) && (memcmp(&netframe[5], &gb2_id, 4) == 0) && (netframe[12] == 0x10)) {
-		/* prepare frmae to test for later testing */
-		memcpy(checkframe, netframe, 13);
+		/* prepare test frama for later use */
+		memcpy(checkframe, netframe, 10);
 		bzero(&checkframe[10], 3);
 		checkframe[1]=0x37;
 		checkframe[4]=5;
 		checkframe[9]=0x88;
 		print_can_frame(CECK_FORMAT_STRG, checkframe, 1);
-		print_can_frame("bootloader", netframe, 1);
 		last_bin_block = gb2_bin_blocks;
 		send_next_block_id(last_bin_block + BOOT_BLOCK_SIZE, lastframe);
 	    } else {
