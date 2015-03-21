@@ -50,7 +50,7 @@ char *CECK_FORMAT_STRG   = "  CHEKCAN    CANID 0x%08X   [%d]";
 
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[] = { 0x00, 0x36, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
 unsigned char M_CAN_PING[]       = { 0x00, 0x30, 0x47, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-unsigned char M_GB2_RESET[]      = { 0x00, 0x36, 0x47, 0x11, 0x06, 0x00, 0x00, 0x00, 0x00, 0x80, 0xff, 0x00, 0x00 };
+unsigned char M_GB2_RESET[]      = { 0x00, 0x00, 0x47, 0x11, 0x06, 0x00, 0x00, 0x00, 0x00, 0x80, 0xff, 0x00, 0x00 };
 unsigned char M_GB2_BOOTLOADER[] = { 0x00, 0x36, 0x47, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 unsigned char M_GB2_BLOCK[]      = { 0x00, 0x36, 0x47, 0x11, 0x06, 0x00, 0x00, 0x00, 0x00, 0x44, 0x00, 0x00, 0x00 };
 unsigned char M_GB2_DATA[]       = { 0x00, 0x36, 0x03, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x88, 0x00, 0x00, 0x00 };
@@ -220,6 +220,7 @@ int send_next_block_id(int block, unsigned char *netframe) {
 
 int send_block(unsigned char *binfile, int length, unsigned char *netframe) {
     int part = 0;
+    uint16_t crc;
     for (int i = 0; i < length; i+=8 ) {
 	memcpy(netframe, M_GB2_DATA, 5);
 	netframe[3]=part;
@@ -229,7 +230,7 @@ int send_block(unsigned char *binfile, int length, unsigned char *netframe) {
     }
     memcpy(netframe, &M_GB2_CRC, 10);
     memcpy(&netframe[5], &gb2_id, 4);
-    uint16_t crc = htons(CRCCCITT(binfile, length, 0xFFFF));
+    crc = htons(CRCCCITT(binfile, length, 0xFFFF));
     memcpy(&netframe[10], &crc, 2);
     send_frame(netframe);
     return 0;
@@ -244,19 +245,16 @@ void fsm(unsigned char *netframe) {
     case (0x00310000UL):
 	printf("received CAN Ping answer\n");
 	print_can_frame(" ", netframe, 1);
-	if ((netframe[5] == 0x47 ) && (netframe[6] == 0x42 )) {
+	/* if ((netframe[5] == 0x47 ) && (netframe[6] == 0x42 )) { */
+	if ((netframe[4] == 8) && (netframe[5] == 0x47 )) {
 	    memcpy(&gb2_id, &netframe[5], 4);
 	    printf("found Gleisbox : 0x%08X  Version %d.%d\n", ntohl(gb2_id), netframe[9], netframe[10]);
 	    printf("Start update ...\n");
-	    /* prepare frmae to test for later testing */
-	    memcpy(checkframe, netframe, 13);
-	    checkframe[1]=0x37;
-	    checkframe[4]=5;
-	    checkframe[9]=0x88;
-	    print_can_frame(CECK_FORMAT_STRG, checkframe, 1);
 	    memcpy(next_frame, M_GB2_RESET, 13);
 	    memcpy(&next_frame[5], &gb2_id, 4);
 	    send_frame(next_frame);
+	    /* delay for boot ? */
+	    usleep(500000);
 	    memcpy(next_frame, M_GB2_BOOTLOADER, 13);
 	    send_frame(next_frame);
 	}
@@ -265,6 +263,13 @@ void fsm(unsigned char *netframe) {
 	/* should always be true */
 	if (gb2_id != 0 ) {
 	    if ((netframe[4] == 8) && (memcmp(&netframe[5], &gb2_id, 4) == 0) && (netframe[12] == 0x10)) {
+		/* prepare frmae to test for later testing */
+		memcpy(checkframe, netframe, 13);
+		bzero(&checkframe[10], 3);
+		checkframe[1]=0x37;
+		checkframe[4]=5;
+		checkframe[9]=0x88;
+		print_can_frame(CECK_FORMAT_STRG, checkframe, 1);
 		print_can_frame("bootloader", netframe, 1);
 		last_bin_block = gb2_bin_blocks;
 		send_next_block_id(last_bin_block + BOOT_BLOCK_SIZE, lastframe);
@@ -272,7 +277,6 @@ void fsm(unsigned char *netframe) {
 		/* first data block */
 		if ((memcmp(&netframe[4], &lastframe[4] , 9) == 0) && (last_bin_block == gb2_bin_blocks)) {
 		    if (last_bin_block == gb2_bin_blocks) {
-			printf("and now the data .... starting 0x%04X\n", gb2_bin_blocks * BLOCK_SIZE);
 			printf("sending block 0x%02X 0x%04X\n", last_bin_block + BOOT_BLOCK_SIZE,
 				last_bin_block * BLOCK_SIZE);
 			send_block(&binfile[((last_bin_block) * BLOCK_SIZE)],
