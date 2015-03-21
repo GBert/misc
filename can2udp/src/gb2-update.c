@@ -197,12 +197,15 @@ unsigned char *read_data(char *filename) {
 
     if ((data = malloc(fsize)) == NULL) {
 	fprintf(stderr, "%s: can't alloc %d bytes for data\n", __func__, fsize);
+	close(fp);
 	return NULL;
     }
     /* padding with 0xff */
     memset(&data[gb2_fsize - 8], 0xff, 8);
     if ((fread((void *)data, 1, fsize, fp)) != fsize) {
 	fprintf(stderr, "%s: error: fread failed for [%s]\n", __func__, filename);
+	close(fp);
+	free(data);
 	return NULL;
     }
     fclose(fp);
