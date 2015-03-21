@@ -72,7 +72,7 @@ int last_bin_block;
 int finished;
 
 void print_usage(char *prg) {
-    fprintf(stderr, "\nUsage: %s -l <port> -d <port> -b <broacast_addr> -i <can interface>\n", prg);
+    fprintf(stderr, "\nUsage: %s -l <port> -d <port> -b <broacast_addr> -i <can interface> <update file>\n", prg);
     fprintf(stderr, "   Version 0.1\n");
     fprintf(stderr, "\n");
     fprintf(stderr, "         -d <port>           destination UDP port - default 15731\n");
@@ -319,7 +319,7 @@ int main(int argc, char **argv)
     int destination_port = 15730;
     const int on = 1;
     const char broadcast_address[] = "255.255.255.255";
-    char file_name[] = "016-gb2.bin";
+    char file_name[255];
 
     bzero(&saddr, sizeof(saddr));
     bzero(&baddr, sizeof(baddr));
@@ -382,6 +382,11 @@ int main(int argc, char **argv)
 	    fprintf(stderr, "Unknown option %c\n", opt);
 	    print_usage(basename(argv[0]));
 	    exit(1);
+	}
+	if (optind < argc) {
+	    strcpy(file_name, argv[optind]);
+	} else {
+	    strcpy(file_name, "016-gb2.bin");
 	}
     }
 
