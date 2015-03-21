@@ -7,13 +7,6 @@
  * ----------------------------------------------------------------------------
  */
 
-
-/* Maerklin TCP/UDP Format: always 13 bytes
- *   byte 0 - 3  CAN ID
- *   byte 4      DLC
- *   byte 5 - 12 CAN data
- */
-
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -266,7 +259,7 @@ void fsm(unsigned char *netframe) {
 	/* should always be true */
 	if (gb2_id != 0 ) {
 	    if ((netframe[4] == 8) && (memcmp(&netframe[5], &gb2_id, 4) == 0) && (netframe[12] == 0x10)) {
-		/* prepare test frama for later use */
+		/* prepare test frame for later use */
 		memcpy(checkframe, netframe, 10);
 		bzero(&checkframe[10], 3);
 		checkframe[1]=0x37;
@@ -341,7 +334,7 @@ int main(int argc, char **argv)
 	} else {
 	    fprintf(stderr, "invalid address family\n");
 	}
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     while ((opt = getopt(argc, argv, "d:l:b:i:fv?")) != -1) {
@@ -361,7 +354,7 @@ int main(int argc, char **argv)
 		} else {
 		    fprintf(stderr, "inet_pton error: %s\n", strerror(errno));
 		}
-		exit(1);
+		exit(EXIT_FAILURE);
 	    }
 	    break;
 	case 'i':
@@ -380,12 +373,12 @@ int main(int argc, char **argv)
 	case 'h':
 	case '?':
 	    print_usage(basename(argv[0]));
-	    exit(0);
+	    exit(EXIT_SUCCESS);
 
 	default:
 	    fprintf(stderr, "Unknown option %c\n", opt);
 	    print_usage(basename(argv[0]));
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
 	if (optind < argc) {
 	    file_name=(char *)malloc(strlen(argv[optind]+1));
@@ -396,6 +389,8 @@ int main(int argc, char **argv)
     }
 
     binfile = read_data(file_name);
+    if (binfile == NULL)
+	exit(EXIT_FAILURE);
     gb2_bin_blocks = gb2_fsize >> 9;
     printf("%s: fsize 0x%04X gb2_fsize 0x%04X blocks 0x%02X last 0x%04X\n", file_name, fsize, gb2_fsize,
 	   gb2_bin_blocks, gb2_fsize - gb2_bin_blocks * BLOCK_SIZE);
@@ -403,19 +398,19 @@ int main(int argc, char **argv)
     if (can_mode) {
 	if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
 	    fprintf(stderr, "CAN socket error: %s\n", strerror(errno));
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
 
 	caddr.can_family = AF_CAN;
 	if (ioctl(sc, SIOCGIFINDEX, &ifr) < 0) {
 	    fprintf(stderr, "CAN setup error: %s\n", strerror(errno));
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
 	caddr.can_ifindex = ifr.ifr_ifindex;
 
 	if (bind(sc, (struct sockaddr *)&caddr, caddrlen) < 0) {
 	    fprintf(stderr, "CAN bind error: %s\n", strerror(errno));
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
 	/* start Maerklin 60113 box */
 	if (netframe_to_can(sc, M_GLEISBOX_MAGIC_START_SEQUENCE) < 0) {
@@ -433,7 +428,7 @@ int main(int argc, char **argv)
     } else {
 	if ((sa = socket(PF_INET, SOCK_DGRAM, 0)) < 0) {
 	    fprintf(stderr, "UDP socket error: %s\n", strerror(errno));
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
 
 	saddr.sin_family = AF_INET;
@@ -442,22 +437,22 @@ int main(int argc, char **argv)
 
 	if (bind(sa, (struct sockaddr *)&saddr, sizeof(saddr)) < 0) {
 	    fprintf(stderr, "UDP bind error: %s\n", strerror(errno));
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
 	/* prepare UDP sending socket */
 	if ((sb = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
 	    fprintf(stderr, "UDP sending socket error %s\n", strerror(errno));
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
 	if (setsockopt(sb, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0) {
 	    fprintf(stderr, "UDP set socket option error: %s\n", strerror(errno));
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
 	sc=0;
 	/* send CAN Ping */
 	if (netframe_to_net(sb, M_CAN_PING, 13) < 0) {
 	    fprintf(stderr, "can't send CAN Ping: %s\n", strerror(errno));
-	    return -1;
+	    exit(EXIT_FAILURE);
 	}
     }
 
