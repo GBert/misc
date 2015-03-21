@@ -319,7 +319,8 @@ int main(int argc, char **argv)
     int destination_port = 15730;
     const int on = 1;
     const char broadcast_address[] = "255.255.255.255";
-    char file_name[255];
+    const char default_file_name[] = "016-gb2.bin";
+    char *file_name;
 
     bzero(&saddr, sizeof(saddr));
     bzero(&baddr, sizeof(baddr));
@@ -384,9 +385,10 @@ int main(int argc, char **argv)
 	    exit(1);
 	}
 	if (optind < argc) {
+	    file_name=(char *)malloc(strlen(argv[optind]+1));
 	    strcpy(file_name, argv[optind]);
 	} else {
-	    strcpy(file_name, "016-gb2.bin");
+	    file_name = (char *)default_file_name;
 	}
     }
 
