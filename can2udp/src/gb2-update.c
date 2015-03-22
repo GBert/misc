@@ -415,12 +415,12 @@ int main(int argc, char **argv)
 	/* start Maerklin 60113 box */
 	if (netframe_to_can(sc, M_GLEISBOX_MAGIC_START_SEQUENCE) < 0) {
 	    fprintf(stderr, "can't send CAN magic 60113 start sequence: %s\n", strerror(errno));
-	    return -1;
+	    exit(EXIT_FAILURE);
 	}
 	/* send CAN Ping */
 	if (netframe_to_can(sc, M_CAN_PING) < 0) {
 	    fprintf(stderr, "can't send CAN Ping: %s\n", strerror(errno));
-	    return -1;
+	    exit(EXIT_FAILURE);
 	}
 	sa=0;
 	sb=0;
@@ -470,6 +470,7 @@ int main(int argc, char **argv)
 
 	    if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
 		fprintf(stderr, "CAN read error: %s\n", strerror(errno));
+		exit(EXIT_FAILURE);
 	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		format_can_to_netframe(&frame, netframe);
 		fsm(netframe);
