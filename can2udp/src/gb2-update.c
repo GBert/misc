@@ -472,7 +472,7 @@ int main(int argc, char **argv) {
 		format_can_to_netframe(&frame, netframe);
 		fsm(netframe);
 		if (finished)
-		    return 0;
+		    break;
 	    }
 	}
 	/* received a UDP packet */
@@ -480,10 +480,12 @@ int main(int argc, char **argv) {
 	    if (read(sa, udpframe, MAXDG) == 13) {
 		fsm(udpframe);
 		if (finished)
-		    return 0;
+		    break;
 	    }
 	}
     }
+    printf("Update successfull !\n\n");
+    free(binfile);
     close(sc);
     close(sa);
     close(sb);
