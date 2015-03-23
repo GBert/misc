@@ -377,12 +377,12 @@ int main(int argc, char **argv) {
 	    print_usage(basename(argv[0]));
 	    exit(EXIT_FAILURE);
 	}
-	if (optind < argc) {
-	    file_name = (char *)malloc(strlen(argv[optind] + 1));
-	    strcpy(file_name, argv[optind]);
-	} else {
-	    file_name = (char *)default_file_name;
-	}
+    }
+    if (optind < argc) {
+	file_name = (char *)malloc(strlen(argv[optind] + 1));
+	strcpy(file_name, argv[optind]);
+    } else {
+	file_name = (char *)default_file_name;
     }
 
     binfile = read_data(file_name);
