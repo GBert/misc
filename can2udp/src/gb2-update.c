@@ -188,7 +188,7 @@ unsigned char *read_data(char *filename) {
     /* for padding */
     gb2_fsize = (fsize + 7) & 0xFFFFFFF8UL;
 
-    if ((data = malloc(fsize)) == NULL) {
+    if ((data = malloc(gb2_fsize)) == NULL) {
 	fprintf(stderr, "%s: can't alloc %d bytes for data\n", __func__, fsize);
 	fclose(fp);
 	return NULL;
