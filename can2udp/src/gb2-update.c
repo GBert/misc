@@ -30,8 +30,9 @@
 
 #define MAXDG   4096		/* maximum datagram size */
 #define MAXUDP  16		/* maximum datagram size */
-#define BLOCK_SIZE	512
-#define BOOT_BLOCK_SIZE	2
+#define GB2_BLOCK_SIZE	512
+#define GB2_BLOCK_SHIFT	9	/* 2^9 = 512 */
+#define GB2_BOOT_BLOCK_SIZE	2
 
 extern uint16_t CRCCCITT(uint8_t * data, size_t length, uint16_t seed);
 
@@ -273,20 +274,20 @@ void fsm(unsigned char *netframe) {
 		checkframe[9] = 0x88;
 		print_can_frame(CECK_FORMAT_STRG, checkframe, 1);
 		last_bin_block = gb2_bin_blocks;
-		send_next_block_id(last_bin_block + BOOT_BLOCK_SIZE, lastframe);
+		send_next_block_id(last_bin_block + GB2_BOOT_BLOCK_SIZE, lastframe);
 	    } else {
 		/* first data block */
 		if ((memcmp(&netframe[4], &lastframe[4], 9) == 0) && (last_bin_block == gb2_bin_blocks)) {
 		    if (last_bin_block == gb2_bin_blocks) {
-			printf("sending block 0x%02X 0x%04X\n", last_bin_block + BOOT_BLOCK_SIZE, last_bin_block * BLOCK_SIZE);
-			send_block(&binfile[((last_bin_block) * BLOCK_SIZE)], gb2_fsize - gb2_bin_blocks * BLOCK_SIZE, lastframe);
+			printf("sending block 0x%02X 0x%04X\n", last_bin_block + GB2_BOOT_BLOCK_SIZE, last_bin_block * GB2_BLOCK_SIZE);
+			send_block(&binfile[((last_bin_block) * GB2_BLOCK_SIZE)], gb2_fsize - gb2_bin_blocks * GB2_BLOCK_SIZE, lastframe);
 			last_bin_block--;
 		    }
 		}
 		if ((memcmp(netframe, checkframe, 10) == 0) && (last_bin_block >= 0)) {
-		    printf("sending block 0x%02X 0x%04X\n", last_bin_block + BOOT_BLOCK_SIZE, last_bin_block * BLOCK_SIZE);
-		    send_next_block_id(last_bin_block + BOOT_BLOCK_SIZE, lastframe);
-		    send_block(&binfile[((last_bin_block) * BLOCK_SIZE)], BLOCK_SIZE, lastframe);
+		    printf("sending block 0x%02X 0x%04X\n", last_bin_block + GB2_BOOT_BLOCK_SIZE, last_bin_block * GB2_BLOCK_SIZE);
+		    send_next_block_id(last_bin_block + GB2_BOOT_BLOCK_SIZE, lastframe);
+		    send_block(&binfile[((last_bin_block) * GB2_BLOCK_SIZE)], GB2_BLOCK_SIZE, lastframe);
 		    last_bin_block--;
 		    if (last_bin_block < 0)
 			finished = 1;
@@ -394,7 +395,7 @@ int main(int argc, char **argv) {
     binfile = read_data(file_name);
     if (binfile == NULL)
 	exit(EXIT_FAILURE);
-    gb2_bin_blocks = gb2_fsize >> 9;
+    gb2_bin_blocks = gb2_fsize >> GB2_BLOCK_SHIFT;
     /* printf("%s: fsize 0x%04X gb2_fsize 0x%04X blocks 0x%02X last 0x%04X\n", file_name, fsize, gb2_fsize,
 	   gb2_bin_blocks, gb2_fsize - gb2_bin_blocks * BLOCK_SIZE); */
 
