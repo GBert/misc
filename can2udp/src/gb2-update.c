@@ -340,7 +340,7 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     }
 
-    while ((opt = getopt(argc, argv, "d:l:b:i:fv?")) != -1) {
+    while ((opt = getopt(argc, argv, "d:l:b:i:fvh?")) != -1) {
 	switch (opt) {
 	case 'l':
 	    local_port = strtoul(optarg, (char **)NULL, 10);
