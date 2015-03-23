@@ -54,7 +54,7 @@ unsigned char udpframe[MAXDG];
 unsigned char *binfile;
 int gb2_fsize, fsize;
 int force = 0, verbose = 0;
-uint16_t version = 0;
+uint16_t gb2_file_version, version = 0;
 unsigned int gb2_id = 0;
 int sc, sb;			/* CAN socket, UDP Broadcast Socket */
 int can_mode = 0;
@@ -72,7 +72,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -l <port>           listening UDP port   - default 15730\n");
     fprintf(stderr, "         -b <broacast_addr>  broadcast address - default 255.255.255.255\n");
     fprintf(stderr, "         -i <can int>        switch to can using interface <can int>\n");
-    fprintf(stderr, "         -f                  force update even if devie has already the same Versio\n");
+    fprintf(stderr, "         -f                  force update even if device has already the same version\n");
     fprintf(stderr, "         -v                  verbose output\n\n");
 }
 
@@ -202,6 +202,7 @@ unsigned char *read_data(char *filename) {
 	return NULL;
     }
     fclose(fp);
+    memcpy(&gb2_file_version, &data[6], 2);
     printf("Gleisbox File Version %d.%d\n", data[6], data[7]);
     return data;
 }
@@ -240,11 +241,16 @@ void fsm(unsigned char *netframe) {
     switch (canid & 0xFFFF0000UL) {
     case (0x00310000UL):
 	printf("received CAN Ping answer\n");
-	print_can_frame(" ", netframe, 1);
+	/* print_can_frame(" ", netframe, 1); */
 	/* if ((netframe[5] == 0x47 ) && (netframe[6] == 0x42 )) { */
 	if ((netframe[4] == 8) && (netframe[5] == 0x47)) {
 	    memcpy(&gb2_id, &netframe[5], 4);
+	    memcpy(&version, &netframe[9], 2);
 	    printf("found Gleisbox : 0x%08X  Version %d.%d\n", ntohl(gb2_id), netframe[9], netframe[10]);
+	    if ((version == gb2_file_version) && (!force)) {
+		printf("file and device version are the same - use -f to force update\n");
+		exit(EXIT_FAILURE);
+	    }
 	    printf("Start update ...\n");
 	    memcpy(next_frame, M_GB2_RESET, 13);
 	    memcpy(&next_frame[5], &gb2_id, 4);
@@ -389,8 +395,8 @@ int main(int argc, char **argv) {
     if (binfile == NULL)
 	exit(EXIT_FAILURE);
     gb2_bin_blocks = gb2_fsize >> 9;
-    printf("%s: fsize 0x%04X gb2_fsize 0x%04X blocks 0x%02X last 0x%04X\n", file_name, fsize, gb2_fsize,
-	   gb2_bin_blocks, gb2_fsize - gb2_bin_blocks * BLOCK_SIZE);
+    /* printf("%s: fsize 0x%04X gb2_fsize 0x%04X blocks 0x%02X last 0x%04X\n", file_name, fsize, gb2_fsize,
+	   gb2_bin_blocks, gb2_fsize - gb2_bin_blocks * BLOCK_SIZE); */
 
     if (can_mode) {
 	if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
