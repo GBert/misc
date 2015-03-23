@@ -56,7 +56,7 @@ int gb2_fsize, fsize;
 int force = 0, verbose = 0;
 uint16_t version = 0;
 unsigned int gb2_id = 0;
-int sc, sb;		/* CAN socket, UDP Broadcast Socket */
+int sc, sb;			/* CAN socket, UDP Broadcast Socket */
 int can_mode = 0;
 unsigned char lastframe[13];
 unsigned char checkframe[13];
@@ -165,7 +165,7 @@ int netframe_to_can(int can_socket, unsigned char *netframe) {
 
 int send_frame(unsigned char *netframe) {
     int ret;
-    if(can_mode)
+    if (can_mode)
 	ret = netframe_to_can(sc, netframe);
     else
 	ret = netframe_to_net(sb, netframe, 13);
@@ -208,8 +208,8 @@ unsigned char *read_data(char *filename) {
 
 int send_next_block_id(int block, unsigned char *netframe) {
     memcpy(netframe, M_GB2_BLOCK, 13);
-    memcpy(&netframe[5], &gb2_id,4);
-    netframe[10]= block;
+    memcpy(&netframe[5], &gb2_id, 4);
+    netframe[10] = block;
     send_frame(netframe);
     return 0;
 }
@@ -217,11 +217,11 @@ int send_next_block_id(int block, unsigned char *netframe) {
 int send_block(unsigned char *binfile, int length, unsigned char *netframe) {
     int part = 0;
     uint16_t crc;
-    for (int i = 0; i < length; i+=8 ) {
+    for (int i = 0; i < length; i += 8) {
 	memcpy(netframe, M_GB2_DATA, 5);
-	netframe[3]=part;
+	netframe[3] = part;
 	part++;
-	memcpy(&netframe[5], &binfile[i] , 8);
+	memcpy(&netframe[5], &binfile[i], 8);
 	send_frame(netframe);
     }
     memcpy(netframe, &M_GB2_CRC, 10);
@@ -242,7 +242,7 @@ void fsm(unsigned char *netframe) {
 	printf("received CAN Ping answer\n");
 	print_can_frame(" ", netframe, 1);
 	/* if ((netframe[5] == 0x47 ) && (netframe[6] == 0x42 )) { */
-	if ((netframe[4] == 8) && (netframe[5] == 0x47 )) {
+	if ((netframe[4] == 8) && (netframe[5] == 0x47)) {
 	    memcpy(&gb2_id, &netframe[5], 4);
 	    printf("found Gleisbox : 0x%08X  Version %d.%d\n", ntohl(gb2_id), netframe[9], netframe[10]);
 	    printf("Start update ...\n");
@@ -257,29 +257,27 @@ void fsm(unsigned char *netframe) {
 	break;
     case (0x00370000UL):
 	/* should always be true */
-	if (gb2_id != 0 ) {
+	if (gb2_id != 0) {
 	    if ((netframe[4] == 8) && (memcmp(&netframe[5], &gb2_id, 4) == 0) && (netframe[12] == 0x10)) {
 		/* prepare test frame for later use */
 		memcpy(checkframe, netframe, 10);
 		bzero(&checkframe[10], 3);
-		checkframe[1]=0x37;
-		checkframe[4]=5;
-		checkframe[9]=0x88;
+		checkframe[1] = 0x37;
+		checkframe[4] = 5;
+		checkframe[9] = 0x88;
 		print_can_frame(CECK_FORMAT_STRG, checkframe, 1);
 		last_bin_block = gb2_bin_blocks;
 		send_next_block_id(last_bin_block + BOOT_BLOCK_SIZE, lastframe);
 	    } else {
 		/* first data block */
-		if ((memcmp(&netframe[4], &lastframe[4] , 9) == 0) && (last_bin_block == gb2_bin_blocks)) {
+		if ((memcmp(&netframe[4], &lastframe[4], 9) == 0) && (last_bin_block == gb2_bin_blocks)) {
 		    if (last_bin_block == gb2_bin_blocks) {
-			printf("sending block 0x%02X 0x%04X\n", last_bin_block + BOOT_BLOCK_SIZE,
-				last_bin_block * BLOCK_SIZE);
-			send_block(&binfile[((last_bin_block) * BLOCK_SIZE)],
-				gb2_fsize - gb2_bin_blocks * BLOCK_SIZE, lastframe);
+			printf("sending block 0x%02X 0x%04X\n", last_bin_block + BOOT_BLOCK_SIZE, last_bin_block * BLOCK_SIZE);
+			send_block(&binfile[((last_bin_block) * BLOCK_SIZE)], gb2_fsize - gb2_bin_blocks * BLOCK_SIZE, lastframe);
 			last_bin_block--;
 		    }
 		}
-		if ((memcmp(netframe, checkframe , 10) == 0) && (last_bin_block >= 0)) {
+		if ((memcmp(netframe, checkframe, 10) == 0) && (last_bin_block >= 0)) {
 		    printf("sending block 0x%02X 0x%04X\n", last_bin_block + BOOT_BLOCK_SIZE, last_bin_block * BLOCK_SIZE);
 		    send_next_block_id(last_bin_block + BOOT_BLOCK_SIZE, lastframe);
 		    send_block(&binfile[((last_bin_block) * BLOCK_SIZE)], BLOCK_SIZE, lastframe);
@@ -295,13 +293,12 @@ void fsm(unsigned char *netframe) {
     }
 }
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     extern int optind, opterr, optopt;
     int s, opt;
     struct can_frame frame;
 
-    int sa;		/* UDP socket */
+    int sa;			/* UDP socket */
     struct sockaddr_in saddr, baddr;
     struct sockaddr_can caddr;
     struct ifreq ifr;
@@ -381,7 +378,7 @@ int main(int argc, char **argv)
 	    exit(EXIT_FAILURE);
 	}
 	if (optind < argc) {
-	    file_name=(char *)malloc(strlen(argv[optind]+1));
+	    file_name = (char *)malloc(strlen(argv[optind] + 1));
 	    strcpy(file_name, argv[optind]);
 	} else {
 	    file_name = (char *)default_file_name;
@@ -422,8 +419,8 @@ int main(int argc, char **argv)
 	    fprintf(stderr, "can't send CAN Ping: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
 	}
-	sa=0;
-	sb=0;
+	sa = 0;
+	sb = 0;
 
     } else {
 	if ((sa = socket(PF_INET, SOCK_DGRAM, 0)) < 0) {
@@ -448,7 +445,7 @@ int main(int argc, char **argv)
 	    fprintf(stderr, "UDP set socket option error: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
 	}
-	sc=0;
+	sc = 0;
 	/* send CAN Ping */
 	if (netframe_to_net(sb, M_CAN_PING, 13) < 0) {
 	    fprintf(stderr, "can't send CAN Ping: %s\n", strerror(errno));
