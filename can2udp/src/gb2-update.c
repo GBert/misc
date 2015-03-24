@@ -34,12 +34,18 @@
 #define GB2_BLOCK_SIZE		512
 #define GB2_BLOCK_SHIFT		9	/* 2^9 = 512 */
 #define GB2_BOOT_BLOCK_SIZE	2
-#define GB2_FILL_SBLOCK		8-1
 
 #define MS2_BLOCK_SIZE		1024
 #define MS2_BLOCK_SHIFT		10	/* 2^10 = 1024 */
 #define MS2_BOOT_BLOCK_SIZE	0
-#define MS2_FILL_SBLOCK		1024-1
+
+#define FILL_SBLOCK		8-1
+
+struct update_config {
+    int block_size;
+    int shift;
+    int boot_blocks;
+};
 
 extern uint16_t CRCCCITT(uint8_t * data, size_t length, uint16_t seed);
 
