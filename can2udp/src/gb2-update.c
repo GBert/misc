@@ -41,7 +41,7 @@
 #define MS2_BLOCK_SIZE		1024
 #define MS2_BLOCK_SHIFT		10	/* 2^10 = 1024 */
 #define MS2_BOOT_BLOCK_SIZE	0
-#define GB2_FILL_SBLOCK		1024-1
+#define MS2_FILL_SBLOCK		1024-1
 
 #define FILL_SBLOCK		8-1
 
