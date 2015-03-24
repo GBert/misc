@@ -28,11 +28,18 @@
 
 #include <linux/can.h>
 
-#define MAXDG   4096		/* maximum datagram size */
-#define MAXUDP  16		/* maximum datagram size */
-#define GB2_BLOCK_SIZE	512
-#define GB2_BLOCK_SHIFT	9	/* 2^9 = 512 */
+#define MAXDG   4096			/* maximum datagram size */
+#define MAXUDP  16			/* maximum datagram size */
+
+#define GB2_BLOCK_SIZE		512
+#define GB2_BLOCK_SHIFT		9	/* 2^9 = 512 */
 #define GB2_BOOT_BLOCK_SIZE	2
+#define GB2_FILL_SBLOCK		8-1
+
+#define MS2_BLOCK_SIZE		1024
+#define MS2_BLOCK_SHIFT		10	/* 2^10 = 1024 */
+#define MS2_BOOT_BLOCK_SIZE	0
+#define MS2_FILL_SBLOCK		1024-1
 
 extern uint16_t CRCCCITT(uint8_t * data, size_t length, uint16_t seed);
 
