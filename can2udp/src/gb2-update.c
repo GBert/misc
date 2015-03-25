@@ -43,8 +43,6 @@
 #define MS2_BOOT_BLOCK_SIZE	0
 #define MS2_FILL_SBLOCK		1024-1
 
-#define FILL_SBLOCK		8-1
-
 struct update_config {
     int block_size;
     int shift;
@@ -82,6 +80,7 @@ int sc, sb;			/* CAN socket, UDP Broadcast Socket */
 int can_mode = 0;
 unsigned char lastframe[13];
 unsigned char checkframe[13];
+unsigned char checkframe_nack[13];
 unsigned char checkframe_block_id[13];
 int gb2_bin_blocks;
 int last_bin_block;
@@ -298,7 +297,9 @@ void fsm(unsigned char *netframe) {
 		checkframe[1] = 0x37;
 		checkframe[4] = 5;
 		checkframe[9] = 0x88;
-		print_can_frame(CECK_FORMAT_STRG, checkframe, 1);
+		memcpy(checkframe_nack, netframe, 13);
+		checkframe_nack[9] = 0xf2;
+		/* print_can_frame(CECK_FORMAT_STRG, checkframe, 1); */
 		last_bin_block = gb2_bin_blocks;
 		send_next_block_id(last_bin_block + GB2_BOOT_BLOCK_SIZE, lastframe);
 	    } else {
@@ -310,6 +311,11 @@ void fsm(unsigned char *netframe) {
 			last_bin_block--;
 		    }
 		} else {
+		    if (memcmp(netframe, checkframe_nack, 10) == 0)  {
+			fprintf(stderr, "Aiiee got nack !\n");
+			print_can_frame(CECK_FORMAT_STRG, netframe, 1);
+			finished = -1;
+		    }
 		    if (memcmp(netframe, checkframe_block_id, 11) == 0 ){
 			printf("sending block 0x%02X 0x%04X\n", last_bin_block + GB2_BOOT_BLOCK_SIZE, last_bin_block * GB2_BLOCK_SIZE);
 			send_block(&binfile[((last_bin_block) * GB2_BLOCK_SIZE)], GB2_BLOCK_SIZE, lastframe);
@@ -509,16 +515,20 @@ int main(int argc, char **argv) {
 	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		format_can_to_netframe(&frame, netframe);
 		fsm(netframe);
-		if (finished)
+		if (finished == 1)
 		    break;
+		if (finished < 0)
+		    exit(EXIT_FAILURE);
 	    }
 	}
 	/* received a UDP packet */
 	if (FD_ISSET(sa, &readfds)) {
 	    if (read(sa, udpframe, MAXDG) == 13) {
 		fsm(udpframe);
-		if (finished)
+		if (finished ==1)
 		    break;
+		if (finished < 0)
+		    exit(EXIT_FAILURE);
 	    }
 	}
     }
