@@ -82,6 +82,7 @@ int sc, sb;			/* CAN socket, UDP Broadcast Socket */
 int can_mode = 0;
 unsigned char lastframe[13];
 unsigned char checkframe[13];
+unsigned char checkframe_block_id[13];
 int gb2_bin_blocks;
 int last_bin_block;
 int finished;
@@ -181,7 +182,7 @@ int netframe_to_can(int can_socket, unsigned char *netframe) {
 	return -1;
     }
     /* TODO : it seems Gleisbox needs a short break after every CAN message */
-    usleep(2000);
+    /* usleep(2000); */
     return 0;
 }
 
@@ -234,6 +235,10 @@ int send_next_block_id(int block, unsigned char *netframe) {
     memcpy(&netframe[5], &gb2_id, 4);
     netframe[10] = block;
     send_frame(netframe);
+    memcpy(checkframe_block_id, checkframe, 10);
+    checkframe_block_id[4] = 6;
+    checkframe_block_id[9]=0x44;
+    checkframe_block_id[10]=block;
     return 0;
 }
 
@@ -304,14 +309,19 @@ void fsm(unsigned char *netframe) {
 			send_block(&binfile[((last_bin_block) * GB2_BLOCK_SIZE)], gb2_fsize - gb2_bin_blocks * GB2_BLOCK_SIZE, lastframe);
 			last_bin_block--;
 		    }
-		}
-		if ((memcmp(netframe, checkframe, 10) == 0) && (last_bin_block >= 0)) {
-		    printf("sending block 0x%02X 0x%04X\n", last_bin_block + GB2_BOOT_BLOCK_SIZE, last_bin_block * GB2_BLOCK_SIZE);
-		    send_next_block_id(last_bin_block + GB2_BOOT_BLOCK_SIZE, lastframe);
-		    send_block(&binfile[((last_bin_block) * GB2_BLOCK_SIZE)], GB2_BLOCK_SIZE, lastframe);
-		    last_bin_block--;
-		    if (last_bin_block < 0)
+		} else {
+		    if (memcmp(netframe, checkframe_block_id, 11) == 0 ){
+			printf("sending block 0x%02X 0x%04X\n", last_bin_block + GB2_BOOT_BLOCK_SIZE, last_bin_block * GB2_BLOCK_SIZE);
+			send_block(&binfile[((last_bin_block) * GB2_BLOCK_SIZE)], GB2_BLOCK_SIZE, lastframe);
+			last_bin_block--;
+		    }
+		    if ((memcmp(netframe, checkframe, 10) == 0) && (last_bin_block >= 0)) {
+			send_next_block_id(last_bin_block + GB2_BOOT_BLOCK_SIZE, lastframe);
+			/* print_can_frame(CECK_FORMAT_STRG, checkframe_block_id, 1); */
+		    }
+		    if ((memcmp(netframe, checkframe, 10) == 0) && (last_bin_block < 0)) {
 			finished = 1;
+		    }
 		}
 	    }
 	}
