@@ -297,9 +297,10 @@ void fsm(unsigned char *netframe) {
 		checkframe[1] = 0x37;
 		checkframe[4] = 5;
 		checkframe[9] = 0x88;
-		memcpy(checkframe_nack, netframe, 13);
+		memcpy(checkframe_nack, checkframe, 13);
 		checkframe_nack[9] = 0xf2;
 		/* print_can_frame(CECK_FORMAT_STRG, checkframe, 1); */
+		/* print_can_frame(CECK_FORMAT_STRG, checkframe_nack, 1); */
 		last_bin_block = gb2_bin_blocks;
 		send_next_block_id(last_bin_block + GB2_BOOT_BLOCK_SIZE, lastframe);
 	    } else {
