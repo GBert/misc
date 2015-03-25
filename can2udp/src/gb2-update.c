@@ -74,8 +74,8 @@ unsigned char udpframe[MAXDG];
 unsigned char *binfile;
 int gb2_fsize, fsize;
 int force = 0, verbose = 0;
-uint16_t gb2_file_version, version = 0;
-unsigned int gb2_id = 0;
+uint16_t device_file_version, version = 0;
+unsigned int device_id = 0;
 int sc, sb;			/* CAN socket, UDP Broadcast Socket */
 int can_mode = 0;
 unsigned char lastframe[13];
@@ -224,14 +224,14 @@ unsigned char *read_data(char *filename) {
 	return NULL;
     }
     fclose(fp);
-    memcpy(&gb2_file_version, &data[6], 2);
+    memcpy(&device_file_version, &data[6], 2);
     printf("Gleisbox File Version %d.%d\n", data[6], data[7]);
     return data;
 }
 
 int send_next_block_id(int block, unsigned char *netframe) {
     memcpy(netframe, M_BLOCK, 13);
-    memcpy(&netframe[5], &gb2_id, 4);
+    memcpy(&netframe[5], &device_id, 4);
     netframe[10] = block;
     send_frame(netframe);
     memcpy(checkframe_block_id, checkframe, 10);
@@ -252,7 +252,7 @@ int send_block(unsigned char *binfile, int length, unsigned char *netframe) {
 	send_frame(netframe);
     }
     memcpy(netframe, &M_CRC, 10);
-    memcpy(&netframe[5], &gb2_id, 4);
+    memcpy(&netframe[5], &device_id, 4);
     crc = htons(CRCCCITT(binfile, length, 0xFFFF));
     memcpy(&netframe[10], &crc, 2);
     send_frame(netframe);
@@ -270,16 +270,16 @@ void fsm(unsigned char *netframe) {
 	/* print_can_frame(" ", netframe, 1); */
 	/* if ((netframe[5] == 0x47 ) && (netframe[6] == 0x43 )) { */
 	if ((netframe[4] == 8) && (netframe[5] == 0x47)) {
-	    memcpy(&gb2_id, &netframe[5], 4);
+	    memcpy(&device_id, &netframe[5], 4);
 	    memcpy(&version, &netframe[9], 2);
-	    printf("found Gleisbox : 0x%08X  Version %d.%d\n", ntohl(gb2_id), netframe[9], netframe[10]);
-	    if ((version == gb2_file_version) && (!force)) {
+	    printf("found Gleisbox : 0x%08X  Version %d.%d\n", ntohl(device_id), netframe[9], netframe[10]);
+	    if ((version == device_file_version) && (!force)) {
 		printf("file and device version are the same - use -f to force update\n");
 		exit(EXIT_FAILURE);
 	    }
 	    printf("Start update ...\n");
 	    memcpy(next_frame, M_RESET, 13);
-	    memcpy(&next_frame[5], &gb2_id, 4);
+	    memcpy(&next_frame[5], &device_id, 4);
 	    send_frame(next_frame);
 	    /* delay for boot ? */
 	    usleep(500000);
@@ -289,8 +289,8 @@ void fsm(unsigned char *netframe) {
 	break;
     case (0x00370000UL):
 	/* should always be true */
-	if (gb2_id != 0) {
-	    if ((netframe[4] == 8) && (memcmp(&netframe[5], &gb2_id, 4) == 0) && (netframe[12] == 0x10)) {
+	if (device_id != 0) {
+	    if ((netframe[4] == 8) && (memcmp(&netframe[5], &device_id, 4) == 0) && (netframe[12] == 0x10)) {
 		/* prepare test frame for later use */
 		memcpy(checkframe, netframe, 10);
 		bzero(&checkframe[10], 3);
