@@ -510,6 +510,9 @@ int main(int argc, char **argv) {
 	FD_SET(sa, &readfds);
 
 	ret = select((sc > sa) ? sc + 1 : sa + 1, &readfds, NULL, NULL, &timeout);
+	/* reset timer */
+	timeout.tv_sec = TIMEOUT;
+	timeout.tv_usec = 0;
 
 	if (ret == 0) {
 	    fprintf(stderr, "no response for %d seconds - terminating\n", TIMEOUT);
