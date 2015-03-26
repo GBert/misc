@@ -34,6 +34,9 @@
 #define MAXUDP  16			/* maximum datagram size */
 #define TIMEOUT 5			/* wait seconds for response */
 
+char *GB2_DEFAULT_FILENAME = "016-gb2.bin";
+char *MS2_DEFAULT_FILENAME = "051-ms2.bin";
+
 #define GB2_BLOCK_SIZE		512
 #define GB2_BLOCK_SHIFT		9	/* 2^9 = 512 */
 #define GB2_BOOT_BLOCK_SIZE	2
@@ -49,7 +52,9 @@ struct update_config {
     int shift;
     int boot_blocks;
     int padding;
+    char *filename;
 };
+
 
 extern uint16_t CRCCCITT(uint8_t * data, size_t length, uint16_t seed);
 
@@ -73,7 +78,7 @@ unsigned char M_MS2_SOFT_RESET[]  = { 0x00, 0x36, 0x47, 0x11, 0x05, 0x00, 0x00, 
 unsigned char udpframe[MAXDG];
 
 unsigned char *binfile;
-int gb2_fsize, fsize;
+int device_fsize, fsize;
 int force = 0, verbose = 0;
 uint16_t device_file_version, version = 0;
 unsigned int device_id = 0;
@@ -195,38 +200,40 @@ int send_frame(unsigned char *netframe) {
     return ret;
 }
 
-unsigned char *read_data(char *filename) {
+unsigned char *read_data(struct update_config *device_config) {
     FILE *fp;
     unsigned char *data;
 
-    fp = fopen(filename, "rb");
+    fp = fopen(device_config->filename, "rb");
     if (fp == NULL) {
-	fprintf(stderr, "%s: error fopen failed [%s]\n", __func__, filename);
+	fprintf(stderr, "%s: error fopen failed [%s]\n", __func__, device_config->filename);
 	return NULL;
     }
 
     fseek(fp, 0, SEEK_END);
     fsize = ftell(fp);
     fseek(fp, 0, SEEK_SET);
-    /* for padding */
-    gb2_fsize = (fsize + 7) & 0xFFFFFFF8UL;
+    /* prepare padding */
+    device_fsize = (fsize + device_config->padding ) & (0xFFFFFFFFUL - device_config->padding);
 
-    if ((data = malloc(gb2_fsize)) == NULL) {
+    if ((data = malloc(device_fsize)) == NULL) {
 	fprintf(stderr, "%s: can't alloc %d bytes for data\n", __func__, fsize);
 	fclose(fp);
 	return NULL;
     }
+
     /* padding with 0xff */
-    memset(&data[gb2_fsize - 8], 0xff, 8);
+    memset(&data[device_fsize - device_config->padding], 0xff, device_config->padding);
     if ((fread((void *)data, 1, fsize, fp)) != fsize) {
-	fprintf(stderr, "%s: error: fread failed for [%s]\n", __func__, filename);
+	fprintf(stderr, "%s: error: fread failed for [%s]\n", __func__, device_config->filename);
 	fclose(fp);
 	free(data);
 	return NULL;
     }
+
     fclose(fp);
     memcpy(&device_file_version, &data[6], 2);
-    printf("Gleisbox File Version %d.%d\n", data[6], data[7]);
+    printf("Device File Version %d.%d\n", data[6], data[7]);
     return data;
 }
 
@@ -240,6 +247,26 @@ int send_next_block_id(int block, unsigned char *netframe) {
     checkframe_block_id[9]=0x44;
     checkframe_block_id[10]=block;
     return 0;
+}
+
+int device_setup(char *device, struct update_config *device_config) {
+    int ret = -1;
+    if (strncmp(device, "gb2", 3) == 0) {
+	device_config->block_size = GB2_BLOCK_SIZE;
+	device_config->shift = GB2_BLOCK_SHIFT;
+	device_config->boot_blocks = GB2_BOOT_BLOCK_SIZE;
+	device_config->padding = GB2_FILL_SBLOCK;
+	device_config->filename = GB2_DEFAULT_FILENAME;
+        ret = 1;
+    } else if (strncmp(device, "ms2", 3) == 0) {
+	device_config->block_size = MS2_BLOCK_SIZE;
+	device_config->shift = MS2_BLOCK_SHIFT;
+	device_config->boot_blocks = MS2_BOOT_BLOCK_SIZE;
+	device_config->padding = MS2_FILL_SBLOCK;
+	device_config->filename = MS2_DEFAULT_FILENAME;
+        ret = 2;
+    } 
+    return ret;
 }
 
 int send_block(unsigned char *binfile, int length, unsigned char *netframe) {
@@ -309,7 +336,7 @@ void fsm(unsigned char *netframe) {
 		if ((memcmp(&netframe[4], &lastframe[4], 9) == 0) && (last_bin_block == gb2_bin_blocks)) {
 		    if (last_bin_block == gb2_bin_blocks) {
 			printf("sending block 0x%02X 0x%04X\n", last_bin_block + GB2_BOOT_BLOCK_SIZE, last_bin_block * GB2_BLOCK_SIZE);
-			send_block(&binfile[((last_bin_block) * GB2_BLOCK_SIZE)], gb2_fsize - gb2_bin_blocks * GB2_BLOCK_SIZE, lastframe);
+			send_block(&binfile[((last_bin_block) * GB2_BLOCK_SIZE)], device_fsize - gb2_bin_blocks * GB2_BLOCK_SIZE, lastframe);
 			last_bin_block--;
 		    }
 		} else {
@@ -349,6 +376,7 @@ int main(int argc, char **argv) {
     struct sockaddr_in saddr, baddr;
     struct sockaddr_can caddr;
     struct ifreq ifr;
+    struct update_config device_config;
 
     /* wait for response */
     timeout.tv_sec = TIMEOUT;
@@ -359,12 +387,16 @@ int main(int argc, char **argv) {
 
     fd_set readfds;
 
+    if(device_setup("gb2", &device_config) < 0) {
+	fprintf(stderr, "invalid device\n");
+	exit(EXIT_FAILURE);
+    }
+
     int local_port = 15731;
     int destination_port = 15730;
     const int on = 1;
     const char broadcast_address[] = "255.255.255.255";
-    const char default_file_name[] = "016-gb2.bin";
-    char *file_name;
+    char *filename;
 
     bzero(&saddr, sizeof(saddr));
     bzero(&baddr, sizeof(baddr));
@@ -430,18 +462,17 @@ int main(int argc, char **argv) {
 	}
     }
     if (optind < argc) {
-	file_name = (char *)malloc(strlen(argv[optind] + 1));
-	strcpy(file_name, argv[optind]);
-    } else {
-	file_name = (char *)default_file_name;
+	filename = (char *)malloc(strlen(argv[optind] + 1));
+	strcpy(filename, argv[optind]);
+	device_config.filename = filename;
     }
 
-    binfile = read_data(file_name);
+    binfile = read_data(&device_config);
     if (binfile == NULL)
 	exit(EXIT_FAILURE);
-    gb2_bin_blocks = gb2_fsize >> GB2_BLOCK_SHIFT;
-    /* printf("%s: fsize 0x%04X gb2_fsize 0x%04X blocks 0x%02X last 0x%04X\n", file_name, fsize, gb2_fsize,
-	   gb2_bin_blocks, gb2_fsize - gb2_bin_blocks * BLOCK_SIZE); */
+    gb2_bin_blocks = device_fsize >> GB2_BLOCK_SHIFT;
+    /* printf("%s: fsize 0x%04X device_fsize 0x%04X blocks 0x%02X last 0x%04X\n", filename, fsize, device_fsize,
+	   gb2_bin_blocks, device_fsize - gb2_bin_blocks * BLOCK_SIZE); */
 
     if (can_mode) {
 	if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
