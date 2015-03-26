@@ -32,6 +32,7 @@
 
 #define MAXDG   4096			/* maximum datagram size */
 #define MAXUDP  16			/* maximum datagram size */
+#define TIMEOUT 5			/* wait seconds for response */
 
 #define GB2_BLOCK_SIZE		512
 #define GB2_BLOCK_SHIFT		9	/* 2^9 = 512 */
@@ -340,13 +341,18 @@ void fsm(unsigned char *netframe) {
 
 int main(int argc, char **argv) {
     extern int optind, opterr, optopt;
-    int s, opt;
+    int ret, s, opt;
     struct can_frame frame;
+    struct timeval timeout;
 
     int sa;			/* UDP socket */
     struct sockaddr_in saddr, baddr;
     struct sockaddr_can caddr;
     struct ifreq ifr;
+
+    /* wait for resonse */
+    timeout.tv_sec = TIMEOUT;
+    timeout.tv_usec = 0;
 
     /* socklen_t sin_size = sizeof(clientaddr); */
     socklen_t caddrlen = sizeof(caddr);
@@ -503,9 +509,15 @@ int main(int argc, char **argv) {
 	FD_SET(sc, &readfds);
 	FD_SET(sa, &readfds);
 
-	if (select((sc > sa) ? sc + 1 : sa + 1, &readfds, NULL, NULL, NULL) < 0) {
+	ret = select((sc > sa) ? sc + 1 : sa + 1, &readfds, NULL, NULL, &timeout);
+
+	if (ret == 0) {
+	    fprintf(stderr, "no response for %d seconds - terminating\n", TIMEOUT);
+	    exit(EXIT_FAILURE);
+        }
+
+	if (ret < 0)
 	    fprintf(stderr, "select error: %s\n", strerror(errno));
-	};
 
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &readfds)) {
