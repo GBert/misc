@@ -314,8 +314,8 @@ void fsm(unsigned char *netframe) {
 		    }
 		} else {
 		    if (memcmp(netframe, checkframe_nack, 10) == 0)  {
-			fprintf(stderr, "Aiiee got nack !\n");
 			print_can_frame(CECK_FORMAT_STRG, netframe, 1);
+			fprintf(stderr, "Aiiee got NACK ! Aborting ...\n\n");
 			finished = -1;
 		    }
 		    if (memcmp(netframe, checkframe_block_id, 11) == 0 ){
@@ -350,7 +350,7 @@ int main(int argc, char **argv) {
     struct sockaddr_can caddr;
     struct ifreq ifr;
 
-    /* wait for resonse */
+    /* wait for response */
     timeout.tv_sec = TIMEOUT;
     timeout.tv_usec = 0;
 
