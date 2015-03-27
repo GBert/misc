@@ -63,7 +63,6 @@ char *T_CAN_FORMAT_STRG   = "      CAN<-  CANID 0x%08X   [%d]";
 
 unsigned char M_ALL_ID[]      = { 0x00, 0x00, 0x00, 0x00 };
 unsigned char M_MS2_ID[]      = { 0x00, 0x31, 0x9B, 0x32, 0x08, 0x4d, 0x54, 0xAA, 0xBB, 0x01, 0x27, 0x00, 0x10 };
-
 unsigned char M_MS2_BL_INIT[] = { 0x00, 0x37, 0x9B, 0x32, 0x08, 0x4d, 0x54, 0xAA, 0xBB, 0x01, 0x27, 0x00, 0x10 };
 
 unsigned char netframe[MAXDG];
@@ -228,26 +227,10 @@ int main(int argc, char **argv) {
 		case 0x00:
 		    if ((memcmp(&frame.data[0], &M_MS2_ID[5], 4) == 0) ||
 			(memcmp(&frame.data[0], M_ALL_ID, 4) == 0)) {
-			if (frame.data[4] == 0x0b) {
-			    switch (frame.data[5]) {
-			    case 0x01:
-				/* send_defined_can_frame(sc, M_MS2_VAL1, verbose); */
-				break;
-			    case 0x03:
-				/* send_defined_can_frame(sc, M_MS2_VAL3, verbose); */
-				break;
-			    case 0x04:
-				/* send_defined_can_frame(sc, M_MS2_VAL4, verbose); */
-				break;
-			    default:
-				break;
-			    }
-			} else {
-			    /* frame.can_id &= 0xFFFF0000UL; */
-			    frame.can_id |= 0x00010000UL;
-			    send_can_frame(sc, &frame, verbose);
+			/* frame.can_id &= 0xFFFF0000UL; */
+			frame.can_id |= 0x00010000UL;
+			send_can_frame(sc, &frame, verbose);
 			}
-		    }
 		    break;
 		case 0x30:	/* ping / ID /software  */
 		    send_defined_can_frame(sc, M_MS2_ID, verbose);
