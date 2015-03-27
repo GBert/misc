@@ -239,12 +239,12 @@ int main(int argc, char **argv) {
 		    if (frame.can_dlc == 0)
 			send_defined_can_frame(sc, M_MS2_BL_INIT, verbose);
 		    if ((frame.can_dlc == 6) && (frame.data[4] == 0x44)) {
-			frame.can_id = 0x00379B32UL;
+			frame.can_id = 0x00370000UL;
 			send_can_frame(sc, &frame, verbose);
 		    }
 		    if ((frame.can_dlc == 7) && (frame.data[4] == 0x88)) {
 			frame.can_dlc = 5;
-			frame.can_id = 0x00379B32UL;
+			frame.can_id = 0x00370000UL;
 			/* frame.data[4] = 0xf2; */  /* test case : crc fault*/
 			send_can_frame(sc, &frame, verbose);
 		    }

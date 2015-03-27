@@ -35,7 +35,7 @@
 #define TIMEOUT 5			/* wait seconds for response */
 
 char *GB2_DEFAULT_FILENAME = "016-gb2.bin";
-char *MS2_DEFAULT_FILENAME = "051-ms2.bin";
+char *MS2_DEFAULT_FILENAME = "050-ms2.bin";
 
 #define GB2_BLOCK_SIZE		512
 #define GB2_BLOCK_SHIFT		9	/* 2^9 = 512 */
@@ -301,7 +301,7 @@ void fsm(unsigned char *netframe, struct update_config *device_config) {
     case (0x00310000UL):
 	printf("received CAN Ping answer\n");
 	/* print_can_frame(" ", netframe, 1); */
-	if ((netframe[4] == 8) && ((netframe[5] == MS2_ID) || (netframe[5] == GB2_ID))) {
+	if ((netframe[4] == 8) && (netframe[5] == device_config->id)) {
 	    memcpy(&device_id, &netframe[5], 4);
 	    memcpy(&version, &netframe[9], 2);
 	    if (netframe[5] == GB2_ID)
@@ -354,17 +354,24 @@ void fsm(unsigned char *netframe, struct update_config *device_config) {
 			fprintf(stderr, "Aiiee got NACK ! Aborting ...\n\n");
 			finished = -1;
 		    }
-		    if (memcmp(netframe, checkframe_block_id, 11) == 0 ){
+		    /* MS2 may use 0x0000 as hash -> begin compare at data length field */
+		    if (memcmp(&netframe[4], &checkframe_block_id[4], 7) == 0) {
 			printf("sending block 0x%02X 0x%04X\n", last_bin_block + device_config->boot_blocks, last_bin_block * device_config->block_size);
 			send_block(&binfile[((last_bin_block) * device_config->block_size)], device_config->block_size, lastframe);
 			last_bin_block--;
 		    }
-		    if ((memcmp(netframe, checkframe, 10) == 0) && (last_bin_block >= 0)) {
-			send_next_block_id(last_bin_block + device_config->boot_blocks, lastframe);
-			/* print_can_frame(CECK_FORMAT_STRG, checkframe_block_id, 1); */
-		    }
-		    if ((memcmp(netframe, checkframe, 10) == 0) && (last_bin_block < 0)) {
-			finished = 1;
+		    /* MS2 may use 0x0000 as hash -> begin compare at data length field */
+		    if (memcmp(&netframe[4], &checkframe[4], 6) == 0) {
+			if (last_bin_block >= 0) {
+			    send_next_block_id(last_bin_block + device_config->boot_blocks, lastframe);
+			} else {
+			    if (device_config->id == MS2_ID) {
+				send_frame(M_MS2_MARK_END);
+				usleep(2000);
+				send_frame(M_MS2_SOFT_RESET);
+			    }
+			    finished = 1;
+			}
 		    }
 		}
 	    }
@@ -396,7 +403,7 @@ int main(int argc, char **argv) {
 
     fd_set readfds;
 
-    if(device_setup("gb2", &device_config) < 0) {
+    if(device_setup(basename(argv[0]), &device_config) < 0) {
 	fprintf(stderr, "invalid device\n");
 	exit(EXIT_FAILURE);
     }
@@ -479,9 +486,9 @@ int main(int argc, char **argv) {
     binfile = read_data(&device_config);
     if (binfile == NULL)
 	exit(EXIT_FAILURE);
-    dev_bin_blocks = device_fsize >> device_config.shift;
-    /* printf("%s: fsize 0x%04X device_fsize 0x%04X blocks 0x%02X last 0x%04X\n", filename, fsize, device_fsize,
-	   dev_bin_blocks, device_fsize - dev_bin_blocks * device_config.block_size); */
+    dev_bin_blocks = (device_fsize - 1) >> device_config.shift;
+    printf("%s: fsize 0x%04X device_fsize 0x%04X blocks 0x%02X last 0x%04X\n", filename, fsize, device_fsize,
+	   dev_bin_blocks, device_fsize - dev_bin_blocks * device_config.block_size);
 
     if (can_mode) {
 	if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
