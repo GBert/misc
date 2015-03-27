@@ -44,7 +44,7 @@ char *MS2_DEFAULT_FILENAME = "051-ms2.bin";
 
 #define MS2_BLOCK_SIZE		1024
 #define MS2_BLOCK_SHIFT		10	/* 2^10 = 1024 */
-#define MS2_BOOT_BLOCK_SIZE	0
+#define MS2_BOOT_BLOCK_SIZE	4
 #define MS2_FILL_SBLOCK		1024-1
 
 struct update_config {
@@ -88,7 +88,7 @@ unsigned char lastframe[13];
 unsigned char checkframe[13];
 unsigned char checkframe_nack[13];
 unsigned char checkframe_block_id[13];
-int gb2_bin_blocks;
+int dev_bin_blocks;
 int last_bin_block;
 int finished;
 
@@ -287,7 +287,7 @@ int send_block(unsigned char *binfile, int length, unsigned char *netframe) {
     return 0;
 }
 
-void fsm(unsigned char *netframe) {
+void fsm(unsigned char *netframe, struct update_config *device_config) {
     unsigned int canid;
     unsigned char next_frame[13];
     memcpy(&canid, netframe, 4);
@@ -329,14 +329,16 @@ void fsm(unsigned char *netframe) {
 		checkframe_nack[9] = 0xf2;
 		/* print_can_frame(CECK_FORMAT_STRG, checkframe, 1); */
 		/* print_can_frame(CECK_FORMAT_STRG, checkframe_nack, 1); */
-		last_bin_block = gb2_bin_blocks;
-		send_next_block_id(last_bin_block + GB2_BOOT_BLOCK_SIZE, lastframe);
+		last_bin_block = dev_bin_blocks;
+		send_next_block_id(last_bin_block + device_config->boot_blocks, lastframe);
 	    } else {
 		/* first data block */
-		if ((memcmp(&netframe[4], &lastframe[4], 9) == 0) && (last_bin_block == gb2_bin_blocks)) {
-		    if (last_bin_block == gb2_bin_blocks) {
-			printf("sending block 0x%02X 0x%04X\n", last_bin_block + GB2_BOOT_BLOCK_SIZE, last_bin_block * GB2_BLOCK_SIZE);
-			send_block(&binfile[((last_bin_block) * GB2_BLOCK_SIZE)], device_fsize - gb2_bin_blocks * GB2_BLOCK_SIZE, lastframe);
+		if ((memcmp(&netframe[4], &lastframe[4], 9) == 0) && (last_bin_block == dev_bin_blocks)) {
+		    if (last_bin_block == dev_bin_blocks) {
+			printf("sending block 0x%02X 0x%04X\n", last_bin_block + device_config->boot_blocks,
+				last_bin_block * device_config->block_size);
+			send_block(&binfile[((last_bin_block) * device_config->block_size)],
+				device_fsize - dev_bin_blocks * device_config->block_size, lastframe);
 			last_bin_block--;
 		    }
 		} else {
@@ -346,12 +348,12 @@ void fsm(unsigned char *netframe) {
 			finished = -1;
 		    }
 		    if (memcmp(netframe, checkframe_block_id, 11) == 0 ){
-			printf("sending block 0x%02X 0x%04X\n", last_bin_block + GB2_BOOT_BLOCK_SIZE, last_bin_block * GB2_BLOCK_SIZE);
-			send_block(&binfile[((last_bin_block) * GB2_BLOCK_SIZE)], GB2_BLOCK_SIZE, lastframe);
+			printf("sending block 0x%02X 0x%04X\n", last_bin_block + device_config->boot_blocks, last_bin_block * device_config->block_size);
+			send_block(&binfile[((last_bin_block) * device_config->block_size)], device_config->block_size, lastframe);
 			last_bin_block--;
 		    }
 		    if ((memcmp(netframe, checkframe, 10) == 0) && (last_bin_block >= 0)) {
-			send_next_block_id(last_bin_block + GB2_BOOT_BLOCK_SIZE, lastframe);
+			send_next_block_id(last_bin_block + device_config->boot_blocks, lastframe);
 			/* print_can_frame(CECK_FORMAT_STRG, checkframe_block_id, 1); */
 		    }
 		    if ((memcmp(netframe, checkframe, 10) == 0) && (last_bin_block < 0)) {
@@ -470,9 +472,9 @@ int main(int argc, char **argv) {
     binfile = read_data(&device_config);
     if (binfile == NULL)
 	exit(EXIT_FAILURE);
-    gb2_bin_blocks = device_fsize >> GB2_BLOCK_SHIFT;
+    dev_bin_blocks = device_fsize >> device_config.shift;
     /* printf("%s: fsize 0x%04X device_fsize 0x%04X blocks 0x%02X last 0x%04X\n", filename, fsize, device_fsize,
-	   gb2_bin_blocks, device_fsize - gb2_bin_blocks * BLOCK_SIZE); */
+	   dev_bin_blocks, device_fsize - dev_bin_blocks * device_config.block_size); */
 
     if (can_mode) {
 	if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
@@ -561,7 +563,7 @@ int main(int argc, char **argv) {
 		exit(EXIT_FAILURE);
 	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		format_can_to_netframe(&frame, netframe);
-		fsm(netframe);
+		fsm(netframe, &device_config);
 		if (finished == 1)
 		    break;
 		if (finished < 0)
@@ -571,7 +573,7 @@ int main(int argc, char **argv) {
 	/* received a UDP packet */
 	if (FD_ISSET(sa, &readfds)) {
 	    if (read(sa, udpframe, MAXDG) == 13) {
-		fsm(udpframe);
+		fsm(udpframe, &device_config);
 		if (finished ==1)
 		    break;
 		if (finished < 0)
