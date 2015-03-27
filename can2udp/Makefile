@@ -44,5 +44,8 @@ define Package/can2udp/install
 #	$(INSTALL_BIN) ./files/can2lan.init $(1)/etc/init.d/can2lan
 endef
 
+define Package/can2udp/postinst
+        ln -sf /usr/bin/gb2-update $${IPKG_INSTROOT}/usr/bin/ms2-update
+endef
 
 $(eval $(call BuildPackage,can2udp))
