@@ -41,17 +41,20 @@ char *MS2_DEFAULT_FILENAME = "051-ms2.bin";
 #define GB2_BLOCK_SHIFT		9	/* 2^9 = 512 */
 #define GB2_BOOT_BLOCK_SIZE	2
 #define GB2_FILL_SBLOCK		8-1
+#define GB2_ID			0x47
 
 #define MS2_BLOCK_SIZE		1024
 #define MS2_BLOCK_SHIFT		10	/* 2^10 = 1024 */
 #define MS2_BOOT_BLOCK_SIZE	4
 #define MS2_FILL_SBLOCK		1024-1
+#define MS2_ID			0x4d
 
 struct update_config {
     int block_size;
     int shift;
     int boot_blocks;
     int padding;
+    int id;
     char *filename;
 };
 
@@ -257,6 +260,7 @@ int device_setup(char *device, struct update_config *device_config) {
 	device_config->boot_blocks = GB2_BOOT_BLOCK_SIZE;
 	device_config->padding = GB2_FILL_SBLOCK;
 	device_config->filename = GB2_DEFAULT_FILENAME;
+	device_config->id = GB2_ID;
         ret = 1;
     } else if (strncmp(device, "ms2", 3) == 0) {
 	device_config->block_size = MS2_BLOCK_SIZE;
@@ -264,6 +268,7 @@ int device_setup(char *device, struct update_config *device_config) {
 	device_config->boot_blocks = MS2_BOOT_BLOCK_SIZE;
 	device_config->padding = MS2_FILL_SBLOCK;
 	device_config->filename = MS2_DEFAULT_FILENAME;
+	device_config->id = MS2_ID;
         ret = 2;
     } 
     return ret;
@@ -296,11 +301,13 @@ void fsm(unsigned char *netframe, struct update_config *device_config) {
     case (0x00310000UL):
 	printf("received CAN Ping answer\n");
 	/* print_can_frame(" ", netframe, 1); */
-	/* if ((netframe[5] == 0x47 ) && (netframe[6] == 0x43 )) { */
-	if ((netframe[4] == 8) && (netframe[5] == 0x47)) {
+	if ((netframe[4] == 8) && ((netframe[5] == MS2_ID) || (netframe[5] == GB2_ID))) {
 	    memcpy(&device_id, &netframe[5], 4);
 	    memcpy(&version, &netframe[9], 2);
-	    printf("found Gleisbox : 0x%08X  Version %d.%d\n", ntohl(device_id), netframe[9], netframe[10]);
+	    if (netframe[5] == GB2_ID)
+		printf("found Gleisbox with ID 0x%08X  Version %d.%d\n", ntohl(device_id), netframe[9], netframe[10]);
+	    if (netframe[5] == MS2_ID)
+		printf("found MS2 with ID 0x%08X  Version %d.%d\n", ntohl(device_id), netframe[9], netframe[10]);
 	    if ((version == device_file_version) && (!force)) {
 		printf("file and device version are the same - use -f to force update\n");
 		exit(EXIT_FAILURE);
