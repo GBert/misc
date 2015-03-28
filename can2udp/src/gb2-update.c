@@ -235,8 +235,13 @@ unsigned char *read_data(struct update_config *device_config) {
     }
 
     fclose(fp);
-    memcpy(&device_file_version, &data[6], 2);
-    printf("Device File Version %d.%d\n", data[6], data[7]);
+    if (device_config->id == GB2_ID) {
+	memcpy(&device_file_version, &data[6], 2);
+	printf("[%s] Device File Version %d.%d\n", device_config->filename, data[6], data[7]);
+    } else if (device_config->id == MS2_ID) {
+	memcpy(&device_file_version, &data[252], 2);
+	printf("[%s] Device File Version %d.%d\n", device_config->filename, data[252], data[253]);
+    }
     return data;
 }
 
@@ -487,8 +492,8 @@ int main(int argc, char **argv) {
     if (binfile == NULL)
 	exit(EXIT_FAILURE);
     dev_bin_blocks = (device_fsize - 1) >> device_config.shift;
-    printf("%s: fsize 0x%04X device_fsize 0x%04X blocks 0x%02X last 0x%04X\n", filename, fsize, device_fsize,
-	   dev_bin_blocks, device_fsize - dev_bin_blocks * device_config.block_size);
+    /* printf("%s: fsize 0x%04X device_fsize 0x%04X blocks 0x%02X last 0x%04X\n", filename, fsize, device_fsize,
+	   dev_bin_blocks, device_fsize - dev_bin_blocks * device_config.block_size); */
 
     if (can_mode) {
 	if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
