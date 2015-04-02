@@ -338,7 +338,6 @@ void fsm(unsigned char *netframe, struct update_config *device_config) {
 		checkframe[4] = 5;
 		checkframe[9] = 0x88;
 		memcpy(checkframe_nack, checkframe, 13);
-		checkframe_nack[9] = 0xf2;
 		/* print_can_frame(CECK_FORMAT_STRG, checkframe, 1); */
 		/* print_can_frame(CECK_FORMAT_STRG, checkframe_nack, 1); */
 		last_bin_block = dev_bin_blocks;
@@ -354,7 +353,8 @@ void fsm(unsigned char *netframe, struct update_config *device_config) {
 			last_bin_block--;
 		    }
 		} else {
-		    if (memcmp(netframe, checkframe_nack, 10) == 0)  {
+		   /* there seems to be different NACK types : 0xF1 and 0xF2 */
+		    if ((memcmp(netframe, checkframe_nack, 9) == 0) && (checkframe_nack[10] == 0xf1) && (checkframe_nack[10] == 0xf2))  {
 			print_can_frame(CECK_FORMAT_STRG, netframe, 1);
 			fprintf(stderr, "Aiiee got NACK ! Aborting ...\n\n");
 			finished = -1;
