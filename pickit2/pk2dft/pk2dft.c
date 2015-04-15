@@ -315,7 +315,7 @@ static int num_rd_scripts = 0;
 static int num_rd_families = 0;
 static int num_rd_devices = 0;
 
-static int verbose = 0;
+static int verbose = 1;
 
 /* forward declarations */
 int parse_script(char *filename, script_ent_t * script);
@@ -395,7 +395,9 @@ int parse_script(char *filename, script_ent_t * script) {
 
     memset(script, 0, sizeof(script_ent_t));
 
+    printf("eins\n");
     pcfg = cfg_init(script_opts, CFGF_NONE);
+    printf("zwei\n");
     if (cfg_parse(pcfg, filename) == CFG_PARSE_ERROR)
 	return -1;
 

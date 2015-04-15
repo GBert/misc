@@ -1,0 +1,51 @@
+MPASM 5.54                      REGS2515.ASM   8-12-2014  15:34:44         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 
+                      00002         LIST P=18F4550
+MPASM 5.54                      REGS2515.ASM   8-12-2014  15:34:44         PAGE  2
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+BFPCTRL_byte                      00000008
+BFPCTRLbits                       00000008
+CANCTRL_byte                      00000001
+CANCTRLbits                       00000001
+CANINTE_byte                      00000005
+CANINTEbits                       00000005
+CANINTF_byte                      00000006
+CANINTFbits                       00000006
+CANSTAT_byte                      00000000
+CANSTATbits                       00000000
+CNF1_byte                         00000002
+CNF1bits                          00000002
+CNF2_byte                         00000003
+CNF2bits                          00000003
+CNF3_byte                         00000004
+CNF3bits                          00000004
+EFLG_byte                         00000007
+EFLGbits                          00000007
+RXB0CTRL_byte                     0000000D
+RXB0CTRLbits                      0000000D
+RXB1CTRL_byte                     0000000E
+RXB1CTRLbits                      0000000E
+TXB0CTRL_byte                     0000000A
+TXB0CTRLbits                      0000000A
+TXB1CTRL_byte                     0000000B
+TXB1CTRLbits                      0000000B
+TXB2CTRL_byte                     0000000C
+TXB2CTRLbits                      0000000C
+TXRTSCTRL_byte                    00000009
+TXRTSCTRLbits                     00000009
+__18F4550                         00000001
+
+Errors   :     0
+Warnings :     0 reported,     0 suppressed
+Messages :     0 reported,     0 suppressed
+
+

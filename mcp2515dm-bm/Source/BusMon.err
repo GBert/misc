@@ -1,0 +1,5 @@
+Warning[2058] C:\Users\c16297\Desktop\MCP2515_BusMonitor\user\BusMon.c 334 : call of function without prototype
+Warning[2054] C:\Users\c16297\Desktop\MCP2515_BusMonitor\user\BusMon.c 945 : suspicious pointer conversion
+Warning[2054] C:\Users\c16297\Desktop\MCP2515_BusMonitor\user\BusMon.c 981 : suspicious pointer conversion
+Warning[2054] C:\Users\c16297\Desktop\MCP2515_BusMonitor\user\BusMon.c 1018 : suspicious pointer conversion
+Warning[2054] C:\Users\c16297\Desktop\MCP2515_BusMonitor\user\BusMon.c 1124 : suspicious pointer conversion
