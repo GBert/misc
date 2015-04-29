@@ -8,12 +8,12 @@ include $(TOPDIR)/rules.mk
 # http://sourceforge.net/projects/srcpd/files/srcpd/2.1.2/srcpd-2.1.2.tar.gz/download
 
 PKG_NAME:=srcpd
-PKG_VERSION:=2.1.2
+PKG_VERSION:=2.1.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=@SF/srcpd/srcpd/2.1.2
-PKG_MD5SUM:=bda8741db2c99b247a371daeee29d667
+PKG_SOURCE_URL:=@SF/srcpd/srcpd/2.1.3
+PKG_MD5SUM:=2f6c173e479ece56cdd5b97f8d0a257c
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 PKG_BUILD_PARALLEL:=1
@@ -26,7 +26,7 @@ define Package/srcpd
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=srcpd
-  DEPENDS:=+libxml2 +libz +libpthread
+  DEPENDS:=+libxml2 +libpthread
   URL:=http://srcpd.sourceforge.net/srcpd
   MAINTAINER:=Gerhard Bertelsmann
 endef
