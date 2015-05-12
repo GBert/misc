@@ -32,6 +32,7 @@
 #include <sys/time.h>
 #include <time.h>
 #include <linux/can.h>
+#include <ifaddrs.h>
 
 #define MAXLINE		1024		/* max string length     */
 #define MAX_TCP_CONN	16		/* max TCP clients       */

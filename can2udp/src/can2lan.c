@@ -32,12 +32,12 @@ int ms1_workaround = 0;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.0\n\n");
+    fprintf(stderr, "   Version 1.01\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default 15730\n");
-    fprintf(stderr, "         -b <broadcast_addr> broadcast address - default 255.255.255.255\n");
+    fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -i <can int>        CAN interface - default can0\n");
     fprintf(stderr, "         -m                  doing MS1 workaround - default: don't do it\n\n");
     fprintf(stderr, "         -f                  running in foreground\n\n");
@@ -138,6 +138,10 @@ int main(int argc, char **argv) {
 
     int sa, sc, sb, st, tcp_socket;	/* UDP incoming socket , CAN socket, UDP broadcast socket, TCP socket */
     struct sockaddr_in saddr, baddr, tcp_addr;
+    /* vars for determing broadcast address */
+    struct ifaddrs *ifap, *ifa;
+    struct sockaddr_in *bsa;
+
     struct sockaddr_can caddr;
     struct ifreq ifr;
     socklen_t caddrlen = sizeof(caddr);
@@ -153,11 +157,16 @@ int main(int argc, char **argv) {
     int destination_port = 15730;
     int background = 1;
     const int on = 1;
-    char udp_dst_address[] = "255.255.255.255";
     char buffer[64];
     page_name = calloc(64, sizeof(char *));
 
     strcpy(ifr.ifr_name, "can0");
+
+    /* TODO : where to use */
+    char *udp_dst_address = (char*)malloc(16);
+    strcpy(udp_dst_address, "255.255.255.255");
+    char *bcast_interface = (char*)malloc(16);
+    strcpy(bcast_interface, "br-lan");
 
     config_file[0] = '\0';
 
@@ -182,9 +191,14 @@ int main(int argc, char **argv) {
 	    break;
 	case 'b':
 	    if (strlen(optarg) <= 15) {
-		strcpy(udp_dst_address, optarg);
+		/* IP address begins with a number */
+		if ((optarg[0] >= '0') || (optarg[0] <= '9'))
+		    strcpy(udp_dst_address, optarg);
+		else
+		    bzero(bcast_interface, 16);
+		    strcpy(bcast_interface, optarg);
 	    } else {
-		fprintf(stderr, "UDP broadcast address error: %s\n", optarg);
+		fprintf(stderr, "UDP broadcast address or interface error: %s\n", optarg);
 		exit(1);
 	    }
 	    break;
@@ -223,6 +237,18 @@ int main(int argc, char **argv) {
 
     page_name = read_track_file(config_file, page_name);
 
+    /* get the broadcast address */
+    getifaddrs (&ifap);
+    for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
+	if (ifa->ifa_addr) {
+	    if (ifa->ifa_addr->sa_family==AF_INET) {
+		bsa = (struct sockaddr_in *) ifa->ifa_broadaddr;
+		if (strncmp(ifa->ifa_name, bcast_interface, strlen(bcast_interface)) == 0)
+		    udp_dst_address = inet_ntoa(bsa->sin_addr);
+	    }
+	}
+    }
+
     /* prepare udp sending socket struct */
     bzero(&baddr, sizeof(baddr));
     baddr.sin_family = AF_INET;
@@ -236,6 +262,8 @@ int main(int argc, char **argv) {
 	}
 	exit(1);
     }
+    if (verbose & !background)
+	printf("using broadcast address %s\n", udp_dst_address);
 
     /* prepare UDP sending socket */
     if ((sb = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {

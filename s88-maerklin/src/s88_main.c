@@ -51,10 +51,12 @@
 #include <linux/fs.h>
 #include <linux/proc_fs.h>
 #include <linux/platform_device.h>
-#include <asm-arm/delay.h>
-#include <asm-arm/types.h>
-#include <asm-arm/arch-pxa/gpio.h>
-#include <asm-arm/arch-pxa/irqs.h>
+#include <linux/delay.h>
+/* #include <asm-arm/types.h> */
+#include <linux/ioctl.h>
+#include <linux/sched.h>
+#include <linux/gpio.h>
+#include <linux/irq.h>
 
 #include "s88.h"
 #include "s88_main.h"
@@ -96,12 +98,12 @@ static BYTE gay_last_read_input_data[(S88_MAX_BUS_LENGTH + 7) / 8] =
 
 struct file_operations gx_s88_fops =
 {
-open:       s88_open,                    // open method
-release:    s88_release,                 // close method
-read:       s88_read,                    // read method
-poll:       s88_poll,                    // poll method
+	open:       s88_open,                    // open method
+	release:    s88_release,                 // close method
+	read:       s88_read,                    // read method
+	poll:       s88_poll,                    // poll method
 	//    fasync:     s88_fasync,                  // asynchronous notification method
-ioctl:      s88_ioctl,                   // I/O control method
+	ioctl:      s88_ioctl,                   // I/O control method
 };
 
 
