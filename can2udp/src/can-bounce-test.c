@@ -114,6 +114,7 @@ int main(int argc, char **argv) {
     float elapsed_time, bandwidth, packets_per_second;
 
     signal(SIGINT, handler);
+    ret = 0;
 
     socket_can1=init_can("can0");
     socket_can2=init_can("can1");
@@ -157,5 +158,5 @@ int main(int argc, char **argv) {
     packets_per_second=NUM_OF_FRAMES / elapsed_time / 1000;
     printf("Send %d in %.3f sec (%.3f tpackets/sec %.3f Mbit)\n",NUM_OF_FRAMES,elapsed_time, packets_per_second, bandwidth);
 
-    return 0;
+    return ret;
 }
