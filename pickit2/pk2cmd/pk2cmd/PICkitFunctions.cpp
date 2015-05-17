@@ -3162,8 +3162,8 @@ bool CPICkitFunctions::DownloadPE(void)
     commandArrayp[commOffSet++] = 0x00;
     commandArrayp[commOffSet++] = 0xA0;
     commandArrayp[commOffSet++] = SCMD_JT2_XFRFASTDAT_LIT;
-    commandArrayp[commOffSet++] = (unsigned char)(K_PE_LEN_RIPE06 & 0xFF);	// PE_SIZE
-    commandArrayp[commOffSet++] = (unsigned char)((K_PE_LEN_RIPE06 >> 8) & 0xFF);
+    commandArrayp[commOffSet++] = (unsigned char)(K_PE_LEN_RIPE11 & 0xFF);	// PE_SIZE
+    commandArrayp[commOffSet++] = (unsigned char)((K_PE_LEN_RIPE11 >> 8) & 0xFF);
     commandArrayp[commOffSet++] = 0x00;
     commandArrayp[commOffSet++] = 0x00;
 
@@ -3173,7 +3173,7 @@ bool CPICkitFunctions::DownloadPE(void)
 	return false;		// yes - abort
     }
     // Download the PE itself (STEP 7-B)
-    int numLoops = K_PE_LEN_RIPE06 / 10;
+    int numLoops = K_PE_LEN_RIPE11 / 10;
     for (int i = 0, j = 0; i < numLoops; i++) {	// download 10 at a time
 	commOffSet = 0;
 	commandArrayp[commOffSet++] = FWCMD_CLR_DOWNLOAD_BUFFER;
@@ -3181,16 +3181,16 @@ bool CPICkitFunctions::DownloadPE(void)
 	commandArrayp[commOffSet++] = 40;
 	// download the PE instructions
 	j = i * 10;
-	commOffSet = addInstruction(commandArrayp, P32PE.PIC32_PE_RIPE06[j], commOffSet);
-	commOffSet = addInstruction(commandArrayp, P32PE.PIC32_PE_RIPE06[j + 1], commOffSet);
-	commOffSet = addInstruction(commandArrayp, P32PE.PIC32_PE_RIPE06[j + 2], commOffSet);
-	commOffSet = addInstruction(commandArrayp, P32PE.PIC32_PE_RIPE06[j + 3], commOffSet);
-	commOffSet = addInstruction(commandArrayp, P32PE.PIC32_PE_RIPE06[j + 4], commOffSet);
-	commOffSet = addInstruction(commandArrayp, P32PE.PIC32_PE_RIPE06[j + 5], commOffSet);
-	commOffSet = addInstruction(commandArrayp, P32PE.PIC32_PE_RIPE06[j + 6], commOffSet);
-	commOffSet = addInstruction(commandArrayp, P32PE.PIC32_PE_RIPE06[j + 7], commOffSet);
-	commOffSet = addInstruction(commandArrayp, P32PE.PIC32_PE_RIPE06[j + 8], commOffSet);
-	commOffSet = addInstruction(commandArrayp, P32PE.PIC32_PE_RIPE06[j + 9], commOffSet);
+	commOffSet = addInstruction(commandArrayp, P32PE.PIC32_PE_RIPE11[j], commOffSet);
+	commOffSet = addInstruction(commandArrayp, P32PE.PIC32_PE_RIPE11[j + 1], commOffSet);
+	commOffSet = addInstruction(commandArrayp, P32PE.PIC32_PE_RIPE11[j + 2], commOffSet);
+	commOffSet = addInstruction(commandArrayp, P32PE.PIC32_PE_RIPE11[j + 3], commOffSet);
+	commOffSet = addInstruction(commandArrayp, P32PE.PIC32_PE_RIPE11[j + 4], commOffSet);
+	commOffSet = addInstruction(commandArrayp, P32PE.PIC32_PE_RIPE11[j + 5], commOffSet);
+	commOffSet = addInstruction(commandArrayp, P32PE.PIC32_PE_RIPE11[j + 6], commOffSet);
+	commOffSet = addInstruction(commandArrayp, P32PE.PIC32_PE_RIPE11[j + 7], commOffSet);
+	commOffSet = addInstruction(commandArrayp, P32PE.PIC32_PE_RIPE11[j + 8], commOffSet);
+	commOffSet = addInstruction(commandArrayp, P32PE.PIC32_PE_RIPE11[j + 9], commOffSet);
 	// execute
 	commandArrayp[commOffSet++] = FWCMD_EXECUTE_SCRIPT;
 	commandArrayp[commOffSet++] = 10;
@@ -3214,7 +3214,7 @@ bool CPICkitFunctions::DownloadPE(void)
     Sleep(100);
     int arrayOffset = numLoops * 10;
     int i;
-    numLoops = K_PE_LEN_RIPE06 % 10;
+    numLoops = K_PE_LEN_RIPE11 % 10;
     if (numLoops > 0) {
 	commOffSet = 0;
 	commandArrayp[commOffSet++] = FWCMD_CLR_DOWNLOAD_BUFFER;
@@ -3222,7 +3222,7 @@ bool CPICkitFunctions::DownloadPE(void)
 	commandArrayp[commOffSet++] = (unsigned char)(4 * numLoops);
 	// download the PE instructions
 	for (i = 0; i < numLoops; i++) {
-	    commOffSet = addInstruction(commandArrayp, P32PE.PIC32_PE_RIPE06[i + arrayOffset], commOffSet);
+	    commOffSet = addInstruction(commandArrayp, P32PE.PIC32_PE_RIPE11[i + arrayOffset], commOffSet);
 	}
 	// execute
 	commandArrayp[commOffSet++] = FWCMD_EXECUTE_SCRIPT;
@@ -3403,7 +3403,7 @@ bool CPICkitFunctions::PE_DownloadAndConnect(void)
     EnterSerialExecution();
     DownloadPE();
     int PEVersion = ReadPEVersion();
-    if (PEVersion != K_PIC32_PE_VERSION_RIPE06) {
+    if (PEVersion != K_PIC32_PE_VERSION_RIPE11) {
 	printf("...FAILED\n");
 	fflush(stdout);
 	RunScript(SCR_PROG_EXIT, 1);
@@ -3622,7 +3622,8 @@ bool CPICkitFunctions::P32Write(bool progmem, bool uidmem, bool cfgmem)
     // Write Program Memory ====================================================================================
 
     // Write 512 bytes (128 words) per memory row - so need 2 downloads per row.
-    int wordsPerLoop = 128;
+    //int wordsPerLoop = 128;
+    int wordsPerLoop = 32;
 
     if (progmem) {
 	// First, find end of used Program Memory
@@ -3636,6 +3637,7 @@ bool CPICkitFunctions::P32Write(bool progmem, bool uidmem, bool cfgmem)
 	if (writes < 2)
 	    writes = 2;		// 1024 bytes min
 
+	printf("endOfBuffer 0x%08X\n", endOfBuffer);
 	timerStart((_TCHAR *) "Write Flash", endOfBuffer / wordsPerLoop);
 
 	// Send PROGRAM command header
@@ -3648,6 +3650,7 @@ bool CPICkitFunctions::P32Write(bool progmem, bool uidmem, bool cfgmem)
 	timerPrint();
 
 	do {
+	    printf(".");
 	    index += wordsPerLoop;
 	    PEProgramSendBlock(index, true);	// response
 	    timerPrint();
