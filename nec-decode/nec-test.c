@@ -40,6 +40,11 @@ uint8_t test_data [] = { 180, 90, 11, 11, 11, 11, 11, 34, 11, 34,   11, 11, 11, 
                                   11, 11, 11, 34, 11, 11, 11, 11,   11, 34, 11, 11, 11, 34, 11, 11,
                                   11, 34, 11, 34, 11, 34, 11, 34,   11, 11, 11, 11, 11, 11, 11, 11,
                                   11, 11, 11, 11, 11, 11, 11, 11,   11, 34, 11, 34, 11, 34, 11, 34 };
+
+uint8_t test_data_f [] = { 180, 90, 11, 11, 11, 11, 11, 34, 11, 34,   11, 11, 11, 34, 11, 11, 11, 34,
+                                  11, 11, 11, 34, 11, 11, 11, 11,   11, 34, 11, 11, 11, 34, 11, 11,
+                                  11, 34, 11, 34, 11, 34, 11, 34,   11, 11, 11, 11, 11, 11, 11, 11,
+                                  11, 11, 11, 11, 11, 11, 11, 11,   11, 34, 11, 34, 11, 34, 11, 34 };
 /* timer 50us */
 
 /*                                              /  50us grid
@@ -77,7 +82,7 @@ void ir_nec_decode(uint8_t stopwatch) {
         return;
     case STATE_HEADER_SPACE:
 	if ((stopwatch > 80 ) && (stopwatch < 100)) {
-	    /* we got the start sequnece -> old data is now invalid */
+	    /* we got the start sequence -> old data is now invalid */
 	    ir_nec_data_valid = 0;
 	    ir_nec_decode_bits = 0;
 	    ir_nec_decode_state = STATE_BIT_PULSE;
@@ -129,6 +134,12 @@ int main(int argc, char **argv) {
     ir_nec_decode_state = STATE_INACTIVE;
 
     for (i = 0; i < sizeof(test_data); i++) {
+	old_state = ir_nec_decode_state;
+	ir_nec_decode(test_data[i]);
+	printf("stopwatch %03d state %d -> %d  bit %02d\n", test_data[i], old_state, ir_nec_decode_state, ir_nec_decode_bits);
+    }
+    printf("data 0x%08X\n\n", nec_code);
+    for (i = 0; i < sizeof(test_data_f); i++) {
 	old_state = ir_nec_decode_state;
 	ir_nec_decode(test_data[i]);
 	printf("stopwatch %03d state %d -> %d  bit %02d\n", test_data[i], old_state, ir_nec_decode_state, ir_nec_decode_bits);
