@@ -41,9 +41,11 @@ uint8_t test_data []   = { 180, 90, 11, 11, 11, 11, 11, 34, 11, 34,   11, 11, 11
                                     11, 34, 11, 34, 11, 34, 11, 34,   11, 11, 11, 11, 11, 11, 11, 11,
                                     11, 11, 11, 11, 11, 11, 11, 11,   11, 34, 11, 34, 11, 34, 11, 34, 11 };
 
+uint8_t test_data_r [] = { 180, 45, 11};
+
 uint8_t test_data_f [] = { 180, 90, 11, 11, 11, 11, 11, 34, 11, 34,   11, 11, 11, 34, 11, 11, 11, 34,
                                     11, 11, 11, 34, 11, 11, 11, 11,   11, 34, 11, 11, 11, 34, 11, 11,
-                                    11, 34, 11, 34, 11, 34, 11, 34,   11, 11, 11, 11, 11, 11, 11, 11,
+                                    11, 34, 99, 34, 11, 34, 11, 34,   11, 11, 11, 11, 11, 11, 11, 11,
                                     11, 11, 11, 11, 11, 11, 11, 11,   11, 34, 11, 34, 11, 34, 11, 34, 11 };
 /* timer 50us */
 
@@ -90,7 +92,7 @@ void ir_nec_decode(uint8_t stopwatch) {
 	} else if ((stopwatch > 39 ) && (stopwatch < 51)) {
 	    /* this is redundant as we already have a full sequence */
 	    ir_nec_decode_bits = 32;
-	    ir_nec_decode_state = STATE_BIT_PULSE;
+	    ir_nec_decode_state = STATE_TRAILER_PULSE;
 	} else
 	    break;
         return;
@@ -146,12 +148,24 @@ int main(int argc, char **argv) {
 	ir_nec_decode(test_data[i]);
 	printf("stopwatch %03d state %d -> %d  bit %02d\n", test_data[i], old_state, ir_nec_decode_state, ir_nec_decode_bits);
     }
-    printf("data 0x%08X\n\n", nec_code);
+    if (ir_nec_data_valid)
+	printf("data 0x%08X\n\n", nec_code);
+
+    for (i = 0; i < sizeof(test_data_r); i++) {
+	old_state = ir_nec_decode_state;
+	ir_nec_decode(test_data_r[i]);
+	printf("stopwatch %03d state %d -> %d  bit %02d\n", test_data_r[i], old_state, ir_nec_decode_state, ir_nec_decode_bits);
+    }
+    if (ir_nec_data_valid)
+        printf("data 0x%08X\n\n", nec_code);
+
     for (i = 0; i < sizeof(test_data_f); i++) {
 	old_state = ir_nec_decode_state;
-	ir_nec_decode(test_data[i]);
-	printf("stopwatch %03d state %d -> %d  bit %02d\n", test_data[i], old_state, ir_nec_decode_state, ir_nec_decode_bits);
+	ir_nec_decode(test_data_f[i]);
+	printf("stopwatch %03d state %d -> %d  bit %02d\n", test_data_f[i], old_state, ir_nec_decode_state, ir_nec_decode_bits);
     }
-    printf("data 0x%08X\n\n", nec_code);
+    if (ir_nec_data_valid)
+        printf("data 0x%08X\n\n", nec_code);
+
     return 0;
 }
