@@ -131,7 +131,7 @@ int main(int argc, char **argv) {
     for (i = 0; i < sizeof(test_data); i++) {
 	old_state = ir_nec_decode_state;
 	ir_nec_decode(test_data[i]);
-	printf("stopwatch %03d state %d -> %d\n", test_data[i], old_state, ir_nec_decode_state);
+	printf("stopwatch %03d state %d -> %d  bit %02d\n", test_data[i], old_state, ir_nec_decode_state, ir_nec_decode_bits);
     }
     printf("data 0x%08X\n\n", nec_code);
     return 0;
