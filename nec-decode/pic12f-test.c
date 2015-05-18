@@ -33,6 +33,8 @@ void init() {
 
   T1CKPS0 = 0;  // prescaler 1:2
   T1CKPS1 = 1;  // "
+
+  TMR1ON  = 1;  // Timer on
 }
 
 void isr (void) __interrupt (1){
