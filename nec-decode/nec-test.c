@@ -106,7 +106,7 @@ void ir_nec_decode(uint8_t stopwatch) {
 	    break;
 
 	if (ir_nec_decode_bits == NEC_NBITS) {
-	    ir_nec_decode_state = STATE_TRAILER_PULSE;
+	    ir_nec_decode_state = STATE_INACTIVE;
 	    ir_nec_data_valid = 1;
 	} else {
 	    ir_nec_decode_bits++;
