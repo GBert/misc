@@ -90,7 +90,7 @@ void ir_nec_decode(uint8_t stopwatch) {
 	    ir_nec_decode_state = STATE_BIT_PULSE;
 	/* is this a repeat sequence ? */
 	} else if ((stopwatch > 39 ) && (stopwatch < 51)) {
-	    /* if ir_nec_decode_bits == 32 the repeat sequence should be valid */
+	    /* if ir_nec_decode_bits == 32 the repeat sequence could be valid */
 	    ir_nec_decode_state = STATE_TRAILER_PULSE;
 	} else
 	    break;
@@ -122,13 +122,13 @@ void ir_nec_decode(uint8_t stopwatch) {
     case STATE_TRAILER_PULSE:
 	if ((stopwatch > 9 ) && (stopwatch < 13)) {
 	    ir_nec_decode_state = STATE_INACTIVE;
-	    /* only valid data if the sequence before had all data - needed for repeat */
+	    /* we got valid data if the sequence before was valid - for repeat needed */
 	    if (ir_nec_decode_bits == NEC_NBITS)
 		ir_nec_data_valid = 1;
 	} else
 	    break;
 
-    /* TODO: check if we nee this state */
+    /* TODO: check if we need this state */
     case STATE_TRAILER_SPACE:
         ir_nec_decode_state = STATE_INACTIVE;
 	return;
