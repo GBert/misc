@@ -36,29 +36,29 @@ enum nec_state { STATE_INACTIVE,
 #define NECX_REPEAT_BITS        1
 
 
-uint8_t test_data []   = { 180, 90, 11, 11, 11, 11, 11, 34, 11, 34,   11, 11, 11, 34, 11, 11, 11, 34,
-                                    11, 11, 11, 34, 11, 11, 11, 11,   11, 34, 11, 11, 11, 34, 11, 11,
-                                    11, 34, 11, 34, 11, 34, 11, 34,   11, 11, 11, 11, 11, 11, 11, 11,
-                                    11, 11, 11, 11, 11, 11, 11, 11,   11, 34, 11, 34, 11, 34, 11, 34, 11 };
+uint8_t test_data []   = { 140, 70, 8,  8,  8,  8,  8, 26,  8, 26,   8,  8,  8, 26,  8,  8,  8, 26,
+                                    8,  8,  8, 26,  8,  8,  8,  8,   8, 26,  8,  8,  8, 26,  8,  8,
+                                    8, 26,  8, 26,  8, 26,  8, 26,   8,  8,  8,  8,  8,  8,  8,  8,
+                                    8,  8,  8,  8,  8,  8,  8,  8,   8, 26,  8, 26,  8, 26,  8, 26, 8 };
 
-uint8_t test_data_r [] = { 180, 45, 11};
+uint8_t test_data_r [] = { 140, 45, 11};
 
-uint8_t test_data_f [] = { 180, 90, 11, 11, 11, 11, 11, 34, 11, 34,   11, 11, 11, 34, 11, 11, 11, 34,
-                                    11, 11, 11, 34, 11, 11, 11, 11,   11, 34, 11, 11, 11, 34, 11, 11,
-                                    11, 34, 99, 34, 11, 34, 11, 34,   11, 11, 11, 11, 11, 11, 11, 11,
-                                    11, 11, 11, 11, 11, 11, 11, 11,   11, 34, 11, 34, 11, 34, 11, 34, 11 };
+uint8_t test_data_f [] = { 140, 70, 8,  8,  8,  8,  8, 26,  8, 26,   8,  8,  8, 26,  8,  8,  8, 26,
+                                    8,  8,  8, 26,  8,  8,  8,  8,   8, 26,  8,  8,  8, 26,  8,  8,
+                                    8, 26, 99, 26,  8, 26,  8, 26,   8,  8,  8,  8,  8,  8,  8,  8,
+                                    8,  8,  8,  8,  8,  8,  8,  8,   8, 26,  8, 26,  8, 26,  8, 26, 8 };
 /* timer 50us */
 
-/*                                              /  50us grid
-   start1     pulse 9000us        / 8100 - 9900 / 162 - 198
-   start2     pulse 4500us        / 4050 - 4950 /  81 -  99
-   data_start pulse  560us        /  500 - 600  /  10 -  12
-   data_h     pulse (2250-560) us / 1500 - 1850 /  30 -  37
-   data_l     pulse  560us        /  500 - 600  /  10 -  12
+/*                                              /  64us grid
+   start1     pulse 9000us        / 8100 - 9900 / 126 - 155
+   start2     pulse 4500us        / 4050 - 4950 /  63 -  77
+   data_start pulse  560us        /  500 - 600  /   7 -  10
+   data_h     pulse (2250-560) us / 1500 - 1850 /  23 -  29
+   data_l     pulse  560us        /  500 - 600  /   7 -  10
 
-   repeat1    pulse 9000us        / 8100 - 9900 / 162 - 198
-   repeat2    pulse 2250us        / 2000 - 2500 /  40 -  50
-   repeat3    pulse  560us        /  500 - 600  /  10 -  12
+   repeat1    pulse 9000us        / 8100 - 9900 / 126 - 155
+   repeat2    pulse 2250us        / 2000 - 2500 /  31 -  40
+   repeat3    pulse  560us        /  500 - 600  /   7 -  10
 
    format:    address , address ^ 0xff, command , command ^ 0xff
    LSB first
@@ -79,33 +79,33 @@ void ir_nec_decode(uint8_t stopwatch) {
     switch (ir_nec_decode_state) {
 
     case STATE_INACTIVE:
-	if ((stopwatch > 161 ) && (stopwatch < 199))
+	if ((stopwatch > 125 ) && (stopwatch < 156))
 	    ir_nec_decode_state = STATE_HEADER_SPACE;
         return;
     case STATE_HEADER_SPACE:
-	if ((stopwatch > 80 ) && (stopwatch < 100)) {
+	if ((stopwatch > 62 ) && (stopwatch < 78)) {
 	    /* we got the start sequence -> old data is now invalid */
 	    ir_nec_data_valid = 0;
 	    ir_nec_decode_bits = 0;
 	    ir_nec_decode_state = STATE_BIT_PULSE;
 	/* is this a repeat sequence ? */
-	} else if ((stopwatch > 39 ) && (stopwatch < 51)) {
+	} else if ((stopwatch > 30 ) && (stopwatch < 41)) {
 	    /* if ir_nec_decode_bits == 32 the repeat sequence could be valid */
 	    ir_nec_decode_state = STATE_TRAILER_PULSE;
 	} else
 	    break;
         return;
     case STATE_BIT_PULSE:
-	if ((stopwatch > 9 ) && (stopwatch < 13))
+	if ((stopwatch > 6 ) && (stopwatch < 11))
 	    ir_nec_decode_state = STATE_BIT_SPACE;
 	else
 	    break;
         return;
     
     case STATE_BIT_SPACE:
-	if ((stopwatch > 9 ) && (stopwatch < 13))
+	if ((stopwatch > 6 ) && (stopwatch < 11))
 	    nec_code >>=1;
-	else if ((stopwatch > 29 ) && (stopwatch < 38)) {
+	else if ((stopwatch > 22 ) && (stopwatch < 30)) {
 	    nec_code >>=1;
 	    nec_code |= 0x80000000;
 	} else
@@ -120,7 +120,7 @@ void ir_nec_decode(uint8_t stopwatch) {
         return;
 
     case STATE_TRAILER_PULSE:
-	if ((stopwatch > 9 ) && (stopwatch < 13)) {
+	if ((stopwatch > 6 ) && (stopwatch < 11)) {
 	    ir_nec_decode_state = STATE_INACTIVE;
 	    /* we got valid data if the sequence before was valid - for repeat needed */
 	    if (ir_nec_decode_bits == NEC_NBITS)
