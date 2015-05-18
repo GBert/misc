@@ -40,9 +40,14 @@ void main() {
   init();
 
   while(1){
-    LATA5 ^= 1;
-    LATA5 ^= 1;
-    LATA5 ^= 1;
-    LATA5 ^= 1;
+    // should toggle with 2 MHz within loop at Fosc = 16 MHz
+    LATA5 = 0;
+    LATA5 = 1;
+    LATA5 = 0;
+    LATA5 = 1;
+    LATA5 = 0;
+    LATA5 = 1;
+    LATA5 = 0;
+    LATA5 = 1;
   }
 }
