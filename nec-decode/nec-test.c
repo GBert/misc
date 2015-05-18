@@ -36,15 +36,15 @@ enum nec_state { STATE_INACTIVE,
 #define NECX_REPEAT_BITS        1
 
 
-uint8_t test_data [] = { 180, 90, 11, 11, 11, 11, 11, 34, 11, 34,   11, 11, 11, 34, 11, 11, 11, 34,
-                                  11, 11, 11, 34, 11, 11, 11, 11,   11, 34, 11, 11, 11, 34, 11, 11,
-                                  11, 34, 11, 34, 11, 34, 11, 34,   11, 11, 11, 11, 11, 11, 11, 11,
-                                  11, 11, 11, 11, 11, 11, 11, 11,   11, 34, 11, 34, 11, 34, 11, 34 };
+uint8_t test_data []   = { 180, 90, 11, 11, 11, 11, 11, 34, 11, 34,   11, 11, 11, 34, 11, 11, 11, 34,
+                                    11, 11, 11, 34, 11, 11, 11, 11,   11, 34, 11, 11, 11, 34, 11, 11,
+                                    11, 34, 11, 34, 11, 34, 11, 34,   11, 11, 11, 11, 11, 11, 11, 11,
+                                    11, 11, 11, 11, 11, 11, 11, 11,   11, 34, 11, 34, 11, 34, 11, 34, 11 };
 
 uint8_t test_data_f [] = { 180, 90, 11, 11, 11, 11, 11, 34, 11, 34,   11, 11, 11, 34, 11, 11, 11, 34,
-                                  11, 11, 11, 34, 11, 11, 11, 11,   11, 34, 11, 11, 11, 34, 11, 11,
-                                  11, 34, 11, 34, 11, 34, 11, 34,   11, 11, 11, 11, 11, 11, 11, 11,
-                                  11, 11, 11, 11, 11, 11, 11, 11,   11, 34, 11, 34, 11, 34, 11, 34 };
+                                    11, 11, 11, 34, 11, 11, 11, 11,   11, 34, 11, 11, 11, 34, 11, 11,
+                                    11, 34, 11, 34, 11, 34, 11, 34,   11, 11, 11, 11, 11, 11, 11, 11,
+                                    11, 11, 11, 11, 11, 11, 11, 11,   11, 34, 11, 34, 11, 34, 11, 34, 11 };
 /* timer 50us */
 
 /*                                              /  50us grid
@@ -105,19 +105,22 @@ void ir_nec_decode(uint8_t stopwatch) {
 	} else
 	    break;
 
-	if (ir_nec_decode_bits == NEC_NBITS) {
-	    ir_nec_decode_state = STATE_INACTIVE;
-	    ir_nec_data_valid = 1;
-	} else {
-	    ir_nec_decode_bits++;
+	ir_nec_decode_bits++;
+
+	if (ir_nec_decode_bits == NEC_NBITS)
+	    ir_nec_decode_state = STATE_TRAILER_PULSE;
+	else
 	    ir_nec_decode_state = STATE_BIT_PULSE;
-	}
         return;
 
     case STATE_TRAILER_PULSE:
-	ir_nec_decode_state = STATE_TRAILER_SPACE;
-	return;
+	if ((stopwatch > 9 ) && (stopwatch < 13)) {
+	    ir_nec_decode_state = STATE_INACTIVE;
+	    ir_nec_data_valid = 1;
+	} else
+	    break;
 
+    /* TODO: check if we nee this state */
     case STATE_TRAILER_SPACE:
         ir_nec_decode_state = STATE_INACTIVE;
 	return;
