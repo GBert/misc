@@ -1,6 +1,5 @@
-/* ir-nec-decoder.c - handle NEC IR Pulse/Space protocol
- *
- * Copyright (C) 2010 by Mauro Carvalho Chehab
+/* nec-test.c - handle NEC IR Pulse/Space protocol
+ * based on ir-nec-decoder.c from Mauro Carvalho Chehab
  *
  * This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -12,13 +11,15 @@
  *  GNU General Public License for more details.
  */
 
+#include <stdio.h>
+#include <stdint.h>
 
 enum nec_state { STATE_INACTIVE,
 	STATE_HEADER_SPACE,
 	STATE_BIT_PULSE,
 	STATE_BIT_SPACE,
 	STATE_TRAILER_PULSE,
-	STATE_TRAILER_SPACE,
+	STATE_TRAILER_SPACE
 };
 
 #define NEC_NBITS               32
@@ -34,6 +35,11 @@ enum nec_state { STATE_INACTIVE,
 #define NEC_TRAILER_SPACE       (10 * NEC_UNIT) /* even longer in reality */
 #define NECX_REPEAT_BITS        1
 
+
+uint8_t test_data [] = { 180, 90, 11, 11, 11, 11, 11, 34, 11, 34,   11, 11, 11, 34, 11, 11, 11, 34,
+                                  11, 34, 11, 34, 11, 11, 11, 11,   11, 34, 11, 11, 11, 34, 11, 11,
+                                  11, 34, 11, 34, 11, 34, 11, 34,   11, 11, 11, 11, 11, 11, 11, 11,
+                                  11, 11, 11, 11, 11, 11, 11, 11,   11, 34, 11, 34, 11, 34, 11, 34 };
 /* timer 50us */
 
 /*                                              /  50us grid
@@ -58,38 +64,43 @@ uint8_t not_command;
 
 uint8_t ir_nec_decode_state;
 uint8_t ir_nec_decode_bits;
-uint8_t ir_nec_decode_valid;
+uint8_t ir_nec_data_valid;
 uint32_t nec_code;
 
-void ir_nec_decode(uint8_t stoppwatch) {
+void ir_nec_decode(uint8_t stopwatch) {
 
     switch (ir_nec_decode_state) {
 
     case STATE_INACTIVE:
-	ir_nec_decode_state = STATE_HEADER_SPACE;
+	if ((stopwatch > 161 ) && (stopwatch < 199))
+	    ir_nec_decode_state = STATE_HEADER_SPACE;
         return;
     case STATE_HEADER_SPACE:
-	if ((stoppwatch > 161 ) && (stopwatch < 199))
-	    ir_nec_decode_state = STATE_HEADER_PULSE;
-        return;
-    case STATE_HEADER_PULSE:
-	if ((stoppwatch > 80 ) && (stopwatch < 100))
+	if ((stopwatch > 80 ) && (stopwatch < 100))
 	    ir_nec_decode_state = STATE_BIT_PULSE;
+	else
+	    ir_nec_decode_state = STATE_INACTIVE;
         return;
     case STATE_BIT_PULSE:
-	if ((stoppwatch > 9 ) && (stopwatch < 13))
+	if ((stopwatch > 9 ) && (stopwatch < 13))
 	    ir_nec_decode_state = STATE_BIT_SPACE;
+	else
+	    ir_nec_decode_state = STATE_INACTIVE;
         return;
     
     case STATE_BIT_SPACE:
-	if ((stoppwatch > 9 ) && (stopwatch < 13))
+	if ((stopwatch > 9 ) && (stopwatch < 13))
 	    nec_code >>=1;
-	if ((stoppwatch  29 ) && (stopwatch < 38))
-	    nec_code &= 0x80000000;
+	else if ((stopwatch > 29 ) && (stopwatch < 38)) {
 	    nec_code >>=1;
-	if (ir_nec_decode_bits == NEC_NBITS)
+	    nec_code |= 0x80000000;
+	} else
+	    ir_nec_decode_state = STATE_INACTIVE;
+
+	if (ir_nec_decode_bits == NEC_NBITS) {
 	    ir_nec_decode_state = STATE_TRAILER_PULSE;
-	else
+	    ir_nec_data_valid = 1;
+	} else
 	    ir_nec_decode_state = STATE_BIT_PULSE;
         return;
 
@@ -103,4 +114,20 @@ void ir_nec_decode(uint8_t stoppwatch) {
 
     /* back to start */
     ir_nec_decode_state = STATE_INACTIVE;
+    }
+}
+
+
+int main(int argc, char **argv) {
+    int i;
+    uint8_t old_state;
+    ir_nec_decode_state = STATE_INACTIVE;
+
+    for (i = 0; i < sizeof(test_data); i++) {
+	old_state = ir_nec_decode_state;
+	ir_nec_decode(test_data[i]);
+	printf("stopwatch %03d state %d -> %d\n", test_data[i], old_state, ir_nec_decode_state);
+    }
+    printf("data 0x%08X\n\n", nec_code);
+    return 0;
 }
