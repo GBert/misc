@@ -37,7 +37,7 @@ enum nec_state { STATE_INACTIVE,
 
 
 uint8_t test_data [] = { 180, 90, 11, 11, 11, 11, 11, 34, 11, 34,   11, 11, 11, 34, 11, 11, 11, 34,
-                                  11, 34, 11, 34, 11, 11, 11, 11,   11, 34, 11, 11, 11, 34, 11, 11,
+                                  11, 11, 11, 34, 11, 11, 11, 11,   11, 34, 11, 11, 11, 34, 11, 11,
                                   11, 34, 11, 34, 11, 34, 11, 34,   11, 11, 11, 11, 11, 11, 11, 11,
                                   11, 11, 11, 11, 11, 11, 11, 11,   11, 34, 11, 34, 11, 34, 11, 34 };
 /* timer 50us */
@@ -76,16 +76,19 @@ void ir_nec_decode(uint8_t stopwatch) {
 	    ir_nec_decode_state = STATE_HEADER_SPACE;
         return;
     case STATE_HEADER_SPACE:
-	if ((stopwatch > 80 ) && (stopwatch < 100))
+	if ((stopwatch > 80 ) && (stopwatch < 100)) {
+	    /* we got the start sequnece -> old data is now invalid */
+	    ir_nec_data_valid = 0;
+	    ir_nec_decode_bits = 0;
 	    ir_nec_decode_state = STATE_BIT_PULSE;
-	else
-	    ir_nec_decode_state = STATE_INACTIVE;
+	} else
+	    break;
         return;
     case STATE_BIT_PULSE:
 	if ((stopwatch > 9 ) && (stopwatch < 13))
 	    ir_nec_decode_state = STATE_BIT_SPACE;
 	else
-	    ir_nec_decode_state = STATE_INACTIVE;
+	    break;
         return;
     
     case STATE_BIT_SPACE:
@@ -95,13 +98,15 @@ void ir_nec_decode(uint8_t stopwatch) {
 	    nec_code >>=1;
 	    nec_code |= 0x80000000;
 	} else
-	    ir_nec_decode_state = STATE_INACTIVE;
+	    break;
 
 	if (ir_nec_decode_bits == NEC_NBITS) {
 	    ir_nec_decode_state = STATE_TRAILER_PULSE;
 	    ir_nec_data_valid = 1;
-	} else
+	} else {
+	    ir_nec_decode_bits++;
 	    ir_nec_decode_state = STATE_BIT_PULSE;
+	}
         return;
 
     case STATE_TRAILER_PULSE:
@@ -112,9 +117,9 @@ void ir_nec_decode(uint8_t stopwatch) {
         ir_nec_decode_state = STATE_INACTIVE;
 	return;
 
-    /* back to start */
-    ir_nec_decode_state = STATE_INACTIVE;
     }
+    /* if something went wrong -> back to start */
+    ir_nec_decode_state = STATE_INACTIVE;
 }
 
 
