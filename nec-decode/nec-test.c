@@ -86,6 +86,11 @@ void ir_nec_decode(uint8_t stopwatch) {
 	    ir_nec_data_valid = 0;
 	    ir_nec_decode_bits = 0;
 	    ir_nec_decode_state = STATE_BIT_PULSE;
+	/* repeat ? */
+	} else if ((stopwatch > 39 ) && (stopwatch < 51)) {
+	    /* this is redundant as we already have a full sequence */
+	    ir_nec_decode_bits = 32;
+	    ir_nec_decode_state = STATE_BIT_PULSE;
 	} else
 	    break;
         return;
