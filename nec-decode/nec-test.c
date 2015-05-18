@@ -39,14 +39,14 @@ enum nec_state { STATE_INACTIVE,
 uint8_t test_data []   = { 140, 70, 8,  8,  8,  8,  8, 26,  8, 26,   8,  8,  8, 26,  8,  8,  8, 26,
                                     8,  8,  8, 26,  8,  8,  8,  8,   8, 26,  8,  8,  8, 26,  8,  8,
                                     8, 26,  8, 26,  8, 26,  8, 26,   8,  8,  8,  8,  8,  8,  8,  8,
-                                    8,  8,  8,  8,  8,  8,  8,  8,   8, 26,  8, 26,  8, 26,  8, 26, 8 };
+                                    8,  8,  8,  8,  8,  8,  8,  8,   8, 26,  8, 26,  8, 26,  8, 26,  8, 255 };
 
-uint8_t test_data_r [] = { 140, 45, 11};
+uint8_t test_data_r [] = { 140, 45, 11, 255};
 
 uint8_t test_data_f [] = { 140, 70, 8,  8,  8,  8,  8, 26,  8, 26,   8,  8,  8, 26,  8,  8,  8, 26,
                                     8,  8,  8, 26,  8,  8,  8,  8,   8, 26,  8,  8,  8, 26,  8,  8,
                                     8, 26, 99, 26,  8, 26,  8, 26,   8,  8,  8,  8,  8,  8,  8,  8,
-                                    8,  8,  8,  8,  8,  8,  8,  8,   8, 26,  8, 26,  8, 26,  8, 26, 8 };
+                                    8,  8,  8,  8,  8,  8,  8,  8,   8, 26,  8, 26,  8, 26,  8, 26, 8, 255 };
 /* timer 50us */
 
 /*                                              /  64us grid
@@ -59,6 +59,8 @@ uint8_t test_data_f [] = { 140, 70, 8,  8,  8,  8,  8, 26,  8, 26,   8,  8,  8, 
    repeat1    pulse 9000us        / 8100 - 9900 / 126 - 155
    repeat2    pulse 2250us        / 2000 - 2500 /  31 -  40
    repeat3    pulse  560us        /  500 - 600  /   7 -  10
+
+   pause after NEC code 255*64us = 16.32 ms
 
    format:    address , address ^ 0xff, command , command ^ 0xff
    LSB first
@@ -82,6 +84,7 @@ void ir_nec_decode(uint8_t stopwatch) {
 	if ((stopwatch > 125 ) && (stopwatch < 156))
 	    ir_nec_decode_state = STATE_HEADER_SPACE;
         return;
+
     case STATE_HEADER_SPACE:
 	if ((stopwatch > 62 ) && (stopwatch < 78)) {
 	    /* we got the start sequence -> old data is now invalid */
@@ -95,6 +98,7 @@ void ir_nec_decode(uint8_t stopwatch) {
 	} else
 	    break;
         return;
+
     case STATE_BIT_PULSE:
 	if ((stopwatch > 6 ) && (stopwatch < 11))
 	    ir_nec_decode_state = STATE_BIT_SPACE;
@@ -120,19 +124,21 @@ void ir_nec_decode(uint8_t stopwatch) {
         return;
 
     case STATE_TRAILER_PULSE:
-	if ((stopwatch > 6 ) && (stopwatch < 11)) {
+	if ((stopwatch > 6 ) && (stopwatch < 11))
+	    ir_nec_decode_state = STATE_TRAILER_SPACE;
+	else
+	    break;
+	return;
+
+    case STATE_TRAILER_SPACE:
+	/* 255 means timer overflow - pause after NEC code sent */
+	if (stopwatch == 255) {
 	    ir_nec_decode_state = STATE_INACTIVE;
 	    /* we got valid data if the sequence before was valid - for repeat needed */
 	    if (ir_nec_decode_bits == NEC_NBITS)
 		ir_nec_data_valid = 1;
-	} else
-	    break;
-
-    /* TODO: check if we need this state */
-    case STATE_TRAILER_SPACE:
-        ir_nec_decode_state = STATE_INACTIVE;
-	return;
-
+	    return;
+	}
     }
     /* if something went wrong -> back to start */
     ir_nec_decode_state = STATE_INACTIVE;
@@ -155,10 +161,11 @@ void feed_state_machine(uint8_t *data, int length) {
 int main(int argc, char **argv) {
     ir_nec_decode_state = STATE_INACTIVE;
 
-    feed_state_machine(test_data, sizeof(test_data));
+    feed_state_machine(test_data,   sizeof(test_data));
     feed_state_machine(test_data_r, sizeof(test_data_r));
     feed_state_machine(test_data_f, sizeof(test_data_f));
     feed_state_machine(test_data_r, sizeof(test_data_r));
+    feed_state_machine(test_data,   sizeof(test_data));
 
     return 0;
 }
