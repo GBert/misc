@@ -4,11 +4,82 @@
 static __code uint16_t __at (_CONFIG1) configword1 = _FOSC_INTOSC & _WDTE_OFF & _MCLRE_ON & _CP_OFF & _PWRTE_OFF & _BOREN_OFF & _CLKOUTEN_OFF;
 static __code uint16_t __at (_CONFIG2) configword2 = _WRT_OFF & _PLLEN_ON & _STVREN_ON & _DEBUG_OFF & _LVP_OFF;
 
+enum nec_state { STATE_INACTIVE,
+        STATE_HEADER_SPACE,
+        STATE_BIT_PULSE,
+        STATE_BIT_SPACE,
+        STATE_TRAILER_PULSE,
+        STATE_TRAILER_SPACE
+};
+
 volatile uint32_t nec_code;
+volatile uint8_t ir_nec_decode_state;
+volatile uint8_t ir_nec_decode_bits;
+volatile uint8_t ir_nec_data_valid;
+volatile uint8_t stopwatch;
+uint16_t count;
+
+#define NEC_NBITS               32
+#define _XTAL_FREQ 32000000     // This is the speed your controller is running at
+#define FCYC (_XTAL_FREQ/4L)    // target device instruction clock freqency
+
+#ifndef BAUDRATE
+#define BAUDRATE        57600
+#endif
+#define USE_BRG16       0
+#define USE_BRGH        1
+
+/* USART calculating Baud Rate Generator
+* if BRGH = 0 => FOSC/[64 (n + 1)]
+* if BRGH = 1 => FOSC/[16 (n + 1)]
+* avoid rounding errors
+*/
+
+#if USE_BRGH == 0
+#define SBRG_VAL        ( (((_XTAL_FREQ / BAUDRATE) / 32) - 1) / 2 )
+#else
+#define SBRG_VAL        ( (((_XTAL_FREQ / BAUDRATE) / 8) - 1) / 2 )
+#endif
+
+void init_usart (void) {
+  // USART configuration
+  //TXSTA REG
+  TXEN=1;
+  BRGH=USE_BRGH;
+  BRG16=USE_BRG16;
+  SPBRG=SBRG_VAL;
+
+  //RCSTA
+  SPEN=1;
+  //CREN=1;	//Enable Receiver (RX)
+
+}
+
+void putchar(char ch) {
+  //Wait for TXREG Buffer to become available
+  while(!TXIF);
+
+  TXREG=ch;
+}
+
+void puts(const char *str) {
+  while((*str)!='\0') {
+    //Wait for TXREG Buffer to become available
+    while(!TXIF);
+
+    //Write data
+    TXREG=(*str);
+
+    //Next goto char
+    str++;
+  }
+}
 
 void init() {
   INTCON  = 0;	// Clear interrupt flag bits
   GIE     = 1;	// Global irq enable
+  TMR1IE  = 1;
+  PEIE    = 1;
   IOCIE   = 1;	// interrupt on change enable
   IOCAN2  = 1;	// irq on negative edge (RA2/pin5)
   IOCAP2  = 1;	// irq on positive edge (RA2/pin5)
@@ -25,6 +96,7 @@ void init() {
   IRCF1   = 1;	// "
   IRCF0   = 0;	// "
 
+  TRISA0  = 0;	// output for UART TX     - pin7
   TRISA5  = 0;	// output for red led     - pin2
   TRISA2  = 1;	// input  for ir receiver - pin5
 
@@ -41,29 +113,109 @@ void isr (void) __interrupt (1){
   GIE = 0;
   if(IOCIF) {	// IOC?
     IOCAF = 0;
+    // we only use the high byte
+    stopwatch = TMR1H;
+    TMR1L = 0;
+    TMR1H = 0;
   }
-  if(INTF) {
+  if(TMR1IF) {
+  // TODO: overflow
     TMR1H = 0;
     TMR1L = 0;
+    stopwatch = 255;
   }
+
+  // NEC IR decode FSM
+  switch (ir_nec_decode_state) {
+
+  case STATE_INACTIVE:
+    if ((stopwatch > 125 ) && (stopwatch < 156))
+      ir_nec_decode_state = STATE_HEADER_SPACE;
+    GIE = 1;
+    return;
+
+  case STATE_HEADER_SPACE:
+    if ((stopwatch > 62 ) && (stopwatch < 78)) {
+      /* we got the start sequence -> old data is now invalid */
+      ir_nec_data_valid = 0;
+      ir_nec_decode_bits = 0;
+      ir_nec_decode_state = STATE_BIT_PULSE;
+      /* is this a repeat sequence ? */
+    } else if ((stopwatch > 30 ) && (stopwatch < 41)) {
+      /* if ir_nec_decode_bits == 32 the repeat sequence could be valid */
+      ir_nec_decode_state = STATE_TRAILER_PULSE;
+    } else
+       break;
+    GIE = 1;
+    return;
+
+  case STATE_BIT_PULSE:
+    if ((stopwatch > 6 ) && (stopwatch < 11))
+      ir_nec_decode_state = STATE_BIT_SPACE;
+    else
+      break;
+    GIE = 1;
+    return;
+
+  case STATE_BIT_SPACE:
+    if ((stopwatch > 6 ) && (stopwatch < 11))
+      nec_code >>=1;
+    else if ((stopwatch > 22 ) && (stopwatch < 30)) {
+      nec_code >>=1;
+      nec_code |= 0x80000000;
+    } else
+      break;
+
+    ir_nec_decode_bits++;
+
+    if (ir_nec_decode_bits == NEC_NBITS)
+       ir_nec_decode_state = STATE_TRAILER_PULSE;
+    else
+      ir_nec_decode_state = STATE_BIT_PULSE;
+    GIE = 1;
+    return;
+
+  case STATE_TRAILER_PULSE:
+    if ((stopwatch > 6 ) && (stopwatch < 11))
+      ir_nec_decode_state = STATE_TRAILER_SPACE;
+    else
+      break;
+    GIE = 1;
+    return;
+
+  case STATE_TRAILER_SPACE:
+    /* 255 means timer overflow - pause after NEC code sent */
+    if (stopwatch == 255) {
+      ir_nec_decode_state = STATE_INACTIVE;
+      /* we got valid data if the sequence before was valid - for repeat needed */
+      if (ir_nec_decode_bits == NEC_NBITS)
+        ir_nec_data_valid = 1;
+      GIE = 1;
+      return;
+    }
+  }
+  /* if something went wrong -> back to start */
+  ir_nec_decode_state = STATE_INACTIVE;
+
   GIE = 1;
 }
 
 void main() {
   init();
-
-  nec_code |= 0x80000000;
-  nec_code >>= 1;
+  init_usart();
 
   while(1){
     // should toggle with 4 MHz within loop at Fosc = 32 MHz
+    count++;
     LATA5 = 0;
-    LATA5 = 1;
-    LATA5 = 0;
-    LATA5 = 1;
-    LATA5 = 0;
-    LATA5 = 1;
-    LATA5 = 0;
+    if (ir_nec_data_valid) {
+      ir_nec_data_valid=0;
+      puts("NEC code received\n\0");
+    }
+    if (count == 5000) {
+      putchar(0xaa);
+      count = 0;
+    }
     LATA5 = 1;
   }
 }
