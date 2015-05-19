@@ -96,12 +96,12 @@ void puthex(uint8_t data) {
   data >>= 4;
   data += 0x30;
   if (data > 0x39)
-    data += 8;
+    data += 7;
   putchar(data);
   hextemp &= 0x0f;
   hextemp += 0x30;
   if (hextemp > 0x39)
-    hextemp += 8;
+    hextemp += 7;
   putchar(hextemp);
 }
 
@@ -230,6 +230,7 @@ void main() {
   uint8_t *data;
   init();
   init_usart();
+  ir_nec_data_valid=0;
 
   while(1){
     // should toggle with 4 MHz within loop at Fosc = 32 MHz
@@ -242,13 +243,14 @@ void main() {
       new_nec_code = nec_code;
       // we got vars so back to normal 
       GIE = 1;
-      puts("NEC code received: 0x\0");
+      puts("\rNEC code received: 0x\0");
       // Aiiieeee : pointer mess
       data = (uint8_t *) &new_nec_code;
       puthex(*data++);
       puthex(*data++);
       puthex(*data++);
       puthex(*data);
+      putchar('\r');
     }
     if (count == 20000)
       putchar(0x55);
