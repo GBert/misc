@@ -78,8 +78,8 @@ void puts(const char *str) {
 void init() {
   INTCON  = 0;	// Clear interrupt flag bits
   GIE     = 1;	// Global irq enable
-  TMR1IE  = 1;
-  PEIE    = 1;
+  PEIE    = 1;  // enable Periphiral Interrupt for Timer1
+  TMR1IE  = 1;  // enebale Timer1 overflow interrupt
   IOCIE   = 1;	// interrupt on change enable
   IOCAN2  = 1;	// irq on negative edge (RA2/pin5)
   IOCAP2  = 1;	// irq on positive edge (RA2/pin5)
@@ -118,11 +118,11 @@ void isr (void) __interrupt (1){
     TMR1L = 0;
     TMR1H = 0;
   }
+  // overflow every 64us * 256 = 16.384ms
   if(TMR1IF) {
   // TODO: overflow
-    TMR1H = 0;
-    TMR1L = 0;
     stopwatch = 255;
+    TMR1IF = 0;
   }
 
   // NEC IR decode FSM
@@ -131,8 +131,7 @@ void isr (void) __interrupt (1){
   case STATE_INACTIVE:
     if ((stopwatch > 125 ) && (stopwatch < 156))
       ir_nec_decode_state = STATE_HEADER_SPACE;
-    GIE = 1;
-    return;
+    goto END_OF_INTERRUPT;
 
   case STATE_HEADER_SPACE:
     if ((stopwatch > 62 ) && (stopwatch < 78)) {
@@ -146,16 +145,14 @@ void isr (void) __interrupt (1){
       ir_nec_decode_state = STATE_TRAILER_PULSE;
     } else
        break;
-    GIE = 1;
-    return;
+    goto END_OF_INTERRUPT;
 
   case STATE_BIT_PULSE:
     if ((stopwatch > 6 ) && (stopwatch < 11))
       ir_nec_decode_state = STATE_BIT_SPACE;
     else
       break;
-    GIE = 1;
-    return;
+    goto END_OF_INTERRUPT;
 
   case STATE_BIT_SPACE:
     if ((stopwatch > 6 ) && (stopwatch < 11))
@@ -172,16 +169,14 @@ void isr (void) __interrupt (1){
        ir_nec_decode_state = STATE_TRAILER_PULSE;
     else
       ir_nec_decode_state = STATE_BIT_PULSE;
-    GIE = 1;
-    return;
+    goto END_OF_INTERRUPT;
 
   case STATE_TRAILER_PULSE:
     if ((stopwatch > 6 ) && (stopwatch < 11))
       ir_nec_decode_state = STATE_TRAILER_SPACE;
     else
       break;
-    GIE = 1;
-    return;
+    goto END_OF_INTERRUPT;
 
   case STATE_TRAILER_SPACE:
     /* 255 means timer overflow - pause after NEC code sent */
@@ -190,13 +185,13 @@ void isr (void) __interrupt (1){
       /* we got valid data if the sequence before was valid - for repeat needed */
       if (ir_nec_decode_bits == NEC_NBITS)
         ir_nec_data_valid = 1;
-      GIE = 1;
-      return;
+      goto END_OF_INTERRUPT;
     }
   }
   /* if something went wrong -> back to start */
   ir_nec_decode_state = STATE_INACTIVE;
 
+END_OF_INTERRUPT:
   GIE = 1;
 }
 
