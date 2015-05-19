@@ -13,13 +13,28 @@ enum nec_state { STATE_INACTIVE,
 };
 
 volatile uint32_t nec_code;
+volatile uint32_t new_nec_code;
 volatile uint8_t ir_nec_decode_state;
 volatile uint8_t ir_nec_decode_bits;
 volatile uint8_t ir_nec_data_valid;
 volatile uint8_t stopwatch;
 uint16_t count;
 
-#define NEC_NBITS               32
+//IR decode defines
+#define NEC_NBITS		32
+#define NEC_UNIT		562500 /* ns */
+#define NEC_HEADER_PULSE	(16 * NEC_UNIT)
+#define NECX_HEADER_PULSE	(8 * NEC_UNIT) /* Less common NEC variant */
+#define NEC_HEADER_SPACE	(8 * NEC_UNIT)
+#define NEC_REPEAT_SPACE	(4 * NEC_UNIT)
+#define NEC_BIT_PULSE		(1 * NEC_UNIT)
+#define NEC_BIT_0_SPACE		(1 * NEC_UNIT)
+#define NEC_BIT_1_SPACE		(3 * NEC_UNIT)
+#define NEC_TRAILER_PULSE	(1 * NEC_UNIT)
+#define NEC_TRAILER_SPACE	(10 * NEC_UNIT) /* even longer in reality */
+#define NECX_REPEAT_BITS	1
+
+// USART defines
 #define _XTAL_FREQ 32000000     // This is the speed your controller is running at
 #define FCYC (_XTAL_FREQ/4L)    // target device instruction clock freqency
 
@@ -75,6 +90,21 @@ void puts(const char *str) {
   }
 }
 
+void puthex(uint8_t data) {
+  uint8_t hextemp = data;
+  data &= 0xf0;
+  data >>= 4;
+  data += 0x30;
+  if (data > 0x39)
+    data += 8;
+  putchar(data);
+  hextemp &= 0x0f;
+  hextemp += 0x30;
+  if (hextemp > 0x39)
+    hextemp += 8;
+  putchar(hextemp);
+}
+
 void init() {
   INTCON  = 0;	// Clear interrupt flag bits
   GIE     = 1;	// Global irq enable
@@ -120,12 +150,13 @@ void isr (void) __interrupt (1){
   }
   // overflow every 64us * 256 = 16.384ms
   if(TMR1IF) {
-  // TODO: overflow
+  // TODO: overflow - stop timer and restart on pin change ?
     stopwatch = 255;
     TMR1IF = 0;
   }
 
   // NEC IR decode FSM
+  // 3.14T idea - it's fast enough so we can use it in the ISR
   switch (ir_nec_decode_state) {
 
   case STATE_INACTIVE:
@@ -135,13 +166,13 @@ void isr (void) __interrupt (1){
 
   case STATE_HEADER_SPACE:
     if ((stopwatch > 62 ) && (stopwatch < 78)) {
-      /* we got the start sequence -> old data is now invalid */
+      // we got the start sequence -> old data is now invalid
       ir_nec_data_valid = 0;
       ir_nec_decode_bits = 0;
       ir_nec_decode_state = STATE_BIT_PULSE;
-      /* is this a repeat sequence ? */
+      // is this a repeat sequence ?
     } else if ((stopwatch > 30 ) && (stopwatch < 41)) {
-      /* if ir_nec_decode_bits == 32 the repeat sequence could be valid */
+      // if ir_nec_decode_bits == 32 the repeat sequence could be valid
       ir_nec_decode_state = STATE_TRAILER_PULSE;
     } else
        break;
@@ -179,16 +210,16 @@ void isr (void) __interrupt (1){
     goto END_OF_INTERRUPT;
 
   case STATE_TRAILER_SPACE:
-    /* 255 means timer overflow - pause after NEC code sent */
+    // 255 means timer overflow - we assume that this is the pause after a complete sequence
     if (stopwatch == 255) {
       ir_nec_decode_state = STATE_INACTIVE;
-      /* we got valid data if the sequence before was valid - for repeat needed */
+      // we got valid data if the sequence before was valid - needed for repeat
       if (ir_nec_decode_bits == NEC_NBITS)
         ir_nec_data_valid = 1;
       goto END_OF_INTERRUPT;
     }
   }
-  /* if something went wrong -> back to start */
+  // if something went wrong -> back to start
   ir_nec_decode_state = STATE_INACTIVE;
 
 END_OF_INTERRUPT:
@@ -196,6 +227,7 @@ END_OF_INTERRUPT:
 }
 
 void main() {
+  uint8_t *data;
   init();
   init_usart();
 
@@ -204,8 +236,19 @@ void main() {
     count++;
     LATA5 = 0;
     if (ir_nec_data_valid) {
+      // atomic acces to vars
+      GIE = 0;
       ir_nec_data_valid=0;
-      puts("NEC code received\n\0");
+      new_nec_code = nec_code;
+      // we got vars so back to normal 
+      GIE = 1;
+      puts("NEC code received: 0x\0");
+      // Aiiieeee : pointer mess
+      data = (uint8_t *) &new_nec_code;
+      puthex(*data++);
+      puthex(*data++);
+      puthex(*data++);
+      puthex(*data);
     }
     if (count == 5000) {
       putchar(0xaa);
