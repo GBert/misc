@@ -107,12 +107,11 @@ void ir_nec_decode(uint8_t stopwatch) {
         return;
     
     case STATE_BIT_SPACE:
-	if ((stopwatch > 6 ) && (stopwatch < 11))
-	    nec_code >>=1;
-	else if ((stopwatch > 22 ) && (stopwatch < 30)) {
-	    nec_code >>=1;
+	nec_code >>=1;
+	if ((stopwatch > 22 ) && (stopwatch < 30))
 	    nec_code |= 0x80000000;
-	} else
+        /* valid data anyway ? */
+	else if ((stopwatch < 7 ) || (stopwatch > 10))
 	    break;
 
 	ir_nec_decode_bits++;
