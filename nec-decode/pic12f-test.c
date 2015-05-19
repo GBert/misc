@@ -250,8 +250,10 @@ void main() {
       puthex(*data++);
       puthex(*data);
     }
-    if (count == 5000) {
-      putchar(0xaa);
+    if (count == 20000)
+      putchar(0x55);
+    if (count == 40000) {
+      putchar(0x44);
       count = 0;
     }
     LATA5 = 1;

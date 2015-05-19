@@ -34,3 +34,5 @@ upload: ${TARGET}
 power: ${TARGET}
 	pk2cmd -B/usr/share/pk2/ -PPIC$(MCU) -T -R
 
+serial: ${TARGET}
+	./pk2serial -r -p -b 57600
