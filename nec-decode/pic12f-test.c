@@ -133,8 +133,8 @@ void init() {
   TMR1CS0 = 0;	// 8MHz (Fosc/4 -> 32MHz/4 ; timer 1 use internal clock)
   TMR1CS1 = 0;  // "
 
-  T1CKPS0 = 0;  // prescaler 1:2
-  T1CKPS1 = 1;  // "
+  T1CKPS0 = 1;  // prescaler 1:2
+  T1CKPS1 = 0;  // "
 
   TMR1ON  = 1;  // Timer on
 }
@@ -153,6 +153,7 @@ void isr (void) __interrupt (1){
   // TODO: overflow - stop timer and restart on pin change ?
     stopwatch = 255;
     TMR1IF = 0;
+    LATA ^= 0x20;
   }
 
   // NEC IR decode FSM
@@ -235,7 +236,7 @@ void main() {
   while(1){
     // should toggle with 4 MHz within loop at Fosc = 32 MHz
     count++;
-    LATA5 = 0;
+    //LATA ^= 0x20;
     if (ir_nec_data_valid) {
       // atomic acces to vars
       GIE = 0;
@@ -243,21 +244,18 @@ void main() {
       new_nec_code = nec_code;
       // we got vars so back to normal 
       GIE = 1;
-      puts("\rNEC code received: 0x\0");
+      puts("\nNEC code received: 0x\0");
       // Aiiieeee : pointer mess
       data = (uint8_t *) &new_nec_code;
       puthex(*data++);
       puthex(*data++);
       puthex(*data++);
       puthex(*data);
-      putchar('\r');
+      putchar('\n');
     }
-    if (count == 20000)
-      putchar(0x55);
-    if (count == 40000) {
+    if (count == 65000) {
       putchar(0x44);
       count = 0;
     }
-    LATA5 = 1;
   }
 }
