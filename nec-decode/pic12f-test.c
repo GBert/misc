@@ -152,11 +152,13 @@ void isr (void) __interrupt (1){
   // TODO: overflow - stop timer and restart on pin change ?
     stopwatch = 255;
     TMR1IF = 0;
-    LATA ^= 0x20;
+    // LATA ^= 0x20;
   }
 
+  LATA5 = 1;
   // NEC IR decode FSM
-  // 3.14T idea - it's fast enough so we can use it in the ISR
+  // 3.14t idea - it's fast enough so we can use it in the ISR
+
   switch (ir_nec_decode_state) {
 
   case STATE_INACTIVE:
@@ -224,6 +226,7 @@ void isr (void) __interrupt (1){
 
 END_OF_INTERRUPT:
   GIE = 1;
+  LATA5 = 0;
 }
 
 void main() {
