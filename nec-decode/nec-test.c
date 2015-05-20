@@ -22,6 +22,11 @@ enum nec_state { STATE_INACTIVE,
 	STATE_TRAILER_SPACE
 };
 
+#define TIMER_GRID		64000	/* 64us */
+#define MARGIN			30	/* in percent */
+
+/* #define	T_LOW (x) */
+
 #define NEC_NBITS               32
 #define NEC_UNIT                562500  /* ns */
 #define NEC_HEADER_PULSE        (16 * NEC_UNIT)
@@ -34,6 +39,7 @@ enum nec_state { STATE_INACTIVE,
 #define NEC_TRAILER_PULSE       (1  * NEC_UNIT)
 #define NEC_TRAILER_SPACE       (10 * NEC_UNIT) /* even longer in reality */
 #define NECX_REPEAT_BITS        1
+
 
 
 uint8_t test_data []   = { 140, 70, 8,  8,  8,  8,  8, 26,  8, 26,   8,  8,  8, 26,  8,  8,  8, 26,
@@ -83,7 +89,7 @@ void ir_nec_decode(uint8_t stopwatch) {
     case STATE_INACTIVE:
 	if ((stopwatch > 125 ) && (stopwatch < 156))
 	    ir_nec_decode_state = STATE_HEADER_SPACE;
-        return;
+        break;
 
     case STATE_HEADER_SPACE:
 	if ((stopwatch > 62 ) && (stopwatch < 78)) {
@@ -91,28 +97,31 @@ void ir_nec_decode(uint8_t stopwatch) {
 	    ir_nec_data_valid = 0;
 	    ir_nec_decode_bits = 0;
 	    ir_nec_decode_state = STATE_BIT_PULSE;
+	    break;
+	}
 	/* is this a repeat sequence ? */
-	} else if ((stopwatch > 30 ) && (stopwatch < 41)) {
+	if ((stopwatch > 30 ) && (stopwatch < 41)) {
 	    /* if ir_nec_decode_bits == 32 the repeat sequence could be valid */
 	    ir_nec_decode_state = STATE_TRAILER_PULSE;
-	} else
-	    break;
-        return;
+            break;
+	}
 
     case STATE_BIT_PULSE:
-	if ((stopwatch > 6 ) && (stopwatch < 11))
+	if ((stopwatch > 6 ) && (stopwatch < 11)) {
 	    ir_nec_decode_state = STATE_BIT_SPACE;
-	else
 	    break;
-        return;
+	}
     
     case STATE_BIT_SPACE:
 	nec_code >>=1;
 	if ((stopwatch > 22 ) && (stopwatch < 30))
 	    nec_code |= 0x80000000;
         /* valid data anyway ? */
-	else if ((stopwatch < 7 ) || (stopwatch > 10))
+	else if ((stopwatch < 7 ) || (stopwatch > 10)) {
+	    /* TODO */
+	    ir_nec_decode_state = STATE_INACTIVE;
 	    break;
+	}
 
 	ir_nec_decode_bits++;
 
@@ -120,14 +129,13 @@ void ir_nec_decode(uint8_t stopwatch) {
 	    ir_nec_decode_state = STATE_TRAILER_PULSE;
 	else
 	    ir_nec_decode_state = STATE_BIT_PULSE;
-        return;
+	break;
 
     case STATE_TRAILER_PULSE:
-	if ((stopwatch > 6 ) && (stopwatch < 11))
+	if ((stopwatch > 6 ) && (stopwatch < 11)) {
 	    ir_nec_decode_state = STATE_TRAILER_SPACE;
-	else
 	    break;
-	return;
+	}
 
     case STATE_TRAILER_SPACE:
 	/* 255 means timer overflow - pause after NEC code sent */
@@ -136,11 +144,12 @@ void ir_nec_decode(uint8_t stopwatch) {
 	    /* we got valid data if the sequence before was valid - for repeat needed */
 	    if (ir_nec_decode_bits == NEC_NBITS)
 		ir_nec_data_valid = 1;
-	    return;
+	    break;
 	}
+    default:
+	ir_nec_decode_state = STATE_INACTIVE;
     }
-    /* if something went wrong -> back to start */
-    ir_nec_decode_state = STATE_INACTIVE;
+	
 }
 
 void feed_state_machine(uint8_t *data, int length) {
