@@ -18,7 +18,6 @@ volatile uint8_t ir_nec_decode_state;
 volatile uint8_t ir_nec_decode_bits;
 volatile uint8_t ir_nec_data_valid;
 volatile uint8_t stopwatch;
-uint16_t count;
 
 //IR decode defines
 #define NEC_NBITS		32
@@ -234,8 +233,6 @@ void main() {
   ir_nec_data_valid=0;
 
   while(1){
-    // should toggle with 4 MHz within loop at Fosc = 32 MHz
-    count++;
     //LATA ^= 0x20;
     if (ir_nec_data_valid) {
       // atomic acces to vars
@@ -244,7 +241,7 @@ void main() {
       new_nec_code = nec_code;
       // we got vars so back to normal 
       GIE = 1;
-      puts("\nNEC code received: 0x\0");
+      puts("0x\0");
       // Aiiieeee : pointer mess
       data = (uint8_t *) &new_nec_code;
       puthex(*data++);
@@ -252,10 +249,6 @@ void main() {
       puthex(*data++);
       puthex(*data);
       putchar('\n');
-    }
-    if (count == 65000) {
-      putchar(0x44);
-      count = 0;
     }
   }
 }
