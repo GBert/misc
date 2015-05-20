@@ -139,6 +139,8 @@ void init() {
 }
 
 void isr (void) __interrupt (1){
+  // check how lonmg the ISR takes
+  LATA5 = 1;
   GIE = 0;
   if(IOCIF) {	// IOC?
     IOCAF = 0;
@@ -152,7 +154,6 @@ void isr (void) __interrupt (1){
   // TODO: overflow - stop timer and restart on pin change ?
     stopwatch = 255;
     TMR1IF = 0;
-    // LATA ^= 0x20;
   }
 
   // NEC IR decode FSM
@@ -166,8 +167,6 @@ void isr (void) __interrupt (1){
     break;
 
   case STATE_HEADER_SPACE:
-    LATA5 = 1;
-    LATA5 = 0;
     if ((stopwatch > 62 ) && (stopwatch < 78)) {
       // we got the start sequence -> old data is now invalid
       ir_nec_data_valid = 0;
@@ -178,7 +177,7 @@ void isr (void) __interrupt (1){
       // if ir_nec_decode_bits == 32 the repeat sequence could be valid
       ir_nec_decode_state = STATE_TRAILER_PULSE;
     } else
-       ir_nec_decode_state = STATE_INACTIVE;
+      ir_nec_decode_state = STATE_INACTIVE;
     break;
 
   case STATE_BIT_PULSE:
@@ -230,12 +229,14 @@ void isr (void) __interrupt (1){
      break;
   }
   GIE = 1;
+  LATA5 = 0;
 }
 
 void main() {
   uint8_t *data;
   init();
   init_usart();
+  ir_nec_decode_state = STATE_INACTIVE;
   ir_nec_data_valid=0;
 
   while(1){
