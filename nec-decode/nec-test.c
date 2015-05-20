@@ -174,6 +174,7 @@ int main(int argc, char **argv) {
     feed_state_machine(test_data_f, sizeof(test_data_f));
     feed_state_machine(test_data_r, sizeof(test_data_r));
     feed_state_machine(test_data,   sizeof(test_data));
+    feed_state_machine(test_data_r, sizeof(test_data_r));
 
     return 0;
 }
