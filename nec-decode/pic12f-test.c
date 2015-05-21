@@ -139,6 +139,8 @@ void init() {
 }
 
 void isr (void) __interrupt (1){
+  // check how lonmg the ISR takes
+  LATA5 = 1;
   GIE = 0;
   if(IOCIF) {	// IOC?
     IOCAF = 0;
@@ -152,10 +154,8 @@ void isr (void) __interrupt (1){
   // TODO: overflow - stop timer and restart on pin change ?
     stopwatch = 255;
     TMR1IF = 0;
-    // LATA ^= 0x20;
   }
 
-  LATA5 = 1;
   // NEC IR decode FSM
   // 3.14t idea - it's fast enough so we can use it in the ISR
 
@@ -164,7 +164,7 @@ void isr (void) __interrupt (1){
   case STATE_INACTIVE:
     if ((stopwatch > 125 ) && (stopwatch < 156))
       ir_nec_decode_state = STATE_HEADER_SPACE;
-    goto END_OF_INTERRUPT;
+    break;
 
   case STATE_HEADER_SPACE:
     if ((stopwatch > 62 ) && (stopwatch < 78)) {
@@ -177,15 +177,15 @@ void isr (void) __interrupt (1){
       // if ir_nec_decode_bits == 32 the repeat sequence could be valid
       ir_nec_decode_state = STATE_TRAILER_PULSE;
     } else
-       break;
-    goto END_OF_INTERRUPT;
+      ir_nec_decode_state = STATE_INACTIVE;
+    break;
 
   case STATE_BIT_PULSE:
     if ((stopwatch > 6 ) && (stopwatch < 11))
       ir_nec_decode_state = STATE_BIT_SPACE;
     else
-      break;
-    goto END_OF_INTERRUPT;
+      ir_nec_decode_state = STATE_INACTIVE;
+    break;
 
   case STATE_BIT_SPACE:
     if ((stopwatch > 6 ) && (stopwatch < 11))
@@ -193,8 +193,10 @@ void isr (void) __interrupt (1){
     else if ((stopwatch > 22 ) && (stopwatch < 30)) {
       nec_code >>=1;
       nec_code |= 0x80000000;
-    } else
+    } else {
+      ir_nec_decode_state = STATE_INACTIVE;
       break;
+    }
 
     ir_nec_decode_bits++;
 
@@ -202,14 +204,14 @@ void isr (void) __interrupt (1){
        ir_nec_decode_state = STATE_TRAILER_PULSE;
     else
       ir_nec_decode_state = STATE_BIT_PULSE;
-    goto END_OF_INTERRUPT;
+    break;
 
   case STATE_TRAILER_PULSE:
     if ((stopwatch > 6 ) && (stopwatch < 11))
       ir_nec_decode_state = STATE_TRAILER_SPACE;
     else
-      break;
-    goto END_OF_INTERRUPT;
+      ir_nec_decode_state = STATE_INACTIVE;
+    break;
 
   case STATE_TRAILER_SPACE:
     // 255 means timer overflow - we assume that this is the pause after a complete sequence
@@ -218,13 +220,14 @@ void isr (void) __interrupt (1){
       // we got valid data if the sequence before was valid - needed for repeat
       if (ir_nec_decode_bits == NEC_NBITS)
         ir_nec_data_valid = 1;
-      goto END_OF_INTERRUPT;
-    }
-  }
-  // if something went wrong -> back to start
-  ir_nec_decode_state = STATE_INACTIVE;
+    } else
+      ir_nec_decode_state = STATE_INACTIVE;
+    break;
 
-END_OF_INTERRUPT:
+  default:
+     ir_nec_decode_state = STATE_INACTIVE;
+     break;
+  }
   GIE = 1;
   LATA5 = 0;
 }
@@ -233,6 +236,7 @@ void main() {
   uint8_t *data;
   init();
   init_usart();
+  ir_nec_decode_state = STATE_INACTIVE;
   ir_nec_data_valid=0;
 
   while(1){
