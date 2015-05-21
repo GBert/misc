@@ -24,9 +24,9 @@ volatile uint8_t stopwatch;
 #define MARGIN                  30	// in percent
 
 // define pulse/space length barriers
-#define T_LOW(x)        ((uint8_t )((( x * (100 - MARGIN)) / TIMER_GRID)/ 100))
+#define T_LOW_M(x)        ((( x * (100 - MARGIN)) / TIMER_GRID)/ 100)
 // round up (+0.5)
-#define T_HIGH(x)       ((uint8_t )((( x * (100 + MARGIN)) / TIMER_GRID + 50 )/ 100))
+#define T_HIGH_M(x)       ((( x * (100 + MARGIN)) / TIMER_GRID + 50 )/ 100)
 
 #define NEC_NBITS		32
 #define NEC_UNIT		562500 /* ns */
@@ -42,15 +42,16 @@ volatile uint8_t stopwatch;
 #define NECX_REPEAT_BITS	1
 
 
-#if (T_HIGH(NEC_BIT_PULSE) - T_LOW(NEC_BIT_PULSE)) < 2
+#if (T_HIGH_M(NEC_BIT_PULSE) - T_LOW_M(NEC_BIT_PULSE)) < 2
 #error "MARGIN to low !"
 #endif
 
-/*
-#if (T_HIGH(NEC_HEADER_PULSE)) > 254
+#if (T_HIGH_M(NEC_HEADER_PULSE)) > 254
 #error "MARGIN to high or GRID to low !"
 #endif
-*/
+
+#define T_LOW(x)	((uint8_t ) T_LOW_M(x))
+#define T_HIGH(x)	((uint8_t ) T_HIGH_M(x))
 
 // USART defines
 #define _XTAL_FREQ 32000000     // This is the speed your controller is running at
