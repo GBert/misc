@@ -65,10 +65,21 @@ enum nec_state { STATE_INACTIVE,
         STATE_TRAILER_SPACE
 };
 
+
 static __code uint16_t __at (_CONFIG1) configword1 = _FOSC_INTOSC & _WDTE_OFF & _MCLRE_ON & _CP_OFF & _PWRTE_OFF & _BOREN_OFF & _CLKOUTEN_OFF;
 static __code uint16_t __at (_CONFIG2) configword2 = _WRT_OFF & _PLLEN_ON & _STVREN_ON & _DEBUG_OFF & _LVP_OFF;
 
-volatile uint32_t new_nec_code;
+typedef union {
+  struct {
+    uint8_t addr_l : 8;
+    uint8_t addr_h : 8;
+    uint8_t cmd    : 8;
+    uint8_t icmd   : 8;
+  };
+  uint32_t  b32;
+}ir_code_t;
+
+ir_code_t new_nec_code;
 volatile uint8_t ir_nec_decode_state;
 volatile uint8_t ir_nec_decode_bits;
 volatile uint8_t ir_nec_data_valid;
@@ -259,7 +270,6 @@ void isr (void) __interrupt (1){
 }
 
 void main() {
-  uint8_t *data;
   init();
   init_usart();
   ir_nec_decode_state = STATE_INACTIVE;
@@ -270,16 +280,14 @@ void main() {
       // atomic acces to vars
       GIE = 0;
       ir_nec_data_valid=0;
-      new_nec_code = nec_code;
+      new_nec_code.b32 = nec_code;
       // we got the vars so switch on interrupts again
       GIE = 1;
       puts("0x\0");
-      // Aiiieeee : pointer mess
-      data = (uint8_t *) &new_nec_code;
-      puthex(*data++);
-      puthex(*data++);
-      puthex(*data++);
-      puthex(*data);
+      puthex(new_nec_code.addr_l);
+      puthex(new_nec_code.addr_h);
+      puthex(new_nec_code.cmd);
+      puthex(new_nec_code.icmd);
       putchar('\n');
     }
   }
