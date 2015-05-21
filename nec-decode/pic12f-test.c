@@ -171,12 +171,14 @@ void isr (void) __interrupt (1){
     stopwatch = TMR1H;
     TMR1L = 0;
     TMR1H = 0;
+    TMR1ON  = 1;  // Timer on
   }
   // overflow every 64us * 256 = 16.384ms
   if(TMR1IF) {
   // TODO: overflow - stop timer and restart on pin change ?
     stopwatch = 255;
     TMR1IF = 0;
+    TMR1ON  = 0;  // Timer off - will be restarted on the next edge
   }
 
   // NEC IR decode FSM
