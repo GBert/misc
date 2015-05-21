@@ -24,9 +24,9 @@ volatile uint8_t stopwatch;
 #define MARGIN                  30	// in percent
 
 // define pulse/space length barriers
-#define T_LOW(x)        ((( x * (100 - MARGIN)) / TIMER_GRID)/ 100)
+#define T_LOW(x)        ((uint8_t )((( x * (100 - MARGIN)) / TIMER_GRID)/ 100))
 // round up (+0.5)
-#define T_HIGH(x)       ((( x * (100 + MARGIN)) / TIMER_GRID + 50 )/ 100)
+#define T_HIGH(x)       ((uint8_t )((( x * (100 + MARGIN)) / TIMER_GRID + 50 )/ 100))
 
 #define NEC_NBITS		32
 #define NEC_UNIT		562500 /* ns */
@@ -41,13 +41,16 @@ volatile uint8_t stopwatch;
 #define NEC_TRAILER_SPACE	(10 * NEC_UNIT) /* even longer in reality */
 #define NECX_REPEAT_BITS	1
 
+
 #if (T_HIGH(NEC_BIT_PULSE) - T_LOW(NEC_BIT_PULSE)) < 2
 #error "MARGIN to low !"
 #endif
 
+/*
 #if (T_HIGH(NEC_HEADER_PULSE)) > 254
 #error "MARGIN to high or GRID to low !"
 #endif
+*/
 
 // USART defines
 #define _XTAL_FREQ 32000000     // This is the speed your controller is running at
@@ -178,18 +181,18 @@ void isr (void) __interrupt (1){
   switch (ir_nec_decode_state) {
 
   case STATE_INACTIVE:
-    if ((stopwatch > (uint8_t) T_LOW(NEC_HEADER_PULSE) ) && (stopwatch < (uint8_t) T_HIGH(NEC_HEADER_PULSE)))
+    if ((stopwatch > T_LOW(NEC_HEADER_PULSE) ) && (stopwatch < T_HIGH(NEC_HEADER_PULSE)))
       ir_nec_decode_state = STATE_HEADER_SPACE;
     break;
 
   case STATE_HEADER_SPACE:
-    if ((stopwatch > (uint8_t) T_LOW(NEC_HEADER_SPACE) ) && (stopwatch < (uint8_t) T_HIGH(NEC_HEADER_SPACE))) {
+    if ((stopwatch > T_LOW(NEC_HEADER_SPACE) ) && (stopwatch < T_HIGH(NEC_HEADER_SPACE))) {
       // we got the start sequence -> old data is now invalid
       ir_nec_data_valid = 0;
       ir_nec_decode_bits = 0;
       ir_nec_decode_state = STATE_BIT_PULSE;
     // check for repeat sequence
-    } else if ((stopwatch > (uint8_t) T_LOW(NEC_REPEAT_SPACE)) && (stopwatch < (uint8_t) T_HIGH(NEC_REPEAT_SPACE))) {
+    } else if ((stopwatch > T_LOW(NEC_REPEAT_SPACE)) && (stopwatch < T_HIGH(NEC_REPEAT_SPACE))) {
       // if ir_nec_decode_bits == 32 the repeat sequence could be valid
       ir_nec_decode_state = STATE_TRAILER_PULSE;
     } else
@@ -197,16 +200,16 @@ void isr (void) __interrupt (1){
     break;
 
   case STATE_BIT_PULSE:
-    if ((stopwatch > (uint8_t) T_LOW(NEC_BIT_PULSE) ) && (stopwatch < (uint8_t) T_HIGH(NEC_BIT_PULSE)))
+    if ((stopwatch > T_LOW(NEC_BIT_PULSE) ) && (stopwatch < T_HIGH(NEC_BIT_PULSE)))
       ir_nec_decode_state = STATE_BIT_SPACE;
     else
       ir_nec_decode_state = STATE_INACTIVE;
     break;
 
   case STATE_BIT_SPACE:
-    if ((stopwatch > (uint8_t) T_LOW(NEC_BIT_0_SPACE) ) && (stopwatch < (uint8_t) T_HIGH(NEC_BIT_0_SPACE)))
+    if ((stopwatch > T_LOW(NEC_BIT_0_SPACE) ) && (stopwatch < T_HIGH(NEC_BIT_0_SPACE)))
       nec_code >>=1;
-    else if ((stopwatch > (uint8_t) T_LOW(NEC_BIT_1_SPACE) ) && (stopwatch < (uint8_t) T_HIGH(NEC_BIT_1_SPACE))) {
+    else if ((stopwatch > T_LOW(NEC_BIT_1_SPACE) ) && (stopwatch < T_HIGH(NEC_BIT_1_SPACE))) {
       nec_code >>=1;
       nec_code |= 0x80000000;
     } else {
@@ -223,7 +226,7 @@ void isr (void) __interrupt (1){
     break;
 
   case STATE_TRAILER_PULSE:
-    if ((stopwatch > (uint8_t) T_LOW(NEC_TRAILER_PULSE) ) && (stopwatch < (uint8_t) T_HIGH(NEC_TRAILER_PULSE)))
+    if ((stopwatch > T_LOW(NEC_TRAILER_PULSE) ) && (stopwatch < T_HIGH(NEC_TRAILER_PULSE)))
       ir_nec_decode_state = STATE_TRAILER_SPACE;
     else
       ir_nec_decode_state = STATE_INACTIVE;
