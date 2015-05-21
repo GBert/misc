@@ -145,10 +145,10 @@ void init() {
   TRISA5  = 0;	// output for red led     - pin2
   TRISA2  = 1;	// input  for ir receiver - pin5
 
+  // set Timer1 (16bit) to 4MHz -> TMR1H increments every 64us -> grid is 64us
   TMR1CS0 = 0;	// 8MHz (Fosc/4 -> 32MHz/4 ; timer 1 use internal clock)
   TMR1CS1 = 0;  // "
-
-  T1CKPS0 = 1;  // prescaler 1:2
+  T1CKPS0 = 1;  // prescaler 1:2 -> Timer1 is now running at 4MHz
   T1CKPS1 = 0;  // "
 
   TMR1ON  = 1;  // Timer on
