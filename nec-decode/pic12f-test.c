@@ -41,9 +41,9 @@
 #define NECX_REPEAT_BITS	1
 
 // define pulse/space length barriers
-#define T_LOW_M(x)        ((( x * (100 - MARGIN)) / TIMER_GRID)/ 100)
+#define T_LOW_M(x)        ((( (x) * (100 - MARGIN)) / TIMER_GRID)/ 100)
 // round up (+0.5)
-#define T_HIGH_M(x)       ((( x * (100 + MARGIN)) / TIMER_GRID + 50 )/ 100)
+#define T_HIGH_M(x)       ((( (x) * (100 + MARGIN)) / TIMER_GRID + 50 )/ 100)
 
 #if (T_HIGH_M(NEC_BIT_PULSE) - T_LOW_M(NEC_BIT_PULSE)) < 2
 #error "MARGIN to low !"
