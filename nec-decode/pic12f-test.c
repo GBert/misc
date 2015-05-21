@@ -23,7 +23,7 @@ volatile uint8_t stopwatch;
 #define TIMER_GRID              64000	// 64us
 #define MARGIN                  30	// in percent
 
-// define pulse length barriers
+// define pulse/space length barriers
 #define T_LOW(x)        ((( x * (100 - MARGIN)) / TIMER_GRID)/ 100)
 // round up (+0.5)
 #define T_HIGH(x)       ((( x * (100 + MARGIN)) / TIMER_GRID + 50 )/ 100)
