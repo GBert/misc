@@ -25,7 +25,7 @@
 
 //IR decode defines
 #define TIMER_GRID		64000	// 64us
-#define MARGIN			30	// in percent
+#define MARGIN			25	// in percent
 
 #define NEC_NBITS		32
 #define NEC_UNIT		562500 /* ns */
@@ -77,6 +77,9 @@ volatile uint32_t nec_code;
 
 void init_usart (void) {
   // USART configuration
+  // use 9 bit trasmission to add 1 extra stop bit
+  TX9D=1;
+  TX9=1;
   //TXSTA REG
   TXEN=1;
   BRGH=USE_BRGH;
@@ -191,6 +194,7 @@ void isr (void) __interrupt (1){
       // we got the start sequence -> old data is now invalid
       ir_nec_data_valid = 0;
       ir_nec_decode_bits = 0;
+      nec_code=0;
       ir_nec_decode_state = STATE_BIT_PULSE;
     // check for repeat sequence
     } else if ((stopwatch > T_LOW(NEC_REPEAT_SPACE)) && (stopwatch < T_HIGH(NEC_REPEAT_SPACE))) {
