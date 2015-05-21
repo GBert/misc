@@ -173,23 +173,23 @@ void isr (void) __interrupt (1){
   }
 
   // NEC IR decode FSM
-  // 3.14t idea - it's fast enough so we can use it in the ISR
+  // using 3.14ts idea - it's fast enough so we can use it inside the ISR
 
   switch (ir_nec_decode_state) {
 
   case STATE_INACTIVE:
-    if ((stopwatch > T_LOW(NEC_HEADER_PULSE) ) && (stopwatch < T_HIGH(NEC_HEADER_PULSE)))
+    if ((stopwatch > (uint8_t) T_LOW(NEC_HEADER_PULSE) ) && (stopwatch < (uint8_t) T_HIGH(NEC_HEADER_PULSE)))
       ir_nec_decode_state = STATE_HEADER_SPACE;
     break;
 
   case STATE_HEADER_SPACE:
-    if ((stopwatch > T_LOW(NEC_HEADER_SPACE) ) && (stopwatch < T_HIGH(NEC_HEADER_SPACE))) {
+    if ((stopwatch > (uint8_t) T_LOW(NEC_HEADER_SPACE) ) && (stopwatch < (uint8_t) T_HIGH(NEC_HEADER_SPACE))) {
       // we got the start sequence -> old data is now invalid
       ir_nec_data_valid = 0;
       ir_nec_decode_bits = 0;
       ir_nec_decode_state = STATE_BIT_PULSE;
     // check for repeat sequence
-    } else if ((stopwatch > T_LOW(NEC_REPEAT_SPACE)) && (stopwatch < T_HIGH(NEC_REPEAT_SPACE))) {
+    } else if ((stopwatch > (uint8_t) T_LOW(NEC_REPEAT_SPACE)) && (stopwatch < (uint8_t) T_HIGH(NEC_REPEAT_SPACE))) {
       // if ir_nec_decode_bits == 32 the repeat sequence could be valid
       ir_nec_decode_state = STATE_TRAILER_PULSE;
     } else
@@ -197,16 +197,16 @@ void isr (void) __interrupt (1){
     break;
 
   case STATE_BIT_PULSE:
-    if ((stopwatch > T_LOW(NEC_BIT_PULSE) ) && (stopwatch < T_HIGH(NEC_BIT_PULSE)))
+    if ((stopwatch > (uint8_t) T_LOW(NEC_BIT_PULSE) ) && (stopwatch < (uint8_t) T_HIGH(NEC_BIT_PULSE)))
       ir_nec_decode_state = STATE_BIT_SPACE;
     else
       ir_nec_decode_state = STATE_INACTIVE;
     break;
 
   case STATE_BIT_SPACE:
-    if ((stopwatch > T_LOW(NEC_BIT_0_SPACE) ) && (stopwatch < T_HIGH(NEC_BIT_0_SPACE)))
+    if ((stopwatch > (uint8_t) T_LOW(NEC_BIT_0_SPACE) ) && (stopwatch < (uint8_t) T_HIGH(NEC_BIT_0_SPACE)))
       nec_code >>=1;
-    else if ((stopwatch > T_LOW(NEC_BIT_1_SPACE) ) && (stopwatch < T_HIGH(NEC_BIT_1_SPACE))) {
+    else if ((stopwatch > (uint8_t) T_LOW(NEC_BIT_1_SPACE) ) && (stopwatch < (uint8_t) T_HIGH(NEC_BIT_1_SPACE))) {
       nec_code >>=1;
       nec_code |= 0x80000000;
     } else {
@@ -223,7 +223,7 @@ void isr (void) __interrupt (1){
     break;
 
   case STATE_TRAILER_PULSE:
-    if ((stopwatch > T_LOW(NEC_TRAILER_PULSE) ) && (stopwatch < T_HIGH(NEC_TRAILER_PULSE)))
+    if ((stopwatch > (uint8_t) T_LOW(NEC_TRAILER_PULSE) ) && (stopwatch < (uint8_t) T_HIGH(NEC_TRAILER_PULSE)))
       ir_nec_decode_state = STATE_TRAILER_SPACE;
     else
       ir_nec_decode_state = STATE_INACTIVE;
