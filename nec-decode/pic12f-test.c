@@ -1,58 +1,6 @@
 #include <pic12f1572.h>
 #include <stdint.h>
 
-static __code uint16_t __at (_CONFIG1) configword1 = _FOSC_INTOSC & _WDTE_OFF & _MCLRE_ON & _CP_OFF & _PWRTE_OFF & _BOREN_OFF & _CLKOUTEN_OFF;
-static __code uint16_t __at (_CONFIG2) configword2 = _WRT_OFF & _PLLEN_ON & _STVREN_ON & _DEBUG_OFF & _LVP_OFF;
-
-enum nec_state { STATE_INACTIVE,
-        STATE_HEADER_SPACE,
-        STATE_BIT_PULSE,
-        STATE_BIT_SPACE,
-        STATE_TRAILER_PULSE,
-        STATE_TRAILER_SPACE
-};
-
-volatile uint32_t nec_code;
-volatile uint32_t new_nec_code;
-volatile uint8_t ir_nec_decode_state;
-volatile uint8_t ir_nec_decode_bits;
-volatile uint8_t ir_nec_data_valid;
-volatile uint8_t stopwatch;
-
-//IR decode defines
-#define TIMER_GRID              64000	// 64us
-#define MARGIN                  30	// in percent
-
-// define pulse/space length barriers
-#define T_LOW_M(x)        ((( x * (100 - MARGIN)) / TIMER_GRID)/ 100)
-// round up (+0.5)
-#define T_HIGH_M(x)       ((( x * (100 + MARGIN)) / TIMER_GRID + 50 )/ 100)
-
-#define NEC_NBITS		32
-#define NEC_UNIT		562500 /* ns */
-#define NEC_HEADER_PULSE	(16 * NEC_UNIT)
-#define NECX_HEADER_PULSE	(8 * NEC_UNIT) /* Less common NEC variant */
-#define NEC_HEADER_SPACE	(8 * NEC_UNIT)
-#define NEC_REPEAT_SPACE	(4 * NEC_UNIT)
-#define NEC_BIT_PULSE		(1 * NEC_UNIT)
-#define NEC_BIT_0_SPACE		(1 * NEC_UNIT)
-#define NEC_BIT_1_SPACE		(3 * NEC_UNIT)
-#define NEC_TRAILER_PULSE	(1 * NEC_UNIT)
-#define NEC_TRAILER_SPACE	(10 * NEC_UNIT) /* even longer in reality */
-#define NECX_REPEAT_BITS	1
-
-
-#if (T_HIGH_M(NEC_BIT_PULSE) - T_LOW_M(NEC_BIT_PULSE)) < 2
-#error "MARGIN to low !"
-#endif
-
-#if (T_HIGH_M(NEC_HEADER_PULSE)) > 254
-#error "MARGIN to high or GRID to low !"
-#endif
-
-#define T_LOW(x)	((uint8_t ) T_LOW_M(x))
-#define T_HIGH(x)	((uint8_t ) T_HIGH_M(x))
-
 // USART defines
 #define _XTAL_FREQ 32000000     // This is the speed your controller is running at
 #define FCYC (_XTAL_FREQ/4L)    // target device instruction clock freqency
@@ -74,6 +22,58 @@ volatile uint8_t stopwatch;
 #else
 #define SBRG_VAL        ( (((_XTAL_FREQ / BAUDRATE) / 8) - 1) / 2 )
 #endif
+
+//IR decode defines
+#define TIMER_GRID		64000	// 64us
+#define MARGIN			30	// in percent
+
+#define NEC_NBITS		32
+#define NEC_UNIT		562500 /* ns */
+#define NEC_HEADER_PULSE	(16 * NEC_UNIT)
+#define NECX_HEADER_PULSE	(8 * NEC_UNIT) /* Less common NEC variant */
+#define NEC_HEADER_SPACE	(8 * NEC_UNIT)
+#define NEC_REPEAT_SPACE	(4 * NEC_UNIT)
+#define NEC_BIT_PULSE		(1 * NEC_UNIT)
+#define NEC_BIT_0_SPACE		(1 * NEC_UNIT)
+#define NEC_BIT_1_SPACE		(3 * NEC_UNIT)
+#define NEC_TRAILER_PULSE	(1 * NEC_UNIT)
+#define NEC_TRAILER_SPACE	(10 * NEC_UNIT) /* even longer in reality */
+#define NECX_REPEAT_BITS	1
+
+// define pulse/space length barriers
+#define T_LOW_M(x)        ((( x * (100 - MARGIN)) / TIMER_GRID)/ 100)
+// round up (+0.5)
+#define T_HIGH_M(x)       ((( x * (100 + MARGIN)) / TIMER_GRID + 50 )/ 100)
+
+#if (T_HIGH_M(NEC_BIT_PULSE) - T_LOW_M(NEC_BIT_PULSE)) < 2
+#error "MARGIN to low !"
+#endif
+
+#if (T_HIGH_M(NEC_HEADER_PULSE)) > 254
+#error "MARGIN to high or GRID to low !"
+#endif
+
+//define again to avoid casting
+#define T_LOW(x)	((uint8_t ) T_LOW_M(x))
+#define T_HIGH(x)	((uint8_t ) T_HIGH_M(x))
+
+enum nec_state { STATE_INACTIVE,
+        STATE_HEADER_SPACE,
+        STATE_BIT_PULSE,
+        STATE_BIT_SPACE,
+        STATE_TRAILER_PULSE,
+        STATE_TRAILER_SPACE
+};
+
+static __code uint16_t __at (_CONFIG1) configword1 = _FOSC_INTOSC & _WDTE_OFF & _MCLRE_ON & _CP_OFF & _PWRTE_OFF & _BOREN_OFF & _CLKOUTEN_OFF;
+static __code uint16_t __at (_CONFIG2) configword2 = _WRT_OFF & _PLLEN_ON & _STVREN_ON & _DEBUG_OFF & _LVP_OFF;
+
+volatile uint32_t new_nec_code;
+volatile uint8_t ir_nec_decode_state;
+volatile uint8_t ir_nec_decode_bits;
+volatile uint8_t ir_nec_data_valid;
+volatile uint8_t stopwatch;
+volatile uint32_t nec_code;
 
 void init_usart (void) {
   // USART configuration
