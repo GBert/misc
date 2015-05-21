@@ -20,6 +20,14 @@ volatile uint8_t ir_nec_data_valid;
 volatile uint8_t stopwatch;
 
 //IR decode defines
+#define TIMER_GRID              64000   /* 64us */
+#define MARGIN                  30      /* in percent */
+
+// define pulse length barriers
+#define T_LOW(x)        ((( x * (100 - MARGIN)) / TIMER_GRID)/ 100)
+// round up (+0.5)
+#define T_HIGH(x)       ((( x * (100 + MARGIN)) / TIMER_GRID + 50 )/ 100)
+
 #define NEC_NBITS		32
 #define NEC_UNIT		562500 /* ns */
 #define NEC_HEADER_PULSE	(16 * NEC_UNIT)
@@ -162,18 +170,18 @@ void isr (void) __interrupt (1){
   switch (ir_nec_decode_state) {
 
   case STATE_INACTIVE:
-    if ((stopwatch > 125 ) && (stopwatch < 156))
+    if ((stopwatch > T_LOW(NEC_HEADER_PULSE) ) && (stopwatch < T_HIGH(NEC_HEADER_PULSE)))
       ir_nec_decode_state = STATE_HEADER_SPACE;
     break;
 
   case STATE_HEADER_SPACE:
-    if ((stopwatch > 62 ) && (stopwatch < 78)) {
+    if ((stopwatch > T_LOW(NEC_HEADER_SPACE) ) && (stopwatch < T_HIGH(NEC_HEADER_SPACE))) {
       // we got the start sequence -> old data is now invalid
       ir_nec_data_valid = 0;
       ir_nec_decode_bits = 0;
       ir_nec_decode_state = STATE_BIT_PULSE;
     // check for repeat sequence
-    } else if ((stopwatch > 30 ) && (stopwatch < 41)) {
+    } else if ((stopwatch > T_LOW(NEC_REPEAT_SPACE)) && (stopwatch < T_HIGH(NEC_REPEAT_SPACE))) {
       // if ir_nec_decode_bits == 32 the repeat sequence could be valid
       ir_nec_decode_state = STATE_TRAILER_PULSE;
     } else
@@ -181,16 +189,16 @@ void isr (void) __interrupt (1){
     break;
 
   case STATE_BIT_PULSE:
-    if ((stopwatch > 6 ) && (stopwatch < 11))
+    if ((stopwatch > T_LOW(NEC_BIT_PULSE) ) && (stopwatch < T_HIGH(NEC_BIT_PULSE)))
       ir_nec_decode_state = STATE_BIT_SPACE;
     else
       ir_nec_decode_state = STATE_INACTIVE;
     break;
 
   case STATE_BIT_SPACE:
-    if ((stopwatch > 6 ) && (stopwatch < 11))
+    if ((stopwatch > T_LOW(NEC_BIT_0_SPACE) ) && (stopwatch < T_HIGH(NEC_BIT_0_SPACE)))
       nec_code >>=1;
-    else if ((stopwatch > 22 ) && (stopwatch < 30)) {
+    else if ((stopwatch > T_LOW(NEC_BIT_1_SPACE) ) && (stopwatch < T_HIGH(NEC_BIT_1_SPACE))) {
       nec_code >>=1;
       nec_code |= 0x80000000;
     } else {
@@ -207,7 +215,7 @@ void isr (void) __interrupt (1){
     break;
 
   case STATE_TRAILER_PULSE:
-    if ((stopwatch > 6 ) && (stopwatch < 11))
+    if ((stopwatch > T_LOW(NEC_TRAILER_PULSE) ) && (stopwatch < T_HIGH(NEC_TRAILER_PULSE)))
       ir_nec_decode_state = STATE_TRAILER_SPACE;
     else
       ir_nec_decode_state = STATE_INACTIVE;
@@ -240,13 +248,12 @@ void main() {
   ir_nec_data_valid=0;
 
   while(1){
-    //LATA ^= 0x20;
     if (ir_nec_data_valid) {
       // atomic acces to vars
       GIE = 0;
       ir_nec_data_valid=0;
       new_nec_code = nec_code;
-      // we got vars so back to normal 
+      // we got the vars so switch on interrupts again
       GIE = 1;
       puts("0x\0");
       // Aiiieeee : pointer mess

@@ -25,7 +25,8 @@ enum nec_state { STATE_INACTIVE,
 #define TIMER_GRID		64000	/* 64us */
 #define MARGIN			30	/* in percent */
 
-/* #define	T_LOW (x) */
+#define	T_LOW(x)	(( x * NEC_UNIT / TIMER_GRID) * (100 - MARGIN)/100)
+#define	T_HIGH(x)	(( x * NEC_UNIT / TIMER_GRID) * (100 + MARGIN)/100)
 
 #define NEC_NBITS               32
 #define NEC_UNIT                562500  /* ns */
