@@ -20,8 +20,8 @@ volatile uint8_t ir_nec_data_valid;
 volatile uint8_t stopwatch;
 
 //IR decode defines
-#define TIMER_GRID              64000   /* 64us */
-#define MARGIN                  30      /* in percent */
+#define TIMER_GRID              64000	// 64us
+#define MARGIN                  30	// in percent
 
 // define pulse length barriers
 #define T_LOW(x)        ((( x * (100 - MARGIN)) / TIMER_GRID)/ 100)
@@ -40,6 +40,14 @@ volatile uint8_t stopwatch;
 #define NEC_TRAILER_PULSE	(1 * NEC_UNIT)
 #define NEC_TRAILER_SPACE	(10 * NEC_UNIT) /* even longer in reality */
 #define NECX_REPEAT_BITS	1
+
+#if (T_HIGH(NEC_BIT_PULSE) - T_LOW(NEC_BIT_PULSE)) < 2
+#error "MARGIN to low !"
+#endif
+
+#if (T_HIGH(NEC_HEADER_PULSE)) > 254
+#error "MARGIN to high or GRID to low !"
+#endif
 
 // USART defines
 #define _XTAL_FREQ 32000000     // This is the speed your controller is running at
