@@ -84,7 +84,7 @@ void puts(const char *str) {
     //Write data
     TXREG=(*str);
 
-    //Next goto char
+    //next char
     str++;
   }
 }
@@ -139,12 +139,12 @@ void init() {
 }
 
 void isr (void) __interrupt (1){
-  // check how lonmg the ISR takes
+  // check how long the ISR takes
   LATA5 = 1;
   GIE = 0;
   if(IOCIF) {	// IOC?
     IOCAF = 0;
-    // we only use the high byte
+    // we only use the high byte and reset the timer
     stopwatch = TMR1H;
     TMR1L = 0;
     TMR1H = 0;
@@ -172,7 +172,7 @@ void isr (void) __interrupt (1){
       ir_nec_data_valid = 0;
       ir_nec_decode_bits = 0;
       ir_nec_decode_state = STATE_BIT_PULSE;
-      // is this a repeat sequence ?
+    // check for repeat sequence
     } else if ((stopwatch > 30 ) && (stopwatch < 41)) {
       // if ir_nec_decode_bits == 32 the repeat sequence could be valid
       ir_nec_decode_state = STATE_TRAILER_PULSE;
@@ -217,7 +217,7 @@ void isr (void) __interrupt (1){
     // 255 means timer overflow - we assume that this is the pause after a complete sequence
     if (stopwatch == 255) {
       ir_nec_decode_state = STATE_INACTIVE;
-      // we got valid data if the sequence before was valid - needed for repeat
+      // we got valid data (even for repeat)
       if (ir_nec_decode_bits == NEC_NBITS)
         ir_nec_data_valid = 1;
     } else
