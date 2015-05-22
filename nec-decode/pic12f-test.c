@@ -57,6 +57,9 @@
 #define T_LOW(x)	((uint8_t ) T_LOW_M(x))
 #define T_HIGH(x)	((uint8_t ) T_HIGH_M(x))
 
+static __code uint16_t __at (_CONFIG1) configword1 = _FOSC_INTOSC & _WDTE_OFF & _MCLRE_ON & _CP_OFF & _PWRTE_OFF & _BOREN_OFF & _CLKOUTEN_OFF;
+static __code uint16_t __at (_CONFIG2) configword2 = _WRT_OFF & _PLLEN_ON & _STVREN_ON & _DEBUG_OFF & _LVP_OFF;
+
 enum nec_state { STATE_INACTIVE,
         STATE_HEADER_SPACE,
         STATE_BIT_PULSE,
@@ -65,30 +68,37 @@ enum nec_state { STATE_INACTIVE,
         STATE_TRAILER_SPACE
 };
 
-
-static __code uint16_t __at (_CONFIG1) configword1 = _FOSC_INTOSC & _WDTE_OFF & _MCLRE_ON & _CP_OFF & _PWRTE_OFF & _BOREN_OFF & _CLKOUTEN_OFF;
-static __code uint16_t __at (_CONFIG2) configword2 = _WRT_OFF & _PLLEN_ON & _STVREN_ON & _DEBUG_OFF & _LVP_OFF;
-
+//make life easier to access data
 typedef union {
   struct {
-    uint8_t addr_l : 8;
     uint8_t addr_h : 8;
+    uint8_t addr_l : 8;
     uint8_t cmd    : 8;
     uint8_t icmd   : 8;
   };
   uint32_t  b32;
 }ir_code_t;
 
+// portable (#if 0) or slightly smaller&faster (#if 1) using sdcc - decide it
+#if 1
+__data ir_code_t __at(0x40) new_nec_code;
+__data uint32_t __at(0x44) nec_code;
+__data uint8_t __at(0x48) ir_nec_decode_state;
+__data uint8_t __at(0x49) ir_nec_decode_bits;
+__data uint8_t __at(0x4a) ir_nec_data_valid;
+__data uint8_t __at(0x4b) stopwatch;
+#else
 ir_code_t new_nec_code;
+volatile uint32_t nec_code;
 volatile uint8_t ir_nec_decode_state;
 volatile uint8_t ir_nec_decode_bits;
 volatile uint8_t ir_nec_data_valid;
 volatile uint8_t stopwatch;
-volatile uint32_t nec_code;
+#endif
 
 void init_usart (void) {
   // USART configuration
-  // use 9 bit trasmission to add 1 extra stop bit
+  // use 9 bit transmission to add 1 extra stop bit
   TX9D=1;
   TX9=1;
   //TXSTA REG
@@ -96,17 +106,14 @@ void init_usart (void) {
   BRGH=USE_BRGH;
   BRG16=USE_BRG16;
   SPBRG=SBRG_VAL;
-
   //RCSTA
   SPEN=1;
   //CREN=1;	//Enable Receiver (RX)
-
 }
 
 void putchar(char ch) {
   //Wait for TXREG Buffer to become available
   while(!TXIF);
-
   TXREG=ch;
 }
 
@@ -114,10 +121,8 @@ void puts(const char *str) {
   while((*str)!='\0') {
     //Wait for TXREG Buffer to become available
     while(!TXIF);
-
     //Write data
     TXREG=(*str);
-
     //next char
     str++;
   }
@@ -284,8 +289,8 @@ void main() {
       // we got the vars so switch on interrupts again
       GIE = 1;
       puts("0x\0");
-      puthex(new_nec_code.addr_l);
       puthex(new_nec_code.addr_h);
+      puthex(new_nec_code.addr_l);
       puthex(new_nec_code.cmd);
       puthex(new_nec_code.icmd);
       putchar('\n');
