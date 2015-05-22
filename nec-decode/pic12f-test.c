@@ -145,15 +145,15 @@ void puts(const char *str) {
 
 void puthex(uint8_t data) {
   uint8_t hextemp = data;
-  data &= 0xf0;
   data >>= 4;
-  data += 0x30;
-  if (data > 0x39)
+  data &= 0x0f;
+  data += '0';
+  if (data > '9')
     data += 7;
   putchar(data);
   hextemp &= 0x0f;
-  hextemp += 0x30;
-  if (hextemp > 0x39)
+  hextemp += '0';
+  if (hextemp > '9')
     hextemp += 7;
   putchar(hextemp);
 }
