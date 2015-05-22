@@ -92,13 +92,16 @@ typedef union {
 }ir_code_t;
 
 // portable (#if 0) or slightly smaller&faster (#if 1) using sdcc - decide it
+// try to use more common ram (0x70 - 0x7f) to avoid banking
+// (stack size must be reduced '--stack-size 8'
+
 #if 1
 __data ir_code_t __at(0x40) new_nec_code;
-__data uint32_t __at(0x44) nec_code;
-__data uint8_t __at(0x48) ir_nec_decode_state;
-__data uint8_t __at(0x49) ir_nec_decode_bits;
-__data uint8_t __at(0x4a) ir_nec_data_valid;
-__data uint8_t __at(0x4b) stopwatch;
+__data uint32_t __at(0x78) nec_code;
+__data uint8_t __at(0x7c) ir_nec_decode_state;
+__data uint8_t __at(0x7d) ir_nec_decode_bits;
+__data uint8_t __at(0x7e) ir_nec_data_valid;
+__data uint8_t __at(0x7f) stopwatch;
 #else
 ir_code_t new_nec_code;
 volatile uint32_t nec_code;

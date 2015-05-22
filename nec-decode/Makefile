@@ -1,6 +1,6 @@
 MCU=12f1572
 CC=sdcc
-CFLAGS=--use-non-free -mpic14 -p$(MCU) #-DDEBUG=1
+CFLAGS=--use-non-free --stack-size 8 -mpic14 -p$(MCU) #-DDEBUG=1
 CLIB=
 
 MAIN=pic12f-test
