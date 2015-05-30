@@ -23,13 +23,58 @@
     ERROR       "CAN Bus rate not defined"
 #ENDIF
 
-#IF CLOCK != 40000000
-    #IF CLOCK != 48000000
-        #IF CLOCK != 60000000
-            #IF CLOCK != 64000000
-                 ERROR   "CAN Bus rate not calculated"
+#IF CLOCK != 16000000
+    #IF CLOCK != 40000000
+        #IF CLOCK != 48000000
+            #IF CLOCK != 60000000
+                #IF CLOCK != 64000000
+                     ERROR   "CAN Bus rate not calculated"
+                #ENDIF
             #ENDIF
         #ENDIF
+    #ENDIF
+#ENDIF
+
+#IF CLOCK == 16000000
+    #IF CANRATE == 1000
+        #DEFINE BRG1 0x00
+        #DEFINE BRG2 0x84
+        #DEFINE BRG3 0x00
+    #ENDIF
+    #IF CANRATE == 500
+        #DEFINE BRG1 0x00
+        #DEFINE BRG2 0xBC
+        #DEFINE BRG3 0x01
+    #ENDIF
+    #IF CANRATE == 250
+        #DEFINE BRG1 0x01
+        #DEFINE BRG2 0xBC
+        #DEFINE BRG3 0x01
+    #ENDIF
+    #IF CANRATE == 125
+        #DEFINE BRG1 0x03
+        #DEFINE BRG2 0xBC
+        #DEFINE BRG3 0x01
+    #ENDIF
+    #IF CANRATE == 100
+        #DEFINE BRG1 0x04
+        #DEFINE BRG2 0xBC
+        #DEFINE BRG3 0x01
+    #ENDIF
+    #IF CANRATE == 50
+        #DEFINE BRG1 0x09
+        #DEFINE BRG2 0xBC
+        #DEFINE BRG3 0x01
+    #ENDIF
+    #IF CANRATE == 20
+        #DEFINE BRG1 0x18
+        #DEFINE BRG2 0xBC
+        #DEFINE BRG3 0x01
+    #ENDIF
+    #IF CANRATE == 10
+        #DEFINE BRG1 0x31
+        #DEFINE BRG2 0xBC
+        #DEFINE BRG3 0x01
     #ENDIF
 #ENDIF
 
