@@ -1,4 +1,5 @@
 FOSC	64MHz
+UART	 4MBaud
 SFF DLC0   BBB DCAN CAN0 -> SLCAN CAN1
 
 cangen -I155 -L0 -i -g 0 can0
@@ -23,6 +24,7 @@ no packet loss
 ########################
 
 FOSC	64MHz
+UART	 4MBaud
 EFF DLC0   BBB DCAN CAN0 -> SLCAN CAN1
 
 cangen -e -I 15555555 -L0 -i -g 0 can0
@@ -44,6 +46,7 @@ no packet loss
 ########################
 
 FOSC	64MHz
+UART	 4MBaud
 SFF DLC8   BBB DCAN CAN0 -> SLCAN CAN1
 
 cangen -I 155 -L8 -D aaaaaaaaaaaaaaaa -i -g 0 can0
@@ -68,6 +71,7 @@ no packet loss
 ########################
 
 FOSC	64MHz
+UART	 4MBaud
 EFF DLC8   BBB DCAN CAN0 -> SLCAN CAN1
 
 cangen -e -I 15555555 -L8 -D aaaaaaaaaaaaaaaa -i -g 0 can0
@@ -90,6 +94,7 @@ no packet loss
 ##############################################
 
 FOSC	16MHz
+UART	 2MBaud
 SFF DLC0   BBB DCAN CAN0 -> SLCAN CAN1
 
 cangen  -I 155 -L0 -i -g 0 can0
@@ -111,6 +116,7 @@ packet loss
 ###############################################
 
 FOSC	16MHz
+UART	 2MBaud
 EFF DLC0   BBB DCAN CAN0 -> SLCAN CAN1
 
 cangen -e -I 15555555 -L0 -i -g 0 can0
@@ -130,6 +136,7 @@ cangen -e -I 15555555 -L0 -i -g 0 can0
 ########################
 
 FOSC	16MHz
+UART	 2MBaud
 SFF DLC8   BBB DCAN CAN0 -> SLCAN CAN1
 
 cangen -I 155 -L8 -D aaaaaaaaaaaaaaaa -i -g 0 can0
@@ -149,6 +156,7 @@ cangen -I 155 -L8 -D aaaaaaaaaaaaaaaa -i -g 0 can0
 ########################
 
 FOSC	16MHz
+UART	 2MBaud
 EFF DLC8   BBB DCAN CAN0 -> SLCAN CAN1
 
 cangen -e -I 15555555 -L8 -D aaaaaaaaaaaaaaaa -i -g 0 can0
