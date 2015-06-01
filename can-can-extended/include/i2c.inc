@@ -1,6 +1,6 @@
 ;------------------------------------------------------------------------------
 ;
-; Can-Can TIMER
+; Can-Can I2C
 ;
 ; Copyright (c) 2015 Gerhard Bertelsmann
 ;
@@ -18,31 +18,33 @@
                 RADIX   DEC
 
 ;------------------------------------------------------------------------------
-; Timer settings
+; I2C settings
 ;------------------------------------------------------------------------------
 
-;------------------------------------------------------------------------------
-; Init. Timer
-;------------------------------------------------------------------------------
-TIMERINIT
-		; timer period = 1/16MHz = 0.0625 us
-		; prescaler period = .0625us * 64 = 4 us
-		; overflow period  = 4us * 256 = 1024 ms
-		
-                MOVLW   (1 << TMR0ON) + (1 << T08BIT) + (1 << T0PS2) + (1 << T0PS0)
+#DEFINE I2CBAUD ((((CLOCK / I2CRATE) / 2) - 1) / 2)
 
-		; prescaler period = .0625us * 8 = 0.5 us
-		; overflow period  = 0.5us * 256 = 128 us
-                ; MOVLW   (1 << TMR0ON) + (1 << T08BIT) + (1 << T0PS1)
-
-                MOVWF   T0CON
+;------------------------------------------------------------------------------
+; Init. I2C
+;------------------------------------------------------------------------------
+I2CINIT
+                ; clear the upper two bits
+                MOVLW   0x3F
+                ANDWF   SSPSTAT,F
+                ; set I2C rate
+                MOVLW   I2CBAUD
+                MOVWF   SSPADD
+                CLRF    SSPCON1
+                CLRF    SSPCON2
+                BCF     SSPSTAT,SMP
+                BSF     SSPSTAT,CKE
+                ; configure SCL and SDL as input
+		BSF     TRISC,3
+		BSF     TRISC,4
+                ; master mode
+                MOVLW   (1 << SSPEN) + (1 << SSPM3)
+                IORWF   SSPCON1,F
                 RETURN
 
-SCHEDULE
-                ; must reset Timer1 overflow flag
-		BCF	INTCON, TMR0IF
-		BTG	LATA, 3
-		RETURN
 ;
 ; vim: shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 ;

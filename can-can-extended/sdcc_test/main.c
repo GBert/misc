@@ -10,8 +10,17 @@
 #include "main.h"
 // #include "usart.h"
 #include "prototypes.h"
+#include <i2c.h>
 
 #pragma config XINST=OFF
+
+
+#define MCP_IODIR_A 0x00
+#define MCP_IPOL_A 0x02
+#define MCP_OLAT_A 0x14
+#define MCP_GPIO_A 0x12
+#define MCP_IOCON_A 0x0A
+#define MCP_GPINTEN_A 0x04
 
 volatile unsigned char timer_ticks=0;
 
@@ -42,6 +51,55 @@ void init_timer(void) {
     // INTCONbits.GIE=1;      //Enable INTs globally
 
     T0CONbits.TMR0ON=1;   //Now start the timer!
+}
+
+void MCP_write()
+{
+     WriteI2C(0x40);
+}
+
+void MCP_read()
+{
+     WriteI2C(0x41);
+}
+
+void MCP_addr()
+{
+     StartI2C();
+     MCP_write();
+}
+
+void init_MCP()
+{
+     //IODIR A configuration
+     MCP_addr();
+     WriteI2C(MCP_IODIR_A);
+     WriteI2C(0x00);
+     StopI2C();
+
+     //IPOL A configuration
+     MCP_addr();
+     WriteI2C(MCP_IPOL_A);
+     WriteI2C(0x00);
+     StopI2C();
+
+     //OLAT A configuration
+     MCP_addr();
+     WriteI2C(MCP_OLAT_A);
+     WriteI2C(0xFF);
+     StopI2C();
+
+     //IOCON A configuration
+     MCP_addr();
+     WriteI2C(MCP_IOCON_A);
+     WriteI2C(0x00);
+     StopI2C();
+
+     //GPINTEN A configuration
+     MCP_addr();
+     WriteI2C(MCP_GPINTEN_A);
+     WriteI2C(0x00);
+     StopI2C();
 }
 
 void main(void) {
