@@ -1,0 +1,22 @@
+#------------------------------------------------------------------------------
+#
+# Can-Can TODO
+#
+# Copyright (c) 2014 Darron M Broad
+#       
+#------------------------------------------------------------------------------
+#               
+# This file is part of the Can-Can CAN bus interface project.
+#
+# Can-Can is licensed under the CC BY-NC-SA 4.0.
+#
+# See file /LICENSE for details.
+# 
+#------------------------------------------------------------------------------
+
+1.   look at TX abort and wonder if we need to do something about it.
+
+2.   check error condition and consider restarting after a while.
+
+666. sell soul to devil.
+
