@@ -22,6 +22,7 @@ char *CAN_TCP_FORMAT_STRG  = "->CAN>TCP    CANID 0x%08X   [%d]";
 char *NET_UDP_FORMAT_STRG  = "      UDP->  CANID 0x%08X   [%d]";
 
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[] = { 0x00, 0x36, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
+unsigned char M_CAN_PING[]                      = { 0x00, 0x30, 0x47, 0x11, 0x08, 0xaa, 0xbb, 0xcc, 0xdd, 0x01, 0x01, 0xee, 0xee };
 unsigned char M_PING_RESPONSE[] = { 0x00, 0x30, 0x00, 0x00, 0x00 };
 
 char config_dir[MAXLINE];
@@ -32,7 +33,7 @@ int ms1_workaround = 0;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.01\n\n");
+    fprintf(stderr, "   Version 1.02\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
@@ -52,6 +53,19 @@ int send_magic_start_60113_frame(int can_socket) {
 	if (verbose) {
 	    printf("                CAN magic 60113 start written\n");
 	    print_can_frame(CAN_FORMAT_STRG, M_GLEISBOX_MAGIC_START_SEQUENCE, verbose);
+	}
+    }
+    return 0;
+}
+
+int send_can_ping(int can_socket) {
+    if (frame_to_can(can_socket, M_CAN_PING) < 0) {
+	fprintf(stderr, "can't send CAN Ping\n");
+	return -1;
+    } else {
+	if (verbose) {
+	    /* printf("                CAN Ping sent\n"); */
+	    print_can_frame(CAN_FORMAT_STRG, M_CAN_PING, verbose);
 	}
     }
     return 0;
@@ -151,6 +165,7 @@ int main(int argc, char **argv) {
 
     uint32_t canid;
     int s, ret;
+    struct timeval tv;
 
     int local_udp_port = 15731;
     int local_tcp_port = 15731;
@@ -346,6 +361,11 @@ int main(int argc, char **argv) {
 	}
     }
 
+    /* set select timeout -> send periodic CAN Ping */
+    bzero(&tv, sizeof(tv));
+    tv.tv_sec = 1;
+    tv.tv_usec = 0;
+
     FD_ZERO(&all_fds);
     FD_SET(sc, &all_fds);
     FD_SET(sa, &all_fds);
@@ -354,9 +374,17 @@ int main(int argc, char **argv) {
 
     while (1) {
 	read_fds = all_fds;
-	if ((nready = select(max_fds + 1, &read_fds, NULL, NULL, NULL)) < 0) {
+	nready = select(max_fds + 1, &read_fds, NULL, NULL, &tv);
+	if (nready == 0) {
+            send_can_ping(sc);
+            tv.tv_sec = 1;
+            tv.tv_usec = 0;
+	    continue;
+	} else if (nready < 0)
 	    fprintf(stderr, "select error: %s\n", strerror(errno));
-	}
+
+	tv.tv_sec = 1;
+	tv.tv_usec = 0;
 
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &read_fds)) {
