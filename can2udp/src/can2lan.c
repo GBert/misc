@@ -22,7 +22,7 @@ char *CAN_TCP_FORMAT_STRG  = "->CAN>TCP    CANID 0x%08X   [%d]";
 char *NET_UDP_FORMAT_STRG  = "      UDP->  CANID 0x%08X   [%d]";
 
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[] = { 0x00, 0x36, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
-unsigned char M_CAN_PING[]                      = { 0x00, 0x30, 0x47, 0x11, 0x08, 0xaa, 0xbb, 0xcc, 0xdd, 0x01, 0x01, 0xee, 0xee };
+unsigned char M_CAN_PING[]                      = { 0x00, 0x30, 0x47, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 unsigned char M_PING_RESPONSE[] = { 0x00, 0x30, 0x00, 0x00, 0x00 };
 
 char config_dir[MAXLINE];
@@ -376,7 +376,7 @@ int main(int argc, char **argv) {
 	read_fds = all_fds;
 	nready = select(max_fds + 1, &read_fds, NULL, NULL, &tv);
 	if (nready == 0) {
-            send_can_ping(sc);
+        /*    send_can_ping(sc); */
             tv.tv_sec = 1;
             tv.tv_usec = 0;
 	    continue;
