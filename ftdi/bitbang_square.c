@@ -8,9 +8,11 @@ int main()
   uint8_t data[256];
   int i;
 
-  bzero(ftdic, sizeof(&ftdic));
-  ftdi_init(ftdic);
- 
+  if ((ftdic = ftdi_new()) == 0) {
+    fprintf(stderr, "ftdi_new failed\n");
+    exit(1);
+  }
+
   if(ftdi_usb_open_desc(ftdic, 0x0403, 0x6001, NULL, NULL) < 0) {
     fprintf(stderr, "ftdi_usb_open_desc failed: %s\n", ftdi_get_error_string(ftdic));
     exit(1);
