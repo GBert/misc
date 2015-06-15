@@ -139,8 +139,10 @@ define Package/rocnetnode/install
 endef
 
 define Package/rocweb/install
+	$(INSTALL_DIR) $(1)/opt/rocrail/svg
 	$(INSTALL_DIR) $(1)/opt/rocrail/web
 	$(INSTALL_DIR) $(1)/opt/rocrail/web/html
+	$(CP) $(PKG_BUILD_DIR)/rocview/svg/* $(1)/opt/rocrail/svg
 	$(CP) $(PKG_BUILD_DIR)/rocrail/impl/web/html/* $(1)/opt/rocrail/web/html
 endef
 
