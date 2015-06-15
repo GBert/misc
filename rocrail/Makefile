@@ -53,8 +53,19 @@ define Package/rocnetnode
   DEPENDS:=+libpthread rocrail
 endef
 
-define Package/rocrail-node/description
+define Package/rocnetnode/description
  This package contains the rocnetnode
+endef
+
+define Package/rocweb
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=rocweb
+  DEPENDS:=+libpthread rocrail
+endef
+
+define Package/rocweb/description
+ This package contains Rocweb, a WEB Browser based Rocrail client for all platforms including mobile devices
 endef
 
 define Package/rocrail-cs-mcs2
@@ -127,6 +138,12 @@ define Package/rocnetnode/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/rocnetnode $(1)/opt/rocrail
 endef
 
+define Package/rocweb/install
+	$(INSTALL_DIR) $(1)/opt/rocrail/web
+	$(INSTALL_DIR) $(1)/opt/rocrail/web/html
+	$(CP) $(PKG_BUILD_DIR)/rocrail/impl/web/html/* $(1)/opt/rocrail/web/html
+endef
+
 define Package/rocrail-cs-ddx/install
 	$(INSTALL_DIR) $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/ddx.so $(1)/opt/rocrail
@@ -151,6 +168,7 @@ endef
 $(eval $(call BuildPackage,rocrail))
 $(eval $(call BuildPackage,rocrail-server))
 $(eval $(call BuildPackage,rocnetnode))
+$(eval $(call BuildPackage,rocweb))
 $(eval $(call BuildPackage,rocrail-cs-ddx))
 $(eval $(call BuildPackage,rocrail-cs-mcs2))
 $(eval $(call BuildPackage,rocrail-cs-mgbox))
