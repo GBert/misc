@@ -13,13 +13,8 @@ int main()
     exit(1);
   }
 
-  if(ftdi_usb_open_desc(ftdic, 0x0403, 0x6001, NULL, NULL) < 0) {
+  if(ftdi_usb_open_desc(ftdic, 0x0403, 0x6015, NULL, NULL) < 0) {
     fprintf(stderr, "ftdi_usb_open_desc failed: %s\n", ftdi_get_error_string(ftdic));
-    exit(1);
-  }
- 
-  if(ftdi_set_baudrate(ftdic, 10000) < 0) {
-    fprintf(stderr, "ftdi_set_baudrate failed: %s\n", ftdi_get_error_string(ftdic));
     exit(1);
   }
  
@@ -28,7 +23,18 @@ int main()
     fprintf(stderr, "ftdi_set_bitmode failed: %s\n", ftdi_get_error_string(ftdic));
     exit(1);
   }
- 
+
+  /* multiply 64 ? */
+  /* 269 -> DCC 58us */
+  /* 601 -> MM  26us */
+  /* 301 -> MM  52us */
+  /* 312 -> mfx 50us */
+
+  if(ftdi_set_baudrate(ftdic, 269) < 0) {
+    fprintf(stderr, "ftdi_set_baudrate failed: %s\n", ftdi_get_error_string(ftdic));
+    exit(1);
+  }
+
   for(i=0; i<sizeof(data); i++)
     if (i & 0x01)
       data[i]=0x00;
@@ -37,7 +43,7 @@ int main()
  
   for(;;) {
     ftdi_write_data(ftdic, data, sizeof(data));
-#if 0
+#if 1
     uint8_t data2[256];
     ftdi_read_data(ftdic, data2, sizeof(data2));
 #endif
