@@ -36,3 +36,10 @@ sudo ./cp210x-program -p -F eeprom.hex -w --set-baudrate 19200:FA90,FE2B,1 --set
 # testing DCC -> 8.6 kHz square wave
 stty -F /dev/ttyUSB0 19200
 echo UUUUUUU > /dev/ttyUSB0
+```
+
+Links
+-----
+
+http://home.mnet-online.de/modelleisenbahn-digital/DCC-start.html
+
