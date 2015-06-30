@@ -48,6 +48,7 @@ static void cp210x_break_ctl(struct tty_struct *, int);
 static int cp210x_startup(struct usb_serial *);
 static void cp210x_release(struct usb_serial *);
 static void cp210x_dtr_rts(struct usb_serial_port *p, int on);
+static bool cp210x_tx_empty(struct usb_serial_port *p);
 
 static const struct usb_device_id id_table[] = {
 	{ USB_DEVICE(0x045B, 0x0053) }, /* Renesas RX610 RX-Stick */
@@ -321,6 +322,18 @@ static struct usb_serial_driver * const serial_drivers[] = {
 #define CONTROL_DCD		0x0080
 #define CONTROL_WRITE_DTR	0x0100
 #define CONTROL_WRITE_RTS	0x0200
+
+/* CP210x EVENSTATES */
+#define EVENTSTATE_RI		0x0001
+#define EVENTSTATE_RXB_80_FULL	0x0004
+#define EVENTSTATE_CHAR_RECV	0x0100
+#define EVENTSTATE_SCHAR_RECV	0x0200
+#define EVENTSTATE_TX_EMPTY	0x0400
+#define EVENTSTATE_CTS_CHANGED	0x0800
+#define EVENTSTATE_DSR_CHANGED	0x1000
+#define EVENTSTATE_DCD_CHANGED	0x2000
+#define EVENTSTATE_LBREAK_RCVD	0x4000
+#define EVENTSTATE_L_STAT_ERR	0x8000
 
 /*
  * cp210x_get_config
@@ -952,6 +965,17 @@ static void cp210x_dtr_rts(struct usb_serial_port *p, int on)
 		cp210x_tiocmset_port(p, TIOCM_DTR|TIOCM_RTS, 0);
 	else
 		cp210x_tiocmset_port(p, 0, TIOCM_DTR|TIOCM_RTS);
+}
+
+static bool cp210x_tx_empty(struct usb_serial_port *p)
+{
+	unsigned int control;
+	cp210x_get_config(p, REQTYPE_INTERFACE_TO_HOST,
+			CP210X_GET_EVENTSTATE, 0, &control, 1);
+	if (control & EVENTSTATE_TX_EMPTY)
+		return true;
+	else
+		return false;
 }
 
 static int cp210x_tiocmget(struct tty_struct *tty)

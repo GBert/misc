@@ -1,4 +1,4 @@
-obj-m = cp2104_fb.o
+obj-m = cp210x.o
 KVERSION = $(shell uname -r)
 all:
 	make -C /lib/modules/$(KVERSION)/build M=$(PWD) modules
