@@ -49,6 +49,9 @@ static int cp210x_startup(struct usb_serial *);
 static void cp210x_release(struct usb_serial *);
 static void cp210x_dtr_rts(struct usb_serial_port *p, int on);
 static bool cp210x_tx_empty(struct usb_serial_port *p);
+static int get_lsr_info(struct usb_serial_port *p,
+			struct serial_struct __user *retinfo);
+
 
 static const struct usb_device_id id_table[] = {
 	{ USB_DEVICE(0x045B, 0x0053) }, /* Renesas RX610 RX-Stick */
@@ -200,8 +203,9 @@ static const struct usb_device_id id_table[] = {
 MODULE_DEVICE_TABLE(usb, id_table);
 
 struct cp210x_port_private {
-	__u8			bInterfaceNumber;
-	__u8			bPartNumber;
+	__u8	bInterfaceNumber;
+	__u8	bPartNumber;
+	char	transmit_empty;
 };
 
 static struct usb_serial_driver cp210x_device = {
@@ -593,6 +597,10 @@ static int cp210x_ioctl(struct tty_struct *tty,
 		}
 		break;
 
+	case TIOCSERGETLSR:
+		return get_lsr_info(port, (struct serial_struct __user *)arg);
+		break;
+
 	default:
 		break;
 	}
@@ -976,6 +984,24 @@ static bool cp210x_tx_empty(struct usb_serial_port *p)
 		return true;
 	else
 		return false;
+}
+
+
+static int get_lsr_info(struct usb_serial_port *p,
+			struct serial_struct __user *retinfo)
+{
+	struct cp210x_port_private *priv = usb_get_serial_port_data(p);
+	unsigned int result = 0;
+
+	if (!retinfo)
+		return -EFAULT;
+
+	if (priv->transmit_empty)
+		result = TIOCSER_TEMT;
+
+	if (copy_to_user(retinfo, &result, sizeof(unsigned int)))
+		return -EFAULT;
+	return 0;
 }
 
 static int cp210x_tiocmget(struct tty_struct *tty)
