@@ -969,10 +969,10 @@ static void cp210x_dtr_rts(struct usb_serial_port *p, int on)
 
 static bool cp210x_tx_empty(struct usb_serial_port *p)
 {
-	unsigned int control;
+	unsigned int event;
 	cp210x_get_config(p, REQTYPE_INTERFACE_TO_HOST,
-			CP210X_GET_EVENTSTATE, 0, &control, 1);
-	if (control & EVENTSTATE_TX_EMPTY)
+			CP210X_GET_EVENTSTATE, 0, &event, 1);
+	if (event & EVENTSTATE_TX_EMPTY)
 		return true;
 	else
 		return false;
