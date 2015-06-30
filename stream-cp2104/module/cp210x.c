@@ -993,6 +993,9 @@ static int get_lsr_info(struct usb_serial_port *p,
 	struct cp210x_port_private *priv = usb_get_serial_port_data(p);
 	unsigned int result = 0;
 
+	/* TODO */
+	priv->transmit_empty = true;
+
 	if (!retinfo)
 		return -EFAULT;
 
