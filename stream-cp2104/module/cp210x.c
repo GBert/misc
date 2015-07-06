@@ -979,7 +979,8 @@ static bool cp210x_tx_empty(struct usb_serial_port *p)
 {
 	unsigned int event;
 	cp210x_get_config(p, REQTYPE_INTERFACE_TO_HOST,
-			CP210X_GET_EVENTSTATE, 0, &event, 1);
+			CP210X_GET_EVENTSTATE, 0, &event, 2);
+	dev_dbg(&p->dev, "%s - event = 0x%.2x\n", __func__, event);
 	if (event & EVENTSTATE_TX_EMPTY)
 		return true;
 	else
