@@ -1,9 +1,10 @@
 #include <xc.h>
 
-#define _XTAL_FREQ 64000000   // This is the speed your controller is running at
-#define FCYC (_XTAL_FREQ/4L)  // target device instruction clock freqency
+#pragma config FOSC = INTOSC, PLLEN = OFF, MCLRE = OFF, WDTE = OFF, LVP = OFF
 
-#define LED_TRIS        (TRISCbits.TRISC0)
+#define _XTAL_FREQ	32000000	// This is the speed your controller is running at
+#define FCYC (_XTAL_FREQ/4L)		// target device instruction clock freqency
+
 #define LED             (LATCbits.LATC0)
 
 /* USART calculating Baud Rate Generator
@@ -26,11 +27,15 @@ void interrupt ISRCode();
 
 int i = 0;
 volatile unsigned char timer_ticks=0;
-void Delay1Second(void);
+
+void init_osc(void) {
+    OSCCONbits.IRCF   = 0b1110;
+    OSCCONbits.SPLLEN = 0b1;
+}
 
 void init_port(void) {
-    ADCON1 = 0x0F;		// Default all pins to digital
-    LED_TRIS = 0;
+    ANSELC = 0x0;		// Default all pins to digital
+    TRISC = 0;
 }
 
 void init_uart (void) {
@@ -60,21 +65,50 @@ void init_uart (void) {
     PIR1bits.RCIF = 0;
 }
 
+void putchar(char ch) {
+  //Wait for TXREG Buffer to become available
+  while(!TXIF);
+  TXREG=ch;
+}
+
+void puts(const char *str) {
+  while((*str)!='\0') {
+    //Wait for TXREG Buffer to become available
+    while(!TXIF);
+    //Write data
+    TXREG=(*str);
+    //next char
+    str++;
+  }
+}
+
+void puthex(char data) {
+  char hextemp = data;
+  data >>= 4;
+  data &= 0x0f;
+  data += '0';
+  if (data > '9')
+    data += 7;
+  putchar(data);
+  hextemp &= 0x0f;
+  hextemp += '0';
+  if (hextemp > '9')
+    hextemp += 7;
+  putchar(hextemp);
+}
+
 void main(int argc, char** argv) {
+    init_osc();
     init_port();
     init_uart();
 
     //infinite loop
     while(1) {
-        /* LED = 1; */
-        Delay1Second();
+        __delay_ms(10);
 	LED = 0;
-        Delay1Second();
-	LED = 0;
+        __delay_ms(10);
+	LED = 1;
+	putchar('U');
     }
 }
 
-void Delay1Second() {
-    for(i=0;i<50;i++)
-        __delay_ms(10);
-}
