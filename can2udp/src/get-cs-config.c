@@ -189,7 +189,7 @@ int main(int argc, char **argv) {
 			fprintf(stderr, "can't malloc deflated config data buffer - size 0x%04x\n", deflated_size + 8);
 			exit(1);
 		    }
-		    config_data.inflated_data = malloc(config_data.inflated_size + 16384);
+		    config_data.inflated_data = malloc(config_data.inflated_size + 65536);
 		    if (config_data.inflated_data == NULL) {
 			fprintf(stderr, "can't malloc inflated config data buffer - size 0x%04x\n",
 				config_data.inflated_size);
