@@ -23,6 +23,12 @@
 #define	SBRG_VAL	( (((_XTAL_FREQ / BAUDRATE) / 8) - 1) / 2 )
 #endif
 
+
+/*  PIN13 RA0/ICSPDAT -> TX
+ *  PIN12 RA1/ICSPCLK -> RX
+ *  PIN10 RC0 LED
+ */
+
 void interrupt ISRCode();
 
 int i = 0;
@@ -34,8 +40,21 @@ void init_osc(void) {
 }
 
 void init_port(void) {
+    ANSELA = 0x0;		// Default all pins to digital
     ANSELC = 0x0;		// Default all pins to digital
     TRISC = 0;
+}
+
+void init_pps(void) {
+    PPSLOCK = 0x55;
+    PPSLOCK = 0xaa;
+    PPSLOCK = 0;	/* unlock PPS */
+    /* set UASRT : TX on RA0 , RX on RA1 */ 
+    RXPPS  = 0b00001;	/* input  EUSART RX -> RA1 */
+    RA0PPS = 0b00110;	/* output TX/CK */
+    PPSLOCK = 0x55;
+    PPSLOCK = 0xaa;
+    PPSLOCK = 1;	/* lock PPS */
 }
 
 void init_uart (void) {
@@ -46,13 +65,13 @@ void init_uart (void) {
     TXSTAbits.BRGH = 1;    // high speed
     RCSTAbits.SPEN = 1;    // enable serial port (configures RX/DT and TX/CK pins as serial port pins)
     RCSTAbits.RX9  = 0;    // 8-bit reception
-    RCSTAbits.CREN = USE_BRGH;    // enable receiver
+    RCSTAbits.CREN = 1;    // enable receiver
     BAUDCON1bits.BRG16 = USE_BRG16; // 8-bit baud rate generator
 
     SPBRG = SBRG_VAL;      // calculated by defines
     
-    // TRISCbits.TRISC6 = 0;     // make the TX pin a digital output
-    // TRISCbits.TRISC7 = 1;     // make the RX pin a digital input
+    TRISAbits.TRISA0 = 0;     // make the TX pin a digital output
+    TRISAbits.TRISA1 = 1;     // make the RX pin a digital input
     
     /* don' use interrupts at the moment 
     // interrupts / USART interrupts configuration
@@ -98,8 +117,10 @@ void puthex(char data) {
 }
 
 void main(int argc, char** argv) {
+    GIE = 0;
     init_osc();
     init_port();
+    init_pps();
     init_uart();
 
     //infinite loop
