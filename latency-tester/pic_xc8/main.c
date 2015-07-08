@@ -129,6 +129,7 @@ void main(void) {
 
     //infinite loop
     while(1) {
+        CLRWDT();
         __delay_ms(10);
 	LED = 0;
         __delay_ms(10);
