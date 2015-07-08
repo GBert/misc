@@ -1,11 +1,12 @@
 #include <xc.h>
 
-#pragma config FOSC = INTOSC, PLLEN = OFF, MCLRE = OFF, WDTE = OFF, LVP = OFF
+#pragma config FOSC = INTOSC, PLLEN = OFF, MCLRE = OFF, LVP = OFF
+#pragma config WRT = OFF, WDTCPS = WDTCPS1F, WDTE = OFF, WDTCWS = WDTCWSSW, WDTCCS = SWC
 
-#define _XTAL_FREQ	32000000	// This is the speed your controller is running at
-#define FCYC (_XTAL_FREQ/4L)		// target device instruction clock freqency
+#define _XTAL_FREQ	32000000	// This is the speed the controller is running at
+#define FCYC		(_XTAL_FREQ/4L)	// target device instruction clock freqency
 
-#define LED             (LATCbits.LATC0)
+#define LED             LATCbits.LATC0
 
 /* USART calculating Baud Rate Generator
  * if BRGH = 0 => FOSC/[64 (n + 1)]
@@ -75,6 +76,18 @@ void init_uart (void) {
     PIR1bits.RCIF = 0;
 }
 
+void init_smt (void) {
+    SMT1CON0 = 0b10000000;              	// STM Enable
+    SMT1CON1 = 0b01000010;              	// Single Acquisition
+    SMT1SIG = 0b00000001;               	// Comp1 Signal
+    SMT1CLK = 0b00000000;               	// clock input FOSC/4
+
+    SMT1TMR = 0x000000;                 	// Clear all Counter Registers
+    SMT1CPR = 0x000000;
+    SMT1CPW = 0x000000;
+    SMT1PR = 0x000000;
+}
+
 void putchar(char ch) {
   //Wait for TXREG Buffer to become available
   while(!TXIF);
@@ -92,8 +105,8 @@ void puts(const char *str) {
   }
 }
 
-void puthex(char data) {
-  char hextemp = data;
+void puthex(unsigned char data) {
+  unsigned char hextemp = data;
   data >>= 4;
   data &= 0x0f;
   data += '0';
