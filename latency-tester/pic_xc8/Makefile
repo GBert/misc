@@ -20,7 +20,7 @@ flash: ${TARGET}
 	pk2cmd -PPIC$(PROCESSOR) -F$(TARGET) -M -R -T
 
 power: ${TARGET}
-	pk2cmd -B/usr/share/pk2/ -PPIC$(PROCESSOR) -T -R
+	pk2cmd -PPIC$(PROCESSOR) -T -R
 
 serial: ${TARGET}
 	./pk2serial -r -p -b 57600
