@@ -58,7 +58,6 @@ void init_pps(void) {
 }
 
 void init_uart (void) {
-    // USART configuration
     TXSTAbits.TX9  = 0;    // 8-bit transmission
     TXSTAbits.TXEN = 1;    // transmit enabled
     TXSTAbits.SYNC = 0;    // asynchronous mode
@@ -73,14 +72,6 @@ void init_uart (void) {
     TRISAbits.TRISA0 = 0;     // make the TX pin a digital output
     TRISAbits.TRISA1 = 1;     // make the RX pin a digital input
     
-    /* don' use interrupts at the moment 
-    // interrupts / USART interrupts configuration
-    RCONbits.IPEN   = 0; // disable interrupt priority
-    INTCONbits.GIE  = 1; // enable interrupts
-    INTCONbits.PEIE = 1; // enable peripheral interrupts.
-    PIE1bits.RCIE   = 1; // enable USART receive interrupt
-    PIE1bits.TXIE   = 0; // disable USART TX interrupt
-    */
     PIR1bits.RCIF = 0;
 }
 
@@ -116,7 +107,7 @@ void puthex(char data) {
   putchar(hextemp);
 }
 
-void main(int argc, char** argv) {
+void main(void) {
     GIE = 0;
     init_osc();
     init_port();
