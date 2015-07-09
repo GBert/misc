@@ -34,6 +34,8 @@ void interrupt ISRCode();
 int i = 0;
 volatile unsigned char timer_ticks=0;
 
+unsigned char t1, t2, t3;
+
 void init_osc(void) {
     OSCCONbits.IRCF   = 0b1110;
     OSCCONbits.SPLLEN = 0b1;
@@ -82,7 +84,7 @@ void init_uart (void) {
 
 void init_smt (void) {
     SMT1CON0 = 0b10000000;	// STM Enable ; WPOL & SPOL active low / falling edge
-    SMT1CON1 = 0b01000110;	// Time of Flight mode
+    SMT1CON1 = 0b11000110;	// Time of Flight mode
     SMT1SIG  = 0b00000000;	// SMT1SIG pin input
     SMT1WIN  = 0b00000000;	// SMT1WIN pin input
     SMT1CLK  = 0b00000000;	// clock input FOSC
@@ -147,6 +149,9 @@ void main(void) {
     // start SMT
     SMT1GO;
 
+    __delay_ms(255);
+    smt_out();
+
     // infinite loop
     while(1) {
 	
@@ -154,16 +159,22 @@ void main(void) {
 	    putchar('1');
 	    puthex(PIR4);
 	    putchar('\n');
-        __delay_ms(8);
+        __delay_ms(2);
 	LED = 0;
         TEST_PIN = 0;
-        __delay_ms(5);
-	    putchar('2');
-	    puthex(PIR4);
-	    putchar('\n');
-        __delay_ms(8);
-	LED = 1;
+        smt_out();
         TEST_PIN = 1;
+	LED = 0;
+        t1 = SMT1TMRL;
+        t2 = SMT1TMRL;
+        t3 = SMT1TMRL;
+        t3 = SMT1TMRL;
+	putchar('#');
+	puthex(t1);
+	puthex(t2);
+	puthex(t3);
+	putchar('\n');
+        __delay_ms(5);
 	putchar('U');
 	puthex(PIR4);
 	putchar('\n');
