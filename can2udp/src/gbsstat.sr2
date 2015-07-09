@@ -1447,7 +1447,6 @@ element
  .id=0x20102
 element
  .id=0x20103
- .zustand=1
 element
  .id=0x20104
 element
@@ -1522,6 +1521,7 @@ element
  .id=0x20303
 element
  .id=0x20304
+ .zustand=1
 element
  .id=0x20305
 element
@@ -1564,9 +1564,9 @@ element
  .id=0x20317
 element
  .id=0x20318
+ .zustand=1
 element
  .id=0x20319
- .zustand=1
 element
  .id=0x2031a
 element
@@ -1618,6 +1618,7 @@ element
  .zustand=1
 element
  .id=0x20416
+ .zustand=1
 element
  .id=0x20417
 element
@@ -1643,6 +1644,7 @@ element
  .id=0x20516
 element
  .id=0x20517
+ .zustand=1
 element
  .id=0x20518
 element
@@ -1978,6 +1980,7 @@ element
  .zustand=1
 element
  .id=0x30405
+ .zustand=1
 element
  .id=0x30406
 element
@@ -2194,6 +2197,7 @@ element
  .id=0x30905
 element
  .id=0x30906
+ .zustand=1
 element
  .id=0x30907
 element
