@@ -82,15 +82,15 @@ void init_uart (void) {
 
 void init_smt (void) {
     SMT1CON0 = 0b10000000;	// STM Enable ; WPOL & SPOL active low / falling edge
-    SMT1CON1 = 0b11000110;	// Time of Flight mode 
+    SMT1CON1 = 0b01000110;	// Time of Flight mode
     SMT1SIG  = 0b00000000;	// SMT1SIG pin input
     SMT1WIN  = 0b00000000;	// SMT1WIN pin input
     SMT1CLK  = 0b00000000;	// clock input FOSC
 
     SMT1TMR = 0x000000;		// Clear all Counter Registers
-    SMT1CPR = 0xFFFFFF;
+    SMT1CPR = 0xFFFFFF;		// maybe for looking of timeout
     SMT1CPW = 0x000000;
-    SMT1PR = 0x000000;
+    SMT1PR  = 0xFFFFFF;		// look for longest period
 }
 
 void putchar(char ch) {
@@ -145,6 +145,7 @@ void main(void) {
     init_uart();
     init_smt();
     // start SMT
+    SMT1GO;
 
     // infinite loop
     while(1) {
