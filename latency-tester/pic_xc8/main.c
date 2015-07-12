@@ -34,7 +34,7 @@ void interrupt ISRCode();
 int i = 0;
 volatile unsigned char timer_ticks=0;
 
-unsigned char t1, t2, t3;
+unsigned char smt1ru_max, smt1rh_max, smt1rl_max;
 
 void init_osc(void) {
     OSCCONbits.IRCF   = 0b1110;
@@ -137,7 +137,15 @@ void smt_out(void) {
     putchar('\n');
 }
 
+void print_max_smt(void) {
+    puthex(smt1ru_max);
+    puthex(smt1rh_max);
+    puthex(smt1rl_max);
+    putchar(' ');
+}
+
 void main(void) {
+    unsigned long max = 0;
     GIE = 0;
     init_osc();
     init_port();
@@ -147,7 +155,7 @@ void main(void) {
     init_uart();
     init_smt();
     // start SMT
-    SMT1GO;
+    //SMT1GO;
 
     __delay_ms(255);
     smt_out();
@@ -156,36 +164,29 @@ void main(void) {
     while(1) {
 	
         CLRWDT();
-	    putchar('1');
-	    puthex(PIR4);
-	    putchar('\n');
-        __delay_ms(2);
 	LED = 0;
         TEST_PIN = 0;
-        smt_out();
         TEST_PIN = 1;
-	LED = 0;
-        t1 = SMT1TMRL;
-        t2 = SMT1TMRL;
-        t3 = SMT1TMRL;
-        t3 = SMT1TMRL;
-	putchar('#');
-	puthex(t1);
-	puthex(t2);
-	puthex(t3);
-	putchar('\n');
-        __delay_ms(5);
-	putchar('U');
-	puthex(PIR4);
-	putchar('\n');
-        smt_out();
-        // smt_out();
-	if (PIR4bits.SMT1PRAIF == 1) {
-            smt_out();
-            PIR4bits.SMT1PRAIF = 0;
+        TEST_PIN = 1;
+        TEST_PIN = 1;
+        TEST_PIN = 1;
+        TEST_PIN = 0;
+        __delay_ms(25);
+	if (PIR4 & 0x0f ) {
+	    if (SMT1TMR > max) {
+                max = SMT1TMR;
+                smt1ru_max = SMT1TMRU;
+                smt1rh_max = SMT1TMRH;
+                smt1rl_max = SMT1TMRL;
+            }
 	    putchar('C');
 	    puthex(PIR4);
 	    putchar('\n');
+            if (PIR4bits.SMT1PRAIF == 1) {
+                print_max_smt();
+                smt_out();
+            }
+	    PIR4 = PIR4 & 0xf0;
         }
     }
 }
