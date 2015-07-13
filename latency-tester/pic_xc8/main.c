@@ -166,28 +166,27 @@ void main(void) {
         CLRWDT();
 	LED = 0;
         TEST_PIN = 0;
-        TEST_PIN = 1;
+        TEST_PIN = 1;	// stretch pulse
         TEST_PIN = 1;
         TEST_PIN = 1;
         TEST_PIN = 1;
         TEST_PIN = 0;
         __delay_ms(25);
-	if (PIR4 & 0x0f ) {
-	    if (SMT1TMR > max) {
-                max = SMT1TMR;
-                smt1ru_max = SMT1TMRU;
-                smt1rh_max = SMT1TMRH;
-                smt1rl_max = SMT1TMRL;
-            }
-	    putchar('C');
-	    puthex(PIR4);
-	    putchar('\n');
-            if (PIR4bits.SMT1PRAIF == 1) {
-                print_max_smt();
-                smt_out();
-            }
-	    PIR4 = PIR4 & 0xf0;
+	while ((PIR4 & 0x0f) == 0);
+	if (SMT1TMR > max) {
+            max = SMT1TMR;
+            smt1ru_max = SMT1TMRU;
+            smt1rh_max = SMT1TMRH;
+            smt1rl_max = SMT1TMRL;
         }
+	putchar('C');
+	puthex(PIR4);
+	putchar('\n');
+        if (PIR4bits.SMT1PRAIF == 1) {
+            print_max_smt();
+            smt_out();
+        }
+	PIR4 = PIR4 & 0xf0;
     }
 }
 
