@@ -173,14 +173,14 @@ void main(void) {
         __delay_ms(10);
 	// wait until a SMT event occurs
 	while ((PIR4 & 0x0f) == 0);
+	putchar('C');
+	puthex(PIR4);
+	putchar(' ');
         // overflow ?
 	if (PIR4bits.SMT1IF == 1) {
             // restart
             SMT1CON1bits.SMT1GO = 0;
             SMT1CON1bits.SMT1GO = 1;
-            putchar('C');
-            puthex(PIR4);
-            putchar('\n');
             print_max_smt();
             puthex(0xff);
             puthex(0xff);
@@ -194,16 +194,14 @@ void main(void) {
                 smt1rl_max = SMT1TMRL;
             }
 	    // print the event
-	    putchar('C');
-	    puthex(PIR4);
-	    putchar('\n');
             // if (PIR4bits.SMT1PRAIF == 1) {
             print_max_smt();
             smt_out();
-            smt_out();
+            if (PIR4bits.SMT1PRAIF != 1)
+                smt_out();
             // }
-	    PIR4 &= 0xf0;
         }
+	PIR4 &= 0xf0;
     }
 }
 
