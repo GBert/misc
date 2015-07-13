@@ -173,22 +173,37 @@ void main(void) {
         __delay_ms(10);
 	// wait until a SMT event occurs
 	while ((PIR4 & 0x0f) == 0);
-	if (SMT1TMR > max) {
-            max = SMT1TMR;
-            smt1ru_max = SMT1TMRU;
-            smt1rh_max = SMT1TMRH;
-            smt1rl_max = SMT1TMRL;
-        }
-	// print the event
-	putchar('C');
-	puthex(PIR4);
-	putchar('\n');
-        // if (PIR4bits.SMT1PRAIF == 1) {
+        // overflow ?
+	if (PIR4bits.SMT1IF == 1) {
+            // restart
+            SMT1CON1bits.SMT1GO = 0;
+            SMT1CON1bits.SMT1GO = 1;
+            putchar('C');
+            puthex(PIR4);
+            putchar('\n');
+            print_max_smt();
+            puthex(0xff);
+            puthex(0xff);
+            puthex(0xff);
+	    putchar('\n');
+        } else {
+            if ( (PIR4bits.SMT1PRAIF == 1) && (SMT1TMR > max) ) {
+                max = SMT1TMR;
+                smt1ru_max = SMT1TMRU;
+                smt1rh_max = SMT1TMRH;
+                smt1rl_max = SMT1TMRL;
+            }
+	    // print the event
+	    putchar('C');
+	    puthex(PIR4);
+	    putchar('\n');
+            // if (PIR4bits.SMT1PRAIF == 1) {
             print_max_smt();
             smt_out();
             smt_out();
-        // }
-	PIR4 &= 0xf0;
+            // }
+	    PIR4 &= 0xf0;
+        }
     }
 }
 
