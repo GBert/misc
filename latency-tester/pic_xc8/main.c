@@ -91,7 +91,7 @@ void init_smt (void) {
 
     SMT1TMR = 0x000000;		// Clear all Counter Registers
     SMT1CPR = 0xFFFFFF;		// maybe for looking of timeout
-    SMT1CPW = 0x000000;
+    SMT1CPW = 0xFFFFFF;
     SMT1PR  = 0xFFFFFF;		// look for longest period
 }
 
@@ -156,13 +156,11 @@ void main(void) {
     init_smt();
     // start SMT
     //SMT1GO;
-
     __delay_ms(255);
     smt_out();
 
     // infinite loop
     while(1) {
-	
         CLRWDT();
 	LED = 0;
         TEST_PIN = 0;
@@ -171,7 +169,9 @@ void main(void) {
         TEST_PIN = 1;
         TEST_PIN = 1;
         TEST_PIN = 0;
-        __delay_ms(25);
+	// slow down a little bit
+        __delay_ms(10);
+	// wait until a SMT event occurs
 	while ((PIR4 & 0x0f) == 0);
 	if (SMT1TMR > max) {
             max = SMT1TMR;
@@ -179,14 +179,16 @@ void main(void) {
             smt1rh_max = SMT1TMRH;
             smt1rl_max = SMT1TMRL;
         }
+	// print the event
 	putchar('C');
 	puthex(PIR4);
 	putchar('\n');
-        if (PIR4bits.SMT1PRAIF == 1) {
+        // if (PIR4bits.SMT1PRAIF == 1) {
             print_max_smt();
             smt_out();
-        }
-	PIR4 = PIR4 & 0xf0;
+            smt_out();
+        // }
+	PIR4 &= 0xf0;
     }
 }
 
