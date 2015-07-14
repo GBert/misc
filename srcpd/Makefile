@@ -38,7 +38,7 @@ define Package/srcpd/description
 endef
 
 define Build/Configure
-  $(call Build/Configure/Default,--disable-ddl --disable-ddls88)
+  $(call Build/Configure/Default,--disable-ddls88)
 endef
 
 define Build/Compile
