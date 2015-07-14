@@ -1,4 +1,4 @@
-# Copyright (C) 2014 OpenWrt.org
+# Copyright (C) 2015 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -7,9 +7,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rocrail
-PKG_REV:=af58b5165d66e06446bec68b4fb956005bfe9cd4
-PKG_REV:=597f4b85be
-PKG_VERSION:=9365
+PKG_REV:=0ae07e7996
+PKG_REV:=3abb090319
+PKG_VERSION:=9479
 PKG_RELEASE:=
 
 PKG_SOURCE_PROTO:=git
