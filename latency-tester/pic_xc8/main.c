@@ -65,7 +65,8 @@ void init_pps(void) {
 }
 
 void init_uart (void) {
-    TXSTAbits.TX9  = 0;		// 8-bit transmission
+    TXSTAbits.TX9  = 1;		// 8-bit transmission
+    TXSTAbits.TX9D = 1;		//  one extra stop bit
     TXSTAbits.TXEN = 1;		// transmit enabled
     TXSTAbits.SYNC = 0;		// asynchronous mode
     TXSTAbits.BRGH = 1;		// high speed
@@ -146,6 +147,7 @@ void print_max_smt(void) {
 
 void main(void) {
     unsigned long max = 0;
+    unsigned long i = 0;
     GIE = 0;
     init_osc();
     init_port();
@@ -159,18 +161,17 @@ void main(void) {
     __delay_ms(255);
     smt_out();
 
-    // infinite loop
-    while(1) {
+    for ( i = 0; i <= 100000 ; i++) {
         CLRWDT();
 	LED = 0;
         TEST_PIN = 0;
         TEST_PIN = 1;	// stretch pulse
-        TEST_PIN = 1;
-        TEST_PIN = 1;
-        TEST_PIN = 1;
+        TEST_PIN = 1;	// stretch pulse
+        TEST_PIN = 1;	// stretch pulse
+        TEST_PIN = 1;	// stretch pulse
         TEST_PIN = 0;
 	// slow down a little bit
-        __delay_ms(10);
+        __delay_ms(1);
 	// wait until a SMT event occurs
 	while ((PIR4 & 0x0f) == 0);
 	putchar('C');
@@ -203,5 +204,8 @@ void main(void) {
         }
 	PIR4 &= 0xf0;
     }
+    // infinite loop
+    while(1)
+        CLRWDT();
 }
 

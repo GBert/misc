@@ -17,7 +17,7 @@ $(MAIN).hex: $(SRC)
 	$(CC) $(SRC) $(CC_FLAGS) $(OPTIMISATION) --ROM=default,-fc00-ffff --chip=$(PROCESSOR) $(CC_INCLUDE) --ASMLIST -M
 
 flash: ${TARGET}
-	pk2cmd -PPIC$(PROCESSOR) -F$(TARGET) -M -R -T
+	pk2cmd -PPIC$(PROCESSOR) -F$(TARGET) -M -R
 
 power: ${TARGET}
 	pk2cmd -PPIC$(PROCESSOR) -T -R
