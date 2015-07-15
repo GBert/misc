@@ -36,10 +36,7 @@ int main()
   }
 
   for(i=0; i<sizeof(data); i++)
-    if (i & 0x01)
-      data[i]=0x00;
-    else
-      data[i]=0xff;
+    data[i]= i & 0x0f;
  
   for(;;) {
     ftdi_write_data(ftdic, data, sizeof(data));
