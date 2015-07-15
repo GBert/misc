@@ -30,7 +30,7 @@ int main()
   /* 301 -> MM  52us */
   /* 312 -> mfx 50us */
 
-  if(ftdi_set_baudrate(ftdic, 269) < 0) {
+  if(ftdi_set_baudrate(ftdic, 1562) < 0) {
     fprintf(stderr, "ftdi_set_baudrate failed: %s\n", ftdi_get_error_string(ftdic));
     exit(1);
   }
