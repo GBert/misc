@@ -32,6 +32,7 @@ TTY=1
 RPI=1
 MCP23017=1
 BITBANG=1
+FTDI=1
 
 # gdb else strip (gdb:1 strip:0)
 GDB=0
