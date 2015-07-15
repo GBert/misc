@@ -1,0 +1,194 @@
+#
+# Copyright (C) 2005-2015 Darron Broad
+# All rights reserved.
+#
+# This file is part of Pickle Microchip PIC ICSP.
+#
+# Pickle Microchip PIC ICSP is free software: you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as published
+# by the Free Software Foundation.
+#
+# Pickle Microchip PIC ICSP is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+# Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Pickle Microchip PIC ICSP. If not, see http://www.gnu.org/licenses/
+#
+
+#
+# Copy this file to ~/.pickle or ~/.pickle/config
+#
+
+# I/O device: tty, ttyUSB, RPI, I2C (MCP23017) or GPIO BIT-BANG
+#
+#DEVICE=/dev/ttyu0
+#DEVICE=/dev/ttyS0
+#DEVICE=/dev/ttyUSB0
+DEVICE=RPI
+#DEVICE=/dev/i2c-1
+#DEVICE=/dev/gpio-bb
+
+# I/O 1/2-bit delay/sleep time
+#
+# For ttyS 1 is fine
+# For ttyUSB try 600
+#
+# When SLEEP is set to zero no delay is taken
+# When SLEEP is less than 10, then SLEEP x I/O bit time is taken for R-PI and tty
+# When SLEEP is less than 100 a busy loop is utilised
+# When SLEEP is >=100 then system usleep is used.
+#
+# For GPIO BIT-BANG SLEEP configures the low and high clock durations in the driver
+#
+# ttyu/ttyS
+#SLEEP=1
+# ttyUSB
+#SLEEP=600
+# RASPBERRY PI VELLEMAN K8048
+#SLEEP=10
+# RASPBERRY PI GPIO
+SLEEP=1
+# MCP23017 I2C
+#SLEEP=0
+# GPIO BIT-BANG
+#SLEEP=1
+
+# I/O bit rules.
+#       These rules determine the polarity of the control lines and whether
+#       data input requires data output pulled high.
+# 0x0001 PGD_OUT_FLIP
+# 0x0002 PGC_OUT_FLIP
+# 0x0004 VPP_OUT_FLIP
+# 0x0008 PGD_IN_FLIP
+# 0x0010 PGD_IN_PULLUP
+# 0x0020 PGM_OUT_FLIP
+#       These rules are for GPIOs on program exit.
+# 0x0100 PGD_RELEASE
+# 0x0200 PGC_RELEASE
+# 0x0400 PGM_RELEASE
+# 0x0800 VPP_RELEASE
+# 0x1000 VPP_RUN
+#	This rule enables shift with irq lock for GPIO BIT-BANG
+# 0x2000 BB_LOCK
+#       This rule re-enables the ALT0 function when an R-PI GPIO is released.
+# 0x4000 ALT_RELEASE
+#
+# TTY VELLEMAN K8048 = PGD_IN_PULLUP + PGD_OUT_FLIP + PGC_OUT_FLIP + VPP_OUT_FLIP + PGD_IN_FLIP
+# TTY VELLEMAN K8076 = PGD_IN_PULLUP
+# RPI VELLEMAN K8048 = PGD_IN_PULLUP
+#
+# TTY VELLEMAN K8048
+#BITRULES=0x001F
+# TTY VELLEMAN K8076
+#BITRULES=0x0010
+# RASPBERRY PI VELLEMAN K8048
+#BITRULES=0x0010
+# RASPBERRY PI GPIO
+BITRULES=0x001B
+# MCP23017 I2C
+#BITRULES=0x1010
+# GPIO BIT-BANG
+#BITRULES=0x1000
+# CHIPKIT PI PIC32 ICSP
+#BITRULES=0x5700
+
+# I/O busy cursor (0=DISABLED)
+# 
+BUSY=0
+
+# RASPBERRY PI VELLEMAN K8048 (README.raspi)
+#
+# TX/!MCLR/VPP     - DSUB9(3)
+#VPP=14
+# PGM              - NOT SUPPORTED ON VELLEMAN K8048
+#PGM=22
+# RTS/PGC CLOCK    - DSUB9(7)
+#PGC=15
+# DTR/PGD DATA_OUT - DSUB9(4)
+#PGDO=23
+# CTS/PGD DATA_IN  - DSUB9(8)
+#PGDI=24
+
+# RASPBERRY PI VELLEMAN K8048 (http://wiki.kewl.org/dokuwiki/boards:rpi:k8048)
+#
+# TX/!MCLR/VPP     - DSUB9(3)
+#VPP=14
+# PGM              - NOT SUPPORTED ON VELLEMAN K8048
+#PGM=22
+# RTS/PGC CLOCK    - DSUB9(7)
+#PGC=18
+# DTR/PGD DATA_OUT - DSUB9(4)
+#PGDO=24
+# CTS/PGD DATA_IN  - DSUB9(8)
+#PGDI=25
+
+# RASPBERRY PI GPIO (separate PGD DATA I/O)
+#                  = SLICE OF PI/O =
+# !MCLR/VPP        - PI/O G04
+#VPP=4
+# PGM              - PI/O G22
+#PGM=22
+# PGC CLOCK        - PI/O G25
+#PGC=25
+# PGD DATA_OUT     - PI/O G24
+#PGDO=24
+# PGD DATA_IN      - PI/O G23
+#PGDI=23
+
+# R-PI OR GPIO BIT-BANG (single PGD DATA I/O)
+#                  = SLICE OF PI/O =
+# !MCLR/VPP        - PI/O G04
+#VPP=4
+# PGM              - PI/O G22
+#PGM=22
+# PGC CLOCK        - PI/O G25
+#PGC=25
+# PGD DATA_I/O     - PI/O G24
+#PGD=24
+
+# R-PI OR GPIO BIT-BANG (single PGD DATA I/O)
+#                  = CHIPKIT PI =
+# !MCLR/VPP        - RPi-Connect 18
+#VPP=9
+# PGM              - RPi-Connect 12
+#PGM=22
+# PGC CLOCK        - RPi-Connect 16
+#PGC=10
+# PGD DATA_I/O     - RPi-Connect 20
+#PGD=11
+
+# RASPBERRY PI GPIO (separate PGD DATA I/O)
+#                  = R-Pi HIGH VOLTAGE PROGRAMMER =
+# !MCLR/VPP
+VPP=9
+# PGM
+PGM=22
+# PGC CLOCK
+PGC=10
+# PGD DATA_OUT
+PGDO=11
+# PGD DATA_IN
+PGDI=7
+
+# R-PI OR GPIO BIT-BANG (single PGD DATA I/O)
+#                  = CHIPKIT PI PIC32 ICSP =
+# !MCLR/VPP        - /RESET
+#VPP=4
+# PGM              - N/A
+#PGM=255
+# PGC CLOCK        - PGC1 RX2
+#PGC=14
+# PGD DATA_I/O     - PGD1 TX2
+#PGD=15
+
+# MCP23017 I2C ADDRESS (README.i2c)
+#
+MCP=0x20
+
+# ICSP I/O 1/2-bit sleep time for `pio'.
+FWSLEEP=30
+
+# Debug level (0=NONE, 1=ERROR, 10=INFO)
+DEBUG=1

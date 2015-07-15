@@ -1,0 +1,79 @@
+#
+# Copyright (C) 2005-2015 Darron Broad
+# All rights reserved.
+# 
+# This file is part of Pickle Microchip PIC ICSP.
+#
+# Pickle Microchip PIC ICSP is free software: you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as published
+# by the Free Software Foundation.
+#
+# Pickle Microchip PIC ICSP is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+# Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Pickle Microchip PIC ICSP. If not, see http://www.gnu.org/licenses/
+#
+
+KNOWN UNSUPPORTED DEVICES (PDIP/SPDIP ONLY)
+===========================================
+
+TO ACQUIRE (C=CPC, F=FARNELL, M=MICROCHP)
+-----------------------------------------
+
+BASELINE
+	N/A
+MIDRANGE
+	N/A
+ENHANCED
+	PIC16F157X  4/5/8/9			Future Product		DS40001766A LIKE PIC12F1571/2
+	PIC16F176X  4/5/8/9 			Future Product		DS40001754A
+	PIC16F183XX 13/23/24/25/44/45		Future Product
+	PIC16F188XX 54/55/56/75/76/77		Future Product		DS40001753A NEW ALGORITHM
+PIC18
+	PIC18FXXK40 24/25/26/27/45/46/47	Future Product		DS40001772A NEW ALGORITHM
+PIC24
+	N/A
+dsPIC
+	N/A
+PIC32
+	N/A
+
+ON ORDER
+--------
+
+BASELINE
+	N/A
+MIDRANGE
+	N/A
+ENHANCED
+	N/A
+PIC18
+	N/A
+PIC24
+	N/A
+dsPIC
+	N/A
+PIC32
+	N/A
+
+AVAILABLE
+---------
+
+BASELINE
+	N/A
+MIDRANGE
+	N/A
+ENHANCED
+	N/A
+PIC18
+	N/A
+PIC24
+	N/A
+dsPIC
+	DSPIC33EV256GM002-I/SP	DS70005137C
+	DSPIC33EV256GM102-I/SP	DS70005137C
+PIC32
+	N/A

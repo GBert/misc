@@ -1,0 +1,22 @@
+# use glob syntax.
+syntax: glob
+
+*~
+*.i
+*.o
+*.s
+*.cod
+*.cof
+*.elf
+*.hex
+*.lst
+*.map
+*.swp
+*.sym
+
+Src/kio
+Src/kload
+Src/k8048
+
+# switch to regexp syntax.
+syntax: regexp
