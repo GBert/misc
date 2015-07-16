@@ -62,9 +62,9 @@ int main(int argc, char **argv) {
  
     /* ------------------ */
     /* open the pcap file */
-    pcap_t *handle; 
-    char errbuf[PCAP_ERRBUF_SIZE]; //not sure what to do with this, oh well 
-    handle = pcap_open_offline(argv[fnum], errbuf);   //call pcap library function 
+    pcap_t *handle;
+    char errbuf[PCAP_ERRBUF_SIZE];	/* not sure what to do with this, oh well */
+    handle = pcap_open_offline(argv[fnum], errbuf);	/* call pcap library function */
  
     if (handle == NULL) { 
       fprintf(stderr,"Couldn't open pcap file %s: %s\n", argv[fnum], errbuf); 
@@ -98,7 +98,9 @@ int main(int argc, char **argv) {
       if (ip_hdr->ip_p == IPPROTO_UDP) {
         myudp = (struct udphdr*)(pkt_ptr + sizeof(struct ip));
         int size_payload = packet_length - (sizeof(struct iphdr) + sizeof(struct udphdr));
-        printf("%04d UDP port %d %d\n", pkt_counter, ntohs(myudp->source), ntohs(myudp->dest));
+        printf("%04d UDP %s ->", pkt_counter, inet_ntoa(ip_hdr->ip_src) );
+        printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(myudp->source), ntohs(myudp->dest));
+        printf("  packet_length %d\n", size_payload);
         print_content((unsigned char *)pkt_ptr + sizeof(struct iphdr) + sizeof(struct udphdr), size_payload);
         printf("\n");
       }
@@ -110,7 +112,8 @@ int main(int argc, char **argv) {
         int size_payload = packet_length - (sizeof(struct iphdr) + tcp_offset );
 
 	if (size_payload > 0) {
-          printf("%04d TCP port %d %d", pkt_counter, ntohs(mytcp->th_sport), ntohs(mytcp->th_dport));
+          printf("%04d TCP %s -> ", pkt_counter, inet_ntoa(ip_hdr->ip_src)); 
+          printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(mytcp->th_sport), ntohs(mytcp->th_dport));
           unsigned char *dump = (unsigned char *)pkt_ptr + sizeof(struct iphdr) + tcp_offset;
           printf("  packet_length %d\n", size_payload);
 	  print_content(dump, size_payload);
@@ -118,22 +121,22 @@ int main(int argc, char **argv) {
         }
       }
  
-      //check to see if the next second has started, for statistics purposes 
+      /* check to see if the next second has started, for statistics purposes */
 #if 0
-      if (current_ts == 0) {  //this takes care of the very first packet seen 
+      if (current_ts == 0) {		/* this takes care of the very first packet seen */
          current_ts = header.ts.tv_sec; 
       } else if (header.ts.tv_sec > current_ts) { 
-         printf("%ld KBps\n", cur_counter/1000); //print 
-         cur_counter = 0; //reset counters 
-         current_ts = header.ts.tv_sec; //update time interval 
+         printf("%ld KBps\n", cur_counter/1000);
+         cur_counter = 0;		/* reset counters  */
+         current_ts = header.ts.tv_sec; /* update time interval */
       } 
  
       cur_counter += packet_length; 
-      byte_counter += packet_length; //byte counter update 
+      byte_counter += packet_length;	/* byte counter update */
 #endif
-      pkt_counter++; //increment number of packets seen 
+      pkt_counter++;	/* increment number of packets seen */
     }
-    pcap_close(handle);  //close the pcap file 
+    pcap_close(handle);	/* close the pcap file */
   }
   return 0;
 }
