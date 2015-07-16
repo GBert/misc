@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
     if (handle == NULL) { 
       fprintf(stderr,"Couldn't open pcap file %s: %s\n", argv[fnum], errbuf); 
       return(2); 
-    } 
+    }
  
     /* ----------------- */
     /* begin processing the packets in this particular file, one at a time */
@@ -98,7 +98,7 @@ int main(int argc, char **argv) {
       if (ip_hdr->ip_p == IPPROTO_UDP) {
         myudp = (struct udphdr*)(pkt_ptr + sizeof(struct ip));
         int size_payload = packet_length - (sizeof(struct iphdr) + sizeof(struct udphdr));
-        printf("%04d UDP %s ->", pkt_counter, inet_ntoa(ip_hdr->ip_src) );
+        printf("%04d UDP %s -> ", pkt_counter, inet_ntoa(ip_hdr->ip_src) );
         printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(myudp->source), ntohs(myudp->dest));
         printf("  packet_length %d\n", size_payload);
         print_content((unsigned char *)pkt_ptr + sizeof(struct iphdr) + sizeof(struct udphdr), size_payload);
