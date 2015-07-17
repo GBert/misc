@@ -17,8 +17,8 @@
  * with Pickle Microchip PIC ICSP. If not, see http://www.gnu.org/licenses/
  */
 
-#ifndef _GPIO_BB_H
-#define _GPIO_BB_H
+#ifndef _FTDI_BB_H
+#define _FTDI_BB_H
 
 struct ftdi_bb_io {
 	uint8_t dir;
@@ -42,19 +42,19 @@ struct ftdi_bb_shift {
 	uint64_t bits;
 };
 
+#if 0
 #define GPIO_BB_MAX (256)
 
 #define GPIO_BB_MAJOR (180)
 #define GPIO_BB_IO		_IOWR(GPIO_BB_MAJOR, 100, struct ftdi_bb_io *)
 #define GPIO_BB_CONFIGURE	_IOW(GPIO_BB_MAJOR,  101, struct ftdi_bb_config *)
 #define GPIO_BB_SHIFT		_IOWR(GPIO_BB_MAJOR, 102, struct ftdi_bb_shift *)
+#endif
 
-#ifndef __KERNEL__
 int ftdi_bb_open(const char *);
 void ftdi_bb_close(void);
 int ftdi_bb_io(struct ftdi_bb_io *);
 int ftdi_bb_configure(struct ftdi_bb_config *);
 int ftdi_bb_shift(struct ftdi_bb_shift *);
-#endif
 
-#endif /* _GPIO_BB_H */
+#endif /* _FTDI_BB_H */

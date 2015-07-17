@@ -38,11 +38,12 @@
 #define ALT_RELEASE   (0x4000)	/* re-enable ALT function if released */
 
 /* I/O backends */
-#define IONONE  (0)
-#define IOTTY   (1)     /* TTY/TTYUSB                     */
-#define IORPI   (2)     /* RPI GPIO DIRECT/VELLEMAN K8048 */
-#define IOI2C   (3)     /* MCP23017 I2C                   */
-#define IOBB    (4)     /* LINUX BIT-BANG DRIVER          */
+#define IONONE   (0)
+#define IOTTY    (1)     /* TTY/TTYUSB                     */
+#define IORPI    (2)     /* RPI GPIO DIRECT/VELLEMAN K8048 */
+#define IOI2C    (3)     /* MCP23017 I2C                   */
+#define IOBB     (4)     /* LINUX BIT-BANG DRIVER          */
+#define IOFTDIBB (5)     /* LINUX FTDI BIT-BANG DRIVER     */
 
 /* Default GPIO pins */
 #define GPIO_PGM_DISABLED (255)

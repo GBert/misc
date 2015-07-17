@@ -72,7 +72,7 @@ io_config(void)
 	strncpy(p.device, SERIAL_DEVICE, STRLEN);
 	p.baudrate = 115200;		/* not speed_t      */
 #endif
-#if defined(RPI) || defined(BITBANG)
+#if defined(RPI) || defined(BITBANG) || defined(FTDI)
 	/* rpi */
 	p.vpp  = GPIO_VPP;		/* TX/!MCLR/VPP     */
 	p.pgm  = GPIO_PGM_DISABLED;	/* PGM              */
@@ -146,6 +146,17 @@ io_open(void)
 		return 0;
 	}
 #endif
+#ifdef FTDI
+	/* TODO */
+	if (strstr(p.device, "/dev/ftdi-bb") == p.device) {
+		/* ftdi bit-bang */
+		if (ftdi_bb_open("/dev/ftdi-bb") < 0)
+			return -1;
+		p.iot = IOFTDIBB;
+		io_signal_on();
+		return 0;
+	}
+#endif
 	return -1; /* Unsupported */
 }
 
@@ -196,6 +207,30 @@ io_release(void)
 		}
 		break;
 #endif
+#ifdef FTDI
+	case IOFTDIBB:	/* ftdi bit-bang */
+		{
+		struct ftdi_bb_io io = {1, 0, 0};
+
+		if (p.bitrules & PGD_RELEASE) {
+			io.pin = p.pgdo;
+			ftdi_bb_io(&io);
+		}
+		if (p.bitrules & PGC_RELEASE) {
+			io.pin = p.pgc;
+			ftdi_bb_io(&io);
+		}
+		if (p.bitrules & PGM_RELEASE && p.pgm != GPIO_PGM_DISABLED) {
+			io.pin = p.pgm;
+			ftdi_bb_io(&io);
+		}
+		if (p.bitrules & VPP_RELEASE) {
+			io.pin = p.vpp;
+			ftdi_bb_io(&io);
+		}
+		}
+		break;
+#endif
 	default:break;
 	}
 }
@@ -207,7 +242,7 @@ io_close(int run)
 		printf("%s: fatal error: device not open.\n", __func__);
 		io_exit(EX_SOFTWARE); /* Panic */
 	}
-#if defined(RPI) || defined(MCP23017) || defined(BITBANG)
+#if defined(RPI) || defined(MCP23017) || defined(BITBANG) || defined(FTDI)
 	io_usleep(10);
 	if (run) {
 		io_set_vpp(HIGH);
@@ -239,6 +274,12 @@ io_close(int run)
 	case IOBB:
 		/* gpio bit-bang */
 		gpio_bb_close();
+		break;
+#endif
+#ifdef FTDI
+	case IOFTDIBB:
+		/* FTDI bit-bang */
+		ftdi_bb_close();
 		break;
 #endif
 	default:break;
@@ -280,6 +321,11 @@ io_error(void)
 #ifdef BITBANG
 	case IOBB:	/* gpio bit-bang */
 		msg = "Can't open GPIO bit-bang I/O";
+		break;
+#endif
+#ifdef FTDI
+	case IOFTDIBB:	/* FTDI bit-bang */
+		msg = "Can't open FTDI bit-bang I/O";
 		break;
 #endif
 	default:msg = "Unsupported I/O";
@@ -383,6 +429,16 @@ io_set_pgm(uint8_t pgm)
 		}
 		break;
 #endif
+#ifdef FTDI
+	/* TODO */
+	case IOFTDIBB:	/* gpio bit-bang */
+		if (p.pgm != GPIO_PGM_DISABLED) {
+			struct ftdi_bb_io io = {0, p.pgm, pgm};
+
+			ftdi_bb_io(&io);
+		}
+		break;
+#endif
 	default:printf("%s: fatal error: unsupported\n", __func__);
 	       	io_exit(EX_SOFTWARE); /* Panic */
 		break;
@@ -435,6 +491,15 @@ io_set_vpp(uint8_t vpp)
 		}
 		break;
 #endif
+#ifdef FTDI
+	case IOFTDIBB:	/* ftdi bit-bang */
+		{
+		struct ftdi_bb_io io = {0, p.vpp, vpp};
+
+		ftdi_bb_io(&io);
+		}
+		break;
+#endif
 	default:printf("%s: fatal error: unsupported\n", __func__);
 		io_exit(EX_SOFTWARE); /* Panic */
 		break;
@@ -473,6 +538,15 @@ io_set_pgd(uint8_t pgd)
 		struct gpio_bb_io io = {0, p.pgdo, pgd};
 
 		gpio_bb_io(&io);
+		}
+		break;
+#endif
+#ifdef FTDI
+	case IOFTDIBB:	/* FTDI bit-bang */
+		{
+		struct ftdi_bb_io io = {0, p.pgdo, pgd};
+
+		ftdi_bb_io(&io);
 		}
 		break;
 #endif
@@ -517,6 +591,15 @@ io_set_pgc(uint8_t pgc)
 		}
 		break;
 #endif
+#ifdef FTDI
+	case IOFTDIBB:	/* ftdi bit-bang */
+		{
+		struct ftdi_bb_io io = {0, p.pgc, pgc};
+
+		ftdi_bb_io(&io);
+		}
+		break;
+#endif
 	default:printf("%s: fatal error: unsupported\n", __func__);
 		io_exit(EX_SOFTWARE); /* Panic */
 		break;
@@ -553,6 +636,16 @@ io_get_pgd(void)
 		struct gpio_bb_io io = {1, p.pgdi, 0};
 
 		gpio_bb_io(&io);
+		pgd = io.bit;
+		}
+		break;
+#endif
+#ifdef FTDI
+	case IOFTDIBB:	/* FTDI bit-bang */
+		{
+		struct ftdi_bb_io io = {1, p.pgdi, 0};
+
+		ftdi_bb_io(&io);
 		pgd = io.bit;
 		}
 		break;
@@ -595,6 +688,19 @@ io_configure(uint8_t clock_falling)
 		gpio_bb_configure(&config);
 	}
 #endif
+#ifdef FTDI
+	if (p.iot == IOFTDIBB) {
+		struct ftdi_bb_config config;
+		config.clock_pin = p.pgc;
+		config.clock_falling = clock_falling;
+		config.data_pin_input = p.pgdi;
+		config.data_pin_output = p.pgdo;
+		config.clock_delay_low = p.sleep_low;
+		config.clock_delay_high = p.sleep_high;
+		config.lock = (p.bitrules & BB_LOCK) ? 1 : 0;
+		ftdi_bb_configure(&config);
+	}
+#endif
 }
 
 /*
@@ -622,6 +728,10 @@ io_data_input(void)
 #endif
 #ifdef BITBANG
 	if (p.iot == IOBB && p.pgdi == p.pgdo)
+		return;
+#endif
+#ifdef FTDI
+	if (p.iot == IOFTDIBB && p.pgdi == p.pgdo)
 		return;
 #endif
 	/* Pull-up PGD output for PGD input (Eg. Velleman K8048) */
@@ -753,6 +863,17 @@ io_program_in(uint8_t nbits)
 		}
 		break;
 #endif
+#ifdef FTDI
+	case IOFTDIBB:
+		/* FTDI bit-bang */
+		{
+		struct ftdi_bb_shift shift = {1, nbits, 0};
+
+		ftdi_bb_shift(&shift);
+		bits = (uint32_t)shift.bits;
+		}
+		break;
+#endif
 	}
 	return bits;
 }
@@ -781,6 +902,16 @@ io_program_out(uint32_t bits, uint8_t nbits)
 		struct gpio_bb_shift shift = {0, nbits, (uint64_t)bits};
 
 		gpio_bb_shift(&shift);
+		}
+		break;
+#endif
+#ifdef FTDI
+	case IOFTDIBB:
+		/* FTDI bit-bang */
+		{
+		struct ftdi_bb_shift shift = {0, nbits, (uint64_t)bits};
+
+		ftdi_bb_shift(&shift);
 		}
 		break;
 #endif
