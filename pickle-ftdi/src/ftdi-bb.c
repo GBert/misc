@@ -33,21 +33,33 @@
 /*
  * File descriptor
  */
+struct ftdi_context *ftdi;
 int ftdi_bb_fd = -1;
 
 int
 ftdi_bb_open(const char *device)
 {
 #ifdef __linux
-	struct ftdi_context ftdi;
 
-	ftdi_bb_fd = open(device, O_RDWR);
-	if (ftdi_bb_fd < 0) {
-		printf("%s: warning: open failed [%s]\n", __func__, strerror(errno));
+	/* Initialize and find device */
+	if (ftdi_init(ftdi) < 0) {
+		printf("%s: ftdi_init failed [%s]\n", __func__, strerror(errno));
 		ftdi_bb_fd = -1;
 		return -1;
 	}
-	return ftdi_bb_fd;
+
+	if (ftdi_usb_open(ftdi, 0x0403, 0x6015) < 0) {
+		printf("%s: can't open FT230X device [%s]\n", __func__, strerror(errno));
+		ftdi_bb_fd = -1;
+		return -1;
+	}
+	if (ftdi_set_bitmode(ftdi, 0xff, BITMODE_BITBANG) < 0) {
+		printf("%s: can't enable bitbang mode [%s]\n", __func__, strerror(errno));
+		ftdi_bb_fd = -1;
+		return -1;
+	}
+
+	return 1;
 #else
 	return -1;
 #endif
@@ -57,8 +69,8 @@ void
 ftdi_bb_close(void)
 {
 #ifdef __linux
-	close(ftdi_bb_fd);
-	ftdi_bb_fd = -1;
+	ftdi_usb_close(ftdi);
+	ftdi_deinit(ftdi);
 #endif
 }
 

@@ -136,6 +136,7 @@ ifeq "$(SYSTEM)" "Linux"
  CFLAGS+=-DFTDI
  SOURCE1+=ftdi-bb.c
  SOURCE2+=ftdi-bb.c
+ CLIB+=-lftdi
  endif
 endif
 
