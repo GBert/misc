@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <pcap.h>
 #include <stdlib.h>
+#define  __FAVOR_BSD
 #include <netinet/ip.h>
 #include <netinet/tcp.h>
 #include <netinet/udp.h>
@@ -99,7 +100,7 @@ int main(int argc, char **argv) {
         myudp = (struct udphdr*)(pkt_ptr + sizeof(struct ip));
         int size_payload = packet_length - (sizeof(struct iphdr) + sizeof(struct udphdr));
         printf("%04d UDP %s -> ", pkt_counter, inet_ntoa(ip_hdr->ip_src) );
-        printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(myudp->source), ntohs(myudp->dest));
+        printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(myudp->uh_sport), ntohs(myudp->uh_dport));
         printf("  packet_length %d\n", size_payload);
         print_content((unsigned char *)pkt_ptr + sizeof(struct iphdr) + sizeof(struct udphdr), size_payload);
         printf("\n");
@@ -108,7 +109,7 @@ int main(int argc, char **argv) {
       if (ip_hdr->ip_p == IPPROTO_TCP) {
 	mytcp = (struct tcphdr*)(pkt_ptr + sizeof(struct ip));
 
-	int tcp_offset = mytcp->doff * 4;
+	int tcp_offset = mytcp->th_off * 4;
         int size_payload = packet_length - (sizeof(struct iphdr) + tcp_offset );
 
 	if (size_payload > 0) {
