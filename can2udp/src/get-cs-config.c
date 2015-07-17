@@ -26,8 +26,8 @@
 #define MAXSIZE		16384
 
 unsigned char GETCONFIG[]          = { 0x00, 0x40, 0x03, 0x00, 0x08 };
-unsigned char GETCONFIG_DATA[]     = { 0x00, 0x42, 0x03, 0x00, 0x08 };
-unsigned char GETCONFIG_RESPONSE[] = { 0x00, 0x42, 0x03, 0x00, 0x06 };
+unsigned char GETCONFIG_DATA[]     = {       0x42, 0x03, 0x00, 0x08 };
+unsigned char GETCONFIG_RESPONSE[] = {       0x42, 0x03, 0x00, 0x06 };
 
 struct config_data {
     int deflated_stream_size;
@@ -175,7 +175,7 @@ int main(int argc, char **argv) {
 	tcp_packet_nr++;
 	if (FD_ISSET(sockfd, &rset)) {
 	    if ((n = recv(sockfd, recvline, MAXSIZE, 0)) > 0) {
-		if (memcmp(recvline, GETCONFIG_RESPONSE, 5) == 0) {
+		if (memcmp(&recvline[1], GETCONFIG_RESPONSE, 4) == 0) {
 		    memcpy(&temp, &recvline[5], 4);
 		    deflated_size = ntohl(temp);
 		    config_data.deflated_size = deflated_size;
@@ -201,7 +201,7 @@ int main(int argc, char **argv) {
 		}
 		for (int i = 0; i < n; i++) {
 		    if ((i % FRAME_SIZE) == 0) {
-			if (memcmp(&recvline[i], GETCONFIG_DATA, 5) == 0) {
+			if (memcmp(&recvline[i+1], GETCONFIG_DATA, 4) == 0) {
 			    memcpy(&config_data.deflated_data[ddi], &recvline[i + 5], 8);
 			    ddi += 8;
 			    if (config_data_start) {
@@ -216,6 +216,7 @@ int main(int argc, char **argv) {
 				    config_data_stream = 0;
 				    config_data.deflated_stream_size = ddi;
 				    config_write(&config_data);
+				    exit(0);
 				} else {
 				    deflated_size -= 8;
 				}
