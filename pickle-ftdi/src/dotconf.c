@@ -139,7 +139,7 @@ getconf(void)
 			else if (mystrcasestr(line, "BUSY=") == line) {
 				p.busy = strtoul(&line[5], NULL, 0);
 			}
-#if defined(RPI) || defined(BITBANG)
+#if defined(RPI) || defined(BITBANG) || defined(FTDI)
 			else if (mystrcasestr(line, "VPP=") == line) {
 				p.vpp = strtoul(&line[4], NULL, 0);
 			}
@@ -159,7 +159,7 @@ getconf(void)
 			else if (mystrcasestr(line, "PGDI=") == line) {
 				p.pgdi = strtoul(&line[5], NULL, 0);
 			}
-#endif /* RPI || BITBANG */
+#endif /* RPI || BITBANG || FTDI*/
 
 #ifdef MCP23017
 			else if (mystrcasestr(line, "MCP=") == line) {

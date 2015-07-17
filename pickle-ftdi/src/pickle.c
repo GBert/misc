@@ -55,6 +55,10 @@ usage_pickle(void)
 		" BIT-BANG\n"
 		"\t\tLinux GPIO bit-bang.\n"
 #endif
+#ifdef FTDI
+		" FTDI BIT-BANG\n"
+		"\t\tLinux FTDI bit-bang.\n"
+#endif
 #ifdef MCP23017
 		" MCP23017\n"
 		"\t\tLinux MCP23017 I2C.\n"
