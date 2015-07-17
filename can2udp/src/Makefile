@@ -1,10 +1,13 @@
-BINS := can-bounce-test can2eth can2udp can4lnx2udp gb2-update scan2lan can2lan virtual_gfp virtual_ms2 get-cs-data get-cs-config
+BINS := read_cs2_dump can-bounce-test can2eth can2udp can4lnx2udp gb2-update scan2lan can2lan virtual_gfp virtual_ms2 get-cs-data get-cs-config
 
 BIN = $@
 
 all:	$(BINS)
 
 CFLAGS+=-Wall -pedantic -std=gnu99 -g
+
+read_cs2_dump: read_cs2_dump.o
+	$(CC) $(CFLAGS) -o read_cs2_dump read_cs2_dump.o -lpcap
 
 can-bounce-test: can-bounce-test.o
 	$(CC) $(CFLAGS) -o can-bounce-test can-bounce-test.o
