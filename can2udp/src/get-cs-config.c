@@ -26,8 +26,8 @@
 #define MAXSIZE		16384
 
 unsigned char GETCONFIG[]          = { 0x00, 0x40, 0x03, 0x00, 0x08 };
-unsigned char GETCONFIG_DATA[]     = {       0x42, 0x03, 0x00, 0x08 };
-unsigned char GETCONFIG_RESPONSE[] = {       0x42, 0x03, 0x00, 0x06 };
+unsigned char GETCONFIG_DATA[]     = { 0x00, 0x42, 0x03, 0x00, 0x08 };
+unsigned char GETCONFIG_RESPONSE[] = { 0x00, 0x42, 0x03, 0x00, 0x06 };
 
 struct config_data {
     int deflated_stream_size;
@@ -175,7 +175,7 @@ int main(int argc, char **argv) {
 	tcp_packet_nr++;
 	if (FD_ISSET(sockfd, &rset)) {
 	    if ((n = recv(sockfd, recvline, MAXSIZE, 0)) > 0) {
-		if (memcmp(&recvline[1], GETCONFIG_RESPONSE, 4) == 0) {
+		if (memcmp(recvline, GETCONFIG_RESPONSE, 5) == 0) {
 		    memcpy(&temp, &recvline[5], 4);
 		    deflated_size = ntohl(temp);
 		    config_data.deflated_size = deflated_size;
@@ -189,25 +189,24 @@ int main(int argc, char **argv) {
 			fprintf(stderr, "can't malloc deflated config data buffer - size 0x%04x\n", deflated_size + 8);
 			exit(1);
 		    }
-		    config_data.inflated_data = malloc(config_data.inflated_size + 65536);
-		    if (config_data.inflated_data == NULL) {
-			fprintf(stderr, "can't malloc inflated config data buffer - size 0x%04x\n",
-				config_data.inflated_size);
-			exit(1);
-		    }
-
 		    /* deflated data index */
 		    ddi = 0;
 		}
 		for (int i = 0; i < n; i++) {
 		    if ((i % FRAME_SIZE) == 0) {
-			if (memcmp(&recvline[i+1], GETCONFIG_DATA, 4) == 0) {
+			if (memcmp(&recvline[i], GETCONFIG_DATA, 5) == 0) {
 			    memcpy(&config_data.deflated_data[ddi], &recvline[i + 5], 8);
 			    ddi += 8;
 			    if (config_data_start) {
 				memcpy(&temp, &recvline[i + 5], 4);
 				config_data.inflated_size = ntohl(temp);
 				printf("\ninflated size: 0x%08x", config_data.inflated_size);
+				config_data.inflated_data = malloc(config_data.inflated_size);
+				if (config_data.inflated_data == NULL) {
+				    fprintf(stderr, "can't malloc inflated config data buffer - size 0x%04x\n",
+				    config_data.inflated_size);
+				    exit(1);
+				}
 				config_data_start = 0;
 				config_data_stream = 1;
 				deflated_size -= 8;
