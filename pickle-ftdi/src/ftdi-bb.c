@@ -194,7 +194,7 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 	/* TODO: maybe data_pin direction changed */
 	/* io struct and mask ? */
 
-	/* prepare buffer */
+	/* TODO: prepare buffer - simple elete for now (maybe MCLR od PGM set) */
 	bzero(ftdi_buf_out, MAX_BITS_TRANSFER * 4);
 
 	for (int i = 0; i< shift->nbits; i++) {
