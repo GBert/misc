@@ -24,7 +24,9 @@ struct ftdi_bb_io {
 	uint8_t dir;
 	uint8_t pin;
 	uint8_t bit;
+	uint8_t mode;
 	uint8_t mask;
+	uint8_t cbus_mask;
 };
 
 struct ftdi_bb_config {
