@@ -43,6 +43,9 @@ uint8_t ftdi_buf_in[64];
 int
 ftdi_bb_open(const char *device)
 {
+#if 1
+	return 1;
+#endif
 #ifdef __linux
 	/* Initialize and find device */
 	if (ftdi_init(&ftdi) < 0) {
@@ -76,6 +79,9 @@ ftdi_bb_open(const char *device)
 void
 ftdi_bb_close(void)
 {
+#if 1
+	return;
+#endif
 #ifdef __linux
 	ftdi_usb_close(&ftdi);
 	ftdi_deinit(&ftdi);
@@ -86,6 +92,10 @@ int
 ftdi_bb_io(struct ftdi_bb_io *io)
 {
 #ifdef __linux
+	printf("set io dir %d\n", io->dir);
+	printf("set io pin %d\n", io->pin);
+	printf("set io bit %d\n", io->bit);
+	printf("\n");
 	return 1;
 	// return ioctl(ftdi_bb_fd, GPIO_BB_IO, io);
 #else
@@ -97,6 +107,13 @@ int
 ftdi_bb_configure(struct ftdi_bb_config *config)
 {
 #ifdef __linux
+	printf("clock pin: %d\n", config->clock_pin);
+	printf("clock falling: %d\n", config->clock_falling);
+	printf("data pin input: %d\n", config->data_pin_input);
+	printf("data pin output: %d\n", config->data_pin_output);
+	printf("clock delay low: %d\n", config->clock_delay_low);
+	printf("clock delay high: %d\n", config->clock_delay_high);
+	printf("\n");
 	return 1;
 	// return ioctl(ftdi_bb_fd, GPIO_BB_CONFIGURE, config);
 #else
@@ -108,6 +125,10 @@ int
 ftdi_bb_shift(struct ftdi_bb_shift *shift)
 {
 #ifdef __linux
+	printf("shift direction %d\n", shift->dir);
+	printf("number bits %d\n", shift->nbits);
+	printf("value 0x%08lX\n", shift->bits);
+	printf("\n");
 	return 1;
 	// return ioctl(ftdi_bb_fd, GPIO_BB_SHIFT, shift);
 #else

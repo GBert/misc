@@ -3,6 +3,7 @@ pickle with FTDI FT230X
 
 Sample bitbanging code:
 http://jim.sh/ftx/#click-bitbang-gpio
+http://jdelfes.blogspot.de/2014/02/spi-bitbang-ft232r.html
 
 ```
 FT230X   PIC18F25K80
