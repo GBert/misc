@@ -231,6 +231,10 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 		value = value >> 1;
 	}
 	print_buffer(ftdi_buf_out, index);
+	if (shift->dir) {
+		printf("read:\n");
+		print_buffer(ftdi_buf_in, index);
+	}
 
 	return 1;
 
