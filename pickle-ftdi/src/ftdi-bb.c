@@ -44,6 +44,7 @@ uint8_t ftdi_buf_in[MAX_BITS_TRANSFER * 4];
 
 static uint16_t pin_state = 0;
 static uint8_t clock_pin, data_pin_input, data_pin_output, clock_falling;
+static uint8_t actual_mask;
 
 void
 print_buffer(uint8_t *buffer, int len)
@@ -140,6 +141,7 @@ ftdi_bb_io(struct ftdi_bb_io *io)
 			pin_state &= ~(1 << io->pin);
 			io->mask  |=  (1 << io->pin);
 		}
+		actual_mask = io->mask;
 		value = pin_state & 0xff;
 		if (ftdi_write_data(&ftdi, &value, 1) < 0) {
 			printf("%s: ftdi_wrire_error [%s]\n", __func__, ftdi_get_error_string(&ftdi));
@@ -184,17 +186,35 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 {
 #ifdef __linux
 	uint32_t index = 0;
+	uint8_t mask;
 	uint64_t value;
 	printf("shift direction %d\n", shift->dir);
 	printf("number bits %d\n", shift->nbits);
-	printf("value 0x%08lX\n", shift->bits);
-	printf("\n");
+	printf("value 0x%08lX\n\n", shift->bits);
 	value = shift->bits;
 
 	/* TODO: maybe data_pin direction changed */
 	/* io struct and mask ? */
+	if (data_pin_input == data_pin_output) {
+		mask = actual_mask;
+		if (shift->dir)
+			mask &= ~(1 << data_pin_input);
+		else
+			mask |= (1 << data_pin_input);
+		if (mask != actual_mask) {
+#if 0
+			if (ftdi_set_bitmode(&ftdi, mask, BITMODE_SYNCBB) < 0) {
+				printf("%s: ftdi set bimode failed [%s]\n", __func__, ftdi_get_error_string(&ftdi));
+				return -1;
+			}
+#endif
+			printf("mask changed: 0x%02x -> 0x%02x\n", actual_mask, mask);
+			actual_mask = mask;
+		}
+	}
 
-	/* TODO: prepare buffer - simple elete for now (maybe MCLR od PGM set) */
+
+	/* TODO: prepare buffer - simple delete for now (maybe wrong if MCLR or PGM set) */
 	bzero(ftdi_buf_out, MAX_BITS_TRANSFER * 4);
 
 	for (int i = 0; i< shift->nbits; i++) {
