@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 OpenWrt.org
+# Copyright (C) 2015 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,15 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=can-utils
-PKG_REV:=dabe592
 PKG_REV:=86023b8
+PKG_REV:=f0abaaa
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
 PKG_SOURCE_MIRROR:=0 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_VERSION:=$(PKG_REV)
-PKG_SOURCE_URL:=git://gitorious.org/linux-can/can-utils.git
+PKG_SOURCE_URL:=https://github.com/linux-can/can-utils.git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)/trunk/can-utils
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
