@@ -60,6 +60,10 @@ CLIB2=$(CLIB)
 TARGET2=pio
 SOURCE2=pio.c dotconf.c io.c util.c
 
+ifeq "$(DRYRUN)" "1"
+CFLAGS+=-DDRYRUN
+endif
+
 ifeq "$(P12)" "1"
 CFLAGS+=-DP12
 SOURCE1+=pic12.c
