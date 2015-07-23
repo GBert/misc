@@ -18,7 +18,6 @@
 #
 
 # build targets (enable:1 disable:0)
-DRYRUN=1
 P12=1
 P14=1
 P16=1
