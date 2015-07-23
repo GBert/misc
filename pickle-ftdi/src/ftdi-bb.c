@@ -59,7 +59,7 @@ print_buffer(uint8_t *buffer, int len)
 int
 ftdi_bb_open(const char *device)
 {
-#if 1
+#if 0
 	return 1;
 #endif
 #ifdef __linux
@@ -75,13 +75,13 @@ ftdi_bb_open(const char *device)
 		ftdi_bb_fd = -1;
 		return -1;
 	}
-	if (ftdi_set_bitmode(&ftdi, 0xff, BITMODE_BITBANG) < 0) {
+	if (ftdi_set_bitmode(&ftdi, 0x00, BITMODE_SYNCBB) < 0) {
 		printf("%s: can't enable bitbang mode [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 		ftdi_bb_fd = -1;
 		return -1;
 	}
 	/* TODO: set baudrate (needed) - defines the bitbang speed (formula ?) */
-	if(ftdi_set_baudrate(&ftdi, 1562) < 0) {
+	if(ftdi_set_baudrate(&ftdi, 1024) < 0) {
 		printf("%s: can't set baudrate [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 		ftdi_bb_fd = -1;
 		return -1;
@@ -95,7 +95,7 @@ ftdi_bb_open(const char *device)
 void
 ftdi_bb_close(void)
 {
-#if 1
+#if 0
 	return;
 #endif
 #ifdef __linux
@@ -113,7 +113,9 @@ ftdi_bb_io(struct ftdi_bb_io *io)
 	printf("set io pin %d\n", io->pin);
 	printf("set io bit %d\n", io->bit);
 	printf("\n");
+#if 0
 	return 1;
+#endif
 	/* pins > 16 are CBUS - asynch write */
 	if (io->pin >= 16) {
 		if ((io->dir == 0) && (io->bit == 1)) {
@@ -123,24 +125,37 @@ ftdi_bb_io(struct ftdi_bb_io *io)
 			pin_state &= ~(1 << io->pin);
 			io->cbus_mask |= (1 << (io->pin - 16));
 		}
+		printf(" **** change to CBUS \n");
 		if (ftdi_set_bitmode(&ftdi, io->cbus_mask, BITMODE_CBUS) <= 0) {
 			printf("%s: ftdi_set_bimode failed [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 			return -1;
 		}
 	} else {
 		/* TODO: change mask if needed */
-		if (io->mode != BITMODE_SYNCBB)
+		io->mask = actual_mask;
+		printf("        mask is 0x%02x pin %d bit %d pin_state 0x%02x\n",io->mask, io->pin, io->bit, pin_state);
+		if (io->dir == 0) {
+			io->mask  |=  (1 << io->pin);
+			if (io->bit == 1) {
+				pin_state |=  (1 << io->pin);
+				printf("set pin\n");
+			} else {
+				pin_state &= ~(1 << io->pin);
+				printf("clr pin\n");
+			}
+		} else 
+			io->mask  &= ~(1 << io->pin);
+		
+		printf("        mask is 0x%02x pin %d bit %d pin_state 0x%02x\n",io->mask, io->pin, io->bit, pin_state);
+		
+		if ( io->mask != actual_mask ) {
 			if (ftdi_set_bitmode(&ftdi, io->mask, BITMODE_SYNCBB) < 0) {
 				printf("%s: ftdi_set_bimode failed [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 				return -1;
 			}
-		if ((io->dir == 0) && (io->bit ==1)) {
-			pin_state |=  (1 << io->pin);
-			io->mask  &= ~(1 << io->pin);
-		} else {
-			pin_state &= ~(1 << io->pin);
-			io->mask  |=  (1 << io->pin);
+			printf("changed mask to 0x%02x\n",io->mask);
 		}
+
 		actual_mask = io->mask;
 		value = pin_state & 0xff;
 		if (ftdi_write_data(&ftdi, &value, 1) < 0) {
@@ -202,7 +217,7 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 		else
 			mask |= (1 << data_pin_input);
 		if (mask != actual_mask) {
-#if 0
+#if 1
 			if (ftdi_set_bitmode(&ftdi, mask, BITMODE_SYNCBB) < 0) {
 				printf("%s: ftdi set bimode failed [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 				return -1;

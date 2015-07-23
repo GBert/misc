@@ -6,6 +6,8 @@ int main()
 {
   struct ftdi_context *ftdic;
   uint8_t data[256];
+  uint8_t data2[256];
+
   int i;
 
   if ((ftdic = ftdi_new()) == 0) {
@@ -29,8 +31,9 @@ int main()
   /* 601 -> MM  26us */
   /* 301 -> MM  52us */
   /* 312 -> mfx 50us */
+  /* 15625 -> 500kHz */
 
-  if(ftdi_set_baudrate(ftdic, 1562) < 0) {
+  if(ftdi_set_baudrate(ftdic, 15625) < 0) {
     fprintf(stderr, "ftdi_set_baudrate failed: %s\n", ftdi_get_error_string(ftdic));
     exit(1);
   }
@@ -40,8 +43,7 @@ int main()
  
   for(;;) {
     ftdi_write_data(ftdic, data, sizeof(data));
-#if 1
-    uint8_t data2[256];
+#if 0
     ftdi_read_data(ftdic, data2, sizeof(data2));
 #endif
   }
