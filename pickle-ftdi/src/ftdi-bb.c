@@ -209,7 +209,7 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 	int ret;
 	printf("shift direction %d\n", shift->dir);
 	printf("number bits %d\n", shift->nbits);
-	printf("value 0x%08lX\n\n", shift->bits);
+	printf("value 0x%016lX\n\n", shift->bits);
 	value = shift->bits;
 
 	/* TODO: maybe data_pin direction changed */
@@ -273,7 +273,7 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 			if (ftdi_buf_in[i*4 + 2] && (1 << data_pin_input))
 				value |= 1;
 		}
-		printf("%s: value 0x%08lX\n", __func__, value);
+		printf("%s: value 0x%016lX\n", __func__, value);
 	}
 	shift->bits = value;
 	return 1;
