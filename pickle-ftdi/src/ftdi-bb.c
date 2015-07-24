@@ -110,10 +110,11 @@ ftdi_bb_io(struct ftdi_bb_io *io)
 {
 #ifdef __linux
 	uint8_t value;
-	printf("set io dir %d\n", io->dir);
+/*	printf("set io dir %d\n", io->dir); 
 	printf("set io pin %d\n", io->pin);
 	printf("set io bit %d\n", io->bit);
 	printf("\n");
+*/
 
 	/* pins > 16 are CBUS - asynch write */
 	if (io->pin >= 16) {
@@ -134,7 +135,7 @@ ftdi_bb_io(struct ftdi_bb_io *io)
 	} else {
 		/* TODO: change mask if needed */
 		io->mask = actual_mask;
-		printf("        mask is 0x%02x pin %d bit %d pin_state 0x%02x\n",io->mask, io->pin, io->bit, pin_state);
+/*		printf("        mask is 0x%02x pin %d bit %d pin_state 0x%02x\n",io->mask, io->pin, io->bit, pin_state); */
 		if (io->dir == 0) {
 			io->mask  |=  (1 << io->pin);
 			if (io->bit == 1) {
@@ -147,7 +148,7 @@ ftdi_bb_io(struct ftdi_bb_io *io)
 		} else 
 			io->mask  &= ~(1 << io->pin);
 		
-		printf("        mask is 0x%02x pin %d bit %d pin_state 0x%02x\n",io->mask, io->pin, io->bit, pin_state);
+/*		printf("        mask is 0x%02x pin %d bit %d pin_state 0x%02x\n",io->mask, io->pin, io->bit, pin_state); */
 		
 		if ( io->mask != actual_mask ) {
 #ifndef DRYRUN
@@ -158,7 +159,7 @@ ftdi_bb_io(struct ftdi_bb_io *io)
 			}
 #endif
 
-			printf("changed mask to 0x%02x\n",io->mask);
+/*			printf("changed mask to 0x%02x\n",io->mask); */
 		}
 		actual_mask = io->mask;
 		value = pin_state & 0xff;
@@ -183,14 +184,14 @@ int
 ftdi_bb_configure(struct ftdi_bb_config *config)
 {
 #ifdef __linux
-	printf("clock pin: %d\n", config->clock_pin);
+/*	printf("clock pin: %d\n", config->clock_pin);
 	printf("clock falling: %d\n", config->clock_falling);
 	printf("data pin input: %d\n", config->data_pin_input);
 	printf("data pin output: %d\n", config->data_pin_output);
 	printf("clock delay low: %d\n", config->clock_delay_low);
 	printf("clock delay high: %d\n", config->clock_delay_high);
 	printf("\n");
-	clock_pin = config->clock_pin;
+*/	clock_pin = config->clock_pin;
 	clock_falling = config->clock_falling;
 	data_pin_input = config->data_pin_input;
 	data_pin_output = config->data_pin_output;
@@ -209,10 +210,15 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 	uint8_t mask;
 	uint64_t value;
 	int ret;
-	printf("shift direction %d\n", shift->dir);
+/*	printf("shift direction %d\n", shift->dir);
 	printf("number bits %d\n", shift->nbits);
 	printf("value 0x%016lX\n\n", shift->bits);
-	value = shift->bits;
+*/	value = shift->bits;
+
+#if 0
+	if (value == 0xA12C2B2)
+		value++;
+#endif
 
 	/* TODO: maybe data_pin direction changed */
 	/* io struct and mask ? */
@@ -228,8 +234,17 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 				printf("%s: ftdi set bimode failed [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 				return -1;
 			}
+			uint8_t temp = 0x04;
+			if (ftdi_write_data(&ftdi, &temp, 1) < 0) {
+				printf("%s: ftdi_write_error [%s]\n", __func__, ftdi_get_error_string(&ftdi));
+				return -1;
+			}
+			if (ftdi_read_data(&ftdi, &temp, 1) < 0) {
+				printf("%s: ftdi_read_error [%s]\n", __func__, ftdi_get_error_string(&ftdi));
+				return -1;
+			}
 #endif
-			printf("mask changed: 0x%02x -> 0x%02x\n", actual_mask, mask);
+/*			printf("mask changed: 0x%02x -> 0x%02x\n", actual_mask, mask); */
 			actual_mask = mask;
 		}
 	}
@@ -252,30 +267,40 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 		index++;
 		value = value >> 1;
 	}
-	print_buffer(ftdi_buf_out, index);
+
+	/* if last bit is high - add down bit */
+	if (shift->dir == 0) {
+		ftdi_buf_out[index] = ftdi_buf_out[index-1] & ~( 1 << clock_pin) & ~(1 << data_pin_output);
+		index++;
+	}
+
+	/* print_buffer(ftdi_buf_out, index);
 	if (shift->dir) {
 		printf("read:\n");
 		print_buffer(ftdi_buf_in, index);
 	}
+	*/
 
 #ifndef DRYRUN 
-	if ((ret = ftdi_write_data(&ftdi, ftdi_buf_out, shift->nbits * 4)) < 0) {
+	if ((ret = ftdi_write_data(&ftdi, ftdi_buf_out, index )) < 0) {
 		printf("%s: ftdi_wrire_error [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 		return -1;
 	}
-	if ((ret = ftdi_read_data(&ftdi, ftdi_buf_in, shift->nbits * 4)) < 0) {
+	if ((ret = ftdi_read_data(&ftdi, ftdi_buf_in, index )) < 0) {
 		printf("%s: ftdi_read_error [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 		return -1;
 	}
 #endif
 	value = 0;
+	int mask_value = 1;
 	if (shift->dir) {
 		for (int i = 0; i < shift->nbits; i++ ) {
-			value = value << 1;
-			if (ftdi_buf_in[i*4 + 2] && (1 << data_pin_input))
-				value |= 1;
+/*			printf("data 0x%02x pin 0x%02x\n", ftdi_buf_in[i*4 + 2], 1 << data_pin_input); */
+			if (ftdi_buf_in[i*4 + 2] & (1 << data_pin_input))
+				value |= mask_value;
+			mask_value = mask_value << 1;
 		}
-		printf("%s: value 0x%016lX\n", __func__, value);
+/*		printf("%s: value 0x%016lX\n", __func__, value); */
 	}
 	shift->bits = value;
 	return 1;
