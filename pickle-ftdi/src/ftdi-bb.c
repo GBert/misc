@@ -234,7 +234,7 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 				printf("%s: ftdi set bimode failed [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 				return -1;
 			}
-			uint8_t temp = 0x04;
+/*			uint8_t temp = 0x04;
 			if (ftdi_write_data(&ftdi, &temp, 1) < 0) {
 				printf("%s: ftdi_write_error [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 				return -1;
@@ -242,7 +242,7 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 			if (ftdi_read_data(&ftdi, &temp, 1) < 0) {
 				printf("%s: ftdi_read_error [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 				return -1;
-			}
+			} */
 #endif
 /*			printf("mask changed: 0x%02x -> 0x%02x\n", actual_mask, mask); */
 			actual_mask = mask;
