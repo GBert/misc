@@ -208,6 +208,7 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 	uint32_t index = 0;
 	uint8_t mask;
 	uint64_t value;
+	int ret;
 	printf("shift direction %d\n", shift->dir);
 	printf("number bits %d\n", shift->nbits);
 	printf("value 0x%08lX\n\n", shift->bits);
@@ -257,13 +258,12 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 		print_buffer(ftdi_buf_in, index);
 	}
 
-	return 1;
 #ifndef DRYRUN 
-	if (ftdi_write_data(&ftdi, ftdi_buf_out, shift->nbits * 4) < 0) {
+	if ((ret = ftdi_write_data(&ftdi, ftdi_buf_out, shift->nbits * 4)) < 0) {
 		printf("%s: ftdi_wrire_error [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 		return -1;
 	}
-	if (ftdi_read_data(&ftdi, ftdi_buf_in, shift->nbits * 4) < 0) {
+	if ((ret = ftdi_read_data(&ftdi, ftdi_buf_in, shift->nbits * 4)) < 0) {
 		printf("%s: ftdi_read_error [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 		return -1;
 	}
