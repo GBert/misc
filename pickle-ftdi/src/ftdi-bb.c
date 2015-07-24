@@ -25,7 +25,6 @@
 #include <unistd.h>
 #include <stdint.h>
 #include <errno.h>
-#include <sys/ioctl.h>
 
 #include <ftdi.h>
 #include "ftdi-bb.h"
@@ -195,7 +194,6 @@ ftdi_bb_configure(struct ftdi_bb_config *config)
 	data_pin_output = config->data_pin_output;
 
 	return 1;
-	// return ioctl(ftdi_bb_fd, GPIO_BB_CONFIGURE, config);
 #else
 	return -1
 #endif
@@ -269,14 +267,16 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 	}
 #endif
 	value = 0;
-	for (int i = 0; i < shift->nbits; i++ ) {
-		value = value << 1;
-		if (ftdi_buf_in[i*4 + 2] && (1 << data_pin_input))
-			value |= 1;
+	if (shift->dir) {
+		for (int i = 0; i < shift->nbits; i++ ) {
+			value = value << 1;
+			if (ftdi_buf_in[i*4 + 2] && (1 << data_pin_input))
+				value |= 1;
+		}
+		printf("%s: value 0x%08lX\n", __func__, value);
 	}
 	shift->bits = value;
 	return 1;
-	// return ioctl(ftdi_bb_fd, GPIO_BB_SHIFT, shift);
 #else
 	return -1;
 #endif
