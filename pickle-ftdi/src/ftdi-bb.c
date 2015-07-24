@@ -74,7 +74,9 @@ ftdi_bb_open(const char *device)
 		ftdi_bb_fd = -1;
 		return -1;
 	}
-	if (ftdi_set_bitmode(&ftdi, 0xff, BITMODE_SYNCBB) < 0) {
+	/* all output */
+	actual_mask = 0xff;
+	if (ftdi_set_bitmode(&ftdi, actual_mask, BITMODE_SYNCBB) < 0) {
 		printf("%s: can't enable bitbang mode [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 		ftdi_bb_fd = -1;
 		return -1;
