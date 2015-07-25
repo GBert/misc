@@ -69,7 +69,7 @@ ftdi_bb_open(const char *device)
 		return -1;
 	}
 
-	if (ftdi_usb_open(&ftdi, 0x0403, 0x6015) < 0) {
+	if ((ftdi_usb_open(&ftdi, 0x0403, 0x6015) < 0) && (ftdi_usb_open(&ftdi, 0x0403, 0x6001) < 0)) {
 		printf("%s: can't open FT230X device [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 		ftdi_bb_fd = -1;
 		return -1;
