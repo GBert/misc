@@ -1,4 +1,4 @@
-update=Mon 27 Jul 2015 05:04:40 PM CEST
+update=Mon 27 Jul 2015 08:11:34 PM CEST
 version=1
 last_client=kicad
 [pcbnew]
@@ -60,3 +60,13 @@ LibName28=contrib
 LibName29=valves
 LibName30=microchip_pic18mcu
 LibName31=icsp
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=
+SpiceForceRefPrefix=0
+SpiceUseNetNumbers=0
+LabSize=60
