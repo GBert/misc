@@ -3,7 +3,7 @@
   (general
     (links 54)
     (no_connects 54)
-    (area 71.679999 42.469999 193.750001 135.965001)
+    (area 0 0 0 0)
     (thickness 1.6)
     (drawings 6)
     (tracks 0)
@@ -232,7 +232,7 @@
   )
 
   (module Capacitors_ThroughHole:C_Rect_L4_W2.5_P2.5 (layer F.Cu) (tedit 0) (tstamp 55B727AF)
-    (at 137.795 100.965 180)
+    (at 130.81 99.695 180)
     (descr "Film Capacitor Length 4mm x Width 2.5mm, Pitch 2.5mm")
     (tags Capacitor)
     (path /55B65742)
@@ -255,7 +255,7 @@
   )
 
   (module Capacitors_ThroughHole:C_Rect_L4_W2.5_P2.5 (layer F.Cu) (tedit 0) (tstamp 55B727B5)
-    (at 137.795 106.045 180)
+    (at 134.62 111.125 180)
     (descr "Film Capacitor Length 4mm x Width 2.5mm, Pitch 2.5mm")
     (tags Capacitor)
     (path /55B65839)
