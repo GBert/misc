@@ -3,9 +3,9 @@
   (general
     (links 54)
     (no_connects 54)
-    (area 71.679999 42.469999 193.750001 135.965001)
+    (area 69.924999 34.924999 170.075001 135.075001)
     (thickness 1.6)
-    (drawings 6)
+    (drawings 4)
     (tracks 0)
     (zones 0)
     (modules 16)
@@ -186,7 +186,7 @@
   )
 
   (module Capacitors_ThroughHole:C_Rect_L4_W2.5_P2.5 (layer F.Cu) (tedit 0) (tstamp 55B727A3)
-    (at 158.115 92.075 270)
+    (at 137.795 91.44 270)
     (descr "Film Capacitor Length 4mm x Width 2.5mm, Pitch 2.5mm")
     (tags Capacitor)
     (path /55B67336)
@@ -209,7 +209,7 @@
   )
 
   (module Capacitors_ThroughHole:C_Rect_L4_W2.5_P2.5 (layer F.Cu) (tedit 0) (tstamp 55B727A9)
-    (at 151.765 97.155 270)
+    (at 131.445 96.52 270)
     (descr "Film Capacitor Length 4mm x Width 2.5mm, Pitch 2.5mm")
     (tags Capacitor)
     (path /55B67397)
@@ -232,7 +232,7 @@
   )
 
   (module Capacitors_ThroughHole:C_Rect_L4_W2.5_P2.5 (layer F.Cu) (tedit 0) (tstamp 55B727AF)
-    (at 137.795 100.965 180)
+    (at 117.475 100.33 180)
     (descr "Film Capacitor Length 4mm x Width 2.5mm, Pitch 2.5mm")
     (tags Capacitor)
     (path /55B65742)
@@ -255,7 +255,7 @@
   )
 
   (module Capacitors_ThroughHole:C_Rect_L4_W2.5_P2.5 (layer F.Cu) (tedit 0) (tstamp 55B727B5)
-    (at 137.795 106.045 180)
+    (at 117.475 105.41 180)
     (descr "Film Capacitor Length 4mm x Width 2.5mm, Pitch 2.5mm")
     (tags Capacitor)
     (path /55B65839)
@@ -278,7 +278,7 @@
   )
 
   (module Capacitors_Elko_ThroughHole:Elko_vert_11x5mm_RM2.5 (layer F.Cu) (tedit 5454A2C2) (tstamp 55B727BB)
-    (at 133.35 79.375)
+    (at 113.03 78.74)
     (descr "Electrolytic Capacitor, vertical, diameter 5mm, radial, RM 2,5mm")
     (tags "Electrolytic Capacitor, vertical, diameter 5mm, radial, RM 2,5mm, Elko, Electrolytkondensator, Kondensator gepolt, Durchmesser 5mm")
     (path /55B65D4C)
@@ -305,7 +305,7 @@
   )
 
   (module Capacitors_ThroughHole:C_Rect_L4_W2.5_P2.5 (layer F.Cu) (tedit 0) (tstamp 55B727C1)
-    (at 170.815 76.835)
+    (at 150.495 76.2)
     (descr "Film Capacitor Length 4mm x Width 2.5mm, Pitch 2.5mm")
     (tags Capacitor)
     (path /55B667FD)
@@ -328,7 +328,7 @@
   )
 
   (module CANBuster:ICSP (layer F.Cu) (tedit 200000) (tstamp 55B727CB)
-    (at 149.86 63.5)
+    (at 129.54 62.865)
     (descr "Staggered Microchip ICSP Pin Header")
     (path /55B640CD)
     (fp_text reference JP1 (at 0 -0.254 270) (layer F.SilkS)
@@ -356,7 +356,7 @@
   )
 
   (module Pin_Headers:Pin_Header_Straight_1x08 (layer F.Cu) (tedit 0) (tstamp 55B727D7)
-    (at 124.46 71.755)
+    (at 104.14 71.12)
     (descr "Through hole pin header")
     (tags "pin header")
     (path /55B665D3)
@@ -401,7 +401,7 @@
   )
 
   (module Pin_Headers:Pin_Header_Straight_1x08 (layer F.Cu) (tedit 0) (tstamp 55B727E3)
-    (at 173.99 120.65 180)
+    (at 153.67 120.015 180)
     (descr "Through hole pin header")
     (tags "pin header")
     (path /55B66B4B)
@@ -446,7 +446,7 @@
   )
 
   (module Pin_Headers:Pin_Header_Angled_1x03 (layer F.Cu) (tedit 0) (tstamp 55B727EA)
-    (at 116.205 81.915 180)
+    (at 95.885 81.28 180)
     (descr "Through hole pin header")
     (tags "pin header")
     (path /55B6BC02)
@@ -508,7 +508,7 @@
   )
 
   (module Pin_Headers:Pin_Header_Angled_1x03 (layer F.Cu) (tedit 0) (tstamp 55B727F1)
-    (at 116.205 92.71 180)
+    (at 95.885 92.075 180)
     (descr "Through hole pin header")
     (tags "pin header")
     (path /55B6BFF5)
@@ -570,7 +570,7 @@
   )
 
   (module Pin_Headers:Pin_Header_Angled_1x03 (layer F.Cu) (tedit 0) (tstamp 55B727F8)
-    (at 116.205 106.045 180)
+    (at 95.885 105.41 180)
     (descr "Through hole pin header")
     (tags "pin header")
     (path /55B6C175)
@@ -632,7 +632,7 @@
   )
 
   (module Pin_Headers:Pin_Header_Angled_1x03 (layer F.Cu) (tedit 0) (tstamp 55B727FF)
-    (at 116.205 118.11 180)
+    (at 95.885 117.475 180)
     (descr "Through hole pin header")
     (tags "pin header")
     (path /55B6C1C8)
@@ -694,7 +694,7 @@
   )
 
   (module Housings_DIP:DIP-40_W15.24mm_LongPads (layer F.Cu) (tedit 54130A77) (tstamp 55B7282B)
-    (at 147.32 71.755)
+    (at 127 71.12)
     (descr "40-lead dip package, row spacing 15.24 mm (600 mils), longer pads")
     (tags "dil dip 2.54 600")
     (path /55B62FE6)
@@ -803,7 +803,7 @@
   )
 
   (module Housings_DIP:DIP-8_W7.62mm_LongPads (layer F.Cu) (tedit 54130A77) (tstamp 55B72837)
-    (at 168.275 85.725)
+    (at 147.955 85.09)
     (descr "8-lead dip package, row spacing 7.62 mm (300 mils), longer pads")
     (tags "dil dip 2.54 300")
     (path /55B65B4E)
@@ -848,7 +848,7 @@
   )
 
   (module Crystals:Crystal_HC49-U_Vertical (layer F.Cu) (tedit 0) (tstamp 55B7283D)
-    (at 142.24 103.505 270)
+    (at 121.92 102.87 270)
     (descr "Crystal, Quarz, HC49/U, vertical, stehend,")
     (tags "Crystal, Quarz, HC49/U, vertical, stehend,")
     (path /55B65532)
@@ -915,11 +915,9 @@
       (net 4 "Net-(C4-Pad1)"))
   )
 
-  (gr_line (start 73.025 135.255) (end 71.755 135.255) (angle 90) (layer Edge.Cuts) (width 0.15))
-  (gr_line (start 71.755 135.255) (end 72.39 135.89) (angle 90) (layer Edge.Cuts) (width 0.15))
-  (gr_line (start 71.755 42.545) (end 71.755 135.255) (angle 90) (layer Edge.Cuts) (width 0.15))
-  (gr_line (start 193.675 42.545) (end 71.755 42.545) (angle 90) (layer Edge.Cuts) (width 0.15))
-  (gr_line (start 193.675 135.255) (end 193.675 42.545) (angle 90) (layer Edge.Cuts) (width 0.15))
-  (gr_line (start 73.025 135.255) (end 193.675 135.255) (angle 90) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 70 135) (end 170 135) (angle 90) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 70 35) (end 70 135) (angle 90) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 170 35) (end 70 35) (angle 90) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 170 135) (end 170 35) (angle 90) (layer Edge.Cuts) (width 0.15))
 
 )
