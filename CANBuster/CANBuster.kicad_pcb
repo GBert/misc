@@ -1,4 +1,4 @@
-(kicad_pcb (version 4) (host pcbnew "(2015-06-12 BZR 5742)-product")
+(kicad_pcb (version 4) (host pcbnew "(2015-07-27 BZR 5997)-product")
 
   (general
     (links 127)
@@ -834,7 +834,7 @@
     (pad 40 thru_hole oval (at 15.24 0) (size 2.3 1.6) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
       (net 7 /PGD))
     (model Housings_DIP.3dshapes/DIP-40_W15.24mm_LongPads.wrl
-      (at (xyz 0 0 0))
+      (at (xyz 0 0 0.15))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
     )
@@ -879,7 +879,7 @@
     (pad 8 thru_hole oval (at 7.62 0) (size 2.3 1.6) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
       (net 2 GND))
     (model Housings_DIP.3dshapes/DIP-8_W7.62mm_LongPads.wrl
-      (at (xyz 0 0 0))
+      (at (xyz 0 0 0.15))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
     )
@@ -1173,7 +1173,7 @@
     (pad 8 thru_hole oval (at 7.62 0 270) (size 1.6 1.6) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
       (net 53 VCC))
     (model Housings_DIP.3dshapes/DIP-8_W7.62mm.wrl
-      (at (xyz 0 0 0))
+      (at (xyz 0 0 0.15))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
     )
@@ -1216,7 +1216,7 @@
     (pad 8 thru_hole oval (at 7.62 0 270) (size 1.6 1.6) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
       (net 53 VCC))
     (model Housings_DIP.3dshapes/DIP-8_W7.62mm.wrl
-      (at (xyz 0 0 0))
+      (at (xyz 0 0 0.15))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
     )
@@ -1259,7 +1259,7 @@
     (pad 8 thru_hole oval (at 7.62 0 90) (size 1.6 1.6) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
       (net 1 VDD))
     (model Housings_DIP.3dshapes/DIP-8_W7.62mm.wrl
-      (at (xyz 0 0 0))
+      (at (xyz 0 0 0.15))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
     )
