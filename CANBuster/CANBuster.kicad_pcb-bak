@@ -3,7 +3,7 @@
   (general
     (links 127)
     (no_connects 127)
-    (area 69.924999 34.924999 170.075001 135.075001)
+    (area 67.356999 34.924999 172.741001 135.075001)
     (thickness 1.6)
     (drawings 4)
     (tracks 0)
@@ -61,8 +61,9 @@
     (pad_size 1.524 1.524)
     (pad_drill 0.762)
     (pad_to_mask_clearance 0.2)
-    (aux_axis_origin 0 0)
-    (visible_elements FFFFFF7F)
+    (aux_axis_origin 70.104 135.128)
+    (grid_origin 70.104 135.128)
+    (visible_elements FFFFF77F)
     (pcbplotparams
       (layerselection 0x00030_80000001)
       (usegerberextensions false)
@@ -484,7 +485,7 @@
   )
 
   (module Pin_Headers:Pin_Header_Angled_1x03 (layer F.Cu) (tedit 0) (tstamp 55B727EA)
-    (at 78.74 73.66 180)
+    (at 78.232 73.66 180)
     (descr "Through hole pin header")
     (tags "pin header")
     (path /55B6BC02)
@@ -608,7 +609,7 @@
   )
 
   (module Pin_Headers:Pin_Header_Angled_1x03 (layer F.Cu) (tedit 0) (tstamp 55B727F8)
-    (at 78.74 53.34 180)
+    (at 78.232 53.848 180)
     (descr "Through hole pin header")
     (tags "pin header")
     (path /55B6C175)
@@ -670,7 +671,7 @@
   )
 
   (module Pin_Headers:Pin_Header_Angled_1x03 (layer F.Cu) (tedit 0) (tstamp 55B727FF)
-    (at 78.232 42.672 180)
+    (at 78.232 43.688 180)
     (descr "Through hole pin header")
     (tags "pin header")
     (path /55B6C1C8)
@@ -834,7 +835,7 @@
     (pad 40 thru_hole oval (at 15.24 0) (size 2.3 1.6) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
       (net 7 /PGD))
     (model Housings_DIP.3dshapes/DIP-40_W15.24mm_LongPads.wrl
-      (at (xyz 0 0 0))
+      (at (xyz 0 0 0.15))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
     )
@@ -879,7 +880,7 @@
     (pad 8 thru_hole oval (at 7.62 0) (size 2.3 1.6) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
       (net 2 GND))
     (model Housings_DIP.3dshapes/DIP-8_W7.62mm_LongPads.wrl
-      (at (xyz 0 0 0))
+      (at (xyz 0 0 0.15))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
     )
@@ -954,7 +955,7 @@
   )
 
   (module LEDs:LED-3MM (layer F.Cu) (tedit 559B82F6) (tstamp 55B7CABA)
-    (at 127 51.435)
+    (at 125.476 64.008)
     (descr "LED 3mm round vertical")
     (tags "LED  3mm round vertical")
     (path /55B7B196)
@@ -989,7 +990,7 @@
   )
 
   (module LEDs:LED-3MM (layer F.Cu) (tedit 559B82F6) (tstamp 55B7CAC0)
-    (at 127 55.88)
+    (at 125.476 58.42)
     (descr "LED 3mm round vertical")
     (tags "LED  3mm round vertical")
     (path /55B7F540)
@@ -1024,7 +1025,7 @@
   )
 
   (module LEDs:LED-3MM (layer F.Cu) (tedit 559B82F6) (tstamp 55B7CAC6)
-    (at 127 60.96)
+    (at 125.476 53.34)
     (descr "LED 3mm round vertical")
     (tags "LED  3mm round vertical")
     (path /55B7F96E)
@@ -1059,7 +1060,7 @@
   )
 
   (module Connect:RJ45_8 (layer F.Cu) (tedit 0) (tstamp 55B7CAD4)
-    (at 164.465 54.61 90)
+    (at 164.084 61.976 90)
     (tags RJ45)
     (path /55BB8745)
     (fp_text reference J1 (at 0.254 4.826 90) (layer F.SilkS)
@@ -1098,7 +1099,7 @@
   )
 
   (module Connect:RJ45_8 (layer F.Cu) (tedit 0) (tstamp 55B7CAE2)
-    (at 166.37 78.105 90)
+    (at 164.084 78.994 90)
     (tags RJ45)
     (path /55BB9CC6)
     (fp_text reference J2 (at 0.254 4.826 90) (layer F.SilkS)
@@ -1173,7 +1174,7 @@
     (pad 8 thru_hole oval (at 7.62 0 270) (size 1.6 1.6) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
       (net 53 VCC))
     (model Housings_DIP.3dshapes/DIP-8_W7.62mm.wrl
-      (at (xyz 0 0 0))
+      (at (xyz 0 0 0.15))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
     )
@@ -1216,7 +1217,7 @@
     (pad 8 thru_hole oval (at 7.62 0 270) (size 1.6 1.6) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
       (net 53 VCC))
     (model Housings_DIP.3dshapes/DIP-8_W7.62mm.wrl
-      (at (xyz 0 0 0))
+      (at (xyz 0 0 0.15))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
     )
@@ -1259,7 +1260,7 @@
     (pad 8 thru_hole oval (at 7.62 0 90) (size 1.6 1.6) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
       (net 1 VDD))
     (model Housings_DIP.3dshapes/DIP-8_W7.62mm.wrl
-      (at (xyz 0 0 0))
+      (at (xyz 0 0 0.15))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
     )
@@ -1340,7 +1341,7 @@
   )
 
   (module Pin_Headers:Pin_Header_Straight_1x04 (layer F.Cu) (tedit 0) (tstamp 55B7CB1E)
-    (at 144.272 69.596)
+    (at 145.796 69.596)
     (descr "Through hole pin header")
     (tags "pin header")
     (path /55BBEC97)
@@ -1492,7 +1493,7 @@
   )
 
   (module Resistors_ThroughHole:Resistor_Horizontal_RM10mm (layer F.Cu) (tedit 53F56209) (tstamp 55B7CB40)
-    (at 137.795 51.435 180)
+    (at 136.144 64.008 180)
     (descr "Resistor, Axial,  RM 10mm, 1/3W,")
     (tags "Resistor, Axial, RM 10mm, 1/3W,")
     (path /55B78E7A)
@@ -1520,7 +1521,7 @@
   )
 
   (module Resistors_ThroughHole:Resistor_Horizontal_RM10mm (layer F.Cu) (tedit 53F56209) (tstamp 55B7CB46)
-    (at 137.795 55.88 180)
+    (at 136.144 58.42 180)
     (descr "Resistor, Axial,  RM 10mm, 1/3W,")
     (tags "Resistor, Axial, RM 10mm, 1/3W,")
     (path /55B7F4C5)
@@ -1548,7 +1549,7 @@
   )
 
   (module Resistors_ThroughHole:Resistor_Horizontal_RM10mm (layer F.Cu) (tedit 53F56209) (tstamp 55B7CB4C)
-    (at 137.795 60.325 180)
+    (at 136.144 53.34 180)
     (descr "Resistor, Axial,  RM 10mm, 1/3W,")
     (tags "Resistor, Axial, RM 10mm, 1/3W,")
     (path /55B7F8F7)
@@ -1688,7 +1689,7 @@
   )
 
   (module Resistors_ThroughHole:Resistor_Horizontal_RM10mm (layer F.Cu) (tedit 53F56209) (tstamp 55B7CB6A)
-    (at 109.22 114.3 270)
+    (at 107.95 113.03 270)
     (descr "Resistor, Axial,  RM 10mm, 1/3W,")
     (tags "Resistor, Axial, RM 10mm, 1/3W,")
     (path /55B7B8AA)
@@ -1772,7 +1773,7 @@
   )
 
   (module Resistors_ThroughHole:Resistor_Horizontal_RM10mm (layer F.Cu) (tedit 53F56209) (tstamp 55B7CB7C)
-    (at 114.808 114.3 270)
+    (at 115.824 113.03 270)
     (descr "Resistor, Axial,  RM 10mm, 1/3W,")
     (tags "Resistor, Axial, RM 10mm, 1/3W,")
     (path /55B7B994)

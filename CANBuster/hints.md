@@ -9,8 +9,10 @@ mkdir /tmp/pretty/
 cd /tmp/pretty
 for i in `cut -d"/" -f2 ~/.config/kicad/fp-lib-table | cut -d")" -f1`
 do
-   git clone --depth==1 https://github.com/KiCad/$i $i
+   git clone --depth=1 https://github.com/KiCad/$i $i
 done
 
 find /tmp/pretty -name .git -exec rm -rf {} \;
+
+cp -rv /tmp/pretty/* /usr/local/share/kicad/modules
 
