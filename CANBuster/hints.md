@@ -1,5 +1,3 @@
-
-
 KiCad
 =====
 
@@ -30,3 +28,4 @@ How do I make PCB mounting holes?
 A hole can be seen as a footprint, with only one pad. You can add one (or many) footprint
 (right toolbar, button "add module") like the "1pin" footprint existing in library. Edit
 the pad in order to have the correct size (pad diameter and drill value).
+
