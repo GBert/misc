@@ -29,7 +29,9 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
-LIBS:xess
+LIBS:microchip_pic18mcu
+LIBS:pic18f25k80
+LIBS:ICSP
 LIBS:RPi_Hat-cache
 EELAYER 25 0
 EELAYER END

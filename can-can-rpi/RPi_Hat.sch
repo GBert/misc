@@ -10,6 +10,7 @@ LIBS:cmos4000
 LIBS:adc-dac
 LIBS:memory
 LIBS:xilinx
+LIBS:special
 LIBS:microcontrollers
 LIBS:dsp
 LIBS:microchip
@@ -28,6 +29,9 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
+LIBS:microchip_pic18mcu
+LIBS:pic18f25k80
+LIBS:ICSP
 LIBS:RPi_Hat-cache
 EELAYER 25 0
 EELAYER END

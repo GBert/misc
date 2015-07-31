@@ -1,4 +1,4 @@
-update=Freitag, 31. Juli 2015 01:00:32
+update=Fri 31 Jul 2015 06:32:47 PM CEST
 version=1
 last_client=kicad
 [cvpcb]
@@ -62,3 +62,15 @@ LibName29=contrib
 LibName30=valves
 LibName31=xess
 LibName32=microchip_pic18mcu
+LibName33=pic18f25k80
+LibName34=/home/eh2be5j/projekte/github-misc/CANBuster/ICSP
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=Pcbnew
+SpiceForceRefPrefix=0
+SpiceUseNetNumbers=0
+LabSize=60
