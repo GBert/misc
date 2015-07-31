@@ -165,7 +165,7 @@ build:$(TARGETS)
 
 $(TARGET1):$(OBJECT1)
 	@echo -n "[LINK] "
-	$(CC) $(CFLAGS) $(OBJECT1) -o $(TARGET1) $(CLIB1) -Wl,-Map=$(TARGET1).map
+	$(CC) $(CFLAGS) $(OBJECT1) -o $(TARGET1) $(CLIB1) -Wl,-map,$(TARGET1).map
 ifneq "$(GDB)" "1"
 	@echo -n "[STRIP] "
 	strip $(TARGET1)
@@ -175,7 +175,7 @@ $(OBJECT1):$(HEADER1) Makefile config.mk VERSION
 
 $(TARGET2):$(OBJECT2)
 	@echo -n "[LINK] "
-	$(CC) $(CFLAGS) $(OBJECT2) -o $(TARGET2) $(CLIB2) -Wl,-Map=$(TARGET2).map
+	$(CC) $(CFLAGS) $(OBJECT2) -o $(TARGET2) $(CLIB2) -Wl,-map,$(TARGET2).map
 ifneq "$(GDB)" "1"
 	@echo -n "[STRIP] "
 	strip $(TARGET2)
