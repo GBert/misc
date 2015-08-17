@@ -1,4 +1,5 @@
 EESchema Schematic File Version 2
+LIBS:RPi_Hat-rescue
 LIBS:power
 LIBS:device
 LIBS:transistors
