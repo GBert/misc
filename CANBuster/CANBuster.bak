@@ -38,11 +38,11 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "CAN-Buster"
-Date "29.7.2015"
-Rev "0.9"
-Comp ""
+Date "2015-08-18"
+Rev "0.91"
+Comp "Gerhard Bertelsmann"
 Comment1 "Universal CAN Interface and more"
-Comment2 ""
+Comment2 "License CC BY-NC-SA 4.0"
 Comment3 ""
 Comment4 ""
 $EndDescr
