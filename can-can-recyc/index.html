@@ -1,0 +1,138 @@
+<title>Gleisbox USB Interface</title>
+<H1>Zusammenfassung</H1>
+Einbau eines USB2CAN Interfaces in die Gleisbox
+<H2>CAN Interface</H2>
+<a href="pictures/wr841_slcan_02.jpg"><img src="pictures/wr841_slcan_02_s.jpg"></a><BR>
+Gegenstand dieser Beschreibung ist der Einbau und die Inbetriebnahme einer SLCAN-Interface Platine in die Gleisbox.
+<H3>Hardware</H3>
+<a href="pictures/wr841n-pic.png"><img src="pictures/wr841n-pic_s.png"></a><BR>
+Herz der Schaltung ist ein PIC18F25K80 bzw PIC18F26k80, der die CAN Daten in serielle Daten (SLCAN) umwandelt.<BR>
+Als CAN Tranceiver dient ein ISO1050.<BR>
+Aufgrund der galvanischen Trennung durch den Tranceiver muss zus&auml;tzlich eine Verbindung zur 5V Versorgung hergestellt werden.
+<h4>BOM (nur CAN)</h4>
+<pre class="literal-block">
+Alle R,C LEDs sind SMD 1206
+R1      4k7 Ohm
+R2      120 Ohm
+R7      270 Ohm
+R8      10k Ohm
+R9-10   220 Ohm
+C1,C2    22pf   
+C3-C7   100nf
+Q1      16MHz Crystal
+LED1    LED gruen
+LED2-3  LED gelb
+IC1     PIC18F25K80-ISO oder PIC18F26K80-ISO
+IC2     TI ISO1050 DUBR
+</pre>
+<a href="https://secure.reichelt.de/index.html?&ACTION=20&LA=5010&AWKID=1035494&PROVID=2084">Reichelt Warenkorb</a> (ohne TI ISO1050)<BR>
+der L&auml;ngsregler 'MC 78M05 CDTG' ist beim Einbau in die Gleisbox nicht notwendig, da 5V zur Verf&uuml;gung stehen.
+
+Die ICs 3-5 sind f&uuml;r den CAN-Betrieb nicht erforderlich und k&ouml;nnen weggelassen  werden. Sie sind f&uuml;r
+sp&auml;tere Erweiterungen (I2C, RS485 ...) vorgesehen.<BR><BR>
+
+Platinen k&ouml;nnen hier bestellt werden:
+<A HREF="http://dirtypcbs.com/view.php?share=3312&accesskey=a7078792db27415ad57e3107b34ce4d3">Dirty PCBs</A><BR>
+bzw. kurz mich per eMail kontaktieren, denn ich habe ggf. noch eine Platine &uuml;brig.<BR><BR>
+
+<A HREF="http://lnxpps.de/openwrt/wr841/bin/can-can_uart500_can250.hex">Die Firmware (500kbaud UART 250kBaud CAN)</A>
+
+<H4>Progammierung der Firmware</H4>
+<pre class="literal-block">
+
+JP1 (SLCAN Platine)
+          -----
+   VCC 14 |O O| 13
+       12 |O O| 11
+       10 |O O| 9  PGD(RxD)
+        8 |O O| 7  PGC(TxD)
+        6 |O O| 5  MCLR
+        4 |O O| 3  RTS
+   GND  2 |O 0| 1
+          -----
+
+FTDI Verbindungen zur SCLAN Platine
+           ---
+       DTR |O|  &lt;-&gt; Jumper -&gt; MCLR
+       RxT |O|  &lt;-&gt; PGC(TxD)
+       TxD |O|  &lt;-&gt; PGD(RxD)
+       VCC |O|  &lt;-&gt; VCC
+       CTS |O|  &lt;-&gt; RTS
+       GND |O|  &lt;-&gt; GND
+           ---
+
+# PIC Programmer uebersetzen
+mkdir ~/tmp
+cd ~/tmp
+git clone https://github.com/GBert/misc.git
+cd misc/pickle-ftdi/src
+make
+ln -s pickle p16
+mkdir ~/.pickle
+cp dotconf/ftdi-ft232 ~/.pickle/config
+# PIC Firmware holen
+wget http://lnxpps.de/openwrt/wr841/bin/can-can_uart500_can250.hex
+
+# PIC ueberpruefen
+p16 lvp id
+[000000] [PROGRAM]     8000 WORDS (0400 ROWS OF 0020 WORDS)
+[200000] [IDLOCATION1] FF .
+[200001] [IDLOCATION2] FF .
+[200002] [IDLOCATION3] FF .
+[200003] [IDLOCATION4] FF .
+[200004] [IDLOCATION5] FF .
+[200005] [IDLOCATION6] FF .
+[200006] [IDLOCATION7] FF .
+[200007] [IDLOCATION8] FF .
+[300000] [CONFIG1]     1214
+[300002] [CONFIG2]     2869
+[300004] [CONFIG3]     8100
+[300006] [CONFIG4]     0081
+[300008] [CONFIG5]     C00F
+[30000A] [CONFIG6]     E00F
+[30000C] [CONFIG7]     400F
+[3FFFFE] [DEVICEID]    6124 DEV:309 REV:04 PIC18F26K80
+[F00000] [DATA]	       0400 BYTES
+# PIC Firmware flashen (Adapter Platine Jumper links)
+./p16 lvp p can-can_uart500_can250.hex
+# PIC Firmware uerberpruefen
+./p16 lvp v can-can_uart500_can250.hex
+# Adapter Platine Jumper rechts - fertig
+
+
+</pre>
+<H4>Installation SocketCAN / Utils</H4>
+<pre class="literal-block">
+cd ~/tmp
+git clone https://github.com/linux-can/can-utils
+cd can-utils
+./autogen.sh
+make
+sudo make install
+# Jetzt kann der Adapter genutzt werden:
+sudo slcand -S500000 /dev/ttyUSB0 can0
+sudo ifconfig can0 up
+</pre>
+<H4>Test mit Gleisbox</H4>
+<pre class="literal-block">
+# erstes Terminal
+candump -tA -xe can0,0:0,#FFFFFFF
+
+#zweites Terminal
+cansend can0 00360301#0000000011
+cansend can0 00304711#
+
+# Ergebnis aehnlich
+candump -tA -xe can0,0:0,#FFFFFFF
+ (2015-08-18 11:05:51.927377)  can0  TX - -  00360301   [5]  00 00 00 00 11
+ (2015-08-18 11:06:31.302496)  can0  TX - -  00304711   [0]
+ (2015-08-18 11:06:31.302651)  can0  RX - -  00319B32   [8]  47 43 DE AD 01 27 00 10
+</pre>
+Der Adapter ist jetzt einsatzbereit.
+<BR>
+<hr>
+Reduced to the max<BR><BR>
+
+Impressum:<BR> <img src="Impressum.png"><BR>
+
+</html>
