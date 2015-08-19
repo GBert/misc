@@ -1,14 +1,18 @@
 <title>Gleisbox USB Interface</title>
 <H1>Zusammenfassung</H1>
-Einbau eines USB2CAN Interfaces in die Gleisbox
-<H2>CAN Interface</H2>
-<a href="pictures/wr841_slcan_02.jpg"><img src="pictures/wr841_slcan_02_s.jpg"></a><BR>
-Gegenstand dieser Beschreibung ist der Einbau und die Inbetriebnahme einer SLCAN-Interface Platine in die Gleisbox.
+Einbau des <a href="http://lnxpps.de/openwrt/wr841">SLCAN-Interfaces</a> in die Gleisbox
+<H2>Gleisbox + USB2CAN Interface</H2>
+Gegenstand dieser Beschreibung ist der Einbau und die Inbetriebnahme einer SLCAN-Interface Platine in die Gleisbox. Dabei wird die SLCAN Platine und ein einfacher USB nach Seriell Wandler (FT232RL) verwendet.<br>
+<a href="pictures/large/IMG_7484.JPG"><img src="pictures/small/IMG_7484.JPG"></a>
+<a href="pictures/large/IMG_7483.JPG"><img src="pictures/small/IMG_7483.JPG"></a>
+<a href="pictures/large/IMG_7480.JPG"><img src="pictures/small/IMG_7480.JPG"></a><BR>
+<a href="pictures/large/IMG_7477.JPG"><img src="pictures/small/IMG_7477.JPG"></a>
+<a href="pictures/large/IMG_7489.JPG"><img src="pictures/small/IMG_7489.JPG"></a>
+<a href="pictures/large/IMG_7475.JPG"><img src="pictures/small/IMG_7475.JPG"></a><BR>
 <H3>Hardware</H3>
 <a href="pictures/wr841n-pic.png"><img src="pictures/wr841n-pic_s.png"></a><BR>
-Herz der Schaltung ist ein PIC18F25K80 bzw PIC18F26k80, der die CAN Daten in serielle Daten (SLCAN) umwandelt.<BR>
-Als CAN Tranceiver dient ein ISO1050.<BR>
-Aufgrund der galvanischen Trennung durch den Tranceiver muss zus&auml;tzlich eine Verbindung zur 5V Versorgung hergestellt werden.
+Herz der Schaltung ist ein PIC18F25K80 bzw PIC18F26k80, der die CAN Daten in serielle Daten (SLCAN) umwandelt. Als CAN Tranceiver dient ein ISO1050.<BR>
+Aufgrund der galvanischen Trennung durch den Tranceiver muss zus&auml;tzlich eine Verbindung zur 5V Versorgung hergestellt werden. Der PIC wird &uuml;ber die USB Schnittstelle versorgt.
 <h4>BOM (nur CAN)</h4>
 <pre class="literal-block">
 Alle R,C LEDs sind SMD 1206
@@ -37,9 +41,8 @@ bzw. kurz mich per eMail kontaktieren, denn ich habe ggf. noch eine Platine &uum
 
 <A HREF="http://lnxpps.de/openwrt/wr841/bin/can-can_uart500_can250.hex">Die Firmware (500kbaud UART 250kBaud CAN)</A>
 
-<H4>Progammierung der Firmware</H4>
+<H4>Adapter</H4>
 <pre class="literal-block">
-
 JP1 (SLCAN Platine)
           -----
    VCC 14 |O O| 13
@@ -60,7 +63,9 @@ FTDI Verbindungen zur SCLAN Platine
        CTS |O|  &lt;-&gt; RTS
        GND |O|  &lt;-&gt; GND
            ---
-
+</pre>
+<H4>Progammierung der Firmware</H4>
+<pre class="literal-block">
 # PIC Programmer uebersetzen
 mkdir ~/tmp
 cd ~/tmp
@@ -70,8 +75,6 @@ make
 ln -s pickle p16
 mkdir ~/.pickle
 cp dotconf/ftdi-ft232 ~/.pickle/config
-# PIC Firmware holen
-wget http://lnxpps.de/openwrt/wr841/bin/can-can_uart500_can250.hex
 
 # PIC ueberpruefen
 p16 lvp id
@@ -93,15 +96,21 @@ p16 lvp id
 [30000C] [CONFIG7]     400F
 [3FFFFE] [DEVICEID]    6124 DEV:309 REV:04 PIC18F26K80
 [F00000] [DATA]	       0400 BYTES
+
+# PIC Firmware holen
+wget http://lnxpps.de/openwrt/wr841/bin/can-can_uart500_can250.hex
+
 # PIC Firmware flashen (Adapter Platine Jumper links)
 ./p16 lvp p can-can_uart500_can250.hex
+
 # PIC Firmware uerberpruefen
 ./p16 lvp v can-can_uart500_can250.hex
-# Adapter Platine Jumper rechts - fertig
 
+# Adapter Platine Jumper rechts - fertig
 
 </pre>
 <H4>Installation SocketCAN / Utils</H4>
+Der Schritt ist nur notwendig, wenn man can2lan nutzen will. Ansonsten arbeitet Rocrail auch direkt mit dem USB-Adapter.
 <pre class="literal-block">
 cd ~/tmp
 git clone https://github.com/linux-can/can-utils
