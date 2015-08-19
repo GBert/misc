@@ -22,9 +22,9 @@ FTDI Verbindungen zur SCLAN Platine
        CTS |O|  <-> RTS
        GND |O|  <-> GND
            ---
-
-Notwendige Verbindungen iwischen SLCAN-Platine und Gleisbox
-
+```
+Notwendige Verbindungen zwischen SLCAN-Platine und Gleisbox
+```
     SLCAN Gleisbox
       5V   am Laengsregler 7805
      GND   am Laengsregler 7805
@@ -58,6 +58,7 @@ cd ~/tmp
 git clone https://github.com/linux-can/can-utils
 cd can-utils
 ./autogen.sh
+make
 sudo make install
 ```
 Jetzt kann der Adapter genutzt werden:
