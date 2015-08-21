@@ -3,7 +3,7 @@ Stream-DCC PoC
 
 goal: cheap DCC interface with PIC16F1704 / inline programmer based on CP2104
 
-Why PIC16F1704 ?
+Why PIC16F1705 ?
 ----------------
 - UART
 - CCP
