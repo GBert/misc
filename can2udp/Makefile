@@ -42,6 +42,8 @@ define Package/can2udp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/gb2-update $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init $(1)/etc/init.d/can2lan
+	$(INSTALL_DIR) $(1)/www/config
+	$(INSTALL_BIN) ./files/geraet.vrs $(1)/www/config/
 endef
 
 define Package/can2udp/postinst
