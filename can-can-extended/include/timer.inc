@@ -18,6 +18,14 @@
                 RADIX   DEC
 
 ;------------------------------------------------------------------------------
+; Timer variables
+;------------------------------------------------------------------------------
+
+                CBLOCK
+                TCOUNTER : 1
+                ENDC
+
+;------------------------------------------------------------------------------
 ; Timer settings
 ;------------------------------------------------------------------------------
 
@@ -41,6 +49,9 @@ TIMERINIT
 SCHEDULE
                 ; must reset Timer1 overflow flag
 		BCF	INTCON, TMR0IF
+		INCFSZ	TCOUNTER,F
+		RETURN
+		; toggle LED on every roll-over
 		BTG	LATA, 3
 		RETURN
 ;
