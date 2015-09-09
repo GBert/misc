@@ -1,4 +1,4 @@
-;------------------------------------------------------------------------------
+
 ;
 ; Can-Can TIMER
 ;
@@ -23,6 +23,7 @@
 
                 CBLOCK
                 TCOUNTER : 1
+                HEARTBEAT : 1
                 ENDC
 
 ;------------------------------------------------------------------------------
@@ -34,15 +35,10 @@
 ;------------------------------------------------------------------------------
 TIMERINIT
 		; timer period = 1/16MHz = 0.0625 us
-		; prescaler period = .0625us * 64 = 4 us
-		; overflow period  = 4us * 256 = 1024 ms
+		; prescaler period = .0625us * 32 = 2 us
+		; overflow period  = 2 us * 256 = 512 us
 		
-                MOVLW   (1 << TMR0ON) + (1 << T08BIT) + (1 << T0PS2) + (1 << T0PS0)
-
-		; prescaler period = .0625us * 8 = 0.5 us
-		; overflow period  = 0.5us * 256 = 128 us
-                ; MOVLW   (1 << TMR0ON) + (1 << T08BIT) + (1 << T0PS1)
-
+                MOVLW   (1 << TMR0ON) + (1 << T08BIT) + (1 << T0PS2)
                 MOVWF   T0CON
                 RETURN
 
@@ -51,9 +47,37 @@ SCHEDULE
 		BCF	INTCON, TMR0IF
 		INCFSZ	TCOUNTER,F
 		RETURN
-		; toggle LED on every roll-over
-		BTG	LATA, 3
+
+		; 512 us * 256 = 131 ms
+		; limit to 8 * 131 ms = 1.049 s
+		INCF	HEARTBEAT,F
+		MOVLW	7
+		ANDWF	HEARTBEAT,F
+		; doing heartbeat
+		MOVLW	0
+		CPFSGT	HEARTBEAT
+		GOTO	STATUS_LED_ON
+		MOVLW	1
+		CPFSGT	HEARTBEAT
+		GOTO	STATUS_LED_OFF
+		MOVLW	2
+		CPFSGT	HEARTBEAT
+		GOTO	STATUS_LED_ON
+		MOVLW	3
+		CPFSGT	HEARTBEAT
+		GOTO	STATUS_LED_OFF
+
 		RETURN
+
+STATUS_LED_OFF
+		BCF	LATA, 3
+		RETURN
+
+STATUS_LED_ON
+		BSF	LATA, 3
+		RETURN
+
+
 ;
 ; vim: shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 ;

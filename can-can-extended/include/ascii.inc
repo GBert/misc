@@ -36,7 +36,7 @@ ASC2BIN
                 MOVWF   INDF0
                 SWAPF   INDF0,F
                 RCALL   ASC2NIB
-                IORWF   POSTINC0
+                IORWF   POSTINC0,F
                 RETURN               
 ASC2NIB
                 GETC                        ; W = <RXBUF>,RXGET++
