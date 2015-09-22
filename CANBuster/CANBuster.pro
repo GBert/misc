@@ -1,4 +1,4 @@
-update=Mittwoch, 19. August 2015 01:12:17
+update=Tue 22 Sep 2015 03:39:08 PM CEST
 version=1
 last_client=kicad
 [cvpcb]
@@ -25,16 +25,6 @@ SolderMaskMinWidth=0
 DrawSegmentWidth=0.2
 BoardOutlineThickness=0.15
 ModuleOutlineThickness=0.15
-[schematic_editor]
-version=1
-PageLayoutDescrFile=
-PlotDirectoryName=
-SubpartIdSeparator=0
-SubpartFirstId=65
-NetFmtName=
-SpiceForceRefPrefix=0
-SpiceUseNetNumbers=0
-LabSize=60
 [eeschema]
 version=1
 LibDir=
@@ -71,3 +61,13 @@ LibName29=contrib
 LibName30=valves
 LibName31=microchip_pic18mcu
 LibName32=icsp
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=
+SpiceForceRefPrefix=0
+SpiceUseNetNumbers=0
+LabSize=60

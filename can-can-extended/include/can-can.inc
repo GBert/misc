@@ -100,6 +100,7 @@ INIT
                 RCALL   INITCAN             ; Init. CAN Bus
                 RCALL   TIMERINIT           ; Init. TIMER
                 RCALL   I2CINIT             ; Init. I2C
+                RCALL   PIOINIT             ; Init. PIO
 
                 BSF     RCON,IPEN           ; Enable priority interrupts
                 BSF     INTCON,PEIE         ; Init. ISR
@@ -126,6 +127,7 @@ MAIN
 #INCLUDE        "ascii.inc"                 ; ASCII I/O
 #INCLUDE        "timer.inc"                 ; Timer
 #INCLUDE        "i2c.inc"                   ; I2C
+#INCLUDE        "pio.inc"                   ; I2C
 
 ;------------------------------------------------------------------------------
 ;
