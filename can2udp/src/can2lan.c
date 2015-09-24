@@ -76,7 +76,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
     char config_name[9];
     char gbs_name[MAXLINE];
     gbs_name[0] = '\0';
-    int ret=0;
+    int ret = 0;
 
     memcpy(&canid, netframe, 4);
     canid = ntohl(canid);
@@ -345,8 +345,10 @@ int main(int argc, char **argv) {
     }
 
     /* start Maerklin 60113 box */
-    if (send_magic_start_60113_frame(sc))
+    if (send_magic_start_60113_frame(sc)) {
 	exit(1);
+	/* TODO */
+    }
 
     /* daemonize the process if requested */
     if (background) {
@@ -397,7 +399,7 @@ int main(int argc, char **argv) {
 	    if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		/* send UDP frame */
 		frame_to_net(sb, (struct sockaddr *)&baddr, (struct can_frame *)&frame);
-		print_can_frame(UDP_FORMAT_STRG, netframe, verbose &!background);
+		print_can_frame(UDP_FORMAT_STRG, netframe, verbose & !background);
 		/* send CAN frame to all connected TCP clients */
 		/* TODO: need all clients the packets ? */
 		for (i = 0; i <= max_tcp_i; i++) {	/* check all clients for data */
