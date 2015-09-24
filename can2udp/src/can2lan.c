@@ -345,7 +345,8 @@ int main(int argc, char **argv) {
     }
 
     /* start Maerklin 60113 box */
-    send_magic_start_60113_frame(sc);
+    if (send_magic_start_60113_frame(sc))
+	exit(1);
 
     /* daemonize the process if requested */
     if (background) {
