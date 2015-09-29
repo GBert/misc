@@ -275,8 +275,8 @@ int main(int argc, char **argv) {
 		/* send CAN frame */
 		memcpy(&frame.data, &udpframe[5], 8);
 		/* answer to CAN ping from LAN to LAN */
-		if (((frame.can_id & 0x00FF0000UL) == 0x00310000UL) && (udpframe[11] = 0xEE)
-		    && (udpframe[12] = 0xEE)) {
+		if (((frame.can_id & 0x00FF0000UL) == 0x00310000UL) &&
+		    (udpframe[11] = 0xEE) && (udpframe[12] = 0xEE)) {
 		    printf("  received CAN ping\n");
 		    memcpy(udpframe_reply, udpframe, 13);
 		    udpframe_reply[0] = 0x00;
