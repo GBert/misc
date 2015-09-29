@@ -56,7 +56,7 @@ ERRORLEVEL      -302
 #DEFINE         CLOCK       64000000
 #DEFINE         TIMEOUT     0           ; Very long switched time-out
 
-; CAN PORTC or PORTB
+; CAN on PORTB
 #DEFINE         CAN         PORTB
 
 ; UART Baud Rate

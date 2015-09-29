@@ -26,7 +26,7 @@ BINDIR=/usr/local/bin
 BINFILE=easy-loader
 
 CC=gcc
-CFLAGS=-Os -std=gnu99 -pedantic-errors -Wall
+CFLAGS=-Wall -Os -std=gnu99 -pedantic-errors -Wall
 CLIB=
 
 CSOURCE=easy-loader.c
