@@ -1,0 +1,22 @@
+# use glob syntax.
+syntax: glob
+
+*~
+*.i
+*.o
+*.s
+*.cod
+*.cof
+*.elf
+*.hex
+*.lst
+*.map
+*.swp
+*.sym
+
+demo/proton-mkII.asm
+
+loader/easy-loader
+
+# switch to regexp syntax.
+syntax: regexp
