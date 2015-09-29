@@ -1,13 +1,13 @@
-/*
- * ----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
- * <info@gerhard-bertelsmann.de> wrote this file. As long as you retain this notice you
- * can do whatever you want with this stuff. If we meet some day, and you think
- * this stuff is worth it, you can buy me a beer in return Gerhard Bertelsmann
+ * <info@gerhard-bertelsmann.de> wrote this file. As long as you retain this
+ * notice you can do whatever you want with this stuff. If we meet some day,
+ * and you think this stuff is worth it, you can buy me a beer in return
+ * Gerhard Bertelsmann
  * ----------------------------------------------------------------------------
  */
 
-/* Thanks to Stefan Krauss and the Socketcan team
+/* Thanks to Stefan Krauss and the SocketCAN team
  */
 
 #include <stdio.h>
@@ -106,21 +106,21 @@ int main(int argc, char **argv) {
     baddr.sin_port = htons(destination_port);
     s = inet_pton(AF_INET, rocrail_server, &baddr.sin_addr);
     if (s <= 0) {
-        if (s == 0) {
-            fprintf(stderr, "UDP IP invalid\n");
-        } else {
-            fprintf(stderr, "invalid address family\n");
-        }
-        exit(1);
+	if (s == 0) {
+	    fprintf(stderr, "UDP IP invalid\n");
+	} else {
+	    fprintf(stderr, "invalid address family\n");
+	}
+	exit(1);
     }
 
     while ((opt = getopt(argc, argv, "l:d:b:i:hfv?")) != -1) {
 	switch (opt) {
 	case 'l':
-	    local_port = strtoul(optarg, (char **) NULL, 10);
+	    local_port = strtoul(optarg, (char **)NULL, 10);
 	    break;
 	case 'd':
-	    destination_port = strtoul(optarg, (char **) NULL, 10);
+	    destination_port = strtoul(optarg, (char **)NULL, 10);
 	    baddr.sin_port = htons(destination_port);
 	    break;
 	case 'b':
@@ -166,7 +166,7 @@ int main(int argc, char **argv) {
     saddr.sin_addr.s_addr = htonl(INADDR_ANY);
     saddr.sin_port = htons(local_port);
 
-    if  (bind(sa, (struct sockaddr *) &saddr, sizeof(saddr)) < 0) {
+    if (bind(sa, (struct sockaddr *)&saddr, sizeof(saddr)) < 0) {
 	fprintf(stderr, "UDP bind error: %s\n", strerror(errno));
 	exit(1);
     }
@@ -183,7 +183,7 @@ int main(int argc, char **argv) {
     }
     caddr.can_ifindex = ifr.ifr_ifindex;
 
-    if (bind(sc, (struct sockaddr *) &caddr, caddrlen) < 0) {
+    if (bind(sc, (struct sockaddr *)&caddr, caddrlen) < 0) {
 	fprintf(stderr, "CAN bind error: %s\n", strerror(errno));
 	exit(1);
     }
@@ -220,9 +220,9 @@ int main(int argc, char **argv) {
 	FD_SET(sc, &readfds);
 	FD_SET(sa, &readfds);
 
-	if (select((sc > sa) ? sc + 1 : sa + 1, &readfds, NULL, NULL, NULL) <0 ) {
-            fprintf(stderr, "select error: %s\n", strerror(errno));
-        };
+	if (select((sc > sa) ? sc + 1 : sa + 1, &readfds, NULL, NULL, NULL) < 0) {
+	    fprintf(stderr, "select error: %s\n", strerror(errno));
+	};
 
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &readfds)) {
@@ -240,7 +240,7 @@ int main(int argc, char **argv) {
 		memcpy(&udpframe[5], &frame.data, frame.can_dlc);
 
 		/* send UDP frame */
-		if (sendto(sb, udpframe, 13, 0, (struct sockaddr *) &baddr, sizeof(baddr)) !=13)
+		if (sendto(sb, udpframe, 13, 0, (struct sockaddr *)&baddr, sizeof(baddr)) != 13)
 		    fprintf(stderr, "UDP write error: %s\n", strerror(errno));
 
 		if (verbose && !background) {
@@ -275,8 +275,7 @@ int main(int argc, char **argv) {
 		/* send CAN frame */
 		memcpy(&frame.data, &udpframe[5], 8);
 		/* answer to CAN ping from LAN to LAN */
-		if (((frame.can_id & 0x00FF0000UL) ==
-		     0x00310000UL) && (udpframe[11] = 0xEE)
+		if (((frame.can_id & 0x00FF0000UL) == 0x00310000UL) && (udpframe[11] = 0xEE)
 		    && (udpframe[12] = 0xEE)) {
 		    printf("  received CAN ping\n");
 		    memcpy(udpframe_reply, udpframe, 13);
@@ -285,7 +284,7 @@ int main(int argc, char **argv) {
 		    udpframe_reply[2] = 0x00;
 		    udpframe_reply[3] = 0x00;
 		    udpframe_reply[4] = 0x00;
-		    if (sendto(sb, udpframe_reply, 13, 0, (struct sockaddr *) &baddr, sizeof(baddr)) != 13) 
+		    if (sendto(sb, udpframe_reply, 13, 0, (struct sockaddr *)&baddr, sizeof(baddr)) != 13)
 			fprintf(stderr, "UDP write error: %s\n", strerror(errno));
 		    else
 			printf("  replied to CAN ping\n");
@@ -295,8 +294,7 @@ int main(int argc, char **argv) {
 		    fprintf(stderr, "CAN write error: %s\n", strerror(errno));
 
 		if (verbose && !background) {
-		    printf("<-UDP>CAN CANID 0x%06X  ",
-			   frame.can_id & CAN_EFF_MASK);
+		    printf("<-UDP>CAN CANID 0x%06X  ", frame.can_id & CAN_EFF_MASK);
 		    printf(" [%d]", udpframe[4]);
 		    for (i = 5; i < 5 + frame.can_dlc; i++) {
 			printf(" %02x", udpframe[i]);

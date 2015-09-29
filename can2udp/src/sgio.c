@@ -36,28 +36,27 @@
 /*
  * return string with CRLF removed from end
  */
-char * rmcrlf(char *s, int slen) {
-        int l;
+char *rmcrlf(char *s, int slen) {
+    int l;
 
-        s[slen - 1] = '\0';
+    s[slen - 1] = '\0';
+    l = strlen(s) - 1;
 
-        l = strlen(s) - 1;
+    while (l >= 0 && (s[l] == '\r' || s[l] == '\n'))
+	s[l--] = '\0';
 
-        while (l >= 0 && (s[l]=='\r' || s[l]=='\n'))
-                s[l--]= '\0';
-
-        return s;
+    return s;
 }
 
-int time_stamp(char *timestamp){
+int time_stamp(char *timestamp) {
     /* char *timestamp = (char *)malloc(sizeof(char) * 16); */
-    struct timeval  tv;
-    struct tm      *tm;
+    struct timeval tv;
+    struct tm *tm;
 
     gettimeofday(&tv, NULL);
     tm = localtime(&tv.tv_sec);
 
-    sprintf(timestamp,"%02d:%02d:%02d.%03d", tm->tm_hour, tm->tm_min, tm->tm_sec, (int) tv.tv_usec/1000);
+    sprintf(timestamp, "%02d:%02d:%02d.%03d", tm->tm_hour, tm->tm_min, tm->tm_sec, (int)tv.tv_usec / 1000);
     return 0;
 }
 
@@ -67,36 +66,34 @@ char **read_track_file(char *filename, char **page_name) {
     int page = 0;
     char line[MAXLINE];
 
-    if((fp = fopen(filename,"r")) != NULL){
-        while(fgets(line,MAXLINE,fp)!=NULL){
-            if (strstr(line, "seite") == line ) {
-                page=1;
-            }
-            else if (strstr(line, " .id=") == line ) {
-                id=strtoul(&line[5], NULL,0);
-            }
-            else if (strstr(line, " .name=") == line ) {
-                rmcrlf(line,MAXLINE);
-                if (page) {
-                    page_name[id] = calloc(strlen(&line[7]) +1 ,sizeof(char));
-                    if (page_name[id] == NULL) {
-                        fprintf(stderr, "%s: error calloc failed creating config buffer for %s\n", __func__, filename);
-                        return NULL;
-                    }
-                    strcpy(page_name[id], &line[7]);
-                }
-            }
-        }
-        /* fgets returned null */
-        if(errno != 0){
-            fprintf(stderr, "error reading line\n");
-            return NULL;
-        }
-        fclose(fp);
-        return page_name;                /* EOF found, normal exit */
-    } else {                    /* there was an error on open */
-        fprintf(stderr, "error reading file %s\n", filename);
-        return NULL;
+    if ((fp = fopen(filename, "r")) != NULL) {
+	while (fgets(line, MAXLINE, fp) != NULL) {
+	    if (strstr(line, "seite") == line) {
+		page = 1;
+	    } else if (strstr(line, " .id=") == line) {
+		id = strtoul(&line[5], NULL, 0);
+	    } else if (strstr(line, " .name=") == line) {
+		rmcrlf(line, MAXLINE);
+		if (page) {
+		    page_name[id] = calloc(strlen(&line[7]) + 1, sizeof(char));
+		    if (page_name[id] == NULL) {
+			fprintf(stderr, "%s: error calloc failed creating config buffer for %s\n", __func__, filename);
+			return NULL;
+		    }
+		    strcpy(page_name[id], &line[7]);
+		}
+	    }
+	}
+	/* fgets returned null */
+	if (errno != 0) {
+	    fprintf(stderr, "error reading line\n");
+	    return NULL;
+	}
+	fclose(fp);
+	return page_name;	/* EOF found, normal exit */
+    } else {			/* there was an error on open */
+	fprintf(stderr, "error reading file %s\n", filename);
+	return NULL;
     }
 }
 
@@ -108,26 +105,26 @@ void print_can_frame(char *format_string, unsigned char *netframe) {
     memcpy(&canid, netframe, 4);
     dlc = netframe[4];
     time_stamp(timestamp);
-    printf("%s   ",timestamp);
+    printf("%s   ", timestamp);
     printf(format_string, ntohl(canid) & CAN_EFF_MASK, netframe[4]);
     for (i = 5; i < 5 + dlc; i++) {
-        printf(" %02x", netframe[i]);
+	printf(" %02x", netframe[i]);
     }
     if (dlc < 8) {
-        printf("(%02x", netframe[i]);
-        for (i = 6 + dlc ; i < 13 ; i++) {
-            printf(" %02x", netframe[i]);
-        }
-        printf(")");
+	printf("(%02x", netframe[i]);
+	for (i = 6 + dlc; i < 13; i++) {
+	    printf(" %02x", netframe[i]);
+	}
+	printf(")");
     } else {
-        printf(" ");
+	printf(" ");
     }
     printf("  ");
     for (i = 5; i < 13; i++) {
-        if(isprint(netframe[i]))
-            printf("%c",netframe[i]);
-        else
-            putchar(46);
+	if (isprint(netframe[i]))
+	    printf("%c", netframe[i]);
+	else
+	    putchar(46);
     }
 
     printf("\n");
@@ -137,8 +134,8 @@ int net_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *netfram
     int s;
     s = sendto(net_socket, netframe, length, 0, net_addr, sizeof(*net_addr));
     if (s != length) {
-        fprintf(stderr, "%s: error sending TCP/UDP data; %s\n", __func__, strerror(errno));
-        return -1;
+	fprintf(stderr, "%s: error sending TCP/UDP data; %s\n", __func__, strerror(errno));
+	return -1;
     }
     return 0;
 }
@@ -149,16 +146,16 @@ int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *fr
 
     bzero(netframe, 13);
     frame->can_id &= CAN_EFF_MASK;
-    canid=htonl(frame->can_id);
-    memcpy(netframe,&canid,4);
+    canid = htonl(frame->can_id);
+    memcpy(netframe, &canid, 4);
     netframe[4] = frame->can_dlc;
     memcpy(&netframe[5], &frame->data, frame->can_dlc);
 
     /* send TCP/UDP frame */
     s = sendto(net_socket, netframe, 13, 0, net_addr, sizeof(*net_addr));
     if (s != 13) {
-        fprintf(stderr, "%s: error sending TCP/UDP data %s\n", __func__, strerror(errno));
-        return -1;
+	fprintf(stderr, "%s: error sending TCP/UDP data %s\n", __func__, strerror(errno));
+	return -1;
     }
     return 0;
 }
@@ -178,7 +175,7 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
     return 0;
 }
 
-uint8_t * read_config_file(char *filename, char *config_dir, uint32_t *nbytes) {
+uint8_t *read_config_file(char *filename, char *config_dir, uint32_t * nbytes) {
     int rc;
     struct stat st;
     FILE *fp;
@@ -186,54 +183,52 @@ uint8_t * read_config_file(char *filename, char *config_dir, uint32_t *nbytes) {
     uint8_t *config;
     char *file_name;
 
-    file_name=calloc(MAXLINE,1);
+    file_name = calloc(MAXLINE, 1);
 
-    strcat(file_name, config_dir );
+    strcat(file_name, config_dir);
     strcat(file_name, filename);
 
     printf("%s: try reading file %s\n", __func__, file_name);
 
     rc = stat(file_name, &st);
     if (rc < 0) {
-        fprintf(stderr, "%s: error stat failed for file %s\n", __func__, filename);
-        return NULL;
+	fprintf(stderr, "%s: error stat failed for file %s\n", __func__, filename);
+	return NULL;
     }
     fp = fopen(file_name, "rb");
     if (fp == NULL) {
-        fprintf(stderr, "%s: error fopen failed for file %s\n", __func__, filename);
-        return NULL;
+	fprintf(stderr, "%s: error fopen failed for file %s\n", __func__, filename);
+	return NULL;
     }
     *nbytes = st.st_size;
-    config = (uint8_t *)calloc(*nbytes, sizeof(uint8_t));
+    config = (uint8_t *) calloc(*nbytes, sizeof(uint8_t));
     if (config == NULL) {
-        fprintf(stderr, "%s: error calloc failed creating config buffer for %s\n", __func__, filename);
-        fclose(fp);
-        return NULL;
+	fprintf(stderr, "%s: error calloc failed creating config buffer for %s\n", __func__, filename);
+	fclose(fp);
+	return NULL;
     }
     rc = fread((void *)config, 1, *nbytes, fp);
     if ((rc != *nbytes)) {
-        fprintf(stderr, "%s: error fread failed reading %s\n", __func__, filename);
-        fclose(fp);
-        free(config);
-        return NULL;
+	fprintf(stderr, "%s: error fread failed reading %s\n", __func__, filename);
+	fclose(fp);
+	free(config);
+	return NULL;
     }
     free(file_name);
     fclose(fp);
     return config;
 }
 
-static void strm_init (z_stream * strm) {
+static void strm_init(z_stream * strm) {
     strm->zalloc = Z_NULL;
-    strm->zfree  = Z_NULL;
+    strm->zfree = Z_NULL;
     strm->opaque = Z_NULL;
-    CALL_ZLIB (deflateInit2 (strm, Z_DEFAULT_COMPRESSION, Z_DEFLATED,
-                             windowBits , 8,
-                             Z_DEFAULT_STRATEGY));
+    CALL_ZLIB(deflateInit2(strm, Z_DEFAULT_COMPRESSION, Z_DEFLATED, windowBits, 8, Z_DEFAULT_STRATEGY));
 }
 
 int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int tcp_socket, int flags) {
     /* uint16_t crc; */
-    uint32_t temp32, canid_be, nbytes=0;
+    uint32_t temp32, canid_be, nbytes = 0;
     uint8_t *config;
     uint8_t *out;
     z_stream strm;
@@ -241,111 +236,112 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
     uint16_t crc, temp16;
     uint8_t netframe[MAXMTU];
 
-    config=read_config_file(filename, config_dir, &nbytes);
-    if (config)  {
-        printf("%s read config file %s\n", __func__, filename);
+    config = read_config_file(filename, config_dir, &nbytes);
+    if (config) {
+	printf("%s read config file %s\n", __func__, filename);
     } else {
-        printf("%s: error reading config %s\n", __func__, filename);
-        return -1;
+	printf("%s: error reading config %s\n", __func__, filename);
+	return -1;
     }
 
     if (flags & COMPRESSED) {
-        /* we need some more bytes to prepare send data (includes inflated file size and padding)    */
-        /* assuming that out[CHUNK] is large enough to compress the whole file, otherwise don't send */
-        out = (uint8_t *)calloc(CHUNK + 12, sizeof(uint8_t));
-        if (out == NULL) {
-            printf("%s: error calloc failed creating deflation buffer\n", __func__);
-            return -1;
-        }
-        strm_init (& strm);
-        strm.next_in = config;
-        strm.avail_in = nbytes;
-        strm.avail_out = CHUNK;
-        /* store deflated file beginning at byte 5 */
-        strm.next_out = &out[4];
-        CALL_ZLIB (deflate (& strm, Z_FINISH));
-        deflated_size = CHUNK - strm.avail_out;
-        if (strm.avail_out == 0) {
-            printf("%s: compressed file to large : %d filesize %d strm.avail_out\n", __func__, nbytes, strm.avail_out);
-            deflateEnd (& strm);
-            free(config);
-            free(out);
-            return -1;
-        }
- 
-        /* now prepare the send buffer */
-        inflated_size = htonl(nbytes);
-        memcpy(out, &inflated_size, 4);
-        /* prepare padding */
-        padded_nbytes = deflated_size + 4;
-        if (padded_nbytes % 8 ) {
-            padded_nbytes +=  8 - (padded_nbytes % 8);
-        }
+	/* we need some more bytes to prepare send data (includes inflated file size and padding)    */
+	/* assuming that out[CHUNK] is large enough to compress the whole file, otherwise don't send */
+	out = (uint8_t *) calloc(CHUNK + 12, sizeof(uint8_t));
+	if (out == NULL) {
+	    printf("%s: error calloc failed creating deflation buffer\n", __func__);
+	    return -1;
+	}
+	strm_init(&strm);
+	strm.next_in = config;
+	strm.avail_in = nbytes;
+	strm.avail_out = CHUNK;
+	/* store deflated file beginning at byte 5 */
+	strm.next_out = &out[4];
+	CALL_ZLIB(deflate(&strm, Z_FINISH));
+	deflated_size = CHUNK - strm.avail_out;
+	if (strm.avail_out == 0) {
+	    printf("%s: compressed file to large : %d filesize %d strm.avail_out\n", __func__, nbytes, strm.avail_out);
+	    deflateEnd(&strm);
+	    free(config);
+	    free(out);
+	    return -1;
+	}
 
-        for (i = deflated_size + 4 ; i < padded_nbytes ; i++) {
-            out[i] = 0;
-        }
+	/* now prepare the send buffer */
+	inflated_size = htonl(nbytes);
+	memcpy(out, &inflated_size, 4);
+	/* prepare padding */
+	padded_nbytes = deflated_size + 4;
+	if (padded_nbytes % 8) {
+	    padded_nbytes += 8 - (padded_nbytes % 8);
+	}
 
-        crc = CRCCCITT(out, padded_nbytes, 0xffff);
-        printf("%s: canid 0x%08x filesize %d deflated size: %d crc 0x%04x\n", __func__, canid, nbytes, deflated_size, crc);
-        bzero(netframe,MAXMTU);
-        /* prepare first CAN frame   */
-        /* delete response bit and set canid to config data stream */
-        canid_be = htonl((canid & 0xFFFEFFFFUL) | 0x00020000UL);
-        memcpy(&netframe[0], &canid_be, 4);
-        /* CAN DLC is 6 */
-        netframe[4] = 0x06;
-        temp32 = htonl(deflated_size + 4 );
-        memcpy(&netframe[5], &temp32, 4);
-        temp16 = htons(crc);
-        memcpy(&netframe[9], &temp16, 2);
-        netframe[11] = 0x00;
-        netframe[12] = 0x00;
+	for (i = deflated_size + 4; i < padded_nbytes; i++) {
+	    out[i] = 0;
+	}
 
-        if (net_to_net(tcp_socket, NULL, netframe, 13)) {
-            deflateEnd (& strm);
-            free(config);
-            free(out);
-            return -1;
-        }
+	crc = CRCCCITT(out, padded_nbytes, 0xffff);
+	printf("%s: canid 0x%08x filesize %d deflated size: %d crc 0x%04x\n", __func__, canid, nbytes, deflated_size,
+	       crc);
+	bzero(netframe, MAXMTU);
+	/* prepare first CAN frame   */
+	/* delete response bit and set canid to config data stream */
+	canid_be = htonl((canid & 0xFFFEFFFFUL) | 0x00020000UL);
+	memcpy(&netframe[0], &canid_be, 4);
+	/* CAN DLC is 6 */
+	netframe[4] = 0x06;
+	temp32 = htonl(deflated_size + 4);
+	memcpy(&netframe[5], &temp32, 4);
+	temp16 = htons(crc);
+	memcpy(&netframe[9], &temp16, 2);
+	netframe[11] = 0x00;
+	netframe[12] = 0x00;
 
-        /* loop until all packets send */
-        src_i = 0 ;
-        do {
-            n_packets = 0;
-            i = 0;
-            do {
-                memcpy(&netframe[i], &canid_be, 4);
-                i += 4;
-                /* CAN DLC is always 8 */
-                netframe[i] = 0x08;
-                i++;
-                memcpy(&netframe[i], &out[src_i], 8);
-                i += 8;
-                src_i += 8;
-                n_packets++;
-            } while ((src_i < padded_nbytes) && n_packets < MAX_PACKETS);
-            /* don't use frame_to_net because we have more then 13 bytes to send */
-            if (net_to_net(tcp_socket, NULL, netframe, i)) {
-                perror("error sending TCP data\n");
-                deflateEnd (& strm);
-                free(config);
-                free(out);
-                return -1;
-            }
-        } while (src_i < padded_nbytes);
+	if (net_to_net(tcp_socket, NULL, netframe, 13)) {
+	    deflateEnd(&strm);
+	    free(config);
+	    free(out);
+	    return -1;
+	}
+
+	/* loop until all packets send */
+	src_i = 0;
+	do {
+	    n_packets = 0;
+	    i = 0;
+	    do {
+		memcpy(&netframe[i], &canid_be, 4);
+		i += 4;
+		/* CAN DLC is always 8 */
+		netframe[i] = 0x08;
+		i++;
+		memcpy(&netframe[i], &out[src_i], 8);
+		i += 8;
+		src_i += 8;
+		n_packets++;
+	    } while ((src_i < padded_nbytes) && n_packets < MAX_PACKETS);
+	    /* don't use frame_to_net because we have more then 13 bytes to send */
+	    if (net_to_net(tcp_socket, NULL, netframe, i)) {
+		perror("error sending TCP data\n");
+		deflateEnd(&strm);
+		free(config);
+		free(out);
+		return -1;
+	    }
+	} while (src_i < padded_nbytes);
 #if 0
-        /* print compressed data */
-        temp32 = i;
-	for (i=0 ; i < temp32 ; i++) {
-            if (( i % 13 ) == 0) {
-                printf("\n");
-            }
-            printf("%02x ", netframe[i]);
-        }
-        printf("\n");
+	/* print compressed data */
+	temp32 = i;
+	for (i = 0; i < temp32; i++) {
+	    if ((i % 13) == 0) {
+		printf("\n");
+	    }
+	    printf("%02x ", netframe[i]);
+	}
+	printf("\n");
 #endif
-        deflateEnd (& strm);
+	deflateEnd(&strm);
     }
     free(config);
     free(out);
