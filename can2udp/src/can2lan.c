@@ -28,8 +28,7 @@ unsigned char M_PING_RESPONSE[] = { 0x00, 0x30, 0x00, 0x00, 0x00 };
 char config_dir[MAXLINE];
 char config_file[MAXLINE];
 char **page_name;
-int verbose = 0;
-int ms1_workaround = 0;
+int verbose, ms1_workaround;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
@@ -130,14 +129,14 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 	    send_tcp_config_data("fahrstrassen.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 	    break;
 	}
-        break;
+	break;
     /* fake cyclic MS1 slave monitoring response */
     case (0x0C000000UL):
 	/* mark CAN frame to send */
 	ret = 0;
 	if (ms1_workaround)
 	    netframe[5] = 0x03;
-        break;
+	break;
     }
     return ret;
 }
@@ -149,8 +148,8 @@ int main(int argc, char **argv) {
     int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, tcp_client[MAX_TCP_CONN];;
     struct can_frame frame;
     char timestamp[16];
-
-    int sa, sc, sb, st, tcp_socket;	/* UDP incoming socket , CAN socket, UDP broadcast socket, TCP socket */
+    /* UDP incoming socket , CAN socket, UDP broadcast socket, TCP socket */
+    int sa, sc, sb, st, tcp_socket;
     struct sockaddr_in saddr, baddr, tcp_addr;
     /* vars for determing broadcast address */
     struct ifaddrs *ifap, *ifa;
@@ -175,12 +174,14 @@ int main(int argc, char **argv) {
     char buffer[64];
     page_name = calloc(64, sizeof(char *));
 
+    verbose = 0;
+    ms1_workaround = 0;
     strcpy(ifr.ifr_name, "can0");
 
     /* TODO : where to use */
-    char *udp_dst_address = (char*)malloc(16);
+    char *udp_dst_address = (char *)malloc(16);
     strcpy(udp_dst_address, "255.255.255.255");
-    char *bcast_interface = (char*)malloc(16);
+    char *bcast_interface = (char *)malloc(16);
     strcpy(bcast_interface, "br-lan");
 
     config_file[0] = '\0';
@@ -257,7 +258,7 @@ int main(int argc, char **argv) {
     getifaddrs (&ifap);
     for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
 	if (ifa->ifa_addr) {
-	    if (ifa->ifa_addr->sa_family==AF_INET) {
+	    if (ifa->ifa_addr->sa_family == AF_INET) {
 		bsa = (struct sockaddr_in *) ifa->ifa_broadaddr;
 		if (strncmp(ifa->ifa_name, bcast_interface, strlen(bcast_interface)) == 0)
 		    udp_dst_address = inet_ntoa(bsa->sin_addr);
@@ -282,7 +283,8 @@ int main(int argc, char **argv) {
 	printf("using broadcast address %s\n", udp_dst_address);
 
     /* prepare UDP sending socket */
-    if ((sb = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+    sb = socket(AF_INET, SOCK_DGRAM, 0);
+    if (sb < 0) {
 	fprintf(stderr, "error creating UDP sending socket: %s\n", strerror(errno));
 	exit(1);
     }
@@ -296,7 +298,8 @@ int main(int argc, char **argv) {
     saddr.sin_family = AF_INET;
     saddr.sin_addr.s_addr = htonl(INADDR_ANY);
     saddr.sin_port = htons(local_udp_port);
-    if ((sa = socket(PF_INET, SOCK_DGRAM, 0)) < 0) {
+    sa = socket(PF_INET, SOCK_DGRAM, 0);
+    if (sa < 0) {
 	fprintf(stderr, "creating UDP reading socket error: %s\n", strerror(errno));
 	exit(1);
     }
@@ -306,7 +309,8 @@ int main(int argc, char **argv) {
     }
 
     /* prepare TCP socket */
-    if ((st = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0) {
+    st = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (st < 0) {
 	fprintf(stderr, "creating TCP socket error: %s\n", strerror(errno));
 	exit(1);
     }
@@ -328,7 +332,8 @@ int main(int argc, char **argv) {
 
     /* prepare CAN socket */
     bzero(&caddr, sizeof(caddr));
-    if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
+    sc = socket(PF_CAN, SOCK_RAW, CAN_RAW);
+    if (sc < 0) {
 	fprintf(stderr, "creating CAN socket error: %s\n", strerror(errno));
 	exit(1);
     }
@@ -345,18 +350,15 @@ int main(int argc, char **argv) {
     }
 
     /* start Maerklin 60113 box */
-    if (send_magic_start_60113_frame(sc)) {
+    if (send_magic_start_60113_frame(sc))
 	exit(1);
-	/* TODO */
-    }
 
     /* daemonize the process if requested */
     if (background) {
 	/* fork off the parent process */
 	pid = fork();
-	if (pid < 0) {
+	if (pid < 0)
 	    exit(EXIT_FAILURE);
-	}
 	/* if we got a good PID, then we can exit the parent process */
 	if (pid > 0) {
 	    printf("Going into background ...\n");
@@ -379,9 +381,9 @@ int main(int argc, char **argv) {
 	read_fds = all_fds;
 	nready = select(max_fds + 1, &read_fds, NULL, NULL, &tv);
 	if (nready == 0) {
-        /*    send_can_ping(sc); */
-            tv.tv_sec = 1;
-            tv.tv_usec = 0;
+	/*    send_can_ping(sc); */
+	    tv.tv_sec = 1;
+	    tv.tv_usec = 0;
 	    continue;
 	} else if (nready < 0)
 	    fprintf(stderr, "select error: %s\n", strerror(errno));
@@ -403,7 +405,8 @@ int main(int argc, char **argv) {
 		/* send CAN frame to all connected TCP clients */
 		/* TODO: need all clients the packets ? */
 		for (i = 0; i <= max_tcp_i; i++) {	/* check all clients for data */
-		    if ((tcp_socket = tcp_client[i]) < 0)
+		    tcp_socket = tcp_client[i];
+		    if (tcp_socket < 0)
 			continue;
 		    frame_to_net(tcp_socket, (struct sockaddr *)&tcp_addr, (struct can_frame *)&frame);
 		    print_can_frame(CAN_TCP_FORMAT_STRG, netframe, verbose & !background);
@@ -419,8 +422,8 @@ int main(int argc, char **argv) {
 		memcpy(&canid, netframe, 4);
 		canid = ntohl(canid);
 		/* answer to encapsulated CAN ping from LAN to LAN */
-		if (((canid & 0xFFFF0000UL) == 0x00310000UL)
-		    && (netframe[11] = 0xEE) && (netframe[12] = 0xEE)) {
+		if (((canid && 0xFFFF0000UL) == 0x00310000UL) &&
+		    (netframe[11] = 0xEE) && (netframe[12] = 0xEE)) {
 		    if (verbose & !background)
 			printf("                received CAN ping\n");
 		    memcpy(netframe, M_PING_RESPONSE, 5);
@@ -458,7 +461,8 @@ int main(int argc, char **argv) {
 	}
 	/* check for already connected TCP clients */
 	for (i = 0; i <= max_tcp_i; i++) {	/* check all clients for data */
-	    if ((tcp_socket = tcp_client[i]) < 0)
+	    tcp_socket = tcp_client[i];
+	    if (tcp_socket < 0)
 		continue;
 	    /* printf("%s tcp packet received from client #%d  max_tcp_i:%d todo:%d\n", time_stamp(timestamp), i, max_tcp_i,nready); */
 	    if (FD_ISSET(tcp_socket, &read_fds)) {
@@ -466,7 +470,8 @@ int main(int argc, char **argv) {
 		    time_stamp(timestamp);
 		    printf("%s packet from: %s\n", timestamp, inet_ntop(AF_INET, &tcp_addr.sin_addr, buffer, sizeof(buffer)));
 		}
-		if ((n = read(tcp_socket, netframe, MAXDG)) == 0) {
+		n = read(tcp_socket, netframe, MAXDG);
+		if (!n) {
 		    /* connection closed by client */
 		    if (verbose && !background) {
 			time_stamp(timestamp);
@@ -486,7 +491,8 @@ int main(int argc, char **argv) {
 			for (i = 0; i < n; i += 13) {
 			    /* check if we need to forward the message to CAN */
 			    if (!check_data(tcp_socket, &netframe[i])) {
-				if ((ret = frame_to_can(sc, &netframe[i])) == 0) {
+				ret = frame_to_can(sc, &netframe[i]);
+				if (!ret) {
 				    if (i > 0)
 					print_can_frame(TCP_FORMATS_STRG, &netframe[i], verbose & !background);
 				    else
