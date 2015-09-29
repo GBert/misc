@@ -63,7 +63,6 @@ void print_can_frame(struct can_frame *frame, int verbose)
 int main(int argc, char **argv)
 {
     pid_t pid;
-    int optind, opterr, optopt;
     int ret, s, opt;
     struct can_frame frame;
     /* UDP socket , CAN socket, UDP broadcast socket */
