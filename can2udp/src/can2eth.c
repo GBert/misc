@@ -1,9 +1,9 @@
-/*
- * ----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
- * <info@gerhard-bertelsmann.de> wrote this file. As long as you retain this notice you
- * can do whatever you want with this stuff. If we meet some day, and you think
- * this stuff is worth it, you can buy me a beer in return Gerhard Bertelsmann
+ * <info@gerhard-bertelsmann.de> wrote this file. As long as you retain this
+ * notice you can do whatever you want with this stuff. If we meet some day,
+ * and you think this stuff is worth it, you can buy me a beer in return.
+ * Gerhard Bertelsmann
  * ----------------------------------------------------------------------------
  */
 
@@ -33,7 +33,8 @@
 
 unsigned char udpframe[MAXDG];
 
-void print_usage(char *prg) {
+void print_usage(char *prg)
+{
     fprintf(stderr, "\nUsage: %s -l <port> -d <port> -i <can interface>\n", prg);
     fprintf(stderr, "   Version 1.01\n\n");
     fprintf(stderr, "         -l <port>           listening UDP port for the server - default 7654\n");
@@ -43,8 +44,10 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -f                  running in foreground\n\n");
 }
 
-void print_can_frame(struct can_frame *frame, int verbose) {
+void print_can_frame(struct can_frame *frame, int verbose)
+{
     int i;
+
     if (verbose) {
 	if (frame->can_id & CAN_EFF_FLAG)
 	    printf("->CAN>UDP CANID 0x%08X  ", frame->can_id & CAN_EFF_MASK);
@@ -57,28 +60,27 @@ void print_can_frame(struct can_frame *frame, int verbose) {
     }
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     pid_t pid;
-    extern int optind, opterr, optopt;
+    int optind, opterr, optopt;
     int ret, s, opt;
     struct can_frame frame;
-
-    int sa, sc, sb;		/* UDP socket , CAN socket, UDP broadcast socket */
+    /* UDP socket , CAN socket, UDP broadcast socket */
+    int sa, sc, sb;
     struct sockaddr_in saddr, baddr;
     struct sockaddr_can caddr;
     struct ifreq ifr;
     socklen_t caddrlen = sizeof(caddr);
-
     fd_set readfds;
-
     int local_port = 7654;
     int destination_port = 7655;
     int foreground = 0;
     uint32_t canid = 0;
     const int on = 1;
     const char broadcast_address[] = "255.255.255.255";
-    strcpy(ifr.ifr_name, "can0");
 
+    strcpy(ifr.ifr_name, "can0");
     bzero(&saddr, sizeof(saddr));
     bzero(&baddr, sizeof(baddr));
     bzero(&caddr, sizeof(caddr));
@@ -109,11 +111,10 @@ int main(int argc, char **argv) {
 	case 'b':
 	    s = inet_pton(AF_INET, optarg, &baddr.sin_addr);
 	    if (s <= 0) {
-		if (s == 0) {
+		if (s == 0)
 		    fprintf(stderr, "invalid IP address: %s\n", strerror(errno));
-		} else {
+		else
 		    fprintf(stderr, "inet_pton error: %s\n", strerror(errno));
-		}
 		exit(1);
 	    }
 	    break;
@@ -137,7 +138,8 @@ int main(int argc, char **argv) {
 	}
     }
 
-    if ((sa = socket(PF_INET, SOCK_DGRAM, 0)) < 0) {
+    sa = socket(PF_INET, SOCK_DGRAM, 0);
+    if (sa < 0) {
 	fprintf(stderr, "UDP socket error: %s\n", strerror(errno));
 	exit(1);
     }
@@ -151,7 +153,8 @@ int main(int argc, char **argv) {
 	exit(1);
     }
 
-    if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
+    sc = socket(PF_CAN, SOCK_RAW, CAN_RAW);
+    if (sc < 0) {
 	fprintf(stderr, "CAN socket error: %s\n", strerror(errno));
 	exit(1);
     }
@@ -169,7 +172,8 @@ int main(int argc, char **argv) {
     }
 
     /* prepare UDP sending socket */
-    if ((sb = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+    sb = socket(AF_INET, SOCK_DGRAM, 0);
+    if (sb < 0) {
 	fprintf(stderr, "Send UDP socket error %s\n", strerror(errno));
 	exit(1);
     }
@@ -181,9 +185,8 @@ int main(int argc, char **argv) {
     if (!foreground) {
 	/* Fork off the parent process */
 	pid = fork();
-	if (pid < 0) {
+	if (pid < 0)
 	    exit(EXIT_FAILURE);
-	}
 	/* If we got a good PID, then we can exit the parent process */
 
 	if (pid > 0) {
@@ -221,7 +224,8 @@ int main(int argc, char **argv) {
 	}
 	/* received a UDP packet */
 	if (FD_ISSET(sa, &readfds)) {
-	    if ((ret=read(sa, udpframe, MAXDG)) != 13) {
+	    ret = read(sa, udpframe, MAXDG);
+	    if (ret != 13) {
 		if (ret < 0)
 		    fprintf(stderr, "UDP read error: %s\n", strerror(errno));
 		else
