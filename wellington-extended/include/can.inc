@@ -141,7 +141,7 @@ RXB0DBEN        EQU     H'0002'
 ;------------------------------------------------------------------------------
 ; Init. CAN Bus
 ;------------------------------------------------------------------------------
-InitCommsCAN
+InitComms
                 ; The CAN module uses the RB2/CANTX and RB3/CANRX pins to
                 ; interface with the CAN bus. In normal mode, the CAN module
                 ; automatically overrides TRISB<2>. The user must ensure that
@@ -157,10 +157,10 @@ InitCommsCAN
                 BANKSEL CANCON
                 MOVLW   (1 << REQOP2)
                 MOVWF   CANCON
-InitComms1CAN
+InitComms1
                 MOVF    CANSTAT,W
                 ANDLW   (1 << OPMODE2)
-                BZ      InitComms1CAN
+                BZ      InitComms1
 
                 ; Set mask/filter
                 ;
@@ -215,10 +215,10 @@ InitComms1CAN
 
                 ; Set normal mode
                 CLRF    CANCON
-InitComms2CAN
+InitComms2
                 MOVF    CANSTAT,W
                 ANDLW   (1 << OPMODE2) + (1 << OPMODE1)
-                BNZ     InitComms2CAN
+                BNZ     InitComms2
 
                 MOVLB   0
                 RETURN
@@ -226,16 +226,16 @@ InitComms2CAN
 ;------------------------------------------------------------------------------
 ; CAN Bus Receive
 ;------------------------------------------------------------------------------
-ReceiveCAN
+Receive
                 BEGINTO TIMEOUT
-RecvLoopCAN
+RecvLoop
                 BANKSEL RXB0CON
                 BTFSC   RXB0CON,RXFUL
-                BRA     Recv0CAN
+                BRA     Recv0
                 MOVLB   0
-                LOOPTO  RecvLoopCAN
+                LOOPTO  RecvLoop
                 BRA     GOTOAPP             ; Timed-out
-Recv0CAN
+Recv0
                 MOVF    RXB0D0,W
                 BCF     RXB0CON,RXFUL
                 MOVLB   0
@@ -244,18 +244,18 @@ Recv0CAN
 ;------------------------------------------------------------------------------
 ; CAN Bus Send
 ;------------------------------------------------------------------------------
-SendCAN
+Send
                 MOVWF   wtemp               ; Save W
 
                 BEGINTO TIMEOUT
-SendLoopCAN
+SendLoop
                 BANKSEL TXB0CON
                 BTFSS   TXB0CON,TXREQ
-                BRA     SendDataCAN
+                BRA     SendData
                 MOVLB   0
-                LOOPTO  SendLoopCAN
+                LOOPTO  SendLoop
                 BRA     GOTOAPP             ; Timed-out
-SendDataCAN
+SendData
                 MOVLB   0
                 MOVF    wtemp,W             ; Restore W
 
@@ -284,9 +284,9 @@ SendDataCAN
 
                 MOVLW   CANDELAY
                 MOVWF   timer1
-SendDelayCAN
+SendDelay
                 DECF    timer1,F
-                BNZ     SendDelayCAN
+                BNZ     SendDelay
                 CLRWDT
 
                 RETURN

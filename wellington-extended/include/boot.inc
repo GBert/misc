@@ -113,12 +113,7 @@ GOTOAPP
 
                 ORG     STARTADDR
                 INIT
-#IFDEF CAN
-                RCALL   InitCommsCAN
-#ENDIF
-#IFDEF UART
-                RCALL   InitCommsUART
-#ENDIF
+                RCALL   InitComms
 
 ;------------------------------------------------------------------------------
 ; Begin
@@ -374,8 +369,7 @@ WriteWait
 
 #IFDEF CAN
     #INCLUDE    "can.inc"
-#ENDIF
-#IFDEF UART
+#ELSE
     #INCLUDE    "uart.inc"
 #ENDIF
 

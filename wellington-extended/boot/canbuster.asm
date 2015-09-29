@@ -37,7 +37,7 @@
 ;------------------------------------------------------------------------------
 
 ; Boot Loader Size
-BOOTSIZE        EQU     (16 * 64)
+BOOTSIZE        EQU     (8 * 64)
 
 ; Boot Loader Ident
 ERRORLEVEL      -220
@@ -55,12 +55,6 @@ ERRORLEVEL      -302
 ; Clock Rate
 #DEFINE         CLOCK       64000000
 #DEFINE         TIMEOUT     0           ; Very long switched time-out
-
-; UART PORTC or PORTB
-#DEFINE         UART        PORTC
-
-; UART Baud Rate
-#DEFINE         BAUDRATE    115200
 
 ; CAN PORTC or PORTB
 #DEFINE         CAN         PORTB
@@ -92,7 +86,7 @@ ERRORLEVEL      -302
 ; Oscillator:
                 CONFIG    FOSC=INTIO2
 ; PLL x4 Enable bit:
-                CONFIG    PLLCFG=OFF
+                CONFIG    PLLCFG=ON
 ; Fail-Safe Clock Monitor:
                 CONFIG    FCMEN=OFF
 ; Internal External Oscillator Switch Over Mode:
@@ -160,22 +154,9 @@ ERRORLEVEL      -302
 ; Device Init.
 ;------------------------------------------------------------------------------
 
-#DEFINE         _16MHZ  b'01110000'     ;64MHZ PLLx4
-#DEFINE         _8MHZ   b'01100000'     ;32MHZ PLLx4
-#DEFINE         _4MHZ   b'01010000'
-#DEFINE         _2MHZ   b'01000000'
-#DEFINE         _1MHZ   b'00110000'
-
 INIT            MACRO
 
                 MOVLB   0x0F
-
-                BSF     OSCTUNE,PLLEN
-                MOVLW   _16MHZ
-                MOVWF   OSCCON
-INITHFIOFS      BTFSS   OSCCON,HFIOFS
-                GOTO    INITHFIOFS
-
                 CLRF    ADCON0          ;D
                 CLRF    ANCON0          ;N
                 CLRF    ANCON1          ;N
