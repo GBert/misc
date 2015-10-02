@@ -21,9 +21,11 @@
 ; UART settings
 ;------------------------------------------------------------------------------
 
-#IF UART != PORTC
-    #IF UART != PORTB
-        ERROR   "UART port not configured"
+#IF UART != PORTD
+    #IF UART != PORTC
+        #IF UART != PORTB
+            ERROR   "UART port not configured"
+        #ENDIF
     #ENDIF
 #ENDIF
 
@@ -77,7 +79,7 @@
     #ENDIF
 #ENDIF
 
-#IF UART == PORTB
+#IF UART == PORTB || UART == PORTD
         #DEFINE UPIR        PIR3
         #DEFINE URCIF       RC2IF
         #DEFINE UTXIF       TX2IF
@@ -125,6 +127,11 @@ INITUART
                 BCF     TRISC,6             ; UART1 TX
                 BSF     TRISC,7             ; UART1 RX
 #ENDIF
+#IF UART == PORTD
+                BCF     TRISD,6             ; UART1 TX
+                BSF     TRISD,7             ; UART1 RX
+#ENDIF
+
                 BSF     UIPR,URCIP          ; Rx high priority
                 BCF     UIPR,UTXIP          ; Tx low priority
 

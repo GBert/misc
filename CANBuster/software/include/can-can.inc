@@ -28,27 +28,27 @@ DJNZ            MACRO   REG,LOC
                 ENDM
 
 CANOVFL         MACRO
-                BSF     GPIO,0              ; LED1 CAN Packet dropped
+                BSF     GPIO,6              ; LED1 CAN Packet dropped
                 ENDM
 
 CANRECV         MACRO
-                BCF     GPIO,0              ; LED1 CAN Packet received
+                BCF     GPIO,6              ; LED1 CAN Packet received
                 ENDM
 
 UARTOVFL        MACRO
-                BSF     GPIO,1              ; LED2 UART Packet dropped
+                BSF     GPIO,7              ; LED2 UART Packet dropped
                 ENDM
 
 UARTRECV        MACRO
-                BCF     GPIO,1              ; LED2 UART Packet received
+                BCF     GPIO,7              ; LED2 UART Packet received
                 ENDM
 
 RTSCLR          MACRO
-                BCF     GPIO,2              ; RTS/CTS CLEAR TO SEND
+                BCF     GPIO,4              ; RTS/CTS CLEAR TO SEND
                 ENDM
 
 RTSSET          MACRO
-                BSF     GPIO,2              ; RTS/CTS NOT CLEAR TO SEND
+                BSF     GPIO,4              ; RTS/CTS NOT CLEAR TO SEND
                 ENDM
 
 ;------------------------------------------------------------------------------
@@ -91,6 +91,8 @@ INIT
                 CLRF    CM1CON          ;C
                 CLRF    CM2CON          ;C
 
+                CLRF    LATC
+                BCF     TRISC, 2
                 CLRF    GPIO                ; Init. LED
                 RTSCLR                      ; Init. RTS
                 CLRF    DDR                 ; All O/P
@@ -100,7 +102,7 @@ INIT
                 RCALL   INITCAN             ; Init. CAN Bus
                 RCALL   TIMERINIT           ; Init. TIMER
                 RCALL   I2CINIT             ; Init. I2C
-                RCALL   PIOINIT             ; Init. PIO
+                ;RCALL   PIOINIT             ; Init. PIO
 
                 BSF     RCON,IPEN           ; Enable priority interrupts
                 BSF     INTCON,PEIE         ; Init. ISR

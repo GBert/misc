@@ -38,8 +38,8 @@
 ; Clock Rate
 #DEFINE         CLOCK       64000000
 
-; UART PORTC or PORTB
-#DEFINE         UART        PORTC
+; UART PORTC, PORTB or PORTD
+#DEFINE         UART        PORTD
 
 ; UART Baud Rate
 #DEFINE         BAUDRATE    500000

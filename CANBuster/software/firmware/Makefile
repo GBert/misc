@@ -25,6 +25,8 @@ ASOURCE:=$(filter-out template.asm, $(wildcard *.asm))
 AHEADER:=$(wildcard ../include/*.inc)
 AOBJECT:=$(ASOURCE:.asm=.hex)
 
+MCU=18F45K80
+TARGET=canbuster.hex
 build:$(AOBJECT)
 
 $(AOBJECT):$(AHEADER) Makefile
@@ -33,12 +35,13 @@ $(AOBJECT):$(AHEADER) Makefile
 	@echo -n "[AS] "
 	$(AS) $< -o $@
 
-upload:build
-	easy-loader -v /dev/ttyPL2303 $(AOBJECT)
-
 install:build
 
 uninstall:clean
+
+upload:build
+	pk2cmd -B/usr/share/pk2/ -PPIC$(MCU) -F$(TARGET) -M -R
+
 
 clean:
 	rm -f *.lst *.hex *.cod *.log *.o *~
