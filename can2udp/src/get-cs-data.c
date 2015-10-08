@@ -29,18 +29,18 @@
 unsigned char GET_GB[]  = { 0x00, 0x30, 0x47, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 unsigned char GET_GB1[] = { 0x00, 0x3A, 0x47, 0x11, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
-char *TCP_FORMAT_STRG      = "->TCP    CANID 0x%06X   [%d]";
-char *TCP_FORMATS_STRG     = "->TCP*   CANID 0x%06X   [%d]";
-char *S_TCP_FORMAT_STRG    = "  TCP<-  CANID 0x%06X   [%d]";
+char *TCP_FORMAT_STRG   = "->TCP    CANID 0x%06X   [%d]";
+char *TCP_FORMATS_STRG  = "->TCP*   CANID 0x%06X   [%d]";
+char *S_TCP_FORMAT_STRG = "  TCP<-  CANID 0x%06X   [%d]";
 
-int time_stamp(char *timestamp){
-    struct timeval  tv;
-    struct tm      *tm;
+int time_stamp(char *timestamp) {
+    struct timeval tv;
+    struct tm *tm;
 
     gettimeofday(&tv, NULL);
     tm = localtime(&tv.tv_sec);
 
-    sprintf(timestamp,"%02d:%02d:%02d.%03d", tm->tm_hour, tm->tm_min, tm->tm_sec, (int) tv.tv_usec/1000);
+    sprintf(timestamp, "%02d:%02d:%02d.%03d", tm->tm_hour, tm->tm_min, tm->tm_sec, (int)tv.tv_usec / 1000);
     return 0;
 }
 
@@ -52,26 +52,26 @@ void print_net_frame(char *format_string, unsigned char *netframe) {
     memcpy(&canid, netframe, 4);
     dlc = netframe[4];
     time_stamp(timestamp);
-    printf("%s   ",timestamp);
+    printf("%s   ", timestamp);
     printf(format_string, ntohl(canid) & CAN_EFF_MASK, netframe[4]);
     for (i = 5; i < 5 + dlc; i++) {
-        printf(" %02x", netframe[i]);
+	printf(" %02x", netframe[i]);
     }
     if (dlc < 8) {
-        printf("(%02x", netframe[i]);
-        for (i = 6 + dlc ; i < 13 ; i++) {
-            printf(" %02x", netframe[i]);
-        }
-        printf(")");
+	printf("(%02x", netframe[i]);
+	for (i = 6 + dlc; i < 13; i++) {
+	    printf(" %02x", netframe[i]);
+	}
+	printf(")");
     } else {
-        printf(" ");
+	printf(" ");
     }
     printf("  ");
     for (i = 5; i < 13; i++) {
-        if(isprint(netframe[i]))
-            printf("%c",netframe[i]);
-        else
-            putchar(46);
+	if (isprint(netframe[i]))
+	    printf("%c", netframe[i]);
+	else
+	    putchar(46);
     }
     printf("\n");
 }
@@ -82,7 +82,7 @@ int netframe_to_net(int net_socket, unsigned char *netframe, int length) {
 	return -1;
     }
     print_net_frame(S_TCP_FORMAT_STRG, netframe);
-    
+
     return 0;
 }
 
@@ -159,8 +159,8 @@ int main(int argc, char **argv) {
 		    time_stamp(timestamp);
 		    fprintf(stderr, "%s received packet %% 13 : length %d\n", timestamp, n);
 		} else {
-		    for (i = 0; i < n; i+=13) {
-			if (i >=13)
+		    for (i = 0; i < n; i += 13) {
+			if (i >= 13)
 			    print_net_frame(TCP_FORMATS_STRG, &recvline[i]);
 			else
 			    print_net_frame(TCP_FORMAT_STRG, &recvline[i]);

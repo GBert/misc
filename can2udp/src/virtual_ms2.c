@@ -1,5 +1,4 @@
-/*
- * ----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
  * <info@gerhard-bertelsmann.de> wrote this file. As long as you retain this
  * notice you can do whatever you want with this stuff. If we meet some day,
@@ -230,7 +229,7 @@ int main(int argc, char **argv) {
 			/* frame.can_id &= 0xFFFF0000UL; */
 			frame.can_id |= 0x00010000UL;
 			send_can_frame(sc, &frame, verbose);
-			}
+		    }
 		    break;
 		case 0x30:	/* ping / ID /software  */
 		    send_defined_can_frame(sc, M_MS2_ID, verbose);
@@ -245,7 +244,8 @@ int main(int argc, char **argv) {
 		    if ((frame.can_dlc == 7) && (frame.data[4] == 0x88)) {
 			frame.can_dlc = 5;
 			frame.can_id = 0x00370000UL;
-			/* frame.data[4] = 0xf2; */  /* test case : crc fault*/
+			/* test case : crc fault */
+			/* frame.data[4] = 0xf2; */
 			send_can_frame(sc, &frame, verbose);
 		    }
 		    break;

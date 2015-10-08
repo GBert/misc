@@ -1,12 +1,10 @@
-/*
- * ----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
  * <info@gerhard-bertelsmann.de> wrote this file. As long as you retain this
  * notice you can do whatever you want with this stuff. If we meet some day,
  * and you think this stuff is worth it, you can buy me a beer in return
  * Gerhard Bertelsmann
  * ----------------------------------------------------------------------------
- *
  *
  * this code emulates the M*rklin Gleisbox to some extend . Only for testing
  *  the M*rklinApp and gateway (can2lan) code
@@ -97,7 +95,7 @@ unsigned char M_GLEISBOX_INDEX3_3[] = { 0x00, 0x3B, 0x03, 0x03, 0x08, 0x54, 0x45
 unsigned char M_GLEISBOX_INDEX3_4[] = { 0x00, 0x3B, 0x03, 0x04, 0x08, 0x00, 0x38, 0x30, 0x2E, 0x30, 0x00, 0x43, 0x00 };
 unsigned char M_GLEISBOX_INDEX3_5[] = { 0x00, 0x3B, 0x9B, 0x32, 0x05, 0x47, 0x43, 0xF5, 0xDA, 0x03, 0x00, 0x00, 0x00 };
 
-unsigned char M_GLEISBOX_BL_INIT[] = { 0x00, 0x37, 0x9B, 0x32, 0x08, 0x47, 0x43, 0xF5, 0xDA, 0x01, 0x27, 0x00, 0x10 };
+unsigned char M_GLEISBOX_BL_INIT[]  = { 0x00, 0x37, 0x9B, 0x32, 0x08, 0x47, 0x43, 0xF5, 0xDA, 0x01, 0x27, 0x00, 0x10 };
 
 unsigned char netframe[MAXDG];
 
@@ -341,7 +339,8 @@ int main(int argc, char **argv) {
 		    if ((frame.can_dlc == 7) && (frame.data[4] == 0x88)) {
 			frame.can_dlc = 5;
 			frame.can_id = 0x00379B32UL;
-			/* frame.data[4] = 0xf2; */  /* test case : crc fault*/
+			/* test case : crc fault */
+			/* frame.data[4] = 0xf2; */
 			send_can_frame(sc, &frame, verbose);
 		    }
 		    break;

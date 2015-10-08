@@ -204,7 +204,7 @@ int main(int argc, char **argv) {
 				config_data.inflated_data = malloc(config_data.inflated_size);
 				if (config_data.inflated_data == NULL) {
 				    fprintf(stderr, "can't malloc inflated config data buffer - size 0x%04x\n",
-				    config_data.inflated_size);
+					    config_data.inflated_size);
 				    exit(1);
 				}
 				config_data_start = 0;
