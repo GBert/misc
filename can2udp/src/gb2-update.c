@@ -30,9 +30,9 @@
 
 #include <linux/can.h>
 
-#define MAXDG   4096			/* maximum datagram size */
-#define MAXUDP  16			/* maximum datagram size */
-#define TIMEOUT 5			/* wait seconds for response */
+#define MAXDG   4096		/* maximum datagram size */
+#define MAXUDP  16		/* maximum datagram size */
+#define TIMEOUT 5		/* wait seconds for response */
 
 char *GB2_DEFAULT_FILENAME = "016-gb2.bin";
 char *MS2_DEFAULT_FILENAME = "050-ms2.bin";
@@ -58,7 +58,6 @@ struct update_config {
     char *filename;
 };
 
-
 extern uint16_t CRCCCITT(uint8_t * data, size_t length, uint16_t seed);
 
 unsigned char netframe[MAXDG];
@@ -67,16 +66,16 @@ char *CAN_FORMAT_STRG    = "      CAN->  CANID 0x%08X R [%d]";
 char *TO_CAN_FORMAT_STRG = "    ->CAN    CANID 0x%08X   [%d]";
 char *CECK_FORMAT_STRG   = "  CHEKCAN    CANID 0x%08X   [%d]";
 
-unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[] = { 0x00, 0x36, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
-unsigned char M_CAN_PING[]        = { 0x00, 0x30, 0x47, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-unsigned char M_RESET[]           = { 0x00, 0x00, 0x47, 0x11, 0x06, 0x00, 0x00, 0x00, 0x00, 0x80, 0xff, 0x00, 0x00 };
-unsigned char M_INIT_BOOTLOADER[] = { 0x00, 0x36, 0x47, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-unsigned char M_BLOCK[]           = { 0x00, 0x36, 0x47, 0x11, 0x06, 0x00, 0x00, 0x00, 0x00, 0x44, 0x00, 0x00, 0x00 };
-unsigned char M_DATA[]            = { 0x00, 0x36, 0x03, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x88, 0x00, 0x00, 0x00 };
-unsigned char M_CRC[]             = { 0x00, 0x36, 0x47, 0x11, 0x07, 0x00, 0x00, 0x00, 0x00, 0x88, 0x00, 0x00, 0x00 };
+unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[]	= { 0x00, 0x36, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
+unsigned char M_CAN_PING[] 			= { 0x00, 0x30, 0x47, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+unsigned char M_RESET[] 			= { 0x00, 0x00, 0x47, 0x11, 0x06, 0x00, 0x00, 0x00, 0x00, 0x80, 0xff, 0x00, 0x00 };
+unsigned char M_INIT_BOOTLOADER[] 		= { 0x00, 0x36, 0x47, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+unsigned char M_BLOCK[] 			= { 0x00, 0x36, 0x47, 0x11, 0x06, 0x00, 0x00, 0x00, 0x00, 0x44, 0x00, 0x00, 0x00 };
+unsigned char M_DATA[] 				= { 0x00, 0x36, 0x03, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x88, 0x00, 0x00, 0x00 };
+unsigned char M_CRC[] 				= { 0x00, 0x36, 0x47, 0x11, 0x07, 0x00, 0x00, 0x00, 0x00, 0x88, 0x00, 0x00, 0x00 };
 
-unsigned char M_MS2_MARK_END[]    = { 0x00, 0x36, 0x47, 0x11, 0x05, 0x00, 0x00, 0x00, 0x00, 0xf5, 0x00, 0x00, 0x00 };
-unsigned char M_MS2_SOFT_RESET[]  = { 0x00, 0x36, 0x47, 0x11, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
+unsigned char M_MS2_MARK_END[] 			= { 0x00, 0x36, 0x47, 0x11, 0x05, 0x00, 0x00, 0x00, 0x00, 0xf5, 0x00, 0x00, 0x00 };
+unsigned char M_MS2_SOFT_RESET[] 		= { 0x00, 0x36, 0x47, 0x11, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
 
 unsigned char udpframe[MAXDG];
 
@@ -217,7 +216,7 @@ unsigned char *read_data(struct update_config *device_config) {
     fsize = ftell(fp);
     fseek(fp, 0, SEEK_SET);
     /* prepare padding */
-    device_fsize = (fsize + device_config->padding ) & (0xFFFFFFFFUL - device_config->padding);
+    device_fsize = (fsize + device_config->padding) & (0xFFFFFFFFUL - device_config->padding);
 
     if ((data = malloc(device_fsize)) == NULL) {
 	fprintf(stderr, "%s: can't alloc %d bytes for data\n", __func__, fsize);
@@ -252,8 +251,8 @@ int send_next_block_id(int block, unsigned char *netframe) {
     send_frame(netframe);
     memcpy(checkframe_block_id, checkframe, 10);
     checkframe_block_id[4] = 6;
-    checkframe_block_id[9]=0x44;
-    checkframe_block_id[10]=block;
+    checkframe_block_id[9] = 0x44;
+    checkframe_block_id[10] = block;
     return 0;
 }
 
@@ -266,7 +265,7 @@ int device_setup(char *device, struct update_config *device_config) {
 	device_config->padding = GB2_FILL_SBLOCK;
 	device_config->filename = GB2_DEFAULT_FILENAME;
 	device_config->id = GB2_ID;
-        ret = 1;
+	ret = 1;
     } else if (strncmp(device, "ms2", 3) == 0) {
 	device_config->block_size = MS2_BLOCK_SIZE;
 	device_config->shift = MS2_BLOCK_SHIFT;
@@ -274,8 +273,8 @@ int device_setup(char *device, struct update_config *device_config) {
 	device_config->padding = MS2_FILL_SBLOCK;
 	device_config->filename = MS2_DEFAULT_FILENAME;
 	device_config->id = MS2_ID;
-        ret = 2;
-    } 
+	ret = 2;
+    }
     return ret;
 }
 
@@ -347,22 +346,24 @@ void fsm(unsigned char *netframe, struct update_config *device_config) {
 		if ((memcmp(&netframe[4], &lastframe[4], 9) == 0) && (last_bin_block == dev_bin_blocks)) {
 		    if (last_bin_block == dev_bin_blocks) {
 			printf("sending block 0x%02X 0x%04X\n", last_bin_block + device_config->boot_blocks,
-				last_bin_block * device_config->block_size);
+			       last_bin_block * device_config->block_size);
 			send_block(&binfile[((last_bin_block) * device_config->block_size)],
-				device_fsize - dev_bin_blocks * device_config->block_size, lastframe);
+				   device_fsize - dev_bin_blocks * device_config->block_size, lastframe);
 			last_bin_block--;
 		    }
 		} else {
-		   /* there seems to be different NACK types : 0xF1 and 0xF2 */
-		    if ((memcmp(netframe, checkframe_nack, 9) == 0) && ((netframe[9] == 0xf1) || (netframe[9] == 0xf2)))  {
+		    /* there seems to be different NACK types : 0xF1 and 0xF2 */
+		    if ((memcmp(netframe, checkframe_nack, 9) == 0) && ((netframe[9] == 0xf1) || (netframe[9] == 0xf2))) {
 			print_can_frame(CECK_FORMAT_STRG, netframe, 1);
 			fprintf(stderr, "Aiiee got NACK ! Aborting ...\n\n");
 			finished = -1;
 		    }
 		    /* MS2 may use 0x0000 as hash -> begin compare at data length field */
 		    if (memcmp(&netframe[4], &checkframe_block_id[4], 7) == 0) {
-			printf("sending block 0x%02X 0x%04X\n", last_bin_block + device_config->boot_blocks, last_bin_block * device_config->block_size);
-			send_block(&binfile[((last_bin_block) * device_config->block_size)], device_config->block_size, lastframe);
+			printf("sending block 0x%02X 0x%04X\n", last_bin_block + device_config->boot_blocks,
+			       last_bin_block * device_config->block_size);
+			send_block(&binfile[((last_bin_block) * device_config->block_size)], device_config->block_size,
+				   lastframe);
 			last_bin_block--;
 		    }
 		    /* MS2 may use 0x0000 as hash -> begin compare at data length field */
@@ -408,7 +409,7 @@ int main(int argc, char **argv) {
 
     fd_set readfds;
 
-    if(device_setup(basename(argv[0]), &device_config) < 0) {
+    if (device_setup(basename(argv[0]), &device_config) < 0) {
 	fprintf(stderr, "invalid device\n");
 	exit(EXIT_FAILURE);
     }
@@ -493,7 +494,7 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     dev_bin_blocks = (device_fsize - 1) >> device_config.shift;
     /* printf("%s: fsize 0x%04X device_fsize 0x%04X blocks 0x%02X last 0x%04X\n", filename, fsize, device_fsize,
-	   dev_bin_blocks, device_fsize - dev_bin_blocks * device_config.block_size); */
+       dev_bin_blocks, device_fsize - dev_bin_blocks * device_config.block_size); */
 
     if (can_mode) {
 	if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
@@ -569,7 +570,7 @@ int main(int argc, char **argv) {
 	if (ret == 0) {
 	    fprintf(stderr, "no response for %d seconds - terminating\n", TIMEOUT);
 	    exit(EXIT_FAILURE);
-        }
+	}
 
 	if (ret < 0)
 	    fprintf(stderr, "select error: %s\n", strerror(errno));
@@ -593,7 +594,7 @@ int main(int argc, char **argv) {
 	if (FD_ISSET(sa, &readfds)) {
 	    if (read(sa, udpframe, MAXDG) == 13) {
 		fsm(udpframe, &device_config);
-		if (finished ==1)
+		if (finished == 1)
 		    break;
 		if (finished < 0)
 		    exit(EXIT_FAILURE);
