@@ -1,12 +1,11 @@
-/* 
- * CAN bounce test
- *
- * --------------------------------------------------------------------------------
+/* --------------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
  * <info@gerhard-bertelsmann.de> wrote this file. As long as you retain this notice
  * you can do whatever you want with this stuff. If we meet some day, and you think
  * this stuff is worth it, you can buy me a beer in return Gerhard Bertelsmann
  * --------------------------------------------------------------------------------
+ *
+ * CAN bounce test
  *
  * compile:
  * gcc -Wall -o bounce bounce.c
@@ -64,30 +63,30 @@ int init_can(char *can_interface) {
     strcpy(ifr.ifr_name, can_interface);
 
     if ((socket_can = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
-        perror("Can't connect to can socket \n");
-        exit(1);
+	perror("Can't connect to can socket \n");
+	exit(1);
     }
     caddr.can_family = AF_CAN;
     if (ioctl(socket_can, SIOCGIFINDEX, &ifr) < 0) {
-        perror("SIOCGIFINDEX");
-        exit(1);
+	perror("SIOCGIFINDEX");
+	exit(1);
     }
     caddr.can_ifindex = ifr.ifr_ifindex;
 
     if (bind(socket_can, (struct sockaddr *)&caddr, caddrlen) < 0) {
-       perror("bind error");
-       exit(1);
+	perror("bind error");
+	exit(1);
     }
-    printf("CAN Socket %s opened\n",can_interface);
+    printf("CAN Socket %s opened\n", can_interface);
     return socket_can;
 }
 
 void print_can_frame(struct can_frame *can_frame) {
     uint8_t i;
-    printf("CAN 0x%08X",can_frame->can_id);
+    printf("CAN 0x%08X", can_frame->can_id);
     printf(" [%d]", can_frame->can_dlc);
-    for (i=0; i<can_frame->can_dlc;i++) {
-        printf(" %02x", can_frame->data[i]);
+    for (i = 0; i < can_frame->can_dlc; i++) {
+	printf(" %02x", can_frame->data[i]);
     }
     printf("\n");
 }
@@ -96,17 +95,17 @@ void bounce_can_frame(int socket_can, struct can_frame *can_frame) {
     int nbytes;
     uint32_t counter;
     uint32_t be_counter;
-    counter=ntohl(*(uint32_t *)&can_frame->data[0]);
+    counter = ntohl(*(uint32_t *) & can_frame->data[0]);
     counter++;
-    be_counter=htonl(counter);
+    be_counter = htonl(counter);
     memcpy(&can_frame->data[0], &be_counter, 4);
     if ((nbytes = write(socket_can, can_frame, sizeof(*can_frame))) != sizeof(*can_frame)) {
-        perror("CAN write error");
+	perror("CAN write error");
     }
 }
 
 int main(int argc, char **argv) {
-    int nbytes,socket_can1, socket_can2, ret;
+    int nbytes, socket_can1, socket_can2, ret;
     fd_set readfds;
     long count;
     struct can_frame *pcan_frame;
@@ -116,47 +115,47 @@ int main(int argc, char **argv) {
     signal(SIGINT, handler);
     ret = 0;
 
-    socket_can1=init_can("can0");
-    socket_can2=init_can("can1");
+    socket_can1 = init_can("can0");
+    socket_can2 = init_can("can1");
     pcan_frame = (struct can_frame *)malloc(sizeof(struct can_frame));
-    bzero(pcan_frame,sizeof(struct can_frame));
-    pcan_frame->can_id=123;
-    pcan_frame->can_dlc=4;
+    bzero(pcan_frame, sizeof(struct can_frame));
+    pcan_frame->can_id = 123;
+    pcan_frame->can_dlc = 4;
 
     count = NUM_OF_FRAMES;
 
-    gettimeofday(&tv1, NULL); 
+    gettimeofday(&tv1, NULL);
     bounce_can_frame(socket_can2, pcan_frame);
 
-    while (count>=0) {
-        FD_ZERO(&readfds);
-        FD_SET(socket_can1, &readfds);
-        FD_SET(socket_can2, &readfds);
+    while (count >= 0) {
+	FD_ZERO(&readfds);
+	FD_SET(socket_can1, &readfds);
+	FD_SET(socket_can2, &readfds);
 
-        ret = select((socket_can1 > socket_can2)?socket_can1+1:socket_can2+1, &readfds, NULL, NULL, NULL);
+	ret = select((socket_can1 > socket_can2) ? socket_can1 + 1 : socket_can2 + 1, &readfds, NULL, NULL, NULL);
 
-        /* received a CAN frame */
-        if (FD_ISSET(socket_can1, &readfds)) {
-            if ((nbytes = read(socket_can1, pcan_frame, sizeof(struct can_frame))) < 0) {
-                perror("read error on CAN\n");
-                return -1;
-            }
-            bounce_can_frame(socket_can1, pcan_frame);
-        }
-        if (FD_ISSET(socket_can2, &readfds)) {
-            if ((nbytes = read(socket_can2, pcan_frame, sizeof(struct can_frame))) < 0) {
-                perror("read error on CAN\n");
-                return -1;
-            }
-            bounce_can_frame(socket_can2, pcan_frame);
-        }
-        count--;
+	/* received a CAN frame */
+	if (FD_ISSET(socket_can1, &readfds)) {
+	    if ((nbytes = read(socket_can1, pcan_frame, sizeof(struct can_frame))) < 0) {
+		perror("read error on CAN\n");
+		return -1;
+	    }
+	    bounce_can_frame(socket_can1, pcan_frame);
+	}
+	if (FD_ISSET(socket_can2, &readfds)) {
+	    if ((nbytes = read(socket_can2, pcan_frame, sizeof(struct can_frame))) < 0) {
+		perror("read error on CAN\n");
+		return -1;
+	    }
+	    bounce_can_frame(socket_can2, pcan_frame);
+	}
+	count--;
     }
     gettimeofday(&tv2, NULL);
     elapsed_time = (float)((tv2.tv_sec - tv1.tv_sec) * 1E6 + (tv2.tv_usec - tv1.tv_usec)) / 1E6;
-    bandwidth=NUM_OF_FRAMES * CAN_NORMAL_FRAME_BITS(4) / elapsed_time / 1E6;
-    packets_per_second=NUM_OF_FRAMES / elapsed_time / 1000;
-    printf("Send %d in %.3f sec (%.3f tpackets/sec %.3f Mbit)\n",NUM_OF_FRAMES,elapsed_time, packets_per_second, bandwidth);
+    bandwidth = NUM_OF_FRAMES * CAN_NORMAL_FRAME_BITS(4) / elapsed_time / 1E6;
+    packets_per_second = NUM_OF_FRAMES / elapsed_time / 1000;
+    printf("Send %d in %.3f sec (%.3f tpackets/sec %.3f Mbit)\n", NUM_OF_FRAMES, elapsed_time, packets_per_second, bandwidth);
 
     return ret;
 }

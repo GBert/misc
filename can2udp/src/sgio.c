@@ -1,5 +1,4 @@
-/*
- * ----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
  * <info@gerhard-bertelsmann.de> wrote this file. As long as you retain this
  * notice you can do whatever you want with this stuff. If we meet some day,
@@ -90,8 +89,9 @@ char **read_track_file(char *filename, char **page_name) {
 	    return NULL;
 	}
 	fclose(fp);
-	return page_name;	/* EOF found, normal exit */
-    } else {			/* there was an error on open */
+	/* EOF found, normal exit */
+	return page_name;
+    } else {
 	fprintf(stderr, "error reading file %s\n", filename);
 	return NULL;
     }
