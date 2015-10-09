@@ -31,7 +31,6 @@
 #define MICRODELAY 50
 #define MAXMODULES 64
 
-
 void usage() {
   fprintf(stderr, "\nUsage: s88udp -vf [-d <destination>][-p <port>][-m <s88modules>][-o <offset>]\n");
   fprintf(stderr, "   Version 1.03\n");
@@ -45,10 +44,9 @@ void usage() {
   fprintf(stderr, "\n");
 }
 
-
 void send_sensor_event(int sock, const struct sockaddr *destaddr, int verbose, int offset, int address, int value)
 {
-  unsigned char udpframe [32];
+  unsigned char udpframe[32];
   unsigned long can_id;
 
   can_id = 0x80220B01 + offset;
@@ -65,7 +63,7 @@ void send_sensor_event(int sock, const struct sockaddr *destaddr, int verbose, i
   udpframe[7] = ((16 * offset + address) >> 8) & 0x000000FF;
   udpframe[8] = (16 * offset + address) & 0x000000FF;
 
-  if ( value ) {
+  if (value) {
     udpframe[9] = 0;
     udpframe[10] = 1;
   } else {
@@ -75,30 +73,29 @@ void send_sensor_event(int sock, const struct sockaddr *destaddr, int verbose, i
   udpframe[11] = 0;
   udpframe[12] = 0;
 
-  if ( verbose ) {
-    printf("->S88>UDP CANID 0x%06lX R",can_id);
+  if (verbose) {
+    printf("->S88>UDP CANID 0x%06lX R", can_id);
     printf(" [%d]", udpframe[4]);
-    for (i=5; i < 13; i++) {
+    for (i = 5; i < 13; i++) {
       printf(" %02x", udpframe[i]);
     }
     printf("\n");
   }
-  if ( sendto(sock, udpframe, 13, 0, destaddr, sizeof(*destaddr)) != 13 ) {
+  if (sendto(sock, udpframe, 13, 0, destaddr, sizeof(*destaddr)) != 13) {
     perror("UDP write __");
-    exit ( 1 );
+    exit(1);
   }
 }
 
-
 main(int argc, char **argv)
 {
-  int i,j;
+  int i, j;
   int opt, ret;
   int offset = 0;
   int verbose = 0;
   int modulcount = 1;
   int background = 1;
-  int sensors[ MAXMODULES * 16 ];
+  int sensors[MAXMODULES * 16];
 
   int udpsock;
   struct hostent *hp;
@@ -108,7 +105,7 @@ main(int argc, char **argv)
   int destination_port = 15730;
 
   /* setup udp socket */
-  bzero(&destaddr,sizeof(destaddr));
+  bzero(&destaddr, sizeof(destaddr));
   destaddr.sin_family = AF_INET;
   destaddr.sin_port = htons(destination_port);
   if (inet_pton(AF_INET, destip, &destaddr.sin_addr) < 0) {
@@ -116,67 +113,65 @@ main(int argc, char **argv)
     exit(1);
   }
 
-  /*fprintf ( stderr, "\ns88udp <modulcount>\n\n" );*/
+  /*fprintf ( stderr, "\ns88udp <modulcount>\n\n" ); */
 
   while ((opt = getopt(argc, argv, "d:p:m:o:fv?")) != -1) {
     switch (opt) {
-      case 'p':
-              destination_port = strtoul(optarg, (char **)NULL, 10);
-              destaddr.sin_port = htons(destination_port);
-              break;
-      case 'd':
-              ret = inet_pton(AF_INET,optarg,&destaddr.sin_addr);
-              if (ret <= 0) {
-                if (ret == 0)  {
-                  hp = gethostbyname(optarg);
-                  if ( !hp ) {
-                    fprintf(stderr, "s88udp: unknown host %s\n", optarg);
-                    exit ( 1 );
-                  } 
-                  memcpy((void *)&destaddr.sin_addr, hp->h_addr_list[0], hp->h_length);
-                } else {
-                  perror("inet_pton");
-                  exit(1);
-                }
-              }
-              break;
-      case 'm':
-              modulcount = atoi(optarg);
-              if ( modulcount < 1 || modulcount > MAXMODULES ) {
-                usage();
-                exit(1);
-              }
-              break;
-      case 'o':
-              offset = atoi(optarg);
-              if ( offset >= MAXMODULES ) {
-                usage();
-                exit(1);
-              }
-              break;
-      case 'v':
-              verbose = 1;
-              break;
-      case 'f':
-              background = 0;
-              break;
-      case '?':
-              usage();
-              exit(0);
+    case 'p':
+      destination_port = strtoul(optarg, (char **)NULL, 10);
+      destaddr.sin_port = htons(destination_port);
+      break;
+    case 'd':
+      ret = inet_pton(AF_INET, optarg, &destaddr.sin_addr);
+      if (ret <= 0) {
+	if (ret == 0) {
+	  hp = gethostbyname(optarg);
+	  if (!hp) {
+	    fprintf(stderr, "s88udp: unknown host %s\n", optarg);
+	    exit(1);
+	  }
+	  memcpy((void *)&destaddr.sin_addr, hp->h_addr_list[0], hp->h_length);
+	} else {
+	  perror("inet_pton");
+	  exit(1);
+	}
+      }
+      break;
+    case 'm':
+      modulcount = atoi(optarg);
+      if (modulcount < 1 || modulcount > MAXMODULES) {
+	usage();
+	exit(1);
+      }
+      break;
+    case 'o':
+      offset = atoi(optarg);
+      if (offset >= MAXMODULES) {
+	usage();
+	exit(1);
+      }
+      break;
+    case 'v':
+      verbose = 1;
+      break;
+    case 'f':
+      background = 0;
+      break;
+    case '?':
+      usage();
+      exit(0);
 
-      default:
-              usage();
-              exit(1);
+    default:
+      usage();
+      exit(1);
     }
   }
 
- 
-
   /* setup gpio handling */
-  bcm2835_set_debug ( 0 );
-  if ( !bcm2835_init() ) {
-    fprintf ( stderr, "GPIO Init failed!\n" );
-    return ( 1 );
+  bcm2835_set_debug(0);
+  if (!bcm2835_init()) {
+    fprintf(stderr, "GPIO Init failed!\n");
+    return (1);
   }
   bcm2835_gpio_fsel(CLOCK_PIN, BCM2835_GPIO_FSEL_OUTP);
   bcm2835_gpio_fsel(LOAD_PIN, BCM2835_GPIO_FSEL_OUTP);
@@ -184,7 +179,7 @@ main(int argc, char **argv)
   bcm2835_gpio_fsel(DATA_PIN, BCM2835_GPIO_FSEL_INPT);
 
   /* Preset sensor values */
-  for (i=0; i < (modulcount * 16); i++) {
+  for (i = 0; i < (modulcount * 16); i++) {
     sensors[i] = 0;
   }
 
@@ -194,11 +189,10 @@ main(int argc, char **argv)
     exit(1);
   }
 
-  if (setsockopt(udpsock, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0){
-     perror("setsockopt");
-     exit(1);
+  if (setsockopt(udpsock, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0) {
+    perror("setsockopt");
+    exit(1);
   }
-
 
   if (background) {
     pid_t pid;
@@ -210,14 +204,14 @@ main(int argc, char **argv)
     }
     /* If we got a good PID, then we can exit the parent process. */
     if (pid > 0) {
-      if ( verbose ) printf("Going into background ...\n");
+      if (verbose)
+	printf("Going into background ...\n");
       exit(0);
     }
   }
 
-
   /* Loop forever */
-  while ( 1 ) {
+  while (1) {
     int oldvalue, newvalue;
 
     bcm2835_gpio_write(LOAD_PIN, HIGH);
@@ -233,29 +227,33 @@ main(int argc, char **argv)
     bcm2835_gpio_write(LOAD_PIN, LOW);
 
     /* get sensor data */
-    for (i=0; i< modulcount; i++) {
-      for ( j=0; j < 16; j++) {
-        bcm2835_delayMicroseconds(MICRODELAY / 2);
+    for (i = 0; i < modulcount; i++) {
+      for (j = 0; j < 16; j++) {
+	bcm2835_delayMicroseconds(MICRODELAY / 2);
 
-        oldvalue = sensors[i*16+j];
-        newvalue = bcm2835_gpio_lev(DATA_PIN); 
-        if ( !background && verbose && modulcount == 1) printf ( "%02x ", sensors[i*16+j] );
+	oldvalue = sensors[i * 16 + j];
+	newvalue = bcm2835_gpio_lev(DATA_PIN);
+	if (!background && verbose && modulcount == 1)
+	  printf("%02x ", sensors[i * 16 + j]);
 
-        if ( newvalue != oldvalue ) {
-          if ( verbose && modulcount > 1) printf ( "sensor %d changed value to %d\n", i*16+j+1, newvalue);
+	if (newvalue != oldvalue) {
+	  if (verbose && modulcount > 1)
+	    printf("sensor %d changed value to %d\n", i * 16 + j + 1, newvalue);
 
-          send_sensor_event ( udpsock, (struct sockaddr *)&destaddr, verbose, offset, i*16+j+1, newvalue );
+	  send_sensor_event(udpsock, (struct sockaddr *)&destaddr, verbose, offset, i * 16 + j + 1, newvalue);
 
-          sensors[i*16+j] = newvalue;
-        }
+	  sensors[i * 16 + j] = newvalue;
+	}
 
-        bcm2835_delayMicroseconds(MICRODELAY / 2);
-        bcm2835_gpio_write(CLOCK_PIN, HIGH);
-        bcm2835_delayMicroseconds(MICRODELAY);
-        bcm2835_gpio_write(CLOCK_PIN, LOW);
+	bcm2835_delayMicroseconds(MICRODELAY / 2);
+	bcm2835_gpio_write(CLOCK_PIN, HIGH);
+	bcm2835_delayMicroseconds(MICRODELAY);
+	bcm2835_gpio_write(CLOCK_PIN, LOW);
       }
     }
-    if (!background && verbose && modulcount == 1) printf ("\r"); fflush(stdout);
+    if (!background && verbose && modulcount == 1)
+      printf("\r");
+    fflush(stdout);
     bcm2835_delayMicroseconds((MAXMODULES - modulcount + 1) * 16 * MICRODELAY);
   }
 }
