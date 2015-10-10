@@ -7,9 +7,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rocrail
-PKG_REV:=6e9dfc69a1
 PKG_REV:=3dc244a0ea
-PKG_VERSION:=9976
+PKG_REV:=e867ffaa4e
+PKG_VERSION:=9980
 PKG_RELEASE:=
 
 PKG_SOURCE_PROTO:=git
@@ -112,6 +112,17 @@ define Package/rocrail-cs-srcp/description
  Command Station SRCP
 endef
 
+define Package/rocrail-cs-p50
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=Command Station p50
+  DEPENDS:=rocrail-server
+endef
+
+define Package/rocrail-cs-p50/description
+ Command Station p50
+endef
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/rocs fromtar PLATFORM=LINUX all
 	cp $(PKG_BUILD_DIR)/rocs/bin/ogen $(PKG_BUILD_DIR)/rocs/bin/ogen_x86
@@ -169,6 +180,11 @@ define Package/rocrail-cs-srcp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/srcp.so $(1)/opt/rocrail
 endef
 
+define Package/rocrail-cs-p50/install
+	$(INSTALL_DIR) $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/p50.so $(1)/opt/rocrail
+endef
+
 
 $(eval $(call BuildPackage,rocrail))
 $(eval $(call BuildPackage,rocrail-server))
@@ -178,3 +194,4 @@ $(eval $(call BuildPackage,rocrail-cs-ddx))
 $(eval $(call BuildPackage,rocrail-cs-mcs2))
 $(eval $(call BuildPackage,rocrail-cs-mgbox))
 $(eval $(call BuildPackage,rocrail-cs-srcp))
+$(eval $(call BuildPackage,rocrail-cs-p50))
