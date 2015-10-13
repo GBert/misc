@@ -16,10 +16,8 @@
 
 build:
 	cd firmware && $(MAKE) build
-	cd test && $(MAKE) build
 
 clean:
 	cd firmware && $(MAKE) clean
-	cd test && $(MAKE) clean
 	rm -f *~ etc/*~ include/*~
 
