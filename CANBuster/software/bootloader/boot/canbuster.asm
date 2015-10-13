@@ -61,15 +61,15 @@ ERRORLEVEL      -302
 
 ; CAN Baud Rate
 #DEFINE         CANRATE     250
-#DEFINE         CANID       0x666
+#DEFINE         CANID       0x29A
 #DEFINE         CANDELAY    200
 
 ; BOOT/LED/SWITCH  - RC2 Status / RC0 Switch
 #DEFINE         DDR         TRISC
 #DEFINE         OUTPUT      LATC
 #DEFINE         LED         2
-#DEFINE         INPUT       PORTC
-#DEFINE         SWITCH      0
+; #DEFINE         INPUT       PORTC
+; #DEFINE         SWITCH      0
 
 ;------------------------------------------------------------------------------
 ; Device Configuration
@@ -84,7 +84,7 @@ ERRORLEVEL      -302
 ; Extended Instruction Set:
                 CONFIG    XINST=OFF
 ; Oscillator:
-                CONFIG    FOSC=INTIO2
+                CONFIG    FOSC=HS2
 ; PLL x4 Enable bit:
                 CONFIG    PLLCFG=ON
 ; Fail-Safe Clock Monitor:
@@ -158,8 +158,12 @@ INIT            MACRO
 
                 MOVLB   0x0F
                 CLRF    ADCON0          ;D
+                CLRF    ADCON1          ;D
+                CLRF    ADCON2          ;D
                 CLRF    ANCON0          ;N
                 CLRF    ANCON1          ;N
+                CLRF    CM1CON          ;C
+                CLRF    CM2CON          ;C
 
                 ENDM
 
