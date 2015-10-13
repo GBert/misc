@@ -239,6 +239,7 @@ Recv0
                 MOVF    RXB0D0,W
                 BCF     RXB0CON,RXFUL
                 MOVLB   0
+                ADDWF   csum,F
                 RETURN
 
 ;------------------------------------------------------------------------------
