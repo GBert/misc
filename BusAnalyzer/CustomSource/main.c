@@ -46,11 +46,10 @@ int main (void)
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
 
     Time_initialize();
-	Communication_initialize();
+    Communication_initialize();
 
-	for(;;)
-	{
-		/* Do host communication (process commands, provide packets) */
-		Communication_doBackground();
-	}
+    for(;;) {
+	/* Do host communication (process commands, provide packets) */
+	Communication_doBackground();
+    }
 }
