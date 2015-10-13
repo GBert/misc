@@ -39,8 +39,7 @@
  *****************************************************************************/
 
 /** Transmit task structure */
-typedef struct
-{
+typedef struct {
     CanTxMsg TxMsg;
     uint64_t CycleTimeUs;
     uint64_t LastTriggerTimeUs;
@@ -49,15 +48,13 @@ typedef struct
 } TxTask_t;
 
 /** Queued transmit message structure */
-typedef struct
-{
+typedef struct {
     CanTxMsg TxMsg;
     uint64_t DeltaTime;
 } QueuedTxMsg_t;
 
 /** Transmit queue structure */
-typedef struct
-{
+typedef struct {
     uint64_t LastTriggerTimeUs;
     uint32_t ReadIndex;
     uint32_t WriteIndex;
@@ -70,8 +67,8 @@ typedef struct
 
 static void DefaultCanCbState(CanState_t state);
 static void DefaultCanCbError(CanError_t error);
-static void DefaultCanCbRxMsg(const CanRxMsg* pMsg);
-static void DefaultCanCbTxMsg(const CanTxMsg* pMsg, uint8_t isQueued);
+static void DefaultCanCbRxMsg(const CanRxMsg * pMsg);
+static void DefaultCanCbTxMsg(const CanTxMsg * pMsg, uint8_t isQueued);
 
 /******************************************************************************
  * Global variables
@@ -129,7 +126,7 @@ static void DefaultCanCbError(CanError_t error)
 /******************************************************************************
  * @brief Default CAN receive message event call-back function.
  *****************************************************************************/
-static void DefaultCanCbRxMsg(const CanRxMsg* pMsg)
+static void DefaultCanCbRxMsg(const CanRxMsg * pMsg)
 {
     (void)pMsg;
 }
@@ -137,7 +134,7 @@ static void DefaultCanCbRxMsg(const CanRxMsg* pMsg)
 /******************************************************************************
  * @brief Default CAN transmit message event call-back function.
  *****************************************************************************/
-static void DefaultCanCbTxMsg(const CanTxMsg* pMsg, uint8_t isQueued)
+static void DefaultCanCbTxMsg(const CanTxMsg * pMsg, uint8_t isQueued)
 {
     (void)pMsg;
     (void)isQueued;
@@ -152,7 +149,7 @@ static void DefaultCanCbTxMsg(const CanTxMsg* pMsg, uint8_t isQueued)
  *
  * @retval 0 if succeeded, 1 if failed
  *****************************************************************************/
-static uint8_t CalculateBitTiming(uint32_t baudRate, CAN_InitTypeDef* pCanInitParams)
+static uint8_t CalculateBitTiming(uint32_t baudRate, CAN_InitTypeDef * pCanInitParams)
 {
     const uint32_t tseg1Max = 16;
     const uint32_t tseg2Min = 1;
@@ -160,9 +157,9 @@ static uint8_t CalculateBitTiming(uint32_t baudRate, CAN_InitTypeDef* pCanInitPa
     const uint32_t sjwMax = 4;
     const uint32_t brpMin = 1;
     const uint32_t brpMax = 512;
-    const uint32_t baudRateDeviation = baudRate >> 7; /* BaudRate / 128 => around 1 percent deviation */
-    const uint32_t samplePointDesired = 192; /* 0.75 * 256 (scale to allow usage of fixed point arithmetic) */
-    const uint32_t samplePointDeviation = 38;  /* 0.15 * 256 (scale to allow usage of fixed point arithmetic) */
+    const uint32_t baudRateDeviation = baudRate >> 7;	/* BaudRate / 128 => around 1 percent deviation */
+    const uint32_t samplePointDesired = 192;	/* 0.75 * 256 (scale to allow usage of fixed point arithmetic) */
+    const uint32_t samplePointDeviation = 38;	/* 0.15 * 256 (scale to allow usage of fixed point arithmetic) */
     uint8_t solutionFound = 0;
     uint32_t lastBaudRateError = 0;
     uint32_t lastSamplePointError = 0;
@@ -170,51 +167,45 @@ static uint8_t CalculateBitTiming(uint32_t baudRate, CAN_InitTypeDef* pCanInitPa
     uint32_t tseg1;
     uint32_t tseg2;
 
-    for (tseg2 = tseg2Min; tseg2 <= tseg2Max; tseg2++)
-    {
-        /* TSEG1 must be at least as large as TSEG2 in order to reach a sample point > 0.5 */
-        for (tseg1 = tseg2; tseg1 <= tseg1Max; tseg1++)
-        {
-            uint32_t numTq = tseg1 + tseg2 + 1; /* Number of time quanta per CAN bit */
-            uint32_t brpEstimate = SystemFrequency_APB1Clk / (numTq * baudRate);
-            uint32_t brpLowerLimit = (brpEstimate > brpMin) ? (brpEstimate - 1) : brpMin;
-            uint32_t brpUpperLimit = (brpEstimate < brpMax) ? (brpEstimate + 1) : brpMax;
+    for (tseg2 = tseg2Min; tseg2 <= tseg2Max; tseg2++) {
+	/* TSEG1 must be at least as large as TSEG2 in order to reach a sample point > 0.5 */
+	for (tseg1 = tseg2; tseg1 <= tseg1Max; tseg1++) {
+	    uint32_t numTq = tseg1 + tseg2 + 1;	/* Number of time quanta per CAN bit */
+	    uint32_t brpEstimate = SystemFrequency_APB1Clk / (numTq * baudRate);
+	    uint32_t brpLowerLimit = (brpEstimate > brpMin) ? (brpEstimate - 1) : brpMin;
+	    uint32_t brpUpperLimit = (brpEstimate < brpMax) ? (brpEstimate + 1) : brpMax;
 
-            /* Only useful BRPs within a certain range are tested */
-            for (brp = brpLowerLimit; brp <= brpUpperLimit; brp++)
-            {
-                uint32_t calcBaudRate = SystemFrequency_APB1Clk / (numTq * brp);
-                uint32_t baudRateError = (calcBaudRate > baudRate) ? (calcBaudRate - baudRate)
-                                                                   : (baudRate - calcBaudRate);
+	    /* Only useful BRPs within a certain range are tested */
+	    for (brp = brpLowerLimit; brp <= brpUpperLimit; brp++) {
+		uint32_t calcBaudRate = SystemFrequency_APB1Clk / (numTq * brp);
+		uint32_t baudRateError = (calcBaudRate > baudRate) ? (calcBaudRate - baudRate)
+		    : (baudRate - calcBaudRate);
 
-                if (baudRateError <= baudRateDeviation)
-                {
-                    uint32_t samplePoint = ((tseg1 + 1) << 8) / numTq; /* SP * 256 (scale to allow usage of fixed point arithmetic) */
-                    uint32_t samplePointError = (samplePoint > samplePointDesired) ? (samplePoint - samplePointDesired)
-                                                                                   : samplePointDesired - samplePoint;
+		if (baudRateError <= baudRateDeviation) {
+		    uint32_t samplePoint = ((tseg1 + 1) << 8) / numTq;	/* SP * 256 (scale to allow usage of fixed point arithmetic) */
+		    uint32_t samplePointError = (samplePoint > samplePointDesired) ? (samplePoint - samplePointDesired)
+			: samplePointDesired - samplePoint;
 
-                    if (samplePointError <= samplePointDeviation)
-                    {
-                        if (   (0 != solutionFound)
-                            && ((samplePointError > lastSamplePointError) || (baudRateError > lastBaudRateError)))
-                        {
-                            /* New solution is not better than old one */
-                            continue;
-                        }
+		    if (samplePointError <= samplePointDeviation) {
+			if ((0 != solutionFound)
+			    && ((samplePointError > lastSamplePointError) || (baudRateError > lastBaudRateError))) {
+			    /* New solution is not better than old one */
+			    continue;
+			}
 
-                        solutionFound = 1;
+			solutionFound = 1;
 
-                        /* New or better solution found */
-                        pCanInitParams->CAN_Prescaler = (uint16_t)brp;
-                        pCanInitParams->CAN_BS1 = (uint8_t)(tseg1 - 1);
-                        pCanInitParams->CAN_BS2 = (uint8_t)(tseg2 - 1);
-                        pCanInitParams->CAN_SJW = (tseg2 <= sjwMax) ? (tseg2 - 1) : (sjwMax - 1);
-                        lastBaudRateError = baudRateError;
-                        lastSamplePointError = samplePointError;
-                    }
-                }
-            }
-        }
+			/* New or better solution found */
+			pCanInitParams->CAN_Prescaler = (uint16_t) brp;
+			pCanInitParams->CAN_BS1 = (uint8_t) (tseg1 - 1);
+			pCanInitParams->CAN_BS2 = (uint8_t) (tseg2 - 1);
+			pCanInitParams->CAN_SJW = (tseg2 <= sjwMax) ? (tseg2 - 1) : (sjwMax - 1);
+			lastBaudRateError = baudRateError;
+			lastSamplePointError = samplePointError;
+		    }
+		}
+	    }
+	}
     }
 
     return (0 != solutionFound) ? 0 : 1;
@@ -262,9 +253,8 @@ uint8_t Can_initialize(uint32_t baudRate, uint8_t silentMode, uint8_t singleShot
     canInitParams.CAN_NART = (0 != singleShotMode) ? ENABLE : DISABLE;
     canInitParams.CAN_ABOM = (0 != busOffRecoveryMode) ? ENABLE : DISABLE;
 
-    if (0 != CalculateBitTiming(baudRate, &canInitParams))
-    {
-        return 1;
+    if (0 != CalculateBitTiming(baudRate, &canInitParams)) {
+	return 1;
     }
 
     /* Begin of critical section, no CAN interrupts shall fire unless the
@@ -312,9 +302,8 @@ uint8_t Can_initialize(uint32_t baudRate, uint8_t silentMode, uint8_t singleShot
 
     g_CanState = CanState_Init;
 
-    for (i = 0; i < MAXIMUM_NUMBER_OF_TX_TASKS; i++)
-    {
-        g_TransmitTasks[i].IsUsed = 0;
+    for (i = 0; i < MAXIMUM_NUMBER_OF_TX_TASKS; i++) {
+	g_TransmitTasks[i].IsUsed = 0;
     }
 
     g_TransmitQueue.LastTriggerTimeUs = 0;
@@ -389,29 +378,26 @@ void Can_connectCbTxMsg(CanCbTxMsg_t pCb)
 static uint8_t TransmitMessageDequeue(void)
 {
     const uint64_t currentTimeUs = Time_getUs();;
-    QueuedTxMsg_t* pQueuedTxMsg;
+    QueuedTxMsg_t *pQueuedTxMsg;
     uint8_t mailbox;
 
-    if (g_TransmitQueue.WriteIndex == g_TransmitQueue.ReadIndex)
-    {
-        /* Nothing to be transmitted */
-        return 1;
+    if (g_TransmitQueue.WriteIndex == g_TransmitQueue.ReadIndex) {
+	/* Nothing to be transmitted */
+	return 1;
     }
 
     pQueuedTxMsg = &g_TransmitQueue.QueuedMessages[g_TransmitQueue.ReadIndex];
 
-    if (   (0 != pQueuedTxMsg->DeltaTime)
-        && (pQueuedTxMsg->DeltaTime > (currentTimeUs - g_TransmitQueue.LastTriggerTimeUs)))
-    {
-        return 1;
+    if ((0 != pQueuedTxMsg->DeltaTime)
+	&& (pQueuedTxMsg->DeltaTime > (currentTimeUs - g_TransmitQueue.LastTriggerTimeUs))) {
+	return 1;
     }
 
     mailbox = CAN_Transmit(CAN1, &pQueuedTxMsg->TxMsg);
 
-    if (mailbox == CAN_NO_MB)
-    {
-        /* No empty mailboxes available */
-        return 1;
+    if (mailbox == CAN_NO_MB) {
+	/* No empty mailboxes available */
+	return 1;
     }
 
     g_TransmitQueue.LastTriggerTimeUs = currentTimeUs;
@@ -432,14 +418,13 @@ static uint8_t TransmitMessageDequeue(void)
  *
  * @retval 0 if succeeded, 1 if failed.
  *****************************************************************************/
-uint8_t Can_transmitQueued(CanTxMsg* pTxMsg, uint64_t deltaTime)
+uint8_t Can_transmitQueued(CanTxMsg * pTxMsg, uint64_t deltaTime)
 {
-    const uint32_t space = (  (g_TransmitQueue.ReadIndex - g_TransmitQueue.WriteIndex - 1)
-                            & (MAXIMUM_NUMBER_OF_QUEUED_MESSAGES - 1));
+    const uint32_t space = ((g_TransmitQueue.ReadIndex - g_TransmitQueue.WriteIndex - 1)
+			    & (MAXIMUM_NUMBER_OF_QUEUED_MESSAGES - 1));
 
-    if (0 == space)
-    {
-        return 1;
+    if (0 == space) {
+	return 1;
     }
 
     g_TransmitQueue.QueuedMessages[g_TransmitQueue.WriteIndex].TxMsg = *pTxMsg;
@@ -458,38 +443,33 @@ uint8_t Can_transmitQueued(CanTxMsg* pTxMsg, uint64_t deltaTime)
  *
  * @retval 0 if succeeded, 1 if failed.
  *****************************************************************************/
-uint8_t Can_addTransmitTask(CanTxMsg* pTxMsg, uint64_t cycleTime, uint32_t taskId)
+uint8_t Can_addTransmitTask(CanTxMsg * pTxMsg, uint64_t cycleTime, uint32_t taskId)
 {
     uint32_t i;
     const uint64_t currentTimeUs = Time_getUs();
 
     /* Check if task already exists, if, alter its parameters */
-    for (i = 0; i < MAXIMUM_NUMBER_OF_TX_TASKS; i++)
-    {
-        if (   (taskId != g_TransmitTasks[i].TaskId)
-            || (0 == g_TransmitTasks[i].IsUsed))
-        {
-            continue;
-        }
+    for (i = 0; i < MAXIMUM_NUMBER_OF_TX_TASKS; i++) {
+	if ((taskId != g_TransmitTasks[i].TaskId)
+	    || (0 == g_TransmitTasks[i].IsUsed)) {
+	    continue;
+	}
 
-        g_TransmitTasks[i].TxMsg = *pTxMsg;
-        g_TransmitTasks[i].CycleTimeUs = cycleTime;
-        g_TransmitTasks[i].LastTriggerTimeUs = currentTimeUs;
-        return 0;
+	g_TransmitTasks[i].TxMsg = *pTxMsg;
+	g_TransmitTasks[i].CycleTimeUs = cycleTime;
+	g_TransmitTasks[i].LastTriggerTimeUs = currentTimeUs;
+	return 0;
     }
 
     /* Add new task to schedule as long as there are empty tasks */
-    for (i = 0; i < MAXIMUM_NUMBER_OF_TX_TASKS; i++)
-    {
-        if (0 == g_TransmitTasks[i].IsUsed)
-        {
-            break;
-        }
+    for (i = 0; i < MAXIMUM_NUMBER_OF_TX_TASKS; i++) {
+	if (0 == g_TransmitTasks[i].IsUsed) {
+	    break;
+	}
     }
 
-    if (MAXIMUM_NUMBER_OF_TX_TASKS == i)
-    {
-        return 1;
+    if (MAXIMUM_NUMBER_OF_TX_TASKS == i) {
+	return 1;
     }
 
     g_TransmitTasks[i].TxMsg = *pTxMsg;
@@ -511,18 +491,15 @@ uint8_t Can_removeTransmitTask(uint32_t taskId)
 {
     uint32_t i;
 
-    for (i = 0; i < MAXIMUM_NUMBER_OF_TX_TASKS; i++)
-    {
-        if (   (0 != g_TransmitTasks[i].IsUsed)
-            && (taskId == g_TransmitTasks[i].TaskId))
-        {
-            break;
-        }
+    for (i = 0; i < MAXIMUM_NUMBER_OF_TX_TASKS; i++) {
+	if ((0 != g_TransmitTasks[i].IsUsed)
+	    && (taskId == g_TransmitTasks[i].TaskId)) {
+	    break;
+	}
     }
 
-    if (MAXIMUM_NUMBER_OF_TX_TASKS == i)
-    {
-        return 1;
+    if (MAXIMUM_NUMBER_OF_TX_TASKS == i) {
+	return 1;
     }
 
     g_TransmitTasks[i].IsUsed = 0;
@@ -541,41 +518,34 @@ static void ProcessTransmitTaskSchedule(void)
     uint32_t i;
     uint8_t mailbox;
 
-    for (i = 0; i < MAXIMUM_NUMBER_OF_TX_TASKS; i++)
-    {
-        index = (g_LastProcessedTransmitTask + i) & (MAXIMUM_NUMBER_OF_TX_TASKS - 1);
+    for (i = 0; i < MAXIMUM_NUMBER_OF_TX_TASKS; i++) {
+	index = (g_LastProcessedTransmitTask + i) & (MAXIMUM_NUMBER_OF_TX_TASKS - 1);
 
-        if (0 == g_TransmitTasks[index].IsUsed)
-        {
-            continue;
-        }
+	if (0 == g_TransmitTasks[index].IsUsed) {
+	    continue;
+	}
 
-        elapsedTimeUs = currentTimeUs - g_TransmitTasks[index].LastTriggerTimeUs;
+	elapsedTimeUs = currentTimeUs - g_TransmitTasks[index].LastTriggerTimeUs;
 
-        if (elapsedTimeUs < g_TransmitTasks[index].CycleTimeUs)
-        {
-            continue;
-        }
+	if (elapsedTimeUs < g_TransmitTasks[index].CycleTimeUs) {
+	    continue;
+	}
 
-        mailbox = CAN_Transmit(CAN1, &g_TransmitTasks[index].TxMsg);
+	mailbox = CAN_Transmit(CAN1, &g_TransmitTasks[index].TxMsg);
 
-        if (mailbox == CAN_NO_MB)
-        {
-            /* No empty mailboxes available */
-            break;
-        }
+	if (mailbox == CAN_NO_MB) {
+	    /* No empty mailboxes available */
+	    break;
+	}
 
-        g_BufferedCanTxMsgs[mailbox] = g_TransmitTasks[index].TxMsg;
-        g_BufferedCanTxMsgIsQueued[mailbox] = 0;
+	g_BufferedCanTxMsgs[mailbox] = g_TransmitTasks[index].TxMsg;
+	g_BufferedCanTxMsgIsQueued[mailbox] = 0;
 
-        if (0 == g_TransmitTasks[index].CycleTimeUs)
-        {
-            g_TransmitTasks[index].IsUsed = 0;
-        }
-        else
-        {
-            g_TransmitTasks[index].LastTriggerTimeUs += g_TransmitTasks[index].CycleTimeUs;
-        }
+	if (0 == g_TransmitTasks[index].CycleTimeUs) {
+	    g_TransmitTasks[index].IsUsed = 0;
+	} else {
+	    g_TransmitTasks[index].LastTriggerTimeUs += g_TransmitTasks[index].CycleTimeUs;
+	}
     }
 
     g_LastProcessedTransmitTask = index;
@@ -586,7 +556,7 @@ static void ProcessTransmitTaskSchedule(void)
  *****************************************************************************/
 static void ProcessTransmitQueue(void)
 {
-    while (0 == TransmitMessageDequeue());
+    while (0 == TransmitMessageDequeue()) ;
 }
 
 /******************************************************************************
@@ -606,29 +576,21 @@ static void CheckBusState(void)
     /* Check whether CAN state has changed */
     errorStatusRegister = CAN1->ESR;
 
-    if (errorStatusRegister & CAN_FLAG_BOF)
-    {
-        state = CanState_BusOff;
-    }
-    else if (errorStatusRegister & CAN_FLAG_EPV)
-    {
-        state = CanState_Passive;
-    }
-    else if (errorStatusRegister & CAN_FLAG_EWG)
-    {
-        state = CanState_Warning;
-    }
-    else
-    {
-        state = CanState_Active;
+    if (errorStatusRegister & CAN_FLAG_BOF) {
+	state = CanState_BusOff;
+    } else if (errorStatusRegister & CAN_FLAG_EPV) {
+	state = CanState_Passive;
+    } else if (errorStatusRegister & CAN_FLAG_EWG) {
+	state = CanState_Warning;
+    } else {
+	state = CanState_Active;
     }
 
-    if (state != g_CanState)
-    {
-        g_CanState = state;
+    if (state != g_CanState) {
+	g_CanState = state;
 
-        /* Notify status event listener */
-        g_pCbStateCan(state);
+	/* Notify status event listener */
+	g_pCbStateCan(state);
     }
 
     /* End of critical section */
@@ -654,41 +616,35 @@ void Can_doBackground(void)
  *****************************************************************************/
 void USB_HP_CAN1_TX_IRQHandler(void)
 {
-    const uint32_t tsrRqcp0 = 0x00000001UL; /* Transmit status register: Request completed mailbox0 */
-    const uint32_t tsrRqcp1 = 0x00000100UL; /* Transmit status register: Request completed mailbox1 */
-    const uint32_t tsrRqcp2 = 0x00010000UL; /* Transmit status register: Request completed mailbox2 */
-    const uint32_t tsrTxOk0 = 0x00000002UL; /* Transmit status register: Transmission OK of mailbox0 */
-    const uint32_t tsrTxOk1 = 0x00000200UL; /* Transmit status register: Transmission OK of mailbox1 */
-    const uint32_t tsrTxOk2 = 0x00020000UL; /* Transmit status register: Transmission OK of mailbox2 */
+    const uint32_t tsrRqcp0 = 0x00000001UL;	/* Transmit status register: Request completed mailbox0 */
+    const uint32_t tsrRqcp1 = 0x00000100UL;	/* Transmit status register: Request completed mailbox1 */
+    const uint32_t tsrRqcp2 = 0x00010000UL;	/* Transmit status register: Request completed mailbox2 */
+    const uint32_t tsrTxOk0 = 0x00000002UL;	/* Transmit status register: Transmission OK of mailbox0 */
+    const uint32_t tsrTxOk1 = 0x00000200UL;	/* Transmit status register: Transmission OK of mailbox1 */
+    const uint32_t tsrTxOk2 = 0x00020000UL;	/* Transmit status register: Transmission OK of mailbox2 */
     uint8_t mailbox = 0;
     uint8_t txOk = 0;
 
     /* Only one transmit interrupt at a time is handled. If multiple transmit
      * interrupts are pending the ISR will be called multiple times.
      * Discarded messages (single shot mode) are not provided to any event listener. */
-    if (RESET != (CAN1->TSR & tsrRqcp0))
-    {
-        txOk = (RESET == (CAN1->TSR & tsrTxOk0)) ? 0 : 1;
-        CAN1->TSR = tsrRqcp0;
-        mailbox = 0;
-    }
-    else if (RESET != (CAN1->TSR & tsrRqcp1))
-    {
-        txOk = (RESET == (CAN1->TSR & tsrTxOk1)) ? 0 : 1;
-        CAN1->TSR = tsrRqcp1;
-        mailbox = 1;
-    }
-    else if (RESET != (CAN1->TSR & tsrRqcp2))
-    {
-        txOk = (RESET == (CAN1->TSR & tsrTxOk2)) ? 0 : 1;
-        CAN1->TSR = tsrRqcp2;
-        mailbox = 2;
+    if (RESET != (CAN1->TSR & tsrRqcp0)) {
+	txOk = (RESET == (CAN1->TSR & tsrTxOk0)) ? 0 : 1;
+	CAN1->TSR = tsrRqcp0;
+	mailbox = 0;
+    } else if (RESET != (CAN1->TSR & tsrRqcp1)) {
+	txOk = (RESET == (CAN1->TSR & tsrTxOk1)) ? 0 : 1;
+	CAN1->TSR = tsrRqcp1;
+	mailbox = 1;
+    } else if (RESET != (CAN1->TSR & tsrRqcp2)) {
+	txOk = (RESET == (CAN1->TSR & tsrTxOk2)) ? 0 : 1;
+	CAN1->TSR = tsrRqcp2;
+	mailbox = 2;
     }
 
-    if (0 != txOk)
-    {
-        /* Notify transmit event listener */
-        g_pCbTxMsgCan(&g_BufferedCanTxMsgs[mailbox], g_BufferedCanTxMsgIsQueued[mailbox]);
+    if (0 != txOk) {
+	/* Notify transmit event listener */
+	g_pCbTxMsgCan(&g_BufferedCanTxMsgs[mailbox], g_BufferedCanTxMsgIsQueued[mailbox]);
     }
 }
 
@@ -697,22 +653,22 @@ void USB_HP_CAN1_TX_IRQHandler(void)
  *****************************************************************************/
 void CAN1_SCE_IRQHandler(void)
 {
-    const uint32_t msrErri = 0x00000004; /* Master status register: Error interrupt */
+    /* Master status register: Error interrupt */
+    const uint32_t msrErri = 0x00000004;
     const uint32_t errorBitMask = 0x07;
     const uint32_t errorBitsPosition = 4;
     CanError_t error;
 
     CheckBusState();
 
-    if (RESET != (CAN1->MSR & msrErri))
-    {
-        error = (CanError_t)((CAN1->ESR >> errorBitsPosition) & errorBitMask);
+    if (RESET != (CAN1->MSR & msrErri)) {
+	error = (CanError_t) ((CAN1->ESR >> errorBitsPosition) & errorBitMask);
 
-        /* Notify error event listener */
-        g_pCbErrorCan(error);
+	/* Notify error event listener */
+	g_pCbErrorCan(error);
 
-        /* Clear pending interrupt (w1c) */
-        CAN1->MSR = msrErri;
+	/* Clear pending interrupt (w1c) */
+	CAN1->MSR = msrErri;
     }
 }
 

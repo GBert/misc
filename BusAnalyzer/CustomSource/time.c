@@ -87,10 +87,9 @@ uint64_t Time_getUs(void)
     /* A timer overflow between reading g_BoardTime and SysTick->VAL invalidates
      * the result. In this case an incremented g_BoardTime is used and
      * SysTick->VAL is read again to make sure to have a valid time. */
-    if (0 != (SysTick->CTRL & SYSTICK_COUNTFLAG_BIT_MASK))
-    {
-        overflowCntr++;
-        ticks = SysTick->VAL;
+    if (0 != (SysTick->CTRL & SYSTICK_COUNTFLAG_BIT_MASK)) {
+	overflowCntr++;
+	ticks = SysTick->VAL;
     }
 
     /* End of critical section */
@@ -105,7 +104,7 @@ uint64_t Time_getUs(void)
 
     /* Now put ISR overflow counter (1 bit == 0.125 seconds) and time
      * (1 bit == 1 us) together */
-    return ((uint64_t)timeUs + ((uint64_t)overflowCntr * overflowDurationUs));
+    return ((uint64_t) timeUs + ((uint64_t) overflowCntr * overflowDurationUs));
 }
 
 /******************************************************************************
@@ -137,20 +136,16 @@ void SysTick_Handler(void)
     SysTick->CTRL &= ~SYSTICK_COUNTFLAG_BIT_MASK;
 
     /* Toggle LED (heart-beat) */
-    if (1 == State)
-    {
-        /* Turn on LD1 */
-        GPIO_SetBits(GPIOC, GPIO_Pin_12);
-    }
-    else
-    {
-        /* Turn off LD1 */
-        GPIO_ResetBits(GPIOC, GPIO_Pin_12);
+    if (1 == State) {
+	/* Turn on LD1 */
+	GPIO_SetBits(GPIOC, GPIO_Pin_12);
+    } else {
+	/* Turn off LD1 */
+	GPIO_ResetBits(GPIOC, GPIO_Pin_12);
     }
 
-    if (maxOverflows == g_SysTickOverflowCntr)
-    {
-        Communication_transmitStatusMessage(StatusMessage_Warning, "HW: Timestamp overflow (305.4 h elapsed)");
+    if (maxOverflows == g_SysTickOverflowCntr) {
+	Communication_transmitStatusMessage(StatusMessage_Warning, "HW: Timestamp overflow (305.4 h elapsed)");
     }
 
     /* Toggle state and increment time */

@@ -38,7 +38,7 @@
  * Function declarations
  *****************************************************************************/
 
-static void DefaultUsartCbRxData(const uint8_t* pData, uint32_t length);
+static void DefaultUsartCbRxData(const uint8_t * pData, uint32_t length);
 
 /******************************************************************************
  * Global variables
@@ -66,7 +66,7 @@ static uint8_t g_SerialDataRxBuffer[USART_BUFFER_SIZE];
 /******************************************************************************
  * @brief Default Serial data available call-back function.
  *****************************************************************************/
-static void DefaultUsartCbRxData(const uint8_t* pData, uint32_t length)
+static void DefaultUsartCbRxData(const uint8_t * pData, uint32_t length)
 {
     (void)pData;
     (void)length;
@@ -127,8 +127,8 @@ void Usart_initialize(void)
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
 
     /* Do basic (fixed) configuration of transmit DMA */
-    dmaInitParams.DMA_PeripheralBaseAddr = (uint32_t)&USART2->DR;
-    dmaInitParams.DMA_MemoryBaseAddr = (uint32_t)g_SerialDataTxBuffer;
+    dmaInitParams.DMA_PeripheralBaseAddr = (uint32_t) & USART2->DR;
+    dmaInitParams.DMA_MemoryBaseAddr = (uint32_t) g_SerialDataTxBuffer;
     dmaInitParams.DMA_DIR = DMA_DIR_PeripheralDST;
     dmaInitParams.DMA_BufferSize = 0;
     dmaInitParams.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
@@ -142,8 +142,8 @@ void Usart_initialize(void)
     DMA_Init(USART_TX_DMA_CHANNEL, &dmaInitParams);
 
     /* Do basic (fixed) configuration of receive DMA */
-    dmaInitParams.DMA_PeripheralBaseAddr = (uint32_t)&USART2->DR;
-    dmaInitParams.DMA_MemoryBaseAddr = (uint32_t)g_SerialDataRxBuffer;
+    dmaInitParams.DMA_PeripheralBaseAddr = (uint32_t) & USART2->DR;
+    dmaInitParams.DMA_MemoryBaseAddr = (uint32_t) g_SerialDataRxBuffer;
     dmaInitParams.DMA_DIR = DMA_DIR_PeripheralSRC;
     dmaInitParams.DMA_BufferSize = USART_BUFFER_SIZE;
     dmaInitParams.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
@@ -204,13 +204,12 @@ void Usart_doBackground(void)
 
     rxIndex = USART_BUFFER_SIZE - USART_RX_DMA_CHANNEL->CNDTR;
 
-    length = (int32_t)rxIndex - (int32_t)g_SerialDataRxIndex;
+    length = (int32_t) rxIndex - (int32_t) g_SerialDataRxIndex;
 
-    if (0 < length)
-    {
-        /* Data available and no wrap around */
-        g_pCbSerialData(&g_SerialDataRxBuffer[g_SerialDataRxIndex], (uint32_t)length);
-        g_SerialDataRxIndex = rxIndex;
+    if (0 < length) {
+	/* Data available and no wrap around */
+	g_pCbSerialData(&g_SerialDataRxBuffer[g_SerialDataRxIndex], (uint32_t) length);
+	g_SerialDataRxIndex = rxIndex;
     }
 
     /* End of critical section */
@@ -225,7 +224,7 @@ void Usart_doBackground(void)
  *
  * @retval The number of bytes transmitted.
  *****************************************************************************/
-uint32_t Usart_transmit(uint8_t* pData, uint32_t length)
+uint32_t Usart_transmit(uint8_t * pData, uint32_t length)
 {
     uint32_t i;
     InterruptStatus_t status;
@@ -233,20 +232,17 @@ uint32_t Usart_transmit(uint8_t* pData, uint32_t length)
     /* Begin of critical section */
     status = Interrupt_saveAndDisable();
 
-    if (0 != g_SerialDataTxPending)
-    {
-        /* End of critical section */
-    	Interrupt_restore(status);
-        return 0;
+    if (0 != g_SerialDataTxPending) {
+	/* End of critical section */
+	Interrupt_restore(status);
+	return 0;
     }
 
-    length = (length > USART_BUFFER_SIZE) ? USART_BUFFER_SIZE
-                                                 : length;
+    length = (length > USART_BUFFER_SIZE) ? USART_BUFFER_SIZE : length;
 
     /* Copy data in dedicated transmit buffer */
-    for (i = 0; i < length; i++)
-    {
-        g_SerialDataTxBuffer[i] = pData[i];
+    for (i = 0; i < length; i++) {
+	g_SerialDataTxBuffer[i] = pData[i];
     }
 
     DMA_Cmd(USART_TX_DMA_CHANNEL, DISABLE);
@@ -266,11 +262,10 @@ uint32_t Usart_transmit(uint8_t* pData, uint32_t length)
  *****************************************************************************/
 void DMA1_Channel7_IRQHandler(void)
 {
-    if (SET == DMA_GetITStatus(DMA1_FLAG_TC7))
-    {
-        /* Transfer complete interrupt */
-        g_SerialDataTxPending = 0;
-        DMA_ClearITPendingBit(DMA1_FLAG_TC7);
+    if (SET == DMA_GetITStatus(DMA1_FLAG_TC7)) {
+	/* Transfer complete interrupt */
+	g_SerialDataTxPending = 0;
+	DMA_ClearITPendingBit(DMA1_FLAG_TC7);
     }
 }
 
@@ -282,33 +277,27 @@ void DMA1_Channel6_IRQHandler(void)
     uint32_t rxIndex;
     int32_t length;
 
-    if (SET == DMA_GetITStatus(DMA1_FLAG_HT6))
-    {
-        /* Half transfer interrupt */
-        DMA_ClearITPendingBit(DMA1_FLAG_HT6);
+    if (SET == DMA_GetITStatus(DMA1_FLAG_HT6)) {
+	/* Half transfer interrupt */
+	DMA_ClearITPendingBit(DMA1_FLAG_HT6);
     }
 
-    if (SET == DMA_GetITStatus(DMA1_FLAG_TC6))
-    {
-        /* Transfer complete interrupt */
-        DMA_ClearITPendingBit(DMA1_FLAG_TC6);
+    if (SET == DMA_GetITStatus(DMA1_FLAG_TC6)) {
+	/* Transfer complete interrupt */
+	DMA_ClearITPendingBit(DMA1_FLAG_TC6);
     }
 
     rxIndex = USART_BUFFER_SIZE - USART_RX_DMA_CHANNEL->CNDTR;
 
-    length = (int32_t)rxIndex - (int32_t)g_SerialDataRxIndex;
+    length = (int32_t) rxIndex - (int32_t) g_SerialDataRxIndex;
 
-    if (0 < length)
-    {
-        /* Data available and no wrap around */
-        g_pCbSerialData(&g_SerialDataRxBuffer[g_SerialDataRxIndex], (uint32_t)length);
-    }
-    else
-    {
-        /* Data available and wrap around */
-        g_pCbSerialData(&g_SerialDataRxBuffer[g_SerialDataRxIndex],
-                        USART_BUFFER_SIZE - g_SerialDataRxIndex);
-        g_pCbSerialData(&g_SerialDataRxBuffer[0], rxIndex);
+    if (0 < length) {
+	/* Data available and no wrap around */
+	g_pCbSerialData(&g_SerialDataRxBuffer[g_SerialDataRxIndex], (uint32_t) length);
+    } else {
+	/* Data available and wrap around */
+	g_pCbSerialData(&g_SerialDataRxBuffer[g_SerialDataRxIndex], USART_BUFFER_SIZE - g_SerialDataRxIndex);
+	g_pCbSerialData(&g_SerialDataRxBuffer[0], rxIndex);
     }
 
     g_SerialDataRxIndex = rxIndex;

@@ -43,7 +43,7 @@ void Lin_deinitialize(void)
  *****************************************************************************/
 uint8_t Lin_removeTransmitTask(uint32_t taskId)
 {
-	(void)taskId;
+    (void)taskId;
     return 0;
 }
 
@@ -55,4 +55,3 @@ uint8_t Lin_removeTransmitTask(uint32_t taskId)
 void Lin_doBackground(void)
 {
 }
-

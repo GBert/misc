@@ -20,7 +20,7 @@
  * Function pointer (call-back) declarations
  *****************************************************************************/
 
-typedef void (*UsartCbRxData) (const uint8_t* pData, uint32_t length);
+typedef void (*UsartCbRxData) (const uint8_t * pData, uint32_t length);
 
 /******************************************************************************
  * Function declarations
@@ -28,7 +28,7 @@ typedef void (*UsartCbRxData) (const uint8_t* pData, uint32_t length);
 
 void Usart_initialize(void);
 void Usart_connectCbRxData(UsartCbRxData pCb);
-uint32_t Usart_transmit(uint8_t* pData, uint32_t length);
+uint32_t Usart_transmit(uint8_t * pData, uint32_t length);
 void Usart_doBackground(void);
 
 #endif /* USART_H_ */

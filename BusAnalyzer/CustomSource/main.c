@@ -36,7 +36,7 @@
  * Function definitions
  *****************************************************************************/
 
-int main (void)
+int main(void)
 {
     /* Basic RCC and PLL setup */
     SystemInit();
@@ -48,7 +48,7 @@ int main (void)
     Time_initialize();
     Communication_initialize();
 
-    for(;;) {
+    for (;;) {
 	/* Do host communication (process commands, provide packets) */
 	Communication_doBackground();
     }
