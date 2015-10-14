@@ -36,7 +36,6 @@ clean:
 	cd boot && $(MAKE) clean
 	cd demo && $(MAKE) clean
 	cd loader && $(MAKE) clean
-	cd loader && $(MAKE) -f Makefile.openwrt clean
 	find . -name "*~" -exec rm {} \;
 
 uninstall:clean
