@@ -658,6 +658,7 @@ static void cp210x_get_termios_port(struct usb_serial_port *port,
 	unsigned int cflag, modem_ctl[4];
 	unsigned int baud;
 	unsigned int bits;
+	unsigned int event_mask;
 
 	cp210x_get_config(port, CP210X_GET_BAUDRATE, 0, &baud, 4);
 
@@ -770,6 +771,21 @@ static void cp210x_get_termios_port(struct usb_serial_port *port,
 	}
 
 	*cflagp = cflag;
+
+#if 1
+	/* tx empty event_mask test */;
+	cp210x_get_config(port, CP210X_GET_EVENTMASK, 0, &event_mask, 2);
+	dev_info(dev,  "%s - 0x%02x old event mask 0x%04x\n", __func__, CP210X_GET_EVENTMASK, event_mask);
+	event_mask |= EVENTSTATE_TX_EMPTY;
+	dev_info(dev,  "%s - 0x%02x     event mask 0x%04x\n", __func__, CP210X_SET_EVENTMASK, event_mask);
+	cp210x_set_config(port, CP210X_SET_EVENTMASK, 0, &event_mask, 2);
+
+	cp210x_get_config(port, CP210X_GET_EVENTMASK, 0, &event_mask, 2);
+	dev_info(dev,  "%s - 0x%02x new event mask 0x%04x\n", __func__, CP210X_GET_EVENTMASK, event_mask);
+
+	cp210x_get_config(port, CP210X_GET_EVENTSTATE, 0, &event_mask, 2);
+	dev_info(dev,  "%s - 0x%02x    event state 0x%04x\n", __func__, CP210X_GET_EVENTSTATE, event_mask);
+#endif
 }
 
 /*
