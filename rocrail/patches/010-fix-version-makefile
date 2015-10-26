@@ -9,14 +9,3 @@
  	cd rocrail$(CS) $(MAKE) server TOOLPREFIX=$(TOOLPREFIX) LIBSUFFIX=$(LIBSUFFIX) PLATFORM=$(PLATFORM) ARCH=$(ARCH) NATIVE=$(NATIVE) MINGWINSTALL=$(MINGWINSTALL) WXCONFIG=$(WXCONFIG)
  
  offline: versionoffline
---- a/rocnetnode/makefile	2014-11-06 17:25:27.087397496 +0100
-+++ a/rocnetnode/makefile	2014-11-06 17:25:36.667204048 +0100
-@@ -97,7 +97,7 @@
- 
- TARGET=$(OUTDIR)$(FS)rocnetnode$(BINSUFFIX)
- 
--all: version $(TARGET)
-+all: $(TARGET)
- 
- $(TARGET): $(OBJS) $(RRLIBS)
- 	$(LNK) $(LNK_FLAGS) -o $(TARGET) $(OBJS) $(RNOBJS) $(RRLIBS) $(LIBS)
