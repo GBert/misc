@@ -23,10 +23,11 @@ Usage: can2udp -l \<port\> -d \<port\> -i \<can interface\>
 </pre></code>
 <pre><code>
 Usage: can2lan -c \<config_dir\> -u \<udp_port\> -t \<tcp_port\> -d \<udp_dest_port\> -i \<can interface\>
-   Version 1.02
+   Version 1.03
          -c \<config_dir\>     set the config directory
          -u \<port\>           listening UDP port for the server - default 15731
          -t \<port\>           listening TCP port for the server - default 15731
+         -s \<port\>           second listening TCP server port - default 15732
          -d \<port\>           destination UDP port for the server - default 15730
          -b \<bcast_addr/int\> broadcast address or interface - default 255.255.255.255/br-lan
          -i \<can int\>        can interface - default can0
