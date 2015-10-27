@@ -31,10 +31,11 @@ int verbose, ms1_workaround;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.02\n\n");
+    fprintf(stderr, "   Version 1.03\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
+    fprintf(stderr, "         -s <port>           second listening TCP server port - default 15732\n");
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default 15730\n");
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -i <can int>        CAN interface - default can0\n");
@@ -148,8 +149,8 @@ int main(int argc, char **argv) {
     struct can_frame frame;
     char timestamp[16];
     /* UDP incoming socket , CAN socket, UDP broadcast socket, TCP socket */
-    int sa, sc, sb, st, tcp_socket;
-    struct sockaddr_in saddr, baddr, tcp_addr;
+    int sa, sc, sb, st, st2, tcp_socket;
+    struct sockaddr_in saddr, baddr, tcp_addr, tcp_addr2;
     /* vars for determing broadcast address */
     struct ifaddrs *ifap, *ifa;
     struct sockaddr_in *bsa;
@@ -167,6 +168,7 @@ int main(int argc, char **argv) {
 
     int local_udp_port = 15731;
     int local_tcp_port = 15731;
+    int local2_tcp_port = 15732;
     int destination_port = 15730;
     int background = 1;
     const int on = 1;
@@ -185,7 +187,7 @@ int main(int argc, char **argv) {
 
     config_file[0] = '\0';
 
-    while ((opt = getopt(argc, argv, "c:u:t:d:b:i:mvhf?")) != -1) {
+    while ((opt = getopt(argc, argv, "c:u:s:t:d:b:i:mvhf?")) != -1) {
 	switch (opt) {
 	case 'c':
 	    if (strlen(optarg) < MAXLINE) {
@@ -200,6 +202,9 @@ int main(int argc, char **argv) {
 	    break;
 	case 't':
 	    local_tcp_port = strtoul(optarg, (char **)NULL, 10);
+	    break;
+	case 's':
+	    local2_tcp_port = strtoul(optarg, (char **)NULL, 10);
 	    break;
 	case 'd':
 	    destination_port = strtoul(optarg, (char **)NULL, 10);
@@ -329,6 +334,30 @@ int main(int argc, char **argv) {
     for (i = 0; i < MAX_TCP_CONN; i++)
 	tcp_client[i] = -1;	/* -1 indicates available entry */
 
+    /* prepare second TCP socket */
+    st2 = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (st2 < 0) {
+	fprintf(stderr, "creating second TCP socket error: %s\n", strerror(errno));
+	exit(1);
+    }
+    tcp_addr2.sin_family = AF_INET;
+    tcp_addr2.sin_addr.s_addr = htonl(INADDR_ANY);
+    tcp_addr2.sin_port = htons(local2_tcp_port);
+    if (bind(st2, (struct sockaddr *)&tcp_addr2, sizeof(tcp_addr2)) < 0) {
+	fprintf(stderr, "binding second TCP socket error: %s\n", strerror(errno));
+	exit(1);
+    }
+    if (listen(st2, MAXPENDING) < 0) {
+	fprintf(stderr, "starting TCP listener error: %s\n", strerror(errno));
+	exit(1);
+    }
+#if 0
+    /* prepare TCP clients array */
+    max_tcp_i = -1;		/* index into tcp_client[] array */
+    for (i = 0; i < MAX_TCP_CONN; i++)
+	tcp_client[i] = -1;	/* -1 indicates available entry */
+#endif
+
     /* prepare CAN socket */
     bzero(&caddr, sizeof(caddr));
     sc = socket(PF_CAN, SOCK_RAW, CAN_RAW);
@@ -374,7 +403,8 @@ int main(int argc, char **argv) {
     FD_SET(sc, &all_fds);
     FD_SET(sa, &all_fds);
     FD_SET(st, &all_fds);
-    max_fds = MAX(MAX(sc, sa), st);
+    FD_SET(st2, &all_fds);
+    max_fds = MAX(MAX(MAX(sc, sa), st), st2);
 
     while (1) {
 	read_fds = all_fds;
@@ -458,6 +488,20 @@ int main(int argc, char **argv) {
 	    if (--nready <= 0)
 		continue;	/* no more readable descriptors */
 	}
+	/* received a packet on second TCP port*/
+	if (FD_ISSET(st2, &read_fds)) {
+	    conn_fd = accept(st2, (struct sockaddr *)&tcp_addr2, &tcp_client_length);
+
+	    /* TODO : close missing */
+	    if (verbose && !background) {
+		printf("new client: %s, port %d conn fd: %d max fds: %d\n", inet_ntop(AF_INET, &(tcp_addr2.sin_addr),
+			buffer, sizeof(buffer)), ntohs(tcp_addr2.sin_port), conn_fd, max_fds);
+	    }
+	    FD_SET(conn_fd, &all_fds);	/* add new descriptor to set */
+	    max_fds = MAX(conn_fd, max_fds);	/* for select */
+	    max_tcp_i = MAX(i, max_tcp_i);	/* max index in tcp_client[] array */
+	}
+
 	/* check for already connected TCP clients */
 	for (i = 0; i <= max_tcp_i; i++) {	/* check all clients for data */
 	    tcp_socket = tcp_client[i];
@@ -510,5 +554,6 @@ int main(int argc, char **argv) {
     close(sa);
     close(sb);
     close(st);
+    close(st2);
     return 0;
 }
