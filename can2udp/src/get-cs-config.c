@@ -25,8 +25,8 @@
 #define FRAME_SIZE	13
 #define MAXSIZE		16384
 
-unsigned char GETCONFIG[]          = { 0x00, 0x40, 0x03, 0x00, 0x08 };
-unsigned char GETCONFIG_DATA[]     = { 0x00, 0x42, 0x03, 0x00, 0x08 };
+unsigned char GETCONFIG[]	= { 0x00, 0x40, 0x03, 0x00, 0x08 };
+unsigned char GETCONFIG_DATA[]	= { 0x00, 0x42, 0x03, 0x00, 0x08 };
 unsigned char GETCONFIG_RESPONSE[] = { 0x00, 0x42, 0x03, 0x00, 0x06 };
 
 struct config_data {
@@ -141,14 +141,14 @@ int main(int argc, char **argv) {
     bzero(&servaddr, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
     if (inet_aton((argv[2]), (struct in_addr *)&servaddr.sin_addr.s_addr) == 0) {
-	fprintf(stderr, "invalid address : %s\n", strerror(errno));
+	fprintf(stderr, "invalid address: %s\n", strerror(errno));
 	exit(1);
     }
 
     servaddr.sin_port = htons(15731);
 
     if (connect(sockfd, (struct sockaddr *)&servaddr, sizeof(servaddr))) {
-	fprintf(stderr, "can't connect to TCP socket %s:\n", strerror(errno));
+	fprintf(stderr, "can't connect to TCP socket: %s\n", strerror(errno));
 	exit(1);
     }
 
