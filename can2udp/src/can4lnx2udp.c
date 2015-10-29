@@ -1,5 +1,4 @@
-/*
- * ----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
  * <info@gerhard-bertelsmann.de> wrote this file. As long as you retain this notice you
  * can do whatever you want with this stuff. If we meet some day, and you think
@@ -55,13 +54,10 @@ int main(int argc, char **argv) {
     pid_t pid;
     int opt;
     canmsg_t frame;
-
     int sa,sb;			/* UDP socket UDP Broadcast Socket */
     int fdc;			/* can4linux FD */
     struct sockaddr_in saddr, baddr;
-
     fd_set readfds;
-
     int s;
 
     int local_port = 15730;

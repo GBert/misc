@@ -40,9 +40,9 @@ void print_content(unsigned char *ptr, int length) {
 /*-------------------------------------------------------------------*/
 int main(int argc, char **argv) {
     unsigned int pkt_counter = 1;	/* packet counter */
-    // unsigned long byte_counter=0;      /* total bytes seen in entire trace */
-    // unsigned long cur_counter=0;       /* counter for current 1-second interval */
-    // unsigned long current_ts=0;        /* current timestamp */
+    /* unsigned long byte_counter=0; */	/* total bytes seen in entire trace */
+    /* unsigned long cur_counter=0;  */	/* counter for current 1-second interval */
+    /* unsigned long current_ts=0;   */	/* current timestamp */
     struct tcphdr *mytcp;
     struct udphdr *myudp;
     int fnum;

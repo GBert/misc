@@ -12,13 +12,13 @@
 
 #include "scan2lan.h"
 
-char *CAN_FORMAT_STRG      = "      CAN->  CANID 0x%06X R [%d]";
-char *TO_CAN_FORMAT_STRG   = "      CAN    CANID 0x%06X   [%d]";
-char *UDP_FORMAT_STRG      = "->CAN>UDP    CANID 0x%06X   [%d]";
-char *TCP_FORMAT_STRG      = "->TCP>CAN    CANID 0x%06X   [%d]";
-char *TCP_FORMATS_STRG     = "->TCP>CAN*   CANID 0x%06X   [%d]";
-char *CAN_TCP_FORMAT_STRG  = "->CAN>TCP    CANID 0x%06X   [%d]";
-char *NET_UDP_FORMAT_STRG  = "      UDP->  CANID 0x%06X   [%d]";
+char *CAN_FORMAT_STRG		= "      CAN->  CANID 0x%06X R [%d]";
+char *TO_CAN_FORMAT_STRG	= "      CAN    CANID 0x%06X   [%d]";
+char *UDP_FORMAT_STRG		= "->CAN>UDP    CANID 0x%06X   [%d]";
+char *TCP_FORMAT_STRG		= "->TCP>CAN    CANID 0x%06X   [%d]";
+char *TCP_FORMATS_STRG		= "->TCP>CAN*   CANID 0x%06X   [%d]";
+char *CAN_TCP_FORMAT_STRG	= "->CAN>TCP    CANID 0x%06X   [%d]";
+char *NET_UDP_FORMAT_STRG	= "      UDP->  CANID 0x%06X   [%d]";
 
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[] = { 0x00, 0x36, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
 
@@ -57,7 +57,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
     char config_name[9];
     char gbs_name[MAXLINE];
     gbs_name[0] = '\0';
-    int ret=0;
+    int ret = 0;
 
     memcpy(&canid, netframe, 4);
     canid = ntohl(canid);
@@ -385,7 +385,7 @@ int main(int argc, char **argv) {
 	    conn_fd = accept(st, (struct sockaddr *)&tcp_addr, &tcp_client_length);
 	    if (verbose && !background) {
 		printf("new client: %s, port %d conn fd: %d max fds: %d\n", inet_ntop(AF_INET, &(tcp_addr.sin_addr),
-			buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port), conn_fd, max_fds);
+		       buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port), conn_fd, max_fds);
 	    }
 	    for (i = 0; i < MAX_TCP_CONN; i++) {
 		if (tcp_client[i] < 0) {
@@ -417,7 +417,7 @@ int main(int argc, char **argv) {
 		    if (verbose && !background) {
 			time_stamp(timestamp);
 			printf("%s client %s closed connection\n", timestamp,
-			    inet_ntop(AF_INET, &tcp_addr.sin_addr, buffer, sizeof(buffer)));
+			       inet_ntop(AF_INET, &tcp_addr.sin_addr, buffer, sizeof(buffer)));
 		    }
 		    close(tcp_socket);
 		    FD_CLR(tcp_socket, &all_fds);
