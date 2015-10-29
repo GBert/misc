@@ -1,5 +1,4 @@
-/*
- * ----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
  * <info@gerhard-bertelsmann.de> wrote this file. As long as you retain this
  * notice you can do whatever you want with this stuff. If we meet some day,
@@ -26,11 +25,11 @@
 #define FRAME_SIZE	13
 #define MAXSIZE		16384
 
-unsigned char GET_GB[]  = { 0x00, 0x30, 0x47, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+unsigned char GET_GB[]	= { 0x00, 0x30, 0x47, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 unsigned char GET_GB1[] = { 0x00, 0x3A, 0x47, 0x11, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
-char *TCP_FORMAT_STRG   = "->TCP    CANID 0x%06X   [%d]";
-char *TCP_FORMATS_STRG  = "->TCP*   CANID 0x%06X   [%d]";
+char *TCP_FORMAT_STRG	= "->TCP    CANID 0x%06X   [%d]";
+char *TCP_FORMATS_STRG	= "->TCP*   CANID 0x%06X   [%d]";
 char *S_TCP_FORMAT_STRG = "  TCP<-  CANID 0x%06X   [%d]";
 
 int time_stamp(char *timestamp) {
