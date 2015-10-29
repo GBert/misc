@@ -116,8 +116,6 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 
 int main(int argc, char **argv) {
     pid_t pid;
-    /* struct cs2_config cs2_config; */
-    extern int optind, opterr, optopt;
     int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, tcp_client[MAX_TCP_CONN];;
     char timestamp[16];
     struct termios term_attr;

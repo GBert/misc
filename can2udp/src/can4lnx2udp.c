@@ -53,7 +53,6 @@ void print_can_frame(char *str, canmsg_t *frame, int verbose) {
 
 int main(int argc, char **argv) {
     pid_t pid;
-    extern int optind, opterr, optopt;
     int opt;
     canmsg_t frame;
 

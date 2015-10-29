@@ -135,7 +135,6 @@ int send_defined_can_frame(int can_socket, unsigned char *data, int verbose) {
 
 int main(int argc, char **argv) {
     pid_t pid;
-    extern int optind, opterr, optopt;
     int max_fds, opt;
     struct can_frame frame;
 

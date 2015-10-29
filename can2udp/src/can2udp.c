@@ -70,7 +70,6 @@ void send_magic_start_60113_frame(int can_socket, int verbose) {
 
 int main(int argc, char **argv) {
     pid_t pid;
-    extern int optind, opterr, optopt;
     int opt;
     struct can_frame frame;
 

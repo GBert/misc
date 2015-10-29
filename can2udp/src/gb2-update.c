@@ -389,7 +389,6 @@ void fsm(unsigned char *netframe, struct update_config *device_config) {
 }
 
 int main(int argc, char **argv) {
-    extern int optind, opterr, optopt;
     int ret, s, opt;
     struct can_frame frame;
     struct timeval timeout;
