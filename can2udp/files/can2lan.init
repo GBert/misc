@@ -5,8 +5,7 @@ START=99
 
 start() {
 	modprobe sun4i_can
-	ip link set can0 type can bitrate 250000
-	ifconfig can0 up
+	/usr/bin/ip link set can0 up type can bitrate 250000
 	sleep 10
 
 	[ -e /www/config/ ] && {
