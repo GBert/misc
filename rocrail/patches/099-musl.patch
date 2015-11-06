@@ -8,7 +8,7 @@
 +#include <sys/ioctl.h>
  #include <termios.h>
  #include "linux/serial.h"
- /* #include <sys/io.h> */
+ #include <sys/io.h>
 --- a/rocs/impl/unx/usystem.c
 +++ b/rocs/impl/unx/usystem.c
 @@ -106,7 +106,7 @@ Boolean rocs_system_accessPort( int from
