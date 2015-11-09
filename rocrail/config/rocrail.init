@@ -6,7 +6,7 @@ START=99
 start() {
 	[ -e /opt/rocrail/ ] && {
 		cd /opt/rocrail/
-		nohup ./rocrail -l /opt/rocrail &
+		nohup ./rocrail -nodevcheck -l /opt/rocrail &
 		echo "$!" > /tmp/rocraild.pid
 	}
 }
