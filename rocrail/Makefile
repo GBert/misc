@@ -145,6 +145,8 @@ define Package/rocrail-server/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/virtual.so $(1)/opt/rocrail
 	$(INSTALL_BIN) ./config/rocrail.ini $(1)/opt/rocrail
 	$(INSTALL_BIN) ./config/plan.xml $(1)/opt/rocrail
+#	$(INSTALL_DIR) $(1)/etc/init.d
+#	$(INSTALL_BIN) ./config/rocrail.init $(1)/etc/init.d/rocrail
 endef
 
 define Package/rocnetnode/install
