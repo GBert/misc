@@ -25,9 +25,9 @@ void pps_init(void) {
   PPSLOCK = 0x55;
   PPSLOCK = 0xaa;
   PPSLOCK = 0;                // unlock PPS
-  // set UASRT : TX on RA0 , RX on RA1
-  RXPPS  = 0b00001;           // input  EUSART RX -> RA1
-  RA0PPS = 0b00110;           // RA0 output TX/CK
+  // set USART : RX on RA0 , TX on RA1 / page 141
+  RXPPS  = 0b00000;           // input  EUSART RX -> RA0
+  RA1PPS = 0b10110;           // RA1 output TX/CK
 
   PPSLOCK = 0x55;
   PPSLOCK = 0xaa;
