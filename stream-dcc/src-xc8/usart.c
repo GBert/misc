@@ -11,39 +11,9 @@
 
 const char * sData = " Data: ";
 
-void init_usart (void) {
-    // USART configuration
-    TRISCbits.TRISC6 = 0;	// make the TX pin a digital output
-    TRISCbits.TRISC7 = 1;	// make the RX pin a digital input
-    TXSTA1bits.BRGH = USE_BRGH;		// high speed
-    BAUDCON1bits.BRG16 = USE_BRG16; 	// 8-bit baud rate generator
-    SPBRG = SBRG_VAL;		// calculated by defines
- 
-    PIE1bits.RC1IE = 0;		// disbale RX interrupt
-    PIE1bits.TX1IE = 0;		// disbale TX interrupt
- 
-    RCSTA1bits.RX9  = 0;	// 8-bit reception
-    RCSTA1bits.SPEN = 1;	// enable serial port (configures RX/DT and TX/CK pins as serial port pins)
-    RCSTA1bits.CREN = 1;	// enable receiver
-
-    TXSTA1bits.TX9  = 0;	// 8-bit transmission
-    TXSTA1bits.SYNC = 0;	// asynchronous mode
-    TXSTA1bits.TXEN = 1;	// transmit enabled
-
-    /* don' use interrupts at the moment 
-    // interrupts / USART interrupts configuration
-    RCONbits.IPEN   = 0; // disable interrupt priority
-    INTCONbits.GIE  = 1; // enable interrupts
-    INTCONbits.PEIE = 1; // enable peripheral interrupts.
-    PIE1bits.RCIE   = 1; // enable USART receive interrupt
-    PIE1bits.TXIE   = 0; // disable USART TX interrupt
-    PIR1bits.RCIF = 0;
-    */
-}
-
 /* prints char on USART if pssible */
 char putchar(unsigned char c) {
-    if ( TXSTA1bits.TRMT1 ) {
+    if ( TXSTAbits.TRMT ) {
 	TXREG1 = c;
         return 1;
     }
@@ -52,7 +22,7 @@ char putchar(unsigned char c) {
 
 /* prints char on USART */
 void putchar_wait(unsigned char c) {
-   while (!TXSTA1bits.TRMT1);
+   while (!TXSTAbits.TRMT);
    TXREG1 = c;
 }
 

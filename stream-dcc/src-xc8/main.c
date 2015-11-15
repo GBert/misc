@@ -1,4 +1,5 @@
-#include<xc.h>
+#include <xc.h>
+#include "main.h"
 
 #pragma config FOSC=INTOSC, PLLEN=OFF, MCLRE=ON, WDTE=OFF
 #pragma config LVP=ON, CLKOUTEN=OFF
@@ -27,7 +28,7 @@ void pps_init(void) {
   PPSLOCK = 0;                // unlock PPS
   // set USART : RX on RA0 , TX on RA1 / page 141
   RXPPS  = 0b00000;           // input  EUSART RX -> RA0
-  RA1PPS = 0b10110;           // RA1 output TX/CK
+  RA1PPS = 0b10100;           // RA1 output TX/CK
 
   PPSLOCK = 0x55;
   PPSLOCK = 0xaa;
@@ -76,8 +77,8 @@ void uart_init (void) {
 
   SPBRG = SBRG_VAL;           // calculated by defines
 
-  TRISAbits.TRISA0 = 0;       // make the TX pin a digital output
-  TRISAbits.TRISA1 = 1;       // make the RX pin a digital input
+  // TRISAbits.TRISA0 = 1;       // make the TX pin a digital output
+  // TRISAbits.TRISA1 = 0;       // make the RX pin a digital input
 
   PIR1bits.RCIF = 0;
 }
@@ -98,10 +99,11 @@ void timer_init() {
 }
 
 void main() {
+  unsigned short counter=0;
   system_init();
-  pps_init();
   uart_init();
-  timer_init();
+  pps_init();
+//  timer_init();
   // Fcyc 8 MHZ
   // 8 cycles per loop -> 1MHz square wave
   while(1) {
@@ -110,5 +112,8 @@ void main() {
     LATA5 = 1;  //
     LATA5 = 1;  //
     LATA5 = 0;
+    if ( counter == 0 )
+	putchar_wait(0x55);
+    counter++;
   }
 }
