@@ -12,7 +12,7 @@
 // if BRGH = 1 => FOSC/[16 (n + 1)]
 // avoid rounding errors
 
-#define BAUDRATE        57600
+#define BAUDRATE        115200
 #define USE_BRG16       0
 #define USE_BRGH        1
 
@@ -103,7 +103,7 @@ void main() {
   system_init();
   uart_init();
   pps_init();
-//  timer_init();
+  timer_init();
   // Fcyc 8 MHZ
   // 8 cycles per loop -> 1MHz square wave
   while(1) {

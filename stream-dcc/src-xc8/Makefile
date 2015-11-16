@@ -17,7 +17,8 @@ $(MAIN).hex: $(SRC)
 	$(CC) $(SRC) $(CC_FLAGS) $(OPTIMISATION) --chip=$(PROCESSOR) $(CC_INCLUDE) --ASMLIST -M
 
 flash: 
-	pk2cmd -B/usr/share/pickit2 -PPIC16F1705 -Fmain.hex -A3.3 -M -R -T
+#	pk2cmd -B/usr/share/pickit2 -PPIC16F1705 -Fmain.hex -A3.3 -M -R -T
+	p14 lvp p main.hex
 
 clean:
 	rm -f $(MAIN).hex funclist $(MAIN).cof $(MAIN).hxl *.p1 $(MAIN).sdb startup.* *.cmf *.rlf *.map *.as *.d *.obj *.lst *.pre $(MAIN).sym
