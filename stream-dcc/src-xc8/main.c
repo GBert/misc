@@ -22,8 +22,8 @@
 #define SBRG_VAL        ( (((_XTAL_FREQ / BAUDRATE) / 8) - 1) / 2 )
 #endif
 
-// timer 0 overflow in mikroseconds
-#define TIMER0_VAL	(256 - 50)
+// timer 0 overflow in 50 microseconds
+#define TIMER0_VAL	(256 - (50-2))
 #define S88BITS		16
 
 #define S88_DATA_PIN	TRISA2
@@ -55,7 +55,7 @@ void interrupt ISR(void) {
     T0IF=0;
     TMR0 = TIMER0_VAL;
     LATA5 = ~LATA5;
-#if 0
+#if 1
     // FSM
     switch (s88_state) {
     case STATE_START:
@@ -80,8 +80,11 @@ void interrupt ISR(void) {
       s88_state = STATE_RESET_L;
       break;
     case STATE_RESET_L:
-      S88_RESET = 0;
+      S88_PS = 0;
       s88_state = STATE_PS_L;
+      break;
+    default:
+      s88_state = STATE_START;
       break;
     }
 #endif
@@ -193,7 +196,7 @@ void main() {
   pps_init();
   system_init();
   uart_init();
-  // s88_init();
+  s88_init();
   timer0_init();
   GIE = 1;
   s88_state = STATE_START;
