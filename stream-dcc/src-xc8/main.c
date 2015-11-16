@@ -25,14 +25,15 @@
 void pps_init(void) {
   PPSLOCK = 0x55;
   PPSLOCK = 0xaa;
-  PPSLOCK = 0;                // unlock PPS
+  PPSLOCK = 0;		// unlock PPS
   // set USART : RX on RA0 , TX on RA1 / 40001729B.pdf page 141
-  RXPPS  = 0b00000;           // input  EUSART RX -> RA0
-  RA1PPS = 0b10100;           // RA1 output TX/CK
+  RXPPS  = 0b00000;	// input  EUSART RX -> RA0
+  RA1PPS = 0b10100;	// RA1 output TX/CK
+  RA4PPS = 0b01100;	// RA4 output CCP1
 
   PPSLOCK = 0x55;
   PPSLOCK = 0xaa;
-  PPSLOCK = 1;                // lock PPS
+  PPSLOCK = 1;		// lock PPS
 }
 
 void system_init() {
@@ -65,20 +66,20 @@ void system_init() {
 }
 
 void uart_init (void) {
-  TXSTAbits.TX9  = 1;         // 8-bit transmission
-  TXSTAbits.TX9D = 1;         //  one extra stop bit
-  TXSTAbits.TXEN = 1;         // transmit enabled
-  TXSTAbits.SYNC = 0;         // asynchronous mode
-  TXSTAbits.BRGH = 1;         // high speed
-  RCSTAbits.SPEN = 1;         // enable serial port (configures RX/DT and TX/CK pins as serial port pins)
-  RCSTAbits.RX9  = 0;         // 8-bit reception
-  RCSTAbits.CREN = 1;         // enable receiver
+  TXSTAbits.TX9  = 1;		// 8-bit transmission
+  TXSTAbits.TX9D = 1;		//  one extra stop bit
+  TXSTAbits.TXEN = 1;		// transmit enabled
+  TXSTAbits.SYNC = 0;		// asynchronous mode
+  TXSTAbits.BRGH = 1;		// high speed
+  RCSTAbits.SPEN = 1;		// enable serial port (configures RX/DT and TX/CK pins as serial port pins)
+  RCSTAbits.RX9  = 0;		// 8-bit reception
+  RCSTAbits.CREN = 1;		// enable receiver
   BAUDCON1bits.BRG16 = USE_BRG16; // 8-bit baud rate generator
 
-  SPBRG = SBRG_VAL;           // calculated by defines
+  SPBRG = SBRG_VAL;		// calculated by defines
 
-  // TRISAbits.TRISA0 = 1;       // make the TX pin a digital output
-  // TRISAbits.TRISA1 = 0;       // make the RX pin a digital input
+  // TRISAbits.TRISA0 = 1;	// make the TX pin a digital output
+  // TRISAbits.TRISA1 = 0;	// make the RX pin a digital input
 
   PIR1bits.RCIF = 0;
 }
@@ -106,9 +107,9 @@ void main() {
   timer_init();
   while(1) {
     LATA5 = 1;
-    LATA5 = 1;  // add 3 CPU cycles 
-    LATA5 = 1;  //
-    LATA5 = 1;  //
+    LATA5 = 1;	// add 3 CPU cycles
+    LATA5 = 1;	//
+    LATA5 = 1;	//
     LATA5 = 0;
     if ( counter == 0 )
 	putchar_wait(0x55);
