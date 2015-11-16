@@ -26,7 +26,7 @@ void pps_init(void) {
   PPSLOCK = 0x55;
   PPSLOCK = 0xaa;
   PPSLOCK = 0;                // unlock PPS
-  // set USART : RX on RA0 , TX on RA1 / page 141
+  // set USART : RX on RA0 , TX on RA1 / 40001729B.pdf page 141
   RXPPS  = 0b00000;           // input  EUSART RX -> RA0
   RA1PPS = 0b10100;           // RA1 output TX/CK
 
@@ -104,11 +104,9 @@ void main() {
   uart_init();
   pps_init();
   timer_init();
-  // Fcyc 8 MHZ
-  // 8 cycles per loop -> 1MHz square wave
   while(1) {
     LATA5 = 1;
-    LATA5 = 1;  // add 3 CPU cycles to generate symetric signal
+    LATA5 = 1;  // add 3 CPU cycles 
     LATA5 = 1;  //
     LATA5 = 1;  //
     LATA5 = 0;
