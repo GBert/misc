@@ -22,6 +22,72 @@
 #define SBRG_VAL        ( (((_XTAL_FREQ / BAUDRATE) / 8) - 1) / 2 )
 #endif
 
+// timer 0 overflow in mikroseconds
+#define TIMER0_VAL	(256 - 50)
+#define S88BITS		16
+
+#define S88_DATA_PIN	TRISA2
+#define S88_DATA	PORTA2
+#define S88_CLOCK_PIN	TRISC0
+#define S88_CLOCK	LATC0
+#define S88_PS_PIN	TRISC1
+#define S88_PS		LATC1
+#define S88_RESET_PIN	TRISC2
+#define S88_RESET	LATC2
+
+enum s88_fsm_state { STATE_START = 0,
+        STATE_PS_H,
+        STATE_CLOCK_LOAD_H,
+        STATE_CLOCK_LOAD_L,
+        STATE_RESET_H,
+        STATE_RESET_L,
+        STATE_PS_L,
+        STATE_CLOCK_H,
+        STATE_DATA_READ,
+        STATE_CLOCK_L,
+};
+
+volatile unsigned char s88_state;
+volatile unsigned char s88_bits;
+
+void interrupt ISR(void) {
+  if(T0IE && T0IF) {
+    T0IF=0;
+    TMR0 = TIMER0_VAL;
+    LATA5 = ~LATA5;
+#if 0
+    // FSM
+    switch (s88_state) {
+    case STATE_START:
+      S88_PS = 1;
+      s88_state = STATE_PS_H;
+      s88_bits = S88BITS;
+      break;
+    case STATE_PS_H:
+      S88_CLOCK = 1;
+      s88_state = STATE_CLOCK_LOAD_H;
+      break;
+    case STATE_CLOCK_LOAD_H:
+      S88_CLOCK = 0;
+      s88_state = STATE_CLOCK_LOAD_L;
+      break;
+    case STATE_CLOCK_LOAD_L:
+      S88_RESET = 1;
+      s88_state = STATE_RESET_H;
+      break;
+    case STATE_RESET_H:
+      S88_RESET = 0;
+      s88_state = STATE_RESET_L;
+      break;
+    case STATE_RESET_L:
+      S88_RESET = 0;
+      s88_state = STATE_PS_L;
+      break;
+    }
+#endif
+  }
+}
+
 void pps_init(void) {
   PPSLOCK = 0x55;
   PPSLOCK = 0xaa;
@@ -84,10 +150,18 @@ void uart_init (void) {
   PIR1bits.RCIF = 0;
 }
 
+void timer0_init() {
+  OPTION_REGbits.TMR0CS = 0;	// FOSC / 4
+  OPTION_REGbits.PSA = 0;	// use prescaler
+  OPTION_REGbits.PS = 0b010;	// prescaler 1:8
+  TMR0 = TIMER0_VAL;
+  T0IE = 1;
+}
 
-void timer_init() {
-  T1CON = 0b00110000;
-          //00------ FOSC/4 as counting source
+
+void timer1_init() {
+  T1CON = 0b01110000;
+          //01------ FOSC as counting source
           //--11---- prescaler 1:8 (counting every us)
   T1GCONbits.TMR1GE = 0; // timer is not controlled by gate.
   TMR1H = 0; // reset timer1 high
@@ -99,18 +173,31 @@ void timer_init() {
   CCPR1L = 0xFF;
 }
 
+void timer2_init() {
+  // default (FOSC/4)
+  T2CON = 0b00000100;
+          //-----1-- timer on
+          //------00 prescaler 1:1 (overflow every 32us)
+  TMR2 = 0; // reset timer2
+}
+
+void s88_init() {
+  S88_PS_PIN = 0;
+  S88_RESET_PIN = 0;
+  S88_CLOCK_PIN = 0;
+  S88_DATA_PIN = 1;
+}
+
 void main() {
   unsigned short counter=0;
+  pps_init();
   system_init();
   uart_init();
-  pps_init();
-  timer_init();
+  // s88_init();
+  timer0_init();
+  GIE = 1;
+  s88_state = STATE_START;
   while(1) {
-    LATA5 = 1;
-    LATA5 = 1;	// add 3 CPU cycles
-    LATA5 = 1;	//
-    LATA5 = 1;	//
-    LATA5 = 0;
     if ( counter == 0 )
 	putchar_wait(0x55);
     counter++;
