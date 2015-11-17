@@ -3,11 +3,14 @@
 *.cof
 *.cod
 *.d
-*.hx1
-*.swp
+*.hxl
 *.lst
+*.map
 MPLABXLog.*
 *.p1
 *.pre
 *.o
 *.obj
+*.rlf
+*.swp
+*.sym
