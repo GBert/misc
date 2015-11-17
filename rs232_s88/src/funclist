@@ -1,0 +1,11 @@
+_putchar_wait: CODE, 405 0 7
+_system_init: CODE, 330 0 28
+__stringdata: STRCODE, 256 0 37
+_ISR: CODE, 4 0 85
+_s88_init: CODE, 418 0 6
+_main: CODE, 293 0 37
+_uart_init: CODE, 378 0 15
+_timer0_init: CODE, 393 0 12
+__initialization: CODE, 91 0 26
+_pps_init: CODE, 358 0 20
+Total: 273

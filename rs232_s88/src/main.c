@@ -16,7 +16,22 @@
 // timer interval in microseconds
 #define INTERVAL	50
 #define TIMER0_VAL	(256 - (INTERVAL-2))
+#define S88BITS		16
 
+#define S88_DATA_PIN	TRISA2
+#define S88_DATA	PORTAbits.RA2
+#define S88_CLOCK_PIN	TRISC0
+#define S88_CLOCK	LATC0
+#define S88_PS_PIN	TRISC1
+#define S88_PS		LATC1
+#define S88_RESET_PIN	TRISC2
+#define S88_RESET	LATC2
+
+const char * SLCAN = "T0035271180000000000000000\r\0";
+
+volatile unsigned char s88_state;
+volatile unsigned char s88_bits;
+volatile unsigned char s88_data_bit;
 struct serial_buffer_t tx_fifo, rx_fifo;
 
 void interrupt ISR(void) {
@@ -24,6 +39,56 @@ void interrupt ISR(void) {
     T0IF=0;
     TMR0 = TIMER0_VAL;
     LATA5 ^= 1;
+    // FSM
+    switch (s88_state) {
+    case STATE_START:
+      S88_PS = 1;
+      s88_state = STATE_PS_H;
+      s88_bits = S88BITS;
+      break;
+    case STATE_PS_H:
+      S88_CLOCK = 1;
+      s88_state = STATE_CLOCK_LOAD_H;
+      break;
+    case STATE_CLOCK_LOAD_H:
+      S88_CLOCK = 0;
+      s88_state = STATE_CLOCK_LOAD_L;
+      break;
+    case STATE_CLOCK_LOAD_L:
+      S88_RESET = 1;
+      s88_state = STATE_RESET_H;
+      break;
+    case STATE_RESET_H:
+      S88_RESET = 0;
+      s88_state = STATE_RESET_L;
+      break;
+    case STATE_RESET_L:
+      S88_PS = 0;
+      s88_state = STATE_PS_L;
+      break;
+    case STATE_PS_L:
+      S88_CLOCK = 1;
+      s88_state = STATE_CLOCK_H;
+      break;
+    case STATE_CLOCK_H:
+      s88_data_bit = S88_DATA;
+      S88_CLOCK = 0;
+      s88_state = STATE_CLOCK_L;
+      break;
+    case STATE_CLOCK_L:
+      if (s88_bits) {
+        s88_bits--;
+        S88_CLOCK = 1;
+        s88_state = STATE_CLOCK_H;
+      } else {
+        // S88 cyle finished - TODO do something with data
+        s88_state = STATE_START;
+      }
+      break;
+    default:
+      s88_state = STATE_START;
+      break;
+    }
   }
 }
 
@@ -120,12 +185,20 @@ void timer2_init() {
   TMR2 = 0; // reset timer2
 }
 
+void s88_init() {
+  S88_PS_PIN = 0;
+  S88_RESET_PIN = 0;
+  S88_CLOCK_PIN = 0;
+  S88_DATA_PIN = 1;
+}
+
 void main() {
   unsigned short counter=0;
 
   pps_init();
   system_init();
   uart_init();
+  s88_init();
   timer0_init();
 
   /* empty circular buffers */
@@ -135,6 +208,7 @@ void main() {
   rx_fifo.tail=0;
 
   GIE = 1;
+  s88_state = STATE_START;
   while(1) {
     if ( counter == 0 )
 	putchar_wait(0x55);

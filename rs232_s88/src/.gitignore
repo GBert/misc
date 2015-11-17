@@ -1,0 +1,13 @@
+*.as
+*.cmf
+*.cof
+*.cod
+*.d
+*.hx1
+*.swp
+*.lst
+MPLABXLog.*
+*.p1
+*.pre
+*.o
+*.obj

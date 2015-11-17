@@ -37,6 +37,27 @@
 // timer interval in microseconds
 #define INTERVAL        50
 #define TIMER0_VAL      (256 - (INTERVAL-2))
+#define S88BITS         16
+
+#define S88_DATA_PIN    TRISA2
+#define S88_DATA        PORTAbits.RA2
+#define S88_CLOCK_PIN   TRISC0
+#define S88_CLOCK       LATC0
+#define S88_PS_PIN      TRISC1
+#define S88_PS          LATC1
+#define S88_RESET_PIN   TRISC2
+#define S88_RESET       LATC2
+
+enum s88_fsm_state { STATE_START = 0,
+        STATE_PS_H,
+        STATE_CLOCK_LOAD_H,
+        STATE_CLOCK_LOAD_L,
+        STATE_RESET_H,
+        STATE_RESET_L,
+        STATE_PS_L,
+        STATE_CLOCK_H,
+        STATE_CLOCK_L,
+};
 
 void interrupt ISR(void);
 char putchar(unsigned char c);
