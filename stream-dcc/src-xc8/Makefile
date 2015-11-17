@@ -16,7 +16,7 @@ $(MAIN).hex: $(SRC)
 #	$(CC) $(SRC) $(CC_FLAGS) $(OPTIMISATION) --ROM=default,-0c00-0fff --chip=$(PROCESSOR) $(CC_INCLUDE) --ASMLIST -M
 	$(CC) $(SRC) $(CC_FLAGS) $(OPTIMISATION) --chip=$(PROCESSOR) $(CC_INCLUDE) --ASMLIST -M
 
-flash: 
+flash: all
 #	pk2cmd -B/usr/share/pickit2 -PPIC16F1705 -Fmain.hex -A3.3 -M -R -T
 	p14 lvp p main.hex
 
