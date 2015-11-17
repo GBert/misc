@@ -9,6 +9,7 @@
 
 #include <xc.h>
 #include "main.h"
+#include "usart.h"
 
 #pragma config FOSC=INTOSC, PLLEN=OFF, MCLRE=ON, WDTE=OFF
 #pragma config LVP=ON, CLKOUTEN=OFF

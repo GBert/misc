@@ -26,13 +26,6 @@ void putchar_wait(unsigned char c) {
    TXREG1 = c;
 }
 
-void puts_rom(const char *s) {
-    char c;
-    while ( ( c = *s++ ) ) {
-	putchar_wait( c );
-    }
-}
-
 void print_hex_wait(unsigned char c) {
     unsigned char nibble;
     nibble=((c & 0xf0) >> 4 ) + '0';
@@ -44,6 +37,13 @@ void print_hex_wait(unsigned char c) {
     putchar_wait(nibble);
 }
 
+void puts_rom(const char *s) {
+    char c;
+    while ( ( c = *s++ ) ) {
+	putchar_wait( c );
+    }
+}
+
 void print_debug_value(char c, unsigned char value) {
     putchar_wait(c);
     putchar_wait(':');
@@ -52,6 +52,8 @@ void print_debug_value(char c, unsigned char value) {
 
 void print_debug_fifo(struct serial_buffer_t * fifo) {
     unsigned char i;
+    putchar_wait('\r');
+    putchar_wait('\n');
     print_debug_value('S',SERIAL_BUFFER_SIZE);
     putchar_wait(' ');
     print_debug_value('M',SERIAL_BUFFER_SIZE_MASK);
@@ -69,27 +71,50 @@ void print_debug_fifo(struct serial_buffer_t * fifo) {
     putchar_wait('\n');
 }
 
+/* place char into fifo */
+char putchar_fifo(char c, struct serial_buffer_t * fifo) {
+    unsigned char head;
+    head=fifo->head;
+    head++;
+    head &= SERIAL_BUFFER_SIZE_MASK;            /* wrap around if needed */
+    if (head != fifo->tail) {
+        fifo->head = head;
+        fifo->data[head] = c;
+        return 1;
+    };
+    return 0;
+}
+
+/* get next char from USART and put it into fifo*/
+char fifo_getchar(struct serial_buffer_t * fifo) {
+    unsigned char head;
+    char c;
+
+    if (PIR1bits.RCIF) {
+        head=fifo->head;
+        head++;
+        head &= SERIAL_BUFFER_SIZE_MASK;        /* wrap around if neededd */
+        if (head != fifo->tail) {
+            c=RCREG1;
+            fifo->data[head]=c;
+            fifo->head=head;
+            return c;
+        }
+    }
+    return 0;
+}
 
 /* put next char onto USART */
 char fifo_putchar(struct serial_buffer_t * fifo) {
     unsigned char tail;
     tail=fifo->tail;
-    print_debug_fifo(fifo);
     if (fifo->head != tail) {
-	tail++;
-	tail &= SERIAL_BUFFER_SIZE_MASK;	/* wrap around if neededd */
-
-	putchar_wait('f');
-	print_debug_value('T',fifo->tail);
-	putchar_wait(' ');
-	print_debug_value('T',tail);
-	putchar_wait('\r');
-	putchar_wait('\n');
-
-	if (putchar(fifo->data[tail])) {
-	    fifo->tail=tail;
-	    return 1;
-	}
+        tail++;
+        tail &= SERIAL_BUFFER_SIZE_MASK;        /* wrap around if neededd */
+        if (putchar(fifo->data[tail])) {
+            fifo->tail=tail;
+            return 1;
+        }
     }
     return 0;
 }

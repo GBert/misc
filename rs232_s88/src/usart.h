@@ -10,28 +10,24 @@
 #ifndef _USART_H_
 #define _USART_H_
 
-#include <xc.h>
 #include "main.h"
 
-#ifndef BAUDRATE
-#define BAUDRATE	500000
-#endif
-#define USE_BRG16	0
-#define USE_BRGH	1
+/* circular serial buffer */
 
-/* USART calculating Baud Rate Generator
- * if BRGH = 0 => FOSC/[64 (n + 1)]
- * if BRGH = 1 => FOSC/[16 (n + 1)]
- * avoid rounding errors
- */
+typedef struct serial_buffer_t {
+    unsigned char head;
+    unsigned char tail;
+    unsigned char data[SERIAL_BUFFER_SIZE];
+};
 
-#if USE_BRGH == 0
-#define	SBRG_VAL	( (((_XTAL_FREQ / BAUDRATE) / 32) - 1) / 2 )
-#else
-#define	SBRG_VAL	( (((_XTAL_FREQ / BAUDRATE) / 8) - 1) / 2 )
-#endif
-
-
-/* circular buffer */
+char putchar(unsigned char c);
+void putchar_wait(unsigned char c);
+void print_hex_wait(unsigned char c);
+void puts_rom(const char *s);
+void print_debug_value(char c, unsigned char value);
+char putchar_fifo(char c, struct serial_buffer_t * fifo);
+char fifo_getchar(struct serial_buffer_t * fifo);
+char fifo_putchar(struct serial_buffer_t * fifo);
+char print_rom_fifo(const unsigned char * s, struct serial_buffer_t * fifo);
 
 #endif		/* _USART_H_ */
