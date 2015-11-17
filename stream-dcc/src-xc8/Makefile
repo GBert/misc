@@ -1,5 +1,5 @@
 PROJ_DIR	= .
-XC8DIR		= /opt/microchip/xc8/v1.32
+XC8DIR		= /opt/microchip/xc8/v1.33
 CC_INCLUDE	= -I$(XC8DIR)/include
 
 PROCESSOR	= 16F1705

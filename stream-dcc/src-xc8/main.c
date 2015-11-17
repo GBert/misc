@@ -22,12 +22,13 @@
 #define SBRG_VAL        ( (((_XTAL_FREQ / BAUDRATE) / 8) - 1) / 2 )
 #endif
 
-// timer 0 overflow in 50 microseconds
-#define TIMER0_VAL	(256 - (50-2))
+// timer interval in microseconds
+#define INTERVAL	50
+#define TIMER0_VAL	(256 - (INTERVAL-2))
 #define S88BITS		16
 
 #define S88_DATA_PIN	TRISA2
-#define S88_DATA	PORTA2
+#define S88_DATA	PORTAbits.RA2
 #define S88_CLOCK_PIN	TRISC0
 #define S88_CLOCK	LATC0
 #define S88_PS_PIN	TRISC1
@@ -43,19 +44,18 @@ enum s88_fsm_state { STATE_START = 0,
         STATE_RESET_L,
         STATE_PS_L,
         STATE_CLOCK_H,
-        STATE_DATA_READ,
         STATE_CLOCK_L,
 };
 
 volatile unsigned char s88_state;
 volatile unsigned char s88_bits;
+volatile unsigned char s88_data_bit;
 
 void interrupt ISR(void) {
   if(T0IE && T0IF) {
     T0IF=0;
     TMR0 = TIMER0_VAL;
-    LATA5 = ~LATA5;
-#if 1
+    LATA5 ^= 1;
     // FSM
     switch (s88_state) {
     case STATE_START:
@@ -83,11 +83,29 @@ void interrupt ISR(void) {
       S88_PS = 0;
       s88_state = STATE_PS_L;
       break;
+    case STATE_PS_L:
+      S88_CLOCK = 1;
+      s88_state = STATE_CLOCK_H;
+      break;
+    case STATE_CLOCK_H:
+      s88_data_bit = S88_DATA;
+      S88_CLOCK = 0;
+      s88_state = STATE_CLOCK_L;
+      break;
+    case STATE_CLOCK_L:
+      if (s88_bits) {
+        s88_bits--;
+        S88_CLOCK = 1;
+        s88_state = STATE_CLOCK_H;
+      } else {
+        // S88 cyle finished - TODO do something with data
+        s88_state = STATE_START;
+      }
+      break;
     default:
       s88_state = STATE_START;
       break;
     }
-#endif
   }
 }
 
