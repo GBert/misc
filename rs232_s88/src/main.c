@@ -17,6 +17,7 @@
 // timer interval in microseconds
 #define INTERVAL	50
 #define TIMER0_VAL	(256 - (INTERVAL-2))
+// we start with a single M*rklin 6088
 #define S88BITS		16
 
 #define S88_DATA_PIN	TRISA2
@@ -28,7 +29,7 @@
 #define S88_RESET_PIN	TRISC2
 #define S88_RESET	LATC2
 
-const char * SLCAN = "T0035271180000000000000000\r\0";
+const char * SLCAN = "T0023030081B00000000000000\r\0";
 
 volatile unsigned char s88_state;
 volatile unsigned char s88_bits;
