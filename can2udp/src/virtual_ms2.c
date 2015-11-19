@@ -7,7 +7,7 @@
  * ----------------------------------------------------------------------------
  *
  *
- * this code emulates the M*rklin Gleisbox to some extend . Only for testing
+ * this code emulates the M*rklin MS2 to some extend . Only for testing
  *  the M*rklinApp and gateway (can2lan) code
  *
  */
