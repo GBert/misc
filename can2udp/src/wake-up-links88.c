@@ -37,6 +37,7 @@
 char *F_CAN_FORMAT_STRG		= "      CAN->  CANID 0x%08X R [%d]";
 char *T_CAN_FORMAT_STRG		= "      CAN<-  CANID 0x%08X   [%d]";
 
+unsigned char M_CAN_BOOTLOADER[]	= { 0x00, 0x36, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 unsigned char M_LINKS88_ID[]		= { 0x00, 0x31, 0x03, 0x00, 0x08, 0x53, 0x38, 0x38, 0x00, 0x00, 0x00, 0x00, 0x10 };
 unsigned char M_LINKS88_WAKE_I[]	= { 0x00, 0x36, 0x03, 0x00, 0x05, 0x53, 0x38, 0x38, 0x00, 0xE4, 0x00, 0x00, 0x00 };
 unsigned char M_LINKS88_WAKE_II[]	= { 0x00, 0x36, 0x03, 0x00, 0x05, 0x53, 0x38, 0x38, 0x00, 0x11, 0x00, 0x00, 0x00 };
@@ -49,7 +50,36 @@ void print_usage(char *prg) {
     fprintf(stderr, "   Version 0.2\n\n");
     fprintf(stderr, "         -i <can int>        can interface - default can0\n");
     fprintf(stderr, "         -d                  daemonize\n\n");
-    fprintf(stderr, "         -e                  exit after wake up\n\n");
+    fprintf(stderr, "         -e                  exit after waking up no of LinkS8\n\n");
+}
+
+struct node {
+    int id;
+    struct node *next;
+};
+
+struct node *insert_right(struct node *list, int id){
+    struct node *new_node = (struct node *) malloc(sizeof(struct node));
+    new_node->id = id;
+    new_node->next = list->next;
+    list->next     = new_node;
+    return new_node;
+}
+
+struct node *delete_right(struct node *list){
+    struct node *tmp   = list->next;
+    list->next = list->next->next;
+    free(tmp);
+    return list;
+}
+
+struct node *search_node(struct node *list, int id) {
+    while (list != NULL) {
+	if (list->id == id)
+	     return list;
+	list = list->next;
+    }
+    return NULL;
 }
 
 int time_stamp(char *timestamp) {
@@ -126,13 +156,20 @@ int main(int argc, char **argv) {
 
     int background = 0;
     int verbose = 1;
-    int exit_on_wake_up = 0;
+    int exit_on_wake_up = 255;
     unsigned char links88_id = 0;
     unsigned char raw_frame[13];
+    struct node *links88_head, *links88_list;
+
+    links88_head = (struct node *)calloc(sizeof(struct node), 1);
+    if (links88_head == NULL) {
+	fprintf(stderr, "can't malloc LinkS88 node\n");
+	exit(1);
+    }
 
     strcpy(ifr.ifr_name, "can0");
 
-    while ((opt = getopt(argc, argv, "i:deh?")) != -1) {
+    while ((opt = getopt(argc, argv, "i:de:h?")) != -1) {
 	switch (opt) {
 	case 'i':
 	    strcpy(ifr.ifr_name, optarg);
@@ -142,7 +179,7 @@ int main(int argc, char **argv) {
 	    background = 1;
 	    break;
 	case 'e':
-	    exit_on_wake_up= 1;
+	    exit_on_wake_up = atoi(optarg);
 	    break;
 	case 'h':
 	case '?':
@@ -208,16 +245,40 @@ int main(int argc, char **argv) {
 		}
 
 		switch ((frame.can_id & 0x00FF0000UL) >> 16) {
+		case 0x30:
+			/* CAN ping triggers searching for LinkS88 */
+			usleep(SLEEPING);
+			memcpy(raw_frame, M_CAN_BOOTLOADER, 13);
+			send_defined_can_frame(sc, raw_frame, verbose);
+			break;
 		case 0x31:
+			/* looking for already known LinkS88 */
+			if ((memcmp(&frame.data[0], &M_LINKS88_ID[5], 3) == 0) &&
+			    (frame.can_dlc == 8)) {
+			    links88_id = frame.data[3];
+			    links88_list = links88_head;
+			    if (search_node(links88_list, links88_id) == NULL) {
+				printf("inserting known LinkS88 ID 0x%02x\n", links88_id);
+				insert_right(links88_list, links88_id);
+			    }
+			}
+			break;
 		case 0x37:
 		    if (frame.can_dlc == 8) {
-			/* check if there is a response from LinkS88 */
-			if (memcmp(&frame.data[0], &M_LINKS88_ID[5], 3) == 0) {
-			    links88_id = frame.data[3];
+			/* check if there is a response from LinkS88
+			   and the LinkS88 ist unknown (didn't responded to a CAN ping ) */
+			links88_id = frame.data[3];
+			links88_list = links88_head;
+			if ((memcmp(&frame.data[0], &M_LINKS88_ID[5], 3) == 0) &&
+			    (search_node(links88_list, links88_id) == NULL)) {
+
 			    if (verbose) {
 				printf("Found LinkS88 ID: 0x%02x\n", links88_id);
 				printf("   sending wake-up sequence\n");
+				printf("   inserting ID 0x%02x as known LinkS88 ID\n", links88_id);
+				insert_right(links88_list, links88_id);
 			    }
+
 			    memcpy(raw_frame, M_LINKS88_WAKE_I, 13);
 			    raw_frame[8] = links88_id;
 			    send_defined_can_frame(sc, raw_frame, verbose);
@@ -230,7 +291,7 @@ int main(int argc, char **argv) {
 			    raw_frame[8] = links88_id;
 			    raw_frame[11] = links88_id;
 			    send_defined_can_frame(sc, raw_frame, verbose);
-			    if (exit_on_wake_up) {
+			    if (exit_on_wake_up-- == 0) {
 				close(sc);
 				exit(0);
 			    }
