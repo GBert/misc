@@ -6,7 +6,7 @@
  * Gerhard Bertelsmann
  * ----------------------------------------------------------------------------
  *
- * wake up M*rklin L88
+ * wake up M*rklin LinkS88
  */
 
 #include <stdio.h>
@@ -37,9 +37,10 @@ char *F_CAN_FORMAT_STRG		= "      CAN->  CANID 0x%08X R [%d]";
 char *F_S_CAN_FORMAT_STRG	= "short CAN->  CANID 0x%08X R [%d]";
 char *T_CAN_FORMAT_STRG		= "      CAN<-  CANID 0x%08X   [%d]";
 
-unsigned char M_ALL_ID[]	= { 0x00, 0x00, 0x00, 0x00 };
-unsigned char M_LINK88_ID[]	= { 0x00, 0x31, 0x9B, 0x32, 0x08, 0x4d, 0x54, 0xAA, 0xBB, 0x01, 0x27, 0x00, 0x10 };
-unsigned char M_LINK88_INIT[]	= { 0x00, 0x37, 0x9B, 0x32, 0x08, 0x4d, 0x54, 0xAA, 0xBB, 0x01, 0x27, 0x00, 0x10 };
+unsigned char M_LINKS88_ID[]		= { 0x00, 0x31, 0x03, 0x00, 0x08, 0x53, 0x38, 0x38, 0x00, 0x00, 0x00, 0x00, 0x10 };
+unsigned char M_LINKS88_WAKE_I[]	= { 0x00, 0x36, 0x03, 0x00, 0x05, 0x53, 0x38, 0x38, 0x00, 0xE4, 0x00, 0x00, 0x00 };
+unsigned char M_LINKS88_WAKE_II[]	= { 0x00, 0x36, 0x03, 0x00, 0x05, 0x53, 0x38, 0x38, 0x00, 0x11, 0x00, 0x00, 0x00 };
+unsigned char M_LINKS88_WAKE_III[]	= { 0x00, 0x01, 0x03, 0x00, 0x07, 0x53, 0x38, 0x38, 0x00, 0x0C, 0x00, 0x00, 0x00 };
 
 unsigned char netframe[MAXDG];
 
@@ -124,6 +125,9 @@ int main(int argc, char **argv) {
 
     int background = 0;
     int verbose = 1;
+    unsigned char links88_id = 0;
+    unsigned char raw_frame[13];
+
     strcpy(ifr.ifr_name, "can0");
 
     while ((opt = getopt(argc, argv, "i:dh?")) != -1) {
@@ -199,37 +203,32 @@ int main(int argc, char **argv) {
 		}
 
 		switch ((frame.can_id & 0x00FF0000UL) >> 16) {
-		case 0x00:
-		    if ((memcmp(&frame.data[0], &M_LINK88_ID[5], 4) == 0) ||
-			(memcmp(&frame.data[0], M_ALL_ID, 4) == 0)) {
-			/* frame.can_id &= 0xFFFF0000UL; */
-			frame.can_id |= 0x00010000UL;
-			send_can_frame(sc, &frame, verbose);
-		    }
-		    break;
-		case 0x30:
-		    /* ping / ID /software  */
-		    send_defined_can_frame(sc, M_LINK88_ID, verbose);
-		    break;
-		case 0x36:
-		    /* upgrade process) */
-		    if (frame.can_dlc == 0)
-			send_defined_can_frame(sc, M_LINK88_INIT, verbose);
-		    if ((frame.can_dlc == 6) && (frame.data[4] == 0x44)) {
-			frame.can_id = 0x00370000UL;
-			send_can_frame(sc, &frame, verbose);
-		    }
-		    if ((frame.can_dlc == 7) && (frame.data[4] == 0x88)) {
-			frame.can_dlc = 5;
-			frame.can_id = 0x00370000UL;
-			send_can_frame(sc, &frame, verbose);
+		case 0x31:
+		    if (frame.can_dlc == 8) {
+			/* check if there is a response from LinkS88 */
+			if (memcmp(&frame.data[0], &M_LINKS88_ID[5], 3) == 0) {
+			    links88_id = frame.data[3];
+			    if (verbose) {
+				printf("Found LinkS88 ID: 0x%02x\n", links88_id);
+				printf("   sending wake-up sequence\n");
+			    }
+			    memcpy(raw_frame, M_LINKS88_WAKE_I, 13);
+			    raw_frame[8] = links88_id;
+			    send_defined_can_frame(sc, raw_frame, verbose);
+			    memcpy(raw_frame, M_LINKS88_WAKE_II, 13);
+			    raw_frame[8] = links88_id;
+			    send_defined_can_frame(sc, raw_frame, verbose);
+			    memcpy(raw_frame, M_LINKS88_WAKE_III, 13);
+			    raw_frame[8] = links88_id;
+			    raw_frame[11] = links88_id;
+			    send_defined_can_frame(sc, raw_frame, verbose);
+			}
 		    }
 		    break;
 		default:
 		    break;
 		}
-	    } else
-		print_can_frame(F_S_CAN_FORMAT_STRG, &frame);
+	    }
 	}
     }
     close(sc);
