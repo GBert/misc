@@ -1,4 +1,4 @@
-BINS := can-bounce-test can2eth can2udp can4lnx2udp gb2-update scan2lan can2lan virtual_gfp virtual_ms2 get-cs-data get-cs-config wake-up-link88
+BINS := can-bounce-test can2eth can2udp can4lnx2udp gb2-update scan2lan can2lan virtual_gfp virtual_ms2 get-cs-data get-cs-config wake-up-links88
 
 BIN = $@
 
@@ -42,8 +42,8 @@ get-cs-data: get-cs-data.o
 get-cs-config: crc-ccitt.o get-cs-config.o
 	$(CC) $(CFLAGS) -o get-cs-config crc-ccitt.o get-cs-config.o -lz
 
-wake-up-link88: wake-up-link88.o
-	$(CC) $(CFLAGS) -o wake-up-link88 wake-up-link88.o
+wake-up-links88: wake-up-links88.o
+	$(CC) $(CFLAGS) -o wake-up-links88 wake-up-links88.o
 
 clean:
 	$(RM) *.o $(BINS)
