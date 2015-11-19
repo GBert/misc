@@ -209,6 +209,7 @@ int main(int argc, char **argv) {
 
 		switch ((frame.can_id & 0x00FF0000UL) >> 16) {
 		case 0x31:
+		case 0x37:
 		    if (frame.can_dlc == 8) {
 			/* check if there is a response from LinkS88 */
 			if (memcmp(&frame.data[0], &M_LINKS88_ID[5], 3) == 0) {
