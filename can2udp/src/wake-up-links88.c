@@ -29,12 +29,12 @@
 #include <time.h>
 #include <linux/can.h>
 
+#define SLEEPING	10000
 #define MAXDG   	4096	/* maximum datagram size */
 #define MAXUDP  	16	/* maximum datagram size */
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
 
 char *F_CAN_FORMAT_STRG		= "      CAN->  CANID 0x%08X R [%d]";
-char *F_S_CAN_FORMAT_STRG	= "short CAN->  CANID 0x%08X R [%d]";
 char *T_CAN_FORMAT_STRG		= "      CAN<-  CANID 0x%08X   [%d]";
 
 unsigned char M_LINKS88_ID[]		= { 0x00, 0x31, 0x03, 0x00, 0x08, 0x53, 0x38, 0x38, 0x00, 0x00, 0x00, 0x00, 0x10 };
@@ -46,9 +46,10 @@ unsigned char netframe[MAXDG];
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 0.1\n\n");
+    fprintf(stderr, "   Version 0.2\n\n");
     fprintf(stderr, "         -i <can int>        can interface - default can0\n");
     fprintf(stderr, "         -d                  daemonize\n\n");
+    fprintf(stderr, "         -e                  exit after wake up\n\n");
 }
 
 int time_stamp(char *timestamp) {
@@ -125,12 +126,13 @@ int main(int argc, char **argv) {
 
     int background = 0;
     int verbose = 1;
+    int exit_on_wake_up = 0;
     unsigned char links88_id = 0;
     unsigned char raw_frame[13];
 
     strcpy(ifr.ifr_name, "can0");
 
-    while ((opt = getopt(argc, argv, "i:dh?")) != -1) {
+    while ((opt = getopt(argc, argv, "i:deh?")) != -1) {
 	switch (opt) {
 	case 'i':
 	    strcpy(ifr.ifr_name, optarg);
@@ -138,6 +140,9 @@ int main(int argc, char **argv) {
 	case 'd':
 	    verbose = 0;
 	    background = 1;
+	    break;
+	case 'e':
+	    exit_on_wake_up= 1;
 	    break;
 	case 'h':
 	case '?':
@@ -215,13 +220,19 @@ int main(int argc, char **argv) {
 			    memcpy(raw_frame, M_LINKS88_WAKE_I, 13);
 			    raw_frame[8] = links88_id;
 			    send_defined_can_frame(sc, raw_frame, verbose);
+			    usleep(SLEEPING);
 			    memcpy(raw_frame, M_LINKS88_WAKE_II, 13);
 			    raw_frame[8] = links88_id;
 			    send_defined_can_frame(sc, raw_frame, verbose);
+			    usleep(SLEEPING);
 			    memcpy(raw_frame, M_LINKS88_WAKE_III, 13);
 			    raw_frame[8] = links88_id;
 			    raw_frame[11] = links88_id;
 			    send_defined_can_frame(sc, raw_frame, verbose);
+			    if (exit_on_wake_up) {
+				close(sc);
+				exit(0);
+			    }
 			}
 		    }
 		    break;
@@ -231,6 +242,5 @@ int main(int argc, char **argv) {
 	    }
 	}
     }
-    close(sc);
     return 0;
 }
