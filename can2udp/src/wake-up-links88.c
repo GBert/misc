@@ -6,7 +6,10 @@
  * Gerhard Bertelsmann
  * ----------------------------------------------------------------------------
  *
- * wake up M*rklin LinkS88
+ * Thx to FPerry for testing
+ *
+ * purpose: wake up M*rklin LinkS88
+ *
  */
 
 #include <stdio.h>
@@ -34,8 +37,8 @@
 #define MAXUDP  	16	/* maximum datagram size */
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
 
-char *F_CAN_FORMAT_STRG		= "      CAN->  CANID 0x%08X R [%d]";
-char *T_CAN_FORMAT_STRG		= "      CAN<-  CANID 0x%08X   [%d]";
+char *F_CAN_FORMAT_STRG	= "      CAN->  CANID 0x%08X R [%d]";
+char *T_CAN_FORMAT_STRG	= "      CAN<-  CANID 0x%08X   [%d]";
 
 unsigned char M_CAN_BOOTLOADER[]	= { 0x00, 0x36, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 unsigned char M_LINKS88_ID[]		= { 0x00, 0x31, 0x03, 0x00, 0x08, 0x53, 0x38, 0x38, 0x00, 0x00, 0x00, 0x00, 0x10 };
@@ -47,7 +50,7 @@ unsigned char netframe[MAXDG];
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 0.2\n\n");
+    fprintf(stderr, "   Version 1.0\n\n");
     fprintf(stderr, "         -i <can int>        can interface - default can0\n");
     fprintf(stderr, "         -d                  daemonize\n\n");
     fprintf(stderr, "         -e                  exit after waking up no of LinkS8\n\n");
@@ -58,16 +61,16 @@ struct node {
     struct node *next;
 };
 
-struct node *insert_right(struct node *list, int id){
-    struct node *new_node = (struct node *) malloc(sizeof(struct node));
+struct node *insert_right(struct node *list, int id) {
+    struct node *new_node = (struct node *)malloc(sizeof(struct node));
     new_node->id = id;
     new_node->next = list->next;
-    list->next     = new_node;
+    list->next = new_node;
     return new_node;
 }
 
-struct node *delete_right(struct node *list){
-    struct node *tmp   = list->next;
+struct node *delete_right(struct node *list) {
+    struct node *tmp = list->next;
     list->next = list->next->next;
     free(tmp);
     return list;
@@ -76,7 +79,7 @@ struct node *delete_right(struct node *list){
 struct node *search_node(struct node *list, int id) {
     while (list != NULL) {
 	if (list->id == id)
-	     return list;
+	    return list;
 	list = list->next;
     }
     return NULL;
@@ -247,27 +250,26 @@ int main(int argc, char **argv) {
 
 		switch ((frame.can_id & 0x00FF0000UL) >> 16) {
 		case 0x30:
-			/* CAN ping triggers searching for LinkS88 */
-			usleep(SLEEPING);
-			memcpy(raw_frame, M_CAN_BOOTLOADER, 13);
-			send_defined_can_frame(sc, raw_frame, verbose);
-			break;
+		    /* CAN ping triggers searching for LinkS88 */
+		    usleep(SLEEPING);
+		    memcpy(raw_frame, M_CAN_BOOTLOADER, 13);
+		    send_defined_can_frame(sc, raw_frame, verbose);
+		    break;
 		case 0x31:
-			/* looking for already known LinkS88 */
-			if ((memcmp(&frame.data[0], &M_LINKS88_ID[5], 2) == 0) &&
-			    (frame.can_dlc == 8)) {
-			    links88_id2 = frame.data[3];
-			    links88_list = links88_head;
-			    if (search_node(links88_list, links88_id2) == NULL) {
-				printf("inserting known LinkS88 ID 0x%02x\n", links88_id2);
-				insert_right(links88_list, links88_id2);
-			    }
+		    /* looking for already known LinkS88 */
+		    if ((memcmp(&frame.data[0], &M_LINKS88_ID[5], 2) == 0) && (frame.can_dlc == 8)) {
+			links88_id2 = frame.data[3];
+			links88_list = links88_head;
+			if (search_node(links88_list, links88_id2) == NULL) {
+			    printf("inserting known LinkS88 ID 0x%02x\n", links88_id2);
+			    insert_right(links88_list, links88_id2);
 			}
-			break;
+		    }
+		    break;
 		case 0x37:
 		    if (frame.can_dlc == 8) {
-			/* check if there is a response from LinkS88
-			   and the LinkS88 ist unknown (didn't responded to a CAN ping ) */
+			/* check if there is a response from a LinkS88
+			   and it's unknown (didn't responded to a CAN ping ) */
 			links88_id1 = frame.data[2];
 			links88_id2 = frame.data[3];
 			links88_list = links88_head;
