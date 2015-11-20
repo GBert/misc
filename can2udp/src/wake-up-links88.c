@@ -20,6 +20,7 @@
 #include <signal.h>
 #include <errno.h>
 #include <ctype.h>
+#include <endian.h>
 
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -74,6 +75,14 @@ struct node *delete_right(struct node *list) {
     list->next = list->next->next;
     free(tmp);
     return list;
+}
+
+void free_list(struct node *list) {
+    struct node *p, *next_node;
+    for (p = list; p != NULL; p = next_node) {
+	next_node = p->next;
+	free(p);
+    }
 }
 
 struct node *search_node(struct node *list, int id) {
@@ -300,6 +309,7 @@ int main(int argc, char **argv) {
 			    send_defined_can_frame(sc, raw_frame, verbose);
 			    if (exit_on_wake_up-- == 0) {
 				close(sc);
+				free(links88_head);
 				exit(0);
 			    }
 			}
