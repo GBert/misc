@@ -157,7 +157,8 @@ int main(int argc, char **argv) {
     int background = 0;
     int verbose = 1;
     int exit_on_wake_up = 255;
-    unsigned char links88_id = 0;
+    unsigned char links88_id1 = 0;
+    unsigned char links88_id2 = 0;
     unsigned char raw_frame[13];
     struct node *links88_head, *links88_list;
 
@@ -253,13 +254,13 @@ int main(int argc, char **argv) {
 			break;
 		case 0x31:
 			/* looking for already known LinkS88 */
-			if ((memcmp(&frame.data[0], &M_LINKS88_ID[5], 3) == 0) &&
+			if ((memcmp(&frame.data[0], &M_LINKS88_ID[5], 2) == 0) &&
 			    (frame.can_dlc == 8)) {
-			    links88_id = frame.data[3];
+			    links88_id2 = frame.data[3];
 			    links88_list = links88_head;
-			    if (search_node(links88_list, links88_id) == NULL) {
-				printf("inserting known LinkS88 ID 0x%02x\n", links88_id);
-				insert_right(links88_list, links88_id);
+			    if (search_node(links88_list, links88_id2) == NULL) {
+				printf("inserting known LinkS88 ID 0x%02x\n", links88_id2);
+				insert_right(links88_list, links88_id2);
 			    }
 			}
 			break;
@@ -267,29 +268,33 @@ int main(int argc, char **argv) {
 		    if (frame.can_dlc == 8) {
 			/* check if there is a response from LinkS88
 			   and the LinkS88 ist unknown (didn't responded to a CAN ping ) */
-			links88_id = frame.data[3];
+			links88_id1 = frame.data[2];
+			links88_id2 = frame.data[3];
 			links88_list = links88_head;
-			if ((memcmp(&frame.data[0], &M_LINKS88_ID[5], 3) == 0) &&
-			    (search_node(links88_list, links88_id) == NULL)) {
+			if ((memcmp(&frame.data[0], &M_LINKS88_ID[5], 2) == 0) &&
+			    (search_node(links88_list, links88_id2) == NULL)) {
 
 			    if (verbose) {
-				printf("Found LinkS88 ID: 0x%02x\n", links88_id);
+				printf("Found LinkS88 ID: 0x%02x\n", links88_id2);
 				printf("   sending wake-up sequence\n");
-				printf("   inserting ID 0x%02x as known LinkS88 ID\n", links88_id);
-				insert_right(links88_list, links88_id);
+				printf("   inserting ID 0x%02x as known LinkS88 ID\n", links88_id2);
+				insert_right(links88_list, links88_id2);
 			    }
 
 			    memcpy(raw_frame, M_LINKS88_WAKE_I, 13);
-			    raw_frame[8] = links88_id;
+			    raw_frame[7] = links88_id1;
+			    raw_frame[8] = links88_id2;
 			    send_defined_can_frame(sc, raw_frame, verbose);
 			    usleep(SLEEPING);
 			    memcpy(raw_frame, M_LINKS88_WAKE_II, 13);
-			    raw_frame[8] = links88_id;
+			    raw_frame[7] = links88_id1;
+			    raw_frame[8] = links88_id2;
 			    send_defined_can_frame(sc, raw_frame, verbose);
 			    usleep(SLEEPING);
 			    memcpy(raw_frame, M_LINKS88_WAKE_III, 13);
-			    raw_frame[8] = links88_id;
-			    raw_frame[11] = links88_id;
+			    raw_frame[7] = links88_id1;
+			    raw_frame[8] = links88_id2;
+			    raw_frame[11] = links88_id2;
 			    send_defined_can_frame(sc, raw_frame, verbose);
 			    if (exit_on_wake_up-- == 0) {
 				close(sc);
