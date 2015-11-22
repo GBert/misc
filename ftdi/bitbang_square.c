@@ -15,7 +15,7 @@ int main()
     exit(1);
   }
 
-  if(ftdi_usb_open_desc(ftdic, 0x0403, 0x6015, NULL, NULL) < 0) {
+  if(ftdi_usb_open_desc(ftdic, 0x0403, 0x6001, NULL, NULL) < 0) {
     fprintf(stderr, "ftdi_usb_open_desc failed: %s\n", ftdi_get_error_string(ftdic));
     exit(1);
   }
