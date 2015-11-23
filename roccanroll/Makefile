@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=roccanroll
-PKG_REV:=5b36e5a63403
 PKG_REV:=d892c56d00c6
+PKG_REV:=67fc50410b5d
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -31,7 +31,7 @@ define Package/$(PKG_NAME)
 endef
 
 define Build/Compile
-	mkdir -p $(PKG_BUILD_DIR)/new_framework/include
+#	mkdir -p $(PKG_BUILD_DIR)/new_framework/include
 	$(MAKE)	-C $(PKG_BUILD_DIR)/new_framework $(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)"
 endef
@@ -39,6 +39,9 @@ endef
 define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/new_framework/drehscheibe/drehscheibe $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/new_framework/client_cs2eth/mrcs2eth $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/new_framework/client_ms1/mrms1 $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/new_framework/client_ms2/mrms2 $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/new_framework/client_zentrale/mrzentrale $(1)/usr/bin
 endef
 
