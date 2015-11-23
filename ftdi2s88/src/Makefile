@@ -1,4 +1,4 @@
-BINS := bitbang_square
+BINS := ftdi2s88
 
 BIN = $@
 
@@ -6,8 +6,8 @@ all:	$(BINS)
 
 CFLAGS+=-Wall -pedantic -std=gnu99 -g
 
-bitbang_square: bitbang_square.o
-	$(CC) $(CFLAGS) -o bitbang_square bitbang_square.o -lftdi
+ftdi2s88: ftdi2s88.o
+	$(CC) $(CFLAGS) -o ftdi2s88 ftdi2s88.o -lftdi
 
 clean:
 	$(RM) *.o $(BINS)
