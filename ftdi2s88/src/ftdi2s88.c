@@ -23,11 +23,10 @@
 
 static struct ftdi_context *ftdic;
 
-void print_usage(char *prg)
-{
+void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -b baud\n", prg);
     fprintf(stderr, "   Version 0.1\n\n");
-    fprintf(stderr, "         -b baud       baudrate\n");
+    fprintf(stderr, "         -b baud       baudrate - default 4096 (~50us)\n");
     fprintf(stderr, "         -l databits   databits(e.g. 6088 -> 16)\n\n");
 }
 
