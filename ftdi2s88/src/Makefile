@@ -2,7 +2,7 @@ BINS := ftdi2s88
 
 BIN = $@
 
-all:	$(BINS)
+all: $(BINS)
 
 CFLAGS+=-Wall -pedantic -std=gnu99 -g
 
