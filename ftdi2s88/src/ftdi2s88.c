@@ -16,9 +16,9 @@
 #include <arpa/inet.h>
 #include <ftdi.h>
 
-#define BAUDRATE	(8192l)
+#define BAUDRATE	(4096l)
 #define S88_DEF_BITS	16
-#define FIFO_SIZE	384
+#define FIFO_SIZE	256
 #define UDP_PORT	15731
 
 static struct ftdi_context *ftdic;
@@ -55,13 +55,13 @@ int do_init(int baudrate) {
 	return -1;
     }
 
-    /* if (ftdi_usb_open_desc(ftdic, 0x0403, 0x6001, NULL, NULL) < 0) { */
-    if (ftdi_usb_open_desc(ftdic, 0x0403, 0x6015, NULL, NULL) < 0) {
+    if (ftdi_usb_open_desc(ftdic, 0x0403, 0x6001, NULL, NULL) < 0) { 
+    /* if (ftdi_usb_open_desc(ftdic, 0x0403, 0x6015, NULL, NULL) < 0) { */
 	fprintf(stderr, "ftdi_usb_open_desc failed: %s\n", ftdi_get_error_string(ftdic));
 	return -1;
     }
 
-    if (ftdi_set_bitmode(ftdic, 0x07, BITMODE_SYNCBB) < 0) {
+    if (ftdi_set_bitmode(ftdic, 0xff, BITMODE_SYNCBB) < 0) {
 	fprintf(stderr, "ftdi_set_bitmode failed: %s\n", ftdi_get_error_string(ftdic));
 	return -1;
     }

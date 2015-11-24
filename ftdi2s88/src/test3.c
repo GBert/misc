@@ -2,11 +2,11 @@
 #include <ftdi.h>
 #include <sys/time.h>
 
-#define RXBUFSZ	16384
-#define TXBUFSZ 16384
+#define RXBUFSZ	256
+#define TXBUFSZ 256
 
 // BAUDRATE = used baudrate, should be a power of 2
-#define BAUDRATE	(65536l)
+#define BAUDRATE	(1024l)
 
 // PLE = 8x bitrate (this is FTDI specific), note: from the FTDI doc it should be 16xBAUDRATE ????
 #define F_SAMPLE	(8*BAUDRATE)
@@ -51,7 +51,7 @@ int main(int argc, char **argv)
       return EXIT_FAILURE;
     }
     
-    ret = ftdi_set_latency_timer(&ftdic,255);
+    ret = ftdi_set_latency_timer(&ftdic,1);
     if (ret<0)
     {
       fprintf(stderr,"Unable to set latency timer\n");
@@ -101,6 +101,7 @@ int main(int argc, char **argv)
     while (!0)
     {
       ret = ftdi_write_data(&ftdic,txbuf,TXBUFSZ);
+      ret = ftdi_read_data(&ftdic,rxbuf,RXBUFSZ);
     }
 
     ftdi_usb_close(&ftdic);
