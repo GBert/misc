@@ -210,11 +210,12 @@ int main(int argc, char **argv) {
 	case 'b':
 	    if (strlen(optarg) <= 15) {
 		/* IP address begins with a number */
-		if ((optarg[0] >= '0') || (optarg[0] <= '9'))
+		if ((optarg[0] >= '0') && (optarg[0] <= '9')) {
 		    strcpy(udp_dst_address, optarg);
-		else
+		} else {
 		    bzero(bcast_interface, 16);
 		    strcpy(bcast_interface, optarg);
+		}
 	    } else {
 		fprintf(stderr, "UDP broadcast address or interface error: %s\n", optarg);
 		exit(1);
