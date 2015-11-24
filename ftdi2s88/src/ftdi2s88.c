@@ -13,11 +13,12 @@
 #include <libgen.h>
 #include <sys/time.h>
 #include <netinet/in.h>
+#include <ifaddrs.h>
 #include <arpa/inet.h>
 #include <ftdi.h>
 
 #define BAUDRATE	(4096)
-#define S88_DEF_BITS	16
+#define S88_DEF_BITS	60
 #define FIFO_SIZE	256
 #define UDP_PORT	15731
 
@@ -28,24 +29,21 @@
 #define S88_DATA_I	BIT(3)
 #define S88_DATA_II	BIT(7)
 
-static struct ftdi_context *ftdic;
-
 /*
 	TXD - 0x01 -> S88 reset
 	RXD - 0x02 -> S88 PS
 	RTS - 0x04 -> S88 clock
-	CTS - 0x08 -> S88 data
-	DTR - 0x10
-	DSR - 0x20
-	DCD - 0x40
-	RI  - 0x80
+	CTS - 0x08 -> S88 data I
+	DTR - 0x10 -> S88 reset
+	DSR - 0x20 -> S88 PS
+	DCD - 0x40 -> S88 clock
+	RI  - 0x80 -> S88 data II
  */
-/* S88 init    */
-/* reset bit 1 */
-/* ps    bit 2 */
-/* clock bit 3 */
+
 const uint8_t S88_INIT[] = { 0, 0, S88_LOAD, S88_LOAD, S88_LOAD | S88_CLOCK, S88_LOAD | S88_CLOCK, S88_LOAD, S88_LOAD,
 			     S88_LOAD | S88_PS, S88_LOAD | S88_PS, S88_LOAD, S88_LOAD, 0, 0 };
+
+static struct ftdi_context *ftdic;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -b baud\n", prg);
@@ -53,9 +51,10 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -d                  going into background\n");
     fprintf(stderr, "         -r <baudrate>       baudrate - default 4096 (~50us)\n");
-    fprintf(stderr, "         -l <databits>       databits(e.g. 6088 -> 16)\n\n");
+    fprintf(stderr, "         -l <databits>       databits(e.g. 6088 -> 16 / max&def 60)\n\n");
 }
 
+/* prepare the FTDI USB device */
 int do_init(int baudrate) {
     ftdic = ftdi_new();
 
@@ -94,6 +93,7 @@ int do_init(int baudrate) {
     return 0;
 }
 
+/* prepare bitbanging data */
 int fill_data(uint8_t * b, size_t s, int s88_bits) {
     int i, offset;
 
@@ -148,6 +148,8 @@ int main(int argc, char **argv) {
     unsigned int baudrate;
     int buffersize, opt, length, background, s, sb, destination_port, ret;
     struct sockaddr_in baddr;
+    struct ifaddrs *ifap, *ifa;
+    struct sockaddr_in *bsa;
     const int on = 1;
 
     char *udp_dst_address = (char *)malloc(16);
@@ -174,7 +176,7 @@ int main(int argc, char **argv) {
 	case 'b':
 	    if (strlen(optarg) <= 15) {
 		/* IP address begins with a number */
-		if ((optarg[0] >= '0') || (optarg[0] <= '9')) {
+		if ((optarg[0] >= '0') && (optarg[0] <= '9')) {
 		    strcpy(udp_dst_address, optarg);
 		} else {
 		    bzero(bcast_interface, 16);
@@ -203,6 +205,18 @@ int main(int argc, char **argv) {
 	    fprintf(stderr, "Unknown option %c\n", opt);
 	    print_usage(basename(argv[0]));
 	    exit(1);
+	}
+    }
+
+    /* get the broadcast address */
+    getifaddrs (&ifap);
+    for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
+	if (ifa->ifa_addr) {
+	    if (ifa->ifa_addr->sa_family == AF_INET) {
+		bsa = (struct sockaddr_in *) ifa->ifa_broadaddr;
+		if (strncmp(ifa->ifa_name, bcast_interface, strlen(bcast_interface)) == 0)
+		    udp_dst_address = inet_ntoa(bsa->sin_addr);
+	    }
 	}
     }
 
