@@ -302,9 +302,7 @@ int main(int argc, char **argv) {
 	exit(-1);
 
     bzero(w_data, sizeof(w_data));
-
     ret = fill_data(w_data, sizeof(w_data), length);
-
     if (ret < 0) {
 	fprintf(stderr, "to many data bits\n");
 	exit(1);
@@ -324,7 +322,6 @@ int main(int argc, char **argv) {
 	    exit(0);
 	}
     }
-
 
     buffersize = sizeof(w_data);
 #if 0
@@ -359,6 +356,5 @@ int main(int argc, char **argv) {
 	if (!background)
 	    printf("send %d bytes in %ld usecs\n", FIFO_SIZE, elapsed_time);
     }
-
     return 0;
 }
