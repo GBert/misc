@@ -31,6 +31,10 @@
 #define S88_DATA_I	BIT(3)
 #define S88_DATA_II	BIT(7)
 
+#define DEFAULT_TASK_T	100
+/* S88 interval 20ms (20000 us)- minus default switching time*/
+#define S88_INTERVAL	20 * 1000 - DEFAULT_TASK_T
+
 /*
 	TXD - 0x01 -> S88 reset
 	RXD - 0x02 -> S88 PS
@@ -42,7 +46,7 @@
 	RI  - 0x80 -> S88 data II
  */
 
-const uint8_t S88_INIT[] = { 0, 0, S88_LOAD, S88_LOAD, S88_LOAD | S88_CLOCK, S88_LOAD | S88_CLOCK, S88_LOAD, S88_LOAD,
+const uint8_t S88_INIT[] = { 0, 0, 0, 0, S88_LOAD, S88_LOAD, S88_LOAD | S88_CLOCK, S88_LOAD | S88_CLOCK, S88_LOAD, S88_LOAD,
 			     S88_LOAD | S88_PS, S88_LOAD | S88_PS, S88_LOAD, S88_LOAD, 0, 0 };
 
 struct ftdi2s88_t {
@@ -51,6 +55,13 @@ struct ftdi2s88_t {
     int sb;
     int baudrate;
 };
+
+#define PIN_MEM		2
+
+uint32_t bus0_new[PIN_MEM];
+uint32_t bus0_old[PIN_MEM];
+uint32_t bus1_new[PIN_MEM];
+uint32_t bus1_old[PIN_MEM];
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -b baud\n", prg);
@@ -114,10 +125,10 @@ int fill_data(uint8_t * b, size_t s, int s88_bits) {
     memcpy(b, S88_INIT, offset);
 
     while (i < s88_bits * 4) {
-	b[i++ + offset] = 0;
-	b[i++ + offset] = 0;
 	b[i++ + offset] = S88_CLOCK;
 	b[i++ + offset] = S88_CLOCK;
+	b[i++ + offset] = 0;
+	b[i++ + offset] = 0;
     }
     return (i + offset);
 }
@@ -147,7 +158,31 @@ int send_event(struct ftdi2s88_t *fs88, int bit, int value) {
     return 0;
 }
 
-int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, size_t s, int s88_bits) {
+int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
+    int i, k;
+
+    k = 0;
+    memcpy(bus0_old, bus0_new, sizeof(PIN_MEM));
+    memcpy(bus1_old, bus1_new, sizeof(PIN_MEM));
+
+    /* first bit is different */
+    if (b[8] && S88_DATA_I)
+	bus0_new[0] = 1;
+    if (b[8] && S88_DATA_II)
+	bus1_new[0] = 1;
+
+    for (i = 1; i < s88_bits; i++) {
+	if ((i && 0x1f) == 0)
+	    k++;
+	if (b[14 + i*4 ] && S88_DATA_I)
+	    bus0_new[k] |= 1;
+	if (b[14 + i*4 ] && S88_DATA_II)
+	    bus1_new[k] |= 1;
+    }
+
+    for (i = 0; i < s88_bits; i++) {
+    }
+
     return 0;
 }
 
@@ -161,6 +196,11 @@ int main(int argc, char **argv) {
     struct sockaddr_in *bsa;
     const int on = 1;
     struct ftdi2s88_t fs88;
+
+    bzero(bus0_new, sizeof(bus0_new));
+    bzero(bus0_old, sizeof(bus0_old));
+    bzero(bus1_new, sizeof(bus1_new));
+    bzero(bus1_old, sizeof(bus1_old));
 
     char *udp_dst_address = (char *)malloc(16);
     if (udp_dst_address == NULL) {
@@ -285,9 +325,10 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "to many data bits\n");
 	exit(1);
     }
-#if 1
-/* testing: simple bit pattern */
+
     buffersize = sizeof(w_data);
+#if 0
+/* testing: simple bit pattern */
     for (int i = 0; i < buffersize; i++) {
 	w_data[i] = (uint8_t) i & 0xff;
     }
@@ -306,6 +347,12 @@ int main(int argc, char **argv) {
 	    fprintf(stderr, "ftdi_read_data faild: %s", ftdi_get_error_string(fs88.ftdic));
 	    exit(1);
 	}
+	analyze_data(&fs88, r_data, length);
+
+	gettimeofday(&tm2, NULL);
+	elapsed_time = 1E6 * (tm2.tv_sec - tm1.tv_sec) + (tm2.tv_usec - tm1.tv_usec);
+	if ((S88_INTERVAL - elapsed_time) > DEFAULT_TASK_T)
+	    usleep(S88_INTERVAL - elapsed_time);
 
 	gettimeofday(&tm2, NULL);
 	elapsed_time = 1E6 * (tm2.tv_sec - tm1.tv_sec) + (tm2.tv_usec - tm1.tv_usec);
