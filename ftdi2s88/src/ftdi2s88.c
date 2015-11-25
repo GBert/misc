@@ -298,6 +298,18 @@ int main(int argc, char **argv) {
 	exit(1);
     }
 
+    if (do_init(&fs88))
+	exit(-1);
+
+    bzero(w_data, sizeof(w_data));
+
+    ret = fill_data(w_data, sizeof(w_data), length);
+
+    if (ret < 0) {
+	fprintf(stderr, "to many data bits\n");
+	exit(1);
+    }
+
     if (background) {
 	pid_t pid;
 
@@ -313,17 +325,6 @@ int main(int argc, char **argv) {
 	}
     }
 
-    if (do_init(&fs88))
-	exit(-1);
-
-    bzero(w_data, sizeof(w_data));
-
-    ret = fill_data(w_data, sizeof(w_data), length);
-
-    if (ret < 0) {
-	fprintf(stderr, "to many data bits\n");
-	exit(1);
-    }
 
     buffersize = sizeof(w_data);
 #if 0
