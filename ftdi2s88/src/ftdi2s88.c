@@ -92,7 +92,6 @@ int do_init(struct ftdi2s88_t *fs88) {
 	return -1;
     }
 
-    printf("using baudrate %d\n", fs88->baudrate);
     if (ftdi_set_baudrate(fs88->ftdic, fs88->baudrate) < 0) {
 	fprintf(stderr, "ftdi_set_baudrate failed: %s\n", ftdi_get_error_string(fs88->ftdic));
 	return -1;
@@ -203,12 +202,12 @@ int main(int argc, char **argv) {
     bzero(bus1_old, sizeof(bus1_old));
 
     char *udp_dst_address = (char *)malloc(16);
-    if (udp_dst_address == NULL) {
+    if (!udp_dst_address) {
 	fprintf(stderr, "can't alloc udp_dst_address memory\n");
 	exit(1);
     }
     char *bcast_interface = (char *)malloc(16);
-    if (bcast_interface == NULL) {
+    if (!bcast_interface) {
 	fprintf(stderr, "can't alloc bcast_interface memory\n");
 	exit(1);
     }
@@ -356,7 +355,8 @@ int main(int argc, char **argv) {
 
 	gettimeofday(&tm2, NULL);
 	elapsed_time = 1E6 * (tm2.tv_sec - tm1.tv_sec) + (tm2.tv_usec - tm1.tv_usec);
-	printf("send %d bytes in %ld usecs\n", FIFO_SIZE, elapsed_time);
+	if (!background)
+	    printf("send %d bytes in %ld usecs\n", FIFO_SIZE, elapsed_time);
     }
 
     return 0;
