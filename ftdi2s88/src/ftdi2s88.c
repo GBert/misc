@@ -99,7 +99,7 @@ int do_init(struct ftdi2s88_t *fs88) {
 	return -1;
     }
 
-    if (ftdi_usb_open_desc(fs88->ftdic, 0x0403, 0x6001, NULL, NULL) < 0) {
+    if (ftdi_usb_open_desc(fs88->ftdic, 0x0403, 0x6015, NULL, NULL) < 0) {
     /* if (ftdi_usb_open_desc(ftdic, 0x0403, 0x6015, NULL, NULL) < 0) { */
 	fprintf(stderr, "ftdi_usb_open_desc failed: %s\n", ftdi_get_error_string(fs88->ftdic));
 	return -1;
@@ -188,8 +188,8 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
     uint32_t mask;
 
     k = 0;
-    memcpy(bus0_old, bus0_new, sizeof(PIN_MEM) * 4);
-    memcpy(bus1_old, bus1_new, sizeof(PIN_MEM) * 4);
+    memcpy(bus0_old, bus0_new, sizeof(bus0_old));
+    memcpy(bus1_old, bus1_new, sizeof(bus1_old));
 
 //    printf("b[8] : 0x%02x\n", b[8]);
     /* first bit is different */
@@ -343,7 +343,7 @@ int main(int argc, char **argv) {
 	}
     }
 
-    /* prepare udp sending socket struct */
+    /* prepare udp socket struct */
     bzero(&fs88.baddr, sizeof(fs88.baddr));
     fs88.baddr.sin_family = AF_INET;
     fs88.baddr.sin_port = htons(destination_port);
@@ -389,7 +389,7 @@ int main(int argc, char **argv) {
 	if (pid < 0) {
 	    exit(EXIT_FAILURE);
 	}
-	/* If we got a good PID, then we can exit the parent process. */
+	/* If we got a valid PID, then we can exit the parent process. */
 	if (pid > 0) {
 	    printf("Going into background ...\n");
 	    exit(0);
@@ -408,19 +408,19 @@ int main(int argc, char **argv) {
 	ret = ftdi_write_data(fs88.ftdic, w_data, buffersize);
 	if (ret < 0) {
 	    fprintf(stderr, "ftdi_write_data faild: %s", ftdi_get_error_string(fs88.ftdic));
-	    exit(1);
+	    break;
 	}
 	ret = ftdi_read_data(fs88.ftdic, r_data, buffersize);
 	if (ret < 0) {
 	    fprintf(stderr, "ftdi_read_data faild: %s", ftdi_get_error_string(fs88.ftdic));
-	    exit(1);
+	    break;
 	}
 #if 1
 /* testing */
 	memcpy(r_data, t_data, buffersize);
 #endif
 	if (analyze_data(&fs88, r_data, length))
-	    exit(1);
+	    break;
 
 	gettimeofday(&tm2, NULL);
 	elapsed_time = 1E6 * (tm2.tv_sec - tm1.tv_sec) + (tm2.tv_usec - tm1.tv_usec);
@@ -432,5 +432,7 @@ int main(int argc, char **argv) {
 	if (!fs88.background)
 	    printf("send %d bytes in %ld usecs\n", FIFO_SIZE, elapsed_time);
     }
-    return 0;
+    free(udp_dst_address);
+    free(bcast_interface);
+    exit(1);
 }
