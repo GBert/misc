@@ -30,6 +30,7 @@
 #define S88_CLOCK	BIT(2) | BIT(6)
 #define S88_DATA_I	BIT(3)
 #define S88_DATA_II	BIT(7)
+#define BITBANG_MASK	S88_LOAD | S88_PS | S88_CLOCK
 
 #define DEFAULT_TASK_T	100
 /* S88 interval 20ms (20000 us)- minus default switching time*/
@@ -48,6 +49,22 @@
 
 const uint8_t S88_INIT[] = { 0, 0, 0, 0, S88_LOAD, S88_LOAD, S88_LOAD | S88_CLOCK, S88_LOAD | S88_CLOCK, S88_LOAD, S88_LOAD,
 			     S88_LOAD | S88_PS, S88_LOAD | S88_PS, S88_LOAD, S88_LOAD, 0, 0 };
+const uint8_t test_data [] = 	{0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00, 0x08,0x08,0x08,0x08, 0x08,0x08,0x08,0x08,
+				 0x88,0x88,0x88,0x88, 0x08,0x08,0x08,0x08, 0x80,0x80,0x80,0x80, 0x88,0x88,0x88,0x88,
+				 0x88,0x88,0x88,0x88, 0x08,0x08,0x08,0x08, 0x00,0x00,0x00,0x00, 0x88,0x88,0x88,0x88,
+				 0x88,0x88,0x88,0x88, 0x08,0x08,0x08,0x08, 0x00,0x00,0x00,0x00, 0x88,0x88,0x88,0x88,
+				 0x88,0x88,0x88,0x88, 0x08,0x08,0x08,0x08, 0x80,0x80,0x80,0x80, 0x88,0x88,0x88,0x88,
+				 0x88,0x88,0x88,0x88, 0x08,0x08,0x08,0x08, 0x00,0x00,0x00,0x00, 0x88,0x88,0x88,0x88,
+				 0x88,0x88,0x88,0x88, 0x08,0x08,0x08,0x08, 0x00,0x00,0x00,0x00, 0x88,0x88,0x88,0x88,
+				 0x88,0x88,0x88,0x88, 0x08,0x08,0x08,0x08, 0x00,0x00,0x00,0x00, 0x88,0x88,0x88,0x88,
+				 0x88,0x88,0x88,0x88, 0x08,0x08,0x08,0x08, 0x00,0x00,0x00,0x00, 0x88,0x88,0x88,0x88,
+				 0x88,0x88,0x88,0x88, 0x08,0x08,0x08,0x08, 0x00,0x00,0x00,0x00, 0x88,0x88,0x88,0x88,
+				 0x88,0x88,0x88,0x88, 0x08,0x08,0x08,0x08, 0x00,0x00,0x00,0x00, 0x88,0x88,0x88,0x88,
+				 0x88,0x88,0x88,0x88, 0x08,0x08,0x08,0x08, 0x00,0x00,0x00,0x00, 0x88,0x88,0x88,0x88,
+				 0x88,0x88,0x88,0x88, 0x08,0x08,0x08,0x08, 0x00,0x00,0x00,0x00, 0x88,0x88,0x88,0x88,
+				 0x88,0x88,0x88,0x88, 0x08,0x08,0x08,0x08, 0x00,0x00,0x00,0x00, 0x88,0x88,0x88,0x88,
+				 0x88,0x88,0x88,0x88, 0x08,0x08,0x08,0x08, 0x00,0x00,0x00,0x00, 0x88,0x88,0x88,0x88,
+				 0x88,0x88,0x88,0x88, 0x08,0x08,0x08,0x08, 0x00,0x00,0x00,0x00, 0x88,0x88,0x88,0x88};
 
 struct ftdi2s88_t {
     struct ftdi_context *ftdic;
@@ -88,7 +105,7 @@ int do_init(struct ftdi2s88_t *fs88) {
 	return -1;
     }
 
-    if (ftdi_set_bitmode(fs88->ftdic, 0xff, BITMODE_SYNCBB) < 0) {
+    if (ftdi_set_bitmode(fs88->ftdic, BITBANG_MASK, BITMODE_SYNCBB) < 0) {
 	fprintf(stderr, "ftdi_set_bitmode failed: %s\n", ftdi_get_error_string(fs88->ftdic));
 	return -1;
     }
@@ -133,6 +150,13 @@ int fill_data(uint8_t * b, size_t s, int s88_bits) {
     return (i + offset);
 }
 
+void random_fill(uint8_t * b, int s) {
+    int i;
+    for (i = 0; i < s; i++) {
+	b[0] = 1;
+    }
+}
+
 int send_event(struct ftdi2s88_t *fs88, int bit, int value) {
     int s;
     uint32_t canid, temp;
@@ -150,11 +174,12 @@ int send_event(struct ftdi2s88_t *fs88, int bit, int value) {
     /* memcpy(&netframe[5] */
 
     /* send UDP frame */
-    s = sendto(fs88->sb, netframe, 13, 0, (struct sockaddr *)&fs88->baddr, sizeof(fs88->sb));
+    s = sendto(fs88->sb, netframe, 13, 0, (struct sockaddr *)&fs88->baddr, sizeof(fs88->baddr));
     if (s != 13) {
-	fprintf(stderr, "%s: error sending TCP/UDP data %s\n", __func__, strerror(errno));
+	fprintf(stderr, "%s: error sending UDP data: %s\n", __func__, strerror(errno));
 	return -1;
     }
+    printf("send UDP packet: bit %d value %d\n", bit, value);
     return 0;
 }
 
@@ -163,51 +188,66 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
     uint32_t mask;
 
     k = 0;
-    memcpy(bus0_old, bus0_new, sizeof(PIN_MEM));
-    memcpy(bus1_old, bus1_new, sizeof(PIN_MEM));
+    memcpy(bus0_old, bus0_new, sizeof(PIN_MEM) * 4);
+    memcpy(bus1_old, bus1_new, sizeof(PIN_MEM) * 4);
 
+//    printf("b[8] : 0x%02x\n", b[8]);
     /* first bit is different */
-    if (b[8] && S88_DATA_I)
+    if (b[8] & S88_DATA_I) {
 	bus0_new[0] = 1;
-    if (b[8] && S88_DATA_II)
+    }
+    if (b[8] & S88_DATA_II)
 	bus1_new[0] = 1;
 
+//    printf("bus0_new[0]: 0x%08X bus1_new[0]: 0x%08X\n", bus0_new[0], bus1_new[0]);
+
     for (i = 1; i < s88_bits; i++) {
-	if ((i && 0x1f) == 0)
+	if ((i & 0x1f) == 0)
 	    k++;
 	bus0_new[k] <<= 1;
 	bus1_new[k] <<= 1;
+//       printf("bus0_new[0]: 0x%08X bus1_new[0]: 0x%08X\n", bus0_new[0], bus1_new[0]);
+//        printf("b[%d] : 0x%02x\n", 14 + 4 * i, b[14 + 4* i]);
 	if (b[14 + i * 4] && S88_DATA_I)
 	    bus0_new[k] |= 1;
 	if (b[14 + i * 4] && S88_DATA_II)
 	    bus1_new[k] |= 1;
     }
 
+    printf("bus0_new[0]: 0x%08X bus1_new[0]: 0x%08X\n", bus0_new[0], bus1_new[0]);
+    printf("bus0_old[0]: 0x%08X bus1_old[0]: 0x%08X\n", bus0_old[0], bus1_old[0]);
+    printf("bus0_new[1]: 0x%08X bus1_new[1]: 0x%08X\n", bus0_new[1], bus1_new[1]);
+    printf("bus0_old[1]: 0x%08X bus1_old[1]: 0x%08X\n", bus0_old[1], bus1_old[1]);
+
     k = 0;
     for (i = 0; i < s88_bits; i++) {
-	mask <<= 1;
-	if ((i && 0x1f) == 0) {
+	mask >>= 1;
+	if ((i & 0x1f) == 0) {
 	    k++;
 	    mask = 1;
 	}
-	if ((bus0_new[k] ^ bus0_old[k]) && mask) {
-	    if (bus0_new[k] && mask) {
-		send_event(fs88, i, 1);
+	if ((bus0_new[k] ^ bus0_old[k]) & mask) {
+	    if (bus0_new[k] & mask) {
+		if (send_event(fs88, i, 1))
+		    return -1;
 		if (!fs88->background)
 		    printf("S88 bus 0 event bit %d state on\n", i);
 	    } else {
-		send_event(fs88, i, 0);
+		if (send_event(fs88, i, 0))
+		    return -1;
 		if (!fs88->background)
 		    printf("S88 bus 0 event bit %d state off\n", i);
 	    }
 	}
-	if ((bus1_new[k] ^ bus1_old[k]) && mask) {
-	    if (bus1_new[k] && mask) {
-		send_event(fs88, i, 1);
+	if ((bus1_new[k] ^ bus1_old[k]) & mask) {
+	    if (bus1_new[k] & mask) {
+		if (send_event(fs88, i, 1))
+		    return -1;
 		if (!fs88->background)
 		    printf("S88 bus 1 event bit %d state on\n", i);
 	    } else {
-		send_event(fs88, i, 0);
+		if (send_event(fs88, i, 0))
+		    return -1;
 		if (!fs88->background)
 		    printf("S88 bus 1 event bit %d state off\n", i);
 	    }
@@ -220,9 +260,10 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
 int main(int argc, char **argv) {
     uint8_t w_data[FIFO_SIZE];
     uint8_t r_data[FIFO_SIZE];
+    uint8_t t_data[FIFO_SIZE];
     struct timeval tm1, tm2;
     unsigned long elapsed_time;
-    int buffersize, opt, length, s, destination_port, ret;
+    int ti, buffersize, opt, length, s, destination_port, ret;
     struct ifaddrs *ifap, *ifa;
     struct sockaddr_in *bsa;
     const int on = 1;
@@ -246,7 +287,7 @@ int main(int argc, char **argv) {
 
     strcpy(udp_dst_address, "255.255.255.255");
     strcpy(bcast_interface, "br-lan");
-    destination_port = 0;
+    destination_port = 15731;
 
     /* setting defaults */
     fs88.baudrate = BAUDRATE;
@@ -315,9 +356,9 @@ int main(int argc, char **argv) {
 	}
 	exit(1);
     }
-    if (!fs88.background)
+    if (!fs88.background) {
 	printf("using broadcast address %s\n", udp_dst_address);
-
+    }
     /* prepare UDP sending socket */
     fs88.sb = socket(AF_INET, SOCK_DGRAM, 0);
     if (fs88.sb < 0) {
@@ -356,14 +397,12 @@ int main(int argc, char **argv) {
     }
 
     buffersize = sizeof(w_data);
-#if 0
+#if 1
 /* testing: simple bit pattern */
-    for (int i = 0; i < buffersize; i++) {
-	w_data[i] = (uint8_t) i & 0xff;
-    }
+    memcpy(t_data, test_data, sizeof(test_data));
 #endif
 
-    for (;;) {
+    for ( ti = 0 ; ti < 3 ; ti++ ) {
 	gettimeofday(&tm1, NULL);
 
 	ret = ftdi_write_data(fs88.ftdic, w_data, buffersize);
@@ -376,7 +415,12 @@ int main(int argc, char **argv) {
 	    fprintf(stderr, "ftdi_read_data faild: %s", ftdi_get_error_string(fs88.ftdic));
 	    exit(1);
 	}
-	analyze_data(&fs88, r_data, length);
+#if 1
+/* testing */
+	memcpy(r_data, t_data, buffersize);
+#endif
+	if (analyze_data(&fs88, r_data, length))
+	    exit(1);
 
 	gettimeofday(&tm2, NULL);
 	elapsed_time = 1E6 * (tm2.tv_sec - tm1.tv_sec) + (tm2.tv_usec - tm1.tv_usec);
