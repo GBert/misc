@@ -54,6 +54,7 @@ struct ftdi2s88_t {
     struct sockaddr_in baddr;
     int sb;
     int baudrate;
+    int background;
 };
 
 #define PIN_MEM		2
@@ -159,6 +160,7 @@ int send_event(struct ftdi2s88_t *fs88, int bit, int value) {
 
 int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
     int i, k;
+    uint32_t mask;
 
     k = 0;
     memcpy(bus0_old, bus0_new, sizeof(PIN_MEM));
@@ -173,13 +175,43 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
     for (i = 1; i < s88_bits; i++) {
 	if ((i && 0x1f) == 0)
 	    k++;
-	if (b[14 + i*4 ] && S88_DATA_I)
+	bus0_new[k] <<= 1;
+	bus1_new[k] <<= 1;
+	if (b[14 + i * 4] && S88_DATA_I)
 	    bus0_new[k] |= 1;
-	if (b[14 + i*4 ] && S88_DATA_II)
+	if (b[14 + i * 4] && S88_DATA_II)
 	    bus1_new[k] |= 1;
     }
 
+    k = 0;
     for (i = 0; i < s88_bits; i++) {
+	mask <<= 1;
+	if ((i && 0x1f) == 0) {
+	    k++;
+	    mask = 1;
+	}
+	if ((bus0_new[k] ^ bus0_old[k]) && mask) {
+	    if (bus0_new[k] && mask) {
+		send_event(fs88, i, 1);
+		if (!fs88->background)
+		    printf("S88 bus 0 event bit %d state on\n", i);
+	    } else {
+		send_event(fs88, i, 0);
+		if (!fs88->background)
+		    printf("S88 bus 0 event bit %d state off\n", i);
+	    }
+	}
+	if ((bus1_new[k] ^ bus1_old[k]) && mask) {
+	    if (bus1_new[k] && mask) {
+		send_event(fs88, i, 1);
+		if (!fs88->background)
+		    printf("S88 bus 1 event bit %d state on\n", i);
+	    } else {
+		send_event(fs88, i, 0);
+		if (!fs88->background)
+		    printf("S88 bus 1 event bit %d state off\n", i);
+	    }
+	}
     }
 
     return 0;
@@ -190,7 +222,7 @@ int main(int argc, char **argv) {
     uint8_t r_data[FIFO_SIZE];
     struct timeval tm1, tm2;
     unsigned long elapsed_time;
-    int buffersize, opt, length, background, s, destination_port, ret;
+    int buffersize, opt, length, s, destination_port, ret;
     struct ifaddrs *ifap, *ifa;
     struct sockaddr_in *bsa;
     const int on = 1;
@@ -219,7 +251,7 @@ int main(int argc, char **argv) {
     /* setting defaults */
     fs88.baudrate = BAUDRATE;
     length = S88_DEF_BITS;
-    background = 0;
+    fs88.background = 0;
 
     while ((opt = getopt(argc, argv, "b:dr:l:h?")) != -1) {
 	switch (opt) {
@@ -238,7 +270,7 @@ int main(int argc, char **argv) {
 	    }
 	    break;
 	case 'd':
-	    background = 1;
+	    fs88.background = 1;
 	    break;
 	case 'r':
 	    fs88.baudrate = atoi(optarg);
@@ -283,7 +315,7 @@ int main(int argc, char **argv) {
 	}
 	exit(1);
     }
-    if (!background)
+    if (!fs88.background)
 	printf("using broadcast address %s\n", udp_dst_address);
 
     /* prepare UDP sending socket */
@@ -308,7 +340,7 @@ int main(int argc, char **argv) {
 	exit(1);
     }
 
-    if (background) {
+    if (fs88.background) {
 	pid_t pid;
 
 	/* Fork off the parent process */
@@ -353,7 +385,7 @@ int main(int argc, char **argv) {
 
 	gettimeofday(&tm2, NULL);
 	elapsed_time = 1E6 * (tm2.tv_sec - tm1.tv_sec) + (tm2.tv_usec - tm1.tv_usec);
-	if (!background)
+	if (!fs88.background)
 	    printf("send %d bytes in %ld usecs\n", FIFO_SIZE, elapsed_time);
     }
     return 0;
