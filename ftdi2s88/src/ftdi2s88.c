@@ -208,9 +208,9 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
 	bus1_new[k] <<= 1;
 //       printf("bus0_new[0]: 0x%08X bus1_new[0]: 0x%08X\n", bus0_new[0], bus1_new[0]);
 //        printf("b[%d] : 0x%02x\n", 14 + 4 * i, b[14 + 4* i]);
-	if (b[14 + i * 4] && S88_DATA_I)
+	if (b[14 + i * 4] & S88_DATA_I)
 	    bus0_new[k] |= 1;
-	if (b[14 + i * 4] && S88_DATA_II)
+	if (b[14 + i * 4] & S88_DATA_II)
 	    bus1_new[k] |= 1;
     }
 
