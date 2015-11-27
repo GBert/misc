@@ -99,7 +99,7 @@ int do_init(struct ftdi2s88_t *fs88) {
 	return -1;
     }
 
-    if (ftdi_usb_open_desc(fs88->ftdic, 0x0403, 0x6015, NULL, NULL) < 0) {
+    if (ftdi_usb_open_desc(fs88->ftdic, 0x0403, 0x6001, NULL, NULL) < 0) {
     /* if (ftdi_usb_open_desc(ftdic, 0x0403, 0x6015, NULL, NULL) < 0) { */
 	fprintf(stderr, "ftdi_usb_open_desc failed: %s\n", ftdi_get_error_string(fs88->ftdic));
 	return -1;
@@ -190,6 +190,8 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
     k = 0;
     memcpy(bus0_old, bus0_new, sizeof(bus0_old));
     memcpy(bus1_old, bus1_new, sizeof(bus1_old));
+    bzero(bus0_new, sizeof(bus0_new));
+    bzero(bus1_new, sizeof(bus1_new));
 
 //    printf("b[8] : 0x%02x\n", b[8]);
     /* first bit is different */
@@ -206,8 +208,8 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
 	    k++;
 	bus0_new[k] <<= 1;
 	bus1_new[k] <<= 1;
-//       printf("bus0_new[0]: 0x%08X bus1_new[0]: 0x%08X\n", bus0_new[0], bus1_new[0]);
-//        printf("b[%d] : 0x%02x\n", 14 + 4 * i, b[14 + 4* i]);
+//	printf("bus0_new[0]: 0x%08X bus1_new[0]: 0x%08X\n", bus0_new[0], bus1_new[0]);
+//	printf("b[%d] : 0x%02x\n", 14 + 4 * i, b[14 + 4* i]);
 	if (b[14 + i * 4] & S88_DATA_I)
 	    bus0_new[k] |= 1;
 	if (b[14 + i * 4] & S88_DATA_II)
@@ -221,7 +223,7 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
 
     k = 0;
     for (i = 0; i < s88_bits; i++) {
-	mask >>= 1;
+	mask <<= 1;
 	if ((i & 0x1f) == 0) {
 	    k++;
 	    mask = 1;
@@ -432,7 +434,7 @@ int main(int argc, char **argv) {
 	if (!fs88.background)
 	    printf("send %d bytes in %ld usecs\n", FIFO_SIZE, elapsed_time);
     }
-    free(udp_dst_address);
-    free(bcast_interface);
+    /* free(udp_dst_address);
+    free(bcast_interface); */
     exit(1);
 }
