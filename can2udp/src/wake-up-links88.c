@@ -6,7 +6,7 @@
  * Gerhard Bertelsmann
  * ----------------------------------------------------------------------------
  *
- * Thx to FPerry for testing
+ * Thx to FPerry for his input and testing
  *
  * purpose: wake up M*rklin LinkS88
  *
