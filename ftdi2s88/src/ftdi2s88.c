@@ -94,7 +94,7 @@ void print_usage(char *prg) {
 int do_init(struct ftdi2s88_t *fs88) {
     fs88->ftdic = ftdi_new();
 
-    if (fs88->ftdic == 0) {
+    if (!fs88->ftdic) {
 	fprintf(stderr, "ftdi_new failed\n");
 	return -1;
     }
@@ -179,7 +179,8 @@ int send_event(struct ftdi2s88_t *fs88, int bit, int value) {
 	fprintf(stderr, "%s: error sending UDP data: %s\n", __func__, strerror(errno));
 	return -1;
     }
-    printf("send UDP packet: bit %d value %d\n", bit, value);
+    if (!fs88->background)
+	printf("send UDP packet: bit %d value %d\n", bit, value);
     return 0;
 }
 
@@ -204,7 +205,7 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
 //    printf("bus0_new[0]: 0x%08X bus1_new[0]: 0x%08X\n", bus0_new[0], bus1_new[0]);
 
     for (i = 1; i < s88_bits; i++) {
-	if ((i & 0x1f) == 0)
+	if (!(i & 0x1f))
 	    k++;
 	bus0_new[k] <<= 1;
 	bus1_new[k] <<= 1;
@@ -215,18 +216,23 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
 	if (b[14 + i * 4] & S88_DATA_II)
 	    bus1_new[k] |= 1;
     }
+    /* align left */
+    if (i & 0x1f) {
+	bus0_new[k] <<= (32 - (s88_bits & 0x1f));
+	bus1_new[k] <<= (32 - (s88_bits & 0x1f));
+    }
 
     printf("bus0_new[0]: 0x%08X bus1_new[0]: 0x%08X\n", bus0_new[0], bus1_new[0]);
     printf("bus0_old[0]: 0x%08X bus1_old[0]: 0x%08X\n", bus0_old[0], bus1_old[0]);
     printf("bus0_new[1]: 0x%08X bus1_new[1]: 0x%08X\n", bus0_new[1], bus1_new[1]);
     printf("bus0_old[1]: 0x%08X bus1_old[1]: 0x%08X\n", bus0_old[1], bus1_old[1]);
 
-    k = 0;
+    k = -1;
     for (i = 0; i < s88_bits; i++) {
-	mask <<= 1;
-	if ((i & 0x1f) == 0) {
+	mask >>= 1;
+	if (!(i & 0x1f)) {
 	    k++;
-	    mask = 1;
+	    mask = BIT(31);
 	}
 	if ((bus0_new[k] ^ bus0_old[k]) & mask) {
 	    if (bus0_new[k] & mask) {
@@ -339,7 +345,7 @@ int main(int argc, char **argv) {
 	if (ifa->ifa_addr) {
 	    if (ifa->ifa_addr->sa_family == AF_INET) {
 		bsa = (struct sockaddr_in *)ifa->ifa_broadaddr;
-		if (strncmp(ifa->ifa_name, bcast_interface, strlen(bcast_interface)) == 0)
+		if (!strncmp(ifa->ifa_name, bcast_interface, strlen(bcast_interface)))
 		    udp_dst_address = inet_ntoa(bsa->sin_addr);
 	    }
 	}
@@ -351,7 +357,7 @@ int main(int argc, char **argv) {
     fs88.baddr.sin_port = htons(destination_port);
     s = inet_pton(AF_INET, udp_dst_address, &fs88.baddr.sin_addr);
     if (s <= 0) {
-	if (s == 0) {
+	if (!s) {
 	    fprintf(stderr, "UDP IP address invalid\n");
 	} else {
 	    fprintf(stderr, "invalid address family\n");
