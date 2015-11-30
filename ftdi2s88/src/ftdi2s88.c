@@ -81,6 +81,11 @@ uint32_t bus0_old[PIN_MEM];
 uint32_t bus1_new[PIN_MEM];
 uint32_t bus1_old[PIN_MEM];
 
+uint32_t bus0_ct0[PIN_MEM];
+uint32_t bus0_ct1[PIN_MEM];
+uint32_t bus1_ct0[PIN_MEM];
+uint32_t bus1_ct1[PIN_MEM];
+
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -b baud\n", prg);
     fprintf(stderr, "   Version 0.1\n\n");
@@ -174,19 +179,44 @@ int send_event(struct ftdi2s88_t *fs88, int bit, int value) {
     /* memcpy(&netframe[5] */
 
     /* send UDP frame */
+#if 0
     s = sendto(fs88->sb, netframe, 13, 0, (struct sockaddr *)&fs88->baddr, sizeof(fs88->baddr));
     if (s != 13) {
 	fprintf(stderr, "%s: error sending UDP data: %s\n", __func__, strerror(errno));
 	return -1;
     }
+#endif
     if (!fs88->background)
 	printf("send UDP packet: bit %d value %d\n", bit, value);
     return 0;
 }
 
+int create_event(struct ftdi2s88_t *fs88, int bus, int base, uint32_t changed_bits, uint32_t value) {
+    int ret;
+    uint32_t i, mask;
+
+    mask = BIT(31);
+    for (i = 0; i < 32; i++) {
+	if (changed_bits & mask) {
+	    if (value & mask) {
+		ret = send_event(fs88, i + base, 1);
+		if (ret)
+		    return -1;
+	    } else {
+		ret = send_event(fs88, i + base, 0);
+                if (ret)
+                    return -1;
+	    }
+	}
+	mask >>=1;
+    }
+    return 0;
+}
+
+
 int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
-    int i, k;
-    uint32_t mask;
+    int ret, i, k;
+    uint32_t c, mask;
 
     k = 0;
     memcpy(bus0_old, bus0_new, sizeof(bus0_old));
@@ -205,7 +235,7 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
 //    printf("bus0_new[0]: 0x%08X bus1_new[0]: 0x%08X\n", bus0_new[0], bus1_new[0]);
 
     for (i = 1; i < s88_bits; i++) {
-	if (!(i & 0x1f))
+	if ((i & 0x1f) == 0)
 	    k++;
 	bus0_new[k] <<= 1;
 	bus1_new[k] <<= 1;
@@ -222,11 +252,44 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
 	bus1_new[k] <<= (32 - (s88_bits & 0x1f));
     }
 
-    printf("bus0_new[0]: 0x%08X bus1_new[0]: 0x%08X\n", bus0_new[0], bus1_new[0]);
+    /* debouncing - tricky part */
+    for (i = 0; i <= k; i++) {
+	c = bus0_new[i] ^ ~bus0_old[i];
+	bus0_ct0[i] = ~(bus0_ct0[i] & c );
+	bus0_ct1[i] = bus0_ct0[i] ^ (bus0_ct1[i] & c);
+	/* 2 bit roll over */
+	printf("bus 0 i: %d c: %x\n", i, c);
+	c &= bus0_ct0[i] & bus0_ct1[i];
+	printf("bus 0 i: %d c: %x v: 0x%08x\n", i, c, bus0_new[i]);
+	ret = create_event(fs88, 0, i * 32, c, bus0_new[i]);
+	if (ret)
+	    return -1;
+
+	c = bus1_new[i] ^ bus1_old[i];
+	bus1_ct0[i] = ~(bus1_ct0[i] & c );
+	bus1_ct1[i] = bus1_ct0[i] ^ (bus1_ct1[i] & c);
+	/* 2 bit roll over */
+	printf("bus 1 i: %d c: %x\n", i, c);
+	c &= bus1_ct0[i] & bus1_ct1[i];
+	printf("bus 1 i: %d c: %x v: 0x%08x\n", i, c, bus1_new[i]);
+	ret = create_event(fs88, 1, i * 32, c, bus1_new[i]);
+	if (ret)
+	    return -1;
+    }
+
+/*  printf("bus0_new[0]: 0x%08X bus1_new[0]: 0x%08X\n", bus0_new[0], bus1_new[0]);
     printf("bus0_old[0]: 0x%08X bus1_old[0]: 0x%08X\n", bus0_old[0], bus1_old[0]);
     printf("bus0_new[1]: 0x%08X bus1_new[1]: 0x%08X\n", bus0_new[1], bus1_new[1]);
     printf("bus0_old[1]: 0x%08X bus1_old[1]: 0x%08X\n", bus0_old[1], bus1_old[1]);
+*/
+    printf("\n");
 
+    printf("bus0_ct0[0]: 0x%08X bus1_ct0[0]: 0x%08X\n", bus0_ct0[0], bus1_ct0[0]);
+    printf("bus0_ct1[0]: 0x%08X bus1_ct1[0]: 0x%08X\n", bus0_ct1[0], bus1_ct1[0]);
+    printf("bus0_ct0[1]: 0x%08X bus1_ct0[1]: 0x%08X\n", bus0_ct0[1], bus1_ct0[1]);
+    printf("bus0_ct1[1]: 0x%08X bus1_ct1[1]: 0x%08X\n", bus0_ct1[1], bus1_ct1[1]);
+
+#if 0
     k = -1;
     for (i = 0; i < s88_bits; i++) {
 	mask >>= 1;
@@ -234,6 +297,7 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
 	    k++;
 	    mask = BIT(31);
 	}
+	/* any bit changed on bus 0 ? */
 	if ((bus0_new[k] ^ bus0_old[k]) & mask) {
 	    if (bus0_new[k] & mask) {
 		if (send_event(fs88, i, 1))
@@ -247,6 +311,7 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
 		    printf("S88 bus 0 event bit %d state off\n", i);
 	    }
 	}
+	/* any bit changed on bus 1 ? */
 	if ((bus1_new[k] ^ bus1_old[k]) & mask) {
 	    if (bus1_new[k] & mask) {
 		if (send_event(fs88, i, 1))
@@ -261,6 +326,7 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
 	    }
 	}
     }
+#endif
 
     return 0;
 }
@@ -281,6 +347,11 @@ int main(int argc, char **argv) {
     bzero(bus0_old, sizeof(bus0_old));
     bzero(bus1_new, sizeof(bus1_new));
     bzero(bus1_old, sizeof(bus1_old));
+
+    memset(bus0_ct0, 0xff, sizeof(bus0_ct0));
+    memset(bus0_ct1, 0xff, sizeof(bus0_ct1));
+    memset(bus1_ct0, 0xff, sizeof(bus1_ct0));
+    memset(bus1_ct1, 0xff, sizeof(bus1_ct1));
 
     char *udp_dst_address = (char *)malloc(16);
     if (!udp_dst_address) {
@@ -410,7 +481,7 @@ int main(int argc, char **argv) {
     memcpy(t_data, test_data, sizeof(test_data));
 #endif
 
-    for ( ti = 0 ; ti < 3 ; ti++ ) {
+    for (ti = 0; ti < 10; ti++) {
 	gettimeofday(&tm1, NULL);
 
 	ret = ftdi_write_data(fs88.ftdic, w_data, buffersize);
