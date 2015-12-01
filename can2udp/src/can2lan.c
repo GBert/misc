@@ -31,7 +31,7 @@ int verbose, ms1_workaround;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.03\n\n");
+    fprintf(stderr, "   Version 1.04\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
@@ -540,6 +540,8 @@ int main(int argc, char **argv) {
 				    else
 					print_can_frame(TCP_FORMAT_STRG, &netframe[i], verbose & !background);
 				}
+				net_to_net(sb, (struct sockaddr *)&baddr, netframe, 13);
+				print_can_frame(UDP_FORMAT_STRG, netframe, verbose & !background);
 			    }
 			}
 		    }
