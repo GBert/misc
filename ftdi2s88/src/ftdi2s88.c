@@ -159,30 +159,30 @@ void random_fill(uint8_t * b, int s) {
 
 int create_event(struct ftdi2s88_t *fs88, int bus, int offset, uint32_t changed_bits, uint32_t value) {
     int s;
-    uint32_t i, mask, canid, temp;
+    uint32_t i, mask, canid, temp32;
+    uint16_t temp16;
     uint8_t netframe[13];
 
     /* TODO: change ID to something standard */
-    canid = 0x00220301;
+    canid = 0x00220300 | fs88->hash;
 
     bzero(netframe, 13);
-    temp = htonl(canid);
-    memcpy(netframe, &temp, 4);
+    temp32 = htonl(canid);
+    memcpy(netframe, &temp32, 4);
     /* sensor event 8 bytes */
     netframe[4] = 8;
-    /* TODO */
-    /* memcpy(&netframe[5] */
 
     mask = BIT(31);
     for (i = 0; i < 32; i++) {
 	if (changed_bits & mask) {
+	    /* TODO */
+	    temp16=htons(bus * 256 + offset + i);
+	    memcpy(&netframe[7], &temp16, 2);
 	    if (value & mask) {
-		/* TODO */
 		/* memcpy(&netframe[5] */
 		if (!fs88->background)
 		    printf("send UDP packet: bit %d 1\n", i + offset);
 	    } else {
-		/* TODO */
 		/* memcpy(&netframe[5] */
 		if (!fs88->background)
 		    printf("send UDP packet: bit %d 0\n", i + offset);
