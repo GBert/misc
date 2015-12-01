@@ -29,29 +29,3 @@
  #endif
  }
  
---- a/rocs/impl/unx/uthread.c
-+++ b/rocs/impl/unx/uthread.c
-@@ -114,19 +114,19 @@ void rocs_thread_high( iOThread inst ) {
- #if defined __APPLE__
-     /* TODO: apple thread prio */
- #else
--    param.__sched_priority = 10; /* valid range = 1...99*/
-+    param.sched_priority = 10; /* valid range = 1...99*/
- 
-     rc = pthread_setschedparam( o->handle, policy, &param );
-     if( rc == 0 )
--      TraceOp.terrno( name, TRCLEVEL_DEBUG, __LINE__, 9999, rc, "Setted thread priority to %d", param.__sched_priority );
-+      TraceOp.terrno( name, TRCLEVEL_DEBUG, __LINE__, 9999, rc, "Setted thread priority to %d", param.sched_priority );
-     else {
--      TraceOp.terrno( name, TRCLEVEL_WARNING, __LINE__, 9999, rc, "Could not set thread priority to %d (only superuser can do this)", param.__sched_priority );
-+      TraceOp.terrno( name, TRCLEVEL_WARNING, __LINE__, 9999, rc, "Could not set thread priority to %d (only superuser can do this)", param.sched_priority );
-     }
-     rc = pthread_getschedparam( o->handle, &policy, &param);
-     if( policy == SCHED_FIFO ) szPolicy = "SCHED_FIFO";
-     else if( policy == SCHED_RR ) szPolicy = "SCHED_RR";
-     else szPolicy = "SCHED_OTHER";
--    TraceOp.terrno( name, TRCLEVEL_INFO, __LINE__, 9999, rc, "Current thread priority is %d policy=%s", param.__sched_priority, szPolicy );
-+    TraceOp.terrno( name, TRCLEVEL_INFO, __LINE__, 9999, rc, "Current thread priority is %d policy=%s", param.sched_priority, szPolicy );
- #endif
-   }
- #endif
