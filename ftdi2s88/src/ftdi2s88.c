@@ -72,6 +72,7 @@ struct ftdi2s88_t {
     int sb;
     int baudrate;
     int background;
+    uint32_t hash;
 };
 
 #define PIN_MEM		2
@@ -162,9 +163,9 @@ void random_fill(uint8_t * b, int s) {
     }
 }
 
-int send_event(struct ftdi2s88_t *fs88, int bit, int value) {
+int create_event(struct ftdi2s88_t *fs88, int bus, int offset, uint32_t changed_bits, uint32_t value) {
     int s;
-    uint32_t canid, temp;
+    uint32_t i, mask, canid, temp;
     uint8_t netframe[13];
 
     /* TODO: change ID to something standard */
@@ -178,35 +179,27 @@ int send_event(struct ftdi2s88_t *fs88, int bit, int value) {
     /* TODO */
     /* memcpy(&netframe[5] */
 
-    /* send UDP frame */
-#if 0
-    s = sendto(fs88->sb, netframe, 13, 0, (struct sockaddr *)&fs88->baddr, sizeof(fs88->baddr));
-    if (s != 13) {
-	fprintf(stderr, "%s: error sending UDP data: %s\n", __func__, strerror(errno));
-	return -1;
-    }
-#endif
-    if (!fs88->background)
-	printf("send UDP packet: bit %d value %d\n", bit, value);
-    return 0;
-}
-
-int create_event(struct ftdi2s88_t *fs88, int bus, int base, uint32_t changed_bits, uint32_t value) {
-    int ret;
-    uint32_t i, mask;
-
     mask = BIT(31);
     for (i = 0; i < 32; i++) {
 	if (changed_bits & mask) {
 	    if (value & mask) {
-		ret = send_event(fs88, i + base, 1);
-		if (ret)
-		    return -1;
+		/* TODO */
+		/* memcpy(&netframe[5] */
+		if (!fs88->background)
+		    printf("send UDP packet: bit %d 1\n", i + offset);
 	    } else {
-		ret = send_event(fs88, i + base, 0);
-                if (ret)
-                    return -1;
+		/* TODO */
+		/* memcpy(&netframe[5] */
+		if (!fs88->background)
+		    printf("send UDP packet: bit %d 0\n", i + offset);
 	    }
+#if 0
+	    s = sendto(fs88->sb, netframe, 13, 0, (struct sockaddr *)&fs88->baddr, sizeof(fs88->baddr));
+	    if (s != 13) {
+		fprintf(stderr, "%s: error sending UDP data: %s\n", __func__, strerror(errno));
+		return -1;
+	    }
+#endif
 	}
 	mask >>=1;
     }
@@ -216,7 +209,7 @@ int create_event(struct ftdi2s88_t *fs88, int bus, int base, uint32_t changed_bi
 
 int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
     int ret, i, k;
-    uint32_t c, mask;
+    uint32_t c;
 
     k = 0;
     memcpy(bus0_old, bus0_new, sizeof(bus0_old));
@@ -252,8 +245,11 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
 	bus1_new[k] <<= (32 - (s88_bits & 0x1f));
     }
 
+    printf("bus0_new[0]: 0x%08X\n", bus0_new[0]);
+    printf("bus0_old[0]: 0x%08X\n", bus0_old[0]);
+
     /* debouncing - tricky part */
-    for (i = 0; i <= k; i++) {
+    for (i = 0; i <= 0; i++) {
 	c = bus0_new[i] ^ ~bus0_old[i];
 	bus0_ct0[i] = ~(bus0_ct0[i] & c );
 	bus0_ct1[i] = bus0_ct0[i] ^ (bus0_ct1[i] & c);
@@ -264,32 +260,34 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
 	ret = create_event(fs88, 0, i * 32, c, bus0_new[i]);
 	if (ret)
 	    return -1;
-
+#if 0
 	c = bus1_new[i] ^ bus1_old[i];
 	bus1_ct0[i] = ~(bus1_ct0[i] & c );
 	bus1_ct1[i] = bus1_ct0[i] ^ (bus1_ct1[i] & c);
 	/* 2 bit roll over */
-	printf("bus 1 i: %d c: %x\n", i, c);
 	c &= bus1_ct0[i] & bus1_ct1[i];
-	printf("bus 1 i: %d c: %x v: 0x%08x\n", i, c, bus1_new[i]);
 	ret = create_event(fs88, 1, i * 32, c, bus1_new[i]);
 	if (ret)
 	    return -1;
+#endif
     }
 
-/*  printf("bus0_new[0]: 0x%08X bus1_new[0]: 0x%08X\n", bus0_new[0], bus1_new[0]);
+/*    printf("bus0_new[0]: 0x%08X bus1_new[0]: 0x%08X\n", bus0_new[0], bus1_new[0]);
     printf("bus0_old[0]: 0x%08X bus1_old[0]: 0x%08X\n", bus0_old[0], bus1_old[0]);
     printf("bus0_new[1]: 0x%08X bus1_new[1]: 0x%08X\n", bus0_new[1], bus1_new[1]);
     printf("bus0_old[1]: 0x%08X bus1_old[1]: 0x%08X\n", bus0_old[1], bus1_old[1]);
 */
     printf("\n");
 
-    printf("bus0_ct0[0]: 0x%08X bus1_ct0[0]: 0x%08X\n", bus0_ct0[0], bus1_ct0[0]);
+    printf("bus0_ct0[0]: 0x%08X\n", bus0_ct0[0]);
+    printf("bus0_ct1[0]: 0x%08X\n", bus0_ct1[0]);
+/*    printf("bus0_ct0[0]: 0x%08X bus1_ct0[0]: 0x%08X\n", bus0_ct0[0], bus1_ct0[0]);
     printf("bus0_ct1[0]: 0x%08X bus1_ct1[0]: 0x%08X\n", bus0_ct1[0], bus1_ct1[0]);
     printf("bus0_ct0[1]: 0x%08X bus1_ct0[1]: 0x%08X\n", bus0_ct0[1], bus1_ct0[1]);
     printf("bus0_ct1[1]: 0x%08X bus1_ct1[1]: 0x%08X\n", bus0_ct1[1], bus1_ct1[1]);
-
+*/
 #if 0
+    int mask;
     k = -1;
     for (i = 0; i < s88_bits; i++) {
 	mask >>= 1;
