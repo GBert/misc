@@ -84,14 +84,9 @@ void print_usage(char *prg) {
 }
 
 void manipulate_test_data(uint8_t *b, int bit, int value) {
-    int i;
+
     if (bit > 0 && bit <=60 ) {
-	for (i = 0; i < 4; i++) {
-	    if (value)
-		b[i * 4 + 16] |= 0x88;
-	    else
-		b[i * 4 + 16] = 0x00;
-	}
+	memset(&b[16 + 4*bit],(uint8_t) value, 4);
     }
 }
 
@@ -249,6 +244,7 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
 	ret = create_event(fs88, 0, i * 32, c, bus0_actual[i]);
 	if (ret)
 	    return -1;
+
 	c = bus1_state[i] ^ ~bus1_actual[i];
 	bus1_ct0[i] = ~(bus1_ct0[i] & c );
 	bus1_ct1[i] = bus1_ct0[i] ^ (bus1_ct1[i] & c);
@@ -430,10 +426,16 @@ int main(int argc, char **argv) {
 	}
 #if 1
 /* testing */
-	if (ti == 8)
-	    manipulate_test_data(t_data, 8, 1);
-	if (ti == 13)
-	    manipulate_test_data(t_data, 8, 0);
+	if (ti == 6) {
+	    manipulate_test_data(t_data, 5, 0x08);
+	    manipulate_test_data(t_data, 9, 0x88);
+	}
+	if (ti == 7) {
+	    manipulate_test_data(t_data, 8, 0x88);
+	    manipulate_test_data(t_data, 9, 0x80);
+	}
+	if (ti == 11)
+	    manipulate_test_data(t_data, 8, 0x00);
 	memcpy(r_data, t_data, sizeof(r_data));
 #endif
 	if (analyze_data(&fs88, r_data, length))
