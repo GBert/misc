@@ -14,6 +14,7 @@
 #include <string.h>
 #include <libgen.h>
 #include <sys/time.h>
+#include <time.h>
 #include <netinet/in.h>
 #include <ifaddrs.h>
 #include <arpa/inet.h>
@@ -81,6 +82,41 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -d                  going into background\n");
     fprintf(stderr, "         -r <baudrate>       baudrate - default 4096 (~50us)\n");
     fprintf(stderr, "         -l <databits>       databits(e.g. 6088 -> 16 / max&def 60)\n\n");
+}
+
+void time_stamp(char *timestamp) {
+    struct timeval tv;
+    struct tm *tm;
+
+    gettimeofday(&tv, NULL);
+    tm = localtime(&tv.tv_sec);
+
+    sprintf(timestamp, "%02d:%02d:%02d.%03d", tm->tm_hour, tm->tm_min, tm->tm_sec, (int)tv.tv_usec / 1000);
+}
+
+void print_net_frame(unsigned char *netframe) {
+    uint32_t canid;
+    int i, dlc;
+    char timestamp[16];
+
+    memcpy(&canid, netframe, 4);
+    dlc = netframe[4];
+    time_stamp(timestamp);
+    printf("%s   ", timestamp);
+    printf("->S88>UDP    CANID 0x%08X   [%d]", ntohl(canid), netframe[4]);
+    for (i = 5; i < 5 + dlc; i++) {
+        printf(" %02x", netframe[i]);
+    }
+    if (dlc < 8) {
+        printf("(%02x", netframe[i]);
+        for (i = 6 + dlc; i < 13; i++) {
+            printf(" %02x", netframe[i]);
+        }
+        printf(")");
+    } else {
+        printf(" ");
+    }
+    printf("\n");
 }
 
 void manipulate_test_data(uint8_t *b, int bit, int value) {
@@ -194,6 +230,8 @@ int create_event(struct ftdi2s88_t *fs88, int bus, int offset, uint32_t changed_
 		return -1;
 	    }
 #endif
+	    if (!fs88->background)
+		print_net_frame(netframe);
 	}
 	mask >>=1;
     }
