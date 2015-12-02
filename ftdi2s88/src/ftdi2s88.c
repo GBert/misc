@@ -51,7 +51,7 @@
 const uint8_t S88_INIT[] = { 0, 0, 0, 0, S88_LOAD, S88_LOAD, S88_LOAD | S88_CLOCK, S88_LOAD | S88_CLOCK, S88_LOAD, S88_LOAD,
 			     S88_LOAD | S88_PS, S88_LOAD | S88_PS, S88_LOAD, S88_LOAD, 0, 0 };
 
-uint8_t test_data [256];
+uint8_t test_data[256];
 
 struct ftdi2s88_t {
     struct ftdi_context *ftdic;
@@ -105,24 +105,23 @@ void print_net_frame(unsigned char *netframe) {
     printf("%s   ", timestamp);
     printf("->S88>UDP    CANID 0x%08X   [%d]", ntohl(canid), netframe[4]);
     for (i = 5; i < 5 + dlc; i++) {
-        printf(" %02x", netframe[i]);
+	printf(" %02x", netframe[i]);
     }
     if (dlc < 8) {
-        printf("(%02x", netframe[i]);
-        for (i = 6 + dlc; i < 13; i++) {
-            printf(" %02x", netframe[i]);
-        }
-        printf(")");
+	printf("(%02x", netframe[i]);
+	for (i = 6 + dlc; i < 13; i++) {
+	    printf(" %02x", netframe[i]);
+	}
+	printf(")");
     } else {
-        printf(" ");
+	printf(" ");
     }
     printf("\n");
 }
 
-void manipulate_test_data(uint8_t *b, int bit, int value) {
-
-    if (bit > 0 && bit <=60 ) {
-	memset(&b[16 + 4*bit],(uint8_t) value, 4);
+void manipulate_test_data(uint8_t * b, int bit, int value) {
+    if (bit > 0 && bit <= 60) {
+	memset(&b[16 + 4 * bit], (uint8_t) value, 4);
     }
 }
 
@@ -212,7 +211,7 @@ int create_event(struct ftdi2s88_t *fs88, int bus, int offset, uint32_t changed_
     for (i = 0; i < 32; i++) {
 	if (changed_bits & mask) {
 	    /* TODO */
-	    temp16=htons(bus * 256 + offset + i);
+	    temp16 = htons(bus * 256 + offset + i);
 	    memcpy(&netframe[7], &temp16, 2);
 	    if (value & mask) {
 		/* memcpy(&netframe[5] */
@@ -233,11 +232,10 @@ int create_event(struct ftdi2s88_t *fs88, int bus, int offset, uint32_t changed_
 	    if (!fs88->background)
 		print_net_frame(netframe);
 	}
-	mask >>=1;
+	mask >>= 1;
     }
     return 0;
 }
-
 
 int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
     int ret, i, k;
@@ -274,7 +272,7 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
     /* debouncing - tricky part */
     for (i = 0; i <= 0; i++) {
 	c = bus0_state[i] ^ ~bus0_actual[i];
-	bus0_ct0[i] = ~(bus0_ct0[i] & c );
+	bus0_ct0[i] = ~(bus0_ct0[i] & c);
 	bus0_ct1[i] = bus0_ct0[i] ^ (bus0_ct1[i] & c);
 	/* 2 bit roll over */
 	c &= bus0_ct0[i] & bus0_ct1[i];
@@ -284,7 +282,7 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
 	    return -1;
 
 	c = bus1_state[i] ^ ~bus1_actual[i];
-	bus1_ct0[i] = ~(bus1_ct0[i] & c );
+	bus1_ct0[i] = ~(bus1_ct0[i] & c);
 	bus1_ct1[i] = bus1_ct0[i] ^ (bus1_ct1[i] & c);
 	/* 2 bit roll over */
 	c &= bus1_ct0[i] & bus1_ct1[i];
@@ -443,7 +441,7 @@ int main(int argc, char **argv) {
 
     buffersize = sizeof(w_data);
     bzero(test_data, sizeof(test_data));
-    memset(&t_data[16+17*4], 0x88, 16);
+    memset(&t_data[16 + 17 * 4], 0x88, 16);
 #if 1
 /* testing: simple bit pattern */
     memcpy(t_data, test_data, sizeof(test_data));
