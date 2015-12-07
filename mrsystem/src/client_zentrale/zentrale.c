@@ -1,0 +1,524 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#include <signal.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/select.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <fcntl.h>
+#include <string.h>
+#include <errno.h>
+#include <boolean.h>
+#include <mr_ipc.h>
+#include <cs2parse.h>
+#include <write_cs2.h>
+#include <fsm.h>
+#include "zentrale.h"
+#include "lok.h"
+#include "magnetartikel.h"
+#include "gleisbild.h"
+#include "gleisbildpage.h"
+#include "fahrstrasse.h"
+
+#define SELECT_TIMEOUT  10
+#define TIMER_INTERVALL  10
+#define GERAET_VRS_FILE "geraet.vrs"
+
+static BOOL Loop;
+
+ZentraleStruct *ZentraleCreate(void)
+{  ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)malloc(sizeof(ZentraleStruct));
+   if (Data != (ZentraleStruct *)NULL)
+   {
+      ZentraleSetVerbose(Data, FALSE);
+      ZentraleSetIsMaster(Data, TRUE);
+      ZentraleSetInterface(Data, (char *)NULL);
+      ZentraleSetServerPort(Data, -1);
+      ZentraleSetClientSock(Data, -1);
+      ZentraleSetLocPath(Data, (char *)NULL);
+      ZentraleSetMajorVersion(Data, 0);
+      ZentraleSetMinorVersion(Data, 1);
+      ZentraleSetUid(Data, 0l);
+      ZentraleSetStateMachine(Data, FsmCreate());
+      ZentraleSetGleisPages(Data, (GleisbildPageStruct **)NULL);
+      if (ZentraleGetStateMachine(Data) != (FsmStruct *)NULL)
+      {
+         ZentraleSetPackedCs2File(Data, ZFileCreate());
+         if (ZentraleGetPackedCs2File(Data) != (ZlibFile *)NULL)
+         {
+            ZentraleSetLoks(Data, LokCreate());
+            if (ZentraleGetLoks(Data) != (LokStruct *)NULL)
+            {
+               ZentraleSetMagnetartikel(Data, MagnetartikelCreate());
+               if (ZentraleGetMagnetartikel(Data) != (MagnetartikelStruct *)NULL)
+               {
+                  ZentraleSetGleisbild(Data, GleisbildCreate());
+                  if (ZentraleGetGleisbild(Data) != (GleisbildStruct *)NULL)
+                  {
+                     ZentraleSetFahrstrasse(Data, FahrstrasseCreate());
+                     if (ZentraleGetFahrstrasse(Data) == (FahrstrasseStruct *)NULL)
+                     {
+                        GleisbildDestroy(ZentraleGetGleisbild(Data));
+                        MagnetartikelDestroy(ZentraleGetMagnetartikel(Data));
+                        LokDestroy(ZentraleGetLoks(Data));
+                        ZFileDestroy(ZentraleGetPackedCs2File(Data));
+                        FsmDestroy(ZentraleGetStateMachine(Data));
+                        free(Data);
+                        Data = (ZentraleStruct *)NULL;
+                     }
+                  }
+                  else
+                  {
+                     MagnetartikelDestroy(ZentraleGetMagnetartikel(Data));
+                     LokDestroy(ZentraleGetLoks(Data));
+                     ZFileDestroy(ZentraleGetPackedCs2File(Data));
+                     FsmDestroy(ZentraleGetStateMachine(Data));
+                     free(Data);
+                     Data = (ZentraleStruct *)NULL;
+                  }
+               }
+               else
+               {
+                  LokDestroy(ZentraleGetLoks(Data));
+                  ZFileDestroy(ZentraleGetPackedCs2File(Data));
+                  FsmDestroy(ZentraleGetStateMachine(Data));
+                  free(Data);
+                  Data = (ZentraleStruct *)NULL;
+               }
+            }
+            else
+            {
+               ZFileDestroy(ZentraleGetPackedCs2File(Data));
+               FsmDestroy(ZentraleGetStateMachine(Data));
+               free(Data);
+               Data = (ZentraleStruct *)NULL;
+            }
+         }
+         else
+         {
+            FsmDestroy(ZentraleGetStateMachine(Data));
+            free(Data);
+            Data = (ZentraleStruct *)NULL;
+         }
+      }
+      else
+      {
+         free(Data);
+         Data = (ZentraleStruct *)NULL;
+      }
+   }
+   return(Data);
+}
+
+void ZentraleDestroy(ZentraleStruct *Data)
+{  int i;
+
+   if (ZentraleGetVerbose(Data))
+      puts("destroy zentrale");
+   if (ZentraleGetFahrstrasse(Data) != (FahrstrasseStruct *)NULL)
+      FahrstrasseDestroy(ZentraleGetFahrstrasse(Data));
+   if (ZentraleGetGleisPages(Data) != (GleisbildPageStruct **)NULL)
+   {
+      for (i = 0; i < GleisbildGetNumPages(ZentraleGetGleisbild(Data)); i++)
+         if (ZentraleGetNrGleisPages(Data, i) != (GleisbildPageStruct *)NULL)
+            GleisbildPageDestroy(ZentraleGetNrGleisPages(Data, i));
+      free(ZentraleGetGleisPages(Data));
+   }
+   if (ZentraleGetGleisbild(Data) != (GleisbildStruct *)NULL)
+      GleisbildDestroy(ZentraleGetGleisbild(Data));
+   if (ZentraleGetMagnetartikel(Data) != (MagnetartikelStruct *)NULL)
+      MagnetartikelDestroy(ZentraleGetMagnetartikel(Data));
+   if (ZentraleGetLoks(Data) != (LokStruct *)NULL)
+      LokDestroy(ZentraleGetLoks(Data));
+   if (ZentraleGetStateMachine(Data) != (FsmStruct *)NULL)
+      FsmDestroy(ZentraleGetStateMachine(Data));
+   if (ZentraleGetPackedCs2File(Data) == (ZlibFile *)NULL)
+      ZFileDestroy(ZentraleGetPackedCs2File(Data));
+   free(Data);
+}
+
+static void LoadGleisPage(void *PrivData, MapKeyType Key, MapDataType Daten)
+{  ZentraleStruct *Data;
+   GleisbildInfo *GleisbildPage;
+
+   Data = (ZentraleStruct *)PrivData;
+   GleisbildPage = (GleisbildInfo *)Daten;
+   ZentraleSetNrGleisPages(Data, GleisbildInfoGetId(GleisbildPage),
+                           GleisbildPageCreate());
+   GleisbildPageInit(ZentraleGetNrGleisPages(Data,
+                                             GleisbildInfoGetId(GleisbildPage)),
+                     ZentraleGetLocPath(Data),
+                     GleisbildInfoGetName(GleisbildPage),
+                     GleisbildInfoGetId(GleisbildPage));
+   GleisbildPageLoadGleisbildPageCs2(ZentraleGetNrGleisPages(Data,
+                                                             GleisbildInfoGetId(GleisbildPage)));
+}
+
+void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, BOOL IsMaster,
+                  char *Interface, char *Addr, int Port, char *LocPath)
+{  Cs2parser *GeraetVrsParser;
+   int LineInfo, handle;
+   char *FileBuffer, *GeraetVrsFile;
+   off_t FileLaenge;
+   ssize_t NumBytes;
+
+   ZentraleSetVerbose(Data, Verbose);
+   if (ZentraleGetVerbose(Data))
+      puts("ZentraleInit");
+   ZentraleSetIsMaster(Data, IsMaster);
+   ZentraleSetInterface(Data, Interface);
+   ZentraleSetAddress(Data, Addr);
+   ZentraleSetServerPort(Data, Port);
+   ZentraleSetClientSock(Data, -1);
+   ZentraleSetCfgLength(Data, 0);
+   ZentraleSetCfgHaveRead(Data, 0);
+   ZentraleSetCfgBuffer(Data, NULL);
+   ZentraleInitFsm(Data, ZentraleGetIsMaster(Data));
+   ZentraleSetLocPath(Data, LocPath);
+   ZentraleSetNumLoks(Data, 2);
+   ZentraleSetMaxLoks(Data, LOK_MAX_LOKS);
+   ZentraleSetLokNamen(Data,
+                       malloc(ZentraleGetMaxLoks(Data) *
+                              sizeof(ZentraleLokName)));
+   LokInit(ZentraleGetLoks(Data), LocPath);
+   LokLoadLokomotiveCs2(ZentraleGetLoks(Data));
+   GleisbildInit(ZentraleGetGleisbild(Data), LocPath);
+   GleisbildLoadGleisbildCs2(ZentraleGetGleisbild(Data));
+   if (GleisbildGetNumPages(ZentraleGetGleisbild(Data)) > 0)
+   {
+      ZentraleSetGleisPages(Data,
+                            (GleisbildPageStruct **)malloc(sizeof(GleisbildPageStruct *) *
+                                                           GleisbildGetNumPages(ZentraleGetGleisbild(Data))));
+      if (ZentraleGetGleisPages(Data) != (GleisbildPageStruct **)NULL)
+      {
+         if (ZentraleGetVerbose(Data))
+            puts("load Gleisbild Pages");
+         MapWalkAscend(GleisbildGetGleisbildDb(ZentraleGetGleisbild(Data)),
+                       (MapWalkCbFkt)LoadGleisPage,
+                       (void *)Data);
+      }
+   }
+   FahrstrasseInit(ZentraleGetFahrstrasse(Data), LocPath);
+   FahrstrasseLoadFahrstrasseCs2(ZentraleGetFahrstrasse(Data));
+   MagnetartikelInit(ZentraleGetMagnetartikel(Data), LocPath);
+   MagnetartikelLoadMagnetartikelCs2(ZentraleGetMagnetartikel(Data));
+   if (ZentraleGetVerbose(Data))
+      puts("read geraet.vrs");
+   GeraetVrsFile = (char *)malloc(strlen(ZentraleGetLocPath(Data)) + 
+                                  strlen(GERAET_VRS_FILE) + 2);
+   if (GeraetVrsFile != (char *)NULL)
+   {
+      strcpy(GeraetVrsFile, ZentraleGetLocPath(Data));
+      if (GeraetVrsFile[strlen(GeraetVrsFile) - 1] != '/')
+         strcat(GeraetVrsFile, "/");
+      strcat(GeraetVrsFile, GERAET_VRS_FILE);
+      handle = open(GeraetVrsFile, O_RDONLY);
+      if (handle >= 0)
+      {
+         FileLaenge = lseek(handle, 0, SEEK_END);
+         FileBuffer = malloc(FileLaenge);
+         if (FileBuffer != NULL)
+         {
+            lseek(handle, 0, SEEK_SET);
+            NumBytes = read(handle, FileBuffer, (size_t)FileLaenge);
+            if (NumBytes > 0)
+            {
+               GeraetVrsParser = Cs2pCreate();
+               Cs2pInit(GeraetVrsParser, PARSER_TYPE_GERAET_VRS, FileBuffer,
+                        NumBytes);
+               Cs2pSetVerbose(GeraetVrsParser, FALSE);
+               do {
+                  LineInfo = Cs2pParse(GeraetVrsParser);
+                  switch (LineInfo)
+                  {
+                     case PARSER_ERROR:
+                        if (ZentraleGetVerbose(Data))
+                           puts("ERROR in geraet.vrs");
+                        break;
+                     case PARSER_EOF:
+                        if (ZentraleGetVerbose(Data))
+                           puts("end of geraet.vrs");
+                        break;
+                     case PARSER_PARAGRAPH:
+                        if (ZentraleGetVerbose(Data))
+                           printf("new paragraph %s in geraet.vrs\n",
+                                  Cs2pGetName(GeraetVrsParser));
+                        switch (Cs2pGetSubType(GeraetVrsParser))
+                        {
+                           case PARSER_PARAGRAPH_GERAET:
+                              if (ZentraleGetVerbose(Data))
+                                 puts("geraet paragraph in geraet.vrs");
+                              break;
+                        }
+                        break;
+                     case PARSER_VALUE:
+                        if (ZentraleGetVerbose(Data))
+                           printf("new value %s=%s in lok cfg\n",
+                                  Cs2pGetName(GeraetVrsParser),
+                                  Cs2pGetValue(GeraetVrsParser));
+                        switch (Cs2pGetSubType(GeraetVrsParser))
+                        {
+                           case PARSER_VALUE_GERAET:
+                              if (ZentraleGetVerbose(Data))
+                                 puts("neuer geraet Eintrag");
+                              break;
+                           case PARSER_VALUE_VERSION:
+                              if (ZentraleGetVerbose(Data))
+                                 puts("neuer version Eintrag");
+                              break;
+                           case PARSER_VALUE_MINOR:
+                              if (ZentraleGetVerbose(Data))
+                                 puts("minor version");
+                              ZentraleSetMinorVersion(Data,
+                                                      strtoul(Cs2pGetValue(GeraetVrsParser),
+                                                              NULL, 0));
+                              break;
+                           case PARSER_VALUE_SERNUM:
+                              if (ZentraleGetVerbose(Data))
+                                 puts("serial number");
+                              ZentraleSetSerialNumber(Data,
+                                                      strtoul(Cs2pGetValue(GeraetVrsParser),
+                                                              NULL, 0));
+                              break;
+                           case PARSER_VALUE_GFPUID:
+                              if (ZentraleGetVerbose(Data))
+                                 puts("gfp uid");
+                              ZentraleSetGfpUid(Data,
+                                                strtoul(Cs2pGetValue(GeraetVrsParser),
+                                                        NULL, 0));
+                              break;
+                           case PARSER_VALUE_GUIUID:
+                              if (ZentraleGetVerbose(Data))
+                                 puts("gui uid");
+                              ZentraleSetUid(Data,
+                                             strtoul(Cs2pGetValue(GeraetVrsParser),
+                                                     NULL, 0));
+                              break;
+                           case PARSER_VALUE_HARDVERS:
+                              if (ZentraleGetVerbose(Data))
+                                 puts("hardware version");
+                              ZentraleSetHardVersion(Data,
+                                                     strtof(Cs2pGetValue(GeraetVrsParser),
+                                                            NULL));
+                              break;
+                        }
+                        break;
+                  }
+               } while (LineInfo != PARSER_EOF);
+               Cs2pDestroy(GeraetVrsParser);
+            }
+            else
+            {
+               if (ZentraleGetVerbose(Data))
+                  puts("kann kein geraet.vrs nicht lesen");
+            }
+            free(FileBuffer);
+         }
+         else
+         {
+            if (ZentraleGetVerbose(Data))
+               printf("kann kein Speicher fuer Dateipuffer (%ld) anlegen\n",
+                      FileLaenge);
+         }
+         close(handle);
+      }
+      else
+      {
+         if (ZentraleGetVerbose(Data))
+            puts("kann geraet.vrs nicht oeffnen");
+      }
+      free(GeraetVrsFile);
+   }
+   else
+   {
+      if (ZentraleGetVerbose(Data))
+         puts("kann kein Speicher fuer Dateiname anlegen");
+   }
+}
+
+void ZentraleExit(ZentraleStruct *Data)
+{  int i;
+
+   if (ZentraleGetVerbose(Data))
+      puts("exit zentrale");
+   if (ZentraleGetFahrstrasse(Data) != (FahrstrasseStruct *)NULL)
+      FahrstrasseExit(ZentraleGetFahrstrasse(Data));
+   if (ZentraleGetGleisPages(Data) != (GleisbildPageStruct **)NULL)
+   {
+      for (i = 0; i < GleisbildGetNumPages(ZentraleGetGleisbild(Data)); i++)
+         if (ZentraleGetNrGleisPages(Data, i) != (GleisbildPageStruct *)NULL)
+            GleisbildPageExit(ZentraleGetNrGleisPages(Data, i));
+   }
+   if (ZentraleGetGleisbild(Data) != (GleisbildStruct *)NULL)
+      GleisbildExit(ZentraleGetGleisbild(Data));
+   if (ZentraleGetMagnetartikel(Data) != (MagnetartikelStruct *)NULL)
+      MagnetartikelExit(ZentraleGetMagnetartikel(Data));
+   if (ZentraleGetLoks(Data) != (LokStruct *)NULL)
+      LokExit(ZentraleGetLoks(Data));
+   if (ZentraleGetStateMachine(Data) != (FsmStruct *)NULL)
+      FsmExit(ZentraleGetStateMachine(Data));
+   if (ZentraleGetPackedCs2File(Data) == (ZlibFile *)NULL)
+      ZFileExit(ZentraleGetPackedCs2File(Data));
+}
+
+static void SigHandler(int sig)
+{
+   Loop = FALSE;
+}
+
+static BOOL Start(ZentraleStruct *Data)
+{  struct sigaction SigStruct;
+
+   if (strlen(ZentraleGetInterface(Data)) > 0)
+   {
+      ZentraleSetClientSock(Data,
+                            MrIpcConnectIf(ZentraleGetInterface(Data),
+                                           ZentraleGetServerPort(Data)));
+   }
+   else
+   {
+      ZentraleSetClientSock(Data,
+                            MrIpcConnect(ZentraleGetAddress(Data),
+                                         ZentraleGetServerPort(Data)));
+   }
+   if (ZentraleGetClientSock(Data) >= 0)
+   {
+      if (ZentraleGetVerbose(Data))
+         puts("ready for incoming comands");
+      SigStruct.sa_handler = SigHandler;
+      sigemptyset(&SigStruct.sa_mask);
+      SigStruct.sa_flags = 0;
+      sigaction(SIGINT, &SigStruct, NULL);
+      sigaction(SIGQUIT, &SigStruct, NULL);
+      sigaction(SIGTERM, &SigStruct, NULL);
+      return(TRUE);
+   }
+   else
+   {
+      return(FALSE);
+   }
+}
+
+static void Stop(ZentraleStruct *Data)
+{
+   if (ZentraleGetVerbose(Data))
+      puts("stop network client");
+   if (ZentraleGetClientSock(Data) >= 0)
+   {
+      MrIpcClose(ZentraleGetClientSock(Data));
+   }
+}
+
+static void ProcessSystemData(ZentraleStruct *Data, MrIpcCmdType *CmdFrame)
+{  int NewState;
+
+   FsmDo(ZentraleGetStateMachine(Data), MrIpcGetCommand(CmdFrame) + 1,
+         (void *)CmdFrame);
+}
+
+static void HandleSystemData(ZentraleStruct *Data)
+{  MrIpcCmdType CmdFrame;
+   int RcvReturnValue;
+
+   MrIpcInit(&CmdFrame);
+   RcvReturnValue = MrIpcRecv(ZentraleGetClientSock(Data), &CmdFrame);
+   if (RcvReturnValue == MR_IPC_RCV_ERROR)
+   {
+      if (ZentraleGetVerbose(Data))
+         puts("Error in recieve from socket!");
+   }
+   else if (RcvReturnValue == MR_IPC_RCV_CLOSED)
+   {
+      if (ZentraleGetVerbose(Data))
+         puts("client socket was closed\nmaybe server has stoped");
+      Loop = FALSE;
+   }
+   else
+   {
+      if (ZentraleGetVerbose(Data))
+         printf("read new comand frame from socket %d\n",
+                MrIpcGetCommand(&CmdFrame));
+      ProcessSystemData(Data, &CmdFrame);
+   }
+}
+
+void ZentraleRun(ZentraleStruct *Data)
+{  fd_set ReadFds;
+   int RetVal, HighFd;
+   struct timeval SelectTimeout;
+   time_t LastTime, Now;
+
+   if (Start(Data))
+   {
+      LastTime = time(NULL);
+      Loop = TRUE;
+      while (Loop)
+      {
+         FD_ZERO(&ReadFds);
+         HighFd = 0;
+         if (ZentraleGetVerbose(Data))
+            printf("add client socket %d\n", ZentraleGetClientSock(Data));
+         FD_SET(ZentraleGetClientSock(Data), &ReadFds);
+         if (ZentraleGetClientSock(Data) > HighFd)
+            HighFd = ZentraleGetClientSock(Data);
+         SelectTimeout.tv_sec = SELECT_TIMEOUT;
+         SelectTimeout.tv_usec = 0;
+         if (ZentraleGetVerbose(Data))
+            printf("wait for %d fd, max %ld s\n", HighFd, SelectTimeout.tv_sec);
+         RetVal = select(HighFd + 1, &ReadFds, NULL, NULL, &SelectTimeout);
+         if (ZentraleGetVerbose(Data))
+            printf("select liefert %d\n", RetVal);
+         if (((RetVal == -1) && (errno == EINTR)) || (RetVal == 0))
+         {
+            Now = time(NULL);
+            if (ZentraleGetVerbose(Data))
+               printf("interrupt at %s\n", asctime(localtime(&Now)));
+            if ((Now - LastTime) > TIMER_INTERVALL)
+            {  MrIpcCmdType Cmd;
+
+               MrIpcInit(&Cmd);
+               MrIpcSetCommand(&Cmd, MrIpcCmdNull);
+               MrIpcSetCanResponse(&Cmd, 0);
+               MrIpcCalcHash(&Cmd, MR_CS2_UID_BROADCAST);
+               MrIpcSetCanCommand(&Cmd, 0xffff);
+               MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
+               FsmDo(ZentraleGetStateMachine(Data), 0, &Cmd);
+               LastTime = Now;
+            }
+         }
+         else if (RetVal < 0)
+         {
+            if (ZentraleGetVerbose(Data))
+               puts("error in main loop");
+            Loop = FALSE;
+         }
+         else
+         {
+            Now = time(NULL);
+            if ((Now - LastTime) > TIMER_INTERVALL)
+            {  MrIpcCmdType Cmd;
+
+               MrIpcInit(&Cmd);
+               MrIpcSetCommand(&Cmd, MrIpcCmdNull);
+               MrIpcSetCanResponse(&Cmd, 0);
+               MrIpcCalcHash(&Cmd, MR_CS2_UID_BROADCAST);
+               MrIpcSetCanCommand(&Cmd, 0xffff);
+               MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
+               FsmDo(ZentraleGetStateMachine(Data), 0, &Cmd);
+               LastTime = Now;
+            }
+            if (FD_ISSET(ZentraleGetClientSock(Data), &ReadFds))
+            {
+               /* new cmd frame */
+               HandleSystemData(Data);
+            }
+         }
+      }
+      Stop(Data);
+   }
+}

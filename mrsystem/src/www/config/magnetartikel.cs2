@@ -1,0 +1,107 @@
+[magnetartikel]
+version
+ .minor=1
+artikel
+ .id=1
+ .name=23
+ .typ=rechtsweiche
+ .stellung=1
+ .schaltzeit=200
+ .decoder=mehr_neu
+ .dectyp=mm2
+artikel
+ .id=2
+ .name=13
+ .typ=linksweiche
+ .stellung=1
+ .schaltzeit=200
+ .decoder=mehr_neu
+ .dectyp=mm2
+artikel
+ .id=3
+ .name=22
+ .typ=rechtsweiche
+ .stellung=1
+ .schaltzeit=200
+ .decoder=mehr_neu
+ .dectyp=mm2
+artikel
+ .id=4
+ .name=12
+ .typ=linksweiche
+ .stellung=1
+ .schaltzeit=200
+ .decoder=mehr_neu
+ .dectyp=mm2
+artikel
+ .id=5
+ .name=24
+ .typ=linksweiche
+ .stellung=1
+ .schaltzeit=200
+ .decoder=mehr_neu
+ .dectyp=mm2
+artikel
+ .id=6
+ .name=11
+ .typ=rechtsweiche
+ .stellung=1
+ .schaltzeit=200
+ .decoder=mehr_neu
+ .dectyp=mm2
+artikel
+ .id=7
+ .name=D
+ .typ=urc_lichtsignal_HP012_SH01
+ .stellung=3
+ .schaltzeit=200
+ .decoder=mehr_alt
+ .dectyp=mm2
+artikel
+ .id=9
+ .name=FF
+ .typ=urc_lichtsignal_HP012_SH01
+ .stellung=3
+ .schaltzeit=200
+ .decoder=mehr_alt
+ .dectyp=mm2
+artikel
+ .id=11
+ .name=E
+ .typ=urc_lichtsignal_HP012_SH01
+ .stellung=3
+ .schaltzeit=200
+ .decoder=mehr_alt
+ .dectyp=mm2
+artikel
+ .id=13
+ .name=C
+ .typ=urc_lichtsignal_HP012_SH01
+ .stellung=3
+ .schaltzeit=200
+ .decoder=mehr_alt
+ .dectyp=mm2
+artikel
+ .id=15
+ .name=A
+ .typ=urc_lichtsignal_HP012_SH01
+ .stellung=3
+ .schaltzeit=200
+ .decoder=mehr_alt
+ .dectyp=mm2
+artikel
+ .id=17
+ .name=F
+ .typ=urc_lichtsignal_HP012_SH01
+ .stellung=3
+ .schaltzeit=200
+ .decoder=mehr_alt
+ .dectyp=mm2
+artikel
+ .id=19
+ .name=B
+ .typ=urc_lichtsignal_HP012_SH01
+ .stellung=3
+ .schaltzeit=200
+ .decoder=mehr_alt
+ .dectyp=mm2

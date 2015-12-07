@@ -1,0 +1,14 @@
+/Makefile/1.1.1.1/Sun Apr 19 14:30:58 2015//
+/cfg_create.c/1.1.1.1/Sun Apr 19 14:30:58 2015//
+/cfg_destroy.c/1.1.1.1/Sun Apr 19 14:30:58 2015//
+/cfg_exit.c/1.1.1.1/Sun Apr 19 14:30:58 2015//
+/cfg_gstr.c/1.1.1.1/Sun Apr 19 14:30:58 2015//
+/cfg_read.c/1.1.1.1/Sun Apr 19 14:30:58 2015//
+/cfg_sstr.c/1.1.1.1/Sun Apr 19 14:30:58 2015//
+/cfg_cmdline.c/1.2/Sat May 16 21:48:18 2015//
+/cfg_intern.h/1.2/Sat May 16 21:43:01 2015//
+/config.h/1.2/Sat May 16 21:48:30 2015//
+/cfg_gint.c/1.2/Wed May 20 06:56:24 2015//
+/cfg_init.c/1.4/Wed May 20 06:56:24 2015//
+/cfg_sint.c/1.2/Wed May 20 06:56:25 2015//
+D
