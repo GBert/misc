@@ -14,6 +14,8 @@ build:
 	cd fsm && $(MAKE) && $(MAKE) install
 	cd scanner && $(MAKE) && $(MAKE) install
 	cd inipars && $(MAKE) && $(MAKE) install
+	cp lib/* ../lib/
+	cp include/* ../include/
 
 clean:
 	rm -rf include/*

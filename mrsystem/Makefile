@@ -24,6 +24,7 @@ define Package/$(PKG_NAME)
   CATEGORY:=Utilities
   TITLE:= Model Railroad System
   URL:=http://mbernstein.de/modellbahn/bbb.htm
+  DEPENDS:= +zlib
 endef
 
 define Build/Prepare
@@ -31,7 +32,8 @@ define Build/Prepare
 endef
 
 define Build/Compile
-#	mkdir -p $(PKG_BUILD_DIR)/mrsystem/include
+	mkdir -p $(PKG_BUILD_DIR)/include
+	mkdir -p $(PKG_BUILD_DIR)/lib
 	$(MAKE)	-C $(PKG_BUILD_DIR)/basic_libs $(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)"
 	$(MAKE)	-C $(PKG_BUILD_DIR)/../mrsystem $(TARGET_CONFIGURE_OPTS) \
@@ -40,11 +42,11 @@ endef
 
 define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/new_framework/drehscheibe/drehscheibe $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/new_framework/client_cs2eth/mrcs2eth $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/new_framework/client_ms1/mrms1 $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/new_framework/client_ms2/mrms2 $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/new_framework/client_zentrale/mrzentrale $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/drehscheibe/drehscheibe $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client_cs2eth/mrcs2eth $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client_ms1/mrms1 $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client_ms2/mrms2 $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client_zentrale/mrzentrale $(1)/usr/bin
 endef
 
 $(eval $(call BuildPackage,$(PKG_NAME)))
