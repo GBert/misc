@@ -32,6 +32,7 @@ define Build/Prepare
 endef
 
 define Build/Compile
+	mkdir -p $(PKG_BUILD_DIR)/basic_libs/include
 	mkdir -p $(PKG_BUILD_DIR)/include
 	mkdir -p $(PKG_BUILD_DIR)/lib
 	$(MAKE)	-C $(PKG_BUILD_DIR)/basic_libs $(TARGET_CONFIGURE_OPTS) \
