@@ -1,0 +1,44 @@
+#
+# Copyright (C) 2014 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=mrsystem
+PKG_VERSION:=2.0
+
+PKG_SOURCE_MIRROR:=0 
+PKG_SOURCE_VERSION:=$(PKG_REV)
+PKG_SOURCE_URL:=http://mbernstein.de/download/modellbahn/
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)/
+PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/$(PKG_NAME)
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:= MRSystem
+  URL:=http://mbernstein.de/modellbahn/bbb.htm
+endef
+
+define Build/Compile
+#	mkdir -p $(PKG_BUILD_DIR)/mrsystem/include
+	$(MAKE)	-C $(PKG_BUILD_DIR)/../mrsystem $(TARGET_CONFIGURE_OPTS) \
+		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)"
+endef
+
+define Package/$(PKG_NAME)/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/new_framework/drehscheibe/drehscheibe $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/new_framework/client_cs2eth/mrcs2eth $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/new_framework/client_ms1/mrms1 $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/new_framework/client_ms2/mrms2 $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/new_framework/client_zentrale/mrzentrale $(1)/usr/bin
+endef
+
+$(eval $(call BuildPackage,$(PKG_NAME)))
