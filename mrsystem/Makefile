@@ -34,11 +34,11 @@ endef
 
 define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/new_framework/drehscheibe/drehscheibe $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/new_framework/client_cs2eth/mrcs2eth $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/new_framework/client_ms1/mrms1 $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/new_framework/client_ms2/mrms2 $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/new_framework/client_zentrale/mrzentrale $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mrsystem/drehscheibe/drehscheibe $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mrsystem/client_cs2eth/mrcs2eth $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mrsystem/client_ms1/mrms1 $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mrsystem/client_ms2/mrms2 $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mrsystem/client_zentrale/mrzentrale $(1)/usr/bin
 endef
 
 $(eval $(call BuildPackage,$(PKG_NAME)))
