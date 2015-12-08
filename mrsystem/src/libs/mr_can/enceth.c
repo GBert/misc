@@ -5,7 +5,7 @@
 void MrEthCs2Encode(char *UdpFrame, MrCs2CanDataType *CanMsg)
 {  unsigned CanHash;
 
-   CanHash = MrCs2GetHash(CanMsg) | MR_CS2_MASK_HASH_MAGIC;
+   CanHash = (MrCs2GetHash(CanMsg) & ~MR_CS2_MASK_HASH_MAGIC) | MR_CS2_HASH_MAGIC;
    MrCs2SetHash(CanMsg, CanHash);
    MrCs2SetId(CanMsg,
               MrCs2EncodeId(MrCs2GetHash(CanMsg), MrCs2GetResponse(CanMsg),
