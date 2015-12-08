@@ -44,7 +44,7 @@ define Package/can2udp/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init $(1)/etc/init.d/can2lan
 	$(INSTALL_DIR) $(1)/www/config
-	$(INSTALL_BIN) ./files/geraet.vrs $(1)/www/config/
+	$(CP) ./files/maerklin/config/* $(1)/www/config/
 endef
 
 define Package/can2udp/postinst
