@@ -78,6 +78,7 @@ uint32_t bus1_state[PIN_MEM];
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -b baud\n", prg);
     fprintf(stderr, "   Version 0.1\n\n");
+    fprintf(stderr, "         -H <hash>           M*rklin hash\n");
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -d                  going into background\n");
     fprintf(stderr, "         -r <baudrate>       baudrate - default 4096 (~50us)\n");
@@ -198,8 +199,8 @@ int create_event(struct ftdi2s88_t *fs88, int bus, int offset, uint32_t changed_
     uint16_t temp16;
     uint8_t netframe[13];
 
-    /* TODO: change ID to something standard */
-    canid = 0x00220300 | fs88->hash;
+    /* allow only usefull M*rklin hashes */
+    canid = 0x00220300 | (fs88->hash & 0x0000ff7f);
 
     bzero(netframe, 13);
     temp32 = htonl(canid);
@@ -214,11 +215,13 @@ int create_event(struct ftdi2s88_t *fs88, int bus, int offset, uint32_t changed_
 	    temp16 = htons(bus * 256 + offset + i);
 	    memcpy(&netframe[7], &temp16, 2);
 	    if (value & mask) {
-		/* memcpy(&netframe[5] */
+		netframe[9] = 0;
+		netframe[10] = 1;
 		if (!fs88->background)
 		    printf("send UDP packet: bit %d 1\n", i + offset);
 	    } else {
-		/* memcpy(&netframe[5] */
+		netframe[9] = 1;
+		netframe[10] = 0;
 		if (!fs88->background)
 		    printf("send UDP packet: bit %d 0\n", i + offset);
 	    }
@@ -337,7 +340,7 @@ int main(int argc, char **argv) {
     length = S88_DEF_BITS;
     fs88.background = 0;
 
-    while ((opt = getopt(argc, argv, "b:dr:l:h?")) != -1) {
+    while ((opt = getopt(argc, argv, "H:b:dr:l:h?")) != -1) {
 	switch (opt) {
 	case 'b':
 	    if (strlen(optarg) <= 15) {
@@ -352,6 +355,9 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "UDP broadcast address or interface error: %s\n", optarg);
 		exit(1);
 	    }
+	    break;
+	case 'H':
+	    fs88.hash = atoi(optarg);
 	    break;
 	case 'd':
 	    fs88.background = 1;
