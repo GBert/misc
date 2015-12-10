@@ -59,6 +59,7 @@ struct ftdi2s88_t {
     int sb;
     int baudrate;
     int background;
+    int inverting;
     uint16_t hash;
     uint16_t hw_id;
 };
@@ -81,6 +82,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "   Version 0.1\n\n");
     fprintf(stderr, "         -H <hash>           M*rklin hash\n");
     fprintf(stderr, "         -I <ID>             hardware id <default 0x5338>\n");
+    fprintf(stderr, "         -i                  inverting signals\n");
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -d                  going into background\n");
     fprintf(stderr, "         -r <baudrate>       baudrate - default 4096 (~50us)\n");
@@ -167,23 +169,30 @@ int do_init(struct ftdi2s88_t *fs88) {
 }
 
 /* prepare bitbanging data */
-int fill_data(uint8_t * b, size_t s, int s88_bits) {
+int fill_data(struct ftdi2s88_t *fs88, uint8_t * b, size_t s, int s88_bits) {
     int i, offset;
+    uint8_t invert;
 
-    i = 0;
     offset = sizeof(S88_INIT);
 
     if (s < s88_bits * 4 + offset) {
 	fprintf(stderr, "to less space (%d) for %d bits\n", (int)s, s88_bits);
 	return -1;
     }
-    memcpy(b, S88_INIT, offset);
+
+    if (fs88->inverting)
+	invert = 0xff;
+    else
+	invert = 0;
+
+    for (i = 0; i < s88_bits * 4; i++)
+	b[i] = S88_INIT[i] ^ invert;
 
     while (i < s88_bits * 4) {
-	b[i++ + offset] = S88_CLOCK;
-	b[i++ + offset] = S88_CLOCK;
-	b[i++ + offset] = 0;
-	b[i++ + offset] = 0;
+	b[i++ + offset] = (S88_CLOCK) ^ invert;
+	b[i++ + offset] = (S88_CLOCK) ^ invert;
+	b[i++ + offset] = invert;
+	b[i++ + offset] = invert;
     }
     return (i + offset);
 }
@@ -340,6 +349,7 @@ int main(int argc, char **argv) {
     destination_port = 15731;
 
     /* setting defaults */
+    fs88.inverting = 0;
     fs88.baudrate = BAUDRATE;
     length = S88_DEF_BITS;
     fs88.background = 0;
@@ -367,6 +377,9 @@ int main(int argc, char **argv) {
 	    break;
 	case 'I':
 	    fs88.hw_id = atoi(optarg);
+	    break;
+	case 'i':
+	    fs88.inverting = 1;
 	    break;
 	case 'd':
 	    fs88.background = 1;
@@ -433,7 +446,7 @@ int main(int argc, char **argv) {
 	exit(-1);
 
     bzero(w_data, sizeof(w_data));
-    ret = fill_data(w_data, sizeof(w_data), length);
+    ret = fill_data(&fs88, w_data, sizeof(w_data), length);
     if (ret < 0) {
 	fprintf(stderr, "to many data bits\n");
 	exit(1);
@@ -462,7 +475,8 @@ int main(int argc, char **argv) {
     memcpy(t_data, test_data, sizeof(test_data));
 #endif
 
-    for (ti = 0; ti < 20; ti++) {
+//    for (ti = 0; ti < 20; ti++) {
+    for (;;) {
 	gettimeofday(&tm1, NULL);
 
 	ret = ftdi_write_data(fs88.ftdic, w_data, buffersize);
