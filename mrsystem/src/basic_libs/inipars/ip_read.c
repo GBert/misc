@@ -9,7 +9,6 @@
 BOOL IniParsReadFile(IniParsStruct *Data, Map *CfgValues)
 {  int Token, i;
    BOOL Ret;
-   char ZkValue[SCAN_BLOCK_LAENGE];
    IniValue *ValuePtr;
 
    Ret = TRUE;

@@ -4,7 +4,7 @@
 #include "dliste.h"
 
 void DlisteDelFirst(Dliste *Wurzel)
-{  DlisteKnoten ReturnPtr;
+{
 
    if (Wurzel->DatenAnfang != NULL)
    {

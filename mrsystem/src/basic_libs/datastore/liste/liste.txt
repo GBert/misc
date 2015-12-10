@@ -37,7 +37,7 @@ Liste *ListeCreate(CmpFkt Cmp);
             kleienr als der zweite ist; 0 wenn beide gleich sind und einen
             Wert groesser 0 wenn der erste Parameter groesser als der
             zweite ist.
-   RÅckgabe: Eine neue Liste im Erfolgsfall, NULL im Fehlerfall
+   R¸ckgabe: Eine neue Liste im Erfolgsfall, NULL im Fehlerfall
 void ListeDestroy(Liste *Wurzel, ListeDelCbFkt Cb);
    Diese Funktion gibt Liste wieder frei. Auch saemtliche Listenknoten
    werden automatisch freigegeben.

@@ -29,6 +29,7 @@ void AvlInit(AvlBaum *Wurzel, CmpFkt Cmp, AvlKeyDelCbFkt DestroyKeyCb, AvlDataDe
 BOOL AvlInsert(AvlBaum *Wurzel, AvlKeyType key, AvlDataType Daten);
 void AvlDelete(AvlBaum *Wurzel, AvlKeyType Key);
 AvlKnoten AvlFinde(AvlBaum *Wurzel, AvlKeyType Key);
+void AvlPurge(AvlBaum *Wurzel);
 void AvlWalkAscend(AvlBaum *Wurzel, AvlWalkCbFkt Cb, void *PrivData);
 void AvlWalkDescend(AvlBaum *Wurzel, AvlWalkCbFkt Cb, void *PrivData);
 
