@@ -59,7 +59,8 @@ struct ftdi2s88_t {
     int sb;
     int baudrate;
     int background;
-    uint32_t hash;
+    uint16_t hash;
+    uint16_t hw_id;
 };
 
 #define PIN_MEM		2
@@ -79,6 +80,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -b baud\n", prg);
     fprintf(stderr, "   Version 0.1\n\n");
     fprintf(stderr, "         -H <hash>           M*rklin hash\n");
+    fprintf(stderr, "         -I <ID>             hardware id <default 0x5338>\n");
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -d                  going into background\n");
     fprintf(stderr, "         -r <baudrate>       baudrate - default 4096 (~50us)\n");
@@ -211,6 +213,8 @@ int create_event(struct ftdi2s88_t *fs88, int bus, int offset, uint32_t changed_
     mask = BIT(31);
     for (i = 0; i < 32; i++) {
 	if (changed_bits & mask) {
+	    temp16 = htons(fs88->hw_id);
+	    memcpy(&netframe[5], &temp16, 2);
 	    /* TODO */
 	    temp16 = htons(bus * 256 + offset + i);
 	    memcpy(&netframe[7], &temp16, 2);
@@ -225,7 +229,7 @@ int create_event(struct ftdi2s88_t *fs88, int bus, int offset, uint32_t changed_
 		if (!fs88->background)
 		    printf("send UDP packet: bit %d 0\n", i + offset);
 	    }
-#if 0
+#if 1
 	    s = sendto(fs88->sb, netframe, 13, 0, (struct sockaddr *)&fs88->baddr, sizeof(fs88->baddr));
 	    if (s != 13) {
 		fprintf(stderr, "%s: error sending UDP data: %s\n", __func__, strerror(errno));
@@ -339,8 +343,10 @@ int main(int argc, char **argv) {
     fs88.baudrate = BAUDRATE;
     length = S88_DEF_BITS;
     fs88.background = 0;
+    fs88.hw_id = 0x5338;
+    fs88.hash = 0x5338;
 
-    while ((opt = getopt(argc, argv, "H:b:dr:l:h?")) != -1) {
+    while ((opt = getopt(argc, argv, "H:I:b:dr:l:h?")) != -1) {
 	switch (opt) {
 	case 'b':
 	    if (strlen(optarg) <= 15) {
@@ -358,6 +364,9 @@ int main(int argc, char **argv) {
 	    break;
 	case 'H':
 	    fs88.hash = atoi(optarg);
+	    break;
+	case 'I':
+	    fs88.hw_id = atoi(optarg);
 	    break;
 	case 'd':
 	    fs88.background = 1;
@@ -448,7 +457,7 @@ int main(int argc, char **argv) {
     buffersize = sizeof(w_data);
     bzero(test_data, sizeof(test_data));
     memset(&t_data[16 + 17 * 4], 0x88, 16);
-#if 1
+#if 0
 /* testing: simple bit pattern */
     memcpy(t_data, test_data, sizeof(test_data));
 #endif
@@ -466,7 +475,7 @@ int main(int argc, char **argv) {
 	    fprintf(stderr, "ftdi_read_data faild: %s", ftdi_get_error_string(fs88.ftdic));
 	    break;
 	}
-#if 1
+#if 0
 /* testing */
 	if (ti == 6) {
 	    manipulate_test_data(t_data, 5, 0x08);
