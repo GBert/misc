@@ -59,7 +59,9 @@ struct ftdi2s88_t {
     int sb;
     int baudrate;
     int background;
-    uint32_t hash;
+    int inverting;
+    uint16_t hash;
+    uint16_t hw_id;
 };
 
 #define PIN_MEM		2
@@ -78,6 +80,9 @@ uint32_t bus1_state[PIN_MEM];
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -b baud\n", prg);
     fprintf(stderr, "   Version 0.1\n\n");
+    fprintf(stderr, "         -H <hash>           M*rklin hash\n");
+    fprintf(stderr, "         -I <ID>             hardware id <default 0x5338>\n");
+    fprintf(stderr, "         -i                  inverting signals\n");
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -d                  going into background\n");
     fprintf(stderr, "         -r <baudrate>       baudrate - default 4096 (~50us)\n");
@@ -164,23 +169,30 @@ int do_init(struct ftdi2s88_t *fs88) {
 }
 
 /* prepare bitbanging data */
-int fill_data(uint8_t * b, size_t s, int s88_bits) {
+int fill_data(struct ftdi2s88_t *fs88, uint8_t * b, size_t s, int s88_bits) {
     int i, offset;
+    uint8_t invert;
 
-    i = 0;
     offset = sizeof(S88_INIT);
 
     if (s < s88_bits * 4 + offset) {
 	fprintf(stderr, "to less space (%d) for %d bits\n", (int)s, s88_bits);
 	return -1;
     }
-    memcpy(b, S88_INIT, offset);
+
+    if (fs88->inverting)
+	invert = 0xff;
+    else
+	invert = 0;
+
+    for (i = 0; i < s88_bits * 4; i++)
+	b[i] = S88_INIT[i] ^ invert;
 
     while (i < s88_bits * 4) {
-	b[i++ + offset] = S88_CLOCK;
-	b[i++ + offset] = S88_CLOCK;
-	b[i++ + offset] = 0;
-	b[i++ + offset] = 0;
+	b[i++ + offset] = (S88_CLOCK) ^ invert;
+	b[i++ + offset] = (S88_CLOCK) ^ invert;
+	b[i++ + offset] = invert;
+	b[i++ + offset] = invert;
     }
     return (i + offset);
 }
@@ -198,8 +210,8 @@ int create_event(struct ftdi2s88_t *fs88, int bus, int offset, uint32_t changed_
     uint16_t temp16;
     uint8_t netframe[13];
 
-    /* TODO: change ID to something standard */
-    canid = 0x00220300 | fs88->hash;
+    /* allow only usefull M*rklin hashes */
+    canid = 0x00220300 | (fs88->hash & 0x0000ff7f);
 
     bzero(netframe, 13);
     temp32 = htonl(canid);
@@ -210,19 +222,23 @@ int create_event(struct ftdi2s88_t *fs88, int bus, int offset, uint32_t changed_
     mask = BIT(31);
     for (i = 0; i < 32; i++) {
 	if (changed_bits & mask) {
+	    temp16 = htons(fs88->hw_id);
+	    memcpy(&netframe[5], &temp16, 2);
 	    /* TODO */
 	    temp16 = htons(bus * 256 + offset + i);
 	    memcpy(&netframe[7], &temp16, 2);
 	    if (value & mask) {
-		/* memcpy(&netframe[5] */
+		netframe[9] = 0;
+		netframe[10] = 1;
 		if (!fs88->background)
 		    printf("send UDP packet: bit %d 1\n", i + offset);
 	    } else {
-		/* memcpy(&netframe[5] */
+		netframe[9] = 1;
+		netframe[10] = 0;
 		if (!fs88->background)
 		    printf("send UDP packet: bit %d 0\n", i + offset);
 	    }
-#if 0
+#if 1
 	    s = sendto(fs88->sb, netframe, 13, 0, (struct sockaddr *)&fs88->baddr, sizeof(fs88->baddr));
 	    if (s != 13) {
 		fprintf(stderr, "%s: error sending UDP data: %s\n", __func__, strerror(errno));
@@ -267,7 +283,8 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
 	bus1_actual[k] <<= (32 - (s88_bits & 0x1f));
     }
 
-    printf("bus0_actual[0]: 0x%08X bus1_actual[0]: 0x%08X\n", bus0_actual[0], bus1_actual[0]);
+    if (!fs88->background)
+	printf("bus0_actual[0]: 0x%08X bus1_actual[0]: 0x%08X\n", bus0_actual[0], bus1_actual[0]);
 
     /* debouncing - tricky part */
     for (i = 0; i <= 0; i++) {
@@ -300,7 +317,7 @@ int main(int argc, char **argv) {
     uint8_t t_data[FIFO_SIZE];
     struct timeval tm1, tm2;
     unsigned long elapsed_time;
-    int ti, buffersize, opt, length, s, destination_port, ret;
+    int buffersize, opt, length, s, destination_port, ret;
     struct ifaddrs *ifap, *ifa;
     struct sockaddr_in *bsa;
     const int on = 1;
@@ -333,11 +350,14 @@ int main(int argc, char **argv) {
     destination_port = 15731;
 
     /* setting defaults */
+    fs88.inverting = 0;
     fs88.baudrate = BAUDRATE;
     length = S88_DEF_BITS;
     fs88.background = 0;
+    fs88.hw_id = 0x5338;
+    fs88.hash = 0x5338;
 
-    while ((opt = getopt(argc, argv, "b:dr:l:h?")) != -1) {
+    while ((opt = getopt(argc, argv, "H:I:b:dr:l:h?")) != -1) {
 	switch (opt) {
 	case 'b':
 	    if (strlen(optarg) <= 15) {
@@ -352,6 +372,15 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "UDP broadcast address or interface error: %s\n", optarg);
 		exit(1);
 	    }
+	    break;
+	case 'H':
+	    fs88.hash = atoi(optarg);
+	    break;
+	case 'I':
+	    fs88.hw_id = atoi(optarg);
+	    break;
+	case 'i':
+	    fs88.inverting = 1;
 	    break;
 	case 'd':
 	    fs88.background = 1;
@@ -418,7 +447,7 @@ int main(int argc, char **argv) {
 	exit(-1);
 
     bzero(w_data, sizeof(w_data));
-    ret = fill_data(w_data, sizeof(w_data), length);
+    ret = fill_data(&fs88, w_data, sizeof(w_data), length);
     if (ret < 0) {
 	fprintf(stderr, "to many data bits\n");
 	exit(1);
@@ -442,12 +471,13 @@ int main(int argc, char **argv) {
     buffersize = sizeof(w_data);
     bzero(test_data, sizeof(test_data));
     memset(&t_data[16 + 17 * 4], 0x88, 16);
-#if 1
+#if 0
 /* testing: simple bit pattern */
     memcpy(t_data, test_data, sizeof(test_data));
 #endif
 
-    for (ti = 0; ti < 20; ti++) {
+//    for (ti = 0; ti < 20; ti++) {
+    for (;;) {
 	gettimeofday(&tm1, NULL);
 
 	ret = ftdi_write_data(fs88.ftdic, w_data, buffersize);
@@ -460,7 +490,7 @@ int main(int argc, char **argv) {
 	    fprintf(stderr, "ftdi_read_data faild: %s", ftdi_get_error_string(fs88.ftdic));
 	    break;
 	}
-#if 1
+#if 0
 /* testing */
 	if (ti == 6) {
 	    manipulate_test_data(t_data, 5, 0x08);
