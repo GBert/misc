@@ -283,7 +283,8 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
 	bus1_actual[k] <<= (32 - (s88_bits & 0x1f));
     }
 
-    printf("bus0_actual[0]: 0x%08X bus1_actual[0]: 0x%08X\n", bus0_actual[0], bus1_actual[0]);
+    if (!fs88->background)
+	printf("bus0_actual[0]: 0x%08X bus1_actual[0]: 0x%08X\n", bus0_actual[0], bus1_actual[0]);
 
     /* debouncing - tricky part */
     for (i = 0; i <= 0; i++) {
