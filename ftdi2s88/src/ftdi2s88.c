@@ -191,7 +191,7 @@ int fill_data(struct ftdi2s88_t *fs88, uint8_t * b, size_t s, int s88_bits) {
 	printf("i %3d: 0x%02x ", i, b[i]);
     }
 
-    while (i < s88_bits * 4) {
+    while (i < offset + s88_bits * 4) {
 	b[i++] = (S88_CLOCK) ^ invert;
 	b[i++] = (S88_CLOCK) ^ invert;
 	b[i++] = invert;
