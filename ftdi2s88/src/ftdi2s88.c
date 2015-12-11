@@ -174,6 +174,7 @@ int fill_data(struct ftdi2s88_t *fs88, uint8_t * b, size_t s, int s88_bits) {
     uint8_t invert;
 
     offset = sizeof(S88_INIT);
+    printf("offset %d\n", offset);
 
     if (s < s88_bits * 4 + offset) {
 	fprintf(stderr, "to less space (%d) for %d bits\n", (int)s, s88_bits);
@@ -185,16 +186,24 @@ int fill_data(struct ftdi2s88_t *fs88, uint8_t * b, size_t s, int s88_bits) {
     else
 	invert = 0;
 
-    for (i = 0; i < s88_bits * 4; i++)
+    for (i = 0; i < offset; i++) {
 	b[i] = S88_INIT[i] ^ invert;
+	printf("i %3d: 0x%02x ", i, b[i]);
+    }
 
     while (i < s88_bits * 4) {
-	b[i++ + offset] = (S88_CLOCK) ^ invert;
-	b[i++ + offset] = (S88_CLOCK) ^ invert;
-	b[i++ + offset] = invert;
-	b[i++ + offset] = invert;
+	b[i++] = (S88_CLOCK) ^ invert;
+	b[i++] = (S88_CLOCK) ^ invert;
+	b[i++] = invert;
+	b[i++] = invert;
     }
-    return (i + offset);
+    for (int j = 0; j < i; j++) {
+	if (( j & 0x0f) == 0)
+	    printf("\n");
+	printf("0x%02x ", b[j]);
+    }
+    printf("\n");
+    return (i);
 }
 
 void random_fill(uint8_t * b, int s) {
@@ -314,10 +323,9 @@ int analyze_data(struct ftdi2s88_t *fs88, uint8_t * b, int s88_bits) {
 int main(int argc, char **argv) {
     uint8_t w_data[FIFO_SIZE];
     uint8_t r_data[FIFO_SIZE];
-    uint8_t t_data[FIFO_SIZE];
     struct timeval tm1, tm2;
     unsigned long elapsed_time;
-    int ti, buffersize, opt, length, s, destination_port, ret;
+    int buffersize, opt, length, s, destination_port, ret;
     struct ifaddrs *ifap, *ifa;
     struct sockaddr_in *bsa;
     const int on = 1;
@@ -357,7 +365,7 @@ int main(int argc, char **argv) {
     fs88.hw_id = 0x5338;
     fs88.hash = 0x5338;
 
-    while ((opt = getopt(argc, argv, "H:I:b:dr:l:h?")) != -1) {
+    while ((opt = getopt(argc, argv, "H:I:ib:dr:l:h?")) != -1) {
 	switch (opt) {
 	case 'b':
 	    if (strlen(optarg) <= 15) {
@@ -452,6 +460,7 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "to many data bits\n");
 	exit(1);
     }
+    buffersize = ret;
 
     if (fs88.background) {
 	pid_t pid;
@@ -468,15 +477,6 @@ int main(int argc, char **argv) {
 	}
     }
 
-    buffersize = sizeof(w_data);
-    bzero(test_data, sizeof(test_data));
-    memset(&t_data[16 + 17 * 4], 0x88, 16);
-#if 0
-/* testing: simple bit pattern */
-    memcpy(t_data, test_data, sizeof(test_data));
-#endif
-
-//    for (ti = 0; ti < 20; ti++) {
     for (;;) {
 	gettimeofday(&tm1, NULL);
 
@@ -490,20 +490,7 @@ int main(int argc, char **argv) {
 	    fprintf(stderr, "ftdi_read_data faild: %s", ftdi_get_error_string(fs88.ftdic));
 	    break;
 	}
-#if 0
-/* testing */
-	if (ti == 6) {
-	    manipulate_test_data(t_data, 5, 0x08);
-	    manipulate_test_data(t_data, 9, 0x88);
-	}
-	if (ti == 7) {
-	    manipulate_test_data(t_data, 8, 0x88);
-	    manipulate_test_data(t_data, 9, 0x80);
-	}
-	if (ti == 11)
-	    manipulate_test_data(t_data, 8, 0x00);
-	memcpy(r_data, t_data, sizeof(r_data));
-#endif
+
 	if (analyze_data(&fs88, r_data, length))
 	    break;
 
@@ -514,9 +501,9 @@ int main(int argc, char **argv) {
 
 	gettimeofday(&tm2, NULL);
 	elapsed_time = 1E6 * (tm2.tv_sec - tm1.tv_sec) + (tm2.tv_usec - tm1.tv_usec);
-#if 0
+#if 1
 	if (!fs88.background)
-	    printf("send %d bytes in %ld usecs\n", FIFO_SIZE, elapsed_time);
+	    printf("send %d bytes in %ld usecs\n", buffersize, elapsed_time);
 #endif
 
     }
