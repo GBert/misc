@@ -465,12 +465,12 @@ int main(int argc, char **argv) {
     if (fs88.background) {
 	pid_t pid;
 
-	/* Fork off the parent process */
+	/* fork off the parent process */
 	pid = fork();
 	if (pid < 0) {
 	    exit(EXIT_FAILURE);
 	}
-	/* If we got a valid PID, then we can exit the parent process. */
+	/* if we got a valid PID, we can exit the parent process. */
 	if (pid > 0) {
 	    printf("Going into background ...\n");
 	    exit(0);
