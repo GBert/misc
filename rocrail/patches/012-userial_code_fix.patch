@@ -30,7 +30,7 @@
    result = ioctl(o->sh, TIOCMGET, &arg);
    if ((result>=0)&&((!(arg&TIOCM_RI))||(msr&0x04)))
      return True;
-@@ -604,7 +606,9 @@ Boolean rocs_serial_isUartEmpty( iOSeria
+@@ -606,7 +608,9 @@ Boolean rocs_serial_isUartEmpty( iOSeria
      } else
        /* TIOCSERGETLSR worked, return result*/
        return result ? True:False;
@@ -41,7 +41,7 @@
      int lsr = inb(o->portbase+5);
      /*UART is empty*/
      if(lsr&0x40)
-@@ -612,6 +616,7 @@ Boolean rocs_serial_isUartEmpty( iOSeria
+@@ -614,6 +618,7 @@ Boolean rocs_serial_isUartEmpty( iOSeria
      else
        return False;
    } else
