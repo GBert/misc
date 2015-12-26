@@ -696,7 +696,7 @@ Text Label 13800 9350 0    60   ~ 0
 TxD
 Text Notes 6300 1850 1    60   ~ 0
 CAN overflow
-Text Notes 6750 1850 1    60   ~ 0
+Text Notes 7050 1900 1    60   ~ 0
 RS232 overflow
 $Comp
 L R R6
@@ -1825,7 +1825,7 @@ U 4 1 561B22D1
 P 3700 10300
 F 0 "U7" H 3500 10500 50  0000 L CNN
 F 1 "LTV-844" H 3700 10500 50  0000 L CNN
-F 2 "Housings_DIP:DIP-18_W7.62mm_LongPads" H 3500 10100 50  0000 L CIN
+F 2 "Housings_DIP:DIP-18_W7.62mm_LongPads" H 3500 10100 50  0001 L CIN
 F 3 "" H 3725 10300 50  0000 L CNN
 	4    3700 10300
 	1    0    0    -1  
