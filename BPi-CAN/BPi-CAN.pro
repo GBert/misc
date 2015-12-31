@@ -1,4 +1,4 @@
-update=Thu 31 Dec 2015 12:54:50 PM CET
+update=Thu 31 Dec 2015 05:35:07 PM CET
 version=1
 last_client=kicad
 [pcbnew]
@@ -60,3 +60,4 @@ LibName28=atmel
 LibName29=contrib
 LibName30=valves
 LibName31=ISO1050
+LibName32=ftdi
