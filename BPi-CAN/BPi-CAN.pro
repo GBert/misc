@@ -1,4 +1,4 @@
-update=Samstag, 26. Dezember 2015 10:25:08
+update=Thu 31 Dec 2015 12:54:50 PM CET
 version=1
 last_client=kicad
 [pcbnew]
@@ -59,3 +59,4 @@ LibName27=opto
 LibName28=atmel
 LibName29=contrib
 LibName30=valves
+LibName31=ISO1050
