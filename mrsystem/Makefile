@@ -50,7 +50,9 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client_ms2/mrms2 $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client_zentrale/mrzentrale $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/root
-	$(CP) ./files/* $(1)/root/
+	$(CP) ./files/mrsystem.init $(1)/root/
+	$(INSTALL_DIR) $(1)/etc
+	$(CP) ./files/mrconfig $(1)/etc/
 endef
 
 $(eval $(call BuildPackage,$(PKG_NAME)))
