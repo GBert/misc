@@ -13,7 +13,7 @@ LokStruct *LokCreate(void)
    NewData = (LokStruct *)malloc(sizeof(LokStruct));
    if (NewData != (LokStruct *)NULL)
    {
-      LokSetLocFilePath(NewData, "/var/www/config/");
+      LokSetLocFilePath(NewData, "/www/config/");
       LokSetNumLoks(NewData, 0);
       LokSetLokDb(NewData, MapCreate());
       if (LokGetLokDb(NewData) == (Map *)NULL)

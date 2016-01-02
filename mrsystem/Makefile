@@ -52,7 +52,7 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/root
 	$(CP) ./files/mrsystem.init $(1)/root/
 	$(INSTALL_DIR) $(1)/etc
-	$(CP) ./files/mrconfig $(1)/etc/
+	$(CP) ./files/mrsystem $(1)/etc/
 endef
 
 $(eval $(call BuildPackage,$(PKG_NAME)))
