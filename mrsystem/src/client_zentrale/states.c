@@ -76,9 +76,9 @@ static int HandleWaitMs2Timer(void *Priv, void *SignalData)
 {  ZentraleStruct *Data;
    MrIpcCmdType *CmdFrame;
 
+   Data = (ZentraleStruct *)Priv;
    if (ZentraleGetVerbose(Data))
       puts("FSM: periodic task");
-   Data = (ZentraleStruct *)Priv;
    CmdFrame = (MrIpcCmdType *)SignalData;
    QueryMembers(Data);
    if (ZentraleGetVerbose(Data))
