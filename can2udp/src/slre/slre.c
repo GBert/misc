@@ -166,9 +166,9 @@ static int match_set(const char *re, int re_len, const char *s,
     /* Support character range */
     if (re[len] != '-' && re[len + 1] == '-' && re[len + 2] != ']' &&
         re[len + 2] != '\0') {
-      result = info->flags &&  SLRE_IGNORE_CASE ?
-        *s >= re[len] && *s <= re[len + 2] :
-        tolower(*s) >= tolower(re[len]) && tolower(*s) <= tolower(re[len + 2]);
+      result = info->flags &  SLRE_IGNORE_CASE ?
+        tolower(*s) >= tolower(re[len]) && tolower(*s) <= tolower(re[len + 2]) :
+        *s >= re[len] && *s <= re[len + 2];
       len += 3;
     } else {
       result = match_op((unsigned char *) re + len, (unsigned char *) s, info);
@@ -231,7 +231,11 @@ static int bar(const char *re, int re_len, const char *s, int s_len,
           if (nj > j && non_greedy) break;
         } while (n1 > 0);
 
-        if (n1 < 0 && re[i + step] == '*' &&
+        /*
+         * Even if we found one or more pattern, this branch will be executed,
+         * changing the next captures.
+         */
+        if (n1 < 0 && n2 < 0 && re[i + step] == '*' &&
             (n2 = bar(re + ni, re_len - ni, s + j, s_len - j, info, bi)) > 0) {
           nj = j + n2;
         }
@@ -275,7 +279,7 @@ static int bar(const char *re, int re_len, const char *s, int s_len,
 
       DBG(("CAPTURED [%.*s] [%.*s]:%d\n", step, re + i, s_len - j, s + j, n));
       FAIL_IF(n < 0, n);
-      if (info->caps != NULL) {
+      if (info->caps != NULL && n > 0) {
         info->caps[bi - 1].ptr = s + j;
         info->caps[bi - 1].len = n;
       }
