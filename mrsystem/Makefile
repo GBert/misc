@@ -25,6 +25,7 @@ define Package/$(PKG_NAME)
   TITLE:= Model Railroad System
   URL:=http://mbernstein.de/modellbahn/bbb.htm
   DEPENDS:= +zlib
+  TARGET_CFLAGS += -ggdb3
 endef
 
 define Build/Prepare

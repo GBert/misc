@@ -99,7 +99,7 @@ static int HandleLoknameCfgHeader(void *Priv, void *SignalData)
       printf("FSM: LOKNAME CFG data length %lu, crc %d\n", Length, Crc);
    ZentraleSetCfgLength(Data, Length);
    ZentraleSetCfgHaveRead(Data, 0);
-   ZentraleSetCfgBuffer(Data, malloc(ZentraleGetCfgLength(Data)));
+   ZentraleSetCfgBuffer(Data, malloc(ZentraleGetCfgLength(Data)+1));
    if (ZentraleGetCfgBuffer(Data) == NULL)
    {
       if (ZentraleGetVerbose(Data))
@@ -273,7 +273,7 @@ static int HandleLokinfoCfgHeader(void *Priv, void *SignalData)
       printf("FSM: LOKINFO CFG data length %lu, crc %d\n", Length, Crc);
    ZentraleSetCfgLength(Data, Length);
    ZentraleSetCfgHaveRead(Data, 0);
-   ZentraleSetCfgBuffer(Data, malloc(ZentraleGetCfgLength(Data)));
+   ZentraleSetCfgBuffer(Data, malloc(ZentraleGetCfgLength(Data)+1));
    if (ZentraleGetCfgBuffer(Data) == NULL)
    {
       if (ZentraleGetVerbose(Data))
