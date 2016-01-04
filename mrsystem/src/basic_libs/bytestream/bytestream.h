@@ -1,4 +1,4 @@
-#ifndef BYTESTRAEM_H
+#ifndef BYTESTREAM_H
 #define BYTESTREAM_H
 
 unsigned long GetLongFromByteArray(char *Data);
