@@ -6,18 +6,10 @@
 #include <map.h>
 #include <scanner.h>
 
-
 #define INI_PARS_FIRST_KEYWORD_TOK (NoSy + 1)
 
-
 typedef enum { IniParsString, IniParsInt } IniParsDataType;
-
-typedef struct {
-   IniParsDataType DataType;
-   int IntValue;
-   char StringValue[SCAN_BLOCK_LAENGE];
-} IniValue;
-
+typedef struct {   IniParsDataType DataType;   int IntValue;   char StringValue[SCAN_BLOCK_LAENGE];} IniValue;
 typedef struct {
    char Keyword[SCAN_BLOCK_LAENGE];
    int Symbol;

@@ -8,7 +8,7 @@ void IniParsInit(IniParsStruct *Data, char *DateiName, int AnzKeywords,
 {  ScanKeyword *ScannerKeywords;
    int i;
 
-   ScannerKeywords = (ScanKeyword *)alloca(AnzKeywords * sizeof(ScanKeyword));
+   ScannerKeywords = (ScanKeyword *)malloc(AnzKeywords * sizeof(ScanKeyword));
    if (ScannerKeywords != (ScanKeyword *)NULL)
    {
       IniParsSetKeywords(Data,
@@ -28,5 +28,6 @@ void IniParsInit(IniParsStruct *Data, char *DateiName, int AnzKeywords,
          ScanInit(IniParsGetScanner(Data), DateiName, NULL, 0, AnzKeywords,
                   ScannerKeywords);
       }
+      free(ScannerKeywords);
    }
 }

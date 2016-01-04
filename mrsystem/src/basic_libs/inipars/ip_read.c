@@ -56,7 +56,7 @@ BOOL IniParsReadFile(IniParsStruct *Data, Map *CfgValues)
                }
             }
             else if ((IniParsGetKeywords(Data)[i].DataType == IniParsInt) &&
-                     (Token = GzahlSy))
+                     (Token == GzahlSy))
             {
                ValuePtr = (IniValue *)MapGet(CfgValues,
                   (MapKeyType)IniParsGetKeywords(Data)[i].Keyword);
