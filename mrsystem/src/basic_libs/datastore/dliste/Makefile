@@ -65,7 +65,7 @@ dlist_ii.o: dlist_ii.c dliste.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-dlist_in.o: dlist_n.c dliste.h
+dlist_in.o: dlist_in.c dliste.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 

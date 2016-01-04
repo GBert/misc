@@ -42,7 +42,7 @@ liste_em.o: liste_em.c liste.h
 
 
 liste_fi.o: liste_fi.c liste.h
-	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH
+	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
 liste_fr.o: liste_fr.c liste.h
