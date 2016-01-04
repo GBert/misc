@@ -4,7 +4,7 @@ OBJS=get_long.o get_int.o set_long.o set_int.o
 TARGET=libbytestream.a
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -I$(INCLUDEPATH)
+	$(CC) -Wall -pedantic $(CFLAGS) -c $< -I$(INCLUDEPATH)
 
 all: $(TARGET)
 
