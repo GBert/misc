@@ -1,6 +1,10 @@
 # Makefile to compile various libs from Michael Bernstein
 
 build:
+	mkdir -p lib
+	mkdir -p ../lib
+	mkdir -p include
+	mkdir -p ../include
 	cp inc/* include/
 	cd bytestream && $(MAKE) && $(MAKE) install
 	cd datastore/avl && $(MAKE) && $(MAKE) install
