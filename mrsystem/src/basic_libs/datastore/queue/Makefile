@@ -1,7 +1,7 @@
 INCLUDEPATH=../../include
 LIBPATH=../../lib
 ARFLAGS=rc
-OBJS=queue_add.o queue_create.o queue_destroy.o queue_get.o queue_init.o queue_is_empty.o
+OBJS=queue_ad.o queue_cr.o queue_de.o queue_ge.o queue_in.o queue_is.o
 TARGET=libqueue.a
 
 
@@ -13,27 +13,27 @@ $(TARGET): $(OBJS)
 	-@ ($(RANLIB) $@ || true) > /dev/null 2> /dev/null
 
 
-queue_add.o: queue_add.c queue.h
+queue_ad.o: queue_ad.c queue.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-queue_create.o: queue_create.c queue.h
+queue_cr.o: queue_cr.c queue.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-queue_destroy.o: queue_destroy.c queue.h
+queue_de.o: queue_de.c queue.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-queue_get.o: queue_get.c queue.h
+queue_ge.o: queue_ge.c queue.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-queue_init.o: queue_init.c queue.h
+queue_in.o: queue_in.c queue.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-queue_is_empty.o: queue_is_empty.c queue.h
+queue_is.o: queue_is.c queue.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 

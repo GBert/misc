@@ -1,7 +1,7 @@
 INCLUDEPATH=../../include
 LIBPATH=../../lib
 ARFLAGS=rc
-OBJS=baum_create.o baum_delete.o baum_destroy.o baum_finde.o baum_init.o baum_insert.o baum_winorder.o baum_wpraeorder.o baum_wpostorder.o
+OBJS=baum_cre.o baum_del.o baum_des.o baum_fin.o baum_ini.o baum_ins.o baum_win.o baum_wpo.o baum_wpr.o
 TARGET=libbaum.a
 
 
@@ -13,39 +13,39 @@ $(TARGET): $(OBJS)
 	-@ ($(RANLIB) $@ || true) > /dev/null 2>/dev/null
 
 
-baum_create.o: baum_create.c baum.h
+baum_cre.o: baum_cre.c baum.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-baum_delete.o: baum_delete.c baum.h
+baum_del.o: baum_del.c baum.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-baum_destroy.o: baum_destroy.c baum.h
+baum_des.o: baum_des.c baum.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-baum_finde.o: baum_finde.c baum.h
+baum_fin.o: baum_fin.c baum.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-baum_init.o: baum_init.c baum.h
+baum_ini.o: baum_ini.c baum.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-baum_insert.o: baum_insert.c baum.h
+baum_ins.o: baum_ins.c baum.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-baum_winorder.o: baum_winorder.c baum.h
+baum_win.o: baum_win.c baum.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-baum_wpraeorder.o: baum_wpraeorder.c baum.h
+baum_wpo.o: baum_wpo.c baum.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-baum_wpostorder.o: baum_wpostorder.c baum.h
+baum_wpr.o: baum_wpr.c baum.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 

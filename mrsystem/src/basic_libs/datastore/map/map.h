@@ -20,6 +20,7 @@ void MapDestroy(Map *Wurzel);
 void MapInit(Map *Wurzel, CmpFkt Cmp, MapKeyDelCbFkt DestroyKeyCb, MapDataDelCbFkt DestroyDatenCb);
 BOOL MapSet(Map *Wurzel, MapKeyType Key, MapDataType Daten);
 void MapDel(Map *Wurzel, MapKeyType Key);
+void MapPurge(Map *Wurzel);
 MapDataType MapGet(Map *Wurzel, MapKeyType Key);
 void MapWalkAscend(Map *Wurzel, MapWalkCbFkt Cb, void *PrivData);
 

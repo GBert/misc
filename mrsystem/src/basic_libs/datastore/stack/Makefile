@@ -1,7 +1,7 @@
 INCLUDEPATH=../../include
 LIBPATH=../../lib
 ARFLAGS=rc
-OBJS=stack_create.o stack_destroy.o stack_init.o stack_is_empty.o stack_pop.o stack_push.o
+OBJS=stack_cr.o stack_de.o stack_in.o stack_is.o stack_po.o stack_pu.o
 TARGET=libstack.a
 
 
@@ -13,27 +13,27 @@ $(TARGET): $(OBJS)
 	-@ ($(RANLIB) $@ || true) > /dev/null 2> /dev/null
 
 
-stack_create.o: stack_create.c stack.h
+stack_cr.o: stack_cr.c stack.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-stack_destroy.o: stack_destroy.c stack.h
+stack_de.o: stack_de.c stack.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-stack_init.o: stack_init.c stack.h
+stack_in.o: stack_in.c stack.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-stack_is_empty.o: stack_is_empty.c stack.h
+stack_is.o: stack_is.c stack.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-stack_pop.o: stack_pop.c stack.h
+stack_po.o: stack_po.c stack.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-stack_push.o: stack_push.c stack.h
+stack_pu.o: stack_pu.c stack.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 

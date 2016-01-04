@@ -1,30 +1,35 @@
 #include <stddef.h>
 #include <boolean.h>
 #include <compare.h>
-#include "liste.h"
+#include "dliste.h"
 
-ListeKnoten ListeFinde(Liste *Wurzel, ListeKeyType Key)
-{  ListeKnoten WorkPtr;
+DlisteKnoten DlisteFinde(Dliste *Wurzel, DlisteKeyType Key)
+{  DlisteKnoten WorkPtr;
    BOOL gefunden;
 
-   if (Wurzel->Daten == NULL)
+   if (Wurzel->DatenAnfang == NULL)
+   {
       /* die Liste ist leer */
       return(NULL);
+   }
    else
    {
       gefunden = FALSE;
-      WorkPtr = Wurzel->Daten;
+      WorkPtr = Wurzel->DatenAnfang;
       while ((WorkPtr != NULL) && !gefunden)
       {
-         /* solange kein Listenende und nicht gefunden */
-         if (Wurzel->Compare(WorkPtr->Key, Key) == 0)
+         /* solange kein Listenende und noch nicht gefunden */
+         if (EQUAL(Wurzel->Compare(WorkPtr->Key, Key)))
+         {
             /* gefunden */
             gefunden = TRUE;
+         }
          else
+         {
             /* noch nicht gefunden -> weitersuchen */
             WorkPtr = WorkPtr->Next;
+         }
       }
-      Wurzel->Aktuell = WorkPtr;
       return(WorkPtr);
    }
 }

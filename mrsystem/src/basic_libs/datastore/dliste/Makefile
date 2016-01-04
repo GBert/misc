@@ -1,7 +1,7 @@
 INCLUDEPATH=../../include
 LIBPATH=../../lib
 ARFLAGS=rc
-OBJS=dlist_ahead.o dlist_append.o dlist_create.o dlist_dakt.o dlist_dfirst.o dlist_dlast.o dlist_delete.o dlist_dstroy.o dlist_finde.o dlist_frst.o dlist_init.o dlist_nsert.o dlist_is_empty.o dlist_last.o dlist_next.o dlist_prev.o dlist_citer.o dlist_diter.o dlist_iiter.o
+OBJS=dlist_ah.o dlist_ap.o dlist_ci.o dlist_cr.o dlist_da.o dlist_de.o dlist_df.o dlist_di.o dlist_dl.o dlist_ds.o dlist_fi.o dlist_fr.o dlist_ii.o dlist_in.o dlist_is.o dlist_la.o dlist_ne.o dlist_ns.o dlist_pr.o
 TARGET=libdliste.a
 
 
@@ -13,79 +13,79 @@ $(TARGET): $(OBJS)
 	-@ ($(RANLIB) $@ || true) > /dev/null 2> /dev/null
 
 
-dlist_ahead.o: dlist_ahead.c dliste.h
+dlist_ah.o: dlist_ah.c dliste.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-dlist_append.o: dlist_append.c dliste.h
+dlist_ap.o: dlist_ap.c dliste.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-dlist_create.o: dlist_create.c dliste.h
+dlist_ci.o: dlist_ci.c dliste.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-dlist_dakt.o: dlist_dakt.c dliste.h
+dlist_cr.o: dlist_cr.c dliste.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-dlist_dfirst.o: dlist_dfirst.c dliste.h
+dlist_da.o: dlist_da.c dliste.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-dlist_dlast.o: dlist_dlast.c dliste.h
+dlist_de.o: dlist_de.c dliste.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-dlist_delete.o: dlist_delete.c dliste.h
+dlist_df.o: dlist_df.c dliste.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-dlist_dstroy.o: dlist_dstroy.c dliste.h
+dlist_di.o: dlist_di.c dliste.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-dlist_finde.o: dlist_finde.c dliste.h
+dlist_dl.o: dlist_dl.c dliste.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-dlist_frst.o: dlist_frst.c dliste.h
+dlist_ds.o: dlist_ds.c dliste.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-dlist_init.o: dlist_init.c dliste.h
+dlist_fi.o: dlist_fi.c dliste.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-dlist_nsert.o: dlist_nsert.c dliste.h
+dlist_fr.o: dlist_fr.c dliste.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-dlist_is_empty.o: dlist_is_empty.c dliste.h
+dlist_ii.o: dlist_ii.c dliste.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-dlist_last.o: dlist_last.c dliste.h
+dlist_in.o: dlist_n.c dliste.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-dlist_next.o: dlist_next.c dliste.h
+dlist_is.o: dlist_is.c dliste.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-dlist_prev.o: dlist_prev.c dliste.h
+dlist_la.o: dlist_la.c dliste.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-dlist_citer.o: dlist_citer.c dliste.h
+dlist_ne.o: dlist_ne.c dliste.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-dlist_diter.o: dlist_diter.c dliste.h
+dlist_ns.o: dlist_ns.c dliste.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 
-dlist_iiter.o: dlist_iiter.c dliste.h
+dlist_pr.o: dlist_pr.c dliste.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 

@@ -5,7 +5,6 @@
 
 void DlisteDelFirst(Dliste *Wurzel)
 {
-
    if (Wurzel->DatenAnfang != NULL)
    {
       /* Die Liste enthaelt Elemente */
