@@ -18,7 +18,7 @@ typedef struct {
 
 typedef struct {
    unsigned char Dlc;
-   unsigned char Data[MR_CS2_NUM_CAN_BYTES];
+   unsigned char Data[2 * MR_CS2_NUM_CAN_BYTES + 1];
 } RawDatas;
 
 typedef struct {
