@@ -13,8 +13,9 @@ void ScanInit(Scanner *Handle, char *DateiName, char *Zeile, int Laenge,
       Handle->ScanFile = fopen(DateiName, "r");
       if (Handle->ScanFile != (FILE *)NULL)
       {
-         Handle->AnzZeichen = fread(Handle->Puffer, 1, SCAN_BLOCK_LAENGE,
-                                    Handle->ScanFile);
+         Handle->AnzZeichen = (int)fread(Handle->Puffer, 1,
+                                         SCAN_BLOCK_LAENGE,
+                                         Handle->ScanFile);
       }
    }
    else

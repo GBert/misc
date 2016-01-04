@@ -1,7 +1,7 @@
-#include <ctype.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <boolean.h>
 #include "scanner.h"
 
@@ -15,8 +15,9 @@ static char NextChar(Scanner *Handle)
    if ((Handle->AktZeichen >= Handle->AnzZeichen) &&
        (Handle->ScanFile != (FILE *)NULL))
    {
-      Handle->AnzZeichen = fread(Handle->Puffer, 1, SCAN_BLOCK_LAENGE,
-                                 Handle->ScanFile);
+      Handle->AnzZeichen = (int)fread(Handle->Puffer, 1,
+                                      SCAN_BLOCK_LAENGE,
+                                      Handle->ScanFile);
       Handle->AktZeichen = 0;
    }
    if (Handle->AktZeichen < Handle->AnzZeichen)
@@ -27,8 +28,9 @@ static char NextChar(Scanner *Handle)
          if ((Handle->AktZeichen > Handle->AnzZeichen) &&
              (Handle->ScanFile != (FILE *)NULL))
          {
-            Handle->AnzZeichen = fread(Handle->Puffer, 1, SCAN_BLOCK_LAENGE,
-                                       Handle->ScanFile);
+            Handle->AnzZeichen = (int)fread(Handle->Puffer, 1,
+                                            SCAN_BLOCK_LAENGE,
+                                            Handle->ScanFile);
             Handle->AktZeichen = 0;
          }
          if ((Handle->AnzZeichen > 0) &&

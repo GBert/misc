@@ -1,7 +1,7 @@
 INCLUDEPATH=../include
 LIBPATH=../lib
 ARFLAGS=rc
-OBJS=scan_create.o scan_destroy.o scan_init.o scan_exit.o scan_scan.o scan_suche.o scan_eol.o scan_ueberlesen.o
+OBJS=scan_cre.o scan_des.o scan_ini.o scan_exi.o scan_sca.o scan_suc.o scan_eol.o scan_ueb.o
 TARGET=libscanner.a
 
 
@@ -13,27 +13,27 @@ $(TARGET): $(OBJS)
 	-@ ($(RANLIB) $@ || true) > /dev/null 2> /dev/null
 
 
-scan_create.o: scan_create.c scanner.h
+scan_cre.o: scan_cre.c scanner.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -I$(INCLUDEPATH) -c -o $@ $<
 
 
-scan_destroy.o: scan_destroy.c scanner.h
+scan_des.o: scan_des.c scanner.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -I$(INCLUDEPATH) -c -o $@ $<
 
 
-scan_init.o: scan_init.c scanner.h
+scan_ini.o: scan_ini.c scanner.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -I$(INCLUDEPATH) -c -o $@ $<
 
 
-scan_exit.o: scan_exit.c scanner.h
+scan_exi.o: scan_exi.c scanner.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -I$(INCLUDEPATH) -c -o $@ $<
 
 
-scan_scan.o: scan_scan.c scanner.h
+scan_sca.o: scan_sca.c scanner.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -I$(INCLUDEPATH) -c -o $@ $<
 
 
-scan_suche.o: scan_suche.c scanner.h
+scan_suc.o: scan_suc.c scanner.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -I$(INCLUDEPATH) -c -o $@ $<
 
 
@@ -41,7 +41,7 @@ scan_eol.o: scan_eol.c scanner.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -I$(INCLUDEPATH) -c -o $@ $<
 
 
-scan_ueberlesen.o: scan_ueberlesen.c scanner.h
+scan_ueb.o: scan_ueb.c scanner.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -I$(INCLUDEPATH) -c -o $@ $<
 
 
