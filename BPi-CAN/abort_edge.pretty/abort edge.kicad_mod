@@ -1,0 +1,17 @@
+(module "abort edge" (layer F.Cu) (tedit 568BD5B6)
+  (fp_text reference REF** (at 0 0.5) (layer F.SilkS) hide
+    (effects (font (size 1 1) (thickness 0.15)))
+  )
+  (fp_text value "abort edge" (at 0 -0.5) (layer F.Fab) hide
+    (effects (font (size 1 1) (thickness 0.15)))
+  )
+  (pad "" np_thru_hole circle (at 3 1.25) (size 0.5 0.5) (drill 0.5) (layers *.Cu *.Mask F.SilkS))
+  (pad "" np_thru_hole circle (at 2.25 1.25) (size 0.5 0.5) (drill 0.5) (layers *.Cu *.Mask F.SilkS))
+  (pad "" np_thru_hole circle (at 1.5 1.25) (size 0.5 0.5) (drill 0.5) (layers *.Cu *.Mask F.SilkS))
+  (pad "" np_thru_hole circle (at 0.75 1.25) (size 0.5 0.5) (drill 0.5) (layers *.Cu *.Mask F.SilkS))
+  (pad "" np_thru_hole circle (at 0 1.25) (size 0.5 0.5) (drill 0.5) (layers *.Cu *.Mask F.SilkS))
+  (pad "" np_thru_hole circle (at -0.75 1.25) (size 0.5 0.5) (drill 0.5) (layers *.Cu *.Mask F.SilkS))
+  (pad "" np_thru_hole circle (at -1.5 1.25) (size 0.5 0.5) (drill 0.5) (layers *.Cu *.Mask F.SilkS))
+  (pad "" np_thru_hole circle (at -2.25 1.25) (size 0.5 0.5) (drill 0.5) (layers *.Cu *.Mask F.SilkS))
+  (pad "" np_thru_hole circle (at -3 1.25) (size 0.5 0.5) (drill 0.5) (layers *.Cu *.Mask F.SilkS))
+)
