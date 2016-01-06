@@ -87,6 +87,7 @@ void MrIpcInit(MrIpcCmdType *Data);
 void MrIpcClear(MrIpcCmdType *Data);
 int MrIpcConnect(char *Address, int Port);
 int MrIpcConnectIf(char *Interface, int Port);
+void MrIpcExit(MrIpcCmdType *Data);
 int MrIpcStartServer(char *Adress, int Port);
 int MrIpcStartServerIf(char *Interface, int Port);
 int MrIpcAccept(int ServerSock);
@@ -114,8 +115,7 @@ void MrIpcCmdSetCfgZHeader(MrIpcCmdType *Data, unsigned long Length,
                            unsigned Crc);
 void MrIpcCmdSetCfgData(MrIpcCmdType *Data, char *Buf);
 
-void MrIpcCmdGetNull(MrIpcCmdType *Data, unsigned char *Dlc,
-                     unsigned char *CanData);
+void MrIpcCmdGetNull(MrIpcCmdType *Data, unsigned char *Dlc, char *CanData);
 void MrIpcCmdGetRun(MrIpcCmdType *Data, SwitchType *Switch);
 void MrIpcCmdGetLocomotiveDir(MrIpcCmdType *Data, unsigned long *Addr, DirectionType *Direction);
 void MrIpcCmdGetLocomotiveSpeed(MrIpcCmdType *Data, unsigned long *Addr, unsigned *Speed);
@@ -126,7 +126,7 @@ void MrIpcCmdGetMember(MrIpcCmdType *Data, unsigned long *Addr, unsigned *Versio
 void MrIpcCmdGetReqestLocname(MrIpcCmdType *Data, unsigned *StartIdx, unsigned *EndIdx);
 void MrIpcCmdGetReqestLocinfo(MrIpcCmdType *Data, char *Locinfo);
 void MrIpcCmdGetQuery(MrIpcCmdType *Data, char *Name);
-void MrIpcCmdGetCfgHeader(MrIpcCmdType *Data, unsigned long *Length, int *Crc);
+void MrIpcCmdGetCfgHeader(MrIpcCmdType *Data, unsigned long *Length, unsigned *Crc);
 void MrIpcCmdGetCfgZHeader(MrIpcCmdType *Data, unsigned long *Length,
                            unsigned *Crc);
 void MrIpcCmdGetCfgData(MrIpcCmdType *Data, char *Buf);

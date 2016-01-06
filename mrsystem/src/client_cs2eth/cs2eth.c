@@ -354,7 +354,7 @@ static void ProcessOutsideData(Cs2ethStruct *Data, MrCs2CanDataType *CanMsg)
 }
 
 static void HandleOutsideData(Cs2ethStruct *Data)
-{  unsigned char UdpFrame[MAX_DATAGRAM_SIZE];
+{  char UdpFrame[MAX_DATAGRAM_SIZE];
    MrCs2CanDataType CanMsg;
    BOOL HaveRecv;
    struct sockaddr_in caddr;
@@ -392,7 +392,7 @@ static void HandleOutsideTcpConnection(Cs2ethStruct *Data)
 }
 
 static void HandleAppData(Cs2ethStruct *Data, ClientInfo *Client)
-{  unsigned char UdpFrame[MAX_DATAGRAM_SIZE];
+{  char UdpFrame[MAX_DATAGRAM_SIZE];
    MrCs2CanDataType CanMsg;
    int RcvReturnValue;
 

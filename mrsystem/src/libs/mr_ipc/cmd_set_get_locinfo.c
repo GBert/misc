@@ -5,5 +5,5 @@
 void MrIpcCmdSetReqestLocinfo(MrIpcCmdType *Data, char *Locname)
 {
    MrIpcSetCommand(Data, MrIpcCmdRequestLocInfo);
-   strcpy(MrIpcGetRawData(Data), Locname);
+   strcpy((char *)MrIpcGetRawData(Data), Locname);
 }

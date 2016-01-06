@@ -113,6 +113,7 @@ static void Stop(Ms2Struct *Data)
    MrMs2Close(Ms2GetCanSock(Data));
 }
 
+#if 0
 static void QueryLokdata(Ms2Struct *Data)
 {  MrCs2CanDataType CanMsg;
    struct can_frame CanFrame;
@@ -130,6 +131,7 @@ static void QueryLokdata(Ms2Struct *Data)
    MrMs2Encode(&CanMsg, &CanFrame);
    MrMs2Send(Ms2GetCanSock(Data), &CanFrame);
 }
+#endif
 
 static void QueryLoknamen(Ms2Struct *Data, int Start, int End)
 {  MrCs2CanDataType CanMsg;
@@ -194,7 +196,7 @@ static void QueryLokinfo(Ms2Struct *Data, char *Locname)
 static void ProcessSystemData(Ms2Struct *Data, MrIpcCmdType *CmdFrame)
 {  MrMs2CanDataType CanMsg;
    struct can_frame CanFrame;
-   int i, StartIdx, EndIdx;
+   unsigned i, StartIdx, EndIdx;
    char LokName[17];
 
    switch (MrIpcGetCommand(CmdFrame))

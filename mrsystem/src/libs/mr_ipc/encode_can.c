@@ -2,7 +2,7 @@
 #include "mr_ipc.h"
 
 void MrIpcEncodeFromCan(MrIpcCmdType *Data, MrCs2CanDataType *CanMsg)
-{  int i, p1, p2, p3, p4, p5;
+{  int p1, p2, p3, p4, p5;
    unsigned int s1;
    unsigned long Uid, LocId, Length;
    char Buf[9];

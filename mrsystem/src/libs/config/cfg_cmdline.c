@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <unistd.h>
 #include <inipars.h>
 #include "config.h"

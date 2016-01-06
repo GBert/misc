@@ -35,7 +35,6 @@ int main(int argc, char *argv[])
 {  Cs2ethStruct *Cs2eth;
    ConfigStruct *Config;
    pid_t ChildPid;
-   char *IpAddr, *BcAddr;
    time_t Now;
    int Ret, NumArgs;
    char **ValArgs;

@@ -109,6 +109,7 @@ Cs2parser *Cs2pCreate(void);
 void Cs2pDestroy(Cs2parser *Data);
 void Cs2pInit(Cs2parser *Data, int Type, char *InputLine, int Len);
 int Cs2pParse(Cs2parser *Data);
+void Cs2WriteHexValueByName(FILE *Stream, char *Title, int Value, int Level);
 
 #define Cs2pSetVerbose(Data, Val) (Data)->Verbose=Val
 #define Cs2pSetScanner(Data, Scn) (Data)->Scanner=Scn

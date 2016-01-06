@@ -199,7 +199,7 @@ void GleisbildLoadGleisbildCs2(GleisbildStruct *Data)
 
 static void WriteGleisbildOfGleisbildCs2(void *PrivData,
                                          MapKeyType Key, MapDataType Daten)
-{  int i;
+{
    GleisbildInfo *GleisbildPage;
    FILE *GleisbildCs2Stream;
 

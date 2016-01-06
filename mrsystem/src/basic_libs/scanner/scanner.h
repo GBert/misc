@@ -36,6 +36,7 @@ typedef int ScanSymbol;
 
 Scanner *ScanCreate(void);
 void ScanDestroy(Scanner *Handle);
+ScanSymbol ScanEol(Scanner *Handle);
 void ScanInit(Scanner *Handle, char *DateiName, char *Zeile, int Laenge,
               int AnzKeywords, ScanKeyword *Keywords);
 void ScanExit(Scanner *Handle);

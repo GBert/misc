@@ -6,6 +6,6 @@ void MrIpcCmdGetReqestLocinfo(MrIpcCmdType *Data, char *Locname)
 {
    if (Data != (MrIpcCmdType *)NULL)
    {
-      strcpy(Locname, MrIpcGetRawData(Data));
+      strcpy(Locname, (char *)MrIpcGetRawData(Data));
    }
 }

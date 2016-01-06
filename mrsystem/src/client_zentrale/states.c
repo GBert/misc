@@ -91,7 +91,7 @@ static int HandleLoknameCfgHeader(void *Priv, void *SignalData)
 {  ZentraleStruct *Data;
    MrIpcCmdType *CmdFrame;
    unsigned long Length;
-   int Crc;
+   unsigned Crc;
 
    Data = (ZentraleStruct *)Priv;
    CmdFrame = (MrIpcCmdType *)SignalData;
@@ -266,7 +266,7 @@ static int HandleLokinfoCfgHeader(void *Priv, void *SignalData)
 {  ZentraleStruct *Data;
    MrIpcCmdType *CmdFrame;
    unsigned long Length;
-   int Crc;
+   unsigned Crc;
 
    Data = (ZentraleStruct *)Priv;
    CmdFrame = (MrIpcCmdType *)SignalData;
@@ -705,7 +705,7 @@ static int HandleCfgHeader(void *Priv, void *SignalData)
 {  ZentraleStruct *Data;
    MrIpcCmdType *CmdFrame;
    unsigned long Length;
-   int Crc;
+   unsigned Crc;
 
    Data = (ZentraleStruct *)Priv;
    CmdFrame = (MrIpcCmdType *)SignalData;
@@ -872,10 +872,11 @@ static int HandleCfgData(void *Priv, void *SignalData)
 
 static int HandlePing(void *Priv, void *SignalData)
 {  ZentraleStruct *Data;
-   MrIpcCmdType *CmdFrame, Cmd;
+   /* MrIpcCmdType *CmdFrame, Cmd; */
+   MrIpcCmdType Cmd;
 
    Data = (ZentraleStruct *)Priv;
-   CmdFrame = (MrIpcCmdType *)SignalData;
+   /* CmdFrame = (MrIpcCmdType *)SignalData; */
    if (ZentraleGetVerbose(Data))
       puts("FSM: answer ping");
    MrIpcInit(&Cmd);

@@ -136,7 +136,7 @@ GleisbildBildElement *GleisbildPageSearch(GleisbildPageStruct *Data, int Id)
 void GleisbildPageParseGleisbildPageCs2(GleisbildPageStruct *Data,
                                         char *Buf, int Len)
 {  Cs2parser *GleisbildPageParser;
-   int NumElements, NumItem, LineInfo;
+   int NumElements, LineInfo;
    GleisbildBildElement NewElement;
 
    GleisbildPageParser = Cs2pCreate();

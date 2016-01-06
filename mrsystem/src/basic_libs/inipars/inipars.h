@@ -24,6 +24,7 @@ typedef struct {
 
 IniParsStruct *IniParsCreate(void);
 void IniParsDestroy(IniParsStruct *Data);
+void IniParsExit(IniParsStruct *Data);
 void IniParsInit(IniParsStruct *Data, char *DateiName, int AnzKeywords,
                  IniParsKeyword *Keywords);
 void InitParsExit(IniParsStruct *Data);
