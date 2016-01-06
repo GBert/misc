@@ -7,8 +7,9 @@ start() {
 	modprobe sun4i_can
 	/usr/sbin/ip link set can0 up type can bitrate 250000
 
+	sleep 2
 	nohup drehscheibe &
-	sleep 1
+	sleep 18
 	nohup mrcs2eth &
 #	mrms1
 	nohup mrms2 &
