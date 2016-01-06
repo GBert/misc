@@ -23,7 +23,6 @@
 #include <libgen.h>
 #include <unistd.h>
 #include <string.h>
-#include <signal.h>
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -48,11 +47,6 @@
 #define NUM_OF_FRAMES        10000
 #define CAN_NORMAL_FRAME_BITS(a)    ((269 + 48*a)/5)
 #define CAN_EXTENDED_FRAME_BITS(a)  ((389 + 48*a)/5)
-
-void handler(int v) {
-    signal(SIGINT, handler);
-    exit(0);
-}
 
 int init_can(char *can_interface) {
     int socket_can;
@@ -104,7 +98,7 @@ void bounce_can_frame(int socket_can, struct can_frame *can_frame) {
     }
 }
 
-int main(int argc, char **argv) {
+int main(void) {
     int nbytes, socket_can1, socket_can2, ret;
     fd_set readfds;
     long count;
@@ -112,7 +106,6 @@ int main(int argc, char **argv) {
     struct timeval tv1, tv2;
     float elapsed_time, bandwidth, packets_per_second;
 
-    signal(SIGINT, handler);
     ret = 0;
 
     socket_can1 = init_can("can0");

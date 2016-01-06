@@ -223,7 +223,7 @@ uint8_t *read_config_file(char *filename, char *config_dir, uint32_t * nbytes) {
 	return NULL;
     }
     rc = fread((void *)config, 1, *nbytes, fp);
-    if ((rc != *nbytes)) {
+    if (((unsigned int)rc != *nbytes)) {
 	fprintf(stderr, "%s: error fread failed reading %s\n", __func__, filename);
 	fclose(fp);
 	free(config);

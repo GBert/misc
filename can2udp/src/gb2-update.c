@@ -226,7 +226,7 @@ unsigned char *read_data(struct update_config *device_config) {
 
     /* padding with 0xff */
     memset(&data[device_fsize - device_config->padding], 0xff, device_config->padding);
-    if ((fread((void *)data, 1, fsize, fp)) != fsize) {
+    if ((fread((void *)data, 1, fsize, fp)) != (unsigned int)fsize) {
 	fprintf(stderr, "%s: error: fread failed for [%s]\n", __func__, device_config->filename);
 	fclose(fp);
 	free(data);
