@@ -323,7 +323,7 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, BOOL IsMaster,
          {
             if (ZentraleGetVerbose(Data))
                printf("kann kein Speicher fuer Dateipuffer (%ld) anlegen\n",
-                      FileLaenge);
+                      (long int)FileLaenge);
          }
          close(handle);
       }
@@ -415,7 +415,7 @@ static void Stop(ZentraleStruct *Data)
 }
 
 static void ProcessSystemData(ZentraleStruct *Data, MrIpcCmdType *CmdFrame)
-{  int NewState;
+{
 
    FsmDo(ZentraleGetStateMachine(Data), MrIpcGetCommand(CmdFrame) + 1,
          (void *)CmdFrame);

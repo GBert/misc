@@ -58,6 +58,7 @@ static int HandleMemberWaitMs2(void *Priv, void *SignalData)
    }
 /*   else
       return(STATE_NO_CHANGE);*/
+   return(STATE_NO_CHANGE);
 }
 
 static void QueryMembers(ZentraleStruct *Data)
@@ -74,12 +75,12 @@ static void QueryMembers(ZentraleStruct *Data)
 
 static int HandleWaitMs2Timer(void *Priv, void *SignalData)
 {  ZentraleStruct *Data;
-   MrIpcCmdType *CmdFrame;
+   /* MrIpcCmdType *CmdFrame; */
 
    Data = (ZentraleStruct *)Priv;
    if (ZentraleGetVerbose(Data))
       puts("FSM: periodic task");
-   CmdFrame = (MrIpcCmdType *)SignalData;
+   /* CmdFrame = (MrIpcCmdType *)SignalData; */
    QueryMembers(Data);
    if (ZentraleGetVerbose(Data))
       printf("FSM: new state %d\n",STATE_NO_CHANGE);
@@ -122,6 +123,7 @@ static int HandleLoknameCfgData(void *Priv, void *SignalData)
    int LineInfo, Paragraph;
    MrIpcCmdType Cmd;
 
+   Paragraph = 0;
    Data = (ZentraleStruct *)Priv;
    CmdFrame = (MrIpcCmdType *)SignalData;
    MrIpcCmdGetCfgData(CmdFrame, Buf);
@@ -587,6 +589,8 @@ static int HandleFileRequest(void *Priv, void *SignalData)
    struct stat attribut;
    FILE *LokomotiveDatei;
 
+   Dateiname = (char *)NULL;
+
    Data = (ZentraleStruct *)Priv;
    CmdFrame = (MrIpcCmdType *)SignalData;
    MrIpcCmdGetQuery(CmdFrame, Name);
@@ -730,8 +734,6 @@ static int HandleCfgData(void *Priv, void *SignalData)
    MrIpcCmdType *CmdFrame;
    char Buf [8];
    Cs2parser *Parser;
-   int LineInfo, Paragraph;
-   MrIpcCmdType Cmd;
 
    Data = (ZentraleStruct *)Priv;
    CmdFrame = (MrIpcCmdType *)SignalData;

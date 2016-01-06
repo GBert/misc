@@ -4,6 +4,7 @@
 #include <boolean.h>
 #include <cs2parse.h>
 #include <write_cs2.h>
+#include "zentrale.h"
 #include "lok.h"
 #include <stdio.h>
 

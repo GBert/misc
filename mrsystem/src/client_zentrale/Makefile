@@ -5,7 +5,7 @@ LOCALLIBS=-lmr_ipc -lmr_can -lcs2_parse -lfsm -lm -lbytestream -lmrconfig -linip
 DESTDIR=/usr/local/bin
 
 %.o: %.c
-	$(CC) $(CFLAGS) -I$(INCLUDE_PATH) -c $<
+	$(CC) $(CFLAGS) -Wall -pedantic -I$(INCLUDE_PATH) -c $<
 
 all: $(TARGET)
 

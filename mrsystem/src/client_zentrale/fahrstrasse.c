@@ -123,7 +123,7 @@ static int FahrstrasseItemNrCmp(void *d1, void *d2)
 
 void FahrstrasseItemInsert(FahrstrasseInfo *Data, int Nr,
                             FahrstrasseItem *Item)
-{  int Id;
+{
    FahrstrasseItem *OldItem;
 
    OldItem = (FahrstrasseItem *)MapGet(FahrstrasseInfoGetItemDb(Data),

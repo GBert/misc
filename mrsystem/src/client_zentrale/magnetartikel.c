@@ -249,8 +249,7 @@ void MagnetartikelLoadMagnetartikelCs2(MagnetartikelStruct *Data)
 static void WriteMagnetartikelOfMagnetartikelCs2(void *PrivData,
                                                  MapKeyType Key,
                                                  MapDataType Daten)
-{  int i;
-   MagnetartikelInfo *MagnetartikelPage;
+{  MagnetartikelInfo *MagnetartikelPage;
    FILE *MagnetartikelCs2Stream;
 
    MagnetartikelPage = (MagnetartikelInfo *)Daten;
