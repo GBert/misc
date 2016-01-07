@@ -313,12 +313,12 @@ static void ProcessCanData(Ms2Struct *Data, MrMs2CanDataType *CanMsg)
          time_stamp();
          printf("get can data 0x%lx %d\n    ",
                 MrCs2GetId(CanMsg), MrCs2GetDlc(CanMsg));
-         time_stamp();
          for (i = 0; i < 8; i++)
 	    printf("0x%02x ", CanMsg->Data[i]);
 	    printf("\n    hash 0x%x resp 0x%x cmd 0x%x prio 0x%x\n",
                 MrCs2GetHash(CanMsg), MrCs2GetResponse(CanMsg),
                 MrCs2GetCommand(CanMsg), MrCs2GetPrio(CanMsg));
+         time_stamp();
          puts("send to drehscheibe");
       }
       MrIpcInit(&Cmd);
