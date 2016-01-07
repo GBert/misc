@@ -7,7 +7,7 @@ OBJS=create.o destroy.o init.o exit.o connect.o connect_if.o server.o server_if.
     cmd_set_acc_pos.o cmd_set_query.o cmd_get_acc_pos.o cmd_set_member.o cmd_get_member.o \
     cmd_set_get_member.o cmd_set_get_locname.o cmd_get_get_locname.o \
     cmd_set_get_locinfo.o cmd_get_get_locinfo.o cmd_get_query.o cmd_get_cfg_zheader.o \
-    cmd_set_cfg_header.o cmd_get_cfg_header.o cmd_set_cfg_data.o cmd_get_cfg_data.o
+    cmd_set_cfg_header.o cmd_get_cfg_header.o cmd_set_cfg_data.o cmd_get_cfg_data.o timestamp.o
 
 %.o: %.c
 	$(CC) $(CFLAGS) -I$(INCLUDE_PATH) -c $<
@@ -96,6 +96,8 @@ cmd_get_cfg_header.o: cmd_get_cfg_header.c mr_ipc.h
 cmd_get_cfg_zheader.o: cmd_get_cfg_zheader.c mr_ipc.h
 
 cmd_get_cfg_data.o: cmd_get_cfg_data.c mr_ipc.h
+
+timestamp.o: timestamp.c mr_ipc.h
 
 clean:
 	rm -f $(TARGET)
