@@ -129,7 +129,6 @@ static BOOL Start(Cs2ethStruct *Data)
       {
          if (Cs2ethGetVerbose(Data))
             puts_ts("start mrcs2eth: start tcp server");
-         }
          Cs2ethSetOutsideTcpSock(Data, MrEthCs2StartAppServer());
          if (Cs2ethGetOutsideTcpSock(Data) >= 0)
          {
@@ -137,7 +136,6 @@ static BOOL Start(Cs2ethStruct *Data)
             {
                if (Cs2ethGetVerbose(Data))
                   puts_ts("start mrcs2eth: start bc server");
-               }
                Cs2ethSetOutsideBcSock(Data, MrEthCs2StartBcServer());
                if (Cs2ethGetOutsideBcSock(Data) >= 0)
                {
@@ -522,7 +520,6 @@ void Cs2ethRun(Cs2ethStruct *Data)
             {
                if (Cs2ethGetVerbose(Data))
                   puts_ts("data on tcp socket server to remote");
-               }
                HandleOutsideTcpConnection(Data);
             }
             MengeInitIterator(Cs2ethGetClientIter(Data), Cs2ethGetClients(Data));
@@ -533,7 +530,6 @@ void Cs2ethRun(Cs2ethStruct *Data)
                {
                   if (Cs2ethGetVerbose(Data))
                      puts_ts("data on app socket to remote");
-                  }
                   HandleAppData(Data, OneClient);
                }
                OneClient = (ClientInfo *)MengeNext(Cs2ethGetClientIter(Data));
