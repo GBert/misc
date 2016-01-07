@@ -52,10 +52,8 @@ DrehscheibeStruct *DrehscheibeCreate(void)
 
 void DrehscheibeDestroy(DrehscheibeStruct *Data)
 {
-   if (DrehscheibeGetVerbose(Data)) {
-      time_stamp();
-      puts("destroy drehscheibe");
-   }
+   if (DrehscheibeGetVerbose(Data))
+      puts_ts("destroy drehscheibe");
    StackDestroy(DrehscheibeGetRemove(Data));
    MengeDestroy(DrehscheibeGetClient(Data));
    free(Data);
@@ -104,10 +102,8 @@ static BOOL Start(DrehscheibeStruct *Data)
    }
    if (DrehscheibeGetServerSock(Data) >= 0)
    {
-      if (DrehscheibeGetVerbose(Data)) {
-         time_stamp();
-         puts("ready for incoming connections");
-      }
+      if (DrehscheibeGetVerbose(Data))
+         puts_ts("ready for incoming connections");
       SigStruct.sa_handler = SigHandler;
       sigemptyset(&SigStruct.sa_mask);
       SigStruct.sa_flags = 0;
@@ -124,10 +120,8 @@ static BOOL Start(DrehscheibeStruct *Data)
 
 static void Stop(DrehscheibeStruct *Data)
 {
-   if (DrehscheibeGetVerbose(Data)) {
-      time_stamp();
-      puts("stop network server");
-   }
+   if (DrehscheibeGetVerbose(Data))
+      puts_ts("stop network server");
    if (DrehscheibeGetServerSock(Data) >= 0)
    {
       MrIpcClose(DrehscheibeGetServerSock(Data));
@@ -138,10 +132,8 @@ static void AddNewClient(DrehscheibeStruct *Data)
 {  DrehscheibeClientStruct *SocketEntry;
    int NewClientSock;
 
-   if (DrehscheibeGetVerbose(Data)) {
-      time_stamp();
-      puts("new incoming connection");
-   }
+   if (DrehscheibeGetVerbose(Data))
+      puts_ts("new incoming connection");
    NewClientSock = MrIpcAccept(DrehscheibeGetServerSock(Data));
    SocketEntry = (DrehscheibeClientStruct *)malloc(sizeof(DrehscheibeClientStruct));
    if (SocketEntry != (DrehscheibeClientStruct *)NULL)
@@ -157,10 +149,8 @@ static void AddNewClient(DrehscheibeStruct *Data)
    else
    {
       /* can not create client struct, reject */
-      if (DrehscheibeGetVerbose(Data)) {
-         time_stamp();
-         puts("reject new connection");
-      }
+      if (DrehscheibeGetVerbose(Data))
+         puts_ts("reject new connection");
       MrIpcClose(NewClientSock);
    }
 }
@@ -203,18 +193,14 @@ static BOOL HandleSystemData(DrehscheibeStruct *Data,
    RcvReturnValue = MrIpcRecv(DrehclientGetSock(ClientEntry), &CmdFrame);
    if (RcvReturnValue == MR_IPC_RCV_ERROR)
    {
-      if (DrehscheibeGetVerbose(Data)) {
-         time_stamp();
-         puts("Error in recieve from socket!");
-      }
+      if (DrehscheibeGetVerbose(Data))
+         puts_ts("Error in recieve from socket!");
       Ret = FALSE;
    }
    else if (RcvReturnValue == MR_IPC_RCV_CLOSED)
    {
-      if (DrehscheibeGetVerbose(Data)) {
-         time_stamp();
-         puts("client socket was closed");
-      }
+      if (DrehscheibeGetVerbose(Data))
+         puts_ts("client socket was closed");
       MrIpcClose(DrehclientGetSock(ClientEntry));
       Ret = TRUE;
    }
@@ -298,10 +284,8 @@ void DrehscheibeRun(DrehscheibeStruct *Data)
          else if (RetVal < 0)
          {
             /* error, check if some clients disconnect */
-            if (DrehscheibeGetVerbose(Data)) {
-               time_stamp();
-               puts("error in main loop");
-            }
+            if (DrehscheibeGetVerbose(Data))
+               puts_ts("error in main loop");
             /* 1) check clients for closed socket */
             MengeInitIterator(&ClientIter, DrehscheibeGetClient(Data));
             ClientEntry = (DrehscheibeClientStruct *)MengeFirst(&ClientIter);
@@ -359,10 +343,8 @@ void DrehscheibeRun(DrehscheibeStruct *Data)
       }
 
       /* cleanup */
-      if (DrehscheibeGetVerbose(Data)) {
-         time_stamp();
-         puts("close all clients and stop system");
-      }
+      if (DrehscheibeGetVerbose(Data))
+         puts_ts("close all clients and stop system");
       MengeInitIterator(&ClientIter, DrehscheibeGetClient(Data));
       ClientEntry = (DrehscheibeClientStruct *)MengeFirst(&ClientIter);
       while (ClientEntry != (DrehscheibeClientStruct *)NULL)

@@ -35,10 +35,8 @@ Ms2Struct *Ms2Create(void)
 
 void Ms2Destroy(Ms2Struct *Data)
 {
-   if (Ms2GetVerbose(Data)) {
-      time_stamp();
-      puts("destroy mrms2");
-   }
+   if (Ms2GetVerbose(Data))
+      puts_ts("destroy mrms2");
    free(Data);
 }
 
@@ -63,10 +61,8 @@ static void SigHandler(int sig)
 static BOOL Start(Ms2Struct *Data)
 {  struct sigaction SigStruct;
 
-   if (Ms2GetVerbose(Data)) {
-        time_stamp();
-        puts("start mrm2: open socket to system");
-   }
+   if (Ms2GetVerbose(Data))
+        puts_ts("start mrm2: open socket to system");
    if (strlen(Ms2GetInterface(Data)) > 0)
    {
       Ms2SetClientSock(Data,
@@ -81,17 +77,13 @@ static BOOL Start(Ms2Struct *Data)
    }
    if (Ms2GetClientSock(Data) >= 0)
    {
-      if (Ms2GetVerbose(Data)) {
-          time_stamp();
-          puts("start mrm2: open can socket");
-      }
+      if (Ms2GetVerbose(Data))
+          puts_ts("start mrm2: open can socket");
       Ms2SetCanSock(Data, MrMs2Connect(Ms2GetCanName(Data)));
       if (Ms2GetCanSock(Data) >= 0)
       {
-         if (Ms2GetVerbose(Data)) {
-             time_stamp();
-             puts("ready for incoming comands from system");
-         }
+         if (Ms2GetVerbose(Data))
+             puts_ts("ready for incoming comands from system");
          SigStruct.sa_handler = SigHandler;
          sigemptyset(&SigStruct.sa_mask);
          SigStruct.sa_flags = 0;
@@ -115,10 +107,8 @@ static BOOL Start(Ms2Struct *Data)
 
 static void Stop(Ms2Struct *Data)
 {
-   if (Ms2GetVerbose(Data)) {
-       time_stamp();
-       puts("stop network client");
-   }
+   if (Ms2GetVerbose(Data))
+       puts_ts("stop network client");
    MrIpcClose(Ms2GetClientSock(Data));
    MrMs2Close(Ms2GetCanSock(Data));
 }
@@ -276,20 +266,18 @@ static void HandleSystemData(Ms2Struct *Data)
    int RcvReturnValue;
 
    if (Ms2GetVerbose(Data))
-      puts("new data available");
+      puts_ts("new data available");
    MrIpcInit(&CmdFrame);
    RcvReturnValue = MrIpcRecv(Ms2GetClientSock(Data), &CmdFrame);
    if (RcvReturnValue == MR_IPC_RCV_ERROR)
    {
       if (Ms2GetVerbose(Data))
-         time_stamp();
-         puts("Error in recieve from socket!");
+         puts_ts("Error in recieve from socket!");
    }
    else if (RcvReturnValue == MR_IPC_RCV_CLOSED)
    {
       if (Ms2GetVerbose(Data))
-         time_stamp();
-         puts("client socket was closed\nmaybe server has stoped");
+         puts_ts("client socket was closed\nmaybe server has stoped");
       Loop = FALSE;
    }
    else
@@ -318,8 +306,7 @@ static void ProcessCanData(Ms2Struct *Data, MrMs2CanDataType *CanMsg)
 	    printf("\n    hash 0x%x resp 0x%x cmd 0x%x prio 0x%x\n",
                 MrCs2GetHash(CanMsg), MrCs2GetResponse(CanMsg),
                 MrCs2GetCommand(CanMsg), MrCs2GetPrio(CanMsg));
-         time_stamp();
-         puts("send to drehscheibe");
+         puts_ts("send to drehscheibe");
       }
       MrIpcInit(&Cmd);
       MrIpcEncodeFromCan(&Cmd, CanMsg);
@@ -386,28 +373,22 @@ void Ms2Run(Ms2Struct *Data)
          }
          else if (RetVal < 0)
          {
-            if (Ms2GetVerbose(Data)) {
-               time_stamp();
-               puts("error in main loop");
-            }
+            if (Ms2GetVerbose(Data))
+               puts_ts("error in main loop");
             Loop = FALSE;
          }
          else
          {
             if (FD_ISSET(Ms2GetClientSock(Data), &ReadFds))
             {
-               if (Ms2GetVerbose(Data)) {
-                  time_stamp();
-                  puts("new data on cmd socket to drehscheibe");
-               }
+               if (Ms2GetVerbose(Data))
+                  puts_ts("new data on cmd socket to drehscheibe");
                HandleSystemData(Data);
             }
             if (FD_ISSET(Ms2GetCanSock(Data), &ReadFds))
             {
-               if (Ms2GetVerbose(Data)) {
-                  time_stamp();
-                  puts("new data on can socket");
-               }
+               if (Ms2GetVerbose(Data))
+                  puts_ts("new data on can socket");
                HandleCanData(Data);
             }
          }

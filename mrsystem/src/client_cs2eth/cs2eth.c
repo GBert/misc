@@ -59,10 +59,8 @@ Cs2ethStruct *Cs2ethCreate(void)
 
 void Cs2ethDestroy(Cs2ethStruct *Data)
 {
-   if (Cs2ethGetVerbose(Data)) {
-      time_stamp();
-      puts("destroy mrcs2eth");
-   }
+   if (Cs2ethGetVerbose(Data))
+      puts_ts("destroy mrcs2eth");
    MengeDestroyIterator(Cs2ethGetClientIter(Data));
    MengeDestroy(Cs2ethGetClients(Data));
    free(Data);
@@ -84,10 +82,8 @@ void Cs2ethInit(Cs2ethStruct *Data, BOOL Verbose, char *Iface, char *Addr,
                )
 {
    Cs2ethSetVerbose(Data, Verbose);
-   if (Cs2ethGetVerbose(Data)) {
-      time_stamp();
-      puts("init mrcs2eth");
-   }
+   if (Cs2ethGetVerbose(Data))
+      puts_ts("init mrcs2eth");
 #ifdef TRACE
    Cs2ethSetTrace(Data, Trace);
 #endif
@@ -110,10 +106,8 @@ static void SigHandler(int sig)
 static BOOL Start(Cs2ethStruct *Data)
 {  struct sigaction SigStruct;
 
-   if (Cs2ethGetVerbose(Data)) {
-      time_stamp();
-      puts("start mrcs2eth: connect to system");
-   }
+   if (Cs2ethGetVerbose(Data))
+      puts_ts("start mrcs2eth: connect to system");
    if (strlen(Cs2ethGetInterface(Data)) > 0)
    {
       Cs2ethSetClientSock(Data,
@@ -128,25 +122,21 @@ static BOOL Start(Cs2ethStruct *Data)
    }
    if (Cs2ethGetClientSock(Data) >= 0)
    {
-      if (Cs2ethGetVerbose(Data)) {
-         time_stamp();
-         puts("start mrcs2eth; start udp server");
-      }
+      if (Cs2ethGetVerbose(Data))
+         puts_ts("start mrcs2eth; start udp server");
       Cs2ethSetOutsideUdpSock(Data, MrEthCs2StartServer());
       if (Cs2ethGetOutsideUdpSock(Data) >= 0)
       {
-         if (Cs2ethGetVerbose(Data)) {
-            time_stamp();
-            puts("start mrcs2eth: start tcp server");
+         if (Cs2ethGetVerbose(Data))
+            puts_ts("start mrcs2eth: start tcp server");
          }
          Cs2ethSetOutsideTcpSock(Data, MrEthCs2StartAppServer());
          if (Cs2ethGetOutsideTcpSock(Data) >= 0)
          {
             if (Cs2ethGetSendUdpBc(Data))
             {
-               if (Cs2ethGetVerbose(Data)) {
-                  time_stamp();
-                  puts("start mrcs2eth: start bc server");
+               if (Cs2ethGetVerbose(Data))
+                  puts_ts("start mrcs2eth: start bc server");
                }
                Cs2ethSetOutsideBcSock(Data, MrEthCs2StartBcServer());
                if (Cs2ethGetOutsideBcSock(Data) >= 0)
@@ -162,10 +152,8 @@ static BOOL Start(Cs2ethStruct *Data)
                   return(FALSE);
                }
             }
-            if (Cs2ethGetVerbose(Data)) {
-               time_stamp();
-               puts("ready for incoming comands from system");
-            }
+            if (Cs2ethGetVerbose(Data))
+               puts_ts("ready for incoming comands from system");
             SigStruct.sa_handler = SigHandler;
             sigemptyset(&SigStruct.sa_mask);
             SigStruct.sa_flags = 0;
@@ -195,10 +183,8 @@ static BOOL Start(Cs2ethStruct *Data)
 
 static void Stop(Cs2ethStruct *Data)
 {
-   if (Cs2ethGetVerbose(Data)) {
-      time_stamp();
-      puts("stop mrcs2eth");
-   }
+   if (Cs2ethGetVerbose(Data))
+      puts_ts("stop mrcs2eth");
    MrIpcClose(Cs2ethGetClientSock(Data));
    MrEthCs2Close(Cs2ethGetOutsideUdpSock(Data));
    if (Cs2ethGetOutsideBcSock(Data) >= 0)
@@ -265,25 +251,19 @@ static void HandleSystemData(Cs2ethStruct *Data)
 {  MrIpcCmdType CmdFrame;
    int RcvReturnValue;
 
-   if (Cs2ethGetVerbose(Data)) {
-      time_stamp();
-      puts("new data available");
-   }
+   if (Cs2ethGetVerbose(Data))
+      puts_ts("new data available");
    MrIpcInit(&CmdFrame);
    RcvReturnValue = MrIpcRecv(Cs2ethGetClientSock(Data), &CmdFrame);
    if (RcvReturnValue == MR_IPC_RCV_ERROR)
    {
-      if (Cs2ethGetVerbose(Data)) {
-         time_stamp();
-         puts("Error in recieve from socket!");
-      }
+      if (Cs2ethGetVerbose(Data))
+         puts_ts("Error in recieve from socket!");
    }
    else if (RcvReturnValue == MR_IPC_RCV_CLOSED)
    {
-      if (Cs2ethGetVerbose(Data)) {
-         time_stamp();
-         puts("client socket was closed\nmaybe server has stoped");
-      }
+      if (Cs2ethGetVerbose(Data))
+         puts_ts("client socket was closed\nmaybe server has stoped");
       Loop = FALSE;
    }
    else
@@ -352,10 +332,8 @@ static void ProcessOutsideData(Cs2ethStruct *Data, MrCs2CanDataType *CanMsg)
          {
             case 0:
                MrCs2DecPing0(CanMsg);
-               if (Cs2ethGetVerbose(Data)) {
-                  time_stamp();
-                  puts("Softwarestand Anfrage/Teilnehmer Ping");
-                  }
+               if (Cs2ethGetVerbose(Data))
+                  puts_ts("Softwarestand Anfrage/Teilnehmer Ping");
                break;
             case 8:
                MrCs2DecPing8(CanMsg, &Uid, &SoftwareVersion, &DeviceId);
@@ -366,10 +344,8 @@ static void ProcessOutsideData(Cs2ethStruct *Data, MrCs2CanDataType *CanMsg)
                }
                break;
             default:
-               if (Cs2ethGetVerbose(Data)) {
-                  time_stamp();
-                  puts("Softwarestand Anfrage/Teilnehmer Ping (unknown parameter)");
-               }
+               if (Cs2ethGetVerbose(Data))
+                  puts_ts("Softwarestand Anfrage/Teilnehmer Ping (unknown parameter)");
                break;
          }
          break;
@@ -406,10 +382,8 @@ static void HandleOutsideData(Cs2ethStruct *Data)
    }
    if (HaveRecv)
    {
-      if (Cs2ethGetVerbose(Data)) {
-         time_stamp();
-         puts("read new udp frame");
-      }
+      if (Cs2ethGetVerbose(Data))
+         puts_ts("read new udp frame");
       MrEthCs2Decode(&CanMsg, UdpFrame);
       ProcessOutsideData(Data, &CanMsg);
    } 
@@ -418,10 +392,8 @@ static void HandleOutsideData(Cs2ethStruct *Data)
 static void HandleOutsideTcpConnection(Cs2ethStruct *Data)
 {  ClientInfo *NewClient;
 
-   if (Cs2ethGetVerbose(Data)) {
-      time_stamp();
-      puts("accept tcp connection");
-   }
+   if (Cs2ethGetVerbose(Data))
+      puts_ts("accept tcp connection");
    NewClient = (ClientInfo *)malloc(sizeof(ClientInfo));
    if (NewClient != (ClientInfo *)NULL)
    {
@@ -440,25 +412,19 @@ static void HandleAppData(Cs2ethStruct *Data, ClientInfo *Client)
                                  UdpFrame);
    if (RcvReturnValue == MR_IPC_RCV_ERROR)
    {
-      if (Cs2ethGetVerbose(Data)) {
-         time_stamp();
-         puts("Error in recieve from app socket!");
-      }
+      if (Cs2ethGetVerbose(Data))
+         puts_ts("Error in recieve from app socket!");
    }
    else if (RcvReturnValue == MR_IPC_RCV_CLOSED)
    {
-      if (Cs2ethGetVerbose(Data)) {
-         time_stamp();
-         puts("app socket was closed");
-      }
+      if (Cs2ethGetVerbose(Data))
+         puts_ts("app socket was closed");
       MengeRemove(Cs2ethGetClients(Data), (MengeDataType)Client);
    }
    else
    {
-      if (Cs2ethGetVerbose(Data)) {
-         time_stamp();
-         puts("read new app frame");
-      }
+      if (Cs2ethGetVerbose(Data))
+         puts_ts("read new app frame");
       MrEthCs2Decode(&CanMsg, UdpFrame);
       ProcessOutsideData(Data, &CanMsg);
    }
@@ -473,10 +439,8 @@ void Cs2ethRun(Cs2ethStruct *Data)
 
    if (Start(Data))
    {
-      if (Cs2ethGetVerbose(Data)) {
-         time_stamp();
-         puts("run mrcs2eth");
-      }
+      if (Cs2ethGetVerbose(Data))
+         puts_ts("run mrcs2eth");
       while (Loop)
       {
          FD_ZERO(&ReadFds);
@@ -536,35 +500,28 @@ void Cs2ethRun(Cs2ethStruct *Data)
          }
          else if (RetVal < 0)
          {
-            if (Cs2ethGetVerbose(Data)) {
-               time_stamp();
-               puts("error in main loop");
-            }
+            if (Cs2ethGetVerbose(Data))
+               puts_ts("error in main loop");
             Loop = FALSE;
          }
          else
          {
             if (FD_ISSET(Cs2ethGetClientSock(Data), &ReadFds))
             {
-               if (Cs2ethGetVerbose(Data)) {
-                  time_stamp();
-                  puts("data on cmd socket to drehscheibe");
-               }
+               if (Cs2ethGetVerbose(Data))
+                  puts_ts("data on cmd socket to drehscheibe");
                HandleSystemData(Data);
             }
             if (FD_ISSET(Cs2ethGetOutsideUdpSock(Data), &ReadFds))
             {
-               if (Cs2ethGetVerbose(Data)) {
-                  time_stamp();
-                  puts("data on udp socket to remote");
-               }
+               if (Cs2ethGetVerbose(Data))
+                  puts_ts("data on udp socket to remote");
                HandleOutsideData(Data);
             }
             if (FD_ISSET(Cs2ethGetOutsideTcpSock(Data), &ReadFds))
             {
-               if (Cs2ethGetVerbose(Data)) {
-                  time_stamp();
-                  puts("data on tcp socket server to remote");
+               if (Cs2ethGetVerbose(Data))
+                  puts_ts("data on tcp socket server to remote");
                }
                HandleOutsideTcpConnection(Data);
             }
@@ -574,9 +531,8 @@ void Cs2ethRun(Cs2ethStruct *Data)
             {
                if (FD_ISSET(OneClient->ClientSock, &ReadFds))
                {
-                  if (Cs2ethGetVerbose(Data)) {
-                     time_stamp();
-                     puts("data on app socket to remote");
+                  if (Cs2ethGetVerbose(Data))
+                     puts_ts("data on app socket to remote");
                   }
                   HandleAppData(Data, OneClient);
                }

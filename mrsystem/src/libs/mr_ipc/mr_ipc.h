@@ -130,6 +130,7 @@ void MrIpcCmdGetCfgHeader(MrIpcCmdType *Data, unsigned long *Length, unsigned *C
 void MrIpcCmdGetCfgZHeader(MrIpcCmdType *Data, unsigned long *Length,
                            unsigned *Crc);
 void MrIpcCmdGetCfgData(MrIpcCmdType *Data, char *Buf);
+void puts_ts(char *s);
 void time_stamp(void);
 
 #endif

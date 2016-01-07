@@ -118,10 +118,8 @@ ZentraleStruct *ZentraleCreate(void)
 void ZentraleDestroy(ZentraleStruct *Data)
 {  int i;
 
-   if (ZentraleGetVerbose(Data)) {
-      time_stamp();
-      puts("destroy zentrale");
-   }
+   if (ZentraleGetVerbose(Data))
+      puts_ts("destroy zentrale");
    if (ZentraleGetFahrstrasse(Data) != (FahrstrasseStruct *)NULL)
       FahrstrasseDestroy(ZentraleGetFahrstrasse(Data));
    if (ZentraleGetGleisPages(Data) != (GleisbildPageStruct **)NULL)
@@ -170,10 +168,8 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, BOOL IsMaster,
    ssize_t NumBytes;
 
    ZentraleSetVerbose(Data, Verbose);
-   if (ZentraleGetVerbose(Data)) {
-      time_stamp();
-      puts("ZentraleInit");
-   }
+   if (ZentraleGetVerbose(Data))
+      puts_ts("ZentraleInit");
    ZentraleSetIsMaster(Data, IsMaster);
    ZentraleSetInterface(Data, Interface);
    ZentraleSetAddress(Data, Addr);
@@ -200,10 +196,8 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, BOOL IsMaster,
                                                            GleisbildGetNumPages(ZentraleGetGleisbild(Data))));
       if (ZentraleGetGleisPages(Data) != (GleisbildPageStruct **)NULL)
       {
-         if (ZentraleGetVerbose(Data)) {
-            time_stamp();
-            puts("load Gleisbild Pages");
-         }
+         if (ZentraleGetVerbose(Data))
+            puts_ts("load Gleisbild Pages");
          MapWalkAscend(GleisbildGetGleisbildDb(ZentraleGetGleisbild(Data)),
                        (MapWalkCbFkt)LoadGleisPage,
                        (void *)Data);
@@ -213,10 +207,8 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, BOOL IsMaster,
    FahrstrasseLoadFahrstrasseCs2(ZentraleGetFahrstrasse(Data));
    MagnetartikelInit(ZentraleGetMagnetartikel(Data), LocPath);
    MagnetartikelLoadMagnetartikelCs2(ZentraleGetMagnetartikel(Data));
-   if (ZentraleGetVerbose(Data)) {
-      time_stamp();
-      puts("read geraet.vrs");
-   }
+   if (ZentraleGetVerbose(Data))
+      puts_ts("read geraet.vrs");
    GeraetVrsFile = (char *)malloc(strlen(ZentraleGetLocPath(Data)) + 
                                   strlen(GERAET_VRS_FILE) + 2);
    if (GeraetVrsFile != (char *)NULL)
@@ -245,16 +237,12 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, BOOL IsMaster,
                   switch (LineInfo)
                   {
                      case PARSER_ERROR:
-                        if (ZentraleGetVerbose(Data)) {
-                           time_stamp();
-                           puts("ERROR in geraet.vrs");
-                        }
+                        if (ZentraleGetVerbose(Data))
+                           puts_ts("ERROR in geraet.vrs");
                         break;
                      case PARSER_EOF:
-                        if (ZentraleGetVerbose(Data)) {
-                           time_stamp();
-                           puts("end of geraet.vrs");
-                        }
+                        if (ZentraleGetVerbose(Data))
+                           puts_ts("end of geraet.vrs");
                         break;
                      case PARSER_PARAGRAPH:
                         if (ZentraleGetVerbose(Data)) {
@@ -265,10 +253,8 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, BOOL IsMaster,
                         switch (Cs2pGetSubType(GeraetVrsParser))
                         {
                            case PARSER_PARAGRAPH_GERAET:
-                              if (ZentraleGetVerbose(Data)) {
-                                 time_stamp();
-                                 puts("geraet paragraph in geraet.vrs");
-                              }
+                              if (ZentraleGetVerbose(Data))
+                                 puts_ts("geraet paragraph in geraet.vrs");
                               break;
                         }
                         break;
@@ -282,58 +268,44 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, BOOL IsMaster,
                         switch (Cs2pGetSubType(GeraetVrsParser))
                         {
                            case PARSER_VALUE_GERAET:
-                              if (ZentraleGetVerbose(Data)) {
-                                 time_stamp();
-                                 puts("neuer geraet Eintrag");
-                              }
+                              if (ZentraleGetVerbose(Data))
+                                 puts_ts("neuer geraet Eintrag");
                               break;
                            case PARSER_VALUE_VERSION:
-                              if (ZentraleGetVerbose(Data)) {
-               			 time_stamp();
-                                 puts("neuer version Eintrag");
-                              }
+                              if (ZentraleGetVerbose(Data))
+                                 puts_ts("neuer version Eintrag");
                               break;
                            case PARSER_VALUE_MINOR:
-                              if (ZentraleGetVerbose(Data)) {
-                                 time_stamp();
-                                 puts("minor version");
-                              }
+                              if (ZentraleGetVerbose(Data))
+                                 puts_ts("minor version");
                               ZentraleSetMinorVersion(Data,
                                                       strtoul(Cs2pGetValue(GeraetVrsParser),
                                                               NULL, 0));
                               break;
                            case PARSER_VALUE_SERNUM:
-                              if (ZentraleGetVerbose(Data)) {
-                                 time_stamp();
-                                 puts("serial number");
-                              }
+                              if (ZentraleGetVerbose(Data))
+                                 puts_ts("serial number");
                               ZentraleSetSerialNumber(Data,
                                                       strtoul(Cs2pGetValue(GeraetVrsParser),
                                                               NULL, 0));
                               break;
                            case PARSER_VALUE_GFPUID:
-                              if (ZentraleGetVerbose(Data)) {
-                                 time_stamp();
-                                 puts("gfp uid");
-                              }
+                              if (ZentraleGetVerbose(Data))
+                                 puts_ts("gfp uid");
                               ZentraleSetGfpUid(Data,
                                                 strtoul(Cs2pGetValue(GeraetVrsParser),
                                                         NULL, 0));
                               break;
                            case PARSER_VALUE_GUIUID:
-                              if (ZentraleGetVerbose(Data)) {
-                                 time_stamp();
-                                 puts("gui uid");
-                              }
+                              if (ZentraleGetVerbose(Data))
+                                 puts_ts("gui uid");
                               ZentraleSetUid(Data,
                                              strtoul(Cs2pGetValue(GeraetVrsParser),
                                                      NULL, 0));
                               break;
                            case PARSER_VALUE_HARDVERS:
-                              if (ZentraleGetVerbose(Data)) {
-                                 time_stamp();
-                                 puts("hardware version");
-                              }
+                              if (ZentraleGetVerbose(Data))
+                                 puts_ts("hardware version");
                               ZentraleSetHardVersion(Data,
                                                      strtof(Cs2pGetValue(GeraetVrsParser),
                                                             NULL));
@@ -346,10 +318,8 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, BOOL IsMaster,
             }
             else
             {
-               if (ZentraleGetVerbose(Data)) {
-                  time_stamp();
-                  puts("kann kein geraet.vrs nicht lesen");
-               }
+               if (ZentraleGetVerbose(Data))
+                  puts_ts("kann kein geraet.vrs nicht lesen");
             }
             free(FileBuffer);
          }
@@ -365,29 +335,23 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, BOOL IsMaster,
       }
       else
       {
-         if (ZentraleGetVerbose(Data)) {
-            time_stamp();
-            puts("kann geraet.vrs nicht oeffnen");
-         }
+         if (ZentraleGetVerbose(Data))
+            puts_ts("kann geraet.vrs nicht oeffnen");
       }
       free(GeraetVrsFile);
    }
    else
    {
-      if (ZentraleGetVerbose(Data)) {
-         time_stamp();
-         puts("kann kein Speicher fuer Dateiname anlegen");
-      }
+      if (ZentraleGetVerbose(Data))
+         puts_ts("kann kein Speicher fuer Dateiname anlegen");
    }
 }
 
 void ZentraleExit(ZentraleStruct *Data)
 {  int i;
 
-   if (ZentraleGetVerbose(Data)) {
-      time_stamp();
-      puts("exit zentrale");
-   }
+   if (ZentraleGetVerbose(Data))
+      puts_ts("exit zentrale");
    if (ZentraleGetFahrstrasse(Data) != (FahrstrasseStruct *)NULL)
       FahrstrasseExit(ZentraleGetFahrstrasse(Data));
    if (ZentraleGetGleisPages(Data) != (GleisbildPageStruct **)NULL)
@@ -431,8 +395,7 @@ static BOOL Start(ZentraleStruct *Data)
    if (ZentraleGetClientSock(Data) >= 0)
    {
       if (ZentraleGetVerbose(Data))
-         time_stamp();
-         puts("ready for incoming comands");
+         puts_ts("ready for incoming comands");
       SigStruct.sa_handler = SigHandler;
       sigemptyset(&SigStruct.sa_mask);
       SigStruct.sa_flags = 0;
@@ -449,10 +412,8 @@ static BOOL Start(ZentraleStruct *Data)
 
 static void Stop(ZentraleStruct *Data)
 {
-   if (ZentraleGetVerbose(Data)) {
-      time_stamp();
-      puts("stop network client");
-   }
+   if (ZentraleGetVerbose(Data))
+      puts_ts("stop network client");
    if (ZentraleGetClientSock(Data) >= 0)
    {
       MrIpcClose(ZentraleGetClientSock(Data));
@@ -474,17 +435,13 @@ static void HandleSystemData(ZentraleStruct *Data)
    RcvReturnValue = MrIpcRecv(ZentraleGetClientSock(Data), &CmdFrame);
    if (RcvReturnValue == MR_IPC_RCV_ERROR)
    {
-      if (ZentraleGetVerbose(Data)) {
-         time_stamp();
-         puts("Error in recieve from socket!");
-      }
+      if (ZentraleGetVerbose(Data))
+         puts_ts("Error in recieve from socket!");
    }
    else if (RcvReturnValue == MR_IPC_RCV_CLOSED)
    {
-      if (ZentraleGetVerbose(Data)) {
-         time_stamp();
-         puts("client socket was closed\nmaybe server has stoped");
-      }
+      if (ZentraleGetVerbose(Data))
+         puts_ts("client socket was closed\nmaybe server has stoped");
       Loop = FALSE;
    }
    else
@@ -552,10 +509,8 @@ void ZentraleRun(ZentraleStruct *Data)
          }
          else if (RetVal < 0)
          {
-            if (ZentraleGetVerbose(Data)) {
-               time_stamp();
-               puts("error in main loop");
-            }
+            if (ZentraleGetVerbose(Data))
+               puts_ts("error in main loop");
             Loop = FALSE;
          }
          else

@@ -82,10 +82,8 @@ static int HandleWaitMs2Timer(void *Priv, void *SignalData)
    /* MrIpcCmdType *CmdFrame; */
 
    Data = (ZentraleStruct *)Priv;
-   if (ZentraleGetVerbose(Data)) {
-      time_stamp();
-      puts("FSM: periodic task");
-   }
+   if (ZentraleGetVerbose(Data))
+      puts_ts("FSM: periodic task");
    /* CmdFrame = (MrIpcCmdType *)SignalData; */
    QueryMembers(Data);
    if (ZentraleGetVerbose(Data)) {
@@ -159,16 +157,12 @@ static int HandleLoknameCfgData(void *Priv, void *SignalData)
          switch (LineInfo)
          {
             case PARSER_ERROR:
-               if (ZentraleGetVerbose(Data)) {
-                  time_stamp();
-                  puts("ERROR in lok cfg");
-               }
+               if (ZentraleGetVerbose(Data))
+                  puts_ts("ERROR in lok cfg");
                break;
             case PARSER_EOF:
-               if (ZentraleGetVerbose(Data)) {
-                  time_stamp();
-                  puts("end of lok cfg");
-               }
+               if (ZentraleGetVerbose(Data))
+                  puts_ts("end of lok cfg");
                break;
             case PARSER_PARAGRAPH:
                if (ZentraleGetVerbose(Data)) {
@@ -179,17 +173,13 @@ static int HandleLoknameCfgData(void *Priv, void *SignalData)
                switch (Cs2pGetSubType(LokParser))
                {
                   case PARSER_PARAGRAPH_LOK:
-                     if (ZentraleGetVerbose(Data)) {
-                        time_stamp();
-                        puts("lok paragraph in lok cfg");
-                     }
+                     if (ZentraleGetVerbose(Data))
+                        puts_ts("lok paragraph in lok cfg");
                      Paragraph = PARAGRAPH_LOK;
                      break;
                   case PARSER_PARAGRAPH_NUMLOKS:
-                     if (ZentraleGetVerbose(Data)) {
-                        time_stamp();
-                        puts("numloks paragraph in lok cfg");
-                     }
+                     if (ZentraleGetVerbose(Data))
+                        puts_ts("numloks paragraph in lok cfg");
                      Paragraph = PARAGRAPH_NUMLOKS;
                      break;
                }
@@ -217,10 +207,8 @@ static int HandleLoknameCfgData(void *Priv, void *SignalData)
                      }
                      break;
                   case PARSER_VALUE_WERT:
-                     if (ZentraleGetVerbose(Data)) {
-                        time_stamp();
-                        puts("number of loks in lok cfg");
-                     }
+                     if (ZentraleGetVerbose(Data))
+                        puts_ts("number of loks in lok cfg");
                      if (Paragraph == PARAGRAPH_NUMLOKS)
                      {
                         ZentraleSetNumLoks(Data, atoi(Cs2pGetValue(LokParser)));
@@ -374,16 +362,12 @@ static int HandleLokinfoCfgData(void *Priv, void *SignalData)
          switch (LineInfo)
          {
             case PARSER_ERROR:
-               if (ZentraleGetVerbose(Data)) {
-                  time_stamp();
-                  puts("ERROR in lok info cfg");
-               }
+               if (ZentraleGetVerbose(Data))
+                  puts_ts("ERROR in lok info cfg");
                break;
             case PARSER_EOF:
-               if (ZentraleGetVerbose(Data)) {
-                  time_stamp();
-                  puts("end of lok info cfg");
-               }
+               if (ZentraleGetVerbose(Data))
+                  puts_ts("end of lok info cfg");
                break;
             case PARSER_PARAGRAPH:
                if (ZentraleGetVerbose(Data)) {
@@ -394,10 +378,8 @@ static int HandleLokinfoCfgData(void *Priv, void *SignalData)
                switch (Cs2pGetSubType(LokParser))
                {
                   case PARSER_PARAGRAPH_LOKOMOTIVE:
-                     if (ZentraleGetVerbose(Data)) {
-                        time_stamp();
-                        puts("lokomotive paragraph in lok cfg");
-                     }
+                     if (ZentraleGetVerbose(Data))
+                        puts_ts("lokomotive paragraph in lok cfg");
                      break;
                }
                break;
@@ -410,33 +392,25 @@ static int HandleLokinfoCfgData(void *Priv, void *SignalData)
                switch (Cs2pGetSubType(LokParser))
                {
                   case PARSER_VALUE_LOK:
-                     if (ZentraleGetVerbose(Data)) {
-                        time_stamp();
-                        puts("neuer lok Eintrag");
-                     }
+                     if (ZentraleGetVerbose(Data))
+                        puts_ts("neuer lok Eintrag");
                      break;
                   case PARSER_VALUE_UID:
-                     if (ZentraleGetVerbose(Data)) {
-                        time_stamp();
-                        puts("lok uid");
-                     }
+                     if (ZentraleGetVerbose(Data))
+                        puts_ts("lok uid");
                      LokInfoSetUid(ZentraleGetActualLok(Data),
                                    strtoul(Cs2pGetValue(LokParser),
                                            NULL, 0));
                      break;
                   case PARSER_VALUE_NAME:
-                     if (ZentraleGetVerbose(Data)) {
-                        time_stamp();
-                        puts("lok name");
-                     }
+                     if (ZentraleGetVerbose(Data))
+                        puts_ts("lok name");
                      LokInfoSetName(ZentraleGetActualLok(Data),
                                     Cs2pGetValue(LokParser));
                      break;
                   case PARSER_VALUE_ADRESSE:
-                     if (ZentraleGetVerbose(Data)) {
-                        time_stamp();
-                        puts("lok adresse");
-                     }
+                     if (ZentraleGetVerbose(Data))
+                        puts_ts("lok adresse");
                      LokInfoSetAdresse(ZentraleGetActualLok(Data),
                                        strtoul(Cs2pGetValue(LokParser),
                                                NULL, 0));
@@ -444,126 +418,98 @@ static int HandleLokinfoCfgData(void *Priv, void *SignalData)
                   case PARSER_VALUE_TYP:
                      if (Cs2pGetLevel(LokParser) == 1)
                      {
-                        if (ZentraleGetVerbose(Data)) {
-                           time_stamp();
-                           puts("lok typ");
-                        }
+                        if (ZentraleGetVerbose(Data))
+                           puts_ts("lok typ");
                         LokInfoSetTyp(ZentraleGetActualLok(Data),
                                       Cs2pGetValue(LokParser));
                      }
                      else if (Cs2pGetLevel(LokParser) == 2)
                      {
-                        if (ZentraleGetVerbose(Data)) {
-                           time_stamp();
-                           puts("lok function typ");
-                        }
+                        if (ZentraleGetVerbose(Data))
+                           puts_ts("lok function typ");
                         LokInfoSetFktTyp(ZentraleGetActualLok(Data), FktIndex,
                                          strtoul(Cs2pGetValue(LokParser),
                                                  NULL, 0));
                      }
                      break;
                   case PARSER_VALUE_MFXUID:
-                     if (ZentraleGetVerbose(Data)) {
-                        time_stamp();
-                        puts("lok mfxuid");
-                     }
+                     if (ZentraleGetVerbose(Data))
+                        puts_ts("lok mfxuid");
                      LokInfoSetMfxUid(ZentraleGetActualLok(Data),
                                       strtoul(Cs2pGetValue(LokParser),
                                               NULL, 0));
                      break;
                   case PARSER_VALUE_SYMBOL:
-                     if (ZentraleGetVerbose(Data)) {
-                        time_stamp();
-                        puts("lok symbol");
-                     }
+                     if (ZentraleGetVerbose(Data))
+                        puts_ts("lok symbol");
                      LokInfoSetSymbol(ZentraleGetActualLok(Data),
                                       strtoul(Cs2pGetValue(LokParser),
                                               NULL, 0));
                      break;
                   case PARSER_VALUE_AV:
-                     if (ZentraleGetVerbose(Data)) {
-                        time_stamp();
-                        puts("lok av");
-                     }
+                     if (ZentraleGetVerbose(Data))
+                        puts_ts("lok av");
                      LokInfoSetAv(ZentraleGetActualLok(Data),
                                   strtoul(Cs2pGetValue(LokParser),
                                           NULL, 0));
                      break;
                   case PARSER_VALUE_BV:
-                     if (ZentraleGetVerbose(Data)) {
-                        time_stamp();
-                        puts("lok bv");
-                     }
+                     if (ZentraleGetVerbose(Data))
+                        puts_ts("lok bv");
                      LokInfoSetBv(ZentraleGetActualLok(Data),
                                   strtoul(Cs2pGetValue(LokParser),
                                           NULL, 0));
                      break;
                   case PARSER_VALUE_VOLUME:
-                     if (ZentraleGetVerbose(Data)) {
-                        time_stamp();
-                        puts("lok volume");
-                     }
+                     if (ZentraleGetVerbose(Data))
+                        puts_ts("lok volume");
                      LokInfoSetVolume(ZentraleGetActualLok(Data),
                                       strtoul(Cs2pGetValue(LokParser),
                                               NULL, 0));
                      break;
                   case PARSER_VALUE_VELOCITY:
-                     if (ZentraleGetVerbose(Data)) {
-                        time_stamp();
-                        puts("lok velocity");
-                     }
+                     if (ZentraleGetVerbose(Data))
+                        puts_ts("lok velocity");
                      LokInfoSetVelocity(ZentraleGetActualLok(Data),
                                         strtoul(Cs2pGetValue(LokParser),
                                                 NULL, 0));
                      break;
                   case PARSER_VALUE_RICHTUNG:
-                     if (ZentraleGetVerbose(Data)) {
-                        time_stamp();
-                        puts("lok richtung");
-                     }
+                     if (ZentraleGetVerbose(Data))
+                        puts_ts("lok richtung");
                      LokInfoSetRichtung(ZentraleGetActualLok(Data),
                                         strtoul(Cs2pGetValue(LokParser),
                                                 NULL, 0));
                      break;
                   case PARSER_VALUE_VMAX:
-                     if (ZentraleGetVerbose(Data)) {
-                        time_stamp();
-                        puts("lok vmax");
-                     }
+                     if (ZentraleGetVerbose(Data))
+                        puts_ts("lok vmax");
                      LokInfoSetVmax(ZentraleGetActualLok(Data),
                                     strtoul(Cs2pGetValue(LokParser),
                                             NULL, 0));
                      break;
                   case PARSER_VALUE_VMIN:
-                     if (ZentraleGetVerbose(Data)) {
-                        time_stamp();
-                        puts("lok vmin");
-                     }
+                     if (ZentraleGetVerbose(Data))
+                        puts_ts("lok vmin");
                      LokInfoSetVmin(ZentraleGetActualLok(Data),
                                     strtoul(Cs2pGetValue(LokParser),
                                             NULL, 0));
                      break;
                   case PARSER_VALUE_FKT:
-                     if (ZentraleGetVerbose(Data)) {
-                        time_stamp();
-                        puts("lok fkt");
-                     }
+                     if (ZentraleGetVerbose(Data))
+                        puts_ts("lok fkt");
                      FktIndex++;
                      break;
                   case PARSER_VALUE_DAUER:
-                     if (ZentraleGetVerbose(Data)) {
-                        time_stamp();
-                        puts("lok function dauer");
-                     }
+                     if (ZentraleGetVerbose(Data))
+                        puts_ts("lok function dauer");
                      LokInfoSetFktDauer(ZentraleGetActualLok(Data), FktIndex,
                                         strtoul(Cs2pGetValue(LokParser),
                                                 NULL, 0));
                      break;
                   case PARSER_VALUE_WERT:
-                     if (ZentraleGetVerbose(Data)) {
-                        time_stamp();
-                        puts("lok function wert");
-                     }
+                     if (ZentraleGetVerbose(Data))
+                        puts_ts("lok function wert");
                      LokInfoSetFktWert(ZentraleGetActualLok(Data), FktIndex,
                                        strtoul(Cs2pGetValue(LokParser),
                                                NULL, 0));
@@ -1023,10 +969,8 @@ static int HandlePing(void *Priv, void *SignalData)
 
    Data = (ZentraleStruct *)Priv;
    /* CmdFrame = (MrIpcCmdType *)SignalData; */
-   if (ZentraleGetVerbose(Data)) {
-      time_stamp();
-      puts("FSM: answer ping");
-   }
+   if (ZentraleGetVerbose(Data))
+      puts_ts("FSM: answer ping");
    MrIpcInit(&Cmd);
    MrIpcSetCanResponse(&Cmd, 1);
    MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
