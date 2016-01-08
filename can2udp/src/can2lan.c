@@ -175,12 +175,14 @@ int main(int argc, char **argv) {
 
     verbose = 0;
     ms1_workaround = 0;
+    bzero(ifr.ifr_name, sizeof(ifr.ifr_name));
     strcpy(ifr.ifr_name, "can0");
+    bzero(config_dir, sizeof(config_dir));
 
     /* TODO : where to use */
-    char *udp_dst_address = (char *)malloc(16);
+    char *udp_dst_address = (char *)malloc(MAXIPLEN);
     strcpy(udp_dst_address, "255.255.255.255");
-    char *bcast_interface = (char *)malloc(16);
+    char *bcast_interface = (char *)malloc(MAXIPLEN);
     strcpy(bcast_interface, "br-lan");
 
     config_file[0] = '\0';
@@ -188,8 +190,8 @@ int main(int argc, char **argv) {
     while ((opt = getopt(argc, argv, "c:u:s:t:d:b:i:mvhf?")) != -1) {
 	switch (opt) {
 	case 'c':
-	    if (strlen(optarg) < MAXLINE) {
-		strcpy(config_dir, optarg);
+	    if (strnlen(optarg, MAXLINE) < MAXLINE) {
+		strncpy(config_dir, optarg, sizeof(config_dir) -1);
 	    } else {
 		fprintf(stderr, "config file dir to long\n");
 		exit(1);
@@ -208,13 +210,14 @@ int main(int argc, char **argv) {
 	    destination_port = strtoul(optarg, (char **)NULL, 10);
 	    break;
 	case 'b':
-	    if (strlen(optarg) <= 15) {
+	    if (strnlen(optarg, MAXIPLEN) <= MAXIPLEN - 1) {
 		/* IP address begins with a number */
 		if ((optarg[0] >= '0') && (optarg[0] <= '9')) {
-		    strcpy(udp_dst_address, optarg);
+		    bzero(udp_dst_address, MAXIPLEN);
+		    strncpy(udp_dst_address, optarg, MAXIPLEN - 1);
 		} else {
-		    bzero(bcast_interface, 16);
-		    strcpy(bcast_interface, optarg);
+		    bzero(bcast_interface, MAXIPLEN);
+		    strncpy(bcast_interface, optarg, MAXIPLEN -1);
 		}
 	    } else {
 		fprintf(stderr, "UDP broadcast address or interface error: %s\n", optarg);

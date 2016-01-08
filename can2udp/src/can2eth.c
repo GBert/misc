@@ -79,6 +79,7 @@ int main(int argc, char **argv)
     const int on = 1;
     const char broadcast_address[] = "255.255.255.255";
 
+    bzero(ifr.ifr_name, sizeof(ifr.ifr_name));
     strcpy(ifr.ifr_name, "can0");
     bzero(&saddr, sizeof(saddr));
     bzero(&baddr, sizeof(baddr));
@@ -118,7 +119,7 @@ int main(int argc, char **argv)
 	    }
 	    break;
 	case 'i':
-	    strcpy(ifr.ifr_name, optarg);
+	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name)-1);
 	    break;
 
 	case 'f':
