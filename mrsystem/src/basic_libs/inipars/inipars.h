@@ -24,10 +24,9 @@ typedef struct {
 
 IniParsStruct *IniParsCreate(void);
 void IniParsDestroy(IniParsStruct *Data);
-void IniParsExit(IniParsStruct *Data);
 void IniParsInit(IniParsStruct *Data, char *DateiName, int AnzKeywords,
                  IniParsKeyword *Keywords);
-void InitParsExit(IniParsStruct *Data);
+void IniParsExit(IniParsStruct *Data);
 BOOL IniParsReadFile(IniParsStruct *Data, Map *CfgValues);
 
 #define IniParsSetScanner(Data,Scn)     (Data)->IniScanner=Scn
