@@ -40,6 +40,7 @@
 #define MAXMTU   	1400		/* maximum MTU           */
 #define MAX_PACKETS	40		/* maximum number of CAN frames per TCP packet */
 #define MAXUDP  	16		/* maximum datagram size */
+#define MAXIPLEN  	40		/* maximum IP string length */
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
 #define debug_print(...) \
             do { if (DEBUG) fprintf(stderr, ##__VA_ARGS__); } while (0)
