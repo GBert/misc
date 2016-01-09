@@ -194,13 +194,14 @@ uint8_t *read_config_file(char *filename, char *config_dir, uint32_t * nbytes) {
     int rc;
     struct stat st;
     FILE *fp;
-    /* char *s; */
     uint8_t *config;
     char *file_name;
 
     file_name = calloc(MAXLINE, 1);
+    if (!file_name)
+	return NULL;
 
-    strcat(file_name, config_dir);
+    strncat(file_name, config_dir, sizeof(file_name) -1);
     strcat(file_name, filename);
 
     printf("%s: try reading file %s\n", __func__, file_name);
@@ -208,29 +209,29 @@ uint8_t *read_config_file(char *filename, char *config_dir, uint32_t * nbytes) {
     rc = stat(file_name, &st);
     if (rc < 0) {
 	fprintf(stderr, "%s: error stat failed for file %s\n", __func__, filename);
-	return NULL;
+	goto read_error1;
     }
     fp = fopen(file_name, "rb");
     if (fp == NULL) {
 	fprintf(stderr, "%s: error fopen failed for file %s\n", __func__, filename);
-	return NULL;
+	goto read_error1;
     }
     *nbytes = st.st_size;
     config = (uint8_t *) calloc(*nbytes, sizeof(uint8_t));
     if (config == NULL) {
 	fprintf(stderr, "%s: error calloc failed creating config buffer for %s\n", __func__, filename);
-	fclose(fp);
-	return NULL;
+	goto read_error2;
     }
     rc = fread((void *)config, 1, *nbytes, fp);
     if (((unsigned int)rc != *nbytes)) {
 	fprintf(stderr, "%s: error fread failed reading %s\n", __func__, filename);
-	fclose(fp);
-	free(config);
-	return NULL;
+        free(config);
+	goto read_error2;
     }
-    free(file_name);
+read_error2:
     fclose(fp);
+read_error1:
+    free(file_name);
     return config;
 }
 

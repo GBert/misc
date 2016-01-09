@@ -179,7 +179,6 @@ int main(int argc, char **argv) {
     strcpy(ifr.ifr_name, "can0");
     bzero(config_dir, sizeof(config_dir));
 
-    /* TODO : where to use */
     char *udp_dst_address = (char *)malloc(MAXIPLEN);
     strcpy(udp_dst_address, "255.255.255.255");
     char *bcast_interface = (char *)malloc(MAXIPLEN);
