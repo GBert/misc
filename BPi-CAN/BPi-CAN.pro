@@ -1,4 +1,4 @@
-update=Sat 09 Jan 2016 08:22:53 PM CET
+update=Montag, 11. Januar 2016 09:55:08
 version=1
 last_client=kicad
 [pcbnew]
@@ -61,3 +61,13 @@ LibName29=contrib
 LibName30=valves
 LibName31=ISO1050
 LibName32=ftdi
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=
+SpiceForceRefPrefix=0
+SpiceUseNetNumbers=0
+LabSize=60
