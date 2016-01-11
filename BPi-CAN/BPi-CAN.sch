@@ -1641,16 +1641,14 @@ CB8
 $Comp
 L CONN_01X05 P14
 U 1 1 56879582
-P 7750 5650
-F 0 "P14" H 7750 5950 50  0000 C CNN
-F 1 "CAN-Bus" V 7850 5650 50  0000 C CNN
-F 2 "w_conn_pt-1,5:pt_1,5-5-3,5-h" H 7750 5650 50  0001 C CNN
-F 3 "" H 7750 5650 50  0000 C CNN
-	1    7750 5650
+P 7750 5750
+F 0 "P14" H 7750 6050 50  0000 C CNN
+F 1 "CAN-Bus" V 7850 5750 50  0000 C CNN
+F 2 "w_conn_pt-1,5:pt_1,5-5-3,5-h" H 7750 5750 50  0001 C CNN
+F 3 "" H 7750 5750 50  0000 C CNN
+	1    7750 5750
 	-1   0    0    1   
 $EndComp
-Entry Wire Line
-	8200 5450 8300 5550
 Entry Wire Line
 	8200 5550 8300 5650
 Entry Wire Line
@@ -1659,25 +1657,27 @@ Entry Wire Line
 	8200 5750 8300 5850
 Entry Wire Line
 	8200 5850 8300 5950
-Text Label 8000 5450 0    60   ~ 0
-CB8
+Entry Wire Line
+	8200 5950 8300 6050
 Text Label 8000 5550 0    60   ~ 0
-CB7
+CB8
 Text Label 8000 5650 0    60   ~ 0
-CB6
-Text Notes 7400 5450 0    60   ~ 0
-CANH
-Text Notes 7400 5550 0    60   ~ 0
-CANL
-Text Notes 7400 5650 0    60   ~ 0
-5V
-Text Notes 7400 5750 0    60   ~ 0
-GND
-Text Notes 7400 5850 0    60   ~ 0
-VCC
+CB7
 Text Label 8000 5750 0    60   ~ 0
+CB6
+Text Notes 7400 5550 0    60   ~ 0
+CANH
+Text Notes 7400 5650 0    60   ~ 0
+CANL
+Text Notes 7400 5750 0    60   ~ 0
+5V
+Text Notes 7400 5850 0    60   ~ 0
+GND
+Text Notes 7400 5950 0    60   ~ 0
+VCC
+Text Label 8000 5850 0    60   ~ 0
 CB4
-Text Label 7950 5850 0    60   ~ 0
+Text Label 7950 5950 0    60   ~ 0
 CVCC
 $Comp
 L CONN_01X02 P15
@@ -2265,20 +2265,18 @@ $EndComp
 $Comp
 L CONN_01X08 P23
 U 1 1 569533BA
-P 7750 4800
-F 0 "P23" H 7750 5250 50  0000 C CNN
-F 1 "CONN_01X08" V 7850 4800 50  0000 C CNN
-F 2 "78xx:DCDC" H 7750 4800 50  0001 C CNN
-F 3 "" H 7750 4800 50  0000 C CNN
-	1    7750 4800
+P 7500 4800
+F 0 "P23" H 7500 5250 50  0000 C CNN
+F 1 "CONN_01X08" V 7600 4800 50  0000 C CNN
+F 2 "78xx:DCDC" H 7500 4800 50  0001 C CNN
+F 3 "" H 7500 4800 50  0000 C CNN
+	1    7500 4800
 	-1   0    0    1   
 $EndComp
 Entry Wire Line
 	8200 4450 8300 4550
 Entry Wire Line
 	8200 4850 8300 4950
-Entry Wire Line
-	8200 5050 8300 5150
 Wire Wire Line
 	1250 1250 1400 1250
 Wire Wire Line
@@ -2748,8 +2746,6 @@ Wire Wire Line
 Wire Bus Line
 	8300 3900 8300 6250
 Wire Wire Line
-	8200 5450 7950 5450
-Wire Wire Line
 	8200 5550 7950 5550
 Wire Wire Line
 	8200 5650 7950 5650
@@ -2757,6 +2753,8 @@ Wire Wire Line
 	8200 5750 7950 5750
 Wire Wire Line
 	8200 5850 7950 5850
+Wire Wire Line
+	8200 5950 7950 5950
 Wire Wire Line
 	8550 5950 8400 5950
 Wire Wire Line
@@ -2948,8 +2946,7 @@ Connection ~ 4850 6650
 Wire Wire Line
 	1350 6000 1350 6150
 Wire Wire Line
-	1150 3700 1150 4000
-Connection ~ 1150 4000
+	1150 3800 1150 4000
 Wire Wire Line
 	5000 2500 6100 2500
 Connection ~ 6100 2500
@@ -3044,29 +3041,22 @@ Connection ~ 1150 6700
 Wire Wire Line
 	2950 5650 3250 5650
 Wire Wire Line
-	8200 4450 7950 4450
+	7700 4450 8200 4450
 Wire Wire Line
-	8200 5050 7950 5050
-Wire Wire Line
-	8050 5050 8050 5150
-Wire Wire Line
-	8050 5150 7950 5150
-Connection ~ 8050 5050
-Wire Wire Line
-	8200 4850 7950 4850
+	7700 4850 8200 4850
 Wire Wire Line
 	8050 4850 8050 4950
 Wire Wire Line
-	8050 4950 7950 4950
+	8050 4950 7700 4950
 Connection ~ 8050 4850
 Entry Wire Line
 	8200 4650 8300 4750
 Wire Wire Line
-	8200 4650 7950 4650
+	7700 4650 8200 4650
 Wire Wire Line
 	8050 4650 8050 4750
 Wire Wire Line
-	8050 4750 7950 4750
+	8050 4750 7700 4750
 Connection ~ 8050 4650
 Text Label 8050 4450 0    60   ~ 0
 CB4
@@ -3075,10 +3065,8 @@ CB4
 Wire Wire Line
 	8050 4450 8050 4550
 Wire Wire Line
-	8050 4550 7950 4550
+	8050 4550 7700 4550
 Connection ~ 8050 4450
-Text Label 8000 5050 0    60   ~ 0
-CVCC
 Text Label 8050 4650 0    60   ~ 0
 CB6
 $Comp
@@ -3149,4 +3137,32 @@ Wire Wire Line
 	1550 3450 1600 3450
 Wire Wire Line
 	1600 3450 1600 3400
+$Comp
+L CONN_01X02 P24
+U 1 1 569443C2
+P 7950 5250
+F 0 "P24" H 7950 5400 50  0000 C CNN
+F 1 "EXT_POW" V 8050 5250 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x02" H 7950 5250 50  0001 C CNN
+F 3 "" H 7950 5250 50  0000 C CNN
+	1    7950 5250
+	0    1    1    0   
+$EndComp
+Entry Wire Line
+	8200 5050 8300 5150
+Entry Wire Line
+	8200 5050 8300 5150
+Entry Wire Line
+	8200 5050 8300 5150
+Wire Wire Line
+	8200 5050 8000 5050
+Wire Wire Line
+	7700 5050 7900 5050
+Wire Wire Line
+	7800 5050 7800 5150
+Wire Wire Line
+	7800 5150 7700 5150
+Connection ~ 7800 5050
+Text Label 8000 5050 0    60   ~ 0
+CVCC
 $EndSCHEMATC
