@@ -1243,7 +1243,7 @@ U 1 1 5683F094
 P 9450 5550
 F 0 "J1" H 9650 6050 50  0000 C CNN
 F 1 "RJ45" H 9300 6050 50  0000 C CNN
-F 2 "Connectors_PC:rj45-wiznet-rb1-125bag1a" H 9450 5550 50  0001 C CNN
+F 2 "megb8-8:rj45-wiznet-rb1-125bag1a" H 9450 5550 50  0001 C CNN
 F 3 "" H 9450 5550 50  0000 C CNN
 	1    9450 5550
 	1    0    0    -1  
@@ -1270,7 +1270,7 @@ U 1 1 5683F85B
 P 10500 5550
 F 0 "J2" H 10700 6050 50  0000 C CNN
 F 1 "RJ45" H 10350 6050 50  0000 C CNN
-F 2 "Connectors_PC:rj45-wiznet-rb1-125bag1a" H 10500 5550 50  0001 C CNN
+F 2 "megb8-8:rj45-wiznet-rb1-125bag1a" H 10500 5550 50  0001 C CNN
 F 3 "" H 10500 5550 50  0000 C CNN
 	1    10500 5550
 	1    0    0    -1  
@@ -1641,16 +1641,14 @@ CB8
 $Comp
 L CONN_01X05 P14
 U 1 1 56879582
-P 7750 5750
-F 0 "P14" H 7750 6050 50  0000 C CNN
-F 1 "CAN-Bus" V 7850 5750 50  0000 C CNN
-F 2 "w_conn_pt-1,5:pt_1,5-5-3,5-h" H 7750 5750 50  0001 C CNN
-F 3 "" H 7750 5750 50  0000 C CNN
-	1    7750 5750
+P 7750 5850
+F 0 "P14" H 7750 6150 50  0000 C CNN
+F 1 "CAN-Bus" V 7850 5850 50  0000 C CNN
+F 2 "w_conn_pt-1,5:pt_1,5-5-3,5-h" H 7750 5850 50  0001 C CNN
+F 3 "" H 7750 5850 50  0000 C CNN
+	1    7750 5850
 	-1   0    0    1   
 $EndComp
-Entry Wire Line
-	8200 5550 8300 5650
 Entry Wire Line
 	8200 5650 8300 5750
 Entry Wire Line
@@ -1659,45 +1657,41 @@ Entry Wire Line
 	8200 5850 8300 5950
 Entry Wire Line
 	8200 5950 8300 6050
-Text Label 8000 5550 0    60   ~ 0
-CB8
+Entry Wire Line
+	8200 6050 8300 6150
 Text Label 8000 5650 0    60   ~ 0
-CB7
+CB8
 Text Label 8000 5750 0    60   ~ 0
-CB6
-Text Notes 7400 5550 0    60   ~ 0
-CANH
-Text Notes 7400 5650 0    60   ~ 0
-CANL
-Text Notes 7400 5750 0    60   ~ 0
-5V
-Text Notes 7400 5850 0    60   ~ 0
-GND
-Text Notes 7400 5950 0    60   ~ 0
-VCC
+CB7
 Text Label 8000 5850 0    60   ~ 0
+CB6
+Text Notes 7400 5650 0    60   ~ 0
+CANH
+Text Notes 7400 5750 0    60   ~ 0
+CANL
+Text Notes 7500 5850 0    60   ~ 0
+5V
+Text Notes 7450 5950 0    60   ~ 0
+GND
+Text Notes 7450 6050 0    60   ~ 0
+VCC
+Text Label 8000 5950 0    60   ~ 0
 CB4
-Text Label 7950 5950 0    60   ~ 0
+Text Label 7950 6050 0    60   ~ 0
 CVCC
 $Comp
 L CONN_01X02 P15
 U 1 1 56887BA0
-P 8750 6000
-F 0 "P15" H 8750 6150 50  0000 C CNN
-F 1 "POWER" H 8850 6000 50  0001 C CNN
-F 2 "w_conn_pt-1,5:pt_1,5-2-3,5-h" H 8750 6000 50  0001 C CNN
-F 3 "" H 8750 6000 50  0000 C CNN
-	1    8750 6000
+P 8700 5300
+F 0 "P15" H 8700 5450 50  0000 C CNN
+F 1 "POWER" H 8800 5300 50  0001 C CNN
+F 2 "w_conn_pt-1,5:pt_1,5-2-3,5-h" H 8700 5300 50  0001 C CNN
+F 3 "" H 8700 5300 50  0000 C CNN
+	1    8700 5300
 	1    0    0    -1  
 $EndComp
-Entry Wire Line
-	8300 5850 8400 5950
-Entry Wire Line
-	8300 5950 8400 6050
-Text Label 8400 5950 0    60   ~ 0
+Text Label 8400 5250 0    60   ~ 0
 CB4
-Text Label 8400 6050 0    60   ~ 0
-CVCC
 Text Notes 7200 6950 0    138  ~ 0
 BananaPi Modellbahn Adapter Board
 $Comp
@@ -1886,7 +1880,7 @@ U 1 1 568BD3E8
 P 6350 5750
 F 0 "J4" H 6550 6250 50  0000 C CNN
 F 1 "RJ45" H 6200 6250 50  0000 C CNN
-F 2 "Connectors_PC:rj45-wiznet-rb1-125bag1a" H 6350 5750 50  0001 C CNN
+F 2 "megb8-8:rj45-wiznet-rb1-125bag1a" H 6350 5750 50  0001 C CNN
 F 3 "" H 6350 5750 50  0000 C CNN
 	1    6350 5750
 	1    0    0    -1  
@@ -1983,7 +1977,7 @@ U 1 1 568CDA36
 P 5200 5750
 F 0 "J3" H 5400 6250 50  0000 C CNN
 F 1 "RJ45" H 5050 6250 50  0000 C CNN
-F 2 "Connectors_PC:rj45-wiznet-rb1-125bag1a" H 5200 5750 50  0001 C CNN
+F 2 "megb8-8:rj45-wiznet-rb1-125bag1a" H 5200 5750 50  0001 C CNN
 F 3 "" H 5200 5750 50  0000 C CNN
 	1    5200 5750
 	1    0    0    -1  
@@ -2277,6 +2271,69 @@ Entry Wire Line
 	8200 4450 8300 4550
 Entry Wire Line
 	8200 4850 8300 4950
+Entry Wire Line
+	8200 4650 8300 4750
+Text Label 8050 4450 0    60   ~ 0
+CB4
+Text Label 8050 4850 0    60   ~ 0
+CB4
+Text Label 8050 4650 0    60   ~ 0
+CB6
+$Comp
+L CONN_01X09 P10
+U 1 1 5693EE0A
+P 700 3150
+F 0 "P10" H 700 3650 50  0000 C CNN
+F 1 "SPI" V 800 3150 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x09" H 700 3150 50  0001 C CNN
+F 3 "" H 700 3150 50  0000 C CNN
+	1    700  3150
+	-1   0    0    1   
+$EndComp
+$Comp
+L GND #PWR083
+U 1 1 56940702
+P 1450 2850
+F 0 "#PWR083" H 1450 2600 50  0001 C CNN
+F 1 "GND" H 1450 2700 50  0000 C CNN
+F 2 "" H 1450 2850 50  0000 C CNN
+F 3 "" H 1450 2850 50  0000 C CNN
+	1    1450 2850
+	1    0    0    -1  
+$EndComp
+$Comp
+L +3V3 #PWR084
+U 1 1 5694136E
+P 1150 2700
+F 0 "#PWR084" H 1150 2550 50  0001 C CNN
+F 1 "+3V3" H 1150 2840 50  0000 C CNN
+F 2 "" H 1150 2700 50  0000 C CNN
+F 3 "" H 1150 2700 50  0000 C CNN
+	1    1150 2700
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R10
+U 1 1 56941EA7
+P 1400 3450
+F 0 "R10" V 1480 3450 50  0000 C CNN
+F 1 "1K5" V 1400 3450 50  0000 C CNN
+F 2 "w_pth_resistors:RC03" V 1330 3450 50  0001 C CNN
+F 3 "" H 1400 3450 50  0000 C CNN
+	1    1400 3450
+	0    1    1    0   
+$EndComp
+$Comp
+L +3V3 #PWR085
+U 1 1 56942125
+P 1600 3400
+F 0 "#PWR085" H 1600 3250 50  0001 C CNN
+F 1 "+3V3" H 1600 3540 50  0000 C CNN
+F 2 "" H 1600 3400 50  0000 C CNN
+F 3 "" H 1600 3400 50  0000 C CNN
+	1    1600 3400
+	1    0    0    -1  
+$EndComp
 Wire Wire Line
 	1250 1250 1400 1250
 Wire Wire Line
@@ -2746,8 +2803,6 @@ Wire Wire Line
 Wire Bus Line
 	8300 3900 8300 6250
 Wire Wire Line
-	8200 5550 7950 5550
-Wire Wire Line
 	8200 5650 7950 5650
 Wire Wire Line
 	8200 5750 7950 5750
@@ -2756,9 +2811,7 @@ Wire Wire Line
 Wire Wire Line
 	8200 5950 7950 5950
 Wire Wire Line
-	8550 5950 8400 5950
-Wire Wire Line
-	8400 6050 8550 6050
+	8200 6050 7950 6050
 Connection ~ 7450 1800
 Connection ~ 7450 2100
 Wire Wire Line
@@ -3049,8 +3102,6 @@ Wire Wire Line
 Wire Wire Line
 	8050 4950 7700 4950
 Connection ~ 8050 4850
-Entry Wire Line
-	8200 4650 8300 4750
 Wire Wire Line
 	7700 4650 8200 4650
 Wire Wire Line
@@ -3058,50 +3109,11 @@ Wire Wire Line
 Wire Wire Line
 	8050 4750 7700 4750
 Connection ~ 8050 4650
-Text Label 8050 4450 0    60   ~ 0
-CB4
-Text Label 8050 4850 0    60   ~ 0
-CB4
 Wire Wire Line
 	8050 4450 8050 4550
 Wire Wire Line
 	8050 4550 7700 4550
 Connection ~ 8050 4450
-Text Label 8050 4650 0    60   ~ 0
-CB6
-$Comp
-L CONN_01X09 P10
-U 1 1 5693EE0A
-P 700 3150
-F 0 "P10" H 700 3650 50  0000 C CNN
-F 1 "SPI" V 800 3150 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x09" H 700 3150 50  0001 C CNN
-F 3 "" H 700 3150 50  0000 C CNN
-	1    700  3150
-	-1   0    0    1   
-$EndComp
-$Comp
-L GND #PWR083
-U 1 1 56940702
-P 1450 2850
-F 0 "#PWR083" H 1450 2600 50  0001 C CNN
-F 1 "GND" H 1450 2700 50  0000 C CNN
-F 2 "" H 1450 2850 50  0000 C CNN
-F 3 "" H 1450 2850 50  0000 C CNN
-	1    1450 2850
-	1    0    0    -1  
-$EndComp
-$Comp
-L +3V3 #PWR084
-U 1 1 5694136E
-P 1150 2700
-F 0 "#PWR084" H 1150 2550 50  0001 C CNN
-F 1 "+3V3" H 1150 2840 50  0000 C CNN
-F 2 "" H 1150 2700 50  0000 C CNN
-F 3 "" H 1150 2700 50  0000 C CNN
-	1    1150 2700
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	900  2750 1150 2750
 Wire Wire Line
@@ -3111,58 +3123,50 @@ Wire Wire Line
 Wire Wire Line
 	1000 3050 1000 2750
 Connection ~ 1000 2750
-$Comp
-L R R10
-U 1 1 56941EA7
-P 1400 3450
-F 0 "R10" V 1480 3450 50  0000 C CNN
-F 1 "1K5" V 1400 3450 50  0000 C CNN
-F 2 "w_pth_resistors:RC03" V 1330 3450 50  0001 C CNN
-F 3 "" H 1400 3450 50  0000 C CNN
-	1    1400 3450
-	0    1    1    0   
-$EndComp
-$Comp
-L +3V3 #PWR085
-U 1 1 56942125
-P 1600 3400
-F 0 "#PWR085" H 1600 3250 50  0001 C CNN
-F 1 "+3V3" H 1600 3540 50  0000 C CNN
-F 2 "" H 1600 3400 50  0000 C CNN
-F 3 "" H 1600 3400 50  0000 C CNN
-	1    1600 3400
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	1550 3450 1600 3450
 Wire Wire Line
 	1600 3450 1600 3400
-$Comp
-L CONN_01X02 P24
-U 1 1 569443C2
-P 7950 5250
-F 0 "P24" H 7950 5400 50  0000 C CNN
-F 1 "EXT_POW" V 8050 5250 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x02" H 7950 5250 50  0001 C CNN
-F 3 "" H 7950 5250 50  0000 C CNN
-	1    7950 5250
-	0    1    1    0   
-$EndComp
-Entry Wire Line
-	8200 5050 8300 5150
-Entry Wire Line
-	8200 5050 8300 5150
-Entry Wire Line
-	8200 5050 8300 5150
 Wire Wire Line
-	8200 5050 8000 5050
-Wire Wire Line
-	7700 5050 7900 5050
+	7700 5050 8050 5050
 Wire Wire Line
 	7800 5050 7800 5150
 Wire Wire Line
 	7800 5150 7700 5150
 Connection ~ 7800 5050
-Text Label 8000 5050 0    60   ~ 0
+Entry Wire Line
+	8300 5150 8400 5250
+Wire Wire Line
+	8500 5250 8400 5250
+Wire Wire Line
+	8500 5350 8450 5350
+$Comp
+L CONN_01X03 P24
+U 1 1 56945EFC
+P 8700 5750
+F 0 "P24" H 8700 5950 50  0000 C CNN
+F 1 "CONN_01X03" V 8800 5750 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x03" H 8700 5750 50  0001 C CNN
+F 3 "" H 8700 5750 50  0000 C CNN
+	1    8700 5750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8350 5750 8500 5750
+Wire Wire Line
+	8350 5750 8350 5400
+Wire Wire Line
+	8350 5400 8050 5400
+Wire Wire Line
+	8050 5400 8050 5050
+Wire Wire Line
+	8450 5350 8450 5650
+Wire Wire Line
+	8450 5650 8500 5650
+Entry Wire Line
+	8300 5750 8400 5850
+Wire Wire Line
+	8400 5850 8500 5850
+Text Label 8400 5850 0    60   ~ 0
 CVCC
 $EndSCHEMATC
