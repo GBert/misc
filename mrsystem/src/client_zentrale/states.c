@@ -51,8 +51,7 @@ static int HandleMemberWaitMs2(void *Priv, void *SignalData)
       MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
       MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
       MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-      MrIpcCmdSetReqestLocname(&Cmd, ZentraleGetActualIndex(Data),
-                               ZentraleGetActualIndex(Data) + 1);
+      MrIpcCmdSetReqestLocname(&Cmd, ZentraleGetActualIndex(Data), 2);
       MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
       if (ZentraleGetVerbose(Data)) {
          time_stamp();
@@ -79,12 +78,12 @@ static void QueryMembers(ZentraleStruct *Data)
 
 static int HandleWaitMs2Timer(void *Priv, void *SignalData)
 {  ZentraleStruct *Data;
-   /* MrIpcCmdType *CmdFrame; */
+   MrIpcCmdType *CmdFrame;
 
    Data = (ZentraleStruct *)Priv;
    if (ZentraleGetVerbose(Data))
       puts_ts("FSM: periodic task");
-   /* CmdFrame = (MrIpcCmdType *)SignalData; */
+   CmdFrame = (MrIpcCmdType *)SignalData;
    QueryMembers(Data);
    if (ZentraleGetVerbose(Data)) {
       time_stamp();
@@ -108,7 +107,7 @@ static int HandleLoknameCfgHeader(void *Priv, void *SignalData)
    }
    ZentraleSetCfgLength(Data, Length);
    ZentraleSetCfgHaveRead(Data, 0);
-   ZentraleSetCfgBuffer(Data, malloc(ZentraleGetCfgLength(Data)+7));
+   ZentraleSetCfgBuffer(Data, malloc(ZentraleGetCfgLength(Data) + 7));
    if (ZentraleGetCfgBuffer(Data) == NULL)
    {
       if (ZentraleGetVerbose(Data)) {
@@ -135,7 +134,6 @@ static int HandleLoknameCfgData(void *Priv, void *SignalData)
    int LineInfo, Paragraph;
    MrIpcCmdType Cmd;
 
-   Paragraph = 0;
    Data = (ZentraleStruct *)Priv;
    CmdFrame = (MrIpcCmdType *)SignalData;
    MrIpcCmdGetCfgData(CmdFrame, Buf);
@@ -250,8 +248,7 @@ static int HandleLoknameCfgData(void *Priv, void *SignalData)
          MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
          MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
          MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-         MrIpcCmdSetReqestLocname(&Cmd, ZentraleGetActualIndex(Data),
-                                  ZentraleGetActualIndex(Data) + 1);
+         MrIpcCmdSetReqestLocname(&Cmd, ZentraleGetActualIndex(Data), 2);
          MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
          if (ZentraleGetVerbose(Data)) {
             time_stamp();
@@ -311,7 +308,7 @@ static int HandleLokinfoCfgHeader(void *Priv, void *SignalData)
    }
    ZentraleSetCfgLength(Data, Length);
    ZentraleSetCfgHaveRead(Data, 0);
-   ZentraleSetCfgBuffer(Data, malloc(ZentraleGetCfgLength(Data)+7));
+   ZentraleSetCfgBuffer(Data, malloc(ZentraleGetCfgLength(Data) + 7));
    if (ZentraleGetCfgBuffer(Data) == NULL)
    {
       if (ZentraleGetVerbose(Data)) {
@@ -657,8 +654,6 @@ static int HandleFileRequest(void *Priv, void *SignalData)
    struct stat attribut;
    FILE *LokomotiveDatei;
 
-   Dateiname = (char *)NULL;
-
    Data = (ZentraleStruct *)Priv;
    CmdFrame = (MrIpcCmdType *)SignalData;
    MrIpcCmdGetQuery(CmdFrame, Name);
@@ -796,7 +791,7 @@ static int HandleCfgHeader(void *Priv, void *SignalData)
    }
    ZentraleSetCfgLength(Data, Length);
    ZentraleSetCfgHaveRead(Data, 0);
-   ZentraleSetCfgBuffer(Data, malloc(ZentraleGetCfgLength(Data) + 6));
+   ZentraleSetCfgBuffer(Data, malloc(ZentraleGetCfgLength(Data) + 7));
    if (ZentraleGetCfgBuffer(Data) == NULL)
    {
       if (ZentraleGetVerbose(Data)) {
@@ -820,6 +815,8 @@ static int HandleCfgData(void *Priv, void *SignalData)
    MrIpcCmdType *CmdFrame;
    char Buf [8];
    Cs2parser *Parser;
+   int LineInfo, Paragraph;
+   MrIpcCmdType Cmd;
 
    Data = (ZentraleStruct *)Priv;
    CmdFrame = (MrIpcCmdType *)SignalData;
@@ -964,11 +961,10 @@ static int HandleCfgData(void *Priv, void *SignalData)
 
 static int HandlePing(void *Priv, void *SignalData)
 {  ZentraleStruct *Data;
-   /* MrIpcCmdType *CmdFrame, Cmd; */
-   MrIpcCmdType Cmd;
+   MrIpcCmdType *CmdFrame, Cmd;
 
    Data = (ZentraleStruct *)Priv;
-   /* CmdFrame = (MrIpcCmdType *)SignalData; */
+   CmdFrame = (MrIpcCmdType *)SignalData;
    if (ZentraleGetVerbose(Data))
       puts_ts("FSM: answer ping");
    MrIpcInit(&Cmd);

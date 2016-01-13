@@ -33,17 +33,12 @@ void LokDestroy(LokStruct *Data)
    free(Data);
 }
 
-static int LokUidCmp(void *d1, void *d2)
-{
-   return((unsigned long)d1 - (unsigned long)d2);
-}
-
 void LokInit(LokStruct *Data, char *LocPath)
 {
    LokSetLocFilePath(Data, LocPath);
    LokSetNumLoks(Data, 0);
    LokSetIsChanged(Data, FALSE);
-   MapInit(LokGetLokDb(Data), (CmpFkt)LokUidCmp,
+   MapInit(LokGetLokDb(Data), (CmpFkt)strcmp,
            (MapKeyDelCbFkt)NULL, (MapDataDelCbFkt)free);
 }
 
@@ -60,45 +55,70 @@ void LokClear(LokStruct *Data)
    LokSetLokDb(Data, MapCreate());
    if (LokGetLokDb(Data) != (Map *)NULL)
    {
-      MapInit(LokGetLokDb(Data), (CmpFkt)LokUidCmp,
+      MapInit(LokGetLokDb(Data), (CmpFkt)strcmp,
               (MapKeyDelCbFkt)NULL, (MapDataDelCbFkt)free);
    }
 }
 
 void LokInsert(LokStruct *Data, LokInfo *Lok)
-{  unsigned long Uid;
+{  char *Name;
    LokInfo *OldLok;
 
-   Uid = LokInfoGetUid(Lok);
-   OldLok = (LokInfo *)MapGet(LokGetLokDb(Data), (MapKeyType)Uid);
-   if (OldLok != (LokInfo *)NULL)
+   Name = LokInfoGetName(Lok);
+   if (strlen(Name) > 0)
    {
-      if ((strcmp(LokInfoGetName(OldLok), LokInfoGetName(Lok)) != 0) ||
-          (LokInfoGetAdresse(OldLok) != LokInfoGetAdresse(Lok)) ||
-          (strcmp(LokInfoGetTyp(OldLok), LokInfoGetTyp(Lok))))
-      {
-         LokSetIsChanged(Data, TRUE);
-         memcpy(OldLok, Lok, sizeof(LokInfo));
-      }
-      LokInfoSetIsDeleted(OldLok, FALSE);
-   }
-   else
-   {
-      OldLok = (LokInfo *)malloc(sizeof(LokInfo));
+      OldLok = (LokInfo *)MapGet(LokGetLokDb(Data), (MapKeyType)Name);
       if (OldLok != (LokInfo *)NULL)
       {
-         LokSetIsChanged(Data, TRUE);
-         memcpy(OldLok, Lok, sizeof(LokInfo));
+         if ((LokInfoGetUid(OldLok) != LokInfoGetUid(Lok)) ||
+             (LokInfoGetAdresse(OldLok) != LokInfoGetAdresse(Lok)) ||
+             (strcmp(LokInfoGetTyp(OldLok), LokInfoGetTyp(Lok))))
+         {
+            LokSetIsChanged(Data, TRUE);
+            memcpy(OldLok, Lok, sizeof(LokInfo));
+         }
          LokInfoSetIsDeleted(OldLok, FALSE);
-         MapSet(LokGetLokDb(Data), (MapKeyType)Uid, (MapDataType)OldLok);
-         LokSetNumLoks(Data, LokGetNumLoks(Data) + 1);
+      }
+      else
+      {
+         OldLok = (LokInfo *)malloc(sizeof(LokInfo));
+         if (OldLok != (LokInfo *)NULL)
+         {
+            LokSetIsChanged(Data, TRUE);
+            memcpy(OldLok, Lok, sizeof(LokInfo));
+            LokInfoSetIsDeleted(OldLok, FALSE);
+            MapSet(LokGetLokDb(Data),
+                   (MapKeyType)LokInfoGetName(OldLok),
+                   (MapDataType)OldLok);
+            LokSetNumLoks(Data, LokGetNumLoks(Data) + 1);
+         }
       }
    }
 }
 
+typedef struct {
+   unsigned long Addr;
+   LokInfo *Result;
+} AddrSearchType;
+
+static void SearchLokomotiveByAddress(void *PrivData,
+                                      MapKeyType Key, MapDataType Daten)
+{  AddrSearchType *Search;
+
+   Search = (AddrSearchType *)PrivData;
+   if (Search->Addr == LokInfoGetUid((LokInfo *)Daten))
+      Search->Result = (LokInfo *)Daten;
+}
+
 LokInfo *LokSearch(LokStruct *Data, unsigned long Addr)
-{
-   return((LokInfo *)MapGet(LokGetLokDb(Data), (MapKeyType)Addr));
+{  AddrSearchType Search;
+
+   Search.Addr = Addr;
+   Search.Result = (LokInfo *)NULL;
+   MapWalkAscend(LokGetLokDb(Data),
+                 (MapWalkCbFkt)SearchLokomotiveByAddress,
+                 (void *)&Search);
+   return(Search.Result);
 }
 
 static void ParseLokomotiveCs2(LokStruct *Data, char *Buf, int Len)
