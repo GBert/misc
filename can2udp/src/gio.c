@@ -201,7 +201,7 @@ uint8_t *read_config_file(char *filename, char *config_dir, uint32_t * nbytes) {
     if (!file_name)
 	return NULL;
 
-    strncat(file_name, config_dir, sizeof(file_name) -1);
+    strncat(file_name, config_dir, MAXLINE-1);
     strcat(file_name, filename);
 
     printf("%s: try reading file %s\n", __func__, file_name);

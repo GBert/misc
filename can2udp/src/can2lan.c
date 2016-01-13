@@ -175,9 +175,9 @@ int main(int argc, char **argv) {
 
     verbose = 0;
     ms1_workaround = 0;
-    bzero(ifr.ifr_name, sizeof(ifr.ifr_name));
+    memset(ifr.ifr_name, 0, sizeof(ifr.ifr_name));
     strcpy(ifr.ifr_name, "can0");
-    bzero(config_dir, sizeof(config_dir));
+    memset(config_dir, 0, sizeof(config_dir));
 
     char *udp_dst_address = (char *)malloc(MAXIPLEN);
     strcpy(udp_dst_address, "255.255.255.255");
@@ -250,6 +250,7 @@ int main(int argc, char **argv) {
     if (config_dir[0] == 0) {
 	strcat(config_file, ".");
     }
+
     strcat(config_file, config_dir);
     if (config_dir[strlen(config_dir)-1] != '/') {
 	strcat(config_file, "/");
