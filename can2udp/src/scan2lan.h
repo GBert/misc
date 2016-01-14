@@ -41,8 +41,6 @@
 #define MAX_PACKETS	40		/* maximum number of CAN frames per TCP packet */
 #define MAXUDP  	16		/* maximum datagram size */
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
-#define debug_print(...) \
-            do { if (DEBUG) fprintf(stderr, ##__VA_ARGS__); } while (0)
 
 #define	CRC		0x01
 #define COMPRESSED	0x02

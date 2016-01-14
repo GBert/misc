@@ -34,8 +34,8 @@
 #define MAXUDP  16		/* maximum datagram size */
 #define TIMEOUT 5		/* wait seconds for response */
 
-char *GB2_DEFAULT_FILENAME = "016-gb2.bin";
-char *MS2_DEFAULT_FILENAME = "050-ms2.bin";
+static char *GB2_DEFAULT_FILENAME = "016-gb2.bin";
+static char *MS2_DEFAULT_FILENAME = "050-ms2.bin";
 
 #define GB2_BLOCK_SHIFT		9	/* 2^9 = 512 */
 #define GB2_BLOCK_SIZE		(1<<GB2_BLOCK_SHIFT)
@@ -62,9 +62,7 @@ extern uint16_t CRCCCITT(uint8_t * data, size_t length, uint16_t seed);
 
 unsigned char netframe[MAXDG];
 
-char *CAN_FORMAT_STRG    = "      CAN->  CANID 0x%08X R [%d]";
-char *TO_CAN_FORMAT_STRG = "    ->CAN    CANID 0x%08X   [%d]";
-char *CECK_FORMAT_STRG   = "  CHEKCAN    CANID 0x%08X   [%d]";
+static char *CECK_FORMAT_STRG   = "  CHEKCAN    CANID 0x%08X   [%d]";
 
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[]	= { 0x00, 0x36, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
 unsigned char M_CAN_PING[] 			= { 0x00, 0x30, 0x47, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };

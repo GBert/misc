@@ -12,13 +12,12 @@
 
 #include "scan2lan.h"
 
-char *CAN_FORMAT_STRG		= "      CAN->  CANID 0x%06X R [%d]";
-char *TO_CAN_FORMAT_STRG	= "      CAN    CANID 0x%06X   [%d]";
-char *UDP_FORMAT_STRG		= "->CAN>UDP    CANID 0x%06X   [%d]";
-char *TCP_FORMAT_STRG		= "->TCP>CAN    CANID 0x%06X   [%d]";
-char *TCP_FORMATS_STRG		= "->TCP>CAN*   CANID 0x%06X   [%d]";
-char *CAN_TCP_FORMAT_STRG	= "->CAN>TCP    CANID 0x%06X   [%d]";
-char *NET_UDP_FORMAT_STRG	= "      UDP->  CANID 0x%06X   [%d]";
+static char *CAN_FORMAT_STRG		= "      CAN->  CANID 0x%06X R [%d]";
+static char *UDP_FORMAT_STRG		= "->CAN>UDP    CANID 0x%06X   [%d]";
+static char *TCP_FORMAT_STRG		= "->TCP>CAN    CANID 0x%06X   [%d]";
+static char *TCP_FORMATS_STRG		= "->TCP>CAN*   CANID 0x%06X   [%d]";
+static char *CAN_TCP_FORMAT_STRG	= "->CAN>TCP    CANID 0x%06X   [%d]";
+static char *NET_UDP_FORMAT_STRG	= "      UDP->  CANID 0x%06X   [%d]";
 
 unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[] = { 0x00, 0x36, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
 

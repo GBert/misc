@@ -228,6 +228,7 @@ uint8_t *read_config_file(char *filename, char *config_dir, uint32_t * nbytes) {
         free(config);
 	goto read_error2;
     }
+    fclose(fp);
     return config;
 read_error2:
     fclose(fp);
