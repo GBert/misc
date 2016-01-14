@@ -54,7 +54,7 @@ int init_can(char *can_interface) {
     struct sockaddr_can caddr;
 
     socklen_t caddrlen = sizeof(caddr);
-    bzero(ifr.ifr_name, sizeof(ifr.ifr_name));
+    memset(ifr.ifr_name, 0, sizeof(ifr.ifr_name));
     strncpy(ifr.ifr_name, can_interface, sizeof(ifr.ifr_name)-1);
 
     if ((socket_can = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
@@ -112,7 +112,7 @@ int main(void) {
     socket_can1 = init_can("can0");
     socket_can2 = init_can("can1");
     pcan_frame = (struct can_frame *)malloc(sizeof(struct can_frame));
-    bzero(pcan_frame, sizeof(struct can_frame));
+    memset(pcan_frame, 0, sizeof(struct can_frame));
     pcan_frame->can_id = 123;
     pcan_frame->can_dlc = 4;
 

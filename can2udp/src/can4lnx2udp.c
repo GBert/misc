@@ -69,11 +69,11 @@ int main(int argc, char **argv) {
     const int on = 1;
     const char broadcast_address[] = "255.255.255.255";
 
-    bzero(&saddr, sizeof(saddr));
-    bzero(&baddr, sizeof(baddr));
-    bzero(&frame, sizeof(frame));
-    bzero(udpframe, sizeof(udpframe));
-    bzero(udpframe_reply, sizeof(udpframe_reply));
+    memset(&saddr, 0, sizeof(saddr));
+    memset(&baddr, 0, sizeof(baddr));
+    memset(&frame, 0, sizeof(frame));
+    memset(udpframe, 0, sizeof(udpframe));
+    memset(udpframe_reply, 0, sizeof(udpframe_reply));
 
     /* prepare udp destination struct with defaults */
     baddr.sin_family = AF_INET;

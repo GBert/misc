@@ -209,7 +209,7 @@ int main(int argc, char **argv)
 		fprintf(stderr, "CAN read error: %s\n", strerror(errno));
 	    } else {
 		/* prepare UDP packet */
-		bzero(udpframe, 13);
+		memset(udpframe, 0, 13);
 		canid = htonl(frame.can_id);
 		memcpy(udpframe, &canid, 4);
 		udpframe[4] = frame.can_dlc;

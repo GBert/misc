@@ -137,7 +137,7 @@ int main(int argc, char **argv) {
 	exit(1);
     }
 
-    bzero(&servaddr, sizeof(servaddr));
+    memset(&servaddr, 0, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
     if (inet_aton((argv[2]), (struct in_addr *)&servaddr.sin_addr.s_addr) == 0) {
 	fprintf(stderr, "invalid address: %s\n", strerror(errno));
@@ -151,7 +151,7 @@ int main(int argc, char **argv) {
 	exit(1);
     }
 
-    bzero(netframe, sizeof(netframe));
+    memset(netframe, 0, FRAME_SIZE);
     memcpy(netframe, GETCONFIG, 5);
     memcpy(&netframe[5], argv[1], strlen(argv[1]));
     if (netframe_to_net(sockfd, netframe, FRAME_SIZE)) {

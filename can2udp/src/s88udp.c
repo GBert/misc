@@ -51,7 +51,7 @@ void send_sensor_event(int sock, const struct sockaddr *destaddr, int verbose, i
 
   can_id = 0x80220B01 + offset;
 
-  bzero(udpframe, 13);
+  memset(udpframe, 0, 13);
   udpframe[0] = (can_id >> 24) & 0x000000FF;
   udpframe[1] = (can_id >> 16) & 0x000000FF;
   udpframe[2] = (can_id >>  8) & 0x000000FF;
@@ -105,7 +105,7 @@ main(int argc, char **argv)
   int destination_port = 15730;
 
   /* setup udp socket */
-  bzero(&destaddr, sizeof(destaddr));
+  memset(&destaddr, 0, sizeof(destaddr));
   destaddr.sin_family = AF_INET;
   destaddr.sin_port = htons(destination_port);
   if (inet_pton(AF_INET, destip, &destaddr.sin_addr) < 0) {
