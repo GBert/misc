@@ -155,7 +155,7 @@ void print_can_frame(char *format_string, unsigned char *netframe, int verbose) 
 void format_can_to_netframe(struct can_frame *frame, unsigned char *netframe) {
     uint32_t canid;
 
-    bzero(netframe, 13);
+    memset(netframe, 0, 13);
     frame->can_id &= CAN_EFF_MASK;
     canid = htonl(frame->can_id);
     memcpy(netframe, &canid, 4);
@@ -174,7 +174,7 @@ int netframe_to_net(int net_socket, unsigned char *netframe, int length) {
 int netframe_to_can(int can_socket, unsigned char *netframe) {
     uint32_t canid;
     struct can_frame frame;
-    bzero(&frame, sizeof(frame));
+    memset(&frame, 0, sizeof(frame));
     memcpy(&canid, netframe, 4);
     /* CAN uses (network) big endian format */
     frame.can_id = ntohl(canid);
@@ -332,7 +332,7 @@ void fsm(unsigned char *netframe, struct update_config *device_config) {
 	    if ((netframe[4] == 8) && (memcmp(&netframe[5], &device_id, 4) == 0) && (netframe[12] == 0x10)) {
 		/* prepare test frame for later use */
 		memcpy(checkframe, netframe, 10);
-		bzero(&checkframe[10], 3);
+		memset(&checkframe[10], 0, 3);
 		checkframe[1] = 0x37;
 		checkframe[4] = 5;
 		checkframe[9] = 0x88;
@@ -419,11 +419,11 @@ int main(int argc, char **argv) {
     const char broadcast_address[] = "255.255.255.255";
     char *filename;
 
-    bzero(&saddr, sizeof(saddr));
-    bzero(&baddr, sizeof(baddr));
-    bzero(&caddr, sizeof(caddr));
-    bzero(&frame, sizeof(frame));
-    bzero(udpframe, sizeof(udpframe));
+    memset(&saddr, 0, sizeof(saddr));
+    memset(&baddr, 0, sizeof(baddr));
+    memset(&caddr, 0, sizeof(caddr));
+    memset(&frame, 0, sizeof(frame));
+    memset(udpframe, 0, sizeof(udpframe));
 
     /* prepare udp destination struct with defaults */
     baddr.sin_family = AF_INET;

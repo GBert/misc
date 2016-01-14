@@ -212,10 +212,10 @@ int main(int argc, char **argv) {
 	    if (strnlen(optarg, MAXIPLEN) <= MAXIPLEN - 1) {
 		/* IP address begins with a number */
 		if ((optarg[0] >= '0') && (optarg[0] <= '9')) {
-		    bzero(udp_dst_address, MAXIPLEN);
+		    memset(udp_dst_address, 0, MAXIPLEN);
 		    strncpy(udp_dst_address, optarg, MAXIPLEN - 1);
 		} else {
-		    bzero(bcast_interface, MAXIPLEN);
+		    memset(bcast_interface, 0, MAXIPLEN);
 		    strncpy(bcast_interface, optarg, MAXIPLEN -1);
 		}
 	    } else {
@@ -273,7 +273,7 @@ int main(int argc, char **argv) {
     }
 
     /* prepare udp sending socket struct */
-    bzero(&baddr, sizeof(baddr));
+    memset(&baddr, 0, sizeof(baddr));
     baddr.sin_family = AF_INET;
     baddr.sin_port = htons(destination_port);
     s = inet_pton(AF_INET, udp_dst_address, &baddr.sin_addr);
@@ -300,7 +300,7 @@ int main(int argc, char **argv) {
     }
 
     /* prepare reading UDP socket */
-    bzero(&saddr, sizeof(saddr));
+    memset(&saddr, 0, sizeof(saddr));
     saddr.sin_family = AF_INET;
     saddr.sin_addr.s_addr = htonl(INADDR_ANY);
     saddr.sin_port = htons(local_udp_port);
@@ -361,7 +361,7 @@ int main(int argc, char **argv) {
 #endif
 
     /* prepare CAN socket */
-    bzero(&caddr, sizeof(caddr));
+    memset(&caddr, 0, sizeof(caddr));
     sc = socket(PF_CAN, SOCK_RAW, CAN_RAW);
     if (sc < 0) {
 	fprintf(stderr, "creating CAN socket error: %s\n", strerror(errno));
@@ -397,7 +397,7 @@ int main(int argc, char **argv) {
     }
 
     /* set select timeout -> send periodic CAN Ping */
-    bzero(&tv, sizeof(tv));
+    memset(&tv, 0, sizeof(tv));
     tv.tv_sec = 1;
     tv.tv_usec = 0;
 

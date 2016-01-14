@@ -97,7 +97,6 @@ int main(int argc, char **argv) {
     memset(&baddr, 0, sizeof(baddr));
     memset(&caddr, 0, sizeof(caddr));
     memset(&frame, 0, sizeof(frame));
-    /* TODO */
     memset(udpframe, 0, sizeof(udpframe));
     memset(udpframe_reply, 0, sizeof(udpframe_reply));
 

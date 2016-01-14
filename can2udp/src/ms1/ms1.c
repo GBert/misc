@@ -19,7 +19,7 @@ extern struct id_node *ms1_root_handle;
 extern int verbose;
 
 void ms1_node_buffer_init(void) {
-    bzero(&ms1_node_buffer, sizeof(struct MS1_Node_Buffer));
+    memset(&ms1_node_buffer, 0, sizeof(struct MS1_Node_Buffer));
 }
 
 int ms1_node_buffer_in(uint8_t node) {
