@@ -210,7 +210,7 @@ int main(int argc, char **argv) {
     page_name = read_track_file(config_file, page_name);
 
     /* prepare udp sending socket struct */
-    bzero(&baddr, sizeof(baddr));
+    memset(&baddr, 0, sizeof(baddr));
     baddr.sin_family = AF_INET;
     baddr.sin_port = htons(destination_port);
     s = inet_pton(AF_INET, udp_dst_address, &baddr.sin_addr);
@@ -234,7 +234,7 @@ int main(int argc, char **argv) {
     }
 
     /* prepare reading UDP socket */
-    bzero(&saddr, sizeof(saddr));
+    memset(&saddr, 0, sizeof(saddr));
     saddr.sin_family = AF_INET;
     saddr.sin_addr.s_addr = htonl(INADDR_ANY);
     saddr.sin_port = htons(local_udp_port);
@@ -273,7 +273,7 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "opening CAN interface error: %s\n", strerror(errno));
 	exit(1);
     } else {
-	bzero(&term_attr, sizeof(term_attr));
+	memset(&term_attr, 0, sizeof(term_attr));
 	if (tcgetattr(sc, &term_attr) < 0) {
 	    fprintf(stderr, "can't get terminal settings error: %s\n", strerror(errno));
 	    exit(1);

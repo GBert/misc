@@ -25,7 +25,7 @@ int main()
     if (sock_descriptor < 0)
 	printf("Failed creating socket\n");
 
-    bzero((char *)&serv_addr, sizeof(serv_addr));
+    memset((char *)&serv_addr, 0, sizeof(serv_addr));
 
     server = gethostbyname("127.0.0.1");
 

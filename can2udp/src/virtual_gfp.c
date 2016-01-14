@@ -157,7 +157,7 @@ int send_can_frame(int can_socket, struct can_frame *frame, int verbose) {
 int send_defined_can_frame(int can_socket, unsigned char *data, int verbose) {
     struct can_frame frame;
     uint32_t can_id;
-    bzero(&frame, sizeof(frame));
+    memset(&frame, 0, sizeof(frame));
     memcpy(&can_id, &data[0], 4);
     frame.can_id = htonl(can_id);
     frame.can_dlc = data[4];
@@ -203,7 +203,7 @@ int main(int argc, char **argv) {
 	}
     }
 
-    bzero(&caddr, sizeof(caddr));
+    memset(&caddr, 0, sizeof(caddr));
 
     /* prepare CAN socket */
     if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {

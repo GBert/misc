@@ -147,7 +147,7 @@ int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *fr
     int s;
     uint32_t canid;
 
-    bzero(netframe, 13);
+    memset(netframe, 0, 13);
     frame->can_id &= CAN_EFF_MASK;
     canid = htonl(frame->can_id);
     memcpy(netframe, &canid, 4);
@@ -171,7 +171,7 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
      *   byte 4      DLC
      *   byte 5 - 12 CAN data
      */
-    bzero(&frame, sizeof(frame));
+    memset(&frame, 0, sizeof(frame));
     memcpy(&canid, netframe, 4);
     /* CAN uses (network) big endian format */
     frame.can_id = ntohl(canid);
@@ -228,11 +228,12 @@ uint8_t *read_config_file(char *filename, char *config_dir, uint32_t * nbytes) {
         free(config);
 	goto read_error2;
     }
+    return config;
 read_error2:
     fclose(fp);
 read_error1:
     free(file_name);
-    return config;
+    return NULL;
 }
 
 static void strm_init(z_stream * strm) {
@@ -300,7 +301,7 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
 	crc = CRCCCITT(out, padded_nbytes, 0xffff);
 	printf("%s: canid 0x%08x filesize %d deflated size: %d crc 0x%04x\n", __func__, canid, nbytes, deflated_size,
 	       crc);
-	bzero(netframe, MAXMTU);
+	memset(netframe, 0, MAXMTU);
 	/* prepare first CAN frame   */
 	/* delete response bit and set canid to config data stream */
 	canid_be = htonl((canid & 0xFFFEFFFFUL) | 0x00020000UL);

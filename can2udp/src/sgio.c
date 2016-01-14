@@ -144,7 +144,7 @@ int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *fr
     int s;
     uint32_t canid;
 
-    bzero(netframe, 13);
+    memset(netframe, 0, 13);
     frame->can_id &= CAN_EFF_MASK;
     canid = htonl(frame->can_id);
     memcpy(netframe, &canid, 4);
@@ -284,7 +284,7 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
 	crc = CRCCCITT(out, padded_nbytes, 0xffff);
 	printf("%s: canid 0x%08x filesize %d deflated size: %d crc 0x%04x\n", __func__, canid, nbytes, deflated_size,
 	       crc);
-	bzero(netframe, MAXMTU);
+	memset(netframe, 0, MAXMTU);
 	/* prepare first CAN frame   */
 	/* delete response bit and set canid to config data stream */
 	canid_be = htonl((canid & 0xFFFEFFFFUL) | 0x00020000UL);

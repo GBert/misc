@@ -123,7 +123,7 @@ int main(int argc, char **argv) {
 	exit(1);
     }
 
-    bzero(&servaddr, sizeof(servaddr));
+    memset(&servaddr, 0, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
     if (inet_aton((argv[1]), (struct in_addr *)&servaddr.sin_addr.s_addr) == 0) {
 	fprintf(stderr, "invalid address : %s\n", strerror(errno));

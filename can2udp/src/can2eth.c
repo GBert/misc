@@ -79,13 +79,13 @@ int main(int argc, char **argv)
     const int on = 1;
     const char broadcast_address[] = "255.255.255.255";
 
-    bzero(ifr.ifr_name, sizeof(ifr.ifr_name));
+    memset(ifr.ifr_name, 0, sizeof(ifr.ifr_name));
     strcpy(ifr.ifr_name, "can0");
-    bzero(&saddr, sizeof(saddr));
-    bzero(&baddr, sizeof(baddr));
-    bzero(&caddr, sizeof(caddr));
-    bzero(&frame, sizeof(frame));
-    bzero(udpframe, sizeof(udpframe));
+    memset(&saddr, 0, sizeof(saddr));
+    memset(&baddr, 0, sizeof(baddr));
+    memset(&caddr, 0, sizeof(caddr));
+    memset(&frame, 0, sizeof(frame));
+    memset(udpframe, 0, sizeof(udpframe));
 
     /* prepare udp destination struct with defaults */
     baddr.sin_family = AF_INET;
