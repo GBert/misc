@@ -112,6 +112,8 @@ int main(void) {
     socket_can1 = init_can("can0");
     socket_can2 = init_can("can1");
     pcan_frame = (struct can_frame *)malloc(sizeof(struct can_frame));
+    if (!pcan_frame)
+	return -1;
     memset(pcan_frame, 0, sizeof(struct can_frame));
     pcan_frame->can_id = 123;
     pcan_frame->can_dlc = 4;
@@ -132,6 +134,7 @@ int main(void) {
 	if (FD_ISSET(socket_can1, &readfds)) {
 	    if ((nbytes = read(socket_can1, pcan_frame, sizeof(struct can_frame))) < 0) {
 		perror("read error on CAN\n");
+		free(pcan_frame);
 		return -1;
 	    }
 	    bounce_can_frame(socket_can1, pcan_frame);
@@ -139,6 +142,7 @@ int main(void) {
 	if (FD_ISSET(socket_can2, &readfds)) {
 	    if ((nbytes = read(socket_can2, pcan_frame, sizeof(struct can_frame))) < 0) {
 		perror("read error on CAN\n");
+		free(pcan_frame);
 		return -1;
 	    }
 	    bounce_can_frame(socket_can2, pcan_frame);
@@ -151,5 +155,6 @@ int main(void) {
     packets_per_second = NUM_OF_FRAMES / elapsed_time / 1000;
     printf("Send %d in %.3f sec (%.3f tpackets/sec %.3f Mbit)\n", NUM_OF_FRAMES, elapsed_time, packets_per_second, bandwidth);
 
+    free(pcan_frame);
     return ret;
 }
