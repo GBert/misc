@@ -1,4 +1,4 @@
-update=Fri 15 Jan 2016 02:36:24 PM CET
+update=Fri 15 Jan 2016 05:14:14 PM CET
 version=1
 last_client=kicad
 [pcbnew]
@@ -60,3 +60,4 @@ LibName28=contrib
 LibName29=valves
 LibName30=ftdi
 LibName31=microchip_pic18mcu
+LibName32=ICSP
