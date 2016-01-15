@@ -3,8 +3,9 @@ BPI-Model-Railroad-Interface
 
 This is the hardware part of the BPi Railroad Interface:
 
-[Deutsch Beschreibung](http://lnxpps.de/bpi/)
-[englisch description](http://lnxpps.de/bpie/)
+[Deutsch](http://lnxpps.de/bpi/)
+
+[English](http://lnxpps.de/bpie/)
 
 
 Interfaces 
