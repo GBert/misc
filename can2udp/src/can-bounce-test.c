@@ -55,7 +55,7 @@ int init_can(char *can_interface) {
 
     socklen_t caddrlen = sizeof(caddr);
     memset(ifr.ifr_name, 0, sizeof(ifr.ifr_name));
-    strncpy(ifr.ifr_name, can_interface, sizeof(ifr.ifr_name)-1);
+    strncpy(ifr.ifr_name, can_interface, sizeof(ifr.ifr_name) - 1);
 
     if ((socket_can = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
 	perror("Can't connect to can socket \n");

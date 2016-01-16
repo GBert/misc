@@ -122,11 +122,12 @@ int send_can_frame(int can_socket, struct can_frame *frame, int verbose) {
 int send_defined_can_frame(int can_socket, unsigned char *data, int verbose) {
     struct can_frame frame;
     uint32_t can_id;
+
     memset(&frame, 0, sizeof(frame));
-    memcpy(&can_id, &data[0], 4);
+    memcpy(&can_id, &data[0], sizeof(can_id));
     frame.can_id = htonl(can_id);
     frame.can_dlc = data[4];
-    memcpy(&frame.data, &data[5], 8);
+    memcpy(&frame.data, &data[5], sizeof(frame.data));
     send_can_frame(can_socket, &frame, verbose);
     return 0;
 }
@@ -150,7 +151,7 @@ int main(int argc, char **argv) {
     while ((opt = getopt(argc, argv, "i:dh?")) != -1) {
 	switch (opt) {
 	case 'i':
-	    strcpy(ifr.ifr_name, optarg);
+	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
 	    break;
 	case 'd':
 	    verbose = 0;

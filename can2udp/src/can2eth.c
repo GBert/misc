@@ -119,7 +119,7 @@ int main(int argc, char **argv)
 	    }
 	    break;
 	case 'i':
-	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name)-1);
+	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
 	    break;
 
 	case 'f':
