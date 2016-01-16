@@ -36,7 +36,7 @@ unsigned char udpframe_reply[MAXDG];
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -l <port> -d <port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 0.91\n");
+    fprintf(stderr, "   Version 0.92\n");
     fprintf(stderr, "\n");
     fprintf(stderr, "         -l <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default 15730\n");

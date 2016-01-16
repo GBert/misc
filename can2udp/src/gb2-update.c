@@ -172,6 +172,8 @@ int netframe_to_net(int net_socket, unsigned char *netframe, int length) {
 int netframe_to_can(int can_socket, unsigned char *netframe) {
     uint32_t canid;
     struct can_frame frame;
+    struct timespec to_wait;
+
     memset(&frame, 0, sizeof(frame));
     memcpy(&canid, netframe, 4);
     /* CAN uses (network) big endian format */
@@ -186,8 +188,10 @@ int netframe_to_can(int can_socket, unsigned char *netframe) {
 	fprintf(stderr, "%s: error writing CAN frame: %s\n", __func__, strerror(errno));
 	return -1;
     }
-    /* TODO : it seems Gleisbox needs a short break after every CAN message */
-    usleep(1000);
+    /* TODO : it seems Gleisbox needs a short break after every CAN message -> 20ms */
+    to_wait.tv_sec = 0;
+    to_wait.tv_nsec = 20*1000000;
+    nanosleep(&to_wait, NULL);
     return 0;
 }
 
@@ -297,6 +301,8 @@ int send_block(unsigned char *binfile, int length, unsigned char *netframe) {
 void fsm(unsigned char *netframe, struct update_config *device_config) {
     unsigned int canid;
     unsigned char next_frame[13];
+    struct timespec to_wait;
+
     memcpy(&canid, netframe, 4);
     canid = ntohl(canid);
     switch (canid & 0xFFFF0000UL) {
@@ -319,7 +325,10 @@ void fsm(unsigned char *netframe, struct update_config *device_config) {
 	    memcpy(&next_frame[5], &device_id, 4);
 	    send_frame(next_frame);
 	    /* delay for boot ? */
-	    usleep(500000);
+	    to_wait.tv_sec = 0;
+	    to_wait.tv_nsec = 500*1000000;
+	    nanosleep(&to_wait, NULL);
+
 	    memcpy(next_frame, M_INIT_BOOTLOADER, 13);
 	    send_frame(next_frame);
 	}
@@ -371,7 +380,9 @@ void fsm(unsigned char *netframe, struct update_config *device_config) {
 			} else {
 			    if (device_config->id == MS2_ID) {
 				send_frame(M_MS2_MARK_END);
-				usleep(2000);
+				to_wait.tv_sec = 0;
+				to_wait.tv_nsec = 2*1000000;
+				nanosleep(&to_wait, NULL);
 				send_frame(M_MS2_SOFT_RESET);
 			    }
 			    finished = 1;

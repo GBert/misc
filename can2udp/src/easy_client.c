@@ -15,10 +15,9 @@ int main()
 {
     int sock_descriptor;
     struct sockaddr_in serv_addr;
-
     struct hostent *server;
-
     char buff[MAX_SIZE];
+    struct timespec to_wait;
 
     sock_descriptor = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -56,7 +55,9 @@ int main()
 	    printf("Failed writing requested bytes to server\n");
 	else
 	    printf("send data\n");
-	sleep(1);
+	to_wait.tv_sec = 1;
+        to_wait.tv_nsec = 0;
+	nanosleep(&to_wait);
     };
 
     close(sock_descriptor);

@@ -150,10 +150,8 @@ int send_defined_can_frame(int can_socket, unsigned char *data, int verbose) {
 
 int main(int argc, char **argv) {
     pid_t pid;
-    int max_fds, opt;
+    int sc, max_fds, opt;
     struct can_frame frame;
-
-    int sc;
     struct sockaddr_can caddr;
     struct ifreq ifr;
     socklen_t caddrlen = sizeof(caddr);
@@ -168,6 +166,10 @@ int main(int argc, char **argv) {
     unsigned char links88_id_l = 0;
     unsigned char raw_frame[13];
     struct node *links88_head, *links88_list;
+    struct timespec to_wait;
+
+    to_wait.tv_sec = 0;
+    to_wait.tv_nsec = SLEEPING * 1000;
 
     links88_head = (struct node *)calloc(sizeof(struct node), 1);
     if (links88_head == NULL) {
@@ -257,7 +259,7 @@ int main(int argc, char **argv) {
 		    /* CAN ping triggers searching for LinkS88 */
 		    known_links88_ids = 0;
 		    free_list(links88_head);
-		    usleep(SLEEPING);
+		    nanosleep(&to_wait, NULL);
 		    memcpy(raw_frame, M_CAN_BOOTLOADER, 13);
 		    send_defined_can_frame(sc, raw_frame, verbose);
 		    break;
@@ -300,12 +302,12 @@ int main(int argc, char **argv) {
 			    raw_frame[7] = links88_id_h;
 			    raw_frame[8] = links88_id_l;
 			    send_defined_can_frame(sc, raw_frame, verbose);
-			    usleep(SLEEPING);
+			    nanosleep(&to_wait, NULL);
 			    memcpy(raw_frame, M_LINKS88_WAKE_II, 13);
 			    raw_frame[7] = links88_id_h;
 			    raw_frame[8] = links88_id_l;
 			    send_defined_can_frame(sc, raw_frame, verbose);
-			    usleep(SLEEPING);
+			    nanosleep(&to_wait, NULL);
 			    memcpy(raw_frame, M_LINKS88_WAKE_III, 13);
 			    raw_frame[7] = links88_id_h;
 			    raw_frame[8] = links88_id_l;

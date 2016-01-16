@@ -166,6 +166,8 @@ int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *fr
 int frame_to_can(int can_socket, unsigned char *netframe) {
     uint32_t canid;
     struct can_frame frame;
+    struct timespec to_wait;
+
     /* Maerklin TCP/UDP Format: always 13 bytes
      *   byte 0 - 3  CAN ID
      *   byte 4      DLC
@@ -185,8 +187,10 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
 	fprintf(stderr, "%s: error writing CAN frame: %s\n", __func__, strerror(errno));
 	return -1;
     }
-    /* TODO : it seems Gleisbox needs a short break after every CAN message */
-    usleep(2000);
+    /* TODO : it seems Gleisbox needs a short break after every CAN message -> 20ms*/
+    to_wait.tv_sec = 0;
+    to_wait.tv_nsec = 20*1000000;
+    nanosleep(&to_wait, NULL);
     return 0;
 }
 

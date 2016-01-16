@@ -13,7 +13,7 @@ The other files are for testing or pre-alpha state.
 ### Using
 <pre><code>
 Usage: can2udp -l \<port\> -d \<port\> -i \<can interface\>
-   Version 0.91
+   Version 0.92
          -l \<port\>           listening UDP port for the server - default 15731
          -d \<port\>           destination UDP port for the server - default 15730
          -b \<broadcast_addr\> broadcast address - default 255.255.255.255
@@ -23,7 +23,7 @@ Usage: can2udp -l \<port\> -d \<port\> -i \<can interface\>
 </pre></code>
 <pre><code>
 Usage: can2lan -c \<config_dir\> -u \<udp_port\> -t \<tcp_port\> -d \<udp_dest_port\> -i \<can interface\>
-   Version 1.04
+   Version 1.05
          -c \<config_dir\>     set the config directory
          -u \<port\>           listening UDP port for the server - default 15731
          -t \<port\>           listening TCP port for the server - default 15731
