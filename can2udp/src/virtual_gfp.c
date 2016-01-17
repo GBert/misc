@@ -181,7 +181,7 @@ int main(int argc, char **argv) {
     while ((opt = getopt(argc, argv, "i:dh?")) != -1) {
 	switch (opt) {
 	case 'i':
-	    strcpy(ifr.ifr_name, optarg);
+	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
 	    break;
 	case 'd':
 	    verbose = 0;

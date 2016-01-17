@@ -468,7 +468,7 @@ int main(int argc, char **argv) {
 	    }
 	    break;
 	case 'i':
-	    strcpy(ifr.ifr_name, optarg);
+	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
 	    can_mode = 1;
 	    break;
 
@@ -493,7 +493,7 @@ int main(int argc, char **argv) {
     }
     if (optind < argc) {
 	filename = (char *)malloc(strlen(argv[optind] + 1));
-	strcpy(filename, argv[optind]);
+	strncpy(filename, argv[optind], sizeof(filename) - 1);
 	device_config.filename = filename;
     }
 

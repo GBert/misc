@@ -148,7 +148,7 @@ int main(int argc, char **argv) {
 	switch (opt) {
 	case 'c':
 	    if (strlen(optarg) < MAXLINE) {
-		strcpy(config_dir, optarg);
+		strncpy(config_dir, optarg, sizeof(config_dir) - 1);
 	    } else {
 		fprintf(stderr, "config file dir to long\n");
 		exit(1);
@@ -165,7 +165,7 @@ int main(int argc, char **argv) {
 	    break;
 	case 'b':
 	    if (strlen(optarg) <= 15) {
-		strcpy(udp_dst_address, optarg);
+		strncpy(udp_dst_address, optarg, sizeof(udp_dst_address) - 1);
 	    } else {
 		fprintf(stderr, "UDP broadcast address error: %s\n", optarg);
 		exit(1);
@@ -173,7 +173,7 @@ int main(int argc, char **argv) {
 	    break;
 	case 'i':
 	    if (strlen(optarg) < MAXSTRING) {
-		strcpy(if_name, optarg);
+		strncpy(if_name, optarg, sizeof(if_name) - 1);
 	    } else {
 		fprintf(stderr, "interface name to long\n");
 		exit(1);

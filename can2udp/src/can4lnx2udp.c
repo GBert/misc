@@ -109,7 +109,7 @@ int main(int argc, char **argv) {
 	    }
 	    break;
 	case 'i':
-	    strcpy(can_interface, optarg);
+	    strncpy(can_interface, optarg, sizeof(can_interface) - 1);
 	    break;
 
 	case 'v':

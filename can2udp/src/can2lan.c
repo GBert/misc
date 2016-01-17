@@ -223,7 +223,7 @@ int main(int argc, char **argv) {
 	    }
 	    break;
 	case 'i':
-	    strcpy(ifr.ifr_name, optarg);
+	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
 	    break;
 	case 'm':
 	    ms1_workaround = 1;
@@ -254,7 +254,7 @@ int main(int argc, char **argv) {
     if (config_dir[strlen(config_dir)-1] != '/') {
 	strcat(config_file, "/");
     }
-    strcpy(config_dir, config_file);
+    strncpy(config_dir, config_file, sizeof(config_dir) - 1);
     strcat(config_file, "gleisbild.cs2");
 
     page_name = read_track_file(config_file, page_name);
