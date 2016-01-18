@@ -93,6 +93,8 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 	/* check for special copy request */
 	if (canid == 0x0040affe) {
 	    netframe[1] |= 1;
+	    netframe[4] = 4;
+	    strcpy((char *)&netframe[5], "copy");
 	    net_to_net(tcp_socket, NULL, netframe, 13);
 	    if (verbose)
 		printf("CS2 copy request\n");
