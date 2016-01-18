@@ -80,6 +80,7 @@ int inflate_data(struct config_data *config_data) {
 int config_write(struct config_data *config_data) {
     FILE *config_fp;
     uint16_t crc;
+    int i;
 
     crc = CRCCCITT(config_data->deflated_data, config_data->deflated_stream_size, 0xFFFF);
 
@@ -91,7 +92,7 @@ int config_write(struct config_data *config_data) {
 	fprintf(stderr, "\ncan't open file %s for writing - error: %s\n", config_data->name, strerror(errno));
 	exit(1);
     } else {
-	for (int i = 0; i < config_data->deflated_stream_size; i++) {
+	for (i = 0; i < config_data->deflated_stream_size; i++) {
 	    if ((i % 8) == 0)
 		printf("\n");
 	    printf("%02x ", config_data->deflated_data[i]);
@@ -105,7 +106,7 @@ int config_write(struct config_data *config_data) {
 }
 
 int main(int argc, char **argv) {
-    int sockfd, ddi, tcp_packet_nr, n = 1;
+    int i, sockfd, ddi, tcp_packet_nr, n = 1;
     int temp, config_data_start, config_data_stream, deflated_size;
     struct config_data config_data;
     struct sockaddr_in servaddr;
@@ -191,7 +192,7 @@ int main(int argc, char **argv) {
 		    /* deflated data index */
 		    ddi = 0;
 		}
-		for (int i = 0; i < n; i++) {
+		for (i = 0; i < n; i++) {
 		    if ((i % FRAME_SIZE) == 0) {
 			if (memcmp(&recvline[i], GETCONFIG_DATA, 5) == 0) {
 			    memcpy(&config_data.deflated_data[ddi], &recvline[i + 5], 8);

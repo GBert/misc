@@ -4,7 +4,7 @@ BIN = $@
 
 all:	$(BINS)
 
-CFLAGS+=-Wall -pedantic -Wextra -std=gnu99 -g
+CFLAGS+=-Wall -pedantic -Wextra -g
 
 read_cs2_dump: read_cs2_dump.o
 	$(CC) $(CFLAGS) -o read_cs2_dump read_cs2_dump.o -lpcap

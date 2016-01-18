@@ -281,9 +281,10 @@ int device_setup(char *device, struct update_config *device_config) {
 }
 
 int send_block(unsigned char *binfile, int length, unsigned char *netframe) {
-    int part = 0;
+    int i, part = 0;
     uint16_t crc;
-    for (int i = 0; i < length; i += 8) {
+
+    for (i = 0; i < length; i += 8) {
 	memcpy(netframe, M_DATA, 5);
 	netframe[3] = part;
 	part++;
@@ -401,30 +402,30 @@ int main(int argc, char **argv) {
     int ret, s, opt;
     struct can_frame frame;
     struct timeval timeout;
-
-    int sa;			/* UDP socket */
+    int local_port, destination_port;
+    int on, sa;			/* UDP socket */
     struct sockaddr_in saddr, baddr;
     struct sockaddr_can caddr;
     struct ifreq ifr;
     struct update_config device_config;
+    socklen_t caddrlen;
+    fd_set readfds;
 
     /* wait for response */
     timeout.tv_sec = TIMEOUT;
     timeout.tv_usec = 0;
 
     /* socklen_t sin_size = sizeof(clientaddr); */
-    socklen_t caddrlen = sizeof(caddr);
-
-    fd_set readfds;
+    caddrlen = sizeof(caddr);
 
     if (device_setup(basename(argv[0]), &device_config) < 0) {
 	fprintf(stderr, "invalid device\n");
 	exit(EXIT_FAILURE);
     }
 
-    int local_port = 15731;
-    int destination_port = 15730;
-    const int on = 1;
+    local_port = 15731;
+    destination_port = 15730;
+    on = 1;
     const char broadcast_address[] = "255.255.255.255";
     char *filename;
 

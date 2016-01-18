@@ -55,8 +55,10 @@ int check_data(int tcp_socket, unsigned char *netframe) {
     uint32_t canid;
     char config_name[9];
     char gbs_name[MAXLINE];
-    gbs_name[0] = '\0';
-    int ret = 0;
+    int ret;
+
+    gbs_name[0] = 0;
+    ret = 0;
 
     memcpy(&canid, netframe, 4);
     canid = ntohl(canid);
@@ -115,7 +117,8 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 
 int main(int argc, char **argv) {
     pid_t pid;
-    int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, tcp_client[MAX_TCP_CONN];;
+    int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, tcp_client[MAX_TCP_CONN];
+    int background, verbose, ec_index, on;
     char timestamp[16];
     struct termios term_attr;
 
@@ -127,19 +130,21 @@ int main(int argc, char **argv) {
     fd_set all_fds, read_fds;
 
     uint32_t canid;
-    int s, ret;
+    int eci, s, ret;
 
-    int local_udp_port = 15731;
-    int local_tcp_port = 15731;
-    int destination_port = 15730;
-    int verbose = 0;
-    int background = 1;
-    const int on = 1;
+    int local_udp_port, local_tcp_port, destination_port;
+    verbose = 0;
+    background = 1;
+    on = 1;
     char udp_dst_address[] = "255.255.255.255";
     char buffer[64];
-    int ec_index = 0;
+    ec_index = 0;
     page_name = calloc(64, sizeof(char *));
 
+    local_udp_port = 15731;
+    local_tcp_port = 15731;
+    destination_port = 15730;
+    verbose = 0;
     strcpy(if_name, "/dev/ttyUSB0");
 
     config_file[0] = '\0';
@@ -328,7 +333,7 @@ int main(int argc, char **argv) {
 	if (FD_ISSET(sc, &read_fds)) {
 	    /* copy the CAN frame to UDP broadcast and all connected TCP clients */
 	    while ((ret = read(sc, buffer, sizeof(buffer))) > 0) {
-		for (int eci = 0; eci < ret; eci++) {
+		for (eci = 0; eci < ret; eci++) {
 		    ec_frame[ec_index++] = (unsigned char)buffer[eci];
 		    if (ec_index == 13) {
 			/* we got a complete CAN frame */

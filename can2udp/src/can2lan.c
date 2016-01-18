@@ -73,9 +73,10 @@ int check_data(int tcp_socket, unsigned char *netframe) {
     uint32_t canid;
     char config_name[9];
     char gbs_name[MAXLINE];
+    int ret;
     gbs_name[0] = '\0';
-    int ret = 0;
 
+    ret = 0;
     memcpy(&canid, netframe, 4);
     canid = ntohl(canid);
     switch (canid & 0xFFFF0000UL) {
@@ -142,7 +143,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 
 int main(int argc, char **argv) {
     pid_t pid;
-    int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, tcp_client[MAX_TCP_CONN];;
+    int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, tcp_client[MAX_TCP_CONN];
     struct can_frame frame;
     char timestamp[16];
     /* UDP incoming socket , CAN socket, UDP broadcast socket, TCP socket */
