@@ -26,11 +26,11 @@ static unsigned char M_PING_RESPONSE[] = { 0x00, 0x30, 0x00, 0x00, 0x00 };
 char config_dir[MAXLINE];
 char config_file[MAXLINE];
 char **page_name;
-int verbose, ms1_workaround;
+int verbose, ms1_workaround, use_cs2_conf;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.05\n\n");
+    fprintf(stderr, "   Version 1.06\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
@@ -38,8 +38,9 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default 15730\n");
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -i <can int>        CAN interface - default can0\n");
-    fprintf(stderr, "         -m                  doing MS1 workaround - default: don't do it\n\n");
-    fprintf(stderr, "         -f                  running in foreground\n\n");
+    fprintf(stderr, "         -k                  use a connected CS2.exe for config source\n");
+    fprintf(stderr, "         -m                  doing MS1 workaround - default: don't do it\n");
+    fprintf(stderr, "         -f                  running in foreground\n");
     fprintf(stderr, "         -v                  verbose output (in foreground)\n\n");
 }
 
@@ -69,6 +70,12 @@ int send_can_ping(int can_socket) {
     return 0;
 }
 
+int copy_cs2_config(int tcp_socket) {
+    if (verbose)
+	printf("copy CS2 config request over TCP socket %d\n", tcp_socket);
+    return 1;
+}
+
 int check_data(int tcp_socket, unsigned char *netframe) {
     uint32_t canid;
     char config_name[9];
@@ -81,56 +88,66 @@ int check_data(int tcp_socket, unsigned char *netframe) {
     canid = ntohl(canid);
     switch (canid & 0xFFFF0000UL) {
     case (0x00400000UL):	/* config data */
-	/* marke CAN frame not to send */
+	/* mark frame not to send over CAN */
 	ret = 1;
-	strncpy(config_name, (char *)&netframe[5], 8);
-	config_name[8] = '\0';
-	printf("%s ID 0x%08x %s\n", __func__, canid, (char *)&netframe[5]);
-	netframe[1] |= 1;
-	net_to_net(tcp_socket, NULL, netframe, 13);
-	if (strcmp("loks", config_name) == 0) {
-	    send_tcp_config_data("lokomotive.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
-	    break;
-	} else if (strcmp("mags", config_name) == 0) {
-	    send_tcp_config_data("magnetartikel.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
-	    break;
-	} else if (strncmp("gbs-", config_name, 4) == 0) {
-	    int page_number;
-	    page_number = atoi(&config_name[5]);
-	    strcat(gbs_name, "gleisbilder/");
-	    if (page_name) {
-		strcat(gbs_name, page_name[page_number]);
-		strcat(gbs_name, ".cs2");
-		send_tcp_config_data(gbs_name, config_dir, canid, tcp_socket, CRC | COMPRESSED);
+	/* check for special copy request */
+	if (canid == 0x0040affe) {
+	    netframe[1] |= 1;
+	    net_to_net(tcp_socket, NULL, netframe, 13);
+	    if (verbose)
+		printf("CS2 copy request\n");
+	    /* fake response */
+	    copy_cs2_config(tcp_socket);
+	} else {
+	    strncpy(config_name, (char *)&netframe[5], 8);
+	    config_name[8] = '\0';
+	    printf("%s ID 0x%08x %s\n", __func__, canid, (char *)&netframe[5]);
+	    netframe[1] |= 1;
+	    net_to_net(tcp_socket, NULL, netframe, 13);
+	    if (strcmp("loks", config_name) == 0) {
+		send_tcp_config_data("lokomotive.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
+		break;
+	    } else if (strcmp("mags", config_name) == 0) {
+		send_tcp_config_data("magnetartikel.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
+		break;
+	    } else if (strncmp("gbs-", config_name, 4) == 0) {
+		int page_number;
+		page_number = atoi(&config_name[5]);
+		strcat(gbs_name, "gleisbilder/");
+		if (page_name) {
+		    strcat(gbs_name, page_name[page_number]);
+		    strcat(gbs_name, ".cs2");
+		    send_tcp_config_data(gbs_name, config_dir, canid, tcp_socket, CRC | COMPRESSED);
+		}
+		break;
+	    } else if (strcmp("gbs", config_name) == 0) {
+		send_tcp_config_data("gleisbild.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
+		break;
+	    } else if (strcmp("fs", config_name) == 0) {
+		send_tcp_config_data("fahrstrassen.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
+		break;
+	    }
+	    /* TODO : these files depends on different internal states */
+	    else if (strcmp("lokstat", config_name) == 0) {
+		fprintf(stderr, "%s: lokstat (lokomotive.sr2) not implemented yet\n", __func__);
+		send_tcp_config_data("lokomotive.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
+		break;
+	    } else if (strcmp("magstat", config_name) == 0) {
+		fprintf(stderr, "%s: magstat (magnetartikel.sr2) not implemented yet\n\n", __func__);
+		send_tcp_config_data("magnetartikel.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
+		break;
+	    } else if (strcmp("gbsstat", config_name) == 0) {
+		fprintf(stderr, "%s: gbsstat (gbsstat.sr2) not implemented yet\n\n", __func__);
+		send_tcp_config_data("gbsstat.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
+		break;
+	    } else if (strcmp("fsstat", config_name) == 0) {
+		fprintf(stderr, "%s: fsstat (fahrstrassen.sr2) not implemented yet\n\n", __func__);
+		send_tcp_config_data("fahrstrassen.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
+		break;
 	    }
 	    break;
-	} else if (strcmp("gbs", config_name) == 0) {
-	    send_tcp_config_data("gleisbild.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
-	    break;
-	} else if (strcmp("fs", config_name) == 0) {
-	    send_tcp_config_data("fahrstrassen.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
-	    break;
 	}
-	/* TODO : these files depends on different internal states */
-	else if (strcmp("lokstat", config_name) == 0) {
-	    fprintf(stderr, "%s: lokstat (lokomotive.sr2) not implemented yet\n", __func__);
-	    send_tcp_config_data("lokomotive.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
-	    break;
-	} else if (strcmp("magstat", config_name) == 0) {
-	    fprintf(stderr, "%s: magstat (magnetartikel.sr2) not implemented yet\n\n", __func__);
-	    send_tcp_config_data("magnetartikel.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
-	    break;
-	} else if (strcmp("gbsstat", config_name) == 0) {
-	    fprintf(stderr, "%s: gbsstat (gbsstat.sr2) not implemented yet\n\n", __func__);
-	    send_tcp_config_data("gbsstat.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
-	    break;
-	} else if (strcmp("fsstat", config_name) == 0) {
-	    fprintf(stderr, "%s: fsstat (fahrstrassen.sr2) not implemented yet\n\n", __func__);
-	    send_tcp_config_data("fahrstrassen.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
-	    break;
-	}
-	break;
-    /* fake cyclic MS1 slave monitoring response */
+	/* fake cyclic MS1 slave monitoring response */
     case (0x0C000000UL):
 	/* mark CAN frame to send */
 	ret = 0;
@@ -173,26 +190,27 @@ int main(int argc, char **argv) {
 
     page_name = calloc(64, sizeof(char *));
     if (!page_name) {
-	fprintf(stderr, "can't alloc memory for page_name: %s\n",  strerror(errno));
-	exit (-1);
+	fprintf(stderr, "can't alloc memory for page_name: %s\n", strerror(errno));
+	exit(-1);
     };
 
     verbose = 0;
     ms1_workaround = 0;
+    use_cs2_conf = 0;
     memset(ifr.ifr_name, 0, sizeof(ifr.ifr_name));
     strcpy(ifr.ifr_name, "can0");
     memset(config_dir, 0, sizeof(config_dir));
 
     udp_dst_address = (char *)calloc(MAXIPLEN, 1);
     if (!udp_dst_address) {
-	fprintf(stderr, "can't alloc memory for udp_dst_address: %s\n",  strerror(errno));
-	exit (-1);
+	fprintf(stderr, "can't alloc memory for udp_dst_address: %s\n", strerror(errno));
+	exit(-1);
     };
 
     bcast_interface = (char *)calloc(MAXIPLEN, 1);
     if (!bcast_interface) {
-	fprintf(stderr, "can't alloc memory for bcast_interface: %s\n",  strerror(errno));
-	exit (-1);
+	fprintf(stderr, "can't alloc memory for bcast_interface: %s\n", strerror(errno));
+	exit(-1);
     };
 
     strcpy(udp_dst_address, "255.255.255.255");
@@ -200,11 +218,11 @@ int main(int argc, char **argv) {
 
     config_file[0] = '\0';
 
-    while ((opt = getopt(argc, argv, "c:u:s:t:d:b:i:mvhf?")) != -1) {
+    while ((opt = getopt(argc, argv, "c:u:s:t:d:b:i:kmvhf?")) != -1) {
 	switch (opt) {
 	case 'c':
 	    if (strnlen(optarg, MAXLINE) < MAXLINE) {
-		strncpy(config_dir, optarg, sizeof(config_dir) -1);
+		strncpy(config_dir, optarg, sizeof(config_dir) - 1);
 	    } else {
 		fprintf(stderr, "config file dir to long\n");
 		exit(1);
@@ -230,7 +248,7 @@ int main(int argc, char **argv) {
 		    strncpy(udp_dst_address, optarg, MAXIPLEN - 1);
 		} else {
 		    memset(bcast_interface, 0, MAXIPLEN);
-		    strncpy(bcast_interface, optarg, MAXIPLEN -1);
+		    strncpy(bcast_interface, optarg, MAXIPLEN - 1);
 		}
 	    } else {
 		fprintf(stderr, "UDP broadcast address or interface error: %s\n", optarg);
@@ -239,6 +257,9 @@ int main(int argc, char **argv) {
 	    break;
 	case 'i':
 	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
+	    break;
+	case 'k':
+	    use_cs2_conf = 1;
 	    break;
 	case 'm':
 	    ms1_workaround = 1;
@@ -266,7 +287,7 @@ int main(int argc, char **argv) {
     }
 
     strcat(config_file, config_dir);
-    if (config_dir[strlen(config_dir)-1] != '/') {
+    if (config_dir[strlen(config_dir) - 1] != '/') {
 	strcat(config_file, "/");
     }
     strncpy(config_dir, config_file, sizeof(config_dir) - 1);
@@ -275,11 +296,11 @@ int main(int argc, char **argv) {
     page_name = read_track_file(config_file, page_name);
 
     /* get the broadcast address */
-    getifaddrs (&ifap);
+    getifaddrs(&ifap);
     for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
 	if (ifa->ifa_addr) {
 	    if (ifa->ifa_addr->sa_family == AF_INET) {
-		bsa = (struct sockaddr_in *) ifa->ifa_broadaddr;
+		bsa = (struct sockaddr_in *)ifa->ifa_broadaddr;
 		if (strncmp(ifa->ifa_name, bcast_interface, strlen(bcast_interface)) == 0)
 		    udp_dst_address = inet_ntoa(bsa->sin_addr);
 	    }
@@ -426,7 +447,7 @@ int main(int argc, char **argv) {
 	read_fds = all_fds;
 	nready = select(max_fds + 1, &read_fds, NULL, NULL, &tv);
 	if (nready == 0) {
-	/*    send_can_ping(sc); */
+	    /*    send_can_ping(sc); */
 	    tv.tv_sec = 1;
 	    tv.tv_usec = 0;
 	    continue;
@@ -504,7 +525,7 @@ int main(int argc, char **argv) {
 	    if (--nready <= 0)
 		continue;	/* no more readable descriptors */
 	}
-	/* received a packet on second TCP port*/
+	/* received a packet on second TCP port */
 	if (FD_ISSET(st2, &read_fds)) {
 	    conn_fd = accept(st2, (struct sockaddr *)&tcp_addr2, &tcp_client_length);
 
@@ -535,7 +556,7 @@ int main(int argc, char **argv) {
 		    if (verbose && !background) {
 			time_stamp(timestamp);
 			printf("%s client %s closed connection\n", timestamp,
-			    inet_ntop(AF_INET, &tcp_addr.sin_addr, buffer, sizeof(buffer)));
+			       inet_ntop(AF_INET, &tcp_addr.sin_addr, buffer, sizeof(buffer)));
 		    }
 		    close(tcp_socket);
 		    FD_CLR(tcp_socket, &all_fds);
