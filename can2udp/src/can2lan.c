@@ -152,17 +152,16 @@ int main(int argc, char **argv) {
     /* vars for determing broadcast address */
     struct ifaddrs *ifap, *ifa;
     struct sockaddr_in *bsa;
-
     struct sockaddr_can caddr;
     struct ifreq ifr;
     socklen_t caddrlen = sizeof(caddr);
     socklen_t tcp_client_length = sizeof(tcp_addr);
-
     fd_set all_fds, read_fds;
-
     uint32_t canid;
     int s, ret;
     struct timeval tv;
+    char *udp_dst_address;
+    char *bcast_interface;
 
     int local_udp_port = 15731;
     int local_tcp_port = 15731;
@@ -171,7 +170,12 @@ int main(int argc, char **argv) {
     int background = 1;
     const int on = 1;
     char buffer[64];
+
     page_name = calloc(64, sizeof(char *));
+    if (!page_name) {
+	fprintf(stderr, "can't alloc memory for page_name: %s\n",  strerror(errno));
+	exit (-1);
+    };
 
     verbose = 0;
     ms1_workaround = 0;
@@ -179,9 +183,19 @@ int main(int argc, char **argv) {
     strcpy(ifr.ifr_name, "can0");
     memset(config_dir, 0, sizeof(config_dir));
 
-    char *udp_dst_address = (char *)malloc(MAXIPLEN);
+    udp_dst_address = (char *)calloc(MAXIPLEN, 1);
+    if (!udp_dst_address) {
+	fprintf(stderr, "can't alloc memory for udp_dst_address: %s\n",  strerror(errno));
+	exit (-1);
+    };
+
+    bcast_interface = (char *)calloc(MAXIPLEN, 1);
+    if (!bcast_interface) {
+	fprintf(stderr, "can't alloc memory for bcast_interface: %s\n",  strerror(errno));
+	exit (-1);
+    };
+
     strcpy(udp_dst_address, "255.255.255.255");
-    char *bcast_interface = (char *)malloc(MAXIPLEN);
     strcpy(bcast_interface, "br-lan");
 
     config_file[0] = '\0';

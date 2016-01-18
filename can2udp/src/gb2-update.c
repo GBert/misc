@@ -408,8 +408,10 @@ int main(int argc, char **argv) {
     struct sockaddr_can caddr;
     struct ifreq ifr;
     struct update_config device_config;
+    char broadcast_address[16];
     socklen_t caddrlen;
     fd_set readfds;
+    char *filename;
 
     /* wait for response */
     timeout.tv_sec = TIMEOUT;
@@ -426,8 +428,7 @@ int main(int argc, char **argv) {
     local_port = 15731;
     destination_port = 15730;
     on = 1;
-    const char broadcast_address[] = "255.255.255.255";
-    char *filename;
+    strcpy(broadcast_address, "255.255.255.255");
 
     memset(&saddr, 0, sizeof(saddr));
     memset(&baddr, 0, sizeof(baddr));

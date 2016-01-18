@@ -121,23 +121,21 @@ int main(int argc, char **argv) {
     int background, verbose, ec_index, on;
     char timestamp[16];
     struct termios term_attr;
-
     int sa, sc, sb, st, tcp_socket;	/* UDP incoming socket , CAN socket, UDP broadcast socket, TCP socket */
     struct sockaddr_in saddr, baddr, tcp_addr;
     char if_name[MAXSTRING];
+    char udp_dst_address[16];
     socklen_t tcp_client_length = sizeof(tcp_addr);
-
     fd_set all_fds, read_fds;
-
     uint32_t canid;
     int eci, s, ret;
-
     int local_udp_port, local_tcp_port, destination_port;
+    char buffer[64];
+
     verbose = 0;
     background = 1;
     on = 1;
-    char udp_dst_address[] = "255.255.255.255";
-    char buffer[64];
+    strcpy(udp_dst_address, "255.255.255.255");
     ec_index = 0;
     page_name = calloc(64, sizeof(char *));
 
