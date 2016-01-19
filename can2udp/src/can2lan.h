@@ -21,6 +21,7 @@
 #include <fcntl.h>
 #include <termios.h>
 
+#include <assert.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/socket.h>
@@ -66,6 +67,17 @@ struct id_node {
     uint32_t id;
     uint8_t slave_node;
     struct id_node *next;
+};
+
+struct config_data {
+    int deflated_stream_size;
+    int deflated_size;
+    int inflated_size;
+    uint16_t crc;
+    char *name;
+    int verbose;
+    uint8_t *deflated_data;
+    uint8_t *inflated_data;
 };
 
 #define MS1_BUFFER_SIZE 8

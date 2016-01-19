@@ -210,6 +210,66 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
     return 0;
 }
 
+int inflate_data(struct config_data *config_data) {
+    int ret;
+    z_stream strm;
+
+    strm.zalloc = Z_NULL;
+    strm.zfree = Z_NULL;
+    strm.opaque = Z_NULL;
+    strm.avail_in = 0;
+    strm.next_in = Z_NULL;
+    ret = inflateInit(&strm);
+    if (ret != Z_OK)
+        return ret;
+    strm.avail_in = config_data->deflated_size;
+    strm.avail_out = config_data->inflated_size;
+    strm.next_in = config_data->deflated_data + 4;
+    strm.next_out = config_data->inflated_data;
+    ret = inflate(&strm, Z_NO_FLUSH);
+
+    assert(ret != Z_STREAM_ERROR);      /* state not clobbered */
+    switch (ret) {
+    case Z_NEED_DICT:
+	ret = Z_DATA_ERROR;     /* and fall through */
+    case Z_DATA_ERROR:
+    case Z_MEM_ERROR:
+	(void)inflateEnd(&strm);
+	return ret;
+    }
+
+    return 0;
+}
+
+int config_write(struct config_data *config_data) {
+    FILE *config_fp;
+    uint16_t crc;
+    int i;
+
+    crc = CRCCCITT(config_data->deflated_data, config_data->deflated_stream_size, 0xFFFF);
+
+    if (config_data->verbose)
+	printf("\n  writing to %s - size 0x%04x crc 0x%04x 0x%04x\n", config_data->name, config_data->deflated_stream_size,
+		config_data->crc, crc);
+
+    config_fp = fopen(config_data->name, "wb");
+    if (!config_fp) {
+	fprintf(stderr, "\ncan't open file %s for writing - error: %s\n", config_data->name, strerror(errno));
+	exit(1);
+    } else if (config_data->verbose) {
+	for (i = 0; i < config_data->deflated_stream_size; i++) {
+	    if ((i % 8) == 0)
+		printf("\n");
+	    printf("%02x ", config_data->deflated_data[i]);
+	}
+	printf("\n");
+    }
+    inflate_data(config_data);
+    fwrite(config_data->inflated_data, 1, config_data->inflated_size, config_fp);
+    fclose(config_fp);
+    return 1;
+}
+
 uint8_t *read_config_file(char *filename, char *config_dir, uint32_t * nbytes) {
     int rc;
     struct stat st;
