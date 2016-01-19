@@ -27,10 +27,11 @@ char config_dir[MAXLINE];
 char config_file[MAXLINE];
 char **page_name;
 int verbose, ms1_workaround, use_cs2_conf;
+struct timeval last_sent;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.06\n\n");
+    fprintf(stderr, "   Version 1.07\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
@@ -189,6 +190,9 @@ int main(int argc, char **argv) {
     int background = 1;
     const int on = 1;
     char buffer[64];
+
+    /* clear timestamp for last CAN frame sent */
+    memset(&last_sent, 0, sizeof(last_sent));
 
     page_name = calloc(64, sizeof(char *));
     if (!page_name) {

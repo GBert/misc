@@ -10,11 +10,16 @@
 #include "can2lan.h"
 #include <zlib.h>
 
-/* CHUNK is the size of the memory chunk used by the zlib routines. */
+/* it seems Gleisbox needs a short break after every CAN message */
+/* use 20ms delay between two consequences CAN frames */
+#define TIME_WAIT_US	20 * 1000
 
-#define CHUNK 0x8000
-#define windowBits 15
-#define GZIP_ENCODING 16
+/* CHUNK is the size of the memory chunk used by the zlib routines. */
+#define CHUNK		0x8000
+#define windowBits	15
+#define GZIP_ENCODING	16
+
+extern struct timeval last_sent;
 
 /* The following macro calls a zlib routine and checks the return
    value. If the return value ("status") is not OK, it prints an error
@@ -127,7 +132,7 @@ void print_can_frame(char *format_string, unsigned char *netframe, int verbose) 
 	if (isprint(netframe[i]))
 	    printf("%c", netframe[i]);
 	else
-	    putchar(46);
+	    putchar('.');
     }
 
     printf("\n");
@@ -167,6 +172,8 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
     uint32_t canid;
     struct can_frame frame;
     struct timespec to_wait;
+    struct timeval actual_time;
+    long usec;
 
     /* Maerklin TCP/UDP Format: always 13 bytes
      *   byte 0 - 3  CAN ID
@@ -182,15 +189,24 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
     frame.can_dlc = netframe[4];
     memcpy(&frame.data, &netframe[5], 8);
 
+    /* we calculate the difference between the actual time and the time the last command was sent */
+    /* probably we don't need to wait anymore before putting next CAN frame on the wire */
+    gettimeofday(&actual_time, NULL);
+    usec  =(actual_time.tv_sec  - last_sent.tv_sec)  * 1000000;
+    usec +=(actual_time.tv_usec - last_sent.tv_usec);
+    if (usec < TIME_WAIT_US) {
+	to_wait.tv_sec = 0;
+	to_wait.tv_nsec = (TIME_WAIT_US - usec) * 1000 ;
+	nanosleep(&to_wait, NULL);
+    }
+
     /* send CAN frame */
     if (write(can_socket, &frame, sizeof(frame)) != sizeof(frame)) {
 	fprintf(stderr, "%s: error writing CAN frame: %s\n", __func__, strerror(errno));
 	return -1;
     }
-    /* TODO : it seems Gleisbox needs a short break after every CAN message -> 20ms*/
-    to_wait.tv_sec = 0;
-    to_wait.tv_nsec = 20*1000000;
-    nanosleep(&to_wait, NULL);
+
+    gettimeofday(&last_sent, NULL);
     return 0;
 }
 
