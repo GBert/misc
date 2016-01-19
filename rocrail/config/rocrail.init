@@ -7,7 +7,7 @@ start() {
 	[ -e /opt/rocrail/ ] && {
 		cd /opt/rocrail/
 		sleep 15
-		nohup ./rocrail -nodevcheck -l /opt/rocrail &
+		nohup ./rocrail -nodevcheck -l /opt/rocrail 2>&1 > /dev/null &
 		echo "$!" > /tmp/rocraild.pid
 	}
 }
