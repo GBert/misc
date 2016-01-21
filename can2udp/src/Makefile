@@ -53,4 +53,4 @@ wake-up-links88: wake-up-links88.o
 	$(CC) $(CFLAGS) -o wake-up-links88 wake-up-links88.o
 
 clean:
-	$(RM) *.o $(BINS)
+	$(RM) *.o $(BINS) s88udp
