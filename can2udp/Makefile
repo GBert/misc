@@ -40,6 +40,7 @@ define Package/can2udp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/can2udp $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/can2lan $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/gb2-update $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/s88udp $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/wake-up-links88 $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init $(1)/etc/init.d/can2lan
