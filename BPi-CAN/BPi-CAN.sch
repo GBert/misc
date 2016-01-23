@@ -1690,8 +1690,8 @@ F 3 "" H 8700 5300 50  0000 C CNN
 $EndComp
 Text Label 8400 5250 0    60   ~ 0
 CB4
-Text Notes 7200 6950 0    138  ~ 0
-BananaPi Modellbahn Adapter Board
+Text Notes 7050 7000 0    138  ~ 0
+BananaPi Modellbahn Adapter Board\nV1.0
 $Comp
 L CONN_01X05 P12
 U 1 1 5689D197
