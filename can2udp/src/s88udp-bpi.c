@@ -11,7 +11,7 @@
  * Credit: 
  * In dieses Programm flossen Ideen von Gerhard Bertelsmann 
  * und seinem can2udp Projekt ebenso wie aus dem railuino 
- * Projekt von Jörg Pleumann.
+ * Projekt von Joerg Pleumann.
  */
 
 #include <libgen.h>
@@ -41,6 +41,7 @@ void usage(char *prg) {
     fprintf(stderr, "   Version 1.03\n");
     fprintf(stderr, "\n");
     fprintf(stderr, "         -d <destination>    IP Address of the server - default 127.0.0.1\n");
+    fprintf(stderr, "         -i [0|1]            invert signals - default 1 -> inverting\n");
     fprintf(stderr, "         -p <port>           Destination port of the server - default 15730\n");
     fprintf(stderr, "         -m <s88modules>     Number of connected S88 modules - default 1\n");
     fprintf(stderr, "         -o <offset>         Number of S88 modules to skip in addressing - default 0\n");
@@ -106,6 +107,7 @@ int main(int argc, char **argv) {
     int verbose = 0;
     int modulcount = 1;
     int background = 1;
+    int invert_signal = 1;
     int sensors[MAXMODULES * 16];
 
     int udpsock;
@@ -126,7 +128,7 @@ int main(int argc, char **argv) {
 
     /* printf ( stderr, "\ns88udp <modulcount>\n\n" ); */
 
-    while ((opt = getopt(argc, argv, "d:p:m:o:fv?")) != -1) {
+    while ((opt = getopt(argc, argv, "d:ip:m:o:fv?")) != -1) {
 	switch (opt) {
 	case 'p':
 	    destination_port = strtoul(optarg, (char **)NULL, 10);
@@ -147,6 +149,9 @@ int main(int argc, char **argv) {
 		    exit(1);
 		}
 	    }
+	    break;
+	case 'i':
+	    invert_signal = atoi(optarg) & 1;
 	    break;
 	case 'm':
 	    modulcount = atoi(optarg);
@@ -221,17 +226,17 @@ int main(int argc, char **argv) {
     while (1) {
 	uint8_t oldvalue, newvalue;
 
-	gpio_bpi_set(LOAD_PIN, HIGH);
+	gpio_bpi_set(LOAD_PIN, HIGH ^ invert_signal);
 	usec_sleep(MICRODELAY);
-	gpio_bpi_set(CLOCK_PIN, HIGH);
+	gpio_bpi_set(CLOCK_PIN, HIGH ^ invert_signal);
 	usec_sleep(MICRODELAY);
-	gpio_bpi_set(CLOCK_PIN, LOW);
+	gpio_bpi_set(CLOCK_PIN, LOW ^ invert_signal);
 	usec_sleep(MICRODELAY);
-	gpio_bpi_set(RESET_PIN, HIGH);
+	gpio_bpi_set(RESET_PIN, HIGH ^ invert_signal);
 	usec_sleep(MICRODELAY);
-	gpio_bpi_set(RESET_PIN, LOW);
+	gpio_bpi_set(RESET_PIN, LOW ^ invert_signal);
 	usec_sleep(MICRODELAY);
-	gpio_bpi_set(LOAD_PIN, LOW);
+	gpio_bpi_set(LOAD_PIN, LOW ^ invert_signal);
 
 	/* get sensor data */
 	for (i = 0; i < modulcount; i++) {
@@ -240,6 +245,7 @@ int main(int argc, char **argv) {
 
 		oldvalue = sensors[i * 16 + j];
 		gpio_bpi_get(DATA_PIN, &newvalue);
+		newvalue ^= invert_signal;
 		if (!background && verbose && modulcount == 1)
 		    printf("%02x ", sensors[i * 16 + j]);
 
@@ -253,9 +259,9 @@ int main(int argc, char **argv) {
 		}
 
 		usec_sleep(MICRODELAY / 2);
-		gpio_bpi_set(CLOCK_PIN, HIGH);
+		gpio_bpi_set(CLOCK_PIN, HIGH ^ invert_signal);
 		usec_sleep(MICRODELAY);
-		gpio_bpi_set(CLOCK_PIN, LOW);
+		gpio_bpi_set(CLOCK_PIN, LOW ^ invert_signal);
 	    }
 	}
 	if (!background && verbose && modulcount == 1)
