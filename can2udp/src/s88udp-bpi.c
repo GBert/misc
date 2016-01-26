@@ -187,7 +187,9 @@ int main(int argc, char **argv) {
 	return (1);
     }
 #endif
+    printf("setup CLOCK_PIN ...");
     gpio_bpi_select_output(CLOCK_PIN);
+    printf(" done \n");
     gpio_bpi_select_output(LOAD_PIN);
     gpio_bpi_select_output(RESET_PIN);
     gpio_bpi_select_input(DATA_PIN);
