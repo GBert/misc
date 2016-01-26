@@ -114,7 +114,6 @@ int main(int argc, char **argv) {
     const int on = 1;
     const char destip[] = "127.0.0.1";
     int destination_port = 15730;
-    int counter = 0;
 
     /* setup udp socket */
     memset(&destaddr, 0, sizeof(destaddr));
@@ -220,7 +219,6 @@ int main(int argc, char **argv) {
 
     /* Loop forever */
     while (1) {
-	counter++;
 	uint8_t oldvalue, newvalue;
 
 	gpio_bpi_set(LOAD_PIN, HIGH);
@@ -264,10 +262,6 @@ int main(int argc, char **argv) {
 	    printf("\r");
 	fflush(stdout);
 	usec_sleep((MAXMODULES - modulcount + 1) * 16 * MICRODELAY);
-	if (counter == 1000) {
-	    printf(".");
-	    counter = 0;
-	}
     }
     return 0;
 }
