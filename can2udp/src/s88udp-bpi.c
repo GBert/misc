@@ -124,7 +124,7 @@ int main(int argc, char **argv) {
 	exit(1);
     }
 
-    /*fprintf ( stderr, "\ns88udp <modulcount>\n\n" ); */
+    /* printf ( stderr, "\ns88udp <modulcount>\n\n" ); */
 
     while ((opt = getopt(argc, argv, "d:p:m:o:fv?")) != -1) {
 	switch (opt) {
@@ -187,9 +187,9 @@ int main(int argc, char **argv) {
 	return (1);
     }
 #endif
-    printf("setup CLOCK_PIN ...");
+    if (gpio_bpi_open("/dev/mem") < 0)
+	return -1;
     gpio_bpi_select_output(CLOCK_PIN);
-    printf(" done \n");
     gpio_bpi_select_output(LOAD_PIN);
     gpio_bpi_select_output(RESET_PIN);
     gpio_bpi_select_input(DATA_PIN);
