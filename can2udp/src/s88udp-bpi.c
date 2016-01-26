@@ -1,5 +1,6 @@
 /*
- * Copyright 2013 - 2014, Siegfried Lohberg
+ * Copyright 2013 - 2014 Siegfried Lohberg
+ *                  2016 Gerhard Bertelsmann
  *
  * "THE BEER-WARE LICENSE" (Revision 42):
  * Siegfried Lohberg wrote this file. As long as you retain this notice you
@@ -63,7 +64,6 @@ void send_sensor_event(int sock, const struct sockaddr *destaddr, int verbose, i
 
     can_id = 0x80220B01 + offset;
 
-    memset(udpframe, 0, 13);
     udpframe[0] = (can_id >> 24) & 0x000000FF;
     udpframe[1] = (can_id >> 16) & 0x000000FF;
     udpframe[2] = (can_id >> 8) & 0x000000FF;
@@ -114,6 +114,7 @@ int main(int argc, char **argv) {
     const int on = 1;
     const char destip[] = "127.0.0.1";
     int destination_port = 15730;
+    int counter = 0;
 
     /* setup udp socket */
     memset(&destaddr, 0, sizeof(destaddr));
@@ -178,15 +179,6 @@ int main(int argc, char **argv) {
 	}
     }
 
-    /* setup gpio handling */
-    /* TODO */
-#if 0
-    bcm2835_set_debug(0);
-    if (!bcm2835_init()) {
-	fprintf(stderr, "GPIO Init failed!\n");
-	return (1);
-    }
-#endif
     if (gpio_bpi_open("/dev/mem") < 0)
 	return -1;
     gpio_bpi_select_output(CLOCK_PIN);
@@ -228,6 +220,7 @@ int main(int argc, char **argv) {
 
     /* Loop forever */
     while (1) {
+	counter++;
 	uint8_t oldvalue, newvalue;
 
 	gpio_bpi_set(LOAD_PIN, HIGH);
@@ -271,6 +264,10 @@ int main(int argc, char **argv) {
 	    printf("\r");
 	fflush(stdout);
 	usec_sleep((MAXMODULES - modulcount + 1) * 16 * MICRODELAY);
+	if (counter == 1000) {
+	    printf(".");
+	    counter = 0;
+	}
     }
     return 0;
 }
