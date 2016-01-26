@@ -37,8 +37,8 @@
 #define MAXMODULES 64
 
 void usage(char *prg) {
-    fprintf(stderr, "\nUsage: %s -vf [-d <destination>][-p <port>][-m <s88modules>][-o <offset>]\n", prg);
-    fprintf(stderr, "   Version 1.03\n");
+    fprintf(stderr, "\nUsage: %s -vf [-d <destination>][-i <0|1>][-p <port>][-m <s88modules>][-o <offset>]\n", prg);
+    fprintf(stderr, "   Version 1.04\n");
     fprintf(stderr, "\n");
     fprintf(stderr, "         -d <destination>    IP Address of the server - default 127.0.0.1\n");
     fprintf(stderr, "         -i [0|1]            invert signals - default 1 -> inverting\n");
