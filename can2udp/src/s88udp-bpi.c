@@ -41,7 +41,7 @@ void usage(char *prg) {
     fprintf(stderr, "   Version 1.04\n");
     fprintf(stderr, "\n");
     fprintf(stderr, "         -d <destination>    IP Address of the server - default 127.0.0.1\n");
-    fprintf(stderr, "         -i [0|1]            invert signals - default 1 -> inverting\n");
+    fprintf(stderr, "         -i [0|1]            invert signals - default 0 -> not inverting\n");
     fprintf(stderr, "         -p <port>           Destination port of the server - default 15730\n");
     fprintf(stderr, "         -m <s88modules>     Number of connected S88 modules - default 1\n");
     fprintf(stderr, "         -o <offset>         Number of S88 modules to skip in addressing - default 0\n");
@@ -107,7 +107,7 @@ int main(int argc, char **argv) {
     int verbose = 0;
     int modulcount = 1;
     int background = 1;
-    int invert_signal = 1;
+    int invert_signal = 0;
     int sensors[MAXMODULES * 16];
 
     int udpsock;
@@ -128,7 +128,7 @@ int main(int argc, char **argv) {
 
     /* printf ( stderr, "\ns88udp <modulcount>\n\n" ); */
 
-    while ((opt = getopt(argc, argv, "d:ip:m:o:fv?")) != -1) {
+    while ((opt = getopt(argc, argv, "d:i:p:m:o:fvh?")) != -1) {
 	switch (opt) {
 	case 'p':
 	    destination_port = strtoul(optarg, (char **)NULL, 10);
@@ -173,6 +173,7 @@ int main(int argc, char **argv) {
 	case 'f':
 	    background = 0;
 	    break;
+	case 'h':
 	case '?':
 	    usage(basename(argv[0]));
 	    exit(0);
