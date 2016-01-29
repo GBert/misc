@@ -63,7 +63,7 @@ void send_sensor_event(int sock, const struct sockaddr *destaddr, int verbose, i
     unsigned long can_id;
     int i;
 
-    can_id = 0x80220B01 + offset;
+    can_id = 0x00220B01 + offset;
 
     udpframe[0] = (can_id >> 24) & 0x000000FF;
     udpframe[1] = (can_id >> 16) & 0x000000FF;
