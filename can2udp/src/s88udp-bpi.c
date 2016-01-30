@@ -20,6 +20,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <time.h>
+#include <sys/time.h>
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -58,6 +59,19 @@ void usec_sleep(int usec) {
     nanosleep(&to_wait, NULL);
 }
 
+int time_stamp(void) {
+    /* char *timestamp = (char *)malloc(sizeof(char) * 16); */
+    struct timeval tv;
+    struct tm *tm;
+
+    gettimeofday(&tv, NULL);
+    tm = localtime(&tv.tv_sec);
+
+    printf("%02d:%02d:%02d.%06d ", tm->tm_hour, tm->tm_min, tm->tm_sec, (int)tv.tv_usec);
+    return 0;
+}
+
+
 void send_sensor_event(int sock, const struct sockaddr *destaddr, int verbose, int offset, int address, int value) {
     unsigned char udpframe[32];
     unsigned long can_id;
@@ -87,6 +101,7 @@ void send_sensor_event(int sock, const struct sockaddr *destaddr, int verbose, i
     udpframe[12] = 0;
 
     if (verbose) {
+	time_stamp();
 	printf("->S88>UDP CANID 0x%06lX R", can_id);
 	printf(" [%d]", udpframe[4]);
 	for (i = 5; i < 13; i++) {
@@ -251,8 +266,10 @@ int main(int argc, char **argv) {
 		    printf("%02x ", sensors[i * 16 + j]);
 
 		if (newvalue != oldvalue) {
-		    if (verbose && modulcount > 1)
+		    if (verbose && modulcount > 1) {
+			time_stamp();
 			printf("sensor %d changed value to %d\n", i * 16 + j + 1, newvalue);
+		    }
 
 		    send_sensor_event(udpsock, (struct sockaddr *)&destaddr, verbose, offset, i * 16 + j + 1, newvalue);
 
