@@ -1,0 +1,9 @@
+V1.1
+- moved R12 to avoid short
+- fixed USB to serial
+- add I2C pullup
+- made SMD 0805 footprint handsoldering smaller
+- changed LED from 1206 to 0805
+- changed DIL housing a little bit by using less F.Skills lines
+
+
