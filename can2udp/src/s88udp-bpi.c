@@ -36,9 +36,11 @@
 #include <linux/can.h>
 #include "s88udp-bpi.h"
 
-#define MICRODELAY	50	/* clock frequency 1/MICRODELAY[us] */
+#define MICRODELAY	15	/* clock frequency 1/MICRODELAY[us] */
+#define MINDELAY	5	/* min delay in usec */
 #define MAXMODULES	16	/* max numbers of S88 modules */
 #define MAXIPLEN	40	/* maximum IP string length */
+#define UDPPORT		15730
 
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -vf [-b <bcast_addr/int>][-i <0|1>][-p <port>][-m <s88modules>][-o <offset>]\n", prg);
@@ -46,11 +48,12 @@ void usage(char *prg) {
     fprintf(stderr, "\n");
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -i [0|1]            invert signals - default 0 -> not inverting\n");
-    fprintf(stderr, "         -p <port>           Destination port of the server - default 15730\n");
-    fprintf(stderr, "         -m <s88modules>     Number of connected S88 modules - default 1\n");
-    fprintf(stderr, "         -o <offset>         Number of S88 modules to skip in addressing - default 0\n");
-    fprintf(stderr, "         -f                  Run in foreground (for debugging)\n");
-    fprintf(stderr, "         -v                  Be verbose\n");
+    fprintf(stderr, "         -m <s88modules>     number of connected S88 modules - default 1\n");
+    fprintf(stderr, "         -o <offset>         number of S88 modules to skip in addressing - default 0\n");
+    fprintf(stderr, "         -p <port>           destination port of the server - default %d\n", UDPPORT);
+    fprintf(stderr, "         -t <time in usec>   microtiming in usec - default %d usec\n", MICRODELAY);
+    fprintf(stderr, "         -f                  run in foreground (for debugging)\n");
+    fprintf(stderr, "         -v                  be verbose\n");
     fprintf(stderr, "\n");
 }
 
@@ -73,7 +76,6 @@ int time_stamp(void) {
     printf("%02d:%02d:%02d.%06d ", tm->tm_hour, tm->tm_min, tm->tm_sec, (int)tv.tv_usec);
     return 0;
 }
-
 
 void send_sensor_event(int sock, const struct sockaddr *destaddr, int verbose, int offset, int address, int value) {
     unsigned char udpframe[32];
@@ -116,7 +118,7 @@ void send_sensor_event(int sock, const struct sockaddr *destaddr, int verbose, i
 }
 
 int main(int argc, char **argv) {
-    int i, j;
+    int utime, i, j;
     int opt, ret;
     int offset = 0;
     int verbose = 0;
@@ -131,9 +133,9 @@ int main(int argc, char **argv) {
     char *bcast_interface;
 
     const int on = 1;
-    /* const char destip[] = "127.0.0.1"; */
 
-    int destination_port = 15730;
+    int destination_port = UDPPORT;
+    utime = MICRODELAY;
 
     udp_dst_address = (char *)calloc(MAXIPLEN, 1);
     if (!udp_dst_address) {
@@ -182,14 +184,21 @@ int main(int argc, char **argv) {
 	    modulcount = atoi(optarg);
 	    if (modulcount < 1 || modulcount > MAXMODULES) {
 		usage(basename(argv[0]));
-		exit(1);
+		exit(-1);
 	    }
 	    break;
 	case 'o':
 	    offset = atoi(optarg);
 	    if (offset >= MAXMODULES) {
 		usage(basename(argv[0]));
-		exit(1);
+		exit(-1);
+	    }
+	    break;
+	case 't':
+	    utime = atoi(optarg);
+	    if (utime < MINDELAY) {
+		fprintf(stderr, "microtiming value to low: %d\n", utime);
+		exit(-1);
 	    }
 	    break;
 	case 'v':
@@ -219,9 +228,9 @@ int main(int argc, char **argv) {
 	    if (ifa->ifa_addr->sa_family == AF_INET) {
 		bsa = (struct sockaddr_in *)ifa->ifa_broadaddr;
 		if (strncmp(ifa->ifa_name, bcast_interface, strlen(bcast_interface)) == 0)
-			    udp_dst_address = inet_ntoa(bsa->sin_addr);
-            }
-        }
+		    udp_dst_address = inet_ntoa(bsa->sin_addr);
+	    }
+	}
     }
     freeifaddrs(ifap);
 
@@ -274,7 +283,7 @@ int main(int argc, char **argv) {
     gpio_bpi_select_input(DATA_PIN);
 
     /* preset sensor values */
-    /* Loop forever */
+    /* loop forever */
     while (1) {
 	uint8_t oldvalue, newvalue;
 
