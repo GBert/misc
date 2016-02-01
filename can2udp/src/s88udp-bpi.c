@@ -35,7 +35,7 @@
 #include "s88udp-bpi.h"
 
 #define MICRODELAY 50
-#define MAXMODULES 64
+#define MAXMODULES 16
 
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -vf [-d <destination>][-i <0|1>][-p <port>][-m <s88modules>][-o <offset>]\n", prg);
@@ -285,7 +285,7 @@ int main(int argc, char **argv) {
 	if (!background && verbose && modulcount == 1)
 	    printf("\r");
 	fflush(stdout);
-	usec_sleep((MAXMODULES - modulcount + 1) * 16 * MICRODELAY);
+	usec_sleep((MAXMODULES + 4 - modulcount + 1) * 16 * MICRODELAY);
     }
     return 0;
 }
