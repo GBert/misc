@@ -220,10 +220,9 @@ int main(int argc, char **argv) {
     }
 
     /* prepare udp sending socket struct */
-    memset(&destaddr, 0, sizeof(destaddr));
+    memset(destaddr, 0, sizeof(destaddr));
     destaddr->sin_family = AF_INET;
     destaddr->sin_port = htons(destination_port);
-
     ret = inet_pton(AF_INET, udp_dst_address, &destaddr->sin_addr);
     if (ret <= 0) {
 	if (ret == 0)
@@ -232,6 +231,8 @@ int main(int argc, char **argv) {
 	    fprintf(stderr, "invalid address family\n");
 	exit(1);
     }
+    if (!background && verbose)
+	printf("using broadcast address %s\n", udp_dst_address);
 
     /* open udp socket */
     if ((udpsock = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
