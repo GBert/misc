@@ -36,11 +36,29 @@
 #include <linux/can.h>
 #include "s88udp-bpi.h"
 
+#define BIT(x)		(1<<x)
 #define MICRODELAY	15	/* clock frequency 1/MICRODELAY[us] */
 #define MINDELAY	5	/* min delay in usec */
-#define MAXMODULES	16	/* max numbers of S88 modules */
+#define MAXMODULES	32	/* max numbers of S88 modules */
 #define MAXIPLEN	40	/* maximum IP string length */
 #define UDPPORT		15730
+/* the maximum amount of pin buffer - assuming 32 bit*/
+#define PIO_BUFFER	((MAXMODULES / 32 + 1) / 2)
+
+uint32_t bus_ct0[PIO_BUFFER];
+uint32_t bus_ct1[PIO_BUFFER];
+uint32_t bus_actual[PIO_BUFFER];
+uint32_t bus_state[PIO_BUFFER];
+
+struct s88_t {
+    struct sockaddr_in baddr;
+    int sb;
+    int baudrate;
+    int background;
+    int inverting;
+    uint16_t hash;
+    uint16_t hw_id;
+};
 
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -vf [-b <bcast_addr/int>][-i <0|1>][-p <port>][-m <s88modules>][-o <offset>]\n", prg);
@@ -74,6 +92,94 @@ int time_stamp(void) {
     tm = localtime(&tv.tv_sec);
 
     printf("%02d:%02d:%02d.%06d ", tm->tm_hour, tm->tm_min, tm->tm_sec, (int)tv.tv_usec);
+    return 0;
+}
+
+void print_net_frame(unsigned char *netframe) {
+    uint32_t canid;
+    int i, dlc;
+
+    memcpy(&canid, netframe, 4);
+    dlc = netframe[4];
+    time_stamp();
+    printf("->S88>UDP  CANID 0x%08X   [%d]", ntohl(canid), netframe[4]);
+    for (i = 5; i < 5 + dlc; i++) {
+	printf(" %02x", netframe[i]);
+    }
+    if (dlc < 8) {
+	printf("(%02x", netframe[i]);
+	for (i = 6 + dlc; i < 13; i++) {
+	    printf(" %02x", netframe[i]);
+	}
+	printf(")");
+    } else {
+	printf(" ");
+    }
+    printf("\n");
+}
+
+int create_event(struct s88_t *s88, int bus, int offset, uint32_t changed_bits, uint32_t value) {
+    int s;
+    uint32_t i, mask, canid, temp32;
+    uint16_t temp16;
+    uint8_t netframe[13];
+
+    /* allow only usefull M*rklin hashes */
+    canid = 0x00220300 | (s88->hash & 0x0000ff7f);
+
+    temp32 = htonl(canid);
+    memcpy(netframe, &temp32, 4);
+    /* sensor event 8 bytes */
+    netframe[4] = 8;
+
+    mask = BIT(31);
+    for (i = 0; i < 32; i++) {
+	if (changed_bits & mask) {
+	    temp16 = htons(s88->hw_id);
+	    memcpy(&netframe[5], &temp16, 2);
+	    /* TODO */
+	    temp16 = htons(bus * 256 + offset + i);
+	    memcpy(&netframe[7], &temp16, 2);
+	    if (value & mask) {
+		netframe[9] = 0;
+		netframe[10] = 1;
+		if (!s88->background)
+		    printf("send UDP packet: bit %d 1\n", i + offset);
+	    } else {
+		netframe[9] = 1;
+		netframe[10] = 0;
+		if (!s88->background)
+		    printf("send UDP packet: bit %d 0\n", i + offset);
+	    }
+	    s = sendto(s88->sb, netframe, 13, 0, (struct sockaddr *)&s88->baddr, sizeof(s88->baddr));
+	    if (s != 13) {
+		fprintf(stderr, "%s: error sending UDP data: %s\n", __func__, strerror(errno));
+		return -1;
+	    }
+	    if (!s88->background)
+		print_net_frame(netframe);
+	}
+	mask >>= 1;
+    }
+    return 0;
+}
+
+int analyze_data(struct s88_t *s88, int s88_bits) {
+    int ret, i;
+    uint32_t c;
+
+    /* using Petre Daneggers 2 bit debouncing buffer code */
+    for (i = 0; i <= (s88_bits / 32); i++) {
+	c = bus_state[i] ^ ~bus_actual[i];
+	bus_ct0[i] = ~(bus_ct0[i] & c);
+	bus_ct1[i] = bus_ct0[i] ^ (bus_ct1[i] & c);
+	/* 2 bit roll over */
+	c &= bus_ct0[i] & bus_ct1[i];
+	bus_state[i] ^= c;
+	ret = create_event(s88, 0, i * 32, c, bus_actual[i]);
+	if (ret)
+	    return -1;
+    }
     return 0;
 }
 
@@ -137,6 +243,12 @@ int main(int argc, char **argv) {
     int destination_port = UDPPORT;
     utime = MICRODELAY;
 
+    /* prepare debouncing buffer */
+    memset(bus_actual, 0, sizeof(bus_actual));
+    memset(bus_state, 0, sizeof(bus_state));
+    memset(bus_ct0, 0xff, sizeof(bus_ct0));
+    memset(bus_ct1, 0xff, sizeof(bus_ct1));
+
     udp_dst_address = (char *)calloc(MAXIPLEN, 1);
     if (!udp_dst_address) {
 	fprintf(stderr, "can't alloc memory for udp_dst_address: %s\n", strerror(errno));
@@ -164,7 +276,7 @@ int main(int argc, char **argv) {
 	    break;
 	case 'b':
 	    if (strnlen(optarg, MAXIPLEN) <= MAXIPLEN - 1) {
-		/* IP address begins with a number */
+		/* broadcat IP begins with a number */
 		if ((optarg[0] >= '0') && (optarg[0] <= '9')) {
 		    memset(udp_dst_address, 0, MAXIPLEN);
 		    strncpy(udp_dst_address, optarg, MAXIPLEN - 1);
