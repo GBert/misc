@@ -110,7 +110,7 @@ void send_sensor_event(int sock, const struct sockaddr *destaddr, int verbose, i
 	printf("\n");
     }
     if (sendto(sock, udpframe, 13, 0, destaddr, sizeof(*destaddr)) != 13) {
-	perror("UDP write __");
+	fprintf(stderr, "UDP write error: %s\n", strerror(errno));
 	exit(1);
     }
 }
@@ -136,8 +136,14 @@ int main(int argc, char **argv) {
     memset(&destaddr, 0, sizeof(destaddr));
     destaddr.sin_family = AF_INET;
     destaddr.sin_port = htons(destination_port);
-    if (inet_pton(AF_INET, destip, &destaddr.sin_addr) < 0) {
-	perror("inet_pton");
+
+    ret = inet_pton(AF_INET, destip, &destaddr.sin_addr);
+    if (ret <= 0) {
+	if (ret == 0) {
+	    fprintf(stderr, "UDP IP invalid\n");
+	} else {
+	    fprintf(stderr, "invalid address family\n");
+	}
 	exit(1);
     }
 
@@ -192,7 +198,6 @@ int main(int argc, char **argv) {
 	case '?':
 	    usage(basename(argv[0]));
 	    exit(0);
-
 	default:
 	    usage(basename(argv[0]));
 	    exit(1);
@@ -213,12 +218,12 @@ int main(int argc, char **argv) {
 
     /* open udp socket */
     if ((udpsock = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
-	perror("Open UDP socket");
+	fprintf(stderr, "UDP socket error: %s\n", strerror(errno));
 	exit(1);
     }
 
     if (setsockopt(udpsock, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0) {
-	perror("setsockopt");
+	fprintf(stderr, "UDP set socket option error: %s\n", strerror(errno));
 	exit(1);
     }
 
