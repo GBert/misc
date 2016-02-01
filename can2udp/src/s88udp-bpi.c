@@ -156,7 +156,7 @@ int main(int argc, char **argv) {
     destaddr.sin_family = AF_INET;
     destaddr.sin_port = htons(destination_port);
 
-    while ((opt = getopt(argc, argv, "b:i:p:m:o:fvh?")) != -1) {
+    while ((opt = getopt(argc, argv, "b:i:p:m:o:t:fvh?")) != -1) {
 	switch (opt) {
 	case 'p':
 	    destination_port = strtoul(optarg, (char **)NULL, 10);
