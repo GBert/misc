@@ -125,7 +125,7 @@ int main(int argc, char **argv) {
     int invert_signal = 0;
     int sensors[MAXMODULES * 16];
     int udpsock;
-    struct sockaddr_in *destaddr;
+    struct sockaddr_in destaddr, *bsa;
     struct ifaddrs *ifap, *ifa;
     char *udp_dst_address;
     char *bcast_interface;
@@ -149,11 +149,16 @@ int main(int argc, char **argv) {
 
     /* printf ( stderr, "\ns88udp <modulcount>\n\n" ); */
 
+    /* prepare udp sending socket struct */
+    memset(&destaddr, 0, sizeof(destaddr));
+    destaddr.sin_family = AF_INET;
+    destaddr.sin_port = htons(destination_port);
+
     while ((opt = getopt(argc, argv, "b:i:p:m:o:fvh?")) != -1) {
 	switch (opt) {
 	case 'p':
 	    destination_port = strtoul(optarg, (char **)NULL, 10);
-	    destaddr->sin_port = htons(destination_port);
+	    destaddr.sin_port = htons(destination_port);
 	    break;
 	case 'b':
 	    if (strnlen(optarg, MAXIPLEN) <= MAXIPLEN - 1) {
@@ -212,18 +217,15 @@ int main(int argc, char **argv) {
     for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
 	if (ifa->ifa_addr) {
 	    if (ifa->ifa_addr->sa_family == AF_INET) {
-		destaddr = (struct sockaddr_in *)ifa->ifa_broadaddr;
+		bsa = (struct sockaddr_in *)ifa->ifa_broadaddr;
 		if (strncmp(ifa->ifa_name, bcast_interface, strlen(bcast_interface)) == 0)
-			    udp_dst_address = inet_ntoa(destaddr->sin_addr);
+			    udp_dst_address = inet_ntoa(bsa->sin_addr);
             }
         }
     }
+    freeifaddrs(ifap);
 
-    /* prepare udp sending socket struct */
-    memset(destaddr, 0, sizeof(destaddr));
-    destaddr->sin_family = AF_INET;
-    destaddr->sin_port = htons(destination_port);
-    ret = inet_pton(AF_INET, udp_dst_address, &destaddr->sin_addr);
+    ret = inet_pton(AF_INET, udp_dst_address, &destaddr.sin_addr);
     if (ret <= 0) {
 	if (ret == 0)
 	    fprintf(stderr, "UDP IP invalid\n");
