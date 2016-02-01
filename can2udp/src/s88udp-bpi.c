@@ -15,6 +15,7 @@
  * Projekt von Joerg Pleumann.
  */
 
+#include <ifaddrs.h>
 #include <libgen.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,14 +36,15 @@
 #include <linux/can.h>
 #include "s88udp-bpi.h"
 
-#define MICRODELAY 50
-#define MAXMODULES 16
+#define MICRODELAY	50	/* clock frequency 1/MICRODELAY[us] */
+#define MAXMODULES	16	/* max numbers of S88 modules */
+#define MAXIPLEN	40	/* maximum IP string length */
 
 void usage(char *prg) {
-    fprintf(stderr, "\nUsage: %s -vf [-d <destination>][-i <0|1>][-p <port>][-m <s88modules>][-o <offset>]\n", prg);
-    fprintf(stderr, "   Version 1.04\n");
+    fprintf(stderr, "\nUsage: %s -vf [-b <bcast_addr/int>][-i <0|1>][-p <port>][-m <s88modules>][-o <offset>]\n", prg);
+    fprintf(stderr, "   Version 1.1\n");
     fprintf(stderr, "\n");
-    fprintf(stderr, "         -d <destination>    IP Address of the server - default 127.0.0.1\n");
+    fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -i [0|1]            invert signals - default 0 -> not inverting\n");
     fprintf(stderr, "         -p <port>           Destination port of the server - default 15730\n");
     fprintf(stderr, "         -m <s88modules>     Number of connected S88 modules - default 1\n");
@@ -123,50 +125,49 @@ int main(int argc, char **argv) {
     int invert_signal = 0;
     int sensors[MAXMODULES * 16];
     int udpsock;
-    struct hostent *hp;
-    struct sockaddr_in destaddr;
+    struct sockaddr_in *destaddr;
+    struct ifaddrs *ifap, *ifa;
+    char *udp_dst_address;
+    char *bcast_interface;
 
     const int on = 1;
-    const char destip[] = "127.0.0.1";
+    /* const char destip[] = "127.0.0.1"; */
+
     int destination_port = 15730;
 
-    /* setup udp socket */
-    memset(&destaddr, 0, sizeof(destaddr));
-    destaddr.sin_family = AF_INET;
-    destaddr.sin_port = htons(destination_port);
+    udp_dst_address = (char *)calloc(MAXIPLEN, 1);
+    if (!udp_dst_address) {
+	fprintf(stderr, "can't alloc memory for udp_dst_address: %s\n", strerror(errno));
+	exit(-1);
+    };
 
-    ret = inet_pton(AF_INET, destip, &destaddr.sin_addr);
-    if (ret <= 0) {
-	if (ret == 0) {
-	    fprintf(stderr, "UDP IP invalid\n");
-	} else {
-	    fprintf(stderr, "invalid address family\n");
-	}
-	exit(1);
-    }
+    bcast_interface = (char *)calloc(MAXIPLEN, 1);
+    if (!bcast_interface) {
+	fprintf(stderr, "can't alloc memory for bcast_interface: %s\n", strerror(errno));
+	exit(-1);
+    };
 
     /* printf ( stderr, "\ns88udp <modulcount>\n\n" ); */
 
-    while ((opt = getopt(argc, argv, "d:i:p:m:o:fvh?")) != -1) {
+    while ((opt = getopt(argc, argv, "b:i:p:m:o:fvh?")) != -1) {
 	switch (opt) {
 	case 'p':
 	    destination_port = strtoul(optarg, (char **)NULL, 10);
-	    destaddr.sin_port = htons(destination_port);
+	    destaddr->sin_port = htons(destination_port);
 	    break;
-	case 'd':
-	    ret = inet_pton(AF_INET, optarg, &destaddr.sin_addr);
-	    if (ret <= 0) {
-		if (ret == 0) {
-		    hp = gethostbyname(optarg);
-		    if (!hp) {
-			fprintf(stderr, "s88udp: unknown host %s\n", optarg);
-			exit(1);
-		    }
-		    memcpy((void *)&destaddr.sin_addr, hp->h_addr_list[0], hp->h_length);
+	case 'b':
+	    if (strnlen(optarg, MAXIPLEN) <= MAXIPLEN - 1) {
+		/* IP address begins with a number */
+		if ((optarg[0] >= '0') && (optarg[0] <= '9')) {
+		    memset(udp_dst_address, 0, MAXIPLEN);
+		    strncpy(udp_dst_address, optarg, MAXIPLEN - 1);
 		} else {
-		    perror("inet_pton");
-		    exit(1);
+		    memset(bcast_interface, 0, MAXIPLEN);
+		    strncpy(bcast_interface, optarg, MAXIPLEN - 1);
 		}
+	    } else {
+		fprintf(stderr, "UDP broadcast address or interface error: %s\n", optarg);
+		exit(-1);
 	    }
 	    break;
 	case 'i':
@@ -202,16 +203,34 @@ int main(int argc, char **argv) {
 	}
     }
 
-    if (gpio_bpi_open("/dev/mem") < 0)
-	return -1;
-    gpio_bpi_select_output(CLOCK_PIN);
-    gpio_bpi_select_output(LOAD_PIN);
-    gpio_bpi_select_output(RESET_PIN);
-    gpio_bpi_select_input(DATA_PIN);
-
-    /* Preset sensor values */
     for (i = 0; i < (modulcount * 16); i++) {
 	sensors[i] = 0;
+    }
+
+    /* get the broadcast address */
+    getifaddrs(&ifap);
+    for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
+	if (ifa->ifa_addr) {
+	    if (ifa->ifa_addr->sa_family == AF_INET) {
+		destaddr = (struct sockaddr_in *)ifa->ifa_broadaddr;
+		if (strncmp(ifa->ifa_name, bcast_interface, strlen(bcast_interface)) == 0)
+			    udp_dst_address = inet_ntoa(destaddr->sin_addr);
+            }
+        }
+    }
+
+    /* prepare udp sending socket struct */
+    memset(&destaddr, 0, sizeof(destaddr));
+    destaddr->sin_family = AF_INET;
+    destaddr->sin_port = htons(destination_port);
+
+    ret = inet_pton(AF_INET, udp_dst_address, &destaddr->sin_addr);
+    if (ret <= 0) {
+	if (ret == 0)
+	    fprintf(stderr, "UDP IP invalid\n");
+	else
+	    fprintf(stderr, "invalid address family\n");
+	exit(1);
     }
 
     /* open udp socket */
@@ -221,7 +240,7 @@ int main(int argc, char **argv) {
     }
 
     if (setsockopt(udpsock, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0) {
-	fprintf(stderr, "UDP set socket option error: %s\n", strerror(errno));
+	fprintf(stderr, "UDP set broadcast option error: %s\n", strerror(errno));
 	exit(1);
     }
 
@@ -241,6 +260,17 @@ int main(int argc, char **argv) {
 	}
     }
 
+    if (gpio_bpi_open("/dev/mem") < 0) {
+	fprintf(stderr, "Can't open IO mem: %s\n", strerror(errno));
+	exit(-1);
+    }
+
+    gpio_bpi_select_output(CLOCK_PIN);
+    gpio_bpi_select_output(LOAD_PIN);
+    gpio_bpi_select_output(RESET_PIN);
+    gpio_bpi_select_input(DATA_PIN);
+
+    /* preset sensor values */
     /* Loop forever */
     while (1) {
 	uint8_t oldvalue, newvalue;
