@@ -217,6 +217,7 @@ int main(int argc, char **argv) {
 	}
     }
 
+    /* preset sensor values */
     for (i = 0; i < (modulcount * 16); i++) {
 	sensors[i] = 0;
     }
@@ -282,7 +283,6 @@ int main(int argc, char **argv) {
     gpio_bpi_select_output(RESET_PIN);
     gpio_bpi_select_input(DATA_PIN);
 
-    /* preset sensor values */
     /* loop forever */
     while (1) {
 	uint8_t oldvalue, newvalue;
