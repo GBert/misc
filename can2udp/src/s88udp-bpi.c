@@ -7,6 +7,7 @@
  * can do whatever you want with this stuff. If we meet some day, and you think
  * this stuff is worth it, you can buy me a beer in return.
  */
+
 /*
  * Credit: 
  * In dieses Programm flossen Ideen von Gerhard Bertelsmann 
@@ -78,13 +79,11 @@ void send_sensor_event(int sock, const struct sockaddr *destaddr, int verbose, i
     int i;
 
     can_id = 0x00220B01 + offset;
-
     udpframe[0] = (can_id >> 24) & 0x000000FF;
     udpframe[1] = (can_id >> 16) & 0x000000FF;
     udpframe[2] = (can_id >> 8) & 0x000000FF;
     udpframe[3] = can_id & 0x000000FF;
     udpframe[4] = 8;
-
     udpframe[5] = 0;
     udpframe[6] = 0;
     udpframe[7] = ((16 * offset + address) >> 8) & 0x000000FF;
@@ -104,9 +103,8 @@ void send_sensor_event(int sock, const struct sockaddr *destaddr, int verbose, i
 	time_stamp();
 	printf("->S88>UDP CANID 0x%06lX R", can_id);
 	printf(" [%d]", udpframe[4]);
-	for (i = 5; i < 13; i++) {
+	for (i = 5; i < 13; i++)
 	    printf(" %02x", udpframe[i]);
-	}
 	printf("\n");
     }
     if (sendto(sock, udpframe, 13, 0, destaddr, sizeof(*destaddr)) != 13) {
@@ -124,10 +122,10 @@ int main(int argc, char **argv) {
     int background = 1;
     int invert_signal = 0;
     int sensors[MAXMODULES * 16];
-
     int udpsock;
     struct hostent *hp;
     struct sockaddr_in destaddr;
+
     const int on = 1;
     const char destip[] = "127.0.0.1";
     int destination_port = 15730;
@@ -230,12 +228,12 @@ int main(int argc, char **argv) {
     if (background) {
 	pid_t pid;
 
-	/* Fork off the parent process */
+	/* fork off the parent process */
 	pid = fork();
 	if (pid < 0) {
 	    exit(EXIT_FAILURE);
 	}
-	/* If we got a good PID, then we can exit the parent process. */
+	/* if we got a good PID, then we can exit the parent process. */
 	if (pid > 0) {
 	    if (verbose)
 		printf("Going into background ...\n");
