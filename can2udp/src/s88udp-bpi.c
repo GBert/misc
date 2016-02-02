@@ -193,8 +193,8 @@ int main(int argc, char **argv) {
     struct s88_t s88_data;
     char *udp_dst_address;
     char *bcast_interface;
-    uint8_t oldvalue, newvalue;
     uint32_t mask, s88_bit;
+    uint8_t newvalue;
 
     const int on = 1;
 
@@ -378,20 +378,12 @@ int main(int argc, char **argv) {
 	    for (j = 0; j < 16; j++) {
 		usec_sleep(MICRODELAY / 2);
 
-		oldvalue = sensors[i * 16 + j];
 		gpio_bpi_get(DATA_PIN, &newvalue);
 		newvalue ^= s88_data.invert;
 		if (newvalue)
 		    bus_actual[i >> 1] |= mask;
 		else
 		    bus_actual[i >> 1] &= ~mask;
-
-		if (newvalue != oldvalue) {
-		    if (s88_data.verbose && modulcount > 1) {
-			time_stamp();
-			printf("sensor %d changed value to %d\n", i * 16 + j + 1, newvalue);
-		    }
-		}
 
 		usec_sleep(MICRODELAY / 2);
 		gpio_bpi_set(CLOCK_PIN, HIGH ^ s88_data.invert);
