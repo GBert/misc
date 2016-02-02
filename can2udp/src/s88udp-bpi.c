@@ -444,6 +444,10 @@ int main(int argc, char **argv) {
 	    s88_bit++;
 	    mask >>= 1;
 	}
+	/* align left if needed */
+	bus_actual[modulcount >> 1] <<= (32 - (s88_bit & 0x1f));
+	/* now check data */
+	analyze_data(&s88_data, modulcount * 16);
 	if (!s88_data.background && s88_data.verbose && modulcount == 1)
 	    printf("\r");
 	fflush(stdout);
