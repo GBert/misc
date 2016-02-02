@@ -64,17 +64,16 @@ struct s88_t {
 
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -vf [-b <bcast_addr/int>][-i <0|1>][-p <port>][-m <s88modules>][-o <offset>]\n", prg);
-    fprintf(stderr, "   Version 1.1\n");
-    fprintf(stderr, "\n");
+    fprintf(stderr, "   Version 1.2\n\n");
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -i [0|1]            invert signals - default 0 -> not inverting\n");
+    fprintf(stderr, "         -e <event id>       using event id - default 0\n");
     fprintf(stderr, "         -m <s88modules>     number of connected S88 modules - default 1\n");
     fprintf(stderr, "         -o <offset>         number of S88 modules to skip in addressing - default 0\n");
     fprintf(stderr, "         -p <port>           destination port of the server - default %d\n", UDPPORT);
     fprintf(stderr, "         -t <time in usec>   microtiming in usec - default %d usec\n", MICRODELAY);
     fprintf(stderr, "         -f                  run in foreground (for debugging)\n");
-    fprintf(stderr, "         -v                  be verbose\n");
-    fprintf(stderr, "\n");
+    fprintf(stderr, "         -v                  be verbose\n\n");
 }
 
 void usec_sleep(int usec) {
@@ -170,7 +169,7 @@ int analyze_data(struct s88_t *s88, int s88_bits) {
     uint32_t c;
 
     /* using Peter Daneggers 2 bit debouncing buffer code */
-    for (i = 0; i <= (s88_bits / 32); i++) {
+    for (i = 0; i <= ((s88_bits - 1) >> 5); i++) {
 	c = bus_state[i] ^ ~bus_actual[i];
 	bus_ct0[i] = ~(bus_ct0[i] & c);
 	bus_ct1[i] = bus_ct0[i] ^ (bus_ct1[i] & c);
@@ -182,46 +181,6 @@ int analyze_data(struct s88_t *s88, int s88_bits) {
 	    return -1;
     }
     return 0;
-}
-
-void send_sensor_event(int sock, const struct sockaddr *destaddr, int verbose, int offset, int address, int value) {
-    unsigned char udpframe[32];
-    unsigned long can_id;
-    int i;
-
-    can_id = 0x00220B01 + offset;
-    udpframe[0] = (can_id >> 24) & 0x000000FF;
-    udpframe[1] = (can_id >> 16) & 0x000000FF;
-    udpframe[2] = (can_id >> 8) & 0x000000FF;
-    udpframe[3] = can_id & 0x000000FF;
-    udpframe[4] = 8;
-    udpframe[5] = 0;
-    udpframe[6] = 0;
-    udpframe[7] = ((16 * offset + address) >> 8) & 0x000000FF;
-    udpframe[8] = (16 * offset + address) & 0x000000FF;
-
-    if (value) {
-	udpframe[9] = 0;
-	udpframe[10] = 1;
-    } else {
-	udpframe[9] = 1;
-	udpframe[10] = 0;
-    }
-    udpframe[11] = 0;
-    udpframe[12] = 0;
-
-    if (verbose) {
-	time_stamp();
-	printf("->S88>UDP CANID 0x%06lX R", can_id);
-	printf(" [%d]", udpframe[4]);
-	for (i = 5; i < 13; i++)
-	    printf(" %02x", udpframe[i]);
-	printf("\n");
-    }
-    if (sendto(sock, udpframe, 13, 0, destaddr, sizeof(*destaddr)) != 13) {
-	fprintf(stderr, "UDP write error: %s\n", strerror(errno));
-	exit(1);
-    }
 }
 
 int main(int argc, char **argv) {
@@ -269,7 +228,7 @@ int main(int argc, char **argv) {
     destaddr.sin_family = AF_INET;
     destaddr.sin_port = htons(destination_port);
 
-    while ((opt = getopt(argc, argv, "b:i:p:m:o:t:fvh?")) != -1) {
+    while ((opt = getopt(argc, argv, "b:e:i:p:m:o:t:fvh?")) != -1) {
 	switch (opt) {
 	case 'p':
 	    destination_port = strtoul(optarg, (char **)NULL, 10);
@@ -289,6 +248,9 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "UDP broadcast address or interface error: %s\n", optarg);
 		exit(-1);
 	    }
+	    break;
+	case 'e':
+	    s88_data.hash = atoi(optarg) & 0xffff;
 	    break;
 	case 'i':
 	    s88_data.invert = atoi(optarg) & 1;
@@ -408,8 +370,8 @@ int main(int argc, char **argv) {
 	gpio_bpi_set(RESET_PIN, LOW ^ s88_data.invert);
 	usec_sleep(MICRODELAY);
 	gpio_bpi_set(LOAD_PIN, LOW ^ s88_data.invert);
-	/* get sensor data */
 	s88_data.count++;
+	/* get sensor data */
 	for (i = 0; i < modulcount; i++) {
 	    if ((s88_bit & 0x1f) == 0)
 		mask = BIT(31);
@@ -420,35 +382,31 @@ int main(int argc, char **argv) {
 		gpio_bpi_get(DATA_PIN, &newvalue);
 		newvalue ^= s88_data.invert;
 		if (newvalue)
-		    bus_actual[modulcount >> 1] |= mask;
+		    bus_actual[i >> 1] |= mask;
 		else
-		    bus_actual[modulcount >> 1] &= ~mask;
-
-		if (!s88_data.background && s88_data.verbose && modulcount == 1)
-		    printf("%02x ", sensors[i * 16 + j]);
+		    bus_actual[i >> 1] &= ~mask;
 
 		if (newvalue != oldvalue) {
 		    if (s88_data.verbose && modulcount > 1) {
 			time_stamp();
 			printf("sensor %d changed value to %d\n", i * 16 + j + 1, newvalue);
 		    }
-		    send_sensor_event(s88_data.socket, (struct sockaddr *)&s88_data.baddr, s88_data.verbose,
-				      s88_data.offset, i * 16 + j + 1, newvalue);
-		    sensors[i * 16 + j] = newvalue;
 		}
 
 		usec_sleep(MICRODELAY / 2);
 		gpio_bpi_set(CLOCK_PIN, HIGH ^ s88_data.invert);
 		usec_sleep(MICRODELAY);
 		gpio_bpi_set(CLOCK_PIN, LOW ^ s88_data.invert);
+	        s88_bit++;
+	        mask >>= 1;
 	    }
-	    s88_bit++;
-	    mask >>= 1;
 	}
-	/* align left if needed */
-	bus_actual[modulcount >> 1] <<= (32 - (s88_bit & 0x1f));
 	/* now check data */
-	analyze_data(&s88_data, modulcount * 16);
+	ret = analyze_data(&s88_data, modulcount * 16);
+	if (ret < 0) {
+	    fprintf(stderr, "problem sending event data - terminating\n", optarg);
+	    exit(-1);
+	}
 	if (!s88_data.background && s88_data.verbose && modulcount == 1)
 	    printf("\r");
 	fflush(stdout);
