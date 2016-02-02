@@ -52,10 +52,11 @@ uint32_t bus_state[PIO_BUFFER];
 
 struct s88_t {
     struct sockaddr_in baddr;
-    int sb;
-    int baudrate;
+    int socket;
     int background;
-    int inverting;
+    int verbose;
+    int invert;
+    int offset;
     uint16_t hash;
     uint16_t hw_id;
 };
@@ -125,7 +126,7 @@ int create_event(struct s88_t *s88, int bus, int offset, uint32_t changed_bits, 
     uint8_t netframe[13];
 
     /* allow only usefull M*rklin hashes */
-    canid = 0x00220300 | (s88->hash & 0x0000ff7f);
+    canid = 0x00220300 | (s88->hash & 0x0000ffff);
 
     temp32 = htonl(canid);
     memcpy(netframe, &temp32, 4);
@@ -151,7 +152,7 @@ int create_event(struct s88_t *s88, int bus, int offset, uint32_t changed_bits, 
 		if (!s88->background)
 		    printf("send UDP packet: bit %d 0\n", i + offset);
 	    }
-	    s = sendto(s88->sb, netframe, 13, 0, (struct sockaddr *)&s88->baddr, sizeof(s88->baddr));
+	    s = sendto(s88->socket, netframe, 13, 0, (struct sockaddr *)&s88->baddr, sizeof(s88->baddr));
 	    if (s != 13) {
 		fprintf(stderr, "%s: error sending UDP data: %s\n", __func__, strerror(errno));
 		return -1;
@@ -226,23 +227,23 @@ void send_sensor_event(int sock, const struct sockaddr *destaddr, int verbose, i
 int main(int argc, char **argv) {
     int utime, i, j;
     int opt, ret;
-    int offset = 0;
-    int verbose = 0;
     int modulcount = 1;
-    int background = 1;
-    int invert_signal = 0;
     int sensors[MAXMODULES * 16];
-    int udpsock;
     struct sockaddr_in destaddr, *bsa;
     struct ifaddrs *ifap, *ifa;
+    struct s88_t s88_data;
     char *udp_dst_address;
     char *bcast_interface;
+    uint8_t oldvalue, newvalue;
+    uint32_t mask, s88_bit;
 
     const int on = 1;
 
     int destination_port = UDPPORT;
     utime = MICRODELAY;
 
+    memset(&s88_data, 0 , sizeof(s88_data));
+    s88_data.background = 1;
     /* prepare debouncing buffer */
     memset(bus_actual, 0, sizeof(bus_actual));
     memset(bus_state, 0, sizeof(bus_state));
@@ -290,7 +291,7 @@ int main(int argc, char **argv) {
 	    }
 	    break;
 	case 'i':
-	    invert_signal = atoi(optarg) & 1;
+	    s88_data.invert = atoi(optarg) & 1;
 	    break;
 	case 'm':
 	    modulcount = atoi(optarg);
@@ -300,8 +301,8 @@ int main(int argc, char **argv) {
 	    }
 	    break;
 	case 'o':
-	    offset = atoi(optarg);
-	    if (offset >= MAXMODULES) {
+	    s88_data.offset = atoi(optarg);
+	    if (s88_data.offset >= MAXMODULES) {
 		usage(basename(argv[0]));
 		exit(-1);
 	    }
@@ -314,10 +315,10 @@ int main(int argc, char **argv) {
 	    }
 	    break;
 	case 'v':
-	    verbose = 1;
+	    s88_data.verbose = 1;
 	    break;
 	case 'f':
-	    background = 0;
+	    s88_data.background = 0;
 	    break;
 	case 'h':
 	case '?':
@@ -330,9 +331,7 @@ int main(int argc, char **argv) {
     }
 
     /* preset sensor values */
-    for (i = 0; i < (modulcount * 16); i++) {
-	sensors[i] = 0;
-    }
+    memset(sensors, 0, sizeof(sensors));
 
     /* get the broadcast address */
     getifaddrs(&ifap);
@@ -355,21 +354,21 @@ int main(int argc, char **argv) {
 	    fprintf(stderr, "invalid address family\n");
 	exit(1);
     }
-    if (!background && verbose)
+    if (!s88_data.background && s88_data.verbose)
 	printf("using broadcast address %s\n", udp_dst_address);
-
     /* open udp socket */
-    if ((udpsock = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+    if ((s88_data.socket = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
 	fprintf(stderr, "UDP socket error: %s\n", strerror(errno));
 	exit(1);
     }
-
-    if (setsockopt(udpsock, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0) {
+    if (setsockopt(s88_data.socket, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0) {
 	fprintf(stderr, "UDP set broadcast option error: %s\n", strerror(errno));
 	exit(1);
     }
 
-    if (background) {
+    s88_data.baddr = destaddr;
+
+    if (s88_data.background) {
 	pid_t pid;
 
 	/* fork off the parent process */
@@ -379,7 +378,7 @@ int main(int argc, char **argv) {
 	}
 	/* if we got a good PID, then we can exit the parent process. */
 	if (pid > 0) {
-	    if (verbose)
+	    if (s88_data.verbose)
 		printf("Going into background ...\n");
 	    exit(0);
 	}
@@ -397,49 +396,55 @@ int main(int argc, char **argv) {
 
     /* loop forever */
     while (1) {
-	uint8_t oldvalue, newvalue;
-
-	gpio_bpi_set(LOAD_PIN, HIGH ^ invert_signal);
+	s88_bit = 0;
+	gpio_bpi_set(LOAD_PIN, HIGH ^ s88_data.invert);
 	usec_sleep(MICRODELAY);
-	gpio_bpi_set(CLOCK_PIN, HIGH ^ invert_signal);
+	gpio_bpi_set(CLOCK_PIN, HIGH ^ s88_data.invert);
 	usec_sleep(MICRODELAY);
-	gpio_bpi_set(CLOCK_PIN, LOW ^ invert_signal);
+	gpio_bpi_set(CLOCK_PIN, LOW ^ s88_data.invert);
 	usec_sleep(MICRODELAY);
-	gpio_bpi_set(RESET_PIN, HIGH ^ invert_signal);
+	gpio_bpi_set(RESET_PIN, HIGH ^ s88_data.invert);
 	usec_sleep(MICRODELAY);
-	gpio_bpi_set(RESET_PIN, LOW ^ invert_signal);
+	gpio_bpi_set(RESET_PIN, LOW ^ s88_data.invert);
 	usec_sleep(MICRODELAY);
-	gpio_bpi_set(LOAD_PIN, LOW ^ invert_signal);
-
+	gpio_bpi_set(LOAD_PIN, LOW ^ s88_data.invert);
 	/* get sensor data */
 	for (i = 0; i < modulcount; i++) {
+	    if ((s88_bit & 0x1f) == 0)
+		mask = BIT(31);
 	    for (j = 0; j < 16; j++) {
 		usec_sleep(MICRODELAY / 2);
 
 		oldvalue = sensors[i * 16 + j];
 		gpio_bpi_get(DATA_PIN, &newvalue);
-		newvalue ^= invert_signal;
-		if (!background && verbose && modulcount == 1)
+		newvalue ^= s88_data.invert;
+		if (newvalue)
+		    bus_actual[modulcount >> 1] |= mask;
+		else
+		    bus_actual[modulcount >> 1] &= ~mask;
+
+		if (!s88_data.background && s88_data.verbose && modulcount == 1)
 		    printf("%02x ", sensors[i * 16 + j]);
 
 		if (newvalue != oldvalue) {
-		    if (verbose && modulcount > 1) {
+		    if (s88_data.verbose && modulcount > 1) {
 			time_stamp();
 			printf("sensor %d changed value to %d\n", i * 16 + j + 1, newvalue);
 		    }
-
-		    send_sensor_event(udpsock, (struct sockaddr *)&destaddr, verbose, offset, i * 16 + j + 1, newvalue);
-
+		    send_sensor_event(s88_data.socket, (struct sockaddr *)&s88_data.baddr, s88_data.verbose,
+				      s88_data.offset, i * 16 + j + 1, newvalue);
 		    sensors[i * 16 + j] = newvalue;
 		}
 
 		usec_sleep(MICRODELAY / 2);
-		gpio_bpi_set(CLOCK_PIN, HIGH ^ invert_signal);
+		gpio_bpi_set(CLOCK_PIN, HIGH ^ s88_data.invert);
 		usec_sleep(MICRODELAY);
-		gpio_bpi_set(CLOCK_PIN, LOW ^ invert_signal);
+		gpio_bpi_set(CLOCK_PIN, LOW ^ s88_data.invert);
 	    }
+	    s88_bit++;
+	    mask >>= 1;
 	}
-	if (!background && verbose && modulcount == 1)
+	if (!s88_data.background && s88_data.verbose && modulcount == 1)
 	    printf("\r");
 	fflush(stdout);
 	usec_sleep((MAXMODULES + 4 - modulcount + 1) * 16 * MICRODELAY);
