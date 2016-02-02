@@ -150,8 +150,6 @@ int create_event(struct s88_t *s88, int bus, int offset, uint32_t changed_bits, 
 	    } else {
 		netframe[9] = 1;
 		netframe[10] = 0;
-		if (!s88->background)
-		    printf("send UDP packet: bit %d 0\n", i + offset);
 	    }
 	    s = sendto(s88->socket, netframe, 13, 0, (struct sockaddr *)&s88->baddr, sizeof(s88->baddr));
 	    if (s != 13) {
