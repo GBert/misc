@@ -44,6 +44,8 @@ define Package/can2udp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/wake-up-links88 $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init $(1)/etc/init.d/can2lan
+	$(INSTALL_DIR) $(1)/root
+	$(INSTALL_BIN) ./files/s88udp.init $(1)/root/s88udp
 	$(INSTALL_DIR) $(1)/www/config
 	$(CP) ./files/maerklin/config/* $(1)/www/config/
 endef
