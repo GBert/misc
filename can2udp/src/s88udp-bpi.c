@@ -57,6 +57,7 @@ struct s88_t {
     int verbose;
     int invert;
     int offset;
+    uint32_t count;
     uint16_t hash;
     uint16_t hw_id;
 };
@@ -96,14 +97,14 @@ int time_stamp(void) {
     return 0;
 }
 
-void print_net_frame(unsigned char *netframe) {
+void print_net_frame(unsigned char *netframe, uint32_t count) {
     uint32_t canid;
     int i, dlc;
 
     memcpy(&canid, netframe, 4);
     dlc = netframe[4];
     time_stamp();
-    printf("->S88>UDP  CANID 0x%08X   [%d]", ntohl(canid), netframe[4]);
+    printf("[0x%08X] ->S88>UDP  CANID 0x%08X   [%d]", count, ntohl(canid), netframe[4]);
     for (i = 5; i < 5 + dlc; i++) {
 	printf(" %02x", netframe[i]);
     }
@@ -142,7 +143,7 @@ int create_event(struct s88_t *s88, int bus, int offset, uint32_t changed_bits, 
 	    temp16 = htons(s88->hw_id);
 	    memcpy(&netframe[5], &temp16, 2);
 	    /* TODO */
-	    temp16 = htons(bus * 256 + offset + i);
+	    temp16 = htons(bus * 256 + offset + i + 1);
 	    memcpy(&netframe[7], &temp16, 2);
 	    if (value & mask) {
 		netframe[9] = 0;
@@ -157,7 +158,7 @@ int create_event(struct s88_t *s88, int bus, int offset, uint32_t changed_bits, 
 		return -1;
 	    }
 	    if (!s88->background)
-		print_net_frame(netframe);
+		print_net_frame(netframe, s88->count);
 	}
 	mask >>= 1;
     }
@@ -168,7 +169,7 @@ int analyze_data(struct s88_t *s88, int s88_bits) {
     int ret, i;
     uint32_t c;
 
-    /* using Petre Daneggers 2 bit debouncing buffer code */
+    /* using Peter Daneggers 2 bit debouncing buffer code */
     for (i = 0; i <= (s88_bits / 32); i++) {
 	c = bus_state[i] ^ ~bus_actual[i];
 	bus_ct0[i] = ~(bus_ct0[i] & c);
@@ -412,6 +413,7 @@ int main(int argc, char **argv) {
 	    if ((s88_bit & 0x1f) == 0)
 		mask = BIT(31);
 	    for (j = 0; j < 16; j++) {
+		s88_data.count++;
 		usec_sleep(MICRODELAY / 2);
 
 		oldvalue = sensors[i * 16 + j];
