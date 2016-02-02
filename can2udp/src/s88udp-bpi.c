@@ -246,7 +246,7 @@ int main(int argc, char **argv) {
     s88_data.background = 1;
     /* prepare debouncing buffer */
     memset(bus_actual, 0, sizeof(bus_actual));
-    memset(bus_state, 0, sizeof(bus_state));
+    memset(bus_state, 0xff, sizeof(bus_state));
     memset(bus_ct0, 0xff, sizeof(bus_ct0));
     memset(bus_ct1, 0xff, sizeof(bus_ct1));
 
@@ -409,11 +409,11 @@ int main(int argc, char **argv) {
 	usec_sleep(MICRODELAY);
 	gpio_bpi_set(LOAD_PIN, LOW ^ s88_data.invert);
 	/* get sensor data */
+	s88_data.count++;
 	for (i = 0; i < modulcount; i++) {
 	    if ((s88_bit & 0x1f) == 0)
 		mask = BIT(31);
 	    for (j = 0; j < 16; j++) {
-		s88_data.count++;
 		usec_sleep(MICRODELAY / 2);
 
 		oldvalue = sensors[i * 16 + j];
