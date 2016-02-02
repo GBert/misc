@@ -132,6 +132,9 @@ int create_event(struct s88_t *s88, int bus, int offset, uint32_t changed_bits, 
     memcpy(netframe, &temp32, 4);
     /* sensor event 8 bytes */
     netframe[4] = 8;
+    /* we don't set the time value in the S88 event as of today */
+    netframe[11] = 0;
+    netframe[12] = 0;
 
     mask = BIT(31);
     for (i = 0; i < 32; i++) {
@@ -144,8 +147,6 @@ int create_event(struct s88_t *s88, int bus, int offset, uint32_t changed_bits, 
 	    if (value & mask) {
 		netframe[9] = 0;
 		netframe[10] = 1;
-		if (!s88->background)
-		    printf("send UDP packet: bit %d 1\n", i + offset);
 	    } else {
 		netframe[9] = 1;
 		netframe[10] = 0;
