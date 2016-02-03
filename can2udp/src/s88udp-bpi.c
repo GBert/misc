@@ -43,7 +43,7 @@
 #define MAXIPLEN	40	/* maximum IP string length */
 #define UDPPORT		15730
 /* the maximum amount of pin buffer - assuming 32 bit*/
-#define PIO_BUFFER	((MAXMODULES / 32 + 1) / 2)
+#define PIO_BUFFER	((MAXMODULES / 2 + 1) / 2)
 
 uint32_t bus_ct0[PIO_BUFFER];
 uint32_t bus_ct1[PIO_BUFFER];
@@ -379,8 +379,7 @@ int main(int argc, char **argv) {
 		usec_sleep(MICRODELAY / 2);
 
 		gpio_bpi_get(DATA_PIN, &newvalue);
-		newvalue ^= s88_data.invert;
-		if (newvalue)
+		if (newvalue ^= s88_data.invert)
 		    bus_actual[i >> 1] |= mask;
 		else
 		    bus_actual[i >> 1] &= ~mask;
@@ -399,9 +398,6 @@ int main(int argc, char **argv) {
 	    fprintf(stderr, "problem sending event data - terminating\n", optarg);
 	    exit(-1);
 	}
-	if (!s88_data.background && s88_data.verbose && modulcount == 1)
-	    printf("\r");
-	fflush(stdout);
 	usec_sleep((MAXMODULES + 4 - modulcount + 1) * 16 * MICRODELAY);
     }
     return 0;
