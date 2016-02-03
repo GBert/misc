@@ -1,4 +1,4 @@
-(kicad_pcb (version 4) (host pcbnew 4.0.1-3.201512221402+6198~38~ubuntu14.04.1-stable)
+(kicad_pcb (version 4) (host pcbnew 4.0.1-stable)
 
   (general
     (links 316)
@@ -698,7 +698,7 @@
   )
 
   (module Connect:RJ45_8 (layer F.Cu) (tedit 0) (tstamp 55B7CAE2)
-    (at 155.321 37.592 180)
+    (at 154.94 38.354 180)
     (tags RJ45)
     (path /55BB9CC6)
     (fp_text reference J2 (at 0.254 4.826 180) (layer F.SilkS)
@@ -853,7 +853,7 @@
   )
 
   (module Wire_Pads:SolderWirePad_2x_0-2.54mmDrill (layer F.Cu) (tedit 56B0ADB3) (tstamp 55D3161E)
-    (at 162.814 106.172 270)
+    (at 162.56 104.648 270)
     (path /55D31B20)
     (fp_text reference JP2 (at 0.127 1.651 270) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
@@ -868,7 +868,7 @@
   )
 
   (module Wire_Pads:SolderWirePad_2x_0-2.54mmDrill (layer F.Cu) (tedit 0) (tstamp 55D31624)
-    (at 140.335 106.172 270)
+    (at 140.081 104.648 270)
     (path /55D325A0)
     (fp_text reference JP3 (at 0 -3.81 270) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
@@ -907,7 +907,7 @@
   )
 
   (module Wire_Pads:SolderWirePad_2x_0-2.54mmDrill (layer F.Cu) (tedit 56B0ADB7) (tstamp 55D339CA)
-    (at 165.354 106.172 270)
+    (at 165.1 104.648 270)
     (path /55D347E6)
     (fp_text reference JP4 (at 0.127 -1.905 270) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
@@ -922,7 +922,7 @@
   )
 
   (module Wire_Pads:SolderWirePad_2x_0-2.54mmDrill (layer F.Cu) (tedit 56B0ADEC) (tstamp 55D339D0)
-    (at 151.511 106.172 270)
+    (at 149.86 104.648 270)
     (path /55D3653C)
     (fp_text reference JP5 (at 0.127 1.651 270) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
@@ -937,7 +937,7 @@
   )
 
   (module Wire_Pads:SolderWirePad_2x_0-2.54mmDrill (layer F.Cu) (tedit 56B0ADF7) (tstamp 55D339D6)
-    (at 154.051 106.172 270)
+    (at 154.94 104.648 270)
     (path /55D3679B)
     (fp_text reference JP6 (at 0.127 -1.905 270) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
@@ -1182,7 +1182,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A5C23)
-    (at 152.781 99.314 180)
+    (at 153.67 98.044 180)
     (descr "Resistor, RC03")
     (tags R)
     (path /55B8819B)
@@ -1211,7 +1211,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A5C2F)
-    (at 141.605 112.776)
+    (at 143.764 113.792)
     (descr "Resistor, RC03")
     (tags R)
     (path /55B89D0C)
@@ -1240,7 +1240,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A5C35)
-    (at 164.846 112.776 180)
+    (at 163.83 111.252 180)
     (descr "Resistor, RC03")
     (tags R)
     (path /55B8DFE0)
@@ -1269,7 +1269,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A5C3B)
-    (at 154.178 112.776)
+    (at 153.67 113.792)
     (descr "Resistor, RC03")
     (tags R)
     (path /55B9F251)
@@ -1733,7 +1733,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A5C9B)
-    (at 112.903 52.705 180)
+    (at 100.965 40.005 180)
     (descr "Resistor, RC03")
     (tags R)
     (path /561EB1C5)
@@ -1791,7 +1791,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A5CA7)
-    (at 127 104.14)
+    (at 126.746 104.14)
     (descr "Resistor, RC03")
     (tags R)
     (path /561F9959)
@@ -1820,7 +1820,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A5CAD)
-    (at 162.687 81.661 90)
+    (at 162.56 81.534 90)
     (descr "Resistor, RC03")
     (tags R)
     (path /561F7584)
@@ -1849,7 +1849,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A5CB3)
-    (at 160.02 81.661 90)
+    (at 160.02 81.534 90)
     (descr "Resistor, RC03")
     (tags R)
     (path /561F996C)
@@ -1936,7 +1936,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A5CC5)
-    (at 160.147 92.075 90)
+    (at 160.02 91.694 90)
     (descr "Resistor, RC03")
     (tags R)
     (path /561F4B82)
@@ -1965,7 +1965,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A5CCB)
-    (at 162.814 92.075 270)
+    (at 162.56 91.694 270)
     (descr "Resistor, RC03")
     (tags R)
     (path /561F5668)
@@ -1994,7 +1994,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A60EF)
-    (at 127 106.68)
+    (at 126.746 106.68)
     (descr "Resistor, RC03")
     (tags R)
     (path /55B7B8AA)
@@ -2023,7 +2023,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A60F5)
-    (at 127 109.22 180)
+    (at 126.746 109.22 180)
     (descr "Resistor, RC03")
     (tags R)
     (path /55B7B994)
@@ -2195,7 +2195,7 @@
   )
 
   (module w_pth_circuits:dil_8-300_socket (layer F.Cu) (tedit 56B0AD9B) (tstamp 569A6738)
-    (at 141.605 106.172 180)
+    (at 143.51 104.648 180)
     (descr "IC, DIL8 x 0,3\", with socket")
     (tags DIL)
     (path /55B75F8C)
@@ -2237,7 +2237,7 @@
   )
 
   (module w_pth_circuits:dil_8-300_socket (layer F.Cu) (tedit 56B0AE02) (tstamp 569A5B4B)
-    (at 152.908 106.172 180)
+    (at 153.67 104.648 180)
     (descr "IC, DIL8 x 0,3\", with socket")
     (tags DIL)
     (path /55B770C8)
@@ -2279,7 +2279,7 @@
   )
 
   (module w_pth_circuits:dil_8-300_socket (layer F.Cu) (tedit 56B0E979) (tstamp 569A5B69)
-    (at 164.084 106.172)
+    (at 163.83 104.648)
     (descr "IC, DIL8 x 0,3\", with socket")
     (tags DIL)
     (path /55B77162)
@@ -2551,12 +2551,12 @@
     )
   )
 
-  (module w_pth_circuits:dil_16-300_socket (layer F.Cu) (tedit 56B0FC7D) (tstamp 56994AC3)
+  (module w_pth_circuits:dil_16-300_socket (layer F.Cu) (tedit 56B0FCB0) (tstamp 56994AC3)
     (at 90.678 101.219 270)
     (descr "IC, DIL16 x 0,3\", with socket")
     (tags DIL)
     (path /561B1EDC)
-    (fp_text reference U7 (at 0 -6.35 270) (layer F.SilkS)
+    (fp_text reference U7 (at -7.366 -6.604 270) (layer F.SilkS)
       (effects (font (size 1.524 1.143) (thickness 0.28702)))
     )
     (fp_text value LTV-844 (at -14.351 -6.604 270) (layer F.SilkS)
@@ -2611,15 +2611,15 @@
     )
   )
 
-  (module w_pth_circuits:dil_16-300_socket (layer F.Cu) (tedit 56B0FC82) (tstamp 56994AA1)
+  (module w_pth_circuits:dil_16-300_socket (layer F.Cu) (tedit 56B0FCB6) (tstamp 56994AA1)
     (at 90.551 122.301 270)
     (descr "IC, DIL16 x 0,3\", with socket")
     (tags DIL)
     (path /561B0BFC)
-    (fp_text reference U6 (at 0 -6.35 270) (layer F.SilkS)
+    (fp_text reference U6 (at -15.748 -6.858 270) (layer F.SilkS)
       (effects (font (size 1.524 1.143) (thickness 0.28702)))
     )
-    (fp_text value LTV-844 (at -17.907 -6.858 270) (layer F.SilkS)
+    (fp_text value LTV-844 (at -22.225 -6.858 270) (layer F.SilkS)
       (effects (font (size 1.524 1.143) (thickness 0.28702)))
     )
     (fp_line (start 7.112 1.27) (end -7.112 1.27) (layer F.SilkS) (width 0.254))
@@ -2896,7 +2896,7 @@
   )
 
   (module w_pth_circuits:dil_8-300_socket (layer F.Cu) (tedit 56A65218) (tstamp 569A5BC3)
-    (at 153.416 81.661 270)
+    (at 153.67 81.534 270)
     (descr "IC, DIL8 x 0,3\", with socket")
     (tags DIL)
     (path /561F756B)
@@ -2980,7 +2980,7 @@
   )
 
   (module w_pth_circuits:dil_8-300_socket (layer F.Cu) (tedit 56A65218) (tstamp 569A5BFF)
-    (at 153.416 92.075 270)
+    (at 153.67 91.694 270)
     (descr "IC, DIL8 x 0,3\", with socket")
     (tags DIL)
     (path /561F4B69)
@@ -3219,7 +3219,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A60E9)
-    (at 141.478 99.568)
+    (at 143.51 98.044)
     (descr "Resistor, RC03")
     (tags R)
     (path /55B833C0)
@@ -3524,7 +3524,7 @@
   )
 
   (module w_pth_circuits:dil_8-300_socket (layer F.Cu) (tedit 56A65218) (tstamp 56B42737)
-    (at 101.219 119.761)
+    (at 101.219 117.729)
     (descr "IC, DIL8 x 0,3\", with socket")
     (tags DIL)
     (path /56B29664)
@@ -3624,7 +3624,7 @@
   )
 
   (module Buttons_Switches_ThroughHole:SW_PUSH_SMALL (layer F.Cu) (tedit 0) (tstamp 56B42763)
-    (at 141.732 93.599)
+    (at 143.002 92.202)
     (path /56AB0AA5)
     (fp_text reference SW2 (at 0 -0.762) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
@@ -3709,11 +3709,11 @@
     )
   )
 
-  (module w_conn_pt-1,5:pt_1,5-2-3,5-h (layer F.Cu) (tedit 56B0F75A) (tstamp 56B49215)
+  (module w_conn_pt-1,5:pt_1,5-2-3,5-h (layer F.Cu) (tedit 56B0FCBD) (tstamp 56B49215)
     (at 101.104 131.628)
     (descr "2-way 3.5mm pitch terminal block, Phoenix PT series")
     (path /56B2B397)
-    (fp_text reference P15 (at -6.731 1.524) (layer F.SilkS)
+    (fp_text reference P15 (at -6.362 2.23) (layer F.SilkS)
       (effects (font (size 1.5 1.5) (thickness 0.3)))
     )
     (fp_text value SNIFFER (at 4.901 -0.833 90) (layer F.SilkS)
@@ -3737,7 +3737,7 @@
   )
 
   (module Pin_Headers:Pin_Header_Straight_1x10 (layer F.Cu) (tedit 0) (tstamp 56B1E8CE)
-    (at 100.33 86.106 180)
+    (at 100.457 77.216 180)
     (descr "Through hole pin header")
     (tags "pin header")
     (path /56198081)
@@ -3786,7 +3786,7 @@
   )
 
   (module Pin_Headers:Pin_Header_Straight_1x10 (layer F.Cu) (tedit 0) (tstamp 56B1E8E7)
-    (at 100.33 112.649 180)
+    (at 100.457 107.569 180)
     (descr "Through hole pin header")
     (tags "pin header")
     (path /561981D6)
@@ -3835,7 +3835,7 @@
   )
 
   (module w_pth_resistors:r-sil_9 (layer F.Cu) (tedit 0) (tstamp 56B1E8F9)
-    (at 104.521 76.708 270)
+    (at 104.648 72.009 270)
     (descr "R-net, sil package, 9pin")
     (tags "CONN DEV")
     (path /561DDD17)
@@ -3876,7 +3876,7 @@
   )
 
   (module w_pth_resistors:r-sil_9 (layer F.Cu) (tedit 0) (tstamp 56B1E90B)
-    (at 104.775 102.362 270)
+    (at 104.775 97.282 270)
     (descr "R-net, sil package, 9pin")
     (tags "CONN DEV")
     (path /561E0FF3)
@@ -4046,7 +4046,7 @@
   )
 
   (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 0) (tstamp 56B28EB2)
-    (at 164.084 99.441)
+    (at 163.83 98.044)
     (descr "Small ceramic capacitor")
     (tags C)
     (path /56B42AE6)
@@ -4073,7 +4073,7 @@
   )
 
   (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 0) (tstamp 56B28EBD)
-    (at 152.781 115.697)
+    (at 156.21 111.252)
     (descr "Small ceramic capacitor")
     (tags C)
     (path /56B42985)
@@ -4100,14 +4100,14 @@
   )
 
   (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 0) (tstamp 56B28EC8)
-    (at 146.812 115.57)
+    (at 143.51 111.252 180)
     (descr "Small ceramic capacitor")
     (tags C)
     (path /56B4278F)
-    (fp_text reference C14 (at 0 -3.81) (layer F.SilkS)
+    (fp_text reference C14 (at 0 -3.81 180) (layer F.SilkS)
       (effects (font (size 1.016 1.016) (thickness 0.2032)))
     )
-    (fp_text value 100nF (at 0 -2.286) (layer F.SilkS) hide
+    (fp_text value 100nF (at 0 -2.286 180) (layer F.SilkS) hide
       (effects (font (size 1.016 1.016) (thickness 0.2032)))
     )
     (fp_line (start -2.4892 -1.27) (end 2.54 -1.27) (layer F.SilkS) (width 0.3048))
@@ -4115,9 +4115,9 @@
     (fp_line (start 2.54 1.27) (end -2.54 1.27) (layer F.SilkS) (width 0.3048))
     (fp_line (start -2.54 1.27) (end -2.54 -1.27) (layer F.SilkS) (width 0.3048))
     (fp_line (start -2.54 -0.635) (end -1.905 -1.27) (layer F.SilkS) (width 0.3048))
-    (pad 1 thru_hole circle (at -1.27 0) (size 1.50114 1.50114) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole circle (at -1.27 0 180) (size 1.50114 1.50114) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 49 VCC))
-    (pad 2 thru_hole circle (at 1.27 0) (size 1.50114 1.50114) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole circle (at 1.27 0 180) (size 1.50114 1.50114) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 2 GND))
     (model walter/capacitors/cnp_3mm_disc.wrl
       (at (xyz 0 0 0))
@@ -4127,7 +4127,7 @@
   )
 
   (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 0) (tstamp 56B2911E)
-    (at 97.282 111.506 90)
+    (at 97.282 109.093 90)
     (descr "Small ceramic capacitor")
     (tags C)
     (path /56B1D1F7)
@@ -4210,7 +4210,7 @@
   )
 
   (module 78xx:TO-220 (layer F.Cu) (tedit 56B0EEA5) (tstamp 55D339E7)
-    (at 103.505 55.499 270)
+    (at 109.093 54.102 270)
     (descr "Non Isolated JEDEC TO-220 Package")
     (tags "Power Integration YN Package")
     (path /55D3F12B)
@@ -4239,7 +4239,7 @@
   )
 
   (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 0) (tstamp 55D339B7)
-    (at 100.2665 52.7685 270)
+    (at 105.664 51.562 270)
     (descr "Small ceramic capacitor")
     (tags C)
     (path /55D3F76D)
@@ -4266,7 +4266,7 @@
   )
 
   (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 56B0FC69) (tstamp 55D339BD)
-    (at 100.2665 58.2295 90)
+    (at 105.664 56.896 90)
     (descr "Small ceramic capacitor")
     (tags C)
     (path /55D43E5B)
