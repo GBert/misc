@@ -187,7 +187,6 @@ int main(int argc, char **argv) {
     int utime, i, j;
     int opt, ret;
     int modulcount = 1;
-    int sensors[MAXMODULES * 16];
     struct sockaddr_in destaddr, *bsa;
     struct ifaddrs *ifap, *ifa;
     struct s88_t s88_data;
@@ -291,9 +290,6 @@ int main(int argc, char **argv) {
 	    exit(1);
 	}
     }
-
-    /* preset sensor values */
-    memset(sensors, 0, sizeof(sensors));
 
     /* get the broadcast address */
     getifaddrs(&ifap);
