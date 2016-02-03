@@ -38,7 +38,7 @@
 
 #define BIT(x)		(1<<x)
 #define MICRODELAY	15	/* clock frequency 1/MICRODELAY[us] */
-#define MINDELAY	5	/* min delay in usec */
+#define MINDELAY	2	/* min delay in usec */
 #define MAXMODULES	32	/* max numbers of S88 modules */
 #define MAXIPLEN	40	/* maximum IP string length */
 #define UDPPORT		15730
@@ -360,15 +360,15 @@ int main(int argc, char **argv) {
     while (1) {
 	s88_bit = 0;
 	gpio_bpi_set(LOAD_PIN, HIGH ^ s88_data.invert);
-	usec_sleep(MICRODELAY);
+	usec_sleep(utime);
 	gpio_bpi_set(CLOCK_PIN, HIGH ^ s88_data.invert);
-	usec_sleep(MICRODELAY);
+	usec_sleep(utime);
 	gpio_bpi_set(CLOCK_PIN, LOW ^ s88_data.invert);
-	usec_sleep(MICRODELAY);
+	usec_sleep(utime);
 	gpio_bpi_set(RESET_PIN, HIGH ^ s88_data.invert);
-	usec_sleep(MICRODELAY);
+	usec_sleep(utime);
 	gpio_bpi_set(RESET_PIN, LOW ^ s88_data.invert);
-	usec_sleep(MICRODELAY);
+	usec_sleep(utime);
 	gpio_bpi_set(LOAD_PIN, LOW ^ s88_data.invert);
 	s88_data.count++;
 	/* get sensor data */
@@ -376,7 +376,7 @@ int main(int argc, char **argv) {
 	    if ((s88_bit & 0x1f) == 0)
 		mask = BIT(31);
 	    for (j = 0; j < 16; j++) {
-		usec_sleep(MICRODELAY / 2);
+		usec_sleep(utime/ 2);
 
 		gpio_bpi_get(DATA_PIN, &newvalue);
 		if (newvalue ^= s88_data.invert)
@@ -384,9 +384,9 @@ int main(int argc, char **argv) {
 		else
 		    bus_actual[i >> 1] &= ~mask;
 
-		usec_sleep(MICRODELAY / 2);
+		usec_sleep(utime/ 2);
 		gpio_bpi_set(CLOCK_PIN, HIGH ^ s88_data.invert);
-		usec_sleep(MICRODELAY);
+		usec_sleep(utime);
 		gpio_bpi_set(CLOCK_PIN, LOW ^ s88_data.invert);
 	        s88_bit++;
 	        mask >>= 1;
@@ -398,7 +398,7 @@ int main(int argc, char **argv) {
 	    fprintf(stderr, "problem sending event data - terminating\n", optarg);
 	    exit(-1);
 	}
-	usec_sleep((MAXMODULES + 4 - modulcount + 1) * 16 * MICRODELAY);
+	usec_sleep(100 * utime);
     }
     return 0;
 }
