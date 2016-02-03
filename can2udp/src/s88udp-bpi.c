@@ -125,7 +125,7 @@ int create_event(struct s88_t *s88, int bus, int offset, uint32_t changed_bits, 
     uint16_t temp16;
     uint8_t netframe[13];
 
-    /* allow only usefull M*rklin hashes */
+    /* allow usefull M*rklin hashes only */
     canid = 0x00220300 | (s88->hash & 0x0000ffff);
 
     temp32 = htonl(canid);
@@ -201,7 +201,7 @@ int main(int argc, char **argv) {
     int destination_port = UDPPORT;
     utime = MICRODELAY;
 
-    memset(&s88_data, 0 , sizeof(s88_data));
+    memset(&s88_data, 0, sizeof(s88_data));
     s88_data.background = 1;
     /* prepare debouncing buffer */
     memset(bus_actual, 0, sizeof(bus_actual));
@@ -376,7 +376,7 @@ int main(int argc, char **argv) {
 	    if ((s88_bit & 0x1f) == 0)
 		mask = BIT(31);
 	    for (j = 0; j < 16; j++) {
-		usec_sleep(utime/ 2);
+		usec_sleep(utime / 2);
 
 		gpio_bpi_get(DATA_PIN, &newvalue);
 		if (newvalue ^= s88_data.invert)
@@ -384,18 +384,18 @@ int main(int argc, char **argv) {
 		else
 		    bus_actual[i >> 1] &= ~mask;
 
-		usec_sleep(utime/ 2);
+		usec_sleep(utime / 2);
 		gpio_bpi_set(CLOCK_PIN, HIGH ^ s88_data.invert);
 		usec_sleep(utime);
 		gpio_bpi_set(CLOCK_PIN, LOW ^ s88_data.invert);
-	        s88_bit++;
-	        mask >>= 1;
+		s88_bit++;
+		mask >>= 1;
 	    }
 	}
 	/* now check data */
 	ret = analyze_data(&s88_data, modulcount * 16);
 	if (ret < 0) {
-	    fprintf(stderr, "problem sending event data - terminating\n", optarg);
+	    fprintf(stderr, "problem sending event data - terminating\n");
 	    exit(-1);
 	}
 	usec_sleep(100 * utime);
