@@ -325,37 +325,37 @@ Text Label 10150 5100 0    60   ~ 0
 SCL
 Text Label 10150 5200 0    60   ~ 0
 SDA
-Text Label 6850 5000 0    60   ~ 0
+Text Label 7300 5000 0    60   ~ 0
 IO1
-Text Label 6850 5100 0    60   ~ 0
+Text Label 7300 5100 0    60   ~ 0
 IO2
-Text Label 6850 5200 0    60   ~ 0
+Text Label 7300 5200 0    60   ~ 0
 IO3
-Text Label 6850 5300 0    60   ~ 0
+Text Label 7300 5300 0    60   ~ 0
 IO4
-Text Label 6850 5400 0    60   ~ 0
+Text Label 7300 5400 0    60   ~ 0
 IO5
-Text Label 10600 6600 0    60   ~ 0
+Text Label 10150 6600 0    60   ~ 0
 IO6
-Text Label 10600 6700 0    60   ~ 0
+Text Label 10150 6700 0    60   ~ 0
 IO7
-Text Label 10600 6800 0    60   ~ 0
+Text Label 10150 6800 0    60   ~ 0
 IO8
-Text Label 10600 5700 0    60   ~ 0
+Text Label 10150 5700 0    60   ~ 0
 IO9
-Text Label 10600 5800 0    60   ~ 0
+Text Label 10100 5800 0    60   ~ 0
 IO10
-Text Label 10600 5900 0    60   ~ 0
+Text Label 10100 5900 0    60   ~ 0
 IO11
-Text Label 10600 6000 0    60   ~ 0
+Text Label 10100 6000 0    60   ~ 0
 IO12
-Text Label 10600 6100 0    60   ~ 0
+Text Label 10100 6100 0    60   ~ 0
 IO13
-Text Label 10600 6200 0    60   ~ 0
+Text Label 10100 6200 0    60   ~ 0
 IO14
-Text Label 6800 5600 0    60   ~ 0
+Text Label 7300 5600 0    60   ~ 0
 IO15
-Text Label 6800 5700 0    60   ~ 0
+Text Label 7300 5700 0    60   ~ 0
 IO16
 $Comp
 L CONN_01X03 P3
@@ -1828,182 +1828,6 @@ F 3 "" H 4200 10850 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R21
-U 1 1 561B862E
-P 7150 5000
-F 0 "R21" V 7150 4550 50  0000 C CNN
-F 1 "R" V 7150 5000 50  0000 C CNN
-F 2 "w_pth_resistors:RC03" V 7080 5000 30  0001 C CNN
-F 3 "" H 7150 5000 30  0000 C CNN
-	1    7150 5000
-	0    1    1    0   
-$EndComp
-$Comp
-L R R22
-U 1 1 561BA02A
-P 7150 5100
-F 0 "R22" V 7150 4650 50  0000 C CNN
-F 1 "R" V 7150 5100 50  0000 C CNN
-F 2 "w_pth_resistors:RC03" V 7080 5100 30  0001 C CNN
-F 3 "" H 7150 5100 30  0000 C CNN
-	1    7150 5100
-	0    1    1    0   
-$EndComp
-$Comp
-L R R23
-U 1 1 561BA1AA
-P 7150 5200
-F 0 "R23" V 7150 4750 50  0000 C CNN
-F 1 "R" V 7150 5200 50  0000 C CNN
-F 2 "w_pth_resistors:RC03" V 7080 5200 30  0001 C CNN
-F 3 "" H 7150 5200 30  0000 C CNN
-	1    7150 5200
-	0    1    1    0   
-$EndComp
-$Comp
-L R R24
-U 1 1 561BA3C4
-P 7150 5300
-F 0 "R24" V 7150 4850 50  0000 C CNN
-F 1 "R" V 7150 5300 50  0000 C CNN
-F 2 "w_pth_resistors:RC03" V 7080 5300 30  0001 C CNN
-F 3 "" H 7150 5300 30  0000 C CNN
-	1    7150 5300
-	0    1    1    0   
-$EndComp
-$Comp
-L R R25
-U 1 1 561BA53C
-P 7150 5400
-F 0 "R25" V 7150 4950 50  0000 C CNN
-F 1 "R" V 7150 5400 50  0000 C CNN
-F 2 "w_pth_resistors:RC03" V 7080 5400 30  0001 C CNN
-F 3 "" H 7150 5400 30  0000 C CNN
-	1    7150 5400
-	0    1    1    0   
-$EndComp
-$Comp
-L R R34
-U 1 1 561BA6B4
-P 10450 6600
-F 0 "R34" V 10450 6150 50  0000 C CNN
-F 1 "R" V 10450 6600 50  0000 C CNN
-F 2 "w_pth_resistors:RC03" V 10380 6600 30  0001 C CNN
-F 3 "" H 10450 6600 30  0000 C CNN
-	1    10450 6600
-	0    -1   -1   0   
-$EndComp
-$Comp
-L R R35
-U 1 1 561BC266
-P 10450 6700
-F 0 "R35" V 10450 6250 50  0000 C CNN
-F 1 "R" V 10450 6700 50  0000 C CNN
-F 2 "w_pth_resistors:RC03" V 10380 6700 30  0001 C CNN
-F 3 "" H 10450 6700 30  0000 C CNN
-	1    10450 6700
-	0    -1   -1   0   
-$EndComp
-$Comp
-L R R36
-U 1 1 561BC38B
-P 10450 6800
-F 0 "R36" V 10450 6350 50  0000 C CNN
-F 1 "R" V 10450 6800 50  0000 C CNN
-F 2 "w_pth_resistors:RC03" V 10380 6800 30  0001 C CNN
-F 3 "" H 10450 6800 30  0000 C CNN
-	1    10450 6800
-	0    -1   -1   0   
-$EndComp
-$Comp
-L R R28
-U 1 1 561BCFDB
-P 10450 5700
-F 0 "R28" V 10450 5250 50  0000 C CNN
-F 1 "R" V 10450 5700 50  0000 C CNN
-F 2 "w_pth_resistors:RC03" V 10380 5700 30  0001 C CNN
-F 3 "" H 10450 5700 30  0000 C CNN
-	1    10450 5700
-	0    -1   -1   0   
-$EndComp
-$Comp
-L R R29
-U 1 1 561BD239
-P 10450 5800
-F 0 "R29" V 10450 5350 50  0000 C CNN
-F 1 "R" V 10450 5800 50  0000 C CNN
-F 2 "w_pth_resistors:RC03" V 10380 5800 30  0001 C CNN
-F 3 "" H 10450 5800 30  0000 C CNN
-	1    10450 5800
-	0    -1   -1   0   
-$EndComp
-$Comp
-L R R30
-U 1 1 561BD3C5
-P 10450 5900
-F 0 "R30" V 10450 5450 50  0000 C CNN
-F 1 "R" V 10450 5900 50  0000 C CNN
-F 2 "w_pth_resistors:RC03" V 10380 5900 30  0001 C CNN
-F 3 "" H 10450 5900 30  0000 C CNN
-	1    10450 5900
-	0    -1   -1   0   
-$EndComp
-$Comp
-L R R31
-U 1 1 561BD611
-P 10450 6000
-F 0 "R31" V 10450 5550 50  0000 C CNN
-F 1 "R" V 10450 6000 50  0000 C CNN
-F 2 "w_pth_resistors:RC03" V 10380 6000 30  0001 C CNN
-F 3 "" H 10450 6000 30  0000 C CNN
-	1    10450 6000
-	0    -1   -1   0   
-$EndComp
-$Comp
-L R R32
-U 1 1 561BD7AD
-P 10450 6100
-F 0 "R32" V 10450 5650 50  0000 C CNN
-F 1 "R" V 10450 6100 50  0000 C CNN
-F 2 "w_pth_resistors:RC03" V 10380 6100 30  0001 C CNN
-F 3 "" H 10450 6100 30  0000 C CNN
-	1    10450 6100
-	0    -1   -1   0   
-$EndComp
-$Comp
-L R R33
-U 1 1 561BD9AA
-P 10450 6200
-F 0 "R33" V 10450 5750 50  0000 C CNN
-F 1 "R" V 10450 6200 50  0000 C CNN
-F 2 "w_pth_resistors:RC03" V 10380 6200 30  0001 C CNN
-F 3 "" H 10450 6200 30  0000 C CNN
-	1    10450 6200
-	0    -1   -1   0   
-$EndComp
-$Comp
-L R R26
-U 1 1 561BFCFA
-P 7150 5600
-F 0 "R26" V 7150 5150 50  0000 C CNN
-F 1 "R" V 7150 5600 50  0000 C CNN
-F 2 "w_pth_resistors:RC03" V 7080 5600 30  0001 C CNN
-F 3 "" H 7150 5600 30  0000 C CNN
-	1    7150 5600
-	0    1    1    0   
-$EndComp
-$Comp
-L R R27
-U 1 1 561BFF0D
-P 7150 5700
-F 0 "R27" V 7150 5250 50  0000 C CNN
-F 1 "R" V 7150 5700 50  0000 C CNN
-F 2 "w_pth_resistors:RC03" V 7080 5700 30  0001 C CNN
-F 3 "" H 7150 5700 30  0000 C CNN
-	1    7150 5700
-	0    1    1    0   
-$EndComp
-$Comp
 L RJ12 J3
 U 1 1 561CBBB3
 P 15050 4700
@@ -3272,38 +3096,6 @@ Connection ~ 4200 9800
 Wire Wire Line
 	4000 10400 4200 10400
 Connection ~ 4200 10400
-Wire Wire Line
-	7000 5700 6800 5700
-Wire Wire Line
-	7000 5600 6800 5600
-Wire Wire Line
-	7000 5400 6800 5400
-Wire Wire Line
-	7000 5300 6800 5300
-Wire Wire Line
-	7000 5200 6800 5200
-Wire Wire Line
-	7000 5100 6800 5100
-Wire Wire Line
-	7000 5000 6800 5000
-Wire Wire Line
-	10600 5700 10800 5700
-Wire Wire Line
-	10600 5800 10800 5800
-Wire Wire Line
-	10600 5900 10800 5900
-Wire Wire Line
-	10600 6000 10800 6000
-Wire Wire Line
-	10600 6100 10800 6100
-Wire Wire Line
-	10600 6200 10800 6200
-Wire Wire Line
-	10600 6600 10800 6600
-Wire Wire Line
-	10600 6700 10800 6700
-Wire Wire Line
-	10600 6800 10800 6800
 Wire Wire Line
 	5850 7250 6050 7250
 Wire Wire Line
