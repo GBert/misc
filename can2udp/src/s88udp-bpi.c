@@ -372,15 +372,12 @@ int main(int argc, char **argv) {
 	    if ((s88_bit & 0x1f) == 0)
 		mask = BIT(31);
 	    for (j = 0; j < 16; j++) {
-		usec_sleep(utime / 2);
-
 		gpio_bpi_get(DATA_PIN, &newvalue);
 		if (newvalue ^= s88_data.invert)
 		    bus_actual[i >> 1] |= mask;
 		else
 		    bus_actual[i >> 1] &= ~mask;
-
-		usec_sleep(utime / 2);
+		usec_sleep(utime);
 		gpio_bpi_set(CLOCK_PIN, HIGH ^ s88_data.invert);
 		usec_sleep(utime);
 		gpio_bpi_set(CLOCK_PIN, LOW ^ s88_data.invert);
