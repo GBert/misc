@@ -98,7 +98,7 @@ unsigned char netframe[MAXDG];
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
     fprintf(stderr, "   Version 0.9\n\n");
-    fprintf(stderr, "         -i <can int>        can interface - default vcan0\n");
+    fprintf(stderr, "         -i <can int>        can interface - default vcan1\n");
     fprintf(stderr, "         -d                  daemonize\n\n");
 }
 
@@ -176,7 +176,7 @@ int main(int argc, char **argv) {
 
     int background = 0;
     int verbose = 1;
-    strcpy(ifr.ifr_name, "vcan0");
+    strcpy(ifr.ifr_name, "vcan1");
 
     while ((opt = getopt(argc, argv, "i:dh?")) != -1) {
 	switch (opt) {
