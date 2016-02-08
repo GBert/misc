@@ -31,16 +31,17 @@
 
 #define MAXDG   	4096	/* maximum datagram size */
 #define MAXUDP  	16	/* maximum UDP datagram size */
+#define DEFAULT_LOCO	5
 
-static unsigned char LOCO_SPEED[] = { 0x00, 0x08, 0x00, 0x03, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-static unsigned char START[]      = { 0x00, 0x00, 0x00, 0x03, 0x05, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
-static unsigned char STOP[]       = { 0x00, 0x00, 0x00, 0x03, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static unsigned char LOCO_SPEED[] = { 0x00, 0x08, 0x03, 0x00, 0x06, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static unsigned char START_STOP[] = { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 unsigned char netframe[MAXDG];
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface> -r <infrared-interface>\n", prg);
     fprintf(stderr, "   Version 0.1\n\n");
+    fprintf(stderr, "         -i <loco id>        loco id - default %d\n", DEFAULT_LOCO);
     fprintf(stderr, "         -i <can int>        can interface - default can0\n");
     fprintf(stderr, "         -r <ir int>         infrared event interface - default /dev/input/event1\n");
 }
@@ -114,7 +115,8 @@ int main(int argc, char **argv) {
     socklen_t caddrlen = sizeof(caddr);
 
     status = 0;
-    loco = 0;
+    loco = DEFAULT_LOCO;
+    speed = 0;
     strcpy(ifr.ifr_name, "can0");
     strcpy(ir_int, "/dev/input/event1");
 
@@ -172,8 +174,39 @@ int main(int argc, char **argv) {
 	    exit(-1);
 	}
 	for (n = 0; n < (int)( ret / sizeof(struct input_event)); n++) {
+	    /* printf("event type :0x%02x - looking for 0x%02x\n", ev[n].type, EV_MSC); */
 	    if (ev[n].type == EV_MSC && (ev[n].code == MSC_RAW || ev[n].code == MSC_SCAN)) {
 		memcpy(&frame.data, &data[5], 8);
+		switch (ev[n].value) {
+		case 0x0c:
+		    printf("Start/Stop\n");
+		    memcpy(data, START_STOP, sizeof(data));
+		    status ^= 1;
+		    data[9] = status & 0x01;
+		    send_defined_can_frame(sc, data);
+		    break;
+		case 0x10:
+		    printf("loco %d speed + %d\n", loco, speed);
+		    memcpy(data, LOCO_SPEED, sizeof(data));
+		    data[8] = loco & 0xff;
+		    if (speed < 256)
+			speed += 1;
+		    data[10] = speed;
+		    send_defined_can_frame(sc, data);
+		    break;
+		case 0x11:
+		    printf("loco %d speed - %d \n", loco, speed);
+		    memcpy(data, LOCO_SPEED, sizeof(data));
+		    data[8] = loco & 0xff;
+		    if (speed > 0)
+			speed -= 1;
+		    data[10] = speed;
+		    send_defined_can_frame(sc, data);
+		    break;
+		default:
+		    printf("unhandled value 0x%02x\n", ev[n].value);
+		    break;
+		}
 	    }
 	}
     }
