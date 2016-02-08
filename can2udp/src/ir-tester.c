@@ -169,11 +169,11 @@ int main(int argc, char **argv) {
 
     while (1) {
 	ret = read(fd, ev, sizeof(struct input_event) * 64);
-	if (ret < (int) sizeof(struct input_event)) {
+	if (ret < (int)sizeof(struct input_event)) {
 	    fprintf(stderr, "error reading IR device: %s\n", strerror(errno));
 	    exit(-1);
 	}
-	for (n = 0; n < (int)( ret / sizeof(struct input_event)); n++) {
+	for (n = 0; n < (int)(ret / sizeof(struct input_event)); n++) {
 	    /* printf("event type :0x%02x - looking for 0x%02x\n", ev[n].type, EV_MSC); */
 	    if (ev[n].type == EV_MSC && (ev[n].code == MSC_RAW || ev[n].code == MSC_SCAN)) {
 		memcpy(&frame.data, &data[5], 8);
