@@ -1,4 +1,4 @@
-BINS := can-bounce-test can2eth can2udp can4lnx2udp clone-cs2-config gb2-update \
+BINS := can-bounce-test can2eth can2udp can4lnx2udp clone-cs2-config gb2-update ir-tester \
         scan2lan can2lan virtual_gfp virtual_links88 virtual_ms2 get-cs-data get-cs-config s88udp-bpi wake-up-links88
 
 BIN = $@
@@ -45,6 +45,9 @@ virtual_ms2: virtual_ms2.o
 
 get-cs-data: get-cs-data.o
 	$(CC) $(CFLAGS) -o get-cs-data get-cs-data.o
+
+ir-tester: ir-tester.o
+	$(CC) $(CFLAGS) -o ir-tester ir-tester.o
 
 get-cs-config: crc-ccitt.o get-cs-config.o
 	$(CC) $(CFLAGS) -o get-cs-config crc-ccitt.o get-cs-config.o -lz
