@@ -1,4 +1,4 @@
-update=Sun 31 Jan 2016 03:40:57 PM CET
+update=Tue 09 Feb 2016 05:48:59 PM CET
 version=1
 last_client=kicad
 [pcbnew]
@@ -61,3 +61,4 @@ LibName29=valves
 LibName30=/home/eh2be5j/projekte/github-misc/srse/Domino
 LibName31=microchip_pic18mcu
 LibName32=ftdi
+LibName33=HR911105A
