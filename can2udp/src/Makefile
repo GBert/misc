@@ -1,4 +1,4 @@
-BINS := can-bounce-test can2eth can2udp can4lnx2udp clone-cs2-config gb2-update ir-tester \
+BINS := can-bounce-test can2eth can2udp can4lnx2udp clone-cs2-config gb2-update ir-tester bpi-rs485 \
         scan2lan can2lan virtual_gfp virtual_links88 virtual_ms2 get-cs-data get-cs-config s88udp-bpi wake-up-links88
 
 BIN = $@
@@ -9,6 +9,9 @@ CFLAGS+=-Wall -pedantic -Wextra -g
 
 read_cs2_dump: read_cs2_dump.o
 	$(CC) $(CFLAGS) -o read_cs2_dump read_cs2_dump.o -lpcap
+
+bpi-rs485: bpi-rs485.o
+	$(CC) $(CFLAGS) -o bpi-rs485 bpi-rs485.o
 
 can-bounce-test: can-bounce-test.o
 	$(CC) $(CFLAGS) -o can-bounce-test can-bounce-test.o
