@@ -28,10 +28,8 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
-LIBS:Domino
 LIBS:microchip_pic18mcu
 LIBS:ftdi
-LIBS:HR911105A
 LIBS:Domino-CAN-cache
 EELAYER 25 0
 EELAYER END
@@ -364,7 +362,13 @@ Wire Wire Line
 Wire Wire Line
 	4100 2100 4900 2100
 Wire Wire Line
-	4100 1900 4100 2850
+	4100 1900 4100 2000
+Wire Wire Line
+	4100 2000 4100 2100
+Wire Wire Line
+	4100 2100 4100 2800
+Wire Wire Line
+	4100 2800 4100 2850
 Wire Wire Line
 	4900 2000 4100 2000
 Connection ~ 4100 2100
@@ -374,7 +378,13 @@ Connection ~ 4100 2000
 Wire Wire Line
 	5600 1100 5600 700 
 Wire Wire Line
-	4700 700  6500 700 
+	4700 700  5600 700 
+Wire Wire Line
+	5600 700  5800 700 
+Wire Wire Line
+	5800 700  5900 700 
+Wire Wire Line
+	5900 700  6500 700 
 Wire Wire Line
 	4700 700  4700 1200
 Wire Wire Line
@@ -389,7 +399,9 @@ Connection ~ 5900 700
 Wire Wire Line
 	7300 3300 8150 3300
 Wire Wire Line
-	8150 2300 8150 3350
+	8150 2300 8150 3300
+Wire Wire Line
+	8150 3300 8150 3350
 Wire Wire Line
 	7300 2300 8150 2300
 Connection ~ 8150 3300
@@ -399,14 +411,24 @@ Connection ~ 4100 2800
 Wire Wire Line
 	8750 2850 8450 2850
 Wire Wire Line
-	8450 2750 8450 2950
+	8450 2750 8450 2850
+Wire Wire Line
+	8450 2850 8450 2950
 Wire Wire Line
 	8750 2750 8450 2750
 Connection ~ 8450 2850
 Wire Wire Line
 	8850 6100 8850 6000
 Wire Wire Line
-	7450 6100 9050 6100
+	7450 6100 7700 6100
+Wire Wire Line
+	7700 6100 8200 6100
+Wire Wire Line
+	8200 6100 8850 6100
+Wire Wire Line
+	8850 6100 8950 6100
+Wire Wire Line
+	8950 6100 9050 6100
 Wire Wire Line
 	9050 6100 9050 6000
 Connection ~ 8950 6100
@@ -448,7 +470,11 @@ Wire Wire Line
 Wire Wire Line
 	9050 4500 8200 4500
 Wire Wire Line
-	8200 4500 8200 5750
+	8200 4500 8200 4900
+Wire Wire Line
+	8200 4900 8200 5500
+Wire Wire Line
+	8200 5500 8200 5750
 Wire Wire Line
 	8200 4900 8250 4900
 Wire Wire Line
@@ -459,9 +485,13 @@ Wire Wire Line
 Connection ~ 8850 6100
 Connection ~ 8200 5500
 Wire Wire Line
-	7150 5200 7750 5200
+	7150 5200 7700 5200
 Wire Wire Line
-	7150 5300 7750 5300
+	7700 5200 7750 5200
+Wire Wire Line
+	7150 5300 7450 5300
+Wire Wire Line
+	7450 5300 7750 5300
 Wire Wire Line
 	7450 5400 7450 5300
 Connection ~ 7450 5300
@@ -475,14 +505,18 @@ Wire Wire Line
 	7450 5700 7450 6100
 Connection ~ 7700 6100
 Wire Wire Line
-	10150 5900 10750 5900
+	10150 5900 10450 5900
+Wire Wire Line
+	10450 5900 10750 5900
 Connection ~ 10450 5900
 Wire Wire Line
 	10450 5800 10450 5900
 Wire Wire Line
 	10150 6200 10150 6300
 Wire Wire Line
-	10150 6300 10750 6300
+	10150 6300 10450 6300
+Wire Wire Line
+	10450 6300 10750 6300
 Wire Wire Line
 	10750 6300 10750 6200
 Connection ~ 10450 6300
@@ -527,11 +561,125 @@ $Comp
 L MICRO-SD_SD-007 U6
 U 1 1 56BA5AED
 P 4450 6700
-F 0 "U6" H 4450 6700 0   0001 C CNN
+F 0 "U6" H 4450 6700 60  0001 C CNN
 F 1 "MICRO-SD_SD-007" H 4450 6700 10  0001 C CNN
 F 2 "" H 4450 6700 60  0000 C CNN
 F 3 "" H 4450 6700 60  0000 C CNN
 	1    4450 6700
 	1    0    0    -1  
 $EndComp
+$Comp
+L R R?
+U 1 1 56BA394D
+P 3800 4950
+F 0 "R?" V 3700 4950 50  0000 C CNN
+F 1 "50" V 3800 4950 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering_II" H 3730 4950 50  0001 C CNN
+F 3 "" H 3800 4950 50  0000 C CNN
+	1    3800 4950
+	0    1    1    0   
+$EndComp
+$Comp
+L R R?
+U 1 1 56BA3AE8
+P 3800 5100
+F 0 "R?" V 3700 5100 50  0000 C CNN
+F 1 "50" V 3800 5100 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering_II" H 3730 5100 50  0001 C CNN
+F 3 "" H 3800 5100 50  0000 C CNN
+	1    3800 5100
+	0    1    1    0   
+$EndComp
+$Comp
+L R R?
+U 1 1 56BA3B32
+P 3800 5250
+F 0 "R?" V 3700 5250 50  0000 C CNN
+F 1 "50" V 3800 5250 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering_II" H 3730 5250 50  0001 C CNN
+F 3 "" H 3800 5250 50  0000 C CNN
+	1    3800 5250
+	0    1    1    0   
+$EndComp
+$Comp
+L R R?
+U 1 1 56BA3B7D
+P 3800 5400
+F 0 "R?" V 3700 5400 50  0000 C CNN
+F 1 "50" V 3800 5400 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering_II" H 3730 5400 50  0001 C CNN
+F 3 "" H 3800 5400 50  0000 C CNN
+	1    3800 5400
+	0    1    1    0   
+$EndComp
+Wire Bus Line
+	3350 4400 3350 4850
+Wire Bus Line
+	3350 4850 3350 5050
+Wire Bus Line
+	3350 5050 3350 5200
+Wire Bus Line
+	3350 5200 3350 5650
+Wire Bus Line
+	3350 5650 3350 5950
+Entry Wire Line
+	3350 4850 3450 4950
+Entry Wire Line
+	3350 5000 3450 5100
+Entry Wire Line
+	3350 5150 3450 5250
+Entry Wire Line
+	3350 5300 3450 5400
+Wire Wire Line
+	1950 4700 1950 4500
+Wire Wire Line
+	2050 4700 2050 4500
+Wire Wire Line
+	2150 4500 2150 4700
+Wire Wire Line
+	2250 4700 2250 4500
+Wire Wire Line
+	2350 4700 2350 4500
+Wire Wire Line
+	2450 4700 2450 4500
+Wire Wire Line
+	2550 4700 2550 4500
+Wire Wire Line
+	2650 4700 2650 4500
+Wire Bus Line
+	1850 4400 1950 4400
+Wire Bus Line
+	1950 4400 2050 4400
+Wire Bus Line
+	2050 4400 2150 4400
+Wire Bus Line
+	2150 4400 2250 4400
+Wire Bus Line
+	2250 4400 2350 4400
+Wire Bus Line
+	2350 4400 2450 4400
+Wire Bus Line
+	2450 4400 2550 4400
+Wire Bus Line
+	2550 4400 3350 4400
+Entry Wire Line
+	2050 4400 2150 4500
+Entry Wire Line
+	1950 4400 2050 4500
+Entry Wire Line
+	1850 4400 1950 4500
+Entry Wire Line
+	2150 4400 2250 4500
+Entry Wire Line
+	2250 4400 2350 4500
+Entry Wire Line
+	2350 4400 2450 4500
+Entry Wire Line
+	2450 4400 2550 4500
+Entry Wire Line
+	2550 4400 2650 4500
+Text Label 1950 4750 1    60   ~ 0
+WTDP
+Text Label 2050 4750 1    60   ~ 0
+WTDM
 $EndSCHEMATC
