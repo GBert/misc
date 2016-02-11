@@ -1,0 +1,6 @@
+config SUSI_GPIO
+    tristate "SUSI GPIO"
+    depends on GENERIC_GPIO
+    select SUSI_GPIO
+    help
+      SUSI GPIO driver
