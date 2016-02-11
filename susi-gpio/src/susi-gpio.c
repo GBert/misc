@@ -70,24 +70,24 @@ void susiport_byte_in(u8 * data) {
 	}
 }
 
-static int susiport_command(u8 * data, u8 length)
+static int susiport_command(u8 * data, u8 length_write, u8 length_read)
 {
 	int i;
 
 	susiport_susidat_dir(0);
-	susiport_byte_out(*(data++));
-	susiport_byte_out(*(data++));
+	for (i = 0; i < length_write; i++)
+		susiport_byte_out(*(data++));
 
 	susiport_susidat_dir(1);
-	for (i = 0; i < length; i++) {
+	for (i = 0; i < length_read; i++)
 		susiport_byte_out(data++);
-	}
+
 	return 0;
 }
 
-static int susiport_command_ack(u8 * data, u8 length)
+static int susiport_command_ack(u8 * data, u8 length_write, u8 length_read)
 {
-	return susiport_command(data, length);
+	return susiport_command(data, length_write, length_read);
 }
 
 static long susiport_gpio_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
@@ -113,7 +113,7 @@ static long susiport_gpio_ioctl(struct file *file, unsigned int cmd, unsigned lo
 	case SUSI_COMMAND:
 		if (copy_from_user(&susidata, (struct susi_command *)arg, sizeof(susidata)) != 0)
 			return -EFAULT;
-		err = susiport_command(susidata.data, susidata.length);
+		err = susiport_command(susidata.data, susidata.length_write, susidata.length_read);
 		/* printk(KERN_INFO "%s : SUSI_COMMAND ...\n", __func__); */
 		if (err)
 			return err;
@@ -125,7 +125,7 @@ static long susiport_gpio_ioctl(struct file *file, unsigned int cmd, unsigned lo
 	case SUSI_COMMAND_ACK:
 		if (copy_from_user(&susidata, (struct susi_command *)arg, sizeof(susidata)) != 0)
 			return -EFAULT;
-		err = susiport_command_ack(susidata.data, susidata.length);
+		err = susiport_command_ack(susidata.data, susidata.length_write, susidata.length_read);
 		/* printk(KERN_INFO "%s : SUSI_COMMAND_ACK ...\n", __func__); */
 		if (err)
 			return err;
