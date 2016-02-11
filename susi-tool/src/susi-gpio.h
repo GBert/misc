@@ -14,10 +14,9 @@
 #define MAX_DATA	4
 
 struct susi_command {
-	uint8_t length_read;
-	uint8_t length_write;
-	uint8_t data[MAX_DATA];
+	uint8_t length;
 	uint8_t ack;
+	uint8_t data[MAX_DATA];
 };
 
 #define SUSI_GPIO_MAJOR (181)

@@ -24,6 +24,9 @@
 #include <arpa/inet.h>
 
 #include "susi-gpio.h"
+#include "dcc.h"
+
+int susi_fd;
 
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s ", prg);
@@ -52,12 +55,40 @@ int time_stamp(void) {
     return 0;
 }
 
+int read_cv(int cv, int *data) {
+    int i, ret;
+    struct susi_command *susi;
+
+    susi->data[0]  = DCC_DIRECT_CV | DIRECT_CV_BITM;
+    susi->data[0] |= (cv >> 8) & DIRECT_ADDRESS_MASK;
+    susi->data[1]  = cv & 0xff;
+
+    *data = 0;
+    /* we are parsing all bits */
+    for (i = 0; i < 8; i++) {
+	/*  1 1 1 K D B B B
+         *  K=0: verify bit
+         *  K=1: write bit
+         *  D: bit value to verify/write
+         *  BBB bit # 0 ..7 to verify/write
+         */
+	susi->data[2] = 0xe8 | i;
+
+	ret = ioctl(susi_fd, SUSI_COMMAND_ACK, susi);
+	if (susi->ack)
+	    *data |= 0x80;
+	*data >>= 1;
+    }
+}
+
 int main(int argc, char **argv) {
-    int fd, opt;
+    int opt, cv, data;
     struct susi_command susi;
 
-    while ((opt = getopt(argc, argv, "h?")) != -1) {
+    while ((opt = getopt(argc, argv, "sh?")) != -1) {
 	switch (opt) {
+	case 'c':
+	    cv = atoi(optarg);
 	case 'h':
 	case '?':
 	    usage(basename(argv[0]));
@@ -70,10 +101,15 @@ int main(int argc, char **argv) {
 
     memset(&susi, 0, sizeof(susi));
 
-    fd = open("/dev/c2tool-gpio", O_RDWR);
-    if (fd < 0) {
+    susi_fd = open("/dev/susi-gpio", O_RDWR);
+    if (susi_fd < 0) {
 	fprintf(stderr, "%s: error: open failed [%s]\n", __func__, strerror(errno));
 	exit(-1);
     }
+
+    read_cv(cv, &data);
+    printf("CV %d = 0x%02x\n", data);
+
+    close(susi_fd);
     return 0;
 }

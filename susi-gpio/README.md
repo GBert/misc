@@ -1,12 +1,10 @@
-#c2tool-gpio module
-
-This kernel module is used in conjunction with c2t-new (modified c2tool from Dirk Eibach).
+#susi-gpio kernel module
 
 ##Using the module
 ```
-insmod c2tool-gpio c2ck=19 c2d=20 # using GPIO 19&20`
-mknod /dev/c2tool-gpio c 180 0
-chmod 666 /dev/c2tool-gpio
+insmod susi-gpio susiclk=268 susidat=270 # PI12 and PI14 on BPi
+mknod /dev/susi-gpio c 181 0
+chmod 666 /dev/susi-gpio
 ```
 ##Links
-* [C2 Interface Specification](http://www.silabs.com/Support%20Documents/TechnicalDocs/C2spec.pdf)
+* http://www.nmra.org/sites/default/files/standards/sandrp/pdf/ti-9.2.3_susi_05_03.pdf

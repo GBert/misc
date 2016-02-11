@@ -54,40 +54,28 @@ void susiport_byte_out(u8 data) {
 	}
 }
 
-void susiport_byte_in(u8 * data) {
-	int i;
-
-	*data = 0;
-	for (i = 0; i < 8; i++) {
-		/* shift bit in */
-		gpio_set_value(susiclk, 1);
-		udelay(delay);
-		gpio_set_value(susiclk, 0);
-		*data >>= 1;
-		if (gpio_get_value(susidat))
-				 *data |= 0x80;
-		udelay(delay);
-	}
-}
-
-static int susiport_command(u8 * data, u8 length_write, u8 length_read)
+static int susiport_command(u8 * data, u8 length)
 {
 	int i;
 
-	susiport_susidat_dir(0);
-	for (i = 0; i < length_write; i++)
+	if (length > MAX_DATA)
+		return(-EFAULT);
+
+	local_irq_disable();
+
+	for (i = 0; i < length; i++) {
+		/* insert extra delay for analyzing on scope */
+		udelay(delay);
 		susiport_byte_out(*(data++));
+	}
 
-	susiport_susidat_dir(1);
-	for (i = 0; i < length_read; i++)
-		susiport_byte_out(data++);
-
+	local_irq_enable();
 	return 0;
 }
 
-static int susiport_command_ack(u8 * data, u8 length_write, u8 length_read)
+static int susiport_command_ack(u8 * data, u8 length)
 {
-	return susiport_command(data, length_write, length_read);
+	return susiport_command(data, length);
 }
 
 static long susiport_gpio_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
@@ -113,7 +101,7 @@ static long susiport_gpio_ioctl(struct file *file, unsigned int cmd, unsigned lo
 	case SUSI_COMMAND:
 		if (copy_from_user(&susidata, (struct susi_command *)arg, sizeof(susidata)) != 0)
 			return -EFAULT;
-		err = susiport_command(susidata.data, susidata.length_write, susidata.length_read);
+		err = susiport_command(susidata.data, susidata.length);
 		/* printk(KERN_INFO "%s : SUSI_COMMAND ...\n", __func__); */
 		if (err)
 			return err;
@@ -125,7 +113,7 @@ static long susiport_gpio_ioctl(struct file *file, unsigned int cmd, unsigned lo
 	case SUSI_COMMAND_ACK:
 		if (copy_from_user(&susidata, (struct susi_command *)arg, sizeof(susidata)) != 0)
 			return -EFAULT;
-		err = susiport_command_ack(susidata.data, susidata.length_write, susidata.length_read);
+		err = susiport_command_ack(susidata.data, susidata.length);
 		/* printk(KERN_INFO "%s : SUSI_COMMAND_ACK ...\n", __func__); */
 		if (err)
 			return err;
@@ -149,12 +137,12 @@ static int __init susiport_init(void)
 	ret = gpio_request(susiclk, "SUSI clock");
 	if (ret)
 		goto exit;
-	gpio_direction_output(susiclk,1);
+	gpio_direction_output(susiclk, 0);
 
 	ret = gpio_request(susidat, "SUSI data");
 	if (ret)
 		goto free_gpio;
-	gpio_direction_input(susidat);
+	gpio_direction_output(susidat, 0);
 	printk(KERN_INFO "susitool-gpio using GPIO%02d (SUSI clock) and GPIO%02d (SUSI data) delay %d us\n", susiclk, susidat, delay);
 
 	cdev_init(&cdev, &susiport_gpio_fops);
