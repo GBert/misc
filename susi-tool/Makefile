@@ -39,6 +39,8 @@ endef
 define Package/susit/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/susit $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/root
+	$(INSTALL_BIN) ./files/susi.sh $(1)/root/
 endef
 
 $(eval $(call BuildPackage,susit))
