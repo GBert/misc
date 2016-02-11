@@ -32,14 +32,6 @@ MODULE_PARM_DESC(susidat, "SUSIDAT pin");
 module_param(delay, int, S_IRUSR);
 MODULE_PARM_DESC(delay, "delay [us]");
 
-static void susiport_susidat_dir(int dir)
-{
-	if (dir)
-		gpio_direction_input(susidat);
-	else
-		gpio_direction_output(susidat, gpio_get_value(susidat));
-}
-
 void susiport_byte_out(u8 data) {
 	int i;
 
@@ -73,9 +65,35 @@ static int susiport_command(u8 * data, u8 length)
 	return 0;
 }
 
-static int susiport_command_ack(u8 * data, u8 length)
+static int susiport_command_ack(u8 * data, u8 length, u8 * ack)
 {
-	return susiport_command(data, length);
+	int old_ack, i, ret;
+
+	ret = susiport_command(data, length);
+	if (ret)
+		return(ret);
+
+	gpio_direction_input(susidat);
+	old_ack = 0;
+	*ack = 0;
+
+	/* scanning for ACK - use 500us */
+	for (i = 0; i < 40; i++) {
+		if (gpio_get_value(susidat)) {
+			*ack = 1;
+			if (old_ack) {
+				goto ACK_FINISHED;
+			}
+		} else {
+			*ack = 0;
+		}
+		old_ack = *ack;
+		udelay(500);
+	}
+	*ack = 0;
+ACK_FINISHED:
+	gpio_direction_output(susidat, 0);
+	return 0;
 }
 
 static long susiport_gpio_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
@@ -113,7 +131,7 @@ static long susiport_gpio_ioctl(struct file *file, unsigned int cmd, unsigned lo
 	case SUSI_COMMAND_ACK:
 		if (copy_from_user(&susidata, (struct susi_command *)arg, sizeof(susidata)) != 0)
 			return -EFAULT;
-		err = susiport_command_ack(susidata.data, susidata.length);
+		err = susiport_command_ack(susidata.data, susidata.length, &susidata.ack);
 		/* printk(KERN_INFO "%s : SUSI_COMMAND_ACK ...\n", __func__); */
 		if (err)
 			return err;
