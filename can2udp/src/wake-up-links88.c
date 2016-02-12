@@ -51,11 +51,18 @@ unsigned char netframe[MAXDG];
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.01\n\n");
+    fprintf(stderr, "   Version 1.1\n\n");
+    fprintf(stderr, "         -c <config_string>  config string \"B0=1,B2=3\"\n");
     fprintf(stderr, "         -i <can int>        can interface - default can0\n");
     fprintf(stderr, "         -d                  daemonize\n");
     fprintf(stderr, "         -e #no_of_links88   exit after no of LinkS88 responded\n\n");
 }
+
+struct s88_bus_t {
+    int length;
+    int interval;
+    int tcyc;
+};
 
 struct node {
     int id;
@@ -155,8 +162,9 @@ int main(int argc, char **argv) {
     struct sockaddr_can caddr;
     struct ifreq ifr;
     socklen_t caddrlen = sizeof(caddr);
-
+    char config_string[256];
     fd_set read_fds;
+    struct s88_bus_t s88_bus[3];
 
     int background = 0;
     int verbose = 1;
@@ -168,6 +176,10 @@ int main(int argc, char **argv) {
     struct node *links88_head, *links88_list;
     struct timespec to_wait;
 
+    memset(config_string, 0, sizeof(config_string));
+    memset(&s88_bus[0], 0, sizeof(s88_bus[0]));
+    memset(&s88_bus[1], 0, sizeof(s88_bus[1]));
+    memset(&s88_bus[2], 0, sizeof(s88_bus[2]));
     to_wait.tv_sec = 0;
     to_wait.tv_nsec = SLEEPING * 1000;
 
@@ -179,8 +191,11 @@ int main(int argc, char **argv) {
 
     strcpy(ifr.ifr_name, "can0");
 
-    while ((opt = getopt(argc, argv, "i:de:h?")) != -1) {
+    while ((opt = getopt(argc, argv, "c:i:de:h?")) != -1) {
 	switch (opt) {
+	case 'c':
+	    strncpy(config_string, optarg, sizeof(config_string) - 1);
+	    break;
 	case 'i':
 	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
 	    break;
