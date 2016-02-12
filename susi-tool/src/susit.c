@@ -1,10 +1,10 @@
-/*
- * Copyright 2016 Gerhard Bertelsmann
- *
+/* ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
- * Siegfried Lohberg wrote this file. As long as you retain this notice you
- * can do whatever you want with this stuff. If we meet some day, and you think
- * this stuff is worth it, you can buy me a beer in return.
+ * <info@gerhard-bertelsmann.de> wrote this file. As long as you retain this
+ * notice you can do whatever you want with this stuff. If we meet some day,
+ * and you think this stuff is worth it, you can buy me a beer in return
+ * 2016 Gerhard Bertelsmann
+ * ----------------------------------------------------------------------------
  */
 
 #include <errno.h>
@@ -61,7 +61,6 @@ int read_cv(int cv, int *data) {
     struct susi_command susi;
 
     susi.length = 3;
-
     susi.data[0]  = DCC_DIRECT_CV | DIRECT_CV_BITM;
     susi.data[0] |= (cv >> 8) & DIRECT_ADDRESS_MASK;
     susi.data[1]  = cv & 0xff;
@@ -71,17 +70,18 @@ int read_cv(int cv, int *data) {
     for (i = 0; i < 8; i++) {
 	*data >>= 1;
 	/*  1 1 1 K D B B B
-         *  K=0: verify bit
-         *  K=1: write bit
-         *  D: bit value to verify/write
-         *  BBB bit # 0 ..7 to verify/write
-         */
+	 *  K=0: verify bit
+	 *  K=1: write bit
+	 *  D: bit value to verify/write
+	 *  BBB bit # 0 ..7 to verify/write
+	 */
 	susi.data[2] = 0xe8 | i;
 
 	ret = ioctl(susi_fd, SUSI_COMMAND_ACK, &susi);
 	if (susi.ack)
 	    *data |= 0x80;
     }
+    return ret;
 }
 
 int main(int argc, char **argv) {
