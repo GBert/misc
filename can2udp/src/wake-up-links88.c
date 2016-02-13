@@ -180,7 +180,7 @@ int main(int argc, char **argv) {
     struct node *links88_head, *links88_list;
     struct timespec to_wait;
 
-    memset(config_string, 0, sizeof(config_string));
+    config_string = NULL;
     memset(&s88_bus[0], 0, sizeof(s88_bus[0]));
     memset(&s88_bus[1], 0, sizeof(s88_bus[1]));
     memset(&s88_bus[2], 0, sizeof(s88_bus[2]));
