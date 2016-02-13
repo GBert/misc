@@ -40,12 +40,15 @@
 
 static char *F_CAN_FORMAT_STRG	= "      CAN->  CANID 0x%08X R [%d]";
 static char *T_CAN_FORMAT_STRG	= "      CAN<-  CANID 0x%08X   [%d]";
+static char delimiters[] = " .,;:!-";
 
 static unsigned char M_CAN_BOOTLOADER[] 	= { 0x00, 0x36, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static unsigned char M_LINKS88_ID[]		= { 0x00, 0x31, 0x03, 0x00, 0x08, 0x53, 0x38, 0x38, 0x00, 0x00, 0x00, 0x00, 0x10 };
 static unsigned char M_LINKS88_WAKE_I[]		= { 0x00, 0x36, 0x03, 0x00, 0x05, 0x53, 0x38, 0x38, 0x00, 0xE4, 0x00, 0x00, 0x00 };
 static unsigned char M_LINKS88_WAKE_II[]	= { 0x00, 0x36, 0x03, 0x00, 0x05, 0x53, 0x38, 0x38, 0x00, 0x11, 0x00, 0x00, 0x00 };
 static unsigned char M_LINKS88_WAKE_III[]	= { 0x00, 0x01, 0x03, 0x00, 0x07, 0x53, 0x38, 0x38, 0x00, 0x0C, 0x00, 0x00, 0x00 };
+
+static unsigned char M_LINKS88_SETUP[]		= { 0x00, 0x00, 0x03, 0x00, 0x08, 0x53, 0x38, 0x38, 0x00, 0x0b, 0x00, 0x00, 0x00 };
 
 unsigned char netframe[MAXDG];
 
@@ -157,12 +160,13 @@ int send_defined_can_frame(int can_socket, unsigned char *data, int verbose) {
 
 int main(int argc, char **argv) {
     pid_t pid;
-    int sc, max_fds, opt;
+    int i, sc, max_fds, opt;
     struct can_frame frame;
     struct sockaddr_can caddr;
     struct ifreq ifr;
     socklen_t caddrlen = sizeof(caddr);
-    char config_string[256];
+    char *config_string;
+    char *token;
     fd_set read_fds;
     struct s88_bus_t s88_bus[3];
 
@@ -194,7 +198,7 @@ int main(int argc, char **argv) {
     while ((opt = getopt(argc, argv, "c:i:de:h?")) != -1) {
 	switch (opt) {
 	case 'c':
-	    strncpy(config_string, optarg, sizeof(config_string) - 1);
+	    config_string = strdup(optarg);
 	    break;
 	case 'i':
 	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
@@ -215,6 +219,32 @@ int main(int argc, char **argv) {
 	    fprintf(stderr, "Unknown option %c\n", opt);
 	    print_usage(basename(argv[0]));
 	    exit(1);
+	}
+    }
+
+    /* mini config string parser */
+
+    if(config_string !=0) {
+	while ((token = strsep (&config_string, delimiters))) {
+	    if (*token == 'B') {
+		token++;
+		i = *token - '0';
+		if ((i > 0)  && (i < 4)) {
+		    token++;
+		    s88_bus[i].length = (int) strtoul(++token, (char **)  NULL, 5);
+		    printf("bus %d length %d\n", i, s88_bus[i].length);
+		}
+	    }
+	    else if (*token == 'T') {
+		token++;
+		i = *token - '0';
+		if ((i > 0)  && (i < 4)) {
+		    i = *token - '0';
+		    token++;
+		    s88_bus[i].tcyc = (int) strtoul(++token, (char **)  NULL, 5) / 100;
+		    printf("bus %d Tcyc %d\n", i, s88_bus[i].tcyc);
+		}
+	    }
 	}
     }
 
@@ -328,6 +358,18 @@ int main(int argc, char **argv) {
 			    raw_frame[8] = links88_id_l;
 			    raw_frame[11] = links88_id_l;
 			    send_defined_can_frame(sc, raw_frame, verbose);
+
+			    /* now send the setup */
+			    for (i = 2; i <5; i++) {
+				if (s88_bus[i-2].length) {
+				    memcpy(raw_frame, M_LINKS88_SETUP, 13);
+			            raw_frame[7]  = links88_id_h;
+				    raw_frame[8]  = links88_id_l;
+				    raw_frame[10] = i & 0xff;
+				    raw_frame[12] = s88_bus[i-2].length & 0xff;
+			            send_defined_can_frame(sc, raw_frame, verbose);
+				}
+			    }
 			}
 		    }
 		    break;
