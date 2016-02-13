@@ -55,7 +55,7 @@ unsigned char netframe[MAXDG];
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
     fprintf(stderr, "   Version 1.1\n\n");
-    fprintf(stderr, "         -c <config_string>  config string \"B0=1,B2=3\"\n");
+    fprintf(stderr, "         -c <config_string>  config string \"B1=1,B2=3\"\n");
     fprintf(stderr, "         -i <can int>        can interface - default can0\n");
     fprintf(stderr, "         -d                  daemonize\n");
     fprintf(stderr, "         -e #no_of_links88   exit after no of LinkS88 responded\n\n");
@@ -223,26 +223,24 @@ int main(int argc, char **argv) {
     }
 
     /* mini config string parser */
-
-    if(config_string !=0) {
-	while ((token = strsep (&config_string, delimiters))) {
+    if (config_string != 0) {
+	while ((token = strsep(&config_string, delimiters))) {
 	    if (*token == 'B') {
 		token++;
 		i = *token - '0';
-		if ((i > 0)  && (i < 4)) {
+		if ((i > 0) && (i < 4)) {
 		    token++;
-		    s88_bus[i].length = (int) strtoul(++token, (char **)  NULL, 5);
-		    printf("bus %d length %d\n", i, s88_bus[i].length);
+		    s88_bus[i - 1].length = (int)strtoul(++token, (char **)NULL, 5);
+		    printf("bus %d length %d\n", i, s88_bus[i - 1].length);
 		}
-	    }
-	    else if (*token == 'T') {
+	    } else if (*token == 'T') {
 		token++;
 		i = *token - '0';
-		if ((i > 0)  && (i < 4)) {
+		if ((i > 0) && (i < 4)) {
 		    i = *token - '0';
 		    token++;
-		    s88_bus[i].tcyc = (int) strtoul(++token, (char **)  NULL, 5) / 100;
-		    printf("bus %d Tcyc %d\n", i, s88_bus[i].tcyc);
+		    s88_bus[i - 1].tcyc = (int)strtoul(++token, (char **)NULL, 5);
+		    printf("bus %d Tcyc %d\n", i, s88_bus[i - 1].tcyc);
 		}
 	    }
 	}
@@ -360,14 +358,14 @@ int main(int argc, char **argv) {
 			    send_defined_can_frame(sc, raw_frame, verbose);
 
 			    /* now send the setup */
-			    for (i = 2; i <5; i++) {
-				if (s88_bus[i-2].length) {
+			    for (i = 2; i < 5; i++) {
+				if (s88_bus[i - 2].length) {
 				    memcpy(raw_frame, M_LINKS88_SETUP, 13);
-			            raw_frame[7]  = links88_id_h;
-				    raw_frame[8]  = links88_id_l;
+				    raw_frame[7] = links88_id_h;
+				    raw_frame[8] = links88_id_l;
 				    raw_frame[10] = i & 0xff;
-				    raw_frame[12] = s88_bus[i-2].length & 0xff;
-			            send_defined_can_frame(sc, raw_frame, verbose);
+				    raw_frame[12] = s88_bus[i - 2].length & 0xff;
+				    send_defined_can_frame(sc, raw_frame, verbose);
 				}
 			    }
 			}
