@@ -211,13 +211,13 @@ int main(int argc, char **argv) {
     udp_dst_address = (char *)calloc(MAXIPLEN, 1);
     if (!udp_dst_address) {
 	fprintf(stderr, "can't alloc memory for udp_dst_address: %s\n", strerror(errno));
-	exit(-1);
+	exit(EXIT_FAILURE);
     };
 
     bcast_interface = (char *)calloc(MAXIPLEN, 1);
     if (!bcast_interface) {
 	fprintf(stderr, "can't alloc memory for bcast_interface: %s\n", strerror(errno));
-	exit(-1);
+	exit(EXIT_FAILURE);
     };
 
     /* printf ( stderr, "\ns88udp <modulcount>\n\n" ); */
@@ -245,7 +245,7 @@ int main(int argc, char **argv) {
 		}
 	    } else {
 		fprintf(stderr, "UDP broadcast address or interface error: %s\n", optarg);
-		exit(-1);
+		exit(EXIT_FAILURE);
 	    }
 	    break;
 	case 'e':
@@ -258,21 +258,21 @@ int main(int argc, char **argv) {
 	    modulcount = atoi(optarg);
 	    if (modulcount < 1 || modulcount > MAXMODULES) {
 		usage(basename(argv[0]));
-		exit(-1);
+		exit(EXIT_FAILURE);
 	    }
 	    break;
 	case 'o':
 	    s88_data.offset = atoi(optarg);
 	    if (s88_data.offset >= MAXMODULES) {
 		usage(basename(argv[0]));
-		exit(-1);
+		exit(EXIT_FAILURE);
 	    }
 	    break;
 	case 't':
 	    utime = atoi(optarg);
 	    if (utime < MINDELAY) {
 		fprintf(stderr, "microtiming value to low: %d\n", utime);
-		exit(-1);
+		exit(EXIT_FAILURE);
 	    }
 	    break;
 	case 'v':
@@ -284,10 +284,10 @@ int main(int argc, char **argv) {
 	case 'h':
 	case '?':
 	    usage(basename(argv[0]));
-	    exit(0);
+	    exit(EXIT_SUCCESS);
 	default:
 	    usage(basename(argv[0]));
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
     }
 
@@ -310,18 +310,18 @@ int main(int argc, char **argv) {
 	    fprintf(stderr, "UDP IP invalid\n");
 	else
 	    fprintf(stderr, "invalid address family\n");
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     if (!s88_data.background && s88_data.verbose)
 	printf("using broadcast address %s\n", udp_dst_address);
     /* open udp socket */
     if ((s88_data.socket = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
 	fprintf(stderr, "UDP socket error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     if (setsockopt(s88_data.socket, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0) {
 	fprintf(stderr, "UDP set broadcast option error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     s88_data.baddr = destaddr;
@@ -338,13 +338,13 @@ int main(int argc, char **argv) {
 	if (pid > 0) {
 	    if (s88_data.verbose)
 		printf("Going into background ...\n");
-	    exit(0);
+	    exit(EXIT_SUCCESS);
 	}
     }
 
     if (gpio_bpi_open("/dev/mem") < 0) {
 	fprintf(stderr, "Can't open IO mem: %s\n", strerror(errno));
-	exit(-1);
+	exit(EXIT_FAILURE);
     }
 
     gpio_bpi_select_output(CLOCK_PIN);
@@ -389,7 +389,7 @@ int main(int argc, char **argv) {
 	ret = analyze_data(&s88_data, modulcount * 16);
 	if (ret < 0) {
 	    fprintf(stderr, "problem sending event data - terminating\n");
-	    exit(-1);
+	    exit(EXIT_FAILURE);
 	}
 	usec_sleep(100 * utime);
     }

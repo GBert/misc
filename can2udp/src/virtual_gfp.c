@@ -190,12 +190,12 @@ int main(int argc, char **argv) {
 	case 'h':
 	case '?':
 	    print_usage(basename(argv[0]));
-	    exit(0);
+	    exit(EXIT_SUCCESS);
 	    break;
 	default:
 	    fprintf(stderr, "Unknown option %c\n", opt);
 	    print_usage(basename(argv[0]));
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
     }
 
@@ -204,18 +204,18 @@ int main(int argc, char **argv) {
     /* prepare CAN socket */
     if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
 	fprintf(stderr, "error creating CAN socket: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     caddr.can_family = AF_CAN;
     if (ioctl(sc, SIOCGIFINDEX, &ifr) < 0) {
 	fprintf(stderr, "setup CAN socket error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     caddr.can_ifindex = ifr.ifr_ifindex;
 
     if (bind(sc, (struct sockaddr *)&caddr, caddrlen) < 0) {
 	fprintf(stderr, "error binding CAN socket: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     /* daemonize the process if requested */
@@ -239,7 +239,7 @@ int main(int argc, char **argv) {
     while (1) {
 	if (select(max_fds + 1, &read_fds, NULL, NULL, NULL) < 0) {
 	    fprintf(stderr, "select error: %s\n", strerror(errno));
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &read_fds)) {

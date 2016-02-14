@@ -134,12 +134,12 @@ int main(int argc, char **argv) {
 	case 'h':
 	case '?':
 	    print_usage(basename(argv[0]));
-	    exit(0);
+	    exit(EXIT_SUCCESS);
 	    break;
 	default:
 	    fprintf(stderr, "Unknown option %c\n", opt);
 	    print_usage(basename(argv[0]));
-	    exit(-1);
+	    exit(EXIT_FAILURE);
 	}
     }
 
@@ -148,30 +148,30 @@ int main(int argc, char **argv) {
     /* prepare CAN socket */
     if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
 	fprintf(stderr, "error creating CAN socket: %s\n", strerror(errno));
-	exit(-1);
+	exit(EXIT_FAILURE);
     }
     caddr.can_family = AF_CAN;
     if (ioctl(sc, SIOCGIFINDEX, &ifr) < 0) {
 	fprintf(stderr, "setup CAN socket error: %s\n", strerror(errno));
-	exit(-1);
+	exit(EXIT_FAILURE);
     }
     caddr.can_ifindex = ifr.ifr_ifindex;
 
     if (bind(sc, (struct sockaddr *)&caddr, caddrlen) < 0) {
 	fprintf(stderr, "error binding CAN socket: %s\n", strerror(errno));
-	exit(-1);
+	exit(EXIT_FAILURE);
     }
 
     if ((fd = open(ir_int, O_RDONLY)) < 0) {
 	fprintf(stderr, "error opening IR device: %s\n", strerror(errno));
-	exit(-1);
+	exit(EXIT_FAILURE);
     }
 
     while (1) {
 	ret = read(fd, ev, sizeof(struct input_event) * 64);
 	if (ret < (int)sizeof(struct input_event)) {
 	    fprintf(stderr, "error reading IR device: %s\n", strerror(errno));
-	    exit(-1);
+	    exit(EXIT_FAILURE);
 	}
 	for (n = 0; n < (int)(ret / sizeof(struct input_event)); n++) {
 	    /* printf("event type :0x%02x - looking for 0x%02x\n", ev[n].type, EV_MSC); */

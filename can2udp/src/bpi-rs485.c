@@ -85,25 +85,25 @@ int main(int argc, char **argv) {
 	case 'h':
 	case '?':
 	    print_usage(basename(argv[0]));
-	    exit(0);
+	    exit(EXIT_SUCCESS);
 	    break;
 	default:
 	    fprintf(stderr, "Unknown option %c\n", opt);
 	    print_usage(basename(argv[0]));
-	    exit(-1);
+	    exit(EXIT_FAILURE);
 	}
     }
 
     if ((fd = open(uart, O_RDONLY)) < 0) {
 	fprintf(stderr, "error opening UART: %s\n", strerror(errno));
-	exit(-1);
+	exit(EXIT_FAILURE);
     }
 
     while (1) {
 	ret = read(fd, ev, sizeof(struct input_event) * 64);
 	if (ret < (int)sizeof(struct input_event)) {
 	    fprintf(stderr, "error reading UART with speed %d: %s\n", speed,  strerror(errno));
-	    exit(-1);
+	    exit(EXIT_FAILURE);
 	}
     }
     return 0;

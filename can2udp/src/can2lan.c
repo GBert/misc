@@ -197,7 +197,7 @@ int main(int argc, char **argv) {
     page_name = calloc(64, sizeof(char *));
     if (!page_name) {
 	fprintf(stderr, "can't alloc memory for page_name: %s\n", strerror(errno));
-	exit(-1);
+	exit(EXIT_FAILURE);
     };
 
     verbose = 0;
@@ -210,13 +210,13 @@ int main(int argc, char **argv) {
     udp_dst_address = (char *)calloc(MAXIPLEN, 1);
     if (!udp_dst_address) {
 	fprintf(stderr, "can't alloc memory for udp_dst_address: %s\n", strerror(errno));
-	exit(-1);
+	exit(EXIT_FAILURE);
     };
 
     bcast_interface = (char *)calloc(MAXIPLEN, 1);
     if (!bcast_interface) {
 	fprintf(stderr, "can't alloc memory for bcast_interface: %s\n", strerror(errno));
-	exit(-1);
+	exit(EXIT_FAILURE);
     };
 
     strcpy(udp_dst_address, "255.255.255.255");
@@ -231,7 +231,7 @@ int main(int argc, char **argv) {
 		strncpy(config_dir, optarg, sizeof(config_dir) - 1);
 	    } else {
 		fprintf(stderr, "config file dir to long\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	    }
 	    break;
 	case 'u':
@@ -258,7 +258,7 @@ int main(int argc, char **argv) {
 		}
 	    } else {
 		fprintf(stderr, "UDP broadcast address or interface error: %s\n", optarg);
-		exit(1);
+		exit(EXIT_FAILURE);
 	    }
 	    break;
 	case 'i':
@@ -279,11 +279,11 @@ int main(int argc, char **argv) {
 	case 'h':
 	case '?':
 	    print_usage(basename(argv[0]));
-	    exit(0);
+	    exit(EXIT_SUCCESS);
 	default:
 	    fprintf(stderr, "Unknown option %c\n", opt);
 	    print_usage(basename(argv[0]));
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
     }
 
@@ -324,7 +324,7 @@ int main(int argc, char **argv) {
 	} else {
 	    fprintf(stderr, "invalid address family\n");
 	}
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     if (verbose & !background)
 	printf("using broadcast address %s\n", udp_dst_address);
@@ -333,11 +333,11 @@ int main(int argc, char **argv) {
     sb = socket(AF_INET, SOCK_DGRAM, 0);
     if (sb < 0) {
 	fprintf(stderr, "error creating UDP sending socket: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     if (setsockopt(sb, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0) {
 	fprintf(stderr, "error setup UDP broadcast option: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     /* prepare reading UDP socket */
@@ -348,29 +348,29 @@ int main(int argc, char **argv) {
     sa = socket(PF_INET, SOCK_DGRAM, 0);
     if (sa < 0) {
 	fprintf(stderr, "creating UDP reading socket error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     if (bind(sa, (struct sockaddr *)&saddr, sizeof(saddr)) < 0) {
 	fprintf(stderr, "binding UDP reading socket error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     /* prepare TCP socket */
     st = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (st < 0) {
 	fprintf(stderr, "creating TCP socket error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     tcp_addr.sin_family = AF_INET;
     tcp_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     tcp_addr.sin_port = htons(local_tcp_port);
     if (bind(st, (struct sockaddr *)&tcp_addr, sizeof(tcp_addr)) < 0) {
 	fprintf(stderr, "binding TCP socket error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     if (listen(st, MAXPENDING) < 0) {
 	fprintf(stderr, "starting TCP listener error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     /* prepare TCP clients array */
     max_tcp_i = -1;		/* index into tcp_client[] array */
@@ -381,18 +381,18 @@ int main(int argc, char **argv) {
     st2 = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (st2 < 0) {
 	fprintf(stderr, "creating second TCP socket error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     tcp_addr2.sin_family = AF_INET;
     tcp_addr2.sin_addr.s_addr = htonl(INADDR_ANY);
     tcp_addr2.sin_port = htons(local2_tcp_port);
     if (bind(st2, (struct sockaddr *)&tcp_addr2, sizeof(tcp_addr2)) < 0) {
 	fprintf(stderr, "binding second TCP socket error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     if (listen(st2, MAXPENDING) < 0) {
 	fprintf(stderr, "starting TCP listener error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 #if 0
     /* prepare TCP clients array */
@@ -406,23 +406,23 @@ int main(int argc, char **argv) {
     sc = socket(PF_CAN, SOCK_RAW, CAN_RAW);
     if (sc < 0) {
 	fprintf(stderr, "creating CAN socket error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     caddr.can_family = AF_CAN;
     if (ioctl(sc, SIOCGIFINDEX, &ifr) < 0) {
 	fprintf(stderr, "setup CAN error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     caddr.can_ifindex = ifr.ifr_ifindex;
 
     if (bind(sc, (struct sockaddr *)&caddr, caddrlen) < 0) {
 	fprintf(stderr, "binding CAN socket error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     /* start Maerklin 60113 box */
     if (send_magic_start_60113_frame(sc))
-	exit(1);
+	exit(EXIT_FAILURE);
 
     /* daemonize the process if requested */
     if (background) {

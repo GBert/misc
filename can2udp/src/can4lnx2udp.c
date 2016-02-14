@@ -85,7 +85,7 @@ int main(int argc, char **argv) {
         } else {
             fprintf(stderr, "invalid address family\n");
         }
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     while ((opt = getopt(argc, argv, "l:d:b:i:hfv?")) != -1) {
@@ -105,7 +105,7 @@ int main(int argc, char **argv) {
 		} else {
 		    fprintf(stderr, "inet_pton error: %s\n", strerror(errno));
 		}
-		exit(1);
+		exit(EXIT_FAILURE);
 	    }
 	    break;
 	case 'i':
@@ -122,18 +122,18 @@ int main(int argc, char **argv) {
 	case 'h':
 	case '?':
 	    print_usage(basename(argv[0]));
-	    exit(0);
+	    exit(EXIT_SUCCESS);
 
 	default:
 	    fprintf(stderr, "Unknown option %c\n", opt);
 	    print_usage(basename(argv[0]));
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
     }
 
     if ((sa = socket(PF_INET, SOCK_DGRAM, 0)) < 0) {
 	fprintf(stderr, "UDP socket error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     saddr.sin_family = AF_INET;
@@ -142,22 +142,22 @@ int main(int argc, char **argv) {
 
     if  (bind(sa, (struct sockaddr *) &saddr, sizeof(saddr)) < 0) {
 	fprintf(stderr, "UDP bind error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     if ((fdc = open(can_interface, O_RDWR)) < 0 ) {
 	fprintf(stderr, "can't open CAN interface: %s\n", strerror(errno));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     /* prepare UDP sending socket */
     if ((sb = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
 	fprintf(stderr, "Send UDP socket error %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     if (setsockopt(sb, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0) {
 	fprintf(stderr, "UDP set socket option error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     if (background) {

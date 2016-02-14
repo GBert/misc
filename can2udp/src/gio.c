@@ -255,7 +255,7 @@ int config_write(struct config_data *config_data) {
     config_fp = fopen(config_data->name, "wb");
     if (!config_fp) {
 	fprintf(stderr, "\ncan't open file %s for writing - error: %s\n", config_data->name, strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     } else if (config_data->verbose) {
 	for (i = 0; i < config_data->deflated_stream_size; i++) {
 	    if ((i % 8) == 0)

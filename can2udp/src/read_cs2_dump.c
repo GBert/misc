@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
     /* check command line arguments */
     if (argc < 2) {
 	fprintf(stderr, "Usage: %s [input pcaps]\n", argv[0]);
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     /* -------- Begin Main Packet Processing Loop ------------------- */

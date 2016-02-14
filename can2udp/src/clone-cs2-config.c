@@ -91,7 +91,7 @@ int config_write(struct config_data *config_data) {
     config_fp = fopen(config_data->name, "wb");
     if (!config_fp) {
 	fprintf(stderr, "\ncan't open file %s for writing - error: %s\n", config_data->name, strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     } else {
 	for (i = 0; i < config_data->deflated_stream_size; i++) {
 	    if ((i % 8) == 0)
@@ -117,13 +117,13 @@ int main(int argc, char **argv) {
 
     if (argc != 3) {
 	fprintf(stderr, "usage: %s <dir_to_write> <IP address>\n", argv[0]);
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
 #if 0
     if (strlen(argv[1]) > 7) {
 	fprintf(stderr, "config name to long\n");
-	exit(1);
+	exit(EXIT_FAILURE);
     } else {
 	if ((config_data.name = malloc(strlen(argv[1] + 4)))) {
 	    config_data.name[0] = '\0';
@@ -131,28 +131,28 @@ int main(int argc, char **argv) {
 	    strcat(config_data.name, ".cs2");
 	} else {
 	    fprintf(stderr, "can't malloc config %s.z file name\n", argv[1]);
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
     }
 #endif
 
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
 	fprintf(stderr, "can't create TCP socket: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     memset(&servaddr, 0, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
     if (inet_aton((argv[2]), (struct in_addr *)&servaddr.sin_addr.s_addr) == 0) {
 	fprintf(stderr, "invalid address: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     servaddr.sin_port = htons(15731);
 
     if (connect(sockfd, (struct sockaddr *)&servaddr, sizeof(servaddr))) {
 	fprintf(stderr, "can't connect to TCP socket: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     memset(netframe, 0, FRAME_SIZE);
@@ -160,7 +160,7 @@ int main(int argc, char **argv) {
     memcpy(&netframe[5], argv[1], strlen(argv[1]));
     if (netframe_to_net(sockfd, netframe, FRAME_SIZE)) {
 	fprintf(stderr, "can't send data on TCP socket: %st\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     FD_ZERO(&rset);
@@ -173,7 +173,7 @@ int main(int argc, char **argv) {
 
 	if (select(sockfd + 1, &rset, NULL, NULL, NULL) < 0) {
 	    fprintf(stderr, "socket error: %s\n", strerror(errno));
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
 	tcp_packet_nr++;
 	if (FD_ISSET(sockfd, &rset)) {
@@ -190,7 +190,7 @@ int main(int argc, char **argv) {
 		    config_data.deflated_data = malloc(deflated_size + 16);
 		    if (config_data.deflated_data == NULL) {
 			fprintf(stderr, "can't malloc deflated config data buffer - size 0x%04x\n", deflated_size + 8);
-			exit(1);
+			exit(EXIT_FAILURE);
 		    }
 		    /* deflated data index */
 		    ddi = 0;
@@ -208,7 +208,7 @@ int main(int argc, char **argv) {
 				if (config_data.inflated_data == NULL) {
 				    fprintf(stderr, "can't malloc inflated config data buffer - size 0x%04x\n",
 					    config_data.inflated_size);
-				    exit(1);
+				    exit(EXIT_FAILURE);
 				}
 				config_data_start = 0;
 				config_data_stream = 1;
@@ -218,7 +218,7 @@ int main(int argc, char **argv) {
 				    config_data_stream = 0;
 				    config_data.deflated_stream_size = ddi;
 				    config_write(&config_data);
-				    exit(0);
+				    exit(EXIT_SUCCESS);
 				} else {
 				    deflated_size -= 8;
 				}

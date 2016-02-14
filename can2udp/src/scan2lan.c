@@ -154,7 +154,7 @@ int main(int argc, char **argv) {
 		strncpy(config_dir, optarg, sizeof(config_dir) - 1);
 	    } else {
 		fprintf(stderr, "config file dir to long\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	    }
 	    break;
 	case 'u':
@@ -171,7 +171,7 @@ int main(int argc, char **argv) {
 		strncpy(udp_dst_address, optarg, sizeof(udp_dst_address) - 1);
 	    } else {
 		fprintf(stderr, "UDP broadcast address error: %s\n", optarg);
-		exit(1);
+		exit(EXIT_FAILURE);
 	    }
 	    break;
 	case 'i':
@@ -179,7 +179,7 @@ int main(int argc, char **argv) {
 		strncpy(if_name, optarg, sizeof(if_name) - 1);
 	    } else {
 		fprintf(stderr, "interface name to long\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	    }
 	    break;
 	case 'v':
@@ -191,11 +191,11 @@ int main(int argc, char **argv) {
 	case 'h':
 	case '?':
 	    print_usage(basename(argv[0]));
-	    exit(0);
+	    exit(EXIT_SUCCESS);
 	default:
 	    fprintf(stderr, "Unknown option %c\n", opt);
 	    print_usage(basename(argv[0]));
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
     }
 
@@ -222,17 +222,17 @@ int main(int argc, char **argv) {
 	} else {
 	    fprintf(stderr, "invalid address family\n");
 	}
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     /* prepare UDP sending socket */
     if ((sb = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
 	fprintf(stderr, "error creating UDP sending socket: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     if (setsockopt(sb, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0) {
 	fprintf(stderr, "error setup UDP broadcast option: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     /* prepare reading UDP socket */
@@ -242,28 +242,28 @@ int main(int argc, char **argv) {
     saddr.sin_port = htons(local_udp_port);
     if ((sa = socket(PF_INET, SOCK_DGRAM, 0)) < 0) {
 	fprintf(stderr, "creating UDP reading socket error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     if (bind(sa, (struct sockaddr *)&saddr, sizeof(saddr)) < 0) {
 	fprintf(stderr, "binding UDP reading socket error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     /* prepare TCP socket */
     if ((st = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0) {
 	fprintf(stderr, "creating TCP socket error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     tcp_addr.sin_family = AF_INET;
     tcp_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     tcp_addr.sin_port = htons(local_tcp_port);
     if (bind(st, (struct sockaddr *)&tcp_addr, sizeof(tcp_addr)) < 0) {
 	fprintf(stderr, "binding TCP socket error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     if (listen(st, MAXPENDING) < 0) {
 	fprintf(stderr, "starting TCP listener error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     /* prepare TCP clients array */
     max_tcp_i = -1;		/* index into tcp_client[] array */
@@ -273,12 +273,12 @@ int main(int argc, char **argv) {
     /* prepare simple CAN interface */
     if ((sc = open(if_name, O_RDWR | O_TRUNC | O_NONBLOCK | O_NOCTTY)) < 0) {
 	fprintf(stderr, "opening CAN interface error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     } else {
 	memset(&term_attr, 0, sizeof(term_attr));
 	if (tcgetattr(sc, &term_attr) < 0) {
 	    fprintf(stderr, "can't get terminal settings error: %s\n", strerror(errno));
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
 	term_attr.c_cflag = CS8 | CRTSCTS | CLOCAL | CREAD;
 	term_attr.c_iflag = 0;
@@ -286,15 +286,15 @@ int main(int argc, char **argv) {
 	term_attr.c_lflag = NOFLSH;
 	if (cfsetospeed(&term_attr, TERM_SPEED) < 0) {
 	    fprintf(stderr, "CAN interface ospeed error: %s\n", strerror(errno));
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
 	if (cfsetispeed(&term_attr, TERM_SPEED) < 0) {
 	    fprintf(stderr, "CAN interface ispeed error: %s\n", strerror(errno));
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
 	if (tcsetattr(sc, TCSANOW, &term_attr) < 0) {
 	    fprintf(stderr, "CAN interface set error: %s\n", strerror(errno));
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
     }
 

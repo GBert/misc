@@ -115,26 +115,26 @@ int main(int argc, char **argv) {
 
     if (argc != 2) {
 	fprintf(stderr, "usage:  %s <IP address>\n", argv[0]);
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
 	fprintf(stderr, "can't create TCP socket: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     memset(&servaddr, 0, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
     if (inet_aton((argv[1]), (struct in_addr *)&servaddr.sin_addr.s_addr) == 0) {
 	fprintf(stderr, "invalid address : %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     servaddr.sin_port = htons(15731);
 
     if (connect(sockfd, (struct sockaddr *)&servaddr, sizeof(servaddr))) {
 	fprintf(stderr, "can't connect to TCP socket : %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     memcpy(netframe, GET_GB, FRAME_SIZE);
@@ -147,7 +147,7 @@ int main(int argc, char **argv) {
 
 	if (select(sockfd + 1, &rset, NULL, NULL, NULL) < 0) {
 	    fprintf(stderr, "socket error: %s\n", strerror(errno));
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
 	tcp_packet_nr++;
 	if (FD_ISSET(sockfd, &rset)) {
