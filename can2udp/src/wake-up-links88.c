@@ -37,6 +37,7 @@
 #define MAXDG   	4096	/* maximum datagram size */
 #define MAXUDP  	16	/* maximum datagram size */
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
+#define TCYC_MAX	1000	/* max cycle time in ms */
 
 static char *F_CAN_FORMAT_STRG	= "      CAN->  CANID 0x%08X R [%d]";
 static char *T_CAN_FORMAT_STRG	= "      CAN<-  CANID 0x%08X   [%d]";
@@ -230,17 +231,20 @@ int main(int argc, char **argv) {
 		i = *token - '0';
 		if ((i > 0) && (i < 4)) {
 		    token++;
-		    s88_bus[i - 1].length = (int)strtoul(++token, (char **)NULL, 5);
+		    s88_bus[i - 1].length = (int)strtoul(++token, (char **)NULL, 10);
 		    printf("bus %d length %d\n", i, s88_bus[i - 1].length);
 		}
 	    } else if (*token == 'T') {
 		token++;
 		i = *token - '0';
 		if ((i > 0) && (i < 4)) {
-		    i = *token - '0';
 		    token++;
-		    s88_bus[i - 1].tcyc = (int)strtoul(++token, (char **)NULL, 5);
-		    printf("bus %d Tcyc %d\n", i, s88_bus[i - 1].tcyc);
+		    s88_bus[i - 1].tcyc = (int)strtoul(++token, (char **)NULL, 10);
+		    if (s88_bus[i - 1].tcyc > TCYC_MAX) {
+			fprintf(stderr, "Cycle time %d ms greater than TCYC_MAX of %d ms\n", s88_bus[i - 1].tcyc, TCYC_MAX);
+			exit(EXIT_FAILURE);
+		    }
+		    printf("bus %d Tcyc %d ms\n", i, s88_bus[i - 1].tcyc);
 		}
 	    }
 	}
@@ -358,13 +362,26 @@ int main(int argc, char **argv) {
 			    send_defined_can_frame(sc, raw_frame, verbose);
 
 			    /* now send the setup */
+			    /* the bus length first */
 			    for (i = 2; i < 5; i++) {
 				if (s88_bus[i - 2].length) {
 				    memcpy(raw_frame, M_LINKS88_SETUP, 13);
 				    raw_frame[7] = links88_id_h;
 				    raw_frame[8] = links88_id_l;
-				    raw_frame[10] = i & 0xff;
+				    raw_frame[10] = i;
 				    raw_frame[12] = s88_bus[i - 2].length & 0xff;
+				    send_defined_can_frame(sc, raw_frame, verbose);
+				}
+			    }
+			    /* the cycle time next */
+			    for (i = 5; i < 8; i++) {
+				if (s88_bus[i - 5].tcyc) {
+				    memcpy(raw_frame, M_LINKS88_SETUP, 13);
+				    raw_frame[7] = links88_id_h;
+				    raw_frame[8] = links88_id_l;
+				    raw_frame[10] = i;
+				    raw_frame[11] = (s88_bus[i - 5].tcyc >> 8) & 0x3;
+				    raw_frame[12] =  s88_bus[i - 5].tcyc & 0xff;
 				    send_defined_can_frame(sc, raw_frame, verbose);
 				}
 			    }
