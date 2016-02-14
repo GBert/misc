@@ -370,6 +370,7 @@ int main(int argc, char **argv) {
 				    raw_frame[8] = links88_id_l;
 				    raw_frame[10] = i;
 				    raw_frame[12] = s88_bus[i - 2].length & 0xff;
+				    nanosleep(&to_wait, NULL);
 				    send_defined_can_frame(sc, raw_frame, verbose);
 				}
 			    }
@@ -382,6 +383,7 @@ int main(int argc, char **argv) {
 				    raw_frame[10] = i;
 				    raw_frame[11] = (s88_bus[i - 5].tcyc >> 8) & 0x3;
 				    raw_frame[12] =  s88_bus[i - 5].tcyc & 0xff;
+				    nanosleep(&to_wait, NULL);
 				    send_defined_can_frame(sc, raw_frame, verbose);
 				}
 			    }
