@@ -70,20 +70,15 @@ void send_magic_start_60113_frame(int can_socket, int verbose) {
 
 int main(int argc, char **argv) {
     pid_t pid;
-    int opt;
+    int s, i, opt;
     struct can_frame frame;
-
     int sa, sc, sb;		/* UDP socket , CAN socket, UDP Broadcast Socket */
     struct sockaddr_in saddr, baddr;
     struct sockaddr_can caddr;
     struct ifreq ifr;
     /* socklen_t sin_size = sizeof(clientaddr); */
     socklen_t caddrlen = sizeof(caddr);
-
     fd_set readfds;
-
-    int s, i;
-
     int local_port = 15731;
     int destination_port = 15730;
     int verbose = 0;
@@ -110,7 +105,7 @@ int main(int argc, char **argv) {
 	} else {
 	    fprintf(stderr, "invalid address family\n");
 	}
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     while ((opt = getopt(argc, argv, "l:d:b:i:hfv?")) != -1) {
@@ -130,35 +125,32 @@ int main(int argc, char **argv) {
 		} else {
 		    fprintf(stderr, "inet_pton error: %s\n", strerror(errno));
 		}
-		exit(1);
+		exit(EXIT_FAILURE);
 	    }
 	    break;
 	case 'i':
 	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
 	    break;
-
 	case 'v':
 	    verbose = 1;
 	    break;
 	case 'f':
 	    background = 0;
 	    break;
-
 	case 'h':
 	case '?':
 	    print_usage(basename(argv[0]));
-	    exit(0);
-
+	    exit(EXIT_SUCCESS);
 	default:
 	    fprintf(stderr, "Unknown option %c\n", opt);
 	    print_usage(basename(argv[0]));
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
     }
 
     if ((sa = socket(PF_INET, SOCK_DGRAM, 0)) < 0) {
 	fprintf(stderr, "UDP socket error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     saddr.sin_family = AF_INET;
@@ -167,34 +159,34 @@ int main(int argc, char **argv) {
 
     if (bind(sa, (struct sockaddr *)&saddr, sizeof(saddr)) < 0) {
 	fprintf(stderr, "UDP bind error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
 	fprintf(stderr, "CAN socket error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     caddr.can_family = AF_CAN;
     if (ioctl(sc, SIOCGIFINDEX, &ifr) < 0) {
 	fprintf(stderr, "CAN setup error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     caddr.can_ifindex = ifr.ifr_ifindex;
 
     if (bind(sc, (struct sockaddr *)&caddr, caddrlen) < 0) {
 	fprintf(stderr, "CAN bind error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     /* prepare UDP sending socket */
     if ((sb = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
 	fprintf(stderr, "Send UDP socket error %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     if (setsockopt(sb, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0) {
 	fprintf(stderr, "UDP set socket option error: %s\n", strerror(errno));
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
     /* start Maerklin 60113 box */
@@ -206,8 +198,7 @@ int main(int argc, char **argv) {
 	if (pid < 0) {
 	    exit(EXIT_FAILURE);
 	}
-	/* If we got a good PID, then we can exit the parent process */
-
+	/* If we got a valid PID, then we can exit the parent process */
 	if (pid > 0) {
 	    printf("Going into background ...\n");
 	    exit(EXIT_SUCCESS);
@@ -263,14 +254,10 @@ int main(int argc, char **argv) {
 		memcpy(&canid, &udpframe[0], 4);
 		/* CAN is stored in network Big Endian format */
 		frame.can_id = ntohl(canid);
-
 		frame.can_id &= CAN_EFF_MASK;
 		frame.can_id |= CAN_EFF_FLAG;
-
 		frame.can_dlc = udpframe[4];
-
 		memcpy(&frame.data, &udpframe[5], 8);
-
 		/* send CAN frame */
 		memcpy(&frame.data, &udpframe[5], 8);
 		/* answer to CAN ping from LAN to LAN */
@@ -295,11 +282,9 @@ int main(int argc, char **argv) {
 		if (verbose && !background) {
 		    printf("<-UDP>CAN CANID 0x%06X  ", frame.can_id & CAN_EFF_MASK);
 		    printf(" [%d]", udpframe[4]);
-		    for (i = 5; i < 5 + frame.can_dlc; i++) {
+		    for (i = 5; i < 5 + frame.can_dlc; i++)
 			printf(" %02x", udpframe[i]);
-		    }
 		    printf("\n");
-
 		}
 	    }
 	}
