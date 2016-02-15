@@ -39,7 +39,7 @@
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
 #define TCYC_MAX	1000	/* max cycle time in ms */
 
-static char *F_CAN_FORMAT_STRG	= "      CAN->  CANID 0x%08X R [%d]";
+static char *F_CAN_FORMAT_STRG	= "      CAN->  CANID 0x%08X   [%d]";
 static char *T_CAN_FORMAT_STRG	= "      CAN<-  CANID 0x%08X   [%d]";
 static char delimiters[] = " .,;:!-";
 
@@ -210,6 +210,10 @@ int main(int argc, char **argv) {
 	    break;
 	case 'e':
 	    exit_on_wake_up = atoi(optarg);
+	    if (!exit_on_wake_up) {
+		fprintf(stderr, "wrong or missing number of LinkS88: %s\n", optarg);
+		exit(EXIT_FAILURE);
+	    }
 	    break;
 	case 'h':
 	case '?':
@@ -341,8 +345,6 @@ int main(int argc, char **argv) {
 			    if (verbose) {
 				printf("Found LinkS88 ID: 0x%02x\n", links88_id_l);
 				printf("   sending wake-up sequence\n");
-				printf("   inserting ID 0x%02x as known LinkS88 ID\n", links88_id_l);
-				insert_right(links88_list, links88_id_l);
 			    }
 
 			    memcpy(raw_frame, M_LINKS88_WAKE_I, 13);
