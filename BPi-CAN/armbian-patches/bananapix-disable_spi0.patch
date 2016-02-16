@@ -1,0 +1,24 @@
+--- a/arch/arm/boot/sun7i-a20-bananapi.dts	2016-02-16 13:52:46.918994301 +0100
++++ a/arch/arm/boot/sun7i-a20-bananapi.dts	2016-02-16 13:53:24.270033422 +0100
+@@ -301,13 +301,14 @@
+ 	status = "okay";
+ };
+ 
+-&spi0 {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&spi0_pins_a>,
+-		    <&spi0_cs0_pins_a>,
+-		    <&spi0_cs1_pins_a>;
+-	status = "okay";
+-};
++/* &spi0 {
++ *	pinctrl-names = "default";
++ *	pinctrl-0 = <&spi0_pins_a>,
++ *		    <&spi0_cs0_pins_a>,
++ *		    <&spi0_cs1_pins_a>;
++ *	status = "okay";
++ *};
++ */
+ 
+ &uart0 {
+ 	pinctrl-names = "default";
