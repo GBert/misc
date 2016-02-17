@@ -43,7 +43,7 @@
 #define MAXIPLEN	40	/* maximum IP string length */
 #define UDPPORT		15730
 /* the maximum amount of pin buffer - assuming 32 bit*/
-#define PIO_BUFFER	((MAXMODULES / 2 + 1) / 2)
+#define PIO_BUFFER	((MAXMODULES + 1) / 2)
 
 uint32_t bus_ct0[PIO_BUFFER];
 uint32_t bus_ct1[PIO_BUFFER];
