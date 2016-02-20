@@ -3,7 +3,7 @@
   (general
     (links 464)
     (no_connects 461)
-    (area 68.580499 29.442999 181.99 143.543001)
+    (area 68.961499 29.442999 181.99 143.543001)
     (thickness 1.6)
     (drawings 28)
     (tracks 10)
@@ -667,7 +667,7 @@
   )
 
   (module Connect:RJ45_8 (layer F.Cu) (tedit 0) (tstamp 55B7CAD4)
-    (at 86.741 37.592 180)
+    (at 86.868 38.1 180)
     (tags RJ45)
     (path /55BB8745)
     (fp_text reference J1 (at 0.254 4.826 180) (layer F.SilkS)
