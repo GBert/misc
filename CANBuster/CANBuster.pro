@@ -1,4 +1,4 @@
-update=Dienstag, 16. Februar 2016 22:48:19
+update=Sun 21 Feb 2016 11:15:01 AM CET
 version=1
 last_client=kicad
 [cvpcb]
@@ -72,3 +72,4 @@ LibName30=valves
 LibName31=microchip_pic18mcu
 LibName32=icsp
 LibName33=w_device
+LibName34=ISO1050
