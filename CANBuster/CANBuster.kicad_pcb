@@ -1,9 +1,9 @@
-(kicad_pcb (version 4) (host pcbnew 4.0.2-4+6225~38~ubuntu14.04.1-stable)
+(kicad_pcb (version 4) (host pcbnew 4.0.1-stable)
 
   (general
     (links 464)
     (no_connects 464)
-    (area 70.028999 35.052999 170.179001 135.203001)
+    (area 69.215499 29.950999 181.99 146.12554)
     (thickness 1.6)
     (drawings 28)
     (tracks 0)
@@ -58,8 +58,8 @@
     (mod_edge_width 0.15)
     (mod_text_size 1 1)
     (mod_text_width 0.15)
-    (pad_size 1.5 3)
-    (pad_drill 0)
+    (pad_size 2.5 1.7)
+    (pad_drill 1.27)
     (pad_to_mask_clearance 0.2)
     (aux_axis_origin 70.104 135.128)
     (grid_origin 70.104 135.128)
@@ -438,6 +438,35 @@
     (add_net "Net-(D93-Pad2)")
   )
 
+  (module 78xx:TO-220 (layer F.Cu) (tedit 56CA27FB) (tstamp 55D339E7)
+    (at 112.014 56.642 270)
+    (descr "Non Isolated JEDEC TO-220 Package")
+    (tags "Power Integration YN Package")
+    (path /55D3F12B)
+    (fp_text reference U3 (at 0.127 -2.286 270) (layer F.SilkS)
+      (effects (font (size 1 1) (thickness 0.15)))
+    )
+    (fp_text value 7805 (at 0 -4.318 270) (layer F.Fab) hide
+      (effects (font (size 1 1) (thickness 0.15)))
+    )
+    (fp_line (start 4.826 -1.651) (end 4.826 1.778) (layer F.SilkS) (width 0.15))
+    (fp_line (start -4.826 -1.651) (end -4.826 1.778) (layer F.SilkS) (width 0.15))
+    (fp_line (start 5.334 -2.794) (end -5.334 -2.794) (layer F.SilkS) (width 0.15))
+    (fp_line (start 1.778 -1.778) (end 1.778 -3.048) (layer F.SilkS) (width 0.15))
+    (fp_line (start -1.778 -1.778) (end -1.778 -3.048) (layer F.SilkS) (width 0.15))
+    (fp_line (start -5.334 -1.651) (end 5.334 -1.651) (layer F.SilkS) (width 0.15))
+    (fp_line (start 5.334 1.778) (end -5.334 1.778) (layer F.SilkS) (width 0.15))
+    (fp_line (start -5.334 -3.048) (end -5.334 1.778) (layer F.SilkS) (width 0.15))
+    (fp_line (start 5.334 -3.048) (end 5.334 1.778) (layer F.SilkS) (width 0.15))
+    (fp_line (start 5.334 -3.048) (end -5.334 -3.048) (layer F.SilkS) (width 0.15))
+    (pad GND thru_hole oval (at 0 0 270) (size 2.032 2.54) (drill 1.143) (layers *.Cu *.Mask F.SilkS)
+      (net 2 GND))
+    (pad VO thru_hole oval (at 2.54 0 270) (size 2.032 2.54) (drill 1.143) (layers *.Cu *.Mask F.SilkS)
+      (net 1 VDD))
+    (pad VI thru_hole oval (at -2.54 0 270) (size 2.032 2.54) (drill 1.143) (layers *.Cu *.Mask F.SilkS)
+      (net 59 "Net-(C9-Pad1)"))
+  )
+
   (module w_smd_dil:so-8 (layer F.Cu) (tedit 0) (tstamp 56C82CD0)
     (at 143.129 55.245 270)
     (descr SO-8)
@@ -484,15 +513,15 @@
     )
   )
 
-  (module LEDs:LED-3MM (layer F.Cu) (tedit 559B82F6) (tstamp 55B7CABA)
+  (module LEDs:LED-3MM (layer F.Cu) (tedit 56CA289B) (tstamp 55B7CABA)
     (at 132.842 41.021)
     (descr "LED 3mm round vertical")
     (tags "LED  3mm round vertical")
     (path /55B7B196)
-    (fp_text reference D1 (at 1.91 3.06) (layer F.SilkS)
+    (fp_text reference D1 (at 2.921 -2.794) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value LED (at 1.3 -2.9) (layer F.Fab)
+    (fp_text value LED (at 1.3 -2.9) (layer F.Fab) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -1.2 2.3) (end 3.8 2.3) (layer F.CrtYd) (width 0.05))
@@ -546,14 +575,14 @@
     )
   )
 
-  (module CANBuster:ICSP (layer F.Cu) (tedit 56B0F1B9) (tstamp 55B727CB)
+  (module CANBuster:ICSP (layer F.Cu) (tedit 56CA27AF) (tstamp 55B727CB)
     (at 121.285 57.15)
     (descr "Staggered Microchip ICSP Pin Header")
     (path /55B640CD)
-    (fp_text reference JP1 (at -2.286 -3.048 270) (layer F.SilkS)
-      (effects (font (size 0.889 0.889) (thickness 0.3048)))
+    (fp_text reference JP1 (at -2.286 -3.048 90) (layer F.SilkS) hide
+      (effects (font (size 0.889 0.889) (thickness 0.22225)))
     )
-    (fp_text value ICSP (at -2.159 0.127 270) (layer F.SilkS)
+    (fp_text value ICSP (at -2.286 -0.254 270) (layer F.SilkS)
       (effects (font (size 0.889 0.889) (thickness 0.3048)))
     )
     (fp_line (start -1.27 1.3716) (end 13.97 1.3716) (layer F.SilkS) (width 0.3048))
@@ -642,15 +671,15 @@
       (net 4 "Net-(C4-Pad1)"))
   )
 
-  (module LEDs:LED-3MM (layer F.Cu) (tedit 559B82F6) (tstamp 55B7CAC0)
+  (module LEDs:LED-3MM (layer F.Cu) (tedit 56CA288E) (tstamp 55B7CAC0)
     (at 127.635 41.021)
     (descr "LED 3mm round vertical")
     (tags "LED  3mm round vertical")
     (path /55B7F540)
-    (fp_text reference D2 (at 1.91 3.06) (layer F.SilkS)
+    (fp_text reference D2 (at 2.921 -2.794) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value LED (at 1.3 -2.9) (layer F.Fab)
+    (fp_text value LED (at 1.3 -2.9) (layer F.Fab) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -1.2 2.3) (end 3.8 2.3) (layer F.CrtYd) (width 0.05))
@@ -677,15 +706,15 @@
     )
   )
 
-  (module LEDs:LED-3MM (layer F.Cu) (tedit 559B82F6) (tstamp 55B7CAC6)
+  (module LEDs:LED-3MM (layer F.Cu) (tedit 56CA2870) (tstamp 55B7CAC6)
     (at 122.428 41.021)
     (descr "LED 3mm round vertical")
     (tags "LED  3mm round vertical")
     (path /55B7F96E)
-    (fp_text reference D3 (at 1.91 3.06) (layer F.SilkS)
+    (fp_text reference D3 (at 2.921 -2.794) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value LED (at 1.3 -2.9) (layer F.Fab)
+    (fp_text value LED (at 1.3 -2.9) (layer F.Fab) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -1.2 2.3) (end 3.8 2.3) (layer F.CrtYd) (width 0.05))
@@ -712,11 +741,11 @@
     )
   )
 
-  (module Connect:RJ45_8 (layer F.Cu) (tedit 0) (tstamp 55B7CAD4)
+  (module Connect:RJ45_8 (layer F.Cu) (tedit 56CA28BB) (tstamp 55B7CAD4)
     (at 86.868 38.1 180)
     (tags RJ45)
     (path /55BB8745)
-    (fp_text reference J1 (at 0.254 4.826 180) (layer F.SilkS)
+    (fp_text reference J1 (at 0.127 1.651 180) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value RJ45 (at 0.14224 -0.1016 180) (layer F.Fab)
@@ -751,11 +780,11 @@
     )
   )
 
-  (module Connect:RJ45_8 (layer F.Cu) (tedit 0) (tstamp 55B7CAE2)
+  (module Connect:RJ45_8 (layer F.Cu) (tedit 56CA28B4) (tstamp 55B7CAE2)
     (at 154.94 38.354 180)
     (tags RJ45)
     (path /55BB9CC6)
-    (fp_text reference J2 (at 0.254 4.826 180) (layer F.SilkS)
+    (fp_text reference J2 (at 0.254 1.778 180) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value RJ45 (at 0.14224 -0.1016 180) (layer F.Fab)
@@ -790,12 +819,12 @@
     )
   )
 
-  (module Pin_Headers:Pin_Header_Straight_1x02 (layer F.Cu) (tedit 56C99D0B) (tstamp 55B7CB0C)
+  (module Pin_Headers:Pin_Header_Straight_1x02 (layer F.Cu) (tedit 56CA22D5) (tstamp 55B7CB0C)
     (at 165.481 60.325 90)
     (descr "Through hole pin header")
     (tags "pin header")
     (path /55BAD460)
-    (fp_text reference P7 (at 0 -5.1 90) (layer F.SilkS)
+    (fp_text reference P7 (at 2.667 2.921 180) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value CONN_01X02 (at 0 -3.1 90) (layer F.Fab) hide
@@ -937,7 +966,7 @@
   )
 
   (module Connect:BARREL_JACK (layer F.Cu) (tedit 0) (tstamp 55D339C4)
-    (at 104.267 40.513 270)
+    (at 102.235 40.132 270)
     (descr "DC Barrel Jack")
     (tags "Power Jack")
     (path /55D41FC8)
@@ -1005,7 +1034,7 @@
       (net 154 VSS))
   )
 
-  (module Socket_Strips:Socket_Strip_Angled_1x06 (layer F.Cu) (tedit 0) (tstamp 55B7CB16)
+  (module Socket_Strips:Socket_Strip_Angled_1x06 (layer F.Cu) (tedit 56CA2E88) (tstamp 55B7CB16)
     (at 126.873 129.794 90)
     (descr "Through hole socket strip")
     (tags "socket strip")
@@ -1013,7 +1042,7 @@
     (fp_text reference P8 (at 0 -4.75 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value CONN_01X06 (at 0 -2.75 90) (layer F.Fab)
+    (fp_text value CONN_01X06 (at 0 -2.75 90) (layer F.Fab) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -1.75 -1.5) (end -1.75 10.6) (layer F.CrtYd) (width 0.05))
@@ -1061,15 +1090,15 @@
     )
   )
 
-  (module Housings_TO-92:TO-92_Molded_Narrow (layer F.Cu) (tedit 56B0E73F) (tstamp 55E9B619)
+  (module Housings_TO-92:TO-92_Molded_Narrow (layer F.Cu) (tedit 56CA287F) (tstamp 55E9B619)
     (at 127.4572 45.6692 180)
     (descr "TO-92 leads molded, narrow, drill 0.6mm (see NXP sot054_po.pdf)")
     (tags "to-92 sc-43 sc-43a sot54 PA33 transistor")
     (path /55E9CD25)
-    (fp_text reference Q1 (at 3.5052 -2.5908 180) (layer F.SilkS)
+    (fp_text reference Q1 (at -0.5588 -2.0828 180) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value BC547 (at 0 3 180) (layer F.Fab)
+    (fp_text value BC547 (at 0 3 180) (layer F.Fab) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -1.4 1.95) (end -1.4 -2.65) (layer F.CrtYd) (width 0.05))
@@ -1092,15 +1121,15 @@
     )
   )
 
-  (module Housings_TO-92:TO-92_Molded_Narrow (layer F.Cu) (tedit 56B0E748) (tstamp 55E9B620)
+  (module Housings_TO-92:TO-92_Molded_Narrow (layer F.Cu) (tedit 56CA2887) (tstamp 55E9B620)
     (at 122.0724 45.6692 180)
     (descr "TO-92 leads molded, narrow, drill 0.6mm (see NXP sot054_po.pdf)")
     (tags "to-92 sc-43 sc-43a sot54 PA33 transistor")
     (path /55E9CE00)
-    (fp_text reference Q2 (at 3.7084 -2.5908 180) (layer F.SilkS)
+    (fp_text reference Q2 (at -0.4826 -2.0828 180) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value BC547 (at 0 3 180) (layer F.Fab)
+    (fp_text value BC547 (at 0 3 180) (layer F.Fab) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -1.4 1.95) (end -1.4 -2.65) (layer F.CrtYd) (width 0.05))
@@ -1272,7 +1301,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A5C41)
-    (at 143.383 74.168 180)
+    (at 143.383 75.819 180)
     (descr "Resistor, RC03")
     (tags R)
     (path /55BA813B)
@@ -1330,7 +1359,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A5C9B)
-    (at 123.825 49.784 180)
+    (at 123.444 49.403 180)
     (descr "Resistor, RC03")
     (tags R)
     (path /561EB1C5)
@@ -1359,7 +1388,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A5CA1)
-    (at 146.05 82.931 90)
+    (at 146.177 84.709 90)
     (descr "Resistor, RC03")
     (tags R)
     (path /561F7571)
@@ -1475,7 +1504,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A5CB9)
-    (at 143.256 82.931 90)
+    (at 143.383 84.709 90)
     (descr "Resistor, RC03")
     (tags R)
     (path /561F4B6F)
@@ -1504,7 +1533,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A5CBF)
-    (at 143.383 76.581 180)
+    (at 143.383 78.232 180)
     (descr "Resistor, RC03")
     (tags R)
     (path /561F5655)
@@ -1678,7 +1707,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A68C1)
-    (at 143.383 71.755)
+    (at 143.383 73.406)
     (descr "Resistor, RC03")
     (tags R)
     (path /55BAEE62)
@@ -1888,12 +1917,12 @@
     )
   )
 
-  (module w_pth_circuits:dil_40-600_socket (layer F.Cu) (tedit 56C8C2A5) (tstamp 569A5D3A)
+  (module w_pth_circuits:dil_40-600_socket (layer F.Cu) (tedit 56CA2259) (tstamp 569A5D3A)
     (at 128.905 87.503 270)
     (descr "IC, DIL40 x 0,6\", with socket")
     (tags DIL)
     (path /55B62FE6)
-    (fp_text reference U1 (at 0 -10.16 270) (layer F.SilkS)
+    (fp_text reference U1 (at 0.127 -0.127 360) (layer F.SilkS)
       (effects (font (size 1.524 1.143) (thickness 0.28702)))
     )
     (fp_text value PIC18F45K80 (at 26.543 -6.858 540) (layer F.SilkS)
@@ -2590,7 +2619,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 55E9B62C)
-    (at 123.825 54.483)
+    (at 123.444 54.229)
     (descr "Resistor, RC03")
     (tags R)
     (path /55E9D3DF)
@@ -2677,7 +2706,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 55E9B626)
-    (at 123.825 52.07 180)
+    (at 123.444 51.816 180)
     (descr "Resistor, RC03")
     (tags R)
     (path /55E9D51A)
@@ -2706,7 +2735,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A5C29)
-    (at 140.462 82.931 90)
+    (at 140.589 84.709 90)
     (descr "Resistor, RC03")
     (tags R)
     (path /55B89E75)
@@ -2734,15 +2763,15 @@
     )
   )
 
-  (module Socket_Strips:Socket_Strip_Straight_1x06 (layer F.Cu) (tedit 56B0F1C0) (tstamp 55B7CB34)
-    (at 121.412 60.325)
+  (module Socket_Strips:Socket_Strip_Straight_1x06 (layer F.Cu) (tedit 56CA27EB) (tstamp 55B7CB34)
+    (at 121.285 60.325)
     (descr "Through hole socket strip")
     (tags "socket strip")
     (path /55B7C26E)
-    (fp_text reference P11 (at -2.286 -0.127 90) (layer F.SilkS)
+    (fp_text reference P11 (at 15.875 0.889 180) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value RS232-Programmer (at 6.477 -2.413) (layer F.Fab)
+    (fp_text value RS232-Programmer (at 6.477 -2.413) (layer F.Fab) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -1.75 -1.75) (end -1.75 1.75) (layer F.CrtYd) (width 0.05))
@@ -2775,7 +2804,7 @@
     )
   )
 
-  (module Discret:D3 (layer F.Cu) (tedit 0) (tstamp 56B42721)
+  (module Discret:D3 (layer F.Cu) (tedit 56CA2E76) (tstamp 56B42721)
     (at 81.28 129.032 90)
     (descr "Diode 3 pas")
     (tags "DIODE DEV")
@@ -2783,7 +2812,7 @@
     (fp_text reference D7 (at 0 0 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 1N4148 (at 0 0 90) (layer F.Fab)
+    (fp_text value 1N4148 (at 0 0 90) (layer F.Fab) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start 3.81 0) (end 3.048 0) (layer F.SilkS) (width 0.15))
@@ -2907,12 +2936,12 @@
     )
   )
 
-  (module Pin_Headers:Pin_Header_Straight_1x02 (layer F.Cu) (tedit 56C9F6FD) (tstamp 56B48B97)
+  (module Pin_Headers:Pin_Header_Straight_1x02 (layer F.Cu) (tedit 56CA22DC) (tstamp 56B48B97)
     (at 164.846 48.641 180)
     (descr "Through hole pin header")
     (tags "pin header")
     (path /56B3B08B)
-    (fp_text reference P16 (at 0 -5.1 180) (layer F.SilkS)
+    (fp_text reference P16 (at 0 -2.54 180) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value CONN_01X02 (at 0 -3.1 180) (layer F.Fab) hide
@@ -3288,12 +3317,12 @@
     )
   )
 
-  (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 0) (tstamp 56B2911E)
-    (at 95.25 129.667 270)
+  (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 56CA2E6E) (tstamp 56B2911E)
+    (at 94.234 129.032 270)
     (descr "Small ceramic capacitor")
     (tags C)
     (path /56B1D1F7)
-    (fp_text reference C15 (at 0 -3.81 270) (layer F.SilkS)
+    (fp_text reference C15 (at -4.318 0 270) (layer F.SilkS)
       (effects (font (size 1.016 1.016) (thickness 0.2032)))
     )
     (fp_text value 100nF (at 0 -2.286 270) (layer F.SilkS) hide
@@ -3371,12 +3400,12 @@
     )
   )
 
-  (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 0) (tstamp 55D339B7)
+  (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 56CA27D3) (tstamp 55D339B7)
     (at 116.459 53.975 270)
     (descr "Small ceramic capacitor")
     (tags C)
     (path /55D3F76D)
-    (fp_text reference C9 (at 0 -3.81 270) (layer F.SilkS)
+    (fp_text reference C9 (at 0.254 -1.778 270) (layer F.SilkS)
       (effects (font (size 1.016 1.016) (thickness 0.2032)))
     )
     (fp_text value 100nF (at 0 -2.286 270) (layer F.SilkS) hide
@@ -3398,12 +3427,12 @@
     )
   )
 
-  (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 56B0FC69) (tstamp 55D339BD)
+  (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 56CA27F3) (tstamp 55D339BD)
     (at 116.459 59.309 90)
     (descr "Small ceramic capacitor")
     (tags C)
     (path /55D43E5B)
-    (fp_text reference C10 (at -4.7625 2.8575 90) (layer F.SilkS)
+    (fp_text reference C10 (at -0.762 2.286 90) (layer F.SilkS)
       (effects (font (size 1.016 1.016) (thickness 0.2032)))
     )
     (fp_text value 100nF (at 0 -2.286 90) (layer F.SilkS) hide
@@ -3506,12 +3535,12 @@
     )
   )
 
-  (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 0) (tstamp 55B727C1)
+  (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 56CA2579) (tstamp 55B727C1)
     (at 143.129 61.595 180)
     (descr "Small ceramic capacitor")
     (tags C)
     (path /55B667FD)
-    (fp_text reference C6 (at 0 -3.81 180) (layer F.SilkS)
+    (fp_text reference C6 (at -3.937 -0.254 180) (layer F.SilkS)
       (effects (font (size 1.016 1.016) (thickness 0.2032)))
     )
     (fp_text value 100nF (at 0 -2.286 180) (layer F.SilkS) hide
@@ -3960,15 +3989,15 @@
     )
   )
 
-  (module w_switch:PCB_PUSH (layer F.Cu) (tedit 56C45411) (tstamp 56B42763)
-    (at 143.002 92.202)
+  (module w_switch:PCB_PUSH (layer F.Cu) (tedit 56CA2240) (tstamp 56B42763)
+    (at 143.51 93.472 270)
     (descr "PCB pushbutton, Tyco FSM6x6 series")
     (tags pushbutton)
     (path /56AB0AA5)
-    (fp_text reference SW2 (at 0 -5.08) (layer F.SilkS)
+    (fp_text reference SW2 (at 0 -5.08 270) (layer F.SilkS) hide
       (effects (font (size 1.27 1.27) (thickness 0.3175)))
     )
-    (fp_text value SW_PUSH (at 4.445 0.254 90) (layer F.SilkS)
+    (fp_text value SW_PUSH (at 4.445 0.254 360) (layer F.SilkS) hide
       (effects (font (size 1.27 1.27) (thickness 0.254)))
     )
     (fp_line (start -3.048 -3.048) (end 3.048 -3.048) (layer F.SilkS) (width 0.3048))
@@ -3976,12 +4005,12 @@
     (fp_line (start 3.048 3.048) (end -3.048 3.048) (layer F.SilkS) (width 0.3048))
     (fp_line (start -3.048 3.048) (end -3.048 -3.048) (layer F.SilkS) (width 0.3048))
     (fp_circle (center 0 0) (end -0.762 0.254) (layer F.SilkS) (width 2.54))
-    (pad 1 thru_hole circle (at -2.25044 -3.2512) (size 1.5 1.99898) (drill 1.00076) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole circle (at -2.25044 -3.2512 270) (size 1.5 1.99898) (drill 1.00076) (layers *.Cu *.Mask F.SilkS)
       (net 2 GND))
-    (pad 2 thru_hole circle (at 2.25044 3.2512) (size 1.5 1.99898) (drill 1.00076) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole circle (at 2.25044 3.2512 270) (size 1.5 1.99898) (drill 1.00076) (layers *.Cu *.Mask F.SilkS)
       (net 60 /STATUS))
-    (pad 4 thru_hole circle (at 2.25044 -3.2512) (size 1.5 1.99898) (drill 1.00076) (layers *.Cu *.Mask F.SilkS))
-    (pad 3 thru_hole circle (at -2.25044 3.2512) (size 1.5 1.99898) (drill 1.00076) (layers *.Cu *.Mask F.SilkS))
+    (pad 4 thru_hole circle (at 2.25044 -3.2512 270) (size 1.5 1.99898) (drill 1.00076) (layers *.Cu *.Mask F.SilkS))
+    (pad 3 thru_hole circle (at -2.25044 3.2512 270) (size 1.5 1.99898) (drill 1.00076) (layers *.Cu *.Mask F.SilkS))
     (model walter/switch/pcb_push.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
@@ -3989,15 +4018,15 @@
     )
   )
 
-  (module w_switch:PCB_PUSH (layer F.Cu) (tedit 0) (tstamp 56994A3B)
+  (module w_switch:PCB_PUSH (layer F.Cu) (tedit 56CA2288) (tstamp 56994A3B)
     (at 114.3 48.133 270)
     (descr "PCB pushbutton, Tyco FSM6x6 series")
     (tags pushbutton)
     (path /561EA706)
-    (fp_text reference SW1 (at 0 -5.08 270) (layer F.SilkS)
+    (fp_text reference SW1 (at 0 -5.08 270) (layer F.SilkS) hide
       (effects (font (size 1.27 1.27) (thickness 0.3175)))
     )
-    (fp_text value SW_PUSH (at 0 5.588 270) (layer F.SilkS)
+    (fp_text value SW_PUSH (at 0 5.588 270) (layer F.SilkS) hide
       (effects (font (size 1.27 1.27) (thickness 0.254)))
     )
     (fp_line (start -3.048 -3.048) (end 3.048 -3.048) (layer F.SilkS) (width 0.3048))
@@ -4078,8 +4107,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C8C58F) (tstamp 56C794B4)
-    (at 82.042 50.546 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA1F30) (tstamp 56C794B4)
+    (at 82.3468 50.546 180)
     (descr "Diode, DO-35 package")
     (path /561EF2CB)
     (fp_text reference D11 (at 0 2.54 180) (layer F.SilkS) hide
@@ -4098,7 +4127,7 @@
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
     (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.5) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 98 "Net-(D11-Pad1)"))
-    (pad 2 thru_hole oval (at 3.81 0 180) (size 2 1.7) (drill 1.2) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole oval (at 3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 150 "Net-(D11-Pad2)"))
     (model walter/pth_diodes/diode_do35.wrl
       (at (xyz 0 0 0))
@@ -4107,7 +4136,7 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C8C521) (tstamp 56C794C2)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA1FBE) (tstamp 56C794C2)
     (at 91.694 50.546 180)
     (descr "Diode, DO-35 package")
     (path /56C7AAA8)
@@ -4125,7 +4154,7 @@
     (fp_line (start 2.286 -1.016) (end 2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start 2.286 1.016) (end -2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
-    (pad 1 thru_hole oval (at -3.81 0 180) (size 2 1.7) (drill 1.2) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole oval (at -3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 146 "Net-(D10-Pad1)"))
     (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.5) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 98 "Net-(D11-Pad1)"))
@@ -4137,7 +4166,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C76CEC) (tstamp 56C794D0)
-    (at 82.042 52.832)
+    (at 82.3468 52.832)
     (descr "Diode, DO-35 package")
     (path /561EF4AA)
     (fp_text reference D13 (at -0.889 0.0635) (layer F.SilkS) hide
@@ -4194,8 +4223,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C8C59C) (tstamp 56C79E61)
-    (at 82.042 55.118 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA1F60) (tstamp 56C79E61)
+    (at 82.3468 55.118 180)
     (descr "Diode, DO-35 package")
     (path /56C91011)
     (fp_text reference D21 (at 0 2.54 180) (layer F.SilkS) hide
@@ -4214,7 +4243,7 @@
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
     (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 100 "Net-(D21-Pad1)"))
-    (pad 2 thru_hole oval (at 3.81 0 180) (size 2 1.7) (drill 1.2) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole oval (at 3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 101 "Net-(D21-Pad2)"))
     (model walter/pth_diodes/diode_do35.wrl
       (at (xyz 0 0 0))
@@ -4223,7 +4252,7 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C8C5A9) (tstamp 56C79E6F)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA1FD1) (tstamp 56C79E6F)
     (at 91.694 55.118 180)
     (descr "Diode, DO-35 package")
     (path /56C91023)
@@ -4241,7 +4270,7 @@
     (fp_line (start 2.286 -1.016) (end 2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start 2.286 1.016) (end -2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
-    (pad 1 thru_hole oval (at -3.81 0 180) (size 2 1.7) (drill 1.2) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole oval (at -3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 146 "Net-(D10-Pad1)"))
     (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 100 "Net-(D21-Pad1)"))
@@ -4253,7 +4282,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C76D30) (tstamp 56C79E7D)
-    (at 82.042 57.404)
+    (at 82.3468 57.404)
     (descr "Diode, DO-35 package")
     (path /56C91017)
     (fp_text reference D23 (at 0 2.54) (layer F.SilkS) hide
@@ -4310,8 +4339,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C8C61E) (tstamp 56C79E99)
-    (at 82.042 59.69 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA1F71) (tstamp 56C79E99)
+    (at 82.3468 59.69 180)
     (descr "Diode, DO-35 package")
     (path /56C9160F)
     (fp_text reference D31 (at 0 2.54 180) (layer F.SilkS) hide
@@ -4330,7 +4359,7 @@
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
     (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 103 "Net-(D31-Pad1)"))
-    (pad 2 thru_hole oval (at 3.81 0 180) (size 2 1.7) (drill 1.2) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole oval (at 3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 104 "Net-(D31-Pad2)"))
     (model walter/pth_diodes/diode_do35.wrl
       (at (xyz 0 0 0))
@@ -4339,7 +4368,7 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C8C639) (tstamp 56C79EA7)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA1FDC) (tstamp 56C79EA7)
     (at 91.694 59.69 180)
     (descr "Diode, DO-35 package")
     (path /56C91621)
@@ -4357,7 +4386,7 @@
     (fp_line (start 2.286 -1.016) (end 2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start 2.286 1.016) (end -2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
-    (pad 1 thru_hole oval (at -3.81 0 180) (size 2 1.7) (drill 1.2) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole oval (at -3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 146 "Net-(D10-Pad1)"))
     (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 103 "Net-(D31-Pad1)"))
@@ -4369,7 +4398,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C76D57) (tstamp 56C79EB5)
-    (at 82.042 61.976)
+    (at 82.3468 61.976)
     (descr "Diode, DO-35 package")
     (path /56C91615)
     (fp_text reference D33 (at 0 2.54) (layer F.SilkS) hide
@@ -4426,8 +4455,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C76E16) (tstamp 56C79ED1)
-    (at 82.042 64.262 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA1F96) (tstamp 56C79ED1)
+    (at 82.3468 64.262 180)
     (descr "Diode, DO-35 package")
     (path /56C95375)
     (fp_text reference D41 (at 0 2.54 180) (layer F.SilkS) hide
@@ -4446,7 +4475,7 @@
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
     (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 106 "Net-(D41-Pad1)"))
-    (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole oval (at 3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 107 "Net-(D41-Pad2)"))
     (model walter/pth_diodes/diode_do35.wrl
       (at (xyz 0 0 0))
@@ -4455,7 +4484,7 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C76E29) (tstamp 56C79EDF)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA1FF8) (tstamp 56C79EDF)
     (at 91.694 64.262 180)
     (descr "Diode, DO-35 package")
     (path /56C95387)
@@ -4473,7 +4502,7 @@
     (fp_line (start 2.286 -1.016) (end 2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start 2.286 1.016) (end -2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
-    (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole oval (at -3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 146 "Net-(D10-Pad1)"))
     (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 106 "Net-(D41-Pad1)"))
@@ -4485,7 +4514,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C76E64) (tstamp 56C79EED)
-    (at 82.042 66.548)
+    (at 82.3468 66.548)
     (descr "Diode, DO-35 package")
     (path /56C9537B)
     (fp_text reference D43 (at 0 2.54) (layer F.SilkS) hide
@@ -4542,8 +4571,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C76E80) (tstamp 56C79F09)
-    (at 82.042 68.834 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA20C9) (tstamp 56C79F09)
+    (at 82.3468 68.834 180)
     (descr "Diode, DO-35 package")
     (path /56C9557B)
     (fp_text reference D51 (at 0 2.54 180) (layer F.SilkS) hide
@@ -4562,7 +4591,7 @@
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
     (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 109 "Net-(D51-Pad1)"))
-    (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole oval (at 3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 110 "Net-(D51-Pad2)"))
     (model walter/pth_diodes/diode_do35.wrl
       (at (xyz 0 0 0))
@@ -4571,7 +4600,7 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C76E5E) (tstamp 56C79F17)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA21D2) (tstamp 56C79F17)
     (at 91.694 68.834 180)
     (descr "Diode, DO-35 package")
     (path /56C9558D)
@@ -4589,7 +4618,7 @@
     (fp_line (start 2.286 -1.016) (end 2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start 2.286 1.016) (end -2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
-    (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole oval (at -3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 146 "Net-(D10-Pad1)"))
     (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 109 "Net-(D51-Pad1)"))
@@ -4601,7 +4630,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C78574) (tstamp 56C79F25)
-    (at 82.042 71.12)
+    (at 82.3468 71.12)
     (descr "Diode, DO-35 package")
     (path /56C95581)
     (fp_text reference D53 (at 0 2.54) (layer F.SilkS) hide
@@ -4658,8 +4687,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C78583) (tstamp 56C79F41)
-    (at 82.042 73.406 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA20E5) (tstamp 56C79F41)
+    (at 82.3468 73.406 180)
     (descr "Diode, DO-35 package")
     (path /56C995A9)
     (fp_text reference D61 (at 0 2.54 180) (layer F.SilkS) hide
@@ -4678,7 +4707,7 @@
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
     (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 112 "Net-(D61-Pad1)"))
-    (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole oval (at 3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 113 "Net-(D61-Pad2)"))
     (model walter/pth_diodes/diode_do35.wrl
       (at (xyz 0 0 0))
@@ -4687,7 +4716,7 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C785CC) (tstamp 56C79F4F)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA21AB) (tstamp 56C79F4F)
     (at 91.694 73.406 180)
     (descr "Diode, DO-35 package")
     (path /56C995BB)
@@ -4705,7 +4734,7 @@
     (fp_line (start 2.286 -1.016) (end 2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start 2.286 1.016) (end -2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
-    (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole oval (at -3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 146 "Net-(D10-Pad1)"))
     (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 112 "Net-(D61-Pad1)"))
@@ -4717,7 +4746,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C78591) (tstamp 56C79F5D)
-    (at 82.042 75.692)
+    (at 82.3468 75.692)
     (descr "Diode, DO-35 package")
     (path /56C995AF)
     (fp_text reference D63 (at 0 2.54) (layer F.SilkS) hide
@@ -4774,8 +4803,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C785B0) (tstamp 56C79F79)
-    (at 82.042 77.978 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA20FF) (tstamp 56C79F79)
+    (at 82.3214 77.978 180)
     (descr "Diode, DO-35 package")
     (path /56C99797)
     (fp_text reference D71 (at 0 2.54 180) (layer F.SilkS) hide
@@ -4794,7 +4823,7 @@
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
     (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 115 "Net-(D71-Pad1)"))
-    (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole oval (at 3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 116 "Net-(D71-Pad2)"))
     (model walter/pth_diodes/diode_do35.wrl
       (at (xyz 0 0 0))
@@ -4803,7 +4832,7 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C785E2) (tstamp 56C79F87)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA218D) (tstamp 56C79F87)
     (at 91.694 77.978 180)
     (descr "Diode, DO-35 package")
     (path /56C997A9)
@@ -4821,7 +4850,7 @@
     (fp_line (start 2.286 -1.016) (end 2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start 2.286 1.016) (end -2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
-    (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole oval (at -3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 146 "Net-(D10-Pad1)"))
     (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 115 "Net-(D71-Pad1)"))
@@ -4833,7 +4862,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C78610) (tstamp 56C79F95)
-    (at 82.042 80.264)
+    (at 82.3468 80.264)
     (descr "Diode, DO-35 package")
     (path /56C9979D)
     (fp_text reference D73 (at 0 2.54) (layer F.SilkS) hide
@@ -4890,8 +4919,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C7861D) (tstamp 56C79FB1)
-    (at 82.042 82.55 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA214C) (tstamp 56C79FB1)
+    (at 82.3468 82.55 180)
     (descr "Diode, DO-35 package")
     (path /56C9A763)
     (fp_text reference D81 (at 0 2.54 180) (layer F.SilkS) hide
@@ -4910,7 +4939,7 @@
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
     (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 118 "Net-(D81-Pad1)"))
-    (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole oval (at 3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 119 "Net-(D81-Pad2)"))
     (model walter/pth_diodes/diode_do35.wrl
       (at (xyz 0 0 0))
@@ -4919,7 +4948,7 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C78609) (tstamp 56C79FBF)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA2173) (tstamp 56C79FBF)
     (at 91.694 82.55 180)
     (descr "Diode, DO-35 package")
     (path /56C9A775)
@@ -4937,7 +4966,7 @@
     (fp_line (start 2.286 -1.016) (end 2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start 2.286 1.016) (end -2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
-    (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole oval (at -3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 146 "Net-(D10-Pad1)"))
     (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 118 "Net-(D81-Pad1)"))
@@ -4949,7 +4978,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C78623) (tstamp 56C79FCD)
-    (at 82.042 84.836)
+    (at 82.3468 84.836)
     (descr "Diode, DO-35 package")
     (path /56C9A769)
     (fp_text reference D83 (at 0 2.54) (layer F.SilkS) hide
@@ -5006,8 +5035,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C78652) (tstamp 56C79FE9)
-    (at 82.169 87.503 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA233F) (tstamp 56C79FE9)
+    (at 82.3468 87.503 180)
     (descr "Diode, DO-35 package")
     (path /56CA7C0C)
     (fp_text reference D91 (at 0 2.54 180) (layer F.SilkS) hide
@@ -5026,7 +5055,7 @@
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
     (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 121 "Net-(D91-Pad1)"))
-    (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole oval (at 3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 122 "Net-(D91-Pad2)"))
     (model walter/pth_diodes/diode_do35.wrl
       (at (xyz 0 0 0))
@@ -5035,8 +5064,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C78644) (tstamp 56C79FF7)
-    (at 91.821 87.503 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA24EA) (tstamp 56C79FF7)
+    (at 91.694 87.503 180)
     (descr "Diode, DO-35 package")
     (path /56CA7C1E)
     (fp_text reference D92 (at 0 2.54 180) (layer F.SilkS) hide
@@ -5053,7 +5082,7 @@
     (fp_line (start 2.286 -1.016) (end 2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start 2.286 1.016) (end -2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
-    (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole oval (at -3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 146 "Net-(D10-Pad1)"))
     (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 121 "Net-(D91-Pad1)"))
@@ -5065,7 +5094,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C7865E) (tstamp 56C7A005)
-    (at 82.169 89.789)
+    (at 82.3468 89.789)
     (descr "Diode, DO-35 package")
     (path /56CA7C12)
     (fp_text reference D93 (at 0 2.54) (layer F.SilkS) hide
@@ -5094,7 +5123,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C78670) (tstamp 56C7A013)
-    (at 91.821 89.789)
+    (at 91.694 89.789)
     (descr "Diode, DO-35 package")
     (path /56CA7C18)
     (fp_text reference D94 (at 0 2.54) (layer F.SilkS) hide
@@ -5122,8 +5151,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C78689) (tstamp 56C7A021)
-    (at 82.169 92.075 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA236C) (tstamp 56C7A021)
+    (at 82.3468 92.075 180)
     (descr "Diode, DO-35 package")
     (path /56CA8017)
     (fp_text reference D101 (at 0 2.54 180) (layer F.SilkS) hide
@@ -5142,7 +5171,7 @@
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
     (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 124 "Net-(D101-Pad1)"))
-    (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole oval (at 3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 125 "Net-(D101-Pad2)"))
     (model walter/pth_diodes/diode_do35.wrl
       (at (xyz 0 0 0))
@@ -5151,8 +5180,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C7867C) (tstamp 56C7A02F)
-    (at 91.821 92.075 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA24C7) (tstamp 56C7A02F)
+    (at 91.694 92.075 180)
     (descr "Diode, DO-35 package")
     (path /56CA8005)
     (fp_text reference D102 (at 0 2.54 180) (layer F.SilkS) hide
@@ -5169,7 +5198,7 @@
     (fp_line (start 2.286 -1.016) (end 2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start 2.286 1.016) (end -2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
-    (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole oval (at -3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 146 "Net-(D10-Pad1)"))
     (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 124 "Net-(D101-Pad1)"))
@@ -5181,7 +5210,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C78698) (tstamp 56C7A03D)
-    (at 82.169 94.361)
+    (at 82.3468 94.361)
     (descr "Diode, DO-35 package")
     (path /56CA8011)
     (fp_text reference D103 (at 0 2.54) (layer F.SilkS) hide
@@ -5210,7 +5239,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C786A4) (tstamp 56C7A04B)
-    (at 91.821 94.361)
+    (at 91.694 94.361)
     (descr "Diode, DO-35 package")
     (path /56CA800B)
     (fp_text reference D104 (at 0 2.54) (layer F.SilkS) hide
@@ -5238,8 +5267,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C786DA) (tstamp 56C7A059)
-    (at 82.169 96.647 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA2387) (tstamp 56C7A059)
+    (at 82.3468 96.647 180)
     (descr "Diode, DO-35 package")
     (path /56CA8FE1)
     (fp_text reference D111 (at 0 2.54 180) (layer F.SilkS) hide
@@ -5258,7 +5287,7 @@
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
     (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 127 "Net-(D111-Pad1)"))
-    (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole oval (at 3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 128 "Net-(D111-Pad2)"))
     (model walter/pth_diodes/diode_do35.wrl
       (at (xyz 0 0 0))
@@ -5267,8 +5296,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C786B1) (tstamp 56C7A067)
-    (at 91.821 96.647 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA24AD) (tstamp 56C7A067)
+    (at 91.694 96.647 180)
     (descr "Diode, DO-35 package")
     (path /56CA8FCF)
     (fp_text reference D112 (at 0 2.54 180) (layer F.SilkS) hide
@@ -5285,7 +5314,7 @@
     (fp_line (start 2.286 -1.016) (end 2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start 2.286 1.016) (end -2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
-    (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole oval (at -3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 146 "Net-(D10-Pad1)"))
     (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 127 "Net-(D111-Pad1)"))
@@ -5297,7 +5326,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C786E1) (tstamp 56C7A075)
-    (at 82.169 98.933)
+    (at 82.3468 98.933)
     (descr "Diode, DO-35 package")
     (path /56CA8FDB)
     (fp_text reference D113 (at 0 2.54) (layer F.SilkS) hide
@@ -5325,8 +5354,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C786ED) (tstamp 56C7A091)
-    (at 82.169 101.219 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA23BD) (tstamp 56C7A091)
+    (at 82.3468 101.219 180)
     (descr "Diode, DO-35 package")
     (path /56CA91F7)
     (fp_text reference D121 (at 0 2.54 180) (layer F.SilkS) hide
@@ -5345,7 +5374,7 @@
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
     (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 130 "Net-(D121-Pad1)"))
-    (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole oval (at 3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 131 "Net-(D121-Pad2)"))
     (model walter/pth_diodes/diode_do35.wrl
       (at (xyz 0 0 0))
@@ -5354,8 +5383,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C78FB6) (tstamp 56C7A09F)
-    (at 91.821 101.219 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA2498) (tstamp 56C7A09F)
+    (at 91.694 101.219 180)
     (descr "Diode, DO-35 package")
     (path /56CA91E5)
     (fp_text reference D122 (at 0 2.54 180) (layer F.SilkS) hide
@@ -5372,7 +5401,7 @@
     (fp_line (start 2.286 -1.016) (end 2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start 2.286 1.016) (end -2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
-    (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole oval (at -3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 146 "Net-(D10-Pad1)"))
     (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 130 "Net-(D121-Pad1)"))
@@ -5384,7 +5413,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C7872A) (tstamp 56C7A0AD)
-    (at 82.169 103.505)
+    (at 82.3468 103.505)
     (descr "Diode, DO-35 package")
     (path /56CA91F1)
     (fp_text reference D123 (at 0 2.54) (layer F.SilkS) hide
@@ -5413,7 +5442,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C78711) (tstamp 56C7A0BB)
-    (at 91.821 103.505)
+    (at 91.694 103.505)
     (descr "Diode, DO-35 package")
     (path /56CA91EB)
     (fp_text reference D124 (at 0 2.54) (layer F.SilkS) hide
@@ -5441,8 +5470,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C78736) (tstamp 56C7A0C9)
-    (at 82.169 105.791 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA23D9) (tstamp 56C7A0C9)
+    (at 82.3468 105.791 180)
     (descr "Diode, DO-35 package")
     (path /56CAA2A7)
     (fp_text reference D131 (at 0 2.54 180) (layer F.SilkS) hide
@@ -5461,7 +5490,7 @@
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
     (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 133 "Net-(D131-Pad1)"))
-    (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole oval (at 3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 134 "Net-(D131-Pad2)"))
     (model walter/pth_diodes/diode_do35.wrl
       (at (xyz 0 0 0))
@@ -5470,8 +5499,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C7871D) (tstamp 56C7A0D7)
-    (at 91.821 105.791 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA247B) (tstamp 56C7A0D7)
+    (at 91.694 105.791 180)
     (descr "Diode, DO-35 package")
     (path /56CAA295)
     (fp_text reference D132 (at 0 2.54 180) (layer F.SilkS) hide
@@ -5488,7 +5517,7 @@
     (fp_line (start 2.286 -1.016) (end 2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start 2.286 1.016) (end -2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
-    (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole oval (at -3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 146 "Net-(D10-Pad1)"))
     (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 133 "Net-(D131-Pad1)"))
@@ -5500,7 +5529,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C78745) (tstamp 56C7A0E5)
-    (at 82.169 108.077)
+    (at 82.3468 108.077)
     (descr "Diode, DO-35 package")
     (path /56CAA2A1)
     (fp_text reference D133 (at 0 2.54) (layer F.SilkS) hide
@@ -5529,7 +5558,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C78752) (tstamp 56C7A0F3)
-    (at 91.821 108.077)
+    (at 91.694 108.077)
     (descr "Diode, DO-35 package")
     (path /56CAA29B)
     (fp_text reference D134 (at 0 2.54) (layer F.SilkS) hide
@@ -5557,8 +5586,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C7876C) (tstamp 56C7A101)
-    (at 82.169 110.363 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA23ED) (tstamp 56C7A101)
+    (at 82.3468 110.363 180)
     (descr "Diode, DO-35 package")
     (path /56CAA4BD)
     (fp_text reference D141 (at 0 2.54 180) (layer F.SilkS) hide
@@ -5577,7 +5606,7 @@
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
     (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 136 "Net-(D141-Pad1)"))
-    (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole oval (at 3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 137 "Net-(D141-Pad2)"))
     (model walter/pth_diodes/diode_do35.wrl
       (at (xyz 0 0 0))
@@ -5586,8 +5615,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C787BB) (tstamp 56C7A10F)
-    (at 91.821 110.363 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA2464) (tstamp 56C7A10F)
+    (at 91.694 110.363 180)
     (descr "Diode, DO-35 package")
     (path /56CAA4AB)
     (fp_text reference D142 (at 0 2.54 180) (layer F.SilkS) hide
@@ -5604,7 +5633,7 @@
     (fp_line (start 2.286 -1.016) (end 2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start 2.286 1.016) (end -2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
-    (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole oval (at -3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 146 "Net-(D10-Pad1)"))
     (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 136 "Net-(D141-Pad1)"))
@@ -5616,7 +5645,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C7877E) (tstamp 56C7A11D)
-    (at 82.169 112.649)
+    (at 82.3468 112.649)
     (descr "Diode, DO-35 package")
     (path /56CAA4B7)
     (fp_text reference D143 (at 0 2.54) (layer F.SilkS) hide
@@ -5645,7 +5674,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C787C1) (tstamp 56C7A12B)
-    (at 91.821 112.649)
+    (at 91.694 112.649)
     (descr "Diode, DO-35 package")
     (path /56CAA4B1)
     (fp_text reference D144 (at 0 2.54) (layer F.SilkS) hide
@@ -5673,8 +5702,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C7878B) (tstamp 56C7A139)
-    (at 82.169 114.935 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA240B) (tstamp 56C7A139)
+    (at 82.3468 114.935 180)
     (descr "Diode, DO-35 package")
     (path /56CAA6D3)
     (fp_text reference D151 (at 0 2.54 180) (layer F.SilkS) hide
@@ -5693,7 +5722,7 @@
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
     (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 139 "Net-(D151-Pad1)"))
-    (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole oval (at 3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 140 "Net-(D151-Pad2)"))
     (model walter/pth_diodes/diode_do35.wrl
       (at (xyz 0 0 0))
@@ -5702,8 +5731,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C787D7) (tstamp 56C7A147)
-    (at 91.821 114.935 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA244B) (tstamp 56C7A147)
+    (at 91.694 114.935 180)
     (descr "Diode, DO-35 package")
     (path /56CAA6C1)
     (fp_text reference D152 (at 0 2.54 180) (layer F.SilkS) hide
@@ -5720,7 +5749,7 @@
     (fp_line (start 2.286 -1.016) (end 2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start 2.286 1.016) (end -2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
-    (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole oval (at -3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 146 "Net-(D10-Pad1)"))
     (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 139 "Net-(D151-Pad1)"))
@@ -5732,7 +5761,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C78799) (tstamp 56C7A155)
-    (at 82.169 117.221)
+    (at 82.3468 117.221)
     (descr "Diode, DO-35 package")
     (path /56CAA6CD)
     (fp_text reference D153 (at 0 2.54) (layer F.SilkS) hide
@@ -5761,7 +5790,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C787EB) (tstamp 56C7A163)
-    (at 91.821 117.221)
+    (at 91.694 117.221)
     (descr "Diode, DO-35 package")
     (path /56CAA6C7)
     (fp_text reference D154 (at 0 2.54) (layer F.SilkS) hide
@@ -5789,8 +5818,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C787A5) (tstamp 56C7A171)
-    (at 82.169 119.507 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA2421) (tstamp 56C7A171)
+    (at 82.3468 119.507 180)
     (descr "Diode, DO-35 package")
     (path /56CAAFE1)
     (fp_text reference D161 (at 0 2.54 180) (layer F.SilkS) hide
@@ -5809,7 +5838,7 @@
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
     (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 142 "Net-(D161-Pad1)"))
-    (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole oval (at 3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 143 "Net-(D161-Pad2)"))
     (model walter/pth_diodes/diode_do35.wrl
       (at (xyz 0 0 0))
@@ -5818,8 +5847,8 @@
     )
   )
 
-  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C787F9) (tstamp 56C7A17F)
-    (at 91.821 119.507 180)
+  (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56CA2435) (tstamp 56C7A17F)
+    (at 91.694 119.507 180)
     (descr "Diode, DO-35 package")
     (path /56CAAFCF)
     (fp_text reference D162 (at 0 2.54 180) (layer F.SilkS) hide
@@ -5836,7 +5865,7 @@
     (fp_line (start 2.286 -1.016) (end 2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start 2.286 1.016) (end -2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
-    (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole oval (at -3.81 0 180) (size 2.5 1.7) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 146 "Net-(D10-Pad1)"))
     (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.99898) (drill 0.8001) (layers *.Cu *.Mask F.SilkS)
       (net 142 "Net-(D161-Pad1)"))
@@ -5848,7 +5877,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C787AC) (tstamp 56C7A18D)
-    (at 82.169 121.793)
+    (at 82.3468 121.793)
     (descr "Diode, DO-35 package")
     (path /56CAAFDB)
     (fp_text reference D163 (at 0 2.54) (layer F.SilkS) hide
@@ -5877,7 +5906,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C787FF) (tstamp 56C7A19B)
-    (at 91.821 121.793)
+    (at 91.694 121.793)
     (descr "Diode, DO-35 package")
     (path /56CAAFD5)
     (fp_text reference D164 (at 0 2.54) (layer F.SilkS) hide
@@ -5905,7 +5934,7 @@
     )
   )
 
-  (module Diodes_ThroughHole:Diode_DO-41_SOD81_Vertical_AnodeUp (layer F.Cu) (tedit 56C7429D) (tstamp 56C7B2CA)
+  (module Diodes_ThroughHole:Diode_DO-41_SOD81_Vertical_AnodeUp (layer F.Cu) (tedit 56CA2E05) (tstamp 56C7B2CA)
     (at 76.454 45.212 180)
     (descr "Diode, DO-41, SOD81, Vertical, Anode Up,")
     (tags "Diode, DO-41, SOD81, Vertical, Anode Up, 1N4007, SB140,")
@@ -5913,7 +5942,7 @@
     (fp_text reference D10 (at -0.635 2.032 180) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value D (at 0.05 -2 180) (layer F.Fab)
+    (fp_text value D (at 0.05 -2 180) (layer F.Fab) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text user A (at 2.794 1.651 180) (layer F.SilkS)
@@ -5925,18 +5954,18 @@
     (fp_line (start 2.286 -1.016) (end 2.286 1.016) (layer F.SilkS) (width 0.15))
     (pad 2 thru_hole circle (at 3.81 0 180) (size 2.5 2.5) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 145 "Net-(D10-Pad2)"))
-    (pad 1 thru_hole rect (at 0 0 180) (size 2 1.99898) (drill 1.00076) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole rect (at 0 0 180) (size 2 1.99898) (drill 1.27) (layers *.Cu *.Mask F.SilkS)
       (net 146 "Net-(D10-Pad1)"))
   )
 
-  (module w_conn_pc:conn_usb_B_mini_smd (layer F.Cu) (tedit 56C72D28) (tstamp 56C7F53E)
+  (module w_conn_pc:conn_usb_B_mini_smd (layer F.Cu) (tedit 56CA28C3) (tstamp 56C7F53E)
     (at 114.808 38.354 180)
     (descr "USB B mini SMD connector")
     (path /56D49082)
-    (fp_text reference P17 (at 0 6.10108 180) (layer F.SilkS)
+    (fp_text reference P17 (at 0 -0.381 180) (layer F.SilkS)
       (effects (font (size 0.99822 0.99822) (thickness 0.19558)))
     )
-    (fp_text value USB_B (at 0 -5.90042 180) (layer F.SilkS)
+    (fp_text value USB_B (at 0.127 1.143 180) (layer F.SilkS)
       (effects (font (size 0.99822 0.99822) (thickness 0.19812)))
     )
     (fp_line (start -3.8989 -4.40436) (end -5.00126 -4.40436) (layer F.SilkS) (width 0.3048))
@@ -5978,13 +6007,13 @@
     )
   )
 
-  (module Wire_Pads:SolderWirePad_2x_0-2.54mmDrill (layer F.Cu) (tedit 0) (tstamp 56C83493)
+  (module Wire_Pads:SolderWirePad_2x_0-2.54mmDrill (layer F.Cu) (tedit 56CA2E95) (tstamp 56C83493)
     (at 127.762 114.3)
     (path /56D6490B)
     (fp_text reference JP7 (at 0 -3.81) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value JUMPER (at 0.635 2.54) (layer F.Fab)
+    (fp_text value JUMPER (at 0.635 2.54) (layer F.Fab) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (pad 1 thru_hole circle (at -1.27 0) (size 1.6 1.6) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
@@ -5993,37 +6022,8 @@
       (net 66 "Net-(J3-Pad1)"))
   )
 
-  (module 78xx:TO-220 (layer F.Cu) (tedit 56B0EEA5) (tstamp 55D339E7)
-    (at 112.014 56.642 270)
-    (descr "Non Isolated JEDEC TO-220 Package")
-    (tags "Power Integration YN Package")
-    (path /55D3F12B)
-    (fp_text reference U3 (at 0 -4.318 270) (layer F.SilkS)
-      (effects (font (size 1 1) (thickness 0.15)))
-    )
-    (fp_text value 7805 (at 0 -4.318 270) (layer F.Fab)
-      (effects (font (size 1 1) (thickness 0.15)))
-    )
-    (fp_line (start 4.826 -1.651) (end 4.826 1.778) (layer F.SilkS) (width 0.15))
-    (fp_line (start -4.826 -1.651) (end -4.826 1.778) (layer F.SilkS) (width 0.15))
-    (fp_line (start 5.334 -2.794) (end -5.334 -2.794) (layer F.SilkS) (width 0.15))
-    (fp_line (start 1.778 -1.778) (end 1.778 -3.048) (layer F.SilkS) (width 0.15))
-    (fp_line (start -1.778 -1.778) (end -1.778 -3.048) (layer F.SilkS) (width 0.15))
-    (fp_line (start -5.334 -1.651) (end 5.334 -1.651) (layer F.SilkS) (width 0.15))
-    (fp_line (start 5.334 1.778) (end -5.334 1.778) (layer F.SilkS) (width 0.15))
-    (fp_line (start -5.334 -3.048) (end -5.334 1.778) (layer F.SilkS) (width 0.15))
-    (fp_line (start 5.334 -3.048) (end 5.334 1.778) (layer F.SilkS) (width 0.15))
-    (fp_line (start 5.334 -3.048) (end -5.334 -3.048) (layer F.SilkS) (width 0.15))
-    (pad GND thru_hole oval (at 0 0 270) (size 2.032 2.54) (drill 1.143) (layers *.Cu *.Mask F.SilkS)
-      (net 2 GND))
-    (pad VO thru_hole oval (at 2.54 0 270) (size 2.032 2.54) (drill 1.143) (layers *.Cu *.Mask F.SilkS)
-      (net 1 VDD))
-    (pad VI thru_hole oval (at -2.54 0 270) (size 2.032 2.54) (drill 1.143) (layers *.Cu *.Mask F.SilkS)
-      (net 59 "Net-(C9-Pad1)"))
-  )
-
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 56C78FC8) (tstamp 56C7937D)
-    (at 91.821 98.933)
+    (at 91.694 98.933)
     (descr "Diode, DO-35 package")
     (path /56CA8FD5)
     (fp_text reference D114 (at 0 2.54) (layer F.SilkS) hide
@@ -6093,12 +6093,12 @@
     )
   )
 
-  (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 0) (tstamp 56C9AB3E)
+  (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 56CA25A9) (tstamp 56C9AB3E)
     (at 158.877 49.657)
     (descr "Small ceramic capacitor")
     (tags C)
     (path /56CA2B47)
-    (fp_text reference C20 (at 0 -3.81) (layer F.SilkS)
+    (fp_text reference C20 (at 2.032 -2.286) (layer F.SilkS)
       (effects (font (size 1.016 1.016) (thickness 0.2032)))
     )
     (fp_text value 100nF (at 0 -2.286) (layer F.SilkS) hide
@@ -6120,15 +6120,15 @@
     )
   )
 
-  (module w_smd_dil:mdip_8 (layer F.Cu) (tedit 56C9F620) (tstamp 56C9AB62)
+  (module w_smd_dil:mdip_8 (layer F.Cu) (tedit 56CA22AE) (tstamp 56C9AB62)
     (at 158.496 57.277)
     (descr "SMD DIL8 x 0,3\"")
     (tags "SMD DIL")
     (path /56C9B342)
-    (fp_text reference U8 (at 0 -6.4008) (layer F.SilkS)
+    (fp_text reference U8 (at 0 1.397) (layer F.SilkS)
       (effects (font (size 1.524 1.143) (thickness 0.28702)))
     )
-    (fp_text value ISO1050 (at 0.127 -0.254) (layer F.SilkS)
+    (fp_text value ISO1050 (at 0.127 -0.762) (layer F.SilkS)
       (effects (font (size 1.524 1.143) (thickness 0.28575)))
     )
     (fp_circle (center -3.5 2) (end -4.3 2) (layer F.SilkS) (width 0.381))
@@ -6186,12 +6186,12 @@
     )
   )
 
-  (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 0) (tstamp 56C9B8D1)
+  (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 56CA22BE) (tstamp 56C9B8D1)
     (at 158.496 64.77)
     (descr "Small ceramic capacitor")
     (tags C)
     (path /56CA2B59)
-    (fp_text reference C19 (at 0 -3.81) (layer F.SilkS)
+    (fp_text reference C19 (at -3.556 0 90) (layer F.SilkS)
       (effects (font (size 1.016 1.016) (thickness 0.2032)))
     )
     (fp_text value 100nF (at 0 -2.286) (layer F.SilkS) hide
@@ -6213,10 +6213,10 @@
     )
   )
 
-  (module jumper:SolderWirePad_2x_0-2.54mmDrill (layer F.Cu) (tedit 56C9F34D) (tstamp 56C9F35D)
+  (module jumper:SolderWirePad_2x_0-2.54mmDrill (layer F.Cu) (tedit 56CA259E) (tstamp 56C9F35D)
     (at 150.749 52.07)
     (path /56CA894C)
-    (fp_text reference JP8 (at 0.127 -1.905) (layer F.SilkS)
+    (fp_text reference JP8 (at -1.143 -1.905) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value JUMPER (at 0.635 2.54) (layer F.Fab) hide
@@ -6228,10 +6228,10 @@
       (net 37 /CANH))
   )
 
-  (module jumper:SolderWirePad_2x_0-2.54mmDrill (layer F.Cu) (tedit 56C9F36A) (tstamp 56C9F363)
+  (module jumper:SolderWirePad_2x_0-2.54mmDrill (layer F.Cu) (tedit 56CA2599) (tstamp 56C9F363)
     (at 150.749 54.483)
     (path /56CA947F)
-    (fp_text reference JP9 (at 0.127 -1.905) (layer F.SilkS)
+    (fp_text reference JP9 (at 1.905 -4.318) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value JUMPER (at 0.635 2.54) (layer F.Fab) hide
