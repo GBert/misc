@@ -1301,7 +1301,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A5C41)
-    (at 143.383 74.168 180)
+    (at 143.383 75.819 180)
     (descr "Resistor, RC03")
     (tags R)
     (path /55BA813B)
@@ -1388,7 +1388,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A5CA1)
-    (at 146.05 82.931 90)
+    (at 146.177 84.709 90)
     (descr "Resistor, RC03")
     (tags R)
     (path /561F7571)
@@ -1504,7 +1504,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A5CB9)
-    (at 143.256 82.931 90)
+    (at 143.383 84.709 90)
     (descr "Resistor, RC03")
     (tags R)
     (path /561F4B6F)
@@ -1533,7 +1533,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A5CBF)
-    (at 143.383 76.581 180)
+    (at 143.383 78.232 180)
     (descr "Resistor, RC03")
     (tags R)
     (path /561F5655)
@@ -1707,7 +1707,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A68C1)
-    (at 143.383 71.755)
+    (at 143.383 73.406)
     (descr "Resistor, RC03")
     (tags R)
     (path /55BAEE62)
@@ -2735,7 +2735,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 569A5C29)
-    (at 140.462 82.931 90)
+    (at 140.589 84.709 90)
     (descr "Resistor, RC03")
     (tags R)
     (path /55B89E75)
@@ -3990,14 +3990,14 @@
   )
 
   (module w_switch:PCB_PUSH (layer F.Cu) (tedit 56CA2240) (tstamp 56B42763)
-    (at 143.256 92.329)
+    (at 143.51 93.472 270)
     (descr "PCB pushbutton, Tyco FSM6x6 series")
     (tags pushbutton)
     (path /56AB0AA5)
-    (fp_text reference SW2 (at 0 -5.08) (layer F.SilkS) hide
+    (fp_text reference SW2 (at 0 -5.08 270) (layer F.SilkS) hide
       (effects (font (size 1.27 1.27) (thickness 0.3175)))
     )
-    (fp_text value SW_PUSH (at 4.445 0.254 90) (layer F.SilkS) hide
+    (fp_text value SW_PUSH (at 4.445 0.254 360) (layer F.SilkS) hide
       (effects (font (size 1.27 1.27) (thickness 0.254)))
     )
     (fp_line (start -3.048 -3.048) (end 3.048 -3.048) (layer F.SilkS) (width 0.3048))
@@ -4005,12 +4005,12 @@
     (fp_line (start 3.048 3.048) (end -3.048 3.048) (layer F.SilkS) (width 0.3048))
     (fp_line (start -3.048 3.048) (end -3.048 -3.048) (layer F.SilkS) (width 0.3048))
     (fp_circle (center 0 0) (end -0.762 0.254) (layer F.SilkS) (width 2.54))
-    (pad 1 thru_hole circle (at -2.25044 -3.2512) (size 1.5 1.99898) (drill 1.00076) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole circle (at -2.25044 -3.2512 270) (size 1.5 1.99898) (drill 1.00076) (layers *.Cu *.Mask F.SilkS)
       (net 2 GND))
-    (pad 2 thru_hole circle (at 2.25044 3.2512) (size 1.5 1.99898) (drill 1.00076) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole circle (at 2.25044 3.2512 270) (size 1.5 1.99898) (drill 1.00076) (layers *.Cu *.Mask F.SilkS)
       (net 60 /STATUS))
-    (pad 4 thru_hole circle (at 2.25044 -3.2512) (size 1.5 1.99898) (drill 1.00076) (layers *.Cu *.Mask F.SilkS))
-    (pad 3 thru_hole circle (at -2.25044 3.2512) (size 1.5 1.99898) (drill 1.00076) (layers *.Cu *.Mask F.SilkS))
+    (pad 4 thru_hole circle (at 2.25044 -3.2512 270) (size 1.5 1.99898) (drill 1.00076) (layers *.Cu *.Mask F.SilkS))
+    (pad 3 thru_hole circle (at -2.25044 3.2512 270) (size 1.5 1.99898) (drill 1.00076) (layers *.Cu *.Mask F.SilkS))
     (model walter/switch/pcb_push.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))

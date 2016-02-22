@@ -439,7 +439,7 @@
   )
 
   (module 78xx:TO-220 (layer F.Cu) (tedit 56CA27FB) (tstamp 55D339E7)
-    (at 112.014 56.642 270)
+    (at 112.903 56.642 270)
     (descr "Non Isolated JEDEC TO-220 Package")
     (tags "Power Integration YN Package")
     (path /55D3F12B)
@@ -575,14 +575,14 @@
     )
   )
 
-  (module CANBuster:ICSP (layer F.Cu) (tedit 56CA27AF) (tstamp 55B727CB)
+  (module CANBuster:ICSP (layer F.Cu) (tedit 56CA4825) (tstamp 55B727CB)
     (at 121.285 57.15)
     (descr "Staggered Microchip ICSP Pin Header")
     (path /55B640CD)
     (fp_text reference JP1 (at -2.286 -3.048 90) (layer F.SilkS) hide
       (effects (font (size 0.889 0.889) (thickness 0.22225)))
     )
-    (fp_text value ICSP (at -2.286 -0.254 270) (layer F.SilkS)
+    (fp_text value ICSP (at -1.905 -0.254 270) (layer F.SilkS)
       (effects (font (size 0.889 0.889) (thickness 0.3048)))
     )
     (fp_line (start -1.27 1.3716) (end 13.97 1.3716) (layer F.SilkS) (width 0.3048))
@@ -3400,12 +3400,12 @@
     )
   )
 
-  (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 56CA27D3) (tstamp 55D339B7)
-    (at 116.459 53.975 270)
+  (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 56CA4835) (tstamp 55D339B7)
+    (at 117.348 53.975 270)
     (descr "Small ceramic capacitor")
     (tags C)
     (path /55D3F76D)
-    (fp_text reference C9 (at 0.254 -1.778 270) (layer F.SilkS)
+    (fp_text reference C9 (at -0.635 2.159 270) (layer F.SilkS)
       (effects (font (size 1.016 1.016) (thickness 0.2032)))
     )
     (fp_text value 100nF (at 0 -2.286 270) (layer F.SilkS) hide
@@ -3427,12 +3427,12 @@
     )
   )
 
-  (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 56CA27F3) (tstamp 55D339BD)
-    (at 116.459 59.309 90)
+  (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 56CA483D) (tstamp 55D339BD)
+    (at 117.348 59.055 90)
     (descr "Small ceramic capacitor")
     (tags C)
     (path /55D43E5B)
-    (fp_text reference C10 (at -0.762 2.286 90) (layer F.SilkS)
+    (fp_text reference C10 (at -1.016 -2.159 90) (layer F.SilkS)
       (effects (font (size 1.016 1.016) (thickness 0.2032)))
     )
     (fp_text value 100nF (at 0 -2.286 90) (layer F.SilkS) hide
