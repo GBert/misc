@@ -3,9 +3,9 @@
   (general
     (links 464)
     (no_connects 0)
-    (area 69.215499 29.4545 242.455667 181.163)
+    (area 69.215499 29.4545 181.99 144.85554)
     (thickness 1.6)
-    (drawings 33)
+    (drawings 32)
     (tracks 1737)
     (zones 0)
     (modules 183)
@@ -6625,9 +6625,6 @@
       (xy 4.15036 -0.50546)) (layer F.Cu) (width 0.00254))
   )
 
-  (gr_text "CANBuster\nV1.0" (at 223.139 173.863) (layer F.Cu)
-    (effects (font (size 5 5) (thickness 0.3)))
-  )
   (gr_text GND (at 121.1834 114.7826 90) (layer F.SilkS)
     (effects (font (size 1.2 1.2) (thickness 0.2)))
   )
