@@ -1,5 +1,5 @@
 const int revisionnr = 
-10729
+10747
 ;
 const char* commithash = 
-"c7b8106c77d03be7d0d7632e2e9ba25eb1d4c123";
+"dc43ab408c4124c22d88c629f68eba6e41667df0";
