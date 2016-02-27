@@ -26,7 +26,7 @@ Laenge Bus 1 (Speicher 02 Laenge 00 03)
 ```
 Kontakte (Gleis): 1-16
 Tasteradressen: 101-164
-Bus 1: 1001 -1496 (z.B. 1005 = 1. Modul, Kontakt 5)
+Bus 1: 1001 - 1496 (z.B. 1005 = 1. Modul, Kontakt 5)
 Bus 2: 2001 - 2496
 Bus 3: 3001 - 3496
 ```
