@@ -1,4 +1,4 @@
-# Links S88 Kanaele
+# LinkS88 Zugriff
 
 Beispiel:
 Laenge Bus 1 (Speicher 02 Laenge 00 03)
