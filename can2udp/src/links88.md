@@ -1,10 +1,10 @@
 # Links S88 Kanaele
 
 Beispiel:
-Laenge Bus 1
+Laenge Bus 1 (Speicher 02 Laenge 00 03)
 ```
  (2016-02-27 19:53:24.899901)  can0  TX - -  00000300   [8]  53 38 40 39 0B 02 00 03
-### Quittung Kanal 02 (Laenge Bus 1) OK 01
+### Quittung Speicher 02 (Laenge Bus 1) OK 01
  (2016-02-27 19:53:24.900510)  can0  RX - -  00019B01   [7]  53 38 40 39 0B 02 01
 ```
 
