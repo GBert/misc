@@ -7,6 +7,7 @@ Laenge Bus 1
  (2016-02-27 19:53:24.900510)  can0  RX - -  00019B01   [7]  53 38 40 39 0B 02 01
 ```
 
+```
  1  Auswertung einzeln => 0  Tastaturmatrix => 1
  2  Laenge Bus 1 (RJ45-1)
  3  Laenge Bus 2 (RJ45-1)
@@ -19,5 +20,4 @@ Laenge Bus 1
 10 Zykluszeit Tastatur [ms] min 10 default 100
 11 Spalten Tastatur max 8
 11 Zeilen  Tastatur max 16
-
-
+```
