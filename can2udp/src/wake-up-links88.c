@@ -60,7 +60,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -c <config_string>  config string \"B1=1,B2=3\"\n");
     fprintf(stderr, "         -i <can int>        can interface - default can0\n");
     fprintf(stderr, "         -d                  daemonize\n");
-    fprintf(stderr, "         -e #no_of_links88   exit after no of LinkS88 responded\n\n");
+    fprintf(stderr, "         -e #no_of_links88   exit after no of LinkS88 responded - default 1\n\n");
 }
 
 struct s88_bus_t {
@@ -174,7 +174,7 @@ int main(int argc, char **argv) {
 
     int background = 0;
     int verbose = 1;
-    int exit_on_wake_up = 255;
+    int exit_on_wake_up = 1;
     int known_links88_ids = 0;
     unsigned char links88_id_h = 0;
     unsigned char links88_id_l = 0;
@@ -324,12 +324,12 @@ int main(int argc, char **argv) {
 			links88_id = frame.data[3] + ((frame.data[2] - 0x38) << 8);
 			links88_list = links88_head;
 			if (search_node(links88_list, links88_id) == NULL) {
-			    printf("inserting awoken LinkS88 ID %d (0x%02x%02x -> 0x%04x)\n", links88_id, links88_id_h, links88_id_l, links88_id);
+			    printf("inserting awoken LinkS88 ID %d (0x%02x%02x -> 0x%04x) into list\n", links88_id, links88_id_h, links88_id_l, links88_id);
 			    insert_right(links88_list, links88_id);
 			    known_links88_ids++;
-			    printf("known_links88_id: %d exit_on_wake_up %d\n", known_links88_ids, exit_on_wake_up);
 			    /* now send the setup */
 			    /* the bus length first */
+			    printf("configure LinkS88 ID %d (0x%04x) \n", links88_id, links88_id);
 			    for (i = 2; i < 5; i++) {
 				if (s88_bus[i - 2].length) {
 				    memcpy(raw_frame, M_LINKS88_SETUP, 13);
@@ -359,6 +359,8 @@ int main(int argc, char **argv) {
 			    free_list(links88_head);
 			    close(sc);
 			    exit(EXIT_SUCCESS);
+			} else {
+			    printf("already know LinkS88 IDs: %d - exit on number of %d IDs\n", known_links88_ids, exit_on_wake_up);
 			}
 		    }
 		    break;
@@ -395,6 +397,7 @@ int main(int argc, char **argv) {
 			    nanosleep(&to_wait, NULL);
 			    send_defined_can_frame(sc, raw_frame, verbose);
 			    /* no send CAN Ping to trigger LinkS88 setup */
+			    printf("   sending CAN ping\n");
 			    memcpy(raw_frame, M_CAN_PING, 13);
 			    nanosleep(&to_wait, NULL);
 			    send_defined_can_frame(sc, raw_frame, verbose);
