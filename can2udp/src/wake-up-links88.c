@@ -43,7 +43,8 @@ static char *F_CAN_FORMAT_STRG	= "      CAN->  CANID 0x%08X   [%d]";
 static char *T_CAN_FORMAT_STRG	= "      CAN<-  CANID 0x%08X   [%d]";
 static char delimiters[] = " .,;:!-";
 
-static unsigned char M_CAN_BOOTLOADER[] 	= { 0x00, 0x36, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static unsigned char M_CAN_BOOTLOADER[]		= { 0x00, 0x36, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static unsigned char M_CAN_PING[]		= { 0x00, 0x30, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static unsigned char M_LINKS88_ID[]		= { 0x00, 0x31, 0x03, 0x00, 0x08, 0x53, 0x38, 0x38, 0x00, 0x00, 0x00, 0x00, 0x10 };
 static unsigned char M_LINKS88_WAKE_I[]		= { 0x00, 0x36, 0x03, 0x00, 0x05, 0x53, 0x38, 0x38, 0x00, 0xE4, 0x00, 0x00, 0x00 };
 static unsigned char M_LINKS88_WAKE_II[]	= { 0x00, 0x36, 0x03, 0x00, 0x05, 0x53, 0x38, 0x38, 0x00, 0x11, 0x00, 0x00, 0x00 };
@@ -55,7 +56,7 @@ unsigned char netframe[MAXDG];
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.1\n\n");
+    fprintf(stderr, "   Version 1.2\n\n");
     fprintf(stderr, "         -c <config_string>  config string \"B1=1,B2=3\"\n");
     fprintf(stderr, "         -i <can int>        can interface - default can0\n");
     fprintf(stderr, "         -d                  daemonize\n");
@@ -161,7 +162,7 @@ int send_defined_can_frame(int can_socket, unsigned char *data, int verbose) {
 
 int main(int argc, char **argv) {
     pid_t pid;
-    int i, sc, max_fds, opt;
+    int i, links88_id, sc, max_fds, opt;
     struct can_frame frame;
     struct sockaddr_can caddr;
     struct ifreq ifr;
@@ -291,6 +292,15 @@ int main(int argc, char **argv) {
     FD_SET(sc, &read_fds);
     max_fds = sc;
 
+    /* initiate a CAN Ping */
+    nanosleep(&to_wait, NULL);
+    memcpy(raw_frame, M_CAN_BOOTLOADER, 13);
+    send_defined_can_frame(sc, raw_frame, verbose);
+
+    memcpy(raw_frame, M_CAN_PING, 13);
+    nanosleep(&to_wait, NULL);
+    send_defined_can_frame(sc, raw_frame, verbose);
+
     while (1) {
 	if (select(max_fds + 1, &read_fds, NULL, NULL, NULL) < 0) {
 	    fprintf(stderr, "select error: %s\n", strerror(errno));
@@ -306,63 +316,18 @@ int main(int argc, char **argv) {
 		}
 
 		switch ((frame.can_id & 0x00FF0000UL) >> 16) {
-		case 0x30:
-		    /* CAN ping triggers searching for LinkS88 */
-		    known_links88_ids = 0;
-		    free_list(links88_head);
-		    nanosleep(&to_wait, NULL);
-		    memcpy(raw_frame, M_CAN_BOOTLOADER, 13);
-		    send_defined_can_frame(sc, raw_frame, verbose);
-		    break;
 		case 0x31:
 		    /* looking for already known LinkS88 */
 		    if ((memcmp(&frame.data[0], &M_LINKS88_ID[5], 2) == 0) && (frame.can_dlc == 8)) {
 			links88_id_h = frame.data[2];
 			links88_id_l = frame.data[3];
+			links88_id = frame.data[3] + ((frame.data[2] - 0x38) << 8);
 			links88_list = links88_head;
-			if (search_node(links88_list, links88_id_l) == NULL) {
-			    printf("inserting known LinkS88 ID 0x%02x\n", links88_id_l);
-			    insert_right(links88_list, links88_id_l);
+			if (search_node(links88_list, links88_id) == NULL) {
+			    printf("inserting awoken LinkS88 ID %d (0x%02x%02x -> 0x%04x)\n", links88_id, links88_id_h, links88_id_l, links88_id);
+			    insert_right(links88_list, links88_id);
 			    known_links88_ids++;
-			}
-			if (known_links88_ids == exit_on_wake_up) {
-			    free_list(links88_head);
-			    close(sc);
-			    exit(EXIT_SUCCESS);
-			}
-		    }
-		    break;
-		case 0x37:
-		    if (frame.can_dlc == 8) {
-			/* check if there is a response from a LinkS88
-			   and it's unknown (didn't responded to a CAN ping ) */
-			links88_id_h = frame.data[2];
-			links88_id_l = frame.data[3];
-			links88_list = links88_head;
-			if ((memcmp(&frame.data[0], &M_LINKS88_ID[5], 2) == 0) &&
-			    (search_node(links88_list, links88_id_l) == NULL)) {
-
-			    if (verbose) {
-				printf("Found LinkS88 ID: 0x%02x\n", links88_id_l);
-				printf("   sending wake-up sequence\n");
-			    }
-
-			    memcpy(raw_frame, M_LINKS88_WAKE_I, 13);
-			    raw_frame[7] = links88_id_h;
-			    raw_frame[8] = links88_id_l;
-			    send_defined_can_frame(sc, raw_frame, verbose);
-			    nanosleep(&to_wait, NULL);
-			    memcpy(raw_frame, M_LINKS88_WAKE_II, 13);
-			    raw_frame[7] = links88_id_h;
-			    raw_frame[8] = links88_id_l;
-			    send_defined_can_frame(sc, raw_frame, verbose);
-			    nanosleep(&to_wait, NULL);
-			    memcpy(raw_frame, M_LINKS88_WAKE_III, 13);
-			    raw_frame[7] = links88_id_h;
-			    raw_frame[8] = links88_id_l;
-			    raw_frame[11] = links88_id_l;
-			    send_defined_can_frame(sc, raw_frame, verbose);
-
+			    printf("known_links88_id: %d exit_on_wake_up %d\n", known_links88_ids, exit_on_wake_up);
 			    /* now send the setup */
 			    /* the bus length first */
 			    for (i = 2; i < 5; i++) {
@@ -389,6 +354,50 @@ int main(int argc, char **argv) {
 				    send_defined_can_frame(sc, raw_frame, verbose);
 				}
 			    }
+			}
+			if (known_links88_ids >= exit_on_wake_up) {
+			    free_list(links88_head);
+			    close(sc);
+			    exit(EXIT_SUCCESS);
+			}
+		    }
+		    break;
+		case 0x37:
+		    if (frame.can_dlc == 8) {
+			/* check if there is a response from a LinkS88
+			   and it's unknown (didn't responded to a CAN ping ) */
+			links88_id_h = frame.data[2];
+			links88_id_l = frame.data[3];
+			links88_id = links88_id_l + ((links88_id_h - 0x38) << 8);
+			links88_list = links88_head;
+			if ((memcmp(&frame.data[0], &M_LINKS88_ID[5], 2) == 0) &&
+			    (search_node(links88_list, links88_id) == NULL)) {
+
+			    if (verbose) {
+				printf("Found LinkS88 ID: %d (0x%02x%02x -> 0x%04x)\n", links88_id, links88_id_h, links88_id_l, links88_id);
+				printf("   sending wake-up sequence\n");
+			    }
+
+			    memcpy(raw_frame, M_LINKS88_WAKE_I, 13);
+			    raw_frame[7] = links88_id_h;
+			    raw_frame[8] = links88_id_l;
+			    send_defined_can_frame(sc, raw_frame, verbose);
+			    nanosleep(&to_wait, NULL);
+			    memcpy(raw_frame, M_LINKS88_WAKE_II, 13);
+			    raw_frame[7] = links88_id_h;
+			    raw_frame[8] = links88_id_l;
+			    send_defined_can_frame(sc, raw_frame, verbose);
+			    nanosleep(&to_wait, NULL);
+			    memcpy(raw_frame, M_LINKS88_WAKE_III, 13);
+			    raw_frame[7] = links88_id_h;
+			    raw_frame[8] = links88_id_l;
+			    raw_frame[11] = links88_id_l;
+			    nanosleep(&to_wait, NULL);
+			    send_defined_can_frame(sc, raw_frame, verbose);
+			    /* no send CAN Ping to trigger LinkS88 setup */
+			    memcpy(raw_frame, M_CAN_PING, 13);
+			    nanosleep(&to_wait, NULL);
+			    send_defined_can_frame(sc, raw_frame, verbose);
 			}
 		    }
 		    break;

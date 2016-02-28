@@ -20,7 +20,7 @@ Laenge Bus 1 (Speicher 02 Laenge 00 03)
  9  Zykluszeit 1 - 16 [ms] min 10 default 100
 10  Zykluszeit Tastatur [ms] min 10 default 100
 11  Spalten Tastatur max 8
-11  Zeilen  Tastatur max 8
+12  Zeilen  Tastatur max 8
 ```
 
 ```
@@ -29,4 +29,29 @@ Tasteradressen: 101-164
 Bus 1: 1001 - 1496 (z.B. 1005 = 1. Modul, Kontakt 5)
 Bus 2: 2001 - 2496
 Bus 3: 3001 - 3496
+```
+
+```
+root@BananaPi:~# wake-up-links88 -c "B3=1"
+bus 3 length 1
+02:58:11.930       CAN->  CANID 0x00300300   [0]
+02:58:11.941       CAN<-  CANID 0x00360300   [0]
+02:58:11.941       CAN->  CANID 0x0031533C   [8] 47 43 7b 11 01 27 00 10  GC{..'..
+02:58:11.942       CAN->  CANID 0x00379B01   [8] 53 38 40 39 01 00 00 40  S8@9...@
+Found LinkS88 ID: 0x39
+   sending wake-up sequence
+02:58:11.942       CAN<-  CANID 0x00360300   [5] 53 38 40 39 e4           S8@9.
+02:58:11.952       CAN<-  CANID 0x00360300   [5] 53 38 40 39 11           S8@9.
+02:58:11.963       CAN<-  CANID 0x00010300   [7] 53 38 40 39 0c 00 39     S8@9..9
+02:58:11.973       CAN<-  CANID 0x00000300   [8] 53 38 40 39 0b 04 00 01  S8@9....
+02:58:11.974       CAN->  CANID 0x00019B01   [7] 53 38 40 39 0b 04 01     S8@9...
+
+
+root@BananaPi:~# wake-up-links88 -c "B3=1"
+bus 3 length 1
+02:58:44.764       CAN->  CANID 0x00300300   [0]
+02:58:44.775       CAN<-  CANID 0x00360300   [0]
+02:58:44.775       CAN->  CANID 0x0031533C   [8] 47 43 7b 11 01 27 00 10  GC{..'..
+02:58:44.775       CAN->  CANID 0x00319B01   [8] 53 38 40 39 01 00 00 40  S8@9...@
+inserting known LinkS88 ID 0x39
 ```
