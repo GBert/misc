@@ -25,21 +25,16 @@
 build:
 	cd boot && $(MAKE) build
 	cd demo && $(MAKE) build
-	cd loader && $(MAKE) build
 
 install:build
 	cd boot && $(MAKE) install
 	cd demo && $(MAKE) install
-	cd loader && $(MAKE) install
 
 clean:
 	cd boot && $(MAKE) clean
 	cd demo && $(MAKE) clean
-	cd loader && $(MAKE) clean
 	find . -name "*~" -exec rm {} \;
 
 uninstall:clean
 	cd boot && $(MAKE) uninstall
 	cd demo && $(MAKE) uninstall
-	cd loader && $(MAKE) uninstall
-	cd loader && $(MAKE) -f Makefile.openwrt uninstall
