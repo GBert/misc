@@ -30,11 +30,11 @@ int main(int argc, char **argv) {
 	    if (slre_match("^seite$", bufr, 5, NULL, 0, 0) > 0) {
 		printf("%d: %s", count, bufr);
 	    }
-	    if (slre_match("^ .id=(\\d+)", bufr, strlen(bufr), caps, 0, 0) > 0) {
+	    else if (slre_match("^ .id=(\\d+)", bufr, strlen(bufr), caps, 0, 0) > 0) {
 		id = atoi(caps[0].ptr);
 		printf("%d\n", id);
 	    }
-	    if (slre_match("^ .name=(\\S+)", bufr, strlen(bufr), caps, 0, 0) > 0) {
+	    else if (slre_match("^ .name=(\\S+)", bufr, strlen(bufr), caps, 0, 0) > 0) {
 		printf("%s %d\n", caps[0].ptr, id);
 	    }
 	}

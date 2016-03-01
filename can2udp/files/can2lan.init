@@ -6,7 +6,6 @@ START=99
 start() {
 	modprobe sun4i_can
 	/usr/sbin/ip link set can0 up type can bitrate 250000 restart-ms 10
-	sleep 10
 
 	[ -e /www/config/ ] && {
 		can2lan -m -c /www/config -b br-lan

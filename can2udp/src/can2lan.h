@@ -35,18 +35,19 @@
 #include <linux/can.h>
 #include <ifaddrs.h>
 
-#define MAXLINE		1024		/* max string length     */
-#define MAX_TCP_CONN	16		/* max TCP clients       */
-#define MAXDG   	4096		/* maximum datagram size */
-#define MAXMTU   	1400		/* maximum MTU           */
-#define MAX_PACKETS	40		/* maximum number of CAN frames per TCP packet */
-#define MAXUDP  	16		/* maximum datagram size */
-#define MAXIPLEN  	40		/* maximum IP string length */
-#define MAX(a,b)	((a) > (b) ? (a) : (b))
+#define MAXLINE			1024		/* max string length     */
+#define MAX_TCP_CONN		16		/* max TCP clients       */
+#define MAXDG   		4096		/* maximum datagram size */
+#define MAXMTU   		1400		/* maximum MTU           */
+#define MAX_PACKETS		40		/* maximum number of CAN frames per TCP packet */
+#define MAXUDP  		16		/* maximum datagram size */
+#define MAXIPLEN  		40		/* maximum IP string length */
+#define MAX_UDP_BCAST_RETRY  	10		/* maximum retries getting UDP socket */
+#define MAX(a,b)		((a) > (b) ? (a) : (b))
 
-#define	CRC		0x01
-#define COMPRESSED	0x02
-#define TERM_SPEED	B500000
+#define	CRC			0x01
+#define COMPRESSED		0x02
+#define TERM_SPEED		B500000
 
 #if 0
 struct cs2_config {

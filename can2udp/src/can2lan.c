@@ -31,7 +31,7 @@ struct timeval last_sent;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.07\n\n");
+    fprintf(stderr, "   Version 1.08\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
@@ -40,6 +40,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -i <can int>        CAN interface - default can0\n");
     fprintf(stderr, "         -k                  use a connected CS2.exe for config source\n");
+    fprintf(stderr, "         -T                  timeout starting %s in sec - default %d sec\n", prg, MAX_UDP_BCAST_RETRY);
     fprintf(stderr, "         -m                  doing MS1 workaround - default: don't do it\n");
     fprintf(stderr, "         -f                  running in foreground\n");
     fprintf(stderr, "         -v                  verbose output (in foreground)\n\n");
@@ -163,7 +164,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 
 int main(int argc, char **argv) {
     pid_t pid;
-    int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, tcp_client[MAX_TCP_CONN];
+    int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, timeout, tcp_client[MAX_TCP_CONN];
     struct can_frame frame;
     char timestamp[16];
     /* UDP incoming socket , CAN socket, UDP broadcast socket, TCP socket */
@@ -219,12 +220,13 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     };
 
+    timeout = MAX_UDP_BCAST_RETRY;
     strcpy(udp_dst_address, "255.255.255.255");
     strcpy(bcast_interface, "br-lan");
 
     config_file[0] = '\0';
 
-    while ((opt = getopt(argc, argv, "c:u:s:t:d:b:i:kmvhf?")) != -1) {
+    while ((opt = getopt(argc, argv, "c:u:s:t:d:b:i:kT:mvhf?")) != -1) {
 	switch (opt) {
 	case 'c':
 	    if (strnlen(optarg, MAXLINE) < MAXLINE) {
@@ -253,6 +255,7 @@ int main(int argc, char **argv) {
 		    memset(udp_dst_address, 0, MAXIPLEN);
 		    strncpy(udp_dst_address, optarg, MAXIPLEN - 1);
 		} else {
+		    memset(udp_dst_address, 0, MAXIPLEN);
 		    memset(bcast_interface, 0, MAXIPLEN);
 		    strncpy(bcast_interface, optarg, MAXIPLEN - 1);
 		}
@@ -266,6 +269,9 @@ int main(int argc, char **argv) {
 	    break;
 	case 'k':
 	    use_cs2_conf = 1;
+	    break;
+	case 'T':
+	    timeout = strtoul(optarg, (char **)NULL, 10);
 	    break;
 	case 'm':
 	    ms1_workaround = 1;
@@ -301,23 +307,29 @@ int main(int argc, char **argv) {
 
     page_name = read_track_file(config_file, page_name);
 
-    /* get the broadcast address */
-    getifaddrs(&ifap);
-    for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
-	if (ifa->ifa_addr) {
-	    if (ifa->ifa_addr->sa_family == AF_INET) {
-		bsa = (struct sockaddr_in *)ifa->ifa_broadaddr;
-		if (strncmp(ifa->ifa_name, bcast_interface, strlen(bcast_interface)) == 0)
-		    udp_dst_address = inet_ntoa(bsa->sin_addr);
+    /* we are trying to setup a UDP socket */
+    for (i = 0; i < timeout; i++) {
+	/* trying to get the broadcast address */
+	getifaddrs(&ifap);
+	for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
+	    if (ifa->ifa_addr) {
+		if (ifa->ifa_addr->sa_family == AF_INET) {
+		    bsa = (struct sockaddr_in *)ifa->ifa_broadaddr;
+		    if (strncmp(ifa->ifa_name, bcast_interface, strlen(bcast_interface)) == 0)
+			udp_dst_address = inet_ntoa(bsa->sin_addr);
+		}
 	    }
 	}
+	/* try to prepare UDP sending socket struct */
+	memset(&baddr, 0, sizeof(baddr));
+	baddr.sin_family = AF_INET;
+	baddr.sin_port = htons(destination_port);
+	s = inet_pton(AF_INET, udp_dst_address, &baddr.sin_addr);
+	if ( s > 0)
+	    break;
+	sleep(1);
     }
-
-    /* prepare udp sending socket struct */
-    memset(&baddr, 0, sizeof(baddr));
-    baddr.sin_family = AF_INET;
-    baddr.sin_port = htons(destination_port);
-    s = inet_pton(AF_INET, udp_dst_address, &baddr.sin_addr);
+    /* check if we got a real UDP socket after MAX_UDP_BCAST_TRY seconds */
     if (s <= 0) {
 	if (s == 0) {
 	    fprintf(stderr, "UDP IP address invalid\n");
@@ -326,6 +338,7 @@ int main(int argc, char **argv) {
 	}
 	exit(EXIT_FAILURE);
     }
+
     if (verbose & !background)
 	printf("using broadcast address %s\n", udp_dst_address);
 
