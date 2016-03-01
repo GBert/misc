@@ -1,0 +1,10 @@
+Version r48    (OpenWRT Version)
+ - can2lan versucht jetzt die Broadcast IP-Adresse wiederholt zu ermitteln
+    und den UDP-Broadcast Socket zu initialisieren. Dadurch kann der
+    Sleep Befehl im Init-skript entfallen
+
+
+Version r48813
+ - wake-up-links88 funktioniert jetzt mit weiteren Parametern, z.B.:
+     wake-up-links88 -c "B3=1" # Bus 3 hat ein S88 Modul
+ - automatischer Neustart des CAN-Interfaces bei einem Fehler (z.B. Bus-Off)
