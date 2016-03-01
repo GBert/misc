@@ -1,14 +1,14 @@
 ;------------------------------------------------------------------------------
 ;
-; Can-Can I2C
+; CANBuster PIO
 ;
-; Copyright (c) 2015 Gerhard Bertelsmann
+; Copyright (c) 2016 Gerhard Bertelsmann
 ;
 ;------------------------------------------------------------------------------
 ;
-; This file is part of the Can-Can CAN bus interface project.
+; This file is part of the CANBuster project.
 ;
-; Can-Can is licensed under the CC BY-NC-SA 4.0.
+; CANBuster is licensed under the CC BY-NC-SA 4.0.
 ;
 ; See file /LICENSE for details.
 ; 
