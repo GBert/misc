@@ -2,6 +2,8 @@ Version r48    (OpenWRT Version)
  - can2lan versucht jetzt die Broadcast IP-Adresse wiederholt zu ermitteln
     und den UDP-Broadcast Socket zu initialisieren. Dadurch kann der
     Sleep Befehl im Init-skript entfallen
+ - M*rklins Icons Verzeichnis entfernt, da es dort falsch war 
+ - Rocrail Update auf 10859
 
 
 Version r48813
