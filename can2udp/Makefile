@@ -48,8 +48,8 @@ define Package/can2udp/install
 	$(INSTALL_DIR) $(1)/root
 	$(INSTALL_BIN) ./files/s88udp.init $(1)/root/s88udp
 	$(INSTALL_BIN) ./files/wake-up-links88.init $(1)/root/wake-up-links88
-	$(INSTALL_DIR) $(1)/www/config
-	$(CP) ./files/maerklin/config/* $(1)/www/config/
+	$(INSTALL_DIR) $(1)/www/
+	$(CP) ./files/maerklin/* $(1)/www/
 endef
 
 define Package/can2udp/postinst
