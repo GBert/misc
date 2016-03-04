@@ -49,12 +49,12 @@ void usec_sleep(int usec) {
 }
 
 void set_pin(char *str, int pin, struct s88_t *s88_data, int value) {
-    /* wit for next step */
+    /* wait for next step */
     getchar();
     if (value ^ s88_data->invert)
-	printf("set %s high", str);
+	printf("set %s high\n", str);
     else
-	printf("set %s low", str);
+	printf("set %s low\n", str);
     gpio_bpi_set(pin, value ^ s88_data->invert);
 }
 
