@@ -1,14 +1,10 @@
-/* BPi Version
- * Copyright 2013 - 2014, Siegfried Lohberg
- *                  2016, Gerhard Bertelsmann
+/* Copyright 2016, Gerhard Bertelsmann
  *
  * "THE BEER-WARE LICENSE" (Revision 42):
  * Siegfried Lohberg wrote this file. As long as you retain this notice you
  * can do whatever you want with this stuff. If we meet some day, and you think
  * this stuff is worth it, you can buy me a beer in return.
  */
-
-
 
 /*
  *	  GPIO Usage
