@@ -1,18 +1,9 @@
-/*
- * Copyright 2013 - 2014 Siegfried Lohberg
- *                  2016 Gerhard Bertelsmann
+/* Copyright 2016 Gerhard Bertelsmann
  *
  * "THE BEER-WARE LICENSE" (Revision 42):
  * Siegfried Lohberg wrote this file. As long as you retain this notice you
  * can do whatever you want with this stuff. If we meet some day, and you think
  * this stuff is worth it, you can buy me a beer in return.
- */
-
-/*
- * Credit: 
- * In dieses Programm flossen Ideen von Gerhard Bertelsmann 
- * und seinem can2udp Projekt ebenso wie aus dem railuino 
- * Projekt von Joerg Pleumann.
  */
 
 #include <stdio.h>
@@ -58,6 +49,7 @@ void usec_sleep(int usec) {
 }
 
 void set_pin(char *str, int pin, struct s88_t *s88_data, int value) {
+    /* wit for next step */
     getchar();
     if (value ^ s88_data->invert)
 	printf("set %s high", str);
