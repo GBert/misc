@@ -26,7 +26,7 @@
 struct s88_t {
     int background;
     int verbose;
-    int invert;
+    uint8_t invert;
     int offset;
     uint32_t count;
     uint16_t hash;
@@ -58,12 +58,22 @@ void set_pin(char *str, int pin, struct s88_t *s88_data, int value) {
     gpio_bpi_set(pin, value ^ s88_data->invert);
 }
 
+void get_data(struct s88_t *s88_data, uint8_t *newvalue) {
+
+    gpio_bpi_get(DATA_PIN, newvalue);
+    if (*newvalue ^ s88_data->invert)
+	printf("Data pin high\n");
+    else
+	printf("Data pin low\n");
+}
+
+
 int main(int argc, char **argv) {
     int utime, i, j;
     int opt;
     int modulcount = 1;
     struct s88_t s88_data;
-    uint32_t mask, s88_bit;
+    uint32_t mask, s88_bits;
     uint8_t newvalue;
 
     utime = MICRODELAY;
@@ -115,16 +125,56 @@ int main(int argc, char **argv) {
     gpio_bpi_select_output(RESET_PIN);
     gpio_bpi_select_input(DATA_PIN);
 
-    printf("press entere to continue\n");
-    /* loop forever */
+    printf("#########################\n");
+    printf("# S88 test\n\n");
+    printf("#########################\n");
+    printf("# Test with multimeter\n\n");
+    gpio_bpi_set(CLOCK_PIN, LOW);
+    gpio_bpi_set(LOAD_PIN, LOW);
+    gpio_bpi_set(RESET_PIN, LOW);
+    printf("CLOCK_PIN, LOAD_PIN & RESET_PIN low   - ( U3,U4,U5 Pin2 1V4 - 1V9) - press enter to continue\n");
+    getchar();
+    printf("\n\n");
+    gpio_bpi_set(CLOCK_PIN, HIGH);
+    gpio_bpi_set(LOAD_PIN, HIGH);
+    gpio_bpi_set(RESET_PIN, HIGH);
+    printf("CLOCK_PIN, LOAD_PIN & RESET_PIN high  - ( U3,U4,U5 Pin2 3V3)  - press enter to continue\n");
+    getchar();
+
+    printf("#########################\n");
+    printf("# Test without multimeter\n\n");
+
+    printf("connect RESET pin to DATA pin on S88 bus - press enter to continue\n");
+    set_pin("RESET pin", RESET_PIN, &s88_data, LOW ^ s88_data.invert);
+    get_data(&s88_data, &newvalue);
+    set_pin("RESET pin", RESET_PIN, &s88_data, HIGH ^ s88_data.invert);
+    get_data(&s88_data, &newvalue);
+    printf("\n\n");
+
+    printf("connect LOAD pin to DATA pin on S88 bus - press enter to continue\n");
+    set_pin("LOAD pin", LOAD_PIN, &s88_data, LOW ^ s88_data.invert);
+    get_data(&s88_data, &newvalue);
+    set_pin("LOAD pin", LOAD_PIN, &s88_data, HIGH ^ s88_data.invert);
+    get_data(&s88_data, &newvalue);
+    printf("\n\n");
+
+    printf("connect CLOCK pin to DATA pin on S88 bus - press enter to continue\n");
+    set_pin("CLOCK pin", CLOCK_PIN, &s88_data, LOW ^ s88_data.invert);
+    get_data(&s88_data, &newvalue);
+    set_pin("CLOCK pin", CLOCK_PIN, &s88_data, HIGH ^ s88_data.invert);
+    get_data(&s88_data, &newvalue);
+    printf("\n\n");
+
+#if 0
+    printf("S88 Step by step");
     while (1) {
 	s88_bit = 0;
-	set_pin("LOAD_PIN", LOAD_PIN, &s88_data, HIGH ^ s88_data.invert);
-	set_pin("CLOCK_PIN", CLOCK_PIN, &s88_data, HIGH ^ s88_data.invert);
-	set_pin("CLOCK_PIN", CLOCK_PIN, &s88_data, LOW ^ s88_data.invert);
-	set_pin("RESET_PIN", RESET_PIN, &s88_data, HIGH ^ s88_data.invert);
-	set_pin("RESET_PIN", RESET_PIN, &s88_data, LOW ^ s88_data.invert);
-	set_pin("LOAD_PIN", LOAD_PIN, &s88_data, LOW ^ s88_data.invert);
+	set_pin("LOAD pin", LOAD_PIN, &s88_data, HIGH ^ s88_data.invert);
+	set_pin("CLOCK pin", CLOCK_PIN, &s88_data, HIGH ^ s88_data.invert);
+	set_pin("CLOCK pin", CLOCK_PIN, &s88_data, LOW ^ s88_data.invert);
+	set_pin("RESET pin", RESET_PIN, &s88_data, HIGH ^ s88_data.invert);
+	set_pin("RESET pin", RESET_PIN, &s88_data, LOW ^ s88_data.invert);
+	set_pin("LOAD pin", LOAD_PIN, &s88_data, LOW ^ s88_data.invert);
 	s88_data.count++;
 	/* get sensor data */
 	for (i = 0; i < modulcount; i++) {
@@ -136,12 +186,13 @@ int main(int argc, char **argv) {
 		    printf("Pin %d high\n", j);
 		else
 		    printf("Pin %d low\n", j);
-		set_pin("CLOCK_PIN", CLOCK_PIN, &s88_data, HIGH ^ s88_data.invert);
-		set_pin("CLOCK_PIN", CLOCK_PIN, &s88_data, LOW ^ s88_data.invert);
+		set_pin("CLOCK pin", CLOCK_PIN, &s88_data, HIGH ^ s88_data.invert);
+		set_pin("CLOCK pin", CLOCK_PIN, &s88_data, LOW ^ s88_data.invert);
 		s88_bit++;
 		mask >>= 1;
 	    }
 	}
     }
+#endif
     return 0;
 }
