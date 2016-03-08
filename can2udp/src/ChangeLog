@@ -1,9 +1,14 @@
-Version r48886    (OpenWRT Version)
+aktuelle Version r48934    (OpenWRT Version)
+ - S88 Test Tool s88test-bpi hinzugefuegt
+ - Rocrail Update auf 10888 (6.3.2016)
+ - OpenWRT nutzt jetzt Kernel 4.4.4
+
+Version r48886
  - can2lan versucht jetzt die Broadcast IP-Adresse wiederholt zu ermitteln
     und den UDP-Broadcast Socket zu initialisieren. Dadurch kann der
     Sleep Befehl im Init-skript entfallen
  - M*rklins Icons Verzeichnis entfernt, da es dort falsch war 
- - Rocrail Update auf 10859
+ - Rocrail Update auf 10859 (2.3.2016)
 
 
 Version r48813
