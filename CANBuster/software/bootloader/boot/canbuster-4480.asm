@@ -30,7 +30,7 @@
 ; Device
 ;------------------------------------------------------------------------------
 
-                PROCESSOR   18f4580
+                PROCESSOR   18f4480
 
 ;------------------------------------------------------------------------------
 ; Device Constants
@@ -106,10 +106,6 @@ ERRORLEVEL      -302
                 CONFIG    CP0=OFF
 ; Code Protect 04000-07FFF:
                 CONFIG    CP1=OFF
-; Code Protect 08000-0BFFF:
-                CONFIG    CP2=OFF
-; Code Protect 0C000-0FFFF:
-                CONFIG    CP3=OFF
 ; Code Protect Boot:
                 CONFIG    CPB=OFF
 ; Data EE Read Protect:
@@ -118,10 +114,6 @@ ERRORLEVEL      -302
                 CONFIG    WRT0=OFF
 ; Table Write Protect 04000-07FFF:
                 CONFIG    WRT1=OFF
-; Table Write Protect 08000-0BFFF:
-                CONFIG    WRT2=OFF
-; Table Write Protect 0C000-0FFFF:
-                CONFIG    WRT3=OFF
 ; Config. Write Protect:
                 CONFIG    WRTC=OFF
 ; Table Write Protect Boot:
@@ -132,10 +124,6 @@ ERRORLEVEL      -302
                 CONFIG    EBTR0=OFF
 ; Table Read Protect 04000-07FFF:
                 CONFIG    EBTR1=OFF
-; Table Read Protect 08000-0BFFF:
-                CONFIG    EBTR2=OFF
-; Table Read Protect 0C000-0FFFF:
-                CONFIG    EBTR3=OFF
 ; Table Read Protect Boot:
                 CONFIG    EBTRB=OFF
 
