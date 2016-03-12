@@ -128,8 +128,8 @@ INITUART
                 BSF     TRISC,7             ; UART1 RX
 #ENDIF
 #IF UART == PORTD
-                BCF     TRISD,6             ; UART1 TX
-                BSF     TRISD,7             ; UART1 RX
+                BCF     TRISD,6             ; UART2 TX
+                BSF     TRISD,7             ; UART2 RX
 #ENDIF
 
                 BSF     UIPR,URCIP          ; Rx high priority
