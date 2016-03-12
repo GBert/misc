@@ -21,3 +21,5 @@ clean:
 	cd firmware && $(MAKE) clean
 	rm -f *~ etc/*~ include/*~
 
+flash:
+	pk2cmd -B/usr/share/pickit2 -PPIC18F45K80 -E -MC -MP -F firmware/canbuster_4xk80.hex -R -T 

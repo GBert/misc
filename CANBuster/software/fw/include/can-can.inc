@@ -91,6 +91,7 @@ INIT
                 CLRF    CM1CON          ;C
                 CLRF    CM2CON          ;C
 
+                CLRF    LATD
                 CLRF    LATC
                 BCF     TRISC, 2
                 CLRF    GPIO                ; Init. LED
