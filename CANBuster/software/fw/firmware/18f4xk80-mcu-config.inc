@@ -72,4 +72,3 @@
                 CONFIG    EBTR3=OFF
 ; Table Read Protect Boot:
                 CONFIG    EBTRB=OFF
-
