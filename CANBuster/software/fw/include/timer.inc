@@ -45,10 +45,10 @@ TIMERINIT
 SCHEDULE
                 ; must reset Timer1 overflow flag
 		BCF	INTCON, TMR0IF
-		RCALL	PIOGET		; PIO routine
-		RCALL	PIOCANSEND	; PIO send
 		INCFSZ	TCOUNTER,F	; heartbeat routine
 		RETURN
+		RCALL	PIOGET		; PIO routine
+		RCALL	PIOCANSEND	; PIO send
 
 		; 512 us * 256 = 131 ms
 		; limit to 8 * 131 ms = 1.049 s
