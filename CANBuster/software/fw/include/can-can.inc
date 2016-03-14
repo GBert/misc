@@ -103,7 +103,7 @@ INIT
                 RCALL   INITCAN             ; Init. CAN Bus
                 RCALL   TIMERINIT           ; Init. TIMER
                 RCALL   I2CINIT             ; Init. I2C
-                ;RCALL   PIOINIT             ; Init. PIO
+                RCALL   PIOINIT             ; Init. PIO
 
                 BSF     RCON,IPEN           ; Enable priority interrupts
                 BSF     INTCON,PEIE         ; Init. ISR
@@ -118,6 +118,7 @@ MAIN
                 RCALL   TXCAN               ; SEND CAN
 		BTFSC	INTCON, TMR0IF
 		RCALL   SCHEDULE
+		RCALL	PIOGET
                 BRA     MAIN
 
 ;------------------------------------------------------------------------------
