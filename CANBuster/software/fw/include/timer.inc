@@ -46,6 +46,7 @@ SCHEDULE
                 ; must reset Timer1 overflow flag
 		BCF	INTCON, TMR0IF
 		RCALL	PIOGET		; PIO routine
+		RCALL	PIOCANSEND	; PIO send
 		INCFSZ	TCOUNTER,F	; heartbeat routine
 		RETURN
 
