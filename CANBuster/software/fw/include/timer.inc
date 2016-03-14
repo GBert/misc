@@ -45,7 +45,8 @@ TIMERINIT
 SCHEDULE
                 ; must reset Timer1 overflow flag
 		BCF	INTCON, TMR0IF
-		INCFSZ	TCOUNTER,F
+		RCALL	PIOGET		; PIO routine
+		INCFSZ	TCOUNTER,F	; heartbeat routine
 		RETURN
 
 		; 512 us * 256 = 131 ms

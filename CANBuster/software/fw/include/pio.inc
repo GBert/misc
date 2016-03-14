@@ -107,6 +107,58 @@ PIOGET
 		IORWF   TOP_VAL_NEW,F
 
 		RETURN
+
+PIOCANSEND
+                ; Find a Tx slot - start with TX buffer 2 down to 0
+                MOVLW   CAN_WIN_TXB2        ; Window mode on TXB2
+                MOVWF   CANCON
+                BTFSS   TXB2CON,TXREQ
+                BRA     PIOTXCAN2
+
+                MOVLW   CAN_WIN_TXB1        ; Window mode on TXB1
+                MOVWF   CANCON
+                BTFSS   TXB1CON,TXREQ
+                BRA     PIOTXCAN2
+
+                MOVLW   CAN_WIN_TXB0        ; Window mode on TXB0
+                MOVWF   CANCON
+                BTFSC   TXB0CON,TXREQ
+                RETURN
+
+; prepare CAN ID 0x00220300 Maerklin S88 Event
+
+PIOTXCAN2
+		MOVLW	0
+		TXEXT_28_24
+		MOVLW	2
+		TXEXT_23_21
+		MOVLW	2
+		TXEXT_20_18
+		MOVLW	2
+		TXEXT_17_16
+		BSF	RXB0SIDL,EXIDEN     ; Enable Extended Id
+		MOVLW	3
+		MOVWF	RXB0EIDH
+		MOVLW	0
+		MOVWF	RXB0EIDL
+		; DLC = 8
+		MOVLW	8
+		MOVWF	RXB0DLC
+		MOVLW	0
+		MOVWF	RXB0D0
+		MOVWF	RXB0D1
+		MOVWF	RXB0D2
+		MOVWF	RXB0D3
+		MOVWF	RXB0D4
+		MOVWF	RXB0D5
+		MOVF	TOP_VAL_NEW,W
+		MOVWF	RXB0D6
+		MOVF	BUT_VAL_NEW,W
+		MOVWF	RXB0D7
+
+		BSF	RXB0CON,TXREQ       ; transmit
+		RETURN
+
 ;
 ; vim: shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 ;

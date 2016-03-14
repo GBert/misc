@@ -118,7 +118,6 @@ MAIN
                 RCALL   TXCAN               ; SEND CAN
 		BTFSC	INTCON, TMR0IF
 		RCALL   SCHEDULE
-		RCALL	PIOGET
                 BRA     MAIN
 
 ;------------------------------------------------------------------------------
