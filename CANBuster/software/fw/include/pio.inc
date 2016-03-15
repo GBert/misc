@@ -27,14 +27,31 @@
                 BUT_VAL_NEW: 1
                 BUT_VAL_OLD: 1
                 TOP_VAL_NEW: 1
-		TOP_VAL_OLD: 1
-                HASH_LOW : 1
-                HASH_HIGH : 1
+                TOP_VAL_OLD: 1
+                CANHASH_LOW : 1
+                CANHASH_HIGH : 1
                 ENDC
 
 ;------------------------------------------------------------------------------
 ; Init. PIO
 ;------------------------------------------------------------------------------
+
+READCANHASH
+		; read location ID - CAN hash ID is stored at 200000h + 200001h
+		MOVLW	0
+		MOVWF	TBLPTRL
+		MOVWF   TBLPTRH
+		MOVLW	20h
+		MOVWF   TBLPTRU
+		TBLRD*+
+		MOVF	TABLAT,W
+		IORLW	03h		; make sure that's a valid hash
+		MOVWF	CANHASH_HIGH
+		TBLRD*
+		MOVF	TABLAT,W
+		MOVWF   CANHASH_LOW
+		RETURN
+
 PIOINIT
 		; set ports as inputs
 
@@ -74,7 +91,7 @@ PTIMECLLOOP
 		DECFSZ	PIOTEMP,1
 		BNZ	PTIMECLLOOP
 
-                RETURN
+                GOTO	READCANHASH
 
 ;------------------------------------------------------------------------------
 ; get status
@@ -130,16 +147,16 @@ PIOCANSEND
 PIOTXCAN2
 		MOVLW	0
 		TXEXT_28_24
-		MOVLW	0
+		MOVLW	22h
 		TXEXT_23_21
-		MOVLW	2
+		MOVLW	22h
 		TXEXT_20_18
-		MOVLW	2
+		MOVLW	22h
 		TXEXT_17_16
 		BSF	RXB0SIDL,EXIDEN     ; Enable Extended Id
-		MOVLW	3
+		MOVF	CANHASH_HIGH,W
 		MOVWF	RXB0EIDH
-		MOVLW	0
+		MOVF	CANHASH_LOW,W
 		MOVWF	RXB0EIDL
 		; DLC = 8
 		MOVLW	8
@@ -157,6 +174,25 @@ PIOTXCAN2
 		MOVWF	RXB0D7
 
 		BSF	RXB0CON,TXREQ       ; transmit
+		RETURN
+
+PIOTXUART	MOVLW	'T'
+		PUTC
+		MOVLW	'0'
+		PUTC
+		MOVLW	'0'
+		PUTC
+		MOVLW	'2'
+		PUTC
+		MOVLW	'2'
+		PUTC
+
+		MOVF	CANHASH_HIGH,W
+		CALL	BIN2ASC
+		MOVF	CANHASH_LOW,W
+		CALL	BIN2ASC
+		MOVLW	'8'
+		PUTC
 		RETURN
 
 ;
