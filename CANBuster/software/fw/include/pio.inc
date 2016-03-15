@@ -209,12 +209,17 @@ PIOTXCAN2
                 ; DLC = 8
                 MOVLW	8
                 MOVWF	RXB0DLC
-                MOVLW	0
+                MOVF	BUT_VAL_NEW,W
                 MOVWF	RXB0D0
+                MOVF	BUT_VAL_CHG,W
                 MOVWF	RXB0D1
+                MOVF	BUT_VAL_STATE,W
                 MOVWF	RXB0D2
+                MOVF	BUT_CT0,W
                 MOVWF	RXB0D3
+                MOVF	BUT_CT1,W
                 MOVWF	RXB0D4
+                MOVLW	0
                 MOVWF	RXB0D5
                 MOVF	TOP_VAL_NEW,W
                 MOVWF	RXB0D6
