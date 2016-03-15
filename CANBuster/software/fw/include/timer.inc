@@ -48,7 +48,9 @@ SCHEDULE
 		INCFSZ	TCOUNTER,F	; heartbeat routine
 		RETURN
 		RCALL	PIOGET		; PIO routine
-		RCALL	PIOCANSEND	; PIO send
+		RCALL	PIOCANSEND	; PIO CAN send
+		RCALL   PIOUARTSEND	; PIO SLCAN send 
+	
 
 		; 512 us * 256 = 131 ms
 		; limit to 8 * 131 ms = 1.049 s
