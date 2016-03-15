@@ -114,34 +114,37 @@ PIODEBOUNCE
                 XORWF	TOP_VAL_STATE,W		; port changed ?
                 MOVWF	PIOTEMP
                 ANDWF	TOP_CT0,W	    	; reset or count ct0
-                COMF	TOP_CT0,W
+                XORLW	255
                 MOVWF	TOP_CT0
+                MOVWF	DEBUG_TOP
                 MOVF	TOP_CT1,W		; reset or count ct1
-                ANDWF	PIOTEMP
+                ANDWF	PIOTEMP,W
                 XORWF	TOP_CT0,W
-                MOVF	TOP_CT1
+                MOVWF	TOP_CT1
                 ANDWF	TOP_CT0,W
                 ANDWF	PIOTEMP,W
+                MOVWF	PIOTEMP
                 XORWF	TOP_VAL_STATE,F
-                ANDWF	TOP_VAL_STATE,W
-                IORWF	TOP_VAL_CHG,F
+                ; ANDWF	TOP_VAL_STATE,W
+                ; IORWF	TOP_VAL_CHG,F
 
                 COMF	BUT_VAL_NEW,W
                 XORWF	BUT_VAL_STATE,W		; port changed ?
                 MOVWF	PIOTEMP
                 ANDWF	BUT_CT0,W		; reset or count ct0
-                MOVWF   DEBUG_BUT
-                COMF	BUT_CT0,W
+                XORLW	255
                 MOVWF	BUT_CT0
+                MOVWF	DEBUG_BUT
                 MOVF	BUT_CT1,W		; reset or count ct1
-                ANDWF	PIOTEMP
+                ANDWF	PIOTEMP,W
                 XORWF	BUT_CT0,W
-                MOVF	BUT_CT1
+                MOVWF	BUT_CT1
                 ANDWF	BUT_CT0,W
                 ANDWF	PIOTEMP,W
+                MOVWF	PIOTEMP
                 XORWF	BUT_VAL_STATE,F
-                ANDWF	BUT_VAL_STATE,W
-                IORWF	BUT_VAL_CHG,F
+                ; ANDWF	BUT_VAL_STATE,W
+                ; IORWF	BUT_VAL_CHG,F
 
                 RETURN
 
