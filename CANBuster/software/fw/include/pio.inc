@@ -205,8 +205,12 @@ PIOUARTSEND
                 CALL	BIN2ASC
                 MOVF	BUT_VAL_NEW,W
                 CALL	BIN2ASC
-                MOVLW	'\r'
+                MOVLW	EOLNCHAR
 		PUTC
+
+                INCF    TXCNT,F             ; Tx packet counter++
+                BSF     UPIE,UTXIE          ; Enable Tx ring ISR
+
                 RETURN
 ;
 ; vim: shiftwidth=4 tabstop=4 softtabstop=4 expandtab
