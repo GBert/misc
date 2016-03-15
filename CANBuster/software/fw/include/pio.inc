@@ -25,8 +25,10 @@
                 PIOTIME : 16
                 PIOTEMP : 1
 		BUT_CT0: 1
+		DEBUG_BUT_CT0:1
 		BUT_CT1: 1
 		TOP_CT0: 1
+		DEBUG_TOP_CT0:1
 		TOP_CT1: 1
                 BUT_VAL_NEW: 1
                 BUT_VAL_CHG: 1
@@ -114,6 +116,7 @@ PIODEBOUNCE
 		ANDWF	TOP_CT0,W		; reset or count ct0
 		COMF	TOP_CT0,W
 		MOVWF	TOP_CT0
+		MOVWF	DEBUG_TOP_CT0
 		MOVF	TOP_CT1,W		; reset or count ct1
 		ANDWF	PIOTEMP
 		XORWF	TOP_CT0,W
@@ -130,6 +133,7 @@ PIODEBOUNCE
 		ANDWF	BUT_CT0,W		; reset or count ct0
 		COMF	BUT_CT0,W
 		MOVWF	BUT_CT0
+		MOVWF	DEBUG_BUT_CT0
 		MOVF	BUT_CT1,W		; reset or count ct1
 		ANDWF	PIOTEMP
 		XORWF	BUT_CT0,W
@@ -219,7 +223,7 @@ PIOTXCAN2
                 MOVWF	RXB0D3
                 MOVF	BUT_CT1,W
                 MOVWF	RXB0D4
-                MOVLW	0
+                MOVF	DEBUG_BUT_CT0
                 MOVWF	RXB0D5
                 MOVF	TOP_VAL_NEW,W
                 MOVWF	RXB0D6
@@ -253,7 +257,7 @@ PIOUARTSEND
                 CALL	BIN2ASC
                 MOVF	TOP_CT1,W
                 CALL	BIN2ASC
-                MOVLW	00h
+                MOVLW	DEBUG_TOP_CT0
                 CALL	BIN2ASC
                 MOVF	TOP_VAL_NEW,W
                 CALL	BIN2ASC
