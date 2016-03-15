@@ -24,10 +24,16 @@
                 CBLOCK
                 PIOTIME : 16
                 PIOTEMP : 1
+		BUT_CT0: 1
+		BUT_CT1: 1
+		TOP_CT0: 1
+		TOP_CT1: 1
                 BUT_VAL_NEW: 1
-                BUT_VAL_OLD: 1
+                BUT_VAL_CHG: 1
+                BUT_VAL_STATE: 1
                 TOP_VAL_NEW: 1
-                TOP_VAL_OLD: 1
+                TOP_VAL_CHG: 1
+                TOP_VAL_STATE: 1
                 CANHASH_LOW : 1
                 CANHASH_HIGH : 1
                 ENDC
@@ -75,11 +81,18 @@ PIOINIT
                 BSF	TRISE,1
                 BSF	TRISE,2
 #ENDIF
-                ; clear vars
-                CLRF	BUT_VAL_NEW
-                CLRF	BUT_VAL_OLD
-                CLRF	TOP_VAL_NEW
-                CLRF	TOP_VAL_OLD
+                ; set vars
+                MOVLW	255
+                MOVWF	BUT_VAL_NEW
+                MOVWF	BUT_VAL_CHG
+                MOVWF	BUT_VAL_STATE
+                MOVWF	TOP_VAL_NEW
+                MOVWF	TOP_VAL_CHG
+                MOVWF	TOP_VAL_STATE
+                MOVWF	BUT_CT0
+                MOVWF	BUT_CT1
+                MOVWF	TOP_CT0
+                MOVWF	TOP_CT1
 
                 ; delete timers
                 MOVLW	16
@@ -92,6 +105,42 @@ PTIMECLLOOP
                 BNZ	PTIMECLLOOP
 
                 GOTO	READCANHASH
+
+                ; debouncing code from Peter Danegger
+PIODEBOUNCE
+                COMF	TOP_VAL_NEW,W
+		XORWF	TOP_VAL_STATE,W		; port changed ?
+		MOVWF	PIOTEMP
+		ANDWF	TOP_CT0,W		; reset or count ct0
+		COMF	TOP_CT0,W
+		MOVWF	TOP_CT0
+		MOVF	TOP_CT1,W		; reset or count ct1
+		ANDWF	PIOTEMP
+		XORWF	TOP_CT0,W
+		MOVF	TOP_CT1
+		ANDWF	TOP_CT0,W
+		ANDWF	PIOTEMP,W
+		XORWF	TOP_VAL_STATE,F
+		ANDWF	TOP_VAL_STATE,W
+		IORWF	TOP_VAL_CHG,F
+
+                COMF	BUT_VAL_NEW,W
+		XORWF	BUT_VAL_STATE,W		; port changed ?
+		MOVWF	PIOTEMP
+		ANDWF	BUT_CT0,W		; reset or count ct0
+		COMF	BUT_CT0,W
+		MOVWF	BUT_CT0
+		MOVF	BUT_CT1,W		; reset or count ct1
+		ANDWF	PIOTEMP
+		XORWF	BUT_CT0,W
+		MOVF	BUT_CT1
+		ANDWF	BUT_CT0,W
+		ANDWF	PIOTEMP,W
+		XORWF	BUT_VAL_STATE,F
+		ANDWF	BUT_VAL_STATE,W
+		IORWF	BUT_VAL_CHG,F
+
+                RETURN
 
 ;------------------------------------------------------------------------------
 ; get status
@@ -123,7 +172,7 @@ PIOGET
                 RLNCF	WREG,F
                 IORWF   TOP_VAL_NEW,F
 
-                RETURN
+		GOTO	PIODEBOUNCE
 
 PIOCANSEND
                 ; Find a Tx slot - start with TX buffer 2 down to 0
@@ -175,7 +224,7 @@ PIOTXCAN2
                 BSF	RXB0CON,TXREQ       ; transmit
                 RETURN
 
-		; test PIO -> SLCAN
+                ; test PIO -> SLCAN
 PIOUARTSEND
                 MOVLW	'T'
                 PUTC
@@ -189,15 +238,15 @@ PIOUARTSEND
                 CALL	BIN2ASC
                 MOVLW	'8'
                 PUTC
-                MOVLW	00h
+                MOVF	TOP_VAL_NEW,W
                 CALL	BIN2ASC
-                MOVLW	00h
+                MOVF	TOP_VAL_CHG,W
                 CALL	BIN2ASC
-                MOVLW	00h
+                MOVF	TOP_VAL_STATE,W
                 CALL	BIN2ASC
-                MOVLW	00h
+                MOVF	TOP_CT0,W
                 CALL	BIN2ASC
-                MOVLW	00h
+                MOVF	TOP_CT1,W
                 CALL	BIN2ASC
                 MOVLW	00h
                 CALL	BIN2ASC
@@ -206,8 +255,7 @@ PIOUARTSEND
                 MOVF	BUT_VAL_NEW,W
                 CALL	BIN2ASC
                 MOVLW	EOLNCHAR
-		PUTC
-
+                PUTC
                 INCF    TXCNT,F             ; Tx packet counter++
                 BSF     UPIE,UTXIE          ; Enable Tx ring ISR
 
