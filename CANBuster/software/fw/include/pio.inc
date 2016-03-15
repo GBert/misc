@@ -111,8 +111,8 @@ PTIMECLLOOP
                 ; debouncing code from Peter Danegger
 PIODEBOUNCE
                 COMF	TOP_VAL_NEW,W
-		MOVWF	DEBUG_TOP
 		XORWF	TOP_VAL_STATE,W		; port changed ?
+		MOVWF	DEBUG_TOP
 		MOVWF	PIOTEMP
 		ANDWF	TOP_CT0,W		; reset or count ct0
 		COMF	TOP_CT0,W
@@ -128,8 +128,8 @@ PIODEBOUNCE
 		IORWF	TOP_VAL_CHG,F
 
                 COMF	BUT_VAL_NEW,W
-		MOVWF	DEBUG_BUT
 		XORWF	BUT_VAL_STATE,W		; port changed ?
+		MOVWF	DEBUG_BUT
 		MOVWF	PIOTEMP
 		ANDWF	BUT_CT0,W		; reset or count ct0
 		COMF	BUT_CT0,W
