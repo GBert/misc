@@ -24,20 +24,20 @@
                 CBLOCK
                 PIOTIME : 16
                 PIOTEMP : 1
-		BUT_CT0: 1
-		DEBUG_BUT:1
-		BUT_CT1: 1
-		TOP_CT0: 1
-		DEBUG_TOP:1
-		TOP_CT1: 1
-                BUT_VAL_NEW: 1
-                BUT_VAL_CHG: 1
-                BUT_VAL_STATE: 1
-                TOP_VAL_NEW: 1
-                TOP_VAL_CHG: 1
-                TOP_VAL_STATE: 1
+		BUT_CT0 : 1
+		DEBUG_BUT : 1
+		BUT_CT1 : 1
+		TOP_CT0 : 1
+		DEBUG_TOP : 1
+		TOP_CT1 : 1
+                BUT_VAL_NEW : 1
+                BUT_VAL_CHG : 1
+                BUT_VAL_STATE : 1
+                TOP_VAL_NEW : 1
+                TOP_VAL_CHG : 1
+                TOP_VAL_STATE : 1
                 CANHASH_LOW : 1
-                CANHASH_HIGH : 1
+                CANHASH_HIGH: 1
                 ENDC
 
 ;------------------------------------------------------------------------------
@@ -111,38 +111,37 @@ PTIMECLLOOP
                 ; debouncing code from Peter Danegger
 PIODEBOUNCE
                 COMF	TOP_VAL_NEW,W
-		XORWF	TOP_VAL_STATE,W		; port changed ?
-		MOVWF	DEBUG_TOP
-		MOVWF	PIOTEMP
-		ANDWF	TOP_CT0,W		; reset or count ct0
-		COMF	TOP_CT0,W
-		MOVWF	TOP_CT0
-		MOVF	TOP_CT1,W		; reset or count ct1
-		ANDWF	PIOTEMP
-		XORWF	TOP_CT0,W
-		MOVF	TOP_CT1
-		ANDWF	TOP_CT0,W
-		ANDWF	PIOTEMP,W
-		XORWF	TOP_VAL_STATE,F
-		ANDWF	TOP_VAL_STATE,W
-		IORWF	TOP_VAL_CHG,F
+                XORWF	TOP_VAL_STATE,W		; port changed ?
+                MOVWF	PIOTEMP
+                ANDWF	TOP_CT0,W	    	; reset or count ct0
+                COMF	TOP_CT0,W
+                MOVWF	TOP_CT0
+                MOVF	TOP_CT1,W		; reset or count ct1
+                ANDWF	PIOTEMP
+                XORWF	TOP_CT0,W
+                MOVF	TOP_CT1
+                ANDWF	TOP_CT0,W
+                ANDWF	PIOTEMP,W
+                XORWF	TOP_VAL_STATE,F
+                ANDWF	TOP_VAL_STATE,W
+                IORWF	TOP_VAL_CHG,F
 
                 COMF	BUT_VAL_NEW,W
-		XORWF	BUT_VAL_STATE,W		; port changed ?
-		MOVWF	DEBUG_BUT
-		MOVWF	PIOTEMP
-		ANDWF	BUT_CT0,W		; reset or count ct0
-		COMF	BUT_CT0,W
-		MOVWF	BUT_CT0
-		MOVF	BUT_CT1,W		; reset or count ct1
-		ANDWF	PIOTEMP
-		XORWF	BUT_CT0,W
-		MOVF	BUT_CT1
-		ANDWF	BUT_CT0,W
-		ANDWF	PIOTEMP,W
-		XORWF	BUT_VAL_STATE,F
-		ANDWF	BUT_VAL_STATE,W
-		IORWF	BUT_VAL_CHG,F
+                XORWF	BUT_VAL_STATE,W		; port changed ?
+                MOVWF	PIOTEMP
+                ANDWF	BUT_CT0,W		; reset or count ct0
+                MOVWF   DEBUG_BUT
+                COMF	BUT_CT0,W
+                MOVWF	BUT_CT0
+                MOVF	BUT_CT1,W		; reset or count ct1
+                ANDWF	PIOTEMP
+                XORWF	BUT_CT0,W
+                MOVF	BUT_CT1
+                ANDWF	BUT_CT0,W
+                ANDWF	PIOTEMP,W
+                XORWF	BUT_VAL_STATE,F
+                ANDWF	BUT_VAL_STATE,W
+                IORWF	BUT_VAL_CHG,F
 
                 RETURN
 
@@ -270,5 +269,5 @@ PIOUARTSEND
 
                 RETURN
 ;
-; vim: shiftwidth=4 tabstop=4 softtabstop=4 expandtab
+; vim: set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 ;
