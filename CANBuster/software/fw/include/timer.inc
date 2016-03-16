@@ -50,7 +50,7 @@ SCHEDULE
                 INFSNZ	TCOUNTER,F	; heartbeat routine
                 RCALL	DO_HEARTBEAT
 
-                INCFSZ  TCOUNTER,F      ; PIO routine
+                INCFSZ  PIOTCOUNTER,F      ; PIO routine
                 RETURN
 
                 RCALL	PIOGET		; PIO service routine - any PIO change ?
