@@ -116,7 +116,6 @@ PIODEBOUNCE
                 ANDWF	TOP_CT0,W	    	; reset or count ct0
                 XORLW	255
                 MOVWF	TOP_CT0
-                MOVWF	DEBUG_TOP
                 MOVF	TOP_CT1,W		; reset or count ct1
                 ANDWF	PIOTEMP,W
                 XORWF	TOP_CT0,W
@@ -134,7 +133,6 @@ PIODEBOUNCE
                 ANDWF	BUT_CT0,W		; reset or count ct0
                 XORLW	255
                 MOVWF	BUT_CT0
-                MOVWF	DEBUG_BUT
                 MOVF	BUT_CT1,W		; reset or count ct1
                 ANDWF	PIOTEMP,W
                 XORWF	BUT_CT0,W
