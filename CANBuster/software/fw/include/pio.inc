@@ -24,12 +24,13 @@
                 CBLOCK
                 PIOTIME : 16
                 PIOTEMP : 1
-		BUT_CT0 : 1
-		DEBUG_BUT : 1
-		BUT_CT1 : 1
-		TOP_CT0 : 1
-		DEBUG_TOP : 1
-		TOP_CT1 : 1
+                PIOTEMP16 : 2
+                BUT_CT0 : 1
+                DEBUG_BUT : 1
+                BUT_CT1 : 1
+                TOP_CT0 : 1
+                DEBUG_TOP : 1
+                TOP_CT1 : 1
                 BUT_VAL_NEW : 1
                 BUT_VAL_CHG : 1
                 BUT_VAL_STATE : 1
@@ -144,6 +145,17 @@ PIODEBOUNCE
                 ; ANDWF	BUT_VAL_STATE,W
                 ; IORWF	BUT_VAL_CHG,F
 
+                RETURN
+
+GENEVENT
+                MOVLW	80h
+                MOVF	PIOTEMP,W
+GENEVENTLOOP
+                INFSNZ	PIOTEMP16
+                INCF	PIOTEMP16+1
+
+                RRNCF	PIOTEMP
+                BNZ	GENEVENTLOOP
                 RETURN
 
 ;------------------------------------------------------------------------------
