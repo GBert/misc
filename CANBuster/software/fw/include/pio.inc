@@ -39,6 +39,8 @@
                 TOP_VAL_STATE : 1
                 CANHASH_LOW : 1
                 CANHASH_HIGH: 1
+                ID_H : 1
+                ID_L : 1
                 ENDC
 
 ;------------------------------------------------------------------------------
@@ -123,7 +125,7 @@ PIODEBOUNCE
                 MOVWF	TOP_CT1
                 ANDWF	TOP_CT0,W
                 ANDWF	PIOTEMP,W
-                MOVWF	PIOTEMP
+                MOVWF	TOP_VAL_CHG
                 XORWF	TOP_VAL_STATE,F
                 ; ANDWF	TOP_VAL_STATE,W
                 ; IORWF	TOP_VAL_CHG,F
@@ -140,7 +142,7 @@ PIODEBOUNCE
                 MOVWF	BUT_CT1
                 ANDWF	BUT_CT0,W
                 ANDWF	PIOTEMP,W
-                MOVWF	PIOTEMP
+                MOVWF	BUT_VAL_CHG
                 XORWF	BUT_VAL_STATE,F
                 ; ANDWF	BUT_VAL_STATE,W
                 ; IORWF	BUT_VAL_CHG,F
@@ -148,11 +150,22 @@ PIODEBOUNCE
                 RETURN
 
 GENEVENT
-                MOVLW	80h
-                MOVF	PIOTEMP,W
+                MOVLW	'C'
+                MOVWF	ID_H
+                MOVLW	'B'
+                MOVWF	ID_L
+                MOVLW	128
+                MOVF	PIOTEMP		; mask
+                CLRF	PIOTEMP16
+                CLRF	PIOTEMP16+1
 GENEVENTLOOP
                 INFSNZ	PIOTEMP16
                 INCF	PIOTEMP16+1
+                MOVF	BUT_VAL_CHG,W
+                ANDWF	PIOTEMP,W
+                BTFSS	STATUS,Z
+                CALL	PIOSENDEVENT
+                RETURN
 
                 RRNCF	PIOTEMP
                 BNZ	GENEVENTLOOP
@@ -190,6 +203,11 @@ PIOGET
 
 		GOTO	PIODEBOUNCE
 
+PIOSENDEVENT
+		CALL	PIOCANSEND
+		CALL	PIOUARTSEND
+                RETURN
+
 PIOCANSEND
                 ; Find a Tx slot - start with TX buffer 2 down to 0
                 MOVLW   CAN_WIN_TXB2        ; Window mode on TXB2
@@ -209,6 +227,104 @@ PIOCANSEND
 
                 ; prepare CAN ID 0x00220300 Maerklin S88 Event
 PIOTXCAN2
+                MOVLW	0
+                TXEXT_28_24
+                MOVLW	22h
+                TXEXT_23_21
+                MOVLW	22h
+                TXEXT_20_18
+                MOVLW	22h
+                TXEXT_17_16
+                BSF	RXB0SIDL,EXIDEN     ; Enable Extended Id
+                MOVF	CANHASH_HIGH,W
+                MOVWF	RXB0EIDH
+                MOVF	CANHASH_LOW,W
+                MOVWF	RXB0EIDL
+                ; DLC = 8
+                MOVLW	8
+                MOVWF	RXB0DLC
+                MOVF	ID_H,W
+                MOVWF	RXB0D0
+                MOVF	ID_L,W
+                MOVWF	RXB0D1
+                MOVF	PIOTEMP16+1,W
+                MOVWF	RXB0D2
+                MOVF	PIOTEMP16,W
+                MOVWF	RXB0D3
+
+                MOVF	PIOTEMP,W
+                MOVWF	RXB0D4
+                MOVF	PIOTEMP,W
+                MOVWF	RXB0D5
+
+                MOVF	TOP_VAL_CHG,W
+                MOVWF	RXB0D6
+                MOVF	BUT_VAL_CHG,W
+                MOVWF	RXB0D7
+
+                BSF	RXB0CON,TXREQ       ; transmit
+                RETURN
+
+                ; test PIO -> SLCAN
+PIOUARTSEND
+                MOVLW	'T'
+                PUTC
+                MOVLW	00h
+                CALL	BIN2ASC
+                MOVLW	22h
+                CALL	BIN2ASC
+                MOVF	CANHASH_HIGH,W
+                CALL	BIN2ASC
+                MOVF	CANHASH_LOW,W
+                CALL	BIN2ASC
+                MOVLW	'8'
+                PUTC
+                MOVF	ID_H,W
+                CALL	BIN2ASC
+                MOVF	ID_L,W
+                CALL	BIN2ASC
+                MOVF	PIOTEMP16+1,W
+                CALL	BIN2ASC
+                MOVF	PIOTEMP16,W
+                CALL	BIN2ASC
+
+                MOVF	PIOTEMP,W
+                CALL	BIN2ASC
+                MOVF	PIOTEMP,W
+                CALL	BIN2ASC
+                MOVF	TOP_VAL_CHG,W
+                CALL	BIN2ASC
+                MOVF	BUT_VAL_CHG,W
+                CALL	BIN2ASC
+                MOVLW	EOLNCHAR
+                PUTC
+
+                INCF    TXCNT,F             ; Tx packet counter++
+                BSF     UPIE,UTXIE          ; Enable Tx ring ISR
+
+                RETURN
+; test routine - will be obsolete
+;
+
+PIOCANSENDT
+                ; Find a Tx slot - start with TX buffer 2 down to 0
+                MOVLW   CAN_WIN_TXB2        ; Window mode on TXB2
+                MOVWF   CANCON
+                BTFSS   TXB2CON,TXREQ
+                BRA     PIOTXCANT2
+
+                MOVLW   CAN_WIN_TXB1        ; Window mode on TXB1
+                MOVWF   CANCON
+                BTFSS   TXB1CON,TXREQ
+                BRA     PIOTXCANT2
+
+                MOVLW   CAN_WIN_TXB0        ; Window mode on TXB0
+                MOVWF   CANCON
+                BTFSC   TXB0CON,TXREQ
+                RETURN
+
+                ; prepare CAN ID 0x00220300 Maerklin S88 Event
+PIOTXCANT2
                 MOVLW	0
                 TXEXT_28_24
                 MOVLW	22h
@@ -246,7 +362,7 @@ PIOTXCAN2
                 RETURN
 
                 ; test PIO -> SLCAN
-PIOUARTSEND
+PIOUARTSENDT
                 MOVLW	'T'
                 PUTC
                 MOVLW	00h

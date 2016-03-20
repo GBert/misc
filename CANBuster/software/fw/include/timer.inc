@@ -54,8 +54,9 @@ SCHEDULE
                 RETURN
 
                 RCALL	PIOGET		; PIO service routine - any PIO change ?
-                RCALL	PIOCANSEND	; PIO CAN send
-                GOTO	PIOUARTSEND	; PIO SLCAN send
+                ; RCALL	PIOCANSENDT	; PIO CAN send
+                ; RCALL PIOUARTSEND	; PIO SLCAN send
+		RCALL	GENEVENT
 
                 ; just in case
                 RETURN
