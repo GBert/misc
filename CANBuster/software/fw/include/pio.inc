@@ -154,21 +154,37 @@ GENEVENT
                 MOVWF	ID_H
                 MOVLW	'B'
                 MOVWF	ID_L
-                MOVLW	128
-                MOVF	PIOTEMP		; mask
+                MOVLW	1
+                MOVWF	PIOTEMP		; mask
                 CLRF	PIOTEMP16
                 CLRF	PIOTEMP16+1
-GENEVENTLOOP
+GENEVENTLOOP_BUT
                 INFSNZ	PIOTEMP16
                 INCF	PIOTEMP16+1
                 MOVF	BUT_VAL_CHG,W
                 ANDWF	PIOTEMP,W
                 BTFSS	STATUS,Z
                 CALL	PIOSENDEVENT
-                RETURN
 
-                RRNCF	PIOTEMP
-                BNZ	GENEVENTLOOP
+                BCF	STATUS,C
+                RLCF	PIOTEMP,F
+                BNC	GENEVENTLOOP_BUT
+
+                ; RLCF ;  should do
+                MOVLW   1
+                MOVWF   PIOTEMP         ; mask
+GENEVENTLOOP_TOP
+                INFSNZ  PIOTEMP16
+                INCF    PIOTEMP16+1
+                MOVF    TOP_VAL_CHG,W
+                ANDWF   PIOTEMP,W
+                BTFSS   STATUS,Z
+                CALL    PIOSENDEVENT
+
+                BCF     STATUS,C
+                RLCF    PIOTEMP,F
+                BNC     GENEVENTLOOP_TOP
+
                 RETURN
 
 ;------------------------------------------------------------------------------
@@ -292,6 +308,7 @@ PIOUARTSEND
                 CALL	BIN2ASC
                 MOVF	PIOTEMP,W
                 CALL	BIN2ASC
+
                 MOVF	TOP_VAL_CHG,W
                 CALL	BIN2ASC
                 MOVF	BUT_VAL_CHG,W
