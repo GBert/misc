@@ -41,7 +41,8 @@ TIMERINIT
                 MOVLW   (1 << TMR0ON) + (1 << T08BIT) + (1 << T0PS2)
                 MOVWF   T0CON
                 CLRF	HEARTBEAT
-                CLRF	PIOTCOUNTER
+		MOVLW	20		; 20 * 512us = 10ms
+                MOVWF	PIOTCOUNTER
                 RETURN
 
 SCHEDULE
@@ -50,16 +51,21 @@ SCHEDULE
                 INFSNZ	TCOUNTER,F	; heartbeat routine
                 RCALL	DO_HEARTBEAT
 
-                INCFSZ  PIOTCOUNTER,F	; PIO routine
+                DCFSNZ	PIOTCOUNTER,F	; PIO routine
+		RCALL	DO_PIO
+
                 RETURN
 
-                RCALL	PIOGET		; PIO service routine - any PIO change ?
-                ; RCALL	PIOCANSENDT	; PIO CAN send
-                ; RCALL PIOUARTSEND	; PIO SLCAN send
-		RCALL	GENEVENT
-
-                ; just in case
+DO_PIO
+                RCALL   PIOGET          ; PIO service routine - any PIO change ?
+                ; RCALL PIOCANSENDT     ; PIO CAN send
+                ; RCALL PIOUARTSEND     ; PIO SLCAN send
+                RCALL   GENEVENT
+                MOVLW   20              ; 20 * 512us = 10ms - check PIO state in 10 ms next time
+                MOVWF   PIOTCOUNTER
                 RETURN
+
+
 
 DO_HEARTBEAT
                 ; 512 us * 256 = 131 ms
