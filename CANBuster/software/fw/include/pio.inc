@@ -204,6 +204,7 @@ PIOGET
                 SWAPF	PORTE,W
                 ANDLW	b'01110000'
                 RLNCF	WREG,F
+
                 IORWF	BUT_VAL_NEW,F
 
                 ; RD0-5 are IO9-14
@@ -216,6 +217,12 @@ PIOGET
                 RLNCF	WREG,F
                 RLNCF	WREG,F
                 IORWF   TOP_VAL_NEW,F
+
+#IFDEF PIOINVERT
+		MOVLW	255
+		XORWF	BUT_VAL_NEW,F
+		XORWF   TOP_VAL_NEW,F
+#ENDIF
 
 		GOTO	PIODEBOUNCE
 
