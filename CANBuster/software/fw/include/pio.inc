@@ -129,8 +129,6 @@ PIODEBOUNCE
                 ANDWF	PIOTEMP,W
                 MOVWF	TOP_VAL_CHG
                 XORWF	TOP_VAL_STATE,F
-                ; ANDWF	TOP_VAL_STATE,W
-                ; IORWF	TOP_VAL_CHG,F
 
                 COMF	BUT_VAL_NEW,W
                 XORWF	BUT_VAL_STATE,W		; port changed ?
@@ -146,8 +144,6 @@ PIODEBOUNCE
                 ANDWF	PIOTEMP,W
                 MOVWF	BUT_VAL_CHG
                 XORWF	BUT_VAL_STATE,F
-                ; ANDWF	BUT_VAL_STATE,W
-                ; IORWF	BUT_VAL_CHG,F
 
                 RETURN
 
