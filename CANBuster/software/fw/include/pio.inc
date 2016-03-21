@@ -159,8 +159,8 @@ GENEVENT
                 CLRF	PIOTEMP16
                 CLRF	PIOTEMP16+1
 GENEVENTLOOP_BUT
-                INFSNZ	PIOTEMP16
-                INCF	PIOTEMP16+1
+                INFSNZ	PIOTEMP16,F
+                INCF	PIOTEMP16+1,F
                 MOVF	BUT_VAL_CHG,W
                 ANDWF	PIOTEMP,W
                 BTFSS	STATUS,Z
@@ -174,8 +174,8 @@ GENEVENTLOOP_BUT
                 MOVLW   1
                 MOVWF   PIOTEMP         ; mask
 GENEVENTLOOP_TOP
-                INFSNZ  PIOTEMP16
-                INCF    PIOTEMP16+1
+                INFSNZ  PIOTEMP16,F
+                INCF    PIOTEMP16+1,F
                 MOVF    TOP_VAL_CHG,W
                 ANDWF   PIOTEMP,W
                 BTFSS   STATUS,Z
