@@ -28,19 +28,35 @@ DJNZ            MACRO   REG,LOC
                 ENDM
 
 CANOVFL         MACRO
+#IFDEF LEDHIGH
                 BSF     GPIO,6              ; LED1 CAN Packet dropped
+#ELSE
+                BCF     GPIO,6
+#ENDIF
                 ENDM
 
 CANRECV         MACRO
+#IFDEF LEDHIGH
                 BCF     GPIO,6              ; LED1 CAN Packet received
+#ELSE
+                BSF     GPIO,6
+#ENDIF
                 ENDM
 
 UARTOVFL        MACRO
+#IFDEF LEDHIGH
                 BSF     GPIO,7              ; LED2 UART Packet dropped
+#ELSE
+                BCF     GPIO,7
+#ENDIF
                 ENDM
 
 UARTRECV        MACRO
+#IFDEF LEDHIGH
                 BCF     GPIO,7              ; LED2 UART Packet received
+#ELSE
+                BCF     GPIO,7
+#ENDIF
                 ENDM
 
 RTSCLR          MACRO
