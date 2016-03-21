@@ -249,15 +249,15 @@ PIOCANSEND
                 BTFSC   TXB0CON,TXREQ
                 RETURN
 
-                ; prepare CAN ID 0x00220300 Maerklin S88 Event
+                ; prepare CAN ID 0x00230300 Maerklin S88 Event
 PIOTXCAN2
                 MOVLW	0
                 TXEXT_28_24
-                MOVLW	22h
+                MOVLW	23h
                 TXEXT_23_21
-                MOVLW	22h
+                MOVLW	23h
                 TXEXT_20_18
-                MOVLW	22h
+                MOVLW	23h
                 TXEXT_17_16
                 BSF	RXB0SIDL,EXIDEN     ; Enable Extended Id
                 MOVF	CANHASH_HIGH,W
@@ -303,7 +303,7 @@ PIOUARTSEND
                 PUTC
                 MOVLW	00h
                 CALL	BIN2ASC
-                MOVLW	22h
+                MOVLW	23h
                 CALL	BIN2ASC
                 MOVF	CANHASH_HIGH,W
                 CALL	BIN2ASC
