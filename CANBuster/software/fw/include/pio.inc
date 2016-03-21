@@ -284,20 +284,19 @@ PIOTXCAN2
                 ANDWF	MASK,W
                 BZ	PIOCAN1
                 ;
-                MOVLW	1
-                MOVWF	RXB0D4
                 MOVLW	0
+                MOVWF	RXB0D4
+                MOVLW	1
                 MOVWF	RXB0D5
                 GOTO	PIOCAN2
 PIOCAN1
-                MOVLW	0
-                MOVWF	RXB0D4
                 MOVLW	1
+                MOVWF	RXB0D4
+                MOVLW	0
                 MOVWF	RXB0D5
 PIOCAN2
-                MOVF	BUT_VAL_NEW,W
+                MOVLW	0
                 MOVWF	RXB0D6
-                MOVF	BUT_VAL_CHG,W
                 MOVWF	RXB0D7
                 BSF	RXB0CON,TXREQ       ; transmit
                 RETURN
@@ -329,20 +328,20 @@ PIOUARTSEND
                 ANDWF	MASK,W
                 BZ	PIOUART1
                 ;
-                MOVLW	1
-                CALL	BIN2ASC
                 MOVLW	0
+                CALL	BIN2ASC
+                MOVLW	1
                 CALL	BIN2ASC
                 GOTO	PIOUART2
 PIOUART1
-                MOVLW	0
-                CALL	BIN2ASC
                 MOVLW	1
                 CALL	BIN2ASC
-PIOUART2
-                MOVF	TOP_VAL_CHG,W
+                MOVLW	0
                 CALL	BIN2ASC
-                MOVF	BUT_VAL_CHG,W
+PIOUART2
+                MOVLW	0
+                CALL	BIN2ASC
+                MOVLW	0
                 CALL	BIN2ASC
                 MOVLW	EOLNCHAR
                 PUTC
