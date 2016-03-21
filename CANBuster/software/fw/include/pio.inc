@@ -155,10 +155,22 @@ GENEVENT
                 MOVWF	ID_H
                 MOVLW	'B'
                 MOVWF	ID_L
-                MOVLW	1
-                MOVWF	MASK		; mask
                 CLRF	PIOTEMP16
                 CLRF	PIOTEMP16+1
+                MOVLW	1
+                MOVWF	MASK
+                MOVF    BUT_VAL_CHG,W
+                MOVWF	PIOTEMP
+                CALL	GENEVENTLOOP
+
+                MOVLW	1
+                MOVWF	MASK
+                MOVF	TOP_VAL_CHG,W
+                MOVWF	PIOTEMP
+                CALL	GENEVENTLOOP
+
+                RETURN
+
 GENEVENTLOOP_BUT
                 INFSNZ	PIOTEMP16,F
                 INCF	PIOTEMP16+1,F
@@ -187,6 +199,21 @@ GENEVENTLOOP_TOP
                 BNC     GENEVENTLOOP_TOP
 
                 RETURN
+
+GENEVENTLOOP
+                INFSNZ  PIOTEMP16,F
+                INCF    PIOTEMP16+1,F
+                MOVF    PIOTEMP,W
+                ANDWF   MASK,W
+                BTFSS   STATUS,Z
+                CALL    PIOSENDEVENT
+
+                BCF     STATUS,C
+                RLCF    MASK,F
+                BNC     GENEVENTLOOP_TOP
+
+                RETURN
+
 
 ;------------------------------------------------------------------------------
 ; get status
