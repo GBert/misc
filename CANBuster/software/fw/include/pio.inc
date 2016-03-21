@@ -158,7 +158,7 @@ GENEVENT
                 MOVWF	ID_L
                 CLRF	PIOTEMP16
                 CLRF	PIOTEMP16+1
-                MOVF	BUT_VAL_NEW
+                MOVF	BUT_VAL_NEW,W
                 MOVWF	ACTUAL
                 MOVLW	1
                 MOVWF	MASK
@@ -166,7 +166,7 @@ GENEVENT
                 MOVWF	PIOTEMP
                 CALL	GENEVENTLOOP
 
-                MOVF	BUT_VAL_NEW
+                MOVF	TOP_VAL_NEW,W
                 MOVWF	ACTUAL
                 MOVLW	1
                 MOVWF	MASK
