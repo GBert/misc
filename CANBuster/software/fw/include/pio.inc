@@ -25,6 +25,7 @@
                 PIOTIME : 16
                 PIOTEMP : 1
                 MASK : 1
+                ACTUAL : 1
                 PIOTEMP16 : 2
                 BUT_CT0 : 1
                 DEBUG_BUT : 1
@@ -157,12 +158,16 @@ GENEVENT
                 MOVWF	ID_L
                 CLRF	PIOTEMP16
                 CLRF	PIOTEMP16+1
+                MOVF	BUT_VAL_NEW
+                MOVWF	ACTUAL
                 MOVLW	1
                 MOVWF	MASK
                 MOVF    BUT_VAL_CHG,W
                 MOVWF	PIOTEMP
                 CALL	GENEVENTLOOP
 
+                MOVF	BUT_VAL_NEW
+                MOVWF	ACTUAL
                 MOVLW	1
                 MOVWF	MASK
                 MOVF	TOP_VAL_CHG,W
@@ -303,16 +308,25 @@ PIOTXCAN2
                 MOVF	PIOTEMP16,W
                 MOVWF	RXB0D3
 
-                MOVF	MASK,W
+                MOVF	ACTUAL
+                ANDWF	MASK,W
+                BZ	PIOCAN1
+                ;
+                MOVLW	1
                 MOVWF	RXB0D4
-                MOVF	MASK,W
+                MOVLW	0
                 MOVWF	RXB0D5
-
+                GOTO	PIOCAN2
+PIOCAN1
+                MOVLW	0
+                MOVWF	RXB0D4
+                MOVLW	1
+                MOVWF	RXB0D5
+PIOCAN2
                 MOVF	TOP_VAL_CHG,W
                 MOVWF	RXB0D6
                 MOVF	BUT_VAL_CHG,W
                 MOVWF	RXB0D7
-
                 BSF	RXB0CON,TXREQ       ; transmit
                 RETURN
 
@@ -339,11 +353,21 @@ PIOUARTSEND
                 MOVF	PIOTEMP16,W
                 CALL	BIN2ASC
 
-                MOVF	MASK,W
+                MOVF	ACTUAL
+                ANDWF	MASK,W
+                BZ	PIOUART1
+                ;
+                MOVLW	1
                 CALL	BIN2ASC
-                MOVF	MASK,W
+                MOVLW	0
                 CALL	BIN2ASC
-
+                GOTO	PIOUART2
+PIOUART1
+                MOVLW	0
+                CALL	BIN2ASC
+                MOVLW	1
+                CALL	BIN2ASC
+PIOUART2
                 MOVF	TOP_VAL_CHG,W
                 CALL	BIN2ASC
                 MOVF	BUT_VAL_CHG,W
