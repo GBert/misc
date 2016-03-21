@@ -24,6 +24,7 @@
                 CBLOCK
                 PIOTIME : 16
                 PIOTEMP : 1
+                MASK : 1
                 PIOTEMP16 : 2
                 BUT_CT0 : 1
                 DEBUG_BUT : 1
@@ -155,24 +156,24 @@ GENEVENT
                 MOVLW	'B'
                 MOVWF	ID_L
                 MOVLW	1
-                MOVWF	PIOTEMP		; mask
+                MOVWF	MASK		; mask
                 CLRF	PIOTEMP16
                 CLRF	PIOTEMP16+1
 GENEVENTLOOP_BUT
                 INFSNZ	PIOTEMP16,F
                 INCF	PIOTEMP16+1,F
                 MOVF	BUT_VAL_CHG,W
-                ANDWF	PIOTEMP,W
+                ANDWF	MASK,W
                 BTFSS	STATUS,Z
                 CALL	PIOSENDEVENT
 
                 BCF	STATUS,C
-                RLCF	PIOTEMP,F
+                RLCF	MASK,F
                 BNC	GENEVENTLOOP_BUT
 
                 ; RLCF ;  should do
                 MOVLW   1
-                MOVWF   PIOTEMP         ; mask
+                MOVWF   MASK		; mask
 GENEVENTLOOP_TOP
                 INFSNZ  PIOTEMP16,F
                 INCF    PIOTEMP16+1,F
@@ -182,7 +183,7 @@ GENEVENTLOOP_TOP
                 CALL    PIOSENDEVENT
 
                 BCF     STATUS,C
-                RLCF    PIOTEMP,F
+                RLCF    MASK,F
                 BNC     GENEVENTLOOP_TOP
 
                 RETURN
@@ -275,9 +276,9 @@ PIOTXCAN2
                 MOVF	PIOTEMP16,W
                 MOVWF	RXB0D3
 
-                MOVF	PIOTEMP,W
+                MOVF	MASK,W
                 MOVWF	RXB0D4
-                MOVF	PIOTEMP,W
+                MOVF	MASK,W
                 MOVWF	RXB0D5
 
                 MOVF	TOP_VAL_CHG,W
@@ -311,9 +312,9 @@ PIOUARTSEND
                 MOVF	PIOTEMP16,W
                 CALL	BIN2ASC
 
-                MOVF	PIOTEMP,W
+                MOVF	MASK,W
                 CALL	BIN2ASC
-                MOVF	PIOTEMP,W
+                MOVF	MASK,W
                 CALL	BIN2ASC
 
                 MOVF	TOP_VAL_CHG,W
