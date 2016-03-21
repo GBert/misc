@@ -57,27 +57,24 @@
 ; Take lower 3-bits in W and store in SID10..SID8, SID7..SID3 are RESET
 TXSID_10_8      MACRO   
                 ANDLW   b'00000111'
-                RRNCF   WREG,F
-                RRNCF   WREG,F
-                RRNCF   WREG,F
+                SWAPF   WREG,F
+                RLNCF   WREG,F
                 MOVWF   RXB0SIDH
                 ENDM
 
 ; Take upper 5-bits in W and store in SID7..SID3, SID10..SID8 are UNAFFECTED
 TXSID_7_3       MACRO   
                 ANDLW   b'11111000'
-                RRNCF   WREG,F
-                RRNCF   WREG,F
-                RRNCF   WREG,F
+                SWAPF   WREG,F
+                RLNCF   WREG,F
                 IORWF   RXB0SIDH,F
                 ENDM
 
 ; Take lower 3-bits in W and store in SID2..SID0, EXIDEN is RESET
 TXSID_2_0       MACRO
                 ANDLW   b'00000111'
-                RRNCF   WREG,F
-                RRNCF   WREG,F
-                RRNCF   WREG,F
+                SWAPF   WREG,F
+                RLNCF   WREG,F
                 MOVWF   RXB0SIDL
                 ENDM
 
@@ -87,26 +84,23 @@ TXSID_2_0       MACRO
 RXSID_10_8      MACRO
                 MOVF    RXB0SIDH,W
                 ANDLW   b'11100000'
-                RLNCF   WREG,F
-                RLNCF   WREG,F
-                RLNCF   WREG,F
+                SWAPF   WREG,F
+                RRNCF   WREG,F
                 ENDM
 
 ; Take SID7..SID3 and store in upper 5-bits of CANID
 RXSID_7_0       MACRO
                 MOVF    RXB0SIDH,W
                 ANDLW   b'00011111'
-                RLNCF   WREG,F
-                RLNCF   WREG,F
-                RLNCF   WREG,F
+                SWAPF   WREG,F
+                RRNCF   WREG,F
                 MOVWF   CANID
 
 ; Take SID2..SID0 and store in upper 3-bits of W, take lower 5-bits from CANID
                 MOVF    RXB0SIDL,W
                 ANDLW   b'11100000'
-                RLNCF   WREG,F
-                RLNCF   WREG,F
-                RLNCF   WREG,F
+                SWAPF   WREG,F
+                RRNCF   WREG,F
                 IORWF   CANID,W
                 ENDM
 
@@ -117,27 +111,24 @@ RXSID_7_0       MACRO
 ; Take lower 5-bits in W and store in EID28..EID24, EID23..EID21 are RESET
 TXEXT_28_24     MACRO   
                 ANDLW   b'00011111'
-                RLNCF   WREG,F
-                RLNCF   WREG,F
-                RLNCF   WREG,F
+                SWAPF   WREG,F
+                RRNCF   WREG,F
                 MOVWF   RXB0SIDH
                 ENDM
 
 ; Take upper 3-bits in W and store in EID23..EID21, EID28..EID24 are UNAFFECTED
 TXEXT_23_21     MACRO   
                 ANDLW   b'11100000'
-                RLNCF   WREG,F
-                RLNCF   WREG,F
-                RLNCF   WREG,F
+                SWAPF   WREG,F
+                RRNCF   WREG,F
                 IORWF   RXB0SIDH,F
                 ENDM
 
 ; Take 3-bits in W and store in EID20..EID18, EXIDEN & EID17..EID16 are RESET
 TXEXT_20_18     MACRO   
                 ANDLW   b'00011100'
-                RLNCF   WREG,F
-                RLNCF   WREG,F
-                RLNCF   WREG,F
+                SWAPF   WREG,F
+                RRNCF   WREG,F
                 MOVWF   RXB0SIDL
                 ENDM
 
@@ -153,26 +144,23 @@ TXEXT_17_16     MACRO
 RXEXT_28_24     MACRO
                 MOVF    RXB0SIDH,W
                 ANDLW   b'11111000'
-                RRNCF   WREG,F
-                RRNCF   WREG,F
-                RRNCF   WREG,F
+                SWAPF   WREG,F
+                RLNCF   WREG,F
                 ENDM
 
 ; Take EID23..EID21 and store in upper 3-bits of CANID
 RXEXT_23_16     MACRO
                 MOVF    RXB0SIDH,W
                 ANDLW   b'00000111'
-                RRNCF   WREG,F
-                RRNCF   WREG,F
-                RRNCF   WREG,F
+                SWAPF   WREG,F
+                RLNCF   WREG,F
                 MOVWF   CANID
 
 ; Take EID20..EID18 and store in W, take upper 3-bits from CANID
                 MOVF    RXB0SIDL,W
                 ANDLW   b'11100000'
-                RRNCF   WREG,F
-                RRNCF   WREG,F
-                RRNCF   WREG,F
+                SWAPF   WREG,F
+                RLNCF   WREG,F
                 IORWF   CANID,F
 
 ; Take EID17..EID16 and store in W, take upper 6-bits from CANID
