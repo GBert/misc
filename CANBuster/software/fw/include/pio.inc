@@ -178,7 +178,7 @@ GENEVENTLOOP_TOP
                 INFSNZ  PIOTEMP16,F
                 INCF    PIOTEMP16+1,F
                 MOVF    TOP_VAL_CHG,W
-                ANDWF   PIOTEMP,W
+                ANDWF   MASK,W
                 BTFSS   STATUS,Z
                 CALL    PIOSENDEVENT
 
