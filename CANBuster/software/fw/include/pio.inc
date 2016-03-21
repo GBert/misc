@@ -158,6 +158,7 @@ GENEVENT
                 MOVWF	ID_L
                 CLRF	PIOTEMP16
                 CLRF	PIOTEMP16+1
+
                 MOVF	BUT_VAL_NEW,W
                 MOVWF	ACTUAL
                 MOVLW	1
@@ -176,35 +177,6 @@ GENEVENT
 
                 RETURN
 
-GENEVENTLOOP_BUT
-                INFSNZ	PIOTEMP16,F
-                INCF	PIOTEMP16+1,F
-                MOVF	BUT_VAL_CHG,W
-                ANDWF	MASK,W
-                BTFSS	STATUS,Z
-                CALL	PIOSENDEVENT
-
-                BCF	STATUS,C
-                RLCF	MASK,F
-                BNC	GENEVENTLOOP_BUT
-
-                ; RLCF ;  should do
-                MOVLW   1
-                MOVWF   MASK		; mask
-GENEVENTLOOP_TOP
-                INFSNZ  PIOTEMP16,F
-                INCF    PIOTEMP16+1,F
-                MOVF    TOP_VAL_CHG,W
-                ANDWF   MASK,W
-                BTFSS   STATUS,Z
-                CALL    PIOSENDEVENT
-
-                BCF     STATUS,C
-                RLCF    MASK,F
-                BNC     GENEVENTLOOP_TOP
-
-                RETURN
-
 GENEVENTLOOP
                 INFSNZ  PIOTEMP16,F
                 INCF    PIOTEMP16+1,F
@@ -215,7 +187,7 @@ GENEVENTLOOP
 
                 BCF     STATUS,C
                 RLCF    MASK,F
-                BNC     GENEVENTLOOP_TOP
+                BNC     GENEVENTLOOP
 
                 RETURN
 
@@ -323,7 +295,7 @@ PIOCAN1
                 MOVLW	1
                 MOVWF	RXB0D5
 PIOCAN2
-                MOVF	TOP_VAL_CHG,W
+                MOVF	BUT_VAL_NEW,W
                 MOVWF	RXB0D6
                 MOVF	BUT_VAL_CHG,W
                 MOVWF	RXB0D7
