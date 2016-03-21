@@ -308,7 +308,7 @@ PIOTXCAN2
                 MOVF	PIOTEMP16,W
                 MOVWF	RXB0D3
 
-                MOVF	ACTUAL
+                MOVF	ACTUAL,W
                 ANDWF	MASK,W
                 BZ	PIOCAN1
                 ;
@@ -353,7 +353,7 @@ PIOUARTSEND
                 MOVF	PIOTEMP16,W
                 CALL	BIN2ASC
 
-                MOVF	ACTUAL
+                MOVF	ACTUAL,W
                 ANDWF	MASK,W
                 BZ	PIOUART1
                 ;
