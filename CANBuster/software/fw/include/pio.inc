@@ -279,19 +279,13 @@ PIOTXCAN2
 
                 MOVF	ACTUAL,W
                 ANDWF	MASK,W
-                BZ	PIOCAN1
-                ;
-                MOVLW	0
+                BTFSS	STATUS,Z
+                MOVLW	1		; either W is zero or it's set to one
+
                 MOVWF	RXB0D4
-                MOVLW	1
+                XORLW	1
                 MOVWF	RXB0D5
-                GOTO	PIOCAN2
-PIOCAN1
-                MOVLW	1
-                MOVWF	RXB0D4
-                MOVLW	0
-                MOVWF	RXB0D5
-PIOCAN2
+
                 MOVLW	0
                 MOVWF	RXB0D6
                 MOVWF	RXB0D7
