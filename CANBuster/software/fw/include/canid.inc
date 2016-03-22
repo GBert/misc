@@ -82,25 +82,22 @@ TXSID_2_0       MACRO
 
 ; Take SID10..SID8 and store in lower 3-bits of W
 RXSID_10_8      MACRO
-                MOVF    RXB0SIDH,W
-                ANDLW   b'11100000'
-                SWAPF   WREG,F
+                SWAPF   RXB0SIDH,W
                 RRNCF   WREG,F
+                ANDLW   b'00000111'
                 ENDM
 
 ; Take SID7..SID3 and store in upper 5-bits of CANID
 RXSID_7_0       MACRO
-                MOVF    RXB0SIDH,W
-                ANDLW   b'00011111'
-                SWAPF   WREG,F
+                SWAPF   RXB0SIDH,W
                 RRNCF   WREG,F
+                ANDLW   b'11111000'
                 MOVWF   CANID
 
 ; Take SID2..SID0 and store in upper 3-bits of W, take lower 5-bits from CANID
-                MOVF    RXB0SIDL,W
-                ANDLW   b'11100000'
-                SWAPF   WREG,F
+                SWAPF   RXB0SIDL,W
                 RRNCF   WREG,F
+                ANDLW   b'00000111'
                 IORWF   CANID,W
                 ENDM
 
@@ -142,25 +139,22 @@ TXEXT_17_16     MACRO
 
 ; Take EID28..EID24 and store in lower 5-bits of W
 RXEXT_28_24     MACRO
-                MOVF    RXB0SIDH,W
-                ANDLW   b'11111000'
-                SWAPF   WREG,F
+                SWAPF   RXB0SIDH,W
                 RLNCF   WREG,F
+                ANDLW   b'00011111'
                 ENDM
 
 ; Take EID23..EID21 and store in upper 3-bits of CANID
 RXEXT_23_16     MACRO
-                MOVF    RXB0SIDH,W
-                ANDLW   b'00000111'
-                SWAPF   WREG,F
+                SWAPF   RXB0SIDH,W
                 RLNCF   WREG,F
+                ANDLW   b'11100000'
                 MOVWF   CANID
 
 ; Take EID20..EID18 and store in W, take upper 3-bits from CANID
-                MOVF    RXB0SIDL,W
-                ANDLW   b'11100000'
-                SWAPF   WREG,F
+                SWAPF   RXB0SIDL,W
                 RLNCF   WREG,F
+                ANDLW   b'00011100'
                 IORWF   CANID,F
 
 ; Take EID17..EID16 and store in W, take upper 6-bits from CANID
