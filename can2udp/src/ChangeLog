@@ -1,4 +1,11 @@
-aktuelle Version r48934    (OpenWRT Version)
+aktuelle Version r49031 (OpenWRT)
+- Rocrail auf 10950 aktualisiert (15.3.)
+- Tools fuer CANBuster integriert:
+  gpasm, make, git, easy-loader
+- Pickle (PIC Programmer) Config fuer FTDI FT232RL hinzugefuegt
+
+
+Version r48934
  - S88 Test Tool s88test-bpi hinzugefuegt
  - Rocrail Update auf 10888 (6.3.2016)
  - OpenWRT nutzt jetzt Kernel 4.4.4
