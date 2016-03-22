@@ -58,10 +58,11 @@ READCANHASH
                 MOVWF   TBLPTRU
                 TBLRD*+
                 MOVF	TABLAT,W
-                IORLW	03h		; make sure that's a valid hash
+                IORLW	0x03		; make sure that's a valid hash
                 MOVWF	CANHASH_HIGH
                 TBLRD*
                 MOVF	TABLAT,W
+                ANDLW	0x7F
                 MOVWF   CANHASH_LOW
                 RETURN
 
