@@ -54,7 +54,7 @@ ERRORLEVEL      -302
 
 ; Clock Rate
 #DEFINE         CLOCK       40000000
-#DEFINE         TIMEOUT     0           ; Very long switched time-out
+#DEFINE         TIMEOUT     5           ; 10 sec timeout
 
 ; CAN on PORTB
 #DEFINE         CAN         PORTB
