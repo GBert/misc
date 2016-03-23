@@ -74,19 +74,17 @@ PIOINIT
                 IORWF	TRISA,F
 
                 ; RB0, RB1
-                BSF	TRISB,0
-                BSF	TRISB,1
+                MOVLW	b'00000011'
+                IORWF	TRISB,F
 
 #IFDEF PIO
                 ; RDO-5
-                MOVF	TRISD,W
-                IORLW	b'00111111'
-                MOVWF	TRISD
+                MOVLW	b'00111111'
+                IORWF	TRISD,F
 
                 ; RE0-2
-                BSF	TRISE,0
-                BSF	TRISE,1
-                BSF	TRISE,2
+                MOVLW	b'00000111'
+                IORWF	TRISE,F
 #ENDIF
                 ; set vars
                 MOVLW	255
@@ -281,10 +279,9 @@ PIOTXCAN2
                 BTFSS	STATUS,Z
                 MOVLW	1		; either W is zero or it's set to one
 
+                MOVWF	RXB0D5
                 XORLW	1
                 MOVWF	RXB0D4
-                XORLW	1
-                MOVWF	RXB0D5
 
                 MOVLW	0
                 MOVWF	RXB0D6
