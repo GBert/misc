@@ -191,9 +191,8 @@ GENEVENTLOOP
 ;------------------------------------------------------------------------------
 PIOGET
                 ; RA5 is IO5
-                MOVF	PORTA,W
-                ANDLW   b'00100000'
-                RRNCF	WREG,F
+                RRNCF	PORTA,W
+                ANDLW	b'00010000'
                 MOVWF	BUT_VAL_NEW
                 ; RA0-RA3 are IO1-4
                 MOVF    PORTA,W
@@ -201,9 +200,8 @@ PIOGET
                 IORWF	BUT_VAL_NEW,F
                 ; RE0-2 are IO6-8
                 SWAPF	PORTE,W
-                ANDLW	b'01110000'
                 RLNCF	WREG,F
-
+                ANDLW	b'11100000'
                 IORWF	BUT_VAL_NEW,F
 
                 ; RD0-5 are IO9-14
@@ -211,11 +209,10 @@ PIOGET
                 ANDLW	b'00111111'
                 MOVWF   TOP_VAL_NEW
                 ; RB0-1 are IO15-16
-                SWAPF	PORTB,W
-                ANDLW	b'00110000'
-                RLNCF	WREG,F
-                RLNCF	WREG,F
-                IORWF   TOP_VAL_NEW,F
+                RRNCF	PORTB,W
+                RRNCF	WREG,W
+                ANDLW	b'11000000'
+                IORWF	TOP_VAL_NEW,F
 
 #IFDEF PIOINVERT
 		MOVLW	255
