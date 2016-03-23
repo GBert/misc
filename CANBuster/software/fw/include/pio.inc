@@ -70,9 +70,8 @@ PIOINIT
                 ; set ports as inputs
 
                 ; RA0-3, RA5
-                MOVF	TRISA,W
-                IORLW	b'00101111'
-                MOVWF	TRISA
+                MOVLW	b'00101111'
+                IORWF	TRISA,F
 
                 ; RB0, RB1
                 BSF	TRISB,0
@@ -162,7 +161,7 @@ GENEVENT
                 MOVWF	MASK
                 MOVF    BUT_VAL_CHG,W
                 MOVWF	PIOTEMP
-                CALL	GENEVENTLOOP
+                RCALL	GENEVENTLOOP
 
                 MOVF	TOP_VAL_NEW,W
                 MOVWF	ACTUAL
@@ -170,17 +169,17 @@ GENEVENT
                 MOVWF	MASK
                 MOVF	TOP_VAL_CHG,W
                 MOVWF	PIOTEMP
-                CALL	GENEVENTLOOP
+                RCALL	GENEVENTLOOP
 
                 RETURN
 
 GENEVENTLOOP
-                INFSNZ  PIOTEMP16,F
-                INCF    PIOTEMP16+1,F
-                MOVF    PIOTEMP,W
-                ANDWF   MASK,W
-                BTFSS   STATUS,Z
-                CALL    PIOSENDEVENT
+                INFSNZ	PIOTEMP16,F
+                INCF	PIOTEMP16+1,F
+                MOVF	PIOTEMP,W
+                ANDWF	MASK,W
+                BTFSS	STATUS,Z
+                RCALL	PIOSENDEVENT
 
                 BCF     STATUS,C
                 RLCF    MASK,F
@@ -229,8 +228,8 @@ PIOGET
 		GOTO	PIODEBOUNCE
 
 PIOSENDEVENT
-		CALL	PIOCANSEND
-		CALL	PIOUARTSEND
+		RCALL	PIOCANSEND
+		RCALL	PIOUARTSEND
                 RETURN
 
 PIOCANSEND
@@ -282,6 +281,7 @@ PIOTXCAN2
                 BTFSS	STATUS,Z
                 MOVLW	1		; either W is zero or it's set to one
 
+                XORLW	1
                 MOVWF	RXB0D4
                 XORLW	1
                 MOVWF	RXB0D5
