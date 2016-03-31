@@ -126,7 +126,7 @@ int create_event(struct s88_t *s88, int bus, int offset, uint32_t changed_bits, 
     uint8_t netframe[13];
 
     /* allow usefull M*rklin hashes only */
-    canid = 0x00220300 | (s88->hash & 0x0000ffff);
+    canid = 0x00230300 | (s88->hash & 0x0000ffff);
 
     temp32 = htonl(canid);
     memcpy(netframe, &temp32, 4);
