@@ -146,7 +146,8 @@ MAIN
 #INCLUDE        "ascii.inc"                 ; ASCII I/O
 #INCLUDE        "timer.inc"                 ; Timer
 #INCLUDE        "i2c.inc"                   ; I2C
-#INCLUDE        "pio.inc"                   ; I2C
+#INCLUDE        "pio.inc"                   ; PIO
+#INCLUDE        "event-ring.inc"            ; Event ring
 
 ;------------------------------------------------------------------------------
 ;
