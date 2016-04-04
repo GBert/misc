@@ -223,8 +223,8 @@ PIOGET
 		GOTO	PIODEBOUNCE
 
 PIOSENDEVENT
-		RCALL	PIOCANSEND
 		RCALL	PIOUARTSEND
+		RCALL	PIOCANSEND
                 RETURN
 
 PIOCANSEND
@@ -288,6 +288,12 @@ PIOTXCAN2
 
                 ; test PIO -> SLCAN
 PIOUARTSEND
+                ; If Tx packet counter = trigger then drop packet
+                MOVF    TXCNT,W
+                XORLW   OVERFLOW
+                BTFSC	STATUS,Z
+                RETURN
+
                 MOVLW	'T'
                 PUTC
                 MOVLW	00h
