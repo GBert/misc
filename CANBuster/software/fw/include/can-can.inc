@@ -91,12 +91,18 @@ RTSSET          MACRO
 ;------------------------------------------------------------------------------
 ; Init.
 ;------------------------------------------------------------------------------
+
 INIT
                 MOVLB   0x0F                ; Default to Bank 15
 
                 CLRF    INTCON              ; Reset ISR
+#IF UART == PORTB || UART == PORTD
+                CLRF    PIE3
+                CLRF    PIR3
+#ELSE
                 CLRF    PIE1
                 CLRF    PIR1
+#ENDIF
 
                 ; switch off A/Ds, D/As and comaprators
                 CLRF    ADCON0          ;D
