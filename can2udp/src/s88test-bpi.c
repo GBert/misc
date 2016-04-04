@@ -69,11 +69,10 @@ void get_data(struct s88_t *s88_data, uint8_t *newvalue) {
 
 
 int main(int argc, char **argv) {
-    int utime, i, j;
+    int utime;
     int opt;
     int modulcount = 1;
     struct s88_t s88_data;
-    uint32_t mask, s88_bits;
     uint8_t newvalue;
 
     utime = MICRODELAY;
