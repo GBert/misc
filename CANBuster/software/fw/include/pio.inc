@@ -177,7 +177,6 @@ GENEVENTLOOP
                 MOVF	PIOTEMP,W
                 ANDWF	MASK,W
                 BTFSS	STATUS,Z
-                ; RCALL	SENDEVENT
                 RCALL	PUTEVENT
 
                 BCF     STATUS,C
@@ -223,125 +222,6 @@ PIOGET
 
 		GOTO	PIODEBOUNCE
 
-PIOSENDEVENT
-		RCALL	PIOUARTSEND
-		RCALL	PIOCANSEND
-                RETURN
-
-PIOCANSEND
-                ; Find a Tx slot - start with TX buffer 2 down to 0
-                MOVLW   CAN_WIN_TXB2        ; Window mode on TXB2
-                MOVWF   CANCON
-                BTFSS   TXB2CON,TXREQ
-                BRA     PIOTXCAN2
-
-                MOVLW   CAN_WIN_TXB1        ; Window mode on TXB1
-                MOVWF   CANCON
-                BTFSS   TXB1CON,TXREQ
-                BRA     PIOTXCAN2
-
-                MOVLW   CAN_WIN_TXB0        ; Window mode on TXB0
-                MOVWF   CANCON
-                BTFSC   TXB0CON,TXREQ
-                RETURN
-
-                ; prepare CAN ID 0x00230300 Maerklin S88 Event
-PIOTXCAN2
-                MOVLW	0
-                TXEXT_28_24
-                MOVLW	23h
-                TXEXT_23_21
-                MOVLW	23h
-                TXEXT_20_18
-                MOVLW	23h
-                TXEXT_17_16
-                BSF	RXB0SIDL,EXIDEN     ; Enable Extended Id
-                MOVF	CANHASH_HIGH,W
-                MOVWF	RXB0EIDH
-                MOVF	CANHASH_LOW,W
-                MOVWF	RXB0EIDL
-                ; DLC = 8
-                MOVLW	8
-                MOVWF	RXB0DLC
-                MOVF	ID_H,W
-                MOVWF	RXB0D0
-                MOVF	ID_L,W
-                MOVWF	RXB0D1
-                MOVF	PIOTEMP16,W
-                MOVWF	RXB0D2
-                MOVF	PIOTEMP16+1,W
-                MOVWF	RXB0D3
-
-                MOVF	ACTUAL,W
-                ANDWF	MASK,W
-                BTFSS	STATUS,Z
-                MOVLW	1		; either W is zero or it's set to one
-
-                MOVWF	RXB0D5
-                XORLW	1
-                MOVWF	RXB0D4
-
-                MOVLW	0
-                MOVWF	RXB0D6
-                MOVWF	RXB0D7
-                BSF	RXB0CON,TXREQ       ; transmit
-                RETURN
-
-                ; test PIO -> SLCAN
-PIOUARTSEND
-                ; If Tx packet counter = trigger then drop packet
-                MOVF    TXCNT,W
-                XORLW   OVERFLOW
-                BTFSC	STATUS,Z
-                RETURN
-
-                MOVLW	'T'
-                PUTC
-                MOVLW	00h
-                CALL	BIN2ASC
-                MOVLW	23h
-                CALL	BIN2ASC
-                MOVF	CANHASH_HIGH,W
-                CALL	BIN2ASC
-                MOVF	CANHASH_LOW,W
-                CALL	BIN2ASC
-                MOVLW	'8'
-                PUTC
-                MOVF	ID_H,W
-                CALL	BIN2ASC
-                MOVF	ID_L,W
-                CALL	BIN2ASC
-                MOVF	PIOTEMP16,W
-                CALL	BIN2ASC
-                MOVF	PIOTEMP16+1,W
-                CALL	BIN2ASC
-
-                MOVF	ACTUAL,W
-                ANDWF	MASK,W
-                BZ	PIOUART1
-                ;
-                MOVLW	0
-                CALL	BIN2ASC
-                MOVLW	1
-                CALL	BIN2ASC
-                GOTO	PIOUART2
-PIOUART1
-                MOVLW	1
-                CALL	BIN2ASC
-                MOVLW	0
-                CALL	BIN2ASC
-PIOUART2
-                MOVLW	0
-                CALL	BIN2ASC
-                MOVLW	0
-                CALL	BIN2ASC
-                MOVLW	EOLNCHAR
-                PUTC
-
-                INCF    TXCNT,F             ; Tx packet counter++
-                BSF     UPIE,UTXIE          ; Enable Tx ring ISR
-
-                RETURN
 ;
 ; vim: set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 ;
