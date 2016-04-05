@@ -160,15 +160,25 @@ EVENTTXCAN
                 MOVLW	'8'
                 PUTC
                 GETEVENT_P
-                MOVLW	8
+                MOVLW	6
                 MOVWF	EVENTTMP
 EVENTUARTLOOP
                 MOVFF	POSTINC0,WREG
                 CALL	BIN2ASC
                 DECFSZ	EVENTTMP,F
                 BRA	EVENTUARTLOOP
+
+		; dummy -test
+		MOVF	FSR0L,W
+		CALL    BIN2ASC
+		MOVF    EVENTCNT,W
+		CALL    BIN2ASC
+                MOVFF	POSTINC0,WREG
+                MOVFF	POSTINC0,WREG
+
                 MOVLW	EOLNCHAR
                 PUTC
+
 
                 INCF	TXCNT,F
                 BSF	UPIE,UTXIE		; enable Tx ring ISR
