@@ -42,12 +42,12 @@ EVENTBUF        CBLOCK 0x0400		; event ring
 
 INITEVENTRING
                 CLRF	EVENTCNT	; event counter
-                MOVLW	HIGH EVENTBUF	; set event pointer
-                MOVF	EVENTPP,F
-                MOVF	EVENTPG,F
+                MOVLW	0x04		; set event pointer
+                MOVWF	EVENTPP
+                MOVWF	EVENTPG
                 MOVLW	LOW EVENTBUF
-                MOVF	EVENTPP+1,F
-                MOVF	EVENTPG+1,F
+                MOVWF	EVENTPP+1
+                MOVWF	EVENTPG+1
                 RETURN
 
 PUTEVENT
