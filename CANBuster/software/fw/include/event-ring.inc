@@ -94,7 +94,7 @@ GETEVENT_P_NORM MACRO
                 MOVFF   FSR0L,EVENTPG+1
                 ENDM
 
-_SENDEVENT_
+SENDEVENT
 		; check if an event is in the buffer
                 MOVF	EVENTCNT,F
                 BTFSC	STATUS,Z
@@ -176,10 +176,10 @@ EVENTUARTLOOP
 		; dummy -test
                 MOVFF	POSTINC0,WREG
                 MOVFF	POSTINC0,WREG
-		MOVF	FSR0L,W
-		CALL    BIN2ASC
-		MOVF    EVENTCNT,W
-		CALL    BIN2ASC
+                MOVF	FSR0L,W
+                CALL    BIN2ASC
+                MOVF    EVENTCNT,W
+                CALL    BIN2ASC
 
                 MOVLW	EOLNCHAR
                 PUTC

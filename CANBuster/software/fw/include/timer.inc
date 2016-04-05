@@ -54,16 +54,15 @@ SCHEDULE
                 DCFSNZ	PIOTCOUNTER,F	; PIO routine
 		RCALL	DO_PIO
 
-                RCALL   _SENDEVENT_
+		; look for events in the buffer
+                RCALL   SENDEVENT
                 RETURN
 
 DO_PIO
                 RCALL   PIOGET          ; PIO service routine - any PIO change ?
-                ; RCALL PIOCANSENDT     ; PIO CAN send
-                ; RCALL PIOUARTSEND     ; PIO SLCAN send
-                RCALL   GENEVENT
-                MOVLW   20              ; 20 * 512us = 10ms - check PIO state in 10 ms next time
-                MOVWF   PIOTCOUNTER
+                RCALL   GENEVENT	; buffer events
+                MOVLW	20              ; 20 * 512us = 10ms - check PIO state in 10 ms next time
+                MOVWF	PIOTCOUNTER
                 RETURN
 
 
