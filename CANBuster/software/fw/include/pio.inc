@@ -172,8 +172,8 @@ GENEVENT
                 RETURN
 
 GENEVENTLOOP
-                INFSNZ	PIOTEMP16,F
-                INCF	PIOTEMP16+1,F
+                INFSNZ	PIOTEMP16+1,F
+                INCF	PIOTEMP16,F
                 MOVF	PIOTEMP,W
                 ANDWF	MASK,W
                 BTFSS	STATUS,Z
@@ -266,9 +266,9 @@ PIOTXCAN2
                 MOVWF	RXB0D0
                 MOVF	ID_L,W
                 MOVWF	RXB0D1
-                MOVF	PIOTEMP16+1,W
-                MOVWF	RXB0D2
                 MOVF	PIOTEMP16,W
+                MOVWF	RXB0D2
+                MOVF	PIOTEMP16+1,W
                 MOVWF	RXB0D3
 
                 MOVF	ACTUAL,W
@@ -310,9 +310,9 @@ PIOUARTSEND
                 CALL	BIN2ASC
                 MOVF	ID_L,W
                 CALL	BIN2ASC
-                MOVF	PIOTEMP16+1,W
-                CALL	BIN2ASC
                 MOVF	PIOTEMP16,W
+                CALL	BIN2ASC
+                MOVF	PIOTEMP16+1,W
                 CALL	BIN2ASC
 
                 MOVF	ACTUAL,W
