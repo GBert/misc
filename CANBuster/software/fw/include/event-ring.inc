@@ -174,12 +174,12 @@ EVENTUARTLOOP
                 BRA	EVENTUARTLOOP
 
 		; dummy -test
+                MOVFF	POSTINC0,WREG
+                MOVFF	POSTINC0,WREG
 		MOVF	FSR0L,W
 		CALL    BIN2ASC
 		MOVF    EVENTCNT,W
 		CALL    BIN2ASC
-                MOVFF	POSTINC0,WREG
-                MOVFF	POSTINC0,WREG
 
                 MOVLW	EOLNCHAR
                 PUTC
