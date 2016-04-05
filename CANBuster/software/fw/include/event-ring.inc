@@ -90,6 +90,8 @@ GETEVENT_P_NORM MACRO
                 IORWF	FSR0H,F
                 MOVLW	0x07
                 ANDWF	FSR0H,F
+                MOVFF   FSR0H,EVENTPG
+                MOVFF   FSR0L,EVENTPG+1
                 ENDM
 
 _SENDEVENT_
