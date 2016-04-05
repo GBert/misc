@@ -141,9 +141,12 @@ EVENTTXCAN
                 MOVFF	POSTINC0,RXB0D3
                 MOVFF	POSTINC0,RXB0D4
                 MOVFF	POSTINC0,RXB0D5
+                MOVFF	POSTINC0,RXB0D6
+                MOVFF	POSTINC0,RXB0D7
+		; test
                 MOVFF	FSR0L,RXB0D6
-                ; MOVFF	POSTINC0,RXB0D7
 		MOVFF	EVENTCNT,RXB0D7
+
                 BSF	RXB0CON,TXREQ       ; start CAN transmit
 
 		; and now the SLCAN packet
@@ -178,7 +181,6 @@ EVENTUARTLOOP
 
                 MOVLW	EOLNCHAR
                 PUTC
-
 
                 INCF	TXCNT,F
                 BSF	UPIE,UTXIE		; enable Tx ring ISR
