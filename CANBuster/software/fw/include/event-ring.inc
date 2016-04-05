@@ -164,7 +164,7 @@ EVENTTXCAN
                 MOVWF	EVENTTMP
 EVENTUARTLOOP
                 MOVFF	POSTINC0,WREG
-                PUTC
+                CALL	BIN2ASC
                 DECFSZ	EVENTTMP,F
                 BRA	EVENTUARTLOOP
                 MOVLW	EOLNCHAR
