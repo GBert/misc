@@ -167,6 +167,8 @@ EVENTUARTLOOP
                 PUTC
                 DECFSZ	EVENTTMP,F
                 BRA	EVENTUARTLOOP
+                MOVLW	EOLNCHAR
+                PUTC
 
                 INCF	TXCNT,F
                 BSF	UPIE,UTXIE		; enable Tx ring ISR
