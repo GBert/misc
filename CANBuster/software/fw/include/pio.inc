@@ -177,7 +177,8 @@ GENEVENTLOOP
                 MOVF	PIOTEMP,W
                 ANDWF	MASK,W
                 BTFSS	STATUS,Z
-                RCALL	PIOSENDEVENT
+                ; RCALL	SENDEVENT
+                RCALL	PUTEVENT
 
                 BCF     STATUS,C
                 RLCF    MASK,F
