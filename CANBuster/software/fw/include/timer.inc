@@ -54,6 +54,7 @@ SCHEDULE
                 DCFSNZ	PIOTCOUNTER,F	; PIO routine
 		RCALL	DO_PIO
 
+                RCALL   _SENDEVENT_
                 RETURN
 
 DO_PIO
