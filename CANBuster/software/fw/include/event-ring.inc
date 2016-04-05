@@ -102,7 +102,7 @@ _SENDEVENT_
 		; check if UART send buffer is available
                 MOVWF	TXCNT,W
                 SUBLW	OVERFLOW - 7	; 6 buffers spare for CAN -> UART
-                BTFSC	STATUS,C
+                BTFSS	STATUS,C
                 RETURN
 
                 ; last: check for CAN buffer
