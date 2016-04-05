@@ -32,7 +32,8 @@
 ; Event ring
 ;------------------------------------------------------------------------------
 
-EVENTBUF        CBLOCK 0x0400		; event ring
+EVENTBUF        EQU 0x400		; event ring
+		CBLOCK 0x400
                 EVENTBUFFER : 1024
                 ENDC
 
@@ -42,12 +43,11 @@ EVENTBUF        CBLOCK 0x0400		; event ring
 
 INITEVENTRING
                 CLRF	EVENTCNT	; event counter
-                MOVLW	0x04		; set event pointer
-                MOVWF	EVENTPP
-                MOVWF	EVENTPG
-                MOVLW	LOW EVENTBUF
-                MOVWF	EVENTPP+1
-                MOVWF	EVENTPG+1
+                LFSR	FSR0,EVENTBUF
+                MOVFF	FSR0H,EVENTPP
+                MOVFF	FSR0H,EVENTPG
+                MOVFF	FSR0L,EVENTPP+1
+                MOVFF	FSR0L,EVENTPG+1
                 RETURN
 
 PUTEVENT
