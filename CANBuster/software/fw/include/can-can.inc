@@ -121,11 +121,12 @@ INIT
                 CLRF    DDR                 ; All O/P
 
                 RCALL   INITUART            ; Init. UART
-                RCALL   INITRING            ; Init. Rx/Tx Ring
+                RCALL   INITRING            ; Init. Rx/Tx Ring Buffer
                 RCALL   INITCAN             ; Init. CAN Bus
                 RCALL   TIMERINIT           ; Init. TIMER
                 RCALL   I2CINIT             ; Init. I2C
                 RCALL   PIOINIT             ; Init. PIO
+                RCALL   INITEVENTRING       ; Init. Event Ring Buffer
 
                 BSF     RCON,IPEN           ; Enable priority interrupts
                 BSF     INTCON,PEIE         ; Init. ISR
