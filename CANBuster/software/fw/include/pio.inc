@@ -215,12 +215,12 @@ PIOGET
                 IORWF	TOP_VAL_NEW,F
 
 #IFDEF PIOINVERT
-		MOVLW	255
-		XORWF	BUT_VAL_NEW,F
-		XORWF   TOP_VAL_NEW,F
+                MOVLW	255
+                XORWF	BUT_VAL_NEW,F
+                XORWF   TOP_VAL_NEW,F
 #ENDIF
 
-		GOTO	PIODEBOUNCE
+                BRA	PIODEBOUNCE
 
 ;
 ; vim: set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
