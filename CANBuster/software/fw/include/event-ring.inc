@@ -146,18 +146,22 @@ EVENTTXCAN
                 MOVFF	POSTINC0,RXB0D6
                 MOVFF	POSTINC0,RXB0D7
 		; test
-                MOVFF	FSR0L,RXB0D6
-		MOVFF	EVENTCNT,RXB0D7
+                ; MOVFF	FSR0L,RXB0D6
+                ; MOVFF	EVENTCNT,RXB0D7
 
                 BSF	RXB0CON,TXREQ       ; start CAN transmit
 
 		; and now the SLCAN packet
                 MOVLW	'T'
                 PUTC
-                MOVLW	00h
-                CALL	BIN2ASC
-                MOVLW	23h
-                CALL	BIN2ASC
+                MOVLW	'0'
+                PUTC
+                MOVLW	'0'
+                PUTC
+                MOVLW	'2'
+                PUTC
+                MOVLW	'3'
+                PUTC
                 MOVF	CANHASH_HIGH,W
                 CALL	BIN2ASC
                 MOVF	CANHASH_LOW,W
@@ -165,21 +169,13 @@ EVENTTXCAN
                 MOVLW	'8'
                 PUTC
                 GETEVENT_P
-                MOVLW	6
+                MOVLW	8
                 MOVWF	EVENTTMP
 EVENTUARTLOOP
                 MOVFF	POSTINC0,WREG
                 CALL	BIN2ASC
                 DECFSZ	EVENTTMP,F
                 BRA	EVENTUARTLOOP
-
-		; dummy -test
-                MOVFF	POSTINC0,WREG
-                MOVFF	POSTINC0,WREG
-                MOVF	FSR0L,W
-                CALL    BIN2ASC
-                MOVF    EVENTCNT,W
-                CALL    BIN2ASC
 
                 MOVLW	EOLNCHAR
                 PUTC
