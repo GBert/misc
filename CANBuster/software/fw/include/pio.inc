@@ -109,7 +109,7 @@ PTIMECLLOOP
                 DECFSZ	PIOTEMP,F
                 BRA	PTIMECLLOOP
 
-                GOTO	READCANHASH
+                BRA	READCANHASH
 
                 ; debouncing code from Peter Danegger
 PIODEBOUNCE

@@ -77,17 +77,18 @@ DO_HEARTBEAT
                 ; for other blinking events
                 MOVLW	0
                 CPFSGT	HEARTBEAT
-                GOTO	STATUS_LED_ON
+                BRA	STATUS_LED_ON
                 MOVLW	1
                 CPFSGT	HEARTBEAT
-                GOTO	STATUS_LED_OFF
+                BRA	STATUS_LED_OFF
                 MOVLW	2
                 CPFSGT	HEARTBEAT
-                GOTO	STATUS_LED_ON
+                BRA	STATUS_LED_ON
                 MOVLW	3
                 CPFSGT	HEARTBEAT
-                GOTO	STATUS_LED_OFF
+                BRA	STATUS_LED_OFF
 
+		; just in case ...
                 RETURN
 
 STATUS_LED_OFF
