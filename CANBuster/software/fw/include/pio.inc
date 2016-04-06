@@ -106,8 +106,8 @@ PIOINIT
                 LFSR	FSR0,PIOTIME
 PTIMECLLOOP
                 ANDWF	POSTINC0,F
-                DECFSZ	PIOTEMP,1
-                BNZ	PTIMECLLOOP
+                DECFSZ	PIOTEMP,F
+                BRA	PTIMECLLOOP
 
                 GOTO	READCANHASH
 
