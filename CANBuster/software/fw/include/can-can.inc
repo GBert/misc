@@ -138,6 +138,7 @@ INIT
 MAIN
                 RCALL   RESETUART           ; UART RESET
                 RCALL   RXCAN               ; RECEIVE CAN
+                RCALL   CANINSPECT
                 RCALL   TXCAN               ; SEND CAN
                 RCALL   CANINSPECT
                 BTFSC	INTCON, TMR0IF

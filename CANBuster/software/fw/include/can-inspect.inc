@@ -22,6 +22,13 @@
 ;------------------------------------------------------------------------------
 
 CANINSPECT
+                BTFSS	CANFRAME,6	; a new CAN frame ?
+                RETURN
+
+                BCF	CANFRAME,6	; mark as old
+                BTFSS	CANFRAME,7	; extended CAN frame ?
+                RETURN
+
                 RETURN
 
 ;
