@@ -53,21 +53,24 @@ ASC2NIB
 ; Nibble: TXPUT += 1
 ; Byte  : TXPUT += 2
 ;------------------------------------------------------------------------------
-BIN2ASC
-                MOVWF   ASCTEMP
-                SWAPF   ASCTEMP,W
-                RCALL   NIB2ASC
-                MOVF    ASCTEMP,W
-NIB2ASC
+NIB2ASC         MACRO
                 ANDLW   0x0F
                 ADDLW   6
                 BTFSC   STATUS,DC
                 ADDLW   7
                 ADDLW   42
                 PUTC                        ; <TXBUF> = W,TXPUT++
+                ENDM
+
+BIN2ASC
+                MOVWF   ASCTEMP
+                SWAPF   ASCTEMP,W
+                NIB2ASC
+                MOVF    ASCTEMP,W
+                NIB2ASC
                 RETURN
 
 ;------------------------------------------------------------------------------
 ;
-; vim: shiftwidth=4 tabstop=4 softtabstop=4 expandtab
+; vim: set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 ;
