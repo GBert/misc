@@ -66,12 +66,14 @@ TXCAN2
 ;------------------------------------------------------------------------------
 TXCANSTD
                 RCALL   ASC2NIB             ; GETC
+                MOVWF   CANFRAME
                 TXSID_10_8                  ; Set SID10..8
 
                 LFSR    FSR0,CANID
                 RCALL   ASC2BIN             ; GETC, GETC
 
                 MOVF    CANID,W
+                MOVWF   CANFRAME+1
                 TXSID_7_3                   ; Set SID7..3
 
                 MOVF    CANID,W
@@ -85,12 +87,15 @@ TXCANEXT
                 RCALL   ASC2BIN             ; GETC, GETC
 
                 MOVF    CANID,W
+                MOVWF   CANFRAME
+                BSF     CANFRAME,7          ; mark as extended frame
                 TXEXT_28_24                 ; Set EID28..24
 
                 LFSR    FSR0,CANID
                 RCALL   ASC2BIN             ; GETC, GETC
 
                 MOVF    CANID,W
+                MOVWF   CANFRAME+1
                 TXEXT_23_21                 ; Set EID23..21
 
                 MOVF    CANID,W
@@ -103,9 +108,11 @@ TXCANEXT
 
                 LFSR    FSR0,RXB0EIDH       ; Set EID15..8
                 RCALL   ASC2BIN             ; GETC, GETC
+                MOVWF   CANFRAME+2
 
                 LFSR    FSR0,RXB0EIDL       ; Set EID7..0
                 RCALL   ASC2BIN             ; GETC, GETC
+                MOVWF   CANFRAME+3
 
 ;------------------------------------------------------------------------------
 TXCAN3
@@ -115,7 +122,10 @@ TXCAN3
 
                 RCALL   ASC2NIB             ; GETC
                 BZ      TXCAN5
+                BSF     CANFRAME,6          ; mark as new frame
+
                 MOVWF   CANCNT
+                MOVWF   CANFRAME+4
                 IORWF   RXB0DLC,F           ; Set DLC
 
 ;------------------------------------------------------------------------------
@@ -124,6 +134,15 @@ TXCAN3
 TXCAN4
                 RCALL   ASC2BIN             ; Set data
                 DJNZ    CANCNT,TXCAN4
+
+                MOVFF   RXB0D0,CANFRAME+5
+                MOVFF   RXB0D1,CANFRAME+6
+                MOVFF   RXB0D2,CANFRAME+7
+                MOVFF   RXB0D3,CANFRAME+8
+                MOVFF   RXB0D4,CANFRAME+9
+                MOVFF   RXB0D5,CANFRAME+10
+                MOVFF   RXB0D6,CANFRAME+11
+                MOVFF   RXB0D7,CANFRAME+12
 
 ;------------------------------------------------------------------------------
 TXCAN5

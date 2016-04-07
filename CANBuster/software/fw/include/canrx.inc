@@ -75,6 +75,8 @@ RXSTD
 
 ;------------------------------------------------------------------------------
 RXEXT
+                BSF     CANFRAME,7          ; mark as extended frame
+
                 MOVLW   EXTDATA             ; Extended data
                 BTFSC   RXB0DLC,RXRTR
                 MOVLW   EXTRTR              ; Extended rtr
@@ -98,6 +100,8 @@ RXEXT
 
 ;------------------------------------------------------------------------------
 RXCANDLC
+                BSF     CANFRAME,6          ; mark as new frame
+
                 MOVF    RXB0DLC,W           ; Get DLC
                 ANDLW   0x0F
                 MOVWF   POSTINC0
