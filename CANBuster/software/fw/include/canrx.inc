@@ -18,6 +18,14 @@
                 RADIX   DEC
 
 ;------------------------------------------------------------------------------
+; CAN frame storage
+;------------------------------------------------------------------------------
+
+                CBLOCK
+                CANFRAME : 13
+                ENDC
+
+;------------------------------------------------------------------------------
 ; Receive message on CAN bus and send on UART
 ;------------------------------------------------------------------------------
 RXCAN
@@ -44,6 +52,7 @@ RXCANLIMIT
 
 ;------------------------------------------------------------------------------
 RXPACKET
+                LFSR    FSR0,CANFRAME
                 BTFSC   RXB0SIDL,EXID
                 BRA     RXEXT
 
@@ -55,9 +64,11 @@ RXSTD
                 PUTC                        ; Tx
  
                 RXSID_10_8                  ; Get SID10..8
+                MOVWF   POSTINC0
                 NIB2ASC                     ; Tx
 
                 RXSID_7_0                   ; Get SID7..0
+                MOVWF   POSTINC0
                 CALL    BIN2ASC             ; Tx
 
                 BRA     RXCANDLC
@@ -70,21 +81,26 @@ RXEXT
                 PUTC                        ; Tx
  
                 RXEXT_28_24                 ; Get EID28..EID24
+                MOVWF   POSTINC0
                 CALL    BIN2ASC             ; Tx
 
                 RXEXT_23_16                 ; Get EID23..EID16
+                MOVWF   POSTINC0
                 CALL    BIN2ASC             ; Tx
 
                 MOVF    RXB0EIDH,W          ; Get EID15..EID8
+                MOVWF   POSTINC0
                 CALL    BIN2ASC             ; Tx
 
                 MOVF    RXB0EIDL,W          ; Get EID7..EID0
+                MOVWF   POSTINC0
                 CALL    BIN2ASC             ; Tx
 
 ;------------------------------------------------------------------------------
 RXCANDLC
                 MOVF    RXB0DLC,W           ; Get DLC
                 ANDLW   0x0F
+                MOVWF   POSTINC0
                 MOVWF   CANCNT
                 IORLW   0x30
                 PUTC                        ; Tx
@@ -99,6 +115,19 @@ RXCANMESG
                 MOVF    POSTINC0,W
                 RCALL   BIN2ASC             ; Tx
                 DJNZ    CANCNT,RXCANMESG
+
+;------------------------------------------------------------------------------
+;
+
+                LFSR    FSR0,CANFRAME+5
+                MOVFF   RXB0D0,POSTINC0
+                MOVFF   RXB0D1,POSTINC0
+                MOVFF   RXB0D2,POSTINC0
+                MOVFF   RXB0D3,POSTINC0
+                MOVFF   RXB0D4,POSTINC0
+                MOVFF   RXB0D5,POSTINC0
+                MOVFF   RXB0D6,POSTINC0
+                MOVFF   RXB0D7,POSTINC0
 
 ;------------------------------------------------------------------------------
 RXCANEOLN
