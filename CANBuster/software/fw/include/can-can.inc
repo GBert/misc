@@ -139,8 +139,9 @@ MAIN
                 RCALL   RESETUART           ; UART RESET
                 RCALL   RXCAN               ; RECEIVE CAN
                 RCALL   TXCAN               ; SEND CAN
-		BTFSC	INTCON, TMR0IF
-		RCALL   SCHEDULE
+                RCALL   CANINSPECT
+                BTFSC	INTCON, TMR0IF
+                RCALL   SCHEDULE
                 BRA     MAIN
 
 ;------------------------------------------------------------------------------
@@ -155,6 +156,7 @@ MAIN
 #INCLUDE        "i2c.inc"                   ; I2C
 #INCLUDE        "pio.inc"                   ; PIO
 #INCLUDE        "event-ring.inc"            ; Event ring
+#INCLUDE        "can-inspect.inc"           ; CAN Inspector
 
 ;------------------------------------------------------------------------------
 ;
