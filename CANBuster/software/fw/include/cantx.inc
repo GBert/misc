@@ -116,13 +116,13 @@ TXCANEXT
 
 ;------------------------------------------------------------------------------
 TXCAN3
+                CLRF    CANFRAME+4
                 CLRF    RXB0DLC             ; Set RTR
                 BTFSC   CANCMD,1            ; r or R?
                 BSF     RXB0DLC,TXRTR
 
                 RCALL   ASC2NIB             ; GETC
                 BZ      TXCAN5
-                BSF     CANFRAME,6          ; mark as new frame
 
                 MOVWF   CANCNT
                 MOVWF   CANFRAME+4
@@ -150,6 +150,7 @@ TXCAN5
 
 ;------------------------------------------------------------------------------
 TXCANEND
+                BSF     CANFRAME,6          ; mark as new frame
                 GETC                        ; W = <RXBUF>,RXGET++
                 XORLW   EOLNCHAR
                 BNZ     TXCANEND
