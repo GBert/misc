@@ -25,9 +25,10 @@ CANINSPECT
                 BTFSS	CANFRAME,6	; a new CAN frame ?
                 RETURN
 
-                BCF	CANFRAME,6	; mark as old
+                BCF	CANFRAME,6	; mark as processed
                 BTFSS	CANFRAME,7	; extended CAN frame ?
                 RETURN
+                ; we only look at extended frames here
 
                 RETURN
 

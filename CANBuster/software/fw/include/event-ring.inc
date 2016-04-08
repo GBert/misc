@@ -1,6 +1,6 @@
 ;------------------------------------------------------------------------------
 ;
-; Event ring
+; CAN frames send ring
 ;
 ; Copyright (c) 2016 Gerhard Bertelsmann
 ;
@@ -120,13 +120,14 @@ SENDEVENT
                 RETURN
 
 EVENTTXCAN
+                GETEVENT_P
                 MOVLW   0
                 TXEXT_28_24
-                MOVLW   23h
+                MOVLW   0x23
                 TXEXT_23_21
-                MOVLW   23h
+                MOVLW   0x23
                 TXEXT_20_18
-                MOVLW   23h
+                MOVLW   0x23
                 TXEXT_17_16
                 BSF	RXB0SIDL,EXIDEN     ; Enable Extended Id
                 MOVF	CANHASH_HIGH,W
@@ -136,7 +137,6 @@ EVENTTXCAN
                 ; DLC = 8
                 MOVLW	8
                 MOVWF	RXB0DLC
-                GETEVENT_P
                 MOVFF	POSTINC0,RXB0D0
                 MOVFF	POSTINC0,RXB0D1
                 MOVFF	POSTINC0,RXB0D2
@@ -152,23 +152,21 @@ EVENTTXCAN
                 BSF	RXB0CON,TXREQ       ; start CAN transmit
 
 		; and now the SLCAN packet
+                GETEVENT_P
                 MOVLW	'T'
                 PUTC
                 MOVLW	'0'
                 PUTC
                 MOVLW	'0'
                 PUTC
-                MOVLW	'2'
-                PUTC
-                MOVLW	'3'
-                PUTC
+                MOVLW	0x23
+                CALL	BIN2ASC
                 MOVF	CANHASH_HIGH,W
                 CALL	BIN2ASC
                 MOVF	CANHASH_LOW,W
                 CALL	BIN2ASC
                 MOVLW	'8'
                 PUTC
-                GETEVENT_P
                 MOVLW	8
                 MOVWF	EVENTTMP
 EVENTUARTLOOP
