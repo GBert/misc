@@ -53,8 +53,11 @@ INITEVENTRING
 PUTEVENT
                 MOVFF	EVENTPP,FSR0H
                 MOVFF	EVENTPP+1,FSR0L
-                MOVFF	ID_H,POSTINC0
-                MOVFF	ID_L,POSTINC0
+		; mark with 0x23 as S88 event
+                MOVLW	0x23
+                MOVWF	POSTINC0
+                MOVLW	0x8
+                MOVWF	POSTINC0
                 MOVFF	PIOTEMP16,POSTINC0
                 MOVFF	PIOTEMP16+1,POSTINC0
                 MOVF	ACTUAL,W
@@ -123,11 +126,11 @@ EVENTTXCAN
                 GETEVENT_P
                 MOVLW   0
                 TXEXT_28_24
-                MOVLW   0x23
+                MOVF	INDF0,W
                 TXEXT_23_21
-                MOVLW   0x23
+                MOVF	INDF0,W
                 TXEXT_20_18
-                MOVLW   0x23
+                MOVF	POSTINC0,W
                 TXEXT_17_16
                 BSF	RXB0SIDL,EXIDEN     ; Enable Extended Id
                 MOVF	CANHASH_HIGH,W
@@ -135,10 +138,13 @@ EVENTTXCAN
                 MOVF	CANHASH_LOW,W
                 MOVWF	RXB0EIDL
                 ; DLC = 8
+                MOVF	POSTINC0,W
                 MOVLW	8
                 MOVWF	RXB0DLC
-                MOVFF	POSTINC0,RXB0D0
-                MOVFF	POSTINC0,RXB0D1
+                MOVLW   'C'
+                MOVWF	RXB0D0
+                MOVLW   'B'
+                MOVWF	RXB0D1
                 MOVFF	POSTINC0,RXB0D2
                 MOVFF	POSTINC0,RXB0D3
                 MOVFF	POSTINC0,RXB0D4
