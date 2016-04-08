@@ -75,8 +75,6 @@ RXSTD
 
 ;------------------------------------------------------------------------------
 RXEXT
-                BSF     CANFRAME,7          ; mark as extended frame
-
                 MOVLW   EXTDATA             ; Extended data
                 BTFSC   RXB0DLC,RXRTR
                 MOVLW   EXTRTR              ; Extended rtr
@@ -97,6 +95,8 @@ RXEXT
                 MOVF    RXB0EIDL,W          ; Get EID7..EID0
                 MOVWF   POSTINC0
                 CALL    BIN2ASC             ; Tx
+
+                BSF     CANFRAME,7          ; mark as extended frame
 
 ;------------------------------------------------------------------------------
 RXCANDLC
