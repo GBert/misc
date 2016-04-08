@@ -84,6 +84,19 @@ CAN_PING_CONT
                 MOVWF	POSTINC0
                 BRA	EVENT_RING_NORMALIZE
 
+;------------------------------------------------------------------------------
+; reboot - e.g. for updates
+;------------------------------------------------------------------------------
+
+CAN_REBOOT
+                ; if DLC != 0 -> return
+                MOVF	CANFRAME+4,F
+                BZ	CAN_REBOOT_CONT
+                RETURN
+
+CAN_REBOOT_CONT
+                GOTO	0
+
 ;
 ; vim: set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 ;
