@@ -172,10 +172,11 @@ EVENTTXCAN
                 CALL	BIN2ASC
                 MOVF	INDF0,W
                 ANDLW	0x0f
-                BNZ	EVENTUARTCONT
+                BRA	EVENTUARTCONT
 
                 MOVLW   '0'
                 PUTC
+                MOVF	POSTINC0,W
                 MOVF	POSTINC0,W
                 MOVF	POSTINC0,W
                 MOVF	POSTINC0,W
