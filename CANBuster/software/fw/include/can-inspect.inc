@@ -29,8 +29,58 @@ CANINSPECT
                 BTFSS	CANFRAME,7	; extended CAN frame ?
                 RETURN
                 ; we only look at extended frames here
+                MOVWF	CANFRAME+1,W
+                ; CAN PING ?
+                XORLW	0x36
+                BZ	CAN_PING
 
                 RETURN
+
+;------------------------------------------------------------------------------
+; answer CAN Ping
+;------------------------------------------------------------------------------
+
+EVENT_RING_NORMALIZE
+                MOVLW	0x04            ; make sure that FSR is in the range 0x400 - 0x7ff
+                IORWF	FSR0H,F
+                MOVLW	0x07
+                ANDWF	FSR0H,F
+                MOVFF	FSR0H,EVENTPP
+                MOVFF	FSR0L,EVENTPP+1
+
+                INCF	EVENTCNT,F
+                RETURN
+;------------------------------------------------------------------------------
+; answer CAN Ping
+;------------------------------------------------------------------------------
+
+CAN_PING
+                ; if DLC != 0 -> return
+                MOVF	CANFRAME+4,F
+                BZ	CAN_PING_CONT
+                RETURN
+
+CAN_PING_CONT
+                MOVFF	EVENTPP,FSR0H
+                MOVFF	EVENTPP+1,FSR0L
+                ; mark with 0x37 as CAN Ping response
+                MOVLW	0x37
+                MOVWF	POSTINC0
+                MOVLW	0x8
+                MOVWF	POSTINC0
+                MOVLW	'U'
+                MOVWF	POSTINC0
+                MOVLW	'S'
+                MOVWF	POSTINC0
+                MOVLW	1
+                MOVWF	POSTINC0
+                MOVLW	0
+                MOVWF	POSTINC0
+                MOVWF	POSTINC0
+                ; this is a back detector (german Rueckmelder)
+                MOVLW	0x40
+                MOVWF	POSTINC0
+                BRA	EVENT_RING_NORMALIZE
 
 ;
 ; vim: set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
