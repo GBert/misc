@@ -26,11 +26,12 @@ CANINSPECT
                 RETURN
 
                 BCF	CANFRAME,6	; mark as processed
-		; BRA	CAN_PING
-                ; BTFSS	CANFRAME,7	; extended CAN frame ?
-                ; RETURN
-                ; we only look at extended frames here
-                MOVWF	CANFRAME+1,W
+
+                ; we are looking only for extended frames here
+                BTFSS	CANFRAME,7	; extended CAN frame ?
+                RETURN
+
+                MOVF	CANFRAME+1,W
                 ; CAN PING ?
                 XORLW	0x36
                 BZ	CAN_PING
