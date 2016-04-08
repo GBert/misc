@@ -43,7 +43,7 @@ CANINSPECT
                 RETURN
 
 ;------------------------------------------------------------------------------
-; answer CAN Ping
+; be sure the pointer is in the appropiate range
 ;------------------------------------------------------------------------------
 
 EVENT_RING_NORMALIZE
