@@ -172,7 +172,7 @@ EVENTTXCAN
                 CALL	BIN2ASC
                 MOVF	INDF0,W
                 ANDLW	0x0f
-                BRA	EVENTUARTCONT
+                BNZ	EVENTUARTCONT
 
                 MOVLW   '0'
                 PUTC
@@ -193,7 +193,7 @@ EVENTUARTCONT
                 MOVLW   'B'
                 CALL	BIN2ASC
                 MOVF	POSTINC0,W
-                SUBLW	2
+                ADDLW	-2
                 MOVWF	EVENTTMP
 EVENTUARTLOOP
                 MOVFF	POSTINC0,WREG
