@@ -30,10 +30,14 @@ CANINSPECT
                 ; we are looking only for extended frames here
                 BTFSS	CANFRAME,7	; extended CAN frame ?
                 RETURN
+		;
+                ; System CMD 0x00 ?
+                MOVF	CANFRAME+1,F
+                BZ	SYSYTEM_CMD
 
                 MOVF	CANFRAME+1,W
-                ; CAN PING ?
-                XORLW	0x36
+                ; CAN PING 0x30 ?
+                XORLW	0x30
                 BZ	CAN_PING
 
                 RETURN
@@ -52,8 +56,59 @@ EVENT_RING_NORMALIZE
 
                 INCF	EVENTCNT,F
                 RETURN
+
 ;------------------------------------------------------------------------------
-; answer CAN Ping
+; answer System Command (0x00)
+;------------------------------------------------------------------------------
+
+SYSYTEM_CMD
+                MOVF    CANFRAME+5,W
+                XORLW	'C'
+                BNZ	SYSYTEM_CMD_OTHER
+                MOVF    CANFRAME+6,W
+                XORLW	'B'
+                BNZ	SYSYTEM_CMD_OTHER
+                MOVF    CANFRAME+7,W
+                XORLW	'U'
+                BNZ	SYSYTEM_CMD_OTHER
+                MOVF    CANFRAME+8,W
+                XORLW	'S'
+                BNZ	SYSYTEM_CMD_OTHER
+		; Reboot ?
+                ; DLC = 6
+                MOVF	CANFRAME+4,W
+                XORLW	6
+                BNZ	SYSYTEM_CMD_OTHER
+                MOVF    CANFRAME+9,W
+                XORLW	0x80
+                BNZ	SYSYTEM_CMD_OTHER
+                BRA	CAN_REBOOT
+
+SYSYTEM_CMD_OTHER
+                MOVFF	EVENTPP,FSR0H
+                MOVFF	EVENTPP+1,FSR0L
+                ; mark with 0x01 as System CMD Response
+                MOVLW	0x01
+                MOVWF	POSTINC0
+                MOVLW	0x0
+                MOVWF	POSTINC0
+                MOVWF	POSTINC0
+                MOVWF	POSTINC0
+                MOVWF	POSTINC0
+                MOVWF	POSTINC0
+                MOVWF	POSTINC0
+                MOVWF	POSTINC0
+                BRA	EVENT_RING_NORMALIZE
+
+;------------------------------------------------------------------------------
+; System Sub CMD Reset 0x80 -> reboot - e.g. for updates
+;------------------------------------------------------------------------------
+
+CAN_REBOOT
+                GOTO	0
+
+;------------------------------------------------------------------------------
+; answer CAN Ping (0x30)
 ;------------------------------------------------------------------------------
 
 CAN_PING
@@ -65,8 +120,8 @@ CAN_PING
 CAN_PING_CONT
                 MOVFF	EVENTPP,FSR0H
                 MOVFF	EVENTPP+1,FSR0L
-                ; mark with 0x37 as CAN Ping response
-                MOVLW	0x37
+                ; mark with 0x31 as CAN Ping response
+                MOVLW	0x31
                 MOVWF	POSTINC0
                 MOVLW	0x8
                 MOVWF	POSTINC0
@@ -83,19 +138,6 @@ CAN_PING_CONT
                 MOVLW	0x40
                 MOVWF	POSTINC0
                 BRA	EVENT_RING_NORMALIZE
-
-;------------------------------------------------------------------------------
-; reboot - e.g. for updates
-;------------------------------------------------------------------------------
-
-CAN_REBOOT
-                ; if DLC != 0 -> return
-                MOVF	CANFRAME+4,F
-                BZ	CAN_REBOOT_CONT
-                RETURN
-
-CAN_REBOOT_CONT
-                GOTO	0
 
 ;
 ; vim: set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
