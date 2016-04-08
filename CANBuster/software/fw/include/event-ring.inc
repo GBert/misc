@@ -139,7 +139,6 @@ EVENTTXCAN
                 MOVWF	RXB0EIDL
                 ; DLC = 8
                 MOVF	POSTINC0,W
-                MOVLW	8
                 MOVWF	RXB0DLC
                 MOVLW   'C'
                 MOVWF	RXB0D0
@@ -165,15 +164,35 @@ EVENTTXCAN
                 PUTC
                 MOVLW	'0'
                 PUTC
-                MOVLW	0x23
+                MOVF	POSTINC0,W
                 CALL	BIN2ASC
                 MOVF	CANHASH_HIGH,W
                 CALL	BIN2ASC
                 MOVF	CANHASH_LOW,W
                 CALL	BIN2ASC
-                MOVLW	'8'
+                MOVF	INDF0,W
+                ANDLW	0x0f
+                BNZ	EVENTUARTCONT
+
+                MOVLW   '0'
                 PUTC
-                MOVLW	8
+                MOVF	POSTINC0,W
+                MOVF	POSTINC0,W
+                MOVF	POSTINC0,W
+                MOVF	POSTINC0,W
+                MOVF	POSTINC0,W
+                MOVF	POSTINC0,W
+                BRA	EVENTUARTFIN
+
+EVENTUARTCONT
+                ADDLW	0x30
+                PUTC
+                MOVLW   'C'
+                CALL	BIN2ASC
+                MOVLW   'B'
+                CALL	BIN2ASC
+                MOVF	POSTINC0,W
+                SUBLW	2
                 MOVWF	EVENTTMP
 EVENTUARTLOOP
                 MOVFF	POSTINC0,WREG
@@ -181,6 +200,7 @@ EVENTUARTLOOP
                 DECFSZ	EVENTTMP,F
                 BRA	EVENTUARTLOOP
 
+EVENTUARTFIN
                 MOVLW	EOLNCHAR
                 PUTC
 
