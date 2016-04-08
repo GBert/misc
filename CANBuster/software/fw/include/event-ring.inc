@@ -188,9 +188,9 @@ EVENTUARTCONT
                 ADDLW	0x30
                 PUTC
                 MOVLW   'C'
-                CALL	BIN2ASC
+                PUTC
                 MOVLW   'B'
-                CALL	BIN2ASC
+                PUTC
                 MOVF	POSTINC0,W
                 SUBLW	2
                 MOVWF	EVENTTMP
