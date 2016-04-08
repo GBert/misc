@@ -30,7 +30,7 @@ CANINSPECT
                 ; we are looking only for extended frames here
                 BTFSS	CANFRAME,7	; extended CAN frame ?
                 RETURN
-		;
+                ;
                 ; System CMD 0x00 ?
                 MOVF	CANFRAME+1,F
                 BZ	SYSYTEM_CMD
@@ -90,14 +90,16 @@ SYSYTEM_CMD_OTHER
                 ; mark with 0x01 as System CMD Response
                 MOVLW	0x01
                 MOVWF	POSTINC0
-                MOVLW	0x0
+                MOVF	CANFRAME+4,W
+                MOVWF	POSTINC0
+                MOVLW	0
                 MOVWF	POSTINC0
                 MOVWF	POSTINC0
                 MOVWF	POSTINC0
                 MOVWF	POSTINC0
                 MOVWF	POSTINC0
                 MOVWF	POSTINC0
-                MOVWF	POSTINC0
+                MOVWF	INDF0
                 BRA	EVENT_RING_NORMALIZE
 
 ;------------------------------------------------------------------------------
