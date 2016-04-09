@@ -74,7 +74,7 @@ SYSYTEM_CMD
                 MOVF    CANFRAME+8,W
                 XORLW	'S'
                 BNZ	SYSYTEM_CMD_OTHER
-		; Reboot ?
+                ; Reboot ?
                 ; DLC = 6
                 MOVF	CANFRAME+4,W
                 XORLW	6

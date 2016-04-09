@@ -33,7 +33,7 @@
 ;------------------------------------------------------------------------------
 
 EVENTBUF        EQU 0x400		; event ring
-		CBLOCK 0x400
+                CBLOCK 0x400
                 EVENTBUFFER : 1024
                 ENDC
 
@@ -53,7 +53,7 @@ INITEVENTRING
 PUTEVENT
                 MOVFF	EVENTPP,FSR0H
                 MOVFF	EVENTPP+1,FSR0L
-		; mark with 0x23 as S88 event
+                ; mark with 0x23 as S88 event
                 MOVLW	0x23
                 MOVWF	POSTINC0
                 MOVLW	0x8
@@ -98,18 +98,18 @@ GETEVENT_P_NORM MACRO
                 ENDM
 
 SENDEVENT
-		; check if an event is in the buffer
+                ; check if an event is in the buffer
                 MOVF	EVENTCNT,F
                 BTFSC	STATUS,Z
                 RETURN
-		; check if UART send buffer is available
+                ; check if UART send buffer is available
                 MOVLW	OVERFLOW - 5	; 5 buffers spare for CAN -> UART
                 SUBWF	TXCNT,W	
                 BTFSC	STATUS,C
                 RETURN
 
                 ; last: check for CAN buffer
-		; Find a Tx slot - start with TX buffer 2 down to 1
+                ; Find a Tx slot - start with TX buffer 2 down to 1
                 MOVLW   CAN_WIN_TXB2        ; Window mode on TXB2
                 MOVWF   CANCON
                 BTFSS   TXB2CON,TXREQ
@@ -150,13 +150,13 @@ EVENTTXCAN
                 MOVFF	POSTINC0,RXB0D5
                 MOVFF	POSTINC0,RXB0D6
                 MOVFF	POSTINC0,RXB0D7
-		; test
+                ; test
                 ; MOVFF	FSR0L,RXB0D6
                 ; MOVFF	EVENTCNT,RXB0D7
 
                 BSF	RXB0CON,TXREQ       ; start CAN transmit
 
-		; and now the SLCAN packet
+                ; and now the SLCAN packet
                 GETEVENT_P
                 MOVLW	'T'
                 PUTC
@@ -208,7 +208,7 @@ EVENTUARTFIN
                 INCF	TXCNT,F
                 BSF	UPIE,UTXIE		; enable Tx ring ISR
 
-		; fix the pointer if necessary
+                ; fix the pointer if necessary
                 GETEVENT_P_NORM
                 RETURN
 
