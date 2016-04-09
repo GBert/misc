@@ -65,9 +65,9 @@ PUTEVENT
                 MOVLW	0x8
                 MOVWF	POSTINC0
                 ; DATA
-		MOVLW   'C'
+                MOVLW   'C'
                 MOVWF	POSTINC0
-		MOVLW   'B'
+                MOVLW   'B'
                 MOVWF	POSTINC0
                 MOVFF	PIOTEMP16,POSTINC0
                 MOVFF	PIOTEMP16+1,POSTINC0
@@ -84,12 +84,12 @@ PUTEVENT
                 CLRF	POSTINC0
 
 		;;;;;;;;;;;;;;;;;;;;;;
-         	MOVLW	15
+                MOVLW	15
                 ADDWF   FSR0L,F
                 BNC     NORM_C1
                 INCF    FSR0H,F
 NORM_C1
-         	MOVLW   0xF0
+                MOVLW   0xF0
                 ANDWF   FSR0L,F
 
                 MOVLW	0x04		; make sure that FSR is in the range 0x400 - 0x7ff
