@@ -99,7 +99,6 @@ SYSYTEM_CMD_OTHER
                 MOVWF	POSTINC0
                 MOVWF	POSTINC0
                 MOVWF	POSTINC0
-                MOVWF	INDF0
                 BRA	EVENT_RING_NORMALIZE
 
 ;------------------------------------------------------------------------------
