@@ -47,6 +47,14 @@ CANINSPECT
 ;------------------------------------------------------------------------------
 
 EVENT_RING_NORMALIZE
+                MOVLW   15
+                ADDWF   FSR0L,F
+                BNC     NORM_POINTER1
+                INCF    FSR0H,F
+NORM_POINTER1
+                MOVLW   0xF0
+                ANDWF   FSR0L,F
+
                 MOVLW	0x04            ; make sure that FSR is in the range 0x400 - 0x7ff
                 IORWF	FSR0H,F
                 MOVLW	0x07
@@ -88,8 +96,12 @@ SYSYTEM_CMD_OTHER
                 MOVFF	EVENTPP,FSR0H
                 MOVFF	EVENTPP+1,FSR0L
                 ; mark with 0x01 as System CMD Response
+                MOVLW	0x00
+                MOVWF	POSTINC0
                 MOVLW	0x01
                 MOVWF	POSTINC0
+                MOVFF   CANHASH_HIGH,POSTINC0
+                MOVFF   CANHASH_LOW,POSTINC0
                 MOVF	CANFRAME+4,W
                 MOVWF	POSTINC0
                 MOVLW	0
@@ -122,9 +134,18 @@ CAN_PING_CONT
                 MOVFF	EVENTPP,FSR0H
                 MOVFF	EVENTPP+1,FSR0L
                 ; mark with 0x31 as CAN Ping response
+                MOVLW	0x0
+                MOVWF	POSTINC0
                 MOVLW	0x31
                 MOVWF	POSTINC0
+                MOVFF   CANHASH_HIGH,POSTINC0
+                MOVFF   CANHASH_LOW,POSTINC0
+                MOVWF	POSTINC0
                 MOVLW	0x8
+                MOVWF	POSTINC0
+                MOVLW	'C'
+                MOVWF	POSTINC0
+                MOVLW	'B'
                 MOVWF	POSTINC0
                 MOVLW	'U'
                 MOVWF	POSTINC0

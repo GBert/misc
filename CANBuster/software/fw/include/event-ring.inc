@@ -53,10 +53,21 @@ INITEVENTRING
 PUTEVENT
                 MOVFF	EVENTPP,FSR0H
                 MOVFF	EVENTPP+1,FSR0L
+                MOVLW	0x00
+                MOVWF	POSTINC0
                 ; mark with 0x23 as S88 event
                 MOVLW	0x23
                 MOVWF	POSTINC0
+
+                MOVFF	CANHASH_HIGH,POSTINC0
+                MOVFF	CANHASH_LOW,POSTINC0
+                ; DLC
                 MOVLW	0x8
+                MOVWF	POSTINC0
+                ; DATA
+		MOVLW   'C'
+                MOVWF	POSTINC0
+		MOVLW   'B'
                 MOVWF	POSTINC0
                 MOVFF	PIOTEMP16,POSTINC0
                 MOVFF	PIOTEMP16+1,POSTINC0
@@ -72,29 +83,49 @@ PUTEVENT
                 CLRF	POSTINC0	; time - unused
                 CLRF	POSTINC0
 
+		;;;;;;;;;;;;;;;;;;;;;;
+         	MOVLW	15
+                ADDWF   FSR0L,F
+                BNC     NORM_C1
+                INCF    FSR0H,F
+NORM_C1
+         	MOVLW   0xF0
+                ANDWF   FSR0L,F
+
                 MOVLW	0x04		; make sure that FSR is in the range 0x400 - 0x7ff
                 IORWF	FSR0H,F
                 MOVLW	0x07
                 ANDWF	FSR0H,F
+
                 MOVFF   FSR0H,EVENTPP
                 MOVFF   FSR0L,EVENTPP+1
 
                 INCF	EVENTCNT,F
                 RETURN
 
-GETEVENT_P      MACRO
-                MOVFF	EVENTPG,FSR0H
-                MOVFF	EVENTPG+1,FSR0L
-                ENDM
 
 GETEVENT_P_NORM MACRO
-                DECF	EVENTCNT,F
+                MOVLW	15
+                ADDWF   FSR0L,F
+                BNC     NORM_C2
+                INCF    FSR0H,F
+NORM_C2
+         	MOVLW   0xF0
+                ANDWF   FSR0L,F
+
                 MOVLW	0x04		; make sure that FSR is in the range 0x400 - 0x7ff
                 IORWF	FSR0H,F
                 MOVLW	0x07
                 ANDWF	FSR0H,F
                 MOVFF   FSR0H,EVENTPG
                 MOVFF   FSR0L,EVENTPG+1
+
+                RETURN
+                ENDM
+
+GETEVENT_P      MACRO
+                MOVFF	EVENTPG,FSR0H
+                MOVFF	EVENTPG+1,FSR0L
                 ENDM
 
 SENDEVENT
@@ -124,7 +155,7 @@ SENDEVENT
 
 EVENTTXCAN
                 GETEVENT_P
-                MOVLW   0
+                MOVF	POSTINC0,W
                 TXEXT_28_24
                 MOVF	INDF0,W
                 TXEXT_23_21
@@ -133,26 +164,24 @@ EVENTTXCAN
                 MOVF	POSTINC0,W
                 TXEXT_17_16
                 BSF	RXB0SIDL,EXIDEN     ; Enable Extended Id
-                MOVF	CANHASH_HIGH,W
-                MOVWF	RXB0EIDH
-                MOVF	CANHASH_LOW,W
-                MOVWF	RXB0EIDL
-                ; DLC = 8
-                MOVF	POSTINC0,W
-                MOVWF	RXB0DLC
-                MOVLW   'C'
-                MOVWF	RXB0D0
-                MOVLW   'B'
-                MOVWF	RXB0D1
+                MOVFF	POSTINC0,RXB0EIDH
+                MOVFF   POSTINC0,RXB0EIDL
+                ; DLC
+                MOVFF	POSTINC0,RXB0DLC
+                ; DATA
+                MOVFF	POSTINC0,RXB0D0
+                MOVFF	POSTINC0,RXB0D1
                 MOVFF	POSTINC0,RXB0D2
                 MOVFF	POSTINC0,RXB0D3
                 MOVFF	POSTINC0,RXB0D4
                 MOVFF	POSTINC0,RXB0D5
                 MOVFF	POSTINC0,RXB0D6
                 MOVFF	POSTINC0,RXB0D7
+
                 ; test
-                ; MOVFF	FSR0L,RXB0D6
-                ; MOVFF	EVENTCNT,RXB0D7
+                MOVFF	FSR0H,RXB0D5
+                MOVFF	FSR0L,RXB0D6
+                MOVFF	EVENTCNT,RXB0D7
 
                 BSF	RXB0CON,TXREQ       ; start CAN transmit
 
@@ -160,41 +189,27 @@ EVENTTXCAN
                 GETEVENT_P
                 MOVLW	'T'
                 PUTC
-                MOVLW	'0'
-                PUTC
-                MOVLW	'0'
-                PUTC
                 MOVF	POSTINC0,W
                 CALL	BIN2ASC
-                MOVF	CANHASH_HIGH,W
+                MOVF	POSTINC0,W
                 CALL	BIN2ASC
-                MOVF	CANHASH_LOW,W
+                MOVF	POSTINC0,W
                 CALL	BIN2ASC
-                MOVF	INDF0,W
+                MOVF	POSTINC0,W
+                CALL	BIN2ASC
+                MOVF	POSTINC0,W
                 ANDLW	0x0f
                 BNZ	EVENTUARTCONT
 
                 MOVLW   '0'
                 PUTC
-                MOVF	POSTINC0,W
-                MOVF	POSTINC0,W
-                MOVF	POSTINC0,W
-                MOVF	POSTINC0,W
-                MOVF	POSTINC0,W
-                MOVF	POSTINC0,W
-                MOVF	POSTINC0,W
                 BRA	EVENTUARTFIN
 
 EVENTUARTCONT
+	        ; DLC
+                MOVWF	EVENTTMP
                 ADDLW	0x30
                 PUTC
-                MOVLW   'C'
-                CALL	BIN2ASC
-                MOVLW   'B'
-                CALL	BIN2ASC
-                MOVF	POSTINC0,W
-                ADDLW	-2
-                MOVWF	EVENTTMP
 EVENTUARTLOOP
                 MOVFF	POSTINC0,WREG
                 CALL	BIN2ASC
@@ -208,6 +223,8 @@ EVENTUARTFIN
                 INCF	TXCNT,F
                 BSF	UPIE,UTXIE		; enable Tx ring ISR
 
+                ; one event done
+                DECF	EVENTCNT,F
                 ; fix the pointer if necessary
                 GETEVENT_P_NORM
                 RETURN

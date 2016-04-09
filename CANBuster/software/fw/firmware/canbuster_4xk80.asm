@@ -65,7 +65,7 @@
 #DEFINE         DDR         DDRB
 #DEFINE		PIO	    1
 #DEFINE		LEDHIGH     1
-#DEFINE		PIOINVERT   1
+;#DEFINE		PIOINVERT   1
 
 ;------------------------------------------------------------------------------
 ; Device firmware
