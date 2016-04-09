@@ -179,9 +179,9 @@ EVENTTXCAN
                 MOVFF	POSTINC0,RXB0D7
 
                 ; test
-                MOVFF	FSR0H,RXB0D5
-                MOVFF	FSR0L,RXB0D6
-                MOVFF	EVENTCNT,RXB0D7
+                ; MOVFF	FSR0H,RXB0D5
+                ; MOVFF	FSR0L,RXB0D6
+                ; MOVFF	EVENTCNT,RXB0D7
 
                 BSF	RXB0CON,TXREQ       ; start CAN transmit
 

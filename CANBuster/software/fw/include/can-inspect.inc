@@ -140,7 +140,6 @@ CAN_PING_CONT
                 MOVWF	POSTINC0
                 MOVFF   CANHASH_HIGH,POSTINC0
                 MOVFF   CANHASH_LOW,POSTINC0
-                MOVWF	POSTINC0
                 MOVLW	0x8
                 MOVWF	POSTINC0
                 MOVLW	'C'
