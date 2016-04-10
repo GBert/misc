@@ -17,14 +17,9 @@
                 LIST
                 RADIX   DEC
 
-;------------------------------------------------------------------------------
-; Location ID 
-; 0x200000	CAN HASH High
-; 0x200001	CAN HASH Low
-;------------------------------------------------------------------------------
 
 ;------------------------------------------------------------------------------
-; Location ID routines
+; Generic Flash routines
 ;------------------------------------------------------------------------------
 
 EEPROM_REFRESH
@@ -68,16 +63,25 @@ PROGRAM_MEMORY
                 BCF     EECON1, WREN	; Disable writes on write complete (EEIF set)
                 RETURN
 
+;------------------------------------------------------------------------------
+; Location ID routines
+;------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
+; Location ID
+; 0x200000	CAN HASH High
+; 0x200001	CAN HASH Low
+;------------------------------------------------------------------------------
+
 SETLOCIDP
-                MOVLW	0
                 MOVWF   TBLPTRL
-                MOVWF   TBLPTRH
+                CLRF    TBLPTRH
                 MOVLW   20h
                 MOVWF   TBLPTRU
                 RETURN
 
 READCANHASH
-                ; read location ID - CAN hash ID is stored at 200000h + 200001h
+                ; read CAN hash ID - stored at 200000h + 200001h
+                MOVLW	0
                 RCALL   SETLOCIDP
                 TBLRD*+
                 MOVF    TABLAT,W
@@ -90,7 +94,8 @@ READCANHASH
                 RETURN
 
 SETCANHASH
-                ; set location ID - CAN hash ID is stored at 200000h + 200001h
+                ; set CAN hash ID - stored at 200000h + 200001h
+                MOVLW	0
                 RCALL   SETLOCIDP
                 MOVF    CANHASH_HIGH,W
                 TBLWT*+
