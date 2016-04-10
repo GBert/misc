@@ -43,6 +43,28 @@ CANINSPECT
                 RETURN
 
 ;------------------------------------------------------------------------------
+; generic routines
+;------------------------------------------------------------------------------
+
+CHECK_ID
+                MOVF    CANFRAME+5,W
+                XORLW   'C'
+                BTFSS   STATUS,Z
+                RETURN
+                MOVF    CANFRAME+6,W
+                XORLW   'B'
+                BTFSS   STATUS,Z
+                RETURN
+                MOVF    CANFRAME+7,W
+                XORWF   ID_H,W
+                BTFSS   STATUS,Z
+                RETURN
+                MOVF    CANFRAME+8,W
+                XORWF   ID_L,W
+                ; return now anyway
+                RETURN
+
+;------------------------------------------------------------------------------
 ; be sure the pointer is in the appropiate range
 ;------------------------------------------------------------------------------
 
@@ -70,17 +92,7 @@ NORM_POINTER1
 ;------------------------------------------------------------------------------
 
 SYSYTEM_CMD
-                MOVF    CANFRAME+5,W
-                XORLW	'C'
-                BNZ	SYSYTEM_CMD_OTHER
-                MOVF    CANFRAME+6,W
-                XORLW	'B'
-                BNZ	SYSYTEM_CMD_OTHER
-                MOVF    CANFRAME+7,W
-                XORLW	'U'
-                BNZ	SYSYTEM_CMD_OTHER
-                MOVF    CANFRAME+8,W
-                XORLW	'S'
+                RCALL   CHECK_ID
                 BNZ	SYSYTEM_CMD_OTHER
                 ; Reboot ?
                 ; DLC = 6
@@ -146,10 +158,8 @@ CAN_PING_CONT
                 MOVWF	POSTINC0
                 MOVLW	'B'
                 MOVWF	POSTINC0
-                MOVLW	'U'
-                MOVWF	POSTINC0
-                MOVLW	'S'
-                MOVWF	POSTINC0
+                MOVFF	ID_H,POSTINC0
+                MOVFF	ID_L,POSTINC0
                 MOVLW	1
                 MOVWF	POSTINC0
                 MOVLW	0
@@ -159,6 +169,10 @@ CAN_PING_CONT
                 MOVLW	0x40
                 MOVWF	POSTINC0
                 BRA	EVENT_RING_NORMALIZE
+
+;------------------------------------------------------------------------------
+; Setup Command (0x3A)
+;------------------------------------------------------------------------------
 
 ;
 ; vim: set shiftwidth=4 tabstop=4 softtabstop=4 expandtab

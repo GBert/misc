@@ -79,6 +79,7 @@ SETLOCIDP
                 MOVWF   TBLPTRU
                 RETURN
 
+READUID
 READCANHASH
                 ; read CAN hash ID - stored at 200000h + 200001h
                 MOVLW	0
@@ -101,6 +102,10 @@ SETCANHASH
                 TBLWT*+
                 MOVF    CANHASH_HIGH,W
                 TBLWT*
+                RETURN
+
+READCANHASH_N
+                RCALL   READUID
                 RETURN
 
 ;
