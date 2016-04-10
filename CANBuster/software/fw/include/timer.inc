@@ -41,7 +41,7 @@ TIMERINIT
                 MOVLW   (1 << TMR0ON) + (1 << T08BIT) + (1 << T0PS2)
                 MOVWF   T0CON
                 CLRF	HEARTBEAT
-		MOVLW	20		; 20 * 512us = 10ms
+                MOVLW	20		; 20 * 512us = 10ms
                 MOVWF	PIOTCOUNTER
                 RETURN
 
@@ -52,9 +52,9 @@ SCHEDULE
                 RCALL	DO_HEARTBEAT
 
                 DCFSNZ	PIOTCOUNTER,F	; PIO routine
-		RCALL	DO_PIO
+                RCALL	DO_PIO
 
-		; look for events in the buffer
+                ; look for events in the buffer
                 RCALL   SENDEVENT
                 RETURN
 
@@ -87,9 +87,6 @@ DO_HEARTBEAT
                 MOVLW	3
                 CPFSGT	HEARTBEAT
                 BRA	STATUS_LED_OFF
-
-		; just in case ...
-                RETURN
 
 STATUS_LED_OFF
                 BSF	LATC, 2

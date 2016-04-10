@@ -83,7 +83,7 @@ PUTEVENT
                 CLRF	POSTINC0	; time - unused
                 CLRF	POSTINC0
 
-		;;;;;;;;;;;;;;;;;;;;;;
+                ;;;;;;;;;;;;;;;;;;;;;;
                 MOVLW	15
                 ADDWF   FSR0L,F
                 BNC     NORM_C1
@@ -110,7 +110,7 @@ GETEVENT_P_NORM MACRO
                 BNC     NORM_C2
                 INCF    FSR0H,F
 NORM_C2
-         	MOVLW   0xF0
+                MOVLW   0xF0
                 ANDWF   FSR0L,F
 
                 MOVLW	0x04		; make sure that FSR is in the range 0x400 - 0x7ff
@@ -206,7 +206,7 @@ EVENTTXCAN
                 BRA	EVENTUARTFIN
 
 EVENTUARTCONT
-	        ; DLC
+                ; DLC
                 MOVWF	EVENTTMP
                 ADDLW	0x30
                 PUTC

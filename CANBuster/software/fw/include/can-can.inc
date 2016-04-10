@@ -155,6 +155,7 @@ MAIN
 #INCLUDE        "can.inc"                   ; CAN
 #INCLUDE        "timer.inc"                 ; Timer
 #INCLUDE        "i2c.inc"                   ; I2C
+#INCLUDE        "id.inc"                   ; PIO
 #INCLUDE        "pio.inc"                   ; PIO
 #INCLUDE        "event-ring.inc"            ; Event ring
 #INCLUDE        "can-inspect.inc"           ; CAN Inspector

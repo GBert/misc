@@ -49,23 +49,6 @@
 ; Init. PIO
 ;------------------------------------------------------------------------------
 
-READCANHASH
-                ; read location ID - CAN hash ID is stored at 200000h + 200001h
-                MOVLW	0
-                MOVWF	TBLPTRL
-                MOVWF   TBLPTRH
-                MOVLW	20h
-                MOVWF   TBLPTRU
-                TBLRD*+
-                MOVF	TABLAT,W
-                IORLW	0x03		; make sure that's a valid hash
-                MOVWF	CANHASH_HIGH
-                TBLRD*
-                MOVF	TABLAT,W
-                ANDLW	0x7F
-                MOVWF   CANHASH_LOW
-                RETURN
-
 PIOINIT
                 ; set ports as inputs
 
