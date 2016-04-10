@@ -80,32 +80,46 @@ SETLOCIDP
                 RETURN
 
 READUID
-READCANHASH
                 ; read CAN hash ID - stored at 200000h + 200001h
                 MOVLW	0
                 RCALL   SETLOCIDP
                 TBLRD*+
-                MOVF    TABLAT,W
-                IORLW   0x03		; make sure that's a valid hash
-                MOVWF   CANHASH_HIGH
+                MOVFF   TABLAT,ID_L
                 TBLRD*
-                MOVF    TABLAT,W
-                ANDLW   0x7F
-                MOVWF   CANHASH_LOW
+                MOVFF   TABLAT,ID_H
                 RETURN
 
-SETCANHASH
+SETUID
                 ; set CAN hash ID - stored at 200000h + 200001h
                 MOVLW	0
                 RCALL   SETLOCIDP
-                MOVF    CANHASH_HIGH,W
+                MOVF    ID_H,W
                 TBLWT*+
-                MOVF    CANHASH_HIGH,W
+                MOVF    ID_L,W
                 TBLWT*
                 RETURN
 
-READCANHASH_N
+;------------------------------------------------------------------------------
+; Set CAN Hash accroding to Maerklin
+;------------------------------------------------------------------------------
+READCANHASH
                 RCALL   READUID
+                MOVLW   'C'
+                XORWF   ID_H,W
+                MOVWF   CANHASH_HIGH
+                ; shift left 3
+                SWAPF	CANHASH_HIGH,F
+                RRNCF	CANHASH_HIGH,F
+                ; set to lower bits
+                BSF     CANHASH_HIGH,0
+                BSF     CANHASH_HIGH,1
+
+                MOVLW   'B'
+                XORWF   ID_L,W
+                MOVWF   CANHASH_LOW
+                BTFSS   ID_L,7
+                BSF     CANHASH_HIGH,2
+                BCF     CANHASH_LOW,7
                 RETURN
 
 ;
