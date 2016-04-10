@@ -86,26 +86,24 @@ PIOINIT
                 MOVLW	b'00000111'
                 IORWF	TRISE,F
 #ENDIF
-                ; set vars
-                MOVLW	255
-                MOVWF	BUT_VAL_NEW
-                MOVWF	BUT_VAL_CHG
-                MOVWF	BUT_VAL_STATE
-                MOVWF	TOP_VAL_NEW
-                MOVWF	TOP_VAL_CHG
-                MOVWF	TOP_VAL_STATE
-                MOVWF	BUT_CT0
-                MOVWF	BUT_CT1
-                MOVWF	TOP_CT0
-                MOVWF	TOP_CT1
+                ; set vars to 0xff
+                SETF	BUT_VAL_NEW
+                SETF	BUT_VAL_CHG
+                SETF	BUT_VAL_STATE
+                SETF	TOP_VAL_NEW
+                SETF	TOP_VAL_CHG
+                SETF	TOP_VAL_STATE
+                SETF	BUT_CT0
+                SETF	BUT_CT1
+                SETF	TOP_CT0
+                SETF	TOP_CT1
 
                 ; delete timers
                 MOVLW	16
                 MOVWF	PIOTEMP
-                CLRW
                 LFSR	FSR0,PIOTIME
 PTIMECLLOOP
-                ANDWF	POSTINC0,F
+                CLRF	POSTINC0
                 DECFSZ	PIOTEMP,F
                 BRA	PTIMECLLOOP
 
