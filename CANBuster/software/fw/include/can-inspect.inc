@@ -94,15 +94,24 @@ NORM_POINTER1
 SYSYTEM_CMD
                 RCALL   CHECK_ID
                 BNZ	SYSYTEM_CMD_OTHER
+                ; Configuration DLC = 8 & Suc Command 0x0b
+                ; DLC = 8
+                MOVF	CANFRAME+4,W
+                XORLW	8
+                BNZ	SYSYTEM_CMD_NEXT1
+                MOVF    CANFRAME+9,W
+                XORLW	0x0B
+                BZ	SETUP_VALUE
+SYSYTEM_CMD_NEXT1
                 ; Reboot ?
                 ; DLC = 6
                 MOVF	CANFRAME+4,W
                 XORLW	6
-                BNZ	SYSYTEM_CMD_OTHER
+                BNZ	SYSYTEM_CMD_NEXT1
                 MOVF    CANFRAME+9,W
                 XORLW	0x80
-                BNZ	SYSYTEM_CMD_OTHER
-                BRA	CAN_REBOOT
+                BZ	CAN_REBOOT
+
 
 SYSYTEM_CMD_OTHER
                 MOVFF	EVENTPP,FSR0H
@@ -124,6 +133,45 @@ SYSYTEM_CMD_OTHER
                 MOVWF	POSTINC0
                 MOVWF	POSTINC0
                 BRA	EVENT_RING_NORMALIZE
+
+;------------------------------------------------------------------------------
+; System Sub CMD Reset 0x0B -> save value
+;------------------------------------------------------------------------------
+
+SETUP_VALUE
+                ; setup ID reuqest ?
+                ; MOVLW   0x00
+                ; XORLW   CANFRAME+10
+                ; BNZ     SETUP_VALUE_CONT1
+                MOVFF   CANFRAME+11,ID_H
+                MOVFF   CANFRAME+12,ID_L
+                CALL    SETUID
+                CALL    READCANHASH
+
+SETUP_VALUE_TEST
+                MOVFF   EVENTPP,FSR0H
+                MOVFF   EVENTPP+1,FSR0L
+                MOVLW	0x00
+                MOVWF	POSTINC0
+                MOVLW	0x01
+                MOVWF	POSTINC0
+                MOVFF   CANHASH_HIGH,POSTINC0
+                MOVFF   CANHASH_LOW,POSTINC0
+                MOVLW	7
+                MOVWF	POSTINC0
+                MOVFF   CANFRAME+5,POSTINC0
+                MOVFF   CANFRAME+6,POSTINC0
+                MOVFF   CANFRAME+7,POSTINC0
+                MOVFF   CANFRAME+8,POSTINC0
+                MOVFF   CANFRAME+9,POSTINC0
+                MOVFF   CANFRAME+10,POSTINC0
+                ; 1 -> success
+                MOVLW   1
+                MOVWF   POSTINC0
+                BRA	EVENT_RING_NORMALIZE
+
+SETUP_VALUE_CONT1
+                RETURN
 
 ;------------------------------------------------------------------------------
 ; System Sub CMD Reset 0x80 -> reboot - e.g. for updates
