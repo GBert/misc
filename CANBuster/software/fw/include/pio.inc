@@ -213,9 +213,8 @@ PIOGET
                 IORWF	TOP_VAL_NEW,F
 
 #IFDEF PIOINVERT
-                MOVLW	255
-                XORWF	BUT_VAL_NEW,F
-                XORWF   TOP_VAL_NEW,F
+                COMF	BUT_VAL_NEW,F
+                COMF	TOP_VAL_NEW,F
 #ENDIF
 
                 BRA	PIODEBOUNCE
