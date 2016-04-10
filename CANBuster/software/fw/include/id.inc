@@ -100,7 +100,7 @@ SETUID
                 RETURN
 
 ;------------------------------------------------------------------------------
-; Set CAN Hash accroding to Maerklin
+; Set CAN Hash according to Maerklin documentation
 ;------------------------------------------------------------------------------
 READCANHASH
                 RCALL   READUID
@@ -110,15 +110,16 @@ READCANHASH
                 ; shift left 3
                 SWAPF	CANHASH_HIGH,F
                 RRNCF	CANHASH_HIGH,F
-                ; set to lower bits
+                ; set two lower bits
                 BSF     CANHASH_HIGH,0
                 BSF     CANHASH_HIGH,1
 
                 MOVLW   'B'
                 XORWF   ID_L,W
                 MOVWF   CANHASH_LOW
-                BTFSS   ID_L,7
                 BSF     CANHASH_HIGH,2
+                BTFSS   ID_L,7
+                BCF     CANHASH_HIGH,2
                 BCF     CANHASH_LOW,7
                 RETURN
 
