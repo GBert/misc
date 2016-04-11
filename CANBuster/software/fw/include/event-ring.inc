@@ -65,9 +65,11 @@ PUTEVENT
                 MOVLW	0x8
                 MOVWF	POSTINC0
                 ; DATA
-                MOVLW   'C'
+                MOVF    ID_H,W
+                ADDLW   -'U'
                 MOVWF	POSTINC0
-                MOVLW   'B'
+                MOVF    ID_L,W
+                ADDLW   -'S'
                 MOVWF	POSTINC0
                 MOVFF	PIOTEMP16,POSTINC0
                 MOVFF	PIOTEMP16+1,POSTINC0
