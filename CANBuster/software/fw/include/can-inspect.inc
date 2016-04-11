@@ -140,9 +140,9 @@ SYSYTEM_CMD_OTHER
 
 SETUP_VALUE
                 ; setup ID reuqest ?
-                ; MOVLW   0x00
-                ; XORLW   CANFRAME+10
-                ; BNZ     SETUP_VALUE_CONT1
+                MOVLW   0x00
+                XORWF   CANFRAME+10,W
+                BNZ     SETUP_VALUE_CONT1
                 MOVFF   CANFRAME+11,ID_H
                 MOVFF   CANFRAME+12,ID_L
                 CALL    SETUID
