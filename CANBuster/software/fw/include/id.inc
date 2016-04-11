@@ -90,6 +90,12 @@ FIN_WRITE_DATA
 ; Location ID
 ; 0x200000	UID High
 ; 0x200001	UID Low
+; 0x200002	Start counting at X-High for event
+; 0x200003	Start counting at X-Low for event
+; 0x200004	Start counting at X-High for event - S88
+; 0x200005	Start counting at X-Low for event - S88
+; 0x200006	free
+; 0x200007	free
 ;------------------------------------------------------------------------------
 
 SETLOCIDP
@@ -100,17 +106,25 @@ SETLOCIDP
                 RETURN
 
 READUID
-                ; read CAN hash ID - stored at 200000h + 200001h
+                ; read ID and counting numbers
                 MOVLW   0
                 RCALL   SETLOCIDP
                 TBLRD*+
                 MOVFF   TABLAT,ID_L
-                TBLRD*
+                TBLRD*+
                 MOVFF   TABLAT,ID_H
+                TBLRD*+
+                MOVFF   TABLAT,PIOC_H
+                TBLRD*+
+                MOVFF   TABLAT,PIOC_L
+                TBLRD*+
+                MOVFF   TABLAT,S88C_H
+                TBLRD*+
+                MOVFF   TABLAT,S88C_L
                 RETURN
 
 SETUID
-                ; set CAN hash ID - stored at 200000h + 200001h
+                ; set ID and counting numbers
                 MOVLW   0
                 RCALL   SETLOCIDP
                 RCALL   ERASE_DATA
@@ -118,6 +132,14 @@ SETUID
                 MOVFF   ID_H,TABLAT
                 TBLWT*+
                 MOVFF   ID_L,TABLAT
+                TBLWT*+
+                MOVFF   PIOC_H,TABLAT
+                TBLWT*+
+                MOVFF   PIOC_L,TABLAT
+                TBLWT*+
+                MOVFF   S88C_H,TABLAT
+                TBLWT*+
+                MOVFF   S88C_L,TABLAT
                 TBLWT*+
 
                 MOVLW   0

@@ -33,12 +33,14 @@ CANINSPECT
                 ;
                 ; System CMD 0x00 ?
                 MOVF	CANFRAME+1,F
-                BZ	SYSYTEM_CMD
+                BTFSC   STATUS,Z
+                BRA     SYSYTEM_CMD
 
-                MOVF	CANFRAME+1,W
                 ; CAN PING 0x30 ?
+                MOVF	CANFRAME+1,W
                 XORLW	0x30
-                BZ	CAN_PING
+                BTFSC   STATUS,Z
+                BRA     CAN_PING
 
                 RETURN
 
@@ -139,12 +141,33 @@ SYSYTEM_CMD_OTHER
 ;------------------------------------------------------------------------------
 
 SETUP_VALUE
-                ; setup ID reuqest ?
+                ; setup ID request ?
                 MOVLW   0x00
                 XORWF   CANFRAME+10,W
                 BNZ     SETUP_VALUE_CONT1
                 MOVFF   CANFRAME+11,ID_H
                 MOVFF   CANFRAME+12,ID_L
+                BRA     SETUP_VALUE_WRITE
+SETUP_VALUE_CONT1
+                MOVLW   0x01
+                XORWF   CANFRAME+10,W
+                BNZ     SETUP_VALUE_CONT2
+                MOVFF   CANFRAME+11,PIOC_H
+                MOVFF   CANFRAME+12,PIOC_L
+                BRA     SETUP_VALUE_WRITE
+SETUP_VALUE_CONT2
+                MOVLW   0x02
+                XORWF   CANFRAME+10,W
+                BNZ     SETUP_VALUE_CONT3
+                MOVFF   CANFRAME+11,S88C_H
+                MOVFF   CANFRAME+12,S88C_L
+                BRA     SETUP_VALUE_WRITE
+
+SETUP_VALUE_CONT3
+                ; exit
+                RETURN
+
+SETUP_VALUE_WRITE
                 CALL    SETUID
                 CALL    READCANHASH
 
@@ -169,7 +192,6 @@ SETUP_VALUE_TEST
                 MOVWF   POSTINC0
                 BRA	EVENT_RING_NORMALIZE
 
-SETUP_VALUE_CONT1
                 RETURN
 
 ;------------------------------------------------------------------------------
