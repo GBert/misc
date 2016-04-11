@@ -48,17 +48,35 @@ EEPROM_REFRESH_LOOP	; Loop to refresh array
                 RETURN
 
 
-PROGRAM_MEMORY
+ERASE_DATA
                 BSF     EECON1, EEPGD	; point to Flash program memory
                 BCF     EECON1, CFGS	; access Flash program memory
                 BSF     EECON1, WREN	; enable write to memory
-                BCF     INTCON, GIE	; disable interrupts
+                BSF     EECON1, FREE
 
+                BCF     INTCON, GIE	; disable interrupts
                 MOVLW   0x55
                 MOVWF   EECON2
                 MOVLW   0xAA
                 MOVWF   EECON2
                 BSF     EECON1, WR	; start program (CPU stall)
+
+                BSF     INTCON, GIE	; enable interrupts
+                BCF     EECON1, WREN	; Disable writes on write complete (EEIF set)
+                RETURN
+
+FIN_WRITE_DATA
+                BSF     EECON1, EEPGD	; point to Flash program memory
+                BCF     EECON1, CFGS	; access Flash program memory
+                BSF     EECON1, WREN	; enable write to memory
+
+                BCF     INTCON, GIE	; disable interrupts
+                MOVLW   0x55
+                MOVWF   EECON2
+                MOVLW   0xAA
+                MOVWF   EECON2
+                BSF     EECON1, WR	; start program (CPU stall)
+
                 BSF     INTCON, GIE	; enable interrupts
                 BCF     EECON1, WREN	; Disable writes on write complete (EEIF set)
                 RETURN
@@ -81,7 +99,7 @@ SETLOCIDP
 
 READUID
                 ; read CAN hash ID - stored at 200000h + 200001h
-                MOVLW	0
+                MOVLW   0
                 RCALL   SETLOCIDP
                 TBLRD*+
                 MOVFF   TABLAT,ID_L
@@ -91,12 +109,19 @@ READUID
 
 SETUID
                 ; set CAN hash ID - stored at 200000h + 200001h
-                MOVLW	0
+                MOVLW   0
                 RCALL   SETLOCIDP
+                RCALL   ERASE_DATA
+
                 MOVF    ID_H,W
                 TBLWT*+
                 MOVF    ID_L,W
                 TBLWT*
+
+                MOVLW   0
+                RCALL   SETLOCIDP
+                RCALL   FIN_WRITE_DATA
+
                 RETURN
 
 ;------------------------------------------------------------------------------
