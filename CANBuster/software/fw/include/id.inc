@@ -110,9 +110,9 @@ READUID
                 MOVLW   0
                 RCALL   SETLOCIDP
                 TBLRD*+
-                MOVFF   TABLAT,ID_L
-                TBLRD*+
                 MOVFF   TABLAT,ID_H
+                TBLRD*+
+                MOVFF   TABLAT,ID_L
                 TBLRD*+
                 MOVFF   TABLAT,PIOC_H
                 TBLRD*+
