@@ -112,7 +112,7 @@ SYSYTEM_CMD_NEXT1
                 XORLW	0x80
                 BZ	CAN_REBOOT
 
-
+                ; for testing
 SYSYTEM_CMD_OTHER
                 MOVFF	EVENTPP,FSR0H
                 MOVFF	EVENTPP+1,FSR0L
@@ -151,8 +151,7 @@ SETUP_VALUE
 SETUP_VALUE_TEST
                 MOVFF   EVENTPP,FSR0H
                 MOVFF   EVENTPP+1,FSR0L
-                MOVLW	0x00
-                MOVWF	POSTINC0
+                CLRF	POSTINC0
                 MOVLW	0x01
                 MOVWF	POSTINC0
                 MOVFF   CANHASH_HIGH,POSTINC0
@@ -194,8 +193,7 @@ CAN_PING_CONT
                 MOVFF	EVENTPP,FSR0H
                 MOVFF	EVENTPP+1,FSR0L
                 ; mark with 0x31 as CAN Ping response
-                MOVLW	0x0
-                MOVWF	POSTINC0
+                CLRF	POSTINC0
                 MOVLW	0x31
                 MOVWF	POSTINC0
                 MOVFF   CANHASH_HIGH,POSTINC0
