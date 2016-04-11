@@ -60,6 +60,7 @@ ERASE_DATA
                 MOVLW   0xAA
                 MOVWF   EECON2
                 BSF     EECON1, WR	; start program (CPU stall)
+                NOP
 
                 BSF     INTCON, GIE	; enable interrupts
                 BCF     EECON1, WREN	; Disable writes on write complete (EEIF set)
@@ -69,6 +70,7 @@ FIN_WRITE_DATA
                 BSF     EECON1, EEPGD	; point to Flash program memory
                 BCF     EECON1, CFGS	; access Flash program memory
                 BSF     EECON1, WREN	; enable write to memory
+                BCF     EECON1, FREE
 
                 BCF     INTCON, GIE	; disable interrupts
                 MOVLW   0x55
@@ -113,10 +115,10 @@ SETUID
                 RCALL   SETLOCIDP
                 RCALL   ERASE_DATA
 
-                MOVF    ID_H,W
+                MOVFF   ID_H,TABLAT
                 TBLWT*+
-                MOVF    ID_L,W
-                TBLWT*
+                MOVFF   ID_L,TABLAT
+                TBLWT*+
 
                 MOVLW   0
                 RCALL   SETLOCIDP

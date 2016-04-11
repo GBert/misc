@@ -127,10 +127,7 @@ PIODEBOUNCE
                 RETURN
 
 GENEVENT
-                MOVLW	'U'
-                MOVWF	ID_H
-                MOVLW	'S'
-                MOVWF	ID_L
+                CALL	READUID
                 CLRF	PIOTEMP16
                 CLRF	PIOTEMP16+1
 
