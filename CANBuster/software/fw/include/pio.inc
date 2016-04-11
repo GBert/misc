@@ -132,8 +132,8 @@ PIODEBOUNCE
 
 GENEVENT
                 CALL	READUID
-                CLRF	PIOTEMP16
-                CLRF	PIOTEMP16+1
+                MOVFF	PIOC_H,PIOTEMP16
+                MOVFF	PIOC_L,PIOTEMP16+1
 
                 MOVF	BUT_VAL_NEW,W
                 MOVWF	ACTUAL
