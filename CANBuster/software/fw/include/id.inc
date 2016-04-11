@@ -94,7 +94,7 @@ FIN_WRITE_DATA
 ; 0x200003	Start counting at X-Low for event
 ; 0x200004	Start counting at X-High for event - S88
 ; 0x200005	Start counting at X-Low for event - S88
-; 0x200006	free
+; 0x200006	Scan Interval (in 512us steps)
 ; 0x200007	free
 ;------------------------------------------------------------------------------
 
@@ -121,6 +121,8 @@ READUID
                 MOVFF   TABLAT,S88C_H
                 TBLRD*+
                 MOVFF   TABLAT,S88C_L
+                TBLRD*+
+                MOVFF   TABLAT,SCAN_INTERVAL
                 RETURN
 
 SETUID
@@ -140,6 +142,8 @@ SETUID
                 MOVFF   S88C_H,TABLAT
                 TBLWT*+
                 MOVFF   S88C_L,TABLAT
+                TBLWT*+
+                MOVFF   SCAN_INTERVAL,TABLAT
                 TBLWT*+
 
                 MOVLW   0

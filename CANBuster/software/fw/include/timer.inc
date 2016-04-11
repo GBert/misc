@@ -61,8 +61,9 @@ SCHEDULE
 DO_PIO
                 RCALL   PIOGET          ; PIO service routine - any PIO change ?
                 RCALL   GENEVENT	; buffer events
-                MOVLW	20              ; 20 * 512us = 10ms - check PIO state in 10 ms next time
-                MOVWF	PIOTCOUNTER
+                MOVLW   20		; 20 * 512us  - check PIO state in 10 ms next time
+                ; MOVF    SCAN_INTERVAL,W	; x * 512us  - check PIO state in X ms next time
+                MOVWF   PIOTCOUNTER
                 RETURN
 
 

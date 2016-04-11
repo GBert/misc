@@ -162,8 +162,14 @@ SETUP_VALUE_CONT2
                 MOVFF   CANFRAME+11,S88C_H
                 MOVFF   CANFRAME+12,S88C_L
                 BRA     SETUP_VALUE_WRITE
-
 SETUP_VALUE_CONT3
+                MOVLW   0x03
+                XORWF   CANFRAME+10,W
+                BNZ     SETUP_VALUE_CONT4
+                MOVFF   CANFRAME+12,SCAN_INTERVAL
+                BRA     SETUP_VALUE_WRITE
+
+SETUP_VALUE_CONT4
                 ; exit
                 RETURN
 

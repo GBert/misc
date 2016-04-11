@@ -127,6 +127,7 @@ INIT
                 RCALL   I2CINIT             ; Init. I2C
                 RCALL   PIOINIT             ; Init. PIO
                 RCALL   INITEVENTRING       ; Init. Event Ring Buffer
+                RCALL   READUID
 
                 BSF     RCON,IPEN           ; Enable priority interrupts
                 BSF     INTCON,PEIE         ; Init. ISR
