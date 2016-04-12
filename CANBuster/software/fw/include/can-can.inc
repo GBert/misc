@@ -123,10 +123,11 @@ INIT
                 RCALL   INITUART            ; Init. UART
                 RCALL   INITRING            ; Init. Rx/Tx Ring Buffer
                 RCALL   INITCAN             ; Init. CAN Bus
-                RCALL   TIMERINIT           ; Init. TIMER
+                RCALL   TIMER0INIT          ; Init. TIMER
                 RCALL   I2CINIT             ; Init. I2C
                 RCALL   PIOINIT             ; Init. PIO
                 RCALL   INITEVENTRING       ; Init. Event Ring Buffer
+                RCALL   PWMINIT
                 RCALL   READUID
 
                 BSF     RCON,IPEN           ; Enable priority interrupts
@@ -139,9 +140,10 @@ INIT
 MAIN
                 RCALL   RESETUART           ; UART RESET
                 RCALL   RXCAN               ; RECEIVE CAN
-                RCALL   CANINSPECT
+                CALL    CANINSPECT
                 RCALL   TXCAN               ; SEND CAN
-                RCALL   CANINSPECT
+                CALL    CANINSPECT
+                RCALL   PWM_TEST
                 BTFSC	INTCON, TMR0IF
                 RCALL   SCHEDULE
                 BRA     MAIN
@@ -156,8 +158,9 @@ MAIN
 #INCLUDE        "can.inc"                   ; CAN
 #INCLUDE        "timer.inc"                 ; Timer
 #INCLUDE        "i2c.inc"                   ; I2C
-#INCLUDE        "id.inc"                   ; PIO
+#INCLUDE        "id.inc"                    ; UID
 #INCLUDE        "pio.inc"                   ; PIO
+#INCLUDE        "pwm.inc"                   ; PWM
 #INCLUDE        "event-ring.inc"            ; Event ring
 #INCLUDE        "can-inspect.inc"           ; CAN Inspector
 
