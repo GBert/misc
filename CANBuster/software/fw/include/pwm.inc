@@ -27,38 +27,14 @@
 
 #DEFINE         PWM_PERIOD      (40000)
 
-#DEFINE         PWM_6_HIGH      ((PWM_PERIOD * 6) / 100)
-#DEFINE         PWM_6_LOW       (PWM_PERIOD - PWM_6_HIGH)
-
-#DEFINE         PWM_8_HIGH      ((PWM_PERIOD * 8) / 100)
-#DEFINE         PWM_8_LOW       (PWM_PERIOD - PWM_8_HIGH)
-
-#DEFINE         PWM_10_HIGH     ((PWM_PERIOD * 10) / 100)
+#DEFINE         PWM_10_HIGH     ((PWM_PERIOD * 20) / 1000)
 #DEFINE         PWM_10_LOW      (PWM_PERIOD - PWM_10_HIGH)
 
-#DEFINE         PWM_20_HIGH     ((PWM_PERIOD * 20) / 100)
+#DEFINE         PWM_15_HIGH      ((PWM_PERIOD * 30) / 1000)
+#DEFINE         PWM_15_LOW       (PWM_PERIOD - PWM_15_HIGH)
+
+#DEFINE         PWM_20_HIGH     ((PWM_PERIOD * 40) / 1000)
 #DEFINE         PWM_20_LOW      (PWM_PERIOD - PWM_20_HIGH)
-
-#DEFINE         PWM_30_HIGH     ((PWM_PERIOD * 30) / 100)
-#DEFINE         PWM_30_LOW      (PWM_PERIOD - PWM_30_HIGH)
-
-#DEFINE         PWM_40_HIGH     ((PWM_PERIOD * 40) / 100)
-#DEFINE         PWM_40_LOW      (PWM_PERIOD - PWM_40_HIGH)
-
-#DEFINE         PWM_50_HIGH     ((PWM_PERIOD * 50) / 100)
-#DEFINE         PWM_50_LOW      (PWM_PERIOD - PWM_50_HIGH)
-
-#DEFINE         PWM_60_HIGH     ((PWM_PERIOD * 60) / 100)
-#DEFINE         PWM_60_LOW      (PWM_PERIOD - PWM_60_HIGH)
-
-#DEFINE         PWM_70_HIGH     ((PWM_PERIOD * 70) / 100)
-#DEFINE         PWM_70_LOW      (PWM_PERIOD - PWM_70_HIGH)
-
-#DEFINE         PWM_80_HIGH     ((PWM_PERIOD * 80) / 100)
-#DEFINE         PWM_80_LOW      (PWM_PERIOD - PWM_80_HIGH)
-
-#DEFINE         PWM_90_HIGH     ((PWM_PERIOD * 90) / 100)
-#DEFINE         PWM_90_LOW      (PWM_PERIOD - PWM_90_HIGH)
 
 ;------------------------------------------------------------------------------
 ; PWM settings
@@ -89,21 +65,21 @@ PWMINIT
                 CLRF    TMR1L
 
                 ; TEST TEST
-                ;; MOVLW   LOW PWM_20_LOW
+                ;; MOVLW   LOW PWM_10_LOW
                 ;; MOVWF	CCPR2L
-                ;; MOVLW   HIGH PWM_20_LOW
+                ;; MOVLW   HIGH PWM_10_LOW
                 ;; MOVWF	CCPR2H
-                MOVLW   LOW PWM_40_LOW
+                MOVLW   LOW PWM_10_LOW
                 MOVWF	CCPR3L
-                MOVLW   HIGH PWM_40_LOW
+                MOVLW   HIGH PWM_10_LOW
                 MOVWF	CCPR3H
-                MOVLW   LOW PWM_60_LOW
+                MOVLW   LOW PWM_15_LOW
                 MOVWF	CCPR4L
-                MOVLW   HIGH PWM_60_LOW
+                MOVLW   HIGH PWM_15_LOW
                 MOVWF	CCPR4H
-                MOVLW   LOW PWM_80_LOW
+                MOVLW   LOW PWM_20_LOW
                 MOVWF	CCPR5L
-                MOVLW   HIGH PWM_80_LOW
+                MOVLW   HIGH PWM_20_LOW
                 MOVWF	CCPR5H
 
                 ; CCP setup
@@ -133,16 +109,16 @@ PWM_TEST
                 BTFSC   CCP2CON,CCP2M0
                 BRA     PWM1_LOAD_LOW
                 BSF     CCP2CON,CCP2M0		; clear bit next time
-                MOVLW   LOW PWM_40_HIGH
+                MOVLW   LOW PWM_10_HIGH
                 ADDWF   CCPR2L,F
-                MOVLW   HIGH PWM_40_HIGH
+                MOVLW   HIGH PWM_10_HIGH
                 ADDWFC  CCPR2H,F
                 BRA     PWM_TEST2
 PWM1_LOAD_LOW
                 BCF     CCP2CON,CCP2M0		; set bit next time
-                MOVLW   LOW PWM_40_LOW
+                MOVLW   LOW PWM_10_LOW
                 ADDWF   CCPR2L,F
-                MOVLW   HIGH PWM_40_LOW
+                MOVLW   HIGH PWM_10_LOW
                 ADDWFC  CCPR2H,F
 
 PWM_TEST2
@@ -152,16 +128,16 @@ PWM_TEST2
                 BTFSC   CCP3CON,CCP3M0
                 BRA     PWM2_LOAD_LOW
                 BSF     CCP3CON,CCP3M0		; clear bit next time
-                MOVLW   LOW PWM_6_HIGH
+                MOVLW   LOW PWM_10_HIGH
                 ADDWF   CCPR3L,F
-                MOVLW   HIGH PWM_6_HIGH
+                MOVLW   HIGH PWM_10_HIGH
                 ADDWFC  CCPR3H,F
                 BRA     PWM_TEST3
 PWM2_LOAD_LOW
                 BCF     CCP3CON,CCP3M0		; set bit next time
-                MOVLW   LOW PWM_6_LOW
+                MOVLW   LOW PWM_10_LOW
                 ADDWF   CCPR3L,F
-                MOVLW   HIGH PWM_6_LOW
+                MOVLW   HIGH PWM_10_LOW
                 ADDWFC  CCPR3H,F
 
 PWM_TEST3
@@ -171,16 +147,16 @@ PWM_TEST3
                 BTFSC   CCP4CON,CCP4M0
                 BRA     PWM3_LOAD_LOW
                 BSF     CCP4CON,CCP4M0		; clear bit next time
-                MOVLW   LOW PWM_8_HIGH
+                MOVLW   LOW PWM_15_HIGH
                 ADDWF   CCPR4L,F
-                MOVLW   HIGH PWM_8_HIGH
+                MOVLW   HIGH PWM_15_HIGH
                 ADDWFC  CCPR4H,F
                 BRA     PWM_TEST4
 PWM3_LOAD_LOW
                 BCF     CCP4CON,CCP4M0		; set bit next time
-                MOVLW   LOW PWM_8_LOW
+                MOVLW   LOW PWM_15_LOW
                 ADDWF   CCPR4L,F
-                MOVLW   HIGH PWM_8_LOW
+                MOVLW   HIGH PWM_15_LOW
                 ADDWFC  CCPR4H,F
 
 PWM_TEST4
@@ -190,16 +166,16 @@ PWM_TEST4
                 BTFSC   CCP5CON,CCP5M0
                 BRA     PWM4_LOAD_LOW
                 BSF     CCP5CON,CCP5M0		; clear bit next time
-                MOVLW   LOW PWM_10_HIGH
+                MOVLW   LOW PWM_20_HIGH
                 ADDWF   CCPR5L,F
-                MOVLW   HIGH PWM_10_HIGH
+                MOVLW   HIGH PWM_20_HIGH
                 ADDWFC  CCPR5H,F
                 BRA     PWM_END
 PWM4_LOAD_LOW
                 BCF     CCP5CON,CCP5M0		; set bit next time
-                MOVLW   LOW PWM_10_LOW
+                MOVLW   LOW PWM_20_LOW
                 ADDWF   CCPR5L,F
-                MOVLW   HIGH PWM_10_LOW
+                MOVLW   HIGH PWM_20_LOW
                 ADDWFC  CCPR5H,F
 PWM_END
                 RETURN
