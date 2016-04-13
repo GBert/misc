@@ -30,11 +30,17 @@ CANINSPECT
                 ; we are looking only for extended frames here
                 BTFSS	CANFRAME,7	; extended CAN frame ?
                 RETURN
-                ;
+
                 ; System CMD 0x00 ?
                 MOVF	CANFRAME+1,F
                 BTFSC   STATUS,Z
                 BRA     SYSYTEM_CMD
+
+                ; Switch Accessoir  0x1B (Zubehoer schalten)?
+                MOVF	CANFRAME+1,W
+                XORLW	0x1B
+                BTFSC   STATUS,Z
+                BRA     CAN_SWITCH_ACC
 
                 ; CAN PING 0x30 ?
                 MOVF	CANFRAME+1,W
@@ -206,6 +212,26 @@ SETUP_VALUE_TEST
 
 CAN_REBOOT
                 GOTO	0
+
+;------------------------------------------------------------------------------
+; Switch Accessois (0x1B)
+;------------------------------------------------------------------------------
+
+CAN_SWITCH_ACC
+                ; if DLC != 8 -> return
+                MOVF	CANFRAME+4,W
+                XORLW	8
+                BZ      CAN_SWITCH_ACC_NEXT1
+                RETURN
+
+CAN_SWITCH_ACC_NEXT1
+                RCALL   CHECK_ID
+                BTFSC   STATUS,Z
+                RETURN
+
+                MOVFF   CANFRAME+11,WREG
+                MOVFF   CANFRAME+12,WREG
+                RETURN
 
 ;------------------------------------------------------------------------------
 ; answer CAN Ping (0x30)
