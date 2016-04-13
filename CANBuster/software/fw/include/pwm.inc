@@ -27,13 +27,13 @@
 
 #DEFINE         PWM_PERIOD      (40000)
 
-#DEFINE         PWM_10_HIGH     ((PWM_PERIOD * 20) / 1000)
+#DEFINE         PWM_10_HIGH     ((PWM_PERIOD * 50) / 1000)
 #DEFINE         PWM_10_LOW      (PWM_PERIOD - PWM_10_HIGH)
 
-#DEFINE         PWM_15_HIGH      ((PWM_PERIOD * 30) / 1000)
-#DEFINE         PWM_15_LOW       (PWM_PERIOD - PWM_15_HIGH)
+#DEFINE         PWM_15_HIGH     ((PWM_PERIOD * 75) / 1000)
+#DEFINE         PWM_15_LOW      (PWM_PERIOD - PWM_15_HIGH)
 
-#DEFINE         PWM_20_HIGH     ((PWM_PERIOD * 40) / 1000)
+#DEFINE         PWM_20_HIGH     ((PWM_PERIOD * 100) / 1000)
 #DEFINE         PWM_20_LOW      (PWM_PERIOD - PWM_20_HIGH)
 
 ;------------------------------------------------------------------------------
@@ -41,8 +41,6 @@
 ;------------------------------------------------------------------------------
 
 PWMINIT
-		; Test Toggle
-		BCF     TRISC,5
                 ;; BCF     TRISC,2		; CCP2 PWM1
                 BCF     TRISC,6		; CCP3 PWM2
                 BCF     TRISC,7		; CCP4 PWM3
