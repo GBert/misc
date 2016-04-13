@@ -28,37 +28,37 @@
 #DEFINE         PWM_PERIOD      (40000)
 
 #DEFINE         PWM_6_HIGH      ((PWM_PERIOD * 6) / 100)
-#DEFINE         PWM_6_LOW       (PWM_PERIOD - PWM_20_HIGH)
+#DEFINE         PWM_6_LOW       (PWM_PERIOD - PWM_6_HIGH)
 
 #DEFINE         PWM_8_HIGH      ((PWM_PERIOD * 8) / 100)
-#DEFINE         PWM_8_LOW       (PWM_PERIOD - PWM_20_HIGH)
+#DEFINE         PWM_8_LOW       (PWM_PERIOD - PWM_8_HIGH)
 
-#DEFINE         PWM_10_HIGH     ((PWM_PERIOD * 1) / 10)
-#DEFINE         PWM_10_LOW      (PWM_PERIOD - PWM_20_HIGH)
+#DEFINE         PWM_10_HIGH     ((PWM_PERIOD * 10) / 100)
+#DEFINE         PWM_10_LOW      (PWM_PERIOD - PWM_10_HIGH)
 
-#DEFINE         PWM_20_HIGH     ((PWM_PERIOD * 2) / 10)
-#DEFINE         PWM_20_LOW      (PWM_PERIOD - PWM_40_HIGH)
+#DEFINE         PWM_20_HIGH     ((PWM_PERIOD * 20) / 100)
+#DEFINE         PWM_20_LOW      (PWM_PERIOD - PWM_20_HIGH)
 
-#DEFINE         PWM_30_HIGH     ((PWM_PERIOD * 3) / 10)
-#DEFINE         PWM_30_LOW      (PWM_PERIOD - PWM_60_HIGH)
+#DEFINE         PWM_30_HIGH     ((PWM_PERIOD * 30) / 100)
+#DEFINE         PWM_30_LOW      (PWM_PERIOD - PWM_30_HIGH)
 
-#DEFINE         PWM_40_HIGH     ((PWM_PERIOD * 4) / 10)
-#DEFINE         PWM_40_LOW      (PWM_PERIOD - PWM_80_HIGH)
+#DEFINE         PWM_40_HIGH     ((PWM_PERIOD * 40) / 100)
+#DEFINE         PWM_40_LOW      (PWM_PERIOD - PWM_40_HIGH)
 
-#DEFINE         PWM_50_HIGH     ((PWM_PERIOD * 5) / 10)
-#DEFINE         PWM_50_LOW      (PWM_PERIOD - PWM_80_HIGH)
+#DEFINE         PWM_50_HIGH     ((PWM_PERIOD * 50) / 100)
+#DEFINE         PWM_50_LOW      (PWM_PERIOD - PWM_50_HIGH)
 
-#DEFINE         PWM_60_HIGH     ((PWM_PERIOD * 6) / 10)
-#DEFINE         PWM_60_LOW      (PWM_PERIOD - PWM_80_HIGH)
+#DEFINE         PWM_60_HIGH     ((PWM_PERIOD * 60) / 100)
+#DEFINE         PWM_60_LOW      (PWM_PERIOD - PWM_60_HIGH)
 
-#DEFINE         PWM_70_HIGH     ((PWM_PERIOD * 7) / 10)
-#DEFINE         PWM_70_LOW      (PWM_PERIOD - PWM_80_HIGH)
+#DEFINE         PWM_70_HIGH     ((PWM_PERIOD * 70) / 100)
+#DEFINE         PWM_70_LOW      (PWM_PERIOD - PWM_70_HIGH)
 
-#DEFINE         PWM_80_HIGH     ((PWM_PERIOD * 8) / 10)
+#DEFINE         PWM_80_HIGH     ((PWM_PERIOD * 80) / 100)
 #DEFINE         PWM_80_LOW      (PWM_PERIOD - PWM_80_HIGH)
 
-#DEFINE         PWM_90_HIGH     ((PWM_PERIOD * 9) / 10)
-#DEFINE         PWM_90_LOW      (PWM_PERIOD - PWM_80_HIGH)
+#DEFINE         PWM_90_HIGH     ((PWM_PERIOD * 90) / 100)
+#DEFINE         PWM_90_LOW      (PWM_PERIOD - PWM_90_HIGH)
 
 ;------------------------------------------------------------------------------
 ; PWM settings
