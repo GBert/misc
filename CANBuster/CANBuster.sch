@@ -470,7 +470,7 @@ Text Label 5250 10650 0    60   ~ 0
 PWM4
 Text Label 7350 6100 0    60   ~ 0
 PWM4
-Text Label 10050 4900 0    60   ~ 0
+Text Label 10150 5000 0    60   ~ 0
 PWM1
 Text Label 10050 5400 0    60   ~ 0
 PWM2
@@ -566,7 +566,7 @@ F 3 "" H 5550 900 60  0000 C CNN
 $EndComp
 Text Label 5550 1900 1    60   ~ 0
 STATUS
-Text Label 10050 5000 0    60   ~ 0
+Text Label 10100 4900 0    60   ~ 0
 STATUS
 Text Label 7450 6000 0    60   ~ 0
 CTS
@@ -3958,7 +3958,7 @@ Wire Wire Line
 Wire Wire Line
 	10050 5400 10300 5400
 Wire Wire Line
-	10050 4900 10300 4900
+	10050 4900 10400 4900
 Wire Wire Line
 	5550 1200 5550 1200
 Wire Wire Line
