@@ -44,15 +44,15 @@
 ;------------------------------------------------------------------------------
 
 PWMINIT
-                BCF     TRISC,1		; PWM1
-                BCF     TRISC,6		; PWM2
-                BCF     TRISC,7		; PWM3
-                BCF     TRISB,5		; PWM4
+                BCF     TRISC,2		; CCP2 PWM1
+                BCF     TRISC,6		; CCP3 PWM2
+                BCF     TRISC,7		; CCP4 PWM3
+                BCF     TRISB,5		; CCP5 PWM4
 
-                BSF     LATC,1		; PWM1
-                BSF     LATC,6		; PWM2
-                BSF     LATC,7		; PWM3
-                BSF     LATB,5		; PWM4
+                BSF     LATC,2		; CCP2 PWM1
+                BSF     LATC,6		; CCP3 PWM2
+                BSF     LATC,7		; CCP4 PWM3
+                BSF     LATB,5		; CCP5 PWM4
 
                 BCF     PIR3,CCP2IF
                 BCF     PIR4,CCP3IF
@@ -105,58 +105,53 @@ PWMINIT
 PWM_TEST
                 BTFSS   PIR3,CCP2IF
                 BRA     PWM_TEST2
-                BTFSC   PWM_STATUS,0
+                BTFSC   CCP2CON,CCP2M0
                 BRA     PWM1_LOAD_LOW
                 BSF     CCP2CON,CCP2M0		; clear bit next time
                 MOVLW   LOW PWM_20_LOW
                 ADDWF   CCPR2L,F
-		MOVLW   HIGH PWM_20_LOW
+                MOVLW   HIGH PWM_20_LOW
                 ADDWFC  CCPR2H,F
-                BSF     PWM_STATUS,0
                 BCF     PIR3,CCP2IF
                 BRA     PWM_TEST2
 PWM1_LOAD_LOW
                 BCF     CCP2CON,CCP2M0		; set bit next time
                 MOVLW   LOW PWM_20_HIGH
                 ADDWF   CCPR2L,F
-		MOVLW   HIGH PWM_20_HIGH
-                ADDWFC  CCPR2L,F
-                BCF     PWM_STATUS,0
+                MOVLW   HIGH PWM_20_HIGH
+                ADDWFC  CCPR2H,F
                 BCF     PIR3,CCP2IF
 
 PWM_TEST2
                 BTFSS   PIR4,CCP3IF
                 BRA     PWM_TEST3
-                BTFSC   PWM_STATUS,1
+                BTFSC   CCP3CON,CCP3M0
                 BRA     PWM2_LOAD_LOW
                 BSF     CCP3CON,CCP3M0		; clear bit next time
                 MOVLW   LOW PWM_40_LOW
                 ADDWF   CCPR3L,F
                 MOVLW   HIGH PWM_40_LOW
                 ADDWFC  CCPR3H,F
-                BSF     PWM_STATUS,1
                 BCF     PIR4,CCP3IF
                 BRA     PWM_TEST3
 PWM2_LOAD_LOW
                 BCF     CCP3CON,CCP3M0		; set bit next time
                 MOVLW   LOW PWM_40_HIGH
                 ADDWF   CCPR3L,F
-		MOVLW   HIGH PWM_40_HIGH
+                MOVLW   HIGH PWM_40_HIGH
                 ADDWFC  CCPR3H,F
-                BCF     PWM_STATUS,1
                 BCF     PIR4,CCP3IF
 
 PWM_TEST3
                 BTFSS   PIR4,CCP4IF
                 BRA     PWM_TEST4
-                BTFSC   PWM_STATUS,2
+                BTFSC   CCP4CON,CCP4M0
                 BRA     PWM3_LOAD_LOW
                 BCF     CCP4CON,CCP4M0		; clear bit next time
                 MOVLW   LOW PWM_60_LOW
                 ADDWF   CCPR4L,F
                 MOVLW   HIGH PWM_60_LOW
                 ADDWFC  CCPR4H,F
-                BSF     PWM_STATUS,2
                 BCF     PIR4,CCP4IF
                 BRA     PWM_TEST3
 PWM3_LOAD_LOW
@@ -165,20 +160,18 @@ PWM3_LOAD_LOW
                 ADDWF   CCPR4L,F
                 MOVLW   HIGH PWM_60_HIGH
                 ADDWFC  CCPR4H,F
-                BCF     PWM_STATUS,3
                 BCF     PIR4,CCP4IF
 
 PWM_TEST4
                 BTFSS   PIR4,CCP5IF
                 BRA     PWM_END
-                BTFSC   PWM_STATUS,3
+                BTFSC   PIR4,CCP5IF
                 BRA     PWM4_LOAD_LOW
                 BSF     CCP5CON,CCP5M0		; clear bit next time
                 MOVLW   LOW PWM_80_LOW
                 ADDWF   CCPR5L,F
                 MOVLW   HIGH PWM_80_LOW
                 ADDWFC  CCPR5H,F
-                BSF     PWM_STATUS,3
                 BCF     PIR4,CCP5IF
                 BRA     PWM_END
 PWM4_LOAD_LOW
@@ -187,10 +180,9 @@ PWM4_LOAD_LOW
                 ADDWF   CCPR5L,F
                 MOVLW   HIGH PWM_80_HIGH
                 ADDWFC  CCPR5H,F
-                BCF     PWM_STATUS,3
                 BCF     PIR4,CCP5IF
 PWM_END
-		RETURN
+                RETURN
 
 ;
 ; vim: set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
