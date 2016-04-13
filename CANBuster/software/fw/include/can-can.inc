@@ -120,15 +120,15 @@ INIT
                 RTSCLR                      ; Init. RTS
                 CLRF    DDR                 ; All O/P
 
-                RCALL   INITUART            ; Init. UART
-                RCALL   INITRING            ; Init. Rx/Tx Ring Buffer
-                RCALL   INITCAN             ; Init. CAN Bus
-                RCALL   TIMER0INIT          ; Init. TIMER
-                RCALL   I2CINIT             ; Init. I2C
-                RCALL   PIOINIT             ; Init. PIO
-                RCALL   INITEVENTRING       ; Init. Event Ring Buffer
-                RCALL   PWMINIT
-                RCALL   READUID
+                CALL    INITUART            ; Init. UART
+                CALL    INITRING            ; Init. Rx/Tx Ring Buffer
+                CALL    INITCAN             ; Init. CAN Bus
+                CALL    TIMER0INIT          ; Init. TIMER
+                CALL    I2CINIT             ; Init. I2C
+                CALL    PIOINIT             ; Init. PIO
+                CALL    INITEVENTRING       ; Init. Event Ring Buffer
+                CALL    PWMINIT
+                CALL    READUID
 
                 BSF     RCON,IPEN           ; Enable priority interrupts
                 BSF     INTCON,PEIE         ; Init. ISR
@@ -138,12 +138,12 @@ INIT
 ; Main
 ;------------------------------------------------------------------------------
 MAIN
-                RCALL   RESETUART           ; UART RESET
-                RCALL   RXCAN               ; RECEIVE CAN
+                CALL    RESETUART           ; UART RESET
+                CALL    RXCAN               ; RECEIVE CAN
                 CALL    CANINSPECT
-                RCALL   TXCAN               ; SEND CAN
+                CALL    TXCAN               ; SEND CAN
                 CALL    CANINSPECT
-                RCALL   PWM_TEST
+                CALL    PWM_TEST
                 BTFSC	INTCON, TMR0IF
                 RCALL   SCHEDULE
                 BRA     MAIN
