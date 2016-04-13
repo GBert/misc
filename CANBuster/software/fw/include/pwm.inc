@@ -148,13 +148,13 @@ PWM_TEST3
                 BRA     PWM_TEST4
                 BTFSC   CCP4CON,CCP4M0
                 BRA     PWM3_LOAD_LOW
-                BCF     CCP4CON,CCP4M0		; clear bit next time
+                BSF     CCP4CON,CCP4M0		; clear bit next time
                 MOVLW   LOW PWM_60_LOW
                 ADDWF   CCPR4L,F
                 MOVLW   HIGH PWM_60_LOW
                 ADDWFC  CCPR4H,F
                 BCF     PIR4,CCP4IF
-                BRA     PWM_TEST3
+                BRA     PWM_TEST4
 PWM3_LOAD_LOW
                 BCF     CCP4CON,CCP4M0		; set bit next time
                 MOVLW   LOW PWM_60_HIGH
@@ -166,7 +166,7 @@ PWM3_LOAD_LOW
 PWM_TEST4
                 BTFSS   PIR4,CCP5IF
                 BRA     PWM_END
-                BTFSC   PIR4,CCP5IF
+                BTFSC   CCP5CON,CCP5M0
                 BRA     PWM4_LOAD_LOW
                 BSF     CCP5CON,CCP5M0		; clear bit next time
                 MOVLW   LOW PWM_80_LOW
