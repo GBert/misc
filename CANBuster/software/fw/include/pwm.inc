@@ -63,21 +63,15 @@ PWMINIT
                 CLRF    TMR1L
 
                 ; TEST TEST
-                ;; MOVLW   LOW PWM_10_LOW
-                ;; MOVWF	CCPR2L
-                ;; MOVLW   HIGH PWM_10_LOW
-                ;; MOVWF	CCPR2H
-                MOVLW   LOW PWM_10_LOW
-                MOVWF	CCPR3L
-                MOVLW   HIGH PWM_10_LOW
-                MOVWF	CCPR3H
-                MOVLW   LOW PWM_15_LOW
-                MOVWF	CCPR4L
-                MOVLW   HIGH PWM_15_LOW
-                MOVWF	CCPR4H
                 MOVLW   LOW PWM_20_LOW
+                ;; MOVWF	CCPR2L
+                MOVWF	CCPR3L
+                MOVWF	CCPR4L
                 MOVWF	CCPR5L
                 MOVLW   HIGH PWM_20_LOW
+                ;; MOVWF	CCPR2H
+                MOVWF	CCPR3H
+                MOVWF	CCPR4H
                 MOVWF	CCPR5H
 
                 ; CCP setup
