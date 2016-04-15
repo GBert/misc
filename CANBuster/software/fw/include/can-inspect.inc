@@ -213,6 +213,22 @@ SETUP_VALUE_TEST
 CAN_REBOOT
                 GOTO	0
 
+;
+;   803                           ;main.c: 160: test = 40000 - pulse;
+;   804  005B  0970                      comf    _pulse,w        ;volatile
+;   805  005C  00FA                      movwf   ??_main
+;   806  005D  0971                      comf    _pulse+1,w      ;volatile
+;   807  005E  00FB                      movwf   ??_main+1
+;   808  005F  0AFA                      incf    ??_main,f
+;   809  0060  1903                      skipnz
+;   810  0061  0AFB                      incf    ??_main+1,f
+;   811  0062  087A                      movf    ??_main,w
+;   812  0063  3E40                      addlw   64
+;   813  0064  00F6                      movwf   _test   ;volatile
+;   814  0065  309C                      movlw   156
+;   815  0066  3D7B                      addwfc  ??_main+1,w
+;   816  0067  00F7                      movwf   _test+1 ;volatile
+
 ;------------------------------------------------------------------------------
 ; Switch Accessois (0x1B)
 ;------------------------------------------------------------------------------
@@ -229,13 +245,17 @@ CAN_SWITCH_ACC_NEXT1
                 BTFSC   STATUS,Z
                 RETURN
 
-                MOVFF   CANFRAME+10,PWM_CHANNEL
-                MOVLW   3
-                ANDWF   PWM_CHANNEL,F
-                MOVFF   CANFRAME+11,PWM_VALUE1
-                MOVFF   CANFRAME+12,PWM_VALUE1+1
+                MOVFF   CANFRAME+10,W
+                ANDLW   3
+                LFSR    FSR0,PWM_VALUE1
+
+                MOVFF   CANFRAME+11,PLUSW0
+                INCF    WREG,F
+                MOVFF   CANFRAME+12,PLUSW0
                 RETURN
 
+CAN_SWITCH_ACC_FAULT
+                RETURN
 ;------------------------------------------------------------------------------
 ; answer CAN Ping (0x30)
 ;------------------------------------------------------------------------------
