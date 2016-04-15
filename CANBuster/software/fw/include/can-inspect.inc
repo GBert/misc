@@ -229,8 +229,11 @@ CAN_SWITCH_ACC_NEXT1
                 BTFSC   STATUS,Z
                 RETURN
 
-                MOVFF   CANFRAME+11,WREG
-                MOVFF   CANFRAME+12,WREG
+                MOVFF   CANFRAME+10,PWM_CHANNEL
+                MOVLW   3
+                ANDWF   PWM_CHANNEL,F
+                MOVFF   CANFRAME+11,PWM_VALUE1
+                MOVFF   CANFRAME+12,PWM_VALUE1+1
                 RETURN
 
 ;------------------------------------------------------------------------------

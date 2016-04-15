@@ -21,8 +21,11 @@
 ;------------------------------------------------------------------------------
 
                 CBLOCK
-                PWM_TEMP : 2
-                PWM_STATUS : 1
+                PWM_VALUE1 : 2
+                PWM_VALUE2 : 2
+                PWM_VALUE3 : 2
+                PWM_VALUE4 : 2
+                PWM_CHANNEL : 1
                 ENDC
 
 #DEFINE         PWM_PERIOD      (40000)
@@ -56,7 +59,15 @@ PWMINIT
                 BCF     PIR4,CCP4IF
                 BCF     PIR4,CCP5IF
 
-                CLRF    PWM_STATUS
+                CLRF    PWM_CHANNEL
+                CLRF    PWM_VALUE1
+                CLRF    PWM_VALUE1+1
+                CLRF    PWM_VALUE2
+                CLRF    PWM_VALUE2+1
+                CLRF    PWM_VALUE3
+                CLRF    PWM_VALUE3+1
+                CLRF    PWM_VALUE4
+                CLRF    PWM_VALUE4+1
 
                 ; using Timer1 as Compare
                 CLRF    TMR1H

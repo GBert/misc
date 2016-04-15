@@ -27,7 +27,7 @@
 struct serial_buffer_t tx_fifo, rx_fifo;
 
 volatile unsigned int pulse_high = 25;
-volatile unsigned int pulse_low = 25;
+volatile unsigned int pulse_low = 75;
 
 void interrupt ISR(void) {
   if (CCP1IF) {
@@ -122,8 +122,8 @@ void timer1_init() {
   TMR1H = 0; // reset timer1 high
   TMR1L = 0; // and low bytes - prescaler automatic reset
   CCP1CON = 0b00001000; // set up capture and compare
-            //----1000 compare mode
-            // set ccp1 register to the highest value to avoid useless interrupt
+            //----1000   Compare mode: set output on compare match (set CCPxIF)
+  // set ccp1 register to the highest value to avoid useless interrupt
   CCPR1H = 0xFF;
   CCPR1L = 0xFF;
   CCP1IE = 1;
