@@ -19,11 +19,19 @@
 
 struct serial_buffer_t tx_fifo, rx_fifo;
 
+volatile unsigned int pulse_high = 25;
+volatile unsigned int pulse_low = 25;
+
 void interrupt ISR(void) {
-  if(T0IE && T0IF) {
-    T0IF=0;
-    TMR0 = TIMER0_VAL;
-    LATA5 ^= 1;
+  if (CCP1IF) {
+    CCP1IF = 0;
+    if (CCP1M0) {
+      CCP1M0 = 0;
+      CCPR1 += pulse_high;
+    } else {
+      CCP1M0 = 1;
+      CCPR1 += pulse_low;
+    }
   }
 }
 
@@ -99,17 +107,20 @@ void timer0_init() {
 
 
 void timer1_init() {
-  T1CON = 0b01110000;
+  T1CON = 0b01110001;
           //01------ FOSC as counting source
           //--11---- prescaler 1:8 (counting every us)
+          //-------1 timer on
   T1GCONbits.TMR1GE = 0; // timer is not controlled by gate.
   TMR1H = 0; // reset timer1 high
   TMR1L = 0; // and low bytes - prescaler automatic reset
-  CCP1CON = 0b00000010; // set up capture and compare
-            //----0010 Toggle CCP1 pin. Set CCP1IF (TODO check if CCP1IF is set)
+  CCP1CON = 0b00001010; // set up capture and compare
+            //----1000 compare mode
+            //-----010 Toggle CCP1 pin. Set CCP1IF (TODO check if CCP1IF is set)
             // set ccp1 register to the highest value to avoid useless interrupt
   CCPR1H = 0xFF;
   CCPR1L = 0xFF;
+  CCP1IE = 1;
 }
 
 void timer2_init() {
@@ -126,7 +137,7 @@ void main() {
   pps_init();
   system_init();
   uart_init();
-  timer0_init();
+  timer1_init();
 
   /* empty circular buffers */
   tx_fifo.head=0;
