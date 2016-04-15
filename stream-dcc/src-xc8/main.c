@@ -72,6 +72,7 @@ void system_init() {
   CM2CON0 = 0;
   CM2CON1 = 0;
   TRISA5 = 0;
+  TRISA4 = 0;
   TRISC5 = 0;  // CCP1
   // setup interrupt events
   //clear all relevant interrupt flags
@@ -114,8 +115,8 @@ void timer0_init() {
 
 
 void timer1_init() {
-  T1CON = 0b01110001;
-          //01------ FOSC as counting source
+  T1CON = 0b00110001;
+          //00------ FOSC/4 as counting source
           //--11---- prescaler 1:8 (counting every us)
           //-------1 timer on
   T1GCONbits.TMR1GE = 0; // timer is not controlled by gate.
@@ -154,7 +155,7 @@ void main() {
   GIE = 1;
   while(1) {
     if ( counter == 0 )
-	putchar_wait(0x55);
+      putchar_wait(0x55);
     counter++;
   }
 }
