@@ -17,6 +17,13 @@
 #define INTERVAL	50
 #define TIMER0_VAL	(256 - (INTERVAL-2))
 
+
+  /* DCC    58us */
+  /* MM1    26us */
+  /* MM2    52us */
+  /* mfx    50us */
+
+
 struct serial_buffer_t tx_fifo, rx_fifo;
 
 volatile unsigned int pulse_high = 25;
@@ -114,9 +121,8 @@ void timer1_init() {
   T1GCONbits.TMR1GE = 0; // timer is not controlled by gate.
   TMR1H = 0; // reset timer1 high
   TMR1L = 0; // and low bytes - prescaler automatic reset
-  CCP1CON = 0b00001010; // set up capture and compare
+  CCP1CON = 0b00001000; // set up capture and compare
             //----1000 compare mode
-            //-----010 Toggle CCP1 pin. Set CCP1IF (TODO check if CCP1IF is set)
             // set ccp1 register to the highest value to avoid useless interrupt
   CCPR1H = 0xFF;
   CCPR1L = 0xFF;
