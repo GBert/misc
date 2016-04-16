@@ -44,17 +44,22 @@
 ;------------------------------------------------------------------------------
 
 PWMINIT
-                ;; BCF     TRISC,2		; CCP2 PWM1
+#IF PCBV == 2
+                BCF     TRISC,2		; CCP2 PWM1
+#ENDIF
                 BCF     TRISC,6		; CCP3 PWM2
                 BCF     TRISC,7		; CCP4 PWM3
                 BCF     TRISB,5		; CCP5 PWM4
-
-                ;; BSF     LATC,2		; CCP2 PWM1
+#IF PCBV ==  2
+                BSF     LATC,2		; CCP2 PWM1
+#ENDIF
                 BSF     LATC,6		; CCP3 PWM2
                 BSF     LATC,7		; CCP4 PWM3
                 BSF     LATB,5		; CCP5 PWM4
 
-                ;; BCF     PIR3,CCP2IF
+#IF PCBV ==  2
+                BCF     PIR3,CCP2IF
+#ENDIF
                 BCF     PIR4,CCP3IF
                 BCF     PIR4,CCP4IF
                 BCF     PIR4,CCP5IF
@@ -75,12 +80,12 @@ PWMINIT
 
                 ; TEST TEST
                 MOVLW   LOW PWM_20_LOW
-                ;; MOVWF	CCPR2L
+                MOVWF	CCPR2L
                 MOVWF	CCPR3L
                 MOVWF	CCPR4L
                 MOVWF	CCPR5L
                 MOVLW   HIGH PWM_20_LOW
-                ;; MOVWF	CCPR2H
+                MOVWF	CCPR2H
                 MOVWF	CCPR3H
                 MOVWF	CCPR4H
                 MOVWF	CCPR5H
@@ -91,7 +96,9 @@ PWMINIT
                 CLRF    CCPTMRS
                 ; Compare Mode
                 MOVLW   (1 << CCP2M3) + (1 << CCP2M0)
-                ; MOVWF   CCP2CON
+#IF PCBV ==  2
+                MOVWF   CCP2CON
+#ENDIF
                 MOVWF   CCP3CON
                 MOVWF   CCP4CON
                 MOVWF   CCP5CON
@@ -105,10 +112,12 @@ PWMINIT
                 RETURN
 
 PWM_TEST
-                BRA     PWM_TEST2	;;;;;;;;;; for testing until PCB fixed (RC2 is double used)
-                BTFSS   PIR3,CCP2IF
-                BCF     PIR3,CCP2IF
+#IF PCBV == 1
                 BRA     PWM_TEST2
+#ENDIF
+                BTFSS   PIR3,CCP2IF
+                BRA     PWM_TEST2
+                BCF     PIR3,CCP2IF
                 BTFSC   CCP2CON,CCP2M0
                 BRA     PWM1_LOAD_LOW
                 BSF     CCP2CON,CCP2M0		; clear bit next time

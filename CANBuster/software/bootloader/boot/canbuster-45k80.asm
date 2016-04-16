@@ -62,6 +62,9 @@ ERRORLEVEL      -302
 ; Device Settings
 ;------------------------------------------------------------------------------
 
+; PCB Version
+#DEFINE	        PCBV        2
+
 ; Clock Rate
 #DEFINE         CLOCK       64000000
 #DEFINE         TIMEOUT     5           ; 10 sec timeout
@@ -77,7 +80,13 @@ ERRORLEVEL      -302
 ; BOOT/LED/SWITCH  - RC2 Status / RC0 Switch
 #DEFINE         DDR         TRISC
 #DEFINE         OUTPUT      LATC
-#DEFINE         LED         2
+
+#IF PCBV == 1
+  #DEFINE       LED         2
+#ELSE
+  #DEFINE       LED         1
+#ENDIF
+
 ; #DEFINE         INPUT       PORTC
 ; #DEFINE         SWITCH      0
 

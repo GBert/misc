@@ -27,8 +27,17 @@
                 ENDC
 
 ;------------------------------------------------------------------------------
-; Timer settings
+; settings
 ;------------------------------------------------------------------------------
+
+#define PCBV    2
+
+#IF PCBV == 1
+  #DEFINE       LED         2
+#ELSE
+  #DEFINE       LED         1
+#ENDIF
+
 
 ;------------------------------------------------------------------------------
 ; Init. Timer
@@ -90,11 +99,11 @@ DO_HEARTBEAT
                 BRA	STATUS_LED_OFF
 
 STATUS_LED_OFF
-                BSF	LATC, 2
+                BSF	LATC, LED
                 RETURN
 
 STATUS_LED_ON
-                BCF	LATC, 2
+                BCF	LATC, LED
                 RETURN
 
 ;
