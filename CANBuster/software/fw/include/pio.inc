@@ -136,23 +136,19 @@ GENEVENT
                 MOVFF	PIOC_H,PIOTEMP16
                 MOVFF	PIOC_L,PIOTEMP16+1
 
-                MOVF	BUT_VAL_NEW,W
-                MOVWF	ACTUAL
+                MOVFF	BUT_VAL_NEW,ACTUAL
                 MOVLW	1
                 MOVWF	MASK
-                MOVF    BUT_VAL_CHG,W
-                MOVWF	PIOTEMP
+                MOVFF   BUT_VAL_CHG,PIOTEMP
+
                 RCALL	GENEVENTLOOP
 
-                MOVF	TOP_VAL_NEW,W
-                MOVWF	ACTUAL
+                MOVFF	TOP_VAL_NEW,ACTUAL
                 MOVLW	1
                 MOVWF	MASK
-                MOVF	TOP_VAL_CHG,W
-                MOVWF	PIOTEMP
-                RCALL	GENEVENTLOOP
+                MOVFF	TOP_VAL_CHG,PIOTEMP
 
-                RETURN
+                ; CALL	GENEVENTLOOP
 
 GENEVENTLOOP
                 INFSNZ	PIOTEMP16+1,F
