@@ -112,7 +112,7 @@ PWMINIT
                 RETURN
 
 PWM_TEST
-#IF PCBV == 1
+#IF PCBV < 2
                 BRA     PWM_TEST2
 #ENDIF
                 BTFSS   PIR3,CCP2IF
