@@ -72,6 +72,7 @@ RTSSET          MACRO
 ;------------------------------------------------------------------------------
 
                 CBLOCK  0x0000              ; ACCESS RAM 0x00..0x5F
+                TEMP    : 4
                 B_SAVE  : 1                 ; ISR BANK SELECT REGISTER
                 S_SAVE  : 1                 ; ISR STATUS REGISTER
                 W_SAVE  : 1                 ; ISR WORKING REGISTER

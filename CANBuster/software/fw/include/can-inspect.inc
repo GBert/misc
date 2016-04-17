@@ -17,10 +17,6 @@
                 LIST
                 RADIX   DEC
 
-                CBLOCK
-                TEMP16: 2
-                ENDC
-
 ;------------------------------------------------------------------------------
 ; inspector
 ;------------------------------------------------------------------------------
@@ -243,9 +239,9 @@ CAN_REBOOT
 
 LOAD_PWMMAX     MACRO
                 MOVLW   HIGH PWMMAX
-                MOVWF   TEMP16
+                MOVWF   TEMP
                 MOVLW   LOW PWMMAX
-                MOVWF   TEMP16+1
+                MOVWF   TEMP+1
                 ENDM
 
 CAN_SWITCH_ACC
@@ -274,27 +270,23 @@ CAN_SWITCH_ACC_NEXT1
                 MOVWF	POSTINC0
                 ; org
 
-                MOVLW   HIGH PWMMAX
-                MOVFF   WREG,TEMP16
-                MOVLW   LOW PWMMAX
-                MOVFF   WREG,TEMP16+1
 
-                MOVFF   TEMP16,POSTINC0
-                MOVFF   TEMP16+1,POSTINC0
+                MOVFF   CANFRAME+5,POSTINC0
+                MOVFF   CANFRAME+6,POSTINC0
+                MOVFF   CANFRAME+7,POSTINC0
+                MOVFF   CANFRAME+8,POSTINC0
 
-                MOVFF   CANFRAME+11,POSTINC0
-                MOVFF   CANFRAME+12,POSTINC0
-
-                MOVF    TEMP16+1,W
-                SUBWF   CANFRAME+12,F
-                MOVF    TEMP16,W
+                LOAD_PWMMAX
+                MOVF    CANFRAME+12,W
+                SUBWF   TEMP+1,F
                 BTFSS   STATUS,C
-                INCFSZ  TEMP16+1
-                SUBWF   CANFRAME+11,F
+                INCF    CANFRAME+11
+                MOVF    CANFRAME+11,W
+                SUBWF   TEMP,F
 
-                ; 40000 - x
-                MOVFF   CANFRAME+11,POSTINC0
-                MOVFF   CANFRAME+12,POSTINC0
+                ; PWMMAX - x  (e.g. 40000 -x)
+                MOVFF   TEMP,POSTINC0
+                MOVFF   TEMP+1,POSTINC0
 
                 ; 01 -> success
                 MOVLW   0x01
