@@ -131,8 +131,8 @@ PIODEBOUNCE
 
 GENEVENT
                 CALL	READUID
-                MOVFF	PIOC_H,TEMP+2
-                MOVFF	PIOC_L,TEMP+3
+                MOVFF	PIOC_H,TEMP16
+                MOVFF	PIOC_L,TEMP16+1
 
                 MOVFF	BUT_VAL_NEW,ACTUAL
                 MOVLW	1
@@ -149,8 +149,8 @@ GENEVENT
                 ; CALL	GENEVENTLOOP
 
 GENEVENTLOOP
-                INFSNZ	TEMP+3,F
-                INCF	TEMP+2,F
+                INFSNZ	TEMP16+1,F
+                INCF	TEMP16,F
                 MOVF	TEMP,W
                 ANDWF	MASK,W
                 BTFSS	STATUS,Z

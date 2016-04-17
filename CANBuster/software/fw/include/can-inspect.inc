@@ -239,9 +239,9 @@ CAN_REBOOT
 
 LOAD_PWMMAX     MACRO
                 MOVLW   HIGH PWMMAX
-                MOVWF   TEMP
+                MOVWF   TEMP16
                 MOVLW   LOW PWMMAX
-                MOVWF   TEMP+1
+                MOVWF   TEMP16+1
                 ENDM
 
 CAN_SWITCH_ACC
@@ -277,15 +277,15 @@ CAN_SWITCH_ACC_NEXT1
 
                 LOAD_PWMMAX
                 MOVF    CANFRAME+12,W
-                SUBWF   TEMP+1,F
+                SUBWF   TEMP16+1,F
                 BTFSS   STATUS,C
                 INCF    CANFRAME+11
                 MOVF    CANFRAME+11,W
-                SUBWF   TEMP,F
+                SUBWF   TEMP16,F
 
                 ; PWMMAX - x  (e.g. 40000 -x)
-                MOVFF   TEMP,POSTINC0
-                MOVFF   TEMP+1,POSTINC0
+                MOVFF   TEMP16,POSTINC0
+                MOVFF   TEMP16+1,POSTINC0
 
                 ; 01 -> success
                 MOVLW   0x01

@@ -71,8 +71,8 @@ PUTEVENT
                 MOVF    ID_L,W
                 ADDLW   -'S'
                 MOVWF	POSTINC0
-                MOVFF	TEMP+2,POSTINC0
-                MOVFF	TEMP+3,POSTINC0
+                MOVFF	TEMP16,POSTINC0
+                MOVFF	TEMP16+1,POSTINC0
                 MOVF	ACTUAL,W
                 ANDWF	MASK,W
                 BTFSS	STATUS,Z
