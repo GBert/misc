@@ -263,13 +263,6 @@ CAN_SWITCH_ACC_NEXT1
                 ; MOVFF   CANFRAME+10,W
                 ; ANDLW   3
 
-                LOAD_PWMMAX
-                SUBWF   CANFRAME+12,F
-                MOVF    TEMP16,W
-                BTFSS   STATUS,C
-                INCFSZ  TEMP16+1
-                SUBWF   CANFRAME+11,F
-
                 MOVFF   EVENTPP,FSR0H
                 MOVFF   EVENTPP+1,FSR0L
                 CLRF	POSTINC0
@@ -279,13 +272,30 @@ CAN_SWITCH_ACC_NEXT1
                 MOVFF   CANHASH_LOW,POSTINC0
                 MOVLW	7
                 MOVWF	POSTINC0
-                MOVFF   CANFRAME+5,POSTINC0
-                MOVFF   CANFRAME+6,POSTINC0
-                MOVFF   CANFRAME+7,POSTINC0
-                MOVFF   CANFRAME+8,POSTINC0
+                ; org
+
+                MOVLW   HIGH PWMMAX
+                MOVFF   WREG,TEMP16
+                MOVLW   LOW PWMMAX
+                MOVFF   WREG,TEMP16+1
+
+                MOVFF   TEMP16,POSTINC0
+                MOVFF   TEMP16+1,POSTINC0
+
+                MOVFF   CANFRAME+11,POSTINC0
+                MOVFF   CANFRAME+12,POSTINC0
+
+                MOVF    TEMP16+1,W
+                SUBWF   CANFRAME+12,F
+                MOVF    TEMP16,W
+                BTFSS   STATUS,C
+                INCFSZ  TEMP16+1
+                SUBWF   CANFRAME+11,F
+
                 ; 40000 - x
                 MOVFF   CANFRAME+11,POSTINC0
                 MOVFF   CANFRAME+12,POSTINC0
+
                 ; 01 -> success
                 MOVLW   0x01
                 MOVWF   POSTINC0
