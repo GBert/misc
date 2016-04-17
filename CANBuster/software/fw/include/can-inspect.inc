@@ -245,7 +245,7 @@ LOAD_PWMMAX     MACRO
                 ENDM
 
 CAN_SWITCH_ACC
-                ; if DLC != 8 -> return
+                ; if DLC != 8 -> RETURN
                 MOVF	CANFRAME+4,W
                 XORLW	8
                 BZ      CAN_SWITCH_ACC_NEXT1
@@ -256,6 +256,7 @@ CAN_SWITCH_ACC_NEXT1
                 BTFSS   STATUS,Z
                 RETURN
 
+                ; fix servo number if needed
                 ; MOVFF   CANFRAME+10,W
                 ; ANDLW   3
 
@@ -268,8 +269,6 @@ CAN_SWITCH_ACC_NEXT1
                 MOVFF   CANHASH_LOW,POSTINC0
                 MOVLW	7
                 MOVWF	POSTINC0
-                ; org
-
 
                 MOVFF   CANFRAME+5,POSTINC0
                 MOVFF   CANFRAME+6,POSTINC0

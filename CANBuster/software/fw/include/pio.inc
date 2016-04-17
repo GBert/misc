@@ -23,10 +23,10 @@
 
                 CBLOCK
                 PIOTIME : 16
-                PIOTEMP : 1
+                ; PIOTEMP : 1
                 MASK : 1
                 ACTUAL : 1
-                PIOTEMP16 : 2
+                ; PIOTEMP16 : 2
                 BUT_CT0 : 1
                 DEBUG_BUT : 1
                 BUT_CT1 : 1
@@ -88,11 +88,11 @@ PIOINIT
 
                 ; delete timers
                 MOVLW	16
-                MOVWF	PIOTEMP
+                MOVWF	TEMP
                 LFSR	FSR0,PIOTIME
 PTIMECLLOOP
                 CLRF	POSTINC0
-                DECFSZ	PIOTEMP,F
+                DECFSZ	TEMP,F
                 BRA	PTIMECLLOOP
 
                 BRA	READCANHASH
@@ -101,29 +101,29 @@ PTIMECLLOOP
 PIODEBOUNCE
                 COMF	TOP_VAL_NEW,W
                 XORWF	TOP_VAL_STATE,W		; port changed ?
-                MOVWF	PIOTEMP
+                MOVWF	TEMP
                 ANDWF	TOP_CT0,F	    	; reset or count ct0
                 COMF	TOP_CT0,F
                 MOVF	TOP_CT1,W		; reset or count ct1
-                ANDWF	PIOTEMP,W
+                ANDWF	TEMP,W
                 XORWF	TOP_CT0,W
                 MOVWF	TOP_CT1
                 ANDWF	TOP_CT0,W
-                ANDWF	PIOTEMP,W
+                ANDWF	TEMP,W
                 MOVWF	TOP_VAL_CHG
                 XORWF	TOP_VAL_STATE,F
 
                 COMF	BUT_VAL_NEW,W
                 XORWF	BUT_VAL_STATE,W		; port changed ?
-                MOVWF	PIOTEMP
+                MOVWF	TEMP
                 ANDWF	BUT_CT0,F		; reset or count ct0
                 COMF	BUT_CT0,F
                 MOVF	BUT_CT1,W		; reset or count ct1
-                ANDWF	PIOTEMP,W
+                ANDWF	TEMP,W
                 XORWF	BUT_CT0,W
                 MOVWF	BUT_CT1
                 ANDWF	BUT_CT0,W
-                ANDWF	PIOTEMP,W
+                ANDWF	TEMP,W
                 MOVWF	BUT_VAL_CHG
                 XORWF	BUT_VAL_STATE,F
 
@@ -131,27 +131,27 @@ PIODEBOUNCE
 
 GENEVENT
                 CALL	READUID
-                MOVFF	PIOC_H,PIOTEMP16
-                MOVFF	PIOC_L,PIOTEMP16+1
+                MOVFF	PIOC_H,TEMP+2
+                MOVFF	PIOC_L,TEMP+3
 
                 MOVFF	BUT_VAL_NEW,ACTUAL
                 MOVLW	1
                 MOVWF	MASK
-                MOVFF   BUT_VAL_CHG,PIOTEMP
+                MOVFF   BUT_VAL_CHG,TEMP
 
                 RCALL	GENEVENTLOOP
 
                 MOVFF	TOP_VAL_NEW,ACTUAL
                 MOVLW	1
                 MOVWF	MASK
-                MOVFF	TOP_VAL_CHG,PIOTEMP
+                MOVFF	TOP_VAL_CHG,TEMP
 
                 ; CALL	GENEVENTLOOP
 
 GENEVENTLOOP
-                INFSNZ	PIOTEMP16+1,F
-                INCF	PIOTEMP16,F
-                MOVF	PIOTEMP,W
+                INFSNZ	TEMP+3,F
+                INCF	TEMP+2,F
+                MOVF	TEMP,W
                 ANDWF	MASK,W
                 BTFSS	STATUS,Z
                 RCALL	PUTEVENT
