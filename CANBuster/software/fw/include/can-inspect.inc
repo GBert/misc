@@ -213,22 +213,6 @@ SETUP_VALUE_TEST
 CAN_REBOOT
                 GOTO	0
 
-;
-;   803                           ;main.c: 160: test = 40000 - pulse;
-;   804  005B  0970                      comf    _pulse,w        ;volatile
-;   805  005C  00FA                      movwf   ??_main
-;   806  005D  0971                      comf    _pulse+1,w      ;volatile
-;   807  005E  00FB                      movwf   ??_main+1
-;   808  005F  0AFA                      incf    ??_main,f
-;   809  0060  1903                      skipnz
-;   810  0061  0AFB                      incf    ??_main+1,f
-;   811  0062  087A                      movf    ??_main,w
-;   812  0063  3E40                      addlw   64
-;   813  0064  00F6                      movwf   _test   ;volatile
-;   814  0065  309C                      movlw   156
-;   815  0066  3D7B                      addwfc  ??_main+1,w
-;   816  0067  00F7                      movwf   _test+1 ;volatile
-
 ;------------------------------------------------------------------------------
 ; Switch Accessois (0x1B)
 ;------------------------------------------------------------------------------
@@ -256,9 +240,26 @@ CAN_SWITCH_ACC_NEXT1
                 BTFSS   STATUS,Z
                 RETURN
 
+                ; calculate PWM value
+                LOAD_PWMMAX
+                MOVF    CANFRAME+12,W
+                SUBWF   TEMP16+1,F
+                BTFSS   STATUS,C
+                INCF    CANFRAME+11
+                MOVF    CANFRAME+11,W
+                SUBWF   TEMP16,F
+
                 ; fix servo number if needed
-                ; MOVFF   CANFRAME+10,W
-                ; ANDLW   3
+                MOVFF   CANFRAME+10,TEMP
+                MOVLW   3
+                ANDWF   TEMP,F
+                RLNCF   TEMP
+
+                ; store new PWM value
+                LFSR    FSR0,PWM_VALUE1_LOW
+                MOVFF   TEMP16,PLUSW0
+                INCF    WREG,F
+                MOVFF   TEMP16+1,PLUSW0
 
                 MOVFF   EVENTPP,FSR0H
                 MOVFF   EVENTPP+1,FSR0L
@@ -274,14 +275,6 @@ CAN_SWITCH_ACC_NEXT1
                 MOVFF   CANFRAME+6,POSTINC0
                 MOVFF   CANFRAME+7,POSTINC0
                 MOVFF   CANFRAME+8,POSTINC0
-
-                LOAD_PWMMAX
-                MOVF    CANFRAME+12,W
-                SUBWF   TEMP16+1,F
-                BTFSS   STATUS,C
-                INCF    CANFRAME+11
-                MOVF    CANFRAME+11,W
-                SUBWF   TEMP16,F
 
                 ; PWMMAX - x  (e.g. 40000 -x)
                 MOVFF   TEMP16,POSTINC0
