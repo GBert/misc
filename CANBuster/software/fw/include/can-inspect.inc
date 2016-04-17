@@ -17,6 +17,10 @@
                 LIST
                 RADIX   DEC
 
+                CBLOCK
+                TEMP16: 2
+                ENDC
+
 ;------------------------------------------------------------------------------
 ; inspector
 ;------------------------------------------------------------------------------
@@ -38,7 +42,7 @@ CANINSPECT
 
                 ; Switch Accessoir  0x1B (Zubehoer schalten)?
                 MOVF	CANFRAME+1,W
-                XORLW	0x1B
+                XORLW	0x16
                 BTFSC   STATUS,Z
                 BRA     CAN_SWITCH_ACC
 
@@ -233,6 +237,17 @@ CAN_REBOOT
 ; Switch Accessois (0x1B)
 ;------------------------------------------------------------------------------
 
+; TODO
+
+#DEFINE	PWMMAX (40000)
+
+LOAD_PWMMAX     MACRO
+                MOVLW   HIGH PWMMAX
+                MOVWF   TEMP16
+                MOVLW   LOW PWMMAX
+                MOVWF   TEMP16+1
+                ENDM
+
 CAN_SWITCH_ACC
                 ; if DLC != 8 -> return
                 MOVF	CANFRAME+4,W
@@ -242,17 +257,39 @@ CAN_SWITCH_ACC
 
 CAN_SWITCH_ACC_NEXT1
                 RCALL   CHECK_ID
-                BTFSC   STATUS,Z
+                BTFSS   STATUS,Z
                 RETURN
 
-                MOVFF   CANFRAME+10,W
-                ANDLW   3
-                LFSR    FSR0,PWM_VALUE1
+                ; MOVFF   CANFRAME+10,W
+                ; ANDLW   3
 
-                MOVFF   CANFRAME+11,PLUSW0
-                INCF    WREG,F
-                MOVFF   CANFRAME+12,PLUSW0
-                RETURN
+                LOAD_PWMMAX
+                SUBWF   CANFRAME+12,F
+                MOVF    TEMP16,W
+                BTFSS   STATUS,C
+                INCFSZ  TEMP16+1
+                SUBWF   CANFRAME+11,F
+
+                MOVFF   EVENTPP,FSR0H
+                MOVFF   EVENTPP+1,FSR0L
+                CLRF	POSTINC0
+                MOVLW	0x17
+                MOVWF	POSTINC0
+                MOVFF   CANHASH_HIGH,POSTINC0
+                MOVFF   CANHASH_LOW,POSTINC0
+                MOVLW	7
+                MOVWF	POSTINC0
+                MOVFF   CANFRAME+5,POSTINC0
+                MOVFF   CANFRAME+6,POSTINC0
+                MOVFF   CANFRAME+7,POSTINC0
+                MOVFF   CANFRAME+8,POSTINC0
+                ; 40000 - x
+                MOVFF   CANFRAME+11,POSTINC0
+                MOVFF   CANFRAME+12,POSTINC0
+                ; 01 -> success
+                MOVLW   0x01
+                MOVWF   POSTINC0
+                BRA	EVENT_RING_NORMALIZE
 
 CAN_SWITCH_ACC_FAULT
                 RETURN
