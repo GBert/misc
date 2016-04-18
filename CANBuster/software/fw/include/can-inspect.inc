@@ -219,14 +219,12 @@ CAN_REBOOT
 
 ; TODO
 
-#DEFINE	PWMMAX (40000)
-
-LOAD_PWMMAX     MACRO
-                MOVLW   HIGH PWMMAX
-                MOVWF   TEMP16
-                MOVLW   LOW PWMMAX
-                MOVWF   TEMP16+1
-                ENDM
+;LOAD_PWMMAX     MACRO
+;                MOVLW   HIGH PWMMAX
+;                MOVWF   TEMP16
+;                MOVLW   LOW PWMMAX
+;                MOVWF   TEMP16+1
+;                ENDM
 
 CAN_SWITCH_ACC
                 ; if DLC != 8 -> RETURN
@@ -240,14 +238,14 @@ CAN_SWITCH_ACC_NEXT1
                 BTFSS   STATUS,Z
                 RETURN
 
-                ; calculate PWM value
-                LOAD_PWMMAX
-                MOVF    CANFRAME+12,W
-                SUBWF   TEMP16+1,F
-                BTFSS   STATUS,C
-                INCF    CANFRAME+11
-                MOVF    CANFRAME+11,W
-                SUBWF   TEMP16,F
+;                ; calculate PWM value
+;                LOAD_PWMMAX
+;                MOVF    CANFRAME+12,W
+;                SUBWF   TEMP16+1,F
+;                BTFSS   STATUS,C
+;                INCF    CANFRAME+11
+;                MOVF    CANFRAME+11,W
+;                SUBWF   TEMP16,F
 
                 ; fix servo number if needed
                 MOVFF   CANFRAME+10,TEMP
@@ -255,11 +253,17 @@ CAN_SWITCH_ACC_NEXT1
                 ANDWF   TEMP,F
                 RLNCF   TEMP
 
+                ; TODO: needs range evaluation
                 ; store new PWM value
                 LFSR    FSR0,PWM_VALUE1_LOW
-                MOVFF   TEMP16,PLUSW0
+                MOVF    TEMP,W
+                MOVFF   CANFRAME+11,PLUSW0
                 INCF    WREG,F
-                MOVFF   TEMP16+1,PLUSW0
+                MOVFF   CANFRAME+12,PLUSW0
+
+;                MOVFF   TEMP16,PLUSW0
+;                INCF    WREG,F
+;                MOVFF   TEMP16+1,PLUSW0
 
                 MOVFF   EVENTPP,FSR0H
                 MOVFF   EVENTPP+1,FSR0L

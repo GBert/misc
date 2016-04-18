@@ -52,21 +52,50 @@ PWM_VALUE5_HIGH   EQU     0x807
 ; PWM settings
 ;------------------------------------------------------------------------------
 
+
+#DEFINE PWMMAX (40000)
+
+LOAD_PWMMAX2    MACRO
+                MOVLW   HIGH PWMMAX
+                MOVWF   TEMP16
+                MOVLW   LOW PWMMAX
+                MOVWF   TEMP16+1
+                ENDM
+
+                ; substract value from PWMMAX and load CCPs
+                ; calculate PWM values
+CCP_LOAD_LOW    MACRO   PWM_HIGH, CCP_HIGH, CCP_LOW
+                LOAD_PWMMAX2
+                MOVFF   PWM_HIGH,TEMP
+                MOVF    PWM_HIGH+1,W
+                SUBWF   TEMP16+1,F      ; LSB
+                BTFSS   STATUS,C
+                INCF    TEMP,F		; MSB
+                SUBWF   TEMP16,F
+
+                MOVWF   CCP_LOW,W
+                ADDWF   TEMP16+1,F
+                MOVWF   TEMP16,W
+                ADDWFC  CCP_HIGH,F
+                MOVFF   TEMP16+1,CCP_LOW
+
+                ENDM
+
 PWMINIT
-#IF PCBV == 2
+#IF PCBV > 1
                 BCF     TRISC,2		; CCP2 PWM1
 #ENDIF
                 BCF     TRISC,6		; CCP3 PWM2
                 BCF     TRISC,7		; CCP4 PWM3
                 BCF     TRISB,5		; CCP5 PWM4
-#IF PCBV ==  2
+#IF PCBV > 1
                 BSF     LATC,2		; CCP2 PWM1
 #ENDIF
                 BSF     LATC,6		; CCP3 PWM2
                 BSF     LATC,7		; CCP4 PWM3
                 BSF     LATB,5		; CCP5 PWM4
 
-#IF PCBV ==  2
+#IF PCBV > 1
                 BCF     PIR3,CCP2IF
 #ENDIF
                 BCF     PIR4,CCP3IF
@@ -74,14 +103,25 @@ PWMINIT
                 BCF     PIR4,CCP5IF
 
                 CLRF    PWM_CHANNEL
-                CLRF    PWM_VALUE1
-                CLRF    PWM_VALUE1+1
-                CLRF    PWM_VALUE2
-                CLRF    PWM_VALUE2+1
-                CLRF    PWM_VALUE3
-                CLRF    PWM_VALUE3+1
-                CLRF    PWM_VALUE4
-                CLRF    PWM_VALUE4+1
+                MOVLW   HIGH PWM_10_HIGH
+                MOVWF   PWM_VALUE1
+                MOVLW   LOW PWM_10_HIGH
+                MOVWF   PWM_VALUE1+1
+
+                MOVLW   HIGH PWM_10_HIGH
+                MOVWF   PWM_VALUE2
+                MOVLW   LOW PWM_10_HIGH
+                MOVWF   PWM_VALUE2+1
+
+                MOVLW   HIGH PWM_15_HIGH
+                MOVWF   PWM_VALUE3
+                MOVLW   LOW PWM_15_HIGH
+                MOVWF   PWM_VALUE3+1
+
+                MOVLW   HIGH PWM_20_HIGH
+                MOVWF   PWM_VALUE4
+                MOVLW   LOW PWM_20_HIGH
+                MOVWF   PWM_VALUE4+1
 
                 ; using Timer1 as Compare
                 CLRF    TMR1H
@@ -130,17 +170,14 @@ PWM_TEST
                 BTFSC   CCP2CON,CCP2M0
                 BRA     PWM1_LOAD_LOW
                 BSF     CCP2CON,CCP2M0		; clear bit next time
-                MOVLW   LOW PWM_10_HIGH
+                MOVF    PWM_VALUE1+1,W
                 ADDWF   CCPR2L,F
-                MOVLW   HIGH PWM_10_HIGH
+                MOVF    PWM_VALUE1,W
                 ADDWFC  CCPR2H,F
                 BRA     PWM_TEST2
 PWM1_LOAD_LOW
                 BCF     CCP2CON,CCP2M0		; set bit next time
-                MOVLW   LOW PWM_10_LOW
-                ADDWF   CCPR2L,F
-                MOVLW   HIGH PWM_10_LOW
-                ADDWFC  CCPR2H,F
+                CCP_LOAD_LOW  PWM_VALUE1, CCPR2H, CCPR2L
 
 PWM_TEST2
                 BTFSS   PIR4,CCP3IF
@@ -149,17 +186,14 @@ PWM_TEST2
                 BTFSC   CCP3CON,CCP3M0
                 BRA     PWM2_LOAD_LOW
                 BSF     CCP3CON,CCP3M0		; clear bit next time
-                MOVLW   LOW PWM_10_HIGH
+                MOVF    PWM_VALUE2+1,W
                 ADDWF   CCPR3L,F
-                MOVLW   HIGH PWM_10_HIGH
+                MOVF    PWM_VALUE2,W
                 ADDWFC  CCPR3H,F
                 BRA     PWM_TEST3
 PWM2_LOAD_LOW
                 BCF     CCP3CON,CCP3M0		; set bit next time
-                MOVLW   LOW PWM_10_LOW
-                ADDWF   CCPR3L,F
-                MOVLW   HIGH PWM_10_LOW
-                ADDWFC  CCPR3H,F
+                CCP_LOAD_LOW  PWM_VALUE2, CCPR3H, CCPR3L
 
 PWM_TEST3
                 BTFSS   PIR4,CCP4IF
@@ -168,17 +202,14 @@ PWM_TEST3
                 BTFSC   CCP4CON,CCP4M0
                 BRA     PWM3_LOAD_LOW
                 BSF     CCP4CON,CCP4M0		; clear bit next time
-                MOVLW   LOW PWM_15_HIGH
+                MOVF    PWM_VALUE3+1,W
                 ADDWF   CCPR4L,F
-                MOVLW   HIGH PWM_15_HIGH
+                MOVF    PWM_VALUE3,W
                 ADDWFC  CCPR4H,F
                 BRA     PWM_TEST4
 PWM3_LOAD_LOW
                 BCF     CCP4CON,CCP4M0		; set bit next time
-                MOVLW   LOW PWM_15_LOW
-                ADDWF   CCPR4L,F
-                MOVLW   HIGH PWM_15_LOW
-                ADDWFC  CCPR4H,F
+                CCP_LOAD_LOW  PWM_VALUE3, CCPR4H, CCPR4L
 
 PWM_TEST4
                 BTFSS   PIR4,CCP5IF
@@ -187,17 +218,15 @@ PWM_TEST4
                 BTFSC   CCP5CON,CCP5M0
                 BRA     PWM4_LOAD_LOW
                 BSF     CCP5CON,CCP5M0		; clear bit next time
-                MOVLW   LOW PWM_20_HIGH
+                MOVF    PWM_VALUE4+1,W
                 ADDWF   CCPR5L,F
-                MOVLW   HIGH PWM_20_HIGH
+                MOVF    PWM_VALUE4,W
                 ADDWFC  CCPR5H,F
                 BRA     PWM_END
 PWM4_LOAD_LOW
                 BCF     CCP5CON,CCP5M0		; set bit next time
-                MOVLW   LOW PWM_20_LOW
-                ADDWF   CCPR5L,F
-                MOVLW   HIGH PWM_20_LOW
-                ADDWFC  CCPR5H,F
+                CCP_LOAD_LOW  PWM_VALUE4, CCPR5H, CCPR5L
+
 PWM_END
                 RETURN
 
