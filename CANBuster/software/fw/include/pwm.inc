@@ -65,19 +65,23 @@ LOAD_PWMMAX2    MACRO
                 ; substract value from PWMMAX and load CCPs
                 ; calculate PWM values
 CCP_LOAD_LOW    MACRO   PWM_HIGH, CCP_HIGH, CCP_LOW
-                LOAD_PWMMAX2
-                MOVFF   PWM_HIGH,TEMP
-                MOVF    PWM_HIGH+1,W
-                SUBWF   TEMP16+1,F      ; LSB
+                MOVLW   HIGH PWMMAX
+                MOVWF   TEMP16
+                MOVLW   LOW PWMMAX
+                MOVWF   TEMP16+1
+
+                MOVFF   PWM_HIGH,TEMP     ; MSB
+                MOVF    PWM_HIGH+1,W      ; LSB
+                SUBWF   TEMP16+1,F
                 BTFSS   STATUS,C
-                INCF    TEMP,F		; MSB
+                INCF    TEMP,W	          ; MSB
                 SUBWF   TEMP16,F
 
                 MOVWF   CCP_LOW,W
                 ADDWF   TEMP16+1,F
                 MOVWF   TEMP16,W
-                ADDWFC  CCP_HIGH,F
-                MOVFF   TEMP16+1,CCP_LOW
+                ADDWFC  CCP_HIGH,F        ; load new CCPRxH &
+                MOVFF   TEMP16+1,CCP_LOW  ; CCPRxL
 
                 ENDM
 
