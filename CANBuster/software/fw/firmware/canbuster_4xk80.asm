@@ -66,6 +66,7 @@
 #DEFINE		PIO	    1
 #DEFINE		LEDHIGH     1
 #DEFINE		PIOINVERT   1
+#DEFINE		PCBV        1
 
 ;------------------------------------------------------------------------------
 ; Device firmware

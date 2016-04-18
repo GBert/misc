@@ -38,8 +38,8 @@
 ; Clock Rate
 #DEFINE         CLOCK       64000000
 
-; UART PORTC or PORTB
-#DEFINE         UART        PORTC
+; UART PORTC, PORTB or PORTD
+#DEFINE         UART        PORTD
 
 ; UART Baud Rate
 #DEFINE         BAUDRATE    500000
@@ -57,13 +57,16 @@
 ; Device hardware
 ;------------------------------------------------------------------------------
 
-; LED1 RA0 CAN  OVERFLOW
-; LED2 RA1 UART OVERFLOW
-; RTS  RA2 CLEAR TO SEND
+; LED1 RB6 CAN  OVERFLOW
+; LED2 RB7 UART OVERFLOW
+; RTS  RB4 CLEAR TO SEND
 ;
-#DEFINE         GPIO        LATA
-#DEFINE         DDR         DDRA
-#DEFINE         PCBV        1
+#DEFINE         GPIO        LATB
+#DEFINE         DDR         DDRB
+#DEFINE		PIO	    1
+#DEFINE		LEDHIGH     1
+#DEFINE		PIOINVERT   1
+#DEFINE		PCBV        2
 
 ;------------------------------------------------------------------------------
 ; Device firmware
