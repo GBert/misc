@@ -71,7 +71,7 @@ ERRORLEVEL      -302
 #DEFINE         DDR         TRISC
 #DEFINE         OUTPUT      LATC
 
-#IF PCBV == 1
+#IF PCBV < 2
   #DEFINE       LED         2
 #ELSE
   #DEFINE       LED         1
