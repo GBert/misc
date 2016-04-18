@@ -197,8 +197,8 @@ SETUP_VALUE_TEST
                 MOVFF   CANFRAME+6,POSTINC0
                 MOVFF   CANFRAME+7,POSTINC0
                 MOVFF   CANFRAME+8,POSTINC0
-                MOVFF   CANFRAME+9,POSTINC0
-                MOVFF   CANFRAME+10,POSTINC0
+                MOVFF   CANFRAME+11,POSTINC0
+                MOVFF   CANFRAME+12,POSTINC0
                 ; 1 -> success
                 MOVLW   1
                 MOVWF   POSTINC0
@@ -238,32 +238,19 @@ CAN_SWITCH_ACC_NEXT1
                 BTFSS   STATUS,Z
                 RETURN
 
-;                ; calculate PWM value
-;                LOAD_PWMMAX
-;                MOVF    CANFRAME+12,W
-;                SUBWF   TEMP16+1,F
-;                BTFSS   STATUS,C
-;                INCF    CANFRAME+11
-;                MOVF    CANFRAME+11,W
-;                SUBWF   TEMP16,F
-
                 ; fix servo number if needed
                 MOVFF   CANFRAME+10,TEMP
                 MOVLW   3
                 ANDWF   TEMP,F
                 RLNCF   TEMP
 
-                ; TODO: needs range evaluation
                 ; store new PWM value
-                LFSR    FSR0,PWM_VALUE1_LOW
+                ; TODO: needs range evaluation
+                LFSR    FSR0,PWM_VALUE1
                 MOVF    TEMP,W
                 MOVFF   CANFRAME+11,PLUSW0
                 INCF    WREG,F
                 MOVFF   CANFRAME+12,PLUSW0
-
-;                MOVFF   TEMP16,PLUSW0
-;                INCF    WREG,F
-;                MOVFF   TEMP16+1,PLUSW0
 
                 MOVFF   EVENTPP,FSR0H
                 MOVFF   EVENTPP+1,FSR0L
@@ -280,9 +267,8 @@ CAN_SWITCH_ACC_NEXT1
                 MOVFF   CANFRAME+7,POSTINC0
                 MOVFF   CANFRAME+8,POSTINC0
 
-                ; PWMMAX - x  (e.g. 40000 -x)
-                MOVFF   TEMP16,POSTINC0
-                MOVFF   TEMP16+1,POSTINC0
+                MOVFF   CANFRAME+11,PLUSW0
+                MOVFF   CANFRAME+12,PLUSW0
 
                 ; 01 -> success
                 MOVLW   0x01

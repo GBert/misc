@@ -77,9 +77,10 @@ CCP_LOAD_LOW    MACRO   PWM_HIGH, CCP_HIGH, CCP_LOW
                 INCF    TEMP,W	          ; MSB
                 SUBWF   TEMP16,F
 
-                MOVWF   CCP_LOW,W
+                ; RCALL   DEBUG_CAN
+                MOVF    CCP_LOW,W
                 ADDWF   TEMP16+1,F
-                MOVWF   TEMP16,W
+                MOVF    TEMP16,W
                 ADDWFC  CCP_HIGH,F        ; load new CCPRxH &
                 MOVFF   TEMP16+1,CCP_LOW  ; CCPRxL
 
@@ -234,6 +235,33 @@ PWM4_LOAD_LOW
 PWM_END
                 RETURN
 
+
+DEBUG_CAN
+                MOVFF   EVENTPP,FSR0H
+                MOVFF   EVENTPP+1,FSR0L
+
+                MOVLW   0
+                MOVFF   WREG,POSTINC0
+                MOVFF   WREG,POSTINC0
+                MOVFF   WREG,POSTINC0
+                MOVFF   WREG,POSTINC0
+                MOVLW   8
+                MOVFF   WREG,POSTINC0
+                MOVLW   HIGH PWMMAX
+                MOVFF   WREG,POSTINC0
+                MOVLW   LOW PWMMAX
+                MOVFF   WREG,POSTINC0
+
+                MOVFF   PWM_VALUE1,POSTINC0
+                MOVFF   PWM_VALUE1+1,POSTINC0
+                MOVFF   TEMP,POSTINC0
+                MOVFF   TEMP+1,POSTINC0
+                MOVFF   TEMP16,POSTINC0
+                MOVFF   TEMP16+1,POSTINC0
+
+                BRA     EVENT_RING_NORMALIZE
+
+                RETURN
 ;
 ; vim: set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 ;
