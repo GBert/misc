@@ -53,7 +53,7 @@ ERRORLEVEL      -302
 ;------------------------------------------------------------------------------
 
 ; PCB Version
-#DEFINE         PCBV        1
+#DEFINE         PCBV        2
 
 ; Clock Rate
 #DEFINE         CLOCK       64000000

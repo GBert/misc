@@ -30,7 +30,7 @@
 ; Device
 ;------------------------------------------------------------------------------
 
-                PROCESSOR   18f46k80
+                PROCESSOR   18f45k80
 
 ;------------------------------------------------------------------------------
 ; Device Constants
@@ -42,7 +42,7 @@ BOOTSIZE        EQU     (8 * 64)
 ; Boot Loader Ident
 ;ERRORLEVEL      -220
 ;                ORG     0x200000
-;                DB      6,6,6
+;                DB      7,7,7
 ;ERRORLEVEL      +220
 
 ERRORLEVEL      -302
@@ -53,7 +53,7 @@ ERRORLEVEL      -302
 ;------------------------------------------------------------------------------
 
 ; PCB Version
-#DEFINE         PCBV        1
+#DEFINE	        PCBV        2
 
 ; Clock Rate
 #DEFINE         CLOCK       64000000

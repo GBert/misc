@@ -39,16 +39,6 @@
 ; Boot Loader Size
 BOOTSIZE        EQU     (8 * 64)
 
-
-   __IDLOCS   200000h,0FFh
-   __IDLOCS   200001h,0FFh
-   __IDLOCS   200002h,0FFh
-   __IDLOCS   200003h,0FFh
-   __IDLOCS   200004h,0FFh
-   __IDLOCS   200005h,0FFh
-   __IDLOCS   200006h,0FFh
-   __IDLOCS   200007h,0FFh
-
 ; Boot Loader Ident
 ;ERRORLEVEL      -220
 ;                ORG     0x200000
@@ -63,7 +53,7 @@ ERRORLEVEL      -302
 ;------------------------------------------------------------------------------
 
 ; PCB Version
-#DEFINE	        PCBV        2
+#DEFINE         PCBV        1
 
 ; Clock Rate
 #DEFINE         CLOCK       64000000
