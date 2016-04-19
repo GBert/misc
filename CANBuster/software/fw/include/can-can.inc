@@ -165,6 +165,7 @@ MAIN
 #INCLUDE        "pwm.inc"                   ; PWM
 #INCLUDE        "event-ring.inc"            ; Event ring
 #INCLUDE        "can-inspect.inc"           ; CAN Inspector
+#INCLUDE        "s88.inc"                   ; S88
 
 ;------------------------------------------------------------------------------
 ;
