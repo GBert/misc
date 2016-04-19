@@ -129,7 +129,11 @@ INIT
                 CALL    I2CINIT             ; Init. I2C
                 CALL    PIOINIT             ; Init. PIO
                 CALL    INITEVENTRING       ; Init. Event Ring Buffer
+#IFDEF PWM_FW
                 CALL    PWMINIT
+#ELSE
+                CALL    S88INIT
+#ENDIF
                 CALL    READUID
 
                 BSF     RCON,IPEN           ; Enable priority interrupts
@@ -145,7 +149,11 @@ MAIN
                 CALL    CANINSPECT
                 CALL    TXCAN               ; SEND CAN
                 CALL    CANINSPECT
+#IFDEF PWM_FW
                 CALL    PWM_TEST
+#ELSE
+                CALL    S88_FSM
+#ENDIF
                 BTFSC	INTCON, TMR0IF
                 RCALL   SCHEDULE
                 BRA     MAIN
@@ -162,10 +170,13 @@ MAIN
 #INCLUDE        "i2c.inc"                   ; I2C
 #INCLUDE        "id.inc"                    ; UID
 #INCLUDE        "pio.inc"                   ; PIO
-#INCLUDE        "pwm.inc"                   ; PWM
+#IFDEF PWM_FW
+  #INCLUDE      "pwm.inc"                   ; PWM
+#ELSE
+  #INCLUDE      "s88.inc"                   ; S88
+#ENDIF
 #INCLUDE        "event-ring.inc"            ; Event ring
 #INCLUDE        "can-inspect.inc"           ; CAN Inspector
-#INCLUDE        "s88.inc"                   ; S88
 
 ;------------------------------------------------------------------------------
 ;

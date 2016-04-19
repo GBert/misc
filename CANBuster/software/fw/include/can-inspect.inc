@@ -237,11 +237,13 @@ CAN_SWITCH_ACC_NEXT1
 
                 ; store new PWM value
                 ; TODO: needs range evaluation
+#IFDEF PWM_FW
                 LFSR    FSR0,PWM_VALUE1
                 MOVF    TEMP,W
                 MOVFF   CANFRAME+11,PLUSW0
                 INCF    WREG,F
                 MOVFF   CANFRAME+12,PLUSW0
+#ENDIF
 
                 MOVFF   EVENTPP,FSR0H
                 MOVFF   EVENTPP+1,FSR0L
