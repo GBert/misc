@@ -102,7 +102,7 @@ NORM_POINTER1
 SYSYTEM_CMD
                 RCALL   CHECK_ID
                 BNZ	SYSYTEM_CMD_OTHER
-                ; Configuration DLC = 8 & Suc Command 0x0b
+                ; Configuration DLC = 8 & Sub Command 0x0b
                 ; DLC = 8
                 MOVF	CANFRAME+4,W
                 XORLW	8
@@ -217,15 +217,6 @@ CAN_REBOOT
 ; Switch Accessois (0x1B)
 ;------------------------------------------------------------------------------
 
-; TODO
-
-;LOAD_PWMMAX     MACRO
-;                MOVLW   HIGH PWMMAX
-;                MOVWF   TEMP16
-;                MOVLW   LOW PWMMAX
-;                MOVWF   TEMP16+1
-;                ENDM
-
 CAN_SWITCH_ACC
                 ; if DLC != 8 -> RETURN
                 MOVF	CANFRAME+4,W
@@ -242,7 +233,7 @@ CAN_SWITCH_ACC_NEXT1
                 MOVFF   CANFRAME+10,TEMP
                 MOVLW   3
                 ANDWF   TEMP,F
-                RLNCF   TEMP
+                RLNCF   TEMP,F
 
                 ; store new PWM value
                 ; TODO: needs range evaluation

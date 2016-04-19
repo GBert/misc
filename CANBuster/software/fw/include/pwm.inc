@@ -55,13 +55,6 @@ PWM_VALUE5_HIGH   EQU     0x807
 
 #DEFINE PWMMAX (40000)
 
-LOAD_PWMMAX2    MACRO
-                MOVLW   HIGH PWMMAX
-                MOVWF   TEMP16
-                MOVLW   LOW PWMMAX
-                MOVWF   TEMP16+1
-                ENDM
-
                 ; substract value from PWMMAX and load CCPs
                 ; calculate PWM values
 CCP_LOAD_LOW    MACRO   PWM_HIGH, CCP_HIGH, CCP_LOW
