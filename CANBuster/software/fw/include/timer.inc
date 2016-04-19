@@ -1,7 +1,7 @@
 ;
 ; Can-Can TIMER
 ;
-; Copyright (c) 2015 Gerhard Bertelsmann
+; Copyright (c) 2016 Gerhard Bertelsmann
 ;
 ;------------------------------------------------------------------------------
 ;
@@ -30,10 +30,16 @@
 ; settings
 ;------------------------------------------------------------------------------
 
-#IF PCBV < 1
-  #DEFINE       LED         2
-#ELSE
-  #DEFINE       LED         1
+#IFDEF PCBV
+  #IF PCBV < 1
+    #DEFINE       LED         2
+  #ELSE
+    #DEFINE       LED         1
+  #ENDIF
+#ENDIF
+
+#IFDEF WR841_SLCAN
+#DEFINE           LED         2
 #ENDIF
 
 ;------------------------------------------------------------------------------
@@ -71,8 +77,6 @@ DO_PIO
                 ; MOVF    SCAN_INTERVAL,W	; x * 512us  - check PIO state in X ms next time
                 MOVWF   PIOTCOUNTER
                 RETURN
-
-
 
 DO_HEARTBEAT
                 ; 512 us * 256 = 131 ms

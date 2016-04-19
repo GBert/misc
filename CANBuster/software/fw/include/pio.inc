@@ -166,7 +166,11 @@ GENEVENTLOOP
 ;------------------------------------------------------------------------------
 ; get status
 ;------------------------------------------------------------------------------
+
 PIOGET
+#IFDEF WR841_SLCAN
+                RETURN
+#ELSE
                 ; RA5 is IO5
                 RRNCF	PORTA,W
                 ANDLW	b'00010000'
@@ -195,8 +199,8 @@ PIOGET
                 COMF	BUT_VAL_NEW,F
                 COMF	TOP_VAL_NEW,F
 #ENDIF
-
                 BRA	PIODEBOUNCE
+#ENDIF
 
 ;
 ; vim: set shiftwidth=4 tabstop=4 softtabstop=4 expandtab

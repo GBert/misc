@@ -115,7 +115,9 @@ INIT
                 CLRF    CM1CON          ;C
                 CLRF    CM2CON          ;C
 
+#IFNDEF WR841_SLCAN
                 CLRF    LATD
+#ENDIF
                 CLRF    LATC
                 BCF     TRISC, 2
                 CLRF    GPIO                ; Init. LED
@@ -127,7 +129,9 @@ INIT
                 CALL    INITCAN             ; Init. CAN Bus
                 CALL    TIMER0INIT          ; Init. TIMER
                 CALL    I2CINIT             ; Init. I2C
+#IFNDEF WR841_SLCAN
                 CALL    PIOINIT             ; Init. PIO
+#ENDIF
                 CALL    INITEVENTRING       ; Init. Event Ring Buffer
 #IFDEF PWM_FW
                 CALL    PWMINIT

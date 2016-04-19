@@ -52,11 +52,14 @@
 ; port defines
 ;------------------------------------------------------------------------------
 
-#IF PCBV > 1
-  #DEFINE      S88_DATA   1
-#ELSE
-  #DEFINE      S88_DATA   2
+#IFDEF PCBV
+  #IF PCBV > 1
+    #DEFINE      S88_DATA   1
+  #ELSE
+    #DEFINE      S88_DATA   2
+  #ENDIF
 #ENDIF
+
 
 #DEFINE        S88_CLOCK  6         
 #DEFINE        S88_LOAD   7         
@@ -93,7 +96,7 @@ S88_CLOCK_LOW   MACRO
 ;------------
 
 BTFS88_INPUT    MACRO
-#IFDEF SLCAN
+#IFDEF WR841_SLCAN
                 BTFSS   TRISB,4
 #ELSE
                 BTFSS   TRISC,S88_DATA
@@ -106,7 +109,7 @@ BTFS88_INPUT    MACRO
 
 S88INIT
 
-#IFDEF SLCAN
+#IFDEF WR841_SLCAN
                 BSF     TRISB,4         ; Input S88 Data
                 BCF     TRISB,5         ; Output S88 Reset
                 BCF     TRISC,6         ; Output S88 Clock
