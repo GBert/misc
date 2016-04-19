@@ -54,9 +54,9 @@
 
 #IFDEF PCBV
   #IF PCBV > 1
-    #DEFINE      S88_DATA   1
-  #ELSE
     #DEFINE      S88_DATA   2
+  #ELSE
+    #DEFINE      S88_DATA   1
   #ENDIF
 #ENDIF
 
@@ -108,7 +108,6 @@ BTFS88_INPUT    MACRO
 ;------------------------------------------------------------------------------
 
 S88INIT
-
 #IFDEF WR841_SLCAN
                 BSF     TRISB,4         ; Input S88 Data
                 BCF     TRISB,S88_RESET ; Output S88 Reset
@@ -131,7 +130,8 @@ S88INIT
 #ENDIF
                 CLRF    S88TEMP
                 CLRF    S88MASK
-                CLRF    S88STATE
+                MOVLW   0
+                MOVWF   S88STATE
                 CLRF    S88COUNT
                 RETURN
 
@@ -140,19 +140,22 @@ S88INIT
 ;------------------------------------------------------------------------------
 
 S88_FSM
+                MOVLW   HIGH $
+                MOVF    PCL,F       ; update PCLATH
                 MOVF    S88STATE,W
                 ANDLW   0x0F
                 MOVWF   S88STATE
+                RLNCF   S88STATE,W
                 ADDWF   PCL,F
-                RCALL   S88_STATE_1
-                RCALL   S88_STATE_2
-                RCALL   S88_STATE_3
-                RCALL   S88_STATE_4
-                RCALL   S88_STATE_5
-                RCALL   S88_STATE_6
-                RCALL   S88_STATE_7
-                RCALL   S88_STATE_8
-                RCALL   S88_STATE_9
+                BRA     S88_STATE_1
+                BRA     S88_STATE_2
+                BRA     S88_STATE_3
+                BRA     S88_STATE_4
+                BRA     S88_STATE_5
+                BRA     S88_STATE_6
+                BRA     S88_STATE_7
+                BRA     S88_STATE_8
+                BRA     S88_STATE_9
                 NOP
                 NOP
                 NOP
@@ -169,7 +172,7 @@ S88_FSM
 S88_STATE_1
                 MOVLW   1
                 MOVWF   S88MASK
-                MOVLW   16
+                MOVLW   7
                 MOVWF   S88COUNT
                 S88_LOAD_HIGH
                 INCF    S88STATE,F
@@ -208,7 +211,9 @@ S88_STATE_9
                 ; read n-bit
                 DECF    S88COUNT,F
                 BNZ     S88_MORE_BITS
-                CLRF    S88STATE
+                MOVLW   0
+                MOVWF   S88STATE
+                RETURN
 
 S88_MORE_BITS   DECF    S88STATE,F      ; go back -> read next
                 RETURN

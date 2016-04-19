@@ -60,6 +60,9 @@ TIMER0INIT
 SCHEDULE
                 ; must reset Timer0 overflow flag
                 BCF	INTCON, TMR0IF
+#IFNDEF PWM_FW
+                CALL    S88_FSM
+#ENDIF
                 INFSNZ	TCOUNTER,F	; heartbeat routine
                 RCALL	DO_HEARTBEAT
 
@@ -68,6 +71,7 @@ SCHEDULE
 
                 ; look for events in the buffer
                 RCALL   SENDEVENT
+
                 RETURN
 
 DO_PIO

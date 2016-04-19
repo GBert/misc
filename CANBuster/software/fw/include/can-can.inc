@@ -155,8 +155,6 @@ MAIN
                 CALL    CANINSPECT
 #IFDEF PWM_FW
                 CALL    PWM_TEST
-#ELSE
-                CALL    S88_FSM
 #ENDIF
                 BTFSC	INTCON, TMR0IF
                 RCALL   SCHEDULE
