@@ -61,36 +61,36 @@
 #ENDIF
 
 
-#DEFINE        S88_CLOCK  6         
-#DEFINE        S88_LOAD   7         
-#DEFINE        S88_REST   5         
+#DEFINE        S88_CLOCK  6   ; RC6
+#DEFINE        S88_LOAD   7   ; RC7
+#DEFINE        S88_RESET  5   ; RB5
 
 ;------------------------------------------------------------------------------
 ; S88 Macros
 ;------------------------------------------------------------------------------
 
-S88_RESET_HIGH  MACRO
-                BSF     LATC,7
-                ENDM
-
-S88_RESET_LOW   MACRO
-                BCF     LATC,7
-                ENDM
-
 S88_LOAD_HIGH   MACRO
-                BSF     LATB,5
+                BSF     LATC,S88_LOAD
                 ENDM
 
 S88_LOAD_LOW    MACRO
-                BCF     LATB,5
+                BCF     LATC,S88_LOAD
+                ENDM
+
+S88_RESET_HIGH  MACRO
+                BSF     LATB,S88_RESET
+                ENDM
+
+S88_RESET_LOW   MACRO
+                BCF     LATB,S88_RESET
                 ENDM
 
 S88_CLOCK_HIGH  MACRO
-                BSF     LATC,6
+                BSF     LATC,S88_CLOCK
                 ENDM
 
 S88_CLOCK_LOW   MACRO
-                BCF     LATC,6
+                BCF     LATC,S88_CLOCK
                 ENDM
 
 ;------------
@@ -111,24 +111,23 @@ S88INIT
 
 #IFDEF WR841_SLCAN
                 BSF     TRISB,4         ; Input S88 Data
-                BCF     TRISB,5         ; Output S88 Reset
-                BCF     TRISC,6         ; Output S88 Clock
-                BCF     TRISC,7         ; Output S88 Load
+                BCF     TRISB,S88_RESET ; Output S88 Reset
+                BCF     TRISC,S88_CLOCK ; Output S88 Clock
+                BCF     TRISC,S88_LOAD  ; Output S88 Load
 
-                BCF     LATB,5          ; clear pins
-                BCF     LATC,6          ;
-                BCF     LATC,7          ;
+                BCF     LATB,S88_RESET  ; clear pins
+                BCF     LATC,S88_CLOCK  ;
+                BCF     LATC,S88_LOAD   ;
 
 #ELSE
                 BSF     TRISC,S88_DATA  ; Input S88 Data
-                BCF     TRISC,6         ; Output S88 Clock
-                BCF     TRISC,7         ; Output S88 Load
-                BCF     TRISB,5         ; Output S88 Reset
+                BCF     TRISC,S88_CLOCK ; Output S88 Clock
+                BCF     TRISC,S88_LOAD  ; Output S88 Load
+                BCF     TRISB,S88_RESET ; Output S88 Reset
 
-                ; 
-                BCF     LATC,6          ; clear pins
-                BCF     LATC,7          ; 
-                BCF     LATB,5          ; 
+                BCF     LATC,S88_CLOCK  ; clear pins
+                BCF     LATC,S88_LOAD   ;
+                BCF     LATB,S88_RESET  ;
 #ENDIF
                 CLRF    S88TEMP
                 CLRF    S88MASK
