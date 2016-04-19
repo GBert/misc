@@ -180,7 +180,7 @@ SETUP_VALUE_CONT4
                 RETURN
 
 SETUP_VALUE_WRITE
-                CALL    SETUID
+                CALL    SET_UID
                 CALL    READCANHASH
 
 SETUP_VALUE_TEST

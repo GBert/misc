@@ -51,6 +51,26 @@
                 ENDC
 
 ;------------------------------------------------------------------------------
+; Macros
+;------------------------------------------------------------------------------
+                ; debouncing code from Peter Danegger
+PIO_DEBOUNCE    MACRO   MVAL_NEW,MVAL_STATE,MVAL_CHG,MTEMP,MCT0,MCT1
+                COMF	MVAL_NEW,W
+                XORWF	MVAL_STATE,W		; port changed ?
+                MOVWF	MTEMP
+                ANDWF	MCT0,F	    	; reset or count ct0
+                COMF	MCT0,F
+                MOVF	MCT1,W		; reset or count ct1
+                ANDWF	MTEMP,W
+                XORWF	MCT0,W
+                MOVWF	MCT1
+                ANDWF	MCT0,W
+                ANDWF	MTEMP,W
+                MOVWF	MVAL_CHG
+                XORWF	MVAL_STATE,F
+                ENDM
+
+;------------------------------------------------------------------------------
 ; Init. PIO
 ;------------------------------------------------------------------------------
 
@@ -97,40 +117,13 @@ PTIMECLLOOP
 
                 BRA	READCANHASH
 
-                ; debouncing code from Peter Danegger
 PIODEBOUNCE
-                COMF	TOP_VAL_NEW,W
-                XORWF	TOP_VAL_STATE,W		; port changed ?
-                MOVWF	TEMP
-                ANDWF	TOP_CT0,F	    	; reset or count ct0
-                COMF	TOP_CT0,F
-                MOVF	TOP_CT1,W		; reset or count ct1
-                ANDWF	TEMP,W
-                XORWF	TOP_CT0,W
-                MOVWF	TOP_CT1
-                ANDWF	TOP_CT0,W
-                ANDWF	TEMP,W
-                MOVWF	TOP_VAL_CHG
-                XORWF	TOP_VAL_STATE,F
-
-                COMF	BUT_VAL_NEW,W
-                XORWF	BUT_VAL_STATE,W		; port changed ?
-                MOVWF	TEMP
-                ANDWF	BUT_CT0,F		; reset or count ct0
-                COMF	BUT_CT0,F
-                MOVF	BUT_CT1,W		; reset or count ct1
-                ANDWF	TEMP,W
-                XORWF	BUT_CT0,W
-                MOVWF	BUT_CT1
-                ANDWF	BUT_CT0,W
-                ANDWF	TEMP,W
-                MOVWF	BUT_VAL_CHG
-                XORWF	BUT_VAL_STATE,F
+                PIO_DEBOUNCE   TOP_VAL_NEW, TOP_VAL_STATE, TOP_VAL_CHG, TEMP, TOP_CT0, TOP_CT1
+                PIO_DEBOUNCE   BUT_VAL_NEW, BUT_VAL_STATE, BUT_VAL_CHG, TEMP, BUT_CT0, BUT_CT1
 
                 RETURN
-
 GENEVENT
-                CALL	READUID
+                CALL	READ_UID
                 MOVFF	PIOC_H,TEMP16
                 MOVFF	PIOC_L,TEMP16+1
 

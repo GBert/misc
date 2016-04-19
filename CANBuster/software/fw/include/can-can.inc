@@ -138,7 +138,7 @@ INIT
 #ELSE
                 CALL    S88INIT
 #ENDIF
-                CALL    READUID
+                CALL    READ_UID
 
                 BSF     RCON,IPEN           ; Enable priority interrupts
                 BSF     INTCON,PEIE         ; Init. ISR
