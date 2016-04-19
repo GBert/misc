@@ -141,7 +141,7 @@ S88INIT
 
 S88_FSM
                 MOVLW   HIGH $
-                MOVF    PCL,F       ; update PCLATH
+                MOVWF   PCLATH
                 MOVF    S88STATE,W
                 ANDLW   0x0F
                 MOVWF   S88STATE
@@ -172,7 +172,7 @@ S88_FSM
 S88_STATE_1
                 MOVLW   1
                 MOVWF   S88MASK
-                MOVLW   7
+                MOVLW   47
                 MOVWF   S88COUNT
                 S88_LOAD_HIGH
                 INCF    S88STATE,F
