@@ -46,6 +46,11 @@
                 S88MASK  : 1
                 S88STATE : 1
                 S88COUNT : 1
+                S88_CT0  : 6
+                S88_CT1  : 6
+                S88_NEW  : 6
+                S88_STATE: 6
+                S88_CHANGE  : 1
                 ENDC
 
 ;------------------------------------------------------------------------------
@@ -140,14 +145,14 @@ S88INIT
 ;------------------------------------------------------------------------------
 
 S88_FSM
-                MOVLW   HIGH $
+                MOVLW   HIGH S88_FSM_BRANCH
                 MOVWF   PCLATH
                 MOVF    S88STATE,W
                 ANDLW   0x0F
                 MOVWF   S88STATE
                 RLNCF   S88STATE,W
                 ADDWF   PCL,F
-                BRA     S88_STATE_1
+S88_FSM_BRANCH  BRA     S88_STATE_1
                 BRA     S88_STATE_2
                 BRA     S88_STATE_3
                 BRA     S88_STATE_4
