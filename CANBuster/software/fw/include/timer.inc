@@ -24,6 +24,7 @@
                 TCOUNTER : 1
                 PIOTCOUNTER : 1
                 HEARTBEAT : 1
+                TIMER3 : 2
                 ENDC
 
 ;------------------------------------------------------------------------------
@@ -45,6 +46,7 @@
 ;------------------------------------------------------------------------------
 ; Init. Timer
 ;------------------------------------------------------------------------------
+
 TIMER0INIT
                 ; timer period = 1/16MHz = 0.0625 us
                 ; prescaler period = .0625us * 8 = 0.5 us
@@ -57,12 +59,35 @@ TIMER0INIT
                 MOVWF	PIOTCOUNTER
                 RETURN
 
+; Setup Timer 3 as free running counter
+
+TIMER3INIT
+                ; timer period = 1/16MHz = 0.0625 us
+                ; overflow period  = 0.0625 us * 65536 = 4.096ms
+                MOVLW   (1 << TMR3ON) + (1 << RD16)
+                MOVWF   T3CON
+                CLRF    TIMER3
+                CLRF    TIMER3+1
+                RETURN
+
+;------------------------------------------------------------------------------
+; Service routine
+;------------------------------------------------------------------------------
+
 SCHEDULE
                 ; must reset Timer0 overflow flag
                 BCF	INTCON, TMR0IF
                 INFSNZ	TCOUNTER,F	; heartbeat routine
                 RCALL	DO_HEARTBEAT
 
+                ; update free running counter (4.096ms)
+                BTFSS   PIR2, TMR3IF
+                BRA     SCHEDULE_NEXT1
+                BCF     PIR2,TMR3IF
+                INCFSZ  TIMER3+1
+                INCF    TIMER3
+
+SCHEDULE_NEXT1
                 DCFSNZ	PIOTCOUNTER,F	; PIO routine
                 RCALL	DO_PIO
 
