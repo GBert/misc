@@ -341,47 +341,47 @@ SEND_CONFIGURATION
                 RETURN
 
 SEND_CONF_CONT
-                MOVF    CANFRAME+4,W
+                MOVF    CANFRAME+9,W
+                MOVWF   INDEX
                 XORLW   0
-                BTFSS   STATUS,Z
-                BRA     SEND_CONF_CONT1
+                BNZ     SEND_CONF_CONT1
                 LOAD_INDEX_P INDEX0
                 GOTO    SEND_INDEX
 
 SEND_CONF_CONT1
+                MOVF    CANFRAME+9,W
                 XORLW   1
-                BTFSS   STATUS,Z
-                BRA     SEND_CONF_CONT2
+                BNZ     SEND_CONF_CONT2
                 LOAD_INDEX_P INDEX1
                 GOTO    SEND_INDEX
 
 SEND_CONF_CONT2
+                MOVF    CANFRAME+9,W
                 XORLW   2
-                BTFSS   STATUS,Z
-                BRA     SEND_CONF_CONT3
+                BNZ     SEND_CONF_CONT3
                 LOAD_INDEX_P INDEX2
                 GOTO    SEND_INDEX
 
 SEND_CONF_CONT3
+                MOVF    CANFRAME+9,W
                 XORLW   3
-                BTFSS   STATUS,Z
-                BRA     SEND_CONF_CONT4
+                BNZ     SEND_CONF_CONT4
                 LOAD_INDEX_P INDEX3
                 GOTO    SEND_INDEX
 
 SEND_CONF_CONT4
+                MOVF    CANFRAME+9,W
                 XORLW   4
-                BTFSS   STATUS,Z
-                BRA     SEND_CONF_CONT5
+                BNZ     SEND_CONF_CONT5
                 LOAD_INDEX_P INDEX4
                 GOTO    SEND_INDEX
 
 SEND_CONF_CONT5
 
 #IFDEF PWM
+                MOVF    CANFRAME+9,W
                 XORLW   5
-                BTFSS   STATUS,Z
-                BRA     SEND_CONF_CONT6
+                BNZ     SEND_CONF_CONT6
                 LOAD_INDEX_P INDEX5
                 GOTO    SEND_INDEX
 #ENDIF

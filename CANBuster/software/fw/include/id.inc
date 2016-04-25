@@ -190,7 +190,7 @@ READCANHASH
 LOAD_INDEX_P    MACRO   INDEX
                 MOVLW   LOW INDEX
                 MOVWF   TBLPTRL
-                MOVLW   LOW INDEX
+                MOVLW   HIGH INDEX
                 MOVWF   TBLPTRH
                 MOVLW   UPPER INDEX
                 MOVWF   TBLPTRU
@@ -199,9 +199,9 @@ LOAD_INDEX_P    MACRO   INDEX
 SEND_INDEX
                 TBLRD*+
                 MOVFF   TABLAT,INDEX_N
-                ; store Index nr
-                MOVFF   TABLAT,INDEX
                 CLRF    INDEX_C
+                ; align
+                TBLRD*+
 
                 ; load Event Queue pointer
                 MOVFF   EVENTPP,FSR0H
