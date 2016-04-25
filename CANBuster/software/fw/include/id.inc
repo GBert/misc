@@ -183,6 +183,10 @@ READCANHASH
                 RETURN
 
 
+;------------------------------------------------------------------------------
+; send variable definitions
+;------------------------------------------------------------------------------
+
 LOAD_INDEX_P    MACRO   INDEX
                 MOVLW   LOW INDEX
                 MOVWF   TBLPTRL
@@ -193,15 +197,15 @@ LOAD_INDEX_P    MACRO   INDEX
                 ENDM
 
 SEND_INDEX
-                MOVFF   EVENTPP,FSR0H
-                MOVFF   EVENTPP+1,FSR0L
-
                 TBLRD*+
                 MOVFF   TABLAT,INDEX_N
                 ; store Index nr
                 MOVFF   TABLAT,INDEX
                 CLRF    INDEX_C
 
+                ; load Event Queue pointer
+                MOVFF   EVENTPP,FSR0H
+                MOVFF   EVENTPP+1,FSR0L
 SEND_INDEX_LOOP1
                 ; CAN ID  0x003B030n  n -> number
                 CLRF    POSTINC0
@@ -209,7 +213,7 @@ SEND_INDEX_LOOP1
                 MOVWF   POSTINC0
                 MOVLW   0x03
                 MOVWF   POSTINC0
-                INCF    INDEX_C
+                INCF    INDEX_C,F
                 MOVFF   INDEX_C,POSTINC0
                 ; CAN DLC
                 MOVLW   8
@@ -245,23 +249,21 @@ SEND_INDEX_LOOP2
                 BRA     EVENT_RING_NORMALIZE
 
 ;------------------------------------------------------------------------------
-; Set CAN Hash according to Maerklin documentation
+; variable definition for cs2.exe
 ;------------------------------------------------------------------------------
 INDEX0
 #IFDEF PWM
-                DB        5
-                DB        0 ,  5 ,  0 ,  0 ,  1 ,  0,   0 ,  1
+                DB        4
+                DB        0 ,  5 ,  0 ,  0 ,  1 ,  2,   0 ,  1
                 DB       'P', 'W', 'M',  0 ,  0 ,  0,   0 ,  0
                 DB       'C', 'A', 'N', 'B', 'u', 's', 't', 'e'
                 DB       'r',  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0
-                DB       'C', 'B', 'U', 'S',  0 ,  0 ,  0 ,  0
 #ELSE
-                DB        5
-                DB        0 ,  4 ,  0 ,  0 ,  1 ,  0 ,  0 ,  1
+                DB        4
+                DB        0 ,  4 ,  0 ,  0 ,  1 ,  2 ,  0 ,  1
                 DB       'S', '8', '8',  0 ,  0 ,  0 ,  0 ,  0
                 DB       'C', 'A', 'N', 'B', 'u', 's', 't', 'e'
                 DB       'r',  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0
-                DB       'C', 'B', 'U', 'S',  0 ,  0 ,  0 ,  0
 #ENDIF
 
 INDEX1

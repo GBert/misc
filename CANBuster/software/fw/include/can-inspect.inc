@@ -248,7 +248,7 @@ CAN_SWITCH_ACC_NEXT1
                 RLNCF   TEMP,F
 
                 ; store new PWM value
-                ; TODO: needs range evaluation
+                ; TODO: needs range verification
 #IFDEF PWM_FW
                 LFSR    FSR0,PWM_VALUE1
                 MOVF    TEMP,W
@@ -334,7 +334,10 @@ SEND_CONFIGURATION
                 ; if DLC != 5 -> return
                 MOVF	CANFRAME+4,W
                 XORLW	5
-                BZ	SEND_CONF_CONT
+                BTFSS   STATUS,Z
+                RETURN
+                RCALL   CHECK_ID
+                BTFSS   STATUS,Z
                 RETURN
 
 SEND_CONF_CONT
