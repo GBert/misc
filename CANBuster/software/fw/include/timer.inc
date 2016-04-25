@@ -84,8 +84,8 @@ SCHEDULE
                 BTFSS   PIR2, TMR3IF
                 BRA     SCHEDULE_NEXT1
                 BCF     PIR2,TMR3IF
-                INCFSZ  TIMER3+1
-                INCF    TIMER3
+                INCFSZ  TIMER3+1,F
+                INCF    TIMER3,F
 
 SCHEDULE_NEXT1
                 DCFSNZ	PIOTCOUNTER,F	; PIO routine

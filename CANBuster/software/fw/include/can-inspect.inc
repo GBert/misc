@@ -381,10 +381,11 @@ SEND_CONF_CONT5
 #IFDEF PWM
                 XORLW   5
                 BTFSS   STATUS,Z
+                BRA     SEND_CONF_CONT6
                 LOAD_INDEX_P INDEX5
                 GOTO    SEND_INDEX
 #ENDIF
-
+SEND_CONF_CONT6
                 RETURN
 ;
 ; vim: set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
