@@ -48,6 +48,12 @@ CANINSPECT
                 BTFSC   STATUS,Z
                 BRA     CAN_PING
 
+                ; CAN PING 0x31 (CS2.exe) ?
+                MOVF    CANFRAME+1,W
+                XORLW   0x31
+                BTFSC   STATUS,Z
+                BRA     CAN_PING2
+
                 RETURN
 
 ;------------------------------------------------------------------------------
@@ -180,7 +186,7 @@ SETUP_VALUE_CONT4
                 RETURN
 
 SETUP_VALUE_WRITE
-                CALL    SETUID
+                CALL    SET_UID
                 CALL    READCANHASH
 
 SETUP_VALUE_TEST
@@ -277,6 +283,13 @@ CAN_SWITCH_ACC_FAULT
 CAN_PING
                 ; if DLC != 0 -> return
                 MOVF	CANFRAME+4,F
+                BZ	CAN_PING_CONT
+                RETURN
+
+CAN_PING2
+                ; if DLC != 8 -> return
+                MOVF	CANFRAME+4,W
+                XORLW	8
                 BZ	CAN_PING_CONT
                 RETURN
 

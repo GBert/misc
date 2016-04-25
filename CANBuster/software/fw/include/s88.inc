@@ -46,6 +46,11 @@
                 S88MASK  : 1
                 S88STATE : 1
                 S88COUNT : 1
+                S88_CT0  : 6
+                S88_CT1  : 6
+                S88_NEW  : 6
+                S88_STATE: 6
+                S88_CHANGE  : 1
                 ENDC
 
 ;------------------------------------------------------------------------------
@@ -54,43 +59,55 @@
 
 #IFDEF PCBV
   #IF PCBV > 1
+<<<<<<< HEAD
     #DEFINE      S88_DATA   1
   #ELSE
     #DEFINE      S88_DATA   2
+=======
+    #DEFINE      S88_DATA   2
+  #ELSE
+    #DEFINE      S88_DATA   1
+>>>>>>> 4a90c978b98a2cb8418aca513376a072af3c4bb5
   #ENDIF
 #ENDIF
 
 
+<<<<<<< HEAD
 #DEFINE        S88_CLOCK  6         
 #DEFINE        S88_LOAD   7         
 #DEFINE        S88_REST   5         
+=======
+#DEFINE        S88_CLOCK  6   ; RC6
+#DEFINE        S88_LOAD   7   ; RC7
+#DEFINE        S88_RESET  5   ; RB5
+>>>>>>> 4a90c978b98a2cb8418aca513376a072af3c4bb5
 
 ;------------------------------------------------------------------------------
 ; S88 Macros
 ;------------------------------------------------------------------------------
 
-S88_RESET_HIGH  MACRO
-                BSF     LATC,7
-                ENDM
-
-S88_RESET_LOW   MACRO
-                BCF     LATC,7
-                ENDM
-
 S88_LOAD_HIGH   MACRO
-                BSF     LATB,5
+                BSF     LATC,S88_LOAD
                 ENDM
 
 S88_LOAD_LOW    MACRO
-                BCF     LATB,5
+                BCF     LATC,S88_LOAD
+                ENDM
+
+S88_RESET_HIGH  MACRO
+                BSF     LATB,S88_RESET
+                ENDM
+
+S88_RESET_LOW   MACRO
+                BCF     LATB,S88_RESET
                 ENDM
 
 S88_CLOCK_HIGH  MACRO
-                BSF     LATC,6
+                BSF     LATC,S88_CLOCK
                 ENDM
 
 S88_CLOCK_LOW   MACRO
-                BCF     LATC,6
+                BCF     LATC,S88_CLOCK
                 ENDM
 
 ;------------
@@ -108,31 +125,34 @@ BTFS88_INPUT    MACRO
 ;------------------------------------------------------------------------------
 
 S88INIT
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4a90c978b98a2cb8418aca513376a072af3c4bb5
 #IFDEF WR841_SLCAN
                 BSF     TRISB,4         ; Input S88 Data
-                BCF     TRISB,5         ; Output S88 Reset
-                BCF     TRISC,6         ; Output S88 Clock
-                BCF     TRISC,7         ; Output S88 Load
+                BCF     TRISB,S88_RESET ; Output S88 Reset
+                BCF     TRISC,S88_CLOCK ; Output S88 Clock
+                BCF     TRISC,S88_LOAD  ; Output S88 Load
 
-                BCF     LATB,5          ; clear pins
-                BCF     LATC,6          ;
-                BCF     LATC,7          ;
+                BCF     LATB,S88_RESET  ; clear pins
+                BCF     LATC,S88_CLOCK  ;
+                BCF     LATC,S88_LOAD   ;
 
 #ELSE
                 BSF     TRISC,S88_DATA  ; Input S88 Data
-                BCF     TRISC,6         ; Output S88 Clock
-                BCF     TRISC,7         ; Output S88 Load
-                BCF     TRISB,5         ; Output S88 Reset
+                BCF     TRISC,S88_CLOCK ; Output S88 Clock
+                BCF     TRISC,S88_LOAD  ; Output S88 Load
+                BCF     TRISB,S88_RESET ; Output S88 Reset
 
-                ; 
-                BCF     LATC,6          ; clear pins
-                BCF     LATC,7          ; 
-                BCF     LATB,5          ; 
+                BCF     LATC,S88_CLOCK  ; clear pins
+                BCF     LATC,S88_LOAD   ;
+                BCF     LATB,S88_RESET  ;
 #ENDIF
                 CLRF    S88TEMP
                 CLRF    S88MASK
-                CLRF    S88STATE
+                MOVLW   0
+                MOVWF   S88STATE
                 CLRF    S88COUNT
                 RETURN
 
@@ -141,19 +161,22 @@ S88INIT
 ;------------------------------------------------------------------------------
 
 S88_FSM
+                MOVLW   HIGH S88_FSM_BRANCH
+                MOVWF   PCLATH
                 MOVF    S88STATE,W
                 ANDLW   0x0F
                 MOVWF   S88STATE
+                RLNCF   S88STATE,W
                 ADDWF   PCL,F
-                RCALL   S88_STATE_1
-                RCALL   S88_STATE_2
-                RCALL   S88_STATE_3
-                RCALL   S88_STATE_4
-                RCALL   S88_STATE_5
-                RCALL   S88_STATE_6
-                RCALL   S88_STATE_7
-                RCALL   S88_STATE_8
-                RCALL   S88_STATE_9
+S88_FSM_BRANCH  BRA     S88_STATE_1
+                BRA     S88_STATE_2
+                BRA     S88_STATE_3
+                BRA     S88_STATE_4
+                BRA     S88_STATE_5
+                BRA     S88_STATE_6
+                BRA     S88_STATE_7
+                BRA     S88_STATE_8
+                BRA     S88_STATE_9
                 NOP
                 NOP
                 NOP
@@ -170,7 +193,7 @@ S88_FSM
 S88_STATE_1
                 MOVLW   1
                 MOVWF   S88MASK
-                MOVLW   16
+                MOVLW   47
                 MOVWF   S88COUNT
                 S88_LOAD_HIGH
                 INCF    S88STATE,F
@@ -209,7 +232,9 @@ S88_STATE_9
                 ; read n-bit
                 DECF    S88COUNT,F
                 BNZ     S88_MORE_BITS
-                CLRF    S88STATE
+                MOVLW   0
+                MOVWF   S88STATE
+                RETURN
 
 S88_MORE_BITS   DECF    S88STATE,F      ; go back -> read next
                 RETURN

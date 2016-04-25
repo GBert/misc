@@ -24,6 +24,7 @@
                 TCOUNTER : 1
                 PIOTCOUNTER : 1
                 HEARTBEAT : 1
+                TIMER3 : 2
                 ENDC
 
 ;------------------------------------------------------------------------------
@@ -45,17 +46,33 @@
 ;------------------------------------------------------------------------------
 ; Init. Timer
 ;------------------------------------------------------------------------------
+
 TIMER0INIT
                 ; timer period = 1/16MHz = 0.0625 us
-                ; prescaler period = .0625us * 32 = 2 us
-                ; overflow period  = 2 us * 256 = 512 us
+                ; prescaler period = .0625us * 8 = 0.5 us
+                ; overflow period  = 0.5 us * 256 = 128 us
 
-                MOVLW   (1 << TMR0ON) + (1 << T08BIT) + (1 << T0PS2)
+                MOVLW   (1 << TMR0ON) + (1 << T08BIT) + (1 << T0PS1)
                 MOVWF   T0CON
                 CLRF	HEARTBEAT
-                MOVLW	20		; 20 * 512us = 10ms
+                MOVLW	80		; 80 * 128us = 10ms
                 MOVWF	PIOTCOUNTER
                 RETURN
+
+; Setup Timer 3 as free running counter
+
+TIMER3INIT
+                ; timer period = 1/16MHz = 0.0625 us
+                ; overflow period  = 0.0625 us * 65536 = 4.096ms
+                MOVLW   (1 << TMR3ON) + (1 << RD16)
+                MOVWF   T3CON
+                CLRF    TIMER3
+                CLRF    TIMER3+1
+                RETURN
+
+;------------------------------------------------------------------------------
+; Service routine
+;------------------------------------------------------------------------------
 
 SCHEDULE
                 ; must reset Timer0 overflow flag
@@ -63,39 +80,51 @@ SCHEDULE
                 INFSNZ	TCOUNTER,F	; heartbeat routine
                 RCALL	DO_HEARTBEAT
 
+                ; update free running counter (4.096ms)
+                BTFSS   PIR2, TMR3IF
+                BRA     SCHEDULE_NEXT1
+                BCF     PIR2,TMR3IF
+                INCFSZ  TIMER3+1
+                INCF    TIMER3
+
+SCHEDULE_NEXT1
                 DCFSNZ	PIOTCOUNTER,F	; PIO routine
                 RCALL	DO_PIO
 
+#IFNDEF PWM_FW
+                CALL    S88_FSM
+#ENDIF
                 ; look for events in the buffer
                 RCALL   SENDEVENT
+
                 RETURN
 
 DO_PIO
                 RCALL   PIOGET          ; PIO service routine - any PIO change ?
                 RCALL   GENEVENT	; buffer events
-                MOVLW   20		; 20 * 512us  - check PIO state in 10 ms next time
-                ; MOVF    SCAN_INTERVAL,W	; x * 512us  - check PIO state in X ms next time
+                MOVLW   80		; 80 * 128us  - check PIO state in 10 ms next time
+                ; MOVF    SCAN_INTERVAL,W	; x * 128us  - check PIO state in X ms next time
                 MOVWF   PIOTCOUNTER
                 RETURN
 
 DO_HEARTBEAT
-                ; 512 us * 256 = 131 ms
-                ; limit to 8 * 131 ms = 1.049 s
+                ; 128 us * 256 = 33 ms
+                ; limit to 32 * 33 ms = 1.049 s
                 INCF	HEARTBEAT,F
-                MOVLW	7
+                MOVLW	31
                 ANDWF	HEARTBEAT,F
                 ; doing heartbeat - sequence starts on 1 to enable resetting HEARTBEAT var
                 ; for other blinking events
                 MOVLW	0
                 CPFSGT	HEARTBEAT
                 BRA	STATUS_LED_ON
-                MOVLW	1
+                MOVLW	4
                 CPFSGT	HEARTBEAT
                 BRA	STATUS_LED_OFF
-                MOVLW	2
+                MOVLW	8
                 CPFSGT	HEARTBEAT
                 BRA	STATUS_LED_ON
-                MOVLW	3
+                MOVLW	12
                 CPFSGT	HEARTBEAT
                 BRA	STATUS_LED_OFF
 

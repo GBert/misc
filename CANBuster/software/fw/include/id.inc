@@ -105,7 +105,7 @@ SETLOCIDP
                 MOVWF   TBLPTRU
                 RETURN
 
-READUID
+READ_UID
                 ; read ID and counting numbers
                 MOVLW   0
                 RCALL   SETLOCIDP
@@ -125,7 +125,7 @@ READUID
                 MOVFF   TABLAT,SCAN_INTERVAL
                 RETURN
 
-SETUID
+SET_UID
                 ; set ID and counting numbers
                 MOVLW   0
                 RCALL   SETLOCIDP
@@ -156,7 +156,7 @@ SETUID
 ; Set CAN Hash according to Maerklin documentation
 ;------------------------------------------------------------------------------
 READCANHASH
-                RCALL   READUID
+                RCALL   READ_UID
                 MOVLW   'C'
                 XORWF   ID_H,W
                 MOVWF   CANHASH_HIGH

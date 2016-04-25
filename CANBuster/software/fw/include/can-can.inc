@@ -127,7 +127,8 @@ INIT
                 CALL    INITUART            ; Init. UART
                 CALL    INITRING            ; Init. Rx/Tx Ring Buffer
                 CALL    INITCAN             ; Init. CAN Bus
-                CALL    TIMER0INIT          ; Init. TIMER
+                CALL    TIMER0INIT          ; Init. TIMER0
+                CALL    TIMER3INIT          ; Init. TIMER3
                 CALL    I2CINIT             ; Init. I2C
 #IFNDEF WR841_SLCAN
                 CALL    PIOINIT             ; Init. PIO
@@ -138,7 +139,7 @@ INIT
 #ELSE
                 CALL    S88INIT
 #ENDIF
-                CALL    READUID
+                CALL    READ_UID
 
                 BSF     RCON,IPEN           ; Enable priority interrupts
                 BSF     INTCON,PEIE         ; Init. ISR
@@ -155,8 +156,6 @@ MAIN
                 CALL    CANINSPECT
 #IFDEF PWM_FW
                 CALL    PWM_TEST
-#ELSE
-                CALL    S88_FSM
 #ENDIF
                 BTFSC	INTCON, TMR0IF
                 RCALL   SCHEDULE
