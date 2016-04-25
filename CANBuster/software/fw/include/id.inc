@@ -176,6 +176,34 @@ READCANHASH
                 BCF     CANHASH_LOW,7
                 RETURN
 
+
+;------------------------------------------------------------------------------
+; Set CAN Hash according to Maerklin documentation
+;------------------------------------------------------------------------------
+INDEX0
+#IFDEF PWM
+                DB         0,   1,   0,   0,   1,   0,   0,   1
+                DB       'P', 'W', 'M',   0,   0,   0,   0,   0
+                DB       'C', 'A', 'N', 'B', 'u', 's', 't', 'e'
+                DB       'r',   0,   0,   0,   0,   0,   0,   0
+                DB       'C', 'B', 'U', 'S',   0,   0,   0,   0
+#ELSE
+                DB         0,   1,   0,   0,   1,   0,   0,   1
+                DB       'S', '8', '8',   0,   0,   0,   0,   0
+                DB       'C', 'A', 'N', 'B', 'u', 's', 't', 'e'
+                DB       'r',   0,   0,   0,   0,   0,   0,   0
+                DB       'C', 'B', 'U', 'S',   0,   0,   0,   0
+#ENDIF
+
+INDEX1
+#IFDEF PWM
+#ELSE
+                DB         1,   2,   0,   0,   0,   3,   0,   1
+                DB       'L',0xc3,0xa4, 'n', 'g', 'e',   0, 'S'
+                DB       '8', '8', '-', 'B', 'u', 's',   0, '0'
+                DB       '3',   0,   0,   0,   0,   0,   0,   0
+#ENDIF
+
 ;
 ; vim: set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 ;
