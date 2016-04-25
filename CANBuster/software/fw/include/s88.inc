@@ -59,28 +59,16 @@
 
 #IFDEF PCBV
   #IF PCBV > 1
-<<<<<<< HEAD
-    #DEFINE      S88_DATA   1
-  #ELSE
-    #DEFINE      S88_DATA   2
-=======
     #DEFINE      S88_DATA   2
   #ELSE
     #DEFINE      S88_DATA   1
->>>>>>> 4a90c978b98a2cb8418aca513376a072af3c4bb5
   #ENDIF
 #ENDIF
 
 
-<<<<<<< HEAD
-#DEFINE        S88_CLOCK  6         
-#DEFINE        S88_LOAD   7         
-#DEFINE        S88_REST   5         
-=======
 #DEFINE        S88_CLOCK  6   ; RC6
 #DEFINE        S88_LOAD   7   ; RC7
 #DEFINE        S88_RESET  5   ; RB5
->>>>>>> 4a90c978b98a2cb8418aca513376a072af3c4bb5
 
 ;------------------------------------------------------------------------------
 ; S88 Macros
@@ -125,10 +113,6 @@ BTFS88_INPUT    MACRO
 ;------------------------------------------------------------------------------
 
 S88INIT
-<<<<<<< HEAD
-
-=======
->>>>>>> 4a90c978b98a2cb8418aca513376a072af3c4bb5
 #IFDEF WR841_SLCAN
                 BSF     TRISB,4         ; Input S88 Data
                 BCF     TRISB,S88_RESET ; Output S88 Reset
