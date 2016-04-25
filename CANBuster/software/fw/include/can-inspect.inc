@@ -54,6 +54,12 @@ CANINSPECT
                 BTFSC   STATUS,Z
                 BRA     CAN_PING2
 
+                ; send CONFIG data
+                MOVF    CANFRAME+1,W
+                XORLW   0x3A
+                BTFSC   STATUS,Z
+                BRA     SEND_CONFIGURATION
+
                 RETURN
 
 ;------------------------------------------------------------------------------
@@ -324,6 +330,59 @@ CAN_PING_CONT
 ; Setup Command (0x3A)
 ;------------------------------------------------------------------------------
 
+SEND_CONFIGURATION
+                ; if DLC != 5 -> return
+                MOVF	CANFRAME+4,W
+                XORLW	5
+                BZ	SEND_CONF_CONT
+                RETURN
+
+SEND_CONF_CONT
+                MOVF    CANFRAME+4,W
+                XORLW   0
+                BTFSS   STATUS,Z
+                BRA     SEND_CONF_CONT1
+                LOAD_INDEX_P INDEX0
+                GOTO    SEND_INDEX
+
+SEND_CONF_CONT1
+                XORLW   1
+                BTFSS   STATUS,Z
+                BRA     SEND_CONF_CONT2
+                LOAD_INDEX_P INDEX1
+                GOTO    SEND_INDEX
+
+SEND_CONF_CONT2
+                XORLW   2
+                BTFSS   STATUS,Z
+                BRA     SEND_CONF_CONT3
+                LOAD_INDEX_P INDEX2
+                GOTO    SEND_INDEX
+
+SEND_CONF_CONT3
+                XORLW   3
+                BTFSS   STATUS,Z
+                BRA     SEND_CONF_CONT4
+                LOAD_INDEX_P INDEX3
+                GOTO    SEND_INDEX
+
+SEND_CONF_CONT4
+                XORLW   4
+                BTFSS   STATUS,Z
+                BRA     SEND_CONF_CONT5
+                LOAD_INDEX_P INDEX4
+                GOTO    SEND_INDEX
+
+SEND_CONF_CONT5
+
+#IFDEF PWM
+                XORLW   5
+                BTFSS   STATUS,Z
+                LOAD_INDEX_P INDEX5
+                GOTO    SEND_INDEX
+#ENDIF
+
+                RETURN
 ;
 ; vim: set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 ;

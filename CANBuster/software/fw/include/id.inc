@@ -17,6 +17,12 @@
                 LIST
                 RADIX   DEC
 
+                CBLOCK
+                INDEX : 1
+                INDEX_N : 1
+                INDEX_L : 1
+                INDEX_C : 1
+                ENDC
 
 ;------------------------------------------------------------------------------
 ; Generic Flash routines
@@ -176,6 +182,67 @@ READCANHASH
                 BCF     CANHASH_LOW,7
                 RETURN
 
+
+LOAD_INDEX_P    MACRO   INDEX
+                MOVLW   LOW INDEX
+                MOVWF   TBLPTRL
+                MOVLW   LOW INDEX
+                MOVWF   TBLPTRH
+                MOVLW   UPPER INDEX
+                MOVWF   TBLPTRU
+                ENDM
+
+SEND_INDEX
+                MOVFF   EVENTPP,FSR0H
+                MOVFF   EVENTPP+1,FSR0L
+
+                TBLRD*+
+                MOVFF   TABLAT,INDEX_N
+                ; store Index nr
+                MOVFF   TABLAT,INDEX
+                CLRF    INDEX_C
+
+SEND_INDEX_LOOP1
+                ; CAN ID  0x003B030n  n -> number
+                CLRF    POSTINC0
+                MOVLW   0x3B
+                MOVWF   POSTINC0
+                MOVLW   0x03
+                MOVWF   POSTINC0
+                INCF    INDEX_C
+                MOVFF   INDEX_C,POSTINC0
+                ; CAN DLC
+                MOVLW   8
+                MOVWF   POSTINC0
+                MOVWF   INDEX_L
+SEND_INDEX_LOOP2
+                TBLRD*+
+                MOVFF   TABLAT,POSTINC0
+                DECFSZ  INDEX_L,F
+                BRA     SEND_INDEX_LOOP2
+                CALL    EVENT_RING_NORMALIZE
+
+                DECFSZ  INDEX_N,F
+                BRA     SEND_INDEX_LOOP1
+
+                ; send last entry with DLC = 6
+                CLRF    POSTINC0
+                MOVLW   0x3B
+                MOVWF   POSTINC0
+                MOVFF   CANHASH_HIGH,POSTINC0
+                MOVFF   CANHASH_LOW,POSTINC0
+                MOVLW   6
+                MOVWF   POSTINC0
+                MOVLW   'C'
+                MOVWF   POSTINC0
+                MOVLW   'B'
+                MOVWF   POSTINC0
+                MOVFF   ID_H,POSTINC0
+                MOVFF   ID_L,POSTINC0
+                MOVFF   INDEX,POSTINC0
+                MOVFF   INDEX_C,POSTINC0
+
+                BRA     EVENT_RING_NORMALIZE
 
 ;------------------------------------------------------------------------------
 ; Set CAN Hash according to Maerklin documentation
