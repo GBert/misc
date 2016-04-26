@@ -54,11 +54,11 @@
                 S88_CHANGE_TMP : 1
                 ENDC
 
-S88_CT0    EQU  0x360
-S88_CT1    EQU  0x380
-S88_NEW    EQU  0x3A0
-S88_STATE  EQU  0x3C0
-S88_CHANGE EQU  0x3E0
+S88_CT0    EQU  0x3B0
+S88_CT1    EQU  0x3C0
+S88_NEW    EQU  0x3D0
+S88_STATE  EQU  0x3E0
+S88_CHANGE EQU  0x3F0
 
 ;------------------------------------------------------------------------------
 ; port defines
@@ -146,7 +146,7 @@ S88INIT
                 MOVWF   S88STATE
 
                 ; TODO
-                MOVLW   32
+                MOVLW   16
                 MOVWF   S88COUNT
                 LFSR    FSR0,S88_CT0
                 ; waste some flash mem -> speed up setup
