@@ -54,6 +54,12 @@ CANINSPECT
                 BTFSC   STATUS,Z
                 BRA     CAN_PING2
 
+                ; CAN BOOTLOADER Service 0x36 ?
+                MOVF    CANFRAME+1,W
+                XORLW   0x36
+                BTFSC   STATUS,Z
+                BRA     CAN_BOOTLOADER
+
                 ; send CONFIG data
                 MOVF    CANFRAME+1,W
                 XORLW   0x3A
@@ -282,6 +288,7 @@ CAN_SWITCH_ACC_NEXT1
 
 CAN_SWITCH_ACC_FAULT
                 RETURN
+
 ;------------------------------------------------------------------------------
 ; answer CAN Ping (0x30)
 ;------------------------------------------------------------------------------
@@ -305,6 +312,43 @@ CAN_PING_CONT
                 ; mark with 0x31 as CAN Ping response
                 CLRF	POSTINC0
                 MOVLW	0x31
+                MOVWF	POSTINC0
+                MOVFF   CANHASH_HIGH,POSTINC0
+                MOVFF   CANHASH_LOW,POSTINC0
+                MOVLW	0x8
+                MOVWF	POSTINC0
+                MOVLW	'C'
+                MOVWF	POSTINC0
+                MOVLW	'B'
+                MOVWF	POSTINC0
+                MOVFF	ID_H,POSTINC0
+                MOVFF	ID_L,POSTINC0
+                MOVLW	1
+                MOVWF	POSTINC0
+                MOVLW	0
+                MOVWF	POSTINC0
+                MOVWF	POSTINC0
+                ; this is a back detector (german Rueckmelder)
+                MOVLW	0x40
+                MOVWF	POSTINC0
+                BRA	EVENT_RING_NORMALIZE
+
+;------------------------------------------------------------------------------
+; CAN Bootloader Service (0x36)
+;------------------------------------------------------------------------------
+
+CAN_BOOTLOADER
+                ; if DLC != 0 -> return
+                MOVF	CANFRAME+4,F
+                BZ	CAN_BOOTLOADER_CONT
+                RETURN
+
+CAN_BOOTLOADER_CONT
+                MOVFF	EVENTPP,FSR0H
+                MOVFF	EVENTPP+1,FSR0L
+                ; mark with 0x37 as CAN Bootloader response
+                CLRF	POSTINC0
+                MOVLW	0x37
                 MOVWF	POSTINC0
                 MOVFF   CANHASH_HIGH,POSTINC0
                 MOVFF   CANHASH_LOW,POSTINC0
