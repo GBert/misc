@@ -1,7 +1,9 @@
-aktuelle Version r49114 (OpenWRT)
+aktuelle Version r49221 (OpenWRT)
+- Rocrail auf 11130 aktualisiert (25.04)
+
+Version r49114
 - Rocrail auf 11050 aktualisiert (03.04)
 - s88udp: S88 Event nun mit Response Bit (0x23 anstatt 0x22)
-
 
 Version r49031
 - Rocrail auf 10950 aktualisiert (15.3.)
