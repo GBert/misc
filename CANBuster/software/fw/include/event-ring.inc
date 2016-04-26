@@ -24,9 +24,10 @@
                 CBLOCK
                 EVENTTMP : 1		; tmp buffer
                 EVENTCNT : 1		; event counter
-                EVENTPP : 2		; event pointer
-                EVENTPG : 2		; event pointer
                 ENDC
+
+EVENTPP   EQU   0x308           ; event pointer
+EVENTPG   EQU   0x30a           ; event pointer
 
 ;------------------------------------------------------------------------------
 ; Event ring

@@ -27,14 +27,12 @@
                 ACTUAL : 1
                 ; PIOTEMP16 : 2
                 BUT_CT0 : 1
-                DEBUG_BUT : 1
                 BUT_CT1 : 1
-                TOP_CT0 : 1
-                DEBUG_TOP : 1
-                TOP_CT1 : 1
                 BUT_VAL_NEW : 1
                 BUT_VAL_CHG : 1
                 BUT_VAL_STATE : 1
+                TOP_CT0 : 1
+                TOP_CT1 : 1
                 TOP_VAL_NEW : 1
                 TOP_VAL_CHG : 1
                 TOP_VAL_STATE : 1
