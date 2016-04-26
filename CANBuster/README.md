@@ -5,5 +5,5 @@
  by [Gerhard Bertelsmann](mailto:info@gerhard-bertelsmann.de) 
 
 
-Hier entsteht ein System zur digitalen Steuerung einer Modellbahn, das auf dem CAN-Bus-Protokoll von Märklin basiert. Ziel ist es, eine preisgünstige und frei zugängliche LÃösung zu schaffen.
+Hier entsteht ein System zur digitalen Steuerung einer Modellbahn, das auf dem CAN-Bus-Protokoll von Märklin basiert. Ziel ist es, eine preisgünstige und frei zugängliche LÃöung zu schaffen.
 
