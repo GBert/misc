@@ -46,12 +46,19 @@
                 S88MASK  : 1
                 S88STATE : 1
                 S88COUNT : 1
-                S88_CT0  : 6
-                S88_CT1  : 6
-                S88_NEW  : 6
-                S88_STATE: 6
-                S88_CHANGE  : 1
+                S88_BYTE_COUNT : 1
+                S88_CT0_TMP : 1
+                S88_CT1_TMP : 1
+                S88_NEW_TMP : 1
+                S88_STATE_TMP : 1
+                S88_CHANGE_TMP : 1
                 ENDC
+
+S88_CT0    EQU  0x360
+S88_CT1    EQU  0x380
+S88_NEW    EQU  0x3A0
+S88_STATE  EQU  0x3C0
+S88_CHANGE EQU  0x3E0
 
 ;------------------------------------------------------------------------------
 ; port defines
@@ -137,7 +144,20 @@ S88INIT
                 CLRF    S88MASK
                 MOVLW   0
                 MOVWF   S88STATE
-                CLRF    S88COUNT
+
+                ; TODO
+                MOVLW   32
+                MOVWF   S88COUNT
+                LFSR    FSR0,S88_CT0
+                ; waste some flash mem -> speed up setup
+S88_FILL
+                SETF    POSTINC0        ; fill with 255
+                SETF    POSTINC0
+                SETF    POSTINC0
+                SETF    POSTINC0
+                SETF    POSTINC0
+                DECFSZ  S88COUNT
+                BRA     S88_FILL
                 RETURN
 
 ;------------------------------------------------------------------------------
