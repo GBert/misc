@@ -32,6 +32,7 @@
 #define MAXDG   	4096	/* maximum datagram size */
 #define MAXUDP  	16	/* maximum UDP datagram size */
 #define DEFAULT_LOCO	5
+#define DEFAULT_STEP	16
 
 static unsigned char LOCO_SPEED[] = { 0x00, 0x08, 0x03, 0x00, 0x06, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static unsigned char START_STOP[] = { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -39,11 +40,12 @@ static unsigned char START_STOP[] = { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 
 unsigned char netframe[MAXDG];
 
 void print_usage(char *prg) {
-    fprintf(stderr, "\nUsage: %s -i <can interface> -r <infrared-interface>\n", prg);
-    fprintf(stderr, "   Version 0.1\n\n");
+    fprintf(stderr, "\nUsage: %s -i <can interface> -r <infrared-interface> -s <step>\n", prg);
+    fprintf(stderr, "   Version 0.2\n\n");
     fprintf(stderr, "         -i <loco id>        loco id - default %d\n", DEFAULT_LOCO);
     fprintf(stderr, "         -i <can int>        can interface - default can0\n");
     fprintf(stderr, "         -r <ir int>         infrared event interface - default /dev/input/event1\n");
+    fprintf(stderr, "         -s <step>           speed setp - default %d\n", DEFAULT_STEP);
 }
 
 int time_stamp(char *timestamp) {
@@ -105,7 +107,7 @@ int send_defined_can_frame(int can_socket, unsigned char *data) {
 }
 
 int main(int argc, char **argv) {
-    int loco, speed, n, opt, sc, ret, fd, status;
+    int step, loco, speed, n, opt, sc, ret, fd, status;
     struct can_frame frame;
     struct sockaddr_can caddr;
     struct ifreq ifr;
@@ -117,10 +119,11 @@ int main(int argc, char **argv) {
     status = 0;
     loco = DEFAULT_LOCO;
     speed = 0;
+    step = DEFAULT_STEP;
     strcpy(ifr.ifr_name, "can0");
     strcpy(ir_int, "/dev/input/event1");
 
-    while ((opt = getopt(argc, argv, "l:i:r:h?")) != -1) {
+    while ((opt = getopt(argc, argv, "s:l:i:r:h?")) != -1) {
 	switch (opt) {
 	case 'l':
 	    loco = atoi(optarg);
@@ -130,6 +133,9 @@ int main(int argc, char **argv) {
 	    break;
 	case 'r':
 	    strncpy(ir_int, optarg, sizeof(ir_int) - 1);
+	    break;
+	case 's':
+	    step = atoi(optarg);
 	    break;
 	case 'h':
 	case '?':
@@ -190,7 +196,9 @@ int main(int argc, char **argv) {
 		    memcpy(data, LOCO_SPEED, sizeof(data));
 		    data[8] = loco & 0xff;
 		    if (speed < 256)
-			speed += 1;
+			speed += step;
+		    if (speed > 256)
+			speed = 255;
 		    data[10] = speed;
 		    send_defined_can_frame(sc, data);
 		    break;
@@ -199,7 +207,9 @@ int main(int argc, char **argv) {
 		    memcpy(data, LOCO_SPEED, sizeof(data));
 		    data[8] = loco & 0xff;
 		    if (speed > 0)
-			speed -= 1;
+			speed -= step;
+		    if (speed < 0)
+			speed = 0;
 		    data[10] = speed;
 		    send_defined_can_frame(sc, data);
 		    break;
