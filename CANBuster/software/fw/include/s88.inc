@@ -54,11 +54,13 @@
                 S88_CHANGE_TMP : 1
                 ENDC
 
-S88_CT0    EQU  0x3B0
-S88_CT1    EQU  0x3C0
-S88_NEW    EQU  0x3D0
-S88_STATE  EQU  0x3E0
-S88_CHANGE EQU  0x3F0
+#DEFINE S88_MAX_LENGTH    16
+S88_DATA_P EQU  0x360
+S88_CT0    EQU  0x360
+S88_CT1    EQU  0x380
+S88_NEW    EQU  0x3A0
+S88_STATE  EQU  0x3C0
+S88_CHANGE EQU  0x3E0
 
 ;------------------------------------------------------------------------------
 ; port defines
@@ -146,7 +148,7 @@ S88INIT
                 MOVWF   S88STATE
 
                 ; TODO
-                MOVLW   16
+                MOVLW   S88_MAX_LENGTH*2
                 MOVWF   S88COUNT
                 LFSR    FSR0,S88_CT0
                 ; waste some flash mem -> speed up setup
@@ -191,12 +193,47 @@ S88_FSM_BRANCH  BRA     S88_STATE_1
                 RETURN
 
 ;------------------------------------------------------------------------------
+; load and store macros
+;------------------------------------------------------------------------------
+
+S88_PREP_POINT  MACRO   BYTE_COUNT
+                LFSR    FSR0,S88_DATA_P
+                ; absolut limit 16 x S88 -> 32 bytes
+                MOVLW   (S88_MAX_LENGTH * 2) - 1
+                ANDWF   S88_BYTE_COUNT,F
+                MOVLW   5
+                MULWF   S88_BYTE_COUNT
+                ; we need to work on low bytes only
+                MOVF    PRODL,W
+                ADDWF   FSR0L,F
+                ENDM
+
+S88_LOAD_MEM    MACRO   BYTE_COUNT
+                S88_PREP_POINT BYTE_COUNT
+                MOVFF   POSTINC0,S88_CT0_TMP
+                MOVFF   POSTINC0,S88_CT1_TMP
+                MOVFF   POSTINC0,S88_NEW_TMP
+                MOVFF   POSTINC0,S88_STATE_TMP
+                MOVFF   POSTINC0,S88_CHANGE_TMP
+                ENDM
+
+S88_SAVE_MEM    MACRO   BYTE_COUNT
+                LFSR    FSR0,S88_DATA_P
+                S88_PREP_POINT BYTE_COUNT
+                MOVFF   S88_CT0_TMP,POSTINC0
+                MOVFF   S88_CT1_TMP,POSTINC0
+                MOVFF   S88_NEW_TMP,POSTINC0
+                MOVFF   S88_STATE_TMP,POSTINC0
+                MOVFF   S88_CHANGE_TMP,POSTINC0
+                ENDM
+
+;------------------------------------------------------------------------------
 ; S88 subs
 ;------------------------------------------------------------------------------
 
 S88_STATE_1
-                MOVLW   1
-                MOVWF   S88MASK
+                S88_LOAD_MEM  S88_BYTE_COUNT
+
                 MOVLW   47
                 MOVWF   S88COUNT
                 S88_LOAD_HIGH
@@ -211,7 +248,12 @@ S88_STATE_3
                 INCF    S88STATE,F
                 RETURN
 S88_STATE_4
+                MOVLW   2
+                MOVWF   S88MASK
                 ; read 1st bit
+                BCF     S88_NEW_TMP,1
+                BTFS88_INPUT
+                BSF     S88_NEW_TMP,1
                 INCF    S88STATE,F
                 RETURN
 S88_STATE_5
@@ -231,18 +273,25 @@ S88_STATE_8
                 INCF    S88STATE,F
                 RETURN
 S88_STATE_9
-                RLCF    S88MASK,F
                 S88_CLOCK_LOW
                 ; read n-bit
                 DECF    S88COUNT,F
                 BNZ     S88_MORE_BITS
-                MOVLW   0
-                MOVWF   S88STATE
+                CLRF    S88STATE
+
+                RLCF    S88MASK,F
+                BC      S88_STATE_9_E
+                RETURN
+
+S88_STATE_9_E
+                INCF    S88_BYTE_COUNT
+                ; DEBOUNCE
+                ; CREATE EVENT
                 RETURN
 
 S88_MORE_BITS   DECF    S88STATE,F      ; go back -> read next
                 RETURN
 
 ;
-; vim: shiftwidth=4 tabstop=4 softtabstop=4 expandtab
+; vim: set syntax=pic18f shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 ;
