@@ -144,8 +144,8 @@ S88INIT
 #ENDIF
                 CLRF    S88TEMP
                 CLRF    S88MASK
-                MOVLW   0
-                MOVWF   S88STATE
+                CLRF    S88_BYTE_COUNT
+                CLRF    S88STATE
 
                 ; TODO
                 MOVLW   S88_MAX_LENGTH*2
@@ -158,7 +158,7 @@ S88_FILL
                 SETF    POSTINC0
                 SETF    POSTINC0
                 SETF    POSTINC0
-                DECFSZ  S88COUNT
+                DECFSZ  S88COUNT,F
                 BRA     S88_FILL
                 RETURN
 
@@ -284,7 +284,7 @@ S88_STATE_9
                 RETURN
 
 S88_STATE_9_E
-                INCF    S88_BYTE_COUNT
+                INCF    S88_BYTE_COUNT,F
                 ; DEBOUNCE
                 ; CREATE EVENT
                 RETURN
