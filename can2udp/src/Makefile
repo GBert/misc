@@ -1,4 +1,4 @@
-BINS := can-bounce-test can2eth can2udp can4lnx2udp clone-cs2-config gb2-update ir-tester bpi-rs485 scan2lan can2lan\
+BINS := can-bounce-test can2eth can2udp can4lnx2udp clone-cs2-config gb2-update ir-tester bpi-rs485 scan2lan can2lan ms2wifi\
         virtual_canbuster virtual_gfp virtual_links88 virtual_ms2 get-cs-data get-cs-config s88udp-bpi s88test-bpi wake-up-links88
 
 BIN = $@
@@ -36,6 +36,9 @@ scan2lan: crc-ccitt.o sgio.o scan2lan.o
 
 can2lan: crc-ccitt.o gio.o can2lan.o
 	$(CC) $(CFLAGS) -o can2lan crc-ccitt.o gio.o can2lan.o -lz
+
+ms2wifi: ms2wifi.o
+	$(CC) $(CFLAGS) -o ms2wifi ms2wifi.o
 
 virtual_canbuster: virtual_canbuster.o
 	$(CC) $(CFLAGS) -o virtual_canbuster virtual_canbuster.o
