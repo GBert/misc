@@ -150,13 +150,16 @@ S88INIT
                 BCF     LATC,S88_LOAD   ;
                 BCF     LATB,S88_RESET  ;
 #ENDIF
+
+	; debug
+	BCF  TRISC,5
                 CLRF    S88TEMP
                 CLRF    S88MASK
                 CLRF    S88_BYTE_COUNT
                 CLRF    S88STATE
 
                 ; TODO
-                MOVLW   S88_MAX_LENGTH*2
+                MOVLW   S88_MAX_LENGTH*2 - 1
                 MOVWF   S88COUNT
                 LFSR    FSR0,S88_CT0
                 ; waste some flash mem -> speed up setup
@@ -281,6 +284,7 @@ S88_STATE_8
                 INCF    S88STATE,F
                 RETURN
 S88_STATE_9
+	BTG  LATC,5
                 S88_CLOCK_LOW
                 ; read n-bit
                 MOVF    S88MASK,W
@@ -330,7 +334,7 @@ S88_GENEVENTLOOP
                 MOVF    TEMP,W
                 ANDWF   MASK,W
                 BTFSS   STATUS,Z
-                CALL   PUTEVENT
+                CALL    PUTEVENT
 
                 BCF     STATUS,C
                 RLCF    MASK,F
