@@ -109,11 +109,19 @@ S88_CLOCK_LOW   MACRO
 
 ;------------
 
-BTFS88_INPUT    MACRO
+BTFSS88_INPUT    MACRO
 #IFDEF WR841_SLCAN
                 BTFSS   TRISB,4
 #ELSE
                 BTFSS   TRISC,S88_DATA
+#ENDIF
+                ENDM
+
+BTFCS88_INPUT    MACRO
+#IFDEF WR841_SLCAN
+                BTFSC   TRISB,4
+#ELSE
+                BTFSC   TRISC,S88_DATA
 #ENDIF
                 ENDM
 
@@ -252,7 +260,7 @@ S88_STATE_4
                 MOVWF   S88MASK
                 ; read 1st bit
                 BCF     S88_NEW_TMP,1
-                BTFS88_INPUT
+                BTFSS88_INPUT
                 BSF     S88_NEW_TMP,1
                 INCF    S88STATE,F
                 RETURN
@@ -275,6 +283,13 @@ S88_STATE_8
 S88_STATE_9
                 S88_CLOCK_LOW
                 ; read n-bit
+                MOVF    S88MASK,W
+                ; set bit - maybe cleared 2 cycles later
+                IORWF   S88_NEW_TMP,F
+                BTFSS88_INPUT
+                ; delete bit
+                XORWF   S88_NEW_TMP,F
+
                 DECF    S88COUNT,F
                 BNZ     S88_MORE_BITS
                 CLRF    S88STATE
@@ -284,12 +299,43 @@ S88_STATE_9
                 RETURN
 
 S88_STATE_9_E
-                INCF    S88_BYTE_COUNT,F
                 ; DEBOUNCE
+                PIO_DEBOUNCE   S88_NEW_TMP, S88_STATE_TMP, S88_CHANGE_TMP, S88TEMP, S88_CT0_TMP, S88_CT1_TMP
                 ; CREATE EVENT
+                RCALL   S88_GENEVENT
+                S88_SAVE_MEM  S88_BYTE_COUNT
+                INCF    S88_BYTE_COUNT,F
                 RETURN
 
 S88_MORE_BITS   DECF    S88STATE,F      ; go back -> read next
+                RETURN
+
+;------------------------------------------------------------------------------
+; event generation
+;------------------------------------------------------------------------------
+
+S88_GENEVENT
+                CALL    READ_UID
+                MOVFF   S88C_H,TEMP16
+                MOVFF   S88C_L,TEMP16+1
+
+                MOVFF   S88_NEW_TMP,ACTUAL
+                MOVLW   1
+                MOVWF   MASK
+                MOVFF   S88_CHANGE_TMP,TEMP
+
+S88_GENEVENTLOOP
+                INFSNZ  TEMP16+1,F
+                INCF    TEMP16,F
+                MOVF    TEMP,W
+                ANDWF   MASK,W
+                BTFSS   STATUS,Z
+                CALL   PUTEVENT
+
+                BCF     STATUS,C
+                RLCF    MASK,F
+                BNC     S88_GENEVENTLOOP
+
                 RETURN
 
 ;
