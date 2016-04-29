@@ -54,7 +54,7 @@
                 S88_CHANGE_TMP : 1
                 ENDC
 
-#DEFINE S88_MAX_LENGTH    16
+#DEFINE S88_MAX_LENGTH    1
 S88_DATA_P EQU  0x360
 S88_CT0    EQU  0x360
 S88_CT1    EQU  0x380
@@ -243,9 +243,10 @@ S88_SAVE_MEM    MACRO   BYTE_COUNT
 ;------------------------------------------------------------------------------
 
 S88_STATE_1
+                CLRF    S88_BYTE_COUNT
                 S88_LOAD_MEM  S88_BYTE_COUNT
 
-                MOVLW   47
+                MOVLW   S88_MAX_LENGTH*16 - 2
                 MOVWF   S88COUNT
                 S88_LOAD_HIGH
                 INCF    S88STATE,F
@@ -284,32 +285,39 @@ S88_STATE_8
                 INCF    S88STATE,F
                 RETURN
 S88_STATE_9
-	BTG  LATC,5
                 S88_CLOCK_LOW
                 ; read n-bit
                 MOVF    S88MASK,W
                 ; set bit - maybe cleared 2 cycles later
                 IORWF   S88_NEW_TMP,F
+                ; BTFCS88_INPUT
                 BTFSS88_INPUT
                 ; delete bit
                 XORWF   S88_NEW_TMP,F
+
+                BCF     STATUS,C
+                RLCF    S88MASK,F
+                BC      S88_STATE_9_E
 
                 DECF    S88COUNT,F
                 BNZ     S88_MORE_BITS
                 CLRF    S88STATE
 
-                RLCF    S88MASK,F
-                BC      S88_STATE_9_E
                 RETURN
 
 S88_STATE_9_E
+	BTG  LATC,5
+                ; load mask with 1 again
+                MOVLW   1
+                MOVWF   S88MASK
+                ; BSF     S88MASK,1
                 ; DEBOUNCE
                 PIO_DEBOUNCE   S88_NEW_TMP, S88_STATE_TMP, S88_CHANGE_TMP, S88TEMP, S88_CT0_TMP, S88_CT1_TMP
                 ; CREATE EVENT
                 RCALL   S88_GENEVENT
                 S88_SAVE_MEM  S88_BYTE_COUNT
                 INCF    S88_BYTE_COUNT,F
-                RETURN
+                S88_LOAD_MEM  S88_BYTE_COUNT
 
 S88_MORE_BITS   DECF    S88STATE,F      ; go back -> read next
                 RETURN
@@ -322,6 +330,14 @@ S88_GENEVENT
                 CALL    READ_UID
                 MOVFF   S88C_H,TEMP16
                 MOVFF   S88C_L,TEMP16+1
+             MOVFF   S88_BYTE_COUNT,TEMP16+1
+
+                ; SWAPF   S88_BYTE_COUNT,W
+                ; RRNCF   WREG,W
+                ; MOVWF   TEMP16+1
+                ; ADDWF   TEMP16+1,F
+                ; BTFSC   STATUS,C
+                ; INCF    TEMP16,F
 
                 MOVFF   S88_NEW_TMP,ACTUAL
                 MOVLW   1
