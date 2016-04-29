@@ -29,23 +29,24 @@
 
 #include <linux/can.h>
 
-#define MAXDG   4096		/* maximum datagram size */
+#define MAXDG		4096	/* maximum datagram size */
+#define UPD_RECV_PORT	7654
+#define UPD_SEND_PORT	7655
 
 unsigned char udpframe[MAXDG];
 
-void print_usage(char *prg)
-{
+
+void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -l <port> -d <port> -i <can interface>\n", prg);
     fprintf(stderr, "   Version 1.01\n\n");
-    fprintf(stderr, "         -l <port>           listening UDP port for the server - default 7654\n");
-    fprintf(stderr, "         -d <port>           destination UDP port for the server - default 7655\n");
+    fprintf(stderr, "         -l <port>           listening UDP port for the server - default %d\n", UPD_RECV_PORT);
+    fprintf(stderr, "         -d <port>           destination UDP port for the server - default %d\n", UPD_SEND_PORT);
     fprintf(stderr, "         -b <broadcast_addr> broadcast address - default 255.255.255.255\n");
     fprintf(stderr, "         -i <can int>        can interface - default can0\n");
     fprintf(stderr, "         -f                  running in foreground\n\n");
 }
 
-void print_can_frame(struct can_frame *frame, int verbose)
-{
+void print_can_frame(struct can_frame *frame, int verbose) {
     int i;
 
     if (verbose) {
@@ -60,8 +61,7 @@ void print_can_frame(struct can_frame *frame, int verbose)
     }
 }
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     pid_t pid;
     int ret, s, opt;
     struct can_frame frame;
@@ -72,8 +72,8 @@ int main(int argc, char **argv)
     struct ifreq ifr;
     socklen_t caddrlen = sizeof(caddr);
     fd_set readfds;
-    int local_port = 7654;
-    int destination_port = 7655;
+    int local_port = UPD_RECV_PORT;
+    int destination_port = UPD_SEND_PORT;
     int foreground = 0;
     uint32_t canid = 0;
     const int on = 1;
