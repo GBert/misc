@@ -111,17 +111,17 @@ S88_CLOCK_LOW   MACRO
 
 BTFSS88_INPUT    MACRO
 #IFDEF WR841_SLCAN
-                BTFSS   TRISB,4
+                BTFSS   PORTB,4
 #ELSE
-                BTFSS   TRISC,S88_DATA
+                BTFSS   PORTB,S88_DATA
 #ENDIF
                 ENDM
 
 BTFCS88_INPUT    MACRO
 #IFDEF WR841_SLCAN
-                BTFSC   TRISB,4
+                BTFSC   PORTB,4
 #ELSE
-                BTFSC   TRISC,S88_DATA
+                BTFSC   PORTC,S88_DATA
 #ENDIF
                 ENDM
 
