@@ -219,7 +219,7 @@ S88_PREP_POINT  MACRO   BYTE_COUNT
                 MOVLW   (S88_MAX_LENGTH * 2) - 1
                 ANDWF   S88_BYTE_COUNT,F
                 MOVLW   5
-                MULWF   S88_BYTE_COUNT,W
+                MULWF   S88_BYTE_COUNT
                 ; we need to work on low bytes only
                 MOVF    PRODL,W
                 ADDWF   FSR0L,F
@@ -251,7 +251,7 @@ S88_STATE_1
                 CLRF    S88_BYTE_COUNT
                 S88_LOAD_MEM  S88_BYTE_COUNT
 
-                MOVLW   15
+                MOVLW   63
                 MOVWF   S88COUNT
                 S88_LOAD_HIGH
                 INCF    S88STATE,F
@@ -337,14 +337,12 @@ S88_GENEVENT
                 CALL    READ_UID
                 MOVFF   S88C_H,TEMP16
                 MOVFF   S88C_L,TEMP16+1
-             MOVFF   S88_BYTE_COUNT,TEMP16+1
 
-                ; SWAPF   S88_BYTE_COUNT,W
-                ; RRNCF   WREG,W
-                ; MOVWF   TEMP16+1
-                ; ADDWF   TEMP16+1,F
-                ; BTFSC   STATUS,C
-                ; INCF    TEMP16,F
+                SWAPF   S88_BYTE_COUNT,W
+                RRNCF   WREG,W
+                ADDWF   TEMP16+1,F
+                BTFSC   STATUS,C
+                INCF    TEMP16,F
 
                 MOVFF   S88_NEW_TMP,ACTUAL
                 MOVLW   1
