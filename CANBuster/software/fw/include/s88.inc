@@ -54,13 +54,19 @@
                 S88_CHANGE_TMP : 1
                 ENDC
 
-#DEFINE S88_MAX_LENGTH    1
+;------------------------------------------------------------------------------
+; don't change this !
+
+#DEFINE S88_MAX_LENGTH    16
+
 S88_DATA_P EQU  0x360
 S88_CT0    EQU  0x360
 S88_CT1    EQU  0x380
 S88_NEW    EQU  0x3A0
 S88_STATE  EQU  0x3C0
 S88_CHANGE EQU  0x3E0
+
+;------------------------------------------------------------------------------
 
 ;------------------------------------------------------------------------------
 ; port defines
@@ -159,7 +165,7 @@ S88INIT
                 CLRF    S88STATE
 
                 ; TODO
-                MOVLW   S88_MAX_LENGTH*2 - 1
+                MOVLW   S88_MAX_LENGTH * 2
                 MOVWF   S88COUNT
                 LFSR    FSR0,S88_CT0
                 ; waste some flash mem -> speed up setup
@@ -213,7 +219,7 @@ S88_PREP_POINT  MACRO   BYTE_COUNT
                 MOVLW   (S88_MAX_LENGTH * 2) - 1
                 ANDWF   S88_BYTE_COUNT,F
                 MOVLW   5
-                MULWF   S88_BYTE_COUNT
+                MULWF   S88_BYTE_COUNT,W
                 ; we need to work on low bytes only
                 MOVF    PRODL,W
                 ADDWF   FSR0L,F
@@ -229,7 +235,6 @@ S88_LOAD_MEM    MACRO   BYTE_COUNT
                 ENDM
 
 S88_SAVE_MEM    MACRO   BYTE_COUNT
-                LFSR    FSR0,S88_DATA_P
                 S88_PREP_POINT BYTE_COUNT
                 MOVFF   S88_CT0_TMP,POSTINC0
                 MOVFF   S88_CT1_TMP,POSTINC0
@@ -246,7 +251,7 @@ S88_STATE_1
                 CLRF    S88_BYTE_COUNT
                 S88_LOAD_MEM  S88_BYTE_COUNT
 
-                MOVLW   S88_MAX_LENGTH*16 - 2
+                MOVLW   15
                 MOVWF   S88COUNT
                 S88_LOAD_HIGH
                 INCF    S88STATE,F
@@ -297,12 +302,15 @@ S88_STATE_9
 
                 BCF     STATUS,C
                 RLCF    S88MASK,F
-                BC      S88_STATE_9_E
+                BTFSC   STATUS,C
+                RCALL   S88_STATE_9_E
 
                 DECF    S88COUNT,F
                 BNZ     S88_MORE_BITS
                 CLRF    S88STATE
+                RETURN
 
+S88_MORE_BITS   DECF    S88STATE,F      ; go back -> read next
                 RETURN
 
 S88_STATE_9_E
@@ -318,9 +326,8 @@ S88_STATE_9_E
                 S88_SAVE_MEM  S88_BYTE_COUNT
                 INCF    S88_BYTE_COUNT,F
                 S88_LOAD_MEM  S88_BYTE_COUNT
-
-S88_MORE_BITS   DECF    S88STATE,F      ; go back -> read next
                 RETURN
+
 
 ;------------------------------------------------------------------------------
 ; event generation
