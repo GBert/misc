@@ -1,0 +1,62 @@
+#
+# Copyright (C) 2005-2015 Darron Broad
+# All rights reserved.
+#
+# This file is part of Pickle Microchip PIC ICSP.
+#
+# Pickle Microchip PIC ICSP is free software: you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as published
+# by the Free Software Foundation.
+#
+# Pickle Microchip PIC ICSP is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+# Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Pickle Microchip PIC ICSP. If not, see http://www.gnu.org/licenses/
+#
+
+#
+# Copy this file to ~/.pickle or ~/.pickle/config
+#
+
+# I/O device: tty, ttyUSB, RPI, I2C (MCP23017) or GPIO BIT-BANG
+#
+#DEVICE=/dev/i2c-1
+DEVICE=/dev/ftdi-bb
+
+SLEEP=0
+
+# 0x1000 VPP_RUN
+BITRULES=0x1000
+
+# I/O busy cursor (0=DISABLED)
+# 
+BUSY=1
+
+# 
+# TXD - 0x01 -> BIT 0
+# RXD - 0x02 -> BIT 1
+# RTS - 0x04 -> BIT 2
+# CTS - 0x08 -> BIT 3
+# DTR - 0x10 -> BIT 4
+# DSR - 0x20 -> BIT 5
+# DCD - 0x40 -> BIT 6
+# RI  - 0x80 -> BIT 7
+
+# FTDI232RL LVP programmer
+#                  = CHIPKIT PI =
+# !MCLR/VPP        - RPi-Connect 18
+VPP=5
+# PGM              - RPi-Connect 12
+PGM=255
+# PGC CLOCK        - RPi-Connect 16
+PGC=1
+# PGD DATA_I/O     - RPi-Connect 20
+PGD=0
+
+FWSLEEP=0
+
+# Debug level (0=NONE, 1=ERROR, 10=INFO)
+DEBUG=11
