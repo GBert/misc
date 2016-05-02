@@ -38,17 +38,14 @@ volatile uint8_t s88_data4[BUFFER_SIZE_BANK];
 #endif
 
 void isr (void) __interrupt (1){
-  if (IOCIF) {
-    IOCCF = 0;
-  }
-  // S88-CLOCK RC2
   if ( IOCCF2 ) {
     IOCCF2 = 0;
-    if ( RA2 )
-      LATA2 = 0;
-    else
+    if ( RC2 )
       LATA2 = 1;
+    else
+      LATA2 = 0;
   }
+  IOCCF = 0;
 }
 
 void pps_init(void) {
@@ -111,6 +108,7 @@ void pio_init(void) {
   TRISC0 = 1;
   TRISC1 = 1;
   TRISC2 = 1;
+  TRISC3 = 0;
 
   IOCCN2 = 1;
   IOCCP2 = 1;
@@ -155,7 +153,7 @@ void main() {
   GIE = 1;
   while(1) {
     if ( counter == 0 )
-      putchar_wait(0x55);
+      putchar_wait(0x33);
     counter++;
   }
 }
