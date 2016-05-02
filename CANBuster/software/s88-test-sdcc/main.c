@@ -22,6 +22,7 @@ static __code uint16_t __at (_CONFIG2) configword2= _LVP_ON & _CLKOUTEN_OFF;
 
 struct serial_buffer_t tx_fifo, rx_fifo;
 volatile uint8_t counter=0;
+volatile uint8_t s88_counter=0;
 
 #define BUFFER_SIZE_BANK	64
 
@@ -39,11 +40,18 @@ volatile uint8_t s88_data4[BUFFER_SIZE_BANK];
 
 void isr (void) __interrupt (1){
   if ( IOCCF2 ) {
-    IOCCF2 = 0;
-    if ( RC2 )
-      LATA2 = 1;
-    else
-      LATA2 = 0;
+    if ( RC2 ) {
+      if (s88_data1[s88_counter] && 1)
+        LATA2 = 1;
+      else
+        LATA2 = 0;
+      s88_counter++;
+      s88_data1[s88_counter] >>= 1;
+    }
+  }
+  if ( IOCCF1 ) {
+      LATC3 ^= 1;
+      s88_counter = 0;
   }
   IOCCF = 0;
 }
@@ -110,8 +118,9 @@ void pio_init(void) {
   TRISC2 = 1;
   TRISC3 = 0;
 
-  IOCCN2 = 1;
-  IOCCP2 = 1;
+  // IOCCN2 = 1;	// Clock neg
+  IOCCP2 = 1;	// Clock pos
+  IOCCP1 = 1;   // Load pos
   IOCIE = 1;
   IOCAF = 0;
   IOCCF = 0;

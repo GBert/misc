@@ -119,7 +119,7 @@ BTFSS88_INPUT    MACRO
 #IFDEF WR841_SLCAN
                 BTFSS   PORTB,4
 #ELSE
-                BTFSS   PORTB,S88_DATA
+                BTFSS   PORTC,S88_DATA
 #ENDIF
                 ENDM
 
@@ -251,7 +251,7 @@ S88_STATE_1
                 CLRF    S88_BYTE_COUNT
                 S88_LOAD_MEM  S88_BYTE_COUNT
 
-                MOVLW   63
+                MOVLW   15
                 MOVWF   S88COUNT
                 S88_LOAD_HIGH
                 INCF    S88STATE,F
