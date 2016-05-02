@@ -15,18 +15,17 @@
    RC2 CLOCK -> ISR
  */
 
-#include <xc.h>
 #include "main.h"
 
-#pragma config FOSC=INTOSC, PLLEN=OFF, MCLRE=ON, WDTE=OFF
-#pragma config LVP=ON, CLKOUTEN=OFF
+static __code uint16_t __at (_CONFIG1) configword1= _FOSC_INTOSC & _WDTE_OFF & _PLLEN_OFF & _MCLRE_ON;
+static __code uint16_t __at (_CONFIG2) configword2= _LVP_ON & _CLKOUTEN_OFF;
 
 struct serial_buffer_t tx_fifo, rx_fifo;
 
 #define BUFFER_SIZE 128
 static char s88_data[BUFFER_SIZE];
 
-void interrupt ISR(void) {
+void isr (void) __interrupt (1){
   if (IOCIF) {
     IOCAF = 0;
   }
@@ -65,33 +64,29 @@ void system_init() {
   TRISC5 = 0;  // CCP1
   // setup interrupt events
   //clear all relevant interrupt flags
-  PIR1bits.SSP1IF = 0;
-  PIR1bits.TMR1IF = 0;
-  PIR1bits.CCP1IF = 0;
-  //activate interrupt bits
-  PIE1bits.CCP1IE = 0; // disable interrupt on CCP1 will be check by polling as of today
-  PIE1bits.SSP1IE = 0;
-  INTCONbits.PEIE = 1;
-  INTCONbits.GIE = 1;
+  PIR1 = 0;
+  INTCON = 3;
 }
 
 void uart_init (void) {
-  TXSTAbits.TX9  = 1;		// 8-bit transmission
-  TXSTAbits.TX9D = 1;		//  one extra stop bit
-  TXSTAbits.TXEN = 1;		// transmit enabled
-  TXSTAbits.SYNC = 0;		// asynchronous mode
-  TXSTAbits.BRGH = 1;		// high speed
-  RCSTAbits.SPEN = 1;		// enable serial port (configures RX/DT and TX/CK pins as serial port pins)
-  RCSTAbits.RX9  = 0;		// 8-bit reception
-  RCSTAbits.CREN = 1;		// enable receiver
-  BAUDCON1bits.BRG16 = USE_BRG16; // 8-bit baud rate generator
+  TX1STAbits  = 0b11111101;		// 8-bit transmission
+  TX1STAbits.TX9  = 1;		// 8-bit transmission
+  TX1STAbits.TX9D = 1;		//  one extra stop bit
+  TX1STAbits.TXEN = 1;		// transmit enabled
+  TX1STAbits.SYNC = 0;		// asynchronous mode
+  TX1STAbits.BRGH = 1;		// high speed
+  RC1STAbits.SPEN = 1;		// enable serial port (configures RX/DT and TX/CK pins as serial port pins)
+  RC1STAbits.RX9  = 0;		// 8-bit reception
+  RC1STAbits.CREN = 1;		// enable receiver
+  // BAUDCON1bits.BRG16 = USE_BRG16; // 8-bit baud rate generator 
 
   SPBRG = SBRG_VAL;		// calculated by defines
 
   // TRISAbits.TRISA0 = 1;	// make the TX pin a digital output
   // TRISAbits.TRISA1 = 0;	// make the RX pin a digital input
 
-  PIR1bits.RCIF = 0;
+  // PIR1bits.RCIF = 0;
+  PIR1 = 0;
 }
 
 void pio_init(void) {
@@ -102,9 +97,9 @@ void pio_init(void) {
 }
 
 void timer0_init(void) {
-  OPTION_REGbits.TMR0CS = 0;	// FOSC / 4
-  OPTION_REGbits.PSA = 0;	// use prescaler
-  OPTION_REGbits.PS = 0b010;	// prescaler 1:8
+  // OPTION_REGbits.TMR0CS = 0;	// FOSC / 4
+  // OPTION_REGbits.PSA = 0;	// use prescaler
+  OPTION_REG = 0b00000010;	// prescaler 1:8
   TMR0 = TIMER0_VAL;
   T0IE = 1;
 }
