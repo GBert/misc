@@ -90,10 +90,11 @@ int check_data(int tcp_socket, unsigned char *netframe) {
     canid = ntohl(canid);
     switch (canid & 0xFFFF0000UL) {
     case (0x00400000UL):	/* config data */
-	/* mark frame not to send over CAN */
-	ret = 1;
+	/* mark frame to send over CAN */
+	ret = 0;
 	/* check for special copy request */
 	if (canid == 0x0040affe) {
+	    ret = 1;
 	    netframe[1] |= 1;
 	    netframe[4] = 4;
 	    strcpy((char *)&netframe[5], "copy");
@@ -109,13 +110,16 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 	    netframe[1] |= 1;
 	    net_to_net(tcp_socket, NULL, netframe, 13);
 	    if (strcmp("loks", config_name) == 0) {
+		ret = 1;
 		send_tcp_config_data("lokomotive.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    } else if (strcmp("mags", config_name) == 0) {
+		ret = 1;
 		send_tcp_config_data("magnetartikel.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    } else if (strncmp("gbs-", config_name, 4) == 0) {
 		int page_number;
+		ret = 1;
 		page_number = atoi(&config_name[5]);
 		strcat(gbs_name, "gleisbilder/");
 		if (page_name) {
@@ -125,26 +129,32 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 		}
 		break;
 	    } else if (strcmp("gbs", config_name) == 0) {
+		ret = 1;
 		send_tcp_config_data("gleisbild.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    } else if (strcmp("fs", config_name) == 0) {
+		ret = 1;
 		send_tcp_config_data("fahrstrassen.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    }
 	    /* TODO : these files depends on different internal states */
 	    else if (strcmp("lokstat", config_name) == 0) {
+		ret = 1;
 		fprintf(stderr, "%s: lokstat (lokomotive.sr2) not implemented yet\n", __func__);
 		send_tcp_config_data("lokomotive.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    } else if (strcmp("magstat", config_name) == 0) {
+		ret = 1;
 		fprintf(stderr, "%s: magstat (magnetartikel.sr2) not implemented yet\n\n", __func__);
 		send_tcp_config_data("magnetartikel.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    } else if (strcmp("gbsstat", config_name) == 0) {
+		ret = 1;
 		fprintf(stderr, "%s: gbsstat (gbsstat.sr2) not implemented yet\n\n", __func__);
 		send_tcp_config_data("gbsstat.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    } else if (strcmp("fsstat", config_name) == 0) {
+		ret = 1;
 		fprintf(stderr, "%s: fsstat (fahrstrassen.sr2) not implemented yet\n\n", __func__);
 		send_tcp_config_data("fahrstrassen.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
