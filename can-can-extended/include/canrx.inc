@@ -55,7 +55,8 @@ RXSTD
                 PUTC                        ; Tx
  
                 RXSID_10_8                  ; Get SID10..8
-                CALL    NIB2ASC             ; Tx
+                ADDLW   '0'                 ; 0 - 7 only
+                PUTC                        ; Tx
 
                 RXSID_7_0                   ; Get SID7..0
                 CALL    BIN2ASC             ; Tx

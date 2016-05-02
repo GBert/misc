@@ -10,11 +10,12 @@
 #include "usart.h"
 
 const char * sData = " Data: ";
+volatile uint8_t i;
 
 /* prints char on USART if pssible */
 char putchar(unsigned char c) {
-    if ( TX1STAbits.TRMT ) {
-	TX1REG1 = c;
+    if ( TRMT ) {
+	TX1REG = c;
         return 1;
     }
     return 0;
@@ -22,7 +23,7 @@ char putchar(unsigned char c) {
 
 /* prints char on USART */
 void putchar_wait(unsigned char c) {
-   while (!TX1STAbits.TRMT);
+   while (!TRMT);
    TX1REG = c;
 }
 
@@ -50,8 +51,8 @@ void print_debug_value(char c, unsigned char value) {
     print_hex_wait(value);
 }
 
-void print_debug_fifo(struct serial_buffer_t * fifo) {
-    unsigned char i;
+// void print_debug_fifo(struct serial_buffer_t *fifo) {
+void print_debug_fifo(void) {
     print_debug_value('S',SERIAL_BUFFER_SIZE);
     putchar_wait(' ');
     print_debug_value('M',SERIAL_BUFFER_SIZE_MASK);
@@ -74,7 +75,7 @@ void print_debug_fifo(struct serial_buffer_t * fifo) {
 char fifo_putchar(struct serial_buffer_t * fifo) {
     unsigned char tail;
     tail=fifo->tail;
-    print_debug_fifo(fifo);
+    print_debug_fifo();
     if (fifo->head != tail) {
 	tail++;
 	tail &= SERIAL_BUFFER_SIZE_MASK;	/* wrap around if neededd */

@@ -21,13 +21,33 @@ static __code uint16_t __at (_CONFIG1) configword1= _FOSC_INTOSC & _WDTE_OFF & _
 static __code uint16_t __at (_CONFIG2) configword2= _LVP_ON & _CLKOUTEN_OFF;
 
 struct serial_buffer_t tx_fifo, rx_fifo;
+volatile uint8_t counter=0;
 
-#define BUFFER_SIZE 128
-static char s88_data[BUFFER_SIZE];
+#define BUFFER_SIZE_BANK	64
+
+#if 1
+__data uint8_t __at(0x120) s88_data1[];
+__data uint8_t __at(0x1A0) s88_data2[];
+__data uint8_t __at(0x220) s88_data3[];
+__data uint8_t __at(0x2A0) s88_data4[];
+#else
+volatile uint8_t s88_data1[BUFFER_SIZE_BANK];
+volatile uint8_t s88_data2[BUFFER_SIZE_BANK];
+volatile uint8_t s88_data3[BUFFER_SIZE_BANK];
+volatile uint8_t s88_data4[BUFFER_SIZE_BANK];
+#endif
 
 void isr (void) __interrupt (1){
   if (IOCIF) {
-    IOCAF = 0;
+    IOCCF = 0;
+  }
+  // S88-CLOCK RC2
+  if ( IOCCF2 ) {
+    IOCCF2 = 0;
+    if ( RA2 )
+      LATA2 = 0;
+    else
+      LATA2 = 1;
   }
 }
 
@@ -61,7 +81,7 @@ void system_init() {
   CM2CON1 = 0;
   TRISA5 = 0;
   TRISA4 = 0;
-  TRISC5 = 0;  // CCP1
+  // TRISC5 = 0;  // CCP1
   // setup interrupt events
   //clear all relevant interrupt flags
   PIR1 = 0;
@@ -69,23 +89,22 @@ void system_init() {
 }
 
 void uart_init (void) {
-  TX1STAbits  = 0b11111101;		// 8-bit transmission
-  TX1STAbits.TX9  = 1;		// 8-bit transmission
-  TX1STAbits.TX9D = 1;		//  one extra stop bit
-  TX1STAbits.TXEN = 1;		// transmit enabled
-  TX1STAbits.SYNC = 0;		// asynchronous mode
-  TX1STAbits.BRGH = 1;		// high speed
-  RC1STAbits.SPEN = 1;		// enable serial port (configures RX/DT and TX/CK pins as serial port pins)
-  RC1STAbits.RX9  = 0;		// 8-bit reception
-  RC1STAbits.CREN = 1;		// enable receiver
-  // BAUDCON1bits.BRG16 = USE_BRG16; // 8-bit baud rate generator 
+  TX9  = 1;		// 8-bit transmission
+  TX9D = 1;		//  one extra stop bit
+  TXEN = 1;		// transmit enabled
+  SYNC = 0;		// asynchronous mode
+  BRGH = 1;		// high speed
+  SPEN = 1;		// enable serial port (configures RX/DT and TX/CK pins as serial port pins)
+  RX9  = 0;		// 8-bit reception
+  CREN = 1;		// enable receiver
+  BRG16 = USE_BRG16;	// 8-bit baud rate generator
 
-  SPBRG = SBRG_VAL;		// calculated by defines
+  SPBRG = SBRG_VAL;	// calculated by defines
 
-  // TRISAbits.TRISA0 = 1;	// make the TX pin a digital output
-  // TRISAbits.TRISA1 = 0;	// make the RX pin a digital input
+  TRISA0 = 1;		// make the TX pin a digital output
+  TRISA1 = 0;		// make the RX pin a digital input
 
-  // PIR1bits.RCIF = 0;
+  // RCIF = 0;
   PIR1 = 0;
 }
 
@@ -94,20 +113,31 @@ void pio_init(void) {
   TRISC0 = 1;
   TRISC1 = 1;
   TRISC2 = 1;
+
+  IOCAF = 0;
+  IOCCF = 0;
+  // enbale "Interrupt On Change" for S88-Clock P&N
+  IOCCN2 = 1;
+  IOCCP2 = 1;
+  IOCIE = 1;
 }
 
 void timer0_init(void) {
-  // OPTION_REGbits.TMR0CS = 0;	// FOSC / 4
-  // OPTION_REGbits.PSA = 0;	// use prescaler
+  TMR0CS = 0;	// FOSC / 4
+  PSA = 0;	// use prescaler
   OPTION_REG = 0b00000010;	// prescaler 1:8
-  TMR0 = TIMER0_VAL;
+  //TMR0 = TIMER0_VAL;
+  TMR0 = 240;
   T0IE = 1;
 }
 
 void data_init(void) {
-  char i;
-  for (i=BUFFER_SIZE; i!=0; i--)
-    s88_data[i]=0;
+  uint8_t i;
+  for (i=BUFFER_SIZE_BANK; i!=0; i--)
+    s88_data1[i]=0;
+    s88_data2[i]=0;
+    s88_data3[i]=0;
+    s88_data4[i]=0;
 }
 
 void main() {
@@ -117,6 +147,7 @@ void main() {
   system_init();
   uart_init();
   data_init();
+  pio_init();
 
   /* empty circular buffers */
   tx_fifo.head=0;
