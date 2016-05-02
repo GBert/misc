@@ -65,11 +65,11 @@ void pps_init(void) {
 }
 
 void system_init() {
-  // switch off analog
   OSCCON = 0b11110000; // Configure oscillator
            //1------- use PLL to get 4x8 Mhz (system clock)
            //-1110--- 8 MHz internal oscillator (instruction clock)
            //------00 oscillator selected with INTOSC
+  // switch off analog
   ANSELA  = 0;
   ANSELC  = 0;
   ADCON0  = 0;
@@ -79,8 +79,6 @@ void system_init() {
   CM1CON1 = 0;
   CM2CON0 = 0;
   CM2CON1 = 0;
-  TRISA5 = 0;
-  TRISA4 = 0;
   // TRISC5 = 0;  // CCP1
   // setup interrupt events
   //clear all relevant interrupt flags
@@ -114,12 +112,11 @@ void pio_init(void) {
   TRISC1 = 1;
   TRISC2 = 1;
 
-  IOCAF = 0;
-  IOCCF = 0;
-  // enbale "Interrupt On Change" for S88-Clock P&N
   IOCCN2 = 1;
   IOCCP2 = 1;
   IOCIE = 1;
+  IOCAF = 0;
+  IOCCF = 0;
 }
 
 void timer0_init(void) {
