@@ -9,7 +9,6 @@
 
 #include "usart.h"
 
-const char * sData = " Data: ";
 volatile uint8_t i;
 
 /* prints char on USART if pssible */

@@ -20,22 +20,27 @@
 static __code uint16_t __at (_CONFIG1) configword1= _FOSC_INTOSC & _WDTE_OFF & _PLLEN_OFF & _MCLRE_ON;
 static __code uint16_t __at (_CONFIG2) configword2= _LVP_ON & _CLKOUTEN_OFF;
 
-struct serial_buffer_t tx_fifo, rx_fifo;
 volatile uint8_t counter=0;
-volatile uint8_t s88_counter=0;
 
 #define BUFFER_SIZE_BANK	64
 
 #if 1
+__data uint8_t __at(0x79) s88_counter;
+__data uint8_t __at(0x7A) c;
 __data uint8_t __at(0x120) s88_data1[];
 __data uint8_t __at(0x1A0) s88_data2[];
 __data uint8_t __at(0x220) s88_data3[];
 __data uint8_t __at(0x2A0) s88_data4[];
+__data struct serial_buffer_t __at(0x320) tx_fifo;
+__data struct serial_buffer_t __at(0x3A0) rx_fifo;
 #else
+volatile uint8_t s88_counter=0;
+volatile uint8_t c;
 volatile uint8_t s88_data1[BUFFER_SIZE_BANK];
 volatile uint8_t s88_data2[BUFFER_SIZE_BANK];
 volatile uint8_t s88_data3[BUFFER_SIZE_BANK];
 volatile uint8_t s88_data4[BUFFER_SIZE_BANK];
+struct serial_buffer_t tx_fifo, rx_fifo;
 #endif
 
 void isr (void) __interrupt (1){
@@ -147,6 +152,21 @@ void data_init(void) {
   } while (i!=0);
 }
 
+void print_help(void) {
+  puts_rom("p print settings\n");
+  puts_rom("s <port> <value_hex>\n");
+  puts_rom("> \n");
+}
+
+void print_intro(void) {
+  puts_rom("*****************\n");
+  puts_rom("* S88 Tester    *\n");
+  puts_rom("* (C) GB 2016   *\n");
+  puts_rom("* h -> help     *\n");
+  puts_rom("*****************\n");
+  puts_rom("> \n");
+}
+
 void main() {
   unsigned short counter=0;
 
@@ -165,11 +185,15 @@ void main() {
   tx_fifo.tail=0;
   rx_fifo.head=0;
   rx_fifo.tail=0;
+  s88_counter =0;
 
   GIE = 1;
+
+  print_intro();;
   while(1) {
-    if ( counter == 0 )
-      putchar_wait(0x33);
-    counter++;
+    if (RCIF) {
+      c = RCREG;
+      putchar_wait(c);
+    }
   }
 }
