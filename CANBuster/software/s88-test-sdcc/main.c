@@ -184,10 +184,10 @@ void main() {
   data_init();
   pio_init();
 
-  s88_data1[3]  = 0xFF;
-  s88_data1[19] = 0xFF;
-  s88_data1[35] = 0xFF;
-  s88_data1[51] = 0xFF;
+  // s88_data1[3]  = 0xFF;
+  // s88_data1[19] = 0xFF;
+  // s88_data1[35] = 0xFF;
+  // s88_data1[51] = 0xFF;
   /* empty circular buffers */
   tx_fifo.head=0;
   tx_fifo.tail=0;

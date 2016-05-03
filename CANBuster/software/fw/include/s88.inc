@@ -268,9 +268,9 @@ S88_STATE_4
                 MOVLW   2
                 MOVWF   S88MASK
                 ; read 1st bit
-                BCF     S88_NEW_TMP,1
+                BSF     S88_NEW_TMP,0
                 BTFSS88_INPUT
-                BSF     S88_NEW_TMP,1
+                BCF     S88_NEW_TMP,0
                 INCF    S88STATE,F
                 RETURN
 S88_STATE_5
