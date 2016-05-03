@@ -50,7 +50,7 @@ void isr (void) __interrupt (1){
     }
   }
   if ( IOCCF1 ) {
-      LATC3 ^= 1;
+      // LATC3 ^= 1;
       s88_counter = 0;
   }
   IOCCF = 0;
