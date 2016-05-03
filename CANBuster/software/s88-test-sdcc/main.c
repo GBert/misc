@@ -137,11 +137,14 @@ void timer0_init(void) {
 
 void data_init(void) {
   uint8_t i;
-  for (i=BUFFER_SIZE_BANK; i!=0; i--)
+  i = BUFFER_SIZE_BANK;
+  do {
+    i--;
     s88_data1[i]=0;
     s88_data2[i]=0;
     s88_data3[i]=0;
     s88_data4[i]=0;
+  } while (i!=0);
 }
 
 void main() {
@@ -153,6 +156,10 @@ void main() {
   data_init();
   pio_init();
 
+  s88_data1[3]  = 0xFF;
+  s88_data1[19] = 0xFF;
+  s88_data1[35] = 0xFF;
+  s88_data1[51] = 0xFF;
   /* empty circular buffers */
   tx_fifo.head=0;
   tx_fifo.tail=0;
