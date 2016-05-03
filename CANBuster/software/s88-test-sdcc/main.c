@@ -27,6 +27,8 @@ volatile uint8_t counter=0;
 #if 1
 __data uint8_t __at(0x79) s88_counter;
 __data uint8_t __at(0x7A) c;
+__data uint8_t __at(0x7B) toggle;
+__data uint8_t __at(0x7C) temp;
 __data uint8_t __at(0x120) s88_data1[];
 __data uint8_t __at(0x1A0) s88_data2[];
 __data uint8_t __at(0x220) s88_data3[];
@@ -35,7 +37,7 @@ __data struct serial_buffer_t __at(0x320) tx_fifo;
 __data struct serial_buffer_t __at(0x3A0) rx_fifo;
 #else
 volatile uint8_t s88_counter=0;
-volatile uint8_t c;
+volatile uint8_t c, t;
 volatile uint8_t s88_data1[BUFFER_SIZE_BANK];
 volatile uint8_t s88_data2[BUFFER_SIZE_BANK];
 volatile uint8_t s88_data3[BUFFER_SIZE_BANK];
@@ -46,12 +48,14 @@ struct serial_buffer_t tx_fifo, rx_fifo;
 void isr (void) __interrupt (1){
   if ( IOCCF2 ) {
     if ( RC2 ) {
-      if (s88_data1[s88_counter] && 1)
+      temp = s88_data1[s88_counter];
+      temp ^= toggle;
+      if (temp && 1)
         LATA2 = 1;
       else
         LATA2 = 0;
       s88_counter++;
-      s88_data1[s88_counter] >>= 1;
+      // s88_data1[s88_counter] >>= 1;
     }
   }
   if ( IOCCF1 ) {
@@ -153,18 +157,22 @@ void data_init(void) {
 }
 
 void print_help(void) {
-  puts_rom("p print settings\n");
-  puts_rom("s <port> <value_hex>\n");
-  puts_rom("> \n");
+  puts_rom("\r\n\r\n");
+  puts_rom("p print settings\r\n");
+  puts_rom("s synch\r\n");
+  puts_rom("t synch & toggle\r\n");
+  puts_rom("v <port> <value_hex>\r\n");
+  puts_rom("\r\n> ");
 }
 
 void print_intro(void) {
-  puts_rom("*****************\n");
-  puts_rom("* S88 Tester    *\n");
-  puts_rom("* (C) GB 2016   *\n");
-  puts_rom("* h -> help     *\n");
-  puts_rom("*****************\n");
-  puts_rom("> \n");
+  puts_rom("\r\n\r\n");
+  puts_rom("*****************\r\n");
+  puts_rom("* S88 Tester    *\r\n");
+  puts_rom("* (C) GB 2016   *\r\n");
+  puts_rom("* h -> help     *\r\n");
+  puts_rom("*****************\r\n");
+  puts_rom("\r\n> ");
 }
 
 void main() {
@@ -185,6 +193,7 @@ void main() {
   tx_fifo.tail=0;
   rx_fifo.head=0;
   rx_fifo.tail=0;
+  toggle =0;
   s88_counter =0;
 
   GIE = 1;
@@ -193,15 +202,26 @@ void main() {
   while(1) {
     if (RCIF) {
       c = RCREG;
+      putchar_wait(c);
       switch(c) {
+        case '?':
         case 'h':
           print_help();
           break;
         case 'i':
           print_intro();
           break;
+        case 's':
+          while (s88_counter!=0);
+          puts_rom(" done\r\n> ");
+          break;
+        case 't':
+          while (s88_counter!=0);
+          toggle ^= 0xFF;
+          puts_rom("  synced & toggled\r\n> ");
+          break;
         default:
-          putchar_wait(c);
+          puts_rom(" ?\r\n> ");
           break;
       }
     }

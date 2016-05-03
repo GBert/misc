@@ -148,7 +148,6 @@ SENDEVENT
                 MOVWF   CANCON
                 BTFSS   TXB2CON,TXREQ
                 BRA     EVENTTXCAN
-	RETURN
 
                 MOVLW   CAN_WIN_TXB1        ; Window mode on TXB1
                 MOVWF   CANCON
