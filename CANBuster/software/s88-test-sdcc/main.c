@@ -193,7 +193,17 @@ void main() {
   while(1) {
     if (RCIF) {
       c = RCREG;
-      putchar_wait(c);
+      switch(c) {
+        case 'h':
+          print_help();
+          break;
+        case 'i':
+          print_intro();
+          break;
+        default:
+          putchar_wait(c);
+          break;
+      }
     }
   }
 }
