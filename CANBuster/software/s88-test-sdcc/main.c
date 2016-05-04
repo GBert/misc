@@ -17,7 +17,8 @@
 
 #include "main.h"
 
-static __code uint16_t __at (_CONFIG1) configword1= _FOSC_INTOSC & _CLKOUTEN_OFF & _WDTE_OFF & _PLLEN_OFF & _MCLRE_ON;
+/* or'd with 0x0100 (always 1) - seems to be a sdcc bug in configword1 */
+static __code uint16_t __at (_CONFIG1) configword1= _FOSC_INTOSC & _CLKOUTEN_OFF & _WDTE_OFF & _PLLEN_OFF & _MCLRE_ON | 0x0100;
 static __code uint16_t __at (_CONFIG2) configword2= _LVP_ON & _PLLEN_ON;
 
 volatile uint8_t counter=0;
