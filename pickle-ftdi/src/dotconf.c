@@ -160,6 +160,11 @@ getconf(void)
 				p.pgdi = strtoul(&line[5], NULL, 0);
 			}
 #endif /* RPI || BITBANG || FTDI*/
+#if defined(FTDI)
+			else if (mystrcasestr(line, "USB_SERIAL=") == line) {
+				strncpy(p.usb_serial, &line[11], STRLEN);
+			}
+#endif /* FTDI*/
 
 #ifdef MCP23017
 			else if (mystrcasestr(line, "MCP=") == line) {

@@ -155,6 +155,10 @@ struct pickle {
         uint8_t pgdi;		/* CTS/PGD DATA_IN  */
         uint8_t pgm;		/* PGM OUT          */
 #endif
+#if defined(FTDI)
+	/* USB serial ID */
+	char usb_serial[STRLEN];
+#endif
 	/* Hardware operations */
 	struct pic_ops *pic;
 };

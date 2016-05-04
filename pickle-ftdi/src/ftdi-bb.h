@@ -20,6 +20,8 @@
 #ifndef _FTDI_BB_H
 #define _FTDI_BB_H
 
+#include "pickle.h"
+
 struct ftdi_bb_io {
 	uint8_t dir;
 	uint8_t pin;
