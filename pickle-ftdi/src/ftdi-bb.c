@@ -100,6 +100,7 @@ ftdi_bb_close(void)
 {
 #ifdef __linux
 	ftdi_disable_bitbang(&ftdi);
+	ftdi_usb_reset(&ftdi);
 	ftdi_usb_close(&ftdi);
 #endif
 }
