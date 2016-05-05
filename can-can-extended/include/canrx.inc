@@ -55,7 +55,7 @@ RXSTD
                 PUTC                        ; Tx
  
                 RXSID_10_8                  ; Get SID10..8
-                ADDLW   '0'                 ; 0 - 7 only
+                IORLW   0x30                ; BIN2ASC
                 PUTC                        ; Tx
 
                 RXSID_7_0                   ; Get SID7..0
@@ -87,7 +87,7 @@ RXCANDLC
                 MOVF    RXB0DLC,W           ; Get DLC
                 ANDLW   0x0F
                 MOVWF   CANCNT
-                IORLW   0x30
+                IORLW   0x30                ; BIN2ASC
                 PUTC                        ; Tx
 
 ;------------------------------------------------------------------------------
