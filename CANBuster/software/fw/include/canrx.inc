@@ -65,7 +65,7 @@ RXSTD
  
                 RXSID_10_8                  ; Get SID10..8
                 MOVWF   POSTINC0
-                ADDLW   '0'                 ; 0 - 7 only
+                IORLW   0x30                ; BIN2ASC
                 PUTC                        ; Tx
 
                 RXSID_7_0                   ; Get SID7..0
@@ -107,7 +107,7 @@ RXCANDLC
                 ANDLW   0x0F
                 MOVWF   POSTINC0
                 MOVWF   CANCNT
-                IORLW   0x30
+                IORLW   0x30                ; BIN2ASC
                 PUTC                        ; Tx
 
 ;------------------------------------------------------------------------------
