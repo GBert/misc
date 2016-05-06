@@ -53,6 +53,7 @@ RXB0DBEN        EQU     H'0002'
 #DEFINE         CAN_WIN_TXB1 0x06           ; 011X
 #DEFINE         CAN_WIN_TXB2 0x04           ; 010X
 
+#INCLUDE        "canrates-rom.inc"
 #INCLUDE        "canrates.inc"
 #INCLUDE        "canid.inc"
 
@@ -160,6 +161,7 @@ INITCAN2
 #DEFINE         STDRTR      'r'             ; 0x72 0111 0010
 #DEFINE         EXTDATA     'T'             ; 0x54 0101 0100
 #DEFINE         EXTRTR      'R'             ; 0x52 0101 0010
+#DEFINE         CANSET      'S'             ; 0x53 0101 0001
 
 ; C\r
 ; |

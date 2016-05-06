@@ -16,17 +16,17 @@
 
 build:
 	cd firmware && $(MAKE) build
-	cd test && $(MAKE) build
+#	cd test && $(MAKE) build
 
 install:build
 	cd firmware && $(MAKE) install
-	cd test && $(MAKE) install
+#	cd test && $(MAKE) install
 
 clean:
 	cd firmware && $(MAKE) clean
 	cd test && $(MAKE) clean
-	rm -f *~ etc/*~ include/*~
+#	rm -f *~ etc/*~ include/*~
 
 uninstall:clean
 	cd firmware && $(MAKE) uninstall
-	cd test && $(MAKE) uninstall
+#	cd test && $(MAKE) uninstall

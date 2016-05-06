@@ -57,9 +57,13 @@ TXCAN2
                 MOVF    CANCMD,W            ; T?
                 XORLW   EXTDATA
                 BZ      TXCANEXT
-                MOVF    CANCMD,W            ; r?
+                MOVF    CANCMD,W            ; R?
                 XORLW   EXTRTR
                 BZ      TXCANEXT
+
+                MOVF    CANCMD,W            ; S?
+                XORLW   CANSET
+                BZ      CANSETBAUD
 
                 BRA     TXCANEND            ; Unsupported
 
@@ -141,6 +145,56 @@ TXCANEND
                 ; Clear to Send; RXCNT = 0
                 RTSCLR
 TXCANRET
+                RETURN
+
+;------------------------------------------------------------------------------
+CANSETBAUD
+
+	; TODO disable interrupt
+                ; set TBL pointer
+                CLRF    TBLPTRU
+                MOVLW   HIGH CANRATE
+                MOVWF   TBLPTRH
+                MOVLW   LOW CANRATE
+                MOVWF   TBLPTRL
+
+                GETC                        ; W = <RXBUF>,RXGET++
+                ANDLW   0x0f
+                RLNCF   WREG,W
+                RLNCF   WREG,W
+                ADDWF   TBLPTRL,F
+                BTFSC   STATUS,C
+                INCF    TBLPTRH,F
+
+                ; Set configuration mode
+
+                BANKSEL CANCON
+                MOVLW   (1 << REQOP2)
+                MOVWF   CANCON
+
+                BANKSEL BRGCON1
+                TBLRD*+                     ; ignore first entry
+                TBLRD*+
+                MOVWF   BRGCON1
+                TBLRD*+
+                MOVWF   BRGCON2
+                TBLRD*+
+                MOVWF   BRGCON3
+
+                ; Set normal mode
+                CLRF    CANCON
+CANSETINIT
+                MOVF    CANSTAT,W
+                ANDLW   (1 << OPMODE2) + (1 << OPMODE1)
+                BNZ     CANSETINIT
+
+	; TODO enable interrupt
+                MOVLB   15
+
+CANSETINITEND
+                GETC                        ; W = <RXBUF>,RXGET++
+                XORLW   EOLNCHAR
+                BNZ     CANSETINITEND
                 RETURN
 
 ;------------------------------------------------------------------------------
