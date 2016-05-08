@@ -149,8 +149,9 @@ TXCANRET
 
 ;------------------------------------------------------------------------------
 CANSETBAUD
+                ; disable interrupts
+                BCF     INTCON,GIE
 
-	; TODO disable interrupt
                 ; set TBL pointer
                 CLRF    TBLPTRU
                 MOVLW   HIGH CANRATE
@@ -172,14 +173,12 @@ CANSETBAUD
                 MOVLW   (1 << REQOP2)
                 MOVWF   CANCON
 
-                BANKSEL BRGCON1
-                TBLRD*+                     ; ignore first entry
-                TBLRD*+
-                MOVWF   BRGCON1
-                TBLRD*+
-                MOVWF   BRGCON2
-                TBLRD*+
-                MOVWF   BRGCON3
+                TBLRD+*                     ; ignore first entry
+                MOVFF   TABLAT,BRGCON1
+                TBLRD+*
+                MOVFF   TABLAT,BRGCON2
+                TBLRD+*
+                MOVFF   TABLAT,BRGCON3
 
                 ; Set normal mode
                 CLRF    CANCON
@@ -188,13 +187,14 @@ CANSETINIT
                 ANDLW   (1 << OPMODE2) + (1 << OPMODE1)
                 BNZ     CANSETINIT
 
-	; TODO enable interrupt
                 MOVLB   15
 
 CANSETINITEND
                 GETC                        ; W = <RXBUF>,RXGET++
                 XORLW   EOLNCHAR
                 BNZ     CANSETINITEND
+	        ; enable interrupts again
+                BSF     INTCON,GIE
                 RETURN
 
 ;------------------------------------------------------------------------------
