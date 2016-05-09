@@ -98,6 +98,8 @@ CANRATE_ROM
     DB 0x08, 0x01, 0xBC, 0x01 ; 1000
 #ENDIF
 
+#DEFINE CANRATE_ROM_DEFAULT (CANRATE_ROM + 5*4)	; S5 -> 250kBaud
+
 ;------------------------------------------------------------------------------
 ;
 ; vim: shiftwidth=4 tabstop=4 softtabstop=4 expandtab

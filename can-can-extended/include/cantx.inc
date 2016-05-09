@@ -153,7 +153,8 @@ CANSETBAUD
                 BCF     INTCON,GIE
 
                 ; set TBL pointer
-                CLRF    TBLPTRU
+                MOVLW   UPPER CANRATE
+                MOVWF   TBLPTRU
                 MOVLW   HIGH CANRATE
                 MOVWF   TBLPTRH
                 MOVLW   LOW CANRATE
@@ -168,10 +169,13 @@ CANSETBAUD
                 INCF    TBLPTRH,F
 
                 ; Set configuration mode
-
                 BANKSEL CANCON
                 MOVLW   (1 << REQOP2)
                 MOVWF   CANCON
+WAIT_SETUP_MODE
+                MOVF    CANSTAT,W
+                ANDLW   (1 << OPMODE2)
+                BZ      WAIT_SETUP_MODE
 
                 TBLRD+*                     ; ignore first entry
                 MOVFF   TABLAT,BRGCON1
@@ -180,12 +184,20 @@ CANSETBAUD
                 TBLRD+*
                 MOVFF   TABLAT,BRGCON3
 
+                ; Enable CANTX
+                BANKSEL CIOCON
+                BSF     CIOCON,ENDRHI
+
+                ; Reset receivers
+                CLRF    RXB0CON
+                CLRF    RXB1CON
+
                 ; Set normal mode
                 CLRF    CANCON
-CANSETINIT
+CAN_WAIT_NORMAL
                 MOVF    CANSTAT,W
                 ANDLW   (1 << OPMODE2) + (1 << OPMODE1)
-                BNZ     CANSETINIT
+                BNZ     CAN_WAIT_NORMAL
 
                 MOVLB   15
 

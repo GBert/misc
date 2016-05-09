@@ -57,9 +57,13 @@ TXCAN2
                 MOVF    CANCMD,W            ; T?
                 XORLW   EXTDATA
                 BZ      TXCANEXT
-                MOVF    CANCMD,W            ; r?
+                MOVF    CANCMD,W            ; R?
                 XORLW   EXTRTR
                 BZ      TXCANEXT
+
+                MOVF    CANCMD,W            ; S?
+                XORLW   CANSET
+                BZ      CANSETBAUD
 
                 BRA     TXCANEND            ; Unsupported
 
@@ -161,6 +165,68 @@ TXCANEND
                 ; Clear to Send; RXCNT = 0
                 RTSCLR
 TXCANRET
+                RETURN
+
+;------------------------------------------------------------------------------
+CANSETBAUD
+                ; disable interrupts
+                BCF     INTCON,GIE
+
+                ; set TBL pointer
+                MOVLW   UPPER CANRATE
+                MOVWF   TBLPTRU
+                MOVLW   HIGH CANRATE
+                MOVWF   TBLPTRH
+                MOVLW   LOW CANRATE
+                MOVWF   TBLPTRL
+
+                GETC                        ; W = <RXBUF>,RXGET++
+                ANDLW   0x0f
+                RLNCF   WREG,W
+                RLNCF   WREG,W
+                ADDWF   TBLPTRL,F
+                BTFSC   STATUS,C
+                INCF    TBLPTRH,F
+
+                ; Set configuration mode
+                BANKSEL CANCON
+                MOVLW   (1 << REQOP2)
+                MOVWF   CANCON
+WAIT_SETUP_MODE
+                MOVF    CANSTAT,W
+                ANDLW   (1 << OPMODE2)
+                BZ      WAIT_SETUP_MODE
+
+                TBLRD+*                     ; ignore first entry
+                MOVFF   TABLAT,BRGCON1
+                TBLRD+*
+                MOVFF   TABLAT,BRGCON2
+                TBLRD+*
+                MOVFF   TABLAT,BRGCON3
+
+                ; Enable CANTX
+                BANKSEL CIOCON
+                BSF     CIOCON,ENDRHI
+
+                ; Reset receivers
+                CLRF    RXB0CON
+                CLRF    RXB1CON
+
+                ; Set normal mode
+                CLRF    CANCON
+CAN_WAIT_NORMAL
+                MOVF    CANSTAT,W
+                ANDLW   (1 << OPMODE2) + (1 << OPMODE1)
+                BNZ     CAN_WAIT_NORMAL
+
+                MOVLB   15
+
+CANSETINITEND
+                GETC                        ; W = <RXBUF>,RXGET++
+                XORLW   EOLNCHAR
+                BNZ     CANSETINITEND
+	        ; enable interrupts again
+                BSF     INTCON,GIE
                 RETURN
 
 ;------------------------------------------------------------------------------

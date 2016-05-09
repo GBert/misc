@@ -54,7 +54,6 @@ RXB0DBEN        EQU     H'0002'
 #DEFINE         CAN_WIN_TXB2 0x04           ; 010X
 
 #INCLUDE        "canrates-rom.inc"
-#INCLUDE        "canrates.inc"
 #INCLUDE        "canid.inc"
 
 ;------------------------------------------------------------------------------
@@ -68,6 +67,14 @@ INITCAN
                 CLRF    TRISB
                 BSF     TRISB,3             ; CANRX I/P
 #ENDIF
+                MOVLW   UPPER CANRATE_ROM_DEFAULT
+                MOVWF   TBLPTRU
+                MOVLW   HIGH CANRATE_ROM_DEFAULT
+                MOVWF   TBLPTRH
+                MOVLW   LOW CANRATE_ROM_DEFAULT
+                MOVWF   TBLPTRL
+
+SETUP_BAUDRATE
                 ; Set configuration mode
                 MOVLW   (1 << REQOP2)
                 MOVWF   CANCON
@@ -119,13 +126,12 @@ INITCAN1
                 CLRF    RXF5SIDL
 
                 ; Set bit rate
-                BANKSEL BRGCON1
-                MOVLW   BRG1
-                MOVWF   BRGCON1
-                MOVLW   BRG2
-                MOVWF   BRGCON2
-                MOVLW   BRG3
-                MOVWF   BRGCON3
+                TBLRD+*                     ; ignore first entry
+                MOVFF   TABLAT,BRGCON1
+                TBLRD+*
+                MOVFF   TABLAT,BRGCON2
+                TBLRD+*
+                MOVFF   TABLAT,BRGCON3
 
                 ; Enable CANTX
                 BANKSEL CIOCON
