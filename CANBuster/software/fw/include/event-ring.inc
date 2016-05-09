@@ -143,15 +143,10 @@ SENDEVENT
                 RETURN
 
                 ; last: check for CAN buffer
-                ; Find a Tx slot - start with TX buffer 2 down to 1
+                ; Find a Tx slot - check if TX buffer 2 is empty 
                 MOVLW   CAN_WIN_TXB2        ; Window mode on TXB2
                 MOVWF   CANCON
                 BTFSS   TXB2CON,TXREQ
-                BRA     EVENTTXCAN
-
-                MOVLW   CAN_WIN_TXB1        ; Window mode on TXB1
-                MOVWF   CANCON
-                BTFSS   TXB1CON,TXREQ
                 BRA     EVENTTXCAN
 
                 RETURN
