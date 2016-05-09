@@ -1,0 +1,150 @@
+PCBNEW-LibModule-V1  
+# encoding utf-8
+Units mm
+$INDEX
+RJ45ALED_1PRIMARY
+$EndINDEX
+$MODULE RJ45ALED_1PRIMARY
+Po 0 0 0 15 00000000 00000000 ~~
+Li RJ45ALED_1PRIMARY
+Cd Original name <b>RJ45ALED</b><p>
+Sc 00000000
+At STD
+Op 0 0 0
+.SolderMask 0.1
+.SolderPaste 0
+T0 3.937 -22.606 1.6 1.6 0 0.05 N V 21 "RJ45ALED_1PRIMARY"
+T1 11.303 1.778 1.6 1.6 0 0.05 N V 21 "VAL**"
+DS 0 0 0 -21.209 0.254 21
+DS 16.002 0 16.002 -21.209 0.254 21
+DS 0 -21.209 16.002 -21.209 0.254 21
+DS 0 0 16.002 0 0.254 21
+$PAD
+Sh "1" R 1.27 1.27 0 0 0
+Dr 0.8636 0 0
+At STD N 00E0FFFF
+.SolderMask 0.2
+Ne 0 ""
+Po 3.556 -17.145
+$EndPAD
+$PAD
+Sh "2" C 1.27 1.27 0 0 0
+Dr 0.8636 0 0
+At STD N 00E0FFFF
+.SolderMask 0.2
+Ne 0 ""
+Po 4.826 -19.685
+$EndPAD
+$PAD
+Sh "3" C 1.27 1.27 0 0 0
+Dr 0.8636 0 0
+At STD N 00E0FFFF
+.SolderMask 0.2
+Ne 0 ""
+Po 6.096 -17.145
+$EndPAD
+$PAD
+Sh "4" C 1.27 1.27 0 0 0
+Dr 0.8636 0 0
+At STD N 00E0FFFF
+.SolderMask 0.2
+Ne 0 ""
+Po 7.366 -19.685
+$EndPAD
+$PAD
+Sh "5" C 1.27 1.27 0 0 0
+Dr 0.8636 0 0
+At STD N 00E0FFFF
+.SolderMask 0.2
+Ne 0 ""
+Po 8.636 -17.145
+$EndPAD
+$PAD
+Sh "6" C 1.27 1.27 0 0 0
+Dr 0.8636 0 0
+At STD N 00E0FFFF
+.SolderMask 0.2
+Ne 0 ""
+Po 9.906 -19.685
+$EndPAD
+$PAD
+Sh "7" C 1.27 1.27 0 0 0
+Dr 0.8636 0 0
+At STD N 00E0FFFF
+.SolderMask 0.2
+Ne 0 ""
+Po 11.176 -17.145
+$EndPAD
+$PAD
+Sh "8" C 1.27 1.27 0 0 0
+Dr 0.8636 0 0
+At STD N 00E0FFFF
+.SolderMask 0.2
+Ne 0 ""
+Po 12.446 -19.685
+$EndPAD
+$PAD
+Sh "9" C 1.27 1.27 0 0 0
+Dr 0.8636 0 0
+At STD N 00E0FFFF
+.SolderMask 0.2
+Ne 0 ""
+Po 1.524 -6.223
+$EndPAD
+$PAD
+Sh "10" C 1.27 1.27 0 0 0
+Dr 0.8636 0 0
+At STD N 00E0FFFF
+.SolderMask 0.2
+Ne 0 ""
+Po 4.191 -6.223
+$EndPAD
+$PAD
+Sh "11" C 1.27 1.27 0 0 0
+Dr 0.8636 0 0
+At STD N 00E0FFFF
+.SolderMask 0.2
+Ne 0 ""
+Po 14.478 -6.223
+$EndPAD
+$PAD
+Sh "12" C 1.27 1.27 0 0 0
+Dr 0.8636 0 0
+At STD N 00E0FFFF
+.SolderMask 0.2
+Ne 0 ""
+Po 11.811 -6.223
+$EndPAD
+$PAD
+Sh "13" C 2.286 2.286 0 0 0
+Dr 2.286 0 0
+At STD N 00E0FFFF
+.SolderMask 0.2
+Ne 0 ""
+Po 13.716 -11.049
+$EndPAD
+$PAD
+Sh "14" C 2.286 2.286 0 0 0
+Dr 2.286 0 0
+At STD N 00E0FFFF
+.SolderMask 0.2
+Ne 0 ""
+Po 2.286 -11.049
+$EndPAD
+$PAD
+Sh "15" O 2.7432 1.3716 0 0 900
+Dr 1.016 0 0
+At STD N 00E0FFFF
+.SolderMask 0.2
+Ne 0 ""
+Po 0.635 -14.478
+$EndPAD
+$PAD
+Sh "16" O 2.7432 1.3716 0 0 900
+Dr 1.016 0 0
+At STD N 00E0FFFF
+.SolderMask 0.2
+Ne 0 ""
+Po 15.367 -14.478
+$EndPAD
+$EndMODULE RJ45ALED_1PRIMARY

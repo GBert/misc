@@ -1,0 +1,14 @@
+++        } else if (port_priv->bPartNumber == CP2105_PARTNUM) {
+++            result = usb_control_msg(port->serial->dev,
+++                    usb_rcvctrlpipe(port->serial->dev, 0),
+++                    CP210X_VENDOR_SPECIFIC,
+++                    REQTYPE_INTERFACE_TO_HOST,
+++                    CP210X_READ_LATCH,
+++                    port_priv->bInterfaceNumber,
+++                    &latch_setting, 1,
+++                    USB_CTRL_GET_TIMEOUT);
+++            if (result != 1)
+++                return -EPROTO;
+++            *(unsigned long *)arg = (unsigned long)latch_setting;
+++            return 0;
+
