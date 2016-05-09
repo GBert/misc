@@ -216,13 +216,13 @@ main(int argc, char *argv[])
 		cmd[0] = CMD_LED;
 		cmd[1] = getbytearg(execname, argv[2]); /* Data */
 		do {
-			err = io_test_command(p.fwsleep, p.fwsleep << 1, cmd, 1, NULL, 0);
+			err = icspio_command(p.fwsleep, p.fwsleep << 1, cmd, 1, NULL, 0);
 			fprintf(stderr, "0x%02X(0x%02X) = 0x%02X\n",
 				cmd[0], cmd[1], err);
 			if (err != ERRNONE) {
 				if (p.debug >= 1) {
 					fprintf(stderr, "%s: error: %s [0x%02X]\n",
-					__func__, io_test_err(err), err);
+					__func__, icspio_err(err), err);
 				}		
 				io_usleep(RESYNC * p.fwsleep);
 			}
@@ -238,12 +238,12 @@ main(int argc, char *argv[])
 
 		cmd[0] = CMD_SWITCH;
 		do {
-			err = io_test_command(p.fwsleep, p.fwsleep << 1, cmd, 0, &sw, 1);
+			err = icspio_command(p.fwsleep, p.fwsleep << 1, cmd, 0, &sw, 1);
 			fprintf(stderr, "0x%02X() = 0x%02X\n", cmd[0], err);
 			if (err != ERRNONE) {
 				if (p.debug >= 1) {
 					fprintf(stderr, "%s: error: %s [0x%02X]\n",
-					__func__, io_test_err(err), err);
+					__func__, icspio_err(err), err);
 				}		
 				io_usleep(RESYNC * p.fwsleep);
 			}
@@ -258,13 +258,13 @@ main(int argc, char *argv[])
 
 		cmd[0] = CMD_SLEEP;
 		do {
-			err = io_test_command(p.fwsleep, p.fwsleep << 1, cmd, 0, NULL, 0);
+			err = icspio_command(p.fwsleep, p.fwsleep << 1, cmd, 0, NULL, 0);
 			fprintf(stderr, "0x%02X() = 0x%02X\n",
 				cmd[0], err);
 			if (err != ERRNONE) {
 				if (p.debug >= 1) {
 					fprintf(stderr, "%s: error: %s [0x%02X]\n",
-					__func__, io_test_err(err), err);
+					__func__, icspio_err(err), err);
 				}		
 				io_usleep(RESYNC * p.fwsleep);
 			}
@@ -289,13 +289,13 @@ main(int argc, char *argv[])
 			usage(execname, "Invalid arg");
 		}
 		do {
-			err = io_test_command(p.fwsleep, p.fwsleep << 1, cmd, 1, NULL, 0);
+			err = icspio_command(p.fwsleep, p.fwsleep << 1, cmd, 1, NULL, 0);
 			fprintf(stderr, "0x%02X(0x%02X) = 0x%02X\n",
 				cmd[0], cmd[1], err);
 			if (err != ERRNONE) {
 				if (p.debug >= 1) {
 					fprintf(stderr, "%s: error: %s [0x%02X]\n",
-					__func__, io_test_err(err), err);
+					__func__, icspio_err(err), err);
 				}		
 				io_usleep(RESYNC * p.fwsleep);
 			}
@@ -312,13 +312,13 @@ main(int argc, char *argv[])
 		cmd[0] = CMD_CLOCK;
 		cmd[1] = getbytearg(execname, argv[2]); /* Data */
 		do {
-			err = io_test_command(p.fwsleep, p.fwsleep << 1, cmd, 1, NULL, 0);
+			err = icspio_command(p.fwsleep, p.fwsleep << 1, cmd, 1, NULL, 0);
 			fprintf(stderr, "0x%02X(0x%02X) = 0x%02X\n",
 				cmd[0], cmd[1], err);
 			if (err != ERRNONE) {
 				if (p.debug >= 1) {
 					fprintf(stderr, "%s: error: %s [0x%02X]\n",
-					__func__, io_test_err(err), err);
+					__func__, icspio_err(err), err);
 				}		
 				io_usleep(RESYNC * p.fwsleep);
 			}
@@ -336,13 +336,13 @@ main(int argc, char *argv[])
 		cmd[1] = getportarg(execname, argv[2]); /* Port */
 		cmd[2] = getbytearg(execname, argv[3]); /* I/O  */
 		do {
-			err = io_test_command(p.fwsleep, p.fwsleep << 1, cmd, 2, NULL, 0);
+			err = icspio_command(p.fwsleep, p.fwsleep << 1, cmd, 2, NULL, 0);
 			fprintf(stderr, "0x%02X(0x%02X, 0x%02X) = 0x%02X\n",
 				cmd[0], cmd[1], cmd[2], err);
 			if (err != ERRNONE) {
 				if (p.debug >= 1) {
 					fprintf(stderr, "%s: error: %s [0x%02X]\n",
-					__func__, io_test_err(err), err);
+					__func__, icspio_err(err), err);
 				}		
 				io_usleep(RESYNC * p.fwsleep);
 			}
@@ -360,13 +360,13 @@ main(int argc, char *argv[])
 		cmd[1] = getportarg(execname, argv[2]); /* Port */
 		cmd[2] = getbytearg(execname, argv[3]); /* Data */
 		do {
-			err = io_test_command(p.fwsleep, p.fwsleep << 1, cmd, 2, NULL, 0);
+			err = icspio_command(p.fwsleep, p.fwsleep << 1, cmd, 2, NULL, 0);
 			fprintf(stderr, "0x%02X(0x%02X, 0x%02X) = 0x%02X\n",
 				cmd[0], cmd[1], cmd[2], err);
 			if (err != ERRNONE) {
 				if (p.debug >= 1) {
 					fprintf(stderr, "%s: error: %s [0x%02X]\n",
-					__func__, io_test_err(err), err);
+					__func__, icspio_err(err), err);
 				}		
 				io_usleep(RESYNC * p.fwsleep);
 			}
@@ -386,13 +386,13 @@ main(int argc, char *argv[])
 		cmd[1] = getportarg(execname, argv[2]); /* Port */
 		do {
 			in = 0;
-			err = io_test_command(p.fwsleep, p.fwsleep << 1, cmd, 1, &in, 1);
+			err = icspio_command(p.fwsleep, p.fwsleep << 1, cmd, 1, &in, 1);
 			fprintf(stderr, "0x%02X(0x%02X) = 0x%02X\n",
 				cmd[0], cmd[1], err);
 			if (err != ERRNONE) {
 				if (p.debug >= 1) {
 					fprintf(stderr, "%s: error: %s [0x%02X]\n",
-					__func__, io_test_err(err), err);
+					__func__, icspio_err(err), err);
 				}		
 				io_usleep(RESYNC * p.fwsleep);
 			}
@@ -415,13 +415,13 @@ main(int argc, char *argv[])
 			cmd[1] = getbytearg(execname, argv[2]);
 		}
 		do {
-			err = io_test_command(p.fwsleep, p.fwsleep << 1, cmd, 1, NULL, 0);
+			err = icspio_command(p.fwsleep, p.fwsleep << 1, cmd, 1, NULL, 0);
 			fprintf(stderr, "0x%02X(0x%02X) = 0x%02X\n",
 				cmd[0], cmd[1], err);
 			if (err != ERRNONE) {
 				if (p.debug >= 1) {
 					fprintf(stderr, "%s: error: %s [0x%02X]\n",
-					__func__, io_test_err(err), err);
+					__func__, icspio_err(err), err);
 				}		
 				io_usleep(RESYNC * p.fwsleep);
 			}
@@ -438,13 +438,13 @@ main(int argc, char *argv[])
 		cmd[0] = CMD_SAMPLE;
 		do {
 			sample = 0;
-			err = io_test_command(p.fwsleep, FWSAMPLE, cmd, 0, &sample, 2);
+			err = icspio_command(p.fwsleep, FWSAMPLE, cmd, 0, &sample, 2);
 			fprintf(stderr, "0x%02X() = 0x%02X\n",
 				cmd[0], err);
 			if (err != ERRNONE) {
 				if (p.debug >= 1) {
 					fprintf(stderr, "%s: error: %s [0x%02X]\n",
-					__func__, io_test_err(err), err);
+					__func__, icspio_err(err), err);
 				}		
 				io_usleep(RESYNC * p.fwsleep);
 			}
@@ -463,13 +463,13 @@ main(int argc, char *argv[])
 		cmd[0] = CMD_EEREAD;
 		cmd[1] = getbytearg(execname, argv[2]); /* Address */
 		do {
-			err = io_test_command(p.fwsleep, p.fwsleep << 1, cmd, 1, &data, 1);
+			err = icspio_command(p.fwsleep, p.fwsleep << 1, cmd, 1, &data, 1);
 			fprintf(stderr, "0x%02X(0x%02X) = 0x%02X\n",
 				cmd[0], cmd[1], err);
 			if (err != ERRNONE) {
 				if (p.debug >= 1) {
 					fprintf(stderr, "%s: error: %s [0x%02X]\n",
-					__func__, io_test_err(err), err);
+					__func__, icspio_err(err), err);
 				}		
 				io_usleep(RESYNC * p.fwsleep);
 			}
@@ -488,13 +488,13 @@ main(int argc, char *argv[])
 		cmd[1] = getbytearg(execname, argv[2]); /* Address */
 		cmd[2] = getbytearg(execname, argv[3]); /* Data */
 		do {
-			err = io_test_command(p.fwsleep, FWEEPROM, cmd, 2, NULL, 0);
+			err = icspio_command(p.fwsleep, FWEEPROM, cmd, 2, NULL, 0);
 			fprintf(stderr, "0x%02X(0x%02X, 0x%02X) = 0x%02X\n",
 				cmd[0], cmd[1], cmd[2], err);
 			if (err != ERRNONE) {
 				if (p.debug >= 1) {
 					fprintf(stderr, "%s: error: %s [0x%02X]\n",
-					__func__, io_test_err(err), err);
+					__func__, icspio_err(err), err);
 				}		
 				io_usleep(RESYNC * p.fwsleep);
 			}
@@ -514,13 +514,13 @@ main(int argc, char *argv[])
 		cmd[1] = addr >> 8; /* Address high */
 		cmd[2] = addr;      /* Address low  */
 		do {
-			err = io_test_command(p.fwsleep, p.fwsleep << 1, cmd, 2, &data, 2);
+			err = icspio_command(p.fwsleep, p.fwsleep << 1, cmd, 2, &data, 2);
 			fprintf(stderr, "0x%02X(0x%02X,0x%02X) = 0x%02X\n",
 				cmd[0], cmd[1], cmd[2], err);
 			if (err != ERRNONE) {
 				if (p.debug >= 1) {
 					fprintf(stderr, "%s: error: %s [0x%02X]\n",
-					__func__, io_test_err(err), err);
+					__func__, icspio_err(err), err);
 				}		
 				io_usleep(RESYNC * p.fwsleep);
 			}
@@ -543,13 +543,13 @@ main(int argc, char *argv[])
 			cmd[1] = getbytearg(execname, argv[2]);
 		}
 		do {
-			err = io_test_command(p.fwsleep, p.fwsleep << 1, cmd, 1, NULL, 0);
+			err = icspio_command(p.fwsleep, p.fwsleep << 1, cmd, 1, NULL, 0);
 			fprintf(stderr, "0x%02X(0x%02X) = 0x%02X\n",
 				cmd[0], cmd[1], err);
 			if (err != ERRNONE) {
 				if (p.debug >= 1) {
 					fprintf(stderr, "%s: error: %s [0x%02X]\n",
-					__func__, io_test_err(err), err);
+					__func__, icspio_err(err), err);
 				}		
 				io_usleep(RESYNC * p.fwsleep);
 			}
@@ -568,13 +568,13 @@ main(int argc, char *argv[])
 		cmd[0] = CMD_ARG8;
 		cmd[1] = getbytearg(execname, argv[2]); /* FW arg */
 		do {
-			err = io_test_command(p.fwsleep, p.fwsleep << 1, cmd, 1, &in, 1);
+			err = icspio_command(p.fwsleep, p.fwsleep << 1, cmd, 1, &in, 1);
 			fprintf(stderr, "0x%02X(0x%02X) = 0x%02X\n",
 				cmd[0], cmd[1], err);
 			if (err != ERRNONE) {
 				if (p.debug >= 1) {
 					fprintf(stderr, "%s: error: %s [0x%02X]\n",
-					__func__, io_test_err(err), err);
+					__func__, icspio_err(err), err);
 				}		
 				io_usleep(RESYNC * p.fwsleep);
 			}
@@ -596,13 +596,13 @@ main(int argc, char *argv[])
 		cmd[1] = fwarg >> 8; /* Arg high */
 		cmd[2] = fwarg;      /* Arg low  */
 		do {
-			err = io_test_command(p.fwsleep, p.fwsleep << 1, cmd, 2, &in, 1);
+			err = icspio_command(p.fwsleep, p.fwsleep << 1, cmd, 2, &in, 1);
 			fprintf(stderr, "0x%02X(0x%02X,0x%02X) = 0x%02X\n",
 				cmd[0], cmd[1], cmd[2], err);
 			if (err != ERRNONE) {
 				if (p.debug >= 1) {
 					fprintf(stderr, "%s: error: %s [0x%02X]\n",
-					__func__, io_test_err(err), err);
+					__func__, icspio_err(err), err);
 				}		
 				io_usleep(RESYNC * p.fwsleep);
 			}
@@ -625,13 +625,13 @@ main(int argc, char *argv[])
 		cmd[2] = fwarg >> 8;
 		cmd[3] = fwarg;       /* Arg low  */
 		do {
-			err = io_test_command(p.fwsleep, p.fwsleep << 1, cmd, 3, &in, 1);
+			err = icspio_command(p.fwsleep, p.fwsleep << 1, cmd, 3, &in, 1);
 			fprintf(stderr, "0x%02X(0x%02X,0x%02X,0x%02X) = 0x%02X\n",
 				cmd[0], cmd[1], cmd[2], cmd[3], err);
 			if (err != ERRNONE) {
 				if (p.debug >= 1) {
 					fprintf(stderr, "%s: error: %s [0x%02X]\n",
-					__func__, io_test_err(err), err);
+					__func__, icspio_err(err), err);
 				}		
 				io_usleep(RESYNC * p.fwsleep);
 			}
@@ -655,13 +655,13 @@ main(int argc, char *argv[])
 		cmd[3] = fwarg >> 8;
 		cmd[4] = fwarg;       /* Arg low  */
 		do {
-			err = io_test_command(p.fwsleep, p.fwsleep << 1, cmd, 4, &in, 1);
+			err = icspio_command(p.fwsleep, p.fwsleep << 1, cmd, 4, &in, 1);
 			fprintf(stderr, "0x%02X(0x%02X,0x%02X,0x%02X,0x%02X) = 0x%02X\n",
 				cmd[0], cmd[1], cmd[2], cmd[3], cmd[4], err);
 			if (err != ERRNONE) {
 				if (p.debug >= 1) {
 					fprintf(stderr, "%s: error: %s [0x%02X]\n",
-					__func__, io_test_err(err), err);
+					__func__, icspio_err(err), err);
 				}		
 				io_usleep(RESYNC * p.fwsleep);
 			}
@@ -679,13 +679,13 @@ main(int argc, char *argv[])
 		cmd[0] = CMD_TEST;
 		cmd[1] = getbytearg(execname, argv[2]); /* FW arg */
 		do {
-			err = io_test_command(p.fwsleep, p.fwsleep << 1, cmd, 1, NULL, 0);
+			err = icspio_command(p.fwsleep, p.fwsleep << 1, cmd, 1, NULL, 0);
 			fprintf(stderr, "0x%02X(0x%02X) = 0x%02X\n",
 				cmd[0], cmd[1], err);
 			if (err != ERRNONE) {
 				if (p.debug >= 1) {
 					fprintf(stderr, "%s: error: %s [0x%02X]\n",
-					__func__, io_test_err(err), err);
+					__func__, icspio_err(err), err);
 				}		
 				io_usleep(RESYNC * p.fwsleep);
 			}
@@ -702,13 +702,13 @@ main(int argc, char *argv[])
 		cmd[0] = CMD_ERROR;
 		do {
 			le = 0;
-			err = io_test_command(p.fwsleep, p.fwsleep << 1, cmd, 0, &le, 1);
+			err = icspio_command(p.fwsleep, p.fwsleep << 1, cmd, 0, &le, 1);
 			fprintf(stderr, "0x%02X() = 0x%02X\n",
 				cmd[0], err);
 			if (err != ERRNONE) {
 				if (p.debug >= 1) {
 					fprintf(stderr, "%s: error: %s [0x%02X]\n",
-					__func__, io_test_err(err), err);
+					__func__, icspio_err(err), err);
 				}		
 				io_usleep(RESYNC * p.fwsleep);
 			}

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005-2015 Darron Broad
+ * Copyright (C) 2015 Gerhard Bertelsmann
  * All rights reserved.
  * 
  * This file is part of Pickle Microchip PIC ICSP.
@@ -22,6 +23,7 @@
 /******************************************************************************
  * Session
  *****************************************************************************/
+
 extern struct pickle p;
 
 /******************************************************************************
@@ -72,8 +74,8 @@ io_config(void)
 	strncpy(p.device, SERIAL_DEVICE, STRLEN);
 	p.baudrate = 115200;		/* not speed_t      */
 #endif
-#if defined(RPI) || defined(BITBANG) || defined(FTDI)
-	/* rpi */
+#if defined(RPI) || defined(BITBANG) || defined(FTDI) || defined(BPI)
+	/* rpi etc */
 	p.vpp  = GPIO_VPP;		/* TX/!MCLR/VPP     */
 	p.pgm  = GPIO_PGM_DISABLED;	/* PGM              */
 	p.pgc  = GPIO_PGC;		/* RTS/PGC CLOCK    */
@@ -85,14 +87,14 @@ io_config(void)
 	p.mcp = MCP_ADDR;
 #endif
 	/* default:Velleman K8048 */
-        p.bitrules = PGD_IN_PULLUP | PGD_OUT_FLIP | PGC_OUT_FLIP | VPP_OUT_FLIP | PGD_IN_FLIP;
+	p.bitrules = PGD_IN_PULLUP | PGD_OUT_FLIP | PGC_OUT_FLIP | VPP_OUT_FLIP | PGD_IN_FLIP;
 
 	/* Mark/space time */
-        p.sleep_high = 1;
-        p.sleep_low = 1;
+	p.sleep_high = 1;
+	p.sleep_low = 1;
 
 	/* ICSPIO mark/space time */
-        p.fwsleep = 30;
+	p.fwsleep = 30;
 }
 
 /*
@@ -119,12 +121,22 @@ io_open(void)
 #ifdef RPI
 	if (mystrcasestr(p.device, "rpi") == p.device) {
 		/* rpi */
-		if (gpio_open("/dev/mem", p.device[3]) < 0)
+		if (gpio_rpi_open("/dev/mem", p.device[3]) < 0)
 			return -1;
 		p.iot = IORPI;
 		io_signal_on();
 		return 0;
 	} 
+#endif
+#ifdef BPI
+	if (mystrcasestr(p.device, "bpi") == p.device) {
+		/* bpi */
+		if (gpio_bpi_open("/dev/mem") < 0)
+			return -1;
+		p.iot = IOBPI;
+		io_signal_on();
+		return 0;
+	}
 #endif
 #ifdef MCP23017
 	if (strstr(p.device, "/dev/i2c") == p.device) {
@@ -173,20 +185,36 @@ io_release(void)
 		uint8_t alt = (p.bitrules & ALT_RELEASE) != 0;
 
 		if (p.bitrules & PGD_RELEASE)
-			gpio_release(p.pgdo, alt);
+			gpio_rpi_release(p.pgdo, alt);
 		if (p.bitrules & PGC_RELEASE)
-			gpio_release(p.pgc, alt);
+			gpio_rpi_release(p.pgc, alt);
 		if (p.bitrules & PGM_RELEASE && p.pgm != GPIO_PGM_DISABLED)
-			gpio_release(p.pgm, alt);
+			gpio_rpi_release(p.pgm, alt);
 		if (p.bitrules & VPP_RELEASE)
-			gpio_release(p.vpp, alt);
+			gpio_rpi_release(p.vpp, alt);
+		}
+		break;
+#endif
+#ifdef BPI
+	case IOBPI:	/* bpi */
+		{
+		uint8_t alt = (p.bitrules & ALT_RELEASE) != 0;
+
+		if (p.bitrules & PGD_RELEASE)
+			gpio_bpi_release(p.pgdo, alt);
+		if (p.bitrules & PGC_RELEASE)
+			gpio_bpi_release(p.pgc, alt);
+		if (p.bitrules & PGM_RELEASE && p.pgm != GPIO_PGM_DISABLED)
+			gpio_bpi_release(p.pgm, alt);
+		if (p.bitrules & VPP_RELEASE)
+			gpio_bpi_release(p.vpp, alt);
 		}
 		break;
 #endif
 #ifdef BITBANG
 	case IOBB:	/* gpio bit-bang */
 		{
-		struct gpio_bb_io io = {1, 0, 0};
+		struct gpio_bb_io io = {.dir = 1, .pin = 0, .bit = 0};
 
 		if (p.bitrules & PGD_RELEASE) {
 			io.pin = p.pgdo;
@@ -210,7 +238,7 @@ io_release(void)
 #ifdef FTDI
 	case IOFTDIBB:	/* ftdi bit-bang */
 		{
-		struct ftdi_bb_io io = {1, 0, 0};
+		struct ftdi_bb_io io = {.dir = 1, .pin = 0, .bit = 0};
 
 		if (p.bitrules & PGD_RELEASE) {
 			io.pin = p.pgdo;
@@ -242,7 +270,7 @@ io_close(int run)
 		printf("%s: fatal error: device not open.\n", __func__);
 		io_exit(EX_SOFTWARE); /* Panic */
 	}
-#if defined(RPI) || defined(MCP23017) || defined(BITBANG) || defined(FTDI)
+#if defined(RPI) || defined(MCP23017) || defined(BITBANG) || defined(FTDI) || defined(BPI)
 	io_usleep(10);
 	if (run) {
 		io_set_vpp(HIGH);
@@ -261,7 +289,13 @@ io_close(int run)
 #ifdef RPI
 	case IORPI:
 		/* rpi */
-		gpio_close();
+		gpio_rpi_close();
+		break;
+#endif
+#ifdef BPI
+	case IOBPI:
+		/* bpi */
+		gpio_bpi_close();
 		break;
 #endif
 #ifdef MCP23017
@@ -311,6 +345,11 @@ io_error(void)
 #ifdef RPI
 	case IORPI:	/* rpi */
 		msg = "Can't open RPI I/O";
+		break;
+#endif
+#ifdef BPI
+	case IOBPI:	/* bpi */
+		msg = "Can't open BPI I/O";
 		break;
 #endif
 #ifdef MCP23017
@@ -368,7 +407,16 @@ io_usleep(uint32_t n)
 	/* I/O sleep */
 	if (p.iot == IORPI && n < 10) {
 		for (uint32_t i = 0; i < n; ++i) {
-			gpio_delay();
+			gpio_rpi_delay();
+		}
+		return;
+	}
+#endif
+#ifdef BPI
+	/* I/O sleep */
+	if (p.iot == IOBPI && n < 10) {
+		for (uint32_t i = 0; i < n; ++i) {
+			gpio_bpi_delay();
 		}
 		return;
 	}
@@ -412,7 +460,13 @@ io_set_pgm(uint8_t pgm)
 #ifdef RPI
 	case IORPI:	/* rpi */
 		if (p.pgm != GPIO_PGM_DISABLED)
-			gpio_set(p.pgm, pgm);
+			gpio_rpi_set(p.pgm, pgm);
+		break;
+#endif
+#ifdef BPI
+	case IOBPI:	/* bpi */
+		if (p.pgm != GPIO_PGM_DISABLED)
+			gpio_bpi_set(p.pgm, pgm);
 		break;
 #endif
 #ifdef MCP23017
@@ -423,7 +477,7 @@ io_set_pgm(uint8_t pgm)
 #ifdef BITBANG
 	case IOBB:	/* gpio bit-bang */
 		if (p.pgm != GPIO_PGM_DISABLED) {
-			struct gpio_bb_io io = {0, p.pgm, pgm};
+			struct gpio_bb_io io = {.dir = 0, .pin = p.pgm, .bit = pgm};
 
 			gpio_bb_io(&io);
 		}
@@ -433,7 +487,7 @@ io_set_pgm(uint8_t pgm)
 	/* TODO */
 	case IOFTDIBB:	/* gpio bit-bang */
 		if (p.pgm != GPIO_PGM_DISABLED) {
-			struct ftdi_bb_io io = {0, p.pgm, pgm};
+			struct ftdi_bb_io io = {.dir = 0, .pin = p.pgm, .bit = pgm};
 
 			ftdi_bb_io(&io);
 		}
@@ -474,7 +528,12 @@ io_set_vpp(uint8_t vpp)
 #endif
 #ifdef RPI
 	case IORPI:	/* rpi */
-		gpio_set(p.vpp, vpp);
+		gpio_rpi_set(p.vpp, vpp);
+		break;
+#endif
+#ifdef BPI
+	case IOBPI:	/* bpi */
+		gpio_bpi_set(p.vpp, vpp);
 		break;
 #endif
 #ifdef MCP23017
@@ -485,7 +544,7 @@ io_set_vpp(uint8_t vpp)
 #ifdef BITBANG
 	case IOBB:	/* gpio bit-bang */
 		{
-		struct gpio_bb_io io = {0, p.vpp, vpp};
+		struct gpio_bb_io io = {.dir = 0, .pin = p.vpp, .bit = vpp};
 
 		gpio_bb_io(&io);
 		}
@@ -494,7 +553,7 @@ io_set_vpp(uint8_t vpp)
 #ifdef FTDI
 	case IOFTDIBB:	/* ftdi bit-bang */
 		{
-		struct ftdi_bb_io io = {0, p.vpp, vpp};
+		struct ftdi_bb_io io = {.dir = 0, .pin = p.vpp, .bit = vpp};
 
 		ftdi_bb_io(&io);
 		}
@@ -524,7 +583,12 @@ io_set_pgd(uint8_t pgd)
 #endif
 #ifdef RPI
 	case IORPI:	/* rpi */
-		gpio_set(p.pgdo, pgd);
+		gpio_rpi_set(p.pgdo, pgd);
+		break;
+#endif
+#ifdef BPI
+	case IOBPI:	/* bpi */
+		gpio_bpi_set(p.pgdo, pgd);
 		break;
 #endif
 #ifdef MCP23017
@@ -535,7 +599,7 @@ io_set_pgd(uint8_t pgd)
 #ifdef BITBANG
 	case IOBB:	/* gpio bit-bang */
 		{
-		struct gpio_bb_io io = {0, p.pgdo, pgd};
+		struct gpio_bb_io io = {.dir = 0, .pin = p.pgdo, .bit = pgd};
 
 		gpio_bb_io(&io);
 		}
@@ -574,7 +638,12 @@ io_set_pgc(uint8_t pgc)
 #endif
 #ifdef RPI
 	case IORPI:	/* rpi */
-		gpio_set(p.pgc, pgc);
+		gpio_rpi_set(p.pgc, pgc);
+		break;
+#endif
+#ifdef BPI
+	case IOBPI:	/* bpi */
+		gpio_bpi_set(p.pgc, pgc);
 		break;
 #endif
 #ifdef MCP23017
@@ -585,7 +654,7 @@ io_set_pgc(uint8_t pgc)
 #ifdef BITBANG
 	case IOBB:	/* gpio bit-bang */
 		{
-		struct gpio_bb_io io = {0, p.pgc, pgc};
+		struct gpio_bb_io io = {.dir = 0, .pin = p.pgc, .bit = pgc};
 
 		gpio_bb_io(&io);
 		}
@@ -594,7 +663,7 @@ io_set_pgc(uint8_t pgc)
 #ifdef FTDI
 	case IOFTDIBB:	/* ftdi bit-bang */
 		{
-		struct ftdi_bb_io io = {0, p.pgc, pgc};
+		struct ftdi_bb_io io = {.dir = 0, .pin = p.pgc, .bit = pgc};
 
 		ftdi_bb_io(&io);
 		}
@@ -622,7 +691,12 @@ io_get_pgd(void)
 #endif
 #ifdef RPI
 	case IORPI:	/* rpi */
-		gpio_get(p.pgdi, &pgd);
+		gpio_rpi_get(p.pgdi, &pgd);
+		break;
+#endif
+#ifdef BPI
+	case IOBPI:	/* bpi */
+		gpio_bpi_get(p.pgdi, &pgd);
 		break;
 #endif
 #ifdef MCP23017
@@ -633,7 +707,7 @@ io_get_pgd(void)
 #ifdef BITBANG
 	case IOBB:	/* gpio bit-bang */
 		{
-		struct gpio_bb_io io = {1, p.pgdi, 0};
+		struct gpio_bb_io io = {.dir = 1, .pin = p.pgdi, .bit = 0};
 
 		gpio_bb_io(&io);
 		pgd = io.bit;
@@ -643,7 +717,7 @@ io_get_pgd(void)
 #ifdef FTDI
 	case IOFTDIBB:	/* FTDI bit-bang */
 		{
-		struct ftdi_bb_io io = {1, p.pgdi, 0};
+		struct ftdi_bb_io io = {.dir = 1, .pin = p.pgdi, .bit = 0};
 
 		ftdi_bb_io(&io);
 		pgd = io.bit;
@@ -724,6 +798,10 @@ io_data_input(void)
 {
 #ifdef RPI
 	if (p.iot == IORPI && p.pgdi == p.pgdo)
+		return;
+#endif
+#ifdef BPI
+	if (p.iot == IOBPI && p.pgdi == p.pgdo)
 		return;
 #endif
 #ifdef BITBANG
@@ -934,576 +1012,3 @@ io_program_feedback(char c)
 		c_count = 0;
 	}
 }
-
-/******************************************************************************
- * Hardware test routines for `ktest'
- *****************************************************************************/
-
-/*
- * Test VPP, PGC or PGD
- */
-#ifdef PTEST
-void
-io_test0(int pin, int t)
-{
-	printf("\nTEST MODE VPP|PGD|PGC|PGM\n\n");
-
-	switch (pin) {
-	case 0: printf("VPP LOW  (ICSP 1) (D-SUB-9 TX 3) [3 seconds]\n");
-		io_set_vpp(LOW);
-		break;
-	case 1: printf("PGC LOW  (ICSP 5) (D-SUB-9 RTS 7) [3 seconds]\n");
-		io_set_pgc(LOW);
-		break;
-	case 2: printf("PGD LOW  (ICSP 4) (D-SUB-9 DTR 3) [3 seconds]\n");
-		io_set_pgd(LOW);
-		break;
-	case 3: printf("PGM LOW  [3 seconds]\n");
-		io_set_pgm(LOW);
-		break;
-	}
-	if (!io_stop)
-		sleep(3);
-
-	switch (pin) {
-	case 0: printf("VPP HIGH (ICSP 1) (D-SUB-9 TX 3) [%d seconds]\n", t);
-		io_set_vpp(HIGH);
-		break;
-	case 1: printf("PGC HIGH (ICSP 5) (D-SUB-9 RTS 7) [%d seconds]\n", t);
-		io_set_pgc(HIGH);
-		break;
-	case 2: printf("PGD HIGH (ICSP 4) (D-SUB-9 DTR 3) [%d seconds]\n", t);
-		io_set_pgd(HIGH);
-		break;
-	case 3: printf("PGM HIGH [%d seconds]\n", t);
-		io_set_pgm(HIGH);
-		break;
-	}
-	if (!io_stop)
-		sleep(t);
-
-	switch (pin) {
-	case 0: printf("VPP LOW  (ICSP 1) (D-SUB-9 TX 3) [3 seconds]\n");
-		io_set_vpp(LOW);
-		break;
-	case 1: printf("PGC LOW  (ICSP 5) (D-SUB-9 RTS 7) [3 seconds]\n");
-		io_set_pgc(LOW);
-		break;
-	case 2: printf("PGD LOW  (ICSP 4) (D-SUB-9 DTR 3) [3 seconds]\n");
-		io_set_pgd(LOW);
-		break;
-	case 3: printf("PGM LOW  [3 seconds]\n");
-		io_set_pgm(LOW);
-		break;
-	}
-	if (!io_stop)
-		sleep(3);
-	
-	printf("\nTEST DONE\n\n");
-}
-
-/*
- * Test D-SUB-9
- */
-void
-io_test1(int t)
-{
-	printf("\nTEST MODE 1 [D-SUB-9]\n\n");
-
-	p.bitrules = 0; /* Disable BITRULES */
-
-	printf("Tx  SET  (+VE) (D-SUB-9 3) [%d seconds] ", t);
-	fflush(stdout);
-	io_set_vpp(HIGH);
-	if (!io_stop)
-		sleep(t);
-	printf("CTS IN: %d\n", io_get_pgd());
-
-	printf("Tx  CLR  (-VE) (D-SUB-9 3) [%d seconds] ", t);
-	fflush(stdout);
-	io_set_vpp(LOW);
-	if (!io_stop)
-		sleep(t);
-	printf("CTS IN: %d\n\n", io_get_pgd());
-
-	printf("DTR SET  (+VE) (D-SUB-9 4) [%d seconds] ", t);
-	fflush(stdout);
-	io_set_pgd(HIGH);
-	if (!io_stop)
-		sleep(t);
-	printf("CTS IN: %d\n", io_get_pgd());
-
-	printf("DTR CLR  (-VE) (D-SUB-9 4) [%d seconds] ", t);
-	fflush(stdout);
-	io_set_pgd(LOW);
-	if (!io_stop)
-		sleep(t);
-	printf("CTS IN: %d\n\n", io_get_pgd());
-	
-	printf("RTS SET  (+VE) (D-SUB-9 7) [%d seconds] ", t);
-	fflush(stdout);
-	io_set_pgc(HIGH);
-	if (!io_stop)
-		sleep(t);
-	printf("CTS IN: %d\n", io_get_pgd());
-
-	printf("RTS CLR  (-VE) (D-SUB-9 7) [%d seconds] ", t);
-	fflush(stdout);
-	io_set_pgc(LOW);
-	if (!io_stop)
-		sleep(t);
-	printf("CTS IN: %d\n\n", io_get_pgd());
-	
-	printf("TEST DONE\n\n");
-}
-
-/*
- * Test ICSP
- */
-void
-io_test2(int t)
-{
-	printf("\nTEST MODE 2 [ICSP]\n\n");
-
-	printf("VPP LOW  (0V)  (ICSP 1) [%d seconds] ", t);
-	fflush(stdout);
-	io_set_vpp(LOW);
-	if (!io_stop)
-		sleep(t);
-	printf("PGD IN: %d\n", io_get_pgd());
-
-	printf("VPP HIGH (12V) (ICSP 1) [%d seconds] ", t);
-	fflush(stdout);
-	io_set_vpp(HIGH);
-	if (!io_stop)
-		sleep(t);
-	printf("PGD IN: %d\n\n", io_get_pgd());
-
-	printf("PGD LOW  (0V)  (ICSP 4) [%d seconds] ", t);
-	fflush(stdout);
-	io_set_pgd(LOW);
-	if (!io_stop)
-		sleep(t);
-	printf("PGD IN: %d\n", io_get_pgd());
-
-	printf("PGD HIGH (5V)  (ICSP 4) [%d seconds] ", t);
-	fflush(stdout);
-	io_set_pgd(HIGH);
-	if (!io_stop)
-		sleep(t);
-	printf("PGD IN: %d\n\n", io_get_pgd());
-
-	printf("PGC LOW  (0V)  (ICSP 5) [%d seconds] ", t);
-	fflush(stdout);
-	io_set_pgc(LOW);
-	if (!io_stop)
-		sleep(t);
-	printf("PGD IN: %d\n", io_get_pgd());
-
-	printf("PGC HIGH (5V)  (ICSP 5) [%d seconds] ", t);
-	fflush(stdout);
-	io_set_pgc(HIGH);
-	if (!io_stop)
-		sleep(t);
-	printf("PGD IN: %d\n\n", io_get_pgd());
-
-	printf("TEST DONE\n\n");
-}
-
-/*
- * Test D-SUB-9 RTS 7 (PGC) DTR 4 (PGD)
- */
-void
-io_test3(int t)
-{
-	printf("\nTEST MODE 3 [D-SUB-9 RTS 7 (PGC) DTR 4 (PGD)] CTRL-C TO STOP\n\n");
-
-	while (!io_stop) {
-		io_set_pgd(0);
-		io_set_pgc(1);
-		io_usleep(t);
-		io_set_pgd(1);
-		io_set_pgc(0);
-		io_usleep(t);
-	}
-
-	printf("\nTEST DONE\n\n");
-}
-
-/*
- * Test PIC16F627 on Velleman K8048 (PIC16F628A is compatible)
- *
- * Program:
- *	p14 program pickles/examples/pic16f627/debug.hex
- *
- * Note: This is the PICMicro which came with the Velleman K8048 kit.
- */
-void
-io_test4(int t)
-{
-	int i, j = 0;
-	uint8_t c, line[STRLEN];
-
-	printf("\nTEST MODE 4 [16F627 debug.asm] CTRL-C TO STOP\n\n");
-
-	/* Initialise for data input */
-	io_data_input();
-
-	while (!io_stop) {
-		/* Handshake */
-		io_set_pgc(LOW);			/* PGC LOW */
-
-		while (io_get_pgd() != HIGH && !io_stop)/* WAIT FOR PGD HIGH */
-			io_usleep(1);
-		
-		io_set_pgc(HIGH);			/* PGC HIGH */
-		
-		while (io_get_pgd() != LOW && !io_stop)/* WAIT FOR PGD LOW */
-			io_usleep(1);
-
-		/* Byte input */
-		c = 0;
-		for (i = 0; i < 8; i++) {
-			io_set_pgc(LOW);		/* PGC LOW */
-			io_usleep(t);
-
-			c = c >> 1;			/* CLOCK BIT IN */
-			if (io_get_pgd())
-				c |= 0x80;
-
-			io_set_pgc(HIGH);		/* PGC HIGH */
-			io_usleep(t);
-		}
-
-		printf("%s: read byte: %02X %c\n", __func__, c, PIC_CHAR(c));
-
-		if (c == 0x03) {			/* ETX */
-			if (j > 1 && line[0] == 0x02) {	/* STX */
-				line[j] = '\0';
-				printf("%s: read line: %s", __func__,
-					&line[1]);
-			}
-			j = 0;
-		}
-		else if (j < STRMAX)
-			line[j++] = c;
-	}
-
-	printf("\nTEST DONE\n\n");
-}
-#endif /* PTEST */
-
-/******************************************************************************
- * Software test routines for `pio' (ICSP I/O)
- *****************************************************************************/
-
-#ifdef PIO
-/*
- * Send an 8-bit byte
- */
-int
-io_test_out(int t1, int t2, uint8_t byte)
-{
-	int i, bit;
-	int parity = 0; /* 0=even 1=odd */
-
-	if (p.debug >= 10) {
-		fprintf(stderr, "%s(t1=%d, t2=%d, byte=0x%02X)\n",
-			__func__, t1, t2, byte);
-	}
-
-	/* Start bit */
-	io_clock_out_bits(t1, t1, LOW, 1);
-
-	/* Send 8-bit byte */
-	for (i = 0; !io_stop && i < 8; ++i) {
-		bit = (byte >> i) & 1;
-		parity ^= bit;
-		io_clock_out_bits(t1, t1, bit, 1);
-	}
-
-	/* Send parity bit */	
-	io_clock_out_bits(t1, t1, parity, 1);
-
-	/* Send stop bit */
-	io_clock_out_bits(t1, t1, HIGH, 1);
-
-	/* Firmware delay */
-	io_usleep(t2);
-	
-	return ERRNONE;
-}
-
-/*
- * Get an 8-bit byte
- */
-int
-io_test_in(int t1, int t2, uint8_t *byte)
-{
-	int i, bit;
-	int parity = 0; /* 0=even 1=odd */
-	
-	*byte = '\0';
-
-	if (p.debug >= 10) {
-		fprintf(stderr, "%s(t1=%d, t2=%d, %p)\n",
-			__func__, t1, t2, byte);
-	}
-
-	/* Get start bit */
-	if (io_clock_in_bits(t1, t1, 1) != LOW) {
-		if (p.debug >= 10)
-			fprintf(stderr, "%s: INVALID START BIT (NOT LOW)\n", __func__);
-		return ERRPROTOCOL;
-	}
-
-	/* Get 8-bit byte */
-	for (i = 0; !io_stop && i < 8; i++) {
-		bit = io_clock_in_bits(t1, t1, 1);
-		parity ^= bit;
-		*byte |= (bit << i);
-	}
-
-	/* Get parity bit */	
-	bit = io_clock_in_bits(t1, t1, 1);
-	if (bit != parity) {
-		if (p.debug >= 10)
-			fprintf(stderr, "%s: INVALID PARITY BIT\n", __func__);
-		return ERRPARITY;
-	}
-
-	/* Get stop bit */
-	if (io_clock_in_bits(t1, t1, 1) != HIGH) {
-		if (p.debug >= 10)
-			fprintf(stderr, "%s: INVALID STOP BIT (NOT HIGH)\n", __func__);
-		return ERRPROTOCOL;
-	}
-
-	/* Firmware processing delay */
-	io_usleep(t2);
-
-	if (p.debug >= 10)
-		fprintf(stderr, "%s: OKAY [0x%02X]\n", __func__, *byte);
-	return ERRNONE;
-}
-
-/*
- * Send command and arg(s), get result
- */
-int
-io_test_command(int t1, int t2, uint8_t *cmdarg, int cmdargc, uint32_t *res, int resw)
-{
-	int i, err;
-	uint8_t byte;
-
-	if (p.debug >= 10)
-		fprintf(stderr, "%s(t1=%d, t2=%d, cmdarg[0]=%02X, cmdargc=%d, %p, %d)\n", __func__,
-			t1, t2, cmdarg[0], cmdargc, (void *)res, resw);
-
-	if (cmdargc < 0) {
-		printf("%s: fatal error: invalid length: %d\n", __func__, cmdargc);
-		io_exit(EX_SOFTWARE); /* Panic */
-	}
-	
-	if (resw < 0 || resw > 4) {
-		printf("%s: fatal error: invalid width: %d\n", __func__, resw);
-		io_exit(EX_SOFTWARE); /* Panic */
-	}
-
-	if (resw > 0 && res == NULL) {
-		printf("%s: fatal error: invalid result pointer: (NULL)\n", __func__);
-		io_exit(EX_SOFTWARE); /* Panic */
-	}
-
-	/* Send command */
-	io_test_out(t1, t2, cmdarg[0]);
-
-	/* Get command ACK or NACK */
-	err = io_test_in(t1, t2, &byte);
-	if (err != ERRNONE) {
-		return err;
-	}
-	if (byte != ACK) {
-		return ERRNOTSUP;
-	}
-
-	/* Send arg(s), get data byte(s) */
-	if (cmdargc > 0 || resw > 0)
-	{
-		uint8_t checksum = cmdarg[0] + byte;
-
-		/* Send arg(s) */
-		if (cmdargc > 0) {
-			for (i = 1; !io_stop && i <= cmdargc; ++i) {
-				io_test_out(t1, t2, cmdarg[i]);
-				checksum += cmdarg[i];
-			}
-		}
-
-		/* Get data byte(s) */
-		if (resw > 0) {
-			*res = 0;
-			for (i = 0; !io_stop && i < resw; ++i) {
-				err = io_test_in(t1, t2, &byte);
-				if (err != ERRNONE) {
-					return err;
-				}
-				*res = (*res << 8) | byte;
-				checksum += byte;
-			}
-		}
-
-		/* Get check-sum */
-		err = io_test_in(t1, t2, &byte);
-		if (err != ERRNONE) {
-			return err;
-		}
-		if (byte != checksum) {
-			if (p.debug >= 10)
-				fprintf(stderr, "%s: INVALID CHECKSUM 0x%02X != 0x%02X\n",
-					__func__, byte, checksum);
-			return ERRINVALID;
-		}
-	}
-
-	return ERRNONE; /* OK */
-}
-
-/*
- * Get error string
- */
-char *
-io_test_err(int err)
-{
-	static char *errmsg;
-
-	switch (err) {
-	case ERRNONE:
-		errmsg = "ERRNONE";
-		break;
-	case ERRTIMEOUT:
-		errmsg = "ERRTIMEOUT";
-		break;
-	case ERRPROTOCOL:
-		errmsg = "ERRPROTOCOL";
-		break;
-	case ERRPARITY:
-		errmsg = "ERRPARITY";
-		break;
-	case ERRNOTSUP:
-		errmsg = "ERRNOTSUP";
-		break;
-	case ERRINVALID:
-		errmsg = "ERRINVALID";
-		break;
-	default:errmsg = "ERRUNKNOWN";
-		break;
-	}
-
-	return errmsg;
-}
-#endif /* PIO */
-
-/******************************************************************************
- * Software test routines for `ktest'
- *****************************************************************************/
-
-#if defined(PTEST) && defined(PIO)
-/*
- * Read and output switches.
- */
-int
-io_test_switch(int t)
-{
-	int err;
-	uint8_t cmd[1];
-
-	uint32_t sw;
-	static uint32_t lastsw = 0xFF;
-
-	cmd[0] = CMD_SWITCH;
-	err = io_test_command(t, t << 1, cmd, 0, &sw, 1);
-	if (err != ERRNONE) {
-		return err;
-	}
-	if (!io_stop && sw != lastsw) {
-		printf("%s: SW=0x%02X SW1=%d SW2=%d SW3=%d SW4=%d\n",
-			__func__, sw,
-			(sw & 0x01) >> 0, (sw & 0x02) >> 1,
-			(sw & 0x04) >> 2, (sw & 0x08) >> 3);
-		lastsw = sw;
-	}
-	return ERRNONE;
-}
-
-/*
- * Read and output last error.
- */
-int
-io_test_lasterror(int t)
-{
-	int err;
-	uint8_t cmd[1];
-
-	uint32_t le;
-	static uint32_t lastle = 0;
-
-	cmd[0] = CMD_ERROR;
-	err = io_test_command(t, t << 1, cmd, 0, &le, 1);
-	if (err != ERRNONE) {
-		return err;
-	}
-	if (!io_stop && le != lastle) {
-		printf("%s: last error: %s [0x%02X]\n",
-			__func__, io_test_err(le), le);
-		lastle = le;
-	}
-	return ERRNONE;
-}
-
-/*
- * Test LEDs and switches
- */
-void
-io_test5(int t)
-{
-	int err;
-	uint8_t cmd[2];
-	uint32_t ld = 0;
-
-	printf("\nTEST MODE 5 [ICSPIO] CTRL-C TO STOP\n\n");
-
-	/* VPP LOW */
-	io_set_vpp(LOW);
-	io_usleep(10000); /* 10ms */
-
-	/* VPP HIGH */
-	io_set_vpp(HIGH);
-	io_usleep(10000); /* 10ms */
-
-	while (!io_stop) {
-		cmd[0] = CMD_LED;
-		cmd[1] = ld++;
-		err = io_test_command(t, t << 1, cmd, 1, NULL, 0);
-		if (err != ERRNONE) {
-			fprintf(stderr, "%s: error: %s [0x%02X]\n",
-				__func__, io_test_err(err), err);
-			break;
-		}
-		err = io_test_switch(t);
-		if (err != ERRNONE) {
-			fprintf(stderr, "%s: error: %s [0x%02X]\n",
-				__func__, io_test_err(err), err);
-			break;
-		}
-		err = io_test_lasterror(t);
-		if (err != ERRNONE) {
-			fprintf(stderr, "%s: error: %s [0x%02X]\n",
-				__func__, io_test_err(err), err);
-			break;
-		}
-	}
-
-	printf("\nTEST DONE\n\n");
-}
-#endif /* PTEST && PIO */

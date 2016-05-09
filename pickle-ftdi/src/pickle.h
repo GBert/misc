@@ -88,6 +88,9 @@ struct pickle;
 #ifdef RPI
 #include "raspi.h"
 #endif
+#ifdef BPI
+#include "a20.h"
+#endif
 #ifdef MCP23017
 #include "mcp23017.h"
 #endif
@@ -101,6 +104,7 @@ struct pickle;
 #include "util.h"
 #include "dotconf.h"
 #include "io.h"
+#include "icspio.h"
 #include "pic.h"
 #include "pic12.h"
 #include "pic14.h"
@@ -149,11 +153,11 @@ struct pickle {
 	int mcp;		/* MCP23017 I2C address				*/
 #endif
 #if defined(RPI) || defined(BITBANG) || defined(FTDI)
-        uint8_t vpp;		/* TX/!MCLR/VPP     */
-        uint8_t pgc;		/* RTS/PGC CLOCK    */
-        uint8_t pgdo;		/* DTR/PGD DATA_OUT */
-        uint8_t pgdi;		/* CTS/PGD DATA_IN  */
-        uint8_t pgm;		/* PGM OUT          */
+        uint16_t vpp;		/* TX/!MCLR/VPP     */
+        uint16_t pgc;		/* RTS/PGC CLOCK    */
+        uint16_t pgdo;		/* DTR/PGD DATA_OUT */
+        uint16_t pgdi;		/* CTS/PGD DATA_IN  */
+        uint16_t pgm;		/* PGM OUT          */
 #endif
 #if defined(FTDI)
 	/* USB serial ID */

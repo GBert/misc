@@ -139,7 +139,7 @@ getconf(void)
 			else if (mystrcasestr(line, "BUSY=") == line) {
 				p.busy = strtoul(&line[5], NULL, 0);
 			}
-#if defined(RPI) || defined(BITBANG) || defined(FTDI)
+#if defined(RPI) || defined(BITBANG) || defined(FTDI) || defined(BPI)
 			else if (mystrcasestr(line, "VPP=") == line) {
 				p.vpp = strtoul(&line[4], NULL, 0);
 			}
@@ -159,7 +159,7 @@ getconf(void)
 			else if (mystrcasestr(line, "PGDI=") == line) {
 				p.pgdi = strtoul(&line[5], NULL, 0);
 			}
-#endif /* RPI || BITBANG || FTDI*/
+#endif /* RPI || BITBANG || FTDI || BPI */
 #if defined(FTDI)
 			else if (mystrcasestr(line, "USB_SERIAL=") == line) {
 				strncpy(p.usb_serial, &line[11], STRLEN);

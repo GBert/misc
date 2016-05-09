@@ -26,16 +26,18 @@ P32=1
 PCTRL=1
 PTEST=1
 PIO=1
+PLOAD=1
 
 # back/front-ends (where available) (enable:1 disable:0)
 TTY=1
 RPI=1
+BPI=0
 MCP23017=1
 BITBANG=1
 FTDI=1
 
 # gdb else strip (gdb:1 strip:0)
-GDB=1
+GDB=0
 
 # output verbose config (enable:1 disable:0)
 VERBOSE=1

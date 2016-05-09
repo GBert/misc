@@ -1019,7 +1019,6 @@ pic16_read_config_memory(void)
 		pic16_set_table_pointer(PIC16_DEVICEID_LOW);
 		pic16_conf.deviceid = pic16_table_read_post_increment();
 		pic16_conf.deviceid |= pic16_table_read_post_increment() << 8;
-/*		printf("%s: read 0x%04x\n", __func__, pic16_conf.deviceid); */
 		dev = 0;
 		while (pic16_map[dev].deviceid) {
 			uint16_t deviceid;

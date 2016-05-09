@@ -17,4 +17,13 @@
  * with Pickle Microchip PIC ICSP. If not, see http://www.gnu.org/licenses/
  */
 
-const char VERSION[] = "4.0e";
+#ifndef _PCTRL_H
+#define _PCTRL_H
+
+#include "pickle.h"
+
+/* prototypes */
+void usage(char *, char *);
+int main(int, char **);
+
+#endif /* !_PCTRL_H */

@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 #define PIC14_MASK (0x3FFF)
-#define PIC14_CONFIG_MAX (3)
+#define PIC14_CONFIG_MAX (4)
 #define PIC14_CALIB_MAX  (32)
 #define PIC14_USERID_MAX (4)
 
@@ -47,6 +47,7 @@ struct pic14_dsmap {
 	uint32_t datasheet;	/*                                                     */
 	uint16_t configaddr;	/* CONFIG BASE                                         */
 	uint16_t dataaddr;	/* DATA BASE                                           */
+	uint16_t calibaddr;	/* CALIB BASE                                          */
 	uint8_t nconfig;	/* NUMBER OF CONFIG WORDS AT CONFIG BASE + 7           */
 	uint8_t ncalib;		/* NUMBER OF CALIB. WORDS AT CONFIG BASE + 7 + nconfig */
 	uint8_t nlatches;	/* PROGRAM FLASH MULTI-WORD LATCHES                    */
@@ -803,6 +804,77 @@ struct pic14_dsmap {
 #define PIC16LF1578 (0x3006)
 #define PIC16F1579  (0x3003)
 #define PIC16LF1579 (0x3007)
+
+/*
+ * DS40001738A
+ *  PIC16F18313  0x3066
+ *  PIC16LF18313 0x3068
+ *  PIC16F18323  0x3067
+ *  PIC16LF18323 0x3069
+ *
+ * DS40001738B/C
+ *  PIC16F18313  0x3034
+ *  PIC16LF18313 0x3036
+ *  PIC16F18323  0x3035
+ *  PIC16LF18323 0x3037
+ *
+ * DS40001738A/B/C
+ *  PIC16F18324  0x303A
+ *  PIC16LF18324 0x303C
+ *  PIC16F18344  0x303B
+ *  PIC16LF18344 0x303D
+ *  PIC16F18325  0x303E
+ *  PIC16LF18325 0x3040
+ *  PIC16F18345  0x303F
+ *  PIC16LF18345 0x3041
+ */
+#define DS40001738A (40001738)
+#define PIC16F18313  (0x3066)
+#define PIC16LF18313 (0x3068)
+#define PIC16F18323  (0x3067)
+#define PIC16LF18323 (0x3069)
+#define PIC16F18324  (0x303A)
+#define PIC16LF18324 (0x303C)
+#define PIC16F18344  (0x303B)
+#define PIC16LF18344 (0x303D)
+#define PIC16F18325  (0x303E)
+#define PIC16LF18325 (0x3040)
+#define PIC16F18345  (0x303F)
+#define PIC16LF18345 (0x3041)
+
+/*
+ * DS40001792A
+ *  PIC16F1773	0x308A
+ *  PIC16LF1773	0x308C
+ *  PIC16F1776	0x308B
+ *  PIC16LF1776	0x308D
+ *  PIC16F1777	0x308E
+ *  PIC16LF1777	0x3091
+ *  PIC16F1778	0x308F
+ *  PIC16LF1778	0x3092
+ *  PIC16F1779	0x3090
+ *  PIC16LF1779	0x3093
+ */
+#define DS40001792A (40001792)
+#define PIC16F1773  (0x308A)
+#define PIC16LF1773 (0x308C)
+#define PIC16F1776  (0x308B)
+#define PIC16LF1776 (0x308D)
+#define PIC16F1777  (0x308E)
+#define PIC16LF1777 (0x3091)
+#define PIC16F1778  (0x308F)
+#define PIC16LF1778 (0x3092)
+#define PIC16F1779  (0x3090)
+#define PIC16LF1779 (0x3093)
+
+/*
+ * DS40001796A
+ *  PIC16LF1566 0x3046 0x2xxx
+ *  PIC16LF1567 0x3047 0x2xxx
+ */
+#define DS40001796A (40001796)
+#define PIC16LF1566 (0x3046)
+#define PIC16LF1567 (0x3047)
 
 /******************************************************************************/
 

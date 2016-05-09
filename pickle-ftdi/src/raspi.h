@@ -40,8 +40,8 @@
 #define GPIO_BASE_ADDR_OFFSET (0x200000)
 #define GPIO_MAP_LEN (0x1000)
 
-/* I/O access */
-typedef volatile uint32_t *GPIO_ADDR;
+/* Only GPIO header pins supported */
+#define GPIO_RPI_NPINS (32)
 
 /* GPIO registers (32-bit) */
 #define GPFSEL0 (0x00)
@@ -103,13 +103,12 @@ typedef volatile uint32_t *GPIO_ADDR;
 #define GPIO_ALT4 (3) /* 011 */
 #define GPIO_ALT5 (2) /* 010 */
 
-int gpio_open(const char *, uint8_t);
-void gpio_close(void);
+int gpio_rpi_open(const char *, uint8_t);
+void gpio_rpi_close(void);
 
-void gpio_delay(void);
-int gpio_get(uint8_t, uint8_t *);
-int gpio_set(uint8_t, uint8_t);
-int gpio_release(uint8_t, uint8_t);
-void gpio_test(int);
+void gpio_rpi_delay(void);
+int gpio_rpi_get(uint16_t, uint8_t *);
+int gpio_rpi_set(uint16_t, uint8_t);
+int gpio_rpi_release(uint16_t, uint8_t);
 
 #endif /* !_RASPI_H */

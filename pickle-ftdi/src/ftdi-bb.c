@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2005-2015 Darron Broad
  * All rights reserved.
- * 
- *  errros designed by Gerhard Bertelsmann
+ *
+ *  all errros designed by Gerhard Bertelsmann
  *
  * This file is part of Pickle Microchip PIC ICSP.
- * 
+ *
  * Pickle Microchip PIC ICSP is free software: you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as published
  * by the Free Software Foundation. 
- * 
+ *
  * Pickle Microchip PIC ICSP is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details. 
- * 
+ *
  * You should have received a copy of the GNU General Public License along
  * with Pickle Microchip PIC ICSP. If not, see http://www.gnu.org/licenses/
  */
@@ -112,29 +112,21 @@ ftdi_bb_io(struct ftdi_bb_io *io)
 	uint8_t value;
 	/* TODO: change mask if needed */
 	io->mask = actual_mask;
-/*	printf("        mask is 0x%02x pin %d bit %d pin_state 0x%02x\n",io->mask, io->pin, io->bit, pin_state); */
 	if (io->dir == 0) {
 		io->mask  |=  (1 << io->pin);
-		if (io->bit == 1) {
+		if (io->bit == 1)
 			pin_state |=  (1 << io->pin);
-			// printf("set pin\n");
-		} else {
+		else
 			pin_state &= ~(1 << io->pin);
-			// printf("clr pin\n");
-		}
-	} else
+	} else {
 		io->mask  &= ~(1 << io->pin);
-		
-/*	printf("        mask is 0x%02x pin %d bit %d pin_state 0x%02x\n",io->mask, io->pin, io->bit, pin_state); */
+        }
 		
 	if ( io->mask != actual_mask ) {
 		if (ftdi_set_bitmode(&ftdi, io->mask, BITMODE_SYNCBB) < 0) {
-
 			printf("%s: ftdi_set_bimode failed [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 			return -1;
 		}
-
-/*		printf("changed mask to 0x%02x\n",io->mask); */
 	}
 	actual_mask = io->mask;
 	value = pin_state & 0xff;
@@ -176,8 +168,6 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 	int ret;
 	value = shift->bits;
 
-	/* TODO: maybe data_pin direction changed */
-	/* io struct and mask ? */
 	if (data_pin_input == data_pin_output) {
 		mask = actual_mask;
 		if (shift->dir)
@@ -193,8 +183,7 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 		}
 	}
 
-
-	/* TODO: prepare buffer - simple delete for now (maybe wrong if MCLR or PGM set) */
+	/* prepare buffer - simple delete for now (maybe wrong if MCLR or PGM set) */
 	bzero(ftdi_buf_out, MAX_BITS_TRANSFER * 4);
 
 	for (int i = 0; i< shift->nbits; i++) {
@@ -234,7 +223,6 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 				value |= mask_value;
 			mask_value = mask_value << 1;
 		}
-		/* printf("%s: value 0x%016lX\n", __func__, value); */
 	}
 	shift->bits = value;
 	return 1;

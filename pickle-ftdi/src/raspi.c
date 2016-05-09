@@ -39,22 +39,22 @@ static void *gpio_map = NULL;
 /*
  * I/O Pins 0..31 on headers P1 & P5
  */
-static uint8_t gpio_pins[32], gpio_dirs[32];
+static uint8_t gpio_pins[GPIO_RPI_NPINS], gpio_dirs[GPIO_RPI_NPINS];
 
 /*
  * Map Raspberry-Pi GPIO memory
  */
 int
-gpio_open(const char *device, uint8_t rev)
+gpio_rpi_open(const char *device, uint8_t type)
 {
 #ifdef RPI
 	off_t gpio_base_addr;
 
 	/* Determine GPIO base address */
-	if (rev == '\0' || rev == '1') {
+	if (type == '\0' || type == '0' || type == '1') {
 		gpio_base_addr = BCM2835_PERI_BASE_ADDR + GPIO_BASE_ADDR_OFFSET;
 	}
-	else if (rev == '2') {
+	else if (type == '2' || type == '3') {
 		gpio_base_addr = BCM2836_PERI_BASE_ADDR + GPIO_BASE_ADDR_OFFSET;
 	}
 	else {
@@ -79,7 +79,7 @@ gpio_open(const char *device, uint8_t rev)
 	}
 
 	/* Reset used pin flags */
-	memset(&gpio_pins, 0, 32);
+	memset(&gpio_pins, 0, GPIO_RPI_NPINS);
 
 	return gpio_mem;
 #else
@@ -91,7 +91,7 @@ gpio_open(const char *device, uint8_t rev)
  * Un-map Raspberry-Pi GPIO memory
  */
 void
-gpio_close(void)
+gpio_rpi_close(void)
 {
 	if (gpio_map) {
 		if (munmap(gpio_map, GPIO_MAP_LEN)) {
@@ -108,7 +108,7 @@ gpio_close(void)
 }
 
 static inline void
-gpio_read(uint8_t gpio_reg, uint32_t *val)
+gpio_rpi_read(uint8_t gpio_reg, uint32_t *val)
 {
 	GPIO_ADDR reg = (GPIO_ADDR)(gpio_map) + gpio_reg;
 
@@ -116,15 +116,15 @@ gpio_read(uint8_t gpio_reg, uint32_t *val)
 }
 
 void
-gpio_delay(void)
+gpio_rpi_delay(void)
 {
 	uint32_t val;
 
-	gpio_read(GPLEV0, &val);
+	gpio_rpi_read(GPLEV0, &val);
 }
 
 static inline void
-gpio_write(uint8_t gpio_reg, uint32_t val)
+gpio_rpi_write(uint8_t gpio_reg, uint32_t val)
 {
 	GPIO_ADDR reg = (GPIO_ADDR)(gpio_map) + gpio_reg;
 
@@ -132,14 +132,14 @@ gpio_write(uint8_t gpio_reg, uint32_t val)
 }
 
 static inline void
-gpio_pud(uint8_t pin, uint8_t pud)
+gpio_rpi_pud(uint8_t pin, uint8_t pud)
 {
-	gpio_write(GPPUD, pud);
+	gpio_rpi_write(GPPUD, pud);
 	usleep(10); /* ? */
-	gpio_write(GPPUDCLK0, (1 << pin));
+	gpio_rpi_write(GPPUDCLK0, (1 << pin));
 	usleep(10); /* ? */
-	gpio_write(GPPUD, 0);
-	gpio_write(GPPUDCLK0, 0);
+	gpio_rpi_write(GPPUD, 0);
+	gpio_rpi_write(GPPUDCLK0, 0);
 }
 
 /*
@@ -155,7 +155,7 @@ gpio_pud(uint8_t pin, uint8_t pud)
  * BCM2835-ARM-Peripherals Page 92
  */
 static inline uint32_t
-gpio_gpfsel(uint8_t pin)
+gpio_rpi_gpfsel(uint8_t pin)
 {
 	return (pin / 10) /* + GPFSEL0 */;
 }
@@ -172,60 +172,60 @@ gpio_gpfsel(uint8_t pin)
  * BCM2835-ARM-Peripherals Page 92
  */
 static inline uint32_t
-gpio_lshift(uint8_t pin)
+gpio_rpi_lshift(uint8_t pin)
 {
 	return (pin % 10) * 3;
 }
 
 static inline void
-gpio_select_input(uint8_t pin)
+gpio_rpi_select_input(uint8_t pin)
 {
-	GPIO_ADDR reg = (GPIO_ADDR)(gpio_map) + gpio_gpfsel(pin);
+	GPIO_ADDR reg = (GPIO_ADDR)(gpio_map) + gpio_rpi_gpfsel(pin);
 
-	uint32_t val = ~(7 << gpio_lshift(pin));
+	uint32_t val = ~(7 << gpio_rpi_lshift(pin));
 	*reg &= val; /* 000 = Input */
 
 	gpio_dirs[pin] = 1;
 }
 
 static inline void
-gpio_select_output(uint8_t pin)
+gpio_rpi_select_output(uint8_t pin)
 {
-	GPIO_ADDR reg = (GPIO_ADDR)(gpio_map) + gpio_gpfsel(pin);
+	GPIO_ADDR reg = (GPIO_ADDR)(gpio_map) + gpio_rpi_gpfsel(pin);
 	
-	uint32_t val = 1 << gpio_lshift(pin);
+	uint32_t val = 1 << gpio_rpi_lshift(pin);
 	*reg |= val; /* 001 = Output */
 
 	gpio_dirs[pin] = 0;
 }
 
 static inline void
-gpio_select_alt(uint8_t pin, uint8_t alt)
+gpio_rpi_select_alt(uint8_t pin, uint8_t alt)
 {
-	GPIO_ADDR reg = (GPIO_ADDR)(gpio_map) + gpio_gpfsel(pin);
+	GPIO_ADDR reg = (GPIO_ADDR)(gpio_map) + gpio_rpi_gpfsel(pin);
 
-	uint32_t val = alt << gpio_lshift(pin);
+	uint32_t val = alt << gpio_rpi_lshift(pin);
 	*reg |= val; /* ALT0 .. ALT5 */
 }
 
 int
-gpio_get(uint8_t pin, uint8_t *level)
+gpio_rpi_get(uint16_t pin, uint8_t *level)
 {
-	if (pin > 31)
+	if (pin >= GPIO_RPI_NPINS)
 		return -1;
 
 	if (gpio_pins[pin] == 0) {
 		gpio_pins[pin] = 1;
-		gpio_pud(pin, GPPUD_UP);
-		gpio_select_input(pin);
+		gpio_rpi_pud(pin, GPPUD_UP);
+		gpio_rpi_select_input(pin);
 	}
 	else if (gpio_dirs[pin] == 0) {
-		gpio_select_input(pin);
+		gpio_rpi_select_input(pin);
 	}
 
 	uint32_t val;
 
-	gpio_read(GPLEV0, &val);
+	gpio_rpi_read(GPLEV0, &val);
 
 	*level = (val & (1 << pin)) ? (HIGH) : (LOW);
 
@@ -233,22 +233,22 @@ gpio_get(uint8_t pin, uint8_t *level)
 }
 
 int
-gpio_set(uint8_t pin, uint8_t level)
+gpio_rpi_set(uint16_t pin, uint8_t level)
 {
-	if (pin > 31)
+	if (pin >= GPIO_RPI_NPINS)
 		return -1;
 
 	if (gpio_pins[pin] == 0) {
 		gpio_pins[pin] = 1;
-		gpio_pud(pin, GPPUD_UP);
-		gpio_select_input(pin);
-		gpio_select_output(pin);
+		gpio_rpi_pud(pin, GPPUD_UP);
+		gpio_rpi_select_input(pin);
+		gpio_rpi_select_output(pin);
 	}
 	else if (gpio_dirs[pin] == 1) {
-		gpio_select_output(pin);
+		gpio_rpi_select_output(pin);
 	}
 
-	gpio_write((level) ? (GPSET0) : (GPCLR0), (1 << pin));
+	gpio_rpi_write((level) ? (GPSET0) : (GPCLR0), (1 << pin));
 
 	return 0;
 }
@@ -257,55 +257,16 @@ gpio_set(uint8_t pin, uint8_t level)
  * Select pin as input, re-enable ALT0 for UART
  */
 int
-gpio_release(uint8_t pin, uint8_t alt)
+gpio_rpi_release(uint16_t pin, uint8_t alt)
 {
-	if (pin > 31)
+	if (pin >= GPIO_RPI_NPINS)
 		return -1;
 
-	gpio_pud(pin, GPPUD_OFF);
-	gpio_select_input(pin);
+	gpio_rpi_pud(pin, GPPUD_OFF);
+	gpio_rpi_select_input(pin);
 	if (alt) {
 		if (pin == 14 || pin == 15)
-			gpio_select_alt(pin, GPIO_ALT0);
+			gpio_rpi_select_alt(pin, GPIO_ALT0);
 	}
 	return 0;
-}
-
-/*
- * Test GPIO pins
- */
-void
-gpio_test(int seconds)
-{
-	uint8_t output_level = 0, input_level;
-
-	printf("\nTEST MODE 4 [RPI GPIO] CTRL-C TO STOP\n");
-
-	while (!io_stop) {
-		printf("\n");
-
-		gpio_set(p.vpp, output_level);
-		printf("GPIO %-3d (VPP) (TX)  = %d\n", p.vpp, output_level);
-
-		if (p.pgm != GPIO_PGM_DISABLED) {
-			gpio_set(p.pgm, output_level);
-			printf("GPIO %-3d (PGM)       = %d\n", p.pgm, output_level);
-		}
-
-		gpio_set(p.pgc, output_level);
-		printf("GPIO %-3d (PGC) (RTS) = %d\n", p.pgc, output_level);
-
-		gpio_set(p.pgdo, output_level);
-		printf("GPIO %-3d (PGD) (DTR) = %d\n", p.pgdo,output_level);
-
-		if (p.pgdi != p.pgdo) {
-			gpio_get(p.pgdi, &input_level);
-			printf("GPIO %02d (PGD) (CTS) = %d\n", p.pgdi, input_level);
-		}
-
-		fflush(stdout);
-		
-		sleep(seconds);
-		output_level = 1 - output_level;
-	}
 }

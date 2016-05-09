@@ -803,7 +803,7 @@ pic24_set_write_pointer(uint32_t addr)
 	printf("%s: PCL=%04X\n", __func__, pic24_readreg(_PCL));
 #endif
 	pic24_six(high,   0);	/* MOV #<DestinationAddress23:16>, W0 */
-	pic24_six(tblpag, 0);	/* MOV W0, TPLPAG                */
+	pic24_six(tblpag, 0);	/* MOV W0, TPLPAG                     */
 	pic24_six(low,    1);	/* MOV #<DestinationAddress15:0>, W7  */
 }
 
@@ -823,9 +823,9 @@ pic24_table_read16_post_increment(void)
 {
 	uint16_t word;
 
-	/* TABLE READ LOW (WORD) [TBLPAG]:[W6] => [W7] (VISI), INCREMENT W6                    */
+	/* TABLE READ LOW (WORD) [TBLPAG]:[W6] => [W7] (VISI), INCREMENT W6            */
 	pic24_six(0xBA0BB6, pic24_conf.tblnop);	/* TBLRDL [W6++], [W7]                 */
-	word = pic24_regout();				/* Clock out contents of VISI register */
+	word = pic24_regout();			/* Clock out contents of VISI register */
 
 	return word;
 }
@@ -850,13 +850,13 @@ pic24_table_read24_post_increment(void)
 	uint32_t word;
 	uint16_t low, high;
 
-	/* TABLE READ LOW  WORD [TBLPAG]:[W6] => [W7] (VISI)                                   */
+	/* TABLE READ LOW  WORD [TBLPAG]:[W6] => [W7] (VISI)                           */
 	pic24_six(0xBA0B96, pic24_conf.tblnop);	/* TBLRDL [W6], [W7]		       */
-	low = pic24_regout();				/* Clock out contents of VISI register */
+	low = pic24_regout();			/* Clock out contents of VISI register */
 
-	/* TABLE READ HIGH WORD [TBLPAG]:[W6++] => [W7] (VISI)                                 */
+	/* TABLE READ HIGH WORD [TBLPAG]:[W6++] => [W7] (VISI)                         */
 	pic24_six(0xBA8BB6, pic24_conf.tblnop);	/* TBLRDH [W6++], [W7]                 */
-	high = pic24_regout();				/* Clock out contents of VISI register */
+	high = pic24_regout();			/* Clock out contents of VISI register */
 
 	word = ((high << 16) | low) & PIC24_MASK;
 
@@ -877,14 +877,14 @@ pic24_table_read48_post_increment(uint32_t *word0, uint32_t *word1)
 	uint16_t msb;
 
 	pic24_six(0xBA0B96, pic24_conf.tblnop);	/* TBLRDL [W6], [W7]		       */
-	*word0 = pic24_regout();			/* Clock out contents of VISI register */
+	*word0 = pic24_regout();		/* Clock out contents of VISI register */
 
 	pic24_six(0xBADBB6, pic24_conf.tblnop);	/* TBLRDH.B [W6++], [W7++]             */
 	pic24_six(0xBAD3D6, pic24_conf.tblnop);	/* TBLRDH.B [++W6], [W7--]             */
-	msb = pic24_regout();				/* Clock out contents of VISI register */
+	msb = pic24_regout();			/* Clock out contents of VISI register */
 
 	pic24_six(0xBA0BB6, pic24_conf.tblnop);	/* TBLRDL [W6++], [W7]		       */
-	*word1 = pic24_regout();			/* Clock out contents of VISI register */
+	*word1 = pic24_regout();		/* Clock out contents of VISI register */
 
 	*word0 |= (msb & 0x00FF) << 16;
 	*word1 |= (msb & 0xFF00) << 8;
@@ -991,8 +991,8 @@ pic24_dsPIC30F_erase(uint32_t tdly)
 		pic24_map[pic24_index].nfuid);
 
 	/* 407F ERASE CODE, DATA, EXEC & PROTECTION */
-	pic24_six(0x2407FA, 0);	/* MOV #0x407F, W10   */
-	pic24_six(0x883B0A, 0);	/* MOV W10, NVMCON    */
+	pic24_six(0x2407FA, 0);	/* MOV #0x407F, W10 */
+	pic24_six(0x883B0A, 0);	/* MOV W10, NVMCON  */
 
 	/* EXTERNALLY TIME */
 	pic24_nvmcon_write_external(tdly);
@@ -1042,7 +1042,7 @@ pic24_dsPIC33FJ_erase(void)
 	pic24_six(0x200000, 0);	/* MOV #<PAGEVAL>, W0   */
 	pic24_six(0x880190, 0);	/* MOV W0, TBLPAG       */
 	pic24_six(0xA8E761, 4);	/* BSET NVMCON, #WR     */
-	io_usleep(240001);		/* P11=240ms, P10=400ns */
+	io_usleep(240001);	/* P11=240ms, P10=400ns */
 
 	pic24_nvmcon_write_completion(0x8000, 0x0000);
 
@@ -1108,7 +1108,7 @@ pic24_dsPIC33F_PIC24H_erase(void)
 	pic24_six(0x200000, 0);	/* MOV #<PAGEVAL>, W0   */
 	pic24_six(0x880190, 0);	/* MOV W0, TBLPAG       */
 	pic24_six(0xA8E761, 4);	/* BSET NVMCON, #WR     */
-	io_usleep(330001);		/* P11=330ms, P10=400ns */
+	io_usleep(330001);	/* P11=330ms, P10=400ns */
 
 	pic24_nvmcon_write_completion(0x8000, 0x0000);
 
@@ -1135,7 +1135,7 @@ pic24_dsPIC33E_PIC24E_erase(void)
 	pic24_six(0x200AA1, 0);	/* MOV #0xAA, W1      */
 	pic24_six(0x883971, 0);	/* MOV W1, NVMKEY     */
 	pic24_six(0xA8E729, 3);	/* BSET NVMCON, #WR   */
-	io_usleep(21001);		/* P11=21ms P10=400ns */
+	io_usleep(21001);	/* P11=21ms P10=400ns */
 #if 1
 	pic24_nvmcon_write_completion(0xFFFF, 0x400F);
 #endif
@@ -1478,19 +1478,19 @@ pic24_write_program_init(void)
 	case DS39934B:    /* PIC24FJXXGA1/GB0  */
 	case DS30000510E: /* PIC24FJXXXGA2/GB2 */
  		/* NVMCON = 0x760 */
-		pic24_six(0x24001A, 0); 	/* MOV #0x4001, W10     */
+		pic24_six(0x24001A, 0);	/* MOV #0x4001, W10     */
 		pic24_six(0x883B0A, 0);	/* MOV W10, NVMCON      */
 		break;
 	case DS70659C: /* dsPIC33FJ    */
 	case DS75012B: /* PIC24FJXXMC  */
  		/* NVMCON = 0x760 */
-		pic24_six(0x24003A, 0); 	/* MOV #0x4003, W10     */
+		pic24_six(0x24003A, 0);	/* MOV #0x4003, W10     */
 		pic24_six(0x883B0A, 0);	/* MOV W10, NVMCON      */
 		break;
 	case DS39919C: /* PIC24F KA    */
 	case DS30625D: /* PIC24F KM/KL */
  		/* NVMCON = 0x760 */
-		pic24_six(0x24004A, 0); 	/* MOV #0x4004, W10     */
+		pic24_six(0x24004A, 0);	/* MOV #0x4004, W10     */
 		pic24_six(0x883B0A, 0);	/* MOV W10, NVMCON      */
 		break;
 	case DS70663D: /* dsPIC33EP/PIC24EP */
@@ -1514,7 +1514,7 @@ pic24_write_program(uint32_t address, uint32_t *buffer, uint32_t buffer_size)
 	case DS70102H: /* dsPIC30F      */
 	case DS70284B: /* dsPIC30F SMPS */
  		/* NVMCON = 0x760 */
-		pic24_six(0x24001A, 0); 	/* MOV #0x4001, W10  */
+		pic24_six(0x24001A, 0);	/* MOV #0x4001, W10  */
 		pic24_six(0x883B0A, 0);	/* MOV W10, NVMCON   */
 	default:break;
 	}
@@ -1580,7 +1580,7 @@ pic24_write_data(uint32_t address, uint32_t *buffer, uint32_t buffer_size)
 	switch (pic24_map[pic24_index].datasheet) {
 	case DS70102H: /* dsPIC30F */
  		/* NVMCON = 0x760 */
-		pic24_six(0x24005A, 0); 	/* MOV #0x4005, W10  */
+		pic24_six(0x24005A, 0);	/* MOV #0x4005, W10  */
 		pic24_six(0x883B0A, 0);	/* MOV W10, NVMCON   */
 	default:break;
 	}
@@ -1627,9 +1627,9 @@ pic24_write_program_word24(uint32_t address, uint32_t word)
 	uint32_t w5 = 0x200005 | ((0x0000FFFF & word)    << 4);
 	uint32_t w6 = 0x200006 | ((0x00FF0000 & word)    >> 12);
 
-	pic24_six(w2, 0);		/* MOV #<DestinationAddress15:0>, W2 */
-	pic24_six(w5, 0);		/* MOV #<LOW_WORD>, W5               */
-	pic24_six(w6, 1);		/* MOV #<HIGH_BYTE>, W6              */
+	pic24_six(w2, 0);	/* MOV #<DestinationAddress15:0>, W2 */
+	pic24_six(w5, 0);	/* MOV #<LOW_WORD>, W5               */
+	pic24_six(w6, 1);	/* MOV #<HIGH_BYTE>, W6              */
 	pic24_six(0xBB0905, 2);	/* TBLWTL W5, [W2]                   */
 	pic24_six(0xBB9906, 3);	/* TBLWTH.B W6, [W2++]               */
 	pic24_nvmcon_write_internal();
@@ -1671,7 +1671,7 @@ pic24_write_program_word48(uint32_t address, uint32_t word0, uint32_t word1)
 
 	/* SET THE NVMADRU/NVMADR REGISTER-PAIR TO POINT TO THE CORRECT ADDRESS */
 	pic24_six(w3, 0);      /* MOV #DestinationAddress<15:0>, W3  */
-	pic24_six(w4, 0);	  /* MOV #DestinationAddress<23:16>, W4 */
+	pic24_six(w4, 0);      /* MOV #DestinationAddress<23:16>, W4 */
 	pic24_six(0x883953, 0);/* MOV W3, NVMADR  */
 	pic24_six(0x883964, 0);/* MOV W4, NVMADRU */
 
@@ -1687,7 +1687,7 @@ pic24_write_program_word48(uint32_t address, uint32_t word0, uint32_t word1)
 	pic24_six(0xA8E729, 3);/* BSET NVMCON, #WR  */
 
 	/* DS700000657H TWW(53.8us) or TWW(54.4us)     */
-	io_usleep(55);	  /* P13=TWW P10=400ns */
+	io_usleep(55); /* P13=TWW P10=400ns */
 
 	pic24_nvmcon_write_completion(0xFFFF, 0x4001);
 }
@@ -1703,8 +1703,8 @@ pic24_write_data_word16(uint32_t address, uint32_t word)
 	uint32_t w2 = 0x200002 | ((0x0000FFFF & address) << 4);
 	uint32_t w5 = 0x200005 | ((0x0000FFFF & word)    << 4);
 
-	pic24_six(w2, 0);		/* MOV #<DestinationAddress15:0>, W2 */
-	pic24_six(w5, 0);		/* MOV #<DATA_WORD_VALUE>, W5        */
+	pic24_six(w2, 0);	/* MOV #<DestinationAddress15:0>, W2 */
+	pic24_six(w5, 0);	/* MOV #<DATA_WORD_VALUE>, W5        */
 	pic24_six(0xBB0905, 2);	/* TBLWTL W5, [W2]                   */
 
 	pic24_nvmcon_write_internal();
@@ -1753,13 +1753,13 @@ pic24_write_config_init1(void)
 		/* PIC24F KA      */
 		/* PIC24F KM/KL   */
 		/* NVMCON = 0x760 */
-		pic24_six(0x24004A, 0); 	/* MOV #0x4004, W10    */
+		pic24_six(0x24004A, 0);	/* MOV #0x4004, W10    */
 		pic24_six(0x883B0A, 0);	/* MOV W10, NVMCON     */
 		break;
 	case DS70152H:
 		/* dsPIC33F/PIC24H */
 		/* NVMCON = 0x760  */
-		pic24_six(0x24000A, 0); 	/* MOV #0x4000, W10    */
+		pic24_six(0x24000A, 0);	/* MOV #0x4000, W10    */
 		pic24_six(0x883B0A, 0);	/* MOV W10, NVMCON     */
 	default:break;
 	}
@@ -1792,7 +1792,7 @@ pic24_write_config_word(uint32_t address, uint16_t word)
 	pic24_six(w6, 1);			/* MOV #<VALUE>, W6      */
 
 	/* WRITE THE CONFIGURATION REGISTER DATA TO THE WRITE LATCH AND INC. WRITE POINTER */
-	pic24_six(0xBB1B86, 2);		/* TBLWTL W6, [W7++]     */
+	pic24_six(0xBB1B86, 2);			/* TBLWTL W6, [W7++]     */
 
 	switch (pic24_map[pic24_index].datasheet) {
 	case DS70102H: /* dsPIC30F      */
