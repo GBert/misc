@@ -31,6 +31,7 @@ LIBS:contrib
 LIBS:valves
 LIBS:microchip_pic18mcu
 LIBS:icsp
+LIBS:w_device
 LIBS:ISO1050
 LIBS:CANBuster-cache
 EELAYER 25 0
@@ -1413,7 +1414,7 @@ U 1 1 561CBBB3
 P 15050 4700
 F 0 "J3" H 15250 5200 60  0000 C CNN
 F 1 "RJ12" H 14900 5200 60  0000 C CNN
-F 2 "w_conn_misc:6p6c" H 15050 4700 60  0001 C CNN
+F 2 "w_conn_misc:molex_6p6c" H 15050 4700 60  0001 C CNN
 F 3 "" H 15050 4700 60  0000 C CNN
 	1    15050 4700
 	1    0    0    -1  
@@ -5111,16 +5112,11 @@ Wire Wire Line
 	15050 5150 15050 5600
 Wire Wire Line
 	15250 5150 15250 5350
-Wire Wire Line
-	15050 5350 15350 5350
 Connection ~ 15050 5350
-Wire Wire Line
-	15350 5350 15350 5150
-Connection ~ 15250 5350
 Wire Wire Line
 	14850 5150 14850 5250
 Wire Wire Line
-	14850 5250 14800 5250
+	14800 5250 15350 5250
 Wire Wire Line
 	14200 5250 14200 5150
 Wire Wire Line
@@ -5405,4 +5401,9 @@ Wire Wire Line
 	11200 5400 11100 5400
 Wire Wire Line
 	11100 5400 11100 5000
+Wire Wire Line
+	15250 5350 15050 5350
+Wire Wire Line
+	15350 5250 15350 5150
+Connection ~ 14850 5250
 $EndSCHEMATC
