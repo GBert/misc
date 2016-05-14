@@ -47,19 +47,21 @@ TXCAN1
 TXCAN2
                 GETC                        ; W = <RXBUF>,RXGET++
 
-                MOVWF   CANCMD              ; t?
-                XORLW   STDDATA
-                BZ      TXCANSTD
-                MOVF    CANCMD,W            ; r?
-                XORLW   STDRTR
-                BZ      TXCANSTD
-
                 MOVF    CANCMD,W            ; T?
                 XORLW   EXTDATA
                 BZ      TXCANEXT
+
+                MOVWF   CANCMD              ; t?
+                XORLW   STDDATA
+                BZ      TXCANSTD
+
                 MOVF    CANCMD,W            ; R?
                 XORLW   EXTRTR
                 BZ      TXCANEXT
+
+                MOVF    CANCMD,W            ; r?
+                XORLW   STDRTR
+                BZ      TXCANSTD
 
                 MOVF    CANCMD,W            ; S?
                 XORLW   CANSET
