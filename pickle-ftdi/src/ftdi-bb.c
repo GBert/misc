@@ -37,7 +37,7 @@ extern struct pickle p;
 struct ftdi_context ftdi;
 int ftdi_bb_fd = -1;
 
-#define MAX_BITS_TRANSFER	64
+#define MAX_BITS_TRANSFER	128
 
 /* buffer for the bitbanged data */
 uint8_t ftdi_buf_out[MAX_BITS_TRANSFER * 4];
@@ -189,12 +189,10 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 	for (int i = 0; i< shift->nbits; i++) {
 		ftdi_buf_out[index] = pin_state;
 		if (value & 1UL)
-			ftdi_buf_out[index] |= 1 << data_pin_output;
-		index++;
-		ftdi_buf_out[index] = ftdi_buf_out[index-1] | ( 1 << clock_pin);
-		index++;
-		/* repeat */
-		ftdi_buf_out[index] = ftdi_buf_out[index-1];
+			ftdi_buf_out[index] |= 1 << data_pin_output | ( 1 << clock_pin) ;
+                else
+			ftdi_buf_out[index] |= ( 1 << clock_pin) ;
+
 		index++;
 		ftdi_buf_out[index] = ftdi_buf_out[index-1] & ~( 1 << clock_pin);
 		index++;
@@ -219,7 +217,7 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 	int mask_value = 1;
 	if (shift->dir) {
 		for (int i = 0; i < shift->nbits; i++ ) {
-			if (ftdi_buf_in[i*4 + 2] & (1 << data_pin_input))
+		if (ftdi_buf_in[i*2 + 1] & (1 << data_pin_input))
 				value |= mask_value;
 			mask_value = mask_value << 1;
 		}
