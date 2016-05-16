@@ -17,15 +17,15 @@
  * with Pickle Microchip PIC ICSP. If not, see http://www.gnu.org/licenses/
  */
 
-#include "led.h"
+#include "main.h"
 
-_FOSCSEL(FNOSC_PRIPLL & IESO_OFF)
-_FOSC(FCKSM_CSECMD & OSCIOFNC_OFF & POSCMD_HS)
-_FWDT(FWDTEN_OFF)
 
-void
-init_io(void)
-{
+// Select Internal FRC at POR
+_FOSCSEL(FNOSC_FRC & IESO_OFF)
+// Enable Clock Switching and Configure POSC in XT mode
+_FOSC(FCKSM_CSECMD & OSCIOFNC_OFF & POSCMD_XT)
+
+void init_io(void) {
 	/* ADC1 Digital Mode */
 	/* AD1PCFGL = 0xFFFF; */
 
@@ -34,32 +34,33 @@ init_io(void)
 	LATAbits.LATA0 = 0;
 }
 
-int
-main(void)
-{
+void init_pps(void) {
+	__builtin_write_OSCCONL(OSCCON & ~(1<<6));
+	RPINR18bits.U1RXR = 34;
+        RPOR0bits.RP35R = 1;	/* U1TXR */
+	__builtin_write_OSCCONL(OSCCON | (1<<6));
+}
+
+
+int main(void) {
 	/* Init Clock */
-	CLKDIVbits.PLLPRE = PLL_PRE;
 	PLLFBD = PLL_DIV;
 	CLKDIVbits.PLLPOST = PLL_POST;
+	CLKDIVbits.PLLPRE = PLL_PRE;
 
 	__builtin_write_OSCCONH(0x03);
-	__builtin_write_OSCCONL(0x01);
+	__builtin_write_OSCCONL(OSCCON | 0x01);
 
-	while (!OSCCONbits.COSC);
-	while (!OSCCONbits.LOCK);
+	while (OSCCONbits.COSC != 0x03);
+	while (OSCCONbits.LOCK != 1);
 
 	/* Init PORT I/O */
 	init_io();
 
 	/* Blink Forever */
 	while (true) {
-		__builtin_btg((unsigned int*)&LATA, 0);
-		__builtin_btg((unsigned int*)&LATA, 0);
-		__builtin_btg((unsigned int*)&LATA, 0);
-		__builtin_btg((unsigned int*)&LATA, 0);
-		__builtin_btg((unsigned int*)&LATA, 0);
-		__builtin_btg((unsigned int*)&LATA, 0);
-		__builtin_btg((unsigned int*)&LATA, 0);
-		__builtin_btg((unsigned int*)&LATA, 0);
+		/* __builtin_btg((unsigned int*)&LATA, 0); */
+		blink();
+		__delay_us(10);
 	}
 }

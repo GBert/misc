@@ -40,9 +40,9 @@ OBJDUMP = $(COMPILE)objdump
 
 RM      = /bin/rm
 
-TARGET  = led.hex
+TARGET  = main.hex
 
-CSOURCE = led.c
+CSOURCE = main.c usart.c
 COBJECT = $(CSOURCE:.c=.o)
 CHEADER = $(CSOURCE:.c=.h)
 CTEMPS  = $(CSOURCE:.c=.s)

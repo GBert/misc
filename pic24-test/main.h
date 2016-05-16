@@ -44,6 +44,7 @@
 /*
  * FCY = FOSC / 2 = 64MHz
  */
+#define FOSC 128000000UL
 #define FCY 64000000UL
 #include <libpic30.h>   /* __delay32() */
 extern int blink(void);
