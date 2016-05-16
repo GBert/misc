@@ -67,7 +67,7 @@
       (layerselection 0x010f0_80000001)
       (usegerberextensions true)
       (usegerberattributes true)
-      (excludeedgelayer true)
+      (excludeedgelayer false)
       (linewidth 0.100000)
       (plotframeref false)
       (viasonmask false)
