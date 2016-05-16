@@ -70,8 +70,8 @@ void pps_init(void) {
   PPSLOCK = 0xaa;
   PPSLOCK = 0;		// unlock PPS
   // set USART : RX on RA0 , TX on RA1 / 40001729B.pdf page 141
-  RXPPS  = 0b00000;	// input  EUSART RX -> RA0
-  RA1PPS = 0b10100;	// RA1 output TX/CK
+  RA0PPS = 0b10100;	// RA0 output TX/CK
+  RXPPS  = 0b00001;	// input  EUSART RX -> RA1
 
   PPSLOCK = 0x55;
   PPSLOCK = 0xaa;
@@ -113,8 +113,8 @@ void uart_init (void) {
 
   SPBRG = SBRG_VAL;	// calculated by defines
 
-  TRISA0 = 1;		// make the TX pin a digital output
-  TRISA1 = 0;		// make the RX pin a digital input
+  TRISA0 = 0;		// make the TX pin a digital output
+  TRISA1 = 1;		// make the RX pin a digital input
 
   // RCIF = 0;
   PIR1 = 0;

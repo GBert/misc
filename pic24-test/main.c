@@ -32,6 +32,9 @@ void init_io(void) {
 	/* RA0 O/P */
 	TRISAbits.TRISA0 = 0;
 	LATAbits.LATA0 = 0;
+
+	TRISBbits.TRISB2 = 1; /* Pin 6 as input pin for UART RxD */
+	TRISBbits.TRISB3 = 0; /* Pin 7 as output pin for UART TxD */
 }
 
 void init_pps(void) {

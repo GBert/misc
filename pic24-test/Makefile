@@ -42,7 +42,7 @@ RM      = /bin/rm
 
 TARGET  = main.hex
 
-CSOURCE = main.c usart.c
+CSOURCE = main.c # usart.c
 COBJECT = $(CSOURCE:.c=.o)
 CHEADER = $(CSOURCE:.c=.h)
 CTEMPS  = $(CSOURCE:.c=.s)
