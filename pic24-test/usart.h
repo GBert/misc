@@ -13,24 +13,11 @@
 #include "main.h"
 
 #ifndef BAUDRATE
-#define BAUDRATE	500000
-#endif
-#define USE_BRG16	0
-#define USE_BRGH	1
-
-/* USART calculating Baud Rate Generator
- * if BRGH = 0 => FOSC/[64 (n + 1)]
- * if BRGH = 1 => FOSC/[16 (n + 1)]
- * avoid rounding errors
- */
-
-#if USE_BRGH == 0
-#define	SBRG_VAL	( (((FOSC / BAUDRATE) / 32) - 1) / 2 )
-#else
-#define	SBRG_VAL	( (((FOSC / BAUDRATE) / 8) - 1) / 2 )
+#define BAUDRATE	115200
 #endif
 
+#define	SBRG_VAL	(((FCY / BAUDRATE) - 8) / 16 )
 
 /* circular buffer */
 
-#endif		/* _USART_H_ */
+#endif /* _USART_H_ */

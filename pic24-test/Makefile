@@ -42,13 +42,13 @@ RM      = /bin/rm
 
 TARGET  = main.hex
 
-CSOURCE = main.c # usart.c
+CSOURCE = main.c usart.c
 COBJECT = $(CSOURCE:.c=.o)
 CHEADER = $(CSOURCE:.c=.h)
 CTEMPS  = $(CSOURCE:.c=.s)
 
-ASOURCE = blink.s
-AOBJECT = $(ASOURCE:.s=.o)
+# ASOURCE = blink.s
+# AOBJECT = $(ASOURCE:.s=.o)
 
 COF     = $(TARGET:.hex=.cof)
 MAP     = $(TARGET:.hex=.map)
@@ -94,16 +94,16 @@ $(COBJECT):$(CHEADER) Makefile
 $(AOBJECT):Makefile
 
 program:build
-	k24 lvp program $(TARGET)
+	p24 select 33EP128GP502 lvp  programm$(TARGET)
 
 verify:build
-	k24 lvp verify $(TARGET)
+	p24 select 33EP128GP502 lvp verify $(TARGET)
 
 program-pi:build
-	ssh ${PIHOST} k24 lvp program < $(TARGET)
+	ssh ${PIHOST} p24 lvp program < $(TARGET)
 
 verify-pi:build
-	ssh ${PIHOST} k24 lvp verify < $(TARGET)
+	ssh ${PIHOST} p24 lvp verify < $(TARGET)
 
 sim:build
 	$(SIM30) $(SIM)
