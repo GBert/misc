@@ -1,10 +1,7 @@
-%TF.GenerationSoftware,KiCad,Pcbnew,(2015-06-12 BZR 5742)-product*%
-%TF.CreationDate,2016-05-16T15:37:26+02:00*%
-%TF.JobID,BPi-CAN,4250692D43414E2E6B696361645F7063,rev?*%
-%TF.FileFunction,Soldermask,Top*%
+G04 #@! TF.FileFunction,Soldermask,Top*
 %FSLAX46Y46*%
 G04 Gerber Fmt 4.6, Leading zero omitted, Abs format (unit mm)*
-G04 Created by KiCad (PCBNEW (2015-06-12 BZR 5742)-product) date Mon 16 May 2016 03:37:26 PM CEST*
+G04 Created by KiCad (PCBNEW 4.0.2+e4-6225~38~ubuntu14.04.1-stable) date Tue 17 May 2016 07:45:52 AM CEST*
 %MOMM*%
 G01*
 G04 APERTURE LIST*
