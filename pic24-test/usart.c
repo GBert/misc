@@ -83,7 +83,7 @@ bool getchar(unsigned char *c) {
 }
 
 void print_debug_fifo(struct serial_buffer_t *fifo) {
-    print_debug_value('S', SERIAL_BUFFER_SIZE);
+    print_debug_value('S', 255);
     uart_putchar_wait(' ');
     print_debug_value('M', SERIAL_BUFFER_SIZE_MASK);
     uart_putchar_wait(' ');
@@ -107,7 +107,7 @@ char fifo_uart_putchar(struct serial_buffer_t *fifo) {
     print_debug_fifo(fifo);
     if (fifo->head != tail) {
 	tail++;
-	tail &= SERIAL_BUFFER_SIZE_MASK;	/* wrap around if neededd */
+	// tail &= SERIAL_BUFFER_SIZE_MASK;	/* wrap around if neededd */
 
 	uart_putchar_wait('f');
 	print_debug_value('T', fifo->tail);
@@ -130,7 +130,7 @@ char print_rom_fifo(const char *s, struct serial_buffer_t *fifo) {
     char c;
     while ((c = *s++)) {
 	head++;
-	head &= SERIAL_BUFFER_SIZE_MASK;	/* wrap around if neededd */
+	// head &= SERIAL_BUFFER_SIZE_MASK;	/* wrap around if neededd */
 	if (head != fifo->tail)		/* space left ? */
 	    fifo->data[head] = c;
 	else
@@ -145,7 +145,7 @@ char putchar_fifo(char c, struct serial_buffer_t *fifo) {
     unsigned char head;
     head = fifo->head;
     head++;
-    head &= SERIAL_BUFFER_SIZE_MASK;	/* wrap around if needed */
+    // head &= SERIAL_BUFFER_SIZE_MASK;	/* wrap around if needed */
     if (head != fifo->tail) {
 	fifo->head = head;
 	fifo->data[head] = c;
@@ -160,7 +160,7 @@ char fifo_putchar(struct serial_buffer_t *fifo) {
     tail = fifo->tail;
     if (fifo->head != tail) {
 	tail++;
-	tail &= SERIAL_BUFFER_SIZE_MASK;	/* wrap around if neededd */
+	// tail &= SERIAL_BUFFER_SIZE_MASK;	/* wrap around if neededd */
 	if (uart_putchar(fifo->data[tail])) {
 	    fifo->tail = tail;
 	    return 1;
@@ -180,14 +180,14 @@ char copy_char_fifo(struct serial_buffer_t *source_fifo, struct serial_buffer_t 
     } else {
 	destination_head = destination_fifo->head;
 	destination_head++;
-	destination_head &= SERIAL_BUFFER_SIZE_MASK;
+	// destination_head &= SERIAL_BUFFER_SIZE_MASK;
 	while ((destination_head != destination_fifo->tail) && (source_tail != source_fifo->head)) {
 	    source_tail++;
-	    source_tail &= SERIAL_BUFFER_SIZE_MASK;
+	    // source_tail &= SERIAL_BUFFER_SIZE_MASK;
 	    destination_fifo->data[destination_head] = source_fifo->data[source_tail];
 	    destination_fifo->head = destination_head;	/* store new pointer destination head before increment */
 	    destination_head++;
-	    destination_head &= SERIAL_BUFFER_SIZE_MASK;
+	    // destination_head &= SERIAL_BUFFER_SIZE_MASK;
 	}
 	source_fifo->tail = source_tail;	/* store new pointer source tail */
 	return source_fifo->data[source_tail];
