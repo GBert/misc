@@ -65,5 +65,5 @@ void uart_putchar_wait(unsigned char c);
 void uart_puts_rom(const char *s);
 char print_rom_fifo(const char *s, struct serial_buffer_t *fifo);
 char fifo_putchar(struct serial_buffer_t *fifo);
-
+void print_debug_fifo(struct serial_buffer_t *fifo);
 #endif

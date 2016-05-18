@@ -47,7 +47,7 @@ void init_pps(void) {
 }
 
 int main(void) {
-    int counter = 0;
+    unsigned int counter = 0;
     /* Init Clock */
     PLLFBD = PLL_DIV;
     CLKDIVbits.PLLPOST = PLL_POST;
@@ -75,6 +75,7 @@ int main(void) {
 	fifo_putchar(&tx_fifo);
 	if (counter == 50000) {
 	    print_rom_fifo("Hello dsPIC33 !\r\n", &tx_fifo);
+	    // print_debug_fifo(&tx_fifo);
 	    counter = 0;
 	}
 	__delay_us(10);

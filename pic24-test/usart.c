@@ -27,7 +27,7 @@ void init_uart(void) {
 
 /* prints char on USART if pssible */
 char uart_putchar(unsigned char c) {
-    if (U1STAbits.UTXBF) {
+    if (!U1STAbits.UTXBF) {
 	if (U1STAbits.OERR)
 	    U1STAbits.OERR = 0;
 	U1TXREG = c;
@@ -87,10 +87,10 @@ void print_debug_fifo(struct serial_buffer_t *fifo) {
     uart_putchar_wait(' ');
     print_debug_value('M', SERIAL_BUFFER_SIZE_MASK);
     uart_putchar_wait(' ');
-//    print_debug_value('H',fifo->head);
-//    uart_putchar_wait(' ');
-//    print_debug_value('T',fifo->tail);
-//    uart_putchar_wait(' ');
+    print_debug_value('H',fifo->head);
+    uart_putchar_wait(' ');
+    print_debug_value('T',fifo->tail);
+    uart_putchar_wait(' ');
 //    puts_rom(sData);
 /*    for (i=0; i<SERIAL_BUFFER_SIZE; i++) {
         print_hex_wait(fifo->data[i]);
