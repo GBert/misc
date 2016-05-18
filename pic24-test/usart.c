@@ -125,20 +125,48 @@ char fifo_uart_putchar(struct serial_buffer_t *fifo) {
 }
 
 /* print into circular buffer */
-char print_rom_fifo(const unsigned char *s, struct serial_buffer_t *fifo) {
+char print_rom_fifo(const char *s, struct serial_buffer_t *fifo) {
     unsigned char head = fifo->head;
     char c;
     while ((c = *s++)) {
 	head++;
 	head &= SERIAL_BUFFER_SIZE_MASK;	/* wrap around if neededd */
-	if (head != fifo->tail) {		/* space left ? */
+	if (head != fifo->tail)		/* space left ? */
 	    fifo->data[head] = c;
-	} else {
+	else
 	    return -1;
-	}
     }
     fifo->head = head;		/* only store new pointer if all is OK */
     return 1;
+}
+
+/* place char into fifo */
+char putchar_fifo(char c, struct serial_buffer_t *fifo) {
+    unsigned char head;
+    head = fifo->head;
+    head++;
+    head &= SERIAL_BUFFER_SIZE_MASK;	/* wrap around if needed */
+    if (head != fifo->tail) {
+	fifo->head = head;
+	fifo->data[head] = c;
+	return 1;
+    };
+    return 0;
+}
+
+/* put next char onto USART */
+char fifo_putchar(struct serial_buffer_t *fifo) {
+    unsigned char tail;
+    tail = fifo->tail;
+    if (fifo->head != tail) {
+	tail++;
+	tail &= SERIAL_BUFFER_SIZE_MASK;	/* wrap around if neededd */
+	if (uart_putchar(fifo->data[tail])) {
+	    fifo->tail = tail;
+	    return 1;
+	}
+    }
+    return 0;
 }
 
 char copy_char_fifo(struct serial_buffer_t *source_fifo, struct serial_buffer_t *destination_fifo) {
@@ -162,6 +190,6 @@ char copy_char_fifo(struct serial_buffer_t *source_fifo, struct serial_buffer_t 
 	    destination_head &= SERIAL_BUFFER_SIZE_MASK;
 	}
 	source_fifo->tail = source_tail;	/* store new pointer source tail */
-        return source_fifo->data[source_tail];
+	return source_fifo->data[source_tail];
     }
 }

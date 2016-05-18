@@ -18,7 +18,7 @@
  */
 
 #include "main.h"
-#include "uart.h"
+#include "usart.h"
 
 // Select Internal FRC at POR
 _FOSCSEL(FNOSC_FRC & IESO_OFF)
@@ -47,6 +47,7 @@ void init_pps(void) {
 }
 
 int main(void) {
+    int counter = 0;
     /* Init Clock */
     PLLFBD = PLL_DIV;
     CLKDIVbits.PLLPOST = PLL_POST;
@@ -68,12 +69,14 @@ int main(void) {
     init_pps();
     init_uart();
 
-    /* Blink Forever */
     while (true) {
-	/* __builtin_btg((unsigned int*)&LATA, 0); */
+	counter++;
 	__builtin_btg((unsigned int *)&LATA, 0);
-	uart_puts_rom("Hello dsPIC33 !\r\n");
-	__delay_ms(100);
-
+	fifo_putchar(&tx_fifo);
+	if (counter == 50000) {
+	    print_rom_fifo("Hello dsPIC33 !\r\n", &tx_fifo);
+	    counter = 0;
+	}
+	__delay_us(10);
     }
 }

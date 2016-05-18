@@ -24,7 +24,7 @@
 #include <stdbool.h>		/* true || false */
 #include <stdint.h>
 #include <p33Exxxx.h>
-#include <pps.h>
+// #include <pps.h>
 #include <dsp.h>
 
 /*
@@ -49,20 +49,21 @@
 #include <libpic30.h>		/* __delay32() */
 
 /* BUFFER_SIZE must be power of two (16,32,64...) */
-#define SERIAL_BUFFER_SIZE      32
+#define SERIAL_BUFFER_SIZE      64
 #define SERIAL_BUFFER_SIZE_MASK (SERIAL_BUFFER_SIZE -1)
 
-void init_uart(void);
-char uart_putchar(unsigned char c);
-void uart_putchar_wait(unsigned char c);
-void uart_puts_rom(const char *s);
-
 /* circular buffer */
-
 struct serial_buffer_t {
     unsigned char head;
     unsigned char tail;
     unsigned char data[SERIAL_BUFFER_SIZE];
 };
+
+void init_uart(void);
+char uart_putchar(unsigned char c);
+void uart_putchar_wait(unsigned char c);
+void uart_puts_rom(const char *s);
+char print_rom_fifo(const char *s, struct serial_buffer_t *fifo);
+char fifo_putchar(struct serial_buffer_t *fifo);
 
 #endif
