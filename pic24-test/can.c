@@ -30,20 +30,19 @@ void init_can(void)
 
     /* DMA Config Channel 0 for TX IRQ = 70 */
     DMA0CON = 0x2020;
-    // DMA0REQ = 70;
     DMA0CNT = 7;
     DMA0PAD = (volatile unsigned int)&C1TXD;
     DMA0REQ = 0x0046;               //C1TX - ECAN1 Transmit Data Request
     DMA0STAH = 0;
     DMA0STAL = (unsigned int)&m_Can_ECanTXRXMsgBuf;
-    DMA0CONbits.CHEN = 0x1;
+    DMA0CONbits.CHEN = 1;
 
     DMA2CON = 0x0000;
-    DMA2REQ = 34;
     DMA2CNT = 7;
     DMA2PAD = (volatile unsigned int)&C1RXD;
-    DMA2STAL = (unsigned int)&m_Can_ECanTXRXMsgBuf;
+    DMA2REQ = 0x0022;
     DMA2STAH = 0;
+    DMA2STAL = (unsigned int)&m_Can_ECanTXRXMsgBuf;
     DMA2CONbits.CHEN = 1;
 
     //IEC0bits.DMA1IE = 1;
