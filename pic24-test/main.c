@@ -1,20 +1,10 @@
-/*
- * Copyright (C) 2005-2015 Darron Broad
- * All rights reserved.
- * 
- * This file is part of Pickle Microchip PIC ICSP.
- * 
- * Pickle Microchip PIC ICSP is free software: you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as published
- * by the Free Software Foundation. 
- * 
- * Pickle Microchip PIC ICSP is distributed in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details. 
- * 
- * You should have received a copy of the GNU General Public License along
- * with Pickle Microchip PIC ICSP. If not, see http://www.gnu.org/licenses/
+/* ----------------------------------------------------------------------------
+ * "THE BEER-WARE LICENSE" (Revision 42):
+ * <info@gerhard-bertelsmann.de> wrote this file. As long as you retain this
+ * notice you can do whatever you want with this stuff. If we meet some day,
+ * and you think this stuff is worth it, you can buy me a beer in return
+ * Gerhard Bertelsmann
+ * ----------------------------------------------------------------------------
  */
 
 #include "main.h"
@@ -53,7 +43,7 @@ void init_pps(void) {
     RPINR18bits.U1RXR = 34;	/* U1RxD */
     RPOR0bits.RP35R   = 1;	/* U1TxD */
     RPINR26bits.C1RXR = 36;	/* PIN 11 RB4 RP36 CAN RxD */
-    RPOR0bits.RP20R   = 14;	/* PIN 12 RA4 RP20 CAN TxD */
+    RPOR0bits.RP20R   = 14;	/* PIN 12 RA4 RP20 CAN TxD (C1TX = 0b001110) */
     __builtin_write_OSCCONL(OSCCON | (1 << 6));
 }
 
@@ -90,7 +80,7 @@ int main(void) {
 	if (counter == 50000) {
 	    print_rom_fifo("Hello dsPIC33 !\r\n", &tx_fifo);
 	    // print_debug_fifo(&tx_fifo);
-	    if (can_test_receive)
+	    if (can_test_receive())
 		print_rom_fifo("received CAN packet\r\n", &tx_fifo);
 	    // can_test_send();
 	    counter = 0;
