@@ -108,6 +108,14 @@ void can_test_send(void) {
     while(C1TR01CONbits.TXREQ0 == 1);
 }
 
+void ecan1DisableRXFilter(int n) {
+    unsigned int *fltEnRegAddr;
+    C1CTRL1bits.WIN=1;
+    fltEnRegAddr = (unsigned int *)(&C1FEN1);
+    *fltEnRegAddr = (*fltEnRegAddr) & (0xFFFF - (0x1 << n));
+    C1CTRL1bits.WIN=0;
+}
+
 bool can_test_receive(void) {
     if (C1RXFUL1bits.RXFUL10) {
         C1RXFUL1bits.RXFUL10=0;
