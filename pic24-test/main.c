@@ -32,6 +32,8 @@ void init_io(void) {
     /* ADC1 Digital Mode */
     // AD1CON1.bits = 0x8000;
     _ADON = 0;
+    _CVR2OE = 0;
+    _CVR1OE = 0;
     // AD1PCFG = 0xFFFF;
 
     /* RA0 LED */
