@@ -22,7 +22,7 @@ void init_can(void)
     C1CTRL1bits.CSIDL = 0;
     C1CTRL1bits.CANCAP = 0;
 
-  // ermittelt mit dem bittime calc Plugin
+  // can-calc-bittiming
     C1CFG1=CB_C1CFG1;
     C1CFG2=CB_C1CFG2;
 
@@ -30,14 +30,15 @@ void init_can(void)
 
     /* DMA Config Channel 0 for TX IRQ = 70 */
     DMA0CON = 0x2020;
-    DMA0REQ = 70;
+    // DMA0REQ = 70;
     DMA0CNT = 7;
     DMA0PAD = (volatile unsigned int)&C1TXD;
-    DMA0STAL = (unsigned int)&m_Can_ECanTXRXMsgBuf;
+    DMA0REQ = 0x0046;               //C1TX - ECAN1 Transmit Data Request
     DMA0STAH = 0;
+    DMA0STAL = (unsigned int)&m_Can_ECanTXRXMsgBuf;
     DMA0CONbits.CHEN = 0x1;
 
-    DMA2CON = 0x0020;
+    DMA2CON = 0x0000;
     DMA2REQ = 34;
     DMA2CNT = 7;
     DMA2PAD = (volatile unsigned int)&C1RXD;
