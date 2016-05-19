@@ -14,6 +14,8 @@ uint16_t m_Can_ECanTXRXMsgBuf[NUM_OF_ECAN_BUFFERS][8] __attribute__ ((aligned(NU
 
 void init_can(void)
 {
+    /* set config register visible in SFRs */
+    C1CTRL1bits.WIN = 0;
     /* wait getting into config mode */
     C1CTRL1bits.REQOP = CAN_OPMODE_CONFIG;
     while (C1CTRL1bits.OPMODE != CAN_OPMODE_CONFIG) ;
@@ -83,10 +85,10 @@ void init_can(void)
     //    C1TR01CONbits.TX1PRI = 0x3;
 
     // start Can
-    //C1CTRL1bits.REQOP = CAN_OPMODE_LOOPBACK;
-    //while (C1CTRL1bits.OPMODE != CAN_OPMODE_LOOPBACK);
-    C1CTRL1bits.REQOP = CAN_OPMODE_NORMAL;
-    while (C1CTRL1bits.OPMODE != CAN_OPMODE_NORMAL);
+    C1CTRL1bits.REQOP = CAN_OPMODE_LOOPBACK;
+    while (C1CTRL1bits.OPMODE != CAN_OPMODE_LOOPBACK);
+    //C1CTRL1bits.REQOP = CAN_OPMODE_NORMAL;
+    //while (C1CTRL1bits.OPMODE != CAN_OPMODE_NORMAL);
     C1RXFUL1 = 0;
 }
 
