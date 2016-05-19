@@ -18,6 +18,7 @@
  */
 
 #include "main.h"
+#include "can.h"
 #include "usart.h"
 
 // Select Internal FRC at POR
@@ -82,6 +83,7 @@ int main(void) {
 	if (counter == 50000) {
 	    print_rom_fifo("Hello dsPIC33 !\r\n", &tx_fifo);
 	    // print_debug_fifo(&tx_fifo);
+	    can_test_send();
 	    counter = 0;
 	}
 	__delay_us(10);
