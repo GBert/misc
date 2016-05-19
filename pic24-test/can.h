@@ -52,5 +52,6 @@
 #define NUM_OF_ECAN_BUFFERS	32
 
 void can_test_send(void);
+void init_can(void);
 
 #endif /* _CAN_H_ */

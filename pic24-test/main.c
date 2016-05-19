@@ -75,6 +75,7 @@ int main(void) {
     init_io();
     init_pps();
     init_uart();
+    init_can();
 
     while (true) {
 	counter++;
@@ -83,7 +84,7 @@ int main(void) {
 	if (counter == 50000) {
 	    print_rom_fifo("Hello dsPIC33 !\r\n", &tx_fifo);
 	    // print_debug_fifo(&tx_fifo);
-	    can_test_send();
+	    // can_test_send();
 	    counter = 0;
 	}
 	__delay_us(10);
