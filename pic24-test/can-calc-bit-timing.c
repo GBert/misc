@@ -359,6 +359,7 @@ static struct calc_bittiming_const can_calc_consts[] = {
 			.brp_inc = 2,
 		},
 		.ref_clk = {
+			{ .clk = 20000000, },
 			{ .clk = 30000000, },
 			{ .clk = 32000000, },
 		},

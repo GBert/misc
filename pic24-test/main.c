@@ -29,20 +29,26 @@ struct serial_buffer_t tx_fifo, rx_fifo;
 
 void init_io(void) {
     /* ADC1 Digital Mode */
-    /* AD1PCFGL = 0xFFFF; */
+    // AD1CON1.bits = 0x8000;
+    _ADON = 0;
+    // AD1PCFG = 0xFFFF;
 
-    /* RA0 O/P */
+    /* RA0 LED */
     TRISAbits.TRISA0 = 0;
     LATAbits.LATA0 = 0;
 
-    TRISBbits.TRISB2 = 1;	/* Pin 6 as input pin for UART RxD */
-    TRISBbits.TRISB3 = 0;	/* Pin 7 as output pin for UART TxD */
+    TRISBbits.TRISB2 = 1;	/* Pin 6  as input  pin for UART RxD */
+    TRISBbits.TRISB3 = 0;	/* Pin 7  as output pin for UART TxD */
+    TRISBbits.TRISB4 = 1;	/* Pin 11 as input  pin for CAN RxD */
+    TRISAbits.TRISA4 = 0;	/* Pin 12 as output pin for CAN TxD */
 }
 
 void init_pps(void) {
     __builtin_write_OSCCONL(OSCCON & ~(1 << 6));
-    RPINR18bits.U1RXR = 34;
-    RPOR0bits.RP35R = 1;	/* U1TXR */
+    RPINR18bits.U1RXR = 34;	/* U1RxD */
+    RPOR0bits.RP35R   = 1;	/* U1TxD */
+    RPINR26bits.C1RXR = 36;	/* PIN 11 RB4 RP36 CAN RxD */
+    RPOR0bits.RP20R   = 14;	/* PIN 12 RA4 RP20 CAN TxD */
     __builtin_write_OSCCONL(OSCCON | (1 << 6));
 }
 
