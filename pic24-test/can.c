@@ -37,7 +37,7 @@ void init_can(void)
     DMA0STAL = (unsigned int)&m_Can_ECanTXRXMsgBuf;
     DMA0CONbits.CHEN = 1;
 
-    DMA2CON = 0x0000;
+    DMA2CON = 0x0020;
     DMA2CNT = 7;
     DMA2PAD = (volatile unsigned int)&C1RXD;
     DMA2REQ = 0x0022;
@@ -83,8 +83,11 @@ void init_can(void)
     //    C1TR01CONbits.TX1PRI = 0x3;
 
     // start Can
+    //C1CTRL1bits.REQOP = CAN_OPMODE_LOOPBACK;
+    //while (C1CTRL1bits.OPMODE != CAN_OPMODE_LOOPBACK);
     C1CTRL1bits.REQOP = CAN_OPMODE_NORMAL;
     while (C1CTRL1bits.OPMODE != CAN_OPMODE_NORMAL);
+    C1RXFUL1 = 0;
 }
 
 void can_test_send(void) {
@@ -98,15 +101,15 @@ void can_test_send(void) {
     m_Can_ECanTXRXMsgBuf[0][6] = 0xabcd;
 
     // Empfangspuffer leer setzen
-    C1RXFUL1 = 0;
 
     C1TR01CONbits.TXREQ0 = 0x1;
     while(C1TR01CONbits.TXREQ0 == 1);
-
 }
 
 bool can_test_receive(void) {
-    if (C1RXFUL1bits.RXFUL10)
-	return 1;
-    return 0;
+    if (C1RXFUL1bits.RXFUL10) {
+        C1RXFUL1bits.RXFUL10=0;
+	return true;
+    }
+    return false;
 }

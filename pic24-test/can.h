@@ -51,6 +51,7 @@
 #define CAN_OPMODE_NORMAL	0x0
 #define NUM_OF_ECAN_BUFFERS	32
 
+bool can_test_receive(void);
 void can_test_send(void);
 void init_can(void);
 

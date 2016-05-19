@@ -34,6 +34,8 @@ void init_io(void) {
     _ADON = 0;
     _CVR2OE = 0;
     _CVR1OE = 0;
+    ANSELA = 0;
+    ANSELB = 0;
     // AD1PCFG = 0xFFFF;
 
     /* RA0 LED */
@@ -83,9 +85,13 @@ int main(void) {
 	counter++;
 	__builtin_btg((unsigned int *)&LATA, 0);
 	fifo_putchar(&tx_fifo);
+	//if (can_test_receive)
+	//    print_rom_fifo("received CAN packet\r\n", &tx_fifo);
 	if (counter == 50000) {
 	    print_rom_fifo("Hello dsPIC33 !\r\n", &tx_fifo);
 	    // print_debug_fifo(&tx_fifo);
+	    if (can_test_receive)
+		print_rom_fifo("received CAN packet\r\n", &tx_fifo);
 	    // can_test_send();
 	    counter = 0;
 	}
