@@ -39,6 +39,7 @@ void init_can(void)
     DMA0STAL = (unsigned int)&m_Can_ECanTXRXMsgBuf;
     DMA0CONbits.CHEN = 1;
 
+    /* DMA Config Channel 2 for RX IRQ = 34 */
     DMA2CON = 0x0020;
     DMA2CNT = 7;
     DMA2PAD = (volatile unsigned int)&C1RXD;
@@ -85,10 +86,12 @@ void init_can(void)
     //    C1TR01CONbits.TX1PRI = 0x3;
 
     // start Can
-    C1CTRL1bits.REQOP = CAN_OPMODE_LOOPBACK;
-    while (C1CTRL1bits.OPMODE != CAN_OPMODE_LOOPBACK);
-    //C1CTRL1bits.REQOP = CAN_OPMODE_NORMAL;
-    //while (C1CTRL1bits.OPMODE != CAN_OPMODE_NORMAL);
+    //C1CTRL1bits.REQOP = CAN_OPMODE_LOOPBACK;
+    //while (C1CTRL1bits.OPMODE != CAN_OPMODE_LOOPBACK);
+    C1CTRL1bits.REQOP = CAN_OPMODE_NORMAL;
+    while (C1CTRL1bits.OPMODE != CAN_OPMODE_NORMAL);
+
+    // Empfangspuffer leer setzen
     C1RXFUL1 = 0;
 }
 
@@ -102,10 +105,8 @@ void can_test_send(void) {
     m_Can_ECanTXRXMsgBuf[0][5] = 0xabcd;
     m_Can_ECanTXRXMsgBuf[0][6] = 0xabcd;
 
-    // Empfangspuffer leer setzen
-
-    C1TR01CONbits.TXREQ0 = 0x1;
     while(C1TR01CONbits.TXREQ0 == 1);
+    C1TR01CONbits.TXREQ0 = 0x1;
 }
 
 void ecan1DisableRXFilter(int n) {

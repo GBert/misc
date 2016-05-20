@@ -49,6 +49,7 @@ void init_pps(void) {
 
 int main(void) {
     unsigned int counter = 0;
+    unsigned int counter_can = 0;
     /* Init Clock */
     PLLFBD = PLL_DIV;
     CLKDIVbits.PLLPOST = PLL_POST;
@@ -73,18 +74,21 @@ int main(void) {
 
     while (true) {
 	counter++;
+	counter_can++;
 	__builtin_btg((unsigned int *)&LATA, 0);
 	fifo_putchar(&tx_fifo);
 	//if (can_test_receive)
 	//    print_rom_fifo("received CAN packet\r\n", &tx_fifo);
 	    if (can_test_receive())
 		print_rom_fifo("received CAN packet\r\n", &tx_fifo);
-	if (counter == 20000)
+	if (counter_can == 10) {
 	    can_test_send();
+            counter_can = 0;
+        }
 	if (counter == 50000) {
 	    print_rom_fifo("Hello dsPIC33 !\r\n", &tx_fifo);
 	    // print_debug_fifo(&tx_fifo);
-	    can_test_send();
+	    ClrWdt();
 	    counter = 0;
 	}
 	__delay_us(10);
