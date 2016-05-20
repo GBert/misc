@@ -8,13 +8,6 @@
  * this stuff is worth it, you can buy me a beer in return.
  */
 
-/*
- * Credit: 
- * In dieses Programm flossen Ideen von Gerhard Bertelsmann 
- * und seinem can2udp Projekt ebenso wie aus dem railuino 
- * Projekt von Joerg Pleumann.
- */
-
 #include <ifaddrs.h>
 #include <libgen.h>
 #include <stdio.h>
