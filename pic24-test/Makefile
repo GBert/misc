@@ -52,6 +52,7 @@ CTEMPS  = $(CSOURCE:.c=.s)
 
 COF     = $(TARGET:.hex=.cof)
 MAP     = $(TARGET:.hex=.map)
+LST     = $(TARGET:.hex=.lst)
 
 SIM30   = /opt/microchip/xc16/v1.21/bin/sim30
 SIM     = $(TARGET:.hex=.sim)
@@ -104,6 +105,9 @@ program-pi:build
 
 verify-pi:build
 	ssh ${PIHOST} p24 lvp verify < $(TARGET)
+
+dump:build
+	$(OBJDUMP) -S $(COF) > $(LST)
 
 sim:build
 	$(SIM30) $(SIM)

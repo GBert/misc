@@ -81,7 +81,7 @@ int main(void) {
 	//    print_rom_fifo("received CAN packet\r\n", &tx_fifo);
 	    if (can_test_receive())
 		print_rom_fifo("received CAN packet\r\n", &tx_fifo);
-	if (counter_can == 10) {
+	if (counter_can == 1000) {
 	    can_test_send();
             counter_can = 0;
         }
