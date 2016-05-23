@@ -106,9 +106,6 @@ program-pi:build
 verify-pi:build
 	ssh ${PIHOST} p24 lvp verify < $(TARGET)
 
-dump:build
-	$(OBJDUMP) -Msymbolic -S -D $(COF) > $(LST)
-
 sim:build
 	$(SIM30) $(SIM)
 
@@ -127,6 +124,9 @@ sim:build
 install:build
 
 uninstall:clean
+
+dump:build
+	$(OBJDUMP) -Msymbolic -S -D $(COF) > $(LST)
 
 clean:
 	@echo -n "[RM] "
