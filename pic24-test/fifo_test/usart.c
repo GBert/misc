@@ -36,6 +36,19 @@ char uart_putchar(unsigned char c) {
     return 0;
 }
 
+/* place char into fifo */
+char putchar_fifo(char c, struct serial_buffer_t *fifo) {
+    unsigned char head;
+    head = fifo->head;
+    head++;
+    if (head != fifo->tail) {
+	fifo->head = head;
+	fifo->data[head] = c;
+	return 1;
+    };
+    return 0;
+}
+
 /* prints char on USART */
 void uart_putchar_wait(unsigned char c) {
     while (U1STAbits.UTXBF) {
@@ -63,6 +76,19 @@ void uart_print_hex_wait(unsigned char c) {
     if (nibble >= 0x3a)
 	nibble += 7;
     uart_putchar_wait(nibble);
+}
+
+void print_hex_fifo(char c, struct serial_buffer_t *fifo) {
+    unsigned char nibble;
+    nibble = ((c & 0xf0) >> 4) + '0';
+    if (nibble >= 0x3a)
+	nibble += 7;
+    putchar_fifo(nibble, fifo);
+
+    nibble = (c & 0x0f) + '0';
+    if (nibble >= 0x3a)
+	nibble += 7;
+    putchar_fifo(nibble, fifo);
 }
 
 void print_debug_value(char c, unsigned char value) {
@@ -136,19 +162,6 @@ char print_rom_fifo(const char *s, struct serial_buffer_t *fifo) {
     }
     fifo->head = head;		/* only store new pointer if all is OK */
     return 1;
-}
-
-/* place char into fifo */
-char putchar_fifo(char c, struct serial_buffer_t *fifo) {
-    unsigned char head;
-    head = fifo->head;
-    head++;
-    if (head != fifo->tail) {
-	fifo->head = head;
-	fifo->data[head] = c;
-	return 1;
-    };
-    return 0;
 }
 
 /* put next char onto USART */

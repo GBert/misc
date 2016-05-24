@@ -48,6 +48,8 @@ void init_pps(void) {
 }
 
 int main(void) {
+    unsigned int fnrb = 0;
+    uint8_t temp;
     unsigned int counter = 0;
     unsigned int counter_can = 0;
     /* Init Clock */
@@ -77,11 +79,18 @@ int main(void) {
 	counter_can++;
 	__builtin_btg((unsigned int *)&LATA, 0);
 	fifo_putchar(&tx_fifo);
-	//if (can_test_receive)
-	//    print_rom_fifo("received CAN packet\r\n", &tx_fifo);
-	    if (can_test_receive())
-		print_rom_fifo("received CAN packet\r\n", &tx_fifo);
-	if (counter_can == 10) {
+        fnrb = can_test_receive();
+	if (counter == 50000) {
+	    if (fnrb != 0) {
+		print_rom_fifo("received CAN packet in : ", &tx_fifo);
+		temp = (fnrb >> 8) & 0xff;
+		print_hex_fifo(temp, &tx_fifo);
+		temp = fnrb & 0xff;
+		print_hex_fifo(temp, &tx_fifo);
+		print_rom_fifo("\r\n", &tx_fifo);
+	    }
+	}
+	if (counter_can == 50000) {
 	    can_test_send();
             counter_can = 0;
         }
