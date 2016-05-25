@@ -95,10 +95,10 @@ $(COBJECT):$(CHEADER) Makefile
 $(AOBJECT):Makefile
 
 program:build
-	p24 select 33EP128GP502 lvp  programm$(TARGET)
+	p24 select 33EP32GP502 lvp  programm$(TARGET)
 
 verify:build
-	p24 select 33EP128GP502 lvp verify $(TARGET)
+	p24 select 33EP32GP502 lvp verify $(TARGET)
 
 program-pi:build
 	ssh ${PIHOST} p24 lvp program < $(TARGET)
