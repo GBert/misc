@@ -1,0 +1,23 @@
+This program is based on a lot of previous work. Not only was I able to reuse a
+lot of code from these projects. But they also provided the required information
+to build this program. For this I like to thank all authors of these projects.
+
+c2prog
+------
+Wojciech M. Zabolotny (wzab@ise.pw.edu.pl)
+http://www.ise.pw.edu.pl/~wzab/cygnal/
+
+c2mon
+-----
+Matt Otto <matt@klox.net>
+Available from: http://www.ise.pw.edu.pl/~wzab/cygnal/
+
+ec2drv
+------
+Ricky White's
+http://ec2drv.sourceforge.net
+
+cycfx2prog
+----------
+Wolfgang Wieser
+http://www.triplespark.net/elec/periph/USB-FX2/software/
