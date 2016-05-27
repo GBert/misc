@@ -1,4 +1,0 @@
-# UDev rules to change permissions of Cypress EZ-USB FX2 development board to
-# allow everyone to use it.
-# Place in /etc/udev/rules.d
-SUBSYSTEMS=="usb", ATTRS{idVendor}=="04b4", ATTRS{idProduct}=="8613", MODE:="0666"

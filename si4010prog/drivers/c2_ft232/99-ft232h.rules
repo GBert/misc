@@ -1,4 +1,0 @@
-# Allow users to directly communicate with FTDI FT232H devices. This is needed
-# to run si4010prog with the ft232 C2 bus interface as a normal user.
-
-SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="0403", ATTR{idProduct}=="6014", MODE="0666"
