@@ -1,0 +1,14 @@
+c2prog.asm
+c2prog.ihx
+c2prog.lnk
+c2prog.map
+c2prog.mem
+
+timing_fx2_48mhz.asm
+uin.asm
+uout.asm
+
+*.lst
+*.rel
+*.rst
+*.sym
