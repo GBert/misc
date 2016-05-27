@@ -56,8 +56,6 @@ void c2_bus_set_error(struct c2_bus *bus, const char *msg)
 
 void c2_bus_set_perror(struct c2_bus *bus, const char *msg)
 {
-	int err = errno;
-
 	if (bus->error_msg != NULL) {
 		free(bus->error_msg);
 	}
