@@ -46,8 +46,8 @@
 #define PIN_DCD 0x40
 #define PIN_RI  0x80
 
-#define PIN_C2CK	PIN_DTR
-#define PIN_C2D		PIN_CTS
+#define PIN_C2CK	PIN_TX
+#define PIN_C2D		PIN_RX
 #define BAUD		450000
 
 // Bit sequences for INS commands
@@ -132,7 +132,7 @@ int c2_bus_ftdi_init(struct c2_bus *bus, const char *path)
 			goto bad2;
 		}
 	} else {
-		if (ftdi_usb_open_desc(hw->ftdi, 0x0403, 0x6014, NULL, NULL) < 0) {
+		if (ftdi_usb_open_desc(hw->ftdi, 0x0403, 0x6015, NULL, NULL) < 0) {
 			//TODO: c2_bus_set_error(bus, "ftdi_usb_open_desc failed: %s\n", 
 			//		ftdi_get_error_string(&ftdic));
 			c2_bus_set_error(bus, "ftdi_usb_open_desc failed");
