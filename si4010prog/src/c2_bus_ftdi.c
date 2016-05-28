@@ -26,7 +26,7 @@
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-//#define C2_FTDI_DEBUG
+#define C2_FTDI_DEBUG
 
 #include <stdio.h>
 #include <string.h>
@@ -38,7 +38,7 @@
 #include "c2_bus_module.h"
 
 #define PIN_TX  0x01  /* Orange wire on FTDI cable */
-#define PIX_RX  0x02  /* Yellow */
+#define PIN_RX  0x02  /* Yellow */
 #define PIN_RTS 0x04  /* Green */
 #define PIN_CTS 0x08  /* Brown */
 #define PIN_DTR 0x10
@@ -46,7 +46,7 @@
 #define PIN_DCD 0x40
 #define PIN_RI  0x80
 
-#define PIN_C2CK	PIN_TX
+#define PIN_C2CK	PIN_CTS
 #define PIN_C2D		PIN_RX
 #define BAUD		450000
 
