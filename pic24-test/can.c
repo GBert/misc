@@ -88,8 +88,8 @@ void init_can(void)
     // start Can
     //C1CTRL1bits.REQOP = CAN_OPMODE_LOOPBACK;
     //while (C1CTRL1bits.OPMODE != CAN_OPMODE_LOOPBACK);
-    C1CTRL1bits.REQOP = CAN_OPMODE_NORMAL;
-    while (C1CTRL1bits.OPMODE != CAN_OPMODE_NORMAL);
+    C1CTRL1bits.REQOP = CAN_OPMODE_LOOPBACK;
+    while (C1CTRL1bits.OPMODE != CAN_OPMODE_LOOPBACK);
 
     // Empfangspuffer leer setzen
     C1RXFUL1 = 0;
