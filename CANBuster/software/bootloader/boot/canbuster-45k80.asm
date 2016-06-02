@@ -42,7 +42,7 @@ BOOTSIZE        EQU     (8 * 64)
 ; Boot Loader Ident
 ;ERRORLEVEL      -220
 ;                ORG     0x200000
-;                DB      7,7,7
+;                DB      6,6,6
 ;ERRORLEVEL      +220
 
 ERRORLEVEL      -302
@@ -53,7 +53,7 @@ ERRORLEVEL      -302
 ;------------------------------------------------------------------------------
 
 ; PCB Version
-#DEFINE         PCBV        1
+#DEFINE         PCBV        2
 
 ; Clock Rate
 #DEFINE         CLOCK       64000000
