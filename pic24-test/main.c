@@ -11,12 +11,23 @@
 #include "can.h"
 #include "usart.h"
 
+#if 1
+// Select Internal FRC at POR
+_FOSCSEL(FNOSC_PRIPLL & IESO_OFF)
+// Enable Clock Switching and Configure POSC in XT mode
+_FOSC(FCKSM_CSECMD & OSCIOFNC_ON & POSCMD_EC)
+#else
 // Select Internal FRC at POR
 _FOSCSEL(FNOSC_FRC & IESO_OFF)
-// Enable Clock Switching and Configure POSC in XT mode
-_FOSC(FCKSM_CSECMD & OSCIOFNC_OFF & POSCMD_XT)
+// Enable Clock Switching and Configure Primary Oscillator in XT mode
+_FOSC(FCKSM_CSECMD & OSCIOFNC_OFF & POSCMD_NONE)
+
+_FWDT(FWDTEN_OFF)
+#endif 
 
 struct serial_buffer_t tx_fifo, rx_fifo;
+unsigned int counter = 0;
+unsigned int counter_can = 0;
 
 void init_io(void) {
     /* ADC1 Digital Mode */
@@ -48,17 +59,15 @@ void init_pps(void) {
 }
 
 int main(void) {
-    unsigned int counter = 0;
-    unsigned int counter_can = 0;
     /* Init Clock */
-    PLLFBD = PLL_DIV;
-    CLKDIVbits.PLLPOST = PLL_POST;
-    CLKDIVbits.PLLPRE = PLL_PRE;
+    PLLFBD = 126;
+    CLKDIVbits.PLLPOST = 0;
+    CLKDIVbits.PLLPRE = 1;
 
     __builtin_write_OSCCONH(0x03);
     __builtin_write_OSCCONL(OSCCON | 0x01);
 
-    while (OSCCONbits.COSC != 0x03) ;
+    while (OSCCONbits.COSC != 3) ;
     while (OSCCONbits.LOCK != 1) ;
 
     tx_fifo.head=0;
@@ -73,24 +82,31 @@ int main(void) {
     init_can();
 
     while (true) {
+
 	counter++;
 	counter_can++;
-	__builtin_btg((unsigned int *)&LATA, 0);
 	fifo_putchar(&tx_fifo);
-	//if (can_test_receive)
-	//    print_rom_fifo("received CAN packet\r\n", &tx_fifo);
-	    if (can_test_receive())
-		print_rom_fifo("received CAN packet\r\n", &tx_fifo);
-	if (counter_can == 1000) {
+	if (can_test_receive())
+	    print_rom_fifo("received CAN packet\r\n", &tx_fifo);
+	if (counter_can == 30000) {
 	    can_test_send();
-            counter_can = 0;
-        }
+	    counter_can = 0;
+	}
 	if (counter == 50000) {
 	    print_rom_fifo("Hello dsPIC33 !\r\n", &tx_fifo);
-	    // print_debug_fifo(&tx_fifo);
-	    ClrWdt();
+	    //print_debug_fifo(&tx_fifo);
+	    // ClrWdt();
 	    counter = 0;
 	}
 	__delay_us(10);
+
+	__builtin_btg((unsigned int *)&LATA, 0);
+	__builtin_btg((unsigned int *)&LATA, 0);
+	__builtin_btg((unsigned int *)&LATA, 0);
+	__builtin_btg((unsigned int *)&LATA, 0);
+	__builtin_btg((unsigned int *)&LATA, 0);
+	__builtin_btg((unsigned int *)&LATA, 0);
+	__builtin_btg((unsigned int *)&LATA, 0);
+	__builtin_btg((unsigned int *)&LATA, 0);
     }
 }
