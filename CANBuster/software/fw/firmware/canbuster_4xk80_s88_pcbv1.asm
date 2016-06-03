@@ -35,8 +35,6 @@
 ; Device settings
 ;------------------------------------------------------------------------------
 
-#DEFINE         PWM_FW      1
-
 ; Clock Rate
 #DEFINE         CLOCK       64000000
 
@@ -68,7 +66,7 @@
 #DEFINE		PIO	    1
 #DEFINE		LEDHIGH     1
 #DEFINE		PIOINVERT   1
-#DEFINE		PCBV        2
+#DEFINE		PCBV        1
 
 ;------------------------------------------------------------------------------
 ; Device firmware
