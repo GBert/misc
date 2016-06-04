@@ -119,7 +119,7 @@ NORM_POINTER1
 
 SYSYTEM_CMD
                 RCALL   CHECK_ID
-                BNZ	SYSYTEM_CMD_OTHER
+                BNZ	SYSYTEM_CMD_EXIT
                 ; Configuration DLC = 8 & Sub Command 0x0b
                 ; DLC = 8
                 MOVF	CANFRAME+4,W
@@ -133,10 +133,14 @@ SYSYTEM_CMD_NEXT1
                 ; DLC = 6
                 MOVF	CANFRAME+4,W
                 XORLW	6
-                BNZ	SYSYTEM_CMD_NEXT1
+                BNZ	SYSYTEM_CMD_NEXT2
                 MOVF    CANFRAME+9,W
                 XORLW	0x80
                 BZ	CAN_REBOOT
+
+SYSYTEM_CMD_NEXT2
+SYSYTEM_CMD_EXIT
+                RETURN
 
                 ; for testing
 SYSYTEM_CMD_OTHER
