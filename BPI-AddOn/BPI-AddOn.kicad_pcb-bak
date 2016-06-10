@@ -1,4 +1,4 @@
-(kicad_pcb (version 4) (host pcbnew 4.0.2+dfsg1-stable)
+(kicad_pcb (version 4) (host pcbnew 4.0.1-stable)
 
   (general
     (links 122)
@@ -167,7 +167,7 @@
     (pad 1 thru_hole circle (at 0 0) (size 6 6) (drill 3.2) (layers *.Cu *.Mask F.SilkS))
   )
 
-  (module maerklin:minidin-10 (layer F.Cu) (tedit 5759B55F) (tstamp 5759950E)
+  (module maerklin:minidin-10 (layer F.Cu) (tedit 5759B765) (tstamp 5759950E)
     (at 110.236 86.78 90)
     (descr "Mini-Din 10 M*rklin")
     (path /57597A29)
@@ -219,7 +219,7 @@
     )
   )
 
-  (module maerklin:minidin-10 (layer F.Cu) (tedit 5759B572) (tstamp 57599528)
+  (module maerklin:minidin-10 (layer F.Cu) (tedit 5759B76B) (tstamp 57599528)
     (at 110.20044 101.258 90)
     (descr "Mini-Din 10 M*rklin")
     (path /57597911)
@@ -271,7 +271,7 @@
     )
   )
 
-  (module maerklin:minidin-10 (layer F.Cu) (tedit 5759B58D) (tstamp 57599542)
+  (module maerklin:minidin-10 (layer F.Cu) (tedit 5759B774) (tstamp 57599542)
     (at 110.216 115.674 90)
     (descr "Mini-Din 10 M*rklin")
     (path /57597B17)
@@ -323,7 +323,7 @@
     )
   )
 
-  (module maerklin:minidin-10 (layer F.Cu) (tedit 5759B59A) (tstamp 5759955C)
+  (module maerklin:minidin-10 (layer F.Cu) (tedit 5759B77A) (tstamp 5759955C)
     (at 110.20044 130.20384 90)
     (descr "Mini-Din 10 M*rklin")
     (path /57597A5F)
@@ -375,7 +375,7 @@
     )
   )
 
-  (module maerklin:minidin-10 (layer F.Cu) (tedit 5759B5AD) (tstamp 57599576)
+  (module maerklin:minidin-10 (layer F.Cu) (tedit 5759B781) (tstamp 57599576)
     (at 73.6426 130.9412 270)
     (descr "Mini-Din 10 M*rklin")
     (path /57597A96)
@@ -427,7 +427,7 @@
     )
   )
 
-  (module maerklin:minidin-10 (layer F.Cu) (tedit 5759B5B7) (tstamp 57599590)
+  (module maerklin:minidin-10 (layer F.Cu) (tedit 5759B78B) (tstamp 57599590)
     (at 73.6172 116.4124 270)
     (descr "Mini-Din 10 M*rklin")
     (path /57597ADC)
@@ -479,7 +479,7 @@
     )
   )
 
-  (module maerklin:minidin-7 (layer F.Cu) (tedit 5759B5D8) (tstamp 575995A7)
+  (module maerklin:minidin-7 (layer F.Cu) (tedit 5759B791) (tstamp 575995A7)
     (at 73.5 98.5 270)
     (descr "Mini-Din 7 M*rklin")
     (path /5759B2DA)
@@ -525,7 +525,7 @@
     )
   )
 
-  (module maerklin:minidin-7 (layer F.Cu) (tedit 5759B5D2) (tstamp 575995BE)
+  (module maerklin:minidin-7 (layer F.Cu) (tedit 5759B797) (tstamp 575995BE)
     (at 73.5 85 270)
     (descr "Mini-Din 7 M*rklin")
     (path /5759B435)
@@ -768,11 +768,11 @@
     (fp_line (start -1.27 11.43) (end -1.27 1.27) (layer F.SilkS) (width 0.15))
     (fp_line (start 1.27 1.27) (end -1.27 1.27) (layer F.SilkS) (width 0.15))
     (pad 1 thru_hole rect (at 0 0 90) (size 2.032 1.7272) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
-      (net 12 /5V))
+      (net 1 /Vcc))
     (pad 2 thru_hole oval (at 0 2.54 90) (size 2.032 1.7272) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 2 /GND))
     (pad 3 thru_hole oval (at 0 5.08 90) (size 2.032 1.7272) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
-      (net 1 /Vcc))
+      (net 12 /5V))
     (pad 4 thru_hole oval (at 0 7.62 90) (size 2.032 1.7272) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 5 /CANL))
     (pad 5 thru_hole oval (at 0 10.16 90) (size 2.032 1.7272) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
@@ -806,9 +806,9 @@
     (pad 2 thru_hole circle (at 3.5 -0.7) (size 2.4 2.4) (drill 1.2) (layers *.Cu *.Mask F.SilkS)
       (net 2 /GND))
     (pad 1 thru_hole rect (at 7 -0.7) (size 2.4 2.4) (drill 1.2) (layers *.Cu *.Mask F.SilkS)
-      (net 12 /5V))
-    (pad 3 thru_hole circle (at 0 -0.7) (size 2.4 2.4) (drill 1.2) (layers *.Cu *.Mask F.SilkS)
       (net 1 /Vcc))
+    (pad 3 thru_hole circle (at 0 -0.7) (size 2.4 2.4) (drill 1.2) (layers *.Cu *.Mask F.SilkS)
+      (net 12 /5V))
     (pad 4 thru_hole circle (at -3.5 -0.7) (size 2.4 2.4) (drill 1.2) (layers *.Cu *.Mask F.SilkS)
       (net 5 /CANL))
     (pad 5 thru_hole circle (at -7 -0.7) (size 2.4 2.4) (drill 1.2) (layers *.Cu *.Mask F.SilkS)
