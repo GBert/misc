@@ -307,7 +307,17 @@ CAN_PING2
                 ; if DLC != 8 -> return
                 MOVF	CANFRAME+4,W
                 XORLW	8
-                BZ	CAN_PING_CONT
+                BTFSS	STATUS,Z
+                RETURN
+                ; check for CS2.exe ping with response bit
+                ; cs2.exe ping looks like 00310000#xxxxxxxxxxxxEEEE
+                MOVF    CANFRAME+11,W
+                XORLW   0xEE
+                BTFSS	STATUS,Z
+                RETURN
+                MOVF    CANFRAME+12,W
+                XORLW   0xEE
+                BTFSS	STATUS,Z
                 RETURN
 
 CAN_PING_CONT
