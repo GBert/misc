@@ -8,6 +8,7 @@
  */
 
 #include <errno.h>
+#include <fcntl.h>
 #include <ifaddrs.h>
 #include <libgen.h>
 #include <stdio.h>
@@ -30,18 +31,22 @@
 #include <linux/i2c-dev.h>
 
 #define BIT(x)		(1<<x)
-#define MICRODELAY	15	/* clock frequency 1/MICRODELAY[us] */
+#define MICRODELAY	2000	/* clock frequency 1/MICRODELAY[us] */
+#define I2C_ADDRESS	0x20	/* default I2C bus number */
+#define I2C_BUS		1	/* default I2C bus number */
 #define MINDELAY	2	/* min delay in usec */
 #define MAXMODULES	4	/* max numbers of PI02 modules */
 #define MAXIPLEN	40	/* maximum IP string length */
 #define UDPPORT		15730
 /* the maximum amount of pin buffer - assuming 32 bit*/
-#define PIO_BUFFER	((MAXMODULES + 1) / 2)
+#define PIO_BUFFER	(MAXMODULES)
 
 uint32_t bus_ct0[PIO_BUFFER];
 uint32_t bus_ct1[PIO_BUFFER];
 uint32_t bus_actual[PIO_BUFFER];
 uint32_t bus_state[PIO_BUFFER];
+
+const char *i2c_dev_def_name = "/dev/i2c-";
 
 struct pio_t {
     struct sockaddr_in baddr;
@@ -57,11 +62,13 @@ struct pio_t {
 
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -vf [-b <bcast_addr/int>][-i <0|1>][-p <port>][-m <PIO2 modules>][-o <offset>]\n", prg);
-    fprintf(stderr, "   Version 1.2\n\n");
+    fprintf(stderr, "   Version 1.0\n\n");
+    fprintf(stderr, "         -a                  I2C address - default 0x%2x\n", I2C_ADDRESS);
+    fprintf(stderr, "         -n                  I2C bus number - default %d\n", I2C_BUS);
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -i [0|1]            invert signals - default 0 -> not inverting\n");
     fprintf(stderr, "         -e <event id>       using event id - default 0\n");
-    fprintf(stderr, "         -m <PIO2 modules>   number of connected S88 modules - default 1\n");
+    fprintf(stderr, "         -m <PIO2 modules>   number of connected SPI-PIO chips - default 2\n");
     fprintf(stderr, "         -o <offset>         number of PIO2 modules to skip in addressing - default 0\n");
     fprintf(stderr, "         -p <port>           destination port of the server - default %d\n", UDPPORT);
     fprintf(stderr, "         -t <time in usec>   microtiming in usec - default %d usec\n", MICRODELAY);
@@ -177,14 +184,18 @@ int analyze_data(struct pio_t *pio, int pio_bits) {
 }
 
 int main(int argc, char **argv) {
-    int utime, i, j;
+    int utime, i;
     int opt, ret;
     int modulcount = 1;
+    int i2c_bus = I2C_BUS;
+    int i2c_address = I2C_ADDRESS;
+    char *i2c_dev_name;
     struct sockaddr_in destaddr, *bsa;
     struct ifaddrs *ifap, *ifa;
     struct pio_t pio_data;
     char *udp_dst_address;
     char *bcast_interface;
+    int file, data_buf_start;
 
     const int on = 1;
 
@@ -216,8 +227,15 @@ int main(int argc, char **argv) {
     destaddr.sin_family = AF_INET;
     destaddr.sin_port = htons(destination_port);
 
-    while ((opt = getopt(argc, argv, "b:e:i:p:m:o:t:fvh?")) != -1) {
+    while ((opt = getopt(argc, argv, "a:n:b:e:i:p:m:o:t:fvh?")) != -1) {
 	switch (opt) {
+	case 'a':
+	    i2c_address = atoi(optarg) & 0xff;
+	    break;
+	case 'n':
+	    /* restict /dev/i2c-0 - /dev/i2c-7 */
+	    i2c_bus = atoi(optarg) & 0x07;
+	    break;
 	case 'p':
 	    destination_port = strtoul(optarg, (char **)NULL, 10);
 	    destaddr.sin_port = htons(destination_port);
@@ -238,7 +256,7 @@ int main(int argc, char **argv) {
 	    }
 	    break;
 	case 'e':
-	   pio_data.hash = atoi(optarg) & 0xffff;
+	    pio_data.hash = atoi(optarg) & 0xffff;
 	    break;
 	case 'i':
 	    pio_data.invert = atoi(optarg) & 1;
@@ -280,6 +298,16 @@ int main(int argc, char **argv) {
 	}
     }
 
+    i2c_dev_name = calloc((strlen(i2c_dev_def_name) + 2), 0);
+    if (!i2c_dev_name) {
+	fprintf(stderr, "can't alloc memory for I2C device name: %s\n", strerror(errno));
+	exit(EXIT_FAILURE);
+    }
+    strncpy(i2c_dev_name, i2c_dev_def_name, (strlen(i2c_dev_def_name)));
+    i2c_dev_name[strlen(i2c_dev_def_name)] = i2c_bus + 0x30;
+
+    printf("i2c device: %s\n", i2c_dev_name);
+    
     /* get the broadcast address */
     getifaddrs(&ifap);
     for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
@@ -331,28 +359,34 @@ int main(int argc, char **argv) {
 	}
     }
 
-    /* if (gpio_bpi_open("/dev/mem") < 0) {
-	fprintf(stderr, "Can't open IO mem: %s\n", strerror(errno));
+    if ((file = open(i2c_dev_name, O_RDWR)) < 0) {
+	fprintf(stderr, "failed to open I2C bus: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
-    */
 
     /* loop forever */
     while (1) {
-	usec_sleep(utime);
 	pio_data.count++;
-	/* get sensor data */
-	for (i = 0; i < modulcount; i++) {
-	    for (j = 0; j < 16; j++) {
-	    }
+	data_buf_start = 0;
+	if (ioctl(file, I2C_SLAVE, i2c_address) < 0) {
+	    fprintf(stderr, "failed to acquire bus access for address 0x%2x: %s\n", i2c_address, strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
+
+	for (i = 0; i<1; i++) {
+	    if (read(file,&bus_actual[data_buf_start],modulcount) != modulcount) {
+		fprintf(stderr, "failed to from I2C bus: %s\n", strerror(errno));
+		exit(EXIT_FAILURE);
+            }
+	    data_buf_start += modulcount;
 	}
 	/* now check data */
-	ret = analyze_data(&pio_data, modulcount * 16);
+	ret = analyze_data(&pio_data, modulcount * 8);
 	if (ret < 0) {
 	    fprintf(stderr, "problem sending event data - terminating\n");
 	    exit(EXIT_FAILURE);
 	}
-	usec_sleep(100 * utime);
+	usec_sleep(utime);
     }
     return 0;
 }

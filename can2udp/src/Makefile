@@ -61,7 +61,7 @@ ir-tester: ir-tester.o
 get-cs-config: crc-ccitt.o get-cs-config.o
 	$(CC) $(CFLAGS) -o get-cs-config crc-ccitt.o get-cs-config.o -lz
 
-po-i2c-udp: pio-i2c-udp.o
+pio-i2c-udp: pio-i2c-udp.o
 	$(CC) $(CFLAGS) -o pio-i2c-udp pio-i2c-udp.c
 
 s88udp-bpi: a20.o s88udp-bpi.o
