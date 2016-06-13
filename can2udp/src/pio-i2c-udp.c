@@ -66,7 +66,7 @@ void usage(char *prg) {
     fprintf(stderr, "         -a                  I2C address - default 0x%2x\n", I2C_ADDRESS);
     fprintf(stderr, "         -n                  I2C bus number - default %d\n", I2C_BUS);
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
-    fprintf(stderr, "         -i [0|1]            invert signals - default 0 -> not inverting\n");
+    fprintf(stderr, "         -i [0|1]            invert signals - default 1 -> inverting\n");
     fprintf(stderr, "         -e <event id>       using event id - default 0\n");
     fprintf(stderr, "         -m <PIO2 modules>   number of connected SPI-PIO chips - default 2\n");
     fprintf(stderr, "         -o <offset>         number of PIO2 modules to skip in addressing - default 0\n");
@@ -186,7 +186,7 @@ int analyze_data(struct pio_t *pio, int pio_bits) {
 int main(int argc, char **argv) {
     int utime, i;
     int opt, ret;
-    int modulcount = 1;
+    int modulcount = 2;
     int i2c_bus = I2C_BUS;
     int i2c_address = I2C_ADDRESS;
     char *i2c_dev_name;
@@ -204,11 +204,14 @@ int main(int argc, char **argv) {
 
     memset(&pio_data, 0, sizeof(pio_data));
     pio_data.background = 1;
+    pio_data.invert = 1;
+
     /* prepare debouncing buffer */
     memset(bus_actual, 0, sizeof(bus_actual));
     memset(bus_state, 0xff, sizeof(bus_state));
     memset(bus_ct0, 0xff, sizeof(bus_ct0));
     memset(bus_ct1, 0xff, sizeof(bus_ct1));
+
 
     udp_dst_address = (char *)calloc(MAXIPLEN, 1);
     if (!udp_dst_address) {
@@ -365,20 +368,43 @@ int main(int argc, char **argv) {
     }
 
     /* loop forever */
+    printf("modulcount: %d\n", modulcount);
     while (1) {
 	pio_data.count++;
 	data_buf_start = 0;
-	if (ioctl(file, I2C_SLAVE, i2c_address) < 0) {
-	    fprintf(stderr, "failed to acquire bus access for address 0x%2x: %s\n", i2c_address, strerror(errno));
-	    exit(EXIT_FAILURE);
-	}
+	uint32_t i2c_data_temp, i2c_data;
 
-	for (i = 0; i<1; i++) {
-	    if (read(file,&bus_actual[data_buf_start],modulcount) != modulcount) {
-		fprintf(stderr, "failed to from I2C bus: %s\n", strerror(errno));
+        i2c_data_temp = 0;
+	i2c_data = 0;
+
+	for (i = 0; i < modulcount ; i++) {
+	    /* printf("i2c address 0x%02x\n", i2c_address + i); */
+	    if (ioctl(file, I2C_SLAVE, i2c_address + i) < 0) {
+		fprintf(stderr, "failed to acquire bus access for address 0x%02x: %s\n", i2c_address, strerror(errno));
 		exit(EXIT_FAILURE);
-            }
-	    data_buf_start += modulcount;
+	    }
+
+	    uint8_t buffer = 0x12;
+            if ((write(file, &buffer , 1)) != 1) {
+		fprintf(stderr, "failed to to set reg address 0x%02x: %s\n", 0x12, strerror(errno));
+		exit(EXIT_FAILURE);
+	    }
+
+	    if (read(file, &i2c_data_temp, 2) != 2) {
+		fprintf(stderr, "failed to read from I2C bus: %s\n", strerror(errno));
+		exit(EXIT_FAILURE);
+	    }
+	    if (i & 1) {
+		i2c_data |= i2c_data_temp;
+		if (pio_data.invert)
+		    i2c_data ^= 0xffffffff;
+		bus_actual[data_buf_start] = i2c_data;
+
+		/* printf("%08d %02d data : 0x%08x\n", pio_data.count, i, bus_actual[data_buf_start]); */
+		data_buf_start++;
+	    } else {
+		i2c_data = i2c_data_temp << 16;
+	    }
 	}
 	/* now check data */
 	ret = analyze_data(&pio_data, modulcount * 8);
