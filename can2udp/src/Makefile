@@ -1,5 +1,5 @@
 BINS := can-bounce-test can2eth can2udp can4lnx2udp clone-cs2-config gb2-update ir-tester bpi-rs485 scan2lan can2lan ms2wifi\
-        virtual_canbuster virtual_gfp virtual_links88 virtual_ms2 get-cs-data get-cs-config s88udp-bpi s88test-bpi wake-up-links88
+        virtual_canbuster virtual_gfp virtual_links88 virtual_ms2 get-cs-data get-cs-config pio-i2c-udp s88udp-bpi s88test-bpi wake-up-links88
 
 BIN = $@
 
@@ -60,6 +60,9 @@ ir-tester: ir-tester.o
 
 get-cs-config: crc-ccitt.o get-cs-config.o
 	$(CC) $(CFLAGS) -o get-cs-config crc-ccitt.o get-cs-config.o -lz
+
+po-i2c-udp: pio-i2c-udp.o
+	$(CC) $(CFLAGS) -o pio-i2c-udp pio-i2c-udp.c
 
 s88udp-bpi: a20.o s88udp-bpi.o
 	$(CC) $(CFLAGS) -o s88udp a20.o s88udp-bpi.o
