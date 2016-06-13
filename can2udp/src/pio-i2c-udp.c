@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 - 2016 Gerhard Bertelsmann
+ * Copyright 2016 Gerhard Bertelsmann
  *
  * "THE BEER-WARE LICENSE" (Revision 42):
  * Siegfried Lohberg wrote this file. As long as you retain this notice you
