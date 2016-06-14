@@ -128,6 +128,8 @@ DO_HEARTBEAT
                 CPFSGT	HEARTBEAT
                 BRA	STATUS_LED_OFF
 
+                RETURN
+
 STATUS_LED_OFF
                 BSF	LATC, LED
                 RETURN

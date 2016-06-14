@@ -36,7 +36,7 @@ CANINSPECT
                 BTFSC   STATUS,Z
                 BRA     SYSYTEM_CMD
 
-                ; Switch Accessoir  0x1B (Zubehoer schalten)?
+                ; Switch Accessoir 0x16 (Zubehoer schalten)?
                 MOVF	CANFRAME+1,W
                 XORLW	0x16
                 BTFSC   STATUS,Z
@@ -170,28 +170,28 @@ SYSYTEM_CMD_OTHER
 
 SETUP_VALUE
                 ; setup ID request ?
-                MOVLW   0x00
+                MOVLW   0x01
                 XORWF   CANFRAME+10,W
                 BNZ     SETUP_VALUE_CONT1
                 MOVFF   CANFRAME+11,ID_H
                 MOVFF   CANFRAME+12,ID_L
                 BRA     SETUP_VALUE_WRITE
 SETUP_VALUE_CONT1
-                MOVLW   0x01
+                MOVLW   0x02
                 XORWF   CANFRAME+10,W
                 BNZ     SETUP_VALUE_CONT2
                 MOVFF   CANFRAME+11,PIOC_H
                 MOVFF   CANFRAME+12,PIOC_L
                 BRA     SETUP_VALUE_WRITE
 SETUP_VALUE_CONT2
-                MOVLW   0x02
+                MOVLW   0x03
                 XORWF   CANFRAME+10,W
                 BNZ     SETUP_VALUE_CONT3
                 MOVFF   CANFRAME+11,S88C_H
                 MOVFF   CANFRAME+12,S88C_L
                 BRA     SETUP_VALUE_WRITE
 SETUP_VALUE_CONT3
-                MOVLW   0x03
+                MOVLW   0x04
                 XORWF   CANFRAME+10,W
                 BNZ     SETUP_VALUE_CONT4
                 MOVFF   CANFRAME+12,SCAN_INTERVAL
@@ -205,7 +205,7 @@ SETUP_VALUE_WRITE
                 CALL    SET_UID
                 CALL    READCANHASH
 
-SETUP_VALUE_TEST
+SETUP_VALUE_RESPONSE
                 MOVFF   EVENTPP,FSR0H
                 MOVFF   EVENTPP+1,FSR0L
                 CLRF	POSTINC0
@@ -219,8 +219,8 @@ SETUP_VALUE_TEST
                 MOVFF   CANFRAME+6,POSTINC0
                 MOVFF   CANFRAME+7,POSTINC0
                 MOVFF   CANFRAME+8,POSTINC0
-                MOVFF   CANFRAME+11,POSTINC0
-                MOVFF   CANFRAME+12,POSTINC0
+                MOVFF   CANFRAME+9,POSTINC0
+                MOVFF   CANFRAME+10,POSTINC0
                 ; 1 -> success
                 MOVLW   1
                 MOVWF   POSTINC0
