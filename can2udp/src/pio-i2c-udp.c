@@ -31,7 +31,7 @@
 #include <linux/i2c-dev.h>
 
 #define BIT(x)		(1<<x)
-#define MICRODELAY	2000	/* clock frequency 1/MICRODELAY[us] */
+#define MICRODELAY	5000	/* clock frequency [us] */
 #define I2C_ADDRESS	0x20	/* default I2C bus number */
 #define I2C_BUS		1	/* default I2C bus number */
 #define MINDELAY	2	/* min delay in usec */
@@ -68,7 +68,7 @@ void usage(char *prg) {
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -i [0|1]            invert signals - default 1 -> inverting\n");
     fprintf(stderr, "         -e <event id>       using event id - default 0\n");
-    fprintf(stderr, "         -m <PIO2 modules>   number of connected SPI-PIO chips - default 2\n");
+    fprintf(stderr, "         -m <PIO chips>      number of connected SPI-PIO chips - default 2\n");
     fprintf(stderr, "         -o <offset>         number of PIO2 modules to skip in addressing - default 0\n");
     fprintf(stderr, "         -p <port>           destination port of the server - default %d\n", UDPPORT);
     fprintf(stderr, "         -t <time in usec>   microtiming in usec - default %d usec\n", MICRODELAY);
@@ -85,7 +85,6 @@ void usec_sleep(int usec) {
 }
 
 int time_stamp(void) {
-    /* char *timestamp = (char *)malloc(sizeof(char) * 16); */
     struct timeval tv;
     struct tm *tm;
 
@@ -184,18 +183,18 @@ int analyze_data(struct pio_t *pio, int pio_bits) {
 }
 
 int main(int argc, char **argv) {
-    int utime, i;
-    int opt, ret;
-    int modulcount = 2;
+    int utime, i, opt, ret;
+    int pio_chips = 2;
     int i2c_bus = I2C_BUS;
     int i2c_address = I2C_ADDRESS;
     char *i2c_dev_name;
     struct sockaddr_in destaddr, *bsa;
     struct ifaddrs *ifap, *ifa;
     struct pio_t pio_data;
-    char *udp_dst_address;
-    char *bcast_interface;
+    char *udp_dst_address, *bcast_interface;
     int file, data_buf_start;
+    uint32_t i2c_data_temp, i2c_data;
+    uint8_t buffer = 0x12;
 
     const int on = 1;
 
@@ -211,7 +210,6 @@ int main(int argc, char **argv) {
     memset(bus_state, 0xff, sizeof(bus_state));
     memset(bus_ct0, 0xff, sizeof(bus_ct0));
     memset(bus_ct1, 0xff, sizeof(bus_ct1));
-
 
     udp_dst_address = (char *)calloc(MAXIPLEN, 1);
     if (!udp_dst_address) {
@@ -265,8 +263,8 @@ int main(int argc, char **argv) {
 	    pio_data.invert = atoi(optarg) & 1;
 	    break;
 	case 'm':
-	    modulcount = atoi(optarg);
-	    if (modulcount < 1 || modulcount > MAXMODULES) {
+	    pio_chips = atoi(optarg);
+	    if (pio_chips < 1 || pio_chips > MAXMODULES) {
 		usage(basename(argv[0]));
 		exit(EXIT_FAILURE);
 	    }
@@ -309,8 +307,9 @@ int main(int argc, char **argv) {
     strncpy(i2c_dev_name, i2c_dev_def_name, (strlen(i2c_dev_def_name)));
     i2c_dev_name[strlen(i2c_dev_def_name)] = i2c_bus + 0x30;
 
-    printf("i2c device: %s\n", i2c_dev_name);
-    
+    if (!pio_data.background && pio_data.verbose)
+	printf("i2c device: %s\n", i2c_dev_name);
+
     /* get the broadcast address */
     getifaddrs(&ifap);
     for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
@@ -367,25 +366,26 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     }
 
+    if (!pio_data.background && pio_data.verbose)
+	printf("PIO ICs: %d , timing: %.1f ms\n", pio_chips, (float )utime / 1000);
+
     /* loop forever */
-    printf("modulcount: %d\n", modulcount);
     while (1) {
 	pio_data.count++;
 	data_buf_start = 0;
-	uint32_t i2c_data_temp, i2c_data;
 
-        i2c_data_temp = 0;
+	i2c_data_temp = 0;
 	i2c_data = 0;
 
-	for (i = 0; i < modulcount ; i++) {
+	for (i = 0; i < pio_chips; i++) {
 	    /* printf("i2c address 0x%02x\n", i2c_address + i); */
 	    if (ioctl(file, I2C_SLAVE, i2c_address + i) < 0) {
 		fprintf(stderr, "failed to acquire bus access for address 0x%02x: %s\n", i2c_address, strerror(errno));
 		exit(EXIT_FAILURE);
 	    }
 
-	    uint8_t buffer = 0x12;
-            if ((write(file, &buffer , 1)) != 1) {
+	    buffer = 0x12;
+	    if ((write(file, &buffer, 1)) != 1) {
 		fprintf(stderr, "failed to to set reg address 0x%02x: %s\n", 0x12, strerror(errno));
 		exit(EXIT_FAILURE);
 	    }
@@ -407,7 +407,7 @@ int main(int argc, char **argv) {
 	    }
 	}
 	/* now check data */
-	ret = analyze_data(&pio_data, modulcount * 8);
+	ret = analyze_data(&pio_data, pio_chips * 16);
 	if (ret < 0) {
 	    fprintf(stderr, "problem sending event data - terminating\n");
 	    exit(EXIT_FAILURE);
