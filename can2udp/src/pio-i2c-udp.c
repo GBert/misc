@@ -395,7 +395,7 @@ int main(int argc, char **argv) {
 		exit(EXIT_FAILURE);
 	    }
 	    if (i & 1) {
-		i2c_data |= i2c_data_temp;
+		i2c_data |= htons(i2c_data_temp);
 		if (pio_data.invert)
 		    i2c_data ^= 0xffffffff;
 		bus_actual[data_buf_start] = i2c_data;
@@ -403,7 +403,7 @@ int main(int argc, char **argv) {
 		/* printf("%08d %02d data : 0x%08x\n", pio_data.count, i, bus_actual[data_buf_start]); */
 		data_buf_start++;
 	    } else {
-		i2c_data = i2c_data_temp << 16;
+		i2c_data = htons(i2c_data_temp) << 16;
 	    }
 	}
 	/* now check data */
