@@ -135,7 +135,7 @@ int create_event(struct pio_t *pio, int bus, int offset, uint32_t changed_bits, 
     netframe[11] = 0;
     netframe[12] = 0;
 
-    mask = BIT(31);
+    mask = BIT(0);
     for (i = 0; i < 32; i++) {
 	if (changed_bits & mask) {
 	    temp16 = htons(pio->hw_id);
@@ -158,7 +158,7 @@ int create_event(struct pio_t *pio, int bus, int offset, uint32_t changed_bits, 
 	    if (!pio->background)
 		print_net_frame(netframe, pio->count);
 	}
-	mask >>= 1;
+	mask <<= 1;
     }
     return 0;
 }
@@ -395,7 +395,7 @@ int main(int argc, char **argv) {
 		exit(EXIT_FAILURE);
 	    }
 	    if (i & 1) {
-		i2c_data |= htons(i2c_data_temp);
+		i2c_data |= i2c_data_temp << 16;
 		if (pio_data.invert)
 		    i2c_data ^= 0xffffffff;
 		bus_actual[data_buf_start] = i2c_data;
@@ -403,7 +403,7 @@ int main(int argc, char **argv) {
 		/* printf("%08d %02d data : 0x%08x\n", pio_data.count, i, bus_actual[data_buf_start]); */
 		data_buf_start++;
 	    } else {
-		i2c_data = htons(i2c_data_temp) << 16;
+		i2c_data = i2c_data_temp & 0xffff;
 	    }
 	}
 	/* now check data */
