@@ -6,12 +6,11 @@ START=99
 start() {
 	[ -e /opt/rocrail/ ] && {
 		cd /opt/rocrail/
-		sleep 15
-		nohup ./rocrail -nodevcheck -l /opt/rocrail 2>&1 > /dev/null &
-		echo "$!" > /tmp/rocraild.pid
+		nohup ./rocnetnode 2>&1 > /dev/null &
+		echo "$!" > /tmp/rocnetnode.pid
 	}
 }
 
 stop() {
-	killall rocrail
+	killall rocnetnode
 }
