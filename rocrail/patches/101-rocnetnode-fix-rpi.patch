@@ -1,0 +1,27 @@
+Index: rocrail/rocnetnode/impl/ip.c
+===================================================================
+--- rocrail.orig/rocnetnode/impl/ip.c	2016-06-14 15:53:10.000000000 +0200
++++ rocrail/rocnetnode/impl/ip.c	2016-06-16 14:33:43.541700480 +0200
+@@ -31,13 +31,15 @@
+     getifaddrs(&ifAddrStruct);
+ 
+     for (ifa = ifAddrStruct; ifa != NULL; ifa = ifa->ifa_next) {
+-        if (ifa ->ifa_addr->sa_family==AF_INET) {
+-            tmpAddrPtr=&((struct sockaddr_in *)ifa->ifa_addr)->sin_addr;
+-            inet_ntop(AF_INET, tmpAddrPtr, addressBuffer, INET_ADDRSTRLEN);
+-            if( StrOp.len(addressBuffer) > 0 && !StrOp.equals(addressBuffer, "127.0.0.1") ) {
+-              if (ifAddrStruct!=NULL)
+-                freeifaddrs(ifAddrStruct);
+-              return addressBuffer;
++        if (ifa ->ifa_addr) {
++            if (ifa ->ifa_addr->sa_family==AF_INET) {
++                tmpAddrPtr=&((struct sockaddr_in *)ifa->ifa_addr)->sin_addr;
++                inet_ntop(AF_INET, tmpAddrPtr, addressBuffer, INET_ADDRSTRLEN);
++                if( StrOp.len(addressBuffer) > 0 && !StrOp.equals(addressBuffer, "127.0.0.1") ) {
++                  if (ifAddrStruct!=NULL)
++                    freeifaddrs(ifAddrStruct);
++                  return addressBuffer;
++                }
+             }
+         }
+     }
