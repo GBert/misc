@@ -367,7 +367,7 @@ int main(int argc, char **argv) {
     }
 
     if (!pio_data.background && pio_data.verbose)
-	printf("PIO ICs: %d , timing: %.1f ms\n", pio_chips, (float )utime / 1000);
+	printf("PIO ICs: %d , timing: %.1f ms\n", pio_chips, (float)utime / 1000);
 
     /* loop forever */
     while (1) {
