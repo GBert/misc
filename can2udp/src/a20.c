@@ -51,8 +51,8 @@ static uint32_t gpio_cfg[GPIO_BPI_NPINS], gpio_dat[GPIO_BPI_NPINS], gpio_pull[GP
 int gpio_bpi_open(const char *device) {
     uint32_t i;
     uint16_t ofs;
-   
-    /* Open /dev/mem */
+
+    /* open /dev/mem */
     gpio_mem = open(device, O_RDWR | O_SYNC);
     if (gpio_mem < 0) {
 	printf("%s: warning: open failed [%s]\n", __func__, strerror(errno));
