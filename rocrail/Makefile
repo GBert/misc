@@ -154,6 +154,7 @@ define Package/rocnetnode/install
 	$(INSTALL_DIR) $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/rocnetnode $(1)/opt/rocrail
 	$(INSTALL_BIN) ./config/rocnetnode.ini $(1)/opt/rocrail
+	$(INSTALL_DIR) $(1)/root
 	$(INSTALL_BIN) ./config/rocnetnode.init $(1)/root/rocnetnode
 endef
 
