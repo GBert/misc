@@ -1961,12 +1961,12 @@
     )
   )
 
-  (module Pin_Headers:Pin_Header_Straight_1x06 (layer F.Cu) (tedit 57641F86) (tstamp 5766F294)
+  (module Pin_Headers:Pin_Header_Straight_1x06 (layer F.Cu) (tedit 5766B81B) (tstamp 5766F294)
     (at 162.5 99)
     (descr "Through hole pin header")
     (tags "pin header")
     (path /576518E4)
-    (fp_text reference P22 (at 0 -5.1) (layer F.SilkS)
+    (fp_text reference P22 (at -0.04 -2.53) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value CONN_01X06 (at 0 -3.1) (layer F.Fab) hide
