@@ -2236,4 +2236,6 @@ Wire Wire Line
 	3800 3950 3500 3950
 Wire Wire Line
 	3500 3950 3500 4050
+Text Label 4900 7350 1    60   ~ 0
+GNDB
 $EndSCHEMATC

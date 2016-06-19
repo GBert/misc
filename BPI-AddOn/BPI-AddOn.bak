@@ -820,7 +820,7 @@ U 1 1 575C164D
 P 1150 7450
 F 0 "F1" H 1250 7500 50  0000 C CNN
 F 1 "FUSE" H 1050 7400 50  0000 C CNN
-F 2 "Fuse_Holders_and_Fuses:BladeFuse-Mini" H 1150 7450 50  0001 C CNN
+F 2 "w_capacitors:cnp_6mm_disc" H 1150 7450 50  0001 C CNN
 F 3 "" H 1150 7450 50  0000 C CNN
 	1    1150 7450
 	1    0    0    -1  
@@ -831,7 +831,7 @@ U 1 1 575C2438
 P 2550 6150
 F 0 "F2" H 2650 6200 50  0000 C CNN
 F 1 "FUSE" H 2450 6100 50  0000 C CNN
-F 2 "Fuse_Holders_and_Fuses:BladeFuse-Mini" H 2550 6150 50  0001 C CNN
+F 2 "w_capacitors:cnp_6mm_disc" H 2550 6150 50  0001 C CNN
 F 3 "" H 2550 6150 50  0000 C CNN
 	1    2550 6150
 	1    0    0    -1  
