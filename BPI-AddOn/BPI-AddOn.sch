@@ -375,25 +375,25 @@ Vcc
 Text Label 850  4550 0    60   ~ 0
 Vcc
 Text Label 850  2600 0    60   ~ 0
-GND
+GNDA
 Text Label 850  3000 0    60   ~ 0
-GND
+GNDA
 Text Label 1800 2600 0    60   ~ 0
-GND
+GNDA
 Text Label 1800 3000 0    60   ~ 0
-GND
+GNDA
 Text Label 850  4250 0    60   ~ 0
-GND
+GNDA
 Text Label 850  4650 0    60   ~ 0
-GND
+GNDA
 Text Label 2750 900  0    60   ~ 0
-GND
+GNDA
 Text Label 2750 2600 0    60   ~ 0
-GND
+GNDA
 Text Label 2750 1300 0    60   ~ 0
-GND
+GNDA
 Text Label 2750 3000 0    60   ~ 0
-GND
+GNDA
 Text Label 2750 800  0    60   ~ 0
 Vcc
 Text Label 2750 2500 0    60   ~ 0
@@ -445,13 +445,13 @@ GS0
 Text Label 850  4750 0    60   ~ 0
 GS0
 Text Label 850  900  0    60   ~ 0
-GND
+GNDA
 Text Label 850  1300 0    60   ~ 0
-GND
+GNDA
 Text Label 1800 1300 0    60   ~ 0
-GND
+GNDA
 Text Label 1800 900  0    60   ~ 0
-GND
+GNDA
 Text Label 2750 2900 0    60   ~ 0
 GS0
 $Comp
@@ -511,9 +511,9 @@ CANL
 Text Label 5350 5550 1    60   ~ 0
 CANL
 Text Label 4000 5550 1    60   ~ 0
-GND
+GNDA
 Text Label 5050 5550 1    60   ~ 0
-GND
+GNDA
 $Comp
 L CONN_01X03 P9
 U 1 1 5759E792
@@ -563,7 +563,7 @@ Text Label 3000 7200 0    60   ~ 0
 Text Label 3500 2500 0    60   ~ 0
 5V
 Text Label 3500 2400 0    60   ~ 0
-GND
+GNDA
 $Comp
 L CONN_01X05 P11
 U 1 1 5759CE72
@@ -589,7 +589,7 @@ $EndComp
 Text Label 3500 3300 0    60   ~ 0
 5V
 Text Label 3500 3200 0    60   ~ 0
-GND
+GNDA
 Text Label 3500 3100 0    60   ~ 0
 Vcc
 Text Label 3500 2300 0    60   ~ 0
@@ -825,7 +825,7 @@ Vdd
 Text Label 4400 3100 0    60   ~ 0
 Vcc
 Text Label 4400 3200 0    60   ~ 0
-GND
+GNDA
 Text Label 4400 3300 0    60   ~ 0
 5V
 Text Label 4400 3400 0    60   ~ 0
@@ -835,7 +835,7 @@ CANH
 Text Label 4400 2300 0    60   ~ 0
 Vcc
 Text Label 4400 2400 0    60   ~ 0
-GND
+GNDA
 Text Label 4400 2500 0    60   ~ 0
 5V
 Text Label 4400 2600 0    60   ~ 0
@@ -1094,9 +1094,9 @@ CANL
 Text Label 2750 4450 0    60   ~ 0
 CANH
 Text Label 2750 4250 0    60   ~ 0
-GND
+GNDA
 Text Label 2750 4650 0    60   ~ 0
-GND
+GNDA
 Text Label 2750 4150 0    60   ~ 0
 Vcc
 Text Label 2750 4350 0    60   ~ 0
