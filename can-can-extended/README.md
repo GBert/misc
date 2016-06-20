@@ -1,8 +1,8 @@
 Extendend CAN CAN Interface
 ===========================
 
-Simple CAN-CAN Intrerface for  Gleisbox
+Einfaches CAN-CAN Interface für Gleisbox
 
-[![alt text](https://github.com/GBert/EasyCAN/blob/master/pictures/easycan_board_front_t.jpg "PCB front")](https://raw.githubusercontent.com/GBert/EasyCAN/master/pictures/easycan_board_front.jpg)
+[![alt text](https://github.com/GBert/misc/raw/master/can-can-extended/pictures/USB-GBox2-DIL-Proto_I.jpg "USB-Gleixbox")](https://github.com/GBert/misc/raw/master/can-can-extended/pictures/USB-GBox2-DIL-Proto_I_s_s.jpg)
 
 
