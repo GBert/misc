@@ -483,11 +483,7 @@ Entry Wire Line
 Entry Wire Line
 	3700 5750 3800 5650
 Entry Wire Line
-	3800 5750 3900 5650
-Entry Wire Line
 	3900 5750 4000 5650
-Entry Wire Line
-	4000 5750 4100 5650
 Entry Wire Line
 	4100 5750 4200 5650
 Entry Wire Line
@@ -499,11 +495,7 @@ Entry Wire Line
 Entry Wire Line
 	4750 5750 4850 5650
 Entry Wire Line
-	4850 5750 4950 5650
-Entry Wire Line
 	4950 5750 5050 5650
-Entry Wire Line
-	5050 5750 5150 5650
 Entry Wire Line
 	5150 5750 5250 5650
 Entry Wire Line
@@ -519,10 +511,6 @@ CANL
 Text Label 5350 5550 1    60   ~ 0
 CANL
 Text Label 4000 5550 1    60   ~ 0
-GND
-Text Label 3900 5550 1    60   ~ 0
-GND
-Text Label 4950 5550 1    60   ~ 0
 GND
 Text Label 5050 5550 1    60   ~ 0
 GND
@@ -564,12 +552,8 @@ Text Label 3700 5550 1    60   ~ 0
 GSB
 Text Label 4750 5550 1    60   ~ 0
 GSB
-Text Label 4100 5550 1    60   ~ 0
-J1_V
 Text Label 4200 5550 1    60   ~ 0
 J1_V
-Text Label 5150 5550 1    60   ~ 0
-J2_V
 Text Label 5250 5550 1    60   ~ 0
 J2_V
 Text Label 3000 6600 0    60   ~ 0
@@ -740,23 +724,23 @@ $EndComp
 $Comp
 L BARREL_JACK CON1
 U 1 1 575B93EA
-P 1550 6400
-F 0 "CON1" H 1550 6650 50  0000 C CNN
-F 1 "BARREL_JACK" H 1550 6200 50  0000 C CNN
-F 2 "w_conn_misc:dc_socket" H 1550 6400 50  0001 C CNN
-F 3 "" H 1550 6400 50  0000 C CNN
-	1    1550 6400
+P 1550 6450
+F 0 "CON1" H 1550 6700 50  0000 C CNN
+F 1 "BARREL_JACK" H 1550 6250 50  0000 C CNN
+F 2 "w_conn_misc:dc_socket" H 1550 6450 50  0001 C CNN
+F 3 "" H 1550 6450 50  0000 C CNN
+	1    1550 6450
 	1    0    0    -1  
 $EndComp
 $Comp
 L GNDA #PWR011
 U 1 1 575B9523
-P 2100 6600
-F 0 "#PWR011" H 2100 6350 50  0001 C CNN
-F 1 "GNDA" H 2100 6450 50  0000 C CNN
-F 2 "" H 2100 6600 50  0000 C CNN
-F 3 "" H 2100 6600 50  0000 C CNN
-	1    2100 6600
+P 2100 6650
+F 0 "#PWR011" H 2100 6400 50  0001 C CNN
+F 1 "GNDA" H 2100 6500 50  0000 C CNN
+F 2 "" H 2100 6650 50  0000 C CNN
+F 3 "" H 2100 6650 50  0000 C CNN
+	1    2100 6650
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1221,12 +1205,12 @@ $EndComp
 $Comp
 L C C9
 U 1 1 57645485
-P 8000 5900
-F 0 "C9" H 8025 6000 50  0000 L CNN
-F 1 "100nF" H 8025 5800 50  0000 L CNN
-F 2 "Resistors_SMD:R_0805_HandSoldering" H 8038 5750 50  0001 C CNN
-F 3 "" H 8000 5900 50  0000 C CNN
-	1    8000 5900
+P 7300 4750
+F 0 "C9" H 7325 4850 50  0000 L CNN
+F 1 "100nF" H 7325 4650 50  0000 L CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" H 7338 4600 50  0001 C CNN
+F 3 "" H 7300 4750 50  0000 C CNN
+	1    7300 4750
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1340,12 +1324,12 @@ $EndComp
 $Comp
 L C C5
 U 1 1 57653A31
-P 7300 4750
-F 0 "C5" H 7325 4850 50  0000 L CNN
-F 1 "10nF" H 7325 4650 50  0000 L CNN
-F 2 "Resistors_SMD:R_0805_HandSoldering" H 7338 4600 50  0001 C CNN
-F 3 "" H 7300 4750 50  0000 C CNN
-	1    7300 4750
+P 8000 5900
+F 0 "C5" H 8025 6000 50  0000 L CNN
+F 1 "100nF" H 8025 5800 50  0000 L CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" H 8038 5750 50  0001 C CNN
+F 3 "" H 8000 5900 50  0000 C CNN
+	1    8000 5900
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1353,7 +1337,7 @@ L C C8
 U 1 1 57653AF9
 P 7600 4750
 F 0 "C8" H 7625 4850 50  0000 L CNN
-F 1 "10nF" H 7625 4650 50  0000 L CNN
+F 1 "4.7uF" H 7625 4650 50  0000 L CNN
 F 2 "Resistors_SMD:R_0805_HandSoldering" H 7638 4600 50  0001 C CNN
 F 3 "" H 7600 4750 50  0000 C CNN
 	1    7600 4750
@@ -1766,11 +1750,7 @@ Wire Wire Line
 Wire Wire Line
 	3800 5300 3800 5650
 Wire Wire Line
-	3900 5300 3900 5650
-Wire Wire Line
 	4000 5300 4000 5650
-Wire Wire Line
-	4100 5300 4100 5650
 Wire Wire Line
 	4200 5300 4200 5650
 Wire Wire Line
@@ -1782,11 +1762,7 @@ Wire Wire Line
 Wire Wire Line
 	4850 5300 4850 5650
 Wire Wire Line
-	4950 5300 4950 5650
-Wire Wire Line
 	5050 5300 5050 5650
-Wire Wire Line
-	5150 5300 5150 5650
 Wire Wire Line
 	5250 5300 5250 5650
 Wire Wire Line
@@ -1877,14 +1853,9 @@ Wire Wire Line
 Wire Wire Line
 	2000 6900 1900 6900
 Wire Wire Line
-	1850 6300 2100 6300
+	1850 6350 2100 6350
 Wire Wire Line
-	2100 6300 2100 6600
-Wire Wire Line
-	1850 6400 2100 6400
-Connection ~ 2100 6400
-Wire Wire Line
-	1850 6500 2400 6500
+	2100 6350 2100 6650
 Wire Wire Line
 	2400 7100 2300 7100
 Wire Wire Line
@@ -2089,17 +2060,12 @@ Connection ~ 7550 5450
 Wire Wire Line
 	7350 5650 7350 5350
 Connection ~ 7350 5350
-Wire Wire Line
-	6550 6000 7550 6000
 Connection ~ 7350 6000
 Wire Wire Line
 	7100 5950 7100 6000
 Connection ~ 7100 6000
 Wire Wire Line
 	7550 6000 7550 5950
-Wire Wire Line
-	6550 6000 6550 5850
-Connection ~ 6950 6000
 Wire Wire Line
 	10150 5050 10150 5150
 Wire Wire Line
@@ -2215,16 +2181,16 @@ Wire Wire Line
 Wire Wire Line
 	1800 4950 2050 4950
 Wire Wire Line
-	2050 4850 2050 4600
+	2050 4600 2050 4850
 Wire Wire Line
 	2050 4650 2200 4650
 Wire Wire Line
 	2200 4650 2200 4600
 Connection ~ 2050 4650
 Wire Wire Line
-	2200 4300 2200 4200
+	2200 4200 2200 4300
 Wire Wire Line
-	2200 4200 1800 4200
+	1800 4200 2200 4200
 Wire Wire Line
 	2050 4300 2050 4200
 Connection ~ 2050 4200
@@ -2238,4 +2204,20 @@ Wire Wire Line
 	3500 3950 3500 4050
 Text Label 4900 7350 1    60   ~ 0
 GNDB
+NoConn ~ 4100 5300
+NoConn ~ 3900 5300
+NoConn ~ 5150 5300
+NoConn ~ 4950 5300
+Wire Wire Line
+	1850 6450 2300 6450
+Wire Wire Line
+	2300 6450 2300 6500
+Wire Wire Line
+	2300 6500 2400 6500
+Wire Wire Line
+	1850 6550 2100 6550
+Connection ~ 2100 6550
+Wire Wire Line
+	6950 6000 7550 6000
+NoConn ~ 6550 5850
 $EndSCHEMATC

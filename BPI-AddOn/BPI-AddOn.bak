@@ -483,11 +483,7 @@ Entry Wire Line
 Entry Wire Line
 	3700 5750 3800 5650
 Entry Wire Line
-	3800 5750 3900 5650
-Entry Wire Line
 	3900 5750 4000 5650
-Entry Wire Line
-	4000 5750 4100 5650
 Entry Wire Line
 	4100 5750 4200 5650
 Entry Wire Line
@@ -499,11 +495,7 @@ Entry Wire Line
 Entry Wire Line
 	4750 5750 4850 5650
 Entry Wire Line
-	4850 5750 4950 5650
-Entry Wire Line
 	4950 5750 5050 5650
-Entry Wire Line
-	5050 5750 5150 5650
 Entry Wire Line
 	5150 5750 5250 5650
 Entry Wire Line
@@ -519,10 +511,6 @@ CANL
 Text Label 5350 5550 1    60   ~ 0
 CANL
 Text Label 4000 5550 1    60   ~ 0
-GND
-Text Label 3900 5550 1    60   ~ 0
-GND
-Text Label 4950 5550 1    60   ~ 0
 GND
 Text Label 5050 5550 1    60   ~ 0
 GND
@@ -564,12 +552,8 @@ Text Label 3700 5550 1    60   ~ 0
 GSB
 Text Label 4750 5550 1    60   ~ 0
 GSB
-Text Label 4100 5550 1    60   ~ 0
-J1_V
 Text Label 4200 5550 1    60   ~ 0
 J1_V
-Text Label 5150 5550 1    60   ~ 0
-J2_V
 Text Label 5250 5550 1    60   ~ 0
 J2_V
 Text Label 3000 6600 0    60   ~ 0
@@ -1221,19 +1205,19 @@ $EndComp
 $Comp
 L C C9
 U 1 1 57645485
-P 8000 5900
-F 0 "C9" H 8025 6000 50  0000 L CNN
-F 1 "100nF" H 8025 5800 50  0000 L CNN
-F 2 "Resistors_SMD:R_0805_HandSoldering" H 8038 5750 50  0001 C CNN
-F 3 "" H 8000 5900 50  0000 C CNN
-	1    8000 5900
+P 7300 4750
+F 0 "C9" H 7325 4850 50  0000 L CNN
+F 1 "100nF" H 7325 4650 50  0000 L CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" H 7338 4600 50  0001 C CNN
+F 3 "" H 7300 4750 50  0000 C CNN
+	1    7300 4750
 	1    0    0    -1  
 $EndComp
 $Comp
-L R F3
+L R Fe1
 U 1 1 576471B3
 P 7450 4400
-F 0 "F3" V 7530 4400 50  0000 C CNN
+F 0 "Fe1" V 7530 4400 50  0000 C CNN
 F 1 "Ferrit" V 7450 4400 50  0000 C CNN
 F 2 "Resistors_SMD:R_0805_HandSoldering" V 7380 4400 50  0001 C CNN
 F 3 "" H 7450 4400 50  0000 C CNN
@@ -1340,12 +1324,12 @@ $EndComp
 $Comp
 L C C5
 U 1 1 57653A31
-P 7300 4750
-F 0 "C5" H 7325 4850 50  0000 L CNN
-F 1 "10nF" H 7325 4650 50  0000 L CNN
-F 2 "Resistors_SMD:R_0805_HandSoldering" H 7338 4600 50  0001 C CNN
-F 3 "" H 7300 4750 50  0000 C CNN
-	1    7300 4750
+P 8000 5900
+F 0 "C5" H 8025 6000 50  0000 L CNN
+F 1 "100nF" H 8025 5800 50  0000 L CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" H 8038 5750 50  0001 C CNN
+F 3 "" H 8000 5900 50  0000 C CNN
+	1    8000 5900
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1353,7 +1337,7 @@ L C C8
 U 1 1 57653AF9
 P 7600 4750
 F 0 "C8" H 7625 4850 50  0000 L CNN
-F 1 "10nF" H 7625 4650 50  0000 L CNN
+F 1 "4.7uF" H 7625 4650 50  0000 L CNN
 F 2 "Resistors_SMD:R_0805_HandSoldering" H 7638 4600 50  0001 C CNN
 F 3 "" H 7600 4750 50  0000 C CNN
 	1    7600 4750
@@ -1766,11 +1750,7 @@ Wire Wire Line
 Wire Wire Line
 	3800 5300 3800 5650
 Wire Wire Line
-	3900 5300 3900 5650
-Wire Wire Line
 	4000 5300 4000 5650
-Wire Wire Line
-	4100 5300 4100 5650
 Wire Wire Line
 	4200 5300 4200 5650
 Wire Wire Line
@@ -1782,11 +1762,7 @@ Wire Wire Line
 Wire Wire Line
 	4850 5300 4850 5650
 Wire Wire Line
-	4950 5300 4950 5650
-Wire Wire Line
 	5050 5300 5050 5650
-Wire Wire Line
-	5150 5300 5150 5650
 Wire Wire Line
 	5250 5300 5250 5650
 Wire Wire Line
@@ -2238,4 +2214,8 @@ Wire Wire Line
 	3500 3950 3500 4050
 Text Label 4900 7350 1    60   ~ 0
 GNDB
+NoConn ~ 4100 5300
+NoConn ~ 3900 5300
+NoConn ~ 5150 5300
+NoConn ~ 4950 5300
 $EndSCHEMATC
