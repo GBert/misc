@@ -2353,11 +2353,11 @@
     )
   )
 
-  (module w_capacitors:CP_5x11mm (layer F.Cu) (tedit 576C12AA) (tstamp 575B68ED)
+  (module w_capacitors:CP_5x11mm (layer F.Cu) (tedit 576C274D) (tstamp 575B68ED)
     (at 143.764 91.694)
     (descr "Capacitor, pol, cyl 5x11mm")
     (path /575B0337)
-    (fp_text reference C2 (at -4.0005 -2.159) (layer F.SilkS)
+    (fp_text reference C2 (at -4.2545 -1.5875) (layer F.SilkS)
       (effects (font (thickness 0.3048)))
     )
     (fp_text value 100uF (at 0 4.2) (layer F.SilkS) hide
@@ -2379,11 +2379,11 @@
     )
   )
 
-  (module w_capacitors:CP_5x11mm (layer F.Cu) (tedit 576C12A7) (tstamp 575B68F8)
+  (module w_capacitors:CP_5x11mm (layer F.Cu) (tedit 576C2744) (tstamp 575B68F8)
     (at 135.001 91.694)
     (descr "Capacitor, pol, cyl 5x11mm")
     (path /575AF2D7)
-    (fp_text reference C3 (at 0 -4.2) (layer F.SilkS)
+    (fp_text reference C3 (at 0.381 -3.683) (layer F.SilkS)
       (effects (font (thickness 0.3048)))
     )
     (fp_text value 100uF (at 0 4.2) (layer F.SilkS) hide
