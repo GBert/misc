@@ -121,13 +121,13 @@ int print_data(struct loc_config_t *loc_config) {
 	index = loc_config->bin[i++];
 	length = loc_config->bin[i++];
 
-	printf("Index [%d @ 0x%04x] Length [%d]:\n", index, i, length);
+	printf("index [%d @ 0x%04x] length [%d]:\n", index, i, length);
 	switch (index) {
 
 	case 0:
 	    id = loc_config->bin[i++];
 	    length = loc_config->bin[i];
-	    printf("[0x%04x] Length [%d]: %d\n", i, length, id);
+	    printf("[0x%04x] length [%d]: %d\n", i, length, id);
 	    if ((id != 0) && (id != 255)) {
 		length = loc_config->bin[i++];
 		switch (id) {
@@ -145,7 +145,7 @@ int print_data(struct loc_config_t *loc_config) {
 			return EXIT_FAILURE;
 		    strncpy(proto_name, (char *)&loc_config->bin[i], length);
 		    i += length;
-		    printf("proto name: %s\n", loco_name);
+		    printf("proto name: %s\n", proto_name);
 		    break;
 		default:
 		    printf("decoding problem:\n");
@@ -156,7 +156,7 @@ int print_data(struct loc_config_t *loc_config) {
 	case 9:
 	    func = 0;
 	    for (j = 0; j < length / 10; j++) {
-		printf("Function %d:\n", func++);
+		printf("function %d:\n", func++);
 		for (k = 0; k < 10; k++) {
 		    printf(" 0x%02x", loc_config->bin[i++]);
 		}
@@ -184,6 +184,7 @@ int main(int argc, char **argv) {
     char *filename;
 
     /* defaults */
+    memset(&loc_config, 0, sizeof(loc_config));
     verbose = 1;
 
     while ((opt = getopt(argc, argv, "vh?")) != -1) {
@@ -214,6 +215,8 @@ int main(int argc, char **argv) {
     }
 
     loc_config.bin = read_data(&loc_config);
+    if (loc_config.bin == NULL)
+	return EXIT_FAILURE;
 
     if (verbose)
 	printf("EEPROM Size (%s) : %d\n", filename, loc_config.eeprom_size);
