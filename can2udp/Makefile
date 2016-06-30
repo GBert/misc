@@ -42,6 +42,7 @@ define Package/can2udp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/gb2-update $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ir-tester $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ms2wifi $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/read_lococard $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/s88udp $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/s88test-bpi $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pio-i2c-udp $(1)/usr/bin/
