@@ -109,9 +109,9 @@ int print_data(struct loc_config_t *loc_config) {
     index = 0;
     /* preamble */
     if (memcmp(loc_config->bin, pre_mfx, 3) == 0)
-	printf("MFX:\n");
+	printf("type: mfx\n");
     else if (memcmp(loc_config->bin, pre_other, 3) == 0)
-	printf("Other:\n");
+	printf("type: other\n");
     else
 	return EXIT_FAILURE;
 
@@ -121,7 +121,7 @@ int print_data(struct loc_config_t *loc_config) {
 	index = loc_config->bin[i++];
 	length = loc_config->bin[i++];
 
-	printf("index [%d @ 0x%04x] length [%d]:\n", index, i, length);
+	printf("index [0x%02x @ 0x%04x] length [%d]: ", index, i, length);
 	switch (index) {
 
 	case 0:
@@ -155,8 +155,9 @@ int print_data(struct loc_config_t *loc_config) {
 	    break;
 	case 9:
 	    func = 0;
+	    printf("\n");
 	    for (j = 0; j < length / 10; j++) {
-		printf("function %d:\n", func++);
+		printf(" function %2d: ", func++);
 		for (k = 0; k < 10; k++) {
 		    printf(" 0x%02x", loc_config->bin[i++]);
 		}
