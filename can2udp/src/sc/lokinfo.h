@@ -26,31 +26,41 @@ lok
 
 */
 
-unsigned char pre_mfx [] = { 0x02, 0xf5, 0x00 };
-unsigned char pre_other [] = { 0x02, 0xc5, 0x00 };
+unsigned char pre_mfx[]   = { 0x02, 0xf5, 0x00 };
+unsigned char pre_other[] = { 0x02, 0xc5, 0x00 };
 
 struct mfxAdr_t {
-	unsigned int target;
-	char *name;
-	unsigned int address;
-	unsigned int xcel;
-	unsigned int speedtable;
-	unsigned int volume;
-	unsigned int numfunc;
-        unsigned int funcy;
+    unsigned int target;
+    char *name;
+    unsigned int address;
+    unsigned int xcel;
+    unsigned int speedtable;
+    unsigned int volume;
+    unsigned int numfunc;
+    unsigned int funcy;
 };
 
-struct loco_t {
-	unsigned int uid;
-	char *name;
-	unsigned int address;
-	unsigned int typ;
-	unsigned int mfxuid;
-	unsigned int acc_delay;		/* av */
-	unsigned int slow_down_delay;	/* bv */
-	unsigned int volume;
-	unsigned int vmax;
-	unsigned int vmin;
-	struct mfxAdr_t mfxAdr;
+struct loco_config_t {
+    int eeprom_max_size;
+    unsigned int eeprom_size;
+    int id;
+    FILE *fp;
+    char *filename;
+    unsigned char *bin;
 };
 
+struct loco_data_t {
+    unsigned int long_uid;
+    unsigned int uid;
+    char *name;
+    char *proto;
+    unsigned int address;
+    unsigned int typ;
+    unsigned int mfxuid;
+    unsigned int acc_delay;		/* av */
+    unsigned int slow_down_delay;	/* bv */
+    unsigned int volume;
+    unsigned int vmax;
+    unsigned int vmin;
+    struct mfxAdr_t mfxAdr;
+};

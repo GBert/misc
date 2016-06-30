@@ -32,15 +32,6 @@
 #include "lokinfo.h"
 #include "uthash.h"
 
-struct loc_config_t {
-    int eeprom_max_size;
-    unsigned int eeprom_size;
-    int id;
-    FILE *fp;
-    char *filename;
-    unsigned char *bin;
-};
-
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -v -f\n", prg);
     fprintf(stderr, "   Version 0.1\n\n");
@@ -48,28 +39,28 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -v                  verbose output\n\n");
 }
 
-unsigned char *read_data(struct loc_config_t *loc_config) {
+unsigned char *read_data(struct loco_config_t *loco_config) {
     FILE *fp;
     unsigned char *data;
 
-    fp = fopen(loc_config->filename, "rb");
+    fp = fopen(loco_config->filename, "rb");
     if (fp == NULL) {
-	fprintf(stderr, "%s: error fopen failed [%s]\n", __func__, loc_config->filename);
+	fprintf(stderr, "%s: error fopen failed [%s]\n", __func__, loco_config->filename);
 	return NULL;
     }
 
     fseek(fp, 0, SEEK_END);
-    loc_config->eeprom_size = ftell(fp);
+    loco_config->eeprom_size = ftell(fp);
     fseek(fp, 0, SEEK_SET);
 
-    if ((data = malloc(loc_config->eeprom_size)) == NULL) {
-	fprintf(stderr, "%s: can't alloc %d bytes for data\n", __func__, loc_config->eeprom_size);
+    if ((data = malloc(loco_config->eeprom_size)) == NULL) {
+	fprintf(stderr, "%s: can't alloc %d bytes for data\n", __func__, loco_config->eeprom_size);
 	fclose(fp);
 	return NULL;
     }
 
-    if ((fread((void *)data, 1, loc_config->eeprom_size, fp)) != loc_config->eeprom_size) {
-	fprintf(stderr, "%s: error: fread failed for [%s]\n", __func__, loc_config->filename);
+    if ((fread((void *)data, 1, loco_config->eeprom_size, fp)) != loco_config->eeprom_size) {
+	fprintf(stderr, "%s: error: fread failed for [%s]\n", __func__, loco_config->filename);
 	fclose(fp);
 	free(data);
 	return NULL;
@@ -79,20 +70,20 @@ unsigned char *read_data(struct loc_config_t *loc_config) {
     return data;
 }
 
-int write_data(struct loc_config_t *loc_config) {
+int write_data(struct loco_config_t *loco_config) {
     FILE *fp;
     unsigned char *data;
 
-    data = loc_config->bin;
+    data = loco_config->bin;
 
-    fp = fopen(loc_config->filename, "wb");
+    fp = fopen(loco_config->filename, "wb");
     if (fp == NULL) {
-	fprintf(stderr, "%s: error fopen failed [%s]\n", __func__, loc_config->filename);
+	fprintf(stderr, "%s: error fopen failed [%s]\n", __func__, loco_config->filename);
 	return EXIT_FAILURE;
     }
 
-    if ((fwrite((void *)data, 1, loc_config->eeprom_size, fp)) != loc_config->eeprom_size) {
-	fprintf(stderr, "%s: error writing failed [%s]\n", __func__, loc_config->filename);
+    if ((fwrite((void *)data, 1, loco_config->eeprom_size, fp)) != loco_config->eeprom_size) {
+	fprintf(stderr, "%s: error writing failed [%s]\n", __func__, loco_config->filename);
 	return EXIT_FAILURE;
     }
 
@@ -100,73 +91,117 @@ int write_data(struct loc_config_t *loc_config) {
     return 0;
 }
 
-int print_data(struct loc_config_t *loc_config) {
-    unsigned int i, j, k, func, id;
+int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_data) {
+    unsigned int i, j, k, func, id, temp;
     unsigned char index, length;
     char *loco_name;
     char *proto_name;
 
     index = 0;
     /* preamble */
-    if (memcmp(loc_config->bin, pre_mfx, 3) == 0)
+    if (memcmp(loco_config->bin, pre_mfx, 3) == 0)
 	printf("type: mfx\n");
-    else if (memcmp(loc_config->bin, pre_other, 3) == 0)
+    else if (memcmp(loco_config->bin, pre_other, 3) == 0)
 	printf("type: other\n");
     else
 	return EXIT_FAILURE;
 
     i = 3;
 
-    while (i < loc_config->eeprom_size) {
-	index = loc_config->bin[i++];
-	length = loc_config->bin[i++];
+    while (i < loco_config->eeprom_size) {
+	index = loco_config->bin[i++];
+	length = loco_config->bin[i++];
 
-	printf("index [0x%02x @ 0x%04x] length [%d]: ", index, i, length);
 	switch (index) {
 
 	case 0:
-	    id = loc_config->bin[i++];
-	    length = loc_config->bin[i];
-	    printf("[0x%04x] length [%d]: %d\n", i, length, id);
-	    if ((id != 0) && (id != 255)) {
-		length = loc_config->bin[i++];
+	    printf("index [0x%02x @ 0x%04x] sub-indexes [%d]: ", index, i, length);
+	    temp = loco_config->bin[i++];
+	    length = (loco_config->bin[i++] << 8) + temp;
+	    printf(" total length [%d]\n", length);
+	    id = loco_config->bin[i++];
+	    while ((id != 0) && (id != 255)) {
+		length = loco_config->bin[i++];
+		/* printf("i 0x%02x [i] 0x%02x length %d\n" , i, loco_config->bin[i], length); */
 		switch (id) {
 		case 0x1e:
-		    loco_name = (char *)malloc(length + 1);
+		    loco_name = (char *)calloc(length + 1, 1);
 		    if (loco_name == NULL)
 			return EXIT_FAILURE;
-		    strncpy(loco_name, (char *)&loc_config->bin[i], length);
+		    memcpy(loco_name, (char *)&loco_config->bin[i], length);
 		    i += length;
-		    printf("loco name: %s\n", loco_name);
+		    loco_data->name = loco_name;
+		    printf("loco name: >%s<\n", loco_name);
 		    break;
 		case 0x1f:
-		    proto_name = (char *)malloc(length + 1);
+		    proto_name = (char *)calloc(length + 1, 1);
 		    if (proto_name == NULL)
 			return EXIT_FAILURE;
-		    strncpy(proto_name, (char *)&loc_config->bin[i], length);
+		    strncpy(proto_name, (char *)&loco_config->bin[i], length);
 		    i += length;
-		    printf("proto name: %s\n", proto_name);
+		    printf("proto name: >%s<\n", proto_name);
+		    loco_data->proto = proto_name;
 		    break;
 		default:
 		    printf("decoding problem:\n");
 		    break;
 		}
+		id = loco_config->bin[i++];
 	    }
 	    break;
 	case 9:
+	    printf("index [0x%02x @ 0x%04x] length [%d]: ", index, i, length);
 	    func = 0;
 	    printf("\n");
 	    for (j = 0; j < length / 10; j++) {
 		printf(" function %2d: ", func++);
 		for (k = 0; k < 10; k++) {
-		    printf(" 0x%02x", loc_config->bin[i++]);
+		    printf(" 0x%02x", loco_config->bin[i++]);
 		}
 		printf("\n");
 	    }
 	    break;
 	default:
+	    printf("index [0x%02x @ 0x%04x] length [%d]: ", index, i, length);
+	    if (length <= 4) {
+		memcpy(&temp, loco_config->bin, length);
+	    }
+	    switch (index) {
+	    case 1:
+		loco_data->long_uid = temp;
+		printf("          long UID ");
+		break;
+	    case 2:
+		loco_data->uid = temp;
+		printf("         short UID ");
+		break;
+	    case 3:
+		loco_data->acc_delay = temp;
+		printf("acceleration delay ");
+		break;
+	    case 4:
+		loco_data->slow_down_delay = temp;
+		printf("   slow down delay ");
+		break;
+	    case 5:
+		loco_data->vmin = temp;
+		printf("              Vmin ");
+		break;
+	    case 6:
+		loco_data->vmax = temp;
+		printf("              Vmax ");
+		break;
+	    case 8:
+		loco_data->volume = temp;
+		printf("            Volume ");
+		break;
+	    default:
+		printf("           unknown ");
+		break;
+	    }
+
 	    for (j = 0; j < length; j++) {
-		printf(" 0x%02x", loc_config->bin[i++]);
+		printf(" 0x%02x", loco_config->bin[i++]);
 	    }
 	    break;
 	}
@@ -174,18 +209,19 @@ int print_data(struct loc_config_t *loc_config) {
 	if (index == 0)
 	    break;
     }
-    printf("loco name: %s\n", loco_name);
 
     return 0;
 }
 
 int main(int argc, char **argv) {
     int opt, verbose;
-    struct loc_config_t loc_config;
+    struct loco_config_t loco_config;
+    struct loco_data_t loco_data;
     char *filename;
 
     /* defaults */
-    memset(&loc_config, 0, sizeof(loc_config));
+    memset(&loco_config, 0, sizeof(loco_config));
+    memset(&loco_data, 0, sizeof(loco_data));
     verbose = 1;
 
     while ((opt = getopt(argc, argv, "vh?")) != -1) {
@@ -212,18 +248,18 @@ int main(int argc, char **argv) {
 	if (filename == NULL)
 	    return EXIT_FAILURE;
 	strncpy(filename, argv[optind], strlen(argv[optind]));
-	loc_config.filename = filename;
+	loco_config.filename = filename;
     }
 
-    loc_config.bin = read_data(&loc_config);
-    if (loc_config.bin == NULL)
+    loco_config.bin = read_data(&loco_config);
+    if (loco_config.bin == NULL)
 	return EXIT_FAILURE;
 
     if (verbose)
-	printf("EEPROM Size (%s) : %d\n", filename, loc_config.eeprom_size);
+	printf("EEPROM Size (%s) : %d\n", filename, loco_config.eeprom_size);
 
     if (verbose)
-	print_data(&loc_config);
+	decode_sc_data(&loco_config, &loco_data);
 
     return 0;
 }
