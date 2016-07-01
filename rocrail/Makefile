@@ -68,6 +68,17 @@ define Package/rocweb/description
  This package contains Rocweb, a WEB Browser based Rocrail client for all platforms including mobile devices
 endef
 
+define Package/rocrail-mqtt
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=MQTT extensionm
+  DEPENDS:=+libpthread rocrail
+endef
+
+define Package/rocrail-mqtt/description
+ MQTT extension for Rocrail
+endef
+
 define Package/rocrail-cs-mcs2
   SECTION:=utils
   CATEGORY:=Utilities
@@ -167,6 +178,11 @@ define Package/rocweb/install
 	$(CP) $(PKG_BUILD_DIR)/rocrail/impl/web/html/* $(1)/opt/rocrail/web/html
 endef
 
+define Package/rccrail-mqtt/install
+	$(INSTALL_DIR) $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/mqtt.so $(1)/opt/rocrail
+endef
+
 define Package/rocrail-cs-ddx/install
 	$(INSTALL_DIR) $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/ddx.so $(1)/opt/rocrail
@@ -197,6 +213,7 @@ $(eval $(call BuildPackage,rocrail))
 $(eval $(call BuildPackage,rocrail-server))
 $(eval $(call BuildPackage,rocnetnode))
 $(eval $(call BuildPackage,rocweb))
+$(eval $(call BuildPackage,rocrail-mqtt))
 $(eval $(call BuildPackage,rocrail-cs-ddx))
 $(eval $(call BuildPackage,rocrail-cs-mcs2))
 $(eval $(call BuildPackage,rocrail-cs-mgbox))
