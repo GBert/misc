@@ -244,7 +244,7 @@ int main(int argc, char **argv) {
     }
 
     if (optind < argc) {
-	filename = (char *)malloc(strlen(argv[optind]) + 1);
+	filename = (char *)calloc(strlen(argv[optind]) + 1, 1);
 	if (filename == NULL)
 	    return EXIT_FAILURE;
 	strncpy(filename, argv[optind], strlen(argv[optind]));
