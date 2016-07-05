@@ -420,7 +420,7 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
 		i += 8;
 		src_i += 8;
 		n_packets++;
-	    } while ((src_i < padded_nbytes) && n_packets < MAX_PACKETS);
+	    } while ((src_i < padded_nbytes) && (n_packets < MAX_PACKETS));
 	    /* don't use frame_to_net because we have more then 13 bytes to send */
 	    if (net_to_net(tcp_socket, NULL, netframe, i)) {
 		perror("error sending TCP data\n");

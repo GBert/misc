@@ -29,6 +29,7 @@
 #include <sys/stat.h>
 #include <net/if.h>
 #include <netinet/in.h>
+#include <netinet/tcp.h>
 #include <arpa/inet.h>
 #include <sys/time.h>
 #include <time.h>
@@ -39,7 +40,7 @@
 #define MAX_TCP_CONN		16		/* max TCP clients       */
 #define MAXDG   		4096		/* maximum datagram size */
 #define MAXMTU   		1400		/* maximum MTU           */
-#define MAX_PACKETS		40		/* maximum number of CAN frames per TCP packet */
+#define MAX_PACKETS		20		/* maximum number of CAN frames per TCP packet */
 #define MAXUDP  		16		/* maximum datagram size */
 #define MAXIPLEN  		40		/* maximum IP string length */
 #define MAX_UDP_BCAST_RETRY  	10		/* maximum retries getting UDP socket */

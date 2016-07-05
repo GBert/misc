@@ -384,6 +384,12 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "creating TCP socket error: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
+    /* disable Nagle */
+    if (setsockopt(st, IPPROTO_TCP, TCP_NODELAY, &on, sizeof(on)) < 0) {
+	fprintf(stderr, "error disabling Nagle: %s\n", strerror(errno));
+	exit(EXIT_FAILURE);
+    }
+
     tcp_addr.sin_family = AF_INET;
     tcp_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     tcp_addr.sin_port = htons(local_tcp_port);

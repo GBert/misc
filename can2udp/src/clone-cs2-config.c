@@ -291,7 +291,7 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     }
 
-    config_data.verbose = 0;
+    config_data.verbose = 1;
     config_index = 0;
 
 #if 1
