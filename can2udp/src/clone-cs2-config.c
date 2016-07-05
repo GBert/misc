@@ -27,6 +27,9 @@
 #define MAXSIZE		16384
 #define TCP_PORT	15731
 #define MAXDIR		256
+#define MAXNAME		256
+#define MAXGBS		16
+#define MAXSTRING	1024
 
 unsigned char GETCONFIG[]          = { 0x00, 0x40, 0x03, 0x00, 0x08 };
 unsigned char GETCONFIG_DATA[]     = { 0x00, 0x42, 0x03, 0x00, 0x08 };
@@ -47,6 +50,8 @@ char *configs[][2] = {
 
 char *gleisbild_dir = { "gleisbilder/" };
 char *gleisbild_name = { "gleisbild.cs2" };
+char *gbs_site = { "gbs-" };
+char *gbs_default = { "gbs-0" };
 
 struct config_data {
     int deflated_stream_size;
@@ -111,7 +116,7 @@ int config_write(struct config_data *config_data) {
     printf("\n  writing to %s/%s - size 0x%04x crc 0x%04x 0x%04x\n", config_data->directory,
 	   config_data->filename, config_data->deflated_stream_size, config_data->crc, crc);
 
-    filename = calloc(strlen(config_data->name) + strlen(config_data->directory) + 2, 1);
+    filename = calloc(MAXSTRING, 1);
 
     if (filename == NULL) {
 	fprintf(stderr, "can't calloc in %s: %s\n", __func__, strerror(errno));
@@ -140,6 +145,7 @@ int config_write(struct config_data *config_data) {
     inflate_data(config_data);
     fwrite(config_data->inflated_data, 1, config_data->inflated_size, config_fp);
     fclose(config_fp);
+    free(filename);
     return 1;
 }
 
@@ -243,7 +249,9 @@ int main(int argc, char **argv) {
     int sockfd;
     struct config_data config_data;
     struct sockaddr_in servaddr;
-    int gb_counter, config_index, gbs_valid, gbs_number;
+    int gb_counter, config_index, gbs_valid;
+    char gbs[MAXGBS];
+    char gbs_name[MAXNAME];
     char buffer[MAXSIZE];
     char *dir;
     char *gleisbild;
@@ -286,7 +294,7 @@ int main(int argc, char **argv) {
     config_data.verbose = 0;
     config_index = 0;
 
-#if 0
+#if 1
     while (configs[config_index][0]) {
 	config_data.name = configs[config_index][0];
 	config_data.filename = configs[config_index++][1];
@@ -302,18 +310,28 @@ int main(int argc, char **argv) {
     printf("gbn : >%s<\n", gleisbild);
 
     gbs_valid = 0;
-    gbs_number = -1;
+    config_data.name = gbs_default;
 
     if ((fp = fopen(gleisbild, "r")) != NULL) {
 	while (fgets(buffer, MAXSIZE, fp) != NULL) {
 	    gb_counter += 1;
 	    if (slre_match("^seite$", buffer, 5, NULL, 0, 0) > 0) {
 		gbs_valid = 1;
-	    } else if (slre_match("^ .id=(\\d+)", buffer, strlen(buffer), caps, 0, 0) > 0) {
-		gbs_number = atoi(caps[0].ptr);
-		
+	    } else if (slre_match("^ .id=(\\S+)", buffer, strlen(buffer), caps, 0, 0) > 0) {
+		strncpy(gbs, gbs_site, sizeof(gbs));
+		if (strnlen(caps[0].ptr, 5) < 4) {
+		    gbs_name[0] = 0;
+		    strncat(gbs, caps[0].ptr, strlen(caps[0].ptr) - 1);
+		    config_data.name = gbs;
+		}
 	    } else if (slre_match("^ .name=(\\S+)", buffer, strlen(buffer), caps, 0, 0) > 0) {
-		config_data.filename = caps[0].ptr;
+                if (gbs_valid) {
+		    strncat(gbs_name, caps[0].ptr, strlen(caps[0].ptr) - 1);
+		    strcat(gbs_name, ".cs2");
+		    config_data.filename = gbs_name;
+		    printf("name: >%s< filename: >%s<\n", config_data.name, config_data.filename);
+		    get_data(&config_data, sockfd);
+		}
 	    }
 	}
     } else {
