@@ -228,6 +228,10 @@ int main(int argc, char **argv) {
 					config_data_stream = 0;
 					config_data.deflated_stream_size = ddi;
 					config_write(&config_data);
+					if (config_data.inflated_data)
+					    free(config_data.inflated_data);
+					if (config_data.deflated_data)
+					    free(config_data.deflated_data);
 					file_not_done = 0;
 				    } else {
 					deflated_size -= 8;
