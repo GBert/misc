@@ -169,11 +169,11 @@ int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_d
 	    switch (index) {
 	    case 1:
 		loco_data->long_uid = temp;
-		printf("          long UID ");
+		printf("           mfx UID ");
 		break;
 	    case 2:
 		loco_data->uid = temp;
-		printf("         short UID ");
+		printf("               UID ");
 		break;
 	    case 3:
 		loco_data->acc_delay = temp;
