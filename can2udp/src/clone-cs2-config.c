@@ -41,6 +41,7 @@ char *configs[][2] = {
     {"fs", "fahrstrassen.cs2"},
     {"gbs", "gleisbild.cs2"},
 /*    {NULL, NULL}, */
+    {NULL, NULL},
     {"lokstat", "lokomotive.sr2"},
     {"magstat", "magnetartikel.sr2"},
     {"gbsstat", "gbsstat.sr2"},
@@ -48,7 +49,7 @@ char *configs[][2] = {
     {NULL, NULL},
 };
 
-char *gleisbild_dir = { "gleisbilder/" };
+char *gleisbild_dir = { "/gleisbilder" };
 char *gleisbild_name = { "gleisbild.cs2" };
 char *gbs_site = { "gbs-" };
 char *gbs_default = { "gbs-0" };
@@ -155,6 +156,9 @@ int get_data(struct config_data *config_data, int sockfd) {
     int ddi, n, i, tcp_packet_nr;
     int file_not_done, temp, config_data_start, config_data_stream, deflated_size;
     fd_set rset;
+
+    if (config_data->verbose)
+	printf(" try getting %s\n", config_data->name);
 
     memset(netframe, 0, FRAME_SIZE);
     memcpy(netframe, GETCONFIG, 5);
@@ -311,6 +315,7 @@ int main(int argc, char **argv) {
 
     gbs_valid = 0;
     config_data.name = gbs_default;
+    strcat(config_data.directory, gleisbild_dir);
 
     if ((fp = fopen(gleisbild, "r")) != NULL) {
 	while (fgets(buffer, MAXSIZE, fp) != NULL) {
