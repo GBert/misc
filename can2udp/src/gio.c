@@ -148,6 +148,18 @@ int net_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *netfram
     return 0;
 }
 
+int net2_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *netframe, int length) {
+    int s;
+    s = send(net_socket, netframe, length, MSG_DONTWAIT);
+    if (s != length) {
+	fprintf(stderr, "%s: error sending TCP data; %s\n", __func__, strerror(errno));
+	return -1;
+    }
+    return 0;
+}
+
+
+
 int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *frame) {
     int s;
     uint32_t canid;
@@ -332,9 +344,11 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
     uint8_t *config;
     uint8_t *out;
     z_stream strm;
-    int inflated_size, deflated_size, padded_nbytes, i, src_i, n_packets;
+    int inflated_size, deflated_size, padded_nbytes, i, src_i, n_packets, on;
     uint16_t crc, temp16;
     uint8_t netframe[MAXMTU];
+
+    on = 1;
 
     config = read_config_file(filename, config_dir, &nbytes);
     if (config) {
@@ -398,7 +412,7 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
 	netframe[11] = 0x00;
 	netframe[12] = 0x00;
 
-	if (net_to_net(tcp_socket, NULL, netframe, 13)) {
+	if (net2_to_net(tcp_socket, NULL, netframe, 13)) {
 	    deflateEnd(&strm);
 	    free(config);
 	    free(out);
@@ -421,8 +435,15 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
 		src_i += 8;
 		n_packets++;
 	    } while ((src_i < padded_nbytes) && (n_packets < MAX_PACKETS));
+	    /* disable Nagle */
+	    if (setsockopt(tcp_socket, IPPROTO_TCP, TCP_NODELAY, &on, sizeof(on)) < 0) {
+	        fprintf(stderr, "error disabling Nagle: %s\n", strerror(errno));
+	        exit(EXIT_FAILURE);
+	    }
+
 	    /* don't use frame_to_net because we have more then 13 bytes to send */
-	    if (net_to_net(tcp_socket, NULL, netframe, i)) {
+	    /* printf("send %3d bytes by TCP\n", i); */
+	    if (net2_to_net(tcp_socket, NULL, netframe, i)) {
 		perror("error sending TCP data\n");
 		deflateEnd(&strm);
 		free(config);
