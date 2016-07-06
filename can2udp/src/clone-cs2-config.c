@@ -253,7 +253,7 @@ int main(int argc, char **argv) {
     int sockfd;
     struct config_data config_data;
     struct sockaddr_in servaddr;
-    int gb_counter, config_index, gbs_valid;
+    int config_index, gbs_valid;
     char gbs[MAXGBS];
     char gbs_name[MAXNAME];
     char buffer[MAXSIZE];
@@ -319,7 +319,6 @@ int main(int argc, char **argv) {
 
     if ((fp = fopen(gleisbild, "r")) != NULL) {
 	while (fgets(buffer, MAXSIZE, fp) != NULL) {
-	    gb_counter += 1;
 	    if (slre_match("^seite$", buffer, 5, NULL, 0, 0) > 0) {
 		gbs_valid = 1;
 	    } else if (slre_match("^ .id=(\\S+)", buffer, strlen(buffer), caps, 0, 0) > 0) {
