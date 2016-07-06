@@ -432,7 +432,7 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
 
 	    /* printf("send %3d bytes by TCP\n", i); */
 	    /* small sleep (reschedule) to disable Nagle in combination with TCP_NODELAY */
-	    usec_sleep(500);
+	    usec_sleep(1000);
 	    /* don't use frame_to_net because we have more then 13 bytes to send */
 	    if (net_to_net(tcp_socket, NULL, netframe, i)) {
 		perror("error sending TCP data\n");
