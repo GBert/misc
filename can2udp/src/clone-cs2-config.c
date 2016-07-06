@@ -21,8 +21,6 @@
 
 #include <zlib.h>
 
-#include "slre.h"
-
 #define FRAME_SIZE	13
 #define MAXSIZE		16384
 #define TCP_PORT	15731
@@ -256,10 +254,9 @@ int main(int argc, char **argv) {
     int config_index, gbs_valid;
     char gbs[MAXGBS];
     char gbs_name[MAXNAME];
-    char buffer[MAXSIZE];
+    char line[MAXSIZE];
     char *dir;
     char *gleisbild;
-    struct slre_cap caps[10];
     FILE *fp;
 
     if (argc != 3) {
@@ -318,22 +315,19 @@ int main(int argc, char **argv) {
     strcat(config_data.directory, gleisbild_dir);
 
     if ((fp = fopen(gleisbild, "r")) != NULL) {
-	while (fgets(buffer, MAXSIZE, fp) != NULL) {
-	    if (slre_match("^seite$", buffer, 5, NULL, 0, 0) > 0) {
+	while (fgets(line, MAXSIZE, fp) != NULL) {
+	    if (line[strlen(line) - 1] == '\n')
+		line[strlen(line) - 1] = 0;
+	    if (strstr(line, "seite") == line) {
 		gbs_valid = 1;
-	    } else if (slre_match("^ .id=(\\S+)", buffer, strlen(buffer), caps, 0, 0) > 0) {
-		strncpy(gbs, gbs_site, sizeof(gbs));
-		if (strnlen(caps[0].ptr, 5) < 4) {
-		    gbs_name[0] = 0;
-		    strncat(gbs, caps[0].ptr, strlen(caps[0].ptr) - 1);
-		    config_data.name = gbs;
-		}
-	    } else if (slre_match("^ .name=(\\S+)", buffer, strlen(buffer), caps, 0, 0) > 0) {
-                if (gbs_valid) {
-		    strncat(gbs_name, caps[0].ptr, strlen(caps[0].ptr) - 1);
+	    } else if (strstr(line, " .id=") == line) {
+		strncpy(gbs, &line[5], strlen(&line[5]));
+		config_data.name = gbs;
+	    } else if (strstr(line, " .name=") == line) {
+		if (gbs_valid) {
+		    strncpy(gbs_name, &line[7], strlen(&line[7]));
 		    strcat(gbs_name, ".cs2");
 		    config_data.filename = gbs_name;
-		    printf("name: >%s< filename: >%s<\n", config_data.name, config_data.filename);
 		    get_data(&config_data, sockfd);
 		}
 	    }

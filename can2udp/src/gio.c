@@ -340,11 +340,9 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
     uint8_t *config;
     uint8_t *out;
     z_stream strm;
-    int inflated_size, deflated_size, padded_nbytes, i, src_i, n_packets, on;
+    int inflated_size, deflated_size, padded_nbytes, i, src_i, n_packets;
     uint16_t crc, temp16;
     uint8_t netframe[MAXMTU];
-
-    on = 1;
 
     config = read_config_file(filename, config_dir, &nbytes);
     if (config) {
@@ -433,7 +431,8 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
 	    } while ((src_i < padded_nbytes) && (n_packets < MAX_PACKETS));
 
 	    /* printf("send %3d bytes by TCP\n", i); */
-	    usec_sleep(100);
+	    /* small sleep (reschedule) to disable Nagle in combination with TCP_NODELAY */
+	    usec_sleep(500);
 	    /* don't use frame_to_net because we have more then 13 bytes to send */
 	    if (net_to_net(tcp_socket, NULL, netframe, i)) {
 		perror("error sending TCP data\n");
