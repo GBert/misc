@@ -52,6 +52,14 @@ char *rmcrlf(char *s, int slen) {
     return s;
 }
 
+void usec_sleep(int usec) {
+    struct timespec to_wait;
+
+    to_wait.tv_sec = 0;
+    to_wait.tv_nsec = usec * 1000;
+    nanosleep(&to_wait, NULL);
+}
+
 int time_stamp(char *timestamp) {
     /* char *timestamp = (char *)malloc(sizeof(char) * 16); */
     struct timeval tv;
@@ -148,18 +156,6 @@ int net_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *netfram
     return 0;
 }
 
-int net2_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *netframe, int length) {
-    int s;
-    s = send(net_socket, netframe, length, MSG_DONTWAIT);
-    if (s != length) {
-	fprintf(stderr, "%s: error sending TCP data; %s\n", __func__, strerror(errno));
-	return -1;
-    }
-    return 0;
-}
-
-
-
 int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *frame) {
     int s;
     uint32_t canid;
@@ -204,11 +200,11 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
     /* we calculate the difference between the actual time and the time the last command was sent */
     /* probably we don't need to wait anymore before putting next CAN frame on the wire */
     gettimeofday(&actual_time, NULL);
-    usec  =(actual_time.tv_sec  - last_sent.tv_sec)  * 1000000;
-    usec +=(actual_time.tv_usec - last_sent.tv_usec);
+    usec  = (actual_time.tv_sec - last_sent.tv_sec) * 1000000;
+    usec += (actual_time.tv_usec - last_sent.tv_usec);
     if (usec < TIME_WAIT_US) {
 	to_wait.tv_sec = 0;
-	to_wait.tv_nsec = (TIME_WAIT_US - usec) * 1000 ;
+	to_wait.tv_nsec = (TIME_WAIT_US - usec) * 1000;
 	nanosleep(&to_wait, NULL);
     }
 
@@ -233,17 +229,17 @@ int inflate_data(struct config_data *config_data) {
     strm.next_in = Z_NULL;
     ret = inflateInit(&strm);
     if (ret != Z_OK)
-        return ret;
+	return ret;
     strm.avail_in = config_data->deflated_size;
     strm.avail_out = config_data->inflated_size;
     strm.next_in = config_data->deflated_data + 4;
     strm.next_out = config_data->inflated_data;
     ret = inflate(&strm, Z_NO_FLUSH);
 
-    assert(ret != Z_STREAM_ERROR);      /* state not clobbered */
+    assert(ret != Z_STREAM_ERROR);	/* state not clobbered */
     switch (ret) {
     case Z_NEED_DICT:
-	ret = Z_DATA_ERROR;     /* and fall through */
+	ret = Z_DATA_ERROR;		/* and fall through */
     case Z_DATA_ERROR:
     case Z_MEM_ERROR:
 	(void)inflateEnd(&strm);
@@ -261,8 +257,8 @@ int config_write(struct config_data *config_data) {
     crc = CRCCCITT(config_data->deflated_data, config_data->deflated_stream_size, 0xFFFF);
 
     if (config_data->verbose)
-	printf("\n  writing to %s - size 0x%04x crc 0x%04x 0x%04x\n", config_data->name, config_data->deflated_stream_size,
-		config_data->crc, crc);
+	printf("\n  writing to %s - size 0x%04x crc 0x%04x 0x%04x\n", config_data->name,
+	       config_data->deflated_stream_size, config_data->crc, crc);
 
     config_fp = fopen(config_data->name, "wb");
     if (!config_fp) {
@@ -293,7 +289,7 @@ uint8_t *read_config_file(char *filename, char *config_dir, uint32_t * nbytes) {
     if (!file_name)
 	return NULL;
 
-    strncat(file_name, config_dir, MAXLINE-1);
+    strncat(file_name, config_dir, MAXLINE - 1);
     strcat(file_name, filename);
 
     printf("%s: try reading file %s\n", __func__, file_name);
@@ -317,7 +313,7 @@ uint8_t *read_config_file(char *filename, char *config_dir, uint32_t * nbytes) {
     rc = fread((void *)config, 1, *nbytes, fp);
     if (((unsigned int)rc != *nbytes)) {
 	fprintf(stderr, "%s: error fread failed reading %s\n", __func__, filename);
-        free(config);
+	free(config);
 	goto read_error2;
     }
     fclose(fp);
@@ -412,7 +408,7 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
 	netframe[11] = 0x00;
 	netframe[12] = 0x00;
 
-	if (net2_to_net(tcp_socket, NULL, netframe, 13)) {
+	if (net_to_net(tcp_socket, NULL, netframe, 13)) {
 	    deflateEnd(&strm);
 	    free(config);
 	    free(out);
@@ -435,15 +431,11 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
 		src_i += 8;
 		n_packets++;
 	    } while ((src_i < padded_nbytes) && (n_packets < MAX_PACKETS));
-	    /* disable Nagle */
-	    if (setsockopt(tcp_socket, IPPROTO_TCP, TCP_NODELAY, &on, sizeof(on)) < 0) {
-	        fprintf(stderr, "error disabling Nagle: %s\n", strerror(errno));
-	        exit(EXIT_FAILURE);
-	    }
 
-	    /* don't use frame_to_net because we have more then 13 bytes to send */
 	    /* printf("send %3d bytes by TCP\n", i); */
-	    if (net2_to_net(tcp_socket, NULL, netframe, i)) {
+	    usec_sleep(100);
+	    /* don't use frame_to_net because we have more then 13 bytes to send */
+	    if (net_to_net(tcp_socket, NULL, netframe, i)) {
 		perror("error sending TCP data\n");
 		deflateEnd(&strm);
 		free(config);

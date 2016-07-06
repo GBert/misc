@@ -385,7 +385,7 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     }
     /* disable Nagle */
-    if (setsockopt(st, SOL_SOCKET, TCP_NODELAY, &on, sizeof(on)) < 0) {
+    if (setsockopt(st, IPPROTO_TCP, TCP_NODELAY, &on, sizeof(on)) < 0) {
 	fprintf(stderr, "error disabling Nagle: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
