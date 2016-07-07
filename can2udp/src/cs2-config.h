@@ -27,6 +27,7 @@ struct config_data_t {
     char *filename;
     uint8_t *deflated_data;
     uint8_t *inflated_data;
+    struct track_config_t *track_config;
 };
 
 /* [gleisbild]
@@ -42,7 +43,7 @@ seite
  .name=SBF S1
 */
 
-struct track_t {
+struct track_config_t {
     unsigned int version;
     unsigned int size;
     char *last_used;

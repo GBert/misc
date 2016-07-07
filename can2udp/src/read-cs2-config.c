@@ -66,6 +66,7 @@ int read_track_config(struct config_data_t *config_data, char *config_file) {
 }
 
 int main(int argc, char **argv) {
+    struct track_config_t *track_config;
     struct config_data_t config_data;
     char *dir;
     char *track_file;
@@ -83,6 +84,9 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "usage: %s <dir> \n", basename(argv[0]));
 	exit(EXIT_FAILURE);
     }
+
+    track_config = calloc(sizeof(track_config), 1);
+    config_data.track_config = track_config;
 
     config_data.verbose = 1;
 
