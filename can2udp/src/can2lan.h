@@ -71,7 +71,7 @@ struct id_node {
     struct id_node *next;
 };
 
-struct config_data {
+struct cs2_config_data_t {
     int deflated_stream_size;
     int deflated_size;
     int inflated_size;

@@ -19,6 +19,8 @@
 #define windowBits	15
 #define GZIP_ENCODING	16
 
+unsigned char GETCONFIG_RESPONSE[] = { 0x00, 0x42, 0x03, 0x00, 0x06 };
+
 extern struct timeval last_sent;
 
 /* The following macro calls a zlib routine and checks the return
@@ -150,7 +152,7 @@ int net_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *netfram
     int s;
     s = sendto(net_socket, netframe, length, 0, net_addr, sizeof(*net_addr));
     if (s != length) {
-	fprintf(stderr, "%s: error sending TCP/UDP data; %s\n", __func__, strerror(errno));
+	fprintf(stderr, "%s: error sending TCP/UDP data: %s\n", __func__, strerror(errno));
 	return -1;
     }
     return 0;
@@ -218,7 +220,7 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
     return 0;
 }
 
-int inflate_data(struct config_data *config_data) {
+int inflate_data(struct cs2_config_data_t *config_data) {
     int ret;
     z_stream strm;
 
@@ -249,7 +251,7 @@ int inflate_data(struct config_data *config_data) {
     return 0;
 }
 
-int config_write(struct config_data *config_data) {
+int config_write(struct cs2_config_data_t *config_data) {
     FILE *config_fp;
     uint16_t crc;
     int i;
@@ -276,6 +278,31 @@ int config_write(struct config_data *config_data) {
     fwrite(config_data->inflated_data, 1, config_data->inflated_size, config_fp);
     fclose(config_fp);
     return 1;
+}
+
+int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netframe, int sockfd) {
+    int ddi, n, i;
+    int file_not_done, temp, config_data_start, config_data_stream, deflated_size;
+    fd_set rset;
+
+    if (memcmp(netframe, GETCONFIG_RESPONSE, 5) == 0) {
+	memcpy(&temp, &netframe[5], 4);
+	deflated_size = ntohl(temp);
+	config_data->deflated_size = deflated_size;
+	memcpy(&temp, &netframe[9], 2);
+	config_data->crc = ntohs(temp);
+	if (config_data->verbose)
+	    printf("\nstart of config - deflated size: 0x%08x crc 0x%04x", deflated_size, config_data->crc);
+        config_data_start = 1;
+        /* we alloc 8 bytes more to be sure that it fits */
+	config_data->deflated_data = malloc(deflated_size + 16);
+        if (config_data->deflated_data == NULL) {
+            fprintf(stderr, "can't malloc deflated config data buffer - size 0x%04x\n", deflated_size + 8);
+            exit(EXIT_FAILURE);
+        }
+        /* deflated data index */
+        ddi = 0;
+     }
 }
 
 uint8_t *read_config_file(char *filename, char *config_dir, uint32_t * nbytes) {

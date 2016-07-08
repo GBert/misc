@@ -18,6 +18,7 @@ static char *TCP_FORMAT_STRG      = "->TCP>CAN    CANID 0x%08X   [%d]";
 static char *TCP_FORMATS_STRG     = "->TCP>CAN*   CANID 0x%08X   [%d]";
 static char *CAN_TCP_FORMAT_STRG  = "->CAN>TCP    CANID 0x%08X   [%d]";
 static char *NET_UDP_FORMAT_STRG  = "      UDP->  CANID 0x%08X   [%d]";
+static char *NET_TCP_FORMAT_STRG  = "      TCP->  CANID 0x%08X   [%d]";
 
 static unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[] = { 0x00, 0x36, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
 static unsigned char M_CAN_PING[]                      = { 0x00, 0x30, 0x47, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -25,7 +26,6 @@ static unsigned char M_PING_RESPONSE[] = { 0x00, 0x30, 0x00, 0x00, 0x00 };
 
 unsigned char GETCONFIG[]          = { 0x00, 0x40, 0x03, 0x00, 0x08 };
 unsigned char GETCONFIG_DATA[]     = { 0x00, 0x42, 0x03, 0x00, 0x08 };
-unsigned char GETCONFIG_RESPONSE[] = { 0x00, 0x42, 0x03, 0x00, 0x06 };
 
 char *cs2_configs[][2] = {
     {"loks", "lokomotive.cs2"},
@@ -104,11 +104,12 @@ int check_data(int tcp_socket, unsigned char *netframe) {
     switch (canid & 0xFFFF0000UL) {
     case (0x00310000UL):	/* CAN ping */
 	ret = 1;
-	/* looking for CS2.exe ping request */
-	if ((netframe[11] = 0xEE) && (netframe[12] = 0xEE)) {
+	/* looking for CS2.exe ping answer */
+	print_can_frame(NET_TCP_FORMAT_STRG, netframe, verbose);
+	if ((netframe[11] == 0xFF) && (netframe[12] == 0xFF)) {
 	    if (copy_cs2_conf) {
 		if (verbose)
-		    printf("CS2 ping - copy config\n");
+		    printf("got CS2 ping answer - copy config now\n");
 		memset(newframe, 0, 13);
 		memcpy(newframe, GETCONFIG, 5);
 		/* TODO */
@@ -197,6 +198,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 	if (canid == 0x0042affe) {
 	    printf("copy conig request\n");
 	}
+	print_can_frame(NET_TCP_FORMAT_STRG, netframe, verbose);
 	break;
 	/* fake cyclic MS1 slave monitoring response */
     case (0x0C000000UL):
@@ -561,7 +563,7 @@ int main(int argc, char **argv) {
 		canid = ntohl(canid);
 		/* answer to encapsulated CAN ping from LAN to LAN */
 		if (((canid & 0xFFFF0000UL) == 0x00310000UL) &&
-		    (netframe[11] = 0xEE) && (netframe[12] = 0xEE)) {
+		    (netframe[11] == 0xEE) && (netframe[12] == 0xEE)) {
 		    if (verbose & !background)
 			printf("                received CAN ping\n");
 		    memcpy(netframe, M_PING_RESPONSE, 5);
@@ -594,6 +596,12 @@ int main(int argc, char **argv) {
 	    FD_SET(conn_fd, &all_fds);	/* add new descriptor to set */
 	    max_fds = MAX(conn_fd, max_fds);	/* for select */
 	    max_tcp_i = MAX(i, max_tcp_i);	/* max index in tcp_client[] array */
+	    /* send embedded CAN ping */
+	    memcpy(netframe, M_CAN_PING, 13);
+	    net_to_net(conn_fd, NULL, netframe, 13);
+	    if (verbose && !background)
+		printf("send embedded CAN ping\n");
+
 	    if (--nready <= 0)
 		continue;	/* no more readable descriptors */
 	}
