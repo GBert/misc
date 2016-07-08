@@ -76,12 +76,6 @@ int send_can_ping(int can_socket) {
     return 0;
 }
 
-int copy_cs2_config(int tcp_socket) {
-    if (verbose)
-	printf("copy CS2 config request over TCP socket %d\n", tcp_socket);
-    return 1;
-}
-
 int check_data(int tcp_socket, unsigned char *netframe) {
     uint32_t canid;
     char config_name[9];
@@ -123,8 +117,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 	    net_to_net(tcp_socket, NULL, netframe, 13);
 	    if (verbose)
 		printf("CS2 copy request\n");
-	    /* fake response */
-	    copy_cs2_config(tcp_socket);
+	    copy_cs2_conf = 1;
 	} else {
 	    strncpy(config_name, (char *)&netframe[5], 8);
 	    config_name[8] = '\0';
