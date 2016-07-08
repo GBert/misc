@@ -27,6 +27,20 @@ unsigned char GETCONFIG[]          = { 0x00, 0x40, 0x03, 0x00, 0x08 };
 unsigned char GETCONFIG_DATA[]     = { 0x00, 0x42, 0x03, 0x00, 0x08 };
 unsigned char GETCONFIG_RESPONSE[] = { 0x00, 0x42, 0x03, 0x00, 0x06 };
 
+char *cs2_configs[][2] = {
+    {"loks", "lokomotive.cs2"},
+    {"mags", "magnetartikel.cs2"},
+    {"fs", "fahrstrassen.cs2"},
+    {"gbs", "gleisbild.cs2"},
+/*    {NULL, NULL}, */
+    {NULL, NULL},
+    {"lokstat", "lokomotive.sr2"},
+    {"magstat", "magnetartikel.sr2"},
+    {"gbsstat", "gbsstat.sr2"},
+    {"fsstat", "fahrstarssen.sr2"},
+    {NULL, NULL},
+};
+
 char config_dir[MAXLINE];
 char config_file[MAXLINE];
 char **page_name;

@@ -91,20 +91,6 @@ struct MS1_Node_Buffer {
     uint8_t write;
 };
 
-char *cs2_configs[][2] = {
-    {"loks", "lokomotive.cs2"},
-    {"mags", "magnetartikel.cs2"},
-    {"fs", "fahrstrassen.cs2"},
-    {"gbs", "gleisbild.cs2"},
-/*    {NULL, NULL}, */
-    {NULL, NULL},
-    {"lokstat", "lokomotive.sr2"},
-    {"magstat", "magnetartikel.sr2"},
-    {"gbsstat", "gbsstat.sr2"},
-    {"fsstat", "fahrstarssen.sr2"},
-    {NULL, NULL},
-};
-
 static const int MAXPENDING = 16;	/* max outstanding tcp connections */
 unsigned char netframe[MAXDG];
 unsigned char ec_frame[13];
