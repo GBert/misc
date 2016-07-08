@@ -23,15 +23,19 @@ static unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[] = { 0x00, 0x36, 0x03, 0x0
 static unsigned char M_CAN_PING[]                      = { 0x00, 0x30, 0x47, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static unsigned char M_PING_RESPONSE[] = { 0x00, 0x30, 0x00, 0x00, 0x00 };
 
+unsigned char GETCONFIG[]          = { 0x00, 0x40, 0x03, 0x00, 0x08 };
+unsigned char GETCONFIG_DATA[]     = { 0x00, 0x42, 0x03, 0x00, 0x08 };
+unsigned char GETCONFIG_RESPONSE[] = { 0x00, 0x42, 0x03, 0x00, 0x06 };
+
 char config_dir[MAXLINE];
 char config_file[MAXLINE];
 char **page_name;
-int verbose, ms1_workaround, use_cs2_conf;
+int verbose, ms1_workaround, copy_cs2_conf;
 struct timeval last_sent;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.08\n\n");
+    fprintf(stderr, "   Version 1.10\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
@@ -39,7 +43,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default 15730\n");
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -i <can int>        CAN interface - default can0\n");
-    fprintf(stderr, "         -k                  use a connected CS2.exe for config source\n");
+    fprintf(stderr, "         -k                  use a connected CS2.exe as config source\n");
     fprintf(stderr, "         -T                  timeout starting %s in sec - default %d sec\n", prg, MAX_UDP_BCAST_RETRY);
     fprintf(stderr, "         -m                  doing MS1 workaround - default: don't do it\n");
     fprintf(stderr, "         -f                  running in foreground\n");
@@ -81,6 +85,7 @@ int copy_cs2_config(int tcp_socket) {
 int check_data(int tcp_socket, unsigned char *netframe) {
     uint32_t canid;
     char config_name[9];
+    unsigned char newframe[13];
     char gbs_name[MAXLINE];
     int ret;
     gbs_name[0] = '\0';
@@ -89,6 +94,21 @@ int check_data(int tcp_socket, unsigned char *netframe) {
     memcpy(&canid, netframe, 4);
     canid = ntohl(canid);
     switch (canid & 0xFFFF0000UL) {
+    case (0x00310000UL):	/* CAN ping */
+	ret = 1;
+	/* looking for CS2.exe ping request */
+	if ((netframe[11] = 0xEE) && (netframe[12] = 0xEE)) {
+	    if (copy_cs2_conf) {
+		if (verbose)
+		    printf("CS2 ping - copy config\n");
+		memset(newframe, 0, 13);
+		memcpy(newframe, GETCONFIG, 5);
+		/* TODO */
+		memcpy(&newframe[5], "gbs-0", 5);
+		net_to_net(tcp_socket, NULL, newframe, 13);
+	    }
+	}
+	break;
     case (0x00400000UL):	/* config data */
 	/* mark frame to send over CAN */
 	ret = 0;
@@ -161,6 +181,14 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 	    }
 	    break;
 	}
+    case (0x00420000UL):
+	/* mark frame to send over CAN */
+	ret = 1;
+	/* check for initiated config request */
+	if (canid == 0x0042affe) {
+	    printf("copy conig request\n");
+	}
+	break;
 	/* fake cyclic MS1 slave monitoring response */
     case (0x0C000000UL):
 	/* mark CAN frame to send */
@@ -213,7 +241,7 @@ int main(int argc, char **argv) {
 
     verbose = 0;
     ms1_workaround = 0;
-    use_cs2_conf = 0;
+    copy_cs2_conf = 0;
     memset(ifr.ifr_name, 0, sizeof(ifr.ifr_name));
     strcpy(ifr.ifr_name, "can0");
     memset(config_dir, 0, sizeof(config_dir));
@@ -278,7 +306,7 @@ int main(int argc, char **argv) {
 	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
 	    break;
 	case 'k':
-	    use_cs2_conf = 1;
+	    copy_cs2_conf = 1;
 	    break;
 	case 'T':
 	    timeout = strtoul(optarg, (char **)NULL, 10);
@@ -335,7 +363,7 @@ int main(int argc, char **argv) {
 	baddr.sin_family = AF_INET;
 	baddr.sin_port = htons(destination_port);
 	s = inet_pton(AF_INET, udp_dst_address, &baddr.sin_addr);
-	if ( s > 0)
+	if (s > 0)
 	    break;
 	sleep(1);
     }
