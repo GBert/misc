@@ -106,6 +106,8 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 		/* TODO */
 		memcpy(&newframe[5], "gbs-0", 5);
 		net_to_net(tcp_socket, NULL, newframe, 13);
+		/* done - don't copy again */
+		copy_cs2_conf = 0;
 	    }
 	}
 	break;
