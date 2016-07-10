@@ -281,9 +281,7 @@ int config_write(struct cs2_config_data_t *config_data) {
 }
 
 int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netframe, int sockfd) {
-    int ddi, n, i;
-    int file_not_done, temp, config_data_start, config_data_stream, deflated_size;
-    fd_set rset;
+    int temp, deflated_size;
 
     if (memcmp(netframe, GETCONFIG_RESPONSE, 5) == 0) {
 	memcpy(&temp, &netframe[5], 4);
@@ -293,7 +291,7 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 	config_data->crc = ntohs(temp);
 	if (config_data->verbose)
 	    printf("\nstart of config - deflated size: 0x%08x crc 0x%04x", deflated_size, config_data->crc);
-        config_data_start = 1;
+        config_data->start = 1;
         /* we alloc 8 bytes more to be sure that it fits */
 	config_data->deflated_data = malloc(deflated_size + 16);
         if (config_data->deflated_data == NULL) {
@@ -301,8 +299,13 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
             exit(EXIT_FAILURE);
         }
         /* deflated data index */
-        ddi = 0;
-     }
+	config_data->ddi = 0;
+        /* file not done */
+	config_data->fnd = 1;
+	/* TODO */
+	printf("sockfd %d\n", sockfd);
+    }
+    return 1;
 }
 
 uint8_t *read_config_file(char *filename, char *config_dir, uint32_t * nbytes) {

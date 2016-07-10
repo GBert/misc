@@ -78,8 +78,12 @@ struct cs2_config_data_t {
     uint16_t crc;
     char *name;
     int verbose;
+    int fnd;
+    int start;
+    unsigned int ddi;
     uint8_t *deflated_data;
     uint8_t *inflated_data;
+    char **page_name;
 };
 
 #define MS1_BUFFER_SIZE 8
