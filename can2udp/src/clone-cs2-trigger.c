@@ -7,6 +7,7 @@
  * ----------------------------------------------------------------------------
  */
 
+#include <errno.h>
 #include <ifaddrs.h>
 #include <libgen.h>
 #include <stdio.h>
@@ -26,14 +27,13 @@
 #include <netdb.h>
 
 #include <linux/can.h>
-#include "s88udp-bpi.h"
 
 #define BIT(x)		(1<<x)
 #define MINDELAY	2	/* min delay in usec */
 #define MAXIPLEN	40	/* maximum IP string length */
 #define UDPPORT		15730
 
-struct s88_t {
+struct trigger_t {
     struct sockaddr_in baddr;
     int socket;
     int background;
@@ -46,10 +46,10 @@ struct s88_t {
 };
 
 void usage(char *prg) {
-    fprintf(stderr, "\nUsage: %s -vf [-b <bcast_addr/int>][-i <0|1>][-p <port>][-m <s88modules>][-o <offset>]\n", prg);
+    fprintf(stderr, "\nUsage: %s -vf [-b <bcast_addr/int>][-i <0|1>][-p <port>][-m <triggermodules>][-o <offset>]\n", prg);
     fprintf(stderr, "   Version 1.0\n\n");
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
-    fprintf(stderr, "         -e <event id>       using event id - default 0\n");
+    fprintf(stderr, "         -t <timer in sec>   using timer in sec\n");
     fprintf(stderr, "         -p <port>           destination port of the server - default %d\n", UDPPORT);
     fprintf(stderr, "         -f                  run in foreground (for debugging)\n");
     fprintf(stderr, "         -v                  be verbose\n\n");
@@ -64,7 +64,6 @@ void usec_sleep(int usec) {
 }
 
 int time_stamp(void) {
-    /* char *timestamp = (char *)malloc(sizeof(char) * 16); */
     struct timeval tv;
     struct tm *tm;
 
@@ -98,14 +97,14 @@ void print_net_frame(unsigned char *netframe, uint32_t count) {
     printf("\n");
 }
 
-int create_event(struct s88_t *s88, int bus, int offset, uint32_t changed_bits, uint32_t value) {
+int create_event(struct trigger_t *trigger, int bus, int offset, uint32_t changed_bits, uint32_t value) {
     int s;
     uint32_t i, mask, canid, temp32;
     uint16_t temp16;
     uint8_t netframe[13];
 
     /* allow usefull M*rklin hashes only */
-    canid = 0x00230300 | (s88->hash & 0x0000ffff);
+    canid = 0x00230300 | (trigger->hash & 0x0000ffff);
 
     temp32 = htonl(canid);
     memcpy(netframe, &temp32, 4);
@@ -118,7 +117,7 @@ int create_event(struct s88_t *s88, int bus, int offset, uint32_t changed_bits, 
     mask = BIT(31);
     for (i = 0; i < 32; i++) {
 	if (changed_bits & mask) {
-	    temp16 = htons(s88->hw_id);
+	    temp16 = htons(trigger->hw_id);
 	    memcpy(&netframe[5], &temp16, 2);
 	    /* TODO */
 	    temp16 = htons(bus * 256 + offset + i + 1);
@@ -130,13 +129,13 @@ int create_event(struct s88_t *s88, int bus, int offset, uint32_t changed_bits, 
 		netframe[9] = 1;
 		netframe[10] = 0;
 	    }
-	    s = sendto(s88->socket, netframe, 13, 0, (struct sockaddr *)&s88->baddr, sizeof(s88->baddr));
+	    s = sendto(trigger->socket, netframe, 13, 0, (struct sockaddr *)&trigger->baddr, sizeof(trigger->baddr));
 	    if (s != 13) {
 		fprintf(stderr, "%s: error sending UDP data: %s\n", __func__, strerror(errno));
 		return -1;
 	    }
-	    if (!s88->background)
-		print_net_frame(netframe, s88->count);
+	    if (!trigger->background)
+		print_net_frame(netframe, trigger->count);
 	}
 	mask >>= 1;
     }
@@ -144,15 +143,12 @@ int create_event(struct s88_t *s88, int bus, int offset, uint32_t changed_bits, 
 }
 
 int main(int argc, char **argv) {
-    int utime, i, j;
-    int opt, ret;
+    int opt, ret, utime;
     struct sockaddr_in destaddr, *bsa;
     struct ifaddrs *ifap, *ifa;
-    struct s88_t s88_data;
+    struct trigger_t trigger_data;
     char *udp_dst_address;
     char *bcast_interface;
-    uint32_t mask, s88_bit;
-    uint8_t newvalue;
 
     const int on = 1;
 
@@ -197,10 +193,10 @@ int main(int argc, char **argv) {
 	    }
 	    break;
 	case 'e':
-	    s88_data.hash = atoi(optarg) & 0xffff;
+	    trigger_data.hash = atoi(optarg) & 0xffff;
 	    break;
 	case 'i':
-	    s88_data.invert = atoi(optarg) & 1;
+	    trigger_data.invert = atoi(optarg) & 1;
 	    break;
 	case 't':
 	    utime = atoi(optarg);
@@ -210,10 +206,10 @@ int main(int argc, char **argv) {
 	    }
 	    break;
 	case 'v':
-	    s88_data.verbose = 1;
+	    trigger_data.verbose = 1;
 	    break;
 	case 'f':
-	    s88_data.background = 0;
+	    trigger_data.background = 0;
 	    break;
 	case 'h':
 	case '?':
@@ -246,21 +242,21 @@ int main(int argc, char **argv) {
 	    fprintf(stderr, "invalid address family\n");
 	exit(EXIT_FAILURE);
     }
-    if (!s88_data.background && s88_data.verbose)
+    if (!trigger_data.background && trigger_data.verbose)
 	printf("using broadcast address %s\n", udp_dst_address);
     /* open udp socket */
-    if ((s88_data.socket = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+    if ((trigger_data.socket = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
 	fprintf(stderr, "UDP socket error: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
-    if (setsockopt(s88_data.socket, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0) {
+    if (setsockopt(trigger_data.socket, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0) {
 	fprintf(stderr, "UDP set broadcast option error: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
 
-    s88_data.baddr = destaddr;
+    trigger_data.baddr = destaddr;
 
-    if (s88_data.background) {
+    if (trigger_data.background) {
 	pid_t pid;
 
 	/* fork off the parent process */
@@ -270,7 +266,7 @@ int main(int argc, char **argv) {
 	}
 	/* if we got a good PID, then we can exit the parent process. */
 	if (pid > 0) {
-	    if (s88_data.verbose)
+	    if (trigger_data.verbose)
 		printf("Going into background ...\n");
 	    exit(EXIT_SUCCESS);
 	}
