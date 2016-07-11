@@ -47,11 +47,10 @@ struct s88_t {
 
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -vf [-b <bcast_addr/int>][-i <0|1>][-p <port>][-m <s88modules>][-o <offset>]\n", prg);
-    fprintf(stderr, "   Version 1.2\n\n");
+    fprintf(stderr, "   Version 1.0\n\n");
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -e <event id>       using event id - default 0\n");
     fprintf(stderr, "         -p <port>           destination port of the server - default %d\n", UDPPORT);
-    fprintf(stderr, "         -t <time in usec>   microtiming in usec - default %d usec\n", MICRODELAY);
     fprintf(stderr, "         -f                  run in foreground (for debugging)\n");
     fprintf(stderr, "         -v                  be verbose\n\n");
 }
@@ -158,7 +157,6 @@ int main(int argc, char **argv) {
     const int on = 1;
 
     int destination_port = UDPPORT;
-    utime = MICRODELAY;
 
     udp_dst_address = (char *)calloc(MAXIPLEN, 1);
     if (!udp_dst_address) {
@@ -203,20 +201,6 @@ int main(int argc, char **argv) {
 	    break;
 	case 'i':
 	    s88_data.invert = atoi(optarg) & 1;
-	    break;
-	case 'm':
-	    modulcount = atoi(optarg);
-	    if (modulcount < 1 || modulcount > MAXMODULES) {
-		usage(basename(argv[0]));
-		exit(EXIT_FAILURE);
-	    }
-	    break;
-	case 'o':
-	    s88_data.offset = atoi(optarg);
-	    if (s88_data.offset >= MAXMODULES) {
-		usage(basename(argv[0]));
-		exit(EXIT_FAILURE);
-	    }
 	    break;
 	case 't':
 	    utime = atoi(optarg);
@@ -292,17 +276,18 @@ int main(int argc, char **argv) {
 	}
     }
 
+#if 0
     if (gpio_bpi_open("/dev/mem") < 0) {
 	fprintf(stderr, "Can't open IO mem: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
+#endif
 
     /* loop forever */
     while (1) {
 	/* get trigger data */
 	usec_sleep(utime);
 	/* now check data */
-	ret = analyze_data(&s88_data, modulcount * 16);
 	if (ret < 0) {
 	    fprintf(stderr, "problem sending event data - terminating\n");
 	    exit(EXIT_FAILURE);
