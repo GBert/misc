@@ -44,7 +44,7 @@ char *cs2_configs[][2] = {
 char config_dir[MAXLINE];
 char config_file[MAXLINE];
 char **page_name;
-int verbose, ms1_workaround, copy_cs2_conf;
+int verbose, ms1_workaround;
 struct timeval last_sent;
 
 void print_usage(char *prg) {
@@ -90,10 +90,63 @@ int send_can_ping(int can_socket) {
     return 0;
 }
 
-int check_data(int tcp_socket, unsigned char *netframe) {
+int copy_cs2_config(struct cs2_config_data_t *cs2_config_data) {
+    unsigned char newframe[13];
+
+    if (cs2_config_data->cs2_tcp_socket) {
+	memset(newframe, 0, 13);
+	memcpy(newframe, GETCONFIG, 5);
+	/* TODO */
+	memcpy(&newframe[5], "gbs-0", 5);
+	net_to_net(cs2_config_data->cs2_tcp_socket, NULL, newframe, 13);
+	/* done - don't copy again */
+	cs2_config_data->cs2_config_copy = 0;
+    } else {
+	fprintf(stderr, "can't clone CS2 config - no CS2 TCP connection yet\n");
+    }
+    return 0;
+}
+
+
+int check_data_udp(int udp_socket, struct sockaddr *baddr, struct cs2_config_data_t *cs2_config_data, unsigned char *netframe) {
+    uint32_t canid;
+
+    memcpy(&canid, netframe, 4);
+    canid = ntohl(canid);
+    switch (canid & 0xFFFF0000UL) {
+    case (0x00310000UL):
+	if ((netframe[11] == 0xEE) && (netframe[12] == 0xEE)) {
+	    if (verbose)
+		printf("                received CAN ping\n");
+	    memcpy(netframe, M_PING_RESPONSE, 5);
+	    if (net_to_net(udp_socket, baddr, netframe, 13)) {
+		fprintf(stderr, "sending UDP data (CAN Ping) error:%s \n", strerror(errno));
+	    } else {
+		print_can_frame(NET_UDP_FORMAT_STRG, netframe, verbose);
+		if (verbose)
+		    printf("                replied CAN ping\n");
+	    }
+	    if (cs2_config_data->cs2_config_copy)
+		copy_cs2_config(cs2_config_data);
+	}
+	break;
+    case (0x00420000UL):
+	/* check for initiated config request */
+	if (canid == 0x0042affe) {
+	    printf("copy config request\n");
+	    cs2_config_data->cs2_config_copy = 1;
+	    copy_cs2_config(cs2_config_data);
+	}
+	break;
+    default:
+	break;
+    }
+    return 0;
+}
+
+int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsigned char *netframe) {
     uint32_t canid;
     char config_name[9];
-    unsigned char newframe[13];
     char gbs_name[MAXLINE];
     int ret;
     gbs_name[0] = '\0';
@@ -107,17 +160,8 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 	/* looking for CS2.exe ping answer */
 	print_can_frame(NET_TCP_FORMAT_STRG, netframe, verbose);
 	if ((netframe[11] == 0xFF) && (netframe[12] == 0xFF)) {
-	    if (copy_cs2_conf) {
-		if (verbose)
-		    printf("got CS2 ping answer - copy config now\n");
-		memset(newframe, 0, 13);
-		memcpy(newframe, GETCONFIG, 5);
-		/* TODO */
-		memcpy(&newframe[5], "gbs-0", 5);
-		net_to_net(tcp_socket, NULL, newframe, 13);
-		/* done - don't copy again */
-		copy_cs2_conf = 0;
-	    }
+	    printf("got CS2 TCP ping - copy config var: %d\n", cs2_config_data->cs2_config_copy);
+	    cs2_config_data->cs2_tcp_socket = tcp_socket;
 	}
 	break;
     case (0x00400000UL):	/* config data */
@@ -132,7 +176,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 	    net_to_net(tcp_socket, NULL, netframe, 13);
 	    if (verbose)
 		printf("CS2 copy request\n");
-	    copy_cs2_conf = 1;
+	    cs2_config_data->cs2_config_copy = 1;
 	} else {
 	    strncpy(config_name, (char *)&netframe[5], 8);
 	    config_name[8] = '\0';
@@ -192,7 +236,7 @@ int check_data(int tcp_socket, unsigned char *netframe) {
 	    break;
 	}
     case (0x00420000UL):
-	/* mark frame to send over CAN */
+	/* mark frame to not send over CAN */
 	ret = 1;
 	/* check for initiated config request */
 	if (canid == 0x0042affe) {
@@ -211,6 +255,8 @@ int check_data(int tcp_socket, unsigned char *netframe) {
     return ret;
 }
 
+
+
 int main(int argc, char **argv) {
     pid_t pid;
     int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, timeout, tcp_client[MAX_TCP_CONN];
@@ -227,11 +273,11 @@ int main(int argc, char **argv) {
     socklen_t caddrlen = sizeof(caddr);
     socklen_t tcp_client_length = sizeof(tcp_addr);
     fd_set all_fds, read_fds;
-    uint32_t canid;
     int s, ret;
     struct timeval tv;
     char *udp_dst_address;
     char *bcast_interface;
+    struct cs2_config_data_t cs2_config_data;
 
     int local_udp_port = 15731;
     int local_tcp_port = 15731;
@@ -252,7 +298,9 @@ int main(int argc, char **argv) {
 
     verbose = 0;
     ms1_workaround = 0;
-    copy_cs2_conf = 0;
+    cs2_config_data.cs2_config_copy = 0;
+    cs2_config_data.cs2_tcp_socket =0;
+
     memset(ifr.ifr_name, 0, sizeof(ifr.ifr_name));
     strcpy(ifr.ifr_name, "can0");
     memset(config_dir, 0, sizeof(config_dir));
@@ -317,7 +365,7 @@ int main(int argc, char **argv) {
 	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
 	    break;
 	case 'k':
-	    copy_cs2_conf = 1;
+	    cs2_config_data.cs2_config_copy = 1;
 	    break;
 	case 'T':
 	    timeout = strtoul(optarg, (char **)NULL, 10);
@@ -559,22 +607,7 @@ int main(int argc, char **argv) {
 		/* send packet on CAN */
 		ret = frame_to_can(sc, netframe);
 		print_can_frame(NET_UDP_FORMAT_STRG, netframe, verbose & !background);
-		memcpy(&canid, netframe, 4);
-		canid = ntohl(canid);
-		/* answer to encapsulated CAN ping from LAN to LAN */
-		if (((canid & 0xFFFF0000UL) == 0x00310000UL) &&
-		    (netframe[11] == 0xEE) && (netframe[12] == 0xEE)) {
-		    if (verbose & !background)
-			printf("                received CAN ping\n");
-		    memcpy(netframe, M_PING_RESPONSE, 5);
-		    if (net_to_net(sb, (struct sockaddr *)&baddr, netframe, 13)) {
-			fprintf(stderr, "sending UDP data (CAN Ping) error:%s \n", strerror(errno));
-		    } else {
-			print_can_frame(NET_UDP_FORMAT_STRG, netframe, verbose & !background);
-			if (verbose & !background)
-			    printf("                replied CAN ping\n");
-		    }
-		}
+		check_data_udp(sb, (struct sockaddr *) &baddr, &cs2_config_data, netframe);
 	    }
 	}
 	/* received a TCP packet */
@@ -593,7 +626,7 @@ int main(int argc, char **argv) {
 	    if (i == MAX_TCP_CONN)
 		fprintf(stderr, "too many TCP clients\n");
 
-	    FD_SET(conn_fd, &all_fds);	/* add new descriptor to set */
+	    FD_SET(conn_fd, &all_fds);		/* add new descriptor to set */
 	    max_fds = MAX(conn_fd, max_fds);	/* for select */
 	    max_tcp_i = MAX(i, max_tcp_i);	/* max index in tcp_client[] array */
 	    /* send embedded CAN ping */
@@ -603,7 +636,7 @@ int main(int argc, char **argv) {
 		printf("send embedded CAN ping\n");
 
 	    if (--nready <= 0)
-		continue;	/* no more readable descriptors */
+		continue;			/* no more readable descriptors */
 	}
 	/* received a packet on second TCP port */
 	if (FD_ISSET(st2, &read_fds)) {
@@ -614,7 +647,7 @@ int main(int argc, char **argv) {
 		printf("new client: %s, port %d conn fd: %d max fds: %d\n", inet_ntop(AF_INET, &(tcp_addr2.sin_addr),
 			buffer, sizeof(buffer)), ntohs(tcp_addr2.sin_port), conn_fd, max_fds);
 	    }
-	    FD_SET(conn_fd, &all_fds);	/* add new descriptor to set */
+	    FD_SET(conn_fd, &all_fds);		/* add new descriptor to set */
 	    max_fds = MAX(conn_fd, max_fds);	/* for select */
 	    max_tcp_i = MAX(i, max_tcp_i);	/* max index in tcp_client[] array */
 	}
@@ -650,7 +683,7 @@ int main(int argc, char **argv) {
 		    } else {
 			for (i = 0; i < n; i += 13) {
 			    /* check if we need to forward the message to CAN */
-			    if (!check_data(tcp_socket, &netframe[i])) {
+			    if (!check_data(tcp_socket, &cs2_config_data, &netframe[i])) {
 				ret = frame_to_can(sc, &netframe[i]);
 				if (!ret) {
 				    if (i > 0)

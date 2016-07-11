@@ -11,8 +11,8 @@
 #include <zlib.h>
 
 /* it seems Gleisbox needs a short break after every CAN message */
-/* use 20ms delay between two consequences CAN frames */
-#define TIME_WAIT_US	20 * 1000
+/* use 10ms delay between two consequences CAN frames */
+#define TIME_WAIT_US	10 * 1000
 
 /* CHUNK is the size of the memory chunk used by the zlib routines. */
 #define CHUNK		0x8000

@@ -29,18 +29,20 @@
 #include <linux/can.h>
 
 #define BIT(x)		(1<<x)
-#define MINDELAY	2	/* min delay in usec */
+#define MINDELAY	1000000	/* min delay in usec */
 #define MAXIPLEN	40	/* maximum IP string length */
-#define UDPPORT		15730
+#define UDPPORT		15731
+
+
+unsigned char CLONE_CONFIG_REQUEST[]     = { 0x00, 0x42, 0xaf, 0xfe, 0x00 };
 
 struct trigger_t {
     struct sockaddr_in baddr;
     int socket;
     int background;
     int verbose;
-    int invert;
+    int interval;
     int offset;
-    uint32_t count;
     uint16_t hash;
     uint16_t hw_id;
 };
@@ -49,7 +51,7 @@ void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -vf [-b <bcast_addr/int>][-i <0|1>][-p <port>][-m <triggermodules>][-o <offset>]\n", prg);
     fprintf(stderr, "   Version 1.0\n\n");
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
-    fprintf(stderr, "         -t <timer in sec>   using timer in sec\n");
+    fprintf(stderr, "         -i <interval in sec>   using timer in sec\n");
     fprintf(stderr, "         -p <port>           destination port of the server - default %d\n", UDPPORT);
     fprintf(stderr, "         -f                  run in foreground (for debugging)\n");
     fprintf(stderr, "         -v                  be verbose\n\n");
@@ -74,14 +76,14 @@ int time_stamp(void) {
     return 0;
 }
 
-void print_net_frame(unsigned char *netframe, uint32_t count) {
+void print_net_frame(unsigned char *netframe) {
     uint32_t canid;
     int i, dlc;
 
     memcpy(&canid, netframe, 4);
     dlc = netframe[4];
     time_stamp();
-    printf("[0x%08X] ->S88>UDP  CANID 0x%08X   [%d]", count, ntohl(canid), netframe[4]);
+    printf("         UDP->  CANID 0x%08X   [%d]", ntohl(canid), netframe[4]);
     for (i = 5; i < 5 + dlc; i++) {
 	printf(" %02x", netframe[i]);
     }
@@ -97,53 +99,25 @@ void print_net_frame(unsigned char *netframe, uint32_t count) {
     printf("\n");
 }
 
-int create_event(struct trigger_t *trigger, int bus, int offset, uint32_t changed_bits, uint32_t value) {
+int create_event(struct trigger_t *trigger) {
     int s;
-    uint32_t i, mask, canid, temp32;
-    uint16_t temp16;
     uint8_t netframe[13];
 
-    /* allow usefull M*rklin hashes only */
-    canid = 0x00230300 | (trigger->hash & 0x0000ffff);
+    memset(netframe, 0, sizeof(netframe));
+    memcpy(netframe, CLONE_CONFIG_REQUEST, sizeof(CLONE_CONFIG_REQUEST));
 
-    temp32 = htonl(canid);
-    memcpy(netframe, &temp32, 4);
-    /* sensor event 8 bytes */
-    netframe[4] = 8;
-    /* we don't set the time value in the S88 event as of today */
-    netframe[11] = 0;
-    netframe[12] = 0;
-
-    mask = BIT(31);
-    for (i = 0; i < 32; i++) {
-	if (changed_bits & mask) {
-	    temp16 = htons(trigger->hw_id);
-	    memcpy(&netframe[5], &temp16, 2);
-	    /* TODO */
-	    temp16 = htons(bus * 256 + offset + i + 1);
-	    memcpy(&netframe[7], &temp16, 2);
-	    if (value & mask) {
-		netframe[9] = 0;
-		netframe[10] = 1;
-	    } else {
-		netframe[9] = 1;
-		netframe[10] = 0;
-	    }
-	    s = sendto(trigger->socket, netframe, 13, 0, (struct sockaddr *)&trigger->baddr, sizeof(trigger->baddr));
-	    if (s != 13) {
-		fprintf(stderr, "%s: error sending UDP data: %s\n", __func__, strerror(errno));
-		return -1;
-	    }
-	    if (!trigger->background)
-		print_net_frame(netframe, trigger->count);
-	}
-	mask >>= 1;
+    s = sendto(trigger->socket, netframe, 13, 0, (struct sockaddr *)&trigger->baddr, sizeof(trigger->baddr));
+    if (s != 13) {
+	fprintf(stderr, "%s: error sending UDP data: %s\n", __func__, strerror(errno));
+	return -1;
     }
+    if (!trigger->background)
+	print_net_frame(netframe);
     return 0;
 }
 
 int main(int argc, char **argv) {
-    int opt, ret, utime;
+    int opt, ret;
     struct sockaddr_in destaddr, *bsa;
     struct ifaddrs *ifap, *ifa;
     struct trigger_t trigger_data;
@@ -151,6 +125,7 @@ int main(int argc, char **argv) {
     char *bcast_interface;
 
     const int on = 1;
+    trigger_data.interval= 0;
 
     int destination_port = UDPPORT;
 
@@ -171,12 +146,8 @@ int main(int argc, char **argv) {
     destaddr.sin_family = AF_INET;
     destaddr.sin_port = htons(destination_port);
 
-    while ((opt = getopt(argc, argv, "b:e:i:p:m:o:t:fvh?")) != -1) {
+    while ((opt = getopt(argc, argv, "b:i:p:fvh?")) != -1) {
 	switch (opt) {
-	case 'p':
-	    destination_port = strtoul(optarg, (char **)NULL, 10);
-	    destaddr.sin_port = htons(destination_port);
-	    break;
 	case 'b':
 	    if (strnlen(optarg, MAXIPLEN) <= MAXIPLEN - 1) {
 		/* broadcat IP begins with a number */
@@ -192,18 +163,12 @@ int main(int argc, char **argv) {
 		exit(EXIT_FAILURE);
 	    }
 	    break;
-	case 'e':
-	    trigger_data.hash = atoi(optarg) & 0xffff;
-	    break;
 	case 'i':
-	    trigger_data.invert = atoi(optarg) & 1;
+	    trigger_data.interval = atoi(optarg);
 	    break;
-	case 't':
-	    utime = atoi(optarg);
-	    if (utime < MINDELAY) {
-		fprintf(stderr, "microtiming value to low: %d\n", utime);
-		exit(EXIT_FAILURE);
-	    }
+	case 'p':
+	    destination_port = strtoul(optarg, (char **)NULL, 10);
+	    destaddr.sin_port = htons(destination_port);
 	    break;
 	case 'v':
 	    trigger_data.verbose = 1;
@@ -256,6 +221,11 @@ int main(int argc, char **argv) {
 
     trigger_data.baddr = destaddr;
 
+    if (!trigger_data.interval) {
+	create_event(&trigger_data);
+	return EXIT_SUCCESS;
+    }
+
     if (trigger_data.background) {
 	pid_t pid;
 
@@ -272,23 +242,14 @@ int main(int argc, char **argv) {
 	}
     }
 
-#if 0
-    if (gpio_bpi_open("/dev/mem") < 0) {
-	fprintf(stderr, "Can't open IO mem: %s\n", strerror(errno));
-	exit(EXIT_FAILURE);
-    }
-#endif
-
     /* loop forever */
     while (1) {
-	/* get trigger data */
-	usec_sleep(utime);
-	/* now check data */
+        ret = create_event(&trigger_data);
 	if (ret < 0) {
 	    fprintf(stderr, "problem sending event data - terminating\n");
 	    exit(EXIT_FAILURE);
 	}
-	usec_sleep(100 * utime);
+	sleep(trigger_data.interval);
     }
     return 0;
 }

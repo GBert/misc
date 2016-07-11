@@ -80,6 +80,8 @@ struct cs2_config_data_t {
     int verbose;
     int fnd;
     int start;
+    int cs2_tcp_socket;
+    int cs2_config_copy;
     unsigned int ddi;
     uint8_t *deflated_data;
     uint8_t *inflated_data;
