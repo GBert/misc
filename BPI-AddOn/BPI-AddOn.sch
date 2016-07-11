@@ -809,7 +809,7 @@ F 3 "" H 2550 6150 50  0000 C CNN
 	1    2550 6150
 	1    0    0    -1  
 $EndComp
-Text Label 2900 6150 0    60   ~ 0
+Text Label 2950 6150 0    60   ~ 0
 Vdd
 Text Label 4400 3100 0    60   ~ 0
 Vcc
@@ -2866,4 +2866,19 @@ Text Label 9350 1050 0    60   ~ 0
 hRTS
 Text Label 9350 1150 0    60   ~ 0
 hCTS
+$Comp
+L CONN_01X02 P32
+U 1 1 5783B80F
+P 3300 6100
+F 0 "P32" H 3300 6250 50  0000 C CNN
+F 1 "CONN_01X02" V 3400 6100 50  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x02" V 3300 6100 50  0001 C CNN
+F 3 "" H 3300 6100 50  0000 C CNN
+	1    3300 6100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3100 6050 2950 6050
+Text Label 2950 6050 0    60   ~ 0
+Vcc
 $EndSCHEMATC
