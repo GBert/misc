@@ -118,6 +118,7 @@ int ms1_print_handles(struct id_node *node);
 struct id_node *ms1_search_for_id(struct id_node *node, uint32_t id);
 struct id_node *ms1_search_for_slave(struct id_node *node, uint8_t slave_node);
 int ms1_add_id(struct id_node *root_node, uint32_t id, uint8_t slave_node);
+int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netframe, int sockfd);
 uint16_t CRCCCITT(uint8_t *data, size_t length, uint16_t seed);
 #endif /* _CAN2LAN_H_ */
 

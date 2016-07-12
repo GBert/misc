@@ -24,7 +24,7 @@ static unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[] = { 0x00, 0x36, 0x03, 0x0
 static unsigned char M_CAN_PING[]                      = { 0x00, 0x30, 0x47, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static unsigned char M_PING_RESPONSE[] = { 0x00, 0x30, 0x00, 0x00, 0x00 };
 
-unsigned char GETCONFIG[]          = { 0x00, 0x40, 0x03, 0x00, 0x08 };
+unsigned char GETCONFIG[]          = { 0x00, 0x40, 0xaf, 0x7e, 0x08 };
 unsigned char GETCONFIG_DATA[]     = { 0x00, 0x42, 0x03, 0x00, 0x08 };
 
 char *cs2_configs[][2] = {
@@ -97,7 +97,11 @@ int copy_cs2_config(struct cs2_config_data_t *cs2_config_data) {
 	memset(newframe, 0, 13);
 	memcpy(newframe, GETCONFIG, 5);
 	/* TODO */
+	cs2_config_data->name = "gleisbild.cs2";
 	memcpy(&newframe[5], "gbs-0", 5);
+        
+	printf("send to CS2.exe ...\n");
+        print_can_frame(NET_TCP_FORMAT_STRG, newframe, 1);
 	net_to_net(cs2_config_data->cs2_tcp_socket, NULL, newframe, 13);
 	/* done - don't copy again */
 	cs2_config_data->cs2_config_copy = 0;
@@ -132,7 +136,7 @@ int check_data_udp(int udp_socket, struct sockaddr *baddr, struct cs2_config_dat
 	break;
     case (0x00420000UL):
 	/* check for initiated config request */
-	if (canid == 0x0042affe) {
+	if (canid == 0x0042af7e) {
 	    printf("copy config request\n");
 	    cs2_config_data->cs2_config_copy = 1;
 	    copy_cs2_config(cs2_config_data);
@@ -168,7 +172,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	/* mark frame to send over CAN */
 	ret = 0;
 	/* check for special copy request */
-	if (canid == 0x0040affe) {
+	if (canid == 0x0040af7e) {
 	    ret = 1;
 	    netframe[1] |= 1;
 	    netframe[4] = 4;
@@ -238,10 +242,8 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
     case (0x00420000UL):
 	/* mark frame to not send over CAN */
 	ret = 1;
-	/* check for initiated config request */
-	if (canid == 0x0042affe) {
-	    printf("copy conig request\n");
-	}
+	/* check for initiated copy request */
+        reassemble_data(cs2_config_data, netframe, tcp_socket);
 	print_can_frame(NET_TCP_FORMAT_STRG, netframe, verbose);
 	break;
 	/* fake cyclic MS1 slave monitoring response */

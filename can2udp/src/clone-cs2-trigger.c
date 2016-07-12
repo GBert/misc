@@ -34,7 +34,7 @@
 #define UDPPORT		15731
 
 
-unsigned char CLONE_CONFIG_REQUEST[]     = { 0x00, 0x42, 0xaf, 0xfe, 0x00 };
+unsigned char CLONE_CONFIG_REQUEST[]     = { 0x00, 0x42, 0xaf, 0x7e, 0x00 };
 
 struct trigger_t {
     struct sockaddr_in baddr;

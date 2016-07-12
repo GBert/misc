@@ -44,12 +44,143 @@ seite
 */
 
 struct track_config_t {
-    unsigned int version;
+    unsigned int version_major;
+    unsigned int version_minor;
     unsigned int size;
     char *last_used;
     unsigned int id;
     unsigned int name;
     UT_hash_handle ut_hash;
-}; 
+};
+
+char *track_types[] = {
+    "leer",
+    "gerade",
+    "bogen",
+    "linksweiche",
+    "rechtsweiche",
+    "dreiwegweiche",
+    "kreuzung",
+    "unterfuehrung",
+    "prellbock",
+    "doppelbogen",
+    "tunnel",
+    "yweiche",
+    "dkweiche",
+    "dkweiche_2",
+    "signal",
+    "s88kontakt",
+    "s88bogen",
+    "pfeil",
+    "fahrstrasse",
+    "text",
+    "k84_einfach",
+    "k84_doppelt",
+    "entkuppler",
+    "entkuppler_1",
+    "std_rot",
+    "std_gruen",
+    "std_rot_gruen_0",
+    "std_rot_gruen_1",
+    "signal_hp02",
+    "signal_hp012",
+    "signal_hp01s",
+    "signal_p_hp012s",
+    "signal_f_hp012s",
+    "signal_p_hp012",
+    "signal_f_hp01",
+    "signal_f_hp02",
+    "signal_f_hp012",
+    "signal_sh01",
+    "schiebebuehne_0",
+    "schiebebuehne_1",
+    "schiebebuehne_2",
+    "schiebebuehne_3",
+    "drehscheibe_alt_0",
+    "drehscheibe_alt_1",
+    "drehscheibe_alt_2",
+    "drehscheibe_alt_3",
+    "drehscheibe_dig_0",
+    "drehscheibe_dig_1",
+    "drehscheibe_dig_2",
+    "drehscheibe_dig_3",
+    "drehscheibe_dig_4",
+    "drehscheibe_dig_5",
+    "drehscheibe_dig_6",
+    "drehscheibe_dig_7",
+    "drehscheibe_dig_8",
+    "drehscheibe_dig_9",
+    "drehscheibe_dig_10",
+    "drehscheibe_dig_11",
+    "drehscheibe_dig_12",
+    "drehscheibe_dig_13",
+    "drehscheibe_dig_14",
+    "drehscheibe_dig_15",
+    "drehscheibe_dig_16",
+    "drehscheibe_dig_17",
+    "drehscheibe_dig_18",
+    "drehscheibe_dig_19",
+    "drehscheibe_dig_20",
+    "drehscheibe_dig_21",
+    "drehscheibe_dig_22",
+    "drehscheibe_dig_23",
+    "drehscheibe_dig_24",
+    "drehscheibe_dig_25",
+    "drehscheibe_dig_26",
+    "drehscheibe_dig_27",
+    "drehscheibe_dig_28",
+    "drehscheibe_dig_29",
+    "drehscheibe_dig_30",
+    "drehscheibe_dig_31",
+    "NULL"
+};
+
+char *mag_types[] = {
+    "digitaldrehscheibe",
+    "DKW 1 Antrieb",
+    "DKW 2 Antriebe",
+    "drehscheibe_alt",
+    "dreiwegweiche",
+    "entkupplungsgleis",
+    "entkupplungsgleis_1",
+    "formsignal_HP01",
+    "formsignal_HP012",
+    "formsignal_HP012_SH01",
+    "formsignal_HP02",
+    "formsignal_SH01",
+    "k84_ausgang",
+    "k84_doppelausgang",
+    "lichtsignal_HP01",
+    "lichtsignal_HP012",
+    "lichtsignal_HP012_SH01",
+    "lichtsignal_HP02",
+    "lichtsignal_SH01",
+    "linksweiche",
+    "rechtsweiche",
+    "schiebebuehne",
+    "std_gruen",
+    "std_rot",
+    "std_rot_gruen",
+    "urc_lichtsignal_HP01",
+    "urc_lichtsignal_HP012",
+    "urc_lichtsignal_HP012_SH01",
+    "urc_lichtsignal_SH01",
+    "y_weiche",
+    NULL
+};
+
+struct track_data_t {
+    unsigned int id;
+    unsigned int version_major;
+    unsigned int version_minor;
+    int item;
+    int state;
+    unsigned int type;
+    unsigned int rotation;
+    unsigned int deviceId;
+    char *text;
+    unsigned int name;
+    UT_hash_handle ut_hash;
+};
 
 #endif
