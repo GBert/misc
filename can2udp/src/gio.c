@@ -297,6 +297,7 @@ int config_write(struct cs2_config_data_t *config_data) {
 int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netframe) {
     unsigned int temp;
     unsigned char newframe[13];
+    char *filename;
 
     if (memcmp(netframe, GETCONFIG_RESPONSE, 5) == 0) {
 	memcpy(&temp, &netframe[5], 4);
@@ -355,6 +356,17 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 	            /* print_can_frame(NET_TCP_FORMAT_STRG, newframe, 1); */
 		    net_to_net(config_data->cs2_tcp_socket, NULL, newframe, 13);
 		    config_data->next++;
+		    if (strstr(cs2_configs[config_data->next][1], "gleisbild.cs2") == cs2_configs[config_data->next][1]) {
+    			filename = calloc(MAXLINE, 1);
+		        if (filename == NULL) {
+			    fprintf(stderr, "can't calloc in %s: %s\n", __func__, strerror(errno));
+			    return(EXIT_FAILURE);
+			}
+                        strcpy(filename, config_data->dir);
+			strcat(filename, cs2_configs[config_data->next][1]);
+			config_data->page_name = read_track_file(filename, config_data->page_name);
+			free(filename);
+		    }
 		}
 		config_data->fnd = 0;
 	    } else {
