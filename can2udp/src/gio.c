@@ -302,10 +302,12 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 	memcpy(&temp, &netframe[5], 4);
 	config_data->deflated_size = ntohl(temp);
 	config_data->deflated_size_counter = config_data->deflated_size;
+
 	memcpy(&temp, &netframe[9], 2);
 	config_data->crc = ntohs(temp);
 	if (config_data->verbose)
 	    printf("\nstart of config - deflated size: 0x%08x crc 0x%04x\n", config_data->deflated_size, config_data->crc);
+
 	config_data->start = 1;
 	/* we alloc 8 bytes more to be sure that it fits */
 	config_data->deflated_data = malloc(config_data->deflated_size + 16);
@@ -317,6 +319,7 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 	config_data->ddi = 0;
 	/* file not done */
 	config_data->fnd = 1;
+
     } else if (memcmp(netframe, GETCONFIG_DATA, 5) == 0) {
 	memcpy(&config_data->deflated_data[config_data->ddi], &netframe[5], 8);
 	config_data->ddi += 8;
