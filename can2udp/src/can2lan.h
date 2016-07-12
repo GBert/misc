@@ -77,7 +77,9 @@ struct cs2_config_data_t {
     int deflated_size_counter;
     int inflated_size;
     uint16_t crc;
+    char *dir;
     char *name;
+    int next;
     int verbose;
     int fnd;
     int start;
@@ -119,7 +121,7 @@ int ms1_print_handles(struct id_node *node);
 struct id_node *ms1_search_for_id(struct id_node *node, uint32_t id);
 struct id_node *ms1_search_for_slave(struct id_node *node, uint8_t slave_node);
 int ms1_add_id(struct id_node *root_node, uint32_t id, uint8_t slave_node);
-int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netframe, int sockfd);
+int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netframe);
 uint16_t CRCCCITT(uint8_t *data, size_t length, uint16_t seed);
 #endif /* _CAN2LAN_H_ */
 

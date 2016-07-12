@@ -49,7 +49,7 @@ struct track_config_t {
     unsigned int size;
     char *last_used;
     unsigned int id;
-    unsigned int name;
+    char *name;
     UT_hash_handle ut_hash;
 };
 
@@ -179,7 +179,7 @@ struct track_data_t {
     unsigned int rotation;
     unsigned int deviceId;
     char *text;
-    unsigned int name;
+    char *name;
     UT_hash_handle ut_hash;
 };
 

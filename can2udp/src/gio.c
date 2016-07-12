@@ -22,7 +22,9 @@
 unsigned char GETCONFIG_RESPONSE[] = { 0x00, 0x42, 0x03, 0x00, 0x06 };
 
 extern unsigned char GETCONFIG_DATA[];
+extern unsigned char GETCONFIG[];
 extern struct timeval last_sent;
+extern char *cs2_configs[][2];
 
 /* The following macro calls a zlib routine and checks the return
    value. If the return value ("status") is not OK, it prints an error
@@ -256,6 +258,15 @@ int config_write(struct cs2_config_data_t *config_data) {
     FILE *config_fp;
     uint16_t crc;
     int i;
+    char *filename;
+
+    filename = calloc(MAXLINE, 1);
+    if (filename == NULL) {
+        fprintf(stderr, "can't calloc in %s: %s\n", __func__, strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+    strcpy(filename, config_data->dir);
+    strcat(filename, config_data->name);
 
     crc = CRCCCITT(config_data->deflated_data, config_data->deflated_stream_size, 0xFFFF);
 
@@ -263,10 +274,10 @@ int config_write(struct cs2_config_data_t *config_data) {
 	printf("\n  writing to %s - size 0x%04x crc 0x%04x 0x%04x\n", config_data->name,
 	       config_data->deflated_stream_size, config_data->crc, crc);
 
-    config_fp = fopen(config_data->name, "wb");
+    config_fp = fopen(filename, "wb");
     if (!config_fp) {
-	fprintf(stderr, "\ncan't open file %s for writing - error: %s\n", config_data->name, strerror(errno));
-	exit(EXIT_FAILURE);
+	fprintf(stderr, "\ncan't open file %s for writing - error: %s\n", filename, strerror(errno));
+	return 0;
     } else if (config_data->verbose) {
 	for (i = 0; i < config_data->deflated_stream_size; i++) {
 	    if ((i % 8) == 0)
@@ -276,15 +287,15 @@ int config_write(struct cs2_config_data_t *config_data) {
 	printf("\n");
     }
     if (config_data->verbose)
-	printf("deflated size: %d inflated size: %d\n", config_data->deflated_size, config_data->inflated_size);
     inflate_data(config_data);
     fwrite(config_data->inflated_data, 1, config_data->inflated_size, config_fp);
     fclose(config_fp);
     return 1;
 }
 
-int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netframe, int sockfd) {
+int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netframe) {
     unsigned int temp;
+    unsigned char newframe[13];
 
     if (memcmp(netframe, GETCONFIG_RESPONSE, 5) == 0) {
 	memcpy(&temp, &netframe[5], 4);
@@ -328,8 +339,19 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 		    free(config_data->inflated_data);
 		if (config_data->deflated_data)
 		    free(config_data->deflated_data);
+
 		/* TODO next */
-		printf("sockfd: %d\n", sockfd);
+		if (cs2_configs[config_data->next][0]) {
+		    memset(newframe, 0, 13);
+		    memcpy(newframe, GETCONFIG, 5);
+
+		    printf("getting %s filename %s\n", cs2_configs[config_data->next][0], cs2_configs[config_data->next][1]);
+		    config_data->name = cs2_configs[config_data->next][1];
+		    memcpy(&newframe[5], cs2_configs[config_data->next][0], strlen(cs2_configs[config_data->next][0]));
+	            /* print_can_frame(NET_TCP_FORMAT_STRG, newframe, 1); */
+		    net_to_net(config_data->cs2_tcp_socket, NULL, newframe, 13);
+		    config_data->next++;
+		}
 		config_data->fnd = 0;
 	    } else {
 		config_data->deflated_size_counter -= 8;

@@ -27,19 +27,19 @@ static unsigned char M_PING_RESPONSE[] = { 0x00, 0x30, 0x00, 0x00, 0x00 };
 unsigned char GETCONFIG[]          = { 0x00, 0x40, 0xaf, 0x7e, 0x08 };
 unsigned char GETCONFIG_DATA[]     = { 0x00, 0x42, 0x03, 0x00, 0x08 };
 
-char *cs2_configs[][2] = {
-    {"loks", "lokomotive.cs2"},
-    {"mags", "magnetartikel.cs2"},
-    {"fs", "fahrstrassen.cs2"},
-    {"gbs", "gleisbild.cs2"},
-/*    {NULL, NULL}, */
-    {NULL, NULL},
-    {"lokstat", "lokomotive.sr2"},
-    {"magstat", "magnetartikel.sr2"},
-    {"gbsstat", "gbsstat.sr2"},
-    {"fsstat", "fahrstarssen.sr2"},
-    {NULL, NULL},
-};
+char *cs2_configs[][2] = { 
+    {"loks", "lokomotive.cs2"}, 
+    {"mags", "magnetartikel.cs2"}, 
+    {"fs", "fahrstrassen.cs2"}, 
+    {"gbs", "gleisbild.cs2"}, 
+/*    {NULL, NULL}, */ 
+    {NULL, NULL}, 
+    {"lokstat", "lokomotive.sr2"}, 
+    {"magstat", "magnetartikel.sr2"}, 
+    {"gbsstat", "gbsstat.sr2"}, 
+    {"fsstat", "fahrstarssen.sr2"}, 
+    {NULL, NULL}, 
+}; 
 
 char config_dir[MAXLINE];
 char config_file[MAXLINE];
@@ -97,8 +97,11 @@ int copy_cs2_config(struct cs2_config_data_t *cs2_config_data) {
 	memset(newframe, 0, 13);
 	memcpy(newframe, GETCONFIG, 5);
 	/* TODO */
-	cs2_config_data->name = "gleisbild.cs2";
-	memcpy(&newframe[5], "gbs-0", 5);
+
+	printf("getting %s filename %s\n", cs2_configs[0][0], cs2_configs[0][1]);
+	cs2_config_data->name = cs2_configs[0][1];
+	memcpy(&newframe[5], cs2_configs[0][0], strlen(cs2_configs[0][0]));
+	cs2_config_data->next = 1;
         
 	printf("send to CS2.exe ...\n");
         print_can_frame(NET_TCP_FORMAT_STRG, newframe, 1);
@@ -243,7 +246,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	/* mark frame to not send over CAN */
 	ret = 1;
 	/* check for initiated copy request */
-        reassemble_data(cs2_config_data, netframe, tcp_socket);
+        reassemble_data(cs2_config_data, netframe);
 	print_can_frame(NET_TCP_FORMAT_STRG, netframe, verbose);
 	break;
 	/* fake cyclic MS1 slave monitoring response */
@@ -403,6 +406,8 @@ int main(int argc, char **argv) {
     }
     strncpy(config_dir, config_file, sizeof(config_dir) - 1);
     strcat(config_file, "gleisbild.cs2");
+
+    cs2_config_data.dir = config_dir;
 
     page_name = read_track_file(config_file, page_name);
 
