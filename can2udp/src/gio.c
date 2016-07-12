@@ -20,7 +20,7 @@
 #define GZIP_ENCODING	16
 
 unsigned char GETCONFIG_RESPONSE[] = { 0x00, 0x42, 0x03, 0x00, 0x06 };
-
+extern unsigned char GETCONFIG_DATA[];
 extern struct timeval last_sent;
 
 /* The following macro calls a zlib routine and checks the return
@@ -304,6 +304,37 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 	config_data->fnd = 1;
 	/* TODO */
 	printf("sockfd %d\n", sockfd);
+    }
+    if (memcmp(netframe, GETCONFIG_DATA, 5) == 0) {
+	memcpy(&config_data->deflated_data[config_data->ddi], &netframe[5], 8);
+	config_data->ddi += 8;
+	if (config_data->start) {
+	    memcpy(&temp, &netframe[5], 4);
+	    config_data->inflated_size = ntohl(temp);
+	    printf("\ninflated size: 0x%08x", config_data->inflated_size);
+	    config_data->inflated_data = malloc(config_data->inflated_size);
+	    if (config_data->inflated_data == NULL) {
+		fprintf(stderr, "can't malloc inflated config data buffer - size 0x%04x\n",
+			config_data->inflated_size);
+		    exit(EXIT_FAILURE);
+	    }
+	    config_data->start = 0;
+	    config_data->stream = 1;
+	    config_data->deflated_size -= 8;
+	} else if (config_data->stream) {
+	    if (config_data->deflated_size <= 8) {
+		config_data->stream = 0;
+                config_data->deflated_stream_size = config_data->ddi;
+                config_write(config_data);
+                if (config_data->inflated_data)
+                    free(config_data->inflated_data);
+                if (config_data->deflated_data)
+                    free(config_data->deflated_data);
+                config_data->fnd = 0;
+             } else {
+                 deflated_size -= 8;
+             }
+        }
     }
     return 1;
 }

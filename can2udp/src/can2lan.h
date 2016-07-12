@@ -80,6 +80,7 @@ struct cs2_config_data_t {
     int verbose;
     int fnd;
     int start;
+    int stream;
     int cs2_tcp_socket;
     int cs2_config_copy;
     unsigned int ddi;
