@@ -74,6 +74,7 @@ struct id_node {
 struct cs2_config_data_t {
     int deflated_stream_size;
     int deflated_size;
+    int deflated_size_counter;
     int inflated_size;
     uint16_t crc;
     char *name;

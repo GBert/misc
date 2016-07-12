@@ -141,6 +141,7 @@ int config_write(struct config_data *config_data) {
 	    printf("\n");
 	}
     }
+    printf("delated size: %d inflated size: %d\n", config_data->deflated_size, config_data->inflated_size);
     inflate_data(config_data);
     fwrite(config_data->inflated_data, 1, config_data->inflated_size, config_fp);
     fclose(config_fp);

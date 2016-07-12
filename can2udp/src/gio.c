@@ -222,7 +222,7 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
 }
 
 int inflate_data(struct cs2_config_data_t *config_data) {
-    int ret, i;
+    int ret;
     z_stream strm;
 
     strm.zalloc = Z_NULL;
@@ -275,6 +275,8 @@ int config_write(struct cs2_config_data_t *config_data) {
 	}
 	printf("\n");
     }
+    if (config_data->verbose)
+	printf("deflated size: %d inflated size: %d\n", config_data->deflated_size, config_data->inflated_size);
     inflate_data(config_data);
     fwrite(config_data->inflated_data, 1, config_data->inflated_size, config_fp);
     fclose(config_fp);
@@ -282,21 +284,21 @@ int config_write(struct cs2_config_data_t *config_data) {
 }
 
 int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netframe, int sockfd) {
-    unsigned int temp, deflated_size;
+    unsigned int temp;
 
     if (memcmp(netframe, GETCONFIG_RESPONSE, 5) == 0) {
 	memcpy(&temp, &netframe[5], 4);
-	deflated_size = ntohl(temp);
-	config_data->deflated_size = deflated_size;
+	config_data->deflated_size = ntohl(temp);
+	config_data->deflated_size_counter = config_data->deflated_size;
 	memcpy(&temp, &netframe[9], 2);
 	config_data->crc = ntohs(temp);
 	if (config_data->verbose)
-	    printf("\nstart of config - deflated size: 0x%08x crc 0x%04x\n", deflated_size, config_data->crc);
+	    printf("\nstart of config - deflated size: 0x%08x crc 0x%04x\n", config_data->deflated_size, config_data->crc);
 	config_data->start = 1;
 	/* we alloc 8 bytes more to be sure that it fits */
-	config_data->deflated_data = malloc(deflated_size + 16);
+	config_data->deflated_data = malloc(config_data->deflated_size + 16);
 	if (config_data->deflated_data == NULL) {
-	    fprintf(stderr, "can't malloc deflated config data buffer - size 0x%04x\n", deflated_size + 8);
+	    fprintf(stderr, "can't malloc deflated config data buffer - size 0x%04x\n", config_data->deflated_size + 8);
 	    exit(EXIT_FAILURE);
 	}
 	/* deflated data index */
@@ -304,13 +306,11 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 	/* file not done */
 	config_data->fnd = 1;
     } else if (memcmp(netframe, GETCONFIG_DATA, 5) == 0) {
-	printf("%s: ddi: %d\n", __func__, config_data->ddi);
 	memcpy(&config_data->deflated_data[config_data->ddi], &netframe[5], 8);
 	config_data->ddi += 8;
 	if (config_data->start) {
 	    memcpy(&temp, &netframe[5], 4);
 	    config_data->inflated_size = ntohl(temp);
-	    printf("\n%s: inflated size: 0x%08x\n", __func__, config_data->inflated_size);
 	    config_data->inflated_data = malloc(config_data->inflated_size);
 	    if (config_data->inflated_data == NULL) {
 		fprintf(stderr, "can't malloc inflated config data buffer - size 0x%04x\n", config_data->inflated_size);
@@ -318,9 +318,9 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 	    }
 	    config_data->start = 0;
 	    config_data->stream = 1;
-	    config_data->deflated_size -= 8;
+	    config_data->deflated_size_counter -= 8;
 	} else if (config_data->stream) {
-	    if (config_data->deflated_size <= 8) {
+	    if (config_data->deflated_size_counter <= 8) {
 		config_data->stream = 0;
 		config_data->deflated_stream_size = config_data->ddi;
 		config_write(config_data);
@@ -332,7 +332,7 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 		printf("sockfd: %d\n", sockfd);
 		config_data->fnd = 0;
 	    } else {
-		config_data->deflated_size -= 8;
+		config_data->deflated_size_counter -= 8;
 	    }
 	}
     }
