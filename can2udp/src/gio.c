@@ -277,6 +277,7 @@ int config_write(struct cs2_config_data_t *config_data) {
     config_fp = fopen(filename, "wb");
     if (!config_fp) {
 	fprintf(stderr, "\ncan't open file %s for writing - error: %s\n", filename, strerror(errno));
+	free(filename);
 	return 0;
     } else if (config_data->verbose) {
 	for (i = 0; i < config_data->deflated_stream_size; i++) {
@@ -286,10 +287,10 @@ int config_write(struct cs2_config_data_t *config_data) {
 	}
 	printf("\n");
     }
-    if (config_data->verbose)
     inflate_data(config_data);
     fwrite(config_data->inflated_data, 1, config_data->inflated_size, config_fp);
     fclose(config_fp);
+    free(filename);
     return 1;
 }
 
