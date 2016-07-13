@@ -61,7 +61,7 @@ void print_pages(char **page_name) {
     int i = 0;
     printf("track pages:\n");
     while (page_name[i]) {
-	printf("track %d -> %s\n", i, page_name[i]);
+	printf("track %2d -> %s\n", i, page_name[i]);
 	i++;
     }
 }
@@ -113,6 +113,7 @@ char **read_track_file(char *filename, char **page_name) {
 	}
 	/* fgets returned null */
 	if (errno != 0) {
+	    fclose(fp);
 	    fprintf(stderr, "error reading line: %s\n", strerror(errno));
 	    return NULL;
 	}
@@ -382,6 +383,11 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 		    if (config_data->verbose)
 			printf("read track file %s dir %s\n", filename, config_data->dir);
 		    config_data->page_name = read_track_file(filename, config_data->page_name);
+		    if (config_data->page_name == NULL) {
+			fprintf(stderr, "can't finish CS2 copy config request\n");
+			config_data->state = CS2_STATE_INACTIVE;
+			return (EXIT_FAILURE);
+		    }
 		    if (config_data->verbose)
 			print_pages(config_data->page_name);
 		    strcat(config_data->dir, "gleisbilder/");
@@ -401,7 +407,7 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 			config_data->track_index++;
 		    } else {
 			/* TODO: this is a hack */
-			config_data->dir[strlen(config_data->dir)-strlen("gleisbilder/")] = 0;
+			config_data->dir[strlen(config_data->dir) - strlen("gleisbilder/")] = 0;
 			config_data->state = CS2_STATE_INACTIVE;
 		    }
 		    break;
