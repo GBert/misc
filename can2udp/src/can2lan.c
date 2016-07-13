@@ -296,6 +296,8 @@ int main(int argc, char **argv) {
     /* clear timestamp for last CAN frame sent */
     memset(&last_sent, 0, sizeof(last_sent));
 
+    memset(&cs2_config_data, 0, sizeof(cs2_config_data));
+
     page_name = calloc(MAX_TRACK_PAGE, sizeof(char *));
     if (!page_name) {
 	fprintf(stderr, "can't alloc memory for page_name: %s\n", strerror(errno));
@@ -309,6 +311,7 @@ int main(int argc, char **argv) {
     };
 
     ms1_workaround = 0;
+
     cs2_config_data.verbose = 0;
     cs2_config_data.state = CS2_STATE_INACTIVE;
     cs2_config_data.page_name = cs2_page_name;

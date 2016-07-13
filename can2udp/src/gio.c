@@ -380,7 +380,7 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 		    strcpy(filename, config_data->dir);
 		    strcat(filename, config_data->name);
 		    if (config_data->verbose)
-			printf("read track file %s dir %s\n", filename, config_data->name);
+			printf("read track file %s dir %s\n", filename, config_data->dir);
 		    config_data->page_name = read_track_file(filename, config_data->page_name);
 		    if (config_data->verbose)
 			print_pages(config_data->page_name);
