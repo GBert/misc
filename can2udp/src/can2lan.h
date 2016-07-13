@@ -66,6 +66,13 @@ struct cs2_config {
 };
 #endif
 
+enum cs2_copy_state {
+    CS2_STATE_INACTIVE,
+    CS2_STATE_NORMAL_CONFIG,
+    CS2_STATE_TRACK_SUM,
+    CS2_STATE_GET_TRACKS
+};
+
 struct id_node {
     uint32_t id;
     uint8_t slave_node;
@@ -83,6 +90,7 @@ struct cs2_config_data_t {
     int next;
     int verbose;
     int track_index;
+    int state;
     int start;
     int stream;
     int cs2_tcp_socket;

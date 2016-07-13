@@ -35,7 +35,7 @@ char *cs2_configs[][2] = {
     {"lokstat", "lokomotive.sr2"}, 
     {"magstat", "magnetartikel.sr2"}, 
     {"gbsstat", "gbsstat.sr2"}, 
-    {"fsstat", "fahrstarssen.sr2"}, 
+    {"fsstat", "fahrstrassen.sr2"}, 
     {"gbs", "gleisbild.cs2"}, 
     {NULL, NULL}, 
 }; 
@@ -108,6 +108,7 @@ int copy_cs2_config(struct cs2_config_data_t *cs2_config_data) {
 	net_to_net(cs2_config_data->cs2_tcp_socket, NULL, newframe, 13);
 	/* done - don't copy again */
 	cs2_config_data->cs2_config_copy = 0;
+	cs2_config_data->state = CS2_STATE_NORMAL_CONFIG;
     } else {
 	fprintf(stderr, "can't clone CS2 config - no CS2 TCP connection yet\n");
     }
@@ -205,7 +206,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 		strcat(gbs_name, "gleisbilder/");
 		if (page_name) {
 		    strcat(gbs_name, page_name[page_number]);
-		    strcat(gbs_name, ".cs2");
+		    /* strcat(gbs_name, ".cs2"); */
 		    send_tcp_config_data(gbs_name, config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		}
 		break;
@@ -309,6 +310,7 @@ int main(int argc, char **argv) {
 
     ms1_workaround = 0;
     cs2_config_data.verbose = 0;
+    cs2_config_data.state = CS2_STATE_INACTIVE;
     cs2_config_data.page_name = cs2_page_name;
     cs2_config_data.cs2_config_copy = 0;
     cs2_config_data.cs2_tcp_socket = 0;
