@@ -57,6 +57,15 @@ char *rmcrlf(char *s, int slen) {
     return s;
 }
 
+void print_pages(char **page_name) {
+    int i = 0;
+    printf("track pages:\n");
+    while (page_name[i]) {
+	printf("track %d -> %s\n", i, page_name[i]);
+	i++;
+    }
+}
+
 void usec_sleep(int usec) {
     struct timespec to_wait;
 
@@ -262,8 +271,8 @@ int config_write(struct cs2_config_data_t *config_data) {
 
     filename = calloc(MAXLINE, 1);
     if (filename == NULL) {
-        fprintf(stderr, "can't calloc in %s: %s\n", __func__, strerror(errno));
-        exit(EXIT_FAILURE);
+	fprintf(stderr, "can't calloc in %s: %s\n", __func__, strerror(errno));
+	exit(EXIT_FAILURE);
     }
     strcpy(filename, config_data->dir);
     strcat(filename, config_data->name);
@@ -318,8 +327,6 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 	}
 	/* deflated data index */
 	config_data->ddi = 0;
-	/* file not done */
-	config_data->fnd = 1;
 
     } else if (memcmp(netframe, GETCONFIG_DATA, 5) == 0) {
 	memcpy(&config_data->deflated_data[config_data->ddi], &netframe[5], 8);
@@ -349,26 +356,38 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 		if (cs2_configs[config_data->next][0]) {
 		    memset(newframe, 0, 13);
 		    memcpy(newframe, GETCONFIG, 5);
-
 		    printf("getting %s filename %s\n", cs2_configs[config_data->next][0], cs2_configs[config_data->next][1]);
 		    config_data->name = cs2_configs[config_data->next][1];
 		    memcpy(&newframe[5], cs2_configs[config_data->next][0], strlen(cs2_configs[config_data->next][0]));
-	            /* print_can_frame(NET_TCP_FORMAT_STRG, newframe, 1); */
+		    /* print_can_frame(NET_TCP_FORMAT_STRG, newframe, 1); */
 		    net_to_net(config_data->cs2_tcp_socket, NULL, newframe, 13);
 		    config_data->next++;
-		    if (strstr(cs2_configs[config_data->next][1], "gleisbild.cs2") == cs2_configs[config_data->next][1]) {
-    			filename = calloc(MAXLINE, 1);
-		        if (filename == NULL) {
-			    fprintf(stderr, "can't calloc in %s: %s\n", __func__, strerror(errno));
-			    return(EXIT_FAILURE);
-			}
-                        strcpy(filename, config_data->dir);
-			strcat(filename, cs2_configs[config_data->next][1]);
-			config_data->page_name = read_track_file(filename, config_data->page_name);
-			free(filename);
+		} else if (strstr(config_data->name, "gleisbild.cs2") == config_data->name) {
+		    filename = calloc(MAXLINE, 1);
+		    if (filename == NULL) {
+			fprintf(stderr, "can't calloc in %s: %s\n", __func__, strerror(errno));
+			return (EXIT_FAILURE);
 		    }
+		    strcpy(filename, config_data->dir);
+		    strcat(filename, config_data->name);
+		    if (config_data->verbose)
+			printf("read track file %s dir %s\n", filename, config_data->name);
+		    config_data->page_name = read_track_file(filename, config_data->page_name);
+		    if (config_data->verbose)
+			print_pages(config_data->page_name);
+		    strcat(config_data->dir, "gleisbilder/");
+		    printf("dir now >%s<\n", config_data->dir);
+		    free(filename);
+		    config_data->track_index = 0;
+		} else if (config_data->page_name[config_data->track_index]) {
+		    memset(newframe, 0, 13);
+		    memcpy(newframe, GETCONFIG, 5);
+		    config_data->name = config_data->page_name[config_data->track_index];
+		    sprintf((char *)&newframe[5], "gbs-%d", config_data->track_index);
+		    printf("getting track %s filename %s\n", &newframe[5], config_data->name);
+		    net_to_net(config_data->cs2_tcp_socket, NULL, newframe, 13);
+		    config_data->track_index++;
 		}
-		config_data->fnd = 0;
 	    } else {
 		config_data->deflated_size_counter -= 8;
 	    }

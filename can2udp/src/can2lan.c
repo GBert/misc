@@ -31,20 +31,20 @@ char *cs2_configs[][2] = {
     {"loks", "lokomotive.cs2"}, 
     {"mags", "magnetartikel.cs2"}, 
     {"fs", "fahrstrassen.cs2"}, 
-    {"gbs", "gleisbild.cs2"}, 
 /*    {NULL, NULL}, */ 
-    {NULL, NULL}, 
     {"lokstat", "lokomotive.sr2"}, 
     {"magstat", "magnetartikel.sr2"}, 
     {"gbsstat", "gbsstat.sr2"}, 
     {"fsstat", "fahrstarssen.sr2"}, 
+    {"gbs", "gleisbild.cs2"}, 
     {NULL, NULL}, 
 }; 
 
 char config_dir[MAXLINE];
 char config_file[MAXLINE];
 char **page_name;
-int verbose, ms1_workaround;
+char **cs2_page_name;
+int ms1_workaround;
 struct timeval last_sent;
 
 void print_usage(char *prg) {
@@ -64,7 +64,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -v                  verbose output (in foreground)\n\n");
 }
 
-int send_magic_start_60113_frame(int can_socket) {
+int send_magic_start_60113_frame(int can_socket, int verbose) {
     if (frame_to_can(can_socket, M_GLEISBOX_MAGIC_START_SEQUENCE) < 0) {
 	fprintf(stderr, "can't send CAN magic 60113 start sequence\n");
 	return -1;
@@ -77,7 +77,7 @@ int send_magic_start_60113_frame(int can_socket) {
     return 0;
 }
 
-int send_can_ping(int can_socket) {
+int send_can_ping(int can_socket, int verbose) {
     if (frame_to_can(can_socket, M_CAN_PING) < 0) {
 	fprintf(stderr, "can't send CAN Ping\n");
 	return -1;
@@ -123,14 +123,14 @@ int check_data_udp(int udp_socket, struct sockaddr *baddr, struct cs2_config_dat
     switch (canid & 0xFFFF0000UL) {
     case (0x00310000UL):
 	if ((netframe[11] == 0xEE) && (netframe[12] == 0xEE)) {
-	    if (verbose)
+	    if (cs2_config_data->verbose)
 		printf("                received CAN ping\n");
 	    memcpy(netframe, M_PING_RESPONSE, 5);
 	    if (net_to_net(udp_socket, baddr, netframe, 13)) {
 		fprintf(stderr, "sending UDP data (CAN Ping) error:%s \n", strerror(errno));
 	    } else {
-		print_can_frame(NET_UDP_FORMAT_STRG, netframe, verbose);
-		if (verbose)
+		print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data->verbose);
+		if (cs2_config_data->verbose)
 		    printf("                replied CAN ping\n");
 	    }
 	    if (cs2_config_data->cs2_config_copy)
@@ -165,7 +165,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
     case (0x00310000UL):	/* CAN ping */
 	ret = 1;
 	/* looking for CS2.exe ping answer */
-	print_can_frame(NET_TCP_FORMAT_STRG, netframe, verbose);
+	print_can_frame(NET_TCP_FORMAT_STRG, netframe, cs2_config_data->verbose);
 	if ((netframe[11] == 0xFF) && (netframe[12] == 0xFF)) {
 	    printf("got CS2 TCP ping - copy config var: %d\n", cs2_config_data->cs2_config_copy);
 	    cs2_config_data->cs2_tcp_socket = tcp_socket;
@@ -181,7 +181,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	    netframe[4] = 4;
 	    strcpy((char *)&netframe[5], "copy");
 	    net_to_net(tcp_socket, NULL, netframe, 13);
-	    if (verbose)
+	    if (cs2_config_data->verbose)
 		printf("CS2 copy request\n");
 	    cs2_config_data->cs2_config_copy = 1;
 	} else {
@@ -247,7 +247,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	ret = 1;
 	/* check for initiated copy request */
         reassemble_data(cs2_config_data, netframe);
-	print_can_frame(NET_TCP_FORMAT_STRG, netframe, verbose);
+	print_can_frame(NET_TCP_FORMAT_STRG, netframe, cs2_config_data->verbose);
 	break;
 	/* fake cyclic MS1 slave monitoring response */
     case (0x0C000000UL):
@@ -295,16 +295,24 @@ int main(int argc, char **argv) {
     /* clear timestamp for last CAN frame sent */
     memset(&last_sent, 0, sizeof(last_sent));
 
-    page_name = calloc(64, sizeof(char *));
+    page_name = calloc(MAX_TRACK_PAGE, sizeof(char *));
     if (!page_name) {
 	fprintf(stderr, "can't alloc memory for page_name: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     };
 
-    verbose = 0;
+    cs2_page_name = calloc(MAX_TRACK_PAGE, sizeof(char *));
+    if (!cs2_page_name) {
+	fprintf(stderr, "can't alloc memory for cs2_page_name: %s\n", strerror(errno));
+	exit(EXIT_FAILURE);
+    };
+
     ms1_workaround = 0;
+    cs2_config_data.verbose = 0;
+    cs2_config_data.page_name = cs2_page_name;
     cs2_config_data.cs2_config_copy = 0;
-    cs2_config_data.cs2_tcp_socket =0;
+    cs2_config_data.cs2_tcp_socket = 0;
+    cs2_config_data.track_index = MAX_TRACK_PAGE;
 
     memset(ifr.ifr_name, 0, sizeof(ifr.ifr_name));
     strcpy(ifr.ifr_name, "can0");
@@ -379,7 +387,7 @@ int main(int argc, char **argv) {
 	    ms1_workaround = 1;
 	    break;
 	case 'v':
-	    verbose = 1;
+	    cs2_config_data.verbose = 1;
 	    break;
 	case 'f':
 	    background = 0;
@@ -443,7 +451,7 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     }
 
-    if (verbose & !background)
+    if (cs2_config_data.verbose & !background)
 	printf("using broadcast address %s\n", udp_dst_address);
 
     /* prepare UDP sending socket */
@@ -544,7 +552,7 @@ int main(int argc, char **argv) {
     }
 
     /* start Maerklin 60113 box */
-    if (send_magic_start_60113_frame(sc))
+    if (send_magic_start_60113_frame(sc, cs2_config_data.verbose))
 	exit(EXIT_FAILURE);
 
     /* daemonize the process if requested */
@@ -596,7 +604,7 @@ int main(int argc, char **argv) {
 	    if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		/* send UDP frame */
 		frame_to_net(sb, (struct sockaddr *)&baddr, (struct can_frame *)&frame);
-		print_can_frame(UDP_FORMAT_STRG, netframe, verbose & !background);
+		print_can_frame(UDP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
 		/* send CAN frame to all connected TCP clients */
 		/* TODO: need all clients the packets ? */
 		for (i = 0; i <= max_tcp_i; i++) {	/* check all clients for data */
@@ -604,7 +612,7 @@ int main(int argc, char **argv) {
 		    if (tcp_socket < 0)
 			continue;
 		    frame_to_net(tcp_socket, (struct sockaddr *)&tcp_addr, (struct can_frame *)&frame);
-		    print_can_frame(CAN_TCP_FORMAT_STRG, netframe, verbose & !background);
+		    print_can_frame(CAN_TCP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
 		}
 	    }
 	}
@@ -613,14 +621,14 @@ int main(int argc, char **argv) {
 	    if (read(sa, netframe, MAXDG) == 13) {
 		/* send packet on CAN */
 		ret = frame_to_can(sc, netframe);
-		print_can_frame(NET_UDP_FORMAT_STRG, netframe, verbose & !background);
+		print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
 		check_data_udp(sb, (struct sockaddr *) &baddr, &cs2_config_data, netframe);
 	    }
 	}
 	/* received a TCP packet */
 	if (FD_ISSET(st, &read_fds)) {
 	    conn_fd = accept(st, (struct sockaddr *)&tcp_addr, &tcp_client_length);
-	    if (verbose && !background) {
+	    if (cs2_config_data.verbose && !background) {
 		printf("new client: %s, port %d conn fd: %d max fds: %d\n", inet_ntop(AF_INET, &(tcp_addr.sin_addr),
 			buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port), conn_fd, max_fds);
 	    }
@@ -639,7 +647,7 @@ int main(int argc, char **argv) {
 	    /* send embedded CAN ping */
 	    memcpy(netframe, M_CAN_PING, 13);
 	    net_to_net(conn_fd, NULL, netframe, 13);
-	    if (verbose && !background)
+	    if (cs2_config_data.verbose && !background)
 		printf("send embedded CAN ping\n");
 
 	    if (--nready <= 0)
@@ -650,7 +658,7 @@ int main(int argc, char **argv) {
 	    conn_fd = accept(st2, (struct sockaddr *)&tcp_addr2, &tcp_client_length);
 
 	    /* TODO : close missing */
-	    if (verbose && !background) {
+	    if (cs2_config_data.verbose && !background) {
 		printf("new client: %s, port %d conn fd: %d max fds: %d\n", inet_ntop(AF_INET, &(tcp_addr2.sin_addr),
 			buffer, sizeof(buffer)), ntohs(tcp_addr2.sin_port), conn_fd, max_fds);
 	    }
@@ -666,14 +674,14 @@ int main(int argc, char **argv) {
 		continue;
 	    /* printf("%s tcp packet received from client #%d  max_tcp_i:%d todo:%d\n", time_stamp(timestamp), i, max_tcp_i,nready); */
 	    if (FD_ISSET(tcp_socket, &read_fds)) {
-		if (verbose && !background) {
+		if (cs2_config_data.verbose && !background) {
 		    time_stamp(timestamp);
 		    printf("%s packet from: %s\n", timestamp, inet_ntop(AF_INET, &tcp_addr.sin_addr, buffer, sizeof(buffer)));
 		}
 		n = read(tcp_socket, netframe, MAXDG);
 		if (!n) {
 		    /* connection closed by client */
-		    if (verbose && !background) {
+		    if (cs2_config_data.verbose && !background) {
 			time_stamp(timestamp);
 			printf("%s client %s closed connection\n", timestamp,
 			       inet_ntop(AF_INET, &tcp_addr.sin_addr, buffer, sizeof(buffer)));
@@ -694,12 +702,12 @@ int main(int argc, char **argv) {
 				ret = frame_to_can(sc, &netframe[i]);
 				if (!ret) {
 				    if (i > 0)
-					print_can_frame(TCP_FORMATS_STRG, &netframe[i], verbose & !background);
+					print_can_frame(TCP_FORMATS_STRG, &netframe[i], cs2_config_data.verbose & !background);
 				    else
-					print_can_frame(TCP_FORMAT_STRG, &netframe[i], verbose & !background);
+					print_can_frame(TCP_FORMAT_STRG, &netframe[i], cs2_config_data.verbose & !background);
 				}
 				net_to_net(sb, (struct sockaddr *)&baddr, netframe, 13);
-				print_can_frame(UDP_FORMAT_STRG, netframe, verbose & !background);
+				print_can_frame(UDP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
 			    }
 			}
 		    }

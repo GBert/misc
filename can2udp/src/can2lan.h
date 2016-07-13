@@ -44,6 +44,7 @@
 #define MAXUDP  		16		/* maximum datagram size */
 #define MAXIPLEN  		40		/* maximum IP string length */
 #define MAX_UDP_BCAST_RETRY  	10		/* maximum retries getting UDP socket */
+#define MAX_TRACK_PAGE		64		/* maximum number track pages */
 #define MAX(a,b)		((a) > (b) ? (a) : (b))
 
 #define	CRC			0x01
@@ -81,7 +82,7 @@ struct cs2_config_data_t {
     char *name;
     int next;
     int verbose;
-    int fnd;
+    int track_index;
     int start;
     int stream;
     int cs2_tcp_socket;
