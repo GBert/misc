@@ -39,7 +39,6 @@ char *configs[][2] = {
     {"fs", "fahrstrassen.cs2"},
     {"gbs", "gleisbild.cs2"},
 /*    {NULL, NULL}, */
-    {NULL, NULL},
     {"lokstat", "lokomotive.sr2"},
     {"magstat", "magnetartikel.sr2"},
     {"gbsstat", "gbsstat.sr2"},
@@ -322,10 +321,12 @@ int main(int argc, char **argv) {
 	    if (strstr(line, "seite") == line) {
 		gbs_valid = 1;
 	    } else if (strstr(line, " .id=") == line) {
-		strncpy(gbs, &line[5], strlen(&line[5]));
+		strcpy(gbs, gbs_site);
+		strncat(gbs, &line[5], strlen(&line[5]));
 		config_data.name = gbs;
 	    } else if (strstr(line, " .name=") == line) {
 		if (gbs_valid) {
+		    memset(gbs_name, 0, sizeof(gbs_name));
 		    strncpy(gbs_name, &line[7], strlen(&line[7]));
 		    strcat(gbs_name, ".cs2");
 		    config_data.filename = gbs_name;
