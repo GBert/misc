@@ -368,10 +368,12 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 			/* print_can_frame(NET_TCP_FORMAT_STRG, newframe, 1); */
 			net_to_net(config_data->cs2_tcp_socket, NULL, newframe, 13);
 			config_data->next++;
-			if (strstr(config_data->name, "gleisbild.cs2") == config_data->name)
-			    config_data->state = CS2_STATE_TRACK_SUM;
+			break;
+		    } else {
+			/* list is done if no entry is left*/
+			config_data->state = CS2_STATE_TRACK_SUM;
 		    }
-		    break;
+		    /* we need to fallthrough here */
 		case CS2_STATE_TRACK_SUM:
 		    filename = calloc(MAXLINE, 1);
 		    if (filename == NULL) {
@@ -379,7 +381,7 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 			return (EXIT_FAILURE);
 		    }
 		    strcpy(filename, config_data->dir);
-		    strcat(filename, config_data->name);
+		    strcat(filename, "gleisbild.cs2");
 		    if (config_data->verbose)
 			printf("read track file %s dir %s\n", filename, config_data->dir);
 		    config_data->page_name = read_track_file(filename, config_data->page_name);
@@ -395,7 +397,7 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 		    free(filename);
 		    config_data->track_index = 0;
 		    config_data->state = CS2_STATE_GET_TRACKS;
-		    /* we need to fall through here */
+		    /* we need to fallthrough here */
 		case CS2_STATE_GET_TRACKS:
 		    if (config_data->page_name[config_data->track_index]) {
 			memset(newframe, 0, 13);
