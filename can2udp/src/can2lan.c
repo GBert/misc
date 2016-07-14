@@ -31,12 +31,12 @@ char *cs2_configs[][2] = {
     {"loks", "lokomotive.cs2"}, 
     {"mags", "magnetartikel.cs2"}, 
     {"fs", "fahrstrassen.cs2"}, 
+    {"gbs", "gleisbild.cs2"}, 
 /*    {NULL, NULL}, */ 
     {"lokstat", "lokomotive.sr2"}, 
     {"magstat", "magnetartikel.sr2"}, 
     {"gbsstat", "gbsstat.sr2"}, 
     {"fsstat", "fahrstrassen.sr2"}, 
-    {"gbs", "gleisbild.cs2"}, 
     {NULL, NULL}, 
 }; 
 
