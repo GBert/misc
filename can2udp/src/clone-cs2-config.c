@@ -22,7 +22,7 @@
 #include <zlib.h>
 
 #define FRAME_SIZE	13
-#define MAXSIZE		16384
+#define MAXSIZE		(1024*FRAME_SIZE)
 #define TCP_PORT	15731
 #define MAXDIR		256
 #define MAXNAME		256
