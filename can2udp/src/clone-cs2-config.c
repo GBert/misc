@@ -271,6 +271,8 @@ int main(int argc, char **argv) {
     }
 
     strncpy(dir, argv[1], MAXDIR - 1);
+
+    memset(&config_data, 0, sizeof(config_data));
     config_data.directory = dir;
 
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {

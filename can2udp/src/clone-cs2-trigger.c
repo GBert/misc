@@ -117,7 +117,7 @@ int create_event(struct trigger_t *trigger) {
 }
 
 int main(int argc, char **argv) {
-    int opt, ret;
+    int opt, ret, destination_port;
     struct sockaddr_in destaddr, *bsa;
     struct ifaddrs *ifap, *ifa;
     struct trigger_t trigger_data;
@@ -127,7 +127,7 @@ int main(int argc, char **argv) {
     const int on = 1;
     trigger_data.interval= 0;
 
-    int destination_port = UDPPORT;
+    destination_port = UDPPORT;
 
     udp_dst_address = (char *)calloc(MAXIPLEN, 1);
     if (!udp_dst_address) {
