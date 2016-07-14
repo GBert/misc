@@ -66,7 +66,7 @@ struct config_data {
 
 uint16_t CRCCCITT(unsigned char *data, size_t length, unsigned short seed);
 
-int netframe_to_net(int net_socket, unsigned char *netframe, int length) {
+int netframe_to_net(int net_socket, char *netframe, int length) {
     if (send(net_socket, netframe, length, 0) != length)
 	return 1;
     return 0;
@@ -149,8 +149,8 @@ int config_write(struct config_data *config_data) {
 }
 
 int get_data(struct config_data *config_data, int sockfd) {
-    unsigned char netframe[FRAME_SIZE];
-    unsigned char recvline[MAXSIZE];
+    char netframe[FRAME_SIZE];
+    char recvline[MAXSIZE];
     int ddi, n, i, tcp_packet_nr;
     int file_not_done, temp, config_data_start, config_data_stream, deflated_size;
     fd_set rset;
