@@ -66,18 +66,7 @@ struct config_data {
 
 uint16_t CRCCCITT(unsigned char *data, size_t length, unsigned short seed);
 
-void print_lines(char *data, int len, int nl) {
-    int i;
-
-    for (i = 0; i < len; i++) {
-	if ((i % nl ) == 0)
-	    printf("\n");
-	printf("%02x ", data[i]);
-    }
-    printf("\n");
-}
-    
-int netframe_to_net(int net_socket, char *netframe, int length) {
+int netframe_to_net(int net_socket, unsigned char *netframe, int length) {
     if (send(net_socket, netframe, length, 0) != length)
 	return 1;
     return 0;
@@ -160,9 +149,9 @@ int config_write(struct config_data *config_data) {
 }
 
 int get_data(struct config_data *config_data, int sockfd) {
-    char netframe[FRAME_SIZE];
-    char recvline[MAXSIZE];
-    int ddi, n, i, tcp_packet_nr;
+    unsigned char netframe[FRAME_SIZE];
+    unsigned char recvline[MAXSIZE];
+    int ddi, n, tcp_packet_nr;
     int file_not_done, temp, config_data_start, config_data_stream, deflated_size;
     fd_set rset;
 
@@ -193,8 +182,7 @@ int get_data(struct config_data *config_data, int sockfd) {
 	}
 	tcp_packet_nr++;
 	if (FD_ISSET(sockfd, &rset)) {
-	    if ((n = recv(sockfd, recvline, MAXSIZE, 0)) > 0) {
-		print_lines(recvline, n, 13);
+	    if ((n = recv(sockfd, recvline, 13, 0)) > 0) {
 		if (memcmp(recvline, GETCONFIG_RESPONSE, 5) == 0) {
 		    memcpy(&temp, &recvline[5], 4);
 		    deflated_size = ntohl(temp);
@@ -211,48 +199,37 @@ int get_data(struct config_data *config_data, int sockfd) {
 		    }
 		    /* deflated data index */
 		    ddi = 0;
-		}
-		for (i = 0; i < n; i++) {
-		    if ((i % FRAME_SIZE) == 0) {
-			if (memcmp(&recvline[i], GETCONFIG_DATA, 5) == 0) {
-			    memcpy(&config_data->deflated_data[ddi], &recvline[i + 5], 8);
-			    ddi += 8;
-			    if (config_data_start) {
-				memcpy(&temp, &recvline[i + 5], 4);
-				config_data->inflated_size = ntohl(temp);
-				printf("\ninflated size: 0x%08x", config_data->inflated_size);
-				config_data->inflated_data = malloc(config_data->inflated_size);
-				if (config_data->inflated_data == NULL) {
-				    fprintf(stderr, "can't malloc inflated config data buffer - size 0x%04x\n",
-					    config_data->inflated_size);
-				    exit(EXIT_FAILURE);
-				}
-				config_data_start = 0;
-				config_data_stream = 1;
-				deflated_size -= 8;
-			    } else if (config_data_stream) {
-				if (deflated_size <= 8) {
-				    config_data_stream = 0;
-				    config_data->deflated_stream_size = ddi;
-				    config_write(config_data);
-				    if (config_data->inflated_data)
-					free(config_data->inflated_data);
-				    if (config_data->deflated_data)
-					free(config_data->deflated_data);
-				    file_not_done = 0;
-				} else {
-				    deflated_size -= 8;
-				}
-			    }
+		} else if (memcmp(recvline, GETCONFIG_DATA, 5) == 0) {
+		    memcpy(&config_data->deflated_data[ddi], &recvline[5], 8);
+		    ddi += 8;
+		    if (config_data_start) {
+			memcpy(&temp, &recvline[5], 4);
+			config_data->inflated_size = ntohl(temp);
+			printf("\ninflated size: 0x%08x", config_data->inflated_size);
+			config_data->inflated_data = malloc(config_data->inflated_size);
+			if (config_data->inflated_data == NULL) {
+			    fprintf(stderr, "can't malloc inflated config data buffer - size 0x%04x\n",
+				    config_data->inflated_size);
+			    exit(EXIT_FAILURE);
 			}
-			if (config_data->verbose)
-			    printf("\n %04d: ", tcp_packet_nr);
+			config_data_start = 0;
+			config_data_stream = 1;
+			deflated_size -= 8;
+		    } else if (config_data_stream) {
+			if (deflated_size <= 8) {
+			    config_data_stream = 0;
+			    config_data->deflated_stream_size = ddi;
+			    config_write(config_data);
+			    if (config_data->inflated_data)
+				free(config_data->inflated_data);
+			    if (config_data->deflated_data)
+				free(config_data->deflated_data);
+			    file_not_done = 0;
+			} else {
+			    deflated_size -= 8;
+			}
 		    }
-		    if (config_data->verbose)
-			printf("%02x ", recvline[i]);
 		}
-		if (config_data->verbose)
-		    printf("\n");
 	    }
 	}
     }
