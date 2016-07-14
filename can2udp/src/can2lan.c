@@ -91,10 +91,10 @@ int send_can_ping(int can_socket, int verbose) {
 }
 
 int copy_cs2_config(struct cs2_config_data_t *cs2_config_data) {
-    unsigned char newframe[13];
+    unsigned char newframe[CAN_ENCAP_SIZE];
 
     if (cs2_config_data->cs2_tcp_socket) {
-	memset(newframe, 0, 13);
+	memset(newframe, 0, CAN_ENCAP_SIZE);
 	memcpy(newframe, GETCONFIG, 5);
 	/* TODO */
 
@@ -105,7 +105,7 @@ int copy_cs2_config(struct cs2_config_data_t *cs2_config_data) {
         
 	printf("send to CS2.exe ...\n");
         print_can_frame(NET_TCP_FORMAT_STRG, newframe, 1);
-	net_to_net(cs2_config_data->cs2_tcp_socket, NULL, newframe, 13);
+	net_to_net(cs2_config_data->cs2_tcp_socket, NULL, newframe, CAN_ENCAP_SIZE);
 	/* done - don't copy again */
 	cs2_config_data->cs2_config_copy = 0;
 	cs2_config_data->state = CS2_STATE_NORMAL_CONFIG;
@@ -127,7 +127,7 @@ int check_data_udp(int udp_socket, struct sockaddr *baddr, struct cs2_config_dat
 	    if (cs2_config_data->verbose)
 		printf("                received CAN ping\n");
 	    memcpy(netframe, M_PING_RESPONSE, 5);
-	    if (net_to_net(udp_socket, baddr, netframe, 13)) {
+	    if (net_to_net(udp_socket, baddr, netframe, CAN_ENCAP_SIZE)) {
 		fprintf(stderr, "sending UDP data (CAN Ping) error:%s \n", strerror(errno));
 	    } else {
 		print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data->verbose);
@@ -181,7 +181,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	    netframe[1] |= 1;
 	    netframe[4] = 4;
 	    strcpy((char *)&netframe[5], "copy");
-	    net_to_net(tcp_socket, NULL, netframe, 13);
+	    net_to_net(tcp_socket, NULL, netframe, CAN_ENCAP_SIZE);
 	    if (cs2_config_data->verbose)
 		printf("CS2 copy request\n");
 	    cs2_config_data->cs2_config_copy = 1;
@@ -190,7 +190,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	    config_name[8] = '\0';
 	    printf("%s ID 0x%08x %s\n", __func__, canid, (char *)&netframe[5]);
 	    netframe[1] |= 1;
-	    net_to_net(tcp_socket, NULL, netframe, 13);
+	    net_to_net(tcp_socket, NULL, netframe, CAN_ENCAP_SIZE);
 	    if (strcmp("loks", config_name) == 0) {
 		ret = 1;
 		send_tcp_config_data("lokomotive.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
@@ -623,7 +623,7 @@ int main(int argc, char **argv) {
 	}
 	/* received a UDP packet */
 	if (FD_ISSET(sa, &read_fds)) {
-	    if (read(sa, netframe, MAXDG) == 13) {
+	    if (read(sa, netframe, MAXDG) == CAN_ENCAP_SIZE) {
 		/* send packet on CAN */
 		ret = frame_to_can(sc, netframe);
 		print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
@@ -650,8 +650,8 @@ int main(int argc, char **argv) {
 	    max_fds = MAX(conn_fd, max_fds);	/* for select */
 	    max_tcp_i = MAX(i, max_tcp_i);	/* max index in tcp_client[] array */
 	    /* send embedded CAN ping */
-	    memcpy(netframe, M_CAN_PING, 13);
-	    net_to_net(conn_fd, NULL, netframe, 13);
+	    memcpy(netframe, M_CAN_PING, CAN_ENCAP_SIZE);
+	    net_to_net(conn_fd, NULL, netframe, CAN_ENCAP_SIZE);
 	    if (cs2_config_data.verbose && !background)
 		printf("send embedded CAN ping\n");
 
@@ -701,7 +701,7 @@ int main(int argc, char **argv) {
 			time_stamp(timestamp);
 			fprintf(stderr, "%s received packet %% 13 : length %d\n", timestamp, n);
 		    } else {
-			for (i = 0; i < n; i += 13) {
+			for (i = 0; i < n; i += CAN_ENCAP_SIZE) {
 			    /* check if we need to forward the message to CAN */
 			    if (!check_data(tcp_socket, &cs2_config_data, &netframe[i])) {
 				ret = frame_to_can(sc, &netframe[i]);
@@ -711,7 +711,7 @@ int main(int argc, char **argv) {
 				    else
 					print_can_frame(TCP_FORMAT_STRG, &netframe[i], cs2_config_data.verbose & !background);
 				}
-				net_to_net(sb, (struct sockaddr *)&baddr, netframe, 13);
+				net_to_net(sb, (struct sockaddr *)&baddr, netframe, CAN_ENCAP_SIZE);
 				print_can_frame(UDP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
 			    }
 			}
