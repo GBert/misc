@@ -202,7 +202,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	    } else if (strncmp("gbs-", config_name, 4) == 0) {
 		int page_number;
 		ret = 1;
-		page_number = atoi(&config_name[5]);
+		page_number = atoi(&config_name[4]);
 		strcat(gbs_name, "gleisbilder/");
 		if (page_name) {
 		    strcat(gbs_name, page_name[page_number]);
