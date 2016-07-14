@@ -111,7 +111,7 @@ int config_write(struct config_data *config_data) {
 
     crc = CRCCCITT(config_data->deflated_data, config_data->deflated_stream_size, 0xFFFF);
 
-    printf("\n  writing to %s/%s - size 0x%04x crc 0x%04x 0x%04x\n", config_data->directory,
+    printf("writing to %s/%s - size 0x%04x crc 0x%04x calculated crc 0x%04x\n", config_data->directory,
 	   config_data->filename, config_data->deflated_stream_size, config_data->crc, crc);
 
     filename = calloc(MAXSTRING, 1);
@@ -140,7 +140,8 @@ int config_write(struct config_data *config_data) {
 	    printf("\n");
 	}
     }
-    printf("delated size: %d inflated size: %d\n", config_data->deflated_size, config_data->inflated_size);
+    if (config_data->verbose)
+	printf("deflated size: %d inflated size: %d\n", config_data->deflated_size, config_data->inflated_size);
     inflate_data(config_data);
     fwrite(config_data->inflated_data, 1, config_data->inflated_size, config_fp);
     fclose(config_fp);
@@ -189,7 +190,8 @@ int get_data(struct config_data *config_data, int sockfd) {
 		    config_data->deflated_size = deflated_size;
 		    memcpy(&temp, &recvline[9], 2);
 		    config_data->crc = ntohs(temp);
-		    printf("\nstart of config - deflated size: 0x%08x crc 0x%04x", deflated_size, config_data->crc);
+		    if (config_data->verbose)
+			printf("\nstart of config - deflated size: 0x%08x crc 0x%04x", deflated_size, config_data->crc);
 		    config_data_start = 1;
 		    /* we alloc 8 bytes more to be sure that it fits */
 		    config_data->deflated_data = malloc(deflated_size + 16);
@@ -205,7 +207,8 @@ int get_data(struct config_data *config_data, int sockfd) {
 		    if (config_data_start) {
 			memcpy(&temp, &recvline[5], 4);
 			config_data->inflated_size = ntohl(temp);
-			printf("\ninflated size: 0x%08x", config_data->inflated_size);
+			if (config_data->verbose)
+			    printf("\ninflated size: 0x%08x", config_data->inflated_size);
 			config_data->inflated_data = malloc(config_data->inflated_size);
 			if (config_data->inflated_data == NULL) {
 			    fprintf(stderr, "can't malloc inflated config data buffer - size 0x%04x\n",
@@ -283,7 +286,7 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     }
 
-    config_data.verbose = 1;
+    config_data.verbose = 0;
     config_index = 0;
 
 #if 1
@@ -298,8 +301,6 @@ int main(int argc, char **argv) {
     strcpy(gleisbild, config_data.directory);
     strcat(gleisbild, "/");
     strcat(gleisbild, gleisbild_name);
-
-    printf("gbn : >%s<\n", gleisbild);
 
     gbs_valid = 0;
     config_data.name = gbs_default;
