@@ -5,7 +5,7 @@ BIN = $@
 
 all:	$(BINS)
 
-CFLAGS+=-Wall -pedantic -Wextra -g
+CFLAGS+=-Wall -Wextra -Wmaybe-uninitialized -pedantic-errors -g
 
 read_cs2_dump: read_cs2_dump.o
 	$(CC) $(CFLAGS) -o read_cs2_dump read_cs2_dump.o -lpcap

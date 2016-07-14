@@ -66,6 +66,17 @@ struct config_data {
 
 uint16_t CRCCCITT(unsigned char *data, size_t length, unsigned short seed);
 
+void print_lines(char *data, int len, int nl) {
+    int i;
+
+    for (i = 0; i < len; i++) {
+	if ((i % nl ) == 0)
+	    printf("\n");
+	printf("%02x ", data[i]);
+    }
+    printf("\n");
+}
+    
 int netframe_to_net(int net_socket, char *netframe, int length) {
     if (send(net_socket, netframe, length, 0) != length)
 	return 1;
@@ -183,6 +194,7 @@ int get_data(struct config_data *config_data, int sockfd) {
 	tcp_packet_nr++;
 	if (FD_ISSET(sockfd, &rset)) {
 	    if ((n = recv(sockfd, recvline, MAXSIZE, 0)) > 0) {
+		print_lines(recvline, n, 13);
 		if (memcmp(recvline, GETCONFIG_RESPONSE, 5) == 0) {
 		    memcpy(&temp, &recvline[5], 4);
 		    deflated_size = ntohl(temp);
