@@ -362,7 +362,8 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 		    if (cs2_configs[config_data->next][0]) {
 			memset(newframe, 0, CAN_ENCAP_SIZE);
 			memcpy(newframe, GETCONFIG, 5);
-			printf("getting %s filename %s\n", cs2_configs[config_data->next][0], cs2_configs[config_data->next][1]);
+			if (config_data->verbose)
+			    printf("getting %s filename %s\n", cs2_configs[config_data->next][0], cs2_configs[config_data->next][1]);
 			config_data->name = cs2_configs[config_data->next][1];
 			memcpy(&newframe[5], cs2_configs[config_data->next][0], strlen(cs2_configs[config_data->next][0]));
 			/* print_can_frame(NET_TCP_FORMAT_STRG, newframe, 1); */
@@ -381,7 +382,6 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 			config_data->state = CS2_STATE_INACTIVE;
 			return (EXIT_FAILURE);
 		    }
-		    strcat(config_data->dir, "gleisbilder/");
 		    strcpy(filename, config_data->dir);
 		    strcat(filename, "gleisbild.cs2");
 		    if (config_data->verbose)
@@ -390,10 +390,10 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 		    if (config_data->page_name == NULL) {
 			fprintf(stderr, "can't finish CS2 copy config request\n");
 			/* hack */
-			config_data->dir[strlen(config_data->dir) - strlen("gleisbilder/")] = 0;
 			config_data->state = CS2_STATE_INACTIVE;
 			return (EXIT_FAILURE);
 		    }
+		    strcat(config_data->dir, "gleisbilder/");
 		    if (config_data->verbose)
 			print_pages(config_data->page_name);
 		    free(filename);
@@ -406,7 +406,8 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 			memcpy(newframe, GETCONFIG, 5);
 			config_data->name = config_data->page_name[config_data->track_index];
 			sprintf((char *)&newframe[5], "gbs-%d", config_data->track_index);
-			printf("getting track %s filename %s\n", &newframe[5], config_data->name);
+			if (config_data->verbose)
+			    printf("getting track %s filename %s\n", &newframe[5], config_data->name);
 			net_to_net(config_data->cs2_tcp_socket, NULL, newframe, CAN_ENCAP_SIZE);
 			config_data->track_index++;
 		    } else {

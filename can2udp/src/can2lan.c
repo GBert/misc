@@ -97,13 +97,14 @@ int copy_cs2_config(struct cs2_config_data_t *cs2_config_data) {
 	memcpy(newframe, GETCONFIG, 5);
 	/* TODO */
 
-	printf("getting %s filename %s\n", cs2_configs[0][0], cs2_configs[0][1]);
+	if (cs2_config_data->verbose)
+	    printf("getting %s filename %s\n", cs2_configs[0][0], cs2_configs[0][1]);
 	cs2_config_data->name = cs2_configs[0][1];
 	memcpy(&newframe[5], cs2_configs[0][0], strlen(cs2_configs[0][0]));
 	cs2_config_data->next = 1;
 
-	printf("send to CS2.exe ...\n");
-	print_can_frame(NET_TCP_FORMAT_STRG, newframe, 1);
+	if (cs2_config_data->verbose)
+	    printf("send to CS2.exe ...\n");
 	net_to_net(cs2_config_data->cs2_tcp_socket, NULL, newframe, CAN_ENCAP_SIZE);
 	/* done - don't copy again */
 	cs2_config_data->cs2_config_copy = 0;
