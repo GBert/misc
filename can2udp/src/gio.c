@@ -117,19 +117,11 @@ char **read_track_file(char *filename, char **page_name) {
 		}
 	    }
 	}
-	/* fgets returned null */
-	if (errno != 0) {
-	    fclose(fp);
-	    fprintf(stderr, "error reading line: %s\n", strerror(errno));
-	    syslog(LOG_ERR, "%s: error reading line: %s\n", __func__, strerror(errno));
-	    closelog();
-	    return NULL;
-	}
 	fclose(fp);
 	/* EOF found, normal exit */
 	return page_name;
     } else {
-	fprintf(stderr, "error reading file %s: %s\n", filename, strerror(errno));
+	fprintf(stderr, "%s: error reading file %s: %s\n", __func__, filename, strerror(errno));
 	syslog(LOG_ERR, "%s: error reading file %s: %s\n", __func__, filename, strerror(errno));
 	closelog();
 	return NULL;
