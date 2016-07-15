@@ -92,9 +92,9 @@ char **read_track_file(char *filename, char **page_name) {
     int page = 0;
     char line[MAXLINE];
 
-    setlogmask (LOG_UPTO (LOG_NOTICE));
-    openlog ("can2lan", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
-    syslog (LOG_NOTICE, " read_track_file: %s", filename);
+    setlogmask(LOG_UPTO(LOG_NOTICE));
+    openlog("can2lan", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_DAEMON);
+    syslog(LOG_NOTICE, " read_track_file: %s", filename);
 
     if ((fp = fopen(filename, "r")) != NULL) {
 	while (fgets(line, MAXLINE, fp) != NULL) {
@@ -108,8 +108,8 @@ char **read_track_file(char *filename, char **page_name) {
 		    page_name[id] = calloc(strlen(&line[7]) + 5, sizeof(char));
 		    if (page_name[id] == NULL) {
 			fprintf(stderr, "%s: error calloc failed creating config buffer for %s\n", __func__, filename);
-    			syslog(LOG_ERR, "%s: error calloc failed creating config buffer for %s\n", __func__, filename);
-    			closelog ();
+			syslog(LOG_ERR, "%s: error calloc failed creating config buffer for %s\n", __func__, filename);
+			closelog();
 			return NULL;
 		    }
 		    strcpy(page_name[id], &line[7]);
@@ -121,8 +121,8 @@ char **read_track_file(char *filename, char **page_name) {
 	if (errno != 0) {
 	    fclose(fp);
 	    fprintf(stderr, "error reading line: %s\n", strerror(errno));
-    	    syslog(LOG_ERR, "%s: error reading line: %s\n", __func__, strerror(errno));
-	    closelog ();
+	    syslog(LOG_ERR, "%s: error reading line: %s\n", __func__, strerror(errno));
+	    closelog();
 	    return NULL;
 	}
 	fclose(fp);
@@ -130,8 +130,8 @@ char **read_track_file(char *filename, char **page_name) {
 	return page_name;
     } else {
 	fprintf(stderr, "error reading file %s: %s\n", filename, strerror(errno));
-    	syslog(LOG_ERR, "%s: error reading file %s: %s\n", __func__, filename, strerror(errno));
-	closelog ();
+	syslog(LOG_ERR, "%s: error reading file %s: %s\n", __func__, filename, strerror(errno));
+	closelog();
 	return NULL;
     }
 }
@@ -154,7 +154,7 @@ void print_can_frame(char *format_string, unsigned char *netframe, int verbose) 
     }
     if (dlc < 8) {
 	printf("(%02x", netframe[i]);
-	for (i = 6 + dlc; i < CAN_ENCAP_SIZE ; i++) {
+	for (i = 6 + dlc; i < CAN_ENCAP_SIZE; i++) {
 	    printf(" %02x", netframe[i]);
 	}
 	printf(")");
@@ -381,7 +381,7 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 			config_data->next++;
 			break;
 		    } else {
-			/* list is done if no entry is left*/
+			/* list is done if no entry is left */
 			config_data->state = CS2_STATE_TRACK_SUM;
 		    }
 		    /* we need to fallthrough here */
