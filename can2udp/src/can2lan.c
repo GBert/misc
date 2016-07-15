@@ -187,7 +187,8 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	} else {
 	    strncpy(config_name, (char *)&netframe[5], 8);
 	    config_name[8] = '\0';
-	    printf("%s ID 0x%08x %s\n", __func__, canid, (char *)&netframe[5]);
+	    if (cs2_config_data->verbose)
+	        printf("%s ID 0x%08x %s\n", __func__, canid, (char *)&netframe[5]);
 	    netframe[1] |= 1;
 	    net_to_net(tcp_socket, NULL, netframe, CAN_ENCAP_SIZE);
 	    if (strcmp("loks", config_name) == 0) {
@@ -221,22 +222,22 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	    /* TODO : these files depends on different internal states */
 	    else if (strcmp("lokstat", config_name) == 0) {
 		ret = 1;
-		fprintf(stderr, "%s: lokstat (lokomotive.sr2) not implemented yet\n", __func__);
+		/* fprintf(stderr, "%s: lokstat (lokomotive.sr2) not implemented yet\n", __func__); */
 		send_tcp_config_data("lokomotive.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    } else if (strcmp("magstat", config_name) == 0) {
 		ret = 1;
-		fprintf(stderr, "%s: magstat (magnetartikel.sr2) not implemented yet\n\n", __func__);
+		/* fprintf(stderr, "%s: magstat (magnetartikel.sr2) not implemented yet\n\n", __func__); */
 		send_tcp_config_data("magnetartikel.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    } else if (strcmp("gbsstat", config_name) == 0) {
 		ret = 1;
-		fprintf(stderr, "%s: gbsstat (gbsstat.sr2) not implemented yet\n\n", __func__);
+		/* fprintf(stderr, "%s: gbsstat (gbsstat.sr2) not implemented yet\n\n", __func__); */
 		send_tcp_config_data("gbsstat.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    } else if (strcmp("fsstat", config_name) == 0) {
 		ret = 1;
-		fprintf(stderr, "%s: fsstat (fahrstrassen.sr2) not implemented yet\n\n", __func__);
+		/* fprintf(stderr, "%s: fsstat (fahrstrassen.sr2) not implemented yet\n\n", __func__); */
 		send_tcp_config_data("fahrstrassen.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    }

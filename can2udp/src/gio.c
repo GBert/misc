@@ -442,7 +442,7 @@ uint8_t *read_config_file(char *filename, char *config_dir, uint32_t * nbytes) {
     strncat(file_name, config_dir, MAXLINE - 1);
     strcat(file_name, filename);
 
-    printf("%s: try reading file %s\n", __func__, file_name);
+    /* printf("%s: try reading file %s\n", __func__, file_name); */
 
     rc = stat(file_name, &st);
     if (rc < 0) {
@@ -495,10 +495,8 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
     uint8_t netframe[MAXMTU];
 
     config = read_config_file(filename, config_dir, &nbytes);
-    if (config) {
-	printf("%s read config file %s\n", __func__, filename);
-    } else {
-	printf("%s: error reading config %s\n", __func__, filename);
+    if (config == NULL) {
+	fprintf(stderr, "%s: error reading config %s\n", __func__, filename);
 	return -1;
     }
 
@@ -507,7 +505,7 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
 	/* assuming that out[CHUNK] is large enough to compress the whole file, otherwise don't send */
 	out = (uint8_t *) calloc(CHUNK + 12, sizeof(uint8_t));
 	if (out == NULL) {
-	    printf("%s: error calloc failed creating deflation buffer\n", __func__);
+	    fprintf(stderr, "%s: error calloc failed creating deflation buffer\n", __func__);
 	    return -1;
 	}
 	strm_init(&strm);
@@ -519,7 +517,7 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
 	CALL_ZLIB(deflate(&strm, Z_FINISH));
 	deflated_size = CHUNK - strm.avail_out;
 	if (strm.avail_out == 0) {
-	    printf("%s: compressed file to large : %d filesize %d strm.avail_out\n", __func__, nbytes, strm.avail_out);
+	    /* printf("%s: compressed file to large : %d filesize %d strm.avail_out\n", __func__, nbytes, strm.avail_out); */
 	    deflateEnd(&strm);
 	    free(config);
 	    free(out);
@@ -540,8 +538,7 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
 	}
 
 	crc = CRCCCITT(out, padded_nbytes, 0xffff);
-	printf("%s: canid 0x%08x filesize %d deflated size: %d crc 0x%04x\n", __func__, canid, nbytes, deflated_size,
-	       crc);
+	/* printf("%s: canid 0x%08x filesize %d deflated size: %d crc 0x%04x\n", __func__, canid, nbytes, deflated_size, crc); */
 	memset(netframe, 0, MAXMTU);
 	/* prepare first CAN frame   */
 	/* delete response bit and set canid to config data stream */
