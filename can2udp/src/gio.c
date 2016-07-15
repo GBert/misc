@@ -144,7 +144,7 @@ void print_can_frame(char *format_string, unsigned char *netframe, int verbose) 
     }
     if (dlc < 8) {
 	printf("(%02x", netframe[i]);
-	for (i = 6 + dlc; i < 13; i++) {
+	for (i = 6 + dlc; i < CAN_ENCAP_SIZE ; i++) {
 	    printf(" %02x", netframe[i]);
 	}
 	printf(")");
@@ -152,7 +152,7 @@ void print_can_frame(char *format_string, unsigned char *netframe, int verbose) 
 	printf(" ");
     }
     printf("  ");
-    for (i = 5; i < 13; i++) {
+    for (i = 5; i < CAN_ENCAP_SIZE; i++) {
 	if (isprint(netframe[i]))
 	    printf("%c", netframe[i]);
 	else
@@ -176,7 +176,7 @@ int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *fr
     int s;
     uint32_t canid;
 
-    memset(netframe, 0, 13);
+    memset(netframe, 0, CAN_ENCAP_SIZE);
     frame->can_id &= CAN_EFF_MASK;
     canid = htonl(frame->can_id);
     memcpy(netframe, &canid, 4);
@@ -184,8 +184,8 @@ int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *fr
     memcpy(&netframe[5], &frame->data, frame->can_dlc);
 
     /* send TCP/UDP frame */
-    s = sendto(net_socket, netframe, 13, 0, net_addr, sizeof(*net_addr));
-    if (s != 13) {
+    s = sendto(net_socket, netframe, CAN_ENCAP_SIZE, 0, net_addr, sizeof(*net_addr));
+    if (s != CAN_ENCAP_SIZE) {
 	fprintf(stderr, "%s: error sending TCP/UDP data %s\n", __func__, strerror(errno));
 	return -1;
     }
@@ -199,7 +199,7 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
     struct timeval actual_time;
     long usec;
 
-    /* Maerklin TCP/UDP Format: always 13 bytes
+    /* Maerklin TCP/UDP Format: always 13 (CAN_ENCAP_SIZE) bytes
      *   byte 0 - 3  CAN ID
      *   byte 4      DLC
      *   byte 5 - 12 CAN data
@@ -307,7 +307,7 @@ int config_write(struct cs2_config_data_t *config_data) {
 
 int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netframe) {
     unsigned int temp;
-    unsigned char newframe[13];
+    unsigned char newframe[CAN_ENCAP_SIZE];
     char *filename;
 
     if (memcmp(netframe, GETCONFIG_RESPONSE, 5) == 0) {
@@ -360,13 +360,13 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 		    break;
 		case CS2_STATE_NORMAL_CONFIG:
 		    if (cs2_configs[config_data->next][0]) {
-			memset(newframe, 0, 13);
+			memset(newframe, 0, CAN_ENCAP_SIZE);
 			memcpy(newframe, GETCONFIG, 5);
 			printf("getting %s filename %s\n", cs2_configs[config_data->next][0], cs2_configs[config_data->next][1]);
 			config_data->name = cs2_configs[config_data->next][1];
 			memcpy(&newframe[5], cs2_configs[config_data->next][0], strlen(cs2_configs[config_data->next][0]));
 			/* print_can_frame(NET_TCP_FORMAT_STRG, newframe, 1); */
-			net_to_net(config_data->cs2_tcp_socket, NULL, newframe, 13);
+			net_to_net(config_data->cs2_tcp_socket, NULL, newframe, CAN_ENCAP_SIZE);
 			config_data->next++;
 			break;
 		    } else {
@@ -378,8 +378,10 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 		    filename = calloc(MAXLINE, 1);
 		    if (filename == NULL) {
 			fprintf(stderr, "can't calloc in %s: %s\n", __func__, strerror(errno));
+			config_data->state = CS2_STATE_INACTIVE;
 			return (EXIT_FAILURE);
 		    }
+		    strcat(config_data->dir, "gleisbilder/");
 		    strcpy(filename, config_data->dir);
 		    strcat(filename, "gleisbild.cs2");
 		    if (config_data->verbose)
@@ -387,25 +389,25 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 		    config_data->page_name = read_track_file(filename, config_data->page_name);
 		    if (config_data->page_name == NULL) {
 			fprintf(stderr, "can't finish CS2 copy config request\n");
+			/* hack */
+			config_data->dir[strlen(config_data->dir) - strlen("gleisbilder/")] = 0;
 			config_data->state = CS2_STATE_INACTIVE;
 			return (EXIT_FAILURE);
 		    }
 		    if (config_data->verbose)
 			print_pages(config_data->page_name);
-		    strcat(config_data->dir, "gleisbilder/");
-		    printf("dir now >%s<\n", config_data->dir);
 		    free(filename);
 		    config_data->track_index = 0;
 		    config_data->state = CS2_STATE_GET_TRACKS;
 		    /* we need to fallthrough here */
 		case CS2_STATE_GET_TRACKS:
 		    if (config_data->page_name[config_data->track_index]) {
-			memset(newframe, 0, 13);
+			memset(newframe, 0, CAN_ENCAP_SIZE);
 			memcpy(newframe, GETCONFIG, 5);
 			config_data->name = config_data->page_name[config_data->track_index];
 			sprintf((char *)&newframe[5], "gbs-%d", config_data->track_index);
 			printf("getting track %s filename %s\n", &newframe[5], config_data->name);
-			net_to_net(config_data->cs2_tcp_socket, NULL, newframe, 13);
+			net_to_net(config_data->cs2_tcp_socket, NULL, newframe, CAN_ENCAP_SIZE);
 			config_data->track_index++;
 		    } else {
 			/* TODO: this is a hack */
@@ -553,7 +555,7 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
 	netframe[11] = 0x00;
 	netframe[12] = 0x00;
 
-	if (net_to_net(tcp_socket, NULL, netframe, 13)) {
+	if (net_to_net(tcp_socket, NULL, netframe, CAN_ENCAP_SIZE)) {
 	    deflateEnd(&strm);
 	    free(config);
 	    free(out);
@@ -580,7 +582,7 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
 	    /* printf("send %3d bytes by TCP\n", i); */
 	    /* small sleep (reschedule) to disable Nagle in combination with TCP_NODELAY */
 	    usec_sleep(1000);
-	    /* don't use frame_to_net because we have more then 13 bytes to send */
+	    /* don't use frame_to_net because we have more then 13 (CAN_ENCAP_SIZE) bytes to send */
 	    if (net_to_net(tcp_socket, NULL, netframe, i)) {
 		perror("error sending TCP data\n");
 		deflateEnd(&strm);
@@ -593,7 +595,7 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
 	/* print compressed data */
 	temp32 = i;
 	for (i = 0; i < temp32; i++) {
-	    if ((i % 13) == 0) {
+	    if ((i % CAN_ENCAP_SIZE) == 0) {
 		printf("\n");
 	    }
 	    printf("%02x ", netframe[i]);
