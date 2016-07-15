@@ -36,6 +36,8 @@
 #include <linux/can.h>
 #include <ifaddrs.h>
 
+#include <syslog.h>
+
 #define MAXLINE			1024		/* max string length     */
 #define MAX_TCP_CONN		16		/* max TCP clients       */
 #define CAN_ENCAP_SIZE 		13		/* maximum datagram size */

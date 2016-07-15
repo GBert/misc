@@ -92,6 +92,12 @@ char **read_track_file(char *filename, char **page_name) {
     int page = 0;
     char line[MAXLINE];
 
+    setlogmask (LOG_UPTO (LOG_NOTICE));
+    openlog ("can2lan", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
+    syslog (LOG_NOTICE, " read_track_file: %s", filename);
+
+    closelog ();
+
     if ((fp = fopen(filename, "r")) != NULL) {
 	while (fgets(line, MAXLINE, fp) != NULL) {
 	    if (strstr(line, "seite") == line) {
