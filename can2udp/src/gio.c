@@ -92,8 +92,6 @@ char **read_track_file(char *filename, char **page_name) {
     int page = 0;
     char line[MAXLINE];
 
-    setlogmask(LOG_UPTO(LOG_NOTICE));
-    openlog("can2lan", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_DAEMON);
     syslog(LOG_NOTICE, " read_track_file: %s", filename);
 
     if ((fp = fopen(filename, "r")) != NULL) {
@@ -109,7 +107,6 @@ char **read_track_file(char *filename, char **page_name) {
 		    if (page_name[id] == NULL) {
 			fprintf(stderr, "%s: error calloc failed creating config buffer for %s\n", __func__, filename);
 			syslog(LOG_ERR, "%s: error calloc failed creating config buffer for %s\n", __func__, filename);
-			closelog();
 			return NULL;
 		    }
 		    strcpy(page_name[id], &line[7]);
@@ -123,7 +120,6 @@ char **read_track_file(char *filename, char **page_name) {
     } else {
 	fprintf(stderr, "%s: error reading file %s: %s\n", __func__, filename, strerror(errno));
 	syslog(LOG_ERR, "%s: error reading file %s: %s\n", __func__, filename, strerror(errno));
-	closelog();
 	return NULL;
     }
 }

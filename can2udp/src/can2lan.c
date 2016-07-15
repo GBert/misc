@@ -65,7 +65,9 @@ void print_usage(char *prg) {
 
 int send_magic_start_60113_frame(int can_socket, int verbose) {
     if (frame_to_can(can_socket, M_GLEISBOX_MAGIC_START_SEQUENCE) < 0) {
-	fprintf(stderr, "can't send CAN magic 60113 start sequence\n");
+	if (verbose)
+	    fprintf(stderr, "can't send CAN magic 60113 start sequence\n");
+        syslog(LOG_ERR, "%s: can't send CAN magic 60113 start sequence\n", __func__);
 	return -1;
     } else {
 	if (verbose) {
@@ -79,6 +81,7 @@ int send_magic_start_60113_frame(int can_socket, int verbose) {
 int send_can_ping(int can_socket, int verbose) {
     if (frame_to_can(can_socket, M_CAN_PING) < 0) {
 	fprintf(stderr, "can't send CAN Ping\n");
+        syslog(LOG_ERR, "%s: can't send CAN Ping\n", __func__);
 	return -1;
     } else {
 	if (verbose) {
@@ -110,7 +113,10 @@ int copy_cs2_config(struct cs2_config_data_t *cs2_config_data) {
 	cs2_config_data->cs2_config_copy = 0;
 	cs2_config_data->state = CS2_STATE_NORMAL_CONFIG;
     } else {
-	fprintf(stderr, "can't clone CS2 config - no CS2 TCP connection yet\n");
+	if (cs2_config_data->verbose)
+	    fprintf(stderr, "can't clone CS2 config - no CS2 TCP connection yet\n");
+        /* syslog(LOG_ERR, "%s: can't clone CS2 config - no CS2 TCP connection yet\n", __func__); */
+        syslog(LOG_ERR, "%s: can't clone CS2 config - no CS2 TCP connection yet\n", __func__);
     }
     return 0;
 }
@@ -128,6 +134,7 @@ int check_data_udp(int udp_socket, struct sockaddr *baddr, struct cs2_config_dat
 	    memcpy(netframe, M_PING_RESPONSE, 5);
 	    if (net_to_net(udp_socket, baddr, netframe, CAN_ENCAP_SIZE)) {
 		fprintf(stderr, "sending UDP data (CAN Ping) error:%s \n", strerror(errno));
+        	syslog(LOG_ERR, "%s: sending UDP data (CAN Ping) error:%s\n", __func__, strerror(errno));
 	    } else {
 		print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data->verbose);
 		if (cs2_config_data->verbose)
@@ -140,7 +147,9 @@ int check_data_udp(int udp_socket, struct sockaddr *baddr, struct cs2_config_dat
     case (0x00420000UL):
 	/* check for initiated config request */
 	if (canid == 0x0042af7e) {
-	    printf("copy config request\n");
+	    if (cs2_config_data->verbose)
+		printf("copy config request\n");
+            syslog(LOG_INFO, "%s: copy config request\n", __func__);
 	    cs2_config_data->cs2_config_copy = 1;
 	    copy_cs2_config(cs2_config_data);
 	}
@@ -167,7 +176,9 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	/* looking for CS2.exe ping answer */
 	print_can_frame(NET_TCP_FORMAT_STRG, netframe, cs2_config_data->verbose);
 	if ((netframe[11] == 0xFF) && (netframe[12] == 0xFF)) {
-	    printf("got CS2 TCP ping - copy config var: %d\n", cs2_config_data->cs2_config_copy);
+	    if (cs2_config_data->verbose)
+		printf("got CS2 TCP ping - copy config var: %d\n", cs2_config_data->cs2_config_copy);
+            syslog(LOG_INFO, "%s: got CS2 TCP ping - copy config var: %d\n", __func__, cs2_config_data->cs2_config_copy);
 	    cs2_config_data->cs2_tcp_socket = tcp_socket;
 	}
 	break;
@@ -571,6 +582,9 @@ int main(int argc, char **argv) {
 	}
     }
 
+    setlogmask(LOG_UPTO(LOG_NOTICE));
+    openlog( NULL, LOG_CONS | LOG_PID | LOG_NDELAY, LOG_DAEMON);
+
     /* set select timeout -> send periodic CAN Ping */
     memset(&tv, 0, sizeof(tv));
     tv.tv_sec = 1;
@@ -602,6 +616,7 @@ int main(int argc, char **argv) {
 	    /* reading via SockatCAN */
 	    if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
 		fprintf(stderr, "reading CAN frame error: %s\n", strerror(errno));
+		syslog(LOG_ERR, "%s: reading CAN frame error: %s\n", __func__, strerror(errno));
 	    }
 	    /* if CAN Frame is EFF do it */
 	    if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
@@ -635,14 +650,18 @@ int main(int argc, char **argv) {
 		printf("new client: %s, port %d conn fd: %d max fds: %d\n", inet_ntop(AF_INET, &(tcp_addr.sin_addr),
 			buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port), conn_fd, max_fds);
 	    }
+	    syslog(LOG_INFO, "%s: new client: %s port %d conn fd: %d max fds: %d\n", __func__,
+			 inet_ntop(AF_INET, &(tcp_addr.sin_addr),  buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port), conn_fd, max_fds);
 	    for (i = 0; i < MAX_TCP_CONN; i++) {
 		if (tcp_client[i] < 0) {
 		    tcp_client[i] = conn_fd;	/* save new TCP client descriptor */
 		    break;
 		}
 	    }
-	    if (i == MAX_TCP_CONN)
+	    if (i == MAX_TCP_CONN) {
 		fprintf(stderr, "too many TCP clients\n");
+		syslog(LOG_ERR, "%s: too many TCP clients\n", __func__);
+	   }
 
 	    FD_SET(conn_fd, &all_fds);		/* add new descriptor to set */
 	    max_fds = MAX(conn_fd, max_fds);	/* for select */
@@ -665,6 +684,8 @@ int main(int argc, char **argv) {
 		printf("new client: %s, port %d conn fd: %d max fds: %d\n", inet_ntop(AF_INET, &(tcp_addr2.sin_addr),
 			buffer, sizeof(buffer)), ntohs(tcp_addr2.sin_port), conn_fd, max_fds);
 	    }
+	    syslog(LOG_INFO, "%s: new client: %s port %d conn fd: %d max fds: %d\n", __func__,
+			 inet_ntop(AF_INET, &(tcp_addr2.sin_addr),  buffer, sizeof(buffer)), ntohs(tcp_addr2.sin_port), conn_fd, max_fds);
 	    FD_SET(conn_fd, &all_fds);		/* add new descriptor to set */
 	    max_fds = MAX(conn_fd, max_fds);	/* for select */
 	    max_tcp_i = MAX(i, max_tcp_i);	/* max index in tcp_client[] array */
@@ -686,9 +707,9 @@ int main(int argc, char **argv) {
 		    /* connection closed by client */
 		    if (cs2_config_data.verbose && !background) {
 			time_stamp(timestamp);
-			printf("%s client %s closed connection\n", timestamp,
-			       inet_ntop(AF_INET, &tcp_addr.sin_addr, buffer, sizeof(buffer)));
+			printf("%s client %s closed connection\n", timestamp, inet_ntop(AF_INET, &tcp_addr.sin_addr, buffer, sizeof(buffer)));
 		    }
+		    syslog(LOG_INFO, "%s: client %s closed connection\n", __func__, inet_ntop(AF_INET, &tcp_addr.sin_addr, buffer, sizeof(buffer)));
 		    close(tcp_socket);
 		    FD_CLR(tcp_socket, &all_fds);
 		    tcp_client[i] = -1;
@@ -697,7 +718,9 @@ int main(int argc, char **argv) {
 		    /* TCP packets with size modulo 13 !=0 are ignored though */
 		    if (n % 13) {
 			time_stamp(timestamp);
-			fprintf(stderr, "%s received packet %% 13 : length %d\n", timestamp, n);
+			if (!background)
+			    fprintf(stderr, "%s received packet %% 13 : length %d - maybe close connection\n", timestamp, n);
+        		syslog(LOG_ERR, "%s: received packet %% 13 : length %d - maybe close connection\n", __func__, n);
 		    } else {
 			for (i = 0; i < n; i += CAN_ENCAP_SIZE) {
 			    /* check if we need to forward the message to CAN */
@@ -720,6 +743,7 @@ int main(int argc, char **argv) {
 	    }
 	}
     }
+    closelog();
     close(sc);
     close(sa);
     close(sb);
