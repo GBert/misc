@@ -93,9 +93,14 @@ int send_can_ping(int can_socket, int verbose) {
 }
 
 int copy_cs2_config(struct cs2_config_data_t *cs2_config_data) {
+    char *ptr;
     unsigned char newframe[CAN_ENCAP_SIZE];
 
     if (cs2_config_data->cs2_tcp_socket) {
+        /* strip old subdir if needed */
+	ptr = strstr(cs2_config_data->dir, "gleisbilder/");
+	if (ptr)
+	    *ptr = 0;
 	memset(newframe, 0, CAN_ENCAP_SIZE);
 	memcpy(newframe, GETCONFIG, 5);
 	/* TODO */
@@ -149,7 +154,7 @@ int check_data_udp(int udp_socket, struct sockaddr *baddr, struct cs2_config_dat
 	if (canid == 0x0042af7e) {
 	    if (cs2_config_data->verbose)
 		printf("copy config request\n");
-            syslog(LOG_INFO, "%s: copy config request\n", __func__);
+            syslog(LOG_INFO, "%s %d: copy config request\n", __func__, __LINE__);
 	    cs2_config_data->cs2_config_copy = 1;
 	    copy_cs2_config(cs2_config_data);
 	}
@@ -180,6 +185,8 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 		printf("got CS2 TCP ping - copy config var: %d\n", cs2_config_data->cs2_config_copy);
             syslog(LOG_INFO, "%s: got CS2 TCP ping - copy config var: %d\n", __func__, cs2_config_data->cs2_config_copy);
 	    cs2_config_data->cs2_tcp_socket = tcp_socket;
+	    if (cs2_config_data->cs2_config_copy)
+		copy_cs2_config(cs2_config_data);
 	}
 	break;
     case (0x00400000UL):	/* config data */
@@ -194,6 +201,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	    net_to_net(tcp_socket, NULL, netframe, CAN_ENCAP_SIZE);
 	    if (cs2_config_data->verbose)
 		printf("CS2 copy request\n");
+	    syslog(LOG_INFO, "%s %d: CS2 copy request\n", __func__, __LINE__);
 	    cs2_config_data->cs2_config_copy = 1;
 	} else {
 	    strncpy(config_name, (char *)&netframe[5], 8);
@@ -204,10 +212,12 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	    net_to_net(tcp_socket, NULL, netframe, CAN_ENCAP_SIZE);
 	    if (strcmp("loks", config_name) == 0) {
 		ret = 1;
+		syslog(LOG_INFO, "%s: sending lokomotive.cs2\n", __func__);
 		send_tcp_config_data("lokomotive.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    } else if (strcmp("mags", config_name) == 0) {
 		ret = 1;
+		syslog(LOG_INFO, "%s: sending magnetartikel.cs2\n", __func__);
 		send_tcp_config_data("magnetartikel.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    } else if (strncmp("gbs-", config_name, 4) == 0) {
@@ -218,15 +228,18 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 		if (page_name) {
 		    strcat(gbs_name, page_name[page_number]);
 		    /* strcat(gbs_name, ".cs2"); */
+		    syslog(LOG_INFO, "%s: sending %s\n", __func__, gbs_name);
 		    send_tcp_config_data(gbs_name, config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		}
 		break;
 	    } else if (strcmp("gbs", config_name) == 0) {
 		ret = 1;
+		syslog(LOG_INFO, "%s: sending gleisbild.cs2\n", __func__);
 		send_tcp_config_data("gleisbild.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    } else if (strcmp("fs", config_name) == 0) {
 		ret = 1;
+		syslog(LOG_INFO, "%s: sending fahrstrassen.cs2\n", __func__);
 		send_tcp_config_data("fahrstrassen.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    }
@@ -234,21 +247,25 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	    else if (strcmp("lokstat", config_name) == 0) {
 		ret = 1;
 		/* fprintf(stderr, "%s: lokstat (lokomotive.sr2) not implemented yet\n", __func__); */
+		syslog(LOG_INFO, "%s: sending lokomotive.sr2\n", __func__);
 		send_tcp_config_data("lokomotive.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    } else if (strcmp("magstat", config_name) == 0) {
 		ret = 1;
 		/* fprintf(stderr, "%s: magstat (magnetartikel.sr2) not implemented yet\n\n", __func__); */
+		syslog(LOG_INFO, "%s: sending magnetartikel.sr2\n", __func__);
 		send_tcp_config_data("magnetartikel.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    } else if (strcmp("gbsstat", config_name) == 0) {
 		ret = 1;
 		/* fprintf(stderr, "%s: gbsstat (gbsstat.sr2) not implemented yet\n\n", __func__); */
+		syslog(LOG_INFO, "%s: sending gbsstat.sr2\n", __func__);
 		send_tcp_config_data("gbsstat.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    } else if (strcmp("fsstat", config_name) == 0) {
 		ret = 1;
 		/* fprintf(stderr, "%s: fsstat (fahrstrassen.sr2) not implemented yet\n\n", __func__); */
+		syslog(LOG_INFO, "%s: sending fahrstrassen.sr2\n", __func__);
 		send_tcp_config_data("fahrstrassen.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    }

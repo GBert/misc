@@ -165,6 +165,7 @@ int net_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *netfram
     s = sendto(net_socket, netframe, length, 0, net_addr, sizeof(*net_addr));
     if (s != length) {
 	fprintf(stderr, "%s: error sending TCP/UDP data: %s\n", __func__, strerror(errno));
+	syslog(LOG_ERR, "%s: error sending TCP/UDP data: %s\n", __func__, strerror(errno));
 	return -1;
     }
     return 0;
@@ -184,7 +185,8 @@ int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *fr
     /* send TCP/UDP frame */
     s = sendto(net_socket, netframe, CAN_ENCAP_SIZE, 0, net_addr, sizeof(*net_addr));
     if (s != CAN_ENCAP_SIZE) {
-	fprintf(stderr, "%s: error sending TCP/UDP data %s\n", __func__, strerror(errno));
+	fprintf(stderr, "%s: error sending TCP/UDP data: %s\n", __func__, strerror(errno));
+	syslog(LOG_ERR, "%s: error sending TCP/UDP data: %s\n", __func__, strerror(errno));
 	return -1;
     }
     return 0;
@@ -225,6 +227,7 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
     /* send CAN frame */
     if (write(can_socket, &frame, sizeof(frame)) != sizeof(frame)) {
 	fprintf(stderr, "%s: error writing CAN frame: %s\n", __func__, strerror(errno));
+	syslog(LOG_ERR, "%s: error writing CAN frame: %s\n", __func__, strerror(errno));
 	return -1;
     }
 
@@ -271,7 +274,8 @@ int config_write(struct cs2_config_data_t *config_data) {
 
     filename = calloc(MAXLINE, 1);
     if (filename == NULL) {
-	fprintf(stderr, "can't calloc in %s: %s\n", __func__, strerror(errno));
+	fprintf(stderr, "%s: can't calloc: %s\n", __func__, strerror(errno));
+	syslog(LOG_ERR, "%s: can't calloc: %s\n", __func__, strerror(errno));
 	exit(EXIT_FAILURE);
     }
     strcpy(filename, config_data->dir);
@@ -286,6 +290,7 @@ int config_write(struct cs2_config_data_t *config_data) {
     config_fp = fopen(filename, "wb");
     if (!config_fp) {
 	fprintf(stderr, "\ncan't open file %s for writing - error: %s\n", filename, strerror(errno));
+	syslog(LOG_ERR, "%s: can't open file %s for writing - error: %s\n", __func__, filename, strerror(errno));
 	free(filename);
 	return 0;
     } else if (config_data->verbose) {
@@ -307,6 +312,7 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
     unsigned int temp;
     unsigned char newframe[CAN_ENCAP_SIZE];
     char *filename;
+    char *ptr;
 
     if (memcmp(netframe, GETCONFIG_RESPONSE, 5) == 0) {
 	memcpy(&temp, &netframe[5], 4);
@@ -362,7 +368,9 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 			memcpy(newframe, GETCONFIG, 5);
 			if (config_data->verbose)
 			    printf("getting %s filename %s\n", cs2_configs[config_data->next][0], cs2_configs[config_data->next][1]);
+			syslog(LOG_INFO, "%s: getting %s filename %s\n", __func__, cs2_configs[config_data->next][0], cs2_configs[config_data->next][1]);
 			config_data->name = cs2_configs[config_data->next][1];
+			syslog(LOG_INFO, "%s: getting %s filename %s\n", __func__, cs2_configs[config_data->next][0], config_data->name);
 			memcpy(&newframe[5], cs2_configs[config_data->next][0], strlen(cs2_configs[config_data->next][0]));
 			/* print_can_frame(NET_TCP_FORMAT_STRG, newframe, 1); */
 			net_to_net(config_data->cs2_tcp_socket, NULL, newframe, CAN_ENCAP_SIZE);
@@ -384,10 +392,11 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 		    strcat(filename, "gleisbild.cs2");
 		    if (config_data->verbose)
 			printf("read track file %s dir %s\n", filename, config_data->dir);
+		    syslog(LOG_INFO, "%s: read track file %s dir %s\n", __func__, filename, config_data->dir);
 		    config_data->page_name = read_track_file(filename, config_data->page_name);
 		    if (config_data->page_name == NULL) {
-			fprintf(stderr, "can't finish CS2 copy config request\n");
-			/* hack */
+			fprintf(stderr, "%s: can't finish CS2 copy config request\n", __func__);
+		        syslog(LOG_ERR, "%s: can't finish CS2 copy config request\n", __func__);
 			config_data->state = CS2_STATE_INACTIVE;
 			return (EXIT_FAILURE);
 		    }
@@ -406,11 +415,14 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 			sprintf((char *)&newframe[5], "gbs-%d", config_data->track_index);
 			if (config_data->verbose)
 			    printf("getting track %s filename %s\n", &newframe[5], config_data->name);
+		        syslog(LOG_INFO, "%s: getting track %s filename %s\n", __func__, &newframe[5], config_data->name);
 			net_to_net(config_data->cs2_tcp_socket, NULL, newframe, CAN_ENCAP_SIZE);
 			config_data->track_index++;
 		    } else {
-			/* TODO: this is a hack */
-			config_data->dir[strlen(config_data->dir) - strlen("gleisbilder/")] = 0;
+			/* reset dir */
+			ptr = strstr(config_data->dir, "gleisbilder/");
+			if (ptr)
+			    *ptr = 0;
 			config_data->state = CS2_STATE_INACTIVE;
 		    }
 		    break;
@@ -445,22 +457,26 @@ uint8_t *read_config_file(char *filename, char *config_dir, uint32_t * nbytes) {
     rc = stat(file_name, &st);
     if (rc < 0) {
 	fprintf(stderr, "%s: error stat failed for file %s\n", __func__, filename);
+	syslog(LOG_ERR, "%s: error stat failed for file %s\n", __func__, filename);
 	goto read_error1;
     }
     fp = fopen(file_name, "rb");
     if (fp == NULL) {
 	fprintf(stderr, "%s: error fopen failed for file %s\n", __func__, filename);
+	syslog(LOG_ERR, "%s: error fopen failed for file %s\n", __func__, filename);
 	goto read_error1;
     }
     *nbytes = st.st_size;
     config = (uint8_t *) calloc(*nbytes, sizeof(uint8_t));
     if (config == NULL) {
 	fprintf(stderr, "%s: error calloc failed creating config buffer for %s\n", __func__, filename);
+	syslog(LOG_ERR, "%s: error calloc failed creating config buffer for %s\n", __func__, filename);
 	goto read_error2;
     }
     rc = fread((void *)config, 1, *nbytes, fp);
     if (((unsigned int)rc != *nbytes)) {
 	fprintf(stderr, "%s: error fread failed reading %s\n", __func__, filename);
+	syslog(LOG_ERR, "%s: error fread failed reading %s\n", __func__, filename);
 	free(config);
 	goto read_error2;
     }
@@ -495,6 +511,7 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
     config = read_config_file(filename, config_dir, &nbytes);
     if (config == NULL) {
 	fprintf(stderr, "%s: error reading config %s\n", __func__, filename);
+	syslog(LOG_ERR, "%s: error reading config %s\n", __func__, filename);
 	return -1;
     }
 
@@ -504,6 +521,7 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
 	out = (uint8_t *) calloc(CHUNK + 12, sizeof(uint8_t));
 	if (out == NULL) {
 	    fprintf(stderr, "%s: error calloc failed creating deflation buffer\n", __func__);
+	    syslog(LOG_ERR, "%s: error calloc failed creating deflation buffer\n", __func__);
 	    return -1;
 	}
 	strm_init(&strm);
