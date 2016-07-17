@@ -92,7 +92,7 @@ char **read_track_file(char *filename, char **page_name) {
     int page = 0;
     char line[MAXLINE];
 
-    syslog(LOG_NOTICE, " read_track_file: %s", filename);
+    syslog(LOG_NOTICE, "%s: read %s", __func__, filename);
 
     if ((fp = fopen(filename, "r")) != NULL) {
 	while (fgets(line, MAXLINE, fp) != NULL) {
@@ -368,9 +368,8 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 			memcpy(newframe, GETCONFIG, 5);
 			if (config_data->verbose)
 			    printf("getting %s filename %s\n", cs2_configs[config_data->next][0], cs2_configs[config_data->next][1]);
-			syslog(LOG_INFO, "%s: getting %s filename %s\n", __func__, cs2_configs[config_data->next][0], cs2_configs[config_data->next][1]);
 			config_data->name = cs2_configs[config_data->next][1];
-			syslog(LOG_INFO, "%s: getting %s filename %s\n", __func__, cs2_configs[config_data->next][0], config_data->name);
+			syslog(LOG_NOTICE, "%s: getting %s filename %s\n", __func__, cs2_configs[config_data->next][0], config_data->name);
 			memcpy(&newframe[5], cs2_configs[config_data->next][0], strlen(cs2_configs[config_data->next][0]));
 			/* print_can_frame(NET_TCP_FORMAT_STRG, newframe, 1); */
 			net_to_net(config_data->cs2_tcp_socket, NULL, newframe, CAN_ENCAP_SIZE);
@@ -392,7 +391,7 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 		    strcat(filename, "gleisbild.cs2");
 		    if (config_data->verbose)
 			printf("read track file %s dir %s\n", filename, config_data->dir);
-		    syslog(LOG_INFO, "%s: read track file %s dir %s\n", __func__, filename, config_data->dir);
+		    syslog(LOG_NOTICE, "%s: read track file %s dir %s\n", __func__, filename, config_data->dir);
 		    config_data->page_name = read_track_file(filename, config_data->page_name);
 		    if (config_data->page_name == NULL) {
 			fprintf(stderr, "%s: can't finish CS2 copy config request\n", __func__);
@@ -415,7 +414,7 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 			sprintf((char *)&newframe[5], "gbs-%d", config_data->track_index);
 			if (config_data->verbose)
 			    printf("getting track %s filename %s\n", &newframe[5], config_data->name);
-		        syslog(LOG_INFO, "%s: getting track %s filename %s\n", __func__, &newframe[5], config_data->name);
+		        syslog(LOG_NOTICE, "%s: getting track %s filename %s\n", __func__, &newframe[5], config_data->name);
 			net_to_net(config_data->cs2_tcp_socket, NULL, newframe, CAN_ENCAP_SIZE);
 			config_data->track_index++;
 		    } else {

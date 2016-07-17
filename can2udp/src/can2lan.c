@@ -149,12 +149,12 @@ int check_data_udp(int udp_socket, struct sockaddr *baddr, struct cs2_config_dat
 		copy_cs2_config(cs2_config_data);
 	}
 	break;
-    case (0x00420000UL):
+    case (0x00400000UL):
 	/* check for initiated config request */
-	if (canid == 0x0042af7e) {
+	if (canid == 0x0040af7e) {
 	    if (cs2_config_data->verbose)
 		printf("copy config request\n");
-            syslog(LOG_INFO, "%s %d: copy config request\n", __func__, __LINE__);
+            syslog(LOG_NOTICE, "%s %d: copy config request\n", __func__, __LINE__);
 	    cs2_config_data->cs2_config_copy = 1;
 	    copy_cs2_config(cs2_config_data);
 	}
@@ -183,7 +183,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	if ((netframe[11] == 0xFF) && (netframe[12] == 0xFF)) {
 	    if (cs2_config_data->verbose)
 		printf("got CS2 TCP ping - copy config var: %d\n", cs2_config_data->cs2_config_copy);
-            syslog(LOG_INFO, "%s: got CS2 TCP ping - copy config var: %d\n", __func__, cs2_config_data->cs2_config_copy);
+            syslog(LOG_NOTICE, "%s: got CS2 TCP ping - copy config var: %d\n", __func__, cs2_config_data->cs2_config_copy);
 	    cs2_config_data->cs2_tcp_socket = tcp_socket;
 	    if (cs2_config_data->cs2_config_copy)
 		copy_cs2_config(cs2_config_data);
@@ -201,10 +201,11 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	    net_to_net(tcp_socket, NULL, netframe, CAN_ENCAP_SIZE);
 	    if (cs2_config_data->verbose)
 		printf("CS2 copy request\n");
-	    syslog(LOG_INFO, "%s %d: CS2 copy request\n", __func__, __LINE__);
+	    syslog(LOG_NOTICE, "%s: CS2 copy request\n", __func__);
 	    cs2_config_data->cs2_config_copy = 1;
 	} else {
 	    strncpy(config_name, (char *)&netframe[5], 8);
+	    syslog(LOG_NOTICE, "%s: config request >%s<\n", __func__, config_name);
 	    config_name[8] = '\0';
 	    if (cs2_config_data->verbose)
 	        printf("%s ID 0x%08x %s\n", __func__, canid, (char *)&netframe[5]);
@@ -212,12 +213,12 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	    net_to_net(tcp_socket, NULL, netframe, CAN_ENCAP_SIZE);
 	    if (strcmp("loks", config_name) == 0) {
 		ret = 1;
-		syslog(LOG_INFO, "%s: sending lokomotive.cs2\n", __func__);
+		syslog(LOG_NOTICE, "%s: sending lokomotive.cs2\n", __func__);
 		send_tcp_config_data("lokomotive.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    } else if (strcmp("mags", config_name) == 0) {
 		ret = 1;
-		syslog(LOG_INFO, "%s: sending magnetartikel.cs2\n", __func__);
+		syslog(LOG_NOTICE, "%s: sending magnetartikel.cs2\n", __func__);
 		send_tcp_config_data("magnetartikel.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    } else if (strncmp("gbs-", config_name, 4) == 0) {
@@ -228,18 +229,18 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 		if (page_name) {
 		    strcat(gbs_name, page_name[page_number]);
 		    /* strcat(gbs_name, ".cs2"); */
-		    syslog(LOG_INFO, "%s: sending %s\n", __func__, gbs_name);
+		    syslog(LOG_NOTICE, "%s: sending %s\n", __func__, gbs_name);
 		    send_tcp_config_data(gbs_name, config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		}
 		break;
 	    } else if (strcmp("gbs", config_name) == 0) {
 		ret = 1;
-		syslog(LOG_INFO, "%s: sending gleisbild.cs2\n", __func__);
+		syslog(LOG_NOTICE, "%s: sending gleisbild.cs2\n", __func__);
 		send_tcp_config_data("gleisbild.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    } else if (strcmp("fs", config_name) == 0) {
 		ret = 1;
-		syslog(LOG_INFO, "%s: sending fahrstrassen.cs2\n", __func__);
+		syslog(LOG_NOTICE, "%s: sending fahrstrassen.cs2\n", __func__);
 		send_tcp_config_data("fahrstrassen.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    }
@@ -247,37 +248,30 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	    else if (strcmp("lokstat", config_name) == 0) {
 		ret = 1;
 		/* fprintf(stderr, "%s: lokstat (lokomotive.sr2) not implemented yet\n", __func__); */
-		syslog(LOG_INFO, "%s: sending lokomotive.sr2\n", __func__);
+		syslog(LOG_NOTICE, "%s: sending lokomotive.sr2\n", __func__);
 		send_tcp_config_data("lokomotive.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    } else if (strcmp("magstat", config_name) == 0) {
 		ret = 1;
 		/* fprintf(stderr, "%s: magstat (magnetartikel.sr2) not implemented yet\n\n", __func__); */
-		syslog(LOG_INFO, "%s: sending magnetartikel.sr2\n", __func__);
+		syslog(LOG_NOTICE, "%s: sending magnetartikel.sr2\n", __func__);
 		send_tcp_config_data("magnetartikel.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    } else if (strcmp("gbsstat", config_name) == 0) {
 		ret = 1;
 		/* fprintf(stderr, "%s: gbsstat (gbsstat.sr2) not implemented yet\n\n", __func__); */
-		syslog(LOG_INFO, "%s: sending gbsstat.sr2\n", __func__);
+		syslog(LOG_NOTICE, "%s: sending gbsstat.sr2\n", __func__);
 		send_tcp_config_data("gbsstat.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    } else if (strcmp("fsstat", config_name) == 0) {
 		ret = 1;
 		/* fprintf(stderr, "%s: fsstat (fahrstrassen.sr2) not implemented yet\n\n", __func__); */
-		syslog(LOG_INFO, "%s: sending fahrstrassen.sr2\n", __func__);
+		syslog(LOG_NOTICE, "%s: sending fahrstrassen.sr2\n", __func__);
 		send_tcp_config_data("fahrstrassen.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    }
 	    break;
 	}
-    case (0x00420000UL):
-	/* mark frame to not send over CAN */
-	ret = 1;
-	/* check for initiated copy request */
-	reassemble_data(cs2_config_data, netframe);
-	print_can_frame(NET_TCP_FORMAT_STRG, netframe, cs2_config_data->verbose);
-	break;
 	/* fake cyclic MS1 slave monitoring response */
     case (0x0C000000UL):
 	/* mark CAN frame to send */
@@ -600,7 +594,7 @@ int main(int argc, char **argv) {
     }
 
     setlogmask(LOG_UPTO(LOG_NOTICE));
-    openlog( NULL, LOG_CONS | LOG_PID | LOG_NDELAY, LOG_DAEMON);
+    openlog("can2lan", LOG_CONS | LOG_NDELAY, LOG_DAEMON);
 
     /* set select timeout -> send periodic CAN Ping */
     memset(&tv, 0, sizeof(tv));
@@ -667,7 +661,7 @@ int main(int argc, char **argv) {
 		printf("new client: %s, port %d conn fd: %d max fds: %d\n", inet_ntop(AF_INET, &(tcp_addr.sin_addr),
 			buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port), conn_fd, max_fds);
 	    }
-	    syslog(LOG_INFO, "%s: new client: %s port %d conn fd: %d max fds: %d\n", __func__,
+	    syslog(LOG_NOTICE, "%s: new client: %s port %d conn fd: %d max fds: %d\n", __func__,
 			 inet_ntop(AF_INET, &(tcp_addr.sin_addr),  buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port), conn_fd, max_fds);
 	    for (i = 0; i < MAX_TCP_CONN; i++) {
 		if (tcp_client[i] < 0) {
@@ -701,7 +695,7 @@ int main(int argc, char **argv) {
 		printf("new client: %s, port %d conn fd: %d max fds: %d\n", inet_ntop(AF_INET, &(tcp_addr2.sin_addr),
 			buffer, sizeof(buffer)), ntohs(tcp_addr2.sin_port), conn_fd, max_fds);
 	    }
-	    syslog(LOG_INFO, "%s: new client: %s port %d conn fd: %d max fds: %d\n", __func__,
+	    syslog(LOG_NOTICE, "%s: new client: %s port %d conn fd: %d max fds: %d\n", __func__,
 			 inet_ntop(AF_INET, &(tcp_addr2.sin_addr),  buffer, sizeof(buffer)), ntohs(tcp_addr2.sin_port), conn_fd, max_fds);
 	    FD_SET(conn_fd, &all_fds);		/* add new descriptor to set */
 	    max_fds = MAX(conn_fd, max_fds);	/* for select */
@@ -726,7 +720,7 @@ int main(int argc, char **argv) {
 			time_stamp(timestamp);
 			printf("%s client %s closed connection\n", timestamp, inet_ntop(AF_INET, &tcp_addr.sin_addr, buffer, sizeof(buffer)));
 		    }
-		    syslog(LOG_INFO, "%s: client %s closed connection\n", __func__, inet_ntop(AF_INET, &tcp_addr.sin_addr, buffer, sizeof(buffer)));
+		    syslog(LOG_NOTICE, "%s: client %s closed connection\n", __func__, inet_ntop(AF_INET, &tcp_addr.sin_addr, buffer, sizeof(buffer)));
 		    close(tcp_socket);
 		    FD_CLR(tcp_socket, &all_fds);
 		    tcp_client[i] = -1;

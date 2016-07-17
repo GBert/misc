@@ -138,9 +138,9 @@ int check_data_udp(int udp_socket, struct sockaddr *baddr, struct cs2_config_dat
 		copy_cs2_config(cs2_config_data);
 	}
 	break;
-    case (0x00420000UL):
+    case (0x00400000UL):
 	/* check for initiated config request */
-	if (canid == 0x0042af7e) {
+	if (canid == 0x0040af7e) {
 	    if (cs2_config_data->verbose)
 		printf("copy config request\n");
 	    cs2_config_data->cs2_config_copy = 1;
