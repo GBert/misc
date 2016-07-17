@@ -25,6 +25,7 @@ extern unsigned char GETCONFIG_DATA[];
 extern unsigned char GETCONFIG[];
 extern struct timeval last_sent;
 extern char *cs2_configs[][2];
+extern char **page_name;
 
 /* The following macro calls a zlib routine and checks the return
    value. If the return value ("status") is not OK, it prints an error
@@ -399,6 +400,11 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 			config_data->state = CS2_STATE_INACTIVE;
 			return (EXIT_FAILURE);
 		    }
+		    if (config_data->verbose)
+			printf("copy track file %s dir %s\n", filename, config_data->dir);
+		    syslog(LOG_NOTICE, "%s: track track file %s dir %s (global)\n", __func__, filename, config_data->dir);
+		    page_name = read_track_file(filename, config_data->page_name);
+
 		    strcat(config_data->dir, "gleisbilder/");
 		    if (config_data->verbose)
 			print_pages(config_data->page_name);

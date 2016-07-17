@@ -272,12 +272,21 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	    }
 	    break;
 	}
+    case (0x00420000UL):
+	/* mark frame to not send over CAN */
+	ret = 1;
+	/* check for initiated copy request */
+	reassemble_data(cs2_config_data, netframe);
+	print_can_frame(NET_TCP_FORMAT_STRG, netframe, cs2_config_data->verbose);
+	break;
 	/* fake cyclic MS1 slave monitoring response */
     case (0x0C000000UL):
 	/* mark CAN frame to send */
 	ret = 0;
 	if (ms1_workaround)
 	    netframe[5] = 0x03;
+	break;
+    default:
 	break;
     }
     return ret;
