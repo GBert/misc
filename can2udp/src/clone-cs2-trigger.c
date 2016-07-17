@@ -24,9 +24,6 @@
 #include <arpa/inet.h>
 
 #include <netinet/in.h>
-#include <netdb.h>
-
-#include <linux/can.h>
 
 #define BIT(x)		(1<<x)
 #define MINDELAY	1000000	/* min delay in usec */
