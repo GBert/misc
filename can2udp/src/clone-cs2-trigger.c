@@ -206,11 +206,11 @@ int gpio_set(int pin, int value) {
     }
 
     if (value)
-	ret = write(fd, "1", 1);
+	ret = write(fd, "1", 2);
     else
-	ret = write(fd, "0", 1);
+	ret = write(fd, "0", 2);
 
-    if (ret != 1) {
+    if (ret != 2) {
 	fprintf(stderr, "Failed to write value!\n");
 	return (EXIT_FAILURE);
     }
