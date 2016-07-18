@@ -4,12 +4,36 @@ local maerklin_proto = Proto("maerklin","Maerklin Protocol")
 local maerklin_pdu_len = 13
 local makeLine
 
+local function hex_dump(buf,len)
+      for i=1,math.ceil(len/maerklin_pdu_len) * maerklin_pdu_len do
+         if (i-1) % maerklin_pdu_len == 0 then io.write(string.format('%08X  ', i-1)) end
+         io.write( i > len and '   ' or string.format('%02X ', buf:byte(i)) )
+         if i % maerklin_pdu_len == 0 then io.write( buf:sub(i-16+1, i):gsub('%c','.'), '\n' ) end
+      end
+end
+
 local function dissect_common(buffer, pinfo, tree, offset)
+
+
+    local command
 
     local subtree = tree:add(maerklin_proto,buffer(offset,maerklin_pdu_len),"Maerklin Protocol Data")
 
     subtree:add(buffer(offset,1)  ,"Prio:    " .. buffer(offset,1):uint())
-    subtree:add(buffer(offset+1,1),"Command: " .. buffer(offset+1,1):uint())
+
+    command = bit.band ( buffer(offset+1,1):uint(), 0xfe)
+
+    if command == 0 then
+        subtree:add(buffer(offset+1,1),"Command: System " .. buffer(offset+1,1):uint())
+    elseif command == 2 then
+        subtree:add(buffer(offset+1,1),"Command: Loc Discovery " .. buffer(offset+1,1):uint())
+    elseif command == 4 then
+        subtree:add(buffer(offset+1,1),"Command: MFX Bind " .. buffer(offset+1,1):uint())
+    elseif command == 54 then
+        subtree:add(buffer(offset+1,1),"Command: Bootloader (CAN) " .. buffer(offset+1,1):uint())
+    else
+        subtree:add(buffer(offset+1,1),"Command: unknown " .. buffer(offset+1,1):uint())
+    end
     subtree:add(buffer(offset+2,2),"Hash:    " .. buffer(offset+2,2):uint())
     subtree:add(buffer(offset+4,1),"DLC:     " .. buffer(offset+4,1):uint())
     subtree = subtree:add(buffer(5,8),"Data")
@@ -33,6 +57,7 @@ function maerklin_proto.dissector(buffer, pinfo, tree)
     pinfo.cols.protocol = "MAERKLIN"
 
     local pktlen = buffer:len()
+--  hex_dump(buffer,pktlen)
 
     local consumed, output = dissect_common(buffer, pinfo, tree, 0)
     local remaining = pktlen - consumed
