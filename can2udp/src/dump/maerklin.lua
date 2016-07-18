@@ -15,13 +15,14 @@ end
 local function dissect_common(buffer, pinfo, tree, offset)
 
 
-    local command
+    local command, dlc
 
     local subtree = tree:add(maerklin_proto,buffer(offset,maerklin_pdu_len),"Maerklin Protocol Data")
 
     subtree:add(buffer(offset,1)  ,"Prio:    " .. buffer(offset,1):uint())
 
     command = bit.band ( buffer(offset+1,1):uint(), 0xfe)
+    dlc = buffer(offset+4,1):uint()
 
     if command == 0 then
         subtree:add(buffer(offset+1,1),"Command: System " .. buffer(offset+1,1):uint())
