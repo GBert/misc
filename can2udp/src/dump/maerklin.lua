@@ -4,14 +4,6 @@ local maerklin_proto = Proto("maerklin","Maerklin Protocol")
 local maerklin_pdu_len = 13
 local makeLine
 
-local function hex_dump(buf,len)
-      for i=1,math.ceil(len/maerklin_pdu_len) * maerklin_pdu_len do
-         if (i-1) % maerklin_pdu_len == 0 then io.write(string.format('%08X  ', i-1)) end
-         io.write( i > len and '   ' or string.format('%02X ', buf:byte(i)) )
-         if i % maerklin_pdu_len == 0 then io.write( buf:sub(i-16+1, i):gsub('%c','.'), '\n' ) end
-      end
-end
-
 local function dissect_common(buffer, pinfo, tree, offset)
 
 
@@ -25,16 +17,21 @@ local function dissect_common(buffer, pinfo, tree, offset)
     rbit = bit.band ( buffer(offset+1,1):uint(), 0x01)
     dlc = buffer(offset+4,1):uint()
 
-    if command == 0 then
+    if command == 0x00 then
         subtree:add(buffer(offset+1,1),"Command: System " .. string.format('0x%02x',buffer(offset+1,1):uint()))
-    elseif command == 2 then
+    elseif command == 0x02 then
         subtree:add(buffer(offset+1,1),"Command: Loc Discovery " .. string.format('0x%02x', buffer(offset+1,1):uint()))
-    elseif command == 4 then
+    elseif command == 0x04 then
         subtree:add(buffer(offset+1,1),"Command: MFX Bind " .. string.format('0x%02x',buffer(offset+1,1):uint()))
-    elseif command == 54 then
+    elseif command == 0x36 then
         subtree:add(buffer(offset+1,1),"Command: Bootloader (CAN) " .. string.format('0x%02x',buffer(offset+1,1):uint()))
     else
         subtree:add(buffer(offset+1,1),"Command: unknown " .. string.format('0x%02x',buffer(offset+1,1):uint()))
+    end
+    if rbit == 1 then
+        subtree:add(buffer(offset+0,1),"Responsebit:     set")
+    else
+        subtree:add(buffer(offset+0,1),"Responsebit: not set")
     end
     subtree:add(buffer(offset+2,2),"Hash:    " .. string.format('0x%04x',buffer(offset+2,2):uint()))
     subtree:add(buffer(offset+4,1),"DLC:     " .. buffer(offset+4,1):uint())
@@ -53,8 +50,26 @@ local function dissect_common(buffer, pinfo, tree, offset)
 	output = "Maerklin CAN (" .. string.format("System  0x%02x",buffer(offset,2):uint()) ..")"
     elseif command == 0x02 then
 	output = "Maerklin CAN (" .. string.format("Loco Discovery  0x%02x",buffer(offset,2):uint()) ..")"
+    elseif command == 0x04 then
+	output = "Maerklin CAN (" .. string.format("MFX Bind    0x%02x",buffer(offset,2):uint()) ..")"
+    elseif command == 0x06 then
+	output = "Maerklin CAN (" .. string.format("MFX Verify  0x%02x",buffer(offset,2):uint()) ..")"
+    elseif command == 0x08 then
+	output = "Maerklin CAN (" .. string.format("Loco Velocity   0x%02x",buffer(offset,2):uint()) ..")"
+    elseif command == 0x0A then
+	output = "Maerklin CAN (" .. string.format("Loco Direction  0x%02x",buffer(offset,2):uint()) ..")"
+    elseif command == 0x0C then
+	output = "Maerklin CAN (" .. string.format("Loco Function  0x%02x",buffer(offset,2):uint()) ..")"
+    elseif command == 0x22 then
+	output = "Maerklin CAN (" .. string.format("S88 Event   0x%02x",buffer(offset,2):uint()) ..")"
     elseif command == 0x30 then
-	output = "Maerklin CAN (" .. string.format("Bootload CAN  0x%02x",buffer(offset,2):uint()) ..")"
+	output = "Maerklin CAN (" .. string.format("Software Version, Ping 0x%02x",buffer(offset,2):uint()) ..")"
+    elseif command == 0x36 then
+	output = "Maerklin CAN (" .. string.format("Bootloader CAN   0x%02x",buffer(offset,2):uint()) ..")"
+    elseif command == 0x38 then
+	output = "Maerklin CAN (" .. string.format("Bootloader Track 0x%02x",buffer(offset,2):uint()) ..")"
+    elseif command == 0x3A then
+	output = "Maerklin CAN (" .. string.format("Status Config  0x%02x",buffer(offset,2):uint()) ..")"
     elseif command == 0x40 then
 	output = "Maerklin CAN (" .. string.format("Config Data Request 0x%02x",buffer(offset,2):uint()) ..")"
     elseif command == 0x42 then
@@ -68,10 +83,9 @@ end
 
 -- create a function to dissect it
 function maerklin_proto.dissector(buffer, pinfo, tree)   
-    pinfo.cols.protocol = "MAERKLIN"
+    -- pinfo.cols.protocol = "MAERKLIN"
 
     local pktlen = buffer:len()
---  hex_dump(buffer,pktlen)
 
     local consumed, output = dissect_common(buffer, pinfo, tree, 0)
     local remaining = pktlen - consumed
@@ -79,7 +93,6 @@ function maerklin_proto.dissector(buffer, pinfo, tree)
 
     while remaining >= maerklin_pdu_len do
         consumed, output = dissect_common(buffer, pinfo, tree, pktlen - remaining)
-        pinfo.cols.info:append(makeLine(pinfo,output))
         remaining = remaining - consumed
     end
 
@@ -98,24 +111,4 @@ local tcp_table = DissectorTable.get("tcp.port")
 tcp_table:add(15731,maerklin_proto)
 udp_table:add(15730,maerklin_proto)
 udp_table:add(15731,maerklin_proto)
-
--- helper function to enable multi-line packet output
-makeLine = function (pinfo,output)
-    local rel_time = string.format("%.6f\t", pinfo.rel_ts)
-
-    local line = {
-        "\n ",
-        tostring(pinfo.number),
-        rel_time,
-        tostring(pinfo.src),
-        tostring(pinfo.src_port),
-        tostring(pinfo.dst),
-        tostring(pinfo.dst_port),
-        "MAERKLIN",
-        tostring(pinfo.len),
-        output,
-    }
-
-    return table.concat(line," ")
-end
 
