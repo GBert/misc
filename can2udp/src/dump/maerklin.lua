@@ -55,9 +55,9 @@ local function dissect_common(buffer, pinfo, tree, offset)
     elseif command == 0x06 then
 	output = "Maerklin CAN (" .. string.format("MFX Verify  0x%02x",buffer(offset,2):uint()) ..")"
     elseif command == 0x08 then
-	output = "Maerklin CAN (" .. string.format("Loco Velocity   0x%02x",buffer(offset,2):uint()) ..")"
+	output = "Maerklin CAN (" .. string.format("Loco Velocity  0x%02x",buffer(offset,2):uint()) ..")"
     elseif command == 0x0A then
-	output = "Maerklin CAN (" .. string.format("Loco Direction  0x%02x",buffer(offset,2):uint()) ..")"
+	output = "Maerklin CAN (" .. string.format("Loco Direction 0x%02x",buffer(offset,2):uint()) ..")"
     elseif command == 0x0C then
 	output = "Maerklin CAN (" .. string.format("Loco Function  0x%02x",buffer(offset,2):uint()) ..")"
     elseif command == 0x22 then
@@ -74,6 +74,8 @@ local function dissect_common(buffer, pinfo, tree, offset)
 	output = "Maerklin CAN (" .. string.format("Config Data Request 0x%02x",buffer(offset,2):uint()) ..")"
     elseif command == 0x42 then
 	output = "Maerklin CAN (" .. string.format("Config Data Stream 0x%02x",buffer(offset,2):uint()) ..")"
+    elseif command == 0x60 then
+	output = "Maerklin CAN (" .. string.format("Start Automatic 0x%02x",buffer(offset,2):uint()) ..")"
     else
 	output = "Maerklin CAN (" .. string.format("Unknown 0x%02x",buffer(offset,2):uint()) ..")"
     end

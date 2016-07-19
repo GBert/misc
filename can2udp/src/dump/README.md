@@ -3,5 +3,8 @@ Maerklin CAN Wireshark/LUA extensions
 
 Usage
 ```
-tshark -Vx -X lua_script:maerklin.lua -r ../maerklin.pcap
+# with data
+tshark -Vx -X lua_script:maerklin.lua -r maerklin.pcap
+# short
+tshark     -X lua_script:maerklin.lua -r maerklin.pcap | grep -i Maerklin
 ```
