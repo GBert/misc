@@ -15,27 +15,28 @@ end
 local function dissect_common(buffer, pinfo, tree, offset)
 
 
-    local command, dlc
+    local rbit, command, dlc
 
     local subtree = tree:add(maerklin_proto,buffer(offset,maerklin_pdu_len),"Maerklin Protocol Data")
 
     subtree:add(buffer(offset,1)  ,"Prio:    " .. buffer(offset,1):uint())
 
     command = bit.band ( buffer(offset+1,1):uint(), 0xfe)
+    rbit = bit.band ( buffer(offset+1,1):uint(), 0x01)
     dlc = buffer(offset+4,1):uint()
 
     if command == 0 then
-        subtree:add(buffer(offset+1,1),"Command: System " .. buffer(offset+1,1):uint())
+        subtree:add(buffer(offset+1,1),"Command: System " .. string.format('0x%02x',buffer(offset+1,1):uint()))
     elseif command == 2 then
-        subtree:add(buffer(offset+1,1),"Command: Loc Discovery " .. buffer(offset+1,1):uint())
+        subtree:add(buffer(offset+1,1),"Command: Loc Discovery " .. string.format('0x%02x', buffer(offset+1,1):uint()))
     elseif command == 4 then
-        subtree:add(buffer(offset+1,1),"Command: MFX Bind " .. buffer(offset+1,1):uint())
+        subtree:add(buffer(offset+1,1),"Command: MFX Bind " .. string.format('0x%02x',buffer(offset+1,1):uint()))
     elseif command == 54 then
-        subtree:add(buffer(offset+1,1),"Command: Bootloader (CAN) " .. buffer(offset+1,1):uint())
+        subtree:add(buffer(offset+1,1),"Command: Bootloader (CAN) " .. string.format('0x%02x',buffer(offset+1,1):uint()))
     else
-        subtree:add(buffer(offset+1,1),"Command: unknown " .. buffer(offset+1,1):uint())
+        subtree:add(buffer(offset+1,1),"Command: unknown " .. string.format('0x%02x',buffer(offset+1,1):uint()))
     end
-    subtree:add(buffer(offset+2,2),"Hash:    " .. buffer(offset+2,2):uint())
+    subtree:add(buffer(offset+2,2),"Hash:    " .. string.format('0x%04x',buffer(offset+2,2):uint()))
     subtree:add(buffer(offset+4,1),"DLC:     " .. buffer(offset+4,1):uint())
     subtree = subtree:add(buffer(5,8),"Data")
     subtree:add(buffer(offset+5,1),"Data 0: " .. buffer(offset+5,1):uint())
@@ -47,8 +48,20 @@ local function dissect_common(buffer, pinfo, tree, offset)
     subtree:add(buffer(offset+11,1),"Data 6: " .. buffer(offset+11,1):uint())
     subtree:add(buffer(offset+12,1),"Data 7: " .. buffer(offset+12,1):uint())
 
-    local output = "Maerklin CAN Info (" .. buffer(offset,2):uint() ..")"
-
+    local output
+    if command == 0 then
+	output = "Maerklin CAN (" .. string.format("System  0x%02x",buffer(offset,2):uint()) ..")"
+    elseif command == 0x02 then
+	output = "Maerklin CAN (" .. string.format("Loco Discovery  0x%02x",buffer(offset,2):uint()) ..")"
+    elseif command == 0x30 then
+	output = "Maerklin CAN (" .. string.format("Bootload CAN  0x%02x",buffer(offset,2):uint()) ..")"
+    elseif command == 0x40 then
+	output = "Maerklin CAN (" .. string.format("Config Data Request 0x%02x",buffer(offset,2):uint()) ..")"
+    elseif command == 0x42 then
+	output = "Maerklin CAN (" .. string.format("Config Data Stream 0x%02x",buffer(offset,2):uint()) ..")"
+    else
+	output = "Maerklin CAN (" .. string.format("Unknown 0x%02x",buffer(offset,2):uint()) ..")"
+    end
     -- return number of bytes consumed so that more maerklin PDUs can be discovered
     return maerklin_pdu_len, output
 end
