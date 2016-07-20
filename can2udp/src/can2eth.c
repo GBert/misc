@@ -31,6 +31,9 @@
 
 #include <linux/can.h>
 
+#define DEF_UDP_RECV_PORT	7654
+#define DEF_UDP_SEND_PORT	7655
+
 #define MAXDG   256		/* maximum datagram size */
 
 unsigned char udpframe[MAXDG];
@@ -42,8 +45,8 @@ void print_usage(char *prg)
 {
     fprintf(stderr, "\nUsage: %s -l <port> -d <port> -i <can interface>\n", prg);
     fprintf(stderr, "   Version 1.1\n\n");
-    fprintf(stderr, "         -l <port>           listening UDP port for the server - default 7654\n");
-    fprintf(stderr, "         -d <port>           destination UDP port for the server - default 7655\n");
+    fprintf(stderr, "         -l <port>           listening UDP port for the server - default %d\n", DEF_UDP_RECV_PORT);
+    fprintf(stderr, "         -d <port>           destination UDP port for the server - default %d\n", DEF_UDP_SEND_PORT);
     fprintf(stderr, "         -b <broadcast_addr> broadcast address - default 255.255.255.255\n");
     fprintf(stderr, "         -i <can int>        can interface - default can0\n");
     fprintf(stderr, "         -f                  running in foreground\n\n");
@@ -83,8 +86,8 @@ int main(int argc, char **argv)
     struct ifreq ifr;
     socklen_t caddrlen = sizeof(caddr);
     fd_set readfds;
-    int local_port = 7654;
-    int destination_port = 7655;
+    int local_port = DEF_UDP_RECV_PORT;
+    int destination_port = DEF_UDP_SEND_PORT;
     int foreground = 0;
     uint32_t canid = 0;
     const int on = 1;
@@ -211,13 +214,16 @@ int main(int argc, char **argv)
 	FD_SET(sc, &readfds);
 	FD_SET(sa, &readfds);
 
-	if (select((sc > sa) ? sc + 1 : sa + 1, &readfds, NULL, NULL, NULL) < 0)
+	if (select((sc > sa) ? sc + 1 : sa + 1, &readfds, NULL, NULL, NULL) < 0) {
 	    fprintf(stderr, "select error: %s\n", strerror(errno));
+	    break;
+	}
 
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &readfds)) {
 	    if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
 		fprintf(stderr, "CAN read error: %s\n", strerror(errno));
+		break;
 	    } else {
 		/* prepare UDP packet */
 		memset(udpframe, 0, 13);
@@ -227,9 +233,10 @@ int main(int argc, char **argv)
 		memcpy(&udpframe[5], &frame.data, frame.can_dlc);
 
 		/* send UDP packet */
-		if (sendto(sb, udpframe, 13, 0, (struct sockaddr *)&baddr, sizeof(baddr)) != 13)
+		if (sendto(sb, udpframe, 13, 0, (struct sockaddr *)&baddr, sizeof(baddr)) != 13) {
 		    fprintf(stderr, "UDP write error: %s\n", strerror(errno));
-
+		    break;
+		}
 		print_can_frame(&frame, CAN_SRC_STRG, foreground);
 	    }
 	}
@@ -237,10 +244,12 @@ int main(int argc, char **argv)
 	if (FD_ISSET(sa, &readfds)) {
 	    ret = read(sa, udpframe, MAXDG);
 	    if (ret != 13) {
-		if (ret < 0)
+		if (ret < 0) {
 		    fprintf(stderr, "UDP read error: %s\n", strerror(errno));
-		else
+		    break;
+		} else {
 		    fprintf(stderr, "UDP packet size error: got %d bytes\n", ret);
+		}
 	    } else {
 		/* prepare CAN frame */
 		memcpy(&canid, &udpframe[0], 4);
@@ -249,9 +258,10 @@ int main(int argc, char **argv)
 		memcpy(&frame.data, &udpframe[5], 8);
 
 		/* send CAN frame */
-		if (write(sc, &frame, sizeof(frame)) != sizeof(frame))
+		if (write(sc, &frame, sizeof(frame)) != sizeof(frame)) {
 		    fprintf(stderr, "CAN write error: %s\n", strerror(errno));
-
+		    break;
+		}
 		print_can_frame(&frame, UDP_SRC_STRG, foreground);
 	    }
 	}
@@ -259,5 +269,6 @@ int main(int argc, char **argv)
     close(sc);
     close(sa);
     close(sb);
-    return 0;
+    /* if we reach this point, there was an error */
+    return EXIT_FAILURE;
 }
