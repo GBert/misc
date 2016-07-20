@@ -18,25 +18,30 @@
 #include <libgen.h>
 #include <unistd.h>
 #include <string.h>
+#include <time.h>
 #include <errno.h>
 
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/ioctl.h>
+#include <sys/time.h>
 #include <net/if.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
 #include <linux/can.h>
 
-#define MAXDG   4096		/* maximum datagram size */
+#define MAXDG   256		/* maximum datagram size */
 
 unsigned char udpframe[MAXDG];
+
+static char *CAN_SRC_STRG = "->CAN>UDP  CANID ";
+static char *UDP_SRC_STRG = "->UDP>CAN  CANID ";
 
 void print_usage(char *prg)
 {
     fprintf(stderr, "\nUsage: %s -l <port> -d <port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.01\n\n");
+    fprintf(stderr, "   Version 1.1\n\n");
     fprintf(stderr, "         -l <port>           listening UDP port for the server - default 7654\n");
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default 7655\n");
     fprintf(stderr, "         -b <broadcast_addr> broadcast address - default 255.255.255.255\n");
@@ -44,16 +49,22 @@ void print_usage(char *prg)
     fprintf(stderr, "         -f                  running in foreground\n\n");
 }
 
-void print_can_frame(struct can_frame *frame, int verbose)
+void print_can_frame(struct can_frame *frame, char *format, int verbose)
 {
     int i;
+    struct timeval tv;
+    struct tm *tm;
 
     if (verbose) {
+	/* print timestamp */
+	gettimeofday(&tv, NULL);
+	tm = localtime(&tv.tv_sec);
+	printf("%02d:%02d:%02d.%03d  ", tm->tm_hour, tm->tm_min, tm->tm_sec, (int)tv.tv_usec / 1000);
+
 	if (frame->can_id & CAN_EFF_FLAG)
-	    printf("->CAN>UDP CANID 0x%08X  ", frame->can_id & CAN_EFF_MASK);
+	    printf("%s 0x%08x   [%d]", format, frame->can_id & CAN_EFF_MASK, frame->can_dlc);
 	else
-	    printf("->CAN>UDP CANID 0x%03X       ", frame->can_id);
-	printf(" [%d]", frame->can_dlc);
+	    printf("%s 0x%03x        [%d]", format, frame->can_id, frame->can_dlc);
 	for (i = 0; i < frame->can_dlc; i++)
 	    printf(" %02x", frame->data[i]);
 	printf("\n");
@@ -219,7 +230,7 @@ int main(int argc, char **argv)
 		if (sendto(sb, udpframe, 13, 0, (struct sockaddr *)&baddr, sizeof(baddr)) != 13)
 		    fprintf(stderr, "UDP write error: %s\n", strerror(errno));
 
-		print_can_frame(&frame, foreground);
+		print_can_frame(&frame, CAN_SRC_STRG, foreground);
 	    }
 	}
 	/* received a UDP packet */
@@ -241,7 +252,7 @@ int main(int argc, char **argv)
 		if (write(sc, &frame, sizeof(frame)) != sizeof(frame))
 		    fprintf(stderr, "CAN write error: %s\n", strerror(errno));
 
-		print_can_frame(&frame, foreground);
+		print_can_frame(&frame, UDP_SRC_STRG, foreground);
 	    }
 	}
     }
