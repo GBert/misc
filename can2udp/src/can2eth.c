@@ -67,9 +67,13 @@ void print_can_frame(struct can_frame *frame, char *format, int verbose)
 	if (frame->can_id & CAN_EFF_FLAG)
 	    printf("%s 0x%08x   [%d]", format, frame->can_id & CAN_EFF_MASK, frame->can_dlc);
 	else
-	    printf("%s 0x%03x        [%d]", format, frame->can_id, frame->can_dlc);
-	for (i = 0; i < frame->can_dlc; i++)
-	    printf(" %02x", frame->data[i]);
+	    printf("%s 0x%03x        [%d]", format, frame->can_id & CAN_SFF_MASK, frame->can_dlc);
+	if (frame->can_id & CAN_RTR_FLAG) {
+	    printf("R");
+	} else {
+	    for (i = 0; i < frame->can_dlc; i++)
+		printf(" %02x", frame->data[i]);
+	}
 	printf("\n");
     }
 }
