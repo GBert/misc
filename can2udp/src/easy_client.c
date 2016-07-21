@@ -11,8 +11,7 @@
 
 unsigned char LOCO_SPEED[] = { 0x00, 0x08, 0x47, 0x11, 0x06, 0x00, 0x00, 0x00, 0x17, 0x00, 0x66, 0x00, 0x00 };
 
-int main()
-{
+int main() {
     int sock_descriptor;
     struct sockaddr_in serv_addr;
     struct hostent *server;
@@ -56,7 +55,7 @@ int main()
 	else
 	    printf("send data\n");
 	to_wait.tv_sec = 1;
-        to_wait.tv_nsec = 0;
+	to_wait.tv_nsec = 0;
 	nanosleep(&to_wait);
     };
 
