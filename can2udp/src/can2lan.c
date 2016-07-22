@@ -96,17 +96,21 @@ int copy_cs2_config(struct cs2_config_data_t *cs2_config_data) {
     char *ptr;
     unsigned char newframe[CAN_ENCAP_SIZE];
 
+    syslog(LOG_NOTICE, "%s %d: copy config request\n", __func__, __LINE__);
     if (cs2_config_data->cs2_tcp_socket) {
         /* strip old subdir if needed */
-	ptr = strstr(cs2_config_data->dir, "gleisbilder/");
+ 	ptr = strstr(cs2_config_data->dir, "gleisbilder/");
 	if (ptr)
 	    *ptr = 0;
 	memset(newframe, 0, CAN_ENCAP_SIZE);
 	memcpy(newframe, GETCONFIG, 5);
 	/* TODO */
 
+	syslog(LOG_NOTICE, "%s %d: copy config request (I next II)\n", __func__, __LINE__);
 	if (cs2_config_data->verbose)
 	    printf("getting %s filename %s\n", cs2_configs[0][0], cs2_configs[0][1]);
+	syslog(LOG_NOTICE, "%s %d: getting %s filename %s II\n", __func__, __LINE__, cs2_configs[0][0], cs2_configs[0][1]);
+
 	cs2_config_data->name = cs2_configs[0][1];
 	memcpy(&newframe[5], cs2_configs[0][0], strlen(cs2_configs[0][0]));
 	cs2_config_data->next = 1;
