@@ -39,6 +39,17 @@ char *cs2_configs[][2] = {
     {NULL, NULL},
 };
 
+char *ms2_configs [] = {
+    "lokinfo"
+    "loknamen",
+    "maginfo",
+    "lokdb",
+    "lang",
+    "ldbver",
+    "langver",
+    NULL
+};
+
 char config_dir[MAXLINE];
 char config_file[MAXLINE];
 char **page_name;
@@ -169,6 +180,14 @@ int check_data_udp(int udp_socket, struct sockaddr *baddr, struct cs2_config_dat
     return 0;
 }
 
+char *check_in_list(char *list, char *compare) {
+    while (!list) {
+	if (strstr(list, compare) == list)
+	    return list;
+    }
+    return NULL;
+}
+
 int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsigned char *netframe) {
     uint32_t canid;
     char config_name[9];
@@ -181,7 +200,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
     canid = ntohl(canid);
     switch (canid & 0xFFFF0000UL) {
     case (0x00310000UL):	/* CAN ping */
-	ret = 1;
+	ret = 0;
 	/* looking for CS2.exe ping answer */
 	print_can_frame(NET_TCP_FORMAT_STRG, netframe, cs2_config_data->verbose);
 	if ((netframe[11] == 0xFF) && (netframe[12] == 0xFF)) {
