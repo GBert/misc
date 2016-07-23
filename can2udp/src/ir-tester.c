@@ -196,11 +196,11 @@ int main(int argc, char **argv) {
 		    printf("loco %d speed + %d\n", loco, speed);
 		    memcpy(data, LOCO_SPEED, sizeof(data));
 		    data[8] = loco & 0xff;
-		    if (speed < 256)
-			speed += step;
-		    if (speed > 256)
-			speed = 255;
-		    data[10] = speed;
+		    speed += step;
+		    if (speed > MAXSPEED)
+			speed = MAXSPEED;
+		    data[9]  = (speed >> 8) & 0x03;
+		    data[10] =  speed & 0xff;
 		    send_defined_can_frame(sc, data);
 		    break;
 		case 0x11:
@@ -211,10 +211,8 @@ int main(int argc, char **argv) {
 			speed -= step;
 		    if (speed < 0)
 			speed = 0;
-		    if (speed >= MAXSPEED)
-			speed = MAXSPEED;
-		    data[9] = speed & 0x03;
-		    data[10] = speed & 0xff;
+		    data[9]  = (speed >> 8) & 0x03;
+		    data[10] =  speed & 0xff;
 		    send_defined_can_frame(sc, data);
 		    break;
 		default:
