@@ -96,7 +96,7 @@ void print_net_frame(unsigned char *netframe) {
     memcpy(&canid, netframe, 4);
     dlc = netframe[4];
     time_stamp();
-    printf("         UDP->  CANID 0x%08X   [%d]", ntohl(canid), netframe[4]);
+    printf("         UDP->  0x%08X   [%d]", ntohl(canid), netframe[4]);
     for (i = 5; i < 5 + dlc; i++) {
 	printf(" %02x", netframe[i]);
     }
@@ -119,7 +119,7 @@ int gpio_export(int pin) {
 
     fd = open("/sys/class/gpio/export", O_WRONLY);
     if (fd < 0) {
-	fprintf(stderr, "Failed to open export for writing: %s\n", strerror(errno));
+	fprintf(stderr, "%s: Failed to open export for writing: %s\n", __func__, strerror(errno));
 	return (EXIT_FAILURE);
     }
 
@@ -136,7 +136,7 @@ int gpio_unexport(int pin) {
 
     fd = open("/sys/class/gpio/unexport", O_WRONLY);
     if (fd < 0) {
-	fprintf(stderr, "Failed to open unexport for writing %s\n", strerror(errno));
+	fprintf(stderr, "%s: Failed to open unexport for writing %s\n", __func__, strerror(errno));
 	return (EXIT_FAILURE);
     }
 
@@ -153,7 +153,7 @@ int gpio_direction(int pin, int dir) {
     snprintf(path, MAX_SYSFS_LEN, "/sys/class/gpio/gpio%d/direction", pin);
     fd = open(path, O_WRONLY);
     if (fd < 0) {
-	fprintf(stderr, "Failed to open gpio direction for writing %s\n", strerror(errno));
+	fprintf(stderr, "%s: Failed to open gpio direction for writing: %s\n", __func__, strerror(errno));
 	return (-1);
     }
 
@@ -163,7 +163,7 @@ int gpio_direction(int pin, int dir) {
 	ret = write(fd, "out", 4);
 
     if (ret == -1) {
-	fprintf(stderr, "Failed to set direction!\n");
+	fprintf(stderr, "%s: Failed to set direction!\n", __func__);
 	return (-1);
     }
 
@@ -179,13 +179,13 @@ int gpio_read(int pin) {
     snprintf(path, MAX_SYSFS_LEN, "/sys/class/gpio/gpio%d/value", pin);
     fd = open(path, O_RDONLY);
     if (fd < 0) {
-	fprintf(stderr, "Failed to open gpio value for reading: %s\n", strerror(errno));
+	fprintf(stderr, "%s: Failed to open gpio value for reading: %s\n", __func__, strerror(errno));
 	return (EXIT_FAILURE);
     }
 
     ret = read(fd, value_str, 3);
     if (ret < 0) {
-	fprintf(stderr, "Failed to read value!\n");
+	fprintf(stderr, "%s: Failed to read value!\n", __func__);
 	return (EXIT_FAILURE);
     }
 
@@ -201,7 +201,7 @@ int gpio_set(int pin, int value) {
     snprintf(path, MAX_SYSFS_LEN, "/sys/class/gpio/gpio%d/value", pin);
     fd = open(path, O_WRONLY);
     if (fd < 0) {
-	fprintf(stderr, "Failed to open gpio value for writing!\n");
+	fprintf(stderr, "%s: Failed to open gpio value for writing: %s\n", __func__, strerror(errno));
 	return (EXIT_FAILURE);
     }
 
@@ -211,7 +211,7 @@ int gpio_set(int pin, int value) {
 	ret = write(fd, "0", 2);
 
     if (ret != 2) {
-	fprintf(stderr, "Failed to write value!\n");
+	fprintf(stderr, "%s: Failed to write value!\n", __func__);
 	return (EXIT_FAILURE);
     }
 
@@ -220,14 +220,16 @@ int gpio_set(int pin, int value) {
 }
 
 /* Blink LED */
-void *LEDMod(int led_period, int pin) {
+void *LEDMod(void *ptr) {
     int fd;
     char path[MAX_SYSFS_LEN];
+    struct trigger_t *trigger = (struct trigger_t *)ptr;
 
-    snprintf(path, MAX_SYSFS_LEN, "/sys/class/gpio/gpio%d/value", pin);
+#if 1
+    snprintf(path, MAX_SYSFS_LEN, "/sys/class/gpio/gpio%d/value", trigger->led_pin);
     fd = open(path, O_WRONLY);
     if (fd < 0) {
-	fprintf(stderr, "Failed to open gpio value for writing!\n");
+	fprintf(stderr, "Failed to open gpio value for writing: %s\n", strerror(errno));
 	exit(1);
     }
 
@@ -237,6 +239,15 @@ void *LEDMod(int led_period, int pin) {
 	write(fd, "0", 2);
 	usec_sleep(led_period);
     }
+#else
+    while (1) {
+	usec_sleep(led_period);
+	printf("*");
+	usec_sleep(led_period);
+	printf("-");
+    }
+#endif
+
 }
 
 int create_event(struct trigger_t *trigger) {
@@ -288,6 +299,8 @@ int main(int argc, char **argv) {
     memset(&destaddr, 0, sizeof(destaddr));
     destaddr.sin_family = AF_INET;
     destaddr.sin_port = htons(destination_port);
+
+    trigger_data.interval = 5;
 
     while ((opt = getopt(argc, argv, "b:l:i:p:s:fvh?")) != -1) {
 	switch (opt) {
@@ -370,9 +383,29 @@ int main(int argc, char **argv) {
 
     trigger_data.baddr = destaddr;
 
+#if 0
     if (!trigger_data.interval) {
 	create_event(&trigger_data);
 	return EXIT_SUCCESS;
+    }
+#endif
+
+    /* Create thread if LED */
+    if ((trigger_data.led_pin) > 0) {
+	led_period = 200000;
+	gpio_export(trigger_data.led_pin);
+	gpio_direction(trigger_data.led_pin, 0);
+
+	if (pthread_mutex_init(&lock, NULL)) {
+	    fprintf(stderr, "can't nit mutex %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
+	if (pthread_create(&pth, NULL, LEDMod, &trigger_data)) {
+	    fprintf(stderr, "can't create pthread %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
+	if (!trigger_data.background && trigger_data.verbose)
+	    printf("created LED thread\n");
     }
 
     if (trigger_data.background) {
