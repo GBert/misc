@@ -7,7 +7,7 @@
  * ----------------------------------------------------------------------------
  */
 
-/* M*rklin smartcard (loc card) tool
+/* M*rklin smartcard (loco card) tool
  */
 
 #include <ctype.h>
@@ -32,9 +32,11 @@
 #include "lokinfo.h"
 #include "uthash.h"
 
+static char *I2C_DEF_PATH = "/sys/bus/i2c/devices/1-0050/eeprom";
+
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -v -f\n", prg);
-    fprintf(stderr, "   Version 0.1\n\n");
+    fprintf(stderr, "   Version 0.2\n\n");
     fprintf(stderr, "         -h                  this help\n\n");
     fprintf(stderr, "         -v                  verbose output\n\n");
 }
@@ -248,9 +250,14 @@ int main(int argc, char **argv) {
 	if (filename == NULL)
 	    return EXIT_FAILURE;
 	strncpy(filename, argv[optind], strlen(argv[optind]));
-	loco_config.filename = filename;
+    } else {
+	filename = (char *)calloc(strlen(I2C_DEF_PATH) + 1, 1);
+	if (filename == NULL)
+	    return EXIT_FAILURE;
+	strncpy(filename, I2C_DEF_PATH, strlen(I2C_DEF_PATH));
     }
 
+    loco_config.filename = filename;
     loco_config.bin = read_data(&loco_config);
     if (loco_config.bin == NULL)
 	return EXIT_FAILURE;
