@@ -33,6 +33,7 @@
 #define MAXUDP  	16	/* maximum UDP datagram size */
 #define DEFAULT_LOCO	5
 #define DEFAULT_STEP	16
+#define MAXSPEED	1000
 
 static unsigned char LOCO_SPEED[] = { 0x00, 0x08, 0x03, 0x00, 0x06, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static unsigned char START_STOP[] = { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -41,8 +42,8 @@ unsigned char netframe[MAXDG];
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface> -r <infrared-interface> -s <step>\n", prg);
-    fprintf(stderr, "   Version 0.2\n\n");
-    fprintf(stderr, "         -i <loco id>        loco id - default %d\n", DEFAULT_LOCO);
+    fprintf(stderr, "   Version 0.3\n\n");
+    fprintf(stderr, "         -l <loco id>        loco id - default %d\n", DEFAULT_LOCO);
     fprintf(stderr, "         -i <can int>        can interface - default can0\n");
     fprintf(stderr, "         -r <ir int>         infrared event interface - default /dev/input/event1\n");
     fprintf(stderr, "         -s <step>           speed setp - default %d\n", DEFAULT_STEP);
@@ -210,7 +211,10 @@ int main(int argc, char **argv) {
 			speed -= step;
 		    if (speed < 0)
 			speed = 0;
-		    data[10] = speed;
+		    if (speed >= MAXSPEED)
+			speed = MAXSPEED;
+		    data[9] = speed & 0x03;
+		    data[10] = speed & 0xff;
 		    send_defined_can_frame(sc, data);
 		    break;
 		default:
