@@ -38,6 +38,7 @@
 #define UDPPORT		15731
 #define MAX_BUFFER	8
 #define MAX_SYSFS_LEN	256
+#define DEF_INTERVAL	300
 
 unsigned int led_period;
 pthread_mutex_t lock;
@@ -62,7 +63,7 @@ void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -vf [-b <bcast_addr/int>][-i <sec>][-p <port>]\n", prg);
     fprintf(stderr, "   Version 1.0\n\n");
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
-    fprintf(stderr, "         -i <interval in sec>   using timer in sec\n");
+    fprintf(stderr, "         -i <interval in sec>   using timer in sec / 0 -> only once - default %d\n", DEF_INTERVAL);
     fprintf(stderr, "         -p <port>           destination port of the server - default %d\n", UDPPORT);
     fprintf(stderr, "         -l                  LED pin (e.g. BPi PI14 -> 270)\n");
     fprintf(stderr, "         -s                  switch pin (e.g. BPi PI10 -> 266)\n");
@@ -300,7 +301,7 @@ int main(int argc, char **argv) {
     destaddr.sin_family = AF_INET;
     destaddr.sin_port = htons(destination_port);
 
-    trigger_data.interval = 5;
+    trigger_data.interval = DEF_INTERVAL;
 
     while ((opt = getopt(argc, argv, "b:l:i:p:s:fvh?")) != -1) {
 	switch (opt) {
@@ -370,7 +371,7 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     }
     if (!trigger_data.background && trigger_data.verbose)
-	printf("using broadcast address %s\n", udp_dst_address);
+	printf("using broadcast address %s interval %d sec\n", udp_dst_address, trigger_data.interval);
     /* open udp socket */
     if ((trigger_data.socket = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
 	fprintf(stderr, "UDP socket error: %s\n", strerror(errno));
@@ -424,14 +425,32 @@ int main(int argc, char **argv) {
 	}
     }
 
-    /* loop forever */
-    while (1) {
+    /* loop forever if interval is set */
+    if (trigger_data.interval) {
+	while (1) {
+	    ret = create_event(&trigger_data);
+	    if (ret < 0) {
+		fprintf(stderr, "problem sending event data - terminating\n");
+		exit(EXIT_FAILURE);
+	    }
+	    /* TODO : wait until copy is done */
+	    sleep(trigger_data.interval);
+	}
+    } else {
 	ret = create_event(&trigger_data);
 	if (ret < 0) {
 	    fprintf(stderr, "problem sending event data - terminating\n");
 	    exit(EXIT_FAILURE);
 	}
-	sleep(trigger_data.interval);
+    }
+    /* TODO : wait until copy is done */
+
+    if ((trigger_data.switch_pin) > 0)
+	gpio_unexport(trigger_data.switch_pin);
+    if ((trigger_data.led_pin) > 0) {
+	gpio_unexport(trigger_data.led_pin);
+	pthread_join(pth, (void *)&trigger_data);
+	pthread_mutex_unlock(&lock);
     }
     return 0;
 }
