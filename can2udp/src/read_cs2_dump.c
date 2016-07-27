@@ -11,6 +11,7 @@
 #include <netinet/udp.h>
 #include <arpa/inet.h>
 
+#define IPHDR_LEN	(20)
 /* defines for the packet type code in an ETHERNET header */
 #define ETHER_TYPE_IP (0x0800)
 #define ETHER_TYPE_8021Q (0x8100)
@@ -98,11 +99,11 @@ int main(int argc, char **argv) {
 
 	    if (ip_hdr->ip_p == IPPROTO_UDP) {
 		myudp = (struct udphdr *)(pkt_ptr + sizeof(struct ip));
-		int size_payload = packet_length - (sizeof(struct iphdr) + sizeof(struct udphdr));
+		int size_payload = packet_length - (IPHDR_LEN+ sizeof(struct udphdr));
 		printf("%04d UDP %s -> ", pkt_counter, inet_ntoa(ip_hdr->ip_src));
 		printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(myudp->uh_sport), ntohs(myudp->uh_dport));
 		printf("  packet_length %d\n", size_payload);
-		print_content((unsigned char *)pkt_ptr + sizeof(struct iphdr) + sizeof(struct udphdr), size_payload);
+		print_content((unsigned char *)pkt_ptr + IPHDR_LEN+ sizeof(struct udphdr), size_payload);
 		printf("\n");
 	    }
 
@@ -110,13 +111,13 @@ int main(int argc, char **argv) {
 		mytcp = (struct tcphdr *)(pkt_ptr + sizeof(struct ip));
 
 		int tcp_offset = mytcp->th_off * 4;
-		int size_payload = packet_length - (sizeof(struct iphdr) + tcp_offset);
+		int size_payload = packet_length - (IPHDR_LEN + tcp_offset);
 
 		if (size_payload > 0) {
 		    printf("%04d TCP %s -> ", pkt_counter, inet_ntoa(ip_hdr->ip_src));
 		    printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(mytcp->th_sport),
 			   ntohs(mytcp->th_dport));
-		    unsigned char *dump = (unsigned char *)pkt_ptr + sizeof(struct iphdr) + tcp_offset;
+		    unsigned char *dump = (unsigned char *)pkt_ptr + IPHDR_LEN + tcp_offset;
 		    printf("  packet_length %d\n", size_payload);
 		    print_content(dump, size_payload);
 		    printf("\n");
