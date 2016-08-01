@@ -29,50 +29,15 @@
 #define MAXGBS		16
 #define MAXSTRING	1024
 
-int read_track_file(struct track_data_t *config_data, char *config_file) {
-    char gbs_name[MAXNAME];
-    int gbs_valid;
-    char gbs[MAXGBS];
-    FILE *fp;
-    char line[MAXSIZE];
-
-    gbs_valid = 0;
-
-    if ((fp = fopen(config_file, "r")) != NULL) {
-	while (fgets(line, MAXSIZE, fp) != NULL) {
-	    if (line[strlen(line) - 1] == '\n')
-		line[strlen(line) - 1] = 0;
-	    if (strstr(line, "seite") == line) {
-		gbs_valid = 1;
-		printf("match seite: >%s<\n", line);
-	    } else if (strstr(line, " .id=") == line) {
-		strncpy(gbs, &line[5], strlen(&line[5]));
-		printf("match id:    >%s<\n", line);
-		config_data->name = gbs;
-	    } else if (strstr(line, " .name=") == line) {
-		printf("match name:  >%s<\n", line);
-		if (gbs_valid) {
-		    strncpy(gbs_name, &line[7], strlen(&line[7]));
-		    strcat(gbs_name, ".cs2");
-		    /* config_data->filename = gbs_name; */
-		}
-	    }
-	}
-    } else {
-	fprintf(stderr, "can't open config file %s: %s\n", config_file, strerror(errno));
-	return (EXIT_FAILURE);
-    }
-    return EXIT_SUCCESS;
-}
-
 int read_track_config(struct config_data_t *config_data, char *config_file) {
     char gbs_name[MAXNAME];
-    int gbs_valid;
+    int gbs_valid, id;
     char gbs[MAXGBS];
     FILE *fp;
     char line[MAXSIZE];
 
     gbs_valid = 0;
+    id = 0;
 
     if ((fp = fopen(config_file, "r")) != NULL) {
 	while (fgets(line, MAXSIZE, fp) != NULL) {
@@ -128,7 +93,8 @@ int main(int argc, char **argv) {
 
     track_file = calloc(strlen(track_name) + strlen(config_data.directory) + 2, 1);
     strcpy(track_file, config_data.directory);
-    strcat(track_file, "/");
+    if (track_file[strlen(track_file)-1] != '/')
+	strcat(track_file, "/");
     strcat(track_file, track_name);
 
     printf("gbn : >%s<\n", track_file);
