@@ -35,7 +35,7 @@ int get_char_index(char **list, char *str) {
     index = 0;
 
     while (list[index]) {
-	if (strcmp(list[index], str) == 0)
+	if (strncmp(list[index], str, strlen(list[index])) == 0)
 	    return index;
 	index++;
     }
