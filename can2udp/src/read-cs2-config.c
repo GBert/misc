@@ -29,9 +29,22 @@
 #define MAXGBS		16
 #define MAXSTRING	1024
 
-int read_track_config(struct config_data_t *config_data, char *config_file) {
+int get_char_index(char **list, char *str) {
+    int index;
+
+    index = 0;
+
+    while (list[index]) {
+	if (strcmp(list[index], str) == 0)
+	    return index;
+	index++;
+    }
+    return -1;
+}
+
+int read_track_config(struct track_config_t *config_data, char *config_file) {
     char gbs_name[MAXNAME];
-    int gbs_valid, id;
+    int gbs_valid, id, ret;
     char gbs[MAXGBS];
     FILE *fp;
     char line[MAXSIZE];
@@ -45,18 +58,40 @@ int read_track_config(struct config_data_t *config_data, char *config_file) {
 		line[strlen(line) - 1] = 0;
 	    if (strstr(line, "seite") == line) {
 		gbs_valid = 1;
-		printf("match seite: >%s<\n", line);
+		config_data->id  = 0;
+		printf("match seite:   >%s<\n", line);
 	    } else if (strstr(line, " .id=") == line) {
-		strncpy(gbs, &line[5], strlen(&line[5]));
-		printf("match id:    >%s<\n", line);
-		config_data->name = gbs;
+		config_data->id  = strtoul(&line[5], NULL, 0);
+		printf("match id:      >%d<\n", config_data->id);
+	    } else if (strstr(line, " .xoffset=") == line) {
+		config_data->xoffset  = strtoul(&line[10], NULL, 0);
+		printf("match xoffset: >%d<\n", config_data->xoffset);
+	    } else if (strstr(line, " .yoffset=") == line) {
+		config_data->yoffset  = strtoul(&line[10], NULL, 0);
+		printf("match yoffset: >%d<\n", config_data->yoffset);
+	    } else if (strstr(line, " .major=") == line) {
+		config_data->major = strtoul(&line[8], NULL, 0);
+		printf("match major:   >%d<\n", config_data->major);
+	    } else if (strstr(line, " .minor=") == line) {
+		config_data->minor = strtoul(&line[8], NULL, 0);
+		printf("match minor:   >%d<\n", config_data->minor);
+	    } else if (strstr(line, " .typ=") == line) {
+		printf("match typ:     >%s<\n", line);
+		ret = get_char_index(track_types, &line[6]);
+		if (ret >= 0) {
+		    printf("hit  %d\n", ret);
+		} else {
+		    printf("miss %d\n", ret);
+		}
 	    } else if (strstr(line, " .name=") == line) {
-		printf("match name:  >%s<\n", line);
+		printf("match name:    >%s<\n", line);
 		if (gbs_valid) {
 		    strncpy(gbs_name, &line[7], strlen(&line[7]));
 		    strcat(gbs_name, ".cs2");
-		    config_data->filename = gbs_name;
+		    config_data->name = gbs_name;
 		}
+	    } else {
+		printf("unknown:       >%s<\n", line);
 	    }
 	}
     } else {
@@ -102,7 +137,7 @@ int main(int argc, char **argv) {
     config_data.name = gbs_default;
     strcat(config_data.directory, track_dir);
 
-    read_track_config(&config_data, track_file);
+    read_track_config(config_data.track_config, track_file);
 
     return EXIT_SUCCESS;
 }

@@ -44,9 +44,11 @@ seite
 */
 
 struct track_config_t {
-    unsigned int version_major;
-    unsigned int version_minor;
+    unsigned int major;
+    unsigned int minor;
     unsigned int size;
+    unsigned int xoffset;
+    unsigned int yoffset;
     char *last_used;
     unsigned int id;
     char *name;
