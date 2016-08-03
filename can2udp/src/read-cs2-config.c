@@ -35,8 +35,9 @@ int get_char_index(char **list, char *str) {
     index = 0;
 
     while (list[index]) {
-	if (strncmp(list[index], str, strlen(list[index])) == 0)
-	    return index;
+	if (strlen(list[index]) == strlen(str))
+	    if (strcmp(list[index], str) == 0)
+		return index;
 	index++;
     }
     return -1;
@@ -45,7 +46,7 @@ int get_char_index(char **list, char *str) {
 int read_track_config(struct track_config_t *config_data, char *config_file) {
     char gbs_name[MAXNAME];
     int gbs_valid, id, ret;
-    char gbs[MAXGBS];
+    /* char gbs[MAXGBS]; */
     FILE *fp;
     char line[MAXSIZE];
 
@@ -79,7 +80,7 @@ int read_track_config(struct track_config_t *config_data, char *config_file) {
 		printf("match typ:     >%s<\n", line);
 		ret = get_char_index(track_types, &line[6]);
 		if (ret >= 0) {
-		    printf("hit  %d\n", ret);
+		    printf("hit  %d -> %s\n", ret, track_types[ret]);
 		} else {
 		    printf("miss %d\n", ret);
 		}
