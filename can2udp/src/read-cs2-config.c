@@ -66,10 +66,13 @@ int read_track_config(struct track_config_t *config_data, char *config_file) {
     gbs_valid = 0;
     id = 0;
 
-    if ((fp = fopen(config_file, "r")) != NULL) {
-	while (fgets(line, MAXSIZE, fp) != NULL) {
-	    if (line[strlen(line) - 1] == '\n')
-		line[strlen(line) - 1] = 0;
+    if ((fp = fopen(config_file, "r")) == NULL) {
+	fprintf(stderr, "can't open config file %s: %s\n", config_file, strerror(errno));
+	return (EXIT_FAILURE);
+    }
+    while (fgets(line, MAXSIZE, fp) != NULL) {
+	if (line[strlen(line) - 1] == '\n')
+	    line[strlen(line) - 1] = 0;
 	    if (line[0] != ' ') {
 		l01_token_n = get_char_index(l01_token, line);
 		if (l01_token_n == L1_PAGE) {
@@ -123,10 +126,6 @@ int read_track_config(struct track_config_t *config_data, char *config_file) {
 		}
 	    }
 	}
-    } else {
-	fprintf(stderr, "can't open config file %s: %s\n", config_file, strerror(errno));
-	return (EXIT_FAILURE);
-    }
     return EXIT_SUCCESS;
 }
 
