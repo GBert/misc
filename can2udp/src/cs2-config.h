@@ -16,6 +16,64 @@ char *track_dir  = { "/gleisbilder" };
 char *track_name = { "gleisbild.cs2" };
 char *gbs_default    = { "gbs-0" };
 
+enum {
+    L0_TRACK = 0,
+    L0_LOCO,
+    L0_MAGS,
+    L0_ATRACK,
+    L1_LOCO,
+    L1_ATRACK,
+    L1_VERSION,
+    L1_SESSION,
+    L1_ITEM,
+    L1_ELEMENT,
+    L1_SIZE,
+    L1_LAST_USED,
+    L1_PAGE,
+};
+
+const char *l01_token [] = {
+    "[gleisbild]",
+    "[lokomotove]",
+    "[magnetartikel]",
+    "[fahrstrassen]",
+    "lokomotive",
+    "fahrstrasse",
+    "version",
+    "sessiion",
+    "artikel",
+    "element",
+    "groesse",
+    "zuletztBenutzt",
+    "seite",
+    NULL
+};
+
+enum {
+    L2_MAJOR = 0,
+    L2_MINOR,
+    L2_ID,
+    L2_NAME,
+    L2_SURNAME,
+    L2_TYPE,
+    L2_ITEM,
+    L2_XOFFSET,
+    L2_YOFFSET,
+};
+
+const char *l2_token [] = {
+    " .major=",
+    " .minor=",
+    " .id=",
+    " .name=",
+    " .vorname=",
+    " .typ=",
+    " .artikel=",
+    " .xoffset=",
+    " .yoffset=",
+    NULL
+};
+
 struct config_data_t {
     int deflated_stream_size;
     int deflated_size;
@@ -55,7 +113,7 @@ struct track_config_t {
     UT_hash_handle ut_hash;
 };
 
-char *track_types[] = {
+const char *track_types[] = {
     "leer",
     "gerade",
     "bogen",
