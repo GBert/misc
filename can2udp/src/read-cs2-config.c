@@ -71,6 +71,8 @@ int read_track_config(struct track_config_t *config_data, char *config_file) {
 	return (EXIT_FAILURE);
     }
     while (fgets(line, MAXSIZE, fp) != NULL) {
+	if (line[strlen(line) - 2] == '\r')
+	    line[strlen(line) - 2] = 0;
 	if (line[strlen(line) - 1] == '\n')
 	    line[strlen(line) - 1] = 0;
 	if (line[0] != ' ') {
