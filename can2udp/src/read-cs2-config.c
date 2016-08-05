@@ -84,28 +84,28 @@ int read_track_config(struct track_config_t *config_data, char *config_file) {
 	    l2_token_n = get_char_index2(l2_token, line);
 	    switch (l2_token_n) {
 	    case L2_ID:
-		config_data->id = strtoul(&line[strlen(l2_token[l2_token_n])], NULL, 0);
+		config_data->id = strtoul(&line[L2_ID_LENGTH], NULL, 0);
 		printf("match id:      >%d<\n", config_data->id);
 		break;
 	    case L2_XOFFSET:
-		config_data->xoffset = strtoul(&line[strlen(l2_token[l2_token_n])], NULL, 0);
+		config_data->xoffset = strtoul(&line[L2_XOFFSET_LENGTH], NULL, 0);
 		printf("match xoffset: >%d<\n", config_data->xoffset);
 		break;
 	    case L2_YOFFSET:
-		config_data->yoffset = strtoul(&line[strlen(l2_token[l2_token_n])], NULL, 0);
+		config_data->yoffset = strtoul(&line[L2_YOFFSET_LENGTH], NULL, 0);
 		printf("match yoffset: >%d<\n", config_data->yoffset);
 		break;
 	    case L2_MAJOR:
-		config_data->major = strtoul(&line[strlen(l2_token[l2_token_n])], NULL, 0);
+		config_data->major = strtoul(&line[L2_MAJOR_LENGTH], NULL, 0);
 		printf("match major:   >%d<\n", config_data->major);
 		break;
 	    case L2_MINOR:
-		config_data->minor = strtoul(&line[strlen(l2_token[l2_token_n])], NULL, 0);
+		config_data->minor = strtoul(&line[L2_MINOR_LENGTH], NULL, 0);
 		printf("match minor:   >%d<\n", config_data->minor);
 		break;
 	    case L2_TYPE:
 		printf("match typ:     >%s<\n", line);
-		ret = get_char_index(track_types, &line[strlen(l2_token[l2_token_n])]);
+		ret = get_char_index(track_types, &line[L2_TYPE_LENGTH]);
 		if (ret >= 0) {
 		    printf("hit  %d -> %s\n", ret, track_types[ret]);
 		} else {
@@ -113,10 +113,13 @@ int read_track_config(struct track_config_t *config_data, char *config_file) {
 		}
 		break;
 	    case L2_NAME:
-		printf("match name:    >%s<\n", line);
 		if (gbs_valid) {
-		    strncpy(gbs_name, &line[7], strlen(&line[7]));
+		    memset(gbs_name, 0, sizeof(gbs_name));
+		    /* strncpy(gbs_name, &line[strlen(l2_token[l2_token_n])], strlen(&line[strlen(l2_token[l2_token_n])])); */
+		    strncpy(gbs_name, &line[L2_NAME_LENGTH], strlen(&line[L2_NAME_LENGTH]));
+		    printf("match name:    >%s<", gbs_name);
 		    strcat(gbs_name, ".cs2");
+		    printf(" file >%s<\n", gbs_name);
 		    config_data->name = gbs_name;
 		}
 		break;

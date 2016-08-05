@@ -12,9 +12,9 @@
 
 #include "uthash.h"
 
-char *track_dir  = { "/gleisbilder" };
-char *track_name = { "gleisbild.cs2" };
-char *gbs_default    = { "gbs-0" };
+char *track_dir   = { "/gleisbilder" };
+char *track_name  = { "gleisbild.cs2" };
+char *gbs_default = { "gbs-0" };
 
 enum {
     L0_TRACK = 0,
@@ -74,6 +74,17 @@ const char *l2_token [] = {
     NULL
 };
 
+/* TODO : use strlen macro */
+#define L2_MAJOR_LENGTH		8
+#define L2_MINOR_LENGTH		8
+#define L2_ID_LENGTH		5
+#define L2_NAME_LENGTH		7
+#define L2_SURNAME_LENGTH	10
+#define L2_TYPE_LENGTH		6
+#define L2_ITEM_LENGTH		10
+#define L2_XOFFSET_LENGTH	10
+#define L2_YOFFSET_LENGTH	10
+
 struct config_data_t {
     int deflated_stream_size;
     int deflated_size;
@@ -87,19 +98,6 @@ struct config_data_t {
     uint8_t *inflated_data;
     struct track_config_t *track_config;
 };
-
-/* [gleisbild]
-version
- .major=1
-groesse
-zuletztBenutzt
- .name=Eschenhofen
-seite
- .name=Tastenmatrix
-seite
- .id=1
- .name=SBF S1
-*/
 
 struct track_config_t {
     unsigned int major;
