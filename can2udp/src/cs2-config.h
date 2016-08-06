@@ -227,6 +227,19 @@ char *mag_types[] = {
     NULL
 };
 
+struct track_page_t {
+    unsigned int id;
+    unsigned int major;
+    unsigned int minor;
+    unsigned int xoffset;
+    unsigned int yoffset;
+    unsigned int width;
+    unsigned int height;
+    char *name;
+    char *file_name;
+    UT_hash_handle hh;
+};
+
 struct track_data_t {
     unsigned int id;
     unsigned int version_major;
