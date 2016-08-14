@@ -39,8 +39,8 @@ char *cs2_configs[][2] = {
     {NULL, NULL},
 };
 
-char *ms2_configs [] = {
-    "lokinfo"
+char *ms2_configs[] = {
+    "lokinfo",
     "loknamen",
     "maginfo",
     "lokdb",
@@ -78,7 +78,7 @@ int send_magic_start_60113_frame(int can_socket, int verbose) {
     if (frame_to_can(can_socket, M_GLEISBOX_MAGIC_START_SEQUENCE) < 0) {
 	if (verbose)
 	    fprintf(stderr, "can't send CAN magic 60113 start sequence\n");
-        syslog(LOG_ERR, "%s: can't send CAN magic 60113 start sequence\n", __func__);
+	syslog(LOG_ERR, "%s: can't send CAN magic 60113 start sequence\n", __func__);
 	return -1;
     } else {
 	if (verbose) {
@@ -92,7 +92,7 @@ int send_magic_start_60113_frame(int can_socket, int verbose) {
 int send_can_ping(int can_socket, int verbose) {
     if (frame_to_can(can_socket, M_CAN_PING) < 0) {
 	fprintf(stderr, "can't send CAN Ping\n");
-        syslog(LOG_ERR, "%s: can't send CAN Ping\n", __func__);
+	syslog(LOG_ERR, "%s: can't send CAN Ping\n", __func__);
 	return -1;
     } else {
 	if (verbose) {
@@ -109,8 +109,8 @@ int copy_cs2_config(struct cs2_config_data_t *cs2_config_data) {
 
     syslog(LOG_NOTICE, "%s %d: copy config request\n", __func__, __LINE__);
     if (cs2_config_data->cs2_tcp_socket) {
-        /* strip old subdir if needed */
- 	ptr = strstr(cs2_config_data->dir, "gleisbilder/");
+	/* strip old subdir if needed */
+	ptr = strstr(cs2_config_data->dir, "gleisbilder/");
 	if (ptr)
 	    *ptr = 0;
 	memset(newframe, 0, CAN_ENCAP_SIZE);
@@ -135,8 +135,8 @@ int copy_cs2_config(struct cs2_config_data_t *cs2_config_data) {
     } else {
 	if (cs2_config_data->verbose)
 	    fprintf(stderr, "can't clone CS2 config - no CS2 TCP connection yet\n");
-        /* syslog(LOG_ERR, "%s: can't clone CS2 config - no CS2 TCP connection yet\n", __func__); */
-        syslog(LOG_ERR, "%s: can't clone CS2 config - no CS2 TCP connection yet\n", __func__);
+	/* syslog(LOG_ERR, "%s: can't clone CS2 config - no CS2 TCP connection yet\n", __func__); */
+	syslog(LOG_ERR, "%s: can't clone CS2 config - no CS2 TCP connection yet\n", __func__);
     }
     return 0;
 }
@@ -154,7 +154,7 @@ int check_data_udp(int udp_socket, struct sockaddr *baddr, struct cs2_config_dat
 	    memcpy(netframe, M_PING_RESPONSE, 5);
 	    if (net_to_net(udp_socket, baddr, netframe, CAN_ENCAP_SIZE)) {
 		fprintf(stderr, "sending UDP data (CAN Ping) error:%s \n", strerror(errno));
-        	syslog(LOG_ERR, "%s: sending UDP data (CAN Ping) error:%s\n", __func__, strerror(errno));
+		syslog(LOG_ERR, "%s: sending UDP data (CAN Ping) error:%s\n", __func__, strerror(errno));
 	    } else {
 		print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data->verbose);
 		if (cs2_config_data->verbose)
@@ -169,7 +169,7 @@ int check_data_udp(int udp_socket, struct sockaddr *baddr, struct cs2_config_dat
 	if (canid == 0x0040af7e) {
 	    if (cs2_config_data->verbose)
 		printf("copy config request\n");
-            syslog(LOG_NOTICE, "%s %d: copy config request\n", __func__, __LINE__);
+	    syslog(LOG_NOTICE, "%s %d: copy config request\n", __func__, __LINE__);
 	    cs2_config_data->cs2_config_copy = 1;
 	    copy_cs2_config(cs2_config_data);
 	}
@@ -206,7 +206,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	if ((netframe[11] == 0xFF) && (netframe[12] == 0xFF)) {
 	    if (cs2_config_data->verbose)
 		printf("got CS2 TCP ping - copy config var: %d\n", cs2_config_data->cs2_config_copy);
-            syslog(LOG_NOTICE, "%s: got CS2 TCP ping - copy config var: %d\n", __func__, cs2_config_data->cs2_config_copy);
+	    syslog(LOG_NOTICE, "%s: got CS2 TCP ping - copy config var: %d\n", __func__, cs2_config_data->cs2_config_copy);
 	    cs2_config_data->cs2_tcp_socket = tcp_socket;
 	    if (cs2_config_data->cs2_config_copy)
 		copy_cs2_config(cs2_config_data);
@@ -231,7 +231,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	    syslog(LOG_NOTICE, "%s: config request >%s<\n", __func__, config_name);
 	    config_name[8] = '\0';
 	    if (cs2_config_data->verbose)
-	        printf("%s ID 0x%08x %s\n", __func__, canid, (char *)&netframe[5]);
+		printf("%s ID 0x%08x %s\n", __func__, canid, (char *)&netframe[5]);
 	    netframe[1] |= 1;
 	    net_to_net(tcp_socket, NULL, netframe, CAN_ENCAP_SIZE);
 	    if (strcmp("loks", config_name) == 0) {
@@ -296,14 +296,21 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	    break;
 	}
     case (0x00420000UL):
-	/* check for initiated copy request */
-	reassemble_data(cs2_config_data, netframe);
-	print_can_frame(NET_TCP_FORMAT_STRG, netframe, cs2_config_data->verbose);
-	/* none CS2 copy request needs to be send over CAN */
-	if (canid & 0x0000fcff)
+        /* check for bordcast config change: DLC = 7 */
+	if (netframe[4] == 7) {
+	    /* TODO */
+	    syslog(LOG_NOTICE, "%s: broadcast config change", __func__);
 	    ret = 0;
-	else
-	    ret = 1;
+	} else {
+	    /* check for initiated copy request */
+	    reassemble_data(cs2_config_data, netframe);
+	    print_can_frame(NET_TCP_FORMAT_STRG, netframe, cs2_config_data->verbose);
+	    /* none CS2 copy request needs to be send over CAN */
+	    if (canid & 0x0000fcff)
+		ret = 0;
+	    else
+		ret = 1;
+	}
 	break;
 	/* fake cyclic MS1 slave monitoring response */
     case (0x0C000000UL):
@@ -697,7 +704,7 @@ int main(int argc, char **argv) {
 			buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port), conn_fd, max_fds);
 	    }
 	    syslog(LOG_NOTICE, "%s: new client: %s port %d conn fd: %d max fds: %d\n", __func__,
-			 inet_ntop(AF_INET, &(tcp_addr.sin_addr),  buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port), conn_fd, max_fds);
+			 inet_ntop(AF_INET, &(tcp_addr.sin_addr), buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port), conn_fd, max_fds);
 	    for (i = 0; i < MAX_TCP_CONN; i++) {
 		if (tcp_client[i] < 0) {
 		    tcp_client[i] = conn_fd;	/* save new TCP client descriptor */
@@ -707,7 +714,7 @@ int main(int argc, char **argv) {
 	    if (i == MAX_TCP_CONN) {
 		fprintf(stderr, "too many TCP clients\n");
 		syslog(LOG_ERR, "%s: too many TCP clients\n", __func__);
-	   }
+	    }
 
 	    FD_SET(conn_fd, &all_fds);		/* add new descriptor to set */
 	    max_fds = MAX(conn_fd, max_fds);	/* for select */
@@ -719,7 +726,7 @@ int main(int argc, char **argv) {
 		printf("send embedded CAN ping\n");
 
 	    if (--nready <= 0)
-		continue;			/* no more readable descriptors */
+		continue;	/* no more readable descriptors */
 	}
 	/* received a packet on second TCP port */
 	if (FD_ISSET(st2, &read_fds)) {
@@ -731,8 +738,8 @@ int main(int argc, char **argv) {
 			buffer, sizeof(buffer)), ntohs(tcp_addr2.sin_port), conn_fd, max_fds);
 	    }
 	    syslog(LOG_NOTICE, "%s: new client: %s port %d conn fd: %d max fds: %d\n", __func__,
-			 inet_ntop(AF_INET, &(tcp_addr2.sin_addr),  buffer, sizeof(buffer)), ntohs(tcp_addr2.sin_port), conn_fd, max_fds);
-	    FD_SET(conn_fd, &all_fds);		/* add new descriptor to set */
+			 inet_ntop(AF_INET, &(tcp_addr2.sin_addr), buffer, sizeof(buffer)), ntohs(tcp_addr2.sin_port), conn_fd, max_fds);
+	    FD_SET(conn_fd, &all_fds);	/* add new descriptor to set */
 	    max_fds = MAX(conn_fd, max_fds);	/* for select */
 	    max_tcp_i = MAX(i, max_tcp_i);	/* max index in tcp_client[] array */
 	}
@@ -766,7 +773,7 @@ int main(int argc, char **argv) {
 			time_stamp(timestamp);
 			if (!background)
 			    fprintf(stderr, "%s received packet %% 13 : length %d - maybe close connection\n", timestamp, n);
-        		syslog(LOG_ERR, "%s: received packet %% 13 : length %d - maybe close connection\n", __func__, n);
+			syslog(LOG_ERR, "%s: received packet %% 13 : length %d - maybe close connection\n", __func__, n);
 		    } else {
 			for (i = 0; i < n; i += CAN_ENCAP_SIZE) {
 			    /* check if we need to forward the message to CAN */

@@ -29,7 +29,7 @@ enum {
     L1_ELEMENT,
     L1_SIZE,
     L1_LAST_USED,
-    L1_PAGE,
+    L1_PAGE
 };
 
 const char *l01_token [] = {
@@ -58,7 +58,7 @@ enum {
     L2_TYPE,
     L2_ITEM,
     L2_XOFFSET,
-    L2_YOFFSET,
+    L2_YOFFSET
 };
 
 const char *l2_token [] = {
