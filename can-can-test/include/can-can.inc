@@ -118,8 +118,8 @@ MAIN
 
 #INCLUDE        "uart.inc"                  ; UART
 #INCLUDE        "ring.inc"                  ; Rx/Tx Ring
-#INCLUDE        "can.inc"                   ; CAN
 #INCLUDE        "ascii.inc"                 ; ASCII I/O
+#INCLUDE        "can.inc"                   ; CAN
 
 ;------------------------------------------------------------------------------
 ;
