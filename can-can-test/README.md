@@ -8,7 +8,6 @@ SLCAN (CAN-CAN) is connected via PL2303HX (allowing 4MBit UART)
 
 Result
 ------
-
 CAN-CAN and PIC18F@64MHz can forward all CAN messages @1Mbaud without any loss if UART is fast enough.
 A PIC18F@16MHz is able to handle roughly 50% percent of a fully saturated CAN@1MBit.
 
@@ -16,3 +15,20 @@ Conclusion
 ----------
 CAN-CAN and PIC18F@64MHz is at 50-60% workload on a saturated CAN@1Mbaud.
 PIC18F@64MHz at CAN@250k has plenty of free CPU cycles.
+
+
+Backup
+------
+minimal Standard Frame Format (SFF) Bits = 47 + n*8
+minimal Extended Frame Format (EFF) Bits = 67 + n*8
+
+min SFF SCLANAPI : t1230\r  (6 chars)
+max EFF SCLANAPI : T1234567881122334455667788\r  (27 chars)
+
+CPU Cycles for minimal SFF@1MBit with 16 MHz = 4 * (47 + 0*8) = 4 *  47 cycles
+CPU Cycles for largest EFF@1MBit with 16 MHz = 4 * (67 + 8*8) = 4 * 131 cycles
+
+PUTC            5 cycles
+BIN2ASC        23 cycles
+UART Tx IRQ  (15) cycles
+
