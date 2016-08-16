@@ -20,6 +20,8 @@ static char *CAN_TCP_FORMAT_STRG  = "->CAN>TCP     0x%08X   [%d]";
 static char *NET_UDP_FORMAT_STRG  = "      UDP->   0x%08X   [%d]";
 static char *NET_TCP_FORMAT_STRG  = "      TCP->   0x%08X   [%d]";
 
+static char *BROADCAST_C0NFIG_UPDATE = "broadcast_update.cs2";
+
 static unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[] = { 0x00, 0x36, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
 static unsigned char M_CAN_PING[]                      = { 0x00, 0x30, 0x47, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static unsigned char M_PING_RESPONSE[] = { 0x00, 0x30, 0x00, 0x00, 0x00 };
@@ -300,17 +302,17 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	if (netframe[4] == 7) {
 	    /* TODO */
 	    syslog(LOG_NOTICE, "%s: broadcast config change", __func__);
-	    ret = 0;
-	} else {
-	    /* check for initiated copy request */
-	    reassemble_data(cs2_config_data, netframe);
-	    print_can_frame(NET_TCP_FORMAT_STRG, netframe, cs2_config_data->verbose);
-	    /* none CS2 copy request needs to be send over CAN */
-	    if (canid & 0x0000fcff)
-		ret = 0;
-	    else
-		ret = 1;
+            cs2_config_data->name = BROADCAST_C0NFIG_UPDATE;
+            cs2_config_data->state = CS2_STATE_BROADCAST_UPDATE;
 	}
+	/* check for initiated copy request or brodcast update */
+	reassemble_data(cs2_config_data, netframe);
+	print_can_frame(NET_TCP_FORMAT_STRG, netframe, cs2_config_data->verbose);
+	/* none CS2 copy request needs to be send over CAN */
+	if (canid & 0x0000fcff)
+	    ret = 0;
+	else
+	    ret = 1;
 	break;
 	/* fake cyclic MS1 slave monitoring response */
     case (0x0C000000UL):

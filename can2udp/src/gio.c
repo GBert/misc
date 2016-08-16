@@ -19,7 +19,8 @@
 #define windowBits	15
 #define GZIP_ENCODING	16
 
-unsigned char GETCONFIG_RESPONSE[] = { 0x00, 0x42, 0x03, 0x00, 0x06 };
+unsigned char GETCONFIG_RESPONSE[]    = { 0x00, 0x42, 0x03, 0x00, 0x06 };
+unsigned char GETCONFIG_RESPONSE_II[] = { 0x00, 0x42, 0x03, 0x00, 0x07 };
 
 extern unsigned char GETCONFIG_DATA[];
 extern unsigned char GETCONFIG[];
@@ -306,6 +307,8 @@ int config_write(struct cs2_config_data_t *config_data) {
     fwrite(config_data->inflated_data, 1, config_data->inflated_size, config_fp);
     fclose(config_fp);
     free(filename);
+    free(config_data->deflated_data);
+    free(config_data->inflated_data);
     return 1;
 }
 
@@ -315,7 +318,8 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
     char *filename;
     char *ptr;
 
-    if (memcmp(netframe, GETCONFIG_RESPONSE, 5) == 0) {
+    if ((memcmp(netframe, GETCONFIG_RESPONSE, 5) == 0) ||
+	(memcmp(netframe, GETCONFIG_RESPONSE_II, 5) == 0)) {
 	memcpy(&temp, &netframe[5], 4);
 	config_data->deflated_size = ntohl(temp);
 	config_data->deflated_size_counter = config_data->deflated_size;
@@ -354,11 +358,11 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 		config_data->stream = 0;
 		config_data->deflated_stream_size = config_data->ddi;
 		config_write(config_data);
-		if (config_data->inflated_data)
+		/* if (config_data->inflated_data)
 		    free(config_data->inflated_data);
 		if (config_data->deflated_data)
 		    free(config_data->deflated_data);
-
+		*/
 		/* TODO next */
 		switch (config_data->state) {
 		case CS2_STATE_INACTIVE:
@@ -431,6 +435,7 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 			config_data->state = CS2_STATE_INACTIVE;
 		    }
 		    break;
+		case CS2_STATE_BROADCAST_UPDATE:
 		default:
 		    config_data->state = CS2_STATE_INACTIVE;
 		    break;
