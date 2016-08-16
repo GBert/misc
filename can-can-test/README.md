@@ -19,6 +19,7 @@ PIC18F@64MHz at CAN@250k has plenty of free CPU cycles.
 
 Backup
 ------
+```
 minimal Standard Frame Format (SFF) Bits = 47 + n*8
 minimal Extended Frame Format (EFF) Bits = 67 + n*8
 
@@ -35,4 +36,4 @@ CPU Cycles for max EFF@1MBit with 16 MHz = 4 * (67 + 8*8) = 4 * 131 cycles
 PUTC            5 cycles
 BIN2ASC        23 cycles
 UART Tx IRQ  (15) cycles
-
+```
