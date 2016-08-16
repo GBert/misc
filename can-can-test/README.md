@@ -23,8 +23,8 @@ Backup
 minimal Standard Frame Format (SFF) Bits = 47 + n*8
 minimal Extended Frame Format (EFF) Bits = 67 + n*8
 
-min SFF SCLANAPI : t1230\r  (6 chars)
-max EFF SCLANAPI : T1234567881122334455667788\r  (27 chars)
+min SFF SLCAN API : t1230\r  (6 chars)
+max EFF SLCAN API : T1234567881122334455667788\r  (27 chars)
 
 UART 1 Byte = 1 startbit + 8 bits + 2 stopbit = 11 bits
 min SFF UART time =  6 * 11 =  66 Bits -> 2MBaud -> 33us   | min SFF @ 1MBit ->  47 us
