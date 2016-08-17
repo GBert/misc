@@ -264,7 +264,7 @@ int inflate_data(struct cs2_config_data_t *config_data) {
 	(void)inflateEnd(&strm);
 	return ret;
     }
-
+    (void)inflateEnd(&strm);
     return 0;
 }
 

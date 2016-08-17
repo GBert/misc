@@ -99,7 +99,7 @@ int inflate_data(struct config_data *config_data) {
 	(void)inflateEnd(&strm);
 	return ret;
     }
-
+    (void)inflateEnd(&strm);
     return 0;
 }
 
