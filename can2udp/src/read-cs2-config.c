@@ -71,13 +71,12 @@ void print_pages(void) {
 }
 
 int read_track_config(char *config_file) {
-    int gbs_valid, id, l01_token_n, l2_token_n, ret;
+    int gbs_valid, l01_token_n, l2_token_n, ret;
     FILE *fp;
     char line[MAXSIZE];
     struct track_page_t *page;
 
     gbs_valid = 0;
-    id = 0;
 
     if ((fp = fopen(config_file, "r")) == NULL) {
 	fprintf(stderr, "can't open config file %s: %s\n", config_file, strerror(errno));
@@ -85,6 +84,7 @@ int read_track_config(char *config_file) {
     }
 
     page = calloc(1, sizeof(struct track_page_t));
+    page->id = 0;
 
     while (fgets(line, MAXSIZE, fp) != NULL) {
 	if (line[strlen(line) - 2] == '\r')
