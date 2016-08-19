@@ -34,6 +34,20 @@ CPU Cycles for min SFF@1MBit with 16 MHz = 4 * (47 + 0*8) = 4 *  47 cycles
 CPU Cycles for max EFF@1MBit with 16 MHz = 4 * (67 + 8*8) = 4 * 131 cycles
 
 PUTC            5 cycles
-BIN2ASC        23 cycles
+BIN2ASC        25 cycles
 UART Tx IRQ  (15) cycles
+
+Estimation for EFF (DLC 0) and SFF (DLC8)
+-----------------------------------------
+
+SFF t1230
+
+            6 6 25 6 6  = 49 cycles + 6 * 15 cycles (IRQ) = 139 Cycles
+SFF no Data t 1 23 0\r
+
+
+EFF T1234567881122334455667788
+            6 6 13 25 25 25 6 25 25 25 25 25 25 25 25 6  = 314 cycles + 27 * 15 cycles (IRQ) = 717 cycles 
+EFF 8 Bytes T 1 2  34 56 78 8 11 22 33 44 55 66 77 88 \r
+
 ```

@@ -30,6 +30,7 @@ LIBS:contrib
 LIBS:valves
 LIBS:ftdi
 LIBS:microchip_pic18mcu
+LIBS:microchip_dspic33dsc
 LIBS:USB2-CAN-CAN-cache
 EELAYER 25 0
 EELAYER END
@@ -1012,16 +1013,14 @@ Text Label 7400 3800 0    60   ~ 0
 CANTX
 Text Label 7400 3900 0    60   ~ 0
 CANRX
-Text Label 6400 2550 0    60   ~ 0
+Text Label 6200 2550 0    60   ~ 0
 PGD
-Text Label 6400 2650 0    60   ~ 0
+Text Label 6200 2650 0    60   ~ 0
 PGC
-Text Label 6400 2450 0    60   ~ 0
+Text Label 6200 2450 0    60   ~ 0
 GND
-Text Label 6400 2250 0    60   ~ 0
+Text Label 6200 2250 0    60   ~ 0
 /MCLR
-NoConn ~ 6400 2350
-NoConn ~ 6400 2750
 Wire Wire Line
 	9950 5600 10250 5600
 $Comp
@@ -1124,4 +1123,18 @@ Wire Wire Line
 	4550 4150 4550 3950
 Wire Wire Line
 	4800 4150 4800 3950
+Wire Wire Line
+	6200 2250 6400 2250
+Wire Wire Line
+	6400 2350 6200 2350
+Wire Wire Line
+	6400 2450 6200 2450
+Wire Wire Line
+	6400 2550 6200 2550
+Wire Wire Line
+	6400 2650 6200 2650
+Wire Wire Line
+	6400 2750 6200 2750
+NoConn ~ 6200 2750
+NoConn ~ 6200 2350
 $EndSCHEMATC
