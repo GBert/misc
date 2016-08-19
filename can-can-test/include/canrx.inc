@@ -71,7 +71,14 @@ RXEXT
                 PUTC                        ; Tx
  
                 RXEXT_28_24                 ; Get EID28..EID24
-                BIN2ASC                     ; Tx
+;                BIN2ASC                     ; Tx
+                MOVWF   ASCTEMP
+                MOVLW   0x30
+                BTFSC   ASCTEMP,4
+                IORLW   0x01
+                PUTC
+                MOVF    ASCTEMP,W
+                NIB2ASC
 
                 RXEXT_23_16                 ; Get EID23..EID16
                 BIN2ASC                     ; Tx
