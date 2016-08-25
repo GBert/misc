@@ -1,0 +1,289 @@
+
+AVRA   Ver. 1.3.0 I2CSNIFF.ASM Mon Aug 22 01:09:11 2016
+
+
+         ;************************************************************************/
+         ;*                                                                      */
+         ;*                      I2C Sniffer					*/
+         ;*                                                                      */
+         ;*              Author: Peter Dannegger                                 */
+         ;*                                                                      */
+         ;************************************************************************/
+          .list
+C:000000 c052      	rjmp	init				; must be rjmp !
+         ;-------------------------------------------------------------------------
+          .include "uart.inc"
+         
+         ;-------------------------------------------------------------------------
+         ;		Software UART transmitter up to 460800 Baud
+         ;-------------------------------------------------------------------------
+          .org	OC1Aaddr
+C:000003 b60f      	in	sregi, sreg
+C:000004 3030      	cpi	tx_state, 0			; byte finished ?
+C:000005 f461      	brne	_txi3
+C:000006 164a      	cp	txipl, xl			; new data to send ?
+C:000007 065b      	cpc	txiph, xh
+C:000008 f039      	breq	_txi2
+C:000009 901d      	ld	tx_data, x+
+C:00000a e039      	ldi	tx_state, 9			; start next byte
+C:00000b 35a6      	cpi	xl, low( fifo_end )		; end of FIFO
+C:00000c 07b0      	cpc	xh, fifo_end_hi
+C:00000d f409      	brne	_txi1
+C:00000e 01d1      	movw	xh:xl, fifoh:fifol		; wrap around
+          _txi1:
+C:00000f bf10      	out	TCCR1, tx_low			; send start bit (low)
+          _txi2:
+C:000010 be0f      	out	SREG, sregi
+C:000011 9518      	reti					; max 23 cycle
+          _txi3:
+C:000012 953a      	dec	tx_state
+C:000013 9416      	lsr	tx_data
+C:000014 f3d0      	brcs	_txi1				; bit inverted
+C:000015 bf20      	out	TCCR1, tx_high
+C:000016 be0f      	out	SREG, sregi
+C:000017 9518      	reti
+         ;-------------------------------------------------------------------------
+          init_uart:
+C:000018 eb11      	ldi	tx_low, 1<<CTC1^1<<COM1A1^1<<CS10^INVERT
+C:000019 c003      	rjmp	_inu2
+          _inu1:
+C:00001a 9513      	inc	tx_low
+C:00001b 95f6      	lsr	zh
+C:00001c 95e7      	ror	zl
+          _inu2:
+C:00001d 30f0      	cpi	zh, 0
+C:00001e f7d9      	brne	_inu1
+C:00001f 95ea      	dec	zl
+C:000020 bdee      	out	OCR1A, zl
+C:000021 bded      	out	OCR1C, zl
+C:000022 e120      	ldi	tx_high, 1<<COM1A0
+C:000023 2721      	eor	tx_high, tx_low
+C:000024 bf20      	out	TCCR1, tx_high
+C:000025 e044      	ldi	a0, 1<<FOC1A
+C:000026 bd4c      	out	GTCCR, a0			; force output level high
+C:000027 9ab9      	sbi	TXD_DDR, TXD			; output
+C:000028 e6a0      	ldi	xl, low ( fifo_start )
+C:000029 e0b0      	ldi	xh, high( fifo_start )
+C:00002a 012d      	movw	txiph:txipl, xh:xl
+C:00002b 011d      	movw	fifoh:fifol, xh:xl
+C:00002c e002      	ldi	fifo_end_hi, high( fifo_end )
+C:00002d e030      	ldi	tx_state, 0
+C:00002e e440      	ldi	a0, 1<<OCIE1A
+C:00002f bf49      	out	TIMSK, a0
+C:000030 9508      	ret
+         ;-------------------------------------------------------------------------
+         ;                               transmit byte hexadecimal
+         ;-------------------------------------------------------------------------
+         ;input: a0 = byte
+         ;use:	a0, b0, b1, b2, yl, yh
+         ;
+          puthex:
+C:000031 2e84      	mov     b2, a0
+C:000032 9542      	swap    a0
+C:000033 d001      	rcall   _phe1
+C:000034 2d48      	mov     a0, b2
+          _phe1:
+C:000035 704f      	andi    a0, 0x0F
+C:000036 304a      	cpi     a0, 10
+C:000037 f008      	brcs    _phe2
+C:000038 5f49      	subi    a0, -('A' - '0' - 10)
+          _phe2:
+C:000039 5d40      	subi    a0, -'0'
+         ;	rjmp    putchar
+         ;-------------------------------------------------------------------------
+         ;                               transmit byte
+         ;-------------------------------------------------------------------------
+         ;input: a0 = byte
+         ;use:	a0, b0, b1, yl, yh
+         ;
+          putchar:
+C:00003a 01e2      	movw	yh:yl, txiph:txipl
+C:00003b 9540      	com	a0				; invert byte
+C:00003c 9349      	st	y+, a0				; store byte in FIFO
+C:00003d 35c6      	cpi	yl, low( fifo_end )		; end of FIFO ?
+C:00003e 07d0      	cpc	yh, fifo_end_hi
+C:00003f f409      	brne	_pch1
+C:000040 01e1      	movw	yh:yl, fifoh:fifol		; roll over
+          _pch1:
+C:000041 013d      	movw	b1:b0, xh:xl			; atomic word read !
+C:000042 166c      	cp	b0, yl
+C:000043 067d      	cpc	b1, yh
+C:000044 f3e1      	breq	_pch1				; until not equal
+C:000045 012e      	movw	txiph:txipl, yh:yl		; atomic word write !
+C:000046 9508      	ret
+         ;-------------------------------------------------------------------------
+         ;                       send zero terminated string after call
+         ;-------------------------------------------------------------------------
+         ;input:	constant string after call
+         ;use:   a0, b0, b1, yl, yh, zl, zh
+         ;
+          puts:
+C:000047 91ff      	pop     zh                      ; get address after call
+C:000048 91ef      	pop     zl
+C:000049 0fee      	lsl     zl                      ; *2 to get byte pointer
+C:00004a 1fff      	rol     zh
+C:00004b c001      	rjmp    _pts2
+          _pts1:
+C:00004c dfed      	rcall   putchar
+          _pts2:
+C:00004d 9145      	lpm     a0, Z+
+C:00004e 3040      	cpi	a0, 0			; check zero byte
+C:00004f f7e1      	brne    _pts1
+C:000050 95f6      	lsr     zh                      ; /2 to get word pointer
+C:000051 95e7      	ror     zl
+C:000052 9409      	ijmp				; return after string
+         ;-------------------------------------------------------------------------
+          "
+          .list
+         ;-------------------------------------------------------------------------
+          init:
+C:000053 e5ef      	ldi	zl, low (RAMEND)
+C:000054 e0f2      	ldi	zh, high(RAMEND)
+C:000055 bfed      	out	SPL, zl
+C:000056 bffe      	out	SPH, zh
+C:000057 e2e0      	ldi	zl,  low(XTAL / BAUD)
+C:000058 e0f0      	ldi	zh, high(XTAL / BAUD)
+C:000059 dfbe      	rcall	init_uart
+C:00005a 9478      	sei
+C:00005b dfeb      	rcall	puts
+          	.db	"I2C-Sniffer:", 13, 10, 0, 0
+C:00005C 4932432D536E69666665723A0D0A0000
+          init_i2c:
+C:000064 e340      	ldi	a0, 1<<USIWM1^1<<USIWM0		; I2C, no counter
+C:000065 b94d      	out	USICR, a0
+C:000066 9ac2      	sbi	I2C_PORT, SCL
+C:000067 9aba      	sbi	I2C_DDR, SCL
+C:000068 9ac0      	sbi	I2C_PORT, SDA
+C:000069 98b8      	cbi	I2C_DDR, SDA
+          init_t0:
+C:00006a e042      	ldi	a0, 1<<WGM01			; claer on compare A
+C:00006b bd4a      	out	TCCR0A, a0
+C:00006c e043      	ldi	a0, 1<<CS01^1<<CS00		; XTAL / 64
+C:00006d bf43      	out	TCCR0B, a0	
+C:00006e ee45      	ldi	a0, (XTAL / 64 + 500) / 1000 - 1	; 1ms
+C:00006f bd49      	out	OCR0A, a0
+C:000070 e080      	ldi	cnt0, 0
+C:000071 e090      	ldi	cnt1, 0
+         ;-------------------------------------------------------------------------
+          .include "i2csniff.inc"
+         ;************************************************************************/
+         ;*                                                                      */
+         ;*                      I2C Sniffer					*/
+         ;*                                                                      */
+         ;*              Author: Peter Dannegger                                 */
+         ;*                                                                      */
+         ;************************************************************************/
+         ;-------------------------------------------------------------------------
+          i2c_sniff:
+C:000072 b748      	in	a0, TIFR			; 1ms time base
+C:000073 7140      	andi	a0, 1<<OCF0A
+C:000074 f011      	breq	_t1ms1
+C:000075 bf48      	out	TIFR, a0			; clear compare flag
+C:000076 9601      	adiw	cnt1:cnt0, 1
+          _t1ms1:
+C:000077 b14e      	in	a0, USISR
+C:000078 ff45      	sbrs	a0, USIPF			; STOP received ?
+C:000079 c007      	rjmp	_isn1
+C:00007a e340      	ldi	a0, 1<<USIWM1^1<<USIWM0		; I2C, no counter
+C:00007b b94e      	out	USISR, a0
+C:00007c e240      	ldi	a0, 1<<USIPF			; clear USISIF
+C:00007d b94e      	out	USISR, a0
+C:00007e e740      	ldi	a0, STOP
+C:00007f dfba      	rcall	putchar
+C:000080 cff1      	rjmp	i2c_sniff
+         ;-------------------------------------------------------------------------
+          _isn1:
+C:000081 ff46      	sbrs	a0, USIOIF			; Data / ACK received ?
+C:000082 c010      	rjmp	_isn3
+C:000083 b06f      	in	b0, USIDR
+C:000084 949a      	dec	get_ack				; toggle get ACK / Data
+C:000085 fe90      	sbrs	get_ack, 0
+C:000086 c005      	rjmp	_isn2
+C:000087 e44e      	ldi	a0, 1<<USIOIF^(0x0F & -2)	; count 2 edges
+C:000088 b94e      	out	USISR, a0
+C:000089 2d46      	mov	a0, b0
+C:00008a dfa6      	rcall	puthex
+C:00008b cfe6      	rjmp	i2c_sniff
+          _isn2:
+C:00008c e440      	ldi	a0, 1<<USIOIF^(0x0F & -16)	; count 16 edges
+C:00008d b94e      	out	USISR, a0
+C:00008e e64e      	ldi	a0, NACK
+C:00008f fe60      	sbrs	b0, 0
+C:000090 e641      	ldi	a0, ACK 
+C:000091 dfa8      	rcall	putchar
+C:000092 cfdf      	rjmp	i2c_sniff
+         ;-------------------------------------------------------------------------
+          _isn3:
+C:000093 ff47      	sbrs	a0, USISIF			; START received ?
+C:000094 cfdd      	rjmp	i2c_sniff
+          _isn4:
+C:000095 99b2      	sbic	I2C_PIN, SCL			; wait until SCL = low
+C:000096 cffe      	rjmp	_isn4
+C:000097 e34c      	ldi	a0, 1<<USIWM1^1<<USIWM0^1<<USICS1^1<<USICS0;
+C:000098 b94d      	out	USICR, a0			; I2C, get data on neg. edge
+C:000099 e840      	ldi	a0, 1<<USISIF^(0x0F & -16)
+C:00009a b94e      	out	USISR, a0			; clear USISIF, count 16 edges
+C:00009b 2499      	clr	get_ack
+C:00009c e04d      	ldi	a0, 13				; new line
+C:00009d df9c      	rcall	putchar
+C:00009e e04a      	ldi	a0, 10
+C:00009f df9a      	rcall	putchar
+C:0000a0 01fc      	movw	zh:zl, cnt1:cnt0		; time stamp of start
+C:0000a1 d004      	rcall	bin16_ascii
+C:0000a2 dfa4      	rcall	puts
+          	.db	": ", START, 0
+C:0000A3 3A207300
+C:0000a5 cfcc      	rjmp	i2c_sniff
+         ;-------------------------------------------------------------------------
+          ;-------------------------------------------------------------------------
+          .include "bcd16.inc"
+         ;*************************************************************************
+         ;*                                                                       *
+         ;*                      Convert unsigned 16bit to ASCII                  *
+         ;*                                                                       *
+         ;*              Author: Peter Dannegger                                  *
+         ;*                      danni@specs.de                                   *
+         ;*                                                                       *
+         ;*************************************************************************
+         ;
+         ;input: ZH, ZL = 16 bit value 0 ... 65535
+         ;output: UARTR: 5 digits (ASCII)
+         ;
+          bin16_ascii:
+C:0000a6 e24f      	ldi	a0, -1 + '0'
+C:0000a7 9543      _bcd1:	inc	a0
+C:0000a8 51e0      	subi	zl, low(10000)
+C:0000a9 42f7      	sbci	zh, high(10000)
+C:0000aa f7e0      	brcc	_bcd1
+C:0000ab df8e      	rcall	putchar
+C:0000ac e34a      	ldi	a0, 10 + '0'
+C:0000ad 954a      _bcd2:	dec	a0
+C:0000ae 51e8      	subi	zl, low(-1000)
+C:0000af 4ffc      	sbci	zh, high(-1000)
+C:0000b0 f3e0      	brcs	_bcd2
+C:0000b1 df88      	rcall	putchar
+C:0000b2 e24f      	ldi	a0, -1 + '0'
+C:0000b3 9543      _bcd3:	inc	a0
+C:0000b4 56e4      	subi	zl, low(100)
+C:0000b5 40f0      	sbci	zh, 0
+C:0000b6 f7e0      	brcc	_bcd3
+C:0000b7 df82      	rcall	putchar
+C:0000b8 e34a      	ldi	a0, 10 + '0'
+C:0000b9 954a      _bcd4:	dec	a0
+C:0000ba 5fe6      	subi	zl, -10
+C:0000bb f3e8      	brcs	_bcd4
+C:0000bc df7d      	rcall	putchar
+C:0000bd 2f4e      	mov	a0, zl
+C:0000be 5d40      	subi	a0, -'0'
+C:0000bf cf7a      	rjmp	putchar
+         ;-------------------------------------------------------------------------
+          1
+         ;-------------------------------------------------------------------------
+
+
+Segment usage:
+   Code      :       190 words (380 bytes)
+   Data      :       502 bytes
+   EEPROM    :         0 bytes
+
+Assembly completed with no errors.
