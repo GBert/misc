@@ -251,12 +251,15 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 		ret = 1;
 		page_number = atoi(&config_name[4]);
 		strcat(gbs_name, "gleisbilder/");
-		if (page_name) {
-		    strcat(gbs_name, page_name[page_number]);
-		    /* strcat(gbs_name, ".cs2"); */
-		    syslog(LOG_NOTICE, "%s: sending %s\n", __func__, gbs_name);
-		    send_tcp_config_data(gbs_name, config_dir, canid, tcp_socket, CRC | COMPRESSED);
+		if (page_number <= MAX_TRACK_PAGE) {
+		    if (page_name[page_number])  {
+			strcat(gbs_name, page_name[page_number]);
+			syslog(LOG_NOTICE, "%s: sending %s\n", __func__, gbs_name);
+			send_tcp_config_data(gbs_name, config_dir, canid, tcp_socket, CRC | COMPRESSED);
+			break;
+		    }
 		}
+		syslog(LOG_NOTICE, "%s: cant't send gbs-%d\n", __func__, page_number);
 		break;
 	    } else if (strcmp("gbs", config_name) == 0) {
 		ret = 1;
