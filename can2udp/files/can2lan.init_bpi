@@ -9,6 +9,9 @@ start() {
 	sleep 10
 
 	[ -e /www/config/ ] && {
+		# for WLAN
+		# can2lan -m -c /www/config -b wlan0
+		# for LAN
 		can2lan -m -c /www/config -b br-lan
 	}
 }
