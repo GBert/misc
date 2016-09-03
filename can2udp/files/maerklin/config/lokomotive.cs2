@@ -5,8 +5,8 @@ version
 session
  .id=1
 lokomotive
- .uid=0x3
  .name=Default
+ .uid=0x3
  .adresse=0x3
  .typ=mm2_prg
  .sid=0x1
@@ -139,8 +139,8 @@ lokomotive
  ..rueckwaerts=0x0
  .inTraktion=0xffffffff
 lokomotive
- .uid=0xb
  .name=111 043-6
+ .uid=0xb
  .adresse=0xb
  .typ=mm2_prg
  .sid=0x1
@@ -273,8 +273,8 @@ lokomotive
  ..rueckwaerts=0x0
  .inTraktion=0xffffffff
 lokomotive
- .uid=0xe
  .name=140 239-5
+ .uid=0xe
  .adresse=0xe
  .typ=mm2_prg
  .sid=0x1
@@ -407,8 +407,8 @@ lokomotive
  ..rueckwaerts=0x0
  .inTraktion=0xffffffff
 lokomotive
- .uid=0xf
  .name=150 045-3
+ .uid=0xf
  .adresse=0xf
  .typ=mm2_prg
  .sid=0x1
@@ -541,8 +541,8 @@ lokomotive
  ..rueckwaerts=0x0
  .inTraktion=0xffffffff
 lokomotive
- .uid=0x10
  .name=94 713
+ .uid=0x10
  .adresse=0x10
  .typ=mm2_prg
  .sid=0x1
@@ -675,8 +675,8 @@ lokomotive
  ..rueckwaerts=0x0
  .inTraktion=0xffffffff
 lokomotive
- .uid=0x13
  .name=GE2000
+ .uid=0x13
  .adresse=0x13
  .typ=mm2_prg
  .sid=0x1
@@ -809,8 +809,8 @@ lokomotive
  ..rueckwaerts=0x0
  .inTraktion=0xffffffff
 lokomotive
- .uid=0x18
  .name=280 003-5
+ .uid=0x18
  .adresse=0x18
  .typ=mm2_prg
  .sid=0x1
@@ -943,8 +943,8 @@ lokomotive
  ..rueckwaerts=0x0
  .inTraktion=0xffffffff
 lokomotive
- .uid=0x1b
  .name=86 173
+ .uid=0x1b
  .adresse=0x1b
  .typ=mmm2_lok
  .sid=0x1
@@ -1077,8 +1077,8 @@ lokomotive
  ..rueckwaerts=0x0
  .inTraktion=0xffffffff
 lokomotive
- .uid=0x28
  .name=240 002-6
+ .uid=0x28
  .adresse=0x28
  .typ=mm2_prg
  .sid=0x1
@@ -1211,8 +1211,8 @@ lokomotive
  ..rueckwaerts=0x0
  .inTraktion=0xffffffff
 lokomotive
- .uid=0x38
  .name=143 612-0
+ .uid=0x38
  .adresse=0x38
  .typ=mmm2_lok
  .sid=0x1
@@ -1345,8 +1345,8 @@ lokomotive
  ..rueckwaerts=0x0
  .inTraktion=0xffffffff
 lokomotive
- .uid=0x3b
  .name=323 530-6
+ .uid=0x3b
  .adresse=0x3b
  .typ=mmm2_lok
  .sid=0x1
@@ -1479,8 +1479,8 @@ lokomotive
  ..rueckwaerts=0x0
  .inTraktion=0xffffffff
 lokomotive
- .uid=0x3c
  .name=V6O 1009
+ .uid=0x3c
  .adresse=0x3c
  .typ=mm2_prg
  .sid=0x1
@@ -1613,8 +1613,8 @@ lokomotive
  ..rueckwaerts=0x0
  .inTraktion=0xffffffff
 lokomotive
- .uid=0x43
  .name=265 002-6
+ .uid=0x43
  .adresse=0x43
  .typ=mm2_prg
  .sid=0x1
@@ -1747,8 +1747,8 @@ lokomotive
  ..rueckwaerts=0x0
  .inTraktion=0xffffffff
 lokomotive
- .uid=0x47
  .name=DHG300
+ .uid=0x47
  .adresse=0x47
  .typ=mm2_prg
  .sid=0x1
@@ -1881,8 +1881,8 @@ lokomotive
  ..rueckwaerts=0x0
  .inTraktion=0xffffffff
 lokomotive
- .uid=0x48
  .name=218 217-8
+ .uid=0x48
  .adresse=0x48
  .typ=mmm2_lok
  .sid=0x1
@@ -2015,8 +2015,8 @@ lokomotive
  ..rueckwaerts=0x0
  .inTraktion=0xffffffff
 lokomotive
- .uid=0x4d
  .name=GOLIATH
+ .uid=0x4d
  .adresse=0x4d
  .typ=mmm2_lok
  .sid=0x1
@@ -2149,8 +2149,8 @@ lokomotive
  ..rueckwaerts=0x0
  .inTraktion=0xffffffff
 lokomotive
- .uid=0x4005
  .name=64 304
+ .uid=0x4005
  .adresse=0x40
  .typ=mfx
  .sid=0x1
@@ -2283,8 +2283,8 @@ lokomotive
  ..rueckwaerts=0x0
  .inTraktion=0xffffffff
 lokomotive
- .uid=0x4006
  .name=212 074-9
+ .uid=0x4006
  .adresse=0x14
  .typ=mfx
  .sid=0x1
@@ -2417,8 +2417,8 @@ lokomotive
  ..rueckwaerts=0x0
  .inTraktion=0xffffffff
 lokomotive
- .uid=0x4007
  .name=146 240-7
+ .uid=0x4007
  .adresse=0x2e
  .typ=mfx
  .sid=0x1
@@ -2551,8 +2551,8 @@ lokomotive
  ..rueckwaerts=0x0
  .inTraktion=0xffffffff
 lokomotive
- .uid=0x4008
  .name=335 105-3
+ .uid=0x4008
  .adresse=0x17
  .typ=mfx
  .sid=0x1
