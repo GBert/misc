@@ -4,6 +4,7 @@
 set -e
 
 FILE=cs2update.img
+FS_TYPE=reiserfs
 LINK=http://www.maerklin.de/fileadmin/media/service/software-updates/$FILE
 MNT_POINT=/tmp/mnt
 WEB_DIR=/www
@@ -14,7 +15,7 @@ set -x
 
 wget $LINK
 mkdir -p $MNT_POINT
-mount -o loop $FILE $MNT_POINT
+mount -o loop -t $FS_TYPE $FILE $MNT_POINT
 
 cp -r $MNT_POINT/home/cs2/fcticons $WEB_DIR
 cp -r $MNT_POINT/home/cs2/icons $WEB_DIR
