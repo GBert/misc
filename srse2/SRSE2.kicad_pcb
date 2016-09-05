@@ -2,8 +2,8 @@
 
   (general
     (links 158)
-    (no_connects 154)
-    (area 99.924999 73.924999 182.075001 146.075001)
+    (no_connects 158)
+    (area 99.924999 73.924999 182.258334 163.875)
     (thickness 1.6)
     (drawings 8)
     (tracks 0)
@@ -612,7 +612,7 @@
   )
 
   (module Capacitors_SMD:C_0805_HandSoldering (layer F.Cu) (tedit 541A9B8D) (tstamp 57C1868F)
-    (at 146.7 151)
+    (at 164.55 121.05)
     (descr "Capacitor SMD 0805, hand soldering")
     (tags "capacitor 0805")
     (path /56CF75E6)
@@ -670,7 +670,7 @@
   )
 
   (module Capacitors_SMD:C_0805_HandSoldering (layer F.Cu) (tedit 541A9B8D) (tstamp 57C186A7)
-    (at 147.1 157.9)
+    (at 159.55 121.05)
     (descr "Capacitor SMD 0805, hand soldering")
     (tags "capacitor 0805")
     (path /56CF75D4)
@@ -1494,7 +1494,7 @@
   )
 
   (module Resistors_SMD:R_0603_HandSoldering (layer F.Cu) (tedit 5418A00F) (tstamp 57C18848)
-    (at 154.6 122.8)
+    (at 154.45 123.6)
     (descr "Resistor SMD 0603, hand soldering")
     (tags "resistor 0603")
     (path /57C13A5E)
@@ -1639,7 +1639,7 @@
   )
 
   (module Resistors_SMD:R_0805_HandSoldering (layer F.Cu) (tedit 54189DEE) (tstamp 57C18884)
-    (at 141 156.075001)
+    (at 155.4 126.3)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /56D013C0)
@@ -1668,7 +1668,7 @@
   )
 
   (module Resistors_SMD:R_0805_HandSoldering (layer F.Cu) (tedit 54189DEE) (tstamp 57C18890)
-    (at 141 156.075001)
+    (at 170.2 120.85)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /57C0A3B3)
@@ -1697,7 +1697,7 @@
   )
 
   (module Resistors_SMD:R_0805_HandSoldering (layer F.Cu) (tedit 54189DEE) (tstamp 57C1889C)
-    (at 141 156.075001)
+    (at 164.95 123.55)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /57BF810F)
@@ -1726,7 +1726,7 @@
   )
 
   (module Resistors_SMD:R_0805_HandSoldering (layer F.Cu) (tedit 54189DEE) (tstamp 57C188A8)
-    (at 141 156.075001)
+    (at 159.55 123.55)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /57BF82EA)
@@ -1755,7 +1755,7 @@
   )
 
   (module Resistors_SMD:R_0805_HandSoldering (layer F.Cu) (tedit 54189DEE) (tstamp 57C188B4)
-    (at 141 156.075001)
+    (at 154.3 120.6)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /56CF6715)
@@ -1784,7 +1784,7 @@
   )
 
   (module Resistors_SMD:R_0805_HandSoldering (layer F.Cu) (tedit 54189DEE) (tstamp 57C188C0)
-    (at 141 156.075001)
+    (at 141.5 120.75)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /56CF75B4)
@@ -1813,7 +1813,7 @@
   )
 
   (module Resistors_SMD:R_0805_HandSoldering (layer F.Cu) (tedit 54189DEE) (tstamp 57C188CC)
-    (at 141 156.075001)
+    (at 148.2 121.25)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /56CF75BA)
@@ -1842,7 +1842,7 @@
   )
 
   (module Resistors_SMD:R_0805_HandSoldering (layer F.Cu) (tedit 54189DEE) (tstamp 57C188D8)
-    (at 141 156.075001)
+    (at 143.95 161.7)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /56CF75C0)
@@ -1871,7 +1871,7 @@
   )
 
   (module Resistors_SMD:R_0805_HandSoldering (layer F.Cu) (tedit 54189DEE) (tstamp 57C188E4)
-    (at 141 156.075001)
+    (at 146.6 152.65)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /56CF75C6)

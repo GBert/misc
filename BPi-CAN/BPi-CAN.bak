@@ -1667,7 +1667,7 @@ $EndComp
 Text Label 8400 5250 0    60   ~ 0
 CB4
 Text Notes 7050 7000 0    138  ~ 0
-BananaPi Modellbahn Adapter Board\nV1.1
+BananaPi Modellbahn Adapter Board\nV1.4
 $Comp
 L CONN_01X05 P12
 U 1 1 5689D197
@@ -3477,7 +3477,7 @@ U 1 1 57B5A0CC
 P 2450 6700
 F 0 "P26" H 2450 6850 50  0000 C CNN
 F 1 "CONN_01X02" V 2550 6700 50  0001 C CNN
-F 2 "" H 2450 6700 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x02" H 2450 6700 50  0001 C CNN
 F 3 "" H 2450 6700 50  0000 C CNN
 	1    2450 6700
 	1    0    0    1   

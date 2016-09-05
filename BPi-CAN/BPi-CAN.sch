@@ -1637,7 +1637,7 @@ Text Label 8000 5650 0    60   ~ 0
 CB8
 Text Label 8000 5750 0    60   ~ 0
 CB7
-Text Label 8000 5850 0    60   ~ 0
+Text Label 7800 6350 0    60   ~ 0
 CB6
 Text Notes 7400 5650 0    60   ~ 0
 CANH
@@ -3512,4 +3512,23 @@ Wire Wire Line
 	2250 6750 2150 6750
 Wire Wire Line
 	2150 6750 2150 6850
+$Comp
+L CONN_01X02 P27
+U 1 1 57CD899E
+P 8200 6400
+F 0 "P27" H 8200 6550 50  0000 C CNN
+F 1 "POWER" H 8300 6400 50  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x02" H 8200 6400 50  0001 C CNN
+F 3 "" H 8200 6400 50  0000 C CNN
+	1    8200 6400
+	1    0    0    -1  
+$EndComp
+Text Label 8000 5850 0    60   ~ 0
+CB6'
+Wire Wire Line
+	8000 6350 7800 6350
+Wire Wire Line
+	8000 6450 7800 6450
+Text Label 7800 6450 0    60   ~ 0
+CB6'
 $EndSCHEMATC
