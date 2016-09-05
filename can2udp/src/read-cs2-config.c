@@ -118,10 +118,7 @@ int read_track_config(char *config_file) {
     page = calloc(1, sizeof(struct track_page_t));
 
     while (fgets(line, MAXSIZE, fp) != NULL) {
-	if (line[strlen(line) - 2] == '\r')
-	    line[strlen(line) - 2] = 0;
-	if (line[strlen(line) - 1] == '\n')
-	    line[strlen(line) - 1] = 0;
+	line[strcspn(line, "\r\n")] = 0;
 	if (line[0] != ' ') {
 	    l01_token_n = get_char_index(l01_token, line);
 	    if (l01_token_n == L1_PAGE) {
@@ -146,11 +143,11 @@ int read_track_config(char *config_file) {
 		break;
 	    case L2_WIDTH:
 		page->width = strtoul(&line[L2_WIDTH_LENGTH], NULL, 0);
-		printf("match width: >%d<\n", page->width);
+		printf("match width:   >%d<\n", page->width);
 		break;
 	    case L2_HEIGHT:
 		page->height = strtoul(&line[L2_HEIGHT_LENGTH], NULL, 0);
-		printf("match height: >%d<\n", page->height);
+		printf("match height:  >%d<\n", page->height);
 		break;
 	    case L2_MAJOR:
 		page->major = strtoul(&line[L2_MAJOR_LENGTH], NULL, 0);
