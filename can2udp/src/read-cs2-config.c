@@ -45,17 +45,26 @@ int get_char_index(const char **list, char *str) {
     return -1;
 }
 
-void add_track_page(int id, char *name) {
+int add_track_page(int id, char *name) {
     struct track_page_t *t;
 
     HASH_FIND_INT(track_page, &id, t);	/* id already in the hash? */
     if (t == NULL) {
-	t = (struct track_page_t *)malloc(sizeof(struct track_page_t));
+	t = (struct track_page_t *)calloc(1, sizeof(struct track_page_t));
+	if (!t) {
+	    fprintf(stderr, "%s: can't calloc track page: %s\n", __func__, strerror(errno));
+	    return (EXIT_FAILURE);
+	}
 	t->id = id;
 	t->name = calloc(1, strlen(name) + 1);
+	if (!t->name) {
+	    fprintf(stderr, "%s: can't calloc track page name: %s\n", __func__, strerror(errno));
+	    return (EXIT_FAILURE);
+	}
 	strcpy(t->name, name);
 	HASH_ADD_INT(track_page, id, t);	/* id: name of key field */
     }
+    return (EXIT_SUCCESS);
 }
 
 int get_char_index2(const char **list, char *str) {
@@ -73,6 +82,10 @@ int get_char_index2(const char **list, char *str) {
 
 int id_sort(struct track_page_t *a, struct track_page_t *b) {
     return (a->id - b->id);
+}
+
+void sort_by_id(void) {
+    HASH_SORT(track_page, id_sort);
 }
 
 void print_pages(void) {
@@ -189,7 +202,7 @@ int main(int argc, char **argv) {
     strcat(config_data.directory, track_dir);
 
     read_track_config(track_file);
-    /* HASH_SORT(track_page, id_sort); */
+    sort_by_id();
     print_pages();
 
     return EXIT_SUCCESS;
