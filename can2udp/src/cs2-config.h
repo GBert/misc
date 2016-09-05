@@ -100,13 +100,13 @@ struct config_data_t {
 };
 
 struct track_config_t {
+    unsigned int id;
     unsigned int major;
     unsigned int minor;
     unsigned int size;
     unsigned int xoffset;
     unsigned int yoffset;
     char *last_used;
-    unsigned int id;
     char *name;
     UT_hash_handle ut_hash;
 };

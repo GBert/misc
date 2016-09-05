@@ -45,6 +45,19 @@ int get_char_index(const char **list, char *str) {
     return -1;
 }
 
+void add_track_page(int id, char *name) {
+    struct track_page_t *t;
+
+    HASH_FIND_INT(track_page, &id, t);	/* id already in the hash? */
+    if (t == NULL) {
+	t = (struct track_page_t *)malloc(sizeof(struct track_page_t));
+	t->id = id;
+	t->name = calloc(1, strlen(name) + 1);
+	strcpy(t->name, name);
+	HASH_ADD_INT(track_page, id, t);	/* id: name of key field */
+    }
+}
+
 int get_char_index2(const char **list, char *str) {
     int index;
 
@@ -59,13 +72,13 @@ int get_char_index2(const char **list, char *str) {
 }
 
 int id_sort(struct track_page_t *a, struct track_page_t *b) {
-	    return (a->id - b->id);
+    return (a->id - b->id);
 }
 
 void print_pages(void) {
     struct track_page_t *s;
 
-    for(s=track_page; s != NULL; s=s->hh.next) {
+    for (s = track_page; s != NULL; s = s->hh.next) {
 	printf("user id %d: name %s\n", s->id, s->name);
     }
 }
@@ -84,7 +97,6 @@ int read_track_config(char *config_file) {
     }
 
     page = calloc(1, sizeof(struct track_page_t));
-    page->id = 0;
 
     while (fgets(line, MAXSIZE, fp) != NULL) {
 	if (line[strlen(line) - 2] == '\r')
@@ -127,10 +139,8 @@ int read_track_config(char *config_file) {
 		break;
 	    case L2_NAME:
 		if (gbs_valid) {
-		    page->name = calloc(1, strlen(&line[L2_NAME_LENGTH]) + 1);
-		    strcpy(page->name, &line[L2_NAME_LENGTH]);
-		    printf("match name:    >%s<  id %d\n", page->name, page->id);
-		    HASH_ADD_INT(track_page, id, page);
+		    printf("match name:    >%s<  id %d\n", &line[L2_NAME_LENGTH], page->id);
+		    add_track_page(page->id, &line[L2_NAME_LENGTH]);
 		}
 		break;
 	    default:
@@ -139,6 +149,7 @@ int read_track_config(char *config_file) {
 	    }
 	}
     }
+    free(page);
     return EXIT_SUCCESS;
 }
 
