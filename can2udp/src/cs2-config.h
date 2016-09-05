@@ -58,7 +58,9 @@ enum {
     L2_TYPE,
     L2_ITEM,
     L2_XOFFSET,
-    L2_YOFFSET
+    L2_YOFFSET,
+    L2_WIDTH,
+    L2_HEIGHT
 };
 
 const char *l2_token [] = {
@@ -71,6 +73,8 @@ const char *l2_token [] = {
     " .artikel=",
     " .xoffset=",
     " .yoffset=",
+    " .width=",
+    " .height=",
     NULL
 };
 
@@ -84,6 +88,8 @@ const char *l2_token [] = {
 #define L2_ITEM_LENGTH		10
 #define L2_XOFFSET_LENGTH	10
 #define L2_YOFFSET_LENGTH	10
+#define L2_WIDTH_LENGTH		8
+#define L2_HEIGHT_LENGTH	9
 
 struct config_data_t {
     int deflated_stream_size;
@@ -106,6 +112,7 @@ struct track_config_t {
     unsigned int size;
     unsigned int xoffset;
     unsigned int yoffset;
+    unsigned int type;
     char *last_used;
     char *name;
     UT_hash_handle ut_hash;

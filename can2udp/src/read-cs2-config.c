@@ -45,23 +45,29 @@ int get_char_index(const char **list, char *str) {
     return -1;
 }
 
-int add_track_page(int id, char *name) {
+int add_track_page(struct track_page_t *page, char *name) {
     struct track_page_t *t;
 
-    HASH_FIND_INT(track_page, &id, t);	/* id already in the hash? */
+    HASH_FIND_INT(track_page, &page->id, t);	/* id already in the hash? */
     if (t == NULL) {
 	t = (struct track_page_t *)calloc(1, sizeof(struct track_page_t));
 	if (!t) {
 	    fprintf(stderr, "%s: can't calloc track page: %s\n", __func__, strerror(errno));
 	    return (EXIT_FAILURE);
 	}
-	t->id = id;
 	t->name = calloc(1, strlen(name) + 1);
 	if (!t->name) {
 	    fprintf(stderr, "%s: can't calloc track page name: %s\n", __func__, strerror(errno));
 	    return (EXIT_FAILURE);
 	}
 	strcpy(t->name, name);
+	t->id = page->id;
+	t->xoffset = page->xoffset;
+	t->yoffset = page->yoffset;
+	t->major = page->major;
+	t->minor = page->minor;
+	t->width = page->width;
+	t->height = page->height;
 	HASH_ADD_INT(track_page, id, t);	/* id: name of key field */
     }
     return (EXIT_SUCCESS);
@@ -97,7 +103,7 @@ void print_pages(void) {
 }
 
 int read_track_config(char *config_file) {
-    int gbs_valid, l01_token_n, l2_token_n, ret;
+    int gbs_valid, l01_token_n, l2_token_n;
     FILE *fp;
     char line[MAXSIZE];
     struct track_page_t *page;
@@ -138,6 +144,14 @@ int read_track_config(char *config_file) {
 		page->yoffset = strtoul(&line[L2_YOFFSET_LENGTH], NULL, 0);
 		printf("match yoffset: >%d<\n", page->yoffset);
 		break;
+	    case L2_WIDTH:
+		page->width = strtoul(&line[L2_WIDTH_LENGTH], NULL, 0);
+		printf("match width: >%d<\n", page->width);
+		break;
+	    case L2_HEIGHT:
+		page->height = strtoul(&line[L2_HEIGHT_LENGTH], NULL, 0);
+		printf("match height: >%d<\n", page->height);
+		break;
 	    case L2_MAJOR:
 		page->major = strtoul(&line[L2_MAJOR_LENGTH], NULL, 0);
 		printf("match major:   >%d<\n", page->major);
@@ -146,14 +160,10 @@ int read_track_config(char *config_file) {
 		page->minor = strtoul(&line[L2_MINOR_LENGTH], NULL, 0);
 		printf("match minor:   >%d<\n", page->minor);
 		break;
-	    case L2_TYPE:
-		ret = get_char_index(track_types, &line[L2_TYPE_LENGTH]);
-		printf("match typ:     >%s< %d\n", &line[L2_TYPE_LENGTH], ret);
-		break;
 	    case L2_NAME:
 		if (gbs_valid) {
 		    printf("match name:    >%s<  id %d\n", &line[L2_NAME_LENGTH], page->id);
-		    add_track_page(page->id, &line[L2_NAME_LENGTH]);
+		    add_track_page(page, &line[L2_NAME_LENGTH]);
 		}
 		break;
 	    default:
