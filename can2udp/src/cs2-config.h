@@ -56,11 +56,15 @@ enum {
     L2_NAME,
     L2_SURNAME,
     L2_TYPE,
+    L2_ROTATION,
     L2_ITEM,
     L2_XOFFSET,
     L2_YOFFSET,
     L2_WIDTH,
-    L2_HEIGHT
+    L2_HEIGHT,
+    L2_TEXT,
+    L2_STATE,
+    L2_DEVICEID
 };
 
 const char *l2_token [] = {
@@ -70,11 +74,15 @@ const char *l2_token [] = {
     " .name=",
     " .vorname=",
     " .typ=",
+    " .drehung=",
     " .artikel=",
     " .xoffset=",
     " .yoffset=",
     " .width=",
     " .height=",
+    " .text=",
+    " .zustand=",
+    " .deviceId=",
     NULL
 };
 
@@ -85,11 +93,15 @@ const char *l2_token [] = {
 #define L2_NAME_LENGTH		7
 #define L2_SURNAME_LENGTH	10
 #define L2_TYPE_LENGTH		6
+#define L2_ROTATION_LENGTH	10
 #define L2_ITEM_LENGTH		10
 #define L2_XOFFSET_LENGTH	10
 #define L2_YOFFSET_LENGTH	10
 #define L2_WIDTH_LENGTH		8
 #define L2_HEIGHT_LENGTH	9
+#define L2_TEXT_LENGTH		7
+#define L2_STATE_LENGTH		10
+#define L2_DEVICEID_LENGTH	11
 
 struct config_data_t {
     int deflated_stream_size;
@@ -255,10 +267,10 @@ struct track_data_t {
     int state;
     unsigned int type;
     unsigned int rotation;
-    unsigned int deviceId;
+    unsigned int deviceid;
     char *text;
     char *name;
-    UT_hash_handle ut_hash;
+    UT_hash_handle hh;
 };
 
 #endif

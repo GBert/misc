@@ -1,5 +1,4 @@
-/*
- * ----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
  * <info@gerhard-bertelsmann.de> wrote this file. As long as you retain this notice you
  * can do whatever you want with this stuff. If we meet some day, and you think
@@ -174,7 +173,7 @@ int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_d
 		printf("           mfx UID ");
 		break;
 	    case 2:
-		loco_data->uid = temp;
+		loco_data->id = temp;
 		printf("               UID ");
 		break;
 	    case 3:

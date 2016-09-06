@@ -63,7 +63,7 @@ struct loco_config_t {
 
 struct loco_data_t {
     unsigned int long_uid;
-    unsigned int uid;
+    unsigned int id;
     char *name;
     char *proto;
     unsigned int address;
@@ -75,6 +75,7 @@ struct loco_data_t {
     unsigned int vmax;
     unsigned int vmin;
     struct mfxAdr_t mfxAdr;
+    UT_hash_handle hh;
 };
 
 #endif /* _LOKINFO_H_ */
