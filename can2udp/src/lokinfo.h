@@ -1,4 +1,16 @@
+/* ----------------------------------------------------------------------------
+ * "THE BEER-WARE LICENSE" (Revision 42):
+ * <info@gerhard-bertelsmann.de> wrote this file. As long as you retain this
+ * notice you can do whatever you want with this stuff. If we meet some day,
+ * and you think this stuff is worth it, you can buy me a beer in return
+ * Gerhard Bertelsmann
+ * ----------------------------------------------------------------------------
+ */
 
+#ifndef _LOKINFO_H
+#define _LOKINFO_H
+
+#include "uthash.h"
 /*
 lok
 .uid=0x4005
@@ -64,3 +76,5 @@ struct loco_data_t {
     unsigned int vmin;
     struct mfxAdr_t mfxAdr;
 };
+
+#endif /* _LOKINFO_H_ */

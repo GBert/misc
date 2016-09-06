@@ -173,6 +173,13 @@ int read_track_config(char *config_file) {
     return EXIT_SUCCESS;
 }
 
+int read_loco_config(char *config_file) {
+	int l01_token_n, l2_token_n;
+	FILE *fp;
+	char line[MAXSIZE];
+	struct loco_confi_t *page;
+}
+
 int main(int argc, char **argv) {
     struct track_page_t *track_page;
     struct config_data_t config_data;
