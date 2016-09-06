@@ -151,6 +151,19 @@ int add_track_page(struct track_page_t *page, char *name) {
 	t->width = page->width;
 	t->height = page->height;
 	HASH_ADD_INT(track_page, id, t);	/* id: name of key field */
+    } else {
+	if (t->xoffset)
+	    t->xoffset = page->xoffset;
+	if (t->yoffset)
+	    t->yoffset = page->yoffset;
+	if (t->major)
+	    t->major = page->major;
+	if (t->minor)
+	    t->minor = page->minor;
+	if (t->width)
+	    t->width = page->width;
+	if (t->height)
+	    t->height = page->height;
     }
     return (EXIT_SUCCESS);
 }
@@ -185,11 +198,14 @@ void print_pages(void) {
 }
 
 int read_track_data(char *config_file) {
-    int l01_token_n, l2_token_n;
+    int l01_token_n, l2_token_n, element;
     FILE *fp;
     char line[MAXSIZE];
     struct track_page_t *track_page;
     struct track_data_t *track_data;
+
+    /* trigger for data save */
+    element = 0;
 
     if ((fp = fopen(config_file, "r")) == NULL) {
 	fprintf(stderr, "%s: can't open track file %s: %s\n", __func__, config_file, strerror(errno));
@@ -197,22 +213,36 @@ int read_track_data(char *config_file) {
     }
 
     track_page = calloc(1, sizeof(struct track_page_t));
+    if (!track_page) {
+	fprintf(stderr, "%s: can't calloc track page: %s\n", __func__, strerror(errno));
+	return (EXIT_FAILURE);
+    }
+
     track_data = calloc(1, sizeof(struct track_data_t));
+    if (!track_data) {
+	fprintf(stderr, "%s: can't calloc track data: %s\n", __func__, strerror(errno));
+	return (EXIT_FAILURE);
+    }
 
     while (fgets(line, MAXSIZE, fp) != NULL) {
 	line[strcspn(line, "\r\n")] = 0;
 	if (line[0] != ' ') {
 	    l01_token_n = get_char_index(l01_token, line);
-	    if (l01_token_n == L1_PAGE) {
+	    switch (l01_token_n) {
+	    case L1_PAGE:
 		track_page->id = 0;
 		printf("match seite:   >%s<\n", line);
+		break;
+	    case L1_ELEMENT:
+		element = 1;
+		break;
 	    }
 	} else {
 	    l2_token_n = get_char_index2(l2_token, line);
 	    switch (l2_token_n) {
 	    case L2_ID:
 		track_page->id = strtoul(&line[L2_ID_LENGTH], NULL, 0);
-		printf("match id:      >0x%06x<\n", track_page->id);
+		printf("match id:      >0x%05x<\n", track_page->id);
 		break;
 	    case L2_MAJOR:
 		track_page->major = strtoul(&line[L2_MAJOR_LENGTH], NULL, 0);
@@ -288,6 +318,10 @@ int read_track_config(char *config_file) {
     }
 
     page = calloc(1, sizeof(struct track_page_t));
+    if (page == NULL) {
+	fprintf(stderr, "can't calloc bufer for track pages: %s\n", strerror(errno));
+	return(EXIT_FAILURE);
+    }
 
     while (fgets(line, MAXSIZE, fp) != NULL) {
 	line[strcspn(line, "\r\n")] = 0;
@@ -370,6 +404,10 @@ int read_loco_data(char *config_file) {
     }
 
     loco = calloc(1, sizeof(struct loco_data_t));
+    if (loco == NULL) {
+	fprintf(stderr, "can't calloc buffer for loco data: %s\n", strerror(errno));
+	return(EXIT_FAILURE);
+    }
 
     while (fgets(line, MAXSIZE, fp) != NULL) {
 	line[strcspn(line, "\r\n")] = 0;
