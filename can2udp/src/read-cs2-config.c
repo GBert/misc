@@ -55,6 +55,30 @@ int get_char_index(const char **list, char *str) {
     return -1;
 }
 
+void delete_all_track_pages() {
+    struct track_page_t *cpage, *tmp;
+
+    HASH_ITER(hh, track_page, cpage, tmp) {
+	HASH_DEL(track_page, cpage);
+	if (cpage->name)
+	    free(cpage->name);
+	free(cpage);
+    }
+}
+
+void delete_all_track_data() {
+    struct track_data_t *ctrack, *tmp;
+
+    HASH_ITER(hh, track_data, ctrack, tmp) {
+	HASH_DEL(track_data, ctrack);
+	if (ctrack->name)
+	    free(ctrack->name);
+	if (ctrack->text)
+	    free(ctrack->text);
+	free(ctrack);
+    }
+}
+
 int add_loco(struct loco_data_t *loco, char *name) {
     struct loco_data_t *l;
 
@@ -449,6 +473,7 @@ void read_track_pages(char *dir) {
     for (s = track_page; s != NULL; s = s->hh.next) {
 	asprintf(&filename, "%s/%s.cs2", dir, s->name);
 	read_track_data(filename);
+	free(filename);
     }
 }
 
@@ -539,6 +564,9 @@ int main(int argc, char **argv) {
 
     printf("track pages: %u\n", HASH_COUNT(track_page));
     printf("track data elements: %u\n", HASH_COUNT(track_data));
+
+    delete_all_track_pages();
+    delete_all_track_data();
 
     free(dir);
     free(track_file);
