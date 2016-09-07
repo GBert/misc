@@ -32,6 +32,11 @@
 #define MAXGBS		16
 #define MAXSTRING	1024
 
+#define DEBUG		0
+
+#define debug_print(...) \
+            do { if (DEBUG) fprintf(stdin, ##__VA_ARGS__); } while (0)
+
 struct track_page_t *track_page = NULL;
 struct track_data_t *track_data = NULL;
 struct loco_data_t *loco_data = NULL;
@@ -94,7 +99,6 @@ int add_track_data(struct track_data_t *td) {
 
     HASH_FIND_INT(track_data, &td->id, t);	/* id already in the hash? */
     if (t == NULL) {
-	printf("create new entry\n");
 	t = (struct track_data_t *)calloc(1, sizeof(struct track_data_t));
 	if (!t) {
 	    fprintf(stderr, "%s: can't calloc track data struct: %s\n", __func__, strerror(errno));
@@ -222,6 +226,21 @@ void print_pages(void) {
     }
 }
 
+void print_gbstats(void) {
+    struct track_data_t *t;
+
+    printf("[gleisbild]\n");
+    printf("version\n");
+    printf(" .major=1\n");
+
+    for (t = track_data; t != NULL; t = t->hh.next) {
+	printf("element\n");
+	printf(" .id=0x%x\n", t->id);
+	if (t->state)
+	    printf(" .zustand=%d\n", t->state);
+    }
+}
+
 void print_tracks(void) {
     struct track_data_t *t;
 
@@ -266,10 +285,9 @@ int read_track_data(char *config_file) {
 	    switch (l01_token_n) {
 	    case L1_PAGE:
 		tp->id = 0;
-		printf("match seite:   >%s<\n", line);
+		debug_print("match seite:   >%s<\n", line);
 		break;
 	    case L1_ELEMENT:
-		printf("match new element:\n");
 		if (element) {
 		    add_track_data(td);
 		    memset(td, 0, sizeof(struct track_data_t));
@@ -282,58 +300,58 @@ int read_track_data(char *config_file) {
 	    switch (l2_token_n) {
 	    case L2_MAJOR:
 		tp->major = strtoul(&line[L2_MAJOR_LENGTH], NULL, 0);
-		printf("match major:   >%d<\n", tp->major);
+		debug_print("match major:   >%d<\n", tp->major);
 		break;
 	    case L2_MINOR:
 		tp->minor = strtoul(&line[L2_MINOR_LENGTH], NULL, 0);
-		printf("match minor:   >%d<\n", tp->minor);
+		debug_print("match minor:   >%d<\n", tp->minor);
 		break;
 	    case L2_XOFFSET:
 		tp->xoffset = strtoul(&line[L2_XOFFSET_LENGTH], NULL, 0);
-		printf("match xoffset: >%d<\n", tp->xoffset);
+		debug_print("match xoffset: >%d<\n", tp->xoffset);
 		break;
 	    case L2_YOFFSET:
 		tp->yoffset = strtoul(&line[L2_YOFFSET_LENGTH], NULL, 0);
-		printf("match yoffset: >%d<\n", tp->yoffset);
+		debug_print("match yoffset: >%d<\n", tp->yoffset);
 		break;
 	    case L2_WIDTH:
 		tp->width = strtoul(&line[L2_WIDTH_LENGTH], NULL, 0);
-		printf("match width:   >%d<\n", tp->width);
+		debug_print("match width:   >%d<\n", tp->width);
 		break;
 	    case L2_HEIGHT:
 		tp->height = strtoul(&line[L2_HEIGHT_LENGTH], NULL, 0);
-		printf("match height:  >%d<\n", tp->height);
+		debug_print("match height:  >%d<\n", tp->height);
 		break;
 	    case L2_ID:
 		td->id = strtoul(&line[L2_ID_LENGTH], NULL, 0);
-		printf("match id:      >0x%05x<\n", tp->id);
+		debug_print("match id:      >0x%05x<\n", tp->id);
 		break;
 	    case L2_TYPE:
 		td->type = get_char_index(track_types, &line[L2_TYPE_LENGTH]);
-		printf("match type:    >%d<\n", td->type);
+		debug_print("match type:    >%d<\n", td->type);
 		break;
 	    case L2_ROTATION:
 		td->rotation = strtoul(&line[L2_ROTATION_LENGTH], NULL, 0);
-		printf("match rotation:>%d<\n", td->rotation);
+		debug_print("match rotation:>%d<\n", td->rotation);
 		break;
 	    case L2_ITEM:
 		td->item = strtoul(&line[L2_ITEM_LENGTH], NULL, 0);
-		printf("match item:    >%d<\n", td->item);
+		debug_print("match item:    >%d<\n", td->item);
 		break;
 	    case L2_TEXT:
 		td->text = &line[L2_TEXT_LENGTH];
-		printf("match text:    >%s<\n", td->text);
+		debug_print("match text:    >%s<\n", td->text);
 		break;
 	    case L2_STATE:
 		td->state = strtoul(&line[L2_STATE_LENGTH], NULL, 0);
-		printf("match state:   >%d<\n", td->state);
+		debug_print("match state:   >%d<\n", td->state);
 		break;
 	    case L2_DEVICEID:
 		td->deviceid = strtoul(&line[L2_DEVICEID_LENGTH], NULL, 0);
-		printf("match deviceId:>%d<\n", td->deviceid);
+		debug_print("match deviceId:>%d<\n", td->deviceid);
 		break;
 	    default:
-		printf("unknown:       >%s<\n", line);
+		fprintf(stderr, "unknown:       >%s<\n", line);
 		break;
 	    }
 	}
@@ -374,42 +392,42 @@ int read_track_config(char *config_file) {
 	    if (l01_token_n == L1_PAGE) {
 		gbs_valid = 1;
 		page->id = 0;
-		printf("match seite:   >%s<\n", line);
+		debug_print("match seite:   >%s<\n", line);
 	    }
 	} else {
 	    l2_token_n = get_char_index2(l2_token, line);
 	    switch (l2_token_n) {
 	    case L2_ID:
 		page->id = strtoul(&line[L2_ID_LENGTH], NULL, 0);
-		printf("match id:      >%d<\n", page->id);
+		debug_print("match id:      >%d<\n", page->id);
 		break;
 	    case L2_MAJOR:
 		page->major = strtoul(&line[L2_MAJOR_LENGTH], NULL, 0);
-		printf("match major:   >%d<\n", page->major);
+		debug_print("match major:   >%d<\n", page->major);
 		break;
 	    case L2_MINOR:
 		page->minor = strtoul(&line[L2_MINOR_LENGTH], NULL, 0);
-		printf("match minor:   >%d<\n", page->minor);
+		debug_print("match minor:   >%d<\n", page->minor);
 		break;
 	    case L2_XOFFSET:
 		page->xoffset = strtoul(&line[L2_XOFFSET_LENGTH], NULL, 0);
-		printf("match xoffset: >%d<\n", page->xoffset);
+		debug_print("match xoffset: >%d<\n", page->xoffset);
 		break;
 	    case L2_YOFFSET:
 		page->yoffset = strtoul(&line[L2_YOFFSET_LENGTH], NULL, 0);
-		printf("match yoffset: >%d<\n", page->yoffset);
+		debug_print("match yoffset: >%d<\n", page->yoffset);
 		break;
 	    case L2_WIDTH:
 		page->width = strtoul(&line[L2_WIDTH_LENGTH], NULL, 0);
-		printf("match width:   >%d<\n", page->width);
+		debug_print("match width:   >%d<\n", page->width);
 		break;
 	    case L2_HEIGHT:
 		page->height = strtoul(&line[L2_HEIGHT_LENGTH], NULL, 0);
-		printf("match height:  >%d<\n", page->height);
+		debug_print("match height:  >%d<\n", page->height);
 		break;
 	    case L2_NAME:
 		if (gbs_valid) {
-		    printf("match name:    >%s<  id %d\n", &line[L2_NAME_LENGTH], page->id);
+		    debug_print("match name:    >%s<  id %d\n", &line[L2_NAME_LENGTH], page->id);
 		    add_track_page(page, &line[L2_NAME_LENGTH]);
 		}
 		break;
@@ -495,6 +513,7 @@ int main(int argc, char **argv) {
 	config_data.directory = dir;
     } else {
 	fprintf(stderr, "usage: %s <dir> \n", basename(argv[0]));
+	free(dir);
 	exit(EXIT_FAILURE);
     }
 
@@ -508,7 +527,7 @@ int main(int argc, char **argv) {
 	strcat(track_file, "/");
     strcat(track_file, track_name);
 
-    printf("gbn : >%s<\n", track_file);
+    /* printf("gbn : >%s<\n", track_file); */
 
     config_data.name = gbs_default;
     strcat(config_data.directory, track_dir);
@@ -518,7 +537,11 @@ int main(int argc, char **argv) {
     print_pages();
     read_track_pages(config_data.directory);
     sort_td_by_id();
-    print_tracks();
+    /* print_tracks(); */
+    /* print_gbstats(); */
 
+    free(dir);
+    free(track_file);
+    free(track_page);
     return EXIT_SUCCESS;
 }
