@@ -17,7 +17,8 @@ char *track_name  = { "gleisbild.cs2" };
 char *gbs_default = { "gbs-0" };
 
 enum {
-    L0_TRACK = 0,
+    L0_TRACK_PAGE = 0,
+    L0_TRACK,
     L0_LOCO,
     L0_MAGS,
     L0_ATRACK,
@@ -33,6 +34,7 @@ enum {
 };
 
 const char *l01_token [] = {
+    "[gleisbildseite]",
     "[gleisbild]",
     "[lokomotove]",
     "[magnetartikel]",
@@ -46,7 +48,7 @@ const char *l01_token [] = {
     "groesse",
     "zuletztBenutzt",
     "seite",
-    NULL
+    "\0"
 };
 
 enum {
@@ -83,7 +85,7 @@ const char *l2_token [] = {
     " .text=",
     " .zustand=",
     " .deviceId=",
-    NULL
+    "\0"
 };
 
 /* TODO : use strlen macro */
@@ -209,7 +211,8 @@ const char *track_types[] = {
     "drehscheibe_dig_29",
     "drehscheibe_dig_30",
     "drehscheibe_dig_31",
-    "NULL"
+    "sonstige_gbs",
+    "\0"
 };
 
 char *mag_types[] = {
@@ -243,7 +246,7 @@ char *mag_types[] = {
     "urc_lichtsignal_HP012_SH01",
     "urc_lichtsignal_SH01",
     "y_weiche",
-    NULL
+    "\0",
 };
 
 struct track_page_t {
@@ -265,7 +268,7 @@ struct track_data_t {
     unsigned int version_minor;
     int item;
     int state;
-    unsigned int type;
+    int type;
     unsigned int rotation;
     unsigned int deviceid;
     char *text;
