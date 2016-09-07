@@ -113,6 +113,25 @@ int add_loco(struct loco_data_t *loco, char *name) {
 	l->vmax = loco->vmax;
 	l->vmin = loco->vmin;
 	/* TODO: mfx struct */
+    } else {
+	if (loco->long_uid)
+	    l->long_uid = loco->long_uid;
+	if (loco->address)
+	    l->address = loco->address;
+	if (loco->typ)
+	    l->typ = loco->typ;
+	if (loco->mfxuid)
+	    l->mfxuid = loco->mfxuid;
+	if (loco->acc_delay)
+	    l->acc_delay = loco->acc_delay;
+	if (loco->slow_down_delay)
+	    l->slow_down_delay = loco->slow_down_delay;
+	if (loco->volume)
+	    l->volume = loco->volume;
+	if (loco->vmax)
+	    l->vmax = loco->vmax;
+	if (loco->vmin)
+	    l->vmin = loco->vmin;
     }
     return (EXIT_SUCCESS);
 }
@@ -143,13 +162,13 @@ int add_track_data(struct track_data_t *td) {
 	/* TODO: side ??? */
 	HASH_ADD_INT(track_data, id, t);	/* id: name of key field */
     } else {
-	if (t->type)
+	if (td->type)
 	    t->type = td->type;
-	if (t->rotation)
+	if (td->rotation)
 	    t->rotation = td->rotation;
-	if (t->item)
+	if (td->item)
 	    t->item = td->item;
-	if (t->state)
+	if (td->state)
 	    t->state = td->state;
     }
 
@@ -196,17 +215,17 @@ int add_track_page(struct track_page_t *page, char *name) {
 	t->height = page->height;
 	HASH_ADD_INT(track_page, id, t);	/* id: name of key field */
     } else {
-	if (t->xoffset)
+	if (page->xoffset)
 	    t->xoffset = page->xoffset;
-	if (t->yoffset)
+	if (page->yoffset)
 	    t->yoffset = page->yoffset;
-	if (t->major)
+	if (page->major)
 	    t->major = page->major;
-	if (t->minor)
+	if (page->minor)
 	    t->minor = page->minor;
-	if (t->width)
+	if (page->width)
 	    t->width = page->width;
-	if (t->height)
+	if (page->height)
 	    t->height = page->height;
     }
     return (EXIT_SUCCESS);
