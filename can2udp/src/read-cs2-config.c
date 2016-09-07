@@ -497,7 +497,6 @@ int read_loco_data(char *config_file) {
 }
 
 int main(int argc, char **argv) {
-    struct track_page_t *track_page;
     struct config_data_t config_data;
     char *dir;
     char *track_file;
@@ -516,8 +515,6 @@ int main(int argc, char **argv) {
 	free(dir);
 	exit(EXIT_FAILURE);
     }
-
-    track_page = calloc(1, sizeof(track_page));
 
     config_data.verbose = 1;
 
@@ -540,8 +537,10 @@ int main(int argc, char **argv) {
     /* print_tracks(); */
     /* print_gbstats(); */
 
+    printf("track pages: %u\n", HASH_COUNT(track_page));
+    printf("track data elements: %u\n", HASH_COUNT(track_data));
+
     free(dir);
     free(track_file);
-    free(track_page);
     return EXIT_SUCCESS;
 }
