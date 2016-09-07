@@ -94,6 +94,7 @@ int add_track_data(struct track_data_t *td) {
 
     HASH_FIND_INT(track_data, &td->id, t);	/* id already in the hash? */
     if (t == NULL) {
+	printf("create new entry\n");
 	t = (struct track_data_t *)calloc(1, sizeof(struct track_data_t));
 	if (!t) {
 	    fprintf(stderr, "%s: can't calloc track data struct: %s\n", __func__, strerror(errno));
@@ -124,6 +125,22 @@ int add_track_data(struct track_data_t *td) {
 	if (t->state)
 	    t->state = td->state;
     }
+
+    /* does text exists ? */
+    if (td->text) {
+	/* the extra check for t->text seems to be needed */
+	if ((t->text) && (strcmp(t->text, td->text))) {
+	    if (t->text)
+		free(t->text);
+	    t->text = calloc(1, strlen(td->text) + 1);
+	    if (!t->text) {
+		fprintf(stderr, "%s: can't calloc track text: %s\n", __func__, strerror(errno));
+		return (EXIT_FAILURE);
+	    }
+	    strcpy(t->text, td->text);
+	}
+    }
+
     return (EXIT_SUCCESS);
 }
 
@@ -181,12 +198,20 @@ int get_char_index2(const char **list, char *str) {
     return -1;
 }
 
-int id_sort(struct track_page_t *a, struct track_page_t *b) {
+int td_id_sort(struct track_data_t *a, struct track_data_t *b) {
     return (a->id - b->id);
 }
 
-void sort_by_id(void) {
-    HASH_SORT(track_page, id_sort);
+int tp_id_sort(struct track_page_t *a, struct track_page_t *b) {
+    return (a->id - b->id);
+}
+
+void sort_tp_by_id(void) {
+    HASH_SORT(track_page, tp_id_sort);
+}
+
+void sort_td_by_id(void) {
+    HASH_SORT(track_data, td_id_sort);
 }
 
 void print_pages(void) {
@@ -197,12 +222,22 @@ void print_pages(void) {
     }
 }
 
+void print_tracks(void) {
+    struct track_data_t *t;
+
+    for (t = track_data; t != NULL; t = t->hh.next) {
+	printf("element\n");
+	printf(" .id=0x%05x\n", t->id);
+	printf(" .artikel=%d\n", t->item);
+    }
+}
+
 int read_track_data(char *config_file) {
     int l01_token_n, l2_token_n, element;
     FILE *fp;
     char line[MAXSIZE];
-    struct track_page_t *track_page;
-    struct track_data_t *track_data;
+    struct track_page_t *tp;
+    struct track_data_t *td;
 
     /* trigger for data save */
     element = 0;
@@ -212,14 +247,14 @@ int read_track_data(char *config_file) {
 	return (EXIT_FAILURE);
     }
 
-    track_page = calloc(1, sizeof(struct track_page_t));
-    if (!track_page) {
+    tp = calloc(1, sizeof(struct track_page_t));
+    if (!tp) {
 	fprintf(stderr, "%s: can't calloc track page: %s\n", __func__, strerror(errno));
 	return (EXIT_FAILURE);
     }
 
-    track_data = calloc(1, sizeof(struct track_data_t));
-    if (!track_data) {
+    td = calloc(1, sizeof(struct track_data_t));
+    if (!td) {
 	fprintf(stderr, "%s: can't calloc track data: %s\n", __func__, strerror(errno));
 	return (EXIT_FAILURE);
     }
@@ -230,67 +265,72 @@ int read_track_data(char *config_file) {
 	    l01_token_n = get_char_index(l01_token, line);
 	    switch (l01_token_n) {
 	    case L1_PAGE:
-		track_page->id = 0;
+		tp->id = 0;
 		printf("match seite:   >%s<\n", line);
 		break;
 	    case L1_ELEMENT:
+		printf("match new element:\n");
+		if (element) {
+		    add_track_data(td);
+		    memset(td, 0, sizeof(struct track_data_t));
+		}
 		element = 1;
 		break;
 	    }
 	} else {
 	    l2_token_n = get_char_index2(l2_token, line);
 	    switch (l2_token_n) {
-	    case L2_ID:
-		track_page->id = strtoul(&line[L2_ID_LENGTH], NULL, 0);
-		printf("match id:      >0x%05x<\n", track_page->id);
-		break;
 	    case L2_MAJOR:
-		track_page->major = strtoul(&line[L2_MAJOR_LENGTH], NULL, 0);
-		printf("match major:   >%d<\n", track_page->major);
+		tp->major = strtoul(&line[L2_MAJOR_LENGTH], NULL, 0);
+		printf("match major:   >%d<\n", tp->major);
 		break;
 	    case L2_MINOR:
-		track_page->minor = strtoul(&line[L2_MINOR_LENGTH], NULL, 0);
-		printf("match minor:   >%d<\n", track_page->minor);
+		tp->minor = strtoul(&line[L2_MINOR_LENGTH], NULL, 0);
+		printf("match minor:   >%d<\n", tp->minor);
 		break;
 	    case L2_XOFFSET:
-		track_page->xoffset = strtoul(&line[L2_XOFFSET_LENGTH], NULL, 0);
-		printf("match xoffset: >%d<\n", track_page->xoffset);
+		tp->xoffset = strtoul(&line[L2_XOFFSET_LENGTH], NULL, 0);
+		printf("match xoffset: >%d<\n", tp->xoffset);
 		break;
 	    case L2_YOFFSET:
-		track_page->yoffset = strtoul(&line[L2_YOFFSET_LENGTH], NULL, 0);
-		printf("match yoffset: >%d<\n", track_page->yoffset);
+		tp->yoffset = strtoul(&line[L2_YOFFSET_LENGTH], NULL, 0);
+		printf("match yoffset: >%d<\n", tp->yoffset);
 		break;
 	    case L2_WIDTH:
-		track_page->width = strtoul(&line[L2_WIDTH_LENGTH], NULL, 0);
-		printf("match width:   >%d<\n", track_page->width);
+		tp->width = strtoul(&line[L2_WIDTH_LENGTH], NULL, 0);
+		printf("match width:   >%d<\n", tp->width);
 		break;
 	    case L2_HEIGHT:
-		track_page->height = strtoul(&line[L2_HEIGHT_LENGTH], NULL, 0);
-		printf("match height:  >%d<\n", track_page->height);
+		tp->height = strtoul(&line[L2_HEIGHT_LENGTH], NULL, 0);
+		printf("match height:  >%d<\n", tp->height);
+		break;
+	    case L2_ID:
+		td->id = strtoul(&line[L2_ID_LENGTH], NULL, 0);
+		printf("match id:      >0x%05x<\n", tp->id);
 		break;
 	    case L2_TYPE:
-		track_data->type = get_char_index(track_types,&line[L2_TYPE_LENGTH]);
-		printf("match type:    >%d<\n", track_data->type);
+		td->type = get_char_index(track_types, &line[L2_TYPE_LENGTH]);
+		printf("match type:    >%d<\n", td->type);
 		break;
 	    case L2_ROTATION:
-		track_data->rotation = strtoul(&line[L2_ROTATION_LENGTH], NULL, 0);
-		printf("match rotation:>%d<\n", track_data->rotation);
+		td->rotation = strtoul(&line[L2_ROTATION_LENGTH], NULL, 0);
+		printf("match rotation:>%d<\n", td->rotation);
 		break;
 	    case L2_ITEM:
-		track_data->item = strtoul(&line[L2_ITEM_LENGTH], NULL, 0);
-		printf("match item:    >%d<\n", track_data->item);
+		td->item = strtoul(&line[L2_ITEM_LENGTH], NULL, 0);
+		printf("match item:    >%d<\n", td->item);
 		break;
 	    case L2_TEXT:
-		track_data->text = &line[L2_TEXT_LENGTH];
-		printf("match text:    >%s<\n", track_data->text);
+		td->text = &line[L2_TEXT_LENGTH];
+		printf("match text:    >%s<\n", td->text);
 		break;
 	    case L2_STATE:
-		track_data->state = strtoul(&line[L2_STATE_LENGTH], NULL, 0);
-		printf("match state:   >%d<\n", track_data->state);
+		td->state = strtoul(&line[L2_STATE_LENGTH], NULL, 0);
+		printf("match state:   >%d<\n", td->state);
 		break;
 	    case L2_DEVICEID:
-		track_data->deviceid = strtoul(&line[L2_DEVICEID_LENGTH], NULL, 0);
-		printf("match deviceId:>%d<\n", track_data->deviceid);
+		td->deviceid = strtoul(&line[L2_DEVICEID_LENGTH], NULL, 0);
+		printf("match deviceId:>%d<\n", td->deviceid);
 		break;
 	    default:
 		printf("unknown:       >%s<\n", line);
@@ -298,8 +338,12 @@ int read_track_data(char *config_file) {
 	    }
 	}
     }
-    free(track_page);
-    free(track_data);
+    /* store last entry if any */
+    if (td->id)
+	add_track_data(td);
+
+    free(tp);
+    free(td);
     fclose(fp);
     return EXIT_SUCCESS;
 }
@@ -320,7 +364,7 @@ int read_track_config(char *config_file) {
     page = calloc(1, sizeof(struct track_page_t));
     if (page == NULL) {
 	fprintf(stderr, "can't calloc bufer for track pages: %s\n", strerror(errno));
-	return(EXIT_FAILURE);
+	return (EXIT_FAILURE);
     }
 
     while (fgets(line, MAXSIZE, fp) != NULL) {
@@ -406,7 +450,7 @@ int read_loco_data(char *config_file) {
     loco = calloc(1, sizeof(struct loco_data_t));
     if (loco == NULL) {
 	fprintf(stderr, "can't calloc buffer for loco data: %s\n", strerror(errno));
-	return(EXIT_FAILURE);
+	return (EXIT_FAILURE);
     }
 
     while (fgets(line, MAXSIZE, fp) != NULL) {
@@ -470,9 +514,11 @@ int main(int argc, char **argv) {
     strcat(config_data.directory, track_dir);
 
     read_track_config(track_file);
-    sort_by_id();
+    sort_tp_by_id();
     print_pages();
     read_track_pages(config_data.directory);
+    sort_td_by_id();
+    print_tracks();
 
     return EXIT_SUCCESS;
 }
