@@ -80,45 +80,62 @@ void delete_all_track_data() {
     }
 }
 
-int add_loco(struct loco_data_t *loco, char *name) {
+void delete_all_loco_data() {
+    struct loco_data_t *cloco, *tmp;
+
+    HASH_ITER(hh, loco_data, cloco, tmp) {
+	HASH_DEL(loco_data, cloco);
+	if (cloco->name)
+	    free(cloco->name);
+	if (cloco->type)
+	    free(cloco->type);
+	if (cloco->mfxAdr)
+	    free(cloco->mfxAdr);
+	free(cloco);
+    }
+}
+
+int add_loco(struct loco_data_t *loco) {
     struct loco_data_t *l;
 
-    HASH_FIND_INT(loco_data, &loco->id, l);
+    HASH_FIND_INT(loco_data, &loco->uid, l);
     if (l == NULL) {
+	if ((!loco->name) || (!loco->type))
+	    return (EXIT_FAILURE);
+
 	l = (struct loco_data_t *)calloc(1, sizeof(struct loco_data_t));
 	if (!l) {
 	    fprintf(stderr, "%s: can't calloc loco data: %s\n", __func__, strerror(errno));
 	    return (EXIT_FAILURE);
 	}
-	l->name = calloc(1, strlen(name) + 1);
+	l->name = calloc(1, strlen(loco->name) + 1);
 	if (!l->name) {
 	    fprintf(stderr, "%s: can't calloc loco name: %s\n", __func__, strerror(errno));
 	    return (EXIT_FAILURE);
 	}
-	strcpy(l->name, name);
+	strcpy(l->name, loco->name);
 
-	l->proto = calloc(1, strlen(loco->proto) + 1);
-	if (!l->proto) {
-	    fprintf(stderr, "%s: can't calloc protocol name: %s\n", __func__, strerror(errno));
+	l->type = calloc(1, strlen(loco->type) + 1);
+	if (!l->type) {
+	    fprintf(stderr, "%s: can't calloc protocol type: %s\n", __func__, strerror(errno));
 	    return (EXIT_FAILURE);
 	}
-	strcpy(l->proto, loco->proto);
+	strcpy(l->type, loco->type);
 
-	l->id = loco->id;
+	l->uid = loco->uid;
 	l->long_uid = loco->long_uid;
 	l->address = loco->address;
-	l->typ = loco->typ;
 	l->mfxuid = loco->mfxuid;
 	l->acc_delay = loco->acc_delay;
 	l->slow_down_delay = loco->slow_down_delay;
 	l->volume = loco->volume;
 	l->vmax = loco->vmax;
 	l->vmin = loco->vmin;
+	HASH_ADD_INT(loco_data, uid, l);
 	/* TODO: mfx & function struct */
     } else {
 	check_modify(loco->long_uid, l->long_uid);
 	check_modify(loco->address, l->address);
-	check_modify(loco->typ, l->typ);
 	check_modify(loco->mfxuid, l->mfxuid);
 	check_modify(loco->acc_delay, l->acc_delay);
 	check_modify(loco->slow_down_delay, l->slow_down_delay);
@@ -127,7 +144,6 @@ int add_loco(struct loco_data_t *loco, char *name) {
 	check_modify(loco->vmin, l->vmin);
 	/* TODO: mfx & function struct */
     }
-    free(l);
     return (EXIT_SUCCESS);
 }
 
@@ -471,13 +487,17 @@ int read_loco_data(char *config_file) {
     int l0_token_n, l1_token_n, l2_token_n, loco_complete;
     FILE *fp;
     char line[MAXSIZE];
+    char *name, *type;
     int16_t function, temp;
     struct loco_data_t *loco;
+    struct mfxAdr_t *mfx;
 
     function = -1;
     temp = -1;
 
+    /* trigger for new entry */
     loco_complete = 0;
+
     if ((fp = fopen(config_file, "r")) == NULL) {
 	fprintf(stderr, "can't open config file %s: %s\n", config_file, strerror(errno));
 	return (EXIT_FAILURE);
@@ -494,23 +514,43 @@ int read_loco_data(char *config_file) {
 	fprintf(stderr, "can't calloc buffer for loco mfx data: %s\n", strerror(errno));
 	return (EXIT_FAILURE);
     }
+    mfx = loco->mfxAdr;
+
+    loco->name = NULL;
 
     while (fgets(line, MAXSIZE, fp) != NULL) {
 	line[strcspn(line, "\r\n")] = 0;
+ 	printf(">>%s\n", line);
 	if (line[0] != ' ') {
 	    l0_token_n = get_char_index(l0_token, line);
 	    if (l0_token_n == L0_LOCO) {
 		/* TODO: next loco */
-		if (loco_complete)
-		    add_loco(loco, loco->name);
+		if (loco_complete) {
+		    add_loco(loco);
+		    memset(loco->mfxAdr, 0, sizeof(struct mfxAdr_t));
+		    memset(loco, 0, sizeof(struct loco_data_t));
+		    loco->mfxAdr = mfx;
+		} else {
+		    loco_complete = 1;
+		}
 	    }
 	/* Level 1 */
 	} else if (line[2] != '.') {
 	    l1_token_n = get_char_index(l1_token, line);
 	    switch (l1_token_n) {
-	    case L1_ID:
-		loco->id = strtoul(&line[L1_ID_LENGTH], NULL, 0);
-		printf("match id:      >%d<\n", loco->id);
+	    case L1_UID:
+		loco->uid = strtoul(&line[L1_UID_LENGTH], NULL, 16);
+		printf("match uid:      >%d<\n", loco->uid);
+		break;
+	    case L1_NAME:
+		asprintf(&name, "%s", &line[L1_NAME_LENGTH]);
+		loco->name = name;
+		printf("match name:    >%s<\n", loco->name);
+		break;
+	    case L1_TYPE:
+		asprintf(&type, "%s", &line[L1_TYPE_LENGTH]);
+		loco->type = type;
+		printf("match type:    >%s<\n", loco->type);
 		break;
 	    default:
 		break;
@@ -520,7 +560,7 @@ int read_loco_data(char *config_file) {
 	    l2_token_n = get_char_index(l2_token, line);
 	    switch (l2_token_n) {
 	    case L2_NUMBER:
-		function = strtoul(&line[L2_NUMBER_LENGTH], NULL, 10);
+		function = strtoul(&line[L2_NUMBER_LENGTH], NULL, 10) & 0x0f;
 		break;
 	    case L2_TYPE:
 		if (function >= 0) {
@@ -548,7 +588,11 @@ int read_loco_data(char *config_file) {
 	    }
 	}
     }
-    free(loco->mfxAdr);
+    if (loco->uid)
+	add_loco(loco);
+    free(name);
+    free(type);
+    free(mfx);
     free(loco);
     fclose(fp);
     return (EXIT_SUCCESS);
@@ -599,14 +643,17 @@ int main(int argc, char **argv) {
     sort_td_by_id();
     /* print_tracks(); */
     /* print_gbstats(); */
-    printf("track pages: %u\n", HASH_COUNT(track_page));
-    printf("track data elements: %u\n", HASH_COUNT(track_data));
 
     asprintf(&loco_file, "%s/%s", dir, loco_name);
     read_loco_data(loco_file);
 
+    printf("track pages: %u\n", HASH_COUNT(track_page));
+    printf("track data elements: %u\n", HASH_COUNT(track_data));
+    printf("loco data: %u\n", HASH_COUNT(loco_data));
+
     delete_all_track_pages();
     delete_all_track_data();
+    delete_all_loco_data();
 
     free(loco_file);
     free(dir);

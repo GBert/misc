@@ -58,6 +58,7 @@ enum {
     L1_MAJOR = 0,
     L1_MINOR,
     L1_ID,
+    L1_UID,
     L1_NAME,
     L1_SURNAME,
     L1_TYPE,
@@ -76,6 +77,7 @@ const char *l1_token [] = {
     " .major=",
     " .minor=",
     " .id=",
+    " .uid=",
     " .name=",
     " .vorname=",
     " .typ=",
@@ -95,6 +97,7 @@ const char *l1_token [] = {
 #define L1_MAJOR_LENGTH		8
 #define L1_MINOR_LENGTH		8
 #define L1_ID_LENGTH		5
+#define L1_UID_LENGTH		6
 #define L1_NAME_LENGTH		7
 #define L1_SURNAME_LENGTH	10
 #define L1_TYPE_LENGTH		6
@@ -368,12 +371,11 @@ struct loco_config_t {
 };
 
 struct loco_data_t {
+    unsigned int uid;
     unsigned int long_uid;
-    unsigned int id;
     char *name;
-    char *proto;
+    char *type;
     unsigned int address;
-    unsigned int typ;
     unsigned int mfxuid;
     unsigned int acc_delay;		/* av */
     unsigned int slow_down_delay;	/* bv */

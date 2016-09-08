@@ -140,7 +140,7 @@ int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_d
 		    strncpy(proto_name, (char *)&loco_config->bin[i], length);
 		    i += length;
 		    printf("proto name: >%s<\n", proto_name);
-		    loco_data->proto = proto_name;
+		    loco_data->type = proto_name;
 		    break;
 		default:
 		    printf("decoding problem:\n");
@@ -172,7 +172,7 @@ int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_d
 		printf("           mfx UID ");
 		break;
 	    case 2:
-		loco_data->id = temp;
+		loco_data->uid = temp;
 		printf("               UID ");
 		break;
 	    case 3:
