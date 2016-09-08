@@ -547,7 +547,7 @@ int read_loco_data(char *config_file) {
 		break;
 	    case L1_UID:
 		loco->uid = strtoul(&line[L1_UID_LENGTH], NULL, 16);
-		printf("match uid:      >%x<\n", loco->uid);
+		printf("match uid:      >0x%04x<\n", loco->uid);
 		break;
 	    case L1_NAME:
 		asprintf(&name, "%s", &line[L1_NAME_LENGTH]);
@@ -569,11 +569,27 @@ int read_loco_data(char *config_file) {
 		break;
 	    case L1_AV:
 		loco->acc_delay = strtoul(&line[L1_AV_LENGTH], NULL, 10);
-		printf("match av:       >0x%d<\n", loco->acc_delay);
+		printf("match av:       >%d<\n", loco->acc_delay);
 		break;
 	    case L1_BV:
 		loco->slow_down_delay = strtoul(&line[L1_BV_LENGTH], NULL, 10);
-		printf("match bv:       >0x%d<\n", loco->slow_down_delay);
+		printf("match bv:       >%d<\n", loco->slow_down_delay);
+		break;
+	    case L1_VOLUME:
+		loco->volume = strtoul(&line[L1_VOLUME_LENGTH], NULL, 10);
+		printf("match volume:   >%d<\n", loco->volume);
+		break;
+	    case L1_VMIN:
+		loco->vmin = strtoul(&line[L1_VMIN_LENGTH], NULL, 10);
+		printf("match vmin:     >%d<\n", loco->vmin);
+		break;
+	    case L1_VMAX:
+		loco->vmax = strtoul(&line[L1_VMAX_LENGTH], NULL, 10);
+		printf("match vmax:     >%d<\n", loco->vmax);
+		break;
+	    case L1_TMAX:
+		loco->tmax = strtoul(&line[L1_TMAX_LENGTH], NULL, 10);
+		printf("match tmax:     >%d<\n", loco->tmax);
 		break;
 	    case L1_ADDRESS:
 		loco->address = strtoul(&line[L1_ADDRESS_LENGTH], NULL, 16);

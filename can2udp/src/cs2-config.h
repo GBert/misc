@@ -65,6 +65,10 @@ enum {
     L1_MFXUID,
     L1_AV,
     L1_BV,
+    L1_VOLUME,
+    L1_VMIN,
+    L1_VMAX,
+    L1_TMAX,
     L1_NAME,
     L1_SURNAME,
     L1_TYPE,
@@ -90,6 +94,10 @@ const char *l1_token [] = {
     " .mfxuid=",
     " .av=",
     " .bv=",
+    " .volume=",
+    " .vmin=",
+    " .vmax=",
+    " .tachomax=",
     " .name=",
     " .vorname=",
     " .typ=",
@@ -115,6 +123,10 @@ const char *l1_token [] = {
 #define L1_MFXUID_LENGTH	9
 #define L1_AV_LENGTH		5
 #define L1_BV_LENGTH		5
+#define L1_VOLUME_LENGTH	9
+#define L1_VMIN_LENGTH		7
+#define L1_VMAX_LENGTH		7
+#define L1_TMAX_LENGTH		11
 #define L1_NAME_LENGTH		7
 #define L1_SURNAME_LENGTH	10
 #define L1_TYPE_LENGTH		6
@@ -398,6 +410,7 @@ struct loco_data_t {
     unsigned int acc_delay;		/* av */
     unsigned int slow_down_delay;	/* bv */
     unsigned int volume;
+    unsigned int tmax;
     unsigned int vmax;
     unsigned int vmin;
     struct loco_func function[16];
