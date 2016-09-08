@@ -296,6 +296,7 @@ lok
 enum {
     L2_NUMBER = 0,
     L2_TYPE,
+    L2_DURATION,
     L2_VALUE,
     L2_TARGET,
     L2_NAME,
@@ -310,6 +311,7 @@ enum {
 const char *l2_token [] = {
     " ..nr=",
     " ..typ=",
+    " ..dauer=",
     " ..wert=",
     " ..target=",
     " ..name=",
@@ -324,6 +326,7 @@ const char *l2_token [] = {
 
 /* TODO : use strlen macro */
 #define L2_NUMBER_LENGTH	6
+#define L2_DURATION_LENGTH	9
 #define L2_TYPE_LENGTH		7
 #define L2_VALUE_LENGTH		8
 #define L2_TARGET_LENGTH	10
@@ -340,6 +343,7 @@ unsigned char pre_other[] = { 0x02, 0xc5, 0x00 };
 struct loco_func {
     uint8_t number;
     uint8_t type;
+    uint16_t duration;
     uint16_t value;
 };
  

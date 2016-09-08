@@ -471,11 +471,11 @@ int read_loco_data(char *config_file) {
     int l0_token_n, l1_token_n, l2_token_n, loco_complete;
     FILE *fp;
     char line[MAXSIZE];
-    int16_t function, type;
+    int16_t function, temp;
     struct loco_data_t *loco;
 
     function = -1;
-    type = -1;
+    temp = -1;
 
     loco_complete = 0;
     if ((fp = fopen(config_file, "r")) == NULL) {
@@ -523,17 +523,25 @@ int read_loco_data(char *config_file) {
 		function = strtoul(&line[L2_NUMBER_LENGTH], NULL, 10);
 		break;
 	    case L2_TYPE:
-		type = strtoul(&line[L2_TYPE_LENGTH], NULL, 10);
-		printf(" loco function %2d type %3d\n", function, type);
-		if (function > 0)
-		    loco->function[function].type = type;
+		if (function >= 0) {
+		    temp = strtoul(&line[L2_TYPE_LENGTH], NULL, 10);
+		    loco->function[function].type = temp;
+		    printf(" loco function %2d type %3d\n", function, temp);
+		}
+		break;
+	    case L2_DURATION:
+		if (function >= 0) {
+		    temp = strtoul(&line[L2_DURATION_LENGTH], NULL, 10);
+		    loco->function[function].duration = temp;
+		    printf(" loco function %2d duration %3d\n", function, temp);
+		}
 		break;
 	    case L2_VALUE:
 		if (function >= 0) {
-		    loco->function[function].value = strtoul(&line[L2_VALUE_LENGTH], NULL, 10);
+		    temp = strtoul(&line[L2_VALUE_LENGTH], NULL, 10);
+		    loco->function[function].value = temp;
+		    printf(" loco function %2d value %d\n", function, temp);
 		}
-		printf(" loco function %2d type %3d value %d\n", function, type, loco->function[function].value);
-		function = -1;
 		break;
 	    default:
 		break;
