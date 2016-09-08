@@ -266,7 +266,7 @@ void print_tracks(void) {
 }
 
 int read_track_data(char *config_file) {
-    int l01_token_n, l2_token_n, element;
+    int l0_token_n, l1_token_n, element;
     FILE *fp;
     char line[MAXSIZE];
     struct track_page_t *tp;
@@ -295,13 +295,13 @@ int read_track_data(char *config_file) {
     while (fgets(line, MAXSIZE, fp) != NULL) {
 	line[strcspn(line, "\r\n")] = 0;
 	if (line[0] != ' ') {
-	    l01_token_n = get_char_index(l01_token, line);
-	    switch (l01_token_n) {
-	    case L1_PAGE:
+	    l0_token_n = get_char_index(l0_token, line);
+	    switch (l0_token_n) {
+	    case L0_PAGE:
 		tp->id = 0;
 		debug_print("match seite:   >%s<\n", line);
 		break;
-	    case L1_ELEMENT:
+	    case L0_ELEMENT:
 		if (element) {
 		    add_track_data(td);
 		    memset(td, 0, sizeof(struct track_data_t));
@@ -310,58 +310,58 @@ int read_track_data(char *config_file) {
 		break;
 	    }
 	} else {
-	    l2_token_n = get_char_index(l2_token, line);
-	    switch (l2_token_n) {
-	    case L2_MAJOR:
-		tp->major = strtoul(&line[L2_MAJOR_LENGTH], NULL, 10);
+	    l1_token_n = get_char_index(l1_token, line);
+	    switch (l1_token_n) {
+	    case L1_MAJOR:
+		tp->major = strtoul(&line[L1_MAJOR_LENGTH], NULL, 10);
 		debug_print("match major:   >%d<\n", tp->major);
 		break;
-	    case L2_MINOR:
-		tp->minor = strtoul(&line[L2_MINOR_LENGTH], NULL, 10);
+	    case L1_MINOR:
+		tp->minor = strtoul(&line[L1_MINOR_LENGTH], NULL, 10);
 		debug_print("match minor:   >%d<\n", tp->minor);
 		break;
-	    case L2_XOFFSET:
-		tp->xoffset = strtoul(&line[L2_XOFFSET_LENGTH], NULL, 10);
+	    case L1_XOFFSET:
+		tp->xoffset = strtoul(&line[L1_XOFFSET_LENGTH], NULL, 10);
 		debug_print("match xoffset: >%d<\n", tp->xoffset);
 		break;
-	    case L2_YOFFSET:
-		tp->yoffset = strtoul(&line[L2_YOFFSET_LENGTH], NULL, 10);
+	    case L1_YOFFSET:
+		tp->yoffset = strtoul(&line[L1_YOFFSET_LENGTH], NULL, 10);
 		debug_print("match yoffset: >%d<\n", tp->yoffset);
 		break;
-	    case L2_WIDTH:
-		tp->width = strtoul(&line[L2_WIDTH_LENGTH], NULL, 10);
+	    case L1_WIDTH:
+		tp->width = strtoul(&line[L1_WIDTH_LENGTH], NULL, 10);
 		debug_print("match width:   >%d<\n", tp->width);
 		break;
-	    case L2_HEIGHT:
-		tp->height = strtoul(&line[L2_HEIGHT_LENGTH], NULL, 10);
+	    case L1_HEIGHT:
+		tp->height = strtoul(&line[L1_HEIGHT_LENGTH], NULL, 10);
 		debug_print("match height:  >%d<\n", tp->height);
 		break;
-	    case L2_ID:
-		td->id = strtoul(&line[L2_ID_LENGTH], NULL, 16);
+	    case L1_ID:
+		td->id = strtoul(&line[L1_ID_LENGTH], NULL, 16);
 		debug_print("match id:      >0x%05x<\n", td->id);
 		break;
-	    case L2_TYPE:
-		td->type = get_char_index(track_types, &line[L2_TYPE_LENGTH]);
+	    case L1_TYPE:
+		td->type = get_char_index(track_types, &line[L1_TYPE_LENGTH]);
 		debug_print("match type:    >%d<\n", td->type);
 		break;
-	    case L2_ROTATION:
-		td->rotation = strtoul(&line[L2_ROTATION_LENGTH], NULL, 10);
+	    case L1_ROTATION:
+		td->rotation = strtoul(&line[L1_ROTATION_LENGTH], NULL, 10);
 		debug_print("match rotation:>%d<\n", td->rotation);
 		break;
-	    case L2_ITEM:
-		td->item = strtoul(&line[L2_ITEM_LENGTH], NULL, 10);
+	    case L1_ITEM:
+		td->item = strtoul(&line[L1_ITEM_LENGTH], NULL, 10);
 		debug_print("match item:    >%d<\n", td->item);
 		break;
-	    case L2_TEXT:
-		td->text = &line[L2_TEXT_LENGTH];
+	    case L1_TEXT:
+		td->text = &line[L1_TEXT_LENGTH];
 		debug_print("match text:    >%s<\n", td->text);
 		break;
-	    case L2_STATE:
-		td->state = strtoul(&line[L2_STATE_LENGTH], NULL, 10);
+	    case L1_STATE:
+		td->state = strtoul(&line[L1_STATE_LENGTH], NULL, 10);
 		debug_print("match state:   >%d<\n", td->state);
 		break;
-	    case L2_DEVICEID:
-		td->deviceid = strtoul(&line[L2_DEVICEID_LENGTH], NULL, 10);
+	    case L1_DEVICEID:
+		td->deviceid = strtoul(&line[L1_DEVICEID_LENGTH], NULL, 10);
 		debug_print("match deviceId:>%d<\n", td->deviceid);
 		break;
 	    default:
@@ -381,7 +381,7 @@ int read_track_data(char *config_file) {
 }
 
 int read_track_config(char *config_file) {
-    int gbs_valid, l01_token_n, l2_token_n;
+    int gbs_valid, l0_token_n, l1_token_n;
     FILE *fp;
     char line[MAXSIZE];
     struct track_page_t *page;
@@ -402,47 +402,47 @@ int read_track_config(char *config_file) {
     while (fgets(line, MAXSIZE, fp) != NULL) {
 	line[strcspn(line, "\r\n")] = 0;
 	if (line[0] != ' ') {
-	    l01_token_n = get_char_index(l01_token, line);
-	    if (l01_token_n == L1_PAGE) {
+	    l0_token_n = get_char_index(l0_token, line);
+	    if (l0_token_n == L0_PAGE) {
 		gbs_valid = 1;
 		page->id = 0;
 		debug_print("match seite:   >%s<\n", line);
 	    }
 	} else {
-	    l2_token_n = get_char_index(l2_token, line);
-	    switch (l2_token_n) {
-	    case L2_ID:
-		page->id = strtoul(&line[L2_ID_LENGTH], NULL, 10);
+	    l1_token_n = get_char_index(l1_token, line);
+	    switch (l1_token_n) {
+	    case L1_ID:
+		page->id = strtoul(&line[L1_ID_LENGTH], NULL, 10);
 		debug_print("match id:      >%d<\n", page->id);
 		break;
-	    case L2_MAJOR:
-		page->major = strtoul(&line[L2_MAJOR_LENGTH], NULL, 10);
+	    case L1_MAJOR:
+		page->major = strtoul(&line[L1_MAJOR_LENGTH], NULL, 10);
 		debug_print("match major:   >%d<\n", page->major);
 		break;
-	    case L2_MINOR:
-		page->minor = strtoul(&line[L2_MINOR_LENGTH], NULL, 10);
+	    case L1_MINOR:
+		page->minor = strtoul(&line[L1_MINOR_LENGTH], NULL, 10);
 		debug_print("match minor:   >%d<\n", page->minor);
 		break;
-	    case L2_XOFFSET:
-		page->xoffset = strtoul(&line[L2_XOFFSET_LENGTH], NULL, 10);
+	    case L1_XOFFSET:
+		page->xoffset = strtoul(&line[L1_XOFFSET_LENGTH], NULL, 10);
 		debug_print("match xoffset: >%d<\n", page->xoffset);
 		break;
-	    case L2_YOFFSET:
-		page->yoffset = strtoul(&line[L2_YOFFSET_LENGTH], NULL, 10);
+	    case L1_YOFFSET:
+		page->yoffset = strtoul(&line[L1_YOFFSET_LENGTH], NULL, 10);
 		debug_print("match yoffset: >%d<\n", page->yoffset);
 		break;
-	    case L2_WIDTH:
-		page->width = strtoul(&line[L2_WIDTH_LENGTH], NULL, 10);
+	    case L1_WIDTH:
+		page->width = strtoul(&line[L1_WIDTH_LENGTH], NULL, 10);
 		debug_print("match width:   >%d<\n", page->width);
 		break;
-	    case L2_HEIGHT:
-		page->height = strtoul(&line[L2_HEIGHT_LENGTH], NULL, 10);
+	    case L1_HEIGHT:
+		page->height = strtoul(&line[L1_HEIGHT_LENGTH], NULL, 10);
 		debug_print("match height:  >%d<\n", page->height);
 		break;
-	    case L2_NAME:
+	    case L1_NAME:
 		if (gbs_valid) {
-		    debug_print("match name:    >%s<  id %d\n", &line[L2_NAME_LENGTH], page->id);
-		    add_track_page(page, &line[L2_NAME_LENGTH]);
+		    debug_print("match name:    >%s<  id %d\n", &line[L1_NAME_LENGTH], page->id);
+		    add_track_page(page, &line[L1_NAME_LENGTH]);
 		}
 		break;
 	    default:
@@ -468,7 +468,7 @@ void read_track_pages(char *dir) {
 }
 
 int read_loco_data(char *config_file) {
-    int l01_token_n, l2_token_n, l3_token_n, loco_complete;
+    int l0_token_n, l1_token_n, l2_token_n, loco_complete;
     FILE *fp;
     char line[MAXSIZE];
     int16_t function, type;
@@ -498,39 +498,39 @@ int read_loco_data(char *config_file) {
     while (fgets(line, MAXSIZE, fp) != NULL) {
 	line[strcspn(line, "\r\n")] = 0;
 	if (line[0] != ' ') {
-	    l01_token_n = get_char_index(l01_token, line);
-	    if (l01_token_n == L1_LOCO) {
+	    l0_token_n = get_char_index(l0_token, line);
+	    if (l0_token_n == L0_LOCO) {
 		/* TODO: next loco */
 		if (loco_complete)
 		    add_loco(loco, loco->name);
 	    }
-	/* Level 2 */
+	/* Level 1 */
 	} else if (line[2] != '.') {
-	    l2_token_n = get_char_index(l2_token, line);
-	    switch (l2_token_n) {
-	    case L2_ID:
-		loco->id = strtoul(&line[L2_ID_LENGTH], NULL, 0);
+	    l1_token_n = get_char_index(l1_token, line);
+	    switch (l1_token_n) {
+	    case L1_ID:
+		loco->id = strtoul(&line[L1_ID_LENGTH], NULL, 0);
 		printf("match id:      >%d<\n", loco->id);
 		break;
 	    default:
 		break;
 	    }
-	/* Level 3 */
+	/* Level 2 */
 	} else {
-	    l3_token_n = get_char_index(l3_token, line);
-	    switch (l3_token_n) {
-	    case L3_NUMBER:
-		function = strtoul(&line[L3_NUMBER_LENGTH], NULL, 10);
+	    l2_token_n = get_char_index(l2_token, line);
+	    switch (l2_token_n) {
+	    case L2_NUMBER:
+		function = strtoul(&line[L2_NUMBER_LENGTH], NULL, 10);
 		break;
-	    case L3_TYPE:
-		type = strtoul(&line[L3_TYPE_LENGTH], NULL, 10);
+	    case L2_TYPE:
+		type = strtoul(&line[L2_TYPE_LENGTH], NULL, 10);
 		printf(" loco function %2d type %3d\n", function, type);
 		if (function > 0)
 		    loco->function[function].type = type;
 		break;
-	    case L3_VALUE:
+	    case L2_VALUE:
 		if (function >= 0) {
-		    loco->function[function].value = strtoul(&line[L3_VALUE_LENGTH], NULL, 10);
+		    loco->function[function].value = strtoul(&line[L2_VALUE_LENGTH], NULL, 10);
 		}
 		printf(" loco function %2d type %3d value %d\n", function, type, loco->function[function].value);
 		function = -1;

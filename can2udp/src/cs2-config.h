@@ -20,23 +20,23 @@ char *auto_name  = { "fahrstrassen.cs2" };
 char *gbs_default = { "gbs-0" };
 
 enum {
-    L0_TRACK_PAGE = 0,
-    L0_TRACK,
+    L00_TRACK_PAGE = 0,
+    L00_TRACK,
+    L00_LOCO,
+    L00_MAGS,
+    L00_ATRACK,
     L0_LOCO,
-    L0_MAGS,
     L0_ATRACK,
-    L1_LOCO,
-    L1_ATRACK,
-    L1_VERSION,
-    L1_SESSION,
-    L1_ITEM,
-    L1_ELEMENT,
-    L1_SIZE,
-    L1_LAST_USED,
-    L1_PAGE
+    L0_VERSION,
+    L0_SESSION,
+    L0_ITEM,
+    L0_ELEMENT,
+    L0_SIZE,
+    L0_LAST_USED,
+    L0_PAGE
 };
 
-const char *l01_token [] = {
+const char *l0_token [] = {
     "[gleisbildseite]",
     "[gleisbild]",
     "[lokomotove]",
@@ -55,24 +55,24 @@ const char *l01_token [] = {
 };
 
 enum {
-    L2_MAJOR = 0,
-    L2_MINOR,
-    L2_ID,
-    L2_NAME,
-    L2_SURNAME,
-    L2_TYPE,
-    L2_ROTATION,
-    L2_ITEM,
-    L2_XOFFSET,
-    L2_YOFFSET,
-    L2_WIDTH,
-    L2_HEIGHT,
-    L2_TEXT,
-    L2_STATE,
-    L2_DEVICEID
+    L1_MAJOR = 0,
+    L1_MINOR,
+    L1_ID,
+    L1_NAME,
+    L1_SURNAME,
+    L1_TYPE,
+    L1_ROTATION,
+    L1_ITEM,
+    L1_XOFFSET,
+    L1_YOFFSET,
+    L1_WIDTH,
+    L1_HEIGHT,
+    L1_TEXT,
+    L1_STATE,
+    L1_DEVICEID
 };
 
-const char *l2_token [] = {
+const char *l1_token [] = {
     " .major=",
     " .minor=",
     " .id=",
@@ -92,21 +92,21 @@ const char *l2_token [] = {
 };
 
 /* TODO : use strlen macro */
-#define L2_MAJOR_LENGTH		8
-#define L2_MINOR_LENGTH		8
-#define L2_ID_LENGTH		5
-#define L2_NAME_LENGTH		7
-#define L2_SURNAME_LENGTH	10
-#define L2_TYPE_LENGTH		6
-#define L2_ROTATION_LENGTH	10
-#define L2_ITEM_LENGTH		10
-#define L2_XOFFSET_LENGTH	10
-#define L2_YOFFSET_LENGTH	10
-#define L2_WIDTH_LENGTH		8
-#define L2_HEIGHT_LENGTH	9
-#define L2_TEXT_LENGTH		7
-#define L2_STATE_LENGTH		10
-#define L2_DEVICEID_LENGTH	11
+#define L1_MAJOR_LENGTH		8
+#define L1_MINOR_LENGTH		8
+#define L1_ID_LENGTH		5
+#define L1_NAME_LENGTH		7
+#define L1_SURNAME_LENGTH	10
+#define L1_TYPE_LENGTH		6
+#define L1_ROTATION_LENGTH	10
+#define L1_ITEM_LENGTH		10
+#define L1_XOFFSET_LENGTH	10
+#define L1_YOFFSET_LENGTH	10
+#define L1_WIDTH_LENGTH		8
+#define L1_HEIGHT_LENGTH	9
+#define L1_TEXT_LENGTH		7
+#define L1_STATE_LENGTH		10
+#define L1_DEVICEID_LENGTH	11
 
 struct config_data_t {
     int deflated_stream_size;
@@ -294,20 +294,20 @@ lok
 */
 
 enum {
-    L3_NUMBER = 0,
-    L3_TYPE,
-    L3_VALUE,
-    L3_TARGET,
-    L3_NAME,
-    L3_ADDRESS,
-    L3_XCEL,
-    L3_SPEEDTABLE,
-    L3_VOLUME,
-    L3_NUMFUNCTION,
-    L3_FUNKTION
+    L2_NUMBER = 0,
+    L2_TYPE,
+    L2_VALUE,
+    L2_TARGET,
+    L2_NAME,
+    L2_ADDRESS,
+    L2_XCEL,
+    L2_SPEEDTABLE,
+    L2_VOLUME,
+    L2_NUMFUNCTION,
+    L2_FUNKTION
 };
     
-const char *l3_token [] = {
+const char *l2_token [] = {
     " ..nr=",
     " ..typ=",
     " ..wert=",
@@ -323,16 +323,16 @@ const char *l3_token [] = {
 };
 
 /* TODO : use strlen macro */
-#define L3_NUMBER_LENGTH	6
-#define L3_TYPE_LENGTH		7
-#define L3_VALUE_LENGTH		8
-#define L3_TARGET_LENGTH	10
-#define L3_NAME_LENGTH		8
-#define L3_ADDRESS_LENGTH	8
-#define L3_SPEEDTABLE_LENGTH	14
-#define L3_VOLUME_LENGTH	10
-#define L3_NUMFUNCTION_LENGTH	10
-#define L3_FUNCTION_LENGTH	8
+#define L2_NUMBER_LENGTH	6
+#define L2_TYPE_LENGTH		7
+#define L2_VALUE_LENGTH		8
+#define L2_TARGET_LENGTH	10
+#define L2_NAME_LENGTH		8
+#define L2_ADDRESS_LENGTH	8
+#define L2_SPEEDTABLE_LENGTH	14
+#define L2_VOLUME_LENGTH	10
+#define L2_NUMFUNCTION_LENGTH	10
+#define L2_FUNCTION_LENGTH	8
 
 unsigned char pre_mfx[]   = { 0x02, 0xf5, 0x00 };
 unsigned char pre_other[] = { 0x02, 0xc5, 0x00 };
