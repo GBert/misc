@@ -123,6 +123,8 @@ int add_loco(struct loco_data_t *loco) {
 	strcpy(l->type, loco->type);
 
 	l->uid = loco->uid;
+	l->address = loco->address;
+	l->sid = loco->sid;
 	l->long_uid = loco->long_uid;
 	l->address = loco->address;
 	l->mfxuid = loco->mfxuid;
@@ -134,6 +136,8 @@ int add_loco(struct loco_data_t *loco) {
 	HASH_ADD_INT(loco_data, uid, l);
 	/* TODO: mfx & function struct */
     } else {
+	check_modify(loco->address, l->address);
+	check_modify(loco->sid, l->sid);
 	check_modify(loco->long_uid, l->long_uid);
 	check_modify(loco->address, l->address);
 	check_modify(loco->mfxuid, l->mfxuid);
@@ -520,7 +524,6 @@ int read_loco_data(char *config_file) {
 
     while (fgets(line, MAXSIZE, fp) != NULL) {
 	line[strcspn(line, "\r\n")] = 0;
- 	printf(">>%s\n", line);
 	if (line[0] != ' ') {
 	    l0_token_n = get_char_index(l0_token, line);
 	    if (l0_token_n == L0_LOCO) {
@@ -533,26 +536,51 @@ int read_loco_data(char *config_file) {
 		} else {
 		    loco_complete = 1;
 		}
+	    } else {
+		printf(">>%s\n", line);
 	    }
 	/* Level 1 */
 	} else if (line[2] != '.') {
 	    l1_token_n = get_char_index(l1_token, line);
 	    switch (l1_token_n) {
+	    case L1_FUNCTION:
+		break;
 	    case L1_UID:
 		loco->uid = strtoul(&line[L1_UID_LENGTH], NULL, 16);
-		printf("match uid:      >%d<\n", loco->uid);
+		printf("match uid:      >%x<\n", loco->uid);
 		break;
 	    case L1_NAME:
 		asprintf(&name, "%s", &line[L1_NAME_LENGTH]);
 		loco->name = name;
-		printf("match name:    >%s<\n", loco->name);
+		printf("match name:     >%s<\n", loco->name);
 		break;
 	    case L1_TYPE:
 		asprintf(&type, "%s", &line[L1_TYPE_LENGTH]);
 		loco->type = type;
-		printf("match type:    >%s<\n", loco->type);
+		printf("match type:     >%s<\n", loco->type);
+		break;
+	    case L1_SID:
+		loco->sid = strtoul(&line[L1_SID_LENGTH], NULL, 16);
+		printf("match sid:      >0x%x<\n", loco->sid);
+		break;
+	    case L1_MFXUID:
+		loco->mfxuid = strtoul(&line[L1_MFXUID_LENGTH], NULL, 16);
+		printf("match mfxuid:   >0x%08x<\n", loco->mfxuid);
+		break;
+	    case L1_AV:
+		loco->acc_delay = strtoul(&line[L1_AV_LENGTH], NULL, 10);
+		printf("match av:       >0x%d<\n", loco->acc_delay);
+		break;
+	    case L1_BV:
+		loco->slow_down_delay = strtoul(&line[L1_BV_LENGTH], NULL, 10);
+		printf("match bv:       >0x%d<\n", loco->slow_down_delay);
+		break;
+	    case L1_ADDRESS:
+		loco->address = strtoul(&line[L1_ADDRESS_LENGTH], NULL, 16);
+		printf("match address:  >0x%x<\n", loco->address);
 		break;
 	    default:
+		printf(">>%s<<\n", line);
 		break;
 	    }
 	/* Level 2 */
@@ -584,6 +612,7 @@ int read_loco_data(char *config_file) {
 		}
 		break;
 	    default:
+		printf(">>%s<<\n", line);
 		break;
 	    }
 	}
@@ -647,7 +676,7 @@ int main(int argc, char **argv) {
     asprintf(&loco_file, "%s/%s", dir, loco_name);
     read_loco_data(loco_file);
 
-    printf("track pages: %u\n", HASH_COUNT(track_page));
+    printf("\n\ntrack pages: %u\n", HASH_COUNT(track_page));
     printf("track data elements: %u\n", HASH_COUNT(track_data));
     printf("loco data: %u\n", HASH_COUNT(loco_data));
 

@@ -55,10 +55,16 @@ const char *l0_token [] = {
 };
 
 enum {
-    L1_MAJOR = 0,
+    L1_FUNCTION = 0,
+    L1_MAJOR,
     L1_MINOR,
     L1_ID,
     L1_UID,
+    L1_ADDRESS,
+    L1_SID,
+    L1_MFXUID,
+    L1_AV,
+    L1_BV,
     L1_NAME,
     L1_SURNAME,
     L1_TYPE,
@@ -74,10 +80,16 @@ enum {
 };
 
 const char *l1_token [] = {
+    " .funktionen",
     " .major=",
     " .minor=",
     " .id=",
     " .uid=",
+    " .adresse=",
+    " .sid=",
+    " .mfxuid=",
+    " .av=",
+    " .bv=",
     " .name=",
     " .vorname=",
     " .typ=",
@@ -98,6 +110,11 @@ const char *l1_token [] = {
 #define L1_MINOR_LENGTH		8
 #define L1_ID_LENGTH		5
 #define L1_UID_LENGTH		6
+#define L1_ADDRESS_LENGTH	10
+#define L1_SID_LENGTH		6
+#define L1_MFXUID_LENGTH	9
+#define L1_AV_LENGTH		5
+#define L1_BV_LENGTH		5
 #define L1_NAME_LENGTH		7
 #define L1_SURNAME_LENGTH	10
 #define L1_TYPE_LENGTH		6
@@ -376,6 +393,7 @@ struct loco_data_t {
     char *name;
     char *type;
     unsigned int address;
+    unsigned int sid;
     unsigned int mfxuid;
     unsigned int acc_delay;		/* av */
     unsigned int slow_down_delay;	/* bv */
