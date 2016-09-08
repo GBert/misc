@@ -14,6 +14,9 @@
 
 char *track_dir   = { "/gleisbilder" };
 char *track_name  = { "gleisbild.cs2" };
+char *loco_name  = { "lokomotive.cs2" };
+char *mags_name  = { "magnetartikel.cs2" };
+char *auto_name  = { "fahrstrassen.cs2" };
 char *gbs_default = { "gbs-0" };
 
 enum {
@@ -116,20 +119,34 @@ struct config_data_t {
     char *filename;
     uint8_t *deflated_data;
     uint8_t *inflated_data;
-    struct track_config_t *track_config;
 };
 
-struct track_config_t {
+struct track_page_t {
     unsigned int id;
     unsigned int major;
     unsigned int minor;
     unsigned int size;
     unsigned int xoffset;
     unsigned int yoffset;
-    unsigned int type;
-    char *last_used;
+    unsigned int width;
+    unsigned int height;
     char *name;
-    UT_hash_handle ut_hash;
+    char *file_name;
+    UT_hash_handle hh;
+};
+
+struct track_data_t {
+    unsigned int id;
+    unsigned int version_major;
+    unsigned int version_minor;
+    int item;
+    int state;
+    int type;
+    unsigned int rotation;
+    unsigned int deviceid;
+    char *text;
+    char *name;
+    UT_hash_handle hh;
 };
 
 const char *track_types[] = {
@@ -249,31 +266,119 @@ char *mag_types[] = {
     "\0",
 };
 
-struct track_page_t {
-    unsigned int id;
-    unsigned int major;
-    unsigned int minor;
-    unsigned int xoffset;
-    unsigned int yoffset;
-    unsigned int width;
-    unsigned int height;
+/*
+lok
+.uid=0x4005
+.name=M4
+.adresse=0x9
+.typ=mfx
+.mfxuid=0xff001234
+.av=64
+.bv=48
+.volume=64
+.vmax=255
+.vmin=12
+.fkt
+..nr=0
+..typ=32
+.mfxAdr
+..target=2
+..name=3
+..addr=136
+..xcel=78
+..speedtable=79
+..volume=117
+..numfunc=16
+..func=21
+
+*/
+
+enum {
+    L3_NUMBER = 0,
+    L3_TYPE,
+    L3_VALUE,
+    L3_TARGET,
+    L3_NAME,
+    L3_ADDRESS,
+    L3_XCEL,
+    L3_SPEEDTABLE,
+    L3_VOLUME,
+    L3_NUMFUNCTION,
+    L3_FUNKTION
+};
+    
+const char *l3_token [] = {
+    " ..nr=",
+    " ..typ=",
+    " ..wert=",
+    " ..target=",
+    " ..name=",
+    " ..addr=",
+    " ..xcel=",
+    " ..speedtable=",
+    " ..volume=",
+    " ..numfunct=",
+    " ..func=",
+    "\0"
+};
+
+/* TODO : use strlen macro */
+#define L3_NUMBER_LENGTH	6
+#define L3_TYPE_LENGTH		7
+#define L3_VALUE_LENGTH		8
+#define L3_TARGET_LENGTH	10
+#define L3_NAME_LENGTH		8
+#define L3_ADDRESS_LENGTH	8
+#define L3_SPEEDTABLE_LENGTH	14
+#define L3_VOLUME_LENGTH	10
+#define L3_NUMFUNCTION_LENGTH	10
+#define L3_FUNCTION_LENGTH	8
+
+unsigned char pre_mfx[]   = { 0x02, 0xf5, 0x00 };
+unsigned char pre_other[] = { 0x02, 0xc5, 0x00 };
+
+struct loco_func {
+    uint8_t number;
+    uint8_t type;
+    uint16_t value;
+};
+ 
+struct mfxAdr_t {
+    unsigned int target;
     char *name;
-    char *file_name;
+    unsigned int address;
+    unsigned int xcel;
+    unsigned int speedtable;
+    unsigned int volume;
+    unsigned int numfunc;
+    unsigned int funcy;
+};
+
+struct loco_config_t {
+    int eeprom_max_size;
+    unsigned int eeprom_size;
+    int id;
+    FILE *fp;
+    char *filename;
+    unsigned char *bin;
+};
+
+struct loco_data_t {
+    unsigned int long_uid;
+    unsigned int id;
+    char *name;
+    char *proto;
+    unsigned int address;
+    unsigned int typ;
+    unsigned int mfxuid;
+    unsigned int acc_delay;		/* av */
+    unsigned int slow_down_delay;	/* bv */
+    unsigned int volume;
+    unsigned int vmax;
+    unsigned int vmin;
+    struct loco_func function[16];
+    struct mfxAdr_t *mfxAdr;
     UT_hash_handle hh;
 };
 
-struct track_data_t {
-    unsigned int id;
-    unsigned int version_major;
-    unsigned int version_minor;
-    int item;
-    int state;
-    int type;
-    unsigned int rotation;
-    unsigned int deviceid;
-    char *text;
-    char *name;
-    UT_hash_handle hh;
-};
-
-#endif
+#endif /* _CS2_CONFIG_H_ */

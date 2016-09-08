@@ -23,7 +23,6 @@
 #include <libgen.h>
 
 #include "cs2-config.h"
-#include "lokinfo.h"
 
 #define FRAME_SIZE	13
 #define MAXSIZE		16384
@@ -36,6 +35,9 @@
 
 #define debug_print(...) \
             do { if (DEBUG) fprintf(stdin, ##__VA_ARGS__); } while (0)
+
+#define check_modify(a, b) \
+	    do { if ( a ) b = a; } while (0)
 
 struct track_page_t *track_page = NULL;
 struct track_data_t *track_data = NULL;
@@ -112,27 +114,20 @@ int add_loco(struct loco_data_t *loco, char *name) {
 	l->volume = loco->volume;
 	l->vmax = loco->vmax;
 	l->vmin = loco->vmin;
-	/* TODO: mfx struct */
+	/* TODO: mfx & function struct */
     } else {
-	if (loco->long_uid)
-	    l->long_uid = loco->long_uid;
-	if (loco->address)
-	    l->address = loco->address;
-	if (loco->typ)
-	    l->typ = loco->typ;
-	if (loco->mfxuid)
-	    l->mfxuid = loco->mfxuid;
-	if (loco->acc_delay)
-	    l->acc_delay = loco->acc_delay;
-	if (loco->slow_down_delay)
-	    l->slow_down_delay = loco->slow_down_delay;
-	if (loco->volume)
-	    l->volume = loco->volume;
-	if (loco->vmax)
-	    l->vmax = loco->vmax;
-	if (loco->vmin)
-	    l->vmin = loco->vmin;
+	check_modify(loco->long_uid, l->long_uid);
+	check_modify(loco->address, l->address);
+	check_modify(loco->typ, l->typ);
+	check_modify(loco->mfxuid, l->mfxuid);
+	check_modify(loco->acc_delay, l->acc_delay);
+	check_modify(loco->slow_down_delay, l->slow_down_delay);
+	check_modify(loco->volume, l->volume);
+	check_modify(loco->vmax, l->vmax);
+	check_modify(loco->vmin, l->vmin);
+	/* TODO: mfx & function struct */
     }
+    free(l);
     return (EXIT_SUCCESS);
 }
 
@@ -162,14 +157,10 @@ int add_track_data(struct track_data_t *td) {
 	/* TODO: side ??? */
 	HASH_ADD_INT(track_data, id, t);	/* id: name of key field */
     } else {
-	if (td->type)
-	    t->type = td->type;
-	if (td->rotation)
-	    t->rotation = td->rotation;
-	if (td->item)
-	    t->item = td->item;
-	if (td->state)
-	    t->state = td->state;
+	check_modify(td->type, t->type);
+	check_modify(td->rotation, t->rotation);
+	check_modify(td->item, t->item);
+	check_modify(td->state, t->state);
     }
 
     /* does text exists ? */
@@ -215,18 +206,12 @@ int add_track_page(struct track_page_t *page, char *name) {
 	t->height = page->height;
 	HASH_ADD_INT(track_page, id, t);	/* id: name of key field */
     } else {
-	if (page->xoffset)
-	    t->xoffset = page->xoffset;
-	if (page->yoffset)
-	    t->yoffset = page->yoffset;
-	if (page->major)
-	    t->major = page->major;
-	if (page->minor)
-	    t->minor = page->minor;
-	if (page->width)
-	    t->width = page->width;
-	if (page->height)
-	    t->height = page->height;
+	check_modify(page->xoffset, t->xoffset);
+	check_modify(page->yoffset, t->yoffset);
+	check_modify(page->major, t->major);
+	check_modify(page->minor, t->minor);
+	check_modify(page->width, t->width);
+	check_modify(page->height, t->height);
     }
     return (EXIT_SUCCESS);
 }
@@ -294,7 +279,6 @@ int read_track_data(char *config_file) {
 	fprintf(stderr, "%s: can't open track file %s: %s\n", __func__, config_file, strerror(errno));
 	return (EXIT_FAILURE);
     }
-
 
     tp = calloc(1, sizeof(struct track_page_t));
     if (!tp) {
@@ -484,13 +468,16 @@ void read_track_pages(char *dir) {
 }
 
 int read_loco_data(char *config_file) {
-    int l01_token_n, l2_token_n, loco_complete;
+    int l01_token_n, l2_token_n, l3_token_n, loco_complete;
     FILE *fp;
     char line[MAXSIZE];
+    int16_t function, type;
     struct loco_data_t *loco;
 
-    loco_complete = 0;
+    function = -1;
+    type = -1;
 
+    loco_complete = 0;
     if ((fp = fopen(config_file, "r")) == NULL) {
 	fprintf(stderr, "can't open config file %s: %s\n", config_file, strerror(errno));
 	return (EXIT_FAILURE);
@@ -499,6 +486,12 @@ int read_loco_data(char *config_file) {
     loco = calloc(1, sizeof(struct loco_data_t));
     if (loco == NULL) {
 	fprintf(stderr, "can't calloc buffer for loco data: %s\n", strerror(errno));
+	return (EXIT_FAILURE);
+    }
+
+    loco->mfxAdr = calloc(1, sizeof(struct mfxAdr_t));
+    if (loco->mfxAdr == NULL) {
+	fprintf(stderr, "can't calloc buffer for loco mfx data: %s\n", strerror(errno));
 	return (EXIT_FAILURE);
     }
 
@@ -511,17 +504,43 @@ int read_loco_data(char *config_file) {
 		if (loco_complete)
 		    add_loco(loco, loco->name);
 	    }
-
-	} else {
+	/* Level 2 */
+	} else if (line[2] != '.') {
 	    l2_token_n = get_char_index(l2_token, line);
 	    switch (l2_token_n) {
 	    case L2_ID:
 		loco->id = strtoul(&line[L2_ID_LENGTH], NULL, 0);
 		printf("match id:      >%d<\n", loco->id);
 		break;
+	    default:
+		break;
+	    }
+	/* Level 3 */
+	} else {
+	    l3_token_n = get_char_index(l3_token, line);
+	    switch (l3_token_n) {
+	    case L3_NUMBER:
+		function = strtoul(&line[L3_NUMBER_LENGTH], NULL, 10);
+		break;
+	    case L3_TYPE:
+		type = strtoul(&line[L3_TYPE_LENGTH], NULL, 10);
+		printf(" loco function %2d type %3d\n", function, type);
+		if (function > 0)
+		    loco->function[function].type = type;
+		break;
+	    case L3_VALUE:
+		if (function >= 0) {
+		    loco->function[function].value = strtoul(&line[L3_VALUE_LENGTH], NULL, 10);
+		}
+		printf(" loco function %2d type %3d value %d\n", function, type, loco->function[function].value);
+		function = -1;
+		break;
+	    default:
+		break;
 	    }
 	}
     }
+    free(loco->mfxAdr);
     free(loco);
     fclose(fp);
     return (EXIT_SUCCESS);
@@ -529,18 +548,20 @@ int read_loco_data(char *config_file) {
 
 int main(int argc, char **argv) {
     struct config_data_t config_data;
-    char *dir;
+    char *dir, *var_dir;
     char *track_file;
+    char *loco_file;
 
-    dir = calloc(1, MAXDIR);
-    if (dir == NULL) {
+    var_dir = calloc(1, MAXDIR);
+    if (var_dir == NULL) {
 	fprintf(stderr, "can't alloc bufer for directory string: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
 
     if (argc == 2) {
-	strncpy(dir, argv[1], MAXDIR - 1);
-	config_data.directory = dir;
+	strncpy(var_dir, argv[1], MAXDIR - 1);
+	config_data.directory = var_dir;
+	asprintf(&dir, "%s", var_dir);
     } else {
 	fprintf(stderr, "usage: %s <dir> \n", basename(argv[0]));
 	free(dir);
@@ -573,10 +594,15 @@ int main(int argc, char **argv) {
     printf("track pages: %u\n", HASH_COUNT(track_page));
     printf("track data elements: %u\n", HASH_COUNT(track_data));
 
+    asprintf(&loco_file, "%s/%s", dir, loco_name);
+    read_loco_data(loco_file);
+
     delete_all_track_pages();
     delete_all_track_data();
 
+    free(loco_file);
     free(dir);
+    free(var_dir);
     free(track_file);
     return EXIT_SUCCESS;
 }

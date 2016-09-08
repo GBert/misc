@@ -28,8 +28,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#include "lokinfo.h"
-#include "uthash.h"
+#include "cs2-config.h"
 
 static char *I2C_DEF_PATH = "/sys/bus/i2c/devices/1-0050/eeprom";
 
