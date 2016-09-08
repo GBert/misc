@@ -123,6 +123,8 @@ int add_loco(struct loco_data_t *loco) {
 	strcpy(l->type, loco->type);
 
 	l->uid = loco->uid;
+	l->direction = loco->direction;
+	l->velocity = loco->velocity;
 	l->address = loco->address;
 	l->sid = loco->sid;
 	l->long_uid = loco->long_uid;
@@ -131,11 +133,15 @@ int add_loco(struct loco_data_t *loco) {
 	l->acc_delay = loco->acc_delay;
 	l->slow_down_delay = loco->slow_down_delay;
 	l->volume = loco->volume;
+	l->progmask = loco->progmask;
 	l->vmax = loco->vmax;
 	l->vmin = loco->vmin;
+	l->mfxtype = loco->mfxtype;
 	HASH_ADD_INT(loco_data, uid, l);
 	/* TODO: mfx & function struct */
     } else {
+	check_modify(loco->direction, l->direction);
+	check_modify(loco->velocity, l->velocity);
 	check_modify(loco->address, l->address);
 	check_modify(loco->sid, l->sid);
 	check_modify(loco->long_uid, l->long_uid);
@@ -144,8 +150,10 @@ int add_loco(struct loco_data_t *loco) {
 	check_modify(loco->acc_delay, l->acc_delay);
 	check_modify(loco->slow_down_delay, l->slow_down_delay);
 	check_modify(loco->volume, l->volume);
+	check_modify(loco->progmask, l->progmask);
 	check_modify(loco->vmax, l->vmax);
 	check_modify(loco->vmin, l->vmin);
+	check_modify(loco->mfxtype, l->mfxtype);
 	/* TODO: mfx & function struct */
     }
     return (EXIT_SUCCESS);
@@ -491,7 +499,7 @@ int read_loco_data(char *config_file) {
     int l0_token_n, l1_token_n, l2_token_n, loco_complete;
     FILE *fp;
     char line[MAXSIZE];
-    char *name, *type;
+    char *name, *type, *icon;
     int16_t function, temp;
     struct loco_data_t *loco;
     struct mfxAdr_t *mfx;
@@ -545,55 +553,100 @@ int read_loco_data(char *config_file) {
 	    switch (l1_token_n) {
 	    case L1_FUNCTION:
 		break;
+	    case L1_ID:
+		loco->id = strtoul(&line[L1_ID_LENGTH], NULL, 10);
+		printf("match id:        >%d<\n", loco->id);
+		break;
+	    case L1_MAJOR:
+		loco->major = strtoul(&line[L1_MAJOR_LENGTH], NULL, 10);
+		printf("match major:     >%d<\n", loco->major);
+		break;
+	    case L1_MINOR:
+		loco->minor = strtoul(&line[L1_MINOR_LENGTH], NULL, 10);
+		printf("match minor:     >%d<\n", loco->minor);
+		break;
+	    case L1_DIRECTION:
+		loco->direction = strtoul(&line[L1_DIRECTION_LENGTH], NULL, 10);
+		printf("match direction: >%d<\n", loco->direction);
+		break;
+	    case L1_VELOCITY:
+		loco->velocity = strtoul(&line[L1_VELOCITY_LENGTH], NULL, 10);
+		printf("match velocity:  >%d<\n", loco->velocity);
+		break;
 	    case L1_UID:
 		loco->uid = strtoul(&line[L1_UID_LENGTH], NULL, 16);
-		printf("match uid:      >0x%04x<\n", loco->uid);
+		printf("match uid:       >0x%04x<\n", loco->uid);
 		break;
 	    case L1_NAME:
 		asprintf(&name, "%s", &line[L1_NAME_LENGTH]);
 		loco->name = name;
-		printf("match name:     >%s<\n", loco->name);
+		printf("match name:      >%s<\n", loco->name);
 		break;
 	    case L1_TYPE:
 		asprintf(&type, "%s", &line[L1_TYPE_LENGTH]);
 		loco->type = type;
-		printf("match type:     >%s<\n", loco->type);
+		printf("match type:      >%s<\n", loco->type);
 		break;
 	    case L1_SID:
 		loco->sid = strtoul(&line[L1_SID_LENGTH], NULL, 16);
-		printf("match sid:      >0x%x<\n", loco->sid);
+		printf("match sid:       >0x%x<\n", loco->sid);
 		break;
 	    case L1_MFXUID:
 		loco->mfxuid = strtoul(&line[L1_MFXUID_LENGTH], NULL, 16);
-		printf("match mfxuid:   >0x%08x<\n", loco->mfxuid);
+		printf("match mfxuid:    >0x%08x<\n", loco->mfxuid);
+		break;
+	    case L1_SYMBOL:
+		loco->symbol = strtoul(&line[L1_SYMBOL_LENGTH], NULL, 10);
+		printf("match symbol:    >0%d<\n", loco->symbol);
+		break;
+	    case L1_ICON:
+		asprintf(&icon, "%s", &line[L1_ICON_LENGTH]);
+		loco->icon = icon;
+		printf("match icon:      >%s<\n", loco->icon);
 		break;
 	    case L1_AV:
 		loco->acc_delay = strtoul(&line[L1_AV_LENGTH], NULL, 10);
-		printf("match av:       >%d<\n", loco->acc_delay);
+		printf("match av:        >%d<\n", loco->acc_delay);
 		break;
 	    case L1_BV:
 		loco->slow_down_delay = strtoul(&line[L1_BV_LENGTH], NULL, 10);
-		printf("match bv:       >%d<\n", loco->slow_down_delay);
+		printf("match bv:        >%d<\n", loco->slow_down_delay);
 		break;
 	    case L1_VOLUME:
 		loco->volume = strtoul(&line[L1_VOLUME_LENGTH], NULL, 10);
-		printf("match volume:   >%d<\n", loco->volume);
+		printf("match volume:    >%d<\n", loco->volume);
+		break;
+	    case L1_PROGMASK:
+		loco->progmask = strtoul(&line[L1_PROGMASK_LENGTH], NULL, 16);
+		printf("match progmask:  >0x%02x<\n", loco->progmask);
 		break;
 	    case L1_VMIN:
 		loco->vmin = strtoul(&line[L1_VMIN_LENGTH], NULL, 10);
-		printf("match vmin:     >%d<\n", loco->vmin);
+		printf("match vmin:      >%d<\n", loco->vmin);
 		break;
 	    case L1_VMAX:
 		loco->vmax = strtoul(&line[L1_VMAX_LENGTH], NULL, 10);
-		printf("match vmax:     >%d<\n", loco->vmax);
+		printf("match vmax:      >%d<\n", loco->vmax);
 		break;
 	    case L1_TMAX:
 		loco->tmax = strtoul(&line[L1_TMAX_LENGTH], NULL, 10);
-		printf("match tmax:     >%d<\n", loco->tmax);
+		printf("match tmax:      >%d<\n", loco->tmax);
+		break;
+	    case L1_SPM:
+		loco->spm = strtoul(&line[L1_SPM_LENGTH], NULL, 10);
+		printf("match spm:       >%d<\n", loco->spm);
+		break;
+	    case L1_FT:
+		loco->ft = strtoul(&line[L1_FT_LENGTH], NULL, 16);
+		printf("match ft:        >0x%x<\n", loco->ft);
+		break;
+	    case L1_MFXTYPE:
+		loco->mfxtype = strtoul(&line[L1_MFXTYPE_LENGTH], NULL, 10);
+		printf("match mfxtype:   >%d<\n", loco->mfxtype);
 		break;
 	    case L1_ADDRESS:
 		loco->address = strtoul(&line[L1_ADDRESS_LENGTH], NULL, 16);
-		printf("match address:  >0x%x<\n", loco->address);
+		printf("match address:   >0x%x<\n", loco->address);
 		break;
 	    default:
 		printf(">>%s<<\n", line);
@@ -661,7 +714,7 @@ int main(int argc, char **argv) {
 	asprintf(&dir, "%s", var_dir);
     } else {
 	fprintf(stderr, "usage: %s <dir> \n", basename(argv[0]));
-	free(dir);
+	free(var_dir);
 	exit(EXIT_FAILURE);
     }
 

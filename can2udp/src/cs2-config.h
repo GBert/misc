@@ -60,15 +60,23 @@ enum {
     L1_MINOR,
     L1_ID,
     L1_UID,
+    L1_DIRECTION,
+    L1_VELOCITY,
     L1_ADDRESS,
     L1_SID,
     L1_MFXUID,
+    L1_SYMBOL,
+    L1_ICON,
     L1_AV,
     L1_BV,
     L1_VOLUME,
+    L1_PROGMASK,
     L1_VMIN,
     L1_VMAX,
     L1_TMAX,
+    L1_SPM,
+    L1_FT,
+    L1_MFXTYPE,
     L1_NAME,
     L1_SURNAME,
     L1_TYPE,
@@ -89,15 +97,23 @@ const char *l1_token [] = {
     " .minor=",
     " .id=",
     " .uid=",
+    " .richtung=",
+    " .velocity=",
     " .adresse=",
     " .sid=",
     " .mfxuid=",
+    " .symbol=",
+    " .icon=",
     " .av=",
     " .bv=",
     " .volume=",
+    " .progmask=",
     " .vmin=",
     " .vmax=",
     " .tachomax=",
+    " .spm=",
+    " .ft=",
+    " .mfxtyp=",
     " .name=",
     " .vorname=",
     " .typ=",
@@ -118,15 +134,23 @@ const char *l1_token [] = {
 #define L1_MINOR_LENGTH		8
 #define L1_ID_LENGTH		5
 #define L1_UID_LENGTH		6
+#define L1_DIRECTION_LENGTH	11
+#define L1_VELOCITY_LENGTH	11
 #define L1_ADDRESS_LENGTH	10
 #define L1_SID_LENGTH		6
 #define L1_MFXUID_LENGTH	9
+#define L1_SYMBOL_LENGTH	9
+#define L1_ICON_LENGTH		7
 #define L1_AV_LENGTH		5
 #define L1_BV_LENGTH		5
 #define L1_VOLUME_LENGTH	9
+#define L1_PROGMASK_LENGTH	11
 #define L1_VMIN_LENGTH		7
 #define L1_VMAX_LENGTH		7
 #define L1_TMAX_LENGTH		11
+#define L1_SPM_LENGTH		6
+#define L1_FT_LENGTH		5
+#define L1_MFXTYPE_LENGTH	9
 #define L1_NAME_LENGTH		7
 #define L1_SURNAME_LENGTH	10
 #define L1_TYPE_LENGTH		6
@@ -400,19 +424,30 @@ struct loco_config_t {
 };
 
 struct loco_data_t {
+    unsigned int major;
+    unsigned int minor;
+    unsigned int id;
     unsigned int uid;
+    unsigned int direction;
+    unsigned int velocity;
     unsigned int long_uid;
     char *name;
     char *type;
+    char *icon;
     unsigned int address;
     unsigned int sid;
     unsigned int mfxuid;
+    unsigned int symbol;
     unsigned int acc_delay;		/* av */
     unsigned int slow_down_delay;	/* bv */
     unsigned int volume;
+    unsigned int progmask;
     unsigned int tmax;
     unsigned int vmax;
     unsigned int vmin;
+    unsigned int spm;
+    unsigned int ft;
+    unsigned int mfxtype;
     struct loco_func function[16];
     struct mfxAdr_t *mfxAdr;
     UT_hash_handle hh;
