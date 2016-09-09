@@ -539,13 +539,16 @@ int read_loco_data(char *config_file) {
 		    memset(loco->mfxAdr, 0, sizeof(struct mfxAdr_t));
 		    memset(loco, 0, sizeof(struct loco_data_t));
 		    loco->mfxAdr = mfx;
+		    free(name);
+		    free(type);
+		    free(icon);
 		} else {
 		    loco_complete = 1;
 		}
 	    } else {
 		printf(">>%s\n", line);
 	    }
-	/* Level 1 */
+	    /* Level 1 */
 	} else if (line[2] != '.') {
 	    l1_token_n = get_char_index(l1_token, line);
 	    switch (l1_token_n) {
@@ -650,7 +653,7 @@ int read_loco_data(char *config_file) {
 		printf(">>%s<<\n", line);
 		break;
 	    }
-	/* Level 2 */
+	    /* Level 2 */
 	} else {
 	    l2_token_n = get_char_index(l2_token, line);
 	    switch (l2_token_n) {
@@ -688,6 +691,7 @@ int read_loco_data(char *config_file) {
 	add_loco(loco);
     free(name);
     free(type);
+    free(icon);
     free(mfx);
     free(loco);
     fclose(fp);
