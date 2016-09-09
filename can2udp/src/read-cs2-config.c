@@ -539,9 +539,12 @@ int read_loco_data(char *config_file) {
 		    memset(loco->mfxAdr, 0, sizeof(struct mfxAdr_t));
 		    memset(loco, 0, sizeof(struct loco_data_t));
 		    loco->mfxAdr = mfx;
-		    free(name);
-		    free(type);
-		    free(icon);
+		    if (name)
+			free(name);
+		    if (type)
+			free(type);
+		    if (icon)
+			free(icon);
 		} else {
 		    loco_complete = 1;
 		}
@@ -689,9 +692,12 @@ int read_loco_data(char *config_file) {
     }
     if (loco->uid)
 	add_loco(loco);
-    free(name);
-    free(type);
-    free(icon);
+    if (name)
+	free(name);
+    if (type)
+	free(type);
+    if (icon)
+	free(icon);
     free(mfx);
     free(loco);
     fclose(fp);
