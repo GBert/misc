@@ -757,5 +757,7 @@ int main(int argc, char **argv) {
     free(dir);
     free(var_dir);
     free(track_file);
+    printf("sizeof(loco_data_t): %ld\n", sizeof(struct loco_data_t));
+    printf("sizeof(track_data_t): %ld\n", sizeof(struct track_data_t));
     return EXIT_SUCCESS;
 }

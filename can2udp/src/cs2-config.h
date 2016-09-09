@@ -193,12 +193,10 @@ struct track_page_t {
 
 struct track_data_t {
     unsigned int id;
-    unsigned int version_major;
-    unsigned int version_minor;
-    int item;
-    int state;
-    int type;
-    unsigned int rotation;
+    int8_t item;
+    int8_t state;
+    int8_t type;
+    int8_t rotation;
     unsigned int deviceid;
     char *text;
     char *name;
