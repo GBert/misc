@@ -527,6 +527,8 @@ int read_loco_data(char *config_file) {
     mfx = loco->mfxAdr;
 
     loco->name = NULL;
+    loco->type = NULL;
+    loco->icon = NULL;
 
     while (fgets(line, MAXSIZE, fp) != NULL) {
 	line[strcspn(line, "\r\n")] = 0;
@@ -543,8 +545,9 @@ int read_loco_data(char *config_file) {
 			free(name);
 		    if (type)
 			free(type);
-		    if (icon)
+/*		    if (icon)
 			free(icon);
+*/
 		} else {
 		    loco_complete = 1;
 		}
