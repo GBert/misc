@@ -39,6 +39,9 @@
 #define check_modify(a, b) \
 	    do { if ( a ) b = a; } while (0)
 
+#define check_free(a) \
+	    do { if ( a ) free(a); } while (0)
+
 struct track_page_t *track_page = NULL;
 struct track_data_t *track_data = NULL;
 struct loco_data_t *loco_data = NULL;
@@ -61,8 +64,7 @@ void delete_all_track_pages() {
 
     HASH_ITER(hh, track_page, cpage, tmp) {
 	HASH_DEL(track_page, cpage);
-	if (cpage->name)
-	    free(cpage->name);
+	check_free(cpage->name);
 	free(cpage);
     }
 }
@@ -72,8 +74,7 @@ void delete_all_track_data() {
 
     HASH_ITER(hh, track_data, ctrack, tmp) {
 	HASH_DEL(track_data, ctrack);
-	if (ctrack->text)
-	    free(ctrack->text);
+	check_free(ctrack->text);
 	free(ctrack);
     }
 }
@@ -83,12 +84,9 @@ void delete_all_loco_data() {
 
     HASH_ITER(hh, loco_data, cloco, tmp) {
 	HASH_DEL(loco_data, cloco);
-	if (cloco->name)
-	    free(cloco->name);
-	if (cloco->type)
-	    free(cloco->type);
-	if (cloco->mfxAdr)
-	    free(cloco->mfxAdr);
+	check_free(cloco->name);
+	check_free(cloco->type);
+	check_free(cloco->mfxAdr);
 	free(cloco);
     }
 }
@@ -193,8 +191,7 @@ int add_track_data(struct track_data_t *td) {
     if (td->text) {
 	/* the extra check for t->text seems to be needed */
 	if ((t->text) && (strcmp(t->text, td->text))) {
-	    if (t->text)
-		free(t->text);
+	    check_free(t->text);
 	    t->text = calloc(1, strlen(td->text) + 1);
 	    if (!t->text) {
 		fprintf(stderr, "%s: can't calloc track text: %s\n", __func__, strerror(errno));
@@ -541,13 +538,9 @@ int read_loco_data(char *config_file) {
 		    memset(loco->mfxAdr, 0, sizeof(struct mfxAdr_t));
 		    memset(loco, 0, sizeof(struct loco_data_t));
 		    loco->mfxAdr = mfx;
-		    if (name)
-			free(name);
-		    if (type)
-			free(type);
-/*		    if (icon)
-			free(icon);
-*/
+		    check_free(name);
+		    check_free(type);
+		    check_free(icon);
 		} else {
 		    loco_complete = 1;
 		}
