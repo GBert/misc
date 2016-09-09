@@ -72,8 +72,6 @@ void delete_all_track_data() {
 
     HASH_ITER(hh, track_data, ctrack, tmp) {
 	HASH_DEL(track_data, ctrack);
-	if (ctrack->name)
-	    free(ctrack->name);
 	if (ctrack->text)
 	    free(ctrack->text);
 	free(ctrack);
@@ -169,13 +167,13 @@ int add_track_data(struct track_data_t *td) {
 	    fprintf(stderr, "%s: can't calloc track data struct: %s\n", __func__, strerror(errno));
 	    return (EXIT_FAILURE);
 	}
-	if (td->name) {
-	    t->name = calloc(1, strlen(td->name) + 1);
-	    if (!t->name) {
-		fprintf(stderr, "%s: can't calloc track page name: %s\n", __func__, strerror(errno));
+	if (td->text) {
+	    t->text = calloc(1, strlen(td->text) + 1);
+	    if (!t->text) {
+		fprintf(stderr, "%s: can't calloc track text: %s\n", __func__, strerror(errno));
 		return (EXIT_FAILURE);
 	    }
-	    strcpy(t->name, td->name);
+	    strcpy(t->text, td->text);
 	}
 	t->id = td->id;
 	t->type = td->type;
