@@ -39,13 +39,13 @@ enum {
 const char *l0_token [] = {
     "[gleisbildseite]",
     "[gleisbild]",
-    "[lokomotove]",
+    "[lokomotive]",
     "[magnetartikel]",
     "[fahrstrassen]",
     "lokomotive",
     "fahrstrasse",
     "version",
-    "sessiion",
+    "session",
     "artikel",
     "element",
     "groesse",
@@ -73,6 +73,7 @@ enum {
     L1_PROGMASK,
     L1_VMIN,
     L1_VMAX,
+    L1_XPROT,
     L1_TMAX,
     L1_SPM,
     L1_FT,
@@ -110,6 +111,7 @@ const char *l1_token [] = {
     " .progmask=",
     " .vmin=",
     " .vmax=",
+    " .xprot=",
     " .tachomax=",
     " .spm=",
     " .ft=",
@@ -147,6 +149,7 @@ const char *l1_token [] = {
 #define L1_PROGMASK_LENGTH	11
 #define L1_VMIN_LENGTH		7
 #define L1_VMAX_LENGTH		7
+#define L1_XPROT_LENGTH		8
 #define L1_TMAX_LENGTH		11
 #define L1_SPM_LENGTH		6
 #define L1_FT_LENGTH		5
@@ -420,6 +423,9 @@ struct loco_config_t {
     unsigned char *bin;
 };
 
+/* symbol :0=e loco, 1=Diesel loco, 2=steam loco, 3=no icon
+ */
+
 struct loco_data_t {
     unsigned int major;
     unsigned int minor;
@@ -429,6 +435,7 @@ struct loco_data_t {
     unsigned int velocity;
     unsigned int long_uid;
     char *name;
+    char *surname;
     char *type;
     char *icon;
     unsigned int address;
@@ -440,8 +447,10 @@ struct loco_data_t {
     unsigned int volume;
     unsigned int progmask;
     unsigned int tmax;
-    unsigned int vmax;
     unsigned int vmin;
+    unsigned int vmax;
+    unsigned int xprot;
+    unsigned int traction;
     unsigned int spm;
     unsigned int ft;
     unsigned int mfxtype;
