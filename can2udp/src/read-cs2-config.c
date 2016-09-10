@@ -545,7 +545,7 @@ int read_loco_data(char *config_file) {
 		    loco->mfxAdr = mfx;
 		    check_free(name);
 		    check_free(type);
-		    check_free(icon);
+		    /* check_free(icon); */
 		} else {
 		    loco_complete = 1;
 		}
