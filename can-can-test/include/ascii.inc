@@ -36,7 +36,7 @@ ASC2BIN
                 MOVWF   INDF0
                 SWAPF   INDF0,F
                 RCALL   ASC2NIB
-                IORWF   POSTINC0
+                IORWF   POSTINC0,F
                 RETURN               
 ASC2NIB
                 GETC                        ; W = <RXBUF>,RXGET++
@@ -53,19 +53,23 @@ ASC2NIB
 ; Nibble: TXPUT += 1
 ; Byte  : TXPUT += 2
 ;------------------------------------------------------------------------------
-BIN2ASC
-                MOVWF   ASCTEMP
-                SWAPF   ASCTEMP,W
-                RCALL   NIB2ASC
-                MOVF    ASCTEMP,W
-NIB2ASC
+NIB2ASC         MACRO
                 ANDLW   0x0F
                 ADDLW   6
                 BTFSC   STATUS,DC
                 ADDLW   7
                 ADDLW   42
                 PUTC                        ; <TXBUF> = W,TXPUT++
-                RETURN
+                ENDM
+
+BIN2ASC         MACRO
+                MOVWF   ASCTEMP
+                SWAPF   ASCTEMP,W
+                NIB2ASC
+                MOVF    ASCTEMP,W
+                NIB2ASC
+                ENDM
+
 
 ;------------------------------------------------------------------------------
 ;

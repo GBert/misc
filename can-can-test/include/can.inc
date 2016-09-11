@@ -61,10 +61,10 @@ RXB0DBEN        EQU     H'0002'
 ;------------------------------------------------------------------------------
 INITCAN
 #IF CAN == PORTC
-                CLRF    TRISC
+                BCF     TRISC,6
                 BSF     TRISC,7             ; CANRX I/P
 #ELSE
-                CLRF    TRISB
+                BCF     TRISB,2
                 BSF     TRISB,3             ; CANRX I/P
 #ENDIF
                 ; Set configuration mode

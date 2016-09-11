@@ -1453,7 +1453,7 @@ F 1 "LED" H 4550 3850 50  0000 C CNN
 F 2 "LEDs:LED-5MM" H 4550 3950 50  0001 C CNN
 F 3 "" H 4550 3950 50  0000 C CNN
 	1    4550 3950
-	-1   0    0    1   
+	1    0    0    -1  
 $EndComp
 $Comp
 L R R13
@@ -1795,21 +1795,21 @@ F 3 "" H 6100 3450 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 Text Label 5200 1100 0    60   ~ 0
-TxD
+lTxD
 Text Label 5200 1950 0    60   ~ 0
-RxD
+lRxD
 Text Label 5200 2800 0    60   ~ 0
-RTS
+lRTS
 Text Label 5200 3650 0    60   ~ 0
-CTS
+lCTS
 Text Label 6450 1350 0    60   ~ 0
-_TxD
+hTxD
 Text Label 6350 1950 0    60   ~ 0
-_RxD
+hRxD
 Text Label 6350 2800 0    60   ~ 0
-_RTS
+hRTS
 Text Label 6350 3650 0    60   ~ 0
-_CTS
+hCTS
 Text Label 6900 700  0    60   ~ 0
 Vout
 $Comp
@@ -2812,4 +2812,58 @@ Wire Wire Line
 Wire Wire Line
 	10750 4700 10700 4700
 Connection ~ 10750 4700
+$Comp
+L CONN_01X04 P30
+U 1 1 576C2EDE
+P 8700 1000
+F 0 "P30" H 8700 1250 50  0000 C CNN
+F 1 "CONN_01X04" V 8800 1000 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x04" V 8700 1000 50  0001 C CNN
+F 3 "" H 8700 1000 50  0000 C CNN
+	1    8700 1000
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X04 P31
+U 1 1 576C5433
+P 9100 1000
+F 0 "P31" H 9100 1250 50  0000 C CNN
+F 1 "CONN_01X04" V 9200 1000 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x04" V 9100 1000 50  0001 C CNN
+F 3 "" H 9100 1000 50  0000 C CNN
+	1    9100 1000
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	8500 850  8250 850 
+Wire Wire Line
+	8500 950  8250 950 
+Wire Wire Line
+	8500 1050 8250 1050
+Wire Wire Line
+	8500 1150 8250 1150
+Wire Wire Line
+	9300 850  9550 850 
+Wire Wire Line
+	9300 950  9550 950 
+Wire Wire Line
+	9300 1050 9550 1050
+Wire Wire Line
+	9300 1150 9550 1150
+Text Label 8300 850  0    60   ~ 0
+lTxD
+Text Label 8300 950  0    60   ~ 0
+lRxD
+Text Label 8300 1050 0    60   ~ 0
+lRTS
+Text Label 8300 1150 0    60   ~ 0
+lCTS
+Text Label 9350 850  0    60   ~ 0
+hTxD
+Text Label 9350 950  0    60   ~ 0
+hRxD
+Text Label 9350 1050 0    60   ~ 0
+hRTS
+Text Label 9350 1150 0    60   ~ 0
+hCTS
 $EndSCHEMATC
