@@ -17,10 +17,12 @@ volatile unsigned int counter;
 volatile uint8_t status;
 
 static void gpio_setup(void) {
-    /* Enable Alternate Function clock */
-    rcc_periph_clock_enable(RCC_AFIO);
-
-    /* Enable GPIOC clock */
+    /* Enable GPIOA & GPIOB & GPIOC clock */
+    /* A2 & A3 USART */
+    rcc_periph_clock_enable(RCC_GPIOA);
+    /* B8 & B9 CAN */
+    rcc_periph_clock_enable(RCC_GPIOB);
+    /* C12 LED */
     rcc_periph_clock_enable(RCC_GPIOC);
 
     /* Preconfigure LED */
@@ -30,8 +32,8 @@ static void gpio_setup(void) {
     gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
 
     /* Enable clocks for GPIO port A (for GPIO_USART2_TX) and USART2. */
-   rcc_periph_clock_enable(RCC_AFIO);
-   rcc_periph_clock_enable(RCC_USART2);
+    rcc_periph_clock_enable(RCC_AFIO);
+    rcc_periph_clock_enable(RCC_USART2);
 }
 
 static void systick_setup(void) {
@@ -117,7 +119,6 @@ static int can_speed(int index) {
 static void can_setup(void) {
     /* Enable peripheral clocks */
     rcc_periph_clock_enable(RCC_AFIO);
-    rcc_periph_clock_enable(RCC_GPIOB);
     rcc_periph_clock_enable(RCC_CAN1);
 
     AFIO_MAPR |= AFIO_MAPR_CAN1_REMAP_PORTB;
@@ -200,7 +201,7 @@ void sys_tick_handler(void) {
     counter++;
     if (counter == 1000) {
 	counter = 0;
-	printf("Hello World !\n");
+	printf("Hello World !\r\n");
 	gpio_toggle(GPIOC, GPIO13);	/* toggle green LED */
 	status ^= 0x01;
         if (status) {
