@@ -8,7 +8,7 @@ using libopencm3 to build cheapest CAN Adapter ever :
 
 Why Serial (SLCAN) and not USB ?
 --------------------------------
-it's not possible to use CAN and USB at the sime time on STM32F103
+it's not possible to use CAN and USB at the same time on STM32F103
 
 CAN-Interface
 -------------
