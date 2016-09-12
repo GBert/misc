@@ -3,7 +3,8 @@ STM32 SLCAN
 
 using libopencm3 to build cheapest CAN Adapter ever :
 
-image::pictures/stm32f103c8t6_dev_board.jpg["STM32F103C8T6 microcontroller development board"]
+![STM32F103C8T6 microcontroller development board]
+(https://github.com/GBert/misc/blob/master/stm32-slcan/pictures/stm32f103c8t6_dev_board.jpg)
 
 Flashing Serial
 ---------------
