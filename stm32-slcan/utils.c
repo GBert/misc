@@ -10,6 +10,7 @@
 #include "stm32-slcan.h"
 
 void nibble2hex(char *dst, unsigned char c) {
+
     c = ((c & 0xf0) >> 4) + '0';
     if (c >= 0x3a)
 	c += 7;
@@ -18,6 +19,7 @@ void nibble2hex(char *dst, unsigned char c) {
 
 void bin2hex(char *dst, unsigned char c) {
     uint8_t nibble;
+
     nibble = ((c & 0xf0) >> 4) + '0';
     if (nibble >= 0x3a)
 	nibble += 7;
@@ -40,6 +42,7 @@ uint8_t nibble2bin(uint8_t s) {
 
 uint8_t hex2bin(char *s) {
     uint8_t x;
+
     x = nibble2bin(*s++) << 4;
     x |= nibble2bin(*s);
     return x;
