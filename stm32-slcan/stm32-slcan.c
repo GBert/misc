@@ -177,8 +177,7 @@ static void can_setup(void) {
     can_enable_irq(CAN1, CAN_IER_FMPIE0);
 }
 
-static int can_send(void) {
-    static uint8_t data[8] = { 0, 0, 0, 0, 0 };
+static int can_send(uint8_t *data) {
 
     if (can_transmit(CAN1, 0x0000fffe,	/* (EX/ST)ID: CAN ID */
 			 true,		/* IDE: CAN ID extended? */
@@ -191,6 +190,7 @@ static int can_send(void) {
 
 }
 void sys_tick_handler(void) {
+    static uint8_t data[5] = { 0, 0, 0, 0, 0 };
 
     /* We call this handler every 1ms so every 1ms = 0.001s
      * resulting in 1Hz message rate.
@@ -200,8 +200,16 @@ void sys_tick_handler(void) {
     counter++;
     if (counter == 1000) {
 	counter = 0;
+	printf("Hello World !\n");
+	gpio_toggle(GPIOC, GPIO13);	/* toggle green LED */
 	status ^= 0x01;
-	gpio_set(GPIOC, GPIO13);	/* LED green off */
+        if (status) {
+            data[4] = 1;
+        } else {
+            data[4] = 0;
+        }
+	if (can_send(data))
+	    gpio_set(GPIOC, GPIO13);	/* LED green off */
     }
 }
 
@@ -223,6 +231,7 @@ int main(void) {
     rcc_clock_setup_in_hse_8mhz_out_72mhz();
     gpio_setup();
     can_setup();
+    usart_setup();
 
     systick_setup();
 

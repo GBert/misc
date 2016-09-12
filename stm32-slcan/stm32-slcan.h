@@ -16,7 +16,10 @@
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/flash.h>
 #include <libopencm3/stm32/rcc.h>
+#include <libopencm3/stm32/usart.h>
 #include <stdio.h>
 #include <errno.h>
+
+void usart_setup(void);
 
 #endif  /* _STM32_SLCAN_H_ */

@@ -24,6 +24,7 @@ OPENCM3_DIR = /embedded/arm-cortex/src/libopencm3
 
 TTYISP = /dev/ttyUSB0
 
+OBJS = usart.o
 BINARY = stm32-slcan
 
 LDSCRIPT = STM32F103C8.ld
