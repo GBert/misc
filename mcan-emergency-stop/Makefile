@@ -17,8 +17,8 @@
 ## along with this library.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-PREFIX = /embedded/arm-cortex/gcc-arm-none-eabi-4_9-2015q1/bin/arm-none-eabi
-OPENCM3_DIR = /embedded/arm-cortex
+#PREFIX = /embedded/arm-cortex/gcc-arm-none-eabi-4_9-2015q1/bin/arm-none-eabi
+OPENCM3_DIR = /usr/local/Cellar/arm-lib/libopencm3
 TTYISP = /dev/ttyUSB0
 
 # BINARY = miniblink

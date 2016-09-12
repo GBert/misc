@@ -132,7 +132,7 @@ void sys_tick_handler(void) {
 			 false,		/* RTR: Request transmit? */
 			 5,		/* DLC: Data length */
 			 data) == -1) {
-	/*    gpio_set(GPIOC, GPIO13);	 LED green off */
+	    gpio_set(GPIOC, GPIO13);	/* LED green off */
 	}
     }
 }
