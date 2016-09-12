@@ -20,6 +20,28 @@
 #include <stdio.h>
 #include <errno.h>
 
+/******************************************************************************
+ * Simple ringbuffer implementation from open-bldc's libgovernor that
+ * you can find at:
+ * https://github.com/open-bldc/open-bldc/tree/master/source/libgovernor
+ *****************************************************************************/
+
+typedef int32_t ring_size_t;
+
+struct ring {
+    uint8_t *data;
+    ring_size_t size;
+    uint32_t begin;
+    uint32_t end;
+};
+
+/* usart */
 void usart_setup(void);
+
+/* utils */
+void nibble2hex(char *dst, unsigned char c);
+uint8_t nibble2bin(uint8_t s);
+void bin2hex(char *dst, unsigned char c);
+uint8_t hex2bin(char *s);
 
 #endif  /* _STM32_SLCAN_H_ */

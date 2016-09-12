@@ -22,21 +22,6 @@
 
 #define USART2_SPEED	115200
 
-/******************************************************************************
- * Simple ringbuffer implementation from open-bldc's libgovernor that
- * you can find at:
- * https://github.com/open-bldc/open-bldc/tree/master/source/libgovernor
- *****************************************************************************/
-
-typedef int32_t ring_size_t;
-
-struct ring {
-    uint8_t *data;
-    ring_size_t size;
-    uint32_t begin;
-    uint32_t end;
-};
-
 #define RING_SIZE(RING)  ((RING)->size - 1)
 #define RING_DATA(RING)  (RING)->data
 #define RING_EMPTY(RING) ((RING)->begin == (RING)->end)
