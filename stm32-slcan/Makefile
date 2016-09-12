@@ -21,6 +21,7 @@
 PREFIX = /embedded/arm-cortex/gcc-arm-none-eabi-5_2-2015q4/bin/arm-none-eabi
 # OPENCM3_DIR = /usr/local/Cellar/arm-lib/libopencm3
 OPENCM3_DIR = /embedded/arm-cortex/src/libopencm3
+
 TTYISP = /dev/ttyUSB0
 
 BINARY = stm32-slcan
