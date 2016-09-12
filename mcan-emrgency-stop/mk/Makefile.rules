@@ -191,7 +191,7 @@ styleclean: $(STYLECHECKFILES:=.styleclean)
 
 %.stlink-flash: %.bin
 	@printf "  FLASH  $<\n"
-	$(Q)$(STFLASH) write $(*).bin 0x8000000
+	$(Q)$(STFLASH) --reset write $(*).bin 0x8000000
 
 ifeq ($(STLINK_PORT),)
 ifeq ($(BMP_PORT),)
