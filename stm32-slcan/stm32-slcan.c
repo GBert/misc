@@ -203,7 +203,7 @@ void sys_tick_handler(void) {
     counter++;
     if (counter == 1000) {
 	counter = 0;
-	printf("Hello World !\r\n");
+	/* printf("Hello World !\r\n"); */
 	gpio_toggle(GPIOC, GPIO13);	/* toggle green LED */
 	status ^= 0x01;
         if (status) {
@@ -237,36 +237,38 @@ void usb_lp_can_rx0_isr(void) {
 	    c = 'R';
 	else
 	    c = 'r';
-	putc(c, stdout);
     } else {
-	if (ext) {
-	    putc('T', stdout);
-	    c = (id >> 24) & 0xff;
-	    put_hex(c);
-	    c = (id >> 16) & 0xff;
-	    put_hex(c);
-	    c = (id >> 8) & 0xff;
-	    put_hex(c);
-	    c = id & 0xff;
-	    put_hex(c);
-	} else {
-	    putc('t', stdout);
-	    /* bits 11-9 */
-	    c = (id >> 8) & 0x07;
-	    c += 0x30;
-	    putc(c, stdout);
-	    /* bits 8-1 */
-	    c = id & 0xff;
-	    put_hex(c);
-	}
-	c = (dlc & 0x0f) | 0x30;
-	putc(c,  stdout);
-	for (i = 0 ; i < dlc; i++)
-	    put_hex(data[i]);
-
-	putc('\n',  stdout);
-	putc('\r', stdout);
+	if (ext)
+	    c = 'T';
+        else
+	    c = 't';
     }
+    putc(c, stdout);
+    if (ext) {
+	c = (id >> 24) & 0xff;
+	put_hex(c);
+	c = (id >> 16) & 0xff;
+	put_hex(c);
+	c = (id >> 8) & 0xff;
+	put_hex(c);
+	c = id & 0xff;
+	put_hex(c);
+    } else {
+	/* bits 11-9 */
+	c = (id >> 8) & 0x07;
+	c += 0x30;
+	putc(c, stdout);
+	/* bits 8-1 */
+	c = id & 0xff;
+	put_hex(c);
+    }
+    c = (dlc & 0x0f) | 0x30;
+    putc(c,  stdout);
+    for (i = 0 ; i < dlc; i++)
+	put_hex(data[i]);
+
+    putc('\n', stdout); /* TODO: debug */
+    putc('\r', stdout);
 
     can_fifo_release(CAN1, 0);
 }
