@@ -275,6 +275,7 @@ static int slcan_command(void) {
     bool ext, rtr;
     uint8_t i, dlc, data[8];
     uint32_t id;
+    int32_t ret;
     char c;
     bool send;
 
@@ -320,6 +321,8 @@ static int slcan_command(void) {
     case 'C':
 	send = false;
 	break;
+    default:
+	break;
     }
     return 0;
 
@@ -333,8 +336,8 @@ static int slcan_command(void) {
 
     /* consume chars until eol reached */
     do {
-	c = ring_read_ch(&input_ring, NULL);
-    } while (c == '\r');
+	ret = ring_read_ch(&input_ring, NULL);
+    } while (ret == '\r' || ret == -1);
 
     if (commands_pending)
 	commands_pending--;
