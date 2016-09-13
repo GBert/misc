@@ -20,7 +20,7 @@
 
 #include "stm32-slcan.h"
 
-#define USART2_SPEED	115200
+#define USART2_SPEED	500000
 
 #define RING_SIZE(RING)  ((RING)->size - 1)
 #define RING_DATA(RING)  (RING)->data
@@ -28,14 +28,14 @@
 
 int _write(int file, char *ptr, int len);
 
-static void ring_init(struct ring *ring, uint8_t * buf, ring_size_t size) {
+static void ring_init(struct ring *ring, uint8_t * buf, ring_size_t size) { 
     ring->data = buf;
     ring->size = size;
     ring->begin = 0;
     ring->end = 0;
 }
 
-static int32_t ring_write_ch(struct ring *ring, uint8_t ch) {
+int32_t ring_write_ch(struct ring *ring, uint8_t ch) {
     if (((ring->end + 1) % ring->size) != ring->begin) {
 	ring->data[ring->end++] = ch;
 	ring->end %= ring->size;

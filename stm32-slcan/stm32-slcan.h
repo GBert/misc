@@ -37,6 +37,7 @@ struct ring {
 
 /* usart */
 void usart_setup(void);
+int32_t ring_write_ch(struct ring *ring, uint8_t ch);
 int32_t ring_write(struct ring *ring, uint8_t * data, ring_size_t size);
 
 /* utils */

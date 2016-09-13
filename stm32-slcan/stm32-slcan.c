@@ -244,7 +244,7 @@ void usb_lp_can_rx0_isr(void) {
         else
 	    c = 't';
     }
-    putc(c, stdout);
+    ring_write_ch(&output_ring, c);
     if (ext) {
 	c = (id >> 24) & 0xff;
 	put_hex(c);
@@ -258,20 +258,22 @@ void usb_lp_can_rx0_isr(void) {
 	/* bits 11-9 */
 	c = (id >> 8) & 0x07;
 	c += 0x30;
-	putc(c, stdout);
+	ring_write_ch(&output_ring, c);
 	/* bits 8-1 */
 	c = id & 0xff;
 	put_hex(c);
     }
     c = (dlc & 0x0f) | 0x30;
-    putc(c,  stdout);
+    ring_write_ch(&output_ring, c);
     for (i = 0 ; i < dlc; i++)
 	put_hex(data[i]);
 
-    putc('\n', stdout); /* TODO: debug */
-    putc('\r', stdout);
+    ring_write_ch(&output_ring, '\n'); /* TODO: debug */
+    ring_write_ch(&output_ring, '\r');
 
     can_fifo_release(CAN1, 0);
+
+    USART_CR1(USART2) |= USART_CR1_TXEIE;
 }
 
 int main(void) {
