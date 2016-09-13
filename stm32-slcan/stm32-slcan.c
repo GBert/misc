@@ -18,6 +18,7 @@ extern struct ring input_ring;
 volatile unsigned int counter;
 volatile uint8_t status;
 volatile uint8_t commands_pending;
+uint8_t d_data[8];
 
 static void gpio_setup(void) {
     /* Enable GPIOA & GPIOB & GPIOC clock */
@@ -163,10 +164,10 @@ static void can_setup(void) {
 
 static int can_send(uint8_t *data) {
 
-    if (can_transmit(CAN1, 0x0000fffe,	/* (EX/ST)ID: CAN ID */
+    if (can_transmit(CAN1, 0x0deb0deb,	/* (EX/ST)ID: CAN ID */
 			 true,		/* IDE: CAN ID extended? */
 			 false,		/* RTR: Request transmit? */
-			 5,		/* DLC: Data length */
+			 8,		/* DLC: Data length */
      data) == -1) {
 	 return -1;
     }
@@ -174,7 +175,6 @@ static int can_send(uint8_t *data) {
 }
 
 void sys_tick_handler(void) {
-    static uint8_t data[5] = { 0, 0, 0, 0, 0 };
 
     /* We call this handler every 1ms so every 1ms = 0.001s
      * resulting in 1Hz message rate.
@@ -186,17 +186,10 @@ void sys_tick_handler(void) {
 	counter = 0;
 	/* printf("Hello World !\r\n"); */
 	gpio_toggle(GPIOC, GPIO13);	/* toggle green LED */
-	status ^= 0x01;
-        if (status) {
-            data[4] = 1;
-        } else {
-            data[4] = 0;
-        }
-	data[0] = input_ring.begin;
-	data[1] = input_ring.end;
-	data[2] = commands_pending;
-	if (can_send(data))
+#if 1
+	if (can_send(d_data))
 	    gpio_set(GPIOC, GPIO13);	/* LED green off */
+#endif
     }
 }
 
@@ -250,7 +243,6 @@ void usb_lp_can_rx0_isr(void) {
     for (i = 0 ; i < dlc; i++)
 	put_hex(data[i]);
 
-    ring_write_ch(&output_ring, '\n'); /* TODO: debug */
     ring_write_ch(&output_ring, '\r');
 
     can_fifo_release(CAN1, 0);
@@ -326,6 +318,7 @@ static int slcan_command(void) {
 	send = false;
 	break;
     default:
+	send = false;
 	break;
     }
 
@@ -336,10 +329,18 @@ static int slcan_command(void) {
     if (send)
 	can_transmit(CAN1, id, ext, rtr, dlc, data);
 
+	d_data[0] = input_ring.data[input_ring.begin-3];
+	d_data[1] = input_ring.data[input_ring.begin-2];
+	d_data[2] = input_ring.data[input_ring.begin-1];
+	d_data[3] = input_ring.data[input_ring.begin];
+	d_data[4] = 0;
+	d_data[5] = input_ring.begin;
+	d_data[6] = input_ring.end;
+	d_data[7] = commands_pending;
     /* consume chars until eol reached */
     do {
 	ret = ring_read_ch(&input_ring, NULL);
-    } while (ret == '\r' || ret == -1);
+    } while (ret == '\r');
 
     if (commands_pending)
 	commands_pending--;
