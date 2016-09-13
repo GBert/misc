@@ -171,8 +171,8 @@ static int can_send(uint8_t *data) {
 	 return -1;
     }
     return 0;
-
 }
+
 void sys_tick_handler(void) {
     static uint8_t data[5] = { 0, 0, 0, 0, 0 };
 
@@ -192,6 +192,9 @@ void sys_tick_handler(void) {
         } else {
             data[4] = 0;
         }
+	data[0] = input_ring.begin;
+	data[1] = input_ring.end;
+	data[2] = commands_pending;
 	if (can_send(data))
 	    gpio_set(GPIOC, GPIO13);	/* LED green off */
     }
@@ -279,6 +282,7 @@ static int slcan_command(void) {
     char c;
     bool send;
 
+    id = 0;
     dlc = 0;
     ext = true;
     send = true;
@@ -324,9 +328,7 @@ static int slcan_command(void) {
     default:
 	break;
     }
-    return 0;
 
-   
     for ( i = 0; i < dlc; i++) {
 	data[i] = (uint8_t) get_id(2); 
     }
