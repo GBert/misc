@@ -13,6 +13,8 @@
 
 #include "stm32-slcan.h"
 
+
+extern struct ring output_ring;
 volatile unsigned int counter;
 volatile uint8_t status;
 
@@ -214,14 +216,57 @@ void sys_tick_handler(void) {
     }
 }
 
+static void put_hex(uint8_t c) {
+    char s[2];
+
+    bin2hex(s, c);
+    putc(s[0], stdout);
+    putc(s[1], stdout);
+}
+    
 void usb_lp_can_rx0_isr(void) {
     uint32_t id, fmi;
     bool ext, rtr;
-    uint8_t dlc, data[8];
+    uint8_t i, dlc, data[8];
+    char c;
 
     can_receive(CAN1, 0, false, &id, &ext, &rtr, &fmi, &dlc, data);
 
-    /* doing something useful */
+    if (rtr) {
+	if (ext)
+	    c = 'R';
+	else
+	    c = 'r';
+	putc(c, stdout);
+	putc('0', stdout);
+	putc('\n',  stdout);
+    } else {
+	if (ext) {
+	    putc('T', stdout);
+	    c = (id >> 24) & 0xff;
+	    put_hex(c);
+	    c = (id >> 16) & 0xff;
+	    put_hex(c);
+	    c = (id >> 8) & 0xff;
+	    put_hex(c);
+	    c &= 0xff;
+	    put_hex(c);
+	} else {
+	    /* bits 11-9 */
+	    c = (id >> 8) & 0x07;
+	    c += 0x30;
+	    putc(c, stdout);
+	    /* bits 8-1 */
+	    c = id & 0xff;
+	    put_hex(c);
+	}
+	c = (dlc & 0x0f) | 0x30;
+	putc(c,  stdout);
+	for (i = 0 ; i < dlc; i++)
+	    put_hex(data[i]);
+
+	putc('\n', stdout);
+    }
 
     can_fifo_release(CAN1, 0);
 }
