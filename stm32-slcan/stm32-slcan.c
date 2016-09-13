@@ -238,8 +238,6 @@ void usb_lp_can_rx0_isr(void) {
 	else
 	    c = 'r';
 	putc(c, stdout);
-	putc('0', stdout);
-	putc('\n',  stdout);
     } else {
 	if (ext) {
 	    putc('T', stdout);
@@ -249,9 +247,10 @@ void usb_lp_can_rx0_isr(void) {
 	    put_hex(c);
 	    c = (id >> 8) & 0xff;
 	    put_hex(c);
-	    c &= 0xff;
+	    c = id & 0xff;
 	    put_hex(c);
 	} else {
+	    putc('t', stdout);
 	    /* bits 11-9 */
 	    c = (id >> 8) & 0x07;
 	    c += 0x30;
@@ -265,7 +264,8 @@ void usb_lp_can_rx0_isr(void) {
 	for (i = 0 ; i < dlc; i++)
 	    put_hex(data[i]);
 
-	putc('\n', stdout);
+	putc('\n',  stdout);
+	putc('\r', stdout);
     }
 
     can_fifo_release(CAN1, 0);
