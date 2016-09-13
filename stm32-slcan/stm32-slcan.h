@@ -37,11 +37,12 @@ struct ring {
 
 /* usart */
 void usart_setup(void);
+int32_t ring_write(struct ring *ring, uint8_t * data, ring_size_t size);
 
 /* utils */
 void nibble2hex(char *dst, unsigned char c);
 uint8_t nibble2bin(uint8_t s);
-void bin2hex(char *dst, unsigned char c);
+void bin2hex(uint8_t *dst, unsigned char c);
 uint8_t hex2bin(char *s);
 
 #endif  /* _STM32_SLCAN_H_ */

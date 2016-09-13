@@ -17,7 +17,7 @@ void nibble2hex(char *dst, unsigned char c) {
     *dst = c;
 }
 
-void bin2hex(char *dst, unsigned char c) {
+void bin2hex(uint8_t *dst, unsigned char c) {
     uint8_t nibble;
 
     nibble = ((c & 0xf0) >> 4) + '0';

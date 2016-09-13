@@ -45,7 +45,7 @@ static int32_t ring_write_ch(struct ring *ring, uint8_t ch) {
     return -1;
 }
 
-static int32_t ring_write(struct ring *ring, uint8_t * data, ring_size_t size) {
+int32_t ring_write(struct ring *ring, uint8_t * data, ring_size_t size) {
     int32_t i;
 
     for (i = 0; i < size; i++) {

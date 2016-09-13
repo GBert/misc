@@ -13,7 +13,6 @@
 
 #include "stm32-slcan.h"
 
-
 extern struct ring output_ring;
 volatile unsigned int counter;
 volatile uint8_t status;
@@ -217,11 +216,13 @@ void sys_tick_handler(void) {
 }
 
 static void put_hex(uint8_t c) {
-    char s[2];
+    uint8_t s[2];
 
     bin2hex(s, c);
-    putc(s[0], stdout);
-    putc(s[1], stdout);
+    ring_write(&output_ring, s, 2);
+    /* putc(s[0], stdout);
+       putc(s[1], stdout);
+     */
 }
     
 void usb_lp_can_rx0_isr(void) {
