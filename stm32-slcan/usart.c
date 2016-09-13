@@ -26,6 +26,8 @@
 #define RING_DATA(RING)  (RING)->data
 #define RING_EMPTY(RING) ((RING)->begin == (RING)->end)
 
+extern volatile uint8_t commands_pending;
+
 int _write(int file, char *ptr, int len);
 
 static void ring_init(struct ring *ring, uint8_t * buf, ring_size_t size) { 
@@ -56,7 +58,7 @@ int32_t ring_write(struct ring *ring, uint8_t * data, ring_size_t size) {
     return i;
 }
 
-static int32_t ring_read_ch(struct ring *ring, uint8_t * ch) {
+int32_t ring_read_ch(struct ring *ring, uint8_t * ch) {
     int32_t ret = -1;
 
     if (ring->begin != ring->end) {
@@ -83,18 +85,17 @@ static int32_t ring_read(struct ring *ring, uint8_t *data, ring_size_t size)
 }
 */
 
-/******************************************************************************
- * The example implementation
- *****************************************************************************/
-
 #define BUFFER_SIZE 1024
 
 struct ring output_ring;
+struct ring input_ring;
 uint8_t output_ring_buffer[BUFFER_SIZE];
+uint8_t input_ring_buffer[BUFFER_SIZE];
 
 void usart_setup(void) {
     /* Initialize output ring buffer. */
     ring_init(&output_ring, output_ring_buffer, BUFFER_SIZE);
+    ring_init(&input_ring, input_ring_buffer, BUFFER_SIZE);
 
     /* Enable the USART2 interrupt. */
     nvic_enable_irq(NVIC_USART2_IRQ);
@@ -110,6 +111,7 @@ void usart_setup(void) {
     usart_set_databits(USART2, 8);
     usart_set_stopbits(USART2, USART_STOPBITS_1);
     usart_set_parity(USART2, USART_PARITY_NONE);
+    /* TODO use hardware handshaking */
     usart_set_flow_control(USART2, USART_FLOWCONTROL_NONE);
     usart_set_mode(USART2, USART_MODE_TX_RX);
 
@@ -121,17 +123,22 @@ void usart_setup(void) {
 }
 
 void usart2_isr(void) {
+    uint8_t c;
     /* Check if we were called because of RXNE. */
     if (((USART_CR1(USART2) & USART_CR1_RXNEIE) != 0) && ((USART_SR(USART2) & USART_SR_RXNE) != 0)) {
+	c = usart_recv(USART2);
 
-	/* Indicate that we got data. */
-	gpio_toggle(GPIOA, GPIO8);
+	/* TODO Indicate that we got data. */
+	/* gpio_toggle(GPIOA, GPIO8); */
 
+	/* TODO check befor overflow */
 	/* Retrieve the data from the peripheral. */
-	ring_write_ch(&output_ring, usart_recv(USART2));
 
-	/* Enable transmit interrupt so it sends back the data. */
-	USART_CR1(USART2) |= USART_CR1_TXEIE;
+        /* ignore \n */
+	if (c != '\n')
+	    ring_write_ch(&input_ring, c);
+	if (c == '\r')
+	    commands_pending++;
     }
 
     /* Check if we were called because of TXE. */

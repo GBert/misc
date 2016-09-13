@@ -14,8 +14,10 @@
 #include "stm32-slcan.h"
 
 extern struct ring output_ring;
+extern struct ring input_ring;
 volatile unsigned int counter;
 volatile uint8_t status;
+volatile uint8_t commands_pending;
 
 static void gpio_setup(void) {
     /* Enable GPIOA & GPIOB & GPIOC clock */
@@ -138,27 +140,7 @@ static void can_setup(void) {
     /* Reset CAN */
     can_reset(CAN1);
 
-    /* CAN cell init.
-     * Setting the bitrate to 250kHz. APB1 = 36MHz, 
-     * prescaler = 9 -> 4MHz time quanta frequency.
-     * 1tq sync + 9tq bit segment1 (TS1) + 6tq bit segment2 (TS2) = 
-     * 16time quanto per bit period, therefor 4MHz/16 = 250kHz
-     */
-#if 0
-    if (can_init(CAN1,
-		 false,		/* TTCM: Time triggered comm mode? */
-		 true,		/* ABOM: Automatic bus-off management? */
-		 false,		/* AWUM: Automatic wakeup mode? */
-		 false,		/* NART: No automatic retransmission? */
-		 false,		/* RFLM: Receive FIFO locked mode? */
-		 false,		/* TXFP: Transmit FIFO priority? */
-		 CAN_BTR_SJW_1TQ,
-		 CAN_BTR_TS1_9TQ,
-		 CAN_BTR_TS2_6TQ,
-		 9,
-		 false,
-		 false))	{
-#endif
+    /* defaultt CAN setting 250 kBaud */ 
     if (can_speed(5)) {
 	gpio_clear(GPIOC, GPIO13);	/* LED green on */
 
@@ -220,9 +202,6 @@ static void put_hex(uint8_t c) {
 
     bin2hex(s, c);
     ring_write(&output_ring, s, 2);
-    /* putc(s[0], stdout);
-       putc(s[1], stdout);
-     */
 }
     
 void usb_lp_can_rx0_isr(void) {
@@ -273,11 +252,99 @@ void usb_lp_can_rx0_isr(void) {
 
     can_fifo_release(CAN1, 0);
 
+    /* enable the transmitter now */
     USART_CR1(USART2) |= USART_CR1_TXEIE;
+}
+
+static uint32_t get_id(int nibbles) {
+    int i;
+    uint32_t id;
+    char c;
+
+    id = 0;
+    for (i = 0; i < nibbles; i++) {
+	c = ring_read_ch(&input_ring, NULL);
+	id <<= 4;
+	id |= nibble2bin(c);
+    }
+    return id;
+}
+
+
+static int slcan_command(void) {
+    bool ext, rtr;
+    uint8_t i, dlc, data[8];
+    uint32_t id;
+    char c;
+    bool send;
+
+    dlc = 0;
+    ext = true;
+    send = true;
+    rtr = false;
+
+    c = ring_read_ch(&input_ring, NULL);
+    switch(c) {
+    case 'T':
+	id = get_id(8);
+	dlc = get_id(1);
+	break;
+    case 't':
+	ext = false;
+	id = get_id(3);
+	dlc = get_id(1);
+	break;
+    case 'R':
+	rtr = true;
+	ext = true;
+	id = get_id(8);
+	dlc = get_id(1);
+	break;
+    case 'r':
+	rtr = true;
+	ext = false;
+	id = get_id(3);
+	dlc = get_id(1);
+	break;
+    case 'S':
+	c = ring_read_ch(&input_ring, NULL);
+        can_speed(c);
+	send = false;
+	break;
+    case 'v':
+	send = false;
+	break;
+    case 'V':
+	send = false;
+	break;
+    case 'C':
+	send = false;
+	break;
+    }
+    return 0;
+
+   
+    for ( i = 0; i < dlc; i++) {
+	data[i] = (uint8_t) get_id(2); 
+    }
+
+    if (send)
+	can_transmit(CAN1, id, ext, rtr, dlc, data);
+
+    /* consume chars until eol reached */
+    do {
+	c = ring_read_ch(&input_ring, NULL);
+    } while (c == '\r');
+
+    if (commands_pending)
+	commands_pending--;
+
+    return 0;
 }
 
 int main(void) {
     status = 0;
+    commands_pending = 0;
 
     rcc_clock_setup_in_hse_8mhz_out_72mhz();
     gpio_setup();
@@ -287,7 +354,9 @@ int main(void) {
     systick_setup();
 
     /* endless loop */
-    while (1) ;	
-
+    while (1) {
+	if (commands_pending)
+	    slcan_command();
+    }
     return 0;
 }
