@@ -20,7 +20,7 @@ CAN-Interface
 
 Flashing Serial
 ---------------
-using stm32-flash (does USART2 also work for STM32F103 ?)
+using SWD interface with st-flash or serial loader stm32-flash (does USART2 also work for STM32F103 ?)
 
 ```
 /* USART1 GPIO */
@@ -42,6 +42,11 @@ connect your favorite/cheap 3V3 USB2Serial board to USART2 and do:
 sudo modprobe can
 sudo modprobe can-raw
 sudo modprobe slcan
-sudo slcand -s5 -S500000 /dev/ttyUSB0 can0 # CAN Speed 5 ->250 kBaud - 500,000 Baud seial (fix)
+sudo slcand -s5 -S500000 /dev/ttyUSB0 can0 # CAN Speed 5 ->250 kBaud - 500,000 Baud serial (fix)
 ```
 You can now use it as SocketCAN interface - enjoy :-)
+
+Links
+-----
+more information here: https://wiki.kewl.org/dokuwiki/boards:vcc-gnd
+
