@@ -20,7 +20,7 @@ CAN-Interface
 
 Flashing Serial
 ---------------
-using SWD interface with st-flash or serial loader stm32-flash (does USART2 also work for STM32F103 ?)
+using SWD interface with st-flash or serial loader stm32-flash (works only with USART1)
 
 ```
 /* USART1 GPIO */
