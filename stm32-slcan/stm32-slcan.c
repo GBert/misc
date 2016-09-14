@@ -186,7 +186,7 @@ void sys_tick_handler(void) {
 	counter = 0;
 	/* printf("Hello World !\r\n"); */
 	gpio_toggle(GPIOC, GPIO13);	/* toggle green LED */
-#if 1
+#if 0
 	if (can_send(d_data))
 	    gpio_set(GPIOC, GPIO13);	/* LED green off */
 #endif
@@ -329,6 +329,7 @@ static int slcan_command(void) {
     if (send)
 	can_transmit(CAN1, id, ext, rtr, dlc, data);
 
+#if 0 
 	d_data[0] = input_ring.data[input_ring.begin-3];
 	d_data[1] = input_ring.data[input_ring.begin-2];
 	d_data[2] = input_ring.data[input_ring.begin-1];
@@ -337,6 +338,8 @@ static int slcan_command(void) {
 	d_data[5] = input_ring.begin;
 	d_data[6] = input_ring.end;
 	d_data[7] = commands_pending;
+#endif
+
     /* consume chars until eol reached */
     do {
 	ret = ring_read_ch(&input_ring, NULL);
