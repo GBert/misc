@@ -9,14 +9,6 @@
 
 #include "stm32-slcan.h"
 
-void nibble2hex(char *dst, unsigned char c) {
-
-    c = ((c & 0xf0) >> 4) + '0';
-    if (c >= 0x3a)
-	c += 7;
-    *dst = c;
-}
-
 void bin2hex(uint8_t *dst, unsigned char c) {
     uint8_t nibble;
 

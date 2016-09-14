@@ -42,7 +42,6 @@ int32_t ring_write(struct ring *ring, uint8_t * data, ring_size_t size);
 int32_t ring_read_ch(struct ring *ring, uint8_t * ch);
 
 /* utils */
-void nibble2hex(char *dst, unsigned char c);
 uint8_t nibble2bin(uint8_t s);
 void bin2hex(uint8_t *dst, unsigned char c);
 uint8_t hex2bin(char *s);

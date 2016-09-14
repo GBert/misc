@@ -20,6 +20,7 @@
 
 #include "stm32-slcan.h"
 
+#define BUFFER_SIZE	1024
 #define USART2_SPEED	500000
 
 #define RING_SIZE(RING)  ((RING)->size - 1)
@@ -71,21 +72,6 @@ int32_t ring_read_ch(struct ring *ring, uint8_t * ch) {
     return ret;
 }
 
-/* Not used!
-static int32_t ring_read(struct ring *ring, uint8_t *data, ring_size_t size)
-{
-	int32_t i;
-
-	for (i = 0; i < size; i++) {
-		if (ring_read_ch(ring, data + i) < 0)
-			return i;
-	}
-
-	return -i;
-}
-*/
-
-#define BUFFER_SIZE 1024
 
 struct ring output_ring;
 struct ring input_ring;
