@@ -1,7 +1,7 @@
 STM32 SLCAN
 ===========
 
-using libopencm3 to build cheapest CAN Adapter ever :
+using libopencm3 (real OpenSource - no questionable STMicroelectrnics License) to build cheapest CAN Adapter ever:
 
 ![STM32F103C8T6 microcontroller development board]
 (https://github.com/GBert/misc/raw/master/stm32-slcan/pictures/stm32f103c8t6_dev_board.jpg)
@@ -35,3 +35,13 @@ using stm32-flash (does USART2 also work for STM32F103 ?)
 #define GPIO_USART2_CK                  GPIO4           /* PA4 */
 ```
 
+Usage
+-----
+connect your favorite/cheap 3V3 USB2Serial board to USART2 and do:
+```
+sudo modprobe can
+sudo modprobe can-raw
+sudo modprobe slcan
+sudo slcand -s5 -S500000 /dev/ttyUSB0 can0 # CAN Speed 5 ->250 kBaud - 500,000 Baud seial (fix)
+```
+You can now use it as SocketCAN interface - enjoy :-)
