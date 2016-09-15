@@ -26,18 +26,19 @@ using SWD interface with st-flash or serial loader stm32-flash (works only with 
 /* USART1 GPIO */
 #define GPIO_USART1_TX                  GPIO9           /* PA9 */
 #define GPIO_USART1_RX                  GPIO10          /* PA10 */
+```
 
+Usage
+-----
+connect your favorite/cheap 3V3 USB2Serial board to USART2:
+```
 /* USART2 GPIO */
 #define GPIO_USART2_CTS                 GPIO0           /* PA0 */
 #define GPIO_USART2_RTS                 GPIO1           /* PA1 */
 #define GPIO_USART2_TX                  GPIO2           /* PA2 */
 #define GPIO_USART2_RX                  GPIO3           /* PA3 */
-#define GPIO_USART2_CK                  GPIO4           /* PA4 */
 ```
-
-Usage
------
-connect your favorite/cheap 3V3 USB2Serial board to USART2 and do:
+and do:
 ```
 sudo modprobe can
 sudo modprobe can-raw

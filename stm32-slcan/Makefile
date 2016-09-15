@@ -22,7 +22,7 @@ PREFIX = /embedded/arm-cortex/gcc-arm-none-eabi-4_9-2015q1/bin/arm-none-eabi
 # OPENCM3_DIR = /usr/local/Cellar/arm-lib/libopencm3
 OPENCM3_DIR = /embedded/arm-cortex/src/libopencm3
 
-TTYISP = /dev/ttyUSB0
+TTYISP = /dev/ttyUSB1
 
 OBJS = usart.o utils.o
 BINARY = stm32-slcan
@@ -38,7 +38,7 @@ stm32flash:$(BINARY).bin
 	stm32flash -w $< -b 57600 -v -g 0 $(TTYISP)
 
 backup:
-	stm32flash -r vcc-gnd.bin -b 57600 $(TTYISP)
+	stm32flash -r $(BINARY)_s.bin -b 57600 $(TTYISP)
 
 distclean:clean
 	find . -name "*~" -delete
