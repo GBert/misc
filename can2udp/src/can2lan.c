@@ -17,6 +17,8 @@ static char *UDP_FORMAT_STRG      = "->CAN>UDP     0x%08X   [%d]";
 static char *TCP_FORMAT_STRG      = "->TCP>CAN     0x%08X   [%d]";
 static char *TCP_FORMATS_STRG     = "->TCP>CAN*    0x%08X   [%d]";
 static char *CAN_TCP_FORMAT_STRG  = "->CAN>TCP     0x%08X   [%d]";
+static char *UDP_TCP_FORMAT_STRG  = "->UDP>TCP     0x%08X   [%d]";
+static char *UDP_UDP_FORMAT_STRG  = "->UDP>UDP     0x%08X   [%d]";
 static char *NET_UDP_FORMAT_STRG  = "      UDP->   0x%08X   [%d]";
 static char *NET_TCP_FORMAT_STRG  = "      TCP->   0x%08X   [%d]";
 
@@ -61,7 +63,7 @@ struct timeval last_sent;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.12\n\n");
+    fprintf(stderr, "   Version 1.2\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
@@ -359,6 +361,7 @@ int main(int argc, char **argv) {
     int background = 1;
     /* const int off = 0; */
     const int on = 1;
+    uint32_t canid;
     char buffer[64];
 
     /* clear timestamp for last CAN frame sent */
@@ -702,10 +705,26 @@ int main(int argc, char **argv) {
 	/* received a UDP packet */
 	if (FD_ISSET(sa, &read_fds)) {
 	    if (read(sa, netframe, MAXDG) == CAN_ENCAP_SIZE) {
+		/* check for S88 events on send them to TCP connected clients */
+		memcpy(&canid, netframe, 4);
+		canid = ntohl(canid);
+		if ((canid & 0x00230000) == 0x00230000) {
+		    printf("UDP : canid 0x%08x\n", canid);
+		    for (i = 0; i <= max_tcp_i; i++) {
+			tcp_socket = tcp_client[i];
+			if (tcp_socket < 0)
+			    continue;
+			net_to_net(tcp_socket, NULL, netframe, CAN_ENCAP_SIZE);
+			print_can_frame(UDP_TCP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
+	    		net_to_net(sb, (struct sockaddr *)&baddr, netframe, CAN_ENCAP_SIZE);
+			print_can_frame(UDP_UDP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
+		    }
+		} else {
 		/* send packet on CAN */
-		ret = frame_to_can(sc, netframe);
-		print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
-		check_data_udp(sb, (struct sockaddr *)&baddr, &cs2_config_data, netframe);
+		    ret = frame_to_can(sc, netframe);
+		    print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
+		    check_data_udp(sb, (struct sockaddr *)&baddr, &cs2_config_data, netframe);
+		}
 	    }
 	}
 	/* received a TCP packet */
