@@ -4,7 +4,8 @@
 START=99
 
 start() {
-	s88udp -m 1 -b br-lan
+	# s88udp -m 1 -b br-lan
+	s88udp -p 15731 -m 1 -b br-lan
 }
 
 stop() {

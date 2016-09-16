@@ -51,8 +51,8 @@ struct s88_t {
     int invert;
     int offset;
     uint32_t count;
+    uint16_t deviceid;
     uint16_t hash;
-    uint16_t hw_id;
 };
 
 void usage(char *prg) {
@@ -60,6 +60,7 @@ void usage(char *prg) {
     fprintf(stderr, "   Version 1.2\n\n");
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -i [0|1]            invert signals - default 0 -> not inverting\n");
+    fprintf(stderr, "         -d < id>       using event id - default 0\n");
     fprintf(stderr, "         -e <event id>       using event id - default 0\n");
     fprintf(stderr, "         -m <s88modules>     number of connected S88 modules - default 1\n");
     fprintf(stderr, "         -o <offset>         number of S88 modules to skip in addressing - default 0\n");
@@ -132,7 +133,7 @@ int create_event(struct s88_t *s88, int bus, int offset, uint32_t changed_bits, 
     mask = BIT(31);
     for (i = 0; i < 32; i++) {
 	if (changed_bits & mask) {
-	    temp16 = htons(s88->hw_id);
+	    temp16 = htons(s88->deviceid);
 	    memcpy(&netframe[5], &temp16, 2);
 	    /* TODO */
 	    temp16 = htons(bus * 256 + offset + i + 1);
@@ -220,7 +221,7 @@ int main(int argc, char **argv) {
     destaddr.sin_family = AF_INET;
     destaddr.sin_port = htons(destination_port);
 
-    while ((opt = getopt(argc, argv, "b:e:i:p:m:o:t:fvh?")) != -1) {
+    while ((opt = getopt(argc, argv, "b:e:d:i:p:m:o:t:fvh?")) != -1) {
 	switch (opt) {
 	case 'p':
 	    destination_port = strtoul(optarg, (char **)NULL, 10);
@@ -240,6 +241,9 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "UDP broadcast address or interface error: %s\n", optarg);
 		exit(EXIT_FAILURE);
 	    }
+	    break;
+	case 'd':
+	    s88_data.deviceid = atoi(optarg) & 0xffff;
 	    break;
 	case 'e':
 	    s88_data.hash = atoi(optarg) & 0xffff;
