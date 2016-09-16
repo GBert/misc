@@ -151,7 +151,7 @@ flash: $(BINARY).flash
 
 %.list: %.elf
 	@#printf "  OBJDUMP $(*).list\n"
-	$(Q)$(OBJDUMP) -S $(*).elf > $(*).list
+	$(Q)$(OBJDUMP) -t -x -d -S $(*).elf > $(*).list
 
 %.elf %.map: $(OBJS) $(LDSCRIPT) $(LIB_DIR)/lib$(LIBNAME).a
 	@#printf "  LD      $(*).elf\n"
