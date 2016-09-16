@@ -32,8 +32,16 @@ static void gpio_setup(void) {
     /* Preconfigure LED */
     gpio_set(GPIOC, GPIO13);	/* LED green off */
 
-    /* Configure LED GPIO */
+    /* Preconfigure Osci pin CAN -> ASCII*/
+    gpio_set(GPIOC, GPIO14);
+
+    /* Preconfigure Osci pin ASCII Buffer Send */
+    gpio_set(GPIOC, GPIO14);
+
+    /* Configure LED&Osci GPIO */
     gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
+    gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO14);
+    gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO15);
 
     /* Enable clocks for GPIO port A (for GPIO_USART2_TX) and USART2. */
     rcc_periph_clock_enable(RCC_AFIO);
@@ -111,7 +119,7 @@ static int can_speed(int index) {
 			CAN_BTR_SJW_1TQ, CAN_BTR_TS1_12TQ, CAN_BTR_TS2_2TQ,   3, false, false);
 	break;
     case 8: ret = can_init(CAN1, false, true, false, false, false, false,
-			CAN_BTR_SJW_1TQ, CAN_BTR_TS1_15TQ, CAN_BTR_TS2_2TQ,    2, false, false);
+			CAN_BTR_SJW_1TQ, CAN_BTR_TS1_15TQ, CAN_BTR_TS2_2TQ,   2, false, false);
 	break;
     default:
 	ret = -1;
@@ -208,6 +216,7 @@ void usb_lp_can_rx0_isr(void) {
 
     can_receive(CAN1, 0, false, &id, &ext, &rtr, &fmi, &dlc, data);
 
+    gpio_set(GPIOC, GPIO14);	/* set osci pin */
     if (rtr) {
 	if (ext)
 	    c = 'R';
@@ -247,6 +256,8 @@ void usb_lp_can_rx0_isr(void) {
 
     can_fifo_release(CAN1, 0);
 
+    gpio_clear(GPIOC, GPIO14);	/* clear osci pin - conversion complete */
+    gpio_set(GPIOC, GPIO15);	/* set osci pin - USART start */
     /* enable the transmitter now */
     USART_CR1(USART2) |= USART_CR1_TXEIE;
 }
@@ -305,7 +316,7 @@ static int slcan_command(void) {
 	break;
     case 'S':
 	c = ring_read_ch(&input_ring, NULL);
-        can_speed(c);
+	can_speed(c);
 	send = false;
 	break;
     case 'v':

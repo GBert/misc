@@ -137,6 +137,7 @@ void usart2_isr(void) {
 	if (data == -1) {
 	    /* Disable the TXE interrupt, it's no longer needed. */
 	    USART_CR1(USART2) &= ~USART_CR1_TXEIE;
+	    gpio_clear(GPIOC, GPIO15);  /* clear osci pin */
 	} else {
 	    /* Put data into the transmit register. */
 	    usart_send(USART2, data);
