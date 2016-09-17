@@ -11,6 +11,33 @@
  * This file is derived from the libopencm3 project examples 
  */
 
+/*
+   B12        MICRO USB         GND
+   B13                          GND
+   B14                          3V3
+   B15   RESET    GND    GND  RESET
+   A8    BUTTON  *BOOT1 *BOOT0  B11
+TX A9             3V3    3V3    B10
+RX A10                           B1
+   A11                           B0
+   A12                           A7
+   A15                           A6
+   B3       STM32F103C8T6        A5
+   B4                            A4
+   B5                            A3
+   B6                            A2
+   B7              8M            A1
+   B8           32768            A0
+   B9                           C15
+   5V       PC13     POWER      C14
+   GND      LED      LED        C13
+   3V3           SWD           VBAT
+          3V3 DIO  DCLK GND
+              PA13 PA14
+
+*100K IN SERIES
+ */
+
 #include "stm32-slcan.h"
 
 extern struct ring output_ring;
@@ -33,10 +60,10 @@ static void gpio_setup(void) {
     gpio_set(GPIOC, GPIO13);	/* LED green off */
 
     /* Preconfigure Osci pin CAN -> ASCII*/
-    gpio_set(GPIOC, GPIO14);
+    gpio_clear(GPIOC, GPIO14);
 
     /* Preconfigure Osci pin ASCII Buffer Send */
-    gpio_set(GPIOC, GPIO14);
+    gpio_clear(GPIOC, GPIO15);
 
     /* Configure LED&Osci GPIO */
     gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
@@ -190,7 +217,7 @@ void sys_tick_handler(void) {
 
     /* Transmit CAN frame. */
     counter++;
-    if (counter == 1000) {
+    if (counter == 500) {
 	counter = 0;
 	/* printf("Hello World !\r\n"); */
 	gpio_toggle(GPIOC, GPIO13);	/* toggle green LED */
@@ -214,7 +241,9 @@ void usb_lp_can_rx0_isr(void) {
     uint8_t i, dlc, data[8];
     char c;
 
+    gpio_set(GPIOC, GPIO14);	/* set osci pin */
     can_receive(CAN1, 0, false, &id, &ext, &rtr, &fmi, &dlc, data);
+    gpio_clear(GPIOC, GPIO14);	/* set osci pin */
 
     gpio_set(GPIOC, GPIO14);	/* set osci pin */
     if (rtr) {
@@ -257,7 +286,6 @@ void usb_lp_can_rx0_isr(void) {
     can_fifo_release(CAN1, 0);
 
     gpio_clear(GPIOC, GPIO14);	/* clear osci pin - conversion complete */
-    gpio_set(GPIOC, GPIO15);	/* set osci pin - USART start */
     /* enable the transmitter now */
     USART_CR1(USART2) |= USART_CR1_TXEIE;
 }
