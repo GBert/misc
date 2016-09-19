@@ -4,7 +4,7 @@ STM32 SLCAN
 using libopencm3 (real OpenSource - no questionable STMicroelectronics License) to build cheapest CAN Adapter ever:
 
 ![STM32F103C8T6 microcontroller development board]
-(https://github.com/GBert/misc/raw/master/stm32-slcan/pictures/stm32f103c8t6_dev_board.jpg)
+(https://github.com/GBert/misc/raw/master/stm32-slcan/pictures/stm32f103c8t6_dev_pinout.gif)
 
 Why Serial (SLCAN) and not USB ?
 --------------------------------
