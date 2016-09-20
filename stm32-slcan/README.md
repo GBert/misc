@@ -10,6 +10,8 @@ Why Serial (SLCAN) and not USB ?
 --------------------------------
 it's not possible to use CAN and USB at the same time on STM32F103
 
+![Cheapest CAN Interface ever]
+(https://github.com/GBert/misc/raw/master/stm32-slcan/pictures/stm32-slcan.png)
 CAN-Interface
 -------------
 ```
