@@ -12,26 +12,26 @@
  */
 
 /*
-   B12        MICRO USB         GND
-   B13                          GND
-   B14                          3V3
-   B15   RESET    GND    GND  RESET
-   A8    BUTTON  *BOOT1 *BOOT0  B11
-TX A9             3V3    3V3    B10
-RX A10                           B1
-   A11                           B0
-   A12                           A7
-   A15                           A6
-   B3       STM32F103C8T6        A5
-   B4                            A4
-   B5                            A3
-   B6                            A2
-   B7              8M            A1
-   B8           32768            A0
-   B9                           C15
-   5V       PC13     POWER      C14
-   GND      LED      LED        C13
-   3V3           SWD           VBAT
+      B12        MICRO USB         GND
+      B13                          GND
+      B14                          3V3
+      B15   RESET    GND    GND  RESET
+      A8    BUTTON  *BOOT1 *BOOT0  B11
+(TX0) A9             3V3    3V3    B10
+(RX0) A10                           B1
+      A11                           B0
+      A12                           A7
+      A15                           A6
+      B3       STM32F103C8T6        A5
+      B4                            A4
+      B5                            A3 RX2
+      B6                            A2 TX2
+      B7              8M            A1 RTS2
+CANRX B8           32768            A0 CTS2
+CANTX B9                           C15
+      5V       PC13     POWER      C14
+      GND      LED      LED        C13
+      3V3           SWD           VBAT
           3V3 DIO  DCLK GND
               PA13 PA14
 
@@ -197,18 +197,6 @@ static void can_setup(void) {
     can_enable_irq(CAN1, CAN_IER_FMPIE0);
 }
 
-static int can_send(uint8_t *data) {
-
-    if (can_transmit(CAN1, 0x0deb0deb,	/* (EX/ST)ID: CAN ID */
-			 true,		/* IDE: CAN ID extended? */
-			 false,		/* RTR: Request transmit? */
-			 8,		/* DLC: Data length */
-     data) == -1) {
-	 return -1;
-    }
-    return 0;
-}
-
 void sys_tick_handler(void) {
 
     /* We call this handler every 1ms so every 1ms = 0.001s
@@ -221,10 +209,6 @@ void sys_tick_handler(void) {
 	counter = 0;
 	/* printf("Hello World !\r\n"); */
 	gpio_toggle(GPIOC, GPIO13);	/* toggle green LED */
-#if 0
-	if (can_send(d_data))
-	    gpio_set(GPIOC, GPIO13);	/* LED green off */
-#endif
     }
 }
 
@@ -290,7 +274,7 @@ void usb_lp_can_rx0_isr(void) {
     USART_CR1(USART2) |= USART_CR1_TXEIE;
 }
 
-static uint32_t get_id(int nibbles) {
+static uint32_t get_nibbles(int nibbles) {
     int i;
     uint32_t id;
     char c;
@@ -322,25 +306,25 @@ static int slcan_command(void) {
     c = ring_read_ch(&input_ring, NULL);
     switch(c) {
     case 'T':
-	id = get_id(8);
-	dlc = get_id(1);
+	id = get_nibbles(8);
+	dlc = get_nibbles(1);
 	break;
     case 't':
 	ext = false;
-	id = get_id(3);
-	dlc = get_id(1);
+	id = get_nibbles(3);
+	dlc = get_nibbles(1);
 	break;
     case 'R':
 	rtr = true;
 	ext = true;
-	id = get_id(8);
-	dlc = get_id(1);
+	id = get_nibbles(8);
+	dlc = get_nibbles(1);
 	break;
     case 'r':
 	rtr = true;
 	ext = false;
-	id = get_id(3);
-	dlc = get_id(1);
+	id = get_nibbles(3);
+	dlc = get_nibbles(1);
 	break;
     case 'S':
 	c = ring_read_ch(&input_ring, NULL);
@@ -362,22 +346,11 @@ static int slcan_command(void) {
     }
 
     for ( i = 0; i < dlc; i++) {
-	data[i] = (uint8_t) get_id(2); 
+	data[i] = (uint8_t) get_nibbles(2); 
     }
 
     if (send)
 	can_transmit(CAN1, id, ext, rtr, dlc, data);
-
-#if 0 
-	d_data[0] = input_ring.data[input_ring.begin-3];
-	d_data[1] = input_ring.data[input_ring.begin-2];
-	d_data[2] = input_ring.data[input_ring.begin-1];
-	d_data[3] = input_ring.data[input_ring.begin];
-	d_data[4] = 0;
-	d_data[5] = input_ring.begin;
-	d_data[6] = input_ring.end;
-	d_data[7] = commands_pending;
-#endif
 
     /* consume chars until eol reached */
     do {

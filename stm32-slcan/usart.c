@@ -44,7 +44,6 @@ int32_t ring_write_ch(struct ring *ring, uint8_t ch) {
 	ring->end %= ring->size;
 	return (uint32_t) ch;
     }
-
     return -1;
 }
 
@@ -55,7 +54,6 @@ int32_t ring_write(struct ring *ring, uint8_t * data, ring_size_t size) {
 	if (ring_write_ch(ring, data[i]) < 0)
 	    return -i;
     }
-
     return i;
 }
 
@@ -68,7 +66,6 @@ int32_t ring_read_ch(struct ring *ring, uint8_t * ch) {
 	if (ch)
 	    *ch = ret;
     }
-
     return ret;
 }
 
@@ -151,15 +148,11 @@ int _write(int file, char *ptr, int len) {
 
     if (file == 1) {
 	ret = ring_write(&output_ring, (uint8_t *) ptr, len);
-
 	if (ret < 0)
 	    ret = -ret;
-
 	USART_CR1(USART2) |= USART_CR1_TXEIE;
-
 	return ret;
     }
-
     errno = EIO;
     return -1;
 }
