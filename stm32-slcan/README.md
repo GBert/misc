@@ -57,6 +57,7 @@ You can now use it as SocketCAN interface - enjoy :-)
 Links
 -----
 Schematic https://github.com/GBert/misc/raw/master/stm32-slcan/pictures/arduino_stm32f103c8t6_schematics.png
+https://github.com/GBert/misc/raw/master/stm32-slcan/pictures/STM32F103C8T6-DEV-BOARD-SCH.pdf
 
 more information here: https://wiki.kewl.org/dokuwiki/boards:vcc-gnd
 
