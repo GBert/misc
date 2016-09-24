@@ -122,6 +122,17 @@ define Package/rocrail-cs-srcp/description
  Command Station SRCP
 endef
 
+define Package/rocrail-cs-rclink
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=Command Station RCLink
+  DEPENDS:=rocrail-server
+endef
+
+define Package/rocrail-cs-rclink/description
+ Command Station RCLink
+endef
+
 define Package/rocrail-cs-p50
   SECTION:=utils
   CATEGORY:=Utilities
@@ -197,6 +208,11 @@ define Package/rocrail-cs-mgbox/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/mgbox.so $(1)/opt/rocrail
 endef
 
+define Package/rocrail-cs-rclink/install
+	$(INSTALL_DIR) $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/rclink.so $(1)/opt/rocrail
+endef
+
 define Package/rocrail-cs-srcp/install
 	$(INSTALL_DIR) $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/srcp.so $(1)/opt/rocrail
@@ -216,5 +232,6 @@ $(eval $(call BuildPackage,rocrail-mqtt))
 $(eval $(call BuildPackage,rocrail-cs-ddx))
 $(eval $(call BuildPackage,rocrail-cs-mcs2))
 $(eval $(call BuildPackage,rocrail-cs-mgbox))
+$(eval $(call BuildPackage,rocrail-cs-rclink))
 $(eval $(call BuildPackage,rocrail-cs-srcp))
 $(eval $(call BuildPackage,rocrail-cs-p50))
