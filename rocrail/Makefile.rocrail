@@ -144,6 +144,17 @@ define Package/rocrail-cs-p50/description
  Command Station p50
 endef
 
+define Package/rocrail-cs-all-other
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=All Command Station
+  DEPENDS:=rocrail-server
+endef
+
+define Package/rocrail-cs-all-other/description
+ All Command Stations
+endef
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/rocs fromtar PLATFORM=LINUX all
 	cp $(PKG_BUILD_DIR)/rocs/bin/ogen $(PKG_BUILD_DIR)/rocs/bin/ogen_x86
@@ -223,6 +234,11 @@ define Package/rocrail-cs-p50/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/p50.so $(1)/opt/rocrail
 endef
 
+define Package/rocrail-cs-all-other/install
+	$(INSTALL_DIR) $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/*.so $(1)/opt/rocrail
+endef
+
 
 $(eval $(call BuildPackage,rocrail))
 $(eval $(call BuildPackage,rocrail-server))
@@ -235,3 +251,4 @@ $(eval $(call BuildPackage,rocrail-cs-mgbox))
 $(eval $(call BuildPackage,rocrail-cs-rclink))
 $(eval $(call BuildPackage,rocrail-cs-srcp))
 $(eval $(call BuildPackage,rocrail-cs-p50))
+$(eval $(call BuildPackage,rocrail-cs-all-other))
