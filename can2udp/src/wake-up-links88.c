@@ -39,8 +39,8 @@
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
 #define TCYC_MAX	1000	/* max cycle time in ms */
 
-static char *F_CAN_FORMAT_STRG	= "      CAN->  CANID 0x%08X   [%d]";
-static char *T_CAN_FORMAT_STRG	= "      CAN<-  CANID 0x%08X   [%d]";
+static char *F_CAN_FORMAT_STRG	= "      CAN->   0x%08X   [%d]";
+static char *T_CAN_FORMAT_STRG	= "      CAN<-   0x%08X   [%d]";
 static char delimiters[] = " .,;:!-";
 
 static unsigned char M_CAN_BOOTLOADER[]		= { 0x00, 0x36, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -56,8 +56,11 @@ unsigned char netframe[MAXDG];
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.2\n\n");
-    fprintf(stderr, "         -c <config_string>  config string \"B1=1,B2=3\"\n");
+    fprintf(stderr, "   Version 1.21\n\n");
+    fprintf(stderr, "         -c <config_string>  config string like \"B1=1,T1=10,B2=3\"\n");
+    fprintf(stderr, "                             means: B1=1  -> bus 1 length one module\n");
+    fprintf(stderr, "                                    T1=10 -> bus 1 cycle time 10ms\n");
+    fprintf(stderr, "                                    B2=3  -> bus 2 length three modules\n");
     fprintf(stderr, "         -i <can int>        can interface - default can0\n");
     fprintf(stderr, "         -d                  daemonize\n");
     fprintf(stderr, "         -e #no_of_links88   exit after no of LinkS88 responded - default 1\n\n");
