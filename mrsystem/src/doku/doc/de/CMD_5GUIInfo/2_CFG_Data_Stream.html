@@ -1,0 +1,454 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<meta content="text/html;charset=ISO-8859-1" http-equiv="Content-Type">
+<!--NewPage--><!-- Extract of javadoc --><title>Config Data Stream</title>
+
+<meta content="2009-09-23" name="date">
+<link title="Style" href="../../stylesheet.css" type="text/css" rel="stylesheet">
+<script type="text/javascript">
+function windowTitle()
+{
+if (location.href.indexOf('is-external=true') == -1) {
+parent.document.title="Config Data Stream";
+}
+}
+</script>
+</head>
+<body onload="windowTitle();" style="background-color: white;">
+<hr>
+<br>
+<table style="width: 100%;" summary="" border="0" cellpadding="1" cellspacing="0">
+<tbody>
+<tr>
+<td colspan="2" class="NavBarCell1" bgcolor="#eeeeff">
+<table summary="" border="0" cellpadding="0" cellspacing="3">
+<tbody>
+<tr align="center" valign="top">
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../overview-summary.html"><font class="NavBarFont1"><b>Überblick</b></font></a>&nbsp;</td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="kapitel-summary.html"><font class="NavBarFont1"><b>Kapitel</b></font></a>&nbsp;</td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td style="background-color: white; text-align: right; vertical-align: middle;" class="NavBarCell2"><font size="-2"> <a href="../../index.html" target="_top"><b>FRAMES</b></a>
+&nbsp;
+&nbsp;<a href="2_CFG_Data_Stream.html" target="_top"><b>NO
+FRAMES</b></a> &nbsp;
+&nbsp;
+<script type="text/javascript">
+<!--
+if(window==top) {
+document.writeln('<A HREF="../../allclasses-noframe.html"><B>All Classes</B></A>');
+}
+//-->
+</script>
+<noscript> <A
+HREF="../../allclasses-noframe.html"><B>All
+Classes</B></A>
+</noscript>
+</font></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>Config Data Stream</h2>
+<hr>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="2" align="left"><font size="+2">
+<b>Kennung</b></font></th>
+</tr>
+<tr class="TableRowColor" bgcolor="white">
+<td>
+Config Data Stream
+(<i><font color="#0000ff">0x21</font></i>,
+in CAN-ID: <i><font color="#ff0000">0x42</font></i>)
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+<b>Format</b></font></th>
+</tr>
+</tbody>
+</table>
+<br>
+<table style="text-align: center; width: 653px;" class="CanTable" border="1" bordercolor="#000000" cellspacing="1">
+<tbody>
+<tr>
+<td style="width: 7%;">Prio
+</td>
+<td style="width: 9%;">
+Command
+</td>
+<td style="width: 5%;">
+Resp.
+</td>
+<td style="width: 6%;">
+Hash
+</td>
+<td style="width: 6%;">
+DLC
+</td>
+<td style="width: 8%;">
+D-Byte 0
+</td>
+<td style="width: 8%;">
+D-Byte 1
+</td>
+<td style="width: 8%;">
+D-Byte 2
+</td>
+<td style="width: 8%;">
+D-Byte 3
+</td>
+<td style="width: 8%;">
+D-Byte 4
+</td>
+<td style="width: 8%;">
+D-Byte 5
+</td>
+<td style="width: 8%;">
+D-Byte 6
+</td>
+<td style="width: 8%;">
+D-Byte 7
+</td>
+</tr>
+<tr>
+<td>
+2+2 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+1 Bit
+</td>
+<td>
+16 Bit
+</td>
+<td>
+4 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+</tr>
+<tr>
+<td rowspan="2">
+Message
+Prio
+</td>
+<td rowspan="2">
+<font color="#0000ff">CFG
+Data Stream</font>
+</td>
+<td rowspan="2">
+0|1
+</td>
+<td rowspan="2">
+-</td>
+<td rowspan="2">
+6
+</td>
+<td colspan="4">
+Dateilänge
+/ Streamlänge in Bytes
+</td>
+<td colspan="2" rowspan="1">
+CRC</td>
+<td rowspan="2" style="background-color: silver;">
+&nbsp;</td>
+<td rowspan="2" style="background-color: silver;">
+&nbsp;</td>
+</tr>
+<tr>
+<td>
+High
+</td>
+<td>
+-</td>
+<td>
+-</td>
+<td>
+Low
+</td>
+<td>High</td>
+<td>Low</td>
+</tr>
+<tr>
+<td rowspan="2">
+Message
+Prio
+</td>
+<td rowspan="2">
+<font color="#0000ff">CFG
+Data Stream</font>
+</td>
+<td rowspan="2">
+0|1
+</td>
+<td rowspan="2">
+-</td>
+<td rowspan="2">
+7
+</td>
+<td colspan="4">
+Dateilänge
+/ Streamlänge in Bytes
+</td>
+<td colspan="2" rowspan="1">
+CRC</td>
+<td rowspan="2">
+Free</td>
+<td rowspan="2" style="background-color: silver;">
+&nbsp;</td>
+</tr>
+<tr>
+<td>
+High
+</td>
+<td>
+-</td>
+<td>
+-</td>
+<td>
+Low
+</td>
+<td>High</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>
+Prio
+</td>
+<td>
+<font color="#0000ff">CFG
+Data Stream</font>
+</td>
+<td>
+1
+</td>
+<td>
+-
+</td>
+<td>
+8
+</td>
+<td>
+D-Byte 0
+</td>
+<td>
+D-Byte 1
+</td>
+<td>
+D-Byte 2
+</td>
+<td>
+D-Byte 3
+</td>
+<td>
+D-Byte 4
+</td>
+<td>
+D-Byte 5
+</td>
+<td>
+D-Byte 6
+</td>
+<td>
+D-Byte 7
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+<b>Beschreibung</b></font></th>
+</tr>
+</tbody>
+</table>
+<p>Überträgt den Datenstrom einer Konfigurationsdatei.&nbsp;</p>
+<p>Folgt unmittelbar auf das (letzte) Antwortframe der "Config
+Data Anforderung" oder zum Mitteilen einer Konfigurationsänderung per
+Broadcast. Durch die DLC wird der Inhalt unterschieden:&nbsp;</p>
+<p>DLC = 6:&nbsp;</p>
+<p style="margin-left: 40px;">Ist das erste Paket im
+Datenstrom. Es definiert den Datenstrom als Antwort auf eine Config
+Data Anfrage. Es enthält die Dateilänge in Bytes, sowie die CRC der zu
+übertragenden Bytes.
+Bei diesem Typ des Datenstroms wird zur Kollisionsauflösung der Hash des<span style="font-weight: bold;"> Empfängers</span>
+verwendet.&nbsp;</p>
+<p>DLC = 7:&nbsp;</p>
+<p style="margin-left: 40px;">Ist das erste Paket im
+Datenstrom. Es definiert den Datenstrom als Broadcast einer
+Konfigänderung. Es enthält die Dateilänge in Bytes, sowie die CRC der
+zu übertragenden Bytes, sowie einem reservierten Byte. Der Datenstrom
+ist bei dieser Übertragungsform immer(?) Zlib-Komprimiert. Bei diesem
+Typ des Datenstroms wird zur Kollisionsauflösung der Hash des <span style="font-weight: bold;">Senders</span>
+verwendet.&nbsp;</p>
+<p>DLC = 8:</p>
+<p style="margin-left: 40px;">Datenpaket: Es enthält immer
+8 Byte an Daten. Stehen weniger Daten zur Verfügung, so wird mit 0x00
+gepaddet. Wird immer ab dem 2.ten Datenpaket gesendet. Hash richtet
+sich nach obiger Systematik.
+Alle anderen DLC-Längen:
+Tritt im Datenstrom eine andere Länge auf, so ist der Empfang
+abzubrechen bzw zu beenden.
+</p>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+Beispiel</font></th>
+</tr>
+</tbody>
+</table>
+<p></p>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+Antwort</font></th>
+</tr>
+</tbody>
+</table>
+<p></p>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+Besonderheiten</font></th>
+</tr>
+</tbody>
+</table>
+<p>Pakete werden nicht bestätigt und werden mit niedriger Prio im
+CAN übertragen</p>
+<p ="">Der CRC ist ein 16-Bit-CRC mit dem
+Startwert 0xFFFF und dem Polynom 0x1021,
+der nach
+folgendem Algorithmus berechnet wird.</p>
+<dd style="margin-left: 0px;">u16
+CtDataSender::updateCRC (u16 CRC_acc, u8 CRC_input)</dd>
+<dd style="margin-left: 0px;">{</dd>
+<dd style="margin-left: 20px;"><span style="color: rgb(51, 51, 255);">#define</span>
+POLY 0x1021</dd>
+<dd style="margin-left: 20px;"><span style="color: green;">//
+Create the CRC "dividend" for polynomial arithmetic (binary
+arithmetic with no carries)</span></dd>
+<dd style="margin-left: 20px;">CRC_acc
+= CRC_acc ^ (CRC_input &lt;&lt; 8);</dd>
+<dd style="margin-left: 20px;"><span style="color: green;">//
+"Divide" the poly into the dividend using CRC XOR
+subtraction CRC_acc holds the</span></dd>
+<dd style="margin-left: 20px;"><span style="color: green;">//
+"remainder" of each divide. Only complete this division for
+8 bits since input is 1 byte</span></dd>
+<dd style="margin-left: 20px;"><span style="color: rgb(51, 51, 255);">for</span>
+(<span style="color: rgb(51, 51, 255);">int</span>
+i = 0; i &lt; 8; i++) {</dd>
+<dd style="margin-left: 40px;"><span style="color: green;">//
+Check if the MSB is set (if MSB is 1, then the POLY can "divide"
+into the "dividend")</span></dd>
+<dd style="margin-left: 40px;"><span style="color: rgb(51, 51, 255);">if</span>
+((CRC_acc &amp; 0x8000) == 0x8000) {</dd>
+<dd style="margin-left: 60px;"><span style="color: green;">//
+if so, shift the CRC value, and XOR "subtract" the poly</span></dd>
+<dd style="margin-left: 60px;">CRC_acc
+= CRC_acc &lt;&lt; 1;</dd>
+<dd style="margin-left: 60px;">CRC_acc
+^= POLY;</dd>
+<dd style="margin-left: 40px;">}</dd>
+<dd style="margin-left: 40px;"><span style="color: rgb(51, 51, 255);">else</span>
+{</dd>
+<dd style="margin-left: 60px;"><span style="color: green;">//
+if not, just shift the CRC value</span></dd>
+<dd style="margin-left: 60px;">CRC_acc
+= CRC_acc &lt;&lt; 1;</dd>
+<dd style="margin-left: 40px;">}</dd>
+<dd style="margin-left: 20px;">}</dd>
+<dd style="margin-left: 20px;"><span style="color: green;">//
+Return the final remainder (CRC value)</span></dd>
+<dd style="margin-left: 20px;"><span style="color: rgb(51, 51, 255);">return</span>
+CRC_acc;</dd>
+<dd style="margin-left: 0px;">
+}</dd>
+<hr><br>
+<table style="width: 100%;" summary="" border="0" cellpadding="1" cellspacing="0">
+<tbody>
+<tr>
+<td colspan="2" class="NavBarCell1" bgcolor="#eeeeff">
+<table summary="" border="0" cellpadding="0" cellspacing="3">
+<tbody>
+<tr align="center" valign="top">
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../overview-summary.html"><font class="NavBarFont1"><b>Überblick</b></font></a>&nbsp;</td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="package-summary.html"><font class="NavBarFont1"><b>Package</b></font></a>&nbsp;</td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td style="background-color: white; text-align: right;" class="NavBarCell2"><font size="-2"> <a href="../../index.html" target="_top"><b>FRAMES</b></a>
+&nbsp;
+&nbsp;<a href="2_CFG_Data_Stream.html" target="_top"><b>NO
+FRAMES</b></a> &nbsp;
+&nbsp;
+<script type="text/javascript">
+<!--
+if(window==top) {
+document.writeln('<A HREF="../../allclasses-noframe.html"><B>All Classes</B></A>');
+}
+//-->
+</script>
+<noscript> <A
+HREF="../../allclasses-noframe.html"><B>All
+Classes</B></A>
+</noscript>
+</font></td>
+</tr>
+</tbody>
+</table>
+<br>
+<hr>
+</body></html>
