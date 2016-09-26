@@ -40,22 +40,19 @@
 #define MR_CS2_UDP_REMOTE_PORT 15730
 #define MR_CS2_UDP_LENGTH 13
 
-/* Namen fuer MS1 CAN Anmeldung */
-#define MrMs1Close(socket)      close(socket)
-#define MrMs1Send(socket, data) write(socket, (char *)data, sizeof(struct can_frame))
-#define MrMs1Connect(IfName)    MrConnectCan(IfName)
-
 #define MrEthCs2Close(socket)   close(socket)
 
 void MrEthCs2Encode(char *UdpFrame, MrCs2CanDataType *CanMsg);
 void MrEthCs2Decode(MrCs2CanDataType *CanMsg, char *UdpFrame);
-int MrConnectCan(char *IfName);
 int MrEthCs2StartServer(void);
 int MrEthCs2StartBcServer(void);
 int MrEthCs2StartAppServer(void);
 int MrEthCs2Accept(int ServSock);
 void MrEthCs2MkBcAddr(struct sockaddr_in *baddr, char *IpAddr);
 BOOL MrEthCs2Recv(int Socket, struct sockaddr_in *ClntAddr, char *Data);
-void MrEthCs2Send(int Socket, struct sockaddr_in *baddr, char *Data);
+void MrEthCs2SendTo(int Socket, struct sockaddr_in *baddr, char *Data);
+void MrEthCs2Send(int Socket, char *Data);
+int MrEthCs2ConnectClient(void);
+int MrEthCs2ConnectTcpClient(struct sockaddr_in *UdpSrvAddr);
 
 #endif

@@ -1,12 +1,12 @@
 TARGET=libmr_can.a
-OBJS=60113_start.o connect_can.o enceth.o deceth.o sendeth.o recveth.o starteth.o starteth_bc.o mk_bcaddr.o starteth_tcp.o accept_tcp.o cs2_encode.o cs2_decode.o trace.o \
-	calc_hash.o calc_hash_fnr.o crc.o iscs2msg.o encode_id.o decode_id.o \
+OBJS=enceth.o deceth.o sendeth.o sendtoeth.o recveth.o starteth.o starteth_bc.o mk_bcaddr.o starteth_tcp.o accept_tcp.o cs2_encode.o cs2_decode.o trace.o \
+	calc_hash.o calc_hash_fnr.o crc.o iscs2msg.o encode_id.o decode_id.o conn_eth.o conn_tcp.o \
 	cand0000.o cand0001.o cand0002.o cand0003.o cand0004.o cand0005.o cand0006.o cand0007.o cand0008.o cand0009.o cand000a.o cand000b.o cand000c.o cand0080.o \
 	cane0000.o cane0001.o cane0002.o cane0003.o cane0004.o cane0005.o cane0006.o cane0007.o cane0008.o cane0009.o cane000a.o cane000b.o cane000c.o cane0080.o \
 	cand01.o cand02.o cand03.o cand04.o cand05.o cand06.o cand07.o cand08.o \
-	cand0b.o cand10.o cand11.o cand18.o cand1d.o cand20.o cand21.o cand30.o \
+	cand0b.o cand10.o cand11.o cand18.o cand1b.o cand1d.o cand20.o cand21.o cand30.o \
 	cane01.o cane02.o cane03.o cane04.o cane05.o cane06.o cane07.o cane08.o \
-	cane0b.o cane10.o cane11.o cane18.o cane1d.o cane20.o cane21.o cane30.o
+	cane0b.o cane10.o cane11.o cane18.o cane1b.o cane1d.o cane20.o cane21.o cane30.o
 
 %.o: %.c
 	$(CC) $(CFLAGS) -I$(INCLUDE_PATH) -c $<
@@ -19,15 +19,13 @@ $(TARGET): $(OBJS)
 	cp mr_can.h $(INCLUDE_PATH)
 	cp m_cs2ms2.h $(INCLUDE_PATH)
 
-60113_start.o: 60113_start.c mr_can.h m_cs2ms2.h
-
 crc.o: crc.c mr_can.h m_cs2ms2.h
-
-connect_can.o: connect_can.c mr_can.h m_cs2ms2.h
 
 enceth.o: enceth.c mr_can.h m_cs2ms2.h
 
 deceth.o: deceth.c mr_can.h m_cs2ms2.h
+
+sendtoeth.o: sendtoeth.c mr_can.h m_cs2ms2.h
 
 sendeth.o: sendeth.c mr_can.h m_cs2ms2.h
 
@@ -42,6 +40,10 @@ starteth_bc.o: starteth_bc.c mr_can.h m_cs2ms2.h
 mk_bcaddr.o: mk_bcaddr.c mr_can.h m_cs2ms2.h
 
 starteth_tcp.o: starteth_tcp.c mr_can.h m_cs2ms2.h
+
+conn_eth.o: conn_eth.c mr_can.h m_cs2ms2.h
+
+conn_tcp.o: conn_tcp.c mr_can.h m_cs2ms2.h
 
 cs2_encode.o: cs2_encode.c mr_can.h m_cs2ms2.h
 
@@ -131,6 +133,8 @@ cand11.o: cand11.c mr_can.h m_cs2ms2.h
 
 cand18.o: cand18.c mr_can.h m_cs2ms2.h
 
+cand1b.o: cand1b.c mr_can.h m_cs2ms2.h
+
 cand1d.o: cand1d.c mr_can.h m_cs2ms2.h
 
 cand20.o: cand20.c mr_can.h m_cs2ms2.h
@@ -162,6 +166,8 @@ cane10.o: cane10.c mr_can.h m_cs2ms2.h
 cane11.o: cane11.c mr_can.h m_cs2ms2.h
 
 cane18.o: cane18.c mr_can.h m_cs2ms2.h
+
+cane1b.o: cane1b.c mr_can.h m_cs2ms2.h
 
 cane1d.o: cane1d.c mr_can.h m_cs2ms2.h
 

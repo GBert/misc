@@ -9,7 +9,7 @@
 #include <config.h>
 #include "cs2eth.h"
 
-#define SOFTWARE_VERSION "1.06"
+#define SOFTWARE_VERSION "1.10"
 
 static void usage(char *name)
 {
@@ -78,8 +78,8 @@ int main(int argc, char *argv[])
                           ConfigGetStrVal(Config, CfgIfaceVal),
                           ConfigGetStrVal(Config, CfgAddrVal),
                           ConfigGetIntVal(Config, CfgPortVal),
-                          ConfigGetIntVal(Config, CfgUdpBcVal),
-                          ConfigGetStrVal(Config, CfgBcVal)
+                          ConfigGetIntVal(Config, CfgBcVal),
+                          ConfigGetStrVal(Config, CfgUdpBcVal)
 #ifdef TRACE
                           , ConfigGetIntVal(Config, CfgTraceVal)
 #endif
@@ -113,8 +113,8 @@ int main(int argc, char *argv[])
                        ConfigGetStrVal(Config, CfgIfaceVal),
                        ConfigGetStrVal(Config, CfgAddrVal),
                        ConfigGetIntVal(Config, CfgPortVal),
-                       ConfigGetIntVal(Config, CfgUdpBcVal),
-                       ConfigGetStrVal(Config, CfgBcVal)
+                       ConfigGetIntVal(Config, CfgBcVal),
+                       ConfigGetStrVal(Config, CfgUdpBcVal)
 #ifdef TRACE
                        , ConfigGetIntVal(Config, CfgTraceVal)
 #endif

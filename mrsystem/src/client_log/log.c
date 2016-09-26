@@ -54,7 +54,9 @@ static void SigHandler(int sig)
 static BOOL Start(LogStruct *Data)
 {  struct sigaction SigStruct;
 
-   if (strlen(LogGetInterface(Data)) > 0)
+   if ((strlen(LogGetInterface(Data)) > 0) &&
+       ((strlen(LogGetAddress(Data)) == 0) ||
+        (strcmp(LogGetAddress(Data), "0.0.0.0") == 0)))
    {
       LogSetClientSock(Data,
                        MrIpcConnectIf(LogGetInterface(Data),
@@ -123,6 +125,13 @@ static void ProcessSystemData(LogStruct *Data, MrIpcCmdType *CmdFrame)
                 MrIpcGetCommand(CmdFrame),
                 MrIpcGetCanCommand(CmdFrame),
                 MrIpcGetRawDlc(CmdFrame));
+         printf("sender %d receiver %d\n",
+                MrIpcGetSenderSocket(CmdFrame),
+                MrIpcGetReceiverSocket(CmdFrame));
+         printf("lp1 %lx ip1 %0x ip2%0x\n",
+                MrIpcGetIntLp1(CmdFrame),
+                MrIpcGetIntIp1(CmdFrame),
+                MrIpcGetIntIp2(CmdFrame));
          for (i = 0; i < MR_CS2_NUM_CAN_BYTES; i++)
             printf(" %02x", MrIpcGetRawDataI(CmdFrame, i));
          printf("\n");

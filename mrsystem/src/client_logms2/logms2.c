@@ -11,6 +11,8 @@
 #include <boolean.h>
 #include <mr_ipc.h>
 #include <mr_can.h>
+#include "../client_ms2/can_io.h"
+#include "../client_ms2/can_client.h"
 #include "logms2.h"
 
 #define SELECT_TIMEOUT 100
@@ -26,9 +28,7 @@ Logms2Struct *Logms2Create(void)
       Logms2SetVerbose(Data, FALSE);
       Logms2SetInterface(Data, (char *)NULL);
       Logms2SetServerPort(Data, -1);
-      Logms2SetClientSock(Data, -1);
-      Logms2SetCanName(Data, strdup("can0"));
-      Logms2SetCanSock(Data, -1);
+      Logms2SetIoFunctions(Data, (IoFktStruct *)NULL);
    }
    return(Data);
 }
@@ -41,18 +41,14 @@ void Logms2Destroy(Logms2Struct *Data)
 }
 
 void Logms2Init(Logms2Struct *Data, BOOL Verbose, char *Interface, char *Addr,
-                int Port, char *CanIf)
+                int Port, IoFktStruct *IoFunctions)
 {
    Logms2SetVerbose(Data, Verbose);
    Logms2SetInterface(Data, Interface);
    Logms2SetAddress(Data, Addr);
    Logms2SetServerPort(Data, Port);
    Logms2SetClientSock(Data, -1);
-   Logms2SetCanSock(Data, -1);
-   if (CanIf != (char *)NULL)
-   {
-      Logms2SetCanName(Data, CanIf);
-   }
+   Logms2SetIoFunctions(Data, IoFunctions);
 }
 
 static void SigHandler(int sig)
@@ -63,7 +59,9 @@ static void SigHandler(int sig)
 static BOOL Start(Logms2Struct *Data)
 {  struct sigaction SigStruct;
 
-   if (strlen(Logms2GetInterface(Data)) > 0)
+   if ((strlen(Logms2GetInterface(Data)) > 0) &&
+       ((strlen(Logms2GetAddress(Data)) == 0) ||
+        (strcmp(Logms2GetAddress(Data), "0.0.0.0") == 0)))
    {
       Logms2SetClientSock(Data,
                           MrIpcConnectIf(Logms2GetInterface(Data),
@@ -75,8 +73,7 @@ static BOOL Start(Logms2Struct *Data)
                           MrIpcConnect(Logms2GetAddress(Data),
                                        Logms2GetServerPort(Data)));
    }
-   Logms2SetCanSock(Data, MrMs2Connect(Logms2GetCanName(Data)));
-   if (Logms2GetCanSock(Data) >= 0)
+   if (Logms2GetIoFunctions(Data)->Open(Logms2GetIoFunctions(Data)->private))
    {
       if (Logms2GetVerbose(Data))
          puts("ready for incoming commands from system");
@@ -86,7 +83,6 @@ static BOOL Start(Logms2Struct *Data)
       sigaction(SIGINT, &SigStruct, NULL);
       sigaction(SIGQUIT, &SigStruct, NULL);
       sigaction(SIGTERM, &SigStruct, NULL);
-      SendMagicStart60113Frame(Logms2GetCanSock(Data), Logms2GetVerbose(Data));
       return(TRUE);
    }
    else
@@ -103,7 +99,7 @@ static void Stop(Logms2Struct *Data)
       puts("stop mrms2");
    if (Logms2GetClientSock(Data) != -1)
       MrIpcClose(Logms2GetClientSock(Data));
-   MrMs2Close(Logms2GetCanSock(Data));
+   Logms2GetIoFunctions(Data)->Close(Logms2GetIoFunctions(Data)->private);
 }
 
 static void ProcessSystemData(Logms2Struct *Data, MrIpcCmdType *CmdFrame)
@@ -138,26 +134,26 @@ static void HandleSystemData(Logms2Struct *Data)
    }
 }
 
-static void ProcessCanData(Logms2Struct *Data, struct can_frame *CanFrame)
-{  MrMs2CanDataType CanMsg;
-
+static void ProcessCanData(Logms2Struct *Data, MrMs2CanDataType *CanMsg)
+{
    if (Logms2GetVerbose(Data))
    {
-      MrMs2Decode(&CanMsg, CanFrame);
-      if (MrMs2IsMs2(&CanMsg))
+      if (MrMs2IsMs2(CanMsg))
       {
-         MrMs2Trace(&CanMsg);
+         MrMs2Trace(CanMsg);
       }
    }
 }
 
 static void HandleCanData(Logms2Struct *Data)
-{  struct can_frame frame;
+{  CanFrameStruct CanFrame;
+   MrMs2CanDataType CanMsg;
 
-   if (read(Logms2GetCanSock(Data), &frame, sizeof(struct can_frame)) ==
-       sizeof(struct can_frame))
+   if (Logms2GetIoFunctions(Data)->Read(Logms2GetIoFunctions(Data)->private,
+                                           &CanFrame) == sizeof(CanFrameStruct))
    {
-      ProcessCanData(Data, &frame);
+      MrMs2Decode(&CanMsg, &CanFrame);
+      ProcessCanData(Data, &CanMsg);
    }
 }
 
@@ -182,10 +178,12 @@ void Logms2Run(Logms2Struct *Data)
                HighFd = Logms2GetClientSock(Data);
          }
          if (Logms2GetVerbose(Data))
-            printf("add can socket %d\n", Logms2GetCanSock(Data));
-         FD_SET(Logms2GetCanSock(Data), &ReadFds);
-         if (Logms2GetCanSock(Data) > HighFd)
-            HighFd = Logms2GetCanSock(Data);
+            printf("add can socket %d\n",
+                   Logms2GetIoFunctions(Data)->GetFd(Logms2GetIoFunctions(Data)->private));
+         FD_SET(Logms2GetIoFunctions(Data)->GetFd(Logms2GetIoFunctions(Data)->private),
+                &ReadFds);
+         if (Logms2GetIoFunctions(Data)->GetFd(Logms2GetIoFunctions(Data)->private) > HighFd)
+            HighFd = Logms2GetIoFunctions(Data)->GetFd(Logms2GetIoFunctions(Data)->private);
          SelectTimeout.tv_sec = SELECT_TIMEOUT;
          SelectTimeout.tv_usec = 0;
          if (Logms2GetVerbose(Data))
@@ -212,7 +210,8 @@ void Logms2Run(Logms2Struct *Data)
             {
                HandleSystemData(Data);
             }
-            if (FD_ISSET(Logms2GetCanSock(Data), &ReadFds))
+            if (FD_ISSET(Logms2GetIoFunctions(Data)->GetFd(Logms2GetIoFunctions(Data)->private),
+                         &ReadFds))
             {
                HandleCanData(Data);
             }

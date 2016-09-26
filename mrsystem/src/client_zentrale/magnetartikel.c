@@ -14,7 +14,7 @@ MagnetartikelStruct *MagnetartikelCreate(void)
    NewData = (MagnetartikelStruct *)malloc(sizeof(MagnetartikelStruct));
    if (NewData != (MagnetartikelStruct *)NULL)
    {
-      MagnetartikelSetMagnetartikelFilePath(NewData, "/www/config/");
+      MagnetartikelSetMagnetartikelFilePath(NewData, "/var/www/config/");
       MagnetartikelSetNumArtikel(NewData, 0);
       MagnetartikelSetMagnetartikelDb(NewData, MapCreate());
       if (MagnetartikelGetMagnetartikelDb(NewData) == (Map *)NULL)
@@ -225,21 +225,23 @@ void MagnetartikelLoadMagnetartikelCs2(MagnetartikelStruct *Data)
          if (MagnetartikelFileName[strlen(MagnetartikelFileName) - 1] != '/')
             strcat(MagnetartikelFileName, "/");
          strcat(MagnetartikelFileName, CS2_FILE_STRING_MAGNETARTIKEL);
-         stat(MagnetartikelFileName, &attribut);
-         MagnetartikelFileContent = (char *)malloc(attribut.st_size);
-         if (MagnetartikelFileContent != (char *)NULL)
+         if (stat(MagnetartikelFileName, &attribut) == 0)
          {
-            MagnetartikelCs2Stream = fopen(MagnetartikelFileName, "r");
-            if (MagnetartikelCs2Stream != NULL)
+            MagnetartikelFileContent = (char *)malloc(attribut.st_size);
+            if (MagnetartikelFileContent != (char *)NULL)
             {
-               fread(MagnetartikelFileContent, 1, attribut.st_size,
-                     MagnetartikelCs2Stream);
-               MagnetartikelParseMagnetartikelCs2(Data,
-                                                  MagnetartikelFileContent,
-                                                  attribut.st_size);
-               Cs2Close(MagnetartikelCs2Stream);
+               MagnetartikelCs2Stream = fopen(MagnetartikelFileName, "r");
+               if (MagnetartikelCs2Stream != NULL)
+               {
+                  fread(MagnetartikelFileContent, 1, attribut.st_size,
+                        MagnetartikelCs2Stream);
+                  MagnetartikelParseMagnetartikelCs2(Data,
+                                                     MagnetartikelFileContent,
+                                                     attribut.st_size);
+                  Cs2Close(MagnetartikelCs2Stream);
+               }
+               free(MagnetartikelFileContent);
             }
-            free(MagnetartikelFileContent);
          }
          free(MagnetartikelFileName);
       }

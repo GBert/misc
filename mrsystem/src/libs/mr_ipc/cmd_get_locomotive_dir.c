@@ -5,7 +5,7 @@ void MrIpcCmdGetLocomotiveDir(MrIpcCmdType *Data, unsigned long *Addr, Direction
 {
    if (Data != (MrIpcCmdType *)NULL)
    {
-      *Addr = MrIpcGetIntIp1(Data);
+      *Addr = MrIpcGetIntLp1(Data);
       *Direction = MrIpcGetIntIp1(Data);
    }
 }

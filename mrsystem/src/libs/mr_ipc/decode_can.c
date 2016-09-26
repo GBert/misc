@@ -4,7 +4,8 @@
 
 void MrIpcDecodeToCan(MrIpcCmdType *Data, MrCs2CanDataType *CanMsg)
 {  unsigned long Addr, Length;
-   unsigned p1, p2;
+   unsigned int p1, p2;
+   int p3;
    SwitchType Switch;
    DirectionType Direction;
    PositionType Position;
@@ -28,6 +29,10 @@ void MrIpcDecodeToCan(MrIpcCmdType *Data, MrCs2CanDataType *CanMsg)
                MrCs2EncSysStop(CanMsg, MR_CS2_UID_BROADCAST);
             else if (Switch == On)
                MrCs2EncSysGo(CanMsg, MR_CS2_UID_BROADCAST);
+            break;
+         case MrIpcCmdTrackProto:
+            MrIpcCmdGetTrackProto(Data, &p3);
+            MrCs2EncSysTrackProtocoll(CanMsg, MR_CS2_UID_BROADCAST, p3);
             break;
          case MrIpcCmdLocomotiveSpeed:
             MrIpcCmdGetLocomotiveSpeed(Data, &Addr, &p1);
@@ -58,8 +63,8 @@ void MrIpcDecodeToCan(MrIpcCmdType *Data, MrCs2CanDataType *CanMsg)
             MrCs2EncConfigQuery(CanMsg, Buf);
             break;
          case MrIpcCmdCfgHeader:
-            MrIpcCmdGetCfgHeader(Data, &Length, &p1);
-            MrCs2EncCfgdatStream6(CanMsg, Length, p1);
+            MrIpcCmdGetCfgHeader(Data, &Length, &p3);
+            MrCs2EncCfgdatStream6(CanMsg, Length, p3);
             break;
             break;
          case MrIpcCmdCfgZHeader:
@@ -69,6 +74,14 @@ void MrIpcDecodeToCan(MrIpcCmdType *Data, MrCs2CanDataType *CanMsg)
          case MrIpcCmdCfgData:
             MrIpcCmdGetCfgData(Data, Buf);
             MrCs2EncCfgdatStream8(CanMsg, Buf);
+            break;
+         case MrIpcCmdSystemStatusVal:
+            MrIpcCmdGetSystemStatusVal(Data, &Addr, &p1, &p2);
+            MrCs2EncSysStatus8(CanMsg, Addr, p1, p2);
+            break;
+         case MrIpcCmdCanBootldrGeb:
+            MrIpcCmdGetCanBootldr(Data, &(MrCs2GetDlc(CanMsg)), Buf);
+            MrCs2EncCanBootldr(CanMsg, Buf);
             break;
       }
    }

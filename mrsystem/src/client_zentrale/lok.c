@@ -4,7 +4,6 @@
 #include <boolean.h>
 #include <cs2parse.h>
 #include <write_cs2.h>
-#include "zentrale.h"
 #include "lok.h"
 #include <stdio.h>
 
@@ -14,7 +13,7 @@ LokStruct *LokCreate(void)
    NewData = (LokStruct *)malloc(sizeof(LokStruct));
    if (NewData != (LokStruct *)NULL)
    {
-      LokSetLocFilePath(NewData, "/www/config/");
+      LokSetLocFilePath(NewData, "/var/www/config/");
       LokSetNumLoks(NewData, 0);
       LokSetLokDb(NewData, MapCreate());
       if (LokGetLokDb(NewData) == (Map *)NULL)
@@ -121,7 +120,7 @@ LokInfo *LokSearch(LokStruct *Data, unsigned long Addr)
    return(Search.Result);
 }
 
-static void ParseLokomotiveCs2(LokStruct *Data, char *Buf, int Len)
+void LokParseLokomotiveCs2(LokStruct *Data, char *Buf, int Len)
 {  Cs2parser *LokParser;
    int NumLoks, LineInfo, FktIndex;
    LokInfo NewLok;
@@ -293,19 +292,21 @@ void LokLoadLokomotiveCs2(LokStruct *Data)
          if (LokFileName[strlen(LokFileName) - 1] != '/')
             strcat(LokFileName, "/");
          strcat(LokFileName, CS2_FILE_STRING_LOKOMOTIVE);
-         stat(LokFileName, &attribut);
-         LokFileContent = (char *)malloc(attribut.st_size);
-         if (LokFileContent != (char *)NULL)
+         if (stat(LokFileName, &attribut) == 0)
          {
-            LokCs2Stream = fopen(LokFileName, "r");
-            if (LokCs2Stream != NULL)
+            LokFileContent = (char *)malloc(attribut.st_size);
+            if (LokFileContent != (char *)NULL)
             {
-               fread(LokFileContent, 1, attribut.st_size, LokCs2Stream);
-               ParseLokomotiveCs2(Data, LokFileContent, attribut.st_size);
-               Cs2Close(LokCs2Stream);
-               LokSetIsChanged(Data, FALSE);
+               LokCs2Stream = fopen(LokFileName, "r");
+               if (LokCs2Stream != NULL)
+               {
+                  fread(LokFileContent, 1, attribut.st_size, LokCs2Stream);
+                  LokParseLokomotiveCs2(Data, LokFileContent, attribut.st_size);
+                  Cs2Close(LokCs2Stream);
+                  LokSetIsChanged(Data, FALSE);
+               }
+               free(LokFileContent);
             }
-            free(LokFileContent);
          }
          free(LokFileName);
       }

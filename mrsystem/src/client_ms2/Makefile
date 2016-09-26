@@ -1,6 +1,6 @@
 TARGET=mrms2
-OBJS=main.o ms2.o
-LOCALLIBS=-lmr_ipc -lmr_can -lm -lbytestream -lmrconfig -linipars -lscanner -lmap -lavl
+OBJS=main.o can_client.o ms2.o
+LOCALLIBS=-lmr_ipc -lmr_can -lm -lbytestream -lmrconfig -linipars -lscanner -lmap -lavl -lqueue -ldliste
 DESTDIR=/usr/local/bin
 
 %.o: %.c
@@ -13,6 +13,9 @@ $(TARGET): $(OBJS)
 
 main.o: main.c ms2.h
 
+can_client.o: can_client.c can_client.h
+	$(CC) $(CFLAGS) -I$(INCLUDE_PATH) -o $@ -c $<
+
 ms2.o: ms2.c ms2.h
 
 install: $(TARGET)
@@ -24,6 +27,9 @@ uninstall:
 clean:
 	rm -f $(TARGET)
 	rm -f $(OBJS)
+
+clean_link:
+	rm -f $(TARGET)
 
 distclean:
 	rm -f $(TARGET)

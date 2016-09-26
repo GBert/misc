@@ -1,8 +1,10 @@
 #ifndef ZENTRALE_H
 #define ZENTRALE_H
 
+#include <time.h>
 #include <boolean.h>
 #include <fsm.h>
+#include "canmember.h"
 #include "lok.h"
 #include "magnetartikel.h"
 #include "gleisbild.h"
@@ -18,15 +20,41 @@ typedef struct {
    char Name[17];
 } ZentraleLokName;
 
+#define ZentraleLokNameSetLokName(Data, LokName) strcpy((Data)->Name,LokName)
+
+#define ZentraleLokNameGetLokName(Data) (Data)->Name
+
+#define MASTER_MODE_PROXY      0
+#define MASTER_MODE_MS2_MASTER 1
+#define MASTER_MODE_MRS_MASTER 2
+
+typedef struct {
+   int Length;
+   int Interval;
+   int TCycle;
+} S88SystemStatusConfig;
+
+#define S88SystemStatusConfigSetLength(Data, Value)   (Data)->Length=Value
+#define S88SystemStatusConfigSetInterval(Data, Value) (Data)->Interval=Value
+#define S88SystemStatusConfigSetTCycle(Data, Value)   (Data)->TCycle=Value
+
+#define S88SystemStatusConfigGetLength(Data)   (Data)->Length
+#define S88SystemStatusConfigGetInterval(Data) (Data)->Interval
+#define S88SystemStatusConfigGetTCycle(Data)   (Data)->TCycle
+
 typedef struct {
    BOOL Verbosity;
-   BOOL IsMaster;
+   int MasterMode;
    char *Interface;
    char *Address;
    int ServerPort;
    int ClientSock;
+   char *WakeUpS88;
    FsmStruct *StateMachine;
+   time_t LastFsmCall;
    char *LocPath;
+   int Protokolle;
+   BOOL SystemStart;
    unsigned MajorVersion;
    unsigned MinorVersion;
    float HardVersion;
@@ -43,21 +71,27 @@ typedef struct {
    int MaxLoks;
    LokInfo ActualLok;
    ZentraleLokName *LokNamen;
+   CanMemberStruct *CanMember;
    LokStruct *Loks;
    MagnetartikelStruct *Magnetartikel;
    GleisbildStruct *Gleisbild;
    GleisbildPageStruct **GleisPages;
    FahrstrasseStruct *Fahrstrasse;
+   S88SystemStatusConfig S88Bus[3];
 } ZentraleStruct;
 
 #define ZentraleSetVerbose(Data, Verbose)               (Data)->Verbosity=Verbose
-#define ZentraleSetIsMaster(Data, Master)               (Data)->IsMaster=Master
+#define ZentraleSetMasterMode(Data, Master)             (Data)->MasterMode=Master
 #define ZentraleSetInterface(Data, Iface)               (Data)->Interface=Iface
 #define ZentraleSetAddress(Data, Addr)                  (Data)->Address=Addr
 #define ZentraleSetServerPort(Data, Port)               (Data)->ServerPort=Port
 #define ZentraleSetClientSock(Data, Sock)               (Data)->ClientSock=Sock
+#define ZentraleSetWakeUpS88(Data, WakeUp)              (Data)->WakeUpS88=WakeUp
 #define ZentraleSetStateMachine(Data, Fsm)              (Data)->StateMachine=Fsm
+#define ZentraleSetLastFsmCall(Data, Time)              (Data)->LastFsmCall=Time
 #define ZentraleSetLocPath(Data, Path)                  (Data)->LocPath=Path
+#define ZentraleSetProtokolle(Data, Protos)             (Data)->Protokolle=Protos
+#define ZentraleSetSystemStart(Data, Start)             (Data)->SystemStart=Start
 #define ZentraleSetMajorVersion(Data, Major)            (Data)->MajorVersion=Major
 #define ZentraleSetMinorVersion(Data, Minor)            (Data)->MinorVersion=Minor
 #define ZentraleSetHardVersion(Data, Hard)              (Data)->HardVersion=Hard
@@ -73,50 +107,63 @@ typedef struct {
 #define ZentraleSetMaxLoks(Data, i)                     (Data)->MaxLoks=i
 #define ZentraleSetLokNamen(Data, Namen)                (Data)->LokNamen=Namen
 #define ZentraleSetLokNamenNr(Data, i, Namen)           strcpy((Data)->LokNamen[i].Name, Namen)
+#define ZentraleSetCanMember(Data, CanMemberDb)         (Data)->CanMember=CanMemberDb
 #define ZentraleSetLoks(Data, LoksDb)                   (Data)->Loks=LoksDb
 #define ZentraleSetMagnetartikel(Data, MagnetartikelDb) (Data)->Magnetartikel=MagnetartikelDb
 #define ZentraleSetGleisbild(Data, GleisbildDb)         (Data)->Gleisbild=GleisbildDb
 #define ZentraleSetGleisPages(Data, GleisPagesArray)    (Data)->GleisPages=GleisPagesArray
 #define ZentraleSetNrGleisPages(Data, i, GleisPage)     (Data)->GleisPages[i]=GleisPage
 #define ZentraleSetFahrstrasse(Data, FahrstrasseDb)     (Data)->Fahrstrasse=FahrstrasseDb
+#define ZentraleSetS88BusIdxLength(Data, i, Val)        (Data)->S88Bus[i].Length=Val
+#define ZentraleSetS88BusIdxInterval(Data, i, Val)      (Data)->S88Bus[i].Interval=Val
+#define ZentraleSetS88BusIdxTCycle(Data, i, Val)        (Data)->S88Bus[i].TCycle=Val
 
-#define ZentraleGetVerbose(Data)         (Data)->Verbosity
-#define ZentraleGetIsMaster(Data)        (Data)->IsMaster
-#define ZentraleGetInterface(Data)       (Data)->Interface
-#define ZentraleGetAddress(Data)         (Data)->Address
-#define ZentraleGetServerPort(Data)      (Data)->ServerPort
-#define ZentraleGetClientSock(Data)      (Data)->ClientSock
-#define ZentraleGetStateMachine(Data)    (Data)->StateMachine
-#define ZentraleGetLocPath(Data)         (Data)->LocPath
-#define ZentraleGetMajorVersion(Data)    (Data)->MajorVersion
-#define ZentraleGetMinorVersion(Data)    (Data)->MinorVersion
-#define ZentraleGetHardVersion(Data)     (Data)->HardVersion
-#define ZentraleGetSerialNumber(Data)    (Data)->Serial
-#define ZentraleGetGfpUid(Data)          (Data)->GfpUid
-#define ZentraleGetUid(Data)             (Data)->Uid
-#define ZentraleGetPackedCs2File(Data)   (Data)->PackedCs2File
-#define ZentraleGetCfgLength(Data)       (Data)->CfgLength
-#define ZentraleGetCfgHaveRead(Data)     (Data)->CfgHaveRead
-#define ZentraleGetCfgBuffer(Data)       (Data)->CfgBuffer
-#define ZentraleGetLoks(Data)            (Data)->Loks
-#define ZentraleGetActualIndex(Data)     (Data)->ActualIndex
-#define ZentraleGetNumLoks(Data)         (Data)->NumLoks
-#define ZentraleGetMaxLoks(Data)         (Data)->MaxLoks
-#define ZentraleGetActualLok(Data)       (&((Data)->ActualLok))
-#define ZentraleGetLokNamen(Data)        (Data)->LokNamen
-#define ZentraleGetLokNamenNr(Data, i)   (Data)->LokNamen[i].Name
-#define ZentraleGetLoks(Data)            (Data)->Loks
-#define ZentraleGetMagnetartikel(Data)   (Data)->Magnetartikel
-#define ZentraleGetGleisbild(Data)       (Data)->Gleisbild
-#define ZentraleGetGleisPages(Data)      (Data)->GleisPages
-#define ZentraleGetNrGleisPages(Data, i) (Data)->GleisPages[i]
-#define ZentraleGetFahrstrasse(Data)     (Data)->Fahrstrasse
+#define ZentraleGetVerbose(Data)              (Data)->Verbosity
+#define ZentraleGetMasterMode(Data)           (Data)->MasterMode
+#define ZentraleGetInterface(Data)            (Data)->Interface
+#define ZentraleGetAddress(Data)              (Data)->Address
+#define ZentraleGetServerPort(Data)           (Data)->ServerPort
+#define ZentraleGetWakeUpS88(Data)            (Data)->WakeUpS88
+#define ZentraleGetClientSock(Data)           (Data)->ClientSock
+#define ZentraleGetStateMachine(Data)         (Data)->StateMachine
+#define ZentraleGetLastFsmCall(Data)          (Data)->LastFsmCall
+#define ZentraleGetLocPath(Data)              (Data)->LocPath
+#define ZentraleGetProtokolle(Data)           (Data)->Protokolle
+#define ZentraleGetSystemStart(Data)          (Data)->SystemStart
+#define ZentraleGetMajorVersion(Data)         (Data)->MajorVersion
+#define ZentraleGetMinorVersion(Data)         (Data)->MinorVersion
+#define ZentraleGetHardVersion(Data)          (Data)->HardVersion
+#define ZentraleGetSerialNumber(Data)         (Data)->Serial
+#define ZentraleGetGfpUid(Data)               (Data)->GfpUid
+#define ZentraleGetUid(Data)                  (Data)->Uid
+#define ZentraleGetPackedCs2File(Data)        (Data)->PackedCs2File
+#define ZentraleGetCfgLength(Data)            (Data)->CfgLength
+#define ZentraleGetCfgHaveRead(Data)          (Data)->CfgHaveRead
+#define ZentraleGetCfgBuffer(Data)            (Data)->CfgBuffer
+#define ZentraleGetLoks(Data)                 (Data)->Loks
+#define ZentraleGetActualIndex(Data)          (Data)->ActualIndex
+#define ZentraleGetNumLoks(Data)              (Data)->NumLoks
+#define ZentraleGetMaxLoks(Data)              (Data)->MaxLoks
+#define ZentraleGetActualLok(Data)            (&((Data)->ActualLok))
+#define ZentraleGetLokNamen(Data)             (Data)->LokNamen
+#define ZentraleGetLokNamenNr(Data, i)        (Data)->LokNamen[i].Name
+#define ZentraleGetCanMember(Data)            (Data)->CanMember
+#define ZentraleGetLoks(Data)                 (Data)->Loks
+#define ZentraleGetMagnetartikel(Data)        (Data)->Magnetartikel
+#define ZentraleGetGleisbild(Data)            (Data)->Gleisbild
+#define ZentraleGetGleisPages(Data)           (Data)->GleisPages
+#define ZentraleGetNrGleisPages(Data, i)      (Data)->GleisPages[i]
+#define ZentraleGetFahrstrasse(Data)          (Data)->Fahrstrasse
+#define ZentraleGetS88BusIdxLength(Data, i)   (Data)->S88Bus[i].Length
+#define ZentraleGetS88BusIdxInterval(Data, i) (Data)->S88Bus[i].Interval
+#define ZentraleGetS88BusIdxTCycle(Data, i)   (Data)->S88Bus[i].TCycle
 
 ZentraleStruct *ZentraleCreate(void);
 void ZentraleDestroy(ZentraleStruct *Data);
-void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, BOOL IsMaster,
-                  char *Interface, char *Addr, int Port, char *LocPath);
-void ZentraleInitFsm(ZentraleStruct *Data, BOOL IsMaster);
+void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, int MasterMode,
+                  char *Interface, char *Addr, int Port, char *LocPath,
+                  int Protokolle, char *SystemStart, char *WakeUpS88);
+void ZentraleInitFsm(ZentraleStruct *Data, int MasterMode);
 void ZentraleExit(ZentraleStruct *Data);
 void ZentraleRun(ZentraleStruct *Data);
 

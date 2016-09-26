@@ -7,6 +7,8 @@
 #include <time.h>
 #include <boolean.h>
 #include <config.h>
+#include "../client_ms2/can_io.h"
+#include "../client_ms2/can_client.h"
 #include "logms2.h"
 
 #define SOFTWARE_VERSION "1.02"
@@ -26,6 +28,7 @@ static void usage(char *name)
 
 int main(int argc, char *argv[])
 {  Logms2Struct *Logms2;
+   IoFktStruct *IoFunctions;
    ConfigStruct *Config;
    pid_t ChildPid;
    time_t Now;
@@ -59,21 +62,31 @@ int main(int argc, char *argv[])
          {
             if (ConfigGetIntVal(Config, CfgVerboseVal))
                puts("child running");
-            Logms2 = Logms2Create();
-            if (Logms2 != (Logms2Struct *)NULL)
+            IoFunctions = CanClientInit(ConfigGetIntVal(Config, CfgVerboseVal),
+                                        ConfigGetStrVal(Config, CfgCanIfVal));
+            if (IoFunctions != (IoFktStruct *)NULL)
             {
-               Logms2Init(Logms2, ConfigGetIntVal(Config, CfgVerboseVal),
-                          ConfigGetStrVal(Config, CfgIfaceVal),
-                          ConfigGetStrVal(Config, CfgAddrVal),
-                          ConfigGetIntVal(Config, CfgPortVal),
-                          ConfigGetStrVal(Config, CfgCanIfVal));
-               Logms2Run(Logms2);
-               Logms2Destroy(Logms2);
-               Ret = 0;
+               Logms2 = Logms2Create();
+               if (Logms2 != (Logms2Struct *)NULL)
+               {
+                  Logms2Init(Logms2, ConfigGetIntVal(Config, CfgVerboseVal),
+                             ConfigGetStrVal(Config, CfgIfaceVal),
+                             ConfigGetStrVal(Config, CfgAddrVal),
+                             ConfigGetIntVal(Config, CfgPortVal),
+                             IoFunctions);
+                  Logms2Run(Logms2);
+                  Logms2Destroy(Logms2);
+                  Ret = 0;
+               }
+               else
+               {
+                  Ret = 2;
+               }
+               CanClientExit(IoFunctions);
             }
             else
             {
-               Ret = 2;
+               Ret = 1;
             }
          }
          else
@@ -89,21 +102,31 @@ int main(int argc, char *argv[])
          Now = time(NULL);
          if (ConfigGetIntVal(Config, CfgVerboseVal))
             printf("start with no fork at %s\n", asctime(localtime(&Now)));
-         Logms2 = Logms2Create();
-         if (Logms2 != (Logms2Struct *)NULL)
+         IoFunctions = CanClientInit(ConfigGetIntVal(Config, CfgVerboseVal),
+                                     ConfigGetStrVal(Config, CfgCanIfVal));
+         if (IoFunctions != (IoFktStruct *)NULL)
          {
-            Logms2Init(Logms2, ConfigGetIntVal(Config, CfgVerboseVal),
-                       ConfigGetStrVal(Config, CfgIfaceVal),
-                       ConfigGetStrVal(Config, CfgAddrVal),
-                       ConfigGetIntVal(Config, CfgPortVal),
-                       ConfigGetStrVal(Config, CfgCanIfVal));
-            Logms2Run(Logms2);
-            Logms2Destroy(Logms2);
-            Ret = 0;
+            Logms2 = Logms2Create();
+            if (Logms2 != (Logms2Struct *)NULL)
+            {
+               Logms2Init(Logms2, ConfigGetIntVal(Config, CfgVerboseVal),
+                          ConfigGetStrVal(Config, CfgIfaceVal),
+                          ConfigGetStrVal(Config, CfgAddrVal),
+                          ConfigGetIntVal(Config, CfgPortVal),
+                          IoFunctions);
+               Logms2Run(Logms2);
+               Logms2Destroy(Logms2);
+               Ret = 0;
+            }
+            else
+            {
+               Ret = 2;
+            }
+            CanClientExit(IoFunctions);
          }
          else
          {
-            Ret = 2;
+            Ret = 1;
          }
       }
       ConfigExit(Config);

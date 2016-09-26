@@ -7,6 +7,7 @@
 #include <time.h>
 #include <boolean.h>
 #include <config.h>
+#include "../client_ms2/can_client.h"
 #include "ms1.h"
 
 #define SOFTWARE_VERSION "1.02"
@@ -26,6 +27,7 @@ static void usage(char *name)
 
 int main(int argc, char *argv[])
 {  Ms1Struct *Ms1;
+   IoFktStruct *IoFunctions;
    ConfigStruct *Config;
    pid_t ChildPid;
    time_t Now;
@@ -58,17 +60,27 @@ int main(int argc, char *argv[])
          {
             if (ConfigGetIntVal(Config, CfgVerboseVal))
                puts("child running");
-            Ms1 = Ms1Create();
-            if (Ms1 != (Ms1Struct *)NULL)
+            IoFunctions = CanClientInit(ConfigGetIntVal(Config, CfgVerboseVal),
+                                        ConfigGetStrVal(Config, CfgCanIfVal));
+            if (IoFunctions != (IoFktStruct *)NULL)
             {
-               Ms1Init(Ms1, ConfigGetIntVal(Config, CfgVerboseVal),
-                       ConfigGetStrVal(Config, CfgIfaceVal),
-                       ConfigGetStrVal(Config, CfgAddrVal),
-                       ConfigGetIntVal(Config, CfgPortVal),
-                       ConfigGetStrVal(Config, CfgCanIfVal));
-               Ms1Run(Ms1);
-               Ms1Destroy(Ms1);
-               Ret = 0;
+               Ms1 = Ms1Create();
+               if (Ms1 != (Ms1Struct *)NULL)
+               {
+                  Ms1Init(Ms1, ConfigGetIntVal(Config, CfgVerboseVal),
+                          ConfigGetStrVal(Config, CfgIfaceVal),
+                          ConfigGetStrVal(Config, CfgAddrVal),
+                          ConfigGetIntVal(Config, CfgPortVal),
+                          IoFunctions);
+                  Ms1Run(Ms1);
+                  Ms1Destroy(Ms1);
+                  Ret = 0;
+               }
+               else
+               {
+                  Ret = 1;
+               }
+               CanClientExit(IoFunctions);
             }
             else
             {
@@ -88,17 +100,27 @@ int main(int argc, char *argv[])
          Now = time(NULL);
          if (ConfigGetIntVal(Config, CfgVerboseVal))
             printf("start with no fork at %s\n", asctime(localtime(&Now)));
-         Ms1 = Ms1Create();
-         if (Ms1 != (Ms1Struct *)NULL)
+         IoFunctions = CanClientInit(ConfigGetIntVal(Config, CfgVerboseVal),
+                                     ConfigGetStrVal(Config, CfgCanIfVal));
+         if (IoFunctions != (IoFktStruct *)NULL)
          {
-            Ms1Init(Ms1, ConfigGetIntVal(Config, CfgVerboseVal),
-                    ConfigGetStrVal(Config, CfgIfaceVal),
-                    ConfigGetStrVal(Config, CfgAddrVal),
-                    ConfigGetIntVal(Config, CfgPortVal),
-                    ConfigGetStrVal(Config, CfgCanIfVal));
-            Ms1Run(Ms1);
-            Ms1Destroy(Ms1);
-            Ret = 0;
+            Ms1 = Ms1Create();
+            if (Ms1 != (Ms1Struct *)NULL)
+            {
+               Ms1Init(Ms1, ConfigGetIntVal(Config, CfgVerboseVal),
+                       ConfigGetStrVal(Config, CfgIfaceVal),
+                       ConfigGetStrVal(Config, CfgAddrVal),
+                       ConfigGetIntVal(Config, CfgPortVal),
+                       IoFunctions);
+               Ms1Run(Ms1);
+               Ms1Destroy(Ms1);
+               Ret = 0;
+            }
+            else
+            {
+               Ret = 1;
+            }
+            CanClientExit(IoFunctions);
          }
          else
          {

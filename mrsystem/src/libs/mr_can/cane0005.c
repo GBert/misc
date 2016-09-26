@@ -10,5 +10,5 @@ void MrCs2EncSysDataProtocoll(MrCs2CanDataType *CanMsg, unsigned long Uid,
    CanMsg->Data[5] = Proto;
    MrCs2SetCommand(CanMsg, MR_CS2_CMD_SYSTEM);
    MrCs2SetSystemSubcmd(CanMsg, MR_CS2_SUBCMD_SYSTEM_DATA_PROTOCOLL);
-   MrCs2SetDlc(CanMsg, 5);
+   MrCs2SetDlc(CanMsg, 6);
 }

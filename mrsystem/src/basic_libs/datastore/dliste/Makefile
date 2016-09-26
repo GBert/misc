@@ -1,7 +1,7 @@
 INCLUDEPATH=../../include
 LIBPATH=../../lib
 ARFLAGS=rc
-OBJS=dlist_ah.o dlist_ap.o dlist_ci.o dlist_cr.o dlist_da.o dlist_de.o dlist_df.o dlist_di.o dlist_dl.o dlist_ds.o dlist_fi.o dlist_fr.o dlist_ii.o dlist_in.o dlist_is.o dlist_la.o dlist_ne.o dlist_ns.o dlist_pr.o
+OBJS=dlist_ah.o dlist_ap.o dlist_ci.o dlist_cr.o dlist_da.o dlist_de.o dlist_df.o dlist_di.o dlist_dl.o dlist_ds.o dlist_fi.o dlist_fr.o dlist_ii.o dlist_in.o dlist_is.o dlist_la.o dlist_ne.o dlist_ns.o dlist_pr.o dlist_rm.o
 TARGET=libdliste.a
 
 
@@ -86,6 +86,10 @@ dlist_ns.o: dlist_ns.c dliste.h
 
 
 dlist_pr.o: dlist_pr.c dliste.h
+	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
+
+
+dlist_rm.o: dlist_rm.c dliste.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 

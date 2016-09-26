@@ -42,7 +42,9 @@ void InjectInit(InjectStruct *Data, BOOL Verbose, char *Iface, char *Addr,
 void InjectRun(InjectStruct *Data)
 {  MrIpcCmdType CmdFrame;
 
-   if (strlen(InjectGetInterface(Data)) > 0)
+   if ((strlen(InjectGetInterface(Data)) > 0) &&
+       ((strlen(InjectGetAddress(Data)) == 0) ||
+        (strcmp(InjectGetAddress(Data), "0.0.0.0") == 0)))
    {
       InjectSetClientSock(Data,
                           MrIpcConnectIf(InjectGetInterface(Data),

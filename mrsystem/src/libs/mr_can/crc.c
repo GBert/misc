@@ -109,7 +109,7 @@ static unsigned short CRCCCITT(unsigned char *data, unsigned int length, unsigne
 
 unsigned short MrCs2CalcCrc(unsigned char *data, unsigned int length)
 {
-   return CRCCCITT(data, length, 0xffff);
+   return(CRCCCITT(data, length, 0xffff));
 }
 
 #endif

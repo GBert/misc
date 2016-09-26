@@ -15,6 +15,7 @@
 #define PARSER_PARAGRAPH_STRING_MAGNETARTIKEL  "magnetartikel"
 #define PARSER_PARAGRAPH_STRING_FAHRSTRASSEN   "fahrstrassen"
 #define PARSER_PARAGRAPH_STRING_GLEISBILDSEITE "gleisbildseite"
+#define PARSER_PARAGRAPH_STRING_LOKSTATUS      "lokstatus"
 #define PARSER_VALUE_STRING_VERSION           "version"
 #define PARSER_VALUE_STRING_NAME              "name"
 #define PARSER_VALUE_STRING_WERT              "wert"
@@ -78,6 +79,7 @@
 #define PARSER_VALUE_STRING_PAGE              "page"
 #define PARSER_VALUE_STRING_SEKUNDE           "sekunde"
 #define PARSER_VALUE_STRING_IDX               "idx"
+#define PARSER_VALUE_STRING_ON                "on"
 
 ScanKeyword LokNameKeywords[] = {
    { PARSER_PARAGRAPH_STRING_LOK,     PARSER_TOKEN_KEYWORD_LOK },
@@ -165,6 +167,8 @@ ScanKeyword GleisbildCs2Keywords[] = {
    { PARSER_VALUE_STRING_NAME,            PARSER_TOKEN_KEYWORD_NAME },
    { PARSER_VALUE_STRING_GROESSE,         PARSER_TOKEN_KEYWORD_GROESSE },
    { PARSER_VALUE_STRING_ZULETZT_BENUTZT, PARSER_TOKEN_KEYWORD_ZULETZT_BENUTZT },
+   { PARSER_VALUE_STRING_ELEMENT,         PARSER_TOKEN_KEYWORD_ELEMENT },
+   { PARSER_VALUE_STRING_ZUSTAND,         PARSER_TOKEN_KEYWORD_ZUSTAND },
 };
 
 ScanKeyword MagnetartikelCs2Keywords[] = {
@@ -203,6 +207,7 @@ ScanKeyword FahrstrassenCs2Keywords[] = {
    { PARSER_VALUE_STRING_SEKUNDE,           PARSER_TOKEN_KEYWORD_SEKUNDE },
    { PARSER_VALUE_STRING_IDX,               PARSER_TOKEN_KEYWORD_IDX },
    { PARSER_VALUE_STRING_WERT,              PARSER_TOKEN_KEYWORD_WERT },
+   { PARSER_VALUE_STRING_ON,                PARSER_TOKEN_KEYWORD_ON },
 };
 
 ScanKeyword GleisbildPageCs2Keywords[] = {
@@ -227,6 +232,7 @@ ScanKeyword HeaderCs2Keywords[] = {
    { PARSER_PARAGRAPH_STRING_MAGNETARTIKEL,  PARSER_TOKEN_KEYWORD_MAGNETARTIKEL },
    { PARSER_PARAGRAPH_STRING_FAHRSTRASSEN,   PARSER_TOKEN_KEYWORD_FAHRSTRASSEN },
    { PARSER_PARAGRAPH_STRING_GLEISBILDSEITE, PARSER_TOKEN_KEYWORD_GLEISBILDSEITE },
+   { PARSER_PARAGRAPH_STRING_LOKSTATUS,      PARSER_TOKEN_KEYWORD_LOKSTATUS },
 };
 
 void Cs2pInit(Cs2parser *Data, int Type, char *InputLine, int Len)
@@ -255,7 +261,7 @@ void Cs2pInit(Cs2parser *Data, int Type, char *InputLine, int Len)
    else if (Type == PARSER_TYPE_GLEISBILD_CS2)
    {
       ScanInit(Cs2pGetScanner(Data), (char *)NULL, InputLine, Len,
-               9, GleisbildCs2Keywords);
+               11, GleisbildCs2Keywords);
    }
    else if (Type == PARSER_TYPE_MAGNETARTIKEL_CS2)
    {
@@ -265,7 +271,7 @@ void Cs2pInit(Cs2parser *Data, int Type, char *InputLine, int Len)
    else if (Type == PARSER_TYPE_FAHRSTRASSEN_CS2)
    {
       ScanInit(Cs2pGetScanner(Data), (char *)NULL, InputLine, Len,
-               19, FahrstrassenCs2Keywords);
+               20, FahrstrassenCs2Keywords);
    }
    else if (Type == PARSER_TYPE_GLEISBILD_SEITE)
    {
@@ -275,6 +281,6 @@ void Cs2pInit(Cs2parser *Data, int Type, char *InputLine, int Len)
    else if (Type == PARSER_TYPE_HEADER_CS2)
    {
       ScanInit(Cs2pGetScanner(Data), (char *)NULL, InputLine, Len,
-               5, HeaderCs2Keywords);
+               6, HeaderCs2Keywords);
    }
 }

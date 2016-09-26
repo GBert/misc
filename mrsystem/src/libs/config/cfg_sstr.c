@@ -24,8 +24,14 @@ void ConfigAddStrVal(ConfigStruct *Data, CfgStrValues ValueTyp, char *Value)
       case CfgPathVal:
          p = INI_STR_CS2_PATH;
          break;
-      case CfgBcVal:
-         p = INI_STR_BC;
+      case CfgUdpBcVal:
+         p = INI_STR_UDP_BC;
+         break;
+      case CfgStartVal:
+         p = INI_STR_START;
+         break;
+      case CfgWakeUpS88:
+         p = INI_TOK_WAKEUP_S88;
          break;
    }
    ValuePtr = (IniValue *)MapGet(ConfigGetConfig(Data), (MapKeyType)p);

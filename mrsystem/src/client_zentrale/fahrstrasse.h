@@ -36,6 +36,7 @@ typedef struct {
 typedef struct {
    int Id;
    char Name[32];
+   int On;
    int S88;
    int S88Ein;
    int Extern;
@@ -44,6 +45,7 @@ typedef struct {
 
 #define FahrstrasseInfoSetId(Data, Val)     (Data)->Id=Val
 #define FahrstrasseInfoSetName(Data, Val)   strcpy((Data)->Name,Val)
+#define FahrstrasseInfoSetOn(Data, Val)     (Data)->On=Val
 #define FahrstrasseInfoSetS88(Data, Val)    (Data)->S88=Val
 #define FahrstrasseInfoSetS88Ein(Data, Val) (Data)->S88Ein=Val
 #define FahrstrasseInfoSetExtern(Data, Val) (Data)->Extern=Val
@@ -51,6 +53,7 @@ typedef struct {
 
 #define FahrstrasseInfoGetId(Data)     (Data)->Id
 #define FahrstrasseInfoGetName(Data)   (Data)->Name
+#define FahrstrasseInfoGetOn(Data)     (Data)->On
 #define FahrstrasseInfoGetS88(Data)    (Data)->S88
 #define FahrstrasseInfoGetS88Ein(Data) (Data)->S88Ein
 #define FahrstrasseInfoGetExtern(Data) (Data)->Extern

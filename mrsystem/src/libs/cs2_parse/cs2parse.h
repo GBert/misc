@@ -19,6 +19,7 @@
 #define PARSER_PARAGRAPH_MAGNETARTIKEL  0x06
 #define PARSER_PARAGRAPH_FAHRSTRASSEN   0x07
 #define PARSER_PARAGRAPH_GLEISBILDSEITE 0x08
+#define PARSER_PARAGRAPH_LOKSTATUS      0x09
 
 #define PARSER_VALUE_LOK             0x01
 #define PARSER_VALUE_NAME            0x02
@@ -84,6 +85,7 @@
 #define PARSER_VALUE_PAGE            0x51
 #define PARSER_VALUE_SEKUNDE         0x52
 #define PARSER_VALUE_IDX             0x53
+#define PARSER_VALUE_ON              0x54
 
 #define PARSER_TYPE_LOKNAMEN          0x01
 #define PARSER_TYPE_LOKINFO           0x02
@@ -109,7 +111,6 @@ Cs2parser *Cs2pCreate(void);
 void Cs2pDestroy(Cs2parser *Data);
 void Cs2pInit(Cs2parser *Data, int Type, char *InputLine, int Len);
 int Cs2pParse(Cs2parser *Data);
-void Cs2WriteHexValueByName(FILE *Stream, char *Title, int Value, int Level);
 
 #define Cs2pSetVerbose(Data, Val) (Data)->Verbose=Val
 #define Cs2pSetScanner(Data, Scn) (Data)->Scanner=Scn

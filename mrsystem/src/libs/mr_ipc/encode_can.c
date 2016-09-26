@@ -58,8 +58,7 @@ void MrIpcEncodeFromCan(MrIpcCmdType *Data, MrCs2CanDataType *CanMsg)
                   break;
                case MR_MS2_SUBCMD_SYSTEM_TRACK_PROTOCOLL:
                   MrCs2DecSysTrackProtocoll(CanMsg, &Uid, &p1);
-                  MrIpcCmdSetNull(Data, MrCs2GetDlc(CanMsg),
-                                  MrCs2GetData(CanMsg));
+                  MrIpcCmdSetTrackProto(Data, p1);
                   break;
                case MR_MS2_SUBCMD_SYSTEM_RESET_MFX_COUNTER:
                   MrMs2DecSysResetMfxCounter(CanMsg, &Uid, &p1);
@@ -86,8 +85,7 @@ void MrIpcEncodeFromCan(MrIpcCmdType *Data, MrCs2CanDataType *CanMsg)
                         break;
                      case 8:
                         MrMs2DecSysStatus8(CanMsg, &Uid, &p1, &p2);
-                        MrIpcCmdSetNull(Data, MrCs2GetDlc(CanMsg),
-                                        MrCs2GetData(CanMsg));
+                        MrIpcCmdSetSystemStatusVal(Data, Uid, p1, p2);
                         break;
                      default:
                         MrIpcCmdSetNull(Data, MrCs2GetDlc(CanMsg),
@@ -363,8 +361,8 @@ void MrIpcEncodeFromCan(MrIpcCmdType *Data, MrCs2CanDataType *CanMsg)
                             MrCs2GetData(CanMsg));
             break;
          case MR_MS2_CMD_BOOTLDR_TRACK:
-            MrIpcCmdSetNull(Data, MrCs2GetDlc(CanMsg),
-                            MrCs2GetData(CanMsg));
+            MrCs2DecCanBootldr(CanMsg, Buf);
+            MrIpcCmdSetCanBootldr(Data, MrCs2GetDlc(CanMsg), Buf);
             break;
          case MR_MS2_CMD_STATUS:
             switch (MrCs2GetNumParamBytes(CanMsg))
@@ -438,6 +436,5 @@ void MrIpcEncodeFromCan(MrIpcCmdType *Data, MrCs2CanDataType *CanMsg)
                             MrCs2GetData(CanMsg));
             break;
       }
-
    }
 }

@@ -14,7 +14,7 @@ GleisbildStruct *GleisbildCreate(void)
    NewData = (GleisbildStruct *)malloc(sizeof(GleisbildStruct));
    if (NewData != (GleisbildStruct *)NULL)
    {
-      GleisbildSetGleisbildFilePath(NewData, "/www/config/");
+      GleisbildSetGleisbildFilePath(NewData, "/var/www/config/");
       GleisbildSetNumPages(NewData, 0);
       GleisbildSetGleisbildDb(NewData, MapCreate());
       if (GleisbildGetGleisbildDb(NewData) == (Map *)NULL)
@@ -74,6 +74,7 @@ void GleisbildInsert(GleisbildStruct *Data, GleisbildInfo *Gleisbild)
    {
       GleisbildInfoSetId(OldGleisbild, GleisbildInfoGetId(Gleisbild));
       GleisbildInfoSetName(OldGleisbild, GleisbildInfoGetName(Gleisbild));
+      GleisbildInfoSetZustand(OldGleisbild, GleisbildInfoGetZustand(Gleisbild));
    }
    else
    {
@@ -82,6 +83,8 @@ void GleisbildInsert(GleisbildStruct *Data, GleisbildInfo *Gleisbild)
       {
          GleisbildInfoSetId(OldGleisbild, GleisbildInfoGetId(Gleisbild));
          GleisbildInfoSetName(OldGleisbild, GleisbildInfoGetName(Gleisbild));
+         GleisbildInfoSetZustand(OldGleisbild,
+	                         GleisbildInfoGetZustand(Gleisbild));
          MapSet(GleisbildGetGleisbildDb(Data),
                 (MapKeyType)Id, (MapDataType)OldGleisbild);
       }
@@ -134,6 +137,7 @@ void GleisbildParseGleisbildCs2(GleisbildStruct *Data, char *Buf, int Len)
                      GleisbildInsert(Data, &NewGleisbild);
                   NumPages++;
                   GleisbildInfoSetId(&NewGleisbild, 0);
+                  GleisbildInfoSetZustand(&NewGleisbild, 0);
                   break;
                case PARSER_VALUE_VERSION:
                   break;
@@ -150,6 +154,11 @@ void GleisbildParseGleisbildCs2(GleisbildStruct *Data, char *Buf, int Len)
                case PARSER_VALUE_ZULETZT_BENUTZT:
                   break;
                case PARSER_VALUE_ID:
+                  GleisbildInfoSetId(&NewGleisbild,
+                                     strtoul(Cs2pGetValue(GleisbildParser),
+                                             NULL, 0));
+                  break;
+               case PARSER_VALUE_ZUSTAND:
                   GleisbildInfoSetId(&NewGleisbild,
                                      strtoul(Cs2pGetValue(GleisbildParser),
                                              NULL, 0));
@@ -176,21 +185,23 @@ void GleisbildLoadGleisbildCs2(GleisbildStruct *Data)
          strcpy(GleisbildFileName, GleisbildGetGleisbildFilePath(Data));
          if (GleisbildFileName[strlen(GleisbildFileName) - 1] != '/')
             strcat(GleisbildFileName, "/");
-         strcat(GleisbildFileName, CS2_FILE_STRING_GLEISBILD);
-         stat(GleisbildFileName, &attribut);
-         GleisbildFileContent = (char *)malloc(attribut.st_size);
-         if (GleisbildFileContent != (char *)NULL)
+         if (strcat(GleisbildFileName, CS2_FILE_STRING_GLEISBILD) == 0)
          {
-            GleisbildCs2Stream = fopen(GleisbildFileName, "r");
-            if (GleisbildCs2Stream != NULL)
+            stat(GleisbildFileName, &attribut);
+            GleisbildFileContent = (char *)malloc(attribut.st_size);
+            if (GleisbildFileContent != (char *)NULL)
             {
-               fread(GleisbildFileContent, 1, attribut.st_size,
-                     GleisbildCs2Stream);
-               GleisbildParseGleisbildCs2(Data, GleisbildFileContent,
-                                          attribut.st_size);
-               Cs2Close(GleisbildCs2Stream);
+               GleisbildCs2Stream = fopen(GleisbildFileName, "r");
+               if (GleisbildCs2Stream != NULL)
+               {
+                  fread(GleisbildFileContent, 1, attribut.st_size,
+                        GleisbildCs2Stream);
+                  GleisbildParseGleisbildCs2(Data, GleisbildFileContent,
+                                             attribut.st_size);
+                  Cs2Close(GleisbildCs2Stream);
+               }
+               free(GleisbildFileContent);
             }
-            free(GleisbildFileContent);
          }
          free(GleisbildFileName);
       }
@@ -199,8 +210,7 @@ void GleisbildLoadGleisbildCs2(GleisbildStruct *Data)
 
 static void WriteGleisbildOfGleisbildCs2(void *PrivData,
                                          MapKeyType Key, MapDataType Daten)
-{
-   GleisbildInfo *GleisbildPage;
+{  GleisbildInfo *GleisbildPage;
    FILE *GleisbildCs2Stream;
 
    GleisbildPage = (GleisbildInfo *)Daten;

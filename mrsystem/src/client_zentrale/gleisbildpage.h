@@ -9,7 +9,7 @@ typedef struct {
    char Typ[32];
    int Drehung;
    int Artikel;
-   char Text[32];
+   char Text[64];
    int Zustand;
    int DeviceId;
 } GleisbildBildElement;

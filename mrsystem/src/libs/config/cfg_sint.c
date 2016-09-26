@@ -14,8 +14,8 @@ void ConfigAddIntVal(ConfigStruct *Data, CfgIntValues ValueTyp, int Value)
       case CfgPortVal:
          p = INI_STR_PORT;
          break;
-      case CfgUdpBcVal:
-         p = INI_STR_UDP_BC;
+      case CfgBcVal:
+         p = INI_STR_BC;
          break;
       case CfgForkVal:
          p = INI_STR_FORK;
@@ -31,6 +31,12 @@ void ConfigAddIntVal(ConfigStruct *Data, CfgIntValues ValueTyp, int Value)
          break;
       case CfgZentraleVal:
          p = INI_STR_ZENTRALE;
+         break;
+      case CfgProtokollVal:
+         p = INI_STR_PROTOKOLL;
+         break;
+      case CfgConnTcpVal:
+         p = INI_STR_CONN_TCP;
          break;
    }
    ValuePtr = (IniValue *)MapGet(ConfigGetConfig(Data), (MapKeyType)p);

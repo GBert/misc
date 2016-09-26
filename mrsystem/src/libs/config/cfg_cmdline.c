@@ -11,9 +11,12 @@ void ConfigCmdLine(ConfigStruct *Data, char *optstr, int argc, char *argv[])
       c = getopt(argc, argv, optstr);
       switch (c)
       {
+         case '8':
+            ConfigAddStrVal(Data, CfgWakeUpS88, optarg);
+            break;
          case 'b':
-            ConfigAddIntVal(Data, CfgUdpBcVal, TRUE);
-            ConfigAddStrVal(Data, CfgBcVal, optarg);
+            ConfigAddIntVal(Data, CfgBcVal, TRUE);
+            ConfigAddStrVal(Data, CfgUdpBcVal, optarg);
             break;
          case 'c':
             ConfigAddStrVal(Data, CfgCanIfVal, optarg);
@@ -21,11 +24,20 @@ void ConfigCmdLine(ConfigStruct *Data, char *optstr, int argc, char *argv[])
          case 'f':
             ConfigAddIntVal(Data, CfgForkVal, FALSE);
             break;
+         case 'g':
+            ConfigAddStrVal(Data, CfgStartVal, optarg);
+            break;
          case 'i':
             ConfigAddStrVal(Data, CfgIfaceVal, optarg);
             break;
+         case 'l':
+            ConfigAddStrVal(Data, CfgPathVal, optarg);
+            break;
          case 'p':
             ConfigAddIntVal(Data, CfgPortVal, atoi(optarg));
+            break;
+         case 's':
+            ConfigAddIntVal(Data, CfgProtokollVal, atoi(optarg));
             break;
          case 't':
             ConfigAddIntVal(Data, CfgTraceVal, TRUE);
@@ -35,6 +47,9 @@ void ConfigCmdLine(ConfigStruct *Data, char *optstr, int argc, char *argv[])
             break;
          case 'z':
             ConfigAddIntVal(Data, CfgZentraleVal, atoi(optarg));
+            break;
+         case 'x':
+            ConfigAddIntVal(Data, CfgConnTcpVal, TRUE);
             break;
          case '?':
             ConfigAddIntVal(Data, CfgUsageVal, TRUE);

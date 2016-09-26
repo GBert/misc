@@ -6,10 +6,21 @@
 
 #define MRSYSTEM_CONFIG_FILE "/etc/mrsystem"
 
-typedef enum { CfgPortVal, CfgUdpBcVal, CfgForkVal, CfgTraceVal,
-               CfgVerboseVal, CfgUsageVal, CfgZentraleVal } CfgIntValues;
+#define MRSYSTEM_CFG_PROTO_MOTOROLA 0x01
+#define MRSYSTEM_CFG_PROTO_MFX      0x02
+#define MRSYSTEM_CFG_PROTO_DCC      0x03
+
+#define MRSYSTEM_CFG_SYSTEM_START "start"
+#define MRSYSTEM_CFG_SYSTEM_STOP  "stop"
+
+#define DISABLE_WAKEUP_S88 "0"
+
+typedef enum { CfgPortVal, CfgBcVal, CfgForkVal, CfgTraceVal,
+               CfgVerboseVal, CfgUsageVal, CfgZentraleVal,
+               CfgProtokollVal, CfgConnTcpVal } CfgIntValues;
 typedef enum { CfgIfaceVal, CfgAddrVal, CfgCanIfVal, CfgPathVal,
-               CfgBcVal } CfgStrValues;
+               CfgUdpBcVal, CfgStartVal, CfgWakeUpS88,
+               CfgGpioS88 } CfgStrValues;
 typedef struct {
    Map *Config;
    IniParsStruct *Parser;

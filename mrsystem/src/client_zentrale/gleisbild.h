@@ -9,13 +9,16 @@
 typedef struct {
    int Id;
    char Name[32];
+   int Zustand;
 } GleisbildInfo;
 
-#define GleisbildInfoSetId(Data, Val)   (Data)->Id=Val
-#define GleisbildInfoSetName(Data, Val) strcpy((Data)->Name,Val)
+#define GleisbildInfoSetId(Data, Val)      (Data)->Id=Val
+#define GleisbildInfoSetName(Data, Val)    strcpy((Data)->Name,Val)
+#define GleisbildInfoSetZustand(Data, Val) (Data)->Zustand=Val
 
-#define GleisbildInfoGetId(Data)   (Data)->Id
-#define GleisbildInfoGetName(Data) (Data)->Name
+#define GleisbildInfoGetId(Data)      (Data)->Id
+#define GleisbildInfoGetName(Data)    (Data)->Name
+#define GleisbildInfoGetZustand(Data) (Data)->Zustand
 
 typedef struct {
    char *GleisbildFilePath;

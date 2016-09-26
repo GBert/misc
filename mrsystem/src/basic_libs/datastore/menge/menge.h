@@ -26,5 +26,6 @@ void MengeDestroyIterator(MengeIterator *Iter);
 void MengeInitIterator(MengeIterator *Iter, Menge *Wurzel);
 MengeDataType MengeFirst(MengeIterator *Iter);
 MengeDataType MengeNext(MengeIterator *Iter);
+MengeDataType MengeIterRemove(MengeIterator *Iter);
 
 #endif

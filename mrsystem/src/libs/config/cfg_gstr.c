@@ -26,8 +26,14 @@ char *ConfigGetStrVal(ConfigStruct *Data, CfgStrValues Value)
       case CfgPathVal:
          p = INI_STR_CS2_PATH;
          break;
-      case CfgBcVal:
-         p = INI_STR_BC;
+      case CfgUdpBcVal:
+         p = INI_STR_UDP_BC;
+         break;
+      case CfgStartVal:
+         p = INI_STR_START;
+         break;
+      case CfgWakeUpS88:
+         p = INI_STR_WAKEUP_S88;
          break;
    }
    CfgWert = (IniValue *)MapGet(ConfigGetConfig(Data), (MapKeyType)p);

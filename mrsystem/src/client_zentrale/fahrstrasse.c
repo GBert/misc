@@ -14,7 +14,7 @@ FahrstrasseStruct *FahrstrasseCreate(void)
    NewData = (FahrstrasseStruct *)malloc(sizeof(FahrstrasseStruct));
    if (NewData != (FahrstrasseStruct *)NULL)
    {
-      FahrstrasseSetFahrstrasseFilePath(NewData, "/www/config/");
+      FahrstrasseSetFahrstrasseFilePath(NewData, "/var/www/config/");
       FahrstrasseSetNumPages(NewData, 0);
       FahrstrasseSetFahrstrasseDb(NewData, MapCreate());
       if (FahrstrasseGetFahrstrasseDb(NewData) == (Map *)NULL)
@@ -90,6 +90,8 @@ void FahrstrasseInsert(FahrstrasseStruct *Data, FahrstrasseInfo *Fahrstrasse)
                            FahrstrasseInfoGetId(Fahrstrasse));
       FahrstrasseInfoSetName(OldFahrstrasse,
                              FahrstrasseInfoGetName(Fahrstrasse));
+      FahrstrasseInfoSetOn(OldFahrstrasse,
+                           FahrstrasseInfoGetOn(Fahrstrasse));
       FahrstrasseInfoSetS88(OldFahrstrasse,
                             FahrstrasseInfoGetS88(Fahrstrasse));
       FahrstrasseInfoSetS88Ein(OldFahrstrasse,
@@ -123,8 +125,7 @@ static int FahrstrasseItemNrCmp(void *d1, void *d2)
 
 void FahrstrasseItemInsert(FahrstrasseInfo *Data, int Nr,
                             FahrstrasseItem *Item)
-{
-   FahrstrasseItem *OldItem;
+{  FahrstrasseItem *OldItem;
 
    OldItem = (FahrstrasseItem *)MapGet(FahrstrasseInfoGetItemDb(Data),
                                        (MapKeyType)Nr);
@@ -196,6 +197,7 @@ void FahrstrasseParseFahrstrasseCs2(FahrstrasseStruct *Data, char *Buf, int Len)
    Cs2pSetVerbose(FahrstrasseParser, FALSE);
    NumFahrstrassen = 0;
    NumItem = 0;
+   FahrstrasseInfoSetOn(&NewFahrstrasse, 0);
    FahrstrasseInfoSetS88(&NewFahrstrasse, -1);
    FahrstrasseInfoSetS88Ein(&NewFahrstrasse, -1);
    FahrstrasseInfoSetExtern(&NewFahrstrasse, -1);
@@ -241,6 +243,7 @@ void FahrstrasseParseFahrstrasseCs2(FahrstrasseStruct *Data, char *Buf, int Len)
                      {
                         FahrstrasseInsert(Data, &NewFahrstrasse);
                         NumItem = 0;
+                        FahrstrasseInfoSetOn(&NewFahrstrasse, 0);
                         FahrstrasseInfoSetS88(&NewFahrstrasse, -1);
                         FahrstrasseInfoSetS88Ein(&NewFahrstrasse, -1);
                         FahrstrasseInfoSetExtern(&NewFahrstrasse, -1);
@@ -370,20 +373,22 @@ void FahrstrasseLoadFahrstrasseCs2(FahrstrasseStruct *Data)
          if (FahrstrasseFileName[strlen(FahrstrasseFileName) - 1] != '/')
             strcat(FahrstrasseFileName, "/");
          strcat(FahrstrasseFileName, CS2_FILE_STRING_FAHRSTRASSE);
-         stat(FahrstrasseFileName, &attribut);
-         FahrstrasseFileContent = (char *)malloc(attribut.st_size);
-         if (FahrstrasseFileContent != (char *)NULL)
+         if (stat(FahrstrasseFileName, &attribut) == 0)
          {
-            FahrstrasseCs2Stream = fopen(FahrstrasseFileName, "r");
-            if (FahrstrasseCs2Stream != NULL)
+            FahrstrasseFileContent = (char *)malloc(attribut.st_size);
+            if (FahrstrasseFileContent != (char *)NULL)
             {
-               fread(FahrstrasseFileContent, 1, attribut.st_size,
-                     FahrstrasseCs2Stream);
-               FahrstrasseParseFahrstrasseCs2(Data, FahrstrasseFileContent,
-                                              attribut.st_size);
-               Cs2Close(FahrstrasseCs2Stream);
+               FahrstrasseCs2Stream = fopen(FahrstrasseFileName, "r");
+               if (FahrstrasseCs2Stream != NULL)
+               {
+                  fread(FahrstrasseFileContent, 1, attribut.st_size,
+                        FahrstrasseCs2Stream);
+                  FahrstrasseParseFahrstrasseCs2(Data, FahrstrasseFileContent,
+                                                 attribut.st_size);
+                  Cs2Close(FahrstrasseCs2Stream);
+               }
+               free(FahrstrasseFileContent);
             }
-            free(FahrstrasseFileContent);
          }
          free(FahrstrasseFileName);
       }

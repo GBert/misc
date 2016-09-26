@@ -16,9 +16,9 @@ ZlibFile *ZFileCreate(void)
    {
       ZFileSetCrc(NewData, 0);
       ZFileSetLength(NewData, 0l);
-      ZFileSetInputData(NewData, (char *)NULL);
+      ZFileSetInputData(NewData, (unsigned char *)NULL);
       ZFileSetInputLength(NewData, 0);
-      ZFileSetBuffer(NewData, (char *)NULL);
+      ZFileSetBuffer(NewData, (unsigned char *)NULL);
    }
    return(NewData);
 }
@@ -30,16 +30,16 @@ void ZFileDestroy(ZlibFile *Data)
 
 void ZFileInit(ZlibFile *Data, char *Input, int Length)
 {
-   ZFileSetInputData(Data, Input);
+   ZFileSetInputData(Data, (unsigned char *)Input);
    ZFileSetInputLength(Data, Length);
 }
 
 void ZFileExit(ZlibFile *Data)
 {
-   if (ZFileGetBuffer(Data) != (char *)NULL)
+   if (ZFileGetBuffer(Data) != (unsigned char *)NULL)
    {
       free(ZFileGetBuffer(Data));
-      ZFileSetBuffer(Data, (char *)NULL);
+      ZFileSetBuffer(Data, (unsigned char *)NULL);
    }
 }
 
@@ -48,8 +48,9 @@ BOOL ZFileCompress(ZlibFile *Data)
    z_stream strm;
    BOOL Ret;
 
-   ZFileSetBuffer(Data, (char *)malloc(ZFileGetInputLength(Data)));
-   if (ZFileGetBuffer(Data) != (char *)NULL)
+   ZFileSetBuffer(Data, (unsigned char *)malloc(ZFileGetInputLength(Data) +
+                                                 sizeof(gz_header)));
+   if (ZFileGetBuffer(Data) != (unsigned char *)NULL)
    {
       strm.avail_in = ZFileGetInputLength(Data);
       strm.zalloc = Z_NULL;
@@ -67,7 +68,7 @@ BOOL ZFileCompress(ZlibFile *Data)
             ZlibRet = deflateEnd(&strm);
             ZFileSetLength(Data, ZFileGetInputLength(Data) - strm.avail_out + 4);
             ZFileSetFrameLength(Data, ((ZFileGetLength(Data) + 7) & 0xfff8));
-            SetLongToByteArray(ZFileGetBuffer(Data), ZFileGetInputLength(Data));
+            SetLongToByteArray((char *)ZFileGetBuffer(Data), ZFileGetInputLength(Data));
             if ((ZFileGetFrameLength(Data) - ZFileGetLength(Data)) > 0)
                memset(&(ZFileGetBuffer(Data)[ZFileGetLength(Data)]),
                       ZFileGetFrameLength(Data) - ZFileGetLength(Data),
@@ -99,9 +100,9 @@ BOOL ZFileUnCompress(ZlibFile *Data)
    z_stream strm;
    BOOL Ret;
 
-   ZFileSetLength(Data, GetLongFromByteArray(ZFileGetInputData(Data)));
-   ZFileSetBuffer(Data, (char *)malloc(ZFileGetLength(Data)));
-   if (ZFileGetBuffer(Data) != (char *)NULL)
+   ZFileSetLength(Data, GetLongFromByteArray((char *)ZFileGetInputData(Data)));
+   ZFileSetBuffer(Data, (unsigned char *)malloc(ZFileGetLength(Data)));
+   if (ZFileGetBuffer(Data) != (unsigned char *)NULL)
    {
       strm.avail_in = ZFileGetInputLength(Data);
       strm.zalloc = Z_NULL;

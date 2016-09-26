@@ -5,5 +5,5 @@ void MrIpcCmdSetLocomotiveDir(MrIpcCmdType *Data, unsigned long Addr, DirectionT
 {
    MrIpcSetCommand(Data, MrIpcCmdLocomotiveDirection);
    MrIpcSetIntLp1(Data, Addr);
-   MrIpcSetIntLp1(Data, Direction);
+   MrIpcSetIntIp1(Data, Direction);
 }

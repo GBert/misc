@@ -14,8 +14,8 @@ int ConfigGetIntVal(ConfigStruct *Data, CfgIntValues Value)
       case CfgPortVal:
          p = INI_STR_PORT;
          break;
-      case CfgUdpBcVal:
-         p = INI_STR_UDP_BC;
+      case CfgBcVal:
+         p = INI_STR_BC;
          break;
       case CfgForkVal:
          p = INI_STR_FORK;
@@ -31,6 +31,12 @@ int ConfigGetIntVal(ConfigStruct *Data, CfgIntValues Value)
          break;
       case CfgZentraleVal:
          p = INI_STR_ZENTRALE;
+         break;
+      case CfgProtokollVal:
+         p = INI_STR_PROTOKOLL;
+         break;
+      case CfgConnTcpVal:
+         p = INI_STR_CONN_TCP;
          break;
    }
    CfgWert = (IniValue *)MapGet(ConfigGetConfig(Data), (MapKeyType)p);

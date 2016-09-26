@@ -16,9 +16,9 @@ static void InitConfigValues(ConfigStruct *Data)
    MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_PORT),
           (MapDataType)ValuePtr);
    ValuePtr = malloc(sizeof(IniValue));
-   ValuePtr->DataType = IniParsInt;
+   ValuePtr->DataType = IniParsString;
    ValuePtr->IntValue = 0;
-   ValuePtr->StringValue[0] = '\0';
+   strcpy(ValuePtr->StringValue, "255.255.255.255");
    MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_UDP_BC),
           (MapDataType)ValuePtr);
    ValuePtr = malloc(sizeof(IniValue));
@@ -36,13 +36,13 @@ static void InitConfigValues(ConfigStruct *Data)
    ValuePtr = malloc(sizeof(IniValue));
    ValuePtr->DataType = IniParsString;
    ValuePtr->IntValue = 0;
-   strcpy(ValuePtr->StringValue, "/www/config");
+   strcpy(ValuePtr->StringValue, "/var/www/config");
    MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_CS2_PATH),
           (MapDataType)ValuePtr);
    ValuePtr = malloc(sizeof(IniValue));
-   ValuePtr->DataType = IniParsString;
+   ValuePtr->DataType = IniParsInt;
    ValuePtr->IntValue = 0;
-   strcpy(ValuePtr->StringValue, "192.168.0.255");
+   ValuePtr->StringValue[0] = '\0';
    MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_BC),
           (MapDataType)ValuePtr);
    ValuePtr = malloc(sizeof(IniValue));
@@ -75,10 +75,34 @@ static void InitConfigValues(ConfigStruct *Data)
    ValuePtr->StringValue[0] = '\0';
    MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_ZENTRALE),
           (MapDataType)ValuePtr);
+   ValuePtr = malloc(sizeof(IniValue));
+   ValuePtr->DataType = IniParsInt;
+   ValuePtr->IntValue = 0;
+   ValuePtr->StringValue[0] = '\0';
+   MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_PROTOKOLL),
+          (MapDataType)ValuePtr);
+   ValuePtr = malloc(sizeof(IniValue));
+   ValuePtr->DataType = IniParsInt;
+   ValuePtr->IntValue = 0;
+   strcpy(ValuePtr->StringValue, "stop");
+   MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_START),
+          (MapDataType)ValuePtr);
+   ValuePtr = malloc(sizeof(IniValue));
+   ValuePtr->DataType = IniParsInt;
+   ValuePtr->IntValue = 0;
+   ValuePtr->StringValue[0] = '\0';
+   MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_CONN_TCP),
+          (MapDataType)ValuePtr);
+   ValuePtr = malloc(sizeof(IniValue));
+   ValuePtr->DataType = IniParsString;
+   ValuePtr->IntValue = 0;
+   ValuePtr->StringValue[0] = '\0';
+   MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_WAKEUP_S88),
+          (MapDataType)ValuePtr);
 }
 
 void ConfigInit(ConfigStruct *Data, char *IniFile)
-{  IniParsKeyword IniKeywords[6];
+{  IniParsKeyword IniKeywords[13];
 
    MapInit(ConfigGetConfig(Data), (CmpFkt)strcmp, (MapKeyDelCbFkt)free,
            (MapDataDelCbFkt)free);
@@ -93,13 +117,34 @@ void ConfigInit(ConfigStruct *Data, char *IniFile)
    IniKeywords[2].DataType = IniParsString;
    strcpy(IniKeywords[3].Keyword, INI_STR_UDP_BC);
    IniKeywords[3].Symbol = INI_TOK_UDP_BC;
-   IniKeywords[3].DataType = IniParsInt;
+   IniKeywords[3].DataType = IniParsString;
    strcpy(IniKeywords[4].Keyword, INI_STR_CAN_IFACE);
    IniKeywords[4].Symbol = INI_TOK_CAN_IFACE;
    IniKeywords[4].DataType = IniParsString;
-   strcpy(IniKeywords[5].Keyword, INI_STR_ZENTRALE);
-   IniKeywords[5].Symbol = INI_TOK_ZENTRALE;
-   IniKeywords[5].DataType = IniParsInt;
-   IniParsInit(ConfigGetParser(Data), IniFile, 6, IniKeywords);
+   strcpy(IniKeywords[5].Keyword, INI_STR_CS2_PATH);
+   IniKeywords[5].Symbol = INI_TOK_CS2_PATH;
+   IniKeywords[5].DataType = IniParsString;
+   strcpy(IniKeywords[6].Keyword, INI_STR_BC);
+   IniKeywords[6].Symbol = INI_TOK_BC;
+   IniKeywords[6].DataType = IniParsInt;
+   strcpy(IniKeywords[7].Keyword, INI_STR_ZENTRALE);
+   IniKeywords[7].Symbol = INI_TOK_ZENTRALE;
+   IniKeywords[7].DataType = IniParsInt;
+   strcpy(IniKeywords[8].Keyword, INI_STR_PROTOKOLL);
+   IniKeywords[8].Symbol = INI_TOK_PROTOKOLL;
+   IniKeywords[8].DataType = IniParsInt;
+   strcpy(IniKeywords[9].Keyword, INI_STR_START);
+   IniKeywords[9].Symbol = INI_TOK_START;
+   IniKeywords[9].DataType = IniParsString;
+   strcpy(IniKeywords[10].Keyword, INI_STR_CONN_TCP);
+   IniKeywords[10].Symbol = INI_TOK_CONN_TCP;
+   IniKeywords[10].DataType = IniParsInt;
+   strcpy(IniKeywords[11].Keyword, INI_STR_WAKEUP_S88);
+   IniKeywords[11].Symbol = INI_TOK_WAKEUP_S88;
+   IniKeywords[11].DataType = IniParsString;
+   strcpy(IniKeywords[12].Keyword, INI_STR_GPIO_S88);
+   IniKeywords[12].Symbol = INI_TOK_GPIO_S88;
+   IniKeywords[12].DataType = IniParsString;
+   IniParsInit(ConfigGetParser(Data), IniFile, 13, IniKeywords);
    InitConfigValues(Data);
 }

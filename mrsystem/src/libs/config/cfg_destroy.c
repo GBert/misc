@@ -8,7 +8,7 @@ void ConfigDestroy(ConfigStruct *Data)
 {
    if (Data != (ConfigStruct *)NULL)
    {
-      if (ConfigGetParser(Data) == (IniParsStruct *)NULL)
+      if (ConfigGetParser(Data) != (IniParsStruct *)NULL)
       {
          IniParsDestroy(ConfigGetParser(Data));
       }

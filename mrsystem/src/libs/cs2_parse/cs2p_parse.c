@@ -31,7 +31,8 @@ static void DoParagraph(Cs2parser *Data)
        (Token == PARSER_TOKEN_KEYWORD_GLEISBILD) ||
        (Token == PARSER_TOKEN_KEYWORD_MAGNETARTIKEL) ||
        (Token == PARSER_TOKEN_KEYWORD_FAHRSTRASSEN) ||
-       (Token == PARSER_TOKEN_KEYWORD_GLEISBILDSEITE))
+       (Token == PARSER_TOKEN_KEYWORD_GLEISBILDSEITE) ||
+       (Token == PARSER_TOKEN_KEYWORD_LOKSTATUS))
    {
       Cs2pSetName(Data, ScanGetString(Cs2pGetScanner(Data)));
       if (Cs2pGetVerbose(Data))
@@ -52,6 +53,8 @@ static void DoParagraph(Cs2parser *Data)
          Cs2pSetSubType(Data, PARSER_PARAGRAPH_FAHRSTRASSEN);
       else if (Token == PARSER_TOKEN_KEYWORD_GLEISBILDSEITE)
          Cs2pSetSubType(Data, PARSER_PARAGRAPH_GLEISBILDSEITE);
+      else if (Token == PARSER_TOKEN_KEYWORD_LOKSTATUS)
+         Cs2pSetSubType(Data, PARSER_PARAGRAPH_LOKSTATUS);
       else
          Cs2pSetSubType(Data, 0);
       Token = Scan(Cs2pGetScanner(Data));
@@ -150,7 +153,8 @@ static void DoValue(Cs2parser *Data, int StartToken)
        (Token == PARSER_TOKEN_KEYWORD_DEVICE_ID) ||
        (Token == PARSER_TOKEN_KEYWORD_PAGE) ||
        (Token == PARSER_TOKEN_KEYWORD_SEKUNDE) ||
-       (Token == PARSER_TOKEN_KEYWORD_IDX))
+       (Token == PARSER_TOKEN_KEYWORD_IDX) ||
+       (Token == PARSER_TOKEN_KEYWORD_ON))
    {
       Cs2pSetName(Data, ScanGetString(Cs2pGetScanner(Data)));
       if (Cs2pGetVerbose(Data))
@@ -283,6 +287,8 @@ static void DoValue(Cs2parser *Data, int StartToken)
          Cs2pSetSubType(Data, PARSER_VALUE_SEKUNDE);
       else if (Token == PARSER_TOKEN_KEYWORD_IDX)
          Cs2pSetSubType(Data, PARSER_VALUE_IDX);
+      else if (Token == PARSER_TOKEN_KEYWORD_ON)
+         Cs2pSetSubType(Data, PARSER_VALUE_ON);
       Token = Scan(Cs2pGetScanner(Data));
       switch (Token)
       {

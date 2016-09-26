@@ -1,7 +1,7 @@
 INCLUDEPATH=../../include
 LIBPATH=../../lib
 ARFLAGS=rc
-OBJS=menge_add.o menge_create.o menge_destroy.o menge_first.o menge_init.o menge_next.o menge_remove.o menge_citer.o menge_iiter.o menge_diter.o
+OBJS=menge_add.o menge_create.o menge_destroy.o menge_first.o menge_idel.o menge_init.o menge_next.o menge_remove.o menge_citer.o menge_iiter.o menge_diter.o
 TARGET=libmenge.a
 
 
@@ -26,6 +26,10 @@ menge_destroy.o: menge_destroy.c menge.h
 
 
 menge_first.o: menge_first.c menge.h
+	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
+
+
+menge_idel.o: menge_idel.c menge.h
 	$(CC) $(CFLAGS) $(CCFLAGS) -c -o $@ $< -I$(INCLUDEPATH)
 
 

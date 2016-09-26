@@ -11,9 +11,10 @@
 #define CS2_FILE_STRING_MAGNETARTIKEL        "magnetartikel.cs2"
 #define CS2_FILE_STRING_GLEISBILD            "gleisbild.cs2"
 #define CS2_FILE_STRING_FAHRSTRASSE          "fahrstrassen.cs2"
-#define CS2_FILE_STRING_STATUS_LOKOMOTIVE    "lokomotive.sr2"
+#define CS2_FILE_STRING_STATUS_LOKOMOTIVE    "lokstatus.sr2"
 #define CS2_FILE_STRING_STATUS_MAGNETARTIKEL "magnetartikel.sr2"
 #define CS2_FILE_STRING_STATUS_GLEISBILD     "gleisbild.sr2"
+#define CS2_FILE_STRING_STATUS_FAHRSTRASSE   "fahrstrassen.sr2"
 
 #define CS2_PARAGRAPH_TYPE_LOK            1
 #define CS2_PARAGRAPH_TYPE_NUMLOKS        2
@@ -157,6 +158,7 @@ void Cs2WriteParagraphByType(FILE *Stream, int Cs2ParagraphType);
 void Cs2WriteTitleByName(FILE *Stream, char *Title, int Level);
 void Cs2WriteStringValueByName(FILE *Stream, char *Title, char *Value, int Level);
 void Cs2WriteIntValueByName(FILE *Stream, char *Title, int Value, int Level);
+void Cs2WriteHexValueByName(FILE *Stream, char *Title, int Value, int Level);
 void Cs2WriteULongValueByName(FILE *Stream, char *Title, unsigned long Value, int Level);
 void Cs2WriteHexLongValueByName(FILE *Stream, char *Title, unsigned long Value, int Level);
 void Cs2WriteFloatValueByName(FILE *Stream, char *Title, float Value, int Level);

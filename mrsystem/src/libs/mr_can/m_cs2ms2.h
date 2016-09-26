@@ -8,6 +8,12 @@
 #define MR_CS2_NUM_CAN_BYTES 8
 
 typedef struct {
+   unsigned long CanId;
+   unsigned char CanDlc;
+   unsigned char CanData[8];
+} CanFrameStruct;
+
+typedef struct {
    unsigned long Id;
    unsigned char Dlc; /* = number of data bytes */
    unsigned char Data[MR_CS2_NUM_CAN_BYTES];
@@ -196,10 +202,6 @@ typedef struct {
 #define MR_CS2_FILE_EXTENSION ".cs2"
 #define MR_CS2_GLEISBILD_PAGE_SUBDIR "gleisbilder/"
 
-/* Namen fuer MS2 CAN Anmeldung */
-#define MrMs2Close(socket)      close(socket)
-#define MrMs2Send(socket, data) write(socket, (char *)data, sizeof(struct can_frame))
-#define MrMs2Connect(IfName)    MrConnectCan(IfName)
 /* Namen fuer MS2 CAN Auswertung */
 #define MrMs2Decode(CanMsg,CanFrame) MrCs2Decode(CanMsg,CanFrame)
 #define MrMs2Encode(CanMsg,CanFrame) MrCs2Encode(CanMsg,CanFrame)
@@ -211,9 +213,8 @@ typedef struct {
 #define MrMs2GetNumParamBytes MrCs2GetNumParamBytes
 
 
-void SendMagicStart60113Frame(int CanSocket, int Verbose);
-void MrCs2Decode(MrCs2CanDataType *CanMsg, struct can_frame *CanFrame);
-void MrCs2Encode(MrCs2CanDataType *CanMsg, struct can_frame *CanFrame);
+void MrCs2Decode(MrCs2CanDataType *CanMsg, CanFrameStruct *CanFrame);
+void MrCs2Encode(MrCs2CanDataType *CanMsg, CanFrameStruct *CanFrame);
 void MrCs2Trace(MrCs2CanDataType *CanMsg);
 unsigned MrCs2CalcHash(unsigned long Uid);
 unsigned MrCs2CalcHashFromFolgenummer(unsigned Folgenummer);
@@ -328,6 +329,7 @@ void MrCs2DecS88Event8(MrCs2CanDataType *CanMsg, int *Device, int *Contact,
 void MrCs2DecPing0(MrCs2CanDataType *CanMsg);
 void MrCs2DecPing8(MrCs2CanDataType *CanMsg, unsigned long *Uid,
                    int *SwVersion, int *DeviceId);
+void MrCs2DecCanBootldr(MrCs2CanDataType *CanMsg, char *Bytes);
 void MrCs2DecStatus5(MrCs2CanDataType *CanMsg, unsigned long *Uid, int *Index);
 void MrCs2DecStatus6(MrCs2CanDataType *CanMsg, unsigned long *Uid, int *Index,
                      int *NumPackets);
@@ -388,6 +390,7 @@ void MrCs2EncS88Event8(MrCs2CanDataType *CanMsg, int Device, int Contact,
 void MrCs2EncPing0(MrCs2CanDataType *CanMsg);
 void MrCs2EncPing8(MrCs2CanDataType *CanMsg, unsigned long Uid,
                    int SwVersion, int DeviceId);
+void MrCs2EncCanBootldr(MrCs2CanDataType *CanMsg, char *Bytes);
 void MrCs2EncStatus5(MrCs2CanDataType *CanMsg, unsigned long Uid, int Index);
 void MrCs2EncStatus6(MrCs2CanDataType *CanMsg, unsigned long Uid, int Index,
                      int NumPackets);
@@ -626,6 +629,7 @@ void MrCs2EncAutomatic8(MrCs2CanDataType *CanMsg, int DeviceId, int Func,
 #define MrMs2DecS88Event8     MrCs2DecS88Event8
 #define MrMs2DecPing0         MrCs2DecPing0
 #define MrMs2DecPing8         MrCs2DecPing8
+#define MrMs2DecCanBootldr    MrCs2DecCanBootldr
 #define MrMs2DecStatus5       MrCs2DecStatus5
 #define MrMs2DecStatus6       MrCs2DecStatus6
 #define MrMs2DecConfigQuery0  MrCs2DecConfigQuery0
@@ -662,6 +666,7 @@ void MrCs2EncAutomatic8(MrCs2CanDataType *CanMsg, int DeviceId, int Func,
 #define MrMs2EncS88Event8     MrCs2EncS88Event8
 #define MrMs2EncPing0         MrCs2EncPing0
 #define MrMs2EncPing8         MrCs2EncPing8
+#define MrMs2EncCanBootldr    MrCs2EncCanBootldr
 #define MrMs2EncStatus5       MrCs2EncStatus5
 #define MrMs2EncStatus6       MrCs2EncStatus6
 #define MrMs2EncConfigQuery0  MrCs2EncConfigQuery0

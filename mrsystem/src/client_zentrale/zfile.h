@@ -9,9 +9,9 @@ typedef struct {
    unsigned short Crc;
    unsigned long Length;
    unsigned long FrameLength;
-   char *InputData;
+   unsigned char *InputData;
    int InputLength;
-   char *Buffer;
+   unsigned char *Buffer;
 } ZlibFile;
 
 #define ZFileSetCrc(Data,crc)         Data->Crc=crc

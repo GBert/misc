@@ -101,6 +101,7 @@ void LokExit(LokStruct *Data);
 void LokClear(LokStruct *Data);
 void LokInsert(LokStruct *Data, LokInfo *Lok);
 LokInfo *LokSearch(LokStruct *Data, unsigned long Addr);
+void LokParseLokomotiveCs2(LokStruct *Data, char *Buf, int Len);
 void LokLoadLokomotiveCs2(LokStruct *Data);
 void LokSaveLokomotiveCs2(LokStruct *Data);
 void LokMarkAllDeleted(LokStruct *Data);

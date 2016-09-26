@@ -1,13 +1,15 @@
 TARGET=libmr_ipc.a
 OBJS=create.o destroy.o init.o exit.o connect.o connect_if.o server.o server_if.o accept.o \
     send.o receive.o encode_can.o decode_can.o \
-    cmd_set_null.o cmd_get_null.o cmd_set_run.o cmd_get_run.o cmd_set_cfg_zheader.o \
+    cmd_set_null.o cmd_get_null.o \
+    cmd_set_run.o cmd_get_run.o cmd_set_track_proto.o cmd_get_track_proto.o cmd_set_cfg_zheader.o \
     cmd_set_locomotive_dir.o cmd_set_locomotive_speed.o cmd_set_locomotive_fkt.o \
     cmd_get_locomotive_dir.o cmd_get_locomotive_speed.o cmd_get_locomotive_fkt.o \
     cmd_set_acc_pos.o cmd_set_query.o cmd_get_acc_pos.o cmd_set_member.o cmd_get_member.o \
     cmd_set_get_member.o cmd_set_get_locname.o cmd_get_get_locname.o \
     cmd_set_get_locinfo.o cmd_get_get_locinfo.o cmd_get_query.o cmd_get_cfg_zheader.o \
-    cmd_set_cfg_header.o cmd_get_cfg_header.o cmd_set_cfg_data.o cmd_get_cfg_data.o timestamp.o
+    cmd_set_cfg_header.o cmd_get_cfg_header.o cmd_set_cfg_data.o cmd_get_cfg_data.o timestamp.o \
+    cmd_set_system_status_val.o cmd_get_system_status_val.o cmd_set_can_bootldr.o cmd_get_can_bootldr.o
 
 %.o: %.c
 	$(CC) $(CFLAGS) -I$(INCLUDE_PATH) -c $<
@@ -49,6 +51,10 @@ decode_can.o: decode_can.c mr_ipc.h
 
 cmd_set_null.o: cmd_set_null.c mr_ipc.h
 
+cmd_set_run.o: cmd_set_run.c mr_ipc.h
+
+cmd_set_track_proto.o: cmd_set_track_proto.c mr_ipc.h
+
 cmd_set_locomotive_dir.o: cmd_set_locomotive_dir.c mr_ipc.h
 
 cmd_set_locomotive_speed.o: cmd_set_locomotive_speed.c mr_ipc.h
@@ -75,6 +81,10 @@ cmd_set_cfg_data.o: cmd_set_cfg_data.c mr_ipc.h
 
 cmd_get_null.o: cmd_get_null.c mr_ipc.h
 
+cmd_get_run.o: cmd_get_run.c mr_ipc.h
+
+cmd_get_track_proto.o: cmd_get_track_proto.c mr_ipc.h
+
 cmd_get_locomotive_dir.o: cmd_get_locomotive_dir.c mr_ipc.h
 
 cmd_get_locomotive_speed.o: cmd_get_locomotive_speed.c mr_ipc.h
@@ -96,6 +106,14 @@ cmd_get_cfg_header.o: cmd_get_cfg_header.c mr_ipc.h
 cmd_get_cfg_zheader.o: cmd_get_cfg_zheader.c mr_ipc.h
 
 cmd_get_cfg_data.o: cmd_get_cfg_data.c mr_ipc.h
+
+cmd_set_system_status_val.o: cmd_set_system_status_val.c mr_ipc.h
+
+cmd_get_system_status_val.o: cmd_get_system_status_val.c mr_ipc.h
+
+cmd_set_can_bootldr.o: cmd_set_can_bootldr.c mr_ipc.h
+
+cmd_get_can_bootldr.o: cmd_get_can_bootldr.c mr_ipc.h
 
 timestamp.o: timestamp.c mr_ipc.h
 

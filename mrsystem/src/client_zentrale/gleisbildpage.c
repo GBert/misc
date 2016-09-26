@@ -17,7 +17,7 @@ GleisbildPageStruct *GleisbildPageCreate(void)
    NewData = (GleisbildPageStruct *)malloc(sizeof(GleisbildPageStruct));
    if (NewData != (GleisbildPageStruct *)NULL)
    {
-      GleisbildPageSetGleisbildPageFilePath(NewData, "/www/config/");
+      GleisbildPageSetGleisbildPageFilePath(NewData, "/var/www/config/");
       GleisbildPageSetNumElements(NewData, 0);
       GleisbildPageSetElementDb(NewData, MapCreate());
       if (GleisbildPageStructGetElementDb(NewData) == (Map *)NULL)
@@ -254,21 +254,23 @@ void GleisbildPageLoadGleisbildPageCs2(GleisbildPageStruct *Data)
             strcat(GleisbildPageFileName, "/");
          strcat(GleisbildPageFileName, GleisbildPageStructGetName(Data));
          strcat(GleisbildPageFileName, MR_CS2_FILE_EXTENSION);
-         stat(GleisbildPageFileName, &attribut);
-         GleisbildPageFileContent = (char *)malloc(attribut.st_size);
-         if (GleisbildPageFileContent != (char *)NULL)
+         if (stat(GleisbildPageFileName, &attribut) == 0)
          {
-            GleisbildPageCs2Stream = fopen(GleisbildPageFileName, "r");
-            if (GleisbildPageCs2Stream != NULL)
+            GleisbildPageFileContent = (char *)malloc(attribut.st_size);
+            if (GleisbildPageFileContent != (char *)NULL)
             {
-               fread(GleisbildPageFileContent, 1, attribut.st_size,
-                     GleisbildPageCs2Stream);
-               GleisbildPageParseGleisbildPageCs2(Data,
-                                                  GleisbildPageFileContent,
-                                                  attribut.st_size);
-               Cs2Close(GleisbildPageCs2Stream);
+               GleisbildPageCs2Stream = fopen(GleisbildPageFileName, "r");
+               if (GleisbildPageCs2Stream != NULL)
+               {
+                  fread(GleisbildPageFileContent, 1, attribut.st_size,
+                        GleisbildPageCs2Stream);
+                  GleisbildPageParseGleisbildPageCs2(Data,
+                                                     GleisbildPageFileContent,
+                                                     attribut.st_size);
+                  Cs2Close(GleisbildPageCs2Stream);
+               }
+               free(GleisbildPageFileContent);
             }
-            free(GleisbildPageFileContent);
          }
          free(GleisbildPageFileName);
       }

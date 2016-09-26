@@ -45,5 +45,6 @@ DlisteKnoten DlisteFirst(DlisteIterator *Iter);
 DlisteKnoten DlisteNext(DlisteIterator *Iter);
 DlisteKnoten DlisteLast(DlisteIterator *Iter);
 DlisteKnoten DlistePrev(DlisteIterator *Iter);
+DlisteKnoten DlisteRemove(DlisteIterator *Iter);
 
 #endif

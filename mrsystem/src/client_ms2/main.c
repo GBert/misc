@@ -1,15 +1,12 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/types.h>
 #include <unistd.h>
 #include <signal.h>
 #include <time.h>
-#include <boolean.h>
 #include <config.h>
+#include "can_client.h"
 #include "ms2.h"
 
-#define SOFTWARE_VERSION "1.02"
+#define SOFTWARE_VERSION "2.01"
 
 static void usage(char *name)
 {
@@ -26,7 +23,8 @@ static void usage(char *name)
 }
 
 int main(int argc, char *argv[])
-{  Ms2Struct *Ms2;
+{  Ms2Struct *Ms2Client;
+   IoFktStruct *IoFunctions;
    ConfigStruct *Config;
    pid_t ChildPid;
    time_t Now;
@@ -59,18 +57,28 @@ int main(int argc, char *argv[])
          {
             if (ConfigGetIntVal(Config, CfgVerboseVal))
                puts("child running");
-            Ms2 = Ms2Create();
-            if (Ms2 != (Ms2Struct *)NULL)
+            IoFunctions = CanClientInit(ConfigGetIntVal(Config, CfgVerboseVal),
+                                        ConfigGetStrVal(Config, CfgCanIfVal));
+            if (IoFunctions != (IoFktStruct *)NULL)
             {
-               Ms2Init(Ms2, ConfigGetIntVal(Config, CfgVerboseVal),
-                       ConfigGetStrVal(Config, CfgIfaceVal),
-                       ConfigGetStrVal(Config, CfgAddrVal),
-                       ConfigGetIntVal(Config, CfgPortVal),
-                       ConfigGetStrVal(Config, CfgCanIfVal),
-                       ConfigGetIntVal(Config, CfgZentraleVal));
-               Ms2Run(Ms2);
-               Ms2Destroy(Ms2);
-               Ret = 0;
+               Ms2Client = Ms2Create();
+               if (Ms2Client != (Ms2Struct *)NULL)
+               {
+                  Ms2Init(Ms2Client, ConfigGetIntVal(Config, CfgVerboseVal),
+                          ConfigGetStrVal(Config, CfgIfaceVal),
+                          ConfigGetStrVal(Config, CfgAddrVal),
+                          ConfigGetIntVal(Config, CfgPortVal),
+                          ConfigGetIntVal(Config, CfgZentraleVal),
+                          IoFunctions);
+                  Ms2Run(Ms2Client);
+                  Ms2Destroy(Ms2Client);
+                  Ret = 0;
+               }
+               else
+               {
+                  Ret = 1;
+               }
+               CanClientExit(IoFunctions);
             }
             else
             {
@@ -90,18 +98,28 @@ int main(int argc, char *argv[])
          Now = time(NULL);
          if (ConfigGetIntVal(Config, CfgVerboseVal))
             printf("start with no fork at %s\n", asctime(localtime(&Now)));
-         Ms2 = Ms2Create();
-         if (Ms2 != (Ms2Struct *)NULL)
+         IoFunctions = CanClientInit(ConfigGetIntVal(Config, CfgVerboseVal),
+                                     ConfigGetStrVal(Config, CfgCanIfVal));
+         if (IoFunctions != (IoFktStruct *)NULL)
          {
-            Ms2Init(Ms2, ConfigGetIntVal(Config, CfgVerboseVal),
-                    ConfigGetStrVal(Config, CfgIfaceVal),
-                    ConfigGetStrVal(Config, CfgAddrVal),
-                    ConfigGetIntVal(Config, CfgPortVal),
-                    ConfigGetStrVal(Config, CfgCanIfVal),
-                    ConfigGetIntVal(Config, CfgZentraleVal));
-            Ms2Run(Ms2);
-            Ms2Destroy(Ms2);
-            Ret = 0;
+            Ms2Client = Ms2Create();
+            if (Ms2Client != (Ms2Struct *)NULL)
+            {
+               Ms2Init(Ms2Client, ConfigGetIntVal(Config, CfgVerboseVal),
+                       ConfigGetStrVal(Config, CfgIfaceVal),
+                       ConfigGetStrVal(Config, CfgAddrVal),
+                       ConfigGetIntVal(Config, CfgPortVal),
+                       ConfigGetIntVal(Config, CfgZentraleVal),
+                       IoFunctions);
+               Ms2Run(Ms2Client);
+               Ms2Destroy(Ms2Client);
+               Ret = 0;
+            }
+            else
+            {
+               Ret = 1;
+            }
+            CanClientExit(IoFunctions);
          }
          else
          {

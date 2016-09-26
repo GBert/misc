@@ -8,19 +8,22 @@
 #include <config.h>
 #include "zentrale.h"
 
-#define SOFTWARE_VERSION "1.04"
+#define SOFTWARE_VERSION "2.01"
 
 static void usage(char *name)
 {
    printf("mrzentrale V%s\nUsage:\n", SOFTWARE_VERSION);
-   printf("%s ([-v] [-f] [-a <addr> | -i <iface>] -p <port> [-l path] [-z <zentrale>]) | -?\n", name);
+   printf("%s ([-v] [-f] [-a <addr> | -i <iface>] -p <port> [-s <proto>] [-l path] [-z <zentrale>] [-g}) [-8 <param>] | -?\n", name);
    puts("-a - ip address of drehscheibe");
    puts("-i - interface to drehscheibe");
    puts("-p - port of drehscheibe");
-   puts("-z - 0=mrsystem dont start zentrale, 1=start zentrale");
+   puts("-z - 0=proxy mode, 1=ethernet addon for ms2");
    puts("-f - dont fork to go in background");
    puts("-v - verbose");
    puts("-l - path where write lokomotive.cs2");
+   puts("-s - bitmask for track protocolls, 1=motorola, 2=mfx, 4=dcc");
+   puts("-g - system start, start power on tracks");
+   puts("-8 - start s88 modules, params like wakeup-links-88 from G.B.");
    puts("-? - this help");
 }
 
@@ -39,7 +42,7 @@ int main(int argc, char *argv[])
       ValArgs = argv;
       ConfigInit(Config, MRSYSTEM_CONFIG_FILE);
       ConfigReadfile(Config);
-      ConfigCmdLine(Config, "a:i:p:fs:vl:z:?", NumArgs, ValArgs);
+      ConfigCmdLine(Config, "8:a:i:p:fgs:vl:z:?", NumArgs, ValArgs);
       if (ConfigGetIntVal(Config, CfgUsageVal))
       {
          usage(argv[0]);
@@ -67,7 +70,10 @@ int main(int argc, char *argv[])
                             ConfigGetStrVal(Config, CfgIfaceVal),
                             ConfigGetStrVal(Config, CfgAddrVal),
                             ConfigGetIntVal(Config, CfgPortVal),
-                            ConfigGetStrVal(Config, CfgPathVal));
+                            ConfigGetStrVal(Config, CfgPathVal),
+                            ConfigGetIntVal(Config, CfgProtokollVal),
+                            ConfigGetStrVal(Config, CfgStartVal),
+                            ConfigGetStrVal(Config, CfgWakeUpS88));
                ZentraleRun(Zentrale);
                ZentraleDestroy(Zentrale);
                Ret = 0;
@@ -99,7 +105,10 @@ int main(int argc, char *argv[])
                          ConfigGetStrVal(Config, CfgIfaceVal),
                          ConfigGetStrVal(Config, CfgAddrVal),
                          ConfigGetIntVal(Config, CfgPortVal),
-                         ConfigGetStrVal(Config, CfgPathVal));
+                         ConfigGetStrVal(Config, CfgPathVal),
+                         ConfigGetIntVal(Config, CfgProtokollVal),
+                         ConfigGetStrVal(Config, CfgStartVal),
+                         ConfigGetStrVal(Config, CfgWakeUpS88));
             ZentraleRun(Zentrale);
             ZentraleDestroy(Zentrale);
             Ret = 0;
