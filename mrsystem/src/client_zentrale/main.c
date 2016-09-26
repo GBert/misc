@@ -8,7 +8,7 @@
 #include <config.h>
 #include "zentrale.h"
 
-#define SOFTWARE_VERSION "2.01"
+#define SOFTWARE_VERSION "3.00"
 
 static void usage(char *name)
 {

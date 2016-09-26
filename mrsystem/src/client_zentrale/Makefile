@@ -1,5 +1,5 @@
 TARGET=mrzentrale
-OBJS=main.o zentrale.o states.o lok.o gleisbild.o gleisbildpage.o \
+OBJS=main.o zentrale.o states.o cron.o lok.o gleisbild.o gleisbildpage.o \
 	magnetartikel.o magstat.o fahrstrasse.o lokstatus.o gbsstat.o \
 	fsstat.o zfile.o canmember.o
 LOCALLIBS=-lmr_ipc -lmr_can -lcs2_parse -lfsm -lm -lbytestream -lmrconfig -linipars -lscanner -lmap -lmenge -lavl -ldliste -lz
@@ -15,9 +15,11 @@ $(TARGET): $(OBJS)
 
 main.o: main.c zentrale.h
 
-zentrale.o: zentrale.c zentrale.h canmember.h lok.h lokstatus.h gleisbild.h gleisbildpage.h gbsstat.h magnetartikel.h magstat.h fahrstrasse.h fsstat.h zfile.h
+zentrale.o: zentrale.c zentrale.h canmember.h cron.h lok.h lokstatus.h gleisbild.h gleisbildpage.h gbsstat.h magnetartikel.h magstat.h fahrstrasse.h fsstat.h zfile.h
 
-states.o: states.c zentrale.h lokstatus.h magstat.h gbsstat.h fsstat.h
+states.o: states.c zentrale.h cron.h lokstatus.h magstat.h gbsstat.h fsstat.h
+
+cron.o: cron.c cron.h
 
 lok.o: lok.c lok.h
 

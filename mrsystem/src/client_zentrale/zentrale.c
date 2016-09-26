@@ -18,6 +18,7 @@
 #include <write_cs2.h>
 #include <fsm.h>
 #include "zentrale.h"
+#include "cron.h"
 #include "canmember.h"
 #include "lok.h"
 #include "lokstatus.h"
@@ -59,25 +60,41 @@ ZentraleStruct *ZentraleCreate(void)
          ZentraleSetPackedCs2File(Data, ZFileCreate());
          if (ZentraleGetPackedCs2File(Data) != (ZlibFile *)NULL)
          {
-            ZentraleSetLoks(Data, LokCreate());
-            if (ZentraleGetLoks(Data) != (LokStruct *)NULL)
+            ZentraleSetCronJobs(Data, CronCreate());
+            if (ZentraleGetCronJobs(Data) != (CronStruct *)NULL)
             {
-               ZentraleSetMagnetartikel(Data, MagnetartikelCreate());
-               if (ZentraleGetMagnetartikel(Data) != (MagnetartikelStruct *)NULL)
+               ZentraleSetLoks(Data, LokCreate());
+               if (ZentraleGetLoks(Data) != (LokStruct *)NULL)
                {
-                  ZentraleSetGleisbild(Data, GleisbildCreate());
-                  if (ZentraleGetGleisbild(Data) != (GleisbildStruct *)NULL)
+                  ZentraleSetMagnetartikel(Data, MagnetartikelCreate());
+                  if (ZentraleGetMagnetartikel(Data) != (MagnetartikelStruct *)NULL)
                   {
-                     ZentraleSetFahrstrasse(Data, FahrstrasseCreate());
-                     if (ZentraleGetFahrstrasse(Data) != (FahrstrasseStruct *)NULL)
+                     ZentraleSetGleisbild(Data, GleisbildCreate());
+                     if (ZentraleGetGleisbild(Data) != (GleisbildStruct *)NULL)
                      {
-                        ZentraleSetCanMember(Data, CanMemberCreate());
-                        if (ZentraleGetCanMember(Data) == (CanMemberStruct *)NULL)
+                        ZentraleSetFahrstrasse(Data, FahrstrasseCreate());
+                        if (ZentraleGetFahrstrasse(Data) != (FahrstrasseStruct *)NULL)
                         {
-                           CanMemberDestroy(ZentraleGetCanMember(Data));
+                           ZentraleSetCanMember(Data, CanMemberCreate());
+                           if (ZentraleGetCanMember(Data) == (CanMemberStruct *)NULL)
+                           {
+                              CanMemberDestroy(ZentraleGetCanMember(Data));
+                              GleisbildDestroy(ZentraleGetGleisbild(Data));
+                              MagnetartikelDestroy(ZentraleGetMagnetartikel(Data));
+                              LokDestroy(ZentraleGetLoks(Data));
+                              CronDestroy(ZentraleGetCronJobs(Data));
+                              ZFileDestroy(ZentraleGetPackedCs2File(Data));
+                              FsmDestroy(ZentraleGetStateMachine(Data));
+                              free(Data);
+                              Data = (ZentraleStruct *)NULL;
+                           }
+                        }
+                        else
+                        {
                            GleisbildDestroy(ZentraleGetGleisbild(Data));
                            MagnetartikelDestroy(ZentraleGetMagnetartikel(Data));
                            LokDestroy(ZentraleGetLoks(Data));
+                           CronDestroy(ZentraleGetCronJobs(Data));
                            ZFileDestroy(ZentraleGetPackedCs2File(Data));
                            FsmDestroy(ZentraleGetStateMachine(Data));
                            free(Data);
@@ -86,9 +103,9 @@ ZentraleStruct *ZentraleCreate(void)
                      }
                      else
                      {
-                        GleisbildDestroy(ZentraleGetGleisbild(Data));
                         MagnetartikelDestroy(ZentraleGetMagnetartikel(Data));
                         LokDestroy(ZentraleGetLoks(Data));
+                        CronDestroy(ZentraleGetCronJobs(Data));
                         ZFileDestroy(ZentraleGetPackedCs2File(Data));
                         FsmDestroy(ZentraleGetStateMachine(Data));
                         free(Data);
@@ -97,8 +114,8 @@ ZentraleStruct *ZentraleCreate(void)
                   }
                   else
                   {
-                     MagnetartikelDestroy(ZentraleGetMagnetartikel(Data));
                      LokDestroy(ZentraleGetLoks(Data));
+                     CronDestroy(ZentraleGetCronJobs(Data));
                      ZFileDestroy(ZentraleGetPackedCs2File(Data));
                      FsmDestroy(ZentraleGetStateMachine(Data));
                      free(Data);
@@ -107,7 +124,7 @@ ZentraleStruct *ZentraleCreate(void)
                }
                else
                {
-                  LokDestroy(ZentraleGetLoks(Data));
+                  CronDestroy(ZentraleGetCronJobs(Data));
                   ZFileDestroy(ZentraleGetPackedCs2File(Data));
                   FsmDestroy(ZentraleGetStateMachine(Data));
                   free(Data);
@@ -160,6 +177,8 @@ void ZentraleDestroy(ZentraleStruct *Data)
       MagnetartikelDestroy(ZentraleGetMagnetartikel(Data));
    if (ZentraleGetLoks(Data) != (LokStruct *)NULL)
       LokDestroy(ZentraleGetLoks(Data));
+   if (ZentraleGetCronJobs(Data) != (CronStruct *)NULL)
+      CronDestroy(ZentraleGetCronJobs(Data));
    if (ZentraleGetStateMachine(Data) != (FsmStruct *)NULL)
       FsmDestroy(ZentraleGetStateMachine(Data));
    if (ZentraleGetPackedCs2File(Data) == (ZlibFile *)NULL)
@@ -204,6 +223,7 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, int MasterMode,
    ZentraleSetCfgLength(Data, 0);
    ZentraleSetCfgHaveRead(Data, 0);
    ZentraleSetCfgBuffer(Data, NULL);
+   CronInit(ZentraleGetCronJobs(Data));
    ZentraleInitFsm(Data, ZentraleGetMasterMode(Data));
    ZentraleSetLocPath(Data, LocPath);
    ZentraleSetProtokolle(Data, Protokolle);
@@ -441,6 +461,8 @@ void ZentraleExit(ZentraleStruct *Data)
       MagnetartikelExit(ZentraleGetMagnetartikel(Data));
    if (ZentraleGetLoks(Data) != (LokStruct *)NULL)
       LokExit(ZentraleGetLoks(Data));
+   if (ZentraleGetCronJobs(Data) != (CronStruct *)NULL)
+      CronExit(ZentraleGetCronJobs(Data));
    if (ZentraleGetStateMachine(Data) != (FsmStruct *)NULL)
       FsmExit(ZentraleGetStateMachine(Data));
    if (ZentraleGetPackedCs2File(Data) == (ZlibFile *)NULL)

@@ -19,6 +19,7 @@ typedef struct {
    Queue *GbCommands;
    unsigned int NumBuffers;
    Queue *CmdBuffers;
+   time_t LastTime;
    MrCs2CanDataType *ActualCmd;
    IoFktStruct *IoFunctions;
 } Ms2Struct;
@@ -32,6 +33,7 @@ typedef struct {
 #define Ms2SetGbCommands(Data, CmdQueue)   (Data)->GbCommands=CmdQueue
 #define Ms2SetNumBuffers(Data, Num)        (Data)->NumBuffers=Num
 #define Ms2SetCmdBuffers(Data, Buffers)    (Data)->CmdBuffers=Buffers
+#define Ms2SetLastTime(Data, Time)         (Data)->LastTime=Time
 #define Ms2SetActualCmd(Data, Cmd)         (Data)->ActualCmd=Cmd
 #define Ms2SetIoFunctions(Data, Fkts)      (Data)->IoFunctions=Fkts
 
@@ -44,6 +46,7 @@ typedef struct {
 #define Ms2GetGbCommands(Data)   (Data)->GbCommands
 #define Ms2GetNumBuffers(Data)   (Data)->NumBuffers
 #define Ms2GetCmdBuffers(Data)   (Data)->CmdBuffers
+#define Ms2GetLastTime(Data)     (Data)->LastTime
 #define Ms2GetActualCmd(Data)    (Data)->ActualCmd
 #define Ms2GetIoFunctions(Data)  (Data)->IoFunctions
 

@@ -19,40 +19,55 @@
 #include "gbsstat.h"
 #include "fsstat.h"
 
+#define PERIODIC_NAME_QUERY     "query_member"
+#define PERIODIC_NAME_POLLMS2   "poll_ms2"
+#define PERIODIC_NAME_PING      "ping"
+#define PERIODIC_NAME_TO_CS2    "timeout_cs2"
+#define PERIODIC_NAME_TO_MS2    "timeout_ms2"
+#define PERIODIC_NAME_TO_NORMAL "timeout_normal"
 
+#define PERIODIC_INTERVALL_QUERY    10
+#define PERIODIC_INTERVALL_POLLMS2  60
+#define PERIODIC_INTERVALL_PING     10
+#define PERIODIC_INTERVALL_TIMEOUT   5
 #define STATE_TIMEOUT 5
 
 #define PARAGRAPH_LOK     1
 #define PARAGRAPH_NUMLOKS 2
 
-#define NUM_STATES 27
-#define STATE_WAIT_FOR_MS2           0
-#define STATE_WAIT_LOKNAME_CFG_HDR   1
-#define STATE_WAIT_LOKNAME_CFG_DATA  2
-#define STATE_WAIT_LOKINFO_CFG_HDR   3
-#define STATE_WAIT_LOKINFO_CFG_DATA  4
-#define STATE_WAIT_CFG_DATA          5
-#define STATE_WAIT_CS2               6
-#define STATE_NORMAL                 7
-#define STATE_GET_LOK_CS2_CFG_DATA   8
-#define STATE_WAIT_LOK_CS2_CFG_HDR   9
-#define STATE_WAIT_LOK_CS2_CFG_DATA 10
-#define STATE_WAIT_MAG_CS2_CFG_HDR  11
-#define STATE_WAIT_MAG_CS2_CFG_DATA 12
-#define STATE_WAIT_FS_CS2_CFG_HDR   13
-#define STATE_WAIT_FS_CS2_CFG_DATA  14
-#define STATE_WAIT_GBS_CS2_CFG_HDR  15
-#define STATE_WAIT_GBS_CS2_CFG_DATA 16
-#define STATE_WAIT_GPG_CS2_CFG_HDR  17
-#define STATE_WAIT_GPG_CS2_CFG_DATA 18
-#define STATE_WAIT_LOK_CVR_CFG_HDR  19
-#define STATE_WAIT_LOK_CVR_CFG_DATA 20
-#define STATE_WAIT_MAG_CVR_CFG_HDR  21
-#define STATE_WAIT_MAG_CVR_CFG_DATA 22
-#define STATE_WAIT_GBS_CVR_CFG_HDR  23
-#define STATE_WAIT_GBS_CVR_CFG_DATA 24
-#define STATE_WAIT_FS_CVR_CFG_HDR   25
-#define STATE_WAIT_FS_CVR_CFG_DATA  26
+#define NUM_STATES 31
+#define STATE_WAIT_FOR_MS2                0
+#define STATE_WAIT_LOKNAME_CFG_HDR        1
+#define STATE_WAIT_LOKNAME_CFG_DATA       2
+#define STATE_WAIT_LOKINFO_CFG_HDR        3
+#define STATE_WAIT_LOKINFO_CFG_DATA       4
+#define STATE_WAIT_CFG_DATA               5
+#define STATE_WAIT_CS2                    6
+#define STATE_NORMAL                      7
+#define STATE_GET_LOK_CS2_CFG_DATA        8
+#define STATE_WAIT_LOK_CS2_CFG_HDR        9
+#define STATE_WAIT_LOK_CS2_CFG_DATA      10
+#define STATE_WAIT_MAG_CS2_CFG_HDR       11
+#define STATE_WAIT_MAG_CS2_CFG_DATA      12
+#define STATE_WAIT_FS_CS2_CFG_HDR        13
+#define STATE_WAIT_FS_CS2_CFG_DATA       14
+#define STATE_WAIT_GBS_CS2_CFG_HDR       15
+#define STATE_WAIT_GBS_CS2_CFG_DATA      16
+#define STATE_WAIT_GPG_CS2_CFG_HDR       17
+#define STATE_WAIT_GPG_CS2_CFG_DATA      18
+#define STATE_WAIT_LOK_CVR_CFG_HDR       19
+#define STATE_WAIT_LOK_CVR_CFG_DATA      20
+#define STATE_WAIT_MAG_CVR_CFG_HDR       21
+#define STATE_WAIT_MAG_CVR_CFG_DATA      22
+#define STATE_WAIT_GBS_CVR_CFG_HDR       23
+#define STATE_WAIT_GBS_CVR_CFG_DATA      24
+#define STATE_WAIT_FS_CVR_CFG_HDR        25
+#define STATE_WAIT_FS_CVR_CFG_DATA       26
+#define STATE_WAIT_POLL_LOKNAME_CFG_HDR  27
+#define STATE_WAIT_POLL_LOKNAME_CFG_DATA 28
+#define STATE_WAIT_POLL_LOKINFO_CFG_HDR  29
+#define STATE_WAIT_POLL_LOKINFO_CFG_DATA 30
+
 
 #define NUM_SIGNALS 18
 
@@ -68,6 +83,114 @@ static S88SystemConfig S88Bootldr[3] = {
    { 5, { 0x53, 0x38, 0x38, 0x00, 0x11, 0x00, 0x00, 0x00 } },
    { 7, { 0x53, 0x38, 0x38, 0x00, 0x0C, 0x00, 0x00, 0x00 } } };
 
+
+static void QueryMembers(ZentraleStruct *Data)
+{  MrIpcCmdType Cmd;
+
+   CanMemberDelAllInvalid(ZentraleGetCanMember(Data));
+   CanMemberMarkAllInvalid(ZentraleGetCanMember(Data));
+   MrIpcInit(&Cmd);
+   MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
+   MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
+   MrIpcSetCanResponse(&Cmd, 0);
+   MrIpcCalcHash(&Cmd, MR_CS2_UID_BROADCAST);
+   MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_PING);
+   MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
+   MrIpcCmdSetRequestMember(&Cmd);
+   MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
+}
+
+static int PeriodicQueryMembers(void *PrivData)
+{  ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)PrivData;
+   QueryMembers(Data);
+   return(STATE_NO_CHANGE);
+}
+
+static int PeriodicPollMs2(void *PrivData)
+{  ZentraleStruct *Data;
+   MrIpcCmdType Cmd;
+
+   Data = (ZentraleStruct *)PrivData;
+   if (ZentraleGetVerbose(Data))
+      puts("FSM: periodic task poll MS2");
+   ZentraleSetActualIndex(Data, 0);
+   MrIpcInit(&Cmd);
+   MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
+   MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
+   MrIpcSetCanResponse(&Cmd, 0);
+   MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
+   MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
+   MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
+   MrIpcCmdSetReqestLocname(&Cmd, ZentraleGetActualIndex(Data), 2);
+   MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
+   CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+   return(STATE_WAIT_POLL_LOKNAME_CFG_HDR);
+}
+
+static int PeriodicPing(void *PrivData)
+{  ZentraleStruct *Data;
+   MrIpcCmdType Cmd;
+
+   Data = (ZentraleStruct *)PrivData;
+   MrIpcInit(&Cmd);
+   MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
+   MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
+   MrIpcSetCanResponse(&Cmd, 1);
+   MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
+   MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_PING);
+   MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
+   MrIpcCmdSetMember(&Cmd, ZentraleGetUid(Data), 0x100, MR_CS2_DEVID_CS2);
+   MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
+   return(STATE_NO_CHANGE);
+}
+
+static int PeriodicTimeoutCs2(void *PrivData)
+{  ZentraleStruct *Data;
+   MrIpcCmdType Cmd;
+
+   Data = (ZentraleStruct *)PrivData;
+   MrIpcInit(&Cmd);
+   MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
+   MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
+   MrIpcSetCanResponse(&Cmd, 0);
+   MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
+   MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
+   MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_0);
+   MrIpcCmdSetQuery(&Cmd, MR_CS2_CFG_LOKS);
+   MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
+   if (ZentraleGetVerbose(Data))
+      printf("FSM: timer, new state %d\n",STATE_WAIT_LOK_CS2_CFG_HDR);
+   CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_CS2);
+   CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+   return(STATE_WAIT_LOK_CS2_CFG_HDR);
+}
+
+static int PeriodicTimeoutWaitMS2(void *PrivData)
+{
+   return(STATE_WAIT_FOR_MS2);
+}
+
+static int PeriodicTimeoutWaitNormal(void *PrivData)
+{  ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)PrivData;
+   if (ZentraleGetVerbose(Data))
+      printf("FSM: timeout, new state %d\n",STATE_NORMAL);
+   CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+   CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+   return(STATE_NORMAL);
+}
+
+static int HandleTimer(void *Priv, void *SignalData)
+{  ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)Priv;
+   if (ZentraleGetVerbose(Data))
+      puts("FSM: periodic task");
+   return(CronDo(ZentraleGetCronJobs(Data)));
+}
 
 static int HandleMemberWaitMs2(void *Priv, void *SignalData)
 {  ZentraleStruct *Data;
@@ -94,108 +217,11 @@ static int HandleMemberWaitMs2(void *Priv, void *SignalData)
       MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
       if (ZentraleGetVerbose(Data))
          printf("FSM: new state %d\n",STATE_WAIT_LOKNAME_CFG_HDR);
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
       return(STATE_WAIT_LOKNAME_CFG_HDR);
    }
    else
       return(STATE_NO_CHANGE);
-}
-
-static int HandleWaitCs2Proxy(void *Priv, void *SignalData)
-{  ZentraleStruct *Data;
-   MrIpcCmdType Cmd;
-
-   Data = (ZentraleStruct *)Priv;
-   if (time(NULL) - ZentraleGetLastFsmCall(Data) > STATE_TIMEOUT)
-   {
-      MrIpcInit(&Cmd);
-      MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-      MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-      MrIpcSetCanResponse(&Cmd, 0);
-      MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-      MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
-      MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_0);
-      MrIpcCmdSetQuery(&Cmd, MR_CS2_CFG_LOKS);
-      MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: timer, new state %d\n",STATE_WAIT_LOK_CS2_CFG_HDR);
-      return(STATE_WAIT_LOK_CS2_CFG_HDR);
-   }
-   else
-   {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: timer, new state %d\n",STATE_NO_CHANGE);
-      return(STATE_NO_CHANGE);
-   }
-}
-
-static int HandleTimerProxy(void *Priv, void *SignalData)
-{  ZentraleStruct *Data;
-
-   Data = (ZentraleStruct *)Priv;
-   if (time(NULL) - ZentraleGetLastFsmCall(Data) > STATE_TIMEOUT)
-   {
-      if (ZentraleGetVerbose(Data))
-      {
-         puts("FSM: timer, fallback to normal");
-         printf("FSM: new state %d\n",STATE_NORMAL);
-      }
-      return(STATE_NORMAL);
-   }
-   else
-   {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: timer, new state %d\n",STATE_NO_CHANGE);
-      return(STATE_NO_CHANGE);
-   }
-}
-
-static void QueryMembers(ZentraleStruct *Data)
-{  MrIpcCmdType Cmd;
-
-   CanMemberDelAllInvalid(ZentraleGetCanMember(Data));
-   CanMemberMarkAllInvalid(ZentraleGetCanMember(Data));
-   MrIpcInit(&Cmd);
-   MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-   MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-   MrIpcSetCanResponse(&Cmd, 0);
-   MrIpcCalcHash(&Cmd, MR_CS2_UID_BROADCAST);
-   MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_PING);
-   MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-   MrIpcCmdSetRequestMember(&Cmd);
-   MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
-}
-
-static int HandleWaitTimerMaster(void *Priv, void *SignalData)
-{  ZentraleStruct *Data;
-
-   Data = (ZentraleStruct *)Priv;
-   if (ZentraleGetVerbose(Data))
-      puts("FSM: periodic task");
-   QueryMembers(Data);
-   if (ZentraleGetVerbose(Data))
-      printf("FSM: new state %d\n",STATE_NO_CHANGE);
-   return(STATE_NO_CHANGE);
-}
-
-static int HandleWaitTimerProxy(void *Priv, void *SignalData)
-{  ZentraleStruct *Data;
-   MrIpcCmdType Cmd;
-
-   Data = (ZentraleStruct *)Priv;
-   if (ZentraleGetVerbose(Data))
-      puts("FSM: periodic task");
-   MrIpcInit(&Cmd);
-   MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-   MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-   MrIpcSetCanResponse(&Cmd, 1);
-   MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-   MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_PING);
-   MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-   MrIpcCmdSetMember(&Cmd, ZentraleGetUid(Data), 0x100, MR_CS2_DEVID_CS2);
-   MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
-   if (ZentraleGetVerbose(Data))
-      printf("FSM: new state %d\n",STATE_NO_CHANGE);
-   return(STATE_NO_CHANGE);
 }
 
 static int HandleLoknameCfgHeader(void *Priv, void *SignalData)
@@ -216,6 +242,7 @@ static int HandleLoknameCfgHeader(void *Priv, void *SignalData)
    {
       if (ZentraleGetVerbose(Data))
          printf("FSM: new state %d\n",STATE_NORMAL);
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
       return(STATE_NORMAL);
    }
    else
@@ -392,6 +419,7 @@ static int HandleLokinfoCfgHeader(void *Priv, void *SignalData)
    {
       if (ZentraleGetVerbose(Data))
          printf("FSM: new state %d\n",STATE_NORMAL);
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
       return(STATE_NORMAL);
    }
    else
@@ -620,6 +648,9 @@ static int HandleLokinfoCfgData(void *Priv, void *SignalData)
          LokSaveLokomotiveCs2(ZentraleGetLoks(Data));
          if (ZentraleGetVerbose(Data))
              printf("FSM: new state %d\n",STATE_NORMAL);
+         CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_QUERY);
+         CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_POLLMS2);
+         CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
          return(STATE_NORMAL);
       }
    }
@@ -890,7 +921,6 @@ static int HandleCfgHeaderProxy(void *Priv, void *SignalData,
    int Ret;
 
    Data = (ZentraleStruct *)Priv;
-   ZentraleSetLastFsmCall(Data, time(NULL));
    Ret = HandleCfgHeaderMs2Master(Priv, SignalData);
    if (Ret == STATE_WAIT_CFG_DATA)
    {
@@ -907,63 +937,203 @@ static int HandleCfgHeaderProxy(void *Priv, void *SignalData,
 }
 
 static int HandleGetLokCfgHeaderProxy(void *Priv, void *SignalData)
-{
-   return(HandleCfgHeaderProxy(Priv, SignalData, STATE_GET_LOK_CS2_CFG_DATA,
-                               STATE_NORMAL));
+{  int NewState;
+   ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)Priv;
+   NewState = HandleCfgHeaderProxy(Priv, SignalData,
+                                   STATE_GET_LOK_CS2_CFG_DATA,
+                                   STATE_NORMAL);
+   if (NewState == STATE_NORMAL)
+   {
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+   }
+   else
+   {
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+   }
+   return(NewState);
 }
 
 static int HandleLokCfgHeaderProxy(void *Priv, void *SignalData)
-{
-   return(HandleCfgHeaderProxy(Priv, SignalData, STATE_WAIT_LOK_CS2_CFG_DATA,
-                               STATE_NORMAL));
+{  int NewState;
+   ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)Priv;
+   NewState = HandleCfgHeaderProxy(Priv, SignalData,
+                                   STATE_WAIT_LOK_CS2_CFG_DATA,
+                                   STATE_NORMAL);
+   if (NewState == STATE_NORMAL)
+   {
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+   }
+   else
+   {
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+   }
+   return(NewState);
 }
 
 static int HandleMagCfgHeaderProxy(void *Priv, void *SignalData)
-{
-   return(HandleCfgHeaderProxy(Priv, SignalData, STATE_WAIT_MAG_CS2_CFG_DATA,
-                               STATE_NORMAL));
+{  int NewState;
+   ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)Priv;
+   NewState = HandleCfgHeaderProxy(Priv, SignalData,
+                                   STATE_WAIT_MAG_CS2_CFG_DATA,
+                                   STATE_NORMAL);
+   if (NewState == STATE_NORMAL)
+   {
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+   }
+   else
+   {
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+   }
+   return(NewState);
 }
 
 static int HandleFsCfgHeaderProxy(void *Priv, void *SignalData)
-{
-   return(HandleCfgHeaderProxy(Priv, SignalData, STATE_WAIT_FS_CS2_CFG_DATA,
-                               STATE_NORMAL));
+{  int NewState;
+   ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)Priv;
+   NewState = HandleCfgHeaderProxy(Priv, SignalData,
+                                   STATE_WAIT_FS_CS2_CFG_DATA,
+                                   STATE_NORMAL);
+   if (NewState == STATE_NORMAL)
+   {
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+   }
+   else
+   {
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+   }
+   return(NewState);
 }
 
 static int HandleGbsCfgHeaderProxy(void *Priv, void *SignalData)
-{
-   return(HandleCfgHeaderProxy(Priv, SignalData, STATE_WAIT_GBS_CS2_CFG_DATA,
-                               STATE_NORMAL));
+{  int NewState;
+   ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)Priv;
+   NewState = HandleCfgHeaderProxy(Priv, SignalData,
+                                   STATE_WAIT_GBS_CS2_CFG_DATA,
+                                   STATE_NORMAL);
+   if (NewState == STATE_NORMAL)
+   {
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+   }
+   else
+   {
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+   }
+   return(NewState);
 }
 
 static int HandleGpgCfgHeaderProxy(void *Priv, void *SignalData)
-{
-   return(HandleCfgHeaderProxy(Priv, SignalData, STATE_WAIT_GPG_CS2_CFG_DATA,
-                               STATE_NORMAL));
+{  int NewState;
+   ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)Priv;
+   NewState = HandleCfgHeaderProxy(Priv, SignalData,
+                                   STATE_WAIT_GPG_CS2_CFG_DATA,
+                                   STATE_NORMAL);
+   if (NewState == STATE_NORMAL)
+   {
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+   }
+   else
+   {
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+   }
+   return(NewState);
 }
 
 static int HandleLokCvrHeaderProxy(void *Priv, void *SignalData)
-{
-   return(HandleCfgHeaderProxy(Priv, SignalData, STATE_WAIT_LOK_CVR_CFG_DATA,
-                               STATE_NORMAL));
+{  int NewState;
+   ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)Priv;
+   NewState = HandleCfgHeaderProxy(Priv, SignalData,
+                                   STATE_WAIT_LOK_CVR_CFG_DATA,
+                                   STATE_NORMAL);
+   if (NewState == STATE_NORMAL)
+   {
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+   }
+   else
+   {
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+   }
+   return(NewState);
 }
 
 static int HandleMagCvrHeaderProxy(void *Priv, void *SignalData)
-{
-   return(HandleCfgHeaderProxy(Priv, SignalData, STATE_WAIT_MAG_CVR_CFG_DATA,
-                               STATE_NORMAL));
+{  int NewState;
+   ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)Priv;
+   NewState = HandleCfgHeaderProxy(Priv, SignalData,
+                                   STATE_WAIT_MAG_CVR_CFG_DATA,
+                                   STATE_NORMAL);
+   if (NewState == STATE_NORMAL)
+   {
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+   }
+   else
+   {
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+   }
+   return(NewState);
 }
 
 static int HandleGbsCvrHeaderProxy(void *Priv, void *SignalData)
-{
-   return(HandleCfgHeaderProxy(Priv, SignalData, STATE_WAIT_GBS_CVR_CFG_DATA,
-                               STATE_NORMAL));
+{  int NewState;
+   ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)Priv;
+   NewState = HandleCfgHeaderProxy(Priv, SignalData,
+                                   STATE_WAIT_GBS_CVR_CFG_DATA,
+                                   STATE_NORMAL);
+   if (NewState == STATE_NORMAL)
+   {
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+   }
+   else
+   {
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+   }
+   return(NewState);
 }
 
 static int HandleFsCvrHeaderProxy(void *Priv, void *SignalData)
-{
-   return(HandleCfgHeaderProxy(Priv, SignalData, STATE_WAIT_FS_CVR_CFG_DATA,
-                               STATE_NORMAL));
+{  int NewState;
+   ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)Priv;
+   NewState = HandleCfgHeaderProxy(Priv, SignalData,
+                                   STATE_WAIT_FS_CVR_CFG_DATA,
+                                   STATE_NORMAL);
+   if (NewState == STATE_NORMAL)
+   {
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+   }
+   else
+   {
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+   }
+   return(NewState);
 }
 
 static int HandleCfgData(void *Priv, void *SignalData)
@@ -974,7 +1144,6 @@ static int HandleCfgData(void *Priv, void *SignalData)
 
    Data = (ZentraleStruct *)Priv;
    CmdFrame = (MrIpcCmdType *)SignalData;
-   ZentraleSetLastFsmCall(Data, time(NULL));
    MrIpcCmdGetCfgData(CmdFrame, Buf);
    memcpy(ZentraleGetCfgBuffer(Data) + ZentraleGetCfgHaveRead(Data), Buf, 8);
    ZentraleSetCfgHaveRead(Data, ZentraleGetCfgHaveRead(Data) + 8);
@@ -1112,6 +1281,7 @@ static int HandleCfgData(void *Priv, void *SignalData)
       ZentraleSetCfgBuffer(Data, NULL);
       if (ZentraleGetVerbose(Data))
          printf("FSM: new state %d\n",STATE_NORMAL);
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
       return(STATE_NORMAL);
    }
    else
@@ -1130,7 +1300,6 @@ static int HandleLCfgDataProxy(void *Priv, void *SignalData,
    int Ret;
 
    Data = (ZentraleStruct *)Priv;
-   ZentraleSetLastFsmCall(Data, time(NULL));
    Ret = HandleCfgData(Priv, SignalData);
    if (Ret == STATE_WAIT_CFG_DATA)
    {
@@ -1159,25 +1328,48 @@ static int HandleLCfgDataProxy(void *Priv, void *SignalData,
 }
 
 static int HandleGetLokCfgDataProxy(void *Priv, void *SignalData)
-{
-   return(HandleLCfgDataProxy(Priv, SignalData, STATE_NORMAL,
-                              STATE_GET_LOK_CS2_CFG_DATA, NULL));
+{  int NewState;
+   ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)Priv;
+   NewState = HandleLCfgDataProxy(Priv, SignalData,
+                                  STATE_NORMAL,
+                                  STATE_GET_LOK_CS2_CFG_DATA, NULL);
+   if (NewState == STATE_NORMAL)
+   {
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+   }
+   else
+   {
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+   }
+   return(NewState);
 }
 
 static int HandleLokCfgDataProxy(void *Priv, void *SignalData)
-{
+{  ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)Priv;
+   CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
    return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_MAG_CS2_CFG_HDR,
                               STATE_WAIT_LOK_CS2_CFG_DATA, MR_CS2_CFG_MAGS));
 }
 
 static int HandleMagCfgDataProxy(void *Priv, void *SignalData)
-{
+{  ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)Priv;
+   CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
    return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_FS_CS2_CFG_HDR,
                               STATE_WAIT_MAG_CS2_CFG_DATA, MR_CS2_CFG_FS));
 }
 
 static int HandleFsCfgDataProxy(void *Priv, void *SignalData)
-{
+{  ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)Priv;
+   CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
    return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_GBS_CS2_CFG_HDR,
                               STATE_WAIT_FS_CS2_CFG_DATA, MR_CS2_CFG_GBS));
 }
@@ -1189,7 +1381,6 @@ static int HandleGbsCfgDataProxy(void *Priv, void *SignalData)
    char PageNummerStr[MR_CS2_NUM_CAN_BYTES + 1];
 
    Data = (ZentraleStruct *)Priv;
-   ZentraleSetLastFsmCall(Data, time(NULL));
    Ret = HandleCfgData(Priv, SignalData);
    if (Ret == STATE_WAIT_CFG_DATA)
    {
@@ -1238,7 +1429,6 @@ static int HandleGpgCfgDataProxy(void *Priv, void *SignalData)
    char PageNummerStr[9];
 
    Data = (ZentraleStruct *)Priv;
-   ZentraleSetLastFsmCall(Data, time(NULL));
    Ret = HandleCfgData(Priv, SignalData);
    if (Ret == STATE_WAIT_CFG_DATA)
    {
@@ -1294,7 +1484,6 @@ static int HandleCvrData(void *Priv, void *SignalData)
 
    Data = (ZentraleStruct *)Priv;
    CmdFrame = (MrIpcCmdType *)SignalData;
-   ZentraleSetLastFsmCall(Data, time(NULL));
    MrIpcCmdGetCfgData(CmdFrame, Buf);
    memcpy(ZentraleGetCfgBuffer(Data) + ZentraleGetCfgHaveRead(Data), Buf, 8);
    ZentraleSetCfgHaveRead(Data, ZentraleGetCfgHaveRead(Data) + 8);
@@ -1350,6 +1539,7 @@ static int HandleCvrData(void *Priv, void *SignalData)
       ZentraleSetCfgBuffer(Data, NULL);
       if (ZentraleGetVerbose(Data))
          printf("FSM: new state %d\n",STATE_NORMAL);
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
       return(STATE_NORMAL);
    }
    else
@@ -1368,7 +1558,6 @@ static int HandleSCfgDataProxy(void *Priv, void *SignalData,
    int Ret;
 
    Data = (ZentraleStruct *)Priv;
-   ZentraleSetLastFsmCall(Data, time(NULL));
    Ret = HandleCvrData(Priv, SignalData);
    if (Ret == STATE_WAIT_CFG_DATA)
    {
@@ -1415,9 +1604,17 @@ static int HandleGbsCvrDataProxy(void *Priv, void *SignalData)
 }
 
 static int HandleFsCvrDataProxy(void *Priv, void *SignalData)
-{
-   return(HandleSCfgDataProxy(Priv, SignalData, STATE_NORMAL,
-                              STATE_WAIT_FS_CVR_CFG_DATA, NULL));
+{  ZentraleStruct *Data;
+   int NewState;
+
+   Data = (ZentraleStruct *)Priv;
+   NewState = HandleSCfgDataProxy(Priv, SignalData, STATE_NORMAL,
+                                  STATE_WAIT_FS_CVR_CFG_DATA, NULL);
+   if (NewState == STATE_NORMAL)
+   {
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+   }
+   return(NewState);
 }
 
 static int HandlePing(void *Priv, void *SignalData)
@@ -1549,7 +1746,8 @@ static int HandleMemberWaitCs2Proxy(void *Priv, void *SignalData)
          QueryMembers(Data);
          if (ZentraleGetVerbose(Data))
             printf("FSM: new state %d\n",STATE_WAIT_FOR_MS2);
-         ZentraleSetLastFsmCall(Data, time(NULL));
+         CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_CS2);
+         CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
          return(STATE_WAIT_FOR_MS2);
       }
       PingAnserToS88(Data, &NewCanMember);
@@ -1642,6 +1840,101 @@ static int HandleCanBootldr(void *Priv, void *SignalData)
    return(STATE_NO_CHANGE);
 }
 
+static int HandleLoknamePollCfgHeader(void *Priv, void *SignalData)
+{  int NextState;
+   ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)Priv;
+   NextState = HandleLoknameCfgHeader(Priv, SignalData);
+   if (NextState == STATE_WAIT_LOKNAME_CFG_DATA)
+   {
+      if (ZentraleGetVerbose(Data))
+         printf("FSM: rewrite state %d\n",STATE_WAIT_POLL_LOKNAME_CFG_DATA);
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+      return(STATE_WAIT_POLL_LOKNAME_CFG_DATA);
+   }
+   else
+   {
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+      return(NextState);
+   }
+}
+
+static int HandleLoknamePollCfgData(void *Priv, void *SignalData)
+{  int NextState;
+   ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)Priv;
+   NextState = HandleLoknameCfgData(Priv, SignalData);
+   if (NextState == STATE_WAIT_LOKNAME_CFG_HDR)
+   {
+      if (ZentraleGetVerbose(Data))
+         printf("FSM: rewrite state %d\n",STATE_WAIT_POLL_LOKNAME_CFG_HDR);
+      return(STATE_WAIT_POLL_LOKNAME_CFG_HDR);
+   }
+   else if (NextState == STATE_WAIT_LOKINFO_CFG_HDR)
+   {
+      if (ZentraleGetVerbose(Data))
+         printf("FSM: rewrite state %d\n",STATE_WAIT_POLL_LOKINFO_CFG_HDR);
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+      return(STATE_WAIT_POLL_LOKINFO_CFG_HDR);
+   }
+   else
+   {
+      if (ZentraleGetVerbose(Data))
+         printf("FSM: rewrite state %d\n",STATE_WAIT_POLL_LOKNAME_CFG_DATA);
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+      return(STATE_WAIT_POLL_LOKNAME_CFG_DATA);
+   }
+}
+
+static int HandleLokinfoPollCfgHeader(void *Priv, void *SignalData)
+{  int NextState;
+   ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)Priv;
+   NextState = HandleLokinfoCfgHeader(Priv, SignalData);
+   if (NextState == STATE_WAIT_LOKINFO_CFG_DATA)
+   {
+      if (ZentraleGetVerbose(Data))
+         printf("FSM: rewrite state %d\n",STATE_WAIT_POLL_LOKINFO_CFG_DATA);
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+      return(STATE_WAIT_POLL_LOKINFO_CFG_DATA);
+   }
+   else
+   {
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+      return(NextState);
+   }
+}
+
+static int HandleLokinfoPollCfgData(void *Priv, void *SignalData)
+{  int NextState;
+   ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)Priv;
+   NextState = HandleLokinfoCfgData(Priv, SignalData);
+   if (NextState == STATE_WAIT_LOKINFO_CFG_HDR)
+   {
+      if (ZentraleGetVerbose(Data))
+         printf("FSM: rewritenew state %d\n",STATE_WAIT_POLL_LOKNAME_CFG_HDR);
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+      return(STATE_WAIT_POLL_LOKINFO_CFG_HDR);
+   }
+   else if (NextState == STATE_WAIT_LOKNAME_CFG_DATA)
+   {
+      if (ZentraleGetVerbose(Data))
+         printf("FSM: rewrite state %d\n",STATE_WAIT_POLL_LOKNAME_CFG_DATA);
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+      return(STATE_WAIT_POLL_LOKINFO_CFG_DATA);
+   }
+   else
+   {
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+      return(NextState);
+   }
+}
+
 static int HandleOther(void *Priv, void *SignalData)
 {  ZentraleStruct *Data;
    MrIpcCmdType *CmdFrame;
@@ -1657,24 +1950,24 @@ static int HandleOther(void *Priv, void *SignalData)
 
 static StateFktType StateProxyWaitForMs2[NUM_SIGNALS] = {
    /* STATE_WAIT_FOR_MS2 */
-   HandleWaitCs2Proxy,/* timer */
-   HandleOther,       /* MrIpcCmdNull */
-   HandleOther,       /* MrIpcCmdRun */
-   HandleOther,       /* MrIpcTrackProto */
-   HandleOther,       /* MrIpcCmdLocomotiveSpeed */
-   HandleOther,       /* MrIpcCmdLocomotiveDirection */
-   HandleOther,       /* MrIpcCmdLocomotiveFunction */
-   HandleOther,       /* MrIpcCmdAccSwitch */
-   HandlePing,        /* MrIpcCmdRequestMember */
-   HandleOther,       /* MrIpcCmdMember */
-   HandleOther,       /* MrIpcCmdRequestLocName */
-   HandleOther,       /* MrIpcCmdRequestLocInfo */
-   HandleOther,       /* MrIpcCmdRequestFile */
-   HandleOther,       /* MrIpcCmdCfgHeader */
-   HandleOther,       /* MrIpcCmdCfgZHeader */
-   HandleOther,       /* MrIpcCmdCfgData */
-   HandleOther,       /* MrIpcCmdSystemStatusVal */
-   HandleCanBootldr   /* MrIpcCmdCanBootldrGeb */
+   HandleTimer,     /* timer */
+   HandleOther,     /* MrIpcCmdNull */
+   HandleOther,     /* MrIpcCmdRun */
+   HandleOther,     /* MrIpcTrackProto */
+   HandleOther,     /* MrIpcCmdLocomotiveSpeed */
+   HandleOther,     /* MrIpcCmdLocomotiveDirection */
+   HandleOther,     /* MrIpcCmdLocomotiveFunction */
+   HandleOther,     /* MrIpcCmdAccSwitch */
+   HandlePing,      /* MrIpcCmdRequestMember */
+   HandleOther,     /* MrIpcCmdMember */
+   HandleOther,     /* MrIpcCmdRequestLocName */
+   HandleOther,     /* MrIpcCmdRequestLocInfo */
+   HandleOther,     /* MrIpcCmdRequestFile */
+   HandleOther,     /* MrIpcCmdCfgHeader */
+   HandleOther,     /* MrIpcCmdCfgZHeader */
+   HandleOther,     /* MrIpcCmdCfgData */
+   HandleOther,     /* MrIpcCmdSystemStatusVal */
+   HandleCanBootldr /* MrIpcCmdCanBootldrGeb */
 };
 static StateFktType StateMs2MasterWaitForMs2[NUM_SIGNALS] = {
    /* STATE_WAIT_FOR_MS2 */
@@ -1783,7 +2076,7 @@ static StateFktType StateMs2MasterWaitLokinfoCfgData[NUM_SIGNALS] = {
 };
 static StateFktType StateMs2MasterWaitCfgData[NUM_SIGNALS] = {
    /* STATE_WAIT_CFG_DATA */
-   HandleWaitTimerMaster,/* timer */
+   HandleTimer,          /* timer */
    HandleOther,          /* MrIpcCmdNull */
    HandleOther,          /* MrIpcCmdRun */
    HandleOther,          /* MrIpcTrackProto */
@@ -1804,7 +2097,7 @@ static StateFktType StateMs2MasterWaitCfgData[NUM_SIGNALS] = {
 };
 static StateFktType StateProxyWaitCs[NUM_SIGNALS] = {
    /* STATE_WAIT_CS2 */
-   HandleWaitTimerProxy,      /* timer */
+   HandleTimer,               /* timer */
    HandleOther,               /* MrIpcCmdNull */
    HandleOther,               /* MrIpcCmdRun */
    HandleOther,               /* MrIpcTrackProto */
@@ -1825,7 +2118,7 @@ static StateFktType StateProxyWaitCs[NUM_SIGNALS] = {
 };
 static StateFktType StateProxyNormal[NUM_SIGNALS] = {
    /* STATE_NORMAL */
-   HandleWaitTimerProxy,      /* timer */
+   HandleTimer,               /* timer */
    HandleOther,               /* MrIpcCmdNull */
    HandleOther,               /* MrIpcCmdRun */
    HandleOther,               /* MrIpcTrackProto */
@@ -1846,7 +2139,7 @@ static StateFktType StateProxyNormal[NUM_SIGNALS] = {
 };
 static StateFktType StateProxyWaitLokCs2CfgHdr[NUM_SIGNALS] = {
    /* STATE_WAIT_LOK_CS2_CFG_HDR */
-   HandleTimerProxy,        /* timer */
+   HandleTimer,            /* timer */
    HandleOther,            /* MrIpcCmdNull */
    HandleOther,            /* MrIpcCmdRun */
    HandleOther,            /* MrIpcTrackProto */
@@ -1867,7 +2160,7 @@ static StateFktType StateProxyWaitLokCs2CfgHdr[NUM_SIGNALS] = {
 };
 static StateFktType StateProxyGetGetLokCs2CfgData[NUM_SIGNALS] = {
    /* STATE_GET_LOK_CS2_CFG_DATA */
-   HandleTimerProxy,        /* timer */
+   HandleTimer,             /* timer */
    HandleOther,             /* MrIpcCmdNull */
    HandleOther,             /* MrIpcCmdRun */
    HandleOther,             /* MrIpcTrackProto */
@@ -1888,7 +2181,7 @@ static StateFktType StateProxyGetGetLokCs2CfgData[NUM_SIGNALS] = {
 };
 static StateFktType StateProxyWaitLokCs2CfgData[NUM_SIGNALS] = {
    /* STATE_WAIT_LOK_CS2_CFG_DATA */
-   HandleTimerProxy,     /* timer */
+   HandleTimer,          /* timer */
    HandleOther,          /* MrIpcCmdNull */
    HandleOther,          /* MrIpcCmdRun */
    HandleOther,          /* MrIpcTrackProto */
@@ -1909,7 +2202,7 @@ static StateFktType StateProxyWaitLokCs2CfgData[NUM_SIGNALS] = {
 };
 static StateFktType StateProxyWaitMagCs2CfgHdr[NUM_SIGNALS] = {
    /* STATE_WAIT_MAG_CS2_CFG_HDR */
-   HandleTimerProxy,       /* timer */
+   HandleTimer,            /* timer */
    HandleOther,            /* MrIpcCmdNull */
    HandleOther,            /* MrIpcCmdRun */
    HandleOther,            /* MrIpcTrackProto */
@@ -1930,7 +2223,7 @@ static StateFktType StateProxyWaitMagCs2CfgHdr[NUM_SIGNALS] = {
 };
 static StateFktType StateProxyWaitMagCs2CfgData[NUM_SIGNALS] = {
    /* STATE_WAIT_MAG_CS2_CFG_DATA */
-   HandleTimerProxy,     /* timer */
+   HandleTimer,          /* timer */
    HandleOther,          /* MrIpcCmdNull */
    HandleOther,          /* MrIpcCmdRun */
    HandleOther,          /* MrIpcTrackProto */
@@ -1951,7 +2244,7 @@ static StateFktType StateProxyWaitMagCs2CfgData[NUM_SIGNALS] = {
 };
 static StateFktType StateProxyWaitFsCs2CfgHdr[NUM_SIGNALS] = {
    /* STATE_WAIT_FS_CS2_CFG_HDR */
-   HandleTimerProxy,      /* timer */
+   HandleTimer,           /* timer */
    HandleOther,           /* MrIpcCmdNull */
    HandleOther,           /* MrIpcCmdRun */
    HandleOther,           /* MrIpcTrackProto */
@@ -1972,7 +2265,7 @@ static StateFktType StateProxyWaitFsCs2CfgHdr[NUM_SIGNALS] = {
 };
 static StateFktType StateProxyWaitFsCs2CfgData[NUM_SIGNALS] = {
    /* STATE_WAIT_FS_CS2_CFG_DATA */
-   HandleTimerProxy,    /* timer */
+   HandleTimer,         /* timer */
    HandleOther,         /* MrIpcCmdNull */
    HandleOther,         /* MrIpcCmdRun */
    HandleOther,         /* MrIpcTrackProto */
@@ -1993,7 +2286,7 @@ static StateFktType StateProxyWaitFsCs2CfgData[NUM_SIGNALS] = {
 };
 static StateFktType StateProxyWaitGbsCs2CfgHdr[NUM_SIGNALS] = {
    /* STATE_WAIT_GBS_CS2_CFG_HDR */
-   HandleTimerProxy,       /* timer */
+   HandleTimer,            /* timer */
    HandleOther,            /* MrIpcCmdNull */
    HandleOther,            /* MrIpcCmdRun */
    HandleOther,            /* MrIpcTrackProto */
@@ -2014,7 +2307,7 @@ static StateFktType StateProxyWaitGbsCs2CfgHdr[NUM_SIGNALS] = {
 };
 static StateFktType StateProxyWaitGbsCs2CfgData[NUM_SIGNALS] = {
    /* STATE_WAIT_GBS_CS2_CFG_DATA */
-   HandleTimerProxy,     /* timer */
+   HandleTimer,          /* timer */
    HandleOther,          /* MrIpcCmdNull */
    HandleOther,          /* MrIpcCmdRun */
    HandleOther,          /* MrIpcTrackProto */
@@ -2035,7 +2328,7 @@ static StateFktType StateProxyWaitGbsCs2CfgData[NUM_SIGNALS] = {
 };
 static StateFktType StateProxyWaitGpgCs2CfgHdr[NUM_SIGNALS] = {
    /* STATE_WAIT_GBS_CS2_CFG_HDR */
-   HandleTimerProxy,       /* timer */
+   HandleTimer,            /* timer */
    HandleOther,            /* MrIpcCmdNull */
    HandleOther,            /* MrIpcCmdRun */
    HandleOther,            /* MrIpcTrackProto */
@@ -2056,7 +2349,7 @@ static StateFktType StateProxyWaitGpgCs2CfgHdr[NUM_SIGNALS] = {
 };
 static StateFktType StateProxyWaitGpgCs2CfgData[NUM_SIGNALS] = {
    /* STATE_WAIT_GBS_CS2_CFG_DATA */
-   HandleTimerProxy,     /* timer */
+   HandleTimer,          /* timer */
    HandleOther,          /* MrIpcCmdNull */
    HandleOther,          /* MrIpcCmdRun */
    HandleOther,          /* MrIpcTrackProto */
@@ -2077,7 +2370,7 @@ static StateFktType StateProxyWaitGpgCs2CfgData[NUM_SIGNALS] = {
 };
 static StateFktType StateProxyWaitLokCvrCs2CfgHdr[NUM_SIGNALS] = {
    /* STATE_WAIT_LOK_CVR_CFG_HDR */
-   HandleTimerProxy,       /* timer */
+   HandleTimer,            /* timer */
    HandleOther,            /* MrIpcCmdNull */
    HandleOther,            /* MrIpcCmdRun */
    HandleOther,            /* MrIpcTrackProto */
@@ -2098,7 +2391,7 @@ static StateFktType StateProxyWaitLokCvrCs2CfgHdr[NUM_SIGNALS] = {
 };
 static StateFktType StateProxyWaitLokCvrCs2CfgData[NUM_SIGNALS] = {
    /* STATE_WAIT_LOK_CVR_CFG_DATA */
-   HandleTimerProxy,     /* timer */
+   HandleTimer,          /* timer */
    HandleOther,          /* MrIpcCmdNull */
    HandleOther,          /* MrIpcCmdRun */
    HandleOther,          /* MrIpcTrackProto */
@@ -2119,7 +2412,7 @@ static StateFktType StateProxyWaitLokCvrCs2CfgData[NUM_SIGNALS] = {
 };
 static StateFktType StateProxyWaitMagCvrCs2CfgHdr[NUM_SIGNALS] = {
    /* STATE_WAIT_MAG_CVR_CFG_HDR */
-   HandleTimerProxy,       /* timer */
+   HandleTimer,            /* timer */
    HandleOther,            /* MrIpcCmdNull */
    HandleOther,            /* MrIpcCmdRun */
    HandleOther,            /* MrIpcTrackProto */
@@ -2140,7 +2433,7 @@ static StateFktType StateProxyWaitMagCvrCs2CfgHdr[NUM_SIGNALS] = {
 };
 static StateFktType StateProxyWaitMagCvrCs2CfgData[NUM_SIGNALS] = {
    /* STATE_WAIT_MAG_CVR_CFG_DATA */
-   HandleTimerProxy,     /* timer */
+   HandleTimer,          /* timer */
    HandleOther,          /* MrIpcCmdNull */
    HandleOther,          /* MrIpcCmdRun */
    HandleOther,          /* MrIpcTrackProto */
@@ -2162,7 +2455,7 @@ static StateFktType StateProxyWaitMagCvrCs2CfgData[NUM_SIGNALS] = {
 
 static StateFktType StateProxyWaitGbsCvrCs2CfgHdr[NUM_SIGNALS] = {
    /* STATE_WAIT_GBS_CVR_CFG_HDR */
-   HandleTimerProxy,       /* timer */
+   HandleTimer,            /* timer */
    HandleOther,            /* MrIpcCmdNull */
    HandleOther,            /* MrIpcCmdRun */
    HandleOther,            /* MrIpcTrackProto */
@@ -2183,7 +2476,7 @@ static StateFktType StateProxyWaitGbsCvrCs2CfgHdr[NUM_SIGNALS] = {
 };
 static StateFktType StateProxyWaitGbsCvrCs2CfgData[NUM_SIGNALS] = {
    /* STATE_WAIT_GBS_CVR_CFG_DATA */
-   HandleTimerProxy,     /* timer */
+   HandleTimer,          /* timer */
    HandleOther,          /* MrIpcCmdNull */
    HandleOther,          /* MrIpcCmdRun */
    HandleOther,          /* MrIpcTrackProto */
@@ -2204,7 +2497,7 @@ static StateFktType StateProxyWaitGbsCvrCs2CfgData[NUM_SIGNALS] = {
 };
 static StateFktType StateProxyWaitFsCvrCs2CfgHdr[NUM_SIGNALS] = {
    /* STATE_WAIT_GBS_CVR_CFG_HDR */
-   HandleTimerProxy,       /* timer */
+   HandleTimer,            /* timer */
    HandleOther,            /* MrIpcCmdNull */
    HandleOther,            /* MrIpcCmdRun */
    HandleOther,            /* MrIpcTrackProto */
@@ -2225,7 +2518,7 @@ static StateFktType StateProxyWaitFsCvrCs2CfgHdr[NUM_SIGNALS] = {
 };
 static StateFktType StateProxyWaitFsCvrCs2CfgData[NUM_SIGNALS] = {
    /* STATE_WAIT_GBS_CVR_CFG_DATA */
-   HandleTimerProxy,     /* timer */
+   HandleTimer,          /* timer */
    HandleOther,          /* MrIpcCmdNull */
    HandleOther,          /* MrIpcCmdRun */
    HandleOther,          /* MrIpcTrackProto */
@@ -2246,7 +2539,7 @@ static StateFktType StateProxyWaitFsCvrCs2CfgData[NUM_SIGNALS] = {
 };
 static StateFktType StateMs2MasterNormal[NUM_SIGNALS] = {
    /* STATE_NORMAL */
-   HandleWaitTimerMaster,   /* timer */
+   HandleTimer,             /* timer */
    HandleOther,             /* MrIpcCmdNull */
    HandleOther,             /* MrIpcCmdRun */
    HandleOther,             /* MrIpcTrackProto */
@@ -2262,6 +2555,90 @@ static StateFktType StateMs2MasterNormal[NUM_SIGNALS] = {
    HandleOther,             /* MrIpcCmdCfgHeader */
    HandleCfgHeaderMs2Master,/* MrIpcCmdCfgZHeader */
    HandleOther,             /* MrIpcCmdCfgData */
+   HandleOther,             /* MrIpcCmdSystemStatusVal */
+   HandleCanBootldr         /* MrIpcCmdCanBootldrGeb */
+};
+static StateFktType StateMs2MasterPollLoknameCfgHdr[NUM_SIGNALS] = {
+   /* STATE_WAIT_POLL_LOKNAME_CFG_HDR */
+   HandleTimer,                /* timer */
+   HandleOther,                /* MrIpcCmdNull */
+   HandleOther,                /* MrIpcCmdRun */
+   HandleOther,                /* MrIpcTrackProto */
+   HandleLokSpeed,             /* MrIpcCmdLocomotiveSpeed */
+   HandleLokDirection,         /* MrIpcCmdLocomotiveDirection */
+   HandleLokFunction,          /* MrIpcCmdLocomotiveFunction */
+   HandleOther,                /* MrIpcCmdAccSwitch */
+   HandlePing,                 /* MrIpcCmdRequestMember */
+   HandleMemberMs2Master,      /* MrIpcCmdMember */
+   HandleOther,                /* MrIpcCmdRequestLocName */
+   HandleOther,                /* MrIpcCmdRequestLocInfo */
+   HandleOther,                /* MrIpcCmdRequestFile */
+   HandleLoknamePollCfgHeader, /* MrIpcCmdCfgHeader */
+   HandleOther,                /* MrIpcCmdCfgZHeader */
+   HandleOther,                /* MrIpcCmdCfgData */
+   HandleOther,                /* MrIpcCmdSystemStatusVal */
+   HandleCanBootldr            /* MrIpcCmdCanBootldrGeb */
+};
+static StateFktType StateMs2MasterPollLoknameCfgData[NUM_SIGNALS] = {
+   /* STATE_WAIT_POLL_LOKNAME_CFG_DATA */
+   HandleTimer,             /* timer */
+   HandleOther,             /* MrIpcCmdNull */
+   HandleOther,             /* MrIpcCmdRun */
+   HandleOther,             /* MrIpcTrackProto */
+   HandleLokSpeed,          /* MrIpcCmdLocomotiveSpeed */
+   HandleLokDirection,      /* MrIpcCmdLocomotiveDirection */
+   HandleLokFunction,       /* MrIpcCmdLocomotiveFunction */
+   HandleOther,             /* MrIpcCmdAccSwitch */
+   HandlePing,              /* MrIpcCmdRequestMember */
+   HandleMemberMs2Master,   /* MrIpcCmdMember */
+   HandleOther,             /* MrIpcCmdRequestLocName */
+   HandleOther,             /* MrIpcCmdRequestLocInfo */
+   HandleOther,             /* MrIpcCmdRequestFile */
+   HandleOther,             /* MrIpcCmdCfgHeader */
+   HandleOther,             /* MrIpcCmdCfgZHeader */
+   HandleLoknamePollCfgData,/* MrIpcCmdCfgData */
+   HandleOther,             /* MrIpcCmdSystemStatusVal */
+   HandleCanBootldr         /* MrIpcCmdCanBootldrGeb */
+};
+static StateFktType StateMs2MasterPollLokinfoCfgHdr[NUM_SIGNALS] = {
+   /* STATE_WAIT_POLL_LOKINFO_CFG_HDR */
+   HandleTimer,                /* timer */
+   HandleOther,                /* MrIpcCmdNull */
+   HandleOther,                /* MrIpcCmdRun */
+   HandleOther,                /* MrIpcTrackProto */
+   HandleLokSpeed,             /* MrIpcCmdLocomotiveSpeed */
+   HandleLokDirection,         /* MrIpcCmdLocomotiveDirection */
+   HandleLokFunction,          /* MrIpcCmdLocomotiveFunction */
+   HandleOther,                /* MrIpcCmdAccSwitch */
+   HandlePing,                 /* MrIpcCmdRequestMember */
+   HandleMemberMs2Master,      /* MrIpcCmdMember */
+   HandleOther,                /* MrIpcCmdRequestLocName */
+   HandleOther,                /* MrIpcCmdRequestLocInfo */
+   HandleOther,                /* MrIpcCmdRequestFile */
+   HandleLokinfoPollCfgHeader, /* MrIpcCmdCfgHeader */
+   HandleOther,                /* MrIpcCmdCfgZHeader */
+   HandleOther,                /* MrIpcCmdCfgData */
+   HandleOther,                /* MrIpcCmdSystemStatusVal */
+   HandleCanBootldr            /* MrIpcCmdCanBootldrGeb */
+};
+static StateFktType StateMs2MasterPollLokinfoCfgData[NUM_SIGNALS] = {
+   /* STATE_WAIT_POLL_LOKINFO_CFG_DATA */
+   HandleTimer,             /* timer */
+   HandleOther,             /* MrIpcCmdNull */
+   HandleOther,             /* MrIpcCmdRun */
+   HandleOther,             /* MrIpcTrackProto */
+   HandleLokSpeed,          /* MrIpcCmdLocomotiveSpeed */
+   HandleLokDirection,      /* MrIpcCmdLocomotiveDirection */
+   HandleLokFunction,       /* MrIpcCmdLocomotiveFunction */
+   HandleOther,             /* MrIpcCmdAccSwitch */
+   HandlePing,              /* MrIpcCmdRequestMember */
+   HandleMemberMs2Master,   /* MrIpcCmdMember */
+   HandleOther,             /* MrIpcCmdRequestLocName */
+   HandleOther,             /* MrIpcCmdRequestLocInfo */
+   HandleOther,             /* MrIpcCmdRequestFile */
+   HandleOther,             /* MrIpcCmdCfgHeader */
+   HandleOther,             /* MrIpcCmdCfgZHeader */
+   HandleLokinfoPollCfgData,/* MrIpcCmdCfgData */
    HandleOther,             /* MrIpcCmdSystemStatusVal */
    HandleCanBootldr         /* MrIpcCmdCanBootldrGeb */
 };
@@ -2293,6 +2670,10 @@ static SignalFunctionsType StateMachineFunctionsProxy[NUM_STATES] = {
    StateProxyWaitGbsCvrCs2CfgData,/* STATE_WAIT_GBS_CVR_CFG_DATA */
    StateProxyWaitFsCvrCs2CfgHdr,  /* STATE_WAIT_FS_CVR_CFG_HDR */
    StateProxyWaitFsCvrCs2CfgData, /* STATE_WAIT_FS_CVR_CFG_DATA */
+   (SignalFunctionsType)NULL,     /* STATE_WAIT_POLL_LOKNAME_CFG_HDR */
+   (SignalFunctionsType)NULL,     /* STATE_WAIT_POLL_LOKNAME_CFG_DATA */
+   (SignalFunctionsType)NULL,     /* STATE_WAIT_POLL_LOKINFO_CFG_HDR */
+   (SignalFunctionsType)NULL,     /* STATE_WAIT_POLL_LOKINFO_CFG_DATA */
 };
 static SignalFunctionsType StateMachineFunctionsMs2Master[NUM_STATES] = {
    StateMs2MasterWaitForMs2,        /* STATE_WAIT_FOR_MS2 */
@@ -2303,6 +2684,7 @@ static SignalFunctionsType StateMachineFunctionsMs2Master[NUM_STATES] = {
    StateMs2MasterWaitCfgData,       /* STATE_WAIT_CFG_DATA */
    (SignalFunctionsType)NULL,       /* STATE_WAIT_CS2 */
    StateMs2MasterNormal,            /* STATE_NORMAL */
+   (SignalFunctionsType)NULL,       /* STATE_GET_LOK_CS2_CFG_DATA */
    (SignalFunctionsType)NULL,       /* STATE_WAIT_LOK_CS2_CFG_HDR */
    (SignalFunctionsType)NULL,       /* STATE_WAIT_LOK_CS2_CFG_DATA */
    (SignalFunctionsType)NULL,       /* STATE_WAIT_MAG_CS2_CFG_HDR */
@@ -2321,6 +2703,10 @@ static SignalFunctionsType StateMachineFunctionsMs2Master[NUM_STATES] = {
    (SignalFunctionsType)NULL,       /* STATE_WAIT_GBS_CVR_CFG_DATA */
    (SignalFunctionsType)NULL,       /* STATE_WAIT_FS_CVR_CFG_HDR */
    (SignalFunctionsType)NULL,       /* STATE_WAIT_FS_CVR_CFG_DATA */
+   StateMs2MasterPollLoknameCfgHdr, /* STATE_WAIT_POLL_LOKNAME_CFG_HDR */
+   StateMs2MasterPollLoknameCfgData,/* STATE_WAIT_POLL_LOKNAME_CFG_DATA */
+   StateMs2MasterPollLokinfoCfgHdr, /* STATE_WAIT_POLL_LOKINFO_CFG_HDR */
+   StateMs2MasterPollLokinfoCfgData,/* STATE_WAIT_POLL_LOKINFO_CFG_DATA */
 };
 static SignalFunctionsType *StateMachines[] = {
    StateMachineFunctionsProxy,
@@ -2333,6 +2719,40 @@ static int StartStates[] = {
 
 void ZentraleInitFsm(ZentraleStruct *Data, int MasterMode)
 {
+   if (MasterMode == 0)
+   {
+      CronAdd(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING,
+              PERIODIC_INTERVALL_PING, PeriodicPing,
+              (void *)Data);
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
+      CronAdd(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_CS2,
+              PERIODIC_INTERVALL_TIMEOUT, PeriodicTimeoutCs2,
+              (void *)Data);
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_CS2);
+      CronAdd(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL,
+              PERIODIC_INTERVALL_TIMEOUT, PeriodicTimeoutWaitNormal,
+              (void *)Data);
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+   }
+   else if (MasterMode == 1)
+   {
+      CronAdd(ZentraleGetCronJobs(Data), PERIODIC_NAME_QUERY,
+              PERIODIC_INTERVALL_QUERY, PeriodicQueryMembers,
+              (void *)Data);
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_QUERY);
+      CronAdd(ZentraleGetCronJobs(Data), PERIODIC_NAME_POLLMS2,
+              PERIODIC_INTERVALL_POLLMS2, PeriodicPollMs2,
+              (void *)Data);
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_POLLMS2);
+      CronAdd(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2,
+              PERIODIC_INTERVALL_TIMEOUT, PeriodicTimeoutWaitMS2,
+              (void *)Data);
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
+      CronAdd(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL,
+              PERIODIC_INTERVALL_TIMEOUT, PeriodicTimeoutWaitNormal,
+              (void *)Data);
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+   }
    FsmInit(ZentraleGetStateMachine(Data), (void *)Data,
            StartStates[MasterMode], NUM_SIGNALS, NUM_STATES,
            StateMachines[MasterMode]);

@@ -13,8 +13,8 @@
 #include <mr_can.h>
 #include "cs2eth.h"
 
-#define SELECT_TIMEOUT 100
-#define MAX_DATAGRAM_SIZE 4096
+#define SELECT_TIMEOUT 200
+#define MAX_DATAGRAM_SIZE 8192
 #define DEVICE_ID 0xFFFF
 
 typedef struct {
@@ -264,8 +264,8 @@ static void ProcessSystemData(Cs2ethStruct *Data, MrIpcCmdType *CmdFrame)
                  if (Cs2ethGetVerbose(Data))
                      printf("send to tcp socket %d\n", OneClient->ClientSock);
                   MrEthCs2Send(OneClient->ClientSock, UdpFrame);
-                  OneClient = (ClientInfo *)MengeNext(Cs2ethGetClientIter(Data));
                }
+               OneClient = (ClientInfo *)MengeNext(Cs2ethGetClientIter(Data));
             }
             break;
       }
@@ -294,8 +294,8 @@ static void HandleSystemData(Cs2ethStruct *Data)
    else
    {
       if (Cs2ethGetVerbose(Data))
-         printf("read new comand frame from socket %d\n",
-                MrIpcGetCommand(&CmdFrame));
+         printf("read new comand %d frame from socket %d\n",
+                MrIpcGetCommand(&CmdFrame), Cs2ethGetClientSock(Data));
       ProcessSystemData(Data, &CmdFrame);
    }
 }

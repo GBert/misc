@@ -14,7 +14,7 @@ FahrstrasseStruct *FahrstrasseCreate(void)
    NewData = (FahrstrasseStruct *)malloc(sizeof(FahrstrasseStruct));
    if (NewData != (FahrstrasseStruct *)NULL)
    {
-      FahrstrasseSetFahrstrasseFilePath(NewData, "/var/www/config/");
+      FahrstrasseSetFahrstrasseFilePath(NewData, "/www/config/");
       FahrstrasseSetNumPages(NewData, 0);
       FahrstrasseSetFahrstrasseDb(NewData, MapCreate());
       if (FahrstrasseGetFahrstrasseDb(NewData) == (Map *)NULL)

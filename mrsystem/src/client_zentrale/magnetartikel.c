@@ -14,7 +14,7 @@ MagnetartikelStruct *MagnetartikelCreate(void)
    NewData = (MagnetartikelStruct *)malloc(sizeof(MagnetartikelStruct));
    if (NewData != (MagnetartikelStruct *)NULL)
    {
-      MagnetartikelSetMagnetartikelFilePath(NewData, "/var/www/config/");
+      MagnetartikelSetMagnetartikelFilePath(NewData, "/www/config/");
       MagnetartikelSetNumArtikel(NewData, 0);
       MagnetartikelSetMagnetartikelDb(NewData, MapCreate());
       if (MagnetartikelGetMagnetartikelDb(NewData) == (Map *)NULL)

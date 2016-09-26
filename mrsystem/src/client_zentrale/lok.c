@@ -13,7 +13,7 @@ LokStruct *LokCreate(void)
    NewData = (LokStruct *)malloc(sizeof(LokStruct));
    if (NewData != (LokStruct *)NULL)
    {
-      LokSetLocFilePath(NewData, "/var/www/config/");
+      LokSetLocFilePath(NewData, "/www/config/");
       LokSetNumLoks(NewData, 0);
       LokSetLokDb(NewData, MapCreate());
       if (LokGetLokDb(NewData) == (Map *)NULL)
@@ -324,8 +324,8 @@ static void WriteLokOfLokomotiveCs2(void *PrivData,
    if (!LokInfoGetIsDeleted(Lok))
    {
       Cs2WriteTitleByName(LokCs2Stream, "lokomotive", 0);
-      Cs2WriteULongValueByName(LokCs2Stream, "uid", LokInfoGetUid(Lok), 1);
       Cs2WriteStringValueByName(LokCs2Stream, "name", LokInfoGetName(Lok), 1);
+      Cs2WriteULongValueByName(LokCs2Stream, "uid", LokInfoGetUid(Lok), 1);
       Cs2WriteHexValueByName(LokCs2Stream, "adresse", LokInfoGetAdresse(Lok), 1);
       Cs2WriteStringValueByName(LokCs2Stream, "typ", LokInfoGetTyp(Lok), 1);
       Cs2WriteHexValueByName(LokCs2Stream, "sid", 1, 1);

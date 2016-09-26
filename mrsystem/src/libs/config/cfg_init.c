@@ -36,7 +36,7 @@ static void InitConfigValues(ConfigStruct *Data)
    ValuePtr = malloc(sizeof(IniValue));
    ValuePtr->DataType = IniParsString;
    ValuePtr->IntValue = 0;
-   strcpy(ValuePtr->StringValue, "/var/www/config");
+   strcpy(ValuePtr->StringValue, "/www/config");
    MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_CS2_PATH),
           (MapDataType)ValuePtr);
    ValuePtr = malloc(sizeof(IniValue));

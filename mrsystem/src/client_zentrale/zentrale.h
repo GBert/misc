@@ -1,10 +1,10 @@
 #ifndef ZENTRALE_H
 #define ZENTRALE_H
 
-#include <time.h>
 #include <boolean.h>
 #include <fsm.h>
 #include "canmember.h"
+#include "cron.h"
 #include "lok.h"
 #include "magnetartikel.h"
 #include "gleisbild.h"
@@ -51,7 +51,6 @@ typedef struct {
    int ClientSock;
    char *WakeUpS88;
    FsmStruct *StateMachine;
-   time_t LastFsmCall;
    char *LocPath;
    int Protokolle;
    BOOL SystemStart;
@@ -72,6 +71,7 @@ typedef struct {
    LokInfo ActualLok;
    ZentraleLokName *LokNamen;
    CanMemberStruct *CanMember;
+   CronStruct *CronJobs;
    LokStruct *Loks;
    MagnetartikelStruct *Magnetartikel;
    GleisbildStruct *Gleisbild;
@@ -88,7 +88,6 @@ typedef struct {
 #define ZentraleSetClientSock(Data, Sock)               (Data)->ClientSock=Sock
 #define ZentraleSetWakeUpS88(Data, WakeUp)              (Data)->WakeUpS88=WakeUp
 #define ZentraleSetStateMachine(Data, Fsm)              (Data)->StateMachine=Fsm
-#define ZentraleSetLastFsmCall(Data, Time)              (Data)->LastFsmCall=Time
 #define ZentraleSetLocPath(Data, Path)                  (Data)->LocPath=Path
 #define ZentraleSetProtokolle(Data, Protos)             (Data)->Protokolle=Protos
 #define ZentraleSetSystemStart(Data, Start)             (Data)->SystemStart=Start
@@ -108,6 +107,7 @@ typedef struct {
 #define ZentraleSetLokNamen(Data, Namen)                (Data)->LokNamen=Namen
 #define ZentraleSetLokNamenNr(Data, i, Namen)           strcpy((Data)->LokNamen[i].Name, Namen)
 #define ZentraleSetCanMember(Data, CanMemberDb)         (Data)->CanMember=CanMemberDb
+#define ZentraleSetCronJobs(Data, CronTab)              (Data)->CronJobs=CronTab
 #define ZentraleSetLoks(Data, LoksDb)                   (Data)->Loks=LoksDb
 #define ZentraleSetMagnetartikel(Data, MagnetartikelDb) (Data)->Magnetartikel=MagnetartikelDb
 #define ZentraleSetGleisbild(Data, GleisbildDb)         (Data)->Gleisbild=GleisbildDb
@@ -126,7 +126,6 @@ typedef struct {
 #define ZentraleGetWakeUpS88(Data)            (Data)->WakeUpS88
 #define ZentraleGetClientSock(Data)           (Data)->ClientSock
 #define ZentraleGetStateMachine(Data)         (Data)->StateMachine
-#define ZentraleGetLastFsmCall(Data)          (Data)->LastFsmCall
 #define ZentraleGetLocPath(Data)              (Data)->LocPath
 #define ZentraleGetProtokolle(Data)           (Data)->Protokolle
 #define ZentraleGetSystemStart(Data)          (Data)->SystemStart
@@ -148,6 +147,7 @@ typedef struct {
 #define ZentraleGetLokNamen(Data)             (Data)->LokNamen
 #define ZentraleGetLokNamenNr(Data, i)        (Data)->LokNamen[i].Name
 #define ZentraleGetCanMember(Data)            (Data)->CanMember
+#define ZentraleGetCronJobs(Data)             (Data)->CronJobs
 #define ZentraleGetLoks(Data)                 (Data)->Loks
 #define ZentraleGetMagnetartikel(Data)        (Data)->Magnetartikel
 #define ZentraleGetGleisbild(Data)            (Data)->Gleisbild

@@ -14,8 +14,10 @@
 #include "can_io.h"
 #include "ms2.h"
 
-#define SELECT_TIMEOUT 100
-#define NUM_BUFFERS 20
+#define SELECT_LONG_TIMEOUT  200
+#define SELECT_SHORT_TIMEOUT   1
+#define TIMER_INTERVALL  10
+#define NUM_BUFFERS 50
 
 static BOOL Loop = TRUE;
 
@@ -377,6 +379,7 @@ static void ProcessSystemData(Ms2Struct *Data, MrIpcCmdType *CmdFrame)
                   {
                      Ms2SetActualCmd(Data, BufCanMsg);
                      ForwardToCan(Data, BufCanMsg);
+                     Ms2SetLastTime(Data, time(NULL));
                   }
                   else
                   {
@@ -479,6 +482,7 @@ static void ProcessCanData(Ms2Struct *Data, MrMs2CanDataType *CanMsg,
             Ms2SetActualCmd(Data,
                             (MrCs2CanDataType *)QueueGet(Ms2GetGbCommands(Data)));
             ForwardToCan(Data, Ms2GetActualCmd(Data));
+            Ms2SetLastTime(Data, time(NULL));
          }
       }
    }
@@ -499,6 +503,40 @@ static void HandleCanData(Ms2Struct *Data)
    }
 }
 
+static void HandleTimeout(Ms2Struct *Data)
+{  int i;
+
+   if (Ms2GetActualCmd(Data) != (MrCs2CanDataType *)NULL)
+   {
+      if (Ms2GetVerbose(Data))
+      {
+         printf("timeout for can data 0x%lx %d\n    ",
+                MrCs2GetId(Ms2GetActualCmd(Data)),
+                MrCs2GetDlc(Ms2GetActualCmd(Data)));
+         for (i = 0; i < 8; i++)
+            printf("0x%02x ", Ms2GetActualCmd(Data)->Data[i]);
+         printf("\n    hash 0x%x resp 0x%x cmd 0x%x prio 0x%x\n",
+                MrCs2GetHash(Ms2GetActualCmd(Data)),
+                MrCs2GetResponse(Ms2GetActualCmd(Data)),
+                MrCs2GetCommand(Ms2GetActualCmd(Data)), 
+                MrCs2GetPrio(Ms2GetActualCmd(Data)));
+      }
+      if (Ms2GetNumBuffers(Data) > NUM_BUFFERS)
+      {
+         free((void *)Ms2GetActualCmd(Data));
+         Ms2SetNumBuffers(Data, Ms2GetNumBuffers(Data) - 1);
+      }
+      Ms2SetActualCmd(Data, (QueueDataType)NULL);
+      if (!QueueIsEmpty(Ms2GetGbCommands(Data)))
+      {
+         Ms2SetActualCmd(Data,
+                        (MrCs2CanDataType *)QueueGet(Ms2GetGbCommands(Data)));
+         ForwardToCan(Data, Ms2GetActualCmd(Data));
+         Ms2SetLastTime(Data, time(NULL));
+      }
+   }
+}
+
 void Ms2Run(Ms2Struct *Data)
 {  fd_set ReadFds;
    int RetVal, HighFd;
@@ -507,6 +545,7 @@ void Ms2Run(Ms2Struct *Data)
 
    if (Start(Data))
    {
+      Ms2SetLastTime(Data, time(NULL));
       while (Loop)
       {
          FD_ZERO(&ReadFds);
@@ -523,16 +562,19 @@ void Ms2Run(Ms2Struct *Data)
                 &ReadFds);
          if (Ms2GetIoFunctions(Data)->GetFd(Ms2GetIoFunctions(Data)->private) > HighFd)
             HighFd = Ms2GetIoFunctions(Data)->GetFd(Ms2GetIoFunctions(Data)->private);
-         SelectTimeout.tv_sec = SELECT_TIMEOUT;
+         if (Ms2GetActualCmd(Data) != (MrCs2CanDataType *)NULL)
+            SelectTimeout.tv_sec = SELECT_SHORT_TIMEOUT;
+         else
+            SelectTimeout.tv_sec = SELECT_LONG_TIMEOUT;
          SelectTimeout.tv_usec = 0;
          if (Ms2GetVerbose(Data))
             printf("wait for %d fd, max %ld s\n", HighFd, SelectTimeout.tv_sec);
          RetVal = select(HighFd + 1, &ReadFds, NULL, NULL, &SelectTimeout);
+         Now = time(NULL);
          if (Ms2GetVerbose(Data))
             printf("select liefert %d\n", RetVal);
          if (((RetVal == -1) && (errno == EINTR)) || (RetVal == 0))
          {
-            Now = time(NULL);
             if (Ms2GetVerbose(Data))
                printf("interrupt at %s\n", asctime(localtime(&Now)));
          }
@@ -557,6 +599,11 @@ void Ms2Run(Ms2Struct *Data)
                   puts("new data on can socket");
                HandleCanData(Data);
             }
+         }
+         if ((Ms2GetActualCmd(Data) != (MrCs2CanDataType *)NULL) &&
+             ((Now - Ms2GetLastTime(Data)) > TIMER_INTERVALL))
+         {
+            HandleTimeout(Data);
          }
       }
       Stop(Data);

@@ -21,7 +21,8 @@ void MrIpcDecodeToCan(MrIpcCmdType *Data, MrCs2CanDataType *CanMsg)
       switch (MrIpcGetCommand(Data))
       {
          case MrIpcCmdNull:
-            MrIpcCmdGetNull(Data, &(MrCs2GetDlc(CanMsg)), Buf);
+            MrIpcCmdGetNull(Data, &(MrCs2GetDlc(CanMsg)),
+                            (char *)MrCs2GetData(CanMsg));
             break;
          case MrIpcCmdRun:
             MrIpcCmdGetRun(Data, &Switch);

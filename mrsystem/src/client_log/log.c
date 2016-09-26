@@ -125,9 +125,6 @@ static void ProcessSystemData(LogStruct *Data, MrIpcCmdType *CmdFrame)
                 MrIpcGetCommand(CmdFrame),
                 MrIpcGetCanCommand(CmdFrame),
                 MrIpcGetRawDlc(CmdFrame));
-         printf("sender %d receiver %d\n",
-                MrIpcGetSenderSocket(CmdFrame),
-                MrIpcGetReceiverSocket(CmdFrame));
          printf("lp1 %lx ip1 %0x ip2%0x\n",
                 MrIpcGetIntLp1(CmdFrame),
                 MrIpcGetIntIp1(CmdFrame),

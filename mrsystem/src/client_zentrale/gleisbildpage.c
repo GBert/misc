@@ -17,7 +17,7 @@ GleisbildPageStruct *GleisbildPageCreate(void)
    NewData = (GleisbildPageStruct *)malloc(sizeof(GleisbildPageStruct));
    if (NewData != (GleisbildPageStruct *)NULL)
    {
-      GleisbildPageSetGleisbildPageFilePath(NewData, "/var/www/config/");
+      GleisbildPageSetGleisbildPageFilePath(NewData, "/www/config/");
       GleisbildPageSetNumElements(NewData, 0);
       GleisbildPageSetElementDb(NewData, MapCreate());
       if (GleisbildPageStructGetElementDb(NewData) == (Map *)NULL)
