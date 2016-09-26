@@ -14,7 +14,6 @@ $(TARGET): $(OBJS)
 main.o: main.c ms2.h
 
 can_client.o: can_client.c can_client.h
-	$(CC) $(CFLAGS) -I$(INCLUDE_PATH) -o $@ -c $<
 
 ms2.o: ms2.c ms2.h
 
