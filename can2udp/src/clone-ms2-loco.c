@@ -290,9 +290,11 @@ int main(int argc, char **argv) {
     struct ifaddrs *ifap, *ifa;
     struct trigger_t trigger_data;
     struct sockaddr_can caddr;
+    char can_interface[MAXLEN];
 
     const int on = 1;
     memset(&trigger_data, 0, sizeof(trigger_data));
+    memset(can_interface, 0, sizeof(can_interface));
     trigger_data.led_pin = -1;
     trigger_data.switch_pin = -1;
 
@@ -304,18 +306,8 @@ int main(int argc, char **argv) {
     while ((opt = getopt(argc, argv, "b:l:i:p:s:fvh?")) != -1) {
 	switch (opt) {
 	case 'i':
-	    if (strnlen(optarg, MAXLEN) <= MAXLEN - 1) {
-		if ((optarg[0] >= '0') && (optarg[0] <= '9')) {
-		    memset(udp_dst_address, 0, MAXLEN);
-		    strncpy(udp_dst_address, optarg, MAXLEN - 1);
-		} else {
-		    memset(bcast_interface, 0, MAXLEN);
-		    strncpy(bcast_interface, optarg, MAXLEN - 1);
-		}
-	    } else {
-		fprintf(stderr, "UDP broadcast address or interface error: %s\n", optarg);
-		exit(EXIT_FAILURE);
-	    }
+	    if (strnlen(optarg, MAXLEN) <= MAXLEN - 1)
+		    strncpy(can_interface, optarg, MAXLEN - 1);
 	    break;
 	case 't':
 	    trigger_data.interval = atoi(optarg);
