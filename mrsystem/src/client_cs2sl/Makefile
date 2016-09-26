@@ -1,5 +1,5 @@
-TARGET=mrcs2eth
-OBJS=main.o cs2eth.o
+TARGET=mrcs2sl
+OBJS=main.o cs2sl.o
 LOCALLIBS=-lmr_ipc -lmr_can -lm -lbytestream -lmrconfig -linipars -lscanner -lmap -lmenge -ldliste -lavl
 DESTDIR=/usr/local/bin
 
@@ -11,9 +11,9 @@ all: $(TARGET)
 $(TARGET): $(OBJS)
 	$(CC) $(LDFLAGS) -L$(LIB_PATH) -o $@ $(OBJS) $(LDLIBS) $(LOCALLIBS)
 
-main.o: main.c cs2eth.h
+main.o: main.c cs2sl.h
 
-cs2eth.o: cs2eth.c cs2eth.h
+cs2sl.o: cs2sl.c cs2sl.h
 
 install: $(TARGET)
 	install -D $(TARGET) $(DESTDIR)/$(TARGET)

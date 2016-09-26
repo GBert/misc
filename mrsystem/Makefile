@@ -47,6 +47,10 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/drehscheibe/drehscheibe $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client_cs2eth/mrcs2eth $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client_cs2sl/mrcs2sl $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client_inject/mrinject $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client_log/mrlog $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client_logms2/mrlogms2 $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client_ms1/mrms1 $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client_ms2/mrms2 $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client_zentrale/mrzentrale $(1)/usr/bin
