@@ -41,15 +41,15 @@
 #define MAX_BUFFER	8
 #define MAX_SYSFS_LEN	256
 #define DEF_INTERVAL	300
+#define MAX(a,b)	((a) > (b) ? (a) : (b))
 
 unsigned int led_period;
 pthread_mutex_t lock;
 
 unsigned char CLONE_CONFIG_REQUEST[] = { 0x00, 0x40, 0xaf, 0x7e, 0x00 };
 
-static char *F_CAN_FORMAT_STRG   = "      CAN->  CANID 0x%08X R [%d]";
-static char *F_S_CAN_FORMAT_STRG = "short CAN->  CANID 0x%08X R [%d]";
-static char *T_CAN_FORMAT_STRG   = "      CAN<-  CANID 0x%08X   [%d]";
+static char *F_CAN_FORMAT_STRG = "   -> CAN     CANID 0x%08X   [%d]";
+static char *T_CAN_FORMAT_STRG = "      CAN ->  CANID 0x%08X   [%d]";
 
 struct trigger_t {
     struct sockaddr_can caddr;
@@ -58,9 +58,8 @@ struct trigger_t {
     int verbose;
     int interval;
     int led_pin;
-    int switch_pin;
-    int led_fd;
-    int switch_fd;
+    int pb_pin;
+    int pb_fd;
     uint16_t hash;
     uint16_t hw_id;
 };
@@ -71,7 +70,7 @@ void usage(char *prg) {
     fprintf(stderr, "         -i <can interface>   broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -t <interval in sec> using timer in sec / 0 -> only once - default %d\n", DEF_INTERVAL);
     fprintf(stderr, "         -l <led pin>         LED pin (e.g. BPi PI14 -> 270)\n");
-    fprintf(stderr, "         -s <push button>     push button (e.g. BPi PI10 -> 266)\n");
+    fprintf(stderr, "         -p <push button>     push button (e.g. BPi PI10 -> 266)\n");
     fprintf(stderr, "         -f                   run in foreground (for debugging)\n");
     fprintf(stderr, "         -v                   be verbose\n\n");
 }
@@ -190,10 +189,9 @@ int gpio_direction(int pin, int dir) {
     return (0);
 }
 
-int gpio_read(int pin) {
+int gpio_open(int pin) {
     char path[MAX_SYSFS_LEN];
-    char value_str[3];
-    int fd, ret;
+    int fd;
 
     snprintf(path, MAX_SYSFS_LEN, "/sys/class/gpio/gpio%d/value", pin);
     fd = open(path, O_RDONLY);
@@ -202,15 +200,7 @@ int gpio_read(int pin) {
 	return (EXIT_FAILURE);
     }
 
-    ret = read(fd, value_str, 3);
-    if (ret < 0) {
-	fprintf(stderr, "%s: Failed to read value!\n", __func__);
-	return (EXIT_FAILURE);
-    }
-
-    close(fd);
-
-    return (atoi(value_str));
+    return fd;
 }
 
 int gpio_set(int pin, int value) {
@@ -266,48 +256,34 @@ void *LEDMod(void *ptr) {
 	printf("-");
     }
 #endif
-
 }
 
-int create_event(struct trigger_t *trigger) {
-    int ret;
-    uint8_t netframe[13];
-
-    memset(netframe, 0, sizeof(netframe));
-    memcpy(netframe, CLONE_CONFIG_REQUEST, sizeof(CLONE_CONFIG_REQUEST));
-
-    send_can_frame(trigger->socket, can_frame, trigger->verbose);
-    if (!trigger->background)
-	print_can_frame(netframe);
+int get_data(struct trigger_t *trigger, struct can_frame *frame) {
     return 0;
 }
 
 int main(int argc, char **argv) {
     pthread_t pth;
-    int opt, ret;
-    struct sockaddr_in destaddr, *bsa;
+    int opt;
     struct ifreq ifr;
-    struct ifaddrs *ifap, *ifa;
     struct trigger_t trigger_data;
     struct sockaddr_can caddr;
-    char can_interface[MAXLEN];
+    fd_set read_fds;
+    struct can_frame frame;
 
-    const int on = 1;
     memset(&trigger_data, 0, sizeof(trigger_data));
-    memset(can_interface, 0, sizeof(can_interface));
-    trigger_data.led_pin = -1;
-    trigger_data.switch_pin = -1;
+    memset(ifr.ifr_name, 0, sizeof(ifr.ifr_name));
+    strcpy(ifr.ifr_name, "vcan0");
 
-    memset(&caddr, 0, sizeof(caddr));
-    strcpy(ifr.ifr_name, "can0");
+    trigger_data.led_pin = -1;
+    trigger_data.pb_pin = -1;
 
     trigger_data.interval = DEF_INTERVAL;
 
-    while ((opt = getopt(argc, argv, "b:l:i:p:s:fvh?")) != -1) {
+    while ((opt = getopt(argc, argv, "i:l:p:t:fvh?")) != -1) {
 	switch (opt) {
 	case 'i':
-	    if (strnlen(optarg, MAXLEN) <= MAXLEN - 1)
-		    strncpy(can_interface, optarg, MAXLEN - 1);
+	    strncpy(ifr.ifr_name, optarg, MAXLEN - 1);
 	    break;
 	case 't':
 	    trigger_data.interval = atoi(optarg);
@@ -315,8 +291,8 @@ int main(int argc, char **argv) {
 	case 'l':
 	    trigger_data.led_pin = atoi(optarg);
 	    break;
-	case 's':
-	    trigger_data.switch_pin = atoi(optarg);
+	case 'p':
+	    trigger_data.pb_pin = atoi(optarg);
 	    break;
 	case 'v':
 	    trigger_data.verbose = 1;
@@ -339,9 +315,11 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "error creating CAN socket: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
+
+    memset(&caddr, 0, sizeof(caddr));
     caddr.can_family = AF_CAN;
     if (ioctl(trigger_data.socket, SIOCGIFINDEX, &ifr) < 0) {
-	fprintf(stderr, "setup CAN socket error: %s\n", strerror(errno));
+	fprintf(stderr, "setup CAN socket error: %s %s\n", strerror(errno), ifr.ifr_name);
 	exit(EXIT_FAILURE);
     }
     caddr.can_ifindex = ifr.ifr_ifindex;
@@ -353,14 +331,7 @@ int main(int argc, char **argv) {
 
     trigger_data.caddr = caddr;
 
-#if 0
-    if (!trigger_data.interval) {
-	create_event(&trigger_data);
-	return EXIT_SUCCESS;
-    }
-#endif
-
-    /* Create thread if LED */
+    /* Create thread if LED pin defined */
     if ((trigger_data.led_pin) > 0) {
 	led_period = 200000;
 	gpio_export(trigger_data.led_pin);
@@ -394,29 +365,52 @@ int main(int argc, char **argv) {
 	}
     }
 
-    /* loop forever if interval is set */
-    if (trigger_data.interval) {
-	while (1) {
-	    ret = create_event(&trigger_data);
-	    if (ret < 0) {
-		fprintf(stderr, "problem sending event data - terminating\n");
-		exit(EXIT_FAILURE);
-	    }
-	    /* TODO : wait until copy is done */
-	    sleep(trigger_data.interval);
-	}
-    } else {
-	ret = create_event(&trigger_data);
-	if (ret < 0) {
-	    fprintf(stderr, "problem sending event data - terminating\n");
+    /* initialize push button */
+    if ((trigger_data.pb_pin) > 0) {
+	gpio_export(trigger_data.pb_pin);
+	gpio_direction(trigger_data.led_pin, 1);
+	trigger_data.pb_fd = gpio_open(trigger_data.led_pin);
+	// read(fd, buf, MAX_BUF);  /* won't work without this read ? */
+    }
+
+    FD_ZERO(&read_fds);
+
+    /* loop forever TODO: if interval is set */
+    while (1) {
+	FD_SET(trigger_data.socket, &read_fds);
+	FD_SET(trigger_data.pb_fd, &read_fds);
+	if (select(MAX(trigger_data.socket, trigger_data.pb_fd) + 1, &read_fds, NULL, NULL, NULL) < 0) {
+	    fprintf(stderr, "select error: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
+	}
+	/* CAN frame event */
+	if (FD_ISSET(trigger_data.socket, &read_fds)) {
+	    if (read(trigger_data.socket, &frame, sizeof(struct can_frame)) < 0)
+		fprintf(stderr, "error reading CAN frame: %s\n", strerror(errno));
+
+	    if (frame.can_id & CAN_EFF_FLAG) {
+		switch ((frame.can_id & 0x00FF0000UL) >> 16) {
+		case 0x41:
+		case 0x42:
+		    get_data(&trigger_data, &frame);
+		    break;
+		default:
+		    if (trigger_data.verbose)
+			print_can_frame(F_CAN_FORMAT_STRG, &frame);
+		    break;
+		}
+	    }
+	}
+	/* push button event */
+	if (FD_ISSET(trigger_data.pb_fd, &read_fds)) {
+	    printf("push button event\n");
 	}
     }
 
     /* TODO : wait until copy is done */
 
-    if ((trigger_data.switch_pin) > 0)
-	gpio_unexport(trigger_data.switch_pin);
+    if ((trigger_data.pb_pin) > 0)
+	gpio_unexport(trigger_data.pb_pin);
     if ((trigger_data.led_pin) > 0) {
 	gpio_unexport(trigger_data.led_pin);
 	pthread_join(pth, (void *)&trigger_data);
