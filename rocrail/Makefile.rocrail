@@ -38,7 +38,7 @@ define Package/rocnetnode
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=rocnetnode
-  DEPENDS:=+libpthread rocrail
+  DEPENDS:=+libpthread +rocrail
 endef
 
 define Package/rocnetnode/description
@@ -49,7 +49,7 @@ define Package/rocweb
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=rocweb
-  DEPENDS:=+libpthread rocrail
+  DEPENDS:=+libpthread +rocrail
 endef
 
 define Package/rocweb/description
@@ -60,7 +60,7 @@ define Package/rocrail-mqtt
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=MQTT extension
-  DEPENDS:=+libpthread rocrail
+  DEPENDS:=+libpthread +rocrail
 endef
 
 define Package/rocrail-mqtt/description
@@ -137,7 +137,7 @@ define Package/rocrail-cs-all-other
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=All other Command Stations
-  DEPENDS:=+libusb-1.0 rocrail
+  DEPENDS:=+libusb-1.0 +rocrail
 endef
 
 define Package/rocrail-cs-all-other/description
@@ -157,7 +157,7 @@ define Build/Compile
 		PLATFORM=LINUX server
 endef
 
-define Package/rocrail-server/install
+define Package/rocrail/install
 	$(INSTALL_DIR) $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/clock.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/lcdriver.so $(1)/opt/rocrail
