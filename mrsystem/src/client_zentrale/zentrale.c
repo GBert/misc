@@ -421,7 +421,7 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, int MasterMode,
          else
          {
             if (ZentraleGetVerbose(Data))
-               printf("kann kein Speicher fuer Dateipuffer (%ld) anlegen\n",
+               printf("kann kein Speicher fuer Dateipuffer (%lld) anlegen\n",
                       FileLaenge);
          }
          close(handle);
