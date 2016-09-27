@@ -34,17 +34,6 @@ define Package/rocrail/description
   Rocrail - Innovative Model Railroad Control System
 endef
 
-define Package/rocrail-server
-  SECTION:=utils
-  CATEGORY:=Utilities
-  TITLE:=Rocrail server
-  DEPENDS:=+libpthread +libusb-1.0 rocrail
-endef
-
-define Package/rocrail-server/description
- This package contains the Rocrail Server
-endef
-
 define Package/rocnetnode
   SECTION:=utils
   CATEGORY:=Utilities
@@ -70,7 +59,7 @@ endef
 define Package/rocrail-mqtt
   SECTION:=utils
   CATEGORY:=Utilities
-  TITLE:=MQTT extensionm
+  TITLE:=MQTT extension
   DEPENDS:=+libpthread rocrail
 endef
 
@@ -82,7 +71,7 @@ define Package/rocrail-cs-mcs2
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Command Station Maerklin CS2 
-  DEPENDS:=rocrail-server
+  DEPENDS:=rocrail
 endef
 
 define Package/rocrail-cs-mcs2/description
@@ -93,7 +82,7 @@ define Package/rocrail-cs-mgbox
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Gleisbox as Command Station
-  DEPENDS:=rocrail-server
+  DEPENDS:=rocrail
 endef
 
 define Package/rocrail-cs-mgbox/description
@@ -104,7 +93,7 @@ define Package/rocrail-cs-ddx
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Command Station DDX
-  DEPENDS:=rocrail-server
+  DEPENDS:=rocrail
 endef
 
 define Package/rocrail-cs-ddx/description
@@ -115,7 +104,7 @@ define Package/rocrail-cs-srcp
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Command Station SRCP
-  DEPENDS:=rocrail-server
+  DEPENDS:=rocrail
 endef
 
 define Package/rocrail-cs-srcp/description
@@ -126,7 +115,7 @@ define Package/rocrail-cs-rclink
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Command Station RCLink
-  DEPENDS:=rocrail-server
+  DEPENDS:=rocrail
 endef
 
 define Package/rocrail-cs-rclink/description
@@ -137,7 +126,7 @@ define Package/rocrail-cs-p50
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Command Station p50
-  DEPENDS:=rocrail-server
+  DEPENDS:=rocrail
 endef
 
 define Package/rocrail-cs-p50/description
@@ -147,8 +136,8 @@ endef
 define Package/rocrail-cs-all-other
   SECTION:=utils
   CATEGORY:=Utilities
-  TITLE:=All Command Station
-  DEPENDS:=rocrail-server
+  TITLE:=All other Command Stations
+  DEPENDS:=+libusb-1.0 rocrail
 endef
 
 define Package/rocrail-cs-all-other/description
@@ -236,12 +225,61 @@ endef
 
 define Package/rocrail-cs-all-other/install
 	$(INSTALL_DIR) $(1)/opt/rocrail
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/*.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/barjut.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/bidib.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/cbus.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/cti.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/dcc232.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/dccar.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/dccpp.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/dinamo.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/dmx4all.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/dmxartnet.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/dmxeurolite.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/dtc.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/dumper.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/e4s.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/easydcc.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/ecos.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/editspro.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/esunavi.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/got.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/hsi88.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/hue.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/infracar.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/inter10.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/lan.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/lcm.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/loconet.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/massoth.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/mttmfcc.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/muet.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/nce.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/om32.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/opendcc.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/p50x.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/perir.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/raptor.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/rascii.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/rfid12.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/rmx.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/rocomp.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/roco.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/slx.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/spl.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/sprog.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/tamsmc.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/ucons88.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/xpressnet.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/z21.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/zimobin.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/zimocan.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/zimo.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/zs2.so $(1)/opt/rocrail
 endef
 
 
 $(eval $(call BuildPackage,rocrail))
-$(eval $(call BuildPackage,rocrail-server))
 $(eval $(call BuildPackage,rocnetnode))
 $(eval $(call BuildPackage,rocweb))
 $(eval $(call BuildPackage,rocrail-mqtt))
