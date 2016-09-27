@@ -48,8 +48,8 @@ pthread_mutex_t lock;
 
 unsigned char CLONE_CONFIG_REQUEST[] = { 0x00, 0x40, 0xaf, 0x7e, 0x00 };
 
-static char *F_CAN_FORMAT_STRG = "   -> CAN     CANID 0x%08X   [%d]";
-static char *T_CAN_FORMAT_STRG = "      CAN ->  CANID 0x%08X   [%d]";
+static char *F_CAN_FORMAT_STRG = "   -> CAN     0x%08X   [%d]";
+static char *T_CAN_FORMAT_STRG = "      CAN ->  0x%08X   [%d]";
 
 struct trigger_t {
     struct sockaddr_can caddr;
@@ -228,6 +228,13 @@ int gpio_set(int pin, int value) {
     return (0);
 }
 
+int get_data(struct trigger_t *trigger, struct can_frame *frame) {
+    /* TODO */
+    if (trigger->socket)
+	frame->can_dlc = 0;
+    return 0;
+}
+
 /* Blink LED */
 void *LEDMod(void *ptr) {
     int fd;
@@ -258,10 +265,6 @@ void *LEDMod(void *ptr) {
 #endif
 }
 
-int get_data(struct trigger_t *trigger, struct can_frame *frame) {
-    return 0;
-}
-
 int main(int argc, char **argv) {
     pthread_t pth;
     int opt;
@@ -273,7 +276,7 @@ int main(int argc, char **argv) {
 
     memset(&trigger_data, 0, sizeof(trigger_data));
     memset(ifr.ifr_name, 0, sizeof(ifr.ifr_name));
-    strcpy(ifr.ifr_name, "vcan0");
+    strcpy(ifr.ifr_name, "can0");
 
     trigger_data.led_pin = -1;
     trigger_data.pb_pin = -1;
@@ -283,7 +286,7 @@ int main(int argc, char **argv) {
     while ((opt = getopt(argc, argv, "i:l:p:t:fvh?")) != -1) {
 	switch (opt) {
 	case 'i':
-	    strncpy(ifr.ifr_name, optarg, MAXLEN - 1);
+	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name));
 	    break;
 	case 't':
 	    trigger_data.interval = atoi(optarg);
@@ -368,9 +371,9 @@ int main(int argc, char **argv) {
     /* initialize push button */
     if ((trigger_data.pb_pin) > 0) {
 	gpio_export(trigger_data.pb_pin);
-	gpio_direction(trigger_data.led_pin, 1);
-	trigger_data.pb_fd = gpio_open(trigger_data.led_pin);
-	// read(fd, buf, MAX_BUF);  /* won't work without this read ? */
+	gpio_direction(trigger_data.pb_pin, 1);
+	trigger_data.pb_fd = gpio_open(trigger_data.pb_pin);
+	read(trigger_data.pb_fd, NULL, 100); /* won't work without this read ? */
     }
 
     FD_ZERO(&read_fds);
@@ -396,7 +399,7 @@ int main(int argc, char **argv) {
 		    break;
 		default:
 		    if (trigger_data.verbose)
-			print_can_frame(F_CAN_FORMAT_STRG, &frame);
+			print_can_frame(T_CAN_FORMAT_STRG, &frame);
 		    break;
 		}
 	    }
