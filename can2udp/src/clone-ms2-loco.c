@@ -411,7 +411,7 @@ int main(int argc, char **argv) {
 	gpio_export(trigger_data.pb_pin);
 	gpio_direction(trigger_data.pb_pin, 1);
 	trigger_data.pb_fd = gpio_open(trigger_data.pb_pin);
-	gpio_edge(trigger_data.pb_pin, EDGE_RISING);
+	gpio_edge(trigger_data.pb_pin, EDGE_FALLING);
 	read(trigger_data.pb_fd, NULL, 100);	/* won't work without this read ? */
     }
 
