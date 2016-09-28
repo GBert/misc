@@ -51,6 +51,13 @@ unsigned char CLONE_CONFIG_REQUEST[] = { 0x00, 0x40, 0xaf, 0x7e, 0x00 };
 static char *F_CAN_FORMAT_STRG = "   -> CAN     0x%08X   [%d]";
 static char *T_CAN_FORMAT_STRG = "      CAN ->  0x%08X   [%d]";
 
+enum gpio_edges {
+    EDGE_NONE,
+    EDGE_RISING,
+    EDGE_FALLING,
+    EDGE_BOTH
+};
+
 struct trigger_t {
     struct sockaddr_can caddr;
     int socket;
@@ -228,6 +235,37 @@ int gpio_set(int pin, int value) {
     return (0);
 }
 
+int gpio_edge(int pin, int value) {
+    char path[MAX_SYSFS_LEN];
+    int fd, ret;
+
+    snprintf(path, MAX_SYSFS_LEN, "/sys/class/gpio/gpio%d/edge", pin);
+    fd = open(path, O_WRONLY);
+    if (fd < 0) {
+	fprintf(stderr, "%s: Failed to open gpio value for writing: %s\n", __func__, strerror(errno));
+	return (EXIT_FAILURE);
+    }
+
+    switch (value) {
+    case EDGE_RISING:
+	ret = write(fd, "rising", 7);
+	break;
+    case EDGE_FALLING:
+	ret = write(fd, "falling", 8);
+	break;
+    case EDGE_BOTH:
+	ret = write(fd, "both", 5);
+	break;
+    case EDGE_NONE:
+	ret = write(fd, "none", 5);
+	break;
+    default:
+	fprintf(stderr, "%s: gpio edge type unknown\n", __func__);
+	return (EXIT_FAILURE);
+    }
+    return ret;
+}
+
 int get_data(struct trigger_t *trigger, struct can_frame *frame) {
     /* TODO */
     if (trigger->socket)
@@ -373,7 +411,8 @@ int main(int argc, char **argv) {
 	gpio_export(trigger_data.pb_pin);
 	gpio_direction(trigger_data.pb_pin, 1);
 	trigger_data.pb_fd = gpio_open(trigger_data.pb_pin);
-	read(trigger_data.pb_fd, NULL, 100); /* won't work without this read ? */
+	gpio_edge(trigger_data.pb_pin, EDGE_RISING);
+	read(trigger_data.pb_fd, NULL, 100);	/* won't work without this read ? */
     }
 
     FD_ZERO(&read_fds);
@@ -399,7 +438,7 @@ int main(int argc, char **argv) {
 		    break;
 		default:
 		    if (trigger_data.verbose)
-			print_can_frame(T_CAN_FORMAT_STRG, &frame);
+			print_can_frame(F_CAN_FORMAT_STRG, &frame);
 		    break;
 		}
 	    }
