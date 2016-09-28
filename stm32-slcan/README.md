@@ -37,7 +37,7 @@ using SWD interface with st-flash or serial loader stm32-flash (works only with 
 
 Usage
 -----
-Hardware hanshaking and LED usage isn't coded as of today.
+Hardware handshaking and LEDs usage is still missing as of today - is made sometime.
 
 connect your favorite/cheap 3V3 USB2Serial board to USART2:
 ```
