@@ -32,8 +32,9 @@
 #define PERIODIC_INTERVALL_TIMEOUT   5
 #define STATE_TIMEOUT 5
 
-#define PARAGRAPH_LOK     1
-#define PARAGRAPH_NUMLOKS 2
+#define PARAGRAPH_UNDEFINED 0
+#define PARAGRAPH_LOK       1
+#define PARAGRAPH_NUMLOKS   2
 
 #define NUM_STATES 31
 #define STATE_WAIT_FOR_MS2                0
@@ -260,6 +261,7 @@ static int HandleLoknameCfgData(void *Priv, void *SignalData)
    Cs2parser *LokParser;
    int LineInfo, Paragraph;
 
+   Paragraph = PARAGRAPH_UNDEFINED;
    Data = (ZentraleStruct *)Priv;
    CmdFrame = (MrIpcCmdType *)SignalData;
    MrIpcCmdGetCfgData(CmdFrame, Buf);
@@ -798,6 +800,8 @@ static int HandleFileRequest(void *Priv, void *SignalData)
       FsStatSaveFsStatSr2(ZentraleGetFahrstrasse(Data));
       Dateiname = CS2_FILE_STRING_STATUS_FAHRSTRASSE;
    }
+   else
+      Dateiname = (char *)NULL;
    if (Dateiname != (char *)NULL)
    {
       if (ZentraleGetVerbose(Data))

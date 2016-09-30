@@ -126,6 +126,7 @@ void LokParseLokomotiveCs2(LokStruct *Data, char *Buf, int Len)
    LokInfo NewLok;
 
    NumLoks = 0;
+   FktIndex = 0;
    LokParser = Cs2pCreate();
    Cs2pInit(LokParser, PARSER_TYPE_LOK_CS2, Buf, Len);
    Cs2pSetVerbose(LokParser, FALSE);

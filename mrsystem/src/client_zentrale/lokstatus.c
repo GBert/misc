@@ -34,6 +34,7 @@ void LokStatusParseLokomotiveSr2(LokStruct *Data, char *Buf, int Len)
    LokInfo NewLok;
 
    NumLoks = 0;
+   FktIndex = 0;
    LokStatusParser = Cs2pCreate();
    Cs2pInit(LokStatusParser, PARSER_TYPE_LOK_CS2, Buf, Len);
    Cs2pSetVerbose(LokStatusParser, FALSE);

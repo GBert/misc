@@ -70,7 +70,7 @@ BOOL ZFileCompress(ZlibFile *Data)
             ZFileSetFrameLength(Data, ((ZFileGetLength(Data) + 7) & 0xfff8));
             SetLongToByteArray((char *)ZFileGetBuffer(Data), ZFileGetInputLength(Data));
             if ((ZFileGetFrameLength(Data) - ZFileGetLength(Data)) > 0)
-               memset(&(ZFileGetBuffer(Data)[ZFileGetLength(Data)]),0,
+               memset(&(ZFileGetBuffer(Data)[ZFileGetLength(Data)]), 0,
                       ZFileGetFrameLength(Data) - ZFileGetLength(Data));
             ZFileSetCrc(Data,
                         MrCs2CalcCrc(ZFileGetBuffer(Data),

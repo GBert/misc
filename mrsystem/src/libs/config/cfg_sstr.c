@@ -31,7 +31,7 @@ void ConfigAddStrVal(ConfigStruct *Data, CfgStrValues ValueTyp, char *Value)
          p = INI_STR_START;
          break;
       case CfgWakeUpS88:
-         p = INI_TOK_WAKEUP_S88;
+         p = INI_STR_WAKEUP_S88;
          break;
    }
    ValuePtr = (IniValue *)MapGet(ConfigGetConfig(Data), (MapKeyType)p);

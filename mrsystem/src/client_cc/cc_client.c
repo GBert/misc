@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#include <termios.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
@@ -23,6 +24,7 @@ static BOOL CcClientOpen(void *private)
    struct timespec spec;
    long ms;
    time_t s;
+   struct termios UsbTerminal;
 
    Data = (CcClientStruct *)private;
    strcpy(DeviceName, "/dev/");
@@ -30,17 +32,19 @@ static BOOL CcClientOpen(void *private)
    CcClientSetCanFd(Data, open(DeviceName, O_RDWR));
    if (CcClientGetCanFd(Data) >= 0)
    {
-/*
-500000 Baud, 8 Datenbits, keine Parität, 1 Stopp-Bit, CTS-Kontrolle "ein"
-      if (ioctl(CcClientGetCanSock(Data), SIOCGIFINDEX, &ifr) >= 0)
+      if (tcgetattr(CcClientGetCanFd(Data), &UsbTerminal) == 0)
       {
+         cfsetospeed(&UsbTerminal, B500000);
+         /*cfmakeraw(&UsbTerminal);*/
+         UsbTerminal.c_iflag |= IXON;
+         UsbTerminal.c_iflag &= ~INPCK;
+         UsbTerminal.c_oflag |= IXON;
+         UsbTerminal.c_cflag &= ~CRTSCTS;
+         UsbTerminal.c_cflag &= ~CSTOPB;
+         UsbTerminal.c_cflag &= ~CSIZE;
+         UsbTerminal.c_cflag |= CS8;
+         tcsetattr(CcClientGetCanFd(Data), TCSAFLUSH, &UsbTerminal);
       }
-      else
-      {
-         close(CcClientGetCanSock(Data));
-         CcClientSetCanFd(Data, -1);
-      }
-*/
       clock_gettime(CLOCK_REALTIME, &spec);
       s = spec.tv_sec;
       ms = (long)(spec.tv_nsec / 1.0e6);

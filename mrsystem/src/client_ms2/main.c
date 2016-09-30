@@ -6,7 +6,7 @@
 #include "can_client.h"
 #include "ms2.h"
 
-#define SOFTWARE_VERSION "2.01"
+#define SOFTWARE_VERSION "2.02"
 
 static void usage(char *name)
 {

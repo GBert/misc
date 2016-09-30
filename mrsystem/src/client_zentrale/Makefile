@@ -43,6 +43,8 @@ canmember.o: canmember.c canmember.h
 
 zfile.o: zfile.c zfile.h
 
+lx_debug.o: lx_debug.c lx_debug.h
+
 install: $(TARGET)
 	install -D $(TARGET) $(DESTDIR)/$(TARGET)
 

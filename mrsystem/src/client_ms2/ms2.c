@@ -14,10 +14,10 @@
 #include "can_io.h"
 #include "ms2.h"
 
-#define SELECT_LONG_TIMEOUT  200
+#define SELECT_LONG_TIMEOUT  100
 #define SELECT_SHORT_TIMEOUT   1
 #define TIMER_INTERVALL  10
-#define NUM_BUFFERS 50
+#define NUM_BUFFERS 20
 
 static BOOL Loop = TRUE;
 

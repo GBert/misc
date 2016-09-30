@@ -6,6 +6,9 @@
 #include <signal.h>
 #include <time.h>
 #include <config.h>
+#ifdef DEBUG
+#include "lx_debug.h"
+#endif
 #include "zentrale.h"
 
 #define SOFTWARE_VERSION "3.00"
@@ -93,6 +96,12 @@ int main(int argc, char *argv[])
       }
       else
       {
+#ifdef DEBUG
+         if (ConfigGetIntVal(Config, CfgVerboseVal))
+         {
+            PmdInit();
+         }
+#endif
          Now = time(NULL);
          if (ConfigGetIntVal(Config, CfgVerboseVal))
             printf("start with no fork at %s\n", asctime(localtime(&Now)));

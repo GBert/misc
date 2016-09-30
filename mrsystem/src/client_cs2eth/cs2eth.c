@@ -13,8 +13,8 @@
 #include <mr_can.h>
 #include "cs2eth.h"
 
-#define SELECT_TIMEOUT 200
-#define MAX_DATAGRAM_SIZE 8192
+#define SELECT_TIMEOUT 100
+#define MAX_DATAGRAM_SIZE 4096
 #define DEVICE_ID 0xFFFF
 
 typedef struct {

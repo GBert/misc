@@ -23,8 +23,8 @@ typedef struct {
 
 typedef struct {
    BOOL IsDeleted;
-   char Name[17];
    unsigned long Uid;
+   char Name[17];
    int Adresse;
    char Typ[20];
    unsigned long MfxUid;
@@ -40,8 +40,8 @@ typedef struct {
 } LokInfo;
 
 #define LokInfoSetIsDeleted(Data, Val) (Data)->IsDeleted=Val
-#define LokInfoSetName(Data, Val)      strcpy((Data)->Name,Val)
 #define LokInfoSetUid(Data, Val)       (Data)->Uid=Val
+#define LokInfoSetName(Data, Val)      strcpy((Data)->Name,Val)
 #define LokInfoSetAdresse(Data, Val)   (Data)->Adresse=Val
 #define LokInfoSetTyp(Data, Val)       strcpy((Data)->Typ,Val)
 #define LokInfoSetMfxUid(Data, Val)    (Data)->MfxUid=Val
@@ -59,8 +59,8 @@ typedef struct {
 #define LokInfoSetFktWert(Data, Idx, Val)  (Data)->Fkt[Idx].Wert=Val
 
 #define LokInfoGetIsDeleted(Data) (Data)->IsDeleted
-#define LokInfoGetName(Data)      (Data)->Name
 #define LokInfoGetUid(Data)       (Data)->Uid
+#define LokInfoGetName(Data)      (Data)->Name
 #define LokInfoGetAdresse(Data)   (Data)->Adresse
 #define LokInfoGetTyp(Data)       (Data)->Typ
 #define LokInfoGetMfxUid(Data)    (Data)->MfxUid
