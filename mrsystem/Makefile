@@ -58,6 +58,8 @@ define Package/$(PKG_NAME)/install
 	$(CP) ./files/mrsystem.init $(1)/root/
 	$(INSTALL_DIR) $(1)/etc
 	$(CP) ./files/mrsystem $(1)/etc/
+	$(INSTALL_DIR) $(1)/www/
+	$(CP) ./files/www/* $(1)/www/
 endef
 
 $(eval $(call BuildPackage,$(PKG_NAME)))
