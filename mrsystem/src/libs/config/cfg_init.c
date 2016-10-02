@@ -96,7 +96,7 @@ static void InitConfigValues(ConfigStruct *Data)
    ValuePtr = malloc(sizeof(IniValue));
    ValuePtr->DataType = IniParsString;
    ValuePtr->IntValue = 0;
-   ValuePtr->StringValue[0] = '\0';
+   strcpy(ValuePtr->StringValue, DISABLE_WAKEUP_S88);
    MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_WAKEUP_S88),
           (MapDataType)ValuePtr);
 }
