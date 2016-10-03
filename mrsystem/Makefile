@@ -28,6 +28,10 @@ define Package/$(PKG_NAME)
   TARGET_CFLAGS += -ggdb3
 endef
 
+define Package/mrsystem/description
+  MRSystem by Michael Bernstein http://mbernstein.de/modellbahn/bbb.htm
+endef
+
 define Build/Prepare
         $(CP) ./src/* $(PKG_BUILD_DIR)
 endef
