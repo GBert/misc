@@ -54,7 +54,7 @@ sudo modprobe can-raw
 sudo modprobe slcan
 sudo slcand -s5 -S500000 /dev/ttyUSB0 can0 # CAN Speed 5 ->250 kBaud - 500,000 Baud serial (fix)
 ```
-You can now use it as SocketCAN interface - enjoy :-)
+Now you can use it as SocketCAN interface - enjoy :-)
 
 Links
 -----
