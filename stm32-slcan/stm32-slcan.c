@@ -59,16 +59,8 @@ static void gpio_setup(void) {
     /* Preconfigure LED */
     gpio_set(GPIOC, GPIO13);	/* LED green off */
 
-    /* Preconfigure Osci pin CAN -> ASCII*/
-    gpio_clear(GPIOC, GPIO14);
-
-    /* Preconfigure Osci pin ASCII Buffer Send */
-    gpio_clear(GPIOC, GPIO15);
-
     /* Configure LED&Osci GPIO */
     gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
-    gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO14);
-    gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO15);
 
     /* Enable clocks for GPIO port A (for GPIO_USART2_TX) and USART2. */
     rcc_periph_clock_enable(RCC_AFIO);
@@ -225,11 +217,8 @@ void usb_lp_can_rx0_isr(void) {
     uint8_t i, dlc, data[8];
     char c;
 
-    gpio_set(GPIOC, GPIO14);	/* set osci pin */
     can_receive(CAN1, 0, false, &id, &ext, &rtr, &fmi, &dlc, data);
-    gpio_clear(GPIOC, GPIO14);	/* set osci pin */
 
-    gpio_set(GPIOC, GPIO14);	/* set osci pin */
     if (rtr) {
 	if (ext)
 	    c = 'R';
@@ -269,7 +258,6 @@ void usb_lp_can_rx0_isr(void) {
 
     can_fifo_release(CAN1, 0);
 
-    gpio_clear(GPIOC, GPIO14);	/* clear osci pin - conversion complete */
     /* enable the transmitter now */
     USART_CR1(USART2) |= USART_CR1_TXEIE;
 }
