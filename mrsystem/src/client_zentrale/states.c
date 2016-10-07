@@ -1642,11 +1642,11 @@ static int HandlePing(void *Priv, void *SignalData)
    return(STATE_NO_CHANGE);
 }
 
-static void PingAnserToS88(ZentraleStruct *Data, CanMemberInfo *CanMember)
+static void PingAnswerToS88(ZentraleStruct *Data, CanMemberInfo *CanMember)
 {  MrIpcCmdType Cmd;
    unsigned int i;
 
-   if ((strcmp(ZentraleGetWakeUpS88(Data), DISABLE_WAKEUP_S88) == 0) &&
+   if ((strcmp(ZentraleGetWakeUpS88(Data), DISABLE_WAKEUP_S88) != 0) &&
        ((CanMemberInfoGetUid(CanMember) & 0xffff0000) == S88_UID_PREFIX))
    {
       for (i = 0; i < 3; i++)
@@ -1708,7 +1708,7 @@ static int HandleMemberMs2Master(void *Priv, void *SignalData)
       CanMemberInfoSetType(&NewCanMember, Type);
       CanMemberInsert(ZentraleGetCanMember(Data), &NewCanMember);
       QueryMembers(Data);
-      PingAnserToS88(Data, &NewCanMember);
+      PingAnswerToS88(Data, &NewCanMember);
    }
    else
    {
@@ -1754,7 +1754,7 @@ static int HandleMemberWaitCs2Proxy(void *Priv, void *SignalData)
          CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
          return(STATE_WAIT_FOR_MS2);
       }
-      PingAnserToS88(Data, &NewCanMember);
+      PingAnswerToS88(Data, &NewCanMember);
    }
    else
    {
@@ -1784,7 +1784,7 @@ static int HandleMemberProxy(void *Priv, void *SignalData)
       CanMemberInfoSetVersion(&NewCanMember, Version);
       CanMemberInfoSetType(&NewCanMember, Type);
       CanMemberInsert(ZentraleGetCanMember(Data), &NewCanMember);
-      PingAnserToS88(Data, &NewCanMember);
+      PingAnswerToS88(Data, &NewCanMember);
    }
    else
    {
@@ -1805,7 +1805,7 @@ static int HandleCanBootldr(void *Priv, void *SignalData)
    if (ZentraleGetVerbose(Data))
       printf("FSM: CAN Bootloader Gebunden %d\n", MrIpcGetCommand(CmdFrame));
    Uid = GetLongFromByteArray((char *)MrIpcGetRawData(CmdFrame));
-   if ((strcmp(ZentraleGetWakeUpS88(Data), DISABLE_WAKEUP_S88) == 0) &&
+   if ((strcmp(ZentraleGetWakeUpS88(Data), DISABLE_WAKEUP_S88) != 0) &&
        (MrIpcGetRawDlc(CmdFrame) == 8) &&
        ((Uid & 0xffff0000) == S88_UID_PREFIX) &&
        (CanMemberSearch(ZentraleGetCanMember(Data), Uid) != (CanMemberInfo *)NULL))

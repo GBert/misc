@@ -1,6 +1,6 @@
 ## MRSystem
 
-This is the MRSystem from Micahel Bernstein http://mbernstein.de/modellbahn/software.htm
+This is the MRSystem from Michael Bernstein http://mbernstein.de/modellbahn/software.htm
 
 ### Installation
 <pre><code>

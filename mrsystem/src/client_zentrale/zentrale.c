@@ -208,7 +208,7 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, int MasterMode,
                   int Protokolle, char *SystemStart, char *WakeUpS88)
 {  Cs2parser *GeraetVrsParser;
    int LineInfo, handle;
-   char *FileBuffer, *GeraetVrsFile;
+   char *FileBuffer, *GeraetVrsFile, *TmpPtr;
    off_t FileLaenge;
    ssize_t NumBytes;
 
@@ -230,7 +230,8 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, int MasterMode,
    ZentraleSetSystemStart(Data,
                           (strcmp(MRSYSTEM_CFG_SYSTEM_START, SystemStart) == 0));
    ZentraleSetWakeUpS88(Data, WakeUpS88);
-   if (strcmp(ZentraleGetWakeUpS88(Data), DISABLE_WAKEUP_S88) != 0)
+   TmpPtr = ZentraleGetWakeUpS88(Data);
+   if (strcmp(TmpPtr, DISABLE_WAKEUP_S88) != 0)
    {  char *token;
       int i;
 
@@ -243,7 +244,7 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, int MasterMode,
       ZentraleSetS88BusIdxLength(Data, 2, 1);
       ZentraleSetS88BusIdxInterval(Data, 2, 0);
       ZentraleSetS88BusIdxTCycle(Data, 2, 0);
-      while ((token = strsep(&ZentraleGetWakeUpS88(Data), S88_WAKEUP_PARM_DELIMETER)))
+      while ((token = strsep(&TmpPtr, S88_WAKEUP_PARM_DELIMETER)))
       {
          if (*token == 'B')
          {

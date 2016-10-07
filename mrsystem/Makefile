@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mrsystem
-PKG_VERSION:=2.0
+PKG_VERSION:=2.3
 
 PKG_SOURCE_MIRROR:=0 
 PKG_SOURCE_VERSION:=$(PKG_REV)
@@ -26,6 +26,10 @@ define Package/$(PKG_NAME)
   URL:=http://mbernstein.de/modellbahn/bbb.htm
   DEPENDS:= +zlib
   TARGET_CFLAGS += -ggdb3
+endef
+
+define Package/mrsystem/description
+  MRSystem by Michael Bernstein http://mbernstein.de/modellbahn/bbb.htm
 endef
 
 define Build/Prepare
@@ -58,6 +62,8 @@ define Package/$(PKG_NAME)/install
 	$(CP) ./files/mrsystem.init $(1)/root/
 	$(INSTALL_DIR) $(1)/etc
 	$(CP) ./files/mrsystem $(1)/etc/
+	$(INSTALL_DIR) $(1)/www/
+	$(CP) ./files/www/* $(1)/www/
 endef
 
 $(eval $(call BuildPackage,$(PKG_NAME)))
