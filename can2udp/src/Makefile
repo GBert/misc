@@ -5,7 +5,7 @@ BIN = $@
 
 all:	$(BINS)
 
-CFLAGS+=-Wall -Wextra -Wmaybe-uninitialized -pedantic-errors -g
+CFLAGS+=-Wall -Wextra -Wmaybe-uninitialized -pedantic-errors -std=gnu99 -g
 
 size_of-test: size_of-test.o
 	$(CC) $(CFLAGS) -o size_of-test size_of-test.o -lpcap
@@ -37,8 +37,8 @@ clone-cs2-config: crc-ccitt.o clone-cs2-config.o
 clone-cs2-trigger: clone-cs2-trigger.o
 	$(CC) $(CFLAGS) -o clone-cs2-trigger clone-cs2-trigger.o -lpthread
 
-clone-ms2-loco: clone-ms2-loco.o
-	$(CC) $(CFLAGS) -o clone-ms2-loco clone-ms2-loco.o -lpthread
+clone-ms2-loco: crc-ccitt.o clone-ms2-loco.o
+	$(CC) $(CFLAGS) -o clone-ms2-loco crc-ccitt.o clone-ms2-loco.o -lpthread
 
 gb2-update: crc-ccitt.o gb2-update.o
 	$(CC) $(CFLAGS) -o gb2-update crc-ccitt.o gb2-update.o

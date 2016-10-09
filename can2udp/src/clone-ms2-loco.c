@@ -43,13 +43,15 @@
 #define DEF_INTERVAL	300
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
 
+uint16_t CRCCCITT(uint8_t * data, size_t length, uint16_t seed);
+
 unsigned int led_period;
 pthread_mutex_t lock;
 
 unsigned char CLONE_CONFIG_REQUEST[] = { 0x00, 0x40, 0xaf, 0x7e, 0x00 };
 
-static char *F_CAN_FORMAT_STRG = "   -> CAN     0x%08X   [%d]";
-static char *T_CAN_FORMAT_STRG = "      CAN ->  0x%08X   [%d]";
+static char *T_CAN_FORMAT_STRG = "   -> CAN     0x%08X   [%d]";
+static char *F_CAN_FORMAT_STRG = "      CAN ->  0x%08X   [%d]";
 
 enum gpio_edges {
     EDGE_NONE,
@@ -69,6 +71,10 @@ struct trigger_t {
     int pb_fd;
     uint16_t hash;
     uint16_t hw_id;
+    uint16_t length;
+    uint16_t crc;
+    int data_index;
+    uint8_t *data;
 };
 
 void usage(char *prg) {
@@ -267,9 +273,63 @@ int gpio_edge(int pin, int value) {
 }
 
 int get_data(struct trigger_t *trigger, struct can_frame *frame) {
-    /* TODO */
-    if (trigger->socket)
-	frame->can_dlc = 0;
+    uint16_t crc;
+    int i, nl, d_index;
+
+    if (frame->can_dlc == 6) {
+	trigger->length = (frame->data[2] << 8) | frame->data[3];
+	trigger->crc = (frame->data[4] << 8) | frame->data[5];
+	printf("length 0x%04x  crc 0x%04x\n", trigger->length, trigger->crc);
+
+	trigger->data = (uint8_t *) calloc(trigger->length + 1, 1);
+	if (!trigger->data) {
+	    fprintf(stderr, "can't alloc memory for config data: %s\n", strerror(errno));
+	    return (EXIT_FAILURE);
+	}
+	trigger->data_index = 0;
+	return 0;
+    }
+
+    if (trigger->data_index < trigger->length) {
+	memcpy(&trigger->data[trigger->data_index], frame->data, 8);
+	trigger->data_index += 8;
+    } else {
+	printf("Error: unexpected data\n");
+	return (EXIT_FAILURE);
+    }
+
+    if (trigger->data_index == trigger->length) {
+	if (!trigger->background && trigger->verbose)
+	    printf("data complete %d %d\n", trigger->data_index, trigger->length);
+	crc = CRCCCITT(trigger->data, trigger->length, 0xFFFF);
+
+	if (crc == trigger->crc) {
+	    if (!trigger->background && trigger->verbose)
+		printf("crc 0x%04x 0x%04x\n", crc, trigger->crc);
+
+	    /* deleting superfluos spaces after \n
+	     * 20 2E 66 6B 74 0A 20 20   ' .fkt.  '  -> delete 20 20
+	     * 20 2E 2E 74 79 70 3D 30   ' ..typ=0'
+	     * 0A 20 20 20 20 20 20 20   '.       '  -> delete 20 20 20 20 20 20 20
+	     */
+
+	    d_index = 0;
+	    nl = 0;
+	    for (i = 0; i < trigger->length; i++) {
+		if ((i % 8) && nl)
+		    continue;
+		else
+		    nl = 0;
+		if (trigger->data[i] == 0x0a)
+		    nl = 1;
+		trigger->data[d_index++] = trigger->data[i];
+	    }
+	}
+	trigger->data[d_index] = 0;
+	printf("Data:\n%s\n", trigger->data);
+
+	free(trigger->data);
+    }
     return 0;
 }
 
@@ -420,7 +480,7 @@ int main(int argc, char **argv) {
     /* loop forever TODO: if interval is set */
     while (1) {
 	FD_SET(trigger_data.socket, &read_fds);
-	FD_SET(trigger_data.pb_fd, &read_fds);
+	/* FD_SET(trigger_data.pb_fd, &read_fds); */
 	if (select(MAX(trigger_data.socket, trigger_data.pb_fd) + 1, &read_fds, NULL, NULL, NULL) < 0) {
 	    fprintf(stderr, "select error: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
@@ -433,8 +493,13 @@ int main(int argc, char **argv) {
 	    if (frame.can_id & CAN_EFF_FLAG) {
 		switch ((frame.can_id & 0x00FF0000UL) >> 16) {
 		case 0x41:
+		    if (trigger_data.verbose)
+			print_can_frame(F_CAN_FORMAT_STRG, &frame);
+		    break;
 		case 0x42:
 		    get_data(&trigger_data, &frame);
+		    /* if (trigger_data.verbose)
+		       print_can_frame(F_CAN_FORMAT_STRG, &frame); */
 		    break;
 		default:
 		    if (trigger_data.verbose)
