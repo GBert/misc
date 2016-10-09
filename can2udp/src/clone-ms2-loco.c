@@ -48,7 +48,10 @@ uint16_t CRCCCITT(uint8_t * data, size_t length, uint16_t seed);
 unsigned int led_period;
 pthread_mutex_t lock;
 
-unsigned char CLONE_CONFIG_REQUEST[] = { 0x00, 0x40, 0xaf, 0x7e, 0x00 };
+unsigned char GET_MS2_CONFIG_LENGTH_I[]  = { 0x6c, 0x6f, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x6e };	/* loknamen */
+unsigned char GET_MS2_CONFIG_LENGTH_II[] = { 0x30, 0x20, 0x32, 0x00, 0x00, 0x00, 0x00, 0x00 };	/* 0 2      */
+
+unsigned char GET_MS2_CONFIG_LOCO_I[]    = { 0x6c, 0x6f, 0x6b, 0x69, 0x6e, 0x66, 0x6f, 0x00 };	/* lokinfo  */
 
 static char *T_CAN_FORMAT_STRG = "   -> CAN     0x%08X   [%d]";
 static char *F_CAN_FORMAT_STRG = "      CAN ->  0x%08X   [%d]";
@@ -140,6 +143,51 @@ int send_can_frame(int can_socket, struct can_frame *frame, int verbose) {
     }
     if (verbose)
 	print_can_frame(T_CAN_FORMAT_STRG, frame);
+    return 0;
+}
+
+int get_ms2_dbsize(struct trigger_t *trigger) {
+    struct can_frame frame;
+
+    memset(&frame, 0, sizeof(frame));
+
+    /* get Config Data */
+    frame.can_id = 0x00400300;
+
+    frame.can_id &= CAN_EFF_MASK;
+    frame.can_id |= CAN_EFF_FLAG;
+    memcpy(frame.data, GET_MS2_CONFIG_LENGTH_I, sizeof(frame.data));
+    if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
+	return (-1);
+    memcpy(frame.data, GET_MS2_CONFIG_LENGTH_II, sizeof(frame.data));
+    if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
+	return (-1);
+    return 0;
+}
+
+int get_ms2_locoinfo(struct trigger_t *trigger, char *loco_name) {
+    struct can_frame frame;
+
+    memset(&frame, 0, sizeof(frame));
+
+    /* get Config Data */
+    frame.can_id = 0x00400300;
+
+    frame.can_id &= CAN_EFF_MASK;
+    frame.can_id |= CAN_EFF_FLAG;
+    memcpy(frame.data, GET_MS2_CONFIG_LOCO_I, sizeof(frame.data));
+    if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
+	return (-1);
+    memset(frame.data, 0, 8);
+    strncpy((char *)frame.data, loco_name, 8);
+    if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
+	return (-1);
+
+    memset(frame.data, 0, 8);
+    if (strnlen(loco_name, 16) > 8)
+	strncpy((char *)frame.data, &loco_name[8], 8);
+    if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
+	return (-1);
     return 0;
 }
 
@@ -307,7 +355,7 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 	    if (!trigger->background && trigger->verbose)
 		printf("crc 0x%04x 0x%04x\n", crc, trigger->crc);
 
-	    /* deleting superfluos spaces after \n
+	    /* deleting MS2 specific superfluos spaces after \n in a row
 	     * 20 2E 66 6B 74 0A 20 20   ' .fkt.  '  -> delete 20 20
 	     * 20 2E 2E 74 79 70 3D 30   ' ..typ=0'
 	     * 0A 20 20 20 20 20 20 20   '.       '  -> delete 20 20 20 20 20 20 20
