@@ -153,9 +153,10 @@ int get_ms2_dbsize(struct trigger_t *trigger) {
 
     /* get Config Data */
     frame.can_id = 0x00400300;
-
     frame.can_id &= CAN_EFF_MASK;
     frame.can_id |= CAN_EFF_FLAG;
+
+    frame.can_dlc = 8;
     memcpy(frame.data, GET_MS2_CONFIG_LENGTH_I, sizeof(frame.data));
     if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
 	return (-1);
@@ -175,6 +176,7 @@ int get_ms2_locoinfo(struct trigger_t *trigger, char *loco_name) {
 
     frame.can_id &= CAN_EFF_MASK;
     frame.can_id |= CAN_EFF_FLAG;
+    frame.can_dlc = 8;
     memcpy(frame.data, GET_MS2_CONFIG_LOCO_I, sizeof(frame.data));
     if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
 	return (-1);
@@ -419,6 +421,7 @@ int main(int argc, char **argv) {
     struct sockaddr_can caddr;
     fd_set read_fds;
     struct can_frame frame;
+    uint16_t member;
 
     memset(&trigger_data, 0, sizeof(trigger_data));
     memset(ifr.ifr_name, 0, sizeof(ifr.ifr_name));
@@ -540,6 +543,15 @@ int main(int argc, char **argv) {
 
 	    if (frame.can_id & CAN_EFF_FLAG) {
 		switch ((frame.can_id & 0x00FF0000UL) >> 16) {
+		case 0x31:
+		    if (trigger_data.verbose)
+			print_can_frame(F_CAN_FORMAT_STRG, &frame);
+		    memcpy(&member, frame.data, sizeof(member));
+		    member = ntohs(member);
+		    /* look for MS2 */
+		    if ((member & 0xfff0) == 0x4d50)
+			get_ms2_dbsize(&trigger_data);
+		    break;
 		case 0x41:
 		    if (trigger_data.verbose)
 			print_can_frame(F_CAN_FORMAT_STRG, &frame);
