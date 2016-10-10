@@ -35,6 +35,8 @@
 #include <netinet/in.h>
 #include <linux/can.h>
 
+#include "cs2-config.h"
+
 #define BIT(x)		(1<<x)
 #define MINDELAY	1000000	/* min delay in usec */
 #define MAXLEN		64	/* maximum string length */

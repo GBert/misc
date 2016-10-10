@@ -30,6 +30,10 @@
 
 #include "cs2-config.h"
 
+
+unsigned char pre_mfx[]   = { 0x02, 0xf5, 0x00 };
+unsigned char pre_other[] = { 0x02, 0xc5, 0x00 };
+
 static char *I2C_DEF_PATH = "/sys/bus/i2c/devices/1-0050/eeprom";
 
 void print_usage(char *prg) {

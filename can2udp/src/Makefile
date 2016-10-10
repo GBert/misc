@@ -1,5 +1,8 @@
-BINS := can-bounce-test can2eth can2udp can4lnx2udp clone-cs2-config clone-cs2-trigger clone-ms2-loco read-cs2-config gb2-update ir-tester bpi-rs485 scan2lan can2lan can2lan_m ms2wifi\
-        virtual_canbuster virtual_gfp virtual_links88 virtual_ms2 get-cs-data get-cs-config pio-i2c-udp read_lococard s88udp-bpi s88test-bpi wake-up-links88
+BINS := can-bounce-test can2eth can2udp can4lnx2udp clone-cs2-config clone-cs2-trigger \
+        clone-ms2-loco read-cs2-ini gb2-update ir-tester bpi-rs485 scan2lan can2lan \
+        can2lan_m ms2wifi virtual_canbuster virtual_gfp virtual_links88 virtual_ms2 \
+        get-cs-data get-cs-config pio-i2c-udp read_lococard s88udp-bpi s88test-bpi \
+        wake-up-links88
 
 BIN = $@
 
@@ -28,8 +31,8 @@ can2udp: can2udp.o
 can4lnx2udp: can4lnx2udp.o
 	$(CC) $(CFLAGS) -o can4lnx2udp can4lnx2udp.o
 
-read-cs2-config: read-cs2-config.o
-	$(CC) $(CFLAGS) -o read-cs2-config read-cs2-config.o
+read-cs2-ini: read-cs2-config.o read-cs2-ini.o
+	$(CC) $(CFLAGS) -o read-cs2-ini read-cs2-config.o read-cs2-ini.o
 
 clone-cs2-config: crc-ccitt.o clone-cs2-config.o
 	$(CC) $(CFLAGS) -o clone-cs2-config crc-ccitt.o clone-cs2-config.o -lz

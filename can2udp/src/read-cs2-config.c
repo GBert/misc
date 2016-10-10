@@ -22,7 +22,8 @@
 #include <assert.h>
 #include <libgen.h>
 
-#include "cs2-config.h"
+#include "read-cs2-ini.h"
+#include "cs2-token.h"
 
 #define FRAME_SIZE	13
 #define MAXSIZE		16384
@@ -41,6 +42,13 @@
 
 #define check_free(a) \
 	    do { if ( a ) free(a); } while (0)
+
+char *track_dir   = { "/gleisbilder" };
+char *track_name  = { "gleisbild.cs2" };
+char *loco_name  = { "lokomotive.cs2" };
+char *mags_name  = { "magnetartikel.cs2" };
+char *auto_name  = { "fahrstrassen.cs2" };
+char *gbs_default = { "gbs-0" };
 
 struct track_page_t *track_page = NULL;
 struct track_data_t *track_data = NULL;
@@ -709,70 +717,4 @@ int read_loco_data(char *config_file) {
     free(loco);
     fclose(fp);
     return (EXIT_SUCCESS);
-}
-
-int main(int argc, char **argv) {
-    struct config_data_t config_data;
-    char *dir, *var_dir;
-    char *track_file;
-    char *loco_file;
-
-    var_dir = calloc(1, MAXDIR);
-    if (var_dir == NULL) {
-	fprintf(stderr, "can't alloc bufer for directory string: %s\n", strerror(errno));
-	exit(EXIT_FAILURE);
-    }
-
-    if (argc == 2) {
-	strncpy(var_dir, argv[1], MAXDIR - 1);
-	config_data.directory = var_dir;
-	asprintf(&dir, "%s", var_dir);
-    } else {
-	fprintf(stderr, "usage: %s <dir> \n", basename(argv[0]));
-	free(var_dir);
-	exit(EXIT_FAILURE);
-    }
-
-    config_data.verbose = 1;
-
-    track_file = calloc(1, strlen(track_name) + strlen(config_data.directory) + 2);
-    strcpy(track_file, config_data.directory);
-    if (track_file[strlen(track_file) - 1] != '/')
-	strcat(track_file, "/");
-    strcat(track_file, track_name);
-
-    /* printf("gbn : >%s<\n", track_file); */
-
-    config_data.name = gbs_default;
-    strcat(config_data.directory, track_dir);
-
-    printf("reading track pages ...\n");
-    read_track_config(track_file);
-    sort_tp_by_id();
-    print_pages();
-    printf("reading track files ...\n");
-    read_track_pages(config_data.directory);
-    printf("sorting track data ...\n");
-    sort_td_by_id();
-    /* print_tracks(); */
-    /* print_gbstats(); */
-
-    asprintf(&loco_file, "%s/%s", dir, loco_name);
-    read_loco_data(loco_file);
-
-    printf("\n\ntrack pages: %u\n", HASH_COUNT(track_page));
-    printf("track data elements: %u\n", HASH_COUNT(track_data));
-    printf("loco data: %u\n", HASH_COUNT(loco_data));
-
-    delete_all_track_pages();
-    delete_all_track_data();
-    delete_all_loco_data();
-
-    free(loco_file);
-    free(dir);
-    free(var_dir);
-    free(track_file);
-    printf("sizeof(loco_data_t): %ld\n", sizeof(struct loco_data_t));
-    printf("sizeof(track_data_t): %ld\n", sizeof(struct track_data_t));
-    return EXIT_SUCCESS;
 }
