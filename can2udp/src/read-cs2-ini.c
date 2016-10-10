@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
     /* print_gbstats(); */
 
     asprintf(&loco_file, "%s/%s", dir, loco_name);
-    read_loco_data(loco_file);
+    read_loco_data(loco_file, CONFIG_FILE);
 
     printf("\n\ntrack pages: %u\n", HASH_COUNT(track_page));
     printf("track data elements: %u\n", HASH_COUNT(track_data));

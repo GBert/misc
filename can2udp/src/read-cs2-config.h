@@ -12,13 +12,15 @@
 
 #include "cs2-config.h"
 
-#define MAXSIZE         16384
-#define MAXDIR          256
-#define MAXNAME         256
-#define MAXGBS          16
-#define MAXSTRING       1024
+#define MAXSIZE		16384
+#define MAXDIR		256
+#define MAXNAME		256
+#define MAXGBS		16
+#define MAXSTRING	1024
 
-#define DEBUG           0
+#define DEBUG		0
+#define CONFIG_STRING	0x00
+#define CONFIG_FILE	0x01
 
 #define debug_print(...) \
             do { if (DEBUG) fprintf(stdin, ##__VA_ARGS__); } while (0)
@@ -46,6 +48,6 @@ void print_tracks(void);
 int read_track_data(char *config_file);
 int read_track_config(char *config_file);
 void read_track_pages(char *dir);
-int read_loco_data(char *config_file);
+int read_loco_data(char *config_file, int config_type);
 
 #endif /* _READ_CS2_CONFIG_H */

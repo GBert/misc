@@ -22,7 +22,7 @@
 #include <assert.h>
 #include <libgen.h>
 
-#include "read-cs2-ini.h"
+#include "read-cs2-config.h"
 #include "cs2-token.h"
 
 #define FRAME_SIZE	13
@@ -53,6 +53,18 @@ char *gbs_default = { "gbs-0" };
 struct track_page_t *track_page = NULL;
 struct track_data_t *track_data = NULL;
 struct loco_data_t *loco_data = NULL;
+
+char *fgets_buffer(char *dest, int max, char *src) {
+    int i;
+
+    i = 0;
+    if ((*src != 0x0a) && (i < max-1)) {
+	*dest++ = *src++;
+	i++;
+    }
+    *dest = 0;
+    return src;
+}
 
 int get_char_index(const char **list, char *str) {
     int index;
@@ -102,7 +114,7 @@ void delete_all_loco_data(void) {
 int add_loco(struct loco_data_t *loco) {
     struct loco_data_t *l;
 
-    HASH_FIND_INT(loco_data, &loco->uid, l);
+    HASH_FIND_STR(loco_data, loco->name, l);
     if (l == NULL) {
 	if ((!loco->name) || (!loco->type))
 	    return (EXIT_FAILURE);
@@ -141,7 +153,7 @@ int add_loco(struct loco_data_t *loco) {
 	l->vmax = loco->vmax;
 	l->vmin = loco->vmin;
 	l->mfxtype = loco->mfxtype;
-	HASH_ADD_INT(loco_data, uid, l);
+	HASH_ADD_STR(loco_data, name, l);
 	/* TODO: mfx & function struct */
     } else {
 	check_modify(loco->direction, l->direction);
@@ -498,11 +510,11 @@ void read_track_pages(char *dir) {
     }
 }
 
-int read_loco_data(char *config_file) {
+int read_loco_data(char *config_file, int config_type) {
     int l0_token_n, l1_token_n, l2_token_n, loco_complete;
     FILE *fp;
     char line[MAXSIZE];
-    char *name, *type, *icon;
+    char *name, *type, *icon, *sret;
     int16_t function, temp;
     struct loco_data_t *loco;
     struct mfxAdr_t *mfx;
@@ -513,9 +525,11 @@ int read_loco_data(char *config_file) {
     /* trigger for new entry */
     loco_complete = 0;
 
-    if ((fp = fopen(config_file, "r")) == NULL) {
-	fprintf(stderr, "can't open config file %s: %s\n", config_file, strerror(errno));
-	return (EXIT_FAILURE);
+    if (config_type && CONFIG_FILE) {
+	if ((fp = fopen(config_file, "r")) == NULL) {
+	    fprintf(stderr, "can't open config file %s: %s\n", config_file, strerror(errno));
+	    return (EXIT_FAILURE);
+	}
     }
 
     loco = calloc(1, sizeof(struct loco_data_t));
@@ -535,7 +549,13 @@ int read_loco_data(char *config_file) {
     loco->type = NULL;
     loco->icon = NULL;
 
-    while (fgets(line, MAXSIZE, fp) != NULL) {
+
+    if (config_type & CONFIG_FILE)
+	sret = fgets(line, MAXSIZE, fp);
+    else
+	sret = fgets_buffer(line, MAXSIZE, config_file);
+
+    while (sret != NULL) {
 	line[strcspn(line, "\r\n")] = 0;
 	if (line[0] != ' ') {
 	    l0_token_n = get_char_index(l0_token, line);
@@ -704,8 +724,12 @@ int read_loco_data(char *config_file) {
 		break;
 	    }
 	}
+	if (config_type & CONFIG_FILE)
+	    sret = fgets(line, MAXSIZE, fp);
+	else
+	    sret = fgets_buffer(line, MAXSIZE, config_file);
     }
-    if (loco->uid)
+    if (loco->name)
 	add_loco(loco);
     if (name)
 	free(name);
