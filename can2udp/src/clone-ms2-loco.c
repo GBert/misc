@@ -395,6 +395,7 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 	trigger->data[d_index] = 0;
 	printf("Data:\n%s\n", trigger->data);
 	read_loco_data((char *)trigger->data, CONFIG_STRING);
+	print_locos();
 
 	free(trigger->data);
     }

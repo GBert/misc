@@ -45,6 +45,7 @@ void sort_td_by_id(void);
 void print_pages(void);
 void print_gbstats(void);
 void print_tracks(void);
+void print_locos(void);
 int read_track_data(char *config_file);
 int read_track_config(char *config_file);
 void read_track_pages(char *dir);

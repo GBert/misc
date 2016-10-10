@@ -118,7 +118,9 @@ int add_loco(struct loco_data_t *loco) {
 
     HASH_FIND_STR(loco_data, loco->name, l);
     if (l == NULL) {
-	if ((!loco->name) || (!loco->type))
+	/* if ((!loco->name) || (!loco->type))
+	    return (EXIT_FAILURE); */
+	if (!loco->name)
 	    return (EXIT_FAILURE);
 
 	l = (struct loco_data_t *)calloc(1, sizeof(struct loco_data_t));
@@ -133,12 +135,14 @@ int add_loco(struct loco_data_t *loco) {
 	}
 	strcpy(l->name, loco->name);
 
-	l->type = calloc(1, strlen(loco->type) + 1);
-	if (!l->type) {
-	    fprintf(stderr, "%s: can't calloc protocol type: %s\n", __func__, strerror(errno));
-	    return (EXIT_FAILURE);
+	if (loco->type) {
+	    l->type = calloc(1, strlen(loco->type) + 1);
+	    if (!l->type) {
+		fprintf(stderr, "%s: can't calloc protocol type: %s\n", __func__, strerror(errno));
+		return (EXIT_FAILURE);
+	    }
+	    strcpy(l->type, loco->type);
 	}
-	strcpy(l->type, loco->type);
 
 	l->uid = loco->uid;
 	l->direction = loco->direction;
@@ -307,6 +311,15 @@ void print_tracks(void) {
 	printf("element\n");
 	printf(" .id=0x%05x\n", t->id);
 	printf(" .artikel=%d\n", t->item);
+    }
+}
+
+void print_locos(void) {
+    struct loco_data_t *l;
+
+    for (l = loco_data; l != NULL; l = l->hh.next) {
+	printf("[lok]\n");
+	printf(" .name=%s\n", l->name);
     }
 }
 
@@ -564,12 +577,12 @@ int read_loco_data(char *config_file, int config_type) {
 	if (line[0] != ' ') {
 	    l0_token_n = get_char_index(l0_token, line);
 	    switch (l0_token_n) {
-	    case L00_LOCO_SHORT:
 	    case L00_LOCO:
 	    case L00_LOCO_NUMBER:
 	    case L0_VERSION:
 	    case L0_SESSION:
 		break;
+	    case L00_LOCO_SHORT:
 	    case L0_LOCO:
 		/* TODO: next loco */
 		if (loco_complete) {
@@ -753,5 +766,7 @@ int read_loco_data(char *config_file, int config_type) {
     free(loco);
     if (config_type && CONFIG_FILE)
 	fclose(fp);
+
+    printf("loco data count: %u\n", HASH_COUNT(loco_data));
     return (EXIT_SUCCESS);
 }
