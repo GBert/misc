@@ -116,7 +116,6 @@ static int PeriodicPollMs2(void *PrivData)
    Data = (ZentraleStruct *)PrivData;
    if (ZentraleGetVerbose(Data))
       puts("FSM: periodic task poll MS2");
-   LokMarkAllDeleted(ZentraleGetLoks(Data));
    ZentraleSetActualIndex(Data, 0);
    MrIpcInit(&Cmd);
    MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
@@ -182,7 +181,6 @@ static int PeriodicTimeoutWaitNormal(void *PrivData)
       printf("FSM: timeout, new state %d\n",STATE_NORMAL);
    CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
    CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
-   LokMarkAllUndeleted(ZentraleGetLoks(Data));
    return(STATE_NORMAL);
 }
 
@@ -208,7 +206,6 @@ static int HandleMemberWaitMs2(void *Priv, void *SignalData)
       printf("FSM: CAN member %lu, version %d, type 0x%x\n", Uid, Version, Type);
    if (Type != MR_CS2_DEVID_WIRED)
    {
-      LokMarkAllDeleted(ZentraleGetLoks(Data));
       ZentraleSetActualIndex(Data, 0);
       MrIpcInit(&Cmd);
       MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
@@ -1359,23 +1356,8 @@ static int HandleLokCfgDataProxy(void *Priv, void *SignalData)
 
    Data = (ZentraleStruct *)Priv;
    CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
-   if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_KEYBD) != 0)
-      return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_MAG_CS2_CFG_HDR,
-                                 STATE_WAIT_LOK_CS2_CFG_DATA, MR_CS2_CFG_MAGS));
-   else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_MEM) != 0)
-      return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_FS_CS2_CFG_HDR,
-                                 STATE_WAIT_LOK_CS2_CFG_DATA, MR_CS2_CFG_FS));
-   else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_LAYOUT) != 0)
-      return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_GBS_CS2_CFG_HDR,
-                                 STATE_WAIT_LOK_CS2_CFG_DATA, MR_CS2_CFG_GBS));
-   else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_CONTR) != 0)
-      return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_LOK_CVR_CFG_HDR,
-                                 STATE_WAIT_LOK_CS2_CFG_DATA,
-                                 MR_CS2_CFG_LOK_STAT));
-   else
-      return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_LOK_CVR_CFG_HDR,
-                                 STATE_WAIT_FS_CS2_CFG_DATA,
-                                 MR_CS2_CFG_LOK_STAT));
+   return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_MAG_CS2_CFG_HDR,
+                              STATE_WAIT_LOK_CS2_CFG_DATA, MR_CS2_CFG_MAGS));
 }
 
 static int HandleMagCfgDataProxy(void *Priv, void *SignalData)
@@ -1383,20 +1365,8 @@ static int HandleMagCfgDataProxy(void *Priv, void *SignalData)
 
    Data = (ZentraleStruct *)Priv;
    CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
-   if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_MEM) != 0)
-      return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_FS_CS2_CFG_HDR,
-                                 STATE_WAIT_MAG_CS2_CFG_DATA, MR_CS2_CFG_FS));
-   else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_LAYOUT) != 0)
-      return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_GBS_CS2_CFG_HDR,
-                                 STATE_WAIT_MAG_CS2_CFG_DATA, MR_CS2_CFG_GBS));
-   else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_CONTR) != 0)
-      return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_LOK_CVR_CFG_HDR,
-                                 STATE_WAIT_MAG_CS2_CFG_DATA,
-                                 MR_CS2_CFG_LOK_STAT));
-   else
-      return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_LOK_CVR_CFG_HDR,
-                                 STATE_WAIT_MAG_CS2_CFG_DATA,
-                                 MR_CS2_CFG_LOK_STAT));
+   return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_FS_CS2_CFG_HDR,
+                              STATE_WAIT_MAG_CS2_CFG_DATA, MR_CS2_CFG_FS));
 }
 
 static int HandleFsCfgDataProxy(void *Priv, void *SignalData)
@@ -1404,17 +1374,8 @@ static int HandleFsCfgDataProxy(void *Priv, void *SignalData)
 
    Data = (ZentraleStruct *)Priv;
    CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
-   if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_LAYOUT) != 0)
-      return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_GBS_CS2_CFG_HDR,
-                                 STATE_WAIT_FS_CS2_CFG_DATA, MR_CS2_CFG_GBS));
-   else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_CONTR) != 0)
-      return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_LOK_CVR_CFG_HDR,
-                                 STATE_WAIT_FS_CS2_CFG_DATA,
-                                 MR_CS2_CFG_LOK_STAT));
-   else
-      return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_LOK_CVR_CFG_HDR,
-                                 STATE_WAIT_FS_CS2_CFG_DATA,
-                                 MR_CS2_CFG_LOK_STAT));
+   return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_GBS_CS2_CFG_HDR,
+                              STATE_WAIT_FS_CS2_CFG_DATA, MR_CS2_CFG_GBS));
 }
 
 static int HandleGbsCfgDataProxy(void *Priv, void *SignalData)
@@ -1435,13 +1396,13 @@ static int HandleGbsCfgDataProxy(void *Priv, void *SignalData)
    {
       if (ZentraleGetVerbose(Data))
          printf("FSM: %d gleisbild pages\n",
-                GleisbildGetNumPages(ZentraleGetGleisbild(Data)));
+	        GleisbildGetNumPages(ZentraleGetGleisbild(Data)));
       ZentraleSetActualIndex(Data, 0);
       if (ZentraleGetActualIndex(Data) < GleisbildGetNumPages(ZentraleGetGleisbild(Data)))
       {
          if (ZentraleGetVerbose(Data))
             printf("FSM: fetch %d of %d\n", ZentraleGetActualIndex(Data),
-                   GleisbildGetNumPages(ZentraleGetGleisbild(Data)));
+	           GleisbildGetNumPages(ZentraleGetGleisbild(Data)));
          sprintf(PageNummerStr, "%s%d", MR_CS2_CFG_GBS_PAGE, ZentraleGetActualIndex(Data));
          MrIpcInit(&Cmd);
          MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
@@ -1486,7 +1447,7 @@ static int HandleGpgCfgDataProxy(void *Priv, void *SignalData)
       {
          if (ZentraleGetVerbose(Data))
             printf("FSM: fetch %d of %d\n", ZentraleGetActualIndex(Data),
-                   GleisbildGetNumPages(ZentraleGetGleisbild(Data)));
+	           GleisbildGetNumPages(ZentraleGetGleisbild(Data)));
          sprintf(PageNummerStr, "%s%d", MR_CS2_CFG_GBS_PAGE, ZentraleGetActualIndex(Data));
          MrIpcInit(&Cmd);
          MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
@@ -1513,7 +1474,7 @@ static int HandleGpgCfgDataProxy(void *Priv, void *SignalData)
          MrIpcCmdSetQuery(&Cmd, MR_CS2_CFG_LOK_STAT);
          MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
          if (ZentraleGetVerbose(Data))
-            printf("FSM: rewrite new state %d\n",STATE_WAIT_LOK_CVR_CFG_HDR);
+            printf("FSM: rewrite new state %d\n",STATE_WAIT_LOK_CVR_CFG_DATA);
          return(STATE_WAIT_LOK_CVR_CFG_HDR);
       }
    }
@@ -1629,99 +1590,21 @@ static int HandleSCfgDataProxy(void *Priv, void *SignalData,
 }
 
 static int HandleLokCvrDataProxy(void *Priv, void *SignalData)
-{  ZentraleStruct *Data;
-   int NewState;
-
-   Data = (ZentraleStruct *)Priv;
-   if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_KEYBD) != 0)
-      NewState = HandleSCfgDataProxy(Priv, SignalData, STATE_WAIT_MAG_CVR_CFG_HDR,
-                                     STATE_WAIT_LOK_CVR_CFG_DATA, MR_CS2_CFG_MAG_STAT);
-   else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_LAYOUT) != 0)
-      NewState = HandleSCfgDataProxy(Priv, SignalData, STATE_WAIT_GBS_CVR_CFG_HDR,
-                                     STATE_WAIT_LOK_CVR_CFG_DATA, MR_CS2_CFG_GBS_STAT);
-   else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_MEM) != 0)
-      NewState = HandleSCfgDataProxy(Priv, SignalData, STATE_WAIT_FS_CVR_CFG_HDR,
-                                     STATE_WAIT_LOK_CVR_CFG_DATA, MR_CS2_CFG_FS_STAT);
-   else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_CONTR) != 0)
-   {
-      NewState = HandleSCfgDataProxy(Priv, SignalData, STATE_NORMAL,
-                                     STATE_WAIT_LOK_CVR_CFG_DATA, NULL);
-      if (NewState == STATE_NORMAL)
-      {
-         CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
-      }
-   }
-   else
-   {
-      NewState = HandleSCfgDataProxy(Priv, SignalData, STATE_NORMAL,
-                                     STATE_WAIT_LOK_CVR_CFG_DATA, NULL);
-      if (NewState == STATE_NORMAL)
-      {
-         CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
-      }
-   }
-   return(NewState);
+{
+   return(HandleSCfgDataProxy(Priv, SignalData, STATE_WAIT_MAG_CVR_CFG_HDR,
+                              STATE_WAIT_LOK_CVR_CFG_DATA, MR_CS2_CFG_MAG_STAT));
 }
 
 static int HandleMagCvrDataProxy(void *Priv, void *SignalData)
-{  ZentraleStruct *Data;
-   int NewState;
-
-   Data = (ZentraleStruct *)Priv;
-   if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_LAYOUT) != 0)
-      NewState = HandleSCfgDataProxy(Priv, SignalData, STATE_WAIT_GBS_CVR_CFG_HDR,
-                                     STATE_WAIT_MAG_CVR_CFG_DATA, MR_CS2_CFG_GBS_STAT);
-   else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_MEM) != 0)
-      NewState = HandleSCfgDataProxy(Priv, SignalData, STATE_WAIT_FS_CVR_CFG_HDR,
-                                     STATE_WAIT_MAG_CVR_CFG_DATA, MR_CS2_CFG_FS_STAT);
-   else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_CONTR) != 0)
-   {
-      NewState = HandleSCfgDataProxy(Priv, SignalData, STATE_NORMAL,
-                                     STATE_WAIT_MAG_CVR_CFG_DATA, NULL);
-      if (NewState == STATE_NORMAL)
-      {
-         CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
-      }
-   }
-   else
-   {
-      NewState = HandleSCfgDataProxy(Priv, SignalData, STATE_NORMAL,
-                                     STATE_WAIT_MAG_CVR_CFG_DATA, NULL);
-      if (NewState == STATE_NORMAL)
-      {
-         CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
-      }
-   }
-   return(NewState);
+{
+   return(HandleSCfgDataProxy(Priv, SignalData, STATE_WAIT_GBS_CVR_CFG_HDR,
+                              STATE_WAIT_MAG_CVR_CFG_DATA, MR_CS2_CFG_GBS_STAT));
 }
 
 static int HandleGbsCvrDataProxy(void *Priv, void *SignalData)
-{  ZentraleStruct *Data;
-   int NewState;
-
-   Data = (ZentraleStruct *)Priv;
-   if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_MEM) != 0)
-      NewState = HandleSCfgDataProxy(Priv, SignalData, STATE_WAIT_FS_CVR_CFG_HDR,
-                                     STATE_WAIT_GBS_CVR_CFG_DATA, MR_CS2_CFG_FS_STAT);
-   else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_CONTR) != 0)
-   {
-      NewState = HandleSCfgDataProxy(Priv, SignalData, STATE_NORMAL,
-                                     STATE_WAIT_GBS_CVR_CFG_DATA, NULL);
-      if (NewState == STATE_NORMAL)
-      {
-         CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
-      }
-   }
-   else
-   {
-      NewState = HandleSCfgDataProxy(Priv, SignalData, STATE_NORMAL,
-                                     STATE_WAIT_GBS_CVR_CFG_DATA, NULL);
-      if (NewState == STATE_NORMAL)
-      {
-         CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
-      }
-   }
-   return(NewState);
+{
+   return(HandleSCfgDataProxy(Priv, SignalData, STATE_WAIT_FS_CVR_CFG_HDR,
+                              STATE_WAIT_GBS_CVR_CFG_DATA, MR_CS2_CFG_FS_STAT));
 }
 
 static int HandleFsCvrDataProxy(void *Priv, void *SignalData)
@@ -1763,7 +1646,7 @@ static void PingAnswerToS88(ZentraleStruct *Data, CanMemberInfo *CanMember)
 {  MrIpcCmdType Cmd;
    unsigned int i;
 
-   if (ZentraleGetShouldWakeUpS88(Data) &&
+   if ((strcmp(ZentraleGetWakeUpS88(Data), DISABLE_WAKEUP_S88) != 0) &&
        ((CanMemberInfoGetUid(CanMember) & 0xffff0000) == S88_UID_PREFIX))
    {
       for (i = 0; i < 3; i++)
@@ -1922,7 +1805,7 @@ static int HandleCanBootldr(void *Priv, void *SignalData)
    if (ZentraleGetVerbose(Data))
       printf("FSM: CAN Bootloader Gebunden %d\n", MrIpcGetCommand(CmdFrame));
    Uid = GetLongFromByteArray((char *)MrIpcGetRawData(CmdFrame));
-   if (ZentraleGetShouldWakeUpS88(Data) &&
+   if ((strcmp(ZentraleGetWakeUpS88(Data), DISABLE_WAKEUP_S88) != 0) &&
        (MrIpcGetRawDlc(CmdFrame) == 8) &&
        ((Uid & 0xffff0000) == S88_UID_PREFIX) &&
        (CanMemberSearch(ZentraleGetCanMember(Data), Uid) != (CanMemberInfo *)NULL))
@@ -2092,7 +1975,7 @@ static StateFktType StateProxyWaitForMs2[NUM_SIGNALS] = {
 };
 static StateFktType StateMs2MasterWaitForMs2[NUM_SIGNALS] = {
    /* STATE_WAIT_FOR_MS2 */
-   HandleTimer,         /* timer */
+   HandleOther,         /* timer */
    HandleOther,         /* MrIpcCmdNull */
    HandleOther,         /* MrIpcCmdRun */
    HandleOther,         /* MrIpcTrackProto */
@@ -2113,7 +1996,7 @@ static StateFktType StateMs2MasterWaitForMs2[NUM_SIGNALS] = {
 };
 static StateFktType StateMs2MasterWaitLoknameCfgHdr[NUM_SIGNALS] = {
    /* STATE_WAIT_LOKNAME_CFG_HDR */
-   HandleTimer,            /* timer */
+   HandleOther,            /* timer */
    HandleOther,            /* MrIpcCmdNull */
    HandleOther,            /* MrIpcCmdRun */
    HandleOther,            /* MrIpcTrackProto */
@@ -2134,7 +2017,7 @@ static StateFktType StateMs2MasterWaitLoknameCfgHdr[NUM_SIGNALS] = {
 };
 static StateFktType StateMs2MasterWaitLoknameCfgData[NUM_SIGNALS] = {
    /* STATE_WAIT_LOKNAME_CFG_DATA */
-   HandleTimer,          /* timer */
+   HandleOther,          /* timer */
    HandleOther,          /* MrIpcCmdNull */
    HandleOther,          /* MrIpcCmdRun */
    HandleOther,          /* MrIpcTrackProto */
@@ -2155,7 +2038,7 @@ static StateFktType StateMs2MasterWaitLoknameCfgData[NUM_SIGNALS] = {
 };
 static StateFktType StateMs2MasterWaitLokinfoCfgHdr[NUM_SIGNALS] = {
    /* STATE_WAIT_LOKINFO_CFG_HDR */
-   HandleTimer,            /* timer */
+   HandleOther,            /* timer */
    HandleOther,            /* MrIpcCmdNull */
    HandleOther,            /* MrIpcCmdRun */
    HandleOther,            /* MrIpcTrackProto */
@@ -2176,7 +2059,7 @@ static StateFktType StateMs2MasterWaitLokinfoCfgHdr[NUM_SIGNALS] = {
 };
 static StateFktType StateMs2MasterWaitLokinfoCfgData[NUM_SIGNALS] = {
    /* STATE_WAIT_LOKINFO_CFG_DATA */
-   HandleTimer,          /* timer */
+   HandleOther,          /* timer */
    HandleOther,          /* MrIpcCmdNull */
    HandleOther,          /* MrIpcCmdRun */
    HandleOther,          /* MrIpcTrackProto */

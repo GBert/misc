@@ -105,8 +105,6 @@ void LokParseLokomotiveCs2(LokStruct *Data, char *Buf, int Len);
 void LokLoadLokomotiveCs2(LokStruct *Data);
 void LokSaveLokomotiveCs2(LokStruct *Data);
 void LokMarkAllDeleted(LokStruct *Data);
-void LokMarkDeleted(LokStruct *Data, char *Name);
-void LokMarkAllUndeleted(LokStruct *Data);
-BOOL LokHaveDeleted(LokStruct *Data);
+void LokMarkDeleted(LokStruct *Data, unsigned long Addr);
 
 #endif

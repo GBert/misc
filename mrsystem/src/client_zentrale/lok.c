@@ -4,7 +4,6 @@
 #include <boolean.h>
 #include <cs2parse.h>
 #include <write_cs2.h>
-#include "zentrale.h"
 #include "lok.h"
 #include <stdio.h>
 
@@ -14,7 +13,7 @@ LokStruct *LokCreate(void)
    NewData = (LokStruct *)malloc(sizeof(LokStruct));
    if (NewData != (LokStruct *)NULL)
    {
-      LokSetLocFilePath(NewData, "/var/www/config/");
+      LokSetLocFilePath(NewData, "/www/config/");
       LokSetNumLoks(NewData, 0);
       LokSetLokDb(NewData, MapCreate());
       if (LokGetLokDb(NewData) == (Map *)NULL)
@@ -315,43 +314,6 @@ void LokLoadLokomotiveCs2(LokStruct *Data)
    }
 }
 
-static void SearchDeleted(void *PrivData, MapKeyType Key, MapDataType Daten)
-{  LokInfo *Lok;
-   AddrSearchType *SearchData;
-
-   Lok = (LokInfo *)Daten;
-   SearchData = (AddrSearchType *)PrivData;
-   if (LokInfoGetIsDeleted(Lok))
-   {
-      SearchData->Result = Lok;
-   }
-}
-
-BOOL LokHaveDeleted(LokStruct *Data)
-{  AddrSearchType Search;
-
-   Search.Addr = 0l;
-   Search.Result = (LokInfo *)NULL;
-   MapWalkAscend(LokGetLokDb(Data), (MapWalkCbFkt)SearchDeleted,
-                 (void *)&Search);
-   return(Search.Result != (LokInfo *)NULL);
-}
-
-static void PurgeDeletedLoks(LokStruct *Data)
-{  AddrSearchType Search;
-
-   do {
-      Search.Addr = 0l;
-      Search.Result = (LokInfo *)NULL;
-      MapWalkAscend(LokGetLokDb(Data), (MapWalkCbFkt)SearchDeleted,
-                    (void *)&Search);
-      if (Search.Result != (LokInfo *)NULL)
-      {
-         MapDel(LokGetLokDb(Data), LokInfoGetName(Search.Result));
-      }
-   } while (Search.Result != (LokInfo *)NULL);
-}
-
 static void WriteLokOfLokomotiveCs2(void *PrivData,
                                     MapKeyType Key, MapDataType Daten)
 {  int i;
@@ -401,7 +363,7 @@ void LokSaveLokomotiveCs2(LokStruct *Data)
 {  FILE *LokCs2Stream;
    char *LokFile;
 
-   if (LokGetIsChanged(Data) || LokHaveDeleted(Data))
+   if (LokGetIsChanged(Data))
    {
       if (LokGetLocFilePath(Data) != (char *)NULL)
       {
@@ -426,8 +388,6 @@ void LokSaveLokomotiveCs2(LokStruct *Data)
                              (MapWalkCbFkt)WriteLokOfLokomotiveCs2,
                              (void *)LokCs2Stream);
                Cs2Close(LokCs2Stream);
-               PurgeDeletedLoks(Data);
-               LokSetIsChanged(Data, FALSE);
             }
             free(LokFile);
          }
@@ -448,33 +408,13 @@ void LokMarkAllDeleted(LokStruct *Data)
    LokSetNumLoks(Data, 0);
 }
 
-void LokMarkDeleted(LokStruct *Data, char *Name)
+void LokMarkDeleted(LokStruct *Data, unsigned long Addr)
 {  LokInfo *Lok;
 
-   Lok = (LokInfo *)MapGet(LokGetLokDb(Data), (MapKeyType)Name);
+   Lok = (LokInfo *)MapGet(LokGetLokDb(Data), (MapKeyType)Addr);
    if (Lok != (LokInfo *)NULL)
    {
       LokInfoSetIsDeleted(Lok, TRUE);
       LokSetNumLoks(Data, LokGetNumLoks(Data) - 1);
    }
-}
-
-static void MarkUndelete(void *PrivData, MapKeyType Key, MapDataType Daten)
-{  LokInfo *Lok;
-   AddrSearchType *SearchData;
-
-   Lok = (LokInfo *)Daten;
-   SearchData = (AddrSearchType *)PrivData;
-   LokInfoSetIsDeleted(Lok, FALSE);
-   SearchData->Addr++;
-}
-
-void LokMarkAllUndeleted(LokStruct *Data)
-{  AddrSearchType Search;
-
-   LokSetNumLoks(Data, 0);
-   Search.Addr = 0;
-   MapWalkAscend(LokGetLokDb(Data), (MapWalkCbFkt)MarkUndelete,
-                 (void *)&Search);
-   LokSetNumLoks(Data, Search.Addr);
 }
