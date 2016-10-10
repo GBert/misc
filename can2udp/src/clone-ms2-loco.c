@@ -36,6 +36,9 @@
 #include <linux/can.h>
 
 #include "cs2-config.h"
+#include "read-cs2-config.h"
+
+extern struct loco_data_t *loco_data;
 
 #define BIT(x)		(1<<x)
 #define MINDELAY	1000000	/* min delay in usec */
@@ -391,6 +394,7 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 	}
 	trigger->data[d_index] = 0;
 	printf("Data:\n%s\n", trigger->data);
+	read_loco_data((char *)trigger->data, CONFIG_STRING);
 
 	free(trigger->data);
     }

@@ -55,15 +55,17 @@ struct track_data_t *track_data = NULL;
 struct loco_data_t *loco_data = NULL;
 
 char *fgets_buffer(char *dest, int max, char *src) {
-    int i;
 
-    i = 0;
-    if ((*src != 0x0a) && (i < max-1)) {
-	*dest++ = *src++;
-	i++;
+    if (*src == 0) {
+	*dest = 0;
+	return NULL;
     }
+    do {
+	*dest++ = *src++;
+    } while ((*src != 0x0a) && (--max));
     *dest = 0;
-    return src;
+
+    return ++src;
 }
 
 int get_char_index(const char **list, char *str) {
@@ -550,17 +552,21 @@ int read_loco_data(char *config_file, int config_type) {
     loco->icon = NULL;
 
 
-    if (config_type & CONFIG_FILE)
+    if (config_type & CONFIG_FILE) {
 	sret = fgets(line, MAXSIZE, fp);
-    else
+    } else {
 	sret = fgets_buffer(line, MAXSIZE, config_file);
+        config_file = sret;
+    }
 
     while (sret != NULL) {
 	line[strcspn(line, "\r\n")] = 0;
 	if (line[0] != ' ') {
 	    l0_token_n = get_char_index(l0_token, line);
 	    switch (l0_token_n) {
+	    case L00_LOCO_SHORT:
 	    case L00_LOCO:
+	    case L00_LOCO_NUMBER:
 	    case L0_VERSION:
 	    case L0_SESSION:
 		break;
@@ -603,6 +609,10 @@ int read_loco_data(char *config_file, int config_type) {
 	    case L1_DIRECTION:
 		loco->direction = strtoul(&line[L1_DIRECTION_LENGTH], NULL, 10);
 		debug_print("match direction: >%d<\n", loco->direction);
+		break;
+	    case L1_VALUE:
+		loco->number = strtoul(&line[L1_VALUE_LENGTH], NULL, 10);
+		debug_print("match value:  >%d<\n", loco->number);
 		break;
 	    case L1_VELOCITY:
 		loco->velocity = strtoul(&line[L1_VELOCITY_LENGTH], NULL, 10);
@@ -724,10 +734,12 @@ int read_loco_data(char *config_file, int config_type) {
 		break;
 	    }
 	}
-	if (config_type & CONFIG_FILE)
+	if (config_type & CONFIG_FILE) {
 	    sret = fgets(line, MAXSIZE, fp);
-	else
+	} else {
 	    sret = fgets_buffer(line, MAXSIZE, config_file);
+	    config_file = sret;
+	}
     }
     if (loco->name)
 	add_loco(loco);
@@ -739,6 +751,7 @@ int read_loco_data(char *config_file, int config_type) {
 	free(icon);
     free(mfx);
     free(loco);
-    fclose(fp);
+    if (config_type && CONFIG_FILE)
+	fclose(fp);
     return (EXIT_SUCCESS);
 }

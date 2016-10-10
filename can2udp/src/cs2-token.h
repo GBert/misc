@@ -13,6 +13,7 @@
 enum {
     L00_TRACK_PAGE = 0,
     L00_TRACK,
+    L00_LOCO_SHORT,
     L00_LOCO,
     L00_LOCO_NUMBER,
     L00_MAGS,
@@ -31,6 +32,7 @@ enum {
 const char *l0_token [] = {
     "[gleisbildseite]",
     "[gleisbild]",
+    "[lok]",
     "[lokomotive]",
     "[numloks]",
     "[magnetartikel]",
@@ -54,6 +56,7 @@ enum {
     L1_ID,
     L1_UID,
     L1_DIRECTION,
+    L1_VALUE,
     L1_VELOCITY,
     L1_ADDRESS,
     L1_SID,
@@ -92,6 +95,7 @@ const char *l1_token [] = {
     " .id=",
     " .uid=",
     " .richtung=",
+    " .wert=",
     " .velocity=",
     " .adresse=",
     " .sid=",
@@ -130,6 +134,7 @@ const char *l1_token [] = {
 #define L1_ID_LENGTH		5
 #define L1_UID_LENGTH		6
 #define L1_DIRECTION_LENGTH	11
+#define L1_VALUE_LENGTH		8
 #define L1_VELOCITY_LENGTH	11
 #define L1_ADDRESS_LENGTH	10
 #define L1_SID_LENGTH		6
