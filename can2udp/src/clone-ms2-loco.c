@@ -48,10 +48,9 @@ uint16_t CRCCCITT(uint8_t * data, size_t length, uint16_t seed);
 unsigned int led_period;
 pthread_mutex_t lock;
 
-unsigned char GET_MS2_CONFIG_LENGTH_I[]  = { 0x6c, 0x6f, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x6e };	/* loknamen */
-unsigned char GET_MS2_CONFIG_LENGTH_II[] = { 0x30, 0x20, 0x32, 0x00, 0x00, 0x00, 0x00, 0x00 };	/* 0 2      */
+unsigned char GET_MS2_LOCO_NAMES[]    = { 0x6c, 0x6f, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x6e };	/* loknamen */
 
-unsigned char GET_MS2_CONFIG_LOCO_I[]    = { 0x6c, 0x6f, 0x6b, 0x69, 0x6e, 0x66, 0x6f, 0x00 };	/* lokinfo  */
+unsigned char GET_MS2_CONFIG_LOCO_I[] = { 0x6c, 0x6f, 0x6b, 0x69, 0x6e, 0x66, 0x6f, 0x00 };	/* lokinfo  */
 
 static char *T_CAN_FORMAT_STRG = "   -> CAN     0x%08X   [%d]";
 static char *F_CAN_FORMAT_STRG = "      CAN ->  0x%08X   [%d]";
@@ -146,7 +145,7 @@ int send_can_frame(int can_socket, struct can_frame *frame, int verbose) {
     return 0;
 }
 
-int get_ms2_dbsize(struct trigger_t *trigger) {
+int get_ms2_loco_names(struct trigger_t *trigger, uint8_t start, int8_t end) {
     struct can_frame frame;
 
     memset(&frame, 0, sizeof(frame));
@@ -156,14 +155,27 @@ int get_ms2_dbsize(struct trigger_t *trigger) {
     frame.can_id &= CAN_EFF_MASK;
     frame.can_id |= CAN_EFF_FLAG;
 
+    /* first frame */
     frame.can_dlc = 8;
-    memcpy(frame.data, GET_MS2_CONFIG_LENGTH_I, sizeof(frame.data));
+    memcpy(frame.data, GET_MS2_LOCO_NAMES, sizeof(frame.data));
     if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
 	return (-1);
-    memcpy(frame.data, GET_MS2_CONFIG_LENGTH_II, sizeof(frame.data));
+
+    /* second frame */
+    memset(frame.data, 0, sizeof(frame.data));
+    frame.data[0] = start + '0';
+    frame.data[1] = ' ';
+    frame.data[2] = end + '0';
     if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
 	return (-1);
     return 0;
+}
+
+int get_ms2_dbsize(struct trigger_t *trigger) {
+    int ret;
+
+    ret = get_ms2_loco_names(trigger, 0, 2);
+    return ret;
 }
 
 int get_ms2_locoinfo(struct trigger_t *trigger, char *loco_name) {
@@ -531,7 +543,9 @@ int main(int argc, char **argv) {
     /* loop forever TODO: if interval is set */
     while (1) {
 	FD_SET(trigger_data.socket, &read_fds);
-	/* FD_SET(trigger_data.pb_fd, &read_fds); */
+	/* extend FD_SET only if push button pin is set */
+	if (trigger_data.pb_pin > 0)
+	    FD_SET(trigger_data.pb_fd, &read_fds);
 	if (select(MAX(trigger_data.socket, trigger_data.pb_fd) + 1, &read_fds, NULL, NULL, NULL) < 0) {
 	    fprintf(stderr, "select error: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
