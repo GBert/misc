@@ -318,7 +318,7 @@ void print_locos(void) {
     struct loco_data_t *l;
 
     for (l = loco_data; l != NULL; l = l->hh.next) {
-	printf("[lok]\n");
+	printf("[loco]\n");
 	printf(" .name=%s\n", l->name);
     }
 }
