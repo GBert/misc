@@ -205,10 +205,11 @@ static void LoadGleisPage(void *PrivData, MapKeyType Key, MapDataType Daten)
 
 void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, int MasterMode,
                   char *Interface, char *Addr, int Port, char *LocPath,
-                  int Protokolle, char *SystemStart, char *WakeUpS88)
+                  int Protokolle, char *SystemStart, int SyncMask,
+                  char *WakeUpS88)
 {  Cs2parser *GeraetVrsParser;
    int LineInfo, handle;
-   char *FileBuffer, *GeraetVrsFile, *TmpPtr;
+   char *FileBuffer, *GeraetVrsFile;
    off_t FileLaenge;
    ssize_t NumBytes;
 
@@ -229,12 +230,14 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, int MasterMode,
    ZentraleSetProtokolle(Data, Protokolle);
    ZentraleSetSystemStart(Data,
                           (strcmp(MRSYSTEM_CFG_SYSTEM_START, SystemStart) == 0));
+   ZentraleSetSyncMask(Data, SyncMask);
+   ZentraleSetShouldWakeUpS88(Data, (strcmp(WakeUpS88,DISABLE_WAKEUP_S88)!=0));
    ZentraleSetWakeUpS88(Data, WakeUpS88);
-   TmpPtr = ZentraleGetWakeUpS88(Data);
-   if (strcmp(TmpPtr, DISABLE_WAKEUP_S88) != 0)
-   {  char *token;
+   if (ZentraleGetShouldWakeUpS88(Data))
+   {  char *token, *TmpPtr;
       int i;
 
+      TmpPtr = ZentraleGetWakeUpS88(Data);
       ZentraleSetS88BusIdxLength(Data, 0, 0);
       ZentraleSetS88BusIdxInterval(Data, 0, 0);
       ZentraleSetS88BusIdxTCycle(Data, 0, 0);
@@ -422,7 +425,7 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, int MasterMode,
          else
          {
             if (ZentraleGetVerbose(Data))
-               printf("kann kein Speicher fuer Dateipuffer (%lld) anlegen\n",
+               printf("kann kein Speicher fuer Dateipuffer (%ld) anlegen\n",
                       FileLaenge);
          }
          close(handle);

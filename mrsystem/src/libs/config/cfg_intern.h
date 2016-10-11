@@ -15,6 +15,7 @@
 #define INI_STR_USAGE      "usage"
 #define INI_STR_ZENTRALE   "zentrale"
 #define INI_STR_PROTOKOLL  "protokoll"
+#define INI_STR_SYNC       "sync"
 #define INI_STR_START      "gleissignal"
 #define INI_STR_CONN_TCP   "conn_tcp"
 #define INI_STR_WAKEUP_S88 "wakeup_s88"
@@ -30,9 +31,10 @@
 #define INI_TOK_ZENTRALE   (INI_TOK_PORT+7)
 #define INI_TOK_PROTOKOLL  (INI_TOK_PORT+8)
 #define INI_TOK_START      (INI_TOK_PORT+9)
-#define INI_TOK_CONN_TCP   (INI_TOK_PORT+10)
-#define INI_TOK_WAKEUP_S88 (INI_TOK_PORT+11)
-#define INI_TOK_GPIO_S88   (INI_TOK_PORT+12)
+#define INI_TOK_SYNC       (INI_TOK_PORT+10)
+#define INI_TOK_CONN_TCP   (INI_TOK_PORT+11)
+#define INI_TOK_WAKEUP_S88 (INI_TOK_PORT+12)
+#define INI_TOK_GPIO_S88   (INI_TOK_PORT+13)
 
 
 #endif

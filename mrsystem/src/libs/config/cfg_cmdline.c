@@ -11,6 +11,9 @@ void ConfigCmdLine(ConfigStruct *Data, char *optstr, int argc, char *argv[])
       c = getopt(argc, argv, optstr);
       switch (c)
       {
+         case '2':
+            ConfigAddIntVal(Data, CfgSyncVal, optarg);
+            break;
          case '8':
             ConfigAddStrVal(Data, CfgWakeUpS88, optarg);
             break;

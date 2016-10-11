@@ -90,6 +90,12 @@ static void InitConfigValues(ConfigStruct *Data)
    ValuePtr = malloc(sizeof(IniValue));
    ValuePtr->DataType = IniParsInt;
    ValuePtr->IntValue = 0;
+   strcpy(ValuePtr->StringValue, "sync");
+   MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_SYNC),
+          (MapDataType)ValuePtr);
+   ValuePtr = malloc(sizeof(IniValue));
+   ValuePtr->DataType = IniParsInt;
+   ValuePtr->IntValue = 0;
    ValuePtr->StringValue[0] = '\0';
    MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_CONN_TCP),
           (MapDataType)ValuePtr);
@@ -102,7 +108,7 @@ static void InitConfigValues(ConfigStruct *Data)
 }
 
 void ConfigInit(ConfigStruct *Data, char *IniFile)
-{  IniParsKeyword IniKeywords[13];
+{  IniParsKeyword IniKeywords[14];
 
    MapInit(ConfigGetConfig(Data), (CmpFkt)strcmp, (MapKeyDelCbFkt)free,
            (MapDataDelCbFkt)free);
@@ -133,18 +139,18 @@ void ConfigInit(ConfigStruct *Data, char *IniFile)
    strcpy(IniKeywords[8].Keyword, INI_STR_PROTOKOLL);
    IniKeywords[8].Symbol = INI_TOK_PROTOKOLL;
    IniKeywords[8].DataType = IniParsInt;
-   strcpy(IniKeywords[9].Keyword, INI_STR_START);
-   IniKeywords[9].Symbol = INI_TOK_START;
-   IniKeywords[9].DataType = IniParsString;
-   strcpy(IniKeywords[10].Keyword, INI_STR_CONN_TCP);
-   IniKeywords[10].Symbol = INI_TOK_CONN_TCP;
+   strcpy(IniKeywords[10].Keyword, INI_STR_SYNC);
+   IniKeywords[10].Symbol = INI_TOK_SYNC;
    IniKeywords[10].DataType = IniParsInt;
-   strcpy(IniKeywords[11].Keyword, INI_STR_WAKEUP_S88);
-   IniKeywords[11].Symbol = INI_TOK_WAKEUP_S88;
-   IniKeywords[11].DataType = IniParsString;
-   strcpy(IniKeywords[12].Keyword, INI_STR_GPIO_S88);
-   IniKeywords[12].Symbol = INI_TOK_GPIO_S88;
+   strcpy(IniKeywords[11].Keyword, INI_STR_CONN_TCP);
+   IniKeywords[11].Symbol = INI_TOK_CONN_TCP;
+   IniKeywords[11].DataType = IniParsInt;
+   strcpy(IniKeywords[12].Keyword, INI_STR_WAKEUP_S88);
+   IniKeywords[12].Symbol = INI_TOK_WAKEUP_S88;
    IniKeywords[12].DataType = IniParsString;
-   IniParsInit(ConfigGetParser(Data), IniFile, 13, IniKeywords);
+   strcpy(IniKeywords[13].Keyword, INI_STR_GPIO_S88);
+   IniKeywords[13].Symbol = INI_TOK_GPIO_S88;
+   IniKeywords[13].DataType = IniParsString;
+   IniParsInit(ConfigGetParser(Data), IniFile, 14, IniKeywords);
    InitConfigValues(Data);
 }

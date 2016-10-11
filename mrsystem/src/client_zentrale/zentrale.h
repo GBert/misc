@@ -49,11 +49,13 @@ typedef struct {
    char *Address;
    int ServerPort;
    int ClientSock;
+   BOOL ShouldWakeUpS88;
    char *WakeUpS88;
    FsmStruct *StateMachine;
    char *LocPath;
    int Protokolle;
    BOOL SystemStart;
+   int SyncMask;
    unsigned MajorVersion;
    unsigned MinorVersion;
    float HardVersion;
@@ -86,11 +88,13 @@ typedef struct {
 #define ZentraleSetAddress(Data, Addr)                  (Data)->Address=Addr
 #define ZentraleSetServerPort(Data, Port)               (Data)->ServerPort=Port
 #define ZentraleSetClientSock(Data, Sock)               (Data)->ClientSock=Sock
+#define ZentraleSetShouldWakeUpS88(Data, DoWakeUp)      (Data)->ShouldWakeUpS88=DoWakeUp
 #define ZentraleSetWakeUpS88(Data, WakeUp)              (Data)->WakeUpS88=WakeUp
 #define ZentraleSetStateMachine(Data, Fsm)              (Data)->StateMachine=Fsm
 #define ZentraleSetLocPath(Data, Path)                  (Data)->LocPath=Path
 #define ZentraleSetProtokolle(Data, Protos)             (Data)->Protokolle=Protos
 #define ZentraleSetSystemStart(Data, Start)             (Data)->SystemStart=Start
+#define ZentraleSetSyncMask(Data, Mask)                 (Data)->SyncMask=Mask
 #define ZentraleSetMajorVersion(Data, Major)            (Data)->MajorVersion=Major
 #define ZentraleSetMinorVersion(Data, Minor)            (Data)->MinorVersion=Minor
 #define ZentraleSetHardVersion(Data, Hard)              (Data)->HardVersion=Hard
@@ -123,12 +127,14 @@ typedef struct {
 #define ZentraleGetInterface(Data)            (Data)->Interface
 #define ZentraleGetAddress(Data)              (Data)->Address
 #define ZentraleGetServerPort(Data)           (Data)->ServerPort
+#define ZentraleGetShouldWakeUpS88(Data)      (Data)->ShouldWakeUpS88
 #define ZentraleGetWakeUpS88(Data)            (Data)->WakeUpS88
 #define ZentraleGetClientSock(Data)           (Data)->ClientSock
 #define ZentraleGetStateMachine(Data)         (Data)->StateMachine
 #define ZentraleGetLocPath(Data)              (Data)->LocPath
 #define ZentraleGetProtokolle(Data)           (Data)->Protokolle
 #define ZentraleGetSystemStart(Data)          (Data)->SystemStart
+#define ZentraleGetSyncMask(Data)             (Data)->SyncMask
 #define ZentraleGetMajorVersion(Data)         (Data)->MajorVersion
 #define ZentraleGetMinorVersion(Data)         (Data)->MinorVersion
 #define ZentraleGetHardVersion(Data)          (Data)->HardVersion
@@ -162,7 +168,8 @@ ZentraleStruct *ZentraleCreate(void);
 void ZentraleDestroy(ZentraleStruct *Data);
 void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, int MasterMode,
                   char *Interface, char *Addr, int Port, char *LocPath,
-                  int Protokolle, char *SystemStart, char *WakeUpS88);
+                  int Protokolle, char *SystemStart, int SyncMask,
+                  char *WakeUpS88);
 void ZentraleInitFsm(ZentraleStruct *Data, int MasterMode);
 void ZentraleExit(ZentraleStruct *Data);
 void ZentraleRun(ZentraleStruct *Data);

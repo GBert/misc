@@ -7,7 +7,7 @@
 #include <time.h>
 #include <config.h>
 #ifdef DEBUG
-#include "lx_debug.h"
+#include <lx_debug.h>
 #endif
 #include "zentrale.h"
 
@@ -26,6 +26,7 @@ static void usage(char *name)
    puts("-l - path where write lokomotive.cs2");
    puts("-s - bitmask for track protocolls, 1=motorola, 2=mfx, 4=dcc");
    puts("-g - system start, start power on tracks");
+   puts("-2 - bitmask for syn with master CS2, 1=keybd, 2=layout 3=mem 4=contr");
    puts("-8 - start s88 modules, params like wakeup-links-88 from G.B.");
    puts("-? - this help");
 }
@@ -45,7 +46,7 @@ int main(int argc, char *argv[])
       ValArgs = argv;
       ConfigInit(Config, MRSYSTEM_CONFIG_FILE);
       ConfigReadfile(Config);
-      ConfigCmdLine(Config, "8:a:i:p:fgs:vl:z:?", NumArgs, ValArgs);
+      ConfigCmdLine(Config, "2:8:a:i:p:fgs:vl:z:?", NumArgs, ValArgs);
       if (ConfigGetIntVal(Config, CfgUsageVal))
       {
          usage(argv[0]);
@@ -76,6 +77,7 @@ int main(int argc, char *argv[])
                             ConfigGetStrVal(Config, CfgPathVal),
                             ConfigGetIntVal(Config, CfgProtokollVal),
                             ConfigGetStrVal(Config, CfgStartVal),
+                            ConfigGetIntVal(Config, CfgSyncVal),
                             ConfigGetStrVal(Config, CfgWakeUpS88));
                ZentraleRun(Zentrale);
                ZentraleDestroy(Zentrale);
@@ -117,6 +119,7 @@ int main(int argc, char *argv[])
                          ConfigGetStrVal(Config, CfgPathVal),
                          ConfigGetIntVal(Config, CfgProtokollVal),
                          ConfigGetStrVal(Config, CfgStartVal),
+                         ConfigGetIntVal(Config, CfgSyncVal),
                          ConfigGetStrVal(Config, CfgWakeUpS88));
             ZentraleRun(Zentrale);
             ZentraleDestroy(Zentrale);

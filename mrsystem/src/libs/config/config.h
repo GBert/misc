@@ -8,16 +8,21 @@
 
 #define MRSYSTEM_CFG_PROTO_MOTOROLA 0x01
 #define MRSYSTEM_CFG_PROTO_MFX      0x02
-#define MRSYSTEM_CFG_PROTO_DCC      0x03
+#define MRSYSTEM_CFG_PROTO_DCC      0x04
 
 #define MRSYSTEM_CFG_SYSTEM_START "start"
 #define MRSYSTEM_CFG_SYSTEM_STOP  "stop"
+
+#define MRSYSTEM_CFG_SYNC_KEYBD  0x01
+#define MRSYSTEM_CFG_SYNC_LAYOUT 0x02
+#define MRSYSTEM_CFG_SYNC_MEM    0x04
+#define MRSYSTEM_CFG_SYNC_CONTR  0x08
 
 #define DISABLE_WAKEUP_S88 "0"
 
 typedef enum { CfgPortVal, CfgBcVal, CfgForkVal, CfgTraceVal,
                CfgVerboseVal, CfgUsageVal, CfgZentraleVal,
-               CfgProtokollVal, CfgConnTcpVal } CfgIntValues;
+               CfgProtokollVal, CfgSyncVal, CfgConnTcpVal } CfgIntValues;
 typedef enum { CfgIfaceVal, CfgAddrVal, CfgCanIfVal, CfgPathVal,
                CfgUdpBcVal, CfgStartVal, CfgWakeUpS88,
                CfgGpioS88 } CfgStrValues;

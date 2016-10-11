@@ -35,6 +35,9 @@ void ConfigAddIntVal(ConfigStruct *Data, CfgIntValues ValueTyp, int Value)
       case CfgProtokollVal:
          p = INI_STR_PROTOKOLL;
          break;
+      case CfgSyncVal:
+         p = INI_STR_SYNC;
+         break;
       case CfgConnTcpVal:
          p = INI_STR_CONN_TCP;
          break;
