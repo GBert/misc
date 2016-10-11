@@ -12,7 +12,7 @@ void ConfigCmdLine(ConfigStruct *Data, char *optstr, int argc, char *argv[])
       switch (c)
       {
          case '2':
-            ConfigAddIntVal(Data, CfgSyncVal, optarg);
+            ConfigAddIntVal(Data, CfgSyncVal, TRUE);
             break;
          case '8':
             ConfigAddStrVal(Data, CfgWakeUpS88, optarg);
