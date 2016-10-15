@@ -26,6 +26,7 @@ static char *BROADCAST_C0NFIG_UPDATE = "broadcast_update.cs2";
 
 static unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[] = { 0x00, 0x36, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
 static unsigned char M_CAN_PING[]                      = { 0x00, 0x30, 0x47, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static unsigned char M_CAN_PING_CS2[]                  = { 0x00, 0x30, 0x47, 0x11, 0x08, 0x00, 0x00, 0x00, 0x00, 0x03, 0x08, 0xff, 0xff };
 static unsigned char M_PING_RESPONSE[] = { 0x00, 0x30, 0x00, 0x00, 0x00 };
 
 unsigned char GETCONFIG[]          = { 0x00, 0x40, 0xaf, 0x7e, 0x08 };
@@ -59,6 +60,7 @@ char config_file[MAXLINE];
 char **page_name;
 char **cs2_page_name;
 int ms1_workaround;
+int cs2fake_ping;
 struct timeval last_sent;
 
 void print_usage(char *prg) {
@@ -72,6 +74,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -i <can int>        CAN interface - default can0\n");
     fprintf(stderr, "         -k                  use a connected CS2.exe as config source\n");
+    fprintf(stderr, "         -g                  fake CS2 ping response\n");
     fprintf(stderr, "         -T                  timeout starting %s in sec - default %d sec\n", prg, MAX_UDP_BCAST_RETRY);
     fprintf(stderr, "         -m                  doing MS1 workaround - default: don't do it\n");
     fprintf(stderr, "         -f                  running in foreground\n");
@@ -151,6 +154,21 @@ int check_data_udp(int udp_socket, struct sockaddr *baddr, struct cs2_config_dat
     memcpy(&canid, netframe, 4);
     canid = ntohl(canid);
     switch (canid & 0xFFFF0000UL) {
+    case (0x00300000UL):
+	if (cs2fake_ping) {
+	    if (cs2_config_data->verbose)
+		printf("                received CAN ping\n");
+	    memcpy(netframe, M_CAN_PING_CS2, 13);
+	    if (net_to_net(udp_socket, baddr, netframe, CAN_ENCAP_SIZE)) {
+		fprintf(stderr, "sending UDP data (CAN Ping fake CS2) error:%s \n", strerror(errno));
+		syslog(LOG_ERR, "%s: sending UDP data (CAN Ping fake CS2) error:%s\n", __func__, strerror(errno));
+	    } else {
+		print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data->verbose);
+		if (cs2_config_data->verbose)
+		    printf("                replied CAN ping (fake CS2)\n");
+	    }
+	}
+	break;
     case (0x00310000UL):
 	if ((netframe[11] == 0xEE) && (netframe[12] == 0xEE)) {
 	    if (cs2_config_data->verbose)
@@ -382,6 +400,7 @@ int main(int argc, char **argv) {
     };
 
     ms1_workaround = 0;
+    cs2fake_ping = 0;
 
     cs2_config_data.verbose = 0;
     cs2_config_data.state = CS2_STATE_INACTIVE;
@@ -412,7 +431,7 @@ int main(int argc, char **argv) {
 
     config_file[0] = '\0';
 
-    while ((opt = getopt(argc, argv, "c:u:s:t:d:b:i:kT:mvhf?")) != -1) {
+    while ((opt = getopt(argc, argv, "c:u:s:t:d:b:i:kT:gmvhf?")) != -1) {
 	switch (opt) {
 	case 'c':
 	    if (strnlen(optarg, MAXLINE) < MAXLINE) {
@@ -458,6 +477,9 @@ int main(int argc, char **argv) {
 	    break;
 	case 'T':
 	    timeout = strtoul(optarg, (char **)NULL, 10);
+	    break;
+	case 'g':
+	    cs2fake_ping = 1;
 	    break;
 	case 'm':
 	    ms1_workaround = 1;
