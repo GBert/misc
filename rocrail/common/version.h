@@ -1,9 +1,12 @@
 const int revisionnr = 
-11580
+11583
 ;
 const char* commithash = 
-"62eeb44aec61593b4c33556791cdf64870bf0b07";
+"2defcf6aa08588f80ba810a1c6c370ae0d9abad5";
 const char* revlog = 
+"11583 2016-10-31 15:09:26 +0100 mdi: remove mdiframe in case of a modular plan\n" \
+"11582 2016-10-31 14:18:31 +0100 model: create new plan if the directory does exist\n" \
+"11581 2016-10-31 07:55:43 +0100 item: d&d support from panel to panel in MDI view\n" \
 "11580 2016-10-30 10:28:49 +0100 locdialog: do not show BBT from block if the use is not set to from block\n" \
 "11579 2016-10-30 09:20:57 +0100 item: fix for background color on paint\n" \
 "11578 2016-10-29 17:55:08 +0200 routedialog: fix for modifying existing route commands without type set\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "11536 2016-10-23 12:11:59 +0200 infodlg: show last 50 commit comments\n" \
 "11535 2016-10-23 08:56:59 +0200 loc: xmlscript support for f0-f28 state\n" \
 "11534 2016-10-23 08:45:41 +0200 item: activate tab level of connector counter part at double click\n" \
-"11533 2016-10-22 10:39:49 +0200 routedialog: fix for modify command ID\n" \
-"11532 2016-10-22 09:33:17 +0200 optional signal events for locos added\n" \
-"11531 2016-10-21 12:31:32 +0200 dccpp: check if the serial object is still alive before read\n" \
 
 "log end";
