@@ -52,10 +52,10 @@ define Package/can2udp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pio-i2c-udp $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/wake-up-links88 $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/can2lan.init_carambola $(1)/etc/init.d/can2lan
+#	$(INSTALL_BIN) ./files/can2lan.init_carambola $(1)/etc/init.d/can2lan
+	$(INSTALL_BIN) ./files/can2lan.init $(1)/etc/init.d/can2lan
 	$(INSTALL_DIR) $(1)/root
 	$(INSTALL_BIN) ./files/ir.sh $(1)/root/
-	$(INSTALL_BIN) ./files/card-reader.sh $(1)/root/
 	$(INSTALL_BIN) ./files/card-reader.sh $(1)/root/card-reader.sh
 	$(INSTALL_BIN) ./files/s88udp.init $(1)/root/s88udp
 	$(INSTALL_BIN) ./files/pio-i2c-udp.init $(1)/root/pio-i2c-udp
@@ -63,10 +63,14 @@ define Package/can2udp/install
 	$(INSTALL_BIN) ./files/scripts/get-icons.sh $(1)/root/get-icons.sh
 	$(INSTALL_DIR) $(1)/www/
 	$(CP) ./files/maerklin/* $(1)/www/
+	$(INSTALL_DIR) $(1)/www/betatest
+	$(INSTALL_DIR) $(1)/betatest
 endef
 
 define Package/can2udp/postinst
         ln -sf /usr/bin/gb2-update $${IPKG_INSTROOT}/usr/bin/ms2-update
+        ln -sf /www/config $${IPKG_INSTROOT}/www/betatest/cs2
+        ln -sf /www/config $${IPKG_INSTROOT}/betatest/cs2
 endef
 
 $(eval $(call BuildPackage,can2udp))
