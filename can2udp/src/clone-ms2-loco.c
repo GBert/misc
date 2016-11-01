@@ -54,7 +54,6 @@ unsigned int led_period;
 pthread_mutex_t lock;
 
 unsigned char GET_MS2_LOCO_NAMES[]    = { 0x6c, 0x6f, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x6e };	/* loknamen */
-
 unsigned char GET_MS2_CONFIG_LOCO_I[] = { 0x6c, 0x6f, 0x6b, 0x69, 0x6e, 0x66, 0x6f, 0x00 };	/* lokinfo  */
 
 static char *T_CAN_FORMAT_STRG = "   -> CAN     0x%08X   [%d]";
@@ -442,6 +441,7 @@ int main(int argc, char **argv) {
     fd_set read_fds;
     struct can_frame frame;
     uint16_t member;
+    uint8_t buffer[MAXLEN];
 
     memset(&trigger_data, 0, sizeof(trigger_data));
     memset(ifr.ifr_name, 0, sizeof(ifr.ifr_name));
@@ -592,6 +592,8 @@ int main(int argc, char **argv) {
 	}
 	/* push button event */
 	if (FD_ISSET(trigger_data.pb_fd, &read_fds)) {
+	    if (read(trigger_data.pb_fd, buffer, sizeof(buffer)) < 0)
+		fprintf(stderr, "error reading GPIO status: %s\n", strerror(errno));
 	    printf("push button event\n");
 	}
     }
