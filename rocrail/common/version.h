@@ -1,9 +1,11 @@
 const int revisionnr = 
-11583
+11585
 ;
 const char* commithash = 
-"2defcf6aa08588f80ba810a1c6c370ae0d9abad5";
+"1391b76f07c096403f0629e3788ec946bd6f6201";
 const char* revlog = 
+"11585 2016-11-01 12:18:47 +0100 guiframe: update recent files after opening a new file\n" \
+"11584 2016-11-01 11:43:37 +0100 rocview: recent file list added in the menu (only updated after restart)\n" \
 "11583 2016-10-31 15:09:26 +0100 mdi: remove mdiframe in case of a modular plan\n" \
 "11582 2016-10-31 14:18:31 +0100 model: create new plan if the directory does exist\n" \
 "11581 2016-10-31 07:55:43 +0100 item: d&d support from panel to panel in MDI view\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11538 2016-10-23 14:07:51 +0200 makefile: revlog added\n" \
 "11537 2016-10-23 13:51:49 +0200 makefile: version info offline fix\n" \
 "11536 2016-10-23 12:11:59 +0200 infodlg: show last 50 commit comments\n" \
-"11535 2016-10-23 08:56:59 +0200 loc: xmlscript support for f0-f28 state\n" \
-"11534 2016-10-23 08:45:41 +0200 item: activate tab level of connector counter part at double click\n" \
 
 "log end";
