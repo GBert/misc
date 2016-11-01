@@ -1,9 +1,14 @@
 const int revisionnr = 
-11585
+11590
 ;
 const char* commithash = 
-"1391b76f07c096403f0629e3788ec946bd6f6201";
+"f214c6d1f6a93e20cbb40fee174ac52b9eae039a";
 const char* revlog = 
+"11590 2016-11-01 15:56:10 +0100 rocs: update for make fromtar\n" \
+"11589 2016-11-01 14:56:33 +0100 guiframe: initialize the system state exception-0000\n" \
+"11588 2016-11-01 14:33:34 +0100 app: check trace actions option added -> default is disabled\n" \
+"11587 2016-11-01 14:11:31 +0100 app: tracelevel correction for calling check action\n" \
+"11586 2016-11-01 14:07:30 +0100 system action extended with trace level EWa\n" \
 "11585 2016-11-01 12:18:47 +0100 guiframe: update recent files after opening a new file\n" \
 "11584 2016-11-01 11:43:37 +0100 rocview: recent file list added in the menu (only updated after restart)\n" \
 "11583 2016-10-31 15:09:26 +0100 mdi: remove mdiframe in case of a modular plan\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "11543 2016-10-24 09:19:46 +0200 infodialog: enable copyright field for scrolling\n" \
 "11542 2016-10-23 15:45:01 +0200 infodialog: tab translation added\n" \
 "11541 2016-10-23 15:34:48 +0200 item: add the color node in the output object if no existing is there\n" \
-"11540 2016-10-23 14:40:10 +0200 item: fix for modify outputs offline\n" \
-"11539 2016-10-23 14:19:34 +0200 rocnetnode makefile fix for revision log\n" \
-"11538 2016-10-23 14:07:51 +0200 makefile: revlog added\n" \
-"11537 2016-10-23 13:51:49 +0200 makefile: version info offline fix\n" \
-"11536 2016-10-23 12:11:59 +0200 infodlg: show last 50 commit comments\n" \
 
 "log end";
