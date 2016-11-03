@@ -1,9 +1,24 @@
 const int revisionnr = 
-11590
+11605
 ;
 const char* commithash = 
-"f214c6d1f6a93e20cbb40fee174ac52b9eae039a";
+"69fcaa2a7390238dd4e8000ebd24c9b696434344";
 const char* revlog = 
+"11605 2016-11-03 21:30:41 +0100 lcdriver: use app as pointer\n" \
+"11604 2016-11-03 21:23:34 +0100 rocrail makefile fix\n" \
+"11603 2016-11-03 15:28:00 +0100 server trace improvements (wip)\n" \
+"11602 2016-11-03 12:02:30 +0100 rocrail makefile: converting the messages in the clean section only\n" \
+"11601 2016-11-03 11:59:17 +0100 rocrail makefile: first build rocs before converting the messages\n" \
+"11600 2016-11-03 11:52:07 +0100 app: resource for trace text added (WIP)\n" \
+"11599 2016-11-03 11:03:25 +0100 switch: added open/close command to manipulate the outoforder attribute\n" \
+"11598 2016-11-03 10:28:30 +0100 guiframe: always reinit the loco tab after closing the loco properties\n" \
+"11597 2016-11-03 07:59:55 +0100 guiframe: check if the loco show flag did change\n" \
+"11596 2016-11-02 14:57:41 +0100 tracedlg: adjust font size in case if the gray theme is active\n" \
+"11595 2016-11-02 14:52:16 +0100 tracedlg: set the correct monospaced font in the text controls\n" \
+"11594 2016-11-02 10:47:19 +0100 block: fix for set class if NULL\n" \
+"11593 2016-11-02 10:26:57 +0100 infodialog: fixed font modification for the log textcontrol\n" \
+"11592 2016-11-02 10:24:16 +0100 guiframe: fixed font in server and controller window\n" \
+"11591 2016-11-02 08:03:04 +0100 mdi: cascade menu item for Windows\n" \
 "11590 2016-11-01 15:56:10 +0100 rocs: update for make fromtar\n" \
 "11589 2016-11-01 14:56:33 +0100 guiframe: initialize the system state exception-0000\n" \
 "11588 2016-11-01 14:33:34 +0100 app: check trace actions option added -> default is disabled\n" \
@@ -39,20 +54,5 @@ const char* revlog =
 "11558 2016-10-26 15:21:07 +0200 midimanager: create a tab node in case there is none for saving position and size\n" \
 "11557 2016-10-26 14:02:54 +0200 mdi: WIP\n" \
 "11556 2016-10-26 13:58:07 +0200 mdi: WIP\n" \
-"11555 2016-10-26 11:58:06 +0200 item: check at the blockstate event if the item is already initialized\n" \
-"11554 2016-10-26 11:47:10 +0200 mdi: manager class added\n" \
-"11553 2016-10-26 11:37:55 +0200 mdi: experimetal multi frame view\n" \
-"11552 2016-10-26 05:11:50 +0200 trackdialog: disable prev, next and index panel if its not filled\n" \
-"11551 2016-10-25 15:29:26 +0200 trackdialog: prev and next track added, rocview always fill index option added\n" \
-"11550 2016-10-25 11:05:19 +0200 rocweb: show signal aspect in the direction button\n" \
-"11549 2016-10-25 11:03:39 +0200 throttledlg: update the signalaspect attribute on model event\n" \
-"11548 2016-10-25 10:58:02 +0200 throttle: activate LED in the speed field to show red aspect\n" \
-"11547 2016-10-25 10:33:15 +0200 throttledlg: show signal aspect in the speed field\n" \
-"11546 2016-10-25 09:15:15 +0200 lc: set signal aspect in the speed field on loco selection\n" \
-"11545 2016-10-24 15:23:40 +0200 item: support for dubble click on curved connectors\n" \
-"11544 2016-10-24 13:35:22 +0200 revision history: revsion number added (Lothar)\n" \
-"11543 2016-10-24 09:19:46 +0200 infodialog: enable copyright field for scrolling\n" \
-"11542 2016-10-23 15:45:01 +0200 infodialog: tab translation added\n" \
-"11541 2016-10-23 15:34:48 +0200 item: add the color node in the output object if no existing is there\n" \
 
 "log end";
