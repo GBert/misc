@@ -541,9 +541,9 @@ int main(int argc, char **argv) {
     if ((trigger_data.pb_pin) > 0) {
 	gpio_export(trigger_data.pb_pin);
 	gpio_direction(trigger_data.pb_pin, 1);
-	trigger_data.pb_fd = gpio_open(trigger_data.pb_pin);
 	gpio_edge(trigger_data.pb_pin, EDGE_FALLING);
-	read(trigger_data.pb_fd, NULL, 100);	/* won't work without this read ? */
+	trigger_data.pb_fd = gpio_open(trigger_data.pb_pin);
+	/* read(trigger_data.pb_fd, NULL, 100);	 won't work without this read ? */
     }
 
     FD_ZERO(&read_fds);
@@ -592,6 +592,7 @@ int main(int argc, char **argv) {
 	}
 	/* push button event */
 	if (FD_ISSET(trigger_data.pb_fd, &read_fds)) {
+	    lseek(trigger_data.pb_fd, 0, SEEK_SET);
 	    if (read(trigger_data.pb_fd, buffer, sizeof(buffer)) < 0)
 		fprintf(stderr, "error reading GPIO status: %s\n", strerror(errno));
 	    printf("push button event\n");
