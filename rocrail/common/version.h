@@ -1,9 +1,10 @@
 const int revisionnr = 
-11606
+11607
 ;
 const char* commithash = 
-"a59932ef2bac5cd213b3691c6000ca2f60425f8a";
+"e98cb7defd746cdd79dd614e0c75e1dadf539634";
 const char* revlog = 
+"11607 2016-11-04 11:27:13 +0100 server messages: wip\n" \
 "11606 2016-11-04 09:18:57 +0100 server messages (wip) switch state open/closed added\n" \
 "11605 2016-11-03 21:30:41 +0100 lcdriver: use app as pointer\n" \
 "11604 2016-11-03 21:23:34 +0100 rocrail makefile fix\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "11560 2016-10-26 16:02:14 +0200 mdimanager: save position and size of the mdi parent frame\n" \
 "11559 2016-10-26 15:24:50 +0200 mdimanager: no default menu to prevent an assert under windows\n" \
 "11558 2016-10-26 15:21:07 +0200 midimanager: create a tab node in case there is none for saving position and size\n" \
-"11557 2016-10-26 14:02:54 +0200 mdi: WIP\n" \
 
 "log end";
