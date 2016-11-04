@@ -273,7 +273,7 @@ int gpio_open(int pin) {
     int fd;
 
     snprintf(path, MAX_SYSFS_LEN, "/sys/class/gpio/gpio%d/value", pin);
-    fd = open(path, O_RDONLY);
+    fd = open(path, O_RDONLY | O_NONBLOCK);
     if (fd < 0) {
 	fprintf(stderr, "%s: Failed to open gpio value for reading: %s\n", __func__, strerror(errno));
 	return (EXIT_FAILURE);
