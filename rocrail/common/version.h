@@ -1,9 +1,16 @@
 const int revisionnr = 
-11607
+11614
 ;
 const char* commithash = 
-"e98cb7defd746cdd79dd614e0c75e1dadf539634";
+"72a41ff07b65be783ea877934a2551353aa8901e";
 const char* revlog = 
+"11614 2016-11-05 16:22:02 +0100 macOS: start rocview in ~/rocrail\n" \
+"11613 2016-11-05 15:17:45 +0100 Run: copy themes to ~/rocrail if not exist\n" \
+"11612 2016-11-05 14:15:07 +0100 makemac.sh: strip all unnecessary files\n" \
+"11611 2016-11-05 13:46:54 +0100 dmg: include rocdata in the Rocrail.app\n" \
+"11610 2016-11-05 09:19:44 +0100 block: fix for action on closed state\n" \
+"11609 2016-11-05 09:05:05 +0100 remove unused rocview.ini template\n" \
+"11608 2016-11-05 08:12:06 +0100 renderer: use dot pen style for virtual blocks\n" \
 "11607 2016-11-04 11:27:13 +0100 server messages: wip\n" \
 "11606 2016-11-04 09:18:57 +0100 server messages (wip) switch state open/closed added\n" \
 "11605 2016-11-03 21:30:41 +0100 lcdriver: use app as pointer\n" \
@@ -47,12 +54,5 @@ const char* revlog =
 "11567 2016-10-27 14:57:02 +0200 guiframe: check if local plan is modified before opening another\n" \
 "11566 2016-10-27 11:51:20 +0200 routedialog: show preselected routes\n" \
 "11565 2016-10-27 10:38:09 +0200 mdi: delete panel support added\n" \
-"11564 2016-10-27 10:09:04 +0200 planpanel: added print popup menu\n" \
-"11563 2016-10-27 09:12:45 +0200 mdimanager: set plan title (for windows)\n" \
-"11562 2016-10-27 08:40:26 +0200 rocguiinidlg: added the MDI option\n" \
-"11561 2016-10-27 08:31:28 +0200 mdi: dispatch model events to the MDI manager to update all levels\n" \
-"11560 2016-10-26 16:02:14 +0200 mdimanager: save position and size of the mdi parent frame\n" \
-"11559 2016-10-26 15:24:50 +0200 mdimanager: no default menu to prevent an assert under windows\n" \
-"11558 2016-10-26 15:21:07 +0200 midimanager: create a tab node in case there is none for saving position and size\n" \
 
 "log end";
