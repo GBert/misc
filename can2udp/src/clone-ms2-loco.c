@@ -438,7 +438,7 @@ int main(int argc, char **argv) {
     struct ifreq ifr;
     struct trigger_t trigger_data;
     struct sockaddr_can caddr;
-    fd_set read_fds;
+    fd_set readfds, exceptfds;
     struct can_frame frame;
     uint16_t member;
     uint8_t buffer[MAXLEN];
@@ -543,23 +543,26 @@ int main(int argc, char **argv) {
 	gpio_direction(trigger_data.pb_pin, 1);
 	gpio_edge(trigger_data.pb_pin, EDGE_FALLING);
 	trigger_data.pb_fd = gpio_open(trigger_data.pb_pin);
-	/* read(trigger_data.pb_fd, NULL, 100);	 won't work without this read ? */
     }
 
-    FD_ZERO(&read_fds);
+    FD_ZERO(&readfds);
+    FD_ZERO(&exceptfds);
+    /* delete pending push button event */
+    if ((trigger_data.pb_pin) > 0)
+	read(trigger_data.pb_fd, NULL, 100);
 
     /* loop forever TODO: if interval is set */
     while (1) {
-	FD_SET(trigger_data.socket, &read_fds);
+	FD_SET(trigger_data.socket, &readfds);
 	/* extend FD_SET only if push button pin is set */
 	if (trigger_data.pb_pin > 0)
-	    FD_SET(trigger_data.pb_fd, &read_fds);
-	if (select(MAX(trigger_data.socket, trigger_data.pb_fd) + 1, &read_fds, NULL, NULL, NULL) < 0) {
+	    FD_SET(trigger_data.pb_fd, &exceptfds);
+	if (select(MAX(trigger_data.socket, trigger_data.pb_fd) + 1, &readfds, NULL, &exceptfds, NULL) < 0) {
 	    fprintf(stderr, "select error: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
 	}
 	/* CAN frame event */
-	if (FD_ISSET(trigger_data.socket, &read_fds)) {
+	if (FD_ISSET(trigger_data.socket, &readfds)) {
 	    if (read(trigger_data.socket, &frame, sizeof(struct can_frame)) < 0)
 		fprintf(stderr, "error reading CAN frame: %s\n", strerror(errno));
 
@@ -591,7 +594,7 @@ int main(int argc, char **argv) {
 	    }
 	}
 	/* push button event */
-	if (FD_ISSET(trigger_data.pb_fd, &read_fds)) {
+	if (FD_ISSET(trigger_data.pb_fd, &exceptfds)) {
 	    lseek(trigger_data.pb_fd, 0, SEEK_SET);
 	    if (read(trigger_data.pb_fd, buffer, sizeof(buffer)) < 0)
 		fprintf(stderr, "error reading GPIO status: %s\n", strerror(errno));
