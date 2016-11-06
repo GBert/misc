@@ -539,6 +539,8 @@ int main(int argc, char **argv) {
 
     /* initialize push button */
     if ((trigger_data.pb_pin) > 0) {
+	/* first free pin */
+	gpio_unexport(trigger_data.pb_pin);
 	gpio_export(trigger_data.pb_pin);
 	gpio_direction(trigger_data.pb_pin, 1);
 	gpio_edge(trigger_data.pb_pin, EDGE_FALLING);
@@ -548,9 +550,10 @@ int main(int argc, char **argv) {
     FD_ZERO(&readfds);
     FD_ZERO(&exceptfds);
     /* delete pending push button event */
-    if ((trigger_data.pb_pin) > 0)
+    if ((trigger_data.pb_pin) > 0) {
+	lseek(trigger_data.pb_fd, 0, SEEK_SET);
 	read(trigger_data.pb_fd, NULL, 100);
-
+    }
     /* loop forever TODO: if interval is set */
     while (1) {
 	FD_SET(trigger_data.socket, &readfds);
