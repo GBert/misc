@@ -1,9 +1,15 @@
 const int revisionnr = 
-11614
+11620
 ;
 const char* commithash = 
-"72a41ff07b65be783ea877934a2551353aa8901e";
+"06819eb4729ffd1cb06b5842e1b3b11f91cd7e4c";
 const char* revlog = 
+"11620 2016-11-06 16:33:45 +0100 makemac.sh: add revision log to the dmg\n" \
+"11619 2016-11-06 16:04:07 +0100 makemac.sh: add a symbolic link to the Application folder\n" \
+"11618 2016-11-06 15:33:37 +0100 Run: create symbolic links to svg and web in the user rocrail directory\n" \
+"11617 2016-11-06 11:24:20 +0100 mkdeb.sh: use new icon for Rocview launcher\n" \
+"11616 2016-11-06 08:49:34 +0100 Run: revert copy Robweb to the user directory\n" \
+"11615 2016-11-06 08:32:52 +0100 Run: copy web to user directory like linux\n" \
 "11614 2016-11-05 16:22:02 +0100 macOS: start rocview in ~/rocrail\n" \
 "11613 2016-11-05 15:17:45 +0100 Run: copy themes to ~/rocrail if not exist\n" \
 "11612 2016-11-05 14:15:07 +0100 makemac.sh: strip all unnecessary files\n" \
@@ -48,11 +54,5 @@ const char* revlog =
 "11573 2016-10-29 10:53:54 +0200 uhl68610: changed title to Lissy\n" \
 "11572 2016-10-29 10:46:58 +0200 lncv: removed the lncv tab option\n" \
 "11571 2016-10-29 08:28:13 +0200 translation merge: de, sl, pt_BR, nl\n" \
-"11570 2016-10-29 07:02:19 +0200 mdi: support for update model events\n" \
-"11569 2016-10-28 12:30:49 +0200 rocview: optional tab child nodes in the workspace (wip)\n" \
-"11568 2016-10-28 06:33:31 +0200 guiframe: only call onexit once at shutdown\n" \
-"11567 2016-10-27 14:57:02 +0200 guiframe: check if local plan is modified before opening another\n" \
-"11566 2016-10-27 11:51:20 +0200 routedialog: show preselected routes\n" \
-"11565 2016-10-27 10:38:09 +0200 mdi: delete panel support added\n" \
 
 "log end";
