@@ -168,8 +168,6 @@ int get_ms2_loco_names(struct trigger_t *trigger, uint8_t start, int8_t end) {
 
     /* get Config Data */
     frame.can_id = 0x00400300;
-    frame.can_id &= CAN_EFF_MASK;
-    frame.can_id |= CAN_EFF_FLAG;
 
     /* first frame */
     frame.can_dlc = 8;
@@ -202,8 +200,6 @@ int get_ms2_locoinfo(struct trigger_t *trigger, char *loco_name) {
     /* get Config Data */
     frame.can_id = 0x00400300;
 
-    frame.can_id &= CAN_EFF_MASK;
-    frame.can_id |= CAN_EFF_FLAG;
     frame.can_dlc = 8;
     memcpy(frame.data, GET_MS2_CONFIG_LOCO_I, sizeof(frame.data));
     if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
@@ -408,6 +404,9 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 	read_loco_data((char *)trigger->data, CONFIG_STRING);
 
 	print_locos();
+	pthread_mutex_lock(&lock);
+	trigger->led_pattern = LED_ST_HB_SLOW;
+	pthread_mutex_unlock(&lock);
 
 	free(trigger->data);
     }
@@ -631,6 +630,19 @@ int main(int argc, char **argv) {
 	}
 	/* push button event */
 	if (FD_ISSET(trigger_data.pb_fd, &exceptfds)) {
+	    pthread_mutex_lock(&lock);
+	    trigger_data.led_pattern = LED_ST_HB_FAST;
+	    pthread_mutex_unlock(&lock);
+
+	    /* wait some time for LED pattern change */
+	    usec_sleep(1000 * 1000);
+	    /* send CAN Member Ping */
+	    frame.can_id = 0x00300300;
+	    frame.can_dlc = 0;
+	    memset(frame.data, 0, 8);
+	    if (send_can_frame(trigger_data.socket, &frame, trigger_data.verbose) < 0)
+		fprintf(stderr, "can't send CAN Member Ping: %s\n", strerror(errno));
+
 	    lseek(trigger_data.pb_fd, 0, SEEK_SET);
 	    if (read(trigger_data.pb_fd, buffer, sizeof(buffer)) < 0)
 		fprintf(stderr, "error reading GPIO status: %s\n", strerror(errno));
