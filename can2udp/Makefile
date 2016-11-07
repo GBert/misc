@@ -42,6 +42,7 @@ define Package/can2udp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/can2lan_m $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/clone-cs2-config $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/clone-cs2-trigger $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/clone-ms2-loco $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/gb2-update $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ir-tester $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ms2wifi $(1)/usr/bin/

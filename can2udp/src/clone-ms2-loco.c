@@ -66,6 +66,17 @@ enum gpio_edges {
     EDGE_BOTH
 };
 
+#define LED_PATTERN_MAX	4
+uint32_t LED_HB_SLOW[]	= { 100, 100, 100, 600 };
+uint32_t LED_HB_FAST[]	= {  70,  70,  70, 220 };
+uint32_t LED_ERROR[]	= { 600, 400, 600, 400 };
+
+enum LED_STATUS {
+    LED_ST_HB_SLOW,
+    LED_ST_HB_FAST,
+    LED_ST_ERROR,
+};
+
 struct trigger_t {
     struct sockaddr_can caddr;
     int socket;
@@ -73,6 +84,7 @@ struct trigger_t {
     int verbose;
     int interval;
     int led_pin;
+    int led_pattern;
     int pb_pin;
     int pb_fd;
     uint16_t hash;
@@ -86,7 +98,7 @@ struct trigger_t {
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -vf [-i <can int>][-t <sec>] \n", prg);
     fprintf(stderr, "   Version 1.0\n\n");
-    fprintf(stderr, "         -i <can interface>   broadcast address or interface - default 255.255.255.255/br-lan\n");
+    fprintf(stderr, "         -i <can interface>   using can interface\n");
     fprintf(stderr, "         -t <interval in sec> using timer in sec / 0 -> only once - default %d\n", DEF_INTERVAL);
     fprintf(stderr, "         -l <led pin>         LED pin (e.g. BPi PI14 -> 270)\n");
     fprintf(stderr, "         -p <push button>     push button (e.g. BPi PI10 -> 266)\n");
@@ -404,9 +416,10 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 
 /* Blink LED */
 void *LEDMod(void *ptr) {
-    int fd;
+    int fd, led_pattern, i;
     char path[MAX_SYSFS_LEN];
     struct trigger_t *trigger = (struct trigger_t *)ptr;
+    uint32_t *led_pattern_p;
 
 #if 1
     snprintf(path, MAX_SYSFS_LEN, "/sys/class/gpio/gpio%d/value", trigger->led_pin);
@@ -417,10 +430,29 @@ void *LEDMod(void *ptr) {
     }
 
     while (1) {
-	write(fd, "1", 2);
-	usec_sleep(led_period);
-	write(fd, "0", 2);
-	usec_sleep(led_period);
+	pthread_mutex_lock(&lock);
+	led_pattern = trigger->led_pattern;
+	pthread_mutex_unlock(&lock);
+
+	switch (led_pattern) {
+	case LED_ST_HB_SLOW:
+	    led_pattern_p = LED_HB_SLOW;
+	    break;
+	case LED_ST_HB_FAST:
+	    led_pattern_p = LED_HB_FAST;
+	    break;
+	case LED_ST_ERROR:
+	    led_pattern_p = LED_ERROR;
+	default:
+	    led_pattern_p = LED_ERROR;
+	}
+
+	for (i = 0; i < LED_PATTERN_MAX; i++) {
+	    write(fd, "0", 2);
+	    usec_sleep(led_pattern_p[i++] * 1000);
+	    write(fd, "1", 2);
+	    usec_sleep(led_pattern_p[i] * 1000);
+	}
     }
 #else
     while (1) {
@@ -505,14 +537,15 @@ int main(int argc, char **argv) {
 
     /* Create thread if LED pin defined */
     if ((trigger_data.led_pin) > 0) {
-	led_period = 200000;
+	trigger_data.led_pattern = LED_ST_HB_SLOW;
 	gpio_export(trigger_data.led_pin);
 	gpio_direction(trigger_data.led_pin, 0);
 
 	if (pthread_mutex_init(&lock, NULL)) {
-	    fprintf(stderr, "can't nit mutex %s\n", strerror(errno));
+	    fprintf(stderr, "can't init mutex %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
 	}
+
 	if (pthread_create(&pth, NULL, LEDMod, &trigger_data)) {
 	    fprintf(stderr, "can't create pthread %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
@@ -551,8 +584,8 @@ int main(int argc, char **argv) {
     FD_ZERO(&exceptfds);
     /* delete pending push button event */
     if ((trigger_data.pb_pin) > 0) {
-	lseek(trigger_data.pb_fd, 0, SEEK_SET);
 	read(trigger_data.pb_fd, NULL, 100);
+	lseek(trigger_data.pb_fd, 0, SEEK_SET);
     }
     /* loop forever TODO: if interval is set */
     while (1) {
