@@ -1,9 +1,13 @@
 const int revisionnr = 
-11620
+11624
 ;
 const char* commithash = 
-"06819eb4729ffd1cb06b5842e1b3b11f91cd7e4c";
+"13abba4e165099d8b8e14969f2aba8e9839fb55b";
 const char* revlog = 
+"11624 2016-11-07 15:40:05 +0100 transalation merge: sv, sr_latin, de, nl, pt_BR, sl\n" \
+"11623 2016-11-07 14:03:50 +0100 guiframe: support for updating loco in case of changed ID\n" \
+"11622 2016-11-07 11:50:47 +0100 loc: recalculate train length after a modify\n" \
+"11621 2016-11-07 08:06:24 +0100 dccpp: check for valid addr and port at output commands\n" \
 "11620 2016-11-06 16:33:45 +0100 makemac.sh: add revision log to the dmg\n" \
 "11619 2016-11-06 16:04:07 +0100 makemac.sh: add a symbolic link to the Application folder\n" \
 "11618 2016-11-06 15:33:37 +0100 Run: create symbolic links to svg and web in the user rocrail directory\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "11577 2016-10-29 16:14:09 +0200 loc: check if the block fixed BBT is smaller then the loco BBT steps to avoid dividing by zero\n" \
 "11576 2016-10-29 15:18:40 +0200 mdi: support for moving items to another level\n" \
 "11575 2016-10-29 11:56:03 +0200 mdimanager: include typo fix\n" \
-"11574 2016-10-29 11:08:54 +0200 midichild: maximize and minimize boxes added\n" \
-"11573 2016-10-29 10:53:54 +0200 uhl68610: changed title to Lissy\n" \
-"11572 2016-10-29 10:46:58 +0200 lncv: removed the lncv tab option\n" \
-"11571 2016-10-29 08:28:13 +0200 translation merge: de, sl, pt_BR, nl\n" \
 
 "log end";
