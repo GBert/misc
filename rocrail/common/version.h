@@ -1,9 +1,15 @@
 const int revisionnr = 
-11624
+11630
 ;
 const char* commithash = 
-"13abba4e165099d8b8e14969f2aba8e9839fb55b";
+"3ca7dd9cf55ee48ccf8bb6d7752e873cd5a55648";
 const char* revlog = 
+"11630 2016-11-08 09:38:37 +0100 route: preferred option as number, zero is default\n" \
+"11629 2016-11-08 09:07:27 +0100 route: preferred option added\n" \
+"11628 2016-11-08 08:13:16 +0100 guiframe: disable recent file menu in case online\n" \
+"11627 2016-11-08 07:52:50 +0100 guiframe: moved workspace menu items up\n" \
+"11626 2016-11-08 07:02:55 +0100 dccpp: fix for output dcc addressing\n" \
+"11625 2016-11-08 06:58:13 +0100 guiframe showtrainimage default false\n" \
 "11624 2016-11-07 15:40:05 +0100 transalation merge: sv, sr_latin, de, nl, pt_BR, sl\n" \
 "11623 2016-11-07 14:03:50 +0100 guiframe: support for updating loco in case of changed ID\n" \
 "11622 2016-11-07 11:50:47 +0100 loc: recalculate train length after a modify\n" \
@@ -48,11 +54,5 @@ const char* revlog =
 "11583 2016-10-31 15:09:26 +0100 mdi: remove mdiframe in case of a modular plan\n" \
 "11582 2016-10-31 14:18:31 +0100 model: create new plan if the directory does exist\n" \
 "11581 2016-10-31 07:55:43 +0100 item: d&d support from panel to panel in MDI view\n" \
-"11580 2016-10-30 10:28:49 +0100 locdialog: do not show BBT from block if the use is not set to from block\n" \
-"11579 2016-10-30 09:20:57 +0100 item: fix for background color on paint\n" \
-"11578 2016-10-29 17:55:08 +0200 routedialog: fix for modifying existing route commands without type set\n" \
-"11577 2016-10-29 16:14:09 +0200 loc: check if the block fixed BBT is smaller then the loco BBT steps to avoid dividing by zero\n" \
-"11576 2016-10-29 15:18:40 +0200 mdi: support for moving items to another level\n" \
-"11575 2016-10-29 11:56:03 +0200 mdimanager: include typo fix\n" \
 
 "log end";
