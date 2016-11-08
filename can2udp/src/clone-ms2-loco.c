@@ -351,7 +351,7 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 
     if (frame->can_dlc == 6) {
 	trigger->length = (frame->data[2] << 8) | frame->data[3];
-	trigger->crc = (frame->data[4] << 8) | frame->data[5];
+	trigger->crc    = (frame->data[4] << 8) | frame->data[5];
 	printf("length 0x%04x  crc 0x%04x\n", trigger->length, trigger->crc);
 
 	trigger->data = (uint8_t *) calloc(trigger->length + 1, 1);
