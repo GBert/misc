@@ -1,9 +1,9 @@
-(kicad_pcb (version 4) (host pcbnew 4.0.4+e1-6308~48~ubuntu14.04.1-stable)
+(kicad_pcb (version 4) (host pcbnew 4.0.2+dfsg1-stable)
 
   (general
     (links 158)
     (no_connects 158)
-    (area 99.924999 73.924999 182.075001 146.075001)
+    (area 99.924999 73.924999 183.2245 152.923)
     (thickness 1.6)
     (drawings 8)
     (tracks 0)
@@ -440,7 +440,7 @@
   )
 
   (module Capacitors_ThroughHole:C_Radial_D5_L6_P2.5 (layer F.Cu) (tedit 0) (tstamp 57C18653)
-    (at 157.6705 100.457 90)
+    (at 157.75 100.3 90)
     (descr "Radial Electrolytic Capacitor Diameter 5mm x Length 6mm, Pitch 2.5mm")
     (tags "Electrolytic Capacitor")
     (path /57BF4044)
@@ -1378,7 +1378,7 @@
   )
 
   (module Resistors_SMD:R_0805_HandSoldering (layer F.Cu) (tedit 54189DEE) (tstamp 57C18824)
-    (at 164.465 100.711)
+    (at 166.8 102.95)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /57BF436F)
