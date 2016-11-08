@@ -1,9 +1,10 @@
 const int revisionnr = 
-11630
+11631
 ;
 const char* commithash = 
-"3ca7dd9cf55ee48ccf8bb6d7752e873cd5a55648";
+"7a677bc998aa3c08f42c6b3e45226e5d71129842";
 const char* revlog = 
+"11631 2016-11-08 15:02:54 +0100 makewin-full: disable root installer\n" \
 "11630 2016-11-08 09:38:37 +0100 route: preferred option as number, zero is default\n" \
 "11629 2016-11-08 09:07:27 +0100 route: preferred option added\n" \
 "11628 2016-11-08 08:13:16 +0100 guiframe: disable recent file menu in case online\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "11584 2016-11-01 11:43:37 +0100 rocview: recent file list added in the menu (only updated after restart)\n" \
 "11583 2016-10-31 15:09:26 +0100 mdi: remove mdiframe in case of a modular plan\n" \
 "11582 2016-10-31 14:18:31 +0100 model: create new plan if the directory does exist\n" \
-"11581 2016-10-31 07:55:43 +0100 item: d&d support from panel to panel in MDI view\n" \
 
 "log end";
