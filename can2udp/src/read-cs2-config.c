@@ -329,14 +329,9 @@ void print_tracks(void) {
 void print_locos(void) {
     struct loco_data_t *l;
 
-    if (loco_data != NULL) {
-	printf("[numloks]\n");
-	printf(" .wert=%d\n", loco_data->number);
-    }
     for (l = loco_data; l != NULL; l = l->hh.next) {
 	printf("[loco]\n");
 	printf(" .name=%s\n", l->name);
-	printf(" .wert=%d\n", l->number);
     }
 }
 
