@@ -146,6 +146,7 @@ int add_loco(struct loco_data_t *loco) {
 
 	l->uid = loco->uid;
 	l->direction = loco->direction;
+	l->number = loco->number;
 	l->velocity = loco->velocity;
 	l->address = loco->address;
 	l->sid = loco->sid;
@@ -317,6 +318,10 @@ void print_tracks(void) {
 void print_locos(void) {
     struct loco_data_t *l;
 
+    if (loco_data != NULL) {
+	printf("[numloks]\n");
+	printf(" .wert=%d\n", loco_data->number);
+    }
     for (l = loco_data; l != NULL; l = l->hh.next) {
 	printf("[loco]\n");
 	printf(" .name=%s\n", l->name);
