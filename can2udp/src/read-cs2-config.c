@@ -68,6 +68,30 @@ char *fgets_buffer(char *dest, int max, char *src) {
     return ++src;
 }
 
+int strip_ms2_spaces(uint8_t *st, int len) {
+    int i, index, nl;
+    index = 0;
+    nl = 0;
+
+    /* deleting MS2 specific superfluos spaces after \n in a row
+     * 20 2E 66 6B 74 0A 20 20   ' .fkt.  '  -> delete 20 20
+     * 20 2E 2E 74 79 70 3D 30   ' ..typ=0'
+     * 0A 20 20 20 20 20 20 20   '.       '  -> delete 20 20 20 20 20 20 20
+     */
+
+    for (i = 0; i < len; i++) {
+	if ((i % 8) && nl)
+	    continue;
+	else
+	    nl = 0;
+	if (st[i] == 0x0a)
+	    nl = 1;
+	st[index++] = st[i];
+    }
+    st[index] = 0;
+    return 0;
+}
+
 int get_char_index(const char **list, char *str) {
     int index;
 

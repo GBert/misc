@@ -348,7 +348,6 @@ int gpio_edge(int pin, int value) {
 
 int get_data(struct trigger_t *trigger, struct can_frame *frame) {
     uint16_t crc;
-    int i, nl, d_index;
 
     if (frame->can_dlc == 6) {
 	trigger->length = (frame->data[2] << 8) | frame->data[3];
@@ -381,25 +380,8 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 	    if (!trigger->background && trigger->verbose)
 		printf("crc 0x%04x 0x%04x\n", crc, trigger->crc);
 
-	    /* deleting MS2 specific superfluos spaces after \n in a row
-	     * 20 2E 66 6B 74 0A 20 20   ' .fkt.  '  -> delete 20 20
-	     * 20 2E 2E 74 79 70 3D 30   ' ..typ=0'
-	     * 0A 20 20 20 20 20 20 20   '.       '  -> delete 20 20 20 20 20 20 20
-	     */
-
-	    d_index = 0;
-	    nl = 0;
-	    for (i = 0; i < trigger->length; i++) {
-		if ((i % 8) && nl)
-		    continue;
-		else
-		    nl = 0;
-		if (trigger->data[i] == 0x0a)
-		    nl = 1;
-		trigger->data[d_index++] = trigger->data[i];
-	    }
+	    strip_ms2_spaces(trigger->data, trigger->length);
 	}
-	trigger->data[d_index] = 0;
 	printf("Data:\n%s\n", trigger->data);
 	read_loco_data((char *)trigger->data, CONFIG_STRING);
 

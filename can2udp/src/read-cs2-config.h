@@ -52,4 +52,5 @@ void read_track_pages(char *dir);
 int read_loco_data(char *config_file, int config_type);
 int get_loco_max(void);
 
+int strip_ms2_spaces(uint8_t *data, int len);
 #endif /* _READ_CS2_CONFIG_H */
