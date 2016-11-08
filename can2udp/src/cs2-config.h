@@ -93,7 +93,7 @@ struct loco_data_t {
     unsigned int id;
     unsigned int uid;
     unsigned int direction;
-    unsigned int number;
+    int number;
     unsigned int velocity;
     unsigned int long_uid;
     char *name;

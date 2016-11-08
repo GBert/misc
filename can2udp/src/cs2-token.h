@@ -134,7 +134,7 @@ const char *l1_token [] = {
 #define L1_ID_LENGTH		5
 #define L1_UID_LENGTH		6
 #define L1_DIRECTION_LENGTH	11
-#define L1_VALUE_LENGTH		8
+#define L1_VALUE_LENGTH		7
 #define L1_VELOCITY_LENGTH	11
 #define L1_ADDRESS_LENGTH	10
 #define L1_SID_LENGTH		6

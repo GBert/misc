@@ -50,5 +50,6 @@ int read_track_data(char *config_file);
 int read_track_config(char *config_file);
 void read_track_pages(char *dir);
 int read_loco_data(char *config_file, int config_type);
+int get_loco_max(void);
 
 #endif /* _READ_CS2_CONFIG_H */

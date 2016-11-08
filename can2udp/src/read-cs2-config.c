@@ -182,6 +182,17 @@ int add_loco(struct loco_data_t *loco) {
     return (EXIT_SUCCESS);
 }
 
+int get_loco_max(void) {
+    struct loco_data_t *l;
+    int loco_max = -1;
+
+    for (l = loco_data; l != NULL; l = l->hh.next) {
+	if (l->number > loco_max)
+	    loco_max = l->number;
+    }
+    return(loco_max);
+}
+
 int add_track_data(struct track_data_t *td) {
     struct track_data_t *t;
 
@@ -325,6 +336,7 @@ void print_locos(void) {
     for (l = loco_data; l != NULL; l = l->hh.next) {
 	printf("[loco]\n");
 	printf(" .name=%s\n", l->name);
+	printf(" .wert=%d\n", l->number);
     }
 }
 
