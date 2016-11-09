@@ -346,6 +346,12 @@ int gpio_edge(int pin, int value) {
     return ret;
 }
 
+void set_led_pattern(struct trigger_t *trigger, int pattern) {
+    pthread_mutex_lock(&lock);
+    trigger->led_pattern = pattern;
+    pthread_mutex_unlock(&lock);
+}
+
 int get_data(struct trigger_t *trigger, struct can_frame *frame) {
     uint16_t crc;
 
@@ -387,10 +393,8 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 
 	print_locos();
 	printf("max locos : %d\n", get_loco_max());
-	pthread_mutex_lock(&lock);
-	trigger->led_pattern = LED_ST_HB_SLOW;
-	pthread_mutex_unlock(&lock);
 
+	set_led_pattern(trigger, LED_ST_HB_SLOW);
 	free(trigger->data);
     }
     return 0;
@@ -613,9 +617,7 @@ int main(int argc, char **argv) {
 	}
 	/* push button event */
 	if (FD_ISSET(trigger_data.pb_fd, &exceptfds)) {
-	    pthread_mutex_lock(&lock);
-	    trigger_data.led_pattern = LED_ST_HB_FAST;
-	    pthread_mutex_unlock(&lock);
+	    set_led_pattern(&trigger_data, LED_ST_HB_FAST);
 
 	    /* wait some time for LED pattern change */
 	    usec_sleep(1000 * 1000);
