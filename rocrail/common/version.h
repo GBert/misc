@@ -1,9 +1,13 @@
 const int revisionnr = 
-11631
+11635
 ;
 const char* commithash = 
-"7a677bc998aa3c08f42c6b3e45226e5d71129842";
+"4ae5d06d520908b9cdf95798d6e2b114b34fbc6b";
 const char* revlog = 
+"11635 2016-11-09 15:31:23 +0100 model: preferred routes are prior to randomrate blocks\n" \
+"11634 2016-11-09 10:33:28 +0100 model: fix for checking preferred routes\n" \
+"11633 2016-11-09 08:51:13 +0100 dccpp: echo and swap gates options added\n" \
+"11632 2016-11-09 07:50:21 +0100 guiframe: conversion fix from char* to wxString\n" \
 "11631 2016-11-08 15:02:54 +0100 makewin-full: disable root installer\n" \
 "11630 2016-11-08 09:38:37 +0100 route: preferred option as number, zero is default\n" \
 "11629 2016-11-08 09:07:27 +0100 route: preferred option added\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "11588 2016-11-01 14:33:34 +0100 app: check trace actions option added -> default is disabled\n" \
 "11587 2016-11-01 14:11:31 +0100 app: tracelevel correction for calling check action\n" \
 "11586 2016-11-01 14:07:30 +0100 system action extended with trace level EWa\n" \
-"11585 2016-11-01 12:18:47 +0100 guiframe: update recent files after opening a new file\n" \
-"11584 2016-11-01 11:43:37 +0100 rocview: recent file list added in the menu (only updated after restart)\n" \
-"11583 2016-10-31 15:09:26 +0100 mdi: remove mdiframe in case of a modular plan\n" \
-"11582 2016-10-31 14:18:31 +0100 model: create new plan if the directory does exist\n" \
 
 "log end";
