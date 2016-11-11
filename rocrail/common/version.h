@@ -1,9 +1,17 @@
 const int revisionnr = 
-11635
+11643
 ;
 const char* commithash = 
-"4ae5d06d520908b9cdf95798d6e2b114b34fbc6b";
+"10053d02a14e68f6ba0bad852ea1671aa7ee8e2a";
 const char* revlog = 
+"11643 2016-11-11 15:20:50 +0100 mdi: cascade if no size presets are available\n" \
+"11642 2016-11-11 15:10:14 +0100 mdichild: use default position and size if no preset is available in the rocview.ini\n" \
+"11641 2016-11-11 13:14:48 +0100 var: support for vars in vars\n" \
+"11640 2016-11-11 11:15:40 +0100 toolbardlg: configure the rocview toolbar\n" \
+"11639 2016-11-11 09:46:55 +0100 rocview: configure toolbar (wip)\n" \
+"11638 2016-11-10 12:04:32 +0100 xmlscript: resolve function name\n" \
+"11637 2016-11-10 11:25:19 +0100 model: select a random destination in case more then one route has the same preferred value\n" \
+"11636 2016-11-10 08:05:08 +0100 rocview: show functions corrected for MDI\n" \
 "11635 2016-11-09 15:31:23 +0100 model: preferred routes are prior to randomrate blocks\n" \
 "11634 2016-11-09 10:33:28 +0100 model: fix for checking preferred routes\n" \
 "11633 2016-11-09 08:51:13 +0100 dccpp: echo and swap gates options added\n" \
@@ -46,13 +54,5 @@ const char* revlog =
 "11596 2016-11-02 14:57:41 +0100 tracedlg: adjust font size in case if the gray theme is active\n" \
 "11595 2016-11-02 14:52:16 +0100 tracedlg: set the correct monospaced font in the text controls\n" \
 "11594 2016-11-02 10:47:19 +0100 block: fix for set class if NULL\n" \
-"11593 2016-11-02 10:26:57 +0100 infodialog: fixed font modification for the log textcontrol\n" \
-"11592 2016-11-02 10:24:16 +0100 guiframe: fixed font in server and controller window\n" \
-"11591 2016-11-02 08:03:04 +0100 mdi: cascade menu item for Windows\n" \
-"11590 2016-11-01 15:56:10 +0100 rocs: update for make fromtar\n" \
-"11589 2016-11-01 14:56:33 +0100 guiframe: initialize the system state exception-0000\n" \
-"11588 2016-11-01 14:33:34 +0100 app: check trace actions option added -> default is disabled\n" \
-"11587 2016-11-01 14:11:31 +0100 app: tracelevel correction for calling check action\n" \
-"11586 2016-11-01 14:07:30 +0100 system action extended with trace level EWa\n" \
 
 "log end";
