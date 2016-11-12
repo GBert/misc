@@ -1,9 +1,11 @@
 const int revisionnr = 
-11644
+11646
 ;
 const char* commithash = 
-"52bc6d1795fe96f6f486979c6719ff47a12ce25a";
+"14e2bebd77543d94d06e0e954a646ecd227c37ba";
 const char* revlog = 
+"11646 2016-11-12 14:49:45 +0100 usocket: trace correction\n" \
+"11645 2016-11-12 14:45:50 +0100 rcon: clean up ic no connection is possible\n" \
 "11644 2016-11-12 08:20:17 +0100 xmlscript: fix for %oid% in a loop\n" \
 "11643 2016-11-11 15:20:50 +0100 mdi: cascade if no size presets are available\n" \
 "11642 2016-11-11 15:10:14 +0100 mdichild: use default position and size if no preset is available in the rocview.ini\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11599 2016-11-03 11:03:25 +0100 switch: added open/close command to manipulate the outoforder attribute\n" \
 "11598 2016-11-03 10:28:30 +0100 guiframe: always reinit the loco tab after closing the loco properties\n" \
 "11597 2016-11-03 07:59:55 +0100 guiframe: check if the loco show flag did change\n" \
-"11596 2016-11-02 14:57:41 +0100 tracedlg: adjust font size in case if the gray theme is active\n" \
-"11595 2016-11-02 14:52:16 +0100 tracedlg: set the correct monospaced font in the text controls\n" \
 
 "log end";
