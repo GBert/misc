@@ -1,9 +1,10 @@
 const int revisionnr = 
-11643
+11644
 ;
 const char* commithash = 
-"10053d02a14e68f6ba0bad852ea1671aa7ee8e2a";
+"52bc6d1795fe96f6f486979c6719ff47a12ce25a";
 const char* revlog = 
+"11644 2016-11-12 08:20:17 +0100 xmlscript: fix for %oid% in a loop\n" \
 "11643 2016-11-11 15:20:50 +0100 mdi: cascade if no size presets are available\n" \
 "11642 2016-11-11 15:10:14 +0100 mdichild: use default position and size if no preset is available in the rocview.ini\n" \
 "11641 2016-11-11 13:14:48 +0100 var: support for vars in vars\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "11597 2016-11-03 07:59:55 +0100 guiframe: check if the loco show flag did change\n" \
 "11596 2016-11-02 14:57:41 +0100 tracedlg: adjust font size in case if the gray theme is active\n" \
 "11595 2016-11-02 14:52:16 +0100 tracedlg: set the correct monospaced font in the text controls\n" \
-"11594 2016-11-02 10:47:19 +0100 block: fix for set class if NULL\n" \
 
 "log end";
