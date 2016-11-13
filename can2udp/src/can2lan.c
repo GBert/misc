@@ -65,7 +65,7 @@ struct timeval last_sent;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.2\n\n");
+    fprintf(stderr, "   Version 1.21\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
@@ -257,7 +257,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	    netframe[1] |= 1;
 	    net_to_net(tcp_socket, NULL, netframe, CAN_ENCAP_SIZE);
 	    if (strcmp("loks", config_name) == 0) {
-		ret = 1;
+		ret = 0;
 		syslog(LOG_NOTICE, "%s: sending lokomotive.cs2\n", __func__);
 		send_tcp_config_data("lokomotive.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;

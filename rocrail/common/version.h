@@ -1,9 +1,11 @@
 const int revisionnr = 
-11649
+11651
 ;
 const char* commithash = 
-"ccc9c6afffd3dfb1af36334f23f012e81df22b91";
+"aa4baacefd38ffe5d26b618833fd6cf6e6773485";
 const char* revlog = 
+"11651 2016-11-13 11:17:29 +0100 text: %bklen% added\n" \
+"11650 2016-11-13 10:41:48 +0100 translation merge: sr_latin, sl, pt_BR, de, nl\n" \
 "11649 2016-11-13 10:25:47 +0100 throttledlg: fix for second decoder speed\n" \
 "11648 2016-11-13 07:38:47 +0100 tracedlg: header font and size correction\n" \
 "11647 2016-11-13 07:24:48 +0100 guiframe: open workspace title added for selecting a directory\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11604 2016-11-03 21:23:34 +0100 rocrail makefile fix\n" \
 "11603 2016-11-03 15:28:00 +0100 server trace improvements (wip)\n" \
 "11602 2016-11-03 12:02:30 +0100 rocrail makefile: converting the messages in the clean section only\n" \
-"11601 2016-11-03 11:59:17 +0100 rocrail makefile: first build rocs before converting the messages\n" \
-"11600 2016-11-03 11:52:07 +0100 app: resource for trace text added (WIP)\n" \
 
 "log end";
