@@ -1,9 +1,12 @@
 const int revisionnr = 
-11646
+11649
 ;
 const char* commithash = 
-"14e2bebd77543d94d06e0e954a646ecd227c37ba";
+"ccc9c6afffd3dfb1af36334f23f012e81df22b91";
 const char* revlog = 
+"11649 2016-11-13 10:25:47 +0100 throttledlg: fix for second decoder speed\n" \
+"11648 2016-11-13 07:38:47 +0100 tracedlg: header font and size correction\n" \
+"11647 2016-11-13 07:24:48 +0100 guiframe: open workspace title added for selecting a directory\n" \
 "11646 2016-11-12 14:49:45 +0100 usocket: trace correction\n" \
 "11645 2016-11-12 14:45:50 +0100 rcon: clean up ic no connection is possible\n" \
 "11644 2016-11-12 08:20:17 +0100 xmlscript: fix for %oid% in a loop\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "11602 2016-11-03 12:02:30 +0100 rocrail makefile: converting the messages in the clean section only\n" \
 "11601 2016-11-03 11:59:17 +0100 rocrail makefile: first build rocs before converting the messages\n" \
 "11600 2016-11-03 11:52:07 +0100 app: resource for trace text added (WIP)\n" \
-"11599 2016-11-03 11:03:25 +0100 switch: added open/close command to manipulate the outoforder attribute\n" \
-"11598 2016-11-03 10:28:30 +0100 guiframe: always reinit the loco tab after closing the loco properties\n" \
-"11597 2016-11-03 07:59:55 +0100 guiframe: check if the loco show flag did change\n" \
 
 "log end";
