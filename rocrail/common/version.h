@@ -1,9 +1,14 @@
 const int revisionnr = 
-11651
+11656
 ;
 const char* commithash = 
-"aa4baacefd38ffe5d26b618833fd6cf6e6773485";
+"a2c6a5d53482c43698f29d09f928ab2d3c9ca7ae";
 const char* revlog = 
+"11656 2016-11-14 15:40:07 +0100 competitiondlg: WIP\n" \
+"11655 2016-11-14 14:44:02 +0100 competition: WIP\n" \
+"11654 2016-11-14 11:38:33 +0100 route: overrule option for thrown switches look up\n" \
+"11653 2016-11-13 17:05:42 +0100 competition: WIP\n" \
+"11652 2016-11-13 16:41:40 +0100 competition: WIP\n" \
 "11651 2016-11-13 11:17:29 +0100 text: %bklen% added\n" \
 "11650 2016-11-13 10:41:48 +0100 translation merge: sr_latin, sl, pt_BR, de, nl\n" \
 "11649 2016-11-13 10:25:47 +0100 throttledlg: fix for second decoder speed\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "11609 2016-11-05 09:05:05 +0100 remove unused rocview.ini template\n" \
 "11608 2016-11-05 08:12:06 +0100 renderer: use dot pen style for virtual blocks\n" \
 "11607 2016-11-04 11:27:13 +0100 server messages: wip\n" \
-"11606 2016-11-04 09:18:57 +0100 server messages (wip) switch state open/closed added\n" \
-"11605 2016-11-03 21:30:41 +0100 lcdriver: use app as pointer\n" \
-"11604 2016-11-03 21:23:34 +0100 rocrail makefile fix\n" \
-"11603 2016-11-03 15:28:00 +0100 server trace improvements (wip)\n" \
-"11602 2016-11-03 12:02:30 +0100 rocrail makefile: converting the messages in the clean section only\n" \
 
 "log end";
