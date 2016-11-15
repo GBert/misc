@@ -4,10 +4,11 @@
 START=99
 
 start() {
+	insmod mcp2515-banged gpios=6,5,4,3,14
 	/usr/sbin/ip link set can0 up type can bitrate 250000 restart-ms 10
 
 	[ -e /www/config/ ] && {
-		can2lan -gm -c /www/config -b br-lan
+		can2lan -m -c /www/config -b br-lan
 	}
 }
 
