@@ -1,9 +1,17 @@
 const int revisionnr = 
-11656
+11664
 ;
 const char* commithash = 
-"a2c6a5d53482c43698f29d09f928ab2d3c9ca7ae";
+"41407ccf533c554685492a022798486677b69c43";
 const char* revlog = 
+"11664 2016-11-15 17:05:53 +0100 competition: translations added\n" \
+"11663 2016-11-15 14:23:04 +0100 competition: added lasttime2 if there are more then 1 laps to run\n" \
+"11662 2016-11-15 14:11:52 +0100 competitiondlg: cancel button added\n" \
+"11661 2016-11-15 14:09:26 +0100 competitiondlg: setup\n" \
+"11660 2016-11-15 13:37:30 +0100 rocweb: add loctions to the block list as destination\n" \
+"11659 2016-11-15 11:49:24 +0100 competitiondlg: setup (wip)\n" \
+"11658 2016-11-15 11:02:13 +0100 competition: WIP\n" \
+"11657 2016-11-15 09:31:38 +0100 competition: WIP\n" \
 "11656 2016-11-14 15:40:07 +0100 competitiondlg: WIP\n" \
 "11655 2016-11-14 14:44:02 +0100 competition: WIP\n" \
 "11654 2016-11-14 11:38:33 +0100 route: overrule option for thrown switches look up\n" \
@@ -46,13 +54,5 @@ const char* revlog =
 "11617 2016-11-06 11:24:20 +0100 mkdeb.sh: use new icon for Rocview launcher\n" \
 "11616 2016-11-06 08:49:34 +0100 Run: revert copy Robweb to the user directory\n" \
 "11615 2016-11-06 08:32:52 +0100 Run: copy web to user directory like linux\n" \
-"11614 2016-11-05 16:22:02 +0100 macOS: start rocview in ~/rocrail\n" \
-"11613 2016-11-05 15:17:45 +0100 Run: copy themes to ~/rocrail if not exist\n" \
-"11612 2016-11-05 14:15:07 +0100 makemac.sh: strip all unnecessary files\n" \
-"11611 2016-11-05 13:46:54 +0100 dmg: include rocdata in the Rocrail.app\n" \
-"11610 2016-11-05 09:19:44 +0100 block: fix for action on closed state\n" \
-"11609 2016-11-05 09:05:05 +0100 remove unused rocview.ini template\n" \
-"11608 2016-11-05 08:12:06 +0100 renderer: use dot pen style for virtual blocks\n" \
-"11607 2016-11-04 11:27:13 +0100 server messages: wip\n" \
 
 "log end";
