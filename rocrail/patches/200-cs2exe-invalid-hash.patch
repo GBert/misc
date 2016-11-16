@@ -1,0 +1,15 @@
+Index: rocrail/rocdigs/impl/mgbox.c
+===================================================================
+--- rocrail.orig/rocdigs/impl/mgbox.c
++++ rocrail/rocdigs/impl/mgbox.c
+@@ -3280,8 +3280,8 @@ static void __reader( void* threadinst )
+             TraceOp.trc( name, TRCLEVEL_EXCEPTION, __LINE__, 9999, "INVALID packet; PRIO byte contains too high value: prio=0x%02X",  in[0]&0xFF );
+         if( ((in[1] > 0x45) && (in[1] != 0x61) && (in[1] != 0x80)) )
+             TraceOp.trc( name, TRCLEVEL_EXCEPTION, __LINE__, 9999, "INVALID packet; command value: CAN-ID=0x%02X", in[1]&0xFF );
+-        if( hashError )
+-            TraceOp.trc( name, TRCLEVEL_EXCEPTION, __LINE__, 9999, "INVALID packet; CAN hash value: 0x%04X", ((in[2] << 8) + in[3]) );
++        /* if( hashError )
++            TraceOp.trc( name, TRCLEVEL_EXCEPTION, __LINE__, 9999, "INVALID packet; CAN hash value: 0x%04X", ((in[2] << 8) + in[3]) ); */
+       }
+       if( in[4] > 8 )
+           TraceOp.trc( name, TRCLEVEL_EXCEPTION, __LINE__, 9999, "INVALID packet; DLC byte contains too high value (max=8): ", in[4]&0x0F );
