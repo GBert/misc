@@ -1,9 +1,18 @@
 const int revisionnr = 
-11664
+11673
 ;
 const char* commithash = 
-"41407ccf533c554685492a022798486677b69c43";
+"15ed8922c22c0acde6a74db46c847d9cfc27182e";
 const char* revlog = 
+"11673 2016-11-16 15:13:00 +0100 loc: trigger new FIND message\n" \
+"11672 2016-11-16 14:57:10 +0100 trace improvements for find level\n" \
+"11671 2016-11-16 14:46:55 +0100 server: trace improvements with FIND level\n" \
+"11670 2016-11-16 11:09:55 +0100 rocpro: show as none modal dialog\n" \
+"11669 2016-11-16 11:01:19 +0100 translation merge: pt_BR, sl, sr_latin, de, nl\n" \
+"11668 2016-11-16 10:35:26 +0100 rocpro: save cv info button added as alternative to enter\n" \
+"11667 2016-11-16 09:35:23 +0100 rocguiinidlg: set planbook to true in case mdi is reset\n" \
+"11666 2016-11-16 08:46:02 +0100 rocpro: save size and position, show initial the selected loco in the loco tab\n" \
+"11665 2016-11-16 07:35:23 +0100 competitiondlg: typo fix\n" \
 "11664 2016-11-15 17:05:53 +0100 competition: translations added\n" \
 "11663 2016-11-15 14:23:04 +0100 competition: added lasttime2 if there are more then 1 laps to run\n" \
 "11662 2016-11-15 14:11:52 +0100 competitiondlg: cancel button added\n" \
@@ -45,14 +54,5 @@ const char* revlog =
 "11626 2016-11-08 07:02:55 +0100 dccpp: fix for output dcc addressing\n" \
 "11625 2016-11-08 06:58:13 +0100 guiframe showtrainimage default false\n" \
 "11624 2016-11-07 15:40:05 +0100 transalation merge: sv, sr_latin, de, nl, pt_BR, sl\n" \
-"11623 2016-11-07 14:03:50 +0100 guiframe: support for updating loco in case of changed ID\n" \
-"11622 2016-11-07 11:50:47 +0100 loc: recalculate train length after a modify\n" \
-"11621 2016-11-07 08:06:24 +0100 dccpp: check for valid addr and port at output commands\n" \
-"11620 2016-11-06 16:33:45 +0100 makemac.sh: add revision log to the dmg\n" \
-"11619 2016-11-06 16:04:07 +0100 makemac.sh: add a symbolic link to the Application folder\n" \
-"11618 2016-11-06 15:33:37 +0100 Run: create symbolic links to svg and web in the user rocrail directory\n" \
-"11617 2016-11-06 11:24:20 +0100 mkdeb.sh: use new icon for Rocview launcher\n" \
-"11616 2016-11-06 08:49:34 +0100 Run: revert copy Robweb to the user directory\n" \
-"11615 2016-11-06 08:32:52 +0100 Run: copy web to user directory like linux\n" \
 
 "log end";
