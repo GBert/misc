@@ -1,9 +1,14 @@
 const int revisionnr = 
-11673
+11678
 ;
 const char* commithash = 
-"15ed8922c22c0acde6a74db46c847d9cfc27182e";
+"159907a54ff2a52e529551b24ea10082342b6457";
 const char* revlog = 
+"11678 2016-11-17 11:29:44 +0100 server trace improvements\n" \
+"11677 2016-11-17 08:27:35 +0100 server trace improvements\n" \
+"11676 2016-11-17 08:17:33 +0100 rocpro: added missing translation\n" \
+"11675 2016-11-17 07:27:59 +0100 routedialog: fix for selecting a command without client data\n" \
+"11674 2016-11-17 06:55:30 +0100 routedialog: prevent adding an empty sw command\n" \
 "11673 2016-11-16 15:13:00 +0100 loc: trigger new FIND message\n" \
 "11672 2016-11-16 14:57:10 +0100 trace improvements for find level\n" \
 "11671 2016-11-16 14:46:55 +0100 server: trace improvements with FIND level\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "11631 2016-11-08 15:02:54 +0100 makewin-full: disable root installer\n" \
 "11630 2016-11-08 09:38:37 +0100 route: preferred option as number, zero is default\n" \
 "11629 2016-11-08 09:07:27 +0100 route: preferred option added\n" \
-"11628 2016-11-08 08:13:16 +0100 guiframe: disable recent file menu in case online\n" \
-"11627 2016-11-08 07:52:50 +0100 guiframe: moved workspace menu items up\n" \
-"11626 2016-11-08 07:02:55 +0100 dccpp: fix for output dcc addressing\n" \
-"11625 2016-11-08 06:58:13 +0100 guiframe showtrainimage default false\n" \
-"11624 2016-11-07 15:40:05 +0100 transalation merge: sv, sr_latin, de, nl, pt_BR, sl\n" \
 
 "log end";
