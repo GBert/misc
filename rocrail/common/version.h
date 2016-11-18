@@ -1,9 +1,12 @@
 const int revisionnr = 
-11678
+11681
 ;
 const char* commithash = 
-"159907a54ff2a52e529551b24ea10082342b6457";
+"ce985808d99be40c6122ccf7e0598d03507b5ed9";
 const char* revlog = 
+"11681 2016-11-18 12:07:23 +0100 car: waybill state added\n" \
+"11680 2016-11-18 10:45:34 +0100 car: assigng waybill command added\n" \
+"11679 2016-11-18 09:13:22 +0100 rocpro: translation\n" \
 "11678 2016-11-17 11:29:44 +0100 server trace improvements\n" \
 "11677 2016-11-17 08:27:35 +0100 server trace improvements\n" \
 "11676 2016-11-17 08:17:33 +0100 rocpro: added missing translation\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "11634 2016-11-09 10:33:28 +0100 model: fix for checking preferred routes\n" \
 "11633 2016-11-09 08:51:13 +0100 dccpp: echo and swap gates options added\n" \
 "11632 2016-11-09 07:50:21 +0100 guiframe: conversion fix from char* to wxString\n" \
-"11631 2016-11-08 15:02:54 +0100 makewin-full: disable root installer\n" \
-"11630 2016-11-08 09:38:37 +0100 route: preferred option as number, zero is default\n" \
-"11629 2016-11-08 09:07:27 +0100 route: preferred option added\n" \
 
 "log end";
