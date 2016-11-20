@@ -1,9 +1,15 @@
 const int revisionnr = 
-11681
+11687
 ;
 const char* commithash = 
-"ce985808d99be40c6122ccf7e0598d03507b5ed9";
+"c513460e4e6b20a8d349b8b592f7ab6f7a6906e7";
 const char* revlog = 
+"11687 2016-11-20 09:20:24 +0100 waybilldlg: new list control index\n" \
+"11686 2016-11-19 16:01:00 +0100 car: broadcast waybill changes to the clients\n" \
+"11685 2016-11-19 14:33:37 +0100 server trace improvements (wip)\n" \
+"11684 2016-11-19 14:03:18 +0100 rocpro: fix for writing a value of one as long address if zero is displayed\n" \
+"11683 2016-11-19 08:41:59 +0100 loc: regard the placing and direction for BBT Vmin/VminR\n" \
+"11682 2016-11-19 08:15:57 +0100 car: waybill commands and state test added\n" \
 "11681 2016-11-18 12:07:23 +0100 car: waybill state added\n" \
 "11680 2016-11-18 10:45:34 +0100 car: assigng waybill command added\n" \
 "11679 2016-11-18 09:13:22 +0100 rocpro: translation\n" \
@@ -48,11 +54,5 @@ const char* revlog =
 "11640 2016-11-11 11:15:40 +0100 toolbardlg: configure the rocview toolbar\n" \
 "11639 2016-11-11 09:46:55 +0100 rocview: configure toolbar (wip)\n" \
 "11638 2016-11-10 12:04:32 +0100 xmlscript: resolve function name\n" \
-"11637 2016-11-10 11:25:19 +0100 model: select a random destination in case more then one route has the same preferred value\n" \
-"11636 2016-11-10 08:05:08 +0100 rocview: show functions corrected for MDI\n" \
-"11635 2016-11-09 15:31:23 +0100 model: preferred routes are prior to randomrate blocks\n" \
-"11634 2016-11-09 10:33:28 +0100 model: fix for checking preferred routes\n" \
-"11633 2016-11-09 08:51:13 +0100 dccpp: echo and swap gates options added\n" \
-"11632 2016-11-09 07:50:21 +0100 guiframe: conversion fix from char* to wxString\n" \
 
 "log end";
