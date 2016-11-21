@@ -1,9 +1,13 @@
 const int revisionnr = 
-11695
+11699
 ;
 const char* commithash = 
-"893e747044ed505077eef8c141a68d9ce756934a";
+"2421b857b27265e194d26a40f8403c8d9de9189b";
 const char* revlog = 
+"11699 2016-11-21 09:26:54 +0100 actionsctrldlg: added missing train types\n" \
+"11698 2016-11-21 08:51:51 +0100 translation merge: pt_BR, sr_latin, de, nl\n" \
+"11697 2016-11-21 08:12:50 +0100 locdialog: added 10ms label to the BBT delay\n" \
+"11696 2016-11-21 08:04:21 +0100 xmlscript: fix for car command assignwaybill\n" \
 "11695 2016-11-20 16:59:18 +0100 xmlscript: resolve the waybill ID in case of a car assignwaybill command\n" \
 "11694 2016-11-20 16:01:05 +0100 xmlscript: resolve the waybill ID in case of a car assignwaybill command\n" \
 "11693 2016-11-20 14:47:40 +0100 waybill helper for getting state\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "11652 2016-11-13 16:41:40 +0100 competition: WIP\n" \
 "11651 2016-11-13 11:17:29 +0100 text: %bklen% added\n" \
 "11650 2016-11-13 10:41:48 +0100 translation merge: sr_latin, sl, pt_BR, de, nl\n" \
-"11649 2016-11-13 10:25:47 +0100 throttledlg: fix for second decoder speed\n" \
-"11648 2016-11-13 07:38:47 +0100 tracedlg: header font and size correction\n" \
-"11647 2016-11-13 07:24:48 +0100 guiframe: open workspace title added for selecting a directory\n" \
-"11646 2016-11-12 14:49:45 +0100 usocket: trace correction\n" \
 
 "log end";
