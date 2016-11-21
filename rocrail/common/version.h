@@ -1,9 +1,17 @@
 const int revisionnr = 
-11687
+11695
 ;
 const char* commithash = 
-"c513460e4e6b20a8d349b8b592f7ab6f7a6906e7";
+"893e747044ed505077eef8c141a68d9ce756934a";
 const char* revlog = 
+"11695 2016-11-20 16:59:18 +0100 xmlscript: resolve the waybill ID in case of a car assignwaybill command\n" \
+"11694 2016-11-20 16:01:05 +0100 xmlscript: resolve the waybill ID in case of a car assignwaybill command\n" \
+"11693 2016-11-20 14:47:40 +0100 waybill helper for getting state\n" \
+"11692 2016-11-20 14:17:12 +0100 text: waybilldest variable added\n" \
+"11691 2016-11-20 11:41:15 +0100 dmxartnet: fix for poll IP address\n" \
+"11690 2016-11-20 11:05:26 +0100 cardlg:  select waybill option added\n" \
+"11689 2016-11-20 10:55:41 +0100 cardlg: show waybill\n" \
+"11688 2016-11-20 10:37:54 +0100 waybilldlg: added cartype to the index list\n" \
 "11687 2016-11-20 09:20:24 +0100 waybilldlg: new list control index\n" \
 "11686 2016-11-19 16:01:00 +0100 car: broadcast waybill changes to the clients\n" \
 "11685 2016-11-19 14:33:37 +0100 server trace improvements (wip)\n" \
@@ -46,13 +54,5 @@ const char* revlog =
 "11648 2016-11-13 07:38:47 +0100 tracedlg: header font and size correction\n" \
 "11647 2016-11-13 07:24:48 +0100 guiframe: open workspace title added for selecting a directory\n" \
 "11646 2016-11-12 14:49:45 +0100 usocket: trace correction\n" \
-"11645 2016-11-12 14:45:50 +0100 rcon: clean up ic no connection is possible\n" \
-"11644 2016-11-12 08:20:17 +0100 xmlscript: fix for %oid% in a loop\n" \
-"11643 2016-11-11 15:20:50 +0100 mdi: cascade if no size presets are available\n" \
-"11642 2016-11-11 15:10:14 +0100 mdichild: use default position and size if no preset is available in the rocview.ini\n" \
-"11641 2016-11-11 13:14:48 +0100 var: support for vars in vars\n" \
-"11640 2016-11-11 11:15:40 +0100 toolbardlg: configure the rocview toolbar\n" \
-"11639 2016-11-11 09:46:55 +0100 rocview: configure toolbar (wip)\n" \
-"11638 2016-11-10 12:04:32 +0100 xmlscript: resolve function name\n" \
 
 "log end";
