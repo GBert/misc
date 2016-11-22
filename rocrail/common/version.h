@@ -1,9 +1,12 @@
 const int revisionnr = 
-11699
+11702
 ;
 const char* commithash = 
-"2421b857b27265e194d26a40f8403c8d9de9189b";
+"2f6bf602a9befa1f6d4a6398be35c618bb47f9ba";
 const char* revlog = 
+"11702 2016-11-22 12:23:38 +0100 dmxartnet: packet size correction\n" \
+"11701 2016-11-22 10:17:08 +0100 action: check type shunting, cleaning and none too\n" \
+"11700 2016-11-22 10:07:17 +0100 guiframe: fix for init loco list\n" \
 "11699 2016-11-21 09:26:54 +0100 actionsctrldlg: added missing train types\n" \
 "11698 2016-11-21 08:51:51 +0100 translation merge: pt_BR, sr_latin, de, nl\n" \
 "11697 2016-11-21 08:12:50 +0100 locdialog: added 10ms label to the BBT delay\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "11655 2016-11-14 14:44:02 +0100 competition: WIP\n" \
 "11654 2016-11-14 11:38:33 +0100 route: overrule option for thrown switches look up\n" \
 "11653 2016-11-13 17:05:42 +0100 competition: WIP\n" \
-"11652 2016-11-13 16:41:40 +0100 competition: WIP\n" \
-"11651 2016-11-13 11:17:29 +0100 text: %bklen% added\n" \
-"11650 2016-11-13 10:41:48 +0100 translation merge: sr_latin, sl, pt_BR, de, nl\n" \
 
 "log end";
