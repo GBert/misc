@@ -25,6 +25,7 @@ static char *NET_TCP_FORMAT_STRG  = "      TCP->   0x%08X   [%d]";
 static char *BROADCAST_C0NFIG_UPDATE = "broadcast_update.cs2";
 
 static unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[] = { 0x00, 0x36, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
+static unsigned char M_GLEISBOX_ALL_PROTO_ENABLE[]     = { 0x00, 0x00, 0x03, 0x01, 0x06, 0x00, 0x00, 0x00, 0x00, 0x08, 0x07, 0x00, 0x00 };
 static unsigned char M_CAN_PING[]                      = { 0x00, 0x30, 0x47, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static unsigned char M_CAN_PING_CS2[]                  = { 0x00, 0x30, 0x47, 0x11, 0x08, 0x00, 0x00, 0x00, 0x00, 0x03, 0x08, 0xff, 0xff };
 static unsigned char M_PING_RESPONSE[] = { 0x00, 0x30, 0x00, 0x00, 0x00 };
@@ -65,7 +66,7 @@ struct timeval last_sent;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.21\n\n");
+    fprintf(stderr, "   Version 1.22\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
@@ -81,10 +82,9 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -v                  verbose output (in foreground)\n\n");
 }
 
-int send_magic_start_60113_frame(int can_socket, int verbose) {
+int send_start_60113_frames(int can_socket, int verbose) {
     if (frame_to_can(can_socket, M_GLEISBOX_MAGIC_START_SEQUENCE) < 0) {
-	if (verbose)
-	    fprintf(stderr, "can't send CAN magic 60113 start sequence\n");
+	fprintf(stderr, "can't send CAN magic 60113 start sequence\n");
 	syslog(LOG_ERR, "%s: can't send CAN magic 60113 start sequence\n", __func__);
 	return -1;
     } else {
@@ -93,6 +93,17 @@ int send_magic_start_60113_frame(int can_socket, int verbose) {
 	    print_can_frame(CAN_FORMAT_STRG, M_GLEISBOX_MAGIC_START_SEQUENCE, verbose);
 	}
     }
+    if (frame_to_can(can_socket, M_GLEISBOX_ALL_PROTO_ENABLE) < 0) {
+	fprintf(stderr, "can't enable all loco protos\n");
+	syslog(LOG_ERR, "%s: can't enable all loco protos\n", __func__);
+	return -1;
+    } else {
+	if (verbose) {
+	    printf("                CAN enabled all loco protos\n");
+	    print_can_frame(CAN_FORMAT_STRG, M_GLEISBOX_ALL_PROTO_ENABLE, verbose);
+	}
+    }
+
     return 0;
 }
 
@@ -656,7 +667,7 @@ int main(int argc, char **argv) {
     }
 
     /* start Maerklin 60113 box */
-    if (send_magic_start_60113_frame(sc, cs2_config_data.verbose))
+    if (send_start_60113_frames(sc, cs2_config_data.verbose))
 	exit(EXIT_FAILURE);
 
     /* daemonize the process if requested */
