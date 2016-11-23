@@ -1,9 +1,10 @@
 const int revisionnr = 
-11702
+11703
 ;
 const char* commithash = 
-"2f6bf602a9befa1f6d4a6398be35c618bb47f9ba";
+"bf55625d6bf934dadcb050900c7d87a839cbf27a";
 const char* revlog = 
+"11703 2016-11-23 06:42:22 +0100 rocview: monospacefont option for trace and controller window\n" \
 "11702 2016-11-22 12:23:38 +0100 dmxartnet: packet size correction\n" \
 "11701 2016-11-22 10:17:08 +0100 action: check type shunting, cleaning and none too\n" \
 "11700 2016-11-22 10:07:17 +0100 guiframe: fix for init loco list\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "11656 2016-11-14 15:40:07 +0100 competitiondlg: WIP\n" \
 "11655 2016-11-14 14:44:02 +0100 competition: WIP\n" \
 "11654 2016-11-14 11:38:33 +0100 route: overrule option for thrown switches look up\n" \
-"11653 2016-11-13 17:05:42 +0100 competition: WIP\n" \
 
 "log end";
