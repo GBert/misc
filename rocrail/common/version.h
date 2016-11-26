@@ -1,9 +1,19 @@
 const int revisionnr = 
-11703
+11713
 ;
 const char* commithash = 
-"bf55625d6bf934dadcb050900c7d87a839cbf27a";
+"8d7428f237820435c9093b7523998557bd618997";
 const char* revlog = 
+"11713 2016-11-26 12:35:59 +0100 var: support for var pointers\n" \
+"11712 2016-11-26 12:03:52 +0100 xmlscript: resolve only for conditions\n" \
+"11711 2016-11-26 08:22:56 +0100 trace: use f for level FIND\n" \
+"11710 2016-11-26 08:21:36 +0100 item: userdata added\n" \
+"11709 2016-11-25 16:48:31 +0100 xmlscript: fix for state vars\n" \
+"11708 2016-11-25 16:07:05 +0100 throttledlg: removed the max height\n" \
+"11707 2016-11-25 14:35:06 +0100 xmlscript: crash fix\n" \
+"11706 2016-11-25 08:13:10 +0100 wait4evet: crash fix\n" \
+"11705 2016-11-24 07:54:15 +0100 server trace improvements\n" \
+"11704 2016-11-24 06:30:17 +0100 bidib: no power off in case of errors\n" \
 "11703 2016-11-23 06:42:22 +0100 rocview: monospacefont option for trace and controller window\n" \
 "11702 2016-11-22 12:23:38 +0100 dmxartnet: packet size correction\n" \
 "11701 2016-11-22 10:17:08 +0100 action: check type shunting, cleaning and none too\n" \
@@ -44,15 +54,5 @@ const char* revlog =
 "11666 2016-11-16 08:46:02 +0100 rocpro: save size and position, show initial the selected loco in the loco tab\n" \
 "11665 2016-11-16 07:35:23 +0100 competitiondlg: typo fix\n" \
 "11664 2016-11-15 17:05:53 +0100 competition: translations added\n" \
-"11663 2016-11-15 14:23:04 +0100 competition: added lasttime2 if there are more then 1 laps to run\n" \
-"11662 2016-11-15 14:11:52 +0100 competitiondlg: cancel button added\n" \
-"11661 2016-11-15 14:09:26 +0100 competitiondlg: setup\n" \
-"11660 2016-11-15 13:37:30 +0100 rocweb: add loctions to the block list as destination\n" \
-"11659 2016-11-15 11:49:24 +0100 competitiondlg: setup (wip)\n" \
-"11658 2016-11-15 11:02:13 +0100 competition: WIP\n" \
-"11657 2016-11-15 09:31:38 +0100 competition: WIP\n" \
-"11656 2016-11-14 15:40:07 +0100 competitiondlg: WIP\n" \
-"11655 2016-11-14 14:44:02 +0100 competition: WIP\n" \
-"11654 2016-11-14 11:38:33 +0100 route: overrule option for thrown switches look up\n" \
 
 "log end";
