@@ -7,8 +7,7 @@
  * ----------------------------------------------------------------------------
  */
 
-/* Thanks to Stefan Krauss and the SocketCAN team
- */
+/* virtual CC-Schnitte */
 
 #include "can2lan.h"
 
@@ -31,7 +30,6 @@ void print_usage(char *prg) {
 }
 
 int time_stamp(char *timestamp) {
-    /* char *timestamp = (char *)malloc(sizeof(char) * 16); */
     struct timeval tv;
     struct tm *tm;
 
@@ -284,7 +282,6 @@ int main(int argc, char **argv) {
 	    /* if CAN Frame is EFF do it */
 	    if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		/* send CAN frame to all connected TCP clients */
-		/* TODO: need all clients the packets ? */
 		for (i = 0; i <= max_tcp_i; i++) {	/* check all clients for data */
 		    tcp_socket = tcp_client[i];
 		    if (tcp_socket < 0)
@@ -300,12 +297,11 @@ int main(int argc, char **argv) {
 	    conn_fd = accept(st, (struct sockaddr *)&tcp_addr, &tcp_client_length);
 	    if (!background) {
 		printf("new client: %s, port %d conn fd: %d max fds: %d\n", inet_ntop(AF_INET, &(tcp_addr.sin_addr),
-										      buffer, sizeof(buffer)),
-		       ntohs(tcp_addr.sin_port), conn_fd, max_fds);
+			buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port), conn_fd, max_fds);
 	    }
 	    syslog(LOG_NOTICE, "%s: new client: %s port %d conn fd: %d max fds: %d\n", __func__,
-		   inet_ntop(AF_INET, &(tcp_addr.sin_addr), buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port), conn_fd,
-		   max_fds);
+		   inet_ntop(AF_INET, &(tcp_addr.sin_addr), buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port),
+		   conn_fd, max_fds);
 	    for (i = 0; i < MAX_TCP_CONN; i++) {
 		if (tcp_client[i] < 0) {
 		    tcp_client[i] = conn_fd;	/* save new TCP client descriptor */
@@ -322,7 +318,7 @@ int main(int argc, char **argv) {
 	    max_tcp_i = MAX(i, max_tcp_i);	/* max index in tcp_client[] array */
 
 	    if (--nready <= 0)
-		continue;	/* no more readable descriptors */
+		continue;		/* no more readable descriptors */
 	}
 
 	/* check for already connected TCP clients */
@@ -330,7 +326,6 @@ int main(int argc, char **argv) {
 	    tcp_socket = tcp_client[i];
 	    if (tcp_socket < 0)
 		continue;
-	    /* printf("%s tcp packet received from client #%d  max_tcp_i:%d todo:%d\n", time_stamp(timestamp), i, max_tcp_i,nready); */
 	    if (FD_ISSET(tcp_socket, &read_fds)) {
 		if (!background) {
 		    time_stamp(timestamp);
@@ -356,10 +351,8 @@ int main(int argc, char **argv) {
 		    if (n % 13) {
 			time_stamp(timestamp);
 			if (!background)
-			    fprintf(stderr, "%s received packet %% 13 : length %d - maybe close connection\n",
-				    timestamp, n);
-			syslog(LOG_ERR, "%s: received packet %% 13 : length %d - maybe close connection\n", __func__,
-			       n);
+			    fprintf(stderr, "%s received packet %% 13 : length %d - maybe close connection\n", timestamp, n);
+			syslog(LOG_ERR, "%s: received packet %% 13 : length %d - maybe close connection\n", __func__, n);
 		    } else {
 			for (i = 0; i < n; i += CAN_ENCAP_SIZE) {
 			    ret = frame_to_can(sc, &netframe[i]);
