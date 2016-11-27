@@ -45,6 +45,7 @@ define Package/can2udp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/clone-ms2-loco $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/gb2-update $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ir-tester $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lan-schnitte $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ms2wifi $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/read-cs2-ini $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/read_lococard $(1)/usr/bin/
@@ -56,6 +57,7 @@ define Package/can2udp/install
 #	$(INSTALL_BIN) ./files/can2lan.init_carambola $(1)/etc/init.d/can2lan
 	$(INSTALL_BIN) ./files/can2lan.init $(1)/etc/init.d/can2lan
 	$(INSTALL_DIR) $(1)/root
+	$(INSTALL_BIN) ./files/lan-schnitte.init $(1)/root/lan-schnitte
 	$(INSTALL_BIN) ./files/ir.sh $(1)/root/
 	$(INSTALL_BIN) ./files/card-reader.sh $(1)/root/card-reader.sh
 	$(INSTALL_BIN) ./files/s88udp.init $(1)/root/s88udp
