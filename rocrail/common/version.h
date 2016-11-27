@@ -1,9 +1,11 @@
 const int revisionnr = 
-11713
+11715
 ;
 const char* commithash = 
-"8d7428f237820435c9093b7523998557bd618997";
+"8f833ff9b1553ba05d370b5fc5d9bd8b9c1190fa";
 const char* revlog = 
+"11715 2016-11-27 11:27:06 +0100 var: replaced prefix + with a ~\n" \
+"11714 2016-11-27 08:03:05 +0100 loc: route speed at enter option added\n" \
 "11713 2016-11-26 12:35:59 +0100 var: support for var pointers\n" \
 "11712 2016-11-26 12:03:52 +0100 xmlscript: resolve only for conditions\n" \
 "11711 2016-11-26 08:22:56 +0100 trace: use f for level FIND\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11668 2016-11-16 10:35:26 +0100 rocpro: save cv info button added as alternative to enter\n" \
 "11667 2016-11-16 09:35:23 +0100 rocguiinidlg: set planbook to true in case mdi is reset\n" \
 "11666 2016-11-16 08:46:02 +0100 rocpro: save size and position, show initial the selected loco in the loco tab\n" \
-"11665 2016-11-16 07:35:23 +0100 competitiondlg: typo fix\n" \
-"11664 2016-11-15 17:05:53 +0100 competition: translations added\n" \
 
 "log end";
