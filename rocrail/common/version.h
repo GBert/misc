@@ -1,9 +1,23 @@
 const int revisionnr = 
-11715
+11729
 ;
 const char* commithash = 
-"8f833ff9b1553ba05d370b5fc5d9bd8b9c1190fa";
+"925dc8fc66291d9a642dc13e426eb779e02f06af";
 const char* revlog = 
+"11729 2016-11-29 13:18:46 +0100 item: fix for schedule2go event offset\n" \
+"11728 2016-11-29 10:29:37 +0100 locdialog: export selected loco\n" \
+"11727 2016-11-29 10:05:02 +0100 waybilldlg: index translation for status and cartype\n" \
+"11726 2016-11-29 08:29:53 +0100 translatione merge: de, pt_BR, sl, nl\n" \
+"11725 2016-11-29 07:28:04 +0100 waybill: broadcast status change\n" \
+"11724 2016-11-29 07:22:45 +0100 waybilldlg: fix for status\n" \
+"11723 2016-11-28 17:41:48 +0100 waybill: cmd function added\n" \
+"11722 2016-11-28 15:14:43 +0100 text: lccur var added\n" \
+"11721 2016-11-28 14:40:46 +0100 waybilldlg: status unassigned at first\n" \
+"11720 2016-11-28 12:15:49 +0100 guiframe: fix for cascade menuitem\n" \
+"11719 2016-11-28 12:08:00 +0100 waybill: unassigned status added\n" \
+"11718 2016-11-28 10:23:11 +0100 route: remove lock status at startup\n" \
+"11717 2016-11-28 08:26:05 +0100 route: option route speed at enter added\n" \
+"11716 2016-11-28 08:14:29 +0100 item: max. 40 go with schedule\n" \
 "11715 2016-11-27 11:27:06 +0100 var: replaced prefix + with a ~\n" \
 "11714 2016-11-27 08:03:05 +0100 loc: route speed at enter option added\n" \
 "11713 2016-11-26 12:35:59 +0100 var: support for var pointers\n" \
@@ -40,19 +54,5 @@ const char* revlog =
 "11682 2016-11-19 08:15:57 +0100 car: waybill commands and state test added\n" \
 "11681 2016-11-18 12:07:23 +0100 car: waybill state added\n" \
 "11680 2016-11-18 10:45:34 +0100 car: assigng waybill command added\n" \
-"11679 2016-11-18 09:13:22 +0100 rocpro: translation\n" \
-"11678 2016-11-17 11:29:44 +0100 server trace improvements\n" \
-"11677 2016-11-17 08:27:35 +0100 server trace improvements\n" \
-"11676 2016-11-17 08:17:33 +0100 rocpro: added missing translation\n" \
-"11675 2016-11-17 07:27:59 +0100 routedialog: fix for selecting a command without client data\n" \
-"11674 2016-11-17 06:55:30 +0100 routedialog: prevent adding an empty sw command\n" \
-"11673 2016-11-16 15:13:00 +0100 loc: trigger new FIND message\n" \
-"11672 2016-11-16 14:57:10 +0100 trace improvements for find level\n" \
-"11671 2016-11-16 14:46:55 +0100 server: trace improvements with FIND level\n" \
-"11670 2016-11-16 11:09:55 +0100 rocpro: show as none modal dialog\n" \
-"11669 2016-11-16 11:01:19 +0100 translation merge: pt_BR, sl, sr_latin, de, nl\n" \
-"11668 2016-11-16 10:35:26 +0100 rocpro: save cv info button added as alternative to enter\n" \
-"11667 2016-11-16 09:35:23 +0100 rocguiinidlg: set planbook to true in case mdi is reset\n" \
-"11666 2016-11-16 08:46:02 +0100 rocpro: save size and position, show initial the selected loco in the loco tab\n" \
 
 "log end";
