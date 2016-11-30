@@ -1,9 +1,13 @@
 const int revisionnr = 
-11729
+11733
 ;
 const char* commithash = 
-"925dc8fc66291d9a642dc13e426eb779e02f06af";
+"9bb0f13f84271b80f10d03bc902f8aa338817d38";
 const char* revlog = 
+"11733 2016-11-30 11:16:46 +0100 wrapper: removed unused attribute poweroffexit\n" \
+"11732 2016-11-30 11:05:22 +0100 loconet: removed unused poweroffexit\n" \
+"11731 2016-11-30 10:54:07 +0100 xmlscript: resolve vars first in the sub state function\n" \
+"11730 2016-11-30 08:55:27 +0100 xmlscript: allow a var in the while max attribute\n" \
 "11729 2016-11-29 13:18:46 +0100 item: fix for schedule2go event offset\n" \
 "11728 2016-11-29 10:29:37 +0100 locdialog: export selected loco\n" \
 "11727 2016-11-29 10:05:02 +0100 waybilldlg: index translation for status and cartype\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "11686 2016-11-19 16:01:00 +0100 car: broadcast waybill changes to the clients\n" \
 "11685 2016-11-19 14:33:37 +0100 server trace improvements (wip)\n" \
 "11684 2016-11-19 14:03:18 +0100 rocpro: fix for writing a value of one as long address if zero is displayed\n" \
-"11683 2016-11-19 08:41:59 +0100 loc: regard the placing and direction for BBT Vmin/VminR\n" \
-"11682 2016-11-19 08:15:57 +0100 car: waybill commands and state test added\n" \
-"11681 2016-11-18 12:07:23 +0100 car: waybill state added\n" \
-"11680 2016-11-18 10:45:34 +0100 car: assigng waybill command added\n" \
 
 "log end";
