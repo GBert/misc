@@ -24,7 +24,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -t <tcp_port> -i <can interface>\n",
 	    prg);
     fprintf(stderr, "   Version 0.99\n\n");
-    fprintf(stderr, "         -t <port>           listening TCP port for the server - default\n", DEF_TCP_PORT);
+    fprintf(stderr, "         -t <port>           listening TCP port for the server - default %d\n", DEF_TCP_PORT);
     fprintf(stderr, "         -i <can int>        CAN interface - default can0\n");
     fprintf(stderr, "         -f                  running in foreground\n");
 }
