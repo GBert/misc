@@ -1,9 +1,11 @@
 const int revisionnr = 
-11733
+11735
 ;
 const char* commithash = 
-"9bb0f13f84271b80f10d03bc902f8aa338817d38";
+"d4f54287863f1bd0e38170d8806e32d7a87ca5ea";
 const char* revlog = 
+"11735 2016-12-01 08:28:59 +0100 waybill.dlg: fix for is deleverd function\n" \
+"11734 2016-12-01 08:06:52 +0100 cardlg: show waybill in the index\n" \
 "11733 2016-11-30 11:16:46 +0100 wrapper: removed unused attribute poweroffexit\n" \
 "11732 2016-11-30 11:05:22 +0100 loconet: removed unused poweroffexit\n" \
 "11731 2016-11-30 10:54:07 +0100 xmlscript: resolve vars first in the sub state function\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11688 2016-11-20 10:37:54 +0100 waybilldlg: added cartype to the index list\n" \
 "11687 2016-11-20 09:20:24 +0100 waybilldlg: new list control index\n" \
 "11686 2016-11-19 16:01:00 +0100 car: broadcast waybill changes to the clients\n" \
-"11685 2016-11-19 14:33:37 +0100 server trace improvements (wip)\n" \
-"11684 2016-11-19 14:03:18 +0100 rocpro: fix for writing a value of one as long address if zero is displayed\n" \
 
 "log end";
