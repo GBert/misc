@@ -146,10 +146,14 @@ InitComms
                 ; interface with the CAN bus. In normal mode, the CAN module
                 ; automatically overrides TRISB<2>. The user must ensure that
                 ; TRISB<3> is set.
+
+                ; C is alternate port
 #IF CAN == PORTC
+                BSF     LATC,6              ; set to high before switching to output
                 BCF     TRISC,6             ; CANTX I/P
                 BSF     TRISC,7             ; CANRX I/P
 #ELSE
+                BSF     LATB,2              ; set to high before switching to output
                 BCF     TRISB,2             ; CANTX I/P
                 BSF     TRISB,3             ; CANRX I/P
 #ENDIF

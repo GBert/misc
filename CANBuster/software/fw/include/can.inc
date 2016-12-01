@@ -61,9 +61,11 @@ RXB0DBEN        EQU     H'0002'
 ;------------------------------------------------------------------------------
 INITCAN
 #IF CAN == PORTC
+                BSF     LATC,6              ; set to high before switching to output
                 BCF     TRISC,6             ; CANTX I/P
                 BSF     TRISC,7             ; CANRX I/P
 #ELSE
+                BSF     LATB,2              ; set to high before switching to output
                 BCF     TRISB,2             ; CANTX I/P
                 BSF     TRISB,3             ; CANRX I/P
 #ENDIF
