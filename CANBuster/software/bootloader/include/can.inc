@@ -147,10 +147,10 @@ InitComms
                 ; automatically overrides TRISB<2>. The user must ensure that
                 ; TRISB<3> is set.
 #IF CAN == PORTC
-                CLRF    TRISC
+                BCF     TRISC,6             ; CANTX I/P
                 BSF     TRISC,7             ; CANRX I/P
 #ELSE
-                CLRF    TRISB
+                BCF     TRISB,2             ; CANTX I/P
                 BSF     TRISB,3             ; CANRX I/P
 #ENDIF
                 ; Set configuration mode

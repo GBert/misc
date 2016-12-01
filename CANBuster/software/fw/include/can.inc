@@ -61,10 +61,10 @@ RXB0DBEN        EQU     H'0002'
 ;------------------------------------------------------------------------------
 INITCAN
 #IF CAN == PORTC
-                CLRF    TRISC
+                BCF     TRISC,6             ; CANTX I/P
                 BSF     TRISC,7             ; CANRX I/P
 #ELSE
-                CLRF    TRISB
+                BCF     TRISB,2             ; CANTX I/P
                 BSF     TRISB,3             ; CANRX I/P
 #ENDIF
                 MOVLW   UPPER CANRATE_ROM_DEFAULT
