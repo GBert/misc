@@ -1,9 +1,12 @@
 const int revisionnr = 
-11735
+11738
 ;
 const char* commithash = 
-"d4f54287863f1bd0e38170d8806e32d7a87ca5ea";
+"8a34637087c49443b7db9d86249fd332a0922cca";
 const char* revlog = 
+"11738 2016-12-02 11:38:57 +0100 routedialog: remove the prev_id of the copied route\n" \
+"11737 2016-12-02 10:08:53 +0100 cv: fix for index error in the vcurve processing\n" \
+"11736 2016-12-02 08:38:47 +0100 waybilldlg: sorting columns added\n" \
 "11735 2016-12-01 08:28:59 +0100 waybill.dlg: fix for is deleverd function\n" \
 "11734 2016-12-01 08:06:52 +0100 cardlg: show waybill in the index\n" \
 "11733 2016-11-30 11:16:46 +0100 wrapper: removed unused attribute poweroffexit\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "11691 2016-11-20 11:41:15 +0100 dmxartnet: fix for poll IP address\n" \
 "11690 2016-11-20 11:05:26 +0100 cardlg:  select waybill option added\n" \
 "11689 2016-11-20 10:55:41 +0100 cardlg: show waybill\n" \
-"11688 2016-11-20 10:37:54 +0100 waybilldlg: added cartype to the index list\n" \
-"11687 2016-11-20 09:20:24 +0100 waybilldlg: new list control index\n" \
-"11686 2016-11-19 16:01:00 +0100 car: broadcast waybill changes to the clients\n" \
 
 "log end";
