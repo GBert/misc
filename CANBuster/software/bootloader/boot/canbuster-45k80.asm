@@ -45,7 +45,8 @@ BOOTSIZE        EQU     (8 * 64)
 ;                DB      6,6,6
 ;ERRORLEVEL      +220
 
-ERRORLEVEL      -302
+ERRORLEVEL      -302,-1301
+
 #INCLUDE        "devices.inc"
 
 ;------------------------------------------------------------------------------
