@@ -1,9 +1,11 @@
 const int revisionnr = 
-11738
+11740
 ;
 const char* commithash = 
-"8a34637087c49443b7db9d86249fd332a0922cca";
+"60107a139994477ca8cba2679578fe70ea369a5e";
 const char* revlog = 
+"11740 2016-12-03 08:40:47 +0100 variable lccurtrack added for stage blocks\n" \
+"11739 2016-12-03 08:09:31 +0100 reset prev_id on object copy\n" \
 "11738 2016-12-02 11:38:57 +0100 routedialog: remove the prev_id of the copied route\n" \
 "11737 2016-12-02 10:08:53 +0100 cv: fix for index error in the vcurve processing\n" \
 "11736 2016-12-02 08:38:47 +0100 waybilldlg: sorting columns added\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11693 2016-11-20 14:47:40 +0100 waybill helper for getting state\n" \
 "11692 2016-11-20 14:17:12 +0100 text: waybilldest variable added\n" \
 "11691 2016-11-20 11:41:15 +0100 dmxartnet: fix for poll IP address\n" \
-"11690 2016-11-20 11:05:26 +0100 cardlg:  select waybill option added\n" \
-"11689 2016-11-20 10:55:41 +0100 cardlg: show waybill\n" \
 
 "log end";
