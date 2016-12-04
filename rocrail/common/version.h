@@ -1,9 +1,12 @@
 const int revisionnr = 
-11740
+11743
 ;
 const char* commithash = 
-"60107a139994477ca8cba2679578fe70ea369a5e";
+"5fe4018fcf28d1a8fcb7038b0f4e202e956cf3a2";
 const char* revlog = 
+"11743 2016-12-04 10:42:46 +0100 xmlscript: revert replace all vars in attributes\n" \
+"11742 2016-12-04 10:42:23 +0100 stage: fix for getcurtrack\n" \
+"11741 2016-12-04 08:09:59 +0100 xmlscript: resolve all vars in all command attributes\n" \
 "11740 2016-12-03 08:40:47 +0100 variable lccurtrack added for stage blocks\n" \
 "11739 2016-12-03 08:09:31 +0100 reset prev_id on object copy\n" \
 "11738 2016-12-02 11:38:57 +0100 routedialog: remove the prev_id of the copied route\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "11696 2016-11-21 08:04:21 +0100 xmlscript: fix for car command assignwaybill\n" \
 "11695 2016-11-20 16:59:18 +0100 xmlscript: resolve the waybill ID in case of a car assignwaybill command\n" \
 "11694 2016-11-20 16:01:05 +0100 xmlscript: resolve the waybill ID in case of a car assignwaybill command\n" \
-"11693 2016-11-20 14:47:40 +0100 waybill helper for getting state\n" \
-"11692 2016-11-20 14:17:12 +0100 text: waybilldest variable added\n" \
-"11691 2016-11-20 11:41:15 +0100 dmxartnet: fix for poll IP address\n" \
 
 "log end";
