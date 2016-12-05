@@ -74,6 +74,10 @@ ERRSUM          EQU     'S'
 
 #INCLUDE        "timeout.inc"
 
+#IFDEF CAN
+#INCLUDE        "can-macros.inc"
+#ENDIF
+
 ;------------------------------------------------------------------------------
 ; Variables
 ;------------------------------------------------------------------------------
@@ -147,6 +151,9 @@ OKCOMPUTER
 
                 MOVF    cmd,W
                 XORLW   RUN
+#IFDEF CAN
+                WAIT_CAN_RDY   TXB0CON
+#ENDIF
                 BZ      GOTOAPP         ; RUN...
 
                 MOVF    cmd,W
