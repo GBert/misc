@@ -49,12 +49,12 @@ void MrCs2Trace(MrCs2CanDataType *CanMsg)
                   break;
                case MR_MS2_SUBCMD_SYSTEM_DECODER_TIMEING:
                   MrMs2DecSysDecoderTimeing(CanMsg, &Uid, &p1);
-                  printf("Schaltzeit Zubehˆrdecoder (Uid = 0x%lx, time = %d ms)\n",
+                  printf("Schaltzeit Zubeh˜rdecoder (Uid = 0x%lx, time = %d ms)\n",
                          Uid, p1 * 10);
                   break;
                case MR_MS2_SUBCMD_SYSTEM_MFX_FAST_READ:
                   MrMs2DecSysMfxFastRead(CanMsg, &Uid, &p1);
-                  printf("Fast Read f¸r mfx (Uid = 0x%lx, mgx-sid = %d)\n",
+                  printf("Fast Read fÅr mfx (Uid = 0x%lx, mgx-sid = %d)\n",
                          Uid, p1);
                   break;
                case MR_MS2_SUBCMD_SYSTEM_TRACK_PROTOCOLL:
@@ -64,12 +64,12 @@ void MrCs2Trace(MrCs2CanDataType *CanMsg)
                   break;
                case MR_MS2_SUBCMD_SYSTEM_RESET_MFX_COUNTER:
                   MrMs2DecSysResetMfxCounter(CanMsg, &Uid, &p1);
-                  printf("System MFX Neuanmeldez‰hler setzen (Uid = 0x%lx, counter = %d)\n",
+                  printf("System MFX NeuanmeldezÑhler setzen (Uid = 0x%lx, counter = %d)\n",
                          Uid, p1);
                   break;
                case MR_MS2_SUBCMD_SYSTEM_OVERLOAD:
                   MrCs2DecSysOverload(CanMsg, &Uid, &p1);
-                  printf("System ‹berlast (Uid = 0x%lx, channel = %d)\n",
+                  printf("System öberlast (Uid = 0x%lx, channel = %d)\n",
                          Uid, p1);
                   break;
                case MR_MS2_SUBCMD_SYSTEM_STATUS:
@@ -257,21 +257,21 @@ void MrCs2Trace(MrCs2CanDataType *CanMsg)
             {
                case 6:
                   MrCs2DecAccSwitch6(CanMsg, &LocId, &p1, &p2);
-                  printf("Zubehˆr Schalten (LocId = 0x%lx, Position = %d, Current = %d)\n",
+                  printf("Zubeh˜r Schalten (LocId = 0x%lx, Position = %d, Current = %d)\n",
                          LocId, p1, p2);
                   break;
                case 8:
                   MrCs2DecAccSwitch8(CanMsg, &LocId, &p1, &p2, &p3);
-                  printf("Zubehˆr Schalten (LocId = 0x%lx, Position = %d, Current = %d, TimeFkt = %d)\n",
+                  printf("Zubeh˜r Schalten (LocId = 0x%lx, Position = %d, Current = %d, TimeFkt = %d)\n",
                          LocId, p1, p2, p3);
                   break;
                default:
-                  puts("Zubehˆr Schalten (unknown parameter)");
+                  puts("Zubeh˜r Schalten (unknown parameter)");
                   break;
             }
             break;
          case MR_MS2_CMD_ACC_CONF:
-            puts("Zubehˆr Konfig (unknown parameter)");
+            puts("Zubeh˜r Konfig (unknown parameter)");
             break;
          case MR_MS2_CMD_S88_POLL:
             switch (MrCs2GetNumParamBytes(CanMsg))

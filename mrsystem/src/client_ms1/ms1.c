@@ -534,7 +534,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 
                             case 0x80 : // Lokstat
 
-                                //dirty hack! Es wird testweise eine einzige Lok übertragen
+                                //dirty hack! Es wird testweise eine einzige Lok æbertragen
 
                                 if (CanFrame->CanData[2] == 0x00) { //erste Anfrage, noch keine Lok. Eine Lok wird gesendet
 
@@ -594,7 +594,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 
                             if (CanFrame->CanData[0] <= 0x04) {
 
-                                //Verknüpfung Index und Statustyp an Slave senden
+                                //Verknæpfung Index und Statustyp an Slave senden
                                 out_msg.can_id = CanFrame->CanId - 1;
 
                                 printf("-> 0x%X Sende Statustyp\n",out_msg.can_id);
@@ -611,7 +611,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
                                     perror("CAN write error");
                                 }
 
-                                statustyp[CanFrame->CanData[0]] = out_msg.data[2];  //Verknüpfung Index und Statustyp speichern
+                                statustyp[CanFrame->CanData[0]] = out_msg.data[2];  //Verknæpfung Index und Statustyp speichern
 
                                 if (CanFrame->CanData[0] == 0x03) { // 0x03 ubekannter STATUSTYP, es wird direkt der WERT gesendet
                                     goto Wertsenden;
@@ -621,7 +621,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 
                             if (CanFrame->CanData[0] == 0x05) {
 
-                                //Verknüpfung Index und Statustyp an Slave senden
+                                //Verknæpfung Index und Statustyp an Slave senden
                                 out_msg.can_id = CanFrame->CanId - 1;
 
                                 printf("-> 0x%X Sende Statustyp\n",out_msg.can_id);
@@ -637,7 +637,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
                                     perror("CAN write error");
                                 }
 
-                                statustyp[CanFrame->CanData[0]] = out_msg.data[2];  //Verknüpfung Index und Statustyp speichern
+                                statustyp[CanFrame->CanData[0]] = out_msg.data[2];  //Verknæpfung Index und Statustyp speichern
 
                             }
 
@@ -650,7 +650,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 
                             printf("-> 0x%X Sende Statustyp\n",out_msg.can_id);
 
-                            //Wert für Index an Slave senden
+                            //Wert fær Index an Slave senden
                             out_msg.can_id = CanFrame->CanId - 1;
 
                             out_msg.can_dlc = 3;
@@ -674,7 +674,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 
 			}
 
-			// Zyklische Überwachung
+			// Zyklische ãberwachung
 			if (my_ms1_handle.prio == 0x03 /*0b011*/) {
 
                 if (CanFrame->CanDlc == 4) {
@@ -789,7 +789,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 			}
 
 			// send UDP frame
-			if (udpsend == 1) { // nicht jeder CAN Frame muss über UDP raus!
+			if (udpsend == 1) { // nicht jeder CAN Frame muss æber UDP raus!
 /* should be done in client_cs2eth */
 #if 0
 				s=sendto(sb, udpframe, 13, 0, (struct sockaddr *)&baddr, sizeof(baddr));
