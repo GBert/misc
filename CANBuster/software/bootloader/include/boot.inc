@@ -74,10 +74,6 @@ ERRSUM          EQU     'S'
 
 #INCLUDE        "timeout.inc"
 
-#IFDEF CAN
-#INCLUDE        "can-macros.inc"
-#ENDIF
-
 ;------------------------------------------------------------------------------
 ; Variables
 ;------------------------------------------------------------------------------
@@ -94,6 +90,8 @@ timer1          EQU     0x005       ; Timer
 timer2          EQU     0x006       ;   "
 timer3          EQU     0x007       ;   "
 timer4          EQU     0x008       ;   "
+
+wait            EQU     0x009
 
 ;------------------------------------------------------------------------------
 ; GOTO Boot Loader
@@ -152,10 +150,13 @@ OKCOMPUTER
                 MOVF    cmd,W
                 XORLW   RUN
                 BNZ     CONTINUE
-#IFDEF _CAN
-                WAIT_CAN_RDY   TXB0CON
-#ENDIF
-                BCF     LATC,5
+
+                MOVLW   255             ; wait a little bit before
+                MOVWF   wait            ;  switch to firmware
+WAIT_LOOP
+                DECFSZ  wait,f
+                BRA     WAIT_LOOP
+
                 BRA     GOTOAPP         ; RUN...
 
 CONTINUE

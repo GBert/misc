@@ -69,9 +69,6 @@ INITCAN
                 BCF     TRISB,2             ; CANTX I/P
                 BSF     TRISB,3             ; CANRX I/P
 #ENDIF
-                ;BCF     TRISC,5             ; *** Test
-                BCF     LATC,5              ; *** Test
-
                 MOVLW   UPPER CANRATE_ROM_DEFAULT
                 MOVWF   TBLPTRU
                 MOVLW   HIGH CANRATE_ROM_DEFAULT
