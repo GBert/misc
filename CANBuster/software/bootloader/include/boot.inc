@@ -151,11 +151,14 @@ OKCOMPUTER
 
                 MOVF    cmd,W
                 XORLW   RUN
-#IFDEF CAN
+                BNZ     CONTINUE
+#IFDEF _CAN
                 WAIT_CAN_RDY   TXB0CON
 #ENDIF
-                BZ      GOTOAPP         ; RUN...
+                BCF     LATC,5
+                BRA     GOTOAPP         ; RUN...
 
+CONTINUE
                 MOVF    cmd,W
                 XORLW   HELLO
                 BNZ     FLASHEEPROM     ; FLASH...
