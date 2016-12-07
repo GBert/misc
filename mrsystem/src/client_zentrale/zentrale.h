@@ -11,6 +11,7 @@
 #include "gleisbildpage.h"
 #include "fahrstrasse.h"
 #include "zfile.h"
+#include "cs2cfg.h"
 
 #define MM2_PRG_TEXT "mm2_prg"
 
@@ -64,9 +65,7 @@ typedef struct {
    unsigned long Uid;
    ZlibFile *PackedCs2File;
    BOOL HaveDb;
-   unsigned long CfgLength;
-   unsigned long CfgHaveRead;
-   char *CfgBuffer;
+   Cs2CfgData *Cs2CgfDaten;
    int ActualIndex;
    int NumLoks;
    int MaxLoks;
@@ -102,9 +101,7 @@ typedef struct {
 #define ZentraleSetGfpUid(Data, MyUid)                  (Data)->GfpUid=MyUid
 #define ZentraleSetUid(Data, MyUid)                     (Data)->Uid=MyUid
 #define ZentraleSetPackedCs2File(Data, Zfile)           (Data)->PackedCs2File=Zfile
-#define ZentraleSetCfgLength(Data, Len)                 (Data)->CfgLength=Len
-#define ZentraleSetCfgHaveRead(Data, Len)               (Data)->CfgHaveRead=Len
-#define ZentraleSetCfgBuffer(Data, Buf)                 (Data)->CfgBuffer=Buf
+#define ZentraleSetCs2CfgDaten(Data, Cs2Daten)          (Data)->Cs2CgfDaten=Cs2Daten
 #define ZentraleSetActualIndex(Data, i)                 (Data)->ActualIndex=i
 #define ZentraleSetNumLoks(Data, i)                     (Data)->NumLoks=i
 #define ZentraleSetMaxLoks(Data, i)                     (Data)->MaxLoks=i
@@ -142,9 +139,7 @@ typedef struct {
 #define ZentraleGetGfpUid(Data)               (Data)->GfpUid
 #define ZentraleGetUid(Data)                  (Data)->Uid
 #define ZentraleGetPackedCs2File(Data)        (Data)->PackedCs2File
-#define ZentraleGetCfgLength(Data)            (Data)->CfgLength
-#define ZentraleGetCfgHaveRead(Data)          (Data)->CfgHaveRead
-#define ZentraleGetCfgBuffer(Data)            (Data)->CfgBuffer
+#define ZentraleGetCs2CfgDaten(Data)          (Data)->Cs2CgfDaten
 #define ZentraleGetLoks(Data)                 (Data)->Loks
 #define ZentraleGetActualIndex(Data)          (Data)->ActualIndex
 #define ZentraleGetNumLoks(Data)              (Data)->NumLoks

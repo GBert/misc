@@ -1,7 +1,7 @@
 TARGET=mrzentrale
 OBJS=main.o zentrale.o states.o cron.o lok.o gleisbild.o gleisbildpage.o \
 	magnetartikel.o magstat.o fahrstrasse.o lokstatus.o gbsstat.o \
-	fsstat.o zfile.o canmember.o
+	fsstat.o zfile.o canmember.o cs2cfg.o
 LOCALLIBS=-lmr_ipc -lmr_can -lcs2_parse -lfsm -lm -lbytestream -lmrconfig -linipars -lscanner -lmap -lmenge -lavl -ldliste -lz
 DESTDIR=/usr/local/bin
 
@@ -42,6 +42,8 @@ fsstat.o: fsstat.c fsstat.h fahrstrasse.h
 canmember.o: canmember.c canmember.h
 
 zfile.o: zfile.c zfile.h
+
+cs2cfg.o: cs2cfg.c cs2cfg.h
 
 lx_debug.o: lx_debug.c lx_debug.h
 

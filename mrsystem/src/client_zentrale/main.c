@@ -11,7 +11,7 @@
 #endif
 #include "zentrale.h"
 
-#define SOFTWARE_VERSION "3.00"
+#define SOFTWARE_VERSION "3.01"
 
 static void usage(char *name)
 {
@@ -57,8 +57,7 @@ int main(int argc, char *argv[])
          ChildPid = fork();
          if (ChildPid == -1)
          {
-            if (ConfigGetIntVal(Config, CfgVerboseVal))
-               puts("ERROR: can not go to backgound");
+            puts("ERROR: can not go to backgound");
             Ret = 4;
          }
          else if (ChildPid == 0)
@@ -85,6 +84,7 @@ int main(int argc, char *argv[])
             }
             else
             {
+               puts("ERROR: can not create Zentrale module");
                Ret = 2;
             }
          }
@@ -127,6 +127,7 @@ int main(int argc, char *argv[])
          }
          else
          {
+            puts("ERROR: can not create Zentrale module");
             Ret = 1;
          }
       }
@@ -135,6 +136,7 @@ int main(int argc, char *argv[])
    }
    else
    {
+      puts("ERROR: can not create Config module");
       Ret = 3;
    }
    return(Ret);

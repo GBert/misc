@@ -6,7 +6,6 @@
 #include <write_cs2.h>
 #include "zentrale.h"
 #include "lok.h"
-#include <stdio.h>
 
 LokStruct *LokCreate(void)
 {  LokStruct *NewData;
@@ -131,6 +130,7 @@ void LokParseLokomotiveCs2(LokStruct *Data, char *Buf, int Len)
    LokParser = Cs2pCreate();
    Cs2pInit(LokParser, PARSER_TYPE_LOK_CS2, Buf, Len);
    Cs2pSetVerbose(LokParser, FALSE);
+   LokInfoSetIsDeleted(&NewLok, FALSE);
    do {
       LineInfo = Cs2pParse(LokParser);
       switch (LineInfo)
@@ -155,7 +155,8 @@ void LokParseLokomotiveCs2(LokStruct *Data, char *Buf, int Len)
                      LokInsert(Data, &NewLok);
                   NumLoks++;
                   FktIndex = -1;
-
+                  LokInfoSetIsDeleted(&NewLok, FALSE);
+                  break;
                case PARSER_VALUE_LOK:
                   break;
                case PARSER_VALUE_VERSION:

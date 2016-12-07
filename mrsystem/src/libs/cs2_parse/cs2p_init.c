@@ -233,6 +233,8 @@ ScanKeyword HeaderCs2Keywords[] = {
    { PARSER_PARAGRAPH_STRING_FAHRSTRASSEN,   PARSER_TOKEN_KEYWORD_FAHRSTRASSEN },
    { PARSER_PARAGRAPH_STRING_GLEISBILDSEITE, PARSER_TOKEN_KEYWORD_GLEISBILDSEITE },
    { PARSER_PARAGRAPH_STRING_LOKSTATUS,      PARSER_TOKEN_KEYWORD_LOKSTATUS },
+   { PARSER_PARAGRAPH_STRING_LOK,            PARSER_TOKEN_KEYWORD_LOK },
+   { PARSER_PARAGRAPH_STRING_NUMLOKS,        PARSER_TOKEN_KEYWORD_NUMLOKS },
 };
 
 void Cs2pInit(Cs2parser *Data, int Type, char *InputLine, int Len)
@@ -281,6 +283,6 @@ void Cs2pInit(Cs2parser *Data, int Type, char *InputLine, int Len)
    else if (Type == PARSER_TYPE_HEADER_CS2)
    {
       ScanInit(Cs2pGetScanner(Data), (char *)NULL, InputLine, Len,
-               6, HeaderCs2Keywords);
+               8, HeaderCs2Keywords);
    }
 }

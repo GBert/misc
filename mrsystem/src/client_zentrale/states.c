@@ -36,7 +36,7 @@
 #define PARAGRAPH_LOK       1
 #define PARAGRAPH_NUMLOKS   2
 
-#define NUM_STATES 31
+#define NUM_STATES 27
 #define STATE_WAIT_FOR_MS2                0
 #define STATE_WAIT_LOKNAME_CFG_HDR        1
 #define STATE_WAIT_LOKNAME_CFG_DATA       2
@@ -64,10 +64,6 @@
 #define STATE_WAIT_GBS_CVR_CFG_DATA      24
 #define STATE_WAIT_FS_CVR_CFG_HDR        25
 #define STATE_WAIT_FS_CVR_CFG_DATA       26
-#define STATE_WAIT_POLL_LOKNAME_CFG_HDR  27
-#define STATE_WAIT_POLL_LOKNAME_CFG_DATA 28
-#define STATE_WAIT_POLL_LOKINFO_CFG_HDR  29
-#define STATE_WAIT_POLL_LOKINFO_CFG_DATA 30
 
 
 #define NUM_SIGNALS 18
@@ -88,6 +84,8 @@ static S88SystemConfig S88Bootldr[3] = {
 static void QueryMembers(ZentraleStruct *Data)
 {  MrIpcCmdType Cmd;
 
+   if (ZentraleGetVerbose(Data))
+      puts("FSM: query members");
    CanMemberDelAllInvalid(ZentraleGetCanMember(Data));
    CanMemberMarkAllInvalid(ZentraleGetCanMember(Data));
    MrIpcInit(&Cmd);
@@ -128,7 +126,7 @@ static int PeriodicPollMs2(void *PrivData)
    MrIpcCmdSetReqestLocname(&Cmd, ZentraleGetActualIndex(Data), 2);
    MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
    CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
-   return(STATE_WAIT_POLL_LOKNAME_CFG_HDR);
+   return(STATE_NO_CHANGE);
 }
 
 static int PeriodicPing(void *PrivData)
@@ -162,6 +160,7 @@ static int PeriodicTimeoutCs2(void *PrivData)
    MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_0);
    MrIpcCmdSetQuery(&Cmd, MR_CS2_CFG_LOKS);
    MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
+   LokMarkAllDeleted(ZentraleGetLoks(Data));
    if (ZentraleGetVerbose(Data))
       printf("FSM: timer, new state %d\n",STATE_WAIT_LOK_CS2_CFG_HDR);
    CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_CS2);
@@ -205,7 +204,8 @@ static int HandleMemberWaitMs2(void *Priv, void *SignalData)
    CmdFrame = (MrIpcCmdType *)SignalData;
    MrIpcCmdGetMember(CmdFrame, &Uid, &Version, &Type);
    if (ZentraleGetVerbose(Data))
-      printf("FSM: CAN member %lu, version %d, type 0x%x\n", Uid, Version, Type);
+      printf("FSM: CAN member %lu, version %d, type 0x%x\n",
+             Uid, Version, Type);
    if (Type != MR_CS2_DEVID_WIRED)
    {
       LokMarkAllDeleted(ZentraleGetLoks(Data));
@@ -226,527 +226,6 @@ static int HandleMemberWaitMs2(void *Priv, void *SignalData)
    }
    else
       return(STATE_NO_CHANGE);
-}
-
-static int HandleLoknameCfgHeader(void *Priv, void *SignalData)
-{  ZentraleStruct *Data;
-   MrIpcCmdType *CmdFrame;
-   unsigned long Length;
-   int Crc;
-
-   Data = (ZentraleStruct *)Priv;
-   CmdFrame = (MrIpcCmdType *)SignalData;
-   MrIpcCmdGetCfgHeader(CmdFrame, &Length, &Crc);
-   if (ZentraleGetVerbose(Data))
-      printf("FSM: LOKNAME CFG data length %lu, crc %d\n", Length, Crc);
-   ZentraleSetCfgLength(Data, Length);
-   ZentraleSetCfgHaveRead(Data, 0);
-   ZentraleSetCfgBuffer(Data, malloc(ZentraleGetCfgLength(Data) + 7));
-   if (ZentraleGetCfgBuffer(Data) == NULL)
-   {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: new state %d\n",STATE_NORMAL);
-      return(STATE_NORMAL);
-   }
-   else
-   {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: new state %d\n",STATE_WAIT_LOKNAME_CFG_DATA);
-      return(STATE_WAIT_LOKNAME_CFG_DATA);
-   }
-}
-
-static int HandleLoknameWaitCfgHeader(void *Priv, void *SignalData)
-{  int NextState;
-   ZentraleStruct *Data;
-
-   Data = (ZentraleStruct *)Priv;
-   NextState = HandleLoknameCfgHeader(Priv, SignalData);
-   if (NextState == STATE_WAIT_LOKNAME_CFG_DATA)
-   {
-      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
-      return(NextState);
-   }
-   else
-   {
-      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
-      return(NextState);
-   }
-}
-
-static int HandleLoknameCfgData(void *Priv, void *SignalData)
-{  ZentraleStruct *Data;
-   MrIpcCmdType *CmdFrame, Cmd;
-   char Buf [8];
-   Cs2parser *LokParser;
-   int LineInfo, Paragraph;
-
-   Paragraph = PARAGRAPH_UNDEFINED;
-   Data = (ZentraleStruct *)Priv;
-   CmdFrame = (MrIpcCmdType *)SignalData;
-   MrIpcCmdGetCfgData(CmdFrame, Buf);
-   memcpy(ZentraleGetCfgBuffer(Data) + ZentraleGetCfgHaveRead(Data), Buf, 8);
-   ZentraleSetCfgHaveRead(Data, ZentraleGetCfgHaveRead(Data) + 8);
-   if (ZentraleGetCfgHaveRead(Data) >= ZentraleGetCfgLength(Data))
-   {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: evaluate lokname cfg\n%s", ZentraleGetCfgBuffer(Data));
-      ZentraleGetCfgBuffer(Data)[ZentraleGetCfgLength(Data)] = '\0';
-      LokParser = Cs2pCreate();
-      Cs2pInit(LokParser, PARSER_TYPE_LOKNAMEN, ZentraleGetCfgBuffer(Data),
-               ZentraleGetCfgHaveRead(Data));
-      Cs2pSetVerbose(LokParser, FALSE);
-      do {
-         LineInfo = Cs2pParse(LokParser);
-         switch (LineInfo)
-         {
-            case PARSER_ERROR:
-               if (ZentraleGetVerbose(Data))
-                  puts("ERROR in lok cfg");
-               break;
-            case PARSER_EOF:
-               if (ZentraleGetVerbose(Data))
-                  puts("end of lok cfg");
-               break;
-            case PARSER_PARAGRAPH:
-               if (ZentraleGetVerbose(Data))
-                  printf("new paragraph %s in lok cfg\n",
-                         Cs2pGetName(LokParser));
-               switch (Cs2pGetSubType(LokParser))
-               {
-                  case PARSER_PARAGRAPH_LOK:
-                     if (ZentraleGetVerbose(Data))
-                        puts("lok paragraph in lok cfg");
-                     Paragraph = PARAGRAPH_LOK;
-                     break;
-                  case PARSER_PARAGRAPH_NUMLOKS:
-                     if (ZentraleGetVerbose(Data))
-                        puts("numloks paragraph in lok cfg");
-                     Paragraph = PARAGRAPH_NUMLOKS;
-                     break;
-               }
-               break;
-            case PARSER_VALUE:
-               if (ZentraleGetVerbose(Data))
-                  printf("new value %s=%s in lok cfg\n",
-                         Cs2pGetName(LokParser), Cs2pGetValue(LokParser));
-               switch (Cs2pGetSubType(LokParser))
-               {
-                  case PARSER_VALUE_NAME:
-                     if (ZentraleGetVerbose(Data))
-                        printf("lok name %d in lok cfg\n", ZentraleGetActualIndex(Data));
-                     if (Paragraph == PARAGRAPH_LOK &&
-                         ZentraleGetActualIndex(Data) < ZentraleGetNumLoks(Data))
-                     {
-                        ZentraleSetLokNamenNr(Data,
-                                              ZentraleGetActualIndex(Data),
-                                              Cs2pGetValue(LokParser));
-                        ZentraleSetActualIndex(Data, ZentraleGetActualIndex(Data) + 1);
-                     }
-                     break;
-                  case PARSER_VALUE_WERT:
-                     if (ZentraleGetVerbose(Data))
-                        puts("number of loks in lok cfg");
-                     if (Paragraph == PARAGRAPH_NUMLOKS)
-                     {
-                        ZentraleSetNumLoks(Data, atoi(Cs2pGetValue(LokParser)));
-                        if (ZentraleGetVerbose(Data))
-                           printf("number of loks in lok cfg is %d\n",
-                                  ZentraleGetNumLoks(Data));
-                        if (ZentraleGetMaxLoks(Data) < ZentraleGetNumLoks(Data))
-                        {
-                           ZentraleSetMaxLoks(Data, ZentraleGetNumLoks(Data));
-                           ZentraleSetLokNamen(Data, realloc(ZentraleGetLokNamen(Data),
-                                                             ZentraleGetNumLoks(Data) * sizeof(ZentraleLokName)));
-                           if (ZentraleGetVerbose(Data))
-                              printf("new number of loks in lok cfg is %d\n",
-                                     ZentraleGetNumLoks(Data));
-                        }
-                     }
-                     break;
-               }
-               break;
-         }
-      } while (LineInfo != PARSER_EOF);
-      Cs2pDestroy(LokParser);
-      free(ZentraleGetCfgBuffer(Data));
-      ZentraleSetCfgLength(Data, 0);
-      ZentraleSetCfgHaveRead(Data, 0);
-      ZentraleSetCfgBuffer(Data, NULL);
-      if (ZentraleGetActualIndex(Data) < ZentraleGetNumLoks(Data))
-      {
-         if (ZentraleGetVerbose(Data))
-            printf("request lokname %d\n", ZentraleGetActualIndex(Data));
-         MrIpcInit(&Cmd);
-         MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetReceiverSocket(&Cmd, MrIpcGetSenderSocket(CmdFrame));
-         MrIpcSetCanResponse(&Cmd, 0);
-         MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-         MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
-         MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-         MrIpcCmdSetReqestLocname(&Cmd, ZentraleGetActualIndex(Data), 2);
-         MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
-         if (ZentraleGetVerbose(Data))
-            printf("FSM: new state %d\n",STATE_WAIT_LOKNAME_CFG_HDR);
-         return(STATE_WAIT_LOKNAME_CFG_HDR);
-      }
-      else
-      {
-         ZentraleSetActualIndex(Data, 0);
-         if (ZentraleGetVerbose(Data))
-            printf("request lokinfo %d >%s< from %d\n",
-                   ZentraleGetActualIndex(Data),
-                   ZentraleGetLokNamenNr(Data, ZentraleGetActualIndex(Data)),
-                   ZentraleGetNumLoks(Data));
-         MrIpcInit(&Cmd);
-         MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetReceiverSocket(&Cmd, MrIpcGetSenderSocket(CmdFrame));
-         MrIpcSetCanResponse(&Cmd, 0);
-         MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-         MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
-         MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-         MrIpcCmdSetReqestLocinfo(&Cmd,
-                                  ZentraleGetLokNamenNr(Data,
-                                                        ZentraleGetActualIndex(Data)));
-         MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
-         LokMarkAllDeleted(ZentraleGetLoks(Data));
-         if (ZentraleGetVerbose(Data))
-            printf("FSM: new state %d\n",STATE_WAIT_LOKINFO_CFG_HDR);
-         return(STATE_WAIT_LOKINFO_CFG_HDR);
-      }
-   }
-   else
-   {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: new state %d\n",STATE_WAIT_LOKNAME_CFG_DATA);
-      return(STATE_WAIT_LOKNAME_CFG_DATA);
-   }
-}
-
-static int HandleLoknameWaitCfgData(void *Priv, void *SignalData)
-{  int NextState;
-   ZentraleStruct *Data;
-
-   Data = (ZentraleStruct *)Priv;
-   NextState = HandleLoknameCfgData(Priv, SignalData);
-   if (NextState == STATE_WAIT_LOKNAME_CFG_HDR)
-   {
-      return(NextState);
-   }
-   else if (NextState == STATE_WAIT_LOKINFO_CFG_HDR)
-   {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: rewrite state %d\n",STATE_WAIT_POLL_LOKINFO_CFG_HDR);
-      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
-      return(STATE_WAIT_POLL_LOKINFO_CFG_HDR);
-   }
-   else
-   {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: rewrite state %d\n",STATE_WAIT_POLL_LOKNAME_CFG_DATA);
-      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
-      return(STATE_WAIT_POLL_LOKNAME_CFG_DATA);
-   }
-}
-
-static int HandleLokinfoCfgHeader(void *Priv, void *SignalData)
-{  ZentraleStruct *Data;
-   MrIpcCmdType *CmdFrame;
-   unsigned long Length;
-   int Crc;
-
-   Data = (ZentraleStruct *)Priv;
-   CmdFrame = (MrIpcCmdType *)SignalData;
-   MrIpcCmdGetCfgHeader(CmdFrame, &Length, &Crc);
-   if (ZentraleGetVerbose(Data))
-      printf("FSM: LOKINFO CFG data length %lu, crc %d\n", Length, Crc);
-   ZentraleSetCfgLength(Data, Length);
-   ZentraleSetCfgHaveRead(Data, 0);
-   ZentraleSetCfgBuffer(Data, malloc(ZentraleGetCfgLength(Data) + 7));
-   if (ZentraleGetCfgBuffer(Data) == NULL)
-   {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: new state %d\n",STATE_NORMAL);
-      return(STATE_NORMAL);
-   }
-   else
-   {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: new state %d\n",STATE_WAIT_LOKINFO_CFG_DATA);
-      return(STATE_WAIT_LOKINFO_CFG_DATA);
-   }
-}
-
-static int HandleLokinfoWaitCfgHeader(void *Priv, void *SignalData)
-{  int NextState;
-   ZentraleStruct *Data;
-
-   Data = (ZentraleStruct *)Priv;
-   NextState = HandleLokinfoCfgHeader(Priv, SignalData);
-   if (NextState == STATE_WAIT_LOKINFO_CFG_DATA)
-   {
-      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
-      return(NextState);
-   }
-   else
-   {
-      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
-      return(NextState);
-   }
-}
-
-static int HandleLokinfoCfgData(void *Priv, void *SignalData)
-{  ZentraleStruct *Data;
-   MrIpcCmdType *CmdFrame, Cmd;
-   char Buf[17];
-   Cs2parser *LokParser;
-   int LineInfo, FktIndex;
-
-   Data = (ZentraleStruct *)Priv;
-   CmdFrame = (MrIpcCmdType *)SignalData;
-   MrIpcCmdGetCfgData(CmdFrame, Buf);
-   memcpy(ZentraleGetCfgBuffer(Data) + ZentraleGetCfgHaveRead(Data), Buf, 8);
-   ZentraleSetCfgHaveRead(Data, ZentraleGetCfgHaveRead(Data) + 8);
-   if (ZentraleGetVerbose(Data))
-      printf("FSM: LOKINFO CFG data, aktuell %lu von %lu\n",
-             ZentraleGetCfgHaveRead(Data), ZentraleGetCfgLength(Data));
-   if (ZentraleGetCfgHaveRead(Data) >= ZentraleGetCfgLength(Data))
-   {
-      memset(ZentraleGetActualLok(Data), 0, sizeof(LokInfo));
-      FktIndex = -1;
-      ZentraleGetCfgBuffer(Data)[ZentraleGetCfgLength(Data)] = '\0';
-      LokParser = Cs2pCreate();
-      Cs2pInit(LokParser, PARSER_TYPE_LOKINFO, ZentraleGetCfgBuffer(Data),
-               ZentraleGetCfgHaveRead(Data));
-      Cs2pSetVerbose(LokParser, FALSE);
-      do {
-         LineInfo = Cs2pParse(LokParser);
-         switch (LineInfo)
-         {
-            case PARSER_ERROR:
-               if (ZentraleGetVerbose(Data))
-                  puts("ERROR in lok info cfg");
-               break;
-            case PARSER_EOF:
-               if (ZentraleGetVerbose(Data))
-                  puts("end of lok info cfg");
-               break;
-            case PARSER_PARAGRAPH:
-               if (ZentraleGetVerbose(Data))
-                  printf("new paragraph %s in lok info cfg\n",
-                         Cs2pGetName(LokParser));
-               switch (Cs2pGetSubType(LokParser))
-               {
-                  case PARSER_PARAGRAPH_LOKOMOTIVE:
-                     if (ZentraleGetVerbose(Data))
-                        puts("lokomotive paragraph in lok cfg");
-                     break;
-               }
-               break;
-            case PARSER_VALUE:
-               if (ZentraleGetVerbose(Data))
-                  printf("new value %s=%s in lok cfg\n",
-                         Cs2pGetName(LokParser), Cs2pGetValue(LokParser));
-               switch (Cs2pGetSubType(LokParser))
-               {
-                  case PARSER_VALUE_LOK:
-                     if (ZentraleGetVerbose(Data))
-                        puts("neuer lok Eintrag");
-                     break;
-                  case PARSER_VALUE_UID:
-                     if (ZentraleGetVerbose(Data))
-                        puts("lok uid");
-                     LokInfoSetUid(ZentraleGetActualLok(Data),
-                                   strtoul(Cs2pGetValue(LokParser),
-                                           NULL, 0));
-                     break;
-                  case PARSER_VALUE_NAME:
-                     if (ZentraleGetVerbose(Data))
-                        puts("lok name");
-                     LokInfoSetName(ZentraleGetActualLok(Data),
-                                    Cs2pGetValue(LokParser));
-                     break;
-                  case PARSER_VALUE_ADRESSE:
-                     if (ZentraleGetVerbose(Data))
-                        puts("lok adresse");
-                     LokInfoSetAdresse(ZentraleGetActualLok(Data),
-                                       strtoul(Cs2pGetValue(LokParser),
-                                               NULL, 0));
-                     break;
-                  case PARSER_VALUE_TYP:
-                     if (Cs2pGetLevel(LokParser) == 1)
-                     {
-                        if (ZentraleGetVerbose(Data))
-                           puts("lok typ");
-                        LokInfoSetTyp(ZentraleGetActualLok(Data),
-                                      Cs2pGetValue(LokParser));
-                     }
-                     else if (Cs2pGetLevel(LokParser) == 2)
-                     {
-                        if (ZentraleGetVerbose(Data))
-                           puts("lok function typ");
-                        LokInfoSetFktTyp(ZentraleGetActualLok(Data), FktIndex,
-                                         strtoul(Cs2pGetValue(LokParser),
-                                                 NULL, 0));
-                     }
-                     break;
-                  case PARSER_VALUE_MFXUID:
-                     if (ZentraleGetVerbose(Data))
-                        puts("lok mfxuid");
-                     LokInfoSetMfxUid(ZentraleGetActualLok(Data),
-                                      strtoul(Cs2pGetValue(LokParser),
-                                              NULL, 0));
-                     break;
-                  case PARSER_VALUE_SYMBOL:
-                     if (ZentraleGetVerbose(Data))
-                        puts("lok symbol");
-                     LokInfoSetSymbol(ZentraleGetActualLok(Data),
-                                      strtoul(Cs2pGetValue(LokParser),
-                                              NULL, 0));
-                     break;
-                  case PARSER_VALUE_AV:
-                     if (ZentraleGetVerbose(Data))
-                        puts("lok av");
-                     LokInfoSetAv(ZentraleGetActualLok(Data),
-                                  strtoul(Cs2pGetValue(LokParser),
-                                          NULL, 0));
-                     break;
-                  case PARSER_VALUE_BV:
-                     if (ZentraleGetVerbose(Data))
-                        puts("lok bv");
-                     LokInfoSetBv(ZentraleGetActualLok(Data),
-                                  strtoul(Cs2pGetValue(LokParser),
-                                          NULL, 0));
-                     break;
-                  case PARSER_VALUE_VOLUME:
-                     if (ZentraleGetVerbose(Data))
-                        puts("lok volume");
-                     LokInfoSetVolume(ZentraleGetActualLok(Data),
-                                      strtoul(Cs2pGetValue(LokParser),
-                                              NULL, 0));
-                     break;
-                  case PARSER_VALUE_VELOCITY:
-                     if (ZentraleGetVerbose(Data))
-                        puts("lok velocity");
-                     LokInfoSetVelocity(ZentraleGetActualLok(Data),
-                                        strtoul(Cs2pGetValue(LokParser),
-                                                NULL, 0));
-                     break;
-                  case PARSER_VALUE_RICHTUNG:
-                     if (ZentraleGetVerbose(Data))
-                        puts("lok richtung");
-                     LokInfoSetRichtung(ZentraleGetActualLok(Data),
-                                        strtoul(Cs2pGetValue(LokParser),
-                                                NULL, 0));
-                     break;
-                  case PARSER_VALUE_VMAX:
-                     if (ZentraleGetVerbose(Data))
-                        puts("lok vmax");
-                     LokInfoSetVmax(ZentraleGetActualLok(Data),
-                                    strtoul(Cs2pGetValue(LokParser),
-                                            NULL, 0));
-                     break;
-                  case PARSER_VALUE_VMIN:
-                     if (ZentraleGetVerbose(Data))
-                        puts("lok vmin");
-                     LokInfoSetVmin(ZentraleGetActualLok(Data),
-                                    strtoul(Cs2pGetValue(LokParser),
-                                            NULL, 0));
-                     break;
-                  case PARSER_VALUE_FKT:
-                     if (ZentraleGetVerbose(Data))
-                        puts("lok fkt");
-                     FktIndex++;
-                     break;
-                  case PARSER_VALUE_DAUER:
-                     if (ZentraleGetVerbose(Data))
-                        puts("lok function dauer");
-                     LokInfoSetFktDauer(ZentraleGetActualLok(Data), FktIndex,
-                                        strtoul(Cs2pGetValue(LokParser),
-                                                NULL, 0));
-                     break;
-                  case PARSER_VALUE_WERT:
-                     if (ZentraleGetVerbose(Data))
-                        puts("lok function wert");
-                     LokInfoSetFktWert(ZentraleGetActualLok(Data), FktIndex,
-                                       strtoul(Cs2pGetValue(LokParser),
-                                               NULL, 0));
-                     break;
-               }
-               break;
-         }
-      } while (LineInfo != PARSER_EOF);
-      Cs2pDestroy(LokParser);
-      free(ZentraleGetCfgBuffer(Data));
-      ZentraleSetCfgLength(Data, 0);
-      ZentraleSetCfgHaveRead(Data, 0);
-      ZentraleSetCfgBuffer(Data, NULL);
-      LokInsert(ZentraleGetLoks(Data), ZentraleGetActualLok(Data));
-      ZentraleSetActualIndex(Data, ZentraleGetActualIndex(Data) + 1);
-      if (ZentraleGetActualIndex(Data) < ZentraleGetNumLoks(Data))
-      {
-         if (ZentraleGetVerbose(Data))
-            printf("request lokinfo %d >%s< from %d\n",
-                   ZentraleGetActualIndex(Data),
-                   ZentraleGetLokNamenNr(Data,
-                                         ZentraleGetActualIndex(Data)),
-                   ZentraleGetNumLoks(Data));
-         MrIpcInit(&Cmd);
-         MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetReceiverSocket(&Cmd, MrIpcGetSenderSocket(CmdFrame));
-         MrIpcSetCanResponse(&Cmd, 0);
-         MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-         MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
-         MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-         MrIpcCmdSetReqestLocinfo(&Cmd,
-                                  ZentraleGetLokNamenNr(Data,
-                                                        ZentraleGetActualIndex(Data)));
-         MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
-         if (ZentraleGetVerbose(Data))
-            printf("FSM: new state %d\n",STATE_WAIT_LOKNAME_CFG_HDR);
-         return(STATE_WAIT_LOKINFO_CFG_HDR);
-      }
-      else
-      {
-         if (ZentraleGetVerbose(Data))
-            printf("save lokomotive.cs2\n");
-         LokSaveLokomotiveCs2(ZentraleGetLoks(Data));
-         if (ZentraleGetVerbose(Data))
-             printf("FSM: new state %d\n",STATE_NORMAL);
-         return(STATE_NORMAL);
-      }
-   }
-   else
-   {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: new state %d\n",STATE_WAIT_LOKNAME_CFG_DATA);
-      return(STATE_WAIT_LOKINFO_CFG_DATA);
-   }
-}
-
-static int HandleLokinfoWaitCfgData(void *Priv, void *SignalData)
-{  int NextState;
-   ZentraleStruct *Data;
-
-   Data = (ZentraleStruct *)Priv;
-   NextState = HandleLokinfoCfgData(Priv, SignalData);
-   if (NextState == STATE_WAIT_LOKINFO_CFG_HDR)
-   {
-      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
-      return(NextState);
-   }
-   else if (NextState == STATE_WAIT_LOKNAME_CFG_DATA)
-   {
-      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
-      return(NextState);
-   }
-   else
-   {
-      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
-      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_QUERY);
-      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_POLLMS2);
-      return(NextState);
-   }
 }
 
 static int HandleLokSpeed(void *Priv, void *SignalData)
@@ -840,6 +319,11 @@ static int HandleFileRequest(void *Priv, void *SignalData)
       Dateiname = (char *)NULL;
    else if (strncmp(MR_CS2_CFG_LDBVER, Name, strlen(MR_CS2_CFG_LDBVER)) == 0)
       Dateiname = (char *)NULL;
+   else if (strncmp(MR_CS2_CFG_LOK_STAT, Name, strlen(MR_CS2_CFG_LOK_STAT)) == 0)
+   {
+      LokStatusSaveLokomotiveSr2(ZentraleGetLoks(Data));
+      Dateiname = CS2_FILE_STRING_STATUS_LOKOMOTIVE;
+   }
    else if (strncmp(MR_CS2_CFG_LOKS, Name, strlen(MR_CS2_CFG_LOKS)) == 0)
       Dateiname = CS2_FILE_STRING_LOKOMOTIVE;
    else if (strncmp(MR_CS2_CFG_MAGS, Name, strlen(MR_CS2_CFG_MAGS)) == 0)
@@ -870,15 +354,10 @@ static int HandleFileRequest(void *Priv, void *SignalData)
       Dateiname = CS2_FILE_STRING_GLEISBILD;
    else if (strncmp(MR_CS2_CFG_FS, Name, strlen(MR_CS2_CFG_FS)) == 0)
       Dateiname = CS2_FILE_STRING_FAHRSTRASSE;
-   else if (strncmp(MR_CS2_CFG_LOK_STAT, Name, strlen(MR_CS2_CFG_LOK_STAT)) == 0)
-   {
-      LokStatusSaveLokomotiveSr2(ZentraleGetLoks(Data));
-      Dateiname = CS2_FILE_STRING_STATUS_MAGNETARTIKEL;
-   }
    else if (strncmp(MR_CS2_CFG_MAG_STAT, Name, strlen(MR_CS2_CFG_MAG_STAT)) == 0)
    {
       MagStatusSaveMagStatusSr2(ZentraleGetMagnetartikel(Data));
-      Dateiname = CS2_FILE_STRING_STATUS_LOKOMOTIVE;
+      Dateiname = CS2_FILE_STRING_STATUS_MAGNETARTIKEL;
    }
    else if (strncmp(MR_CS2_CFG_FS_STAT, Name, strlen(MR_CS2_CFG_FS_STAT)) == 0)
    {
@@ -976,51 +455,110 @@ static int HandleFileRequest(void *Priv, void *SignalData)
    return(STATE_NO_CHANGE);
 }
 
-static int HandleCfgHeaderMs2Master(void *Priv, void *SignalData)
+static BOOL DoCfgHeader(ZentraleStruct *Data, MrIpcCmdType *CmdFrame,
+                        BOOL IsCompressed)
+{  unsigned long Length;
+   int Crc;
+
+   MrIpcCmdGetCfgHeader(CmdFrame, &Length, &Crc);
+   if (ZentraleGetVerbose(Data))
+      printf("DoCfgHeader: CFG data length %lu, crc %d\n", Length, Crc);
+   if (!Cs2CfgDataStart(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame),
+                        Length, IsCompressed))
+   {
+      if (ZentraleGetVerbose(Data))
+         puts("DoCfgHeader: error");
+      return(FALSE);
+   }
+   else
+   {
+      return(TRUE);
+   }
+}
+
+static int HandleCfgHeaderUncompressed(void *Priv, void *SignalData)
 {  ZentraleStruct *Data;
    MrIpcCmdType *CmdFrame;
-   unsigned long Length;
-   int Crc;
 
    Data = (ZentraleStruct *)Priv;
    CmdFrame = (MrIpcCmdType *)SignalData;
-   MrIpcCmdGetCfgHeader(CmdFrame, &Length, &Crc);
-   if (ZentraleGetVerbose(Data))
-      printf("FSM: CFG data length %lu, crc %d\n", Length, Crc);
-   ZentraleSetCfgLength(Data, Length);
-   ZentraleSetCfgHaveRead(Data, 0);
-   ZentraleSetCfgBuffer(Data, malloc(ZentraleGetCfgLength(Data) + 7));
-   if (ZentraleGetCfgBuffer(Data) == NULL)
+   DoCfgHeader(Data, CmdFrame, FALSE);
+   return(STATE_NO_CHANGE);
+}
+
+static int HandleCfgHeaderCompressed(void *Priv, void *SignalData)
+{  ZentraleStruct *Data;
+   MrIpcCmdType *CmdFrame;
+
+   Data = (ZentraleStruct *)Priv;
+   CmdFrame = (MrIpcCmdType *)SignalData;
+   DoCfgHeader(Data, CmdFrame, TRUE);
+   return(STATE_NO_CHANGE);
+}
+
+static int HandleLoknameWaitCfgHeader(void *Priv, void *SignalData)
+{  ZentraleStruct *Data;
+   MrIpcCmdType *CmdFrame;
+
+   Data = (ZentraleStruct *)Priv;
+   CmdFrame = (MrIpcCmdType *)SignalData;
+   if (DoCfgHeader(Data, CmdFrame, FALSE))
    {
       if (ZentraleGetVerbose(Data))
-         printf("FSM: new state %d\n",STATE_NORMAL);
-      return(STATE_NORMAL);
+      {
+         puts("HandleLoknameWaitCfgHeader: continue");
+         printf("FSM: new state %d\n",STATE_WAIT_LOKNAME_CFG_DATA);
+      }
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
+      return(STATE_WAIT_LOKNAME_CFG_DATA);
    }
    else
    {
       if (ZentraleGetVerbose(Data))
-         printf("FSM: new state %d\n",STATE_WAIT_CFG_DATA);
-      return(STATE_WAIT_CFG_DATA);
+      {
+         puts("HandleLoknameWaitCfgHeader: error");
+         printf("FSM: new state %d\n",STATE_NORMAL);
+      }
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
+      return(STATE_NORMAL);
+   }
+}
+
+static int HandleLokinfoWaitCfgHeader(void *Priv, void *SignalData)
+{  ZentraleStruct *Data;
+   MrIpcCmdType *CmdFrame;
+
+   Data = (ZentraleStruct *)Priv;
+   CmdFrame = (MrIpcCmdType *)SignalData;
+   if (DoCfgHeader(Data, CmdFrame, FALSE))
+   {
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
+      if (ZentraleGetVerbose(Data))
+         printf("FSM: new state %d\n",STATE_WAIT_LOKINFO_CFG_DATA);
+      return(STATE_WAIT_LOKINFO_CFG_DATA);
+   }
+   else
+   {
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
+      if (ZentraleGetVerbose(Data))
+         printf("FSM: new state %d\n",STATE_NORMAL);
+      return(STATE_NORMAL);
    }
 }
 
 static int HandleCfgHeaderProxy(void *Priv, void *SignalData,
                                 int NewStateForContinue, int NewStateForStay)
 {  ZentraleStruct *Data;
-   int Ret;
+   MrIpcCmdType *CmdFrame;
 
    Data = (ZentraleStruct *)Priv;
-   Ret = HandleCfgHeaderMs2Master(Priv, SignalData);
-   if (Ret == STATE_WAIT_CFG_DATA)
+   CmdFrame = (MrIpcCmdType *)SignalData;
+   if (DoCfgHeader(Data, CmdFrame, TRUE))
    {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: rewrite new state %d\n",NewStateForContinue);
       return(NewStateForContinue);
    }
    else
    {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: rewrite new state %d\n",NewStateForStay);
       return(NewStateForStay);
    }
 }
@@ -1225,159 +763,631 @@ static int HandleFsCvrHeaderProxy(void *Priv, void *SignalData)
    return(NewState);
 }
 
-static int HandleCfgData(void *Priv, void *SignalData)
-{  ZentraleStruct *Data;
-   MrIpcCmdType *CmdFrame;
-   char Buf [8];
-   Cs2parser *Parser;
+static BOOL HandleCfgLoknamen(ZentraleStruct *Data, MrIpcCmdType *CmdFrame)
+{  Cs2parser *LokParser;
+   int LineInfo, Paragraph;
+   MrIpcCmdType Cmd;
 
-   Data = (ZentraleStruct *)Priv;
-   CmdFrame = (MrIpcCmdType *)SignalData;
-   MrIpcCmdGetCfgData(CmdFrame, Buf);
-   memcpy(ZentraleGetCfgBuffer(Data) + ZentraleGetCfgHaveRead(Data), Buf, 8);
-   ZentraleSetCfgHaveRead(Data, ZentraleGetCfgHaveRead(Data) + 8);
-   if (ZentraleGetCfgHaveRead(Data) >= ZentraleGetCfgLength(Data))
-   {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: inflate compressed cfg\n");
-      ZFileInit(ZentraleGetPackedCs2File(Data), ZentraleGetCfgBuffer(Data),
-                ZentraleGetCfgHaveRead(Data));
-      if (ZFileUnCompress(ZentraleGetPackedCs2File(Data)))
+   Paragraph = PARAGRAPH_UNDEFINED;
+   if (ZentraleGetVerbose(Data))
+      printf("FSM: evaluate lokname cfg\n%s",
+             Cs2CfgDataGetBuf(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame)));
+   Cs2CfgDataGetBuf(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame))[Cs2CfgDataGetLength(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame))] = '\0';
+   LokParser = Cs2pCreate();
+   Cs2pInit(LokParser, PARSER_TYPE_LOKNAMEN,
+            Cs2CfgDataGetBuf(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame)),
+            Cs2CfgDataGetHaveRead(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame)));
+   Cs2pSetVerbose(LokParser, FALSE);
+   do {
+      LineInfo = Cs2pParse(LokParser);
+      switch (LineInfo)
       {
-         Parser = Cs2pCreate();
-         Cs2pInit(Parser, PARSER_TYPE_HEADER_CS2,
-                  (char *)ZFileGetBuffer(ZentraleGetPackedCs2File(Data)),
-                  ZFileGetLength(ZentraleGetPackedCs2File(Data)));
-         Cs2pSetVerbose(Parser, FALSE);
-         if (Cs2pParse(Parser) == PARSER_PARAGRAPH)
-         {
-            switch (Cs2pGetSubType(Parser))
+         case PARSER_ERROR:
+            if (ZentraleGetVerbose(Data))
+               puts("ERROR in lok cfg");
+            break;
+         case PARSER_EOF:
+            if (ZentraleGetVerbose(Data))
+               puts("end of lok cfg");
+            break;
+         case PARSER_PARAGRAPH:
+            if (ZentraleGetVerbose(Data))
+               printf("new paragraph %s in lok cfg\n",
+                      Cs2pGetName(LokParser));
+            switch (Cs2pGetSubType(LokParser))
             {
-               case PARSER_PARAGRAPH_LOKOMOTIVE:
-                  LokParseLokomotiveCs2(ZentraleGetLoks(Data),
-                                        (char *)ZFileGetBuffer(ZentraleGetPackedCs2File(Data)),
-                                                ZFileGetLength(ZentraleGetPackedCs2File(Data)));
-                  LokSaveLokomotiveCs2(ZentraleGetLoks(Data));
+               case PARSER_PARAGRAPH_LOK:
+                  if (ZentraleGetVerbose(Data))
+                     puts("lok paragraph in lok cfg");
+                  Paragraph = PARAGRAPH_LOK;
                   break;
-               case PARSER_PARAGRAPH_GLEISBILD:
-                  {  DIR *d;
-                     struct dirent *dir;
-                     char GleisbildPageDir[256], GleisbildPageFullName[256];
-
-                     GleisbildClear(ZentraleGetGleisbild(Data));
-                     strcpy(GleisbildPageDir, ZentraleGetLocPath(Data));
-                     if (GleisbildPageDir[strlen(GleisbildPageDir) - 1] != '/')
-                        strcat(GleisbildPageDir, "/");
-                     strcat(GleisbildPageDir, MR_CS2_GLEISBILD_PAGE_SUBDIR);
-                     d = opendir(GleisbildPageDir);
-                     if (d)
-                     {
-                        while ((dir = readdir(d)) != NULL)
-                        {
-                           if ((strcmp(dir->d_name, ".") != 0) &&
-                               (strcmp(dir->d_name, "..") != 0))
-                           {
-                              strcpy(GleisbildPageFullName, GleisbildPageDir);
-                              if (GleisbildPageFullName[strlen(GleisbildPageFullName) - 1] != '/')
-                                 strcat(GleisbildPageFullName, "/");
-                              strcat(GleisbildPageFullName, dir->d_name);
-                              remove(GleisbildPageFullName);
-                           }
-                        }
-                        closedir(d);
-                     }
-                     if (GleisbildGetNumPages(ZentraleGetGleisbild(Data)) > 0)
-                     {  int i;
-
-                        for (i=0; i<GleisbildGetNumPages(ZentraleGetGleisbild(Data)); i++)
-                        {
-                           GleisbildPageExit(ZentraleGetNrGleisPages(Data, i));
-                           GleisbildPageDestroy(ZentraleGetNrGleisPages(Data, i));
-                        }
-                        free(ZentraleGetGleisPages(Data));
-                     }
-                     GleisbildParseGleisbildCs2(ZentraleGetGleisbild(Data),
-                                                (char *)ZFileGetBuffer(ZentraleGetPackedCs2File(Data)),
-                                                ZFileGetLength(ZentraleGetPackedCs2File(Data)));
-                     GleisbildSaveGleisbildCs2(ZentraleGetGleisbild(Data));
-                     if (GleisbildGetNumPages(ZentraleGetGleisbild(Data)) > 0)
-                     {  int i;
-
-                        ZentraleSetGleisPages(Data,
-                                              (GleisbildPageStruct **)malloc(sizeof(GleisbildPageStruct *) *
-                                                                             GleisbildGetNumPages(ZentraleGetGleisbild(Data))));
-                        for (i=0; i<GleisbildGetNumPages(ZentraleGetGleisbild(Data)); i++)
-                        {
-                           ZentraleSetNrGleisPages(Data, i,
-                                                   (GleisbildPageStruct *)NULL);
-                        }
-                     }
+               case PARSER_PARAGRAPH_NUMLOKS:
+                  if (ZentraleGetVerbose(Data))
+                     puts("numloks paragraph in lok cfg");
+                  Paragraph = PARAGRAPH_NUMLOKS;
+                  break;
+            }
+            break;
+         case PARSER_VALUE:
+            if (ZentraleGetVerbose(Data))
+               printf("new value %s=%s in lok cfg\n",
+                      Cs2pGetName(LokParser), Cs2pGetValue(LokParser));
+            switch (Cs2pGetSubType(LokParser))
+            {
+               case PARSER_VALUE_NAME:
+                  if (ZentraleGetVerbose(Data))
+                     printf("lok name %d in lok cfg\n", ZentraleGetActualIndex(Data));
+                  if (Paragraph == PARAGRAPH_LOK &&
+                      ZentraleGetActualIndex(Data) < ZentraleGetNumLoks(Data))
+                  {
+                     ZentraleSetLokNamenNr(Data,
+                                           ZentraleGetActualIndex(Data),
+                                           Cs2pGetValue(LokParser));
+                     ZentraleSetActualIndex(Data, ZentraleGetActualIndex(Data) + 1);
                   }
                   break;
-               case PARSER_PARAGRAPH_MAGNETARTIKEL:
-                  MagnetartikelParseMagnetartikelCs2(ZentraleGetMagnetartikel(Data),
-                                                     (char *)ZFileGetBuffer(ZentraleGetPackedCs2File(Data)),
-                                                     ZFileGetLength(ZentraleGetPackedCs2File(Data)));
-                  MagnetartikelSaveMagnetartikelCs2(ZentraleGetMagnetartikel(Data));
-                  break;
-               case PARSER_PARAGRAPH_FAHRSTRASSEN:
-                  FahrstrasseParseFahrstrasseCs2(ZentraleGetFahrstrasse(Data),
-                                                 (char *)ZFileGetBuffer(ZentraleGetPackedCs2File(Data)),
-                                                 ZFileGetLength(ZentraleGetPackedCs2File(Data)));
-                  FahrstrasseSaveFahrstrasseCs2(ZentraleGetFahrstrasse(Data));
-                  break;
-               case PARSER_PARAGRAPH_GLEISBILDSEITE:
+               case PARSER_VALUE_WERT:
+                  if (ZentraleGetVerbose(Data))
+                     puts("number of loks in lok cfg");
+                  if (Paragraph == PARAGRAPH_NUMLOKS)
                   {
-                     GleisbildPageStruct *NewPage;
-                     char *GleisbildName;
-
-                     NewPage = GleisbildPageCreate();
-                     if (NewPage != (GleisbildPageStruct *)NULL)
+                     ZentraleSetNumLoks(Data, atoi(Cs2pGetValue(LokParser)));
+                     if (ZentraleGetVerbose(Data))
+                        printf("number of loks in lok cfg is %d\n",
+                               ZentraleGetNumLoks(Data));
+                     if (ZentraleGetMaxLoks(Data) < ZentraleGetNumLoks(Data))
                      {
-                        GleisbildPageInit(NewPage, ZentraleGetLocPath(Data), "", 0);
-                        GleisbildPageParseGleisbildPageCs2(NewPage,
-                                                           (char *)ZFileGetBuffer(ZentraleGetPackedCs2File(Data)),
-                                                           ZFileGetLength(ZentraleGetPackedCs2File(Data)));
-                        GleisbildPageSetGleisbildPageFilePath(NewPage,
-                                                              ZentraleGetLocPath(Data));
-                        GleisbildName = malloc(strlen(GleisbildInfoGetName(GleisbildSearch(ZentraleGetGleisbild(Data),
-                                                                           GleisbildPageStructGetPage(NewPage)))) +
-                                               strlen(MR_CS2_FILE_EXTENSION) + 1);
-                        if (GleisbildName != (char *)NULL)
-                        {
-                           strcpy(GleisbildName,
-                                  GleisbildInfoGetName(GleisbildSearch(ZentraleGetGleisbild(Data),
-                                                       GleisbildPageStructGetPage(NewPage))));
-                           strcat(GleisbildName, MR_CS2_FILE_EXTENSION);
-                           GleisbildPageSetGleisbildName(NewPage,
-                                                         GleisbildName);
-                           GleisbildPageSaveGleisbildPageCs2(NewPage);
-                           ZentraleSetNrGleisPages(Data,
-                                                   GleisbildPageStructGetPage(NewPage),
-                                                   NewPage);
-                        }
+                        ZentraleSetMaxLoks(Data, ZentraleGetNumLoks(Data));
+                        ZentraleSetLokNamen(Data, realloc(ZentraleGetLokNamen(Data),
+                                                          ZentraleGetNumLoks(Data) * sizeof(ZentraleLokName)));
+                        if (ZentraleGetVerbose(Data))
+                           printf("new number of loks in lok cfg is %d\n",
+                                  ZentraleGetNumLoks(Data));
                      }
                   }
                   break;
             }
-         }
-         Cs2pDestroy(Parser);
+            break;
       }
-      ZFileExit(ZentraleGetPackedCs2File(Data));
-      free(ZentraleGetCfgBuffer(Data));
-      ZentraleSetCfgLength(Data, 0);
-      ZentraleSetCfgHaveRead(Data, 0);
-      ZentraleSetCfgBuffer(Data, NULL);
+   } while (LineInfo != PARSER_EOF);
+   Cs2pDestroy(LokParser);
+   if (ZentraleGetActualIndex(Data) < ZentraleGetNumLoks(Data))
+   {
       if (ZentraleGetVerbose(Data))
-         printf("FSM: new state %d\n",STATE_NORMAL);
-      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
-      return(STATE_NORMAL);
+         printf("request lokname %d\n", ZentraleGetActualIndex(Data));
+      MrIpcInit(&Cmd);
+      MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
+      MrIpcSetReceiverSocket(&Cmd, MrIpcGetSenderSocket(CmdFrame));
+      MrIpcSetCanResponse(&Cmd, 0);
+      MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
+      MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
+      MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
+      MrIpcCmdSetReqestLocname(&Cmd, ZentraleGetActualIndex(Data), 2);
+      MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
+      return(FALSE);
+   }
+   else
+   {
+      ZentraleSetActualIndex(Data, 0);
+      if (ZentraleGetVerbose(Data))
+         printf("request lokinfo %d >%s< from %d\n",
+                ZentraleGetActualIndex(Data),
+                ZentraleGetLokNamenNr(Data, ZentraleGetActualIndex(Data)),
+                ZentraleGetNumLoks(Data));
+      MrIpcInit(&Cmd);
+      MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
+      MrIpcSetReceiverSocket(&Cmd, MrIpcGetSenderSocket(CmdFrame));
+      MrIpcSetCanResponse(&Cmd, 0);
+      MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
+      MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
+      MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
+      MrIpcCmdSetReqestLocinfo(&Cmd,
+                               ZentraleGetLokNamenNr(Data,
+                                                     ZentraleGetActualIndex(Data)));
+      MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
+      LokMarkAllDeleted(ZentraleGetLoks(Data));
+      return(TRUE);
+   }
+}
+
+static BOOL HandleCfgLokinfo(ZentraleStruct *Data, MrIpcCmdType *CmdFrame)
+{  MrIpcCmdType Cmd;
+   Cs2parser *LokParser;
+   int LineInfo, FktIndex;
+
+   if (ZentraleGetVerbose(Data))
+      printf("FSM: LOKINFO CFG data, aktuell %lu von %lu\n",
+             Cs2CfgDataGetHaveRead(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame)),
+             Cs2CfgDataGetLength(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame)));
+   memset(ZentraleGetActualLok(Data), 0, sizeof(LokInfo));
+   FktIndex = -1;
+   Cs2CfgDataGetBuf(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame))[Cs2CfgDataGetHaveRead(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame))] = '\0';
+   LokParser = Cs2pCreate();
+   Cs2pInit(LokParser, PARSER_TYPE_LOKINFO,
+            Cs2CfgDataGetBuf(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame)),
+            Cs2CfgDataGetHaveRead(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame)));
+   Cs2pSetVerbose(LokParser, FALSE);
+   do {
+      LineInfo = Cs2pParse(LokParser);
+      switch (LineInfo)
+      {
+         case PARSER_ERROR:
+            if (ZentraleGetVerbose(Data))
+               puts("ERROR in lok info cfg");
+            break;
+         case PARSER_EOF:
+            if (ZentraleGetVerbose(Data))
+               puts("end of lok info cfg");
+            break;
+         case PARSER_PARAGRAPH:
+            if (ZentraleGetVerbose(Data))
+               printf("new paragraph %s in lok info cfg\n",
+                      Cs2pGetName(LokParser));
+            switch (Cs2pGetSubType(LokParser))
+            {
+               case PARSER_PARAGRAPH_LOKOMOTIVE:
+                  if (ZentraleGetVerbose(Data))
+                     puts("lokomotive paragraph in lok cfg");
+                  break;
+            }
+            break;
+         case PARSER_VALUE:
+            if (ZentraleGetVerbose(Data))
+               printf("new value %s=%s in lok cfg\n",
+                      Cs2pGetName(LokParser), Cs2pGetValue(LokParser));
+            switch (Cs2pGetSubType(LokParser))
+            {
+               case PARSER_VALUE_LOK:
+                  if (ZentraleGetVerbose(Data))
+                     puts("neuer lok Eintrag");
+                  break;
+               case PARSER_VALUE_UID:
+                  if (ZentraleGetVerbose(Data))
+                     puts("lok uid");
+                  LokInfoSetUid(ZentraleGetActualLok(Data),
+                                strtoul(Cs2pGetValue(LokParser),
+                                        NULL, 0));
+                  break;
+               case PARSER_VALUE_NAME:
+                  if (ZentraleGetVerbose(Data))
+                     puts("lok name");
+                  LokInfoSetName(ZentraleGetActualLok(Data),
+                                 Cs2pGetValue(LokParser));
+                  break;
+               case PARSER_VALUE_ADRESSE:
+                  if (ZentraleGetVerbose(Data))
+                     puts("lok adresse");
+                  LokInfoSetAdresse(ZentraleGetActualLok(Data),
+                                    strtoul(Cs2pGetValue(LokParser),
+                                            NULL, 0));
+                  break;
+               case PARSER_VALUE_TYP:
+                  if (Cs2pGetLevel(LokParser) == 1)
+                  {
+                     if (ZentraleGetVerbose(Data))
+                        puts("lok typ");
+                     LokInfoSetTyp(ZentraleGetActualLok(Data),
+                                   Cs2pGetValue(LokParser));
+                  }
+                  else if (Cs2pGetLevel(LokParser) == 2)
+                  {
+                     if (ZentraleGetVerbose(Data))
+                        puts("lok function typ");
+                     LokInfoSetFktTyp(ZentraleGetActualLok(Data), FktIndex,
+                                      strtoul(Cs2pGetValue(LokParser),
+                                              NULL, 0));
+                  }
+                  break;
+               case PARSER_VALUE_MFXUID:
+                  if (ZentraleGetVerbose(Data))
+                     puts("lok mfxuid");
+                  LokInfoSetMfxUid(ZentraleGetActualLok(Data),
+                                   strtoul(Cs2pGetValue(LokParser),
+                                           NULL, 0));
+                  break;
+               case PARSER_VALUE_SYMBOL:
+                  if (ZentraleGetVerbose(Data))
+                     puts("lok symbol");
+                  LokInfoSetSymbol(ZentraleGetActualLok(Data),
+                                   strtoul(Cs2pGetValue(LokParser),
+                                           NULL, 0));
+                  break;
+               case PARSER_VALUE_AV:
+                  if (ZentraleGetVerbose(Data))
+                     puts("lok av");
+                  LokInfoSetAv(ZentraleGetActualLok(Data),
+                               strtoul(Cs2pGetValue(LokParser),
+                                       NULL, 0));
+                  break;
+               case PARSER_VALUE_BV:
+                  if (ZentraleGetVerbose(Data))
+                     puts("lok bv");
+                  LokInfoSetBv(ZentraleGetActualLok(Data),
+                               strtoul(Cs2pGetValue(LokParser),
+                                       NULL, 0));
+                  break;
+               case PARSER_VALUE_VOLUME:
+                  if (ZentraleGetVerbose(Data))
+                     puts("lok volume");
+                  LokInfoSetVolume(ZentraleGetActualLok(Data),
+                                   strtoul(Cs2pGetValue(LokParser),
+                                           NULL, 0));
+                  break;
+               case PARSER_VALUE_VELOCITY:
+                  if (ZentraleGetVerbose(Data))
+                     puts("lok velocity");
+                  LokInfoSetVelocity(ZentraleGetActualLok(Data),
+                                     strtoul(Cs2pGetValue(LokParser),
+                                             NULL, 0));
+                  break;
+               case PARSER_VALUE_RICHTUNG:
+                  if (ZentraleGetVerbose(Data))
+                     puts("lok richtung");
+                  LokInfoSetRichtung(ZentraleGetActualLok(Data),
+                                     strtoul(Cs2pGetValue(LokParser),
+                                             NULL, 0));
+                  break;
+               case PARSER_VALUE_VMAX:
+                  if (ZentraleGetVerbose(Data))
+                     puts("lok vmax");
+                  LokInfoSetVmax(ZentraleGetActualLok(Data),
+                                 strtoul(Cs2pGetValue(LokParser),
+                                         NULL, 0));
+                  break;
+               case PARSER_VALUE_VMIN:
+                  if (ZentraleGetVerbose(Data))
+                     puts("lok vmin");
+                  LokInfoSetVmin(ZentraleGetActualLok(Data),
+                                 strtoul(Cs2pGetValue(LokParser),
+                                         NULL, 0));
+                  break;
+               case PARSER_VALUE_FKT:
+                  if (ZentraleGetVerbose(Data))
+                     puts("lok fkt");
+                  FktIndex++;
+                  break;
+               case PARSER_VALUE_DAUER:
+                  if (ZentraleGetVerbose(Data))
+                     puts("lok function dauer");
+                  LokInfoSetFktDauer(ZentraleGetActualLok(Data), FktIndex,
+                                     strtoul(Cs2pGetValue(LokParser),
+                                             NULL, 0));
+                  break;
+               case PARSER_VALUE_WERT:
+                  if (ZentraleGetVerbose(Data))
+                     puts("lok function wert");
+                  LokInfoSetFktWert(ZentraleGetActualLok(Data), FktIndex,
+                                    strtoul(Cs2pGetValue(LokParser),
+                                            NULL, 0));
+                  break;
+            }
+            break;
+      }
+   } while (LineInfo != PARSER_EOF);
+   Cs2pDestroy(LokParser);
+   LokInsert(ZentraleGetLoks(Data), ZentraleGetActualLok(Data));
+   ZentraleSetActualIndex(Data, ZentraleGetActualIndex(Data) + 1);
+   if (ZentraleGetActualIndex(Data) < ZentraleGetNumLoks(Data))
+   {
+      if (ZentraleGetVerbose(Data))
+         printf("request lokinfo %d >%s< from %d\n",
+                ZentraleGetActualIndex(Data),
+                ZentraleGetLokNamenNr(Data,
+                                      ZentraleGetActualIndex(Data)),
+                ZentraleGetNumLoks(Data));
+      MrIpcInit(&Cmd);
+      MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
+      MrIpcSetReceiverSocket(&Cmd, MrIpcGetSenderSocket(CmdFrame));
+      MrIpcSetCanResponse(&Cmd, 0);
+      MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
+      MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
+      MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
+      MrIpcCmdSetReqestLocinfo(&Cmd,
+                               ZentraleGetLokNamenNr(Data,
+                                                     ZentraleGetActualIndex(Data)));
+      MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
+      return(FALSE);
    }
    else
    {
       if (ZentraleGetVerbose(Data))
-         printf("FSM: new state %d\n",STATE_WAIT_CFG_DATA);
-      return(STATE_WAIT_CFG_DATA);
+         printf("save lokomotive.cs2\n");
+      LokSaveLokomotiveCs2(ZentraleGetLoks(Data));
+      return(TRUE);
+   }
+}
+
+static void HandleCfgUnCompressedData(ZentraleStruct *Data, MrIpcCmdType *CmdFrame)
+{  Cs2parser *Parser;
+
+   Parser = Cs2pCreate();
+   Cs2pInit(Parser, PARSER_TYPE_HEADER_CS2,
+            Cs2CfgDataGetBuf(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame)),
+            Cs2CfgDataGetHaveRead(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame)));
+   Cs2pSetVerbose(Parser, FALSE);
+   if (Cs2pParse(Parser) == PARSER_PARAGRAPH)
+   {
+      switch (Cs2pGetSubType(Parser))
+      {
+         case PARSER_PARAGRAPH_LOK:
+         case PARSER_PARAGRAPH_NUMLOKS:
+            HandleCfgLoknamen(Data, CmdFrame);
+            break;
+         case PARSER_PARAGRAPH_LOKOMOTIVE:
+            HandleCfgLokinfo(Data, CmdFrame);
+            break;
+      }
+      Cs2pDestroy(Parser);
+   }
+}
+
+static void HandleCfgCompressedData(ZentraleStruct *Data, MrIpcCmdType *CmdFrame)
+{  Cs2parser *Parser;
+
+   if (ZentraleGetVerbose(Data))
+      printf("FSM: inflate compressed cfg\n");
+   ZFileInit(ZentraleGetPackedCs2File(Data),
+             Cs2CfgDataGetBuf(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame)),
+             Cs2CfgDataGetHaveRead(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame)));
+   if (ZFileUnCompress(ZentraleGetPackedCs2File(Data)))
+   {
+      Parser = Cs2pCreate();
+      Cs2pInit(Parser, PARSER_TYPE_HEADER_CS2,
+               (char *)ZFileGetBuffer(ZentraleGetPackedCs2File(Data)),
+               ZFileGetLength(ZentraleGetPackedCs2File(Data)));
+      Cs2pSetVerbose(Parser, FALSE);
+      if (Cs2pParse(Parser) == PARSER_PARAGRAPH)
+      {
+         switch (Cs2pGetSubType(Parser))
+         {
+            case PARSER_PARAGRAPH_LOKOMOTIVE:
+               LokParseLokomotiveCs2(ZentraleGetLoks(Data),
+                                     (char *)ZFileGetBuffer(ZentraleGetPackedCs2File(Data)),
+                                             ZFileGetLength(ZentraleGetPackedCs2File(Data)));
+               LokSaveLokomotiveCs2(ZentraleGetLoks(Data));
+               break;
+            case PARSER_PARAGRAPH_GLEISBILD:
+               {  DIR *d;
+                  struct dirent *dir;
+                  char GleisbildPageDir[256], GleisbildPageFullName[256];
+
+                  GleisbildClear(ZentraleGetGleisbild(Data));
+                  strcpy(GleisbildPageDir, ZentraleGetLocPath(Data));
+                  if (GleisbildPageDir[strlen(GleisbildPageDir) - 1] != '/')
+                     strcat(GleisbildPageDir, "/");
+                  strcat(GleisbildPageDir, MR_CS2_GLEISBILD_PAGE_SUBDIR);
+                  d = opendir(GleisbildPageDir);
+                  if (d)
+                  {
+                     while ((dir = readdir(d)) != NULL)
+                     {
+                        if ((strcmp(dir->d_name, ".") != 0) &&
+                            (strcmp(dir->d_name, "..") != 0))
+                        {
+                           strcpy(GleisbildPageFullName, GleisbildPageDir);
+                           if (GleisbildPageFullName[strlen(GleisbildPageFullName) - 1] != '/')
+                              strcat(GleisbildPageFullName, "/");
+                           strcat(GleisbildPageFullName, dir->d_name);
+                           remove(GleisbildPageFullName);
+                        }
+                     }
+                     closedir(d);
+                  }
+                  if (GleisbildGetNumPages(ZentraleGetGleisbild(Data)) > 0)
+                  {  int i;
+
+                     for (i=0; i<GleisbildGetNumPages(ZentraleGetGleisbild(Data)); i++)
+                     {
+                        GleisbildPageExit(ZentraleGetNrGleisPages(Data, i));
+                        GleisbildPageDestroy(ZentraleGetNrGleisPages(Data, i));
+                     }
+                     free(ZentraleGetGleisPages(Data));
+                  }
+                  GleisbildParseGleisbildCs2(ZentraleGetGleisbild(Data),
+                                             (char *)ZFileGetBuffer(ZentraleGetPackedCs2File(Data)),
+                                             ZFileGetLength(ZentraleGetPackedCs2File(Data)));
+                  GleisbildSaveGleisbildCs2(ZentraleGetGleisbild(Data));
+                  if (GleisbildGetNumPages(ZentraleGetGleisbild(Data)) > 0)
+                  {  int i;
+
+                     ZentraleSetGleisPages(Data,
+                                           (GleisbildPageStruct **)malloc(sizeof(GleisbildPageStruct *) *
+                                                                          GleisbildGetNumPages(ZentraleGetGleisbild(Data))));
+                     for (i=0; i<GleisbildGetNumPages(ZentraleGetGleisbild(Data)); i++)
+                     {
+                        ZentraleSetNrGleisPages(Data, i,
+                                                (GleisbildPageStruct *)NULL);
+                     }
+                  }
+               }
+               break;
+            case PARSER_PARAGRAPH_MAGNETARTIKEL:
+               MagnetartikelParseMagnetartikelCs2(ZentraleGetMagnetartikel(Data),
+                                                  (char *)ZFileGetBuffer(ZentraleGetPackedCs2File(Data)),
+                                                  ZFileGetLength(ZentraleGetPackedCs2File(Data)));
+               MagnetartikelSaveMagnetartikelCs2(ZentraleGetMagnetartikel(Data));
+               break;
+            case PARSER_PARAGRAPH_FAHRSTRASSEN:
+               FahrstrasseParseFahrstrasseCs2(ZentraleGetFahrstrasse(Data),
+                                              (char *)ZFileGetBuffer(ZentraleGetPackedCs2File(Data)),
+                                              ZFileGetLength(ZentraleGetPackedCs2File(Data)));
+               FahrstrasseSaveFahrstrasseCs2(ZentraleGetFahrstrasse(Data));
+               break;
+            case PARSER_PARAGRAPH_GLEISBILDSEITE:
+               {
+                  GleisbildPageStruct *NewPage;
+                  char *GleisbildName;
+
+                  NewPage = GleisbildPageCreate();
+                  if (NewPage != (GleisbildPageStruct *)NULL)
+                  {
+                     GleisbildPageInit(NewPage, ZentraleGetLocPath(Data), "", 0);
+                     GleisbildPageParseGleisbildPageCs2(NewPage,
+                                                        (char *)ZFileGetBuffer(ZentraleGetPackedCs2File(Data)),
+                                                        ZFileGetLength(ZentraleGetPackedCs2File(Data)));
+                     GleisbildPageSetGleisbildPageFilePath(NewPage,
+                                                           ZentraleGetLocPath(Data));
+                     GleisbildName = malloc(strlen(GleisbildInfoGetName(GleisbildSearch(ZentraleGetGleisbild(Data),
+                                                                        GleisbildPageStructGetPage(NewPage)))) +
+                                            strlen(MR_CS2_FILE_EXTENSION) + 1);
+                     if (GleisbildName != (char *)NULL)
+                     {
+                        strcpy(GleisbildName,
+                               GleisbildInfoGetName(GleisbildSearch(ZentraleGetGleisbild(Data),
+                                                    GleisbildPageStructGetPage(NewPage))));
+                        strcat(GleisbildName, MR_CS2_FILE_EXTENSION);
+                        GleisbildPageSetGleisbildName(NewPage,
+                                                      GleisbildName);
+                        GleisbildPageSaveGleisbildPageCs2(NewPage);
+                        ZentraleSetNrGleisPages(Data,
+                                                GleisbildPageStructGetPage(NewPage),
+                                                NewPage);
+                     }
+                  }
+               }
+               break;
+         }
+      }
+      Cs2pDestroy(Parser);
+   }
+   ZFileExit(ZentraleGetPackedCs2File(Data));
+}
+
+static BOOL DoCfgData(void *Priv, void *SignalData)
+{  ZentraleStruct *Data;
+   MrIpcCmdType *CmdFrame;
+   char Buf[8];
+
+   Data = (ZentraleStruct *)Priv;
+   CmdFrame = (MrIpcCmdType *)SignalData;
+   MrIpcCmdGetCfgData(CmdFrame, Buf);
+   if (Cs2CfgDataNextBuf(ZentraleGetCs2CfgDaten(Data),
+                         MrIpcGetCanHash(CmdFrame), Buf))
+   {
+      if (Cs2CfgDataGetIsCompressed(ZentraleGetCs2CfgDaten(Data),
+                                    MrIpcGetCanHash(CmdFrame)))
+      {
+         if (ZentraleGetVerbose(Data))
+            printf("FSM: handle compressed cfg\n");
+         HandleCfgCompressedData(Data, CmdFrame);
+      }
+      else
+      {
+         if (ZentraleGetVerbose(Data))
+            printf("FSM: handle uncompressed cfg\n");
+         HandleCfgUnCompressedData(Data, CmdFrame);
+      }
+      Cs2CfgDataEnd(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame));
+      if (ZentraleGetVerbose(Data))
+         puts("FSM: cfg finished");
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
+      return(TRUE);
+   }
+   else
+   {
+      if (ZentraleGetVerbose(Data))
+         puts("FSM: cfg wait for next packet");
+      return(FALSE);
+   }
+}
+
+static int HandleCfgData(void *Priv, void *SignalData)
+{
+   DoCfgData(Priv, SignalData);
+   return(STATE_NORMAL);
+}
+
+static int HandleLoknameCfgData(void *Priv, void *SignalData)
+{  ZentraleStruct *Data;
+   MrIpcCmdType *CmdFrame;
+   char Buf[8];
+
+   Data = (ZentraleStruct *)Priv;
+   CmdFrame = (MrIpcCmdType *)SignalData;
+   MrIpcCmdGetCfgData(CmdFrame, Buf);
+   if (Cs2CfgDataNextBuf(ZentraleGetCs2CfgDaten(Data),
+                         MrIpcGetCanHash(CmdFrame), Buf))
+   {
+      if (HandleCfgLoknamen(Data, CmdFrame))
+      {
+         if (ZentraleGetVerbose(Data))
+            printf("FSM: new state %d\n",STATE_WAIT_LOKINFO_CFG_HDR);
+         return(STATE_WAIT_LOKINFO_CFG_HDR);
+      }
+      else
+      {
+         if (ZentraleGetVerbose(Data))
+            printf("FSM: new state %d\n",STATE_WAIT_LOKNAME_CFG_HDR);
+         return(STATE_WAIT_LOKNAME_CFG_HDR);
+      }
+   }
+   else
+   {
+      if (ZentraleGetVerbose(Data))
+         printf("FSM: new state %d\n",STATE_WAIT_LOKNAME_CFG_DATA);
+      return(STATE_WAIT_LOKNAME_CFG_DATA);
+   }
+}
+
+static int HandleLokinfoCfgData(void *Priv, void *SignalData)
+{  ZentraleStruct *Data;
+   MrIpcCmdType *CmdFrame;
+   char Buf[17];
+
+   Data = (ZentraleStruct *)Priv;
+   CmdFrame = (MrIpcCmdType *)SignalData;
+   MrIpcCmdGetCfgData(CmdFrame, Buf);
+   if (Cs2CfgDataNextBuf(ZentraleGetCs2CfgDaten(Data),
+                         MrIpcGetCanHash(CmdFrame), Buf))
+   {
+      if (HandleCfgLokinfo(Data, CmdFrame))
+      {
+         if (ZentraleGetVerbose(Data))
+             printf("FSM: new state %d\n",STATE_NORMAL);
+         return(STATE_NORMAL);
+      }
+      else
+      {
+         if (ZentraleGetVerbose(Data))
+            printf("FSM: new state %d\n",STATE_WAIT_LOKNAME_CFG_HDR);
+         return(STATE_WAIT_LOKINFO_CFG_HDR);
+      }
+   }
+   else
+   {
+      if (ZentraleGetVerbose(Data))
+      {
+         printf("FSM: LOKINFO CFG data, aktuell %lu von %lu\n",
+                Cs2CfgDataGetHaveRead(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame)),
+		Cs2CfgDataGetLength(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame)));
+         printf("FSM: new state %d\n",STATE_WAIT_LOKNAME_CFG_DATA);
+      }
+      return(STATE_WAIT_LOKINFO_CFG_DATA);
+   }
+}
+
+static int HandleLokinfoWaitCfgData(void *Priv, void *SignalData)
+{  int NextState;
+   ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)Priv;
+   NextState = HandleLokinfoCfgData(Priv, SignalData);
+   if (NextState == STATE_WAIT_LOKINFO_CFG_HDR)
+   {
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
+      return(NextState);
+   }
+   else if (NextState == STATE_WAIT_LOKNAME_CFG_DATA)
+   {
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
+      return(NextState);
+   }
+   else
+   {
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_QUERY);
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_POLLMS2);
+      return(NextState);
    }
 }
 
@@ -1386,17 +1396,9 @@ static int HandleLCfgDataProxy(void *Priv, void *SignalData,
                                char *CfgFile)
 {  ZentraleStruct *Data;
    MrIpcCmdType Cmd;
-   int Ret;
 
    Data = (ZentraleStruct *)Priv;
-   Ret = HandleCfgData(Priv, SignalData);
-   if (Ret == STATE_WAIT_CFG_DATA)
-   {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: rewrite new state %d\n",SignalStay);
-      return(SignalStay);
-   }
-   else
+   if (DoCfgData(Priv, SignalData))
    {
       if (CfgFile != (char *)NULL)
       {
@@ -1413,6 +1415,12 @@ static int HandleLCfgDataProxy(void *Priv, void *SignalData,
       if (ZentraleGetVerbose(Data))
          printf("FSM: rewrite new state %d\n",SignalContinue);
       return(SignalContinue);
+   }
+   else
+   {
+      if (ZentraleGetVerbose(Data))
+         printf("FSM: rewrite new state %d\n",SignalStay);
+      return(SignalStay);
    }
 }
 
@@ -1456,7 +1464,7 @@ static int HandleLokCfgDataProxy(void *Priv, void *SignalData)
                                  MR_CS2_CFG_LOK_STAT));
    else
       return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_LOK_CVR_CFG_HDR,
-                                 STATE_WAIT_FS_CS2_CFG_DATA,
+                                 STATE_WAIT_LOK_CS2_CFG_DATA,
                                  MR_CS2_CFG_LOK_STAT));
 }
 
@@ -1502,18 +1510,10 @@ static int HandleFsCfgDataProxy(void *Priv, void *SignalData)
 static int HandleGbsCfgDataProxy(void *Priv, void *SignalData)
 {  ZentraleStruct *Data;
    MrIpcCmdType Cmd;
-   int Ret;
    char PageNummerStr[MR_CS2_NUM_CAN_BYTES + 1];
 
    Data = (ZentraleStruct *)Priv;
-   Ret = HandleCfgData(Priv, SignalData);
-   if (Ret == STATE_WAIT_CFG_DATA)
-   {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: rewrite new state %d\n",STATE_WAIT_GBS_CS2_CFG_DATA);
-      return(STATE_WAIT_GBS_CS2_CFG_DATA);
-   }
-   else
+   if (DoCfgData(Priv, SignalData))
    {
       if (ZentraleGetVerbose(Data))
          printf("FSM: %d gleisbild pages\n",
@@ -1545,23 +1545,21 @@ static int HandleGbsCfgDataProxy(void *Priv, void *SignalData)
          return(STATE_NORMAL);
       }
    }
+   else
+   {
+      if (ZentraleGetVerbose(Data))
+         printf("FSM: rewrite new state %d\n",STATE_WAIT_GBS_CS2_CFG_DATA);
+      return(STATE_WAIT_GBS_CS2_CFG_DATA);
+   }
 }
 
 static int HandleGpgCfgDataProxy(void *Priv, void *SignalData)
 {  ZentraleStruct *Data;
    MrIpcCmdType Cmd;
-   int Ret;
    char PageNummerStr[9];
 
    Data = (ZentraleStruct *)Priv;
-   Ret = HandleCfgData(Priv, SignalData);
-   if (Ret == STATE_WAIT_CFG_DATA)
-   {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: rewrite new state %d\n",STATE_WAIT_GPG_CS2_CFG_DATA);
-      return(STATE_WAIT_GPG_CS2_CFG_DATA);
-   }
-   else
+   if (DoCfgData(Priv, SignalData))
    {
       ZentraleSetActualIndex(Data, ZentraleGetActualIndex(Data) + 1);
       if (ZentraleGetActualIndex(Data) < GleisbildGetNumPages(ZentraleGetGleisbild(Data)))
@@ -1599,6 +1597,12 @@ static int HandleGpgCfgDataProxy(void *Priv, void *SignalData)
          return(STATE_WAIT_LOK_CVR_CFG_HDR);
       }
    }
+   else
+   {
+      if (ZentraleGetVerbose(Data))
+         printf("FSM: rewrite new state %d\n",STATE_WAIT_GPG_CS2_CFG_DATA);
+      return(STATE_WAIT_GPG_CS2_CFG_DATA);
+   }
 }
 
 static int HandleCvrData(void *Priv, void *SignalData)
@@ -1610,14 +1614,14 @@ static int HandleCvrData(void *Priv, void *SignalData)
    Data = (ZentraleStruct *)Priv;
    CmdFrame = (MrIpcCmdType *)SignalData;
    MrIpcCmdGetCfgData(CmdFrame, Buf);
-   memcpy(ZentraleGetCfgBuffer(Data) + ZentraleGetCfgHaveRead(Data), Buf, 8);
-   ZentraleSetCfgHaveRead(Data, ZentraleGetCfgHaveRead(Data) + 8);
-   if (ZentraleGetCfgHaveRead(Data) >= ZentraleGetCfgLength(Data))
+   if (Cs2CfgDataNextBuf(ZentraleGetCs2CfgDaten(Data),
+                         MrIpcGetCanHash(CmdFrame), Buf))
    {
       if (ZentraleGetVerbose(Data))
          printf("FSM: inflate compressed cfg\n");
-      ZFileInit(ZentraleGetPackedCs2File(Data), ZentraleGetCfgBuffer(Data),
-                ZentraleGetCfgHaveRead(Data));
+      ZFileInit(ZentraleGetPackedCs2File(Data),
+                Cs2CfgDataGetBuf(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame)),
+                Cs2CfgDataGetHaveRead(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame)));
       if (ZFileUnCompress(ZentraleGetPackedCs2File(Data)))
       {
          Parser = Cs2pCreate();
@@ -1658,10 +1662,7 @@ static int HandleCvrData(void *Priv, void *SignalData)
          Cs2pDestroy(Parser);
       }
       ZFileExit(ZentraleGetPackedCs2File(Data));
-      free(ZentraleGetCfgBuffer(Data));
-      ZentraleSetCfgLength(Data, 0);
-      ZentraleSetCfgHaveRead(Data, 0);
-      ZentraleSetCfgBuffer(Data, NULL);
+      Cs2CfgDataEnd(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame));
       if (ZentraleGetVerbose(Data))
          printf("FSM: new state %d\n",STATE_NORMAL);
       CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
@@ -1820,13 +1821,9 @@ static int HandleFsCvrDataProxy(void *Priv, void *SignalData)
    return(NewState);
 }
 
-static int HandlePing(void *Priv, void *SignalData)
-{  ZentraleStruct *Data;
-   MrIpcCmdType Cmd;
+static void DoPingMember(ZentraleStruct *Data, unsigned int DeviceId)
+{  MrIpcCmdType Cmd;
 
-   Data = (ZentraleStruct *)Priv;
-   if (ZentraleGetVerbose(Data))
-      puts("FSM: answer ping");
    MrIpcInit(&Cmd);
    MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
    MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
@@ -1834,8 +1831,18 @@ static int HandlePing(void *Priv, void *SignalData)
    MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
    MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_PING);
    MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-   MrIpcCmdSetMember(&Cmd, ZentraleGetUid(Data), 0x100, MR_CS2_DEVID_CS2);
+   MrIpcCmdSetMember(&Cmd, ZentraleGetUid(Data), 0x100, DeviceId);
    MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
+}
+
+static int HandlePing(void *Priv, void *SignalData)
+{  ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)Priv;
+   if (ZentraleGetVerbose(Data))
+      puts("FSM: answer ping");
+   DoPingMember(Data, MR_CS2_DEVID_CS2);
+   DoPingMember(Data, MR_CS2_DEVID_CS2GUI);
    if (ZentraleGetVerbose(Data))
       printf("FSM: new state %d\n",STATE_NO_CHANGE);
    return(STATE_NO_CHANGE);
@@ -1951,7 +1958,6 @@ static int HandleMemberWaitCs2Proxy(void *Priv, void *SignalData)
             printf("FSM: new state %d\n",STATE_WAIT_FOR_MS2);
          CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_CS2);
          CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
-         return(STATE_WAIT_FOR_MS2);
       }
       PingAnswerToS88(Data, &NewCanMember);
    }
@@ -2043,103 +2049,6 @@ static int HandleCanBootldr(void *Priv, void *SignalData)
    return(STATE_NO_CHANGE);
 }
 
-static int HandleLoknamePollCfgHeader(void *Priv, void *SignalData)
-{  int NextState;
-   ZentraleStruct *Data;
-
-   Data = (ZentraleStruct *)Priv;
-   NextState = HandleLoknameCfgHeader(Priv, SignalData);
-   if (NextState == STATE_WAIT_LOKNAME_CFG_DATA)
-   {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: rewrite state %d\n",STATE_WAIT_POLL_LOKNAME_CFG_DATA);
-      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
-      return(STATE_WAIT_POLL_LOKNAME_CFG_DATA);
-   }
-   else
-   {
-      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
-      return(NextState);
-   }
-}
-
-static int HandleLoknamePollCfgData(void *Priv, void *SignalData)
-{  int NextState;
-   ZentraleStruct *Data;
-
-   Data = (ZentraleStruct *)Priv;
-   NextState = HandleLoknameCfgData(Priv, SignalData);
-   if (NextState == STATE_WAIT_LOKNAME_CFG_HDR)
-   {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: rewrite state %d\n",STATE_WAIT_POLL_LOKNAME_CFG_HDR);
-      return(STATE_WAIT_POLL_LOKNAME_CFG_HDR);
-   }
-   else if (NextState == STATE_WAIT_LOKINFO_CFG_HDR)
-   {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: rewrite state %d\n",STATE_WAIT_POLL_LOKINFO_CFG_HDR);
-      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
-      return(STATE_WAIT_POLL_LOKINFO_CFG_HDR);
-   }
-   else
-   {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: rewrite state %d\n",STATE_WAIT_POLL_LOKNAME_CFG_DATA);
-      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
-      return(STATE_WAIT_POLL_LOKNAME_CFG_DATA);
-   }
-}
-
-static int HandleLokinfoPollCfgHeader(void *Priv, void *SignalData)
-{  int NextState;
-   ZentraleStruct *Data;
-
-   Data = (ZentraleStruct *)Priv;
-   NextState = HandleLokinfoCfgHeader(Priv, SignalData);
-   if (NextState == STATE_WAIT_LOKINFO_CFG_DATA)
-   {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: rewrite state %d\n",STATE_WAIT_POLL_LOKINFO_CFG_DATA);
-      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
-      return(STATE_WAIT_POLL_LOKINFO_CFG_DATA);
-   }
-   else
-   {
-      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
-      return(NextState);
-   }
-}
-
-static int HandleLokinfoPollCfgData(void *Priv, void *SignalData)
-{  int NextState;
-   ZentraleStruct *Data;
-
-   Data = (ZentraleStruct *)Priv;
-   NextState = HandleLokinfoCfgData(Priv, SignalData);
-   if (NextState == STATE_WAIT_LOKINFO_CFG_HDR)
-   {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: rewritenew state %d\n",STATE_WAIT_POLL_LOKNAME_CFG_HDR);
-      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
-      return(STATE_WAIT_POLL_LOKINFO_CFG_HDR);
-   }
-   else if (NextState == STATE_WAIT_LOKNAME_CFG_DATA)
-   {
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: rewrite state %d\n",STATE_WAIT_POLL_LOKNAME_CFG_DATA);
-      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
-      return(STATE_WAIT_POLL_LOKINFO_CFG_DATA);
-   }
-   else
-   {
-      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
-      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_QUERY);
-      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_POLLMS2);
-      return(NextState);
-   }
-}
-
 static int HandleOther(void *Priv, void *SignalData)
 {  ZentraleStruct *Data;
    MrIpcCmdType *CmdFrame;
@@ -2218,24 +2127,24 @@ static StateFktType StateMs2MasterWaitLoknameCfgHdr[NUM_SIGNALS] = {
 };
 static StateFktType StateMs2MasterWaitLoknameCfgData[NUM_SIGNALS] = {
    /* STATE_WAIT_LOKNAME_CFG_DATA */
-   HandleTimer,              /* timer */
-   HandleOther,              /* MrIpcCmdNull */
-   HandleOther,              /* MrIpcCmdRun */
-   HandleOther,              /* MrIpcTrackProto */
-   HandleOther,              /* MrIpcCmdLocomotiveSpeed */
-   HandleOther,              /* MrIpcCmdLocomotiveDirection */
-   HandleOther,              /* MrIpcCmdLocomotiveFunction */
-   HandleOther,              /* MrIpcCmdAccSwitch */
-   HandleOther,              /* MrIpcCmdRequestMember */
-   HandleMemberMs2Master,    /* MrIpcCmdMember */
-   HandleOther,              /* MrIpcCmdRequestLocName */
-   HandleOther,              /* MrIpcCmdRequestLocInfo */
-   HandleOther,              /* MrIpcCmdRequestFile */
-   HandleOther,              /* MrIpcCmdCfgHeader */
-   HandleOther,              /* MrIpcCmdCfgZHeader */
-   HandleLoknameWaitCfgData, /* MrIpcCmdCfgData */
-   HandleOther,              /* MrIpcCmdSystemStatusVal */
-   HandleCanBootldr          /* MrIpcCmdCanBootldrGeb */
+   HandleTimer,           /* timer */
+   HandleOther,           /* MrIpcCmdNull */
+   HandleOther,           /* MrIpcCmdRun */
+   HandleOther,           /* MrIpcTrackProto */
+   HandleOther,           /* MrIpcCmdLocomotiveSpeed */
+   HandleOther,           /* MrIpcCmdLocomotiveDirection */
+   HandleOther,           /* MrIpcCmdLocomotiveFunction */
+   HandleOther,           /* MrIpcCmdAccSwitch */
+   HandleOther,           /* MrIpcCmdRequestMember */
+   HandleMemberMs2Master, /* MrIpcCmdMember */
+   HandleOther,           /* MrIpcCmdRequestLocName */
+   HandleOther,           /* MrIpcCmdRequestLocInfo */
+   HandleOther,           /* MrIpcCmdRequestFile */
+   HandleOther,           /* MrIpcCmdCfgHeader */
+   HandleOther,           /* MrIpcCmdCfgZHeader */
+   HandleLoknameCfgData,  /* MrIpcCmdCfgData */
+   HandleOther,           /* MrIpcCmdSystemStatusVal */
+   HandleCanBootldr       /* MrIpcCmdCanBootldrGeb */
 };
 static StateFktType StateMs2MasterWaitLokinfoCfgHdr[NUM_SIGNALS] = {
    /* STATE_WAIT_LOKINFO_CFG_HDR */
@@ -2744,108 +2653,24 @@ static StateFktType StateProxyWaitFsCvrCs2CfgData[NUM_SIGNALS] = {
 };
 static StateFktType StateMs2MasterNormal[NUM_SIGNALS] = {
    /* STATE_NORMAL */
-   HandleTimer,             /* timer */
-   HandleOther,             /* MrIpcCmdNull */
-   HandleOther,             /* MrIpcCmdRun */
-   HandleOther,             /* MrIpcTrackProto */
-   HandleLokSpeed,          /* MrIpcCmdLocomotiveSpeed */
-   HandleLokDirection,      /* MrIpcCmdLocomotiveDirection */
-   HandleLokFunction,       /* MrIpcCmdLocomotiveFunction */
-   HandleOther,             /* MrIpcCmdAccSwitch */
-   HandlePing,              /* MrIpcCmdRequestMember */
-   HandleMemberMs2Master,   /* MrIpcCmdMember */
-   HandleOther,             /* MrIpcCmdRequestLocName */
-   HandleOther,             /* MrIpcCmdRequestLocInfo */
-   HandleFileRequest,       /* MrIpcCmdRequestFile */
-   HandleOther,             /* MrIpcCmdCfgHeader */
-   HandleCfgHeaderMs2Master,/* MrIpcCmdCfgZHeader */
-   HandleOther,             /* MrIpcCmdCfgData */
-   HandleOther,             /* MrIpcCmdSystemStatusVal */
-   HandleCanBootldr         /* MrIpcCmdCanBootldrGeb */
-};
-static StateFktType StateMs2MasterPollLoknameCfgHdr[NUM_SIGNALS] = {
-   /* STATE_WAIT_POLL_LOKNAME_CFG_HDR */
-   HandleTimer,                /* timer */
-   HandleOther,                /* MrIpcCmdNull */
-   HandleOther,                /* MrIpcCmdRun */
-   HandleOther,                /* MrIpcTrackProto */
-   HandleLokSpeed,             /* MrIpcCmdLocomotiveSpeed */
-   HandleLokDirection,         /* MrIpcCmdLocomotiveDirection */
-   HandleLokFunction,          /* MrIpcCmdLocomotiveFunction */
-   HandleOther,                /* MrIpcCmdAccSwitch */
-   HandlePing,                 /* MrIpcCmdRequestMember */
-   HandleMemberMs2Master,      /* MrIpcCmdMember */
-   HandleOther,                /* MrIpcCmdRequestLocName */
-   HandleOther,                /* MrIpcCmdRequestLocInfo */
-   HandleOther,                /* MrIpcCmdRequestFile */
-   HandleLoknamePollCfgHeader, /* MrIpcCmdCfgHeader */
-   HandleOther,                /* MrIpcCmdCfgZHeader */
-   HandleOther,                /* MrIpcCmdCfgData */
-   HandleOther,                /* MrIpcCmdSystemStatusVal */
-   HandleCanBootldr            /* MrIpcCmdCanBootldrGeb */
-};
-static StateFktType StateMs2MasterPollLoknameCfgData[NUM_SIGNALS] = {
-   /* STATE_WAIT_POLL_LOKNAME_CFG_DATA */
-   HandleTimer,             /* timer */
-   HandleOther,             /* MrIpcCmdNull */
-   HandleOther,             /* MrIpcCmdRun */
-   HandleOther,             /* MrIpcTrackProto */
-   HandleLokSpeed,          /* MrIpcCmdLocomotiveSpeed */
-   HandleLokDirection,      /* MrIpcCmdLocomotiveDirection */
-   HandleLokFunction,       /* MrIpcCmdLocomotiveFunction */
-   HandleOther,             /* MrIpcCmdAccSwitch */
-   HandlePing,              /* MrIpcCmdRequestMember */
-   HandleMemberMs2Master,   /* MrIpcCmdMember */
-   HandleOther,             /* MrIpcCmdRequestLocName */
-   HandleOther,             /* MrIpcCmdRequestLocInfo */
-   HandleOther,             /* MrIpcCmdRequestFile */
-   HandleOther,             /* MrIpcCmdCfgHeader */
-   HandleOther,             /* MrIpcCmdCfgZHeader */
-   HandleLoknamePollCfgData,/* MrIpcCmdCfgData */
-   HandleOther,             /* MrIpcCmdSystemStatusVal */
-   HandleCanBootldr         /* MrIpcCmdCanBootldrGeb */
-};
-static StateFktType StateMs2MasterPollLokinfoCfgHdr[NUM_SIGNALS] = {
-   /* STATE_WAIT_POLL_LOKINFO_CFG_HDR */
-   HandleTimer,                /* timer */
-   HandleOther,                /* MrIpcCmdNull */
-   HandleOther,                /* MrIpcCmdRun */
-   HandleOther,                /* MrIpcTrackProto */
-   HandleLokSpeed,             /* MrIpcCmdLocomotiveSpeed */
-   HandleLokDirection,         /* MrIpcCmdLocomotiveDirection */
-   HandleLokFunction,          /* MrIpcCmdLocomotiveFunction */
-   HandleOther,                /* MrIpcCmdAccSwitch */
-   HandlePing,                 /* MrIpcCmdRequestMember */
-   HandleMemberMs2Master,      /* MrIpcCmdMember */
-   HandleOther,                /* MrIpcCmdRequestLocName */
-   HandleOther,                /* MrIpcCmdRequestLocInfo */
-   HandleOther,                /* MrIpcCmdRequestFile */
-   HandleLokinfoPollCfgHeader, /* MrIpcCmdCfgHeader */
-   HandleOther,                /* MrIpcCmdCfgZHeader */
-   HandleOther,                /* MrIpcCmdCfgData */
-   HandleOther,                /* MrIpcCmdSystemStatusVal */
-   HandleCanBootldr            /* MrIpcCmdCanBootldrGeb */
-};
-static StateFktType StateMs2MasterPollLokinfoCfgData[NUM_SIGNALS] = {
-   /* STATE_WAIT_POLL_LOKINFO_CFG_DATA */
-   HandleTimer,             /* timer */
-   HandleOther,             /* MrIpcCmdNull */
-   HandleOther,             /* MrIpcCmdRun */
-   HandleOther,             /* MrIpcTrackProto */
-   HandleLokSpeed,          /* MrIpcCmdLocomotiveSpeed */
-   HandleLokDirection,      /* MrIpcCmdLocomotiveDirection */
-   HandleLokFunction,       /* MrIpcCmdLocomotiveFunction */
-   HandleOther,             /* MrIpcCmdAccSwitch */
-   HandlePing,              /* MrIpcCmdRequestMember */
-   HandleMemberMs2Master,   /* MrIpcCmdMember */
-   HandleOther,             /* MrIpcCmdRequestLocName */
-   HandleOther,             /* MrIpcCmdRequestLocInfo */
-   HandleOther,             /* MrIpcCmdRequestFile */
-   HandleOther,             /* MrIpcCmdCfgHeader */
-   HandleOther,             /* MrIpcCmdCfgZHeader */
-   HandleLokinfoPollCfgData,/* MrIpcCmdCfgData */
-   HandleOther,             /* MrIpcCmdSystemStatusVal */
-   HandleCanBootldr         /* MrIpcCmdCanBootldrGeb */
+   HandleTimer,                 /* timer */
+   HandleOther,                 /* MrIpcCmdNull */
+   HandleOther,                 /* MrIpcCmdRun */
+   HandleOther,                 /* MrIpcTrackProto */
+   HandleLokSpeed,              /* MrIpcCmdLocomotiveSpeed */
+   HandleLokDirection,          /* MrIpcCmdLocomotiveDirection */
+   HandleLokFunction,           /* MrIpcCmdLocomotiveFunction */
+   HandleOther,                 /* MrIpcCmdAccSwitch */
+   HandlePing,                  /* MrIpcCmdRequestMember */
+   HandleMemberMs2Master,       /* MrIpcCmdMember */
+   HandleOther,                 /* MrIpcCmdRequestLocName */
+   HandleOther,                 /* MrIpcCmdRequestLocInfo */
+   HandleFileRequest,           /* MrIpcCmdRequestFile */
+   HandleCfgHeaderUncompressed, /* MrIpcCmdCfgHeader */
+   HandleCfgHeaderCompressed,   /* MrIpcCmdCfgZHeader */
+   HandleCfgData,               /* MrIpcCmdCfgData */
+   HandleOther,                 /* MrIpcCmdSystemStatusVal */
+   HandleCanBootldr             /* MrIpcCmdCanBootldrGeb */
 };
 static SignalFunctionsType StateMachineFunctionsProxy[NUM_STATES] = {
    StateProxyWaitForMs2,          /* STATE_WAIT_FOR_MS2 */
@@ -2875,10 +2700,6 @@ static SignalFunctionsType StateMachineFunctionsProxy[NUM_STATES] = {
    StateProxyWaitGbsCvrCs2CfgData,/* STATE_WAIT_GBS_CVR_CFG_DATA */
    StateProxyWaitFsCvrCs2CfgHdr,  /* STATE_WAIT_FS_CVR_CFG_HDR */
    StateProxyWaitFsCvrCs2CfgData, /* STATE_WAIT_FS_CVR_CFG_DATA */
-   (SignalFunctionsType)NULL,     /* STATE_WAIT_POLL_LOKNAME_CFG_HDR */
-   (SignalFunctionsType)NULL,     /* STATE_WAIT_POLL_LOKNAME_CFG_DATA */
-   (SignalFunctionsType)NULL,     /* STATE_WAIT_POLL_LOKINFO_CFG_HDR */
-   (SignalFunctionsType)NULL,     /* STATE_WAIT_POLL_LOKINFO_CFG_DATA */
 };
 static SignalFunctionsType StateMachineFunctionsMs2Master[NUM_STATES] = {
    StateMs2MasterWaitForMs2,        /* STATE_WAIT_FOR_MS2 */
@@ -2908,10 +2729,6 @@ static SignalFunctionsType StateMachineFunctionsMs2Master[NUM_STATES] = {
    (SignalFunctionsType)NULL,       /* STATE_WAIT_GBS_CVR_CFG_DATA */
    (SignalFunctionsType)NULL,       /* STATE_WAIT_FS_CVR_CFG_HDR */
    (SignalFunctionsType)NULL,       /* STATE_WAIT_FS_CVR_CFG_DATA */
-   StateMs2MasterPollLoknameCfgHdr, /* STATE_WAIT_POLL_LOKNAME_CFG_HDR */
-   StateMs2MasterPollLoknameCfgData,/* STATE_WAIT_POLL_LOKNAME_CFG_DATA */
-   StateMs2MasterPollLokinfoCfgHdr, /* STATE_WAIT_POLL_LOKINFO_CFG_HDR */
-   StateMs2MasterPollLokinfoCfgData,/* STATE_WAIT_POLL_LOKINFO_CFG_DATA */
 };
 static SignalFunctionsType *StateMachines[] = {
    StateMachineFunctionsProxy,

@@ -6,7 +6,7 @@
 #include "can_client.h"
 #include "ms2.h"
 
-#define SOFTWARE_VERSION "2.02"
+#define SOFTWARE_VERSION "2.03"
 
 static void usage(char *name)
 {
@@ -49,8 +49,7 @@ int main(int argc, char *argv[])
          ChildPid = fork();
          if (ChildPid == -1)
          {
-            if (ConfigGetIntVal(Config, CfgVerboseVal))
-               puts("ERROR: can not go to backgound");
+            puts("ERROR: can not go to backgound");
             Ret = 4;
          }
          else if (ChildPid == 0)
@@ -76,19 +75,20 @@ int main(int argc, char *argv[])
                }
                else
                {
+                  puts("ERROR: can not create Ms2Client module");
                   Ret = 1;
                }
                CanClientExit(IoFunctions);
             }
             else
             {
+               puts("ERROR: can not create IoFunctions module");
                Ret = 1;
             }
          }
          else
          {
-            if (ConfigGetIntVal(Config, CfgVerboseVal))
-               puts("parent terminates");
+            puts("parent terminates");
             signal(SIGCHLD, SIG_IGN);
             Ret = 0;
          }
@@ -117,12 +117,14 @@ int main(int argc, char *argv[])
             }
             else
             {
+               puts("ERROR: can not create Ms2Client module");
                Ret = 1;
             }
             CanClientExit(IoFunctions);
          }
          else
          {
+            puts("ERROR: can not create IoFunctions module");
             Ret = 1;
          }
       }
@@ -131,6 +133,7 @@ int main(int argc, char *argv[])
    }
    else
    {
+      puts("ERROR: can not create Config module");
       Ret = 3;
    }
    return(Ret);

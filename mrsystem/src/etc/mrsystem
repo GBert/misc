@@ -2,4 +2,4 @@
 
 port 10234
 interface "lo"
-cs2_path /var/www/config
+cs2_path /www/config

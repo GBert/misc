@@ -193,12 +193,14 @@ static BOOL Start(Ms2Struct *Data)
       }
       else
       {
+         puts("ERROR: can not open CAN connection");
          Ms2GetIoFunctions(Data)->Close(Ms2GetIoFunctions(Data)->private);
          return(FALSE);
       }
    }
    else
    {
+      puts("ERROR: can not open socket to 'drehscheibe'");
       return(FALSE);
    }
 }
@@ -607,5 +609,9 @@ void Ms2Run(Ms2Struct *Data)
          }
       }
       Stop(Data);
+   }
+   else
+   {
+      puts("ERROR: can not start Ms2 module");
    }
 }

@@ -29,12 +29,13 @@
 #include "gbsstat.h"
 #include "fahrstrasse.h"
 #include "fsstat.h"
+#include "cs2cfg.h"
 
 #define SELECT_TIMEOUT  1
 #define TIMER_INTERVALL  10
 #define GERAET_VRS_FILE "geraet.vrs"
 #define S88_WAKEUP_PARM_DELIMETER " .,;:!-"
-#define TCYC_MAX	1000	/* max cycle time in ms */
+#define TCYC_MAX 1000 /* max cycle time in ms */
 
 static BOOL Loop;
 
@@ -76,15 +77,31 @@ ZentraleStruct *ZentraleCreate(void)
                         if (ZentraleGetFahrstrasse(Data) != (FahrstrasseStruct *)NULL)
                         {
                            ZentraleSetCanMember(Data, CanMemberCreate());
-                           if (ZentraleGetCanMember(Data) == (CanMemberStruct *)NULL)
+                           if (ZentraleGetCanMember(Data) != (CanMemberStruct *)NULL)
                            {
-                              CanMemberDestroy(ZentraleGetCanMember(Data));
+                              ZentraleSetCs2CfgDaten(Data, Cs2CfgDataCreate());
+                              if (ZentraleGetCs2CfgDaten(Data) == (Cs2CfgData *)NULL)
+                              {
+                                 CanMemberDestroy(ZentraleGetCanMember(Data));
+                                 GleisbildDestroy(ZentraleGetGleisbild(Data));
+                                 MagnetartikelDestroy(ZentraleGetMagnetartikel(Data));
+                                 LokDestroy(ZentraleGetLoks(Data));
+                                 CronDestroy(ZentraleGetCronJobs(Data));
+                                 ZFileDestroy(ZentraleGetPackedCs2File(Data));
+                                 FsmDestroy(ZentraleGetStateMachine(Data));
+                                 free(Data);
+                                 Data = (ZentraleStruct *)NULL;
+                              }
+                           }
+                           else
+                           {
                               GleisbildDestroy(ZentraleGetGleisbild(Data));
                               MagnetartikelDestroy(ZentraleGetMagnetartikel(Data));
                               LokDestroy(ZentraleGetLoks(Data));
                               CronDestroy(ZentraleGetCronJobs(Data));
                               ZFileDestroy(ZentraleGetPackedCs2File(Data));
                               FsmDestroy(ZentraleGetStateMachine(Data));
+                              CanMemberDestroy(ZentraleGetCanMember(Data));
                               free(Data);
                               Data = (ZentraleStruct *)NULL;
                            }
@@ -181,8 +198,10 @@ void ZentraleDestroy(ZentraleStruct *Data)
       CronDestroy(ZentraleGetCronJobs(Data));
    if (ZentraleGetStateMachine(Data) != (FsmStruct *)NULL)
       FsmDestroy(ZentraleGetStateMachine(Data));
-   if (ZentraleGetPackedCs2File(Data) == (ZlibFile *)NULL)
+   if (ZentraleGetPackedCs2File(Data) != (ZlibFile *)NULL)
       ZFileDestroy(ZentraleGetPackedCs2File(Data));
+   if (ZentraleGetCs2CfgDaten(Data) != (Cs2CfgData *)NULL)
+      Cs2CfgDataDestroy(ZentraleGetCs2CfgDaten(Data));
    free(Data);
 }
 
@@ -221,9 +240,6 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, int MasterMode,
    ZentraleSetAddress(Data, Addr);
    ZentraleSetServerPort(Data, Port);
    ZentraleSetClientSock(Data, -1);
-   ZentraleSetCfgLength(Data, 0);
-   ZentraleSetCfgHaveRead(Data, 0);
-   ZentraleSetCfgBuffer(Data, NULL);
    CronInit(ZentraleGetCronJobs(Data));
    ZentraleInitFsm(Data, ZentraleGetMasterMode(Data));
    ZentraleSetLocPath(Data, LocPath);
@@ -284,6 +300,7 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, int MasterMode,
                        malloc(ZentraleGetMaxLoks(Data) *
                               sizeof(ZentraleLokName)));
    CanMemberInit(ZentraleGetCanMember(Data));
+   Cs2CfgDataInit(ZentraleGetCs2CfgDaten(Data), ZentraleGetVerbose(Data));
    LokInit(ZentraleGetLoks(Data), LocPath);
    LokLoadLokomotiveCs2(ZentraleGetLoks(Data));
    LokStatusLoadLokomotiveSr2(ZentraleGetLoks(Data));
@@ -451,6 +468,8 @@ void ZentraleExit(ZentraleStruct *Data)
       puts("exit zentrale");
    if (ZentraleGetCanMember(Data) != (CanMemberStruct *)NULL)
       CanMemberExit(ZentraleGetCanMember(Data));
+   if (ZentraleGetCs2CfgDaten(Data) != (Cs2CfgData *)NULL)
+      Cs2CfgDataExit(ZentraleGetCs2CfgDaten(Data));
    if (ZentraleGetFahrstrasse(Data) != (FahrstrasseStruct *)NULL)
       FahrstrasseExit(ZentraleGetFahrstrasse(Data));
    if (ZentraleGetGleisPages(Data) != (GleisbildPageStruct **)NULL)
@@ -509,6 +528,7 @@ static BOOL Start(ZentraleStruct *Data)
    }
    else
    {
+      puts("ERROR: can not open socket to 'drehscheibe'");
       return(FALSE);
    }
 }
@@ -599,16 +619,28 @@ static void SwitchOn(ZentraleStruct *Data)
    }
 }
 
+static void StartTimerCheck(ZentraleStruct *Data)
+{  MrIpcCmdType Cmd;
+
+   MrIpcInit(&Cmd);
+   MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
+   MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
+   MrIpcSetCommand(&Cmd, MrIpcCmdNull);
+   MrIpcSetCanResponse(&Cmd, 0);
+   MrIpcCalcHash(&Cmd, MR_CS2_UID_BROADCAST);
+   MrIpcSetCanCommand(&Cmd, 0xffff);
+   MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
+   FsmDo(ZentraleGetStateMachine(Data), 0, &Cmd);
+}
+
 void ZentraleRun(ZentraleStruct *Data)
 {  fd_set ReadFds;
    int RetVal, HighFd;
    struct timeval SelectTimeout;
-   time_t LastTime, Now;
 
    if (Start(Data))
    {
       SwitchOn(Data);
-      LastTime = time(NULL);
       Loop = TRUE;
       while (Loop)
       {
@@ -628,23 +660,9 @@ void ZentraleRun(ZentraleStruct *Data)
             printf("select liefert %d\n", RetVal);
          if (((RetVal == -1) && (errno == EINTR)) || (RetVal == 0))
          {
-            Now = time(NULL);
             if (ZentraleGetVerbose(Data))
-               printf("interrupt at %s\n", asctime(localtime(&Now)));
-            if ((Now - LastTime) > TIMER_INTERVALL)
-            {  MrIpcCmdType Cmd;
-
-               MrIpcInit(&Cmd);
-               MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-               MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-               MrIpcSetCommand(&Cmd, MrIpcCmdNull);
-               MrIpcSetCanResponse(&Cmd, 0);
-               MrIpcCalcHash(&Cmd, MR_CS2_UID_BROADCAST);
-               MrIpcSetCanCommand(&Cmd, 0xffff);
-               MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-               FsmDo(ZentraleGetStateMachine(Data), 0, &Cmd);
-               LastTime = Now;
-            }
+               puts("interrupt");
+            StartTimerCheck(Data);
          }
          else if (RetVal < 0)
          {
@@ -654,28 +672,18 @@ void ZentraleRun(ZentraleStruct *Data)
          }
          else
          {
-            Now = time(NULL);
-            if ((Now - LastTime) > TIMER_INTERVALL)
-            {  MrIpcCmdType Cmd;
-
-               MrIpcInit(&Cmd);
-               MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-               MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-               MrIpcSetCommand(&Cmd, MrIpcCmdNull);
-               MrIpcSetCanResponse(&Cmd, 0);
-               MrIpcCalcHash(&Cmd, MR_CS2_UID_BROADCAST);
-               MrIpcSetCanCommand(&Cmd, 0xffff);
-               MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-               FsmDo(ZentraleGetStateMachine(Data), 0, &Cmd);
-               LastTime = Now;
-            }
             if (FD_ISSET(ZentraleGetClientSock(Data), &ReadFds))
             {
                /* new cmd frame */
                HandleSystemData(Data);
             }
+            StartTimerCheck(Data);
          }
       }
       Stop(Data);
+   }
+   else
+   {
+      puts("ERROR: can not start Ms2 module");
    }
 }
