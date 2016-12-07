@@ -1,9 +1,16 @@
 const int revisionnr = 
-11743
+11750
 ;
 const char* commithash = 
-"5fe4018fcf28d1a8fcb7038b0f4e202e956cf3a2";
+"066d01cf957f5903c18f4a10f76e8e09a1fc4dc5";
 const char* revlog = 
+"11750 2016-12-06 10:49:36 +0100 stage: send block command to the loco after successful locoset\n" \
+"11749 2016-12-06 08:14:44 +0100 item: show aspect in the signal tooltip\n" \
+"11748 2016-12-05 14:24:08 +0100 planpanel: trace correction\n" \
+"11747 2016-12-05 12:39:17 +0100 stage: broadcast locoset as block event\n" \
+"11746 2016-12-05 12:26:16 +0100 getLocoTrack implemented in tt and seltab\n" \
+"11745 2016-12-05 10:06:53 +0100 xmlscript: replace all vars in command node clones, not in the original\n" \
+"11744 2016-12-05 08:30:13 +0100 stage: new commands setloco and resetloco\n" \
 "11743 2016-12-04 10:42:46 +0100 xmlscript: revert replace all vars in attributes\n" \
 "11742 2016-12-04 10:42:23 +0100 stage: fix for getcurtrack\n" \
 "11741 2016-12-04 08:09:59 +0100 xmlscript: resolve all vars in all command attributes\n" \
@@ -47,12 +54,5 @@ const char* revlog =
 "11703 2016-11-23 06:42:22 +0100 rocview: monospacefont option for trace and controller window\n" \
 "11702 2016-11-22 12:23:38 +0100 dmxartnet: packet size correction\n" \
 "11701 2016-11-22 10:17:08 +0100 action: check type shunting, cleaning and none too\n" \
-"11700 2016-11-22 10:07:17 +0100 guiframe: fix for init loco list\n" \
-"11699 2016-11-21 09:26:54 +0100 actionsctrldlg: added missing train types\n" \
-"11698 2016-11-21 08:51:51 +0100 translation merge: pt_BR, sr_latin, de, nl\n" \
-"11697 2016-11-21 08:12:50 +0100 locdialog: added 10ms label to the BBT delay\n" \
-"11696 2016-11-21 08:04:21 +0100 xmlscript: fix for car command assignwaybill\n" \
-"11695 2016-11-20 16:59:18 +0100 xmlscript: resolve the waybill ID in case of a car assignwaybill command\n" \
-"11694 2016-11-20 16:01:05 +0100 xmlscript: resolve the waybill ID in case of a car assignwaybill command\n" \
 
 "log end";
