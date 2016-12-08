@@ -1,9 +1,14 @@
 const int revisionnr = 
-11750
+11755
 ;
 const char* commithash = 
-"066d01cf957f5903c18f4a10f76e8e09a1fc4dc5";
+"59dd920e4ff67cfcd3707f2ed7631214c67aaad1";
 const char* revlog = 
+"11755 2016-12-07 16:08:37 +0100 rcon: only report a connection lost if no close has been issued\n" \
+"11754 2016-12-07 11:26:32 +0100 stage: allow setloco up front of another loco\n" \
+"11753 2016-12-07 10:39:53 +0100 stage: speed option to last section\n" \
+"11752 2016-12-07 07:26:04 +0100 extended the connection lost message\n" \
+"11751 2016-12-07 06:56:11 +0100 rcon: signal server connection lost\n" \
 "11750 2016-12-06 10:49:36 +0100 stage: send block command to the loco after successful locoset\n" \
 "11749 2016-12-06 08:14:44 +0100 item: show aspect in the signal tooltip\n" \
 "11748 2016-12-05 14:24:08 +0100 planpanel: trace correction\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "11708 2016-11-25 16:07:05 +0100 throttledlg: removed the max height\n" \
 "11707 2016-11-25 14:35:06 +0100 xmlscript: crash fix\n" \
 "11706 2016-11-25 08:13:10 +0100 wait4evet: crash fix\n" \
-"11705 2016-11-24 07:54:15 +0100 server trace improvements\n" \
-"11704 2016-11-24 06:30:17 +0100 bidib: no power off in case of errors\n" \
-"11703 2016-11-23 06:42:22 +0100 rocview: monospacefont option for trace and controller window\n" \
-"11702 2016-11-22 12:23:38 +0100 dmxartnet: packet size correction\n" \
-"11701 2016-11-22 10:17:08 +0100 action: check type shunting, cleaning and none too\n" \
 
 "log end";
