@@ -1,9 +1,11 @@
 const int revisionnr = 
-11755
+11757
 ;
 const char* commithash = 
-"59dd920e4ff67cfcd3707f2ed7631214c67aaad1";
+"e432d63ab4f50c8b8653b361765f67c2c0499997";
 const char* revlog = 
+"11757 2016-12-08 11:20:23 +0100 modplan: check for already existing IDs\n" \
+"11756 2016-12-08 10:18:38 +0100 model: ignore NULL blockID at setBlockOcc\n" \
 "11755 2016-12-07 16:08:37 +0100 rcon: only report a connection lost if no close has been issued\n" \
 "11754 2016-12-07 11:26:32 +0100 stage: allow setloco up front of another loco\n" \
 "11753 2016-12-07 10:39:53 +0100 stage: speed option to last section\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11710 2016-11-26 08:21:36 +0100 item: userdata added\n" \
 "11709 2016-11-25 16:48:31 +0100 xmlscript: fix for state vars\n" \
 "11708 2016-11-25 16:07:05 +0100 throttledlg: removed the max height\n" \
-"11707 2016-11-25 14:35:06 +0100 xmlscript: crash fix\n" \
-"11706 2016-11-25 08:13:10 +0100 wait4evet: crash fix\n" \
 
 "log end";
