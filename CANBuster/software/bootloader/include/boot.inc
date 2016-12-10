@@ -151,8 +151,7 @@ OKCOMPUTER
                 XORLW   RUN
                 BNZ     CONTINUE
 
-                MOVLW   255             ; wait a little bit before
-                MOVWF   wait            ;  switch to firmware
+                SETF    wait            ; wait a little bit before
 WAIT_LOOP
                 DECFSZ  wait,f
                 BRA     WAIT_LOOP
