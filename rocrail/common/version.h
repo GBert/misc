@@ -1,9 +1,11 @@
 const int revisionnr = 
-11759
+11761
 ;
 const char* commithash = 
-"4c85436f0189761dc995fba1495db9d5d116709e";
+"7d4067f0a70b2c4cf7422aab55de2ca79a92fecb";
 const char* revlog = 
+"11761 2016-12-11 08:28:44 +0100 stage: call init after cmd locoset\n" \
+"11760 2016-12-11 06:34:48 +0100 rocnetnode: only initialize PB1 if needed\n" \
 "11759 2016-12-10 07:19:12 +0100 locdialog: bbt delay 10000\n" \
 "11758 2016-12-09 11:34:17 +0100 stage: fix for broadcasting a loco event -> changed to a loco command\n" \
 "11757 2016-12-08 11:20:23 +0100 modplan: check for already existing IDs\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11714 2016-11-27 08:03:05 +0100 loc: route speed at enter option added\n" \
 "11713 2016-11-26 12:35:59 +0100 var: support for var pointers\n" \
 "11712 2016-11-26 12:03:52 +0100 xmlscript: resolve only for conditions\n" \
-"11711 2016-11-26 08:22:56 +0100 trace: use f for level FIND\n" \
-"11710 2016-11-26 08:21:36 +0100 item: userdata added\n" \
 
 "log end";
