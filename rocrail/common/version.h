@@ -1,9 +1,11 @@
 const int revisionnr = 
-11761
+11763
 ;
 const char* commithash = 
-"7d4067f0a70b2c4cf7422aab55de2ca79a92fecb";
+"48961d82ad65176778c3934b337117174a8be410";
 const char* revlog = 
+"11763 2016-12-12 08:24:07 +0100 guiframe: only D&D if the block is not set\n" \
+"11762 2016-12-12 07:10:36 +0100 enter: regard route maxkmh for option routespeedatenter\n" \
 "11761 2016-12-11 08:28:44 +0100 stage: call init after cmd locoset\n" \
 "11760 2016-12-11 06:34:48 +0100 rocnetnode: only initialize PB1 if needed\n" \
 "11759 2016-12-10 07:19:12 +0100 locdialog: bbt delay 10000\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11716 2016-11-28 08:14:29 +0100 item: max. 40 go with schedule\n" \
 "11715 2016-11-27 11:27:06 +0100 var: replaced prefix + with a ~\n" \
 "11714 2016-11-27 08:03:05 +0100 loc: route speed at enter option added\n" \
-"11713 2016-11-26 12:35:59 +0100 var: support for var pointers\n" \
-"11712 2016-11-26 12:03:52 +0100 xmlscript: resolve only for conditions\n" \
 
 "log end";
