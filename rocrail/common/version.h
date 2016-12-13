@@ -1,9 +1,10 @@
 const int revisionnr = 
-11766
+11767
 ;
 const char* commithash = 
-"7ff9978bc311239e24c7b8a280f7b4637b90a019";
+"2951f5ef4a5ce1d1cc57d690574204c0dd566d5c";
 const char* revlog = 
+"11767 2016-12-13 15:46:14 +0100 xmlscript: set also the variable value\n" \
 "11766 2016-12-13 12:18:12 +0100 xmlscript: query function added\n" \
 "11765 2016-12-12 15:43:13 +0100 guiframe: if loco is already in a block the d&d will be used for goto block\n" \
 "11764 2016-12-12 11:15:05 +0100 translation merge: sl, de, pt_BR, nl\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "11720 2016-11-28 12:15:49 +0100 guiframe: fix for cascade menuitem\n" \
 "11719 2016-11-28 12:08:00 +0100 waybill: unassigned status added\n" \
 "11718 2016-11-28 10:23:11 +0100 route: remove lock status at startup\n" \
-"11717 2016-11-28 08:26:05 +0100 route: option route speed at enter added\n" \
 
 "log end";
