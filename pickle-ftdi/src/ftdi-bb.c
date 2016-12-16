@@ -68,14 +68,23 @@ ftdi_bb_open(const char *device)
 		return -1;
 	}
 
-	if ((ftdi_usb_open_desc(&ftdi, 0x0403, 0x6015, NULL, p.usb_serial) < 0) && (ftdi_usb_open_desc(&ftdi, 0x0403, 0x6001, NULL, p.usb_serial) < 0)) {
-		if (p.usb_serial)
-			printf("%s: can't open FT232R/FT230X device [%s] with serial ID %s\n", __func__, ftdi_get_error_string(&ftdi), p.usb_serial);
-		else
-			printf("%s: can't open FT232R/FT230X device [%s]\n", __func__, ftdi_get_error_string(&ftdi));
-		ftdi_bb_fd = -1;
-		return -1;
-	}
+	if (strlen(p.usb_serial)) {
+		if ((ftdi_usb_open_desc(&ftdi, 0x0403, 0x6015, NULL, p.usb_serial) < 0) && (ftdi_usb_open_desc(&ftdi, 0x0403, 0x6001, NULL, p.usb_serial) < 0)) {
+			if (p.usb_serial)
+				printf("%s: can't open FT232R/FT230X device [%s] with serial ID %s\n", __func__, ftdi_get_error_string(&ftdi), p.usb_serial);
+			else
+				printf("%s: can't open FT232R/FT230X device [%s]\n", __func__, ftdi_get_error_string(&ftdi));
+			ftdi_bb_fd = -1;
+			return -1;
+		}
+	} else {
+		if ((ftdi_usb_open(&ftdi, 0x0403, 0x6015) < 0) && (ftdi_usb_open(&ftdi, 0x0403, 0x6001) < 0)) {
+			printf("%s: can't open FT230X device [%s]\n", __func__, ftdi_get_error_string(&ftdi));
+			ftdi_bb_fd = -1;
+			return -1;
+		}
+        }
+
 	/* all output */
 	actual_mask = 0xff;
 	if (ftdi_set_bitmode(&ftdi, actual_mask, BITMODE_SYNCBB) < 0) {
