@@ -151,11 +151,12 @@ OKCOMPUTER
                 XORLW   RUN
                 BNZ     CONTINUE
 
+#IFDEF CAN
                 SETF    wait            ; wait a little bit before
 WAIT_LOOP
                 DECFSZ  wait,f
                 BRA     WAIT_LOOP
-
+#ENDIF
                 BRA     GOTOAPP         ; RUN...
 
 CONTINUE

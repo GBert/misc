@@ -157,6 +157,7 @@ InitComms
                 BCF     TRISB,2             ; CANTX I/P
                 BSF     TRISB,3             ; CANRX I/P
 #ENDIF
+
                 ; Set configuration mode
                 BANKSEL CANCON
                 MOVLW   (1 << REQOP2)
