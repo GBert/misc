@@ -91,8 +91,6 @@ timer2          EQU     0x006       ;   "
 timer3          EQU     0x007       ;   "
 timer4          EQU     0x008       ;   "
 
-wait            EQU     0x009
-
 ;------------------------------------------------------------------------------
 ; GOTO Boot Loader
 ;------------------------------------------------------------------------------
@@ -142,24 +140,21 @@ OKCOMPUTER
                 MOVLW   (RUN + 1)       ; > RUN?
                 SUBWF   cmd,W
                 BC      OKCOMPUTER      ; IGNORE
-       
+
 ;------------------------------------------------------------------------------
 ; Perform command
 ;------------------------------------------------------------------------------
 
                 MOVF    cmd,W
                 XORLW   RUN
-                BNZ     CONTINUE
-
-#IFDEF CAN
-                SETF    wait            ; wait a little bit before
-WAIT_LOOP
-                DECFSZ  wait,f
-                BRA     WAIT_LOOP
-#ENDIF
+#IFNDEF CAN
+                BZ      GOTOAPP         ; RUN...
+#ELSE
+                BNZ     NOTRUN
+                RCALL   CanDelay
                 BRA     GOTOAPP         ; RUN...
-
-CONTINUE
+NOTRUN
+#ENDIF
                 MOVF    cmd,W
                 XORLW   HELLO
                 BNZ     FLASHEEPROM     ; FLASH...
@@ -314,7 +309,7 @@ WriteFlashLoop
 ;
 ;  DS39761B-page 100
 ;------------------------------------------------------------------------------
-ReadFlash       
+ReadFlash
                 MOVLW   ROWSIZE
                 MOVWF   cnt
 ReadFlashLoop   
@@ -331,7 +326,7 @@ ReadFlashLoop
 ;
 ;  DS39761B-page 107
 ;------------------------------------------------------------------------------
-WriteEEPROM     
+WriteEEPROM
                 MOVFF   buffer,EEDATA
                 MOVLW   (1 << WREN)     ; EEPROM WRITE
                 RCALL   Write
@@ -367,7 +362,7 @@ Write
                 MOVWF   EECON2
 
                 BSF     EECON1,WR       ; Start Erase/Write (CPU stall)
-WriteWait       
+WriteWait
                 BTFSC   EECON1,WR
                 BRA     WriteWait
 

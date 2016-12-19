@@ -149,15 +149,14 @@ InitComms
 
                 ; C is alternate port
 #IF CAN == PORTC
-                BSF     LATC,6              ; set to high before switching to output
-                BCF     TRISC,6             ; CANTX I/P
+                BSF     LATC,6              ; CANTX PRESET HIGH
+                BCF     TRISC,6             ; CANTX O/P
                 BSF     TRISC,7             ; CANRX I/P
 #ELSE
-                BSF     LATB,2              ; set to high before switching to output
-                BCF     TRISB,2             ; CANTX I/P
+                BSF     LATB,2              ; CANTX PRESET HIGH
+                BCF     TRISB,2             ; CANTX O/P
                 BSF     TRISB,3             ; CANRX I/P
 #ENDIF
-
                 ; Set configuration mode
                 BANKSEL CANCON
                 MOVLW   (1 << REQOP2)
@@ -185,7 +184,7 @@ InitComms1
 
                 CLRF    RXM1SIDH            ; RXB1 extended filters 2/3/4/5 
                 CLRF    RXM1SIDL
-                CLRF    RXM1EIDH            
+                CLRF    RXM1EIDH
                 CLRF    RXM1EIDL
 
                 ; Set standard receive filters for RXB0
@@ -200,7 +199,7 @@ InitComms1
                 ; Set extended receive filters for RXB1
                 BANKSEL RXF2SIDH
                 MOVLW   (1 << EXIDEN)       ; EXIDEN = 1
-                MOVWF   RXF2SIDL    
+                MOVWF   RXF2SIDL
                 MOVWF   RXF3SIDL
                 MOVWF   RXF4SIDL
                 MOVWF   RXF5SIDL
@@ -286,18 +285,23 @@ SendData
                 MOVLW   (1 << TXREQ)
                 MOVWF   TXB0CON
 
+; FOLLOW THROUGH
+;------------------------------------------------------------------------------
+; CAN Bus Delay
+;------------------------------------------------------------------------------
+CanDelay
                 MOVLB   0
 
                 MOVLW   CANDELAY
                 MOVWF   timer1
-SendDelay
+CanDelayLoop
                 DECF    timer1,F
-                BNZ     SendDelay
+                BNZ     CanDelayLoop
                 CLRWDT
 
                 RETURN
 
-;------------------------------------------------------------------------------    
+;------------------------------------------------------------------------------
 ;
 ; vim: ft=asm shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 ;
