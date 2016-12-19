@@ -1,9 +1,24 @@
 const int revisionnr = 
-11767
+11782
 ;
 const char* commithash = 
-"2951f5ef4a5ce1d1cc57d690574204c0dd566d5c";
+"907dcdba16b2efa3e524334bc823fa4d2c52b85b";
 const char* revlog = 
+"11782 2016-12-18 18:10:13 +0100 trace level corrections\n" \
+"11781 2016-12-18 18:09:13 +0100 loc: broadcast blockid to zero string in case not set\n" \
+"11780 2016-12-18 14:29:59 +0100 locdialog: speed error popup extended\n" \
+"11779 2016-12-18 14:28:55 +0100 locdialog: speed error popup extended\n" \
+"11778 2016-12-18 08:45:17 +0100 dccpp: trace extended for wrong addressing\n" \
+"11777 2016-12-18 07:31:36 +0100 loc: Vvar for automobile engine type only\n" \
+"11776 2016-12-17 16:37:19 +0100 app: tracelevel fix for calc and find\n" \
+"11775 2016-12-17 07:52:43 +0100 SBB-L-Signals: 4 and 5 aspect signals added from Andy\n" \
+"11774 2016-12-17 07:17:53 +0100 dccpp: fix for getting accessory output ID\n" \
+"11773 2016-12-17 07:07:20 +0100 signal: set ID for output commands (dccpp)\n" \
+"11772 2016-12-15 21:27:58 +0100 app: only check access of the protocol path if its length > 0\n" \
+"11771 2016-12-15 09:00:27 +0100 dccpp: fix for double used ID's\n" \
+"11770 2016-12-14 11:04:15 +0100 blockgroupingdlg: added the <> buttons\n" \
+"11769 2016-12-14 08:31:54 +0100 trace level find option added\n" \
+"11768 2016-12-13 19:21:02 +0100 blockgroupingdlg: fix for crash on condition add without a selection\n" \
 "11767 2016-12-13 15:46:14 +0100 xmlscript: set also the variable value\n" \
 "11766 2016-12-13 12:18:12 +0100 xmlscript: query function added\n" \
 "11765 2016-12-12 15:43:13 +0100 guiframe: if loco is already in a block the d&d will be used for goto block\n" \
@@ -39,20 +54,5 @@ const char* revlog =
 "11735 2016-12-01 08:28:59 +0100 waybill.dlg: fix for is deleverd function\n" \
 "11734 2016-12-01 08:06:52 +0100 cardlg: show waybill in the index\n" \
 "11733 2016-11-30 11:16:46 +0100 wrapper: removed unused attribute poweroffexit\n" \
-"11732 2016-11-30 11:05:22 +0100 loconet: removed unused poweroffexit\n" \
-"11731 2016-11-30 10:54:07 +0100 xmlscript: resolve vars first in the sub state function\n" \
-"11730 2016-11-30 08:55:27 +0100 xmlscript: allow a var in the while max attribute\n" \
-"11729 2016-11-29 13:18:46 +0100 item: fix for schedule2go event offset\n" \
-"11728 2016-11-29 10:29:37 +0100 locdialog: export selected loco\n" \
-"11727 2016-11-29 10:05:02 +0100 waybilldlg: index translation for status and cartype\n" \
-"11726 2016-11-29 08:29:53 +0100 translatione merge: de, pt_BR, sl, nl\n" \
-"11725 2016-11-29 07:28:04 +0100 waybill: broadcast status change\n" \
-"11724 2016-11-29 07:22:45 +0100 waybilldlg: fix for status\n" \
-"11723 2016-11-28 17:41:48 +0100 waybill: cmd function added\n" \
-"11722 2016-11-28 15:14:43 +0100 text: lccur var added\n" \
-"11721 2016-11-28 14:40:46 +0100 waybilldlg: status unassigned at first\n" \
-"11720 2016-11-28 12:15:49 +0100 guiframe: fix for cascade menuitem\n" \
-"11719 2016-11-28 12:08:00 +0100 waybill: unassigned status added\n" \
-"11718 2016-11-28 10:23:11 +0100 route: remove lock status at startup\n" \
 
 "log end";
