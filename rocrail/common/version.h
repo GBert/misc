@@ -1,9 +1,11 @@
 const int revisionnr = 
-11782
+11784
 ;
 const char* commithash = 
-"907dcdba16b2efa3e524334bc823fa4d2c52b85b";
+"2b85e8c47eb2a4b621d3961cad10aede56750960";
 const char* revlog = 
+"11784 2016-12-22 08:08:49 +0100 zimobin: set f0 in funcmd response\n" \
+"11783 2016-12-20 17:09:34 +0100 dccpp: fix for output as accessory -> use gate\n" \
 "11782 2016-12-18 18:10:13 +0100 trace level corrections\n" \
 "11781 2016-12-18 18:09:13 +0100 loc: broadcast blockid to zero string in case not set\n" \
 "11780 2016-12-18 14:29:59 +0100 locdialog: speed error popup extended\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11737 2016-12-02 10:08:53 +0100 cv: fix for index error in the vcurve processing\n" \
 "11736 2016-12-02 08:38:47 +0100 waybilldlg: sorting columns added\n" \
 "11735 2016-12-01 08:28:59 +0100 waybill.dlg: fix for is deleverd function\n" \
-"11734 2016-12-01 08:06:52 +0100 cardlg: show waybill in the index\n" \
-"11733 2016-11-30 11:16:46 +0100 wrapper: removed unused attribute poweroffexit\n" \
 
 "log end";
