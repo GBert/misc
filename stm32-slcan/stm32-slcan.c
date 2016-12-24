@@ -293,11 +293,12 @@ static int slcan_command(void) {
     bool ext, rtr;
     uint8_t i, dlc, data[8];
     uint32_t id;
-    int32_t ret;
+    int32_t ret, loop;
     char c;
     bool send;
 
     id = 0;
+    loop = 10000;
     dlc = 0;
     ext = true;
     send = true;
@@ -349,13 +350,21 @@ static int slcan_command(void) {
 	data[i] = (uint8_t) get_nibbles(2); 
     }
 
-    if (send)
-	can_transmit(CAN1, id, ext, rtr, dlc, data);
-
     /* consume chars until eol reached */
     do {
 	ret = ring_read_ch(&input_ring, NULL);
     } while (ret == '\r');
+
+    if (send) {
+	/* try to send data - omit if not possible */
+	while(can_transmit(CAN1, id, ext, rtr, dlc, data) < 0) {
+	    loop--;
+	    /* readed end of retries */
+	    if (loop < 0)
+		break;
+	    /* TODO: LED overflow */
+	}
+    }
 
     if (commands_pending)
 	commands_pending--;
