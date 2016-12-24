@@ -191,7 +191,7 @@ ifeq "$(SYSTEM)" "Linux"
  SOURCE3+=ftdi-bb.c
  SOURCE4+=ftdi-bb.c
  SOURCE5+=ftdi-bb.c
- CLIB+=-lftdi
+ CLIB+=-lftdi1
  endif
 endif
 

@@ -34,7 +34,7 @@
 ; Device Constants
 ;------------------------------------------------------------------------------
 
-ERRORLEVEL      -302
+ERRORLEVEL      -302,-1301
 #INCLUDE        "devices.inc"
 
 ;------------------------------------------------------------------------------
@@ -78,11 +78,11 @@ LOOP            BTG     LATC,2
                 CLRF    temp2
                 CLRF    temp3
 
-DELAY           DECFSZ  temp3
+DELAY           DECFSZ  temp3,f
                 BRA     DELAY 
-                DECFSZ  temp2
+                DECFSZ  temp2,f
                 BRA     DELAY
-                DECFSZ  temp1
+                DECFSZ  temp1,f
                 BRA     DELAY
 
                 BRA     LOOP
