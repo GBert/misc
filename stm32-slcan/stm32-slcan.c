@@ -293,12 +293,11 @@ static int slcan_command(void) {
     bool ext, rtr;
     uint8_t i, dlc, data[8];
     uint32_t id;
-    int32_t ret, loop;
+    int32_t ret;
     char c;
     bool send;
 
     id = 0;
-    loop = 10000;
     dlc = 0;
     ext = true;
     send = true;
@@ -356,6 +355,7 @@ static int slcan_command(void) {
     } while (ret == '\r');
 
     if (send) {
+	int loop = CAN_MAX_RETRY;
 	/* try to send data - omit if not possible */
 	while(can_transmit(CAN1, id, ext, rtr, dlc, data) < 0) {
 	    loop--;
