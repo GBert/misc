@@ -20,6 +20,9 @@
 #include <stdio.h>
 #include <errno.h>
 
+
+#define CAN_MAX_RETRY	1000
+
 /******************************************************************************
  * Simple ringbuffer implementation from open-bldc's libgovernor that
  * you can find at:
