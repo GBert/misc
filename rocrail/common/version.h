@@ -1,9 +1,15 @@
 const int revisionnr = 
-11784
+11790
 ;
 const char* commithash = 
-"2b85e8c47eb2a4b621d3961cad10aede56750960";
+"59aaf422c07c35cc0d405105a3be9ae9f46b46de";
 const char* revlog = 
+"11790 2016-12-26 07:51:33 +0100 stage: allow cleaning without checking type and era\n" \
+"11789 2016-12-25 09:29:59 +0100 bidib: work around for MSG_CS_ACCESSORY_ACK\n" \
+"11788 2016-12-24 14:29:14 +0100 issuedlg: trace level corrections\n" \
+"11787 2016-12-24 06:31:29 +0100 idle: crash fix\n" \
+"11786 2016-12-23 08:25:59 +0100 app: fix for trace actions\n" \
+"11785 2016-12-22 16:52:03 +0100 app: command line help correction\n" \
 "11784 2016-12-22 08:08:49 +0100 zimobin: set f0 in funcmd response\n" \
 "11783 2016-12-20 17:09:34 +0100 dccpp: fix for output as accessory -> use gate\n" \
 "11782 2016-12-18 18:10:13 +0100 trace level corrections\n" \
@@ -48,11 +54,5 @@ const char* revlog =
 "11743 2016-12-04 10:42:46 +0100 xmlscript: revert replace all vars in attributes\n" \
 "11742 2016-12-04 10:42:23 +0100 stage: fix for getcurtrack\n" \
 "11741 2016-12-04 08:09:59 +0100 xmlscript: resolve all vars in all command attributes\n" \
-"11740 2016-12-03 08:40:47 +0100 variable lccurtrack added for stage blocks\n" \
-"11739 2016-12-03 08:09:31 +0100 reset prev_id on object copy\n" \
-"11738 2016-12-02 11:38:57 +0100 routedialog: remove the prev_id of the copied route\n" \
-"11737 2016-12-02 10:08:53 +0100 cv: fix for index error in the vcurve processing\n" \
-"11736 2016-12-02 08:38:47 +0100 waybilldlg: sorting columns added\n" \
-"11735 2016-12-01 08:28:59 +0100 waybill.dlg: fix for is deleverd function\n" \
 
 "log end";
