@@ -354,17 +354,22 @@ static int slcan_command(void) {
 	ret = ring_read_ch(&input_ring, NULL);
     } while (ret == '\r');
 
+#if 1
+    if (send)
+	can_transmit(CAN1, id, ext, rtr, dlc, data);
+#else
+
     if (send) {
 	int loop = CAN_MAX_RETRY;
 	/* try to send data - omit if not possible */
-	while(can_transmit(CAN1, id, ext, rtr, dlc, data) < 0) {
-	    loop--;
-	    /* readed end of retries */
-	    if (loop < 0)
+	while(loop-- > 0) {
+	    if (can_available_mailbox(CAN1))
 		break;
 	    /* TODO: LED overflow */
 	}
+	can_transmit(CAN1, id, ext, rtr, dlc, data);
     }
+#endif
 
     if (commands_pending)
 	commands_pending--;
