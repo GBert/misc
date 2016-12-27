@@ -1,9 +1,11 @@
 const int revisionnr = 
-11790
+11792
 ;
 const char* commithash = 
-"59aaf422c07c35cc0d405105a3be9ae9f46b46de";
+"9cc4de8f1b31fb1dadbd5925f06e4e8f5bf8ad71";
 const char* revlog = 
+"11792 2016-12-26 14:36:09 +0100 loc: remove command delay for consist locos\n" \
+"11791 2016-12-26 14:07:39 +0100 throttledlg: fix for get icon on none UTF-8 systems\n" \
 "11790 2016-12-26 07:51:33 +0100 stage: allow cleaning without checking type and era\n" \
 "11789 2016-12-25 09:29:59 +0100 bidib: work around for MSG_CS_ACCESSORY_ACK\n" \
 "11788 2016-12-24 14:29:14 +0100 issuedlg: trace level corrections\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11745 2016-12-05 10:06:53 +0100 xmlscript: replace all vars in command node clones, not in the original\n" \
 "11744 2016-12-05 08:30:13 +0100 stage: new commands setloco and resetloco\n" \
 "11743 2016-12-04 10:42:46 +0100 xmlscript: revert replace all vars in attributes\n" \
-"11742 2016-12-04 10:42:23 +0100 stage: fix for getcurtrack\n" \
-"11741 2016-12-04 08:09:59 +0100 xmlscript: resolve all vars in all command attributes\n" \
 
 "log end";
