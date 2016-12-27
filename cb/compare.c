@@ -21,7 +21,7 @@
 
 #define timersub_nano(s,t,a) ( (a)->tv_sec = (s)->tv_sec - (t)->tv_sec, \
 	((a)->tv_nsec = (s)->tv_nsec - (t)->tv_nsec) < 0 && \
-	((a)->tv_nsec += 1000000000L, (a)->tv_sec++) )
+	((a)->tv_nsec -= 1000000000L, (a)->tv_sec++) )
 
 #define timespeccmp(tsp, usp, cmp)	\
 	(((tsp)->tv_sec == (usp)->tv_sec) ? 	\
@@ -97,7 +97,7 @@ int main(int argc, char **argv) {
 	    memcpy(&ts1, &header1.ts, sizeof(ts1));
 	    memcpy(&ts2, &header2.ts, sizeof(ts2));
 	    us = timespec_sub(&ts1, &ts2, &ts_diff);
-	    printf("(%ld.%09ld) - (%ld.%09ld) ->  %6d\n", ts1.tv_sec, ts1.tv_nsec, ts2.tv_sec, ts2.tv_nsec, us);
+	    printf("(%ld.%09ld) - (%ld.%09ld) ->  %6d us\n", ts1.tv_sec, ts1.tv_nsec, ts2.tv_sec, ts2.tv_nsec, us);
 	}
     }
 }

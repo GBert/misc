@@ -207,8 +207,29 @@ void sys_tick_handler(void) {
     counter++;
     if (counter == 500) {
 	counter = 0;
-	/* printf("Hello World !\r\n"); */
 	gpio_toggle(GPIOC, GPIO13);	/* toggle green LED */
+    }
+}
+
+static void gpio_debug(int n) {
+
+    switch(n) {
+    case 0:
+	gpio_clear(GPIOC, GPIO14);
+	gpio_clear(GPIOC, GPIO15);
+	break;
+    case 1:
+	gpio_set(GPIOC, GPIO14);
+	gpio_clear(GPIOC, GPIO15);
+	break;
+    case 2:
+	gpio_clear(GPIOC, GPIO14);
+	gpio_set(GPIOC, GPIO15);
+	break;
+    case -1:
+	gpio_set(GPIOC, GPIO14);
+	gpio_set(GPIOC, GPIO15);
+	break;
     }
 }
 
@@ -225,11 +246,8 @@ void usb_lp_can_rx0_isr(void) {
     uint8_t i, dlc, data[8];
     char c;
 
-    gpio_set(GPIOC, GPIO14);	/* set osci pin */
     can_receive(CAN1, 0, false, &id, &ext, &rtr, &fmi, &dlc, data);
-    gpio_clear(GPIOC, GPIO14);	/* set osci pin */
 
-    gpio_set(GPIOC, GPIO14);	/* set osci pin */
     if (rtr) {
 	if (ext)
 	    c = 'R';
@@ -269,7 +287,6 @@ void usb_lp_can_rx0_isr(void) {
 
     can_fifo_release(CAN1, 0);
 
-    gpio_clear(GPIOC, GPIO14);	/* clear osci pin - conversion complete */
     /* enable the transmitter now */
     USART_CR1(USART2) |= USART_CR1_TXEIE;
 }
@@ -355,10 +372,11 @@ static int slcan_command(void) {
     } while (ret == '\r');
 
 #if 1
-    if (send)
-	can_transmit(CAN1, id, ext, rtr, dlc, data);
+    if (send) {
+	ret = can_transmit(CAN1, id, ext, rtr, dlc, data);
+	gpio_debug(ret);
+    }
 #else
-
     if (send) {
 	int loop = CAN_MAX_RETRY;
 	/* try to send data - omit if not possible */
@@ -367,7 +385,8 @@ static int slcan_command(void) {
 		break;
 	    /* TODO: LED overflow */
 	}
-	can_transmit(CAN1, id, ext, rtr, dlc, data);
+	ret = can_transmit(CAN1, id, ext, rtr, dlc, data);
+	gpio_debug(ret);
     }
 #endif
 
