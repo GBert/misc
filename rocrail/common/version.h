@@ -1,9 +1,13 @@
 const int revisionnr = 
-11792
+11796
 ;
 const char* commithash = 
-"9cc4de8f1b31fb1dadbd5925f06e4e8f5bf8ad71";
+"44d46a0ab112bc2517a46585ac03895e0cc84a40";
 const char* revlog = 
+"11796 2016-12-28 13:16:27 +0100 xmlscript: fix for %iod% in query\n" \
+"11795 2016-12-28 08:35:15 +0100 stagedlg: layout correction\n" \
+"11794 2016-12-28 08:20:42 +0100 block: era permission option added\n" \
+"11793 2016-12-28 06:57:23 +0100 route: skip checking permission for cleaning type\n" \
 "11792 2016-12-26 14:36:09 +0100 loc: remove command delay for consist locos\n" \
 "11791 2016-12-26 14:07:39 +0100 throttledlg: fix for get icon on none UTF-8 systems\n" \
 "11790 2016-12-26 07:51:33 +0100 stage: allow cleaning without checking type and era\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "11749 2016-12-06 08:14:44 +0100 item: show aspect in the signal tooltip\n" \
 "11748 2016-12-05 14:24:08 +0100 planpanel: trace correction\n" \
 "11747 2016-12-05 12:39:17 +0100 stage: broadcast locoset as block event\n" \
-"11746 2016-12-05 12:26:16 +0100 getLocoTrack implemented in tt and seltab\n" \
-"11745 2016-12-05 10:06:53 +0100 xmlscript: replace all vars in command node clones, not in the original\n" \
-"11744 2016-12-05 08:30:13 +0100 stage: new commands setloco and resetloco\n" \
-"11743 2016-12-04 10:42:46 +0100 xmlscript: revert replace all vars in attributes\n" \
 
 "log end";
