@@ -1,9 +1,11 @@
 const int revisionnr = 
-11796
+11798
 ;
 const char* commithash = 
-"44d46a0ab112bc2517a46585ac03895e0cc84a40";
+"f89e11aaa06ceb0de2d0dd9676f2194ba506d35b";
 const char* revlog = 
+"11798 2016-12-29 09:07:18 +0100 enter: restrictions removed for routespeedatenter\n" \
+"11797 2016-12-29 08:42:45 +0100 milight: skeleton created\n" \
 "11796 2016-12-28 13:16:27 +0100 xmlscript: fix for %iod% in query\n" \
 "11795 2016-12-28 08:35:15 +0100 stagedlg: layout correction\n" \
 "11794 2016-12-28 08:20:42 +0100 block: era permission option added\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11751 2016-12-07 06:56:11 +0100 rcon: signal server connection lost\n" \
 "11750 2016-12-06 10:49:36 +0100 stage: send block command to the loco after successful locoset\n" \
 "11749 2016-12-06 08:14:44 +0100 item: show aspect in the signal tooltip\n" \
-"11748 2016-12-05 14:24:08 +0100 planpanel: trace correction\n" \
-"11747 2016-12-05 12:39:17 +0100 stage: broadcast locoset as block event\n" \
 
 "log end";
