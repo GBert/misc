@@ -196,7 +196,7 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 	/* prepare buffer - simple delete for now (maybe wrong if MCLR or PGM set) */
 	bzero(ftdi_buf_out, MAX_BITS_TRANSFER * 4);
 
-	value_mask = msb_first ? 1 << shift->nbits : 1;
+	value_mask = msb_first ? 1 << (shift->nbits - 1) : 1;
 
 	for (int i = 0; i< shift->nbits; i++) {
 		ftdi_buf_out[index] = pin_state;
@@ -226,7 +226,7 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 		return -1;
 	}
 	value = 0;
-	value_mask = msb_first ? 1 << shift->nbits : 1;
+	value_mask = msb_first ? 1 << (shift->nbits - 1) : 1;
 	if (shift->dir) {
 		for (int i = 0; i < shift->nbits; i++ ) {
 			if (ftdi_buf_in[i*2 + 1] & (1 << data_pin_input))
