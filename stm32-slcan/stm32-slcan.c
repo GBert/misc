@@ -320,6 +320,9 @@ static int slcan_command(void) {
     send = true;
     rtr = false;
 
+    if (!can_available_mailbox(CAN1))
+	return -1;
+
     c = ring_read_ch(&input_ring, NULL);
     switch(c) {
     case 'T':
@@ -374,7 +377,7 @@ static int slcan_command(void) {
 #if 1
     if (send) {
 	ret = can_transmit(CAN1, id, ext, rtr, dlc, data);
-	gpio_debug(ret);
+	/* gpio_debug(ret); */
     }
 #else
     if (send) {
