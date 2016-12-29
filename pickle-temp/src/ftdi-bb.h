@@ -29,23 +29,23 @@ struct ftdi_bb_io {
 	uint8_t mode;
 	uint8_t mask;
 	uint8_t cbus_mask;
-};
+} __attribute__((packed));
 
 struct ftdi_bb_config {
-	uint8_t clock_pin;
+	uint16_t clock_pin;
+	uint16_t data_pin_input;
+	uint16_t data_pin_output;
 	uint8_t clock_falling;
-	uint8_t data_pin_input;
-	uint8_t data_pin_output;
+	uint8_t msb_first;
 	uint8_t clock_delay_low;
 	uint8_t clock_delay_high;
-	uint8_t msb_first;
-};
+} __attribute__((packed));
 
 struct ftdi_bb_shift {
 	uint8_t dir;
 	uint8_t nbits;
 	uint64_t bits;
-};
+} __attribute__((packed));
 
 int ftdi_bb_open(const char *);
 void ftdi_bb_close(void);
