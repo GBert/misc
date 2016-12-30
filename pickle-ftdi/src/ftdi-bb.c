@@ -39,26 +39,11 @@ int ftdi_bb_fd = -1;
 #define MAX_BITS_TRANSFER (64)
 
 /* Buffer for the bit-banged data */
-uint8_t ftdi_buf_out[MAX_BITS_TRANSFER * 4];
-uint8_t ftdi_buf_in[MAX_BITS_TRANSFER * 4];
+uint8_t ftdi_buffer[MAX_BITS_TRANSFER * 4];
 
-static uint16_t pin_state = 0;
-static uint8_t actual_mask;
+static uint8_t pin_latch = 0, pin_mask = 0;
 
-static uint8_t clock_pin, data_pin_input, data_pin_output, clock_falling;
-static uint8_t msb_first;
-
-#ifdef DEBUG
-void
-print_buffer(uint8_t *buffer, int len)
-{
-	for (int i = 0; i < len; ++i) {
-		printf("0x%02x ", buffer[i]);
-		if (((i + 1) % 16) == 0)
-			printf("\n");
-	}
-}
-#endif
+static uint8_t clock_pin, data_pin_input, data_pin_output, clock_falling, msb_first;
 
 int
 ftdi_bb_open(const char *device)
@@ -73,10 +58,7 @@ ftdi_bb_open(const char *device)
 
 	if (p.usb_serial[0]) {
 		if ((ftdi_usb_open_desc(&ftdi, 0x0403, 0x6015, NULL, p.usb_serial) < 0) && (ftdi_usb_open_desc(&ftdi, 0x0403, 0x6001, NULL, p.usb_serial) < 0)) {
-			if (p.usb_serial)
-				printf("%s: can't open FT232R/FT230X device [%s] with serial ID %s\n", __func__, ftdi_get_error_string(&ftdi), p.usb_serial);
-			else
-				printf("%s: can't open FT232R/FT230X device [%s]\n", __func__, ftdi_get_error_string(&ftdi));
+			printf("%s: can't open FT232R/FT230X device [%s] with serial ID %s\n", __func__, ftdi_get_error_string(&ftdi), p.usb_serial);
 			ftdi_bb_fd = -1;
 			return -1;
 		}
@@ -88,16 +70,15 @@ ftdi_bb_open(const char *device)
 		}
 	}
 
-	/* all output */
-	actual_mask = 0xff;
+	/* All output */
+	pin_mask = 0xFF;
 
-	if (ftdi_set_bitmode(&ftdi, actual_mask, BITMODE_SYNCBB) < 0) {
+	if (ftdi_set_bitmode(&ftdi, pin_mask, BITMODE_SYNCBB) < 0) {
 		printf("%s: can't enable bitbang mode [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 		ftdi_bb_fd = -1;
 		return -1;
 	}
 
-	/* TODO: set baudrate (needed) - defines the bitbang speed (formula ?) */
 	if (ftdi_set_baudrate(&ftdi, 65536) < 0) {
 		printf("%s: can't set baudrate [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 		ftdi_bb_fd = -1;
@@ -140,37 +121,37 @@ int
 ftdi_bb_io(struct ftdi_bb_io *io)
 {
 #ifdef __linux
-	uint8_t mask, value;
+	uint8_t old_mask = pin_mask, pin_read;
 
-	mask = actual_mask;
-	if (io->dir == 0) {
-		mask |= (1 << io->pin);
-		if (io->bit == 1)
-			pin_state |= (1 << io->pin);
-		else
-			pin_state &= ~(1 << io->pin);
-	} else {
-		mask &= ~(1 << io->pin);
+	if (io->dir) {	/* In */
+		pin_mask &= ~(1 << io->pin);
+	} else {	/* Out */
+		pin_mask |= (1 << io->pin);
+		if (io->bit)	/* Set */
+			pin_latch |= (1 << io->pin);
+		else		/* Reset */
+			pin_latch &= ~(1 << io->pin);
 	}
 
-	if (mask != actual_mask) {
-		if (ftdi_set_bitmode(&ftdi, mask, BITMODE_SYNCBB) < 0) {
+	if (pin_mask != old_mask) {
+		if (ftdi_set_bitmode(&ftdi, pin_mask, BITMODE_SYNCBB) < 0) {
 			printf("%s: ftdi_set_bimode failed [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 			return -1;
 		}
-		actual_mask = mask;
 	}
 
-	value = pin_state;
-
-	if (ftdi_write_data(&ftdi, &value, 1) < 0) {
+	if (ftdi_write_data(&ftdi, &pin_latch, 1) < 0) {
 		printf("%s: ftdi_write_error [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 		return -1;
 	}
-	if (ftdi_read_data(&ftdi, &value, 1) < 0) {
+
+	if (ftdi_read_data(&ftdi, &pin_read, 1) < 0) {
 		printf("%s: ftdi_read_error [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 		return -1;
 	}
+
+	if (io->dir) /* In */
+		io->bit = (pin_read & (1 << io->pin)) != 0;
 
 	return 1;
 #endif
@@ -182,61 +163,62 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 {
 #ifdef __linux
 	uint32_t index = 0;
-	uint8_t mask, pattern;
+	uint8_t old_mask;
 	uint64_t value, value_mask;
-	int ret;
 
 	if (data_pin_input == data_pin_output) {
-		mask = actual_mask;
-		if (shift->dir)
-			mask &= ~(1 << data_pin_input);
-		else
-			mask |= (1 << data_pin_input);
-		if (mask != actual_mask) {
-			if (ftdi_set_bitmode(&ftdi, mask, BITMODE_SYNCBB) < 0) {
-				printf("%s: ftdi set bimode failed [%s]\n", __func__, ftdi_get_error_string(&ftdi));
+		old_mask = pin_mask;
+		if (shift->dir) /* In */
+			pin_mask &= ~(1 << data_pin_input);
+		else		/* Out */
+			pin_mask |= (1 << data_pin_input);
+		if (pin_mask != old_mask) {
+			if (ftdi_set_bitmode(&ftdi, pin_mask, BITMODE_SYNCBB) < 0) {
+				printf("%s: ftdi_set_bimode failed [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 				return -1;
 			}
-			actual_mask = mask;
 		}
 	}
 
-	/* prepare buffer - simple delete for now (maybe wrong if MCLR or PGM set) */
-	bzero(ftdi_buf_out, MAX_BITS_TRANSFER * 4);
-
+	bzero(ftdi_buffer, MAX_BITS_TRANSFER * 4);
 	value = shift->bits;
-	value_mask = (msb_first) ? (1 << (shift->nbits - 1)) : (1 << 0);
+	value_mask = (msb_first) ? ((uint64_t)(1) << (shift->nbits - 1)) : (1 << 0);
 	for (int i = 0; i < shift->nbits; ++i) {
-		if (value & value_mask)
-			pattern = pin_state | (1 << data_pin_output) | (1 << clock_pin);
-		else
-			pattern = pin_state | (1 << clock_pin);
-		ftdi_buf_out[index++] = pattern;
-		ftdi_buf_out[index++] = pattern;
-		ftdi_buf_out[index++] = pattern & ~(1 << clock_pin);
-		ftdi_buf_out[index++] = pattern & ~(1 << clock_pin);
+		if (!shift->dir) {	/* Out */
+			if (value & value_mask)	/* Set */
+				pin_latch |= (1 << data_pin_output);
+			else			/* Reset */
+				pin_latch &= ~(1 << data_pin_output);
+		}
+		pin_latch |= (1 << clock_pin);
+		ftdi_buffer[index++] = pin_latch;
+		ftdi_buffer[index++] = pin_latch;
+		pin_latch &= ~(1 << clock_pin);
+		ftdi_buffer[index++] = pin_latch;
+		ftdi_buffer[index++] = pin_latch;
 		value_mask = (msb_first) ? (value_mask >> 1) : (value_mask << 1);
 	}
 
-	if ((ret = ftdi_write_data(&ftdi, ftdi_buf_out, index)) < 0) {
+	if ((ftdi_write_data(&ftdi, ftdi_buffer, index)) < 0) {
 		printf("%s: ftdi_wrire_error [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 		return -1;
 	}
-	if ((ret = ftdi_read_data(&ftdi, ftdi_buf_in, index)) < 0) {
+
+	if ((ftdi_read_data(&ftdi, ftdi_buffer, index)) < 0) {
 		printf("%s: ftdi_read_error [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 		return -1;
 	}
 
-	value = 0;
-	value_mask = (msb_first) ? (1 << (shift->nbits - 1)) : (1 << 0);
-	if (shift->dir) {
+	if (shift->dir) { /* In */
+		value = 0;
+		value_mask = (msb_first) ? ((uint64_t)(1) << (shift->nbits - 1)) : (1 << 0);
 		for (int i = 0; i < shift->nbits; ++i) {
-			if (ftdi_buf_in[i * 4 + 2] & (1 << data_pin_input))
+			if (ftdi_buffer[i * 4 + 2] & (1 << data_pin_input))
 				value |= value_mask;
 			value_mask = (msb_first) ? (value_mask >> 1) : (value_mask << 1);
 		}
+		shift->bits = value;
 	}
-	shift->bits = value;
 
 	return 1;
 #else

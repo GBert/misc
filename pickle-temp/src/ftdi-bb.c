@@ -204,8 +204,6 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 			pattern = pin_state | 1 << clock_pin;
 
 		ftdi_buf_out[index++] = pattern;
-		ftdi_buf_out[index++] = pattern;
-		ftdi_buf_out[index++] = pattern & ~( 1 << clock_pin);
 		ftdi_buf_out[index++] = pattern & ~( 1 << clock_pin);
 
 		value_mask = msb_first ? (value_mask >> 1) : (value_mask << 1);
@@ -224,7 +222,7 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 	value_mask = msb_first ? 1 << (shift->nbits - 1) : 1;
 	if (shift->dir) {
 		for (int i = 0; i < shift->nbits; i++ ) {
-			if (ftdi_buf_in[i*4 + 2] & (1 << data_pin_input))
+			if (ftdi_buf_in[i*2 + 0] & (1 << data_pin_input))
 				value |= value_mask;
 			value_mask = msb_first ? (value_mask >> 1) : (value_mask << 1);
 		}
