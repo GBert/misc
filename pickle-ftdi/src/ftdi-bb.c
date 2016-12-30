@@ -51,7 +51,7 @@ static uint8_t msb_first;
 void
 print_buffer(uint8_t *buffer, int len)
 {
-	for (int i = 0; i < len; i++) {
+	for (int i = 0; i < len; ++i) {
 		printf("0x%02x ", buffer[i]);
 		if (((i + 1) % 16) == 0)
 			printf("\n");
@@ -89,6 +89,7 @@ ftdi_bb_open(const char *device)
 
 	/* all output */
 	actual_mask = 0xff;
+
 	if (ftdi_set_bitmode(&ftdi, actual_mask, BITMODE_SYNCBB) < 0) {
 		printf("%s: can't enable bitbang mode [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 		ftdi_bb_fd = -1;
@@ -159,8 +160,8 @@ ftdi_bb_io(struct ftdi_bb_io *io)
 		}
 	}
 
-	actual_mask = io->mask;
 	value = pin_state & 0xff;
+
 	if (ftdi_write_data(&ftdi, &value, 1) < 0) {
 		printf("%s: ftdi_write_error [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 		return -1;
@@ -183,7 +184,6 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 	uint8_t mask, pattern;
 	uint64_t value, value_mask;
 	int ret;
-	value = shift->bits;
 
 	if (data_pin_input == data_pin_output) {
 		mask = actual_mask;
@@ -191,7 +191,6 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 			mask &= ~(1 << data_pin_input);
 		else
 			mask |= (1 << data_pin_input);
-
 		if (mask != actual_mask) {
 			if (ftdi_set_bitmode(&ftdi, mask, BITMODE_SYNCBB) < 0) {
 				printf("%s: ftdi set bimode failed [%s]\n", __func__, ftdi_get_error_string(&ftdi));
@@ -204,19 +203,17 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 	/* prepare buffer - simple delete for now (maybe wrong if MCLR or PGM set) */
 	bzero(ftdi_buf_out, MAX_BITS_TRANSFER * 4);
 
+	value = shift->bits;
 	value_mask = (msb_first) ? (1 << (shift->nbits - 1)) : (1 << 0);
-
-	for (int i = 0; i< shift->nbits; i++) {
+	for (int i = 0; i < shift->nbits; ++i) {
 		if (value & value_mask)
 			pattern = pin_state | (1 << data_pin_output) | (1 << clock_pin);
 		else
 			pattern = pin_state | (1 << clock_pin);
-
 		ftdi_buf_out[index++] = pattern;
 		ftdi_buf_out[index++] = pattern;
 		ftdi_buf_out[index++] = pattern & ~(1 << clock_pin);
 		ftdi_buf_out[index++] = pattern & ~(1 << clock_pin);
-
 		value_mask = (msb_first) ? (value_mask >> 1) : (value_mask << 1);
 	}
 
@@ -231,12 +228,10 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 
 	value = 0;
 	value_mask = (msb_first) ? (1 << (shift->nbits - 1)) : (1 << 0);
-
 	if (shift->dir) {
-		for (int i = 0; i < shift->nbits; i++ ) {
+		for (int i = 0; i < shift->nbits; ++i) {
 			if (ftdi_buf_in[i * 4 + 2] & (1 << data_pin_input))
 				value |= value_mask;
-
 			value_mask = (msb_first) ? (value_mask >> 1) : (value_mask << 1);
 		}
 	}
