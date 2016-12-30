@@ -92,7 +92,7 @@ ftdi_bb_open(const char *device)
 		return -1;
 	}
 	/* TODO: set baudrate (needed) - defines the bitbang speed (formula ?) */
-	if(ftdi_set_baudrate(&ftdi, 1024) < 0) {
+	if(ftdi_set_baudrate(&ftdi, 65536) < 0) {
 		printf("%s: can't set baudrate [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 		ftdi_bb_fd = -1;
 		return -1;
