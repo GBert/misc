@@ -30,19 +30,18 @@
 
 extern struct pickle p;
 
-/*
- * File descriptor
- */
+/* File descriptor */
 struct ftdi_context ftdi;
 int ftdi_bb_fd = -1;
 
-#define MAX_BITS_TRANSFER (64)
-
 /* Buffer for the bit-banged data */
-uint8_t ftdi_buffer[MAX_BITS_TRANSFER * 4];
+#define FTDI_BB_MAX_BITS_TRANSFER (64)
+uint8_t ftdi_buffer[FTDI_BB_MAX_BITS_TRANSFER * 4];
 
-static uint8_t pin_latch = 0, pin_mask = 0;
+/* I/O */
+static uint8_t pin_latch = 0, pin_mask = 0xFF;
 
+/* Configuration */
 static uint8_t clock_pin, data_pin_input, data_pin_output, clock_falling, msb_first;
 
 int
@@ -180,9 +179,9 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 		}
 	}
 
-	bzero(ftdi_buffer, MAX_BITS_TRANSFER * 4);
+	bzero(ftdi_buffer, FTDI_BB_MAX_BITS_TRANSFER * 4);
 	value = shift->bits;
-	value_mask = (msb_first) ? ((uint64_t)(1) << (shift->nbits - 1)) : (1 << 0);
+	value_mask = (msb_first) ? (1U << (shift->nbits - 1)) : (1 << 0);
 	for (int i = 0; i < shift->nbits; ++i) {
 		if (!shift->dir) {	/* Out */
 			if (value & value_mask)	/* Set */
@@ -211,7 +210,7 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 
 	if (shift->dir) { /* In */
 		value = 0;
-		value_mask = (msb_first) ? ((uint64_t)(1) << (shift->nbits - 1)) : (1 << 0);
+		value_mask = (msb_first) ? (1U << (shift->nbits - 1)) : (1 << 0);
 		for (int i = 0; i < shift->nbits; ++i) {
 			if (ftdi_buffer[i * 4 + 2] & (1 << data_pin_input))
 				value |= value_mask;
