@@ -158,6 +158,7 @@ ftdi_bb_io(struct ftdi_bb_io *io)
 			printf("%s: ftdi_set_bimode failed [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 			return -1;
 		}
+		actual_mask = io->mask;
 	}
 
 	value = pin_state & 0xff;
