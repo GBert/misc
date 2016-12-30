@@ -43,8 +43,9 @@ uint8_t ftdi_buf_out[MAX_BITS_TRANSFER * 4];
 uint8_t ftdi_buf_in[MAX_BITS_TRANSFER * 4];
 
 static uint16_t pin_state = 0;
-static uint8_t clock_pin, data_pin_input, data_pin_output, clock_falling;
 static uint8_t actual_mask;
+
+static uint8_t clock_pin, data_pin_input, data_pin_output, clock_falling;
 static uint8_t msb_first;
 
 #ifdef DEBUG
@@ -97,7 +98,7 @@ ftdi_bb_open(const char *device)
 	}
 
 	/* TODO: set baudrate (needed) - defines the bitbang speed (formula ?) */
-	if (ftdi_set_baudrate(&ftdi, 65536) < 0) {
+	if (ftdi_set_baudrate(&ftdi, 1024) < 0) {
 		printf("%s: can't set baudrate [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 		ftdi_bb_fd = -1;
 		return -1;
@@ -139,29 +140,28 @@ int
 ftdi_bb_io(struct ftdi_bb_io *io)
 {
 #ifdef __linux
-	uint8_t value;
+	uint8_t mask, value;
 
-	/* TODO: change mask if needed */
-	io->mask = actual_mask;
+	mask = actual_mask;
 	if (io->dir == 0) {
-		io->mask |= (1 << io->pin);
+		mask |= (1 << io->pin);
 		if (io->bit == 1)
 			pin_state |= (1 << io->pin);
 		else
 			pin_state &= ~(1 << io->pin);
 	} else {
-		io->mask &= ~(1 << io->pin);
+		mask &= ~(1 << io->pin);
 	}
 
-	if (io->mask != actual_mask) {
-		if (ftdi_set_bitmode(&ftdi, io->mask, BITMODE_SYNCBB) < 0) {
+	if (mask != actual_mask) {
+		if (ftdi_set_bitmode(&ftdi, mask, BITMODE_SYNCBB) < 0) {
 			printf("%s: ftdi_set_bimode failed [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 			return -1;
 		}
-		actual_mask = io->mask;
+		actual_mask = mask;
 	}
 
-	value = pin_state & 0xff;
+	value = pin_state;
 
 	if (ftdi_write_data(&ftdi, &value, 1) < 0) {
 		printf("%s: ftdi_write_error [%s]\n", __func__, ftdi_get_error_string(&ftdi));
