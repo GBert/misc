@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2015 Darron Broad
+ * Copyright (C) 2005-2016 Darron Broad
  * All rights reserved.
  * 
  * This file is part of Pickle Microchip PIC ICSP.
@@ -24,6 +24,7 @@
  * Session
  *
  *****************************************************************************/
+
 extern struct pickle p;
 
 /*****************************************************************************
@@ -410,6 +411,10 @@ struct pic14_dsmap pic14_map[] =
 {"PIC16LF18325",PIC16LF18325,	8192, 0/*256*/,   DS40001738A,  0x8000, 0xF000, 0xE000, 4,      4,     32,      32},
 {"PIC16F18345", PIC16F18345,	8192, 0/*256*/,   DS40001738A,  0x8000, 0xF000, 0xE000, 4,      4,     32,      32},
 {"PIC16LF18345",PIC16LF18345,	8192, 0/*256*/,   DS40001738A,  0x8000, 0xF000, 0xE000, 4,      4,     32,      32},
+{"PIC16F18326", PIC16F18326,	16384,0/*256*/,   DS40001738D,  0x8000, 0xF000, 0xE000, 4,      4,     32,      32},
+{"PIC16LF18326",PIC16LF18326,	16384,0/*256*/,   DS40001738D,  0x8000, 0xF000, 0xE000, 4,      4,     32,      32},
+{"PIC16F18346", PIC16F18346,	16384,0/*256*/,   DS40001738D,  0x8000, 0xF000, 0xE000, 4,      4,     32,      32},
+{"PIC16LF18346",PIC16LF18346,	16384,0/*256*/,   DS40001738D,  0x8000, 0xF000, 0xE000, 4,      4,     32,      32},
 
 /* These devices have two config words at 8007 & 8008 and multiple calibration words from 8009 onward */
 {"PIC16F1773",	PIC16F1773,	4096,	0,   DS40001792A,  0x8000, 0xF000, 0x8009, 2,      16,    32,      32},
@@ -484,8 +489,8 @@ pic14_program_verify(void)
 	io_set_pgm(LOW);
 	io_usleep(1000);
 
-	/* INPUT DATA ON CLOCK RISING EDGE */
-	io_configure(FALSE);
+	/* INPUT DATA ON CLOCK RISING EDGE, LSB FIRST */
+	io_configure(FALSE, FALSE);
 
 	/* LVP(KEY) */
 	if (p.key == LVPKEY) {
@@ -1305,7 +1310,7 @@ pic14_erase_device(void)
 			pic14_bulk_erase_data_memory(PIC14_TERASE_DEFAULT);
 			break;
 
-			/* HAS NVM */
+			/* FIXME HAS NVM */
 	case DS40001738A:/* PIC16F18313 */
 
 			 /* HAS NO DATA EEPROM	*/
@@ -1942,7 +1947,7 @@ pic14_write_config(void)
  * DETERMINE MEMORY REGION: CODE, ID, CONFIG or DATA
  *
  *  RETURN PIC_REGIONCODE:
- *	0 .. FLASH SIZE
+ *	0 .. FLASH SIZE - 1
  *
  *  RETURN PIC_REGIONID:
  *	0x2000 or 0x8000
@@ -1951,25 +1956,14 @@ pic14_write_config(void)
  *	0x2007 or 0x8007
  *
  *  RETURN PIC_REGIONDATA:
- *	0x2100 or 0xf000
+ *	0x2100 or 0xF000
  */
 uint16_t
 pic14_getregion(uint16_t address)
 {
 	/* CODE */
-	uint16_t code_high = pic14_map[pic14_index].flash - 1;
-
-	if (address <= code_high) {
+	if (address < pic14_map[pic14_index].flash) {
 		return PIC_REGIONCODE;
-	}
-	/* EEPROM */
-	if (pic14_map[pic14_index].eeprom) {
-		uint16_t data_low = pic14_map[pic14_index].dataaddr;
-		uint16_t data_high = data_low + pic14_map[pic14_index].eeprom - 1;
-
-		if (address >= data_low && address <= data_high) {
-			return PIC_REGIONDATA;
-		}
 	}
 	/* ID */
 	if (address >= pic14_map[pic14_index].configaddr &&
@@ -1981,6 +1975,13 @@ pic14_getregion(uint16_t address)
 	uint16_t config_high = config_low + pic14_map[pic14_index].nconfig;
 	if (address >= config_low && address < config_high) {
 		return PIC_REGIONCONFIG;
+	}
+	/* EEPROM */
+	if (pic14_map[pic14_index].eeprom) {
+		uint16_t data_low = pic14_map[pic14_index].dataaddr;
+		uint16_t data_high = data_low + pic14_map[pic14_index].eeprom;
+		if (address >= data_low && address < data_high)
+			return PIC_REGIONDATA;
 	}
 	if (p.f)
 		fprintf(p.f, "%s: warning: address unsupported [%04X]\n", __func__, address);
@@ -2093,7 +2094,7 @@ pic14_programregion(uint16_t address, uint16_t region, uint16_t data)
 /*
  * VERIFY DATA FOR REGION
  *
- *  RETURN BYTE FAILURE COUNT
+ *  RETURN DATA
  */
 static inline uint16_t
 pic14_verifyregion(uint16_t address, uint16_t region, uint16_t wdata)

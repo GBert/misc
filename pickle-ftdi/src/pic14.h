@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2015 Darron Broad
+ * Copyright (C) 2005-2016 Darron Broad
  * All rights reserved.
  * 
  * This file is part of Pickle Microchip PIC ICSP.
@@ -830,17 +830,26 @@ struct pic14_dsmap {
  */
 #define DS40001738A (40001738)
 #define PIC16F18313  (0x3066)
-#define PIC16LF18313 (0x3068)
 #define PIC16F18323  (0x3067)
-#define PIC16LF18323 (0x3069)
 #define PIC16F18324  (0x303A)
-#define PIC16LF18324 (0x303C)
 #define PIC16F18344  (0x303B)
-#define PIC16LF18344 (0x303D)
 #define PIC16F18325  (0x303E)
-#define PIC16LF18325 (0x3040)
 #define PIC16F18345  (0x303F)
+#define PIC16LF18313 (0x3068)
+#define PIC16LF18323 (0x3069)
+#define PIC16LF18324 (0x303C)
+#define PIC16LF18344 (0x303D)
+#define PIC16LF18325 (0x3040)
 #define PIC16LF18345 (0x3041)
+
+/*
+ * DS40001738D
+ */
+#define DS40001738D (40001738)
+#define PIC16F18326  (0x30A4)
+#define PIC16F18346  (0x30A5)
+#define PIC16LF18326 (0x30A6)
+#define PIC16LF18346 (0x30A7)
 
 /*
  * DS40001792A

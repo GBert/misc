@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2015 Darron Broad
+ * Copyright (C) 2005-2016 Darron Broad
  * All rights reserved.
  * 
  * This file is part of Pickle Microchip PIC ICSP.
@@ -24,6 +24,7 @@
  * Session
  *
  *****************************************************************************/
+
 extern struct pickle p;
 
 /*****************************************************************************
@@ -248,6 +249,29 @@ struct pic32_dsmap pic32_map[] =
 {"PIC32MZ2048ECM124", PIC32MZ2048ECM124, DS60001191C,		40960, 524288,	512, 4096},
 {"PIC32MZ2048ECM144", PIC32MZ2048ECM144, DS60001191C,		40960, 524288,	512, 4096},
 
+/* PIC32MX1XX/2XX/5XX 64/100-PIN FAMILY */
+#if 0
+{"PIC32MX120F064H",	PIC32MX120F064H, DS60001290D,		0, 0,	0, 0},
+{"PIC32MX130F128H",	PIC32MX130F128H, DS60001290D,		0, 0,	0, 0},
+{"PIC32MX130F128L",	PIC32MX130F128L, DS60001290D,		0, 0,	0, 0},
+{"PIC32MX230F128H",	PIC32MX230F128H, DS60001290D,		0, 0,	0, 0},
+{"PIC32MX230F128L",	PIC32MX230F128L, DS60001290D,		0, 0,	0, 0},
+{"PIC32MX530F128H",	PIC32MX530F128H, DS60001290D,		0, 0,	0, 0},
+{"PIC32MX530F128L",	PIC32MX530F128L, DS60001290D,		0, 0,	0, 0},
+{"PIC32MX150F256H",	PIC32MX150F256H, DS60001290D,		0, 0,	0, 0},
+{"PIC32MX150F256L",	PIC32MX150F256L, DS60001290D,		0, 0,	0, 0},
+{"PIC32MX250F256H",	PIC32MX250F256H, DS60001290D,		0, 0,	0, 0},
+{"PIC32MX250F256L",	PIC32MX250F256L, DS60001290D,		0, 0,	0, 0},
+{"PIC32MX550F256H",	PIC32MX550F256H, DS60001290D,		0, 0,	0, 0},
+{"PIC32MX550F256L",	PIC32MX550F256L, DS60001290D,		0, 0,	0, 0},
+{"PIC32MX170F512H",	PIC32MX170F512H, DS60001290D,		0, 0,	0, 0},
+{"PIC32MX170F512L",	PIC32MX170F512L, DS60001290D,		0, 0,	0, 0},
+{"PIC32MX270F512H",	PIC32MX270F512H, DS60001290D,		0, 0,	0, 0},
+{"PIC32MX270F512L",	PIC32MX270F512L, DS60001290D,		0, 0,	0, 0},
+{"PIC32MX570F512H",	PIC32MX570F512H, DS60001290D,		0, 0,	0, 0},
+{"PIC32MX570F512L",	PIC32MX570F512L, DS60001290D,		0, 0,	0, 0},
+#endif
+
 {"(null)",		0,		 0,			0, 0,		0, 0},
 /*Device name		Device id	 App. Data-Sheet	BOOT/PROG Size	Row/Page Size*/
 };
@@ -330,8 +354,8 @@ pic32_program_verify(void)
 	io_set_pgm(LOW);
 	io_usleep(1000);
 
-	/* CONFIGURE GPIO-BB */
-	io_configure(TRUE);
+	/* CONFIGURE I/O (GPIO-BB, FTDI-BB) */
+	io_configure(TRUE, FALSE);
 
 	/* VPP HIGH */
 	io_set_vpp(HIGH);
@@ -1640,7 +1664,7 @@ pic32_init_verifyregion(uint32_t region)
 /*
  * VERIFY REGION
  *
- *  RETURN BYTE FAILURE COUNT
+ *  RETURN DATA
  */
 static inline uint32_t
 pic32_verifyregion(uint32_t address, uint32_t region, uint32_t wdata)

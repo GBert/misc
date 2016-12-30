@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2015 Darron Broad
+ * Copyright (C) 2005-2016 Darron Broad
  * All rights reserved.
  * 
  * This file is part of Pickle Microchip PIC ICSP.
@@ -24,6 +24,7 @@
  * Session
  *
  *****************************************************************************/
+
 extern struct pickle p;
 
 /*****************************************************************************
@@ -185,8 +186,8 @@ pic12_program_verify(void)
 	io_set_pgm(LOW);
 	io_usleep(1000);
 
-	/* INPUT DATA ON CLOCK RISING EDGE */
-	io_configure(FALSE);
+	/* INPUT DATA ON CLOCK RISING EDGE, LSB FIRST */
+	io_configure(FALSE, FALSE);
 
 	/* VPP HIGH */
 	io_set_vpp(HIGH);

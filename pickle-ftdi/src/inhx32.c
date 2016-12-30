@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2015 Darron Broad
+ * Copyright (C) 2005-2016 Darron Broad
  * All rights reserved.
  * 
  * This file is part of Pickle Microchip PIC ICSP.
@@ -24,6 +24,7 @@
  * Session
  *
  *****************************************************************************/
+
 extern struct pickle p;
 
 /******************************************************************************
@@ -44,7 +45,7 @@ extern struct pickle p;
  *
  * Reads input line and updates the byte count and address fields.
  *
- * The record type field (*tt) is also updated as:
+ * The record type field (*tt) is also returned as:
  *
  *	TT_EOF		EOF record
  *	TT_DATA		Data record

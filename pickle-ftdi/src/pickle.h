@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2015 Darron Broad
+ * Copyright (C) 2005-2016 Darron Broad
  * All rights reserved.
  * 
  * This file is part of Pickle Microchip PIC ICSP.
@@ -67,6 +67,7 @@
 #define UL_ON  ("\033[4m")
 #define UL_OFF ("\033[0m")
 
+#define ARCH8BIT  (0x000000FF) /* HYBRID 14/16-bit WORD DEVICE PROGRAMMING */
 #define ARCH12BIT (0x00000FFF)
 #define ARCH14BIT (0x00003FFF)
 #define ARCH16BIT (0x0000FFFF)
@@ -108,7 +109,9 @@ struct pickle;
 #include "pic.h"
 #include "pic12.h"
 #include "pic14.h"
+#include "pic14n.h"
 #include "pic16.h"
+#include "pic16n.h"
 #include "pic24.h"
 #include "pic32.h"
 
@@ -122,35 +125,35 @@ struct pickle;
 
 /* SESSION */
 struct pickle {
-	/* Message output stream (NULL = disable)                               */
+	/* Message output stream (NULL = disable) */
 	FILE *f;
 
 	/* Command line options */
-	char devicename[STRLEN];/* overridden PICMicro device name		*/ 
-	uint32_t key;		/* MCHP LVP key					*/
+	char devicename[STRLEN];/* overridden PICMicro device name */
+	uint32_t key;		/* MCHP LVP key */
 
 	/* Dot file settings */
-	char dotfile[STRLEN];	/* configuration file name			*/
-	char device[STRLEN];	/* I/O device name: tty or rpi			*/
-	char etc[STRLEN];	/* overridden etc directory path		*/ 
-	uint16_t bitrules;	/* I/O bit rules				*/
-	uint32_t busy;		/* I/O busy cursor speed			*/
-	uint32_t sleep_low;	/* I/O clock low duration			*/
-	uint32_t sleep_high;	/* I/O clock high duration			*/
-	uint32_t fwsleep;	/* ICSPIO bit time				*/
-	uint32_t debug;		/* default 0 (no debugging)			*/
-	uint8_t clock_falling;	/* Clock falling edge for shifting in bits      */
+	char dotfile[STRLEN];	/* configuration file name */
+	char device[STRLEN];	/* I/O device name: tty or rpi */
+	char etc[STRLEN];	/* overridden etc directory path */
+	uint16_t bitrules;	/* I/O bit rules */
+	uint32_t busy;		/* I/O busy cursor speed */
+	uint32_t sleep_low;	/* I/O clock low duration */
+	uint32_t sleep_high;	/* I/O clock high duration */
+	uint32_t fwsleep;	/* ICSPIO bit timeo */
+	uint32_t debug;		/* default 0 (no debugging) */
+	uint8_t clock_falling;	/* Clock falling edge for shifting in bits */
+	uint8_t msb_first;	/* Shift direction is MSB>LSB rather than LSB>MSB */
 #ifdef TTY
-	uint32_t baudrate;	/* TTY baud rate                                */
+	uint32_t baudrate;	/* TTY baud rate */
 #endif
-
 	/* I/O backends */
-	uint8_t iot;		/* I/O type (tty, rpi or i2c)			*/
+	uint8_t iot;		/* I/O type (tty, rpi or i2c) */
 #ifdef TTY
-	int serial_port;	/* tty bit-bang port descriptor                 */
+	int serial_port;	/* tty bit-bang port descriptor */
 #endif
 #ifdef MCP23017
-	int mcp;		/* MCP23017 I2C address				*/
+	int mcp;		/* MCP23017 I2C address */
 #endif
 #if defined(RPI) || defined(BITBANG) || defined(FTDI)
         uint16_t vpp;		/* TX/!MCLR/VPP     */

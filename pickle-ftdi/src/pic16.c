@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2015 Darron Broad
+ * Copyright (C) 2005-2016 Darron Broad
  * All rights reserved.
  * 
  * This file is part of Pickle Microchip PIC ICSP.
@@ -24,6 +24,7 @@
  * Session
  *
  *****************************************************************************/
+
 extern struct pickle p;
 
 /*****************************************************************************
@@ -335,8 +336,8 @@ pic16_program_verify(void)
 	io_set_pgm(LOW);
 	io_usleep(1000);
 
-	/* INPUT DATA ON CLOCK RISING EDGE */
-	io_configure(FALSE);
+	/* INPUT DATA ON CLOCK RISING EDGE, LSB FIRST */
+	io_configure(FALSE, FALSE);
 
 	/* LVP(KEY) */
 	if (p.key == LVPKEY) {
@@ -1327,7 +1328,7 @@ pic16_write_configreg(uint8_t index, uint32_t h, uint32_t l)
 	pic16_set_table_pointer(address);		/* EVEN ADDRESS			 */
 	pic16_table_write_start_programming(data);	/* <MSB IGNORED><LSB>		 */
 	pic16_core_instruction_nopp(h, l);		/* CONFIG PROGRAM H=P9/P9A L=P10 */
-	pic16_set_table_pointer(address + 1);	/* ODD ADDRESS			 */
+	pic16_set_table_pointer(address + 1);		/* ODD ADDRESS			 */
 	pic16_table_write_start_programming(data);	/* <MSB><LSB IGNORED>		 */
 	pic16_core_instruction_nopp(h, l);		/* CONFIG PROGRAM H=P9/P9A L=P10 */
 }

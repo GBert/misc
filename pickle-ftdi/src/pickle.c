@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2015 Darron Broad
+ * Copyright (C) 2005-2016 Darron Broad
  * All rights reserved.
  * 
  * This file is part of Pickle Microchip PIC ICSP.
@@ -50,32 +50,33 @@ usage_pickle(void)
 #endif
 		"\n");
 
-	printf("BACKENDS:\n"
+	printf("BACKENDS:\n");
 #ifdef BITBANG
-		" BIT-BANG\n"
-		"\t\tLinux GPIO bit-bang.\n"
+	printf(" BIT-BANG\n"
+		"\t\tLinux GPIO bit-bang version %d.%d.\n",
+		GPIO_BB_VERSION_MAJ, GPIO_BB_VERSION_MIN);
 #endif
 #ifdef FTDI
-		" FTDI BIT-BANG\n"
-		"\t\tLinux FTDI bit-bang.\n"
+	printf(" FTDI BIT-BANG\n"
+		"\t\tLinux FTDI bit-bang.\n");
 #endif
 #ifdef MCP23017
-		" MCP23017\n"
-		"\t\tLinux MCP23017 I2C.\n"
+	printf(" MCP23017\n"
+		"\t\tLinux MCP23017 I2C.\n");
 #endif
 #ifdef RPI
-		" RPI\n"
-		"\t\tRaspberry Pi GPIO.\n"
+	printf(" RPI\n"
+		"\t\tRaspberry Pi GPIO.\n");
 #endif
 #ifdef BPI
-		" BPI\n"
-		"\t\tBanana Pi GPIO.\n"
+	printf(" BPI\n"
+		"\t\tBanana Pi GPIO.\n");
 #endif
 #ifdef TTY
-		" TTY\n"
-		"\t\tPOSIX serial I/O.\n"
+	printf(" TTY\n"
+		"\t\tPOSIX serial I/O.\n");
 #endif
-		"\n");
+	printf("\n");
 
 	printf("ENVIRONMENT:\n"
 		" PICKLE\n"
@@ -90,8 +91,16 @@ usage_pickle(void)
 		" p14 [SELECT DEVICE] [LVP] OPERATION [ARG]\n"
 		"\t\t14-bit word PIC10F/12F/16F operations.\n"
 #endif
+#ifdef N14
+		" n14 [LVP] OPERATION [ARG]\n"
+		"\t\t14-bit word PIC16F operations.\n"
+#endif
 #ifdef P16
 		" p16 [SELECT DEVICE] [LVP|HVP] OPERATION [ARG]\n"
+		"\t\t16-bit word PIC18F operations.\n"
+#endif
+#ifdef N16
+		" n16 [LVP] OPERATION [ARG]\n"
 		"\t\t16-bit word PIC18F operations.\n"
 #endif
 #ifdef P24
@@ -248,6 +257,67 @@ usage_p14(char *msg)
 #endif
 
 /*
+ * n14 help
+ */
+#ifdef N14
+void
+usage_n14(char *msg)
+{
+	printf("USAGE: n14 [LVP] OPERATION [ARG]\n");
+	printf("14-bit PIC16F operations.\n\n");
+
+	if (msg)
+		printf("Error: %s.\n\n", msg);
+
+	printf("FILES:\n"
+		" %s\n"
+		"\t\tConfiguration file.\n\n", p.dotfile);
+
+	printf("ENVIRONMENT:\n"
+		" PICKLE\n"
+		"\t\tConfiguration file.\n\n");
+
+	printf("EXAMPLES:\n");
+        printf(" n14 %ss%select\n"
+                "\t\tDump supported devices.\n", UL_ON, UL_OFF);
+        printf(" n14 %sl%svp OPERATION [ARG]\n"
+                "\t\tLVP 32-bit key entry.\n", UL_ON, UL_OFF);
+        printf(" n14 %sb%slank\n"
+                "\t\tBlank device (disable protection and bulk erase).\n", UL_ON, UL_OFF);
+        printf(" n14 %sc%sonfig\n"
+                "\t\tDisplay device configuration.\n", UL_ON, UL_OFF);
+        printf(" n14 %sda%sta\n"
+                "\t\tDisplay data EEPROM content.\n", UL_ON, UL_OFF);
+        printf(" n14 %sd%sump\n"
+                "\t\tDump device content (INHX32 format).\n", UL_ON, UL_OFF);
+#if 0
+        printf(" n14 %ser%sase eeprom | flash | id | row [n]\n"
+                "\t\tErase EEPROM, flash, id or flash at row for n rows.\n", UL_ON, UL_OFF);
+#endif
+        printf(" n14 %sf%slash [n] [address]\n"
+                "\t\tDisplay all or n words of program flash content from address.\n", UL_ON, UL_OFF);
+        printf(" n14 %si%sd\n"
+                "\t\tDisplay device identification.\n", UL_ON, UL_OFF);
+        printf(" n14 %sp%srogram [file.hex] [noblank]\n"
+                "\t\tBlank and program file.hex or stdin to flash (INHX32 format).\n", UL_ON, UL_OFF);
+        printf(" n14 %sv%serify [file.hex]\n"
+                "\t\tVerify file.hex or stdin in flash (INHX32 format).\n", UL_ON, UL_OFF);
+        printf(" n14 %svi%sew [file.hex]\n"
+                "\t\tView file.hex or stdin (INHX32 format).\n", UL_ON, UL_OFF);
+        printf(" n14 /dev/ttyUSB0 | %s8%s048\n"
+                "\t\tListen on /dev/ttyUSB0 or network for remote programming.\n", UL_ON, UL_OFF);
+
+	printf("\n");
+
+	printf("VERSION:\n %s\n", VERSION);
+
+	if (msg)
+		io_exit(EX_USAGE);
+	io_exit(EX_OK);
+}
+#endif
+
+/*
  * p16 help
  */
 #ifdef P16
@@ -302,6 +372,67 @@ usage_p16(char *msg)
 
 	printf("\n");
 	
+	printf("VERSION:\n %s\n", VERSION);
+
+	if (msg)
+		io_exit(EX_USAGE);
+	io_exit(EX_OK);
+}
+#endif
+
+/*
+ * n16 help
+ */
+#ifdef N16
+void
+usage_n14(char *msg)
+{
+	printf("USAGE: n16 [LVP] OPERATION [ARG]\n");
+	printf("16-bit PIC18F operations.\n\n");
+
+	if (msg)
+		printf("Error: %s.\n\n", msg);
+
+	printf("FILES:\n"
+		" %s\n"
+		"\t\tConfiguration file.\n\n", p.dotfile);
+
+	printf("ENVIRONMENT:\n"
+		" PICKLE\n"
+		"\t\tConfiguration file.\n\n");
+
+	printf("EXAMPLES:\n");
+        printf(" n16 %ss%select\n"
+                "\t\tDump supported devices.\n", UL_ON, UL_OFF);
+        printf(" n16 %sl%svp OPERATION [ARG]\n"
+                "\t\tLVP 32-bit key entry.\n", UL_ON, UL_OFF);
+        printf(" n16 %sb%slank\n"
+                "\t\tBlank device (disable protection and bulk erase).\n", UL_ON, UL_OFF);
+        printf(" n16 %sc%sonfig\n"
+                "\t\tDisplay device configuration.\n", UL_ON, UL_OFF);
+        printf(" n16 %sda%sta\n"
+                "\t\tDisplay data EEPROM content.\n", UL_ON, UL_OFF);
+        printf(" n16 %sd%sump\n"
+                "\t\tDump device content (INHX32 format).\n", UL_ON, UL_OFF);
+#if 0
+        printf(" n14 %ser%sase eeprom | flash | id | row [n]\n"
+                "\t\tErase EEPROM, flash, id or flash at row for n rows.\n", UL_ON, UL_OFF);
+#endif
+        printf(" n16 %sf%slash [n] [address]\n"
+                "\t\tDisplay all or n words of program flash content from address.\n", UL_ON, UL_OFF);
+        printf(" n16 %si%sd\n"
+                "\t\tDisplay device identification.\n", UL_ON, UL_OFF);
+        printf(" n16 %sp%srogram [file.hex] [noblank]\n"
+                "\t\tBlank and program file.hex or stdin to flash (INHX32 format).\n", UL_ON, UL_OFF);
+        printf(" n16 %sv%serify [file.hex]\n"
+                "\t\tVerify file.hex or stdin in flash (INHX32 format).\n", UL_ON, UL_OFF);
+        printf(" n16 %svi%sew [file.hex]\n"
+                "\t\tView file.hex or stdin (INHX32 format).\n", UL_ON, UL_OFF);
+        printf(" n16 /dev/ttyUSB0 | %s8%s048\n"
+                "\t\tListen on /dev/ttyUSB0 or network for remote programming.\n", UL_ON, UL_OFF);
+
+	printf("\n");
+
 	printf("VERSION:\n %s\n", VERSION);
 
 	if (msg)
@@ -444,9 +575,17 @@ usage(char *execname, char *msg)
 	if (strcmp("p14", execname) == 0)
 		usage_p14(msg);
 #endif
+#ifdef N14
+	if (strcmp("n14", execname) == 0)
+		usage_n14(msg);
+#endif
 #ifdef P16
 	if (strcmp("p16", execname) == 0)
 		usage_p16(msg);
+#endif
+#ifdef N16
+	if (strcmp("n16", execname) == 0)
+		usage_n16(msg);
 #endif
 #ifdef P24
 	if (strcmp("p24", execname) == 0)
@@ -466,6 +605,7 @@ int
 main(int argc, char **argv)
 {
 	char *execdup, *execname;
+	int rc = EX_OK;
 
 	/* Get exec name */
 	execdup = (char *)strdup(argv[0]);
@@ -757,9 +897,9 @@ main(int argc, char **argv)
 				if (argc > 3)
 					usage(execname, "Too many args [verify]");
 				if (argc < 3)
-					pic_verify("-");
+					rc = 0 - pic_verify("-");
 				else
-					pic_verify(argv[2]);
+					rc = 0 - pic_verify(argv[2]);
 			}
 			break;
 #ifdef TTY
@@ -780,5 +920,5 @@ main(int argc, char **argv)
 	}
 
 	free(execdup);
-	io_exit(EX_OK);
+	io_exit(rc);
 }

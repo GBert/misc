@@ -1,8 +1,7 @@
 /*
- * Copyright (C) 2005-2015 Darron Broad
+ * Copyright (C) 2005-2016 Darron Broad
+ * Copyright (C) 2016 Gerhard Bertelsmann
  * All rights reserved.
- *
- *  all errros designed by Gerhard Bertelsmann
  *
  * This file is part of Pickle Microchip PIC ICSP.
  *
@@ -37,15 +36,16 @@ extern struct pickle p;
 struct ftdi_context ftdi;
 int ftdi_bb_fd = -1;
 
-#define MAX_BITS_TRANSFER	128
+#define MAX_BITS_TRANSFER	64
 
-/* buffer for the bitbanged data */
+/* Buffer for the bit-banged data */
 uint8_t ftdi_buf_out[MAX_BITS_TRANSFER * 4];
 uint8_t ftdi_buf_in[MAX_BITS_TRANSFER * 4];
 
 static uint16_t pin_state = 0;
 static uint8_t clock_pin, data_pin_input, data_pin_output, clock_falling;
 static uint8_t actual_mask;
+static uint8_t msb_first;
 
 void
 print_buffer(uint8_t *buffer, int len)
@@ -83,8 +83,7 @@ ftdi_bb_open(const char *device)
 			ftdi_bb_fd = -1;
 			return -1;
 		}
-        }
-
+	}
 	/* all output */
 	actual_mask = 0xff;
 	if (ftdi_set_bitmode(&ftdi, actual_mask, BITMODE_SYNCBB) < 0) {
@@ -93,7 +92,7 @@ ftdi_bb_open(const char *device)
 		return -1;
 	}
 	/* TODO: set baudrate (needed) - defines the bitbang speed (formula ?) */
-	if(ftdi_set_baudrate(&ftdi, 1024) < 0) {
+	if(ftdi_set_baudrate(&ftdi, 65536) < 0) {
 		printf("%s: can't set baudrate [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 		ftdi_bb_fd = -1;
 		return -1;
@@ -160,6 +159,7 @@ ftdi_bb_configure(struct ftdi_bb_config *config)
 	clock_falling = config->clock_falling;
 	data_pin_input = config->data_pin_input;
 	data_pin_output = config->data_pin_output;
+	msb_first = config->msb_first;
 
 	return 1;
 #else
@@ -172,8 +172,8 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 {
 #ifdef __linux
 	uint32_t index = 0;
-	uint8_t mask;
-	uint64_t value;
+	uint8_t mask, pattern;
+	uint64_t value, value_mask;
 	int ret;
 	value = shift->bits;
 
@@ -195,23 +195,20 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 	/* prepare buffer - simple delete for now (maybe wrong if MCLR or PGM set) */
 	bzero(ftdi_buf_out, MAX_BITS_TRANSFER * 4);
 
+	value_mask = msb_first ? 1 << (shift->nbits - 1) : 1;
+
 	for (int i = 0; i< shift->nbits; i++) {
-		ftdi_buf_out[index] = pin_state;
-		if (value & 1UL)
-			ftdi_buf_out[index] |= 1 << data_pin_output | ( 1 << clock_pin) ;
-                else
-			ftdi_buf_out[index] |= ( 1 << clock_pin) ;
+		if (value & value_mask)
+			pattern = pin_state | (1 << data_pin_output | 1 << clock_pin);
+		else
+			pattern = pin_state | 1 << clock_pin;
 
-		index++;
-		ftdi_buf_out[index] = ftdi_buf_out[index-1] & ~( 1 << clock_pin);
-		index++;
-		value = value >> 1;
-	}
+		ftdi_buf_out[index++] = pattern;
+		ftdi_buf_out[index++] = pattern;
+		ftdi_buf_out[index++] = pattern & ~( 1 << clock_pin);
+		ftdi_buf_out[index++] = pattern & ~( 1 << clock_pin);
 
-	/* if last bit is high - add down bit */
-	if (shift->dir == 0) {
-		ftdi_buf_out[index] = ftdi_buf_out[index-1] & ~( 1 << clock_pin) & ~(1 << data_pin_output);
-		index++;
+		value_mask = msb_first ? (value_mask >> 1) : (value_mask << 1);
 	}
 
 	if ((ret = ftdi_write_data(&ftdi, ftdi_buf_out, index )) < 0) {
@@ -222,13 +219,14 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 		printf("%s: ftdi_read_error [%s]\n", __func__, ftdi_get_error_string(&ftdi));
 		return -1;
 	}
+
 	value = 0;
-	int mask_value = 1;
+	value_mask = msb_first ? 1 << (shift->nbits - 1) : 1;
 	if (shift->dir) {
 		for (int i = 0; i < shift->nbits; i++ ) {
-		if (ftdi_buf_in[i*2 + 1] & (1 << data_pin_input))
-				value |= mask_value;
-			mask_value = mask_value << 1;
+			if (ftdi_buf_in[i*4 + 2] & (1 << data_pin_input))
+				value |= value_mask;
+			value_mask = msb_first ? (value_mask >> 1) : (value_mask << 1);
 		}
 	}
 	shift->bits = value;

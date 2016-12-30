@@ -1,18 +1,18 @@
 /*
- * Copyright (C) 2005-2015 Darron Broad
+ * Copyright (C) 2005-2016 Darron Broad
  * All rights reserved.
- * 
+ *
  * This file is part of Pickle Microchip PIC ICSP.
- * 
+ *
  * Pickle Microchip PIC ICSP is free software: you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as published
- * by the Free Software Foundation. 
- * 
+ * by the Free Software Foundation.
+ *
  * Pickle Microchip PIC ICSP is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details. 
- * 
+ * Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License along
  * with Pickle Microchip PIC ICSP. If not, see http://www.gnu.org/licenses/
  */
@@ -25,25 +25,31 @@
  *****************************************************************************/
 
 #define PIC24_MASK (0x00FFFFFF)
-#define PIC24_CALIB_MAX  (8)
-#define PIC24_CONFIG_MAX (16)
-#define PIC24_FUID_MAX   (32)
+#define PIC24_CALIB_MAX  (256)
+#define PIC24_CONFIG_MAX (256)
+#define PIC24_FUID_MAX   (255)
 
 struct pic24_config {
 	uint32_t appid;				/* 8005BE OR 8007F0	 */
 	uint32_t calib[PIC24_CALIB_MAX];	/* CALIBRATION WORDS 	 */
-	uint32_t config[PIC24_CONFIG_MAX];	/* CONFIG BYTES/WORDS    */
+	uint32_t config[PIC24_CONFIG_MAX];	/* CONFIG BYTES/WORDS	*/
 	uint32_t fuid[PIC24_FUID_MAX];		/* UNIT/FUID BYTES/WORDS */
 	uint32_t deviceid;			/* FF0000 		 */
 	uint32_t revision;			/* FF0002 		 */
-        char pepath[STRLEN];                    /* PE FILE PATH          */
-	/* required for program verify mode entry and device detection   */
-	uint16_t tblpag;			/* TBLPAG REGISTER ADDR  */
-	uint16_t nvmcon;			/* NVMCON REGISTER ADDR  */
-	uint16_t visi;				/* VISI REGISTER ADDR    */
-	uint8_t tblnop;				/* TBL READ NOP COUNT    */
-	uint8_t gotonop;			/* GOTO NOP COUNT        */
+	char pepath[STRLEN];			/* PE FILE PATH		 */
+	/* required for program verify mode entry and device detection	 */
+	uint16_t tblpag;			/* TBLPAG REGISTER ADDR	 */
+	uint16_t nvmcon;			/* NVMCON REGISTER ADDR	 */
+	uint16_t visi;				/* VISI REGISTER ADDR	 */
+	uint8_t tblnop;				/* TBL READ NOP COUNT	 */
+	uint8_t gotonop;			/* GOTO NOP COUNT	 */
 };
+
+/* NVM register addresses */
+#define PIC24_NVMCON	(pic24_conf.nvmcon)
+#define PIC24_NVMADR	(pic24_conf.nvmcon + 2)
+#define PIC24_NVMADRU	(pic24_conf.nvmcon + 4)
+#define PIC24_NVMKEY	(pic24_conf.nvmcon + 6)
 
 struct pic24_dstab {
 	uint32_t datasheet;
@@ -77,19 +83,22 @@ struct pic24_dsmap {
 #if 0
 #define PIC24_CODE_LOW  (0x000000)
 #endif
-#define PIC24_EXEC_LOW       (0x00800000) /* EXECUTIVE */
-#define dsPIC30F_APPID_ADDR  (0x008005BE) /* APP ID WORD FOR dsPIC30F  */
-#define dsPIC30F_EXEC_HIGH   (0x00800600) /* EXEC + UNIT/FUID          */
-#define PIC24_APPID_ADDR     (0x008007F0) /* APP ID WORD FOR PIC24FJ   */
-#define PIC24_CALIB_ADDR     (0x008007F4) /* up to 6 calibration words */
-#define PIC24_EXEC_HIGH      (0x00800800)
-#define dsPIC33E_APPID_ADDR  (0x00800FF0) /* APP ID WORD FOR dsPIC33E  */
-#define dsPIC33E_EXEC_HIGH   (0x00801000) /* EXEC + UNIT/FUID          */
-#define PIC24_CONFIG_ADDR    (0x00F80000) /* base address              */
-#define PIC24_CONFIG_MASK    (0x0000FFFF) /* 16-bit word mask          */
-#define PIC24_CONFIG_PENDING (0x80000000) /* config/fuid Write pending */
-#define PIC24_DEVID          (0x00FF0000)
-#define PIC24_DEVREV         (0x00FF0002)
+#define PIC24_EXEC_LOW          (0x00800000) /* EXECUTIVE                   */
+#define PIC24_GA6_GB6_EXEC_LOW  (0x00800100) /* EXECUTIVE                   */
+#define dsPIC30F_APPID_ADDR     (0x008005BE) /* APP ID WORD FOR dsPIC30F    */
+#define dsPIC30F_EXEC_HIGH      (0x00800600) /* EXEC + UNIT/FUID            */
+#define PIC24_GA6_GB6_EXEC_HIGH (0x00800FFE) /* EXECUTIVE                   */
+#define PIC24_APPID_ADDR        (0x008007F0) /* APP ID WORD FOR PIC24FJ     */
+#define PIC24_CALIB_ADDR        (0x008007F4) /* up to 6 calibration words   */
+#define PIC24_EXEC_HIGH         (0x00800800)
+#define dsPIC33EP_APPID_ADDR    (0x00800FF0) /* APP ID WORD FOR dsPIC33EP   */
+#define dsPIC33EV_APPID_ADDR    (0x00800BFE) /* APP ID WORD FOR dsPIC33EV?  */
+#define dsPIC33E_EXEC_HIGH      (0x00801000) /* EXEC + UNIT/FUID/UDID + OTP */
+#define PIC24_CONFIG_ADDR       (0x00F80000) /* base address                */
+#define PIC24_CONFIG_MASK       (0x0000FFFF) /* 16-bit word mask            */
+#define PIC24_CONFIG_PENDING    (0x80000000) /* config/fuid Write pending   */
+#define PIC24_DEVID             (0x00FF0000)
+#define PIC24_DEVREV            (0x00FF0002)
 
 /*
  * DEVID / DEVREV
@@ -149,11 +158,11 @@ struct pic24_dsmap {
  *****************************************************************************/
 
 /*
- * DS39786D
+ * DS39768D
  * 
  * LVP KEY ENTRY
  */
-#define DS39786D (39786)
+#define DS39768D (39768)
 #define PIC24FJ16GA002  (0x0444) /* CONFIG1:002BFE CONFIG2:002BFC (11264) */
 #define PIC24FJ16GA004  (0x044C)
 #define PIC24FJ32GA002  (0x0445) /* CONFIG1:0057FE CONFIG2:0057FC (22528) */
@@ -533,7 +542,7 @@ struct pic24_dsmap {
 
 /*
  * dsPIC30F SMPS (switch mode power supply) Flash Programming Specification
- *   
+ *
  * LVP(KEY)
  *
  * DS70284B
@@ -567,6 +576,64 @@ struct pic24_dsmap {
 #define PIC24FJ64GB004 (0x420F)
 
 /*
+ * DS30009907C
+ */
+#define DS30009907C (30009907)
+#define PIC24FJ64GA106  (0x1000)
+#define PIC24FJ128GA106 (0x1008)
+#define PIC24FJ192GA106 (0x1010)
+#define PIC24FJ256GA106 (0x1018)
+#define PIC24FJ64GA108  (0x1002)
+#define PIC24FJ128GA108 (0x100A)
+#define PIC24FJ192GA108 (0x1012)
+#define PIC24FJ256GA108 (0x101A)
+#define PIC24FJ64GA110  (0x1006)
+#define PIC24FJ128GA110 (0x100E)
+#define PIC24FJ192GA110 (0x1016)
+#define PIC24FJ256GA110 (0x101E)
+#define PIC24FJ64GB106  (0x1001)
+#define PIC24FJ128GB106 (0x1009)
+#define PIC24FJ192GB106 (0x1011)
+#define PIC24FJ256GB106 (0x1019)
+#define PIC24FJ64GB108  (0x1003)
+#define PIC24FJ128GB108 (0x100B)
+#define PIC24FJ192GB108 (0x1013)
+#define PIC24FJ256GB108 (0x101B)
+#define PIC24FJ64GB110  (0x1007)
+#define PIC24FJ128GB110 (0x100F)
+#define PIC24FJ192GB110 (0x1017)
+#define PIC24FJ256GB110 (0x101F)
+
+/*
+ * DS39970E
+ */
+#define DS39970E (39970)
+#define PIC24FJ128DA106 (0x4109)
+#define PIC24FJ256DA106 (0x410D)
+#define PIC24FJ128DA110 (0x410B)
+#define PIC24FJ256DA110 (0x410F)
+#define PIC24FJ128DA206 (0x4108)
+#define PIC24FJ256DA206 (0x410C)
+#define PIC24FJ128DA210 (0x410A)
+#define PIC24FJ256DA210 (0x410E)
+#define PIC24FJ64GA306  (0x46C0)
+#define PIC24FJ64GA308  (0x46C4)
+#define PIC24FJ64GA310  (0x46C8)
+#define PIC24FJ128GA306 (0x46C2)
+#define PIC24FJ128GA308 (0x46C6)
+#define PIC24FJ128GA310 (0x46CA)
+#define PIC24FJ128GB206 (0x4100)
+#define PIC24FJ256GB206 (0x4104)
+#define PIC24FJ128GB210 (0x4102)
+#define PIC24FJ256GB210 (0x4106)
+#define PIC24FJ64GC006  (0x4888)
+#define PIC24FJ64GC008  (0x488A)
+#define PIC24FJ64GC010  (0x4884)
+#define PIC24FJ128GC006 (0x4889)
+#define PIC24FJ128GC008 (0x488B)
+#define PIC24FJ128GC010 (0x4885)
+
+/*
  * DS30000510E
  */
 #define DS30000510E (30000510)
@@ -580,9 +647,59 @@ struct pic24_dsmap {
 #define PIC24FJ64GA202  (0x4C50)
 
 /*
- * DS70005137C
+ * DS30010073A
  */
-#define DS70005137C (70005137)
+#define DS30010073A (30010073)
+#define PIC24FJ64GA406  (0x6100)
+#define PIC24FJ64GA410  (0x6101)
+#define PIC24FJ64GA412  (0x6102)
+#define PIC24FJ64GB406  (0x6104)
+#define PIC24FJ64GB410  (0x6105)
+#define PIC24FJ64GB412  (0x6106)
+#define PIC24FJ128GA406 (0x6108)
+#define PIC24FJ128GA410 (0x6109)
+#define PIC24FJ128GA412 (0x610A)
+#define PIC24FJ128GB406 (0x610C)
+#define PIC24FJ128GB410 (0x610D)
+#define PIC24FJ128GB412 (0x610E)
+#define PIC24FJ256GA406 (0x6110)
+#define PIC24FJ256GA410 (0x6111)
+#define PIC24FJ256GA412 (0x6112)
+#define PIC24FJ256GB406 (0x6114)
+#define PIC24FJ256GB410 (0x6115)
+#define PIC24FJ256GB412 (0x6116)
+
+/*
+ * DS30010057F
+ */
+#define DS30010057F (30010057)
+#define PIC24FJ128GA606  (0x6000)
+#define PIC24FJ256GA606  (0x6008)
+#define PIC24FJ512GA606  (0x6010)
+#define PIC24FJ1024GA606 (0x6018)
+#define PIC24FJ128GA610  (0x6001)
+#define PIC24FJ256GA610  (0x6009)
+#define PIC24FJ512GA610  (0x6011)
+#define PIC24FJ1024GA610 (0x6019)
+#define PIC24FJ128GB606  (0x6004)
+#define PIC24FJ256GB606  (0x600C)
+#define PIC24FJ512GB606  (0x6014)
+#define PIC24FJ1024GB606 (0x601C)
+#define PIC24FJ128GB610  (0x6005)
+#define PIC24FJ256GB610  (0x600D)
+#define PIC24FJ512GB610  (0x6015)
+#define PIC24FJ1024GB610 (0x601D)
+
+/*
+ * DS70005137F
+ */
+#define DS70005137F (70005137)
+#define dsPIC33EV32GM002  (0x5D01)
+#define dsPIC33EV32GM004  (0x5D00)
+#define dsPIC33EV32GM006  (0x5D03)
+#define dsPIC33EV32GM102  (0x5D09)
+#define dsPIC33EV32GM104  (0x5D08)
+#define dsPIC33EV32GM106  (0x5D0B)
 #define dsPIC33EV64GM002  (0x5D11)
 #define dsPIC33EV64GM004  (0x5D10)
 #define dsPIC33EV64GM006  (0x5D13)
@@ -602,6 +719,20 @@ struct pic24_dsmap {
 #define dsPIC33EV256GM104 (0x5D38)
 #define dsPIC33EV256GM106 (0x5D3B)
 
+/*
+ * DS30010102A
+ */
+#define DS30010102A (30010102)
+#define PIC24FJ64GA702  (0x7506)
+#define PIC24FJ128GA702 (0x750A)
+#define PIC24FJ256GA702 (0x750E)
+#define PIC24FJ64GA704  (0x7505)
+#define PIC24FJ128GA704 (0x7509)
+#define PIC24FJ256GA704 (0x750D)
+#define PIC24FJ64GA705  (0x7507)
+#define PIC24FJ128GA705 (0x750B)
+#define PIC24FJ256GA705 (0x750F)
+
 /******************************************************************************/
 
 #define _PCL (0x002E)
@@ -610,6 +741,14 @@ void pic24_selector(void);
 void pic24_program_verify(void);
 void pic24_standby(void);
 void pic24_goto200(void);
+uint16_t pic24_readreg(uint16_t);
+void pic24_set_read_pointer(uint32_t);
+void pic24_set_write_pointer(uint32_t);
+void pic24_set_write_pointer_nvmadr(uint32_t);
+uint32_t pic24_table_read24_post_increment(void);
+void pic24_table_read48_post_increment(uint32_t *, uint32_t *);
+void pic24_nvmcon_write_completion(uint16_t, uint16_t);
+void pic24_nvmcon_write_external(uint32_t);
 void pic24_bulk_erase(void);
 int pic24_read_config_memory(void);
 uint32_t pic24_get_program_size(uint32_t *);
@@ -619,6 +758,7 @@ uint32_t pic24_read_program_memory_block(uint32_t *, uint32_t, uint32_t);
 uint32_t pic24_read_data_memory_block(uint16_t *, uint32_t, uint16_t);
 void pic24_write_program_init(void);
 void pic24_write_program(uint32_t, uint32_t *, uint32_t);
+uint32_t pic24_has_config(void);
 void pic24_write_panel(uint32_t, uint32_t, uint32_t *, uint32_t);
 void pic24_write_config_init1(void);
 void pic24_write_config_init2(void);

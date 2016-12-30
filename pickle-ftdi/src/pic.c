@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2015 Darron Broad
+ * Copyright (C) 2005-2016 Darron Broad
  * All rights reserved.
  * 
  * This file is part of Pickle Microchip PIC ICSP.
@@ -27,22 +27,30 @@ extern struct pickle p;
 /*
  * DETERMINE ARCH
  *
- *  12 | 14 | 16 | 24 | 32
+ *  12 | 14 | 14 new | 16 | 16 new | 24 | 32
  */
 uint32_t
 pic_arch(const char *execname)
 {
 #ifdef P12
 	if (strcmp(execname, "p12") == 0)
-		return pic12_arch();	/* 12-bit word PIC10F/PIC12F/PICF */
+		return pic12_arch();	/* 12-bit word PIC10F/PIC12F/PIC16F */
 #endif
 #ifdef P14
 	if (strcmp(execname, "p14") == 0)
-		return pic14_arch();	/* 14-bit word PIC10F/PIC12F/PICF */
+		return pic14_arch();	/* 14-bit word PIC10F/PIC12F/PIC16F */
+#endif
+#ifdef N14
+	if (strcmp(execname, "n14") == 0)
+		return pic14n_arch();	/* 14-bit word PIC16F */
 #endif
 #ifdef P16
 	if (strcmp(execname, "p16") == 0)
 		return pic16_arch();	/* 16-bit word PIC18F */
+#endif
+#ifdef N16
+	if (strcmp(execname, "n16") == 0)
+		return pic16n_arch();	/* 16-bit word PIC18F */
 #endif
 #ifdef P24
 	if (strcmp(execname, "p24") == 0)
@@ -427,7 +435,7 @@ pic_program(char *filename, int blank)
 /*
  * VERIFY FILE
  *
- *  RETURN NUMBER OF VERIFY ERRORS
+ *  RETURN 1 FOR FAULT OR NUMBER OF VERIFY ERRORS
  */
 uint32_t
 pic_verify(char *filename)
@@ -439,14 +447,14 @@ pic_verify(char *filename)
 
 	if (!p.pic->verify_data || !p.pic->verify_end) {
 		printf("%s: information: verify unimplemented\n", __func__);
-		return fail;
+		return 1;
 	}
 	if (pic_read_config() < 0)
-		return fail;
+		return 1;
 
 	nbytes = inhx32_array_create(&pdata, filename, &count);
 	if (nbytes == 0)
-		return fail;
+		return 0;
 
 	if (p.pic->verify_begin)
 		p.pic->verify_begin();

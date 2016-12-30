@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2015 Darron Broad
+ * Copyright (C) 2005-2016 Darron Broad
  * All rights reserved.
  * 
  * This file is part of Pickle Microchip PIC ICSP.
@@ -29,32 +29,23 @@ struct ftdi_bb_io {
 	uint8_t mode;
 	uint8_t mask;
 	uint8_t cbus_mask;
-};
+} __attribute__((packed));
 
 struct ftdi_bb_config {
-	uint8_t clock_pin;
+	uint16_t clock_pin;
+	uint16_t data_pin_input;
+	uint16_t data_pin_output;
 	uint8_t clock_falling;
-	uint8_t data_pin_input;
-	uint8_t data_pin_output;
+	uint8_t msb_first;
 	uint8_t clock_delay_low;
 	uint8_t clock_delay_high;
-	uint8_t lock;
-};
+} __attribute__((packed));
 
 struct ftdi_bb_shift {
 	uint8_t dir;
 	uint8_t nbits;
 	uint64_t bits;
-};
-
-#if 0
-#define GPIO_BB_MAX (256)
-
-#define GPIO_BB_MAJOR (180)
-#define GPIO_BB_IO		_IOWR(GPIO_BB_MAJOR, 100, struct ftdi_bb_io *)
-#define GPIO_BB_CONFIGURE	_IOW(GPIO_BB_MAJOR,  101, struct ftdi_bb_config *)
-#define GPIO_BB_SHIFT		_IOWR(GPIO_BB_MAJOR, 102, struct ftdi_bb_shift *)
-#endif
+} __attribute__((packed));
 
 int ftdi_bb_open(const char *);
 void ftdi_bb_close(void);

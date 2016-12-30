@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2015 Darron Broad
+ * Copyright (C) 2005-2016 Darron Broad
  * All rights reserved.
  * 
  * This file is part of Pickle Microchip PIC ICSP.
@@ -203,7 +203,7 @@ stk500v2_load_address(void)
 	if (stk_addr & 0x80000000) {
 		stk_addr <<= 1;			/* 32-BIT EXTENDED ADDRESS */
 	} else {
-		stk_addr <<= 1;			/* 24-BIT ADDRESS */
+		stk_addr <<= 1;			/* 24-BIT ADDRESS? */
 		stk_addr &= 0xFFFFFF;
 	}
 	DPRINT("%s() stk_addr=0x%08X\n", __func__, stk_addr);

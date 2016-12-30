@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2015 Darron Broad
+# Copyright (C) 2005-2016 Darron Broad
 # All rights reserved.
 #
 # This file is part of Pickle Microchip PIC ICSP.
@@ -92,9 +92,19 @@ CFLAGS+=-DP14
 SOURCE1+=pic14.c
 endif
 
+ifeq "$(N14)" "1"
+CFLAGS+=-DN14
+SOURCE1+=pic14n.c
+endif
+
 ifeq "$(P16)" "1"
 CFLAGS+=-DP16
 SOURCE1+=pic16.c
+endif
+
+ifeq "$(N16)" "1"
+CFLAGS+=-DN16
+SOURCE1+=pic16n.c
 endif
 
 ifeq "$(P24)" "1"
@@ -191,7 +201,7 @@ ifeq "$(SYSTEM)" "Linux"
  SOURCE3+=ftdi-bb.c
  SOURCE4+=ftdi-bb.c
  SOURCE5+=ftdi-bb.c
- CLIB+=-lftdi1
+ CLIB+=-lftdi
  endif
 endif
 
@@ -295,8 +305,14 @@ endif
 ifeq "$(P14)" "1"
 	ln -sf $(BINDIR)/$(TARGET1) $(BINDIR)/p14
 endif
+ifeq "$(N14)" "1"
+	ln -sf $(BINDIR)/$(TARGET1) $(BINDIR)/n14
+endif
 ifeq "$(P16)" "1"
 	ln -sf $(BINDIR)/$(TARGET1) $(BINDIR)/p16
+endif
+ifeq "$(N16)" "1"
+	ln -sf $(BINDIR)/$(TARGET1) $(BINDIR)/n16
 endif
 ifeq "$(P24)" "1"
 	ln -sf $(BINDIR)/$(TARGET1) $(BINDIR)/p24
@@ -321,6 +337,7 @@ uninstall:
 	rm -f $(BINDIR)/pickle
 	rm -f $(BINDIR)/p12
 	rm -f $(BINDIR)/p14
+	rm -f $(BINDIR)/n14
 	rm -f $(BINDIR)/p16
 	rm -f $(BINDIR)/p24
 	rm -f $(BINDIR)/p32

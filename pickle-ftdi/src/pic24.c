@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2015 Darron Broad
+ * Copyright (C) 2005-2016 Darron Broad
  * All rights reserved.
  * 
  * This file is part of Pickle Microchip PIC ICSP.
@@ -24,6 +24,7 @@
  * Session
  *
  *****************************************************************************/
+
 extern struct pickle p;
 
 /*****************************************************************************
@@ -93,23 +94,23 @@ struct pic24_dsmap pic24_map[] =
 {
 /*Device name          Device id           Flash  EEPROM Data-sheet Config    #  Fuid #       Calib #      PanelSizes*/
 /* These devices have 2 config words at the end of program flash */
-{"PIC24FJ16GA002",     PIC24FJ16GA002,     5632,  0,     DS39786D,  0x002BFC, 2, 0,0,         0x8007F4, 6, 64,0},
-{"PIC24FJ16GA004",     PIC24FJ16GA004,     5632,  0,     DS39786D,  0x002BFC, 2, 0,0,         0x8007F4, 6, 64,0},
-{"PIC24FJ32GA002",     PIC24FJ32GA002,     11264, 0,     DS39786D,  0x0057FC, 2, 0,0,         0x8007F4, 6, 64,0},
-{"PIC24FJ32GA004",     PIC24FJ32GA004,     11264, 0,     DS39786D,  0x0057FC, 2, 0,0,         0x8007F4, 6, 64,0},
-{"PIC24FJ48GA002",     PIC24FJ48GA002,     16896, 0,     DS39786D,  0x0083FC, 2, 0,0,         0x8007F4, 6, 64,0},
-{"PIC24FJ48GA004",     PIC24FJ48GA004,     16896, 0,     DS39786D,  0x0083FC, 2, 0,0,         0x8007F4, 6, 64,0},
-{"PIC24FJ64GA002",     PIC24FJ64GA002,     22016, 0,     DS39786D,  0x00ABFC, 2, 0,0,         0x8007F4, 6, 64,0},
-{"PIC24FJ64GA004",     PIC24FJ64GA004,     22016, 0,     DS39786D,  0x00ABFC, 2, 0,0,         0x8007F4, 6, 64,0},
-{"PIC24FJ64GA006",     PIC24FJ64GA006,     22016, 0,     DS39786D,  0x00ABFC, 2, 0,0,         0x8007F4, 6, 64,0},
-{"PIC24FJ64GA008",     PIC24FJ64GA008,     22016, 0,     DS39786D,  0x00ABFC, 2, 0,0,         0x8007F4, 6, 64,0},
-{"PIC24FJ64GA010",     PIC24FJ64GA010,     22016, 0,     DS39786D,  0x00ABFC, 2, 0,0,         0x8007F4, 6, 64,0},
-{"PIC24FJ96GA006",     PIC24FJ96GA006,     32768, 0,     DS39786D,  0x00FFFC, 2, 0,0,         0x8007F4, 6, 64,0},
-{"PIC24FJ96GA008",     PIC24FJ96GA008,     32768, 0,     DS39786D,  0x00FFFC, 2, 0,0,         0x8007F4, 6, 64,0},
-{"PIC24FJ96GA010",     PIC24FJ96GA010,     32768, 0,     DS39786D,  0x00FFFC, 2, 0,0,         0x8007F4, 6, 64,0},
-{"PIC24FJ128GA006",    PIC24FJ128GA006,    44032, 0,     DS39786D,  0x0157FC, 2, 0,0,         0x8007F4, 6, 64,0},
-{"PIC24FJ128GA008",    PIC24FJ128GA008,    44032, 0,     DS39786D,  0x0157FC, 2, 0,0,         0x8007F4, 6, 64,0},
-{"PIC24FJ128GA010",    PIC24FJ128GA010,    44032, 0,     DS39786D,  0x0157FC, 2, 0,0,         0x8007F4, 6, 64,0},
+{"PIC24FJ16GA002",     PIC24FJ16GA002,     5632,  0,     DS39768D,  0x002BFC, 2, 0,0,         0x8007F4, 6, 64,0},
+{"PIC24FJ16GA004",     PIC24FJ16GA004,     5632,  0,     DS39768D,  0x002BFC, 2, 0,0,         0x8007F4, 6, 64,0},
+{"PIC24FJ32GA002",     PIC24FJ32GA002,     11264, 0,     DS39768D,  0x0057FC, 2, 0,0,         0x8007F4, 6, 64,0},
+{"PIC24FJ32GA004",     PIC24FJ32GA004,     11264, 0,     DS39768D,  0x0057FC, 2, 0,0,         0x8007F4, 6, 64,0},
+{"PIC24FJ48GA002",     PIC24FJ48GA002,     16896, 0,     DS39768D,  0x0083FC, 2, 0,0,         0x8007F4, 6, 64,0},
+{"PIC24FJ48GA004",     PIC24FJ48GA004,     16896, 0,     DS39768D,  0x0083FC, 2, 0,0,         0x8007F4, 6, 64,0},
+{"PIC24FJ64GA002",     PIC24FJ64GA002,     22016, 0,     DS39768D,  0x00ABFC, 2, 0,0,         0x8007F4, 6, 64,0},
+{"PIC24FJ64GA004",     PIC24FJ64GA004,     22016, 0,     DS39768D,  0x00ABFC, 2, 0,0,         0x8007F4, 6, 64,0},
+{"PIC24FJ64GA006",     PIC24FJ64GA006,     22016, 0,     DS39768D,  0x00ABFC, 2, 0,0,         0x8007F4, 6, 64,0},
+{"PIC24FJ64GA008",     PIC24FJ64GA008,     22016, 0,     DS39768D,  0x00ABFC, 2, 0,0,         0x8007F4, 6, 64,0},
+{"PIC24FJ64GA010",     PIC24FJ64GA010,     22016, 0,     DS39768D,  0x00ABFC, 2, 0,0,         0x8007F4, 6, 64,0},
+{"PIC24FJ96GA006",     PIC24FJ96GA006,     32768, 0,     DS39768D,  0x00FFFC, 2, 0,0,         0x8007F4, 6, 64,0},
+{"PIC24FJ96GA008",     PIC24FJ96GA008,     32768, 0,     DS39768D,  0x00FFFC, 2, 0,0,         0x8007F4, 6, 64,0},
+{"PIC24FJ96GA010",     PIC24FJ96GA010,     32768, 0,     DS39768D,  0x00FFFC, 2, 0,0,         0x8007F4, 6, 64,0},
+{"PIC24FJ128GA006",    PIC24FJ128GA006,    44032, 0,     DS39768D,  0x0157FC, 2, 0,0,         0x8007F4, 6, 64,0},
+{"PIC24FJ128GA008",    PIC24FJ128GA008,    44032, 0,     DS39768D,  0x0157FC, 2, 0,0,         0x8007F4, 6, 64,0},
+{"PIC24FJ128GA010",    PIC24FJ128GA010,    44032, 0,     DS39768D,  0x0157FC, 2, 0,0,         0x8007F4, 6, 64,0},
 
 /* These devices have 7 config words in the config space */
 {"dsPIC30F2010",       dsPIC30F2010,       4096,  1024,  DS70102H,  0xF80000, 7, 0x8005C0,32, 0, 0,        32,16},
@@ -347,6 +348,7 @@ struct pic24_dsmap pic24_map[] =
 {"PIC24HJ256GP210A",   PIC24HJ256GP210A,   87552, 0,     DS70152H,  0xF80000, 8, 0xF80010, 4, 0, 0,        64,0},
 {"PIC24HJ256GP610A",   PIC24HJ256GP610A,   87552, 0,     DS70152H,  0xF80000, 8, 0xF80010, 4, 0, 0,        64,0},
 
+/* These devices have 10 config bytes at the end of program flash */
 {"PIC24EP32GP202",     PIC24EP32GP202,     11264, 0,     DS70663D,  0x0057EC,10, 0x800FF8, 4, 0, 0,        2,0},
 {"PIC24EP32GP203",     PIC24EP32GP203,     11264, 0,     DS70663D,  0x0057EC,10, 0x800FF8, 4, 0, 0,        2,0},
 {"PIC24EP32GP204",     PIC24EP32GP204,     11264, 0,     DS70663D,  0x0057EC,10, 0x800FF8, 4, 0, 0,        2,0},
@@ -447,6 +449,33 @@ struct pic24_dsmap pic24_map[] =
 {"PIC24FJ32GB004",     PIC24FJ32GB004,     11264, 0,     DS39934B,  0x0057F8, 4, 0,0,         0x800880, 8, 64,0},
 {"PIC24FJ64GB004",     PIC24FJ64GB004,     22016, 0,     DS39934B,  0x00ABF8, 4, 0,0,         0x800880, 8, 64,0},
 
+/* These devices have 3 config words at the end of program flash */
+{"PIC24FJ64GA106",     PIC24FJ64GA106,     22016, 0,  DS30009907C,  0x00ABFA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ64GA108",     PIC24FJ64GA108,     22016, 0,  DS30009907C,  0x00ABFA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ64GA110",     PIC24FJ64GA110,     22016, 0,  DS30009907C,  0x00ABFA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ64GB106",     PIC24FJ64GB106,     22016, 0,  DS30009907C,  0x00ABFA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ64GB108",     PIC24FJ64GB108,     22016, 0,  DS30009907C,  0x00ABFA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ64GB110",     PIC24FJ64GB110,     22016, 0,  DS30009907C,  0x00ABFA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ128GA106",    PIC24FJ128GA106,    44032, 0,  DS30009907C,  0x0157FA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ128GA108",    PIC24FJ128GA108,    44032, 0,  DS30009907C,  0x0157FA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ128GA110",    PIC24FJ128GA110,    44032, 0,  DS30009907C,  0x0157FA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ128GB106",    PIC24FJ128GB106,    44032, 0,  DS30009907C,  0x0157FA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ128GB108",    PIC24FJ128GB108,    44032, 0,  DS30009907C,  0x0157FA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ128GB110",    PIC24FJ128GB110,    44032, 0,  DS30009907C,  0x0157FA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ192GA106",    PIC24FJ192GA106,    67072, 0,  DS30009907C,  0x020BFA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ192GA108",    PIC24FJ192GA108,    67072, 0,  DS30009907C,  0x020BFA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ192GA110",    PIC24FJ192GA110,    67072, 0,  DS30009907C,  0x020BFA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ192GB106",    PIC24FJ192GB106,    67072, 0,  DS30009907C,  0x020BFA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ192GB108",    PIC24FJ192GB108,    67072, 0,  DS30009907C,  0x020BFA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ192GB110",    PIC24FJ192GB110,    67072, 0,  DS30009907C,  0x020BFA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ256GA106",    PIC24FJ256GA106,    87552, 0,  DS30009907C,  0x02ABFA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ256GA108",    PIC24FJ256GA108,    87552, 0,  DS30009907C,  0x02ABFA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ256GA110",    PIC24FJ256GA110,    87552, 0,  DS30009907C,  0x02ABFA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ256GB106",    PIC24FJ256GB106,    87552, 0,  DS30009907C,  0x02ABFA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ256GB108",    PIC24FJ256GB108,    87552, 0,  DS30009907C,  0x02ABFA, 3, 0,0,         0x8007F0, 8,  64,0},
+{"PIC24FJ256GB110",    PIC24FJ256GB110,    87552, 0,  DS30009907C,  0x02ABFA, 3, 0,0,         0x8007F0, 8,  64,0},
+
+/* These devices have 4 config words at the end of program flash */
 {"PIC24FJ64GA204",     PIC24FJ64GA204,     22016, 0,  DS30000510E,  0x00ABF8, 4, 0,0,         0x800880, 8, 64,0},
 {"PIC24FJ64GA202",     PIC24FJ64GA202,     22016, 0,  DS30000510E,  0x00ABF8, 4, 0,0,         0x800880, 8, 64,0},
 {"PIC24FJ64GB204",     PIC24FJ64GB204,     22016, 0,  DS30000510E,  0x00ABF8, 4, 0,0,         0x800880, 8, 64,0},
@@ -455,6 +484,98 @@ struct pic24_dsmap pic24_map[] =
 {"PIC24FJ128GA202",    PIC24FJ128GA202,    44032, 0,  DS30000510E,  0x0157F8, 4, 0,0,         0x800880, 8, 64,0},
 {"PIC24FJ128GB204",    PIC24FJ128GB204,    44032, 0,  DS30000510E,  0x0157F8, 4, 0,0,         0x800880, 8, 64,0},
 {"PIC24FJ128GB202",    PIC24FJ128GB202,    44032, 0,  DS30000510E,  0x0157F8, 4, 0,0,         0x800880, 8, 64,0},
+
+/* These devices have 4 config words at the end of program flash */
+{"PIC24FJ64GA306",     PIC24FJ64GA306,     22016, 0,    DS39970E,   0x00ABF8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ64GA308",     PIC24FJ64GA308,     22016, 0,    DS39970E,   0x00ABF8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ64GA310",     PIC24FJ64GA310,     22016, 0,    DS39970E,   0x00ABF8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ64GC006",     PIC24FJ64GC006,     22016, 0,    DS39970E,   0x00ABF8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ64GC008",     PIC24FJ64GC008,     22016, 0,    DS39970E,   0x00ABF8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ64GC010",     PIC24FJ64GC010,     22016, 0,    DS39970E,   0x00ABF8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ128DA106",    PIC24FJ128DA106,    44032, 0,    DS39970E,   0x0157F8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ128DA110",    PIC24FJ128DA110,    44032, 0,    DS39970E,   0x0157F8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ128DA206",    PIC24FJ128DA206,    44032, 0,    DS39970E,   0x0157F8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ128DA210",    PIC24FJ128DA210,    44032, 0,    DS39970E,   0x0157F8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ128GA306",    PIC24FJ128GA306,    44032, 0,    DS39970E,   0x0157F8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ128GA308",    PIC24FJ128GA308,    44032, 0,    DS39970E,   0x0157F8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ128GA310",    PIC24FJ128GA310,    44032, 0,    DS39970E,   0x0157F8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ128GB206",    PIC24FJ128GB206,    44032, 0,    DS39970E,   0x0157F8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ128GB210",    PIC24FJ128GB210,    44032, 0,    DS39970E,   0x0157F8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ128GC006",    PIC24FJ128GC006,    44032, 0,    DS39970E,   0x0157F8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ128GC008",    PIC24FJ128GC008,    44032, 0,    DS39970E,   0x0157F8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ128GC010",    PIC24FJ128GC010,    44032, 0,    DS39970E,   0x0157F8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ256DA106",    PIC24FJ256DA106,    87552, 0,    DS39970E,   0x02ABF8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ256DA110",    PIC24FJ256DA110,    87552, 0,    DS39970E,   0x02ABF8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ256DA206",    PIC24FJ256DA206,    87552, 0,    DS39970E,   0x02ABF8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ256DA210",    PIC24FJ256DA210,    87552, 0,    DS39970E,   0x02ABF8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ256GB206",    PIC24FJ256GB206,    87552, 0,    DS39970E,   0x02ABF8, 4, 0,0,         0x800880, 8, 64,0},
+{"PIC24FJ256GB210",    PIC24FJ256GB210,    87552, 0,    DS39970E,   0x02ABF8, 4, 0,0,         0x800880, 8, 64,0},
+
+/* These devices use 10 of 25 words in the config space at the last page of flash
+   and support dual partition mode (FBOOT config word @ 0x80100 */
+{"PIC24FJ64GA406",     PIC24FJ64GA406,     22528, 0,   DS30010073A, 0x00AF80, 25, 0,0,        0, 0,        64,0},
+{"PIC24FJ64GA410",     PIC24FJ64GA410,     22528, 0,   DS30010073A, 0x00AF80, 25, 0,0,        0, 0,        64,0},
+{"PIC24FJ64GA412",     PIC24FJ64GA412,     22528, 0,   DS30010073A, 0x00AF80, 25, 0,0,        0, 0,        64,0},
+{"PIC24FJ64GB406",     PIC24FJ64GB406,     22528, 0,   DS30010073A, 0x00AF80, 25, 0,0,        0, 0,        64,0},
+{"PIC24FJ64GB410",     PIC24FJ64GB410,     22528, 0,   DS30010073A, 0x00AF80, 25, 0,0,        0, 0,        64,0},
+{"PIC24FJ64GB412",     PIC24FJ64GB412,     22528, 0,   DS30010073A, 0x00AF80, 25, 0,0,        0, 0,        64,0},
+{"PIC24FJ128GA406",    PIC24FJ128GA406,    43968, 0,   DS30010073A, 0x015780, 25, 0,0,        0, 0,        64,0},
+{"PIC24FJ128GA410",    PIC24FJ128GA410,    43968, 0,   DS30010073A, 0x015780, 25, 0,0,        0, 0,        64,0},
+{"PIC24FJ128GA412",    PIC24FJ128GA412,    43968, 0,   DS30010073A, 0x015780, 25, 0,0,        0, 0,        64,0},
+{"PIC24FJ128GB406",    PIC24FJ128GB406,    43968, 0,   DS30010073A, 0x015780, 25, 0,0,        0, 0,        64,0},
+{"PIC24FJ128GB410",    PIC24FJ128GB410,    43968, 0,   DS30010073A, 0x015780, 25, 0,0,        0, 0,        64,0},
+{"PIC24FJ128GB412",    PIC24FJ128GB412,    43968, 0,   DS30010073A, 0x015780, 25, 0,0,        0, 0,        64,0},
+{"PIC24FJ256GA406",    PIC24FJ256GA406,    88064, 0,   DS30010073A, 0x02AF80, 25, 0,0,        0, 0,        64,0},
+{"PIC24FJ256GA410",    PIC24FJ256GA410,    88064, 0,   DS30010073A, 0x02AF80, 25, 0,0,        0, 0,        64,0},
+{"PIC24FJ256GA412",    PIC24FJ256GA412,    88064, 0,   DS30010073A, 0x02AF80, 25, 0,0,        0, 0,        64,0},
+{"PIC24FJ256GB406",    PIC24FJ256GB406,    88064, 0,   DS30010073A, 0x02AF80, 25, 0,0,        0, 0,        64,0},
+{"PIC24FJ256GB410",    PIC24FJ256GB410,    88064, 0,   DS30010073A, 0x02AF80, 25, 0,0,        0, 0,        64,0},
+{"PIC24FJ256GB412",    PIC24FJ256GB412,    88064, 0,   DS30010073A, 0x02AF80, 25, 0,0,        0, 0,        64,0},
+
+/* These devices use 9 of 24 words in the config space at the last page of flash
+   and support dual partition mode (FBOOT config word @ 0x80100 */
+{"PIC24FJ128GA606",    PIC24FJ128GA606,    44928,  0,  DS30010057F, 0x015F00, 23, 0,0,        0, 0,       128,0},
+{"PIC24FJ128GA610",    PIC24FJ128GA610,    44928,  0,  DS30010057F, 0x015F00, 23, 0,0,        0, 0,       128,0},
+{"PIC24FJ128GB606",    PIC24FJ128GB606,    44928,  0,  DS30010057F, 0x015F00, 23, 0,0,        0, 0,       128,0},
+{"PIC24FJ128GB610",    PIC24FJ128GB610,    44928,  0,  DS30010057F, 0x015F00, 23, 0,0,        0, 0,       128,0},
+{"PIC24FJ256GA606",    PIC24FJ256GA606,    87936,  0,  DS30010057F, 0x02AF00, 23, 0,0,        0, 0,       128,0},
+{"PIC24FJ256GA610",    PIC24FJ256GA610,    87936,  0,  DS30010057F, 0x02AF00, 23, 0,0,        0, 0,       128,0},
+{"PIC24FJ256GB606",    PIC24FJ256GB606,    87936,  0,  DS30010057F, 0x02AF00, 23, 0,0,        0, 0,       128,0},
+{"PIC24FJ256GB610",    PIC24FJ256GB610,    87936,  0,  DS30010057F, 0x02AF00, 23, 0,0,        0, 0,       128,0},
+{"PIC24FJ512GA606",    PIC24FJ512GA606,    176000, 0,  DS30010057F, 0x055F00, 23, 0,0,        0, 0,       128,0},
+{"PIC24FJ512GA610",    PIC24FJ512GA610,    176000, 0,  DS30010057F, 0x055F00, 23, 0,0,        0, 0,       128,0},
+{"PIC24FJ512GB606",    PIC24FJ512GB606,    176000, 0,  DS30010057F, 0x055F00, 23, 0,0,        0, 0,       128,0},
+{"PIC24FJ512GB610",    PIC24FJ512GB610,    176000, 0,  DS30010057F, 0x055F00, 23, 0,0,        0, 0,       128,0},
+{"PIC24FJ1024GA606",   PIC24FJ1024GA606,   352128, 0,  DS30010057F, 0x0ABF00, 23, 0,0,        0, 0,       128,0},
+{"PIC24FJ1024GA610",   PIC24FJ1024GA610,   352128, 0,  DS30010057F, 0x0ABF00, 23, 0,0,        0, 0,       128,0},
+{"PIC24FJ1024GB606",   PIC24FJ1024GB606,   352128, 0,  DS30010057F, 0x0ABF00, 23, 0,0,        0, 0,       128,0},
+{"PIC24FJ1024GB610",   PIC24FJ1024GB610,   352128, 0,  DS30010057F, 0x0ABF00, 23, 0,0,        0, 0,       128,0},
+
+/* These devices use 15 of 35 words in the config space at the last page of flash */
+{"dsPIC33EV32GM002",   dsPIC33EV32GM002,   11200, 0,  DS70005137F,  0x005780,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV32GM004",   dsPIC33EV32GM004,   11200, 0,  DS70005137F,  0x005780,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV32GM006",   dsPIC33EV32GM006,   11200, 0,  DS70005137F,  0x005780,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV32GM102",   dsPIC33EV32GM102,   11200, 0,  DS70005137F,  0x005780,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV32GM104",   dsPIC33EV32GM104,   11200, 0,  DS70005137F,  0x005780,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV32GM106",   dsPIC33EV32GM106,   11200, 0,  DS70005137F,  0x005780,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV64GM002",   dsPIC33EV64GM002,   21952, 0,  DS70005137F,  0x00AB80,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV64GM004",   dsPIC33EV64GM004,   21952, 0,  DS70005137F,  0x00AB80,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV64GM002",   dsPIC33EV64GM002,   21952, 0,  DS70005137F,  0x00AB80,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV64GM104",   dsPIC33EV64GM104,   21952, 0,  DS70005137F,  0x00AB80,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV64GM106",   dsPIC33EV64GM106,   21952, 0,  DS70005137F,  0x00AB80,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV64GM106",   dsPIC33EV64GM106,   21952, 0,  DS70005137F,  0x00AB80,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV128GM002",  dsPIC33EV128GM002,  43968, 0,  DS70005137F,  0x015780,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV128GM004",  dsPIC33EV128GM004,  43968, 0,  DS70005137F,  0x015780,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV128GM006",  dsPIC33EV128GM006,  43968, 0,  DS70005137F,  0x015780,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV128GM102",  dsPIC33EV128GM102,  43968, 0,  DS70005137F,  0x015780,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV128GM104",  dsPIC33EV128GM104,  43968, 0,  DS70005137F,  0x015780,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV128GM106",  dsPIC33EV128GM106,  43968, 0,  DS70005137F,  0x015780,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV256GM002",  dsPIC33EV256GM002,  87488, 0,  DS70005137F,  0x02AB80,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV256GM004",  dsPIC33EV256GM004,  87488, 0,  DS70005137F,  0x02AB80,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV256GM006",  dsPIC33EV256GM006,  87488, 0,  DS70005137F,  0x02AB80,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV256GM102",  dsPIC33EV256GM102,  87488, 0,  DS70005137F,  0x02AB80,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV256GM104",  dsPIC33EV256GM104,  87488, 0,  DS70005137F,  0x02AB80,35, 0, 0,        0, 0,        2,0},
+{"dsPIC33EV256GM106",  dsPIC33EV256GM106,  87488, 0,  DS70005137F,  0x02AB80,35, 0, 0,        0, 0,        2,0},
 
 {"(null)",             0,                  0,     0,     0,         0,        0, 0, 0,        0, 0,        0, 0},
 /*Device name          Device id           Flash  EEPROM Data-sheet Config    #  Fuid #       Calib #      PanelSizes*/
@@ -545,6 +666,7 @@ pic24_program_verify(void)
 	/* DS39768D    PIC24FJ64GA002    P6(100ns) */
 	/* DS70102H    dsPIC30F4013      P6(100ns) */
 	/* DS70663D    dsPIC33EP128GP502 P6(100ns) */
+	/* DS70005137F dsPIC33EV256GM002 P6(100ns) */
 	/* DS30000510E PIC24FJXXXGA2/GB2 P6(100ns) */
 	io_usleep(1000);
 
@@ -556,14 +678,15 @@ pic24_program_verify(void)
 
 	/* LVP(KEY) */
 	if (p.key == LVPKEY) {
-		/* INPUT DATA ON CLOCK FALLING EDGE */
+		/* INPUT DATA ON CLOCK FALLING EDGE, LSB FIRST */
 		/* DS39768D-page 14 PIC24FJ64GA002 */
-		io_configure(TRUE);
+		io_configure(TRUE, FALSE);
 
 		/* VPP HIGH */
 		io_set_vpp(HIGH);
 		/* DS39768D    PIC24FJ64GA002    UNKNOWN    */
 		/* DS70663D    dsPIC33EP128GP502 P21(500us) */
+		/* DS70005137F dsPIC33EV256GM002 P21(500us) */
 		/* DS30000510E PIC24FJXXXGA2/GB2 UNKNOWN    */
 		io_usleep(500);
 
@@ -571,6 +694,7 @@ pic24_program_verify(void)
 		io_set_vpp(LOW);
 		/* DS39768D    PIC24FJ64GA002    P18(40ns) */
 		/* DS70663D    dsPIC33EP128GP502 P18(1ms)  */
+		/* DS70005137F dsPIC33EV256GM002 P18(1ms)  */
 		/* DS30000510E PIC24FJXXXGA2/GB2 P18(10ms) */
 		io_usleep(10000);
 
@@ -578,6 +702,7 @@ pic24_program_verify(void)
 		io_program_out(QHCMKEY, 32);
 		/* DS39768D    PIC24FJ64GA002    P19(1ms)  */
 		/* DS70663D    dsPIC33EP128GP502 P19(25ns) */
+		/* DS70005137F dsPIC33EV256GM002 P19(25ns) */
 		/* DS30000510E PIC24FJXXXGA2/GB2 P19(1ms)  */
 		io_usleep(1000);
 
@@ -588,7 +713,7 @@ pic24_program_verify(void)
 		/* DS70663D    dsPIC33EP128GP502 P1(200ns) x 5 */
 		/* DS30000510E PIC24FJXXXGA2/GB2 P7(25ms)      */
 		io_usleep(50001);
-	
+
 		/*
 		 * STEP 1: EXIT THE RESET VECTOR (GOTO 0)
 		 * 	NOP (5)
@@ -609,9 +734,9 @@ pic24_program_verify(void)
 	}
 	/* HVP(KEY) */
 	else if (p.key == HVPKEY) {
-		/* INPUT DATA ON CLOCK FALLING EDGE */
+		/* INPUT DATA ON CLOCK FALLING EDGE, LSB FIRST */
 		/* DS30625D-page 9 PIC24F16KL402 */
-		io_configure(TRUE);
+		io_configure(TRUE, FALSE);
 
 		/* VPP HIGH */
 		io_set_vpp(HIGH);
@@ -643,8 +768,8 @@ pic24_program_verify(void)
 	}
 	/* HVP(STDP) */
 	else {
-		/* INPUT DATA ON CLOCK RISING EDGE */
-		io_configure(FALSE);
+		/* INPUT DATA ON CLOCK RISING EDGE, LSB FIRST */
+		io_configure(FALSE, FALSE);
 
 		/* VPP HIGH */
 		io_set_vpp(HIGH);
@@ -808,6 +933,29 @@ pic24_set_write_pointer(uint32_t addr)
 }
 
 /*
+ * Set the NVMADRU/NVMADR register pair to point to the correct address.
+ *
+ *  AFFECTS
+ *   NVMADR = ADDRESS LOW
+ *   NVMADRU = ADDRESS HIGH
+ *   W7 = RESET
+ */
+void
+pic24_set_write_pointer_nvmadr(uint32_t addr)
+{
+	uint32_t high = 0x200004 | ((addr & 0x00FF0000) >> 12);
+	uint32_t low  = 0x200003 | ((addr & 0x0000FFFF) << 4);
+#ifdef DEBUG
+	printf("%s: PCL=%04X\n", __func__, pic24_readreg(_PCL));
+#endif
+	pic24_six(low, 1);	/* MOV #<DestinationAddress15:0>, W3  */
+	pic24_six(high, 0);	/* MOV #<DestinationAddress23:16>, W4 */
+	pic24_six(0x883B13, 0);	/* MOV W3, NVMADR                     */
+	pic24_six(0x883B24, 0);	/* MOV W4, NVMADRU                    */
+	pic24_six(0xEB0380, 1);	/* CLR W7                             */
+}
+
+/*
  * TABLE READ 16-BIT WITH POST INCREMENT
  *
  *  REQUIRES
@@ -851,7 +999,7 @@ pic24_table_read24_post_increment(void)
 	uint16_t low, high;
 
 	/* TABLE READ LOW  WORD [TBLPAG]:[W6] => [W7] (VISI)                           */
-	pic24_six(0xBA0B96, pic24_conf.tblnop);	/* TBLRDL [W6], [W7]		       */
+	pic24_six(0xBA0B96, pic24_conf.tblnop);	/* TBLRDL [W6], [W7]                   */
 	low = pic24_regout();			/* Clock out contents of VISI register */
 
 	/* TABLE READ HIGH WORD [TBLPAG]:[W6++] => [W7] (VISI)                         */
@@ -876,14 +1024,14 @@ pic24_table_read48_post_increment(uint32_t *word0, uint32_t *word1)
 {
 	uint16_t msb;
 
-	pic24_six(0xBA0B96, pic24_conf.tblnop);	/* TBLRDL [W6], [W7]		       */
+	pic24_six(0xBA0B96, pic24_conf.tblnop);	/* TBLRDL [W6], [W7]                   */
 	*word0 = pic24_regout();		/* Clock out contents of VISI register */
 
 	pic24_six(0xBADBB6, pic24_conf.tblnop);	/* TBLRDH.B [W6++], [W7++]             */
 	pic24_six(0xBAD3D6, pic24_conf.tblnop);	/* TBLRDH.B [++W6], [W7--]             */
 	msb = pic24_regout();			/* Clock out contents of VISI register */
 
-	pic24_six(0xBA0BB6, pic24_conf.tblnop);	/* TBLRDL [W6++], [W7]		       */
+	pic24_six(0xBA0BB6, pic24_conf.tblnop);	/* TBLRDL [W6++], [W7]                 */
 	*word1 = pic24_regout();		/* Clock out contents of VISI register */
 
 	*word0 |= (msb & 0x00FF) << 16;
@@ -935,6 +1083,20 @@ pic24_nvmcon_write_external(uint32_t tdly)
 }
 
 /*
+ * INITIATE PROGRAM/ERASE
+ *
+ * DS30010057F-page 19 PIC24FJXXXGA6/GB6
+ */
+static inline void
+pic24_nvmcon_write_initiate(void)
+{
+	pic24_six(0x200550, 0);	/* MOV #0x55, W0      */
+	pic24_six(0x883B30, 0);	/* MOV W0, NVMKEY     */
+	pic24_six(0x200AA0, 0);	/* MOV #0xAA, W0      */
+	pic24_six(0x883B30, 0);	/* MOV W0, NVMKEY     */
+}
+
+/*
  * INITIATE PROGRAM/ERASE THEN WAIT FOR COMPLETION
  *
  * DS39768D-page 17 PIC24FJ64GA002
@@ -944,6 +1106,7 @@ pic24_nvmcon_write_internal(void)
 {
  	/* NVMCON = 0x760 */
 	pic24_six(0xA8E761, 2); /* BSET NVMCON, #WR */
+
 	pic24_nvmcon_write_completion(0x8000, 0x0000);
 }
 
@@ -975,7 +1138,7 @@ pic24_restore_calibration(void)
 void
 pic24_dsPIC30F_erase(uint32_t tdly)
 {
- 	/* NVMCON = 0x760 */
+	/* NVMCON = 0x760 */
 	pic24_program_verify();
 
 	/* ERASE CONFIG */
@@ -1003,19 +1166,20 @@ pic24_dsPIC30F_erase(uint32_t tdly)
 /*
  * BLANK PIC24FJ
  *
- * DS39768D-page 17 PIC24FJ64GA002
+ * DS39768D-page 17    PIC24FJ64GA002
+ * DS30000510E-page 14 PIC24FJXXXGA2/GB2
  */
 void
-pic24_PIC24FJ_erase(void)
+pic24_PIC24FJ_erase(uint32_t tblpag)
 {
- 	/* NVMCON = 0x760 */
+	/* NVMCON = 0x760 */
 	pic24_program_verify();
 
 	/* 404F ERASE CHIP */
 	pic24_six(0x2404FA, 0);	/* MOV #0x404F, W10   */
 	pic24_six(0x883B0A, 0);	/* MOV W10, NVMCON    */
 	pic24_six(0x200000, 0);	/* MOV #<PAGEVAL>, W0 */
-	pic24_six(0x880190, 0);	/* MOV W0, TBLPAG     */
+	pic24_six(tblpag, 0);	/* MOV W0, TBLPAG     */
 	pic24_six(0x200000, 0);	/* MOV #0x0000, W0    */
 	pic24_six(0xBB0800, 2);	/* TBLWTL W0, [W0]    */
 
@@ -1033,7 +1197,7 @@ pic24_PIC24FJ_erase(void)
 void
 pic24_dsPIC33FJ_erase(void)
 {
- 	/* NVMCON = 0x760 */
+	/* NVMCON = 0x760 */
 	pic24_program_verify();
 
 	/* 404F ERASE CHIP */
@@ -1050,6 +1214,29 @@ pic24_dsPIC33FJ_erase(void)
 }
 
 /*
+ * BLANK PIC24FJXXGA6XX/PIC24FJXXB6XX
+ *
+ * DS30010057F-page 19 PIC24FJ1024GA610/GB610 FAMILY
+ */
+void
+pic24_PIC24FJ_GA6_GB6_erase(void)
+{
+	/* NVMCON = 0x760 */
+	pic24_program_verify();
+
+	/* 400E ERASE CHIP */
+	pic24_six(0x2400E0, 0);	/* MOV #0x400E, W0 */
+	pic24_six(0x883B00, 0);	/* MOV W0, NVMCON  */
+	pic24_nvmcon_write_initiate();
+	pic24_six(0xA8E761, 4);	/* BSET NVMCON, #WR   */
+	io_usleep(25001);	/* P11=25ms P10=400ns */
+
+	pic24_nvmcon_write_completion(0x8000, 0x0000);
+
+	pic24_standby();
+}
+
+/*
  * BLANK PIC24F KA/KM/KL
  *
  * DS39919C-page 11
@@ -1058,7 +1245,7 @@ pic24_dsPIC33FJ_erase(void)
 void
 pic24_PIC24FKA_erase(void)
 {
- 	/* NVMCON = 0x760 */
+	/* NVMCON = 0x760 */
 	pic24_program_verify();
 #ifdef CALIBKA
 	/* ERASE EXEC & CALIBRATION */
@@ -1093,7 +1280,7 @@ pic24_PIC24FKA_erase(void)
 void
 pic24_dsPIC33F_PIC24H_erase(void)
 {
- 	/* NVMCON = 0x760 */
+	/* NVMCON = 0x760 */
 	pic24_program_verify();
 
 	/* ERASE CONFIG */
@@ -1122,9 +1309,9 @@ pic24_dsPIC33F_PIC24H_erase(void)
  * BLANK dsPIC33E/PIC24E
  */
 void
-pic24_dsPIC33E_PIC24E_erase(void)
+pic24_dsPIC33EP_PIC24EP_erase(void)
 {
- 	/* NVMCON = 0x728 */
+	/* NVMCON = 0x728 */
 	pic24_program_verify();
 
 	/* 400F ERASE CODE, EXEC & FUID */
@@ -1136,9 +1323,33 @@ pic24_dsPIC33E_PIC24E_erase(void)
 	pic24_six(0x883971, 0);	/* MOV W1, NVMKEY     */
 	pic24_six(0xA8E729, 3);	/* BSET NVMCON, #WR   */
 	io_usleep(21001);	/* P11=21ms P10=400ns */
-#if 1
+
 	pic24_nvmcon_write_completion(0xFFFF, 0x400F);
-#endif
+
+	pic24_standby();
+}
+
+/*
+ * BLANK dsPIC33EV
+ */
+void
+pic24_dsPIC33EV_erase(void)
+{
+	/* NVMCON = 0x728 */
+	pic24_program_verify();
+
+	/* 400E ERASE CODE */
+	pic24_six(0x2400EA, 1);	/* MOV #0x400E, W10   */
+	pic24_six(0x88394A, 2);	/* MOV W10, NVMCON    */
+	pic24_six(0x200551, 0);	/* MOV #0x55, W1      */
+	pic24_six(0x883971, 0);	/* MOV W1, NVMKEY     */
+	pic24_six(0x200AA1, 0);	/* MOV #0xAA, W1      */
+	pic24_six(0x883971, 0);	/* MOV W1, NVMKEY     */
+	pic24_six(0xA8E729, 3);	/* BSET NVMCON, #WR   */
+	io_usleep(24001);	/* P11=24ms P10=400ns */
+
+	pic24_nvmcon_write_completion(0xFFFF, 0x400E);
+
 	pic24_standby();
 }
 
@@ -1160,10 +1371,19 @@ pic24_bulk_erase(void)
 		/* DS70284C-page 28 dsPIC30F1010 EXTERNALLY TIMED(200ms) */
 		pic24_dsPIC30F_erase(200000);
 		break;
-	case DS39786D:	  /* PIC24FJ           */
+	case DS39768D:	  /* PIC24FJ           */
 	case DS39934B:	  /* PIC24FJXXGA1/GB0  */
+	case DS30009907C: /* PIC24FJXXXGA1/GB1 */
+		pic24_PIC24FJ_erase(0x880190);
+		break;
 	case DS30000510E: /* PIC24FJXXXGA2/GB2 */
-		pic24_PIC24FJ_erase();
+	case DS39970E:    /* PIC24FJXXXDA1/DA2/GB2/GA3/GC0 */
+		pic24_PIC24FJ_erase(0x8802A0);
+		break;
+	case DS30010073A: /* PIC24FJXXXGA4/GB4 */
+	case DS30010057F: /* PIC24FJXXXGA6/GB6 */
+	case DS30010102A: /* PIC24FJXXXGA7     */
+		pic24_PIC24FJ_GA6_GB6_erase();
 		break;
 	case DS70659C: /* dsPIC33FJ         */
 	case DS75012B: /* PIC24FJXXMC       */
@@ -1177,7 +1397,10 @@ pic24_bulk_erase(void)
 		pic24_dsPIC33F_PIC24H_erase();
 		break;
 	case DS70663D: /* dsPIC33EP/PIC24EP */
-		pic24_dsPIC33E_PIC24E_erase();
+		pic24_dsPIC33EP_PIC24EP_erase();
+		break;
+	case DS70005137F: /* dsPIC33EV */
+		pic24_dsPIC33EV_erase();
 		break;
 	default:printf("%s: information: unimplemented\n", __func__);
 		break;
@@ -1259,7 +1482,8 @@ pic24_read_config_memory(void)
 		}
 #endif
 		break;
-	case DS70663D:
+	case DS70663D:		/* EP */
+	case DS70005137F:	/* EV */
 		pic24_conf.tblpag  = 0x0054;
 		pic24_conf.nvmcon  = 0x0728;
 		pic24_conf.visi    = 0x0F88;
@@ -1268,7 +1492,11 @@ pic24_read_config_memory(void)
 		pic24_program_verify();
 		pic24_index = pic24_get_dev();
 		break;
+	case DS39970E:
 	case DS30000510E:
+	case DS30010073A:
+	case DS30010057F:
+	case DS30010102A: /* PIC24FJXXXGA7 */
 		pic24_conf.tblpag  = 0x0054;
 		pic24_conf.nvmcon  = 0x0760;
 		pic24_conf.visi    = 0x0784;
@@ -1304,8 +1532,13 @@ pic24_read_config_memory(void)
 	if ((pic24_map[pic24_index].datasheet == DS70102H) ||	/* dsPIC30F      */
 		(pic24_map[pic24_index].datasheet == DS70284B))	/* dsPIC30F SMPS */
 		pic24_set_read_pointer(dsPIC30F_APPID_ADDR);
-	else if (pic24_map[pic24_index].datasheet == DS70663D)
-		pic24_set_read_pointer(dsPIC33E_APPID_ADDR);
+	else if ((pic24_map[pic24_index].datasheet == DS70663D) ||
+		(pic24_map[pic24_index].datasheet == DS30010057F) ||
+		(pic24_map[pic24_index].datasheet == DS30010102A))
+		pic24_set_read_pointer(dsPIC33EP_APPID_ADDR);
+	else if ((pic24_map[pic24_index].datasheet == DS70005137F) ||
+			 (pic24_map[pic24_index].datasheet == DS30010073A))
+		pic24_set_read_pointer(dsPIC33EV_APPID_ADDR);	/* XXX */
 	else
 		pic24_set_read_pointer(PIC24_APPID_ADDR);
 	pic24_conf.appid = pic24_table_read24_post_increment();
@@ -1375,11 +1608,21 @@ pic24_get_executive_size(uint32_t *addr)
 
 	*addr = PIC24_EXEC_LOW;
 
-	if ((pic24_map[pic24_index].datasheet == DS70102H) ||	/* dsPIC30F      */
-		(pic24_map[pic24_index].datasheet == DS70284B))	/* dsPIC30F SMPS */
+	if ((pic24_map[pic24_index].datasheet == DS70102H) ||		/* dsPIC30F      */
+		(pic24_map[pic24_index].datasheet == DS70284B))		/* dsPIC30F SMPS */
 		size = dsPIC30F_EXEC_HIGH - PIC24_EXEC_LOW;
-	else if (pic24_map[pic24_index].datasheet == DS70663D)	/* dsPIC33EP/PIC24EP */
+	else if ((pic24_map[pic24_index].datasheet == DS70663D) ||	/* dsPIC33EP/PIC24EP */
+		(pic24_map[pic24_index].datasheet == DS70005137F))	/* dsPIC33EV */
 		size = dsPIC33E_EXEC_HIGH - PIC24_EXEC_LOW;
+	else if (pic24_map[pic24_index].datasheet == DS30010073A) {	/* PIC24FJXXXGA4/GB4 */
+		*addr = PIC24_GA6_GB6_EXEC_LOW;
+		size = dsPIC33EV_APPID_ADDR - PIC24_GA6_GB6_EXEC_LOW + 2;
+	}
+	else if ((pic24_map[pic24_index].datasheet == DS30010057F) ||	/* PIC24FJXXXGA6/GB6 */
+		(pic24_map[pic24_index].datasheet == DS30010102A)) {	/* PIC24FJXXXGA7     */
+		*addr = PIC24_GA6_GB6_EXEC_LOW;
+		size = dsPIC33E_EXEC_HIGH - PIC24_GA6_GB6_EXEC_LOW;
+	}
 	else
 		size = PIC24_EXEC_HIGH - PIC24_EXEC_LOW;
 
@@ -1473,29 +1716,42 @@ pic24_write_program_init(void)
 	memset(pic24_conf.config, 0, sizeof(uint32_t) * PIC24_CONFIG_MAX);
 
 	switch (pic24_map[pic24_index].datasheet) {
-	case DS39786D:    /* PIC24FJ           */
+	case DS39768D:    /* PIC24FJ           */
+	case DS39970E:    /* PIC24FJXXXDA1/DA2/GB2/GA3/GC0 */
 	case DS70152H:    /* dsPIC33F/PIC24H   */
 	case DS39934B:    /* PIC24FJXXGA1/GB0  */
 	case DS30000510E: /* PIC24FJXXXGA2/GB2 */
- 		/* NVMCON = 0x760 */
+	case DS30009907C: /* PIC24FJXXXGA1/GB1 */
+		/* NVMCON = 0x760 */
 		pic24_six(0x24001A, 0);	/* MOV #0x4001, W10     */
 		pic24_six(0x883B0A, 0);	/* MOV W10, NVMCON      */
 		break;
 	case DS70659C: /* dsPIC33FJ    */
 	case DS75012B: /* PIC24FJXXMC  */
- 		/* NVMCON = 0x760 */
+		/* NVMCON = 0x760 */
 		pic24_six(0x24003A, 0);	/* MOV #0x4003, W10     */
 		pic24_six(0x883B0A, 0);	/* MOV W10, NVMCON      */
 		break;
 	case DS39919C: /* PIC24F KA    */
 	case DS30625D: /* PIC24F KM/KL */
- 		/* NVMCON = 0x760 */
+		/* NVMCON = 0x760 */
 		pic24_six(0x24004A, 0);	/* MOV #0x4004, W10     */
 		pic24_six(0x883B0A, 0);	/* MOV W10, NVMCON      */
 		break;
-	case DS70663D: /* dsPIC33EP/PIC24EP */
+	case DS70663D:	  /* dsPIC33EP/PIC24EP */
+	case DS70005137F: /* dsPIC33EV */
 		pic24_six(0x200FAC, 0);	/* MOV #0xFA, W12       */
 		pic24_six(0x8802AC, 0);	/* MOV W12, TBLPAG      */
+		break;
+	case DS30010073A: /* PIC24FJXXXGA4/GB4 */
+	case DS30010057F: /* PIC24FJXXXGA6/GB6 */
+	case DS30010102A: /* PIC24FJXXXGA7     */
+		/* NVMCON = 0x760 */
+		pic24_six(0x240020, 0); /* MOV #0x4002, W0     */
+		pic24_six(0x883B00, 0);	/* MOV W0, NVMCON      */
+		/*  Initialize the TBLPAG register for writing to the latches */
+		pic24_six(0x200FAC, 0); /* MOV #0xFA, W12      */
+		pic24_six(0x8802AC, 0);	/* MOV W12, TBLPAG     */
 	default:break;
 	}
 }
@@ -1511,14 +1767,21 @@ pic24_write_program(uint32_t address, uint32_t *buffer, uint32_t buffer_size)
 	pic24_dumphexcode(address, buffer_size, buffer);
 #else
 	switch (pic24_map[pic24_index].datasheet) {
+	case DS30010073A: /* PIC24FJXXXGA4/GB4 */
+	case DS30010057F: /* PIC24FJXXXGA6/GB6 */
+	case DS30010102A: /* PIC24FJXXXGA7     */
+		pic24_set_write_pointer_nvmadr(address);
+		break;
 	case DS70102H: /* dsPIC30F      */
 	case DS70284B: /* dsPIC30F SMPS */
- 		/* NVMCON = 0x760 */
-		pic24_six(0x24001A, 0);	/* MOV #0x4001, W10  */
-		pic24_six(0x883B0A, 0);	/* MOV W10, NVMCON   */
-	default:break;
+		/* NVMCON = 0x760 */
+		pic24_six(0x24001A, 0);	/* MOV #0x4001, W10 */
+		pic24_six(0x883B0A, 0);	/* MOV W10, NVMCON  */
+	default:
+		pic24_set_write_pointer(address);
+		break;
 	}
-	pic24_set_write_pointer(address);
+
 	for (uint32_t i = 0; i < buffer_size; i += 4) {
 		uint16_t lsw0 = buffer[i + 0];
 		uint16_t lsw1 = buffer[i + 1];
@@ -1540,8 +1803,8 @@ pic24_write_program(uint32_t address, uint32_t *buffer, uint32_t buffer_size)
 		pic24_six(w0, 0);	/* MOV #<LSW0>, W0      */
 		pic24_six(w1, 0);	/* MOV #<MSB1:MSB0>, W1 */
 		pic24_six(w2, 0);	/* MOV #<LSW1>, W2      */
-		pic24_six(w3, 0); 	/* MOV #<LSW2>, W3      */
-		pic24_six(w4, 0); 	/* MOV #<MSB3:MSB2>, W4 */
+		pic24_six(w3, 0);	/* MOV #<LSW2>, W3      */
+		pic24_six(w4, 0);	/* MOV #<MSB3:MSB2>, W4 */
 		pic24_six(w5, 0);	/* MOV #<LSW3>, W5      */
 
 		/* SET THE READ POINTER AND LOAD LATCHES */
@@ -1554,7 +1817,7 @@ pic24_write_program(uint32_t address, uint32_t *buffer, uint32_t buffer_size)
 		pic24_six(0xBBDBB6, 2);/* TBLWTH.B [W6++], [W7++] */
 		pic24_six(0xBBEBB6, 2);/* TBLWTH.B [W6++], [++W7] */
 		pic24_six(0xBB1BB6, 2);/* TBLWTL   [W6++], [W7++] */
-	}	
+	}
 
 	switch (pic24_map[pic24_index].datasheet) {
 	case DS70102H: /* dsPIC30F      */
@@ -1563,6 +1826,11 @@ pic24_write_program(uint32_t address, uint32_t *buffer, uint32_t buffer_size)
 		/* DS70284B-page 44 dsPIC30F1010 TPROG P18(4ms MAX) */
 		pic24_nvmcon_write_external(4000);
 		break;
+	case DS30010073A: /* PIC24FJXXXGA4/GB4 */
+	case DS30010057F: /* PIC24FJXXXGA6/GB6 */
+	case DS30010102A: /* PIC24FJXXXGA7     */
+		pic24_nvmcon_write_initiate();
+		/* follow through */
 	default:pic24_nvmcon_write_internal();
 		break;
 	}
@@ -1579,7 +1847,7 @@ pic24_write_data(uint32_t address, uint32_t *buffer, uint32_t buffer_size)
 {
 	switch (pic24_map[pic24_index].datasheet) {
 	case DS70102H: /* dsPIC30F */
- 		/* NVMCON = 0x760 */
+		/* NVMCON = 0x760 */
 		pic24_six(0x24005A, 0);	/* MOV #0x4005, W10  */
 		pic24_six(0x883B0A, 0);	/* MOV W10, NVMCON   */
 	default:break;
@@ -1632,6 +1900,7 @@ pic24_write_program_word24(uint32_t address, uint32_t word)
 	pic24_six(w6, 1);	/* MOV #<HIGH_BYTE>, W6              */
 	pic24_six(0xBB0905, 2);	/* TBLWTL W5, [W2]                   */
 	pic24_six(0xBB9906, 3);	/* TBLWTH.B W6, [W2++]               */
+
 	pic24_nvmcon_write_internal();
 }
 
@@ -1643,7 +1912,12 @@ pic24_write_program_word24(uint32_t address, uint32_t word)
 void
 pic24_write_program_word48(uint32_t address, uint32_t word0, uint32_t word1)
 {
- 	/* NVMCON = 0x728 */
+	uint32_t w3_nvmadr    = 0x880003 | (PIC24_NVMADR  << 3);
+	uint32_t w4_nvmadru   = 0x880004 | (PIC24_NVMADRU << 3);
+	uint32_t w10_nvmcon   = 0x88000A | (PIC24_NVMCON  << 3);
+	uint32_t w1_nvmkey    = 0x880001 | (PIC24_NVMKEY  << 3);
+	uint32_t bs_nvmcon_wr = 0xA8E001 | PIC24_NVMCON;
+
 	uint16_t lsw0 = word0;
 	uint16_t lsw1 = word1;
 	uint8_t  msb0 = word0 >> 16;
@@ -1670,21 +1944,21 @@ pic24_write_program_word48(uint32_t address, uint32_t word0, uint32_t word1)
 	uint32_t w4 = 0x200004 | ((address & 0xFF0000) >> 12);
 
 	/* SET THE NVMADRU/NVMADR REGISTER-PAIR TO POINT TO THE CORRECT ADDRESS */
-	pic24_six(w3, 0);      /* MOV #DestinationAddress<15:0>, W3  */
-	pic24_six(w4, 0);      /* MOV #DestinationAddress<23:16>, W4 */
-	pic24_six(0x883953, 0);/* MOV W3, NVMADR  */
-	pic24_six(0x883964, 0);/* MOV W4, NVMADRU */
+	pic24_six(w3, 0);       /* MOV #DestinationAddress<15:0>, W3  */
+	pic24_six(w4, 0);       /* MOV #DestinationAddress<23:16>, W4 */
+	pic24_six(w3_nvmadr,  0);/* MOV W3, NVMADR  */
+	pic24_six(w4_nvmadru, 0);/* MOV W4, NVMADRU */
 
 	/* SET THE NVMCON TO PROGRAM TWO INSTRUCTION WORDS */
-	pic24_six(0x24001A, 1);/* MOV 0x4001, W10 */
-	pic24_six(0x88394A, 2);/* MOV W10, NVMCON */
+	pic24_six(0x24001A, 1);  /* MOV 0x4001, W10 */
+	pic24_six(w10_nvmcon, 2);/* MOV W10, NVMCON */
 
 	/* INITIATE THE WRITE CYCLE */
-	pic24_six(0x200551, 0);/* MOV #0x55, W1     */
-	pic24_six(0x883971, 0);/* MOV W1, NVMKEY    */
-	pic24_six(0x200AA1, 0);/* MOV #0xAA, W1     */
-	pic24_six(0x883971, 0);/* MOV W1, NVMKEY    */
-	pic24_six(0xA8E729, 3);/* BSET NVMCON, #WR  */
+	pic24_six(0x200551, 0);    /* MOV #0x55, W1     */
+	pic24_six(w1_nvmkey, 0);   /* MOV W1, NVMKEY    */
+	pic24_six(0x200AA1, 0);    /* MOV #0xAA, W1     */
+	pic24_six(w1_nvmkey, 0);   /* MOV W1, NVMKEY    */
+	pic24_six(bs_nvmcon_wr, 3);/* BSET NVMCON, #WR  */
 
 	/* DS700000657H TWW(53.8us) or TWW(54.4us)     */
 	io_usleep(55); /* P13=TWW P10=400ns */
@@ -1721,7 +1995,7 @@ pic24_write_panel(uint32_t region, uint32_t address, uint32_t *panel, uint32_t p
 	case PIC_REGIONEXEC:
 		if (panel_size == 1) {		/* dsPIC33FJ/PIC24FJXXMC WORD WRITING */
 			pic24_write_program_word24(address << 1, panel[0]);
-		} else if (panel_size == 2) {	/* dsPIC33E/PIC24E DWORD WRITING */
+		} else if (panel_size == 2) {	/* dsPIC33EP/PIC24EP/dsPIC33EV DWORD WRITING */
 			pic24_write_program_word48(address << 1, panel[0], panel[1]);
 		} else {			/* PANEL WRITING */
 			pic24_write_program(address << 1, panel, panel_size);
@@ -1740,6 +2014,39 @@ pic24_write_panel(uint32_t region, uint32_t address, uint32_t *panel, uint32_t p
 }
 
 /*
+ * HAS FUID
+ *
+ *  RETURN TRUE IF FUID EXISTS
+ */
+static inline uint32_t
+pic24_has_fuid(void)
+{
+	return pic24_map[pic24_index].fuidaddr;
+}
+
+/*
+ * HAS CONFIG
+ *
+ *  RETURN TRUE IF CONFIG NOT IN PROGRAM FLASH
+ */
+uint32_t
+pic24_has_config(void)
+{
+	if (pic24_map[pic24_index].configaddr == PIC24_CONFIG_ADDR)
+		return PIC24_CONFIG_ADDR;
+
+	switch (pic24_map[pic24_index].datasheet) {
+	case DS70005137F: /* dsPIC33EV         */
+	case DS30010073A: /* PIC24FJXXXGA4/GB4 */
+	case DS30010057F: /* PIC24FJXXXGA6/GB6 */
+	case DS30010102A: /* PIC24FJXXXGA7     */
+		return pic24_map[pic24_index].configaddr;
+	default:break;
+	}
+	return 0;
+}
+
+/*
  * CONFIG INIT
  *
  *  SETUP FOR CONFIG OR FUID WRITING IN THE CONFIG SPACE
@@ -1753,14 +2060,30 @@ pic24_write_config_init1(void)
 		/* PIC24F KA      */
 		/* PIC24F KM/KL   */
 		/* NVMCON = 0x760 */
-		pic24_six(0x24004A, 0);	/* MOV #0x4004, W10    */
-		pic24_six(0x883B0A, 0);	/* MOV W10, NVMCON     */
+		pic24_six(0x24004A, 0);	/* MOV #0x4004, W10 */
+		pic24_six(0x883B0A, 0);	/* MOV W10, NVMCON  */
 		break;
 	case DS70152H:
 		/* dsPIC33F/PIC24H */
 		/* NVMCON = 0x760  */
-		pic24_six(0x24000A, 0);	/* MOV #0x4000, W10    */
-		pic24_six(0x883B0A, 0);	/* MOV W10, NVMCON     */
+		pic24_six(0x24000A, 0);	/* MOV #0x4000, W10 */
+		pic24_six(0x883B0A, 0);	/* MOV W10, NVMCON  */
+		break;
+	case DS70005137F:
+	case DS30010073A:
+	case DS30010057F:
+	case DS30010102A:
+		/* dsPIC33EV */
+		/* PIC24FJXXXGA6/GB6 */
+ 		/* PIC24FJXXXGA7     */
+		pic24_six(0x200FAC, 0);	/* MOV #0xFA, W12   */
+		pic24_six(0x8802AC, 0);	/* MOV W12, TBLPAG  */
+		break;
+	case DS30009907C:
+		/* PIC24FJXXXGA1/GB1 */
+		/* NVMCON = 0x760  */
+		pic24_six(0x24003A, 0); /* MOV #0x4003, W10 */
+		pic24_six(0x883B0A, 0);	/* MOV W10, NVMCON  */
 	default:break;
 	}
 }
@@ -1783,6 +2106,18 @@ pic24_write_config_init2(void)
 void
 pic24_write_config_word(uint32_t address, uint16_t word)
 {
+#ifdef DEBUG
+	printf("%s(): CONFIG WORD: address=%06X word=%04X\n", __func__, address, word);
+#endif
+	switch (pic24_map[pic24_index].datasheet) {
+	case DS70005137F: /* dsPIC33EV         */
+	case DS30010073A: /* PIC24FJXXXGA4/GB4 */
+	case DS30010057F: /* PIC24FJXXXGA6/GB6 */
+ 	case DS30010102A: /* PIC24FJXXXGA7     */
+		pic24_write_program_word48(address, word, 0xFFFF);
+		return;
+	default:break;
+	}
 	uint32_t w6 = 0x200006 | (word << 4);
 
 	/* INITIALISE TBLPAG AND THE WRITE POINTER (W7) FOR TBLWT INSTRUCTION */
@@ -1809,12 +2144,12 @@ pic24_write_config_word(uint32_t address, uint16_t word)
 }
 
 /*
- * WRITE CONFIG WORDS IN THE CONFIG SPACE
+ * WRITE CONFIG WORDS IN CONFIG FLASH OR CONFIG SPACE
  */
 uint32_t
 pic24_write_config_words(void)
 {
-	if (pic24_map[pic24_index].configaddr != PIC24_CONFIG_ADDR)
+	if (pic24_has_config() == 0)
 		return 0; /* Not supported here */
 
 	pic24_write_config_init1();
@@ -1837,7 +2172,7 @@ pic24_write_config_words(void)
 uint32_t
 pic24_write_fuid_words(void)
 {
-	if (pic24_map[pic24_index].fuidaddr < PIC24_CONFIG_ADDR)
+	if (pic24_has_fuid() == 0)
 		return 0; /* Not supported here */
 
 	pic24_write_config_init1();
@@ -1860,8 +2195,7 @@ pic24_write_fuid_words(void)
 uint32_t
 pic24_write_config(void)
 {
-	if ((pic24_map[pic24_index].configaddr >= PIC24_CONFIG_ADDR) ||
-		(pic24_map[pic24_index].fuidaddr >= PIC24_CONFIG_ADDR)) {
+	if (pic24_has_fuid() || pic24_has_config()) {
 		uint32_t n = 0;
 
 		pic24_program_verify();
@@ -1873,7 +2207,7 @@ pic24_write_config(void)
 			n += pic24_write_config_words();
 
 		pic24_standby();
-	
+
 		return n;
 	}
 	return 0;
@@ -1896,6 +2230,7 @@ pic24_write_config(void)
  *
  *  RETURN PIC_REGIONCONFIG:
  *	F80000 .. F8000E
+ *	XXXXXX .. XXXXXX
  *
  *  RETURN PIC_REGIONEXEC:
  *	800000 .. 8005BE
@@ -1927,15 +2262,25 @@ pic24_getregion(uint32_t address)
 		if (address >= PIC24_EXEC_LOW && address <= dsPIC30F_EXEC_HIGH) {
 			return PIC_REGIONEXEC;
 		}
-	} else if (pic24_map[pic24_index].datasheet == DS70663D) {	/* dsPIC33EP/PIC24EP */
+	} else if ((pic24_map[pic24_index].datasheet == DS70663D) || 	/* dsPIC33EP/PIC24EP */
+		(pic24_map[pic24_index].datasheet == DS70005137F)) {	/* dsPIC33EV */
 		if (address >= PIC24_EXEC_LOW && address <= dsPIC33E_EXEC_HIGH) {
+			return PIC_REGIONEXEC;
+		}
+	} else if (pic24_map[pic24_index].datasheet == DS30010073A) {	/* PIC24FJXXXGA4/GB4 */
+		if (address >= PIC24_GA6_GB6_EXEC_LOW && address <= dsPIC33EV_APPID_ADDR) {
+			return PIC_REGIONEXEC;
+		}
+	} else if ((pic24_map[pic24_index].datasheet == DS30010057F) || /* PIC24FJXXXGA6/GB6 */
+		(pic24_map[pic24_index].datasheet == DS30010102A)) {	/* PIC24FJXXXGA7      */
+		if (address >= PIC24_GA6_GB6_EXEC_LOW && address <= PIC24_GA6_GB6_EXEC_LOW) {
 			return PIC_REGIONEXEC;
 		}
 	} else if (address >= PIC24_EXEC_LOW && address <= PIC24_EXEC_HIGH) {
 		return PIC_REGIONEXEC;
 	}
 	/* FUID */
-	if (pic24_map[pic24_index].fuidaddr) {
+	if (pic24_has_fuid()) {
 		uint32_t fuid_high = pic24_map[pic24_index].fuidaddr + 2 * pic24_map[pic24_index].nfuid - 2;
 
 		if (address >= pic24_map[pic24_index].fuidaddr && address <= fuid_high) {
@@ -1943,10 +2288,13 @@ pic24_getregion(uint32_t address)
 		}
 	}
 	/* CONFIG */
-	if (pic24_map[pic24_index].configaddr == PIC24_CONFIG_ADDR) {
-		uint32_t config_high = PIC24_CONFIG_ADDR + 2 * pic24_map[pic24_index].nconfig - 2;
-
-		if (address >= PIC24_CONFIG_ADDR && address <= config_high) {
+	if (pic24_has_config()) {
+		uint32_t config_high = pic24_map[pic24_index].configaddr + 2 * pic24_map[pic24_index].nconfig - 2;
+		if (address >= pic24_map[pic24_index].configaddr && address <= config_high) {
+#ifdef DEBUG
+			printf("%s(): REGION CONFIG: address=%06X configaddr=%06X config_high=%06X\n",
+				__func__, address, pic24_map[pic24_index].configaddr, config_high);
+#endif
 			return PIC_REGIONCONFIG;
 		}
 	}
@@ -2037,7 +2385,7 @@ pic24_init_verifyregion(uint32_t region)
 /*
  * VERIFY REGION
  *
- *  RETURN BYTE FAILURE COUNT
+ *  RETURN DATA
  */
 static inline uint32_t
 pic24_verifyregion(uint32_t address, uint32_t region, uint16_t index, uint32_t wdata)
@@ -2093,8 +2441,8 @@ pic24_program_data(uint32_t current_region, pic_data *pdata)
 		address = (pdata->address + i) >> 1;
 		new_region = pic24_getregion(address);
 		if (new_region != current_region) {
-		        pic_write_panel(PIC_PANEL_END, PIC_VOID, PIC_VOID);
-		        current_region = pic24_init_writeregion(new_region);
+			pic_write_panel(PIC_PANEL_END, PIC_VOID, PIC_VOID);
+			current_region = pic24_init_writeregion(new_region);
 		}
 		if (current_region == PIC_REGIONNOTSUP)
 			continue;
@@ -2177,127 +2525,151 @@ pic24_view_data(pic_data *pdata)
 void
 pic24_dumpdeviceid(void)
 {
-	printf("[000000] [PROGRAM]  %04X WORDS\n", pic24_map[pic24_index].flash);
+	printf("[000000] [PROGRAM]   %04X WORDS\n", pic24_map[pic24_index].flash);
 	uint32_t eaddr;
 	if (pic24_get_data_size(&eaddr)) {
-		printf("[%06X] [DATA]     %04X BYTES\n",
+		printf("[%06X] [DATA]      %04X BYTES\n",
 			eaddr, pic24_map[pic24_index].eeprom);
 	}
 
 	/* dsPIC30F */
 	if ((pic24_map[pic24_index].datasheet == DS70102H) ||		/* dsPIC30F      */
 		(pic24_map[pic24_index].datasheet == DS70284B)) {	/* dsPIC30F SMPS */
-		printf("[%06X] [APPID]    %02X\n", dsPIC30F_APPID_ADDR, 0xFF & pic24_conf.appid);
+		printf("[%06X] [APPID]     %02X\n", dsPIC30F_APPID_ADDR, 0xFF & pic24_conf.appid);
 		for (uint32_t i = 0; i < 32; i += 4) {
-			printf("[%06X] [UNIT%02X]   %04X %04X %04X %04X\n", pic24_map[pic24_index].fuidaddr + 2 * i, i,
+			printf("[%06X] [UNIT%02X]    %04X %04X %04X %04X\n", pic24_map[pic24_index].fuidaddr + 2 * i, i,
 				0xFFFF & pic24_conf.fuid[i + 0], 0xFFFF & pic24_conf.fuid[i + 1],
 				0xFFFF & pic24_conf.fuid[i + 2], 0xFFFF & pic24_conf.fuid[i + 3]);
 		}
 		pic24_dumpconfig(PIC_BRIEF);
 		int16_t id  = (pic24_conf.deviceid & dsPIC30F_MASK) >> 6;
 		int16_t var = (pic24_conf.deviceid & dsPIC30F_VAR_MASK);
-		printf("[%06X] [DEVID]    %04X MASK:%03X VAR:%02X %s\n",
+		printf("[%06X] [DEVID]     %04X MASK:%03X VAR:%02X %s\n",
 			PIC24_DEVID, pic24_conf.deviceid, id, var, pic24_map[pic24_index].devicename);
 		int16_t proc = (pic24_conf.revision & dsPIC30F_PROC_MASK) >> 12;
 		int16_t rev  = (pic24_conf.revision & dsPIC30F_REV_MASK) >> 6;
 		int16_t dot  = (pic24_conf.revision & dsPIC30F_DOT_MASK);
-		printf("[%06X] [DEVREV]   %04X PROC:%X REV:%1X DOT:%1X\n",
+		printf("[%06X] [DEVREV]    %04X PROC:%X REV:%1X DOT:%1X\n",
 			PIC24_DEVREV, pic24_conf.revision, proc, rev, dot);
 	}
 
 	/* dsPIC33F/PIC24H */
 	else if (pic24_map[pic24_index].datasheet == DS70152H) {
-		printf("[%06X] [APPID]    %02X\n", PIC24_APPID_ADDR, 0xFF & pic24_conf.appid);
+		printf("[%06X] [APPID]     %02X\n", PIC24_APPID_ADDR, 0xFF & pic24_conf.appid);
 		for (uint32_t i = 0; i < pic24_map[pic24_index].ncalib; ++i) {
-			printf("[%06X] [CALIB%d]   %06X\n", pic24_map[pic24_index].calibaddr + 2 * i,
+			printf("[%06X] [CALIB%d]    %06X\n", pic24_map[pic24_index].calibaddr + 2 * i,
 				i + 1, pic24_conf.calib[i]);
 		}
 		pic24_dumpconfig(PIC_BRIEF);
 		for (uint32_t i = 0; i < pic24_map[pic24_index].nfuid; ++i) {
-			printf("[%06X] [FUID%d]    %02X\n",
+			printf("[%06X] [FUID%d]     %02X\n",
 				pic24_map[pic24_index].fuidaddr + 2 * i, i, 0xFF & pic24_conf.fuid[i]);
 		}
-		printf("[%06X] [DEVID]    %04X %s\n",
+		printf("[%06X] [DEVID]     %04X %s\n",
 			PIC24_DEVID, pic24_conf.deviceid, pic24_map[pic24_index].devicename);
-		printf("[%06X] [DEVREV]   %04X\n",
+		printf("[%06X] [DEVREV]    %04X\n",
 			PIC24_DEVREV, pic24_conf.revision);
 	}
 
 	/* PIC24F KA KL/KM */
 	else if (pic24_map[pic24_index].datasheet == DS39919C ||
 		 pic24_map[pic24_index].datasheet == DS30625D) {
-		printf("[%06X] [APPID]    %02X\n", PIC24_APPID_ADDR, 0xFF & pic24_conf.appid);
+		printf("[%06X] [APPID]     %02X\n", PIC24_APPID_ADDR, 0xFF & pic24_conf.appid);
 		for (uint32_t i = 0; i < pic24_map[pic24_index].ncalib; ++i) {
-			printf("[%06X] [CALIB%d]   %06X\n", pic24_map[pic24_index].calibaddr + 2 * i,
+			printf("[%06X] [CALIB%d]    %06X\n", pic24_map[pic24_index].calibaddr + 2 * i,
 				i + 1, pic24_conf.calib[i]);
 		}
 		pic24_dumpconfig(PIC_BRIEF);
 		int16_t family = (pic24_conf.deviceid & 0xFF00) >> 8;
 		int16_t device = (pic24_conf.deviceid & 0x00FF);
-		printf("[%06X] [DEVID]    %04X FAM:%02X DEV:%02X %s\n",
+		printf("[%06X] [DEVID]     %04X FAM:%02X DEV:%02X %s\n",
 			PIC24_DEVID, pic24_conf.deviceid, family, device, pic24_map[pic24_index].devicename);
 		int16_t rev = (pic24_conf.revision & 0x0F);
-		printf("[%06X] [DEVREV]   %04X REV:%1X\n",
+		printf("[%06X] [DEVREV]    %04X REV:%1X\n",
 			PIC24_DEVREV, pic24_conf.revision, rev);
 	}
 
 	/* dsPIC33F/PIC24FJXXMC with volatile config */
 	else if (pic24_map[pic24_index].datasheet == DS70659C || pic24_map[pic24_index].datasheet == DS75012B) {
 		pic24_dumpconfig(PIC_BRIEF);
-		printf("[%06X] [APPID]    %02X\n", PIC24_APPID_ADDR, 0xFF & pic24_conf.appid);
-		printf("[%06X] [DEVID]    %04X %s\n",
+		printf("[%06X] [APPID]     %02X\n", PIC24_APPID_ADDR, 0xFF & pic24_conf.appid);
+		printf("[%06X] [DEVID]     %04X %s\n",
 			PIC24_DEVID, pic24_conf.deviceid, pic24_map[pic24_index].devicename);
-		printf("[%06X] [DEVREV]   %04X\n",
+		printf("[%06X] [DEVREV]    %04X\n",
 			PIC24_DEVREV, pic24_conf.revision);
 	}
 
-	/* PIC24F with 2 volatile config words */
-	else if (pic24_map[pic24_index].datasheet == DS39786D) {
+	/* PIC24F with 2 or 3 volatile config words */
+	else if (pic24_map[pic24_index].datasheet == DS39768D ||
+		pic24_map[pic24_index].datasheet == DS30009907C) {
 		pic24_dumpconfig(PIC_BRIEF);
-		printf("[%06X] [APPID]    %02X\n", PIC24_APPID_ADDR, 0xFF & pic24_conf.appid);
+		printf("[%06X] [APPID]     %02X\n", PIC24_APPID_ADDR, 0xFF & pic24_conf.appid);
 		for (uint32_t i = 0; i < pic24_map[pic24_index].ncalib; ++i) {
-			printf("[%06X] [CALIB%d]   %06X\n", pic24_map[pic24_index].calibaddr + 2 * i,
+			printf("[%06X] [CALIB%d]    %06X\n", pic24_map[pic24_index].calibaddr + 2 * i,
 				i + 1, pic24_conf.calib[i]);
 		}
+		/* FAMID<13:6> DEV<5:0> */
 		int16_t family = (pic24_conf.deviceid & PIC24FJ_FAMILY_MASK) >> 6;
 		int16_t device = (pic24_conf.deviceid & PIC24FJ_DEV_MASK);
-		printf("[%06X] [DEVID]    %04X FAM:%02X DEV:%02X %s\n",
+		printf("[%06X] [DEVID]     %04X FAM:%02X DEV:%02X %s\n",
 			PIC24_DEVID, pic24_conf.deviceid, family, device, pic24_map[pic24_index].devicename);
+		/* MAJRV<8:6> DOT<2:0> */
 		int16_t major = (pic24_conf.revision & PIC24FJ_MAJRV_MASK) >> 6;
 		int16_t dot   = (pic24_conf.revision & PIC24FJ_DOT_MASK);
-		printf("[%06X] [DEVREV]   %04X MAJOR:%1X DOT:%1X\n",
+		printf("[%06X] [DEVREV]    %04X MAJOR:%1X DOT:%1X\n",
 			PIC24_DEVREV, pic24_conf.revision, major, dot);
 	}
 
 	/* PIC24F with 4 volatile config words */
 	else if (pic24_map[pic24_index].datasheet == DS39934B ||
-		pic24_map[pic24_index].datasheet == DS30000510E) {
+		pic24_map[pic24_index].datasheet == DS30000510E ||
+		pic24_map[pic24_index].datasheet == DS39970E) {
 		pic24_dumpconfig(PIC_BRIEF);
-		printf("[%06X] [APPID]    %02X\n", PIC24_APPID_ADDR, 0xFF & pic24_conf.appid);
+		switch (pic24_map[pic24_index].datasheet) {
+		case DS30010073A:
+			printf("[%06X] [APPID]     %02X\n", dsPIC33EV_APPID_ADDR, 0xFF & pic24_conf.appid);
+			break;
+		default:
+			printf("[%06X] [APPID]     %02X\n", PIC24_APPID_ADDR, 0xFF & pic24_conf.appid);
+		}
 		for (uint32_t i = 0; i < pic24_map[pic24_index].ncalib; ++i) {
-			printf("[%06X] [CALIB%d]   %06X\n", pic24_map[pic24_index].calibaddr + 2 * i,
+			printf("[%06X] [CALIB%d]    %06X\n", pic24_map[pic24_index].calibaddr + 2 * i,
 				i + 1, pic24_conf.calib[i]);
 		}
+		/* FAMID<15:8> DEV<7:0> */
 		int16_t family = (pic24_conf.deviceid & 0xFF00) >> 8;
 		int16_t device = (pic24_conf.deviceid & 0x00FF);
-		printf("[%06X] [DEVID]    %04X FAM:%02X DEV:%02X %s\n",
+		printf("[%06X] [DEVID]     %04X FAM:%02X DEV:%02X %s\n",
 			PIC24_DEVID, pic24_conf.deviceid, family, device, pic24_map[pic24_index].devicename);
+		/* REV<3:0> */
 		int16_t rev = (pic24_conf.revision & 0x0F);
-		printf("[%06X] [DEVREV]   %04X REV:%1X\n",
+		printf("[%06X] [DEVREV]    %04X REV:%1X\n",
 			PIC24_DEVREV, pic24_conf.revision, rev);
 	}
 
 	/* dsPIC33EP/PIC24EP with volatile config */
 	else if (pic24_map[pic24_index].datasheet == DS70663D) {
 		pic24_dumpconfig(PIC_BRIEF);
-		printf("[%06X] [APPID]    %02X\n", dsPIC33E_APPID_ADDR, 0xFF & pic24_conf.appid);
+		printf("[%06X] [APPID]     %02X\n", dsPIC33EP_APPID_ADDR, 0xFF & pic24_conf.appid);
 		for (uint32_t i = 0; i < pic24_map[pic24_index].nfuid; ++i) {
-			printf("[%06X] [FUID%d]    %04X\n",
+			printf("[%06X] [FUID%d]     %04X\n",
 				pic24_map[pic24_index].fuidaddr + 2 * i, i, 0xFFFF & pic24_conf.fuid[i]);
 		}
-		printf("[%06X] [DEVID]    %04X %s\n",
+		printf("[%06X] [DEVID]     %04X %s\n",
 			PIC24_DEVID, pic24_conf.deviceid, pic24_map[pic24_index].devicename);
-		printf("[%06X] [DEVREV]   %04X\n",
+		printf("[%06X] [DEVREV]    %04X\n",
+			PIC24_DEVREV, pic24_conf.revision);
+	}
+
+	/* dsPIC33EV/PIC24 with config flash */
+	else if (pic24_map[pic24_index].datasheet == DS70005137F ||
+		pic24_map[pic24_index].datasheet == DS30010073A ||
+		pic24_map[pic24_index].datasheet == DS30010057F ||
+		pic24_map[pic24_index].datasheet == DS30010102A) {
+		pic24_dumpconfig(PIC_BRIEF);
+		printf("[%06X] [DEVID]     %04X %s\n",
+			PIC24_DEVID, pic24_conf.deviceid, pic24_map[pic24_index].devicename);
+		printf("[%06X] [DEVREV]    %04X\n",
 			PIC24_DEVREV, pic24_conf.revision);
 	}
 
@@ -2324,7 +2696,7 @@ pic24_dumpconfig(int mode)
 			/* 0xF8000C */ "[FICD]"
 		};
 		for (uint32_t i = 0; i < pic24_map[pic24_index].nconfig; ++i) {
-			printf("[%06X] %-10s %04X\n", pic24_map[pic24_index].configaddr + 2 * i,
+			printf("[%06X] %-11s %04X\n", pic24_map[pic24_index].configaddr + 2 * i,
 				config[i], pic24_conf.config[i]);
 		}
 	}
@@ -2333,7 +2705,7 @@ pic24_dumpconfig(int mode)
 	else if (pic24_map[pic24_index].datasheet == DS70284B) {
 		char config[8][11] = {
 			/* 0xF80000 */ "[FBS]",
-			/* 0xF80002 */ "[RESERVED]",
+			/* 0xF80002 */ "[UNKNOWN]",
 			/* 0xF80004 */ "[FGS]",
 			/* 0xF80006 */ "[FOSCSEL]",
 			/* 0xF80008 */ "[FOSC]",
@@ -2342,8 +2714,9 @@ pic24_dumpconfig(int mode)
 			/* 0xF8000E */ "[FICD]"
 		};
 		for (uint32_t i = 0; i < pic24_map[pic24_index].nconfig; ++i) {
-			printf("[%06X] %-10s %02X\n", pic24_map[pic24_index].configaddr + 2 * i,
-				config[i], 0xFF & pic24_conf.config[i]);
+			if (strcmp(config[i], "[UNKNOWN]"))
+				printf("[%06X] %-11s %02X\n", pic24_map[pic24_index].configaddr + 2 * i,
+					config[i], 0xFF & pic24_conf.config[i]);
 		}
 	}
 
@@ -2361,7 +2734,7 @@ pic24_dumpconfig(int mode)
 			/* 0xF80010 */ "[FCMP]"
 		};
 		for (uint32_t i = 0; i < pic24_map[pic24_index].nconfig; ++i) {
-			printf("[%06X] %-10s %02X\n", pic24_map[pic24_index].configaddr + 2 * i,
+			printf("[%06X] %-11s %02X\n", pic24_map[pic24_index].configaddr + 2 * i,
 				config[i], 0xFF & pic24_conf.config[i]);
 		}
 	}
@@ -2371,7 +2744,7 @@ pic24_dumpconfig(int mode)
 		 pic24_map[pic24_index].datasheet == DS30625D) {
 		char config[9][11] = {
 			/* 0xF80000 */ "[FBS]",
-			/* 0xF80002 */ "[RESERVED]",
+			/* 0xF80002 */ "[UNKNOWN]",
 			/* 0xF80004 */ "[FGS]",
 			/* 0xF80006 */ "[FOSCSEL]",
 			/* 0xF80008 */ "[FOSC]",
@@ -2381,74 +2754,205 @@ pic24_dumpconfig(int mode)
 			/* 0xF80010 */ "[FDS]"
 		};
 		for (uint32_t i = 0; i < pic24_map[pic24_index].nconfig; ++i) {
-			printf("[%06X] %-10s %02X\n", pic24_map[pic24_index].configaddr + 2 * i,
-				config[i], 0xFF & pic24_conf.config[i]);
+			if (strcmp(config[i], "[UNKNOWN]"))
+				printf("[%06X] %-11s %02X\n", pic24_map[pic24_index].configaddr + 2 * i,
+					config[i], 0xFF & pic24_conf.config[i]);
 		}
 	}
 
 	/* dsPIC33F/PIC24FJXXMC with volatile config */
 	else if (pic24_map[pic24_index].datasheet == DS70659C || pic24_map[pic24_index].datasheet == DS75012B) {
 		if (pic24_map[pic24_index].nconfig == 2) {
-			printf("[%06X] [CONFIG2]  %04X\n",
+			printf("[%06X] [CONFIG2]   %04X\n",
 				pic24_map[pic24_index].configaddr + 0, pic24_conf.config[0]);
-			printf("[%06X] [CONFIG1]  %04X\n",
+			printf("[%06X] [CONFIG1]   %04X\n",
 				pic24_map[pic24_index].configaddr + 2, pic24_conf.config[1]);
 		} else {
 			char config[8][11] = {
 				/* 0x00XXF0 */ "[FICD]",
-				/* 0x00XXF2 */ "[RESERVED]",
+				/* 0x00XXF2 */ "[UNKNOWN]",
 				/* 0x00XXF4 */ "[FWDT]",
 				/* 0x00XXF6 */ "[FOSC]",
 				/* 0x00XXF8 */ "[FOSCSEL]",
 				/* 0x00XXFA */ "[FGS]",
-				/* 0x00XXFC */ "[RESERVED]",
-				/* 0x00XXFE */ "[RESERVED]"
+				/* 0x00XXFC */ "[UNKNOWN]",
+				/* 0x00XXFE */ "[UNKNOWN]"
 			};
 			for (uint32_t i = 0; i < pic24_map[pic24_index].nconfig; ++i) {
-				printf("[%06X] %-10s %02X\n", pic24_map[pic24_index].configaddr + 2 * i,
-					config[i], 0xFF & pic24_conf.config[i]);
+				if (strcmp(config[i], "[UNKNOWN]"))
+					printf("[%06X] %-11s %02X\n", pic24_map[pic24_index].configaddr + 2 * i,
+						config[i], 0xFF & pic24_conf.config[i]);
 			}
 		}
 	}
 
 	/* PIC24F with 2 volatile config words */
-	else if (pic24_map[pic24_index].datasheet == DS39786D) {
-		printf("[%06X] [CONFIG2]  %04X\n",
+	else if (pic24_map[pic24_index].datasheet == DS39768D) {
+		printf("[%06X] [CONFIG2]   %04X\n",
 			pic24_map[pic24_index].configaddr + 0, pic24_conf.config[0]);
-		printf("[%06X] [CONFIG1]  %04X\n",
+		printf("[%06X] [CONFIG1]   %04X\n",
 			pic24_map[pic24_index].configaddr + 2, pic24_conf.config[1]);
+	}
+
+	/* PIC24F with 3 volatile config words */
+	else if (pic24_map[pic24_index].datasheet == DS30009907C) {
+		printf("[%06X] [CONFIG3]   %04X\n",
+			pic24_map[pic24_index].configaddr + 0, pic24_conf.config[0]);
+		printf("[%06X] [CONFIG2]   %04X\n",
+			pic24_map[pic24_index].configaddr + 2, pic24_conf.config[1]);
+		printf("[%06X] [CONFIG1]   %04X\n",
+			pic24_map[pic24_index].configaddr + 4, pic24_conf.config[2]);
 	}
 
 	/* PIC24F with 4 volatile config words */
 	else if (pic24_map[pic24_index].datasheet == DS39934B ||
-		pic24_map[pic24_index].datasheet == DS30000510E) {
-		printf("[%06X] [CONFIG4]  %04X\n",
+		pic24_map[pic24_index].datasheet == DS30000510E ||
+		pic24_map[pic24_index].datasheet == DS39970E) {
+		printf("[%06X] [CONFIG4]   %04X\n",
 			pic24_map[pic24_index].configaddr + 0, pic24_conf.config[0]);
-		printf("[%06X] [CONFIG3]  %04X\n",
+		printf("[%06X] [CONFIG3]   %04X\n",
 			pic24_map[pic24_index].configaddr + 2, pic24_conf.config[1]);
-		printf("[%06X] [CONFIG2]  %04X\n",
+		printf("[%06X] [CONFIG2]   %04X\n",
 			pic24_map[pic24_index].configaddr + 4, pic24_conf.config[2]);
-		printf("[%06X] [CONFIG1]  %04X\n",
+		printf("[%06X] [CONFIG1]   %04X\n",
 			pic24_map[pic24_index].configaddr + 6, pic24_conf.config[3]);
 	}
 
 	/* dsPIC33EP/PIC24EP with volatile config */
 	else if (pic24_map[pic24_index].datasheet == DS70663D) {
 		char config[10][11] = {
-			/* 0x00XXEC */ "[RESERVED]",
-			/* 0x00XXEE */ "[RESERVED]",
+			/* 0x00XXEC */ "[UNKNOWN]",
+			/* 0x00XXEE */ "[UNKNOWN]",
 			/* 0x00XXF0 */ "[FICD]",
 			/* 0x00XXF2 */ "[FPOR]",
 			/* 0x00XXF4 */ "[FWDT]",
 			/* 0x00XXF6 */ "[FOSC]",
 			/* 0x00XXF8 */ "[FOSCSEL]",
 			/* 0x00XXFA */ "[FGS]",
-			/* 0x00XXFC */ "[RESERVED]",
-			/* 0x00XXFE */ "[RESERVED]"
+			/* 0x00XXFC */ "[UNKNOWN]",
+			/* 0x00XXFE */ "[UNKNOWN]"
 		};
 		for (uint32_t i = 0; i < pic24_map[pic24_index].nconfig; ++i) {
-			printf("[%06X] %-10s %02X\n", pic24_map[pic24_index].configaddr + 2 * i,
-				config[i], 0xFF & pic24_conf.config[i]);
+			if (strcmp(config[i], "[UNKNOWN]"))
+				printf("[%06X] %-11s %02X\n", pic24_map[pic24_index].configaddr + 2 * i,
+					config[i], 0xFF & pic24_conf.config[i]);
+		}
+	}
+
+	/* dsPIC33EV with config flash */
+	else if (pic24_map[pic24_index].datasheet == DS70005137F) {
+		char config[35][12] = {
+			/* 0x0XXX80 */ "[FSEC]",
+			/* 0x0XXX82 */ "[UNKNOWN]",
+			/* 0x0XXX84 */ "[UNKNOWN]",
+			/* 0x0XXX86 */ "[UNKNOWN]",
+			/* 0x0XXX88 */ "[UNKNOWN]",
+			/* 0x0XXX8A */ "[UNKNOWN]",
+			/* 0x0XXX8C */ "[UNKNOWN]",
+			/* 0x0XXX8E */ "[UNKNOWN]",
+			/* 0x0XXX90 */ "[FSBLIM]",
+			/* 0x0XXX92 */ "[UNKNOWN]",
+			/* 0x0XXX94 */ "[RESERVED]",
+			/* 0x0XXX96 */ "[UNKNOWN]",
+			/* 0x0XXX98 */ "[FOSCSEL]",
+			/* 0x0XXX9A */ "[UNKNOWN]",
+			/* 0x0XXX9C */ "[FOSC]",
+			/* 0x0XXX9E */ "[UNKNOWN]",
+			/* 0x0XXXA0 */ "[FWDT]",
+			/* 0x0XXXA2 */ "[UNKNOWN]",
+			/* 0x0XXXA4 */ "[FPOR]",
+			/* 0x0XXXA6 */ "[UNKNOWN]",
+			/* 0x0XXXA8 */ "[FICD]",
+			/* 0x0XXXAA */ "[UNKNOWN]",
+			/* 0x0XXXAC */ "[FDMTINTVL]",
+			/* 0x0XXXAE */ "[UNKNOWN]",
+			/* 0x0XXXB0 */ "[FDMTINTVH]",
+			/* 0x0XXXB2 */ "[UNKNOWN]",
+			/* 0x0XXXB4 */ "[FDMTCNTL]",
+			/* 0x0XXXB2 */ "[UNKNOWN]",
+			/* 0x0XXXB8 */ "[FDMTCNTH]",
+			/* 0x0XXXBA */ "[UNKNOWN]",
+			/* 0x0XXXBC */ "[FDMT]",
+			/* 0x0XXXBE */ "[UNKNOWN]",
+			/* 0x0XXXC0 */ "[FDEVOPT]",
+			/* 0x0XXXC2 */ "[UNKNOWN]",
+			/* 0x0XXXC4 */ "[FALTREG]"
+		};
+		for (uint32_t i = 0; i < pic24_map[pic24_index].nconfig; ++i) {
+			if (strcmp(config[i], "[UNKNOWN]"))
+				printf("[%06X] %-11s %04X\n", pic24_map[pic24_index].configaddr + 2 * i,
+					config[i], pic24_conf.config[i]);
+		}
+	}
+
+	/* PIC24FJXXXGA4/GB4 with config flash */
+	else if (pic24_map[pic24_index].datasheet == DS30010073A) {
+		char config[25][11] = {
+			/* 0x00XF80 */ "[FSEC]",
+			/* 0x0XXF92 */ "[UNKNOWN]",
+			/* 0x0XXF84 */ "[UNKNOWN]",
+			/* 0x0XXF86 */ "[UNKNOWN]",
+			/* 0x0XXF88 */ "[UNKNOWN]",
+			/* 0x0XXF8A */ "[UNKNOWN]",
+			/* 0x0XXF8C */ "[UNKNOWN]",
+			/* 0x0XXF8E */ "[UNKNOWN]",
+			/* 0x00XF90 */ "[FBSLIM]",
+			/* 0x0XXF92 */ "[UNKNOWN]",
+			/* 0x00XF94 */ "[FSIGN]",
+			/* 0x0XXF96 */ "[UNKNOWN]",
+			/* 0x00XF98 */ "[FOSCSEL]",
+			/* 0x0XXF9A */ "[UNKNOWN]",
+			/* 0x00XF9C */ "[FOSC]",
+			/* 0x0XXF9E */ "[UNKNOWN]",
+			/* 0x00XFA0 */ "[FWDT]",
+			/* 0x0XXFA2 */ "[UNKNOWN]",
+			/* 0x00XFA4 */ "[FPOR]",
+			/* 0x0XXFA6 */ "[UNKNOWN]",
+			/* 0x00XFA8 */ "[FICD]",
+			/* 0x0XXFAA */ "[UNKNOWN]",
+			/* 0x00XFAC */ "[FDS]",
+			/* 0x0XXFAE */ "[UNKNOWN]",
+			/* 0x00XFB0 */ "[FDEVOPT1]"
+		};
+		for (uint32_t i = 0; i < pic24_map[pic24_index].nconfig; ++i) {
+			if (strcmp(config[i], "[UNKNOWN]"))
+				printf("[%06X] %-11s %04X\n", pic24_map[pic24_index].configaddr + 2 * i,
+					config[i], pic24_conf.config[i]);
+		}
+	}
+
+	/* PIC24FJXXXGA6/GB6/GA7 with config flash */
+	else if (pic24_map[pic24_index].datasheet == DS30010057F ||
+		pic24_map[pic24_index].datasheet == DS30010102A) {
+		char config[23][11] = {
+			/* 0x00XF00 */ "[FSEC]",
+			/* 0x0XXF02 */ "[UNKNOWN]",
+			/* 0x0XXF04 */ "[UNKNOWN]",
+			/* 0x0XXF06 */ "[UNKNOWN]",
+			/* 0x0XXF08 */ "[UNKNOWN]",
+			/* 0x0XXF0A */ "[UNKNOWN]",
+			/* 0x0XXF0C */ "[UNKNOWN]",
+			/* 0x0XXF0E */ "[UNKNOWN]",
+			/* 0x00XF10 */ "[FBSLIM]",
+			/* 0x0XXF12 */ "[UNKNOWN]",
+			/* 0x00XF14 */ "[FSIGN]",
+			/* 0x0XXF16 */ "[UNKNOWN]",
+			/* 0x00XF18 */ "[FOSCSEL]",
+			/* 0x0XXF1A */ "[UNKNOWN]",
+			/* 0x00XF1C */ "[FOSC]",
+			/* 0x0XXF1E */ "[UNKNOWN]",
+			/* 0x00XF20 */ "[FWDT]",
+			/* 0x0XXF22 */ "[UNKNOWN]",
+			/* 0x00XF24 */ "[FPOR]",
+			/* 0x0XXF26 */ "[UNKNOWN]",
+			/* 0x00XF28 */ "[FICD]",
+			/* 0x0XXF2A */ "[UNKNOWN]",
+			/* 0x00XF2C */ "[FDEVOPT1]"
+		};
+		for (uint32_t i = 0; i < pic24_map[pic24_index].nconfig; ++i) {
+			if (strcmp(config[i], "[UNKNOWN]"))
+				printf("[%06X] %-11s %04X\n", pic24_map[pic24_index].configaddr + 2 * i,
+					config[i], pic24_conf.config[i]);
 		}
 	}
 
@@ -2597,7 +3101,7 @@ pic24_dumpinhxdata(uint32_t address, uint32_t size, uint16_t *data)
 void
 pic24_dumpdevice(void)
 {
-	if (pic24_map[pic24_index].fuidaddr) {
+	if (pic24_has_fuid()) {
 		/* PIC24: Extended address */
 		pic_dumpaddr(pic24_map[pic24_index].fuidaddr << 1, 1);
 
@@ -2606,7 +3110,7 @@ pic24_dumpdevice(void)
 			pic_dumpword32(pic24_map[pic24_index].fuidaddr + 2 * i, pic24_conf.fuid[i]);
 		}
 	}
-	if (pic24_map[pic24_index].configaddr == PIC24_CONFIG_ADDR) {
+	if (pic24_has_config()) {
 		/* PIC24: Extended address */
 		pic_dumpaddr(pic24_map[pic24_index].configaddr << 1, 1);
 

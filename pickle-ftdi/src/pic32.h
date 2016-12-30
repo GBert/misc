@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2015 Darron Broad
+ * Copyright (C) 2005-2016 Darron Broad
  * All rights reserved.
  * 
  * This file is part of Pickle Microchip PIC ICSP.
@@ -155,12 +155,14 @@ struct pic32_dsmap {
  * PIC32MX1XX/2XX			DS60001168F
  * PIC32MX330/350/370/430/450/470	DS60001185C
  * PIC32MZ EC				DS60001191C
+ * PIC32MX1XX/2XX/5XX			DS60001290D
  */
 #define DS61143H    (61143)
 #define DS61156H    (61156)
 #define DS60001168F (60001168)
 #define DS60001185C (60001185)
 #define DS60001191C (60001191)
+#define DS60001290D (60001290)
 
 /*
  * Programming Spec.
@@ -296,6 +298,10 @@ struct pic32_dsmap {
  * Errata.
  *
  * DS80000616B
+ *
+ * Programming Spec.
+ *
+ * DS60001145S
  */
 #define PIC32MX120F064H (0x06A50053)
 #define PIC32MX130F128H (0x06A00053)

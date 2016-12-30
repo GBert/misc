@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2015 Darron Broad
+# Copyright (C) 2005-2016 Darron Broad
 # All rights reserved.
 #
 # This file is part of Pickle Microchip PIC ICSP.
@@ -20,7 +20,9 @@
 # build targets (enable:1 disable:0)
 P12=1
 P14=1
+N14=1
 P16=1
+N16=0
 P24=1
 P32=1
 PCTRL=1

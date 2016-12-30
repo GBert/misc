@@ -98,81 +98,16 @@ BITRULES=0x1000
 # 
 BUSY=1
 
-# RASPBERRY PI VELLEMAN K8048 (README.raspi)
-#
-# TX/!MCLR/VPP     - DSUB9(3)
-#VPP=14
-# PGM              - NOT SUPPORTED ON VELLEMAN K8048
-#PGM=22
-# RTS/PGC CLOCK    - DSUB9(7)
-#PGC=15
-# DTR/PGD DATA_OUT - DSUB9(4)
-#PGDO=23
-# CTS/PGD DATA_IN  - DSUB9(8)
-#PGDI=24
-
-# RASPBERRY PI VELLEMAN K8048 (http://wiki.kewl.org/dokuwiki/boards:rpi:k8048)
-#
-# TX/!MCLR/VPP     - DSUB9(3)
-#VPP=14
-# PGM              - NOT SUPPORTED ON VELLEMAN K8048
-#PGM=22
-# RTS/PGC CLOCK    - DSUB9(7)
-#PGC=18
-# DTR/PGD DATA_OUT - DSUB9(4)
-#PGDO=24
-# CTS/PGD DATA_IN  - DSUB9(8)
-#PGDI=25
-
-# RASPBERRY PI GPIO (separate PGD DATA I/O)
-#                  = SLICE OF PI/O =
-# !MCLR/VPP        - PI/O G04
-#VPP=4
-# PGM              - PI/O G22
-#PGM=22
-# PGC CLOCK        - PI/O G25
-#PGC=25
-# PGD DATA_OUT     - PI/O G24
-#PGDO=24
-# PGD DATA_IN      - PI/O G23
-#PGDI=23
-
-# R-PI OR GPIO BIT-BANG (single PGD DATA I/O)
-#                  = SLICE OF PI/O =
-# !MCLR/VPP        - PI/O G04
-#VPP=4
-# PGM              - PI/O G22
-#PGM=22
-# PGC CLOCK        - PI/O G25
-#PGC=25
-# PGD DATA_I/O     - PI/O G24
-#PGD=24
-
 # R-PI OR GPIO BIT-BANG (single PGD DATA I/O)
 #                  = CHIPKIT PI =
 # !MCLR/VPP        - RPi-Connect 18
-VPP=4
+VPP=0
 # PGM              - RPi-Connect 12
-PGM=255
+PGM=65535
 # PGC CLOCK        - RPi-Connect 16
 PGC=1
 # PGD DATA_I/O     - RPi-Connect 20
-PGD=0
-
-# R-PI OR GPIO BIT-BANG (single PGD DATA I/O)
-#                  = CHIPKIT PI PIC32 ICSP =
-# !MCLR/VPP        - /RESET
-#VPP=4
-# PGM              - N/A
-#PGM=255
-# PGC CLOCK        - PGC1 RX2
-#PGC=14
-# PGD DATA_I/O     - PGD1 TX2
-#PGD=15
-
-# MCP23017 I2C ADDRESS (README.i2c)
-#
-# MCP=0x20
+PGD=3
 
 # ICSP I/O 1/2-bit sleep time for `pio'.
 FWSLEEP=0

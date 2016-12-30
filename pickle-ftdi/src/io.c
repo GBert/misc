@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2015 Darron Broad
+ * Copyright (C) 2005-2016 Darron Broad
  * Copyright (C) 2015 Gerhard Bertelsmann
  * All rights reserved.
  * 
@@ -27,7 +27,7 @@
 extern struct pickle p;
 
 /******************************************************************************
- * CTRL-C signal handlers
+ * CTRL-C signal handler
  *****************************************************************************/
 
 int io_stop = 0;
@@ -136,7 +136,7 @@ io_open(void)
 		p.iot = IOBPI;
 		io_signal_on();
 		return 0;
-	}
+	} 
 #endif
 #ifdef MCP23017
 	if (strstr(p.device, "/dev/i2c") == p.device) {
@@ -159,7 +159,6 @@ io_open(void)
 	}
 #endif
 #ifdef FTDI
-	/* TODO */
 	if (strstr(p.device, "/dev/ftdi-bb") == p.device) {
 		/* ftdi bit-bang */
 		if (ftdi_bb_open("/dev/ftdi-bb") < 0)
@@ -484,7 +483,6 @@ io_set_pgm(uint8_t pgm)
 		break;
 #endif
 #ifdef FTDI
-	/* TODO */
 	case IOFTDIBB:	/* gpio bit-bang */
 		if (p.pgm != GPIO_PGM_DISABLED) {
 			struct ftdi_bb_io io = {.dir = 0, .pin = p.pgm, .bit = pgm};
@@ -740,20 +738,24 @@ io_get_pgd(void)
  *****************************************************************************/
 
 /*
- * Configure chip input
+ * Configure chip I/O
  *
  * Clock falling is to satisfy LVP mode PIC24F devices which output data
  * on the falling edge of the clock and not on the rising edge.
+ *
+ * msb_first is to satisfy the next generation 8-bit chip programming.
  */
 void
-io_configure(uint8_t clock_falling)
+io_configure(uint8_t clock_falling, uint8_t msb_first)
 {
 	p.clock_falling = clock_falling;
+	p.msb_first = msb_first;
 #ifdef BITBANG
 	if (p.iot == IOBB) {
 		struct gpio_bb_config config;
 		config.clock_pin = p.pgc;
 		config.clock_falling = clock_falling;
+		config.msb_first = msb_first;
 		config.data_pin_input = p.pgdi;
 		config.data_pin_output = p.pgdo;
 		config.clock_delay_low = p.sleep_low;
@@ -767,11 +769,11 @@ io_configure(uint8_t clock_falling)
 		struct ftdi_bb_config config;
 		config.clock_pin = p.pgc;
 		config.clock_falling = clock_falling;
+		config.msb_first = msb_first;
 		config.data_pin_input = p.pgdi;
 		config.data_pin_output = p.pgdo;
 		config.clock_delay_low = p.sleep_low;
 		config.clock_delay_high = p.sleep_high;
-		config.lock = (p.bitrules & BB_LOCK) ? 1 : 0;
 		ftdi_bb_configure(&config);
 	}
 #endif
@@ -817,23 +819,46 @@ io_data_input(void)
 }
 
 /*
+ * Return first bit mask
+ */
+static inline
+uint32_t io_first_mask(uint8_t nbits)
+{
+	return (p.msb_first) ? ((uint32_t)(1) << (nbits - 1)) : (1 << 0);
+}
+
+/*
+ * Return next bit mask
+ */
+static inline
+uint32_t io_next_mask(uint32_t mask)
+{
+	return (p.msb_first) ? (mask >> 1) : (mask << 1);
+}
+
+/*
  * Clock in bit(s)
  */
 uint32_t
 io_clock_in_bits(uint32_t ldly, uint32_t hdly, uint8_t nbits)
 {
-	uint32_t bits = 0;
+	uint32_t bits = 0, mask = io_first_mask(nbits);
 
 	/* Initialise for data input */
 	io_data_input();
 
 	/* Clock in bits 0..N */
-	for (int i = 0; i < nbits; i++) {
+	while (nbits--) {
 		if (!p.clock_falling)
 			io_clock_bit(ldly, hdly);
-		bits |= io_get_pgd() << i;
+
+		if (io_get_pgd())
+			bits |= mask;
+
 		if (p.clock_falling)
 			io_clock_bit(ldly, hdly);
+
+		mask = io_next_mask(mask);
 	}
 	return bits;
 }
@@ -844,10 +869,14 @@ io_clock_in_bits(uint32_t ldly, uint32_t hdly, uint8_t nbits)
 void
 io_clock_out_bits(uint32_t ldly, uint32_t hdly, uint32_t bits, uint8_t nbits)
 {
+	uint32_t mask = io_first_mask(nbits);
+
 	/* Clock out bits 0..N */
-	for (int i = 0; i < nbits; ++i) {
-		io_set_pgd((bits >> i) & 1);
+	while (nbits--) {
+		io_set_pgd((bits & mask) != 0);
 		io_clock_bit(ldly, hdly);
+
+		mask = io_next_mask(mask);
 	}
 }
 
