@@ -1,9 +1,11 @@
 const int revisionnr = 
-11804
+11806
 ;
 const char* commithash = 
-"360082cfb1c15adec8b0fde9b0521bc0bb6b86b0";
+"a0803355405a6912ecf8ba3652a9fd92c19f641f";
 const char* revlog = 
+"11806 2016-12-31 15:48:41 +0100 switch: setstatic and resetstatic commands added for actions\n" \
+"11805 2016-12-31 15:22:21 +0100 messages: ghost train added 4202\n" \
 "11804 2016-12-31 13:43:09 +0100 gobyblock Alt-D&D added\n" \
 "11803 2016-12-31 09:19:50 +0100 signal: useprefix option for visualisation only\n" \
 "11802 2016-12-31 09:01:19 +0100 switchdialog: static option added\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11759 2016-12-10 07:19:12 +0100 locdialog: bbt delay 10000\n" \
 "11758 2016-12-09 11:34:17 +0100 stage: fix for broadcasting a loco event -> changed to a loco command\n" \
 "11757 2016-12-08 11:20:23 +0100 modplan: check for already existing IDs\n" \
-"11756 2016-12-08 10:18:38 +0100 model: ignore NULL blockID at setBlockOcc\n" \
-"11755 2016-12-07 16:08:37 +0100 rcon: only report a connection lost if no close has been issued\n" \
 
 "log end";
