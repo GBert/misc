@@ -159,9 +159,9 @@ io_open(void)
 	}
 #endif
 #ifdef FTDI
-	if (strstr(p.device, "/dev/ftdi-bb") == p.device) {
+	if (mystrcasestr(p.device, "ftdi") == p.device) {
 		/* ftdi bit-bang */
-		if (ftdi_bb_open("/dev/ftdi-bb") < 0)
+		if (ftdi_bb_open(p.usb_serial) < 0)
 			return -1;
 		p.iot = IOFTDIBB;
 		io_signal_on();
@@ -824,7 +824,7 @@ io_data_input(void)
 static inline
 uint32_t io_first_mask(uint8_t nbits)
 {
-	return (p.msb_first) ? ((uint32_t)(1) << (nbits - 1)) : (1 << 0);
+	return (p.msb_first) ? (1U << (nbits - 1)) : (1 << 0);
 }
 
 /*

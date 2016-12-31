@@ -20,7 +20,9 @@
 #ifndef _FTDI_BB_H
 #define _FTDI_BB_H
 
-#include "pickle.h"
+#include <ftdi.h>
+
+#define FTDI_BB_MAX_BITS_TRANSFER (64)
 
 struct ftdi_bb_io {
 	uint8_t dir;
