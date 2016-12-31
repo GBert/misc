@@ -1,9 +1,13 @@
 const int revisionnr = 
-11800
+11804
 ;
 const char* commithash = 
-"fd36ef1af3305a3bf5952511140e86a69c2d47aa";
+"360082cfb1c15adec8b0fde9b0521bc0bb6b86b0";
 const char* revlog = 
+"11804 2016-12-31 13:43:09 +0100 gobyblock Alt-D&D added\n" \
+"11803 2016-12-31 09:19:50 +0100 signal: useprefix option for visualisation only\n" \
+"11802 2016-12-31 09:01:19 +0100 switchdialog: static option added\n" \
+"11801 2016-12-31 08:26:04 +0100 switch: static option added\n" \
 "11800 2016-12-30 08:22:22 +0100 fix for d&d from the loco table to a block\n" \
 "11799 2016-12-29 20:05:22 +0100 milight: include fix\n" \
 "11798 2016-12-29 09:07:18 +0100 enter: restrictions removed for routespeedatenter\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "11757 2016-12-08 11:20:23 +0100 modplan: check for already existing IDs\n" \
 "11756 2016-12-08 10:18:38 +0100 model: ignore NULL blockID at setBlockOcc\n" \
 "11755 2016-12-07 16:08:37 +0100 rcon: only report a connection lost if no close has been issued\n" \
-"11754 2016-12-07 11:26:32 +0100 stage: allow setloco up front of another loco\n" \
-"11753 2016-12-07 10:39:53 +0100 stage: speed option to last section\n" \
-"11752 2016-12-07 07:26:04 +0100 extended the connection lost message\n" \
-"11751 2016-12-07 06:56:11 +0100 rcon: signal server connection lost\n" \
 
 "log end";
