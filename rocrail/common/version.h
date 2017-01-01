@@ -1,9 +1,18 @@
 const int revisionnr = 
-11806
+11815
 ;
 const char* commithash = 
-"a0803355405a6912ecf8ba3652a9fd92c19f641f";
+"b441a3d1914520d7fdd9c493523e1225fc9076ce";
 const char* revlog = 
+"11815 2017-01-01 16:27:02 +0100 milight: query bridges V5 added\n" \
+"11814 2017-01-01 16:16:05 +0100 milight: set broadcast socket option for searching bridges\n" \
+"11813 2017-01-01 15:46:29 +0100 milight: query bridges added\n" \
+"11812 2017-01-01 14:36:32 +0100 locdialog: tooltip added to the rdate field\n" \
+"11811 2017-01-01 14:31:30 +0100 locdialog: layout correction\n" \
+"11810 2017-01-01 14:17:35 +0100 loc: last running date added\n" \
+"11809 2017-01-01 13:55:20 +0100 milight: WIP\n" \
+"11808 2017-01-01 11:55:18 +0100 milight: WIP\n" \
+"11807 2017-01-01 08:35:53 +0100 update copyright\n" \
 "11806 2016-12-31 15:48:41 +0100 switch: setstatic and resetstatic commands added for actions\n" \
 "11805 2016-12-31 15:22:21 +0100 messages: ghost train added 4202\n" \
 "11804 2016-12-31 13:43:09 +0100 gobyblock Alt-D&D added\n" \
@@ -45,14 +54,5 @@ const char* revlog =
 "11768 2016-12-13 19:21:02 +0100 blockgroupingdlg: fix for crash on condition add without a selection\n" \
 "11767 2016-12-13 15:46:14 +0100 xmlscript: set also the variable value\n" \
 "11766 2016-12-13 12:18:12 +0100 xmlscript: query function added\n" \
-"11765 2016-12-12 15:43:13 +0100 guiframe: if loco is already in a block the d&d will be used for goto block\n" \
-"11764 2016-12-12 11:15:05 +0100 translation merge: sl, de, pt_BR, nl\n" \
-"11763 2016-12-12 08:24:07 +0100 guiframe: only D&D if the block is not set\n" \
-"11762 2016-12-12 07:10:36 +0100 enter: regard route maxkmh for option routespeedatenter\n" \
-"11761 2016-12-11 08:28:44 +0100 stage: call init after cmd locoset\n" \
-"11760 2016-12-11 06:34:48 +0100 rocnetnode: only initialize PB1 if needed\n" \
-"11759 2016-12-10 07:19:12 +0100 locdialog: bbt delay 10000\n" \
-"11758 2016-12-09 11:34:17 +0100 stage: fix for broadcasting a loco event -> changed to a loco command\n" \
-"11757 2016-12-08 11:20:23 +0100 modplan: check for already existing IDs\n" \
 
 "log end";
