@@ -20,7 +20,7 @@
 #include <arpa/inet.h>
 #include <ftdi.h>
 
-#define BAUDRATE	(4096)
+#define BAUDRATE	(65536)
 #define S88_DEF_BITS	60
 #define FIFO_SIZE	256
 #define UDP_PORT	15731
