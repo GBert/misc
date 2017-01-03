@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2016 Darron Broad
+ * Copyright (C) 2005-2017 Darron Broad
  * Copyright (C) 2016 Gerhard Bertelsmann
  * All rights reserved.
  *
@@ -23,7 +23,7 @@
 /*
  * Shadow output
  */
-static uint8_t pin_latch = 0, pin_mask = 0xFF;
+static uint8_t pin_latch = 0, pin_ddr = 0;
 
 /*
  * FTDI handle
@@ -38,7 +38,7 @@ static uint8_t buffer[FTDI_BB_MAX_BITS_TRANSFER * 2];
 /*
  * Configuration
  */
-static uint8_t clock_pin, data_pin_input, data_pin_output, clock_falling, msb_first;
+static uint8_t clock_pin, data_pin_input, data_pin_output, msb_first;
 
 int
 ftdi_bb_open(const char *usb_serial)
@@ -68,9 +68,9 @@ ftdi_bb_open(const char *usb_serial)
 	}
 
 	/* All input */
-	pin_mask = 0;
+	pin_ddr = 0;
 
-	if (ftdi_set_bitmode(&handle, pin_mask, BITMODE_SYNCBB) < 0) {
+	if (ftdi_set_bitmode(&handle, pin_ddr, BITMODE_SYNCBB) < 0) {
 		printf("%s: can't enable bitbang mode [%s]\n", __func__,
 			ftdi_get_error_string(&handle));
 		return -1;
@@ -103,7 +103,6 @@ ftdi_bb_configure(struct ftdi_bb_config *config)
 {
 #ifdef __linux
 	clock_pin = config->clock_pin;
-	clock_falling = config->clock_falling;
 	data_pin_input = config->data_pin_input;
 	data_pin_output = config->data_pin_output;
 	msb_first = config->msb_first;
@@ -118,20 +117,20 @@ int
 ftdi_bb_io(struct ftdi_bb_io *io)
 {
 #ifdef __linux
-	uint8_t old_mask = pin_mask, pin_port;
+	uint8_t old_ddr = pin_ddr, pin_port;
 
 	if (io->dir) {	/* In */
-		pin_mask &= ~(1 << io->pin);
+		pin_ddr &= ~(1 << io->pin);
 	} else {	/* Out */
-		pin_mask |= (1 << io->pin);
+		pin_ddr |= (1 << io->pin);
 		if (io->bit)	/* Set */
 			pin_latch |= (1 << io->pin);
 		else		/* Reset */
 			pin_latch &= ~(1 << io->pin);
 	}
 
-	if (pin_mask != old_mask) {
-		if (ftdi_set_bitmode(&handle, pin_mask, BITMODE_SYNCBB) < 0) {
+	if (pin_ddr != old_ddr) {
+		if (ftdi_set_bitmode(&handle, pin_ddr, BITMODE_SYNCBB) < 0) {
 			printf("%s: ftdi_set_bimode failed [%s]\n", __func__,
 				ftdi_get_error_string(&handle));
 			return -1;
@@ -163,17 +162,17 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 {
 #ifdef __linux
 	uint32_t index = 0;
-	uint8_t old_mask, offset;
+	uint8_t old_ddr, offset;
 	uint64_t value, value_mask;
 
 	if (data_pin_input == data_pin_output) {
-		old_mask = pin_mask;
+		old_ddr = pin_ddr;
 		if (shift->dir) /* In */
-			pin_mask &= ~(1 << data_pin_input);
+			pin_ddr &= ~(1 << data_pin_input);
 		else		/* Out */
-			pin_mask |= (1 << data_pin_input);
-		if (pin_mask != old_mask) {
-			if (ftdi_set_bitmode(&handle, pin_mask, BITMODE_SYNCBB) < 0) {
+			pin_ddr |= (1 << data_pin_input);
+		if (pin_ddr != old_ddr) {
+			if (ftdi_set_bitmode(&handle, pin_ddr, BITMODE_SYNCBB) < 0) {
 				printf("%s: ftdi_set_bimode failed [%s]\n", __func__,
 					ftdi_get_error_string(&handle));
 				return -1;
