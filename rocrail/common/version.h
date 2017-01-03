@@ -1,9 +1,20 @@
 const int revisionnr = 
-11815
+11826
 ;
 const char* commithash = 
-"b441a3d1914520d7fdd9c493523e1225fc9076ce";
+"cf500bb74806f139e20b7b0a8512c75a8bcdbbab";
 const char* revlog = 
+"11826 2017-01-03 12:21:35 +0100 milight: response evaluation added\n" \
+"11825 2017-01-03 11:51:01 +0100 milight: link command at power on\n" \
+"11824 2017-01-03 11:03:50 +0100 colorutils: fix for RGBtoHSL\n" \
+"11823 2017-01-03 10:00:05 +0100 milight: added byte tracing\n" \
+"11822 2017-01-03 09:52:45 +0100 milight: color support added\n" \
+"11821 2017-01-03 09:16:34 +0100 throttletooltip option added\n" \
+"11820 2017-01-02 15:24:49 +0100 loc: do not set rdate in case running virtual\n" \
+"11819 2017-01-02 15:16:08 +0100 colorutils: added RGBtoHSL and HSLtoMiLight functions\n" \
+"11818 2017-01-02 12:01:31 +0100 cardlg: added code column\n" \
+"11817 2017-01-02 10:30:12 +0100 milight: keep alive thread added\n" \
+"11816 2017-01-02 09:22:24 +0100 translation merge: sv, pl, en_GB, de, nl\n" \
 "11815 2017-01-01 16:27:02 +0100 milight: query bridges V5 added\n" \
 "11814 2017-01-01 16:16:05 +0100 milight: set broadcast socket option for searching bridges\n" \
 "11813 2017-01-01 15:46:29 +0100 milight: query bridges added\n" \
@@ -43,16 +54,5 @@ const char* revlog =
 "11779 2016-12-18 14:28:55 +0100 locdialog: speed error popup extended\n" \
 "11778 2016-12-18 08:45:17 +0100 dccpp: trace extended for wrong addressing\n" \
 "11777 2016-12-18 07:31:36 +0100 loc: Vvar for automobile engine type only\n" \
-"11776 2016-12-17 16:37:19 +0100 app: tracelevel fix for calc and find\n" \
-"11775 2016-12-17 07:52:43 +0100 SBB-L-Signals: 4 and 5 aspect signals added from Andy\n" \
-"11774 2016-12-17 07:17:53 +0100 dccpp: fix for getting accessory output ID\n" \
-"11773 2016-12-17 07:07:20 +0100 signal: set ID for output commands (dccpp)\n" \
-"11772 2016-12-15 21:27:58 +0100 app: only check access of the protocol path if its length > 0\n" \
-"11771 2016-12-15 09:00:27 +0100 dccpp: fix for double used ID's\n" \
-"11770 2016-12-14 11:04:15 +0100 blockgroupingdlg: added the <> buttons\n" \
-"11769 2016-12-14 08:31:54 +0100 trace level find option added\n" \
-"11768 2016-12-13 19:21:02 +0100 blockgroupingdlg: fix for crash on condition add without a selection\n" \
-"11767 2016-12-13 15:46:14 +0100 xmlscript: set also the variable value\n" \
-"11766 2016-12-13 12:18:12 +0100 xmlscript: query function added\n" \
 
 "log end";
