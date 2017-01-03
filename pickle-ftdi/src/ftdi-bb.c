@@ -33,7 +33,7 @@ static struct ftdi_context handle = {0};
 /*
  * I/O buffer
  */
-static uint8_t buffer[FTDI_BB_MAX_BITS_TRANSFER * 4];
+static uint8_t buffer[FTDI_BB_MAX_BITS_TRANSFER * 2];
 
 /*
  * Configuration
@@ -67,8 +67,8 @@ ftdi_bb_open(const char *usb_serial)
 		}
 	}
 
-	/* All output */
-	pin_mask = 0xFF;
+	/* All input */
+	pin_mask = 0;
 
 	if (ftdi_set_bitmode(&handle, pin_mask, BITMODE_SYNCBB) < 0) {
 		printf("%s: can't enable bitbang mode [%s]\n", __func__,
@@ -163,7 +163,7 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 {
 #ifdef __linux
 	uint32_t index = 0;
-	uint8_t old_mask;
+	uint8_t old_mask, offset;
 	uint64_t value, value_mask;
 
 	if (data_pin_input == data_pin_output) {
@@ -181,8 +181,9 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 		}
 	}
 
-	bzero(buffer, FTDI_BB_MAX_BITS_TRANSFER * 4);
+	bzero(buffer, FTDI_BB_MAX_BITS_TRANSFER * 2);
 	value = shift->bits;
+
 	value_mask = (msb_first) ? (1U << (shift->nbits - 1)) : (1 << 0);
 	for (int i = 0; i < shift->nbits; ++i) {
 		if (!shift->dir) {	/* Out */
@@ -193,12 +194,15 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 		}
 		pin_latch |= (1 << clock_pin);
 		buffer[index++] = pin_latch;
-		buffer[index++] = pin_latch;
 		pin_latch &= ~(1 << clock_pin);
-		buffer[index++] = pin_latch;
 		buffer[index++] = pin_latch;
 		value_mask = (msb_first) ? (value_mask >> 1) : (value_mask << 1);
 	}
+
+	/* set data pin to low */
+	pin_latch &= ~(1 << data_pin_output);
+	buffer[index++] = pin_latch;
+	buffer[index++] = pin_latch;
 
 	if ((ftdi_write_data(&handle, buffer, index)) < 0) {
 		printf("%s: ftdi_write_error [%s]\n", __func__,
@@ -214,15 +218,17 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 
 	if (shift->dir) { /* In */
 		value = 0;
+		/* sometimes there is an offset of one scan cycle */
+		/* this is true when the clock pin is read as one */
+		offset = (buffer[1] & (1 << clock_pin)) ? 1 : 2;
 		value_mask = (msb_first) ? (1U << (shift->nbits - 1)) : (1 << 0);
 		for (int i = 0; i < shift->nbits; ++i) {
-			if (buffer[i * 4 + 2] & (1 << data_pin_input))
+			if (buffer[i * 2 + offset] & (1 << data_pin_input))
 				value |= value_mask;
 			value_mask = (msb_first) ? (value_mask >> 1) : (value_mask << 1);
 		}
 		shift->bits = value;
 	}
-
 	return 1;
 #else
 	return -1;
