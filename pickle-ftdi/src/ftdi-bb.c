@@ -40,6 +40,16 @@ static uint8_t buffer[FTDI_BB_MAX_BITS_TRANSFER * 2];
  */
 static uint8_t clock_pin, data_pin_input, data_pin_output, msb_first;
 
+void
+print_buffer(uint8_t *buffer, int len)
+{
+	for (int i = 0; i < len; i++) {
+		printf("%02x ", buffer[i]);
+		if ( ((i+1) % 16 ) == 0)
+			printf("\n");
+	}
+}
+
 int
 ftdi_bb_open(const char *usb_serial)
 {
@@ -119,6 +129,8 @@ ftdi_bb_io(struct ftdi_bb_io *io)
 #ifdef __linux
 	uint8_t old_ddr = pin_ddr, pin_port;
 
+	printf("%s: io.dir %d iobit %d\n", __func__, io->dir, io->bit);
+
 	if (io->dir) {	/* In */
 		pin_ddr &= ~(1 << io->pin);
 	} else {	/* Out */
@@ -165,6 +177,8 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 	uint8_t old_ddr, offset;
 	uint64_t value, value_mask;
 
+	printf("%s: shift->nbits %d\n", __func__, shift->nbits);
+
 	if (data_pin_input == data_pin_output) {
 		old_ddr = pin_ddr;
 		if (shift->dir) /* In */
@@ -200,6 +214,7 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 
 	/* set data pin to low */
 	pin_latch &= ~(1 << data_pin_output);
+	pin_latch &= ~(1 << clock_pin);
 	buffer[index++] = pin_latch;
 	buffer[index++] = pin_latch;
 
@@ -215,6 +230,9 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 		return -1;
 	}
 
+	print_buffer(buffer, index);
+	printf("\n");
+
 	if (shift->dir) { /* In */
 		value = 0;
 		/* sometimes there is an offset of one scan cycle */
@@ -226,8 +244,14 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 				value |= value_mask;
 			value_mask = (msb_first) ? (value_mask >> 1) : (value_mask << 1);
 		}
+		print_buffer(buffer, index);
+		printf("\n%s: mask 0x%02x bits %2d out 0x%016lx", __func__, pin_ddr, shift->nbits, shift->bits);
 		shift->bits = value;
+		printf(" in 0x%016lx\n", value);
+	} else {
+		printf("%s: mask 0x%02x bits %2d out 0x%016lx\n", __func__, pin_ddr, shift->nbits, shift->bits);
 	}
+	printf("\n");
 	return 1;
 #else
 	return -1;

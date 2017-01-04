@@ -39,7 +39,7 @@ BITBANG=1
 FTDI=1
 
 # gdb else strip (gdb:1 strip:0)
-GDB=0
+GDB=1
 
 # output verbose config (enable:1 disable:0)
 VERBOSE=1
