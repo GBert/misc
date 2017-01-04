@@ -823,12 +823,10 @@ pic24_standby(void)
 static inline void
 pic24_six(uint32_t data, uint8_t nops)
 {
-	io_program_out(0x0, 4);		/* SIX        */
+	io_program_out(0x0, 4);		/* SIX */
 	io_program_out(data, 24);
-	while (nops) {
-		io_program_out(0, 28);	/* NOP [,NOP] */
-		--nops;
-	}
+	while (nops--)
+		io_program_out(0, 28);	/* NOP */
 }
 
 /*

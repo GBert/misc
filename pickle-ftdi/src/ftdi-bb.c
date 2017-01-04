@@ -174,7 +174,7 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 {
 #ifdef __linux
 	uint32_t index = 0;
-	uint8_t old_ddr, offset;
+	uint8_t old_ddr;
 	uint64_t value, value_mask;
 
 	printf("%s: shift->nbits %d\n", __func__, shift->nbits);
@@ -205,7 +205,9 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 			else			/* Reset */
 				pin_latch &= ~(1 << data_pin_output);
 		}
+		buffer[index++] = pin_latch;
 		pin_latch |= (1 << clock_pin);
+		buffer[index++] = pin_latch;
 		buffer[index++] = pin_latch;
 		pin_latch &= ~(1 << clock_pin);
 		buffer[index++] = pin_latch;
@@ -235,12 +237,9 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 
 	if (shift->dir) { /* In */
 		value = 0;
-		/* sometimes there is an offset of one scan cycle */
-		/* this is true when the clock pin is read as one */
-		offset = (buffer[1] & (1 << clock_pin)) ? 1 : 2;
 		value_mask = (msb_first) ? (1U << (shift->nbits - 1)) : (1 << 0);
 		for (int i = 0; i < shift->nbits; ++i) {
-			if (buffer[i * 2 + offset] & (1 << data_pin_input))
+			if (buffer[i * 4 + 2] & (1 << data_pin_input))
 				value |= value_mask;
 			value_mask = (msb_first) ? (value_mask >> 1) : (value_mask << 1);
 		}
