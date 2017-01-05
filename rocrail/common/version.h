@@ -1,9 +1,15 @@
 const int revisionnr = 
-11826
+11832
 ;
 const char* commithash = 
-"cf500bb74806f139e20b7b0a8512c75a8bcdbbab";
+"e58e2c2d0b052ef3f821b2a85cd8b9d6b0e25f1e";
 const char* revlog = 
+"11832 2017-01-05 09:53:28 +0100 milight: V5\n" \
+"11831 2017-01-04 14:55:48 +0100 dccpp: trace warning if dccpp respond with an X\n" \
+"11830 2017-01-04 12:17:54 +0100 ledbutton: reject disable\n" \
+"11829 2017-01-04 09:33:34 +0100 locdialog: bbt interval changed to deceleration time\n" \
+"11828 2017-01-04 09:04:29 +0100 dccpp: changed trace level to byte in evaluate message function\n" \
+"11827 2017-01-04 08:46:17 +0100 basedlg: uid column added\n" \
 "11826 2017-01-03 12:21:35 +0100 milight: response evaluation added\n" \
 "11825 2017-01-03 11:51:01 +0100 milight: link command at power on\n" \
 "11824 2017-01-03 11:03:50 +0100 colorutils: fix for RGBtoHSL\n" \
@@ -48,11 +54,5 @@ const char* revlog =
 "11785 2016-12-22 16:52:03 +0100 app: command line help correction\n" \
 "11784 2016-12-22 08:08:49 +0100 zimobin: set f0 in funcmd response\n" \
 "11783 2016-12-20 17:09:34 +0100 dccpp: fix for output as accessory -> use gate\n" \
-"11782 2016-12-18 18:10:13 +0100 trace level corrections\n" \
-"11781 2016-12-18 18:09:13 +0100 loc: broadcast blockid to zero string in case not set\n" \
-"11780 2016-12-18 14:29:59 +0100 locdialog: speed error popup extended\n" \
-"11779 2016-12-18 14:28:55 +0100 locdialog: speed error popup extended\n" \
-"11778 2016-12-18 08:45:17 +0100 dccpp: trace extended for wrong addressing\n" \
-"11777 2016-12-18 07:31:36 +0100 loc: Vvar for automobile engine type only\n" \
 
 "log end";
