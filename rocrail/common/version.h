@@ -1,9 +1,12 @@
 const int revisionnr = 
-11832
+11835
 ;
 const char* commithash = 
-"e58e2c2d0b052ef3f821b2a85cd8b9d6b0e25f1e";
+"6dafa0f46ff653361d7a0ef662e423933a0cfa5d";
 const char* revlog = 
+"11835 2017-01-06 13:20:02 +0100 rocweb: support for outoforder and staticuse\n" \
+"11834 2017-01-06 11:10:11 +0100 model: fix for trying to delete none regular files\n" \
+"11833 2017-01-06 08:40:21 +0100 item: show static switch with orange background color\n" \
 "11832 2017-01-05 09:53:28 +0100 milight: V5\n" \
 "11831 2017-01-04 14:55:48 +0100 dccpp: trace warning if dccpp respond with an X\n" \
 "11830 2017-01-04 12:17:54 +0100 ledbutton: reject disable\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "11788 2016-12-24 14:29:14 +0100 issuedlg: trace level corrections\n" \
 "11787 2016-12-24 06:31:29 +0100 idle: crash fix\n" \
 "11786 2016-12-23 08:25:59 +0100 app: fix for trace actions\n" \
-"11785 2016-12-22 16:52:03 +0100 app: command line help correction\n" \
-"11784 2016-12-22 08:08:49 +0100 zimobin: set f0 in funcmd response\n" \
-"11783 2016-12-20 17:09:34 +0100 dccpp: fix for output as accessory -> use gate\n" \
 
 "log end";
