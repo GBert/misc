@@ -1,9 +1,11 @@
 const int revisionnr = 
-11840
+11842
 ;
 const char* commithash = 
-"714f5d547c4bd987283a3c65286b77cfc8dcdc6c";
+"18fc8c39cc6fd7809ece519f213e45d7579968cb";
 const char* revlog = 
+"11842 2017-01-07 15:47:52 +0100 finder: fix for initialising location map\n" \
+"11841 2017-01-07 13:42:21 +0100 action: fix for goto freeing up the varval too soon\n" \
 "11840 2017-01-07 11:12:03 +0100 action: crash fix for sensor action and string tokeniser\n" \
 "11839 2017-01-07 08:50:30 +0100 model: removed reset of flag resetspfx\n" \
 "11838 2017-01-07 06:59:04 +0100 renderer: crash fix in case text > 256 and includes a pipe sign\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11795 2016-12-28 08:35:15 +0100 stagedlg: layout correction\n" \
 "11794 2016-12-28 08:20:42 +0100 block: era permission option added\n" \
 "11793 2016-12-28 06:57:23 +0100 route: skip checking permission for cleaning type\n" \
-"11792 2016-12-26 14:36:09 +0100 loc: remove command delay for consist locos\n" \
-"11791 2016-12-26 14:07:39 +0100 throttledlg: fix for get icon on none UTF-8 systems\n" \
 
 "log end";
