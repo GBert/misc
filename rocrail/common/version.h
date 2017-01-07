@@ -1,9 +1,14 @@
 const int revisionnr = 
-11835
+11840
 ;
 const char* commithash = 
-"6dafa0f46ff653361d7a0ef662e423933a0cfa5d";
+"714f5d547c4bd987283a3c65286b77cfc8dcdc6c";
 const char* revlog = 
+"11840 2017-01-07 11:12:03 +0100 action: crash fix for sensor action and string tokeniser\n" \
+"11839 2017-01-07 08:50:30 +0100 model: removed reset of flag resetspfx\n" \
+"11838 2017-01-07 06:59:04 +0100 renderer: crash fix in case text > 256 and includes a pipe sign\n" \
+"11837 2017-01-07 06:45:55 +0100 block: crash fix if loco on lock is not found\n" \
+"11836 2017-01-07 06:27:19 +0100 stage: inform location at command locoset\n" \
 "11835 2017-01-06 13:20:02 +0100 rocweb: support for outoforder and staticuse\n" \
 "11834 2017-01-06 11:10:11 +0100 model: fix for trying to delete none regular files\n" \
 "11833 2017-01-06 08:40:21 +0100 item: show static switch with orange background color\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "11793 2016-12-28 06:57:23 +0100 route: skip checking permission for cleaning type\n" \
 "11792 2016-12-26 14:36:09 +0100 loc: remove command delay for consist locos\n" \
 "11791 2016-12-26 14:07:39 +0100 throttledlg: fix for get icon on none UTF-8 systems\n" \
-"11790 2016-12-26 07:51:33 +0100 stage: allow cleaning without checking type and era\n" \
-"11789 2016-12-25 09:29:59 +0100 bidib: work around for MSG_CS_ACCESSORY_ACK\n" \
-"11788 2016-12-24 14:29:14 +0100 issuedlg: trace level corrections\n" \
-"11787 2016-12-24 06:31:29 +0100 idle: crash fix\n" \
-"11786 2016-12-23 08:25:59 +0100 app: fix for trace actions\n" \
 
 "log end";
