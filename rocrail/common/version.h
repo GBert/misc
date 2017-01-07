@@ -1,9 +1,11 @@
 const int revisionnr = 
-11842
+11844
 ;
 const char* commithash = 
-"18fc8c39cc6fd7809ece519f213e45d7579968cb";
+"46aaee962978af2c792fa95b9db041096a6daf88";
 const char* revlog = 
+"11844 2017-01-07 17:12:14 +0100 var: poiter support for value added\n" \
+"11843 2017-01-07 16:34:37 +0100 loconet: packetsize crash fix\n" \
 "11842 2017-01-07 15:47:52 +0100 finder: fix for initialising location map\n" \
 "11841 2017-01-07 13:42:21 +0100 action: fix for goto freeing up the varval too soon\n" \
 "11840 2017-01-07 11:12:03 +0100 action: crash fix for sensor action and string tokeniser\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11797 2016-12-29 08:42:45 +0100 milight: skeleton created\n" \
 "11796 2016-12-28 13:16:27 +0100 xmlscript: fix for %iod% in query\n" \
 "11795 2016-12-28 08:35:15 +0100 stagedlg: layout correction\n" \
-"11794 2016-12-28 08:20:42 +0100 block: era permission option added\n" \
-"11793 2016-12-28 06:57:23 +0100 route: skip checking permission for cleaning type\n" \
 
 "log end";
