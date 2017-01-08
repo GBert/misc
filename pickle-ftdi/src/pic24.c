@@ -661,6 +661,7 @@ struct pic24_dstab pic24_tab[] =
 void
 pic24_program_verify(void)
 {
+	uint8_t nops = pic24_conf.gotonop;
 	/* RESET & ACQUIRE GPIO */
 	io_set_vpp(LOW);
 	/* DS39768D    PIC24FJ64GA002    P6(100ns) */
@@ -727,7 +728,9 @@ pic24_program_verify(void)
 		/* DS39768D-page 13 PIC24FJ64GA002 */
 		/* NOP (5)              */
 		/* NOP (28) [,NOP, NOP] */
-		io_program_out(0, 5 + pic24_conf.gotonop * 28);
+		io_program_out(0, 5);
+		while (nops--)
+			io_program_out(0, 28);
 
 		/* GOTO 200, NOP [,NOP, NOP] */
 		pic24_goto200();
