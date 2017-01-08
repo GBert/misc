@@ -56,6 +56,12 @@ define Package/can2udp/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 #	$(INSTALL_BIN) ./files/can2lan.init_carambola $(1)/etc/init.d/can2lan
 	$(INSTALL_BIN) ./files/can2lan.init $(1)/etc/init.d/can2lan
+ifneq (,$(findstring wr841,$(CONFIG_TARGET_PROFILE)))
+	$(INSTALL_BIN) ./files/can2lan.init_slcan $(1)/etc/init.d/can2lan
+endif
+ifneq (,$(findstring carambola,$(CONFIG_TARGET_PROFILE)))
+	$(INSTALL_BIN) ./files/can2lan.init_carambola $(1)/etc/init.d/can2lan
+endif
 	$(INSTALL_DIR) $(1)/root
 	$(INSTALL_BIN) ./files/lan-schnitte.init $(1)/root/lan-schnitte
 	$(INSTALL_BIN) ./files/ir.sh $(1)/root/
