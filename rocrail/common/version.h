@@ -1,9 +1,10 @@
 const int revisionnr = 
-11844
+11845
 ;
 const char* commithash = 
-"46aaee962978af2c792fa95b9db041096a6daf88";
+"85b1ad361554c8a9d5de56571a15cf5724c316e7";
 const char* revlog = 
+"11845 2017-01-08 11:58:23 +0100 loc: fix for function state\n" \
 "11844 2017-01-07 17:12:14 +0100 var: poiter support for value added\n" \
 "11843 2017-01-07 16:34:37 +0100 loconet: packetsize crash fix\n" \
 "11842 2017-01-07 15:47:52 +0100 finder: fix for initialising location map\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "11798 2016-12-29 09:07:18 +0100 enter: restrictions removed for routespeedatenter\n" \
 "11797 2016-12-29 08:42:45 +0100 milight: skeleton created\n" \
 "11796 2016-12-28 13:16:27 +0100 xmlscript: fix for %iod% in query\n" \
-"11795 2016-12-28 08:35:15 +0100 stagedlg: layout correction\n" \
 
 "log end";
