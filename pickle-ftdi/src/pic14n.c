@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2016 Darron Broad
+ * Copyright (C) 2005-2017 Darron Broad
  * All rights reserved.
  *
  * This file is part of Pickle Microchip PIC ICSP.
@@ -37,7 +37,7 @@ struct pic_ops pic14n_ops = {
 	.arch				= ARCH14BIT,
 	.align				= sizeof(uint16_t),
 	.selector			= pic14n_selector,
-	.program_begin			= pic14n_program_verify,
+	.program_begin			= pic14n_program_begin,
 	.program_data			= pic14n_program_data,
 	.program_end			= pic14n_program_end,
 	.verify_begin			= pic14n_program_verify,
@@ -92,47 +92,47 @@ struct pic14n_config pic14n_conf;
 
 struct pic14n_dsmap pic14n_map[] =
 {
-/*Device name	Device id	Data-sheet	Flash		 Config		EEProm	Latches	Devinf/con*/
-{"PIC16F18854", PIC16F18854,    DS40001753B,	PIC14N_WORD(7),  5,      	256,	32,	0,0},
-{"PIC16LF18854",PIC16LF18854,   DS40001753B,	PIC14N_WORD(7),  5,      	256,	32,	0,0},
-{"PIC16F18855", PIC16F18855,    DS40001753B,	PIC14N_WORD(14), 5,      	256,	32,	0,0},
-{"PIC16LF18855",PIC16LF18855,   DS40001753B,	PIC14N_WORD(14), 5,      	256,	32,	0,0},
-{"PIC16F18875", PIC16F18875,    DS40001753B,	PIC14N_WORD(14), 5,      	256,	32,	0,0},
-{"PIC16LF18875",PIC16LF18875,   DS40001753B,	PIC14N_WORD(14), 5,      	256,	32,	0,0},
-{"PIC16F18856", PIC16F18856,    DS40001753B,	PIC14N_WORD(28), 5,      	256,	32,	0,0},
-{"PIC16LF18856",PIC16LF18856,   DS40001753B,	PIC14N_WORD(28), 5,      	256,	32,	0,0},
-{"PIC16F18876", PIC16F18876,    DS40001753B,	PIC14N_WORD(28), 5,      	256,	32,	0,0},
-{"PIC16LF18876",PIC16LF18876,   DS40001753B,	PIC14N_WORD(28), 5,      	256,	32,	0,0},
-{"PIC16F18857", PIC16F18857,    DS40001753B,	PIC14N_WORD(56), 5,      	256,	32,	0,0},
-{"PIC16LF18857",PIC16LF18857,   DS40001753B,	PIC14N_WORD(56), 5,      	256,	32,	0,0},
-{"PIC16F18877", PIC16F18877,    DS40001753B,	PIC14N_WORD(56), 5,      	256,	32,	0,0},
-{"PIC16LF18877",PIC16LF18877,   DS40001753B,	PIC14N_WORD(56), 5,      	256,	32,	0,0},
+/*Device name	Device id	Data-sheet	Flash		 Config		EEProm	Latches	Inf/Con/Cal*/
+{"PIC16F18854", PIC16F18854,    DS40001753B,	PIC14N_WORD(7),  5,      	256,	32,	0,0,4},
+{"PIC16LF18854",PIC16LF18854,   DS40001753B,	PIC14N_WORD(7),  5,      	256,	32,	0,0,4},
+{"PIC16F18855", PIC16F18855,    DS40001753B,	PIC14N_WORD(14), 5,      	256,	32,	0,0,4},
+{"PIC16LF18855",PIC16LF18855,   DS40001753B,	PIC14N_WORD(14), 5,      	256,	32,	0,0,4},
+{"PIC16F18875", PIC16F18875,    DS40001753B,	PIC14N_WORD(14), 5,      	256,	32,	0,0,4},
+{"PIC16LF18875",PIC16LF18875,   DS40001753B,	PIC14N_WORD(14), 5,      	256,	32,	0,0,4},
+{"PIC16F18856", PIC16F18856,    DS40001753B,	PIC14N_WORD(28), 5,      	256,	32,	0,0,4},
+{"PIC16LF18856",PIC16LF18856,   DS40001753B,	PIC14N_WORD(28), 5,      	256,	32,	0,0,4},
+{"PIC16F18876", PIC16F18876,    DS40001753B,	PIC14N_WORD(28), 5,      	256,	32,	0,0,4},
+{"PIC16LF18876",PIC16LF18876,   DS40001753B,	PIC14N_WORD(28), 5,      	256,	32,	0,0,4},
+{"PIC16F18857", PIC16F18857,    DS40001753B,	PIC14N_WORD(56), 5,      	256,	32,	0,0,4},
+{"PIC16LF18857",PIC16LF18857,   DS40001753B,	PIC14N_WORD(56), 5,      	256,	32,	0,0,4},
+{"PIC16F18877", PIC16F18877,    DS40001753B,	PIC14N_WORD(56), 5,      	256,	32,	0,0,4},
+{"PIC16LF18877",PIC16LF18877,   DS40001753B,	PIC14N_WORD(56), 5,      	256,	32,	0,0,4},
 
-{"PIC16F15313", PIC16F15313,    DS40001838B,	PIC14N_WORD(3.5),5,      	0,	32,	32,5},
-{"PIC16LF15313",PIC16LF15313,   DS40001838B,	PIC14N_WORD(3.5),5,      	0,	32,	32,5},
-{"PIC16F15323", PIC16F15323,    DS40001838B,	PIC14N_WORD(3.5),5,      	0,	32,	32,5},
-{"PIC16LF15323",PIC16LF15323,   DS40001838B,	PIC14N_WORD(3.5),5,      	0,	32,	32,5},
-{"PIC16F15324", PIC16F15324,    DS40001838B,	PIC14N_WORD(7),  5,      	0,	32,	32,5},
-{"PIC16LF15324",PIC16LF15324,   DS40001838B,	PIC14N_WORD(7),  5,      	0,	32,	32,5},
-{"PIC16F15344", PIC16F15344,    DS40001838B,	PIC14N_WORD(7),  5,      	0,	32,	32,5},
-{"PIC16LF15344",PIC16LF15344,   DS40001838B,	PIC14N_WORD(7),  5,      	0,	32,	32,5},
-{"PIC16F15325", PIC16F15325,    DS40001838B,	PIC14N_WORD(14), 5,      	0,	32,	32,5},
-{"PIC16LF15325",PIC16LF15325,   DS40001838B,	PIC14N_WORD(14), 5,      	0,	32,	32,5},
-{"PIC16F15345", PIC16F15345,    DS40001838B,	PIC14N_WORD(14), 5,      	0,	32,	32,5},
-{"PIC16LF15345",PIC16LF15345,   DS40001838B,	PIC14N_WORD(14), 5,      	0,	32,	32,5},
-{"PIC16F15354", PIC16F15354,    DS40001838B,	PIC14N_WORD(7),  5,      	0,	32,	32,5},
-{"PIC16LF15354",PIC16LF15354,   DS40001838B,	PIC14N_WORD(7),  5,      	0,	32,	32,5},
-{"PIC16F15355", PIC16F15355,    DS40001838B,	PIC14N_WORD(14), 5,      	0,	32,	32,5},
-{"PIC16LF15355",PIC16LF15355,   DS40001838B,	PIC14N_WORD(14), 5,      	0,	32,	32,5},
-{"PIC16F15356", PIC16F15356,    DS40001838B,	PIC14N_WORD(28), 5,      	0,	32,	32,5},
-{"PIC16LF15356",PIC16LF15356,   DS40001838B,	PIC14N_WORD(28), 5,      	0,	32,	32,5},
-{"PIC16F15375", PIC16F15375,    DS40001838B,	PIC14N_WORD(14), 5,      	0,	32,	32,5},
-{"PIC16LF15375",PIC16LF15375,   DS40001838B,	PIC14N_WORD(14), 5,      	0,	32,	32,5},
-{"PIC16F15376", PIC16F15376,    DS40001838B,	PIC14N_WORD(28), 5,      	0,	32,	32,5},
-{"PIC16LF15376",PIC16LF15376,   DS40001838B,	PIC14N_WORD(28), 5,      	0,	32,	32,5},
+{"PIC16F15313", PIC16F15313,    DS40001838B,	PIC14N_WORD(3.5),5,      	0,	32,	32,5,4},
+{"PIC16LF15313",PIC16LF15313,   DS40001838B,	PIC14N_WORD(3.5),5,      	0,	32,	32,5,4},
+{"PIC16F15323", PIC16F15323,    DS40001838B,	PIC14N_WORD(3.5),5,      	0,	32,	32,5,4},
+{"PIC16LF15323",PIC16LF15323,   DS40001838B,	PIC14N_WORD(3.5),5,      	0,	32,	32,5,4},
+{"PIC16F15324", PIC16F15324,    DS40001838B,	PIC14N_WORD(7),  5,      	0,	32,	32,5,4},
+{"PIC16LF15324",PIC16LF15324,   DS40001838B,	PIC14N_WORD(7),  5,      	0,	32,	32,5,4},
+{"PIC16F15344", PIC16F15344,    DS40001838B,	PIC14N_WORD(7),  5,      	0,	32,	32,5,4},
+{"PIC16LF15344",PIC16LF15344,   DS40001838B,	PIC14N_WORD(7),  5,      	0,	32,	32,5,4},
+{"PIC16F15325", PIC16F15325,    DS40001838B,	PIC14N_WORD(14), 5,      	0,	32,	32,5,4},
+{"PIC16LF15325",PIC16LF15325,   DS40001838B,	PIC14N_WORD(14), 5,      	0,	32,	32,5,4},
+{"PIC16F15345", PIC16F15345,    DS40001838B,	PIC14N_WORD(14), 5,      	0,	32,	32,5,4},
+{"PIC16LF15345",PIC16LF15345,   DS40001838B,	PIC14N_WORD(14), 5,      	0,	32,	32,5,4},
+{"PIC16F15354", PIC16F15354,    DS40001838B,	PIC14N_WORD(7),  5,      	0,	32,	32,5,4},
+{"PIC16LF15354",PIC16LF15354,   DS40001838B,	PIC14N_WORD(7),  5,      	0,	32,	32,5,4},
+{"PIC16F15355", PIC16F15355,    DS40001838B,	PIC14N_WORD(14), 5,      	0,	32,	32,5,4},
+{"PIC16LF15355",PIC16LF15355,   DS40001838B,	PIC14N_WORD(14), 5,      	0,	32,	32,5,4},
+{"PIC16F15356", PIC16F15356,    DS40001838B,	PIC14N_WORD(28), 5,      	0,	32,	32,5,4},
+{"PIC16LF15356",PIC16LF15356,   DS40001838B,	PIC14N_WORD(28), 5,      	0,	32,	32,5,4},
+{"PIC16F15375", PIC16F15375,    DS40001838B,	PIC14N_WORD(14), 5,      	0,	32,	32,5,4},
+{"PIC16LF15375",PIC16LF15375,   DS40001838B,	PIC14N_WORD(14), 5,      	0,	32,	32,5,4},
+{"PIC16F15376", PIC16F15376,    DS40001838B,	PIC14N_WORD(28), 5,      	0,	32,	32,5,4},
+{"PIC16LF15376",PIC16LF15376,   DS40001838B,	PIC14N_WORD(28), 5,      	0,	32,	32,5,4},
 
-{"(null)",      0,              0,              0,               0,             0,      0,      0,0},
-/*Device name	Device id	Data-sheet	Flash		 Config		EEProm	Latches	Devinf/con*/
+{"(null)",      0,              0,              0,               0,             0,      0,      0,0,0},
+/*Device name	Device id	Data-sheet	Flash		 Config		EEProm	Latches	Inf/Con/Cal*/
 };
 #define PIC14N_SIZE ((sizeof(pic14n_map) / sizeof(struct pic14n_dsmap)) - 1)
 
@@ -480,18 +480,25 @@ pic14n_read_config_memory(void)
 	for (uint32_t i = 0; i < pic14n_map[pic14n_index].config; ++i)
 		pic14n_conf.config[i] = pic14n_read_data_from_nvm(1);
 
-	/* Device information area (calibration) */
+	/* Device information area */
 	if (pic14n_map[pic14n_index].devinfo) {
 		pic14n_load_pc_address(PIC14N_DEVINFO_ADDR);
 		for (uint32_t i = 0; i < pic14n_map[pic14n_index].devinfo; ++i)
 			pic14n_conf.devinfo[i] = pic14n_read_data_from_nvm(1);
 	}
 
-	/* Device configuration information (charateristics) */
+	/* Device configuration information */
 	if (pic14n_map[pic14n_index].devconf) {
 		pic14n_load_pc_address(PIC14N_DEVCONF_ADDR);
 		for (uint32_t i = 0; i < pic14n_map[pic14n_index].devconf; ++i)
 			pic14n_conf.devconf[i] = pic14n_read_data_from_nvm(1);
+	}
+
+	/* Device calibration */
+	if (pic14n_map[pic14n_index].calib) {
+		pic14n_load_pc_address(PIC14N_CALIB_ADDR);
+		for (uint32_t i = 0; i < pic14n_map[pic14n_index].calib; ++i)
+			pic14n_conf.calib[i] = pic14n_read_data_from_nvm(1);
 	}
 
 	pic14n_standby();
@@ -569,7 +576,7 @@ pic14n_read_data_memory_block(uint16_t *data, uint32_t addr, uint16_t size)
 
 /*****************************************************************************
  *
- * Program Code/Data Panel
+ * Program Code Panel
  *
  *****************************************************************************/
 
@@ -584,6 +591,24 @@ pic14n_write_panel(uint32_t region, uint32_t address, uint32_t *panel, uint32_t 
 
 	pic14n_load_pc_address(address);
 	pic14n_begin_internally_timed_programming(PIC14N_TPINT_CODE);
+}
+
+/*****************************************************************************
+ *
+ * Program Data/EEPROM
+ *
+ *****************************************************************************/
+
+/*
+ * WRITE Data/EEPROM BYTE
+ */
+static inline
+void
+pic14n_write_data_memory(uint32_t address, uint8_t data)
+{
+	pic14n_load_pc_address(address);
+	pic14n_load_data_for_nvm(data, 0);
+	pic14n_begin_internally_timed_programming(PIC16N_TPINT_CONFIG);
 }
 
 /*****************************************************************************
@@ -668,14 +693,14 @@ pic14n_write_config(void)
  *      0xF000 .. 0xFXXX
  */
 uint16_t
-pic14n_getregion(uint16_t address)
+pic14n_getregion(uint32_t address)
 {
 	/* CODE */
 	if (address < pic14n_map[pic14n_index].flash) {
 		return PIC_REGIONCODE;
 	}
 	/* ID */
-	if (address >= PIC14N_USERID_ADDR && address < PIC14N_USERID_ADDR + 4) {
+	if (address >= PIC14N_USERID_ADDR && address < (PIC14N_USERID_ADDR + PIC14N_USERID_MAX)) {
 		return PIC_REGIONID;
 	}
 	/* CONFIG */
@@ -683,7 +708,7 @@ pic14n_getregion(uint16_t address)
 	if (address >= PIC14N_CONFIG_ADDR && address < config_high) {
 		return PIC_REGIONCONFIG;
 	}
-	/* EEPROM */
+	/* DATA EEPROM */
 	if (pic14n_map[pic14n_index].eeprom) {
 		uint16_t data_high = PIC14N_EEPROM_ADDR + pic14n_map[pic14n_index].eeprom;
 		if (address >= PIC14N_EEPROM_ADDR && address < data_high)
@@ -709,6 +734,7 @@ pic14n_init_writeregion(uint32_t region)
 		/* Follow through */
 	case PIC_REGIONID:
 	case PIC_REGIONCONFIG:
+	case PIC_REGIONDATA:
 		return region;
 	}
 	if (p.f)
@@ -724,7 +750,6 @@ pic14n_writeregion(uint32_t address, uint32_t region, uint16_t data)
 {
 	switch (region) {
 	case PIC_REGIONCODE:
-	case PIC_REGIONDATA:
 		pic_write_panel(PIC_PANEL_UPDATE, address, data);
 		return;
 	case PIC_REGIONID:
@@ -732,6 +757,9 @@ pic14n_writeregion(uint32_t address, uint32_t region, uint16_t data)
 		return;
 	case PIC_REGIONCONFIG:
 		pic14n_conf.config[address - PIC14N_CONFIG_ADDR] = data;
+		return;
+	case PIC_REGIONDATA:
+		pic14n_write_data_memory(address, data);
 		return;
 	}
 	if (p.f)
@@ -749,8 +777,8 @@ pic14n_init_verifyregion(uint32_t region)
 	switch (region) {
 	case PIC_REGIONCODE:
 	case PIC_REGIONID:
-	case PIC_REGIONDATA:
 	case PIC_REGIONCONFIG:
+	case PIC_REGIONDATA:
 		/* Nothing to do on PIC14 new */
 		return region;
 	}
@@ -790,6 +818,18 @@ pic14n_verifyregion(uint32_t address, uint32_t region, uint16_t index, uint16_t 
  * Program & verify
  *
  *****************************************************************************/
+
+/*
+ * BEGIN PROGRAMMING
+ */
+void
+pic14n_program_begin(void)
+{
+	pic14n_program_verify();
+
+	memset(pic14n_conf.userid, -1, sizeof(uint16_t) * PIC14N_USERID_MAX);
+	memset(pic14n_conf.config, -1, sizeof(uint16_t) * PIC14N_CONFIG_MAX);
+}
 
 /*
  * PROGRAM DATA
@@ -852,7 +892,7 @@ pic14n_verify_data(uint32_t current_region, pic_data *pdata, uint32_t *fail)
 		if (vdata != wdata) {
 			pdata->bytes[i] = vdata;
 			pdata->bytes[i + 1] = vdata >> 8;
-			(*fail)++;
+			(*fail) += 2;
 		}
 	}
 	return current_region;
@@ -906,7 +946,7 @@ pic14n_dumpdeviceid(void)
 
 	pic14n_dumpconfig(PIC_BRIEF);
 
-	/* Device information area (calibration) */
+	/* Device information area */
 	if (pic14n_map[pic14n_index].devinfo) {
 		for (uint32_t i = 0; i < pic14n_map[pic14n_index].devinfo; i += 8) {
 			printf("[%04X] [DEVINF%02X] ", PIC14N_DEVINFO_ADDR + i, i);
@@ -917,13 +957,21 @@ pic14n_dumpdeviceid(void)
 		}
 	}
 
-	/* Device configuration information (characteristics) */
+	/* Device configuration information */
 	if (pic14n_map[pic14n_index].devconf) {
 		printf("[%04X] [ERASE]    %04X\n", PIC14N_ERASE, pic14n_conf.devconf[0]);
 		printf("[%04X] [LATCHES]  %04X\n", PIC14N_LATCHES, pic14n_conf.devconf[1]);
 		printf("[%04X] [ROWS]     %04X\n", PIC14N_ROWS, pic14n_conf.devconf[2]);
 		printf("[%04X] [EEPROM]   %04X\n", PIC14N_EEPROM, pic14n_conf.devconf[3]);
 		printf("[%04X] [PINS]     %04X\n", PIC14N_PINS, pic14n_conf.devconf[4]);
+	}
+
+	/* Device calibration */
+	if (pic14n_map[pic14n_index].calib) {
+		for (uint32_t i = 0; i < pic14n_map[pic14n_index].calib; ++i) {
+			printf("[%04X] [CALIB%d]   %04X\n", PIC14N_CALIB_ADDR + i, 1 + i,
+				pic14n_conf.calib[i]);
+		}
 	}
 
 	if (pic14n_map[pic14n_index].eeprom)

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2016 Darron Broad
+ * Copyright (C) 2005-2017 Darron Broad
  * All rights reserved.
  * 
  * This file is part of Pickle Microchip PIC ICSP.
@@ -45,6 +45,7 @@
 #include <fcntl.h>
 #include <limits.h>
 #include <stdint.h>
+#include <assert.h>
 
 #define LOW   (0x00)
 #define HIGH  (0x01)
@@ -90,7 +91,7 @@ struct pickle;
 #include "raspi.h"
 #endif
 #ifdef BPI
-#include "a20.h"
+#include "allwinner.h"
 #endif
 #ifdef MCP23017
 #include "mcp23017.h"
