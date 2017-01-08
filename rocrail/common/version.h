@@ -1,9 +1,11 @@
 const int revisionnr = 
-11845
+11847
 ;
 const char* commithash = 
-"85b1ad361554c8a9d5de56571a15cf5724c316e7";
+"9803521c0a20af97a6e3a0d0a36481aa9ebbcd39";
 const char* revlog = 
+"11847 2017-01-08 19:44:16 +0100 signals: crash fix for trace if the block is not set\n" \
+"11846 2017-01-08 15:43:05 +0100 scheduledialog: from/to hour only disable for absolute time table\n" \
 "11845 2017-01-08 11:58:23 +0100 loc: fix for function state\n" \
 "11844 2017-01-07 17:12:14 +0100 var: poiter support for value added\n" \
 "11843 2017-01-07 16:34:37 +0100 loconet: packetsize crash fix\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11800 2016-12-30 08:22:22 +0100 fix for d&d from the loco table to a block\n" \
 "11799 2016-12-29 20:05:22 +0100 milight: include fix\n" \
 "11798 2016-12-29 09:07:18 +0100 enter: restrictions removed for routespeedatenter\n" \
-"11797 2016-12-29 08:42:45 +0100 milight: skeleton created\n" \
-"11796 2016-12-28 13:16:27 +0100 xmlscript: fix for %iod% in query\n" \
 
 "log end";
