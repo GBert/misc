@@ -827,8 +827,13 @@ pic24_standby(void)
 static inline void
 pic24_six(uint32_t data, uint8_t nops)
 {
-	io_program_out(0x0, 4);		/* SIX */
-	io_program_out(data, 24);
+	io_program_out((data & ARCH24BIT) << 4, 28);	/* SIX */
+	/* optimize for FTDI */
+	while (nops >= 2) {
+		io_program_out(0, 56);	/* 2 NOPs */
+		nops -= 2;
+	}
+	/* any NOPs left ? */
 	while (nops--)
 		io_program_out(0, 28);	/* NOP */
 }

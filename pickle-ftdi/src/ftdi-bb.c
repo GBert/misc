@@ -210,6 +210,12 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 		value_mask = (msb_first) ? (value_mask >> 1) : (value_mask << 1);
 	}
 
+	pin_latch &= ~(1 << clock_pin); /* CLOCK LOW */
+	buffer[index++] = pin_latch;
+	/* set data pin high */
+	pin_latch |= (1 << data_pin_output);
+	buffer[index++] = pin_latch;
+
 	assert(index < FTDI_BB_BUFFER_SIZE);
 
 	if ((ftdi_write_data(&handle, buffer, index)) < 0) {
@@ -228,7 +234,7 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 		value = 0;
 		value_mask = (msb_first) ? (1U << (shift->nbits - 1)) : (1 << 0);
 		for (int i = 0; i < shift->nbits; ++i) {
-			if (buffer[i * 4 + 2] & (1 << data_pin_input))
+			if (buffer[i * 4 + 3] & (1 << data_pin_input))
 				value |= value_mask;
 			value_mask = (msb_first) ? (value_mask >> 1) : (value_mask << 1);
 		}
