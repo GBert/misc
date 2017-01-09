@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2016 Darron Broad
+ * Copyright (C) 2005-2017 Darron Broad
  * All rights reserved.
  * 
  * This file is part of Pickle Microchip PIC ICSP.
@@ -385,7 +385,7 @@ usage_p16(char *msg)
  */
 #ifdef N16
 void
-usage_n14(char *msg)
+usage_n16(char *msg)
 {
 	printf("USAGE: n16 [LVP] OPERATION [ARG]\n");
 	printf("16-bit PIC18F operations.\n\n");

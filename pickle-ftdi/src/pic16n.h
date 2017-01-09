@@ -1,5 +1,5 @@
 /*
- * Copyright (0xC) 2005-2016 Darron Broad
+ * Copyright (C) 2005-2017 Darron Broad
  * All rights reserved.
  * 
  * This file is part of Pickle Microchip PIC ICSP.
@@ -24,15 +24,20 @@
  * 16-bit CONFIGURATION
  *****************************************************************************/
 
-#define PIC16N_MASK (0xFFFF)
+#define PIC16N_WORD_MASK (0x0000FFFF)
+#define PIC16N_DATA_MASK (0x000000FF)
 #define PIC16N_USERID_MAX (8)
-#define PIC16N_CONFIG_MAX (6)
+#define PIC16N_CONFIG_MAX (12)
 
 struct pic16n_config {
-	uint16_t userid[PIC16N_USERID_MAX];	/* 200000 .. 200007 */
-	uint16_t config[PIC16N_CONFIG_MAX]; 	/* 300000 .. 300005 */
-	uint16_t revisionid;     	        /* 3ffffc           */
-	uint16_t deviceid;              	/* 3ffffe           */
+	uint8_t userid[PIC16N_USERID_MAX];	/* 200000 .. 200007 */
+	uint8_t config[PIC16N_CONFIG_MAX]; 	/* 300000 .. 30000B */
+	uint16_t revisionid;     	        /* 3FFFFC           */
+	uint16_t deviceid;              	/* 3FFFFE           */
+#if 0
+	uint16_t devinfo[PIC16N_DEVINFO_MAX];   /* */
+	uint16_t devconf[PIC16N_DEVCONF_MAX];   /* */
+#endif
 };
 
 struct pic16n_dsmap {
@@ -43,6 +48,10 @@ struct pic16n_dsmap {
 	uint32_t config;		/* configuration size        */
 	uint32_t eeprom;		/* nvm eeprom size           */
 	uint32_t latches;		/* latch / erase row size    */
+#if 0
+	uint32_t devinfo;               /* devinfo size              */
+	uint32_t devconf;               /* devconf size              */
+#endif
 };
 
 /******************************************************************************
@@ -53,15 +62,18 @@ struct pic16n_dsmap {
 
 #define PIC16N_USERID_ADDR  (0x200000)
 #define PIC16N_CONFIG_ADDR  (0x300000)
-#define PIC16N_EEPHY_ADDR   (0x310000) /* EEPROM phyical address */
+#define PIC16N_EEPROM_ADDR  (0x310000) /* EEPROM physical address */
 #define PIC16N_REVID_ADDR   (0x3FFFFC)
 #define PIC16N_DEVID_ADDR   (0x3FFFFE)
-#define PIC16N_EEPROM_ADDR  (0xF00000) /* EEPROM pseudo address  */
+#define PIC16N_EEFAKE_ADDR  (0xF00000) /* EEPROM pseudo address */
 
 #define PIC16N_TPINT_CODE   (2800)	/*  2.8 ms */
 #define PIC16N_TPINT_CONFIG (5600)	/*  5.6 ms */
 #define PIC16N_TERAB        (25200)	/* 25.2 ms */
 #define PIC16N_TERAR        (2800)	/*  2.8 ms */
+
+#define PIC16N_MAJOR_SHIFT   (6)
+#define PIC16N_REV_MASK      (0x003F)
 
 /******************************************************************************
  * PICMicro devices (8-bit data devices using new programming protocol)
@@ -98,8 +110,9 @@ uint32_t pic16n_get_data_size(uint32_t *);
 uint32_t pic16n_read_program_memory_block(uint32_t *, uint32_t, uint32_t);
 uint32_t pic16n_read_data_memory_block(uint16_t *, uint32_t, uint16_t);
 uint32_t pic16n_write_config(void);
-uint16_t pic16n_getregion(uint16_t);
+uint16_t pic16n_getregion(uint32_t);
 uint32_t pic16n_program_data(uint32_t, pic_data *);
+void pic16n_program_begin(void);
 void pic16n_program_end(int);
 uint32_t pic16n_verify_data(uint32_t, pic_data *, uint32_t *);
 void pic16n_view_data(pic_data *);

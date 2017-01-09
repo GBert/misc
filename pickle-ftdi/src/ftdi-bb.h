@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2016 Darron Broad
+ * Copyright (C) 2005-2017 Darron Broad
  * All rights reserved.
  * 
  * This file is part of Pickle Microchip PIC ICSP.
@@ -22,7 +22,8 @@
 
 #include <ftdi.h>
 
-#define FTDI_BB_MAX_BITS_TRANSFER (128)
+#define FTDI_BB_MAX_BITS_TRANSFER (64)
+#define FTDI_BB_BUFFER_SIZE (FTDI_BB_MAX_BITS_TRANSFER * 8) /* 512 */
 
 struct ftdi_bb_io {
 	uint8_t dir;

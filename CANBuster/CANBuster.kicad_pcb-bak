@@ -7762,7 +7762,7 @@
   (segment (start 161.274101 78.432879) (end 161.274101 76.966421) (width 0.381) (layer F.Cu) (net 47))
   (segment (start 161.274101 76.966421) (end 160.782 76.47432) (width 0.381) (layer F.Cu) (net 47))
   (segment (start 160.782 76.47432) (end 160.782 74.9935) (width 0.381) (layer F.Cu) (net 47))
-  (segment (start 126.873 119.634) (end 131.318 119.634) (width 0.381) (layer B.Cu) (net 48) (status 400000))
+  (segment (start 126.873 119.634) (end 131.318 119.634) (width 0.381) (layer B.Cu) (net 48))
   (segment (start 137.287 113.665) (end 139.7 111.252) (width 0.381) (layer B.Cu) (net 48))
   (segment (start 131.318 119.634) (end 137.287 113.665) (width 0.381) (layer B.Cu) (net 48) (tstamp 58468AB8))
   (segment (start 139.6746 106.1212) (end 139.9032 106.1212) (width 0.381) (layer B.Cu) (net 48))

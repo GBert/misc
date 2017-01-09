@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2016 Darron Broad
+ * Copyright (C) 2005-2017 Darron Broad
  * All rights reserved.
  * 
  * This file is part of Pickle Microchip PIC ICSP.
@@ -47,7 +47,9 @@ usage(char *execname, char *msg)
 
 	printf("EXAMPLES:\n"
 		" ptest VPP|PGC|PGD|PGM 5\n"
-		"\t\tVPP, PGC, PGD or PGM LOW->HIGH->LOW test with 5 seconds mark time.\n"
+		"\t\tVPP, PGC, PGD or PGM LOW->HIGH->LOW output test with 5 seconds mark time.\n"
+		" ptest 0 10\n"
+		"\t\tPGD input test with 10 iterations of 1 second per step.\n"
 		" ptest 1 10\n"
 		"\t\tD-SUB-9 test with 10 seconds per step.\n"
 		" ptest 2 10\n"
@@ -86,7 +88,7 @@ usage(char *execname, char *msg)
  *****************************************************************************/
 
 /*
- * Test VPP, PGC or PGD
+ * Test VPP, PGC or PGD output
  */
 void
 test_pin(int pin, int t)
@@ -144,6 +146,22 @@ test_pin(int pin, int t)
 	if (!io_stop)
 		sleep(3);
 	
+	printf("\nTEST DONE\n\n");
+}
+
+/*
+ * Test PGD input
+ */
+void
+test_in(int t)
+{
+	printf("\nTEST PGD INPUT\n\n");
+	
+	while (t-- && !io_stop) {
+		printf("PGD IN: %d\n", io_get_pgd());
+		sleep(1);
+	}
+
 	printf("\nTEST DONE\n\n");
 }
 
@@ -521,20 +539,30 @@ main(int argc, char *argv[])
 	else if (argv[1][0] >= '0' && argv[1][0] <= '9') {
 		int32_t test = strtol(argv[1], NULL, 0);
 		switch (test) {
-		case 1: test_dsub9(testarg); break;
-		case 2: test_icsp(testarg); break;
-		case 3: test_toggle(testarg); break;
-		case 4: test_debug(testarg); break;
+		case 0: test_in(testarg);
+			break;
+		case 1: test_dsub9(testarg);
+			break;
+		case 2: test_icsp(testarg);
+			break;
+		case 3: test_toggle(testarg);
+			break;
+		case 4: test_debug(testarg);
+			break;
 #ifdef PIO
-		case 5: test_icspio(testarg); break;
+		case 5: test_icspio(testarg);
+			break;
 #endif
 #ifdef RPI
-		case 6: test_rpi(testarg);break;
+		case 6: test_rpi(testarg);
+			break;
 #endif
 #ifdef BPI
-		case 7: test_bpi(testarg);break;
+		case 7: test_bpi(testarg);
+			break;
 #endif
-		default:usage(execname, "Invalid arg");break;
+		default:usage(execname, "Invalid arg");
+			break;
 		}
 	} else {
 		usage(execname, "Invalid arg");

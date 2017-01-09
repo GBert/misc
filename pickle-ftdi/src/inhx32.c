@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2016 Darron Broad
+ * Copyright (C) 2005-2017 Darron Broad
  * All rights reserved.
  * 
  * This file is part of Pickle Microchip PIC ICSP.
@@ -108,28 +108,33 @@ inhx32_fgets(char *line, FILE *fp,
 	if (_tt == TT_DATA) {
 		/* Validate line length */
 		if (*bb == 0)
-			return line;
+			return line;	/* Not a data record */
 
 		/* Validate alignment */
-		if (p.pic && (*bb % p.pic->align))
-			return line;
+		if (p.pic && (*bb % p.pic->align)) {
+#if 0
+			printf("%s: information: unaligned input ignored\n", __func__);
+#endif
+			return line;	/* Not a data record */
+		}
 	}
 	/* Process extended address record */
 	else if (_tt == TT_EXTENDED_LINEAR_ADDRESS) {
 		/* Validate extended address */
 		if (*aaaa != 0 || *bb != 2)
-			return line;
+			return line;	/* Not a data record */
 
 		/* Determine extended address */
 		*extended_addr = (hex2byte(&line[HHHH]) << 8) |
 				hex2byte(&line[HHHH + 2]);
-		return line;
+		return line;		/* Not a data record */
 	}
 	/* Ignore other records */
-	else
-		return line;
+	else {
+		return line;		/* Not a data record */
+	}
 
-	/* Return data line */
+	/* Return data record */
 	*tt = TT_DATA;
 
 	return line;

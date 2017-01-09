@@ -17,8 +17,8 @@
  * with Pickle Microchip PIC ICSP. If not, see http://www.gnu.org/licenses/
  */
 
-#ifndef _A20_H
-#define _A20_H
+#ifndef _ALLWINNER_H
+#define _ALLWINNER_H
 
 #include <stdio.h>
 #include <string.h>
@@ -171,4 +171,4 @@ int gpio_bpi_get(uint16_t, uint8_t *);
 int gpio_bpi_set(uint16_t, uint8_t);
 int gpio_bpi_release(uint16_t, uint8_t);
 
-#endif /* !_A20_H */
+#endif /* !_ALLWINNER_H */

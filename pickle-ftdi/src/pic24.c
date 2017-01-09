@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2016 Darron Broad
+ * Copyright (C) 2005-2017 Darron Broad
  * All rights reserved.
  * 
  * This file is part of Pickle Microchip PIC ICSP.
@@ -727,7 +727,11 @@ pic24_program_verify(void)
 		/* DS39768D-page 13 PIC24FJ64GA002 */
 		/* NOP (5)              */
 		/* NOP (28) [,NOP, NOP] */
-		io_program_out(0, 5 + pic24_conf.gotonop * 28);
+		uint8_t nops = pic24_conf.gotonop;
+
+		io_program_out(0, 5);
+		while (nops--)
+			io_program_out(0, 28);	/* NOP */
 
 		/* GOTO 200, NOP [,NOP, NOP] */
 		pic24_goto200();
@@ -823,8 +827,18 @@ pic24_standby(void)
 static inline void
 pic24_six(uint32_t data, uint8_t nops)
 {
-	io_program_out(0x0, 4);		/* SIX */
-	io_program_out(data, 24);
+	if (nops--) {
+		io_program_out((data & ARCH24BIT) << 4, 56);	/* SIX */
+	} else {
+		io_program_out((data & ARCH24BIT) << 4, 28);	/* SIX */
+		return;
+	}
+	/* optimize for FTDI */
+	while (nops >= 2) {
+		io_program_out(0, 56);	/* 2 NOPs */
+		nops -= 2;
+	}
+	/* any NOPs left ? */
 	while (nops--)
 		io_program_out(0, 28);	/* NOP */
 }
