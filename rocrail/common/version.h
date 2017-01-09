@@ -1,9 +1,10 @@
 const int revisionnr = 
-11847
+11848
 ;
 const char* commithash = 
-"9803521c0a20af97a6e3a0d0a36481aa9ebbcd39";
+"3ef1cf2e5e0ddf2aa2287be17c7fab06e601dfdc";
 const char* revlog = 
+"11848 2017-01-09 07:11:31 +0100 translation merge: sl, de, pt_BR, fr, sr_latin, nl\n" \
 "11847 2017-01-08 19:44:16 +0100 signals: crash fix for trace if the block is not set\n" \
 "11846 2017-01-08 15:43:05 +0100 scheduledialog: from/to hour only disable for absolute time table\n" \
 "11845 2017-01-08 11:58:23 +0100 loc: fix for function state\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "11801 2016-12-31 08:26:04 +0100 switch: static option added\n" \
 "11800 2016-12-30 08:22:22 +0100 fix for d&d from the loco table to a block\n" \
 "11799 2016-12-29 20:05:22 +0100 milight: include fix\n" \
-"11798 2016-12-29 09:07:18 +0100 enter: restrictions removed for routespeedatenter\n" \
 
 "log end";
