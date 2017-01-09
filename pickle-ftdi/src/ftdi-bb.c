@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2005-2017 Darron Broad
- * Copyright (C) 2016 Gerhard Bertelsmann
+ * Copyright (C) 2016-2017 Gerhard Bertelsmann
  * All rights reserved.
  *
  * This file is part of Pickle Microchip PIC ICSP.
@@ -176,6 +176,7 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 #ifdef __linux
 	uint32_t index = 0;
 	uint64_t value, value_mask;
+	int rc, retry;
 
 	assert(shift->nbits > 0 && shift->nbits < 65);
 
@@ -218,14 +219,27 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 
 	assert(index < FTDI_BB_BUFFER_SIZE);
 
-	if ((ftdi_write_data(&handle, buffer, index)) < 0) {
-		fprintf(stderr, "%s: ftdi_write_error [%s]\n", __func__,
+
+	retry = 5;
+	while ((rc = ftdi_write_data(&handle, buffer, index)) < 0 && retry--) {
+		fprintf(stderr, "%s: ftdi_write_error [%s], retries left %d\n",
+			__func__, ftdi_get_error_string(&handle), retry);
+		io_usleep(100000);
+	}
+	if (rc < 0) {
+		fprintf(stderr, "%s: ftdi_write_error [%s] abort\n", __func__,
 			ftdi_get_error_string(&handle));
 		return -1;
 	}
 
-	if ((ftdi_read_data(&handle, buffer, index)) < 0) {
-		fprintf(stderr, "%s: ftdi_read_error [%s]\n", __func__,
+	retry = 5;
+	while ((rc = ftdi_read_data(&handle, buffer, index)) < 0 && retry--) {
+		fprintf(stderr, "%s: ftdi_read_error [%s], retries left %d\n",
+			__func__, ftdi_get_error_string(&handle), retry);
+		io_usleep(100000);
+	}
+	if (rc < 0) {
+		fprintf(stderr, "%s: ftdi_read_error [%s] abort\n", __func__,
 			ftdi_get_error_string(&handle));
 		return -1;
 	}
@@ -234,7 +248,7 @@ ftdi_bb_shift(struct ftdi_bb_shift *shift)
 		value = 0;
 		value_mask = (msb_first) ? (1U << (shift->nbits - 1)) : (1 << 0);
 		for (int i = 0; i < shift->nbits; ++i) {
-			if (buffer[i * 4 + 3] & (1 << data_pin_input))
+			if (buffer[i * 4 + 2] & (1 << data_pin_input))
 				value |= value_mask;
 			value_mask = (msb_first) ? (value_mask >> 1) : (value_mask << 1);
 		}
