@@ -1,9 +1,13 @@
 const int revisionnr = 
-11848
+11852
 ;
 const char* commithash = 
-"3ef1cf2e5e0ddf2aa2287be17c7fab06e601dfdc";
+"508ced95b8ffe5242f29536894b20380415cae3e";
 const char* revlog = 
+"11852 2017-01-10 11:27:51 +0100 locdialog: layout correction\n" \
+"11851 2017-01-10 08:56:15 +0100 guiapp: update route status in case its not visible\n" \
+"11850 2017-01-10 08:47:05 +0100 stage: inform location in case of a d&d moveto\n" \
+"11849 2017-01-10 07:29:56 +0100 xmlscript: fix for overwritting the original id\n" \
 "11848 2017-01-09 07:11:31 +0100 translation merge: sl, de, pt_BR, fr, sr_latin, nl\n" \
 "11847 2017-01-08 19:44:16 +0100 signals: crash fix for trace if the block is not set\n" \
 "11846 2017-01-08 15:43:05 +0100 scheduledialog: from/to hour only disable for absolute time table\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "11805 2016-12-31 15:22:21 +0100 messages: ghost train added 4202\n" \
 "11804 2016-12-31 13:43:09 +0100 gobyblock Alt-D&D added\n" \
 "11803 2016-12-31 09:19:50 +0100 signal: useprefix option for visualisation only\n" \
-"11802 2016-12-31 09:01:19 +0100 switchdialog: static option added\n" \
-"11801 2016-12-31 08:26:04 +0100 switch: static option added\n" \
-"11800 2016-12-30 08:22:22 +0100 fix for d&d from the loco table to a block\n" \
-"11799 2016-12-29 20:05:22 +0100 milight: include fix\n" \
 
 "log end";
