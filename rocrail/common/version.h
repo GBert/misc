@@ -1,9 +1,12 @@
 const int revisionnr = 
-11852
+11855
 ;
 const char* commithash = 
-"508ced95b8ffe5242f29536894b20380415cae3e";
+"b1f3b96f48889c6980fa35d4114f536e651ffaaa";
 const char* revlog = 
+"11855 2017-01-11 13:10:49 +0100 nce: support for polling AUI over USB, version > 0\n" \
+"11854 2017-01-11 11:19:57 +0100 guiapp: revert -update route status in case its not visible-\n" \
+"11853 2017-01-11 08:33:20 +0100 xmlscript: query subnodes\n" \
 "11852 2017-01-10 11:27:51 +0100 locdialog: layout correction\n" \
 "11851 2017-01-10 08:56:15 +0100 guiapp: update route status in case its not visible\n" \
 "11850 2017-01-10 08:47:05 +0100 stage: inform location in case of a d&d moveto\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "11808 2017-01-01 11:55:18 +0100 milight: WIP\n" \
 "11807 2017-01-01 08:35:53 +0100 update copyright\n" \
 "11806 2016-12-31 15:48:41 +0100 switch: setstatic and resetstatic commands added for actions\n" \
-"11805 2016-12-31 15:22:21 +0100 messages: ghost train added 4202\n" \
-"11804 2016-12-31 13:43:09 +0100 gobyblock Alt-D&D added\n" \
-"11803 2016-12-31 09:19:50 +0100 signal: useprefix option for visualisation only\n" \
 
 "log end";
