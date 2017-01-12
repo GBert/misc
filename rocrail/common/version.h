@@ -1,9 +1,12 @@
 const int revisionnr = 
-11856
+11859
 ;
 const char* commithash = 
-"6713fce76e973d16305d052cc55c38ba4916eeaf";
+"112dcabfd0b293c08697a8bd99b8beb3ab411699";
 const char* revlog = 
+"11859 2017-01-12 15:24:46 +0100 nce: separate handling of USB AIU polling\n" \
+"11858 2017-01-12 14:58:33 +0100 model: fix for linear signal field events, start of delete objects support\n" \
+"11857 2017-01-12 08:47:05 +0100 item: tooltip for connector type added\n" \
 "11856 2017-01-12 06:33:04 +0100 finddest: check if the current block is set before calling it\n" \
 "11855 2017-01-11 13:10:49 +0100 nce: support for polling AUI over USB, version > 0\n" \
 "11854 2017-01-11 11:19:57 +0100 guiapp: revert -update route status in case its not visible-\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "11812 2017-01-01 14:36:32 +0100 locdialog: tooltip added to the rdate field\n" \
 "11811 2017-01-01 14:31:30 +0100 locdialog: layout correction\n" \
 "11810 2017-01-01 14:17:35 +0100 loc: last running date added\n" \
-"11809 2017-01-01 13:55:20 +0100 milight: WIP\n" \
-"11808 2017-01-01 11:55:18 +0100 milight: WIP\n" \
-"11807 2017-01-01 08:35:53 +0100 update copyright\n" \
 
 "log end";
