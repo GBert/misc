@@ -194,7 +194,7 @@ U 1 1 5873ADA3
 P 8350 4000
 F 0 "R4" V 8430 4000 50  0000 C CNN
 F 1 "120" V 8350 4000 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM7mm" V 8280 4000 50  0001 C CNN
+F 2 "w_pth_resistors:RC03" V 8280 4000 50  0001 C CNN
 F 3 "" H 8350 4000 50  0000 C CNN
 	1    8350 4000
 	1    0    0    -1  
@@ -243,7 +243,7 @@ U 1 1 5873B79D
 P 4950 3450
 F 0 "R3" V 5030 3450 50  0000 C CNN
 F 1 "4k7" V 4950 3450 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM7mm" V 4880 3450 50  0001 C CNN
+F 2 "w_pth_resistors:RC03" V 4880 3450 50  0001 C CNN
 F 3 "" H 4950 3450 50  0000 C CNN
 	1    4950 3450
 	1    0    0    -1  
@@ -309,7 +309,7 @@ U 1 1 5873BDDA
 P 4800 3450
 F 0 "R2" V 4880 3450 50  0000 C CNN
 F 1 "4k7" V 4800 3450 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM7mm" V 4730 3450 50  0001 C CNN
+F 2 "w_pth_resistors:RC03" V 4730 3450 50  0001 C CNN
 F 3 "" H 4800 3450 50  0000 C CNN
 	1    4800 3450
 	1    0    0    -1  
@@ -320,7 +320,7 @@ U 1 1 5873C105
 P 4650 3450
 F 0 "R1" V 4730 3450 50  0000 C CNN
 F 1 "4k7" V 4650 3450 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM7mm" V 4580 3450 50  0001 C CNN
+F 2 "w_pth_resistors:RC03" V 4580 3450 50  0001 C CNN
 F 3 "" H 4650 3450 50  0000 C CNN
 	1    4650 3450
 	1    0    0    -1  
@@ -363,17 +363,11 @@ Wire Wire Line
 Wire Wire Line
 	6900 4250 6500 4250
 Wire Wire Line
-	5750 3100 5750 3200
+	5750 3100 5750 3450
 Wire Wire Line
-	5750 3200 5750 3450
+	7350 3100 7350 3700
 Wire Wire Line
-	7350 3100 7350 3150
-Wire Wire Line
-	7350 3150 7350 3700
-Wire Wire Line
-	7650 3100 7650 3150
-Wire Wire Line
-	7650 3150 7650 3700
+	7650 3100 7650 3700
 Wire Wire Line
 	7500 4900 7500 5000
 Wire Wire Line
@@ -391,18 +385,14 @@ Wire Wire Line
 Wire Wire Line
 	8350 3850 8350 3750
 Wire Wire Line
-	8100 4200 8350 4200
-Wire Wire Line
-	8350 4200 8750 4200
+	8100 4200 8750 4200
 Wire Wire Line
 	8350 4150 8350 4200
 Connection ~ 8350 4200
 Wire Wire Line
 	8450 4400 8100 4400
 Wire Wire Line
-	8450 3750 8450 4300
-Wire Wire Line
-	8450 4300 8450 4400
+	8450 3750 8450 4400
 Wire Wire Line
 	8450 4300 8750 4300
 Wire Wire Line
@@ -430,18 +420,14 @@ Wire Wire Line
 Wire Wire Line
 	5000 5000 4750 5000
 Wire Wire Line
-	4750 5000 4750 4900
+	4750 4900 4750 5000
 Wire Wire Line
-	4750 4900 4500 4900
-Wire Wire Line
-	4500 4900 3950 4900
+	3950 4900 4750 4900
 Wire Wire Line
 	3950 4900 3950 5250
 Connection ~ 4500 4900
 Wire Wire Line
-	4200 5250 4500 5250
-Wire Wire Line
-	4500 5250 4750 5250
+	4200 5250 4750 5250
 Connection ~ 4500 5250
 Wire Wire Line
 	4500 5250 4500 5200
@@ -456,25 +442,17 @@ Wire Wire Line
 Wire Wire Line
 	4800 4450 5000 4450
 Wire Wire Line
-	4800 3600 4800 4350
-Wire Wire Line
-	4800 4350 4800 4450
+	4800 3600 4800 4450
 Wire Wire Line
 	4650 4850 5000 4850
 Wire Wire Line
-	4650 3600 4650 4450
+	4650 3600 4650 4850
 Wire Wire Line
-	4650 4450 4650 4850
-Wire Wire Line
-	4800 3100 4800 3200
-Wire Wire Line
-	4800 3200 4800 3300
+	4800 3100 4800 3300
 Wire Wire Line
 	4950 3200 4950 3300
 Wire Wire Line
-	4650 3200 4800 3200
-Wire Wire Line
-	4800 3200 4950 3200
+	4650 3200 4950 3200
 Connection ~ 4800 3200
 Wire Wire Line
 	4650 3200 4650 3300
