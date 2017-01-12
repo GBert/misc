@@ -1,9 +1,10 @@
 const int revisionnr = 
-11855
+11856
 ;
 const char* commithash = 
-"b1f3b96f48889c6980fa35d4114f536e651ffaaa";
+"6713fce76e973d16305d052cc55c38ba4916eeaf";
 const char* revlog = 
+"11856 2017-01-12 06:33:04 +0100 finddest: check if the current block is set before calling it\n" \
 "11855 2017-01-11 13:10:49 +0100 nce: support for polling AUI over USB, version > 0\n" \
 "11854 2017-01-11 11:19:57 +0100 guiapp: revert -update route status in case its not visible-\n" \
 "11853 2017-01-11 08:33:20 +0100 xmlscript: query subnodes\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "11809 2017-01-01 13:55:20 +0100 milight: WIP\n" \
 "11808 2017-01-01 11:55:18 +0100 milight: WIP\n" \
 "11807 2017-01-01 08:35:53 +0100 update copyright\n" \
-"11806 2016-12-31 15:48:41 +0100 switch: setstatic and resetstatic commands added for actions\n" \
 
 "log end";
