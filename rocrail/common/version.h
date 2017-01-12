@@ -1,9 +1,11 @@
 const int revisionnr = 
-11859
+11861
 ;
 const char* commithash = 
-"112dcabfd0b293c08697a8bd99b8beb3ab411699";
+"d62cf566c2288163b9ec56188e6db012965cd524";
 const char* revlog = 
+"11861 2017-01-12 19:46:13 +0100 nce: fix for evaluating AIU\n" \
+"11860 2017-01-12 17:21:33 +0100 text: serialise multiple threads to avoid crash\n" \
 "11859 2017-01-12 15:24:46 +0100 nce: separate handling of USB AIU polling\n" \
 "11858 2017-01-12 14:58:33 +0100 model: fix for linear signal field events, start of delete objects support\n" \
 "11857 2017-01-12 08:47:05 +0100 item: tooltip for connector type added\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11814 2017-01-01 16:16:05 +0100 milight: set broadcast socket option for searching bridges\n" \
 "11813 2017-01-01 15:46:29 +0100 milight: query bridges added\n" \
 "11812 2017-01-01 14:36:32 +0100 locdialog: tooltip added to the rdate field\n" \
-"11811 2017-01-01 14:31:30 +0100 locdialog: layout correction\n" \
-"11810 2017-01-01 14:17:35 +0100 loc: last running date added\n" \
 
 "log end";
