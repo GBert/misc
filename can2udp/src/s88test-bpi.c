@@ -55,12 +55,12 @@ void set_pin(char *str, int pin, struct s88_t *s88_data, int value) {
 	printf("set %s high\n", str);
     else
 	printf("set %s low\n", str);
-    gpio_bpi_set(pin, value ^ s88_data->invert);
+    gpio_aw_set(pin, value ^ s88_data->invert);
 }
 
 void get_data(struct s88_t *s88_data, uint8_t *newvalue) {
 
-    gpio_bpi_get(DATA_PIN, newvalue);
+    gpio_aw_get(DATA_PIN, newvalue);
     if (*newvalue ^ s88_data->invert)
 	printf("Data pin high\n");
     else
@@ -114,29 +114,29 @@ int main(int argc, char **argv) {
 	}
     }
 
-    if (gpio_bpi_open("/dev/mem") < 0) {
+    if (gpio_aw_open("/dev/mem") < 0) {
 	fprintf(stderr, "Can't open IO mem: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
 
-    gpio_bpi_select_output(CLOCK_PIN);
-    gpio_bpi_select_output(LOAD_PIN);
-    gpio_bpi_select_output(RESET_PIN);
-    gpio_bpi_select_input(DATA_PIN);
+    gpio_aw_select_output(CLOCK_PIN);
+    gpio_aw_select_output(LOAD_PIN);
+    gpio_aw_select_output(RESET_PIN);
+    gpio_aw_select_input(DATA_PIN);
 
     printf("#########################\n");
     printf("# S88 test\n\n");
     printf("#########################\n");
     printf("# Test with multimeter\n\n");
-    gpio_bpi_set(CLOCK_PIN, LOW);
-    gpio_bpi_set(LOAD_PIN, LOW);
-    gpio_bpi_set(RESET_PIN, LOW);
+    gpio_aw_set(CLOCK_PIN, LOW);
+    gpio_aw_set(LOAD_PIN, LOW);
+    gpio_aw_set(RESET_PIN, LOW);
     printf("CLOCK_PIN, LOAD_PIN & RESET_PIN low   - ( U3,U4,U5 Pin2 1V4 - 1V9) - press enter to continue\n");
     getchar();
     printf("\n\n");
-    gpio_bpi_set(CLOCK_PIN, HIGH);
-    gpio_bpi_set(LOAD_PIN, HIGH);
-    gpio_bpi_set(RESET_PIN, HIGH);
+    gpio_aw_set(CLOCK_PIN, HIGH);
+    gpio_aw_set(LOAD_PIN, HIGH);
+    gpio_aw_set(RESET_PIN, HIGH);
     printf("CLOCK_PIN, LOAD_PIN & RESET_PIN high  - ( U3,U4,U5 Pin2 3V3)  - press enter to continue\n");
     getchar();
 
@@ -180,7 +180,7 @@ int main(int argc, char **argv) {
 	    if ((s88_bit & 0x1f) == 0)
 		mask = BIT(31);
 	    for (j = 0; j < 16; j++) {
-		gpio_bpi_get(DATA_PIN, &newvalue);
+		gpio_aw_get(DATA_PIN, &newvalue);
 		if (newvalue ^= s88_data.invert)
 		    printf("Pin %d high\n", j);
 		else

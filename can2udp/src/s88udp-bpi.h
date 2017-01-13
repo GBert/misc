@@ -14,7 +14,7 @@
  *  J12 Pin6 	TXD 	UART7_TX 	PI20
  */
 
-#include "a20.h"
+#include "allwinner.h"
 
 #define BPI_PH5		(7*32+5)
 #define BPI_PI21	(8*32+21)
@@ -26,7 +26,3 @@
 #define LOAD_PIN	BPI_PI21
 #define RESET_PIN	BPI_PH5
 
-void gpio_bpi_select_input(uint16_t pin);
-void gpio_bpi_select_output(uint16_t pin);
-int gpio_bpi_get(uint16_t pin, uint8_t *level);
-int gpio_bpi_set(uint16_t pin, uint8_t level);

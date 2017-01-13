@@ -339,45 +339,45 @@ int main(int argc, char **argv) {
 	}
     }
 
-    if (gpio_bpi_open("/dev/mem") < 0) {
+    if (gpio_aw_open("/dev/mem") < 0) {
 	fprintf(stderr, "Can't open IO mem: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
 
-    gpio_bpi_select_output(CLOCK_PIN);
-    gpio_bpi_select_output(LOAD_PIN);
-    gpio_bpi_select_output(RESET_PIN);
-    gpio_bpi_select_input(DATA_PIN);
+    gpio_aw_select_output(CLOCK_PIN);
+    gpio_aw_select_output(LOAD_PIN);
+    gpio_aw_select_output(RESET_PIN);
+    gpio_aw_select_input(DATA_PIN);
 
     /* loop forever */
     while (1) {
 	s88_bit = 0;
-	gpio_bpi_set(LOAD_PIN, HIGH ^ s88_data.invert);
+	gpio_aw_set(LOAD_PIN, HIGH ^ s88_data.invert);
 	usec_sleep(utime);
-	gpio_bpi_set(CLOCK_PIN, HIGH ^ s88_data.invert);
+	gpio_aw_set(CLOCK_PIN, HIGH ^ s88_data.invert);
 	usec_sleep(utime);
-	gpio_bpi_set(CLOCK_PIN, LOW ^ s88_data.invert);
+	gpio_aw_set(CLOCK_PIN, LOW ^ s88_data.invert);
 	usec_sleep(utime);
-	gpio_bpi_set(RESET_PIN, HIGH ^ s88_data.invert);
+	gpio_aw_set(RESET_PIN, HIGH ^ s88_data.invert);
 	usec_sleep(utime);
-	gpio_bpi_set(RESET_PIN, LOW ^ s88_data.invert);
+	gpio_aw_set(RESET_PIN, LOW ^ s88_data.invert);
 	usec_sleep(utime);
-	gpio_bpi_set(LOAD_PIN, LOW ^ s88_data.invert);
+	gpio_aw_set(LOAD_PIN, LOW ^ s88_data.invert);
 	s88_data.count++;
 	/* get sensor data */
 	for (i = 0; i < modulcount; i++) {
 	    if ((s88_bit & 0x1f) == 0)
 		mask = BIT(31);
 	    for (j = 0; j < 16; j++) {
-		gpio_bpi_get(DATA_PIN, &newvalue);
+		gpio_aw_get(DATA_PIN, &newvalue);
 		if (newvalue ^= s88_data.invert)
 		    bus_actual[i >> 1] |= mask;
 		else
 		    bus_actual[i >> 1] &= ~mask;
 		usec_sleep(utime);
-		gpio_bpi_set(CLOCK_PIN, HIGH ^ s88_data.invert);
+		gpio_aw_set(CLOCK_PIN, HIGH ^ s88_data.invert);
 		usec_sleep(utime);
-		gpio_bpi_set(CLOCK_PIN, LOW ^ s88_data.invert);
+		gpio_aw_set(CLOCK_PIN, LOW ^ s88_data.invert);
 		s88_bit++;
 		mask >>= 1;
 	    }
