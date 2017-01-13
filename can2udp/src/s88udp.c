@@ -33,7 +33,7 @@
 
 void usage() {
   fprintf(stderr, "\nUsage: s88udp -vf [-d <destination>][-p <port>][-m <s88modules>][-o <offset>]\n");
-  fprintf(stderr, "   Version 1.03\n");
+  fprintf(stderr, "   Version 1.04\n");
   fprintf(stderr, "\n");
   fprintf(stderr, "         -d <destination>    IP Address of the server - default 127.0.0.1\n");
   fprintf(stderr, "         -p <port>           Destination port of the server - default 15730\n");

@@ -35,7 +35,7 @@ struct s88_t {
 
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -vf [-b <bcast_addr/int>][-i <0|1>][-p <port>][-m <s88modules>][-o <offset>]\n", prg);
-    fprintf(stderr, "   Version 0.1\n\n");
+    fprintf(stderr, "   Version 0.2\n\n");
     fprintf(stderr, "         -i [0|1]            invert signals - default 0 -> not inverting\n");
     fprintf(stderr, "         -t <time in usec>   microtiming in usec - default %d usec\n", MICRODELAY);
 }
