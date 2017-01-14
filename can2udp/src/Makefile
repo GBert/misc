@@ -89,10 +89,10 @@ read_lococard: read_lococard.o
 	$(CC) $(CFLAGS) -o read_lococard read_lococard.o
 
 s88udp-bpi: allwinner.o s88udp-bpi.o
-	$(CC) $(CFLAGS) -DBPI -o s88udp allwinner.o s88udp-bpi.o
+	$(CC) $(CFLAGS) -o s88udp allwinner.o s88udp-bpi.o
 
 s88test-bpi: allwinner.o s88test-bpi.o
-	$(CC) $(CFLAGS) -DBPI -o s88test-bpi allwinner.o s88test-bpi.o
+	$(CC) $(CFLAGS) -o s88test-bpi allwinner.o s88test-bpi.o
 
 wake-up-links88: wake-up-links88.o
 	$(CC) $(CFLAGS) -o wake-up-links88 wake-up-links88.o
