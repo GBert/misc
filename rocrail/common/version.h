@@ -1,9 +1,16 @@
 const int revisionnr = 
-11861
+11868
 ;
 const char* commithash = 
-"d62cf566c2288163b9ec56188e6db012965cd524";
+"a8f5d3d221ad4f2701a6cd9c9c4b21f0722561dc";
 const char* revlog = 
+"11868 2017-01-14 11:23:33 +0100 cbusnodedlg: 100ms pause between the getall commands\n" \
+"11867 2017-01-14 11:02:50 +0100 rmx: show rmx channel in the loco trace\n" \
+"11866 2017-01-14 08:42:35 +0100 bidib: flat addressing support for switch servo type\n" \
+"11865 2017-01-14 08:26:41 +0100 renderer: fix for use prefix with aspects < 5\n" \
+"11864 2017-01-14 07:22:42 +0100 hue: increased the response buffer from 4k to 10k\n" \
+"11863 2017-01-13 14:14:13 +0100 finder: only reserve destination block if its not in a location\n" \
+"11862 2017-01-13 10:07:04 +0100 var: text index support\n" \
 "11861 2017-01-12 19:46:13 +0100 nce: fix for evaluating AIU\n" \
 "11860 2017-01-12 17:21:33 +0100 text: serialise multiple threads to avoid crash\n" \
 "11859 2017-01-12 15:24:46 +0100 nce: separate handling of USB AIU polling\n" \
@@ -47,12 +54,5 @@ const char* revlog =
 "11821 2017-01-03 09:16:34 +0100 throttletooltip option added\n" \
 "11820 2017-01-02 15:24:49 +0100 loc: do not set rdate in case running virtual\n" \
 "11819 2017-01-02 15:16:08 +0100 colorutils: added RGBtoHSL and HSLtoMiLight functions\n" \
-"11818 2017-01-02 12:01:31 +0100 cardlg: added code column\n" \
-"11817 2017-01-02 10:30:12 +0100 milight: keep alive thread added\n" \
-"11816 2017-01-02 09:22:24 +0100 translation merge: sv, pl, en_GB, de, nl\n" \
-"11815 2017-01-01 16:27:02 +0100 milight: query bridges V5 added\n" \
-"11814 2017-01-01 16:16:05 +0100 milight: set broadcast socket option for searching bridges\n" \
-"11813 2017-01-01 15:46:29 +0100 milight: query bridges added\n" \
-"11812 2017-01-01 14:36:32 +0100 locdialog: tooltip added to the rdate field\n" \
 
 "log end";
