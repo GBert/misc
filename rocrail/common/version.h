@@ -1,9 +1,12 @@
 const int revisionnr = 
-11868
+11871
 ;
 const char* commithash = 
-"a8f5d3d221ad4f2701a6cd9c9c4b21f0722561dc";
+"bdb5658fd33f1dd7429edaf4d70b58da858af39b";
 const char* revlog = 
+"11871 2017-01-15 11:32:02 +0100 milight: fix for none color lights\n" \
+"11870 2017-01-15 07:09:13 +0100 bidib: fix for set/get vendor CV\n" \
+"11869 2017-01-15 07:00:15 +0100 milight: none color type output support\n" \
 "11868 2017-01-14 11:23:33 +0100 cbusnodedlg: 100ms pause between the getall commands\n" \
 "11867 2017-01-14 11:02:50 +0100 rmx: show rmx channel in the loco trace\n" \
 "11866 2017-01-14 08:42:35 +0100 bidib: flat addressing support for switch servo type\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "11824 2017-01-03 11:03:50 +0100 colorutils: fix for RGBtoHSL\n" \
 "11823 2017-01-03 10:00:05 +0100 milight: added byte tracing\n" \
 "11822 2017-01-03 09:52:45 +0100 milight: color support added\n" \
-"11821 2017-01-03 09:16:34 +0100 throttletooltip option added\n" \
-"11820 2017-01-02 15:24:49 +0100 loc: do not set rdate in case running virtual\n" \
-"11819 2017-01-02 15:16:08 +0100 colorutils: added RGBtoHSL and HSLtoMiLight functions\n" \
 
 "log end";
