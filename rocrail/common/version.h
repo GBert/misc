@@ -1,9 +1,10 @@
 const int revisionnr = 
-11871
+11872
 ;
 const char* commithash = 
-"bdb5658fd33f1dd7429edaf4d70b58da858af39b";
+"56eff9fe7fad0baf81b617ae7572b11d3ead6670";
 const char* revlog = 
+"11872 2017-01-16 11:57:22 +0100 rocview: carpanel (WIP)\n" \
 "11871 2017-01-15 11:32:02 +0100 milight: fix for none color lights\n" \
 "11870 2017-01-15 07:09:13 +0100 bidib: fix for set/get vendor CV\n" \
 "11869 2017-01-15 07:00:15 +0100 milight: none color type output support\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "11825 2017-01-03 11:51:01 +0100 milight: link command at power on\n" \
 "11824 2017-01-03 11:03:50 +0100 colorutils: fix for RGBtoHSL\n" \
 "11823 2017-01-03 10:00:05 +0100 milight: added byte tracing\n" \
-"11822 2017-01-03 09:52:45 +0100 milight: color support added\n" \
 
 "log end";
