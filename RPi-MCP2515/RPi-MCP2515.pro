@@ -1,4 +1,4 @@
-update=Fr 13 Jan 2017 15:15:14 CET
+update=Fr 13 Jan 2017 21:27:16 CET
 version=1
 last_client=kicad
 [pcbnew]
@@ -60,3 +60,4 @@ LibName28=contrib
 LibName29=valves
 LibName30=libs/mylib
 LibName31=ISO1050
+LibName32=libs/p82b715
