@@ -1,13 +1,13 @@
 BINDIR=/usr/local/bin
-BINFILE=mosquitto_poll
+BINFILE=mqtt_s_serial
 
 CC=gcc
 CFLAGS=-Os -std=gnu99 -pedantic-errors -Wall
 CLIB=-lmosquitto
 
-CSOURCE=mosquitto_poll.c
-COBJECT=mosquitto_poll.o
-CTARGET=mosquitto_poll
+CSOURCE=mqtt_s_serial.c
+COBJECT=mqtt_s_serial.o
+CTARGET=mqtt_s_serial
 
 build:$(COBJECT) $(CTARGET)
 
