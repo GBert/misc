@@ -1,9 +1,15 @@
 const int revisionnr = 
-11879
+11885
 ;
 const char* commithash = 
-"84da36439152096974dee6d80e835c37935bfd29";
+"3f1ef0c96b5b562da115507706855c2d1e4c2c09";
 const char* revlog = 
+"11885 2017-01-19 09:45:57 +0100 actionctrldlg: removed overwriting the at command option\n" \
+"11884 2017-01-19 09:38:19 +0100 control: reset action tickers after a clock time change\n" \
+"11883 2017-01-19 08:23:53 +0100 trainimage: tracelevel correction\n" \
+"11882 2017-01-19 08:10:42 +0100 rocguiinidlg: added car and train tab options\n" \
+"11881 2017-01-19 07:51:10 +0100 virtual: trace extended for aspect commands\n" \
+"11880 2017-01-19 07:02:15 +0100 bidib: revert work around for accessory ack\n" \
 "11879 2017-01-18 11:58:08 +0100 locowidget: render smooth option implemented\n" \
 "11878 2017-01-18 08:32:52 +0100 throttle: save width and height\n" \
 "11877 2017-01-18 07:15:30 +0100 carpanel: typo fix\n" \
@@ -48,11 +54,5 @@ const char* revlog =
 "11838 2017-01-07 06:59:04 +0100 renderer: crash fix in case text > 256 and includes a pipe sign\n" \
 "11837 2017-01-07 06:45:55 +0100 block: crash fix if loco on lock is not found\n" \
 "11836 2017-01-07 06:27:19 +0100 stage: inform location at command locoset\n" \
-"11835 2017-01-06 13:20:02 +0100 rocweb: support for outoforder and staticuse\n" \
-"11834 2017-01-06 11:10:11 +0100 model: fix for trying to delete none regular files\n" \
-"11833 2017-01-06 08:40:21 +0100 item: show static switch with orange background color\n" \
-"11832 2017-01-05 09:53:28 +0100 milight: V5\n" \
-"11831 2017-01-04 14:55:48 +0100 dccpp: trace warning if dccpp respond with an X\n" \
-"11830 2017-01-04 12:17:54 +0100 ledbutton: reject disable\n" \
 
 "log end";
