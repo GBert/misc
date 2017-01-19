@@ -1,9 +1,16 @@
 const int revisionnr = 
-11872
+11879
 ;
 const char* commithash = 
-"56eff9fe7fad0baf81b617ae7572b11d3ead6670";
+"84da36439152096974dee6d80e835c37935bfd29";
 const char* revlog = 
+"11879 2017-01-18 11:58:08 +0100 locowidget: render smooth option implemented\n" \
+"11878 2017-01-18 08:32:52 +0100 throttle: save width and height\n" \
+"11877 2017-01-18 07:15:30 +0100 carpanel: typo fix\n" \
+"11876 2017-01-17 15:46:24 +0100 train d&d: WIP\n" \
+"11875 2017-01-17 13:56:20 +0100 train d&d: WIP\n" \
+"11874 2017-01-17 09:57:37 +0100 train d&d: WIP\n" \
+"11873 2017-01-17 08:38:10 +0100 carpanel: d&d fixes\n" \
 "11872 2017-01-16 11:57:22 +0100 rocview: carpanel (WIP)\n" \
 "11871 2017-01-15 11:32:02 +0100 milight: fix for none color lights\n" \
 "11870 2017-01-15 07:09:13 +0100 bidib: fix for set/get vendor CV\n" \
@@ -47,12 +54,5 @@ const char* revlog =
 "11832 2017-01-05 09:53:28 +0100 milight: V5\n" \
 "11831 2017-01-04 14:55:48 +0100 dccpp: trace warning if dccpp respond with an X\n" \
 "11830 2017-01-04 12:17:54 +0100 ledbutton: reject disable\n" \
-"11829 2017-01-04 09:33:34 +0100 locdialog: bbt interval changed to deceleration time\n" \
-"11828 2017-01-04 09:04:29 +0100 dccpp: changed trace level to byte in evaluate message function\n" \
-"11827 2017-01-04 08:46:17 +0100 basedlg: uid column added\n" \
-"11826 2017-01-03 12:21:35 +0100 milight: response evaluation added\n" \
-"11825 2017-01-03 11:51:01 +0100 milight: link command at power on\n" \
-"11824 2017-01-03 11:03:50 +0100 colorutils: fix for RGBtoHSL\n" \
-"11823 2017-01-03 10:00:05 +0100 milight: added byte tracing\n" \
 
 "log end";
