@@ -192,7 +192,7 @@ void mqtt_cb_log(struct mosquitto *mosq, void *userdata, int level, const char *
 }
 
 int main(int argc, char *argv[]) {
-    int pid, opt, background, keepalive = 3;
+    int pid, opt, ret, background, keepalive = 3;
     bool clean_session = true;
     struct mosquitto *mosq = NULL;
     int running = 1;
@@ -202,7 +202,6 @@ int main(int argc, char *argv[]) {
     while ((opt = getopt(argc, argv, "i:dh?")) != -1) {
 	switch (opt) {
 	case 'd':
-	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
 	    break;
 	case 'f':
 	    background = 1;
@@ -288,7 +287,7 @@ int main(int argc, char *argv[]) {
 	}
 	// or read:
 	if (pfd[0].revents & POLLIN) {
-	    int ret = mosquitto_loop_read(mosq, 1);
+	    ret = mosquitto_loop_read(mosq, 1);
 	    if (ret == MOSQ_ERR_CONN_LOST) {
 		printf("reconnect...\n");
 		mosquitto_reconnect(mosq);
@@ -300,7 +299,11 @@ int main(int argc, char *argv[]) {
 	// and publish
 	if (pfd[1].revents & POLLIN) {
 	    char input[64];
-	    read(0, input, 64);
+	    ret = read(0, input, 64);
+	    if (ret < 0) {
+		fprintf(stderr, "%s: read_error\n", __func__);
+		exit(EXIT_FAILURE);
+	    }
 	    printf("STDIN: %s", input);
 	    mosquitto_publish(mosq, NULL, "stdin", strlen(input), input, 0, false);
 	}
