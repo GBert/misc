@@ -21,6 +21,8 @@
 const char *mqtt_broker_host = "localhost";
 const int mqtt_broker_port = 1883;
 
+int background;
+
 typedef struct {
     uint32_t baud;
     speed_t speed;
@@ -29,8 +31,9 @@ typedef struct {
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -d<serial_device> -m<mosquitto_ip>\n", prg);
     fprintf(stderr, "   Version 0.1\n\n");
-    fprintf(stderr, "         -m <mosquitto_ip>   Mosquitto server - default localhost\n");
-    fprintf(stderr, "         -m <mosquitto_ip>   Mosquitto server - default localhost\n");
+    fprintf(stderr, "         -d <serial_device>  e.g. /dev/ttyUSB0\n");
+    fprintf(stderr, "         -s <baudrate>       serial device baudrate\n");
+    fprintf(stderr, "         -b <MQTT broker>    Mosquitto broaker - default localhost\n");
     fprintf(stderr, "         -f                  foreground\n\n");
 }
 
@@ -125,11 +128,11 @@ int openDevice(const char *dev, speed_t speed, int tim, int rts, int dtr) {
     }
     if (fcntl(fd, F_SETFL, O_NONBLOCK | fcntl(fd, F_GETFL)) < 0) {
 	close(fd);
-	return -1;
+	return(EXIT_FAILURE);
     }
     if (tcgetattr(fd, &options) < 0) {
 	close(fd);
-	return -1;
+	return(EXIT_FAILURE);
     }
 
     /*
@@ -149,25 +152,25 @@ int openDevice(const char *dev, speed_t speed, int tim, int rts, int dtr) {
 
     if (cfsetispeed(&options, speed) < 0) {
 	close(fd);
-	return -1;
+	return(EXIT_FAILURE);
     }
     if (cfsetospeed(&options, speed) < 0) {
 	close(fd);
-	return -1;
+	return(EXIT_FAILURE);
     }
     if (tcsetattr(fd, TCSANOW, &options) < 0) {
 	close(fd);
-	return -1;
+	return(EXIT_FAILURE);
     }
     if (tcflush(fd, TCIOFLUSH) < 0) {
 	close(fd);
-	return -1;
+	return(EXIT_FAILURE);
     }
 
     return fd;
 }
 
-/* Called when a message arrives to the subscribed topic,
+/* called when a message arrives to the subscribed topic,
  */
 void mqtt_cb_msg(struct mosquitto *mosq, void *userdata, const struct mosquitto_message *msg) {
     printf("Received msg on topic: %s\n", msg->topic);
@@ -216,16 +219,24 @@ void mqtt_cb_log(struct mosquitto *mosq, void *userdata, int level, const char *
 }
 
 int main(int argc, char *argv[]) {
-    int pid, opt, ret, background, keepalive = 3;
-    bool clean_session = true;
+    int pid, opt, ret, running, keepalive;
+    int baudrate;
+    bool clean_session;
     struct mosquitto *mosq = NULL;
-    int running = 1;
 
+    clean_session = true;
+    running = 1;
+    clean_session = true;
     background = 0;
+    keepalive = 5;
 
-    while ((opt = getopt(argc, argv, "i:dh?")) != -1) {
+    while ((opt = getopt(argc, argv, "d:s:fh?")) != -1) {
 	switch (opt) {
 	case 'd':
+	    break;
+	case 's':
+	    break;
+	case 'b':
 	    break;
 	case 'f':
 	    background = 1;
@@ -246,7 +257,7 @@ int main(int argc, char *argv[]) {
     mosq = mosquitto_new(NULL, clean_session, NULL);
     if (!mosq) {
 	fprintf(stderr, "Error: Out of memory.\n");
-	return -1;
+	return(EXIT_FAILURE);
     }
 
     /* daemonize the process if requested */
