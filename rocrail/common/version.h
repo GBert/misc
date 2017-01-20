@@ -1,9 +1,12 @@
 const int revisionnr = 
-11885
+11888
 ;
 const char* commithash = 
-"3f1ef0c96b5b562da115507706855c2d1e4c2c09";
+"038b831a290bb0657c9a0164d25089d70067c2f5";
 const char* revlog = 
+"11888 2017-01-19 20:28:38 +0100 renderer: trace level fix\n" \
+"11887 2017-01-19 20:28:01 +0100 Rocview: init fixes for new tabs\n" \
+"11886 2017-01-19 19:40:58 +0100 model: FIX: If analyser is disabled then also reject clean all\n" \
 "11885 2017-01-19 09:45:57 +0100 actionctrldlg: removed overwriting the at command option\n" \
 "11884 2017-01-19 09:38:19 +0100 control: reset action tickers after a clock time change\n" \
 "11883 2017-01-19 08:23:53 +0100 trainimage: tracelevel correction\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "11841 2017-01-07 13:42:21 +0100 action: fix for goto freeing up the varval too soon\n" \
 "11840 2017-01-07 11:12:03 +0100 action: crash fix for sensor action and string tokeniser\n" \
 "11839 2017-01-07 08:50:30 +0100 model: removed reset of flag resetspfx\n" \
-"11838 2017-01-07 06:59:04 +0100 renderer: crash fix in case text > 256 and includes a pipe sign\n" \
-"11837 2017-01-07 06:45:55 +0100 block: crash fix if loco on lock is not found\n" \
-"11836 2017-01-07 06:27:19 +0100 stage: inform location at command locoset\n" \
 
 "log end";
