@@ -1,9 +1,11 @@
 const int revisionnr = 
-11888
+11890
 ;
 const char* commithash = 
-"038b831a290bb0657c9a0164d25089d70067c2f5";
+"455948c2e53b52a7942dfe0b111ce8b82e605f97";
 const char* revlog = 
+"11890 2017-01-20 11:56:25 +0100 rocview: rejected the new locopanel to avoid a major rewrite, guiframe is **the** locopanel\n" \
+"11889 2017-01-20 07:58:49 +0100 rocguiinidlg: temp. disable car and train tab options\n" \
 "11888 2017-01-19 20:28:38 +0100 renderer: trace level fix\n" \
 "11887 2017-01-19 20:28:01 +0100 Rocview: init fixes for new tabs\n" \
 "11886 2017-01-19 19:40:58 +0100 model: FIX: If analyser is disabled then also reject clean all\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11843 2017-01-07 16:34:37 +0100 loconet: packetsize crash fix\n" \
 "11842 2017-01-07 15:47:52 +0100 finder: fix for initialising location map\n" \
 "11841 2017-01-07 13:42:21 +0100 action: fix for goto freeing up the varval too soon\n" \
-"11840 2017-01-07 11:12:03 +0100 action: crash fix for sensor action and string tokeniser\n" \
-"11839 2017-01-07 08:50:30 +0100 model: removed reset of flag resetspfx\n" \
 
 "log end";
