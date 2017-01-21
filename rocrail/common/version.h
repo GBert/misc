@@ -1,9 +1,10 @@
 const int revisionnr = 
-11890
+11891
 ;
 const char* commithash = 
-"455948c2e53b52a7942dfe0b111ce8b82e605f97";
+"c2143d91844dda1bb15ec1c3b7c0ac08034efba5";
 const char* revlog = 
+"11891 2017-01-21 07:12:31 +0100 bidib: fix for bus at function commands\n" \
 "11890 2017-01-20 11:56:25 +0100 rocview: rejected the new locopanel to avoid a major rewrite, guiframe is **the** locopanel\n" \
 "11889 2017-01-20 07:58:49 +0100 rocguiinidlg: temp. disable car and train tab options\n" \
 "11888 2017-01-19 20:28:38 +0100 renderer: trace level fix\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "11844 2017-01-07 17:12:14 +0100 var: poiter support for value added\n" \
 "11843 2017-01-07 16:34:37 +0100 loconet: packetsize crash fix\n" \
 "11842 2017-01-07 15:47:52 +0100 finder: fix for initialising location map\n" \
-"11841 2017-01-07 13:42:21 +0100 action: fix for goto freeing up the varval too soon\n" \
 
 "log end";
