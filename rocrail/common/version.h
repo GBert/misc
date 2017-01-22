@@ -1,9 +1,11 @@
 const int revisionnr = 
-11891
+11893
 ;
 const char* commithash = 
-"c2143d91844dda1bb15ec1c3b7c0ac08034efba5";
+"e58fd5308b35a3ebf01a0293db46a989bdce5c0b";
 const char* revlog = 
+"11893 2017-01-22 07:58:39 +0100 throttle: allow blank as function text to disable soft\n" \
+"11892 2017-01-22 06:12:36 +0100 rocnet: only sleep in the write thread if nothing was send\n" \
 "11891 2017-01-21 07:12:31 +0100 bidib: fix for bus at function commands\n" \
 "11890 2017-01-20 11:56:25 +0100 rocview: rejected the new locopanel to avoid a major rewrite, guiframe is **the** locopanel\n" \
 "11889 2017-01-20 07:58:49 +0100 rocguiinidlg: temp. disable car and train tab options\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11846 2017-01-08 15:43:05 +0100 scheduledialog: from/to hour only disable for absolute time table\n" \
 "11845 2017-01-08 11:58:23 +0100 loc: fix for function state\n" \
 "11844 2017-01-07 17:12:14 +0100 var: poiter support for value added\n" \
-"11843 2017-01-07 16:34:37 +0100 loconet: packetsize crash fix\n" \
-"11842 2017-01-07 15:47:52 +0100 finder: fix for initialising location map\n" \
 
 "log end";
