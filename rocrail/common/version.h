@@ -1,9 +1,11 @@
 const int revisionnr = 
-11893
+11895
 ;
 const char* commithash = 
-"e58fd5308b35a3ebf01a0293db46a989bdce5c0b";
+"631c286efdbc90a927ec42e81154089e715df213";
 const char* revlog = 
+"11895 2017-01-22 16:25:53 +0100 tracedlg: trace level find added\n" \
+"11894 2017-01-22 15:04:59 +0100 guiframe: fix for dnd if loco is idle\n" \
 "11893 2017-01-22 07:58:39 +0100 throttle: allow blank as function text to disable soft\n" \
 "11892 2017-01-22 06:12:36 +0100 rocnet: only sleep in the write thread if nothing was send\n" \
 "11891 2017-01-21 07:12:31 +0100 bidib: fix for bus at function commands\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11848 2017-01-09 07:11:31 +0100 translation merge: sl, de, pt_BR, fr, sr_latin, nl\n" \
 "11847 2017-01-08 19:44:16 +0100 signals: crash fix for trace if the block is not set\n" \
 "11846 2017-01-08 15:43:05 +0100 scheduledialog: from/to hour only disable for absolute time table\n" \
-"11845 2017-01-08 11:58:23 +0100 loc: fix for function state\n" \
-"11844 2017-01-07 17:12:14 +0100 var: poiter support for value added\n" \
 
 "log end";
