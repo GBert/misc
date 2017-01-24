@@ -127,7 +127,7 @@ int main(int argc, char *argv[]) {
 	    char input[64];
 	    read(0, input, 64);
 	    printf("STDIN: %s", input);
-	    mosquitto_publish(mosq, NULL, "stdin", strlen(input), input, 0, false);
+	    mosquitto_publish(mosq, NULL, "tetra1", strlen(input), input, 0, false);
 	}
     }
 
@@ -150,7 +150,7 @@ void mqtt_cb_msg(struct mosquitto *mosq, void *userdata, const struct mosquitto_
 
 void mqtt_cb_connect(struct mosquitto *mosq, void *userdata, int result) {
     if (!result) {
-	mosquitto_subscribe(mosq, NULL, "topic/#", 2);
+	mosquitto_subscribe(mosq, NULL, "tetra1/#", 2);
     } else {
 	printf("MQTT subscribe failed\n");
     }

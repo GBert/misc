@@ -25,6 +25,8 @@
 const char *mqtt_broker_host = "localhost";
 const int mqtt_broker_port = 1883;
 
+char topic[255];
+
 int background;
 
 typedef struct {
@@ -33,11 +35,12 @@ typedef struct {
 } baudrate_t;
 
 void print_usage(char *prg) {
-    fprintf(stderr, "\nUsage: %s -d <serial_device> -s <baudrate> -m <mosquitto_ip>\n", prg);
+    fprintf(stderr, "\nUsage: %s -d <serial_device> -s <baudrate> -m <mosquitto_ip> -t <topic>\n", prg);
     fprintf(stderr, "   Version 0.1\n\n");
     fprintf(stderr, "         -d <serial_device>  e.g. /dev/ttyUSB0\n");
     fprintf(stderr, "         -s <baudrate>       serial device baudrate\n");
     fprintf(stderr, "         -b <MQTT broker>    Mosquitto broker - default localhost\n");
+    fprintf(stderr, "         -t <topic>          topic\n");
     fprintf(stderr, "         -f                  foreground\n\n");
 }
 
@@ -146,11 +149,14 @@ int openDevice(const char *dev, speed_t speed) {
      *  Linux TERMIOS(3)
      */
 
-    options.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
-    options.c_oflag &= ~(OPOST);
     options.c_cflag &= ~(CSIZE | PARENB);
-    options.c_cflag |= (CS8 | CSTOPB);
-    options.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+    options.c_cflag |= (CS8 | CSTOPB );
+
+    /* options.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON); */
+    options.c_iflag |= IGNPAR | ICRNL;
+    options.c_oflag &= ~(OPOST);
+    options.c_lflag &= ~(ECHO | ECHONL | ISIG | IEXTEN);
+    options.c_lflag |= ICANON;
 
     options.c_cc[VMIN] = 0;
     options.c_cc[VTIME] = 0;
@@ -185,8 +191,12 @@ void mqtt_cb_msg(struct mosquitto *mosq, void *userdata, const struct mosquitto_
 }
 
 void mqtt_cb_connect(struct mosquitto *mosq, void *userdata, int result) {
+    /* TODO: length */
+    char subscribe[255];
+
+    snprintf(subscribe, 253, "%s/#", topic);
     if (!result) {
-	mosquitto_subscribe(mosq, NULL, "tetra/#", 2);
+	mosquitto_subscribe(mosq, NULL, topic, 2);
     } else {
 	fprintf(stderr, "MQTT subscribe failed\n");
     }
@@ -239,10 +249,11 @@ int main(int argc, char *argv[]) {
     keepalive = 5;
     baudrate = 9600;
 
+    memset(topic, 0, sizeof(topic));
     memset(broker, 0, sizeof(broker));
     memcpy(broker, mqtt_broker_host, strlen(mqtt_broker_host));
 
-    while ((opt = getopt(argc, argv, "b:d:s:fh?")) != -1) {
+    while ((opt = getopt(argc, argv, "b:d:s:t:fh?")) != -1) {
 	switch (opt) {
 	case 'd':
 	    strncpy(uart, optarg, sizeof(uart) - 1);
@@ -252,6 +263,9 @@ int main(int argc, char *argv[]) {
 	    break;
 	case 'b':
 	    strncpy(broker, optarg, sizeof(broker) - 1);
+	    break;
+	case 't':
+	    strncpy(topic, optarg, sizeof(topic) - 1);
 	    break;
 	case 'f':
 	    background = 1;
@@ -290,6 +304,9 @@ int main(int argc, char *argv[]) {
     }
 
     pfd[1].fd = openDevice(uart, serial_speed(baudrate));
+    if (pfd[1].fd <=0)
+	exit(EXIT_FAILURE);
+
     printf("open serial device fd : %d\n", pfd[1].fd);
 
     mosquitto_connect_callback_set(mosq, mqtt_cb_connect);
@@ -351,13 +368,14 @@ int main(int argc, char *argv[]) {
 	// and publish
 	if (pfd[1].revents & POLLIN) {
 	    char input[64];
+	    memset(input, 0, sizeof(input));
 	    ret = read(pfd[1].fd, input, 64);
 	    if (ret < 0) {
 		fprintf(stderr, "%s: read_error\n", __func__);
 		exit(EXIT_FAILURE);
 	    }
-	    printf("STDIN: %s", input);
-	    mosquitto_publish(mosq, NULL, uart, strlen(input), input, 0, false);
+	    printf("%s: %s", uart, input);
+	    mosquitto_publish(mosq, NULL, topic, strlen(input), input, 0, false);
 	}
     }
 
