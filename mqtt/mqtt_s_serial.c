@@ -5,6 +5,10 @@
 #include <stdlib.h>
 #include <syslog.h>
 #include <termios.h>
+#include <net/if.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
 #include <unistd.h>
 #include <getopt.h>
 #include <string.h>
@@ -29,11 +33,11 @@ typedef struct {
 } baudrate_t;
 
 void print_usage(char *prg) {
-    fprintf(stderr, "\nUsage: %s -d<serial_device> -m<mosquitto_ip>\n", prg);
+    fprintf(stderr, "\nUsage: %s -d <serial_device> -s <baudrate> -m <mosquitto_ip>\n", prg);
     fprintf(stderr, "   Version 0.1\n\n");
     fprintf(stderr, "         -d <serial_device>  e.g. /dev/ttyUSB0\n");
     fprintf(stderr, "         -s <baudrate>       serial device baudrate\n");
-    fprintf(stderr, "         -b <MQTT broker>    Mosquitto broaker - default localhost\n");
+    fprintf(stderr, "         -b <MQTT broker>    Mosquitto broker - default localhost\n");
     fprintf(stderr, "         -f                  foreground\n\n");
 }
 
@@ -118,21 +122,22 @@ speed_t serial_speed(uint32_t baudrate) {
     return rates[--i].speed;
 }
 
-int openDevice(const char *dev, speed_t speed, int tim, int rts, int dtr) {
+int openDevice(const char *dev, speed_t speed) {
     int fd;
     struct termios options;
 
     fd = open(dev, O_RDWR | O_NOCTTY | O_NONBLOCK);
     if (fd < 0) {
+	fprintf(stderr, "%s: Can't open >%s<\n", __func__, dev);
 	return fd;
     }
     if (fcntl(fd, F_SETFL, O_NONBLOCK | fcntl(fd, F_GETFL)) < 0) {
 	close(fd);
-	return(EXIT_FAILURE);
+	return (EXIT_FAILURE);
     }
     if (tcgetattr(fd, &options) < 0) {
 	close(fd);
-	return(EXIT_FAILURE);
+	return (EXIT_FAILURE);
     }
 
     /*
@@ -152,19 +157,19 @@ int openDevice(const char *dev, speed_t speed, int tim, int rts, int dtr) {
 
     if (cfsetispeed(&options, speed) < 0) {
 	close(fd);
-	return(EXIT_FAILURE);
+	return (EXIT_FAILURE);
     }
     if (cfsetospeed(&options, speed) < 0) {
 	close(fd);
-	return(EXIT_FAILURE);
+	return (EXIT_FAILURE);
     }
     if (tcsetattr(fd, TCSANOW, &options) < 0) {
 	close(fd);
-	return(EXIT_FAILURE);
+	return (EXIT_FAILURE);
     }
     if (tcflush(fd, TCIOFLUSH) < 0) {
 	close(fd);
-	return(EXIT_FAILURE);
+	return (EXIT_FAILURE);
     }
 
     return fd;
@@ -223,20 +228,30 @@ int main(int argc, char *argv[]) {
     int baudrate;
     bool clean_session;
     struct mosquitto *mosq = NULL;
+    char uart[255];
+    char broker[255];
+    struct pollfd pfd[2];
 
     clean_session = true;
     running = 1;
     clean_session = true;
     background = 0;
     keepalive = 5;
+    baudrate = 9600;
 
-    while ((opt = getopt(argc, argv, "d:s:fh?")) != -1) {
+    memset(broker, 0, sizeof(broker));
+    memcpy(broker, mqtt_broker_host, strlen(mqtt_broker_host));
+
+    while ((opt = getopt(argc, argv, "b:d:s:fh?")) != -1) {
 	switch (opt) {
 	case 'd':
+	    strncpy(uart, optarg, sizeof(uart) - 1);
 	    break;
 	case 's':
+	    baudrate = atoi(optarg);
 	    break;
 	case 'b':
+	    strncpy(broker, optarg, sizeof(broker) - 1);
 	    break;
 	case 'f':
 	    background = 1;
@@ -257,7 +272,7 @@ int main(int argc, char *argv[]) {
     mosq = mosquitto_new(NULL, clean_session, NULL);
     if (!mosq) {
 	fprintf(stderr, "Error: Out of memory.\n");
-	return(EXIT_FAILURE);
+	return (EXIT_FAILURE);
     }
 
     /* daemonize the process if requested */
@@ -274,6 +289,9 @@ int main(int argc, char *argv[]) {
 	}
     }
 
+    pfd[1].fd = openDevice(uart, serial_speed(baudrate));
+    printf("open serial device fd : %d\n", pfd[1].fd);
+
     mosquitto_connect_callback_set(mosq, mqtt_cb_connect);
     mosquitto_message_callback_set(mosq, mqtt_cb_msg);
     mosquitto_subscribe_callback_set(mosq, mqtt_cb_subscribe);
@@ -282,17 +300,16 @@ int main(int argc, char *argv[]) {
 
     // we try until we succeed, or we killed
     while (running) {
-	if (mosquitto_connect(mosq, mqtt_broker_host, mqtt_broker_port, keepalive)) {
-	    printf("Unable to connect, host: %s, port: %d\n", mqtt_broker_host, mqtt_broker_port);
+	if (mosquitto_connect(mosq, broker, mqtt_broker_port, keepalive)) {
+	    printf("Unable to connect, host: %s, port: %d\n", broker, mqtt_broker_port);
 	    sleep(2);
 	    continue;
 	}
 	break;
     }
-    // pfd[0] is for the mosquitto socket, pfd[1] is for stdin, or any
+    // pfd[0] is for the mosquitto socket, pfd[1] is for UART, or any
     // other file descriptor we need to handle
-    struct pollfd pfd[2];
-    pfd[1].fd = 0;
+    // pfd[1].fd = 0;
     pfd[1].events = POLLIN;	//these 2 won't change, so enough to set it once
     const int nfds = sizeof(pfd) / sizeof(struct pollfd);
 
@@ -330,17 +347,17 @@ int main(int argc, char *argv[]) {
 	}
 	// we call the misc() funtion in both cases
 	mosquitto_loop_misc(mosq);
-	// checking if there is data on the stdin, if yes, reading it
+	// checking if there is data on the UART, if yes, reading it
 	// and publish
 	if (pfd[1].revents & POLLIN) {
 	    char input[64];
-	    ret = read(0, input, 64);
+	    ret = read(pfd[1].fd, input, 64);
 	    if (ret < 0) {
 		fprintf(stderr, "%s: read_error\n", __func__);
 		exit(EXIT_FAILURE);
 	    }
 	    printf("STDIN: %s", input);
-	    mosquitto_publish(mosq, NULL, "stdin", strlen(input), input, 0, false);
+	    mosquitto_publish(mosq, NULL, uart, strlen(input), input, 0, false);
 	}
     }
 
