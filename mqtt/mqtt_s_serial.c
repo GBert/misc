@@ -22,10 +22,13 @@
 
 #include <mosquitto.h>
 
+#define MAX_BUFFER	256
+
 const char *mqtt_broker_host = "localhost";
 const int mqtt_broker_port = 1883;
 
-char topic[255];
+char topic[MAX_BUFFER];
+char topic_in[MAX_BUFFER];
 
 int background;
 
@@ -192,9 +195,9 @@ void mqtt_cb_msg(struct mosquitto *mosq, void *userdata, const struct mosquitto_
 
 void mqtt_cb_connect(struct mosquitto *mosq, void *userdata, int result) {
     /* TODO: length */
-    char subscribe[255];
+    char subscribe[MAX_BUFFER];
 
-    snprintf(subscribe, 253, "%s/#", topic);
+    snprintf(subscribe, MAX_BUFFER - 4, "%s/out", topic);
     if (!result) {
 	mosquitto_subscribe(mosq, NULL, topic, 2);
     } else {
@@ -238,8 +241,8 @@ int main(int argc, char *argv[]) {
     int baudrate;
     bool clean_session;
     struct mosquitto *mosq = NULL;
-    char uart[255];
-    char broker[255];
+    char uart[MAX_BUFFER];
+    char broker[MAX_BUFFER];
     struct pollfd pfd[2];
 
     clean_session = true;
@@ -302,6 +305,8 @@ int main(int argc, char *argv[]) {
 	    exit(EXIT_SUCCESS);
 	}
     }
+
+    snprintf(topic_in, MAX_BUFFER - 3, "%s/in", topic);
 
     pfd[1].fd = openDevice(uart, serial_speed(baudrate));
     if (pfd[1].fd <=0)
@@ -375,7 +380,7 @@ int main(int argc, char *argv[]) {
 		exit(EXIT_FAILURE);
 	    }
 	    printf("%s: %s", uart, input);
-	    mosquitto_publish(mosq, NULL, topic, strlen(input), input, 0, false);
+	    mosquitto_publish(mosq, NULL, topic_in, strlen(input), input, 0, false);
 	}
     }
 
