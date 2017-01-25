@@ -1,9 +1,14 @@
 const int revisionnr = 
-11895
+11900
 ;
 const char* commithash = 
-"631c286efdbc90a927ec42e81154089e715df213";
+"f9fa711e2b60323975ef83cf0b7e55a93500b0a4";
 const char* revlog = 
+"11900 2017-01-25 11:10:48 +0100 makefile: skip revlog in case of native win32\n" \
+"11899 2017-01-25 11:03:15 +0100 makefile: skip revlog in case of native win32\n" \
+"11898 2017-01-25 10:59:54 +0100 makefile: skip revlog in case of native win32\n" \
+"11897 2017-01-25 07:53:02 +0100 renderer: block signal type precedes accnr\n" \
+"11896 2017-01-25 07:27:37 +0100 signal: accnr support\n" \
 "11895 2017-01-22 16:25:53 +0100 tracedlg: trace level find added\n" \
 "11894 2017-01-22 15:04:59 +0100 guiframe: fix for dnd if loco is idle\n" \
 "11893 2017-01-22 07:58:39 +0100 throttle: allow blank as function text to disable soft\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "11853 2017-01-11 08:33:20 +0100 xmlscript: query subnodes\n" \
 "11852 2017-01-10 11:27:51 +0100 locdialog: layout correction\n" \
 "11851 2017-01-10 08:56:15 +0100 guiapp: update route status in case its not visible\n" \
-"11850 2017-01-10 08:47:05 +0100 stage: inform location in case of a d&d moveto\n" \
-"11849 2017-01-10 07:29:56 +0100 xmlscript: fix for overwritting the original id\n" \
-"11848 2017-01-09 07:11:31 +0100 translation merge: sl, de, pt_BR, fr, sr_latin, nl\n" \
-"11847 2017-01-08 19:44:16 +0100 signals: crash fix for trace if the block is not set\n" \
-"11846 2017-01-08 15:43:05 +0100 scheduledialog: from/to hour only disable for absolute time table\n" \
 
 "log end";
