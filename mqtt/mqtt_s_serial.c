@@ -153,7 +153,7 @@ int openDevice(const char *dev, speed_t speed) {
      */
 
     options.c_cflag &= ~(CSIZE | PARENB);
-    options.c_cflag |= (CS8 | CSTOPB );
+    options.c_cflag |= (CS8 | CSTOPB);
 
     /* options.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON); */
     options.c_iflag |= IGNPAR | ICRNL;
@@ -309,7 +309,7 @@ int main(int argc, char *argv[]) {
     snprintf(topic_in, MAX_BUFFER - 3, "%s/in", topic);
 
     pfd[1].fd = openDevice(uart, serial_speed(baudrate));
-    if (pfd[1].fd <=0)
+    if (pfd[1].fd <= 0)
 	exit(EXIT_FAILURE);
 
     printf("open serial device fd : %d\n", pfd[1].fd);
