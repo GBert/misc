@@ -27,8 +27,11 @@
 const char *mqtt_broker_host = "localhost";
 const int mqtt_broker_port = 1883;
 
+struct pollfd pfd[2];
+
 char topic[MAX_BUFFER];
 char topic_in[MAX_BUFFER];
+const char crlf[] = {0x0d, 0x0a, 0x00};
 
 int background;
 
@@ -189,7 +192,9 @@ int openDevice(const char *dev, speed_t speed) {
 void mqtt_cb_msg(struct mosquitto *mosq, void *userdata, const struct mosquitto_message *msg) {
     printf("Received msg on topic: %s\n", msg->topic);
     if (msg->payload != NULL) {
-	printf("Payload: %s\n", (char *)msg->payload);
+	if (!background)
+	    printf("Payload: %s\n", (char *)msg->payload);
+	dprintf(pfd[1].fd, "%s\r\n", (char *) msg->payload);
     }
 }
 
@@ -199,7 +204,7 @@ void mqtt_cb_connect(struct mosquitto *mosq, void *userdata, int result) {
 
     snprintf(subscribe, MAX_BUFFER - 4, "%s/out", topic);
     if (!result) {
-	mosquitto_subscribe(mosq, NULL, topic, 2);
+	mosquitto_subscribe(mosq, NULL, subscribe, 2);
     } else {
 	fprintf(stderr, "MQTT subscribe failed\n");
     }
@@ -208,7 +213,8 @@ void mqtt_cb_connect(struct mosquitto *mosq, void *userdata, int result) {
 void mqtt_cb_subscribe(struct mosquitto *mosq, void *userdata, int mid, int qos_count, const int *granted_qos) {
     printf("Subscribed (mid: %d): %d\n", mid, granted_qos[0]);
     for (int i = 1; i < qos_count; i++) {
-	printf("\t %d", granted_qos[i]);
+	if (!background)
+	    printf("\t %d", granted_qos[i]);
     }
 }
 
@@ -243,7 +249,6 @@ int main(int argc, char *argv[]) {
     struct mosquitto *mosq = NULL;
     char uart[MAX_BUFFER];
     char broker[MAX_BUFFER];
-    struct pollfd pfd[2];
 
     clean_session = true;
     running = 1;
