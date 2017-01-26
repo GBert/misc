@@ -1,29 +1,24 @@
+BINS := mqtt_s_serial mqtt_master mqtt_gpio
+
 BINDIR=/usr/local/bin
-BINFILE=mqtt_s_serial
 
 CC=gcc
-CFLAGS=-Os -std=gnu99 -pedantic-errors -Wall
+CFLAGS=-Wall -pedantic-errors -std=gnu99 -Os
 CLIB=-lmosquitto
 
-CSOURCE=mqtt_s_serial.c
-COBJECT=mqtt_s_serial.o
-CTARGET=mqtt_s_serial
+BIN = $@
 
-build:$(COBJECT) $(CTARGET)
+all:	$(BINS)
 
-$(CTARGET):$(COBJECT)
-	$(CC) $(COBJECT) -o $(CTARGET) $(CLIB)
+mqtt_s_serial: mqtt_s_serial.o
+	$(CC) $(CFLAGS) -o mqtt_s_serial mqtt_s_serial.o $(CLIB)
 
-$(COBJECT):$(CHEADER) Makefile
+mqtt_master: mqtt_master.o
+	$(CC) $(CFLAGS) -o mqtt_master mqtt_master.o $(CLIB)
 
-%.o:%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+mqtt_gpio: gpio.o mqtt_gpio.o
+	$(CC) $(CFLAGS) -o mqtt_gpio gpio.o mqtt_gpio.o $(CLIB)
 
-install:build
-	mkdir -p $(BINDIR)
-	cp $(CTARGET) $(BINDIR)/$(BINFILE)
-
-uninstall:clean
 
 clean:
-	rm -f *.o *~ $(CTARGET)
+	rm -f *.o *~ $(BINS)

@@ -35,156 +35,11 @@ const char crlf[] = { 0x0d, 0x0a, 0x00 };
 
 int background;
 
-typedef struct {
-    uint32_t baud;
-    speed_t speed;
-} baudrate_t;
-
 void print_usage(char *prg) {
-    fprintf(stderr, "\nUsage: %s -d <serial_device> -s <baudrate> -m <mosquitto_ip> -t <topic>\n", prg);
+    fprintf(stderr, "\nUsage: %s -b <mosquitto_ip>\n", prg);
     fprintf(stderr, "   Version 0.1\n\n");
-    fprintf(stderr, "         -d <serial_device>  e.g. /dev/ttyUSB0\n");
-    fprintf(stderr, "         -s <baudrate>       serial device baudrate\n");
     fprintf(stderr, "         -b <MQTT broker>    Mosquitto broker - default localhost\n");
-    fprintf(stderr, "         -t <topic>          topic\n");
     fprintf(stderr, "         -f                  foreground\n\n");
-}
-
-speed_t serial_speed(uint32_t baudrate) {
-    int i = 0;
-
-    static baudrate_t rates[] = {
-	{0, B0},
-	{50, B50},
-	{75, B75},
-	{110, B110},
-	{134, B134},
-	{150, B150},
-	{200, B200},
-	{300, B300},
-	{600, B600},
-	{1200, B1200},
-	{1800, B1800},
-	{2400, B2400},
-	{4800, B4800},
-#ifdef B7200
-	{7200, B7200},
-#endif
-	{9600, B9600},
-#ifdef B14400
-	{14400, B14400},
-#endif
-	{19200, B19200},
-	{19200, EXTA},
-#ifdef B28800
-	{28800, B28800},
-#endif
-	{38400, B38400},
-	{38400, EXTB},
-	{57600, B57600},
-#ifdef B76800
-	{76800, B76800},
-#endif
-	{115200, B115200},
-	{230400, B230400},
-#ifdef B460800
-	{460800, B460800},
-#endif
-#ifdef B500000
-	{500000, B500000},
-#endif
-#ifdef B4000000
-	{576000, B576000},
-#endif
-#ifdef B921600
-	{921600, B921600},
-#endif
-#ifdef B1000000
-	{1000000, B1000000},
-#endif
-#ifdef B1152000
-	{1152000, B1152000},
-#endif
-#ifdef B1500000
-	{1500000, B1500000},
-#endif
-#ifdef B2000000
-	{2000000, B2000000},
-#endif
-#ifdef B2500000
-	{2500000, B2500000},
-#endif
-#ifdef B3000000
-	{3000000, B3000000},
-#endif
-#ifdef B3500000
-	{3500000, B3500000},
-#endif
-#ifdef B4000000
-	{4000000, B4000000},
-#endif
-	{UINT32_MAX, B9600},
-    };
-
-    while (baudrate > rates[i++].baud) ;
-
-    return rates[--i].speed;
-}
-
-int openDevice(const char *dev, speed_t speed) {
-    int fd;
-    struct termios options;
-
-    fd = open(dev, O_RDWR | O_NOCTTY | O_NONBLOCK);
-    if (fd < 0) {
-	fprintf(stderr, "%s: Can't open >%s<\n", __func__, dev);
-	return fd;
-    }
-    if (fcntl(fd, F_SETFL, O_NONBLOCK | fcntl(fd, F_GETFL)) < 0) {
-	close(fd);
-	return (EXIT_FAILURE);
-    }
-    if (tcgetattr(fd, &options) < 0) {
-	close(fd);
-	return (EXIT_FAILURE);
-    }
-
-    /*
-     * Raw mode 8N2
-     *
-     *  Linux TERMIOS(3)
-     */
-
-    options.c_cflag &= ~(CSIZE | PARENB);
-    options.c_cflag |= (CS8 | CSTOPB);
-
-    /* options.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON); */
-    options.c_iflag |= IGNPAR | ICRNL;
-    options.c_oflag &= ~(OPOST);
-    options.c_lflag &= ~(ECHO | ECHONL | ISIG | IEXTEN);
-    options.c_lflag |= ICANON;
-
-    options.c_cc[VMIN] = 0;
-    options.c_cc[VTIME] = 0;
-
-    if (cfsetispeed(&options, speed) < 0) {
-	close(fd);
-	return (EXIT_FAILURE);
-    }
-    if (cfsetospeed(&options, speed) < 0) {
-	close(fd);
-	return (EXIT_FAILURE);
-    }
-    if (tcsetattr(fd, TCSANOW, &options) < 0) {
-	close(fd);
-	return (EXIT_FAILURE);
-    }
-    if (tcflush(fd, TCIOFLUSH) < 0) {
-	close(fd);
-	return (EXIT_FAILURE);
-    }
-
-    return fd;
 }
 
 /* called when a message arrives to the subscribed topic,
@@ -244,10 +99,8 @@ void mqtt_cb_log(struct mosquitto *mosq, void *userdata, int level, const char *
 
 int main(int argc, char *argv[]) {
     int pid, opt, ret, running, keepalive;
-    int baudrate;
     bool clean_session;
     struct mosquitto *mosq = NULL;
-    char uart[MAX_BUFFER];
     char broker[MAX_BUFFER];
 
     clean_session = true;
@@ -255,20 +108,13 @@ int main(int argc, char *argv[]) {
     clean_session = true;
     background = 0;
     keepalive = 5;
-    baudrate = 9600;
 
     memset(topic, 0, sizeof(topic));
     memset(broker, 0, sizeof(broker));
     memcpy(broker, mqtt_broker_host, strlen(mqtt_broker_host));
 
-    while ((opt = getopt(argc, argv, "b:d:s:t:fh?")) != -1) {
+    while ((opt = getopt(argc, argv, "b:t:fh?")) != -1) {
 	switch (opt) {
-	case 'd':
-	    strncpy(uart, optarg, sizeof(uart) - 1);
-	    break;
-	case 's':
-	    baudrate = atoi(optarg);
-	    break;
 	case 'b':
 	    strncpy(broker, optarg, sizeof(broker) - 1);
 	    break;
@@ -312,10 +158,6 @@ int main(int argc, char *argv[]) {
     }
 
     snprintf(topic_in, MAX_BUFFER - 3, "%s/in", topic);
-
-    pfd[1].fd = openDevice(uart, serial_speed(baudrate));
-    if (pfd[1].fd <= 0)
-	exit(EXIT_FAILURE);
 
     printf("open serial device fd : %d\n", pfd[1].fd);
 
@@ -385,7 +227,6 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr, "%s: read_error\n", __func__);
 		exit(EXIT_FAILURE);
 	    }
-	    printf("%s: %s", uart, input);
 	    mosquitto_publish(mosq, NULL, topic_in, strlen(input), input, 0, false);
 	}
     }
