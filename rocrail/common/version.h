@@ -1,9 +1,13 @@
 const int revisionnr = 
-11900
+11904
 ;
 const char* commithash = 
-"f9fa711e2b60323975ef83cf0b7e55a93500b0a4";
+"ad8d344b0c24f24cdf0c4a31d43756626a40c0a3";
 const char* revlog = 
+"11904 2017-01-28 13:31:28 +0100 guiframe: fix for lncvtab\n" \
+"11903 2017-01-28 07:49:21 +0100 fix for CTC\n" \
+"11902 2017-01-27 08:12:12 +0100 carpanel: check if the car is allready in the train before adding it\n" \
+"11901 2017-01-26 10:14:35 +0100 guiframe: update loco props deep incase of a bbt broadcast\n" \
 "11900 2017-01-25 11:10:48 +0100 makefile: skip revlog in case of native win32\n" \
 "11899 2017-01-25 11:03:15 +0100 makefile: skip revlog in case of native win32\n" \
 "11898 2017-01-25 10:59:54 +0100 makefile: skip revlog in case of native win32\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "11857 2017-01-12 08:47:05 +0100 item: tooltip for connector type added\n" \
 "11856 2017-01-12 06:33:04 +0100 finddest: check if the current block is set before calling it\n" \
 "11855 2017-01-11 13:10:49 +0100 nce: support for polling AUI over USB, version > 0\n" \
-"11854 2017-01-11 11:19:57 +0100 guiapp: revert -update route status in case its not visible-\n" \
-"11853 2017-01-11 08:33:20 +0100 xmlscript: query subnodes\n" \
-"11852 2017-01-10 11:27:51 +0100 locdialog: layout correction\n" \
-"11851 2017-01-10 08:56:15 +0100 guiapp: update route status in case its not visible\n" \
 
 "log end";
