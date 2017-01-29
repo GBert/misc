@@ -1,9 +1,10 @@
 const int revisionnr = 
-11904
+11905
 ;
 const char* commithash = 
-"ad8d344b0c24f24cdf0c4a31d43756626a40c0a3";
+"25baa63790b1ad8fe492b95a549576269b8f2941";
 const char* revlog = 
+"11905 2017-01-29 19:52:16 +0100 analyser: extended plan check fix zlevel repair\n" \
 "11904 2017-01-28 13:31:28 +0100 guiframe: fix for lncvtab\n" \
 "11903 2017-01-28 07:49:21 +0100 fix for CTC\n" \
 "11902 2017-01-27 08:12:12 +0100 carpanel: check if the car is allready in the train before adding it\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "11858 2017-01-12 14:58:33 +0100 model: fix for linear signal field events, start of delete objects support\n" \
 "11857 2017-01-12 08:47:05 +0100 item: tooltip for connector type added\n" \
 "11856 2017-01-12 06:33:04 +0100 finddest: check if the current block is set before calling it\n" \
-"11855 2017-01-11 13:10:49 +0100 nce: support for polling AUI over USB, version > 0\n" \
 
 "log end";
