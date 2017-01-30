@@ -76,9 +76,8 @@ int main(int argc, char *argv[]) {
     if (background) {
 	/* fork off the parent process */
 	pid = fork();
-	if (pid < 0) {
+	if (pid < 0)
 	    exit(EXIT_FAILURE);
-	}
 	/* if we got a good PID, then we can exit the parent process */
 	if (pid > 0) {
 	    printf("Going into background ...\n");
