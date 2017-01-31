@@ -1,9 +1,16 @@
 const int revisionnr = 
-11905
+11912
 ;
 const char* commithash = 
-"25baa63790b1ad8fe492b95a549576269b8f2941";
+"a6681275e9218aa8f9da87f46f150dd55b2281b1";
 const char* revlog = 
+"11912 2017-01-31 16:58:52 +0100 bidib: update messages\n" \
+"11911 2017-01-31 08:34:32 +0100 routedialog: uidname for ctc added\n" \
+"11910 2017-01-31 08:18:29 +0100 switch: added uidname to the ctc\n" \
+"11909 2017-01-31 08:00:27 +0100 virtual, model: fix for ctc event matching\n" \
+"11908 2017-01-31 07:33:09 +0100 trainimage: DnD moving cars within a train\n" \
+"11907 2017-01-30 08:20:08 +0100 train dnd: WIP\n" \
+"11906 2017-01-29 20:10:53 +0100 guiframe: check if the lncv tab is created before sending events\n" \
 "11905 2017-01-29 19:52:16 +0100 analyser: extended plan check fix zlevel repair\n" \
 "11904 2017-01-28 13:31:28 +0100 guiframe: fix for lncvtab\n" \
 "11903 2017-01-28 07:49:21 +0100 fix for CTC\n" \
@@ -47,12 +54,5 @@ const char* revlog =
 "11865 2017-01-14 08:26:41 +0100 renderer: fix for use prefix with aspects < 5\n" \
 "11864 2017-01-14 07:22:42 +0100 hue: increased the response buffer from 4k to 10k\n" \
 "11863 2017-01-13 14:14:13 +0100 finder: only reserve destination block if its not in a location\n" \
-"11862 2017-01-13 10:07:04 +0100 var: text index support\n" \
-"11861 2017-01-12 19:46:13 +0100 nce: fix for evaluating AIU\n" \
-"11860 2017-01-12 17:21:33 +0100 text: serialise multiple threads to avoid crash\n" \
-"11859 2017-01-12 15:24:46 +0100 nce: separate handling of USB AIU polling\n" \
-"11858 2017-01-12 14:58:33 +0100 model: fix for linear signal field events, start of delete objects support\n" \
-"11857 2017-01-12 08:47:05 +0100 item: tooltip for connector type added\n" \
-"11856 2017-01-12 06:33:04 +0100 finddest: check if the current block is set before calling it\n" \
 
 "log end";
