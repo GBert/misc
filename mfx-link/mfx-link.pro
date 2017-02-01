@@ -1,4 +1,4 @@
-update=Di 31 Jan 2017 18:37:57 CET
+update=Mi 01 Feb 2017 15:02:29 CET
 version=1
 last_client=kicad
 [pcbnew]
@@ -61,3 +61,4 @@ LibName29=contrib
 LibName30=valves
 LibName31=transf
 LibName32=my
+LibName33=ICSP
