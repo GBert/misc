@@ -1,9 +1,26 @@
 const int revisionnr = 
-11895
+11912
 ;
 const char* commithash = 
-"631c286efdbc90a927ec42e81154089e715df213";
+"a6681275e9218aa8f9da87f46f150dd55b2281b1";
 const char* revlog = 
+"11912 2017-01-31 16:58:52 +0100 bidib: update messages\n" \
+"11911 2017-01-31 08:34:32 +0100 routedialog: uidname for ctc added\n" \
+"11910 2017-01-31 08:18:29 +0100 switch: added uidname to the ctc\n" \
+"11909 2017-01-31 08:00:27 +0100 virtual, model: fix for ctc event matching\n" \
+"11908 2017-01-31 07:33:09 +0100 trainimage: DnD moving cars within a train\n" \
+"11907 2017-01-30 08:20:08 +0100 train dnd: WIP\n" \
+"11906 2017-01-29 20:10:53 +0100 guiframe: check if the lncv tab is created before sending events\n" \
+"11905 2017-01-29 19:52:16 +0100 analyser: extended plan check fix zlevel repair\n" \
+"11904 2017-01-28 13:31:28 +0100 guiframe: fix for lncvtab\n" \
+"11903 2017-01-28 07:49:21 +0100 fix for CTC\n" \
+"11902 2017-01-27 08:12:12 +0100 carpanel: check if the car is allready in the train before adding it\n" \
+"11901 2017-01-26 10:14:35 +0100 guiframe: update loco props deep incase of a bbt broadcast\n" \
+"11900 2017-01-25 11:10:48 +0100 makefile: skip revlog in case of native win32\n" \
+"11899 2017-01-25 11:03:15 +0100 makefile: skip revlog in case of native win32\n" \
+"11898 2017-01-25 10:59:54 +0100 makefile: skip revlog in case of native win32\n" \
+"11897 2017-01-25 07:53:02 +0100 renderer: block signal type precedes accnr\n" \
+"11896 2017-01-25 07:27:37 +0100 signal: accnr support\n" \
 "11895 2017-01-22 16:25:53 +0100 tracedlg: trace level find added\n" \
 "11894 2017-01-22 15:04:59 +0100 guiframe: fix for dnd if loco is idle\n" \
 "11893 2017-01-22 07:58:39 +0100 throttle: allow blank as function text to disable soft\n" \
@@ -37,22 +54,5 @@ const char* revlog =
 "11865 2017-01-14 08:26:41 +0100 renderer: fix for use prefix with aspects < 5\n" \
 "11864 2017-01-14 07:22:42 +0100 hue: increased the response buffer from 4k to 10k\n" \
 "11863 2017-01-13 14:14:13 +0100 finder: only reserve destination block if its not in a location\n" \
-"11862 2017-01-13 10:07:04 +0100 var: text index support\n" \
-"11861 2017-01-12 19:46:13 +0100 nce: fix for evaluating AIU\n" \
-"11860 2017-01-12 17:21:33 +0100 text: serialise multiple threads to avoid crash\n" \
-"11859 2017-01-12 15:24:46 +0100 nce: separate handling of USB AIU polling\n" \
-"11858 2017-01-12 14:58:33 +0100 model: fix for linear signal field events, start of delete objects support\n" \
-"11857 2017-01-12 08:47:05 +0100 item: tooltip for connector type added\n" \
-"11856 2017-01-12 06:33:04 +0100 finddest: check if the current block is set before calling it\n" \
-"11855 2017-01-11 13:10:49 +0100 nce: support for polling AUI over USB, version > 0\n" \
-"11854 2017-01-11 11:19:57 +0100 guiapp: revert -update route status in case its not visible-\n" \
-"11853 2017-01-11 08:33:20 +0100 xmlscript: query subnodes\n" \
-"11852 2017-01-10 11:27:51 +0100 locdialog: layout correction\n" \
-"11851 2017-01-10 08:56:15 +0100 guiapp: update route status in case its not visible\n" \
-"11850 2017-01-10 08:47:05 +0100 stage: inform location in case of a d&d moveto\n" \
-"11849 2017-01-10 07:29:56 +0100 xmlscript: fix for overwritting the original id\n" \
-"11848 2017-01-09 07:11:31 +0100 translation merge: sl, de, pt_BR, fr, sr_latin, nl\n" \
-"11847 2017-01-08 19:44:16 +0100 signals: crash fix for trace if the block is not set\n" \
-"11846 2017-01-08 15:43:05 +0100 scheduledialog: from/to hour only disable for absolute time table\n" \
 
 "log end";
