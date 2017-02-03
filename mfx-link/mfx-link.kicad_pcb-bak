@@ -2,11 +2,11 @@
 
   (general
     (links 118)
-    (no_connects 118)
+    (no_connects 112)
     (area 94.924999 79.924999 145.075001 130.075001)
     (thickness 1.6)
     (drawings 11)
-    (tracks 0)
+    (tracks 18)
     (zones 0)
     (modules 57)
     (nets 43)
@@ -37,7 +37,7 @@
   )
 
   (setup
-    (last_trace_width 0.25)
+    (last_trace_width 0.3048)
     (trace_clearance 0.2)
     (zone_clearance 0.508)
     (zone_45_only no)
@@ -136,7 +136,7 @@
 
   (net_class Default "This is the default net class."
     (clearance 0.2)
-    (trace_width 0.25)
+    (trace_width 0.3048)
     (via_dia 0.6)
     (via_drill 0.4)
     (uvia_dia 0.3)
@@ -151,10 +151,6 @@
     (add_net /SDA)
     (add_net /SENSE)
     (add_net /TxD)
-    (add_net /boost_1)
-    (add_net /boost_2)
-    (add_net /brown)
-    (add_net /red)
     (add_net GND)
     (add_net GNDA)
     (add_net "Net-(C1-Pad1)")
@@ -185,8 +181,30 @@
     (add_net VDD)
   )
 
-  (module w_conn_pt-1,5:pt_1,5-2-3,5-h (layer F.Cu) (tedit 586FCD9D) (tstamp 58709C08)
-    (at 106.934 127.508)
+  (net_class Boost ""
+    (clearance 0.4)
+    (trace_width 2)
+    (via_dia 2.5)
+    (via_drill 1.5)
+    (uvia_dia 0.3)
+    (uvia_drill 0.1)
+    (add_net /boost_1)
+    (add_net /boost_2)
+  )
+
+  (net_class GB ""
+    (clearance 0.2)
+    (trace_width 0.508)
+    (via_dia 0.8)
+    (via_drill 0.6)
+    (uvia_dia 0.3)
+    (uvia_drill 0.1)
+    (add_net /brown)
+    (add_net /red)
+  )
+
+  (module w_conn_pt-1,5:pt_1,5-2-3,5-h (layer F.Cu) (tedit 589487A8) (tstamp 58709C08)
+    (at 107.188 127.508)
     (descr "2-way 3.5mm pitch terminal block, Phoenix PT series")
     (path /586FB2A0)
     (fp_text reference P1 (at 0 5.3) (layer F.SilkS)
@@ -201,9 +219,9 @@
     (fp_line (start -3.5 -3.8) (end -3.5 3.8) (layer F.SilkS) (width 0.381))
     (fp_line (start 3.5 3.8) (end 3.5 -3.8) (layer F.SilkS) (width 0.381))
     (fp_line (start 3.5 -3.8) (end -3.5 -3.8) (layer F.SilkS) (width 0.381))
-    (pad 2 thru_hole circle (at -1.75 -0.7) (size 2.4 2.4) (drill 1.2) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole circle (at -2.794 -0.508) (size 2.4 2.4) (drill 1.2) (layers *.Cu *.Mask F.SilkS)
       (net 24 /boost_2))
-    (pad 1 thru_hole rect (at 1.75 -0.7) (size 2.4 2.4) (drill 1.2) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole rect (at 2.286 -0.508) (size 2.4 2.4) (drill 1.2) (layers *.Cu *.Mask F.SilkS)
       (net 23 /boost_1))
     (model walter/conn_pt-1_5/pt_1,5-2-3,5-h.wrl
       (at (xyz 0 0 0))
@@ -212,14 +230,14 @@
     )
   )
 
-  (module Connect:1pin (layer F.Cu) (tedit 586FCE1E) (tstamp 58722E34)
+  (module Connect:1pin (layer F.Cu) (tedit 58948E6C) (tstamp 58722E34)
     (at 100 85)
     (descr "module 1 pin (ou trou mecanique de percage)")
     (tags DEV)
     (fp_text reference REF** (at 0 -3.048) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 1pin (at 0 2.794) (layer F.Fab)
+    (fp_text value 1pin (at 0 2.794) (layer F.Fab) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_circle (center 0 0) (end 0 -2.286) (layer F.SilkS) (width 0.15))
@@ -240,28 +258,28 @@
     (pad 1 thru_hole circle (at 0 0) (size 5 5) (drill 3.1) (layers *.Cu *.Mask F.SilkS))
   )
 
-  (module Connect:1pin (layer F.Cu) (tedit 586FCE0A) (tstamp 58722E94)
+  (module Connect:1pin (layer F.Cu) (tedit 58948E60) (tstamp 58722E94)
     (at 140 125)
     (descr "module 1 pin (ou trou mecanique de percage)")
     (tags DEV)
     (fp_text reference REF** (at 0 -3.048) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 1pin (at 0 2.794) (layer F.Fab)
+    (fp_text value 1pin (at 0 2.794) (layer F.Fab) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_circle (center 0 0) (end 0 -2.286) (layer F.SilkS) (width 0.15))
     (pad 1 thru_hole circle (at 0 0) (size 5 5) (drill 3.1) (layers *.Cu *.Mask F.SilkS))
   )
 
-  (module Connect:1pin (layer F.Cu) (tedit 586FCE01) (tstamp 58722E95)
+  (module Connect:1pin (layer F.Cu) (tedit 58948E63) (tstamp 58722E95)
     (at 100 125)
     (descr "module 1 pin (ou trou mecanique de percage)")
     (tags DEV)
     (fp_text reference REF** (at 0 -3.048) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 1pin (at 0 2.794) (layer F.Fab)
+    (fp_text value 1pin (at 0 2.794) (layer F.Fab) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_circle (center 0 0) (end 0 -2.286) (layer F.SilkS) (width 0.15))
@@ -297,7 +315,7 @@
     )
   )
 
-  (module w_pth_circuits:dil_8-300_socket (layer F.Cu) (tedit 58935BDC) (tstamp 5872E635)
+  (module w_pth_circuits:dil_8-300_socket (layer F.Cu) (tedit 58948CF3) (tstamp 5872E635)
     (at 123.825 113.792 180)
     (descr "IC, DIL8 x 0,3\", with socket")
     (tags DIL)
@@ -305,7 +323,7 @@
     (fp_text reference U1 (at 0.0635 0.0635 180) (layer F.SilkS)
       (effects (font (size 1.524 1.143) (thickness 0.28702)))
     )
-    (fp_text value LM393-1 (at 3.3782 -0.01524 270) (layer F.SilkS)
+    (fp_text value LM393 (at 3.3782 -0.01524 270) (layer F.SilkS)
       (effects (font (size 1.4 1) (thickness 0.25)))
     )
     (fp_line (start 2.032 1.27) (end -2.032 1.27) (layer F.SilkS) (width 0.254))
@@ -341,7 +359,7 @@
     )
   )
 
-  (module Pin_Headers:Pin_Header_Straight_2x04 (layer F.Cu) (tedit 0) (tstamp 58934E9B)
+  (module Pin_Headers:Pin_Header_Straight_2x04 (layer F.Cu) (tedit 58948E72) (tstamp 58934E9B)
     (at 97.028 98.044)
     (descr "Through hole pin header")
     (tags "pin header")
@@ -349,7 +367,7 @@
     (fp_text reference P5 (at 0 -5.1) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value IBT-2 (at 0 -3.1) (layer F.Fab)
+    (fp_text value IBT-2 (at 0 -3.1) (layer F.Fab) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -1.75 -1.75) (end -1.75 9.4) (layer F.CrtYd) (width 0.05))
@@ -445,15 +463,15 @@
     )
   )
 
-  (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 5893C402) (tstamp 58945EEF)
-    (at 110.236 120.65 90)
+  (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 58948DBC) (tstamp 58945EEF)
+    (at 118.9736 120.3452 180)
     (descr "Small ceramic capacitor")
     (tags C)
     (path /586FB781)
-    (fp_text reference C1 (at 1.778 2.667 180) (layer F.SilkS)
+    (fp_text reference C1 (at -3.7592 0.1016 360) (layer F.SilkS)
       (effects (font (size 1.016 1.016) (thickness 0.2032)))
     )
-    (fp_text value 100nF (at 0 -2.286 90) (layer F.SilkS) hide
+    (fp_text value 100nF (at 0 -2.286 180) (layer F.SilkS) hide
       (effects (font (size 1.016 1.016) (thickness 0.2032)))
     )
     (fp_line (start -2.4892 -1.27) (end 2.54 -1.27) (layer F.SilkS) (width 0.3048))
@@ -461,9 +479,9 @@
     (fp_line (start 2.54 1.27) (end -2.54 1.27) (layer F.SilkS) (width 0.3048))
     (fp_line (start -2.54 1.27) (end -2.54 -1.27) (layer F.SilkS) (width 0.3048))
     (fp_line (start -2.54 -0.635) (end -1.905 -1.27) (layer F.SilkS) (width 0.3048))
-    (pad 1 thru_hole circle (at -1.27 0 90) (size 1.50114 1.50114) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole circle (at -1.27 0 180) (size 1.50114 1.50114) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
       (net 1 "Net-(C1-Pad1)"))
-    (pad 2 thru_hole circle (at 1.27 0 90) (size 1.50114 1.50114) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole circle (at 1.27 0 180) (size 1.50114 1.50114) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
       (net 2 "Net-(C1-Pad2)"))
     (model walter/capacitors/cnp_3mm_disc.wrl
       (at (xyz 0 0 0))
@@ -473,7 +491,7 @@
   )
 
   (module w_capacitors:cnp_3mm_disc (layer F.Cu) (tedit 58937EE9) (tstamp 58945EFA)
-    (at 102.362 113.284)
+    (at 101.9302 117.2718)
     (descr "Small ceramic capacitor")
     (tags C)
     (path /5890CBD2)
@@ -585,13 +603,13 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 5893525A) (tstamp 58945F17)
-    (at 120.142 124.46 90)
+    (at 113.8682 115.189 180)
     (descr "Diode, DO-35 package")
     (path /586FB68D)
-    (fp_text reference D3 (at -0.3556 0.0127 90) (layer F.SilkS)
+    (fp_text reference D3 (at -0.3556 0.0127 180) (layer F.SilkS)
       (effects (font (size 1.2 1.2) (thickness 0.2)))
     )
-    (fp_text value 1N4148 (at 0 -1.905 90) (layer F.SilkS) hide
+    (fp_text value 1N4148 (at 0 -1.905 180) (layer F.SilkS) hide
       (effects (font (thickness 0.3048)))
     )
     (fp_line (start 1.524 1.016) (end 1.524 -1.016) (layer F.SilkS) (width 0.254))
@@ -602,9 +620,9 @@
     (fp_line (start 2.286 -1.016) (end 2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start 2.286 1.016) (end -2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
-    (pad 1 thru_hole circle (at -3.81 0 90) (size 1.5 1.5) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.5) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
       (net 2 "Net-(C1-Pad2)"))
-    (pad 2 thru_hole circle (at 3.81 0 90) (size 1.5 1.5) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.5) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
       (net 1 "Net-(C1-Pad1)"))
     (model walter/pth_diodes/diode_do35.wrl
       (at (xyz 0 0 0))
@@ -614,13 +632,13 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 58935256) (tstamp 58945F1D)
-    (at 117.729 124.46 270)
+    (at 113.8174 117.4242)
     (descr "Diode, DO-35 package")
     (path /586FB6CE)
-    (fp_text reference D4 (at -0.3556 -0.1651 270) (layer F.SilkS)
+    (fp_text reference D4 (at -0.3556 -0.1651) (layer F.SilkS)
       (effects (font (thickness 0.3048)))
     )
-    (fp_text value 1N4148 (at 0 -2.54 270) (layer F.SilkS) hide
+    (fp_text value 1N4148 (at 0 -2.54) (layer F.SilkS) hide
       (effects (font (thickness 0.3048)))
     )
     (fp_line (start 1.524 1.016) (end 1.524 -1.016) (layer F.SilkS) (width 0.254))
@@ -631,9 +649,9 @@
     (fp_line (start 2.286 -1.016) (end 2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start 2.286 1.016) (end -2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
-    (pad 1 thru_hole circle (at -3.81 0 270) (size 1.5 1.5) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole circle (at -3.81 0) (size 1.5 1.5) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
       (net 1 "Net-(C1-Pad1)"))
-    (pad 2 thru_hole circle (at 3.81 0 270) (size 1.5 1.5) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole circle (at 3.81 0) (size 1.5 1.5) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
       (net 2 "Net-(C1-Pad2)"))
     (model walter/pth_diodes/diode_do35.wrl
       (at (xyz 0 0 0))
@@ -701,7 +719,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 5893C306) (tstamp 58945F2F)
-    (at 104.775 108.839)
+    (at 107.2896 108.331)
     (descr "Diode, DO-35 package")
     (path /5890D818)
     (fp_text reference D7 (at -0.24384 -0.0254) (layer F.SilkS)
@@ -730,7 +748,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 5893C2F7) (tstamp 58945F35)
-    (at 106.68 106.68 180)
+    (at 107.3404 106.2736 180)
     (descr "Diode, DO-35 package")
     (path /5890CAEB)
     (fp_text reference D8 (at -0.4318 0.06858 180) (layer F.SilkS)
@@ -918,7 +936,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 58932BA2) (tstamp 58945F66)
-    (at 113.919 117.094)
+    (at 104.2924 112.6998)
     (descr "Resistor, RC03")
     (tags R)
     (path /586FB893)
@@ -1130,13 +1148,13 @@
     )
   )
 
-  (module Choke_Toroid_ThroughHole:Murata56000C (layer F.Cu) (tedit 5891E60F) (tstamp 589472DC)
+  (module Choke_Toroid_ThroughHole:Murata56000C (layer F.Cu) (tedit 58948E5B) (tstamp 589472DC)
     (at 129.413 123.317)
     (path /586FB078)
     (fp_text reference TR1 (at 0 0) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value TRANSF1 (at 0 3) (layer F.Fab)
+    (fp_text value TRANSF1 (at 0 3) (layer F.Fab) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -4 4) (end -8 4) (layer F.SilkS) (width 0))
@@ -1406,7 +1424,7 @@
   )
 
   (module w_pth_resistors:RC03 (layer F.Cu) (tedit 0) (tstamp 589286C8)
-    (at 113.919 115.062 180)
+    (at 104.2924 110.617 180)
     (descr "Resistor, RC03")
     (tags R)
     (path /5892451C)
@@ -1615,7 +1633,7 @@
   )
 
   (module 78xx:to220 (layer F.Cu) (tedit 58937D9E) (tstamp 58933CB6)
-    (at 103.759 119.38)
+    (at 105.283 120.7008)
     (descr TO220)
     (path /5890CA1C)
     (fp_text reference U2 (at -0.127 2.413) (layer F.SilkS)
@@ -1764,14 +1782,14 @@
     )
   )
 
-  (module w_capacitors:CP_4x7mm (layer F.Cu) (tedit 58948374) (tstamp 58936AB7)
-    (at 106.807 113.538 270)
+  (module w_capacitors:CP_4x7mm (layer F.Cu) (tedit 58948D2B) (tstamp 58936AB7)
+    (at 107.1118 116.0272)
     (descr "Capacitor, pol, cyl 4x7mm")
     (path /5890CCB5)
-    (fp_text reference C3 (at -2.54 2.413 360) (layer F.SilkS)
+    (fp_text reference C3 (at -3.048 -0.9652 90) (layer F.SilkS)
       (effects (font (size 1.2 1) (thickness 0.25)))
     )
-    (fp_text value CP (at 0 3.6 270) (layer F.SilkS) hide
+    (fp_text value CP (at 0 3.6) (layer F.SilkS) hide
       (effects (font (thickness 0.3048)))
     )
     (fp_line (start -0.7 -2.1) (end 0.7 -2.1) (layer F.SilkS) (width 0.3048))
@@ -1779,9 +1797,9 @@
     (fp_line (start -1.5 -1.7) (end 1.5 -1.7) (layer F.SilkS) (width 0.3048))
     (fp_line (start 1 -0.8) (end 1.6 -0.8) (layer F.SilkS) (width 0.3))
     (fp_circle (center 0 0) (end -2.3 0) (layer F.SilkS) (width 0.3048))
-    (pad 1 thru_hole rect (at 0 0.75 270) (size 1.2 1.2) (drill 0.65) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole rect (at 0 0.75) (size 1.2 1.2) (drill 0.65) (layers *.Cu *.Mask F.SilkS)
       (net 13 VCC))
-    (pad 2 thru_hole circle (at 0 -0.75 270) (size 1.2 1.2) (drill 0.65) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole circle (at 0 -0.75) (size 1.2 1.2) (drill 0.65) (layers *.Cu *.Mask F.SilkS)
       (net 9 GND))
     (model walter/capacitors/cp_4x7mm.wrl
       (at (xyz 0 0 0))
@@ -1963,5 +1981,24 @@
   (gr_line (start 140 80) (end 100 80) (angle 90) (layer Edge.Cuts) (width 0.15))
   (gr_line (start 145 125) (end 145 85) (angle 90) (layer Edge.Cuts) (width 0.15))
   (gr_line (start 100 130) (end 140 130) (angle 90) (layer Edge.Cuts) (width 0.15))
+
+  (segment (start 130.913001 119.816999) (end 132.413 118.317) (width 2) (layer B.Cu) (net 23))
+  (segment (start 123.377007 126.119999) (end 129.680007 119.816999) (width 2) (layer B.Cu) (net 23))
+  (segment (start 110.354001 126.119999) (end 123.377007 126.119999) (width 2) (layer B.Cu) (net 23))
+  (segment (start 129.680007 119.816999) (end 130.913001 119.816999) (width 2) (layer B.Cu) (net 23))
+  (segment (start 115.316 120.65) (end 112.903 120.65) (width 2) (layer B.Cu) (net 23))
+  (segment (start 112.903 120.65) (end 112.903 123.571) (width 2) (layer B.Cu) (net 23))
+  (segment (start 112.903 123.571) (end 110.354001 126.119999) (width 2) (layer B.Cu) (net 23))
+  (segment (start 109.474 127) (end 110.354001 126.119999) (width 2) (layer B.Cu) (net 23))
+  (segment (start 114.0714 128.27) (end 115.316 128.27) (width 2) (layer F.Cu) (net 24))
+  (segment (start 112.903 128.27) (end 114.0714 128.27) (width 2) (layer F.Cu) (net 24))
+  (segment (start 106.794001 124.599999) (end 114.0206 124.599999) (width 2) (layer F.Cu) (net 24))
+  (segment (start 114.0206 124.599999) (end 121.459997 124.599999) (width 2) (layer F.Cu) (net 24))
+  (segment (start 114.0714 128.27) (end 114.0714 124.650799) (width 2) (layer F.Cu) (net 24))
+  (segment (start 114.0714 124.650799) (end 114.0206 124.599999) (width 2) (layer F.Cu) (net 24))
+  (segment (start 104.394 127) (end 106.794001 124.599999) (width 2) (layer F.Cu) (net 24))
+  (segment (start 121.459997 124.599999) (end 123.676999 126.817001) (width 2) (layer F.Cu) (net 24))
+  (segment (start 123.676999 126.817001) (end 124.913001 126.817001) (width 2) (layer F.Cu) (net 24))
+  (segment (start 124.913001 126.817001) (end 126.413 128.317) (width 2) (layer F.Cu) (net 24))
 
 )
