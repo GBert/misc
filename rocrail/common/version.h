@@ -1,9 +1,10 @@
 const int revisionnr = 
-11918
+11919
 ;
 const char* commithash = 
-"f319d0698561daf1b2e9a5283129ca94d6f59d24";
+"313caecea1074057258da326ddab52bb8ba5d638";
 const char* revlog = 
+"11919 2017-02-04 14:39:08 +0100 guiframe: menu->help->menu added\n" \
 "11918 2017-02-04 08:16:02 +0100 carpanel: fix for delete the whole train\n" \
 "11917 2017-02-03 07:17:17 +0100 zimobin: toggle broadcast on/off with the ebreak command\n" \
 "11916 2017-02-02 08:07:47 +0100 carpanel: fix for deleting last car with dnd\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "11872 2017-01-16 11:57:22 +0100 rocview: carpanel (WIP)\n" \
 "11871 2017-01-15 11:32:02 +0100 milight: fix for none color lights\n" \
 "11870 2017-01-15 07:09:13 +0100 bidib: fix for set/get vendor CV\n" \
-"11869 2017-01-15 07:00:15 +0100 milight: none color type output support\n" \
 
 "log end";
