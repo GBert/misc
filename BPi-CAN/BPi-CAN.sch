@@ -3579,17 +3579,6 @@ F 3 "" H 6800 4950 50  0000 C CNN
 	1    6800 4950
 	0    1    1    0   
 $EndComp
-$Comp
-L CONN_01X08 P30
-U 1 1 5896A347
-P 5750 4950
-F 0 "P30" H 5750 5400 50  0000 C CNN
-F 1 "CONN_01X08" V 5850 4950 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x08" H 5750 4950 50  0001 C CNN
-F 3 "" H 5750 4950 50  0000 C CNN
-	1    5750 4950
-	-1   0    0    1   
-$EndComp
 Wire Wire Line
 	6350 4600 5950 4600
 Wire Wire Line
@@ -3628,4 +3617,70 @@ Wire Wire Line
 	850  4300 1050 4300
 Text Label 900  4300 0    60   ~ 0
 PH2
+$Comp
+L CONN_01X06 P32
+U 1 1 58971FDD
+P 5750 5050
+F 0 "P32" H 5750 4700 50  0000 C CNN
+F 1 "CONN_01X06" V 5850 5050 50  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x06" V 5750 5050 60  0001 C CNN
+F 3 "" H 5750 5050 60  0000 C CNN
+	1    5750 5050
+	-1   0    0    -1  
+$EndComp
+$Comp
+L CONN_01X02 P30
+U 1 1 5897216B
+P 5750 4650
+F 0 "P30" H 5750 4800 50  0000 C CNN
+F 1 "CONN_01X02" V 5850 4650 50  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x02" V 5750 4650 60  0001 C CNN
+F 3 "" H 5750 4650 60  0000 C CNN
+	1    5750 4650
+	-1   0    0    -1  
+$EndComp
+$Comp
+L LED D6
+U 1 1 58972F10
+P 5200 5100
+F 0 "D6" H 5200 5000 50  0000 C CNN
+F 1 "LED" H 5350 5050 50  0000 C CNN
+F 2 "LEDs:LED-3MM" H 5200 5100 50  0001 C CNN
+F 3 "" H 5200 5100 50  0000 C CNN
+	1    5200 5100
+	0    -1   -1   0   
+$EndComp
+$Comp
+L R R14
+U 1 1 58972F16
+P 5200 4750
+F 0 "R14" V 5100 4750 50  0000 C CNN
+F 1 "8k2" V 5200 4750 50  0000 C CNN
+F 2 "w_pth_resistors:RC03" V 5130 4750 50  0001 C CNN
+F 3 "" H 5200 4750 50  0000 C CNN
+	1    5200 4750
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	5200 4600 5200 4550
+Wire Wire Line
+	5200 4550 5500 4550
+Wire Wire Line
+	5200 5300 5550 5300
+Text Label 6000 4600 0    60   ~ 0
+rt_
+Text Label 6000 4700 0    60   ~ 0
+br_
+Text Label 6000 4900 0    60   ~ 0
+GND_
+Text Label 6000 5100 0    60   ~ 0
+VCC_
+Text Label 6000 5200 0    60   ~ 0
+CANL_
+Text Label 6000 5300 0    60   ~ 0
+CANH_
+Text Label 5300 5300 0    60   ~ 0
+GND_
+Text Label 5300 4550 0    60   ~ 0
+VCC_
 $EndSCHEMATC
