@@ -1,9 +1,11 @@
 const int revisionnr = 
-11919
+11921
 ;
 const char* commithash = 
-"313caecea1074057258da326ddab52bb8ba5d638";
+"58b13648655a91a241c2805ca78768667281f0fc";
 const char* revlog = 
+"11921 2017-02-05 15:26:34 +0100 xmlscript: fix for replacing oid with NULL\n" \
+"11920 2017-02-05 07:22:06 +0100 trainpanel: default dnd action added\n" \
 "11919 2017-02-04 14:39:08 +0100 guiframe: menu->help->menu added\n" \
 "11918 2017-02-04 08:16:02 +0100 carpanel: fix for delete the whole train\n" \
 "11917 2017-02-03 07:17:17 +0100 zimobin: toggle broadcast on/off with the ebreak command\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11874 2017-01-17 09:57:37 +0100 train d&d: WIP\n" \
 "11873 2017-01-17 08:38:10 +0100 carpanel: d&d fixes\n" \
 "11872 2017-01-16 11:57:22 +0100 rocview: carpanel (WIP)\n" \
-"11871 2017-01-15 11:32:02 +0100 milight: fix for none color lights\n" \
-"11870 2017-01-15 07:09:13 +0100 bidib: fix for set/get vendor CV\n" \
 
 "log end";
