@@ -29,7 +29,6 @@ LIBS:atmel
 LIBS:contrib
 LIBS:valves
 LIBS:mylib
-LIBS:ISO1050
 LIBS:p82b715
 LIBS:RPi-MCP2515-cache
 EELAYER 25 0
@@ -842,7 +841,99 @@ F 3 "" H 2100 5600 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
+<<<<<<< HEAD
 L GND #PWR038
+=======
+L R R5
+U 1 1 5898B374
+P 1450 6450
+F 0 "R5" V 1450 6650 50  0000 C CNN
+F 1 "var" V 1450 6450 50  0000 C CNN
+F 2 "w_pth_resistors:rc03_vert" V 1380 6450 50  0001 C CNN
+F 3 "" H 1450 6450 50  0000 C CNN
+	1    1450 6450
+	0    1    1    0   
+$EndComp
+$Comp
+L R R6
+U 1 1 5898B46C
+P 1450 6550
+F 0 "R6" V 1450 6750 50  0000 C CNN
+F 1 "var" V 1450 6550 50  0000 C CNN
+F 2 "w_pth_resistors:rc03_vert" V 1380 6550 50  0001 C CNN
+F 3 "" H 1450 6550 50  0000 C CNN
+	1    1450 6550
+	0    1    1    0   
+$EndComp
+$Comp
+L R R7
+U 1 1 5898BC40
+P 1450 6650
+F 0 "R7" V 1450 6850 50  0000 C CNN
+F 1 "var" V 1450 6650 50  0000 C CNN
+F 2 "w_pth_resistors:rc03_vert" V 1380 6650 50  0001 C CNN
+F 3 "" H 1450 6650 50  0000 C CNN
+	1    1450 6650
+	0    1    1    0   
+$EndComp
+$Comp
+L R R8
+U 1 1 5898BD04
+P 1450 6750
+F 0 "R8" V 1450 6950 50  0000 C CNN
+F 1 "var" V 1450 6750 50  0000 C CNN
+F 2 "w_pth_resistors:rc03_vert" V 1380 6750 50  0001 C CNN
+F 3 "" H 1450 6750 50  0000 C CNN
+	1    1450 6750
+	0    1    1    0   
+$EndComp
+$Comp
+L R R9
+U 1 1 5898BDD0
+P 1450 6850
+F 0 "R9" V 1450 7050 50  0000 C CNN
+F 1 "var" V 1450 6850 50  0000 C CNN
+F 2 "w_pth_resistors:rc03_vert" V 1380 6850 50  0001 C CNN
+F 3 "" H 1450 6850 50  0000 C CNN
+	1    1450 6850
+	0    1    1    0   
+$EndComp
+$Comp
+L R R10
+U 1 1 5898BECB
+P 1450 6950
+F 0 "R10" V 1450 7150 50  0000 C CNN
+F 1 "var" V 1450 6950 50  0000 C CNN
+F 2 "w_pth_resistors:rc03_vert" V 1380 6950 50  0001 C CNN
+F 3 "" H 1450 6950 50  0000 C CNN
+	1    1450 6950
+	0    1    1    0   
+$EndComp
+$Comp
+L R R11
+U 1 1 5898BF9B
+P 1450 7050
+F 0 "R11" V 1450 7250 50  0000 C CNN
+F 1 "var" V 1450 7050 50  0000 C CNN
+F 2 "w_pth_resistors:rc03_vert" V 1380 7050 50  0001 C CNN
+F 3 "" H 1450 7050 50  0000 C CNN
+	1    1450 7050
+	0    1    1    0   
+$EndComp
+$Comp
+L R R12
+U 1 1 5898C073
+P 1450 7150
+F 0 "R12" V 1450 7350 50  0000 C CNN
+F 1 "var" V 1450 7150 50  0000 C CNN
+F 2 "w_pth_resistors:rc03_vert" V 1380 7150 50  0001 C CNN
+F 3 "" H 1450 7150 50  0000 C CNN
+	1    1450 7150
+	0    1    1    0   
+$EndComp
+$Comp
+L GND #PWR040
+>>>>>>> 2f0b4e2309c528b4c9a9322d917b106c7e42ead4
 U 1 1 5898E873
 P 2550 7400
 F 0 "#PWR038" H 2550 7150 50  0001 C CNN
@@ -864,7 +955,99 @@ F 3 "" H 3550 5600 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
+<<<<<<< HEAD
 L GNDA #PWR039
+=======
+L R R16
+U 1 1 58992506
+P 4200 6450
+F 0 "R16" V 4200 6650 50  0000 C CNN
+F 1 "var" V 4200 6450 50  0000 C CNN
+F 2 "w_pth_resistors:rc03_vert" V 4130 6450 50  0001 C CNN
+F 3 "" H 4200 6450 50  0000 C CNN
+	1    4200 6450
+	0    -1   1    0   
+$EndComp
+$Comp
+L R R17
+U 1 1 5899250C
+P 4200 6550
+F 0 "R17" V 4200 6750 50  0000 C CNN
+F 1 "var" V 4200 6550 50  0000 C CNN
+F 2 "w_pth_resistors:rc03_vert" V 4130 6550 50  0001 C CNN
+F 3 "" H 4200 6550 50  0000 C CNN
+	1    4200 6550
+	0    -1   1    0   
+$EndComp
+$Comp
+L R R18
+U 1 1 58992512
+P 4200 6650
+F 0 "R18" V 4200 6850 50  0000 C CNN
+F 1 "var" V 4200 6650 50  0000 C CNN
+F 2 "w_pth_resistors:rc03_vert" V 4130 6650 50  0001 C CNN
+F 3 "" H 4200 6650 50  0000 C CNN
+	1    4200 6650
+	0    -1   1    0   
+$EndComp
+$Comp
+L R R19
+U 1 1 58992518
+P 4200 6750
+F 0 "R19" V 4200 6950 50  0000 C CNN
+F 1 "var" V 4200 6750 50  0000 C CNN
+F 2 "w_pth_resistors:rc03_vert" V 4130 6750 50  0001 C CNN
+F 3 "" H 4200 6750 50  0000 C CNN
+	1    4200 6750
+	0    -1   1    0   
+$EndComp
+$Comp
+L R R20
+U 1 1 5899251E
+P 4200 6850
+F 0 "R20" V 4200 7050 50  0000 C CNN
+F 1 "var" V 4200 6850 50  0000 C CNN
+F 2 "w_pth_resistors:rc03_vert" V 4130 6850 50  0001 C CNN
+F 3 "" H 4200 6850 50  0000 C CNN
+	1    4200 6850
+	0    -1   1    0   
+$EndComp
+$Comp
+L R R21
+U 1 1 58992524
+P 4200 6950
+F 0 "R21" V 4200 7150 50  0000 C CNN
+F 1 "var" V 4200 6950 50  0000 C CNN
+F 2 "w_pth_resistors:rc03_vert" V 4130 6950 50  0001 C CNN
+F 3 "" H 4200 6950 50  0000 C CNN
+	1    4200 6950
+	0    -1   1    0   
+$EndComp
+$Comp
+L R R22
+U 1 1 5899252A
+P 4200 7050
+F 0 "R22" V 4200 7250 50  0000 C CNN
+F 1 "var" V 4200 7050 50  0000 C CNN
+F 2 "w_pth_resistors:rc03_vert" V 4130 7050 50  0001 C CNN
+F 3 "" H 4200 7050 50  0000 C CNN
+	1    4200 7050
+	0    -1   1    0   
+$EndComp
+$Comp
+L R R23
+U 1 1 58992530
+P 4200 7150
+F 0 "R23" V 4200 7350 50  0000 C CNN
+F 1 "var" V 4200 7150 50  0000 C CNN
+F 2 "w_pth_resistors:rc03_vert" V 4130 7150 50  0001 C CNN
+F 3 "" H 4200 7150 50  0000 C CNN
+	1    4200 7150
+	0    -1   1    0   
+$EndComp
+$Comp
+L GNDA #PWR041
+>>>>>>> 2f0b4e2309c528b4c9a9322d917b106c7e42ead4
 U 1 1 58992960
 P 3100 7400
 F 0 "#PWR039" H 3100 7150 50  0001 C CNN
