@@ -1,9 +1,12 @@
 const int revisionnr = 
-11921
+11924
 ;
 const char* commithash = 
-"58b13648655a91a241c2805ca78768667281f0fc";
+"5f3e7c6f4f867e4535c4fa5ffdb4a9a23fc96d10";
 const char* revlog = 
+"11924 2017-02-07 09:40:27 +0100 car and trainpanel: contect menu added\n" \
+"11923 2017-02-07 08:07:14 +0100 ulni: echo timeout parameter added\n" \
+"11922 2017-02-06 07:24:37 +0100 DnD a loco to a train\n" \
 "11921 2017-02-05 15:26:34 +0100 xmlscript: fix for replacing oid with NULL\n" \
 "11920 2017-02-05 07:22:06 +0100 trainpanel: default dnd action added\n" \
 "11919 2017-02-04 14:39:08 +0100 guiframe: menu->help->menu added\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "11877 2017-01-18 07:15:30 +0100 carpanel: typo fix\n" \
 "11876 2017-01-17 15:46:24 +0100 train d&d: WIP\n" \
 "11875 2017-01-17 13:56:20 +0100 train d&d: WIP\n" \
-"11874 2017-01-17 09:57:37 +0100 train d&d: WIP\n" \
-"11873 2017-01-17 08:38:10 +0100 carpanel: d&d fixes\n" \
-"11872 2017-01-16 11:57:22 +0100 rocview: carpanel (WIP)\n" \
 
 "log end";
