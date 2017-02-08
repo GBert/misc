@@ -1,9 +1,21 @@
 const int revisionnr = 
-11912
+11924
 ;
 const char* commithash = 
-"a6681275e9218aa8f9da87f46f150dd55b2281b1";
+"5f3e7c6f4f867e4535c4fa5ffdb4a9a23fc96d10";
 const char* revlog = 
+"11924 2017-02-07 09:40:27 +0100 car and trainpanel: contect menu added\n" \
+"11923 2017-02-07 08:07:14 +0100 ulni: echo timeout parameter added\n" \
+"11922 2017-02-06 07:24:37 +0100 DnD a loco to a train\n" \
+"11921 2017-02-05 15:26:34 +0100 xmlscript: fix for replacing oid with NULL\n" \
+"11920 2017-02-05 07:22:06 +0100 trainpanel: default dnd action added\n" \
+"11919 2017-02-04 14:39:08 +0100 guiframe: menu->help->menu added\n" \
+"11918 2017-02-04 08:16:02 +0100 carpanel: fix for delete the whole train\n" \
+"11917 2017-02-03 07:17:17 +0100 zimobin: toggle broadcast on/off with the ebreak command\n" \
+"11916 2017-02-02 08:07:47 +0100 carpanel: fix for deleting last car with dnd\n" \
+"11915 2017-02-02 07:57:55 +0100 trainpanel: cardel dnd support added\n" \
+"11914 2017-02-02 07:53:49 +0100 carpanel: only allow alt+dnd in case the car does not belong to a train\n" \
+"11913 2017-02-02 07:47:38 +0100 carpanel: default dnd action added\n" \
 "11912 2017-01-31 16:58:52 +0100 bidib: update messages\n" \
 "11911 2017-01-31 08:34:32 +0100 routedialog: uidname for ctc added\n" \
 "11910 2017-01-31 08:18:29 +0100 switch: added uidname to the ctc\n" \
@@ -42,17 +54,5 @@ const char* revlog =
 "11877 2017-01-18 07:15:30 +0100 carpanel: typo fix\n" \
 "11876 2017-01-17 15:46:24 +0100 train d&d: WIP\n" \
 "11875 2017-01-17 13:56:20 +0100 train d&d: WIP\n" \
-"11874 2017-01-17 09:57:37 +0100 train d&d: WIP\n" \
-"11873 2017-01-17 08:38:10 +0100 carpanel: d&d fixes\n" \
-"11872 2017-01-16 11:57:22 +0100 rocview: carpanel (WIP)\n" \
-"11871 2017-01-15 11:32:02 +0100 milight: fix for none color lights\n" \
-"11870 2017-01-15 07:09:13 +0100 bidib: fix for set/get vendor CV\n" \
-"11869 2017-01-15 07:00:15 +0100 milight: none color type output support\n" \
-"11868 2017-01-14 11:23:33 +0100 cbusnodedlg: 100ms pause between the getall commands\n" \
-"11867 2017-01-14 11:02:50 +0100 rmx: show rmx channel in the loco trace\n" \
-"11866 2017-01-14 08:42:35 +0100 bidib: flat addressing support for switch servo type\n" \
-"11865 2017-01-14 08:26:41 +0100 renderer: fix for use prefix with aspects < 5\n" \
-"11864 2017-01-14 07:22:42 +0100 hue: increased the response buffer from 4k to 10k\n" \
-"11863 2017-01-13 14:14:13 +0100 finder: only reserve destination block if its not in a location\n" \
 
 "log end";
