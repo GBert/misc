@@ -1,9 +1,14 @@
 const int revisionnr = 
-11924
+11929
 ;
 const char* commithash = 
-"5f3e7c6f4f867e4535c4fa5ffdb4a9a23fc96d10";
+"79914d4f8fd473530b4fd08fbca8e084d515020f";
 const char* revlog = 
+"11929 2017-02-08 15:47:41 +0100 car and train panel: extra colums added\n" \
+"11928 2017-02-08 15:18:56 +0100 rocguidialog: enable car and train tab options\n" \
+"11927 2017-02-08 12:07:48 +0100 car train panel: fix for scrolling\n" \
+"11926 2017-02-08 09:29:23 +0100 xmlscript: use rawdata for the scripts to save html escapes\n" \
+"11925 2017-02-08 07:55:08 +0100 enable scrolling in car and train grid\n" \
 "11924 2017-02-07 09:40:27 +0100 car and trainpanel: contect menu added\n" \
 "11923 2017-02-07 08:07:14 +0100 ulni: echo timeout parameter added\n" \
 "11922 2017-02-06 07:24:37 +0100 DnD a loco to a train\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "11882 2017-01-19 08:10:42 +0100 rocguiinidlg: added car and train tab options\n" \
 "11881 2017-01-19 07:51:10 +0100 virtual: trace extended for aspect commands\n" \
 "11880 2017-01-19 07:02:15 +0100 bidib: revert work around for accessory ack\n" \
-"11879 2017-01-18 11:58:08 +0100 locowidget: render smooth option implemented\n" \
-"11878 2017-01-18 08:32:52 +0100 throttle: save width and height\n" \
-"11877 2017-01-18 07:15:30 +0100 carpanel: typo fix\n" \
-"11876 2017-01-17 15:46:24 +0100 train d&d: WIP\n" \
-"11875 2017-01-17 13:56:20 +0100 train d&d: WIP\n" \
 
 "log end";
