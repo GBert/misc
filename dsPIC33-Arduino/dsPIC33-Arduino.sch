@@ -686,36 +686,25 @@ A2
 Text Label 2400 5200 0    60   ~ 0
 A3
 $Comp
-L D D4
-U 1 1 588DD0A8
-P 2850 4550
-F 0 "D4" H 2850 4650 50  0000 C CNN
-F 1 "BAT43" H 3000 4450 50  0000 C CNN
-F 2 "w_pth_diodes:diode_do35" H 2850 4550 50  0001 C CNN
-F 3 "" H 2850 4550 50  0000 C CNN
-	1    2850 4550
-	0    -1   -1   0   
-$EndComp
-$Comp
 L R R7
 U 1 1 588DD141
-P 2850 4200
-F 0 "R7" V 2930 4200 50  0000 C CNN
-F 1 "4k7" V 2850 4200 50  0000 C CNN
-F 2 "w_pth_resistors:RC03" V 2780 4200 50  0001 C CNN
-F 3 "" H 2850 4200 50  0000 C CNN
-	1    2850 4200
+P 2850 3950
+F 0 "R7" V 2930 3950 50  0000 C CNN
+F 1 "4k7" V 2850 3950 50  0000 C CNN
+F 2 "w_pth_resistors:RC03" V 2780 3950 50  0001 C CNN
+F 3 "" H 2850 3950 50  0000 C CNN
+	1    2850 3950
 	1    0    0    -1  
 $EndComp
 $Comp
 L VDD #PWR021
 U 1 1 588DD1FB
-P 2850 3950
-F 0 "#PWR021" H 2850 3800 50  0001 C CNN
-F 1 "VDD" H 2850 4100 50  0000 C CNN
-F 2 "" H 2850 3950 50  0000 C CNN
-F 3 "" H 2850 3950 50  0000 C CNN
-	1    2850 3950
+P 2850 3700
+F 0 "#PWR021" H 2850 3550 50  0001 C CNN
+F 1 "VDD" H 2850 3850 50  0000 C CNN
+F 2 "" H 2850 3700 50  0000 C CNN
+F 3 "" H 2850 3700 50  0000 C CNN
+	1    2850 3700
 	1    0    0    -1  
 $EndComp
 Text Label 2250 4800 0    60   ~ 0
@@ -1070,7 +1059,7 @@ U 1 1 588F6DFB
 P 8000 2450
 F 0 "P14" H 8000 2650 50  0000 C CNN
 F 1 "Power Select" V 8100 2450 50  0000 C CNN
-F 2 "Socket_Strips:Socket_Strip_Straight_1x03" H 8000 2450 50  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x03" H 8000 2450 50  0001 C CNN
 F 3 "" H 8000 2450 50  0000 C CNN
 	1    8000 2450
 	1    0    0    -1  
@@ -1114,7 +1103,7 @@ U 1 1 588F890F
 P 5500 4450
 F 0 "P13" H 5500 4600 50  0000 C CNN
 F 1 "PIN2" V 5600 4450 50  0000 C CNN
-F 2 "Socket_Strips:Socket_Strip_Straight_2x01" H 5500 4450 50  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x02" H 5500 4450 50  0001 C CNN
 F 3 "" H 5500 4450 50  0000 C CNN
 	1    5500 4450
 	-1   0    0    1   
@@ -1184,7 +1173,7 @@ F 3 "" H 5650 1250 50  0000 C CNN
 	1    5650 1250
 	1    0    0    -1  
 $EndComp
-Text Label 4950 3100 0    60   ~ 0
+Text Label 5050 3100 0    60   ~ 0
 ~MCLR~
 $Comp
 L 74AHC1G32 U4
@@ -1198,22 +1187,11 @@ F 3 "" H 4300 3100 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D D6
-U 1 1 589A18F3
-P 4775 3100
-F 0 "D6" H 4775 3200 50  0000 C CNN
-F 1 "D" H 4775 3000 50  0000 C CNN
-F 2 "w_pth_diodes:diode_do35" H 4775 3100 50  0001 C CNN
-F 3 "" H 4775 3100 50  0000 C CNN
-	1    4775 3100
-	-1   0    0    1   
-$EndComp
-$Comp
 L CONN_01X04 P15
 U 1 1 589A6EC0
 P 1225 3550
 F 0 "P15" H 1225 3800 50  0000 C CNN
-F 1 "Grove I2C" V 1325 3550 50  0000 C CNN
+F 1 "I2C" V 1325 3550 50  0000 C CNN
 F 2 "w_conn_jst-ph:s4b-ph-kl" V 1225 3550 50  0001 C CNN
 F 3 "" H 1225 3550 50  0000 C CNN
 	1    1225 3550
@@ -1348,9 +1326,7 @@ Wire Wire Line
 Wire Wire Line
 	9050 1925 9375 1925
 Wire Wire Line
-	9300 2025 9300 2125
-Wire Wire Line
-	9300 2125 9300 3100
+	9300 2025 9300 3100
 Wire Wire Line
 	8600 1725 9375 1725
 Wire Wire Line
@@ -1403,17 +1379,13 @@ Wire Notes Line
 Wire Notes Line
 	9925 825  9925 475 
 Wire Wire Line
-	1150 2050 1400 2050
-Wire Wire Line
-	1400 2050 1750 2050
+	1150 2050 1750 2050
 Wire Wire Line
 	2050 2050 2150 2050
 Wire Wire Line
 	2150 2150 2050 2150
 Wire Wire Line
-	1150 2150 1650 2150
-Wire Wire Line
-	1650 2150 1750 2150
+	1150 2150 1750 2150
 Wire Wire Line
 	1400 2450 1400 2050
 Connection ~ 1400 2050
@@ -1421,27 +1393,13 @@ Wire Wire Line
 	1650 2150 1650 2450
 Connection ~ 1650 2150
 Wire Wire Line
-	1150 2250 1200 2250
-Wire Wire Line
-	1200 2250 1300 2250
+	1150 2250 1300 2250
 Wire Wire Line
 	1200 2250 1200 2950
 Wire Wire Line
-	1200 2950 1400 2950
+	1200 2950 3200 2950
 Wire Wire Line
-	1400 2950 1650 2950
-Wire Wire Line
-	1650 2950 2100 2950
-Wire Wire Line
-	2100 2950 2750 2950
-Wire Wire Line
-	2750 2950 2950 2950
-Wire Wire Line
-	2950 2950 3200 2950
-Wire Wire Line
-	2950 2850 2950 2950
-Wire Wire Line
-	2950 2950 2950 3100
+	2950 2850 2950 3100
 Connection ~ 2950 2950
 Wire Wire Line
 	2750 2850 2750 2950
@@ -1456,9 +1414,7 @@ Wire Wire Line
 	1300 2250 1300 1900
 Connection ~ 1200 2250
 Wire Wire Line
-	1150 1300 1150 1600
-Wire Wire Line
-	1150 1600 1150 1950
+	1150 1300 1150 1950
 Wire Wire Line
 	1150 1600 1300 1600
 Wire Wire Line
@@ -1469,11 +1425,7 @@ Wire Wire Line
 Wire Wire Line
 	2950 1450 2950 1200
 Wire Wire Line
-	2100 1200 2100 1750
-Wire Wire Line
-	2100 1750 2100 2350
-Wire Wire Line
-	2100 2350 2100 2550
+	2100 1200 2100 2550
 Wire Wire Line
 	2100 2350 2150 2350
 Wire Wire Line
@@ -1484,18 +1436,14 @@ Wire Wire Line
 	2100 2850 2100 2950
 Connection ~ 2100 2950
 Wire Wire Line
-	700  1200 850  1200
-Wire Wire Line
-	850  1200 1000 1200
+	700  1200 1000 1200
 Wire Wire Line
 	850  1200 850  1300
 Connection ~ 850  1200
 Wire Wire Line
 	1000 800  1000 900 
 Wire Wire Line
-	700  800  850  800 
-Wire Wire Line
-	850  800  1000 800 
+	700  800  1000 800 
 Wire Wire Line
 	700  800  700  900 
 Wire Wire Line
@@ -1526,9 +1474,7 @@ Wire Wire Line
 Wire Wire Line
 	3550 2550 3800 2550
 Wire Wire Line
-	1750 1100 1750 1200
-Wire Wire Line
-	1750 1200 1750 1300
+	1750 1100 1750 1300
 Connection ~ 1750 1300
 Wire Wire Line
 	1450 1100 1450 1200
@@ -1538,11 +1484,7 @@ Connection ~ 1750 1200
 Wire Wire Line
 	750  2450 750  2450
 Wire Wire Line
-	2100 1200 2950 1200
-Wire Wire Line
-	2950 1200 4100 1200
-Wire Wire Line
-	4100 1200 4350 1200
+	2100 1200 4350 1200
 Wire Wire Line
 	4100 1200 4100 1800
 Wire Wire Line
@@ -1550,22 +1492,16 @@ Wire Wire Line
 Wire Wire Line
 	5650 2850 5650 2900
 Wire Wire Line
-	5650 2900 6100 2900
-Wire Wire Line
-	6100 2900 6550 2900
+	5650 2900 6550 2900
 Wire Wire Line
 	6550 2900 6550 2850
 Wire Wire Line
-	6100 2700 6100 2900
-Wire Wire Line
-	6100 2900 6100 3000
+	6100 2700 6100 3000
 Connection ~ 6100 2900
 Wire Wire Line
 	5650 2550 5650 2400
 Wire Wire Line
-	5300 2400 5650 2400
-Wire Wire Line
-	5650 2400 5800 2400
+	5300 2400 5800 2400
 Wire Wire Line
 	6550 2400 6550 2550
 Wire Wire Line
@@ -1579,11 +1515,7 @@ Wire Wire Line
 Wire Wire Line
 	4150 7050 4150 7325
 Wire Wire Line
-	4150 7325 4300 7325
-Wire Wire Line
-	4300 7325 4450 7325
-Wire Wire Line
-	4450 7325 4775 7325
+	4150 7325 4775 7325
 Wire Wire Line
 	4450 7325 4450 7050
 Wire Wire Line
@@ -1591,15 +1523,11 @@ Wire Wire Line
 Wire Wire Line
 	4200 4500 4200 4450
 Wire Wire Line
-	4200 4450 4300 4450
-Wire Wire Line
-	4300 4450 4400 4450
+	4200 4450 4400 4450
 Wire Wire Line
 	4400 4450 4400 4500
 Wire Wire Line
-	4300 4250 4300 4300
-Wire Wire Line
-	4300 4300 4300 4450
+	4300 4250 4300 4450
 Connection ~ 4300 4450
 Wire Wire Line
 	5550 6350 5850 6350
@@ -1620,9 +1548,7 @@ Wire Wire Line
 Wire Wire Line
 	3600 4100 3600 4000
 Wire Wire Line
-	3600 4000 3700 4000
-Wire Wire Line
-	3700 4000 3800 4000
+	3600 4000 3800 4000
 Wire Wire Line
 	3800 4000 3800 4100
 Wire Wire Line
@@ -1639,17 +1565,9 @@ Wire Wire Line
 Wire Wire Line
 	2100 5300 3100 5300
 Wire Wire Line
-	2800 4800 2850 4800
+	2800 4800 3100 4800
 Wire Wire Line
-	2850 4800 3050 4800
-Wire Wire Line
-	3050 4800 3100 4800
-Wire Wire Line
-	2850 4800 2850 4700
-Wire Wire Line
-	2850 4400 2850 4350
-Wire Wire Line
-	2850 4050 2850 3950
+	2850 4800 2850 4550
 Connection ~ 2850 4800
 Wire Wire Line
 	5500 5400 5750 5400
@@ -1664,19 +1582,13 @@ Wire Wire Line
 Wire Wire Line
 	3100 5500 2850 5500
 Wire Wire Line
-	2450 5650 2750 5650
+	2450 5650 3100 5650
 Wire Wire Line
-	2750 5650 3100 5650
-Wire Wire Line
-	2450 6000 2750 6000
-Wire Wire Line
-	2750 6000 3100 6000
+	2450 6000 3100 6000
 Wire Wire Line
 	2150 5650 1950 5650
 Wire Wire Line
-	1950 5650 1950 6000
-Wire Wire Line
-	1950 6000 1950 6150
+	1950 5650 1950 6150
 Wire Wire Line
 	2150 6000 1950 6000
 Connection ~ 1950 6000
@@ -1701,28 +1613,18 @@ Wire Wire Line
 Wire Wire Line
 	5650 1700 5650 1750
 Wire Wire Line
-	5500 1750 5650 1750
-Wire Wire Line
-	5650 1750 6100 1750
-Wire Wire Line
-	6100 1750 6550 1750
+	5500 1750 6550 1750
 Wire Wire Line
 	6550 1750 6550 1700
 Wire Wire Line
-	6100 1550 6100 1750
-Wire Wire Line
-	6100 1750 6100 1850
+	6100 1550 6100 1850
 Connection ~ 6100 1750
 Wire Wire Line
 	5650 1400 5650 1250
 Wire Wire Line
-	5450 1250 5650 1250
+	5450 1250 5800 1250
 Wire Wire Line
-	5650 1250 5800 1250
-Wire Wire Line
-	6400 1250 6550 1250
-Wire Wire Line
-	6550 1250 6800 1250
+	6400 1250 6800 1250
 Wire Wire Line
 	6550 1250 6550 1400
 Connection ~ 6550 1250
@@ -1730,9 +1632,7 @@ Connection ~ 5650 1250
 Wire Wire Line
 	5450 1350 5500 1350
 Wire Wire Line
-	5500 1350 5500 1450
-Wire Wire Line
-	5500 1450 5500 1750
+	5500 1350 5500 1750
 Connection ~ 5650 1750
 Wire Wire Line
 	5450 1450 5500 1450
@@ -1750,9 +1650,7 @@ Wire Wire Line
 Wire Wire Line
 	3800 2550 3800 3050
 Wire Wire Line
-	3400 3150 3650 3150
-Wire Wire Line
-	3650 3150 4000 3150
+	3400 3150 4000 3150
 Wire Wire Line
 	3800 3050 4000 3050
 Wire Wire Line
@@ -1817,9 +1715,7 @@ Wire Wire Line
 	3650 3100 3650 3150
 Connection ~ 3650 3150
 Wire Wire Line
-	6400 2400 6550 2400
-Wire Wire Line
-	6550 2400 6750 2400
+	6400 2400 6750 2400
 Wire Wire Line
 	4650 4300 4300 4300
 Connection ~ 4300 4300
@@ -1831,13 +1727,7 @@ Wire Wire Line
 	3050 4550 3050 4800
 Connection ~ 3050 4800
 Wire Wire Line
-	4625 3100 4550 3100
-Wire Wire Line
-	4925 3100 5200 3100
-Wire Wire Line
-	1650 1300 1750 1300
-Wire Wire Line
-	1750 1300 2750 1300
+	1650 1300 2750 1300
 Connection ~ 2950 1200
 Connection ~ 4100 1200
 Wire Wire Line
@@ -1856,9 +1746,7 @@ Connection ~ 4300 7325
 Wire Wire Line
 	4300 7050 4300 7225
 Wire Wire Line
-	4300 7225 4675 7225
-Wire Wire Line
-	4675 7225 4775 7225
+	4300 7225 4775 7225
 Connection ~ 4450 7325
 Wire Wire Line
 	4775 7125 4550 7125
@@ -1883,4 +1771,34 @@ Text Label 800  4150 0    60   ~ 0
 5(**)
 Text Label 800  4250 0    60   ~ 0
 6(**)
+$Comp
+L ZENER D4
+U 1 1 589B6E76
+P 2850 4350
+F 0 "D4" H 2850 4450 50  0000 C CNN
+F 1 "BAT43" H 2850 4250 50  0000 C CNN
+F 2 "w_pth_diodes:diode_do35" H 2850 4350 50  0001 C CNN
+F 3 "" H 2850 4350 50  0000 C CNN
+	1    2850 4350
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	2850 4100 2850 4150
+Wire Wire Line
+	2850 3700 2850 3800
+$Comp
+L ZENER D6
+U 1 1 589B7FB8
+P 4850 3100
+F 0 "D6" H 4850 3200 50  0000 C CNN
+F 1 "BAT43" H 4850 3000 50  0000 C CNN
+F 2 "w_pth_diodes:diode_do35" H 4850 3100 50  0001 C CNN
+F 3 "" H 4850 3100 50  0000 C CNN
+	1    4850 3100
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	4550 3100 4650 3100
+Wire Wire Line
+	5050 3100 5300 3100
 $EndSCHEMATC
