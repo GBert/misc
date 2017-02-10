@@ -1790,7 +1790,7 @@ F 1 "BAT43" H 4800 3000 50  0000 C CNN
 F 2 "w_pth_diodes:diode_do35" H 4800 3100 50  0001 C CNN
 F 3 "" H 4800 3100 50  0000 C CNN
 	1    4800 3100
-	-1   0    0    1   
+	1    0    0    -1  
 $EndComp
 Wire Wire Line
 	4950 3100 5200 3100
