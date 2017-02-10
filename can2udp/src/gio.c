@@ -164,6 +164,7 @@ void print_can_frame(char *format_string, unsigned char *netframe, int verbose) 
 
 int net_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *netframe, int length) {
     int s;
+
     s = sendto(net_socket, netframe, length, 0, net_addr, sizeof(*net_addr));
     if (s != length) {
 	fprintf(stderr, "%s: error sending TCP/UDP data: %s\n", __func__, strerror(errno));
@@ -517,6 +518,7 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
     int inflated_size, deflated_size, padded_nbytes, i, src_i, n_packets;
     uint16_t crc, temp16;
     uint8_t netframe[MAXMTU];
+    int on = 1;
 
     config = read_config_file(filename, config_dir, &nbytes);
     if (config == NULL) {
@@ -603,9 +605,12 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
 		n_packets++;
 	    } while ((src_i < padded_nbytes) && (n_packets < MAX_PACKETS));
 
+	    /* disable Nagle - force PUSH */
+	    if (setsockopt(tcp_socket, IPPROTO_TCP, TCP_NODELAY, &on, sizeof(on)) < 0) {
+		fprintf(stderr, "error disabling Nagle - TCP_NODELAY on: %s\n", strerror(errno));
+		return -1;
+	    }
 	    /* printf("send %3d bytes by TCP\n", i); */
-	    /* small sleep (reschedule) to disable Nagle in combination with TCP_NODELAY */
-	    usec_sleep(1000);
 	    /* don't use frame_to_net because we have more then 13 (CAN_ENCAP_SIZE) bytes to send */
 	    if (net_to_net(tcp_socket, NULL, netframe, i)) {
 		perror("error sending TCP data\n");
@@ -614,6 +619,13 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
 		free(out);
 		return -1;
 	    }
+	    /* disable Nagle - force PUSH */
+	    if (setsockopt(tcp_socket, IPPROTO_TCP, TCP_NODELAY, &on, sizeof(on)) < 0) {
+		fprintf(stderr, "error disabling Nagle - TCP_NODELAY on: %s\n", strerror(errno));
+		return -1;
+	    }
+	    /* small sleep (reschedule) */
+	    usec_sleep(1000);
 	} while (src_i < padded_nbytes);
 #if 0
 	/* print compressed data */
