@@ -742,9 +742,9 @@ F 3 "" H 3700 4500 50  0000 C CNN
 	1    3700 4500
 	1    0    0    -1  
 $EndComp
-Text Label 5650 5400 0    60   ~ 0
+Text Label 2850 5400 0    60   ~ 0
 RX
-Text Label 5650 5500 0    60   ~ 0
+Text Label 2850 5500 0    60   ~ 0
 TX
 Text Label 5650 5100 0    60   ~ 0
 2
@@ -919,9 +919,9 @@ Text Label 8625 2925 0    60   ~ 0
 SCL
 Text Label 8625 2825 0    60   ~ 0
 SDA
-Text Label 2850 5500 0    60   ~ 0
+Text Label 5575 5400 0    60   ~ 0
 SDA
-Text Label 2850 5400 0    60   ~ 0
+Text Label 5575 5500 0    60   ~ 0
 SCL
 $Comp
 L LED D3

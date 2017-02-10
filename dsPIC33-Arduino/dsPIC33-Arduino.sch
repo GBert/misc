@@ -973,11 +973,11 @@ Text Label 5650 5650 0    60   ~ 0
 4
 Text Label 5550 5800 0    60   ~ 0
 5(**)
-Text Label 2600 6200 0    60   ~ 0
+Text Label 2550 6200 0    60   ~ 0
 7
-Text Label 2600 6300 0    60   ~ 0
+Text Label 2550 6300 0    60   ~ 0
 8
-Text Label 2600 6400 0    60   ~ 0
+Text Label 2550 6400 0    60   ~ 0
 9(**)
 Text Label 2550 6500 0    60   ~ 0
 10(**/SS)
@@ -1805,4 +1805,12 @@ F 3 "" H 2850 4400 50  0000 C CNN
 	1    2850 4400
 	0    -1   -1   0   
 $EndComp
+Text Notes 5850 5900 0    60   ~ 0
+UART2 TxD
+Text Notes 5850 5800 0    60   ~ 0
+UART2 RxD
+Text Notes 1350 4250 0    60   ~ 0
+UART2 TxD
+Text Notes 1350 4175 0    60   ~ 0
+UART2 RxD
 $EndSCHEMATC
