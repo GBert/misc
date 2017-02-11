@@ -557,7 +557,7 @@ F 3 "" H 4650 4250 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L dsPIC33EVxxxGM102-I/SP U3
+L dsPIC33EVxxxGM102-I/SP-RESCUE-dsPIC33-Arduino U3
 U 1 1 588DA463
 P 4300 5800
 F 0 "U3" H 3300 7000 50  0000 C CNN
@@ -737,7 +737,7 @@ Text Label 2850 5500 0    60   ~ 0
 TX
 Text Label 5650 5100 0    60   ~ 0
 2
-Text Label 2350 5400 0    60   ~ 0
+Text Label 5550 5650 0    60   ~ 0
 3(**)
 $Comp
 L Crystal Y1
@@ -936,7 +936,7 @@ F 3 "" H 7125 1125 50  0000 C CNN
 $EndComp
 Text Label 5550 5200 0    60   ~ 0
 13(SCK)
-Text Label 5650 5650 0    60   ~ 0
+Text Label 2450 5400 0    60   ~ 0
 4
 Text Label 5550 5800 0    60   ~ 0
 5(**)
@@ -1201,8 +1201,6 @@ F 3 "" H 4975 7225 50  0000 C CNN
 	1    4975 7225
 	1    0    0    -1  
 $EndComp
-Text Label 4550 7125 0    60   ~ 0
-3(**)
 $Comp
 L PWR_FLAG #FLG042
 U 1 1 589B715B
@@ -1526,9 +1524,9 @@ Wire Wire Line
 	2850 4800 2850 4550
 Connection ~ 2850 4800
 Wire Wire Line
-	5500 5400 5750 5400
+	5500 5400 6375 5400
 Wire Wire Line
-	5500 5500 5750 5500
+	5500 5500 6475 5500
 Wire Wire Line
 	5500 5800 5750 5800
 Wire Wire Line
@@ -1813,4 +1811,51 @@ F 3 "" H 5650 2700 50  0000 C CNN
 	1    5650 2700
 	1    0    0    -1  
 $EndComp
+Text Label 4550 7125 0    60   ~ 0
+4
+Connection ~ 3700 4500
+$Comp
+L R R11
+U 1 1 589E7364
+P 6375 5250
+F 0 "R11" V 6300 5250 50  0000 C CNN
+F 1 "3k3" V 6375 5250 50  0000 C CNN
+F 2 "w_pth_resistors:RC03" V 6305 5250 50  0001 C CNN
+F 3 "" H 6375 5250 50  0000 C CNN
+	1    6375 5250
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R12
+U 1 1 589E75B1
+P 6475 5250
+F 0 "R12" V 6555 5250 50  0000 C CNN
+F 1 "3k3" V 6475 5250 50  0000 C CNN
+F 2 "w_pth_resistors:RC03" V 6405 5250 50  0001 C CNN
+F 3 "" H 6475 5250 50  0000 C CNN
+	1    6475 5250
+	1    0    0    -1  
+$EndComp
+$Comp
+L VDD #PWR045
+U 1 1 589E780D
+P 6425 5025
+F 0 "#PWR045" H 6425 4875 50  0001 C CNN
+F 1 "VDD" H 6425 5175 50  0000 C CNN
+F 2 "" H 6425 5025 50  0000 C CNN
+F 3 "" H 6425 5025 50  0000 C CNN
+	1    6425 5025
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6375 5100 6375 5075
+Wire Wire Line
+	6375 5075 6475 5075
+Wire Wire Line
+	6475 5075 6475 5100
+Wire Wire Line
+	6425 5025 6425 5075
+Connection ~ 6425 5075
+Wire Wire Line
+	6475 5500 6475 5400
 $EndSCHEMATC
