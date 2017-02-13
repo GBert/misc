@@ -1,9 +1,12 @@
 const int revisionnr = 
-11941
+11944
 ;
 const char* commithash = 
-"b8bb3b8a5bfffb3c97600908b777773be8417ffb";
+"99be864a5f817f5c5230f2b864b0d0a0ccd54303";
 const char* revlog = 
+"11944 2017-02-13 06:57:37 +0100 operatordlg: show loaded kmh too\n" \
+"11943 2017-02-13 06:46:03 +0100 cardlg: location filter fix\n" \
+"11942 2017-02-13 06:35:18 +0100 rmx: fix for unsollicited messages\n" \
 "11941 2017-02-12 09:12:51 +0100 filter enterside in tour and schedule dialog\n" \
 "11940 2017-02-12 09:06:18 +0100 filter enterside in tour and schedule dialog\n" \
 "11939 2017-02-12 08:30:52 +0100 item: use red2 for blinking the connector\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "11897 2017-01-25 07:53:02 +0100 renderer: block signal type precedes accnr\n" \
 "11896 2017-01-25 07:27:37 +0100 signal: accnr support\n" \
 "11895 2017-01-22 16:25:53 +0100 tracedlg: trace level find added\n" \
-"11894 2017-01-22 15:04:59 +0100 guiframe: fix for dnd if loco is idle\n" \
-"11893 2017-01-22 07:58:39 +0100 throttle: allow blank as function text to disable soft\n" \
-"11892 2017-01-22 06:12:36 +0100 rocnet: only sleep in the write thread if nothing was send\n" \
 
 "log end";
