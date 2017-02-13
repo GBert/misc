@@ -1,9 +1,21 @@
 const int revisionnr = 
-11929
+11941
 ;
 const char* commithash = 
-"79914d4f8fd473530b4fd08fbca8e084d515020f";
+"b8bb3b8a5bfffb3c97600908b777773be8417ffb";
 const char* revlog = 
+"11941 2017-02-12 09:12:51 +0100 filter enterside in tour and schedule dialog\n" \
+"11940 2017-02-12 09:06:18 +0100 filter enterside in tour and schedule dialog\n" \
+"11939 2017-02-12 08:30:52 +0100 item: use red2 for blinking the connector\n" \
+"11938 2017-02-12 08:24:16 +0100 item: blink the other connector after dclick\n" \
+"11937 2017-02-12 07:18:11 +0100 dccpp: added reducedids option\n" \
+"11936 2017-02-12 06:24:25 +0100 rmx: fix for unsollicited RMX channel message\n" \
+"11935 2017-02-11 16:24:54 +0100 dccpp: limit switch IDs to 16 (patch proposal from Duesselklaus)\n" \
+"11934 2017-02-11 07:32:22 +0100 translation merge: pl, ja, fr, pr_BR, de, sr_latin, sl, es, nl\n" \
+"11933 2017-02-10 08:00:53 +0100 rmx: extra trace for RMX channel events\n" \
+"11932 2017-02-10 08:00:16 +0100 car: optional vmax loaded added\n" \
+"11931 2017-02-10 07:19:34 +0100 rmx: fix for slot purge\n" \
+"11930 2017-02-09 11:13:42 +0100 trainpanel: new train menu item added\n" \
 "11929 2017-02-08 15:47:41 +0100 car and train panel: extra colums added\n" \
 "11928 2017-02-08 15:18:56 +0100 rocguidialog: enable car and train tab options\n" \
 "11927 2017-02-08 12:07:48 +0100 car train panel: fix for scrolling\n" \
@@ -42,17 +54,5 @@ const char* revlog =
 "11894 2017-01-22 15:04:59 +0100 guiframe: fix for dnd if loco is idle\n" \
 "11893 2017-01-22 07:58:39 +0100 throttle: allow blank as function text to disable soft\n" \
 "11892 2017-01-22 06:12:36 +0100 rocnet: only sleep in the write thread if nothing was send\n" \
-"11891 2017-01-21 07:12:31 +0100 bidib: fix for bus at function commands\n" \
-"11890 2017-01-20 11:56:25 +0100 rocview: rejected the new locopanel to avoid a major rewrite, guiframe is **the** locopanel\n" \
-"11889 2017-01-20 07:58:49 +0100 rocguiinidlg: temp. disable car and train tab options\n" \
-"11888 2017-01-19 20:28:38 +0100 renderer: trace level fix\n" \
-"11887 2017-01-19 20:28:01 +0100 Rocview: init fixes for new tabs\n" \
-"11886 2017-01-19 19:40:58 +0100 model: FIX: If analyser is disabled then also reject clean all\n" \
-"11885 2017-01-19 09:45:57 +0100 actionctrldlg: removed overwriting the at command option\n" \
-"11884 2017-01-19 09:38:19 +0100 control: reset action tickers after a clock time change\n" \
-"11883 2017-01-19 08:23:53 +0100 trainimage: tracelevel correction\n" \
-"11882 2017-01-19 08:10:42 +0100 rocguiinidlg: added car and train tab options\n" \
-"11881 2017-01-19 07:51:10 +0100 virtual: trace extended for aspect commands\n" \
-"11880 2017-01-19 07:02:15 +0100 bidib: revert work around for accessory ack\n" \
 
 "log end";
