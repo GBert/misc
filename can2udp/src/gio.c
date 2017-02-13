@@ -107,8 +107,7 @@ char **read_track_file(char *filename, char **page_name) {
 		if (page) {
 		    page_name[id] = calloc(strlen(&line[7]) + 5, sizeof(char));
 		    if (page_name[id] == NULL) {
-			fprintf(stderr, "%s: error calloc failed creating config buffer for %s\n", __func__, filename);
-			syslog(LOG_ERR, "%s: error calloc failed creating config buffer for %s\n", __func__, filename);
+			fprint_syslog_wc(stderr, LOG_ERR, "error calloc failed creating config buffer for", filename);
 			return NULL;
 		    }
 		    strcpy(page_name[id], &line[7]);
@@ -167,8 +166,7 @@ int net_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *netfram
 
     s = sendto(net_socket, netframe, length, 0, net_addr, sizeof(*net_addr));
     if (s != length) {
-	fprintf(stderr, "%s: error sending TCP/UDP data: %s\n", __func__, strerror(errno));
-	syslog(LOG_ERR, "%s: error sending TCP/UDP data: %s\n", __func__, strerror(errno));
+	fprint_syslog_wc(stderr, LOG_ERR, "error sending TCP/UDP data:", strerror(errno));
 	return -1;
     }
     return 0;
@@ -188,8 +186,7 @@ int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *fr
     /* send TCP/UDP frame */
     s = sendto(net_socket, netframe, CAN_ENCAP_SIZE, 0, net_addr, sizeof(*net_addr));
     if (s != CAN_ENCAP_SIZE) {
-	fprintf(stderr, "%s: error sending TCP/UDP data: %s\n", __func__, strerror(errno));
-	syslog(LOG_ERR, "%s: error sending TCP/UDP data: %s\n", __func__, strerror(errno));
+	fprint_syslog_wc(stderr, LOG_ERR, "error sending TCP/UDP data:", strerror(errno));
 	return -1;
     }
     return 0;
@@ -229,8 +226,7 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
 
     /* send CAN frame */
     if (write(can_socket, &frame, sizeof(frame)) != sizeof(frame)) {
-	fprintf(stderr, "%s: error writing CAN frame: %s\n", __func__, strerror(errno));
-	syslog(LOG_ERR, "%s: error writing CAN frame: %s\n", __func__, strerror(errno));
+	fprint_syslog_wc(stderr, LOG_ERR, "error CAN frame:", strerror(errno));
 	return -1;
     }
 
@@ -277,8 +273,7 @@ int config_write(struct cs2_config_data_t *config_data) {
 
     filename = calloc(MAXLINE, 1);
     if (filename == NULL) {
-	fprintf(stderr, "%s: can't calloc: %s\n", __func__, strerror(errno));
-	syslog(LOG_ERR, "%s: can't calloc: %s\n", __func__, strerror(errno));
+	fprint_syslog_wc(stderr, LOG_ERR, "can't calloc:", strerror(errno));
 	exit(EXIT_FAILURE);
     }
     strcpy(filename, config_data->dir);
@@ -400,8 +395,7 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 		    syslog(LOG_NOTICE, "%s: read track file %s dir %s\n", __func__, filename, config_data->dir);
 		    config_data->page_name = read_track_file(filename, config_data->page_name);
 		    if (config_data->page_name == NULL) {
-			fprintf(stderr, "%s: can't finish CS2 copy config request\n", __func__);
-		        syslog(LOG_ERR, "%s: can't finish CS2 copy config request\n", __func__);
+			fprint_syslog(stderr, LOG_ERR, "can't finish CS2 copy config request");
 			config_data->state = CS2_STATE_INACTIVE;
 			return (EXIT_FAILURE);
 		    }

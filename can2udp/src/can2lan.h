@@ -54,6 +54,14 @@
 #define COMPRESSED		0x02
 #define TERM_SPEED		B500000
 
+#define fprint_syslog(pipe, spipe, text) \
+	    do { fprintf( pipe, "%s: " text "\n", __func__); \
+		 syslog( spipe, "%s: " text "\n", __func__); } while (0)
+
+#define fprint_syslog_wc(pipe, spipe, text, var) \
+	    do { fprintf( pipe, "%s: " text " %s\n", __func__, var); \
+		 syslog( spipe, "%s: " text " %s\n", __func__, var); } while (0)
+
 #if 0
 struct cs2_config {
     int canid;

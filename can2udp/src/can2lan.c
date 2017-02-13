@@ -84,8 +84,7 @@ void print_usage(char *prg) {
 
 int send_start_60113_frames(int can_socket, int verbose) {
     if (frame_to_can(can_socket, M_GLEISBOX_MAGIC_START_SEQUENCE) < 0) {
-	fprintf(stderr, "can't send CAN magic 60113 start sequence\n");
-	syslog(LOG_ERR, "%s: can't send CAN magic 60113 start sequence\n", __func__);
+	fprint_syslog(stderr, LOG_ERR, "can't send CAN magic 60113 start sequence");
 	return -1;
     } else {
 	if (verbose) {
@@ -94,8 +93,7 @@ int send_start_60113_frames(int can_socket, int verbose) {
 	}
     }
     if (frame_to_can(can_socket, M_GLEISBOX_ALL_PROTO_ENABLE) < 0) {
-	fprintf(stderr, "can't enable all loco protos\n");
-	syslog(LOG_ERR, "%s: can't enable all loco protos\n", __func__);
+	fprint_syslog(stderr, LOG_ERR, "can't enable all loco protos");
 	return -1;
     } else {
 	if (verbose) {
@@ -109,8 +107,7 @@ int send_start_60113_frames(int can_socket, int verbose) {
 
 int send_can_ping(int can_socket, int verbose) {
     if (frame_to_can(can_socket, M_CAN_PING) < 0) {
-	fprintf(stderr, "can't send CAN Ping\n");
-	syslog(LOG_ERR, "%s: can't send CAN Ping\n", __func__);
+	fprint_syslog(stderr, LOG_ERR, "can't send CAN Ping");
 	return -1;
     } else {
 	if (verbose) {
@@ -171,8 +168,7 @@ int check_data_udp(int udp_socket, struct sockaddr *baddr, struct cs2_config_dat
 		printf("                received CAN ping\n");
 	    memcpy(netframe, M_CAN_PING_CS2, 13);
 	    if (net_to_net(udp_socket, baddr, netframe, CAN_ENCAP_SIZE)) {
-		fprintf(stderr, "sending UDP data (CAN Ping fake CS2) error:%s \n", strerror(errno));
-		syslog(LOG_ERR, "%s: sending UDP data (CAN Ping fake CS2) error:%s\n", __func__, strerror(errno));
+		fprint_syslog_wc(stderr, LOG_ERR, "sending UDP data (CAN Ping fake CS2) error:", strerror(errno));
 	    } else {
 		print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data->verbose);
 		if (cs2_config_data->verbose)
@@ -186,8 +182,7 @@ int check_data_udp(int udp_socket, struct sockaddr *baddr, struct cs2_config_dat
 		printf("                received CAN ping\n");
 	    memcpy(netframe, M_PING_RESPONSE, 5);
 	    if (net_to_net(udp_socket, baddr, netframe, CAN_ENCAP_SIZE)) {
-		fprintf(stderr, "sending UDP data (CAN Ping) error:%s \n", strerror(errno));
-		syslog(LOG_ERR, "%s: sending UDP data (CAN Ping) error:%s\n", __func__, strerror(errno));
+		fprint_syslog_wc(stderr, LOG_ERR, "sending UDP data (CAN Ping) error:", strerror(errno));
 	    } else {
 		print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data->verbose);
 		if (cs2_config_data->verbose)
