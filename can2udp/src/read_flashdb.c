@@ -85,8 +85,8 @@ static char *DEF_PATH = "/mnt/home/cs2/update/flashdb.ms2";
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -v -f\n", prg);
     fprintf(stderr, "   Version 0.1\n\n");
-    fprintf(stderr, "         -h                  this help\n\n");
-    fprintf(stderr, "         -v                  verbose output\n\n");
+    fprintf(stderr, "         -h      this help\n");
+    fprintf(stderr, "         -v      verbose output\n");
 }
 
 unsigned char *read_data(struct loco_db_t *loco_db) {
@@ -142,7 +142,7 @@ int write_data(struct loco_db_t *loco_db) {
 }
 
 int decode_sc_data(struct loco_db_t *loco_db, struct loco_data_t *loco_data) {
-    unsigned int i, j, k, func, id, temp;
+    unsigned int i, j, k, func, id, temp, address;
     unsigned char index, length;
     char *loco_id;
     char *loco_name;
@@ -150,7 +150,7 @@ int decode_sc_data(struct loco_db_t *loco_db, struct loco_data_t *loco_data) {
 
     index = 0;
     /* preamble */
-    i = 0;
+    i = 64;
 
     while (i < loco_db->eeprom_size) {
 	length = strlen(&loco_db->bin[i+0]);
@@ -163,8 +163,11 @@ int decode_sc_data(struct loco_db_t *loco_db, struct loco_data_t *loco_data) {
         loco_name = (char *)calloc(length + 1, 1);
         if (loco_name == NULL)
             return EXIT_FAILURE;
+
+        address = loco_db->bin[i+26];
+	
         memcpy(loco_name, (char *)&loco_db->bin[i+7], length);
-        printf("loco id: %8s %s\n", loco_id, loco_name);
+        printf("loco id: %8s %s\t default address: %d\n", loco_id, loco_name, address);
 
 	i +=64;
     }

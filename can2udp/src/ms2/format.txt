@@ -1,0 +1,28 @@
+00008580  33 36 33 33 30 00 00 45  45 20 33 2f 33 00 00 00  |36330..EE 3/3...|
+00008590  00 00 00 00 00 00 00 00  00 01 21 00 00 00 1f 00  |..........!.....|
+000085a0  1f 00 1f 00 07 00 1f 00  1f 00 1f 00 1f 00 1f 00  |................|
+000085b0  1f 00 1f 00 1f 00 1f 00  1f 00 1f 00 00 00 00 00  |................|
+
+
+Einstellbare Adressen: 01 . 80.
+Adresse ab Werk: 33
+Rangiergang F4
+
+Parameter Register- Wert
+nummer (min . max)
+Adresse 01 01 . 80
+Anfahrregelung 03 01 . 63
+Bremsverzöung 04 01 . 63
+Hötgeschwindigkeit 05 01 . 63
+
+
+Licht
+
+00008580  33 36 33 33 30 00 00
+                               45  45 20 33 2f 33 00 00 00  |36330..EE 3/3...|
+00008590  00 00 00 00 00 00 00 00  00
+                                      01                     Motorola 1
+                                         21                  Adresse
+
+
+
