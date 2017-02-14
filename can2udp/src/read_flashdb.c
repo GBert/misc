@@ -30,9 +30,20 @@
 
 #include "uthash.h"
 
+#define OFFSET_LOCO_ID		0
+#define OFFSET_LOCO_NAME	7
+#define OFFSET_PROTO		25
+#define OFFSET_DEFAULT_ID	26
+#define DATA_SET_LENGTH		64
 
-static char PROTO_DELTA[] = "delta   ";
-static char PROTO_MM[]    = "motorola";
+#define PROTO_DELTA_ID	0
+#define PROTO_MM2_ID	1
+#define PROTO_MFX_ID	2
+#define PROTO_DCC_ID	4
+
+
+static char PROTO_DELTA[] = "delta";
+static char PROTO_MM[] = "motorola";
 
 struct loco_func {
     uint8_t number;
@@ -57,8 +68,8 @@ struct loco_data_t {
     unsigned int sid;
     unsigned int mfxuid;
     unsigned int symbol;
-    unsigned int acc_delay;             /* av */
-    unsigned int slow_down_delay;       /* bv */
+    unsigned int acc_delay;		/* av */
+    unsigned int slow_down_delay;	/* bv */
     unsigned int volume;
     unsigned int progmask;
     unsigned int tmax;
@@ -82,7 +93,6 @@ struct loco_db_t {
     char *filename;
     unsigned char *bin;
 };
-
 
 static char *DEF_PATH = "/mnt/home/cs2/update/flashdb.ms2";
 
@@ -146,44 +156,46 @@ int write_data(struct loco_db_t *loco_db) {
 }
 
 int decode_sc_data(struct loco_db_t *loco_db, struct loco_data_t *loco_data) {
-    unsigned int i, j, k, func, id, proto, temp, address;
-    unsigned char index, length;
+    unsigned int i, n, proto, address, length;
     char *loco_id;
     char *loco_name;
     char *proto_name;
 
-    index = 0;
     /* preamble */
-    i = 64;
+    i = DATA_SET_LENGTH;
+    n = 0;
 
     while (i < loco_db->eeprom_size) {
-	length = strlen(&loco_db->bin[i+0]);
+	n++;
+	length = strlen((char *)&loco_db->bin[i + OFFSET_LOCO_ID]);
 	loco_id = (char *)calloc(length + 1, 1);
 	if (loco_id == NULL)
 	    return EXIT_FAILURE;
 	memcpy(loco_id, (char *)&loco_db->bin[i], length);
 
-        length = strlen(&loco_db->bin[i+7]);
-        loco_name = (char *)calloc(length + 1, 1);
-        if (loco_name == NULL)
-            return EXIT_FAILURE;
+	length = strlen((char *)&loco_db->bin[i + OFFSET_LOCO_NAME]);
+	loco_name = (char *)calloc(length + 1, 1);
+	if (loco_name == NULL)
+	    return EXIT_FAILURE;
+	memcpy(loco_name, (char *)&loco_db->bin[i + OFFSET_LOCO_NAME], length);
 
-        address = loco_db->bin[i+26];
-	proto = loco_db->bin[i+25];
+	proto = loco_db->bin[i + OFFSET_PROTO];
+	address = loco_db->bin[i + OFFSET_DEFAULT_ID];
 
 	switch (proto) {
-	case 0:
+	case PROTO_DELTA_ID:
 	    proto_name = PROTO_DELTA;
 	    break;
-	case 1:
+	case PROTO_MM2_ID:
 	    proto_name = PROTO_MM;
 	    break;
 	}
-	
-        memcpy(loco_name, (char *)&loco_db->bin[i+7], length);
-        printf("loco id: %8s %s\t proto: %s  address: %d\n", loco_id, loco_name, proto_name, address);
 
-	i +=64;
+	printf("%4d loco id: %8s %15s proto: %8s  default address: %2d\n", n, loco_id, loco_name, proto_name, address);
+	free(loco_id);
+	free(loco_name);
+
+	i += DATA_SET_LENGTH;
     }
 
 #if 0
@@ -347,5 +359,7 @@ int main(int argc, char **argv) {
     if (verbose)
 	decode_sc_data(&loco_db, &loco_data);
 
+    free(filename);
+    free(loco_db.bin);
     return 0;
 }
