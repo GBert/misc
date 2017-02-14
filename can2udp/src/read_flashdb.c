@@ -30,6 +30,10 @@
 
 #include "uthash.h"
 
+
+static char PROTO_DELTA[] = "delta   ";
+static char PROTO_MM[]    = "motorola";
+
 struct loco_func {
     uint8_t number;
     uint8_t type;
@@ -142,7 +146,7 @@ int write_data(struct loco_db_t *loco_db) {
 }
 
 int decode_sc_data(struct loco_db_t *loco_db, struct loco_data_t *loco_data) {
-    unsigned int i, j, k, func, id, temp, address;
+    unsigned int i, j, k, func, id, proto, temp, address;
     unsigned char index, length;
     char *loco_id;
     char *loco_name;
@@ -165,9 +169,19 @@ int decode_sc_data(struct loco_db_t *loco_db, struct loco_data_t *loco_data) {
             return EXIT_FAILURE;
 
         address = loco_db->bin[i+26];
+	proto = loco_db->bin[i+25];
+
+	switch (proto) {
+	case 0:
+	    proto_name = PROTO_DELTA;
+	    break;
+	case 1:
+	    proto_name = PROTO_MM;
+	    break;
+	}
 	
         memcpy(loco_name, (char *)&loco_db->bin[i+7], length);
-        printf("loco id: %8s %s\t default address: %d\n", loco_id, loco_name, address);
+        printf("loco id: %8s %s\t proto: %s  address: %d\n", loco_id, loco_name, proto_name, address);
 
 	i +=64;
     }
