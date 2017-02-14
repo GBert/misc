@@ -1,9 +1,11 @@
 const int revisionnr = 
-11944
+11946
 ;
 const char* commithash = 
-"99be864a5f817f5c5230f2b864b0d0a0ccd54303";
+"f6fd1f06e6e42473acf924d4c524528d2f8f882f";
 const char* revlog = 
+"11946 2017-02-14 21:35:49 +0100 bidib: trace crash fix for POM and no master connected\n" \
+"11945 2017-02-14 17:20:58 +0100 esunavi: added byte level trace\n" \
 "11944 2017-02-13 06:57:37 +0100 operatordlg: show loaded kmh too\n" \
 "11943 2017-02-13 06:46:03 +0100 cardlg: location filter fix\n" \
 "11942 2017-02-13 06:35:18 +0100 rmx: fix for unsollicited messages\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11899 2017-01-25 11:03:15 +0100 makefile: skip revlog in case of native win32\n" \
 "11898 2017-01-25 10:59:54 +0100 makefile: skip revlog in case of native win32\n" \
 "11897 2017-01-25 07:53:02 +0100 renderer: block signal type precedes accnr\n" \
-"11896 2017-01-25 07:27:37 +0100 signal: accnr support\n" \
-"11895 2017-01-22 16:25:53 +0100 tracedlg: trace level find added\n" \
 
 "log end";
