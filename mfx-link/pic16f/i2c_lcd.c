@@ -41,7 +41,7 @@ unsigned char I2C_PCF8574_Write(Byte addr, Byte value) {
     StopI2C();
     // __delay_us(LCD_WAIT_DELAY); // No impact on my project!
     return (S);
-}				// I2C_PCF8574_Write()
+}
 
 void LCD_putcmd(unsigned char addr, unsigned char data, unsigned char cmdtype) {
     unsigned char lcddata;
@@ -59,7 +59,7 @@ void LCD_putcmd(unsigned char addr, unsigned char data, unsigned char cmdtype) {
 	I2C_PCF8574_Write(addr, lcddata & ~LCD_EN);	// Reset LCD bus
     }
     __delay_ms(2);		// For most command, Wait > 100 us is ok.
-}				// LCD_putcmd())
+}
 
 // Extract data high and low nible and send it to I2C LCD
 void LCD_putch(unsigned char addr, unsigned char data) {
@@ -70,7 +70,7 @@ void LCD_putch(unsigned char addr, unsigned char data) {
     lcddata = LO_NIBBLE(data) | LCD_BL | LCD_RS;	// Get low nibble
     I2C_PCF8574_Write(addr, lcddata | LCD_EN);	// Send it!
     I2C_PCF8574_Write(addr, lcddata & ~LCD_EN);	// Reset LCD bus
-}				// LCD_putch()
+}
 
 // Init the LCD: DATA bus 4 bits, cursor off, auto increment, no shift.
 void LCD_init(unsigned char addr) {
@@ -111,7 +111,7 @@ void LCD_goto(unsigned char addr, unsigned char row, unsigned char column) {
 
 // Note: The string must be zero terminated!
 // Example: char callSign[] = "ve2cuy\0";
-void LCD_puts(unsigned char addr, char *s) {
+void LCD_puts(unsigned char addr, const char *s) {
     int i = 0;
     while (*s != 0)
 	LCD_putch(addr, *s++);
