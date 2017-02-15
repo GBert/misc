@@ -15,14 +15,21 @@
 #define _XTAL_FREQ      32000000
 #define FCYC            (_XTAL_FREQ/4L) // target device instruction clock freqency
 
-// USART calculating Baud Rate Generator
-// if BRGH = 0 => FOSC/[64 (n + 1)]
-// if BRGH = 1 => FOSC/[16 (n + 1)]
-// avoid rounding errors
+#define I2C_BAUDRATE	100000
 
 #define BAUDRATE        115200
 #define USE_BRG16       0
 #define USE_BRGH        1
+
+// I2C baud rate calculation
+// SCL pin clock period = ((ADD<7:0> + 1) *4)/FOSC
+
+#define SSP1ADD_VAL	( (((_XTAL_FREQ / I2C_BAUDRATE) / 2) - 1) / 2)
+
+// USART calculating Baud Rate Generator
+// if BRGH = 0 => FOSC/[64 (n + 1)]
+// if BRGH = 1 => FOSC/[16 (n + 1)]
+// avoid rounding errors
 
 #if USE_BRGH == 0
 #define SBRG_VAL	( (((_XTAL_FREQ / BAUDRATE) / 32) - 1) / 2 )
