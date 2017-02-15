@@ -9,6 +9,8 @@
 
 #include <xc.h>
 #include "main.h"
+#include "i2c_lcd.h"
+#include "lcd.h"
 
 #pragma config FOSC=INTOSC, PLLEN=OFF, MCLRE=ON, WDTE=OFF
 #pragma config LVP=ON, CLKOUTEN=OFF
@@ -162,6 +164,11 @@ void main() {
 
     GIE = 1;
     while (1) {
+	LCD_putcmd(LCD_01_ADDRESS, LCD_CLEAR, 1);
+	LCD_puts(LCD_01_ADDRESS, "I2C print on LCD\0");
+	LCD_goto(LCD_01_ADDRESS, 2, 1);
+	LCD_puts(LCD_01_ADDRESS, "yeah !\n");
+
 	if (counter == 0)
 	    putchar_wait(0x55);
 	counter++;

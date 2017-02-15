@@ -65,7 +65,7 @@ extern "C" {
 void LCD_init(unsigned char addr);
 void LCD_putcmd(unsigned char addr, unsigned char data, unsigned char cmdtype);
 void LCD_putch(unsigned char addr, unsigned char data);
-void LCD_puts(unsigned char addr, char *s);
+void LCD_puts(unsigned char addr, const char *s);
 void LCD_goto(unsigned char addr, char row, char column);
 
 #endif /* LCD_H */

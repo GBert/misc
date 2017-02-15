@@ -20,27 +20,25 @@
  */
 
 #include <xc.h>
+#include "i2c.h"
 #include "lcd.h"
+#include "main.h"
 
-#ifndef _XTAL_FREQ
-#define _XTAL_FREQ 8000000
-#endif
 /// ##############################################################################################
 /// Custom LCD_I2C functions
 
-unsigned char I2C_PCF8574_Write(Byte addr, Byte value) {
-    unsigned char S, dummy;
-    StartI2C();
-    S = WriteI2C(addr);
-    if (S == -1)		//bus collision ?
-    {
+char I2C_PCF8574_Write(Byte addr, Byte value) {
+    char s, dummy;
+    i2c_start();
+    s = i2c_write(addr);
+    if (s < 0) {		//bus collision ?
 	dummy = SSPBUF;		// clear the buffer,
 	SSPCON1bits.WCOL = 0;	// clear collision status bit
     }
-    S = WriteI2C(value);
-    StopI2C();
+    s = i2c_write(value);
+    i2c_stop();
     // __delay_us(LCD_WAIT_DELAY); // No impact on my project!
-    return (S);
+    return s;
 }
 
 void LCD_putcmd(unsigned char addr, unsigned char data, unsigned char cmdtype) {
@@ -86,7 +84,7 @@ void LCD_init(unsigned char addr) {
     LCD_putcmd(addr, LCD_CLEAR, 1);
     LCD_putcmd(addr, LCD_INCREMENT_NO_SHIFT, 1);
     LCD_putcmd(addr, LCD_DISPLAY_ON_CURSOR_OFF, 1);
-}				// LCD_init() 
+}
 
 // Goto line number. On line err, goto line 1.
 void LCD_goto(unsigned char addr, unsigned char row, unsigned char column) {
@@ -107,7 +105,7 @@ void LCD_goto(unsigned char addr, unsigned char row, unsigned char column) {
 	LCD_putcmd(addr, LCD_LINE1 + (column - 1), 1);
 	break;
     }
-}				// LCD_GOTO()
+}
 
 // Note: The string must be zero terminated!
 // Example: char callSign[] = "ve2cuy\0";
