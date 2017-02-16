@@ -1,4 +1,4 @@
-update=Sat 08 Oct 2016 07:06:53 PM CEST
+update=Do 16 Feb 2017 12:27:56 CET
 version=1
 last_client=kicad
 [pcbnew]
@@ -63,3 +63,4 @@ LibName31=HR911105A
 LibName32=microchip_pic18mcu
 LibName33=ftdi
 LibName34=Omega2
+LibName35=cmos_ieee
