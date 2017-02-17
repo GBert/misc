@@ -1,9 +1,10 @@
 const int revisionnr = 
-11946
+11947
 ;
 const char* commithash = 
-"f6fd1f06e6e42473acf924d4c524528d2f8f882f";
+"295adc59f9ccab312537d3ce1f41d032d656b89e";
 const char* revlog = 
+"11947 2017-02-16 06:58:47 +0100 esunavi: fix for evaluating direction in case the speed is -0\n" \
 "11946 2017-02-14 21:35:49 +0100 bidib: trace crash fix for POM and no master connected\n" \
 "11945 2017-02-14 17:20:58 +0100 esunavi: added byte level trace\n" \
 "11944 2017-02-13 06:57:37 +0100 operatordlg: show loaded kmh too\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "11900 2017-01-25 11:10:48 +0100 makefile: skip revlog in case of native win32\n" \
 "11899 2017-01-25 11:03:15 +0100 makefile: skip revlog in case of native win32\n" \
 "11898 2017-01-25 10:59:54 +0100 makefile: skip revlog in case of native win32\n" \
-"11897 2017-01-25 07:53:02 +0100 renderer: block signal type precedes accnr\n" \
 
 "log end";
