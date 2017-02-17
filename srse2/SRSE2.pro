@@ -1,4 +1,4 @@
-update=Do 16 Feb 2017 12:27:56 CET
+update=Fr 17 Feb 2017 14:24:33 CET
 version=1
 last_client=kicad
 [pcbnew]
@@ -64,3 +64,4 @@ LibName32=microchip_pic18mcu
 LibName33=ftdi
 LibName34=Omega2
 LibName35=cmos_ieee
+LibName36=common-ICs
