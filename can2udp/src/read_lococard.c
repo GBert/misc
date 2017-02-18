@@ -30,7 +30,6 @@
 
 #include "cs2-config.h"
 
-
 unsigned char pre_mfx[]   = { 0x02, 0xf5, 0x00 };
 unsigned char pre_other[] = { 0x02, 0xc5, 0x00 };
 
@@ -96,10 +95,11 @@ int write_data(struct loco_config_t *loco_config) {
 }
 
 int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_data) {
-    unsigned int i, j, k, func, id, temp;
+    unsigned int i, j, k, func, id, temp, png_size;
     unsigned char index, length;
     char *loco_name;
     char *proto_name;
+    char *png_name;
 
     index = 0;
     /* preamble */
@@ -146,15 +146,34 @@ int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_d
 		    printf("proto name: >%s<\n", proto_name);
 		    loco_data->type = proto_name;
 		    break;
+		case 0x20:
+		    /* prepare additional .png space */
+		    png_name = (char *)calloc(length + 4 + 1, 1);
+		    if (png_name == NULL)
+			return EXIT_FAILURE;
+		    strncpy(png_name, (char *)&loco_config->bin[i], length);
+		    strncat(png_name, ".png", 4);
+		    i += length;
+		    printf("png name: >%s<\n", png_name);
+		    loco_data->icon = png_name;
+		    /* HACK */
+		    i++;
+		    break;
+		case 0x05:
+		    png_size = length + (loco_config->bin[i++] << 8);
+		    printf("png start: 0x%04x  end: 0x%04x  size: 0x%04x  %d bytes\n",
+			   i, i + png_size, png_size, png_size);
+		    i += 2;
+		    return EXIT_SUCCESS;
 		default:
-		    printf("decoding problem:\n");
+		    printf("decoding problem: 0x%02x\n", id);
 		    break;
 		}
 		id = loco_config->bin[i++];
 	    }
 	    break;
 	case 9:
-	    printf("index [0x%02x @ 0x%04x] length [%d]: ", index, i, length);
+	    printf("index [0x%02x @ 0x%04x] length [%3d]: ", index, i, length);
 	    func = 0;
 	    printf("\n");
 	    for (j = 0; j < length / 10; j++) {
@@ -166,7 +185,7 @@ int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_d
 	    }
 	    break;
 	default:
-	    printf("index [0x%02x @ 0x%04x] length [%d]: ", index, i, length);
+	    printf("index [0x%02x @ 0x%04x] length [%3d]: ", index, i, length);
 	    if (length <= 4) {
 		memcpy(&temp, loco_config->bin, length);
 	    }
