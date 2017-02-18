@@ -34,7 +34,6 @@ LIBS:microchip_pic18mcu
 LIBS:ftdi
 LIBS:Omega2
 LIBS:cmos_ieee
-LIBS:common-ICs
 LIBS:SRSE2-cache
 EELAYER 25 0
 EELAYER END
@@ -1592,7 +1591,7 @@ F 3 "" H 1800 1225 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 4504 U8
+L 4504-RESCUE-SRSE2 U8
 U 1 1 58A5932A
 P 4050 6225
 F 0 "U8" H 4350 6725 50  0000 C CNN
@@ -2923,4 +2922,217 @@ Wire Notes Line
 	3600 8125 3600 11175
 Wire Notes Line
 	11800 8125 11800 9950
+$Comp
+L CONN_01X13 P22
+U 1 1 58A8A47F
+P 7275 9675
+F 0 "P22" H 7275 10375 50  0000 C CNN
+F 1 "CONN_01X13" V 7375 9675 50  0001 C CNN
+F 2 "maerklin:minidin-10" V 7375 9675 50  0000 C CNN
+F 3 "" H 7275 9675 50  0000 C CNN
+	1    7275 9675
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X13 P23
+U 1 1 58A8A5C6
+P 7900 9675
+F 0 "P23" H 7900 10375 50  0000 C CNN
+F 1 "CONN_01X13" V 8000 9675 50  0001 C CNN
+F 2 "maerklin:minidin-10" V 7975 9675 50  0000 C CNN
+F 3 "" H 7900 9675 50  0000 C CNN
+	1    7900 9675
+	1    0    0    -1  
+$EndComp
+Text Label 4925 10450 0    60   ~ 0
+GSB
+Text Label 4975 10350 0    60   ~ 0
+GS0
+Text Label 5050 10150 0    60   ~ 0
+GNDA
+Text Label 5175 9850 0    60   ~ 0
+CANL_
+Text Label 5225 9750 0    60   ~ 0
+CANH_
+Text Label 5125 9950 0    60   ~ 0
+Vcc_
+Wire Wire Line
+	7075 9075 6825 9075
+$Comp
+L CONN_01X10 P24
+U 1 1 58A8CACB
+P 8575 9625
+F 0 "P24" H 8575 10175 50  0000 C CNN
+F 1 "CONN_01X10" V 8675 9625 50  0001 C CNN
+F 2 "maerklin:minidin-7" V 8675 9625 50  0000 C CNN
+F 3 "" H 8575 9625 50  0000 C CNN
+	1    8575 9625
+	1    0    0    -1  
+$EndComp
+Text Label 6825 9075 0    60   ~ 0
+Vcc_
+Wire Wire Line
+	7075 9175 6825 9175
+Wire Wire Line
+	6825 9275 7075 9275
+Wire Wire Line
+	6825 9375 7075 9375
+Wire Wire Line
+	6825 9475 7075 9475
+Wire Wire Line
+	6825 9575 7075 9575
+Wire Wire Line
+	6825 9675 7075 9675
+Wire Wire Line
+	6825 9775 7075 9775
+Wire Wire Line
+	6825 9875 7075 9875
+Wire Wire Line
+	7075 9975 6825 9975
+Wire Wire Line
+	7075 10075 6825 10075
+Wire Wire Line
+	6825 10075 6825 10275
+Wire Wire Line
+	6825 10275 7075 10275
+Wire Wire Line
+	7075 10175 6825 10175
+Connection ~ 6825 10175
+Wire Wire Line
+	7700 10075 7475 10075
+Wire Wire Line
+	7475 10075 7475 10275
+Wire Wire Line
+	7475 10275 7700 10275
+Wire Wire Line
+	7700 10175 7475 10175
+Connection ~ 7475 10175
+Text Label 6825 10275 0    60   ~ 0
+GNDA
+Text Label 7475 10275 0    60   ~ 0
+GNDA
+Text Label 6825 9975 0    60   ~ 0
+GSB
+Text Label 6825 9875 0    60   ~ 0
+GSB
+Wire Wire Line
+	7475 9975 7700 9975
+Wire Wire Line
+	7475 9875 7700 9875
+Wire Wire Line
+	7475 9775 7700 9775
+Wire Wire Line
+	7475 9675 7700 9675
+Wire Wire Line
+	7475 9575 7700 9575
+Wire Wire Line
+	7475 9475 7700 9475
+Wire Wire Line
+	7475 9375 7700 9375
+Wire Wire Line
+	7475 9275 7700 9275
+Wire Wire Line
+	7475 9175 7700 9175
+Wire Wire Line
+	7475 9075 7700 9075
+Wire Wire Line
+	8125 10075 8375 10075
+Wire Wire Line
+	8125 9975 8375 9975
+Wire Wire Line
+	8125 9875 8375 9875
+Wire Wire Line
+	8125 9775 8375 9775
+Wire Wire Line
+	8125 9675 8375 9675
+Wire Wire Line
+	8125 9575 8375 9575
+Wire Wire Line
+	8125 9475 8375 9475
+Wire Wire Line
+	8125 9375 8375 9375
+Wire Wire Line
+	8125 9275 8375 9275
+Wire Wire Line
+	8125 9175 8375 9175
+Text Label 7475 9975 0    60   ~ 0
+GSB
+Text Label 7475 9875 0    60   ~ 0
+GSB
+Text Label 6825 9675 0    60   ~ 0
+GS0
+Text Label 7475 9675 0    60   ~ 0
+GS0
+Text Label 8125 9575 0    60   ~ 0
+GS0
+Text Label 6825 9775 0    60   ~ 0
+CANL_
+Text Label 7475 9775 0    60   ~ 0
+CANL_
+Text Label 8125 9775 0    60   ~ 0
+CANL_
+Wire Wire Line
+	8125 10075 8125 9875
+Connection ~ 8125 9975
+Text Label 8125 10075 0    60   ~ 0
+GNDA
+Text Label 6825 9175 0    60   ~ 0
+GNDA
+Text Label 7475 9175 0    60   ~ 0
+GNDA
+Text Label 8125 9275 0    60   ~ 0
+GNDA
+Text Label 7475 9075 0    60   ~ 0
+Vcc_
+Text Label 8125 9175 0    60   ~ 0
+Vcc_
+Text Label 6825 9275 0    60   ~ 0
+GS0
+Text Label 7475 9275 0    60   ~ 0
+GS0
+Text Label 8125 9375 0    60   ~ 0
+GSB
+Text Label 6825 9375 0    60   ~ 0
+CANH_
+Text Label 7475 9375 0    60   ~ 0
+CANH_
+Text Label 8125 9475 0    60   ~ 0
+CANH_
+Text Label 8125 9675 0    60   ~ 0
+GNDA
+Text Label 7475 9575 0    60   ~ 0
+GNDA
+Text Label 6825 9575 0    60   ~ 0
+GNDA
+Text Label 6825 9475 0    60   ~ 0
+Vcc_
+Text Label 7475 9475 0    60   ~ 0
+Vcc_
+$Comp
+L CONN_01X04 P25
+U 1 1 58A987E7
+P 9350 9575
+F 0 "P25" H 9350 9825 50  0000 C CNN
+F 1 "CONN_01X04" V 9450 9575 50  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x04" V 9350 9575 50  0001 C CNN
+F 3 "" H 9350 9575 50  0000 C CNN
+	1    9350 9575
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9150 9425 8925 9425
+Wire Wire Line
+	8925 9525 9150 9525
+Wire Wire Line
+	8925 9625 9150 9625
+Wire Wire Line
+	8925 9725 9150 9725
+Text Label 8925 9425 0    60   ~ 0
+Vcc_
+Text Label 8925 9525 0    60   ~ 0
+GNDA
+Text Label 8925 9625 0    60   ~ 0
+CANL_
+Text Label 8925 9725 0    60   ~ 0
+CANH_
 $EndSCHEMATC
