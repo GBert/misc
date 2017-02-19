@@ -1,9 +1,17 @@
 const int revisionnr = 
-11947
+11955
 ;
 const char* commithash = 
-"295adc59f9ccab312537d3ce1f41d032d656b89e";
+"23d44d9dcb482aa94175e685a6fcac6b86cc677d";
 const char* revlog = 
+"11955 2017-02-19 10:47:18 +0100 cardlg: show total weight in case the waybill has set its own weight\n" \
+"11954 2017-02-19 10:02:55 +0100 cardlg: fix for showing the waybill ID after selection\n" \
+"11953 2017-02-19 08:02:22 +0100 var: ##n index added\n" \
+"11952 2017-02-19 07:07:33 +0100 car: max load option added -> reject waybill in case of overload\n" \
+"11951 2017-02-19 06:55:16 +0100 waybill: optional weight added\n" \
+"11950 2017-02-18 06:32:33 +0100 locdialog: bbt delay unit removed\n" \
+"11949 2017-02-18 04:52:38 +0100 locdialog: limit bbt delay to 1000\n" \
+"11948 2017-02-18 04:47:15 +0100 locdialog: limit bbt delay to 100\n" \
 "11947 2017-02-16 06:58:47 +0100 esunavi: fix for evaluating direction in case the speed is -0\n" \
 "11946 2017-02-14 21:35:49 +0100 bidib: trace crash fix for POM and no master connected\n" \
 "11945 2017-02-14 17:20:58 +0100 esunavi: added byte level trace\n" \
@@ -46,13 +54,5 @@ const char* revlog =
 "11908 2017-01-31 07:33:09 +0100 trainimage: DnD moving cars within a train\n" \
 "11907 2017-01-30 08:20:08 +0100 train dnd: WIP\n" \
 "11906 2017-01-29 20:10:53 +0100 guiframe: check if the lncv tab is created before sending events\n" \
-"11905 2017-01-29 19:52:16 +0100 analyser: extended plan check fix zlevel repair\n" \
-"11904 2017-01-28 13:31:28 +0100 guiframe: fix for lncvtab\n" \
-"11903 2017-01-28 07:49:21 +0100 fix for CTC\n" \
-"11902 2017-01-27 08:12:12 +0100 carpanel: check if the car is allready in the train before adding it\n" \
-"11901 2017-01-26 10:14:35 +0100 guiframe: update loco props deep incase of a bbt broadcast\n" \
-"11900 2017-01-25 11:10:48 +0100 makefile: skip revlog in case of native win32\n" \
-"11899 2017-01-25 11:03:15 +0100 makefile: skip revlog in case of native win32\n" \
-"11898 2017-01-25 10:59:54 +0100 makefile: skip revlog in case of native win32\n" \
 
 "log end";
