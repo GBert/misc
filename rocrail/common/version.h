@@ -1,9 +1,11 @@
 const int revisionnr = 
-11955
+11957
 ;
 const char* commithash = 
-"23d44d9dcb482aa94175e685a6fcac6b86cc677d";
+"7494f7364c662e6e6e7e9049ed23a04e0f4293ba";
 const char* revlog = 
+"11957 2017-02-20 14:18:11 +0100 locdialog: BBT delay restored delay units\n" \
+"11956 2017-02-20 11:52:54 +0100 loc: fix for BBT delay timer\n" \
 "11955 2017-02-19 10:47:18 +0100 cardlg: show total weight in case the waybill has set its own weight\n" \
 "11954 2017-02-19 10:02:55 +0100 cardlg: fix for showing the waybill ID after selection\n" \
 "11953 2017-02-19 08:02:22 +0100 var: ##n index added\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "11910 2017-01-31 08:18:29 +0100 switch: added uidname to the ctc\n" \
 "11909 2017-01-31 08:00:27 +0100 virtual, model: fix for ctc event matching\n" \
 "11908 2017-01-31 07:33:09 +0100 trainimage: DnD moving cars within a train\n" \
-"11907 2017-01-30 08:20:08 +0100 train dnd: WIP\n" \
-"11906 2017-01-29 20:10:53 +0100 guiframe: check if the lncv tab is created before sending events\n" \
 
 "log end";
