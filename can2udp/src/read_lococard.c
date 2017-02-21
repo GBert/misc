@@ -94,6 +94,16 @@ int write_data(struct loco_config_t *loco_config) {
     return 0;
 }
 
+char *extract_string(unsigned int *index, unsigned char *bin, unsigned int length) {
+    char *s;
+    s = calloc(length + 1, 1);
+    if (s == NULL)
+	return NULL;
+    strncpy(s, (char *)&bin[*index], length);
+    *index += length;
+    return s;
+}
+
 int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_data) {
     unsigned int i, j, k, func, id, temp, png_size;
     unsigned char index, length;
@@ -119,7 +129,7 @@ int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_d
 	switch (index) {
 
 	case 0:
-	    printf("index [0x%02x @ 0x%04x] sub-indexes [%d]: ", index, i, length);
+	    printf("index [0x%02x @ 0x%04x] sub-index [%d]: ", index, i, length);
 	    temp = loco_config->bin[i++];
 	    length = (loco_config->bin[i++] << 8) + temp;
 	    printf(" total length [%d]\n", length);
@@ -129,35 +139,26 @@ int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_d
 		/* printf("i 0x%02x [i] 0x%02x length %d\n" , i, loco_config->bin[i], length); */
 		switch (id) {
 		case 0x1e:
-		    loco_name = (char *)calloc(length + 1, 1);
+		    loco_name = extract_string(&i, loco_config->bin, length);
 		    if (loco_name == NULL)
 			return EXIT_FAILURE;
-		    memcpy(loco_name, (char *)&loco_config->bin[i], length);
-		    i += length;
 		    loco_data->name = loco_name;
 		    printf("loco name: >%s<\n", loco_name);
 		    break;
 		case 0x1f:
-		    proto_name = (char *)calloc(length + 1, 1);
+		    proto_name = extract_string(&i, loco_config->bin, length);
 		    if (proto_name == NULL)
 			return EXIT_FAILURE;
-		    strncpy(proto_name, (char *)&loco_config->bin[i], length);
-		    i += length;
 		    printf("proto name: >%s<\n", proto_name);
 		    loco_data->type = proto_name;
 		    break;
 		case 0x20:
-		    /* prepare additional .png space */
-		    png_name = (char *)calloc(length + 4 + 1, 1);
+		    png_name = extract_string(&i, loco_config->bin, length);
 		    if (png_name == NULL)
 			return EXIT_FAILURE;
-		    strncpy(png_name, (char *)&loco_config->bin[i], length);
-		    strncat(png_name, ".png", 4);
-		    i += length;
 		    printf("png name: >%s<\n", png_name);
 		    loco_data->icon = png_name;
 		    /* HACK */
-		    i++;
 		    break;
 		case 0x05:
 		    png_size = length + (loco_config->bin[i++] << 8);
@@ -170,6 +171,8 @@ int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_d
 		    break;
 		}
 		id = loco_config->bin[i++];
+		if (id == 0)
+		    id = loco_config->bin[i++];
 	    }
 	    break;
 	case 9:
