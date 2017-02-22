@@ -158,13 +158,11 @@ int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_d
 			return EXIT_FAILURE;
 		    printf("png name: >%s<\n", png_name);
 		    loco_data->icon = png_name;
-		    /* HACK */
 		    break;
 		case 0x05:
 		    png_size = length + (loco_config->bin[i++] << 8);
 		    printf("png start: 0x%04x  end: 0x%04x  size: 0x%04x  %d bytes\n",
 			   i, i + png_size, png_size, png_size);
-		    i += 2;
 		    return EXIT_SUCCESS;
 		default:
 		    printf("decoding problem: 0x%02x\n", id);
