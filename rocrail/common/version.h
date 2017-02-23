@@ -1,9 +1,19 @@
 const int revisionnr = 
-11957
+11967
 ;
 const char* commithash = 
-"7494f7364c662e6e6e7e9049ed23a04e0f4293ba";
+"f48f676ae8e20dab5f4e0b9faa656ad1a7308a7d";
 const char* revlog = 
+"11967 2017-02-23 09:40:42 +0100 cardlg: moved locality to the details tab\n" \
+"11966 2017-02-23 08:08:52 +0100 cardlg: rearranged\n" \
+"11965 2017-02-22 17:28:11 +0100 bidib: flat programming WIP\n" \
+"11964 2017-02-22 16:14:43 +0100 weather: use minbri also for sliding daylight\n" \
+"11963 2017-02-22 08:21:48 +0100 bidib: flat programming WIP\n" \
+"11962 2017-02-21 15:09:07 +0100 operator: center train option added which overwrites the loco BBT option\n" \
+"11961 2017-02-21 08:12:03 +0100 cardlg: added release waybill button\n" \
+"11960 2017-02-21 07:55:30 +0100 waybilldlg: weight column added to the index\n" \
+"11959 2017-02-21 07:25:50 +0100 waybilldlg: next/prev buttons added\n" \
+"11958 2017-02-21 06:43:05 +0100 car: set state to loaded after assigning a waybill\n" \
 "11957 2017-02-20 14:18:11 +0100 locdialog: BBT delay restored delay units\n" \
 "11956 2017-02-20 11:52:54 +0100 loc: fix for BBT delay timer\n" \
 "11955 2017-02-19 10:47:18 +0100 cardlg: show total weight in case the waybill has set its own weight\n" \
@@ -44,15 +54,5 @@ const char* revlog =
 "11920 2017-02-05 07:22:06 +0100 trainpanel: default dnd action added\n" \
 "11919 2017-02-04 14:39:08 +0100 guiframe: menu->help->menu added\n" \
 "11918 2017-02-04 08:16:02 +0100 carpanel: fix for delete the whole train\n" \
-"11917 2017-02-03 07:17:17 +0100 zimobin: toggle broadcast on/off with the ebreak command\n" \
-"11916 2017-02-02 08:07:47 +0100 carpanel: fix for deleting last car with dnd\n" \
-"11915 2017-02-02 07:57:55 +0100 trainpanel: cardel dnd support added\n" \
-"11914 2017-02-02 07:53:49 +0100 carpanel: only allow alt+dnd in case the car does not belong to a train\n" \
-"11913 2017-02-02 07:47:38 +0100 carpanel: default dnd action added\n" \
-"11912 2017-01-31 16:58:52 +0100 bidib: update messages\n" \
-"11911 2017-01-31 08:34:32 +0100 routedialog: uidname for ctc added\n" \
-"11910 2017-01-31 08:18:29 +0100 switch: added uidname to the ctc\n" \
-"11909 2017-01-31 08:00:27 +0100 virtual, model: fix for ctc event matching\n" \
-"11908 2017-01-31 07:33:09 +0100 trainimage: DnD moving cars within a train\n" \
 
 "log end";
