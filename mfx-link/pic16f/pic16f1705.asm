@@ -36,10 +36,13 @@
 ; Device Pinout
 ;-------------------------------------------------------------------------------
 ;
-; VDD 3V3       1----8 VSS GND
-; RA5 RX        2    7 RA0 ICSPDAT
-; RA4 TX        3    6 RA1 ICSPCLK
-; RA3 !MCLR VPP 4----5 RA2
+; VDD VCC       1----14 VSS GND
+; RA5           2    13 RA0 ICSPDAT
+; RA4           3    12 RA1 ICSPCLK
+; RA3 !MCLR VPP 4    11 RA2
+; RC5           5    10 RC0
+; RC4           6     9 RC1 RX
+; RC3           7-----8 RC2 TX
 ;
 ;-------------------------------------------------------------------------------
 ; Device Constants
@@ -80,8 +83,8 @@ BOOTSIZE        EQU         8
 ; Device Configuration
 ;-------------------------------------------------------------------------------
 
-  __CONFIG _CONFIG1, _FOSC_INTOSC & _CLKOUTEN_OFF & _WDTE_OFF & _MCLRE_ON
-  __CONFIG _CONFIG2, _LVP_ON & _PLLEN_ON
+  __CONFIG _CONFIG1, _FOSC_INTOSC & _WDTE_SWDTEN & _PWRTE_ON & _MCLRE_ON & _CP_OFF & _BOREN_OFF & _CLKOUTEN_OFF & _IESO_OFF & _FCMEN_OFF
+  __CONFIG _CONFIG2, _WRT_OFF & _PPS1WAY_OFF & _PLLEN_ON & _STVREN_ON & _BORV_HI & _LPBOR_OFF & _LVP_ON
 
 ;-------------------------------------------------------------------------------
 ; Device Init.
@@ -89,8 +92,8 @@ BOOTSIZE        EQU         8
 
 INIT            MACRO
 
-                BANKSEL ANSELA              ;BANK ?
-                CLRF    ANSELA
+                BANKSEL ANSELC              ;BANK ?
+                CLRF    ANSELC
 ; PPSUnlock
                 BANKSEL PPSLOCK
                 MOVLW   0x55
