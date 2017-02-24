@@ -173,6 +173,7 @@ int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_d
 		    id = loco_config->bin[i++];
 	    }
 	    break;
+	/* Loco functions */
 	case 9:
 	    printf("index [0x%02x @ 0x%04x] length [%3d]: ", index, i, length);
 	    func = 0;
@@ -181,6 +182,18 @@ int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_d
 		printf(" function %2d: ", func++);
 		for (k = 0; k < 10; k++) {
 		    printf(" 0x%02x", loco_config->bin[i++]);
+		}
+		printf("\n");
+		i -= 10;
+		for (k = 0; k < 10; k++) {
+		    uint8_t ti = loco_config->bin[i++];
+		    switch(k) {
+		    case 0:
+			printf(" %10s 0x%02x", loco_function_string[ti & 0x07], ti);
+			break;
+		    default:
+			break;
+		    }
 		}
 		printf("\n");
 	    }
