@@ -1,14 +1,21 @@
 #!/bin/sh
 
-cp BPI-AddOn-F.Cu.gtl      BPI-AddOn.GTL
-cp BPI-AddOn-B.Cu.gbl      BPI-AddOn.GBL
-cp BPI-AddOn-F.Mask.gts    BPI-AddOn.GTS
-cp BPI-AddOn-B.Mask.gbs    BPI-AddOn.GBS
-cp BPI-AddOn-F.SilkS.gto   BPI-AddOn.GTO
-cp BPI-AddOn-B.SilkS.gbo   BPI-AddOn.GBO
-cp BPI-AddOn.drl           BPI-AddOn-PTH.TXT
-cp BPI-AddOn-NPTH.drl      BPI-AddOn-NPTH.TXT
-cp BPI-AddOn-Edge.Cuts.gm1 BPI-AddOn.GML
+BOARD='BPI-AddOn'
 
-rm -f BPI-AddOn.ZIP
-zip BPI-AddOn.ZIP BPI-AddOn.GTL BPI-AddOn.GBL BPI-AddOn.GTS BPI-AddOn.GBS BPI-AddOn.GTO BPI-AddOn.GBO BPI-AddOn-PTH.TXT BPI-AddOn-NPTH.TXT BPI-AddOn.GML 
+cp ${BOARD}-F.Cu.gtl      ${BOARD}.GTL
+cp ${BOARD}-B.Cu.gbl      ${BOARD}.GBL
+cp ${BOARD}-F.Mask.gts    ${BOARD}.GTS
+cp ${BOARD}-B.Mask.gbs    ${BOARD}.GBS
+cp ${BOARD}-F.SilkS.gto   ${BOARD}.GTO
+cp ${BOARD}-B.SilkS.gbo   ${BOARD}.GBO
+cp ${BOARD}.drl           ${BOARD}-PTH.TXT
+cp ${BOARD}-Edge.Cuts.gm1 ${BOARD}.GML
+
+if [ -f ${BOARD}-NPTH.drl ]; then
+    cp ${BOARD}-NPTH.drl      ${BOARD}-NPTH.TXT
+    rm -f ${BOARD}.ZIP
+    zip ${BOARD}.ZIP ${BOARD}.GTL ${BOARD}.GBL ${BOARD}.GTS ${BOARD}.GBS ${BOARD}.GTO ${BOARD}.GBO ${BOARD}-PTH.TXT ${BOARD}-NPTH.TXT ${BOARD}.GML 
+else
+    rm -f ${BOARD}.ZIP
+    zip ${BOARD}.ZIP ${BOARD}.GTL ${BOARD}.GBL ${BOARD}.GTS ${BOARD}.GBS ${BOARD}.GTO ${BOARD}.GBO ${BOARD}-PTH.TXT ${BOARD}.GML 
+fi
