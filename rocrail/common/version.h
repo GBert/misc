@@ -1,9 +1,16 @@
 const int revisionnr = 
-11967
+11974
 ;
 const char* commithash = 
-"f48f676ae8e20dab5f4e0b9faa656ad1a7308a7d";
+"019544c6f933ad17696f3217e5f4fb34ef374903";
 const char* revlog = 
+"11974 2017-02-25 12:15:04 +0100 bidibdlg: fix for secure activate translation\n" \
+"11973 2017-02-25 10:37:22 +0100 block: fix for free event\n" \
+"11972 2017-02-25 08:12:54 +0100 block: check if its electrically free before unlock it\n" \
+"11971 2017-02-24 13:55:06 +0100 operator: extra train options added\n" \
+"11970 2017-02-24 08:09:57 +0100 bidib: support for configx message\n" \
+"11969 2017-02-24 07:46:55 +0100 weather: min brightness percentage for sliding daylight added\n" \
+"11968 2017-02-23 17:40:56 +0100 item: check locoid for valid pointer (Achim)\n" \
 "11967 2017-02-23 09:40:42 +0100 cardlg: moved locality to the details tab\n" \
 "11966 2017-02-23 08:08:52 +0100 cardlg: rearranged\n" \
 "11965 2017-02-22 17:28:11 +0100 bidib: flat programming WIP\n" \
@@ -47,12 +54,5 @@ const char* revlog =
 "11927 2017-02-08 12:07:48 +0100 car train panel: fix for scrolling\n" \
 "11926 2017-02-08 09:29:23 +0100 xmlscript: use rawdata for the scripts to save html escapes\n" \
 "11925 2017-02-08 07:55:08 +0100 enable scrolling in car and train grid\n" \
-"11924 2017-02-07 09:40:27 +0100 car and trainpanel: contect menu added\n" \
-"11923 2017-02-07 08:07:14 +0100 ulni: echo timeout parameter added\n" \
-"11922 2017-02-06 07:24:37 +0100 DnD a loco to a train\n" \
-"11921 2017-02-05 15:26:34 +0100 xmlscript: fix for replacing oid with NULL\n" \
-"11920 2017-02-05 07:22:06 +0100 trainpanel: default dnd action added\n" \
-"11919 2017-02-04 14:39:08 +0100 guiframe: menu->help->menu added\n" \
-"11918 2017-02-04 08:16:02 +0100 carpanel: fix for delete the whole train\n" \
 
 "log end";
