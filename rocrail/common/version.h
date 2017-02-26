@@ -1,9 +1,10 @@
 const int revisionnr = 
-11974
+11975
 ;
 const char* commithash = 
-"019544c6f933ad17696f3217e5f4fb34ef374903";
+"2339eb086a74ab2f8a599553c1e2ac7d0e72c304";
 const char* revlog = 
+"11975 2017-02-26 13:03:08 +0100 trigger fix for free event\n" \
 "11974 2017-02-25 12:15:04 +0100 bidibdlg: fix for secure activate translation\n" \
 "11973 2017-02-25 10:37:22 +0100 block: fix for free event\n" \
 "11972 2017-02-25 08:12:54 +0100 block: check if its electrically free before unlock it\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "11928 2017-02-08 15:18:56 +0100 rocguidialog: enable car and train tab options\n" \
 "11927 2017-02-08 12:07:48 +0100 car train panel: fix for scrolling\n" \
 "11926 2017-02-08 09:29:23 +0100 xmlscript: use rawdata for the scripts to save html escapes\n" \
-"11925 2017-02-08 07:55:08 +0100 enable scrolling in car and train grid\n" \
 
 "log end";
