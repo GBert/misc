@@ -1,15 +1,23 @@
+/* ----------------------------------------------------------------------------
+ * "THE BEER-WARE LICENSE" (Revision 42):
+ * <info@gerhard-bertelsmann.de> wrote this file. As long as you retain this
+ * notice you can do whatever you want with this stuff. If we meet some day,
+ * and you think this stuff is worth it, you can buy me a beer in return
+ * Gerhard Bertelsmann
+ * ----------------------------------------------------------------------------
+ */
+
 #include "main.h"
 
 void i2c_Init(void) {
-    //Initialise I2C MSSP
-    //Master 100KHz
-
-    SSP1CON1 = 0b00101000;	//I2C enabled Master mode
+    /* Initialise I2C MSSP
+       Master 100KHz */
+    SSP1CON1 = 0b00101000;
     SSP1CON2 = 0x00;
-    //I2C Master mode, clock = FOSC/(4 * (SSPADD + 1))
+    /* clock = FOSC/(4 * (SSPADD + 1)) */
     SSP1ADD = SSP1ADD_VAL;
-
-    SSP1STAT = 0b11000000;	//Slew rate disabled
+    /* Slew rate disabled */
+    SSP1STAT = 0b11000000;
 }
 
 void i2c_start() {
@@ -37,7 +45,7 @@ void i2c_sendNACK() {
     SSP1CON2bits.ACKEN = 1;
 }
 
-char i2c_write(unsigned char data) {
+signed char i2c_write(unsigned char data) {
     SSPBUF = data;
     if (SSP1CON1bits.WCOL)
 	return -1;

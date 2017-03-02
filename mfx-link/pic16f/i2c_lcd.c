@@ -27,8 +27,8 @@
 /// ##############################################################################################
 /// Custom LCD_I2C functions
 
-char I2C_PCF8574_Write(Byte addr, Byte value) {
-    char s, dummy;
+char I2C_PCF8574_Write(unsigned char addr, unsigned char value) {
+    signed char s, dummy;
     i2c_start();
     s = i2c_write(addr);
     if (s < 0) {		//bus collision ?
