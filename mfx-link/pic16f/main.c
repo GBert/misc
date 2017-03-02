@@ -66,7 +66,7 @@ void pps_init(void) {
     PPSLOCK = 1;		// lock PPS
 }
 
-void system_init() {
+void system_init(void) {
     // switch off analog
     OSCCON = 0b11110000;	// Configure oscillator
     //1------- use PLL to get 4x8 Mhz (system clock)
@@ -115,7 +115,7 @@ void uart_init(void) {
     PIR1bits.RCIF = 0;
 }
 
-void timer0_init() {
+void timer0_init(void) {
     OPTION_REGbits.TMR0CS = 0;	// FOSC / 4
     OPTION_REGbits.PSA = 0;	// use prescaler
     OPTION_REGbits.PS = 0b010;	// prescaler 1:8
@@ -123,7 +123,7 @@ void timer0_init() {
     T0IE = 1;
 }
 
-void timer1_init() {
+void timer1_init(void) {
     T1CON = 0b00110001;
     //00------ FOSC/4 as counting source
     //--11---- prescaler 1:8 (counting every us)
@@ -140,7 +140,7 @@ void timer1_init() {
     // CCP1IE = 1;
 }
 
-void timer2_init() {
+void timer2_init(void) {
     // default (FOSC/4)
     T2CON = 0b00000100;
     //-----1-- timer on
@@ -148,7 +148,7 @@ void timer2_init() {
     TMR2 = 0;			// reset timer2
 }
 
-void main() {
+void main(void) {
     unsigned short counter = 0;
 
     pps_init();

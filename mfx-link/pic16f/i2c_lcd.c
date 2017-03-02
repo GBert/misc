@@ -19,16 +19,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <xc.h>
+#include "main.h"
 #include "i2c.h"
 #include "lcd.h"
-#include "main.h"
 
 /// ##############################################################################################
 /// Custom LCD_I2C functions
 
-char I2C_PCF8574_Write(unsigned char addr, unsigned char value) {
-    signed char s, dummy;
+int8_t I2C_PCF8574_Write(uint8_t addr, uint8_t value) {
+    int8_t s, dummy;
     i2c_start();
     s = i2c_write(addr);
     if (s < 0) {		//bus collision ?
@@ -41,8 +40,8 @@ char I2C_PCF8574_Write(unsigned char addr, unsigned char value) {
     return s;
 }
 
-void LCD_putcmd(unsigned char addr, unsigned char data, unsigned char cmdtype) {
-    unsigned char lcddata;
+void LCD_putcmd(uint8_t addr, uint8_t data, uint8_t cmdtype) {
+    uint8_t lcddata;
 
     // Write high nibble
     lcddata = HI_NIBBLE(data) | LCD_BL;
@@ -60,8 +59,8 @@ void LCD_putcmd(unsigned char addr, unsigned char data, unsigned char cmdtype) {
 }
 
 // Extract data high and low nible and send it to I2C LCD
-void LCD_putch(unsigned char addr, unsigned char data) {
-    unsigned char lcddata;
+void LCD_putch(uint8_t addr, uint8_t data) {
+    uint8_t lcddata;
     lcddata = HI_NIBBLE(data) | LCD_BL | LCD_RS;	// Get high nibble
     I2C_PCF8574_Write(addr, lcddata | LCD_EN);	// Send it!
     I2C_PCF8574_Write(addr, lcddata & ~LCD_EN);	// Reset LCD bus
@@ -71,7 +70,7 @@ void LCD_putch(unsigned char addr, unsigned char data) {
 }
 
 // Init the LCD: DATA bus 4 bits, cursor off, auto increment, no shift.
-void LCD_init(unsigned char addr) {
+void LCD_init(uint8_t addr) {
     __delay_ms(20);		// Wait > 15 ms after power ON
 
     LCD_putcmd(addr, LCD_INIT_BYTE, 0);
@@ -87,7 +86,7 @@ void LCD_init(unsigned char addr) {
 }
 
 // Goto line number. On line err, goto line 1.
-void LCD_goto(unsigned char addr, unsigned char row, unsigned char column) {
+void LCD_goto(uint8_t addr, uint8_t row, uint8_t column) {
     switch (row) {
     case 1:
 	LCD_putcmd(addr, LCD_LINE1 + (column - 1), 1);
@@ -109,7 +108,7 @@ void LCD_goto(unsigned char addr, unsigned char row, unsigned char column) {
 
 // Note: The string must be zero terminated!
 // Example: char callSign[] = "ve2cuy\0";
-void LCD_puts(unsigned char addr, const char *s) {
+void LCD_puts(uint8_t addr, const char *s) {
     int i = 0;
     while (*s != 0)
 	LCD_putch(addr, *s++);

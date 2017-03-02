@@ -11,6 +11,7 @@
 #define _MAIN_H_
 
 #include <xc.h>
+#include <stdint.h>
 
 #define _XTAL_FREQ      32000000
 #define FCYC            (_XTAL_FREQ/4L) // target device instruction clock freqency

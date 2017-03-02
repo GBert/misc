@@ -20,32 +20,32 @@ void i2c_Init(void) {
     SSP1STAT = 0b11000000;
 }
 
-void i2c_start() {
+void i2c_start(void) {
     SSP1CON2bits.SEN = 1;
     while(SSP1CON2bits.SEN);
 }
 
-void i2c_restart() {
+void i2c_restart(void) {
     SSP1CON2bits.RSEN = 1;
     while(SSP1CON2bits.RSEN);
 }
 
-void i2c_stop() {
+void i2c_stop(void) {
     SSP1CON2bits.PEN = 1;
     while(SSP1CON2bits.PEN);
 }
 
-void i2c_sendACK() {
+void i2c_sendACK(void) {
     SSP1CON2bits.ACKDT = 0;
     SSP1CON2bits.ACKEN = 1;
 }
 
-void i2c_sendNACK() {
+void i2c_sendNACK(void) {
     SSP1CON2bits.ACKDT = 1;
     SSP1CON2bits.ACKEN = 1;
 }
 
-signed char i2c_write(unsigned char data) {
+int8_t i2c_write(uint8_t data) {
     SSPBUF = data;
     if (SSP1CON1bits.WCOL)
 	return -1;

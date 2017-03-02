@@ -14,6 +14,6 @@ void i2c_start(void);
 void i2c_restart(void);
 void i2c_stop(void);
 void i2c_sendACK(void);
-signed char i2c_write(unsigned char);
+int8_t i2c_write(uint8_t);
 
 #endif	/* _I2C_H_ */
