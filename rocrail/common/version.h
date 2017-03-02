@@ -1,9 +1,31 @@
 const int revisionnr = 
-11975
+11997
 ;
 const char* commithash = 
-"2339eb086a74ab2f8a599553c1e2ac7d0e72c304";
+"bf8021db476ce5ce98b269afb95c9ef927de83c9";
 const char* revlog = 
+"11997 2017-03-02 11:13:53 +0100 xmlscript: support for text variables in the sleep command\n" \
+"11996 2017-03-02 10:53:53 +0100 mttmfcc: traces added to list up all nonebidi units\n" \
+"11995 2017-03-02 08:23:49 +0100 mttmfcc: csv list of none bidi units\n" \
+"11994 2017-03-01 15:01:30 +0100 operator: removed option withoutloco\n" \
+"11993 2017-03-01 14:56:57 +0100 bidib: fix for simulating sensors\n" \
+"11992 2017-03-01 11:05:52 +0100 loc: center train without loco fix\n" \
+"11991 2017-03-01 10:49:18 +0100 free current block on event\n" \
+"11990 2017-03-01 08:32:55 +0100 loc: added trace in case BBT center without loco\n" \
+"11989 2017-02-28 10:56:42 +0100 locdialog BBT: only show route in case this mode is selected\n" \
+"11988 2017-02-28 10:51:10 +0100 locdialog: set from block field to empty in case this is not the selected mode\n" \
+"11987 2017-02-28 08:36:01 +0100 bidib, loc: support dynstate 2 as temperature\n" \
+"11986 2017-02-28 08:28:07 +0100 bidib dynstate: dynamic commands\n" \
+"11985 2017-02-28 07:46:04 +0100 translation merge: sl, pt_BR, sr_latin, de, sv, fr, nl\n" \
+"11984 2017-02-28 06:56:49 +0100 loc, operator: added center train without loco option\n" \
+"11983 2017-02-28 06:17:51 +0100 toursdlg: departure column align left\n" \
+"11982 2017-02-28 05:37:33 +0100 toursdlg: resize columns to fit contents\n" \
+"11981 2017-02-27 17:57:07 +0100 loc: container1 event support added\n" \
+"11980 2017-02-27 17:17:19 +0100 bidib: trace temp.\n" \
+"11979 2017-02-27 15:20:49 +0100 bidib: container1 value support added\n" \
+"11978 2017-02-27 11:20:06 +0100 xmlscript: ! comparator added for class\n" \
+"11977 2017-02-27 11:16:10 +0100 xmlscript: subclass support added\n" \
+"11976 2017-02-27 10:44:58 +0100 free: also allow state LC_WAIT4EVENT\n" \
 "11975 2017-02-26 13:03:08 +0100 trigger fix for free event\n" \
 "11974 2017-02-25 12:15:04 +0100 bidibdlg: fix for secure activate translation\n" \
 "11973 2017-02-25 10:37:22 +0100 block: fix for free event\n" \
@@ -32,27 +54,5 @@ const char* revlog =
 "11950 2017-02-18 06:32:33 +0100 locdialog: bbt delay unit removed\n" \
 "11949 2017-02-18 04:52:38 +0100 locdialog: limit bbt delay to 1000\n" \
 "11948 2017-02-18 04:47:15 +0100 locdialog: limit bbt delay to 100\n" \
-"11947 2017-02-16 06:58:47 +0100 esunavi: fix for evaluating direction in case the speed is -0\n" \
-"11946 2017-02-14 21:35:49 +0100 bidib: trace crash fix for POM and no master connected\n" \
-"11945 2017-02-14 17:20:58 +0100 esunavi: added byte level trace\n" \
-"11944 2017-02-13 06:57:37 +0100 operatordlg: show loaded kmh too\n" \
-"11943 2017-02-13 06:46:03 +0100 cardlg: location filter fix\n" \
-"11942 2017-02-13 06:35:18 +0100 rmx: fix for unsollicited messages\n" \
-"11941 2017-02-12 09:12:51 +0100 filter enterside in tour and schedule dialog\n" \
-"11940 2017-02-12 09:06:18 +0100 filter enterside in tour and schedule dialog\n" \
-"11939 2017-02-12 08:30:52 +0100 item: use red2 for blinking the connector\n" \
-"11938 2017-02-12 08:24:16 +0100 item: blink the other connector after dclick\n" \
-"11937 2017-02-12 07:18:11 +0100 dccpp: added reducedids option\n" \
-"11936 2017-02-12 06:24:25 +0100 rmx: fix for unsollicited RMX channel message\n" \
-"11935 2017-02-11 16:24:54 +0100 dccpp: limit switch IDs to 16 (patch proposal from Duesselklaus)\n" \
-"11934 2017-02-11 07:32:22 +0100 translation merge: pl, ja, fr, pr_BR, de, sr_latin, sl, es, nl\n" \
-"11933 2017-02-10 08:00:53 +0100 rmx: extra trace for RMX channel events\n" \
-"11932 2017-02-10 08:00:16 +0100 car: optional vmax loaded added\n" \
-"11931 2017-02-10 07:19:34 +0100 rmx: fix for slot purge\n" \
-"11930 2017-02-09 11:13:42 +0100 trainpanel: new train menu item added\n" \
-"11929 2017-02-08 15:47:41 +0100 car and train panel: extra colums added\n" \
-"11928 2017-02-08 15:18:56 +0100 rocguidialog: enable car and train tab options\n" \
-"11927 2017-02-08 12:07:48 +0100 car train panel: fix for scrolling\n" \
-"11926 2017-02-08 09:29:23 +0100 xmlscript: use rawdata for the scripts to save html escapes\n" \
 
 "log end";
