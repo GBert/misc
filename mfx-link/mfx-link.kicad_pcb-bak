@@ -183,6 +183,8 @@
     (via_drill 1.5)
     (uvia_dia 0.3)
     (uvia_drill 0.1)
+    (add_net /boost_1)
+    (add_net /boost_2)
   )
 
   (net_class GB ""
@@ -215,8 +217,6 @@
     (uvia_dia 0.3)
     (uvia_drill 0.1)
     (add_net /VI)
-    (add_net /boost_1)
-    (add_net /boost_2)
     (add_net VCC)
     (add_net VDD)
   )
@@ -715,7 +715,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 5893C2F7) (tstamp 58945F35)
-    (at 114.427 110.998 180)
+    (at 114.4524 111.0996 180)
     (descr "Diode, DO-35 package")
     (path /5890CAEB)
     (fp_text reference D8 (at -0.4318 0.06858 180) (layer F.SilkS)
@@ -744,13 +744,13 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 5893C2C5) (tstamp 58945F3B)
-    (at 104.2416 106.4768 180)
+    (at 104.3432 107.0864)
     (descr "Diode, DO-35 package")
     (path /5890D8AE)
-    (fp_text reference D9 (at -0.4191 -0.05588 180) (layer F.SilkS)
+    (fp_text reference D9 (at -0.4191 -0.05588) (layer F.SilkS)
       (effects (font (size 1.2 1) (thickness 0.25)))
     )
-    (fp_text value 1N4007 (at 0 -2.54 180) (layer F.SilkS) hide
+    (fp_text value 1N4007 (at 0 -2.54) (layer F.SilkS) hide
       (effects (font (thickness 0.3048)))
     )
     (fp_line (start 1.524 1.016) (end 1.524 -1.016) (layer F.SilkS) (width 0.254))
@@ -761,9 +761,9 @@
     (fp_line (start 2.286 -1.016) (end 2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start 2.286 1.016) (end -2.286 1.016) (layer F.SilkS) (width 0.254))
     (fp_line (start -2.286 1.016) (end -2.286 -1.016) (layer F.SilkS) (width 0.254))
-    (pad 1 thru_hole circle (at -3.81 0 180) (size 1.5 1.5) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
+    (pad 1 thru_hole circle (at -3.81 0) (size 1.5 1.5) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
       (net 25 /brown))
-    (pad 2 thru_hole circle (at 3.81 0 180) (size 1.5 1.5) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
+    (pad 2 thru_hole circle (at 3.81 0) (size 1.5 1.5) (drill 0.8) (layers *.Cu *.Mask F.SilkS)
       (net 9 GND))
     (model walter/pth_diodes/diode_do35.wrl
       (at (xyz 0 0 0))
@@ -1156,7 +1156,7 @@
   )
 
   (module w_pth_diodes:diode_do35 (layer F.Cu) (tedit 5893C2B3) (tstamp 58928639)
-    (at 114.427 113.411 180)
+    (at 114.4016 113.6396 180)
     (descr "Diode, DO-35 package")
     (path /5892404C)
     (fp_text reference D10 (at -0.4953 -0.1016 180) (layer F.SilkS)

@@ -1431,4 +1431,8 @@ Text Label 4825 1550 0    60   ~ 0
 VI
 Text Label 5700 1550 2    60   ~ 0
 VO
+Text Label 2350 4650 0    60   ~ 0
+GVI
+Text Label 3275 4650 2    60   ~ 0
+GVO
 $EndSCHEMATC
