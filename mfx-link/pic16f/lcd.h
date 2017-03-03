@@ -19,8 +19,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LCD_H
-#define LCD_H
+#ifndef _LCD_H_
+#define _LCD_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -29,13 +29,13 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-/// ###### I2C LCD defines ######
+/* I2C LCD defines */
 #define LCD_WAIT_DELAY 2
 #define LCD_BL 0x08
 #define LCD_EN 0x04
 #define LCD_RW 0x02
 #define LCD_RS 0x01
-// LCD Command
+/* LCD Commands */
 #define LCD_INIT_BYTE		0x30
 #define LCD_BUS_WIDTH_4Bit	0x20
 #define LCD_BUS_WIDTH_8Bit	0x30
@@ -67,4 +67,4 @@ void LCD_putch(unsigned char addr, unsigned char data);
 void LCD_puts(unsigned char addr, const char *s);
 void LCD_goto(unsigned char addr, char row, char column);
 
-#endif /* LCD_H */
+#endif /* _LCD_H_ */

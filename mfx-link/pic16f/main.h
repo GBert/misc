@@ -13,6 +13,8 @@
 #include <xc.h>
 #include <stdint.h>
 
+#define LCD_01_ADDRESS  0x27
+
 #define _XTAL_FREQ      32000000
 #define FCYC            (_XTAL_FREQ/4L) // target device instruction clock freqency
 

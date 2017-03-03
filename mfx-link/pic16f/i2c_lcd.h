@@ -10,8 +10,6 @@
 #ifndef _I2C_LCD_H_
 #define _I2C_LCD_H_
 
-#define LCD_01_ADDRESS	0x40
-
 void LCD_init(unsigned char addr);
 void LCD_putcmd(unsigned char addr, unsigned char data, unsigned char cmdtype);
 
