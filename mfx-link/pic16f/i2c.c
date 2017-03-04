@@ -10,7 +10,9 @@
 #include "main.h"
 
 void i2c_wait(void) {
-    while(SSP1STAT & 0x04);
+    /* wait for R/W and Buffer Full clearing */
+    while(SSP1STAT & 0x05);
+    /* wait for SEN, RSEN, PEN, RCEN, ACKEN */
     while(SSP1CON2 & 0x1F);
 }
 
