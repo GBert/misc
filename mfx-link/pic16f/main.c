@@ -108,7 +108,8 @@ void i2c_init(void) {
     /* Initialise I2C MSSP Master */
     SSP1CON1 = 0b00101000;
     SSP1CON2 = 0x00;
-    /* Master 100KHz */
+    SSP1CON3 = 0x00;
+    /* Master at 100KHz */
     /* clock = FOSC/(4 * (SSPADD + 1)) */
     SSP1ADD = SSP1ADD_VAL;
     /* Slew rate disabled */
