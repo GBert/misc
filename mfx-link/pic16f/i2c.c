@@ -9,17 +9,6 @@
 
 #include "main.h"
 
-void i2c_Init(void) {
-    /* Initialise I2C MSSP
-       Master 100KHz */
-    SSP1CON1 = 0b00101000;
-    SSP1CON2 = 0x00;
-    /* clock = FOSC/(4 * (SSPADD + 1)) */
-    SSP1ADD = SSP1ADD_VAL;
-    /* Slew rate disabled */
-    SSP1STAT = 0b11000000;
-}
-
 void i2c_start(void) {
     SSP1CON2bits.SEN = 1;
     while(SSP1CON2bits.SEN);
@@ -46,9 +35,11 @@ void i2c_sendNACK(void) {
 }
 
 int8_t i2c_write(uint8_t data) {
+    LATCbits.LATC0 = 1;
     SSPBUF = data;
     if (SSP1CON1bits.WCOL)
 	return -1;
     while(SSP1STATbits.BF);
+    LATCbits.LATC0 = 0;
     return 0;
 }

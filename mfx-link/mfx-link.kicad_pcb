@@ -1,4 +1,4 @@
-(kicad_pcb (version 4) (host pcbnew 4.0.1-stable)
+(kicad_pcb (version 4) (host pcbnew 4.0.2+dfsg1-stable)
 
   (general
     (links 122)
@@ -1797,12 +1797,12 @@
     )
   )
 
-  (module TO_SOT_Packages_THT:TO-220_Neutral123_Vertical_LargePads (layer F.Cu) (tedit 58B97964) (tstamp 58B9C629)
+  (module TO_SOT_Packages_THT:TO-220_Neutral123_Vertical_LargePads (layer F.Cu) (tedit 58B9A732) (tstamp 58B9C629)
     (at 97.1931 90.0303 270)
     (descr "TO-220, Neutral, Vertical, Large Pads,")
     (tags "TO-220, Neutral, Vertical, Large Pads,")
     (path /58922907)
-    (fp_text reference U5 (at -3.429 2.667 270) (layer F.SilkS)
+    (fp_text reference U5 (at -4.1783 0.2921 360) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 7805 (at 0 3.81 270) (layer F.Fab)

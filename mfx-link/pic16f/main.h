@@ -20,7 +20,7 @@
 
 #define I2C_BAUDRATE	100000
 
-#define BAUDRATE        115200
+#define BAUDRATE        100000
 #define USE_BRG16       0
 #define USE_BRGH        1
 

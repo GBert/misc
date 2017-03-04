@@ -56,8 +56,11 @@ void pps_init(void) {
     // set USART : RX on RC1 , TX on RA1 / 40001729B.pdf page 141
     RXPPS = 0b10001;		// input  EUSART RX -> RC1
     RC2PPS = 0b10100;		// RC2 output TX/CK
-    RA4PPS = 0b10001;		// RA4 output SDA
+    /* I2C */
+    SSPCLKPPS = 0x05;
     RA5PPS = 0b10000;		// RA5 output SCL
+    SSPDATPPS = 0x04;
+    RA4PPS = 0b10001;		// RA4 output SDA
     // CCP1
     // RC3PPS = 0b01100
 
@@ -81,8 +84,13 @@ void system_init(void) {
     CM1CON1 = 0;
     CM2CON0 = 0;
     CM2CON1 = 0;
-    TRISA5 = 0;
+    /* done by periperal
     TRISA4 = 0;
+    TRISA5 = 0;
+    TRISC2 = 0;
+    */
+    TRISC0 = 0;
+    TRISC1 = 1;
     // TRISC5 = 0;  // CCP1
     // setup interrupt events
     //clear all relevant interrupt flags
@@ -94,6 +102,17 @@ void system_init(void) {
     PIE1bits.SSP1IE = 1;
     INTCONbits.PEIE = 1;
     INTCONbits.GIE = 1;
+}
+
+void i2c_init(void) {
+    /* Initialise I2C MSSP Master */
+    SSP1CON1 = 0b00101000;
+    SSP1CON2 = 0x00;
+    /* Master 100KHz */
+    /* clock = FOSC/(4 * (SSPADD + 1)) */
+    SSP1ADD = SSP1ADD_VAL;
+    /* Slew rate disabled */
+    SSP1STAT = 0b11000000;
 }
 
 void uart_init(void) {
@@ -108,9 +127,6 @@ void uart_init(void) {
     BAUDCON1bits.BRG16 = USE_BRG16;	// 8-bit baud rate generator
 
     SPBRG = SBRG_VAL;		// calculated by defines
-
-    // TRISAbits.TRISA0 = 1;      // make the TX pin a digital output
-    // TRISAbits.TRISA1 = 0;      // make the RX pin a digital input
 
     PIR1bits.RCIF = 0;
 }
@@ -154,6 +170,7 @@ void main(void) {
     pps_init();
     system_init();
     uart_init();
+    i2c_init();
     //timer1_init();
 
     /* empty circular buffers */
@@ -162,15 +179,20 @@ void main(void) {
     rx_fifo.head = 0;
     rx_fifo.tail = 0;
 
-    GIE = 1;
-    while (1) {
-	LCD_putcmd(LCD_01_ADDRESS, LCD_CLEAR, 1);
-	LCD_puts(LCD_01_ADDRESS, "I2C print on LCD\0");
-	LCD_goto(LCD_01_ADDRESS, 2, 1);
-	LCD_puts(LCD_01_ADDRESS, "yeah !\n");
+    GIE = 0;
+    LCD_init(LCD_01_ADDRESS);
 
-	if (counter == 0)
-	    putchar_wait(0x55);
+    while (1) {
+	if (counter == 0) {
+	    LCD_putcmd(LCD_01_ADDRESS, LCD_CLEAR, 1);
+	    LCD_puts(LCD_01_ADDRESS, "I2C print on LCD\0");
+	    LCD_goto(LCD_01_ADDRESS, 2, 1);
+	    LCD_puts(LCD_01_ADDRESS, "yeah !\n");
+	    // LATCbits.LATC0 = 1;
+	    //LATCbits.LATC0 ^= 1;
+	    // putchar_wait(0x55);
+	}
+
 	counter++;
     }
 }
