@@ -9,37 +9,42 @@
 
 #include "main.h"
 
+void i2c_wait(void) {
+    while(SSP1STAT & 0x04);
+    while(SSP1CON2 & 0x1F);
+}
+
 void i2c_start(void) {
+    i2c_wait();
     SSP1CON2bits.SEN = 1;
-    while(SSP1CON2bits.SEN);
 }
 
 void i2c_restart(void) {
+    i2c_wait();
     SSP1CON2bits.RSEN = 1;
-    while(SSP1CON2bits.RSEN);
 }
 
 void i2c_stop(void) {
+    i2c_wait();
     SSP1CON2bits.PEN = 1;
-    while(SSP1CON2bits.PEN);
 }
 
 void i2c_sendACK(void) {
+    i2c_wait();
     SSP1CON2bits.ACKDT = 0;
     SSP1CON2bits.ACKEN = 1;
 }
 
 void i2c_sendNACK(void) {
+    i2c_wait();
     SSP1CON2bits.ACKDT = 1;
     SSP1CON2bits.ACKEN = 1;
 }
 
 int8_t i2c_write(uint8_t data) {
-    LATCbits.LATC0 = 1;
+    i2c_wait();
     SSPBUF = data;
     if (SSP1CON1bits.WCOL)
 	return -1;
-    while(SSP1STATbits.BF);
-    LATCbits.LATC0 = 0;
     return 0;
 }

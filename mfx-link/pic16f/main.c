@@ -84,9 +84,11 @@ void system_init(void) {
     CM1CON1 = 0;
     CM2CON0 = 0;
     CM2CON1 = 0;
-    /* done by periperal
-    TRISA4 = 0;
-    TRISA5 = 0;
+
+    /* 40001729B.pdf page 302 */
+    TRISA4 = 1;
+    TRISA5 = 1;
+    /*
     TRISC2 = 0;
     */
     TRISC0 = 0;
@@ -189,7 +191,8 @@ void main(void) {
 	    LCD_puts(LCD_01_ADDRESS, "I2C print on LCD\0");
 	    LCD_goto(LCD_01_ADDRESS, 2, 1);
 	    LCD_puts(LCD_01_ADDRESS, "yeah !\n");
-	    // LATCbits.LATC0 = 1;
+	    __delay_ms(10);
+	    //LATCbits.LATC0 = 1;
 	    //LATCbits.LATC0 ^= 1;
 	    // putchar_wait(0x55);
 	}

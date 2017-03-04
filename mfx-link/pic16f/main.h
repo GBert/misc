@@ -16,6 +16,7 @@
 #define LCD_01_ADDRESS  0x27
 
 #define _XTAL_FREQ      32000000
+#define XTAL_FREQ      32000000
 #define FCYC            (_XTAL_FREQ/4L) // target device instruction clock freqency
 
 #define I2C_BAUDRATE	100000
