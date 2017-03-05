@@ -1,9 +1,14 @@
 const int revisionnr = 
-12003
+12008
 ;
 const char* commithash = 
-"94c5cb2c779fd36cf900661461b43ca468646968";
+"203275b2096d90189165d3f92d0dab9ce8959c38";
 const char* revlog = 
+"12008 2017-03-05 17:25:13 +0100 xmlscript: fix for substring start/length\n" \
+"12007 2017-03-05 12:13:49 +0100 car/trainpanel: support for sorting and column move (WIP)\n" \
+"12006 2017-03-05 12:08:40 +0100 xmlscript: fix for start and length=0\n" \
+"12005 2017-03-05 11:37:06 +0100 messages: alt text for locomotiveview, carview, trainview\n" \
+"12004 2017-03-05 11:31:51 +0100 guiframe: tab names changed\n" \
 "12003 2017-03-04 15:38:41 +0100 item, scheduledialog: use same function for looking up location\n" \
 "12002 2017-03-04 13:47:51 +0100 xmlscript: crash fix\n" \
 "12001 2017-03-04 07:22:12 +0100 model: generate guest loco on field event\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "11961 2017-02-21 08:12:03 +0100 cardlg: added release waybill button\n" \
 "11960 2017-02-21 07:55:30 +0100 waybilldlg: weight column added to the index\n" \
 "11959 2017-02-21 07:25:50 +0100 waybilldlg: next/prev buttons added\n" \
-"11958 2017-02-21 06:43:05 +0100 car: set state to loaded after assigning a waybill\n" \
-"11957 2017-02-20 14:18:11 +0100 locdialog: BBT delay restored delay units\n" \
-"11956 2017-02-20 11:52:54 +0100 loc: fix for BBT delay timer\n" \
-"11955 2017-02-19 10:47:18 +0100 cardlg: show total weight in case the waybill has set its own weight\n" \
-"11954 2017-02-19 10:02:55 +0100 cardlg: fix for showing the waybill ID after selection\n" \
 
 "log end";
