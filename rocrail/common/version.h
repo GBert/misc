@@ -1,9 +1,15 @@
 const int revisionnr = 
-11997
+12003
 ;
 const char* commithash = 
-"bf8021db476ce5ce98b269afb95c9ef927de83c9";
+"94c5cb2c779fd36cf900661461b43ca468646968";
 const char* revlog = 
+"12003 2017-03-04 15:38:41 +0100 item, scheduledialog: use same function for looking up location\n" \
+"12002 2017-03-04 13:47:51 +0100 xmlscript: crash fix\n" \
+"12001 2017-03-04 07:22:12 +0100 model: generate guest loco on field event\n" \
+"12000 2017-03-03 16:03:39 +0100 xmlscript query: resolve variables in variable name\n" \
+"11999 2017-03-03 11:09:25 +0100 xmlscript: more info in query trace\n" \
+"11998 2017-03-02 16:21:00 +0100 loc: BBT center without loco\n" \
 "11997 2017-03-02 11:13:53 +0100 xmlscript: support for text variables in the sleep command\n" \
 "11996 2017-03-02 10:53:53 +0100 mttmfcc: traces added to list up all nonebidi units\n" \
 "11995 2017-03-02 08:23:49 +0100 mttmfcc: csv list of none bidi units\n" \
@@ -48,11 +54,5 @@ const char* revlog =
 "11956 2017-02-20 11:52:54 +0100 loc: fix for BBT delay timer\n" \
 "11955 2017-02-19 10:47:18 +0100 cardlg: show total weight in case the waybill has set its own weight\n" \
 "11954 2017-02-19 10:02:55 +0100 cardlg: fix for showing the waybill ID after selection\n" \
-"11953 2017-02-19 08:02:22 +0100 var: ##n index added\n" \
-"11952 2017-02-19 07:07:33 +0100 car: max load option added -> reject waybill in case of overload\n" \
-"11951 2017-02-19 06:55:16 +0100 waybill: optional weight added\n" \
-"11950 2017-02-18 06:32:33 +0100 locdialog: bbt delay unit removed\n" \
-"11949 2017-02-18 04:52:38 +0100 locdialog: limit bbt delay to 1000\n" \
-"11948 2017-02-18 04:47:15 +0100 locdialog: limit bbt delay to 100\n" \
 
 "log end";
