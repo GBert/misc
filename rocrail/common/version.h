@@ -1,9 +1,17 @@
 const int revisionnr = 
-12008
+12016
 ;
 const char* commithash = 
-"203275b2096d90189165d3f92d0dab9ce8959c38";
+"183fc7b9456706a0766b065b5838c448fb3508be";
 const char* revlog = 
+"12016 2017-03-06 17:08:50 +0100 guiframe, carpanel: revert shift+alt for adding\n" \
+"12015 2017-03-06 16:25:25 +0100 carpanel/guiframe: use shift+alt for add loco or car\n" \
+"12014 2017-03-06 16:12:57 +0100 analyse: fix for healthy flag (Lothar)\n" \
+"12013 2017-03-06 09:29:14 +0100 analyse: added location check to the healthy check\n" \
+"12012 2017-03-06 09:18:50 +0100 analyse locationCheck: check if blocks are in multiple locations\n" \
+"12011 2017-03-06 08:55:21 +0100 locationsdlg: allow locationid to be NULL to get the block location\n" \
+"12010 2017-03-06 08:52:31 +0100 locationsdlg: check if selected block is already in another location before adding\n" \
+"12009 2017-03-06 07:57:05 +0100 locationdialog: listctrl and prev/next added\n" \
 "12008 2017-03-05 17:25:13 +0100 xmlscript: fix for substring start/length\n" \
 "12007 2017-03-05 12:13:49 +0100 car/trainpanel: support for sorting and column move (WIP)\n" \
 "12006 2017-03-05 12:08:40 +0100 xmlscript: fix for start and length=0\n" \
@@ -46,13 +54,5 @@ const char* revlog =
 "11969 2017-02-24 07:46:55 +0100 weather: min brightness percentage for sliding daylight added\n" \
 "11968 2017-02-23 17:40:56 +0100 item: check locoid for valid pointer (Achim)\n" \
 "11967 2017-02-23 09:40:42 +0100 cardlg: moved locality to the details tab\n" \
-"11966 2017-02-23 08:08:52 +0100 cardlg: rearranged\n" \
-"11965 2017-02-22 17:28:11 +0100 bidib: flat programming WIP\n" \
-"11964 2017-02-22 16:14:43 +0100 weather: use minbri also for sliding daylight\n" \
-"11963 2017-02-22 08:21:48 +0100 bidib: flat programming WIP\n" \
-"11962 2017-02-21 15:09:07 +0100 operator: center train option added which overwrites the loco BBT option\n" \
-"11961 2017-02-21 08:12:03 +0100 cardlg: added release waybill button\n" \
-"11960 2017-02-21 07:55:30 +0100 waybilldlg: weight column added to the index\n" \
-"11959 2017-02-21 07:25:50 +0100 waybilldlg: next/prev buttons added\n" \
 
 "log end";
