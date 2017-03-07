@@ -1,9 +1,12 @@
 const int revisionnr = 
-12016
+12019
 ;
 const char* commithash = 
-"183fc7b9456706a0766b065b5838c448fb3508be";
+"c9ab3831d13a39bdfd27339771b9f0b047aa45e9";
 const char* revlog = 
+"12019 2017-03-07 13:55:42 +0100 guiframe: d&d test for windows crash\n" \
+"12018 2017-03-07 07:58:47 +0100 routedlg: blank aspect support added (fix for command selection)\n" \
+"12017 2017-03-07 07:51:46 +0100 route: blank aspect support added\n" \
 "12016 2017-03-06 17:08:50 +0100 guiframe, carpanel: revert shift+alt for adding\n" \
 "12015 2017-03-06 16:25:25 +0100 carpanel/guiframe: use shift+alt for add loco or car\n" \
 "12014 2017-03-06 16:12:57 +0100 analyse: fix for healthy flag (Lothar)\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "11972 2017-02-25 08:12:54 +0100 block: check if its electrically free before unlock it\n" \
 "11971 2017-02-24 13:55:06 +0100 operator: extra train options added\n" \
 "11970 2017-02-24 08:09:57 +0100 bidib: support for configx message\n" \
-"11969 2017-02-24 07:46:55 +0100 weather: min brightness percentage for sliding daylight added\n" \
-"11968 2017-02-23 17:40:56 +0100 item: check locoid for valid pointer (Achim)\n" \
-"11967 2017-02-23 09:40:42 +0100 cardlg: moved locality to the details tab\n" \
 
 "log end";
