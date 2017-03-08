@@ -85,14 +85,17 @@ void system_init(void) {
     CM2CON0 = 0;
     CM2CON1 = 0;
 
-    /* 40001729B.pdf page 302 */
+    /* I2C MSSP 40001729B.pdf page 302 */
     TRISA4 = 1;
     TRISA5 = 1;
     /*
        TRISC2 = 0;
      */
+    /* USART */
     TRISC0 = 0;
     TRISC1 = 1;
+    /* RA2 analog input */
+    TRISA2 = 1;
     // TRISC5 = 0;  // CCP1
     // setup interrupt events
     //clear all relevant interrupt flags
@@ -116,6 +119,15 @@ void i2c_init(void) {
     SSP1ADD = SSP1ADD_VAL;
     /* Slew rate disabled */
     SSP1STAT = 0b11000000;
+}
+
+void ad_init(void) {
+    /* RA2 analog */
+    ANSELA = 1 << 2;
+    /* right justified ; FOSC/64 ;VREF- GND & VREF+ VDD */
+    ADCON1 = 0b01100000;
+    /* RA2 analog input */
+    ADCON0 = 1 << 2;
 }
 
 void uart_init(void) {
@@ -174,6 +186,7 @@ void main(void) {
     system_init();
     uart_init();
     i2c_init();
+    ad_init();
     //timer1_init();
 
     /* empty circular buffers */
