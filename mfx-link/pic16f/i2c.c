@@ -11,9 +11,9 @@
 
 void i2c_wait(void) {
     /* wait for R/W and Buffer Full clearing */
-    while(SSP1STAT & 0x05);
-    /* wait for SEN, RSEN, PEN, RCEN, ACKEN */
-    while(SSP1CON2 & 0x1F);
+    while (SSP1STAT & 0x05) ;
+    /* wait for SEN, RSEN, PEN, RCEN, ACKEN clearing */
+    while (SSP1CON2 & 0x1F) ;
 }
 
 void i2c_start(void) {

@@ -89,8 +89,8 @@ void system_init(void) {
     TRISA4 = 1;
     TRISA5 = 1;
     /*
-    TRISC2 = 0;
-    */
+       TRISC2 = 0;
+     */
     TRISC0 = 0;
     TRISC1 = 1;
     // TRISC5 = 0;  // CCP1
@@ -188,14 +188,14 @@ void main(void) {
     while (1) {
 	if (counter == 0) {
 	    LCD_putcmd(LCD_01_ADDRESS, LCD_CLEAR, 1);
-	    LCD_puts(LCD_01_ADDRESS, "I2C print on LCD\0");
+	    LCD_puts(LCD_01_ADDRESS, "Booster Max=8.0A\0");
 	    LCD_goto(LCD_01_ADDRESS, 2, 1);
-	    LCD_puts(LCD_01_ADDRESS, "yeah !\n");
-	    __delay_ms(10);
+	    LCD_puts(LCD_01_ADDRESS, "Pwr On      0.0%\0");
 	    //LATCbits.LATC0 = 1;
 	    //LATCbits.LATC0 ^= 1;
-	    // putchar_wait(0x55);
+	    putchar_wait(0x55);
 	}
+	__delay_ms(1);
 
 	counter++;
     }
