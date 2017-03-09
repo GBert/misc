@@ -98,8 +98,9 @@ void system_init(void) {
     /* USART */
     TRISC0 = 0;
     TRISC1 = 1;
-    /* RA2 analog input */
+    /* RA2&RC0 analog input */
     TRISA2 = 1;
+    TRISC0 = 1;
     // TRISC5 = 0;  // CCP1
     // setup interrupt events
     //clear all relevant interrupt flags
@@ -126,12 +127,15 @@ void i2c_init(void) {
 }
 
 void ad_init(void) {
-    /* RA2 analog */
+    /* RA2&RC0 analog */
     ANSELA = 1 << 2;
+    ANSELC = 1 << 0;
     /* right justified ; FOSC/64 ;VREF- GND & VREF+ VDD */
     ADCON1 = 0b01100000;
     /* RA2 analog input */
-    ADCON0 = 1 << 2;
+    ADCON0 = AD_POTI;
+    /* RC0 (AN4) analog input */
+    /* ADCON0 = AD_SENSE; */
 }
 
 void uart_init(void) {

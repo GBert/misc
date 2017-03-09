@@ -14,16 +14,18 @@
 #include <stdint.h>
 
 #define LCD_01_ADDRESS  0x27
+#define AD_POTI		2
+#define AD_SENSE	4
 
-#define _XTAL_FREQ      32000000
-#define XTAL_FREQ      32000000
-#define FCYC            (_XTAL_FREQ/4L) // target device instruction clock freqency
+#define _XTAL_FREQ	32000000
+#define XTAL_FREQ	(_XTAL_FREQ)
+#define FCYC		(_XTAL_FREQ/4L) // target device instruction clock freqency
 
 #define I2C_BAUDRATE	100000
 
-#define BAUDRATE        100000
-#define USE_BRG16       0
-#define USE_BRGH        1
+#define BAUDRATE	100000
+#define USE_BRG16	0
+#define USE_BRGH	1
 
 // I2C baud rate calculation
 // SCL pin clock period = ((ADD<7:0> + 1) *4)/FOSC
@@ -49,21 +51,21 @@
 #define INTERVAL        50
 #define TIMER0_VAL      (256 - (INTERVAL-2))
 
+/* circular buffer */
+struct serial_buffer {
+    unsigned char head;
+    unsigned char tail;
+    unsigned char data[SERIAL_BUFFER_SIZE];
+};
+
 void interrupt ISR(void);
 char putchar(unsigned char c);
 void putchar_wait(unsigned char c);
 void puts_rom(const char *c);
 void init_usart(void);
-char fifo_putchar(struct serial_buffer_t * fifo);
-char print_rom_fifo(const unsigned char * s, struct serial_buffer_t *fifo);
+char fifo_putchar(struct serial_buffer *fifo);
+char print_rom_fifo(const unsigned char * s, struct serial_buffer *fifo);
 void print_debug_value(char c, unsigned char value);
-void print_debug_fifo(struct serial_buffer_t * fifo);
-
-/* circular buffer */
-typedef struct serial_buffer_t {
-    unsigned char head;
-    unsigned char tail;
-    unsigned char data[SERIAL_BUFFER_SIZE];
-};
+void print_debug_fifo(struct serial_buffer *fifo);
 
 #endif /* _MAIN_H_ */

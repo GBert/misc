@@ -14,16 +14,18 @@
 #include <stdint.h>
 
 #define LCD_01_ADDRESS  0x27
+#define AD_POTI		2
+#define AD_SENSE	4
 
-#define _XTAL_FREQ      32000000
-#define XTAL_FREQ      32000000
-#define FCYC            (_XTAL_FREQ/4L) // target device instruction clock freqency
+#define _XTAL_FREQ	32000000
+#define XTAL_FREQ	(_XTAL_FREQ)
+#define FCYC		(_XTAL_FREQ/4L) // target device instruction clock freqency
 
 #define I2C_BAUDRATE	100000
 
-#define BAUDRATE        100000
-#define USE_BRG16       0
-#define USE_BRGH        1
+#define BAUDRATE	100000
+#define USE_BRG16	0
+#define USE_BRGH	1
 
 // I2C baud rate calculation
 // SCL pin clock period = ((ADD<7:0> + 1) *4)/FOSC
