@@ -1,0 +1,22 @@
+
+MCU		= 16F1705
+MAIN		= main
+SRC		= main.c i2c.c i2c_lcd.c usart.c
+CC_FLAGS	= --use-non-free --stack-size 8 -mpic14 -p$(MCU) #-DDEBUG=1
+OPTIMISATION	= --opt=default,+asm,-asmfile,+speed,-space,-debug,9 --runtime=+plib
+CC		= $(XC8DIR)/bin/xc8
+CC		= sdcc
+
+all: $(MAIN).hex
+
+$(MAIN).hex: $(SRC)
+#	$(CC) $(SRC) $(CC_FLAGS) $(OPTIMISATION) --ROM=default,-0c00-0fff --chip=$(PROCESSOR) $(CC_INCLUDE) --ASMLIST -M
+	$(CC) $(SRC) $(CC_FLAGS)
+
+flash: all
+	pk2cmd -B/usr/share/pickit2 -PPIC16F1705 -Fmain.hex -M -R -T
+#	p14 lvp p main.hex
+
+clean:
+	rm -f $(MAIN).hex funclist $(MAIN).cof $(MAIN).hxl *.p1 $(MAIN).sdb startup.* *.cmf *.rlf *.map *.as *.d *.obj *.lst *.pre $(MAIN).sym
+
