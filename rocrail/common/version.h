@@ -1,9 +1,22 @@
 const int revisionnr = 
-12019
+12032
 ;
 const char* commithash = 
-"c9ab3831d13a39bdfd27339771b9f0b047aa45e9";
+"895589bd5f6d8771967d0d885f45eef78e5e14df";
 const char* revlog = 
+"12032 2017-03-09 15:28:05 +0100 block: added command randomrateset\n" \
+"12031 2017-03-09 12:24:08 +0100 model: use a list to find sensors by address\n" \
+"12030 2017-03-09 10:11:39 +0100 trainpanel: add button added\n" \
+"12029 2017-03-09 08:51:13 +0100 Train DnD: show loco on car and train tab\n" \
+"12028 2017-03-09 07:58:15 +0100 decspecs: D&H SX2 (Thomas)\n" \
+"12027 2017-03-09 07:52:59 +0100 cartab: optional carimage\n" \
+"12026 2017-03-08 13:15:51 +0100 location: support for subblocks\n" \
+"12025 2017-03-08 09:46:32 +0100 analyse: fix for checking locations at startup\n" \
+"12024 2017-03-08 09:01:20 +0100 trainimage: use an event to update the image after D&D\n" \
+"12023 2017-03-08 08:27:45 +0100 trainimage: extra debug traces added\n" \
+"12022 2017-03-08 07:52:46 +0100 trainimage: extra debug traces added\n" \
+"12021 2017-03-08 07:48:14 +0100 scheduledialog: new function for checking if a (sub)block is in a location\n" \
+"12020 2017-03-08 06:53:39 +0100 location: subblocks added\n" \
 "12019 2017-03-07 13:55:42 +0100 guiframe: d&d test for windows crash\n" \
 "12018 2017-03-07 07:58:47 +0100 routedlg: blank aspect support added (fix for command selection)\n" \
 "12017 2017-03-07 07:51:46 +0100 route: blank aspect support added\n" \
@@ -41,18 +54,5 @@ const char* revlog =
 "11985 2017-02-28 07:46:04 +0100 translation merge: sl, pt_BR, sr_latin, de, sv, fr, nl\n" \
 "11984 2017-02-28 06:56:49 +0100 loc, operator: added center train without loco option\n" \
 "11983 2017-02-28 06:17:51 +0100 toursdlg: departure column align left\n" \
-"11982 2017-02-28 05:37:33 +0100 toursdlg: resize columns to fit contents\n" \
-"11981 2017-02-27 17:57:07 +0100 loc: container1 event support added\n" \
-"11980 2017-02-27 17:17:19 +0100 bidib: trace temp.\n" \
-"11979 2017-02-27 15:20:49 +0100 bidib: container1 value support added\n" \
-"11978 2017-02-27 11:20:06 +0100 xmlscript: ! comparator added for class\n" \
-"11977 2017-02-27 11:16:10 +0100 xmlscript: subclass support added\n" \
-"11976 2017-02-27 10:44:58 +0100 free: also allow state LC_WAIT4EVENT\n" \
-"11975 2017-02-26 13:03:08 +0100 trigger fix for free event\n" \
-"11974 2017-02-25 12:15:04 +0100 bidibdlg: fix for secure activate translation\n" \
-"11973 2017-02-25 10:37:22 +0100 block: fix for free event\n" \
-"11972 2017-02-25 08:12:54 +0100 block: check if its electrically free before unlock it\n" \
-"11971 2017-02-24 13:55:06 +0100 operator: extra train options added\n" \
-"11970 2017-02-24 08:09:57 +0100 bidib: support for configx message\n" \
 
 "log end";

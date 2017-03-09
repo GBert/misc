@@ -33,6 +33,7 @@
 #define MICRODELAY	15	/* clock frequency 1/MICRODELAY[us] */
 #define MINDELAY	2	/* min delay in usec */
 #define MAXMODULES	32	/* max numbers of S88 modules */
+#define MAXCON		65535-32/* max numbers of S88 connectors */
 #define MAXIPLEN	40	/* maximum IP string length */
 #define UDPPORT		15730
 /* the maximum amount of pin buffer - assuming 32 bit*/
@@ -57,13 +58,13 @@ struct s88_t {
 
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -vf [-b <bcast_addr/int>][-i <0|1>][-p <port>][-m <s88modules>][-o <offset>]\n", prg);
-    fprintf(stderr, "   Version 1.2\n\n");
+    fprintf(stderr, "   Version 1.3\n\n");
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -i [0|1]            invert signals - default 0 -> not inverting\n");
-    fprintf(stderr, "         -d < id>       using event id - default 0\n");
-    fprintf(stderr, "         -e <event id>       using event id - default 0\n");
+    fprintf(stderr, "         -d <event id>       using event id - default 0\n");
+    fprintf(stderr, "         -e <hash>           using CAN <hash>\n");
     fprintf(stderr, "         -m <s88modules>     number of connected S88 modules - default 1\n");
-    fprintf(stderr, "         -o <offset>         number of S88 modules to skip in addressing - default 0\n");
+    fprintf(stderr, "         -o <offset>         addressing offset - default 0\n");
     fprintf(stderr, "         -p <port>           destination port of the server - default %d\n", UDPPORT);
     fprintf(stderr, "         -t <time in usec>   microtiming in usec - default %d usec\n", MICRODELAY);
     fprintf(stderr, "         -f                  run in foreground (for debugging)\n");
@@ -170,7 +171,7 @@ int analyze_data(struct s88_t *s88, int s88_bits) {
 	/* 2 bit roll over */
 	c &= bus_ct0[i] & bus_ct1[i];
 	bus_state[i] ^= c;
-	ret = create_event(s88, 0, i * 32, c, bus_actual[i]);
+	ret = create_event(s88, 0, i * 32 + s88->offset, c, bus_actual[i]);
 	if (ret)
 	    return -1;
     }
@@ -260,7 +261,7 @@ int main(int argc, char **argv) {
 	    break;
 	case 'o':
 	    s88_data.offset = atoi(optarg);
-	    if (s88_data.offset >= MAXMODULES) {
+	    if (s88_data.offset >= MAXCON) {
 		usage(basename(argv[0]));
 		exit(EXIT_FAILURE);
 	    }
