@@ -1,9 +1,12 @@
 const int revisionnr = 
-12032
+12035
 ;
 const char* commithash = 
-"895589bd5f6d8771967d0d885f45eef78e5e14df";
+"48fbddc1f644d09239eee84065c639073001adab";
 const char* revlog = 
+"12035 2017-03-10 11:17:05 +0100 block: reinit event timer member variables after an init\n" \
+"12034 2017-03-10 08:16:41 +0100 xmlscript: set command added\n" \
+"12033 2017-03-10 07:19:22 +0100 cardlg: SX1, SX2 and MFX added\n" \
 "12032 2017-03-09 15:28:05 +0100 block: added command randomrateset\n" \
 "12031 2017-03-09 12:24:08 +0100 model: use a list to find sensors by address\n" \
 "12030 2017-03-09 10:11:39 +0100 trainpanel: add button added\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "11988 2017-02-28 10:51:10 +0100 locdialog: set from block field to empty in case this is not the selected mode\n" \
 "11987 2017-02-28 08:36:01 +0100 bidib, loc: support dynstate 2 as temperature\n" \
 "11986 2017-02-28 08:28:07 +0100 bidib dynstate: dynamic commands\n" \
-"11985 2017-02-28 07:46:04 +0100 translation merge: sl, pt_BR, sr_latin, de, sv, fr, nl\n" \
-"11984 2017-02-28 06:56:49 +0100 loc, operator: added center train without loco option\n" \
-"11983 2017-02-28 06:17:51 +0100 toursdlg: departure column align left\n" \
 
 "log end";
