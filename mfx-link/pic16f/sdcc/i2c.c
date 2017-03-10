@@ -43,7 +43,7 @@ void i2c_sendNACK(void) {
     ACKEN = 1;
 }
 
-int8_t i2c_write(uint8_t data) {
+int8_t i2c_write(volatile uint8_t data) {
     i2c_wait();
     SSPBUF = data;
     if (WCOL)

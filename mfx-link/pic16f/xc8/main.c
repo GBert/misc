@@ -184,7 +184,7 @@ void timer2_init(void) {
 }
 
 void main(void) {
-    unsigned short counter = 0;
+    uint8_t counter = 0;
 
     pps_init();
     system_init();
@@ -212,7 +212,7 @@ void main(void) {
 	    //LATCbits.LATC0 ^= 1;
 	    putchar_wait(0x55);
 	}
-	__delay_ms(1);
+	__delay_ms(4);
 
 	counter++;
     }

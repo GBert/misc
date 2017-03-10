@@ -188,7 +188,7 @@ void timer2_init(void) {
 }
 
 /* Instructions per millisecond. */
-#define INSNS_PER_MS    (XTAL_FREQ / 4000U)
+#define INSNS_PER_MS    (XTAL_FREQ / 8000U)
 /* Delay loop is about 10 cycles per iteration. */
 #define LOOPS_PER_MS    (INSNS_PER_MS / 10U)
 void delay_ms(uint16_t ms) {
@@ -203,7 +203,7 @@ void delay_ms(uint16_t ms) {
 }
 
 void main(void) {
-    unsigned short counter = 0;
+    uint8_t counter = 0;
 
     pps_init();
     system_init();
@@ -231,6 +231,7 @@ void main(void) {
 	    //LATCbits.LATC0 ^= 1;
 	    putchar_wait(0x55);
 	}
+	delay_ms(4);
 
 	counter++;
     }

@@ -28,6 +28,9 @@ clean:
 	@echo -n "[CC]   "
 	$(CC) $(CFLAGS) -c $< -o $@
 
+flash: ${TARGET}
+	pk2cmd -B/usr/share/pk2/ -PPIC$(MCU) -F$(TARGET) -M -R -T
+
 upload: ${TARGET}
 	pk2cmd -B/usr/share/pk2/ -PPIC$(MCU) -F$(TARGET) -M -R -T
 
