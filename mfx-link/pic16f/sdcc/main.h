@@ -58,6 +58,7 @@ struct serial_buffer {
     unsigned char data[SERIAL_BUFFER_SIZE];
 };
 
+void delay_ms(uint16_t ms);
 char putchar(unsigned char c);
 void putchar_wait(unsigned char c);
 void puts_rom(const char *c);

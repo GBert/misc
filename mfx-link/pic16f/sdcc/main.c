@@ -65,7 +65,7 @@ void pps_init(void) {
     RA5PPS = 0b10000;		// RA5 output SCL
     SSPDATPPS = 0x04;
     RA4PPS = 0b10001;		// RA4 output SDA
-    // CCP1
+    /* CCP1 - for standalone DCC/MM/mfx encoder */
     // RC3PPS = 0b01100
 
     PPSLOCK = 0x55;
@@ -185,6 +185,21 @@ void timer2_init(void) {
     //-----1-- timer on
     //------00 prescaler 1:1 (overflow every 32us)
     TMR2 = 0;			// reset timer2
+}
+
+/* Instructions per millisecond. */
+#define INSNS_PER_MS    (XTAL_FREQ / 4000U)
+/* Delay loop is about 10 cycles per iteration. */
+#define LOOPS_PER_MS    (INSNS_PER_MS / 10U)
+void delay_ms(uint16_t ms) {
+    uint16_t u;
+    while (ms--) {
+        /* Inner loop takes about 10 cycles per iteration + 4 cycles setup. */
+        for (u = 0; u < LOOPS_PER_MS; u++) {
+            /* Prevent this loop from being optimized away. */
+            __asm nop __endasm;
+        }
+    }
 }
 
 void main(void) {

@@ -58,7 +58,6 @@ struct serial_buffer {
     unsigned char data[SERIAL_BUFFER_SIZE];
 };
 
-void interrupt ISR(void);
 char putchar(unsigned char c);
 void putchar_wait(unsigned char c);
 void puts_rom(const char *c);
