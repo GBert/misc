@@ -160,7 +160,8 @@ int openDevice(const char *dev, speed_t speed) {
 
     /* options.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON); */
     options.c_iflag |= IGNPAR | ICRNL;
-    options.c_oflag &= ~(OPOST) | ONLCR ;
+    /* options.c_oflag &= ~(OPOST) | ONLCR ; */
+    options.c_oflag = ONLCR;
     options.c_lflag &= ~(ECHO | ECHONL | ISIG | IEXTEN);
     options.c_lflag |= ICANON;
 
@@ -194,7 +195,7 @@ void mqtt_cb_msg(struct mosquitto *mosq, void *userdata, const struct mosquitto_
     if (msg->payload != NULL) {
 	if (!background)
 	    printf("Payload: %s\n", (char *)msg->payload);
-	dprintf(pfd[1].fd, "%s\n", (char *)msg->payload);
+	dprintf(pfd[1].fd, "%s\r\n", (char *)msg->payload);
     }
 }
 
