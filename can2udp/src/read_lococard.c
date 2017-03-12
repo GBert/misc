@@ -30,6 +30,7 @@
 
 #include "cs2-config.h"
 
+unsigned char pre_mm[]    = { 0x02, 0x75, 0x00 };
 unsigned char pre_mfx[]   = { 0x02, 0xf5, 0x00 };
 unsigned char pre_other[] = { 0x02, 0xc5, 0x00 };
 
@@ -115,6 +116,8 @@ int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_d
     /* preamble */
     if (memcmp(loco_config->bin, pre_mfx, 3) == 0)
 	printf("type: mfx\n");
+    else if (memcmp(loco_config->bin, pre_mm, 3) == 0)
+	printf("type: mm\n");
     else if (memcmp(loco_config->bin, pre_other, 3) == 0)
 	printf("type: other\n");
     else
