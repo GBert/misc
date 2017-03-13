@@ -1,9 +1,12 @@
 const int revisionnr = 
-12035
+12038
 ;
 const char* commithash = 
-"48fbddc1f644d09239eee84065c639073001adab";
+"6dbdc37dd6691aa7a456ea6ba5c9c971581e0395";
 const char* revlog = 
+"12038 2017-03-12 09:38:41 +0100 carpanel: sort and move column support (WIP)\n" \
+"12037 2017-03-12 08:04:58 +0100 toursdlg: support for location subblocks added\n" \
+"12036 2017-03-12 07:49:59 +0100 xmlscript: fix for set statement\n" \
 "12035 2017-03-10 11:17:05 +0100 block: reinit event timer member variables after an init\n" \
 "12034 2017-03-10 08:16:41 +0100 xmlscript: set command added\n" \
 "12033 2017-03-10 07:19:22 +0100 cardlg: SX1, SX2 and MFX added\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "11991 2017-03-01 10:49:18 +0100 free current block on event\n" \
 "11990 2017-03-01 08:32:55 +0100 loc: added trace in case BBT center without loco\n" \
 "11989 2017-02-28 10:56:42 +0100 locdialog BBT: only show route in case this mode is selected\n" \
-"11988 2017-02-28 10:51:10 +0100 locdialog: set from block field to empty in case this is not the selected mode\n" \
-"11987 2017-02-28 08:36:01 +0100 bidib, loc: support dynstate 2 as temperature\n" \
-"11986 2017-02-28 08:28:07 +0100 bidib dynstate: dynamic commands\n" \
 
 "log end";
