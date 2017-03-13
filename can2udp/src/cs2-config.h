@@ -111,6 +111,7 @@ struct loco_data_t {
     unsigned int tmax;
     unsigned int vmin;
     unsigned int vmax;
+    unsigned int tacho;
     unsigned int xprot;
     unsigned int traction;
     unsigned int spm;

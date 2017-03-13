@@ -43,6 +43,25 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -v                  verbose output\n\n");
 }
 
+void print_bitmap(unsigned char *data) {
+    uint8_t i, j, mask;
+    unsigned char *line;
+
+    line = data;   
+    for (i = 0; i < 8; i++) {
+	mask = 0x80;
+	for ( j = 0; j < 8 ; j++) {
+	   if (*line & mask)
+		printf("*");
+	   else
+		printf(".");
+	   mask >>= 1;
+	}
+	printf("\n");
+	line++;
+    }
+}
+
 unsigned char *read_data(struct loco_config_t *loco_config) {
     FILE *fp;
     unsigned char *data;
@@ -194,6 +213,10 @@ int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_d
 		    case 0:
 			printf(" %10s 0x%02x", loco_function_string[ti & 0x07], ti);
 			break;
+		    case 99: /* TODO */
+			printf("\n");
+			print_bitmap(&loco_config->bin[i]);
+			break;
 		    default:
 			break;
 		    }
@@ -231,9 +254,13 @@ int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_d
 		loco_data->vmax = temp;
 		printf("              Vmax ");
 		break;
+	    case 7:
+		loco_data->tacho = temp;
+		printf("             tacho ");
+		break;
 	    case 8:
 		loco_data->volume = temp;
-		printf("            Volume ");
+		printf("            volume ");
 		break;
 	    default:
 		printf("           unknown ");
