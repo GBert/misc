@@ -1,9 +1,10 @@
 const int revisionnr = 
-12038
+12039
 ;
 const char* commithash = 
-"6dbdc37dd6691aa7a456ea6ba5c9c971581e0395";
+"b118df4517849f69b80120535b5b9e8ae11244d7";
 const char* revlog = 
+"12039 2017-03-13 17:22:02 +0100 translation merge: fr, sr_latin, sl, pt_BR, de, nl\n" \
 "12038 2017-03-12 09:38:41 +0100 carpanel: sort and move column support (WIP)\n" \
 "12037 2017-03-12 08:04:58 +0100 toursdlg: support for location subblocks added\n" \
 "12036 2017-03-12 07:49:59 +0100 xmlscript: fix for set statement\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "11992 2017-03-01 11:05:52 +0100 loc: center train without loco fix\n" \
 "11991 2017-03-01 10:49:18 +0100 free current block on event\n" \
 "11990 2017-03-01 08:32:55 +0100 loc: added trace in case BBT center without loco\n" \
-"11989 2017-02-28 10:56:42 +0100 locdialog BBT: only show route in case this mode is selected\n" \
 
 "log end";
