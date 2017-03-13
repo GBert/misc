@@ -35,14 +35,15 @@
 #define DEFAULT_STEP	16
 #define MAXSPEED	1000
 
-static unsigned char LOCO_SPEED[] = { 0x00, 0x08, 0x03, 0x00, 0x06, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00 };
-static unsigned char START_STOP[] = { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static unsigned char LOCO_SPEED[]    = { 0x00, 0x08, 0x03, 0x00, 0x06, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static unsigned char LOCO_FUNCTION[] = { 0x00, 0x0C, 0x03, 0x00, 0x06, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static unsigned char START_STOP[]    = { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 unsigned char netframe[MAXDG];
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface> -r <infrared-interface> -s <step>\n", prg);
-    fprintf(stderr, "   Version 0.3\n\n");
+    fprintf(stderr, "   Version 0.4\n\n");
     fprintf(stderr, "         -l <loco id>        loco id - default %d\n", DEFAULT_LOCO);
     fprintf(stderr, "         -i <can int>        can interface - default can0\n");
     fprintf(stderr, "         -r <ir int>         infrared event interface - default /dev/input/event1\n");
@@ -55,7 +56,6 @@ int time_stamp(char *timestamp) {
 
     gettimeofday(&tv, NULL);
     tm = localtime(&tv.tv_sec);
-
     sprintf(timestamp, "%02d:%02d:%02d.%03d", tm->tm_hour, tm->tm_min, tm->tm_sec, (int)tv.tv_usec / 1000);
     return 0;
 }
@@ -115,12 +115,15 @@ int main(int argc, char **argv) {
     struct input_event ev[64];
     char ir_int[255];
     unsigned char data[13];
+    unsigned char loco_function[32];
     socklen_t caddrlen = sizeof(caddr);
 
     status = 0;
     loco = DEFAULT_LOCO;
     speed = 0;
     step = DEFAULT_STEP;
+    memset(loco_function, 0, sizeof(loco_function));
+
     strcpy(ifr.ifr_name, "can0");
     strcpy(ir_int, "/dev/input/event1");
 
@@ -185,6 +188,24 @@ int main(int argc, char **argv) {
 	    if (ev[n].type == EV_MSC && (ev[n].code == MSC_RAW || ev[n].code == MSC_SCAN)) {
 		memcpy(&frame.data, &data[5], 8);
 		switch (ev[n].value) {
+		case 0x00:
+		case 0x01:
+		case 0x02:
+		case 0x03:
+		case 0x04:
+		case 0x05:
+		case 0x06:
+		case 0x07:
+		case 0x08:
+		case 0x09:
+		    printf("function %d\n", ev[n].value);
+		    loco_function[ev[n].value] ^= 1;
+		    memcpy(data, LOCO_FUNCTION, sizeof(data));
+		    data[8] = loco & 0xff;
+		    data[9] = ev[n].value & 0xff;
+		    data[10] = loco_function[ev[n].value] & 0xff;
+		    send_defined_can_frame(sc, data);
+		    break;
 		case 0x0c:
 		    printf("Start/Stop\n");
 		    memcpy(data, START_STOP, sizeof(data));
@@ -199,8 +220,8 @@ int main(int argc, char **argv) {
 		    speed += step;
 		    if (speed > MAXSPEED)
 			speed = MAXSPEED;
-		    data[9]  = (speed >> 8) & 0x03;
-		    data[10] =  speed & 0xff;
+		    data[9] = (speed >> 8) & 0x03;
+		    data[10] = speed & 0xff;
 		    send_defined_can_frame(sc, data);
 		    break;
 		case 0x11:
@@ -211,8 +232,8 @@ int main(int argc, char **argv) {
 			speed -= step;
 		    if (speed < 0)
 			speed = 0;
-		    data[9]  = (speed >> 8) & 0x03;
-		    data[10] =  speed & 0xff;
+		    data[9] = (speed >> 8) & 0x03;
+		    data[10] = speed & 0xff;
 		    send_defined_can_frame(sc, data);
 		    break;
 		default:
