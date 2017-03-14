@@ -1,9 +1,13 @@
 const int revisionnr = 
-12039
+12043
 ;
 const char* commithash = 
-"b118df4517849f69b80120535b5b9e8ae11244d7";
+"fa2691c9cc0297864b362ca590cc5d2df7d57506";
 const char* revlog = 
+"12043 2017-03-14 15:50:16 +0100 action: added system hour, minute, second\n" \
+"12042 2017-03-14 10:23:33 +0100 schedule and toursdialog: fix for conver old data\n" \
+"12041 2017-03-14 08:02:13 +0100 xmlscript: inform object after a set statement\n" \
+"12040 2017-03-14 07:42:10 +0100 xmlscriptdlg: added new statements\n" \
 "12039 2017-03-13 17:22:02 +0100 translation merge: fr, sr_latin, sl, pt_BR, de, nl\n" \
 "12038 2017-03-12 09:38:41 +0100 carpanel: sort and move column support (WIP)\n" \
 "12037 2017-03-12 08:04:58 +0100 toursdlg: support for location subblocks added\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "11996 2017-03-02 10:53:53 +0100 mttmfcc: traces added to list up all nonebidi units\n" \
 "11995 2017-03-02 08:23:49 +0100 mttmfcc: csv list of none bidi units\n" \
 "11994 2017-03-01 15:01:30 +0100 operator: removed option withoutloco\n" \
-"11993 2017-03-01 14:56:57 +0100 bidib: fix for simulating sensors\n" \
-"11992 2017-03-01 11:05:52 +0100 loc: center train without loco fix\n" \
-"11991 2017-03-01 10:49:18 +0100 free current block on event\n" \
-"11990 2017-03-01 08:32:55 +0100 loc: added trace in case BBT center without loco\n" \
 
 "log end";
