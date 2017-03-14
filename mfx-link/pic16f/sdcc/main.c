@@ -202,6 +202,14 @@ void delay_ms(uint16_t ms) {
     }
 }
 
+uint8_t ad(uint8_t channel) {
+    ADCON0 = (channel << 2) | 1;
+    ADGO = 1;
+    delay_ms(1);
+    while(ADGO);
+    return(ADRESH);
+}
+
 void main(void) {
     uint8_t counter = 0;
 
