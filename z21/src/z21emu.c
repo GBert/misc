@@ -18,7 +18,7 @@
 #include <string.h>
 #include <time.h>
 #include <errno.h>
-
+#include <pthread.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/ioctl.h>
@@ -40,6 +40,7 @@ unsigned char udpframe[MAXDG];
 int sp, ss, sb;
 struct sockaddr_in spaddr, ssaddr, sbaddr, *bsa;
 int foreground = 1;
+pthread_mutex_t lock;
 
 static char *UDP_SRC_STRG = "->UDP   ";
 static char *UDP_DST_STRG = "  UDP-> ";
@@ -98,6 +99,7 @@ int check_data(unsigned char *udpframe) {
 
 int main(int argc, char **argv) {
     pid_t pid;
+    pthread_t pth;
     int ret, opt;
     /* primary UDP socket , secondary UDP socket, UDP broadcast socket */
     struct ifaddrs *ifap, *ifa;
@@ -218,6 +220,20 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "UDP set socket option error: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
+
+    if (pthread_mutex_init(&lock, NULL)) {
+	fprintf(stderr, "can't init mutex %s\n", strerror(errno));
+	exit(EXIT_FAILURE);
+    }
+    if (pthread_create(&pth, NULL, LEDMod, &trigger_data)) {
+	fprintf(stderr, "can't create pthread %s\n", strerror(errno));
+	exit(EXIT_FAILURE);
+
+    }
+    if (forground)
+	printf("created peridic thread\n");
+    }
+
 
     if (!foreground) {
 	/* Fork off the parent process */
