@@ -210,14 +210,25 @@ uint8_t ad(uint8_t channel) {
     return(ADRESH);
 }
 
+char nibble_to_hex(uint8_t c) {
+    char nibble;
+    nibble = (c & 0x0f) + '0';
+    if (nibble >= 0x3a)
+        nibble += 7;
+    return(nibble);
+}
+
 void main(void) {
     uint8_t counter = 0;
+    uint8_t temp;
+    uint16_t ad_value;
 
     pps_init();
     system_init();
     uart_init();
     i2c_init();
     ad_init();
+
     //timer1_init();
 
     /* empty circular buffers */
@@ -231,10 +242,16 @@ void main(void) {
 
     while (1) {
 	if (counter == 0) {
+	    temp = ad(AD_SENSE);
+	    /* 14mA per digit */
+	    ad_value = temp * 14;
+	    temp = ad(AD_POTI);
 	    LCD_putcmd(LCD_01_ADDRESS, LCD_CLEAR, 1);
 	    LCD_puts(LCD_01_ADDRESS, "Booster Max=8.0A\0");
 	    LCD_goto(LCD_01_ADDRESS, 2, 1);
-	    LCD_puts(LCD_01_ADDRESS, "Pwr On      0.0%\0");
+	    LCD_putch(LCD_01_ADDRESS, nibble_to_hex(temp >> 4));
+	    LCD_putch(LCD_01_ADDRESS, nibble_to_hex(temp));
+	    LCD_puts(LCD_01_ADDRESS, "  On      0.0%\0");
 	    //LATCbits.LATC0 = 1;
 	    //LATCbits.LATC0 ^= 1;
 	    putchar_wait(0x55);
