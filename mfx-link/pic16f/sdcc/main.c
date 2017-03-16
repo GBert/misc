@@ -12,9 +12,8 @@
 #include "i2c_lcd.h"
 #include "lcd.h"
 
-
-static __code uint16_t __at (_CONFIG1) configword1 = _FOSC_INTOSC & _PLLEN_OFF & _MCLRE_ON & _WDTE_OFF;
-static __code uint16_t __at (_CONFIG2) configword2 = _LVP_ON & _CLKOUTEN_OFF;
+static __code uint16_t __at(_CONFIG1) configword1 = _FOSC_INTOSC & _PLLEN_OFF & _MCLRE_ON & _WDTE_OFF;
+static __code uint16_t __at(_CONFIG2) configword2 = _LVP_ON & _CLKOUTEN_OFF;
 
 // #pragma config FOSC=INTOSC, PLLEN=OFF, MCLRE=ON, WDTE=OFF
 // #pragma config LVP=ON, CLKOUTEN=OFF
@@ -33,7 +32,7 @@ struct serial_buffer tx_fifo, rx_fifo;
 volatile unsigned int pulse_high = 25;
 volatile unsigned int pulse_low = 75;
 
-void isr (void) __interrupt (0){
+void isr(void) __interrupt(0) {
     if (CCP1IF) {
 	CCP1IF = 0;
 	if (CCP1M0) {
@@ -108,7 +107,7 @@ void system_init(void) {
     TMR1IF = 0;
     CCP1IF = 0;
     //activate interrupt bits
-    CCP1IE = 0;	// disable interrupt on CCP1 will be check by polling as of today
+    CCP1IE = 0;			// disable interrupt on CCP1 will be check by polling as of today
     SSP1IE = 1;
     PEIE = 1;
     GIE = 1;
@@ -149,15 +148,15 @@ void uart_init(void) {
     CREN = 1;		// enable receiver
     BRG16 = USE_BRG16;	// 8-bit baud rate generator
 
-    SPBRG = SBRG_VAL;		// calculated by defines
+    SPBRG = SBRG_VAL;	// calculated by defines
 
     RCIF = 0;
 }
 
 void timer0_init(void) {
-    TMR0CS = 0;	// FOSC / 4
-    PSA = 0;	// use prescaler
-    PS1 = 1;	// prescaler 1:8
+    TMR0CS = 0;		// FOSC / 4
+    PSA = 0;		// use prescaler
+    PS1 = 1;		// prescaler 1:8
     TMR0 = TIMER0_VAL;
     T0IE = 1;
 }
@@ -167,7 +166,7 @@ void timer1_init(void) {
     //00------ FOSC/4 as counting source
     //--11---- prescaler 1:8 (counting every us)
     //-------1 timer on
-    TMR1GE = 0;	// timer is not controlled by gate.
+    TMR1GE = 0;			// timer is not controlled by gate.
     TMR1H = 0;			// reset timer1 high
     TMR1L = 0;			// and low bytes - prescaler automatic reset
     CCP1CON = 0b00001000;	// set up capture and compare
@@ -194,11 +193,11 @@ void timer2_init(void) {
 void delay_ms(uint16_t ms) {
     uint16_t u;
     while (ms--) {
-        /* Inner loop takes about 10 cycles per iteration + 4 cycles setup. */
-        for (u = 0; u < LOOPS_PER_MS; u++) {
-            /* Prevent this loop from being optimized away. */
-            __asm nop __endasm;
-        }
+	/* Inner loop takes about 10 cycles per iteration + 4 cycles setup. */
+	for (u = 0; u < LOOPS_PER_MS; u++) {
+	    /* Prevent this loop from being optimized away. */
+	    __asm nop __endasm;
+	}
     }
 }
 
@@ -206,16 +205,16 @@ uint8_t ad(uint8_t channel) {
     ADCON0 = (channel << 2) | 1;
     ADGO = 1;
     delay_ms(1);
-    while(ADGO);
-    return(ADRESH);
+    while (ADGO) ;
+    return (ADRESH);
 }
 
 char nibble_to_hex(uint8_t c) {
     char nibble;
     nibble = (c & 0x0f) + '0';
     if (nibble >= 0x3a)
-        nibble += 7;
-    return(nibble);
+	nibble += 7;
+    return (nibble);
 }
 
 void main(void) {
