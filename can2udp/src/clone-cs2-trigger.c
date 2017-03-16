@@ -398,7 +398,7 @@ int main(int argc, char **argv) {
 	gpio_direction(trigger_data.led_pin, 0);
 
 	if (pthread_mutex_init(&lock, NULL)) {
-	    fprintf(stderr, "can't nit mutex %s\n", strerror(errno));
+	    fprintf(stderr, "can't init mutex %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
 	}
 	if (pthread_create(&pth, NULL, LEDMod, &trigger_data)) {
