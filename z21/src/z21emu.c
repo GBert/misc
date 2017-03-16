@@ -42,8 +42,25 @@ struct sockaddr_in spaddr, ssaddr, sbaddr, *bsa;
 int foreground = 1;
 pthread_mutex_t lock;
 
+struct z21_data_t {
+    struct sockaddr_in baddr;
+    int socket;
+    int background;
+    char *format;
+};
+
+struct z21_data_t z21_data;
+
 static char *UDP_SRC_STRG = "->UDP   ";
 static char *UDP_DST_STRG = "  UDP-> ";
+
+void usec_sleep(int usec) {
+    struct timespec to_wait;
+
+    to_wait.tv_sec = 0;
+    to_wait.tv_nsec = usec * 1000;
+    nanosleep(&to_wait, NULL);
+}
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -p <port> -s <port>\n", prg);
@@ -97,6 +114,16 @@ int check_data(unsigned char *udpframe) {
     return (EXIT_SUCCESS);
 }
 
+void *z21_periodic_tasks(void *ptr) {
+    struct z21_data_t *z21_data = (struct z21_data_t *)ptr;
+
+    while (1) {
+	usec_sleep(1000000);
+	if (z21_data->socket)
+	    printf("send data");
+    }
+}
+
 int main(int argc, char **argv) {
     pid_t pid;
     pthread_t pth;
@@ -110,6 +137,7 @@ int main(int argc, char **argv) {
     char *udp_dst_address;
     char *bcast_interface;
 
+    memset(&z21_data, 0, sizeof(z21_data));
     memset(&spaddr, 0, sizeof(spaddr));
     memset(&ssaddr, 0, sizeof(ssaddr));
     memset(&sbaddr, 0, sizeof(sbaddr));
@@ -225,12 +253,12 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "can't init mutex %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
-    if (pthread_create(&pth, NULL, LEDMod, &trigger_data)) {
+    if (pthread_create(&pth, NULL, z21_periodic_tasks, &z21_data)) {
 	fprintf(stderr, "can't create pthread %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
 
     }
-    if (forground)
+    if (foreground) {
 	printf("created peridic thread\n");
     }
 
