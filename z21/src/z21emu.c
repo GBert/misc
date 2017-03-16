@@ -312,6 +312,8 @@ int main(int argc, char **argv) {
     close(sp);
     close(ss);
     close(sb);
+    pthread_join(pth, (void *)&z21_data);
+    pthread_mutex_unlock(&lock);
     /* if we reach this point, there was an error */
     return EXIT_FAILURE;
 }
