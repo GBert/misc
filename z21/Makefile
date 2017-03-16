@@ -18,7 +18,6 @@ define Package/z21emu
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Roco Z21 Emulator
-  DEPENDS:=
 endef
 
 define Package/z21emu/description

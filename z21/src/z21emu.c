@@ -55,6 +55,7 @@ void print_usage(char *prg) {
 
 void print_udp_frame(unsigned char *udpframe, char *format, int verbose) {
     int i;
+    uint16_t length, header;
     struct timeval tv;
     struct tm *tm;
 
@@ -64,20 +65,36 @@ void print_udp_frame(unsigned char *udpframe, char *format, int verbose) {
 	tm = localtime(&tv.tv_sec);
 	printf("%02d:%02d:%02d.%03d  ", tm->tm_hour, tm->tm_min, tm->tm_sec, (int)tv.tv_usec / 1000);
 
- 	for (i = 0; i < 8; i++)
-		printf(" %02x", udpframe[i]);
+	length = udpframe[0] + (udpframe[1] << 8);
+	header = udpframe[2] + (udpframe[3] << 8);
+	printf(" 0x%04x 0x%04x", length, header);
+	for (i = 4 ; i < length -4 ; i++)
+	    printf(" %02x", udpframe[i]);
 	printf("\n");
     }
 }
 
 int send_broadcast(unsigned char *udpframe, char *format, int verbose) {
-    if (sendto(sb, udpframe, 12, 0, (struct sockaddr *)&sbaddr, sizeof(sbaddr)) < 0)
+    int s;
+    uint16_t length;
+
+    length = udpframe[0] + (udpframe[1] << 8);
+    s = sendto(sb, udpframe, length, 0, (struct sockaddr *)&sbaddr, sizeof(sbaddr));
+
+    if (s < 0) {
 	fprintf(stderr, "UDP write error: %s\n", strerror(errno));
-    else
-	if (verbose)
-	    print_udp_frame(udpframe, format, foreground);
+	return (EXIT_FAILURE);
+    }
+    if (s != length) {
+    } else {
+	print_udp_frame(udpframe, format, foreground);
+    }
     return (EXIT_SUCCESS);
-}	
+}
+
+int check_data(unsigned char *udpframe) {
+    return (EXIT_SUCCESS);
+}
 
 int main(int argc, char **argv) {
     pid_t pid;
@@ -97,8 +114,8 @@ int main(int argc, char **argv) {
     memset(udpframe, 0, sizeof(udpframe));
     udp_dst_address = (char *)calloc(MAXIPLEN, 1);
     if (!udp_dst_address) {
-        fprintf(stderr, "can't alloc memory for udp_dst_address: %s\n", strerror(errno));
-        exit(EXIT_FAILURE);
+	fprintf(stderr, "can't alloc memory for udp_dst_address: %s\n", strerror(errno));
+	exit(EXIT_FAILURE);
     };
 
     bcast_interface = (char *)calloc(MAXIPLEN, 1);
@@ -106,8 +123,6 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "can't alloc memory for bcast_interface: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     };
-
-
 
     while ((opt = getopt(argc, argv, "p:s:b:hf?")) != -1) {
 	switch (opt) {
@@ -118,19 +133,19 @@ int main(int argc, char **argv) {
 	    secondary_port = strtoul(optarg, (char **)NULL, 10);
 	    break;
 	case 'b':
-            if (strnlen(optarg, MAXIPLEN) <= MAXIPLEN - 1) {
-                /* broadcat IP begins with a number */
-                if ((optarg[0] >= '0') && (optarg[0] <= '9')) {
-                    memset(udp_dst_address, 0, MAXIPLEN);
-                    strncpy(udp_dst_address, optarg, MAXIPLEN - 1);
-                } else {
-                    memset(bcast_interface, 0, MAXIPLEN);
-                    strncpy(bcast_interface, optarg, MAXIPLEN - 1);
-                }
-            } else {
-                fprintf(stderr, "UDP broadcast address or interface error: %s\n", optarg);
-                exit(EXIT_FAILURE);
-            }
+	    if (strnlen(optarg, MAXIPLEN) <= MAXIPLEN - 1) {
+		/* broadcat IP begins with a number */
+		if ((optarg[0] >= '0') && (optarg[0] <= '9')) {
+		    memset(udp_dst_address, 0, MAXIPLEN);
+		    strncpy(udp_dst_address, optarg, MAXIPLEN - 1);
+		} else {
+		    memset(bcast_interface, 0, MAXIPLEN);
+		    strncpy(bcast_interface, optarg, MAXIPLEN - 1);
+		}
+	    } else {
+		fprintf(stderr, "UDP broadcast address or interface error: %s\n", optarg);
+		exit(EXIT_FAILURE);
+	    }
 
 	    break;
 	case 'f':
@@ -184,13 +199,13 @@ int main(int argc, char **argv) {
     /* get the broadcast address */
     getifaddrs(&ifap);
     for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
-        if (ifa->ifa_addr) {
-            if (ifa->ifa_addr->sa_family == AF_INET) {
-                bsa = (struct sockaddr_in *)ifa->ifa_broadaddr;
-                if (strncmp(ifa->ifa_name, bcast_interface, strlen(bcast_interface)) == 0)
-                    udp_dst_address = inet_ntoa(bsa->sin_addr);
-            }
-        }
+	if (ifa->ifa_addr) {
+	    if (ifa->ifa_addr->sa_family == AF_INET) {
+		bsa = (struct sockaddr_in *)ifa->ifa_broadaddr;
+		if (strncmp(ifa->ifa_name, bcast_interface, strlen(bcast_interface)) == 0)
+		    udp_dst_address = inet_ntoa(bsa->sin_addr);
+	    }
+	}
     }
     freeifaddrs(ifap);
 
@@ -232,7 +247,7 @@ int main(int argc, char **argv) {
 	    ret = read(ss, udpframe, MAXDG);
 	    if (ret < 0) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
-	 	break;
+		break;
 	    } else {
 		print_udp_frame(udpframe, UDP_SRC_STRG, foreground);
 	    }
@@ -243,7 +258,7 @@ int main(int argc, char **argv) {
 	    ret = read(ss, udpframe, MAXDG);
 	    if (ret < 0) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
-	 	break;
+		break;
 	    } else {
 		print_udp_frame(udpframe, UDP_SRC_STRG, foreground);
 	    }

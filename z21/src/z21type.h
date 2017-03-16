@@ -6,10 +6,17 @@
  * Copyright (c) by Philipp Gahtow, year 2015
 */
 
-/* Z21 LAN Protokoll Spezifikation: */
+/* Z21 LAN protocol specification */
 
 #ifndef _Z21_TYPES_H_
 #define _Z21_TYPES_H_
+
+struct z21data_t {
+    int type;
+    uint16_t length;
+    uint16_t header;
+    uint8_t *data;
+};
 
 #define LAN_X_Header			0x40  /* not in Spezifikation! */
 #define LAN_GET_SERIAL_NUMBER		0x10
