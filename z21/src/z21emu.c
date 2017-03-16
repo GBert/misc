@@ -86,7 +86,7 @@ void print_udp_frame(unsigned char *udpframe, char *format, int verbose) {
 	length = udpframe[0] + (udpframe[1] << 8);
 	header = udpframe[2] + (udpframe[3] << 8);
 	printf(" 0x%04x 0x%04x", length, header);
-	for (i = 4 ; i < length -4 ; i++)
+	for (i = 4 ; i < length ; i++)
 	    printf(" %02x", udpframe[i]);
 	printf("\n");
     }
@@ -259,7 +259,7 @@ int main(int argc, char **argv) {
 
     }
     if (foreground) {
-	printf("created peridic thread\n");
+	printf("created periodic z21 thread\n");
     }
 
 
@@ -276,10 +276,10 @@ int main(int argc, char **argv) {
 	}
     }
 
-    FD_ZERO(&readfds);
     while (1) {
+	FD_ZERO(&readfds);
 	FD_SET(sp, &readfds);
-	FD_SET(sp, &readfds);
+	FD_SET(ss, &readfds);
 
 	if (select((sp > ss) ? sp + 1 : ss + 1, &readfds, NULL, NULL, NULL) < 0) {
 	    fprintf(stderr, "select error: %s\n", strerror(errno));
@@ -288,14 +288,14 @@ int main(int argc, char **argv) {
 
 	/* received a UDP packet on primary */
 	if (FD_ISSET(sp, &readfds)) {
-	    ret = read(ss, udpframe, MAXDG);
+	    ret = read(sp, udpframe, MAXDG);
 	    if (ret < 0) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
 		break;
 	    } else {
 		print_udp_frame(udpframe, UDP_SRC_STRG, foreground);
 	    }
-	    send_broadcast(udpframe, UDP_DST_STRG, foreground);
+	    /* send_broadcast(udpframe, UDP_DST_STRG, foreground); */
 	}
 	/* received a UDP packet on secondary */
 	if (FD_ISSET(ss, &readfds)) {
@@ -306,7 +306,7 @@ int main(int argc, char **argv) {
 	    } else {
 		print_udp_frame(udpframe, UDP_SRC_STRG, foreground);
 	    }
-	    send_broadcast(udpframe, UDP_DST_STRG, foreground);
+	    /* send_broadcast(udpframe, UDP_DST_STRG, foreground); */
 	}
     }
     close(sp);
