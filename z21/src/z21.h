@@ -18,7 +18,9 @@ struct z21data_t {
     uint8_t *data;
 };
 
-#define LAN_X_Header			0x40  /* not in Spezifikation! */
+static unsigned char Z21_VERSION[]  = { 0x09, 0x00, 0x40, 0x00, 0xF3, 0x0A, 0x01, 0x23, 0xDB };
+
+#define LAN_X_HEADER			0x40  /* not in Spezifikation! */
 #define LAN_GET_SERIAL_NUMBER		0x10
 #define LAN_LOGOFF			0x30
 #define LAN_X_GET_SETTING		0x21  

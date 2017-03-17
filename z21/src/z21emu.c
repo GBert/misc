@@ -8,7 +8,7 @@
  */
 
 /*
- * Z21 Emulation for
+ * Z21 Emulation for Roco WiFi Mouse
  */
 
 #include <stdio.h>
@@ -27,6 +27,7 @@
 #include <netinet/in.h>
 #include <ifaddrs.h>
 #include <arpa/inet.h>
+#include <linux/can.h>
 
 #include "z21.h"
 
@@ -47,6 +48,7 @@ struct z21_data_t {
     int sp;
     int ss;
     int sb;
+    int sc;
     int foreground;
     char *format;
     unsigned char udpframe[MAXDG];
@@ -63,6 +65,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -p <port>           primary UDP port for the server - default %d\n", PRIMARY_UDP_PORT);
     fprintf(stderr, "         -s <port>           secondary UDP port for the server - default %d\n", SECONDARY_UDP_PORT);
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface\n");
+    fprintf(stderr, "         -c <CAN interface>  CAN interface\n");
     fprintf(stderr, "         -f                  running in foreground\n\n");
 }
 
@@ -125,7 +128,28 @@ int send_broadcast(unsigned char *udpframe, char *format, int verbose) {
     return (EXIT_SUCCESS);
 }
 
-int check_data(unsigned char *udpframe) {
+int check_data(struct z21_data_t *z21_data) {
+    uint16_t length, header;
+    uint8_t xheader;
+
+    length = z21_data->udpframe[0] + (z21_data->udpframe[1] << 8);
+    header = z21_data->udpframe[2] + (z21_data->udpframe[3] << 8);
+
+    switch (header) {
+    case LAN_X_HEADER:
+	xheader = z21_data->udpframe[4];
+	switch (xheader) {
+	case LAN_X_GET_FIRMWARE_VERSION:
+	    break;
+	default:
+	    break;
+	}
+	break;
+    case LAN_GET_SERIAL_NUMBER:
+	break;
+    default:
+	break;
+    }
     return (EXIT_SUCCESS);
 }
 
@@ -146,6 +170,8 @@ int main(int argc, char **argv) {
     int ret, opt;
     /* primary UDP socket , secondary UDP socket, UDP broadcast socket */
     struct ifaddrs *ifap, *ifa;
+    struct ifreq ifr;
+    struct sockaddr_can caddr;
     struct sockaddr_in *bsa;
     fd_set readfds;
     int primary_port = PRIMARY_UDP_PORT;
@@ -154,6 +180,8 @@ int main(int argc, char **argv) {
     char *udp_dst_address;
     char *bcast_interface;
 
+    socklen_t caddrlen = sizeof(caddr);
+    memset(&ifr, 0, sizeof(ifr));
     memset(&z21_data, 0, sizeof(z21_data));
     z21_data.foreground = 1;
 
@@ -169,7 +197,7 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     };
 
-    while ((opt = getopt(argc, argv, "p:s:b:hf?")) != -1) {
+    while ((opt = getopt(argc, argv, "p:s:b:c:hf?")) != -1) {
 	switch (opt) {
 	case 'p':
 	    primary_port = strtoul(optarg, (char **)NULL, 10);
@@ -191,7 +219,9 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "UDP broadcast address or interface error: %s\n", optarg);
 		exit(EXIT_FAILURE);
 	    }
-
+	    break;
+        case 'i':
+	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
 	    break;
 	case 'f':
 	    z21_data.foreground = 1;
@@ -274,6 +304,25 @@ int main(int argc, char **argv) {
     if (setsockopt(z21_data.sb, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0) {
 	fprintf(stderr, "UDP set socket option error: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
+    }
+
+    if (ifr.ifr_name) {
+	/* prepare CAN socket */
+	if ((z21_data.sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
+	    fprintf(stderr, "error creating CAN socket: %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
+	caddr.can_family = AF_CAN;
+	if (ioctl(z21_data.sc, SIOCGIFINDEX, &ifr) < 0) {
+	    fprintf(stderr, "setup CAN socket error: %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
+	caddr.can_ifindex = ifr.ifr_ifindex;
+
+	if (bind(z21_data.sc, (struct sockaddr *)&caddr, caddrlen) < 0) {
+	    fprintf(stderr, "error binding CAN socket: %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
     }
 
     if (pthread_mutex_init(&lock, NULL)) {
