@@ -8,8 +8,8 @@
 
 /* Z21 LAN protocol specification */
 
-#ifndef _Z21_TYPES_H_
-#define _Z21_TYPES_H_
+#ifndef _Z21_H_
+#define _Z21_H_
 
 struct z21data_t {
     int type;
@@ -88,4 +88,4 @@ struct z21data_t {
 
 //-----------------------------------------
 
-#endif /* _Z21_TYPES_H_ */
+#endif /* _Z21_H_ */

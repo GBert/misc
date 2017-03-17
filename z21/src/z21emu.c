@@ -28,7 +28,7 @@
 #include <ifaddrs.h>
 #include <arpa/inet.h>
 
-#include "z21type.h"
+#include "z21.h"
 
 #define MAXIPLEN		40	/* maximum IP string length */
 #define PRIMARY_UDP_PORT	21105
@@ -36,31 +36,26 @@
 
 #define MAXDG   256		/* maximum datagram size */
 
-unsigned char udpframe[MAXDG];
-int sp, ss, sb;
-struct sockaddr_in spaddr, ssaddr, sbaddr, *bsa;
-int foreground = 1;
+struct sockaddr_in *bsa;
 pthread_mutex_t lock;
 
 struct z21_data_t {
-    struct sockaddr_in baddr;
-    int socket;
-    int background;
+    struct sockaddr_in spaddr;
+    struct sockaddr_in ssaddr;
+    struct sockaddr_in sbaddr;
+    struct sockaddr_in scaddr;
+    int sp;
+    int ss;
+    int sb;
+    int foreground;
     char *format;
+    unsigned char udpframe[MAXDG];
 };
 
 struct z21_data_t z21_data;
 
 static char *UDP_SRC_STRG = "->UDP   ";
 static char *UDP_DST_STRG = "  UDP-> ";
-
-void usec_sleep(int usec) {
-    struct timespec to_wait;
-
-    to_wait.tv_sec = 0;
-    to_wait.tv_nsec = usec * 1000;
-    nanosleep(&to_wait, NULL);
-}
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -p <port> -s <port>\n", prg);
@@ -71,13 +66,33 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -f                  running in foreground\n\n");
 }
 
-void print_udp_frame(unsigned char *udpframe, char *format, int verbose) {
+void usec_sleep(int usec) {
+    struct timespec to_wait;
+
+    if (usec > 999999)
+	usec = 999999;
+    to_wait.tv_sec = 0;
+    to_wait.tv_nsec = usec * 1000;
+    nanosleep(&to_wait, NULL);
+}
+
+uint8_t xor(unsigned char *data, int length) {
+    uint8_t res;
+    int i;
+
+    res = 0;
+    for (i = 0; i < length; i++)
+	res ^= data[i];
+    return (res);
+}
+
+void print_udp_frame(unsigned char *udpframe, char *format) {
     int i;
     uint16_t length, header;
     struct timeval tv;
     struct tm *tm;
 
-    if (verbose) {
+    if (z21_data.foreground) {
 	/* print timestamp */
 	gettimeofday(&tv, NULL);
 	tm = localtime(&tv.tv_sec);
@@ -86,7 +101,7 @@ void print_udp_frame(unsigned char *udpframe, char *format, int verbose) {
 	length = udpframe[0] + (udpframe[1] << 8);
 	header = udpframe[2] + (udpframe[3] << 8);
 	printf(" 0x%04x 0x%04x", length, header);
-	for (i = 4 ; i < length ; i++)
+	for (i = 4; i < length; i++)
 	    printf(" %02x", udpframe[i]);
 	printf("\n");
     }
@@ -97,7 +112,7 @@ int send_broadcast(unsigned char *udpframe, char *format, int verbose) {
     uint16_t length;
 
     length = udpframe[0] + (udpframe[1] << 8);
-    s = sendto(sb, udpframe, length, 0, (struct sockaddr *)&sbaddr, sizeof(sbaddr));
+    s = sendto(z21_data.sb, udpframe, length, 0, (struct sockaddr *)&z21_data.sbaddr, sizeof(z21_data.sbaddr));
 
     if (s < 0) {
 	fprintf(stderr, "UDP write error: %s\n", strerror(errno));
@@ -105,7 +120,7 @@ int send_broadcast(unsigned char *udpframe, char *format, int verbose) {
     }
     if (s != length) {
     } else {
-	print_udp_frame(udpframe, format, foreground);
+	print_udp_frame(udpframe, format);
     }
     return (EXIT_SUCCESS);
 }
@@ -118,9 +133,10 @@ void *z21_periodic_tasks(void *ptr) {
     struct z21_data_t *z21_data = (struct z21_data_t *)ptr;
 
     while (1) {
-	usec_sleep(1000000);
-	if (z21_data->socket)
-	    printf("send data");
+	usec_sleep(1E6);
+	if (z21_data->sb) {
+	    /* printf("Z21 periodic wakeup\n"); */
+	}
     }
 }
 
@@ -130,6 +146,7 @@ int main(int argc, char **argv) {
     int ret, opt;
     /* primary UDP socket , secondary UDP socket, UDP broadcast socket */
     struct ifaddrs *ifap, *ifa;
+    struct sockaddr_in *bsa;
     fd_set readfds;
     int primary_port = PRIMARY_UDP_PORT;
     int secondary_port = SECONDARY_UDP_PORT;
@@ -138,10 +155,8 @@ int main(int argc, char **argv) {
     char *bcast_interface;
 
     memset(&z21_data, 0, sizeof(z21_data));
-    memset(&spaddr, 0, sizeof(spaddr));
-    memset(&ssaddr, 0, sizeof(ssaddr));
-    memset(&sbaddr, 0, sizeof(sbaddr));
-    memset(udpframe, 0, sizeof(udpframe));
+    z21_data.foreground = 1;
+
     udp_dst_address = (char *)calloc(MAXIPLEN, 1);
     if (!udp_dst_address) {
 	fprintf(stderr, "can't alloc memory for udp_dst_address: %s\n", strerror(errno));
@@ -179,7 +194,7 @@ int main(int argc, char **argv) {
 
 	    break;
 	case 'f':
-	    foreground = 1;
+	    z21_data.foreground = 1;
 	    break;
 	case 'h':
 	case '?':
@@ -194,33 +209,33 @@ int main(int argc, char **argv) {
     }
 
     /* prepare primary UDP socket */
-    sp = socket(PF_INET, SOCK_DGRAM, 0);
-    if (sp < 0) {
+    z21_data.sp = socket(PF_INET, SOCK_DGRAM, 0);
+    if (z21_data.sp < 0) {
 	fprintf(stderr, "primary UDP socket error: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
 
-    spaddr.sin_family = AF_INET;
-    spaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    spaddr.sin_port = htons(primary_port);
+    z21_data.spaddr.sin_family = AF_INET;
+    z21_data.spaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    z21_data.spaddr.sin_port = htons(primary_port);
 
-    if (bind(sp, (struct sockaddr *)&spaddr, sizeof(spaddr)) < 0) {
+    if (bind(z21_data.sp, (struct sockaddr *)&z21_data.spaddr, sizeof(z21_data.spaddr)) < 0) {
 	fprintf(stderr, "primary UDP bind error: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
 
     /* prepare secondary UDP socket */
-    ss = socket(PF_INET, SOCK_DGRAM, 0);
-    if (ss < 0) {
+    z21_data.ss = socket(PF_INET, SOCK_DGRAM, 0);
+    if (z21_data.ss < 0) {
 	fprintf(stderr, "secondary UDP socket error: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
 
-    ssaddr.sin_family = AF_INET;
-    ssaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    ssaddr.sin_port = htons(secondary_port);
+    z21_data.ssaddr.sin_family = AF_INET;
+    z21_data.ssaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    z21_data.ssaddr.sin_port = htons(secondary_port);
 
-    if (bind(ss, (struct sockaddr *)&ssaddr, sizeof(ssaddr)) < 0) {
+    if (bind(z21_data.ss, (struct sockaddr *)&z21_data.ssaddr, sizeof(z21_data.ssaddr)) < 0) {
 	fprintf(stderr, "scondary UDP bind error: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
@@ -239,24 +254,24 @@ int main(int argc, char **argv) {
     }
     freeifaddrs(ifap);
 
-    sbaddr.sin_family = AF_INET;
-    sbaddr.sin_port = htons(primary_port);
+    z21_data.sbaddr.sin_family = AF_INET;
+    z21_data.sbaddr.sin_port = htons(primary_port);
 
-    ret = inet_pton(AF_INET, udp_dst_address, &sbaddr.sin_addr);
+    ret = inet_pton(AF_INET, udp_dst_address, &z21_data.sbaddr.sin_addr);
     if (ret <= 0) {
-        if (ret == 0)
-            fprintf(stderr, "UDP IP invalid\n");
-        else
-            fprintf(stderr, "invalid address family\n");
-        exit(EXIT_FAILURE);
+	if (ret == 0)
+	    fprintf(stderr, "UDP IP invalid\n");
+	else
+	    fprintf(stderr, "invalid address family\n");
+	exit(EXIT_FAILURE);
     }
 
-    sb = socket(AF_INET, SOCK_DGRAM, 0);
-    if (sb < 0) {
+    z21_data.sb = socket(AF_INET, SOCK_DGRAM, 0);
+    if (z21_data.sb < 0) {
 	fprintf(stderr, "sending UDP socket error %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
-    if (setsockopt(sb, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0) {
+    if (setsockopt(z21_data.sb, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0) {
 	fprintf(stderr, "UDP set socket option error: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
@@ -270,12 +285,11 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
 
     }
-    if (foreground) {
+    if (z21_data.foreground) {
 	printf("created periodic z21 thread\n");
     }
 
-
-    if (!foreground) {
+    if (!z21_data.foreground) {
 	/* Fork off the parent process */
 	pid = fork();
 	if (pid < 0)
@@ -290,40 +304,41 @@ int main(int argc, char **argv) {
 
     while (1) {
 	FD_ZERO(&readfds);
-	FD_SET(sp, &readfds);
-	FD_SET(ss, &readfds);
+	FD_SET(z21_data.sp, &readfds);
+	FD_SET(z21_data.ss, &readfds);
 
-	if (select((sp > ss) ? sp + 1 : ss + 1, &readfds, NULL, NULL, NULL) < 0) {
+	if (select((z21_data.sp > z21_data.ss) ? z21_data.sp + 1 : z21_data.ss + 1, &readfds, NULL, NULL, NULL) < 0) {
 	    fprintf(stderr, "select error: %s\n", strerror(errno));
 	    break;
 	}
 
 	/* received a UDP packet on primary */
-	if (FD_ISSET(sp, &readfds)) {
-	    ret = read(sp, udpframe, MAXDG);
+	if (FD_ISSET(z21_data.sp, &readfds)) {
+	    ret = read(z21_data.sp, z21_data.udpframe, MAXDG);
 	    if (ret < 0) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
 		break;
 	    } else {
-		print_udp_frame(udpframe, UDP_SRC_STRG, foreground);
+		print_udp_frame(z21_data.udpframe, UDP_SRC_STRG);
 	    }
-	    /* send_broadcast(udpframe, UDP_DST_STRG, foreground); */
+	    /* send_broadcast(z21_data.udpframe, UDP_DST_STRG, z21_data.foreground); */
 	}
 	/* received a UDP packet on secondary */
-	if (FD_ISSET(ss, &readfds)) {
-	    ret = read(ss, udpframe, MAXDG);
+	if (FD_ISSET(z21_data.ss, &readfds)) {
+	    ret = read(z21_data.ss, z21_data.udpframe, MAXDG);
 	    if (ret < 0) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
 		break;
 	    } else {
-		print_udp_frame(udpframe, UDP_SRC_STRG, foreground);
+		print_udp_frame(z21_data.udpframe, UDP_SRC_STRG);
 	    }
-	    /* send_broadcast(udpframe, UDP_DST_STRG, foreground); */
+	    /* TODO */
+	    send_broadcast(z21_data.udpframe, UDP_DST_STRG, z21_data.foreground);
 	}
     }
-    close(sp);
-    close(ss);
-    close(sb);
+    close(z21_data.sp);
+    close(z21_data.ss);
+    close(z21_data.sb);
     pthread_join(pth, (void *)&z21_data);
     pthread_mutex_unlock(&lock);
     /* if we reach this point, there was an error */
