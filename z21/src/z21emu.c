@@ -29,35 +29,18 @@
 #include <arpa/inet.h>
 #include <linux/can.h>
 
+#include "utils.h"
 #include "z21.h"
-
-#define MAXIPLEN		40	/* maximum IP string length */
-#define PRIMARY_UDP_PORT	21105
-#define SECONDARY_UDP_PORT	21106
-
-#define MAXDG   256		/* maximum datagram size */
 
 struct sockaddr_in *bsa;
 pthread_mutex_t lock;
-
-struct z21_data_t {
-    struct sockaddr_in spaddr;
-    struct sockaddr_in ssaddr;
-    struct sockaddr_in sbaddr;
-    struct sockaddr_in scaddr;
-    int sp;
-    int ss;
-    int sb;
-    int sc;
-    int foreground;
-    char *format;
-    unsigned char udpframe[MAXDG];
-};
 
 struct z21_data_t z21_data;
 
 static char *UDP_SRC_STRG = "->UDP   ";
 static char *UDP_DST_STRG = "  UDP-> ";
+
+static unsigned char Z21_VERSION[]  = { 0x09, 0x00, 0x40, 0x00, 0xF3, 0x0A, 0x01, 0x23, 0xDB };
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -p <port> -s <port>\n", prg);
@@ -67,47 +50,6 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface\n");
     fprintf(stderr, "         -c <CAN interface>  CAN interface\n");
     fprintf(stderr, "         -f                  running in foreground\n\n");
-}
-
-void usec_sleep(int usec) {
-    struct timespec to_wait;
-
-    if (usec > 999999)
-	usec = 999999;
-    to_wait.tv_sec = 0;
-    to_wait.tv_nsec = usec * 1000;
-    nanosleep(&to_wait, NULL);
-}
-
-uint8_t xor(unsigned char *data, int length) {
-    uint8_t res;
-    int i;
-
-    res = 0;
-    for (i = 0; i < length; i++)
-	res ^= data[i];
-    return (res);
-}
-
-void print_udp_frame(unsigned char *udpframe, char *format) {
-    int i;
-    uint16_t length, header;
-    struct timeval tv;
-    struct tm *tm;
-
-    if (z21_data.foreground) {
-	/* print timestamp */
-	gettimeofday(&tv, NULL);
-	tm = localtime(&tv.tv_sec);
-	printf("%02d:%02d:%02d.%03d  ", tm->tm_hour, tm->tm_min, tm->tm_sec, (int)tv.tv_usec / 1000);
-
-	length = udpframe[0] + (udpframe[1] << 8);
-	header = udpframe[2] + (udpframe[3] << 8);
-	printf(" 0x%04x 0x%04x", length, header);
-	for (i = 4; i < length; i++)
-	    printf(" %02x", udpframe[i]);
-	printf("\n");
-    }
 }
 
 int send_broadcast(unsigned char *udpframe, char *format, int verbose) {

@@ -11,6 +11,11 @@
 #ifndef _Z21_H_
 #define _Z21_H_
 
+#define MAXDG   256             /* maximum datagram size */
+#define MAXIPLEN                40      /* maximum IP string length */
+#define PRIMARY_UDP_PORT        21105
+#define SECONDARY_UDP_PORT      21106
+
 struct z21data_t {
     int type;
     uint16_t length;
@@ -18,7 +23,19 @@ struct z21data_t {
     uint8_t *data;
 };
 
-static unsigned char Z21_VERSION[]  = { 0x09, 0x00, 0x40, 0x00, 0xF3, 0x0A, 0x01, 0x23, 0xDB };
+struct z21_data_t {
+    struct sockaddr_in spaddr;
+    struct sockaddr_in ssaddr;
+    struct sockaddr_in sbaddr;
+    struct sockaddr_in scaddr;
+    int sp;
+    int ss;
+    int sb;
+    int sc;
+    int foreground;
+    char *format;
+    unsigned char udpframe[MAXDG];
+};
 
 #define LAN_X_HEADER			0x40  /* not in Spezifikation! */
 #define LAN_GET_SERIAL_NUMBER		0x10
