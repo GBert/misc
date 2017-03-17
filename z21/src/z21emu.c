@@ -239,6 +239,18 @@ int main(int argc, char **argv) {
     }
     freeifaddrs(ifap);
 
+    sbaddr.sin_family = AF_INET;
+    sbaddr.sin_port = htons(primary_port);
+
+    ret = inet_pton(AF_INET, udp_dst_address, &sbaddr.sin_addr);
+    if (ret <= 0) {
+        if (ret == 0)
+            fprintf(stderr, "UDP IP invalid\n");
+        else
+            fprintf(stderr, "invalid address family\n");
+        exit(EXIT_FAILURE);
+    }
+
     sb = socket(AF_INET, SOCK_DGRAM, 0);
     if (sb < 0) {
 	fprintf(stderr, "sending UDP socket error %s\n", strerror(errno));
