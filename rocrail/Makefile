@@ -133,6 +133,17 @@ define Package/rocrail-cs-p50/description
  Command Station p50
 endef
 
+define Package/rocrail-cs-wmz21
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=Command Station WLAN Mouse Z21
+  DEPENDS:=rocrail
+endef
+
+define Package/rocrail-cs-wmz21/description
+ Virtual Z21 for Roco Wlan Mouse
+endef
+
 define Package/rocrail-cs-all-other
   SECTION:=utils
   CATEGORY:=Utilities
@@ -221,6 +232,11 @@ endef
 define Package/rocrail-cs-p50/install
 	$(INSTALL_DIR) $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/p50.so $(1)/opt/rocrail
+endef
+
+define Package/rocrail-cs-wmz21/install
+	$(INSTALL_DIR) $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/wmz21.so $(1)/opt/rocrail
 endef
 
 define Package/rocrail-cs-all-other/install
