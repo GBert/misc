@@ -1,9 +1,24 @@
 const int revisionnr = 
-12043
+12058
 ;
 const char* commithash = 
-"fa2691c9cc0297864b362ca590cc5d2df7d57506";
+"ce0c5da3dd24b8f8a6718984bfb0d7448b65a53e";
 const char* revlog = 
+"12058 2017-03-18 15:51:40 +0100 wmz21: try to find a matchin switch\n" \
+"12057 2017-03-18 12:18:12 +0100 wmz21: system command support added\n" \
+"12056 2017-03-18 12:00:44 +0100 wmz21: switch support added\n" \
+"12055 2017-03-18 11:21:16 +0100 wmz21: functions support\n" \
+"12054 2017-03-18 09:57:32 +0100 wmz21: loco dirspeed support\n" \
+"12053 2017-03-18 09:41:36 +0100 wmz21: WLANmaus support (WIP)\n" \
+"12052 2017-03-17 10:01:12 +0100 signal: save current state as command for restore after unblank\n" \
+"12051 2017-03-17 09:56:19 +0100 trainpanel: sort columns (wip)\n" \
+"12050 2017-03-17 07:58:17 +0100 carpanel: sorting columns added\n" \
+"12049 2017-03-16 09:15:51 +0100 signal: save last command if the signal has been blanked\n" \
+"12048 2017-03-15 16:06:58 +0100 model: fix for fbinfo unit calculation\n" \
+"12047 2017-03-15 15:06:37 +0100 signal: blank distant signal at red\n" \
+"12046 2017-03-15 12:46:50 +0100 blank distant signal at red\n" \
+"12045 2017-03-15 08:57:55 +0100 rocweb: location subblocks support added\n" \
+"12044 2017-03-15 08:15:24 +0100 mttmfcc: lights function command for sx2 added\n" \
 "12043 2017-03-14 15:50:16 +0100 action: added system hour, minute, second\n" \
 "12042 2017-03-14 10:23:33 +0100 schedule and toursdialog: fix for conver old data\n" \
 "12041 2017-03-14 08:02:13 +0100 xmlscript: inform object after a set statement\n" \
@@ -39,20 +54,5 @@ const char* revlog =
 "12011 2017-03-06 08:55:21 +0100 locationsdlg: allow locationid to be NULL to get the block location\n" \
 "12010 2017-03-06 08:52:31 +0100 locationsdlg: check if selected block is already in another location before adding\n" \
 "12009 2017-03-06 07:57:05 +0100 locationdialog: listctrl and prev/next added\n" \
-"12008 2017-03-05 17:25:13 +0100 xmlscript: fix for substring start/length\n" \
-"12007 2017-03-05 12:13:49 +0100 car/trainpanel: support for sorting and column move (WIP)\n" \
-"12006 2017-03-05 12:08:40 +0100 xmlscript: fix for start and length=0\n" \
-"12005 2017-03-05 11:37:06 +0100 messages: alt text for locomotiveview, carview, trainview\n" \
-"12004 2017-03-05 11:31:51 +0100 guiframe: tab names changed\n" \
-"12003 2017-03-04 15:38:41 +0100 item, scheduledialog: use same function for looking up location\n" \
-"12002 2017-03-04 13:47:51 +0100 xmlscript: crash fix\n" \
-"12001 2017-03-04 07:22:12 +0100 model: generate guest loco on field event\n" \
-"12000 2017-03-03 16:03:39 +0100 xmlscript query: resolve variables in variable name\n" \
-"11999 2017-03-03 11:09:25 +0100 xmlscript: more info in query trace\n" \
-"11998 2017-03-02 16:21:00 +0100 loc: BBT center without loco\n" \
-"11997 2017-03-02 11:13:53 +0100 xmlscript: support for text variables in the sleep command\n" \
-"11996 2017-03-02 10:53:53 +0100 mttmfcc: traces added to list up all nonebidi units\n" \
-"11995 2017-03-02 08:23:49 +0100 mttmfcc: csv list of none bidi units\n" \
-"11994 2017-03-01 15:01:30 +0100 operator: removed option withoutloco\n" \
 
 "log end";
