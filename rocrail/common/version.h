@@ -1,9 +1,21 @@
 const int revisionnr = 
-12058
+12070
 ;
 const char* commithash = 
-"ce0c5da3dd24b8f8a6718984bfb0d7448b65a53e";
+"c240880e780321c165a999cbaceb1a7d3952b551";
 const char* revlog = 
+"12070 2017-03-19 15:59:46 +0100 rfbooster: POM support added\n" \
+"12069 2017-03-19 14:58:53 +0100 rfbooster: activate car before sending function command\n" \
+"12068 2017-03-19 13:38:50 +0100 rfbooster: loco and function command added\n" \
+"12067 2017-03-19 12:26:07 +0100 rfbooster: skeleton added (WIP)\n" \
+"12066 2017-03-19 10:29:23 +0100 wmz21: port fixed to 21105\n" \
+"12065 2017-03-19 10:27:28 +0100 wmz21: use userid as master IID\n" \
+"12064 2017-03-19 10:20:06 +0100 wmz21: POM command fix\n" \
+"12063 2017-03-19 09:11:04 +0100 wmz21: POM support\n" \
+"12062 2017-03-19 08:45:07 +0100 wmz21: lookup a fittin loco to map functions\n" \
+"12061 2017-03-19 07:46:44 +0100 action: added the desc field to the variables\n" \
+"12060 2017-03-19 06:33:18 +0100 action: revert param because its already used for selecting a function\n" \
+"12059 2017-03-19 06:27:39 +0100 action: param added at xmlscript calls\n" \
 "12058 2017-03-18 15:51:40 +0100 wmz21: try to find a matchin switch\n" \
 "12057 2017-03-18 12:18:12 +0100 wmz21: system command support added\n" \
 "12056 2017-03-18 12:00:44 +0100 wmz21: switch support added\n" \
@@ -42,17 +54,5 @@ const char* revlog =
 "12023 2017-03-08 08:27:45 +0100 trainimage: extra debug traces added\n" \
 "12022 2017-03-08 07:52:46 +0100 trainimage: extra debug traces added\n" \
 "12021 2017-03-08 07:48:14 +0100 scheduledialog: new function for checking if a (sub)block is in a location\n" \
-"12020 2017-03-08 06:53:39 +0100 location: subblocks added\n" \
-"12019 2017-03-07 13:55:42 +0100 guiframe: d&d test for windows crash\n" \
-"12018 2017-03-07 07:58:47 +0100 routedlg: blank aspect support added (fix for command selection)\n" \
-"12017 2017-03-07 07:51:46 +0100 route: blank aspect support added\n" \
-"12016 2017-03-06 17:08:50 +0100 guiframe, carpanel: revert shift+alt for adding\n" \
-"12015 2017-03-06 16:25:25 +0100 carpanel/guiframe: use shift+alt for add loco or car\n" \
-"12014 2017-03-06 16:12:57 +0100 analyse: fix for healthy flag (Lothar)\n" \
-"12013 2017-03-06 09:29:14 +0100 analyse: added location check to the healthy check\n" \
-"12012 2017-03-06 09:18:50 +0100 analyse locationCheck: check if blocks are in multiple locations\n" \
-"12011 2017-03-06 08:55:21 +0100 locationsdlg: allow locationid to be NULL to get the block location\n" \
-"12010 2017-03-06 08:52:31 +0100 locationsdlg: check if selected block is already in another location before adding\n" \
-"12009 2017-03-06 07:57:05 +0100 locationdialog: listctrl and prev/next added\n" \
 
 "log end";
