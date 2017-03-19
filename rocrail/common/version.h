@@ -1,9 +1,10 @@
 const int revisionnr = 
-12070
+12071
 ;
 const char* commithash = 
-"c240880e780321c165a999cbaceb1a7d3952b551";
+"c0f2cc46bf06bbe6c52309fda769b638624159df";
 const char* revlog = 
+"12071 2017-03-19 21:45:02 +0100 rfbooster: check if the serial connection is OK\n" \
 "12070 2017-03-19 15:59:46 +0100 rfbooster: POM support added\n" \
 "12069 2017-03-19 14:58:53 +0100 rfbooster: activate car before sending function command\n" \
 "12068 2017-03-19 13:38:50 +0100 rfbooster: loco and function command added\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12024 2017-03-08 09:01:20 +0100 trainimage: use an event to update the image after D&D\n" \
 "12023 2017-03-08 08:27:45 +0100 trainimage: extra debug traces added\n" \
 "12022 2017-03-08 07:52:46 +0100 trainimage: extra debug traces added\n" \
-"12021 2017-03-08 07:48:14 +0100 scheduledialog: new function for checking if a (sub)block is in a location\n" \
 
 "log end";
