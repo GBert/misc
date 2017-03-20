@@ -1,9 +1,16 @@
 const int revisionnr = 
-12071
+12078
 ;
 const char* commithash = 
-"c0f2cc46bf06bbe6c52309fda769b638624159df";
+"a44bd2334c0f8f2b712d9715d8c66322da1a19a8";
 const char* revlog = 
+"12078 2017-03-20 14:29:31 +0100 wmz21: use WLM IP address as unique throttle ID\n" \
+"12077 2017-03-20 13:46:44 +0100 rfbooster: correction for max speed to 127\n" \
+"12076 2017-03-20 12:02:10 +0100 rocprodlg, cv: use the IID of the selected loco at POM if set\n" \
+"12075 2017-03-20 10:06:19 +0100 rfbooster: fix for function command value\n" \
+"12074 2017-03-20 07:37:45 +0100 rfbooster: report speed messages\n" \
+"12073 2017-03-20 07:31:29 +0100 rfbooster: POM get, evaluating responses\n" \
+"12072 2017-03-20 06:14:23 +0100 rfbooster: fix for reading messages\n" \
 "12071 2017-03-19 21:45:02 +0100 rfbooster: check if the serial connection is OK\n" \
 "12070 2017-03-19 15:59:46 +0100 rfbooster: POM support added\n" \
 "12069 2017-03-19 14:58:53 +0100 rfbooster: activate car before sending function command\n" \
@@ -47,12 +54,5 @@ const char* revlog =
 "12031 2017-03-09 12:24:08 +0100 model: use a list to find sensors by address\n" \
 "12030 2017-03-09 10:11:39 +0100 trainpanel: add button added\n" \
 "12029 2017-03-09 08:51:13 +0100 Train DnD: show loco on car and train tab\n" \
-"12028 2017-03-09 07:58:15 +0100 decspecs: D&H SX2 (Thomas)\n" \
-"12027 2017-03-09 07:52:59 +0100 cartab: optional carimage\n" \
-"12026 2017-03-08 13:15:51 +0100 location: support for subblocks\n" \
-"12025 2017-03-08 09:46:32 +0100 analyse: fix for checking locations at startup\n" \
-"12024 2017-03-08 09:01:20 +0100 trainimage: use an event to update the image after D&D\n" \
-"12023 2017-03-08 08:27:45 +0100 trainimage: extra debug traces added\n" \
-"12022 2017-03-08 07:52:46 +0100 trainimage: extra debug traces added\n" \
 
 "log end";
