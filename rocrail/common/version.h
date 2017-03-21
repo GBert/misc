@@ -1,9 +1,10 @@
 const int revisionnr = 
-12083
+12084
 ;
 const char* commithash = 
-"806ca178b25d03fe25bcea0309190f64f4322a2e";
+"60f8caea3a4957976495816a2e41b407143f86fb";
 const char* revlog = 
+"12084 2017-03-21 14:34:15 +0100 car: V_hints\n" \
 "12083 2017-03-21 10:32:23 +0100 digint: interface enhancement\n" \
 "12082 2017-03-21 07:30:43 +0100 car: translate V_hint into a percentage\n" \
 "12081 2017-03-21 07:08:45 +0100 loc: trace fix and reset throttleid at resetall\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12037 2017-03-12 08:04:58 +0100 toursdlg: support for location subblocks added\n" \
 "12036 2017-03-12 07:49:59 +0100 xmlscript: fix for set statement\n" \
 "12035 2017-03-10 11:17:05 +0100 block: reinit event timer member variables after an init\n" \
-"12034 2017-03-10 08:16:41 +0100 xmlscript: set command added\n" \
 
 "log end";
