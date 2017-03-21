@@ -1,5 +1,7 @@
 # Pickle / UART1 switch mode
 
+https://docs.onion.io/omega2-docs/omega2p.html
+
 Pickle Ports
 ```
 PGC UART1_RXD GPIO#46
