@@ -1,9 +1,14 @@
 const int revisionnr = 
-12078
+12083
 ;
 const char* commithash = 
-"a44bd2334c0f8f2b712d9715d8c66322da1a19a8";
+"806ca178b25d03fe25bcea0309190f64f4322a2e";
 const char* revlog = 
+"12083 2017-03-21 10:32:23 +0100 digint: interface enhancement\n" \
+"12082 2017-03-21 07:30:43 +0100 car: translate V_hint into a percentage\n" \
+"12081 2017-03-21 07:08:45 +0100 loc: trace fix and reset throttleid at resetall\n" \
+"12080 2017-03-21 07:00:18 +0100 tt: wait in a thread in case motor off delay > 0\n" \
+"12079 2017-03-21 06:35:20 +0100 locdialog: use 80% of V_max for V_cru if set to zero\n" \
 "12078 2017-03-20 14:29:31 +0100 wmz21: use WLM IP address as unique throttle ID\n" \
 "12077 2017-03-20 13:46:44 +0100 rfbooster: correction for max speed to 127\n" \
 "12076 2017-03-20 12:02:10 +0100 rocprodlg, cv: use the IID of the selected loco at POM if set\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "12036 2017-03-12 07:49:59 +0100 xmlscript: fix for set statement\n" \
 "12035 2017-03-10 11:17:05 +0100 block: reinit event timer member variables after an init\n" \
 "12034 2017-03-10 08:16:41 +0100 xmlscript: set command added\n" \
-"12033 2017-03-10 07:19:22 +0100 cardlg: SX1, SX2 and MFX added\n" \
-"12032 2017-03-09 15:28:05 +0100 block: added command randomrateset\n" \
-"12031 2017-03-09 12:24:08 +0100 model: use a list to find sensors by address\n" \
-"12030 2017-03-09 10:11:39 +0100 trainpanel: add button added\n" \
-"12029 2017-03-09 08:51:13 +0100 Train DnD: show loco on car and train tab\n" \
 
 "log end";
