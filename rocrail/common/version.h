@@ -1,9 +1,11 @@
 const int revisionnr = 
-12084
+12086
 ;
 const char* commithash = 
-"60f8caea3a4957976495816a2e41b407143f86fb";
+"bcf78c7c96fa569c7836780142469aefd675357b";
 const char* revlog = 
+"12086 2017-03-22 10:10:13 +0100 wmz21: set the speed steps according to the rocrail definition on getlocoinfo\n" \
+"12085 2017-03-22 08:51:29 +0100 wmz21: send shortids to a WLANmaus if its in receive mode\n" \
 "12084 2017-03-21 14:34:15 +0100 car: V_hints\n" \
 "12083 2017-03-21 10:32:23 +0100 digint: interface enhancement\n" \
 "12082 2017-03-21 07:30:43 +0100 car: translate V_hint into a percentage\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12039 2017-03-13 17:22:02 +0100 translation merge: fr, sr_latin, sl, pt_BR, de, nl\n" \
 "12038 2017-03-12 09:38:41 +0100 carpanel: sort and move column support (WIP)\n" \
 "12037 2017-03-12 08:04:58 +0100 toursdlg: support for location subblocks added\n" \
-"12036 2017-03-12 07:49:59 +0100 xmlscript: fix for set statement\n" \
-"12035 2017-03-10 11:17:05 +0100 block: reinit event timer member variables after an init\n" \
 
 "log end";
