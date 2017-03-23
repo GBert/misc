@@ -1,9 +1,17 @@
 const int revisionnr = 
-12086
+12094
 ;
 const char* commithash = 
-"bcf78c7c96fa569c7836780142469aefd675357b";
+"4338b2584ad3a11c5fe3a11cf2946cfe3864c5f6";
 const char* revlog = 
+"12094 2017-03-23 13:45:42 +0100 block: poweron/off also command it to the powermanager\n" \
+"12093 2017-03-23 10:49:44 +0100 loc: color and owner field added\n" \
+"12092 2017-03-23 08:38:22 +0100 wmz21: fix for speed\n" \
+"12091 2017-03-23 07:38:06 +0100 wmz21: release prev loco after selecting another loco\n" \
+"12090 2017-03-23 07:30:18 +0100 timedactions, variabledlg: fix for double IDs\n" \
+"12089 2017-03-23 07:21:27 +0100 translations pot update\n" \
+"12088 2017-03-23 07:20:40 +0100 guiframe: release throttle context menu added\n" \
+"12087 2017-03-23 06:44:26 +0100 timedactions: check for existing ID\n" \
 "12086 2017-03-22 10:10:13 +0100 wmz21: set the speed steps according to the rocrail definition on getlocoinfo\n" \
 "12085 2017-03-22 08:51:29 +0100 wmz21: send shortids to a WLANmaus if its in receive mode\n" \
 "12084 2017-03-21 14:34:15 +0100 car: V_hints\n" \
@@ -46,13 +54,5 @@ const char* revlog =
 "12047 2017-03-15 15:06:37 +0100 signal: blank distant signal at red\n" \
 "12046 2017-03-15 12:46:50 +0100 blank distant signal at red\n" \
 "12045 2017-03-15 08:57:55 +0100 rocweb: location subblocks support added\n" \
-"12044 2017-03-15 08:15:24 +0100 mttmfcc: lights function command for sx2 added\n" \
-"12043 2017-03-14 15:50:16 +0100 action: added system hour, minute, second\n" \
-"12042 2017-03-14 10:23:33 +0100 schedule and toursdialog: fix for conver old data\n" \
-"12041 2017-03-14 08:02:13 +0100 xmlscript: inform object after a set statement\n" \
-"12040 2017-03-14 07:42:10 +0100 xmlscriptdlg: added new statements\n" \
-"12039 2017-03-13 17:22:02 +0100 translation merge: fr, sr_latin, sl, pt_BR, de, nl\n" \
-"12038 2017-03-12 09:38:41 +0100 carpanel: sort and move column support (WIP)\n" \
-"12037 2017-03-12 08:04:58 +0100 toursdlg: support for location subblocks added\n" \
 
 "log end";
