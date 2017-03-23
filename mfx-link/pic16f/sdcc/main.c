@@ -43,10 +43,11 @@ void isr(void) __interrupt(0) {
 	    CCPR1 += pulse_low;
 	}
     }
-    if (T0IE && T0IF) {
-	T0IF = 0;
+    if (TMR0IF && TMR0IE) {
+	TMR0IF = 0;
 	TMR0 = TIMER0_VAL;
-	LATC ^= 0b00010000;
+	LATC4 ^= 1;
+
 	timer0_counter++;
 	/* kind of state machione
 	   to sample two pins */
@@ -126,6 +127,7 @@ void system_init(void) {
     /* RA2&RC0 analog input */
     TRISA2 = 1;
     TRISC0 = 1;
+    TRISC4 = 0;			/* Enable */
     TRISC5 = 0;			/* LED */
     // setup interrupt events
     //clear all relevant interrupt flags
@@ -133,8 +135,7 @@ void system_init(void) {
     TMR1IF = 0;
     CCP1IF = 0;
     //activate interrupt bits
-    CCP1IE = 0;			// disable interrupt on CCP1 will be check by polling as of today
-    SSP1IE = 1;
+    CCP1IE = 1;			// disable interrupt on CCP1 will be check by polling as of today
     PEIE = 1;
     GIE = 1;
 }
@@ -184,7 +185,7 @@ void timer0_init(void) {
     PSA = 0;			// use prescaler
     PS1 = 1;			// prescaler 1:8
     TMR0 = TIMER0_VAL;
-    T0IE = 1;
+    TMR0IE = 1;
 }
 
 void timer1_init(void) {
@@ -262,7 +263,7 @@ void main(void) {
     rx_fifo.head = 0;
     rx_fifo.tail = 0;
 
-    // GIE = 0;
+    GIE = 1;
     LCD_init(LCD_01_ADDRESS);
 
     while (1) {
