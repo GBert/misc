@@ -18,10 +18,6 @@ static __code uint16_t __at(_CONFIG2) configword2 = _LVP_ON & _CLKOUTEN_OFF;
 // #pragma config FOSC=INTOSC, PLLEN=OFF, MCLRE=ON, WDTE=OFF
 // #pragma config LVP=ON, CLKOUTEN=OFF
 
-// timer interval in microseconds
-#define INTERVAL	50
-#define TIMER0_VAL	(256 - (INTERVAL-2))
-
   /* DCC    58us */
   /* MM1    26us */
   /* MM2    52us */
@@ -31,8 +27,12 @@ struct serial_buffer tx_fifo, rx_fifo;
 
 volatile unsigned int pulse_high = 25;
 volatile unsigned int pulse_low = 75;
+volatile uint8_t timer0_counter;
+volatile uint16_t adc_poti;
+volatile uint16_t adc_sense;
 
 void isr(void) __interrupt(0) {
+    GIE = 0;
     if (CCP1IF) {
 	CCP1IF = 0;
 	if (CCP1M0) {
@@ -43,6 +43,32 @@ void isr(void) __interrupt(0) {
 	    CCPR1 += pulse_low;
 	}
     }
+    if (T0IE && T0IF) {
+	T0IF = 0;
+	TMR0 = TIMER0_VAL;
+	LATC ^= 0b00010000;
+	timer0_counter++;
+	/* kind of state machione
+	   to sample two pins */
+	if (timer0_counter & 0x02) {
+	    if (timer0_counter & 0x01) {
+		ADCON0 = (AD_POTI << 2) | 1;
+		ADGO = 1;
+	    } else {
+		adc_poti += ADRESH;
+		adc_poti >>= 1;
+	    }
+	} else {
+	    if (timer0_counter & 0x01) {
+		ADCON0 = (AD_SENSE << 2) | 1;
+		ADGO = 1;
+	    } else {
+		adc_sense += ADRESH;
+		adc_sense >>= 1;
+	    }
+	}
+    }
+    GIE = 1;
 }
 
 /* RA4 SDA I2C
@@ -100,7 +126,7 @@ void system_init(void) {
     /* RA2&RC0 analog input */
     TRISA2 = 1;
     TRISC0 = 1;
-    // TRISC5 = 0;  // CCP1
+    TRISC5 = 0;			/* LED */
     // setup interrupt events
     //clear all relevant interrupt flags
     SSP1IF = 0;
@@ -138,25 +164,25 @@ void ad_init(void) {
 }
 
 void uart_init(void) {
-    TX9 = 1;		// 8-bit transmission
-    TX9D = 1;		//  one extra stop bit
-    TXEN = 1;		// transmit enabled
-    SYNC = 0;		// asynchronous mode
-    BRGH = 1;		// high speed
-    SPEN = 1;		// enable serial port (configures RX/DT and TX/CK pins as serial port pins)
-    RX9 = 0;		// 8-bit reception
-    CREN = 1;		// enable receiver
-    BRG16 = USE_BRG16;	// 8-bit baud rate generator
+    TX9 = 1;			// 8-bit transmission
+    TX9D = 1;			//  one extra stop bit
+    TXEN = 1;			// transmit enabled
+    SYNC = 0;			// asynchronous mode
+    BRGH = 1;			// high speed
+    SPEN = 1;			// enable serial port (configures RX/DT and TX/CK pins as serial port pins)
+    RX9 = 0;			// 8-bit reception
+    CREN = 1;			// enable receiver
+    BRG16 = USE_BRG16;		// 8-bit baud rate generator
 
-    SPBRG = SBRG_VAL;	// calculated by defines
+    SPBRG = SBRG_VAL;		// calculated by defines
 
     RCIF = 0;
 }
 
 void timer0_init(void) {
-    TMR0CS = 0;		// FOSC / 4
-    PSA = 0;		// use prescaler
-    PS1 = 1;		// prescaler 1:8
+    TMR0CS = 0;			// FOSC / 4
+    PSA = 0;			// use prescaler
+    PS1 = 1;			// prescaler 1:8
     TMR0 = TIMER0_VAL;
     T0IE = 1;
 }
@@ -227,7 +253,7 @@ void main(void) {
     uart_init();
     i2c_init();
     ad_init();
-
+    timer0_init();
     //timer1_init();
 
     /* empty circular buffers */
@@ -236,7 +262,7 @@ void main(void) {
     rx_fifo.head = 0;
     rx_fifo.tail = 0;
 
-    GIE = 0;
+    // GIE = 0;
     LCD_init(LCD_01_ADDRESS);
 
     while (1) {
@@ -244,7 +270,9 @@ void main(void) {
 	    temp = ad(AD_SENSE);
 	    /* 14mA per digit */
 	    ad_value = temp * 14;
-	    temp = ad(AD_POTI);
+	    GIE = 0;
+	    temp = adc_poti;
+	    GIE = 1;
 	    LCD_putcmd(LCD_01_ADDRESS, LCD_CLEAR, 1);
 	    LCD_puts(LCD_01_ADDRESS, "Booster Max=8.0A\0");
 	    LCD_goto(LCD_01_ADDRESS, 2, 1);

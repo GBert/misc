@@ -48,8 +48,8 @@
 #define SERIAL_BUFFER_SIZE_MASK (SERIAL_BUFFER_SIZE -1)
 
 // timer interval in microseconds
-#define INTERVAL        50
-#define TIMER0_VAL      (256 - (INTERVAL-2))
+#define INTERVAL        250
+#define TIMER0_VAL      (255 - (INTERVAL-1))
 
 /* circular buffer */
 struct serial_buffer {
