@@ -1,9 +1,10 @@
 const int revisionnr = 
-12099
+12100
 ;
 const char* commithash = 
-"5e429a6d53c8cf2496b267ac1c518154f31d7561";
+"2db5c838436980ba04203bc874c7d6cc34a6a5fe";
 const char* revlog = 
+"12100 2017-03-24 14:10:17 +0100 wmz21: trace out the wlanmaus loco database during send\n" \
 "12099 2017-03-24 11:54:04 +0100 wmz21: fix for unknown loco speed commands\n" \
 "12098 2017-03-24 10:45:14 +0100 wmz21: fix for switch commands\n" \
 "12097 2017-03-24 08:25:08 +0100 control, wmz21: calculate dbsize before sending the shortids\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12053 2017-03-18 09:41:36 +0100 wmz21: WLANmaus support (WIP)\n" \
 "12052 2017-03-17 10:01:12 +0100 signal: save current state as command for restore after unblank\n" \
 "12051 2017-03-17 09:56:19 +0100 trainpanel: sort columns (wip)\n" \
-"12050 2017-03-17 07:58:17 +0100 carpanel: sorting columns added\n" \
 
 "log end";
