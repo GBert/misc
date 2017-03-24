@@ -1,9 +1,14 @@
 const int revisionnr = 
-12094
+12099
 ;
 const char* commithash = 
-"4338b2584ad3a11c5fe3a11cf2946cfe3864c5f6";
+"5e429a6d53c8cf2496b267ac1c518154f31d7561";
 const char* revlog = 
+"12099 2017-03-24 11:54:04 +0100 wmz21: fix for unknown loco speed commands\n" \
+"12098 2017-03-24 10:45:14 +0100 wmz21: fix for switch commands\n" \
+"12097 2017-03-24 08:25:08 +0100 control, wmz21: calculate dbsize before sending the shortids\n" \
+"12096 2017-03-24 07:46:12 +0100 wmz21: corrected the max database size\n" \
+"12095 2017-03-24 07:18:10 +0100 enable block power check on lock option added\n" \
 "12094 2017-03-23 13:45:42 +0100 block: poweron/off also command it to the powermanager\n" \
 "12093 2017-03-23 10:49:44 +0100 loc: color and owner field added\n" \
 "12092 2017-03-23 08:38:22 +0100 wmz21: fix for speed\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "12052 2017-03-17 10:01:12 +0100 signal: save current state as command for restore after unblank\n" \
 "12051 2017-03-17 09:56:19 +0100 trainpanel: sort columns (wip)\n" \
 "12050 2017-03-17 07:58:17 +0100 carpanel: sorting columns added\n" \
-"12049 2017-03-16 09:15:51 +0100 signal: save last command if the signal has been blanked\n" \
-"12048 2017-03-15 16:06:58 +0100 model: fix for fbinfo unit calculation\n" \
-"12047 2017-03-15 15:06:37 +0100 signal: blank distant signal at red\n" \
-"12046 2017-03-15 12:46:50 +0100 blank distant signal at red\n" \
-"12045 2017-03-15 08:57:55 +0100 rocweb: location subblocks support added\n" \
 
 "log end";
