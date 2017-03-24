@@ -32,7 +32,6 @@ volatile uint16_t adc_poti;
 volatile uint16_t adc_sense;
 
 void isr(void) __interrupt(0) {
-    GIE = 0;
     if (CCP1IF) {
 	CCP1IF = 0;
 	if (CCP1M0) {
@@ -69,7 +68,6 @@ void isr(void) __interrupt(0) {
 	    }
 	}
     }
-    GIE = 1;
 }
 
 /* RA4 SDA I2C
