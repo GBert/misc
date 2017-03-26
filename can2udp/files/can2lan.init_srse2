@@ -4,7 +4,7 @@
 START=99
 
 start() {
-	omega-ctrl gpiomux set uart1 uart
+	omega2-ctrl gpiomux set uart1 uart
 	slcand -S 500000 /dev/ttyS1 can0
 	ifconfig can0 up
 
