@@ -1,9 +1,10 @@
 const int revisionnr = 
-12110
+12111
 ;
 const char* commithash = 
-"162d5d8951a4113a5d4c92730bb5102e9002fc8d";
+"dccfc9747fbaeeb515c9fed30756a20788c0a855";
 const char* revlog = 
+"12111 2017-03-26 15:26:48 +0200 dccpp: fix for getting a sw ID incase none accessory\n" \
 "12110 2017-03-26 10:46:15 +0200 loc: set bkid and lcclass at activating an action\n" \
 "12109 2017-03-26 10:16:46 +0200 wmz21: support for switch motor 2\n" \
 "12108 2017-03-26 10:11:39 +0200 wmz21: use addressing scheme also for looking up an existing switch\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12064 2017-03-19 10:20:06 +0100 wmz21: POM command fix\n" \
 "12063 2017-03-19 09:11:04 +0100 wmz21: POM support\n" \
 "12062 2017-03-19 08:45:07 +0100 wmz21: lookup a fittin loco to map functions\n" \
-"12061 2017-03-19 07:46:44 +0100 action: added the desc field to the variables\n" \
 
 "log end";
