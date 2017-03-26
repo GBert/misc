@@ -1,9 +1,19 @@
 const int revisionnr = 
-12100
+12110
 ;
 const char* commithash = 
-"2db5c838436980ba04203bc874c7d6cc34a6a5fe";
+"162d5d8951a4113a5d4c92730bb5102e9002fc8d";
 const char* revlog = 
+"12110 2017-03-26 10:46:15 +0200 loc: set bkid and lcclass at activating an action\n" \
+"12109 2017-03-26 10:16:46 +0200 wmz21: support for switch motor 2\n" \
+"12108 2017-03-26 10:11:39 +0200 wmz21: use addressing scheme also for looking up an existing switch\n" \
+"12107 2017-03-26 10:10:10 +0200 dccpp revert: removed the double redefinition at delayed of command\n" \
+"12106 2017-03-26 09:08:18 +0200 wmz21: use protver for determine the addressing scheme.\n" \
+"12105 2017-03-26 08:26:50 +0200 wmz21: convert FADA to MADA in case of an unknown switch\n" \
+"12104 2017-03-25 10:28:29 +0100 set var lc4112 and bk4112 in case no destination was found\n" \
+"12103 2017-03-25 09:58:59 +0100 basedlg: option for not showing position if the ID already exist\n" \
+"12102 2017-03-25 07:43:53 +0100 dccpp: removed the double redefinition at delayed of command\n" \
+"12101 2017-03-25 07:21:19 +0100 model: fix for create loco on bidi\n" \
 "12100 2017-03-24 14:10:17 +0100 wmz21: trace out the wlanmaus loco database during send\n" \
 "12099 2017-03-24 11:54:04 +0100 wmz21: fix for unknown loco speed commands\n" \
 "12098 2017-03-24 10:45:14 +0100 wmz21: fix for switch commands\n" \
@@ -44,15 +54,5 @@ const char* revlog =
 "12063 2017-03-19 09:11:04 +0100 wmz21: POM support\n" \
 "12062 2017-03-19 08:45:07 +0100 wmz21: lookup a fittin loco to map functions\n" \
 "12061 2017-03-19 07:46:44 +0100 action: added the desc field to the variables\n" \
-"12060 2017-03-19 06:33:18 +0100 action: revert param because its already used for selecting a function\n" \
-"12059 2017-03-19 06:27:39 +0100 action: param added at xmlscript calls\n" \
-"12058 2017-03-18 15:51:40 +0100 wmz21: try to find a matchin switch\n" \
-"12057 2017-03-18 12:18:12 +0100 wmz21: system command support added\n" \
-"12056 2017-03-18 12:00:44 +0100 wmz21: switch support added\n" \
-"12055 2017-03-18 11:21:16 +0100 wmz21: functions support\n" \
-"12054 2017-03-18 09:57:32 +0100 wmz21: loco dirspeed support\n" \
-"12053 2017-03-18 09:41:36 +0100 wmz21: WLANmaus support (WIP)\n" \
-"12052 2017-03-17 10:01:12 +0100 signal: save current state as command for restore after unblank\n" \
-"12051 2017-03-17 09:56:19 +0100 trainpanel: sort columns (wip)\n" \
 
 "log end";
