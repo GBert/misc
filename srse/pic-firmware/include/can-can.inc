@@ -59,12 +59,21 @@ UARTRECV        MACRO
 #ENDIF
                 ENDM
 
+
 RTSCLR          MACRO
+#IFDEF SRSE2_SLCAN
+                BCF     GPIO,2              ; RTS/CTS CLEAR TO SEND
+#ELSE
                 BCF     GPIO,4              ; RTS/CTS CLEAR TO SEND
+ENDIF
                 ENDM
 
 RTSSET          MACRO
+#IFDEF SRSE2_SLCAN
+                BSF     GPIO,2              ; RTS/CTS NOT CLEAR TO SEND
+#ELSE
                 BSF     GPIO,4              ; RTS/CTS NOT CLEAR TO SEND
+#ENDIF
                 ENDM
 
 ;------------------------------------------------------------------------------

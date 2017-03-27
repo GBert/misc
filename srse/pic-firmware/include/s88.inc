@@ -72,29 +72,31 @@ S88_CHANGE EQU  0x3E0
 ; port defines
 ;------------------------------------------------------------------------------
 
-#IFDEF PCBV
-  #IF PCBV > 1
-    #DEFINE      S88_DATA   2
-  #ELSE
-    #DEFINE      S88_DATA   1
-  #ENDIF
+#IFDEF SRSE2_SLCAN
+#DEFINE        S88_DATA   0   ; RB0
+#DEFINE        S88_CLOCK  1   ; RB1
+#DEFINE        S88_LOAD   4   ; RB4
+#DEFINE        S88_RESET  5   ; RB5
 #ENDIF
 
+#IFDEF WR841_SLCAN
+#DEFINE        S88_DATA   4   ; RB4
+#DEFINE        S88_CLOCK  1   ; RB1
+#DEFINE        S88_LOAD   6   ; RC6
+#DEFINE        S88_RESET  7   ; RC7
+#ENDIF
 
-#DEFINE        S88_CLOCK  6   ; RC6
-#DEFINE        S88_LOAD   7   ; RC7
-#DEFINE        S88_RESET  5   ; RB5
 
 ;------------------------------------------------------------------------------
 ; S88 Macros
 ;------------------------------------------------------------------------------
 
 S88_LOAD_HIGH   MACRO
-                BSF     LATC,S88_LOAD
+                BSF     LATB,S88_LOAD
                 ENDM
 
 S88_LOAD_LOW    MACRO
-                BCF     LATC,S88_LOAD
+                BCF     LATB,S88_LOAD
                 ENDM
 
 S88_RESET_HIGH  MACRO
@@ -115,19 +117,12 @@ S88_CLOCK_LOW   MACRO
 
 ;------------
 
-BTFSS88_INPUT    MACRO
-#IFDEF WR841_SLCAN
-                BTFSS   PORTB,4
-#ELSE
-                BTFSS   PORTC,S88_DATA
-#ENDIF
+BTFSS88_INPUT   MACRO
+                BTFSS   PORTB,S88_DATA
                 ENDM
 
-BTFCS88_INPUT    MACRO
-#IFDEF WR841_SLCAN
-                BTFSC   PORTB,4
-#ELSE
-                BTFSC   PORTC,S88_DATA
+BTFCS88_INPUT   MACRO
+                BTFSC   PORTB,S88_DATA
 #ENDIF
                 ENDM
 
@@ -137,7 +132,7 @@ BTFCS88_INPUT    MACRO
 
 S88INIT
 #IFDEF WR841_SLCAN
-                BSF     TRISB,4         ; Input S88 Data
+                BSF     TRISB,S88_DATA  ; Input S88 Data
                 BCF     TRISB,S88_RESET ; Output S88 Reset
                 BCF     TRISC,S88_CLOCK ; Output S88 Clock
                 BCF     TRISC,S88_LOAD  ; Output S88 Load
@@ -147,18 +142,16 @@ S88INIT
                 BCF     LATC,S88_LOAD   ;
 
 #ELSE
-                BSF     TRISC,S88_DATA  ; Input S88 Data
-                BCF     TRISC,S88_CLOCK ; Output S88 Clock
-                BCF     TRISC,S88_LOAD  ; Output S88 Load
+                BSF     TRISB,S88_DATA  ; Input S88 Data
+                BCF     TRISB,S88_CLOCK ; Output S88 Clock
+                BCF     TRISB,S88_LOAD  ; Output S88 Load
                 BCF     TRISB,S88_RESET ; Output S88 Reset
 
-                BCF     LATC,S88_CLOCK  ; clear pins
-                BCF     LATC,S88_LOAD   ;
+                BCF     LATB,S88_CLOCK  ; clear pins
+                BCF     LATB,S88_LOAD   ;
                 BCF     LATB,S88_RESET  ;
 #ENDIF
 
-	; debug
-	BCF  TRISC,5
                 CLRF    S88TEMP
                 CLRF    S88MASK
                 CLRF    S88_BYTE_COUNT

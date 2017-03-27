@@ -3,6 +3,7 @@
 ; Can-Can Device
 ;
 ; Copyright (c) 2014 Darron M Broad
+; Copyright (c) 2017 Gerhard Bertelsmann
 ;
 ;------------------------------------------------------------------------------
 ;
@@ -59,16 +60,15 @@
 ; Device hardware
 ;------------------------------------------------------------------------------
 
-; LED1 RB6 CAN  OVERFLOW
-; LED2 RB7 UART OVERFLOW
-; RTS  RB4 CLEAR TO SEND
+; LED1 RA1 CAN  OVERFLOW
+; LED2 RA0 UART OVERFLOW
+; RTS  RA3 CLEAR TO SEND
 ;
-#DEFINE         GPIO        LATB
-#DEFINE         DDR         DDRB
+#DEFINE         GPIO        LATA
+#DEFINE         DDR         DDRA
 #DEFINE		PIO	    1
 #DEFINE		LEDHIGH     1
 #DEFINE		PIOINVERT   1
-#DEFINE		PCBV        2
 
 ;------------------------------------------------------------------------------
 ; Device firmware
