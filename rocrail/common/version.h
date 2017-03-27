@@ -1,9 +1,12 @@
 const int revisionnr = 
-12111
+12114
 ;
 const char* commithash = 
-"dccfc9747fbaeeb515c9fed30756a20788c0a855";
+"c8dff1bba1c04da14d43401c86ed3b705f2792fb";
 const char* revlog = 
+"12114 2017-03-27 10:14:14 +0200 trainpanel: sorting columns added\n" \
+"12113 2017-03-27 08:31:48 +0200 wmz21: A2ID support added\n" \
+"12112 2017-03-27 07:53:44 +0200 wmz21: FADAM support added\n" \
 "12111 2017-03-26 15:26:48 +0200 dccpp: fix for getting a sw ID incase none accessory\n" \
 "12110 2017-03-26 10:46:15 +0200 loc: set bkid and lcclass at activating an action\n" \
 "12109 2017-03-26 10:16:46 +0200 wmz21: support for switch motor 2\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12067 2017-03-19 12:26:07 +0100 rfbooster: skeleton added (WIP)\n" \
 "12066 2017-03-19 10:29:23 +0100 wmz21: port fixed to 21105\n" \
 "12065 2017-03-19 10:27:28 +0100 wmz21: use userid as master IID\n" \
-"12064 2017-03-19 10:20:06 +0100 wmz21: POM command fix\n" \
-"12063 2017-03-19 09:11:04 +0100 wmz21: POM support\n" \
-"12062 2017-03-19 08:45:07 +0100 wmz21: lookup a fittin loco to map functions\n" \
 
 "log end";
