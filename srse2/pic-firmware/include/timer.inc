@@ -109,11 +109,11 @@ DO_HEARTBEAT
                 RETURN
 
 STATUS_LED_OFF
-                BSF	LATC, LED
+                BSF	LATA, LED
                 RETURN
 
 STATUS_LED_ON
-                BCF	LATC, LED
+                BCF	LATA, LED
                 RETURN
 
 ;

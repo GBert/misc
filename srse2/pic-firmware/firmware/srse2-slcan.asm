@@ -66,8 +66,8 @@
 ;
 #DEFINE         GPIO        LATA
 #DEFINE         DDR         DDRA
-#DEFINE		PIO	    1
-#DEFINE		LEDHIGH     1
+#DEFINE		PIO	    0
+#DEFINE		LEDHIGH     0
 #DEFINE		PIOINVERT   1
 
 ;------------------------------------------------------------------------------
