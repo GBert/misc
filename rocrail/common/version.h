@@ -1,9 +1,13 @@
 const int revisionnr = 
-12114
+12118
 ;
 const char* commithash = 
-"c8dff1bba1c04da14d43401c86ed3b705f2792fb";
+"1b483c07c35947e6989f81ede1a3929092f96ed6";
 const char* revlog = 
+"12118 2017-03-29 10:17:19 +0200 translation merge: sr_latin, sv, de\n" \
+"12117 2017-03-29 09:42:42 +0200 loc: reset energypercentage on init and reset\n" \
+"12116 2017-03-29 07:56:11 +0200 locdialog: import CVs\n" \
+"12115 2017-03-28 10:32:51 +0200 model: splitup the init process into two parts, create and init\n" \
 "12114 2017-03-27 10:14:14 +0200 trainpanel: sorting columns added\n" \
 "12113 2017-03-27 08:31:48 +0200 wmz21: A2ID support added\n" \
 "12112 2017-03-27 07:53:44 +0200 wmz21: FADAM support added\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12071 2017-03-19 21:45:02 +0100 rfbooster: check if the serial connection is OK\n" \
 "12070 2017-03-19 15:59:46 +0100 rfbooster: POM support added\n" \
 "12069 2017-03-19 14:58:53 +0100 rfbooster: activate car before sending function command\n" \
-"12068 2017-03-19 13:38:50 +0100 rfbooster: loco and function command added\n" \
-"12067 2017-03-19 12:26:07 +0100 rfbooster: skeleton added (WIP)\n" \
-"12066 2017-03-19 10:29:23 +0100 wmz21: port fixed to 21105\n" \
-"12065 2017-03-19 10:27:28 +0100 wmz21: use userid as master IID\n" \
 
 "log end";
