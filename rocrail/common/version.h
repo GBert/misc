@@ -1,9 +1,11 @@
 const int revisionnr = 
-12118
+12120
 ;
 const char* commithash = 
-"1b483c07c35947e6989f81ede1a3929092f96ed6";
+"40efa4d992c10d1b132f2a5c601768b007542b3d";
 const char* revlog = 
+"12120 2017-03-29 17:57:04 +0200 locdialog: fix for deleting a CV\n" \
+"12119 2017-03-29 16:51:14 +0200 locdialog: check before cv delete if there are entries in the grid\n" \
 "12118 2017-03-29 10:17:19 +0200 translation merge: sr_latin, sv, de\n" \
 "12117 2017-03-29 09:42:42 +0200 loc: reset energypercentage on init and reset\n" \
 "12116 2017-03-29 07:56:11 +0200 locdialog: import CVs\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12073 2017-03-20 07:31:29 +0100 rfbooster: POM get, evaluating responses\n" \
 "12072 2017-03-20 06:14:23 +0100 rfbooster: fix for reading messages\n" \
 "12071 2017-03-19 21:45:02 +0100 rfbooster: check if the serial connection is OK\n" \
-"12070 2017-03-19 15:59:46 +0100 rfbooster: POM support added\n" \
-"12069 2017-03-19 14:58:53 +0100 rfbooster: activate car before sending function command\n" \
 
 "log end";
