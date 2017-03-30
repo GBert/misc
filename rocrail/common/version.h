@@ -1,9 +1,14 @@
 const int revisionnr = 
-12120
+12125
 ;
 const char* commithash = 
-"40efa4d992c10d1b132f2a5c601768b007542b3d";
+"fb438a4db27ac6e0ecf07be50e6056be16fdde6e";
 const char* revlog = 
+"12125 2017-03-30 10:56:25 +0200 block: bring warning in case of an empty or blank include and ignore the complete list\n" \
+"12124 2017-03-30 10:07:04 +0200 block: bring warning in case of an empty include and ignore the complete list\n" \
+"12123 2017-03-30 07:13:32 +0200 loc: fix for initial calculation of the train length in case of consist locos\n" \
+"12122 2017-03-30 06:38:00 +0200 dccpp: use parameter for the output port setting flag\n" \
+"12121 2017-03-30 06:09:00 +0200 locdialog: select the first cvbyte after a delete\n" \
 "12120 2017-03-29 17:57:04 +0200 locdialog: fix for deleting a CV\n" \
 "12119 2017-03-29 16:51:14 +0200 locdialog: check before cv delete if there are entries in the grid\n" \
 "12118 2017-03-29 10:17:19 +0200 translation merge: sr_latin, sv, de\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "12078 2017-03-20 14:29:31 +0100 wmz21: use WLM IP address as unique throttle ID\n" \
 "12077 2017-03-20 13:46:44 +0100 rfbooster: correction for max speed to 127\n" \
 "12076 2017-03-20 12:02:10 +0100 rocprodlg, cv: use the IID of the selected loco at POM if set\n" \
-"12075 2017-03-20 10:06:19 +0100 rfbooster: fix for function command value\n" \
-"12074 2017-03-20 07:37:45 +0100 rfbooster: report speed messages\n" \
-"12073 2017-03-20 07:31:29 +0100 rfbooster: POM get, evaluating responses\n" \
-"12072 2017-03-20 06:14:23 +0100 rfbooster: fix for reading messages\n" \
-"12071 2017-03-19 21:45:02 +0100 rfbooster: check if the serial connection is OK\n" \
 
 "log end";
