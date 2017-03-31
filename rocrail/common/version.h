@@ -1,9 +1,11 @@
 const int revisionnr = 
-12125
+12127
 ;
 const char* commithash = 
-"fb438a4db27ac6e0ecf07be50e6056be16fdde6e";
+"c8c8716314d778faf56f9c38cd90833577faddbe";
 const char* revlog = 
+"12127 2017-03-31 12:18:24 +0200 cbusnodedlg: exoport/import gc2\n" \
+"12126 2017-03-31 07:13:10 +0200 wmz21: swapped the switch command to resembel the display\n" \
 "12125 2017-03-30 10:56:25 +0200 block: bring warning in case of an empty or blank include and ignore the complete list\n" \
 "12124 2017-03-30 10:07:04 +0200 block: bring warning in case of an empty include and ignore the complete list\n" \
 "12123 2017-03-30 07:13:32 +0200 loc: fix for initial calculation of the train length in case of consist locos\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12080 2017-03-21 07:00:18 +0100 tt: wait in a thread in case motor off delay > 0\n" \
 "12079 2017-03-21 06:35:20 +0100 locdialog: use 80% of V_max for V_cru if set to zero\n" \
 "12078 2017-03-20 14:29:31 +0100 wmz21: use WLM IP address as unique throttle ID\n" \
-"12077 2017-03-20 13:46:44 +0100 rfbooster: correction for max speed to 127\n" \
-"12076 2017-03-20 12:02:10 +0100 rocprodlg, cv: use the IID of the selected loco at POM if set\n" \
 
 "log end";
