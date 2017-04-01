@@ -1,9 +1,10 @@
 const int revisionnr = 
-12127
+12128
 ;
 const char* commithash = 
-"c8c8716314d778faf56f9c38cd90833577faddbe";
+"36d3d1c8e8c9e402d8a02d2b26434fd9103a9ab6";
 const char* revlog = 
+"12128 2017-04-01 09:07:15 +0200 cbusnodedlg: export/import for the cangc6\n" \
 "12127 2017-03-31 12:18:24 +0200 cbusnodedlg: exoport/import gc2\n" \
 "12126 2017-03-31 07:13:10 +0200 wmz21: swapped the switch command to resembel the display\n" \
 "12125 2017-03-30 10:56:25 +0200 block: bring warning in case of an empty or blank include and ignore the complete list\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12081 2017-03-21 07:08:45 +0100 loc: trace fix and reset throttleid at resetall\n" \
 "12080 2017-03-21 07:00:18 +0100 tt: wait in a thread in case motor off delay > 0\n" \
 "12079 2017-03-21 06:35:20 +0100 locdialog: use 80% of V_max for V_cru if set to zero\n" \
-"12078 2017-03-20 14:29:31 +0100 wmz21: use WLM IP address as unique throttle ID\n" \
 
 "log end";
