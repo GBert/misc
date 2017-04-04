@@ -1,9 +1,21 @@
 const int revisionnr = 
-12128
+12140
 ;
 const char* commithash = 
-"36d3d1c8e8c9e402d8a02d2b26434fd9103a9ab6";
+"5bb62e3366d4205d58c37aef7c085e4f81590edf";
 const char* revlog = 
+"12140 2017-04-04 16:59:14 +0200 guiframe: check on close if the car or train tab was already initialized before call th exit function\n" \
+"12139 2017-04-04 08:22:01 +0200 locdialog: added button to fix and center all BBT records\n" \
+"12138 2017-04-04 07:05:45 +0200 p50x: error code list added\n" \
+"12137 2017-04-03 15:28:34 +0200 rocprodlg: try to find the fitting decoder file\n" \
+"12136 2017-04-03 10:41:52 +0200 rocprodlg: detect decoder type\n" \
+"12135 2017-04-03 07:53:52 +0200 stage: fix for advancing in case of percent arrive speed\n" \
+"12134 2017-04-03 06:46:53 +0200 decodertypes: update\n" \
+"12133 2017-04-02 15:11:13 +0200 decodertypes: WIP\n" \
+"12132 2017-04-02 09:46:20 +0200 speedcurvedlg: slider height set to default -1\n" \
+"12131 2017-04-02 08:22:32 +0200 speedcurvedlg: layout changed\n" \
+"12130 2017-04-02 07:33:41 +0200 locdialog: hide and show all button added\n" \
+"12129 2017-04-01 13:06:12 +0200 guiframe: fix for first entry of open recent\n" \
 "12128 2017-04-01 09:07:15 +0200 cbusnodedlg: export/import for the cangc6\n" \
 "12127 2017-03-31 12:18:24 +0200 cbusnodedlg: exoport/import gc2\n" \
 "12126 2017-03-31 07:13:10 +0200 wmz21: swapped the switch command to resembel the display\n" \
@@ -42,17 +54,5 @@ const char* revlog =
 "12093 2017-03-23 10:49:44 +0100 loc: color and owner field added\n" \
 "12092 2017-03-23 08:38:22 +0100 wmz21: fix for speed\n" \
 "12091 2017-03-23 07:38:06 +0100 wmz21: release prev loco after selecting another loco\n" \
-"12090 2017-03-23 07:30:18 +0100 timedactions, variabledlg: fix for double IDs\n" \
-"12089 2017-03-23 07:21:27 +0100 translations pot update\n" \
-"12088 2017-03-23 07:20:40 +0100 guiframe: release throttle context menu added\n" \
-"12087 2017-03-23 06:44:26 +0100 timedactions: check for existing ID\n" \
-"12086 2017-03-22 10:10:13 +0100 wmz21: set the speed steps according to the rocrail definition on getlocoinfo\n" \
-"12085 2017-03-22 08:51:29 +0100 wmz21: send shortids to a WLANmaus if its in receive mode\n" \
-"12084 2017-03-21 14:34:15 +0100 car: V_hints\n" \
-"12083 2017-03-21 10:32:23 +0100 digint: interface enhancement\n" \
-"12082 2017-03-21 07:30:43 +0100 car: translate V_hint into a percentage\n" \
-"12081 2017-03-21 07:08:45 +0100 loc: trace fix and reset throttleid at resetall\n" \
-"12080 2017-03-21 07:00:18 +0100 tt: wait in a thread in case motor off delay > 0\n" \
-"12079 2017-03-21 06:35:20 +0100 locdialog: use 80% of V_max for V_cru if set to zero\n" \
 
 "log end";
