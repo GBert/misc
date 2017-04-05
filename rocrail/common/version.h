@@ -1,9 +1,13 @@
 const int revisionnr = 
-12140
+12144
 ;
 const char* commithash = 
-"5bb62e3366d4205d58c37aef7c085e4f81590edf";
+"6fafb74e97f2834edcc32a85265c4e4ad76152ce";
 const char* revlog = 
+"12144 2017-04-05 11:30:14 +0200 decodertypes: update\n" \
+"12143 2017-04-05 11:16:04 +0200 model: check for multiple signals at event\n" \
+"12142 2017-04-05 08:48:02 +0200 compiler warnings fixed\n" \
+"12141 2017-04-05 07:58:21 +0200 decodertypes: D&H added\n" \
 "12140 2017-04-04 16:59:14 +0200 guiframe: check on close if the car or train tab was already initialized before call th exit function\n" \
 "12139 2017-04-04 08:22:01 +0200 locdialog: added button to fix and center all BBT records\n" \
 "12138 2017-04-04 07:05:45 +0200 p50x: error code list added\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12097 2017-03-24 08:25:08 +0100 control, wmz21: calculate dbsize before sending the shortids\n" \
 "12096 2017-03-24 07:46:12 +0100 wmz21: corrected the max database size\n" \
 "12095 2017-03-24 07:18:10 +0100 enable block power check on lock option added\n" \
-"12094 2017-03-23 13:45:42 +0100 block: poweron/off also command it to the powermanager\n" \
-"12093 2017-03-23 10:49:44 +0100 loc: color and owner field added\n" \
-"12092 2017-03-23 08:38:22 +0100 wmz21: fix for speed\n" \
-"12091 2017-03-23 07:38:06 +0100 wmz21: release prev loco after selecting another loco\n" \
 
 "log end";
