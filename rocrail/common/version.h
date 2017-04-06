@@ -1,9 +1,12 @@
 const int revisionnr = 
-12144
+12147
 ;
 const char* commithash = 
-"6fafb74e97f2834edcc32a85265c4e4ad76152ce";
+"e21f82dabd16b2c2b8dfd36252227106039c2b61";
 const char* revlog = 
+"12147 2017-04-06 17:16:59 +0200 option secondnextblock4wait added (TEST)\n" \
+"12146 2017-04-06 10:19:33 +0200 rocpro: fix for multiple detect command\n" \
+"12145 2017-04-06 10:01:38 +0200 rocpro: outo detect structure changed\n" \
 "12144 2017-04-05 11:30:14 +0200 decodertypes: update\n" \
 "12143 2017-04-05 11:16:04 +0200 model: check for multiple signals at event\n" \
 "12142 2017-04-05 08:48:02 +0200 compiler warnings fixed\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12100 2017-03-24 14:10:17 +0100 wmz21: trace out the wlanmaus loco database during send\n" \
 "12099 2017-03-24 11:54:04 +0100 wmz21: fix for unknown loco speed commands\n" \
 "12098 2017-03-24 10:45:14 +0100 wmz21: fix for switch commands\n" \
-"12097 2017-03-24 08:25:08 +0100 control, wmz21: calculate dbsize before sending the shortids\n" \
-"12096 2017-03-24 07:46:12 +0100 wmz21: corrected the max database size\n" \
-"12095 2017-03-24 07:18:10 +0100 enable block power check on lock option added\n" \
 
 "log end";
