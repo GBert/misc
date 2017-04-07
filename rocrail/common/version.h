@@ -1,9 +1,12 @@
 const int revisionnr = 
-12147
+12150
 ;
 const char* commithash = 
-"e21f82dabd16b2c2b8dfd36252227106039c2b61";
+"224e364313a1746a94e0e1e3279d01c9473477e3";
 const char* revlog = 
+"12150 2017-04-07 10:51:55 +0200 rocpro: cvnrs from the loco properties\n" \
+"12149 2017-04-07 10:51:18 +0200 lcdriver: moved the secondnextblock4wait option into the loco properties\n" \
+"12148 2017-04-07 09:35:55 +0200 signal: revert addressing fix\n" \
 "12147 2017-04-06 17:16:59 +0200 option secondnextblock4wait added (TEST)\n" \
 "12146 2017-04-06 10:19:33 +0200 rocpro: fix for multiple detect command\n" \
 "12145 2017-04-06 10:01:38 +0200 rocpro: outo detect structure changed\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12103 2017-03-25 09:58:59 +0100 basedlg: option for not showing position if the ID already exist\n" \
 "12102 2017-03-25 07:43:53 +0100 dccpp: removed the double redefinition at delayed of command\n" \
 "12101 2017-03-25 07:21:19 +0100 model: fix for create loco on bidi\n" \
-"12100 2017-03-24 14:10:17 +0100 wmz21: trace out the wlanmaus loco database during send\n" \
-"12099 2017-03-24 11:54:04 +0100 wmz21: fix for unknown loco speed commands\n" \
-"12098 2017-03-24 10:45:14 +0100 wmz21: fix for switch commands\n" \
 
 "log end";
