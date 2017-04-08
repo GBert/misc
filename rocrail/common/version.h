@@ -1,9 +1,11 @@
 const int revisionnr = 
-12150
+12152
 ;
 const char* commithash = 
-"224e364313a1746a94e0e1e3279d01c9473477e3";
+"c0f64730f02ae79ad5999f42a5078f3f7805e5ab";
 const char* revlog = 
+"12152 2017-04-08 09:42:35 +0200 milight: work around for white\n" \
+"12151 2017-04-08 07:42:46 +0200 secondnextblock4wait option must be set in the block also\n" \
 "12150 2017-04-07 10:51:55 +0200 rocpro: cvnrs from the loco properties\n" \
 "12149 2017-04-07 10:51:18 +0200 lcdriver: moved the secondnextblock4wait option into the loco properties\n" \
 "12148 2017-04-07 09:35:55 +0200 signal: revert addressing fix\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12105 2017-03-26 08:26:50 +0200 wmz21: convert FADA to MADA in case of an unknown switch\n" \
 "12104 2017-03-25 10:28:29 +0100 set var lc4112 and bk4112 in case no destination was found\n" \
 "12103 2017-03-25 09:58:59 +0100 basedlg: option for not showing position if the ID already exist\n" \
-"12102 2017-03-25 07:43:53 +0100 dccpp: removed the double redefinition at delayed of command\n" \
-"12101 2017-03-25 07:21:19 +0100 model: fix for create loco on bidi\n" \
 
 "log end";
