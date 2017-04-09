@@ -1,9 +1,11 @@
 const int revisionnr = 
-12152
+12154
 ;
 const char* commithash = 
-"c0f64730f02ae79ad5999f42a5078f3f7805e5ab";
+"4deb0affe0c37b3c20a8cdaf0fa788c8d7bbbca3";
 const char* revlog = 
+"12154 2017-04-09 09:49:17 +0200 rocpro: added missing translation for readall\n" \
+"12153 2017-04-09 07:49:22 +0200 throttledlg: set icon\n" \
 "12152 2017-04-08 09:42:35 +0200 milight: work around for white\n" \
 "12151 2017-04-08 07:42:46 +0200 secondnextblock4wait option must be set in the block also\n" \
 "12150 2017-04-07 10:51:55 +0200 rocpro: cvnrs from the loco properties\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12107 2017-03-26 10:10:10 +0200 dccpp revert: removed the double redefinition at delayed of command\n" \
 "12106 2017-03-26 09:08:18 +0200 wmz21: use protver for determine the addressing scheme.\n" \
 "12105 2017-03-26 08:26:50 +0200 wmz21: convert FADA to MADA in case of an unknown switch\n" \
-"12104 2017-03-25 10:28:29 +0100 set var lc4112 and bk4112 in case no destination was found\n" \
-"12103 2017-03-25 09:58:59 +0100 basedlg: option for not showing position if the ID already exist\n" \
 
 "log end";
