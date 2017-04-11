@@ -483,7 +483,7 @@ F 3 "" H 8850 5250 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 Text Notes 9500 6350 0    60   ~ 0
-galvanic isolated options
+galvanic isolated option
 $Comp
 L LM7805 U7
 U 1 1 58791E9C
@@ -1752,7 +1752,7 @@ L R R5
 U 1 1 58ACA6EA
 P 8275 4475
 F 0 "R5" V 8355 4475 50  0000 C CNN
-F 1 "120" V 8275 4475 50  0000 C CNN
+F 1 "1k5" V 8275 4475 50  0000 C CNN
 F 2 "w_pth_resistors:RC03" V 8205 4475 50  0001 C CNN
 F 3 "" H 8275 4475 50  0000 C CNN
 	1    8275 4475
