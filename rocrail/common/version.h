@@ -1,9 +1,13 @@
 const int revisionnr = 
-12154
+12158
 ;
 const char* commithash = 
-"4deb0affe0c37b3c20a8cdaf0fa788c8d7bbbca3";
+"7baa13dad7c22ae8643985131d43717f49f0509e";
 const char* revlog = 
+"12158 2017-04-11 19:13:14 +0200 bidib: adressing fix for configx\n" \
+"12157 2017-04-11 11:13:13 +0200 model: if the schedule index does not match use it as offset to find the matching index\n" \
+"12156 2017-04-11 09:51:16 +0200 initdest: reset destination in case the block group clould not be locked\n" \
+"12155 2017-04-11 07:13:42 +0200 bidib: addressing fix for MSG_LC_CONFIGX_SET\n" \
 "12154 2017-04-09 09:49:17 +0200 rocpro: added missing translation for readall\n" \
 "12153 2017-04-09 07:49:22 +0200 throttledlg: set icon\n" \
 "12152 2017-04-08 09:42:35 +0200 milight: work around for white\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12111 2017-03-26 15:26:48 +0200 dccpp: fix for getting a sw ID incase none accessory\n" \
 "12110 2017-03-26 10:46:15 +0200 loc: set bkid and lcclass at activating an action\n" \
 "12109 2017-03-26 10:16:46 +0200 wmz21: support for switch motor 2\n" \
-"12108 2017-03-26 10:11:39 +0200 wmz21: use addressing scheme also for looking up an existing switch\n" \
-"12107 2017-03-26 10:10:10 +0200 dccpp revert: removed the double redefinition at delayed of command\n" \
-"12106 2017-03-26 09:08:18 +0200 wmz21: use protver for determine the addressing scheme.\n" \
-"12105 2017-03-26 08:26:50 +0200 wmz21: convert FADA to MADA in case of an unknown switch\n" \
 
 "log end";
