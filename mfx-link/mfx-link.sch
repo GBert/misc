@@ -59,7 +59,7 @@ F 3 "" H 2600 5900 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D D1
+L D-RESCUE-mfx-link D1
 U 1 1 586FB141
 P 2050 5900
 F 0 "D1" H 1950 5850 50  0000 C CNN
@@ -70,7 +70,7 @@ F 3 "" H 2050 5900 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L D D2
+L D-RESCUE-mfx-link D2
 U 1 1 586FB1AE
 P 2250 5900
 F 0 "D2" H 2150 5850 50  0000 C CNN
@@ -92,7 +92,7 @@ F 3 "" H 1200 5900 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L D D3
+L D-RESCUE-mfx-link D3
 U 1 1 586FB68D
 P 2950 5900
 F 0 "D3" H 2850 5850 50  0000 C CNN
@@ -103,7 +103,7 @@ F 3 "" H 2950 5900 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L D D4
+L D-RESCUE-mfx-link D4
 U 1 1 586FB6CE
 P 3150 5900
 F 0 "D4" H 3050 5850 50  0000 C CNN
@@ -279,7 +279,7 @@ F 3 "" H 2850 4700 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D D8
+L D-RESCUE-mfx-link D8
 U 1 1 5890CAEB
 P 2100 4650
 F 0 "D8" H 2100 4750 50  0000 C CNN
@@ -356,7 +356,7 @@ F 3 "" H 5800 4350 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L D D5
+L D-RESCUE-mfx-link D5
 U 1 1 5890D6E1
 P 1900 4050
 F 0 "D5" H 2000 4000 50  0000 C CNN
@@ -367,7 +367,7 @@ F 3 "" H 1900 4050 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L D D6
+L D-RESCUE-mfx-link D6
 U 1 1 5890D779
 P 2100 4050
 F 0 "D6" H 2200 4075 50  0000 C CNN
@@ -378,7 +378,7 @@ F 3 "" H 2100 4050 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L D D7
+L D-RESCUE-mfx-link D7
 U 1 1 5890D818
 P 1400 4050
 F 0 "D7" H 1300 4100 50  0000 C CNN
@@ -389,7 +389,7 @@ F 3 "" H 1400 4050 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L D D9
+L D-RESCUE-mfx-link D9
 U 1 1 5890D8AE
 P 1600 4050
 F 0 "D9" H 1500 4000 50  0000 C CNN
@@ -709,7 +709,7 @@ F 3 "" H 6150 1900 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D D10
+L D-RESCUE-mfx-link D10
 U 1 1 5892404C
 P 1850 1800
 F 0 "D10" H 1850 1700 50  0000 C CNN
@@ -1329,7 +1329,7 @@ RxD
 Text Label 10400 3900 0    60   ~ 0
 TxD
 $Comp
-L D_Schottky D12
+L D_Schottky-RESCUE-mfx-link D12
 U 1 1 589396E9
 P 7950 1500
 F 0 "D12" H 7950 1600 50  0000 C CNN

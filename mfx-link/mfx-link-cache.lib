@@ -263,11 +263,11 @@ X ~ 2 0 -150 110 U 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# D
+# D-RESCUE-mfx-link
 #
-DEF D D 0 40 N N 1 F N
+DEF D-RESCUE-mfx-link D 0 40 N N 1 F N
 F0 "D" 0 100 50 H V C CNN
-F1 "D" 0 -100 50 H V C CNN
+F1 "D-RESCUE-mfx-link" 0 -100 50 H V C CNN
 F2 "" 0 0 50 H V C CNN
 F3 "" 0 0 50 H V C CNN
 $FPLIST
@@ -285,11 +285,11 @@ X K 2 -150 0 100 R 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# D_Schottky
+# D_Schottky-RESCUE-mfx-link
 #
-DEF D_Schottky D 0 40 N N 1 F N
+DEF D_Schottky-RESCUE-mfx-link D 0 40 N N 1 F N
 F0 "D" 0 100 50 H V C CNN
-F1 "D_Schottky" 0 -100 50 H V C CNN
+F1 "D_Schottky-RESCUE-mfx-link" 0 -100 50 H V C CNN
 F2 "" 0 0 50 H V C CNN
 F3 "" 0 0 50 H V C CNN
 $FPLIST
