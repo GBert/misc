@@ -1,4 +1,4 @@
-update=Di 21 Feb 2017 15:50:17 CET
+update=Dienstag, 11. April 2017 21:59:22
 version=1
 last_client=kicad
 [pcbnew]
@@ -62,3 +62,13 @@ LibName30=libs/mylib
 LibName31=ISO1050
 LibName32=libs/p82b715
 LibName33=rfcom
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=
+SpiceForceRefPrefix=0
+SpiceUseNetNumbers=0
+LabSize=60
