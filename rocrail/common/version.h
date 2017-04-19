@@ -1,9 +1,21 @@
 const int revisionnr = 
-12192
+12204
 ;
 const char* commithash = 
-"b10e2f8780bd3f636770c74580fb3a287107ffe5";
+"441c0dd30631084c8ffcc569d317c9a53ece05df";
 const char* revlog = 
+"12204 2017-04-19 11:03:26 +0200 start all filter extended with loco shunting type\n" \
+"12203 2017-04-19 10:17:04 +0200 start all filter extended with shunting\n" \
+"12202 2017-04-19 10:15:18 +0200 translation merge: sl_latin, pt_BR, nl, sl, fr, de\n" \
+"12201 2017-04-19 07:49:26 +0200 mgbox: fix voor het aanmaken van een mfx loco met een uniek adres (Bert)\n" \
+"12200 2017-04-18 15:50:38 +0200 clock: scalable digital type\n" \
+"12199 2017-04-18 14:22:34 +0200 xmlscript: resolve variable in the sub filename\n" \
+"12198 2017-04-18 13:57:21 +0200 clock: removed the not needed OK button\n" \
+"12197 2017-04-18 13:45:59 +0200 clock: drawing improvements\n" \
+"12196 2017-04-18 12:31:39 +0200 clock: do not show logo in the resizable clock\n" \
+"12195 2017-04-18 11:53:33 +0200 clock: drawing improvements\n" \
+"12194 2017-04-18 11:01:22 +0200 bidib: removed SOD call after receiving a MSG_NODE_NA message to prevent endless looping\n" \
+"12193 2017-04-18 10:31:12 +0200 clock: some drawing optimation to save CPU load\n" \
 "12192 2017-04-17 15:47:20 +0200 model: allow csv list for roadnames in startall filter\n" \
 "12191 2017-04-17 15:25:30 +0200 model: memory leak repared for writing occ.xml\n" \
 "12190 2017-04-17 10:47:28 +0200 startallfilterdlg: added main line option\n" \
@@ -42,17 +54,5 @@ const char* revlog =
 "12157 2017-04-11 11:13:13 +0200 model: if the schedule index does not match use it as offset to find the matching index\n" \
 "12156 2017-04-11 09:51:16 +0200 initdest: reset destination in case the block group clould not be locked\n" \
 "12155 2017-04-11 07:13:42 +0200 bidib: addressing fix for MSG_LC_CONFIGX_SET\n" \
-"12154 2017-04-09 09:49:17 +0200 rocpro: added missing translation for readall\n" \
-"12153 2017-04-09 07:49:22 +0200 throttledlg: set icon\n" \
-"12152 2017-04-08 09:42:35 +0200 milight: work around for white\n" \
-"12151 2017-04-08 07:42:46 +0200 secondnextblock4wait option must be set in the block also\n" \
-"12150 2017-04-07 10:51:55 +0200 rocpro: cvnrs from the loco properties\n" \
-"12149 2017-04-07 10:51:18 +0200 lcdriver: moved the secondnextblock4wait option into the loco properties\n" \
-"12148 2017-04-07 09:35:55 +0200 signal: revert addressing fix\n" \
-"12147 2017-04-06 17:16:59 +0200 option secondnextblock4wait added (TEST)\n" \
-"12146 2017-04-06 10:19:33 +0200 rocpro: fix for multiple detect command\n" \
-"12145 2017-04-06 10:01:38 +0200 rocpro: outo detect structure changed\n" \
-"12144 2017-04-05 11:30:14 +0200 decodertypes: update\n" \
-"12143 2017-04-05 11:16:04 +0200 model: check for multiple signals at event\n" \
 
 "log end";
