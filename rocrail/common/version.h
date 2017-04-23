@@ -1,9 +1,10 @@
 const int revisionnr = 
-12221
+12222
 ;
 const char* commithash = 
-"9eaf095b7f9d43fea26f599890e0c73f0a035d2a";
+"25a673beab0c1133903269c37c8a75a0a36c59ba";
 const char* revlog = 
+"12222 2017-04-23 10:00:16 +0200 tracedlg: handshake fix for overflow\n" \
 "12221 2017-04-23 09:01:46 +0200 tracedlg: allow free text in the object type field\n" \
 "12220 2017-04-23 08:22:37 +0200 tracedlg: limit nr of lines to 1200 appr. 100K\n" \
 "12219 2017-04-22 16:21:41 +0200 in: fix for checking schedule wait at in\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12175 2017-04-15 12:05:43 +0200 check schedule time in case the secondnextblock4wait did reserve the next destination\n" \
 "12174 2017-04-15 11:05:08 +0200 basedlg: startup schedule and tour column added\n" \
 "12173 2017-04-15 10:59:20 +0200 esunavi: crash fix in case no serial device is initialised\n" \
-"12172 2017-04-15 09:38:22 +0200 roclcdr: save the secondnextblock4wait index in its own variable for adjusting the index after wait\n" \
 
 "log end";
