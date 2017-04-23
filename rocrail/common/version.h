@@ -1,9 +1,14 @@
 const int revisionnr = 
-12222
+12227
 ;
 const char* commithash = 
-"25a673beab0c1133903269c37c8a75a0a36c59ba";
+"42fe14d7f4d4ac556a9c606fc64097438e712875";
 const char* revlog = 
+"12227 2017-04-23 16:16:42 +0200 output: button group fix\n" \
+"12226 2017-04-23 14:03:29 +0200 bidib: trace improvements\n" \
+"12225 2017-04-23 14:02:25 +0200 schedule: minimal wait option added in the entries\n" \
+"12224 2017-04-23 11:24:15 +0200 control: catch commands if not initialized\n" \
+"12223 2017-04-23 11:20:41 +0200 output: check if the control is already initialized before send a command\n" \
 "12222 2017-04-23 10:00:16 +0200 tracedlg: handshake fix for overflow\n" \
 "12221 2017-04-23 09:01:46 +0200 tracedlg: allow free text in the object type field\n" \
 "12220 2017-04-23 08:22:37 +0200 tracedlg: limit nr of lines to 1200 appr. 100K\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "12180 2017-04-16 11:10:18 +0200 clockdlg: translations\n" \
 "12179 2017-04-16 10:42:43 +0200 clockdlg: save size and position\n" \
 "12178 2017-04-16 10:28:54 +0200 clockdlg: synclock added\n" \
-"12177 2017-04-16 10:24:00 +0200 clockdlg: resizeable fast clock\n" \
-"12176 2017-04-15 15:27:34 +0200 seltab: generate switch IDs for dccpp\n" \
-"12175 2017-04-15 12:05:43 +0200 check schedule time in case the secondnextblock4wait did reserve the next destination\n" \
-"12174 2017-04-15 11:05:08 +0200 basedlg: startup schedule and tour column added\n" \
-"12173 2017-04-15 10:59:20 +0200 esunavi: crash fix in case no serial device is initialised\n" \
 
 "log end";
