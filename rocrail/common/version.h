@@ -1,9 +1,26 @@
 const int revisionnr = 
-12204
+12221
 ;
 const char* commithash = 
-"441c0dd30631084c8ffcc569d317c9a53ece05df";
+"9eaf095b7f9d43fea26f599890e0c73f0a035d2a";
 const char* revlog = 
+"12221 2017-04-23 09:01:46 +0200 tracedlg: allow free text in the object type field\n" \
+"12220 2017-04-23 08:22:37 +0200 tracedlg: limit nr of lines to 1200 appr. 100K\n" \
+"12219 2017-04-22 16:21:41 +0200 in: fix for checking schedule wait at in\n" \
+"12218 2017-04-22 11:45:02 +0200 block: in action state added (same as occupied)\n" \
+"12217 2017-04-22 11:40:34 +0200 blockdialog: in added for actions control\n" \
+"12216 2017-04-22 11:21:44 +0200 bidibutils: some more feature descriptions added\n" \
+"12215 2017-04-22 10:12:35 +0200 signal: normalized flip and aspect nr\n" \
+"12214 2017-04-21 17:01:27 +0200 schedule: ignore block wait only if loco uses schedule time\n" \
+"12213 2017-04-21 15:19:35 +0200 location: disregard none active locos in case of minocc and fifo\n" \
+"12212 2017-04-21 14:05:55 +0200 schedules: a regular stop with wait set to zero, and time processing relative, ist set automatically to 00:01\n" \
+"12211 2017-04-21 11:17:37 +0200 signal: fix for state as aspectnr (linear)\n" \
+"12210 2017-04-21 08:20:21 +0200 locdialog: layout improvement\n" \
+"12209 2017-04-21 07:42:03 +0200 locdialog: fix for class length\n" \
+"12208 2017-04-20 11:52:40 +0200 xmlscript: support for model commands\n" \
+"12207 2017-04-20 11:33:50 +0200 item: show in stageblock also the total number of sections\n" \
+"12206 2017-04-20 10:40:53 +0200 schedule: check for wait in the schedule and ignore the block wait flag\n" \
+"12205 2017-04-19 15:17:59 +0200 clock: offset corrections\n" \
 "12204 2017-04-19 11:03:26 +0200 start all filter extended with loco shunting type\n" \
 "12203 2017-04-19 10:17:04 +0200 start all filter extended with shunting\n" \
 "12202 2017-04-19 10:15:18 +0200 translation merge: sl_latin, pt_BR, nl, sl, fr, de\n" \
@@ -37,22 +54,5 @@ const char* revlog =
 "12174 2017-04-15 11:05:08 +0200 basedlg: startup schedule and tour column added\n" \
 "12173 2017-04-15 10:59:20 +0200 esunavi: crash fix in case no serial device is initialised\n" \
 "12172 2017-04-15 09:38:22 +0200 roclcdr: save the secondnextblock4wait index in its own variable for adjusting the index after wait\n" \
-"12171 2017-04-14 17:38:45 +0200 model: only show warning if the schedule index is in range\n" \
-"12170 2017-04-14 16:32:04 +0200 secondnextblock options also in the operator\n" \
-"12169 2017-04-14 15:21:04 +0200 location, model: check if the blockid is valid\n" \
-"12168 2017-04-14 15:14:35 +0200 stage: unregister occ sensors too on delete and modify\n" \
-"12167 2017-04-14 11:35:25 +0200 z21: global railcom trace correction\n" \
-"12166 2017-04-14 10:58:45 +0200 reserve: schedule index fix for secondnextblock4wait\n" \
-"12165 2017-04-14 10:26:54 +0200 secondnextblock4wait: some corrections made in case of schedule\n" \
-"12164 2017-04-14 09:22:38 +0200 model: fix for deleting a deleted sensor from the list-map\n" \
-"12163 2017-04-13 17:10:27 +0200 block: remove listeners on delete\n" \
-"12162 2017-04-12 11:48:35 +0200 translation merge: sr_latin, de, pt_BR, nl\n" \
-"12161 2017-04-12 09:36:58 +0200 model: fix for possible endless loop in finding the right schedule index\n" \
-"12160 2017-04-12 08:47:47 +0200 initialize: show warning in case a block group could not be locked\n" \
-"12159 2017-04-12 08:19:41 +0200 bidib: handleConfigX extended\n" \
-"12158 2017-04-11 19:13:14 +0200 bidib: adressing fix for configx\n" \
-"12157 2017-04-11 11:13:13 +0200 model: if the schedule index does not match use it as offset to find the matching index\n" \
-"12156 2017-04-11 09:51:16 +0200 initdest: reset destination in case the block group clould not be locked\n" \
-"12155 2017-04-11 07:13:42 +0200 bidib: addressing fix for MSG_LC_CONFIGX_SET\n" \
 
 "log end";
