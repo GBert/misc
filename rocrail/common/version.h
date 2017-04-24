@@ -1,9 +1,10 @@
 const int revisionnr = 
-12227
+12228
 ;
 const char* commithash = 
-"42fe14d7f4d4ac556a9c606fc64097438e712875";
+"e8545501e6a00509081b7d83ceee3ea49523283b";
 const char* revlog = 
+"12228 2017-04-24 07:17:17 +0200 output: stay on in case of flip and buttongroup\n" \
 "12227 2017-04-23 16:16:42 +0200 output: button group fix\n" \
 "12226 2017-04-23 14:03:29 +0200 bidib: trace improvements\n" \
 "12225 2017-04-23 14:02:25 +0200 schedule: minimal wait option added in the entries\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12181 2017-04-16 11:11:04 +0200 seltab: accessory interface option added\n" \
 "12180 2017-04-16 11:10:18 +0200 clockdlg: translations\n" \
 "12179 2017-04-16 10:42:43 +0200 clockdlg: save size and position\n" \
-"12178 2017-04-16 10:28:54 +0200 clockdlg: synclock added\n" \
 
 "log end";
