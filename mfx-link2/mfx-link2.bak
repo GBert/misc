@@ -1,0 +1,223 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:microchip_pic16mcu
+LIBS:PIC16F1709
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L PIC16F1709 U?
+U 1 1 58FE1162
+P 4550 3400
+F 0 "U?" H 4550 2950 50  0000 C CNN
+F 1 "PIC16F1709" H 4550 2850 50  0000 C CNN
+F 2 "w_smd_dil:soic-20" H 4550 3950 50  0001 C CNN
+F 3 "" H 4550 2700 50  0001 C CNN
+	1    4550 3400
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R?
+U 1 1 58FE11BC
+P 2925 3050
+F 0 "R?" V 3005 3050 50  0000 C CNN
+F 1 "22" V 2925 3050 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 2855 3050 50  0001 C CNN
+F 3 "" H 2925 3050 50  0000 C CNN
+	1    2925 3050
+	0    1    1    0   
+$EndComp
+$Comp
+L C C?
+U 1 1 58FE132A
+P 4575 4525
+F 0 "C?" H 4600 4625 50  0000 L CNN
+F 1 "C" H 4600 4425 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0805_HandSoldering" H 4613 4375 50  0001 C CNN
+F 3 "" H 4575 4525 50  0000 C CNN
+	1    4575 4525
+	1    0    0    -1  
+$EndComp
+$Comp
+L 530x0C T?
+U 1 1 58FE2425
+P 1525 3250
+F 0 "T?" H 1525 3500 50  0000 C CNN
+F 1 "53040C" H 1525 2950 50  0000 C CNN
+F 2 "Divers:530x0C" H 1525 3250 50  0001 C CNN
+F 3 "" H 1525 3250 50  0000 C CNN
+	1    1525 3250
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X02 P?
+U 1 1 58FE254A
+P 825 3250
+F 0 "P?" H 825 3400 50  0000 C CNN
+F 1 "Rail" V 925 3250 50  0000 C CNN
+F 2 "" H 825 3250 50  0000 C CNN
+F 3 "" H 825 3250 50  0000 C CNN
+	1    825  3250
+	-1   0    0    1   
+$EndComp
+$Comp
+L D D?
+U 1 1 58FE266D
+P 2050 3250
+F 0 "D?" H 2050 3350 50  0000 C CNN
+F 1 "1N4148" H 2050 3150 50  0000 C CNN
+F 2 "w_smd_diode:sod323" H 2050 3250 50  0001 C CNN
+F 3 "" H 2050 3250 50  0000 C CNN
+	1    2050 3250
+	0    -1   -1   0   
+$EndComp
+$Comp
+L D D?
+U 1 1 58FE27B5
+P 2325 3250
+F 0 "D?" H 2325 3150 50  0000 C CNN
+F 1 "1N4148" H 2325 3375 50  0000 C CNN
+F 2 "w_smd_diode:sod323" H 2325 3250 50  0001 C CNN
+F 3 "" H 2325 3250 50  0000 C CNN
+	1    2325 3250
+	0    1    1    0   
+$EndComp
+$Comp
+L R R?
+U 1 1 58FE2988
+P 3150 3250
+F 0 "R?" V 3230 3250 50  0000 C CNN
+F 1 "82" V 3150 3250 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 3080 3250 50  0001 C CNN
+F 3 "" H 3150 3250 50  0000 C CNN
+	1    3150 3250
+	-1   0    0    1   
+$EndComp
+$Comp
+L C C?
+U 1 1 58FE2A6C
+P 2650 3250
+F 0 "C?" H 2675 3350 50  0000 L CNN
+F 1 "1nF" H 2675 3150 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0805_HandSoldering" H 2688 3100 50  0001 C CNN
+F 3 "" H 2650 3250 50  0000 C CNN
+	1    2650 3250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1825 3050 2050 3050
+Wire Wire Line
+	2050 3050 2325 3050
+Wire Wire Line
+	2325 3050 2650 3050
+Wire Wire Line
+	2650 3050 2775 3050
+Wire Wire Line
+	1825 3450 2050 3450
+Wire Wire Line
+	2050 3450 2325 3450
+Wire Wire Line
+	2325 3450 2650 3450
+Wire Wire Line
+	2650 3450 3150 3450
+Wire Wire Line
+	3150 3450 3425 3450
+Wire Wire Line
+	3150 3450 3150 3400
+Wire Wire Line
+	2050 3400 2050 3450
+Connection ~ 2050 3450
+Wire Wire Line
+	2325 3400 2325 3450
+Connection ~ 2325 3450
+Wire Wire Line
+	2050 3100 2050 3050
+Connection ~ 2050 3050
+Wire Wire Line
+	2325 3100 2325 3050
+Connection ~ 2325 3050
+Wire Wire Line
+	2650 3100 2650 3050
+Connection ~ 2650 3050
+Wire Wire Line
+	2650 3400 2650 3450
+Connection ~ 2650 3450
+Wire Wire Line
+	3075 3050 3150 3050
+Wire Wire Line
+	3150 3050 3800 3050
+Wire Wire Line
+	3150 3050 3150 3100
+Wire Wire Line
+	1025 3200 1150 3200
+Wire Wire Line
+	1150 3200 1150 3050
+Wire Wire Line
+	1150 3050 1225 3050
+Wire Wire Line
+	1225 3450 1150 3450
+Wire Wire Line
+	1150 3450 1150 3300
+Wire Wire Line
+	1150 3300 1025 3300
+Connection ~ 3150 3050
+Wire Wire Line
+	3425 3450 3425 3150
+Wire Wire Line
+	3425 3150 3800 3150
+Connection ~ 3150 3450
+$Comp
+L +5V #PWR?
+U 1 1 58FE2E72
+P 3450 2375
+F 0 "#PWR?" H 3450 2225 50  0001 C CNN
+F 1 "+5V" H 3450 2515 50  0000 C CNN
+F 2 "" H 3450 2375 50  0000 C CNN
+F 3 "" H 3450 2375 50  0000 C CNN
+	1    3450 2375
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3800 2950 3450 2950
+Wire Wire Line
+	3450 2950 3450 2375
+$EndSCHEMATC
