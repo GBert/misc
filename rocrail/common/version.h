@@ -1,9 +1,12 @@
 const int revisionnr = 
-12229
+12232
 ;
 const char* commithash = 
-"df0737dd37957ee10ab881ae0f1a3354618ca113";
+"b86f4d2127dd001d4cdbe27af05ba15d6f7d6bea";
 const char* revlog = 
+"12232 2017-04-26 07:40:16 +0200 schedules: no minwait in the first entry\n" \
+"12231 2017-04-25 11:11:00 +0200 basedlg: fix for missing cast\n" \
+"12230 2017-04-25 10:56:14 +0200 translation merge: sr_latin, de, sl, pt_BR, nl\n" \
 "12229 2017-04-24 11:02:07 +0200 scheduledialog: fix for modify minwait\n" \
 "12228 2017-04-24 07:17:17 +0200 output: stay on in case of flip and buttongroup\n" \
 "12227 2017-04-23 16:16:42 +0200 output: button group fix\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12185 2017-04-16 13:30:24 +0200 clock: added missing include\n" \
 "12184 2017-04-16 13:06:57 +0200 clockdlg: open dialog at startup in case it was open at shutdown\n" \
 "12183 2017-04-16 12:24:13 +0200 clockdlg: layout correction\n" \
-"12182 2017-04-16 11:48:08 +0200 rocview: replaced the conflicting clock wrapper with fastclock\n" \
-"12181 2017-04-16 11:11:04 +0200 seltab: accessory interface option added\n" \
-"12180 2017-04-16 11:10:18 +0200 clockdlg: translations\n" \
 
 "log end";
