@@ -1,9 +1,12 @@
 const int revisionnr = 
-12232
+12235
 ;
 const char* commithash = 
-"b86f4d2127dd001d4cdbe27af05ba15d6f7d6bea";
+"3af1208fde38d930e2dc9e9efd5353e527410246";
 const char* revlog = 
+"12235 2017-04-27 15:21:59 +0200 action: check if the actionctrl is set\n" \
+"12234 2017-04-27 07:55:59 +0200 signaldialog: label correction\n" \
+"12233 2017-04-26 11:41:26 +0200 scheduledialog: layout corrections\n" \
 "12232 2017-04-26 07:40:16 +0200 schedules: no minwait in the first entry\n" \
 "12231 2017-04-25 11:11:00 +0200 basedlg: fix for missing cast\n" \
 "12230 2017-04-25 10:56:14 +0200 translation merge: sr_latin, de, sl, pt_BR, nl\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12188 2017-04-17 07:27:12 +0200 milight: revert white workaround\n" \
 "12187 2017-04-16 14:44:57 +0200 rocnetnode: listener interface corrected to the new version\n" \
 "12186 2017-04-16 14:03:21 +0200 clockdlg: save size and position on shutdown\n" \
-"12185 2017-04-16 13:30:24 +0200 clock: added missing include\n" \
-"12184 2017-04-16 13:06:57 +0200 clockdlg: open dialog at startup in case it was open at shutdown\n" \
-"12183 2017-04-16 12:24:13 +0200 clockdlg: layout correction\n" \
 
 "log end";
