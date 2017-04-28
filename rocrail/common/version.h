@@ -1,9 +1,12 @@
 const int revisionnr = 
-12237
+12240
 ;
 const char* commithash = 
-"e6383fc6b1994fb2674f1ebff0ca6c1433a18451";
+"c57917b6e89d4146fb3c1d5e108ac078428ff7da";
 const char* revlog = 
+"12240 2017-04-28 14:45:50 +0200 action: allways use an actionctrl on exec\n" \
+"12239 2017-04-28 11:16:27 +0200 action: avoid starting the timer thread multiple times\n" \
+"12238 2017-04-28 10:27:42 +0200 tours: absolute option added for depart time\n" \
 "12237 2017-04-28 07:54:25 +0200 schedules: tour times always absolute\n" \
 "12236 2017-04-28 07:53:48 +0200 feedbackdialog: show bus also in hex\n" \
 "12235 2017-04-27 15:21:59 +0200 action: check if the actionctrl is set\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12193 2017-04-18 10:31:12 +0200 clock: some drawing optimation to save CPU load\n" \
 "12192 2017-04-17 15:47:20 +0200 model: allow csv list for roadnames in startall filter\n" \
 "12191 2017-04-17 15:25:30 +0200 model: memory leak repared for writing occ.xml\n" \
-"12190 2017-04-17 10:47:28 +0200 startallfilterdlg: added main line option\n" \
-"12189 2017-04-17 10:02:38 +0200 start all filter dialog added\n" \
-"12188 2017-04-17 07:27:12 +0200 milight: revert white workaround\n" \
 
 "log end";
