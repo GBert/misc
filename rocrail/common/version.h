@@ -1,9 +1,11 @@
 const int revisionnr = 
-12235
+12237
 ;
 const char* commithash = 
-"3af1208fde38d930e2dc9e9efd5353e527410246";
+"e6383fc6b1994fb2674f1ebff0ca6c1433a18451";
 const char* revlog = 
+"12237 2017-04-28 07:54:25 +0200 schedules: tour times always absolute\n" \
+"12236 2017-04-28 07:53:48 +0200 feedbackdialog: show bus also in hex\n" \
 "12235 2017-04-27 15:21:59 +0200 action: check if the actionctrl is set\n" \
 "12234 2017-04-27 07:55:59 +0200 signaldialog: label correction\n" \
 "12233 2017-04-26 11:41:26 +0200 scheduledialog: layout corrections\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12190 2017-04-17 10:47:28 +0200 startallfilterdlg: added main line option\n" \
 "12189 2017-04-17 10:02:38 +0200 start all filter dialog added\n" \
 "12188 2017-04-17 07:27:12 +0200 milight: revert white workaround\n" \
-"12187 2017-04-16 14:44:57 +0200 rocnetnode: listener interface corrected to the new version\n" \
-"12186 2017-04-16 14:03:21 +0200 clockdlg: save size and position on shutdown\n" \
 
 "log end";
