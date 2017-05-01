@@ -1,9 +1,11 @@
 const int revisionnr = 
-12252
+12254
 ;
 const char* commithash = 
-"0a704e71aedafe629100d66d40383fa05044e252";
+"95f79ba6fff297a1cc5261807c703fbbcc8936b6";
 const char* revlog = 
+"12254 2017-05-01 14:45:27 +0200 route: check command type for isSet\n" \
+"12253 2017-05-01 14:35:08 +0200 model: trace correction\n" \
 "12252 2017-05-01 14:19:55 +0200 switchdialog: usage panel added\n" \
 "12251 2017-05-01 13:59:28 +0200 signaldialog: check cmd type in route commands for the usage tab\n" \
 "12250 2017-05-01 12:27:27 +0200 rocrailinidlg: removed mrc from the cs list\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12207 2017-04-20 11:33:50 +0200 item: show in stageblock also the total number of sections\n" \
 "12206 2017-04-20 10:40:53 +0200 schedule: check for wait in the schedule and ignore the block wait flag\n" \
 "12205 2017-04-19 15:17:59 +0200 clock: offset corrections\n" \
-"12204 2017-04-19 11:03:26 +0200 start all filter extended with loco shunting type\n" \
-"12203 2017-04-19 10:17:04 +0200 start all filter extended with shunting\n" \
 
 "log end";
