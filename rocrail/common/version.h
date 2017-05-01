@@ -1,9 +1,10 @@
 const int revisionnr = 
-12251
+12252
 ;
 const char* commithash = 
-"21d9449d3a14c0714d11a481036c1bb7ea860dce";
+"0a704e71aedafe629100d66d40383fa05044e252";
 const char* revlog = 
+"12252 2017-05-01 14:19:55 +0200 switchdialog: usage panel added\n" \
 "12251 2017-05-01 13:59:28 +0200 signaldialog: check cmd type in route commands for the usage tab\n" \
 "12250 2017-05-01 12:27:27 +0200 rocrailinidlg: removed mrc from the cs list\n" \
 "12249 2017-05-01 10:37:20 +0200 loc: reject govirtual in case its already running\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12205 2017-04-19 15:17:59 +0200 clock: offset corrections\n" \
 "12204 2017-04-19 11:03:26 +0200 start all filter extended with loco shunting type\n" \
 "12203 2017-04-19 10:17:04 +0200 start all filter extended with shunting\n" \
-"12202 2017-04-19 10:15:18 +0200 translation merge: sl_latin, pt_BR, nl, sl, fr, de\n" \
 
 "log end";
