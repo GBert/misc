@@ -10,6 +10,7 @@ Nutzung
 
 Mit dem I2C Interface kann man die preiswerten [PI02](http://wiki.rocrail.net/doku.php?id=gca_pi02-de) nutzen.
 
+CAN Nutzung vorbereiten
 ```
 sudo apt-get update
 sudo apt-get install can-utils
