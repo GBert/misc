@@ -1,9 +1,20 @@
 const int revisionnr = 
-12240
+12251
 ;
 const char* commithash = 
-"c57917b6e89d4146fb3c1d5e108ac078428ff7da";
+"21d9449d3a14c0714d11a481036c1bb7ea860dce";
 const char* revlog = 
+"12251 2017-05-01 13:59:28 +0200 signaldialog: check cmd type in route commands for the usage tab\n" \
+"12250 2017-05-01 12:27:27 +0200 rocrailinidlg: removed mrc from the cs list\n" \
+"12249 2017-05-01 10:37:20 +0200 loc: reject govirtual in case its already running\n" \
+"12248 2017-05-01 10:06:35 +0200 bidib: MSG_LC_STAT use 12 bits for flat addressing\n" \
+"12247 2017-05-01 09:54:55 +0200 model: trace level correction for adjusting the schedule index\n" \
+"12246 2017-05-01 09:28:01 +0200 node: optional mutex for variables\n" \
+"12245 2017-05-01 08:17:53 +0200 bidib: check at MSG_LC_STAT if its a flat model\n" \
+"12244 2017-04-30 11:34:04 +0200 mrc: switch and loco support added\n" \
+"12243 2017-04-30 10:41:48 +0200 mrc: WIP\n" \
+"12242 2017-04-30 09:45:19 +0200 z21: correction for evaluating LAN_X_TURNOUT_INFO\n" \
+"12241 2017-04-29 10:50:54 +0200 dialogs: show bus also in hex\n" \
 "12240 2017-04-28 14:45:50 +0200 action: allways use an actionctrl on exec\n" \
 "12239 2017-04-28 11:16:27 +0200 action: avoid starting the timer thread multiple times\n" \
 "12238 2017-04-28 10:27:42 +0200 tours: absolute option added for depart time\n" \
@@ -43,16 +54,5 @@ const char* revlog =
 "12204 2017-04-19 11:03:26 +0200 start all filter extended with loco shunting type\n" \
 "12203 2017-04-19 10:17:04 +0200 start all filter extended with shunting\n" \
 "12202 2017-04-19 10:15:18 +0200 translation merge: sl_latin, pt_BR, nl, sl, fr, de\n" \
-"12201 2017-04-19 07:49:26 +0200 mgbox: fix voor het aanmaken van een mfx loco met een uniek adres (Bert)\n" \
-"12200 2017-04-18 15:50:38 +0200 clock: scalable digital type\n" \
-"12199 2017-04-18 14:22:34 +0200 xmlscript: resolve variable in the sub filename\n" \
-"12198 2017-04-18 13:57:21 +0200 clock: removed the not needed OK button\n" \
-"12197 2017-04-18 13:45:59 +0200 clock: drawing improvements\n" \
-"12196 2017-04-18 12:31:39 +0200 clock: do not show logo in the resizable clock\n" \
-"12195 2017-04-18 11:53:33 +0200 clock: drawing improvements\n" \
-"12194 2017-04-18 11:01:22 +0200 bidib: removed SOD call after receiving a MSG_NODE_NA message to prevent endless looping\n" \
-"12193 2017-04-18 10:31:12 +0200 clock: some drawing optimation to save CPU load\n" \
-"12192 2017-04-17 15:47:20 +0200 model: allow csv list for roadnames in startall filter\n" \
-"12191 2017-04-17 15:25:30 +0200 model: memory leak repared for writing occ.xml\n" \
 
 "log end";
