@@ -14,17 +14,17 @@ sudo apt-get install can-utils
 sudo apt-get upgrade
 ```
 /boot/config.txt editieren
-# uncomment
+\# uncomment
 dtparam=spi=on
-
-# add
+\# add
 dtoverlay=mcp2515-can0,oscillator=16000000,interrupt=25
 dtoverlay=spi-bcm2835-overlay
-
-# reboot
+```
+reboot
 ```
 sudo shutdown -h now
 ```
+CAN Interface konfigurieren
 ```
 ip link set can0 up type can bitrate 250000 restart-ms 100
 ```
@@ -43,4 +43,11 @@ geraet
  .hardvers=RPi,3
 EOF
 ```
-
+can2lan herunterladen und starten
+```
+cd
+git clone https://github.com/GBert/railroad.git
+cd rairoad/can2udp/src
+make
+./can2lan -mvf -c /var/www/html
+```
