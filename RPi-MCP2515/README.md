@@ -8,6 +8,8 @@ RPI-CAN/I2C Adapter mit galv. Trennung
 Nutzung
 -------
 
+Mit dem I2C Interface kann man die preiswerten [PI02](http://wiki.rocrail.net/doku.php?id=gca_pi02-de) nutzen.
+
 ```
 sudo apt-get update
 sudo apt-get install can-utils
@@ -15,9 +17,9 @@ sudo apt-get upgrade
 ```
 /boot/config.txt editieren
 ```
-# uncomment
+; uncomment
 dtparam=spi=on
-# add
+; add
 dtoverlay=mcp2515-can0,oscillator=16000000,interrupt=25
 dtoverlay=spi-bcm2835-overlay
 ```
