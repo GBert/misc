@@ -1,5 +1,4 @@
 EESchema Schematic File Version 2
-LIBS:mfx-link2-rescue
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -251,7 +250,7 @@ U 1 1 58FE5EB8
 P 9975 2700
 F 0 "P8" H 9975 2950 50  0000 C CNN
 F 1 "IBT-2" H 9975 2450 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_2x04" H 9975 1500 50  0001 C CNN
+F 2 "Socket_Strips:Socket_Strip_Straight_2x04" H 9975 1500 50  0001 C CNN
 F 3 "" H 9975 1500 50  0000 C CNN
 	1    9975 2700
 	1    0    0    -1  
