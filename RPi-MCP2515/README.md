@@ -9,7 +9,7 @@ Nutzung
 -------
 
 Mit dem I2C Interface kann man die preiswerten [PI02](http://wiki.rocrail.net/doku.php?id=gca_pi02-de) nutzen.
-pio-i2c-udp setzt &Auml;nderungen in das M\*rklin Format um.
+pio-i2c-udp setzt Events in das M\*rklin Format um und stellt sich als S88 dar.
 
 CAN Nutzung vorbereiten
 ```
@@ -48,7 +48,7 @@ geraet
  .hardvers=RPi,3
 EOF
 ```
-can2lan herunterladen und starten
+can2lan herunter laden und starten
 ```
 cd
 git clone https://github.com/GBert/railroad.git
