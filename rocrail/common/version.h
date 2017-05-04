@@ -1,9 +1,17 @@
 const int revisionnr = 
-12254
+12262
 ;
 const char* commithash = 
-"95f79ba6fff297a1cc5261807c703fbbcc8936b6";
+"c5bf4dfe7c4397cd4ac9980d35719b3e69add53d";
 const char* revlog = 
+"12262 2017-05-04 15:15:41 +0200 z21: revert correction for evaluating LAN_X_TURNOUT_INFO\n" \
+"12261 2017-05-04 07:49:10 +0200 schedules: broadcast the recordtime reset to the clients\n" \
+"12260 2017-05-03 10:58:04 +0200 mrc: removed library\n" \
+"12259 2017-05-03 10:41:30 +0200 schedule time recording option\n" \
+"12258 2017-05-03 07:54:47 +0200 free prev block on enter plus/min option added\n" \
+"12257 2017-05-02 16:38:42 +0200 FIX: show bidib bus number in hex (Lothar)\n" \
+"12256 2017-05-02 08:39:26 +0200 model: fix for not processing signal events\n" \
+"12255 2017-05-02 08:20:30 +0200 item: show bus as hex in tooltip if > 0xffff\n" \
 "12254 2017-05-01 14:45:27 +0200 route: check command type for isSet\n" \
 "12253 2017-05-01 14:35:08 +0200 model: trace correction\n" \
 "12252 2017-05-01 14:19:55 +0200 switchdialog: usage panel added\n" \
@@ -46,13 +54,5 @@ const char* revlog =
 "12215 2017-04-22 10:12:35 +0200 signal: normalized flip and aspect nr\n" \
 "12214 2017-04-21 17:01:27 +0200 schedule: ignore block wait only if loco uses schedule time\n" \
 "12213 2017-04-21 15:19:35 +0200 location: disregard none active locos in case of minocc and fifo\n" \
-"12212 2017-04-21 14:05:55 +0200 schedules: a regular stop with wait set to zero, and time processing relative, ist set automatically to 00:01\n" \
-"12211 2017-04-21 11:17:37 +0200 signal: fix for state as aspectnr (linear)\n" \
-"12210 2017-04-21 08:20:21 +0200 locdialog: layout improvement\n" \
-"12209 2017-04-21 07:42:03 +0200 locdialog: fix for class length\n" \
-"12208 2017-04-20 11:52:40 +0200 xmlscript: support for model commands\n" \
-"12207 2017-04-20 11:33:50 +0200 item: show in stageblock also the total number of sections\n" \
-"12206 2017-04-20 10:40:53 +0200 schedule: check for wait in the schedule and ignore the block wait flag\n" \
-"12205 2017-04-19 15:17:59 +0200 clock: offset corrections\n" \
 
 "log end";
