@@ -122,16 +122,4 @@ struct loco_data_t {
     UT_hash_handle hh;
 };
 
-static const char *loco_function_string [] = {
-    " ",
-    "Licht",
-    "ka",
-    "ka",
-    "ka",
-    "ka",
-    "ka",
-    "ka",
-    "ka"
-};
-
 #endif /* _CS2_CONFIG_H_ */

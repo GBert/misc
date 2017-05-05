@@ -36,6 +36,18 @@ unsigned char pre_other[] = { 0x02, 0xc5, 0x00 };
 
 static char *I2C_DEF_PATH = "/sys/bus/i2c/devices/1-0050/eeprom";
 
+static const char *loco_function_string [] = {
+    " ",
+    "Licht",
+    "ka",
+    "ka",
+    "ka",
+    "ka",
+    "ka",
+    "ka",
+    "ka"
+};
+
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -v -f\n", prg);
     fprintf(stderr, "   Version 0.2\n\n");
