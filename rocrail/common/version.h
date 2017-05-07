@@ -1,9 +1,15 @@
 const int revisionnr = 
-12266
+12272
 ;
 const char* commithash = 
-"6843f3791478fdf123ae8877ab9126c1b2e80460";
+"4b70974207977aface7a43642b99e5cf5386c46f";
 const char* revlog = 
+"12272 2017-05-07 11:43:38 +0200 rocpro: layout corrections\n" \
+"12271 2017-05-07 11:30:03 +0200 rocpro: layout corrections\n" \
+"12270 2017-05-07 10:44:29 +0200 rocpro: colaps and expand buttons added\n" \
+"12269 2017-05-07 10:30:10 +0200 rocpro: units and range added to the info\n" \
+"12268 2017-05-07 08:43:32 +0200 rocpro: DecoderDB button added\n" \
+"12267 2017-05-07 08:11:06 +0200 rocpro: DecoderDB categories\n" \
 "12266 2017-05-06 13:53:12 +0200 locdialog: fix for exporting a single loco\n" \
 "12265 2017-05-06 12:11:10 +0200 rocpro: DecoderDB support added (WIP)\n" \
 "12264 2017-05-06 11:29:44 +0200 rocpro: DecoderDB support added (WIP)\n" \
@@ -48,11 +54,5 @@ const char* revlog =
 "12225 2017-04-23 14:02:25 +0200 schedule: minimal wait option added in the entries\n" \
 "12224 2017-04-23 11:24:15 +0200 control: catch commands if not initialized\n" \
 "12223 2017-04-23 11:20:41 +0200 output: check if the control is already initialized before send a command\n" \
-"12222 2017-04-23 10:00:16 +0200 tracedlg: handshake fix for overflow\n" \
-"12221 2017-04-23 09:01:46 +0200 tracedlg: allow free text in the object type field\n" \
-"12220 2017-04-23 08:22:37 +0200 tracedlg: limit nr of lines to 1200 appr. 100K\n" \
-"12219 2017-04-22 16:21:41 +0200 in: fix for checking schedule wait at in\n" \
-"12218 2017-04-22 11:45:02 +0200 block: in action state added (same as occupied)\n" \
-"12217 2017-04-22 11:40:34 +0200 blockdialog: in added for actions control\n" \
 
 "log end";
