@@ -6,7 +6,7 @@
 
 / {
 	compatible = "A5-V11", "ralink,rt5350-soc";
-	model = "A5-V11 (8M)";
+	model = "A5-V11";
 
 	gpio-leds {
 		compatible = "gpio-leds";
