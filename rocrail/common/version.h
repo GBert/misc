@@ -1,9 +1,13 @@
 const int revisionnr = 
-12262
+12266
 ;
 const char* commithash = 
-"c5bf4dfe7c4397cd4ac9980d35719b3e69add53d";
+"6843f3791478fdf123ae8877ab9126c1b2e80460";
 const char* revlog = 
+"12266 2017-05-06 13:53:12 +0200 locdialog: fix for exporting a single loco\n" \
+"12265 2017-05-06 12:11:10 +0200 rocpro: DecoderDB support added (WIP)\n" \
+"12264 2017-05-06 11:29:44 +0200 rocpro: DecoderDB support added (WIP)\n" \
+"12263 2017-05-05 15:35:58 +0200 translation merge: de, nl, sl\n" \
 "12262 2017-05-04 15:15:41 +0200 z21: revert correction for evaluating LAN_X_TURNOUT_INFO\n" \
 "12261 2017-05-04 07:49:10 +0200 schedules: broadcast the recordtime reset to the clients\n" \
 "12260 2017-05-03 10:58:04 +0200 mrc: removed library\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12219 2017-04-22 16:21:41 +0200 in: fix for checking schedule wait at in\n" \
 "12218 2017-04-22 11:45:02 +0200 block: in action state added (same as occupied)\n" \
 "12217 2017-04-22 11:40:34 +0200 blockdialog: in added for actions control\n" \
-"12216 2017-04-22 11:21:44 +0200 bidibutils: some more feature descriptions added\n" \
-"12215 2017-04-22 10:12:35 +0200 signal: normalized flip and aspect nr\n" \
-"12214 2017-04-21 17:01:27 +0200 schedule: ignore block wait only if loco uses schedule time\n" \
-"12213 2017-04-21 15:19:35 +0200 location: disregard none active locos in case of minocc and fifo\n" \
 
 "log end";
