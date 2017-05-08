@@ -3,8 +3,7 @@ STM32 SLCAN
 
 using libopencm3 (real OpenSource - no questionable STMicroelectronics License) to build cheapest CAN Adapter ever:
 
-![STM32F103C8T6 microcontroller development board]
-(https://github.com/GBert/misc/raw/master/stm32-slcan/pictures/stm32f103c8t6_dev_pinout.gif)
+![STM32F103C8T6 microcontroller development board](https://github.com/GBert/misc/raw/master/stm32-slcan/pictures/stm32f103c8t6_dev_pinout.gif)
 
 Why Serial (SLCAN) and not USB ?
 --------------------------------
@@ -12,8 +11,7 @@ it's not possible to use CAN and USB at the same time on STM32F103
 
 Schematic
 ---------
-![Cheapest CAN Interface ever]
-(https://github.com/GBert/misc/raw/master/stm32-slcan/pictures/stm32-slcan.png)
+![Cheapest CAN Interface ever](https://github.com/GBert/misc/raw/master/stm32-slcan/pictures/stm32-slcan.png)
 
 either use MCP2562 or ISO1050 transceiver - not both !
 
