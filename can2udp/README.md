@@ -11,8 +11,8 @@ to emulate the CS2 (or more specific the CAN gateway of the CS2).
 The other files are for testing or pre-alpha state.
 
 ### Using
-<pre><code>
-Usage: can2udp -l \<port\> -d \<port\> -i \<can interface\>
+```
+Usage: can2udp -l <port\> -d \<port\> -i \<can interface\>
    Version 0.92
          -l \<port\>           listening UDP port for the server - default 15731
          -d \<port\>           destination UDP port for the server - default 15730
@@ -20,7 +20,7 @@ Usage: can2udp -l \<port\> -d \<port\> -i \<can interface\>
          -i \<can int\>        can interface - default can0
          -f                  running in foreground
          -v                  verbose output (in foreground)
-</pre></code>
+```
 <pre><code>
 Usage: can2lan -c \<config_dir\> -u \<udp_port\> -t \<tcp_port\> -d \<udp_dest_port\> -i \<can interface\>
    Version 1.2
