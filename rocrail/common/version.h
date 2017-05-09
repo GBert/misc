@@ -1,9 +1,17 @@
 const int revisionnr = 
-12272
+12280
 ;
 const char* commithash = 
-"4b70974207977aface7a43642b99e5cf5386c46f";
+"6a6f3233dd21c36792d190630ad7a8ff1e23fe23";
 const char* revlog = 
+"12280 2017-05-09 08:32:02 +0200 loc: check if route/block maxkmh is not bigger then the loco maxkmh\n" \
+"12279 2017-05-08 15:51:09 +0200 loc: only use the dir flag at event in case this attribute is set\n" \
+"12278 2017-05-08 14:50:15 +0200 rocpro: esure root is visible after expand all\n" \
+"12277 2017-05-08 10:53:14 +0200 rocrailinidlg: decpath added\n" \
+"12276 2017-05-08 10:44:55 +0200 rocpro: read decoder file from server\n" \
+"12275 2017-05-08 09:46:38 +0200 translation merge: de, nl, pt_BR\n" \
+"12274 2017-05-08 08:25:58 +0200 rocpro: select the fitting language fromm the DecoderDB template\n" \
+"12273 2017-05-07 16:52:55 +0200 loco tyoe battery added\n" \
 "12272 2017-05-07 11:43:38 +0200 rocpro: layout corrections\n" \
 "12271 2017-05-07 11:30:03 +0200 rocpro: layout corrections\n" \
 "12270 2017-05-07 10:44:29 +0200 rocpro: colaps and expand buttons added\n" \
@@ -46,13 +54,5 @@ const char* revlog =
 "12233 2017-04-26 11:41:26 +0200 scheduledialog: layout corrections\n" \
 "12232 2017-04-26 07:40:16 +0200 schedules: no minwait in the first entry\n" \
 "12231 2017-04-25 11:11:00 +0200 basedlg: fix for missing cast\n" \
-"12230 2017-04-25 10:56:14 +0200 translation merge: sr_latin, de, sl, pt_BR, nl\n" \
-"12229 2017-04-24 11:02:07 +0200 scheduledialog: fix for modify minwait\n" \
-"12228 2017-04-24 07:17:17 +0200 output: stay on in case of flip and buttongroup\n" \
-"12227 2017-04-23 16:16:42 +0200 output: button group fix\n" \
-"12226 2017-04-23 14:03:29 +0200 bidib: trace improvements\n" \
-"12225 2017-04-23 14:02:25 +0200 schedule: minimal wait option added in the entries\n" \
-"12224 2017-04-23 11:24:15 +0200 control: catch commands if not initialized\n" \
-"12223 2017-04-23 11:20:41 +0200 output: check if the control is already initialized before send a command\n" \
 
 "log end";
