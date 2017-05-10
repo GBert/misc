@@ -1,9 +1,11 @@
 const int revisionnr = 
-12280
+12282
 ;
 const char* commithash = 
-"6a6f3233dd21c36792d190630ad7a8ff1e23fe23";
+"aa8e1ac9e56d977393e8acf19950afa1384a1d1e";
 const char* revlog = 
+"12282 2017-05-09 16:41:11 +0200 tracing corrections\n" \
+"12281 2017-05-09 11:25:24 +0200 rocpro: try to determine the decdoder type for DecoderDB templates\n" \
 "12280 2017-05-09 08:32:02 +0200 loc: check if route/block maxkmh is not bigger then the loco maxkmh\n" \
 "12279 2017-05-08 15:51:09 +0200 loc: only use the dir flag at event in case this attribute is set\n" \
 "12278 2017-05-08 14:50:15 +0200 rocpro: esure root is visible after expand all\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12235 2017-04-27 15:21:59 +0200 action: check if the actionctrl is set\n" \
 "12234 2017-04-27 07:55:59 +0200 signaldialog: label correction\n" \
 "12233 2017-04-26 11:41:26 +0200 scheduledialog: layout corrections\n" \
-"12232 2017-04-26 07:40:16 +0200 schedules: no minwait in the first entry\n" \
-"12231 2017-04-25 11:11:00 +0200 basedlg: fix for missing cast\n" \
 
 "log end";
