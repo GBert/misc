@@ -1,9 +1,13 @@
 const int revisionnr = 
-12282
+12286
 ;
 const char* commithash = 
-"aa8e1ac9e56d977393e8acf19950afa1384a1d1e";
+"23fb5f3e248d8fd947b5597f84a750befbdb1208";
 const char* revlog = 
+"12286 2017-05-11 07:03:54 +0200 basedlg: show bus as hex in the index in case its bigger then 0xFFFF\n" \
+"12285 2017-05-10 15:47:23 +0200 rocpro: cvGroup DecoderDB support added\n" \
+"12284 2017-05-10 10:23:03 +0200 wrapper: default no tracing active in rocview\n" \
+"12283 2017-05-10 09:43:31 +0200 timed reset signals to red in routes\n" \
 "12282 2017-05-09 16:41:11 +0200 tracing corrections\n" \
 "12281 2017-05-09 11:25:24 +0200 rocpro: try to determine the decdoder type for DecoderDB templates\n" \
 "12280 2017-05-09 08:32:02 +0200 loc: check if route/block maxkmh is not bigger then the loco maxkmh\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12239 2017-04-28 11:16:27 +0200 action: avoid starting the timer thread multiple times\n" \
 "12238 2017-04-28 10:27:42 +0200 tours: absolute option added for depart time\n" \
 "12237 2017-04-28 07:54:25 +0200 schedules: tour times always absolute\n" \
-"12236 2017-04-28 07:53:48 +0200 feedbackdialog: show bus also in hex\n" \
-"12235 2017-04-27 15:21:59 +0200 action: check if the actionctrl is set\n" \
-"12234 2017-04-27 07:55:59 +0200 signaldialog: label correction\n" \
-"12233 2017-04-26 11:41:26 +0200 scheduledialog: layout corrections\n" \
 
 "log end";
