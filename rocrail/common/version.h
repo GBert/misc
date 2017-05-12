@@ -1,9 +1,10 @@
 const int revisionnr = 
-12286
+12287
 ;
 const char* commithash = 
-"23fb5f3e248d8fd947b5597f84a750befbdb1208";
+"9f98bc9df23939f6e7fd55f613dc63421f7e0a57";
 const char* revlog = 
+"12287 2017-05-12 15:51:53 +0200 z21: check and process light in loco command\n" \
 "12286 2017-05-11 07:03:54 +0200 basedlg: show bus as hex in the index in case its bigger then 0xFFFF\n" \
 "12285 2017-05-10 15:47:23 +0200 rocpro: cvGroup DecoderDB support added\n" \
 "12284 2017-05-10 10:23:03 +0200 wrapper: default no tracing active in rocview\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12240 2017-04-28 14:45:50 +0200 action: allways use an actionctrl on exec\n" \
 "12239 2017-04-28 11:16:27 +0200 action: avoid starting the timer thread multiple times\n" \
 "12238 2017-04-28 10:27:42 +0200 tours: absolute option added for depart time\n" \
-"12237 2017-04-28 07:54:25 +0200 schedules: tour times always absolute\n" \
 
 "log end";
