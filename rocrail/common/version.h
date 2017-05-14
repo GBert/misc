@@ -1,9 +1,15 @@
 const int revisionnr = 
-12287
+12293
 ;
 const char* commithash = 
-"9f98bc9df23939f6e7fd55f613dc63421f7e0a57";
+"5da14ead281025faeff9e1bc50166df9ec1f5048";
 const char* revlog = 
+"12293 2017-05-14 17:34:48 +0200 virtual: removed the timer test\n" \
+"12292 2017-05-14 17:30:55 +0200 bidib, fback, virtual: set the timer in case of position report\n" \
+"12291 2017-05-14 09:30:14 +0200 bidib: support for postion message\n" \
+"12290 2017-05-13 13:15:48 +0200 schedules: fix for minwait\n" \
+"12289 2017-05-13 13:09:57 +0200 loc: trace correction\n" \
+"12288 2017-05-13 07:59:48 +0200 wait: use also maxwaittime if no destination was found\n" \
 "12287 2017-05-12 15:51:53 +0200 z21: check and process light in loco command\n" \
 "12286 2017-05-11 07:03:54 +0200 basedlg: show bus as hex in the index in case its bigger then 0xFFFF\n" \
 "12285 2017-05-10 15:47:23 +0200 rocpro: cvGroup DecoderDB support added\n" \
@@ -48,11 +54,5 @@ const char* revlog =
 "12246 2017-05-01 09:28:01 +0200 node: optional mutex for variables\n" \
 "12245 2017-05-01 08:17:53 +0200 bidib: check at MSG_LC_STAT if its a flat model\n" \
 "12244 2017-04-30 11:34:04 +0200 mrc: switch and loco support added\n" \
-"12243 2017-04-30 10:41:48 +0200 mrc: WIP\n" \
-"12242 2017-04-30 09:45:19 +0200 z21: correction for evaluating LAN_X_TURNOUT_INFO\n" \
-"12241 2017-04-29 10:50:54 +0200 dialogs: show bus also in hex\n" \
-"12240 2017-04-28 14:45:50 +0200 action: allways use an actionctrl on exec\n" \
-"12239 2017-04-28 11:16:27 +0200 action: avoid starting the timer thread multiple times\n" \
-"12238 2017-04-28 10:27:42 +0200 tours: absolute option added for depart time\n" \
 
 "log end";
