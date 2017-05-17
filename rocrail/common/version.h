@@ -1,9 +1,17 @@
 const int revisionnr = 
-12293
+12301
 ;
 const char* commithash = 
-"5da14ead281025faeff9e1bc50166df9ec1f5048";
+"7755d4be8a9a6e2ef1f92c47983fc16ebcfb5528";
 const char* revlog = 
+"12301 2017-05-16 14:35:05 +0200 mcs2: SOD also for s88 bus 2\n" \
+"12300 2017-05-16 12:22:31 +0200 guiframe: show energy percentage in the runtime column\n" \
+"12299 2017-05-16 12:12:50 +0200 loc: broadcast loco properties to the clients if the energy percentage has been changed\n" \
+"12298 2017-05-16 11:59:00 +0200 loc: energy action state added with substate high,middle,low\n" \
+"12297 2017-05-16 08:00:55 +0200 loc: minenergypercentage added for go home\n" \
+"12296 2017-05-16 06:29:28 +0200 action: fix for activating the timer thread\n" \
+"12295 2017-05-15 09:34:18 +0200 loc: fix for f0 for consist members\n" \
+"12294 2017-05-15 07:38:52 +0200 schedule: ignore minwait if no regular stop\n" \
 "12293 2017-05-14 17:34:48 +0200 virtual: removed the timer test\n" \
 "12292 2017-05-14 17:30:55 +0200 bidib, fback, virtual: set the timer in case of position report\n" \
 "12291 2017-05-14 09:30:14 +0200 bidib: support for postion message\n" \
@@ -46,13 +54,5 @@ const char* revlog =
 "12254 2017-05-01 14:45:27 +0200 route: check command type for isSet\n" \
 "12253 2017-05-01 14:35:08 +0200 model: trace correction\n" \
 "12252 2017-05-01 14:19:55 +0200 switchdialog: usage panel added\n" \
-"12251 2017-05-01 13:59:28 +0200 signaldialog: check cmd type in route commands for the usage tab\n" \
-"12250 2017-05-01 12:27:27 +0200 rocrailinidlg: removed mrc from the cs list\n" \
-"12249 2017-05-01 10:37:20 +0200 loc: reject govirtual in case its already running\n" \
-"12248 2017-05-01 10:06:35 +0200 bidib: MSG_LC_STAT use 12 bits for flat addressing\n" \
-"12247 2017-05-01 09:54:55 +0200 model: trace level correction for adjusting the schedule index\n" \
-"12246 2017-05-01 09:28:01 +0200 node: optional mutex for variables\n" \
-"12245 2017-05-01 08:17:53 +0200 bidib: check at MSG_LC_STAT if its a flat model\n" \
-"12244 2017-04-30 11:34:04 +0200 mrc: switch and loco support added\n" \
 
 "log end";
