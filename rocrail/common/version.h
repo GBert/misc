@@ -1,9 +1,11 @@
 const int revisionnr = 
-12301
+12303
 ;
 const char* commithash = 
-"7755d4be8a9a6e2ef1f92c47983fc16ebcfb5528";
+"24b7bb435785b6cf5891c5ba9298bb8476d4cc4d";
 const char* revlog = 
+"12303 2017-05-17 10:09:54 +0200 rocpro: support for DecoderDB repeaters\n" \
+"12302 2017-05-17 07:57:40 +0200 translation merge: pt_BR, fr, sl, sr_latin, de, nl\n" \
 "12301 2017-05-16 14:35:05 +0200 mcs2: SOD also for s88 bus 2\n" \
 "12300 2017-05-16 12:22:31 +0200 guiframe: show energy percentage in the runtime column\n" \
 "12299 2017-05-16 12:12:50 +0200 loc: broadcast loco properties to the clients if the energy percentage has been changed\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12256 2017-05-02 08:39:26 +0200 model: fix for not processing signal events\n" \
 "12255 2017-05-02 08:20:30 +0200 item: show bus as hex in tooltip if > 0xffff\n" \
 "12254 2017-05-01 14:45:27 +0200 route: check command type for isSet\n" \
-"12253 2017-05-01 14:35:08 +0200 model: trace correction\n" \
-"12252 2017-05-01 14:19:55 +0200 switchdialog: usage panel added\n" \
 
 "log end";
