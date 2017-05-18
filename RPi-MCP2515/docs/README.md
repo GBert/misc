@@ -13,6 +13,7 @@ IC = IF * CTR = 5.6 mA * 0.5 = 2.8 mA
 Rce = 5V / 2.8mA = 1.8 kOhm
 ```
 
+5kHz schould be fine:
 
 ![RPI- MCP2515](https://github.com/GBert/misc/raw/master/RPi-MCP2515/docs/rpi_gpio-ltv817.jpg)
 
