@@ -26,12 +26,12 @@ IO -> RPi
 ```
 IF = 5 mA
 5V
-(5V - 1.1V) / 5mA = 780 -> 680 Ohm
+R1  = (5V - 1.1V) / 5mA = 780 -> 680 Ohm
 
 12V
-(12 - 1.1V) / 5mA = 2.2 kOhm
+R1' = (12 - 1.1V) / 5mA = 2.2 kOhm
 
 CTR = 50%
 
-R = 3.3V / 2.5mA = 1320 = 1k2 kOhm
+R2 = 3.3V / 2.5mA = 1320 = 1k2 kOhm
 ```
