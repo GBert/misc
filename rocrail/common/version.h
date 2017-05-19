@@ -1,9 +1,11 @@
 const int revisionnr = 
-12308
+12310
 ;
 const char* commithash = 
-"a43662e0379fb502c7964ba6a5c8728d5282ec32";
+"c8a53ccf24973712ed5483aac874a41f68d38902";
 const char* revlog = 
+"12310 2017-05-19 09:39:54 +0200 switchdialog: reset usefieldevents in case sensors are set\n" \
+"12309 2017-05-19 08:48:46 +0200 locdialog, rocpro: filedlg translations\n" \
 "12308 2017-05-19 07:42:36 +0200 translation merge: nl, de, pt_BR\n" \
 "12307 2017-05-19 06:56:15 +0200 switch: reset usefieldevent flag in case it has position sensors\n" \
 "12306 2017-05-18 10:26:55 +0200 rocpro: support for .decdb file extension\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12263 2017-05-05 15:35:58 +0200 translation merge: de, nl, sl\n" \
 "12262 2017-05-04 15:15:41 +0200 z21: revert correction for evaluating LAN_X_TURNOUT_INFO\n" \
 "12261 2017-05-04 07:49:10 +0200 schedules: broadcast the recordtime reset to the clients\n" \
-"12260 2017-05-03 10:58:04 +0200 mrc: removed library\n" \
-"12259 2017-05-03 10:41:30 +0200 schedule time recording option\n" \
 
 "log end";
