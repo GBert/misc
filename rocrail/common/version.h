@@ -1,9 +1,14 @@
 const int revisionnr = 
-12303
+12308
 ;
 const char* commithash = 
-"24b7bb435785b6cf5891c5ba9298bb8476d4cc4d";
+"a43662e0379fb502c7964ba6a5c8728d5282ec32";
 const char* revlog = 
+"12308 2017-05-19 07:42:36 +0200 translation merge: nl, de, pt_BR\n" \
+"12307 2017-05-19 06:56:15 +0200 switch: reset usefieldevent flag in case it has position sensors\n" \
+"12306 2017-05-18 10:26:55 +0200 rocpro: support for .decdb file extension\n" \
+"12305 2017-05-18 08:15:21 +0200 rocpro: search recursive to find the decspec\n" \
+"12304 2017-05-18 07:57:31 +0200 rocpro: settitle on loco select, clear tree before parsing the decspec\n" \
 "12303 2017-05-17 10:09:54 +0200 rocpro: support for DecoderDB repeaters\n" \
 "12302 2017-05-17 07:57:40 +0200 translation merge: pt_BR, fr, sl, sr_latin, de, nl\n" \
 "12301 2017-05-16 14:35:05 +0200 mcs2: SOD also for s88 bus 2\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "12261 2017-05-04 07:49:10 +0200 schedules: broadcast the recordtime reset to the clients\n" \
 "12260 2017-05-03 10:58:04 +0200 mrc: removed library\n" \
 "12259 2017-05-03 10:41:30 +0200 schedule time recording option\n" \
-"12258 2017-05-03 07:54:47 +0200 free prev block on enter plus/min option added\n" \
-"12257 2017-05-02 16:38:42 +0200 FIX: show bidib bus number in hex (Lothar)\n" \
-"12256 2017-05-02 08:39:26 +0200 model: fix for not processing signal events\n" \
-"12255 2017-05-02 08:20:30 +0200 item: show bus as hex in tooltip if > 0xffff\n" \
-"12254 2017-05-01 14:45:27 +0200 route: check command type for isSet\n" \
 
 "log end";
