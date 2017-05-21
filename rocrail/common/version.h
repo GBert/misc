@@ -1,9 +1,13 @@
 const int revisionnr = 
-12310
+12314
 ;
 const char* commithash = 
-"c8a53ccf24973712ed5483aac874a41f68d38902";
+"10335c03870afb4cd2404c9307ca989cbe4e6990";
 const char* revlog = 
+"12314 2017-05-21 17:10:06 +0200 bidib: secack before processing the sensor messages\n" \
+"12313 2017-05-21 08:17:17 +0200 translation merge: de, nl, pt_BR, sl\n" \
+"12312 2017-05-20 15:05:45 +0200 bidib: new error added\n" \
+"12311 2017-05-20 07:54:08 +0200 model: fix for modify schedule\n" \
 "12310 2017-05-19 09:39:54 +0200 switchdialog: reset usefieldevents in case sensors are set\n" \
 "12309 2017-05-19 08:48:46 +0200 locdialog, rocpro: filedlg translations\n" \
 "12308 2017-05-19 07:42:36 +0200 translation merge: nl, de, pt_BR\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12267 2017-05-07 08:11:06 +0200 rocpro: DecoderDB categories\n" \
 "12266 2017-05-06 13:53:12 +0200 locdialog: fix for exporting a single loco\n" \
 "12265 2017-05-06 12:11:10 +0200 rocpro: DecoderDB support added (WIP)\n" \
-"12264 2017-05-06 11:29:44 +0200 rocpro: DecoderDB support added (WIP)\n" \
-"12263 2017-05-05 15:35:58 +0200 translation merge: de, nl, sl\n" \
-"12262 2017-05-04 15:15:41 +0200 z21: revert correction for evaluating LAN_X_TURNOUT_INFO\n" \
-"12261 2017-05-04 07:49:10 +0200 schedules: broadcast the recordtime reset to the clients\n" \
 
 "log end";
