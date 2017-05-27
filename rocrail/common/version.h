@@ -1,9 +1,19 @@
 const int revisionnr = 
-12314
+12324
 ;
 const char* commithash = 
-"10335c03870afb4cd2404c9307ca989cbe4e6990";
+"2332adf5b092b0e20a44212460fc2a22d6da4115";
 const char* revlog = 
+"12324 2017-05-27 09:34:03 +0200 switch: fix for sync delay\n" \
+"12323 2017-05-26 10:09:24 +0200 wrapper: remarks added to the block state constants\n" \
+"12322 2017-05-26 06:56:30 +0200 route: default sw if switchcmd type is not set\n" \
+"12321 2017-05-25 12:10:38 +0200 fback: optional delayed zero code\n" \
+"12320 2017-05-25 07:54:52 +0200 loc: fix for setting energypercentage\n" \
+"12319 2017-05-24 09:27:30 +0200 opendcc: avoid send the switch off command in case of a retry response\n" \
+"12318 2017-05-24 08:58:46 +0200 bidib: set only code, identifier, if the loco address > 0\n" \
+"12317 2017-05-23 11:08:20 +0200 messages: correction for zero code into no code\n" \
+"12316 2017-05-23 08:18:19 +0200 block: ignore zero code option added\n" \
+"12315 2017-05-23 07:06:15 +0200 mgbox: support for Link S88 (Bert)\n" \
 "12314 2017-05-21 17:10:06 +0200 bidib: secack before processing the sensor messages\n" \
 "12313 2017-05-21 08:17:17 +0200 translation merge: de, nl, pt_BR, sl\n" \
 "12312 2017-05-20 15:05:45 +0200 bidib: new error added\n" \
@@ -44,15 +54,5 @@ const char* revlog =
 "12277 2017-05-08 10:53:14 +0200 rocrailinidlg: decpath added\n" \
 "12276 2017-05-08 10:44:55 +0200 rocpro: read decoder file from server\n" \
 "12275 2017-05-08 09:46:38 +0200 translation merge: de, nl, pt_BR\n" \
-"12274 2017-05-08 08:25:58 +0200 rocpro: select the fitting language fromm the DecoderDB template\n" \
-"12273 2017-05-07 16:52:55 +0200 loco tyoe battery added\n" \
-"12272 2017-05-07 11:43:38 +0200 rocpro: layout corrections\n" \
-"12271 2017-05-07 11:30:03 +0200 rocpro: layout corrections\n" \
-"12270 2017-05-07 10:44:29 +0200 rocpro: colaps and expand buttons added\n" \
-"12269 2017-05-07 10:30:10 +0200 rocpro: units and range added to the info\n" \
-"12268 2017-05-07 08:43:32 +0200 rocpro: DecoderDB button added\n" \
-"12267 2017-05-07 08:11:06 +0200 rocpro: DecoderDB categories\n" \
-"12266 2017-05-06 13:53:12 +0200 locdialog: fix for exporting a single loco\n" \
-"12265 2017-05-06 12:11:10 +0200 rocpro: DecoderDB support added (WIP)\n" \
 
 "log end";
