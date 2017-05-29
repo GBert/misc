@@ -1,9 +1,15 @@
 const int revisionnr = 
-12324
+12330
 ;
 const char* commithash = 
-"2332adf5b092b0e20a44212460fc2a22d6da4115";
+"7810ddfd993c0258a175077eb2e8c6048f16bf16";
 const char* revlog = 
+"12330 2017-05-29 15:49:04 +0200 block: use loco enterside for recording mv\n" \
+"12329 2017-05-29 15:14:56 +0200 block: record mv\n" \
+"12328 2017-05-29 11:48:23 +0200 mvtrack: recording option added\n" \
+"12327 2017-05-29 07:21:31 +0200 guiframe: always enable recent workspaces\n" \
+"12326 2017-05-28 16:49:22 +0200 rocguiinidlg: test with scrollbars\n" \
+"12325 2017-05-28 09:15:41 +0200 loc: soft reset improvements\n" \
 "12324 2017-05-27 09:34:03 +0200 switch: fix for sync delay\n" \
 "12323 2017-05-26 10:09:24 +0200 wrapper: remarks added to the block state constants\n" \
 "12322 2017-05-26 06:56:30 +0200 route: default sw if switchcmd type is not set\n" \
@@ -48,11 +54,5 @@ const char* revlog =
 "12283 2017-05-10 09:43:31 +0200 timed reset signals to red in routes\n" \
 "12282 2017-05-09 16:41:11 +0200 tracing corrections\n" \
 "12281 2017-05-09 11:25:24 +0200 rocpro: try to determine the decdoder type for DecoderDB templates\n" \
-"12280 2017-05-09 08:32:02 +0200 loc: check if route/block maxkmh is not bigger then the loco maxkmh\n" \
-"12279 2017-05-08 15:51:09 +0200 loc: only use the dir flag at event in case this attribute is set\n" \
-"12278 2017-05-08 14:50:15 +0200 rocpro: esure root is visible after expand all\n" \
-"12277 2017-05-08 10:53:14 +0200 rocrailinidlg: decpath added\n" \
-"12276 2017-05-08 10:44:55 +0200 rocpro: read decoder file from server\n" \
-"12275 2017-05-08 09:46:38 +0200 translation merge: de, nl, pt_BR\n" \
 
 "log end";
