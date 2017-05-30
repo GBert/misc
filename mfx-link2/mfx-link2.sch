@@ -91,17 +91,6 @@ F 3 "" H 2050 6750 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CONN_01X02 P1
-U 1 1 58FE254A
-P 1450 6750
-F 0 "P1" H 1450 6900 50  0000 C CNN
-F 1 "Rail" V 1550 6750 50  0000 C CNN
-F 2 "Wire_Pads:SolderWirePad_2x_1-5mmDrill" H 1450 6750 50  0001 C CNN
-F 3 "" H 1450 6750 50  0000 C CNN
-	1    1450 6750
-	-1   0    0    1   
-$EndComp
-$Comp
 L D-RESCUE-mfx-link2 D6
 U 1 1 58FE266D
 P 2425 6750
@@ -166,17 +155,6 @@ F 2 "Capacitors_SMD:C_0805_HandSoldering" H 3588 1450 50  0001 C CNN
 F 3 "" H 3550 1600 50  0000 C CNN
 	1    3550 1600
 	1    0    0    -1  
-$EndComp
-$Comp
-L CONN_01X02 P3
-U 1 1 58FE3599
-P 2950 1350
-F 0 "P3" H 2950 1500 50  0000 C CNN
-F 1 "18V" V 3050 1350 50  0000 C CNN
-F 2 "w_conn_pt-1,5:pt_1,5-2-3,5-h" V 2950 1350 50  0001 C CNN
-F 3 "" H 2950 1350 50  0000 C CNN
-	1    2950 1350
-	-1   0    0    1   
 $EndComp
 $Comp
 L PWR_FLAG #FLG01
@@ -542,8 +520,8 @@ L 7805 U4
 U 1 1 5900103C
 P 4150 5200
 F 0 "U4" H 4300 5004 50  0000 C CNN
-F 1 "7805" H 4150 5400 50  0000 C CNN
-F 2 "78xx:TO-252-2Lead" H 4150 5200 50  0001 C CNN
+F 1 "78L05" H 4150 5400 50  0000 C CNN
+F 2 "TO_SOT_Packages_SMD:SOT89-3_Housing_Handsoldering" H 4150 5200 50  0001 C CNN
 F 3 "" H 4150 5200 50  0000 C CNN
 	1    4150 5200
 	1    0    0    -1  
@@ -567,7 +545,7 @@ U 1 1 59091F18
 P 2700 3000
 F 0 "U1" H 2500 3300 50  0000 L CNN
 F 1 "6N137" H 2700 3300 50  0001 L CNN
-F 2 "w_smd_dil:mdip_8" H 2500 2700 50  0001 L CIN
+F 2 "w_pth_circuits:dil_8-300_socket" H 2500 2700 50  0001 L CIN
 F 3 "" H 2700 3000 50  0000 L CNN
 	1    2700 3000
 	1    0    0    -1  
@@ -603,17 +581,6 @@ F 1 "1N4007" H 2850 5250 50  0000 C CNN
 F 2 "w_smd_diode:sod323" H 2850 5150 50  0001 C CNN
 F 3 "" H 2850 5150 50  0000 C CNN
 	1    2850 5150
-	-1   0    0    1   
-$EndComp
-$Comp
-L CONN_01X02 P2
-U 1 1 59002303
-P 1500 4450
-F 0 "P2" H 1500 4600 50  0000 C CNN
-F 1 "Gleisbox" V 1600 4450 50  0000 C CNN
-F 2 "w_conn_pt-1,5:pt_1,5-2-3,5-h" H 1500 4450 50  0001 C CNN
-F 3 "" H 1500 4450 50  0000 C CNN
-	1    1500 4450
 	-1   0    0    1   
 $EndComp
 $Comp
@@ -950,7 +917,7 @@ Connection ~ 3025 6950
 Wire Wire Line
 	3525 6450 3525 6600
 Wire Wire Line
-	1650 6700 1700 6700
+	1375 6700 1700 6700
 Wire Wire Line
 	1700 6700 1700 6550
 Wire Wire Line
@@ -960,7 +927,7 @@ Wire Wire Line
 Wire Wire Line
 	1700 6950 1700 6800
 Wire Wire Line
-	1700 6800 1650 6800
+	1700 6800 1375 6800
 Connection ~ 3525 6550
 Connection ~ 3525 6950
 Wire Wire Line
@@ -979,12 +946,12 @@ Wire Wire Line
 	3550 1825 3550 1750
 Connection ~ 4100 1825
 Wire Wire Line
-	3150 1300 3700 1300
+	2975 1300 3700 1300
 Wire Wire Line
 	3550 1300 3550 1450
 Connection ~ 3550 1300
 Wire Wire Line
-	3150 1400 3300 1400
+	2975 1400 3300 1400
 Wire Wire Line
 	3300 1400 3300 1825
 Connection ~ 3550 1825
@@ -1290,8 +1257,6 @@ Wire Wire Line
 Wire Wire Line
 	5925 5900 5925 5975
 Wire Bus Line
-	600  3800 7000 3800
-Wire Bus Line
 	7000 3800 7000 6350
 Wire Wire Line
 	8550 4850 8200 4850
@@ -1340,4 +1305,54 @@ F 3 "" H 9400 2250 50  0000 C CNN
 $EndComp
 Wire Wire Line
 	2900 4400 5575 4400
+Wire Bus Line
+	7000 3800 1625 3800
+$Comp
+L CONN_01X04 P1
+U 1 1 592D9A8D
+P 1175 6650
+F 0 "P1" H 1175 6900 50  0000 C CNN
+F 1 "CONN_01X04" V 1275 6650 50  0001 C CNN
+F 2 "w_conn_mkds:akl0711,5-4" V 1175 6650 50  0001 C CNN
+F 3 "" H 1175 6650 50  0000 C CNN
+	1    1175 6650
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	1375 6500 1500 6500
+Wire Wire Line
+	1500 6500 1500 6225
+Wire Wire Line
+	1500 6225 1875 6225
+Wire Wire Line
+	1375 6600 1600 6600
+Wire Wire Line
+	1600 6600 1600 6325
+Wire Wire Line
+	1600 6325 1875 6325
+Text Label 1625 6325 0    60   ~ 0
+18V+
+Text Label 1625 6225 0    60   ~ 0
+18V-
+Text Label 2975 1300 0    60   ~ 0
+18V+
+Text Label 2975 1400 0    60   ~ 0
+18V-
+$Comp
+L CONN_01X02 P2
+U 1 1 592E55CE
+P 1500 4450
+F 0 "P2" H 1500 4600 50  0000 C CNN
+F 1 "Gleisbox" V 1600 4450 50  0000 C CNN
+F 2 "w_conn_pt-1,5:pt_1,5-2-3,5-h" V 1500 4450 50  0001 C CNN
+F 3 "" H 1500 4450 50  0000 C CNN
+	1    1500 4450
+	-1   0    0    1   
+$EndComp
+Text Notes 1375 6800 0    60   ~ 0
+Rail
+Text Label 3700 5150 0    60   ~ 0
+VI
+Text Label 4575 5150 2    60   ~ 0
+VO
 $EndSCHEMATC
