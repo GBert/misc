@@ -1,9 +1,13 @@
 const int revisionnr = 
-12330
+12334
 ;
 const char* commithash = 
-"7810ddfd993c0258a175077eb2e8c6048f16bf16";
+"6a82c30366faf19877425ccbc9c342987ec8832f";
 const char* revlog = 
+"12334 2017-05-30 12:36:02 +0200 wait4event: revert\n" \
+"12333 2017-05-30 11:52:59 +0200 wait4event: the Check for free destinations until reaching IN option will be ignored if a schedule is active\n" \
+"12332 2017-05-30 10:07:05 +0200 z21: loconet loco traces added\n" \
+"12331 2017-05-30 08:05:15 +0200 guiframe: wait 2500ms befor starting up the next workspace to give the current server time to shutdown\n" \
 "12330 2017-05-29 15:49:04 +0200 block: use loco enterside for recording mv\n" \
 "12329 2017-05-29 15:14:56 +0200 block: record mv\n" \
 "12328 2017-05-29 11:48:23 +0200 mvtrack: recording option added\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12287 2017-05-12 15:51:53 +0200 z21: check and process light in loco command\n" \
 "12286 2017-05-11 07:03:54 +0200 basedlg: show bus as hex in the index in case its bigger then 0xFFFF\n" \
 "12285 2017-05-10 15:47:23 +0200 rocpro: cvGroup DecoderDB support added\n" \
-"12284 2017-05-10 10:23:03 +0200 wrapper: default no tracing active in rocview\n" \
-"12283 2017-05-10 09:43:31 +0200 timed reset signals to red in routes\n" \
-"12282 2017-05-09 16:41:11 +0200 tracing corrections\n" \
-"12281 2017-05-09 11:25:24 +0200 rocpro: try to determine the decdoder type for DecoderDB templates\n" \
 
 "log end";
