@@ -1,9 +1,10 @@
 const int revisionnr = 
-12334
+12335
 ;
 const char* commithash = 
-"6a82c30366faf19877425ccbc9c342987ec8832f";
+"ca1fac4af2364f9881c78923fdeddec0992a7091";
 const char* revlog = 
+"12335 2017-05-30 22:14:57 +0200 p50x: revert retry flag in case p50x reports power off at switch command...\n" \
 "12334 2017-05-30 12:36:02 +0200 wait4event: revert\n" \
 "12333 2017-05-30 11:52:59 +0200 wait4event: the Check for free destinations until reaching IN option will be ignored if a schedule is active\n" \
 "12332 2017-05-30 10:07:05 +0200 z21: loconet loco traces added\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12288 2017-05-13 07:59:48 +0200 wait: use also maxwaittime if no destination was found\n" \
 "12287 2017-05-12 15:51:53 +0200 z21: check and process light in loco command\n" \
 "12286 2017-05-11 07:03:54 +0200 basedlg: show bus as hex in the index in case its bigger then 0xFFFF\n" \
-"12285 2017-05-10 15:47:23 +0200 rocpro: cvGroup DecoderDB support added\n" \
 
 "log end";
