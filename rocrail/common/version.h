@@ -1,9 +1,11 @@
 const int revisionnr = 
-12335
+12337
 ;
 const char* commithash = 
-"ca1fac4af2364f9881c78923fdeddec0992a7091";
+"f6050021a00c97b759068b50559a126ccee43563";
 const char* revlog = 
+"12337 2017-06-01 10:21:10 +0200 switch: lock und unlock check action\n" \
+"12336 2017-05-31 14:46:02 +0200 scheduledialog: reinit entry pointers\n" \
 "12335 2017-05-30 22:14:57 +0200 p50x: revert retry flag in case p50x reports power off at switch command...\n" \
 "12334 2017-05-30 12:36:02 +0200 wait4event: revert\n" \
 "12333 2017-05-30 11:52:59 +0200 wait4event: the Check for free destinations until reaching IN option will be ignored if a schedule is active\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12290 2017-05-13 13:15:48 +0200 schedules: fix for minwait\n" \
 "12289 2017-05-13 13:09:57 +0200 loc: trace correction\n" \
 "12288 2017-05-13 07:59:48 +0200 wait: use also maxwaittime if no destination was found\n" \
-"12287 2017-05-12 15:51:53 +0200 z21: check and process light in loco command\n" \
-"12286 2017-05-11 07:03:54 +0200 basedlg: show bus as hex in the index in case its bigger then 0xFFFF\n" \
 
 "log end";
