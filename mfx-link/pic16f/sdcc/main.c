@@ -48,7 +48,7 @@ void isr(void) __interrupt(0) {
 	LATC4 ^= 1;
 
 	timer0_counter++;
-	/* kind of state machione
+	/* kind of state machine
 	   to sample two pins */
 	if (timer0_counter & 0x02) {
 	    if (timer0_counter & 0x01) {
@@ -266,12 +266,12 @@ void main(void) {
 
     while (1) {
 	if (counter == 0) {
-	    temp = ad(AD_SENSE);
+	    // temp = ad(AD_SENSE);
 	    /* 14mA per digit */
-	    ad_value = temp * 14;
-	    GIE = 0;
+	    // GIE = 0;
+	    ad_value = adc_sense * 14;
 	    temp = adc_poti;
-	    GIE = 1;
+	    // GIE = 1;
 	    LCD_putcmd(LCD_01_ADDRESS, LCD_CLEAR, 1);
 	    LCD_puts(LCD_01_ADDRESS, "Booster Max=8.0A\0");
 	    LCD_goto(LCD_01_ADDRESS, 2, 1);
