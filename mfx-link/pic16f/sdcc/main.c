@@ -54,7 +54,8 @@ void isr(void) __interrupt(0) {
 	    if (timer0_counter & 0x01) {
 		ADCON0 = (AD_POTI << 2) | 1;
 		ADGO = 1;
-	    } else {
+	    /* check if ADC completed) */
+	    } else if (!ADGO) {
 		adc_poti += ADRESH;
 		adc_poti >>= 1;
 	    }
@@ -62,7 +63,8 @@ void isr(void) __interrupt(0) {
 	    if (timer0_counter & 0x01) {
 		ADCON0 = (AD_SENSE << 2) | 1;
 		ADGO = 1;
-	    } else {
+	    /* check if ADC completed) */
+	    } else if (!ADGO) {
 		adc_sense += ADRESH;
 		adc_sense >>= 1;
 	    }
