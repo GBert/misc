@@ -56,7 +56,8 @@ void isr(void) __interrupt(0) {
 		ADGO = 1;
 	    /* check if ADC completed) */
 	    } else if (!ADGO) {
-		adc_poti += ADRESH;
+		/* use sliding average */
+		adc_poti += ADRESL;
 		adc_poti >>= 1;
 	    }
 	} else {
@@ -65,7 +66,8 @@ void isr(void) __interrupt(0) {
 		ADGO = 1;
 	    /* check if ADC completed) */
 	    } else if (!ADGO) {
-		adc_sense += ADRESH;
+		/* use sliding average */
+		adc_sense += ADRESL;
 		adc_sense >>= 1;
 	    }
 	}
@@ -157,11 +159,7 @@ void ad_init(void) {
     ANSELA = 1 << 2;
     ANSELC = 1 << 0;
     /* right justified ; FOSC/64 ;VREF- GND & VREF+ VDD */
-    ADCON1 = 0b01100000;
-    /* RA2 analog input */
-    ADCON0 = AD_POTI;
-    /* RC0 (AN4) analog input */
-    /* ADCON0 = AD_SENSE; */
+    ADCON1 = 0b11100000;
 }
 
 void uart_init(void) {
@@ -269,11 +267,11 @@ void main(void) {
     while (1) {
 	if (counter == 0) {
 	    // temp = ad(AD_SENSE);
-	    /* 14mA per digit */
-	    // GIE = 0;
+	    /* 14mA per digit / atomic read */
+	    GIE = 0;
 	    ad_value = adc_sense * 14;
 	    temp = adc_poti;
-	    // GIE = 1;
+	    GIE = 1;
 	    LCD_putcmd(LCD_01_ADDRESS, LCD_CLEAR, 1);
 	    LCD_puts(LCD_01_ADDRESS, "Booster Max=8.0A\0");
 	    LCD_goto(LCD_01_ADDRESS, 2, 1);
