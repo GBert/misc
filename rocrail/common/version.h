@@ -1,9 +1,10 @@
 const int revisionnr = 
-12337
+12338
 ;
 const char* commithash = 
-"f6050021a00c97b759068b50559a126ccee43563";
+"b41bcd8e72a6c1a2450b90378053cbc2f10e1808";
 const char* revlog = 
+"12338 2017-06-06 10:47:17 +0200 translation merge: sl, de, nl, pt_BR, es, fr\n" \
 "12337 2017-06-01 10:21:10 +0200 switch: lock und unlock check action\n" \
 "12336 2017-05-31 14:46:02 +0200 scheduledialog: reinit entry pointers\n" \
 "12335 2017-05-30 22:14:57 +0200 p50x: revert retry flag in case p50x reports power off at switch command...\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12291 2017-05-14 09:30:14 +0200 bidib: support for postion message\n" \
 "12290 2017-05-13 13:15:48 +0200 schedules: fix for minwait\n" \
 "12289 2017-05-13 13:09:57 +0200 loc: trace correction\n" \
-"12288 2017-05-13 07:59:48 +0200 wait: use also maxwaittime if no destination was found\n" \
 
 "log end";
