@@ -1,9 +1,12 @@
 const int revisionnr = 
-12338
+12341
 ;
 const char* commithash = 
-"b41bcd8e72a6c1a2450b90378053cbc2f10e1808";
+"5d6cddc1c205e76a8667b2c7602dd86e8fbea85b";
 const char* revlog = 
+"12341 2017-06-07 21:53:14 +0200 zoomdlg: fix or work around for mingw\n" \
+"12340 2017-06-07 11:43:39 +0200 zoomdlg: preset buttons for 50, 75 and 100%\n" \
+"12339 2017-06-07 06:59:02 +0200 mgbox: correction of the index uid array link s88 (Bert)\n" \
 "12338 2017-06-06 10:47:17 +0200 translation merge: sl, de, nl, pt_BR, es, fr\n" \
 "12337 2017-06-01 10:21:10 +0200 switch: lock und unlock check action\n" \
 "12336 2017-05-31 14:46:02 +0200 scheduledialog: reinit entry pointers\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12294 2017-05-15 07:38:52 +0200 schedule: ignore minwait if no regular stop\n" \
 "12293 2017-05-14 17:34:48 +0200 virtual: removed the timer test\n" \
 "12292 2017-05-14 17:30:55 +0200 bidib, fback, virtual: set the timer in case of position report\n" \
-"12291 2017-05-14 09:30:14 +0200 bidib: support for postion message\n" \
-"12290 2017-05-13 13:15:48 +0200 schedules: fix for minwait\n" \
-"12289 2017-05-13 13:09:57 +0200 loc: trace correction\n" \
 
 "log end";
