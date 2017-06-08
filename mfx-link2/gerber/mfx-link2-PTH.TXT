@@ -1,5 +1,5 @@
 M48
-;DRILL file {KiCad 4.0.2+dfsg1-stable} date Do 08 Jun 2017 16:22:21 CEST
+;DRILL file {KiCad 4.0.2+dfsg1-stable} date Do 08 Jun 2017 17:03:57 CEST
 ;FORMAT={-:-/ absolute / metric / decimal}
 FMAT,2
 METRIC,TZ

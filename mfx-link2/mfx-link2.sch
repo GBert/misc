@@ -1,5 +1,4 @@
 EESchema Schematic File Version 2
-LIBS:mfx-link2-rescue
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -329,9 +328,9 @@ Text Label 4675 2925 2    60   ~ 0
 RxD
 Text Label 4675 3025 2    60   ~ 0
 TxD
-Text Label 5650 2925 2    60   ~ 0
-SDA
 Text Label 5650 3025 2    60   ~ 0
+SDA
+Text Label 5650 2925 2    60   ~ 0
 SCL
 Text Label 6575 2300 0    60   ~ 0
 SDA
