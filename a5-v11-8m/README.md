@@ -3,3 +3,58 @@ A5-V11 8 MByte flash
 
 scripts/feeds install luci-app-openvpn
 
+Create image
+------------
+```
+# mtd0.img u-boot
+# mtd1.img u-boot-Env
+# mtd2.img factory
+cat u-boot.img u-boot-env.img factory.img lede-ramips-rt305x-a5-v11-8m-squashfs-sysupgrade.bin > combined_image.img
+```
+
+Backup
+------
+
+supported flash chips by u-boot
+```
+AT25DF321
+AT26DF161
+FL016AIF
+FL064AIF
+MX25L1605D
+MX25L3205D
+MX25L6406E
+MX25L12835F
+MX25L25635F
+MX25L51245G
+S25FL256S
+S25FL128P
+S25FL129P
+S25FL164K
+S25FL132K
+S25FL032P
+S25FL064P
+S25FL116K
+F25L64QA
+F25L32QA
+EN25F16
+EN25Q32B
+EN25F32
+EN25F64
+EN25Q64
+W25Q32BV
+W25X32VS
+W25Q64BV
+W25Q128FV
+W25Q256FV
+N25Q032A13ESE40F
+N25Q064A13ESE40F
+N25Q128A13ESE40F
+N25Q256A
+MT25QL512AB
+GD25Q32B
+GD25Q64B
+GD25Q128C
+Pm25LQ032
+```
+
