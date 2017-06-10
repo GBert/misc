@@ -1,9 +1,13 @@
 const int revisionnr = 
-12341
+12345
 ;
 const char* commithash = 
-"5d6cddc1c205e76a8667b2c7602dd86e8fbea85b";
+"7d63875a93f3afaed4b6218a12a3eb7b854c5efa";
 const char* revlog = 
+"12345 2017-06-10 11:04:52 +0200 wlanmausdlg: fix for help link\n" \
+"12344 2017-06-10 10:51:18 +0200 wlanmausdlg added\n" \
+"12343 2017-06-09 17:05:27 +0200 control: if no switch is found by ID try to find a route with this ID\n" \
+"12342 2017-06-08 09:15:27 +0200 switch: checkactions on occ event\n" \
 "12341 2017-06-07 21:53:14 +0200 zoomdlg: fix or work around for mingw\n" \
 "12340 2017-06-07 11:43:39 +0200 zoomdlg: preset buttons for 50, 75 and 100%\n" \
 "12339 2017-06-07 06:59:02 +0200 mgbox: correction of the index uid array link s88 (Bert)\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12298 2017-05-16 11:59:00 +0200 loc: energy action state added with substate high,middle,low\n" \
 "12297 2017-05-16 08:00:55 +0200 loc: minenergypercentage added for go home\n" \
 "12296 2017-05-16 06:29:28 +0200 action: fix for activating the timer thread\n" \
-"12295 2017-05-15 09:34:18 +0200 loc: fix for f0 for consist members\n" \
-"12294 2017-05-15 07:38:52 +0200 schedule: ignore minwait if no regular stop\n" \
-"12293 2017-05-14 17:34:48 +0200 virtual: removed the timer test\n" \
-"12292 2017-05-14 17:30:55 +0200 bidib, fback, virtual: set the timer in case of position report\n" \
 
 "log end";
