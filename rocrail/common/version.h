@@ -1,9 +1,11 @@
 const int revisionnr = 
-12345
+12347
 ;
 const char* commithash = 
-"7d63875a93f3afaed4b6218a12a3eb7b854c5efa";
+"84dfa97f291f15dbf28941537ae581f71c278976";
 const char* revlog = 
+"12347 2017-06-11 14:08:09 +0200 wmz21: trace fixes\n" \
+"12346 2017-06-11 09:33:10 +0200 route: number added for mapping switch commands from wlanmaus\n" \
 "12345 2017-06-10 11:04:52 +0200 wlanmausdlg: fix for help link\n" \
 "12344 2017-06-10 10:51:18 +0200 wlanmausdlg added\n" \
 "12343 2017-06-09 17:05:27 +0200 control: if no switch is found by ID try to find a route with this ID\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12300 2017-05-16 12:22:31 +0200 guiframe: show energy percentage in the runtime column\n" \
 "12299 2017-05-16 12:12:50 +0200 loc: broadcast loco properties to the clients if the energy percentage has been changed\n" \
 "12298 2017-05-16 11:59:00 +0200 loc: energy action state added with substate high,middle,low\n" \
-"12297 2017-05-16 08:00:55 +0200 loc: minenergypercentage added for go home\n" \
-"12296 2017-05-16 06:29:28 +0200 action: fix for activating the timer thread\n" \
 
 "log end";
