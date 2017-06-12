@@ -1,9 +1,11 @@
 const int revisionnr = 
-12347
+12349
 ;
 const char* commithash = 
-"84dfa97f291f15dbf28941537ae581f71c278976";
+"cdf1c2fd98e61d4b1c3bd64f62d174b8b708b102";
 const char* revlog = 
+"12349 2017-06-11 18:18:50 +0200 action: crash fix for timed actions\n" \
+"12348 2017-06-11 16:29:50 +0200 switchdialog: layout corrections\n" \
 "12347 2017-06-11 14:08:09 +0200 wmz21: trace fixes\n" \
 "12346 2017-06-11 09:33:10 +0200 route: number added for mapping switch commands from wlanmaus\n" \
 "12345 2017-06-10 11:04:52 +0200 wlanmausdlg: fix for help link\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12302 2017-05-17 07:57:40 +0200 translation merge: pt_BR, fr, sl, sr_latin, de, nl\n" \
 "12301 2017-05-16 14:35:05 +0200 mcs2: SOD also for s88 bus 2\n" \
 "12300 2017-05-16 12:22:31 +0200 guiframe: show energy percentage in the runtime column\n" \
-"12299 2017-05-16 12:12:50 +0200 loc: broadcast loco properties to the clients if the energy percentage has been changed\n" \
-"12298 2017-05-16 11:59:00 +0200 loc: energy action state added with substate high,middle,low\n" \
 
 "log end";
