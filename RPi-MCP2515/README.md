@@ -52,7 +52,7 @@ can2lan herunter laden und starten
 ```
 cd
 git clone https://github.com/GBert/railroad.git
-cd rairoad/can2udp/src
+cd railroad/can2udp/src
 make
 ./can2lan -mvf -c /var/www/html
 ```
