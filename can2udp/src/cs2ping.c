@@ -120,6 +120,8 @@ int main(int argc, char **argv) {
     const int on = 1;
 
     memset(&trigger_data, 0, sizeof(trigger_data));
+    /* normally we go into background */
+    trigger_data.background = 1;
 
     destination_port = UDPPORT;
 
