@@ -47,6 +47,7 @@ define Package/can2udp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/clone-cs2-config $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/clone-cs2-trigger $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/clone-ms2-loco $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/cs2ping $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/gb2-update $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ir-tester $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lan-schnitte $(1)/usr/bin/
@@ -58,6 +59,7 @@ define Package/can2udp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pio-i2c-udp $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/wake-up-links88 $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/cs2ping.init $(1)/etc/init.d/cs2ping
 #	$(INSTALL_BIN) ./files/can2lan.init_carambola $(1)/etc/init.d/can2lan
 	$(INSTALL_BIN) ./files/can2lan.init $(1)/etc/init.d/can2lan
 ifneq (,$(findstring carambola,$(CONFIG_TARGET_PROFILE)))
