@@ -1,9 +1,18 @@
 const int revisionnr = 
-12349
+12358
 ;
 const char* commithash = 
-"cdf1c2fd98e61d4b1c3bd64f62d174b8b708b102";
+"a9fbd660f526520206201ca6826ac95a45561150";
 const char* revlog = 
+"12358 2017-06-14 10:12:17 +0200 schedule: regard the IN time in case of minwait > 0\n" \
+"12357 2017-06-14 09:56:03 +0200 app: removed trace with same content as following traces in case of memory check\n" \
+"12356 2017-06-14 09:34:11 +0200 app: fix for taking over memory trace level from the rocrail.ini\n" \
+"12355 2017-06-14 09:26:52 +0200 app: fix for taking over memory trace level from the rocrail.ini\n" \
+"12354 2017-06-13 11:14:05 +0200 app: only trace memory if it has increased\n" \
+"12353 2017-06-13 10:24:32 +0200 app: memory watch added\n" \
+"12352 2017-06-12 16:30:51 +0200 analyse: accept signal aspect command in route (Lothar)\n" \
+"12351 2017-06-12 12:38:58 +0200 wlanmausedlg: layout correction\n" \
+"12350 2017-06-12 09:31:11 +0200 route: fix for CTC logic\n" \
 "12349 2017-06-11 18:18:50 +0200 action: crash fix for timed actions\n" \
 "12348 2017-06-11 16:29:50 +0200 switchdialog: layout corrections\n" \
 "12347 2017-06-11 14:08:09 +0200 wmz21: trace fixes\n" \
@@ -45,14 +54,5 @@ const char* revlog =
 "12311 2017-05-20 07:54:08 +0200 model: fix for modify schedule\n" \
 "12310 2017-05-19 09:39:54 +0200 switchdialog: reset usefieldevents in case sensors are set\n" \
 "12309 2017-05-19 08:48:46 +0200 locdialog, rocpro: filedlg translations\n" \
-"12308 2017-05-19 07:42:36 +0200 translation merge: nl, de, pt_BR\n" \
-"12307 2017-05-19 06:56:15 +0200 switch: reset usefieldevent flag in case it has position sensors\n" \
-"12306 2017-05-18 10:26:55 +0200 rocpro: support for .decdb file extension\n" \
-"12305 2017-05-18 08:15:21 +0200 rocpro: search recursive to find the decspec\n" \
-"12304 2017-05-18 07:57:31 +0200 rocpro: settitle on loco select, clear tree before parsing the decspec\n" \
-"12303 2017-05-17 10:09:54 +0200 rocpro: support for DecoderDB repeaters\n" \
-"12302 2017-05-17 07:57:40 +0200 translation merge: pt_BR, fr, sl, sr_latin, de, nl\n" \
-"12301 2017-05-16 14:35:05 +0200 mcs2: SOD also for s88 bus 2\n" \
-"12300 2017-05-16 12:22:31 +0200 guiframe: show energy percentage in the runtime column\n" \
 
 "log end";
