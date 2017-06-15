@@ -1,9 +1,12 @@
 const int revisionnr = 
-12358
+12361
 ;
 const char* commithash = 
-"a9fbd660f526520206201ca6826ac95a45561150";
+"d5caca315a6e35b40f9705989291cb041a5bd250";
 const char* revlog = 
+"12361 2017-06-15 10:09:25 +0200 signal: CTC implemented\n" \
+"12360 2017-06-15 09:42:17 +0200 signal: CTC (wip)\n" \
+"12359 2017-06-15 09:41:42 +0200 wlanmausdlg: use a combobox for the target IID\n" \
 "12358 2017-06-14 10:12:17 +0200 schedule: regard the IN time in case of minwait > 0\n" \
 "12357 2017-06-14 09:56:03 +0200 app: removed trace with same content as following traces in case of memory check\n" \
 "12356 2017-06-14 09:34:11 +0200 app: fix for taking over memory trace level from the rocrail.ini\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12314 2017-05-21 17:10:06 +0200 bidib: secack before processing the sensor messages\n" \
 "12313 2017-05-21 08:17:17 +0200 translation merge: de, nl, pt_BR, sl\n" \
 "12312 2017-05-20 15:05:45 +0200 bidib: new error added\n" \
-"12311 2017-05-20 07:54:08 +0200 model: fix for modify schedule\n" \
-"12310 2017-05-19 09:39:54 +0200 switchdialog: reset usefieldevents in case sensors are set\n" \
-"12309 2017-05-19 08:48:46 +0200 locdialog, rocpro: filedlg translations\n" \
 
 "log end";
