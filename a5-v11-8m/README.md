@@ -10,6 +10,7 @@ Create image
 # mtd1.img u-boot-Env
 # mtd2.img factory
 cat u-boot.img u-boot-env.img factory.img lede-ramips-rt305x-a5-v11-8m-squashfs-sysupgrade.bin > combined_image.img
+sudo flashrom -c MX25L6406E/MX25L6408E -p ch341a_spi -w combined_image.img
 ```
 
 Backup
