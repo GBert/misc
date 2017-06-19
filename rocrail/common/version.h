@@ -1,9 +1,10 @@
 const int revisionnr = 
-12371
+12372
 ;
 const char* commithash = 
-"0caaded60cb6532807eefa9bacde37dd5ccb7be3";
+"477fad59994b2ea3f6a9b8055b12f9e612ccdd70";
 const char* revlog = 
+"12372 2017-06-19 10:31:31 +0200 app: faster checking memory usage in case of memory level is activated\n" \
 "12371 2017-06-19 10:20:50 +0200 loc: memory fix for operator command\n" \
 "12370 2017-06-18 09:38:00 +0200 translation merge: de, sl, pt_BR, fr, nl\n" \
 "12369 2017-06-18 09:27:09 +0200 cardlg, operatordlg: FG min button added\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12325 2017-05-28 09:15:41 +0200 loc: soft reset improvements\n" \
 "12324 2017-05-27 09:34:03 +0200 switch: fix for sync delay\n" \
 "12323 2017-05-26 10:09:24 +0200 wrapper: remarks added to the block state constants\n" \
-"12322 2017-05-26 06:56:30 +0200 route: default sw if switchcmd type is not set\n" \
 
 "log end";
