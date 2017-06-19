@@ -1,9 +1,13 @@
 const int revisionnr = 
-12367
+12371
 ;
 const char* commithash = 
-"5c2964974359d2460f8f45c2d0b5f25220aaa16e";
+"0caaded60cb6532807eefa9bacde37dd5ccb7be3";
 const char* revlog = 
+"12371 2017-06-19 10:20:50 +0200 loc: memory fix for operator command\n" \
+"12370 2017-06-18 09:38:00 +0200 translation merge: de, sl, pt_BR, fr, nl\n" \
+"12369 2017-06-18 09:27:09 +0200 cardlg, operatordlg: FG min button added\n" \
+"12368 2017-06-17 12:08:11 +0200 loc: fix for memory leak in case of SBT record search\n" \
 "12367 2017-06-17 09:33:30 +0200 model: memeory leak fix at writing occ.xml\n" \
 "12366 2017-06-16 15:32:06 +0200 powerman: fix for freeing up string tokeniser\n" \
 "12365 2017-06-16 15:03:47 +0200 powerman: fix for multiple free string tokeniser\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12324 2017-05-27 09:34:03 +0200 switch: fix for sync delay\n" \
 "12323 2017-05-26 10:09:24 +0200 wrapper: remarks added to the block state constants\n" \
 "12322 2017-05-26 06:56:30 +0200 route: default sw if switchcmd type is not set\n" \
-"12321 2017-05-25 12:10:38 +0200 fback: optional delayed zero code\n" \
-"12320 2017-05-25 07:54:52 +0200 loc: fix for setting energypercentage\n" \
-"12319 2017-05-24 09:27:30 +0200 opendcc: avoid send the switch off command in case of a retry response\n" \
-"12318 2017-05-24 08:58:46 +0200 bidib: set only code, identifier, if the loco address > 0\n" \
 
 "log end";
