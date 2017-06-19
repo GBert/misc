@@ -1,9 +1,19 @@
 const int revisionnr = 
-12361
+12371
 ;
 const char* commithash = 
-"d5caca315a6e35b40f9705989291cb041a5bd250";
+"0caaded60cb6532807eefa9bacde37dd5ccb7be3";
 const char* revlog = 
+"12371 2017-06-19 10:20:50 +0200 loc: memory fix for operator command\n" \
+"12370 2017-06-18 09:38:00 +0200 translation merge: de, sl, pt_BR, fr, nl\n" \
+"12369 2017-06-18 09:27:09 +0200 cardlg, operatordlg: FG min button added\n" \
+"12368 2017-06-17 12:08:11 +0200 loc: fix for memory leak in case of SBT record search\n" \
+"12367 2017-06-17 09:33:30 +0200 model: memeory leak fix at writing occ.xml\n" \
+"12366 2017-06-16 15:32:06 +0200 powerman: fix for freeing up string tokeniser\n" \
+"12365 2017-06-16 15:03:47 +0200 powerman: fix for multiple free string tokeniser\n" \
+"12364 2017-06-16 11:13:31 +0200 pre2in: check also if the block allows BBT\n" \
+"12363 2017-06-16 09:29:05 +0200 number added to signal, output and switch\n" \
+"12362 2017-06-15 11:25:35 +0200 memory leaks fixes for string tokeniser\n" \
 "12361 2017-06-15 10:09:25 +0200 signal: CTC implemented\n" \
 "12360 2017-06-15 09:42:17 +0200 signal: CTC (wip)\n" \
 "12359 2017-06-15 09:41:42 +0200 wlanmausdlg: use a combobox for the target IID\n" \
@@ -44,15 +54,5 @@ const char* revlog =
 "12324 2017-05-27 09:34:03 +0200 switch: fix for sync delay\n" \
 "12323 2017-05-26 10:09:24 +0200 wrapper: remarks added to the block state constants\n" \
 "12322 2017-05-26 06:56:30 +0200 route: default sw if switchcmd type is not set\n" \
-"12321 2017-05-25 12:10:38 +0200 fback: optional delayed zero code\n" \
-"12320 2017-05-25 07:54:52 +0200 loc: fix for setting energypercentage\n" \
-"12319 2017-05-24 09:27:30 +0200 opendcc: avoid send the switch off command in case of a retry response\n" \
-"12318 2017-05-24 08:58:46 +0200 bidib: set only code, identifier, if the loco address > 0\n" \
-"12317 2017-05-23 11:08:20 +0200 messages: correction for zero code into no code\n" \
-"12316 2017-05-23 08:18:19 +0200 block: ignore zero code option added\n" \
-"12315 2017-05-23 07:06:15 +0200 mgbox: support for Link S88 (Bert)\n" \
-"12314 2017-05-21 17:10:06 +0200 bidib: secack before processing the sensor messages\n" \
-"12313 2017-05-21 08:17:17 +0200 translation merge: de, nl, pt_BR, sl\n" \
-"12312 2017-05-20 15:05:45 +0200 bidib: new error added\n" \
 
 "log end";
