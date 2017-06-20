@@ -1,0 +1,2839 @@
+;-------------------------------------------------------------------------------
+;
+;   The Cowboy Boot Loader for Enhanced PIC12/PIC16
+;
+;   Device Specific Constants
+;
+;   Copyright (c) 2017 Darron M Broad
+;
+;-------------------------------------------------------------------------------
+
+;-------------------------------------------------------------------------------
+;   This file is part of The Cowboy Boot Loader.
+;
+;   The Cowboy Boot Loader is free software: you can redistribute it and/or
+;   modify it under the terms of the GNU General Public License as published
+;   by the Free Software Foundation.
+;
+;   The Cowboy Boot Loader is distributed in the hope that it will be
+;   useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+;   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+;   GNU General Public License for more details.
+;
+;   You should have received a copy of the GNU General Public License along
+;   with The Cowboy Boot Loader. If not, see http://www.gnu.org/licenses/
+;-------------------------------------------------------------------------------
+
+                LIST
+                RADIX   DEC
+
+;-------------------------------------------------------------------------------
+; Device data
+;-------------------------------------------------------------------------------
+
+#IFDEF __12F1501
+    LIST        P=PIC12F1501
+    #INCLUDE    "p12f1501.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x400
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1503
+    LIST        P=PIC16F1503
+    #INCLUDE    "p16f1503.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1507
+    LIST        P=PIC16F1507
+    #INCLUDE    "p16f1507.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1508
+    LIST        P=PIC16F1508
+    #INCLUDE    "p16f1508.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1509
+    LIST        P=PIC16F1509
+    #INCLUDE    "p16f1509.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __12LF1501
+    LIST        P=PIC12LF1501
+    #INCLUDE    "p12lf1501.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x400
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1503
+    LIST        P=PIC16LF1503
+    #INCLUDE    "p16lf1503.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1507
+    LIST        P=PIC16LF1507
+    #INCLUDE    "p16lf1507.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1508
+    LIST        P=PIC16LF1508
+    #INCLUDE    "p16lf1508.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1509
+    LIST        P=PIC16LF1509
+    #INCLUDE    "p16lf1509.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __12F1840
+    LIST        P=PIC12F1840
+    #INCLUDE    "p12f1840.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1847
+    LIST        P=PIC16F1847
+    #INCLUDE    "p16f1847.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __12LF1840
+    LIST        P=PIC12LF1840
+    #INCLUDE    "p12lf1840.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1847
+    LIST        P=PIC16LF1847
+    #INCLUDE    "p16lf1847.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1933
+    LIST        P=PIC16F1933
+    #INCLUDE    "p16f1933.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1934
+    LIST        P=PIC16F1934
+    #INCLUDE    "p16f1934.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1936
+    LIST        P=PIC16F1936
+    #INCLUDE    "p16f1936.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1937
+    LIST        P=PIC16F1937
+    #INCLUDE    "p16f1937.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1938
+    LIST        P=PIC16F1938
+    #INCLUDE    "p16f1938.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1939
+    LIST        P=PIC16F1939
+    #INCLUDE    "p16f1939.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1946
+    LIST        P=PIC16F1946
+    #INCLUDE    "p16f1946.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1947
+    LIST        P=PIC16F1947
+    #INCLUDE    "p16f1947.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1933
+    LIST        P=PIC16LF1933
+    #INCLUDE    "p16lf1933.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1934
+    LIST        P=PIC16LF1934
+    #INCLUDE    "p16lf1934.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1936
+    LIST        P=PIC16LF1936
+    #INCLUDE    "p16lf1936.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1937
+    LIST        P=PIC16LF1937
+    #INCLUDE    "p16lf1937.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1938
+    LIST        P=PIC16LF1938
+    #INCLUDE    "p16lf1938.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1939
+    LIST        P=PIC16LF1939
+    #INCLUDE    "p16lf1939.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1946
+    LIST        P=PIC16LF1946
+    #INCLUDE    "p16lf1946.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1947
+    LIST        P=PIC16LF1947
+    #INCLUDE    "p16lf1947.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1902
+    LIST        P=PIC16LF1902
+    #INCLUDE    "p16lf1902.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1903
+    LIST        P=PIC16LF1903
+    #INCLUDE    "p16lf1903.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1904
+    LIST        P=PIC16LF1904
+    #INCLUDE    "p16lf1904.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1906
+    LIST        P=PIC16LF1906
+    #INCLUDE    "p16lf1906.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1907
+    LIST        P=PIC16LF1907
+    #INCLUDE    "p16lf1907.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __12F1822
+    LIST        P=PIC12F1822
+    #INCLUDE    "p12f1822.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1823
+    LIST        P=PIC16F1823
+    #INCLUDE    "p16f1823.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1826
+    LIST        P=PIC16F1826
+    #INCLUDE    "p16f1826.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1827
+    LIST        P=PIC16F1827
+    #INCLUDE    "p16f1827.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1824
+    LIST        P=PIC16F1824
+    #INCLUDE    "p16f1824.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1828
+    LIST        P=PIC16F1828
+    #INCLUDE    "p16f1828.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1825
+    LIST        P=PIC16F1825
+    #INCLUDE    "p16f1825.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1829
+    LIST        P=PIC16F1829
+    #INCLUDE    "p16f1829.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __12LF1822
+    LIST        P=PIC12LF1822
+    #INCLUDE    "p12lf1822.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1823
+    LIST        P=PIC16LF1823
+    #INCLUDE    "p16lf1823.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1826
+    LIST        P=PIC16LF1826
+    #INCLUDE    "p16lf1826.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1827
+    LIST        P=PIC16LF1827
+    #INCLUDE    "p16lf1827.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     8
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1824
+    LIST        P=PIC16LF1824
+    #INCLUDE    "p16lf1824.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1828
+    LIST        P=PIC16LF1828
+    #INCLUDE    "p16lf1828.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1825
+    LIST        P=PIC16LF1825
+    #INCLUDE    "p16lf1825.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1829
+    LIST        P=PIC16LF1829
+    #INCLUDE    "p16lf1829.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1782
+    LIST        P=PIC16F1782
+    #INCLUDE    "p16f1782.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1783
+    LIST        P=PIC16F1783
+    #INCLUDE    "p16f1783.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1784
+    LIST        P=PIC16F1784
+    #INCLUDE    "p16f1784.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1786
+    LIST        P=PIC16F1786
+    #INCLUDE    "p16f1786.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1787
+    LIST        P=PIC16F1787
+    #INCLUDE    "p16f1787.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1788
+    LIST        P=PIC16F1788
+    #INCLUDE    "p16f1788.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1789
+    LIST        P=PIC16F1789
+    #INCLUDE    "p16f1789.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1782
+    LIST        P=PIC16LF1782
+    #INCLUDE    "p16lf1782.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1783
+    LIST        P=PIC16LF1783
+    #INCLUDE    "p16lf1783.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1784
+    LIST        P=PIC16LF1784
+    #INCLUDE    "p16lf1784.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1786
+    LIST        P=PIC16LF1786
+    #INCLUDE    "p16lf1786.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1787
+    LIST        P=PIC16LF1787
+    #INCLUDE    "p16lf1787.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1788
+    LIST        P=PIC16LF1788
+    #INCLUDE    "p16lf1788.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1789
+    LIST        P=PIC16LF1789
+    #INCLUDE    "p16lf1789.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     MAX_EE      4 ; X 64
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1454
+    LIST        P=PIC16F1454
+    #INCLUDE    "p16f1454.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1455
+    LIST        P=PIC16F1455
+    #INCLUDE    "p16f1455.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1459
+    LIST        P=PIC16F1459
+    #INCLUDE    "p16f1459.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1454
+    LIST        P=PIC16LF1454
+    #INCLUDE    "p16lf1454.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1455
+    LIST        P=PIC16LF1455
+    #INCLUDE    "p16lf1455.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1459
+    LIST        P=PIC16LF1459
+    #INCLUDE    "p16lf1459.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1527
+    LIST        P=PIC16F1527
+    #INCLUDE    "p16f1527.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1526
+    LIST        P=PIC16F1526
+    #INCLUDE    "p16f1526.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1519
+    LIST        P=PIC16F1519
+    #INCLUDE    "p16f1519.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1518
+    LIST        P=PIC16F1518
+    #INCLUDE    "p16f1518.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1517
+    LIST        P=PIC16F1517
+    #INCLUDE    "p16f1517.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1516
+    LIST        P=PIC16F1516
+    #INCLUDE    "p16f1516.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1513
+    LIST        P=PIC16F1513
+    #INCLUDE    "p16f1513.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1512
+    LIST        P=PIC16F1512
+    #INCLUDE    "p16f1512.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1527
+    LIST        P=PIC16LF1527
+    #INCLUDE    "p16lf1527.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1526
+    LIST        P=PIC16LF1526
+    #INCLUDE    "p16lf1526.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1519
+    LIST        P=PIC16LF1519
+    #INCLUDE    "p16lf1519.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1518
+    LIST        P=PIC16LF1518
+    #INCLUDE    "p16lf1518.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1517
+    LIST        P=PIC16LF1517
+    #INCLUDE    "p16lf1517.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1516
+    LIST        P=PIC16LF1516
+    #INCLUDE    "p16lf1516.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1513
+    LIST        P=PIC16LF1513
+    #INCLUDE    "p16lf1513.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1512
+    LIST        P=PIC16LF1512
+    #INCLUDE    "p16lf1512.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __12LF1552
+    LIST        P=PIC12LF1552
+    #INCLUDE    "p12lf1552.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1554
+    LIST        P=PIC16LF1554
+    #INCLUDE    "p16lf1554.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1559
+    LIST        P=PIC16LF1559
+    #INCLUDE    "p16lf1559.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1703
+    LIST        P=PIC16F1703
+    #INCLUDE    "p16f1703.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1704
+    LIST        P=PIC16F1704
+    #INCLUDE    "p16f1704.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1705
+    LIST        P=PIC16F1705
+    #INCLUDE    "p16f1705.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1707
+    LIST        P=PIC16F1707
+    #INCLUDE    "p16f1707.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1708
+    LIST        P=PIC16F1708
+    #INCLUDE    "p16f1708.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1709
+    LIST        P=PIC16F1709
+    #INCLUDE    "p16f1709.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1703
+    LIST        P=PIC16LF1703
+    #INCLUDE    "p16lf1703.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1704
+    LIST        P=PIC16LF1704
+    #INCLUDE    "p16lf1704.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1705
+    LIST        P=PIC16LF1705
+    #INCLUDE    "p16lf1705.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1707
+    LIST        P=PIC16LF1707
+    #INCLUDE    "p16lf1707.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1708
+    LIST        P=PIC16LF1708
+    #INCLUDE    "p16lf1708.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1709
+    LIST        P=PIC16LF1709
+    #INCLUDE    "p16lf1709.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __12F1612
+    LIST        P=PIC12F1612
+    #INCLUDE    "p12f1612.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __12LF1612
+    LIST        P=PIC12LF1612
+    #INCLUDE    "p12lf1612.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1613
+    LIST        P=PIC16F1613
+    #INCLUDE    "p16f1613.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1613
+    LIST        P=PIC16LF1613
+    #INCLUDE    "p16lf1613.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1614
+    LIST        P=PIC16F1614
+    #INCLUDE    "p16f1614.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1614
+    LIST        P=PIC16LF1614
+    #INCLUDE    "p16lf1614.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1615
+    LIST        P=PIC16F1615
+    #INCLUDE    "p16f1615.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1615
+    LIST        P=PIC16LF1615
+    #INCLUDE    "p16lf1615.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1618
+    LIST        P=PIC16F1618
+    #INCLUDE    "p16f1618.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1618
+    LIST        P=PIC16LF1618
+    #INCLUDE    "p16lf1618.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1619
+    LIST        P=PIC16F1619
+    #INCLUDE    "p16f1619.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1619
+    LIST        P=PIC16LF1619
+    #INCLUDE    "p16lf1619.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1713
+    LIST        P=PIC16F1713
+    #INCLUDE    "p16f1713.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1716
+    LIST        P=PIC16F1716
+    #INCLUDE    "p16f1716.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1717
+    LIST        P=PIC16F1717
+    #INCLUDE    "p16f1717.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1718
+    LIST        P=PIC16F1718
+    #INCLUDE    "p16f1718.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1719
+    LIST        P=PIC16F1719
+    #INCLUDE    "p16f1719.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1713
+    LIST        P=PIC16LF1713
+    #INCLUDE    "p16lf1713.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1716
+    LIST        P=PIC16LF1716
+    #INCLUDE    "p16lf1716.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1717
+    LIST        P=PIC16LF1717
+    #INCLUDE    "p16lf1717.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1718
+    LIST        P=PIC16LF1718
+    #INCLUDE    "p16lf1718.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1719
+    LIST        P=PIC16LF1719
+    #INCLUDE    "p16lf1719.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __12F1571
+    LIST        P=PIC12F1571
+    #INCLUDE    "p12f1571.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x400
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __12LF1571
+    LIST        P=PIC12LF1571
+    #INCLUDE    "p12lf1571.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x400
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __12F1572
+    LIST        P=PIC12F1572
+    #INCLUDE    "p12f1572.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __12LF1572
+    LIST        P=PIC12LF1572
+    #INCLUDE    "p12lf1572.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     16
+    #DEFINE     ERASESIZE   16
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1764
+    LIST        P=PIC16F1764
+    #INCLUDE    "p16f1764.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1768
+    LIST        P=PIC16F1768
+    #INCLUDE    "p16f1768.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1765
+    LIST        P=PIC16F1765
+    #INCLUDE    "p16f1765.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1769
+    LIST        P=PIC16F1769
+    #INCLUDE    "p16f1769.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1764
+    LIST        P=PIC16LF1764
+    #INCLUDE    "p16lf1764.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1768
+    LIST        P=PIC16LF1768
+    #INCLUDE    "p16lf1768.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1765
+    LIST        P=PIC16LF1765
+    #INCLUDE    "p16lf1765.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1769
+    LIST        P=PIC16LF1769
+    #INCLUDE    "p16lf1769.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1574
+    LIST        P=PIC16F1574
+    #INCLUDE    "p16f1574.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1574
+    LIST        P=PIC16LF1574
+    #INCLUDE    "p16lf1574.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1575
+    LIST        P=PIC16F1575
+    #INCLUDE    "p16f1575.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1575
+    LIST        P=PIC16LF1575
+    #INCLUDE    "p16lf1575.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1578
+    LIST        P=PIC16F1578
+    #INCLUDE    "p16f1578.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1578
+    LIST        P=PIC16LF1578
+    #INCLUDE    "p16lf1578.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1579
+    LIST        P=PIC16F1579
+    #INCLUDE    "p16f1579.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1579
+    LIST        P=PIC16LF1579
+    #INCLUDE    "p16lf1579.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F18313
+    LIST        P=PIC16F18313
+    #INCLUDE    "p16f18313.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF18313
+    LIST        P=PIC16LF18313
+    #INCLUDE    "p16lf18313.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F18323
+    LIST        P=PIC16F18323
+    #INCLUDE    "p16f18323.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF18323
+    LIST        P=PIC16LF18323
+    #INCLUDE    "p16lf18323.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F18324
+    LIST        P=PIC16F18324
+    #INCLUDE    "p16f18324.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF18324
+    LIST        P=PIC16LF18324
+    #INCLUDE    "p16lf18324.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F18344
+    LIST        P=PIC16F18344
+    #INCLUDE    "p16f18344.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF18344
+    LIST        P=PIC16LF18344
+    #INCLUDE    "p16lf18344.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F18325
+    LIST        P=PIC16F18325
+    #INCLUDE    "p16f18325.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF18325
+    LIST        P=PIC16LF18325
+    #INCLUDE    "p16lf18325.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F18345
+    LIST        P=PIC16F18345
+    #INCLUDE    "p16f18345.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF18345
+    LIST        P=PIC16LF18345
+    #INCLUDE    "p16lf18345.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F18326
+    LIST        P=PIC16F18326
+    #INCLUDE    "p16f18326.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF18326
+    LIST        P=PIC16LF18326
+    #INCLUDE    "p16lf18326.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F18346
+    LIST        P=PIC16F18346
+    #INCLUDE    "p16f18346.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF18346
+    LIST        P=PIC16LF18346
+    #INCLUDE    "p16lf18346.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1773
+    LIST        P=PIC16F1773
+    #INCLUDE    "p16f1773.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1776
+    LIST        P=PIC16F1776
+    #INCLUDE    "p16f1776.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1777
+    LIST        P=PIC16F1777
+    #INCLUDE    "p16f1777.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1778
+    LIST        P=PIC16F1778
+    #INCLUDE    "p16f1778.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F1779
+    LIST        P=PIC16F1779
+    #INCLUDE    "p16f1779.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1773
+    LIST        P=PIC16LF1773
+    #INCLUDE    "p16lf1773.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1776
+    LIST        P=PIC16LF1776
+    #INCLUDE    "p16lf1776.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1777
+    LIST        P=PIC16LF1777
+    #INCLUDE    "p16lf1777.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1778
+    LIST        P=PIC16LF1778
+    #INCLUDE    "p16lf1778.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1779
+    LIST        P=PIC16LF1779
+    #INCLUDE    "p16lf1779.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1566
+    LIST        P=PIC16LF1566
+    #INCLUDE    "p16lf1566.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16LF1567
+    LIST        P=PIC16LF1567
+    #INCLUDE    "p16lf1567.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x94
+    #DEFINE     WRITE_LATCH 0xA4
+    #DEFINE     WRITE_FLASH 0x84
+    #DEFINE     READ_FLASH  0x81
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        2
+#ENDIF
+#IFDEF __16F18854
+    LIST        P=PIC16F18854
+    #INCLUDE    "p16f18854.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16LF18854
+    LIST        P=PIC16LF18854
+    #INCLUDE    "p16lf18854.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16F18855
+    LIST        P=PIC16F18855
+    #INCLUDE    "p16f18855.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16LF18855
+    LIST        P=PIC16LF18855
+    #INCLUDE    "p16lf18855.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16F18875
+    LIST        P=PIC16F18875
+    #INCLUDE    "p16f18875.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16LF18875
+    LIST        P=PIC16LF18875
+    #INCLUDE    "p16lf18875.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16F18856
+    LIST        P=PIC16F18856
+    #INCLUDE    "p16f18856.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16LF18856
+    LIST        P=PIC16LF18856
+    #INCLUDE    "p16lf18856.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16F18876
+    LIST        P=PIC16F18876
+    #INCLUDE    "p16f18876.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16LF18876
+    LIST        P=PIC16LF18876
+    #INCLUDE    "p16lf18876.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16F18857
+    LIST        P=PIC16F18857
+    #INCLUDE    "p16f18857.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x8000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16LF18857
+    LIST        P=PIC16LF18857
+    #INCLUDE    "p16lf18857.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x8000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16F18877
+    LIST        P=PIC16F18877
+    #INCLUDE    "p16f18877.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x8000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16LF18877
+    LIST        P=PIC16LF18877
+    #INCLUDE    "p16lf18877.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x8000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16F15313
+    LIST        P=PIC16F15313
+    #INCLUDE    "p16f15313.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16LF15313
+    LIST        P=PIC16LF15313
+    #INCLUDE    "p16lf15313.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16F15323
+    LIST        P=PIC16F15323
+    #INCLUDE    "p16f15323.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16LF15323
+    LIST        P=PIC16LF15323
+    #INCLUDE    "p16lf15323.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x800
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16F15324
+    LIST        P=PIC16F15324
+    #INCLUDE    "p16f15324.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16LF15324
+    LIST        P=PIC16LF15324
+    #INCLUDE    "p16lf15324.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16F15344
+    LIST        P=PIC16F15344
+    #INCLUDE    "p16f15344.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16LF15344
+    LIST        P=PIC16LF15344
+    #INCLUDE    "p16lf15344.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16F15325
+    LIST        P=PIC16F15325
+    #INCLUDE    "p16f15325.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16LF15325
+    LIST        P=PIC16LF15325
+    #INCLUDE    "p16lf15325.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16F15345
+    LIST        P=PIC16F15345
+    #INCLUDE    "p16f15345.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16LF15345
+    LIST        P=PIC16LF15345
+    #INCLUDE    "p16lf15345.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16F15354
+    LIST        P=PIC16F15354
+    #INCLUDE    "p16f15354.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16LF15354
+    LIST        P=PIC16LF15354
+    #INCLUDE    "p16lf15354.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x1000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16F15355
+    LIST        P=PIC16F15355
+    #INCLUDE    "p16f15355.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16LF15355
+    LIST        P=PIC16LF15355
+    #INCLUDE    "p16lf15355.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16F15356
+    LIST        P=PIC16F15356
+    #INCLUDE    "p16f15356.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16LF15356
+    LIST        P=PIC16LF15356
+    #INCLUDE    "p16lf15356.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16F15375
+    LIST        P=PIC16F15375
+    #INCLUDE    "p16f15375.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16LF15375
+    LIST        P=PIC16LF15375
+    #INCLUDE    "p16lf15375.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x2000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16F15376
+    LIST        P=PIC16F15376
+    #INCLUDE    "p16f15376.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+#IFDEF __16LF15376
+    LIST        P=PIC16LF15376
+    #INCLUDE    "p16lf15376.inc"
+    NOLIST
+    #DEFINE     ERASE_FLASH 0x14
+    #DEFINE     WRITE_LATCH 0x24
+    #DEFINE     WRITE_FLASH 0x04
+    #DEFINE     READ_FLASH  0x01
+    #DEFINE     MAX_FLASH   0x4000
+    #DEFINE     ROWSIZE     32
+    #DEFINE     ERASESIZE   32
+    #DEFINE     TYPE        3
+#ENDIF
+
+#IFNDEF MAX_FLASH
+    ERROR       "Device unsupported"
+#ENDIF
+
+#IF ROWSIZE > 32
+    ERROR       "Device unsupported"
+#ENDIF
+
+;-------------------------------------------------------------------------------
+; EECON
+;-------------------------------------------------------------------------------
+
+#IFDEF EECON1
+    #DEFINE     MEMADRL EEADRL              ;BANK 3 191h
+    #DEFINE     MEMADRH EEADRH              ;BANK 3 192h
+    #DEFINE     MEMDATL EEDATL              ;BANK 3 193h
+    #DEFINE     MEMDATH EEDATH              ;BANK 3 194h
+    #DEFINE     MEMCON1 EECON1              ;BANK 3 195h
+    #DEFINE     MEMCON2 EECON2              ;BANK 3 196h
+#ENDIF
+
+;-------------------------------------------------------------------------------
+; PMCON
+;-------------------------------------------------------------------------------
+
+#IFDEF PMCON1
+    #DEFINE     MEMADRL PMADRL              ;BANK 3 191h
+    #DEFINE     MEMADRH PMADRH              ;BANK 3 192h
+    #DEFINE     MEMDATL PMDATL              ;BANK 3 193h
+    #DEFINE     MEMDATH PMDATH              ;BANK 3 194h
+    #DEFINE     MEMCON1 PMCON1              ;BANK 3 195h
+    #DEFINE     MEMCON2 PMCON2              ;BANK 3 196h
+#ENDIF
+
+;-------------------------------------------------------------------------------
+; NVMCON
+;-------------------------------------------------------------------------------
+
+#IFDEF NVMCON1
+    #DEFINE     MEMADRL NVMADRL             ;BANK 16 81Ah
+    #DEFINE     MEMADRH NVMADRH             ;BANK 16 81Bh
+    #DEFINE     MEMDATL NVMDATL             ;BANK 16 81Ch
+    #DEFINE     MEMDATH NVMDATH             ;BANK 16 81Dh
+    #DEFINE     MEMCON1 NVMCON1             ;BANK 16 81Eh
+    #DEFINE     MEMCON2 NVMCON2             ;BANK 16 81Fh
+#ENDIF
+
+;-------------------------------------------------------------------------------
+;
+; vim: ft=asm shiftwidth=4 tabstop=4 softtabstop=4 expandtab
+;
