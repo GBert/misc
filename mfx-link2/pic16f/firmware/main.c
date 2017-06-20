@@ -96,9 +96,9 @@ void pps_init(void) {
     SSPDATPPS = 0x04;
     RA4PPS = 0b10001;		// RA4 output SDA
     /* CLC */
-    CLCIN1PPS = 0x10011;	// RC3 PULSE
-    RB5PPS = 0x00100;		// CLC1OUT 
-    RB6PPS = 0x00101;		// CLC2OUT 
+    CLCIN1PPS = 0b10011;	// RC3 PULSE
+    RB5PPS = 0b00100;		// CLC1OUT 
+    RB6PPS = 0b00101;		// CLC2OUT 
     /* CCP1 - for standalone DCC/MM/mfx encoder */
     // RC3PPS = 0b01100
 
@@ -215,6 +215,14 @@ void timer2_init(void) {
     //-----1-- timer on
     //------00 prescaler 1:1 (overflow every 32us)
     TMR2 = 0;			// reset timer2
+}
+
+void clc_init(void) {
+    CLC1SEL0 = 0;
+    CLC1SEL1 = 0;
+
+    //LC1OE = 1;
+    //LC1EN = 1;
 }
 
 /* Instructions per millisecond. */
