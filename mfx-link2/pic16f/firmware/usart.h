@@ -13,7 +13,7 @@
 #include "main.h"
 
 #ifndef BAUDRATE
-#define BAUDRATE	500000
+#define BAUDRATE	115200
 #endif
 #define USE_BRG16	0
 #define USE_BRGH	1

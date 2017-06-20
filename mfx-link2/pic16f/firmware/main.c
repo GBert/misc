@@ -77,6 +77,9 @@ void isr(void) __interrupt(0) {
  * RA5 SCL I2C
  * RC1 RxD UART
  * RC2 TxD UART
+ * RC3 Rail Signal
+ * RB5 RPWM
+ * RB6 LPWM
  * // RC3 CCP1
  */
 
@@ -84,7 +87,7 @@ void pps_init(void) {
     PPSLOCK = 0x55;
     PPSLOCK = 0xaa;
     PPSLOCK = 0;		// unlock PPS
-    // set USART : RX on RC1 , TX on RA1 / 40001729B.pdf page 141
+    /* USART */
     RXPPS = 0b10001;		// input  EUSART RX -> RC1
     RC2PPS = 0b10100;		// RC2 output TX/CK
     /* I2C */
@@ -92,6 +95,10 @@ void pps_init(void) {
     RA5PPS = 0b10000;		// RA5 output SCL
     SSPDATPPS = 0x04;
     RA4PPS = 0b10001;		// RA4 output SDA
+    /* CLC */
+    CLCIN1PPS = 0x10011;	// RC3 PULSE
+    RB5PPS = 0x00100;		// CLC1OUT 
+    RB6PPS = 0x00101;		// CLC2OUT 
     /* CCP1 - for standalone DCC/MM/mfx encoder */
     // RC3PPS = 0b01100
 
