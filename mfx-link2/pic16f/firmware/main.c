@@ -87,20 +87,20 @@ void pps_init(void) {
     PPSLOCK = 0x55;
     PPSLOCK = 0xaa;
     PPSLOCK = 0;		// unlock PPS
-    /* USART */
-    RXPPS = 0b10001;		// input  EUSART RX -> RC1
-    RC2PPS = 0b10100;		// RC2 output TX/CK
     /* I2C */
     SSPCLKPPS = 0x05;
     RA5PPS = 0b10000;		// RA5 output SCL
     SSPDATPPS = 0x04;
     RA4PPS = 0b10001;		// RA4 output SDA
+    /* USART */
+    RXPPS = 0b10001;		// input  EUSART RX -> RC1
+    RC2PPS = 0b10100;		// RC2 output TX/CK
     /* CLC */
-    CLCIN1PPS = 0b10011;	// RC3 PULSE
-    RB5PPS = 0b00100;		// CLC1OUT 
-    RB6PPS = 0b00101;		// CLC2OUT 
-    /* CCP1 - for standalone DCC/MM/mfx encoder */
-    // RC3PPS = 0b01100
+    RB4PPS = 0b00100;		// LC1OUT -> ENABLE
+    /* COG */
+    COGINPPS = 0b10011;		// RC3 PULSE
+    RB5PPS = 0b01001;		// COG1A -> RPWM
+    RB6PPS = 0b01000;		// COG1B -> LPWM
 
     PPSLOCK = 0x55;
     PPSLOCK = 0xaa;
@@ -126,17 +126,19 @@ void system_init(void) {
     /* I2C MSSP 40001729B.pdf page 302 */
     TRISA4 = 1;
     TRISA5 = 1;
-    /*
-       TRISC2 = 0;
-     */
-    /* USART */
     TRISC0 = 0;
+    /* USART */
     TRISC1 = 1;
+    TRISC2 = 0;
     /* RA2&RC0 analog input */
     TRISA2 = 1;
+    TRISB5 = 0;
+    TRISB5 = 0;
+    TRISB6 = 0;
     TRISC0 = 1;
-    TRISC4 = 0;			/* Enable */
-    TRISC5 = 0;			/* LED */
+    TRISC3 = 1;		/* Rail Data */
+    TRISC4 = 0;		/* Enable */
+    TRISC5 = 0;		/* LED */
     // setup interrupt events
     //clear all relevant interrupt flags
     SSP1IF = 0;
@@ -194,9 +196,9 @@ void timer0_init(void) {
 
 void timer1_init(void) {
     T1CON = 0b00110001;
-    //00------ FOSC/4 as counting source
-    //--11---- prescaler 1:8 (counting every us)
-    //-------1 timer on
+          /*  00------ FOSC/4 as counting source
+              --11---- prescaler 1:8 (counting every us)
+              -------1 timer on */
     TMR1GE = 0;			// timer is not controlled by gate.
     TMR1H = 0;			// reset timer1 high
     TMR1L = 0;			// and low bytes - prescaler automatic reset
@@ -223,6 +225,33 @@ void clc_init(void) {
 
     //LC1OE = 1;
     //LC1EN = 1;
+}
+
+void cog_init(void) {
+    COG1CON0 = 0;
+    COG1CON1 = 0;
+
+    COG1RIS = 0x1;	/* COG1PPS rising event		*/
+    COG1RSIM = 0x0;	/* no rising delaya		*/
+    COG1FIS = 0x1;	/* COG1PPS falling event	*/
+    COG1FSIM = 0x0;	/* no falling delay		*/
+
+    COG1ASD0 = 0;	/* dpn't use shutdown		*/
+    COG1ASD1 = 0;
+
+    COG1STR = 0;	/* don't use steering control	*/
+    COG1DBR = 0;	/* no dead band			*/
+    COG1DBF = 0;
+    COG1BLKR = 0;	/* don't use blanking		*/
+    COG1BLKF = 0;
+    COG1PHR = 0;	/* normal phase			*/
+    COG1PHF = 0;
+
+    COG1CON0 = 0b10100000;
+	      /* 1-------	G1EN COG1 Enable
+		 -0------	G1LD0 no buffer
+		 ---01---	G1CS Fosc clock source
+		 -----100	G1MD COG Half Bridge mode */
 }
 
 /* Instructions per millisecond. */

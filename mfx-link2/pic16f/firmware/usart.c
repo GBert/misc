@@ -53,6 +53,8 @@ void print_debug_value(char c, unsigned char value) {
 }
 
 void print_debug_fifo(struct serial_buffer *fifo) {
+    unsigned char tail;
+    tail = fifo->tail;
     print_debug_value('S', SERIAL_BUFFER_SIZE);
     putchar_wait(' ');
     print_debug_value('M', SERIAL_BUFFER_SIZE_MASK);
