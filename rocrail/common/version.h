@@ -1,9 +1,11 @@
 const int revisionnr = 
-12372
+12374
 ;
 const char* commithash = 
-"477fad59994b2ea3f6a9b8055b12f9e612ccdd70";
+"3ef0e435bd6613127f4be8bb4fa4c4d92927c170";
 const char* revlog = 
+"12374 2017-06-20 14:57:32 +0200 mgbox: fixes (Bert)\n" \
+"12373 2017-06-20 12:28:17 +0200 mgbox: L88 improvements (Bert)\n" \
 "12372 2017-06-19 10:31:31 +0200 app: faster checking memory usage in case of memory level is activated\n" \
 "12371 2017-06-19 10:20:50 +0200 loc: memory fix for operator command\n" \
 "12370 2017-06-18 09:38:00 +0200 translation merge: de, sl, pt_BR, fr, nl\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12327 2017-05-29 07:21:31 +0200 guiframe: always enable recent workspaces\n" \
 "12326 2017-05-28 16:49:22 +0200 rocguiinidlg: test with scrollbars\n" \
 "12325 2017-05-28 09:15:41 +0200 loc: soft reset improvements\n" \
-"12324 2017-05-27 09:34:03 +0200 switch: fix for sync delay\n" \
-"12323 2017-05-26 10:09:24 +0200 wrapper: remarks added to the block state constants\n" \
 
 "log end";
