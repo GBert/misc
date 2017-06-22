@@ -1,7 +1,7 @@
 BINS := can-bounce-test can2eth can2udp can4lnx2udp can2serial clone-cs2-config clone-cs2-trigger \
         clone-ms2-loco read-cs2-ini gb2-update ir-tester cs2ping bpi-rs485 scan2lan can2lan \
         can2lan_m ms2wifi virtual_canbuster virtual_gfp virtual_gfp3 virtual_links88 virtual_ms2 \
-        get-cs-data get-cs-config pio-i2c-udp read_lococard s88udp-bpi s88test-bpi \
+        get-cs-data get-cs-config pio-i2c-udp read_lococard s88udp-bpi s88udp-rpi s88test-bpi \
         wake-up-links88 gpio-poll lan-schnitte
 
 BIN = $@
@@ -99,6 +99,9 @@ read_lococard: read_lococard.o
 
 s88udp-bpi: allwinner.o s88udp-bpi.o
 	$(CC) $(CFLAGS) -o s88udp allwinner.o s88udp-bpi.o
+
+s88udp-rpi: raspi.o s88udp-rpi.o
+	$(CC) $(CFLAGS) -o s88udp-rpi raspi.o s88udp-rpi.o
 
 s88test-bpi: allwinner.o s88test-bpi.o
 	$(CC) $(CFLAGS) -o s88test-bpi allwinner.o s88test-bpi.o
