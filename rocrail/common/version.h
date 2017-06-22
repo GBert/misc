@@ -1,9 +1,10 @@
 const int revisionnr = 
-12374
+12375
 ;
 const char* commithash = 
-"3ef0e435bd6613127f4be8bb4fa4c4d92927c170";
+"1bddd50391f4a8264a1c0235180262e533a06246";
 const char* revlog = 
+"12375 2017-06-22 14:47:03 +0200 tt, seltab: number added for wlanmaus switch support\n" \
 "12374 2017-06-20 14:57:32 +0200 mgbox: fixes (Bert)\n" \
 "12373 2017-06-20 12:28:17 +0200 mgbox: L88 improvements (Bert)\n" \
 "12372 2017-06-19 10:31:31 +0200 app: faster checking memory usage in case of memory level is activated\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12328 2017-05-29 11:48:23 +0200 mvtrack: recording option added\n" \
 "12327 2017-05-29 07:21:31 +0200 guiframe: always enable recent workspaces\n" \
 "12326 2017-05-28 16:49:22 +0200 rocguiinidlg: test with scrollbars\n" \
-"12325 2017-05-28 09:15:41 +0200 loc: soft reset improvements\n" \
 
 "log end";
