@@ -46,12 +46,12 @@ int main(int argc, char **argv) {
     int opt;
     unsigned int us;
     struct timespec ts1, ts2, ts_diff;
-    pcap_t *handle1;
-    pcap_t *handle2;
+    pcap_t *handle_pcap;
+    uint16_t ixia_signature;
 
     /* temporary packet buffers */
-    struct pcap_pkthdr header1, header2;	/* The header that pcap gives us */
-    const u_char *packet1, *packet2;	/* The actual packet */
+    struct pcap_pkthdr header1;	/* The header that pcap gives us */
+    const u_char *packet1;	/* The actual packet */
 
     while ((opt = getopt(argc, argv, "h?")) != -1) {
 	switch (opt) {
@@ -68,31 +68,34 @@ int main(int argc, char **argv) {
     memset(&ts_diff, 0, sizeof(ts_diff));
 
     /* check command line arguments */
-    if (argc < 3) {
+    if (argc < 2) {
 	fprintf(stderr, "Usage: %s pcap1 pcap2\n", argv[0]);
 	exit(EXIT_FAILURE);
     }
 
     char errbuf[PCAP_ERRBUF_SIZE];	/* not sure what to do with this, oh well */
 
-    handle1 = pcap_open_offline_with_tstamp_precision(argv[optind], PCAP_TSTAMP_PRECISION_NANO, errbuf);	/* call pcap library function */
-    if (handle1 == NULL) {
+    handle_pcap = pcap_open_offline_with_tstamp_precision(argv[optind], PCAP_TSTAMP_PRECISION_NANO, errbuf);	/* call pcap library function */
+    if (handle_pcap == NULL) {
 	fprintf(stderr, "Couldn't open pcap1 file %s: %s\n", argv[optind], errbuf);
 	return (EXIT_FAILURE);
     }
 
-    handle2 = pcap_open_offline_with_tstamp_precision(argv[optind + 1], PCAP_TSTAMP_PRECISION_NANO, errbuf);	/* call pcap library function */
-    if (handle2 == NULL) {
-	fprintf(stderr, "Couldn't open pcap2 file %s: %s\n", argv[optind + 1], errbuf);
-	return (EXIT_FAILURE);
-    }
-
-    while ((packet1 = pcap_next(handle1, &header1)) != NULL) {
-	if ((packet2 = pcap_next(handle2, &header2)) != NULL) {
-	    memcpy(&ts1, &header1.ts, sizeof(ts1));
-	    memcpy(&ts2, &header2.ts, sizeof(ts2));
+    while ((packet1 = pcap_next(handle_pcap, &header1)) != NULL) {
+	memcpy(&ts1, &header1.ts, sizeof(ts1));
+	u_char *pkt_ptr = (u_char *) packet1;
+	printf("%ld.%09ld us %d octets length", ts1.tv_sec, ts1.tv_nsec, header1.caplen);
+	ixia_signature = ((pkt_ptr[header1.caplen - 4] << 8) & 0xff00) | (pkt_ptr[header1.caplen - 3] & 0x00ff);
+	printf("  0x%04x  ", ixia_signature);
+	if (ixia_signature == 0xaf12) {
+	    memcpy(&ts2.tv_sec, &pkt_ptr[header1.caplen - 13], 4);
+	    memcpy(&ts2.tv_nsec, &pkt_ptr[header1.caplen - 9], 4);
+	    ts2.tv_sec = ntohl(ts2.tv_sec);
+	    ts2.tv_nsec = ntohl(ts2.tv_nsec);
 	    us = timespec_sub(&ts1, &ts2, &ts_diff);
 	    printf("(%ld.%09ld) - (%ld.%09ld) ->  %6d us\n", ts1.tv_sec, ts1.tv_nsec, ts2.tv_sec, ts2.tv_nsec, us);
+	} else {
+	    printf("\n");
 	}
     }
 }
