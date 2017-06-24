@@ -14,6 +14,6 @@
 
 #define DATA_PIN	14
 #define CLOCK_PIN	17
-#define LOAD_PIN	21
+#define LOAD_PIN	27
 #define RESET_PIN	22
 
