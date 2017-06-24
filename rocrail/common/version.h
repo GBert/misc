@@ -1,9 +1,12 @@
 const int revisionnr = 
-12375
+12378
 ;
 const char* commithash = 
-"1bddd50391f4a8264a1c0235180262e533a06246";
+"94d2cb54957a08f63b62eba8c87060025ad63e1c";
 const char* revlog = 
+"12378 2017-06-24 09:15:26 +0200 action: loco lookupscheduleon/off added\n" \
+"12377 2017-06-23 09:06:47 +0200 translation merge: sr_latin\n" \
+"12376 2017-06-23 07:35:27 +0200 mgbox: PT loadmonitor for the CS2\n" \
 "12375 2017-06-22 14:47:03 +0200 tt, seltab: number added for wlanmaus switch support\n" \
 "12374 2017-06-20 14:57:32 +0200 mgbox: fixes (Bert)\n" \
 "12373 2017-06-20 12:28:17 +0200 mgbox: L88 improvements (Bert)\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12331 2017-05-30 08:05:15 +0200 guiframe: wait 2500ms befor starting up the next workspace to give the current server time to shutdown\n" \
 "12330 2017-05-29 15:49:04 +0200 block: use loco enterside for recording mv\n" \
 "12329 2017-05-29 15:14:56 +0200 block: record mv\n" \
-"12328 2017-05-29 11:48:23 +0200 mvtrack: recording option added\n" \
-"12327 2017-05-29 07:21:31 +0200 guiframe: always enable recent workspaces\n" \
-"12326 2017-05-28 16:49:22 +0200 rocguiinidlg: test with scrollbars\n" \
 
 "log end";
