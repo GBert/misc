@@ -483,7 +483,7 @@ F 3 "" H 8850 5250 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 Text Notes 9500 6350 0    60   ~ 0
-galvanic isolated options
+galvanic isolated option
 $Comp
 L LM7805 U7
 U 1 1 58791E9C
@@ -601,7 +601,7 @@ GPIO4
 Text Label 2400 2600 0    60   ~ 0
 GPIO17
 Text Label 2400 2700 0    60   ~ 0
-GPIO21
+GPIO27
 Text Label 2400 2800 0    60   ~ 0
 GPIO22
 $Comp
@@ -620,7 +620,7 @@ GPIO22
 Text Label 1950 7300 0    60   ~ 0
 GPIO4
 Text Label 1950 6200 0    60   ~ 0
-GPIO21
+GPIO27
 Text Label 1950 7400 0    60   ~ 0
 GPIO17
 Text Label 3300 2400 0    60   ~ 0
@@ -1752,7 +1752,7 @@ L R R5
 U 1 1 58ACA6EA
 P 8275 4475
 F 0 "R5" V 8355 4475 50  0000 C CNN
-F 1 "120" V 8275 4475 50  0000 C CNN
+F 1 "1k5" V 8275 4475 50  0000 C CNN
 F 2 "w_pth_resistors:RC03" V 8205 4475 50  0001 C CNN
 F 3 "" H 8275 4475 50  0000 C CNN
 	1    8275 4475
