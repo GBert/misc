@@ -12,7 +12,7 @@
 
 #include "raspi.h"
 
-#define DATA_PIN	14
+#define DATA_PIN	4
 #define CLOCK_PIN	17
 #define LOAD_PIN	27
 #define RESET_PIN	22
