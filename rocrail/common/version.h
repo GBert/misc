@@ -1,9 +1,11 @@
 const int revisionnr = 
-12378
+12380
 ;
 const char* commithash = 
-"94d2cb54957a08f63b62eba8c87060025ad63e1c";
+"6258a9419feb1b59a9e547f0b0924c9c09eac590";
 const char* revlog = 
+"12380 2017-06-25 10:43:57 +0200 wlanmausdlg: translation for standard buttons\n" \
+"12379 2017-06-24 17:32:52 +0200 schedule: disregard maxdelay in case of minwait\n" \
 "12378 2017-06-24 09:15:26 +0200 action: loco lookupscheduleon/off added\n" \
 "12377 2017-06-23 09:06:47 +0200 translation merge: sr_latin\n" \
 "12376 2017-06-23 07:35:27 +0200 mgbox: PT loadmonitor for the CS2\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12333 2017-05-30 11:52:59 +0200 wait4event: the Check for free destinations until reaching IN option will be ignored if a schedule is active\n" \
 "12332 2017-05-30 10:07:05 +0200 z21: loconet loco traces added\n" \
 "12331 2017-05-30 08:05:15 +0200 guiframe: wait 2500ms befor starting up the next workspace to give the current server time to shutdown\n" \
-"12330 2017-05-29 15:49:04 +0200 block: use loco enterside for recording mv\n" \
-"12329 2017-05-29 15:14:56 +0200 block: record mv\n" \
 
 "log end";
