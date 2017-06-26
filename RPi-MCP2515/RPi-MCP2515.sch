@@ -1,4 +1,5 @@
 EESchema Schematic File Version 2
+LIBS:RPi-MCP2515-rescue
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -29,6 +30,7 @@ LIBS:atmel
 LIBS:contrib
 LIBS:valves
 LIBS:mylib
+LIBS:ISO1050
 LIBS:p82b715
 LIBS:rfcom
 LIBS:RPi-MCP2515-cache
@@ -690,17 +692,6 @@ F 1 "PWR_FLAG" H 10700 6330 50  0000 C CNN
 F 2 "" H 10700 6150 50  0000 C CNN
 F 3 "" H 10700 6150 50  0000 C CNN
 	1    10700 6150
-	1    0    0    -1  
-$EndComp
-$Comp
-L P82B715 U8
-U 1 1 58795EBE
-P 9300 1550
-F 0 "U8" H 8850 2200 50  0000 L CNN
-F 1 "P82B715" H 9450 1950 50  0000 L CNN
-F 2 "w_pth_circuits:dil_8-300_socket" H 9300 1550 50  0001 C CNN
-F 3 "" H 9300 1550 50  0000 C CNN
-	1    9300 1550
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1822,4 +1813,15 @@ Wire Wire Line
 	5000 5450 5000 5650
 Wire Wire Line
 	5000 5650 5350 5650
+$Comp
+L P82B715 U3
+U 1 1 5950C44B
+P 9300 1550
+F 0 "U3" H 8850 2200 50  0000 L CNN
+F 1 "P82B715" H 9450 1950 50  0000 L CNN
+F 2 "w_pth_circuits:dil_8-300_socket" H 9300 1550 50  0001 C CNN
+F 3 "" H 9300 1550 50  0000 C CNN
+	1    9300 1550
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
