@@ -23,7 +23,7 @@ char **page_name;
 struct timeval last_sent;
 
 void print_usage(char *prg) {
-    fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n",
+    fprintf(stderr, "\nUsage: %s -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n",
 	    prg);
     fprintf(stderr, "   Version 0.9\n\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
@@ -181,16 +181,8 @@ int main(int argc, char **argv) {
 
     config_file[0] = '\0';
 
-    while ((opt = getopt(argc, argv, "c:u:t:d:b:i:vhf?")) != -1) {
+    while ((opt = getopt(argc, argv, "u:t:d:b:i:vhf?")) != -1) {
 	switch (opt) {
-	case 'c':
-	    if (strlen(optarg) < MAXLINE) {
-		strncpy(config_dir, optarg, sizeof(config_dir) - 1);
-	    } else {
-		fprintf(stderr, "config file dir to long\n");
-		exit(EXIT_FAILURE);
-	    }
-	    break;
 	case 't':
 	    tcp_port = strtoul(optarg, (char **)NULL, 10);
 	    break;

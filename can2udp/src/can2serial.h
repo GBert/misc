@@ -9,8 +9,8 @@
 
 /* Thanks to Stefan Krauss and the SocketCAN team
  */
-#ifndef _CAN2LAN_H_
-#define _CAN2LAN_H_
+#ifndef _CAN2SERIAL_H_
+#define _CAN2SERIAL_H_
 #include <stdio.h>
 #include <stdlib.h>
 #include <libgen.h>
@@ -73,5 +73,5 @@ unsigned char ec_frame[13];
 int net_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *netframe, int length);
 int frame_to_can(int can_socket, unsigned char *netframe);
 int frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *frame);
-#endif /* _CAN2LAN_H_ */
+#endif /* _CAN2SERIAL_H_ */
 
