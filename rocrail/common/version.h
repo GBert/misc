@@ -1,9 +1,12 @@
 const int revisionnr = 
-12380
+12383
 ;
 const char* commithash = 
-"6258a9419feb1b59a9e547f0b0924c9c09eac590";
+"6e5964946e67a2d5b65f9f94b9a6b16e7dd4c8fc";
 const char* revlog = 
+"12383 2017-06-27 12:27:41 +0200 schedules: fix for already waited and minwait\n" \
+"12382 2017-06-27 11:07:03 +0200 schedule: **revert** ignore block wait in case the loco uses schedule time\n" \
+"12381 2017-06-27 10:41:39 +0200 schedule: fix for ignore maxdelay and minwait\n" \
 "12380 2017-06-25 10:43:57 +0200 wlanmausdlg: translation for standard buttons\n" \
 "12379 2017-06-24 17:32:52 +0200 schedule: disregard maxdelay in case of minwait\n" \
 "12378 2017-06-24 09:15:26 +0200 action: loco lookupscheduleon/off added\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12336 2017-05-31 14:46:02 +0200 scheduledialog: reinit entry pointers\n" \
 "12335 2017-05-30 22:14:57 +0200 p50x: revert retry flag in case p50x reports power off at switch command...\n" \
 "12334 2017-05-30 12:36:02 +0200 wait4event: revert\n" \
-"12333 2017-05-30 11:52:59 +0200 wait4event: the Check for free destinations until reaching IN option will be ignored if a schedule is active\n" \
-"12332 2017-05-30 10:07:05 +0200 z21: loconet loco traces added\n" \
-"12331 2017-05-30 08:05:15 +0200 guiframe: wait 2500ms befor starting up the next workspace to give the current server time to shutdown\n" \
 
 "log end";
