@@ -29,7 +29,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default 15730\n");
-    fprintf(stderr, "         -b <broadcast_addr> broadcast address - default 255.255.255.255\n");
+    fprintf(stderr, "         -a <IP addr>        IP address - default 255.255.255.255\n");
     fprintf(stderr, "         -i <can int>        CAN interface - default /dev/ttyUSB0\n");
     fprintf(stderr, "         -f                  running in foreground\n\n");
     fprintf(stderr, "         -v                  verbose output (in foreground)\n\n");
@@ -236,30 +236,6 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    /* prepare udp sending socket struct */
-    memset(&baddr, 0, sizeof(baddr));
-    baddr.sin_family = AF_INET;
-    baddr.sin_port = htons(destination_port);
-    s = inet_pton(AF_INET, udp_dst_address, &baddr.sin_addr);
-    if (s <= 0) {
-	if (s == 0) {
-	    fprintf(stderr, "UDP IP address invalid\n");
-	} else {
-	    fprintf(stderr, "invalid address family\n");
-	}
-	exit(EXIT_FAILURE);
-    }
-
-    /* prepare UDP sending socket */
-    if ((sb = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
-	fprintf(stderr, "error creating UDP sending socket: %s\n", strerror(errno));
-	exit(EXIT_FAILURE);
-    }
-    if (setsockopt(sb, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0) {
-	fprintf(stderr, "error setup UDP broadcast option: %s\n", strerror(errno));
-	exit(EXIT_FAILURE);
-    }
-
     /* prepare TCP socket */
     if ((st = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0) {
 	fprintf(stderr, "creating TCP socket error: %s\n", strerror(errno));
@@ -276,6 +252,7 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "starting TCP listener error: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
+
     /* prepare simple CAN interface aka Schnitte */
     if ((se = open(if_name, O_RDWR | O_TRUNC | O_NONBLOCK | O_NOCTTY)) < 0) {
 	fprintf(stderr, "opening CAN interface error: %s\n", strerror(errno));
