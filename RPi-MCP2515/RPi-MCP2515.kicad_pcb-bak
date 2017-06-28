@@ -2216,12 +2216,12 @@
       (xy 4.15036 -0.50546)) (layer F.Cu) (width 0.00254))
   )
 
-  (module w_conn_pt-1,5:pt_1,5-5-3,5-h (layer F.Cu) (tedit 58ADCCAE) (tstamp 58ADD1D3)
+  (module w_conn_pt-1,5:pt_1,5-5-3,5-h (layer F.Cu) (tedit 595102CD) (tstamp 58ADD1D3)
     (at 149.225 125.095)
     (descr "5-way 3.5mm pitch terminal block, Phoenix PT series")
     (path /58ADC600)
-    (fp_text reference P7 (at 0 5.3) (layer F.SilkS)
-      (effects (font (size 1.5 1.5) (thickness 0.3)))
+    (fp_text reference P7 (at 0.127 1.524) (layer F.SilkS)
+      (effects (font (size 1 1) (thickness 0.2)))
     )
     (fp_text value CONN_01X05 (at 0 -5) (layer F.SilkS) hide
       (effects (font (size 1.5 1.5) (thickness 0.3)))
