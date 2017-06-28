@@ -1,9 +1,10 @@
 const int revisionnr = 
-12383
+12384
 ;
 const char* commithash = 
-"6e5964946e67a2d5b65f9f94b9a6b16e7dd4c8fc";
+"8d19306b536dd06800674012132a4634a316b118";
 const char* revlog = 
+"12384 2017-06-28 08:26:22 +0200 schedules: blockwait4schedules option added for backward wait compatibility\n" \
 "12383 2017-06-27 12:27:41 +0200 schedules: fix for already waited and minwait\n" \
 "12382 2017-06-27 11:07:03 +0200 schedule: **revert** ignore block wait in case the loco uses schedule time\n" \
 "12381 2017-06-27 10:41:39 +0200 schedule: fix for ignore maxdelay and minwait\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12337 2017-06-01 10:21:10 +0200 switch: lock und unlock check action\n" \
 "12336 2017-05-31 14:46:02 +0200 scheduledialog: reinit entry pointers\n" \
 "12335 2017-05-30 22:14:57 +0200 p50x: revert retry flag in case p50x reports power off at switch command...\n" \
-"12334 2017-05-30 12:36:02 +0200 wait4event: revert\n" \
 
 "log end";
