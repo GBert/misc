@@ -23,13 +23,11 @@ char **page_name;
 struct timeval last_sent;
 
 void print_usage(char *prg) {
-    fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n",
+    fprintf(stderr, "\nUsage: %s -vf -t <tcp_port> -a <IP addr> -i <can interface>\n",
 	    prg);
     fprintf(stderr, "   Version 0.9\n\n");
-    fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
-    fprintf(stderr, "         -d <port>           destination UDP port for the server - default 15730\n");
-    fprintf(stderr, "         -b <broadcast_addr> broadcast address - default 255.255.255.255\n");
+    fprintf(stderr, "         -a <IP addr>        IP address - default 255.255.255.255\n");
     fprintf(stderr, "         -i <can int>        CAN interface - default /dev/ttyUSB0\n");
     fprintf(stderr, "         -f                  running in foreground\n\n");
     fprintf(stderr, "         -v                  verbose output (in foreground)\n\n");
@@ -146,11 +144,11 @@ int rawframe_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *ne
 int main(int argc, char **argv) {
     pid_t pid;
     int n, i, max_fds, opt, nready;
-    int background, verbose, ec_index, on;
+    int background, verbose, ec_index;
     char timestamp[16];
     struct termios term_attr;
-    int sc, se, sb, st;		/* CAN socket, TCP socket */
-    struct sockaddr_in baddr, tcp_addr;
+    int sc, se, st;		/* CAN socket, TCP socket */
+    struct sockaddr_in tcp_addr;
     struct sockaddr_can caddr;
     socklen_t caddrlen = sizeof(caddr);
     char if_name[MAXSTRING];
@@ -159,15 +157,13 @@ int main(int argc, char **argv) {
     /* socklen_t tcp_client_length = sizeof(tcp_addr); */
     fd_set all_fds, read_fds;
     uint32_t canid;
-    int eci, s, ret;
-    int tcp_port, destination_port;
+    int eci, ret, tcp_port;
     char buffer[64];
     unsigned char rawframe[64];
     struct can_frame frame;
 
     verbose = 0;
     background = 1;
-    on = 1;
     strcpy(udp_dst_address, "255.255.255.255");
     ec_index = 0;
     page_name = calloc(64, sizeof(char *));
@@ -175,27 +171,15 @@ int main(int argc, char **argv) {
     memset(ifr.ifr_name, 0, sizeof(ifr.ifr_name));
     strcpy(ifr.ifr_name, "can0");
     tcp_port = 15731;
-    destination_port = 15730;
     verbose = 0;
     strcpy(if_name, "/dev/ttyGS0");
 
     config_file[0] = '\0';
 
-    while ((opt = getopt(argc, argv, "c:u:t:d:b:i:vhf?")) != -1) {
+    while ((opt = getopt(argc, argv, "u:t:b:i:vhf?")) != -1) {
 	switch (opt) {
-	case 'c':
-	    if (strlen(optarg) < MAXLINE) {
-		strncpy(config_dir, optarg, sizeof(config_dir) - 1);
-	    } else {
-		fprintf(stderr, "config file dir to long\n");
-		exit(EXIT_FAILURE);
-	    }
-	    break;
 	case 't':
 	    tcp_port = strtoul(optarg, (char **)NULL, 10);
-	    break;
-	case 'd':
-	    destination_port = strtoul(optarg, (char **)NULL, 10);
 	    break;
 	case 'b':
 	    if (strlen(optarg) <= 15) {
@@ -244,30 +228,6 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    /* prepare udp sending socket struct */
-    memset(&baddr, 0, sizeof(baddr));
-    baddr.sin_family = AF_INET;
-    baddr.sin_port = htons(destination_port);
-    s = inet_pton(AF_INET, udp_dst_address, &baddr.sin_addr);
-    if (s <= 0) {
-	if (s == 0) {
-	    fprintf(stderr, "UDP IP address invalid\n");
-	} else {
-	    fprintf(stderr, "invalid address family\n");
-	}
-	exit(EXIT_FAILURE);
-    }
-
-    /* prepare UDP sending socket */
-    if ((sb = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
-	fprintf(stderr, "error creating UDP sending socket: %s\n", strerror(errno));
-	exit(EXIT_FAILURE);
-    }
-    if (setsockopt(sb, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0) {
-	fprintf(stderr, "error setup UDP broadcast option: %s\n", strerror(errno));
-	exit(EXIT_FAILURE);
-    }
-
     /* prepare TCP socket */
     if ((st = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0) {
 	fprintf(stderr, "creating TCP socket error: %s\n", strerror(errno));
@@ -284,6 +244,7 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "starting TCP listener error: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
+
     /* prepare simple CAN interface aka Schnitte */
     if ((se = open(if_name, O_RDWR | O_TRUNC | O_NONBLOCK | O_NOCTTY)) < 0) {
 	fprintf(stderr, "opening CAN interface error: %s\n", strerror(errno));
@@ -421,7 +382,6 @@ int main(int argc, char **argv) {
 		break;		/* no more readable descriptors */
 	}
     }
-    close(sb);
     close(sc);
     close(se);
     close(st);
