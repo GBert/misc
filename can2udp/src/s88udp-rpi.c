@@ -30,7 +30,7 @@
 #include "s88udp-rpi.h"
 
 #define BIT(x)		(1<<x)
-#define MICRODELAY	15	/* clock frequency 1/MICRODELAY[us] */
+#define MICRODELAY	50	/* clock frequency 1/MICRODELAY[us] */
 #define MINDELAY	2	/* min delay in usec */
 #define MAXMODULES	32	/* max numbers of S88 modules */
 #define MAXCON		65535-32/* max numbers of S88 connectors */
