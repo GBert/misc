@@ -1,9 +1,11 @@
 const int revisionnr = 
-12384
+12386
 ;
 const char* commithash = 
-"8d19306b536dd06800674012132a4634a316b118";
+"fff62d70a940a319372ba98c67f7dd4e9b509017";
 const char* revlog = 
+"12386 2017-06-30 10:20:16 +0200 schedules: initialisation fix for wait offset\n" \
+"12385 2017-06-29 11:46:46 +0200 schedules: disregard block wait in case delayed, use schedule times and not use block wait for schedules\n" \
 "12384 2017-06-28 08:26:22 +0200 schedules: blockwait4schedules option added for backward wait compatibility\n" \
 "12383 2017-06-27 12:27:41 +0200 schedules: fix for already waited and minwait\n" \
 "12382 2017-06-27 11:07:03 +0200 schedule: **revert** ignore block wait in case the loco uses schedule time\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12339 2017-06-07 06:59:02 +0200 mgbox: correction of the index uid array link s88 (Bert)\n" \
 "12338 2017-06-06 10:47:17 +0200 translation merge: sl, de, nl, pt_BR, es, fr\n" \
 "12337 2017-06-01 10:21:10 +0200 switch: lock und unlock check action\n" \
-"12336 2017-05-31 14:46:02 +0200 scheduledialog: reinit entry pointers\n" \
-"12335 2017-05-30 22:14:57 +0200 p50x: revert retry flag in case p50x reports power off at switch command...\n" \
 
 "log end";
