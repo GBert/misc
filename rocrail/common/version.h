@@ -1,9 +1,13 @@
 const int revisionnr = 
-12386
+12390
 ;
 const char* commithash = 
-"fff62d70a940a319372ba98c67f7dd4e9b509017";
+"d20fb2f7d783f7eda9975c0bfffd48431cd91bc3";
 const char* revlog = 
+"12390 2017-07-01 14:59:46 +0200 fundialog: sort blocks\n" \
+"12389 2017-07-01 09:25:01 +0200 z21: fix for IID\n" \
+"12388 2017-07-01 08:45:31 +0200 z21: CAN detector support added\n" \
+"12387 2017-06-30 10:52:32 +0200 issue: changed model.xml in plan.xml to be compatible with standard workspaces\n" \
 "12386 2017-06-30 10:20:16 +0200 schedules: initialisation fix for wait offset\n" \
 "12385 2017-06-29 11:46:46 +0200 schedules: disregard block wait in case delayed, use schedule times and not use block wait for schedules\n" \
 "12384 2017-06-28 08:26:22 +0200 schedules: blockwait4schedules option added for backward wait compatibility\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12343 2017-06-09 17:05:27 +0200 control: if no switch is found by ID try to find a route with this ID\n" \
 "12342 2017-06-08 09:15:27 +0200 switch: checkactions on occ event\n" \
 "12341 2017-06-07 21:53:14 +0200 zoomdlg: fix or work around for mingw\n" \
-"12340 2017-06-07 11:43:39 +0200 zoomdlg: preset buttons for 50, 75 and 100%\n" \
-"12339 2017-06-07 06:59:02 +0200 mgbox: correction of the index uid array link s88 (Bert)\n" \
-"12338 2017-06-06 10:47:17 +0200 translation merge: sl, de, nl, pt_BR, es, fr\n" \
-"12337 2017-06-01 10:21:10 +0200 switch: lock und unlock check action\n" \
 
 "log end";
