@@ -1,9 +1,10 @@
 const int revisionnr = 
-12392
+12393
 ;
 const char* commithash = 
-"57417e354217e691e8191e7004ad4a58fe5adb72";
+"e393338c9be6f56213f669aa367254312aa0babb";
 const char* revlog = 
+"12393 2017-07-02 16:05:04 +0200 modplan: add the toRoute also to the module to routeID map\n" \
 "12392 2017-07-02 10:31:48 +0200 plandlg: resize tree after changing the dialog height\n" \
 "12391 2017-07-02 10:10:35 +0200 plandlg: save size, position and options\n" \
 "12390 2017-07-01 14:59:46 +0200 fundialog: sort blocks\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12346 2017-06-11 09:33:10 +0200 route: number added for mapping switch commands from wlanmaus\n" \
 "12345 2017-06-10 11:04:52 +0200 wlanmausdlg: fix for help link\n" \
 "12344 2017-06-10 10:51:18 +0200 wlanmausdlg added\n" \
-"12343 2017-06-09 17:05:27 +0200 control: if no switch is found by ID try to find a route with this ID\n" \
 
 "log end";
