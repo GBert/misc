@@ -1,9 +1,11 @@
 const int revisionnr = 
-12390
+12392
 ;
 const char* commithash = 
-"d20fb2f7d783f7eda9975c0bfffd48431cd91bc3";
+"57417e354217e691e8191e7004ad4a58fe5adb72";
 const char* revlog = 
+"12392 2017-07-02 10:31:48 +0200 plandlg: resize tree after changing the dialog height\n" \
+"12391 2017-07-02 10:10:35 +0200 plandlg: save size, position and options\n" \
 "12390 2017-07-01 14:59:46 +0200 fundialog: sort blocks\n" \
 "12389 2017-07-01 09:25:01 +0200 z21: fix for IID\n" \
 "12388 2017-07-01 08:45:31 +0200 z21: CAN detector support added\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12345 2017-06-10 11:04:52 +0200 wlanmausdlg: fix for help link\n" \
 "12344 2017-06-10 10:51:18 +0200 wlanmausdlg added\n" \
 "12343 2017-06-09 17:05:27 +0200 control: if no switch is found by ID try to find a route with this ID\n" \
-"12342 2017-06-08 09:15:27 +0200 switch: checkactions on occ event\n" \
-"12341 2017-06-07 21:53:14 +0200 zoomdlg: fix or work around for mingw\n" \
 
 "log end";
