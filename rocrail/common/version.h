@@ -1,9 +1,13 @@
 const int revisionnr = 
-12393
+12397
 ;
 const char* commithash = 
-"e393338c9be6f56213f669aa367254312aa0babb";
+"77152445f17287212c8e8f1f1954ac1845340215";
 const char* revlog = 
+"12397 2017-07-03 11:59:31 +0200 modulepropsdlg: removed because it is now integrated into the modplandlg\n" \
+"12396 2017-07-03 11:48:07 +0200 modplandlg: extended with index and module properties\n" \
+"12395 2017-07-03 10:10:24 +0200 schedules: check for regular stop in case of second next block\n" \
+"12394 2017-07-03 08:22:33 +0200 block: fix for changing acceptident flag at runtime\n" \
 "12393 2017-07-02 16:05:04 +0200 modplan: add the toRoute also to the module to routeID map\n" \
 "12392 2017-07-02 10:31:48 +0200 plandlg: resize tree after changing the dialog height\n" \
 "12391 2017-07-02 10:10:35 +0200 plandlg: save size, position and options\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12350 2017-06-12 09:31:11 +0200 route: fix for CTC logic\n" \
 "12349 2017-06-11 18:18:50 +0200 action: crash fix for timed actions\n" \
 "12348 2017-06-11 16:29:50 +0200 switchdialog: layout corrections\n" \
-"12347 2017-06-11 14:08:09 +0200 wmz21: trace fixes\n" \
-"12346 2017-06-11 09:33:10 +0200 route: number added for mapping switch commands from wlanmaus\n" \
-"12345 2017-06-10 11:04:52 +0200 wlanmausdlg: fix for help link\n" \
-"12344 2017-06-10 10:51:18 +0200 wlanmausdlg added\n" \
 
 "log end";
