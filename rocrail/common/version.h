@@ -1,9 +1,15 @@
 const int revisionnr = 
-12397
+12403
 ;
 const char* commithash = 
-"77152445f17287212c8e8f1f1954ac1845340215";
+"10830eff8e88262d08d56462a1f976e49747e570";
 const char* revlog = 
+"12403 2017-07-04 10:40:00 +0200 issue: keep original plan file name and rip of the path prefix\n" \
+"12402 2017-07-04 10:24:48 +0200 modplandlg: remove modplan properties and index page in case module properties only are available\n" \
+"12401 2017-07-04 09:38:09 +0200 modplandlg: abox calls added\n" \
+"12400 2017-07-03 15:43:02 +0200 rocguiinidlg: fix for loco/train image option\n" \
+"12399 2017-07-03 15:24:27 +0200 dynamic text: lcscfirstlocation and lcsclastlocation added\n" \
+"12398 2017-07-03 14:03:53 +0200 guiframe: enable panel props in case of modular layout\n" \
 "12397 2017-07-03 11:59:31 +0200 modulepropsdlg: removed because it is now integrated into the modplandlg\n" \
 "12396 2017-07-03 11:48:07 +0200 modplandlg: extended with index and module properties\n" \
 "12395 2017-07-03 10:10:24 +0200 schedules: check for regular stop in case of second next block\n" \
@@ -48,11 +54,5 @@ const char* revlog =
 "12356 2017-06-14 09:34:11 +0200 app: fix for taking over memory trace level from the rocrail.ini\n" \
 "12355 2017-06-14 09:26:52 +0200 app: fix for taking over memory trace level from the rocrail.ini\n" \
 "12354 2017-06-13 11:14:05 +0200 app: only trace memory if it has increased\n" \
-"12353 2017-06-13 10:24:32 +0200 app: memory watch added\n" \
-"12352 2017-06-12 16:30:51 +0200 analyse: accept signal aspect command in route (Lothar)\n" \
-"12351 2017-06-12 12:38:58 +0200 wlanmausedlg: layout correction\n" \
-"12350 2017-06-12 09:31:11 +0200 route: fix for CTC logic\n" \
-"12349 2017-06-11 18:18:50 +0200 action: crash fix for timed actions\n" \
-"12348 2017-06-11 16:29:50 +0200 switchdialog: layout corrections\n" \
 
 "log end";
