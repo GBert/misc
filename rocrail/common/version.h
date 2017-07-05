@@ -1,9 +1,12 @@
 const int revisionnr = 
-12403
+12406
 ;
 const char* commithash = 
-"10830eff8e88262d08d56462a1f976e49747e570";
+"7d6ed5656bcd5ce414c6bb99debf53cb1fdcaf07";
 const char* revlog = 
+"12406 2017-07-05 11:14:48 +0200 modplandlg: reset connection comboboxes after selecting another module\n" \
+"12405 2017-07-05 10:59:53 +0200 enter: reset triggers in target block in case the loco state is check route\n" \
+"12404 2017-07-05 07:44:19 +0200 signaldialog: fix for tablabels\n" \
 "12403 2017-07-04 10:40:00 +0200 issue: keep original plan file name and rip of the path prefix\n" \
 "12402 2017-07-04 10:24:48 +0200 modplandlg: remove modplan properties and index page in case module properties only are available\n" \
 "12401 2017-07-04 09:38:09 +0200 modplandlg: abox calls added\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12359 2017-06-15 09:41:42 +0200 wlanmausdlg: use a combobox for the target IID\n" \
 "12358 2017-06-14 10:12:17 +0200 schedule: regard the IN time in case of minwait > 0\n" \
 "12357 2017-06-14 09:56:03 +0200 app: removed trace with same content as following traces in case of memory check\n" \
-"12356 2017-06-14 09:34:11 +0200 app: fix for taking over memory trace level from the rocrail.ini\n" \
-"12355 2017-06-14 09:26:52 +0200 app: fix for taking over memory trace level from the rocrail.ini\n" \
-"12354 2017-06-13 11:14:05 +0200 app: only trace memory if it has increased\n" \
 
 "log end";
