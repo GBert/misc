@@ -1,9 +1,12 @@
 const int revisionnr = 
-12406
+12409
 ;
 const char* commithash = 
-"7d6ed5656bcd5ce414c6bb99debf53cb1fdcaf07";
+"afabf77e2b130946140243f455bf16821cb8100e";
 const char* revlog = 
+"12409 2017-07-07 07:21:16 +0200 bidib: watchdog should only send if the power flag is set\n" \
+"12408 2017-07-06 14:09:20 +0200 bidib: trace level correction for MSG_NODE_NA\n" \
+"12407 2017-07-06 08:39:48 +0200 item: increased number of schedules to go from 40 to 80\n" \
 "12406 2017-07-05 11:14:48 +0200 modplandlg: reset connection comboboxes after selecting another module\n" \
 "12405 2017-07-05 10:59:53 +0200 enter: reset triggers in target block in case the loco state is check route\n" \
 "12404 2017-07-05 07:44:19 +0200 signaldialog: fix for tablabels\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12362 2017-06-15 11:25:35 +0200 memory leaks fixes for string tokeniser\n" \
 "12361 2017-06-15 10:09:25 +0200 signal: CTC implemented\n" \
 "12360 2017-06-15 09:42:17 +0200 signal: CTC (wip)\n" \
-"12359 2017-06-15 09:41:42 +0200 wlanmausdlg: use a combobox for the target IID\n" \
-"12358 2017-06-14 10:12:17 +0200 schedule: regard the IN time in case of minwait > 0\n" \
-"12357 2017-06-14 09:56:03 +0200 app: removed trace with same content as following traces in case of memory check\n" \
 
 "log end";
