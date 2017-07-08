@@ -96,7 +96,7 @@ void pps_init(void) {
     RXPPS = 0b10001;		// input  EUSART RX -> RC1
     RC2PPS = 0b10100;		// RC2 output TX/CK
     /* CLC */
-    RB4PPS = 0b00100;		// LC1OUT -> ENABLE
+    /* RB4PPS = 0b00100;		// LC1OUT -> ENABLE */
     /* COG */
     COGINPPS = 0b10011;		// RC3 PULSE
     RB5PPS = 0b01001;		// COG1A -> RPWM
@@ -133,11 +133,10 @@ void system_init(void) {
     /* RA2&RC0 analog input */
     TRISA2 = 1;
     TRISB5 = 0;
-    TRISB5 = 0;
     TRISB6 = 0;
     TRISC0 = 1;
     TRISC3 = 1;		/* Rail Data */
-    TRISC4 = 0;		/* Enable */
+    TRISB4 = 0;		/* Enable */
     TRISC5 = 0;		/* LED */
     // setup interrupt events
     //clear all relevant interrupt flags
@@ -232,11 +231,11 @@ void cog_init(void) {
     COG1CON1 = 0;
 
     COG1RIS = 0x1;	/* COG1PPS rising event		*/
-    COG1RSIM = 0x0;	/* no rising delaya		*/
+    COG1RSIM = 0x0;	/* no rising delay		*/
     COG1FIS = 0x1;	/* COG1PPS falling event	*/
     COG1FSIM = 0x0;	/* no falling delay		*/
 
-    COG1ASD0 = 0;	/* dpn't use shutdown		*/
+    COG1ASD0 = 0;	/* don't use shutdown		*/
     COG1ASD1 = 0;
 
     COG1STR = 0;	/* don't use steering control	*/
@@ -296,6 +295,7 @@ void main(void) {
     i2c_init();
     ad_init();
     timer0_init();
+    cog_init();
     //timer1_init();
 
     /* empty circular buffers */
@@ -304,6 +304,7 @@ void main(void) {
     rx_fifo.head = 0;
     rx_fifo.tail = 0;
 
+    LATB4 = 1;		/* enable	*/
     GIE = 1;
     LCD_init(LCD_01_ADDRESS);
 
@@ -324,6 +325,7 @@ void main(void) {
 	    //LATCbits.LATC0 = 1;
 	    //LATCbits.LATC0 ^= 1;
 	    putchar_wait(0x55);
+	    LATC5 ^= 1;
 	}
 	delay_ms(4);
 
