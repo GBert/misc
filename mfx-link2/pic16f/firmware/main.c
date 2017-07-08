@@ -114,6 +114,7 @@ void system_init(void) {
     //-1110--- 8 MHz internal oscillator (instruction clock)
     //------00 oscillator selected with INTOSC
     ANSELA = 0;
+    ANSELB = 0;
     ANSELC = 0;
     ADCON0 = 0;
     ADCON1 = 0;
@@ -246,11 +247,12 @@ void cog_init(void) {
     COG1PHR = 0;	/* normal phase			*/
     COG1PHF = 0;
 
-    COG1CON0 = 0b10100000;
+    COG1CON0 = 0b10001100;
 	      /* 1-------	G1EN COG1 Enable
 		 -0------	G1LD0 no buffer
 		 ---01---	G1CS Fosc clock source
 		 -----100	G1MD COG Half Bridge mode */
+
 }
 
 /* Instructions per millisecond. */
