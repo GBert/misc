@@ -1,9 +1,11 @@
 const int revisionnr = 
-12409
+12411
 ;
 const char* commithash = 
-"afabf77e2b130946140243f455bf16821cb8100e";
+"0e144fd6fd16850ddef6760336951c10ba4e3ab1";
 const char* revlog = 
+"12411 2017-07-09 08:45:39 +0200 wrapper: categories added to the block wrapper\n" \
+"12410 2017-07-09 07:04:40 +0200 loc: check if the field command has the fn attribute to avoid using the default value\n" \
 "12409 2017-07-07 07:21:16 +0200 bidib: watchdog should only send if the power flag is set\n" \
 "12408 2017-07-06 14:09:20 +0200 bidib: trace level correction for MSG_NODE_NA\n" \
 "12407 2017-07-06 08:39:48 +0200 item: increased number of schedules to go from 40 to 80\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12364 2017-06-16 11:13:31 +0200 pre2in: check also if the block allows BBT\n" \
 "12363 2017-06-16 09:29:05 +0200 number added to signal, output and switch\n" \
 "12362 2017-06-15 11:25:35 +0200 memory leaks fixes for string tokeniser\n" \
-"12361 2017-06-15 10:09:25 +0200 signal: CTC implemented\n" \
-"12360 2017-06-15 09:42:17 +0200 signal: CTC (wip)\n" \
 
 "log end";
