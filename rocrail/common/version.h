@@ -1,9 +1,12 @@
 const int revisionnr = 
-12411
+12414
 ;
 const char* commithash = 
-"0e144fd6fd16850ddef6760336951c10ba4e3ab1";
+"d8d7cbb65c703e5d8ba79c9b6d8bf17f3c064d2c";
 const char* revlog = 
+"12414 2017-07-10 09:33:25 +0200 translation merge: de, pt_BR, sr_latin, fr, nl\n" \
+"12413 2017-07-10 09:14:58 +0200 bidib: removed trace in initial loop\n" \
+"12412 2017-07-10 09:12:20 +0200 bidib: serial writer thread sleep for connection reduced from 2500 to 100\n" \
 "12411 2017-07-09 08:45:39 +0200 wrapper: categories added to the block wrapper\n" \
 "12410 2017-07-09 07:04:40 +0200 loc: check if the field command has the fn attribute to avoid using the default value\n" \
 "12409 2017-07-07 07:21:16 +0200 bidib: watchdog should only send if the power flag is set\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12367 2017-06-17 09:33:30 +0200 model: memeory leak fix at writing occ.xml\n" \
 "12366 2017-06-16 15:32:06 +0200 powerman: fix for freeing up string tokeniser\n" \
 "12365 2017-06-16 15:03:47 +0200 powerman: fix for multiple free string tokeniser\n" \
-"12364 2017-06-16 11:13:31 +0200 pre2in: check also if the block allows BBT\n" \
-"12363 2017-06-16 09:29:05 +0200 number added to signal, output and switch\n" \
-"12362 2017-06-15 11:25:35 +0200 memory leaks fixes for string tokeniser\n" \
 
 "log end";
