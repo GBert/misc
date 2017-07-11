@@ -1,9 +1,11 @@
 const int revisionnr = 
-12414
+12416
 ;
 const char* commithash = 
-"d8d7cbb65c703e5d8ba79c9b6d8bf17f3c064d2c";
+"915c2970904da1382484266565e893ad7702be11";
 const char* revlog = 
+"12416 2017-07-11 11:14:17 +0200 bidib: serial initial read sleep decreased from 1000 to 10ms\n" \
+"12415 2017-07-11 08:05:47 +0200 rocguiinidlg: layout correction renderer: fix for array out of bounds\n" \
 "12414 2017-07-10 09:33:25 +0200 translation merge: de, pt_BR, sr_latin, fr, nl\n" \
 "12413 2017-07-10 09:14:58 +0200 bidib: removed trace in initial loop\n" \
 "12412 2017-07-10 09:12:20 +0200 bidib: serial writer thread sleep for connection reduced from 2500 to 100\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12369 2017-06-18 09:27:09 +0200 cardlg, operatordlg: FG min button added\n" \
 "12368 2017-06-17 12:08:11 +0200 loc: fix for memory leak in case of SBT record search\n" \
 "12367 2017-06-17 09:33:30 +0200 model: memeory leak fix at writing occ.xml\n" \
-"12366 2017-06-16 15:32:06 +0200 powerman: fix for freeing up string tokeniser\n" \
-"12365 2017-06-16 15:03:47 +0200 powerman: fix for multiple free string tokeniser\n" \
 
 "log end";
