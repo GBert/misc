@@ -1,9 +1,12 @@
 const int revisionnr = 
-12416
+12419
 ;
 const char* commithash = 
-"915c2970904da1382484266565e893ad7702be11";
+"83aac7e6dda62a4bae11d22c4dd909d9e766b3ee";
 const char* revlog = 
+"12419 2017-07-13 17:49:01 +0200 rocnetnode: added share parameter to the socket\n" \
+"12418 2017-07-13 13:21:44 +0200 switch: fix for CTC LEDs in case of two motors.\n" \
+"12417 2017-07-13 10:36:27 +0200 socket: UDP share option added for multiple z21 and wmz21\n" \
 "12416 2017-07-11 11:14:17 +0200 bidib: serial initial read sleep decreased from 1000 to 10ms\n" \
 "12415 2017-07-11 08:05:47 +0200 rocguiinidlg: layout correction renderer: fix for array out of bounds\n" \
 "12414 2017-07-10 09:33:25 +0200 translation merge: de, pt_BR, sr_latin, fr, nl\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12372 2017-06-19 10:31:31 +0200 app: faster checking memory usage in case of memory level is activated\n" \
 "12371 2017-06-19 10:20:50 +0200 loc: memory fix for operator command\n" \
 "12370 2017-06-18 09:38:00 +0200 translation merge: de, sl, pt_BR, fr, nl\n" \
-"12369 2017-06-18 09:27:09 +0200 cardlg, operatordlg: FG min button added\n" \
-"12368 2017-06-17 12:08:11 +0200 loc: fix for memory leak in case of SBT record search\n" \
-"12367 2017-06-17 09:33:30 +0200 model: memeory leak fix at writing occ.xml\n" \
 
 "log end";
