@@ -1,9 +1,11 @@
 const int revisionnr = 
-12420
+12422
 ;
 const char* commithash = 
-"94eeb54deb7048b51751766518d81208fc292f7c";
+"0d3a809815b365a1f3ae48d5a21ce58dd126df2d";
 const char* revlog = 
+"12422 2017-07-14 10:26:11 +0200 cardlg: show function icons\n" \
+"12421 2017-07-14 10:01:03 +0200 locdialog: show function icons\n" \
 "12420 2017-07-14 08:06:37 +0200 blockdialog: layout corrections\n" \
 "12419 2017-07-13 17:49:01 +0200 rocnetnode: added share parameter to the socket\n" \
 "12418 2017-07-13 13:21:44 +0200 switch: fix for CTC LEDs in case of two motors.\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12375 2017-06-22 14:47:03 +0200 tt, seltab: number added for wlanmaus switch support\n" \
 "12374 2017-06-20 14:57:32 +0200 mgbox: fixes (Bert)\n" \
 "12373 2017-06-20 12:28:17 +0200 mgbox: L88 improvements (Bert)\n" \
-"12372 2017-06-19 10:31:31 +0200 app: faster checking memory usage in case of memory level is activated\n" \
-"12371 2017-06-19 10:20:50 +0200 loc: memory fix for operator command\n" \
 
 "log end";
