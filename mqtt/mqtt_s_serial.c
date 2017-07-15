@@ -195,7 +195,7 @@ void mqtt_cb_msg(struct mosquitto *mosq, void *userdata, const struct mosquitto_
     if (msg->payload != NULL) {
 	if (!background)
 	    printf("Payload: %s\n", (char *)msg->payload);
-	dprintf(pfd[1].fd, "%s\r\n", (char *)msg->payload);
+	dprintf(pfd[1].fd, "%s\r", (char *)msg->payload);
     }
 }
 

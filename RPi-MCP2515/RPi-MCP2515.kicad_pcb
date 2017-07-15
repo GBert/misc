@@ -1,9 +1,9 @@
-(kicad_pcb (version 4) (host pcbnew 4.0.2+dfsg1-stable)
+(kicad_pcb (version 4) (host pcbnew 4.0.1-stable)
 
   (general
     (links 152)
     (no_connects 0)
-    (area 127.924999 71.424999 193.075001 128.075001)
+    (area 120.350001 59.15 207 142.700001)
     (thickness 1.6)
     (drawings 49)
     (tracks 750)
@@ -2252,7 +2252,7 @@
     )
   )
 
-  (module w_pth_circuits:dil_8-300_socket (layer B.Cu) (tedit 56A65218) (tstamp 5950D3E8)
+  (module w_pth_circuits:dil_8-300_socket (layer B.Cu) (tedit 596A1230) (tstamp 5950D3E8)
     (at 171.45 83.82 90)
     (descr "IC, DIL8 x 0,3\", with socket")
     (tags DIL)
@@ -2260,8 +2260,8 @@
     (fp_text reference U3 (at 0.0635 -0.0635 90) (layer B.SilkS)
       (effects (font (size 1.524 1.143) (thickness 0.28702)) (justify mirror))
     )
-    (fp_text value P82B715 (at 8.8265 -2.9845 90) (layer B.SilkS)
-      (effects (font (size 1.524 1.143) (thickness 0.28702)) (justify mirror))
+    (fp_text value P82B715 (at -0.508 -5.842 90) (layer B.SilkS)
+      (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
     )
     (fp_line (start 2.032 -1.27) (end -2.032 -1.27) (layer B.SilkS) (width 0.254))
     (fp_line (start -2.032 1.27) (end 2.032 1.27) (layer B.SilkS) (width 0.254))
