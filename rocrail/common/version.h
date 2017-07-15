@@ -1,9 +1,11 @@
 const int revisionnr = 
-12422
+12424
 ;
 const char* commithash = 
-"0d3a809815b365a1f3ae48d5a21ce58dd126df2d";
+"a1bcad73242d488639465ff28ca56bbbf0a53090";
 const char* revlog = 
+"12424 2017-07-15 09:36:56 +0200 operatordlg: show function icons\n" \
+"12423 2017-07-15 08:16:30 +0200 wserial: fix for retry offset\n" \
 "12422 2017-07-14 10:26:11 +0200 cardlg: show function icons\n" \
 "12421 2017-07-14 10:01:03 +0200 locdialog: show function icons\n" \
 "12420 2017-07-14 08:06:37 +0200 blockdialog: layout corrections\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12377 2017-06-23 09:06:47 +0200 translation merge: sr_latin\n" \
 "12376 2017-06-23 07:35:27 +0200 mgbox: PT loadmonitor for the CS2\n" \
 "12375 2017-06-22 14:47:03 +0200 tt, seltab: number added for wlanmaus switch support\n" \
-"12374 2017-06-20 14:57:32 +0200 mgbox: fixes (Bert)\n" \
-"12373 2017-06-20 12:28:17 +0200 mgbox: L88 improvements (Bert)\n" \
 
 "log end";
