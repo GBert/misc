@@ -1,9 +1,10 @@
 const int revisionnr = 
-12425
+12426
 ;
 const char* commithash = 
-"be78add42027b44a36383d46d4e17cc52664f6cb";
+"d4946c1eef12eb690d4fcd18a3537fb0883e3766";
 const char* revlog = 
+"12426 2017-07-17 07:47:10 +0200 turntable stylesheets (Gerd)\n" \
 "12425 2017-07-16 08:11:00 +0200 trainimage: use freeze/thaw to prevent flickering under Windows\n" \
 "12424 2017-07-15 09:36:56 +0200 operatordlg: show function icons\n" \
 "12423 2017-07-15 08:16:30 +0200 wserial: fix for retry offset\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12379 2017-06-24 17:32:52 +0200 schedule: disregard maxdelay in case of minwait\n" \
 "12378 2017-06-24 09:15:26 +0200 action: loco lookupscheduleon/off added\n" \
 "12377 2017-06-23 09:06:47 +0200 translation merge: sr_latin\n" \
-"12376 2017-06-23 07:35:27 +0200 mgbox: PT loadmonitor for the CS2\n" \
 
 "log end";
