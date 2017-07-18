@@ -1,9 +1,11 @@
 const int revisionnr = 
-12426
+12428
 ;
 const char* commithash = 
-"d4946c1eef12eb690d4fcd18a3537fb0883e3766";
+"894335a5f105e90c41e8db9e4db3b67810f5cdbe";
 const char* revlog = 
+"12428 2017-07-18 09:47:58 +0200 bidi direction: optional for setting block enter side\n" \
+"12427 2017-07-17 12:26:00 +0200 modplan: try to find a generated route with a route segment which is locked\n" \
 "12426 2017-07-17 07:47:10 +0200 turntable stylesheets (Gerd)\n" \
 "12425 2017-07-16 08:11:00 +0200 trainimage: use freeze/thaw to prevent flickering under Windows\n" \
 "12424 2017-07-15 09:36:56 +0200 operatordlg: show function icons\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12381 2017-06-27 10:41:39 +0200 schedule: fix for ignore maxdelay and minwait\n" \
 "12380 2017-06-25 10:43:57 +0200 wlanmausdlg: translation for standard buttons\n" \
 "12379 2017-06-24 17:32:52 +0200 schedule: disregard maxdelay in case of minwait\n" \
-"12378 2017-06-24 09:15:26 +0200 action: loco lookupscheduleon/off added\n" \
-"12377 2017-06-23 09:06:47 +0200 translation merge: sr_latin\n" \
 
 "log end";
