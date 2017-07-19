@@ -1,9 +1,10 @@
 const int revisionnr = 
-12428
+12429
 ;
 const char* commithash = 
-"894335a5f105e90c41e8db9e4db3b67810f5cdbe";
+"b23c6506ac2b104fd765c85ad2a1a9053ead4b96";
 const char* revlog = 
+"12429 2017-07-19 08:10:58 +0200 locdialog: argument fix for init function icon\n" \
 "12428 2017-07-18 09:47:58 +0200 bidi direction: optional for setting block enter side\n" \
 "12427 2017-07-17 12:26:00 +0200 modplan: try to find a generated route with a route segment which is locked\n" \
 "12426 2017-07-17 07:47:10 +0200 turntable stylesheets (Gerd)\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12382 2017-06-27 11:07:03 +0200 schedule: **revert** ignore block wait in case the loco uses schedule time\n" \
 "12381 2017-06-27 10:41:39 +0200 schedule: fix for ignore maxdelay and minwait\n" \
 "12380 2017-06-25 10:43:57 +0200 wlanmausdlg: translation for standard buttons\n" \
-"12379 2017-06-24 17:32:52 +0200 schedule: disregard maxdelay in case of minwait\n" \
 
 "log end";
