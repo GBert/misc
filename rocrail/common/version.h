@@ -1,9 +1,14 @@
 const int revisionnr = 
-12429
+12434
 ;
 const char* commithash = 
-"b23c6506ac2b104fd765c85ad2a1a9053ead4b96";
+"9fa7da04fddf9cbca65d869bdfa829bba0ead15d";
 const char* revlog = 
+"12434 2017-07-20 10:33:48 +0200 dccpp: warning in case serial device could not be initialized\n" \
+"12433 2017-07-20 09:41:47 +0200 rocdigs: reject poll info except xpressnet\n" \
+"12432 2017-07-20 08:34:29 +0200 loconet, virtual: catch the poll info command and reject it\n" \
+"12431 2017-07-20 08:22:48 +0200 loc: reset the poll info flag at startup\n" \
+"12430 2017-07-20 07:49:03 +0200 locdialog: label for poll info extended with xpressnet\n" \
 "12429 2017-07-19 08:10:58 +0200 locdialog: argument fix for init function icon\n" \
 "12428 2017-07-18 09:47:58 +0200 bidi direction: optional for setting block enter side\n" \
 "12427 2017-07-17 12:26:00 +0200 modplan: try to find a generated route with a route segment which is locked\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "12387 2017-06-30 10:52:32 +0200 issue: changed model.xml in plan.xml to be compatible with standard workspaces\n" \
 "12386 2017-06-30 10:20:16 +0200 schedules: initialisation fix for wait offset\n" \
 "12385 2017-06-29 11:46:46 +0200 schedules: disregard block wait in case delayed, use schedule times and not use block wait for schedules\n" \
-"12384 2017-06-28 08:26:22 +0200 schedules: blockwait4schedules option added for backward wait compatibility\n" \
-"12383 2017-06-27 12:27:41 +0200 schedules: fix for already waited and minwait\n" \
-"12382 2017-06-27 11:07:03 +0200 schedule: **revert** ignore block wait in case the loco uses schedule time\n" \
-"12381 2017-06-27 10:41:39 +0200 schedule: fix for ignore maxdelay and minwait\n" \
-"12380 2017-06-25 10:43:57 +0200 wlanmausdlg: translation for standard buttons\n" \
 
 "log end";
