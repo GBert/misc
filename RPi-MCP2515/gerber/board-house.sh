@@ -1,5 +1,6 @@
 #!/bin/sh
 
+set -x
 BOARD='RPi-MCP2515'
 
 cp ${BOARD}-F.Cu.gtl      ${BOARD}.GTL
