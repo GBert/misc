@@ -1,9 +1,17 @@
 const int revisionnr = 
-12434
+12442
 ;
 const char* commithash = 
-"9fa7da04fddf9cbca65d869bdfa829bba0ead15d";
+"a9fa0acd1d0b6a92ddb1342d8a7b1dd3be2a2de3";
 const char* revlog = 
+"12442 2017-07-21 16:29:41 +0200 guiframe: fix for not updating the selected loco in the throttle\n" \
+"12441 2017-07-21 16:21:36 +0200 revert guiframe: fix for not updating the selected loco in the throttle\n" \
+"12440 2017-07-21 16:17:56 +0200 guiframe: fix for not updating the selected loco in the throttle\n" \
+"12439 2017-07-21 11:55:45 +0200 gotodlg: save selection settings loconet: save slotdirf in case of a command\n" \
+"12438 2017-07-21 11:25:42 +0200 xmlscript: fix for text commands\n" \
+"12437 2017-07-21 10:23:30 +0200 loconet: fix for DIRF and SND\n" \
+"12436 2017-07-21 08:32:33 +0200 text: cmd showon and showoff added for xmlscript\n" \
+"12435 2017-07-21 08:04:08 +0200 text: show flag added\n" \
 "12434 2017-07-20 10:33:48 +0200 dccpp: warning in case serial device could not be initialized\n" \
 "12433 2017-07-20 09:41:47 +0200 rocdigs: reject poll info except xpressnet\n" \
 "12432 2017-07-20 08:34:29 +0200 loconet, virtual: catch the poll info command and reject it\n" \
@@ -46,13 +54,5 @@ const char* revlog =
 "12395 2017-07-03 10:10:24 +0200 schedules: check for regular stop in case of second next block\n" \
 "12394 2017-07-03 08:22:33 +0200 block: fix for changing acceptident flag at runtime\n" \
 "12393 2017-07-02 16:05:04 +0200 modplan: add the toRoute also to the module to routeID map\n" \
-"12392 2017-07-02 10:31:48 +0200 plandlg: resize tree after changing the dialog height\n" \
-"12391 2017-07-02 10:10:35 +0200 plandlg: save size, position and options\n" \
-"12390 2017-07-01 14:59:46 +0200 fundialog: sort blocks\n" \
-"12389 2017-07-01 09:25:01 +0200 z21: fix for IID\n" \
-"12388 2017-07-01 08:45:31 +0200 z21: CAN detector support added\n" \
-"12387 2017-06-30 10:52:32 +0200 issue: changed model.xml in plan.xml to be compatible with standard workspaces\n" \
-"12386 2017-06-30 10:20:16 +0200 schedules: initialisation fix for wait offset\n" \
-"12385 2017-06-29 11:46:46 +0200 schedules: disregard block wait in case delayed, use schedule times and not use block wait for schedules\n" \
 
 "log end";
