@@ -1,9 +1,10 @@
 const int revisionnr = 
-12442
+12443
 ;
 const char* commithash = 
-"a9fa0acd1d0b6a92ddb1342d8a7b1dd3be2a2de3";
+"e95af98eb78d804d6091bbae7bd060a923349066";
 const char* revlog = 
+"12443 2017-07-22 16:37:51 +0200 ecos: trace level changed for invalid railcom module\n" \
 "12442 2017-07-21 16:29:41 +0200 guiframe: fix for not updating the selected loco in the throttle\n" \
 "12441 2017-07-21 16:21:36 +0200 revert guiframe: fix for not updating the selected loco in the throttle\n" \
 "12440 2017-07-21 16:17:56 +0200 guiframe: fix for not updating the selected loco in the throttle\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12396 2017-07-03 11:48:07 +0200 modplandlg: extended with index and module properties\n" \
 "12395 2017-07-03 10:10:24 +0200 schedules: check for regular stop in case of second next block\n" \
 "12394 2017-07-03 08:22:33 +0200 block: fix for changing acceptident flag at runtime\n" \
-"12393 2017-07-02 16:05:04 +0200 modplan: add the toRoute also to the module to routeID map\n" \
 
 "log end";
