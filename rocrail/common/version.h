@@ -1,9 +1,17 @@
 const int revisionnr = 
-12443
+12451
 ;
 const char* commithash = 
-"e95af98eb78d804d6091bbae7bd060a923349066";
+"a72d57ab0af67d2cfb8a07cbc61281daa85b661e";
 const char* revlog = 
+"12451 2017-07-23 17:18:35 +0200 messages: xml wellformed fix ;)\n" \
+"12450 2017-07-23 15:47:47 +0200 variabledlg: maximize button added\n" \
+"12449 2017-07-23 15:08:44 +0200 esunavi: fix for get slot without using the serial semaphore\n" \
+"12448 2017-07-23 14:27:00 +0200 guiframe: accelerator for the variable table added\n" \
+"12447 2017-07-23 12:38:03 +0200 ecos: fix for bulb 3, trackbus\n" \
+"12446 2017-07-23 11:27:04 +0200 ecosdlg: browser button added to open the web browser with the ecos IP\n" \
+"12445 2017-07-23 09:50:58 +0200 ecos: status bulb support extended\n" \
+"12444 2017-07-23 08:00:30 +0200 textdialog: set the color values at opening the color picker\n" \
 "12443 2017-07-22 16:37:51 +0200 ecos: trace level changed for invalid railcom module\n" \
 "12442 2017-07-21 16:29:41 +0200 guiframe: fix for not updating the selected loco in the throttle\n" \
 "12441 2017-07-21 16:21:36 +0200 revert guiframe: fix for not updating the selected loco in the throttle\n" \
@@ -46,13 +54,5 @@ const char* revlog =
 "12404 2017-07-05 07:44:19 +0200 signaldialog: fix for tablabels\n" \
 "12403 2017-07-04 10:40:00 +0200 issue: keep original plan file name and rip of the path prefix\n" \
 "12402 2017-07-04 10:24:48 +0200 modplandlg: remove modplan properties and index page in case module properties only are available\n" \
-"12401 2017-07-04 09:38:09 +0200 modplandlg: abox calls added\n" \
-"12400 2017-07-03 15:43:02 +0200 rocguiinidlg: fix for loco/train image option\n" \
-"12399 2017-07-03 15:24:27 +0200 dynamic text: lcscfirstlocation and lcsclastlocation added\n" \
-"12398 2017-07-03 14:03:53 +0200 guiframe: enable panel props in case of modular layout\n" \
-"12397 2017-07-03 11:59:31 +0200 modulepropsdlg: removed because it is now integrated into the modplandlg\n" \
-"12396 2017-07-03 11:48:07 +0200 modplandlg: extended with index and module properties\n" \
-"12395 2017-07-03 10:10:24 +0200 schedules: check for regular stop in case of second next block\n" \
-"12394 2017-07-03 08:22:33 +0200 block: fix for changing acceptident flag at runtime\n" \
 
 "log end";
