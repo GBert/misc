@@ -1,9 +1,26 @@
 const int revisionnr = 
-12451
+12468
 ;
 const char* commithash = 
-"a72d57ab0af67d2cfb8a07cbc61281daa85b661e";
+"1751e99651b247d0350fcf13e3d63ee36d165962";
 const char* revlog = 
+"12468 2017-07-27 15:31:33 +0200 wrapper: default themes\n" \
+"12467 2017-07-27 11:30:34 +0200 rocview: programming tab option added\n" \
+"12466 2017-07-27 08:41:52 +0200 dialogs: save size and position\n" \
+"12465 2017-07-27 08:15:41 +0200 renderer: fix for linear signal\n" \
+"12464 2017-07-26 15:57:00 +0200 basedlg: generalizing dialog properties\n" \
+"12463 2017-07-26 12:29:02 +0200 rocweb: fix for subblocks in locations if missing\n" \
+"12462 2017-07-26 12:21:02 +0200 basedlg: dialog properties\n" \
+"12461 2017-07-26 10:40:21 +0200 dlgprops: generalized dialog properties\n" \
+"12460 2017-07-25 11:39:26 +0200 timedactions: save position and size\n" \
+"12459 2017-07-25 11:06:25 +0200 operator and variable dialog: save size and position\n" \
+"12458 2017-07-25 10:57:07 +0200 translation merge: de, pt_BR, sr_latin, fr, nl\n" \
+"12457 2017-07-25 08:18:36 +0200 actionsctrldlg: title fix for system actions\n" \
+"12456 2017-07-25 08:00:14 +0200 textdialog: resize fixes\n" \
+"12455 2017-07-24 16:16:54 +0200 rocweb: XS disable short click for Vmax preset\n" \
+"12454 2017-07-24 15:23:11 +0200 rocweb: button IIII, Vmax, long click only\n" \
+"12453 2017-07-24 11:49:42 +0200 ecos: only evaluate the railcom attribute in case of ecos detectors >= 200\n" \
+"12452 2017-07-24 08:24:00 +0200 dialogs: maximize buttons added\n" \
 "12451 2017-07-23 17:18:35 +0200 messages: xml wellformed fix ;)\n" \
 "12450 2017-07-23 15:47:47 +0200 variabledlg: maximize button added\n" \
 "12449 2017-07-23 15:08:44 +0200 esunavi: fix for get slot without using the serial semaphore\n" \
@@ -37,22 +54,5 @@ const char* revlog =
 "12421 2017-07-14 10:01:03 +0200 locdialog: show function icons\n" \
 "12420 2017-07-14 08:06:37 +0200 blockdialog: layout corrections\n" \
 "12419 2017-07-13 17:49:01 +0200 rocnetnode: added share parameter to the socket\n" \
-"12418 2017-07-13 13:21:44 +0200 switch: fix for CTC LEDs in case of two motors.\n" \
-"12417 2017-07-13 10:36:27 +0200 socket: UDP share option added for multiple z21 and wmz21\n" \
-"12416 2017-07-11 11:14:17 +0200 bidib: serial initial read sleep decreased from 1000 to 10ms\n" \
-"12415 2017-07-11 08:05:47 +0200 rocguiinidlg: layout correction renderer: fix for array out of bounds\n" \
-"12414 2017-07-10 09:33:25 +0200 translation merge: de, pt_BR, sr_latin, fr, nl\n" \
-"12413 2017-07-10 09:14:58 +0200 bidib: removed trace in initial loop\n" \
-"12412 2017-07-10 09:12:20 +0200 bidib: serial writer thread sleep for connection reduced from 2500 to 100\n" \
-"12411 2017-07-09 08:45:39 +0200 wrapper: categories added to the block wrapper\n" \
-"12410 2017-07-09 07:04:40 +0200 loc: check if the field command has the fn attribute to avoid using the default value\n" \
-"12409 2017-07-07 07:21:16 +0200 bidib: watchdog should only send if the power flag is set\n" \
-"12408 2017-07-06 14:09:20 +0200 bidib: trace level correction for MSG_NODE_NA\n" \
-"12407 2017-07-06 08:39:48 +0200 item: increased number of schedules to go from 40 to 80\n" \
-"12406 2017-07-05 11:14:48 +0200 modplandlg: reset connection comboboxes after selecting another module\n" \
-"12405 2017-07-05 10:59:53 +0200 enter: reset triggers in target block in case the loco state is check route\n" \
-"12404 2017-07-05 07:44:19 +0200 signaldialog: fix for tablabels\n" \
-"12403 2017-07-04 10:40:00 +0200 issue: keep original plan file name and rip of the path prefix\n" \
-"12402 2017-07-04 10:24:48 +0200 modplandlg: remove modplan properties and index page in case module properties only are available\n" \
 
 "log end";
