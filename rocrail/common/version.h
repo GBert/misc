@@ -1,9 +1,19 @@
 const int revisionnr = 
-12468
+12478
 ;
 const char* commithash = 
-"1751e99651b247d0350fcf13e3d63ee36d165962";
+"e3724c525b2e783e7a462b1f8d5cf1e6ae2db432";
 const char* revlog = 
+"12478 2017-07-28 15:17:58 +0200 programming dialogs: save size and position\n" \
+"12477 2017-07-28 11:22:31 +0200 save size and position\n" \
+"12476 2017-07-28 11:07:20 +0200 cmdrecorder: save size and position\n" \
+"12475 2017-07-28 10:59:03 +0200 competitiondlg: resize fixes and save size position\n" \
+"12474 2017-07-28 10:49:07 +0200 save size and position of issue and info dialog\n" \
+"12473 2017-07-28 10:37:25 +0200 rocview: save size and pos of the two test dialogs\n" \
+"12472 2017-07-28 10:31:11 +0200 ecos: trace fixes\n" \
+"12471 2017-07-28 09:21:37 +0200 rocview: restor dialog size option added\n" \
+"12470 2017-07-28 08:08:18 +0200 save dialog size and position at cancel too\n" \
+"12469 2017-07-28 07:48:57 +0200 gotodlg: sizing fix\n" \
 "12468 2017-07-27 15:31:33 +0200 wrapper: default themes\n" \
 "12467 2017-07-27 11:30:34 +0200 rocview: programming tab option added\n" \
 "12466 2017-07-27 08:41:52 +0200 dialogs: save size and position\n" \
@@ -44,15 +54,5 @@ const char* revlog =
 "12431 2017-07-20 08:22:48 +0200 loc: reset the poll info flag at startup\n" \
 "12430 2017-07-20 07:49:03 +0200 locdialog: label for poll info extended with xpressnet\n" \
 "12429 2017-07-19 08:10:58 +0200 locdialog: argument fix for init function icon\n" \
-"12428 2017-07-18 09:47:58 +0200 bidi direction: optional for setting block enter side\n" \
-"12427 2017-07-17 12:26:00 +0200 modplan: try to find a generated route with a route segment which is locked\n" \
-"12426 2017-07-17 07:47:10 +0200 turntable stylesheets (Gerd)\n" \
-"12425 2017-07-16 08:11:00 +0200 trainimage: use freeze/thaw to prevent flickering under Windows\n" \
-"12424 2017-07-15 09:36:56 +0200 operatordlg: show function icons\n" \
-"12423 2017-07-15 08:16:30 +0200 wserial: fix for retry offset\n" \
-"12422 2017-07-14 10:26:11 +0200 cardlg: show function icons\n" \
-"12421 2017-07-14 10:01:03 +0200 locdialog: show function icons\n" \
-"12420 2017-07-14 08:06:37 +0200 blockdialog: layout corrections\n" \
-"12419 2017-07-13 17:49:01 +0200 rocnetnode: added share parameter to the socket\n" \
 
 "log end";
