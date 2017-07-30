@@ -1,9 +1,22 @@
 const int revisionnr = 
-12478
+12491
 ;
 const char* commithash = 
-"e3724c525b2e783e7a462b1f8d5cf1e6ae2db432";
+"21647326fbaf889313a3e96d2db58300a1208acd";
 const char* revlog = 
+"12491 2017-07-30 15:26:44 +0200 rocweb: es translation for the select block popup\n" \
+"12490 2017-07-30 11:08:24 +0200 rocweb: select block popup translation added\n" \
+"12489 2017-07-30 10:52:32 +0200 rocweb: added a select block popup in case a loco is not in a block\n" \
+"12488 2017-07-29 18:16:05 +0200 action: unlock route forced by action\n" \
+"12487 2017-07-29 17:49:20 +0200 guiframe: only trace if trace windows are visible\n" \
+"12486 2017-07-29 17:05:48 +0200 virtual: report all 1024 sensors on SOD\n" \
+"12485 2017-07-29 16:35:34 +0200 clntcon: sleep removed from broadcaster\n" \
+"12484 2017-07-29 14:58:08 +0200 clntcon: only sleep 10ms in case the queue > 1000\n" \
+"12483 2017-07-29 14:26:01 +0200 bidib: MSG_BM_GET_RANGE must be a multiple of 8\n" \
+"12482 2017-07-29 11:55:37 +0200 basedlg: object name in popup in case property changes\n" \
+"12481 2017-07-29 11:14:08 +0200 blockdialog: check for changes on cancel and selection (experimental)\n" \
+"12480 2017-07-29 10:49:56 +0200 blockdialog: check for changes on cancel and selection (experimental)\n" \
+"12479 2017-07-29 08:12:20 +0200 translation merge: de, nl, pt_BR\n" \
 "12478 2017-07-28 15:17:58 +0200 programming dialogs: save size and position\n" \
 "12477 2017-07-28 11:22:31 +0200 save size and position\n" \
 "12476 2017-07-28 11:07:20 +0200 cmdrecorder: save size and position\n" \
@@ -41,18 +54,5 @@ const char* revlog =
 "12444 2017-07-23 08:00:30 +0200 textdialog: set the color values at opening the color picker\n" \
 "12443 2017-07-22 16:37:51 +0200 ecos: trace level changed for invalid railcom module\n" \
 "12442 2017-07-21 16:29:41 +0200 guiframe: fix for not updating the selected loco in the throttle\n" \
-"12441 2017-07-21 16:21:36 +0200 revert guiframe: fix for not updating the selected loco in the throttle\n" \
-"12440 2017-07-21 16:17:56 +0200 guiframe: fix for not updating the selected loco in the throttle\n" \
-"12439 2017-07-21 11:55:45 +0200 gotodlg: save selection settings loconet: save slotdirf in case of a command\n" \
-"12438 2017-07-21 11:25:42 +0200 xmlscript: fix for text commands\n" \
-"12437 2017-07-21 10:23:30 +0200 loconet: fix for DIRF and SND\n" \
-"12436 2017-07-21 08:32:33 +0200 text: cmd showon and showoff added for xmlscript\n" \
-"12435 2017-07-21 08:04:08 +0200 text: show flag added\n" \
-"12434 2017-07-20 10:33:48 +0200 dccpp: warning in case serial device could not be initialized\n" \
-"12433 2017-07-20 09:41:47 +0200 rocdigs: reject poll info except xpressnet\n" \
-"12432 2017-07-20 08:34:29 +0200 loconet, virtual: catch the poll info command and reject it\n" \
-"12431 2017-07-20 08:22:48 +0200 loc: reset the poll info flag at startup\n" \
-"12430 2017-07-20 07:49:03 +0200 locdialog: label for poll info extended with xpressnet\n" \
-"12429 2017-07-19 08:10:58 +0200 locdialog: argument fix for init function icon\n" \
 
 "log end";
