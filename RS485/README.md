@@ -29,9 +29,17 @@ https://viereck.ch/linux-mark-space-parity/
 Links
 -----
 https://stevenbreuls.com/2013/05/diy-usb-dmx-dongle-interface-for-under-10/
+
 https://stevenbreuls.com/2014/04/dmx-rs485-wrong-board-fix/
 
 https://viereck.ch/linux-mark-space-parity/
+
+
+According Sven Skrable:
+
+http://sven-skrabal.de/projekte/xpressnet-zu-virtual-com-usb-gateway/
+
+we are going to show the opposite ;-)
 
 old:
 
