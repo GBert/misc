@@ -17,12 +17,12 @@ https://viereck.ch/linux-mark-space-parity/
 	tio.c_cflag |= PARENB;
 	tio.c_cflag |= CMSPAR;
 	tio.c_cflag |= PARODD;
-	tcsetattr(mFileHandle, TCSADRAIN, &tio);
+	tcsetattr(ttyHandle, TCSADRAIN, &tio);
 	write(ttyHandle, packet, 1);
 
 	// Send the rest with space parity
 	tio.c_cflag &= ~PARODD;
-	tcsetattr(mFileHandle, TCSADRAIN, &tio);
+	tcsetattr(ttyHandle, TCSADRAIN, &tio);
 	write(ttyHandle, packet+1, len-1);
 ```
 
