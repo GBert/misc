@@ -37,7 +37,7 @@ https://stevenbreuls.com/2014/04/dmx-rs485-wrong-board-fix/
 https://viereck.ch/linux-mark-space-parity/
 
 
-According Sven Skrable:
+According to Sven Skrable the adapter doesn't work:
 
 http://sven-skrabal.de/projekte/xpressnet-zu-virtual-com-usb-gateway/
 
