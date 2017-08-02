@@ -43,6 +43,8 @@ http://sven-skrabal.de/projekte/xpressnet-zu-virtual-com-usb-gateway/
 
 we are going to show the opposite ;-)
 
+https://groups.google.com/forum/#!msg/de.rec.modelle.bahn/pAHyAhnnz0k/zorJCrMxDp4J
+
 old:
 
 http://www.telltronics.org/software/dmx
