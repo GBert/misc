@@ -6,8 +6,6 @@
  * Gerhard Bertelsmann
  * ----------------------------------------------------------------------------
  *
- *
- * http://bohdan-danishevsky.blogspot.de/2014/12/9-bit-uart-8m1-8s1-modes-in-linux-hack.html
  */
 
 #include <fcntl.h>
@@ -89,8 +87,14 @@ int init_rs485(struct rs485_data_t *rs485_data) {
 	ftdi_free(rs485_data->ftdi);
 	return EXIT_FAILURE;
     }
+
+    if ((ret = ftdi_setflowctrl(rs485_data->ftdi, SIO_DISABLE_FLOW_CTRL)) < 0) {
+        fprintf(stderr, "unable to set flow control: %d (%s)\n", ret, ftdi_get_error_string(rs485_data->ftdi));
+        return EXIT_FAILURE;
+    }
     return 0;
 }
+
 
 int close_rs485(struct rs485_data_t *rs485_data) {
     int ret;
@@ -101,6 +105,29 @@ int close_rs485(struct rs485_data_t *rs485_data) {
 	return EXIT_FAILURE;
     }
     ftdi_free(rs485_data->ftdi);
+    return 0;
+}
+
+int send_rs485_data(struct rs485_data_t *rs485_data, unsigned char *data, int length) {
+    int ret;
+
+    if ((ret = ftdi_set_line_property(rs485_data->ftdi, BITS_8, STOP_BIT_1, MARK)) < 0) {
+        fprintf(stderr, "unable to set flow control: %d (%s)\n", ret, ftdi_get_error_string(rs485_data->ftdi));
+        return EXIT_FAILURE;
+    }
+    if ((ret = ftdi_write_data(rs485_data->ftdi, data, 1)) != 1) {
+        fprintf(stderr, "unable to sent data (address): %d (%s)\n", ret, ftdi_get_error_string(rs485_data->ftdi));
+        return EXIT_FAILURE;
+    }
+
+    if ((ret = ftdi_set_line_property(rs485_data->ftdi, BITS_8, STOP_BIT_1, SPACE)) < 0) {
+        fprintf(stderr, "unable to set flow control: %d (%s)\n", ret, ftdi_get_error_string(rs485_data->ftdi));
+        return EXIT_FAILURE;
+    }
+    if ((ret = ftdi_write_data(rs485_data->ftdi, &data[1], length - 1)) != length -1) {
+        fprintf(stderr, "unable to sent data (address): %d (%s)\n", ret, ftdi_get_error_string(rs485_data->ftdi));
+        return EXIT_FAILURE;
+    }
     return 0;
 }
 
