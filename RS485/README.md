@@ -48,3 +48,5 @@ https://groups.google.com/forum/#!msg/de.rec.modelle.bahn/pAHyAhnnz0k/zorJCrMxDp
 old:
 
 http://www.telltronics.org/software/dmx
+
+ftp://ftp.koansoftware.com/public/linux/freescale/imx6/imx6-3.10.17-serial-imx-rs485.patch

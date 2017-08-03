@@ -60,24 +60,19 @@ int countBits(uint8_t value) {
 }
 
 int main(int argc, char **argv) {
-    int fd, opt, ret, speed;
+    int fd, opt, speed;
     char uart[255];
-    struct ifreq ifr;
-    /* socklen_t caddrlen = sizeof(caddr); */
 
     speed = DEFAULT_SPEED;
     strcpy(uart, "/dev/ttyS2");
 
     while ((opt = getopt(argc, argv, "i:s:h?")) != -1) {
 	switch (opt) {
+	case 'i':
+	    strncpy(uart, optarg, sizeof(uart) - 1);
+	    break;
 	case 's':
 	    speed = atoi(optarg);
-	    break;
-	case 'i':
-	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
-	    break;
-	case 'r':
-	    strncpy(uart, optarg, sizeof(uart) - 1);
 	    break;
 	case 'h':
 	case '?':
