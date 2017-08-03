@@ -29,12 +29,20 @@
 #include <sys/time.h>
 #include <time.h>
 
+#include <ftdi.h>
+
 #define DEFAULT_SPEED	62500
 
+struct rs485_data_t {
+    unsigned int speed;
+    struct ftdi_context *ftdi;
+};
+
+struct rs485_data_t rs485_data;
+
 void print_usage(char *prg) {
-    fprintf(stderr, "\nUsage: %s -i <UART> -s <speed>\n", prg);
+    fprintf(stderr, "\nUsage: %s -s <speed>\n", prg);
     fprintf(stderr, "   Version 0.1\n\n");
-    fprintf(stderr, "         -i <UART>           UART - default UART2\n");
     fprintf(stderr, "         -s <speed>          speed - default %d\n", DEFAULT_SPEED);
 }
 
@@ -52,27 +60,61 @@ int time_stamp(char *timestamp) {
 int countBits(uint8_t value) {
     int ret = 0;
 
-    while(value > 0) {
-        ret++;
-        value >>= 1;
+    while (value > 0) {
+	ret++;
+	value >>= 1;
     }
     return ret;
 }
 
-int main(int argc, char **argv) {
-    int fd, opt, speed;
-    char uart[255];
+int init_rs485(struct rs485_data_t *rs485_data) {
+    int ret;
 
-    speed = DEFAULT_SPEED;
-    strcpy(uart, "/dev/ttyS2");
+    rs485_data->ftdi = ftdi_new();
+
+    if (!rs485_data->ftdi) {
+	fprintf(stderr, "ftdi_new failed\n");
+	return -1;
+    }
+
+    /* check for FT232RL device */
+    if ((ret = ftdi_usb_open(rs485_data->ftdi, 0x0403, 0x6001)) < 0) {
+	fprintf(stderr, "unable to open FTDI device: %d (%s)\n", ret, ftdi_get_error_string(rs485_data->ftdi));
+	ftdi_free(rs485_data->ftdi);
+	return EXIT_FAILURE;
+    }
+
+    if ((ret = ftdi_set_baudrate(rs485_data->ftdi, rs485_data->speed)) < 0) {
+	fprintf(stderr, "unable to set baudrate: %d (%s)\n", ret, ftdi_get_error_string(rs485_data->ftdi));
+	ftdi_free(rs485_data->ftdi);
+	return EXIT_FAILURE;
+    }
+    return 0;
+}
+
+int close_rs485(struct rs485_data_t *rs485_data) {
+    int ret;
+
+    if ((ret = ftdi_usb_close(rs485_data->ftdi)) < 0) {
+	fprintf(stderr, "unable to close ftdi device: %d (%s)\n", ret, ftdi_get_error_string(rs485_data->ftdi));
+	ftdi_free(rs485_data->ftdi);
+	return EXIT_FAILURE;
+    }
+    ftdi_free(rs485_data->ftdi);
+    return 0;
+}
+
+int main(int argc, char **argv) {
+    int ret, opt;
+
+    memset(&rs485_data, 0, sizeof(rs485_data));
+
+    rs485_data.speed = DEFAULT_SPEED;
 
     while ((opt = getopt(argc, argv, "i:s:h?")) != -1) {
 	switch (opt) {
-	case 'i':
-	    strncpy(uart, optarg, sizeof(uart) - 1);
-	    break;
 	case 's':
-	    speed = atoi(optarg);
+	    rs485_data.speed = atoi(optarg);
 	    break;
 	case 'h':
 	case '?':
@@ -86,12 +128,14 @@ int main(int argc, char **argv) {
 	}
     }
 
-    if ((fd = open(uart, O_RDONLY)) < 0) {
-	fprintf(stderr, "error opening UART: %s\n", strerror(errno));
+    ret = init_rs485(&rs485_data);
+    if (ret > 0)
 	exit(EXIT_FAILURE);
-    }
 
     while (1) {
     }
+    ret = close_rs485(&rs485_data);
+    if (ret > 0)
+	exit(EXIT_FAILURE);
     return 0;
 }
