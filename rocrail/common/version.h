@@ -1,9 +1,29 @@
 const int revisionnr = 
-12491
+12511
 ;
 const char* commithash = 
-"21647326fbaf889313a3e96d2db58300a1208acd";
+"562cce2345c2a0ea4cd6e77e9ba62decf3e63565";
 const char* revlog = 
+"12511 2017-08-02 14:58:54 +0200 bidibdlg: label correction\n" \
+"12510 2017-08-02 14:42:48 +0200 mcs2: try to query 1000 and 2000 ranges\n" \
+"12509 2017-08-02 11:41:18 +0200 mcs2: added sensor query with device ID at SoD\n" \
+"12508 2017-08-02 11:22:00 +0200 mcs2: trace correction\n" \
+"12507 2017-08-02 11:17:09 +0200 translation for sensordevice\n" \
+"12506 2017-08-02 11:10:23 +0200 ecosdlg: added sensor device for mcs2\n" \
+"12505 2017-08-02 10:50:06 +0200 bidibdlg: udp sublib added\n" \
+"12504 2017-08-02 10:13:38 +0200 basedlg: fix for wxString constructor\n" \
+"12503 2017-08-02 09:40:33 +0200 mcs2: revert useS88bus\n" \
+"12502 2017-08-02 08:09:47 +0200 rocweb: loco list category option all added\n" \
+"12501 2017-08-01 15:28:25 +0200 mcs2: trace correction\n" \
+"12500 2017-08-01 15:18:29 +0200 mcs2: useS88bus option added for reporting\n" \
+"12499 2017-08-01 12:03:20 +0200 competition: added to the toolbar, layout fixes\n" \
+"12498 2017-08-01 10:54:59 +0200 powermandlg: fix for selecting the initial tab\n" \
+"12497 2017-08-01 10:26:37 +0200 blockgroupingdlg: sort on ID and Description\n" \
+"12496 2017-08-01 10:13:23 +0200 blockgroupingdlg: replaced the simple list with a list control\n" \
+"12495 2017-07-31 14:32:33 +0200 blockdialog: disabled check4changes\n" \
+"12494 2017-07-31 14:27:42 +0200 bidib: tcp functions connect and disconnect added\n" \
+"12493 2017-07-31 10:46:54 +0200 bidib: tcpip support\n" \
+"12492 2017-07-31 10:10:30 +0200 bidib: tcp support (wip)\n" \
 "12491 2017-07-30 15:26:44 +0200 rocweb: es translation for the select block popup\n" \
 "12490 2017-07-30 11:08:24 +0200 rocweb: select block popup translation added\n" \
 "12489 2017-07-30 10:52:32 +0200 rocweb: added a select block popup in case a loco is not in a block\n" \
@@ -34,25 +54,5 @@ const char* revlog =
 "12464 2017-07-26 15:57:00 +0200 basedlg: generalizing dialog properties\n" \
 "12463 2017-07-26 12:29:02 +0200 rocweb: fix for subblocks in locations if missing\n" \
 "12462 2017-07-26 12:21:02 +0200 basedlg: dialog properties\n" \
-"12461 2017-07-26 10:40:21 +0200 dlgprops: generalized dialog properties\n" \
-"12460 2017-07-25 11:39:26 +0200 timedactions: save position and size\n" \
-"12459 2017-07-25 11:06:25 +0200 operator and variable dialog: save size and position\n" \
-"12458 2017-07-25 10:57:07 +0200 translation merge: de, pt_BR, sr_latin, fr, nl\n" \
-"12457 2017-07-25 08:18:36 +0200 actionsctrldlg: title fix for system actions\n" \
-"12456 2017-07-25 08:00:14 +0200 textdialog: resize fixes\n" \
-"12455 2017-07-24 16:16:54 +0200 rocweb: XS disable short click for Vmax preset\n" \
-"12454 2017-07-24 15:23:11 +0200 rocweb: button IIII, Vmax, long click only\n" \
-"12453 2017-07-24 11:49:42 +0200 ecos: only evaluate the railcom attribute in case of ecos detectors >= 200\n" \
-"12452 2017-07-24 08:24:00 +0200 dialogs: maximize buttons added\n" \
-"12451 2017-07-23 17:18:35 +0200 messages: xml wellformed fix ;)\n" \
-"12450 2017-07-23 15:47:47 +0200 variabledlg: maximize button added\n" \
-"12449 2017-07-23 15:08:44 +0200 esunavi: fix for get slot without using the serial semaphore\n" \
-"12448 2017-07-23 14:27:00 +0200 guiframe: accelerator for the variable table added\n" \
-"12447 2017-07-23 12:38:03 +0200 ecos: fix for bulb 3, trackbus\n" \
-"12446 2017-07-23 11:27:04 +0200 ecosdlg: browser button added to open the web browser with the ecos IP\n" \
-"12445 2017-07-23 09:50:58 +0200 ecos: status bulb support extended\n" \
-"12444 2017-07-23 08:00:30 +0200 textdialog: set the color values at opening the color picker\n" \
-"12443 2017-07-22 16:37:51 +0200 ecos: trace level changed for invalid railcom module\n" \
-"12442 2017-07-21 16:29:41 +0200 guiframe: fix for not updating the selected loco in the throttle\n" \
 
 "log end";
