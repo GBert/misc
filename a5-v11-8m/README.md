@@ -9,6 +9,7 @@ cd lede
 scripts/feeds update -a
 scripts/feeds install luci-app-openvpn
 scripts/feeds install luci-proto-3g
+scripts/feeds install rpcd-mod-rrdns
 make menuconfig
 make clean ; make -j9
 ```
@@ -21,13 +22,13 @@ Create image
 # mtd2.img factory
 
 # 8 Mbyte
-cat u-boot.img u-boot-env.img factory.img lede-ramips-rt305x-a5-v11-8m-squashfs-sysupgrade.bin > combined_image.img
+cat u-boot.img u-boot-env.img factory.img lede-ramips-rt305x-a5-v11-8M-squashfs-sysupgrade.bin > combined_image.img
 dd if=/dev/zero ibs=1k count=8192 | tr "\000" "\377" >paddedFile_8m.bin
 dd if=combined_image.img of=paddedFile_8m.bin conv=notrunc    
 sudo flashrom -c MX25L6406E/MX25L6408E -p ch341a_spi -w paddedFile_8m.img
 
 # 16 MByte
-cat u-boot.img u-boot-env.img factory.img lede-ramips-rt305x-a5-v11-16m-squashfs-sysupgrade.bin > combined_image.img
+cat u-boot.img u-boot-env.img factory.img lede-ramips-rt305x-a5-v11-16M-squashfs-sysupgrade.bin > combined_image.img
 dd if=/dev/zero ibs=1k count=16384 | tr "\000" "\377" >paddedFile_16m.bin
 dd if=combined_image.img of=paddedFile_16m.bin conv=notrunc
 sudo flashrom -c W25Q128 -p ch341a_spi -w paddedFile_16m.img
