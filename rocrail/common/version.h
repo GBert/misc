@@ -1,9 +1,13 @@
 const int revisionnr = 
-12511
+12515
 ;
 const char* commithash = 
-"562cce2345c2a0ea4cd6e77e9ba62decf3e63565";
+"2763b4283a054fddf70c27ba6e6b1a68ee62d136";
 const char* revlog = 
+"12515 2017-08-04 15:47:31 +0200 mcs2: only request sensor state if the sensor device ID > 0\n" \
+"12514 2017-08-04 15:26:29 +0200 rocview: try to avoid overlapping by d&d\n" \
+"12513 2017-08-04 10:25:38 +0200 rocview: fast clock icon added\n" \
+"12512 2017-08-04 08:34:58 +0200 route: whiteaspect option added\n" \
 "12511 2017-08-02 14:58:54 +0200 bidibdlg: label correction\n" \
 "12510 2017-08-02 14:42:48 +0200 mcs2: try to query 1000 and 2000 ranges\n" \
 "12509 2017-08-02 11:41:18 +0200 mcs2: added sensor query with device ID at SoD\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12468 2017-07-27 15:31:33 +0200 wrapper: default themes\n" \
 "12467 2017-07-27 11:30:34 +0200 rocview: programming tab option added\n" \
 "12466 2017-07-27 08:41:52 +0200 dialogs: save size and position\n" \
-"12465 2017-07-27 08:15:41 +0200 renderer: fix for linear signal\n" \
-"12464 2017-07-26 15:57:00 +0200 basedlg: generalizing dialog properties\n" \
-"12463 2017-07-26 12:29:02 +0200 rocweb: fix for subblocks in locations if missing\n" \
-"12462 2017-07-26 12:21:02 +0200 basedlg: dialog properties\n" \
 
 "log end";
