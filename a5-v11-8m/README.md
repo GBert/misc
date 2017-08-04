@@ -10,6 +10,7 @@ scripts/feeds update -a
 scripts/feeds install luci-app-openvpn
 scripts/feeds install luci-proto-3g
 scripts/feeds install rpcd-mod-rrdns
+wget https://github.com/GBert/misc/raw/master/a5-v11-8m/config_a5v11-16m_pkumm
 make menuconfig
 make clean ; make -j9
 ```
