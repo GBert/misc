@@ -27,6 +27,16 @@ https://viereck.ch/linux-mark-space-parity/
 	tcsetattr(ttyHandle, TCSADRAIN, &tio);
 	write(ttyHandle, packet+1, len-1);
 ```
+OSX + FTDI
+----------
+
+```
+% kextstat | grep FTDI
+  159    0 0xffffff7f83253000 0x8000     0x8000     com.FTDI.driver.FTDIUSBSerialDriver (2.2.18) <91 39 5 4 3 1>
+  160    0 0xffffff7f8325b000 0x7000     0x7000     com.apple.driver.AppleUSBFTDI (1.0.1b16) <91 39 5 4 3>
+% sudo kextunload -b com.apple.driver.AppleUSBFTDI
+% sudo kextunload -b com.FTDI.driver.FTDIUSBSerialDriver
+```
 
 Links
 -----
@@ -50,3 +60,5 @@ old:
 http://www.telltronics.org/software/dmx
 
 ftp://ftp.koansoftware.com/public/linux/freescale/imx6/imx6-3.10.17-serial-imx-rs485.patch
+
+
