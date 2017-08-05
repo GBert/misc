@@ -1,9 +1,11 @@
 const int revisionnr = 
-12515
+12517
 ;
 const char* commithash = 
-"2763b4283a054fddf70c27ba6e6b1a68ee62d136";
+"22fcfe851f68f76f081e92e85bc10646ca61d45d";
 const char* revlog = 
+"12517 2017-08-05 11:30:12 +0200 translatione merge: nl, de, pt_BR\n" \
+"12516 2017-08-05 07:57:05 +0200 mcs2: fix for unknown memory block crash\n" \
 "12515 2017-08-04 15:47:31 +0200 mcs2: only request sensor state if the sensor device ID > 0\n" \
 "12514 2017-08-04 15:26:29 +0200 rocview: try to avoid overlapping by d&d\n" \
 "12513 2017-08-04 10:25:38 +0200 rocview: fast clock icon added\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12470 2017-07-28 08:08:18 +0200 save dialog size and position at cancel too\n" \
 "12469 2017-07-28 07:48:57 +0200 gotodlg: sizing fix\n" \
 "12468 2017-07-27 15:31:33 +0200 wrapper: default themes\n" \
-"12467 2017-07-27 11:30:34 +0200 rocview: programming tab option added\n" \
-"12466 2017-07-27 08:41:52 +0200 dialogs: save size and position\n" \
 
 "log end";
