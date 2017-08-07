@@ -28,7 +28,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "   Version 0.9\n\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
     fprintf(stderr, "         -a <IP addr>        IP address - default 255.255.255.255\n");
-    fprintf(stderr, "         -i <can int>        CAN interface - default /dev/ttyUSB0\n");
+    fprintf(stderr, "         -i <can int>        CAN interface - default /dev/ttyGS0\n");
     fprintf(stderr, "         -f                  running in foreground\n\n");
     fprintf(stderr, "         -v                  verbose output (in foreground)\n\n");
 }
