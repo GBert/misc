@@ -1,9 +1,12 @@
 const int revisionnr = 
-12517
+12520
 ;
 const char* commithash = 
-"22fcfe851f68f76f081e92e85bc10646ca61d45d";
+"30d8cdeed2c0eb73c4901c35d15a783b3e754d9c";
 const char* revlog = 
+"12520 2017-08-07 05:11:08 +0200 sensorevents; improved performance\n" \
+"12519 2017-08-06 16:46:03 +0200 loc: pomwrite command support\n" \
+"12518 2017-08-06 14:58:50 +0200 rocview: loco weight added\n" \
 "12517 2017-08-05 11:30:12 +0200 translatione merge: nl, de, pt_BR\n" \
 "12516 2017-08-05 07:57:05 +0200 mcs2: fix for unknown memory block crash\n" \
 "12515 2017-08-04 15:47:31 +0200 mcs2: only request sensor state if the sensor device ID > 0\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12473 2017-07-28 10:37:25 +0200 rocview: save size and pos of the two test dialogs\n" \
 "12472 2017-07-28 10:31:11 +0200 ecos: trace fixes\n" \
 "12471 2017-07-28 09:21:37 +0200 rocview: restor dialog size option added\n" \
-"12470 2017-07-28 08:08:18 +0200 save dialog size and position at cancel too\n" \
-"12469 2017-07-28 07:48:57 +0200 gotodlg: sizing fix\n" \
-"12468 2017-07-27 15:31:33 +0200 wrapper: default themes\n" \
 
 "log end";
