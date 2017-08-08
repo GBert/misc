@@ -1,9 +1,11 @@
 const int revisionnr = 
-12520
+12522
 ;
 const char* commithash = 
-"30d8cdeed2c0eb73c4901c35d15a783b3e754d9c";
+"85b67560bbd910ba64c542979c2b17e703cadee9";
 const char* revlog = 
+"12522 2017-08-08 11:31:20 +0200 locdialog: support for 32 functions\n" \
+"12521 2017-08-08 10:49:18 +0200 32 functions for locos\n" \
 "12520 2017-08-07 05:11:08 +0200 sensorevents; improved performance\n" \
 "12519 2017-08-06 16:46:03 +0200 loc: pomwrite command support\n" \
 "12518 2017-08-06 14:58:50 +0200 rocview: loco weight added\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12475 2017-07-28 10:59:03 +0200 competitiondlg: resize fixes and save size position\n" \
 "12474 2017-07-28 10:49:07 +0200 save size and position of issue and info dialog\n" \
 "12473 2017-07-28 10:37:25 +0200 rocview: save size and pos of the two test dialogs\n" \
-"12472 2017-07-28 10:31:11 +0200 ecos: trace fixes\n" \
-"12471 2017-07-28 09:21:37 +0200 rocview: restor dialog size option added\n" \
 
 "log end";
