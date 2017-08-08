@@ -62,6 +62,9 @@ define Package/can2udp/install
 	$(INSTALL_BIN) ./files/cs2ping.init $(1)/etc/init.d/cs2ping
 #	$(INSTALL_BIN) ./files/can2lan.init_carambola $(1)/etc/init.d/can2lan
 	$(INSTALL_BIN) ./files/can2lan.init $(1)/etc/init.d/can2lan
+ifneq (,$(findstring banana,$(CONFIG_TARGET_PROFILE)))
+	$(INSTALL_BIN) ./files/can2lan.init_bpi $(1)/etc/init.d/can2lan
+endif
 ifneq (,$(findstring carambola,$(CONFIG_TARGET_PROFILE)))
 	$(INSTALL_BIN) ./files/can2lan.init_carambola $(1)/etc/init.d/can2lan
 endif

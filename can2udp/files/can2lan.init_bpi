@@ -5,7 +5,11 @@ START=99
 
 start() {
 	# modprobe sun4i_can
-	/usr/sbin/ip link set can0 up type can bitrate 250000 restart-ms 10
+	if [ -e /usr/sbin/ip ]; then
+		/usr/sbin/ip link set can0 up type can bitrate 250000 restart-ms 10
+	else
+		/sbin/ip link set can0 up type can bitrate 250000 restart-ms 10
+	fi
 	## WLAN add 10 seconds
 	# sleep 10
 
