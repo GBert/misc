@@ -199,6 +199,34 @@ int main(int argc, char **argv) {
 	}
     }
 
+    /* prepare simple CAN interface aka Schnitte */
+    if ((se = open(if_name, O_RDWR | O_TRUNC | O_NONBLOCK | O_NOCTTY)) < 0) {
+	fprintf(stderr, "opening serial interface >%s< error: %s\n", if_name, strerror(errno));
+	exit(EXIT_FAILURE);
+    } else {
+	memset(&term_attr, 0, sizeof(term_attr));
+	if (tcgetattr(sc, &term_attr) < 0) {
+	    fprintf(stderr, "can't get terminal settings error: %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
+	term_attr.c_cflag = CS8 | CRTSCTS | CLOCAL | CREAD;
+	term_attr.c_iflag = 0;
+	term_attr.c_oflag = 0;
+	term_attr.c_lflag = NOFLSH;
+	if (cfsetospeed(&term_attr, TERM_SPEED) < 0) {
+	    fprintf(stderr, "CAN interface ospeed error: %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
+	if (cfsetispeed(&term_attr, TERM_SPEED) < 0) {
+	    fprintf(stderr, "CAN interface ispeed error: %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
+	if (tcsetattr(sc, TCSANOW, &term_attr) < 0) {
+	    fprintf(stderr, "CAN interface set error: %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
+    }
+
     if (tcp_dst_address[0]) {
 	/* prepare TCP client socket */
 	if ((st = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0) {
@@ -237,34 +265,6 @@ int main(int argc, char **argv) {
 	st = 0;
     }
 
-    /* prepare simple CAN interface aka Schnitte */
-    if ((se = open(if_name, O_RDWR | O_TRUNC | O_NONBLOCK | O_NOCTTY)) < 0) {
-	fprintf(stderr, "opening serial interface >%s< error: %s\n", if_name, strerror(errno));
-	exit(EXIT_FAILURE);
-    } else {
-	memset(&term_attr, 0, sizeof(term_attr));
-	if (tcgetattr(sc, &term_attr) < 0) {
-	    fprintf(stderr, "can't get terminal settings error: %s\n", strerror(errno));
-	    exit(EXIT_FAILURE);
-	}
-	term_attr.c_cflag = CS8 | CRTSCTS | CLOCAL | CREAD;
-	term_attr.c_iflag = 0;
-	term_attr.c_oflag = 0;
-	term_attr.c_lflag = NOFLSH;
-	if (cfsetospeed(&term_attr, TERM_SPEED) < 0) {
-	    fprintf(stderr, "CAN interface ospeed error: %s\n", strerror(errno));
-	    exit(EXIT_FAILURE);
-	}
-	if (cfsetispeed(&term_attr, TERM_SPEED) < 0) {
-	    fprintf(stderr, "CAN interface ispeed error: %s\n", strerror(errno));
-	    exit(EXIT_FAILURE);
-	}
-	if (tcsetattr(sc, TCSANOW, &term_attr) < 0) {
-	    fprintf(stderr, "CAN interface set error: %s\n", strerror(errno));
-	    exit(EXIT_FAILURE);
-	}
-    }
-
     /* daemonize the process if requested */
     if (background) {
 	/* fork off the parent process */
@@ -292,7 +292,6 @@ int main(int argc, char **argv) {
 	}
 
 	/* serial interface */
-
 	if (FD_ISSET(se, &read_fds)) {
 	    while ((ret = read(se, buffer, sizeof(buffer))) > 0) {
 		for (eci = 0; eci < ret; eci++) {
@@ -348,12 +347,13 @@ int main(int argc, char **argv) {
 		/* connection closed by client */
 		if (verbose && !background) {
 		    time_stamp(timestamp);
-		    printf("%s client %s closed connection\n", timestamp,
+		    printf("%s server %s closed connection\n", timestamp,
 			   inet_ntop(AF_INET, &tcp_addr.sin_addr, buffer, sizeof(buffer)));
 		}
-		/* tcp close  TODO */
+		/* tcp server closed connection TODO */
 		close(st);
 		FD_CLR(st, &all_fds);
+		break;
 	    } else {
 		/* check the whole TCP packet, if there are more than one CAN frame included */
 		/* TCP packets with size modulo 13 !=0 are ignored though */
