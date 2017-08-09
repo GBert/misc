@@ -6,13 +6,13 @@ set -x
 mount -t configfs none /sys/kernel/config
 
 CONFIGFS=/sys/kernel/config/usb_gadget
-GADGET=$CONFIGFS/gadget
+GADGET=$CONFIGFS/g1
 
 # Create a gadget
 mkdir $GADGET
 # Set the VID/PID - this is a pid.codes test code. I'll get a proper one later
-echo 0x05e1 > $GADGET/idVendor
-echo 0x16c0 > $GADGET/idProduct
+echo 0x0525 > $GADGET/idVendor
+echo 0xa4a7 > $GADGET/idProduct
 
 # Set strings - 0x409 is a magic number in the USB spec meaning "English (United States)"
 mkdir $GADGET/strings/0x409
@@ -30,9 +30,7 @@ echo 500 > $GADGET/configs/c.1/MaxPower
 # The 'acm' and 'rndis' parts of the directory name are important, they set the type of function. Other possibilities are 'lun' for mass storage, 'hid' for human interface....
 mkdir $GADGET/functions/acm.usb0
 ln -s $GADGET/functions/acm.usb0 $GADGET/configs/c.1
-# mkdir $GADGET/functions/rndis.0
-# ln -s $GADGET/functions/rndis.0 $GADGET/configs/c.1
 
 # Finally, enable the gadget by setting its USB Device Controller. The 20980000.usb is the name of the (only) UDC on the Raspberry Pi
-echo musb-hdrc.1.auto > $GADGET/UDC
+echo "musb-hdrc.1.auto" > $GADGET/UDC
 

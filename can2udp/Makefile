@@ -44,6 +44,7 @@ define Package/can2udp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/can2udp $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/can2lan $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/can2lan_m $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/can2serial $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/clone-cs2-config $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/clone-cs2-trigger $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/clone-ms2-loco $(1)/usr/bin/
@@ -73,8 +74,8 @@ endif
 ifneq (,$(findstring wr841,$(CONFIG_TARGET_PROFILE)))
 	$(INSTALL_BIN) ./files/can2lan.init_slcan $(1)/etc/init.d/can2lan
 endif
-	$(INSTALL_BIN) ./files/s88udp.init $(1)/etc/init.d/s88udp
 	$(INSTALL_DIR) $(1)/root
+	$(INSTALL_BIN) ./files/s88udp.init $(1)/root
 	$(INSTALL_BIN) ./files/can2serial.init $(1)/root
 	$(INSTALL_BIN) ./files/lan-schnitte.init $(1)/root/lan-schnitte
 	$(INSTALL_BIN) ./files/ir.sh $(1)/root/
