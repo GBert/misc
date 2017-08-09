@@ -191,6 +191,18 @@ define Package/rocrail/install
 	$(INSTALL_BIN) ./config/plan.xml $(1)/opt/rocrail
 	$(INSTALL_DIR) $(1)/root
 	$(INSTALL_BIN) ./config/rocrail.init $(1)/root/rocrail
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./config/rocrail.init $(1)/etc/init.d/rocrail
+endef
+
+define Package/rocrail/prerm
+#!/bin/sh
+# check if we are on real system
+if [ -z "$${IPKG_INSTROOT}" ]; then
+        echo "Removing rc.d symlink for rocrail"
+        /etc/init.d/rocrail disable
+fi
+exit 0
 endef
 
 define Package/rocnetnode/install
@@ -199,6 +211,18 @@ define Package/rocnetnode/install
 	$(INSTALL_BIN) ./config/rocnetnode.ini $(1)/opt/rocrail
 	$(INSTALL_DIR) $(1)/root
 	$(INSTALL_BIN) ./config/rocnetnode.init $(1)/root/rocnetnode
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./config/rocnetnode.init $(1)/etc/init.d/rocnetnode
+endef
+
+define Package/rocnetnode/prerm
+#!/bin/sh
+# check if we are on real system
+if [ -z "$${IPKG_INSTROOT}" ]; then
+        echo "Removing rc.d symlink for rocrail"
+        /etc/init.d/rocnetnode disable
+fi
+exit 0
 endef
 
 define Package/rocweb/install
