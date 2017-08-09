@@ -1,9 +1,17 @@
 const int revisionnr = 
-12522
+12530
 ;
 const char* commithash = 
-"85b67560bbd910ba64c542979c2b17e703cadee9";
+"1ca5c0e332d77346c49cef04f5bf56e07551723e";
 const char* revlog = 
+"12530 2017-08-09 15:31:18 +0200 use binstate for functions > 28\n" \
+"12529 2017-08-09 15:26:50 +0200 bidib: support for function 29...68 by binstate\n" \
+"12528 2017-08-09 12:18:45 +0200 mgbox: 32 function support\n" \
+"12527 2017-08-09 12:16:40 +0200 mcs2: 32 function support\n" \
+"12526 2017-08-09 11:21:57 +0200 loconetdlg: dr5000 cs added\n" \
+"12525 2017-08-09 10:28:56 +0200 car, loco, operator dlg: 32 function support\n" \
+"12524 2017-08-09 08:33:03 +0200 throttledlg: support for 32 functions\n" \
+"12523 2017-08-09 08:05:58 +0200 action: support for 32 functions added\n" \
 "12522 2017-08-08 11:31:20 +0200 locdialog: support for 32 functions\n" \
 "12521 2017-08-08 10:49:18 +0200 32 functions for locos\n" \
 "12520 2017-08-07 05:11:08 +0200 sensorevents; improved performance\n" \
@@ -46,13 +54,5 @@ const char* revlog =
 "12483 2017-07-29 14:26:01 +0200 bidib: MSG_BM_GET_RANGE must be a multiple of 8\n" \
 "12482 2017-07-29 11:55:37 +0200 basedlg: object name in popup in case property changes\n" \
 "12481 2017-07-29 11:14:08 +0200 blockdialog: check for changes on cancel and selection (experimental)\n" \
-"12480 2017-07-29 10:49:56 +0200 blockdialog: check for changes on cancel and selection (experimental)\n" \
-"12479 2017-07-29 08:12:20 +0200 translation merge: de, nl, pt_BR\n" \
-"12478 2017-07-28 15:17:58 +0200 programming dialogs: save size and position\n" \
-"12477 2017-07-28 11:22:31 +0200 save size and position\n" \
-"12476 2017-07-28 11:07:20 +0200 cmdrecorder: save size and position\n" \
-"12475 2017-07-28 10:59:03 +0200 competitiondlg: resize fixes and save size position\n" \
-"12474 2017-07-28 10:49:07 +0200 save size and position of issue and info dialog\n" \
-"12473 2017-07-28 10:37:25 +0200 rocview: save size and pos of the two test dialogs\n" \
 
 "log end";

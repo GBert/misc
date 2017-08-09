@@ -7,8 +7,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rocrail
-PKG_REV:=85b67560bb
-PKG_VERSION:=12522
+PKG_REV:=1ca5c0e332
+PKG_VERSION:=12530
 PKG_RELEASE:=
 
 PKG_SOURCE_PROTO:=git
@@ -144,17 +144,6 @@ define Package/rocrail-cs-wmz21/description
  Virtual Z21 for Roco Wlan Mouse
 endef
 
-define Package/rocrail-cs-xpressnet
-  SECTION:=utils
-  CATEGORY:=Utilities
-  TITLE:=Command Station Lenz Xpressnet
-  DEPENDS:=rocrail
-endef
-
-define Package/rocrail-cs-xpressnet/description
- Lenz Xpressnet
-endef
-
 define Package/rocrail-cs-all-other
   SECTION:=utils
   CATEGORY:=Utilities
@@ -191,18 +180,6 @@ define Package/rocrail/install
 	$(INSTALL_BIN) ./config/plan.xml $(1)/opt/rocrail
 	$(INSTALL_DIR) $(1)/root
 	$(INSTALL_BIN) ./config/rocrail.init $(1)/root/rocrail
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./config/rocrail.init $(1)/etc/init.d/rocrail
-endef
-
-define Package/rocrail/prerm
-#!/bin/sh
-# check if we are on real system
-if [ -z "$${IPKG_INSTROOT}" ]; then
-        echo "Removing rc.d symlink for rocrail"
-        /etc/init.d/rocrail disable
-fi
-exit 0
 endef
 
 define Package/rocnetnode/install
@@ -211,18 +188,6 @@ define Package/rocnetnode/install
 	$(INSTALL_BIN) ./config/rocnetnode.ini $(1)/opt/rocrail
 	$(INSTALL_DIR) $(1)/root
 	$(INSTALL_BIN) ./config/rocnetnode.init $(1)/root/rocnetnode
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./config/rocnetnode.init $(1)/etc/init.d/rocnetnode
-endef
-
-define Package/rocnetnode/prerm
-#!/bin/sh
-# check if we are on real system
-if [ -z "$${IPKG_INSTROOT}" ]; then
-        echo "Removing rc.d symlink for rocrail"
-        /etc/init.d/rocnetnode disable
-fi
-exit 0
 endef
 
 define Package/rocweb/install
@@ -274,11 +239,6 @@ define Package/rocrail-cs-wmz21/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/wmz21.so $(1)/opt/rocrail
 endef
 
-define Package/rocrail-cs-xpressnet/install
-	$(INSTALL_DIR) $(1)/opt/rocrail
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/xpressnet.so $(1)/opt/rocrail
-endef
-
 define Package/rocrail-cs-all-other/install
 	$(INSTALL_DIR) $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/barjut.so $(1)/opt/rocrail
@@ -326,6 +286,7 @@ define Package/rocrail-cs-all-other/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/sprog.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/tamsmc.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/ucons88.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/xpressnet.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/z21.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/zimobin.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/zimocan.so $(1)/opt/rocrail
@@ -345,5 +306,4 @@ $(eval $(call BuildPackage,rocrail-cs-rclink))
 $(eval $(call BuildPackage,rocrail-cs-srcp))
 $(eval $(call BuildPackage,rocrail-cs-p50))
 $(eval $(call BuildPackage,rocrail-cs-wmz21))
-$(eval $(call BuildPackage,rocrail-cs-xpressnet))
 $(eval $(call BuildPackage,rocrail-cs-all-other))
