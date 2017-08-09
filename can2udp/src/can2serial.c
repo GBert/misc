@@ -12,10 +12,10 @@
 
 #include "can2serial.h"
 
-static char *CAN_FORMAT_STRG     = "      CAN->  CANID 0x%06X   [%d]";
-static char *TCP_FORMAT_STRG     = "->TCP>CAN    CANID 0x%06X   [%d]";
-static char *TCP_FORMATS_STRG    = "->TCP>CAN*   CANID 0x%06X   [%d]";
-static char *CAN_TCP_FORMAT_STRG = "->CAN>TCP    CANID 0x%06X   [%d]";
+static char *CAN_FORMAT_STRG     = "<-SER<CAN    CANID 0x%06X   [%d]";
+static char *TCP_FORMAT_STRG     = "->TCP>SER    CANID 0x%06X   [%d]";
+static char *TCP_FORMATS_STRG    = "->TCP>SER*   CANID 0x%06X   [%d]";
+static char *SER_CAN_FORMAT_STRG = "->SER>CAN    CANID 0x%06X   [%d]";
 
 struct timeval last_sent;
 
@@ -25,7 +25,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -t <port>           TCP port for the server - default 15731\n");
     fprintf(stderr, "         -a <IP addr>        IP address\n");
     fprintf(stderr, "         -i <can int>        CAN interface - default can0\n");
-    fprintf(stderr, "         -s <serial int>     Serial interface - default /dev/ttyGS0\n");
+    fprintf(stderr, "         -s <serial int>     serial interface - default /dev/ttyGS0\n");
     fprintf(stderr, "         -f                  running in foreground\n\n");
     fprintf(stderr, "         -v                  verbose output (in foreground)\n\n");
 }
@@ -84,6 +84,14 @@ void print_can_frame(char *format_string, unsigned char *netframe, int verbose) 
     }
 
     printf("\n");
+}
+
+int frame_to_serial(int fd, unsigned char *netframe) {
+    if (write(fd, netframe, 13) != 13) {
+	fprint_syslog_wc(stderr, LOG_ERR, "error sennding serial frame:", strerror(errno));
+	return -1;
+    }
+    return 0;
 }
 
 int frame_to_can(int can_socket, unsigned char *netframe) {
@@ -165,7 +173,6 @@ int main(int argc, char **argv) {
     memset(ifr.ifr_name, 0, sizeof(ifr.ifr_name));
     strcpy(ifr.ifr_name, "can0");
     tcp_port = 15731;
-    verbose = 0;
     strcpy(if_name, "/dev/ttyGS0");
 
     while ((opt = getopt(argc, argv, "a:t:s:i:vhf?")) != -1) {
@@ -199,13 +206,13 @@ int main(int argc, char **argv) {
 	}
     }
 
-    /* prepare simple CAN interface aka Schnitte */
+    /* prepare simple serial CAN interface aka Schnitte */
     if ((se = open(if_name, O_RDWR | O_TRUNC | O_NONBLOCK | O_NOCTTY)) < 0) {
 	fprintf(stderr, "opening serial interface >%s< error: %s\n", if_name, strerror(errno));
 	exit(EXIT_FAILURE);
     } else {
 	memset(&term_attr, 0, sizeof(term_attr));
-	if (tcgetattr(sc, &term_attr) < 0) {
+	if (tcgetattr(se, &term_attr) < 0) {
 	    fprintf(stderr, "can't get terminal settings error: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
 	}
@@ -214,15 +221,18 @@ int main(int argc, char **argv) {
 	term_attr.c_oflag = 0;
 	term_attr.c_lflag = NOFLSH;
 	if (cfsetospeed(&term_attr, TERM_SPEED) < 0) {
-	    fprintf(stderr, "CAN interface ospeed error: %s\n", strerror(errno));
+	    fprintf(stderr, "serial interface ospeed error: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
 	}
 	if (cfsetispeed(&term_attr, TERM_SPEED) < 0) {
-	    fprintf(stderr, "CAN interface ispeed error: %s\n", strerror(errno));
+	    fprintf(stderr, "serial interface ispeed error: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
 	}
-	if (tcsetattr(sc, TCSANOW, &term_attr) < 0) {
-	    fprintf(stderr, "CAN interface set error: %s\n", strerror(errno));
+
+	printf("set serial interface ospeed\n");
+
+	if (tcsetattr(se, TCSANOW, &term_attr) < 0) {
+	    fprintf(stderr, "serial interface set error: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
 	}
     }
@@ -308,7 +318,7 @@ int main(int argc, char **argv) {
 			/* send CAN frame to TCP socket */
 			rawframe_to_net(st, (struct sockaddr *)&tcp_addr, ec_frame, 13);
 			if (!background)
-			    print_can_frame(CAN_TCP_FORMAT_STRG, ec_frame, verbose);
+			    print_can_frame(SER_CAN_FORMAT_STRG, ec_frame, verbose);
 		    }
 		}
 	    }
@@ -327,9 +337,9 @@ int main(int argc, char **argv) {
 		rawframe[4] = frame.can_dlc;
 		memcpy(&rawframe[5], &frame.data, frame.can_dlc);
 
-		/* send TCP packet */
-		if (sendto(st, rawframe, 13, 0, (struct sockaddr *)&tcp_addr, sizeof(tcp_addr)) != 13) {
-		    fprintf(stderr, "UDP write error: %s\n", strerror(errno));
+		/* send serial packet */
+		if (write(se, rawframe, 13) != 13) {
+		    fprintf(stderr, "serial write error: %s\n", strerror(errno));
 		    break;
 		}
 		print_can_frame(CAN_FORMAT_STRG, rawframe, verbose);
@@ -344,13 +354,12 @@ int main(int argc, char **argv) {
 		       inet_ntop(AF_INET, &tcp_addr.sin_addr, buffer, sizeof(buffer)));
 	    }
 	    if ((n = read(st, netframe, MAXDG)) == 0) {
-		/* connection closed by client */
+		/* TCP connection closed by server */
 		if (verbose && !background) {
 		    time_stamp(timestamp);
 		    printf("%s server %s closed connection\n", timestamp,
 			   inet_ntop(AF_INET, &tcp_addr.sin_addr, buffer, sizeof(buffer)));
 		}
-		/* tcp server closed connection TODO */
 		close(st);
 		FD_CLR(st, &all_fds);
 		break;
@@ -362,7 +371,7 @@ int main(int argc, char **argv) {
 		    fprintf(stderr, "%s received packet %% 13 : length %d\n", timestamp, n);
 		} else {
 		    for (i = 0; i < n; i += 13) {
-			ret = frame_to_can(sc, &netframe[i]);
+			ret = frame_to_serial(se, &netframe[i]);
 			if ((ret == 0) && (verbose && !background)) {
 			    if (i > 0)
 				print_can_frame(TCP_FORMATS_STRG, &netframe[i], verbose);
@@ -372,8 +381,6 @@ int main(int argc, char **argv) {
 		    }
 		}
 	    }
-	    if (--nready <= 0)
-		break;		/* no more readable descriptors */
 	}
     }
     close(sc);
