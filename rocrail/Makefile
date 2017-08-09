@@ -144,6 +144,17 @@ define Package/rocrail-cs-wmz21/description
  Virtual Z21 for Roco Wlan Mouse
 endef
 
+define Package/rocrail-cs-xpressnet
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=Command Station Lenz Xpressnet
+  DEPENDS:=rocrail
+endef
+
+define Package/rocrail-cs-xpressnet/description
+ Lenz Xpressnet
+endef
+
 define Package/rocrail-cs-all-other
   SECTION:=utils
   CATEGORY:=Utilities
@@ -239,6 +250,11 @@ define Package/rocrail-cs-wmz21/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/wmz21.so $(1)/opt/rocrail
 endef
 
+define Package/rocrail-cs-xpressnet/install
+	$(INSTALL_DIR) $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/xpressnet.so $(1)/opt/rocrail
+endef
+
 define Package/rocrail-cs-all-other/install
 	$(INSTALL_DIR) $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/barjut.so $(1)/opt/rocrail
@@ -286,7 +302,6 @@ define Package/rocrail-cs-all-other/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/sprog.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/tamsmc.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/ucons88.so $(1)/opt/rocrail
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/xpressnet.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/z21.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/zimobin.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/zimocan.so $(1)/opt/rocrail
@@ -306,4 +321,5 @@ $(eval $(call BuildPackage,rocrail-cs-rclink))
 $(eval $(call BuildPackage,rocrail-cs-srcp))
 $(eval $(call BuildPackage,rocrail-cs-p50))
 $(eval $(call BuildPackage,rocrail-cs-wmz21))
+$(eval $(call BuildPackage,rocrail-cs-xpressnet))
 $(eval $(call BuildPackage,rocrail-cs-all-other))
