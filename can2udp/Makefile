@@ -75,6 +75,7 @@ ifneq (,$(findstring wr841,$(CONFIG_TARGET_PROFILE)))
 endif
 	$(INSTALL_BIN) ./files/s88udp.init $(1)/etc/init.d/s88udp
 	$(INSTALL_DIR) $(1)/root
+	$(INSTALL_BIN) ./files/can2serial.init $(1)/root
 	$(INSTALL_BIN) ./files/lan-schnitte.init $(1)/root/lan-schnitte
 	$(INSTALL_BIN) ./files/ir.sh $(1)/root/
 	$(INSTALL_BIN) ./files/card-reader.sh $(1)/root/card-reader.sh
