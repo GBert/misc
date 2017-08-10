@@ -1,9 +1,14 @@
 const int revisionnr = 
-12530
+12535
 ;
 const char* commithash = 
-"1ca5c0e332d77346c49cef04f5bf56e07551723e";
+"12159a327b878b73107073456e0d9a41de146bb3";
 const char* revlog = 
+"12535 2017-08-10 15:11:09 +0200 model: look up a route only if the ID is not null or not 0 length\n" \
+"12534 2017-08-10 15:05:15 +0200 p50x: C style comments\n" \
+"12533 2017-08-10 12:02:28 +0200 p50x: correction of binstate (Lothar)\n" \
+"12532 2017-08-10 09:23:42 +0200 p50x: stop reading status in case PT is on\n" \
+"12531 2017-08-10 08:11:44 +0200 p50x: binstate support added p50x: stopio in case the PT is ON\n" \
 "12530 2017-08-09 15:31:18 +0200 use binstate for functions > 28\n" \
 "12529 2017-08-09 15:26:50 +0200 bidib: support for function 29...68 by binstate\n" \
 "12528 2017-08-09 12:18:45 +0200 mgbox: 32 function support\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "12488 2017-07-29 18:16:05 +0200 action: unlock route forced by action\n" \
 "12487 2017-07-29 17:49:20 +0200 guiframe: only trace if trace windows are visible\n" \
 "12486 2017-07-29 17:05:48 +0200 virtual: report all 1024 sensors on SOD\n" \
-"12485 2017-07-29 16:35:34 +0200 clntcon: sleep removed from broadcaster\n" \
-"12484 2017-07-29 14:58:08 +0200 clntcon: only sleep 10ms in case the queue > 1000\n" \
-"12483 2017-07-29 14:26:01 +0200 bidib: MSG_BM_GET_RANGE must be a multiple of 8\n" \
-"12482 2017-07-29 11:55:37 +0200 basedlg: object name in popup in case property changes\n" \
-"12481 2017-07-29 11:14:08 +0200 blockdialog: check for changes on cancel and selection (experimental)\n" \
 
 "log end";
