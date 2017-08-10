@@ -16,6 +16,7 @@ static char *CAN_FORMAT_STRG     = "<-SER<CAN    CANID 0x%06X   [%d]";
 static char *TCP_FORMAT_STRG     = "->TCP>SER    CANID 0x%06X   [%d]";
 static char *TCP_FORMATS_STRG    = "->TCP>SER*   CANID 0x%06X   [%d]";
 static char *SER_CAN_FORMAT_STRG = "->SER>CAN    CANID 0x%06X   [%d]";
+static char *SER_TCP_FORMAT_STRG = "->SER>TCP    CANID 0x%06X   [%d]";
 
 struct timeval last_sent;
 
@@ -309,16 +310,17 @@ int main(int argc, char **argv) {
 		    if (ec_index == 13) {
 			/* we got a complete CAN frame */
 			ec_index = 0;
-			/* TODO */
-			/* if (frame_to_net(sb, (struct sockaddr *)&baddr, ec_frame, 13)) {
-			   fprintf(stderr, "sending UDP data error:%s \n", strerror(errno));
-			   } else if (!background) {
-			   print_can_frame(UDP_FORMAT_STRG, ec_frame, verbose);
-			   } */
-			/* send CAN frame to TCP socket */
-			rawframe_to_net(st, (struct sockaddr *)&tcp_addr, ec_frame, 13);
-			if (!background)
-			    print_can_frame(SER_CAN_FORMAT_STRG, ec_frame, verbose);
+			/* send frame to TCP socket if open */
+			if (st) {
+			    rawframe_to_net(st, (struct sockaddr *)&tcp_addr, ec_frame, 13);
+			    if (!background)
+				print_can_frame(SER_TCP_FORMAT_STRG, ec_frame, verbose);
+			/* otherwise send frame to CAN socket */
+			} else {
+			    frame_to_can(sc, ec_frame);
+			    if (!background)
+				print_can_frame(SER_CAN_FORMAT_STRG, ec_frame, verbose);
+			}
 		    }
 		}
 	    }
