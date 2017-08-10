@@ -60,6 +60,7 @@ define Package/can2udp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pio-i2c-udp $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/wake-up-links88 $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/s88udp.init $(1)/etc/init.d/s88udp
 	$(INSTALL_BIN) ./files/cs2ping.init $(1)/etc/init.d/cs2ping
 	$(INSTALL_BIN) ./files/can2lan.init $(1)/etc/init.d/can2lan
 ifneq (,$(findstring banana,$(CONFIG_TARGET_PROFILE)))
@@ -75,7 +76,6 @@ ifneq (,$(findstring wr841,$(CONFIG_TARGET_PROFILE)))
 	$(INSTALL_BIN) ./files/can2lan.init_slcan $(1)/etc/init.d/can2lan
 endif
 	$(INSTALL_DIR) $(1)/root
-	$(INSTALL_BIN) ./files/s88udp.init $(1)/root
 	$(INSTALL_BIN) ./files/can2serial.init $(1)/root
 	$(INSTALL_BIN) ./files/lan-schnitte.init $(1)/root/lan-schnitte
 	$(INSTALL_BIN) ./files/ir.sh $(1)/root/
@@ -96,7 +96,7 @@ define Package/can2udp/postinst
         ln -sf /www/config $${IPKG_INSTROOT}/betatest/cs2
 endef
 
-define Package/can2udp/prerm
+define Package/can2udp/postinst
 #!/bin/sh
 # check if we are on real system
 if [ -z "$${IPKG_INSTROOT}" ]; then
