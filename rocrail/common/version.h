@@ -1,9 +1,10 @@
 const int revisionnr = 
-12537
+12538
 ;
 const char* commithash = 
-"fac56a1826e81eca7f9eea532f893a7c9a4cb59f";
+"04f36fe1f8aa28d4ebd44db9690cb264c1b181eb";
 const char* revlog = 
+"12538 2017-08-11 10:20:44 +0200 rclink: increased detector range from 24 to 239 as documented\n" \
 "12537 2017-08-11 08:13:24 +0200 mgbox: improved comparision mfx names (Bert)\n" \
 "12536 2017-08-11 08:05:36 +0200 control: fix for by number support (WLANmaus)\n" \
 "12535 2017-08-10 15:11:09 +0200 model: look up a route only if the ID is not null or not 0 length\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12491 2017-07-30 15:26:44 +0200 rocweb: es translation for the select block popup\n" \
 "12490 2017-07-30 11:08:24 +0200 rocweb: select block popup translation added\n" \
 "12489 2017-07-30 10:52:32 +0200 rocweb: added a select block popup in case a loco is not in a block\n" \
-"12488 2017-07-29 18:16:05 +0200 action: unlock route forced by action\n" \
 
 "log end";
