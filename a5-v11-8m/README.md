@@ -14,6 +14,7 @@ wget https://github.com/GBert/misc/raw/master/a5-v11-8m/mk.patch
 patch -p1 < mk.patch
 wget https://github.com/GBert/misc/raw/master/a5-v11-8m/config_a5v11-16m_pkumm
 cp config_a5v11-16m_pkumm .config
+make dirclean
 make menuconfig
 make clean ; make -j9
 ```
