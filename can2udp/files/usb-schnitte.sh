@@ -1,8 +1,6 @@
 #!/bin/sh
 #
-# wir basteln uns 'ne CC-Schnitte ;-)
-#
-set -x
+# set -x
 mount -t configfs none /sys/kernel/config
 
 CONFIGFS=/sys/kernel/config/usb_gadget
@@ -20,17 +18,17 @@ echo "00000001" > $GADGET/strings/0x409/serialnumber
 echo "CdB" > $GADGET/strings/0x409/manufacturer
 echo "CC-Schnitte" > $GADGET/strings/0x409/product
 
-# Create a config called 'c.1'. Configs can have multiple functions. A device can have multiple configs. Only one config can be enabled at a time
+# Create a config called 'c.1'
 mkdir $GADGET/configs/c.1
 mkdir $GADGET/configs/c.1/strings/0x409
 echo "Config 1" > $GADGET/configs/c.1/strings/0x409/configuration
 echo 500 > $GADGET/configs/c.1/MaxPower
 
-# Create ACM and RNDIS functions, and add them to config 'c.1'
-# The 'acm' and 'rndis' parts of the directory name are important, they set the type of function. Other possibilities are 'lun' for mass storage, 'hid' for human interface....
+# Create ACM function and add them to config 'c.1'
+# The 'acm' part of the directory name are important, they set the type of function
 mkdir $GADGET/functions/acm.usb0
 ln -s $GADGET/functions/acm.usb0 $GADGET/configs/c.1
 
-# Finally, enable the gadget by setting its USB Device Controller. The 20980000.usb is the name of the (only) UDC on the Raspberry Pi
+# Finally, enable the gadget by setting its USB Device Controller. The musb-hdrc.1.auto is the name of the (only) UDC on the Banana Pi
 echo "musb-hdrc.1.auto" > $GADGET/UDC
 
