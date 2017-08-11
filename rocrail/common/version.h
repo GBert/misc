@@ -1,9 +1,10 @@
 const int revisionnr = 
-12538
+12539
 ;
 const char* commithash = 
-"04f36fe1f8aa28d4ebd44db9690cb264c1b181eb";
+"d9735a99e1337cb847aa8a9958866b5d1ccfa6ea";
 const char* revlog = 
+"12539 2017-08-11 14:37:12 +0200 block: rear collision protection option added\n" \
 "12538 2017-08-11 10:20:44 +0200 rclink: increased detector range from 24 to 239 as documented\n" \
 "12537 2017-08-11 08:13:24 +0200 mgbox: improved comparision mfx names (Bert)\n" \
 "12536 2017-08-11 08:05:36 +0200 control: fix for by number support (WLANmaus)\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12492 2017-07-31 10:10:30 +0200 bidib: tcp support (wip)\n" \
 "12491 2017-07-30 15:26:44 +0200 rocweb: es translation for the select block popup\n" \
 "12490 2017-07-30 11:08:24 +0200 rocweb: select block popup translation added\n" \
-"12489 2017-07-30 10:52:32 +0200 rocweb: added a select block popup in case a loco is not in a block\n" \
 
 "log end";
