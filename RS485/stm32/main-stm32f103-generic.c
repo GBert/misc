@@ -83,7 +83,7 @@ static void usart_setup(void) {
     rcc_periph_clock_enable(RCC_USART2);
 
     /* Setup USART2 parameters. */
-    usart_set_baudrate(USART2, 67500);
+    usart_set_baudrate(USART2, 62500);
     usart_set_databits(USART2, 9);
     usart_set_stopbits(USART2, USART_STOPBITS_1);
     usart_set_mode(USART2, USART_MODE_TX_RX);
