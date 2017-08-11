@@ -1,9 +1,11 @@
 const int revisionnr = 
-12535
+12537
 ;
 const char* commithash = 
-"12159a327b878b73107073456e0d9a41de146bb3";
+"fac56a1826e81eca7f9eea532f893a7c9a4cb59f";
 const char* revlog = 
+"12537 2017-08-11 08:13:24 +0200 mgbox: improved comparision mfx names (Bert)\n" \
+"12536 2017-08-11 08:05:36 +0200 control: fix for by number support (WLANmaus)\n" \
 "12535 2017-08-10 15:11:09 +0200 model: look up a route only if the ID is not null or not 0 length\n" \
 "12534 2017-08-10 15:05:15 +0200 p50x: C style comments\n" \
 "12533 2017-08-10 12:02:28 +0200 p50x: correction of binstate (Lothar)\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12490 2017-07-30 11:08:24 +0200 rocweb: select block popup translation added\n" \
 "12489 2017-07-30 10:52:32 +0200 rocweb: added a select block popup in case a loco is not in a block\n" \
 "12488 2017-07-29 18:16:05 +0200 action: unlock route forced by action\n" \
-"12487 2017-07-29 17:49:20 +0200 guiframe: only trace if trace windows are visible\n" \
-"12486 2017-07-29 17:05:48 +0200 virtual: report all 1024 sensors on SOD\n" \
 
 "log end";
