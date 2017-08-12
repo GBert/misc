@@ -1,9 +1,15 @@
 const int revisionnr = 
-12539
+12545
 ;
 const char* commithash = 
-"d9735a99e1337cb847aa8a9958866b5d1ccfa6ea";
+"08e61c73ed42d542f9804747cb160a3a83b100c1";
 const char* revlog = 
+"12545 2017-08-12 15:12:34 +0200 xmlscript: allow in sub function id an underscore to execute the whole script excluding function definitions\n" \
+"12544 2017-08-12 11:24:01 +0200 translation merge: nl\n" \
+"12543 2017-08-12 11:12:55 +0200 xmlscript: resolve function ID in the sub statement\n" \
+"12542 2017-08-12 10:50:20 +0200 guiframe: auto pt off in case tab selection changed and the pt button is on\n" \
+"12541 2017-08-12 08:49:33 +0200 translation merge: de, nl, sl, sr_latin\n" \
+"12540 2017-08-12 07:51:54 +0200 p50x: flag PT off after transacting\n" \
 "12539 2017-08-11 14:37:12 +0200 block: rear collision protection option added\n" \
 "12538 2017-08-11 10:20:44 +0200 rclink: increased detector range from 24 to 239 as documented\n" \
 "12537 2017-08-11 08:13:24 +0200 mgbox: improved comparision mfx names (Bert)\n" \
@@ -48,11 +54,5 @@ const char* revlog =
 "12498 2017-08-01 10:54:59 +0200 powermandlg: fix for selecting the initial tab\n" \
 "12497 2017-08-01 10:26:37 +0200 blockgroupingdlg: sort on ID and Description\n" \
 "12496 2017-08-01 10:13:23 +0200 blockgroupingdlg: replaced the simple list with a list control\n" \
-"12495 2017-07-31 14:32:33 +0200 blockdialog: disabled check4changes\n" \
-"12494 2017-07-31 14:27:42 +0200 bidib: tcp functions connect and disconnect added\n" \
-"12493 2017-07-31 10:46:54 +0200 bidib: tcpip support\n" \
-"12492 2017-07-31 10:10:30 +0200 bidib: tcp support (wip)\n" \
-"12491 2017-07-30 15:26:44 +0200 rocweb: es translation for the select block popup\n" \
-"12490 2017-07-30 11:08:24 +0200 rocweb: select block popup translation added\n" \
 
 "log end";
