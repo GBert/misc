@@ -1,9 +1,14 @@
 const int revisionnr = 
-12545
+12550
 ;
 const char* commithash = 
-"08e61c73ed42d542f9804747cb160a3a83b100c1";
+"b4697ae5abb683955a1c667f93a6de99537200cc";
 const char* revlog = 
+"12550 2017-08-13 16:17:28 +0200 switchdialog: bookmark support added\n" \
+"12549 2017-08-13 15:42:32 +0200 edit bookmarks dialog added\n" \
+"12548 2017-08-13 12:28:50 +0200 bookmarks: WIP\n" \
+"12547 2017-08-13 10:25:31 +0200 rclink: fix for check detector range\n" \
+"12546 2017-08-13 08:29:01 +0200 block, route: fixes for cleaning type permissions\n" \
 "12545 2017-08-12 15:12:34 +0200 xmlscript: allow in sub function id an underscore to execute the whole script excluding function definitions\n" \
 "12544 2017-08-12 11:24:01 +0200 translation merge: nl\n" \
 "12543 2017-08-12 11:12:55 +0200 xmlscript: resolve function ID in the sub statement\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "12503 2017-08-02 09:40:33 +0200 mcs2: revert useS88bus\n" \
 "12502 2017-08-02 08:09:47 +0200 rocweb: loco list category option all added\n" \
 "12501 2017-08-01 15:28:25 +0200 mcs2: trace correction\n" \
-"12500 2017-08-01 15:18:29 +0200 mcs2: useS88bus option added for reporting\n" \
-"12499 2017-08-01 12:03:20 +0200 competition: added to the toolbar, layout fixes\n" \
-"12498 2017-08-01 10:54:59 +0200 powermandlg: fix for selecting the initial tab\n" \
-"12497 2017-08-01 10:26:37 +0200 blockgroupingdlg: sort on ID and Description\n" \
-"12496 2017-08-01 10:13:23 +0200 blockgroupingdlg: replaced the simple list with a list control\n" \
 
 "log end";
