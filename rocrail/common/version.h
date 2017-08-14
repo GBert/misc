@@ -1,9 +1,13 @@
 const int revisionnr = 
-12550
+12554
 ;
 const char* commithash = 
-"b4697ae5abb683955a1c667f93a6de99537200cc";
+"3a3d295651e1e0fcfc808f67f42fac4c77f150e3";
 const char* revlog = 
+"12554 2017-08-14 11:25:50 +0200 p50x: psleep before sending the PT ON command\n" \
+"12553 2017-08-14 09:28:01 +0200 routedialog: bookmark added\n" \
+"12552 2017-08-14 09:03:03 +0200 feedbackdialog: bookmark button added\n" \
+"12551 2017-08-14 08:02:54 +0200 guiframe: work around for PT off under Windows\n" \
 "12550 2017-08-13 16:17:28 +0200 switchdialog: bookmark support added\n" \
 "12549 2017-08-13 15:42:32 +0200 edit bookmarks dialog added\n" \
 "12548 2017-08-13 12:28:50 +0200 bookmarks: WIP\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12507 2017-08-02 11:17:09 +0200 translation for sensordevice\n" \
 "12506 2017-08-02 11:10:23 +0200 ecosdlg: added sensor device for mcs2\n" \
 "12505 2017-08-02 10:50:06 +0200 bidibdlg: udp sublib added\n" \
-"12504 2017-08-02 10:13:38 +0200 basedlg: fix for wxString constructor\n" \
-"12503 2017-08-02 09:40:33 +0200 mcs2: revert useS88bus\n" \
-"12502 2017-08-02 08:09:47 +0200 rocweb: loco list category option all added\n" \
-"12501 2017-08-01 15:28:25 +0200 mcs2: trace correction\n" \
 
 "log end";
