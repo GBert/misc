@@ -60,7 +60,6 @@ define Package/can2udp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pio-i2c-udp $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/wake-up-links88 $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/s88udp.init $(1)/etc/init.d/s88udp
 	$(INSTALL_BIN) ./files/cs2ping.init $(1)/etc/init.d/cs2ping
 	$(INSTALL_BIN) ./files/can2lan.init $(1)/etc/init.d/can2lan
 ifneq (,$(findstring banana,$(CONFIG_TARGET_PROFILE)))
@@ -83,6 +82,7 @@ endif
 	$(INSTALL_BIN) ./files/pio-i2c-udp.init $(1)/root/pio-i2c-udp
 	$(INSTALL_BIN) ./files/wake-up-links88.init $(1)/root/wake-up-links88
 	$(INSTALL_BIN) ./files/scripts/get-icons.sh $(1)/root/get-icons.sh
+	$(INSTALL_BIN) ./files/s88udp.init $(1)/root
 	$(INSTALL_DIR) $(1)/sbin
 	$(INSTALL_BIN) ./files/usb-schnitte.sh $(1)/sbin
 	$(INSTALL_DIR) $(1)/www/
