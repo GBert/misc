@@ -1,9 +1,18 @@
 const int revisionnr = 
-12554
+12563
 ;
 const char* commithash = 
-"3a3d295651e1e0fcfc808f67f42fac4c77f150e3";
+"e95aa6a892acee2775acba8fa4ed8502db0d9936";
 const char* revlog = 
+"12563 2017-08-15 11:51:10 +0200 translation merge: nl, de, sr_latin\n" \
+"12562 2017-08-15 11:15:14 +0200 editbookmarksdlg: delete all button added\n" \
+"12561 2017-08-15 11:02:22 +0200 scheduledialog: bookmark added\n" \
+"12560 2017-08-15 10:45:19 +0200 textdialog: bookmark added\n" \
+"12559 2017-08-15 10:33:13 +0200 outputdialog: bookmark added\n" \
+"12558 2017-08-15 09:35:18 +0200 signaldialog: bookmark added\n" \
+"12557 2017-08-15 08:02:22 +0200 blockdialog: bookmark added\n" \
+"12556 2017-08-15 07:34:40 +0200 rclink: trace correction\n" \
+"12555 2017-08-14 15:37:36 +0200 editbookmarks: open and stamp added\n" \
 "12554 2017-08-14 11:25:50 +0200 p50x: psleep before sending the PT ON command\n" \
 "12553 2017-08-14 09:28:01 +0200 routedialog: bookmark added\n" \
 "12552 2017-08-14 09:03:03 +0200 feedbackdialog: bookmark button added\n" \
@@ -45,14 +54,5 @@ const char* revlog =
 "12516 2017-08-05 07:57:05 +0200 mcs2: fix for unknown memory block crash\n" \
 "12515 2017-08-04 15:47:31 +0200 mcs2: only request sensor state if the sensor device ID > 0\n" \
 "12514 2017-08-04 15:26:29 +0200 rocview: try to avoid overlapping by d&d\n" \
-"12513 2017-08-04 10:25:38 +0200 rocview: fast clock icon added\n" \
-"12512 2017-08-04 08:34:58 +0200 route: whiteaspect option added\n" \
-"12511 2017-08-02 14:58:54 +0200 bidibdlg: label correction\n" \
-"12510 2017-08-02 14:42:48 +0200 mcs2: try to query 1000 and 2000 ranges\n" \
-"12509 2017-08-02 11:41:18 +0200 mcs2: added sensor query with device ID at SoD\n" \
-"12508 2017-08-02 11:22:00 +0200 mcs2: trace correction\n" \
-"12507 2017-08-02 11:17:09 +0200 translation for sensordevice\n" \
-"12506 2017-08-02 11:10:23 +0200 ecosdlg: added sensor device for mcs2\n" \
-"12505 2017-08-02 10:50:06 +0200 bidibdlg: udp sublib added\n" \
 
 "log end";
