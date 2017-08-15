@@ -1,9 +1,10 @@
 const int revisionnr = 
-12563
+12564
 ;
 const char* commithash = 
-"e95aa6a892acee2775acba8fa4ed8502db0d9936";
+"00a82af211faa5ee513e94bb826f18d1f8cb55cc";
 const char* revlog = 
+"12564 2017-08-15 15:54:40 +0200 timedactions: bookmark added\n" \
 "12563 2017-08-15 11:51:10 +0200 translation merge: nl, de, sr_latin\n" \
 "12562 2017-08-15 11:15:14 +0200 editbookmarksdlg: delete all button added\n" \
 "12561 2017-08-15 11:02:22 +0200 scheduledialog: bookmark added\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12517 2017-08-05 11:30:12 +0200 translatione merge: nl, de, pt_BR\n" \
 "12516 2017-08-05 07:57:05 +0200 mcs2: fix for unknown memory block crash\n" \
 "12515 2017-08-04 15:47:31 +0200 mcs2: only request sensor state if the sensor device ID > 0\n" \
-"12514 2017-08-04 15:26:29 +0200 rocview: try to avoid overlapping by d&d\n" \
 
 "log end";
