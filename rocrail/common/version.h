@@ -1,9 +1,14 @@
 const int revisionnr = 
-12564
+12569
 ;
 const char* commithash = 
-"00a82af211faa5ee513e94bb826f18d1f8cb55cc";
+"fa378a9a66317e35d9a6b5c2ac3bf754236eba00";
 const char* revlog = 
+"12569 2017-08-16 11:00:23 +0200 stagedlg: bookmark added\n" \
+"12568 2017-08-16 10:44:19 +0200 road-dcurve: moved to user theme with nr 22\n" \
+"12567 2017-08-16 10:32:59 +0200 operatordlg: bookmark added\n" \
+"12566 2017-08-16 10:18:03 +0200 cardlg: bookmark added\n" \
+"12565 2017-08-16 08:20:30 +0200 dcurve: moved to the User Theme with curvenr 11\n" \
 "12564 2017-08-15 15:54:40 +0200 timedactions: bookmark added\n" \
 "12563 2017-08-15 11:51:10 +0200 translation merge: nl, de, sr_latin\n" \
 "12562 2017-08-15 11:15:14 +0200 editbookmarksdlg: delete all button added\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "12522 2017-08-08 11:31:20 +0200 locdialog: support for 32 functions\n" \
 "12521 2017-08-08 10:49:18 +0200 32 functions for locos\n" \
 "12520 2017-08-07 05:11:08 +0200 sensorevents; improved performance\n" \
-"12519 2017-08-06 16:46:03 +0200 loc: pomwrite command support\n" \
-"12518 2017-08-06 14:58:50 +0200 rocview: loco weight added\n" \
-"12517 2017-08-05 11:30:12 +0200 translatione merge: nl, de, pt_BR\n" \
-"12516 2017-08-05 07:57:05 +0200 mcs2: fix for unknown memory block crash\n" \
-"12515 2017-08-04 15:47:31 +0200 mcs2: only request sensor state if the sensor device ID > 0\n" \
 
 "log end";
