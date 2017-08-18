@@ -1,9 +1,24 @@
 const int revisionnr = 
-12569
+12584
 ;
 const char* commithash = 
-"fa378a9a66317e35d9a6b5c2ac3bf754236eba00";
+"6bc92c926b17eccbaafa4e9c8c21a85340558a4a";
 const char* revlog = 
+"12584 2017-08-18 12:38:28 +0200 renamedlg: resize border added\n" \
+"12583 2017-08-18 12:14:27 +0200 renamedlg: added missing translations for the standard buttons\n" \
+"12582 2017-08-18 12:02:47 +0200 renamedlg: new\n" \
+"12581 2017-08-18 08:31:26 +0200 road-curve-11.svg\n" \
+"12580 2017-08-18 08:06:53 +0200 z21, wmz21: disable share flag under Windows\n" \
+"12579 2017-08-17 15:53:18 +0200 ecos: use oid in case of discovery and the addr is zero or not provided\n" \
+"12578 2017-08-17 14:58:18 +0200 guiframe: wx2.8 compatible correction\n" \
+"12577 2017-08-17 14:52:52 +0200 model: discover trace corrections\n" \
+"12576 2017-08-17 11:43:05 +0200 dinamo: trace correction\n" \
+"12575 2017-08-17 10:12:37 +0200 bookmarks: layout corrections\n" \
+"12574 2017-08-17 09:49:13 +0200 locdialog: show the generated flag\n" \
+"12573 2017-08-17 08:42:59 +0200 basedlg: ask bookmark remark at add\n" \
+"12572 2017-08-17 08:23:19 +0200 bookmark: remark added\n" \
+"12571 2017-08-16 15:37:01 +0200 ecos: evaluate decoder protocol on bind\n" \
+"12570 2017-08-16 15:15:50 +0200 ecos: import unknown locos from the ecos (temporary)\n" \
 "12569 2017-08-16 11:00:23 +0200 stagedlg: bookmark added\n" \
 "12568 2017-08-16 10:44:19 +0200 road-dcurve: moved to user theme with nr 22\n" \
 "12567 2017-08-16 10:32:59 +0200 operatordlg: bookmark added\n" \
@@ -39,20 +54,5 @@ const char* revlog =
 "12537 2017-08-11 08:13:24 +0200 mgbox: improved comparision mfx names (Bert)\n" \
 "12536 2017-08-11 08:05:36 +0200 control: fix for by number support (WLANmaus)\n" \
 "12535 2017-08-10 15:11:09 +0200 model: look up a route only if the ID is not null or not 0 length\n" \
-"12534 2017-08-10 15:05:15 +0200 p50x: C style comments\n" \
-"12533 2017-08-10 12:02:28 +0200 p50x: correction of binstate (Lothar)\n" \
-"12532 2017-08-10 09:23:42 +0200 p50x: stop reading status in case PT is on\n" \
-"12531 2017-08-10 08:11:44 +0200 p50x: binstate support added p50x: stopio in case the PT is ON\n" \
-"12530 2017-08-09 15:31:18 +0200 use binstate for functions > 28\n" \
-"12529 2017-08-09 15:26:50 +0200 bidib: support for function 29...68 by binstate\n" \
-"12528 2017-08-09 12:18:45 +0200 mgbox: 32 function support\n" \
-"12527 2017-08-09 12:16:40 +0200 mcs2: 32 function support\n" \
-"12526 2017-08-09 11:21:57 +0200 loconetdlg: dr5000 cs added\n" \
-"12525 2017-08-09 10:28:56 +0200 car, loco, operator dlg: 32 function support\n" \
-"12524 2017-08-09 08:33:03 +0200 throttledlg: support for 32 functions\n" \
-"12523 2017-08-09 08:05:58 +0200 action: support for 32 functions added\n" \
-"12522 2017-08-08 11:31:20 +0200 locdialog: support for 32 functions\n" \
-"12521 2017-08-08 10:49:18 +0200 32 functions for locos\n" \
-"12520 2017-08-07 05:11:08 +0200 sensorevents; improved performance\n" \
 
 "log end";
