@@ -1,9 +1,11 @@
 const int revisionnr = 
-12584
+12586
 ;
 const char* commithash = 
-"6bc92c926b17eccbaafa4e9c8c21a85340558a4a";
+"ef1ae129c84ca4f3f27172e03b35051d46ab9891";
 const char* revlog = 
+"12586 2017-08-18 16:41:54 +0200 renamedlg: layout corrections\n" \
+"12585 2017-08-18 15:37:23 +0200 analyse: curvenr 22 removed\n" \
 "12584 2017-08-18 12:38:28 +0200 renamedlg: resize border added\n" \
 "12583 2017-08-18 12:14:27 +0200 renamedlg: added missing translations for the standard buttons\n" \
 "12582 2017-08-18 12:02:47 +0200 renamedlg: new\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12539 2017-08-11 14:37:12 +0200 block: rear collision protection option added\n" \
 "12538 2017-08-11 10:20:44 +0200 rclink: increased detector range from 24 to 239 as documented\n" \
 "12537 2017-08-11 08:13:24 +0200 mgbox: improved comparision mfx names (Bert)\n" \
-"12536 2017-08-11 08:05:36 +0200 control: fix for by number support (WLANmaus)\n" \
-"12535 2017-08-10 15:11:09 +0200 model: look up a route only if the ID is not null or not 0 length\n" \
 
 "log end";
