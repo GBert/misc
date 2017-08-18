@@ -66,7 +66,7 @@ struct timeval last_sent;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.22\n\n");
+    fprintf(stderr, "   Version 1.23\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
@@ -726,16 +726,15 @@ int main(int argc, char **argv) {
 		memcpy(&canid, netframe, 4);
 		canid = ntohl(canid);
 		if ((canid & 0x00230000) == 0x00230000) {
-		    printf("UDP : canid 0x%08x\n", canid);
 		    for (i = 0; i <= max_tcp_i; i++) {
 			tcp_socket = tcp_client[i];
 			if (tcp_socket < 0)
 			    continue;
 			net_to_net(tcp_socket, NULL, netframe, CAN_ENCAP_SIZE);
 			print_can_frame(UDP_TCP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
-	    		net_to_net(sb, (struct sockaddr *)&baddr, netframe, CAN_ENCAP_SIZE);
-			print_can_frame(UDP_UDP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
 		    }
+		    net_to_net(sb, (struct sockaddr *)&baddr, netframe, CAN_ENCAP_SIZE);
+		    print_can_frame(UDP_UDP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
 		} else {
 		/* send packet on CAN */
 		    ret = frame_to_can(sc, netframe);

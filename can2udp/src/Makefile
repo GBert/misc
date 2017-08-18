@@ -110,7 +110,7 @@ wake-up-links88: wake-up-links88.o
 	$(CC) $(CFLAGS) -o wake-up-links88 wake-up-links88.o
 
 virtual_s88udp: virtual_s88udp.o
-	$(CC) $(CFLAGS) -o virtual_s88 virtual_s88udp.o
+	$(CC) $(CFLAGS) -o virtual_s88udp virtual_s88udp.o
 
 gpio-poll: gpio-poll.o
 	$(CC) $(CFLAGS) -o gpio-poll gpio-poll.o

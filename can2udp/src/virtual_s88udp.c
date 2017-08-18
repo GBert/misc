@@ -99,8 +99,7 @@ void print_net_frame(unsigned char *netframe) {
 
 int create_event(struct s88_t *s88, uint16_t address, uint32_t value) {
     int s;
-    uint32_t i, mask, canid, temp32;
-    uint16_t temp16;
+    uint32_t canid, temp32;
     uint8_t netframe[13];
 
     memset(netframe, 0, sizeof(netframe));
@@ -140,22 +139,17 @@ int create_event(struct s88_t *s88, uint16_t address, uint32_t value) {
 }
 
 int main(int argc, char **argv) {
-    int utime, i, j;
     int value, opt, ret;
-    int modulcount = 1;
     struct sockaddr_in destaddr, *bsa;
     struct ifaddrs *ifap, *ifa;
     struct s88_t s88_data;
     char *udp_dst_address;
     char *bcast_interface;
-    uint32_t mask, s88_bit;
-    uint8_t newvalue;
     uint16_t sensor;
 
     const int on = 1;
 
     int destination_port = UDPPORT;
-    utime = MICRODELAY;
 
     memset(&s88_data, 0, sizeof(s88_data));
 
