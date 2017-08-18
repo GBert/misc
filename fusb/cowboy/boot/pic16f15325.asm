@@ -106,11 +106,11 @@ INIT            MACRO
                 MOVWF   PPSLOCK
                 BCF     PPSLOCK,PPSLOCKED
 ; PPSInput
-                MOVLW   0x05                ;RA5 = RX
+                MOVLW   0x05                ;RA5 = RX1
                 BANKSEL RX1DTPPS
                 MOVWF   RX1DTPPS
 ; PPSOutput
-                MOVLW   0x16                ;RA4 = TX
+                MOVLW   0x0F                ;RA4 = TX1
                 BANKSEL RA4PPS
                 MOVWF   RA4PPS
 ; PPSLock
