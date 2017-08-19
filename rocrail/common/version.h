@@ -1,9 +1,11 @@
 const int revisionnr = 
-12588
+12590
 ;
 const char* commithash = 
-"f32aa7e73e1269ed5561332d008055fa33ac1b3c";
+"e6e6c015eb315c3245c9973afcd74848184287a8";
 const char* revlog = 
+"12590 2017-08-19 12:38:00 +0200 removed gca wrapper: not needed for accdecdlg\n" \
+"12589 2017-08-19 11:07:35 +0200 accdecdlg: GCA support\n" \
 "12588 2017-08-19 08:32:22 +0200 routedialog: rename all autogen function added\n" \
 "12587 2017-08-19 07:41:57 +0200 renamedlg: layout corrections\n" \
 "12586 2017-08-18 16:41:54 +0200 renamedlg: layout corrections\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12543 2017-08-12 11:12:55 +0200 xmlscript: resolve function ID in the sub statement\n" \
 "12542 2017-08-12 10:50:20 +0200 guiframe: auto pt off in case tab selection changed and the pt button is on\n" \
 "12541 2017-08-12 08:49:33 +0200 translation merge: de, nl, sl, sr_latin\n" \
-"12540 2017-08-12 07:51:54 +0200 p50x: flag PT off after transacting\n" \
-"12539 2017-08-11 14:37:12 +0200 block: rear collision protection option added\n" \
 
 "log end";
