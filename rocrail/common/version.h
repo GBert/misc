@@ -1,9 +1,11 @@
 const int revisionnr = 
-12586
+12588
 ;
 const char* commithash = 
-"ef1ae129c84ca4f3f27172e03b35051d46ab9891";
+"f32aa7e73e1269ed5561332d008055fa33ac1b3c";
 const char* revlog = 
+"12588 2017-08-19 08:32:22 +0200 routedialog: rename all autogen function added\n" \
+"12587 2017-08-19 07:41:57 +0200 renamedlg: layout corrections\n" \
 "12586 2017-08-18 16:41:54 +0200 renamedlg: layout corrections\n" \
 "12585 2017-08-18 15:37:23 +0200 analyse: curvenr 22 removed\n" \
 "12584 2017-08-18 12:38:28 +0200 renamedlg: resize border added\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12541 2017-08-12 08:49:33 +0200 translation merge: de, nl, sl, sr_latin\n" \
 "12540 2017-08-12 07:51:54 +0200 p50x: flag PT off after transacting\n" \
 "12539 2017-08-11 14:37:12 +0200 block: rear collision protection option added\n" \
-"12538 2017-08-11 10:20:44 +0200 rclink: increased detector range from 24 to 239 as documented\n" \
-"12537 2017-08-11 08:13:24 +0200 mgbox: improved comparision mfx names (Bert)\n" \
 
 "log end";
