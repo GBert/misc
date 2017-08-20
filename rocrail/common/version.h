@@ -1,9 +1,11 @@
 const int revisionnr = 
-12591
+12593
 ;
 const char* commithash = 
-"26714da3b443ba55b5612a05b5375ab111f76e90";
+"a1c0891fb4463a33a0254320bd2e09e53587ed05";
 const char* revlog = 
+"12593 2017-08-20 14:47:58 +0200 guiframe: translation fix for import level\n" \
+"12592 2017-08-20 12:08:06 +0200 plus sign in road blocks\n" \
 "12591 2017-08-20 10:20:24 +0200 mgvdlg: add cvbyte nodes compatible with switchpilot\n" \
 "12590 2017-08-19 12:38:00 +0200 removed gca wrapper: not needed for accdecdlg\n" \
 "12589 2017-08-19 11:07:35 +0200 accdecdlg: GCA support\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12546 2017-08-13 08:29:01 +0200 block, route: fixes for cleaning type permissions\n" \
 "12545 2017-08-12 15:12:34 +0200 xmlscript: allow in sub function id an underscore to execute the whole script excluding function definitions\n" \
 "12544 2017-08-12 11:24:01 +0200 translation merge: nl\n" \
-"12543 2017-08-12 11:12:55 +0200 xmlscript: resolve function ID in the sub statement\n" \
-"12542 2017-08-12 10:50:20 +0200 guiframe: auto pt off in case tab selection changed and the pt button is on\n" \
 
 "log end";
