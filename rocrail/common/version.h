@@ -1,9 +1,10 @@
 const int revisionnr = 
-12590
+12591
 ;
 const char* commithash = 
-"e6e6c015eb315c3245c9973afcd74848184287a8";
+"26714da3b443ba55b5612a05b5375ab111f76e90";
 const char* revlog = 
+"12591 2017-08-20 10:20:24 +0200 mgvdlg: add cvbyte nodes compatible with switchpilot\n" \
 "12590 2017-08-19 12:38:00 +0200 removed gca wrapper: not needed for accdecdlg\n" \
 "12589 2017-08-19 11:07:35 +0200 accdecdlg: GCA support\n" \
 "12588 2017-08-19 08:32:22 +0200 routedialog: rename all autogen function added\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12544 2017-08-12 11:24:01 +0200 translation merge: nl\n" \
 "12543 2017-08-12 11:12:55 +0200 xmlscript: resolve function ID in the sub statement\n" \
 "12542 2017-08-12 10:50:20 +0200 guiframe: auto pt off in case tab selection changed and the pt button is on\n" \
-"12541 2017-08-12 08:49:33 +0200 translation merge: de, nl, sl, sr_latin\n" \
 
 "log end";
