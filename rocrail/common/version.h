@@ -1,9 +1,13 @@
 const int revisionnr = 
-12596
+12600
 ;
 const char* commithash = 
-"f4c6f0dc8500e49dd1df234091646c63f8fdef0b";
+"8b3791c16016c86143f407815c8d66507f3f5fbd";
 const char* revlog = 
+"12600 2017-08-22 15:17:11 +0200 analyser: automatically replace dcurve with curvenr 11\n" \
+"12599 2017-08-22 11:56:52 +0200 z21: switch mm protocol support added\n" \
+"12598 2017-08-22 09:30:49 +0200 renamedlg: search ID with startswithi\n" \
+"12597 2017-08-22 08:42:30 +0200 renamedlg: find and open added\n" \
 "12596 2017-08-21 10:38:25 +0200 modplan: save and merge declist\n" \
 "12595 2017-08-21 10:36:41 +0200 modplan: save and merge declist\n" \
 "12594 2017-08-21 08:30:32 +0200 translation merge: pt_BR, sl, nl, de\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12553 2017-08-14 09:28:01 +0200 routedialog: bookmark added\n" \
 "12552 2017-08-14 09:03:03 +0200 feedbackdialog: bookmark button added\n" \
 "12551 2017-08-14 08:02:54 +0200 guiframe: work around for PT off under Windows\n" \
-"12550 2017-08-13 16:17:28 +0200 switchdialog: bookmark support added\n" \
-"12549 2017-08-13 15:42:32 +0200 edit bookmarks dialog added\n" \
-"12548 2017-08-13 12:28:50 +0200 bookmarks: WIP\n" \
-"12547 2017-08-13 10:25:31 +0200 rclink: fix for check detector range\n" \
 
 "log end";
