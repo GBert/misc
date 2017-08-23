@@ -1,9 +1,13 @@
 const int revisionnr = 
-12600
+12604
 ;
 const char* commithash = 
-"8b3791c16016c86143f407815c8d66507f3f5fbd";
+"6bfafce56d515b12fa3e5087e5063d81bbf667da";
 const char* revlog = 
+"12604 2017-08-23 17:36:02 +0200 loc: trace correction for unexpected enter event\n" \
+"12603 2017-08-23 12:11:28 +0200 z21: fix for using the decoder address for setting mode MM/DCC\n" \
+"12602 2017-08-23 10:28:48 +0200 analyse: dcurve warning added with tip\n" \
+"12601 2017-08-23 08:18:52 +0200 z21: query switch mode\n" \
 "12600 2017-08-22 15:17:11 +0200 analyser: automatically replace dcurve with curvenr 11\n" \
 "12599 2017-08-22 11:56:52 +0200 z21: switch mm protocol support added\n" \
 "12598 2017-08-22 09:30:49 +0200 renamedlg: search ID with startswithi\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12557 2017-08-15 08:02:22 +0200 blockdialog: bookmark added\n" \
 "12556 2017-08-15 07:34:40 +0200 rclink: trace correction\n" \
 "12555 2017-08-14 15:37:36 +0200 editbookmarks: open and stamp added\n" \
-"12554 2017-08-14 11:25:50 +0200 p50x: psleep before sending the PT ON command\n" \
-"12553 2017-08-14 09:28:01 +0200 routedialog: bookmark added\n" \
-"12552 2017-08-14 09:03:03 +0200 feedbackdialog: bookmark button added\n" \
-"12551 2017-08-14 08:02:54 +0200 guiframe: work around for PT off under Windows\n" \
 
 "log end";
