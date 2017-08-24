@@ -1,9 +1,15 @@
 const int revisionnr = 
-12604
+12610
 ;
 const char* commithash = 
-"6bfafce56d515b12fa3e5087e5063d81bbf667da";
+"dab1fbee2fbc7a8cac87b542e572b904bce45cea";
 const char* revlog = 
+"12610 2017-08-24 10:49:10 +0200 renamedlg: translation for dialog title added\n" \
+"12609 2017-08-24 10:42:41 +0200 translation merge: nl, de, fr, sl\n" \
+"12608 2017-08-24 10:31:37 +0200 renamedlg: translation for ID and enable logic on field select\n" \
+"12607 2017-08-24 08:04:17 +0200 system: set random seed function added\n" \
+"12606 2017-08-24 07:51:48 +0200 var: seed for srand extended with millis xmlscript: break support in while loop\n" \
+"12605 2017-08-23 22:16:25 +0200 CV19: update\n" \
 "12604 2017-08-23 17:36:02 +0200 loc: trace correction for unexpected enter event\n" \
 "12603 2017-08-23 12:11:28 +0200 z21: fix for using the decoder address for setting mode MM/DCC\n" \
 "12602 2017-08-23 10:28:48 +0200 analyse: dcurve warning added with tip\n" \
@@ -48,11 +54,5 @@ const char* revlog =
 "12563 2017-08-15 11:51:10 +0200 translation merge: nl, de, sr_latin\n" \
 "12562 2017-08-15 11:15:14 +0200 editbookmarksdlg: delete all button added\n" \
 "12561 2017-08-15 11:02:22 +0200 scheduledialog: bookmark added\n" \
-"12560 2017-08-15 10:45:19 +0200 textdialog: bookmark added\n" \
-"12559 2017-08-15 10:33:13 +0200 outputdialog: bookmark added\n" \
-"12558 2017-08-15 09:35:18 +0200 signaldialog: bookmark added\n" \
-"12557 2017-08-15 08:02:22 +0200 blockdialog: bookmark added\n" \
-"12556 2017-08-15 07:34:40 +0200 rclink: trace correction\n" \
-"12555 2017-08-14 15:37:36 +0200 editbookmarks: open and stamp added\n" \
 
 "log end";
