@@ -1,9 +1,11 @@
 const int revisionnr = 
-12610
+12612
 ;
 const char* commithash = 
-"dab1fbee2fbc7a8cac87b542e572b904bce45cea";
+"7d22ccc51a3007107b9169e41007b7c88da4256b";
 const char* revlog = 
+"12612 2017-08-25 11:32:57 +0200 signal: show flag added\n" \
+"12611 2017-08-25 08:02:05 +0200 rocprodlg: filter out GCA decoders\n" \
 "12610 2017-08-24 10:49:10 +0200 renamedlg: translation for dialog title added\n" \
 "12609 2017-08-24 10:42:41 +0200 translation merge: nl, de, fr, sl\n" \
 "12608 2017-08-24 10:31:37 +0200 renamedlg: translation for ID and enable logic on field select\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12565 2017-08-16 08:20:30 +0200 dcurve: moved to the User Theme with curvenr 11\n" \
 "12564 2017-08-15 15:54:40 +0200 timedactions: bookmark added\n" \
 "12563 2017-08-15 11:51:10 +0200 translation merge: nl, de, sr_latin\n" \
-"12562 2017-08-15 11:15:14 +0200 editbookmarksdlg: delete all button added\n" \
-"12561 2017-08-15 11:02:22 +0200 scheduledialog: bookmark added\n" \
 
 "log end";
