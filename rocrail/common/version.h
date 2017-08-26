@@ -1,9 +1,11 @@
 const int revisionnr = 
-12612
+12614
 ;
 const char* commithash = 
-"7d22ccc51a3007107b9169e41007b7c88da4256b";
+"cffe18362d59ed9aabbd7105d6e15b90c8305f63";
 const char* revlog = 
+"12614 2017-08-26 09:43:35 +0200 signaldialog: freeid and blankid editable\n" \
+"12613 2017-08-26 08:16:23 +0200 lightctrl: ignore at startup the output on state\n" \
 "12612 2017-08-25 11:32:57 +0200 signal: show flag added\n" \
 "12611 2017-08-25 08:02:05 +0200 rocprodlg: filter out GCA decoders\n" \
 "12610 2017-08-24 10:49:10 +0200 renamedlg: translation for dialog title added\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12567 2017-08-16 10:32:59 +0200 operatordlg: bookmark added\n" \
 "12566 2017-08-16 10:18:03 +0200 cardlg: bookmark added\n" \
 "12565 2017-08-16 08:20:30 +0200 dcurve: moved to the User Theme with curvenr 11\n" \
-"12564 2017-08-15 15:54:40 +0200 timedactions: bookmark added\n" \
-"12563 2017-08-15 11:51:10 +0200 translation merge: nl, de, sr_latin\n" \
 
 "log end";
