@@ -29,10 +29,11 @@ define Build/Prepare
 	$(CP) ./src/* $(PKG_BUILD_DIR)/
 endef
 
+ifneq (,$(findstring sun7i-a20,$(CONFIG_TARGET_PROFILE)))
+        TARGET_CPPFLAGS+= -DSUNXI_A20
+endif
+
 define Build/Compile
-	ifneq (,$(findstring banana,$(CONFIG_TARGET_PROFILE)))
-		$(TARGET_CFLAGS) += -DSUNXI_A20
-	endif
 	make -C $(PKG_BUILD_DIR)		\
 		$(TARGET_CONFIGURE_OPTS)	\
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)"	\

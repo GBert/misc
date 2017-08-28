@@ -1,7 +1,6 @@
 #include "allwinner.h"
 #include <libgen.h>
 
-#define AW_IO_BASE_ADDR		(0x01C20000)
 #define AW_PWM_CTRL_REG		(0x00000E00)
 #define AW_PWM_CH0_PERIOD	(0x00000E04)
 #define AW_PWM_CH1_PERIOD	(0x00000E08)
@@ -10,8 +9,8 @@ void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s \n", prg);
     fprintf(stderr, "   Version 0.1\n\n");
     fprintf(stderr, "         -p toggle pin [e.g. PH2 -> (7*32+2) 226]\n");
-    fprintf(stderr, "         -t period time in ns\n");
-    fprintf(stderr, "         -d duty cycle in ns\n");
+    fprintf(stderr, "         -t period time in us\n");
+    fprintf(stderr, "         -d duty cycle in us\n");
 }
 
 int main(int argc, char **argv) {
@@ -57,10 +56,25 @@ int main(int argc, char **argv) {
 
     printf("toggling port %d ...\n", toggle_pin);
 
+#if 0
     while (1) {
 	gpio_aw_set(toggle_pin, HIGH);
 	gpio_aw_set(toggle_pin, LOW);
     }
+#else
+    unsigned int val;
+    io_aw_read(AW_PWM_CTRL_REG, &val);
+    io_aw_write(AW_PWM_CTRL_REG, val & ~PWM_EN);
+    io_aw_write(AW_PWM_CH1_PERIOD, (((pwm_period * 24 - 1) << 16) & 0xffff0000) | (pwm_duty_cycle & 0xffff));
+    io_aw_write(AW_PWM_CTRL_REG, val | PWM_EN | 0x0000000f);
+    while (1) {
+	io_aw_read(AW_PWM_CH1_PERIOD, &val);
+	if (val && PWM_RDY(1))
+	    gpio_aw_set(toggle_pin, HIGH);
+	else
+	    gpio_aw_set(toggle_pin, LOW);
+    }
+#endif
 
     io_aw_close();
     return 0;

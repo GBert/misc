@@ -31,9 +31,11 @@
 
 typedef volatile uint32_t *IO_ADDR;
 
-#define LOW   (0x00)
-#define HIGH  (0x01)
-#define FLOAT (0xFF)
+#define LOW	(0x00)
+#define HIGH	(0x01)
+#define FLOAT	(0xFF)
+
+#define BIT(x)	(1<<x)
 
 /* AllWinner A20/H2+/H3 */
 #define AW_BASE_ADDR		(0x01C20000)
@@ -46,6 +48,18 @@ typedef volatile uint32_t *IO_ADDR;
 #define AW_PWM_CTRL_REG         (0x00000E00)
 #define AW_PWM_CH0_PERIOD       (0x00000E04)
 #define AW_PWM_CH1_PERIOD       (0x00000E08)
+
+/* PWM defines */
+#define PWM_EN			BIT(4)
+#define PWM_ACT_STATE		BIT(5)
+#define PWM_CLK_GATING		BIT(6)
+#define PWM_MODE		BIT(7)
+#define PWM_PULSE		BIT(8)
+#define PWM_BYPASS		BIT(9)
+
+#define PWM_RDY_BASE		28
+#define PWM_RDY_OFFSET		1
+#define PWM_RDY(ch)		BIT((PWM_RDY_BASE + PWM_RDY_OFFSET) * (ch))
 
 /* Banana Pi      A20 */
 /* Orange Pi/Mini A20 */
@@ -217,6 +231,9 @@ int gpio_aw_set(uint16_t, uint8_t);
 int gpio_aw_release(uint16_t, uint8_t);
 void gpio_aw_select_output(uint16_t pin);
 void gpio_aw_select_input(uint16_t pin);
+void io_aw_read(uint32_t io_reg, uint32_t *val);
+void io_aw_write(uint32_t io_reg, uint32_t val);
+
 
 
 #endif /* !_ALLWINNER_H */

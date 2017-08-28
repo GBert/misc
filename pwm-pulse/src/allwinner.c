@@ -124,7 +124,7 @@ io_aw_close(void)
 	}
 }
 
-static inline void
+void
 io_aw_read(uint32_t io_reg, uint32_t *val)
 {
 	IO_ADDR reg = (IO_ADDR)(io_map) + io_reg;
@@ -132,7 +132,7 @@ io_aw_read(uint32_t io_reg, uint32_t *val)
 	*val = *reg;
 }
 
-static inline void
+void
 io_aw_write(uint32_t io_reg, uint32_t val)
 {
 	IO_ADDR reg = (IO_ADDR)(io_map) + io_reg;

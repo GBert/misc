@@ -10,4 +10,4 @@ pwm-pulse: allwinner.o pwm-pulse.o
 	$(CC) $(CFLAGS) -o pwm-pulse allwinner.o pwm-pulse.o
 
 clean:
-	$(RM) *.o $(BINS) s88udp
+	$(RM) *.o $(BINS)
