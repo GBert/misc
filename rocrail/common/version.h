@@ -1,9 +1,14 @@
 const int revisionnr = 
-12625
+12630
 ;
 const char* commithash = 
-"3d1d143774c5942caf746b773b2f7f3c4e0c56b4";
+"8c8a32fb9d590c9418404dbe4a5806cb3b27ef55";
 const char* revlog = 
+"12630 2017-08-28 15:43:05 +0200 item: show invisible tracks in the context menu\n" \
+"12629 2017-08-28 15:21:33 +0200 bidib product IDs: GBM16TS added\n" \
+"12628 2017-08-28 12:22:10 +0200 rocguiinidlg: removed update path\n" \
+"12627 2017-08-28 11:57:52 +0200 rocguiinidlg: added an extra tab for path\n" \
+"12626 2017-08-28 09:30:39 +0200 rocguiinidlg: layout fix\n" \
 "12625 2017-08-27 17:50:50 +0200 infodialog: plan title added\n" \
 "12624 2017-08-27 17:29:51 +0200 infodialog: layout corrections\n" \
 "12623 2017-08-27 17:17:33 +0200 infodialog: layout corrections\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "12583 2017-08-18 12:14:27 +0200 renamedlg: added missing translations for the standard buttons\n" \
 "12582 2017-08-18 12:02:47 +0200 renamedlg: new\n" \
 "12581 2017-08-18 08:31:26 +0200 road-curve-11.svg\n" \
-"12580 2017-08-18 08:06:53 +0200 z21, wmz21: disable share flag under Windows\n" \
-"12579 2017-08-17 15:53:18 +0200 ecos: use oid in case of discovery and the addr is zero or not provided\n" \
-"12578 2017-08-17 14:58:18 +0200 guiframe: wx2.8 compatible correction\n" \
-"12577 2017-08-17 14:52:52 +0200 model: discover trace corrections\n" \
-"12576 2017-08-17 11:43:05 +0200 dinamo: trace correction\n" \
 
 "log end";
