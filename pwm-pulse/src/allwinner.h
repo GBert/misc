@@ -38,10 +38,11 @@ typedef volatile uint32_t *IO_ADDR;
 #define BIT(x)	(1<<x)
 
 /* AllWinner A20/H2+/H3 */
+
 #define AW_BASE_ADDR		(0x01C20000)
 #define AW_BASE_OFS1 		(0x00000800)	/* PIO 0x01C20800 .. 0x01C20BFF 1K                 */
 #define AW_BASE_OFS2 		(0x00000C00)	/* PIO 0x01C20C00 .. 0x01C20FFF 1K (H2+/H3 PORT L) */
-#define AW_MAP_LEN   		(0x2000)
+#define AW_MAP_LEN   		(0x1000)
 #define AW_A20_NPINS 		(288)		/* PORT A .. PORT I                      */
 #define AW_H3_NPINS  		(224)		/* PORT A .. PORT G (PORT L UNSUPPORTED) */
 #define AW_NPINS     		(288)		/* Max Supported Pins                    */
@@ -50,6 +51,7 @@ typedef volatile uint32_t *IO_ADDR;
 #define AW_PWM_CH1_PERIOD       (0x00000E08)
 
 /* PWM defines */
+#define PWM_CH1_EN		BIT(19)
 #define PWM_EN			BIT(4)
 #define PWM_ACT_STATE		BIT(5)
 #define PWM_CLK_GATING		BIT(6)
@@ -59,7 +61,7 @@ typedef volatile uint32_t *IO_ADDR;
 
 #define PWM_RDY_BASE		28
 #define PWM_RDY_OFFSET		1
-#define PWM_RDY(ch)		BIT((PWM_RDY_BASE + PWM_RDY_OFFSET) * (ch))
+#define PWM_RDY(ch)		BIT((PWM_RDY_BASE + PWM_RDY_OFFSET * (ch)))
 
 /* Banana Pi      A20 */
 /* Orange Pi/Mini A20 */

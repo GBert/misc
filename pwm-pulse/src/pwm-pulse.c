@@ -64,12 +64,15 @@ int main(int argc, char **argv) {
 #else
     unsigned int val;
     io_aw_read(AW_PWM_CTRL_REG, &val);
-    io_aw_write(AW_PWM_CTRL_REG, val & ~PWM_EN);
-    io_aw_write(AW_PWM_CH1_PERIOD, (((pwm_period * 24 - 1) << 16) & 0xffff0000) | (pwm_duty_cycle & 0xffff));
-    io_aw_write(AW_PWM_CTRL_REG, val | PWM_EN | 0x0000000f);
+    printf("read CTRL 0x%08x 0x%08x\n", AW_PWM_CTRL_REG, val);
+    io_aw_write(AW_PWM_CTRL_REG, val & ~PWM_CH1_EN);
+    printf("write CTRL 0x%08x\n", val & ~PWM_CH1_EN);
+    io_aw_write(AW_PWM_CH1_PERIOD, (((pwm_period * 24 - 1) << 16) & 0xffff0000) | ((pwm_duty_cycle * 24) & 0xffff));
+    io_aw_write(AW_PWM_CTRL_REG, val | PWM_CH1_EN | 0x0000000f);
+    printf("write CTRL 0x%08x\n", val | PWM_CH1_EN | 0x0000000f);
     while (1) {
-	io_aw_read(AW_PWM_CH1_PERIOD, &val);
-	if (val && PWM_RDY(1))
+	io_aw_read(AW_PWM_CTRL_REG, &val);
+	if (val & PWM_RDY(1))
 	    gpio_aw_set(toggle_pin, HIGH);
 	else
 	    gpio_aw_set(toggle_pin, LOW);

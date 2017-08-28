@@ -75,7 +75,7 @@ io_aw_open(const char *device)
 		return -1;
 	}
 
-	/* Memory map GPIO */
+	/* Memory map IO */
 	io_map = mmap(NULL, AW_MAP_LEN, PROT_READ | PROT_WRITE, MAP_SHARED, io_mem, AW_BASE_ADDR);
 	if (io_map == MAP_FAILED) {
 		printf("%s: warning: mmap failed [%s]\n", __func__, strerror(errno));
@@ -128,6 +128,7 @@ void
 io_aw_read(uint32_t io_reg, uint32_t *val)
 {
 	IO_ADDR reg = (IO_ADDR)(io_map) + io_reg;
+	printf("%s : io_reg 0x%08x val 0x%08x\n", __func__, io_reg, *val);
 
 	*val = *reg;
 }
@@ -138,6 +139,7 @@ io_aw_write(uint32_t io_reg, uint32_t val)
 	IO_ADDR reg = (IO_ADDR)(io_map) + io_reg;
 
 	*reg = val;
+	printf("%s: io_reg 0x%08x val 0x%08x\n", __func__, io_reg, val);
 }
 
 void
