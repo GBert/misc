@@ -21,7 +21,7 @@ define Package/hello
 endef
 
 define Package/hello/description
-  The famous Hello World
+  The famous Hello World to show a simple feed construction
 endef
 
 define Build/Prepare
