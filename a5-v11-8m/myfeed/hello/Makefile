@@ -15,7 +15,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/hello
   SECTION:=utils
   CATEGORY:=Utilities
-  TITLE:= Famous Helle World
+  TITLE:= Famous Hello World
   DEPENDS:=
   MAINTAINER:=Gerhard Bertelsmann
 endef
