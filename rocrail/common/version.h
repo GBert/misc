@@ -1,9 +1,20 @@
 const int revisionnr = 
-12614
+12625
 ;
 const char* commithash = 
-"cffe18362d59ed9aabbd7105d6e15b90c8305f63";
+"3d1d143774c5942caf746b773b2f7f3c4e0c56b4";
 const char* revlog = 
+"12625 2017-08-27 17:50:50 +0200 infodialog: plan title added\n" \
+"12624 2017-08-27 17:29:51 +0200 infodialog: layout corrections\n" \
+"12623 2017-08-27 17:17:33 +0200 infodialog: layout corrections\n" \
+"12622 2017-08-27 14:12:12 +0200 infodialog: correction for server IP\n" \
+"12621 2017-08-27 13:35:17 +0200 infodialog: layout and info extended\n" \
+"12620 2017-08-27 11:25:35 +0200 trace: distinguish between linux and macos\n" \
+"12619 2017-08-27 11:01:08 +0200 translation merge: fr, sr_latin\n" \
+"12618 2017-08-27 10:21:09 +0200 archivebox: create the home directory also incase of readonly\n" \
+"12617 2017-08-27 10:08:48 +0200 xpressnet: trace extended with position switch wiring hint\n" \
+"12616 2017-08-27 09:58:57 +0200 control: adde MAC and IP to the issue header\n" \
+"12615 2017-08-27 08:29:10 +0200 signal: ctc LED support for aspect number signals\n" \
 "12614 2017-08-26 09:43:35 +0200 signaldialog: freeid and blankid editable\n" \
 "12613 2017-08-26 08:16:23 +0200 lightctrl: ignore at startup the output on state\n" \
 "12612 2017-08-25 11:32:57 +0200 signal: show flag added\n" \
@@ -43,16 +54,5 @@ const char* revlog =
 "12578 2017-08-17 14:58:18 +0200 guiframe: wx2.8 compatible correction\n" \
 "12577 2017-08-17 14:52:52 +0200 model: discover trace corrections\n" \
 "12576 2017-08-17 11:43:05 +0200 dinamo: trace correction\n" \
-"12575 2017-08-17 10:12:37 +0200 bookmarks: layout corrections\n" \
-"12574 2017-08-17 09:49:13 +0200 locdialog: show the generated flag\n" \
-"12573 2017-08-17 08:42:59 +0200 basedlg: ask bookmark remark at add\n" \
-"12572 2017-08-17 08:23:19 +0200 bookmark: remark added\n" \
-"12571 2017-08-16 15:37:01 +0200 ecos: evaluate decoder protocol on bind\n" \
-"12570 2017-08-16 15:15:50 +0200 ecos: import unknown locos from the ecos (temporary)\n" \
-"12569 2017-08-16 11:00:23 +0200 stagedlg: bookmark added\n" \
-"12568 2017-08-16 10:44:19 +0200 road-dcurve: moved to user theme with nr 22\n" \
-"12567 2017-08-16 10:32:59 +0200 operatordlg: bookmark added\n" \
-"12566 2017-08-16 10:18:03 +0200 cardlg: bookmark added\n" \
-"12565 2017-08-16 08:20:30 +0200 dcurve: moved to the User Theme with curvenr 11\n" \
 
 "log end";
