@@ -69,7 +69,8 @@ int main(int argc, char **argv) {
     printf("write CTRL 0x%08x\n", val & ~PWM_CH1_EN);
     io_aw_write(AW_PWM_CH1_PERIOD, (((pwm_period * 24 - 1) << 16) & 0xffff0000) | ((pwm_duty_cycle * 24) & 0xffff));
     io_aw_write(AW_PWM_CTRL_REG, val | PWM_CH1_EN | 0x0000000f);
-    printf("write CTRL 0x%08x\n", val | PWM_CH1_EN | 0x0000000f);
+    io_aw_read(AW_PWM_CTRL_REG, &val);
+    printf("write CTRL 0x%08x\n", val);
     while (1) {
 	io_aw_read(AW_PWM_CTRL_REG, &val);
 	if (val & PWM_RDY(1))
