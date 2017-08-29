@@ -50,14 +50,17 @@ typedef volatile uint32_t *IO_ADDR;
 #define AW_PWM_CH1_PERIOD       (0x00000E08)
 
 /* PWM defines */
-#define PWM_CH0_EN		BIT(18)
+#define PWM_CH1_PULSE_OUT_START	BIT(23)
+#define PWM_CH1_MODE		BIT(22)
+#define PWM_CH1_CLK_GATING	BIT(21)
+#define PWM_CH1_ACT_STATE	BIT(20)
 #define PWM_CH1_EN		BIT(19)
-#define PWM_EN			BIT(4)
-#define PWM_ACT_STATE		BIT(5)
-#define PWM_CLK_GATING		BIT(6)
-#define PWM_MODE		BIT(7)
-#define PWM_PULSE		BIT(8)
-#define PWM_BYPASS		BIT(9)
+#define PWM0_BYPASS		BIT(9)
+#define PWM_CH0_PUL_START	BIT(8)
+#define PWM_CH0_MODE		BIT(7)
+#define PWM_CH0_CLK_GATING	BIT(6)
+#define PWM_CH0_ACT_STATE	BIT(5)
+#define PWM_CH0_EN		BIT(4)
 
 #define PWM_RDY_BASE		28
 #define PWM_RDY_OFFSET		1

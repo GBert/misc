@@ -38,8 +38,7 @@ static uint32_t gpio_cfg[AW_NPINS], gpio_dat[AW_NPINS], gpio_pull[AW_NPINS];
 /*
  *  Type of Pi.
  */
-
-static aw_device_t aw = {0};
+static aw_device_t aw;
 
 /*
  * Map AllWinner GPIO memory
@@ -47,6 +46,7 @@ static aw_device_t aw = {0};
 int
 io_aw_open(const char *device)
 {
+	memset(&aw, 0, sizeof(aw));
 	/* Setup device */
 #ifdef SUNXI_A20
 	aw.npins = AW_A20_NPINS;
