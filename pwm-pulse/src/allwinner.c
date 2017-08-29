@@ -128,7 +128,6 @@ void
 io_aw_read(uint32_t io_reg, uint32_t *val)
 {
 	IO_ADDR reg = (IO_ADDR)(io_map) + io_reg;
-	/* printf("%s : io_reg 0x%08x val 0x%08x\n", __func__, io_reg, *val); */
 
 	*val = *reg;
 }
@@ -139,7 +138,6 @@ io_aw_write(uint32_t io_reg, uint32_t val)
 	IO_ADDR reg = (IO_ADDR)(io_map) + io_reg;
 
 	*reg = val;
-	printf("%s: io_reg 0x%08x val 0x%08x\n", __func__, io_reg, val);
 }
 
 void

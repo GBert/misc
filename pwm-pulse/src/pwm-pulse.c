@@ -15,11 +15,11 @@ void print_usage(char *prg) {
 
 void print_iomem(unsigned int start, unsigned int len) {
     unsigned int i, val;
-    for (i = start; i<=len ; i+=4) {
-	if (!(i & 4))
-	    printf("\n0x%08x: ", AW_BASE_ADDR + i);
+    for (i = start; i <= len; i++) {
+	if (!(i & 3))
+	    printf("\n%08x: ", AW_BASE_ADDR + 4 * i);
 	io_aw_read(i, &val);
-	printf("0x%08x", val);
+	printf(" %08x", val);
     }
 }
 
@@ -73,19 +73,19 @@ int main(int argc, char **argv) {
     }
 #else
     unsigned int val;
-    io_aw_read(AW_PWM_CTRL_REG, &val);
+    io_aw_read(AW_PWM_CTRL_REG >> 2, &val);
     printf("read CTRL 0x%08x 0x%08x\n", AW_PWM_CTRL_REG, val);
-    io_aw_write(AW_PWM_CTRL_REG, val & ~PWM_CH1_EN);
+    io_aw_write(AW_PWM_CTRL_REG >> 2, val & ~PWM_CH1_EN);
     printf("write CTRL 0x%08x\n", val & ~PWM_CH1_EN);
-    io_aw_write(AW_PWM_CH1_PERIOD, (((pwm_period * 24 - 1) << 16) & 0xffff0000) | ((pwm_duty_cycle * 24) & 0xffff));
-    io_aw_write(AW_PWM_CTRL_REG, val | PWM_CH1_EN | 0x0000000f);
-    io_aw_read(AW_PWM_CTRL_REG, &val);
+    io_aw_write(AW_PWM_CH1_PERIOD >> 2, (((pwm_period * 24 - 1) << 16) & 0xffff0000) | ((pwm_duty_cycle * 24) & 0xffff));
+    io_aw_write(AW_PWM_CTRL_REG >> 2, val | PWM_CH1_EN);
+    io_aw_read(AW_PWM_CTRL_REG >> 2, &val);
     printf("write CTRL 0x%08x\n", val);
-    print_iomem(0, 1024);
+    /* print_iomem(0, 1024); */
 
-#if 0
+#if 1
     while (1) {
-	io_aw_read(AW_PWM_CTRL_REG, &val);
+	io_aw_read(AW_PWM_CTRL_REG >> 2, &val);
 	if (val & PWM_RDY(1))
 	    gpio_aw_set(toggle_pin, HIGH);
 	else
