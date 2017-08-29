@@ -1,9 +1,13 @@
 const int revisionnr = 
-12630
+12634
 ;
 const char* commithash = 
-"8c8a32fb9d590c9418404dbe4a5806cb3b27ef55";
+"2617706a4382cd35368a8e49be1b75879dc7808e";
 const char* revlog = 
+"12634 2017-08-29 12:05:05 +0200 debian control: use for libusb also the developer package\n" \
+"12633 2017-08-29 09:06:16 +0200 guiframe: added a loop counter to prevent an endless loop in case there are tabidx with same value.\n" \
+"12632 2017-08-29 08:09:58 +0200 guiframe, planpanel: fix for sorting the panels at tabidx\n" \
+"12631 2017-08-29 07:34:09 +0200 control.template: added dependency libusb\n" \
 "12630 2017-08-28 15:43:05 +0200 item: show invisible tracks in the context menu\n" \
 "12629 2017-08-28 15:21:33 +0200 bidib product IDs: GBM16TS added\n" \
 "12628 2017-08-28 12:22:10 +0200 rocguiinidlg: removed update path\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12587 2017-08-19 07:41:57 +0200 renamedlg: layout corrections\n" \
 "12586 2017-08-18 16:41:54 +0200 renamedlg: layout corrections\n" \
 "12585 2017-08-18 15:37:23 +0200 analyse: curvenr 22 removed\n" \
-"12584 2017-08-18 12:38:28 +0200 renamedlg: resize border added\n" \
-"12583 2017-08-18 12:14:27 +0200 renamedlg: added missing translations for the standard buttons\n" \
-"12582 2017-08-18 12:02:47 +0200 renamedlg: new\n" \
-"12581 2017-08-18 08:31:26 +0200 road-curve-11.svg\n" \
 
 "log end";
