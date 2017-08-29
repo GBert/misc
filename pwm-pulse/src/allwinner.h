@@ -38,7 +38,6 @@ typedef volatile uint32_t *IO_ADDR;
 #define BIT(x)	(1<<x)
 
 /* AllWinner A20/H2+/H3 */
-
 #define AW_BASE_ADDR		(0x01C20000)
 #define AW_BASE_OFS1 		(0x00000800)	/* PIO 0x01C20800 .. 0x01C20BFF 1K                 */
 #define AW_BASE_OFS2 		(0x00000C00)	/* PIO 0x01C20C00 .. 0x01C20FFF 1K (H2+/H3 PORT L) */
@@ -51,6 +50,7 @@ typedef volatile uint32_t *IO_ADDR;
 #define AW_PWM_CH1_PERIOD       (0x00000E08)
 
 /* PWM defines */
+#define PWM_CH0_EN		BIT(18)
 #define PWM_CH1_EN		BIT(19)
 #define PWM_EN			BIT(4)
 #define PWM_ACT_STATE		BIT(5)

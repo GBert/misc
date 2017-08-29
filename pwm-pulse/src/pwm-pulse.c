@@ -13,6 +13,16 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -d duty cycle in us\n");
 }
 
+void print_iomem(unsigned int start, unsigned int len) {
+    unsigned int i, val;
+    for (i = start; i<=len ; i+=4) {
+	if (!(i & 4))
+	    printf("\n0x%08x: ", AW_BASE_ADDR + i);
+	io_aw_read(i, &val);
+	printf("0x%08x", val);
+    }
+}
+
 int main(int argc, char **argv) {
     int opt, pwm_period, pwm_duty_cycle, toggle_pin;
 
@@ -71,6 +81,9 @@ int main(int argc, char **argv) {
     io_aw_write(AW_PWM_CTRL_REG, val | PWM_CH1_EN | 0x0000000f);
     io_aw_read(AW_PWM_CTRL_REG, &val);
     printf("write CTRL 0x%08x\n", val);
+    print_iomem(0, 1024);
+
+#if 0
     while (1) {
 	io_aw_read(AW_PWM_CTRL_REG, &val);
 	if (val & PWM_RDY(1))
@@ -78,6 +91,7 @@ int main(int argc, char **argv) {
 	else
 	    gpio_aw_set(toggle_pin, LOW);
     }
+#endif
 #endif
 
     io_aw_close();
