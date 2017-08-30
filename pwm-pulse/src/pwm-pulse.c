@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
 	gpio_aw_set(toggle_pin, LOW);
     }
 #else
-    unsigned int val;
+    unsigned int val, oldval;
     io_aw_read(AW_PWM_CTRL_REG >> 2, &val);
     printf("read CTRL 0x%08x 0x%08x\n", AW_PWM_CTRL_REG, val);
     io_aw_write(AW_PWM_CTRL_REG >> 2, val & ~PWM_CH1_EN);
@@ -84,12 +84,16 @@ int main(int argc, char **argv) {
     /* print_iomem(0, 1024); */
 
 #if 1
+    io_aw_read(AW_PWM_CTRL_REG >> 2, &val);
+    oldval = 0;
     while (1) {
-	io_aw_read(AW_PWM_CTRL_REG >> 2, &val);
-	if (val & PWM_RDY(1))
+	if (val ^ oldval) {
+    	    printf("CTRL differ 0x%08x\n", val);
 	    gpio_aw_set(toggle_pin, HIGH);
-	else
+	} else {
 	    gpio_aw_set(toggle_pin, LOW);
+	}
+	oldval = val;
     }
 #endif
 #endif
