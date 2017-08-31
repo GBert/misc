@@ -1,9 +1,15 @@
 const int revisionnr = 
-12634
+12640
 ;
 const char* commithash = 
-"2617706a4382cd35368a8e49be1b75879dc7808e";
+"9ed9497c20aae12e1fb52cc68c7aae95eef5ab54";
 const char* revlog = 
+"12640 2017-08-31 10:56:52 +0200 translation merge: de, fr\n" \
+"12639 2017-08-31 09:34:08 +0200 lightctrl: modify function added\n" \
+"12638 2017-08-31 09:33:13 +0200 guiframe: save selected tab index in the ini file\n" \
+"12637 2017-08-30 18:09:21 +0200 ecos: request loco table again if an appended event happend\n" \
+"12636 2017-08-30 16:15:36 +0200 analyse: fix for connector finding\n" \
+"12635 2017-08-30 09:02:12 +0200 lightctrl: unique id added, convert table automatically\n" \
 "12634 2017-08-29 12:05:05 +0200 debian control: use for libusb also the developer package\n" \
 "12633 2017-08-29 09:06:16 +0200 guiframe: added a loop counter to prevent an endless loop in case there are tabidx with same value.\n" \
 "12632 2017-08-29 08:09:58 +0200 guiframe, planpanel: fix for sorting the panels at tabidx\n" \
@@ -48,11 +54,5 @@ const char* revlog =
 "12593 2017-08-20 14:47:58 +0200 guiframe: translation fix for import level\n" \
 "12592 2017-08-20 12:08:06 +0200 plus sign in road blocks\n" \
 "12591 2017-08-20 10:20:24 +0200 mgvdlg: add cvbyte nodes compatible with switchpilot\n" \
-"12590 2017-08-19 12:38:00 +0200 removed gca wrapper: not needed for accdecdlg\n" \
-"12589 2017-08-19 11:07:35 +0200 accdecdlg: GCA support\n" \
-"12588 2017-08-19 08:32:22 +0200 routedialog: rename all autogen function added\n" \
-"12587 2017-08-19 07:41:57 +0200 renamedlg: layout corrections\n" \
-"12586 2017-08-18 16:41:54 +0200 renamedlg: layout corrections\n" \
-"12585 2017-08-18 15:37:23 +0200 analyse: curvenr 22 removed\n" \
 
 "log end";
