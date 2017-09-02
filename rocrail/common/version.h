@@ -1,9 +1,14 @@
 const int revisionnr = 
-12645
+12650
 ;
 const char* commithash = 
-"8b293f7bacf3ec28cea98b3e3bf2f3d41770aa37";
+"102923dc0bc55a2b3188c83f8a737729b3c5694c";
 const char* revlog = 
+"12650 2017-09-02 10:18:55 +0200 locdialog: update index only if a loco was deleted\n" \
+"12649 2017-09-02 10:15:20 +0200 locdialog: delete multiple locos\n" \
+"12648 2017-09-02 09:49:16 +0200 importdlg: save size and position\n" \
+"12647 2017-09-02 09:13:56 +0200 importdlg: list control added for sorting on columns\n" \
+"12646 2017-09-02 07:57:07 +0200 locdialog: export multiple locos by selection dialog\n" \
 "12645 2017-09-01 16:29:52 +0200 blockdialog: use separate lists for main, distant and blockstate signals to fill up the dropdowns\n" \
 "12644 2017-09-01 15:31:16 +0200 issue: show the reporting client revision number\n" \
 "12643 2017-09-01 12:09:38 +0200 basedlg: uidname column removed; id uidname is set it will be shown in the address column\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "12603 2017-08-23 12:11:28 +0200 z21: fix for using the decoder address for setting mode MM/DCC\n" \
 "12602 2017-08-23 10:28:48 +0200 analyse: dcurve warning added with tip\n" \
 "12601 2017-08-23 08:18:52 +0200 z21: query switch mode\n" \
-"12600 2017-08-22 15:17:11 +0200 analyser: automatically replace dcurve with curvenr 11\n" \
-"12599 2017-08-22 11:56:52 +0200 z21: switch mm protocol support added\n" \
-"12598 2017-08-22 09:30:49 +0200 renamedlg: search ID with startswithi\n" \
-"12597 2017-08-22 08:42:30 +0200 renamedlg: find and open added\n" \
-"12596 2017-08-21 10:38:25 +0200 modplan: save and merge declist\n" \
 
 "log end";
