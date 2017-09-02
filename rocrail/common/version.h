@@ -1,9 +1,14 @@
 const int revisionnr = 
-12640
+12645
 ;
 const char* commithash = 
-"9ed9497c20aae12e1fb52cc68c7aae95eef5ab54";
+"8b293f7bacf3ec28cea98b3e3bf2f3d41770aa37";
 const char* revlog = 
+"12645 2017-09-01 16:29:52 +0200 blockdialog: use separate lists for main, distant and blockstate signals to fill up the dropdowns\n" \
+"12644 2017-09-01 15:31:16 +0200 issue: show the reporting client revision number\n" \
+"12643 2017-09-01 12:09:38 +0200 basedlg: uidname column removed; id uidname is set it will be shown in the address column\n" \
+"12642 2017-09-01 11:04:52 +0200 ecos: use address to oid map also for function commands\n" \
+"12641 2017-09-01 10:46:49 +0200 ecos: extra map for address to oid to support the slotserver\n" \
 "12640 2017-08-31 10:56:52 +0200 translation merge: de, fr\n" \
 "12639 2017-08-31 09:34:08 +0200 lightctrl: modify function added\n" \
 "12638 2017-08-31 09:33:13 +0200 guiframe: save selected tab index in the ini file\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "12598 2017-08-22 09:30:49 +0200 renamedlg: search ID with startswithi\n" \
 "12597 2017-08-22 08:42:30 +0200 renamedlg: find and open added\n" \
 "12596 2017-08-21 10:38:25 +0200 modplan: save and merge declist\n" \
-"12595 2017-08-21 10:36:41 +0200 modplan: save and merge declist\n" \
-"12594 2017-08-21 08:30:32 +0200 translation merge: pt_BR, sl, nl, de\n" \
-"12593 2017-08-20 14:47:58 +0200 guiframe: translation fix for import level\n" \
-"12592 2017-08-20 12:08:06 +0200 plus sign in road blocks\n" \
-"12591 2017-08-20 10:20:24 +0200 mgvdlg: add cvbyte nodes compatible with switchpilot\n" \
 
 "log end";
