@@ -62,6 +62,9 @@ define Package/can2udp/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/cs2ping.init $(1)/etc/init.d/cs2ping
 	$(INSTALL_BIN) ./files/can2lan.init $(1)/etc/init.d/can2lan
+ifneq (,$(findstring a5-v11,$(CONFIG_TARGET_PROFILE)))
+	$(INSTALL_BIN) ./files/can2lan.init_slcan_a5v11 $(1)/etc/init.d/can2lan
+endif
 ifneq (,$(findstring banana,$(CONFIG_TARGET_PROFILE)))
 	$(INSTALL_BIN) ./files/can2lan.init_bpi $(1)/etc/init.d/can2lan
 endif
