@@ -212,7 +212,7 @@ static int cdcacm_control_request(usbd_device * usbd_dev,
 	}
     case USB_CDC_REQ_SET_LINE_CODING:
 	{
-	    /* TODO */
+	    /* TODO: we are using an unusual fixed rate 62500 for Xpressnet */
 	    return 1;
 	    struct usb_cdc_line_coding *coding;
 
