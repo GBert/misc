@@ -212,6 +212,8 @@ static int cdcacm_control_request(usbd_device * usbd_dev,
 	}
     case USB_CDC_REQ_SET_LINE_CODING:
 	{
+	    /* TODO */
+	    return 1;
 	    struct usb_cdc_line_coding *coding;
 
 	    if (*len < sizeof(struct usb_cdc_line_coding))
