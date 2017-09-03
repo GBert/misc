@@ -1,9 +1,13 @@
 const int revisionnr = 
-12650
+12654
 ;
 const char* commithash = 
-"102923dc0bc55a2b3188c83f8a737729b3c5694c";
+"86b53d02ee57898540a3515b2cf27f1ca421c1a2";
 const char* revlog = 
+"12654 2017-09-03 11:23:26 +0200 model: ignore the loco iid if none is found\n" \
+"12653 2017-09-03 10:21:08 +0200 importdlg: address column added cardlg: fix for sorting on address\n" \
+"12652 2017-09-03 10:13:49 +0200 translation merge: pt_BR\n" \
+"12651 2017-09-03 09:42:42 +0200 model: trace generated loco properties\n" \
 "12650 2017-09-02 10:18:55 +0200 locdialog: update index only if a loco was deleted\n" \
 "12649 2017-09-02 10:15:20 +0200 locdialog: delete multiple locos\n" \
 "12648 2017-09-02 09:49:16 +0200 importdlg: save size and position\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12607 2017-08-24 08:04:17 +0200 system: set random seed function added\n" \
 "12606 2017-08-24 07:51:48 +0200 var: seed for srand extended with millis xmlscript: break support in while loop\n" \
 "12605 2017-08-23 22:16:25 +0200 CV19: update\n" \
-"12604 2017-08-23 17:36:02 +0200 loc: trace correction for unexpected enter event\n" \
-"12603 2017-08-23 12:11:28 +0200 z21: fix for using the decoder address for setting mode MM/DCC\n" \
-"12602 2017-08-23 10:28:48 +0200 analyse: dcurve warning added with tip\n" \
-"12601 2017-08-23 08:18:52 +0200 z21: query switch mode\n" \
 
 "log end";
