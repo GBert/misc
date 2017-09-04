@@ -102,11 +102,11 @@ void usart2_isr(void) {
     // usbser-rxne()
     /* Check if we were called because of RXNE. */
     if (((USART_CR1(USART2) & USART_CR1_RXNEIE) != 0) &&
-        ((USART_SR(USART2) & USART_SR_RXNE) != 0)) {
+	((USART_SR(USART2) & USART_SR_RXNE) != 0)) {
 
 	gpio_set(LED_RX_PORT, LED_RX_PIN);
-	uint8_t c = usart_recv(USART2);
-	if (ringb_put(&rx_ring, c)) {
+	uint16_t c = usart_recv(USART2);
+	if (ringb_put(&rx_ring, (uint8_t) (c >> 8) & 0xff) && ringb_put(&rx_ring, (uint8_t) (c & 0xff))) {
 	    // good,
 	} else {
 	    // fatal, you should always have drained by now.
@@ -121,7 +121,7 @@ void usart2_isr(void) {
     }
     // usbser-irq-txe()
     if (((USART_CR1(USART2) & USART_CR1_TXEIE) != 0) &&
-        ((USART_SR(USART2) & USART_SR_TXE) != 0)) {
+	((USART_SR(USART2) & USART_SR_TXE) != 0)) {
 
 	if (ringb_depth(&tx_ring) == 0) {
 	    // turn off tx empty interrupts, nothing left to send
@@ -130,14 +130,14 @@ void usart2_isr(void) {
 	    // Turn on tx complete interrupts, for rs485 de
 	    USART_CR1(USART2) |= USART_CR1_TCIE;
 	} else {
-	    int c = ringb_get(&tx_ring);
+	    int c = (((ringb_get(&tx_ring) << 8) & 1) | (ringb_get(&tx_ring) & 0xff));
 	    usart_send(USART2, c);
 	}
     }
     // usbser-irq-txc?  rs485 is auto on some devices, but can be emulated anyway
 
     if (((USART_CR1(USART2) & USART_CR1_TCIE) != 0) &&
-        ((USART_SR(USART2) & USART_SR_TC) != 0)) {
+	((USART_SR(USART2) & USART_SR_TC) != 0)) {
 
 	ER_DPRINTF("TC");
 	// turn off the complete irqs, we're done now.
