@@ -34,9 +34,9 @@
         B4                            A4
         B5                            A3 RX2
         B6                            A2 TX2
-        B7              8M            A1 RTS2
-(CANRX) B8           32768            A0 CTS2
-(CANTX) B9                           C15
+        B7              8M            A1
+        B8           32768            A0
+        B9                           C15
         5V       PC13     POWER      C14
         GND      LED      LED        C13
         3V3           SWD           VBAT
@@ -63,6 +63,8 @@
 #define ER_DPRINTF(fmt, ...) \
     do { } while (0)
 #endif
+
+int de_set_first;;
 
 static inline void gpio_really(uint32_t port, uint16_t pin, const bool set) {
     int shift = set ? 0 : 16;
@@ -130,8 +132,11 @@ void usart2_isr(void) {
 	    // Turn on tx complete interrupts, for rs485 de
 	    USART_CR1(USART2) |= USART_CR1_TCIE;
 	} else {
-	    /* TODO : check receiving before enabling*/
-	    cdcacm_arch_pin(0, CDCACM_PIN_RS485DE, 1);
+	    /* TODO : check receiving before enabling */
+	    if (de_set_first) {
+		cdcacm_arch_pin(0, CDCACM_PIN_RS485DE, 1);
+		de_set_first = 0;
+	    }
 	    uint16_t c = (((ringb_get(&tx_ring) << 8) & 0x100) | ringb_get(&tx_ring));
 	    usart_send(USART2, c);
 	}
@@ -146,6 +151,7 @@ void usart2_isr(void) {
 	USART_CR1(USART2) &= ~USART_CR1_TCIE;
 	USART_SR(USART2) &= ~USART_SR_TC;
 	cdcacm_arch_pin(0, CDCACM_PIN_RS485DE, 0);
+	de_set_first = 1;
     }
     gpio_really(GPIOA, GPIO5, 0);
 }
@@ -197,6 +203,9 @@ void cdcacm_arch_set_line_state(int port, uint8_t dtr, uint8_t rts) {
 }
 
 int main(void) {
+
+    de_set_first = 1;
+
     rcc_clock_setup_in_hse_8mhz_out_72mhz();
     ER_DPRINTF("And we're alive!\n");
     /* Led */
