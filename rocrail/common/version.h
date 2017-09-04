@@ -1,9 +1,15 @@
 const int revisionnr = 
-12654
+12660
 ;
 const char* commithash = 
-"86b53d02ee57898540a3515b2cf27f1ca421c1a2";
+"007ba81b3ff7a8e8cd5dd9e7b0b56779ca2eb952";
 const char* revlog = 
+"12660 2017-09-04 13:11:52 +0200 scheduledialog: check for existing ID\n" \
+"12659 2017-09-04 09:57:35 +0200 fback: fix for modify and address offset\n" \
+"12658 2017-09-04 09:43:57 +0200 feedbackdialog: layout corrections\n" \
+"12657 2017-09-04 09:34:44 +0200 fback: optional offset variable added\n" \
+"12656 2017-09-03 12:26:38 +0200 locdialog: disable importing locos with already existing IDs\n" \
+"12655 2017-09-03 11:50:15 +0200 loc: send config to the command station virtual: show config command\n" \
 "12654 2017-09-03 11:23:26 +0200 model: ignore the loco iid if none is found\n" \
 "12653 2017-09-03 10:21:08 +0200 importdlg: address column added cardlg: fix for sorting on address\n" \
 "12652 2017-09-03 10:13:49 +0200 translation merge: pt_BR\n" \
@@ -48,11 +54,5 @@ const char* revlog =
 "12613 2017-08-26 08:16:23 +0200 lightctrl: ignore at startup the output on state\n" \
 "12612 2017-08-25 11:32:57 +0200 signal: show flag added\n" \
 "12611 2017-08-25 08:02:05 +0200 rocprodlg: filter out GCA decoders\n" \
-"12610 2017-08-24 10:49:10 +0200 renamedlg: translation for dialog title added\n" \
-"12609 2017-08-24 10:42:41 +0200 translation merge: nl, de, fr, sl\n" \
-"12608 2017-08-24 10:31:37 +0200 renamedlg: translation for ID and enable logic on field select\n" \
-"12607 2017-08-24 08:04:17 +0200 system: set random seed function added\n" \
-"12606 2017-08-24 07:51:48 +0200 var: seed for srand extended with millis xmlscript: break support in while loop\n" \
-"12605 2017-08-23 22:16:25 +0200 CV19: update\n" \
 
 "log end";
