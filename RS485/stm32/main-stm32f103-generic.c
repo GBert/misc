@@ -106,7 +106,7 @@ void usart2_isr(void) {
 
 	gpio_set(LED_RX_PORT, LED_RX_PIN);
 	uint16_t c = usart_recv(USART2);
-	if (ringb_put(&rx_ring, (uint8_t) (c >> 8) & 0xff) && ringb_put(&rx_ring, (uint8_t) (c & 0xff))) {
+	if (ringb_put(&rx_ring, (uint8_t) (c >> 8) & 0x01) && ringb_put(&rx_ring, (uint8_t) (c & 0xff))) {
 	    // good,
 	} else {
 	    // fatal, you should always have drained by now.
@@ -130,7 +130,9 @@ void usart2_isr(void) {
 	    // Turn on tx complete interrupts, for rs485 de
 	    USART_CR1(USART2) |= USART_CR1_TCIE;
 	} else {
-	    int c = (((ringb_get(&tx_ring) << 8) & 1) | (ringb_get(&tx_ring) & 0xff));
+	    /* TODO : check receiving before enabling*/
+	    cdcacm_arch_pin(0, CDCACM_PIN_RS485DE, 1);
+	    uint16_t c = (((ringb_get(&tx_ring) << 8) & 0x100) | ringb_get(&tx_ring));
 	    usart_send(USART2, c);
 	}
     }
