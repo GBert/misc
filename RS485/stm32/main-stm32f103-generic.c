@@ -139,7 +139,8 @@ void usart2_isr(void) {
 	    }
 
 	    // uint16_t c = (((ringb_get(&tx_ring) << 8) & 0x100) | ringb_get(&tx_ring));
-	    uint16_t c = ringb_get(&tx_ring);
+	    uint16_t c = (( ringb_get(&tx_ring) | ((ringb_get(&tx_ring) << 8) & 0x100)));
+	    //uint16_t c = ringb_get(&tx_ring);
 	    // c = 0x155;
 	    usart_send(USART2, c);
 	}

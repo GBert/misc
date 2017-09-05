@@ -242,9 +242,10 @@ static void cdcacm_data_rx_cb(usbd_device * usbd_dev, uint8_t ep) {
 	    // this is _never_recoverable beyond watchdog reset.
 	    while (1) ;
 	}
-	// look up port to suart mapping which side?
-	cdcacm_arch_txirq(0, 1);
     }
+    // look up port to suart mapping which side?
+    cdcacm_arch_txirq(0, 1);
+
     if (ringb_depth(&tx_ring) < 64) {
 	ER_DPRINTF("ACK\n");
 	usbd_ep_nak_set(usbd_dev, ep, 0);
