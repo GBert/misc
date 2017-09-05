@@ -47,7 +47,7 @@ using SWD interface with st-flash or serial loader stm32-flash (works only with 
 
 Usage
 -----
-sending 16bit like
+sending 16bit
 
 
 Links
