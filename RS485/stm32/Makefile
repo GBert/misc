@@ -27,7 +27,10 @@ BINARY = main-stm32f103-generic
 
 LDSCRIPT = STM32F103C8.ld
 
+CFLAGS += -DSPEED62500
+
 include mk/Makefile.include
+
 
 st-flash:$(BINARY).stlink-flash
 
