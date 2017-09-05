@@ -65,6 +65,11 @@ int glue_set_line_coding_cb(uint32_t baud, uint8_t databits,
 	return 0;
     }
 
+#ifdef SPEED62500
+    /* TODO: we are using an unusual fixed rate 62500 for Xpressnet */
+    return 1;
+#else
+
     /* Disable the UART while we mess with its settings */
     usart_disable(USART2);
     /* Set communication parameters */
@@ -76,4 +81,5 @@ int glue_set_line_coding_cb(uint32_t baud, uint8_t databits,
     usart_enable(USART2);
 
     return 1;
+#endif
 }
