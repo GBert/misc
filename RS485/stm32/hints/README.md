@@ -19,3 +19,12 @@ st-flash 1.4.0-6-g7b7a5c1
 2017-09-05T10:25:10 INFO src/common.c: Loading device parameters....
 2017-09-05T10:25:10 WARN src/common.c: unknown chip id! 0xe0042000
 ```
+
+Prices (Aliexpress)
+-------------------
+
+```
+STLinkV2(clone)	1,50 Euro
+Blue-Pill	1,40 Euro
+```
+
