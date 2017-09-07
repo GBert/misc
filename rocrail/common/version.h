@@ -1,9 +1,13 @@
 const int revisionnr = 
-12660
+12664
 ;
 const char* commithash = 
-"007ba81b3ff7a8e8cd5dd9e7b0b56779ca2eb952";
+"4380aa10a5fc8a3988ce59a8ec857d901c82ba5b";
 const char* revlog = 
+"12664 2017-09-06 10:47:16 +0200 ecos: generate an ID if not set from slot server\n" \
+"12663 2017-09-06 08:08:17 +0200 scheduledialog: event on change ID removed\n" \
+"12662 2017-09-06 07:51:51 +0200 mcs2: removed support for version < 3\n" \
+"12661 2017-09-05 08:13:45 +0200 wrapper: removed the obsolete lenz lib name\n" \
 "12660 2017-09-04 13:11:52 +0200 scheduledialog: check for existing ID\n" \
 "12659 2017-09-04 09:57:35 +0200 fback: fix for modify and address offset\n" \
 "12658 2017-09-04 09:43:57 +0200 feedbackdialog: layout corrections\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12617 2017-08-27 10:08:48 +0200 xpressnet: trace extended with position switch wiring hint\n" \
 "12616 2017-08-27 09:58:57 +0200 control: adde MAC and IP to the issue header\n" \
 "12615 2017-08-27 08:29:10 +0200 signal: ctc LED support for aspect number signals\n" \
-"12614 2017-08-26 09:43:35 +0200 signaldialog: freeid and blankid editable\n" \
-"12613 2017-08-26 08:16:23 +0200 lightctrl: ignore at startup the output on state\n" \
-"12612 2017-08-25 11:32:57 +0200 signal: show flag added\n" \
-"12611 2017-08-25 08:02:05 +0200 rocprodlg: filter out GCA decoders\n" \
 
 "log end";
