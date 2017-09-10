@@ -1,9 +1,28 @@
 const int revisionnr = 
-12664
+12683
 ;
 const char* commithash = 
-"4380aa10a5fc8a3988ce59a8ec857d901c82ba5b";
+"c4b7666cef82febbff958951063fb8f6aa938e9e";
 const char* revlog = 
+"12683 2017-09-10 14:06:23 +0200 ecos: check if the oid still matches to the ID\n" \
+"12682 2017-09-10 11:42:21 +0200 ecos, loc: use previous ID if not found by ID\n" \
+"12681 2017-09-10 10:42:14 +0200 ecos: use oid in case its known\n" \
+"12680 2017-09-10 10:22:11 +0200 loc, ecos, model: oid support\n" \
+"12679 2017-09-10 08:03:11 +0200 virtual: show decoder type in trace\n" \
+"12678 2017-09-09 17:14:26 +0200 loc: loccnfig mfx support\n" \
+"12677 2017-09-09 14:46:28 +0200 SBB-L-Signals update (Andy)\n" \
+"12676 2017-09-09 10:58:29 +0200 ecos: refrsh mapping in case of a rename\n" \
+"12675 2017-09-09 09:58:24 +0200 ecos: modify existing loco on send decoder config\n" \
+"12674 2017-09-09 08:28:06 +0200 route: extra trace in case a manual route could not be unlocked\n" \
+"12673 2017-09-09 07:54:35 +0200 mcs2: set version to 3 in case it was set to zero\n" \
+"12672 2017-09-08 22:11:05 +0200 mcs2: reverted version evaluation\n" \
+"12671 2017-09-08 10:33:51 +0200 wrapper: default routeswtime changed from 0 to 500ms\n" \
+"12670 2017-09-08 08:25:17 +0200 locdialog: send decoder settings to the CS\n" \
+"12669 2017-09-07 16:34:45 +0200 loc: do not send loco config automatically at startup\n" \
+"12668 2017-09-07 15:06:55 +0200 ecos: fixes...\n" \
+"12667 2017-09-07 12:35:24 +0200 ecos: crash fix on create object\n" \
+"12666 2017-09-07 10:00:55 +0200 ecos: map oid by address too at loco create event\n" \
+"12665 2017-09-07 08:22:35 +0200 switch, signal, output: reject commands if the command thread is still pending\n" \
 "12664 2017-09-06 10:47:16 +0200 ecos: generate an ID if not set from slot server\n" \
 "12663 2017-09-06 08:08:17 +0200 scheduledialog: event on change ID removed\n" \
 "12662 2017-09-06 07:51:51 +0200 mcs2: removed support for version < 3\n" \
@@ -35,24 +54,5 @@ const char* revlog =
 "12636 2017-08-30 16:15:36 +0200 analyse: fix for connector finding\n" \
 "12635 2017-08-30 09:02:12 +0200 lightctrl: unique id added, convert table automatically\n" \
 "12634 2017-08-29 12:05:05 +0200 debian control: use for libusb also the developer package\n" \
-"12633 2017-08-29 09:06:16 +0200 guiframe: added a loop counter to prevent an endless loop in case there are tabidx with same value.\n" \
-"12632 2017-08-29 08:09:58 +0200 guiframe, planpanel: fix for sorting the panels at tabidx\n" \
-"12631 2017-08-29 07:34:09 +0200 control.template: added dependency libusb\n" \
-"12630 2017-08-28 15:43:05 +0200 item: show invisible tracks in the context menu\n" \
-"12629 2017-08-28 15:21:33 +0200 bidib product IDs: GBM16TS added\n" \
-"12628 2017-08-28 12:22:10 +0200 rocguiinidlg: removed update path\n" \
-"12627 2017-08-28 11:57:52 +0200 rocguiinidlg: added an extra tab for path\n" \
-"12626 2017-08-28 09:30:39 +0200 rocguiinidlg: layout fix\n" \
-"12625 2017-08-27 17:50:50 +0200 infodialog: plan title added\n" \
-"12624 2017-08-27 17:29:51 +0200 infodialog: layout corrections\n" \
-"12623 2017-08-27 17:17:33 +0200 infodialog: layout corrections\n" \
-"12622 2017-08-27 14:12:12 +0200 infodialog: correction for server IP\n" \
-"12621 2017-08-27 13:35:17 +0200 infodialog: layout and info extended\n" \
-"12620 2017-08-27 11:25:35 +0200 trace: distinguish between linux and macos\n" \
-"12619 2017-08-27 11:01:08 +0200 translation merge: fr, sr_latin\n" \
-"12618 2017-08-27 10:21:09 +0200 archivebox: create the home directory also incase of readonly\n" \
-"12617 2017-08-27 10:08:48 +0200 xpressnet: trace extended with position switch wiring hint\n" \
-"12616 2017-08-27 09:58:57 +0200 control: adde MAC and IP to the issue header\n" \
-"12615 2017-08-27 08:29:10 +0200 signal: ctc LED support for aspect number signals\n" \
 
 "log end";
