@@ -1,9 +1,11 @@
 const int revisionnr = 
-12683
+12685
 ;
 const char* commithash = 
-"c4b7666cef82febbff958951063fb8f6aa938e9e";
+"0565ed5b8c0ae763aa72b6ca36ba2191f5473de7";
 const char* revlog = 
+"12685 2017-09-11 14:45:17 +0200 revert lookup by address option: loco command sync added\n" \
+"12684 2017-09-11 08:16:22 +0200 model: lookupbyaddress option added for field events\n" \
 "12683 2017-09-10 14:06:23 +0200 ecos: check if the oid still matches to the ID\n" \
 "12682 2017-09-10 11:42:21 +0200 ecos, loc: use previous ID if not found by ID\n" \
 "12681 2017-09-10 10:42:14 +0200 ecos: use oid in case its known\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12638 2017-08-31 09:33:13 +0200 guiframe: save selected tab index in the ini file\n" \
 "12637 2017-08-30 18:09:21 +0200 ecos: request loco table again if an appended event happend\n" \
 "12636 2017-08-30 16:15:36 +0200 analyse: fix for connector finding\n" \
-"12635 2017-08-30 09:02:12 +0200 lightctrl: unique id added, convert table automatically\n" \
-"12634 2017-08-29 12:05:05 +0200 debian control: use for libusb also the developer package\n" \
 
 "log end";
