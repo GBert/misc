@@ -54,6 +54,7 @@
 #include "syscfg.h"
 #include "usb_cdcacm.h"
 #include "ringb.h"
+#include "utils.h"
 
 // #define ER_DEBUG
 #ifdef ER_DEBUG

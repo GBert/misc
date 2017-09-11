@@ -22,7 +22,7 @@ OPENCM3_DIR = /embedded/arm-cortex/src/libopencm3
 
 TTYISP = /dev/ttyUSB1
 
-OBJS = usb_cdcacm.o usb_cdcacm-arch.o ringb.o
+OBJS = usb_cdcacm.o usb_cdcacm-arch.o ringb.o utils.o
 BINARY = main-stm32f103-generic
 
 LDSCRIPT = STM32F103C8.ld
