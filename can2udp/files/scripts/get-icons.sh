@@ -5,7 +5,7 @@ set -e
 
 FILE=cs2update.img
 FS_TYPE=reiserfs
-LINK=http://www.maerklin.de/fileadmin/media/service/software-updates/$FILE
+LINK=https://cloud.maerklin.de/owncloud/index.php/s/s9VYomomybeHTnD/download
 MNT_POINT=/tmp/mnt
 WEB_DIR=/www
 
@@ -13,7 +13,7 @@ cd /root
 
 set -x
 
-wget $LINK
+wget $LINK -O $FILE
 mkdir -p $MNT_POINT
 mount -o loop -t $FS_TYPE $FILE $MNT_POINT
 
