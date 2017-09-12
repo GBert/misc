@@ -1,9 +1,16 @@
 const int revisionnr = 
-12685
+12692
 ;
 const char* commithash = 
-"0565ed5b8c0ae763aa72b6ca36ba2191f5473de7";
+"11a95961b8e3c8ec0ae1b5ac3b59bf53c1c743ce";
 const char* revlog = 
+"12692 2017-09-12 15:16:28 +0200 bidib image 13-134 added\n" \
+"12691 2017-09-12 15:08:59 +0200 rocview dialogs: format bus as unsigned integer to avoid minus values\n" \
+"12690 2017-09-12 13:03:46 +0200 p50x: decoder format + 1 (is not zero based) 1=MM1 2=MM2 3=DCC\n" \
+"12689 2017-09-12 11:19:01 +0200 model: ignore looking up by addres in case of loco sync command from ecos\n" \
+"12688 2017-09-12 10:53:05 +0200 rfbooster: position support added\n" \
+"12687 2017-09-12 08:14:41 +0200 model: trace correction in case of removing a generated object\n" \
+"12686 2017-09-12 07:49:02 +0200 variables: remove generated variables from actions at shutdown\n" \
 "12685 2017-09-11 14:45:17 +0200 revert lookup by address option: loco command sync added\n" \
 "12684 2017-09-11 08:16:22 +0200 model: lookupbyaddress option added for field events\n" \
 "12683 2017-09-10 14:06:23 +0200 ecos: check if the oid still matches to the ID\n" \
@@ -47,12 +54,5 @@ const char* revlog =
 "12645 2017-09-01 16:29:52 +0200 blockdialog: use separate lists for main, distant and blockstate signals to fill up the dropdowns\n" \
 "12644 2017-09-01 15:31:16 +0200 issue: show the reporting client revision number\n" \
 "12643 2017-09-01 12:09:38 +0200 basedlg: uidname column removed; id uidname is set it will be shown in the address column\n" \
-"12642 2017-09-01 11:04:52 +0200 ecos: use address to oid map also for function commands\n" \
-"12641 2017-09-01 10:46:49 +0200 ecos: extra map for address to oid to support the slotserver\n" \
-"12640 2017-08-31 10:56:52 +0200 translation merge: de, fr\n" \
-"12639 2017-08-31 09:34:08 +0200 lightctrl: modify function added\n" \
-"12638 2017-08-31 09:33:13 +0200 guiframe: save selected tab index in the ini file\n" \
-"12637 2017-08-30 18:09:21 +0200 ecos: request loco table again if an appended event happend\n" \
-"12636 2017-08-30 16:15:36 +0200 analyse: fix for connector finding\n" \
 
 "log end";
