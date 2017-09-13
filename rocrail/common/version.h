@@ -1,9 +1,10 @@
 const int revisionnr = 
-12692
+12693
 ;
 const char* commithash = 
-"11a95961b8e3c8ec0ae1b5ac3b59bf53c1c743ce";
+"af0e9f06957f6da64a8c157e661e413651b23f3e";
 const char* revlog = 
+"12693 2017-09-13 08:22:48 +0200 translation merge: fr, zh_CN, de\n" \
 "12692 2017-09-12 15:16:28 +0200 bidib image 13-134 added\n" \
 "12691 2017-09-12 15:08:59 +0200 rocview dialogs: format bus as unsigned integer to avoid minus values\n" \
 "12690 2017-09-12 13:03:46 +0200 p50x: decoder format + 1 (is not zero based) 1=MM1 2=MM2 3=DCC\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12646 2017-09-02 07:57:07 +0200 locdialog: export multiple locos by selection dialog\n" \
 "12645 2017-09-01 16:29:52 +0200 blockdialog: use separate lists for main, distant and blockstate signals to fill up the dropdowns\n" \
 "12644 2017-09-01 15:31:16 +0200 issue: show the reporting client revision number\n" \
-"12643 2017-09-01 12:09:38 +0200 basedlg: uidname column removed; id uidname is set it will be shown in the address column\n" \
 
 "log end";
