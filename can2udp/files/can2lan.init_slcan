@@ -18,7 +18,11 @@ start() {
 	slcand -S 500000 /dev/ttyATH0 can0
 	# wait a little bit to establish CAN device
 	sleep 1
-	ifconfig can0 up
+        if [ -e /usr/sbin/ip ]; then
+                /usr/sbin/ip link set can0 up type can bitrate 250000 restart-ms 10
+        else
+                /sbin/ip link set can0 up type can bitrate 250000 restart-ms 10
+        fi
 
 	[ -e /www/config/ ] && {
 		can2lan -m -c /www/config -b br-lan
