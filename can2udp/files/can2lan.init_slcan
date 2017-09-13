@@ -19,9 +19,9 @@ start() {
 	# wait a little bit to establish CAN device
 	sleep 1
 	if [ -e /usr/sbin/ip ]; then
-		/usr/sbin/ip link set can0 up type can bitrate 250000 restart-ms 10
+		/usr/sbin/ip link set can0 up type can
 	else
-		/sbin/ip link set can0 up type can bitrate 250000 restart-ms 10
+		/sbin/ip link set can0 up type can
 	fi
 
 	[ -e /www/config/ ] && {
