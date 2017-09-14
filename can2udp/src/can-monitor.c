@@ -122,10 +122,9 @@ const char *getLoco(uint8_t *data) {
 }
 
 int main(int argc, char **argv) {
-    int max_fds, opt;
+    int max_fds, opt, sc, i;
     struct can_frame frame;
 
-    int sc;
     struct sockaddr_can caddr;
     struct ifreq ifr;
     socklen_t caddrlen = sizeof(caddr);
@@ -186,13 +185,35 @@ int main(int argc, char **argv) {
 	    } else if ((frame.can_id & CAN_EFF_FLAG) && !(!CS1(frame.can_id & 0x1FFFFFFF))) {	/* only EFF frames are valid */
 		switch ((frame.can_id & 0x00FF0000UL) >> 16) {
 		case 0x00:
+		    for (i = 0; i < 13; i++) {
+                        if (frame.data[4] == i) {
+                            if (i == 0 || i == 2) { printf("System-Befehl, Sub-Befehl: "); writeRed(subCmdNames[i]); }
+                            else if (i == 1) { printf("System-Befehl, Sub-Befehl: "); writeGreen(subCmdNames[i]); }
+                            else if (i == 3 && (frame.data[2] + frame.data[3]) == 0) writeRed("Nothalt an alle Loks");
+                            else if (i == 3) printf("Lok: %s, Nothalt\n", getLoco(&frame.data));
+                            else if (i == 5) printf("Lok: %s, Protokollparameter: %d\n", getLoco(&frame.data), frame.data[5]);
+                            else printf("0x%02X %s", frame.data[4], subCmdNames[i]);
+                        }
+		    }
+
 		    break;
 		case 0x01:
 		    float v = (frame.data[4] << 8) + frame.data[5];
 		    v = v / 10;
 		    printf("Lok: %s, Geschwindigkeit: %3.1f\n", getLoco(&frame.data), v);
 		    break;
-		case 0x30:
+		case 0x02:
+                    string dir;
+
+                    if (frame.data[0] == 4) dir = " wird abgefragt";
+                    else if (frame.data[5] == 0) dir = " bleibt gleich";
+                    else if (frame.data[5] == 1) dir = ": vorwärts";
+                    else if (frame.data[5] == 2) dir = ": rückwärts";
+                    else if (frame.data[5] == 3) dir = " wechseln";
+                    else dir = "unbekannt";
+
+                    printf("Lok: %s, Richtung %s\n", getLoco(&frame.data), dir);
+
 		    break;
 		case 0x36:
 		    break;
