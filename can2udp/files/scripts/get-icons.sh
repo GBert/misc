@@ -20,9 +20,9 @@ mount -o loop -t $FS_TYPE $FILE $MNT_POINT
 cp -r $MNT_POINT/home/cs2/fcticons $WEB_DIR
 cp -r $MNT_POINT/home/cs2/icons $WEB_DIR
 cp -r $MNT_POINT/home/cs2/magicons_ $WEB_DIR
-mkdir $WEB_DIR/update
-cp '$MNT_POINT/home/cs2/update/*.bin' $WEB_DIR/update
-cp '$MNT_POINT/home/cs2/update/*.ms2' $WEB_DIR/update
+mkdir -p $WEB_DIR/update
+cp $MNT_POINT/home/cs2/update/*.bin $WEB_DIR/update
+cp $MNT_POINT/home/cs2/update/*.ms2 $WEB_DIR/update
 # cp -r $(MNT_POINT)/home/cs2/spiel $WEB_DIR
 
 umount $MNT_POINT
