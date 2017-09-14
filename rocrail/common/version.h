@@ -1,9 +1,13 @@
 const int revisionnr = 
-12693
+12697
 ;
 const char* commithash = 
-"af0e9f06957f6da64a8c157e661e413651b23f3e";
+"c02ff02eb09df23df1e5e7b255e84bd848f1cda9";
 const char* revlog = 
+"12697 2017-09-14 10:05:00 +0200 model: logic fix after generating a loco\n" \
+"12696 2017-09-14 09:42:39 +0200 ecos2dlg: open link button added\n" \
+"12695 2017-09-14 09:34:37 +0200 dedicated ecos dialog added\n" \
+"12694 2017-09-14 08:10:24 +0200 ecos: sync option added\n" \
 "12693 2017-09-13 08:22:48 +0200 translation merge: fr, zh_CN, de\n" \
 "12692 2017-09-12 15:16:28 +0200 bidib image 13-134 added\n" \
 "12691 2017-09-12 15:08:59 +0200 rocview dialogs: format bus as unsigned integer to avoid minus values\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12650 2017-09-02 10:18:55 +0200 locdialog: update index only if a loco was deleted\n" \
 "12649 2017-09-02 10:15:20 +0200 locdialog: delete multiple locos\n" \
 "12648 2017-09-02 09:49:16 +0200 importdlg: save size and position\n" \
-"12647 2017-09-02 09:13:56 +0200 importdlg: list control added for sorting on columns\n" \
-"12646 2017-09-02 07:57:07 +0200 locdialog: export multiple locos by selection dialog\n" \
-"12645 2017-09-01 16:29:52 +0200 blockdialog: use separate lists for main, distant and blockstate signals to fill up the dropdowns\n" \
-"12644 2017-09-01 15:31:16 +0200 issue: show the reporting client revision number\n" \
 
 "log end";
