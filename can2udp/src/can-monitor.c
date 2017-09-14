@@ -43,11 +43,11 @@ const char *subCmdNames[] = {
     "Lok-Nothalt",
     "Lok Zyklus Stopp",
     "Lok Datenprotokoll",
-    "Schaltzeit Zubehoerdecoder",
-    "Fast Read fuer",
+    "Schaltzeit Zubehördecoder",
+    "Fast Read für",
     "Gleisprotokoll freischalten",
-    "MFX Neuanmeldezaehler setzen",
-    "Ueberlast",
+    "MFX Neuanmeldezähler setzen",
+    "Überlast",
     "Status",
     "Kennung"
 };
@@ -184,6 +184,7 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "error reading CAN frame: %s\n", strerror(errno));
 	    } else if ((frame.can_id & CAN_EFF_FLAG) && !(!CS1(frame.can_id & 0x1FFFFFFF))) {	/* only EFF frames are valid */
 		switch ((frame.can_id & 0x00FF0000UL) >> 16) {
+		case 0x01:
 		case 0x00:
 		    for (i = 0; i < 13; i++) {
                         if (frame.data[4] == i) {
@@ -197,12 +198,14 @@ int main(int argc, char **argv) {
 		    }
 
 		    break;
-		case 0x01:
+		case 0x03:
+		case 0x02:
 		    float v = (frame.data[4] << 8) + frame.data[5];
 		    v = v / 10;
 		    printf("Lok: %s, Geschwindigkeit: %3.1f\n", getLoco(&frame.data), v);
 		    break;
-		case 0x02:
+		case 0x05:
+		case 0x04:
                     string dir;
 
                     if (frame.data[0] == 4) dir = " wird abgefragt";
@@ -214,10 +217,6 @@ int main(int argc, char **argv) {
 
                     printf("Lok: %s, Richtung %s\n", getLoco(&frame.data), dir);
 
-		    break;
-		case 0x36:
-		    break;
-		case 0x40:
 		    break;
 		default:
 		    break;
