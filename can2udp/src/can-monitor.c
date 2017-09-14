@@ -32,9 +32,10 @@
 #define MAXUDP  	16	/* maximum datagram size */
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
 
-static char *F_CAN_FORMAT_STRG = "      CAN->  0x%08X   [%d]";
-static char *F_S_CAN_FORMAT_STRG = "short CAN->  0x%08X   [%d]";
-static char *T_CAN_FORMAT_STRG = "      CAN<-  0x%08X   [%d]";
+unsigned char netframe[MAXDG];
+
+static char *F_S_CAN_FORMAT_STRG = "S CAN  0x%08X  [%d]";
+static char *F_N_CAN_FORMAT_STRG = "  CAN  0x%08X  [%d]";
 
 const char *subCmdNames[] = {
     "Stopp",
@@ -52,7 +53,13 @@ const char *subCmdNames[] = {
     "Kennung"
 };
 
-unsigned char netframe[MAXDG];
+void writeRed(const char *subCmdNames) {
+    printf("%s\n", subCmdNames);
+}
+
+void writeGreen(const char *subCmdNames) {
+    printf("%s\n", subCmdNames);
+}
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
@@ -86,6 +93,7 @@ void print_can_frame(char *format_string, struct can_frame *frame) {
 	    printf("   ");
 	}
     }
+#if 0
     printf("  ");
     for (i = 0; i < frame->can_dlc; i++) {
 	if (isprint(frame->data[i]))
@@ -94,6 +102,7 @@ void print_can_frame(char *format_string, struct can_frame *frame) {
 	    putchar(46);
     }
     printf("\n");
+#endif
 }
 
 int CS1(int hash) {
@@ -103,26 +112,29 @@ int CS1(int hash) {
 	return 1;
 }
 
-const char *getLoco(uint8_t *data) {
+char *getLoco(uint8_t * data) {
     uint16_t locID = (data[2] << 8) + data[3];
-    char prot[256];
+    static char prot[32];
     int addrs;
 
     if (locID <= 0x03ff) {
-	prot = "Motorola";
+	strncpy(prot, "Motorola-", sizeof(prot));
 	addrs = locID;
-    } else if (locID >= 0xC000 && locID <= 0xFFFF) {
-	prot = "DCC";
+    } else if (locID >= 0xC000) {
+	strncpy(prot, "DCC-", sizeof(prot));
 	addrs = locID - 0xc000;
     } else {
-	prot = "unbekannt";
+	strncpy(prot, "unbekannt-", sizeof(prot));
 	addrs = 0;
     }
-    return prot + "-" + addrs;
+
+    sprintf(prot, "%s%d", prot, addrs);
+    return prot;
 }
 
 int main(int argc, char **argv) {
     int max_fds, opt, sc, i;
+    float v;
     struct can_frame frame;
 
     struct sockaddr_can caddr;
@@ -130,6 +142,7 @@ int main(int argc, char **argv) {
     socklen_t caddrlen = sizeof(caddr);
 
     fd_set read_fds;
+    char dir[32];
 
     strcpy(ifr.ifr_name, "can0");
 
@@ -182,43 +195,61 @@ int main(int argc, char **argv) {
 	if (FD_ISSET(sc, &read_fds)) {
 	    if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
 		fprintf(stderr, "error reading CAN frame: %s\n", strerror(errno));
-	    } else if ((frame.can_id & CAN_EFF_FLAG) && !(!CS1(frame.can_id & 0x1FFFFFFF))) {	/* only EFF frames are valid */
+	    } else if ((frame.can_id & CAN_EFF_FLAG) && !CS1(frame.can_id & 0x1FFFFFFF)) {	/* only EFF frames are valid */
+		print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
 		switch ((frame.can_id & 0x00FF0000UL) >> 16) {
 		case 0x01:
 		case 0x00:
 		    for (i = 0; i < 13; i++) {
-                        if (frame.data[4] == i) {
-                            if (i == 0 || i == 2) { printf("System-Befehl, Sub-Befehl: "); writeRed(subCmdNames[i]); }
-                            else if (i == 1) { printf("System-Befehl, Sub-Befehl: "); writeGreen(subCmdNames[i]); }
-                            else if (i == 3 && (frame.data[2] + frame.data[3]) == 0) writeRed("Nothalt an alle Loks");
-                            else if (i == 3) printf("Lok: %s, Nothalt\n", getLoco(&frame.data));
-                            else if (i == 5) printf("Lok: %s, Protokollparameter: %d\n", getLoco(&frame.data), frame.data[5]);
-                            else printf("0x%02X %s", frame.data[4], subCmdNames[i]);
-                        }
+			if (frame.data[4] == i) {
+			    if (i == 0 || i == 2) {
+				printf("System-Befehl, Sub-Befehl: ");
+				writeRed(subCmdNames[i]);
+			    } else if (i == 1) {
+				printf("System-Befehl, Sub-Befehl: ");
+				writeGreen(subCmdNames[i]);
+			    } else if (i == 3 && (frame.data[2] + frame.data[3]) == 0)
+				writeRed("Nothalt an alle Loks");
+			    else if (i == 3)
+				printf("Lok: %s, Nothalt\n", getLoco(frame.data));
+			    else if (i == 5)
+				printf("Lok: %s, Protokollparameter: %d\n", getLoco(frame.data), frame.data[5]);
+			    else
+				printf("0x%02X %s", frame.data[4], subCmdNames[i]);
+			}
 		    }
 
 		    break;
-		case 0x03:
-		case 0x02:
-		    float v = (frame.data[4] << 8) + frame.data[5];
+		/* Lok Geschwindigkeit */
+		case 0x09:
+		case 0x08:
+		    v = (frame.data[4] << 8) + frame.data[5];
 		    v = v / 10;
-		    printf("Lok: %s, Geschwindigkeit: %3.1f\n", getLoco(&frame.data), v);
+		    printf("Lok: %s, Geschwindigkeit: %3.1f\n", getLoco(frame.data), v);
 		    break;
-		case 0x05:
-		case 0x04:
-                    string dir;
+		/* Lok Richtung */
+		case 0x0B:
+		case 0x0A:
+		    memset(dir, 0, sizeof(dir));
 
-                    if (frame.data[0] == 4) dir = " wird abgefragt";
-                    else if (frame.data[5] == 0) dir = " bleibt gleich";
-                    else if (frame.data[5] == 1) dir = ": vorwärts";
-                    else if (frame.data[5] == 2) dir = ": rückwärts";
-                    else if (frame.data[5] == 3) dir = " wechseln";
-                    else dir = "unbekannt";
+		    if (frame.can_dlc == 4)
+			strncat(dir, " wird abgefragt", sizeof(dir));
+		    else if (frame.data[4] == 0)
+			strncat(dir, " bleibt gleich", sizeof(dir));
+		    else if (frame.data[4] == 1)
+			strncat(dir, ": vorwärts", sizeof(dir));
+		    else if (frame.data[4] == 2)
+			strncat(dir, ": rückwärts", sizeof(dir));
+		    else if (frame.data[4] == 3)
+			strncat(dir, " wechseln", sizeof(dir));
+		    else
+			strncat(dir, "unbekannt", sizeof(dir));
 
-                    printf("Lok: %s, Richtung %s\n", getLoco(&frame.data), dir);
+		    printf("Lok: %s, Richtung %s\n", getLoco(frame.data), dir);
 
 		    break;
 		default:
+		    printf("\n");
 		    break;
 		}
 	    } else

@@ -41,6 +41,7 @@ endef
 
 define Package/can2udp/install
 	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/can-monitor $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/can2udp $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/can2lan $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/can2lan_m $(1)/usr/bin/
