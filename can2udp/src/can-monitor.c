@@ -276,13 +276,11 @@ int main(int argc, char **argv) {
 			printf("Gleisbox");
 			break;
 		    case 0x0030:
-			printf("Mobile Station 2");
-			break;
 		    case 0x0033:
 			printf("Mobile Station 2");
 			break;
 		    case 0x1234:
-			printf("MaeAN-Weichendecoder");
+			printf("MäCAN-Weichendecoder");
 			break;
 		    case 0xEEEE:
 			printf("CS2 Software");
@@ -308,13 +306,11 @@ int main(int argc, char **argv) {
 			printf("Gleisbox");
 			break;
 		    case 0x0030:
-			printf("Mobile Station 2");
-			break;
 		    case 0x0033:
 			printf("Mobile Station 2");
 			break;
 		    case 0x1234:
-			printf("MaeAN-Weichendecoder");
+			printf("MäCAN-Weichendecoder");
 			break;
 		    case 0xEEEE:
 			printf("CS2 Software");
