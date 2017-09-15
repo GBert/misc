@@ -68,15 +68,15 @@ void writeRed(const char *subCmdNames) {
 }
 
 void writeGreen(const char *subCmdNames) {
-    printf(GRN "%s\n", subCmdNames);
+    printf(CYN "%s\n", subCmdNames);
     printf(RESET);
 }
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
     fprintf(stderr, "   Version 0.1\n\n");
-    fprintf(stderr, "         -i <can int>        can interface - default can0\n");
-    fprintf(stderr, "         -d                  daemonize\n\n");
+    fprintf(stderr, "         -i <can int>  CAN interface - default can0\n");
+    fprintf(stderr, "         -h            show this help\n\n");
 }
 
 int time_stamp(char *timestamp) {
@@ -104,6 +104,7 @@ void print_can_frame(char *format_string, struct can_frame *frame) {
 	    printf("   ");
 	}
     }
+    printf(" ");
 #if 0
     printf("  ");
     for (i = 0; i < frame->can_dlc; i++) {
@@ -131,9 +132,12 @@ char *getLoco(uint8_t * data) {
     if (locID <= 0x03ff) {
 	strncpy(prot, "Motorola-", sizeof(prot));
 	addrs = locID;
+    } else if (locID >= 0x4000 && locID < 0xC000) {
+	strncpy(prot, "mfx-", sizeof(prot));
+	addrs = locID - 0x4000;
     } else if (locID >= 0xC000) {
 	strncpy(prot, "DCC-", sizeof(prot));
-	addrs = locID - 0xc000;
+	addrs = locID - 0xC000;
     } else {
 	strncpy(prot, "unbekannt-", sizeof(prot));
 	addrs = 0;
@@ -147,6 +151,7 @@ int main(int argc, char **argv) {
     int max_fds, opt, sc, i;
     float v;
     struct can_frame frame;
+    uint32_t kennung, uid;
 
     struct sockaddr_can caddr;
     struct ifreq ifr;
@@ -206,7 +211,7 @@ int main(int argc, char **argv) {
 	if (FD_ISSET(sc, &read_fds)) {
 	    if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
 		fprintf(stderr, "error reading CAN frame: %s\n", strerror(errno));
-	    } else if ((frame.can_id & CAN_EFF_FLAG) && !CS1(frame.can_id & 0x1FFFFFFF)) {	/* only EFF frames are valid */
+	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
 		switch ((frame.can_id & 0x00FF0000UL) >> 16) {
 		case 0x01:
@@ -231,14 +236,14 @@ int main(int argc, char **argv) {
 		    }
 
 		    break;
-		/* Lok Geschwindigkeit */
+		    /* Lok Geschwindigkeit */
 		case 0x09:
 		case 0x08:
 		    v = (frame.data[4] << 8) + frame.data[5];
 		    v = v / 10;
 		    printf("Lok: %s, Geschwindigkeit: %3.1f\n", getLoco(frame.data), v);
 		    break;
-		/* Lok Richtung */
+		    /* Lok Richtung */
 		case 0x0B:
 		case 0x0A:
 		    memset(dir, 0, sizeof(dir));
@@ -259,12 +264,78 @@ int main(int argc, char **argv) {
 		    printf("Lok: %s, Richtung %s\n", getLoco(frame.data), dir);
 
 		    break;
+		case 0x30:
+		    printf("Ping Anfrage\n");
+		    break;
+		case 0x31:
+		    kennung = (frame.data[6] << 8) + frame.data[7];
+		    uid = ntohl(*(uint32_t *) & frame.data);
+		    printf("Ping Antwort von ");
+		    switch (kennung) {
+		    case 0x0010:
+			printf("Gleisbox");
+			break;
+		    case 0x0030:
+			printf("Mobile Station 2");
+			break;
+		    case 0x0033:
+			printf("Mobile Station 2");
+			break;
+		    case 0x1234:
+			printf("MaeAN-Weichendecoder");
+			break;
+		    case 0xEEEE:
+			printf("CS2 Software");
+			break;
+		    case 0xFFFF:
+			printf("CS2-GUI (Master)");
+			break;
+		    default:
+			printf("unbekannt");
+			break;
+		    }
+		    printf(" mit 0x%04X UID 0x%08X, Software Version %d.%d\n", kennung, uid, frame.data[4], frame.data[5]);
+		    break;
+		case 0x36:
+		    printf("Bootloader Anfrage\n");
+		    break;
+		case 0x37:
+		    kennung = (frame.data[6] << 8) + frame.data[7];
+		    uid = ntohl(*(uint32_t *) & frame.data);
+		    printf("Bootloader Antwort von ");
+		    switch (kennung) {
+		    case 0x0010:
+			printf("Gleisbox");
+			break;
+		    case 0x0030:
+			printf("Mobile Station 2");
+			break;
+		    case 0x0033:
+			printf("Mobile Station 2");
+			break;
+		    case 0x1234:
+			printf("MaeAN-Weichendecoder");
+			break;
+		    case 0xEEEE:
+			printf("CS2 Software");
+			break;
+		    case 0xFFFF:
+			printf("CS2-GUI (Master)");
+			break;
+		    default:
+			printf("unbekannt");
+			break;
+		    }
+		    printf(" mit 0x%04X UID 0x%08X, Software Version %d.%d\n", kennung, uid, frame.data[4], frame.data[5]);
+		    break;
 		default:
 		    printf("\n");
 		    break;
 		}
-	    } else
+	    } else {
 		print_can_frame(F_S_CAN_FORMAT_STRG, &frame);
+		printf("\n");
+	    }
 	}
     }
     close(sc);
