@@ -62,15 +62,24 @@ const char *subCmdNames[] = {
     "Kennung"
 };
 
-void writeRed(const char *subCmdNames) {
-    printf(RED "%s\n", subCmdNames);
+void writeRed(const char *s) {
+    printf(RED "%s\n", s);
     printf(RESET);
 }
 
-void writeGreen(const char *subCmdNames) {
-    printf(CYN "%s\n", subCmdNames);
+void writeGreen(const char *s) {
+    printf(GRM "%s\n", s);
     printf(RESET);
 }
+
+void writeCyan(const char *s) {
+    printf(CYN "%s\n", s);
+}
+
+void writeYellow(const char *s) {
+    printf(YLW "%s\n", s);
+}
+
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
@@ -264,8 +273,20 @@ int main(int argc, char **argv) {
 		    printf("Lok: %s, Richtung %s\n", getLoco(frame.data), dir);
 
 		    break;
+		case 0x0D;
+		case 0x0C;
+		    if (frame.can_dlc == 5)
+			printf("Lok %d Funktion %d\n", getLoco(frame.data), frame.data[4]));
+		    else if (frame.can_dlc == 6)
+			printf("Lok %d Funktion %d Wert %d\n", getLoco(frame.data), frame.data[4], frame.data[5]));
+		    else if (frame.can_dlc == 7)
+			printf("Lok %d Funktion %d Wert %d Funktionswert %d\n",
+				getLoco(frame.data), frame.data[4], frame.data[5], frame.data[6] << 8 + frame.data[7]);
+		    break;
+
 		case 0x30:
-		    printf("Ping Anfrage\n");
+		    writeYellow("Ping Anfrage\n");
+		    printf(RESET);
 		    break;
 		case 0x31:
 		    kennung = (frame.data[6] << 8) + frame.data[7];
@@ -273,29 +294,33 @@ int main(int argc, char **argv) {
 		    printf("Ping Antwort von ");
 		    switch (kennung) {
 		    case 0x0010:
-			printf("Gleisbox");
+			writeCyan("Gleisbox");
 			break;
 		    case 0x0030:
+		    case 0x0031:
+		    case 0x0032:
 		    case 0x0033:
-			printf("Mobile Station 2");
+			writeCyan("Mobile Station 2");
 			break;
 		    case 0x1234:
-			printf("MäCAN-Weichendecoder");
+			writeCyan("MäCAN-Weichendecoder");
 			break;
 		    case 0xEEEE:
-			printf("CS2 Software");
+			writeCyan("CS2 Software");
 			break;
 		    case 0xFFFF:
-			printf("CS2-GUI (Master)");
+			writeCyan("CS2-GUI (Master)");
 			break;
 		    default:
-			printf("unbekannt");
+			writeCyan("unbekannt");
 			break;
 		    }
 		    printf(" mit 0x%04X UID 0x%08X, Software Version %d.%d\n", kennung, uid, frame.data[4], frame.data[5]);
+		    printf(RESET);
 		    break;
 		case 0x36:
-		    printf("Bootloader Anfrage\n");
+		    writeYellow("Bootloader Anfrage\n");
+		    printf(RESET);
 		    break;
 		case 0x37:
 		    kennung = (frame.data[6] << 8) + frame.data[7];
@@ -303,26 +328,27 @@ int main(int argc, char **argv) {
 		    printf("Bootloader Antwort von ");
 		    switch (kennung) {
 		    case 0x0010:
-			printf("Gleisbox");
+			writeCyan("Gleisbox");
 			break;
 		    case 0x0030:
 		    case 0x0033:
-			printf("Mobile Station 2");
+			writeCyan("Mobile Station 2");
 			break;
 		    case 0x1234:
-			printf("MäCAN-Weichendecoder");
+			writeCyan("MäCAN-Weichendecoder");
 			break;
 		    case 0xEEEE:
-			printf("CS2 Software");
+			writeCyan("CS2 Software");
 			break;
 		    case 0xFFFF:
-			printf("CS2-GUI (Master)");
+			writeCyan("CS2-GUI (Master)");
 			break;
 		    default:
-			printf("unbekannt");
+			writeCyan("unbekannt");
 			break;
 		    }
 		    printf(" mit 0x%04X UID 0x%08X, Software Version %d.%d\n", kennung, uid, frame.data[4], frame.data[5]);
+		    printf(RESET);
 		    break;
 		default:
 		    printf("\n");
