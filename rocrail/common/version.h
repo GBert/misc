@@ -1,9 +1,13 @@
 const int revisionnr = 
-12697
+12701
 ;
 const char* commithash = 
-"c02ff02eb09df23df1e5e7b255e84bd848f1cda9";
+"8c266d8795e0278e4d3878fb7b9a7f1fd30ad83e";
 const char* revlog = 
+"12701 2017-09-14 16:00:22 +0200 ecos2dlg: set default port in case port value is zero\n" \
+"12700 2017-09-14 11:58:06 +0200 messages: alttxt for sync (British English)\n" \
+"12699 2017-09-14 11:46:36 +0200 stage: use occupancy section detection for bidi code to set a loco in a stageblock section\n" \
+"12698 2017-09-14 10:52:41 +0200 ecos2dlg: title correction\n" \
 "12697 2017-09-14 10:05:00 +0200 model: logic fix after generating a loco\n" \
 "12696 2017-09-14 09:42:39 +0200 ecos2dlg: open link button added\n" \
 "12695 2017-09-14 09:34:37 +0200 dedicated ecos dialog added\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12654 2017-09-03 11:23:26 +0200 model: ignore the loco iid if none is found\n" \
 "12653 2017-09-03 10:21:08 +0200 importdlg: address column added cardlg: fix for sorting on address\n" \
 "12652 2017-09-03 10:13:49 +0200 translation merge: pt_BR\n" \
-"12651 2017-09-03 09:42:42 +0200 model: trace generated loco properties\n" \
-"12650 2017-09-02 10:18:55 +0200 locdialog: update index only if a loco was deleted\n" \
-"12649 2017-09-02 10:15:20 +0200 locdialog: delete multiple locos\n" \
-"12648 2017-09-02 09:49:16 +0200 importdlg: save size and position\n" \
 
 "log end";
