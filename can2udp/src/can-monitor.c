@@ -62,6 +62,12 @@ const char *subCmdNames[] = {
     "Kennung"
 };
 
+void INThandler(int sig) {
+    signal(sig, SIG_IGN);
+    printf(RESET);
+    exit(0);
+}
+
 void writeRed(const char *s) {
     printf(RED "%s", s);
     printf(RESET);
@@ -176,6 +182,8 @@ int main(int argc, char **argv) {
 
     strcpy(ifr.ifr_name, "can0");
 
+    signal(SIGINT, INThandler);
+
     while ((opt = getopt(argc, argv, "i:dh?")) != -1) {
 	switch (opt) {
 	case 'i':
@@ -253,6 +261,7 @@ int main(int argc, char **argv) {
 				printf("System-Befehl %s", subCmdNames[i]);
 			}
 		    }
+		    printf("\n");
 		    break;
 		/* Lok Discovery */
 		case 0x02:
