@@ -223,6 +223,7 @@ int main(int argc, char **argv) {
 	}
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &read_fds)) {
+	    printf(RESET);
 	    if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
 		fprintf(stderr, "error reading CAN frame: %s\n", strerror(errno));
 	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
@@ -252,34 +253,33 @@ int main(int argc, char **argv) {
 				printf("System-Befehl %s", subCmdNames[i]);
 			}
 		    }
-		    printf(RESET "\n");
 		    break;
 		/* Lok Discovery */
 		case 0x02:
 		case 0x03:
 		    if (frame.can_dlc == 0)
-			printf("Lok Discovery - Erkennen alle Protokolle\n" RESET);
+			printf("Lok Discovery - Erkennen alle Protokolle\n");
 		    if (frame.can_dlc == 1)
-			printf("Lok Discovery - Protokoll Kennung 0x%02X\n" RESET, frame.data[0]);
+			printf("Lok Discovery - Protokoll Kennung 0x%02X\n", frame.data[0]);
 		    if (frame.can_dlc == 5) {
 			uid = ntohl(*(uint32_t *) & frame.data);
-			printf("Lok Discovery - 0x%04X Protokoll Kennung 0x%02X\n" RESET, uid, frame.data[4]);
+			printf("Lok Discovery - 0x%04X Protokoll Kennung 0x%02X\n", uid, frame.data[4]);
 		    }
 		    break;
 		/* MFX Bind */
 		case 0x04:
 		case 0x05:
 		    uid = ntohl(*(uint32_t *) & frame.data);
-		    printf("MFX Bind: MFX UID %d MFX SID %d\n" RESET, uid, (frame.data[4] << 8) + frame.data[5]);
+		    printf("MFX Bind: MFX UID %d MFX SID %d\n", uid, (frame.data[4] << 8) + frame.data[5]);
 		    break;
 		/* MFX Verify */
 		case 0x06:
 		case 0x07:
 		    uid = ntohl(*(uint32_t *) & frame.data);
 		    if (frame.can_dlc == 6)
-			printf("MFX Verify: MFX UID %d MFX SID %d\n" RESET, uid, (frame.data[4] << 8) + frame.data[5]);
+			printf("MFX Verify: MFX UID %d MFX SID %d\n", uid, (frame.data[4] << 8) + frame.data[5]);
 		    if (frame.can_dlc == 7)
-			printf("MFX Verify: MFX UID %d MFX SID %d ASK-Verhältnis %d\n" RESET,
+			printf("MFX Verify: MFX UID %d MFX SID %d ASK-Verhältnis %d\n" ,
 			       uid, (frame.data[4] << 8) + frame.data[5], frame.data[6]);
 		    break;
 		/* Lok Geschwindigkeit */
@@ -287,7 +287,7 @@ int main(int argc, char **argv) {
 		case 0x09:
 		    v = (frame.data[4] << 8) + frame.data[5];
 		    v = v / 10;
-		    printf("Lok: %s, Geschwindigkeit: %3.1f\n" RESET, getLoco(frame.data), v);
+		    printf("Lok: %s, Geschwindigkeit: %3.1f\n", getLoco(frame.data), v);
 		    break;
 		/* Lok Richtung */
 		case 0x0A:
@@ -307,7 +307,7 @@ int main(int argc, char **argv) {
 		    else
 			strncat(dir, "unbekannt", sizeof(dir));
 
-		    printf("Lok: %s, Richtung %s\n" RESET, getLoco(frame.data), dir);
+		    printf("Lok: %s, Richtung %s\n", getLoco(frame.data), dir);
 
 		    break;
 		/* Lok Funktion */
@@ -320,14 +320,13 @@ int main(int argc, char **argv) {
 		    else if (frame.can_dlc == 7)
 			printf("Lok %s Funktion %d Wert %d Funktionswert %d\n",
 			       getLoco(frame.data), frame.data[4], frame.data[5], (frame.data[6] << 8) + frame.data[7]);
-		    printf(RESET);
 		    break;
 		/* Read Config */
 		case 0x0E:
 		    if (frame.can_dlc == 7) {
 			cv_number = ((frame.data[4] & 0x3) << 8) + frame.data[5];
 			cv_index = frame.data[4] >> 2;
-			printf("Read Config Lok %s CV Nummer %d Index %d Anzahl %d\n" RESET,
+			printf("Read Config Lok %s CV Nummer %d Index %d Anzahl %d\n",
 			       getLoco(frame.data), cv_number, cv_index, frame.data[6]);
 		    }
 		    break;
@@ -335,17 +334,17 @@ int main(int argc, char **argv) {
 		    cv_number = ((frame.data[4] & 0x3) << 8) + frame.data[5];
 		    cv_index = frame.data[4] >> 2;
 		    if (frame.can_dlc == 6)
-			printf("Read Config Lok %s CV Nummer %d Index %d\n" RESET,
+			printf("Read Config Lok %s CV Nummer %d Index %d\n",
 			       getLoco(frame.data), cv_number, cv_index);
 		    if (frame.can_dlc == 7)
-			printf("Read Config Lok %s CV Nummer %d Index %d Wert %d\n" RESET,
+			printf("Read Config Lok %s CV Nummer %d Index %d Wert %d\n",
 			       getLoco(frame.data), cv_number, cv_index, frame.data[6]);
 		    break;
 		/* Zubehör schalten */
 		case 0x16:
 		case 0x17:
 		    if (frame.can_dlc == 6)
-			printf("Zubehör Schalten Lok %s Stellung %d Strom %d\n" RESET,
+			printf("Zubehör Schalten Lok %s Stellung %d Strom %d\n" ,
 			       getLoco(frame.data), frame.data[4], frame.data[5]);
 		    if (frame.can_dlc == 8)
 			printf("Zubehör Schalten Lok %s Stellung %d Strom %d Schaltzeit/Sonderfunktionswert %d\n"
@@ -358,7 +357,7 @@ int main(int argc, char **argv) {
 		    break;
 		case 0x21:
 		    uid = ntohl(*(uint32_t *) & frame.data);
-		    printf("S88 Polling 0x%04X Modul %d Zustand %d\n" RESET,
+		    printf("S88 Polling 0x%04X Modul %d Zustand %d\n",
 			   uid, frame.data[4], (frame.data[5] << 8) + frame.data[6]);
 		    break;
 		/* S88 Event */
@@ -366,7 +365,7 @@ int main(int argc, char **argv) {
 		    kenner = ntohs(*(uint16_t *) & frame.data);
 		    kontakt = ntohs(*(uint16_t *) & frame.data);
 		    if (frame.can_dlc == 4)
-			printf("S88 Event: Kennung %d Kontakt %d\n" RESET, kennung, kontakt);
+			printf("S88 Event: Kennung %d Kontakt %d\n", kennung, kontakt);
 		    if (frame.can_dlc == 5)
 			printf("S88 Event: Kennung %d Kontakt %d Parameter %d\n" RESET, kenner, kontakt, frame.data[4]);
 		    break;
@@ -374,12 +373,12 @@ int main(int argc, char **argv) {
 		    kenner = ntohs(*(uint16_t *) & frame.data);
 		    kontakt = ntohs(*(uint16_t *) & frame.data);
 		    if (frame.can_dlc == 5)
-			printf("S88 Event: Kennung %d Kontakt %d Zusand alt %d Zusand neu %d Zeit %d\n" RESET,
+			printf("S88 Event: Kennung %d Kontakt %d Zusand alt %d Zusand neu %d Zeit %d\n",
 			       kenner, kontakt, frame.data[4], frame.data[5], (frame.data[6] << 8) + frame.data[7]);
 		    break;
 		/* Ping */
 		case 0x30:
-		    printf("Ping Anfrage\n" RESET);
+		    printf("Ping Anfrage\n");
 		    break;
 		case 0x31:
 		    kennung = (frame.data[6] << 8) + frame.data[7];
@@ -408,10 +407,10 @@ int main(int argc, char **argv) {
 			printf("unbekannt");
 			break;
 		    }
-		    printf(" UID 0x%08X, Software Version %d.%d\n" RESET, uid, frame.data[4], frame.data[5]);
+		    printf(" UID 0x%08X, Software Version %d.%d\n", uid, frame.data[4], frame.data[5]);
 		    break;
 		case 0x36:
-		    printf("Bootloader Anfrage\n" RESET);
+		    printf("Bootloader Anfrage\n");
 		    break;
 		case 0x37:
 		    kennung = (frame.data[6] << 8) + frame.data[7];
@@ -438,47 +437,48 @@ int main(int argc, char **argv) {
 			printf("unbekannt");
 			break;
 		    }
-		    printf(" UID 0x%08X, Software Version %d.%d\n" RESET, uid, frame.data[4], frame.data[5]);
+		    printf(" UID 0x%08X, Software Version %d.%d\n", uid, frame.data[4], frame.data[5]);
 		    break;
 		/* Statusdaten Konfiguration */
 		case 0x3A:
 		case 0x3B:
 		    uid = ntohl(*(uint32_t *) & frame.data);
 		    if (frame.can_dlc == 5)
-			printf("Status Daten: UID 0x%08X Index 0x%02X\n" RESET, uid, frame.data[4]);
+			printf("Status Daten: UID 0x%08X Index 0x%02X\n", uid, frame.data[4]);
 		    if (frame.can_dlc == 6)
-			printf("Status Daten: UID 0x%08X Index 0x%02X Paketanzahl %d\n" RESET, uid, frame.data[4], frame.data[5]);
+			printf("Status Daten: UID 0x%08X Index 0x%02X Paketanzahl %d\n", uid, frame.data[4], frame.data[5]);
 		    if (frame.can_dlc == 8)
 			/* TODO Daten analysiert ausgeben */
-			printf("Status Daten: Paket %d\n" RESET, frame.can_id & 0xFFFF);
+			printf("Status Daten: Paket %d\n", frame.can_id & 0xFCFF);
 		    break;
 		/* Anfordern Config Daten */
 		case 0x40:
 		case 0x41:
 		    memset(s, 0, sizeof(s));
 		    memcpy(s, frame.data, 8);
-		    printf("Anfordern Config Data: %s\n" RESET, s);
+		    printf("Anfordern Config Data: %s\n", s);
 		    break;
+		/* Config Data Stream */
 		case 0x42:
 		case 0x43:
 		    stream_size = ntohs(*(uint32_t *) &frame.data);
 		    crc = ntohs(*(uint16_t *) &frame.data[4]);
 		    if (frame.can_dlc == 6)
-			printf("Config Data Stream: Länge 0x%08X CRC 0x%04X\n" RESET, stream_size, crc);
+			printf("Config Data Stream: Länge 0x%08X CRC 0x%04X\n" , stream_size, crc);
 		    if (frame.can_dlc == 7)
-			printf("Config Data Stream: Länge 0x%08X CRC 0x%04X (unbekannt 0x%02X)\n" RESET, stream_size, crc, frame.data[6]);
+			printf("Config Data Stream: Länge 0x%08X CRC 0x%04X (unbekannt 0x%02X)\n"", stream_size, crc, frame.data[6]);
 		    if (frame.can_dlc == 8)
-			printf("Config Data Stream: Daten\n" RESET);
+			printf("Config Data Stream: Daten\n");
 		    break;
 		case 0x60:
 		case 0x61:
 		    id = ntohs(*(uint16_t *) &frame.data);
 		    function = (frame.data[2] << 8) + frame.data[3];
 		    if (frame.can_dlc == 6)
-			printf("Automatik ID 0x%04X Funktion 0x%04X Status 0x%02X Parameter 0x%02X\n" RESET,
+			printf("Automatik ID 0x%04X Funktion 0x%04X Status 0x%02X Parameter 0x%02X\n",
 			       id, function, frame.data[4], frame.data[5]);
 		    if (frame.can_dlc == 8)
-			printf("Automatik ID 0x%04X Funktion 0x%04X Lok %s\n" RESET,
+			printf("Automatik ID 0x%04X Funktion 0x%04X Lok %s\n",
 			       id, function, getLoco(&frame.data[4]));
 		    break;
 		default:
