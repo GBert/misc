@@ -138,14 +138,12 @@ int CS1(int hash) {
 	return 1;
 }
 
-char *getLoco(uint8_t * data) {
+char *getLoco(uint8_t * data, char *s) {
     uint16_t locID = (data[2] << 8) + data[3];
     char prot[32];
-    static char loco[32];
     int addrs;
 
     memset(prot, 0, sizeof(prot));
-    memset(loco, 0, sizeof(loco));
 
     if (locID <= 0x03ff) {
 	strncpy(prot, " mm-", sizeof(prot));
@@ -161,8 +159,8 @@ char *getLoco(uint8_t * data) {
 	addrs = 0;
     }
 
-    sprintf(loco, "%s%d", prot, addrs);
-    return loco;
+    sprintf(s, "%s%d", prot, addrs);
+    return s;
 }
 
 int main(int argc, char **argv) {
@@ -171,14 +169,13 @@ int main(int argc, char **argv) {
     struct can_frame frame;
     uint32_t kennung, function, id, uid, cv_number, cv_index, stream_size;
     uint16_t kenner, kontakt, crc;
-    char s[64];
+    char s[32];
 
     struct sockaddr_can caddr;
     struct ifreq ifr;
     socklen_t caddrlen = sizeof(caddr);
 
     fd_set read_fds;
-    char dir[32];
 
     strcpy(ifr.ifr_name, "can0");
 
@@ -259,10 +256,10 @@ int main(int argc, char **argv) {
 			if (frame.data[2] + frame.data[3] == 0)
 			    writeRed("System-Befehl: Nothalt an alle Loks");
 			else
-			    printf("System-Befehl: Lok %s Nothalt", getLoco(frame.data));
+			    printf("System-Befehl: Lok %s Nothalt", getLoco(frame.data, s));
 			break;
 		    case 0x05:
-			printf("System-Befehl: Lok %s Protokollparameter: %d", getLoco(frame.data), frame.data[5]);
+			printf("System-Befehl: Lok %s Protokollparameter: %d", getLoco(frame.data, s), frame.data[5]);
 			break;
 		    case 0x80:
 			uid = ntohl(*(uint32_t *) frame.data);
@@ -310,39 +307,40 @@ int main(int argc, char **argv) {
 		case 0x09:
 		    v = (frame.data[4] << 8) + frame.data[5];
 		    v = v / 10;
-		    printf("Lok: %s, Geschwindigkeit: %3.1f\n", getLoco(frame.data), v);
+		    printf("Lok: %s, Geschwindigkeit: %3.1f\n", getLoco(frame.data, s), v);
 		    break;
 		/* Lok Richtung */
 		case 0x0A:
 		case 0x0B:
-		    memset(dir, 0, sizeof(dir));
+		    memset(s, 0, sizeof(s));
 
+		    printf("Lok: %s, ", getLoco(frame.data, s));
 		    if (frame.can_dlc == 4)
-			strncat(dir, " wird abgefragt", sizeof(dir));
+			strncat(s, " wird abgefragt", sizeof(s));
 		    else if (frame.data[4] == 0)
-			strncat(dir, " bleibt gleich", sizeof(dir));
+			strncat(s, " bleibt gleich", sizeof(s));
 		    else if (frame.data[4] == 1)
-			strncat(dir, ": vorwärts", sizeof(dir));
+			strncat(s, ": vorwärts", sizeof(s));
 		    else if (frame.data[4] == 2)
-			strncat(dir, ": rückwärts", sizeof(dir));
+			strncat(s, ": rückwärts", sizeof(s));
 		    else if (frame.data[4] == 3)
-			strncat(dir, " wechseln", sizeof(dir));
+			strncat(s, " wechseln", sizeof(s));
 		    else
-			strncat(dir, "unbekannt", sizeof(dir));
+			strncat(s, "unbekannt", sizeof(s));
 
-		    printf("Lok: %s, Richtung %s\n", getLoco(frame.data), dir);
+		    printf("Richtung %s\n", getLoco(frame.data, s));
 
 		    break;
 		/* Lok Funktion */
 		case 0x0C:
 		case 0x0D:
 		    if (frame.can_dlc == 5)
-			printf("Lok %s Funktion %d\n", getLoco(frame.data), frame.data[4]);
+			printf("Lok %s Funktion %d\n", getLoco(frame.data, s), frame.data[4]);
 		    else if (frame.can_dlc == 6)
-			printf("Lok %s Funktion %d Wert %d\n", getLoco(frame.data), frame.data[4], frame.data[5]);
+			printf("Lok %s Funktion %d Wert %d\n", getLoco(frame.data, s), frame.data[4], frame.data[5]);
 		    else if (frame.can_dlc == 7)
 			printf("Lok %s Funktion %d Wert %d Funktionswert %d\n",
-			       getLoco(frame.data), frame.data[4], frame.data[5], (frame.data[6] << 8) + frame.data[7]);
+			       getLoco(frame.data, s), frame.data[4], frame.data[5], (frame.data[6] << 8) + frame.data[7]);
 		    break;
 		/* Read Config */
 		case 0x0E:
@@ -350,33 +348,33 @@ int main(int argc, char **argv) {
 			cv_number = ((frame.data[4] & 0x3) << 8) + frame.data[5];
 			cv_index = frame.data[4] >> 2;
 			printf("Read Config Lok %s CV Nummer %d Index %d Anzahl %d\n",
-			       getLoco(frame.data), cv_number, cv_index, frame.data[6]);
+			       getLoco(frame.data, s), cv_number, cv_index, frame.data[6]);
 		    }
 		    break;
 		case 0x0F:
 		    cv_number = ((frame.data[4] & 0x3) << 8) + frame.data[5];
 		    cv_index = frame.data[4] >> 2;
 		    if (frame.can_dlc == 6)
-			printf("Read Config Lok %s CV Nummer %d Index %d\n", getLoco(frame.data), cv_number, cv_index);
+			printf("Read Config Lok %s CV Nummer %d Index %d\n", getLoco(frame.data ,s), cv_number, cv_index);
 		    if (frame.can_dlc == 7)
 			printf("Read Config Lok %s CV Nummer %d Index %d Wert %d\n",
-			       getLoco(frame.data), cv_number, cv_index, frame.data[6]);
+			       getLoco(frame.data, s), cv_number, cv_index, frame.data[6]);
 		    break;
 		/* Zubehör schalten */
 		case 0x16:
 		case 0x17:
 		    if (frame.can_dlc == 6)
 			printf("Zubehör Schalten Lok %s Stellung %d Strom %d\n",
-			       getLoco(frame.data), frame.data[4], frame.data[5]);
+			       getLoco(frame.data, s), frame.data[4], frame.data[5]);
 		    if (frame.can_dlc == 8)
-			printf("Zubehör Schalten Lok %s Stellung %d Strom %d Schaltzeit/Sonderfunktionswert %d\n"
-			       RESET, getLoco(frame.data), frame.data[4], frame.data[5],
+			printf("Zubehör Schalten Lok %s Stellung %d Strom %d Schaltzeit/Sonderfunktionswert %d\n",
+			       getLoco(frame.data, s), frame.data[4], frame.data[5],
 			       (frame.data[6] << 8) + frame.data[7]);
 		    break;
 		/* S88 Polling */
 		case 0x20:
 		    uid = ntohl(*(uint32_t *) frame.data);
-		    printf("S88 Polling 0x%04X Modul Anzahl %d\n" RESET, uid, frame.data[4]);
+		    printf("S88 Polling 0x%04X Modul Anzahl %d\n", uid, frame.data[4]);
 		    break;
 		case 0x21:
 		    uid = ntohl(*(uint32_t *) frame.data);
@@ -390,7 +388,7 @@ int main(int argc, char **argv) {
 		    if (frame.can_dlc == 4)
 			printf("S88 Event: Kennung %d Kontakt %d\n", kennung, kontakt);
 		    if (frame.can_dlc == 5)
-			printf("S88 Event: Kennung %d Kontakt %d Parameter %d\n" RESET, kenner, kontakt, frame.data[4]);
+			printf("S88 Event: Kennung %d Kontakt %d Parameter %d\n", kenner, kontakt, frame.data[4]);
 		    break;
 		case 0x23:
 		    kenner = ntohs(*(uint16_t *) frame.data);
@@ -503,7 +501,7 @@ int main(int argc, char **argv) {
 			printf("Automatik ID 0x%04X Funktion 0x%04X Status 0x%02X Parameter 0x%02X\n",
 			       id, function, frame.data[4], frame.data[5]);
 		    if (frame.can_dlc == 8)
-			printf("Automatik ID 0x%04X Funktion 0x%04X Lok %s\n", id, function, getLoco(&frame.data[4]));
+			printf("Automatik ID 0x%04X Funktion 0x%04X Lok %s\n", id, function, getLoco(&frame.data[4], s));
 		    break;
 		default:
 		    break;
