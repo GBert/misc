@@ -241,25 +241,39 @@ int main(int argc, char **argv) {
 		else
 		    printf(YEL);
 		switch ((frame.can_id & 0x00FF0000UL) >> 16) {
+		/* System Befehle */
 		case 0x00:
 		case 0x01:
-		    for (i = 0; i < 13; i++) {
-			if (frame.data[4] == i) {
-			    if (i == 0 || i == 2) {
-				printf("System-Befehl: Sub-Befehl: ");
-				writeRed(subCmdNames[i]);
-			    } else if (i == 1) {
-				printf("System-Befehl: Sub-Befehl: ");
-				writeGreen(subCmdNames[i]);
-			    } else if (i == 3 && (frame.data[2] + frame.data[3]) == 0)
-				writeRed("Nothalt an alle Loks");
-			    else if (i == 3)
-				printf("Lok: %s, Nothalt", getLoco(frame.data));
-			    else if (i == 5)
-				printf("Lok: %s, Protokollparameter: %d", getLoco(frame.data), frame.data[5]);
-			    else
-				printf("System-Befehl %s", subCmdNames[i]);
-			}
+		    i = frame.data[4];
+		    switch (i) {
+		    case 0x00:
+		    case 0x02:
+			printf("System-Befehl: Sub-Befehl ");
+			writeRed(subCmdNames[i]);
+			break;
+		    case 0x01:
+			printf("System-Befehl: Sub-Befehl ");
+			writeGreen(subCmdNames[i]);
+			break;
+		    case 0x03:
+			if (frame.data[2] + frame.data[3] == 0)
+			    writeRed("System-Befehl: Nothalt an alle Loks");
+			else
+			    printf("System-Befehl: Lok %s Nothalt", getLoco(frame.data));
+			break;
+		    case 0x05:
+			printf("System-Befehl: Lok %s Protokollparameter: %d", getLoco(frame.data), frame.data[5]);
+			break;
+		    case 0x80:
+			uid = ntohl(*(uint32_t *) & frame.data);
+			printf("System-Befehl: System Reset UID 0x%08X Ziel 0x%02X", uid, frame.data[5]);
+			break;
+		    default:
+			if (i < 13)
+			     printf("System-Befehl: %s", subCmdNames[i]);
+			else
+			     printf("System-Befehl: unbekannt 0x%02X", i);
+			break;
 		    }
 		    printf("\n");
 		    break;
