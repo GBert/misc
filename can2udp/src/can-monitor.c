@@ -167,8 +167,8 @@ int main(int argc, char **argv) {
     int max_fds, opt, sc, i;
     float v;
     struct can_frame frame;
-    uint32_t kennung, function, id, uid, cv_number, cv_index, stream_size;
-    uint16_t kenner, kontakt, crc;
+    uint32_t response, kennung, function, id, uid, cv_number, cv_index, stream_size;
+    uint16_t crc, kenner, kontakt, wert;
     char s[32];
 
     struct sockaddr_can caddr;
@@ -233,10 +233,13 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "error reading CAN frame: %s\n", strerror(errno));
 	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
-		if (frame.can_id & 0x00010000UL)
+		if (frame.can_id & 0x00010000UL) {
+		    response = 1;
 		    printf(CYN);
-		else
+		} else {
+		    response = 0;
 		    printf(YEL);
+		}
 		switch ((frame.can_id & 0x00FF0000UL) >> 16) {
 		/* System Befehle */
 		case 0x00:
@@ -259,7 +262,21 @@ int main(int argc, char **argv) {
 			    printf("System-Befehl: Lok %s Nothalt", getLoco(frame.data, s));
 			break;
 		    case 0x05:
-			printf("System-Befehl: Lok %s Protokollparameter: %d", getLoco(frame.data, s), frame.data[5]);
+			printf("System-Befehl: Lok %s Gleisprotokoll: %d", getLoco(frame.data, s), frame.data[5]);
+			break;
+		    case 0x0b:
+		        uid = ntohl(*(uint32_t *) frame.data);
+			if (frame.can_dlc == 6)
+			    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X", uid, frame.data[5]);
+			if (frame.can_dlc == 7)
+			    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X Wert %d", uid, frame.data[5], frame.data[6]);
+			if (frame.can_dlc == 8) {
+			    wert = ntohs(*(uint16_t *) &frame.data[6]);
+			    if (response)
+				printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X Messwert 0x%04X", uid, frame.data[5], wert);
+			    else
+				printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X Konfigurationswert 0x%04X", uid, frame.data[5], wert);
+			    }
 			break;
 		    case 0x80:
 			uid = ntohl(*(uint32_t *) frame.data);
