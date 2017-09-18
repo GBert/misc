@@ -163,8 +163,9 @@ int main(int argc, char **argv) {
     int max_fds, opt, sc, i;
     float v;
     struct can_frame frame;
-    uint32_t kennung, function, id, uid, cv_number, cv_index;
-    uint16_t kenner, kontakt;
+    uint32_t kennung, function, id, uid, cv_number, cv_index, stream_size;
+    uint16_t kenner, kontakt, crc;
+    char s[64];
 
     struct sockaddr_can caddr;
     struct ifreq ifr;
@@ -439,9 +440,26 @@ int main(int argc, char **argv) {
 		    }
 		    printf(" UID 0x%08X, Software Version %d.%d\n" RESET, uid, frame.data[4], frame.data[5]);
 		    break;
+		case 0x40:
+		case 0x41:
+		    memset(s, 0, sizeof(s));
+		    memcpy(s, frame.data, 8);
+		    printf("Anforderung Config Data: %s\n" RESET, s);
+		    break;
+		case 0x42:
+		case 0x43:
+		    stream_size = ntohs(*(uint32_t *) &frame.data);
+		    crc = ntohs(*(uint16_t *) &frame.data[4]);
+		    if (frame.can_dlc == 6)
+			printf("Config Data Stream: Länge 0x%08X CRC 0x%04X\n" RESET, stream_size, crc);
+		    if (frame.can_dlc == 7)
+			printf("Config Data Stream: Länge 0x%08X CRC 0x%04X (unbekannt 0x%02X)\n" RESET, stream_size, crc, frame.data[6]);
+		    if (frame.can_dlc == 8)
+			printf("Config Data Stream: Daten\n" RESET);
+		    break;
 		case 0x60:
 		case 0x61:
-		    id = (frame.data[0] << 8) + frame.data[1];
+		    id = ntohs(*(uint16_t *) &frame.data);
 		    function = (frame.data[2] << 8) + frame.data[3];
 		    if (frame.can_dlc == 6)
 			printf("Automatik ID 0x%04X Funktion 0x%04X Status 0x%02X Parameter 0x%02X\n" RESET,
