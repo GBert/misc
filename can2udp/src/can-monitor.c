@@ -432,6 +432,12 @@ int main(int argc, char **argv) {
 		    case 0x0033:
 			printf("MS2");
 			break;
+		    case 0x0053:
+			printf("Cg Servo");
+			break;
+		    case 0x0054:
+			printf("Cg Rückmelder");
+			break;
 		    case 0x1234:
 			printf("MäCAN-Weichendecoder");
 			break;
@@ -459,8 +465,16 @@ int main(int argc, char **argv) {
 			printf("Gleisbox");
 			break;
 		    case 0x0030:
+		    case 0x0031:
+		    case 0x0032:
 		    case 0x0033:
 			printf("MS2");
+			break;
+		    case 0x0053:
+			printf("Cg Servo");
+			break;
+		    case 0x0054:
+			printf("Cg Rückmelder");
 			break;
 		    case 0x1234:
 			printf("MäCAN-Weichendecoder");
