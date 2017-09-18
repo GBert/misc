@@ -237,10 +237,10 @@ int main(int argc, char **argv) {
 		    for (i = 0; i < 13; i++) {
 			if (frame.data[4] == i) {
 			    if (i == 0 || i == 2) {
-				printf("System-Befehl, Sub-Befehl: ");
+				printf("System-Befehl: Sub-Befehl: ");
 				writeRed(subCmdNames[i]);
 			    } else if (i == 1) {
-				printf("System-Befehl, Sub-Befehl: ");
+				printf("System-Befehl: Sub-Befehl: ");
 				writeGreen(subCmdNames[i]);
 			    } else if (i == 3 && (frame.data[2] + frame.data[3]) == 0)
 				writeRed("Nothalt an alle Loks");
@@ -440,11 +440,24 @@ int main(int argc, char **argv) {
 		    }
 		    printf(" UID 0x%08X, Software Version %d.%d\n" RESET, uid, frame.data[4], frame.data[5]);
 		    break;
+		/* Statusdaten Konfiguration */
+		case 0x3A:
+		case 0x3B:
+		    uid = ntohl(*(uint32_t *) & frame.data);
+		    if (frame.can_dlc == 5)
+			printf("Status Daten: Index %d\n" RESET, frame.can_id >> 16);
+		    if (frame.can_dlc == 6)
+			printf("Status Daten: Index 0x%d Paketanzahl %d\n" RESET, frame.data[4], frame.data[5]);
+		    if (frame.can_dlc == 8)
+			/* TODO Daten analysiert ausgeben */
+			printf("Status Daten: Paket %d\n" RESET, frame.can_id >> 16);
+		    break;
+		/* Anfordern Config Daten */
 		case 0x40:
 		case 0x41:
 		    memset(s, 0, sizeof(s));
 		    memcpy(s, frame.data, 8);
-		    printf("Anforderung Config Data: %s\n" RESET, s);
+		    printf("Anfordern Config Data: %s\n" RESET, s);
 		    break;
 		case 0x42:
 		case 0x43:
