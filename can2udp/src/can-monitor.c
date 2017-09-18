@@ -466,7 +466,7 @@ int main(int argc, char **argv) {
 		    if (frame.can_dlc == 6)
 			printf("Config Data Stream: Länge 0x%08X CRC 0x%04X\n" , stream_size, crc);
 		    if (frame.can_dlc == 7)
-			printf("Config Data Stream: Länge 0x%08X CRC 0x%04X (unbekannt 0x%02X)\n"", stream_size, crc, frame.data[6]);
+			printf("Config Data Stream: Länge 0x%08X CRC 0x%04X (unbekannt 0x%02X)\n", stream_size, crc, frame.data[6]);
 		    if (frame.can_dlc == 8)
 			printf("Config Data Stream: Daten\n");
 		    break;
@@ -482,7 +482,6 @@ int main(int argc, char **argv) {
 			       id, function, getLoco(&frame.data[4]));
 		    break;
 		default:
-		    printf("\n" RESET);
 		    break;
 		}
 	    } else {
