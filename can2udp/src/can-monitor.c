@@ -445,12 +445,12 @@ int main(int argc, char **argv) {
 		case 0x3B:
 		    uid = ntohl(*(uint32_t *) & frame.data);
 		    if (frame.can_dlc == 5)
-			printf("Status Daten: Index %d\n" RESET, frame.can_id >> 16);
+			printf("Status Daten: UID 0x%08X Index 0x%02X\n" RESET, uid, frame.data[4]);
 		    if (frame.can_dlc == 6)
-			printf("Status Daten: Index 0x%d Paketanzahl %d\n" RESET, frame.data[4], frame.data[5]);
+			printf("Status Daten: UID 0x%08X Index 0x%02X Paketanzahl %d\n" RESET, uid, frame.data[4], frame.data[5]);
 		    if (frame.can_dlc == 8)
 			/* TODO Daten analysiert ausgeben */
-			printf("Status Daten: Paket %d\n" RESET, frame.can_id >> 16);
+			printf("Status Daten: Paket %d\n" RESET, frame.can_id & 0xFFFF);
 		    break;
 		/* Anfordern Config Daten */
 		case 0x40:
