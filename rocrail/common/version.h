@@ -1,9 +1,20 @@
 const int revisionnr = 
-12701
+12712
 ;
 const char* commithash = 
-"8c266d8795e0278e4d3878fb7b9a7f1fd30ad83e";
+"7e61f5b0163cc5d9d821b86885c31cc3523c3e46";
 const char* revlog = 
+"12712 2017-09-18 14:25:04 +0200 lightctrl: short pause before processing\n" \
+"12711 2017-09-18 14:24:03 +0200 stage: fix for unexpected bidi loco\n" \
+"12710 2017-09-18 10:31:38 +0200 infodialog: important changes button added to open the default webbrowser\n" \
+"12709 2017-09-17 12:30:36 +0200 planpanel: create always an object for text even if the show flag is not set\n" \
+"12708 2017-09-17 10:12:58 +0200 z21: CAN bus 3\n" \
+"12707 2017-09-17 10:03:19 +0200 z21: removed option system info -> always active\n" \
+"12706 2017-09-17 09:59:39 +0200 z21: CAN detector sensor events set to bus 2 as documented in the Wiki\n" \
+"12705 2017-09-17 09:11:44 +0200 controllers: check for a valid IID on OK\n" \
+"12704 2017-09-16 14:15:17 +0200 stage: fix for unexpected occ sensor\n" \
+"12703 2017-09-16 10:16:23 +0200 hue: removed unused config wrapper\n" \
+"12702 2017-09-16 08:44:30 +0200 z21: fix for evaluating CAN and RailCom-Data\n" \
 "12701 2017-09-14 16:00:22 +0200 ecos2dlg: set default port in case port value is zero\n" \
 "12700 2017-09-14 11:58:06 +0200 messages: alttxt for sync (British English)\n" \
 "12699 2017-09-14 11:46:36 +0200 stage: use occupancy section detection for bidi code to set a loco in a stageblock section\n" \
@@ -43,16 +54,5 @@ const char* revlog =
 "12665 2017-09-07 08:22:35 +0200 switch, signal, output: reject commands if the command thread is still pending\n" \
 "12664 2017-09-06 10:47:16 +0200 ecos: generate an ID if not set from slot server\n" \
 "12663 2017-09-06 08:08:17 +0200 scheduledialog: event on change ID removed\n" \
-"12662 2017-09-06 07:51:51 +0200 mcs2: removed support for version < 3\n" \
-"12661 2017-09-05 08:13:45 +0200 wrapper: removed the obsolete lenz lib name\n" \
-"12660 2017-09-04 13:11:52 +0200 scheduledialog: check for existing ID\n" \
-"12659 2017-09-04 09:57:35 +0200 fback: fix for modify and address offset\n" \
-"12658 2017-09-04 09:43:57 +0200 feedbackdialog: layout corrections\n" \
-"12657 2017-09-04 09:34:44 +0200 fback: optional offset variable added\n" \
-"12656 2017-09-03 12:26:38 +0200 locdialog: disable importing locos with already existing IDs\n" \
-"12655 2017-09-03 11:50:15 +0200 loc: send config to the command station virtual: show config command\n" \
-"12654 2017-09-03 11:23:26 +0200 model: ignore the loco iid if none is found\n" \
-"12653 2017-09-03 10:21:08 +0200 importdlg: address column added cardlg: fix for sorting on address\n" \
-"12652 2017-09-03 10:13:49 +0200 translation merge: pt_BR\n" \
 
 "log end";
