@@ -64,7 +64,7 @@ const char *subCmdNames[] = {
 
 void INThandler(int sig) {
     signal(sig, SIG_IGN);
-    printf(RESET);
+    fputs(RESET, stdout);
     exit(0);
 }
 
@@ -373,6 +373,7 @@ int main(int argc, char **argv) {
 			printf("Zubehör Schalten Lok %s Stellung %d Strom %d Schaltzeit/Sonderfunktionswert %d\n"
 			       RESET, getLoco(frame.data), frame.data[4], frame.data[5],
 			       (frame.data[6] << 8) + frame.data[7]);
+		    break;
 		/* S88 Polling */
 		case 0x20:
 		    uid = ntohl(*(uint32_t *) & frame.data);
