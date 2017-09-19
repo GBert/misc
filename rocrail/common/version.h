@@ -1,9 +1,12 @@
 const int revisionnr = 
-12715
+12718
 ;
 const char* commithash = 
-"3db4cba7c60bf7a945ffc3540da6b42e0e721874";
+"b2aaab5015d788ccea93c9850eea030e2499fc7e";
 const char* revlog = 
+"12718 2017-09-19 10:33:27 +0200 translation merge: nl, de, fr, sl\n" \
+"12717 2017-09-19 10:17:54 +0200 z21dlg added\n" \
+"12716 2017-09-19 07:57:46 +0200 app: trace pwd and args at startup\n" \
 "12715 2017-09-18 16:45:14 +0200 z21: trace CAN detector direction info\n" \
 "12714 2017-09-18 16:40:39 +0200 z21: evaluate CAN detector direction info\n" \
 "12713 2017-09-18 16:39:55 +0200 virtual: trace output color info\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12671 2017-09-08 10:33:51 +0200 wrapper: default routeswtime changed from 0 to 500ms\n" \
 "12670 2017-09-08 08:25:17 +0200 locdialog: send decoder settings to the CS\n" \
 "12669 2017-09-07 16:34:45 +0200 loc: do not send loco config automatically at startup\n" \
-"12668 2017-09-07 15:06:55 +0200 ecos: fixes...\n" \
-"12667 2017-09-07 12:35:24 +0200 ecos: crash fix on create object\n" \
-"12666 2017-09-07 10:00:55 +0200 ecos: map oid by address too at loco create event\n" \
 
 "log end";
