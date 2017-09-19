@@ -1,9 +1,12 @@
 const int revisionnr = 
-12712
+12715
 ;
 const char* commithash = 
-"7e61f5b0163cc5d9d821b86885c31cc3523c3e46";
+"3db4cba7c60bf7a945ffc3540da6b42e0e721874";
 const char* revlog = 
+"12715 2017-09-18 16:45:14 +0200 z21: trace CAN detector direction info\n" \
+"12714 2017-09-18 16:40:39 +0200 z21: evaluate CAN detector direction info\n" \
+"12713 2017-09-18 16:39:55 +0200 virtual: trace output color info\n" \
 "12712 2017-09-18 14:25:04 +0200 lightctrl: short pause before processing\n" \
 "12711 2017-09-18 14:24:03 +0200 stage: fix for unexpected bidi loco\n" \
 "12710 2017-09-18 10:31:38 +0200 infodialog: important changes button added to open the default webbrowser\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12668 2017-09-07 15:06:55 +0200 ecos: fixes...\n" \
 "12667 2017-09-07 12:35:24 +0200 ecos: crash fix on create object\n" \
 "12666 2017-09-07 10:00:55 +0200 ecos: map oid by address too at loco create event\n" \
-"12665 2017-09-07 08:22:35 +0200 switch, signal, output: reject commands if the command thread is still pending\n" \
-"12664 2017-09-06 10:47:16 +0200 ecos: generate an ID if not set from slot server\n" \
-"12663 2017-09-06 08:08:17 +0200 scheduledialog: event on change ID removed\n" \
 
 "log end";
