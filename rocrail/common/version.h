@@ -1,9 +1,11 @@
 const int revisionnr = 
-12718
+12720
 ;
 const char* commithash = 
-"b2aaab5015d788ccea93c9850eea030e2499fc7e";
+"5e465901e1274ed07ad35926a8aac87668240d97";
 const char* revlog = 
+"12720 2017-09-19 15:27:44 +0200 renderer: occroute support removed\n" \
+"12719 2017-09-19 14:45:14 +0200 removed SpDrS60 'alt'\n" \
 "12718 2017-09-19 10:33:27 +0200 translation merge: nl, de, fr, sl\n" \
 "12717 2017-09-19 10:17:54 +0200 z21dlg added\n" \
 "12716 2017-09-19 07:57:46 +0200 app: trace pwd and args at startup\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12673 2017-09-09 07:54:35 +0200 mcs2: set version to 3 in case it was set to zero\n" \
 "12672 2017-09-08 22:11:05 +0200 mcs2: reverted version evaluation\n" \
 "12671 2017-09-08 10:33:51 +0200 wrapper: default routeswtime changed from 0 to 500ms\n" \
-"12670 2017-09-08 08:25:17 +0200 locdialog: send decoder settings to the CS\n" \
-"12669 2017-09-07 16:34:45 +0200 loc: do not send loco config automatically at startup\n" \
 
 "log end";
