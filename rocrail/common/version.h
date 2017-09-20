@@ -1,9 +1,13 @@
 const int revisionnr = 
-12720
+12724
 ;
 const char* commithash = 
-"5e465901e1274ed07ad35926a8aac87668240d97";
+"788093771deecf543a55e6367d0e8b78dda7be89";
 const char* revlog = 
+"12724 2017-09-20 10:50:27 +0200 z21: report QoS in case > 0 with address 10000\n" \
+"12723 2017-09-20 08:28:18 +0200 z21: send RailCom Data to the control\n" \
+"12722 2017-09-20 08:00:56 +0200 translation merge: pt_BR\n" \
+"12721 2017-09-20 07:41:27 +0200 z21: removed unused zerobased variable\n" \
 "12720 2017-09-19 15:27:44 +0200 renderer: occroute support removed\n" \
 "12719 2017-09-19 14:45:14 +0200 removed SpDrS60 'alt'\n" \
 "12718 2017-09-19 10:33:27 +0200 translation merge: nl, de, fr, sl\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12677 2017-09-09 14:46:28 +0200 SBB-L-Signals update (Andy)\n" \
 "12676 2017-09-09 10:58:29 +0200 ecos: refrsh mapping in case of a rename\n" \
 "12675 2017-09-09 09:58:24 +0200 ecos: modify existing loco on send decoder config\n" \
-"12674 2017-09-09 08:28:06 +0200 route: extra trace in case a manual route could not be unlocked\n" \
-"12673 2017-09-09 07:54:35 +0200 mcs2: set version to 3 in case it was set to zero\n" \
-"12672 2017-09-08 22:11:05 +0200 mcs2: reverted version evaluation\n" \
-"12671 2017-09-08 10:33:51 +0200 wrapper: default routeswtime changed from 0 to 500ms\n" \
 
 "log end";
