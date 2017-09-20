@@ -88,7 +88,7 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 0.1\n\n");
+    fprintf(stderr, "   Version 1.0\n\n");
     fprintf(stderr, "         -i <can int>  CAN interface - default can0\n");
     fprintf(stderr, "         -h            show this help\n\n");
 }
@@ -168,7 +168,7 @@ int main(int argc, char **argv) {
     float v;
     struct can_frame frame;
     uint32_t response, kennung, function, id, uid, cv_number, cv_index, stream_size;
-    uint16_t crc, kenner, kontakt, wert;
+    uint16_t crc, kenner, kontakt, wert, sid;
     char s[32];
 
     struct sockaddr_can caddr;
@@ -264,6 +264,34 @@ int main(int argc, char **argv) {
 		    case 0x05:
 			printf("System-Befehl: Lok %s Gleisprotokoll: %d", getLoco(frame.data, s), frame.data[5]);
 			break;
+		    case 0x06:
+		        uid = ntohl(*(uint32_t *) frame.data);
+		        wert = ntohs(*(uint16_t *) &frame.data[5]);
+			printf("System-Befehl: %s UID 0x%08X Zeit 0x%04X", subCmdNames[i], uid, wert);
+			break;
+		    case 0x07:
+		        uid = ntohl(*(uint32_t *) frame.data);
+		        sid = ntohs(*(uint16_t *) &frame.data[5]);
+			printf("System-Befehl: %s UID 0x%08X SID 0x%04X", subCmdNames[i], uid, sid);
+			break;
+		    case 0x08:
+			printf("System-Befehl: %s - ", subCmdNames[i]);
+			if (frame.data[5] & 1)
+			    printf("MM2");
+			if (frame.data[5] & 2)
+			    printf("MFX");
+			if (frame.data[5] & 4)
+			    printf("DCC");
+			break;
+		    case 0x09:
+		        uid = ntohl(*(uint32_t *) frame.data);
+		        wert = ntohs(*(uint16_t *) &frame.data[5]);
+			printf("System-Befehl: %s UID 0x%08X Zähler 0x%04X", subCmdNames[i], uid, sid);
+			break;
+		    case 0x0a:
+		        uid = ntohl(*(uint32_t *) frame.data);
+			printf("System-Befehl: %s UID 0x%08X Kanal 0x%04X", subCmdNames[i], uid, frame.data[5]);
+			break;
 		    case 0x0b:
 		        uid = ntohl(*(uint32_t *) frame.data);
 			if (frame.can_dlc == 6)
@@ -277,6 +305,14 @@ int main(int argc, char **argv) {
 			    else
 				printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X Konfigurationswert 0x%04X", uid, frame.data[5], wert);
 			    }
+			break;
+		    case 0x0c:
+		        uid = ntohl(*(uint32_t *) frame.data);
+		        wert = ntohs(*(uint16_t *) &frame.data[5]);
+			if (frame.can_dlc == 6)
+			    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X", uid, frame.data[5]);
+			if (frame.can_dlc == 7)
+			    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X Wert %d", uid, frame.data[5], frame.data[6]);
 			break;
 		    case 0x80:
 			uid = ntohl(*(uint32_t *) frame.data);
