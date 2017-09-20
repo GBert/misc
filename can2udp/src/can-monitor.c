@@ -399,7 +399,7 @@ int main(int argc, char **argv) {
 		    else
 			strncat(s, "unbekannt", sizeof(s));
 
-		    printf("Richtung %s\n", getLoco(frame.data, s));
+		    printf("Richtung %s\n", s);
 
 		    break;
 		/* Lok Funktion */
@@ -467,6 +467,15 @@ int main(int argc, char **argv) {
 		    if (frame.can_dlc == 5)
 			printf("S88 Event: Kennung %d Kontakt %d Zusand alt %d Zusand neu %d Zeit %d\n",
 			       kenner, kontakt, frame.data[4], frame.data[5], (frame.data[6] << 8) + frame.data[7]);
+		    break;
+		/* SX1 Event */
+		case 0x24:
+		case 0x25:
+		    uid = ntohl(*(uint32_t *) frame.data);
+		    if (frame.can_dlc == 5)
+			printf("SX1 Event: UID 0x%08X SX1-Adresse %d\n", uid, frame.data[4]);
+		    if (frame.can_dlc == 5)
+			printf("SX1 Event: UID 0x%08X SX1-Adresse %d Zustand %d\n", uid, frame.data[4], frame.data[5]);
 		    break;
 		/* Ping */
 		case 0x30:
@@ -580,13 +589,22 @@ int main(int argc, char **argv) {
 		    break;
 		case 0x60:
 		case 0x61:
-		    id = ntohs(*(uint16_t *) frame.data);
-		    function = (frame.data[2] << 8) + frame.data[3];
+		    kenner = ntohs(*(uint16_t *) frame.data);
+		    function = ntohs(*(uint16_t *) &frame.data[2]);
 		    if (frame.can_dlc == 6)
-			printf("Automatik ID 0x%04X Funktion 0x%04X Status 0x%02X Parameter 0x%02X\n",
-			       id, function, frame.data[4], frame.data[5]);
+			printf("Automatik schalten: ID 0x%04X Funktion 0x%04X Stellung 0x%02X Parameter 0x%02X\n",
+			       kenner, function, frame.data[4], frame.data[5]);
 		    if (frame.can_dlc == 8)
-			printf("Automatik ID 0x%04X Funktion 0x%04X Lok %s\n", id, function, getLoco(&frame.data[4], s));
+			printf("Automatik schalten: ID 0x%04X Funktion 0x%04X Lok %s\n", kenner, function, getLoco(&frame.data[4], s));
+		    break;
+		case 0x62:
+		case 0x63:
+		    kenner = ntohs(*(uint16_t *) frame.data);
+		    function = ntohs(*(uint16_t *) &frame.data[2]);
+		    if (frame.can_dlc == 4)
+			printf("Blocktext zuordnen: ID 0x%04X Funktion 0x%04X\n", kenner, function);
+		    if (frame.can_dlc == 8)
+			printf("Blocktext zuordnen: ID 0x%04X Funktion 0x%04X Lok %s\n", kenner, function, getLoco(&frame.data[4], s));
 		    break;
 		default:
 		    break;
