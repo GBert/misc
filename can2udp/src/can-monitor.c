@@ -111,7 +111,7 @@ void print_can_frame(char *format_string, struct can_frame *frame) {
     printf("%s ", timestamp);
     printf(format_string, frame->can_id & CAN_EFF_MASK, frame->can_dlc);
     for (i = 0; i < frame->can_dlc; i++) {
-	printf(" %02x", frame->data[i]);
+	printf(" %02X", frame->data[i]);
     }
     if (frame->can_dlc < 8) {
 	for (i = frame->can_dlc; i < 8; i++) {
@@ -163,12 +163,105 @@ char *getLoco(uint8_t * data, char *s) {
     return s;
 }
 
+void command_system(struct can_frame *frame) {
+    uint32_t i, uid, response;
+    uint16_t sid, wert;
+    char s[32];
+
+    memset(s, 0, sizeof(s));
+    response = frame->can_id & 0x00010000;
+    i = frame->data[4];
+    switch (i) {
+    case 0x00:
+    case 0x02:
+	printf("System-Befehl: Sub-Befehl ");
+	writeRed(subCmdNames[i]);
+	break;
+    case 0x01:
+	printf("System-Befehl: Sub-Befehl ");
+	writeGreen(subCmdNames[i]);
+	break;
+    case 0x03:
+	if (frame->data[2] + frame->data[3] == 0)
+	    writeRed("System-Befehl: Nothalt an alle Loks");
+	else
+	    printf("System-Befehl: Lok %s Nothalt", getLoco(frame->data, s));
+	break;
+    case 0x05:
+	printf("System-Befehl: Lok %s Gleisprotokoll: %d", getLoco(frame->data, s), frame->data[5]);
+	break;
+    case 0x06:
+	uid = ntohl(*(uint32_t *) frame->data);
+	wert = ntohs(*(uint16_t *) &frame->data[5]);
+	printf("System-Befehl: %s UID 0x%08X Zeit 0x%04X", subCmdNames[i], uid, wert);
+	break;
+    case 0x07:
+	uid = ntohl(*(uint32_t *) frame->data);
+	sid = ntohs(*(uint16_t *) &frame->data[5]);
+	printf("System-Befehl: %s UID 0x%08X SID 0x%04X", subCmdNames[i], uid, sid);
+	break;
+    case 0x08:
+	printf("System-Befehl: %s - ", subCmdNames[i]);
+	if (frame->data[5] & 1)
+	    printf("MM2");
+	if (frame->data[5] & 2)
+	    printf("MFX");
+	if (frame->data[5] & 4)
+	    printf("DCC");
+	break;
+    case 0x09:
+	uid = ntohl(*(uint32_t *) frame->data);
+	wert = ntohs(*(uint16_t *) &frame->data[5]);
+	printf("System-Befehl: %s UID 0x%08X Zähler 0x%04X", subCmdNames[i], uid, wert);
+	break;
+    case 0x0a:
+	uid = ntohl(*(uint32_t *) frame->data);
+	printf("System-Befehl: %s UID 0x%08X Kanal 0x%04X", subCmdNames[i], uid, frame->data[5]);
+	break;
+    case 0x0b:
+	uid = ntohl(*(uint32_t *) frame->data);
+	if (frame->can_dlc == 6)
+	    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X", uid, frame->data[5]);
+	if (frame->can_dlc == 7)
+	    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X Wert %d", uid, frame->data[5], frame->data[6]);
+	if (frame->can_dlc == 8) {
+	    wert = ntohs(*(uint16_t *) &frame->data[6]);
+	    if (response)
+		printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X Messwert 0x%04X",
+		       uid, frame->data[5], wert);
+	    else
+		printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X Konfigurationswert 0x%04X",
+		       uid, frame->data[5], wert);
+	}
+	break;
+    case 0x0c:
+	uid = ntohl(*(uint32_t *) frame->data);
+	wert = ntohs(*(uint16_t *) &frame->data[5]);
+	if (frame->can_dlc == 6)
+	    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X", uid, frame->data[5]);
+	if (frame->can_dlc == 7)
+	    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X Wert %d", uid, frame->data[5], frame->data[6]);
+	break;
+    case 0x80:
+	uid = ntohl(*(uint32_t *) frame->data);
+	printf("System-Befehl: System Reset UID 0x%08X Ziel 0x%02X", uid, frame->data[5]);
+	break;
+    default:
+	if (i < 13)
+	    printf("System-Befehl: %s", subCmdNames[i]);
+	else
+	    printf("System-Befehl: unbekannt 0x%02X", i);
+	break;
+    }
+    printf("\n");
+}
+
 int main(int argc, char **argv) {
-    int max_fds, opt, sc, i;
+    int max_fds, opt, sc;
     float v;
     struct can_frame frame;
-    uint32_t response, kennung, function, id, uid, cv_number, cv_index, stream_size;
-    uint16_t crc, kenner, kontakt, wert, sid;
+    uint32_t kennung, function, id, uid, cv_number, cv_index, stream_size;
+    uint16_t crc, kenner, kontakt;
     char s[32];
 
     struct sockaddr_can caddr;
@@ -233,99 +326,15 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "error reading CAN frame: %s\n", strerror(errno));
 	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
-		if (frame.can_id & 0x00010000UL) {
-		    response = 1;
+		if (frame.can_id & 0x00010000UL)
 		    printf(CYN);
-		} else {
-		    response = 0;
+		else
 		    printf(YEL);
-		}
 		switch ((frame.can_id & 0x00FF0000UL) >> 16) {
 		/* System Befehle */
 		case 0x00:
 		case 0x01:
-		    i = frame.data[4];
-		    switch (i) {
-		    case 0x00:
-		    case 0x02:
-			printf("System-Befehl: Sub-Befehl ");
-			writeRed(subCmdNames[i]);
-			break;
-		    case 0x01:
-			printf("System-Befehl: Sub-Befehl ");
-			writeGreen(subCmdNames[i]);
-			break;
-		    case 0x03:
-			if (frame.data[2] + frame.data[3] == 0)
-			    writeRed("System-Befehl: Nothalt an alle Loks");
-			else
-			    printf("System-Befehl: Lok %s Nothalt", getLoco(frame.data, s));
-			break;
-		    case 0x05:
-			printf("System-Befehl: Lok %s Gleisprotokoll: %d", getLoco(frame.data, s), frame.data[5]);
-			break;
-		    case 0x06:
-		        uid = ntohl(*(uint32_t *) frame.data);
-		        wert = ntohs(*(uint16_t *) &frame.data[5]);
-			printf("System-Befehl: %s UID 0x%08X Zeit 0x%04X", subCmdNames[i], uid, wert);
-			break;
-		    case 0x07:
-		        uid = ntohl(*(uint32_t *) frame.data);
-		        sid = ntohs(*(uint16_t *) &frame.data[5]);
-			printf("System-Befehl: %s UID 0x%08X SID 0x%04X", subCmdNames[i], uid, sid);
-			break;
-		    case 0x08:
-			printf("System-Befehl: %s - ", subCmdNames[i]);
-			if (frame.data[5] & 1)
-			    printf("MM2");
-			if (frame.data[5] & 2)
-			    printf("MFX");
-			if (frame.data[5] & 4)
-			    printf("DCC");
-			break;
-		    case 0x09:
-		        uid = ntohl(*(uint32_t *) frame.data);
-		        wert = ntohs(*(uint16_t *) &frame.data[5]);
-			printf("System-Befehl: %s UID 0x%08X Zähler 0x%04X", subCmdNames[i], uid, sid);
-			break;
-		    case 0x0a:
-		        uid = ntohl(*(uint32_t *) frame.data);
-			printf("System-Befehl: %s UID 0x%08X Kanal 0x%04X", subCmdNames[i], uid, frame.data[5]);
-			break;
-		    case 0x0b:
-		        uid = ntohl(*(uint32_t *) frame.data);
-			if (frame.can_dlc == 6)
-			    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X", uid, frame.data[5]);
-			if (frame.can_dlc == 7)
-			    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X Wert %d", uid, frame.data[5], frame.data[6]);
-			if (frame.can_dlc == 8) {
-			    wert = ntohs(*(uint16_t *) &frame.data[6]);
-			    if (response)
-				printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X Messwert 0x%04X", uid, frame.data[5], wert);
-			    else
-				printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X Konfigurationswert 0x%04X", uid, frame.data[5], wert);
-			    }
-			break;
-		    case 0x0c:
-		        uid = ntohl(*(uint32_t *) frame.data);
-		        wert = ntohs(*(uint16_t *) &frame.data[5]);
-			if (frame.can_dlc == 6)
-			    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X", uid, frame.data[5]);
-			if (frame.can_dlc == 7)
-			    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X Wert %d", uid, frame.data[5], frame.data[6]);
-			break;
-		    case 0x80:
-			uid = ntohl(*(uint32_t *) frame.data);
-			printf("System-Befehl: System Reset UID 0x%08X Ziel 0x%02X", uid, frame.data[5]);
-			break;
-		    default:
-			if (i < 13)
-			    printf("System-Befehl: %s", subCmdNames[i]);
-			else
-			    printf("System-Befehl: unbekannt 0x%02X", i);
-			break;
-		    }
-		    printf("\n");
+		    command_system(&frame);
 		    break;
 		/* Lok Discovery */
 		case 0x02:
@@ -408,7 +417,7 @@ int main(int argc, char **argv) {
 		    cv_number = ((frame.data[4] & 0x3) << 8) + frame.data[5];
 		    cv_index = frame.data[4] >> 2;
 		    if (frame.can_dlc == 6)
-			printf("Read Config Lok %s CV Nummer %d Index %d\n", getLoco(frame.data ,s), cv_number, cv_index);
+			printf("Read Config Lok %s CV Nummer %d Index %d\n", getLoco(frame.data, s), cv_number, cv_index);
 		    if (frame.can_dlc == 7)
 			printf("Read Config Lok %s CV Nummer %d Index %d Wert %d\n",
 			       getLoco(frame.data, s), cv_number, cv_index, frame.data[6]);
