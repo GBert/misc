@@ -201,13 +201,13 @@ void command_system(struct can_frame *frame) {
 	printf("System-Befehl: %s UID 0x%08X SID %d", subCmdNames[i], uid, sid);
 	break;
     case 0x08:
-	printf("System-Befehl: %s - ", subCmdNames[i]);
+	printf("System-Befehl: %s -", subCmdNames[i]);
 	if (frame->data[5] & 1)
-	    printf("MM2");
+	    printf(" MM2");
 	if (frame->data[5] & 2)
-	    printf("MFX");
+	    printf(" MFX");
 	if (frame->data[5] & 4)
-	    printf("DCC");
+	    printf(" DCC");
 	break;
     case 0x09:
 	uid = ntohl(*(uint32_t *) frame->data);
