@@ -198,7 +198,7 @@ void command_system(struct can_frame *frame) {
     case 0x07:
 	uid = ntohl(*(uint32_t *) frame->data);
 	sid = ntohs(*(uint16_t *) &frame->data[5]);
-	printf("System-Befehl: %s UID 0x%08X SID 0x%04X", subCmdNames[i], uid, sid);
+	printf("System-Befehl: %s UID 0x%08X SID %d", subCmdNames[i], uid, sid);
 	break;
     case 0x08:
 	printf("System-Befehl: %s - ", subCmdNames[i]);
@@ -241,6 +241,15 @@ void command_system(struct can_frame *frame) {
 	    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X", uid, frame->data[5]);
 	if (frame->can_dlc == 7)
 	    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X Wert %d", uid, frame->data[5], frame->data[6]);
+	break;
+    case 0x20:
+	uid = ntohl(*(uint32_t *) frame->data);
+	printf("System-Befehl: Systemzeit UID 0x%08X Stunde %d Minute %d Faktor %d",
+	       uid, frame->data[5], frame->data[6], frame->data[7]);
+	break;
+    case 0x30:
+	uid = ntohl(*(uint32_t *) frame->data);
+	printf("System-Befehl: mfx Seek 0x%08X", uid);
 	break;
     case 0x80:
 	uid = ntohl(*(uint32_t *) frame->data);
@@ -352,16 +361,16 @@ int main(int argc, char **argv) {
 		case 0x04:
 		case 0x05:
 		    uid = ntohl(*(uint32_t *) frame.data);
-		    printf("MFX Bind: MFX UID %d MFX SID %d\n", uid, (frame.data[4] << 8) + frame.data[5]);
+		    printf("MFX Bind: MFX UID 0x%08X MFX SID %d\n", uid, (frame.data[4] << 8) + frame.data[5]);
 		    break;
 		/* MFX Verify */
 		case 0x06:
 		case 0x07:
 		    uid = ntohl(*(uint32_t *) frame.data);
 		    if (frame.can_dlc == 6)
-			printf("MFX Verify: MFX UID %d MFX SID %d\n", uid, (frame.data[4] << 8) + frame.data[5]);
+			printf("MFX Verify: MFX UID 0x%08X MFX SID %d\n", uid, (frame.data[4] << 8) + frame.data[5]);
 		    if (frame.can_dlc == 7)
-			printf("MFX Verify: MFX UID %d MFX SID %d ASK-Verhältnis %d\n",
+			printf("MFX Verify: MFX UID 0x%08X MFX SID %d ASK-Verhältnis %d\n",
 			       uid, (frame.data[4] << 8) + frame.data[5], frame.data[6]);
 		    break;
 		/* Lok Geschwindigkeit */
