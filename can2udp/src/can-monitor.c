@@ -46,22 +46,6 @@ unsigned char netframe[MAXDG];
 static char *F_S_CAN_FORMAT_STRG = "S CAN  0x%08X  [%d]";
 static char *F_N_CAN_FORMAT_STRG = "  CAN  0x%08X  [%d]";
 
-const char *subCmdNames[] = {
-    "Stopp",
-    "Go",
-    "Halt",
-    "Lok-Nothalt",
-    "Lok Zyklus Stopp",
-    "Lok Datenprotokoll",
-    "Schaltzeit Zubehördecoder",
-    "Fast Read für",
-    "Gleisprotokoll freischalten",
-    "MFX Neuanmeldezähler setzen",
-    "Überlast",
-    "Status",
-    "Kennung"
-};
-
 void INThandler(int sig) {
     signal(sig, SIG_IGN);
     fputs(RESET, stdout);
@@ -88,7 +72,7 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.0\n\n");
+    fprintf(stderr, "   Version 1.01\n\n");
     fprintf(stderr, "         -i <can int>  CAN interface - default can0\n");
     fprintf(stderr, "         -h            show this help\n\n");
 }
@@ -175,11 +159,11 @@ void command_system(struct can_frame *frame) {
     case 0x00:
     case 0x02:
 	printf("System-Befehl: Sub-Befehl ");
-	writeRed(subCmdNames[i]);
+	writeRed("Stopp");
 	break;
     case 0x01:
 	printf("System-Befehl: Sub-Befehl ");
-	writeGreen(subCmdNames[i]);
+	writeGreen("Go");
 	break;
     case 0x03:
 	if (frame->data[2] + frame->data[3] == 0)
@@ -187,36 +171,43 @@ void command_system(struct can_frame *frame) {
 	else
 	    printf("System-Befehl: Lok %s Nothalt", getLoco(frame->data, s));
 	break;
+    case 0x04:
+	printf("System-Befehl: Lok %s Zyklus Ende", getLoco(frame->data, s));
+	break;
     case 0x05:
 	printf("System-Befehl: Lok %s Gleisprotokoll: %d", getLoco(frame->data, s), frame->data[5]);
 	break;
     case 0x06:
 	uid = ntohl(*(uint32_t *) frame->data);
 	wert = ntohs(*(uint16_t *) &frame->data[5]);
-	printf("System-Befehl: %s UID 0x%08X Zeit 0x%04X", subCmdNames[i], uid, wert);
+	printf("System-Befehl: System Schaltzeit Zubehör UID 0x%08X Zeit 0x%04X", uid, wert);
 	break;
     case 0x07:
 	uid = ntohl(*(uint32_t *) frame->data);
 	sid = ntohs(*(uint16_t *) &frame->data[5]);
-	printf("System-Befehl: %s UID 0x%08X SID %d", subCmdNames[i], uid, sid);
+	printf("System-Befehl: Fast Read mfx UID 0x%08X SID %d", uid, sid);
 	break;
     case 0x08:
-	printf("System-Befehl: %s -", subCmdNames[i]);
+	printf("System-Befehl: Gleisprotokoll freischalten -");
 	if (frame->data[5] & 1)
 	    printf(" MM2");
 	if (frame->data[5] & 2)
 	    printf(" MFX");
 	if (frame->data[5] & 4)
 	    printf(" DCC");
+	if (frame->data[5] & 8)
+	    printf(" SX1");
+	if (frame->data[5] & 16)
+	    printf(" SX2");
 	break;
     case 0x09:
 	uid = ntohl(*(uint32_t *) frame->data);
 	wert = ntohs(*(uint16_t *) &frame->data[5]);
-	printf("System-Befehl: %s UID 0x%08X Zähler 0x%04X", subCmdNames[i], uid, wert);
+	printf("System-Befehl: Neuanmeldezähler setzen UID 0x%08X Zähler 0x%04X", sud, wert);
 	break;
     case 0x0a:
 	uid = ntohl(*(uint32_t *) frame->data);
-	printf("System-Befehl: %s UID 0x%08X Kanal 0x%04X", subCmdNames[i], uid, frame->data[5]);
+	printf("System-Befehl: Überlast UID 0x%08X Kanal 0x%04X", uid, frame->data[5]);
 	break;
     case 0x0b:
 	uid = ntohl(*(uint32_t *) frame->data);
@@ -256,10 +247,7 @@ void command_system(struct can_frame *frame) {
 	printf("System-Befehl: System Reset UID 0x%08X Ziel 0x%02X", uid, frame->data[5]);
 	break;
     default:
-	if (i < 13)
-	    printf("System-Befehl: %s", subCmdNames[i]);
-	else
-	    printf("System-Befehl: unbekannt 0x%02X", i);
+	printf("System-Befehl: unbekannt 0x%02X", i);
 	break;
     }
     printf("\n");
@@ -269,7 +257,7 @@ int main(int argc, char **argv) {
     int max_fds, opt, sc;
     float v;
     struct can_frame frame;
-    uint32_t kennung, function, id, uid, cv_number, cv_index, stream_size;
+    uint32_t kennung, function, uid, cv_number, cv_index, stream_size;
     uint16_t crc, kenner, kontakt;
     char s[32];
 
@@ -516,8 +504,9 @@ int main(int argc, char **argv) {
 		    }
 		    printf(" UID 0x%08X, Software Version %d.%d\n", uid, frame.data[4], frame.data[5]);
 		    break;
+		/* CAN Bootloader */
 		case 0x36:
-		    printf("Bootloader Anfrage\n");
+		    printf("CAN Bootloader Anfrage\n");
 		    break;
 		case 0x37:
 		    uid = ntohl(*(uint32_t *) frame.data);
@@ -587,6 +576,7 @@ int main(int argc, char **argv) {
 		    if (frame.can_dlc == 8)
 			printf("Config Data Stream: Daten\n");
 		    break;
+		/* Automatik schalten */
 		case 0x60:
 		case 0x61:
 		    kenner = ntohs(*(uint16_t *) frame.data);
@@ -597,6 +587,7 @@ int main(int argc, char **argv) {
 		    if (frame.can_dlc == 8)
 			printf("Automatik schalten: ID 0x%04X Funktion 0x%04X Lok %s\n", kenner, function, getLoco(&frame.data[4], s));
 		    break;
+		/* Blocktext zuordnen */
 		case 0x62:
 		case 0x63:
 		    kenner = ntohs(*(uint16_t *) frame.data);
