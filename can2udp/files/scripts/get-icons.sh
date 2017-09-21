@@ -23,7 +23,8 @@ cp -r $MNT_POINT/home/cs2/magicons_ $WEB_DIR
 mkdir -p $WEB_DIR/update
 cp $MNT_POINT/home/cs2/update/*.bin $WEB_DIR/update
 cp $MNT_POINT/home/cs2/update/*.ms2 $WEB_DIR/update
-# cp -r $(MNT_POINT)/home/cs2/spiel $WEB_DIR
+# cp -r $MNT_POINT/home/cs2/spiel $WEB_DIR
+cp -r $MNT_POINT/home/cs2/doc $WEB_DIR
 
 umount $MNT_POINT
 
