@@ -203,7 +203,7 @@ void command_system(struct can_frame *frame) {
     case 0x09:
 	uid = ntohl(*(uint32_t *) frame->data);
 	wert = ntohs(*(uint16_t *) &frame->data[5]);
-	printf("System-Befehl: Neuanmeldezähler setzen UID 0x%08X Zähler 0x%04X", sud, wert);
+	printf("System-Befehl: Neuanmeldezähler setzen UID 0x%08X Zähler 0x%04X", uid, wert);
 	break;
     case 0x0a:
 	uid = ntohl(*(uint32_t *) frame->data);
