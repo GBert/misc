@@ -148,28 +148,41 @@ char *getLoco(uint8_t * data, char *s) {
 }
 
 void command_system(struct can_frame *frame) {
-    uint32_t i, uid, response;
+    uint32_t uid, response;
     uint16_t sid, wert;
     char s[32];
 
     memset(s, 0, sizeof(s));
     response = frame->can_id & 0x00010000;
-    i = frame->data[4];
-    switch (i) {
+    uid = ntohl(*(uint32_t *) frame->data);
+    switch (frame->data[4]) {
     case 0x00:
-    case 0x02:
-	printf("System-Befehl: Sub-Befehl ");
+	if (uid)
+	    printf("System-Befehl: UID 0x%08X ", uid);
+	else
+	    printf("System-Befehl: alle ");
 	writeRed("Stopp");
 	break;
     case 0x01:
-	printf("System-Befehl: Sub-Befehl ");
+	if (uid)
+	    printf("System-Befehl: UID 0x%08X ", uid);
+	else
+	    printf("System-Befehl: alle ");
 	writeGreen("Go");
 	break;
-    case 0x03:
-	if (frame->data[2] + frame->data[3] == 0)
-	    writeRed("System-Befehl: Nothalt an alle Loks");
+    case 0x02:
+	if (uid)
+	    printf("System-Befehl: UID 0x%08X ", uid);
 	else
-	    printf("System-Befehl: Lok %s Nothalt", getLoco(frame->data, s));
+	    printf("System-Befehl: alle ");
+	writeRed("Halt");
+	break;
+    case 0x03:
+	printf("System-Befehl: ");
+	if (uid)
+	    printf("Lok %s Nothalt", getLoco(frame->data, s));
+	else
+	    writeRed("Nothalt alle Loks");
 	break;
     case 0x04:
 	printf("System-Befehl: Lok %s Zyklus Ende", getLoco(frame->data, s));
@@ -178,12 +191,10 @@ void command_system(struct can_frame *frame) {
 	printf("System-Befehl: Lok %s Gleisprotokoll: %d", getLoco(frame->data, s), frame->data[5]);
 	break;
     case 0x06:
-	uid = ntohl(*(uint32_t *) frame->data);
 	wert = ntohs(*(uint16_t *) &frame->data[5]);
 	printf("System-Befehl: System Schaltzeit Zubehör UID 0x%08X Zeit 0x%04X", uid, wert);
 	break;
     case 0x07:
-	uid = ntohl(*(uint32_t *) frame->data);
 	sid = ntohs(*(uint16_t *) &frame->data[5]);
 	printf("System-Befehl: Fast Read mfx UID 0x%08X SID %d", uid, sid);
 	break;
@@ -201,16 +212,13 @@ void command_system(struct can_frame *frame) {
 	    printf(" SX2");
 	break;
     case 0x09:
-	uid = ntohl(*(uint32_t *) frame->data);
 	wert = ntohs(*(uint16_t *) &frame->data[5]);
 	printf("System-Befehl: Neuanmeldezähler setzen UID 0x%08X Zähler 0x%04X", uid, wert);
 	break;
     case 0x0a:
-	uid = ntohl(*(uint32_t *) frame->data);
 	printf("System-Befehl: Überlast UID 0x%08X Kanal 0x%04X", uid, frame->data[5]);
 	break;
     case 0x0b:
-	uid = ntohl(*(uint32_t *) frame->data);
 	if (frame->can_dlc == 6)
 	    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X", uid, frame->data[5]);
 	if (frame->can_dlc == 7)
@@ -226,7 +234,6 @@ void command_system(struct can_frame *frame) {
 	}
 	break;
     case 0x0c:
-	uid = ntohl(*(uint32_t *) frame->data);
 	wert = ntohs(*(uint16_t *) &frame->data[5]);
 	if (frame->can_dlc == 6)
 	    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X", uid, frame->data[5]);
@@ -234,20 +241,17 @@ void command_system(struct can_frame *frame) {
 	    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X Wert %d", uid, frame->data[5], frame->data[6]);
 	break;
     case 0x20:
-	uid = ntohl(*(uint32_t *) frame->data);
 	printf("System-Befehl: Systemzeit UID 0x%08X Stunde %d Minute %d Faktor %d",
 	       uid, frame->data[5], frame->data[6], frame->data[7]);
 	break;
     case 0x30:
-	uid = ntohl(*(uint32_t *) frame->data);
 	printf("System-Befehl: mfx Seek 0x%08X", uid);
 	break;
     case 0x80:
-	uid = ntohl(*(uint32_t *) frame->data);
 	printf("System-Befehl: System Reset UID 0x%08X Ziel 0x%02X", uid, frame->data[5]);
 	break;
     default:
-	printf("System-Befehl: unbekannt 0x%02X", i);
+	printf("System-Befehl: unbekannt 0x%02X", frame->data[4]);
 	break;
     }
     printf("\n");
