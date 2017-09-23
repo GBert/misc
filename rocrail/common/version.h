@@ -1,9 +1,19 @@
 const int revisionnr = 
-12724
+12734
 ;
 const char* commithash = 
-"788093771deecf543a55e6367d0e8b78dda7be89";
+"669b321e617ca9f24870fd845b557f40289d13d9";
 const char* revlog = 
+"12734 2017-09-23 11:03:49 +0200 drcmd: power event support\n" \
+"12733 2017-09-23 10:26:48 +0200 drcmd: sensor, S88, evaluation added\n" \
+"12732 2017-09-23 10:08:53 +0200 drcmd: WIP\n" \
+"12731 2017-09-23 08:26:34 +0200 infodlg: important changes panel added\n" \
+"12730 2017-09-22 16:34:35 +0200 p50x: echo switch commands support added\n" \
+"12729 2017-09-22 15:07:15 +0200 drcmd: WIP\n" \
+"12728 2017-09-22 10:10:22 +0200 massoth: echo commands option added\n" \
+"12727 2017-09-22 09:54:59 +0200 basedlg: state column for routes added\n" \
+"12726 2017-09-22 08:31:08 +0200 rocview: fix for updating a block with old data to avoid loosing the reserved flag\n" \
+"12725 2017-09-22 07:55:00 +0200 app: console command 9 added for triggering the xmlh trace level\n" \
 "12724 2017-09-20 10:50:27 +0200 z21: report QoS in case > 0 with address 10000\n" \
 "12723 2017-09-20 08:28:18 +0200 z21: send RailCom Data to the control\n" \
 "12722 2017-09-20 08:00:56 +0200 translation merge: pt_BR\n" \
@@ -44,15 +54,5 @@ const char* revlog =
 "12687 2017-09-12 08:14:41 +0200 model: trace correction in case of removing a generated object\n" \
 "12686 2017-09-12 07:49:02 +0200 variables: remove generated variables from actions at shutdown\n" \
 "12685 2017-09-11 14:45:17 +0200 revert lookup by address option: loco command sync added\n" \
-"12684 2017-09-11 08:16:22 +0200 model: lookupbyaddress option added for field events\n" \
-"12683 2017-09-10 14:06:23 +0200 ecos: check if the oid still matches to the ID\n" \
-"12682 2017-09-10 11:42:21 +0200 ecos, loc: use previous ID if not found by ID\n" \
-"12681 2017-09-10 10:42:14 +0200 ecos: use oid in case its known\n" \
-"12680 2017-09-10 10:22:11 +0200 loc, ecos, model: oid support\n" \
-"12679 2017-09-10 08:03:11 +0200 virtual: show decoder type in trace\n" \
-"12678 2017-09-09 17:14:26 +0200 loc: loccnfig mfx support\n" \
-"12677 2017-09-09 14:46:28 +0200 SBB-L-Signals update (Andy)\n" \
-"12676 2017-09-09 10:58:29 +0200 ecos: refrsh mapping in case of a rename\n" \
-"12675 2017-09-09 09:58:24 +0200 ecos: modify existing loco on send decoder config\n" \
 
 "log end";
