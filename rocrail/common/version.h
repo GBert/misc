@@ -1,9 +1,12 @@
 const int revisionnr = 
-12734
+12737
 ;
 const char* commithash = 
-"669b321e617ca9f24870fd845b557f40289d13d9";
+"f6d5bbfd4c927cf4f0c0a4a856e16497d7bf1b41";
 const char* revlog = 
+"12737 2017-09-24 08:35:57 +0200 drcmd: loco reporting\n" \
+"12736 2017-09-24 08:18:27 +0200 drcmd: event support for switches, load and temp\n" \
+"12735 2017-09-23 18:34:15 +0200 z21: trace spelling correction\n" \
 "12734 2017-09-23 11:03:49 +0200 drcmd: power event support\n" \
 "12733 2017-09-23 10:26:48 +0200 drcmd: sensor, S88, evaluation added\n" \
 "12732 2017-09-23 10:08:53 +0200 drcmd: WIP\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12690 2017-09-12 13:03:46 +0200 p50x: decoder format + 1 (is not zero based) 1=MM1 2=MM2 3=DCC\n" \
 "12689 2017-09-12 11:19:01 +0200 model: ignore looking up by addres in case of loco sync command from ecos\n" \
 "12688 2017-09-12 10:53:05 +0200 rfbooster: position support added\n" \
-"12687 2017-09-12 08:14:41 +0200 model: trace correction in case of removing a generated object\n" \
-"12686 2017-09-12 07:49:02 +0200 variables: remove generated variables from actions at shutdown\n" \
-"12685 2017-09-11 14:45:17 +0200 revert lookup by address option: loco command sync added\n" \
 
 "log end";
