@@ -1,9 +1,10 @@
 const int revisionnr = 
-12737
+12738
 ;
 const char* commithash = 
-"f6d5bbfd4c927cf4f0c0a4a856e16497d7bf1b41";
+"db77a6ba47dae9662b7fc1389ff6c06cf65e64e2";
 const char* revlog = 
+"12738 2017-09-24 10:27:48 +0200 drcmd: PT and POM support added\n" \
 "12737 2017-09-24 08:35:57 +0200 drcmd: loco reporting\n" \
 "12736 2017-09-24 08:18:27 +0200 drcmd: event support for switches, load and temp\n" \
 "12735 2017-09-23 18:34:15 +0200 z21: trace spelling correction\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12691 2017-09-12 15:08:59 +0200 rocview dialogs: format bus as unsigned integer to avoid minus values\n" \
 "12690 2017-09-12 13:03:46 +0200 p50x: decoder format + 1 (is not zero based) 1=MM1 2=MM2 3=DCC\n" \
 "12689 2017-09-12 11:19:01 +0200 model: ignore looking up by addres in case of loco sync command from ecos\n" \
-"12688 2017-09-12 10:53:05 +0200 rfbooster: position support added\n" \
 
 "log end";
