@@ -21,6 +21,10 @@
 ; DATA address definitions
 
 Common_RAM      equ     0x0070                              ; size: 16 bytes
+w_temp		equ	0x70
+status_temp	equ	0x71
+pclath_temp	equ	0x72
+fsr_temp	equ	0x73
 
 ;===============================================================================
 ; CODE area
@@ -38,15 +42,15 @@ vector_reset:                                               ; address: 0x0000
 
 vector_int:                                                 ; address: 0x0004
 
-        movwf   Common_RAM                                  ; reg: 0x070
-        swapf   STATUS, W                                   ; reg: 0x003
-        clrf    STATUS                                      ; reg: 0x003
-        movwf   (Common_RAM + 1)                            ; reg: 0x071
-        movlw   0x5e
+        movwf   w_temp
+        swapf   STATUS, W
+        clrf    STATUS
+        movwf   status_temp
+        movlw   0x5e			;  PS 1:128 
         movwf   TMR0                                        ; reg: 0x001
         bcf     INTCON, T0IF                                ; reg: 0x00b, bit: 2
         movf    FSR, W                                      ; reg: 0x004
-        movwf   (Common_RAM + 3)                            ; reg: 0x073
+        movwf   fsr_temp
         movf    0x37, W                                     ; reg: 0x037
         btfss   STATUS, Z                                   ; reg: 0x003, bit: 2
         goto    label_002
@@ -172,12 +176,12 @@ label_009:                                                  ; address: 0x006a
 
 label_010:                                                  ; address: 0x006f
 
-        btfss   PIR1, RCIF                                  ; reg: 0x00c, bit: 5
-        goto    label_017
-        btfss   RCSTA, OERR                                 ; reg: 0x018, bit: 1
-        btfsc   RCSTA, FERR                                 ; reg: 0x018, bit: 2
+        btfss   PIR1, RCIF	; check if data received
+        goto    label_017	; no data received
+        btfss   RCSTA, OERR	; overrrun error ?
+        btfsc   RCSTA, FERR	; framing error
         goto    label_016
-        btfss   RCSTA, RX9D                                 ; reg: 0x018, bit: 0
+        btfss   RCSTA, RX9D	; 9th bit set ?
         goto    label_012
         bcf     0x46, 0x2                                   ; reg: 0x046
         clrf    0x45                                        ; reg: 0x045
@@ -237,8 +241,8 @@ label_012:                                                  ; address: 0x0090
 
 label_013:                                                  ; address: 0x00a7
 
-        bsf     PORTB, RB0                                  ; reg: 0x006, bit: 0
-        movlw   0x20
+        bsf     PORTB, RB0
+        movlw   0x20		; send space
         movwf   TXREG                                       ; reg: 0x019
 
 label_014:                                                  ; address: 0x00aa
@@ -302,10 +306,10 @@ label_020:                                                  ; address: 0x00d1
 
         movf    (Common_RAM + 3), W                         ; reg: 0x073
         movwf   FSR                                         ; reg: 0x004
-        swapf   (Common_RAM + 1), W                         ; reg: 0x071
-        movwf   STATUS                                      ; reg: 0x003
-        swapf   Common_RAM, F                               ; reg: 0x070
-        swapf   Common_RAM, W                               ; reg: 0x070
+        swapf   status_temp, W
+        movwf   STATUS
+        swapf   w_temp, F
+        swapf   w_temp, W
         retfie
 
 function_000:                                               ; address: 0x00d8
@@ -348,34 +352,34 @@ label_021:                                                  ; address: 0x00df
 
 label_022:                                                  ; address: 0x00f8
 
-        movlw   0x07
-        movwf   CMCON                                       ; reg: 0x01f
-        clrf    RCSTA                                       ; reg: 0x018
+        movlw   0x07		; switch off comaparatos
+        movwf   CMCON
+        clrf    RCSTA		; stop UART
         movlw   0x06
-        movwf   PORTA                                       ; reg: 0x005
+        movwf   PORTA		; Initialize Port A - A1&A2 high
         movlw   0x00
-        movwf   PORTB                                       ; reg: 0x006
-        bsf     STATUS, RP0                                 ; reg: 0x003, bit: 5
-        bcf     STATUS, RP1                                 ; reg: 0x003, bit: 6
+        movwf   PORTB		; Initialize Port B
+        bsf     STATUS, RP0	; Bank 1
+        bcf     STATUS, RP1	;
         movlw   0x00
-        movwf   PIE1                                        ; reg: 0x08c
+        movwf   PIE1		; disbale all interrupts
         movlw   0xfe
-        movwf   TRISB                                       ; reg: 0x086
+        movwf   TRISB           ; B0 out
         movlw   0xf9
-        movwf   TRISA                                       ; reg: 0x085
+        movwf   TRISA		; A1/A2 out
         movlw   0x88
         movwf   OPTION_REG                                  ; reg: 0x081
         movlw   0x0b
         movwf   PCON                                        ; reg: 0x08e
-        bcf     STATUS, RP0                                 ; reg: 0x003, bit: 5
-        bcf     STATUS, RP1                                 ; reg: 0x003, bit: 6
-        clrf    TMR0                                        ; reg: 0x001
-        clrf    CCP1CON                                     ; reg: 0x017
-        movlw   0x31
-        movwf   T1CON                                       ; reg: 0x010
-        clrf    T2CON                                       ; reg: 0x012
+        bcf     STATUS, RP0	; Bank 0
+        bcf     STATUS, RP1
+        clrf    TMR0		; clear Timer0
+        clrf    CCP1CON		; CCP off
+        movlw   0x31		; Prescale 1:8 Stopp	
+        movwf   T1CON
+        clrf    T2CON		; no Timer2
         movlw   0x20
-        movwf   FSR                                         ; reg: 0x004
+        movwf   FSR
 
 label_023:                                                  ; address: 0x0114
 
@@ -661,20 +665,20 @@ label_038:                                                  ; address: 0x01de
 
 uart_init:                                               ; address: 0x01e3
 
-        bcf     PORTB, RB0                                  ; reg: 0x006, bit: 0
-        bsf     PORTA, RA1                                  ; reg: 0x005, bit: 1
+        bcf     PORTB, RB0
+        bsf     PORTA, RA1
         clrf    0x46                                        ; reg: 0x046
         clrf    0x45                                        ; reg: 0x045
-        bsf     STATUS, RP0                                 ; reg: 0x003, bit: 5
-        bcf     STATUS, RP1                                 ; reg: 0x003, bit: 6
-        movlw   0x13
-        movwf   SPBRG                                       ; reg: 0x099
-        movlw   0x64
-        movwf   TXSTA                                       ; reg: 0x098
-        bcf     STATUS, RP0                                 ; reg: 0x003, bit: 5
-        bcf     STATUS, RP1                                 ; reg: 0x003, bit: 6
-        movlw   0xd0
-        movwf   RCSTA                                       ; reg: 0x018
+        bsf     STATUS, RP0	; Bank 1
+        bcf     STATUS, RP1
+        movlw   0x13		; Baudrate 62500 Hz = 20MHz / 16 / ( 19 +1 )
+        movwf   SPBRG
+        movlw   0x64		; BRGH = 1  TXEN = 1  TX9 = 1
+        movwf   TXSTA
+        bcf     STATUS, RP0	; Bank 0
+        bcf     STATUS, RP1
+        movlw   0xd0		; SPEN = 1  RX9 = 1  SREN = 1 
+        movwf   RCSTA
         clrw
 
 label_039:                                                  ; address: 0x01f2
