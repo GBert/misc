@@ -17,6 +17,11 @@
         CONFIG  CPD   = OFF
         CONFIG  CP    = OFF
 
+
+;===============================================================================
+
+#DEFINE	RXINPUT	RA5
+
 ;===============================================================================
 ; DATA address definitions
 
@@ -120,7 +125,7 @@ label_006:                                                  ; address: 0x0040
         movf    0x39, W                                     ; reg: 0x039
         btfss   STATUS, Z                                   ; reg: 0x003, bit: 2
         goto    label_007
-        btfsc   PORTA, RA5                                  ; reg: 0x005, bit: 5
+        btfsc   PORTA, RXINPUT
         goto    label_010
         movlw   0x04
         movwf   0x38                                        ; reg: 0x038
@@ -142,7 +147,7 @@ label_007:                                                  ; address: 0x004b
         btfss   STATUS, Z                                   ; reg: 0x003, bit: 2
         goto    label_009
         clrf    0x39                                        ; reg: 0x039
-        btfss   PORTA, RA5                                  ; reg: 0x005, bit: 5
+        btfss   PORTA, RXINPUT
         goto    label_010
         movf    0x3c, W                                     ; reg: 0x03c
         movwf   FSR                                         ; reg: 0x004
@@ -169,7 +174,7 @@ label_008:                                                  ; address: 0x0063
 label_009:                                                  ; address: 0x006a
 
         bcf     STATUS, C                                   ; reg: 0x003, bit: 0
-        btfsc   PORTA, RA5                                  ; reg: 0x005, bit: 5
+        btfsc   PORTA, RXINPUT
         bsf     STATUS, C                                   ; reg: 0x003, bit: 0
         rrf     0x3a, F                                     ; reg: 0x03a
         incf    0x39, F                                     ; reg: 0x039
