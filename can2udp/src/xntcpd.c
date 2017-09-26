@@ -41,7 +41,7 @@
 #define fprint_syslog(pipe, spipe, text) \
 	syslog( spipe, "%s: " text "\n", __func__); } while (0)
 
-#define TERM_SPEED	250000
+#define TERM_SPEED	B115200
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -p <tcp_port> -i <RS485 interface>\n", prg);
@@ -141,18 +141,18 @@ int main(int argc, char **argv) {
 	term_attr.c_oflag = 0;
 	term_attr.c_lflag = NOFLSH;
 	if (cfsetospeed(&term_attr, TERM_SPEED) < 0) {
-	    fprintf(stderr, "serial interface ospeed error: %s\n", strerror(errno));
+	    fprintf(stderr, "serial interface >%s< ospeed error: %s\n", rs485_interface, strerror(errno));
 	    exit(EXIT_FAILURE);
 	}
 	if (cfsetispeed(&term_attr, TERM_SPEED) < 0) {
-	    fprintf(stderr, "serial interface ispeed error: %s\n", strerror(errno));
+	    fprintf(stderr, "serial interface >%s< ispeed error: %s\n", rs485_interface, strerror(errno));
 	    exit(EXIT_FAILURE);
 	}
 
 	printf("set serial interface ospeed\n");
 
 	if (tcsetattr(se, TCSANOW, &term_attr) < 0) {
-	    fprintf(stderr, "serial interface set error: %s\n", strerror(errno));
+	    fprintf(stderr, "serial interface >%s< set error: %s\n", rs485_interface, strerror(errno));
 	    exit(EXIT_FAILURE);
 	}
     }
