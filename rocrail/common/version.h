@@ -1,9 +1,12 @@
 const int revisionnr = 
-12740
+12743
 ;
 const char* commithash = 
-"5e0159af61a404f1414231dfd65be3ed3243b3cc";
+"9d11bacd43fed2268ee5df591414e0fa68122764";
 const char* revlog = 
+"12743 2017-09-26 15:48:53 +0200 analyse: dcurve replacement in check health\n" \
+"12742 2017-09-26 10:28:42 +0200 track: replace type dcurve with curvenr\n" \
+"12741 2017-09-26 07:57:07 +0200 stage: except unexpected in case the train will fit\n" \
 "12740 2017-09-25 09:59:00 +0200 drcmd: save function string for send it with speed commands\n" \
 "12739 2017-09-25 09:50:33 +0200 drcmd: f1-f28 support\n" \
 "12738 2017-09-24 10:27:48 +0200 drcmd: PT and POM support added\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12696 2017-09-14 09:42:39 +0200 ecos2dlg: open link button added\n" \
 "12695 2017-09-14 09:34:37 +0200 dedicated ecos dialog added\n" \
 "12694 2017-09-14 08:10:24 +0200 ecos: sync option added\n" \
-"12693 2017-09-13 08:22:48 +0200 translation merge: fr, zh_CN, de\n" \
-"12692 2017-09-12 15:16:28 +0200 bidib image 13-134 added\n" \
-"12691 2017-09-12 15:08:59 +0200 rocview dialogs: format bus as unsigned integer to avoid minus values\n" \
 
 "log end";
