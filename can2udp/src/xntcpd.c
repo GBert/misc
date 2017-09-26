@@ -32,6 +32,7 @@
 #include <sys/time.h>
 #include <time.h>
 
+#define XNTCPPORT	61235
 #define MAXDG   	4096
 #define CAN_ENCAP_SIZE	13
 #define MAXPENDING	16
@@ -43,15 +44,14 @@
 #define TERM_SPEED	250000
 
 void print_usage(char *prg) {
-    fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.23\n\n");
-    fprintf(stderr, "         -p <port>           listening TCP port for the server - default 15731\n");
-    fprintf(stderr, "         -i <RS485 int>      RS485N interface - default /dev/ttyUSB0\n");
+    fprintf(stderr, "\nUsage: %s -p <tcp_port> -i <RS485 interface>\n", prg);
+    fprintf(stderr, "   Version 0.1\n\n");
+    fprintf(stderr, "         -p <port>           listening TCP port for the server - default %d\n", XNTCPPORT);
+    fprintf(stderr, "         -i <RS485 int>      RS485 interface - default /dev/ttyUSB0\n");
     fprintf(stderr, "         -f                  running in foreground\n\n");
 }
 
 int time_stamp(char *timestamp) {
-    /* char *timestamp = (char *)malloc(sizeof(char) * 16); */
     struct timeval tv;
     struct tm *tm;
 
@@ -62,12 +62,34 @@ int time_stamp(char *timestamp) {
     return 0;
 }
 
+int rawframe_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *netframe, int length) {
+    int s;
+
+    s = sendto(net_socket, netframe, length, 0, net_addr, sizeof(*net_addr));
+    if (s != length) {
+	fprintf(stderr, "%s: error sending TCP data; %s\n", __func__, strerror(errno));
+	return -1;
+    }
+    return 0;
+}
+
+int print_frame(unsigned char *frame, int length, int background) {
+    int i;
+
+    if (!background) {
+	for (i = 0; i < length; i++)
+	    printf("0x%02x ", frame[i]);
+	printf("\n");
+    }
+    return 0;
+}
+
 int main(int argc, char **argv) {
     pid_t pid;
     int n, i, max_fds, opt, max_tcp_i, local_tcp_port, nready, conn_fd, tcp_client[MAX_TCP_CONN];
     char timestamp[16];
     /* UDP incoming socket , CAN socket, UDP broadcast socket, TCP socket */
-    int eci, ret, se, st, tcp_socket;
+    int eci, ret, se, st, tcp_socket, ec_index;
     struct sockaddr_in tcp_addr;
     /* vars for determing broadcast address */
     socklen_t tcp_client_length = sizeof(tcp_addr);
@@ -76,13 +98,15 @@ int main(int argc, char **argv) {
     struct termios term_attr;
 
     int background = 1;
+    unsigned char ec_frame[64];
     char buffer[64];
     char rs485_interface[64];
     char frame[MAXDG];
+    local_tcp_port = XNTCPPORT;
 
-    while ((opt = getopt(argc, argv, "t:i:fh?")) != -1) {
+    while ((opt = getopt(argc, argv, "p:i:fh?")) != -1) {
 	switch (opt) {
-	case 't':
+	case 'p':
 	    local_tcp_port = strtoul(optarg, (char **)NULL, 10);
 	    break;
 	case 'i':
@@ -104,33 +128,33 @@ int main(int argc, char **argv) {
 
     /* prepare RS485 interface */
     if ((se = open(rs485_interface, O_RDWR | O_TRUNC | O_NONBLOCK | O_NOCTTY)) < 0) {
-        fprintf(stderr, "opening serial interface >%s< error: %s\n", rs485_interface, strerror(errno));
-        exit(EXIT_FAILURE);
+	fprintf(stderr, "opening serial interface >%s< error: %s\n", rs485_interface, strerror(errno));
+	exit(EXIT_FAILURE);
     } else {
-        memset(&term_attr, 0, sizeof(term_attr));
-        if (tcgetattr(se, &term_attr) < 0) {
-            fprintf(stderr, "can't get terminal settings error: %s\n", strerror(errno));
-            exit(EXIT_FAILURE);
-        }
-        term_attr.c_cflag = CS8 | CRTSCTS | CLOCAL | CREAD;
-        term_attr.c_iflag = 0;
-        term_attr.c_oflag = 0;
-        term_attr.c_lflag = NOFLSH;
-        if (cfsetospeed(&term_attr, TERM_SPEED) < 0) {
-            fprintf(stderr, "serial interface ospeed error: %s\n", strerror(errno));
-            exit(EXIT_FAILURE);
-        }
-        if (cfsetispeed(&term_attr, TERM_SPEED) < 0) {
-            fprintf(stderr, "serial interface ispeed error: %s\n", strerror(errno));
-            exit(EXIT_FAILURE);
-        }
+	memset(&term_attr, 0, sizeof(term_attr));
+	if (tcgetattr(se, &term_attr) < 0) {
+	    fprintf(stderr, "can't get terminal settings error: %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
+	term_attr.c_cflag = CS8 | CRTSCTS | CLOCAL | CREAD;
+	term_attr.c_iflag = 0;
+	term_attr.c_oflag = 0;
+	term_attr.c_lflag = NOFLSH;
+	if (cfsetospeed(&term_attr, TERM_SPEED) < 0) {
+	    fprintf(stderr, "serial interface ospeed error: %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
+	if (cfsetispeed(&term_attr, TERM_SPEED) < 0) {
+	    fprintf(stderr, "serial interface ispeed error: %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
 
-        printf("set serial interface ospeed\n");
+	printf("set serial interface ospeed\n");
 
-        if (tcsetattr(se, TCSANOW, &term_attr) < 0) {
-            fprintf(stderr, "serial interface set error: %s\n", strerror(errno));
-            exit(EXIT_FAILURE);
-        }
+	if (tcsetattr(se, TCSANOW, &term_attr) < 0) {
+	    fprintf(stderr, "serial interface set error: %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
     }
 
     /* prepare TCP socket */
@@ -195,28 +219,24 @@ int main(int argc, char **argv) {
 	tv.tv_sec = 1;
 	tv.tv_usec = 0;
 
-        /* serial interface */
-        if (FD_ISSET(se, &read_fds)) {
-            while ((ret = read(se, buffer, sizeof(buffer))) > 0) {
-                for (eci = 0; eci < ret; eci++) {
-                    ec_frame[ec_index++] = (unsigned char)buffer[eci];
-                    if (ec_index == 13) {
-                        /* we got a complete CAN frame */
-                        ec_index = 0;
-                        /* send frame to TCP socket if open */
-                        if (st) {
-                            rawframe_to_net(st, (struct sockaddr *)&tcp_addr, ec_frame, 13);
-                            if (!background)
-                                print_can_frame(SER_TCP_FORMAT_STRG, ec_frame, verbose);
-                        /* otherwise send frame to CAN socket */
-                        } else {
-                            if (!background)
-                                print_can_frame(SER_CAN_FORMAT_STRG, ec_frame, verbose);
-                        }
-                    }
-                }
-            }
-        }
+	/* serial interface */
+	if (FD_ISSET(se, &read_fds)) {
+	    while ((ret = read(se, buffer, sizeof(buffer))) > 0) {
+		for (eci = 0; eci < ret; eci++) {
+		    ec_frame[ec_index++] = (unsigned char)buffer[eci];
+		    if (ec_index == 13) {
+			/* we got a complete frame */
+			ec_index = 0;
+			/* send frame to TCP socket if open */
+			if (st) {
+			    rawframe_to_net(st, (struct sockaddr *)&tcp_addr, ec_frame, 13);
+			    if (!background)
+				print_frame(ec_frame, ec_index, background);
+			}
+		    }
+		}
+	    }
+	}
 
 	/* received a TCP packet */
 	if (FD_ISSET(st, &read_fds)) {
@@ -226,7 +246,7 @@ int main(int argc, char **argv) {
 			buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port), conn_fd, max_fds);
 	    }
 	    syslog(LOG_NOTICE, "%s: new client: %s port %d conn fd: %d max fds: %d\n", __func__,
-			 inet_ntop(AF_INET, &(tcp_addr.sin_addr), buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port), conn_fd, max_fds);
+		   inet_ntop(AF_INET, &(tcp_addr.sin_addr), buffer, sizeof(buffer)), ntohs(tcp_addr.sin_port), conn_fd, max_fds);
 	    for (i = 0; i < MAX_TCP_CONN; i++) {
 		if (tcp_client[i] < 0) {
 		    tcp_client[i] = conn_fd;	/* save new TCP client descriptor */
@@ -238,7 +258,7 @@ int main(int argc, char **argv) {
 		syslog(LOG_ERR, "%s: too many TCP clients\n", __func__);
 	    }
 
-	    FD_SET(conn_fd, &all_fds);		/* add new descriptor to set */
+	    FD_SET(conn_fd, &all_fds);	/* add new descriptor to set */
 	    max_fds = MAX(conn_fd, max_fds);	/* for select */
 	    max_tcp_i = MAX(i, max_tcp_i);	/* max index in tcp_client[] array */
 
@@ -251,7 +271,8 @@ int main(int argc, char **argv) {
 	    tcp_socket = tcp_client[i];
 	    if (tcp_socket < 0)
 		continue;
-	    printf("%s tcp packet received from client #%d  max_tcp_i:%d todo:%d\n", time_stamp(timestamp), i, max_tcp_i,nready);
+	    time_stamp(timestamp);
+	    printf("%s tcp packet received from client #%d  max_tcp_i:%d todo:%d\n", timestamp, i, max_tcp_i, nready);
 	    if (FD_ISSET(tcp_socket, &read_fds)) {
 		if (!background) {
 		    time_stamp(timestamp);
