@@ -1,9 +1,10 @@
 const int revisionnr = 
-12743
+12744
 ;
 const char* commithash = 
-"9d11bacd43fed2268ee5df591414e0fa68122764";
+"9e1578745ea8e5edf8993630df1d4601613d0d8d";
 const char* revlog = 
+"12744 2017-09-27 11:05:08 +0200 operatordlg: reset location button added\n" \
 "12743 2017-09-26 15:48:53 +0200 analyse: dcurve replacement in check health\n" \
 "12742 2017-09-26 10:28:42 +0200 track: replace type dcurve with curvenr\n" \
 "12741 2017-09-26 07:57:07 +0200 stage: except unexpected in case the train will fit\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12697 2017-09-14 10:05:00 +0200 model: logic fix after generating a loco\n" \
 "12696 2017-09-14 09:42:39 +0200 ecos2dlg: open link button added\n" \
 "12695 2017-09-14 09:34:37 +0200 dedicated ecos dialog added\n" \
-"12694 2017-09-14 08:10:24 +0200 ecos: sync option added\n" \
 
 "log end";
