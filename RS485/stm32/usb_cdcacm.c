@@ -45,8 +45,6 @@
 
 static uint8_t usbd_control_buffer[128];
 static usbd_device *acm_dev;
-static uint8_t start_seq = 0;
-static uint8_t end_seq = 0;
 
 static const struct usb_device_descriptor dev = {
     .bLength = USB_DT_DEVICE_SIZE,
@@ -238,15 +236,6 @@ static void cdcacm_data_rx_cb(usbd_device * usbd_dev, uint8_t ep) {
     cdcacm_arch_pin(0, CDCACM_PIN_LED_TX, 1);
     cdcacm_arch_pin(0, CDCACM_PIN_RS485DE, 1);
     for (int x = 0; x < len; x++) {
-	if (buf[x] == '[') {
-	    start_seq = 1;
-	    end_seq = 0;
-	    break;
-	} else if (buf[x] == ']') {
-	    start_seq = 0;
-	    end_seq = 1;
-	    break;
-	}
 	if (!ringb_put(&tx_ring, buf[x])) {
 	    // failed to process usb traffic properly.
 	    // should _never_ happen, means we failed to nak in time.
@@ -255,8 +244,7 @@ static void cdcacm_data_rx_cb(usbd_device * usbd_dev, uint8_t ep) {
 	}
     }
     // look up port to suart mapping which side?
-    if (end_seq == 1)
-	cdcacm_arch_txirq(0, 1);
+    cdcacm_arch_txirq(0, 1);
 
     if (ringb_depth(&tx_ring) < 64) {
 	ER_DPRINTF("ACK\n");

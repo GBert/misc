@@ -23,10 +23,10 @@ Pinout
         A15                           A6
         B3       STM32F103C8T6        A5
         B4                            A4
-        B5                            A3 RX2
-        B6                            A2 TX2
-        B7              8M            A1 RTS2
-(CANRX) B8           32768            A0 CTS2
+        B5                            A3 RX2 RS485
+        B6                            A2 TX2 RS485
+        B7              8M            A1 DE
+(CANRX) B8           32768            A0
 (CANTX) B9                           C15
         5V       PC13     POWER      C14
         GND      LED      LED        C13
