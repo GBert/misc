@@ -9,12 +9,14 @@ based on https://github.com/karlp/libopencm3-tests/tree/master/tests/usb-serial-
 Pinout
 ------
 ```
+RJ12
+====
 1 Signal, DCC (optional) 
 2 GND 
 3 B RS485 - 
 4 A RS485 + 
 5 +12V 
-6 Signal, DCC (optional
+6 Signal, DCC (optional)
 ```
 
 ![USB Xpressnet Adapter](https://github.com/GBert/misc/raw/master/RS485/stm32/pictures/usb2xn_sch.jpg)
