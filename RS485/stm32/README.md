@@ -34,6 +34,7 @@ Pinout
           3V3 DIO  DCLK GND
               PA13 PA14
 ```
+![USB Xpressnet Adapter](https://github.com/GBert/misc/raw/master/RS485/stm32/pictures/usb2xn_sch.jpg)
 
 Flashing Serial
 ---------------

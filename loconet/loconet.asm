@@ -1,6 +1,8 @@
         processor p16f873
         radix dec
 
+	ERRORLEVEL  -302,-1302
+
         include p16f873.inc
 
 ; The recognition of labels and registers is not always good, therefore
