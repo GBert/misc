@@ -34,7 +34,6 @@
 
 #define XNTCPPORT	61235
 #define MAXDG   	4096
-#define CAN_ENCAP_SIZE	13
 #define MAXPENDING	16
 #define MAX_TCP_CONN	16
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
@@ -62,12 +61,18 @@ int time_stamp(char *timestamp) {
     return 0;
 }
 
-int rawframe_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *netframe, int length) {
+int rawframe_to_socket(int net_socket, unsigned char *netframe, int length) {
     int s;
+    int on = 1;
 
-    s = sendto(net_socket, netframe, length, 0, net_addr, sizeof(*net_addr));
+    s = send(net_socket, netframe, length, 0);
     if (s != length) {
 	fprintf(stderr, "%s: error sending TCP data; %s\n", __func__, strerror(errno));
+	return -1;
+    }
+    /* disable Nagle algorithm - force PUSH to send immediatly */
+    if (setsockopt(net_socket, IPPROTO_TCP, TCP_NODELAY, &on, sizeof(on)) < 0) {
+	fprintf(stderr, "error disabling Nagle - TCP_NODELAY on: %s\n", strerror(errno));
 	return -1;
     }
     return 0;
@@ -101,7 +106,7 @@ int main(int argc, char **argv) {
     unsigned char ec_frame[64];
     char buffer[64];
     char rs485_interface[64];
-    char frame[MAXDG];
+    unsigned char frame[MAXDG];
     local_tcp_port = XNTCPPORT;
 
     while ((opt = getopt(argc, argv, "p:i:fh?")) != -1) {
@@ -224,15 +229,12 @@ int main(int argc, char **argv) {
 	    while ((ret = read(se, buffer, sizeof(buffer))) > 0) {
 		for (eci = 0; eci < ret; eci++) {
 		    ec_frame[ec_index++] = (unsigned char)buffer[eci];
-		    if (ec_index == 13) {
+		    if (ec_index % 2) {
 			/* we got a complete frame */
 			ec_index = 0;
-			/* send frame to TCP socket if open */
-			if (st) {
-			    rawframe_to_net(st, (struct sockaddr *)&tcp_addr, ec_frame, 13);
-			    if (!background)
-				print_frame(ec_frame, ec_index, background);
-			}
+			/* send frame to connect clients */
+			for (i = 0; i <= max_tcp_i; i++)
+			    rawframe_to_socket(tcp_client[i], ec_frame, ret);
 		    }
 		}
 	    }
@@ -272,10 +274,10 @@ int main(int argc, char **argv) {
 	    if (tcp_socket < 0)
 		continue;
 	    time_stamp(timestamp);
-	    printf("%s tcp packet received from client #%d  max_tcp_i:%d todo:%d\n", timestamp, i, max_tcp_i, nready);
 	    if (FD_ISSET(tcp_socket, &read_fds)) {
 		if (!background) {
 		    time_stamp(timestamp);
+		    printf("%s tcp packet received from client #%d  max_tcp_i:%d todo:%d\n", timestamp, i, max_tcp_i, nready);
 		    /* printf("%s packet from: %s\n", timestamp, inet_ntop(AF_INET, &tcp_addr.sin_addr, buffer, sizeof(buffer))); */
 		}
 		n = read(tcp_socket, frame, MAXDG);
@@ -290,14 +292,20 @@ int main(int argc, char **argv) {
 		    FD_CLR(tcp_socket, &all_fds);
 		    tcp_client[i] = -1;
 		} else {
-		    /* TCP packets with size modulo 13 !=0 are ignored though */
-		    if (n % 13) {
-			time_stamp(timestamp);
-			if (!background)
-			    fprintf(stderr, "%s received packet %% 13 : length %d - maybe close connection\n", timestamp, n);
-			syslog(LOG_ERR, "%s: received packet %% 13 : length %d - maybe close connection\n", __func__, n);
+		    /* TCP packets with size modulo 2 !=0 are ignored though */
+		    if (n % 2) {
+			if (!background) {
+			    time_stamp(timestamp);
+			    fprintf(stderr, "%s received packet %% 2 : length %d - maybe close connection\n", timestamp, n);
+			}
+			syslog(LOG_ERR, "%s: received packet %% 2 : length %d - maybe close connection\n", __func__, n);
 		    } else {
-			for (i = 0; i < n; i += CAN_ENCAP_SIZE) {
+			print_frame(frame, n, background);
+			/* send packet to all connected clients */
+			for (i = 0; i <= max_tcp_i; i++) {
+			    if (tcp_socket == tcp_client[i])
+				continue;
+			    rawframe_to_socket(tcp_client[i], frame, n);
 			}
 		    }
 		}
@@ -307,5 +315,6 @@ int main(int argc, char **argv) {
 	}
     }
     close(st);
+    close(se);
     return 0;
 }
