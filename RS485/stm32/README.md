@@ -38,6 +38,14 @@ sending 16bit:
 0x01 0xee -> 0x1ee
 ```
 
+Price (28/09/17 Aliexpress)
+---------------------------
+```
+Blue-Pill STM32	1,45 Euro
+ST-LinkV2 Clone	1,55 Euro
+SN75176 (10pcs)	1,20 Euro
+```
+
 Links
 -----
 Schematic https://github.com/GBert/misc/raw/master/stm32-slcan/pictures/arduino_stm32f103c8t6_schematics.png
