@@ -47,8 +47,10 @@ using SWD interface with st-flash or serial loader stm32-flash (works only with 
 
 Usage
 -----
-sending 16bit
-
+sending 16bit:
+```
+0x01 0xee -> 0x1ee
+```
 
 Links
 -----
