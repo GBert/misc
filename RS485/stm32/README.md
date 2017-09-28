@@ -8,32 +8,6 @@ based on https://github.com/karlp/libopencm3-tests/tree/master/tests/usb-serial-
 
 Pinout
 ------
-```
-                 Blue Pill
-
-        B12        MICRO USB         GND
-        B13                          GND
-        B14                          3V3
-        B15   RESET    GND    GND  RESET
-        A8    BUTTON  *BOOT1 *BOOT0  B11
-(TX0)   A9             3V3    3V3    B10
-(RX0)   A10                           B1
-        A11                           B0
-        A12                           A7
-        A15                           A6
-        B3       STM32F103C8T6        A5
-        B4                            A4
-        B5                            A3 RX2 RS485
-        B6                            A2 TX2 RS485
-        B7              8M            A1 DE
-(CANRX) B8           32768            A0
-(CANTX) B9                           C15
-        5V       PC13     POWER      C14
-        GND      LED      LED        C13
-        3V3           SWD           VBAT
-          3V3 DIO  DCLK GND
-              PA13 PA14
-```
 ![USB Xpressnet Adapter](https://github.com/GBert/misc/raw/master/RS485/stm32/pictures/usb2xn_sch.jpg)
 
 Flashing Serial
