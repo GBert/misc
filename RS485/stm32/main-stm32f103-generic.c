@@ -102,7 +102,7 @@ static void usart_setup(void) {
 }
 
 void usart2_isr(void) {
-    gpio_really(GPIOA, GPIO5, 1);
+    //gpio_really(GPIOA, GPIO5, 1);
     // usbser-rxne()
     /* Check if we were called because of RXNE. */
     if (((USART_CR1(USART3) & USART_CR1_RXNEIE) != 0) &&
@@ -156,7 +156,7 @@ void usart2_isr(void) {
 	cdcacm_arch_pin(0, CDCACM_PIN_RS485DE, 0);
 	de_set_first = 1;
     }
-    gpio_really(GPIOA, GPIO5, 0);
+    //gpio_really(GPIOA, GPIO5, 0);
 }
 
 void usb_cdcacm_setup_pre_arch(void) {

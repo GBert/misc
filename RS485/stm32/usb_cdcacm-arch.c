@@ -71,14 +71,14 @@ int glue_set_line_coding_cb(uint32_t baud, uint8_t databits,
 #else
 
     /* Disable the UART while we mess with its settings */
-    usart_disable(USART2);
+    usart_disable(USART3);
     /* Set communication parameters */
-    usart_set_baudrate(USART2, baud);
-    usart_set_databits(USART2, databits);
-    usart_set_parity(USART2, uart_parity);
-    usart_set_stopbits(USART2, uart_stopbits);
+    usart_set_baudrate(USART3, baud);
+    usart_set_databits(USART3, databits);
+    usart_set_parity(USART3, uart_parity);
+    usart_set_stopbits(USART3, uart_stopbits);
     /* Back to work. */
-    usart_enable(USART2);
+    usart_enable(USART3);
 
     return 1;
 #endif
