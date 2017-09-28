@@ -1,9 +1,14 @@
 const int revisionnr = 
-12744
+12749
 ;
 const char* commithash = 
-"9e1578745ea8e5edf8993630df1d4601613d0d8d";
+"62997c612104920ef98b9e4eab291d3fc2c15594";
 const char* revlog = 
+"12749 2017-09-28 16:17:58 +0200 translation merge: fr\n" \
+"12748 2017-09-28 11:52:22 +0200 bidib: echo switch commands option added\n" \
+"12747 2017-09-28 11:39:40 +0200 rocs: tracelevel added for client connection\n" \
+"12746 2017-09-28 11:38:52 +0200 rocview: # fix for setting a loco with train in a block\n" \
+"12745 2017-09-28 11:03:36 +0200 rocview: fixes for xcode 9.0\n" \
 "12744 2017-09-27 11:05:08 +0200 operatordlg: reset location button added\n" \
 "12743 2017-09-26 15:48:53 +0200 analyse: dcurve replacement in check health\n" \
 "12742 2017-09-26 10:28:42 +0200 track: replace type dcurve with curvenr\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "12702 2017-09-16 08:44:30 +0200 z21: fix for evaluating CAN and RailCom-Data\n" \
 "12701 2017-09-14 16:00:22 +0200 ecos2dlg: set default port in case port value is zero\n" \
 "12700 2017-09-14 11:58:06 +0200 messages: alttxt for sync (British English)\n" \
-"12699 2017-09-14 11:46:36 +0200 stage: use occupancy section detection for bidi code to set a loco in a stageblock section\n" \
-"12698 2017-09-14 10:52:41 +0200 ecos2dlg: title correction\n" \
-"12697 2017-09-14 10:05:00 +0200 model: logic fix after generating a loco\n" \
-"12696 2017-09-14 09:42:39 +0200 ecos2dlg: open link button added\n" \
-"12695 2017-09-14 09:34:37 +0200 dedicated ecos dialog added\n" \
 
 "log end";
