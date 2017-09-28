@@ -33,7 +33,7 @@ extern "C" {
 #define LED_RX_PIN GPIO13
 #define LED_TX_PORT GPIOC
 #define LED_TX_PIN GPIO13
-#define RS485DE_PORT GPIOA
+#define RS485DE_PORT GPIOB
 #define RS485DE_PIN GPIO1
 
 #ifdef	__cplusplus
