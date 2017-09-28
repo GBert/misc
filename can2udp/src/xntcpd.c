@@ -63,10 +63,16 @@ int time_stamp(char *timestamp) {
 
 int rawframe_to_socket(int net_socket, unsigned char *netframe, int length) {
     int s;
+    int on = 1;
 
     s = send(net_socket, netframe, length, 0);
     if (s != length) {
 	fprintf(stderr, "%s: error sending TCP data; %s\n", __func__, strerror(errno));
+	return -1;
+    }
+    /* disable Nagle algorithm - force PUSH to send immediatly */
+    if (setsockopt(net_socket, IPPROTO_TCP, TCP_NODELAY, &on, sizeof(on)) < 0) {
+	fprintf(stderr, "error disabling Nagle - TCP_NODELAY on: %s\n", strerror(errno));
 	return -1;
     }
     return 0;
