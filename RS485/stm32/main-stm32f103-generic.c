@@ -101,7 +101,7 @@ static void usart_setup(void) {
     usart_enable(USART3);
 }
 
-void usart2_isr(void) {
+void usart3_isr(void) {
     //gpio_really(GPIOA, GPIO5, 1);
     // usbser-rxne()
     /* Check if we were called because of RXNE. */

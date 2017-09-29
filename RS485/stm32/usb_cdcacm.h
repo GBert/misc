@@ -32,18 +32,18 @@ extern "C" {
 #include <libopencm3/usb/usbd.h>
 #include <libopencm3/usb/cdc.h>
 
-	enum cdcacm_pin {
-		CDCACM_PIN_NONE,
-		CDCACM_PIN_LED_TX,
-		CDCACM_PIN_LED_RX,
-		CDCACM_PIN_RS485DE,
-	};
+    enum cdcacm_pin {
+	CDCACM_PIN_NONE,
+	CDCACM_PIN_LED_TX,
+	CDCACM_PIN_LED_RX,
+	CDCACM_PIN_RS485DE,
+    };
 
-	usbd_device * usb_cdcacm_init(const usbd_driver *driver, const char *userserial);
-	void usb_cdcacm_setup_pre_arch(void);
-	void usb_cdcacm_setup_post_arch(usbd_device *dev);
-	void usb_cdcacm_poll(usbd_device *usbd_dev);
-	void cdcacm_line_state_changed_cb(uint8_t linemask);
+    usbd_device *usb_cdcacm_init(const usbd_driver * driver, const char *userserial);
+    void usb_cdcacm_setup_pre_arch(void);
+    void usb_cdcacm_setup_post_arch(usbd_device * dev);
+    void usb_cdcacm_poll(usbd_device * usbd_dev);
+    void cdcacm_line_state_changed_cb(uint8_t linemask);
 
 	/**
 	 * Called by the cdcacm core to toggle pins as need be
@@ -51,24 +51,22 @@ extern "C" {
 	 * @param pin logical pin 
 	 * @param set set or clear
 	 */
-	void cdcacm_arch_pin(int port, enum cdcacm_pin pin, bool set);
+    void cdcacm_arch_pin(int port, enum cdcacm_pin pin, bool set);
 
 	/**
 	 * enable the tx emmpty irq for the logical port
 	 * @param port
 	 * @param set
 	 */
-	void cdcacm_arch_txirq(int port, bool set);
+    void cdcacm_arch_txirq(int port, bool set);
 
-	void cdcacm_arch_set_line_state(int port, uint8_t dtr, uint8_t rts);
+    void cdcacm_arch_set_line_state(int port, uint8_t dtr, uint8_t rts);
 
-	int glue_set_line_coding_cb(uint32_t baud, uint8_t databits,
-		enum usb_cdc_line_coding_bParityType cdc_parity,
-		enum usb_cdc_line_coding_bCharFormat cdc_stopbits);
+    int glue_set_line_coding_cb(uint32_t baud, uint8_t databits,
+				enum usb_cdc_line_coding_bParityType cdc_parity,
+				enum usb_cdc_line_coding_bCharFormat cdc_stopbits);
 
 #ifdef	__cplusplus
 }
 #endif
-
-#endif	/* USB_CDCACM_H */
-
+#endif				/* USB_CDCACM_H */
