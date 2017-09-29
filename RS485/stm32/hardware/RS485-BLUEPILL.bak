@@ -219,15 +219,7 @@ Connection ~ 5850 2750
 Wire Wire Line
 	6250 2900 6050 2900
 Wire Wire Line
-	6050 2900 6050 3050
-Wire Wire Line
-	6050 3050 5700 3050
-Wire Wire Line
-	5700 3150 6050 3150
-Wire Wire Line
-	6050 3150 6050 3300
-Wire Wire Line
-	6050 3300 6250 3300
+	5875 3300 6250 3300
 Wire Wire Line
 	6250 3000 6150 3000
 Wire Wire Line
@@ -328,4 +320,12 @@ $EndComp
 Wire Wire Line
 	7000 4100 6650 4100
 Connection ~ 7000 4100
+Wire Wire Line
+	6050 2900 6050 3150
+Wire Wire Line
+	6050 3150 5700 3150
+Wire Wire Line
+	5700 3050 5875 3050
+Wire Wire Line
+	5875 3050 5875 3300
 $EndSCHEMATC
