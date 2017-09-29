@@ -1,9 +1,11 @@
 const int revisionnr = 
-12749
+12751
 ;
 const char* commithash = 
-"62997c612104920ef98b9e4eab291d3fc2c15594";
+"42ca5c0b26da6410142fef7c9840949ef3f986d5";
 const char* revlog = 
+"12751 2017-09-29 13:14:55 +0200 decoders stylesheet update (Andy)\n" \
+"12750 2017-09-29 08:08:05 +0200 loc: fix for find RC messages\n" \
 "12749 2017-09-28 16:17:58 +0200 translation merge: fr\n" \
 "12748 2017-09-28 11:52:22 +0200 bidib: echo switch commands option added\n" \
 "12747 2017-09-28 11:39:40 +0200 rocs: tracelevel added for client connection\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12704 2017-09-16 14:15:17 +0200 stage: fix for unexpected occ sensor\n" \
 "12703 2017-09-16 10:16:23 +0200 hue: removed unused config wrapper\n" \
 "12702 2017-09-16 08:44:30 +0200 z21: fix for evaluating CAN and RailCom-Data\n" \
-"12701 2017-09-14 16:00:22 +0200 ecos2dlg: set default port in case port value is zero\n" \
-"12700 2017-09-14 11:58:06 +0200 messages: alttxt for sync (British English)\n" \
 
 "log end";
