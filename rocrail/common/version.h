@@ -1,9 +1,11 @@
 const int revisionnr = 
-12753
+12755
 ;
 const char* commithash = 
-"0eab9c162bc614b6170121b6c9ab4bf33f13038b";
+"930eb85ea66f5b015da26a1ea3e7eba97947a887";
 const char* revlog = 
+"12755 2017-09-30 10:28:28 +0200 stage: added loco commands on set or reset in sections\n" \
+"12754 2017-09-30 10:20:24 +0200 makemac.sh: fix for create with wrong format\n" \
 "12753 2017-09-29 15:51:38 +0200 loc: fix for setting the resume flag\n" \
 "12752 2017-09-29 15:34:50 +0200 SLIM theme: WIP\n" \
 "12751 2017-09-29 13:14:55 +0200 decoders stylesheet update (Andy)\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12708 2017-09-17 10:12:58 +0200 z21: CAN bus 3\n" \
 "12707 2017-09-17 10:03:19 +0200 z21: removed option system info -> always active\n" \
 "12706 2017-09-17 09:59:39 +0200 z21: CAN detector sensor events set to bus 2 as documented in the Wiki\n" \
-"12705 2017-09-17 09:11:44 +0200 controllers: check for a valid IID on OK\n" \
-"12704 2017-09-16 14:15:17 +0200 stage: fix for unexpected occ sensor\n" \
 
 "log end";
