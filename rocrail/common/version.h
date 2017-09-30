@@ -1,9 +1,11 @@
 const int revisionnr = 
-12751
+12753
 ;
 const char* commithash = 
-"42ca5c0b26da6410142fef7c9840949ef3f986d5";
+"0eab9c162bc614b6170121b6c9ab4bf33f13038b";
 const char* revlog = 
+"12753 2017-09-29 15:51:38 +0200 loc: fix for setting the resume flag\n" \
+"12752 2017-09-29 15:34:50 +0200 SLIM theme: WIP\n" \
 "12751 2017-09-29 13:14:55 +0200 decoders stylesheet update (Andy)\n" \
 "12750 2017-09-29 08:08:05 +0200 loc: fix for find RC messages\n" \
 "12749 2017-09-28 16:17:58 +0200 translation merge: fr\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12706 2017-09-17 09:59:39 +0200 z21: CAN detector sensor events set to bus 2 as documented in the Wiki\n" \
 "12705 2017-09-17 09:11:44 +0200 controllers: check for a valid IID on OK\n" \
 "12704 2017-09-16 14:15:17 +0200 stage: fix for unexpected occ sensor\n" \
-"12703 2017-09-16 10:16:23 +0200 hue: removed unused config wrapper\n" \
-"12702 2017-09-16 08:44:30 +0200 z21: fix for evaluating CAN and RailCom-Data\n" \
 
 "log end";
