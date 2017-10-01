@@ -456,7 +456,7 @@ int main(int argc, char **argv) {
 		case 0x23:
 		    kenner = ntohs(*(uint16_t *) frame.data);
 		    kontakt = ntohs(*(uint16_t *) &frame.data[2]);
-		    if (frame.can_dlc == 5)
+		    if (frame.can_dlc == 8)
 			printf("S88 Event: Kennung %d Kontakt %d Zusand alt %d Zusand neu %d Zeit %d\n",
 			       kenner, kontakt, frame.data[4], frame.data[5], (frame.data[6] << 8) + frame.data[7]);
 		    break;
