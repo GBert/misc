@@ -1,9 +1,10 @@
 const int revisionnr = 
-12766
+12767
 ;
 const char* commithash = 
-"67cd0b2b5ffa0de58582478fda28215053ca961a";
+"537e4195c83630b994c0129976c0e2cb00e3d967";
 const char* revlog = 
+"12767 2017-10-02 15:45:46 +0200 dccpp: trace level correction\n" \
 "12766 2017-10-02 12:14:48 +0200 SLIM: wip\n" \
 "12765 2017-10-02 08:36:02 +0200 trainimage: fix for rendering after the auto mode was switched on\n" \
 "12764 2017-10-02 08:18:39 +0200 SLIM: 2 pixel width symbols\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12720 2017-09-19 15:27:44 +0200 renderer: occroute support removed\n" \
 "12719 2017-09-19 14:45:14 +0200 removed SpDrS60 'alt'\n" \
 "12718 2017-09-19 10:33:27 +0200 translation merge: nl, de, fr, sl\n" \
-"12717 2017-09-19 10:17:54 +0200 z21dlg added\n" \
 
 "log end";
