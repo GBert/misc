@@ -440,15 +440,15 @@ int main(int argc, char **argv) {
 		case 0x07:
 		    uid = ntohl(*(uint32_t *) frame.data);
 		    if (frame.can_dlc == 2) {
-		        kenner = ntohs(*(uint16_t *) frame.data);
+			kenner = ntohs(*(uint16_t *) frame.data);
 			if (kenner == 0x00ff)
 			    printf("CdB: Reset\n");
 			else
 			    printf("CdB: unbekannt 0x%04x\n", kenner);
 		    }
 		    if (frame.can_dlc == 4) {
-		        kenner = ntohs(*(uint16_t *) frame.data);
-		        wert = ntohs(*(uint16_t *) &frame.data[2]);
+			kenner = ntohs(*(uint16_t *) frame.data);
+			wert = ntohs(*(uint16_t *) & frame.data[2]);
 			printf("CdB: unbekannt 0x%04x 0x%04x\n", kenner, wert);
 		    }
 		    if (frame.can_dlc == 6)
