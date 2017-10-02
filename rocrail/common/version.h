@@ -1,9 +1,20 @@
 const int revisionnr = 
-12755
+12766
 ;
 const char* commithash = 
-"930eb85ea66f5b015da26a1ea3e7eba97947a887";
+"67cd0b2b5ffa0de58582478fda28215053ca961a";
 const char* revlog = 
+"12766 2017-10-02 12:14:48 +0200 SLIM: wip\n" \
+"12765 2017-10-02 08:36:02 +0200 trainimage: fix for rendering after the auto mode was switched on\n" \
+"12764 2017-10-02 08:18:39 +0200 SLIM: 2 pixel width symbols\n" \
+"12763 2017-10-02 08:06:10 +0200 model, fback: fix for evaluating sensor address with offset\n" \
+"12762 2017-10-02 07:51:07 +0200 infodialog: translation fix for the third tab\n" \
+"12761 2017-10-02 07:29:15 +0200 analyse: fix for address calculation with offset variable (Lothar)\n" \
+"12760 2017-10-01 16:35:41 +0200 slim: 2 pixel (wip)\n" \
+"12759 2017-10-01 13:20:44 +0200 slim: block reserved an enter\n" \
+"12758 2017-10-01 11:59:53 +0200 slim: block symbols\n" \
+"12757 2017-10-01 11:10:35 +0200 slim: wip\n" \
+"12756 2017-10-01 08:29:37 +0200 SLIM: wip\n" \
 "12755 2017-09-30 10:28:28 +0200 stage: added loco commands on set or reset in sections\n" \
 "12754 2017-09-30 10:20:24 +0200 makemac.sh: fix for create with wrong format\n" \
 "12753 2017-09-29 15:51:38 +0200 loc: fix for setting the resume flag\n" \
@@ -43,16 +54,5 @@ const char* revlog =
 "12719 2017-09-19 14:45:14 +0200 removed SpDrS60 'alt'\n" \
 "12718 2017-09-19 10:33:27 +0200 translation merge: nl, de, fr, sl\n" \
 "12717 2017-09-19 10:17:54 +0200 z21dlg added\n" \
-"12716 2017-09-19 07:57:46 +0200 app: trace pwd and args at startup\n" \
-"12715 2017-09-18 16:45:14 +0200 z21: trace CAN detector direction info\n" \
-"12714 2017-09-18 16:40:39 +0200 z21: evaluate CAN detector direction info\n" \
-"12713 2017-09-18 16:39:55 +0200 virtual: trace output color info\n" \
-"12712 2017-09-18 14:25:04 +0200 lightctrl: short pause before processing\n" \
-"12711 2017-09-18 14:24:03 +0200 stage: fix for unexpected bidi loco\n" \
-"12710 2017-09-18 10:31:38 +0200 infodialog: important changes button added to open the default webbrowser\n" \
-"12709 2017-09-17 12:30:36 +0200 planpanel: create always an object for text even if the show flag is not set\n" \
-"12708 2017-09-17 10:12:58 +0200 z21: CAN bus 3\n" \
-"12707 2017-09-17 10:03:19 +0200 z21: removed option system info -> always active\n" \
-"12706 2017-09-17 09:59:39 +0200 z21: CAN detector sensor events set to bus 2 as documented in the Wiki\n" \
 
 "log end";
