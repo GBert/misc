@@ -41,7 +41,6 @@ void usec_sleep(int usec) {
 }
 
 int time_stamp(char *timestamp) {
-    /* char *timestamp = (char *)malloc(sizeof(char) * 16); */
     struct timeval tv;
     struct tm *tm;
 
@@ -89,10 +88,26 @@ void print_can_frame(char *format_string, unsigned char *netframe, int verbose) 
 }
 
 int frame_to_serial(int fd, unsigned char *netframe) {
+    struct timespec to_wait;
+    struct timeval actual_time;
+    long usec;
+
+    /* we calculate the difference between the actual time and the time the last command was sent */
+    /* probably we don't need to wait anymore before putting next CAN frame on the serial interface */
+    gettimeofday(&actual_time, NULL);
+    usec = (actual_time.tv_sec - last_sent.tv_sec) * 1000000;
+    usec += (actual_time.tv_usec - last_sent.tv_usec);
+    if (usec < TIME_WAIT_US) {
+        to_wait.tv_sec = 0;
+        to_wait.tv_nsec = (TIME_WAIT_US - usec) * 1000;
+        nanosleep(&to_wait, NULL);
+    }
+
     if (write(fd, netframe, 13) != 13) {
 	fprint_syslog_wc(stderr, LOG_ERR, "error sennding serial frame:", strerror(errno));
 	return -1;
     }
+    gettimeofday(&last_sent, NULL);
     return 0;
 }
 

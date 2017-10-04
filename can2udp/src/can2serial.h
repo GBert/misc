@@ -36,7 +36,7 @@
 
 #include <linux/can.h>
 
-#define TIME_WAIT_US	10 * 1000
+#define TIME_WAIT_US	2 * 1000
 #define MAXSTRING	64		/* max string length     */
 #define MAXLINE		1024		/* max line length       */
 #define MAX_TCP_CONN	16		/* max TCP clients       */
