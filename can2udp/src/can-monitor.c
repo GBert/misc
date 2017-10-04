@@ -150,14 +150,19 @@ char *getLoco(uint8_t * data, char *s) {
 void command_system(struct can_frame *frame) {
     uint32_t uid, response;
     uint16_t sid, wert;
+    uint8_t modul;
     char s[32];
 
     memset(s, 0, sizeof(s));
     response = frame->can_id & 0x00010000;
 
-    /* CdB extension) */
+    /* CdB extension */
     if (frame->can_dlc == 0) {
-	printf("System-Befehl: CdB Suche\n");
+	modul = frame->can_dlc & 0x1F;
+	if (response)
+	    printf("System-Befehl: CdB Such-Antwort Modul %d\n", modul);
+	else
+	    printf("System-Befehl: CdB Suche\n");
 	return;
     }
 
@@ -265,15 +270,16 @@ void command_system(struct can_frame *frame) {
 }
 
 void cdb_extension(struct can_frame *frame) {
-    uint8_t kontakt, index;
+    uint8_t kontakt, index, modul;
     uint16_t wert;
 
     kontakt = *frame->data;
     index = frame->data[1];
+    modul = frame->can_dlc & 0x1F;
 
     if (kontakt) {
 	if (frame->can_dlc == 2) {
-	    printf("CdB: Abfrage Kontakt %d ", kontakt);
+	    printf("CdB: Abfrage Modul %d Kontakt %d ", modul, kontakt);
 	    switch (index) {
 	    case 0x01:
 		printf("Version\n");
@@ -291,7 +297,7 @@ void cdb_extension(struct can_frame *frame) {
 	}
 	if (frame->can_dlc == 4) {
 	    wert = ntohs(*(uint16_t *) &frame->data[2]);
-	    printf("CdB: Antwort Kontakt %d ", kontakt);
+	    printf("CdB: Antwort Modul %d Kontakt %d ", modul, kontakt);
 	    switch (index) {
 	    case 0x01:
 		printf("Version %d.%d\n", frame->data[2], frame->data[3]);
@@ -333,12 +339,40 @@ void cdb_extension(struct can_frame *frame) {
     }
 }
 
+void cdb_extension_set(struct can_frame *frame) {
+    uint16_t wert;
+    uint8_t index, kontakt, modul;
+
+    modul = frame->can_dlc & 0x1F;
+    kontakt = frame->data[0];
+    index = frame->data[1];
+
+    if (frame->can_dlc == 4) {
+	wert = ntohs(*(uint16_t *) &frame->data[4]);
+	printf("CdB: Setze Modul %d Kontakt %d ", modul, kontakt);
+	switch (index) {
+	case 0x01:
+	    printf("Version %d.%d\n", frame->data[2], frame->data[3]);
+	    break;
+	case 0x02:
+	    printf("Einschaltverzögerung %d ms\n", wert);
+	    break;
+	case 0x03:
+	    printf("Ausschaltverzögerung %d ms\n", wert);
+	    break;
+	default:
+	    printf("unbekannt: %d\n", wert);
+	    break;
+	}
+    }
+}
+
 int main(int argc, char **argv) {
     int max_fds, opt, sc;
     float v;
     struct can_frame frame;
     uint32_t kennung, function, uid, cv_number, cv_index, stream_size;
-    uint16_t crc, kenner, kontakt, wert;
+    uint16_t crc, kenner, kontakt;
     char s[32];
 
     struct sockaddr_can caddr;
@@ -447,9 +481,7 @@ int main(int argc, char **argv) {
 			    printf("CdB: unbekannt 0x%04x\n", kenner);
 		    }
 		    if (frame.can_dlc == 4) {
-			kenner = ntohs(*(uint16_t *) frame.data);
-			wert = ntohs(*(uint16_t *) & frame.data[2]);
-			printf("CdB: unbekannt 0x%04x 0x%04x\n", kenner, wert);
+			cdb_extension_set(&frame);
 		    }
 		    if (frame.can_dlc == 6)
 			printf("MFX Verify: MFX UID 0x%08X MFX SID %d\n", uid, (frame.data[4] << 8) + frame.data[5]);
