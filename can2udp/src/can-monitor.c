@@ -316,9 +316,19 @@ void cdb_extension(struct can_frame *frame) {
     /* System */
     } else {
 	if (frame->can_dlc == 2) {
+	    printf("CdB: Abfrage ");
 	    switch (index) {
 	    case 0x01:
-		printf("CdB: Abfrage Version\n");
+		printf("Version\n");
+		break;
+	    case 0x10:
+		printf("Gerätekennung\n");
+		break;
+	    case 0x11:
+		printf("Refresh CS2-Layout\n");
+		break;
+	    case 0x12:
+		printf("Sende auch an Master CS2\n");
 		break;
 	    default:
 		printf("CdB: Abfrage unbekannter Index %d\n", index);
@@ -329,6 +339,22 @@ void cdb_extension(struct can_frame *frame) {
 	    switch (index) {
 	    case 0x01:
 		printf("CdB: Antwort Version %d.%d\n", frame->data[2], frame->data[3]);
+		break;
+	    case 0x10:
+		wert = ntohs(*(uint16_t *) &frame->data[2]);
+		printf("CdB: Gerätekennung %d\n", wert);
+		break;
+	    case 0x11:
+		if (wert == 1)
+		    printf("CdB: Refresh CS2-Layout\n");
+		else
+		    printf("CdB: kein Refresh CS2-Layout\n");
+		break;
+	    case 0x12:
+		if (wert == 1)
+		    printf("CdB: Sende auch Master CS2\n");
+		else
+		    printf("CdB: kein Sende auch Master CS2\n");
 		break;
 	    default:
 		wert = ntohs(*(uint16_t *) &frame->data[2]);
@@ -343,13 +369,15 @@ void cdb_extension_set(struct can_frame *frame) {
     uint16_t wert;
     uint8_t index, kontakt, modul;
 
-    modul = frame->can_dlc & 0x1F;
+    modul = frame->can_id & 0x1F;
     kontakt = frame->data[0];
     index = frame->data[1];
 
     if (frame->can_dlc == 4) {
 	wert = ntohs(*(uint16_t *) &frame->data[2]);
-	printf("CdB: Setze Modul %d Kontakt %d ", modul, kontakt);
+	printf("CdB: Setze Modul %d ", modul);
+	if (kontakt)
+	    printf("Kontakt %d ", kontakt);
 	switch (index) {
 	case 0x01:
 	    printf("Version %d.%d\n", frame->data[2], frame->data[3]);
@@ -359,6 +387,21 @@ void cdb_extension_set(struct can_frame *frame) {
 	    break;
 	case 0x03:
 	    printf("Ausschaltverzögerung %d ms\n", wert);
+	    break;
+	case 0x10:
+	    printf("Gerätekennung %d\n", wert);
+	    break;
+	case 0x11:
+	    if (wert == 1)
+		printf("Refresh CS2-Layout\n");
+	    else
+		printf("kein Refresh CS2-Layout\n");
+	    break;
+	case 0x12:
+	    if (wert == 1)
+		printf("Sende auch an Master CS2\n");
+	    else
+		printf("Sende nicht an Master CS2\n");
 	    break;
 	default:
 	    printf("unbekannt: %d\n", wert);
