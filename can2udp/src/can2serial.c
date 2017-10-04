@@ -238,8 +238,6 @@ int main(int argc, char **argv) {
 	    exit(EXIT_FAILURE);
 	}
 
-	printf("set serial interface ospeed\n");
-
 	if (tcsetattr(se, TCSANOW, &term_attr) < 0) {
 	    fprintf(stderr, "serial interface set error: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
@@ -299,10 +297,14 @@ int main(int argc, char **argv) {
     }
 
     FD_ZERO(&all_fds);
-    FD_SET(sc, &all_fds);
     FD_SET(se, &all_fds);
-    FD_SET(st, &all_fds);
-    max_fds = MAX(se, MAX(sc, st));
+    if (st) {
+	FD_SET(st, &all_fds);
+	max_fds = MAX(se, st);
+    } else {
+	FD_SET(sc, &all_fds);
+	max_fds = MAX(se, sc);
+    }
 
     while (1) {
 	read_fds = all_fds;

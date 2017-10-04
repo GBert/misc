@@ -145,6 +145,8 @@ int main(int argc, char **argv) {
 	term_attr.c_iflag = 0;
 	term_attr.c_oflag = 0;
 	term_attr.c_lflag = 0;
+
+	/* the DIY RS485 Xpressnet adpapter ignores speed setting */
 	if (cfsetospeed(&term_attr, TERM_SPEED) < 0) {
 	    fprintf(stderr, "serial interface >%s< ospeed error: %s\n", rs485_interface, strerror(errno));
 	    exit(EXIT_FAILURE);
@@ -153,8 +155,6 @@ int main(int argc, char **argv) {
 	    fprintf(stderr, "serial interface >%s< ispeed error: %s\n", rs485_interface, strerror(errno));
 	    exit(EXIT_FAILURE);
 	}
-
-	printf("set serial interface ospeed\n");
 
 	if (tcsetattr(se, TCSANOW, &term_attr) < 0) {
 	    fprintf(stderr, "serial interface >%s< set error: %s\n", rs485_interface, strerror(errno));
