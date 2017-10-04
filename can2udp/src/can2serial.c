@@ -26,6 +26,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -t <port>           TCP port for the server - default 15731\n");
     fprintf(stderr, "         -a <IP addr>        IP address\n");
     fprintf(stderr, "         -i <can int>        CAN interface - default can0\n");
+    fprintf(stderr, "         -w                  hardware flow-control CTS/RTS\n");
     fprintf(stderr, "         -s <serial int>     serial interface - default /dev/ttyGS0\n");
     fprintf(stderr, "         -f                  running in foreground\n\n");
     fprintf(stderr, "         -v                  verbose output (in foreground)\n\n");
@@ -149,7 +150,7 @@ int rawframe_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *ne
 
 int main(int argc, char **argv) {
     pid_t pid;
-    int n, i, max_fds, opt, nready;
+    int n, i, max_fds, hw_flow, opt, nready;
     int background, verbose, ec_index;
     char timestamp[16];
     struct termios term_attr;
@@ -170,6 +171,7 @@ int main(int argc, char **argv) {
 
     verbose = 0;
     background = 1;
+    hw_flow = 0;
     memset(tcp_dst_address, 0, sizeof(tcp_dst_address));
     memset(ifr.ifr_name, 0, sizeof(ifr.ifr_name));
     strcpy(ifr.ifr_name, "can0");
@@ -189,6 +191,9 @@ int main(int argc, char **argv) {
 	    break;
 	case 'i':
 	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
+	    break;
+	case 'w':
+	    hw_flow = 1;
 	    break;
 	case 'v':
 	    verbose = 1;
@@ -217,7 +222,10 @@ int main(int argc, char **argv) {
 	    fprintf(stderr, "can't get terminal settings error: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
 	}
-	term_attr.c_cflag = CS8 | CRTSCTS | CLOCAL | CREAD;
+	if (hw_flow)
+	    term_attr.c_cflag = CS8 | CRTSCTS | CLOCAL | CREAD;
+	else
+	    term_attr.c_cflag = CS8 | CLOCAL | CREAD;
 	term_attr.c_iflag = 0;
 	term_attr.c_oflag = 0;
 	term_attr.c_lflag = NOFLSH;
