@@ -141,10 +141,10 @@ int main(int argc, char **argv) {
 	    fprintf(stderr, "can't get terminal settings error: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
 	}
-	term_attr.c_cflag = CS8 | CRTSCTS | CLOCAL | CREAD;
+	term_attr.c_cflag = CS8 | CLOCAL | CREAD;
 	term_attr.c_iflag = 0;
 	term_attr.c_oflag = 0;
-	term_attr.c_lflag = NOFLSH;
+	term_attr.c_lflag = 0;
 	if (cfsetospeed(&term_attr, TERM_SPEED) < 0) {
 	    fprintf(stderr, "serial interface >%s< ospeed error: %s\n", rs485_interface, strerror(errno));
 	    exit(EXIT_FAILURE);
