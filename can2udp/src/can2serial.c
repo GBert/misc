@@ -342,7 +342,7 @@ int main(int argc, char **argv) {
 	    } else {
 		/* prepare packet */
 		memset(rawframe, 0, 13);
-		canid = htonl(frame.can_id);
+		canid = htonl(frame.can_id & 0x1FFFFFFF);
 		memcpy(rawframe, &canid, 4);
 		rawframe[4] = frame.can_dlc;
 		memcpy(&rawframe[5], &frame.data, frame.can_dlc);
