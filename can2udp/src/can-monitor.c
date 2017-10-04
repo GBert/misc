@@ -158,7 +158,7 @@ void command_system(struct can_frame *frame) {
 
     /* CdB extension */
     if (frame->can_dlc == 0) {
-	modul = frame->can_dlc & 0x1F;
+	modul = frame->can_id & 0x7F;
 	if (response)
 	    printf("System-Befehl: CdB Such-Antwort Modul %d\n", modul);
 	else
@@ -275,7 +275,7 @@ void cdb_extension(struct can_frame *frame) {
 
     kontakt = *frame->data;
     index = frame->data[1];
-    modul = frame->can_dlc & 0x1F;
+    modul = frame->can_id & 0x7F;
 
     if (kontakt) {
 	if (frame->can_dlc == 2) {
@@ -348,7 +348,7 @@ void cdb_extension_set(struct can_frame *frame) {
     index = frame->data[1];
 
     if (frame->can_dlc == 4) {
-	wert = ntohs(*(uint16_t *) &frame->data[4]);
+	wert = ntohs(*(uint16_t *) &frame->data[2]);
 	printf("CdB: Setze Modul %d Kontakt %d ", modul, kontakt);
 	switch (index) {
 	case 0x01:
