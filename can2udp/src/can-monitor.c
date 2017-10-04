@@ -336,12 +336,12 @@ void cdb_extension(struct can_frame *frame) {
 	    }
 	}
 	if (frame->can_dlc == 4) {
+	    wert = ntohs(*(uint16_t *) &frame->data[2]);
 	    switch (index) {
 	    case 0x01:
 		printf("CdB: Antwort Version %d.%d\n", frame->data[2], frame->data[3]);
 		break;
 	    case 0x10:
-		wert = ntohs(*(uint16_t *) &frame->data[2]);
 		printf("CdB: Gerätekennung %d\n", wert);
 		break;
 	    case 0x11:
@@ -357,7 +357,6 @@ void cdb_extension(struct can_frame *frame) {
 		    printf("CdB: kein Sende auch Master CS2\n");
 		break;
 	    default:
-		wert = ntohs(*(uint16_t *) &frame->data[2]);
 		printf("CdB: Antwort unbekannter Index %d Wert 0x%04X\n", index, wert);
 		break;
 	    }
