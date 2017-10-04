@@ -1,9 +1,13 @@
 const int revisionnr = 
-12773
+12777
 ;
 const char* commithash = 
-"9916d6c26f649a097bc33d4b000636529da68d1c";
+"b6f342882946745dccd1d7d1d95c19ab0a640b9f";
 const char* revlog = 
+"12777 2017-10-04 15:34:49 +0200 SLIM: dcrossing WIP\n" \
+"12776 2017-10-04 14:45:25 +0200 SLIM: wip\n" \
+"12775 2017-10-04 11:23:07 +0200 SLIM: curve sensors added\n" \
+"12774 2017-10-04 10:56:02 +0200 SLIM: more symbols added\n" \
 "12773 2017-10-03 16:52:59 +0200 slim: blockstate added\n" \
 "12772 2017-10-03 16:39:54 +0200 trackpickerdlg: use normal switch symbols instead of route types\n" \
 "12771 2017-10-03 16:39:03 +0200 theme properties: routeprio added to overwrite occupied\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12730 2017-09-22 16:34:35 +0200 p50x: echo switch commands support added\n" \
 "12729 2017-09-22 15:07:15 +0200 drcmd: WIP\n" \
 "12728 2017-09-22 10:10:22 +0200 massoth: echo commands option added\n" \
-"12727 2017-09-22 09:54:59 +0200 basedlg: state column for routes added\n" \
-"12726 2017-09-22 08:31:08 +0200 rocview: fix for updating a block with old data to avoid loosing the reserved flag\n" \
-"12725 2017-09-22 07:55:00 +0200 app: console command 9 added for triggering the xmlh trace level\n" \
-"12724 2017-09-20 10:50:27 +0200 z21: report QoS in case > 0 with address 10000\n" \
 
 "log end";
