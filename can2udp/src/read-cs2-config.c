@@ -155,6 +155,7 @@ int add_loco(struct loco_data_t *loco) {
 	l->name = calloc(1, strlen(loco->name) + 1);
 	if (!l->name) {
 	    fprintf(stderr, "%s: can't calloc loco name: %s\n", __func__, strerror(errno));
+	    free(l);
 	    return (EXIT_FAILURE);
 	}
 	strcpy(l->name, loco->name);
@@ -163,6 +164,7 @@ int add_loco(struct loco_data_t *loco) {
 	    l->type = calloc(1, strlen(loco->type) + 1);
 	    if (!l->type) {
 		fprintf(stderr, "%s: can't calloc protocol type: %s\n", __func__, strerror(errno));
+		free(l);
 		return (EXIT_FAILURE);
 	    }
 	    strcpy(l->type, loco->type);
@@ -231,6 +233,7 @@ int add_track_data(struct track_data_t *td) {
 	    t->text = calloc(1, strlen(td->text) + 1);
 	    if (!t->text) {
 		fprintf(stderr, "%s: can't calloc track text: %s\n", __func__, strerror(errno));
+		free(t);
 		return (EXIT_FAILURE);
 	    }
 	    strcpy(t->text, td->text);
@@ -279,6 +282,7 @@ int add_track_page(struct track_page_t *page, char *name) {
 	t->name = calloc(1, strlen(name) + 1);
 	if (!t->name) {
 	    fprintf(stderr, "%s: can't calloc track page name: %s\n", __func__, strerror(errno));
+	    free(t);
 	    return (EXIT_FAILURE);
 	}
 	strcpy(t->name, name);
@@ -377,12 +381,15 @@ int read_track_data(char *config_file) {
     tp = calloc(1, sizeof(struct track_page_t));
     if (!tp) {
 	fprintf(stderr, "%s: can't calloc track page: %s\n", __func__, strerror(errno));
+	fclose(fp);
 	return (EXIT_FAILURE);
     }
 
     td = calloc(1, sizeof(struct track_data_t));
     if (!td) {
 	fprintf(stderr, "%s: can't calloc track data: %s\n", __func__, strerror(errno));
+	free(tp);
+	fclose(fp);
 	return (EXIT_FAILURE);
     }
 
@@ -490,6 +497,7 @@ int read_track_config(char *config_file) {
     page = calloc(1, sizeof(struct track_page_t));
     if (page == NULL) {
 	fprintf(stderr, "can't calloc bufer for track pages: %s\n", strerror(errno));
+	fclose(fp);
 	return (EXIT_FAILURE);
     }
 
@@ -586,12 +594,15 @@ int read_loco_data(char *config_file, int config_type) {
     loco = calloc(1, sizeof(struct loco_data_t));
     if (loco == NULL) {
 	fprintf(stderr, "can't calloc buffer for loco data: %s\n", strerror(errno));
+	fclose(fp);
 	return (EXIT_FAILURE);
     }
 
     loco->mfxAdr = calloc(1, sizeof(struct mfxAdr_t));
     if (loco->mfxAdr == NULL) {
 	fprintf(stderr, "can't calloc buffer for loco mfx data: %s\n", strerror(errno));
+	free(loco);
+	fclose(fp);
 	return (EXIT_FAILURE);
     }
     mfx = loco->mfxAdr;

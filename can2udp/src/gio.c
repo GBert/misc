@@ -514,6 +514,8 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
     uint8_t netframe[MAXMTU];
     int on = 1;
 
+    out = NULL;
+
     config = read_config_file(filename, config_dir, &nbytes);
     if (config == NULL) {
 	fprintf(stderr, "%s: error reading config %s\n", __func__, filename);
@@ -635,6 +637,7 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
 	deflateEnd(&strm);
     }
     free(config);
-    free(out);
+    if (out)
+	free(out);
     return 0;
 }

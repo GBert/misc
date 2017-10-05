@@ -239,6 +239,8 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
     uint16_t crc, temp16;
     uint8_t netframe[MAXMTU];
 
+    out = NULL;
+
     config = read_config_file(filename, config_dir, &nbytes);
     if (config) {
 	printf("%s read config file %s\n", __func__, filename);
@@ -347,6 +349,7 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
 	deflateEnd(&strm);
     }
     free(config);
-    free(out);
+    if (out)
+	free(out);
     return 0;
 }

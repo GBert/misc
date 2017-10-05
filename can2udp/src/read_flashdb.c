@@ -148,6 +148,7 @@ int write_data(struct loco_db_t *loco_db) {
 
     if ((fwrite((void *)data, 1, loco_db->eeprom_size, fp)) != loco_db->eeprom_size) {
 	fprintf(stderr, "%s: error writing failed [%s]\n", __func__, loco_db->filename);
+	fclose(fp);
 	return EXIT_FAILURE;
     }
 
@@ -175,8 +176,10 @@ int decode_sc_data(struct loco_db_t *loco_db, struct loco_data_t *loco_data) {
 
 	length = strlen((char *)&loco_db->bin[i + OFFSET_LOCO_NAME]);
 	loco_name = (char *)calloc(length + 1, 1);
-	if (loco_name == NULL)
+	if (loco_name == NULL) {
+	    free(loco_id);
 	    return EXIT_FAILURE;
+	}
 	memcpy(loco_name, (char *)&loco_db->bin[i + OFFSET_LOCO_NAME], length);
 
 	proto = loco_db->bin[i + OFFSET_PROTO];

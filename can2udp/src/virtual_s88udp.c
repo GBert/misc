@@ -250,6 +250,7 @@ int main(int argc, char **argv) {
     s88_data.baddr = destaddr;
 
     create_event(&s88_data, sensor, value);
+    free(bcast_interface);
 
     return 0;
 }

@@ -334,5 +334,6 @@ int main(int argc, char **argv) {
 	free(dir);
     if (gleisbild)
 	free(gleisbild);
+    fclose(fp);
     return EXIT_SUCCESS;
 }
