@@ -18,7 +18,8 @@ static char *TCP_FORMATS_STRG    = "->TCP>SER*   CANID 0x%06X   [%d]";
 static char *SER_CAN_FORMAT_STRG = "->SER>CAN    CANID 0x%06X   [%d]";
 static char *SER_TCP_FORMAT_STRG = "->SER>TCP    CANID 0x%06X   [%d]";
 
-struct timeval last_sent;
+struct timeval last_sent_can;
+struct timeval last_sent_serial;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -vf -t <tcp_port> -a <IP addr> -i <can interface> -s <serial interface>\n", prg);
@@ -95,11 +96,11 @@ int frame_to_serial(int fd, unsigned char *netframe) {
     /* we calculate the difference between the actual time and the time the last command was sent */
     /* probably we don't need to wait anymore before putting next CAN frame on the serial interface */
     gettimeofday(&actual_time, NULL);
-    usec = (actual_time.tv_sec - last_sent.tv_sec) * 1000000;
-    usec += (actual_time.tv_usec - last_sent.tv_usec);
-    if (usec < TIME_WAIT_US) {
+    usec = (actual_time.tv_sec - last_sent_serial.tv_sec) * 1000000;
+    usec += (actual_time.tv_usec - last_sent_serial.tv_usec);
+    if (usec < TIME_WAIT_SERIAL_US) {
         to_wait.tv_sec = 0;
-        to_wait.tv_nsec = (TIME_WAIT_US - usec) * 1000;
+        to_wait.tv_nsec = (TIME_WAIT_SERIAL_US - usec) * 1000;
         nanosleep(&to_wait, NULL);
     }
 
@@ -107,7 +108,7 @@ int frame_to_serial(int fd, unsigned char *netframe) {
 	fprint_syslog_wc(stderr, LOG_ERR, "error sennding serial frame:", strerror(errno));
 	return -1;
     }
-    gettimeofday(&last_sent, NULL);
+    gettimeofday(&last_sent_serial, NULL);
     return 0;
 }
 
@@ -135,11 +136,11 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
     /* we calculate the difference between the actual time and the time the last command was sent */
     /* probably we don't need to wait anymore before putting next CAN frame on the wire */
     gettimeofday(&actual_time, NULL);
-    usec = (actual_time.tv_sec - last_sent.tv_sec) * 1000000;
-    usec += (actual_time.tv_usec - last_sent.tv_usec);
-    if (usec < TIME_WAIT_US) {
+    usec = (actual_time.tv_sec - last_sent_can.tv_sec) * 1000000;
+    usec += (actual_time.tv_usec - last_sent_can.tv_usec);
+    if (usec < TIME_WAIT_CAN_US) {
 	to_wait.tv_sec = 0;
-	to_wait.tv_nsec = (TIME_WAIT_US - usec) * 1000;
+	to_wait.tv_nsec = (TIME_WAIT_CAN_US - usec) * 1000;
 	nanosleep(&to_wait, NULL);
     }
 
@@ -149,7 +150,7 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
 	return -1;
     }
 
-    gettimeofday(&last_sent, NULL);
+    gettimeofday(&last_sent_can, NULL);
     return 0;
 }
 
@@ -189,6 +190,9 @@ int main(int argc, char **argv) {
     hw_flow = 0;
     memset(tcp_dst_address, 0, sizeof(tcp_dst_address));
     memset(ifr.ifr_name, 0, sizeof(ifr.ifr_name));
+    memset(&last_sent_can, 0, sizeof(last_sent_can));
+    memset(&last_sent_serial, 0, sizeof(last_sent_serial));
+
     strcpy(ifr.ifr_name, "can0");
     tcp_port = 15731;
     strcpy(if_name, "/dev/ttyGS0");

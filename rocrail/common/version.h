@@ -1,9 +1,19 @@
 const int revisionnr = 
-12777
+12787
 ;
 const char* commithash = 
-"b6f342882946745dccd1d7d1d95c19ab0a640b9f";
+"29c972c79c5244bd496d103e10f76d12508c7a7e";
 const char* revlog = 
+"12787 2017-10-05 18:02:09 +0200 locdialog: accept typed input in the multihead loco ID SLIM: wip\n" \
+"12786 2017-10-05 17:04:08 +0200 SLIM: smaller dir tracks\n" \
+"12785 2017-10-05 16:56:53 +0200 SLIM: smaller off sensors\n" \
+"12784 2017-10-05 15:52:41 +0200 fix for evaluating an unsigned int with atoi -> replaced with strtoul\n" \
+"12783 2017-10-05 14:46:02 +0200 SLIM: wip to 1 pixel\n" \
+"12782 2017-10-05 14:11:04 +0200 SLIM: wip\n" \
+"12781 2017-10-05 12:11:46 +0200 block: reset byRouteId at reset and init\n" \
+"12780 2017-10-05 08:47:38 +0200 block: fix for formatting an event key to prevent using a null pointer\n" \
+"12779 2017-10-05 08:19:18 +0200 block: fix for buffer overflow in case of formating an event key\n" \
+"12778 2017-10-05 07:49:51 +0200 block: fix for buffer overflow in case of formating an event key\n" \
 "12777 2017-10-04 15:34:49 +0200 SLIM: dcrossing WIP\n" \
 "12776 2017-10-04 14:45:25 +0200 SLIM: wip\n" \
 "12775 2017-10-04 11:23:07 +0200 SLIM: curve sensors added\n" \
@@ -44,15 +54,5 @@ const char* revlog =
 "12740 2017-09-25 09:59:00 +0200 drcmd: save function string for send it with speed commands\n" \
 "12739 2017-09-25 09:50:33 +0200 drcmd: f1-f28 support\n" \
 "12738 2017-09-24 10:27:48 +0200 drcmd: PT and POM support added\n" \
-"12737 2017-09-24 08:35:57 +0200 drcmd: loco reporting\n" \
-"12736 2017-09-24 08:18:27 +0200 drcmd: event support for switches, load and temp\n" \
-"12735 2017-09-23 18:34:15 +0200 z21: trace spelling correction\n" \
-"12734 2017-09-23 11:03:49 +0200 drcmd: power event support\n" \
-"12733 2017-09-23 10:26:48 +0200 drcmd: sensor, S88, evaluation added\n" \
-"12732 2017-09-23 10:08:53 +0200 drcmd: WIP\n" \
-"12731 2017-09-23 08:26:34 +0200 infodlg: important changes panel added\n" \
-"12730 2017-09-22 16:34:35 +0200 p50x: echo switch commands support added\n" \
-"12729 2017-09-22 15:07:15 +0200 drcmd: WIP\n" \
-"12728 2017-09-22 10:10:22 +0200 massoth: echo commands option added\n" \
 
 "log end";
