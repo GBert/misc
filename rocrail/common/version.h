@@ -1,9 +1,13 @@
 const int revisionnr = 
-12787
+12791
 ;
 const char* commithash = 
-"29c972c79c5244bd496d103e10f76d12508c7a7e";
+"807720ed5a17f40cdcac93b013c2fb062423110a";
 const char* revlog = 
+"12791 2017-10-06 11:29:03 +0200 SLIM: signalmain white added for occ and route\n" \
+"12790 2017-10-06 11:23:22 +0200 SLIM: decoupler added\n" \
+"12789 2017-10-06 10:56:53 +0200 SLIM: WIP\n" \
+"12788 2017-10-06 10:12:49 +0200 loc, guiframe: system action condition eventtimeout added\n" \
 "12787 2017-10-05 18:02:09 +0200 locdialog: accept typed input in the multihead loco ID SLIM: wip\n" \
 "12786 2017-10-05 17:04:08 +0200 SLIM: smaller dir tracks\n" \
 "12785 2017-10-05 16:56:53 +0200 SLIM: smaller off sensors\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12744 2017-09-27 11:05:08 +0200 operatordlg: reset location button added\n" \
 "12743 2017-09-26 15:48:53 +0200 analyse: dcurve replacement in check health\n" \
 "12742 2017-09-26 10:28:42 +0200 track: replace type dcurve with curvenr\n" \
-"12741 2017-09-26 07:57:07 +0200 stage: except unexpected in case the train will fit\n" \
-"12740 2017-09-25 09:59:00 +0200 drcmd: save function string for send it with speed commands\n" \
-"12739 2017-09-25 09:50:33 +0200 drcmd: f1-f28 support\n" \
-"12738 2017-09-24 10:27:48 +0200 drcmd: PT and POM support added\n" \
 
 "log end";
