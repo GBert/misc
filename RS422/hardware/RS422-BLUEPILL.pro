@@ -1,4 +1,4 @@
-update=Fri 29 Sep 2017 04:57:03 PM CEST
+update=Sa 30 Sep 2017 13:30:16 CEST
 version=1
 last_client=kicad
 [pcbnew]
@@ -70,3 +70,4 @@ LibName28=atmel
 LibName29=contrib
 LibName30=valves
 LibName31=blue-pill
+LibName32=maxim

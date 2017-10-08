@@ -102,6 +102,7 @@ static void usart_setup(void) {
 }
 
 void usart3_isr(void) {
+    uint16_t c;
     //gpio_really(GPIOA, GPIO5, 1);
     // usbser-rxne()
     /* Check if we were called because of RXNE. */
@@ -109,8 +110,8 @@ void usart3_isr(void) {
 	((USART_SR(USART3) & USART_SR_RXNE) != 0)) {
 
 	gpio_set(LED_RX_PORT, LED_RX_PIN);
-	uint16_t c = usart_recv(USART3);
-	if (ringb_put(&rx_ring, (uint8_t) (c >> 8) & 0x01) && ringb_put(&rx_ring, (uint8_t) (c & 0xff))) {
+	c = usart_recv(USART3);
+	if (ringb_put(&rx_ring, (uint8_t) c ))  {
 	    // good,
 	} else {
 	    // fatal, you should always have drained by now.
@@ -138,9 +139,11 @@ void usart3_isr(void) {
 	    if (de_set_first) {
 		cdcacm_arch_pin(0, CDCACM_PIN_RS485DE, 1);
 		de_set_first = 0;
+		c = (ringb_get(&tx_ring) | 0x100);
+	    } else {
+		c = (ringb_get(&tx_ring) & 0xff);
 	    }
 
-	    uint16_t c = (((ringb_get(&tx_ring) << 8) & 0x100) | ringb_get(&tx_ring));
 	    usart_send(USART3, c);
 	}
     }
