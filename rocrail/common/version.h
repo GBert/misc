@@ -1,9 +1,22 @@
 const int revisionnr = 
-12791
+12804
 ;
 const char* commithash = 
-"807720ed5a17f40cdcac93b013c2fb062423110a";
+"c14913c98234c64c262eaeeceed203a480d58027";
 const char* revlog = 
+"12804 2017-10-08 09:14:45 +0200 SLIM: turnout occ symbols\n" \
+"12803 2017-10-08 09:04:41 +0200 SLIM: dcrossing occ symbols\n" \
+"12802 2017-10-08 08:48:35 +0200 SLIM: dcrossing route symbols\n" \
+"12801 2017-10-08 08:39:28 +0200 SLIM: wip\n" \
+"12800 2017-10-08 07:51:48 +0200 cppcheck corrections\n" \
+"12799 2017-10-07 16:25:21 +0200 SLIM: wip\n" \
+"12798 2017-10-07 15:29:17 +0200 translation merge: sr_latin\n" \
+"12797 2017-10-07 12:16:37 +0200 SLIM: dcrossingleft...\n" \
+"12796 2017-10-07 11:30:59 +0200 SLIM: dcrossingright...\n" \
+"12795 2017-10-07 09:58:51 +0200 cbus: socket semaphore added to prevent using a null pointer\n" \
+"12794 2017-10-07 08:30:45 +0200 actionctrldlg: state column added\n" \
+"12793 2017-10-07 08:22:21 +0200 fback: fix for checking action twice in case of off status\n" \
+"12792 2017-10-06 16:58:22 +0200 SLIM: switch curves...\n" \
 "12791 2017-10-06 11:29:03 +0200 SLIM: signalmain white added for occ and route\n" \
 "12790 2017-10-06 11:23:22 +0200 SLIM: decoupler added\n" \
 "12789 2017-10-06 10:56:53 +0200 SLIM: WIP\n" \
@@ -41,18 +54,5 @@ const char* revlog =
 "12757 2017-10-01 11:10:35 +0200 slim: wip\n" \
 "12756 2017-10-01 08:29:37 +0200 SLIM: wip\n" \
 "12755 2017-09-30 10:28:28 +0200 stage: added loco commands on set or reset in sections\n" \
-"12754 2017-09-30 10:20:24 +0200 makemac.sh: fix for create with wrong format\n" \
-"12753 2017-09-29 15:51:38 +0200 loc: fix for setting the resume flag\n" \
-"12752 2017-09-29 15:34:50 +0200 SLIM theme: WIP\n" \
-"12751 2017-09-29 13:14:55 +0200 decoders stylesheet update (Andy)\n" \
-"12750 2017-09-29 08:08:05 +0200 loc: fix for find RC messages\n" \
-"12749 2017-09-28 16:17:58 +0200 translation merge: fr\n" \
-"12748 2017-09-28 11:52:22 +0200 bidib: echo switch commands option added\n" \
-"12747 2017-09-28 11:39:40 +0200 rocs: tracelevel added for client connection\n" \
-"12746 2017-09-28 11:38:52 +0200 rocview: # fix for setting a loco with train in a block\n" \
-"12745 2017-09-28 11:03:36 +0200 rocview: fixes for xcode 9.0\n" \
-"12744 2017-09-27 11:05:08 +0200 operatordlg: reset location button added\n" \
-"12743 2017-09-26 15:48:53 +0200 analyse: dcurve replacement in check health\n" \
-"12742 2017-09-26 10:28:42 +0200 track: replace type dcurve with curvenr\n" \
 
 "log end";
