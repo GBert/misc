@@ -84,6 +84,7 @@ int write_data(struct loco_config_t *loco_config) {
 
     if ((fwrite((void *)data, 1, loco_config->eeprom_size, fp)) != loco_config->eeprom_size) {
 	fprintf(stderr, "%s: error writing failed [%s]\n", __func__, loco_config->filename);
+	fclose(fp);
 	return EXIT_FAILURE;
     }
 

@@ -114,7 +114,7 @@ void usec_sleep(int usec) {
     nanosleep(&to_wait, NULL);
 }
 
-int time_stamp() {
+int time_stamp(void) {
     struct timeval tv;
     struct tm *tm;
 
