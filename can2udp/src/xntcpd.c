@@ -61,6 +61,50 @@ int time_stamp(char *timestamp) {
     return 0;
 }
 
+void add_crc(uint8_t *data, int length) {
+    int i;
+    uint8_t xor = 0;
+
+    /* ignore CallByte */
+    data++;
+    for (i = 0; i < (length - 2); i++) {
+	xor = xor ^ *data;
+	data++;
+    }
+    *data = xor;
+}
+
+uint8_t add_parity(uint8_t data) {
+    uint8_t temp, parity = 0;
+    data &= 0x7f;
+    temp = data;
+
+    while (temp) {
+	parity = !parity;
+	temp &= (temp - 1);
+    }
+    if (parity)
+	data |= 0x80;
+    return data;
+}
+
+void send_version(void) {
+}
+
+void xntcp_internal(unsigned char *frame) {
+
+    switch (frame[0]) {
+    case 0xF0:
+	if (frame[1] == 0xF0)
+	    send_version();
+	break;
+    case 0xF2:
+	break;
+    default:
+	break;
+    }
+}
+
 int rawframe_to_socket(int net_socket, unsigned char *netframe, int length) {
     int s;
     int on = 1;
@@ -227,16 +271,12 @@ int main(int argc, char **argv) {
 	/* serial interface */
 	if (FD_ISSET(se, &read_fds)) {
 	    while ((ret = read(se, buffer, sizeof(buffer))) > 0) {
-		for (eci = 0; eci < ret; eci++) {
+		for (eci = 0; eci < ret; eci++)
 		    ec_frame[ec_index++] = (unsigned char)buffer[eci];
-		    if (ec_index % 2) {
-			/* we got a complete frame */
-			ec_index = 0;
-			/* send frame to connect clients */
-			for (i = 0; i <= max_tcp_i; i++)
-			    rawframe_to_socket(tcp_client[i], ec_frame, ret);
-		    }
-		}
+		/* send frame to connect clients */
+		for (i = 0; i <= max_tcp_i; i++)
+		    rawframe_to_socket(tcp_client[i], ec_frame, ret);
+		ec_index = 0;
 	    }
 	}
 
@@ -292,8 +332,7 @@ int main(int argc, char **argv) {
 		    FD_CLR(tcp_socket, &all_fds);
 		    tcp_client[i] = -1;
 		} else {
-		    /* TCP packets with size modulo 2 !=0 are ignored though */
-		    if (n % 2) {
+		    if (n == 0) {
 			if (!background) {
 			    time_stamp(timestamp);
 			    fprintf(stderr, "%s received packet %% 2 : length %d - maybe close connection\n", timestamp, n);
@@ -301,11 +340,17 @@ int main(int argc, char **argv) {
 			syslog(LOG_ERR, "%s: received packet %% 2 : length %d - maybe close connection\n", __func__, n);
 		    } else {
 			print_frame(frame, n, background);
-			/* send packet to all connected clients */
-			for (i = 0; i <= max_tcp_i; i++) {
-			    if (tcp_socket == tcp_client[i])
-				continue;
-			    rawframe_to_socket(tcp_client[i], frame, n);
+			if ((frame[0] & 0xF0) == 0xF0) {
+			    xntcp_internal(frame);
+			} else {
+			    if (write(se, frame, n) != n)
+				fprintf(stderr, "%s: error sending RS485 frame: %s\n", __func__, strerror(errno));
+			    /* send packet to all connected clients */
+			    for (i = 0; i <= max_tcp_i; i++) {
+				if (tcp_socket == tcp_client[i])
+				    continue;
+				rawframe_to_socket(tcp_client[i], frame, n);
+			    }
 			}
 		    }
 		}
