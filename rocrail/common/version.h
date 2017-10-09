@@ -1,9 +1,13 @@
 const int revisionnr = 
-12819
+12823
 ;
 const char* commithash = 
-"ac3182635feddad52ec9f99edddcbc90501d36e0";
+"0a46831d19b570915c75d696d32889725719aeec";
 const char* revlog = 
+"12823 2017-10-09 17:56:10 +0200 routedlg: fix for crash\n" \
+"12822 2017-10-09 16:04:13 +0200 SLIM: blockstate signal correction\n" \
+"12821 2017-10-09 15:30:21 +0200 renderer: trace level correction svg: memory leak fixed\n" \
+"12820 2017-10-09 15:28:52 +0200 basedlg: last run date column added\n" \
 "12819 2017-10-09 12:10:01 +0200 SLIM: support for tri-state button 0\n" \
 "12818 2017-10-09 10:13:32 +0200 rocguiinidlg: show train ID in block as tri-state\n" \
 "12817 2017-10-09 08:36:36 +0200 cardlg: export added\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12776 2017-10-04 14:45:25 +0200 SLIM: wip\n" \
 "12775 2017-10-04 11:23:07 +0200 SLIM: curve sensors added\n" \
 "12774 2017-10-04 10:56:02 +0200 SLIM: more symbols added\n" \
-"12773 2017-10-03 16:52:59 +0200 slim: blockstate added\n" \
-"12772 2017-10-03 16:39:54 +0200 trackpickerdlg: use normal switch symbols instead of route types\n" \
-"12771 2017-10-03 16:39:03 +0200 theme properties: routeprio added to overwrite occupied\n" \
-"12770 2017-10-03 16:38:01 +0200 slim: wip\n" \
 
 "log end";
