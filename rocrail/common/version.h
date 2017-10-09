@@ -1,9 +1,24 @@
 const int revisionnr = 
-12804
+12819
 ;
 const char* commithash = 
-"c14913c98234c64c262eaeeceed203a480d58027";
+"ac3182635feddad52ec9f99edddcbc90501d36e0";
 const char* revlog = 
+"12819 2017-10-09 12:10:01 +0200 SLIM: support for tri-state button 0\n" \
+"12818 2017-10-09 10:13:32 +0200 rocguiinidlg: show train ID in block as tri-state\n" \
+"12817 2017-10-09 08:36:36 +0200 cardlg: export added\n" \
+"12816 2017-10-09 08:14:22 +0200 action stylesheets improved (Andy)\n" \
+"12815 2017-10-09 07:59:23 +0200 SLIM: correction for left disabled\n" \
+"12814 2017-10-09 07:38:11 +0200 switch: trace improvement in case action state does not match\n" \
+"12813 2017-10-09 06:31:04 +0200 mgbox: init corrections (Bert)\n" \
+"12812 2017-10-08 18:31:18 +0200 SLIM: twoway\n" \
+"12811 2017-10-08 15:54:03 +0200 SLIM: threeway\n" \
+"12810 2017-10-08 14:52:44 +0200 item: a closed block is visible by symbol, no need for the closed text\n" \
+"12809 2017-10-08 14:23:07 +0200 SLIM: ccrossing\n" \
+"12808 2017-10-08 14:04:06 +0200 SLIM: crossing added\n" \
+"12807 2017-10-08 12:38:24 +0200 SLIM: signaldistant 4 aspects\n" \
+"12806 2017-10-08 11:55:03 +0200 SLIM: shunting signals\n" \
+"12805 2017-10-08 10:53:56 +0200 SLIM:color correction for turnoutright-t-route\n" \
 "12804 2017-10-08 09:14:45 +0200 SLIM: turnout occ symbols\n" \
 "12803 2017-10-08 09:04:41 +0200 SLIM: dcrossing occ symbols\n" \
 "12802 2017-10-08 08:48:35 +0200 SLIM: dcrossing route symbols\n" \
@@ -39,20 +54,5 @@ const char* revlog =
 "12772 2017-10-03 16:39:54 +0200 trackpickerdlg: use normal switch symbols instead of route types\n" \
 "12771 2017-10-03 16:39:03 +0200 theme properties: routeprio added to overwrite occupied\n" \
 "12770 2017-10-03 16:38:01 +0200 slim: wip\n" \
-"12769 2017-10-03 16:26:46 +0200 xpressnet: trace correction for lenz ethernet\n" \
-"12768 2017-10-03 10:01:58 +0200 item, guiframe: filter out locoevents to prevent loosing reserved flag\n" \
-"12767 2017-10-02 15:45:46 +0200 dccpp: trace level correction\n" \
-"12766 2017-10-02 12:14:48 +0200 SLIM: wip\n" \
-"12765 2017-10-02 08:36:02 +0200 trainimage: fix for rendering after the auto mode was switched on\n" \
-"12764 2017-10-02 08:18:39 +0200 SLIM: 2 pixel width symbols\n" \
-"12763 2017-10-02 08:06:10 +0200 model, fback: fix for evaluating sensor address with offset\n" \
-"12762 2017-10-02 07:51:07 +0200 infodialog: translation fix for the third tab\n" \
-"12761 2017-10-02 07:29:15 +0200 analyse: fix for address calculation with offset variable (Lothar)\n" \
-"12760 2017-10-01 16:35:41 +0200 slim: 2 pixel (wip)\n" \
-"12759 2017-10-01 13:20:44 +0200 slim: block reserved an enter\n" \
-"12758 2017-10-01 11:59:53 +0200 slim: block symbols\n" \
-"12757 2017-10-01 11:10:35 +0200 slim: wip\n" \
-"12756 2017-10-01 08:29:37 +0200 SLIM: wip\n" \
-"12755 2017-09-30 10:28:28 +0200 stage: added loco commands on set or reset in sections\n" \
 
 "log end";

@@ -35,12 +35,15 @@
 #define XNTCPPORT	61235
 #define MAXDG   	4096
 #define MAXPENDING	16
+#define SMALL_BUFFER	16
 #define MAX_TCP_CONN	16
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
 #define fprint_syslog(pipe, spipe, text) \
 	syslog( spipe, "%s: " text "\n", __func__); } while (0)
 
 #define TERM_SPEED	B115200
+
+static unsigned char XNTP_VERSION[]	= {0x02, 0x01, 0x80, 0x00};
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -p <tcp_port> -i <RS485 interface>\n", prg);
@@ -65,8 +68,6 @@ void add_crc(uint8_t *data, int length) {
     int i;
     uint8_t xor = 0;
 
-    /* ignore CallByte */
-    data++;
     for (i = 0; i < (length - 2); i++) {
 	xor = xor ^ *data;
 	data++;
@@ -89,6 +90,10 @@ uint8_t add_parity(uint8_t data) {
 }
 
 void send_version(void) {
+    uint8_t buffer[SMALL_BUFFER];
+
+    memcpy(buffer, XNTP_VERSION, sizeof(XNTP_VERSION));
+    add_crc(buffer, sizeof(XNTP_VERSION));
 }
 
 void xntcp_internal(unsigned char *frame) {
