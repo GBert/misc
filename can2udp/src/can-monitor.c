@@ -269,7 +269,7 @@ void command_system(struct can_frame *frame) {
     printf("\n");
 }
 
-void cdb_extension(struct can_frame *frame) {
+void cdb_extension_grd(struct can_frame *frame) {
     uint8_t kontakt, index, modul;
     uint16_t wert;
 
@@ -364,7 +364,42 @@ void cdb_extension(struct can_frame *frame) {
     }
 }
 
-void cdb_extension_set(struct can_frame *frame) {
+void cdb_extension_wc(struct can_frame *frame) {
+    uint8_t modul, servo;
+    uint16_t wert;
+
+    modul = frame->can_id & 0x7F;
+    servo = frame->data[0];
+    /* modul = ntohs(*(uint16_t *) &frame->data[2]); */
+
+    if (frame->can_dlc == 2) {
+	if (servo) {
+	    if (frame->data[1] == 0x55)
+		printf("CdB: WeichenChef Abfrage Modul %d Kontakt %d\n", modul, servo);
+	    else
+		printf("CdB: WeichenChef Abfrage Modul %d Servo %d\n", modul, servo);
+	} else {
+	    if (frame->data[1] == 1)
+		printf("CdB: WeichenChef Abfrage Modul %d Version\n", modul);
+	    else
+		printf("CdB: WeichenChef Abfrage Modul %d System %d\n", modul, frame->data[1]);
+	}
+    } else if (frame->can_dlc == 4) {
+	if (servo) {
+	    wert = ntohs(*(uint16_t *) &frame->data[2]);
+	    printf("CdB: WeichenChef Modul %d Servo %d Wert %d\n", modul, servo, wert);
+	} else {
+	    if (frame->data[1] == 1)
+		printf("CdB: WeichenChef Modul %d Version %d.%d\n", modul, frame->data[2], frame->data[3]);
+	    else
+		printf("CdB: WeichenChef Modul %d System %d\n", modul, frame->data[1]);
+	}
+    } else {
+	printf("CdB: WeichenChef unbekannt\n");
+    }
+}
+
+void cdb_extension_set_grd(struct can_frame *frame) {
     uint16_t wert;
     uint8_t index, kontakt, modul;
 
@@ -505,7 +540,7 @@ int main(int argc, char **argv) {
 		case 0x04:
 		case 0x05:
 		    if ((frame.can_dlc == 2) || (frame.can_dlc == 4))
-			cdb_extension(&frame);
+			cdb_extension_grd(&frame);
 		    if (frame.can_dlc == 6) {
 			uid = ntohl(*(uint32_t *) frame.data);
 			printf("MFX Bind: MFX UID 0x%08X MFX SID %d\n", uid, (frame.data[4] << 8) + frame.data[5]);
@@ -523,7 +558,7 @@ int main(int argc, char **argv) {
 			    printf("CdB: unbekannt 0x%04x\n", kenner);
 		    }
 		    if (frame.can_dlc == 4) {
-			cdb_extension_set(&frame);
+			cdb_extension_set_grd(&frame);
 		    }
 		    if (frame.can_dlc == 6)
 			printf("MFX Verify: MFX UID 0x%08X MFX SID %d\n", uid, (frame.data[4] << 8) + frame.data[5]);
@@ -745,6 +780,11 @@ int main(int argc, char **argv) {
 			       frame.data[6]);
 		    if (frame.can_dlc == 8)
 			printf("Config Data Stream: Daten\n");
+		    break;
+		/* CdB: WeichenChef */
+		case 0x44:
+		case 0x45:
+		    cdb_extension_wc(&frame);
 		    break;
 		/* Automatik schalten */
 		case 0x60:
