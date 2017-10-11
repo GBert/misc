@@ -1,9 +1,19 @@
 const int revisionnr = 
-12823
+12833
 ;
 const char* commithash = 
-"0a46831d19b570915c75d696d32889725719aeec";
+"52da760088d02013f115cec707f33572b5eb4c3c";
 const char* revlog = 
+"12833 2017-10-11 10:09:22 +0200 blockdialog: save sorting\n" \
+"12832 2017-10-11 08:44:14 +0200 basedlg: save dialog index sorting in rocview.ini\n" \
+"12831 2017-10-11 07:57:23 +0200 item: regard show block ID in case the block is closed\n" \
+"12830 2017-10-10 15:16:57 +0200 renderer: fix for rendering blckstate in case of a graphic context...\n" \
+"12829 2017-10-10 11:56:10 +0200 basedlg: initial sorting support lodialog: save sorting for the beeing session\n" \
+"12828 2017-10-10 08:20:21 +0200 item: fix for small block text\n" \
+"12827 2017-10-10 08:07:16 +0200 mgbox: init (Bert)\n" \
+"12826 2017-10-10 08:03:58 +0200 SLIM: blockstate occ and route added\n" \
+"12825 2017-10-10 07:51:55 +0200 loc: fix secondnextblock4wait did overwrite secondnextblock at modify\n" \
+"12824 2017-10-10 07:28:49 +0200 actionsctrldlg: fix for initial values\n" \
 "12823 2017-10-09 17:56:10 +0200 routedlg: fix for crash\n" \
 "12822 2017-10-09 16:04:13 +0200 SLIM: blockstate signal correction\n" \
 "12821 2017-10-09 15:30:21 +0200 renderer: trace level correction svg: memory leak fixed\n" \
@@ -44,15 +54,5 @@ const char* revlog =
 "12786 2017-10-05 17:04:08 +0200 SLIM: smaller dir tracks\n" \
 "12785 2017-10-05 16:56:53 +0200 SLIM: smaller off sensors\n" \
 "12784 2017-10-05 15:52:41 +0200 fix for evaluating an unsigned int with atoi -> replaced with strtoul\n" \
-"12783 2017-10-05 14:46:02 +0200 SLIM: wip to 1 pixel\n" \
-"12782 2017-10-05 14:11:04 +0200 SLIM: wip\n" \
-"12781 2017-10-05 12:11:46 +0200 block: reset byRouteId at reset and init\n" \
-"12780 2017-10-05 08:47:38 +0200 block: fix for formatting an event key to prevent using a null pointer\n" \
-"12779 2017-10-05 08:19:18 +0200 block: fix for buffer overflow in case of formating an event key\n" \
-"12778 2017-10-05 07:49:51 +0200 block: fix for buffer overflow in case of formating an event key\n" \
-"12777 2017-10-04 15:34:49 +0200 SLIM: dcrossing WIP\n" \
-"12776 2017-10-04 14:45:25 +0200 SLIM: wip\n" \
-"12775 2017-10-04 11:23:07 +0200 SLIM: curve sensors added\n" \
-"12774 2017-10-04 10:56:02 +0200 SLIM: more symbols added\n" \
 
 "log end";
