@@ -385,14 +385,96 @@ void cdb_extension_wc(struct can_frame *frame) {
 		printf("CdB: WeichenChef Abfrage Modul %d System %d\n", modul, frame->data[1]);
 	}
     } else if (frame->can_dlc == 4) {
+	wert = ntohs(*(uint16_t *) &frame->data[2]);
 	if (servo) {
-	    wert = ntohs(*(uint16_t *) &frame->data[2]);
-	    printf("CdB: WeichenChef Modul %d Servo %d Wert %d\n", modul, servo, wert);
+	    printf("CdB: WeichenChef Modul %d ", modul);
+
+	    switch (frame->data[1]) {
+	    case 0x04:
+		printf("Servo %d Position in us Schritten: %d\n", servo, wert);
+		break;
+	    case 0x06:
+		if (wert)
+		    printf("Servo %d Spannung aus\n", servo);
+		else
+		    printf("Servo %d Spannung ein\n", servo);
+		break;
+	    case 0x08:
+		if (wert)
+		    printf("Servo %d CdB-Meldungen\n", servo);
+		else
+		    printf("Servo %d keine CdB-Meldungen\n", servo);
+		break;
+	    case 0x0A:
+		printf("Ausgang %d Adresse %d ", frame->data[0], frame->data[3] + 1);
+		if (frame->data[2] == 0x38)
+		    printf("DCC\n");
+		else if (frame->data[2] == 0x30)
+		    printf("MM\n");
+		else
+		    printf("Protokoll unbekannt\n");
+		break;
+	    case 0x0C:
+		printf("Ausgang %da Adresse %d ", frame->data[0], frame->data[3] + 1);
+		if (frame->data[2] == 0x38)
+		    printf("DCC\n");
+		else if (frame->data[2] == 0x30)
+		    printf("MM\n");
+		else
+		    printf("Protokoll unbekannt\n");
+		break;
+	    case 0x12:
+		printf("Servo %d Funktion %d\n", servo, wert);
+		break;
+	    case 0x14:
+		printf("Servo %d Dauer/Zeitbetrieb %d * 0,7s\n", servo, wert);
+		break;
+	    case 0x22:
+		printf("Servo %d Speichern als Position ", servo);
+		if (frame->data[3] == 0x02)
+		    printf("rot\n");
+		else if (frame->data[3] == 0x03)
+		    printf("grün\n");
+		else
+		    printf("- unbekannt\n");
+		break;
+	    case 0x24:
+		printf("Servo %d ", servo);
+		switch (frame->data[3]) {
+		case 0x02:
+		    printf("Speichern für Weg rot - Verzögerung %d ms\n", frame->data[2]);
+		    break;
+		case 0x03:
+		    printf("Speichern für Weg grün - Verzögerung %d ms\n", frame->data[2]);
+		    break;
+		case 0x0A:
+		    printf("Verzögerung %d ms je Schritt\n", frame->data[2]);
+		    break;
+		default:
+		    printf("- unbekannt\n");
+		    break;
+		}
+		break;
+	    default:
+		printf("Servo %d unbekannter Wert %d\n", servo, wert);
+		break;
+	    }
+	/* Servo 0 -> System */
 	} else {
-	    if (frame->data[1] == 1)
+	    switch (frame->data[1]) {
+	    case 0x01:
 		printf("CdB: WeichenChef Modul %d Version %d.%d\n", modul, frame->data[2], frame->data[3]);
-	    else
+		break;
+	    case 0x18:
+		printf("CdB: WeichenChef Modul %d -> Modul %d \n", modul, wert);
+		break;
+	    case 0xFF:
+		printf("CdB: WeichenChef Modul %d Reset\n", modul);
+		break;
+	    default:
 		printf("CdB: WeichenChef Modul %d System %d\n", modul, frame->data[1]);
+		break;
+	    }
 	}
     } else {
 	printf("CdB: WeichenChef unbekannt\n");
@@ -766,7 +848,25 @@ int main(int argc, char **argv) {
 		case 0x41:
 		    memset(s, 0, sizeof(s));
 		    memcpy(s, frame.data, 8);
-		    printf("Anfordern Config Data: %s\n", s);
+		    /* WeichenChef Erweiterung */
+		    if ((frame.can_id & 0x00FEFFFE) == 0x00404A80) {
+			if (frame.can_dlc == 8) {
+			    int i;
+			    printf("CdB: Weichenchef");
+			    for (i = 0; i < 4 ; i++) {
+				printf(" Adresse %d", frame.data[i * 2 + 1] + 1);
+				if (frame.data[i * 2] == 0x30)
+				    printf("MM");
+				else if (frame.data[i * 2] == 0x38)
+				    printf("DCC");
+			    }
+			    printf("\n");
+			} else {
+			    printf("CdB: Abfrage Weichenchef\n");
+			}
+		    } else {
+			printf("Anfordern Config Data: %s\n", s);
+		    }
 		    break;
 		/* Config Data Stream */
 		case 0x42:
