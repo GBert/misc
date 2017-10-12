@@ -1,9 +1,12 @@
 const int revisionnr = 
-12833
+12836
 ;
 const char* commithash = 
-"52da760088d02013f115cec707f33572b5eb4c3c";
+"fe6f19a03eb04bfdf30f7561995f983c5bbd1fbe";
 const char* revlog = 
+"12836 2017-10-12 13:50:23 +0200 translation merge: sv\n" \
+"12835 2017-10-12 10:37:44 +0200 switch: dcrossing support with one motor\n" \
+"12834 2017-10-12 08:35:23 +0200 loconet: sensor query fix\n" \
 "12833 2017-10-11 10:09:22 +0200 blockdialog: save sorting\n" \
 "12832 2017-10-11 08:44:14 +0200 basedlg: save dialog index sorting in rocview.ini\n" \
 "12831 2017-10-11 07:57:23 +0200 item: regard show block ID in case the block is closed\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12789 2017-10-06 10:56:53 +0200 SLIM: WIP\n" \
 "12788 2017-10-06 10:12:49 +0200 loc, guiframe: system action condition eventtimeout added\n" \
 "12787 2017-10-05 18:02:09 +0200 locdialog: accept typed input in the multihead loco ID SLIM: wip\n" \
-"12786 2017-10-05 17:04:08 +0200 SLIM: smaller dir tracks\n" \
-"12785 2017-10-05 16:56:53 +0200 SLIM: smaller off sensors\n" \
-"12784 2017-10-05 15:52:41 +0200 fix for evaluating an unsigned int with atoi -> replaced with strtoul\n" \
 
 "log end";

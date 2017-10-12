@@ -328,7 +328,7 @@ void cdb_extension_grd(struct can_frame *frame) {
 		printf("Refresh CS2-Layout\n");
 		break;
 	    case 0x12:
-		printf("Sende auch an Master CS2\n");
+		printf("Sende Master CS2\n");
 		break;
 	    default:
 		printf("CdB: Abfrage unbekannter Index %d\n", index);
@@ -352,9 +352,9 @@ void cdb_extension_grd(struct can_frame *frame) {
 		break;
 	    case 0x12:
 		if (wert == 1)
-		    printf("CdB: Sende auch Master CS2\n");
+		    printf("CdB: Sende Master CS2\n");
 		else
-		    printf("CdB: kein Sende auch Master CS2\n");
+		    printf("CdB: kein Sende Master CS2\n");
 		break;
 	    default:
 		printf("CdB: Antwort unbekannter Index %d Wert 0x%04X\n", index, wert);
@@ -515,9 +515,9 @@ void cdb_extension_set_grd(struct can_frame *frame) {
 	    break;
 	case 0x12:
 	    if (wert == 1)
-		printf("Sende auch an Master CS2\n");
+		printf("Sende Master CS2\n");
 	    else
-		printf("Sende nicht an Master CS2\n");
+		printf("Sende nicht Master CS2\n");
 	    break;
 	default:
 	    printf("unbekannt: %d\n", wert);
