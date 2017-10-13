@@ -405,11 +405,29 @@ void cdb_extension_wc(struct can_frame *frame) {
 		else
 		    printf("Servo %d keine CdB-Meldungen\n", servo);
 		break;
+	    case 0x09:
+		printf("Ausgang %d Adresse %d ", frame->data[0], frame->data[2] + 1);
+		if (frame->data[3] == 0x38)
+		    printf("DCC\n");
+		else if (frame->data[3] == 0x30)
+		    printf("MM\n");
+		else
+		    printf("Protokoll unbekannt\n");
+		break;
 	    case 0x0A:
 		printf("Ausgang %d Adresse %d ", frame->data[0], frame->data[3] + 1);
 		if (frame->data[2] == 0x38)
 		    printf("DCC\n");
 		else if (frame->data[2] == 0x30)
+		    printf("MM\n");
+		else
+		    printf("Protokoll unbekannt\n");
+		break;
+	    case 0x0B:
+		printf("Ausgang %da Adresse %d ", frame->data[0], frame->data[2] + 1);
+		if (frame->data[3] == 0x38)
+		    printf("DCC\n");
+		else if (frame->data[3] == 0x30)
 		    printf("MM\n");
 		else
 		    printf("Protokoll unbekannt\n");
