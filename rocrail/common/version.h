@@ -1,9 +1,13 @@
 const int revisionnr = 
-12845
+12849
 ;
 const char* commithash = 
-"c8db6f4605a26c877022436d1a1a9e8c197ce6f5";
+"2e62c1a2160a913a3e3388114014c7c22ee41196";
 const char* revlog = 
+"12849 2017-10-13 18:45:28 +0200 item: buffered paint...\n" \
+"12848 2017-10-13 18:35:09 +0200 model: extra trace at setting occupancy in the occ.xml\n" \
+"12847 2017-10-13 18:19:45 +0200 item: use buffered paint under Windows\n" \
+"12846 2017-10-13 18:14:19 +0200 item: use buffered paint under Windows\n" \
 "12845 2017-10-13 17:56:53 +0200 item: revert freeze/thaw\n" \
 "12844 2017-10-13 17:45:26 +0200 SLIM: road crossing 10 added\n" \
 "12843 2017-10-13 16:15:48 +0200 item: freeze/thaw added to prevent flickering under Windows\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12802 2017-10-08 08:48:35 +0200 SLIM: dcrossing route symbols\n" \
 "12801 2017-10-08 08:39:28 +0200 SLIM: wip\n" \
 "12800 2017-10-08 07:51:48 +0200 cppcheck corrections\n" \
-"12799 2017-10-07 16:25:21 +0200 SLIM: wip\n" \
-"12798 2017-10-07 15:29:17 +0200 translation merge: sr_latin\n" \
-"12797 2017-10-07 12:16:37 +0200 SLIM: dcrossingleft...\n" \
-"12796 2017-10-07 11:30:59 +0200 SLIM: dcrossingright...\n" \
 
 "log end";
