@@ -1,9 +1,11 @@
 const int revisionnr = 
-12839
+12841
 ;
 const char* commithash = 
-"07b68a3038dd77cbd17e787df68ca8e52c6d75f0";
+"cf7b1b1ff4f9b6a5ea7701c795f4f89ef27a7201";
 const char* revlog = 
+"12841 2017-10-13 11:13:07 +0200 loc: fix for forwarding the eventtimeout to the system actions\n" \
+"12840 2017-10-13 10:50:35 +0200 switch: sensor support for dcrossing with one motor\n" \
 "12839 2017-10-13 08:40:24 +0200 switch: dcrossing with 1 motor invert support added\n" \
 "12838 2017-10-13 08:15:12 +0200 locdialog: manuid added\n" \
 "12837 2017-10-12 19:48:18 +0200 renderer: fix for show routes over switches\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12794 2017-10-07 08:30:45 +0200 actionctrldlg: state column added\n" \
 "12793 2017-10-07 08:22:21 +0200 fback: fix for checking action twice in case of off status\n" \
 "12792 2017-10-06 16:58:22 +0200 SLIM: switch curves...\n" \
-"12791 2017-10-06 11:29:03 +0200 SLIM: signalmain white added for occ and route\n" \
-"12790 2017-10-06 11:23:22 +0200 SLIM: decoupler added\n" \
 
 "log end";
