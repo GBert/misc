@@ -1,9 +1,13 @@
 const int revisionnr = 
-12841
+12845
 ;
 const char* commithash = 
-"cf7b1b1ff4f9b6a5ea7701c795f4f89ef27a7201";
+"c8db6f4605a26c877022436d1a1a9e8c197ce6f5";
 const char* revlog = 
+"12845 2017-10-13 17:56:53 +0200 item: revert freeze/thaw\n" \
+"12844 2017-10-13 17:45:26 +0200 SLIM: road crossing 10 added\n" \
+"12843 2017-10-13 16:15:48 +0200 item: freeze/thaw added to prevent flickering under Windows\n" \
+"12842 2017-10-13 15:53:42 +0200 SLIM: track-2 added\n" \
 "12841 2017-10-13 11:13:07 +0200 loc: fix for forwarding the eventtimeout to the system actions\n" \
 "12840 2017-10-13 10:50:35 +0200 switch: sensor support for dcrossing with one motor\n" \
 "12839 2017-10-13 08:40:24 +0200 switch: dcrossing with 1 motor invert support added\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12798 2017-10-07 15:29:17 +0200 translation merge: sr_latin\n" \
 "12797 2017-10-07 12:16:37 +0200 SLIM: dcrossingleft...\n" \
 "12796 2017-10-07 11:30:59 +0200 SLIM: dcrossingright...\n" \
-"12795 2017-10-07 09:58:51 +0200 cbus: socket semaphore added to prevent using a null pointer\n" \
-"12794 2017-10-07 08:30:45 +0200 actionctrldlg: state column added\n" \
-"12793 2017-10-07 08:22:21 +0200 fback: fix for checking action twice in case of off status\n" \
-"12792 2017-10-06 16:58:22 +0200 SLIM: switch curves...\n" \
 
 "log end";
