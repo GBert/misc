@@ -1,9 +1,12 @@
 const int revisionnr = 
-12836
+12839
 ;
 const char* commithash = 
-"fe6f19a03eb04bfdf30f7561995f983c5bbd1fbe";
+"07b68a3038dd77cbd17e787df68ca8e52c6d75f0";
 const char* revlog = 
+"12839 2017-10-13 08:40:24 +0200 switch: dcrossing with 1 motor invert support added\n" \
+"12838 2017-10-13 08:15:12 +0200 locdialog: manuid added\n" \
+"12837 2017-10-12 19:48:18 +0200 renderer: fix for show routes over switches\n" \
 "12836 2017-10-12 13:50:23 +0200 translation merge: sv\n" \
 "12835 2017-10-12 10:37:44 +0200 switch: dcrossing support with one motor\n" \
 "12834 2017-10-12 08:35:23 +0200 loconet: sensor query fix\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12792 2017-10-06 16:58:22 +0200 SLIM: switch curves...\n" \
 "12791 2017-10-06 11:29:03 +0200 SLIM: signalmain white added for occ and route\n" \
 "12790 2017-10-06 11:23:22 +0200 SLIM: decoupler added\n" \
-"12789 2017-10-06 10:56:53 +0200 SLIM: WIP\n" \
-"12788 2017-10-06 10:12:49 +0200 loc, guiframe: system action condition eventtimeout added\n" \
-"12787 2017-10-05 18:02:09 +0200 locdialog: accept typed input in the multihead loco ID SLIM: wip\n" \
 
 "log end";
