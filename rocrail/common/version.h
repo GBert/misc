@@ -1,9 +1,11 @@
 const int revisionnr = 
-12849
+12851
 ;
 const char* commithash = 
-"2e62c1a2160a913a3e3388114014c7c22ee41196";
+"51d377e01b60036d248b9d565c857d52fb338f2e";
 const char* revlog = 
+"12851 2017-10-13 19:23:50 +0200 item: revert buffered paint\n" \
+"12850 2017-10-13 19:10:13 +0200 Analyser-Fix: no warnings for second address 9999 in dcrossing with one motor (Lothar)\n" \
 "12849 2017-10-13 18:45:28 +0200 item: buffered paint...\n" \
 "12848 2017-10-13 18:35:09 +0200 model: extra trace at setting occupancy in the occ.xml\n" \
 "12847 2017-10-13 18:19:45 +0200 item: use buffered paint under Windows\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12804 2017-10-08 09:14:45 +0200 SLIM: turnout occ symbols\n" \
 "12803 2017-10-08 09:04:41 +0200 SLIM: dcrossing occ symbols\n" \
 "12802 2017-10-08 08:48:35 +0200 SLIM: dcrossing route symbols\n" \
-"12801 2017-10-08 08:39:28 +0200 SLIM: wip\n" \
-"12800 2017-10-08 07:51:48 +0200 cppcheck corrections\n" \
 
 "log end";
