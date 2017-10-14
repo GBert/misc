@@ -1,9 +1,11 @@
 const int revisionnr = 
-12851
+12853
 ;
 const char* commithash = 
-"51d377e01b60036d248b9d565c857d52fb338f2e";
+"12a8649666ce0d713326bbd9c240d6669c573fcb";
 const char* revlog = 
+"12853 2017-10-14 08:39:32 +0200 item: test auto buffered paint\n" \
+"12852 2017-10-13 21:36:15 +0200 SLIM: minor improvement\n" \
 "12851 2017-10-13 19:23:50 +0200 item: revert buffered paint\n" \
 "12850 2017-10-13 19:10:13 +0200 Analyser-Fix: no warnings for second address 9999 in dcrossing with one motor (Lothar)\n" \
 "12849 2017-10-13 18:45:28 +0200 item: buffered paint...\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12806 2017-10-08 11:55:03 +0200 SLIM: shunting signals\n" \
 "12805 2017-10-08 10:53:56 +0200 SLIM:color correction for turnoutright-t-route\n" \
 "12804 2017-10-08 09:14:45 +0200 SLIM: turnout occ symbols\n" \
-"12803 2017-10-08 09:04:41 +0200 SLIM: dcrossing occ symbols\n" \
-"12802 2017-10-08 08:48:35 +0200 SLIM: dcrossing route symbols\n" \
 
 "log end";
