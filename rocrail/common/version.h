@@ -1,9 +1,12 @@
 const int revisionnr = 
-12853
+12856
 ;
 const char* commithash = 
-"12a8649666ce0d713326bbd9c240d6669c573fcb";
+"92d2d44d9ecfddd7c0a42a7d98df16f16c213308";
 const char* revlog = 
+"12856 2017-10-15 11:05:38 +0200 renderer: regard the SLIM theme in case of seltab and turntable\n" \
+"12855 2017-10-15 10:17:49 +0200 cars and locos update from Andy\n" \
+"12854 2017-10-15 09:29:05 +0200 node: fix for replacechilds attribute\n" \
 "12853 2017-10-14 08:39:32 +0200 item: test auto buffered paint\n" \
 "12852 2017-10-13 21:36:15 +0200 SLIM: minor improvement\n" \
 "12851 2017-10-13 19:23:50 +0200 item: revert buffered paint\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12809 2017-10-08 14:23:07 +0200 SLIM: ccrossing\n" \
 "12808 2017-10-08 14:04:06 +0200 SLIM: crossing added\n" \
 "12807 2017-10-08 12:38:24 +0200 SLIM: signaldistant 4 aspects\n" \
-"12806 2017-10-08 11:55:03 +0200 SLIM: shunting signals\n" \
-"12805 2017-10-08 10:53:56 +0200 SLIM:color correction for turnoutright-t-route\n" \
-"12804 2017-10-08 09:14:45 +0200 SLIM: turnout occ symbols\n" \
 
 "log end";
