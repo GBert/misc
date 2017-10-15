@@ -1,9 +1,10 @@
 const int revisionnr = 
-12856
+12857
 ;
 const char* commithash = 
-"92d2d44d9ecfddd7c0a42a7d98df16f16c213308";
+"d7d3a27f37370ccecbde624685379dc68ab4b67c";
 const char* revlog = 
+"12857 2017-10-15 13:13:02 +0200 actionsctrldlg: has conditions column added to the index\n" \
 "12856 2017-10-15 11:05:38 +0200 renderer: regard the SLIM theme in case of seltab and turntable\n" \
 "12855 2017-10-15 10:17:49 +0200 cars and locos update from Andy\n" \
 "12854 2017-10-15 09:29:05 +0200 node: fix for replacechilds attribute\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12810 2017-10-08 14:52:44 +0200 item: a closed block is visible by symbol, no need for the closed text\n" \
 "12809 2017-10-08 14:23:07 +0200 SLIM: ccrossing\n" \
 "12808 2017-10-08 14:04:06 +0200 SLIM: crossing added\n" \
-"12807 2017-10-08 12:38:24 +0200 SLIM: signaldistant 4 aspects\n" \
 
 "log end";
