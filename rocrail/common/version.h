@@ -1,9 +1,13 @@
 const int revisionnr = 
-12857
+12861
 ;
 const char* commithash = 
-"d7d3a27f37370ccecbde624685379dc68ab4b67c";
+"5fcc43bbf2e03a7dcd8c3f76cdb7d44cd9398912";
 const char* revlog = 
+"12861 2017-10-16 11:47:00 +0200 routedialog: autogen checkbox added to be able to remove this flag\n" \
+"12860 2017-10-16 11:24:15 +0200 analyse: set description in the generated routes\n" \
+"12859 2017-10-16 11:10:56 +0200 autogen flag added for routes to replace the autogen- prefix\n" \
+"12858 2017-10-16 07:59:39 +0200 rocguiinidlg: reenabled the lnsv tab option\n" \
 "12857 2017-10-15 13:13:02 +0200 actionsctrldlg: has conditions column added to the index\n" \
 "12856 2017-10-15 11:05:38 +0200 renderer: regard the SLIM theme in case of seltab and turntable\n" \
 "12855 2017-10-15 10:17:49 +0200 cars and locos update from Andy\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12814 2017-10-09 07:38:11 +0200 switch: trace improvement in case action state does not match\n" \
 "12813 2017-10-09 06:31:04 +0200 mgbox: init corrections (Bert)\n" \
 "12812 2017-10-08 18:31:18 +0200 SLIM: twoway\n" \
-"12811 2017-10-08 15:54:03 +0200 SLIM: threeway\n" \
-"12810 2017-10-08 14:52:44 +0200 item: a closed block is visible by symbol, no need for the closed text\n" \
-"12809 2017-10-08 14:23:07 +0200 SLIM: ccrossing\n" \
-"12808 2017-10-08 14:04:06 +0200 SLIM: crossing added\n" \
 
 "log end";
