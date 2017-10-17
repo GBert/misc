@@ -1,9 +1,10 @@
 const int revisionnr = 
-12861
+12862
 ;
 const char* commithash = 
-"5fcc43bbf2e03a7dcd8c3f76cdb7d44cd9398912";
+"fda7f897147c782f8af2eba8f18cea97ac6e122f";
 const char* revlog = 
+"12862 2017-10-17 17:25:24 +0200 routedlg: not list up closed routes\n" \
 "12861 2017-10-16 11:47:00 +0200 routedialog: autogen checkbox added to be able to remove this flag\n" \
 "12860 2017-10-16 11:24:15 +0200 analyse: set description in the generated routes\n" \
 "12859 2017-10-16 11:10:56 +0200 autogen flag added for routes to replace the autogen- prefix\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12815 2017-10-09 07:59:23 +0200 SLIM: correction for left disabled\n" \
 "12814 2017-10-09 07:38:11 +0200 switch: trace improvement in case action state does not match\n" \
 "12813 2017-10-09 06:31:04 +0200 mgbox: init corrections (Bert)\n" \
-"12812 2017-10-08 18:31:18 +0200 SLIM: twoway\n" \
 
 "log end";
