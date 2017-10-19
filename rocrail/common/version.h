@@ -1,9 +1,12 @@
 const int revisionnr = 
-12862
+12865
 ;
 const char* commithash = 
-"fda7f897147c782f8af2eba8f18cea97ac6e122f";
+"c5b379d9a016573d52cd2d787b1feabeb0c4116c";
 const char* revlog = 
+"12865 2017-10-18 20:17:00 +0200 rocrail icon as png\n" \
+"12864 2017-10-18 09:31:51 +0200 roclcdr: prevent looping in case of enter state\n" \
+"12863 2017-10-18 07:35:20 +0200 rocview makefile corrections for native builds\n" \
 "12862 2017-10-17 17:25:24 +0200 routedlg: not list up closed routes\n" \
 "12861 2017-10-16 11:47:00 +0200 routedialog: autogen checkbox added to be able to remove this flag\n" \
 "12860 2017-10-16 11:24:15 +0200 analyse: set description in the generated routes\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12818 2017-10-09 10:13:32 +0200 rocguiinidlg: show train ID in block as tri-state\n" \
 "12817 2017-10-09 08:36:36 +0200 cardlg: export added\n" \
 "12816 2017-10-09 08:14:22 +0200 action stylesheets improved (Andy)\n" \
-"12815 2017-10-09 07:59:23 +0200 SLIM: correction for left disabled\n" \
-"12814 2017-10-09 07:38:11 +0200 switch: trace improvement in case action state does not match\n" \
-"12813 2017-10-09 06:31:04 +0200 mgbox: init corrections (Bert)\n" \
 
 "log end";
