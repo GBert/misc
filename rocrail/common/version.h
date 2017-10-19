@@ -1,9 +1,16 @@
 const int revisionnr = 
-12865
+12872
 ;
 const char* commithash = 
-"c5b379d9a016573d52cd2d787b1feabeb0c4116c";
+"92418ae4b9d590942e7f8bdb456f51cfd99856b4";
 const char* revlog = 
+"12872 2017-10-19 20:46:32 +0200 system: typo fix\n" \
+"12871 2017-10-19 19:12:47 +0200 renderer: fix for short circuit stageblock in case no fitting symbol\n" \
+"12870 2017-10-19 17:17:33 +0200 update trademark\n" \
+"12869 2017-10-19 13:57:36 +0200 update readme file\n" \
+"12868 2017-10-19 12:57:40 +0200 loconet: use slot response address instead using the expected address\n" \
+"12867 2017-10-19 12:05:48 +0200 tt: optional register sensor for bridge position\n" \
+"12866 2017-10-19 11:11:12 +0200 register sensor type added\n" \
 "12865 2017-10-18 20:17:00 +0200 rocrail icon as png\n" \
 "12864 2017-10-18 09:31:51 +0200 roclcdr: prevent looping in case of enter state\n" \
 "12863 2017-10-18 07:35:20 +0200 rocview makefile corrections for native builds\n" \
@@ -47,12 +54,5 @@ const char* revlog =
 "12825 2017-10-10 07:51:55 +0200 loc: fix secondnextblock4wait did overwrite secondnextblock at modify\n" \
 "12824 2017-10-10 07:28:49 +0200 actionsctrldlg: fix for initial values\n" \
 "12823 2017-10-09 17:56:10 +0200 routedlg: fix for crash\n" \
-"12822 2017-10-09 16:04:13 +0200 SLIM: blockstate signal correction\n" \
-"12821 2017-10-09 15:30:21 +0200 renderer: trace level correction svg: memory leak fixed\n" \
-"12820 2017-10-09 15:28:52 +0200 basedlg: last run date column added\n" \
-"12819 2017-10-09 12:10:01 +0200 SLIM: support for tri-state button 0\n" \
-"12818 2017-10-09 10:13:32 +0200 rocguiinidlg: show train ID in block as tri-state\n" \
-"12817 2017-10-09 08:36:36 +0200 cardlg: export added\n" \
-"12816 2017-10-09 08:14:22 +0200 action stylesheets improved (Andy)\n" \
 
 "log end";
