@@ -1,9 +1,12 @@
 const int revisionnr = 
-12872
+12875
 ;
 const char* commithash = 
-"92418ae4b9d590942e7f8bdb456f51cfd99856b4";
+"b59d12b5e61f3d81e41c58bb46162cd7719a1d8d";
 const char* revlog = 
+"12875 2017-10-20 14:10:10 +0200 model: fix for update sensor module list in case of register type\n" \
+"12874 2017-10-20 10:50:09 +0200 weather: todo added\n" \
+"12873 2017-10-20 10:35:40 +0200 route: removed the 100ms sleep between the route alias broadcasts\n" \
 "12872 2017-10-19 20:46:32 +0200 system: typo fix\n" \
 "12871 2017-10-19 19:12:47 +0200 renderer: fix for short circuit stageblock in case no fitting symbol\n" \
 "12870 2017-10-19 17:17:33 +0200 update trademark\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12828 2017-10-10 08:20:21 +0200 item: fix for small block text\n" \
 "12827 2017-10-10 08:07:16 +0200 mgbox: init (Bert)\n" \
 "12826 2017-10-10 08:03:58 +0200 SLIM: blockstate occ and route added\n" \
-"12825 2017-10-10 07:51:55 +0200 loc: fix secondnextblock4wait did overwrite secondnextblock at modify\n" \
-"12824 2017-10-10 07:28:49 +0200 actionsctrldlg: fix for initial values\n" \
-"12823 2017-10-09 17:56:10 +0200 routedlg: fix for crash\n" \
 
 "log end";
