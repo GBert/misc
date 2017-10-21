@@ -123,7 +123,6 @@ int check_data(int tcp_socket, unsigned char *frame) {
     	// memcpy(frame, GET_LM2, sizeof(GET_LM2));
     	memcpy(frame, RESP_LM2_3, sizeof(RESP_LM2_3));
 	netframe_to_net(tcp_socket, frame, sizeof(RESP_LM2_3));
-	usec_sleep(10000);
 	memcpy(frame, GET_LM2, sizeof(GET_LM2));
 	netframe_to_net(tcp_socket, frame, sizeof(GET_LM2));
     }

@@ -70,6 +70,14 @@ int time_stamp(char *timestamp) {
     return 0;
 }
 
+void usec_sleep(int usec) {
+    struct timespec to_wait;
+
+    to_wait.tv_sec = 0;
+    to_wait.tv_nsec = usec * 1000;
+    nanosleep(&to_wait, NULL);
+}
+
 void add_crc(uint8_t *data, int length) {
     int i;
     uint8_t xor = 0;
@@ -146,7 +154,7 @@ int print_frame(unsigned char *frame, int length, int background) {
 
 int main(int argc, char **argv) {
     pid_t pid;
-    int length, n, i, max_fds, opt, max_tcp_i, local_tcp_port, nready, conn_fd, tcp_client[MAX_TCP_CONN];
+    int length, rs485_length, n, i, max_fds, opt, max_tcp_i, local_tcp_port, nready, conn_fd, tcp_client[MAX_TCP_CONN];
     char timestamp[16];
     /* UDP incoming socket , CAN socket, UDP broadcast socket, TCP socket */
     int eci, ret, se, st, tcp_socket, ec_index;
@@ -365,8 +373,21 @@ int main(int argc, char **argv) {
 			if ((frame[0] & 0xF0) == 0xF0) {
 			    xntcp_internal(frame);
 			} else {
-			    if (write(se, frame, n) != n)
-				fprintf(stderr, "%s: error sending RS485 frame: %s\n", __func__, strerror(errno));
+			    /* we need to check if TCP consist of more than one command */
+			    if (n > 1) {
+				rs485_length = (frame[1] & 0x0F) + 3;
+				if (write(se, frame, rs485_length) != rs485_length)
+				    fprintf(stderr, "%s: error sending RS485 frame: %s\n", __func__, strerror(errno));
+				if (n > rs485_length) {
+				    /* TODO - maybe for RS485 Adapter */
+				    usec_sleep(rs485_length * 200);
+				    if (write(se, &frame[rs485_length], n - rs485_length) != n - rs485_length)
+					fprintf(stderr, "%s: error sending RS485 frame: %s\n", __func__, strerror(errno));
+				}
+			    } else {
+				if (write(se, frame, 1) != 1)
+				    fprintf(stderr, "%s: error sending RS485 frame: %s\n", __func__, strerror(errno));
+			    }
 			    /* send packet to all connected clients */
 			    for (i = 0; i <= max_tcp_i; i++) {
 				if (tcp_socket == tcp_client[i])
