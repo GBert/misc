@@ -43,7 +43,7 @@
 
 #define TERM_SPEED	B115200
 
-static unsigned char XNTP_VERSION[]	= {0x02, 0x01, 0x80, 0x00};
+static unsigned char XNTP_VERSION[] = { 0x02, 0x01, 0x80, 0x00 };
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -p <tcp_port> -i <RS485 interface>\n", prg);
@@ -51,6 +51,12 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -p <port>           listening TCP port for the server - default %d\n", XNTCPPORT);
     fprintf(stderr, "         -i <RS485 int>      RS485 interface - default /dev/ttyUSB0\n");
     fprintf(stderr, "         -f                  running in foreground\n\n");
+}
+
+void INThandler(int sig) {
+    signal(sig, SIG_IGN);
+    /* fputs(RESET, stdout); */
+    exit(0);
 }
 
 int time_stamp(char *timestamp) {
@@ -140,7 +146,7 @@ int print_frame(unsigned char *frame, int length, int background) {
 
 int main(int argc, char **argv) {
     pid_t pid;
-    int n, i, max_fds, opt, max_tcp_i, local_tcp_port, nready, conn_fd, tcp_client[MAX_TCP_CONN];
+    int length, n, i, max_fds, opt, max_tcp_i, local_tcp_port, nready, conn_fd, tcp_client[MAX_TCP_CONN];
     char timestamp[16];
     /* UDP incoming socket , CAN socket, UDP broadcast socket, TCP socket */
     int eci, ret, se, st, tcp_socket, ec_index;
@@ -152,6 +158,7 @@ int main(int argc, char **argv) {
     struct termios term_attr;
 
     int background = 1;
+    ec_index = 0;
     unsigned char ec_frame[64];
     char buffer[64];
     char rs485_interface[64];
@@ -276,11 +283,21 @@ int main(int argc, char **argv) {
 	/* serial interface */
 	if (FD_ISSET(se, &read_fds)) {
 	    while ((ret = read(se, buffer, sizeof(buffer))) > 0) {
-		for (eci = 0; eci < ret; eci++)
+		time_stamp(timestamp);
+		printf("%s RS485 received length %d\n", timestamp, ret);
+		for (eci = 0; eci < ret; eci++) {
+		    if (ec_index == 0) {
+			length = (buffer[0] & 0x0F) + 2;
+			time_stamp(timestamp);
+			printf("%s RS485 frame length %d\n", timestamp, length);
+		    }
 		    ec_frame[ec_index++] = (unsigned char)buffer[eci];
-		/* send frame to connect clients */
+		}
+	    }
+	    /* send frame to connected clients */
+	    if (ec_index == length) {
 		for (i = 0; i <= max_tcp_i; i++)
-		    rawframe_to_socket(tcp_client[i], ec_frame, ret);
+		    rawframe_to_socket(tcp_client[i], ec_frame, ec_index);
 		ec_index = 0;
 	    }
 	}
