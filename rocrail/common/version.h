@@ -1,9 +1,10 @@
 const int revisionnr = 
-12875
+12876
 ;
 const char* commithash = 
-"b59d12b5e61f3d81e41c58bb46162cd7719a1d8d";
+"a22a86cc705fa70afbadfd4ca1d5a44a1710a147";
 const char* revlog = 
+"12876 2017-10-21 10:00:37 +0200 item: reset updateenterside flag always after processing\n" \
 "12875 2017-10-20 14:10:10 +0200 model: fix for update sensor module list in case of register type\n" \
 "12874 2017-10-20 10:50:09 +0200 weather: todo added\n" \
 "12873 2017-10-20 10:35:40 +0200 route: removed the 100ms sleep between the route alias broadcasts\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12829 2017-10-10 11:56:10 +0200 basedlg: initial sorting support lodialog: save sorting for the beeing session\n" \
 "12828 2017-10-10 08:20:21 +0200 item: fix for small block text\n" \
 "12827 2017-10-10 08:07:16 +0200 mgbox: init (Bert)\n" \
-"12826 2017-10-10 08:03:58 +0200 SLIM: blockstate occ and route added\n" \
 
 "log end";
