@@ -1,9 +1,18 @@
 const int revisionnr = 
-12876
+12885
 ;
 const char* commithash = 
-"a22a86cc705fa70afbadfd4ca1d5a44a1710a147";
+"67616d23ef2f101dd9b7f2d0245a7edbd51051f0";
 const char* revlog = 
+"12885 2017-10-22 16:03:42 +0200 stage: trace level change for unexpected event\n" \
+"12884 2017-10-22 15:29:45 +0200 guiframe: use the event node to update the block state\n" \
+"12883 2017-10-22 14:10:30 +0200 item: extra trace for reserved and entering flags\n" \
+"12882 2017-10-22 12:09:06 +0200 model: fix for gotoblock in case its occupied\n" \
+"12881 2017-10-22 11:08:13 +0200 SLIM: small ghost block\n" \
+"12880 2017-10-22 09:20:29 +0200 SLIM: ghost block added\n" \
+"12879 2017-10-22 08:48:00 +0200 block: resetghost command added\n" \
+"12878 2017-10-21 20:13:32 +0200 actionctrldlg: loco state schedule added\n" \
+"12877 2017-10-21 18:51:27 +0200 signaldialog: help index fix\n" \
 "12876 2017-10-21 10:00:37 +0200 item: reset updateenterside flag always after processing\n" \
 "12875 2017-10-20 14:10:10 +0200 model: fix for update sensor module list in case of register type\n" \
 "12874 2017-10-20 10:50:09 +0200 weather: todo added\n" \
@@ -45,14 +54,5 @@ const char* revlog =
 "12838 2017-10-13 08:15:12 +0200 locdialog: manuid added\n" \
 "12837 2017-10-12 19:48:18 +0200 renderer: fix for show routes over switches\n" \
 "12836 2017-10-12 13:50:23 +0200 translation merge: sv\n" \
-"12835 2017-10-12 10:37:44 +0200 switch: dcrossing support with one motor\n" \
-"12834 2017-10-12 08:35:23 +0200 loconet: sensor query fix\n" \
-"12833 2017-10-11 10:09:22 +0200 blockdialog: save sorting\n" \
-"12832 2017-10-11 08:44:14 +0200 basedlg: save dialog index sorting in rocview.ini\n" \
-"12831 2017-10-11 07:57:23 +0200 item: regard show block ID in case the block is closed\n" \
-"12830 2017-10-10 15:16:57 +0200 renderer: fix for rendering blckstate in case of a graphic context...\n" \
-"12829 2017-10-10 11:56:10 +0200 basedlg: initial sorting support lodialog: save sorting for the beeing session\n" \
-"12828 2017-10-10 08:20:21 +0200 item: fix for small block text\n" \
-"12827 2017-10-10 08:07:16 +0200 mgbox: init (Bert)\n" \
 
 "log end";
