@@ -45,6 +45,9 @@
 
 static unsigned char XNTP_VERSION[] = { 0x02, 0x01, 0x80, 0x00 };
 
+int tcp_client[MAX_TCP_CONN];
+int max_tcp_i, se, st;
+
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -p <tcp_port> -i <RS485 interface>\n", prg);
     fprintf(stderr, "   Version 0.1\n\n");
@@ -54,8 +57,15 @@ void print_usage(char *prg) {
 }
 
 void INThandler(int sig) {
+    int i;
+
     signal(sig, SIG_IGN);
-    /* fputs(RESET, stdout); */
+    for (i = 0; i <= max_tcp_i; i++) {
+	if (tcp_client[i])
+	    close(tcp_client[i]);
+    }
+    close(st);
+    close(se);
     exit(0);
 }
 
@@ -103,27 +113,6 @@ uint8_t add_parity(uint8_t data) {
     return data;
 }
 
-void send_version(void) {
-    uint8_t buffer[SMALL_BUFFER];
-
-    memcpy(buffer, XNTP_VERSION, sizeof(XNTP_VERSION));
-    add_crc(buffer, sizeof(XNTP_VERSION));
-}
-
-void xntcp_internal(unsigned char *frame) {
-
-    switch (frame[0]) {
-    case 0xF0:
-	if (frame[1] == 0xF0)
-	    send_version();
-	break;
-    case 0xF2:
-	break;
-    default:
-	break;
-    }
-}
-
 int rawframe_to_socket(int net_socket, unsigned char *netframe, int length) {
     int s;
     int on = 1;
@@ -141,6 +130,38 @@ int rawframe_to_socket(int net_socket, unsigned char *netframe, int length) {
     return 0;
 }
 
+int send_to_clients(uint8_t *frame, int length) {
+    int i;
+
+    for (i = 0; i <= max_tcp_i; i++) {
+	if (tcp_client[i] > 0)
+	    rawframe_to_socket(tcp_client[i], frame, length);
+    }
+    return 0;
+}
+
+void send_version(void) {
+    uint8_t buffer[SMALL_BUFFER];
+
+    memcpy(buffer, XNTP_VERSION, sizeof(XNTP_VERSION));
+    add_crc(buffer, sizeof(XNTP_VERSION));
+    send_to_clients(buffer, sizeof(XNTP_VERSION));
+}
+
+void xntcp_internal(unsigned char *frame) {
+
+    switch (frame[0]) {
+    case 0xF0:
+	if (frame[1] == 0xF0)
+	    send_version();
+	break;
+    case 0xF2:
+	break;
+    default:
+	break;
+    }
+}
+
 int print_frame(unsigned char *frame, int length, int background) {
     int i;
 
@@ -154,10 +175,10 @@ int print_frame(unsigned char *frame, int length, int background) {
 
 int main(int argc, char **argv) {
     pid_t pid;
-    int length, rs485_length, n, i, max_fds, opt, max_tcp_i, local_tcp_port, nready, conn_fd, tcp_client[MAX_TCP_CONN];
+    int length, rs485_length, n, i, max_fds, opt, local_tcp_port, nready, conn_fd;
     char timestamp[16];
     /* UDP incoming socket , CAN socket, UDP broadcast socket, TCP socket */
-    int eci, ret, se, st, tcp_socket, ec_index;
+    int eci, ret, tcp_socket, ec_index;
     struct sockaddr_in tcp_addr;
     /* vars for determing broadcast address */
     socklen_t tcp_client_length = sizeof(tcp_addr);
@@ -255,6 +276,8 @@ int main(int argc, char **argv) {
     for (i = 0; i < MAX_TCP_CONN; i++)
 	tcp_client[i] = -1;	/* -1 indicates available entry */
 #endif
+
+    signal(SIGINT, INThandler);
 
     /* daemonize the process if requested */
     if (background) {
@@ -378,6 +401,7 @@ int main(int argc, char **argv) {
 				rs485_length = (frame[1] & 0x0F) + 3;
 				if (write(se, frame, rs485_length) != rs485_length)
 				    fprintf(stderr, "%s: error sending RS485 frame: %s\n", __func__, strerror(errno));
+				    usec_sleep(rs485_length * 200);
 				if (n > rs485_length) {
 				    /* TODO - maybe for RS485 Adapter */
 				    usec_sleep(rs485_length * 200);
@@ -402,7 +426,5 @@ int main(int argc, char **argv) {
 	    }
 	}
     }
-    close(st);
-    close(se);
     return 0;
 }
