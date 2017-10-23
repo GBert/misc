@@ -327,6 +327,7 @@ int main(int argc, char **argv) {
 	    }
 	    /* send frame to connected clients */
 	    if (ec_index == length) {
+		print_frame(ec_frame, ec_index, background);
 		for (i = 0; i <= max_tcp_i; i++)
 		    rawframe_to_socket(tcp_client[i], ec_frame, ec_index);
 		ec_index = 0;

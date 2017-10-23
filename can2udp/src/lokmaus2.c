@@ -7,12 +7,13 @@
  * ----------------------------------------------------------------------------
  */
 
+#include <errno.h>
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
-#include <errno.h>
-#include <ctype.h>
+#include <unistd.h>
 
 #include <arpa/inet.h>
 #include <assert.h>
@@ -183,6 +184,7 @@ int main(int argc, char **argv) {
 		check_data(sockfd, recvline);
 	    } else if (n == 0) {
 		fprintf(stderr, "%s server closed connection\n", timestamp);
+		close(sockfd);
 		exit(EXIT_FAILURE);
 	    } else {
 		time_stamp(timestamp);

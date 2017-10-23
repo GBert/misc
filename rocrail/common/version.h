@@ -1,9 +1,15 @@
 const int revisionnr = 
-12885
+12891
 ;
 const char* commithash = 
-"67616d23ef2f101dd9b7f2d0245a7edbd51051f0";
+"ff4068ece5d607963592d265b33774aa7f7b4662";
 const char* revlog = 
+"12891 2017-10-23 18:18:23 +0200 SLIM: blank distant signal added signal: fix for flipping blank aspect\n" \
+"12890 2017-10-23 15:28:42 +0200 SLIM: button 5 added (decoupler as output)\n" \
+"12889 2017-10-23 11:43:30 +0200 fback: use base address too at broadcast to clients\n" \
+"12888 2017-10-23 11:10:31 +0200 car: getHome function return value fix\n" \
+"12887 2017-10-23 08:46:22 +0200 car: getHome function added\n" \
+"12886 2017-10-23 08:32:28 +0200 car: home location added as preparation for shuting\n" \
 "12885 2017-10-22 16:03:42 +0200 stage: trace level change for unexpected event\n" \
 "12884 2017-10-22 15:29:45 +0200 guiframe: use the event node to update the block state\n" \
 "12883 2017-10-22 14:10:30 +0200 item: extra trace for reserved and entering flags\n" \
@@ -48,11 +54,5 @@ const char* revlog =
 "12844 2017-10-13 17:45:26 +0200 SLIM: road crossing 10 added\n" \
 "12843 2017-10-13 16:15:48 +0200 item: freeze/thaw added to prevent flickering under Windows\n" \
 "12842 2017-10-13 15:53:42 +0200 SLIM: track-2 added\n" \
-"12841 2017-10-13 11:13:07 +0200 loc: fix for forwarding the eventtimeout to the system actions\n" \
-"12840 2017-10-13 10:50:35 +0200 switch: sensor support for dcrossing with one motor\n" \
-"12839 2017-10-13 08:40:24 +0200 switch: dcrossing with 1 motor invert support added\n" \
-"12838 2017-10-13 08:15:12 +0200 locdialog: manuid added\n" \
-"12837 2017-10-12 19:48:18 +0200 renderer: fix for show routes over switches\n" \
-"12836 2017-10-12 13:50:23 +0200 translation merge: sv\n" \
 
 "log end";
