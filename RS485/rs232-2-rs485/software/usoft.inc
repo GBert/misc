@@ -112,7 +112,7 @@ RecvLoop
                 BTFSS   UINP,URXD
                 BRA     Received
                 LOOPTO  RecvLoop
-                BRA     RUNAPP              ; Timed-out
+                ;BRA     RUNAPP              ; Timed-out
 Received
                 BANKSEL TMR0                ; BANK 0 | 11
                 MOVLW   UDELAY
@@ -143,7 +143,7 @@ RecvBit
                 WAIT                        ; BANK 14?
 #ENDIF
                 MOVF    UREG,W
-                LEDON                       ; BOOT LED ON
+                ;LEDON                       ; BOOT LED ON
                 ADDWF   checksum,F
                 RETURN
 

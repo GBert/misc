@@ -29,10 +29,11 @@ ERRORLEVEL	-1302
 #DEFINE		UOUT		LATA
 #DEFINE		UDDR		TRISA
 #DEFINE		UINP		PORTA
-#DEFINE		UTXD		5
-#DEFINE		URXD		4
+#DEFINE		UTXD1		0
+#DEFINE		URXD1		1
+#DEFINE		URXD2		4
+#DEFINE		UTXD2		5
 #DEFINE		UDERE		2
-#DEFINE		USTP		1
 
 #DEFINE		TYPE		2
 #DEFINE		UART		1
@@ -52,19 +53,16 @@ ERRORLEVEL	-1302
 #DEFINE		INPUT		PORTA
 
 ; Device REG, goto LOC if result not ZERO
-DJNZ            MACRO   REG,LOC
-                DECFSZ  REG,F
-                GOTO    LOC
-                ENDM
+DJNZ		MACRO   REG,LOC
+		DECFSZ  REG,F
+		GOTO    LOC
+		ENDM
 
-CBLOCK		0x70
-    buflen	:	1	; Buffer Length
-    checksum    :       1	; Checksum Accumulator
-    command     :       1	; Command
-    count       :       1	; Counter
-    timer1      :       1	; Timer
-    timer2      :       1	;   "
-    timer3      :       1	;   "
+CBLOCK          0x70
+    RCOUNT	: 1
+    TCOUNT	: 1
+    UREG1	: 1
+    UREG2	: 1
 ENDC
 
 ;-------------------------------------------------------------------------------
@@ -79,37 +77,45 @@ ENDC
 INIT		ORG	0
 		GOTO START
 
-;		BANKSEL	OSCCON              ;BANK ?
-;		MOVLW	B'01111010'
-;		MOVWF	OSCCON
-;INITHFIOFS	BTFSS	OSCSTAT,HFIOFS
-;		GOTO	INITHFIOFS
+START
+		MOVLW	0xff
+		MOVWF	UREG1
+		MOVLW	0xff
+		MOVWF	UREG2
 
-#INCLUDE	"timeout.inc"
-#INCLUDE	"usoft.inc"
+LOOP
+		BANKSEL	UINP		;    1T
+		BSF	UREG1,7		;    1T
+		BTFSS	UINP,URXD1	; |
+		BCF     UREG1,7		; |- 2T
+					; S	4T
 
-		; switch off analog
-START		BANKSEL ANSELA              ;BANK ?
-                CLRF	ANSELA
+                BANKSEL UOUT		;    1T
+                RRF     UREG1,F		;    1T
+                BTFSS   STATUS,C	; |
+                BCF     UOUT,UTXD1	; |- 2T
+                BTFSC   STATUS,C	; |
+                BSF     UOUT,UTXD1	; |- 2T
+					; S	6T
 
-		; RO	RAO	out
-		; DI	RA1	in
-		; DE'	RA2	out
-		; 	RA3
-		; DI'	RA4	out
-		; RO'   RA5	in
+
+		BANKSEL	UINP		;    1T
+		BSF	UREG2,7		;    1T
+		BTFSS	UINP,URXD2	; |
+		BCF     UREG2,7		; |- 2T
+					; S	4T
 		
-		BANKSEL TRISA
-                MOVLW   B'00100010'
-                MOVWF   TRISA
+		BANKSEL UOUT		;    1T
+		RRF     UREG2,F		;    1T
+		BTFSS   STATUS,C	; |
+		BCF     UOUT,UTXD2	; |- 2T
+		BTFSC   STATUS,C	; |
+		BSF     UOUT,UTXD2	; |- 2T
+					; S	6T
 
-                BANKSEL	APFCON              ;BANK ?
-                CLRF	APFCON
-
-MAINLOOP
-		BANKSEL	LATA
-		GOTO	MAINLOOP
+		GOTO	LOOP		; 2T
 
 ;-------------------------------------------------------------------------------
 THE
                 END
+
