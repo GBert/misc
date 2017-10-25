@@ -1,9 +1,11 @@
 const int revisionnr = 
-12901
+12903
 ;
 const char* commithash = 
-"340475d18e28edc40043e4b3b67c53fee3bd0110";
+"9550eafb6f6d0d0674c659d015dcc4e29444c4af";
 const char* revlog = 
+"12903 2017-10-25 10:47:51 +0200 mttmfcc: sensor simulation added\n" \
+"12902 2017-10-25 08:36:07 +0200 rocguiinidlg: SVG ID color\n" \
 "12901 2017-10-24 22:04:11 +0200 renderer: fix for showroute4switches\n" \
 "12900 2017-10-24 21:56:25 +0200 SLIM-COLOR: WIP (Peter)\n" \
 "12899 2017-10-24 17:27:25 +0200 wrapper: default trace file name for rocview\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12856 2017-10-15 11:05:38 +0200 renderer: regard the SLIM theme in case of seltab and turntable\n" \
 "12855 2017-10-15 10:17:49 +0200 cars and locos update from Andy\n" \
 "12854 2017-10-15 09:29:05 +0200 node: fix for replacechilds attribute\n" \
-"12853 2017-10-14 08:39:32 +0200 item: test auto buffered paint\n" \
-"12852 2017-10-13 21:36:15 +0200 SLIM: minor improvement\n" \
 
 "log end";
