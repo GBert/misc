@@ -1,9 +1,19 @@
 const int revisionnr = 
-12891
+12901
 ;
 const char* commithash = 
-"ff4068ece5d607963592d265b33774aa7f7b4662";
+"340475d18e28edc40043e4b3b67c53fee3bd0110";
 const char* revlog = 
+"12901 2017-10-24 22:04:11 +0200 renderer: fix for showroute4switches\n" \
+"12900 2017-10-24 21:56:25 +0200 SLIM-COLOR: WIP (Peter)\n" \
+"12899 2017-10-24 17:27:25 +0200 wrapper: default trace file name for rocview\n" \
+"12898 2017-10-24 17:22:17 +0200 text variable sensor regval added\n" \
+"12897 2017-10-24 17:07:18 +0200 powerctrldlg: time var fix\n" \
+"12896 2017-10-24 16:44:49 +0200 competitiondlg: time var fix\n" \
+"12895 2017-10-24 16:13:37 +0200 loc: getHome function added\n" \
+"12894 2017-10-24 12:57:35 +0200 loc: use home location of train if defined\n" \
+"12893 2017-10-24 12:46:10 +0200 translation merge: fr, pr_BR, sl, sr_latin, de, nl\n" \
+"12892 2017-10-24 10:44:05 +0200 operator: home location added\n" \
 "12891 2017-10-23 18:18:23 +0200 SLIM: blank distant signal added signal: fix for flipping blank aspect\n" \
 "12890 2017-10-23 15:28:42 +0200 SLIM: button 5 added (decoupler as output)\n" \
 "12889 2017-10-23 11:43:30 +0200 fback: use base address too at broadcast to clients\n" \
@@ -44,15 +54,5 @@ const char* revlog =
 "12854 2017-10-15 09:29:05 +0200 node: fix for replacechilds attribute\n" \
 "12853 2017-10-14 08:39:32 +0200 item: test auto buffered paint\n" \
 "12852 2017-10-13 21:36:15 +0200 SLIM: minor improvement\n" \
-"12851 2017-10-13 19:23:50 +0200 item: revert buffered paint\n" \
-"12850 2017-10-13 19:10:13 +0200 Analyser-Fix: no warnings for second address 9999 in dcrossing with one motor (Lothar)\n" \
-"12849 2017-10-13 18:45:28 +0200 item: buffered paint...\n" \
-"12848 2017-10-13 18:35:09 +0200 model: extra trace at setting occupancy in the occ.xml\n" \
-"12847 2017-10-13 18:19:45 +0200 item: use buffered paint under Windows\n" \
-"12846 2017-10-13 18:14:19 +0200 item: use buffered paint under Windows\n" \
-"12845 2017-10-13 17:56:53 +0200 item: revert freeze/thaw\n" \
-"12844 2017-10-13 17:45:26 +0200 SLIM: road crossing 10 added\n" \
-"12843 2017-10-13 16:15:48 +0200 item: freeze/thaw added to prevent flickering under Windows\n" \
-"12842 2017-10-13 15:53:42 +0200 SLIM: track-2 added\n" \
 
 "log end";
