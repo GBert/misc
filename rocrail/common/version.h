@@ -1,9 +1,11 @@
 const int revisionnr = 
-12911
+12913
 ;
 const char* commithash = 
-"f08a29df05321ca041415bbf668ffbdb53e8eae3";
+"3387286ace025cc7fcdfdbfeebced28897ccf12e";
 const char* revlog = 
+"12913 2017-10-26 21:48:34 +0200 SLIM-COLOR: button-1 (Peter)\n" \
+"12912 2017-10-26 18:28:01 +0200 SLIM-COLOR: decoupler (Peter)\n" \
 "12911 2017-10-26 16:33:16 +0200 SLIM-COLOR: symbols added (Peter)\n" \
 "12910 2017-10-26 16:07:04 +0200 block: evaluate absent events in manual mode\n" \
 "12909 2017-10-26 14:57:10 +0200 SLIM-COLOR: corrections (Peter)\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12866 2017-10-19 11:11:12 +0200 register sensor type added\n" \
 "12865 2017-10-18 20:17:00 +0200 rocrail icon as png\n" \
 "12864 2017-10-18 09:31:51 +0200 roclcdr: prevent looping in case of enter state\n" \
-"12863 2017-10-18 07:35:20 +0200 rocview makefile corrections for native builds\n" \
-"12862 2017-10-17 17:25:24 +0200 routedlg: not list up closed routes\n" \
 
 "log end";
