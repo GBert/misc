@@ -1,9 +1,17 @@
 const int revisionnr = 
-12903
+12911
 ;
 const char* commithash = 
-"9550eafb6f6d0d0674c659d015dcc4e29444c4af";
+"f08a29df05321ca041415bbf668ffbdb53e8eae3";
 const char* revlog = 
+"12911 2017-10-26 16:33:16 +0200 SLIM-COLOR: symbols added (Peter)\n" \
+"12910 2017-10-26 16:07:04 +0200 block: evaluate absent events in manual mode\n" \
+"12909 2017-10-26 14:57:10 +0200 SLIM-COLOR: corrections (Peter)\n" \
+"12908 2017-10-26 14:26:48 +0200 fback: trigger the action check too if the regval did change\n" \
+"12907 2017-10-26 14:15:56 +0200 SLIM-COLOR: update (Peter)\n" \
+"12906 2017-10-26 14:09:32 +0200 block: only evaluate the code event in case the block type is shunting\n" \
+"12905 2017-10-26 12:20:51 +0200 block: code sensor added for shunting cars\n" \
+"12904 2017-10-26 07:25:44 +0200 SLIM-COLOR: update (Peter)\n" \
 "12903 2017-10-25 10:47:51 +0200 mttmfcc: sensor simulation added\n" \
 "12902 2017-10-25 08:36:07 +0200 rocguiinidlg: SVG ID color\n" \
 "12901 2017-10-24 22:04:11 +0200 renderer: fix for showroute4switches\n" \
@@ -46,13 +54,5 @@ const char* revlog =
 "12864 2017-10-18 09:31:51 +0200 roclcdr: prevent looping in case of enter state\n" \
 "12863 2017-10-18 07:35:20 +0200 rocview makefile corrections for native builds\n" \
 "12862 2017-10-17 17:25:24 +0200 routedlg: not list up closed routes\n" \
-"12861 2017-10-16 11:47:00 +0200 routedialog: autogen checkbox added to be able to remove this flag\n" \
-"12860 2017-10-16 11:24:15 +0200 analyse: set description in the generated routes\n" \
-"12859 2017-10-16 11:10:56 +0200 autogen flag added for routes to replace the autogen- prefix\n" \
-"12858 2017-10-16 07:59:39 +0200 rocguiinidlg: reenabled the lnsv tab option\n" \
-"12857 2017-10-15 13:13:02 +0200 actionsctrldlg: has conditions column added to the index\n" \
-"12856 2017-10-15 11:05:38 +0200 renderer: regard the SLIM theme in case of seltab and turntable\n" \
-"12855 2017-10-15 10:17:49 +0200 cars and locos update from Andy\n" \
-"12854 2017-10-15 09:29:05 +0200 node: fix for replacechilds attribute\n" \
 
 "log end";
