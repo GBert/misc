@@ -635,6 +635,8 @@ int main(int argc, char **argv) {
 			uid = ntohl(*(uint32_t *) frame.data);
 			printf("Lok Discovery - 0x%04X Protokoll Kennung 0x%02X\n", uid, frame.data[4]);
 		    }
+		    if (frame.can_dlc == 6)
+			printf("Lok Discovery - 0x%04X Range %d ASK %d\n", uid, frame.data[4], frame.data[5]);
 		    break;
 		/* MFX Bind */
 		case 0x04:
@@ -723,6 +725,17 @@ int main(int argc, char **argv) {
 		    if (frame.can_dlc == 7)
 			printf("Read Config Lok %s CV Nummer %d Index %d Wert %d\n",
 			       getLoco(frame.data, s), cv_number, cv_index, frame.data[6]);
+		    break;
+		/* Write Config */
+		case 0x10:
+		case 0x11:
+		    /* TODO */
+		    cv_number = ((frame.data[4] & 0x3) << 8) + frame.data[5];
+		    cv_index = frame.data[4] >> 2;
+		    if (frame.can_dlc == 8)
+			printf("Write Config Lok %s CV Nummer %d Index %d Wert %d Ctrl 0x%02X\n", getLoco(frame.data, s), cv_number, cv_index, frame.data[6], frame.data[7]);
+		    else
+			printf("Write Config Lok %s Befehl unbekannt\n", getLoco(frame.data, s));
 		    break;
 		/* Zubehör schalten */
 		case 0x16:
