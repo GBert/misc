@@ -1,9 +1,18 @@
 const int revisionnr = 
-12913
+12922
 ;
 const char* commithash = 
-"3387286ace025cc7fcdfdbfeebced28897ccf12e";
+"159f58c288628651d82b2a4a2379819d0304e27e";
 const char* revlog = 
+"12922 2017-10-27 15:30:31 +0200 route: fix for ignore signal commands at set\n" \
+"12921 2017-10-27 14:34:02 +0200 action: unlock route only forced in case no parameter is provided\n" \
+"12920 2017-10-27 09:49:10 +0200 rocview: attribute for route prio\n" \
+"12919 2017-10-27 08:55:28 +0200 route: set signals first after all switches are set\n" \
+"12918 2017-10-27 08:08:41 +0200 SLIM: accessory-20\n" \
+"12917 2017-10-27 07:31:52 +0200 SLIM-COLOR: accessory-20 (Peter)\n" \
+"12916 2017-10-27 07:27:15 +0200 SLIM-COLOR: button-0 update (Peter)\n" \
+"12915 2017-10-26 22:17:00 +0200 SLIM: signaldistant-b fill color correction\n" \
+"12914 2017-10-26 21:58:14 +0200 SLIM: button-0 correction\n" \
 "12913 2017-10-26 21:48:34 +0200 SLIM-COLOR: button-1 (Peter)\n" \
 "12912 2017-10-26 18:28:01 +0200 SLIM-COLOR: decoupler (Peter)\n" \
 "12911 2017-10-26 16:33:16 +0200 SLIM-COLOR: symbols added (Peter)\n" \
@@ -45,14 +54,5 @@ const char* revlog =
 "12875 2017-10-20 14:10:10 +0200 model: fix for update sensor module list in case of register type\n" \
 "12874 2017-10-20 10:50:09 +0200 weather: todo added\n" \
 "12873 2017-10-20 10:35:40 +0200 route: removed the 100ms sleep between the route alias broadcasts\n" \
-"12872 2017-10-19 20:46:32 +0200 system: typo fix\n" \
-"12871 2017-10-19 19:12:47 +0200 renderer: fix for short circuit stageblock in case no fitting symbol\n" \
-"12870 2017-10-19 17:17:33 +0200 update trademark\n" \
-"12869 2017-10-19 13:57:36 +0200 update readme file\n" \
-"12868 2017-10-19 12:57:40 +0200 loconet: use slot response address instead using the expected address\n" \
-"12867 2017-10-19 12:05:48 +0200 tt: optional register sensor for bridge position\n" \
-"12866 2017-10-19 11:11:12 +0200 register sensor type added\n" \
-"12865 2017-10-18 20:17:00 +0200 rocrail icon as png\n" \
-"12864 2017-10-18 09:31:51 +0200 roclcdr: prevent looping in case of enter state\n" \
 
 "log end";
