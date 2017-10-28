@@ -1,9 +1,13 @@
 const int revisionnr = 
-12922
+12926
 ;
 const char* commithash = 
-"159f58c288628651d82b2a4a2379819d0304e27e";
+"f3dc943abef7578a976b884a9288088eb98bc719";
 const char* revlog = 
+"12926 2017-10-28 13:10:11 +0200 mttmfcc: show digital format support\n" \
+"12925 2017-10-28 11:33:12 +0200 mttmfcc: trace level corrections\n" \
+"12924 2017-10-28 11:31:36 +0200 switch: trace level corrections\n" \
+"12923 2017-10-28 07:29:20 +0200 SLIM-COLOR: update (Peter)\n" \
 "12922 2017-10-27 15:30:31 +0200 route: fix for ignore signal commands at set\n" \
 "12921 2017-10-27 14:34:02 +0200 action: unlock route only forced in case no parameter is provided\n" \
 "12920 2017-10-27 09:49:10 +0200 rocview: attribute for route prio\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12879 2017-10-22 08:48:00 +0200 block: resetghost command added\n" \
 "12878 2017-10-21 20:13:32 +0200 actionctrldlg: loco state schedule added\n" \
 "12877 2017-10-21 18:51:27 +0200 signaldialog: help index fix\n" \
-"12876 2017-10-21 10:00:37 +0200 item: reset updateenterside flag always after processing\n" \
-"12875 2017-10-20 14:10:10 +0200 model: fix for update sensor module list in case of register type\n" \
-"12874 2017-10-20 10:50:09 +0200 weather: todo added\n" \
-"12873 2017-10-20 10:35:40 +0200 route: removed the 100ms sleep between the route alias broadcasts\n" \
 
 "log end";
