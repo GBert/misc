@@ -1,9 +1,20 @@
 const int revisionnr = 
-12926
+12937
 ;
 const char* commithash = 
-"f3dc943abef7578a976b884a9288088eb98bc719";
+"a70a993c8076ba7544ecd5635f2ba13bea195ffe";
 const char* revlog = 
+"12937 2017-10-29 16:27:14 +0100 hsi88dlg: translation bps\n" \
+"12936 2017-10-29 16:25:12 +0100 hsi88: selectable baudrate, default 9600\n" \
+"12935 2017-10-29 13:09:53 +0100 translation merge: de, nl, pt_BR, sl\n" \
+"12934 2017-10-29 11:58:44 +0100 SLIM: accessory-20 state swapped\n" \
+"12933 2017-10-29 08:21:16 +0100 renderer: changed behaviour of showroute4switches\n" \
+"12932 2017-10-29 08:09:26 +0100 theme properties: color option added in combination with SLIM\n" \
+"12931 2017-10-29 07:20:15 +0100 SLIM-COLOR: accessory-20 correction (Peter)\n" \
+"12930 2017-10-28 22:09:57 +0200 symbols: removed not used virtual switch\n" \
+"12929 2017-10-28 17:37:33 +0200 cbusnodedlg: 250ms pause between the getall commands CANGCA1e\n" \
+"12928 2017-10-28 16:44:44 +0200 cbus: trace level corrections\n" \
+"12927 2017-10-28 15:36:22 +0200 guiframe: fix for update block in case no locoid is set in the event\n" \
 "12926 2017-10-28 13:10:11 +0200 mttmfcc: show digital format support\n" \
 "12925 2017-10-28 11:33:12 +0200 mttmfcc: trace level corrections\n" \
 "12924 2017-10-28 11:31:36 +0200 switch: trace level corrections\n" \
@@ -43,16 +54,5 @@ const char* revlog =
 "12890 2017-10-23 15:28:42 +0200 SLIM: button 5 added (decoupler as output)\n" \
 "12889 2017-10-23 11:43:30 +0200 fback: use base address too at broadcast to clients\n" \
 "12888 2017-10-23 11:10:31 +0200 car: getHome function return value fix\n" \
-"12887 2017-10-23 08:46:22 +0200 car: getHome function added\n" \
-"12886 2017-10-23 08:32:28 +0200 car: home location added as preparation for shuting\n" \
-"12885 2017-10-22 16:03:42 +0200 stage: trace level change for unexpected event\n" \
-"12884 2017-10-22 15:29:45 +0200 guiframe: use the event node to update the block state\n" \
-"12883 2017-10-22 14:10:30 +0200 item: extra trace for reserved and entering flags\n" \
-"12882 2017-10-22 12:09:06 +0200 model: fix for gotoblock in case its occupied\n" \
-"12881 2017-10-22 11:08:13 +0200 SLIM: small ghost block\n" \
-"12880 2017-10-22 09:20:29 +0200 SLIM: ghost block added\n" \
-"12879 2017-10-22 08:48:00 +0200 block: resetghost command added\n" \
-"12878 2017-10-21 20:13:32 +0200 actionctrldlg: loco state schedule added\n" \
-"12877 2017-10-21 18:51:27 +0200 signaldialog: help index fix\n" \
 
 "log end";
