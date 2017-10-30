@@ -1,9 +1,13 @@
 const int revisionnr = 
-12940
+12944
 ;
 const char* commithash = 
-"1ec59d06dee8d4d15af45ef131dce780760032f3";
+"3eb9b019f2b25dc3a289476e3e1c356da07454c0";
 const char* revlog = 
+"12944 2017-10-30 12:06:08 +0100 guiframe: fix for evaluating the slim attribute\n" \
+"12943 2017-10-30 12:02:20 +0100 enter: regard check2in in case of setting signals\n" \
+"12942 2017-10-30 11:41:38 +0100 xmlscript: variable generated flag added\n" \
+"12941 2017-10-30 11:33:51 +0100 loc: extra check for rearprotection to make sure the loco is already in\n" \
 "12940 2017-10-30 09:12:18 +0100 routedialog: combine autogen and generated flag\n" \
 "12939 2017-10-29 18:38:36 +0100 tt: allow manager routes set static\n" \
 "12938 2017-10-29 18:01:08 +0100 fback: register bits added\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12897 2017-10-24 17:07:18 +0200 powerctrldlg: time var fix\n" \
 "12896 2017-10-24 16:44:49 +0200 competitiondlg: time var fix\n" \
 "12895 2017-10-24 16:13:37 +0200 loc: getHome function added\n" \
-"12894 2017-10-24 12:57:35 +0200 loc: use home location of train if defined\n" \
-"12893 2017-10-24 12:46:10 +0200 translation merge: fr, pr_BR, sl, sr_latin, de, nl\n" \
-"12892 2017-10-24 10:44:05 +0200 operator: home location added\n" \
-"12891 2017-10-23 18:18:23 +0200 SLIM: blank distant signal added signal: fix for flipping blank aspect\n" \
 
 "log end";
