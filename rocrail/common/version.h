@@ -1,9 +1,10 @@
 const int revisionnr = 
-12944
+12945
 ;
 const char* commithash = 
-"3eb9b019f2b25dc3a289476e3e1c356da07454c0";
+"5f7bfdb86b7289ba1a4065990c08b7e996dd98c4";
 const char* revlog = 
+"12945 2017-10-30 14:40:58 +0100 enter, initialize: regard route wait speed in case no dest if found\n" \
 "12944 2017-10-30 12:06:08 +0100 guiframe: fix for evaluating the slim attribute\n" \
 "12943 2017-10-30 12:02:20 +0100 enter: regard check2in in case of setting signals\n" \
 "12942 2017-10-30 11:41:38 +0100 xmlscript: variable generated flag added\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12898 2017-10-24 17:22:17 +0200 text variable sensor regval added\n" \
 "12897 2017-10-24 17:07:18 +0200 powerctrldlg: time var fix\n" \
 "12896 2017-10-24 16:44:49 +0200 competitiondlg: time var fix\n" \
-"12895 2017-10-24 16:13:37 +0200 loc: getHome function added\n" \
 
 "log end";
