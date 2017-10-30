@@ -1,9 +1,12 @@
 const int revisionnr = 
-12937
+12940
 ;
 const char* commithash = 
-"a70a993c8076ba7544ecd5635f2ba13bea195ffe";
+"1ec59d06dee8d4d15af45ef131dce780760032f3";
 const char* revlog = 
+"12940 2017-10-30 09:12:18 +0100 routedialog: combine autogen and generated flag\n" \
+"12939 2017-10-29 18:38:36 +0100 tt: allow manager routes set static\n" \
+"12938 2017-10-29 18:01:08 +0100 fback: register bits added\n" \
 "12937 2017-10-29 16:27:14 +0100 hsi88dlg: translation bps\n" \
 "12936 2017-10-29 16:25:12 +0100 hsi88: selectable baudrate, default 9600\n" \
 "12935 2017-10-29 13:09:53 +0100 translation merge: de, nl, pt_BR, sl\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12893 2017-10-24 12:46:10 +0200 translation merge: fr, pr_BR, sl, sr_latin, de, nl\n" \
 "12892 2017-10-24 10:44:05 +0200 operator: home location added\n" \
 "12891 2017-10-23 18:18:23 +0200 SLIM: blank distant signal added signal: fix for flipping blank aspect\n" \
-"12890 2017-10-23 15:28:42 +0200 SLIM: button 5 added (decoupler as output)\n" \
-"12889 2017-10-23 11:43:30 +0200 fback: use base address too at broadcast to clients\n" \
-"12888 2017-10-23 11:10:31 +0200 car: getHome function return value fix\n" \
 
 "log end";
