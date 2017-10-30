@@ -1,9 +1,10 @@
 const int revisionnr = 
-12945
+12946
 ;
 const char* commithash = 
-"5f7bfdb86b7289ba1a4065990c08b7e996dd98c4";
+"2a9f2f99cf99e64cd4f5c573635264f67e4de322";
 const char* revlog = 
+"12946 2017-10-30 16:18:44 +0100 initialize: trace fix\n" \
 "12945 2017-10-30 14:40:58 +0100 enter, initialize: regard route wait speed in case no dest if found\n" \
 "12944 2017-10-30 12:06:08 +0100 guiframe: fix for evaluating the slim attribute\n" \
 "12943 2017-10-30 12:02:20 +0100 enter: regard check2in in case of setting signals\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12899 2017-10-24 17:27:25 +0200 wrapper: default trace file name for rocview\n" \
 "12898 2017-10-24 17:22:17 +0200 text variable sensor regval added\n" \
 "12897 2017-10-24 17:07:18 +0200 powerctrldlg: time var fix\n" \
-"12896 2017-10-24 16:44:49 +0200 competitiondlg: time var fix\n" \
 
 "log end";
