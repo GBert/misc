@@ -1,9 +1,15 @@
 const int revisionnr = 
-12947
+12953
 ;
 const char* commithash = 
-"bd854183553070cdf2203875fed58aab672b3c7f";
+"65924ba2957229d4a5f78ca1022e72b3c45193e9";
 const char* revlog = 
+"12953 2017-10-31 13:10:20 +0100 routedialog: fix for autogen and generated flag\n" \
+"12952 2017-10-31 11:46:09 +0100 routedialog: extended sensor index\n" \
+"12951 2017-10-31 08:31:02 +0100 virtual: sensor trace extended with UID and bus\n" \
+"12950 2017-10-31 08:14:41 +0100 model: filter sensor events on UID too if set\n" \
+"12949 2017-10-30 21:22:54 +0100 SLIM-COLOR: connector-curve* added (Peter)\n" \
+"12948 2017-10-30 19:58:39 +0100 SLIM: connector-curve* added\n" \
 "12947 2017-10-30 19:25:25 +0100 enter, initialize: revert use route speed on enter\n" \
 "12946 2017-10-30 16:18:44 +0100 initialize: trace fix\n" \
 "12945 2017-10-30 14:40:58 +0100 enter, initialize: regard route wait speed in case no dest if found\n" \
@@ -48,11 +54,5 @@ const char* revlog =
 "12906 2017-10-26 14:09:32 +0200 block: only evaluate the code event in case the block type is shunting\n" \
 "12905 2017-10-26 12:20:51 +0200 block: code sensor added for shunting cars\n" \
 "12904 2017-10-26 07:25:44 +0200 SLIM-COLOR: update (Peter)\n" \
-"12903 2017-10-25 10:47:51 +0200 mttmfcc: sensor simulation added\n" \
-"12902 2017-10-25 08:36:07 +0200 rocguiinidlg: SVG ID color\n" \
-"12901 2017-10-24 22:04:11 +0200 renderer: fix for showroute4switches\n" \
-"12900 2017-10-24 21:56:25 +0200 SLIM-COLOR: WIP (Peter)\n" \
-"12899 2017-10-24 17:27:25 +0200 wrapper: default trace file name for rocview\n" \
-"12898 2017-10-24 17:22:17 +0200 text variable sensor regval added\n" \
 
 "log end";
