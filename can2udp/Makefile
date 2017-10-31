@@ -60,6 +60,7 @@ define Package/can2udp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/s88test-bpi $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pio-i2c-udp $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/wake-up-links88 $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/xntcpd $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/cs2ping.init $(1)/etc/init.d/cs2ping
 	$(INSTALL_BIN) ./files/can2lan.init $(1)/etc/init.d/can2lan
