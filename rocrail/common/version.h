@@ -1,9 +1,13 @@
 const int revisionnr = 
-12953
+12957
 ;
 const char* commithash = 
-"65924ba2957229d4a5f78ca1022e72b3c45193e9";
+"66c632ac6bb51fd0829ed605946637b98321cc7a";
 const char* revlog = 
+"12957 2017-11-01 08:50:32 +0100 loc: check at rear protection if V=0\n" \
+"12956 2017-11-01 08:45:22 +0100 switch, route: regard manual operated switch objects\n" \
+"12955 2017-11-01 08:25:46 +0100 switch: manualoperated option replaced with manual (impl. like signal WIP)\n" \
+"12954 2017-10-31 20:46:45 +0100 CV19 update\n" \
 "12953 2017-10-31 13:10:20 +0100 routedialog: fix for autogen and generated flag\n" \
 "12952 2017-10-31 11:46:09 +0100 routedialog: extended sensor index\n" \
 "12951 2017-10-31 08:31:02 +0100 virtual: sensor trace extended with UID and bus\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12910 2017-10-26 16:07:04 +0200 block: evaluate absent events in manual mode\n" \
 "12909 2017-10-26 14:57:10 +0200 SLIM-COLOR: corrections (Peter)\n" \
 "12908 2017-10-26 14:26:48 +0200 fback: trigger the action check too if the regval did change\n" \
-"12907 2017-10-26 14:15:56 +0200 SLIM-COLOR: update (Peter)\n" \
-"12906 2017-10-26 14:09:32 +0200 block: only evaluate the code event in case the block type is shunting\n" \
-"12905 2017-10-26 12:20:51 +0200 block: code sensor added for shunting cars\n" \
-"12904 2017-10-26 07:25:44 +0200 SLIM-COLOR: update (Peter)\n" \
 
 "log end";
