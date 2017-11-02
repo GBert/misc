@@ -1,36 +1,20 @@
 ;-------------------------------------------------------------------------------
 ;
-;   The Cowboy Boot Loader for Enhanced PIC12/PIC16
+;   RS232 to RS485 converter with a 2 USART PIC
 ;
-;   Boot Loader Project
-;
-;   Copyright (c) 2017 Darron M Broad
+;   Xpressnet Interface with
+;    USART1 (PC) 57600 8N1
+;    USART2 (XN) 62500 9N1
 ;
 ;-------------------------------------------------------------------------------
 
-;-------------------------------------------------------------------------------
-;   This file is part of The Cowboy Boot Loader.
-;
-;   The Cowboy Boot Loader is free software: you can redistribute it and/or
-;   modify it under the terms of the GNU General Public License as published
-;   by the Free Software Foundation.
-;
-;   The Cowboy Boot Loader is distributed in the hope that it will be
-;   useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-;   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-;   GNU General Public License for more details.
-;
-;   You should have received a copy of the GNU General Public License along
-;   with The Cowboy Boot Loader. If not, see http://www.gnu.org/licenses/
-;-------------------------------------------------------------------------------
-
-                RADIX       DEC
+		RADIX	DEC
 
 ;-------------------------------------------------------------------------------
 ; Device
 ;-------------------------------------------------------------------------------
 
-                PROCESSOR   16f15325
+		PROCESSOR	16f15325
 
 ;-------------------------------------------------------------------------------
 ; Device Pinout
@@ -50,13 +34,6 @@
 
 ERRORLEVEL      -1302
 #INCLUDE        "p16f15325.inc"
-
-
-; Boot Loader Size
-BOOTSIZE        EQU         8
-
-; Boot Loader Ident
-; __IDLOCS 0x6666
 
 ;-------------------------------------------------------------------------------
 ; Device Settings
@@ -85,7 +62,7 @@ BOOTSIZE        EQU         8
     ERROR       "UART2 BRG zero"
 #ENDIF
 
-; BOOT/LED/SWITCH
+; DE/LED
 #DEFINE		DDR	TRISC
 #DEFINE		OUTPUT	LATC
 #DEFINE		DE	2
@@ -94,7 +71,6 @@ BOOTSIZE        EQU         8
 CBLOCK          0x70
     frame_start	:	1
 ENDC
-
 
 ;-------------------------------------------------------------------------------
 ; Device Configuration
@@ -256,7 +232,7 @@ DATA_ON_RS232	; there is data
 		BANKSEL	RC1REG
 		MOVF	RC1REG,W
 
-		; check for start char
+		; check for start condition
 		MOVF	frame_start,F
 		BTFSC	STATUS,Z
 		BRA	FRAME_START
@@ -271,9 +247,11 @@ FRAME_START
 		; set 9th bit -> address
 		BANKSEL TX1STA
 		BSF	TX1STA,TX9D
-		INCF	frame_start
 
 TX2_CONT
+		; set the counter to one / timeout reset
+		CLRF	frame_start
+		INCF	frame_start
 		BANKSEL	PIR3
 TX2_WAIT	BTFSS   PIR3,TX2IF
 		BRA	TX2_WAIT
