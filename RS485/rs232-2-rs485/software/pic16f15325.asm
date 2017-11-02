@@ -237,15 +237,27 @@ START
 		CLRF	frame_start
 
 LOOP		BANKSEL	PIR3
-		BTFSS	PIR3,RC1IF
+		BTFSC	PIR3,RC1IF
+		BRA	DATA_ON_RS232
+
+		; if the counter was started and overflows
+		;  delete the DE
+		MOVF	frame_start,F
+		BTFSC	STATUS,Z
 		BRA	RX2_CHECK
-		; there is data
+		INCF	frame_start
+		BTFSC	STATUS,Z
+		BRA	RX2_CHECK
+		BANKSEL	OUTPUT
+		BCF	OUTPUT,DE
+		BRA	RX2_CHECK
+
+DATA_ON_RS232	; there is data
 		BANKSEL	RC1REG
 		MOVF	RC1REG,W
 
 		; check for start char
-		MOVF	frame_start,W
-		IORLW	0
+		MOVF	frame_start,F
 		BTFSC	STATUS,Z
 		BRA	FRAME_START
 
@@ -256,10 +268,10 @@ LOOP		BANKSEL	PIR3
 FRAME_START
 		BANKSEL	OUTPUT
 		BSF	OUTPUT,DE
-		INCF	frame_start,F
 		; set 9th bit -> address
 		BANKSEL TX1STA
 		BSF	TX1STA,TX9D
+		INCF	frame_start
 
 TX2_CONT
 		BANKSEL	PIR3
@@ -280,6 +292,11 @@ TX1_WAIT	BTFSS	PIR3,TX1IF
 		BRA	TX1_WAIT
 		BANKSEL	TX1REG
 		MOVWF	TX1REG
+
+		; testing
+		BANKSEL	DDR
+		MOVLW	1 << LED
+		XORWF	OUTPUT,F
 
 		GOTO	LOOP
 
