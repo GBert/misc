@@ -1,9 +1,12 @@
 const int revisionnr = 
-12957
+12960
 ;
 const char* commithash = 
-"66c632ac6bb51fd0829ed605946637b98321cc7a";
+"09b3a8cc218185d1cdc6d2da25793b280845ba73";
 const char* revlog = 
+"12960 2017-11-02 20:24:15 +0100 blockdialog: translation electrified replaced with catenary\n" \
+"12959 2017-11-01 20:09:04 +0100 car: desc attribute added\n" \
+"12958 2017-11-01 19:18:02 +0100 cardlg: description field added\n" \
 "12957 2017-11-01 08:50:32 +0100 loc: check at rear protection if V=0\n" \
 "12956 2017-11-01 08:45:22 +0100 switch, route: regard manual operated switch objects\n" \
 "12955 2017-11-01 08:25:46 +0100 switch: manualoperated option replaced with manual (impl. like signal WIP)\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12913 2017-10-26 21:48:34 +0200 SLIM-COLOR: button-1 (Peter)\n" \
 "12912 2017-10-26 18:28:01 +0200 SLIM-COLOR: decoupler (Peter)\n" \
 "12911 2017-10-26 16:33:16 +0200 SLIM-COLOR: symbols added (Peter)\n" \
-"12910 2017-10-26 16:07:04 +0200 block: evaluate absent events in manual mode\n" \
-"12909 2017-10-26 14:57:10 +0200 SLIM-COLOR: corrections (Peter)\n" \
-"12908 2017-10-26 14:26:48 +0200 fback: trigger the action check too if the regval did change\n" \
 
 "log end";
