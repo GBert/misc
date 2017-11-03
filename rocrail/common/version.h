@@ -1,9 +1,12 @@
 const int revisionnr = 
-12960
+12963
 ;
 const char* commithash = 
-"09b3a8cc218185d1cdc6d2da25793b280845ba73";
+"662cc83072b36654fd5cea3f6e20e4deda8ae336";
 const char* revlog = 
+"12963 2017-11-03 12:15:30 +0100 z21: LocoNet detector support added\n" \
+"12962 2017-11-03 11:20:39 +0100 guiframe: forum link added to the tooltar\n" \
+"12961 2017-11-03 08:09:32 +0100 blockdialog: show catenary in brackets\n" \
 "12960 2017-11-02 20:24:15 +0100 blockdialog: translation electrified replaced with catenary\n" \
 "12959 2017-11-01 20:09:04 +0100 car: desc attribute added\n" \
 "12958 2017-11-01 19:18:02 +0100 cardlg: description field added\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12916 2017-10-27 07:27:15 +0200 SLIM-COLOR: button-0 update (Peter)\n" \
 "12915 2017-10-26 22:17:00 +0200 SLIM: signaldistant-b fill color correction\n" \
 "12914 2017-10-26 21:58:14 +0200 SLIM: button-0 correction\n" \
-"12913 2017-10-26 21:48:34 +0200 SLIM-COLOR: button-1 (Peter)\n" \
-"12912 2017-10-26 18:28:01 +0200 SLIM-COLOR: decoupler (Peter)\n" \
-"12911 2017-10-26 16:33:16 +0200 SLIM-COLOR: symbols added (Peter)\n" \
 
 "log end";
