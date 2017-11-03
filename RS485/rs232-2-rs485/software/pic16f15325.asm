@@ -145,7 +145,6 @@ GPIO_INIT	MACRO
 		BANKSEL	DDR
 		; LED and DE are aoutputs
 		MOVLW	0xFF ^ ( (1 << DE) + (1 << LED))
-		MOVLW	0xF3
 		MOVWF	DDR
 		ENDM
 
