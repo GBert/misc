@@ -112,7 +112,8 @@ PPS_INIT	MACRO
 		BCF	PPSLOCK,PPSLOCKED
 ; PPSInput
 		BANKSEL RX1DTPPS            ;BANK 61
-		MOVLW   0x01                ;RA1
+		; MOVLW   0x01                ;RA1
+		MOVLW   0x13                ;RC3
 		MOVWF   RX1DTPPS            ;RA1 = RX1
 
 		; BANKSEL RX2DTPPS          ;BANK 61
@@ -122,7 +123,8 @@ PPS_INIT	MACRO
 ; PPSOutput
 		BANKSEL RA0PPS              ;BANK 62
 		MOVLW   0x0F                ;TX1/CK1
-		MOVWF   RA0PPS              ;RA0 = TX1
+		;MOVWF   RA0PPS              ;RA0 = TX1
+		MOVWF   RC4PPS              ;RC4 = TX1
 
 		; BANKSEL	RC0PPS	    ;BANK 62
 		MOVLW   0x11                ;TX2/CK2
@@ -207,6 +209,28 @@ UART2_INIT	MACRO
 
 		ENDM
 
+;-------------------------------------------------------------------------------
+
+TEST_SEND
+		BANKSEL	TX1STA
+		BCF	TX1STA,TX9D
+
+		BANKSEL PIR3
+_TX1_WAIT	BTFSS	PIR3,TX1IF
+		BRA	_TX1_WAIT
+		BANKSEL	TX1REG
+		MOVLW	0xAA
+		MOVWF	TX1REG
+
+		BANKSEL PIR3
+_TX2_WAIT	BTFSS	PIR3,TX2IF
+		BRA	_TX2_WAIT
+		BANKSEL	TX2REG
+		MOVLW	0x55
+		MOVWF	TX2REG
+
+		GOTO	TEST_SEND
+
 
 ;-------------------------------------------------------------------------------
 ; Main Loop
@@ -221,6 +245,8 @@ START
 		UART1_INIT
 		UART2_INIT
 		CLRF	frame_start
+
+		GOTO	TEST_SEND	; testing
 
 LOOP		BANKSEL	PIR3
 		BTFSC	PIR3,RC1IF
