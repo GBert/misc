@@ -92,42 +92,52 @@ ENDC
 		ORG     4
 		RETFIE
 
-PPS_INIT	MACRO
-                BANKSEL ANSELA              ;BANK 62
-                CLRF    ANSELA
-                CLRF    ANSELC
-; PPSUnlock
-                BANKSEL PPSLOCK             ;BANK ?
-                MOVLW   0x55
-                MOVWF   PPSLOCK
-                MOVLW   0xAA
-                MOVWF   PPSLOCK
-                BCF     PPSLOCK,PPSLOCKED
-; PPSInput
-                BANKSEL RX1DTPPS            ;BANK ?
-                MOVLW   0x01
-                MOVWF   RX1DTPPS            ;RA1 = RX1
+;-------------------------------------------------------------------------------
 
-		BANKSEL RX2DTPPS            ;BANK ?
-                MOVLW   0x0F
-                MOVWF   RX1DTPPS            ;RC1 = RX1
+; TX1/CK1 0x0F
+; TX2/CK2 0x11
+
+
+PPS_INIT	MACRO
+		BCF	INTCON,GIE
+		BANKSEL	ANSELA              ;BANK 62
+		CLRF	ANSELA
+		CLRF	ANSELC
+; PPSUnlock
+		BANKSEL	PPSLOCK             ;BANK 61
+		MOVLW	0x55
+		MOVWF	PPSLOCK
+		MOVLW	0xAA
+		MOVWF	PPSLOCK
+		BCF	PPSLOCK,PPSLOCKED
+; PPSInput
+		BANKSEL RX1DTPPS            ;BANK 61
+		MOVLW   0x01                ;RA1
+		MOVWF   RX1DTPPS            ;RA1 = RX1
+
+		; BANKSEL RX2DTPPS          ;BANK 61
+		MOVLW   0x11                ;RC1
+		MOVWF   RX2DTPPS            ;RC1 = RX2
 
 ; PPSOutput
-                BANKSEL RA0PPS              ;BANK 62
-                MOVLW   0x11
-                MOVWF   RA0PPS              ;RA0 = TX1
+		BANKSEL RA0PPS              ;BANK 62
+		MOVLW   0x0F                ;TX1/CK1
+		MOVWF   RA0PPS              ;RA0 = TX1
 
-		; BANKSEL RC0PPS	    ;BANK 62
-                MOVLW   0x11
-                MOVWF   RA0PPS              ;RC0 = TX2
+		; BANKSEL	RC0PPS	    ;BANK 62
+		MOVLW   0x11                ;TX2/CK2
+		MOVWF   RC0PPS              ;RC0 = TX2
+
 ; PPSLock
-                BANKSEL PPSLOCK             ;BANK ?
-                MOVLW   0x55
-                MOVWF   PPSLOCK
-                MOVLW   0xAA
-                MOVWF   PPSLOCK
-                BSF     PPSLOCK,PPSLOCKED
+		BANKSEL	PPSLOCK             ;BANK 61
+		MOVLW	0x55
+		MOVWF	PPSLOCK
+		MOVLW	0xAA
+		MOVWF	PPSLOCK
+		BSF	PPSLOCK,PPSLOCKED
 		ENDM
+
+;-------------------------------------------------------------------------------
 
 GPIO_INIT	MACRO
 		BANKSEL	DDR
@@ -143,54 +153,54 @@ GPIO_INIT	MACRO
 ;  Modifies W, BSR
 ;-------------------------------------------------------------------------------
 UART1_INIT	MACRO
-                BANKSEL BAUD1CON		;BANK 2
-                MOVLW   (1 << BRG16)
-                MOVWF   BAUD1CON
+		BANKSEL BAUD1CON		;BANK 2
+		MOVLW   (1 << BRG16)
+		MOVWF   BAUD1CON
 
-                MOVLW   HIGH (UBAUD1)
-                MOVWF   SP1BRGH
-                MOVLW   LOW  (UBAUD1)
-                MOVWF   SP1BRGL
+		MOVLW   HIGH (UBAUD1)
+		MOVWF   SP1BRGH
+		MOVLW   LOW  (UBAUD1)
+		MOVWF   SP1BRGL
 
-                ; Enable Enable Transmit + High Speed Mode
-                MOVLW   (1 << TXEN) + (1 << BRGH)
-                MOVWF   TX1STA
+		; Enable Enable Transmit + High Speed Mode
+		MOVLW   (1 << TXEN) + (1 << BRGH)
+		MOVWF   TX1STA
 
-                ; Enable Serial Port + Disable Receiver
-                MOVLW   (1 << SPEN)
-                MOVWF   RC1STA
+		; Enable Serial Port + Disable Receiver
+		MOVLW   (1 << SPEN)
+		MOVWF   RC1STA
 
-                ; Enable Receiver
-                BSF     RC1STA,CREN
+		; Enable Receiver
+		BSF     RC1STA,CREN
 
-                ; Flush Receivers
-                MOVF    RC1REG,W
-                MOVF    RC1REG,W
-                MOVF    RC1REG,W
+		; Flush Receivers
+		MOVF    RC1REG,W
+		MOVF    RC1REG,W
+		MOVF    RC1REG,W
 		ENDM
 
 UART2_INIT	MACRO
 		BANKSEL BAUD2CON		;BANK 20
-                MOVLW   (1 << BRG16)
-                MOVWF   BAUD2CON
+		MOVLW   (1 << BRG16)
+		MOVWF   BAUD2CON
 
-                MOVLW   HIGH (UBAUD2)
-                MOVWF   SP2BRGH
-                MOVLW   LOW  (UBAUD2)
-                MOVWF   SP2BRGL
+		MOVLW   HIGH (UBAUD2)
+		MOVWF   SP2BRGH
+		MOVLW   LOW  (UBAUD2)
+		MOVWF   SP2BRGL
 
-                ; Enable Enable 9-bit + Enable Transmit + High Speed Mode
-                MOVLW   (1 << TX9) + (1 << TXEN) + (1 << BRGH)
-                MOVWF   TXSTA2
+		; Enable Enable 9-bit + Enable Transmit + High Speed Mode
+		MOVLW   (1 << TX9) + (1 << TXEN) + (1 << BRGH)
+		MOVWF   TXSTA2
 
-                ; Enable Serial Port 2 + Disable Receiver
-                MOVLW   (1 << SPEN)
-                MOVWF   RCSTA2
+		; Enable Serial Port 2 + Disable Receiver
+		MOVLW   (1 << SPEN)
+		MOVWF   RCSTA2
 
-                ; Enable Receiver
-                BSF     RCSTA2,CREN
+		; Enable Receiver
+		BSF     RCSTA2,CREN
 
-                ; Flush Receivers
+		; Flush Receivers
 		MOVF	RC2REG,W
 		MOVF	RC2REG,W
 		MOVF	RC2REG,W
@@ -263,7 +273,7 @@ RX2_CHECK
 		BTFSS	PIR3,RC2IF
 		BRA	LOOP
 		BANKSEL	RC2REG
-                MOVF	RC2REG,W
+		MOVF	RC2REG,W
 
 		BANKSEL PIR3
 TX1_WAIT	BTFSS	PIR3,TX1IF
