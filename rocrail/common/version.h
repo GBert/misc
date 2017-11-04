@@ -1,9 +1,11 @@
 const int revisionnr = 
-12963
+12965
 ;
 const char* commithash = 
-"662cc83072b36654fd5cea3f6e20e4deda8ae336";
+"dcea64a1c9c04d7ec4e3cdbaa78aa13f5afa2ecf";
 const char* revlog = 
+"12965 2017-11-04 13:09:04 +0100 stagedlg: label extended electrified (catenary)\n" \
+"12964 2017-11-04 08:37:21 +0100 translation merge: de, nl, sl, sr_latin\n" \
 "12963 2017-11-03 12:15:30 +0100 z21: LocoNet detector support added\n" \
 "12962 2017-11-03 11:20:39 +0100 guiframe: forum link added to the tooltar\n" \
 "12961 2017-11-03 08:09:32 +0100 blockdialog: show catenary in brackets\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12918 2017-10-27 08:08:41 +0200 SLIM: accessory-20\n" \
 "12917 2017-10-27 07:31:52 +0200 SLIM-COLOR: accessory-20 (Peter)\n" \
 "12916 2017-10-27 07:27:15 +0200 SLIM-COLOR: button-0 update (Peter)\n" \
-"12915 2017-10-26 22:17:00 +0200 SLIM: signaldistant-b fill color correction\n" \
-"12914 2017-10-26 21:58:14 +0200 SLIM: button-0 correction\n" \
 
 "log end";
