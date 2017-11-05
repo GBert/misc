@@ -5,6 +5,28 @@ RPI-I2C/CAN Adapter mit galv. Trennung
 
 [Reichelt Liste (ohne P82B715P)](https://www.reichelt.de/my/1344615)
 
+Bauteilliste
+------------
+```
+C1,C2	22pF
+C3-C9	100nF
+D1	LED 2mA
+P1	Buchsenleiste 2x20
+P6	Steckerleiste 1x2
+P9	Groove Buchse gewinkelt
+P17	Steckerleiste 1x2
+R1-R3	4k7 Ohm
+R5	1k5 Ohm
+R13	120 Ohm
+R14,R15	3k3 Ohm
+R24,R25	3k3 Ohm
+U1	MCP2515
+U3	PB2B715
+U6	ISO1050
+U7	LM7805
+Y1	16MHz Quarz
+```
+
 Nutzung
 -------
 
