@@ -7,6 +7,7 @@ RPI-I2C/CAN Adapter mit galv. Trennung
 
 Bauteilliste
 ------------
+(galv. Trennung mit ISO1050)
 ```
 C1,C2	22pF
 C3-C9	100nF
