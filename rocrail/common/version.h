@@ -1,9 +1,16 @@
 const int revisionnr = 
-12965
+12972
 ;
 const char* commithash = 
-"dcea64a1c9c04d7ec4e3cdbaa78aa13f5afa2ecf";
+"95e49a22ad594fd22ad9a4e5a9cbb93bc0022204";
 const char* revlog = 
+"12972 2017-11-06 07:24:27 +0100 copying: update\n" \
+"12971 2017-11-05 15:58:08 +0100 bidib: state report 'fix'\n" \
+"12970 2017-11-05 15:01:22 +0100 output: longclick support added for toggle\n" \
+"12969 2017-11-05 11:16:49 +0100 translation merge: it\n" \
+"12968 2017-11-05 11:00:22 +0100 loc: figure out the changed function if not set\n" \
+"12967 2017-11-05 09:55:35 +0100 block: check also route events for rear protection\n" \
+"12966 2017-11-05 08:37:22 +0100 loconet: trace corrections\n" \
 "12965 2017-11-04 13:09:04 +0100 stagedlg: label extended electrified (catenary)\n" \
 "12964 2017-11-04 08:37:21 +0100 translation merge: de, nl, sl, sr_latin\n" \
 "12963 2017-11-03 12:15:30 +0100 z21: LocoNet detector support added\n" \
@@ -47,12 +54,5 @@ const char* revlog =
 "12925 2017-10-28 11:33:12 +0200 mttmfcc: trace level corrections\n" \
 "12924 2017-10-28 11:31:36 +0200 switch: trace level corrections\n" \
 "12923 2017-10-28 07:29:20 +0200 SLIM-COLOR: update (Peter)\n" \
-"12922 2017-10-27 15:30:31 +0200 route: fix for ignore signal commands at set\n" \
-"12921 2017-10-27 14:34:02 +0200 action: unlock route only forced in case no parameter is provided\n" \
-"12920 2017-10-27 09:49:10 +0200 rocview: attribute for route prio\n" \
-"12919 2017-10-27 08:55:28 +0200 route: set signals first after all switches are set\n" \
-"12918 2017-10-27 08:08:41 +0200 SLIM: accessory-20\n" \
-"12917 2017-10-27 07:31:52 +0200 SLIM-COLOR: accessory-20 (Peter)\n" \
-"12916 2017-10-27 07:27:15 +0200 SLIM-COLOR: button-0 update (Peter)\n" \
 
 "log end";
