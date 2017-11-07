@@ -1,9 +1,19 @@
 const int revisionnr = 
-12972
+12982
 ;
 const char* commithash = 
-"95e49a22ad594fd22ad9a4e5a9cbb93bc0022204";
+"1594afe1f8928f3c908006e4d48223a4ca923dbe";
 const char* revlog = 
+"12982 2017-11-07 17:35:48 +0100 lnmaster: ignore OPC_IDLE\n" \
+"12981 2017-11-07 16:07:47 +0100 eod: options added\n" \
+"12980 2017-11-07 15:17:19 +0100 guiframe: EoD support in case of active WorkSpace\n" \
+"12979 2017-11-07 14:49:35 +0100 wsystem: try to set the shutdown privilege\n" \
+"12978 2017-11-07 14:44:06 +0100 wsystem: try to set the shutdown privilege\n" \
+"12977 2017-11-07 14:16:19 +0100 wsystem: force power off\n" \
+"12976 2017-11-07 13:49:41 +0100 main: added new shutdown parameter in the windows section\n" \
+"12975 2017-11-07 13:42:35 +0100 guiframe: split up EoD text\n" \
+"12974 2017-11-07 12:19:41 +0100 eof: (wip)\n" \
+"12973 2017-11-06 17:17:11 +0100 enter: do not reset BBT on re_enter (no dest found search2in)\n" \
 "12972 2017-11-06 07:24:27 +0100 copying: update\n" \
 "12971 2017-11-05 15:58:08 +0100 bidib: state report 'fix'\n" \
 "12970 2017-11-05 15:01:22 +0100 output: longclick support added for toggle\n" \
@@ -44,15 +54,5 @@ const char* revlog =
 "12935 2017-10-29 13:09:53 +0100 translation merge: de, nl, pt_BR, sl\n" \
 "12934 2017-10-29 11:58:44 +0100 SLIM: accessory-20 state swapped\n" \
 "12933 2017-10-29 08:21:16 +0100 renderer: changed behaviour of showroute4switches\n" \
-"12932 2017-10-29 08:09:26 +0100 theme properties: color option added in combination with SLIM\n" \
-"12931 2017-10-29 07:20:15 +0100 SLIM-COLOR: accessory-20 correction (Peter)\n" \
-"12930 2017-10-28 22:09:57 +0200 symbols: removed not used virtual switch\n" \
-"12929 2017-10-28 17:37:33 +0200 cbusnodedlg: 250ms pause between the getall commands CANGCA1e\n" \
-"12928 2017-10-28 16:44:44 +0200 cbus: trace level corrections\n" \
-"12927 2017-10-28 15:36:22 +0200 guiframe: fix for update block in case no locoid is set in the event\n" \
-"12926 2017-10-28 13:10:11 +0200 mttmfcc: show digital format support\n" \
-"12925 2017-10-28 11:33:12 +0200 mttmfcc: trace level corrections\n" \
-"12924 2017-10-28 11:31:36 +0200 switch: trace level corrections\n" \
-"12923 2017-10-28 07:29:20 +0200 SLIM-COLOR: update (Peter)\n" \
 
 "log end";
