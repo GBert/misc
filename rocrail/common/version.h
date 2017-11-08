@@ -1,9 +1,10 @@
 const int revisionnr = 
-12984
+12985
 ;
 const char* commithash = 
-"a278feda3f7a7c0f6e49db4df30d14304c6817c9";
+"746ac183d19b95317835ce9e68dbf059bb6998be";
 const char* revlog = 
+"12985 2017-11-08 14:51:33 +0100 loc: fix for none regulated decoders and stop request\n" \
 "12984 2017-11-08 08:24:30 +0100 guiframe: eod directly under sod\n" \
 "12983 2017-11-08 07:48:04 +0100 eod: timeout value on automatic tab\n" \
 "12982 2017-11-07 17:35:48 +0100 lnmaster: ignore OPC_IDLE\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12938 2017-10-29 18:01:08 +0100 fback: register bits added\n" \
 "12937 2017-10-29 16:27:14 +0100 hsi88dlg: translation bps\n" \
 "12936 2017-10-29 16:25:12 +0100 hsi88: selectable baudrate, default 9600\n" \
-"12935 2017-10-29 13:09:53 +0100 translation merge: de, nl, pt_BR, sl\n" \
 
 "log end";
