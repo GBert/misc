@@ -1,9 +1,11 @@
 const int revisionnr = 
-12982
+12984
 ;
 const char* commithash = 
-"1594afe1f8928f3c908006e4d48223a4ca923dbe";
+"a278feda3f7a7c0f6e49db4df30d14304c6817c9";
 const char* revlog = 
+"12984 2017-11-08 08:24:30 +0100 guiframe: eod directly under sod\n" \
+"12983 2017-11-08 07:48:04 +0100 eod: timeout value on automatic tab\n" \
 "12982 2017-11-07 17:35:48 +0100 lnmaster: ignore OPC_IDLE\n" \
 "12981 2017-11-07 16:07:47 +0100 eod: options added\n" \
 "12980 2017-11-07 15:17:19 +0100 guiframe: EoD support in case of active WorkSpace\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12937 2017-10-29 16:27:14 +0100 hsi88dlg: translation bps\n" \
 "12936 2017-10-29 16:25:12 +0100 hsi88: selectable baudrate, default 9600\n" \
 "12935 2017-10-29 13:09:53 +0100 translation merge: de, nl, pt_BR, sl\n" \
-"12934 2017-10-29 11:58:44 +0100 SLIM: accessory-20 state swapped\n" \
-"12933 2017-10-29 08:21:16 +0100 renderer: changed behaviour of showroute4switches\n" \
 
 "log end";
