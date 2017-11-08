@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
 
     config_data.verbose = 1;
 
-    track_file = calloc(1, strlen(track_name) + strlen(config_data.directory) + 2);
+    track_file = calloc(strlen(track_name) + strlen(config_data.directory) + 2, 1);
     strcpy(track_file, config_data.directory);
     if (track_file[strlen(track_file) - 1] != '/')
 	strcat(track_file, "/");
@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
 
     /* printf("gbn : >%s<\n", track_file); */
 
-    config_data.name = calloc(strlen(gbs_default) +1, 1);
+    config_data.name = calloc(strlen(gbs_default) + 1, 1);
     strcpy(config_data.name, gbs_default);
     strcat(config_data.directory, track_dir);
 

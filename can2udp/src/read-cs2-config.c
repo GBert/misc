@@ -147,12 +147,12 @@ int add_loco(struct loco_data_t *loco) {
 	if (!loco->name)
 	    return (EXIT_FAILURE);
 
-	l = (struct loco_data_t *)calloc(1, sizeof(struct loco_data_t));
+	l = (struct loco_data_t *)calloc(sizeof(struct loco_data_t), 1);
 	if (!l) {
 	    fprintf(stderr, "%s: can't calloc loco data: %s\n", __func__, strerror(errno));
 	    return (EXIT_FAILURE);
 	}
-	l->name = calloc(1, strlen(loco->name) + 1);
+	l->name = calloc(strlen(loco->name) + 1, 1);
 	if (!l->name) {
 	    fprintf(stderr, "%s: can't calloc loco name: %s\n", __func__, strerror(errno));
 	    free(l);
@@ -161,7 +161,7 @@ int add_loco(struct loco_data_t *loco) {
 	strcpy(l->name, loco->name);
 
 	if (loco->type) {
-	    l->type = calloc(1, strlen(loco->type) + 1);
+	    l->type = calloc(strlen(loco->type) + 1, 1);
 	    if (!l->type) {
 		fprintf(stderr, "%s: can't calloc protocol type: %s\n", __func__, strerror(errno));
 		free(l);
@@ -224,13 +224,13 @@ int add_track_data(struct track_data_t *td) {
 
     HASH_FIND_INT(track_data, &td->id, t);	/* id already in the hash? */
     if (t == NULL) {
-	t = (struct track_data_t *)calloc(1, sizeof(struct track_data_t));
+	t = (struct track_data_t *)calloc(sizeof(struct track_data_t), 1);
 	if (!t) {
 	    fprintf(stderr, "%s: can't calloc track data struct: %s\n", __func__, strerror(errno));
 	    return (EXIT_FAILURE);
 	}
 	if (td->text) {
-	    t->text = calloc(1, strlen(td->text) + 1);
+	    t->text = calloc(strlen(td->text) + 1, 1);
 	    if (!t->text) {
 		fprintf(stderr, "%s: can't calloc track text: %s\n", __func__, strerror(errno));
 		free(t);
@@ -257,7 +257,7 @@ int add_track_data(struct track_data_t *td) {
 	/* the extra check for t->text seems to be needed */
 	if ((t->text) && (strcmp(t->text, td->text))) {
 	    check_free(t->text);
-	    t->text = calloc(1, strlen(td->text) + 1);
+	    t->text = calloc(strlen(td->text) + 1, 1);
 	    if (!t->text) {
 		fprintf(stderr, "%s: can't calloc track text: %s\n", __func__, strerror(errno));
 		return (EXIT_FAILURE);
@@ -274,12 +274,12 @@ int add_track_page(struct track_page_t *page, char *name) {
 
     HASH_FIND_INT(track_page, &page->id, t);	/* id already in the hash? */
     if (t == NULL) {
-	t = (struct track_page_t *)calloc(1, sizeof(struct track_page_t));
+	t = (struct track_page_t *)calloc(sizeof(struct track_page_t), 1);
 	if (!t) {
 	    fprintf(stderr, "%s: can't calloc track page: %s\n", __func__, strerror(errno));
 	    return (EXIT_FAILURE);
 	}
-	t->name = calloc(1, strlen(name) + 1);
+	t->name = calloc(strlen(name) + 1, 1);
 	if (!t->name) {
 	    fprintf(stderr, "%s: can't calloc track page name: %s\n", __func__, strerror(errno));
 	    free(t);
@@ -378,14 +378,14 @@ int read_track_data(char *config_file) {
 	return (EXIT_FAILURE);
     }
 
-    tp = calloc(1, sizeof(struct track_page_t));
+    tp = calloc(sizeof(struct track_page_t), 1);
     if (!tp) {
 	fprintf(stderr, "%s: can't calloc track page: %s\n", __func__, strerror(errno));
 	fclose(fp);
 	return (EXIT_FAILURE);
     }
 
-    td = calloc(1, sizeof(struct track_data_t));
+    td = calloc(sizeof(struct track_data_t), 1);
     if (!td) {
 	fprintf(stderr, "%s: can't calloc track data: %s\n", __func__, strerror(errno));
 	free(tp);
@@ -494,7 +494,7 @@ int read_track_config(char *config_file) {
 	return (EXIT_FAILURE);
     }
 
-    page = calloc(1, sizeof(struct track_page_t));
+    page = calloc(sizeof(struct track_page_t), 1);
     if (page == NULL) {
 	fprintf(stderr, "can't calloc bufer for track pages: %s\n", strerror(errno));
 	fclose(fp);
@@ -591,14 +591,14 @@ int read_loco_data(char *config_file, int config_type) {
 	}
     }
 
-    loco = calloc(1, sizeof(struct loco_data_t));
+    loco = calloc(sizeof(struct loco_data_t), 1);
     if (loco == NULL) {
 	fprintf(stderr, "can't calloc buffer for loco data: %s\n", strerror(errno));
 	fclose(fp);
 	return (EXIT_FAILURE);
     }
 
-    loco->mfxAdr = calloc(1, sizeof(struct mfxAdr_t));
+    loco->mfxAdr = calloc(sizeof(struct mfxAdr_t), 1);
     if (loco->mfxAdr == NULL) {
 	fprintf(stderr, "can't calloc buffer for loco mfx data: %s\n", strerror(errno));
 	free(loco);

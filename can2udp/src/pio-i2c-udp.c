@@ -297,7 +297,7 @@ int main(int argc, char **argv) {
 	}
     }
 
-    i2c_dev_name = calloc((strlen(i2c_dev_def_name) + 2), 0);
+    i2c_dev_name = calloc((strlen(i2c_dev_def_name) + 2), 1);
     if (!i2c_dev_name) {
 	fprintf(stderr, "can't alloc memory for I2C device name: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);

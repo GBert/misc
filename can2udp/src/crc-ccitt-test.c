@@ -131,7 +131,7 @@ int main(int argc, char **argv)
     }
     printf("deflated size %d padded (+ 4 bytes inflated file size) %d\n", nbytes, padded_nbytes);
 
-    data = (uint8_t *) calloc(padded_nbytes, sizeof(uint8_t));
+    data = (uint8_t *) calloc(padded_nbytes, 1);
     if (data == NULL) {
 	printf("fatal error: calloc failed\n");
 	return -1;

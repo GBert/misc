@@ -105,7 +105,7 @@ char **read_track_file(char *filename, char **page_name) {
 	    } else if (strstr(line, " .name=") == line) {
 		rmcrlf(line, MAXLINE);
 		if (page) {
-		    page_name[id] = calloc(strlen(&line[7]) + 5, sizeof(char));
+		    page_name[id] = calloc(strlen(&line[7]) + 5, 1);
 		    if (page_name[id] == NULL) {
 			fprint_syslog_wc(stderr, LOG_ERR, "error calloc failed creating config buffer for", filename);
 			return NULL;
@@ -472,7 +472,7 @@ uint8_t *read_config_file(char *filename, char *config_dir, uint32_t * nbytes) {
 	goto read_error1;
     }
     *nbytes = st.st_size;
-    config = (uint8_t *) calloc(*nbytes, sizeof(uint8_t));
+    config = (uint8_t *) calloc(*nbytes, 1);
     if (config == NULL) {
 	fprintf(stderr, "%s: error calloc failed creating config buffer for %s\n", __func__, filename);
 	syslog(LOG_ERR, "%s: error calloc failed creating config buffer for %s\n", __func__, filename);
@@ -526,7 +526,7 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
     if (flags & COMPRESSED) {
 	/* we need some more bytes to prepare send data (includes inflated file size and padding)    */
 	/* assuming that out[CHUNK] is large enough to compress the whole file, otherwise don't send */
-	out = (uint8_t *) calloc(CHUNK + 12, sizeof(uint8_t));
+	out = (uint8_t *) calloc(CHUNK + 12, 1);
 	if (out == NULL) {
 	    fprintf(stderr, "%s: error calloc failed creating deflation buffer\n", __func__);
 	    syslog(LOG_ERR, "%s: error calloc failed creating deflation buffer\n", __func__);
