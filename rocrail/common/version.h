@@ -1,9 +1,12 @@
 const int revisionnr = 
-12985
+12988
 ;
 const char* commithash = 
-"746ac183d19b95317835ce9e68dbf059bb6998be";
+"6108bfb3d132da4d1f54ce3fdcbd4fa1879cecaa";
 const char* revlog = 
+"12988 2017-11-09 08:49:17 +0100 virtual: report switch type on report\n" \
+"12987 2017-11-09 08:29:52 +0100 rocguiini: label corrections\n" \
+"12986 2017-11-09 08:17:52 +0100 guiframe: option for workspace control/slave code\n" \
 "12985 2017-11-08 14:51:33 +0100 loc: fix for none regulated decoders and stop request\n" \
 "12984 2017-11-08 08:24:30 +0100 guiframe: eod directly under sod\n" \
 "12983 2017-11-08 07:48:04 +0100 eod: timeout value on automatic tab\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "12941 2017-10-30 11:33:51 +0100 loc: extra check for rearprotection to make sure the loco is already in\n" \
 "12940 2017-10-30 09:12:18 +0100 routedialog: combine autogen and generated flag\n" \
 "12939 2017-10-29 18:38:36 +0100 tt: allow manager routes set static\n" \
-"12938 2017-10-29 18:01:08 +0100 fback: register bits added\n" \
-"12937 2017-10-29 16:27:14 +0100 hsi88dlg: translation bps\n" \
-"12936 2017-10-29 16:25:12 +0100 hsi88: selectable baudrate, default 9600\n" \
 
 "log end";
