@@ -1,9 +1,10 @@
 const int revisionnr = 
-12988
+12989
 ;
 const char* commithash = 
-"6108bfb3d132da4d1f54ce3fdcbd4fa1879cecaa";
+"d36bd77ad2fd8c7f6b35f7c7e9ed7af7de1b9688";
 const char* revlog = 
+"12989 2017-11-09 19:46:33 +0100 EoD: power off delay added\n" \
 "12988 2017-11-09 08:49:17 +0100 virtual: report switch type on report\n" \
 "12987 2017-11-09 08:29:52 +0100 rocguiini: label corrections\n" \
 "12986 2017-11-09 08:17:52 +0100 guiframe: option for workspace control/slave code\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12942 2017-10-30 11:41:38 +0100 xmlscript: variable generated flag added\n" \
 "12941 2017-10-30 11:33:51 +0100 loc: extra check for rearprotection to make sure the loco is already in\n" \
 "12940 2017-10-30 09:12:18 +0100 routedialog: combine autogen and generated flag\n" \
-"12939 2017-10-29 18:38:36 +0100 tt: allow manager routes set static\n" \
 
 "log end";
