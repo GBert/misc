@@ -1,9 +1,19 @@
 const int revisionnr = 
-12989
+12999
 ;
 const char* commithash = 
-"d36bd77ad2fd8c7f6b35f7c7e9ed7af7de1b9688";
+"f79b62bdb2fb5e10d35818b7b8b232890c464752";
 const char* revlog = 
+"12999 2017-11-11 15:53:42 +0100 SLIM: closed small block fix\n" \
+"12998 2017-11-11 15:35:26 +0100 rocnet: 32 functions support added\n" \
+"12997 2017-11-11 08:19:27 +0100 basedlg: optimised selectIDs function added\n" \
+"12996 2017-11-10 22:09:48 +0100 makemac.sh: removed unnecessary hdiutil commands\n" \
+"12995 2017-11-10 18:08:20 +0100 translation merge: nl, de, sl, pt_BR\n" \
+"12994 2017-11-10 12:56:28 +0100 rocint: interface update for blockbase\n" \
+"12993 2017-11-10 11:23:16 +0100 blockgroup: condition prereserve option added\n" \
+"12992 2017-11-10 10:40:10 +0100 blockgroup: pre-reserve function added\n" \
+"12991 2017-11-10 09:25:01 +0100 app: check if planfile is not empty\n" \
+"12990 2017-11-10 08:36:08 +0100 stagedlg: fix for free all sections\n" \
 "12989 2017-11-09 19:46:33 +0100 EoD: power off delay added\n" \
 "12988 2017-11-09 08:49:17 +0100 virtual: report switch type on report\n" \
 "12987 2017-11-09 08:29:52 +0100 rocguiini: label corrections\n" \
@@ -44,15 +54,5 @@ const char* revlog =
 "12952 2017-10-31 11:46:09 +0100 routedialog: extended sensor index\n" \
 "12951 2017-10-31 08:31:02 +0100 virtual: sensor trace extended with UID and bus\n" \
 "12950 2017-10-31 08:14:41 +0100 model: filter sensor events on UID too if set\n" \
-"12949 2017-10-30 21:22:54 +0100 SLIM-COLOR: connector-curve* added (Peter)\n" \
-"12948 2017-10-30 19:58:39 +0100 SLIM: connector-curve* added\n" \
-"12947 2017-10-30 19:25:25 +0100 enter, initialize: revert use route speed on enter\n" \
-"12946 2017-10-30 16:18:44 +0100 initialize: trace fix\n" \
-"12945 2017-10-30 14:40:58 +0100 enter, initialize: regard route wait speed in case no dest if found\n" \
-"12944 2017-10-30 12:06:08 +0100 guiframe: fix for evaluating the slim attribute\n" \
-"12943 2017-10-30 12:02:20 +0100 enter: regard check2in in case of setting signals\n" \
-"12942 2017-10-30 11:41:38 +0100 xmlscript: variable generated flag added\n" \
-"12941 2017-10-30 11:33:51 +0100 loc: extra check for rearprotection to make sure the loco is already in\n" \
-"12940 2017-10-30 09:12:18 +0100 routedialog: combine autogen and generated flag\n" \
 
 "log end";
