@@ -1,9 +1,15 @@
 const int revisionnr = 
-12999
+13005
 ;
 const char* commithash = 
-"f79b62bdb2fb5e10d35818b7b8b232890c464752";
+"e5bfe176665f3f4de93f632138b326e06179e7a3";
 const char* revlog = 
+"13005 2017-11-12 17:03:10 +0100 app: count down power off delay\n" \
+"13004 2017-11-12 16:46:06 +0100 dccpp: fix for choosing the default sublib\n" \
+"13003 2017-11-12 16:34:11 +0100 new demo plan\n" \
+"13002 2017-11-12 16:05:00 +0100 analyser: dir track exception option added\n" \
+"13001 2017-11-12 10:13:26 +0100 z21: trace level correction\n" \
+"13000 2017-11-12 10:11:08 +0100 rocpro: fix for saving the decspec from server if local directory does not exist\n" \
 "12999 2017-11-11 15:53:42 +0100 SLIM: closed small block fix\n" \
 "12998 2017-11-11 15:35:26 +0100 rocnet: 32 functions support added\n" \
 "12997 2017-11-11 08:19:27 +0100 basedlg: optimised selectIDs function added\n" \
@@ -48,11 +54,5 @@ const char* revlog =
 "12958 2017-11-01 19:18:02 +0100 cardlg: description field added\n" \
 "12957 2017-11-01 08:50:32 +0100 loc: check at rear protection if V=0\n" \
 "12956 2017-11-01 08:45:22 +0100 switch, route: regard manual operated switch objects\n" \
-"12955 2017-11-01 08:25:46 +0100 switch: manualoperated option replaced with manual (impl. like signal WIP)\n" \
-"12954 2017-10-31 20:46:45 +0100 CV19 update\n" \
-"12953 2017-10-31 13:10:20 +0100 routedialog: fix for autogen and generated flag\n" \
-"12952 2017-10-31 11:46:09 +0100 routedialog: extended sensor index\n" \
-"12951 2017-10-31 08:31:02 +0100 virtual: sensor trace extended with UID and bus\n" \
-"12950 2017-10-31 08:14:41 +0100 model: filter sensor events on UID too if set\n" \
 
 "log end";
