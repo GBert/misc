@@ -1,9 +1,13 @@
 const int revisionnr = 
-13005
+13009
 ;
 const char* commithash = 
-"e5bfe176665f3f4de93f632138b326e06179e7a3";
+"01a50bdb62acc868959a126ede1236274b3858dc";
 const char* revlog = 
+"13009 2017-11-13 11:35:42 +0100 app: fix for power off delay\n" \
+"13008 2017-11-13 08:30:37 +0100 translation merge: sl, de\n" \
+"13007 2017-11-13 07:40:19 +0100 stagedlg: sort column fix\n" \
+"13006 2017-11-12 21:37:23 +0100 ecos: SoD support added\n" \
 "13005 2017-11-12 17:03:10 +0100 app: count down power off delay\n" \
 "13004 2017-11-12 16:46:06 +0100 dccpp: fix for choosing the default sublib\n" \
 "13003 2017-11-12 16:34:11 +0100 new demo plan\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12962 2017-11-03 11:20:39 +0100 guiframe: forum link added to the tooltar\n" \
 "12961 2017-11-03 08:09:32 +0100 blockdialog: show catenary in brackets\n" \
 "12960 2017-11-02 20:24:15 +0100 blockdialog: translation electrified replaced with catenary\n" \
-"12959 2017-11-01 20:09:04 +0100 car: desc attribute added\n" \
-"12958 2017-11-01 19:18:02 +0100 cardlg: description field added\n" \
-"12957 2017-11-01 08:50:32 +0100 loc: check at rear protection if V=0\n" \
-"12956 2017-11-01 08:45:22 +0100 switch, route: regard manual operated switch objects\n" \
 
 "log end";
