@@ -1,9 +1,10 @@
 const int revisionnr = 
-13009
+13010
 ;
 const char* commithash = 
-"01a50bdb62acc868959a126ede1236274b3858dc";
+"01e2b66b38eed3dac99c207eae3fe4d4e4a0469c";
 const char* revlog = 
+"13010 2017-11-13 16:52:41 +0100 speed percent values minimal 10\n" \
 "13009 2017-11-13 11:35:42 +0100 app: fix for power off delay\n" \
 "13008 2017-11-13 08:30:37 +0100 translation merge: sl, de\n" \
 "13007 2017-11-13 07:40:19 +0100 stagedlg: sort column fix\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12963 2017-11-03 12:15:30 +0100 z21: LocoNet detector support added\n" \
 "12962 2017-11-03 11:20:39 +0100 guiframe: forum link added to the tooltar\n" \
 "12961 2017-11-03 08:09:32 +0100 blockdialog: show catenary in brackets\n" \
-"12960 2017-11-02 20:24:15 +0100 blockdialog: translation electrified replaced with catenary\n" \
 
 "log end";
