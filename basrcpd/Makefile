@@ -40,7 +40,7 @@ endef
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/libxml2 -I./ -lpthread"
+		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -D_REENTRANT -I$(STAGING_DIR)/usr/include/libxml2 -I./ -lpthread"
 endef
 
 define Package/basrcpd/install

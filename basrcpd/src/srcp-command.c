@@ -117,12 +117,17 @@ static int handle_setcheck(sessionid_t sessionid, bus_t bus, char *device,
              && strncasecmp(device, "GM", 2) == 0) {
         sessionid_t sendto, replyto;
         int result;
-        char msg[MAXSRCPLINELEN];
+        char msg[MAXSRCPLINELEN] = {};
 
         memset(msg, 0, sizeof(msg));
         /*TODO: scan also message type */
         result =
             sscanf(parameter, "%lu %lu %990c", &sendto, &replyto, msg);
+
+	/* ugly musl workaround */
+	if ((result == 2) && msg)
+	    result++;
+
         if (result < 3)
             rc = SRCP_LISTTOOSHORT;
         else
@@ -246,6 +251,11 @@ static int handle_setcheck(sessionid_t sessionid, bus_t bus, char *device,
         char state[5], msg[256];
         memset(msg, 0, sizeof(msg));
         nelem = sscanf(parameter, "%3s %100c", state, msg);
+
+        /* ugly musl woraround */
+        if ((nelem == 1) && msg)
+            nelem++;
+
         if (nelem >= 1) {
             rc = SRCP_WRONGVALUE;
             if (strncasecmp(state, "OFF", 3) == 0) {
@@ -922,6 +932,10 @@ int doCmdClient(session_node_t * sn)
         memset(reply, 0, sizeof(reply));
         nelem = sscanf(line, "%s %s %s %1000c", command, cbus,
                        devicegroup, parameter);
+	/* ugly musl woraround */
+	if ((nelem == 3) && parameter)
+	    nelem++;
+
         bus = atoi(cbus);
         reply[0] = 0x00;
 

@@ -162,6 +162,10 @@ void *thr_doClient(void *v)
         memset(parameter, 0, sizeof(parameter));
         nelem = sscanf(line, "%s %1000c", cmd, parameter);
 
+	/* ugly musl workaround */
+	if ((nelem == 1) && parameter)
+	    nelem++;
+
         if (nelem > 0) {
             rc = SRCP_UNKNOWNCOMMAND;
 
@@ -207,8 +211,13 @@ void *thr_doClient(void *v)
             }
 
             else if (strncasecmp(cmd, "SET", 3) == 0) {
-                char p[MAXSRCPLINELEN], setcmd[MAXSRCPLINELEN];
+		char p[MAXSRCPLINELEN] = {};
+		char setcmd[MAXSRCPLINELEN] = {};
                 int n = sscanf(parameter, "%s %1000c", setcmd, p);
+
+	        /* ugly musl workaround */
+		if ((n == 1) && p)
+		    n++;
 
                 if (n == 2
                     && strncasecmp(setcmd, "CONNECTIONMODE", 14) == 0) {

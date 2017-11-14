@@ -2,7 +2,7 @@ BINS := can-bounce-test can-monitor can2eth can2udp can4lnx2udp can2serial clone
         clone-ms2-loco read-cs2-ini gb2-update ir-tester cs2ping bpi-rs485 scan2lan can2lan \
         can2lan_m ms2wifi virtual_canbuster virtual_gfp virtual_gfp3 virtual_links88 virtual_ms2 \
         get-cs-data get-cs-config pio-i2c-udp read_lococard s88udp-bpi s88udp-rpi s88test-bpi \
-        wake-up-links88 virtual_s88udp gpio-poll lan-schnitte xntcpd
+        wake-up-links88 virtual_s88udp gpio-poll lan-schnitte xntcpd test_scanf
 
 BIN = $@
 
@@ -12,6 +12,9 @@ CFLAGS+=-Wall -Wextra -Wmaybe-uninitialized -pedantic-errors -std=gnu99 -g
 
 size_of-test: size_of-test.o
 	$(CC) $(CFLAGS) -o size_of-test size_of-test.o -lpcap
+
+test_scanf: test_scanf.o
+	$(CC) $(CFLAGS) -o test_scanf test_scanf.o
 
 read_cs2_dump: read_cs2_dump.o
 	$(CC) $(CFLAGS) -o read_cs2_dump read_cs2_dump.o -lpcap
