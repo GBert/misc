@@ -1,9 +1,10 @@
 const int revisionnr = 
-13014
+13015
 ;
 const char* commithash = 
-"afae40a271b58e85471663ea7cc86b5ace9454f0";
+"102bda624ed46bf1d873a7ebb249325926c143ca";
 const char* revlog = 
+"13015 2017-11-15 13:40:53 +0100 block fifo: regard block and automobile length\n" \
 "13014 2017-11-14 17:09:40 +0100 app: shutdown controller before power off delay\n" \
 "13013 2017-11-14 11:53:34 +0100 routedialog: select via blocks with the blockdialog\n" \
 "13012 2017-11-14 07:33:11 +0100 stylesheets: update switches EN/DE (Andy)\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12968 2017-11-05 11:00:22 +0100 loc: figure out the changed function if not set\n" \
 "12967 2017-11-05 09:55:35 +0100 block: check also route events for rear protection\n" \
 "12966 2017-11-05 08:37:22 +0100 loconet: trace corrections\n" \
-"12965 2017-11-04 13:09:04 +0100 stagedlg: label extended electrified (catenary)\n" \
 
 "log end";
