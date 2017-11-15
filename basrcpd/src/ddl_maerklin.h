@@ -62,4 +62,7 @@ int protocol_maerklin_sm_write_phregister (bus_t bus, int addr, int speed);
   */
 void setSPIModeMaerklin(bool newSpiMode);
 
+char getMaerklinHI(void);
+char getMaerklinLO(void);
+
 #endif

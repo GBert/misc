@@ -163,7 +163,7 @@ void *thr_doClient(void *v)
         nelem = sscanf(line, "%s %1000c", cmd, parameter);
 
 	/* ugly musl workaround */
-	if ((nelem == 1) && parameter)
+	if ((nelem == 1) && *parameter)
 	    nelem++;
 
         if (nelem > 0) {
@@ -216,7 +216,7 @@ void *thr_doClient(void *v)
                 int n = sscanf(parameter, "%s %1000c", setcmd, p);
 
 	        /* ugly musl workaround */
-		if ((n == 1) && p)
+		if ((n == 1) && *p)
 		    n++;
 
                 if (n == 2

@@ -44,7 +44,7 @@ obj/%.o: %.c
 
 .PHONY:	clean
 clean:
-	@rm -f $(OBJ) $(DEP) $(EXE) *~ *.bak
+	@rm -f $(OBJ) $(DEP) $(EXE) *~ *.bak *.map
 	@rmdir obj
 
 
