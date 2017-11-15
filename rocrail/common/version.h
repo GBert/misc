@@ -1,9 +1,10 @@
 const int revisionnr = 
-13013
+13014
 ;
 const char* commithash = 
-"265d6604d771c34d325931bb2913f82bf380ebfa";
+"afae40a271b58e85471663ea7cc86b5ace9454f0";
 const char* revlog = 
+"13014 2017-11-14 17:09:40 +0100 app: shutdown controller before power off delay\n" \
 "13013 2017-11-14 11:53:34 +0100 routedialog: select via blocks with the blockdialog\n" \
 "13012 2017-11-14 07:33:11 +0100 stylesheets: update switches EN/DE (Andy)\n" \
 "13011 2017-11-13 18:15:03 +0100 demo plan update\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12967 2017-11-05 09:55:35 +0100 block: check also route events for rear protection\n" \
 "12966 2017-11-05 08:37:22 +0100 loconet: trace corrections\n" \
 "12965 2017-11-04 13:09:04 +0100 stagedlg: label extended electrified (catenary)\n" \
-"12964 2017-11-04 08:37:21 +0100 translation merge: de, nl, sl, sr_latin\n" \
 
 "log end";
