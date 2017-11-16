@@ -1,9 +1,13 @@
 const int revisionnr = 
-13015
+13019
 ;
 const char* commithash = 
-"102bda624ed46bf1d873a7ebb249325926c143ca";
+"1e0b987d25d156868fbe7535979b795bd02d058c";
 const char* revlog = 
+"13019 2017-11-16 21:48:08 +0100 autosave, scrollview in rocrail and rocview tabs\n" \
+"13018 2017-11-16 15:16:07 +0100 rocraild: image command line optione removed\n" \
+"13017 2017-11-16 14:22:20 +0100 rocnet: removed extra byte at output commands\n" \
+"13016 2017-11-16 11:17:54 +0100 rocrailinidialog: layout corrections\n" \
 "13015 2017-11-15 13:40:53 +0100 block fifo: regard block and automobile length\n" \
 "13014 2017-11-14 17:09:40 +0100 app: shutdown controller before power off delay\n" \
 "13013 2017-11-14 11:53:34 +0100 routedialog: select via blocks with the blockdialog\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "12972 2017-11-06 07:24:27 +0100 copying: update\n" \
 "12971 2017-11-05 15:58:08 +0100 bidib: state report 'fix'\n" \
 "12970 2017-11-05 15:01:22 +0100 output: longclick support added for toggle\n" \
-"12969 2017-11-05 11:16:49 +0100 translation merge: it\n" \
-"12968 2017-11-05 11:00:22 +0100 loc: figure out the changed function if not set\n" \
-"12967 2017-11-05 09:55:35 +0100 block: check also route events for rear protection\n" \
-"12966 2017-11-05 08:37:22 +0100 loconet: trace corrections\n" \
 
 "log end";
