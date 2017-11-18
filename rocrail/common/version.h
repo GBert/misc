@@ -1,9 +1,10 @@
 const int revisionnr = 
-13039
+13040
 ;
 const char* commithash = 
-"15c6a70fbfbfbf2138e3ecd706ddbcd7a3f3b785";
+"9b22f68237f5b152123229ef59d81c01bd8737ce";
 const char* revlog = 
+"13040 2017-11-18 11:05:55 +0100 rocnetnode: mkdeb.sh remark set to nightly build\n" \
 "13039 2017-11-18 09:16:27 +0100 fback: fix for setting baseaddr in case of an offset variable\n" \
 "13038 2017-11-18 09:08:43 +0100 block: update block occupancy after modify (by dialog)\n" \
 "13037 2017-11-17 22:32:31 +0100 scheduledialog: scrolling added\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "12993 2017-11-10 11:23:16 +0100 blockgroup: condition prereserve option added\n" \
 "12992 2017-11-10 10:40:10 +0100 blockgroup: pre-reserve function added\n" \
 "12991 2017-11-10 09:25:01 +0100 app: check if planfile is not empty\n" \
-"12990 2017-11-10 08:36:08 +0100 stagedlg: fix for free all sections\n" \
 
 "log end";
