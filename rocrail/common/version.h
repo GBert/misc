@@ -1,9 +1,11 @@
 const int revisionnr = 
-13037
+13039
 ;
 const char* commithash = 
-"6553e9405a71ec278d30f3b400734f84ecce000c";
+"15c6a70fbfbfbf2138e3ecd706ddbcd7a3f3b785";
 const char* revlog = 
+"13039 2017-11-18 09:16:27 +0100 fback: fix for setting baseaddr in case of an offset variable\n" \
+"13038 2017-11-18 09:08:43 +0100 block: update block occupancy after modify (by dialog)\n" \
 "13037 2017-11-17 22:32:31 +0100 scheduledialog: scrolling added\n" \
 "13036 2017-11-17 22:23:07 +0100 locdialog: scrolling added on the index tab\n" \
 "13035 2017-11-17 21:17:12 +0100 rocnetnode: fix bindir makefile\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "12992 2017-11-10 10:40:10 +0100 blockgroup: pre-reserve function added\n" \
 "12991 2017-11-10 09:25:01 +0100 app: check if planfile is not empty\n" \
 "12990 2017-11-10 08:36:08 +0100 stagedlg: fix for free all sections\n" \
-"12989 2017-11-09 19:46:33 +0100 EoD: power off delay added\n" \
-"12988 2017-11-09 08:49:17 +0100 virtual: report switch type on report\n" \
 
 "log end";
