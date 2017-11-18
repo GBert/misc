@@ -1,9 +1,27 @@
 const int revisionnr = 
-13019
+13037
 ;
 const char* commithash = 
-"1e0b987d25d156868fbe7535979b795bd02d058c";
+"6553e9405a71ec278d30f3b400734f84ecce000c";
 const char* revlog = 
+"13037 2017-11-17 22:32:31 +0100 scheduledialog: scrolling added\n" \
+"13036 2017-11-17 22:23:07 +0100 locdialog: scrolling added on the index tab\n" \
+"13035 2017-11-17 21:17:12 +0100 rocnetnode: fix bindir makefile\n" \
+"13034 2017-11-17 19:26:00 +0100 dialog min height reduced to 400\n" \
+"13033 2017-11-17 17:44:50 +0100 signaldialog: scrolling added\n" \
+"13032 2017-11-17 16:08:17 +0100 dialogs: eliminated multiple defines with the same name\n" \
+"13031 2017-11-17 15:32:49 +0100 outputdialog: scrolling added\n" \
+"13030 2017-11-17 15:26:55 +0100 feedbackdialog: scrolling added\n" \
+"13029 2017-11-17 15:16:01 +0100 switchdialog: scrolling added\n" \
+"13028 2017-11-17 15:06:41 +0100 blockdialog: scrolling added\n" \
+"13027 2017-11-17 14:32:24 +0100 routedialog: scrolling added\n" \
+"13026 2017-11-17 14:16:55 +0100 cardlg: scrolling added\n" \
+"13025 2017-11-17 13:56:22 +0100 locdialog: scrolling added\n" \
+"13024 2017-11-17 13:27:50 +0100 rocrailinidlg: scroll added on panels service, finder, r2rnet, controllers\n" \
+"13023 2017-11-17 13:15:54 +0100 rocrailinidlg: rpic library added\n" \
+"13022 2017-11-17 12:25:15 +0100 rocguiinidlg: added scroll container in path, svg, gamepad\n" \
+"13021 2017-11-17 11:56:14 +0100 rpic: WIP\n" \
+"13020 2017-11-17 08:08:37 +0100 rocguiinidlg, rocrailinidlg: save size and position\n" \
 "13019 2017-11-16 21:48:08 +0100 autosave, scrollview in rocrail and rocview tabs\n" \
 "13018 2017-11-16 15:16:07 +0100 rocraild: image command line optione removed\n" \
 "13017 2017-11-16 14:22:20 +0100 rocnet: removed extra byte at output commands\n" \
@@ -36,23 +54,5 @@ const char* revlog =
 "12990 2017-11-10 08:36:08 +0100 stagedlg: fix for free all sections\n" \
 "12989 2017-11-09 19:46:33 +0100 EoD: power off delay added\n" \
 "12988 2017-11-09 08:49:17 +0100 virtual: report switch type on report\n" \
-"12987 2017-11-09 08:29:52 +0100 rocguiini: label corrections\n" \
-"12986 2017-11-09 08:17:52 +0100 guiframe: option for workspace control/slave code\n" \
-"12985 2017-11-08 14:51:33 +0100 loc: fix for none regulated decoders and stop request\n" \
-"12984 2017-11-08 08:24:30 +0100 guiframe: eod directly under sod\n" \
-"12983 2017-11-08 07:48:04 +0100 eod: timeout value on automatic tab\n" \
-"12982 2017-11-07 17:35:48 +0100 lnmaster: ignore OPC_IDLE\n" \
-"12981 2017-11-07 16:07:47 +0100 eod: options added\n" \
-"12980 2017-11-07 15:17:19 +0100 guiframe: EoD support in case of active WorkSpace\n" \
-"12979 2017-11-07 14:49:35 +0100 wsystem: try to set the shutdown privilege\n" \
-"12978 2017-11-07 14:44:06 +0100 wsystem: try to set the shutdown privilege\n" \
-"12977 2017-11-07 14:16:19 +0100 wsystem: force power off\n" \
-"12976 2017-11-07 13:49:41 +0100 main: added new shutdown parameter in the windows section\n" \
-"12975 2017-11-07 13:42:35 +0100 guiframe: split up EoD text\n" \
-"12974 2017-11-07 12:19:41 +0100 eof: (wip)\n" \
-"12973 2017-11-06 17:17:11 +0100 enter: do not reset BBT on re_enter (no dest found search2in)\n" \
-"12972 2017-11-06 07:24:27 +0100 copying: update\n" \
-"12971 2017-11-05 15:58:08 +0100 bidib: state report 'fix'\n" \
-"12970 2017-11-05 15:01:22 +0100 output: longclick support added for toggle\n" \
 
 "log end";
