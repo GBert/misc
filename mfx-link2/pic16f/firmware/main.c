@@ -99,8 +99,8 @@ void pps_init(void) {
     /* RB4PPS = 0b00100;		// LC1OUT -> ENABLE */
     /* COG */
     COGINPPS = 0b10011;		// RC3 PULSE
-    RB5PPS = 0b01001;		// COG1A -> RPWM
-    RB6PPS = 0b01000;		// COG1B -> LPWM
+    RB5PPS = 0b01001;		// COG1B -> RPWM
+    RB6PPS = 0b01000;		// COG1A -> LPWM
 
     PPSLOCK = 0x55;
     PPSLOCK = 0xaa;
