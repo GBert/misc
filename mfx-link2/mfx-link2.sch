@@ -1,4 +1,5 @@
 EESchema Schematic File Version 2
+LIBS:mfx-link2-rescue
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -496,12 +497,12 @@ $EndComp
 $Comp
 L 7805 U4
 U 1 1 5900103C
-P 4150 5200
-F 0 "U4" H 4300 5004 50  0000 C CNN
-F 1 "78L05" H 4150 5400 50  0000 C CNN
-F 2 "TO_SOT_Packages_SMD:SOT89-3_Housing_Handsoldering" H 4150 5200 50  0001 C CNN
-F 3 "" H 4150 5200 50  0000 C CNN
-	1    4150 5200
+P 4175 5200
+F 0 "U4" H 4325 5004 50  0000 C CNN
+F 1 "78L05" H 4175 5400 50  0000 C CNN
+F 2 "TO_SOT_Packages_SMD:SOT89-3_Housing_Handsoldering" H 4175 5200 50  0001 C CNN
+F 3 "" H 4175 5200 50  0000 C CNN
+	1    4175 5200
 	1    0    0    -1  
 $EndComp
 Text Label 4575 6750 0    60   ~ 0
@@ -1138,11 +1139,10 @@ Wire Wire Line
 Connection ~ 3700 5150
 Wire Wire Line
 	4650 5600 4650 5525
-Connection ~ 4150 5600
 Wire Wire Line
 	4650 4725 4650 5225
 Wire Wire Line
-	4550 5150 4650 5150
+	4575 5150 4650 5150
 Connection ~ 4650 5150
 Wire Wire Line
 	3950 6350 3950 6450
@@ -1161,7 +1161,7 @@ Connection ~ 2200 3150
 Wire Wire Line
 	1750 2850 1400 2850
 Wire Wire Line
-	3000 5150 3750 5150
+	3000 5150 3775 5150
 Wire Wire Line
 	2125 5600 5000 5600
 Wire Wire Line
@@ -1269,7 +1269,7 @@ F 3 "" H 1500 4450 50  0000 C CNN
 	1    1500 4450
 	-1   0    0    1   
 $EndComp
-Text Notes 1375 6800 0    60   ~ 0
+Text Notes 1250 6800 0    60   ~ 0
 Rail
 Text Label 3700 5150 0    60   ~ 0
 VI
@@ -1303,7 +1303,7 @@ F 3 "" H 5325 2325 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L LED D13
+L LED-RESCUE-mfx-link2 D13
 U 1 1 59389A4F
 P 5000 5350
 F 0 "D13" H 5000 5450 50  0000 C CNN
@@ -1423,7 +1423,7 @@ U 2 1 593A4AC0
 P 1350 5475
 F 0 "U3" H 1500 5625 50  0000 C CNN
 F 1 "LM393" H 1600 5325 50  0000 C CNN
-F 2 "" H 1350 5475 50  0000 C CNN
+F 2 "w_smd_dil:so-8" H 1350 5475 50  0001 C CNN
 F 3 "" H 1350 5475 50  0000 C CNN
 	2    1350 5475
 	1    0    0    -1  
@@ -1493,4 +1493,88 @@ F 3 "" H 5175 6125 50  0000 C CNN
 	1    5175 6125
 	1    0    0    -1  
 $EndComp
+$Comp
+L Conn_01x04 P1
+U 1 1 5A11BCEB
+P 1050 1950
+F 0 "P1" H 1050 2150 50  0000 C CNN
+F 1 "Conn_01x04" V 1050 1650 50  0001 C CNN
+F 2 "w_conn_mkds:akl0711,5-4" H 1050 1950 50  0001 C CNN
+F 3 "" H 1050 1950 50  0001 C CNN
+	1    1050 1950
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	1250 1750 1450 1750
+Wire Wire Line
+	1250 1850 1450 1850
+Text Label 1450 1850 2    60   ~ 0
+18V+
+Text Label 1450 1750 2    60   ~ 0
+18V-
+Wire Wire Line
+	1450 6700 1700 6700
+Wire Wire Line
+	1700 6800 1450 6800
+Text Label 1450 6800 0    60   ~ 0
+rail1
+Text Label 1450 6700 0    60   ~ 0
+rail2
+Text Label 1450 2050 2    60   ~ 0
+rail1
+Text Label 1450 1950 2    60   ~ 0
+rail2
+Wire Wire Line
+	1250 1950 1450 1950
+Wire Wire Line
+	1250 2050 1450 2050
+Connection ~ 4175 5600
+Wire Wire Line
+	4175 5450 4175 5600
+$Comp
+L PWR_FLAG #FLG034
+U 1 1 5A11FF2E
+P 700 5725
+F 0 "#FLG034" H 700 5800 50  0001 C CNN
+F 1 "PWR_FLAG" H 700 5875 50  0000 C CNN
+F 2 "" H 700 5725 50  0001 C CNN
+F 3 "" H 700 5725 50  0001 C CNN
+	1    700  5725
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	700  5725 950  5725
+Connection ~ 950  5725
+$Comp
+L D-RESCUE-mfx-link2 D12
+U 1 1 5A122364
+P 2400 6075
+F 0 "D12" H 2575 6125 50  0000 C CNN
+F 1 "US1M" H 2400 6175 50  0000 C CNN
+F 2 "w_smd_diode:do214ac" H 2400 6075 50  0001 C CNN
+F 3 "" H 2400 6075 50  0000 C CNN
+	1    2400 6075
+	0    1    1    0   
+$EndComp
+$Comp
+L D-RESCUE-mfx-link2 D11
+U 1 1 5A1227E6
+P 2250 6075
+F 0 "D11" H 2425 6125 50  0000 C CNN
+F 1 "US1M" H 2250 6175 50  0000 C CNN
+F 2 "w_smd_diode:do214ac" H 2250 6075 50  0001 C CNN
+F 3 "" H 2250 6075 50  0000 C CNN
+	1    2250 6075
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	1900 5925 2400 5925
+Connection ~ 2250 5925
+Wire Wire Line
+	1900 6225 2400 6225
+Connection ~ 2250 6225
+Text Label 1900 5925 0    60   ~ 0
+rail2
+Text Label 1900 6225 0    60   ~ 0
+rail1
 $EndSCHEMATC
