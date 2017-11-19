@@ -1,9 +1,20 @@
 const int revisionnr = 
-13040
+13051
 ;
 const char* commithash = 
-"9b22f68237f5b152123229ef59d81c01bd8737ce";
+"bb4c3f7ec67ca489a91a5e7ef4614d798b082aa7";
 const char* revlog = 
+"13051 2017-11-19 13:32:50 +0100 x64 innosetup support added\n" \
+"13050 2017-11-19 13:30:27 +0100 x64 innosetup support added\n" \
+"13049 2017-11-19 12:57:42 +0100 added architecture parameter to the inno setup template\n" \
+"13048 2017-11-19 12:24:05 +0100 makewin64 update for raspi\n" \
+"13047 2017-11-19 11:56:09 +0100 makewin64-full.sh script added\n" \
+"13046 2017-11-19 11:19:39 +0100 rocs: isoDate and isoTime use time_t\n" \
+"13045 2017-11-19 11:07:52 +0100 time_ use time_t\n" \
+"13044 2017-11-19 10:51:12 +0100 time: use time_t instead of long\n" \
+"13043 2017-11-18 22:42:42 +0100 trace: win64 os string\n" \
+"13042 2017-11-18 15:58:28 +0100 xpressnet: removed accessory output behaviour\n" \
+"13041 2017-11-18 15:57:45 +0100 rpic added to the makefile\n" \
 "13040 2017-11-18 11:05:55 +0100 rocnetnode: mkdeb.sh remark set to nightly build\n" \
 "13039 2017-11-18 09:16:27 +0100 fback: fix for setting baseaddr in case of an offset variable\n" \
 "13038 2017-11-18 09:08:43 +0100 block: update block occupancy after modify (by dialog)\n" \
@@ -43,16 +54,5 @@ const char* revlog =
 "13004 2017-11-12 16:46:06 +0100 dccpp: fix for choosing the default sublib\n" \
 "13003 2017-11-12 16:34:11 +0100 new demo plan\n" \
 "13002 2017-11-12 16:05:00 +0100 analyser: dir track exception option added\n" \
-"13001 2017-11-12 10:13:26 +0100 z21: trace level correction\n" \
-"13000 2017-11-12 10:11:08 +0100 rocpro: fix for saving the decspec from server if local directory does not exist\n" \
-"12999 2017-11-11 15:53:42 +0100 SLIM: closed small block fix\n" \
-"12998 2017-11-11 15:35:26 +0100 rocnet: 32 functions support added\n" \
-"12997 2017-11-11 08:19:27 +0100 basedlg: optimised selectIDs function added\n" \
-"12996 2017-11-10 22:09:48 +0100 makemac.sh: removed unnecessary hdiutil commands\n" \
-"12995 2017-11-10 18:08:20 +0100 translation merge: nl, de, sl, pt_BR\n" \
-"12994 2017-11-10 12:56:28 +0100 rocint: interface update for blockbase\n" \
-"12993 2017-11-10 11:23:16 +0100 blockgroup: condition prereserve option added\n" \
-"12992 2017-11-10 10:40:10 +0100 blockgroup: pre-reserve function added\n" \
-"12991 2017-11-10 09:25:01 +0100 app: check if planfile is not empty\n" \
 
 "log end";
