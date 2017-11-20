@@ -1,9 +1,10 @@
 const int revisionnr = 
-13051
+13052
 ;
 const char* commithash = 
-"bb4c3f7ec67ca489a91a5e7ef4614d798b082aa7";
+"7260df63adea433374200bdb42f05e0b5f32aeb2";
 const char* revlog = 
+"13052 2017-11-19 21:53:22 +0100 demo plan: fix for sensor events in block cb2 and sb2\n" \
 "13051 2017-11-19 13:32:50 +0100 x64 innosetup support added\n" \
 "13050 2017-11-19 13:30:27 +0100 x64 innosetup support added\n" \
 "13049 2017-11-19 12:57:42 +0100 added architecture parameter to the inno setup template\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "13005 2017-11-12 17:03:10 +0100 app: count down power off delay\n" \
 "13004 2017-11-12 16:46:06 +0100 dccpp: fix for choosing the default sublib\n" \
 "13003 2017-11-12 16:34:11 +0100 new demo plan\n" \
-"13002 2017-11-12 16:05:00 +0100 analyser: dir track exception option added\n" \
 
 "log end";
