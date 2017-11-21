@@ -1,9 +1,27 @@
 const int revisionnr = 
-13052
+13070
 ;
 const char* commithash = 
-"7260df63adea433374200bdb42f05e0b5f32aeb2";
+"bf8f84595c4b75ec0518d274ef3cf40c4240de15";
 const char* revlog = 
+"13070 2017-11-21 15:09:45 +0100 cbus, loconet: dialog scrolling added\n" \
+"13069 2017-11-21 13:32:34 +0100 innosetup: do not use the previous install directory automatically\n" \
+"13068 2017-11-21 08:51:23 +0100 makewin64-full.sh: innosetup file variable\n" \
+"13067 2017-11-21 08:39:47 +0100 rpic: fix for header and input checksum\n" \
+"13066 2017-11-20 21:08:37 +0100 rpic: 100ms refresh rate\n" \
+"13065 2017-11-20 20:54:01 +0100 rpic: wip\n" \
+"13064 2017-11-20 20:05:24 +0100 rpic: wip\n" \
+"13063 2017-11-20 19:21:20 +0100 rpic: wip\n" \
+"13062 2017-11-20 18:15:59 +0100 rpic: wip\n" \
+"13061 2017-11-20 17:04:46 +0100 guiapp: update route in case not visable\n" \
+"13060 2017-11-20 16:34:23 +0100 innosetup: set support for 64bit only in case of 64bit build\n" \
+"13059 2017-11-20 16:16:06 +0100 locdialog: use time_t instead of long\n" \
+"13058 2017-11-20 15:55:30 +0100 basedlg: use time_t instead of long\n" \
+"13057 2017-11-20 14:05:08 +0100 makefiles: native WIN64 support\n" \
+"13056 2017-11-20 13:26:23 +0100 makefiles: native WIN64 support\n" \
+"13055 2017-11-20 13:21:48 +0100 makefiles: native WIN64 support\n" \
+"13054 2017-11-20 12:56:03 +0100 makefiles: native WIN64 support\n" \
+"13053 2017-11-20 12:53:20 +0100 makefiles: native WIN64 support\n" \
 "13052 2017-11-19 21:53:22 +0100 demo plan: fix for sensor events in block cb2 and sb2\n" \
 "13051 2017-11-19 13:32:50 +0100 x64 innosetup support added\n" \
 "13050 2017-11-19 13:30:27 +0100 x64 innosetup support added\n" \
@@ -36,23 +54,5 @@ const char* revlog =
 "13023 2017-11-17 13:15:54 +0100 rocrailinidlg: rpic library added\n" \
 "13022 2017-11-17 12:25:15 +0100 rocguiinidlg: added scroll container in path, svg, gamepad\n" \
 "13021 2017-11-17 11:56:14 +0100 rpic: WIP\n" \
-"13020 2017-11-17 08:08:37 +0100 rocguiinidlg, rocrailinidlg: save size and position\n" \
-"13019 2017-11-16 21:48:08 +0100 autosave, scrollview in rocrail and rocview tabs\n" \
-"13018 2017-11-16 15:16:07 +0100 rocraild: image command line optione removed\n" \
-"13017 2017-11-16 14:22:20 +0100 rocnet: removed extra byte at output commands\n" \
-"13016 2017-11-16 11:17:54 +0100 rocrailinidialog: layout corrections\n" \
-"13015 2017-11-15 13:40:53 +0100 block fifo: regard block and automobile length\n" \
-"13014 2017-11-14 17:09:40 +0100 app: shutdown controller before power off delay\n" \
-"13013 2017-11-14 11:53:34 +0100 routedialog: select via blocks with the blockdialog\n" \
-"13012 2017-11-14 07:33:11 +0100 stylesheets: update switches EN/DE (Andy)\n" \
-"13011 2017-11-13 18:15:03 +0100 demo plan update\n" \
-"13010 2017-11-13 16:52:41 +0100 speed percent values minimal 10\n" \
-"13009 2017-11-13 11:35:42 +0100 app: fix for power off delay\n" \
-"13008 2017-11-13 08:30:37 +0100 translation merge: sl, de\n" \
-"13007 2017-11-13 07:40:19 +0100 stagedlg: sort column fix\n" \
-"13006 2017-11-12 21:37:23 +0100 ecos: SoD support added\n" \
-"13005 2017-11-12 17:03:10 +0100 app: count down power off delay\n" \
-"13004 2017-11-12 16:46:06 +0100 dccpp: fix for choosing the default sublib\n" \
-"13003 2017-11-12 16:34:11 +0100 new demo plan\n" \
 
 "log end";
