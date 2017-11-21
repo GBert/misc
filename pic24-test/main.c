@@ -12,10 +12,14 @@
 #include "usart.h"
 
 #if 1
-// Select Internal FRC at POR
-_FOSCSEL(FNOSC_PRIPLL & IESO_OFF)
+//_FOSCSEL(FNOSC_PRIPLL & IESO_OFF)
+#pragma config FNOSC    = PRIPLL
+#pragma config IESO     = OFF
 // Enable Clock Switching and Configure POSC in XT mode
-_FOSC(FCKSM_CSECMD & OSCIOFNC_ON & POSCMD_EC)
+//_FOSC(FCKSM_CSECMD & OSCIOFNC_ON & POSCMD_EC)
+#pragma config FCKSM    = CSECMD
+#pragma config OSCIOFNC = ON
+#pragma config POSCMD   = EC
 #else
 // Select Internal FRC at POR
 _FOSCSEL(FNOSC_FRC & IESO_OFF)
