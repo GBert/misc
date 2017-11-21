@@ -17,8 +17,8 @@
  * with Pickle Microchip PIC ICSP. If not, see http://www.gnu.org/licenses/
  */
 
-#ifndef _LED_H
-#define _LED_H
+#ifndef _MAIN_H
+#define _MAIN_H
 
 #include <stdlib.h>		/* rand() */
 #include <stdbool.h>		/* true || false */

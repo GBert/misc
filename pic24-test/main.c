@@ -19,7 +19,7 @@
 //_FOSC(FCKSM_CSECMD & OSCIOFNC_ON & POSCMD_EC)
 #pragma config FCKSM    = CSECMD
 #pragma config OSCIOFNC = ON
-#pragma config POSCMD   = EC
+#pragma config POSCMD   = XT
 #else
 // Select Internal FRC at POR
 _FOSCSEL(FNOSC_FRC & IESO_OFF)
