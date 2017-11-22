@@ -1,9 +1,16 @@
 const int revisionnr = 
-13070
+13077
 ;
 const char* commithash = 
-"bf8f84595c4b75ec0518d274ef3cf40c4240de15";
+"342019e0a59658dcbdb6c89a54f489a5b6e8792c";
 const char* revlog = 
+"13077 2017-11-22 13:28:52 +0100 makefile: Rocweb desktop added to target install\n" \
+"13076 2017-11-22 11:34:48 +0100 rocnet: removed extra byte at switch commands\n" \
+"13075 2017-11-22 11:27:56 +0100 guiapp: fix for show routes\n" \
+"13074 2017-11-22 08:42:15 +0100 Rocweb desktop file added\n" \
+"13073 2017-11-21 18:15:31 +0100 use wheelcount for free up previous block\n" \
+"13072 2017-11-21 17:25:23 +0100 use wheelcount for free up previous block\n" \
+"13071 2017-11-21 17:15:20 +0100 rpic: checksum byte offset correction\n" \
 "13070 2017-11-21 15:09:45 +0100 cbus, loconet: dialog scrolling added\n" \
 "13069 2017-11-21 13:32:34 +0100 innosetup: do not use the previous install directory automatically\n" \
 "13068 2017-11-21 08:51:23 +0100 makewin64-full.sh: innosetup file variable\n" \
@@ -47,12 +54,5 @@ const char* revlog =
 "13030 2017-11-17 15:26:55 +0100 feedbackdialog: scrolling added\n" \
 "13029 2017-11-17 15:16:01 +0100 switchdialog: scrolling added\n" \
 "13028 2017-11-17 15:06:41 +0100 blockdialog: scrolling added\n" \
-"13027 2017-11-17 14:32:24 +0100 routedialog: scrolling added\n" \
-"13026 2017-11-17 14:16:55 +0100 cardlg: scrolling added\n" \
-"13025 2017-11-17 13:56:22 +0100 locdialog: scrolling added\n" \
-"13024 2017-11-17 13:27:50 +0100 rocrailinidlg: scroll added on panels service, finder, r2rnet, controllers\n" \
-"13023 2017-11-17 13:15:54 +0100 rocrailinidlg: rpic library added\n" \
-"13022 2017-11-17 12:25:15 +0100 rocguiinidlg: added scroll container in path, svg, gamepad\n" \
-"13021 2017-11-17 11:56:14 +0100 rpic: WIP\n" \
 
 "log end";
