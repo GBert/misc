@@ -1,9 +1,10 @@
 const int revisionnr = 
-13077
+13078
 ;
 const char* commithash = 
-"342019e0a59658dcbdb6c89a54f489a5b6e8792c";
+"2b48c35d298cdc0f922fdc16066e66af03d46d6c";
 const char* revlog = 
+"13078 2017-11-23 08:00:37 +0100 locoio: fix for resizing and save size&position\n" \
 "13077 2017-11-22 13:28:52 +0100 makefile: Rocweb desktop added to target install\n" \
 "13076 2017-11-22 11:34:48 +0100 rocnet: removed extra byte at switch commands\n" \
 "13075 2017-11-22 11:27:56 +0100 guiapp: fix for show routes\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "13031 2017-11-17 15:32:49 +0100 outputdialog: scrolling added\n" \
 "13030 2017-11-17 15:26:55 +0100 feedbackdialog: scrolling added\n" \
 "13029 2017-11-17 15:16:01 +0100 switchdialog: scrolling added\n" \
-"13028 2017-11-17 15:06:41 +0100 blockdialog: scrolling added\n" \
 
 "log end";
