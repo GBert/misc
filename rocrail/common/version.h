@@ -1,9 +1,12 @@
 const int revisionnr = 
-13081
+13084
 ;
 const char* commithash = 
-"f6a2863eccd4ee85861d9d593fbf7e01231b650f";
+"e7b88b7a30893a641f0971f05235775468ca95f7";
 const char* revlog = 
+"13084 2017-11-24 20:14:09 +0100 rocnetnodedlg: prevent programming left channel position greater then the right poisition\n" \
+"13083 2017-11-24 16:38:01 +0100 channeltunedlg: prevent setting left(off) position higher then the right(on) position\n" \
+"13082 2017-11-24 15:15:54 +0100 switch control: wait until its in position before frre up the routes\n" \
 "13081 2017-11-23 17:30:21 +0100 rocnetnode: comment in ansi style...\n" \
 "13080 2017-11-23 17:28:23 +0100 rocnetnode: get hostaddress by socket\n" \
 "13079 2017-11-23 17:09:46 +0100 rocnetnodedlg: fix for getting update info\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "13037 2017-11-17 22:32:31 +0100 scheduledialog: scrolling added\n" \
 "13036 2017-11-17 22:23:07 +0100 locdialog: scrolling added on the index tab\n" \
 "13035 2017-11-17 21:17:12 +0100 rocnetnode: fix bindir makefile\n" \
-"13034 2017-11-17 19:26:00 +0100 dialog min height reduced to 400\n" \
-"13033 2017-11-17 17:44:50 +0100 signaldialog: scrolling added\n" \
-"13032 2017-11-17 16:08:17 +0100 dialogs: eliminated multiple defines with the same name\n" \
 
 "log end";
