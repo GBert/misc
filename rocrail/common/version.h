@@ -1,9 +1,12 @@
 const int revisionnr = 
-13078
+13081
 ;
 const char* commithash = 
-"2b48c35d298cdc0f922fdc16066e66af03d46d6c";
+"f6a2863eccd4ee85861d9d593fbf7e01231b650f";
 const char* revlog = 
+"13081 2017-11-23 17:30:21 +0100 rocnetnode: comment in ansi style...\n" \
+"13080 2017-11-23 17:28:23 +0100 rocnetnode: get hostaddress by socket\n" \
+"13079 2017-11-23 17:09:46 +0100 rocnetnodedlg: fix for getting update info\n" \
 "13078 2017-11-23 08:00:37 +0100 locoio: fix for resizing and save size&position\n" \
 "13077 2017-11-22 13:28:52 +0100 makefile: Rocweb desktop added to target install\n" \
 "13076 2017-11-22 11:34:48 +0100 rocnet: removed extra byte at switch commands\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "13034 2017-11-17 19:26:00 +0100 dialog min height reduced to 400\n" \
 "13033 2017-11-17 17:44:50 +0100 signaldialog: scrolling added\n" \
 "13032 2017-11-17 16:08:17 +0100 dialogs: eliminated multiple defines with the same name\n" \
-"13031 2017-11-17 15:32:49 +0100 outputdialog: scrolling added\n" \
-"13030 2017-11-17 15:26:55 +0100 feedbackdialog: scrolling added\n" \
-"13029 2017-11-17 15:16:01 +0100 switchdialog: scrolling added\n" \
 
 "log end";
