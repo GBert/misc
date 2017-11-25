@@ -1,9 +1,14 @@
 const int revisionnr = 
-13084
+13089
 ;
 const char* commithash = 
-"e7b88b7a30893a641f0971f05235775468ca95f7";
+"061fc55a563965cc2f27c2086180d65e35474b86";
 const char* revlog = 
+"13089 2017-11-25 11:27:08 +0100 switch: control option invert added\n" \
+"13088 2017-11-25 10:01:14 +0100 rocnetnode: own default trace file name\n" \
+"13087 2017-11-25 09:59:28 +0100 rpic: faster refresh rate\n" \
+"13086 2017-11-25 09:43:52 +0100 rocnetnode: fix for unloading and removing the DCC generator\n" \
+"13085 2017-11-25 08:32:41 +0100 rocnetnode: fix for unloading and removing the DCC generator\n" \
 "13084 2017-11-24 20:14:09 +0100 rocnetnodedlg: prevent programming left channel position greater then the right poisition\n" \
 "13083 2017-11-24 16:38:01 +0100 channeltunedlg: prevent setting left(off) position higher then the right(on) position\n" \
 "13082 2017-11-24 15:15:54 +0100 switch control: wait until its in position before frre up the routes\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "13042 2017-11-18 15:58:28 +0100 xpressnet: removed accessory output behaviour\n" \
 "13041 2017-11-18 15:57:45 +0100 rpic added to the makefile\n" \
 "13040 2017-11-18 11:05:55 +0100 rocnetnode: mkdeb.sh remark set to nightly build\n" \
-"13039 2017-11-18 09:16:27 +0100 fback: fix for setting baseaddr in case of an offset variable\n" \
-"13038 2017-11-18 09:08:43 +0100 block: update block occupancy after modify (by dialog)\n" \
-"13037 2017-11-17 22:32:31 +0100 scheduledialog: scrolling added\n" \
-"13036 2017-11-17 22:23:07 +0100 locdialog: scrolling added on the index tab\n" \
-"13035 2017-11-17 21:17:12 +0100 rocnetnode: fix bindir makefile\n" \
 
 "log end";
