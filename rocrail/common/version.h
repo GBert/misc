@@ -1,9 +1,20 @@
 const int revisionnr = 
-13089
+13100
 ;
 const char* commithash = 
-"061fc55a563965cc2f27c2086180d65e35474b86";
+"ac15591fcf24c2b94ec41e8219e9289ff9a0d4dd";
 const char* revlog = 
+"13100 2017-11-26 14:38:57 +0100 mvtrack: reset command support added\n" \
+"13099 2017-11-26 13:52:02 +0100 fback: do not increase wheelcounter at command\n" \
+"13098 2017-11-26 08:48:13 +0100 rocnetnode: init outputs at startup\n" \
+"13097 2017-11-26 08:34:05 +0100 rocnetnode: check the new ini from SD before rename it to rocnetnode.ini\n" \
+"13096 2017-11-25 19:00:46 +0100 makewin64-full.sh: only one task on the raspi\n" \
+"13095 2017-11-25 18:13:47 +0100 roclcdr: free on enter/wheel count fixes\n" \
+"13094 2017-11-25 17:05:21 +0100 roclcdr: free on enter/wheel count fixes\n" \
+"13093 2017-11-25 15:09:49 +0100 rocnetnode: start of day fix\n" \
+"13092 2017-11-25 14:06:33 +0100 rocnetnode: SoD traces added\n" \
+"13091 2017-11-25 12:14:39 +0100 rocnetnode: trace errno text\n" \
+"13090 2017-11-25 12:04:01 +0100 switch: automode option added for the controller\n" \
 "13089 2017-11-25 11:27:08 +0100 switch: control option invert added\n" \
 "13088 2017-11-25 10:01:14 +0100 rocnetnode: own default trace file name\n" \
 "13087 2017-11-25 09:59:28 +0100 rpic: faster refresh rate\n" \
@@ -43,16 +54,5 @@ const char* revlog =
 "13053 2017-11-20 12:53:20 +0100 makefiles: native WIN64 support\n" \
 "13052 2017-11-19 21:53:22 +0100 demo plan: fix for sensor events in block cb2 and sb2\n" \
 "13051 2017-11-19 13:32:50 +0100 x64 innosetup support added\n" \
-"13050 2017-11-19 13:30:27 +0100 x64 innosetup support added\n" \
-"13049 2017-11-19 12:57:42 +0100 added architecture parameter to the inno setup template\n" \
-"13048 2017-11-19 12:24:05 +0100 makewin64 update for raspi\n" \
-"13047 2017-11-19 11:56:09 +0100 makewin64-full.sh script added\n" \
-"13046 2017-11-19 11:19:39 +0100 rocs: isoDate and isoTime use time_t\n" \
-"13045 2017-11-19 11:07:52 +0100 time_ use time_t\n" \
-"13044 2017-11-19 10:51:12 +0100 time: use time_t instead of long\n" \
-"13043 2017-11-18 22:42:42 +0100 trace: win64 os string\n" \
-"13042 2017-11-18 15:58:28 +0100 xpressnet: removed accessory output behaviour\n" \
-"13041 2017-11-18 15:57:45 +0100 rpic added to the makefile\n" \
-"13040 2017-11-18 11:05:55 +0100 rocnetnode: mkdeb.sh remark set to nightly build\n" \
 
 "log end";
