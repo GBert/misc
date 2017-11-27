@@ -1,9 +1,16 @@
 const int revisionnr = 
-13100
+13107
 ;
 const char* commithash = 
-"ac15591fcf24c2b94ec41e8219e9289ff9a0d4dd";
+"f938006327c9f1d1d9aae76f292eaa6363d25bcd";
 const char* revlog = 
+"13107 2017-11-27 19:55:08 +0100 innosetup: demo or wiki plan choice\n" \
+"13106 2017-11-27 13:58:30 +0100 block: trace correction for none matching code\n" \
+"13105 2017-11-27 13:36:27 +0100 wait4event: release blockgroup on enter too (test)\n" \
+"13104 2017-11-27 11:54:51 +0100 routedialog: popup for removing all autogen with questionmark\n" \
+"13103 2017-11-27 11:17:42 +0100 routedialog: remove also tt generated flags\n" \
+"13102 2017-11-27 09:57:35 +0100 locdialog: prev function group from 1 to 8\n" \
+"13101 2017-11-27 08:12:53 +0100 loc: fix for function > 28 timers\n" \
 "13100 2017-11-26 14:38:57 +0100 mvtrack: reset command support added\n" \
 "13099 2017-11-26 13:52:02 +0100 fback: do not increase wheelcounter at command\n" \
 "13098 2017-11-26 08:48:13 +0100 rocnetnode: init outputs at startup\n" \
@@ -47,12 +54,5 @@ const char* revlog =
 "13060 2017-11-20 16:34:23 +0100 innosetup: set support for 64bit only in case of 64bit build\n" \
 "13059 2017-11-20 16:16:06 +0100 locdialog: use time_t instead of long\n" \
 "13058 2017-11-20 15:55:30 +0100 basedlg: use time_t instead of long\n" \
-"13057 2017-11-20 14:05:08 +0100 makefiles: native WIN64 support\n" \
-"13056 2017-11-20 13:26:23 +0100 makefiles: native WIN64 support\n" \
-"13055 2017-11-20 13:21:48 +0100 makefiles: native WIN64 support\n" \
-"13054 2017-11-20 12:56:03 +0100 makefiles: native WIN64 support\n" \
-"13053 2017-11-20 12:53:20 +0100 makefiles: native WIN64 support\n" \
-"13052 2017-11-19 21:53:22 +0100 demo plan: fix for sensor events in block cb2 and sb2\n" \
-"13051 2017-11-19 13:32:50 +0100 x64 innosetup support added\n" \
 
 "log end";
