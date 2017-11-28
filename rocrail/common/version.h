@@ -1,9 +1,14 @@
 const int revisionnr = 
-13107
+13112
 ;
 const char* commithash = 
-"f938006327c9f1d1d9aae76f292eaa6363d25bcd";
+"69708e41f4b55afcf46253be73897a4cada351fb";
 const char* revlog = 
+"13112 2017-11-28 16:01:25 +0100 innosetup: skip ask for install directory if already installed\n" \
+"13111 2017-11-28 11:50:49 +0100 wiki demo plan added\n" \
+"13110 2017-11-28 11:34:08 +0100 car: use identifier instead of ident to be conform other objects\n" \
+"13109 2017-11-28 09:37:50 +0100 demo/wiki plan options\n" \
+"13108 2017-11-28 08:10:34 +0100 rpic: save and restore field bytes\n" \
 "13107 2017-11-27 19:55:08 +0100 innosetup: demo or wiki plan choice\n" \
 "13106 2017-11-27 13:58:30 +0100 block: trace correction for none matching code\n" \
 "13105 2017-11-27 13:36:27 +0100 wait4event: release blockgroup on enter too (test)\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "13065 2017-11-20 20:54:01 +0100 rpic: wip\n" \
 "13064 2017-11-20 20:05:24 +0100 rpic: wip\n" \
 "13063 2017-11-20 19:21:20 +0100 rpic: wip\n" \
-"13062 2017-11-20 18:15:59 +0100 rpic: wip\n" \
-"13061 2017-11-20 17:04:46 +0100 guiapp: update route in case not visable\n" \
-"13060 2017-11-20 16:34:23 +0100 innosetup: set support for 64bit only in case of 64bit build\n" \
-"13059 2017-11-20 16:16:06 +0100 locdialog: use time_t instead of long\n" \
-"13058 2017-11-20 15:55:30 +0100 basedlg: use time_t instead of long\n" \
 
 "log end";
