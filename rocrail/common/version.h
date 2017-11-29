@@ -1,9 +1,13 @@
 const int revisionnr = 
-13116
+13120
 ;
 const char* commithash = 
-"076393aa9d188ca0a9a8ac9b49e34abfdc2b3307";
+"68633a3c97e31237be915d6643c0931f7bb5de5e";
 const char* revlog = 
+"13120 2017-11-29 18:55:46 +0100 disable properties in auto mode for stage too\n" \
+"13119 2017-11-29 16:13:33 +0100 InnoSetup: do not popup if the destination directory already exist\n" \
+"13118 2017-11-29 14:32:45 +0100 InnoSetup: do not popup if the destination directory already exist\n" \
+"13117 2017-11-29 14:22:46 +0100 innosetup: do not use the previous install directory automatically\n" \
 "13116 2017-11-29 12:52:27 +0100 item: fix for invalid locoID pointer\n" \
 "13115 2017-11-29 11:51:24 +0100 mem: isValid function added\n" \
 "13114 2017-11-28 17:23:59 +0100 item: try fix locoid mystery...\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "13073 2017-11-21 18:15:31 +0100 use wheelcount for free up previous block\n" \
 "13072 2017-11-21 17:25:23 +0100 use wheelcount for free up previous block\n" \
 "13071 2017-11-21 17:15:20 +0100 rpic: checksum byte offset correction\n" \
-"13070 2017-11-21 15:09:45 +0100 cbus, loconet: dialog scrolling added\n" \
-"13069 2017-11-21 13:32:34 +0100 innosetup: do not use the previous install directory automatically\n" \
-"13068 2017-11-21 08:51:23 +0100 makewin64-full.sh: innosetup file variable\n" \
-"13067 2017-11-21 08:39:47 +0100 rpic: fix for header and input checksum\n" \
 
 "log end";
