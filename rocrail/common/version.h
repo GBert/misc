@@ -1,9 +1,10 @@
 const int revisionnr = 
-13120
+13121
 ;
 const char* commithash = 
-"68633a3c97e31237be915d6643c0931f7bb5de5e";
+"ceca4c7c305d45b5af53645a0054b006f7cad61c";
 const char* revlog = 
+"13121 2017-11-29 22:06:19 +0100 mvtrack: toString implemented\n" \
 "13120 2017-11-29 18:55:46 +0100 disable properties in auto mode for stage too\n" \
 "13119 2017-11-29 16:13:33 +0100 InnoSetup: do not popup if the destination directory already exist\n" \
 "13118 2017-11-29 14:32:45 +0100 InnoSetup: do not popup if the destination directory already exist\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "13074 2017-11-22 08:42:15 +0100 Rocweb desktop file added\n" \
 "13073 2017-11-21 18:15:31 +0100 use wheelcount for free up previous block\n" \
 "13072 2017-11-21 17:25:23 +0100 use wheelcount for free up previous block\n" \
-"13071 2017-11-21 17:15:20 +0100 rpic: checksum byte offset correction\n" \
 
 "log end";
