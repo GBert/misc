@@ -1,9 +1,13 @@
 const int revisionnr = 
-13112
+13116
 ;
 const char* commithash = 
-"69708e41f4b55afcf46253be73897a4cada351fb";
+"076393aa9d188ca0a9a8ac9b49e34abfdc2b3307";
 const char* revlog = 
+"13116 2017-11-29 12:52:27 +0100 item: fix for invalid locoID pointer\n" \
+"13115 2017-11-29 11:51:24 +0100 mem: isValid function added\n" \
+"13114 2017-11-28 17:23:59 +0100 item: try fix locoid mystery...\n" \
+"13113 2017-11-28 17:22:35 +0100 locdialog: calibrate labels changed\n" \
 "13112 2017-11-28 16:01:25 +0100 innosetup: skip ask for install directory if already installed\n" \
 "13111 2017-11-28 11:50:49 +0100 wiki demo plan added\n" \
 "13110 2017-11-28 11:34:08 +0100 car: use identifier instead of ident to be conform other objects\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "13069 2017-11-21 13:32:34 +0100 innosetup: do not use the previous install directory automatically\n" \
 "13068 2017-11-21 08:51:23 +0100 makewin64-full.sh: innosetup file variable\n" \
 "13067 2017-11-21 08:39:47 +0100 rpic: fix for header and input checksum\n" \
-"13066 2017-11-20 21:08:37 +0100 rpic: 100ms refresh rate\n" \
-"13065 2017-11-20 20:54:01 +0100 rpic: wip\n" \
-"13064 2017-11-20 20:05:24 +0100 rpic: wip\n" \
-"13063 2017-11-20 19:21:20 +0100 rpic: wip\n" \
 
 "log end";
