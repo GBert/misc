@@ -1,9 +1,10 @@
 const int revisionnr = 
-13122
+13123
 ;
 const char* commithash = 
-"11d03c7ec45e974a809364a41a28822e0453ffe7";
+"768ef2893e744796fc2c76e93748fe1587eb5038";
 const char* revlog = 
+"13123 2017-11-30 14:20:35 +0100 fback: not delete command node in case of redirection to the controller\n" \
 "13122 2017-11-30 08:02:19 +0100 mvtrack: reset by xmlscript\n" \
 "13121 2017-11-29 22:06:19 +0100 mvtrack: toString implemented\n" \
 "13120 2017-11-29 18:55:46 +0100 disable properties in auto mode for stage too\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "13076 2017-11-22 11:34:48 +0100 rocnet: removed extra byte at switch commands\n" \
 "13075 2017-11-22 11:27:56 +0100 guiapp: fix for show routes\n" \
 "13074 2017-11-22 08:42:15 +0100 Rocweb desktop file added\n" \
-"13073 2017-11-21 18:15:31 +0100 use wheelcount for free up previous block\n" \
 
 "log end";
