@@ -358,7 +358,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 
 int main(int argc, char **argv) {
     pid_t pid;
-    int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, timeout, tcp_client[MAX_TCP_CONN];
+    int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, timeout, ret, tcp_client[MAX_TCP_CONN];
     struct can_frame frame;
     char timestamp[16];
     /* UDP incoming socket , CAN socket, UDP broadcast socket, TCP socket */
@@ -372,7 +372,7 @@ int main(int argc, char **argv) {
     socklen_t caddrlen = sizeof(caddr);
     socklen_t tcp_client_length = sizeof(tcp_addr);
     fd_set all_fds, read_fds;
-    int s, ret;
+    int s = 0;
     struct timeval tv;
     char *udp_dst_address;
     char *bcast_interface;
