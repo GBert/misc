@@ -1,9 +1,10 @@
 const int revisionnr = 
-13121
+13122
 ;
 const char* commithash = 
-"ceca4c7c305d45b5af53645a0054b006f7cad61c";
+"11d03c7ec45e974a809364a41a28822e0453ffe7";
 const char* revlog = 
+"13122 2017-11-30 08:02:19 +0100 mvtrack: reset by xmlscript\n" \
 "13121 2017-11-29 22:06:19 +0100 mvtrack: toString implemented\n" \
 "13120 2017-11-29 18:55:46 +0100 disable properties in auto mode for stage too\n" \
 "13119 2017-11-29 16:13:33 +0100 InnoSetup: do not popup if the destination directory already exist\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "13075 2017-11-22 11:27:56 +0100 guiapp: fix for show routes\n" \
 "13074 2017-11-22 08:42:15 +0100 Rocweb desktop file added\n" \
 "13073 2017-11-21 18:15:31 +0100 use wheelcount for free up previous block\n" \
-"13072 2017-11-21 17:25:23 +0100 use wheelcount for free up previous block\n" \
 
 "log end";
