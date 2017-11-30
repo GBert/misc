@@ -22,7 +22,7 @@ DEP = $(OBJ:.o=.d)
 
 # CC = gcc
 
-DEFS = -D_REENTRANT -DSYSCONFDIR=\"$(CONFDIR)\" -DHAVE_CONFIG_H 
+DEFS = -D_REENTRANT -DHAVE_CONFIG_H 
 INCS = -I/usr/include/libxml2 -I.
 CFLAGS	= -g -O2 -pthread -Wall -MD $(DEFS) $(INCS) -std=gnu11
 LDFLAGS	= -Wl,-Map=$(EXE).map -pthread

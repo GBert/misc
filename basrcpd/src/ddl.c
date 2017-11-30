@@ -1605,6 +1605,8 @@ void send_packet(bus_t busnumber, char *packet,
     
     //Nur für MFX RDS 1-Bit Rückmeldung: Position und Länge im SPI Bytestream an der sich die Rückmeldung befinden muss.
     unsigned int mfxRdsPos, mfxRdsLen;
+   
+    mfxRdsPos = 0; 
 
     struct spi_ioc_transfer spi;
     char spiBuffer[2700]; //Worst Case wenn maximales MFX Paket
