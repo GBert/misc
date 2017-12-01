@@ -125,7 +125,10 @@ int gpio_export(int pin) {
     }
 
     bytes_written = snprintf(buffer, MAX_BUFFER, "%d", pin);
-    write(fd, buffer, bytes_written);
+    if (write(fd, buffer, bytes_written) < 0) {
+	fprintf(stderr, "%s: Failed to write: %s\n", __func__, strerror(errno));
+	return (EXIT_FAILURE);
+    }
     close(fd);
     return (0);
 }
@@ -142,7 +145,10 @@ int gpio_unexport(int pin) {
     }
 
     bytes_written = snprintf(buffer, MAX_BUFFER, "%d", pin);
-    write(fd, buffer, bytes_written);
+    if (write(fd, buffer, bytes_written) < 0) {
+	fprintf(stderr, "%s: Failed to write: %s\n", __func__, strerror(errno));
+	return (EXIT_FAILURE);
+    }
     close(fd);
     return (0);
 }
@@ -235,9 +241,11 @@ void *LEDMod(void *ptr) {
     }
 
     while (1) {
-	write(fd, "1", 2);
+    	if (write(fd, "1", 2) != 2)
+	    fprintf(stderr, "%s: Failed to write value!\n", __func__);
 	usec_sleep(led_period);
-	write(fd, "0", 2);
+    	if (write(fd, "0", 2) != 2)
+	    fprintf(stderr, "%s: Failed to write value!\n", __func__);
 	usec_sleep(led_period);
     }
 #else

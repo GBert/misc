@@ -5,6 +5,7 @@
  * Author: Tim Harvey <tharvey@gateworks.com>
  */
 
+#include <errno.h>
 #include <fcntl.h>
 #include <poll.h>
 #include <stdio.h>
@@ -93,7 +94,10 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "non-exported or non-input gpio: %s\n", path);
 	exit(-1);
     }
-    write(fd, argv[2], strlen(argv[2]));
+    if (write(fd, argv[2], strlen(argv[2])) < 0) {
+	fprintf(stderr, "error writing gpio edge: %s\n", strerror(errno));
+	exit(-1);
+    }
     close(fd);
 
     /* open gpio sysfs value for reading in blocking mode */

@@ -1,0 +1,23 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@
+
+override_dh_auto_clean:
+	dh_testdir
+	cd src; make clean
+	dh_clean
+
+override_dh_auto_build:
+	cd src; make can2lan; make can2serial; make can-monitor
+
+override_dh_auto_install:
+	cp src/can2lan $$(pwd)/debian/can2lan/usr/sbin
+	cp src/can2serial $$(pwd)/debian/can2lan/usr/sbin
+	cp src/can-monitor $$(pwd)/debian/can2lan/usr/bin
+	cp -r files/maerklin/config $$(pwd)/debian/can2lan/var/www/html
+
+override_dh_shlibdeps:
+	dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info
+
+override_dh_auto_test:

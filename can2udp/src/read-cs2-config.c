@@ -563,7 +563,8 @@ void read_track_pages(char *dir) {
     char *filename;
 
     for (s = track_page; s != NULL; s = s->hh.next) {
-	asprintf(&filename, "%s/%s.cs2", dir, s->name);
+	if (asprintf(&filename, "%s/%s.cs2", dir, s->name) < 0)
+	    fprintf(stderr, "can't alloc memory for filename: %s\n", __func__);
 	read_track_data(filename);
 	free(filename);
     }
@@ -683,12 +684,14 @@ int read_loco_data(char *config_file, int config_type) {
 		debug_print("match uid:       >0x%04x<\n", loco->uid);
 		break;
 	    case L1_NAME:
-		asprintf(&name, "%s", &line[L1_NAME_LENGTH]);
+		if (asprintf(&name, "%s", &line[L1_NAME_LENGTH]) < 0)
+		    fprintf(stderr, "can't alloc memory for loco->name: %s\n", __func__);
 		loco->name = name;
 		debug_print("match name:      >%s<\n", loco->name);
 		break;
 	    case L1_TYPE:
-		asprintf(&type, "%s", &line[L1_TYPE_LENGTH]);
+		if (asprintf(&type, "%s", &line[L1_TYPE_LENGTH]) < 0)
+		    fprintf(stderr, "can't alloc memory for loco->type: %s\n", __func__);
 		loco->type = type;
 		debug_print("match type:      >%s<\n", loco->type);
 		break;
@@ -705,7 +708,8 @@ int read_loco_data(char *config_file, int config_type) {
 		debug_print("match symbol:    >0%d<\n", loco->symbol);
 		break;
 	    case L1_ICON:
-		asprintf(&icon, "%s", &line[L1_ICON_LENGTH]);
+		if (asprintf(&icon, "%s", &line[L1_ICON_LENGTH]) < 0)
+		    fprintf(stderr, "can't alloc memory for loco->icon: %s\n", __func__);
 		loco->icon = icon;
 		debug_print("match icon:      >%s<\n", loco->icon);
 		break;

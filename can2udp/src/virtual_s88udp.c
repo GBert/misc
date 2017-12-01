@@ -139,13 +139,13 @@ int create_event(struct s88_t *s88, uint16_t address, uint32_t value) {
 }
 
 int main(int argc, char **argv) {
-    int value, opt, ret;
+    int opt, ret, value = 0;
     struct sockaddr_in destaddr, *bsa;
     struct ifaddrs *ifap, *ifa;
     struct s88_t s88_data;
     char *udp_dst_address;
     char *bcast_interface;
-    uint16_t sensor;
+    uint16_t sensor = 0;
 
     const int on = 1;
 

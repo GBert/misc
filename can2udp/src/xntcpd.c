@@ -187,6 +187,7 @@ int main(int argc, char **argv) {
     struct termios term_attr;
 
     int background = 1;
+    length = 0;
     ec_index = 0;
     unsigned char ec_frame[64];
     char buffer[64];

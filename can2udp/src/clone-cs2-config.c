@@ -152,8 +152,8 @@ int config_write(struct config_data *config_data) {
 int get_data(struct config_data *config_data, int sockfd) {
     unsigned char netframe[FRAME_SIZE];
     unsigned char recvline[MAXSIZE];
-    int ddi, n, tcp_packet_nr;
-    int file_not_done, temp, config_data_start, config_data_stream, deflated_size;
+    int n, tcp_packet_nr, ddi = 0;
+    int file_not_done, temp, config_data_start, config_data_stream, deflated_size = 0;
     fd_set rset;
 
     if (config_data->verbose)
