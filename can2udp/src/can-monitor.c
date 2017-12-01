@@ -556,8 +556,9 @@ int main(int argc, char **argv) {
     int max_fds, opt, sc;
     float v;
     struct can_frame frame;
-    uint32_t kennung, function, uid, cv_number, cv_index, stream_size;
-    uint16_t crc, kenner, kontakt;
+    uint32_t id, kennung, function, uid, cv_number, cv_index, stream_size;
+    uint16_t paket, crc, kenner, kontakt;
+    uint8_t n_kanaele, n_messwerte, kanal = 0;
     char s[32];
 
     struct sockaddr_can caddr;
@@ -872,15 +873,29 @@ int main(int argc, char **argv) {
 		/* Statusdaten Konfiguration */
 		case 0x3A:
 		case 0x3B:
+		    /* TODO Daten analysiert ausgeben */
 		    uid = be32(frame.data);
-		    if (frame.can_dlc == 5)
-			printf("Status Daten: UID 0x%08X Index 0x%02X\n", uid, frame.data[4]);
+		    if (frame.can_dlc == 5) {
+			kanal = frame.data[4];
+			printf("Status Daten: UID 0x%08X Index 0x%02X\n", uid, kanal);
+		    }
 		    if (frame.can_dlc == 6)
 			printf("Status Daten: UID 0x%08X Index 0x%02X Paketanzahl %d\n", uid, frame.data[4],
 			       frame.data[5]);
-		    if (frame.can_dlc == 8)
-			/* TODO Daten analysiert ausgeben */
-			printf("Status Daten: Paket %d\n", frame.can_id & 0xFCFF);
+		    if (frame.can_dlc == 8) {
+			paket = frame.can_id & 0xFCFF;
+			printf("Status Daten: Paket %d", paket);
+			if ((kanal == 0) && (paket == 1)) {
+			    n_messwerte = frame.data[0];
+			    n_kanaele = frame.data[1];
+			    id = be32(&frame.data[4]);
+			    printf(" Anzahl Messwerte: %d Anzahl Kanä: %d GeräID: 0x%08x",
+				    n_messwerte, n_kanaele, id);
+			}
+			if ((kanal == 0) && (paket != 1)) {
+			}
+			printf("\n");
+		    }
 		    break;
 		/* Anfordern Config Daten */
 		case 0x40:
