@@ -1,9 +1,10 @@
 const int revisionnr = 
-13126
+13127
 ;
 const char* commithash = 
-"b54b880133400fcc038688796eae447f004450f3";
+"4a852aa50e37cc1fe0ba711fa85843b833c96566";
 const char* revlog = 
+"13127 2017-12-01 16:16:14 +0100 rocview: extra status info at startup\n" \
 "13126 2017-12-01 11:30:42 +0100 loc: fix for function timers > 27\n" \
 "13125 2017-11-30 22:09:48 +0100 app: -pwr command line option added\n" \
 "13124 2017-11-30 22:07:35 +0100 app: -pwr command line option added\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "13080 2017-11-23 17:28:23 +0100 rocnetnode: get hostaddress by socket\n" \
 "13079 2017-11-23 17:09:46 +0100 rocnetnodedlg: fix for getting update info\n" \
 "13078 2017-11-23 08:00:37 +0100 locoio: fix for resizing and save size&position\n" \
-"13077 2017-11-22 13:28:52 +0100 makefile: Rocweb desktop added to target install\n" \
 
 "log end";
