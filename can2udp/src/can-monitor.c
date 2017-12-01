@@ -889,7 +889,7 @@ int main(int argc, char **argv) {
 			    n_messwerte = frame.data[0];
 			    n_kanaele = frame.data[1];
 			    id = be32(&frame.data[4]);
-			    printf(" Anzahl Messwerte: %d Anzahl Kanä: %d GeräID: 0x%08x",
+			    printf(" Anzahl Messwerte: %d Anzahl Kanäle: %d Gerätenummer: 0x%08x",
 				    n_messwerte, n_kanaele, id);
 			}
 			if ((kanal == 0) && (paket != 1)) {
