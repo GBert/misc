@@ -8,7 +8,8 @@ BIN = $@
 
 all:	$(BINS)
 
-CFLAGS+=-Wall -Wextra -Wmaybe-uninitialized -pedantic-errors -std=gnu99 -g
+# CFLAGS+=-Wall -Wextra -Wmaybe-uninitialized -pedantic-errors -std=gnu99 -g
+CFLAGS+=-g -O2 -fstack-protector-strong -Wformat -Werror=format-security -Wall -Wextra -Wmaybe-uninitialized -pedantic-errors -std=gnu99 -g -Wdate-time
 
 size_of-test: size_of-test.o
 	$(CC) $(CFLAGS) -o size_of-test size_of-test.o -lpcap

@@ -36,14 +36,17 @@ int main(int argc, char **argv) {
 
     var_dir = calloc(MAXDIR, 1);
     if (var_dir == NULL) {
-	fprintf(stderr, "can't alloc bufer for directory string: %s\n", strerror(errno));
+	fprintf(stderr, "can't alloc buffer for directory string: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
 
     if (argc == 2) {
 	strncpy(var_dir, argv[1], MAXDIR - 1);
 	config_data.directory = var_dir;
-	asprintf(&dir, "%s", var_dir);
+	if (asprintf(&dir, "%s", var_dir) < 0) {
+	    fprintf(stderr, "can't alloc buffer for directory string: %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
     } else {
 	fprintf(stderr, "usage: %s <dir> \n", basename(argv[0]));
 	free(var_dir);
@@ -75,7 +78,11 @@ int main(int argc, char **argv) {
     /* print_tracks(); */
     /* print_gbstats(); */
 
-    asprintf(&loco_file, "%s/%s", dir, loco_name);
+    if (asprintf(&loco_file, "%s/%s", dir, loco_name) < 0) {
+	fprintf(stderr, "can't alloc buffer for loco_name: %s\n", strerror(errno));
+	exit(EXIT_FAILURE);
+    }
+    
     read_loco_data(loco_file, CONFIG_FILE);
 
     printf("\n\ntrack pages: %u\n", HASH_COUNT(track_page));

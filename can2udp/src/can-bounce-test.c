@@ -48,6 +48,10 @@
 #define CAN_NORMAL_FRAME_BITS(a)    ((269 + 48*a)/5)
 #define CAN_EXTENDED_FRAME_BITS(a)  ((389 + 48*a)/5)
 
+uint32_t be32(uint8_t *u) {
+    return (u[0]<<24) | (u[1]<<16) | (u[2]<<8) | u[3];
+}
+
 int init_can(char *can_interface) {
     int socket_can;
     struct ifreq ifr;
@@ -90,7 +94,7 @@ void bounce_can_frame(int socket_can, struct can_frame *can_frame) {
     int nbytes;
     uint32_t counter;
     uint32_t be_counter;
-    counter = ntohl(*(uint32_t *) & can_frame->data[0]);
+    counter = be32(can_frame->data);
     counter++;
     be_counter = htonl(counter);
     memcpy(&can_frame->data[0], &be_counter, 4);

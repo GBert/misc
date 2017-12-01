@@ -224,12 +224,15 @@ int gpio_export(int pin) {
 
     fd = open("/sys/class/gpio/export", O_WRONLY);
     if (fd < 0) {
-	fprintf(stderr, "%s: Failed to open export for writing: %s\n", __func__, strerror(errno));
+	fprintf(stderr, "%s: Failed to open GPIO export for writing: %s\n", __func__, strerror(errno));
 	return (EXIT_FAILURE);
     }
 
     bytes_written = snprintf(buffer, MAX_BUFFER, "%d", pin);
-    write(fd, buffer, bytes_written);
+    if (write(fd, buffer, bytes_written) < 0) {
+	fprintf(stderr, "error writing GPIO config: %s\n", strerror(errno));
+	return (EXIT_FAILURE);
+    }
     close(fd);
     return (0);
 }
@@ -246,7 +249,10 @@ int gpio_unexport(int pin) {
     }
 
     bytes_written = snprintf(buffer, MAX_BUFFER, "%d", pin);
-    write(fd, buffer, bytes_written);
+    if (write(fd, buffer, bytes_written) < 0) {
+	fprintf(stderr, "error writing GPIO config: %s\n", strerror(errno));
+	return (EXIT_FAILURE);
+    }
     close(fd);
     return (0);
 }
@@ -434,9 +440,11 @@ void *LEDMod(void *ptr) {
 	}
 
 	for (i = 0; i < LED_PATTERN_MAX; i++) {
-	    write(fd, "0", 2);
+	    if (write(fd, "0", 2) != 2)
+		fprintf(stderr, "%s: Failed to write GPIO value!\n", __func__);
 	    usec_sleep(led_pattern_p[i++] * 1000);
-	    write(fd, "1", 2);
+	    if (write(fd, "1", 2) != 2)
+		fprintf(stderr, "%s: Failed to write GPIO value!\n", __func__);
 	    usec_sleep(led_pattern_p[i] * 1000);
 	}
     }
@@ -570,7 +578,8 @@ int main(int argc, char **argv) {
     FD_ZERO(&exceptfds);
     /* delete pending push button event */
     if ((trigger_data.pb_pin) > 0) {
-	read(trigger_data.pb_fd, NULL, 100);
+	if (read(trigger_data.pb_fd, NULL, 100) < 0)
+	    fprintf(stderr, "error reading GPIO trigger: %s\n", strerror(errno));
 	lseek(trigger_data.pb_fd, 0, SEEK_SET);
     }
     /* loop forever TODO: if interval is set */

@@ -46,6 +46,14 @@ unsigned char netframe[MAXDG];
 static char *F_S_CAN_FORMAT_STRG = "S CAN  0x%08X  [%d]";
 static char *F_N_CAN_FORMAT_STRG = "  CAN  0x%08X  [%d]";
 
+uint16_t be16(uint8_t *u) {
+    return (u[0]<<8) | u[1];
+}
+
+uint32_t be32(uint8_t *u) {
+    return (u[0]<<24) | (u[1]<<16) | (u[2]<<8) | u[3];
+}
+
 void INThandler(int sig) {
     signal(sig, SIG_IGN);
     fputs(RESET, stdout);
@@ -123,7 +131,7 @@ int CS1(int hash) {
 }
 
 char *getLoco(uint8_t * data, char *s) {
-    uint16_t locID = (data[2] << 8) + data[3];
+    uint16_t locID = be16(&data[2]);
     char prot[32];
     int addrs;
 
@@ -166,7 +174,7 @@ void command_system(struct can_frame *frame) {
 	return;
     }
 
-    uid = ntohl(*(uint32_t *) frame->data);
+    uid = be32(frame->data);
     switch (frame->data[4]) {
     case 0x00:
 	if (uid)
@@ -203,11 +211,11 @@ void command_system(struct can_frame *frame) {
 	printf("System-Befehl: Lok %s Gleisprotokoll: %d", getLoco(frame->data, s), frame->data[5]);
 	break;
     case 0x06:
-	wert = ntohs(*(uint16_t *) &frame->data[5]);
+	wert = be16(&frame->data[5]);
 	printf("System-Befehl: System Schaltzeit Zubehör UID 0x%08X Zeit 0x%04X", uid, wert);
 	break;
     case 0x07:
-	sid = ntohs(*(uint16_t *) &frame->data[5]);
+	sid = be16(&frame->data[5]);
 	printf("System-Befehl: Fast Read mfx UID 0x%08X SID %d", uid, sid);
 	break;
     case 0x08:
@@ -224,7 +232,7 @@ void command_system(struct can_frame *frame) {
 	    printf(" SX2");
 	break;
     case 0x09:
-	wert = ntohs(*(uint16_t *) &frame->data[5]);
+	wert = be16(&frame->data[5]);
 	printf("System-Befehl: Neuanmeldezähler setzen UID 0x%08X Zähler 0x%04X", uid, wert);
 	break;
     case 0x0a:
@@ -236,7 +244,7 @@ void command_system(struct can_frame *frame) {
 	if (frame->can_dlc == 7)
 	    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X Wert %d", uid, frame->data[5], frame->data[6]);
 	if (frame->can_dlc == 8) {
-	    wert = ntohs(*(uint16_t *) &frame->data[6]);
+	    wert = be16(&frame->data[6]);
 	    if (response)
 		printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X Messwert 0x%04X",
 		       uid, frame->data[5], wert);
@@ -246,7 +254,7 @@ void command_system(struct can_frame *frame) {
 	}
 	break;
     case 0x0c:
-	wert = ntohs(*(uint16_t *) &frame->data[5]);
+	wert = be16(&frame->data[5]);
 	if (frame->can_dlc == 6)
 	    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X", uid, frame->data[5]);
 	if (frame->can_dlc == 7)
@@ -296,7 +304,7 @@ void cdb_extension_grd(struct can_frame *frame) {
 	    }
 	}
 	if (frame->can_dlc == 4) {
-	    wert = ntohs(*(uint16_t *) &frame->data[2]);
+	    wert = be16(&frame->data[2]);
 	    printf("CdB: Antwort Modul %d Kontakt %d ", modul, kontakt);
 	    switch (index) {
 	    case 0x01:
@@ -336,7 +344,7 @@ void cdb_extension_grd(struct can_frame *frame) {
 	    }
 	}
 	if (frame->can_dlc == 4) {
-	    wert = ntohs(*(uint16_t *) &frame->data[2]);
+	    wert = be16(&frame->data[2]);
 	    switch (index) {
 	    case 0x01:
 		printf("CdB: Antwort Version %d.%d\n", frame->data[2], frame->data[3]);
@@ -385,7 +393,7 @@ void cdb_extension_wc(struct can_frame *frame) {
 		printf("CdB: WeichenChef Abfrage Modul %d System %d\n", modul, frame->data[1]);
 	}
     } else if (frame->can_dlc == 4) {
-	wert = ntohs(*(uint16_t *) &frame->data[2]);
+	wert = be16(&frame->data[2]);
 	if (servo) {
 	    printf("CdB: WeichenChef Modul %d ", modul);
 
@@ -508,7 +516,7 @@ void cdb_extension_set_grd(struct can_frame *frame) {
     index = frame->data[1];
 
     if (frame->can_dlc == 4) {
-	wert = ntohs(*(uint16_t *) &frame->data[2]);
+	wert = be16(&frame->data[2]);
 	printf("CdB: Setze Modul %d ", modul);
 	if (kontakt)
 	    printf("Kontakt %d ", kontakt);
@@ -632,7 +640,7 @@ int main(int argc, char **argv) {
 		    if (frame.can_dlc == 1)
 			printf("Lok Discovery - Protokoll Kennung 0x%02X\n", frame.data[0]);
 		    if (frame.can_dlc == 5) {
-			uid = ntohl(*(uint32_t *) frame.data);
+			uid = be32(frame.data);
 			printf("Lok Discovery - 0x%04X Protokoll Kennung 0x%02X\n", uid, frame.data[4]);
 		    }
 		    if (frame.can_dlc == 6)
@@ -644,16 +652,16 @@ int main(int argc, char **argv) {
 		    if ((frame.can_dlc == 2) || (frame.can_dlc == 4))
 			cdb_extension_grd(&frame);
 		    if (frame.can_dlc == 6) {
-			uid = ntohl(*(uint32_t *) frame.data);
-			printf("MFX Bind: MFX UID 0x%08X MFX SID %d\n", uid, (frame.data[4] << 8) + frame.data[5]);
+			uid = be32(frame.data);
+			printf("MFX Bind: MFX UID 0x%08X MFX SID %d\n", uid, be16(&frame.data[4]));
 		    }
 		    break;
 		/* MFX Verify */
 		case 0x06:
 		case 0x07:
-		    uid = ntohl(*(uint32_t *) frame.data);
+		    uid = be32(frame.data);
 		    if (frame.can_dlc == 2) {
-			kenner = ntohs(*(uint16_t *) frame.data);
+			kenner = be16(frame.data);
 			if (kenner == 0x00ff)
 			    printf("CdB: Reset\n");
 			else
@@ -663,15 +671,15 @@ int main(int argc, char **argv) {
 			cdb_extension_set_grd(&frame);
 		    }
 		    if (frame.can_dlc == 6)
-			printf("MFX Verify: MFX UID 0x%08X MFX SID %d\n", uid, (frame.data[4] << 8) + frame.data[5]);
+			printf("MFX Verify: MFX UID 0x%08X MFX SID %d\n", uid, be16(&frame.data[4]));
 		    if (frame.can_dlc == 7)
 			printf("MFX Verify: MFX UID 0x%08X MFX SID %d ASK-Verhältnis %d\n",
-			       uid, (frame.data[4] << 8) + frame.data[5], frame.data[6]);
+			       uid, be16(&frame.data[4]), frame.data[6]);
 		    break;
 		/* Lok Geschwindigkeit */
 		case 0x08:
 		case 0x09:
-		    v = (frame.data[4] << 8) + frame.data[5];
+		    v = be16(&frame.data[4]);
 		    v = v / 10;
 		    printf("Lok: %s, Geschwindigkeit: %3.1f\n", getLoco(frame.data, s), v);
 		    break;
@@ -706,7 +714,7 @@ int main(int argc, char **argv) {
 			printf("Lok %s Funktion %d Wert %d\n", getLoco(frame.data, s), frame.data[4], frame.data[5]);
 		    else if (frame.can_dlc == 7)
 			printf("Lok %s Funktion %d Wert %d Funktionswert %d\n",
-			       getLoco(frame.data, s), frame.data[4], frame.data[5], (frame.data[6] << 8) + frame.data[7]);
+			       getLoco(frame.data, s), frame.data[4], frame.data[5], be16(&frame.data[6]));
 		    break;
 		/* Read Config */
 		case 0x0E:
@@ -746,38 +754,38 @@ int main(int argc, char **argv) {
 		    if (frame.can_dlc == 8)
 			printf("Zubehör Schalten Lok %s Stellung %d Strom %d Schaltzeit/Sonderfunktionswert %d\n",
 			       getLoco(frame.data, s), frame.data[4], frame.data[5],
-			       (frame.data[6] << 8) + frame.data[7]);
+			       be16(&frame.data[6]));
 		    break;
 		/* S88 Polling */
 		case 0x20:
-		    uid = ntohl(*(uint32_t *) frame.data);
+		    uid = be32(frame.data);
 		    printf("S88 Polling 0x%04X Modul Anzahl %d\n", uid, frame.data[4]);
 		    break;
 		case 0x21:
-		    uid = ntohl(*(uint32_t *) frame.data);
+		    uid = be32(frame.data);
 		    printf("S88 Polling 0x%04X Modul %d Zustand %d\n",
-			   uid, frame.data[4], (frame.data[5] << 8) + frame.data[6]);
+			   uid, frame.data[4], be16(&frame.data[5]));
 		    break;
 		/* S88 Event */
 		case 0x22:
-		    kenner = ntohs(*(uint16_t *) frame.data);
-		    kontakt = ntohs(*(uint16_t *) &frame.data[2]);
+		    kenner = be16(frame.data);
+		    kontakt = be16(&frame.data[2]);
 		    if (frame.can_dlc == 4)
 			printf("S88 Event: Kennung %d Kontakt %d\n", kennung, kontakt);
 		    if (frame.can_dlc == 5)
 			printf("S88 Event: Kennung %d Kontakt %d Parameter %d\n", kenner, kontakt, frame.data[4]);
 		    break;
 		case 0x23:
-		    kenner = ntohs(*(uint16_t *) frame.data);
-		    kontakt = ntohs(*(uint16_t *) &frame.data[2]);
+		    kenner = be16(frame.data);
+		    kontakt = be16(&frame.data[2]);
 		    if (frame.can_dlc == 8)
 			printf("S88 Event: Kennung %d Kontakt %d Zusand alt %d Zusand neu %d Zeit %d\n",
-			       kenner, kontakt, frame.data[4], frame.data[5], (frame.data[6] << 8) + frame.data[7]);
+			       kenner, kontakt, frame.data[4], frame.data[5], be16(&frame.data[6]));
 		    break;
 		/* SX1 Event */
 		case 0x24:
 		case 0x25:
-		    uid = ntohl(*(uint32_t *) frame.data);
+		    uid = be32(frame.data);
 		    if (frame.can_dlc == 5)
 			printf("SX1 Event: UID 0x%08X SX1-Adresse %d\n", uid, frame.data[4]);
 		    if (frame.can_dlc == 5)
@@ -788,8 +796,8 @@ int main(int argc, char **argv) {
 		    printf("Ping Anfrage\n");
 		    break;
 		case 0x31:
-		    uid = ntohl(*(uint32_t *) frame.data);
-		    kennung = ntohs(*(uint16_t *) &frame.data[6]);
+		    uid = be32(frame.data);
+		    kennung = be16(&frame.data[6]);
 		    printf("Ping Antwort von ");
 		    switch (kennung) {
 		    case 0x0010:
@@ -827,8 +835,8 @@ int main(int argc, char **argv) {
 		    printf("CAN Bootloader Anfrage\n");
 		    break;
 		case 0x37:
-		    uid = ntohl(*(uint32_t *) frame.data);
-		    kennung = ntohs(*(uint16_t *) &frame.data[6]);
+		    uid = be32(frame.data);
+		    kennung = be16(&frame.data[6]); 
 		    printf("Bootloader Antwort von ");
 		    switch (kennung) {
 		    case 0x0010:
@@ -864,7 +872,7 @@ int main(int argc, char **argv) {
 		/* Statusdaten Konfiguration */
 		case 0x3A:
 		case 0x3B:
-		    uid = ntohl(*(uint32_t *) & frame.data);
+		    uid = be32(frame.data);
 		    if (frame.can_dlc == 5)
 			printf("Status Daten: UID 0x%08X Index 0x%02X\n", uid, frame.data[4]);
 		    if (frame.can_dlc == 6)
@@ -902,8 +910,8 @@ int main(int argc, char **argv) {
 		/* Config Data Stream */
 		case 0x42:
 		case 0x43:
-		    stream_size = ntohs(*(uint32_t *) frame.data);
-		    crc = ntohs(*(uint16_t *) &frame.data[4]);
+		    stream_size = be32(frame.data);
+		    crc = be16(&frame.data[4]);
 		    if (frame.can_dlc == 6)
 			printf("Config Data Stream: Länge 0x%08X CRC 0x%04X\n", stream_size, crc);
 		    if (frame.can_dlc == 7)
@@ -920,8 +928,8 @@ int main(int argc, char **argv) {
 		/* Automatik schalten */
 		case 0x60:
 		case 0x61:
-		    kenner = ntohs(*(uint16_t *) frame.data);
-		    function = ntohs(*(uint16_t *) &frame.data[2]);
+		    kenner = be16(frame.data);
+		    function = be16(&frame.data[2]);
 		    if (frame.can_dlc == 6)
 			printf("Automatik schalten: ID 0x%04X Funktion 0x%04X Stellung 0x%02X Parameter 0x%02X\n",
 			       kenner, function, frame.data[4], frame.data[5]);
@@ -931,8 +939,8 @@ int main(int argc, char **argv) {
 		/* Blocktext zuordnen */
 		case 0x62:
 		case 0x63:
-		    kenner = ntohs(*(uint16_t *) frame.data);
-		    function = ntohs(*(uint16_t *) &frame.data[2]);
+		    kenner = be16(frame.data);
+		    function = be16(&frame.data[2]);
 		    if (frame.can_dlc == 4)
 			printf("Blocktext zuordnen: ID 0x%04X Funktion 0x%04X\n", kenner, function);
 		    if (frame.can_dlc == 8)

@@ -106,13 +106,15 @@ int config_write(struct config_data *config_data) {
 }
 
 int main(int argc, char **argv) {
-    int i, sockfd, ddi, tcp_packet_nr, n = 1;
-    int temp, config_data_start, config_data_stream, deflated_size;
+    int i, sockfd, tcp_packet_nr, n = 1;
+    int temp, config_data_start, config_data_stream, deflated_size = 0;
     struct config_data config_data;
     struct sockaddr_in servaddr;
     fd_set rset;
     unsigned char netframe[FRAME_SIZE];
     unsigned char recvline[MAXSIZE];
+
+    int ddi = 0;
 
     if (argc != 3) {
 	fprintf(stderr, "usage:  %s <config> <IP address>\n", argv[0]);

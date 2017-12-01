@@ -167,7 +167,7 @@ int rawframe_to_net(int net_socket, struct sockaddr *net_addr, unsigned char *ne
 int main(int argc, char **argv) {
     pid_t pid;
     int n, i, max_fds, hw_flow, opt, nready;
-    int background, verbose, ec_index;
+    int background, verbose, ec_index = 0;
     char timestamp[16];
     struct termios term_attr;
     int sc, se, st;		/* CAN socket, TCP socket */

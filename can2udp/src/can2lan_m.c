@@ -280,7 +280,7 @@ int main(int argc, char **argv) {
     socklen_t caddrlen = sizeof(caddr);
     socklen_t tcp_client_length = sizeof(tcp_addr);
     fd_set all_fds, read_fds;
-    int s, ret;
+    int ret, s = 0;
     struct timeval tv;
     char *udp_dst_address;
     char *bcast_interface;
