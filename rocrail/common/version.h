@@ -1,9 +1,11 @@
 const int revisionnr = 
-13127
+13129
 ;
 const char* commithash = 
-"4a852aa50e37cc1fe0ba711fa85843b833c96566";
+"c59a4236b3c4d283426e9aa358457c7c54a5beef";
 const char* revlog = 
+"13129 2017-12-02 18:42:06 +0100 rocctrl: create read handler first after connect\n" \
+"13128 2017-12-02 18:31:21 +0100 rocctrl: (WIP) a small Python utility for a small display\n" \
 "13127 2017-12-01 16:16:14 +0100 rocview: extra status info at startup\n" \
 "13126 2017-12-01 11:30:42 +0100 loc: fix for function timers > 27\n" \
 "13125 2017-11-30 22:09:48 +0100 app: -pwr command line option added\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "13082 2017-11-24 15:15:54 +0100 switch control: wait until its in position before frre up the routes\n" \
 "13081 2017-11-23 17:30:21 +0100 rocnetnode: comment in ansi style...\n" \
 "13080 2017-11-23 17:28:23 +0100 rocnetnode: get hostaddress by socket\n" \
-"13079 2017-11-23 17:09:46 +0100 rocnetnodedlg: fix for getting update info\n" \
-"13078 2017-11-23 08:00:37 +0100 locoio: fix for resizing and save size&position\n" \
 
 "log end";
