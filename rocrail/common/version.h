@@ -1,9 +1,14 @@
 const int revisionnr = 
-13135
+13140
 ;
 const char* commithash = 
-"aca4526aa936f9936c9cf96da5201ad42f54c4e6";
+"ffaf908270ba9e7a5ca2fcaa6cbaf1e3be89eb5a";
 const char* revlog = 
+"13140 2017-12-03 17:21:51 +0100 routedialog: multi delete\n" \
+"13139 2017-12-03 17:00:28 +0100 rocctrl: clean up\n" \
+"13138 2017-12-03 15:15:09 +0100 rocctrl: messagebox for python 2 and 3\n" \
+"13137 2017-12-03 14:33:37 +0100 rocctrl: python 3...\n" \
+"13136 2017-12-03 14:31:41 +0100 rocctrl: python 2 and 3 support (Liviu)\n" \
 "13135 2017-12-03 12:46:58 +0100 rocrail makefile: added rocctrl\n" \
 "13134 2017-12-03 12:41:01 +0100 RocControl desktop shortcut added\n" \
 "13133 2017-12-03 12:28:58 +0100 rocctrl: automenu extended\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "13093 2017-11-25 15:09:49 +0100 rocnetnode: start of day fix\n" \
 "13092 2017-11-25 14:06:33 +0100 rocnetnode: SoD traces added\n" \
 "13091 2017-11-25 12:14:39 +0100 rocnetnode: trace errno text\n" \
-"13090 2017-11-25 12:04:01 +0100 switch: automode option added for the controller\n" \
-"13089 2017-11-25 11:27:08 +0100 switch: control option invert added\n" \
-"13088 2017-11-25 10:01:14 +0100 rocnetnode: own default trace file name\n" \
-"13087 2017-11-25 09:59:28 +0100 rpic: faster refresh rate\n" \
-"13086 2017-11-25 09:43:52 +0100 rocnetnode: fix for unloading and removing the DCC generator\n" \
 
 "log end";
