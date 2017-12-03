@@ -1,9 +1,15 @@
 const int revisionnr = 
-13129
+13135
 ;
 const char* commithash = 
-"c59a4236b3c4d283426e9aa358457c7c54a5beef";
+"aca4526aa936f9936c9cf96da5201ad42f54c4e6";
 const char* revlog = 
+"13135 2017-12-03 12:46:58 +0100 rocrail makefile: added rocctrl\n" \
+"13134 2017-12-03 12:41:01 +0100 RocControl desktop shortcut added\n" \
+"13133 2017-12-03 12:28:58 +0100 rocctrl: automenu extended\n" \
+"13132 2017-12-03 11:18:18 +0100 rocctrl: wip\n" \
+"13131 2017-12-03 09:00:57 +0100 rocctrl: WIP\n" \
+"13130 2017-12-02 22:37:29 +0100 rocctrl: WIP\n" \
 "13129 2017-12-02 18:42:06 +0100 rocctrl: create read handler first after connect\n" \
 "13128 2017-12-02 18:31:21 +0100 rocctrl: (WIP) a small Python utility for a small display\n" \
 "13127 2017-12-01 16:16:14 +0100 rocview: extra status info at startup\n" \
@@ -48,11 +54,5 @@ const char* revlog =
 "13088 2017-11-25 10:01:14 +0100 rocnetnode: own default trace file name\n" \
 "13087 2017-11-25 09:59:28 +0100 rpic: faster refresh rate\n" \
 "13086 2017-11-25 09:43:52 +0100 rocnetnode: fix for unloading and removing the DCC generator\n" \
-"13085 2017-11-25 08:32:41 +0100 rocnetnode: fix for unloading and removing the DCC generator\n" \
-"13084 2017-11-24 20:14:09 +0100 rocnetnodedlg: prevent programming left channel position greater then the right poisition\n" \
-"13083 2017-11-24 16:38:01 +0100 channeltunedlg: prevent setting left(off) position higher then the right(on) position\n" \
-"13082 2017-11-24 15:15:54 +0100 switch control: wait until its in position before frre up the routes\n" \
-"13081 2017-11-23 17:30:21 +0100 rocnetnode: comment in ansi style...\n" \
-"13080 2017-11-23 17:28:23 +0100 rocnetnode: get hostaddress by socket\n" \
 
 "log end";
