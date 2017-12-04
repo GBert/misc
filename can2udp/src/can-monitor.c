@@ -28,6 +28,8 @@
 #include <time.h>
 #include <linux/can.h>
 
+#include "can-monitor.h"
+
 #define RED	"\x1B[31m"
 #define GRN	"\x1B[32m"
 #define YEL	"\x1B[33m"
@@ -43,6 +45,9 @@
 
 unsigned char netframe[MAXDG];
 
+struct knoten *statusdaten = NULL;
+struct knoten *messwert = NULL;
+
 static char *F_S_CAN_FORMAT_STRG = "S CAN  0x%08X  [%d]";
 static char *F_N_CAN_FORMAT_STRG = "  CAN  0x%08X  [%d]";
 
@@ -53,6 +58,39 @@ uint16_t be16(uint8_t *u) {
 uint32_t be32(uint8_t *u) {
     return (u[0]<<24) | (u[1]<<16) | (u[2]<<8) | u[3];
 }
+
+int insert_right(struct knoten *liste, void *element) {
+    struct knoten *tmp = liste;
+    struct knoten *node = calloc(sizeof(struct knoten), 1);
+    if (node == NULL) {
+	fprintf(stderr, "calloc failed in %s: %s\n", __func__, strerror(errno));
+	return -1;
+    }
+    while (tmp->next != NULL)
+	tmp = tmp->next;
+    tmp->next = node;
+    tmp->daten = element;
+    return 0;
+}
+
+struct messwert_t *suche_messwert(struct knoten *liste, uint64_t messwert) {
+    struct messwert_t *messwert_tmp = NULL;
+    struct knoten *tmp = liste;
+    int i = 0;
+
+    while (tmp) {
+	messwert_tmp = (void *) tmp->daten;
+	if (messwert_tmp->geraete_id_messwert == messwert) {
+	    return messwert_tmp;
+	} else {
+	    i++;
+	    if (i >= MAX_MESSWERTE)
+		return NULL;
+	    tmp = tmp->next;
+	}
+    }
+    return NULL;
+} 
 
 void INThandler(int sig) {
     signal(sig, SIG_IGN);
@@ -877,14 +915,14 @@ int main(int argc, char **argv) {
 		    uid = be32(frame.data);
 		    if (frame.can_dlc == 5) {
 			kanal = frame.data[4];
-			printf("Status Daten: UID 0x%08X Index 0x%02X\n", uid, kanal);
+			printf("Statusdaten: UID 0x%08X Index 0x%02X\n", uid, kanal);
 		    }
 		    if (frame.can_dlc == 6)
-			printf("Status Daten: UID 0x%08X Index 0x%02X Paketanzahl %d\n", uid, frame.data[4],
+			printf("Statusdaten: UID 0x%08X Index 0x%02X Paketanzahl %d\n", uid, frame.data[4],
 			       frame.data[5]);
 		    if (frame.can_dlc == 8) {
 			paket = frame.can_id & 0xFCFF;
-			printf("Status Daten: Paket %d", paket);
+			printf("Statusdaten: Paket %d", paket);
 			if ((kanal == 0) && (paket == 1)) {
 			    n_messwerte = frame.data[0];
 			    n_kanaele = frame.data[1];
