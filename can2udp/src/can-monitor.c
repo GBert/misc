@@ -39,6 +39,7 @@
 #define WHT	"\x1B[37m"
 #define RESET	"\x1B[0m"
 
+#define	MAX_PAKETE	256
 #define MAXDG   	4096	/* maximum datagram size */
 #define MAXUDP  	16	/* maximum datagram size */
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
@@ -48,15 +49,17 @@ unsigned char netframe[MAXDG];
 struct knoten *statusdaten = NULL;
 struct knoten *messwert = NULL;
 
+unsigned char buffer[MAX_PAKETE * 8];
+
 static char *F_S_CAN_FORMAT_STRG = "S CAN  0x%08X  [%d]";
 static char *F_N_CAN_FORMAT_STRG = "  CAN  0x%08X  [%d]";
 
 uint16_t be16(uint8_t *u) {
-    return (u[0]<<8) | u[1];
+    return (u[0] << 8) | u[1];
 }
 
 uint32_t be32(uint8_t *u) {
-    return (u[0]<<24) | (u[1]<<16) | (u[2]<<8) | u[3];
+    return (u[0] << 24) | (u[1] << 16) | (u[2] << 8) | u[3];
 }
 
 int insert_right(struct knoten *liste, void *element) {
@@ -79,7 +82,7 @@ struct messwert_t *suche_messwert(struct knoten *liste, uint64_t messwert) {
     int i = 0;
 
     while (tmp) {
-	messwert_tmp = (void *) tmp->daten;
+	messwert_tmp = (void *)tmp->daten;
 	if (messwert_tmp->geraete_id_messwert == messwert) {
 	    return messwert_tmp;
 	} else {
@@ -90,7 +93,7 @@ struct messwert_t *suche_messwert(struct knoten *liste, uint64_t messwert) {
 	}
     }
     return NULL;
-} 
+}
 
 void INThandler(int sig) {
     signal(sig, SIG_IGN);
@@ -792,8 +795,7 @@ int main(int argc, char **argv) {
 			       getLoco(frame.data, s), frame.data[4], frame.data[5]);
 		    if (frame.can_dlc == 8)
 			printf("Zubehör Schalten Lok %s Stellung %d Strom %d Schaltzeit/Sonderfunktionswert %d\n",
-			       getLoco(frame.data, s), frame.data[4], frame.data[5],
-			       be16(&frame.data[6]));
+			       getLoco(frame.data, s), frame.data[4], frame.data[5], be16(&frame.data[6]));
 		    break;
 		/* S88 Polling */
 		case 0x20:
@@ -802,8 +804,7 @@ int main(int argc, char **argv) {
 		    break;
 		case 0x21:
 		    uid = be32(frame.data);
-		    printf("S88 Polling 0x%04X Modul %d Zustand %d\n",
-			   uid, frame.data[4], be16(&frame.data[5]));
+		    printf("S88 Polling 0x%04X Modul %d Zustand %d\n", uid, frame.data[4], be16(&frame.data[5]));
 		    break;
 		/* S88 Event */
 		case 0x22:
@@ -875,7 +876,7 @@ int main(int argc, char **argv) {
 		    break;
 		case 0x37:
 		    uid = be32(frame.data);
-		    kennung = be16(&frame.data[6]); 
+		    kennung = be16(&frame.data[6]);
 		    printf("Bootloader Antwort von ");
 		    switch (kennung) {
 		    case 0x0010:
@@ -916,22 +917,31 @@ int main(int argc, char **argv) {
 		    if (frame.can_dlc == 5) {
 			kanal = frame.data[4];
 			printf("Statusdaten: UID 0x%08X Index 0x%02X\n", uid, kanal);
+			/* Datensatz ist komplett übertragen */
+			if (frame.can_id & 0x00010000UL) {
+			}
 		    }
 		    if (frame.can_dlc == 6)
 			printf("Statusdaten: UID 0x%08X Index 0x%02X Paketanzahl %d\n", uid, frame.data[4],
 			       frame.data[5]);
 		    if (frame.can_dlc == 8) {
-			paket = frame.can_id & 0xFCFF;
+			paket = (frame.can_id & 0xFCFF) - 1;
 			printf("Statusdaten: Paket %d", paket);
-			if ((kanal == 0) && (paket == 1)) {
+			if (paket == 0)
+			    memset(buffer, 0, sizeof(buffer));
+			if (paket < MAX_PAKETE)
+			    memcpy(buffer, frame.data, paket * 8);
+			if ((kanal == 0) && (paket == 0)) {
 			    n_messwerte = frame.data[0];
 			    n_kanaele = frame.data[1];
 			    id = be32(&frame.data[4]);
 			    printf(" Anzahl Messwerte: %d Anzahl Kanäle: %d Gerätenummer: 0x%08x",
-				    n_messwerte, n_kanaele, id);
+				   n_messwerte, n_kanaele, id);
 			}
-			if ((kanal == 0) && (paket != 1)) {
-			}
+			if ((kanal == 0) && (paket = 1))
+			    printf("    %s", &buffer[8]);
+			if ((kanal == 0) && (paket = 3))
+			    printf("    %s", &buffer[16]);
 			printf("\n");
 		    }
 		    break;
@@ -945,7 +955,7 @@ int main(int argc, char **argv) {
 			if (frame.can_dlc == 8) {
 			    int i;
 			    printf("CdB: Weichenchef");
-			    for (i = 0; i < 4 ; i++) {
+			    for (i = 0; i < 4; i++) {
 				printf(" Adresse %d", frame.data[i * 2 + 1] + 1);
 				if (frame.data[i * 2] == 0x30)
 				    printf("MM");

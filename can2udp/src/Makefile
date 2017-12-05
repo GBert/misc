@@ -4,12 +4,18 @@ BINS := can-bounce-test can-monitor can2eth can2udp can4lnx2udp can2serial clone
         get-cs-data get-cs-config pio-i2c-udp read_lococard s88udp-bpi s88udp-rpi s88test-bpi \
         wake-up-links88 virtual_s88udp gpio-poll lan-schnitte xntcpd
 
+PREFIX=/usr/sbin
+
 BIN = $@
 
 all:	$(BINS)
 
 # CFLAGS+=-Wall -Wextra -Wmaybe-uninitialized -pedantic-errors -std=gnu99 -g
-CFLAGS+=-g -O2 -fstack-protector-strong -Wformat -Werror=format-security -Wall -Wextra -Wmaybe-uninitialized -pedantic-errors -std=gnu99 -g -Wdate-time
+CFLAGS+=-g -O2 -fstack-protector-strong -Wformat -Werror=format-security -Wall -Wextra -Wmaybe-uninitialized -std=gnu99 -pedantic-errors -Wdate-time
+
+install: all
+	mkdir -p $(DESTDIR)/$(PREFIX)
+	cp $(BINS) $(DESTDIR)/$(PREFIX)
 
 size_of-test: size_of-test.o
 	$(CC) $(CFLAGS) -o size_of-test size_of-test.o -lpcap
