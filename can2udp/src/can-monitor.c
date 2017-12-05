@@ -930,7 +930,7 @@ int main(int argc, char **argv) {
 			if (paket == 0)
 			    memset(buffer, 0, sizeof(buffer));
 			if (paket < MAX_PAKETE)
-			    memcpy(buffer, frame.data, paket * 8);
+			    memcpy(&buffer[paket * 8], frame.data, 8);
 			if ((kanal == 0) && (paket == 0)) {
 			    n_messwerte = frame.data[0];
 			    n_kanaele = frame.data[1];
@@ -938,9 +938,9 @@ int main(int argc, char **argv) {
 			    printf(" Anzahl Messwerte: %d Anzahl Kanäle: %d Gerätenummer: 0x%08x",
 				   n_messwerte, n_kanaele, id);
 			}
-			if ((kanal == 0) && (paket = 1))
+			if ((kanal == 0) && (paket == 1))
 			    printf("    %s", &buffer[8]);
-			if ((kanal == 0) && (paket = 3))
+			if ((kanal == 0) && (paket == 3))
 			    printf("    %s", &buffer[16]);
 			printf("\n");
 		    }
