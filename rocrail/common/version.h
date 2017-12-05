@@ -1,9 +1,16 @@
 const int revisionnr = 
-13152
+13159
 ;
 const char* commithash = 
-"fe143caee31530a52df69781740c6fbaeb275e39";
+"58db4a3520b26a398521a61939da6e06c66b81a0";
 const char* revlog = 
+"13159 2017-12-05 19:26:30 +0100 blockdialog: allow main signals used as distant signals\n" \
+"13158 2017-12-05 19:17:53 +0100 operatordlg: button added to open the props of the loco which the train is assigned to\n" \
+"13157 2017-12-05 17:53:11 +0100 guiframe: close throttles on changing workspace\n" \
+"13156 2017-12-05 16:39:43 +0100 trackdialog: remove index tab in case it should not be populated\n" \
+"13155 2017-12-05 15:44:04 +0100 route: skip manual signal commands\n" \
+"13154 2017-12-05 14:26:20 +0100 bidib: check run flag before attempting to (re)connect\n" \
+"13153 2017-12-05 13:43:30 +0100 rocctrl: quit on shutdown event\n" \
 "13152 2017-12-05 08:56:24 +0100 control: set var lcid on event timeout\n" \
 "13151 2017-12-05 08:32:00 +0100 translation merge: de, sl, sr_latin, fr, en_GB, nl\n" \
 "13150 2017-12-04 17:36:15 +0100 trace: level char for analyser\n" \
@@ -47,12 +54,5 @@ const char* revlog =
 "13112 2017-11-28 16:01:25 +0100 innosetup: skip ask for install directory if already installed\n" \
 "13111 2017-11-28 11:50:49 +0100 wiki demo plan added\n" \
 "13110 2017-11-28 11:34:08 +0100 car: use identifier instead of ident to be conform other objects\n" \
-"13109 2017-11-28 09:37:50 +0100 demo/wiki plan options\n" \
-"13108 2017-11-28 08:10:34 +0100 rpic: save and restore field bytes\n" \
-"13107 2017-11-27 19:55:08 +0100 innosetup: demo or wiki plan choice\n" \
-"13106 2017-11-27 13:58:30 +0100 block: trace correction for none matching code\n" \
-"13105 2017-11-27 13:36:27 +0100 wait4event: release blockgroup on enter too (test)\n" \
-"13104 2017-11-27 11:54:51 +0100 routedialog: popup for removing all autogen with questionmark\n" \
-"13103 2017-11-27 11:17:42 +0100 routedialog: remove also tt generated flags\n" \
 
 "log end";
