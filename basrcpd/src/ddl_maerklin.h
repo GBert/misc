@@ -33,34 +33,17 @@
 #ifndef __MAERKLIN_H__
 #define __MAERKLIN_H__
 
-#define WAIT_TRASH           1000
-#define WAIT_BETWEEN_19K     3750        /* 3750 */
-#define WAIT_END_19K         3750        /* 3750 */
-#define WAIT_BETWEEN_38K     2570        /* 1875 */
-#define WAIT_END_38K         2570        /* 1875 */
-
 /* signal generating functions for maerklin */
 int comp_maerklin_1(bus_t bus, int address, int direction, int speed, int func, bool prio);
 int comp_maerklin_2(bus_t bus, int address, int direction, int speed, int func,
                     int f1, int f2, int f3, int f4, bool prio);
-int comp_maerklin_3(bus_t bus, int address, int direction, int speed, int func,
+int comp_maerklin_28(bus_t bus, int address, int direction, int speed, int func,
                     int f1, int f2, int f3, int f4, bool prio);
-int comp_maerklin_4(bus_t bus, int address, int direction, int speed, int func,
-                    int f1, int f2, int f3, int f4, bool prio);
-int comp_maerklin_5(bus_t bus, int address, int direction, int speed, int func,
+int comp_maerklin_27(bus_t bus, int address, int direction, int speed, int func,
                     int f1, int f2, int f3, int f4, bool prio);
 int comp_maerklin_ms(bus_t bus, int address, int port, int action);
 int comp_maerklin_mf(bus_t bus, int address,
                      int f1, int f2, int f3, int f4);
-
-int protocol_maerklin_sm_write_phregister (bus_t bus, int addr, int speed);
-
-/**
-  * Setzen SPI Mode zur Berechnung der zu sendenen Datenpakete.
-  * Da diese bei SPI anders sein müssen (siehe Kommentar oben).
-  * @param newSpiMode true=SPI, false=RS232 (default).
-  */
-void setSPIModeMaerklin(bool newSpiMode);
 
 char getMaerklinHI(void);
 char getMaerklinLO(void);

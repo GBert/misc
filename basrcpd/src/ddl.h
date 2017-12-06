@@ -116,37 +116,17 @@ typedef struct _DDL_DATA {
     int number_gl;
     int number_ga;
 
-    int SERIAL_DEVICE_MODE;
-    int RI_CHECK;               /* ring indicator checking      */
     int CHECKSHORT;             /* default no shortcut checking */
-    int DSR_INVERSE;            /* controls how DSR is used to  */
-    /*                             check shorts                 */
     time_t SHORTCUTDELAY;       /* usecs shortcut delay         */
-    int NMRADCC_TR_V;           /* version of the nmra dcc      */
-    /*                             translation routine(1,2 or 3) */
     int ENABLED_PROTOCOLS;      /* enabled p's                  */
-    int IMPROVE_NMRADCC_TIMING; /* NMRA DCC: improve timing     */
-
-    bool WAITUART_USLEEP_PATCH;  /* enable/disbable usleep patch */
-    int WAITUART_USLEEP_USEC;   /* usecs for usleep patch       */
     int NMRA_GA_OFFSET;         /* offset for ga base address 0/1*/
-
     int PROGRAM_TRACK;          /* 0: suppress SM commands to PT address */
-    int SIGG_MODE;              /*EDITS Booster Sigg Mode. CHECKSHORT wird automatisch gesetzt. Booster GO message on CTS Line, Booster GO / STOP Command impluse on RTS/DTR)*/
-    int MOBILE_STATION_MODE;    /*Verwendung zusammen mit Mobilestation. Booster an Mobilestation für Loksteuerung. Bei einem GA Kommando
-                                  wird der Booster über RTS übernommen und nach GA Kommandoausgabe wieder an die Mobile Station zurückgegeben.
-                                  Meldung Booster GO erfolgt über DSR */
-    int spiMode;                /*true wenn auf RaspPi SPI verwendet wird.*/
     int spiLastMM;              //War das letzte Paket ein Märklin Motorola Paket?
-
     unsigned int uid;           /* Für MFX die UID der Zentrale */
-    struct termios maerklin_dev_termios;
-    struct termios nmra_dev_termios;
+// OBSOLETE
+//    struct termios maerklin_dev_termios;
+//    struct termios nmra_dev_termios;
 
-#if linux
-    struct serial_struct *serinfo_marklin;
-    struct serial_struct *serinfo_nmradcc;
-#endif
     pthread_mutex_t queue_mutex;        /* mutex to synchronize queue inserts */
     int queue_initialized;
     tQueue queueNormal, queuePriority;
@@ -192,9 +172,6 @@ int init_bus_DDL(bus_t busnumber);
 #define  EP_MAERKLIN  1         /* maerklin protocol */
 #define  EP_NMRADCC   2         /* nmra dcc protocol */
 #define  EP_MFX       4         /* maerklin mfx protocol */
-
-//NMRA Translation Routine Kennung (NMRADCC_TR_V) für SPI
-#define NMRADCC_TR_SPI -1
 
 /* constants for setSerialMode() */
 #define SDM_NOTINITIALIZED -1
@@ -245,7 +222,6 @@ void update_NMRAPacketPool(bus_t busnumber, int adr,
 void update_MFXPacketPool(bus_t busnumber, int adr,
                           char const *const packet, int packet_size);
 
-void (*waitUARTempty) (bus_t busnumber);
 void send_packet(bus_t busnumber, char *packet,
                  int packet_size, int packet_type, int refresh);
 

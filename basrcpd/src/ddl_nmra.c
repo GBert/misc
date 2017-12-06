@@ -66,276 +66,13 @@
  (verify/write register/cv contents)
  (implemented)
 
- general notes:
-
-   configuration of the serial port:
-
-      start bit: 1
-      stop bit : 1
-      data bits: 8
-      baud rate: 19200
-
-      ==> one serial bit takes 52.08 usec.
-
-      ==> NMRA-1-Bit: 01         (52 usec low and 52 usec high)
-          NMRA-0-Bit: 0011       (at least 100 usec low and high)
-
-      serial stream (only start/stop bits):
-
-      0_______10_______10_______10_______10_______10_______10___ ...
-
-      problem: how to place the NMRA-0- and NMRA-1-Bits in the serial stream
-
-      examples:
-
-      0          0xF0     _____-----
-      00         0xC6     __--___---
-      01         0x78     ____----_-
-      10         0xE1     _-____----
-      001        0x66     __--__--_-
-      010        0x96     __--_-__--
-      011        0x5C     ___---_-_-
-      100        0x99     _-__--__--
-      101        0x71     _-___---_-
-      110        0xC5     _-_-___---
-      0111       0x56     __--_-_-_-
-      1011       0x59     _-__--_-_-
-      1101       0x65     _-_-__--_-
-      1110       0x95     _-_-_-__--
-      11111      0x55     _-_-_-_-_-
-                          ^        ^
-                          start-   stop-
-                          bit      bit
-
-   known bugs (of version 1 of the NMRA dcc translation routine):
-   (i hope version 2 don't have these bugs ;-) )
-
-      following packets are not translatable:
-
-        N1 031 1 06 0 0 0 0 0
-        N1 047 0 07 0 0 0 0 0
-
-        N2 031 0 091 0 0 0 0 0
-        N2 031 1 085 0 0 0 0 0
-        N2 031 1 095 0 0 0 0 0
-        N2 047 0 107 0 0 0 0 0
-        N2 047 1 103 0 0 0 0 0
-        N2 047 1 111 0 0 0 0 0
-        N2 048 1 112 0 0 0 0 0
-        N2 051 1 115 0 0 0 0 0
-        N2 053 1 117 0 0 0 0 0
-        N2 056 0 124 0 0 0 0 0
-        N2 057 1 113 0 0 0 0 0
-        N2 058 1 114 0 0 0 0 0
-        N2 059 1 115 0 0 0 0 0
-        N2 060 1 116 0 0 0 0 0
-        N2 061 1 117 0 0 0 0 0
-        N2 062 1 118 0 0 0 0 0
-
-     I think, that these are not really problems. The only consequence is
-     e.g. that some addresses has 127 speed steps instead of 128. That's
-     life, don't worry.
-
-     New: completely new algorithm to generate the NMRA packet stream
-     (i call it 'version 3' of the translate routines)
-
-     The idea in this approach to generate NMRA patterns is, to split the
-     starting and ending bit in each pattern and share it with the next
-     pattern. Therefore the patterns, which could be generated, are coded with
-     h, H, l and L, lowercase describing the half bits. The longest possible
-     pattern contains two half h bits and four H bits. For the access into
-     the coding table, the index of course doesn't differentiate between half
-     and full bits, because the first one is always half and the last one
-     determined by this table. This table shows, which bit pattern will be
-     replaced by which pattern on the serial line. There is only one pattern
-     left, which could not be directly translated. This pattern starts with
-     an h, so we have to look at the patterns, which end with an h, if we want
-     to avoid this pattern. All of the patterns, we access in the first try,
-     contain an l or an L, which could be enlarged, to get rid of at least on
-     bit in this pattern and don't have our problem in the next pattern. With
-     the only exception of hHHHHh, but this pattern simply moves our problem
-     into one byte before or up to the beginning of the sequence. And there, we
-     could always add a bit. So we are sure, to be able, to translate any
-     given sequence of bits.
-
-    Because only the case of hHHHHh really requires 6 bits, the translation table
-    could be left at 32 entries. The other case, which has the same first five
-    bits is our problem, so we have to handle it separately anyway.
-
-    Of course the resulting sequence is not dc free. But if this is required,
-    one could replace the bytes in the TranslateData by an index in another
-    table which holds for each data containing at least an L or two l
-    replacements with different dc components. This way one could get a dc
-    free signal or at will a signal with a given dc part.
-
-    #define ll          0xf0  _____-----
-
-    #define lLl         0xcc  ___--__---    000000  000001  000010 000011 000100 000101 000110  000111
-
-    #define lHl         0xe8  ____-_----
-
-    #define lHLl        0x9a  __-_--__--    010000  010001  010010  010011
-
-    #define lLHl        0xa6  __--__-_--    001000  001001  001010  001011
-
-    #define lHHl        0xd4  ___-_-_---    011000  011001  011010  011011
-
-    #define lHHHl       0xaa  __-_-_-_--
-
-
-
-    #define lh          0x00  _________-
-
-    #define lLh         0x1c  ___---___-
-
-    #define lHh         0x40  _______-_-
-
-    #define lLHh        0x4c  ___--__-_-    001100  001101  001110  001111
-
-    #define lHLh        0x34  ___-_--__-    010100  010101  010110  010111
-
-    #define lHHh        0x50  _____-_-_-    011100  011101
-
-    #define lHHHh       0x54  ___-_-_-_-    011110  011111
-
-
-
-    #define hLh         0x0f  _----____-
-
-    #define hHLh        0x1d  _-_---___-    110100  110101
-
-    #define hLHh        0x47  _---___-_-    101100  101101
-
-    #define hHHLh       0x35  _-_-_--__-    111010  111011
-
-    #define hHLHh       0x4d  _-_--__-_-    110110  110111
-
-    #define hLHHh       0x53  _--__-_-_-      101110  101111
-
-    #define hHHHHh      0x55  _-_-_-_-_-    111111
-
-
-
-    #define hl          0xff  _---------
-
-    #define hLl         0xc7  _---___---    100000  100001  100010  100011  100100  100101  100110  100111
-
-    #define hHl         0xfd  _-_-------
-
-    #define hHLl        0xcd  _-_--__---    110000  110001  110010  110011
-
-    #define hLHl        0xD3        _--__-_---      101000  101001  101010  101011
-
-    #define hHHl        0xF5        _-_-_-----      111000  111001
-
-    #define hHHHl       0xd5  _-_-_-_---      111100  111101
-
-    not directly translatable     111110
-
 ****************************************************************/
-
-#define ll          0xf0
-#define lLl         0xcc
-#define lHl         0xe8
-#define lHLl        0x9a
-#define lLHl        0xa6
-#define lHHl        0xd4
-#define lHHHl       0xaa
-#define lh          0x00
-#define lLh         0x1c
-#define lHh         0x40
-#define lLHh        0x4c
-#define lHLh        0x34
-#define lHHh        0x50
-#define lHHHh       0x54
-#define hLh         0x0f
-#define hHLh        0x1d
-#define hLHh        0x47
-#define hHHLh       0x35
-#define hHLHh       0x4d
-#define hLHHh       0x53
-#define hHHHHh      0x55
-#define hl          0xff
-#define hLl         0xc7
-#define hHl         0xfd
-#define hHLl        0xcd
-#define hLHl        0xD3
-#define hHHl        0xF5
-#define hHHHl       0xd5
 
 #include <time.h>
 
 #include "ddl.h"
 #include "ddl_nmra.h"
 #include "syslogmessage.h"
-
-
-typedef struct {
-    char *pattern;
-    int patternlength;
-    int value;
-} tTranslateData;
-
-typedef struct {
-    int value;
-    int patternlength;
-} tTranslateData_v3;
-
-static const tTranslateData TranslateData[] = {
-    {"0", 1, 0xF0},
-    {"00", 2, 0xC6},
-    {"01", 2, 0x78},
-    {"10", 2, 0xE1},
-    {"001", 3, 0x66},
-    {"010", 3, 0x96},
-    {"011", 3, 0x5C},
-    {"100", 3, 0x99},
-    {"101", 3, 0x71},
-    {"110", 3, 0xC5},
-    {"0111", 4, 0x56},
-    {"1011", 4, 0x59},
-    {"1101", 4, 0x65},
-    {"1110", 4, 0x95},
-    {"11111", 5, 0x55}
-};
-
-/* number of translatable patterns */
-static int DataCnt = sizeof(TranslateData) / sizeof(TranslateData[0]);
-
-static const tTranslateData_v3 TranslateData_v3[32][2] = {
-    {{lLl, 2}, {ll, 1}},
-    {{lLl, 2}, {ll, 1}},
-    {{lLl, 2}, {ll, 1}},
-    {{lLl, 2}, {ll, 1}},
-    {{lLHl, 3}, {lLh, 2}},
-    {{lLHl, 3}, {lLh, 2}},
-    {{lLHh, 3}, {lLh, 2}},
-    {{lLHh, 3}, {lLh, 2}},
-    {{lHLl, 3}, {lHl, 2}},
-    {{lHLl, 3}, {lHl, 2}},
-    {{lHLh, 3}, {lHl, 2}},
-    {{lHLh, 3}, {lHl, 2}},
-    {{lHHl, 3}, {lHh, 2}},
-    {{lHHl, 3}, {lHh, 2}},
-    {{lHHh, 3}, {lHh, 2}},
-    {{lHHHh, 4}, {lHHh, 3}},
-    {{hLl, 2}, {hl, 1}},
-    {{hLl, 2}, {hl, 1}},
-    {{hLl, 2}, {hl, 1}},
-    {{hLl, 2}, {hl, 1}},
-    {{hLHl, 3}, {hLh, 2}},
-    {{hLHl, 3}, {hLh, 2}},
-    {{hLHh, 3}, {hLh, 2}},
-    {{hLHHh, 4}, {hLHh, 3}},
-    {{hHLl, 3}, {hHl, 2}},
-    {{hHLl, 3}, {hHl, 2}},
-    {{hHLh, 3}, {hHl, 2}},
-    {{hHLHh, 4}, {hHLh, 3}},
-    {{hHHl, 3}, {hHHl, 3}},
-    {{hHHLh, 4}, {hHHl, 3}},
-    {{hHHHl, 4}, {hHHHl, 4}},
-    {{hHHHHh, 5}, {hHHHHh, 5}}
-};
 
 static char *preamble = "111111111111111";
 static const int NMRA_STACKSIZE = 200;
@@ -346,252 +83,6 @@ static const unsigned int BUFFERSIZE = 256;
 /* internal offset of the long addresses */
 static const unsigned int ADDR14BIT_OFFSET = 128;
 
-/* the result is only an index, no warranty */
-static int translateabel(char *bs)
-{
-    int i;
-    size_t size;
-    char *pbs;
-    size = strlen(bs);
-    for (i = (DataCnt - 1); i >= 0; i--) {
-        pbs = bs + (size - TranslateData[i].patternlength);
-        if (strcmp(pbs, TranslateData[i].pattern) == 0)
-            return 1;
-    }
-    return 0;
-}
-
-static int read_next_six_bits(char *Bitstream)
-{
-    int i, bits = 0;
-    for (i = 0; i < 6; i++)
-        bits = (bits << 1) | (*Bitstream++ == '0' ? 0 : 1);
-    return bits;
-}
-
-static int translateBitstream2Packetstream_v1(char *Bitstream,
-                                              char *Packetstream,
-                                              int force_translation)
-{
-
-    char Buffer[BUFFERSIZE];
-    char *pBs = Buffer;
-    int i;                      /* decision of each recursion level          */
-    int j = 0;                  /* index of Packetstream, level of recursion */
-    int found;                  /* flag                                      */
-    int stack[NMRA_STACKSIZE];  /* stack for the i's                         */
-    int pstack = 0;             /* stack pointer                             */
-    int correction = 0;
-    size_t bufsize = 0;
-    int highest_level = 0;      /* highest recursion level reached during algo. */
-    const int max_level_delta = 7;      /* additional recursion base, speeds up */
-
-    pBs = strncpy(Buffer, Bitstream, BUFFERSIZE - 1);
-    memset(Packetstream, 0, PKTSIZE);
-    i = DataCnt - 1;
-    if (!translateabel(Buffer)) {
-        /* The last bit of the bitstream is always '1'. */
-        pBs[strlen(pBs) - 1] = 0;
-        correction = 1;
-    }
-    bufsize = strlen(Buffer);
-    while (*pBs) {
-        found = 0;
-        while (i >= 0) {
-            if (strncmp(pBs, TranslateData[i].pattern,
-                        TranslateData[i].patternlength) == 0) {
-                found = 1;
-                break;
-            }
-            i--;
-        }
-        if (!found) {           /* now backtracking    */
-            pstack--;           /* back to last level  */
-            if (pstack >= 0) {  /* last level avail.?  */
-                i = stack[pstack];
-                pBs -= TranslateData[i].patternlength;  /* corrections */
-                j--;
-                if (((highest_level - j) >= max_level_delta) &&
-                    (!force_translation))
-                    j = 0;
-                i--;            /* next try */
-            }
-        }
-        else {
-            Packetstream[j] = (unsigned char) TranslateData[i].value;
-            j++;
-            if (j > highest_level)
-                highest_level = j;
-            pBs += TranslateData[i].patternlength;
-            stack[pstack] = i;
-            pstack++;
-            i = DataCnt - 1;
-        }
-        if (j >= PKTSIZE - 1 || bufsize == BUFFERSIZE) {
-            syslog(LOG_INFO,
-                   "cannot translate bitstream '%s' to NMRA packet",
-                   Bitstream);
-            return 0;
-        }
-        if (j <= 0 || pstack < 0 || pstack > NMRA_STACKSIZE - 1) {
-            /* it's nasty, but a try: */
-            /* leading 1's don't make problems */
-            strcat(Buffer, "1");
-            bufsize++;
-            pBs = Buffer;
-            j = 0;
-            pstack = 0;
-            i = DataCnt - 1;
-            correction = 0;     /* correction also done */
-            memset(Packetstream, 0, PKTSIZE);
-        }
-    }
-    if (correction) {
-        Packetstream[j] = (unsigned char) 0x99; /* Now the handling of the */
-        j++;                    /* final '1'. See above. */
-    }
-    return j + 1;               /* return number of bytes in packetstream */
-}
-
-static int translateBitstream2Packetstream_v2(char *Bitstream,
-                                              char *Packetstream)
-{
-
-    int i = DataCnt - 1;        /* decision of each recursion level          */
-    int j = 0;                  /* index of Packetstream, level of recursion */
-    int found;                  /* flag                                      */
-    int stack[PKTSIZE];         /* stack for the i's                         */
-
-    memset(Packetstream, 0, PKTSIZE);
-    while (*Bitstream) {
-        /* Check if the end of the buffer contains only 1s */
-        if (strlen(Bitstream) <= 5) {
-            if (strncmp(Bitstream, "11111", strlen(Bitstream)) == 0) {
-                /* This is the end */
-                Packetstream[j++] = (unsigned char) 0x55;
-                return j + 1;
-            }
-        }
-
-        found = 0;
-        while (i >= 0) {
-            if (strncmp
-                (Bitstream, TranslateData[i].pattern,
-                 TranslateData[i].patternlength) == 0) {
-                found = 1;
-                break;
-            }
-            i--;
-        }
-        if (!found) {           /* now backtracking   */
-            if (j > 0) {        /* last level avail.? */
-                j--;            /* go back            */
-                i = stack[j];
-                Bitstream -= TranslateData[i].patternlength;    /* corrections */
-                i--;
-
-            }
-            else {
-                syslog(LOG_INFO,
-                       "cannot translate bitstream '%s' to NMRA packet",
-                       Bitstream);
-                return 0;
-            }
-        }
-        else {
-            Packetstream[j] = (unsigned char) TranslateData[i].value;
-            Bitstream += TranslateData[i].patternlength;
-            stack[j] = i;
-            j++;
-            i = DataCnt - 1;
-        }
-        /* Check buffer size */
-        if (j >= PKTSIZE) {
-            syslog(LOG_INFO, "Oops buffer too small - bitstream '%s'",
-                   Bitstream);
-            return 0;
-        }
-    }
-    return j + 1;               /* return number of bytes in packetstream */
-}
-
-static int translateBitstream2Packetstream_v3(char *Bitstream,
-                                              char *Packetstream)
-{
-
-    /* This routine assumes, that any Bitstream starts with a 1 Bit. */
-    /* This could be changed, if necessary */
-
-    /* keep room for additional pre and postamble */
-    char Buffer[BUFFERSIZE + 20];
-
-    /* here the real sequence starts */
-    char *read_ptr = Buffer + 1;
-
-    /* one more 1 in the beginning for successful restart */
-    char *restart_read = Buffer;
-
-    /* this necessary, only to verify our assumptions */
-    char *last_restart = Buffer - 1;
-
-    char *buf_end;
-
-    int restart_packet = 0;
-    int generate_packet = 0;
-
-    int second_try = false;
-    int act_six;
-
-    read_ptr = strcpy(Buffer, "11");
-
-    /* one bit, to start with a half-bit, so we have to put in the left half */
-    /* one bit, to be able, to back up one bit, if we run into a 111110 pattern */
-
-    strncat(Buffer, Bitstream, BUFFERSIZE - 1);
-
-    /* for simply testing, whether our job is done */
-    buf_end = Buffer + strlen(Buffer);
-
-    strcat(Buffer, "111111");
-
-    /* at most six trailing bits are possibly necessary */
-
-    memset(Packetstream, 0, PKTSIZE);
-
-    while (generate_packet < PKTSIZE && read_ptr < buf_end) {
-        act_six = read_next_six_bits(read_ptr);
-        if (act_six == 0x3e /* 111110 */ ) {
-            /*did we reach an untranslatable value */
-            /* try again from last position, where a shorter translation */
-            /* could be chosen                                          */
-            second_try = true;
-            generate_packet = restart_packet;
-            if (restart_read == last_restart)
-                syslog(LOG_INFO, "Sorry, restart algorithm doesn't "
-                       "work as expected for NMRA-Packet %s", Bitstream);
-            last_restart = restart_read;
-            read_ptr = restart_read;
-            act_six = read_next_six_bits(read_ptr);
-        }
-
-        Packetstream[generate_packet] =
-            TranslateData_v3[act_six >> 1][second_try ? 1 : 0].value;
-
-        if (act_six < 0x3e /* 111110 */ ) {
-            /* is translation fixed up to here ? */
-            restart_packet = generate_packet;
-            restart_read = read_ptr;
-        }
-        read_ptr +=
-            TranslateData_v3[act_six >> 1][second_try ? 1 : 0].
-            patternlength;
-        generate_packet++;
-        second_try = false;
-    }
-
-    return generate_packet;     /* return number of bytes in packetstream */
-}
-
 /**
  * Erzeugung Paket für SPI Ausgabe. Was viel einfacher ist:
  * Aus Effizenzgründen kodieren wir hier bitweise, Konvertierung 
@@ -601,8 +92,11 @@ static int translateBitstream2Packetstream_v3(char *Bitstream,
  * Anzahl im 1. Packetstream Byte übergeben.
  * Retunwert ist die Anzahl Byte, also erstes Löngenbyte plus alle notwendigen Datenbytes.
  */
-static int translateBitstream2Packetstream_SPI(char *Bitstream,
-                                               char *Packetstream)
+//static int translateBitstream2Packetstream_SPI(char *Bitstream,
+//                                               char *Packetstream)
+int translateBitstream2Packetstream(bus_t busnumber, char *Bitstream,
+                                    char *Packetstream,
+                                    int force_translation)
 {
   int i;
   int bitLen = strlen(Bitstream);
@@ -621,30 +115,6 @@ static int translateBitstream2Packetstream_SPI(char *Bitstream,
   return (bitLen / 8) + 2; //Inkl. Längenbyte
 }
 
-int translateBitstream2Packetstream(bus_t busnumber, char *Bitstream,
-                                    char *Packetstream,
-                                    int force_translation)
-{
-    DDL_DATA *DDL = ((DDL_DATA *) buses[busnumber].driverdata);
-    int NMRADCC_TR_V = DDL->NMRADCC_TR_V;
-    switch (NMRADCC_TR_V) {
-        case 1:
-            return translateBitstream2Packetstream_v1(Bitstream,
-                                                      Packetstream,
-                                                      force_translation);
-        case 2:
-            return translateBitstream2Packetstream_v2(Bitstream,
-                                                      Packetstream);
-        case 3:
-            return translateBitstream2Packetstream_v3(Bitstream,
-                                                      Packetstream);
-        case NMRADCC_TR_SPI:
-            return translateBitstream2Packetstream_SPI(Bitstream,
-                                                       Packetstream);
-        default:
-            return 0;
-    }
-}
 
 /*** Some useful functions to calculate NMRA-DCC bytes (char arrays) ***/
 
@@ -1090,7 +560,7 @@ int comp_nmra_multi_func(bus_t busnumber, int address, int direction,
     int j, jj;
 
     syslog_bus(busnumber, DBG_DEBUG,
-               "command for NMRA protocol (N%d) received \naddr:%d "
+               "command for NMRA protocol (N%d) received addr:%d "
                "dir:%d speed:%d nspeeds:%d nfunc:%d",
                mode, address, direction, speed, nspeed, nfuncs);
 
@@ -1363,11 +833,11 @@ static int waitUARTempty_scanACK(bus_t busnumber)
             diff /= CLOCKS_PER_SEC;
             if (ack) {
                 value = 1;
-                waitUARTempty(busnumber);
+//                waitUARTempty(busnumber);
             }
             /* wait 300ms */
             if (diff > 0.3) {
-                waitUARTempty(busnumber);
+//                waitUARTempty(busnumber);
                 value = 1;
             }
         }

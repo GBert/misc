@@ -36,18 +36,20 @@
 void syslog_bus(bus_t busnumber, int dbglevel, const char *fmt, ...)
 {
     if (dbglevel <= buses[busnumber].debuglevel) {
-        va_list parm;
-        va_start(parm, fmt);
-        char *msg;
-        msg = (char *) malloc(sizeof(char) * (strlen(fmt) + 18));
-        if (msg == NULL) {
-            va_end(parm);
-            return;
-	}
-        sprintf(msg, "[bus %ld] %s", busnumber, fmt);
-        vsyslog(LOG_INFO, msg, parm);
-        free(msg);
+	va_list parm;
+	va_start(parm, fmt);
 
+	char *msg;
+	msg = (char *) malloc(sizeof(char) * (strlen(fmt) + 18));
+	if (msg != NULL) {
+		sprintf(msg, "[bus %lu] %s", busnumber, fmt);
+		vsyslog(LOG_INFO, msg, parm);
+		if (logprint){
+				vprintf(msg, parm);
+				printf("\n");
+			}
+		free(msg);
+		}
         va_end(parm);
     }
 }
@@ -61,14 +63,15 @@ void syslog_session(sessionid_t session, int dbglevel, const char *fmt,
 
         char *msg;
         msg = (char *) malloc(sizeof(char) * (strlen(fmt) + 22));
-        if (msg == NULL) {
-            va_end(parm);
-            return;
-	}
-        sprintf(msg, "[session %ld] %s", session, fmt);
-        vsyslog(LOG_INFO, msg, parm);
-        free(msg);
-
-        va_end(parm);
+        if (msg != NULL) {
+		sprintf(msg, "[session %lu] %s", session, fmt);
+		vsyslog(LOG_INFO, msg, parm);
+		if (logprint){
+				vprintf(msg, parm);
+				printf("\n");
+			}
+		free(msg);
+		}
+	va_end(parm);
     }
 }

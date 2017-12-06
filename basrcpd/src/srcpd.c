@@ -26,13 +26,15 @@
 #include "srcp-ga.h"
 #include "srcp-gl.h"
 #include "srcp-info.h"
-#include "srcp-lock.h"
+//#include "srcp-lock.h"
 #include "srcp-server.h"
 #include "srcp-session.h"
 #include "srcp-time.h"
 #include "syslogmessage.h"
 
-#define SYSCONFDIR "/etc"
+#ifndef SYSCONFDIR
+	#define SYSCONFDIR "/etc"
+#endif
 
 #if defined BANANAPI
     #include <a20hw.h>
@@ -290,7 +292,7 @@ int main(int argc, char **argv)
     startup_GA();
     startup_FB();
     startup_INFO();
-    startup_LOCK();
+//    startup_LOCK();
     startup_DESCRIPTION();
     startup_TIME();
     startup_SERVER();
@@ -300,7 +302,8 @@ int main(int argc, char **argv)
 
     /* read command line parameters */
     opterr = 0;
-    while ((c = getopt(argc, argv, "f:hvn")) != EOF) {
+    logprint = 0;
+    while ((c = getopt(argc, argv, "f:hvnp")) != EOF) {
         switch (c) {
             case 'f':
                 if (strlen(optarg) < MAXPATHLEN - 1)
@@ -313,6 +316,9 @@ int main(int argc, char **argv)
             case 'n':
                 daemonflag = 0;
                 break;
+            case 'p':
+                logprint = 1;
+                break;
             case 'h':
                 printf(WELCOME_MSG);
                 printf("Usage: srcpd -f <conffile> -v -h\n\n");
@@ -321,6 +327,7 @@ int main(int argc, char **argv)
                 printf("  -f  Use another config file (default %s).\n",
                        conffile);
                 printf("  -n  Do not daemonize at startup.\n");
+                printf("  -p  Print log messages on stdout.\n");
                 printf("  -h  Show this help text and quit.\n");
                 exit(EXIT_FAILURE);
                 break;

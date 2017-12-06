@@ -23,6 +23,10 @@
 #include "srcp-gl.h"
 #include "srcp-error.h"
 
+#ifndef SYSCONFDIR
+	#define SYSCONFDIR "/etc"
+#endif
+
 //Zentrale UID, Dekoder Existenzabfrage und Dekodersuche Intervall (us)
 #define INTERVALL_UID 500000
 //Anzahl Durchläufe "Zentrale UID" (INTERVALL_UID) nach der wieder eine Adresszuweisung wiederholt wird
@@ -163,7 +167,7 @@ typedef struct _tMFXKonfigCache {
   bool valid[CV_SIZE][CVINDEX_SIZE];
 } tMFXKonfigCache;
 //Es wird jeweils eine Lok im Cache gehalten, mit der gerade Konfig-Variablen gelesen / geschrieben werden.
-static tMFXKonfigCache mfxKonfigCache = {.adresse=0, .cache=0, .valid=0};
+static tMFXKonfigCache mfxKonfigCache = {.adresse=0, .cache={{0}}, .valid={{0}}};
 
 /**
  * Servicemode (SM) aktiv oder nicht.
@@ -418,13 +422,14 @@ int comp_mfx_loco(int address, int direction,
   return 0;
 }
 
-#define REG_COUNTER_FILE "/etc/srcpd.regcount"
+#define REG_COUNTER_FILE SYSCONFDIR"/srcpd.regcount"
 /**
  * Den gespeicherten Neuanmeldezähler laden.
  * @return Aktuell gespeicherter Neuanmeldezähler, wenn nichts gespeichert ist 0.
  */
 static uint16_t loadRegistrationCounter() {
-  //printf("Load RegCounter. File=%s\n", REG_COUNTER_FILE);
+  syslog_bus(busnumber, DBG_INFO, 
+  			"Load ReRegistration counter from file %s", REG_COUNTER_FILE);
   int regCountFile = open(REG_COUNTER_FILE, O_RDONLY);
   if (regCountFile < 0) {
     //Kein Reg.Counter File vorhanden -> Start bei 0
@@ -1075,7 +1080,7 @@ static void *thr_mfxManageThread(void *threadParam) {
   uint32_t uid = ddl -> uid;
   //Neuanmeldezähler mit letztem gespeichertem Wert laden
   uint16_t registrationCounter = loadRegistrationCounter();
-  //printf("Neuanmeldezähler=%d\n", registrationCounter);
+  syslog_bus(busnumber, DBG_INFO, "ReRegistration counter = %d", registrationCounter);
   //Aktuelle Lok SID für periodische Dekoder Existenzabfrage
   int lokAdrExist = 0;
   //Erste MFX UID, zu der ein "DekoderExist" gesendet wurde. Zur Erkennung, wenn ein Durchgang über alle MFX Loks fertig ist

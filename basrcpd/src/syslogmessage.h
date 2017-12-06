@@ -17,13 +17,14 @@
 #include <stdarg.h>
 #include "config-srcpd.h"
 
-
 #define DBG_NONE 0
 #define DBG_FATAL 1
 #define DBG_ERROR 2
 #define DBG_WARN 3
 #define DBG_INFO 4
 #define DBG_DEBUG 5
+
+int logprint;
 
 void syslog_bus(bus_t busnumber, int dbglevel, const char *fmt, ...);
 void syslog_session(sessionid_t session, int dbglevel, const char *fmt, ...);

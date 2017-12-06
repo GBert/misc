@@ -163,10 +163,6 @@
 #define __DDL ((DDL_DATA*)buses[busnumber].driverdata)
 #define __DDLt ((DDL_DATA*)buses[btd->bus].driverdata)
 
-#ifdef __CYGWIN__
-#define TIOCOUTQ 0x5411
-#endif
-
 #define DAUER_STOP_IMPULS_SIGG_MODE 500000
 #define DAUER_START_IMPULS_SIGG_MODE 500000
 //Zeit, die Booster On sein muss in uSekunden, damit bei Off (wegen Schluss) automatisch wieder eingeschaltet wird
@@ -227,7 +223,6 @@ static struct spi_ioc_transfer spi_nmra_idle;
 //Breite RDS Sync Impulse (in usec)
 #define MFX_RDS_SYNC_IMPULS_USEC 25
 
-void (*waitUARTempty_MM) (bus_t busnumber);
 
 static int (*nanosleep_DDL) (const struct timespec * req,
                              struct timespec * rem);
@@ -254,7 +249,7 @@ static void queue_init(bus_t busnumber)
         syslog_bus(busnumber, DBG_ERROR,
                    "pthread_mutex_init() failed: %s (errno = %d).",
                    strerror(result), result);
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     result = pthread_mutex_lock(&__DDL->queue_mutex);
@@ -398,119 +393,20 @@ static int queue_get(bus_t busnumber, int *addr, char *packet,
     return rtc;
 }
 
-
-/* functions to open, initialize and close comport */
-
-#if linux
-static int init_serinfo(int fd, int divisor,
-                        struct serial_struct **serinfo)
-{
-    if (*serinfo == NULL) {
-        *serinfo = malloc(sizeof(struct serial_struct));
-        if (!*serinfo)
-            return -1;
-    }
-
-    if (ioctl(fd, TIOCGSERIAL, *serinfo) < 0)
-        return -1;
-    /* check baud_base - for other baud_base values change the divisor */
-    if ((*serinfo)->baud_base != 115200)
-        return -1;
-
-    (*serinfo)->custom_divisor = divisor;
-    (*serinfo)->flags = ASYNC_SPD_CUST | ASYNC_SKIP_TEST;
-
-    return 0;
-}
-
-static int set_customdivisor(int fd, struct serial_struct *serinfo)
-{
-    if (ioctl(fd, TIOCSSERIAL, serinfo) < 0)
-        return -1;
-    return 0;
-}
-
-static int reset_customdivisor(int fd)
-{
-    struct serial_struct serinfo;
-
-    if (ioctl(fd, TIOCGSERIAL, &serinfo) < 0)
-        return -2;
-    serinfo.custom_divisor = 0;
-    serinfo.flags = 0;
-    if (ioctl(fd, TIOCSSERIAL, &serinfo) < 0)
-        return -3;
-    return 0;
-}
-#endif
-
+// OBSOLETE
 int setSerialMode(bus_t busnumber, int mode)
 {
-    switch (mode) {
-        case SDM_MAERKLIN:
-            if (__DDL->SERIAL_DEVICE_MODE != SDM_MAERKLIN) {
-                if (tcsetattr
-                    (buses[busnumber].device.file.fd, TCSANOW,
-                     &__DDL->maerklin_dev_termios) != 0) {
-                    syslog_bus(busnumber, DBG_ERROR,
-                               "Error setting serial device mode to Maerklin!");
-                    return -1;
-                }
-#if linux
-                if (__DDL->IMPROVE_NMRADCC_TIMING) {
-                    if (set_customdivisor
-                        (buses[busnumber].device.file.fd,
-                         __DDL->serinfo_marklin) != 0) {
-                        syslog_bus(busnumber, DBG_ERROR,
-                                   "Cannot set custom divisor for maerklin of serial device!");
-                        return -1;
-                    }
-                }
-#endif
-                __DDL->SERIAL_DEVICE_MODE = SDM_MAERKLIN;
-            }
-            break;
-        case SDM_NMRA:
-            if (__DDL->SERIAL_DEVICE_MODE != SDM_NMRA) {
-                if (tcsetattr
-                    (buses[busnumber].device.file.fd, TCSANOW,
-                     &__DDL->nmra_dev_termios) != 0) {
-                    syslog_bus(busnumber, DBG_ERROR,
-                               "Error setting serial device mode to NMRA!");
-                    return -1;
-                }
-#if linux
-                if (__DDL->IMPROVE_NMRADCC_TIMING) {
-                    if (set_customdivisor
-                        (buses[busnumber].device.file.fd,
-                         __DDL->serinfo_nmradcc) != 0) {
-                        syslog_bus(busnumber, DBG_ERROR,
-                                   "Cannot set custom divisor for nmra dcc of serial device!");
-                        return -1;
-                    }
-                }
-#endif
-                __DDL->SERIAL_DEVICE_MODE = SDM_NMRA;
-            }
-            break;
-        default:
-            syslog_bus(busnumber, DBG_ERROR,
-                       "Error setting serial device to unknown mode!");
-            return -1;
-    }
     return 0;
 }
 
 int init_lineDDL(bus_t busnumber)
 {
-    /* opens and initializes the selected comport */
-    /* returns a file handle                      */
+    /* opens and initializes the selected SPI port */
+    /* returns a file handle                       */
 
     int dev;
-    int rc;
-    int result;
 
-    /* open comport */
+    /* open SPI port */
     dev = open(buses[busnumber].device.file.path, O_WRONLY);
     if (dev < 0) {
         syslog_bus(busnumber, DBG_FATAL,
@@ -522,10 +418,7 @@ int init_lineDDL(bus_t busnumber)
     }
     if (strstr(buses[busnumber].device.file.path, "spidev")) {
       //Es wird ein SPI Interface zur Ausgabe verwendet
-      __DDL->spiMode = 1;
       __DDL->spiLastMM = 0;
-      setSPIModeMaerklin(true);
-      __DDL->NMRADCC_TR_V = NMRADCC_TR_SPI;
 
 #ifndef RASPBERRYPI
         syslog_bus(busnumber, DBG_FATAL, "SPI only on Raspberry PI supported!");
@@ -533,151 +426,24 @@ int init_lineDDL(bus_t busnumber)
         exit(1);
 #endif      
     }
-    else {
-      //Es wird ein "normaler" Com Port zur Ausgabe verwendet
-      __DDL->spiMode = 0;
-    }
-#if linux
-    if ((! __DDL->spiMode) && (rc = reset_customdivisor(dev)) != 0) {
-        syslog_bus(busnumber, DBG_FATAL,
-                   "Error initializing device %s (reset custom "
-                   "divisor %d). Abort!",
-                   buses[busnumber].device.file.path, rc);
-        exit(1);
-    }
-#endif
 
-    if (__DDL->spiMode) {
       // Set SPI parameters.
-      int mode = 1; 
-      if (ioctl (dev, SPI_IOC_WR_MODE, &mode) < 0) {
+    int mode = 1; 
+    if (ioctl (dev, SPI_IOC_WR_MODE, &mode) < 0) {
         syslog_bus(busnumber, DBG_FATAL, "SPI Mode Change failure: %s", strerror(errno));
         return 1;
-      }
-      uint8_t spiBPW = 8;
-      if (ioctl (dev, SPI_IOC_WR_BITS_PER_WORD, &spiBPW) < 0) {
+    }
+    uint8_t spiBPW = 8;
+    if (ioctl (dev, SPI_IOC_WR_BITS_PER_WORD, &spiBPW) < 0) {
         syslog_bus(busnumber, DBG_FATAL, "SPI BPW Change failure: %s", strerror(errno));
         return 1;
-      }
-      int speed = SPI_BAUDRATE_MAERKLIN_LOCO_2;
-      if (ioctl (dev, SPI_IOC_WR_MAX_SPEED_HZ, &speed) < 0) {
+    }
+    int speed = SPI_BAUDRATE_MAERKLIN_LOCO_2;
+    if (ioctl (dev, SPI_IOC_WR_MAX_SPEED_HZ, &speed) < 0) {
         syslog_bus(busnumber, DBG_FATAL, "SPI Speed Change failure: %s", strerror(errno));
         return 1;
-      }
-    }
-    else {
-      result = tcflush(dev, TCOFLUSH);
-      if (result == -1) {
-          syslog_bus(busnumber, DBG_FATAL,
-                     "tcflush() failed: %s (errno = %d).",
-                     strerror(result), result);
-          exit(1);
-      }
-
-      result = tcflow(dev, TCOOFF);       /* suspend output */
-      if (result == -1) {
-          syslog_bus(busnumber, DBG_FATAL,
-                     "tcflow() failed: %s (errno = %d).",
-                     strerror(result), result);
-          exit(1);
-      }
-
-      result = tcgetattr(dev, &__DDL->maerklin_dev_termios);
-      if (result == -1) {
-          syslog_bus(busnumber, DBG_FATAL,
-                     "tcgetattr() failed: %s (errno = %d, device = %s).",
-                     strerror(result), result,
-                     buses[busnumber].device.file.path);
-          exit(1);
-      }
-
-      result = tcgetattr(dev, &__DDL->nmra_dev_termios);
-      if (result == -1) {
-          syslog_bus(busnumber, DBG_FATAL,
-                     "tcgetattr() failed: %s (errno = %d, device = %s).",
-                     strerror(result), result,
-                     buses[busnumber].device.file.path);
-          exit(1);
-      }
-
-      /* init termios structure for Maerklin mode */
-      __DDL->maerklin_dev_termios.c_lflag &=
-          ~(ECHO | ICANON | IEXTEN | ISIG);
-      __DDL->maerklin_dev_termios.c_oflag &= ~(OPOST);
-      __DDL->maerklin_dev_termios.c_iflag &=
-          ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
-      __DDL->maerklin_dev_termios.c_cflag &= ~(CSIZE | PARENB);
-      __DDL->maerklin_dev_termios.c_cflag |= CS6; /* 6 data bits      */
-      cfsetospeed(&__DDL->maerklin_dev_termios, B38400);  /* baud rate: 38400 */
-      cfsetispeed(&__DDL->maerklin_dev_termios, B38400);  /* baud rate: 38400 */
-
-      /* init termios structure for NMRA mode */
-      __DDL->nmra_dev_termios.c_lflag &= ~(ECHO | ICANON | IEXTEN | ISIG);
-      __DDL->nmra_dev_termios.c_oflag &= ~(OPOST);
-      __DDL->nmra_dev_termios.c_iflag &=
-          ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
-      __DDL->nmra_dev_termios.c_cflag &= ~(CSIZE | PARENB);
-      __DDL->nmra_dev_termios.c_cflag |= CS8;     /* 8 data bits      */
-      if (__DDL->IMPROVE_NMRADCC_TIMING) {
-          /* IMPROVE_NMRADCC_TIMING
-             With 19200 baud we are already outside of the specification of NMRA.
-             19200 baud means we have pulses of 52 microseconds - the specification
-             for generating DCC signals is in the range between 55 and 61 
-             microseconds.
-             Decoders are expected to accept signals with a length between 52 
-             and 66 microseconds (all this timigs are for one half of a logical 1).
-             Actually most decoders accept an even wider range than specified by
-             NMRA, thus 19200 baud normaly works.
-             If you have communication problems here is the method to reduce the
-             speed of your serial line to 16457 baud (i.e. 60.8 microseconds),
-             which is inside the NMRA specification.
-
-             On linux this is done in an odd way:
-             You have to set your baudrate to 38400 and set the flag 
-             ASYNC_SPD_CUST (see init_serinfo), this actualy sets the speed of
-             the line to Baud_base / custom_devisor
-             Baud_base is 115200 on "normal" serial lines (using the chip 16550A)
-             therefore a custom_devisor of 7 is needed for 16457 baud
-             and a custom_devisor of 3 will give you 38400 baud (maerklin)
-           */
-          cfsetospeed(&__DDL->nmra_dev_termios, B38400);  /* baud rate: 38400 */
-          cfsetispeed(&__DDL->nmra_dev_termios, B38400);  /* baud rate: 38400 */
-      }
-      else {
-          cfsetospeed(&__DDL->nmra_dev_termios, B19200);  /* baud rate: 19200 */
-          cfsetispeed(&__DDL->nmra_dev_termios, B19200);  /* baud rate: 19200 */
-      }
-
-#if linux
-      /* if IMPROVE_NMRADCC_TIMING is set, we have to initialize some */
-      /* structures */
-      if (__DDL->IMPROVE_NMRADCC_TIMING) {
-          if (init_serinfo(dev, 3, &__DDL->serinfo_marklin) != 0) {
-              syslog_bus(busnumber, DBG_FATAL,
-                         "Error initializing device %s (init_serinfo mm). Abort!",
-                         buses[busnumber].device.file.path);
-              exit(1);
-          }
-          if (init_serinfo(dev, 7, &__DDL->serinfo_nmradcc) != 0) {
-              syslog_bus(busnumber, DBG_FATAL,
-                         "Error initializing device %s (init_serinfo dcc). Abort!",
-                         buses[busnumber].device.file.path);
-              exit(1);
-          }
-      }
-#endif
     }
     buses[busnumber].device.file.fd = dev;      /* we need that value at the next step */
-
-    if (! __DDL->spiMode) {
-      /* setting serial device to default mode */
-      if ((! __DDL->spiMode) && (!setSerialMode(busnumber, SDM_DEFAULT) == 0)) {
-        syslog_bus(busnumber, DBG_FATAL,
-                   "Error initializing device %s. Abort!",
-                   buses[busnumber].device.file.path);
-        exit(1);
-      }
-    }
 
     return dev;
 }
@@ -789,7 +555,6 @@ void update_MaerklinPacketPool(bus_t busnumber, int adr,
     }
 }
 
-/**********************************************************/
 
 /****** routines for NMRA packet pool *********************/
 static void reset_NMRAPacketPool(bus_t busnumber)
@@ -877,7 +642,7 @@ static void init_NMRAPacketPool(bus_t busnumber)
         syslog_bus(busnumber, DBG_ERROR,
                    "pthread_mutex_init() failed: %s (error = %d). Terminating!\n",
                    strerror(result), result);
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     result = pthread_mutex_lock(&__DDL->nmra_pktpool_mutex);
@@ -912,17 +677,13 @@ static void init_NMRAPacketPool(bus_t busnumber)
     for (i = 0; i < (MAXDATA / j) * j; i++)
       __DDL->idle_data[i] = idle_pktstr[i % j]; */
     
-    if ( __DDL->spiMode) {
-      memset (&spi_nmra_idle, 0, sizeof (spi_nmra_idle)) ;
-      spi_nmra_idle.len = convertNMRAPacketToSPIStream(busnumber, idle_pktstr, __DDL->NMRA_idle_data);
-      spi_nmra_idle.tx_buf =  (unsigned long)__DDL->NMRA_idle_data;
-      spi_nmra_idle.bits_per_word = 8;
-      spi_nmra_idle.speed_hz = SPI_BAUDRATE_NMRA_2;
-    }
-    else {
-      memcpy(__DDL->NMRA_idle_data, idle_pktstr, j);
-      __DDL->NMRA_idle_data_size = j;
-    }
+    memset (&spi_nmra_idle, 0, sizeof (spi_nmra_idle)) ;
+    spi_nmra_idle.len = convertNMRAPacketToSPIStream(busnumber, idle_pktstr, __DDL->NMRA_idle_data);
+    spi_nmra_idle.tx_buf =  (unsigned long)__DDL->NMRA_idle_data;
+    spi_nmra_idle.bits_per_word = 8;
+    spi_nmra_idle.speed_hz = SPI_BAUDRATE_NMRA_2;
+//      memcpy(__DDL->NMRA_idle_data, idle_pktstr, j);
+//      __DDL->NMRA_idle_data_size = j;
 }
 
 void update_NMRAPacketPool(bus_t busnumber, int adr,
@@ -1339,247 +1100,55 @@ void update_MFXPacketPool(bus_t busnumber, int adr,
 }
 /**************************************************************************/
 
-
-/* busy wait until UART is empty, without delay */
-static void waitUARTempty_COMMON(bus_t busnumber)
+static int checkShortcut(bus_t busnumber) 
 {
-    int value = 0;
-    int result;
-
-    do {
-#if linux
-        result =
-            ioctl(buses[busnumber].device.file.fd, TIOCSERGETLSR, &value);
-#else
-        result = ioctl(buses[busnumber].device.file.fd, TCSADRAIN, &value);
-#endif
-        if (result == -1) {
-            syslog_bus(busnumber, DBG_ERROR,
-                       "ioctl() failed: %s (errno = %d)\n",
-                       strerror(errno), errno);
-        }
-    } while (!value);
-}
-
-/* busy wait until UART is empty, with delay */
-static void waitUARTempty_COMMON_USLEEPPATCH(bus_t busnumber)
-{
-    int value = 0;
-    int result;
-
-    do {
-#if linux
-        result =
-            ioctl(buses[busnumber].device.file.fd, TIOCSERGETLSR, &value);
-#else
-        result = ioctl(buses[busnumber].device.file.fd, TCSADRAIN, &value);
-#endif
-        if (result == -1) {
-            syslog_bus(busnumber, DBG_ERROR,
-                       "ioctl() failed: %s (errno = %d)\n",
-                       strerror(errno), errno);
-        }
-        if (usleep(__DDL->WAITUART_USLEEP_USEC) == -1) {
-            syslog_bus(busnumber, DBG_ERROR,
-                       "usleep() failed: %s (errno = %d)\n",
-                       strerror(errno), errno);
-        }
-    } while (!value);
-}
-
-/* new Version of waitUARTempty() for a clean NMRA-DCC signal */
-/* from Harald Barth */
-#define SLEEPFACTOR 48000l      /* used in waitUARTempty() */
-#define NUMBUFFERBYTES 1024     /* used in waitUARTempty() */
-
-static void waitUARTempty_CLEANNMRADCC(bus_t busnumber)
-{
-    int outbytes;
-    int result;
-
-    /* look how many bytes are in UART's out buffer */
-    result = ioctl(buses[busnumber].device.file.fd, TIOCOUTQ, &outbytes);
-    if (result == -1) {
-        syslog_bus(busnumber, DBG_ERROR,
-                   "ioctl() failed: %s (errno = %d)\n",
-                   strerror(errno), errno);
-    }
-
-    if (outbytes > NUMBUFFERBYTES) {
-        struct timespec sleeptime;
-        /* calculate sleep time */
-        sleeptime.tv_sec = outbytes / SLEEPFACTOR;
-        sleeptime.tv_nsec =
-            (outbytes % SLEEPFACTOR) * (1000000000l / SLEEPFACTOR);
-
-        nanosleep_DDL(&sleeptime, NULL);
-    }
-}
-
-static int checkRingIndicator(bus_t busnumber)
-{
-    int result, arg;
-
-    result = ioctl(buses[busnumber].device.file.fd, TIOCMGET, &arg);
-    if (result >= 0) {
-        if (arg & TIOCM_RI) {
-            syslog_bus(busnumber, DBG_INFO,
-                       "Ring indicator alert. Power on tracks stopped!");
-            return 1;
-        }
-        return 0;
-    }
-    else {
-        syslog_bus(busnumber, DBG_ERROR,
-                   "ioctl() failed: %s (errno = %d). Power on tracks stopped!",
-                   strerror(errno), errno);
-        return 1;
-    }
-}
-
-/**
- * @param boosterGoCheck wenn true: prüfen ob der Booster extern eingeschaltet wurde
- *                       und Short Erkennungsdelay auf 0 setzen.
- */
-static int __checkShortcut(bus_t busnumber, int boosterGoCheck)
-{
-    int result, arg;
+    int arg;
     time_t short_now = 0;
     struct timeval tv_shortcut = { 0, 0 };
 
-    #if defined BANANAPI
-        // nur BAPI_CTS wird eingelesen 
-      result = 0;
-      arg = (a20_gpio_lev(BAPI_CTS) == LOW ? TIOCM_CTS : 0);    
-    #elif defined RASPBERRYPI
-      //Nur CTS und DSR werden von RPI_CTS und RPI_DSR eingelesen, 0 = gesetzt.
-      result = 0;
-      arg = (bcm2835_gpio_lev(RPI_CTS) == LOW ? TIOCM_CTS : 0) |
-            (bcm2835_gpio_lev(RPI_DSR) == LOW ? TIOCM_DSR : 0);
-    #else
-      result = ioctl(buses[busnumber].device.file.fd, TIOCMGET, &arg);
-    #endif
-    if (result >= 0) {
-      #if defined BANANAPI
-        if (~arg & TIOCM_CTS) {
-      #else
-        if ((__DDL->SIGG_MODE && (~arg&TIOCM_CTS)) ||
-            ((!__DDL->SIGG_MODE) && 
-             (((arg & TIOCM_DSR) && (!__DDL->DSR_INVERSE)) || ((~arg & TIOCM_DSR) && (__DDL->DSR_INVERSE))))) {
-      #endif
-            if (boosterGoCheck) {
-              __DDL->short_detected = 0;
-              return 1;
-            }
-            if (__DDL->short_detected == 0) {
-                gettimeofday(&tv_shortcut, NULL);
-                __DDL->short_detected =
+    // nur CTS wird eingelesen 
+#if defined BANANAPI
+    arg = (a20_gpio_lev(BAPI_CTS) == LOW ? TIOCM_CTS : 0);    
+#elif defined RASPBERRYPI
+    arg = (bcm2835_gpio_lev(RPI_CTS) == LOW ? TIOCM_CTS : 0);
+#endif
+
+    if (__DDL->CHECKSHORT != 2) arg =  ~arg;	// CTS inverted or not
+    if (arg & TIOCM_CTS) {
+    	if (__DDL->short_detected == 0) {
+        	gettimeofday(&tv_shortcut, NULL);
+            __DDL->short_detected =
                     tv_shortcut.tv_sec * 1000000 + tv_shortcut.tv_usec;
-            }
-            gettimeofday(&tv_shortcut, NULL);
-            short_now = tv_shortcut.tv_sec * 1000000 + tv_shortcut.tv_usec;
-            if (__DDL->SHORTCUTDELAY <=
+        }
+        gettimeofday(&tv_shortcut, NULL);
+        short_now = tv_shortcut.tv_sec * 1000000 + tv_shortcut.tv_usec;
+        if (__DDL->SHORTCUTDELAY <=
                 (short_now - __DDL->short_detected)) {
 //                char buffer[1000];
 //                sprintf(buffer, "__DDL->SHORTCUTDELAY=%u short_now=%u __DDL->short_detected=%u", __DDL->SHORTCUTDELAY, short_now, __DDL->short_detected);
 //                syslog_bus(busnumber, DBG_FATAL, buffer);
-                syslog_bus(busnumber, DBG_INFO,
+        	syslog_bus(busnumber, DBG_INFO,
                            "Shortcut detected. Power on tracks stopped!");
-                return 1;
-            }
+            return 1;
         }
-        else {
-            __DDL->short_detected = 0;
-            return 0;
-        }
-    }
+	}
     else {
-        syslog_bus(busnumber, DBG_INFO,
-                   "ioctl() failed: %s (errno = %d). Power on tracks stopped!",
-                   strerror(errno), errno);
-        return 1;
+    	__DDL->short_detected = 0;
     }
     return 0;
 }
 
-static int checkShortcut(bus_t busnumber) {
-  return __checkShortcut(busnumber, false);
-}
 
 /**
  * Setzen einer HW Handshake Leitung.
- * Auf dem RaspberryPI wird für DTR GPIO4 (=Pin7) und RTS GPIO17 (=Pin11) direkt verwendet, andere Leitungen werden da NICHT unterstützt.
  */
 static void set_SerialLine(bus_t busnumber, int line, int mode)
 {
+    //ON setzt Leitung auf 0 wegen Invertierung durch RS232 Treiber
   #ifdef BANANAPI
     if (line == SL_RTS) a20_gpio_write(BAPI_RTS, mode == ON ? LOW : HIGH);
-//    printf("Statusleitung %d auf %d\n", line, mode);
   #elif defined RASPBERRYPI
-    int pin = -1;
-    switch (line) {
-       case SL_DTR:
-           pin = RPI_DTR;
-           break;
-       case SL_RTS:
-           pin = RPI_RTS;
-           break;
-    }
-    if (pin > -1) {
-        //ON setzt Leitung auf 0 wegen Invertierung durch RS232 Treiber
-        bcm2835_gpio_write(pin, mode == ON ? LOW : HIGH);
-    }
-  #else
-    int result, arg;
-
-    result = ioctl(buses[busnumber].device.file.fd, TIOCMGET, &arg);
-    if (result == -1) {
-        syslog_bus(busnumber, DBG_ERROR,
-                   "ioctl() failed: %s (errno = %d). "
-                   "Serial line not set! (%d: %d)",
-                   strerror(errno), errno, line, mode);
-    }
-    else {
-        switch (line) {
-            case SL_DTR:
-                if (mode == OFF)
-                    arg &= ~TIOCM_DTR;
-                if (mode == ON)
-                    arg |= TIOCM_DTR;
-                break;
-            case SL_DSR:
-                if (mode == OFF)
-                    arg &= ~TIOCM_DSR;
-                if (mode == ON)
-                    arg |= TIOCM_DSR;
-                break;
-            case SL_RI:
-                if (mode == OFF)
-                    arg &= ~TIOCM_RI;
-                if (mode == ON)
-                    arg |= TIOCM_RI;
-                break;
-            case SL_RTS:
-                if (mode == OFF)
-                    arg &= ~TIOCM_RTS;
-                if (mode == ON)
-                    arg |= TIOCM_RTS;
-                break;
-            case SL_CTS:
-                if (mode == OFF)
-                    arg &= ~TIOCM_CTS;
-                if (mode == ON)
-                    arg |= TIOCM_CTS;
-                break;
-        }
-        result = ioctl(buses[busnumber].device.file.fd, TIOCMSET, &arg);
-        if (result == -1) {
-            syslog_bus(busnumber, DBG_FATAL,
-                       "ioctl() failed: %s (errno = %d).",
-                       strerror(result), result);
-            /*What to do now */
-        }
-    }
+    if (line == SL_RTS) bcm2835_gpio_write(RPI_RTS, mode == ON ? LOW : HIGH);
   #endif
 }
 
@@ -1587,35 +1156,32 @@ static void set_SerialLine(bus_t busnumber, int line, int mode)
 void send_packet(bus_t busnumber, char *packet,
                         int packet_size, int packet_type, int refresh)
 {
-    ssize_t result;
     int i, laps;
     /* arguments for nanosleep and Maerklin loco decoders (19KHz) */
     /* all using busy waiting */
-    const static struct timespec rqtp_btw19K = { 0, 1250000 };
+//    const static struct timespec rqtp_btw19K = { 0, 1250000 };
 //SID, 22.03.09: gemäss http://home.mnet-online.de/modelleisenbahn-digital/Dig-tutorial-start.html sind es 4.2ms .....
-    const static struct timespec rqtp_end19K = { 0, 4200000 };       /* ==> busy waiting */
+//    const static struct timespec rqtp_end19K = { 0, 4200000 };       /* ==> busy waiting */
 //    static struct timespec rqtp_end19K = { 0, 1700000 };       /* ==> busy waiting */
     /* arguments for nanosleep and Maerklin solenoids/function decoders (38KHz) */
-    const static struct timespec rqtp_btw38K = { 0, 625000 };
+//    const static struct timespec rqtp_btw38K = { 0, 625000 };
 //SID, 04.01.08 : Wartezeit wäre theoretisch schon 850us, dies geht aber mit den LDT Dekodern nicht....
-    const static struct timespec rqtp_end38K = { 0,  3000000 }; /* ==> busy waiting     */
+//    const static struct timespec rqtp_end38K = { 0,  3000000 }; /* ==> busy waiting     */
 //    struct timespec rqtp_end38K = { 0, 850000 };        /* ==> busy waiting */
     //Anzugsverzögerung Umschaltrelais bei Mobile Station Mode 10ms
-    const static struct timespec mobileStationRelaisDelay = { 0,  10000000 };
+//    const static struct timespec mobileStationRelaisDelay = { 0,  10000000 };
     
     //Nur für MFX RDS 1-Bit Rückmeldung: Position und Länge im SPI Bytestream an der sich die Rückmeldung befinden muss.
     unsigned int mfxRdsPos, mfxRdsLen;
-   
-    mfxRdsPos = 0; 
-
+    mfxRdsPos = 0;
+    
     struct spi_ioc_transfer spi;
     char spiBuffer[2700]; //Worst Case wenn maximales MFX Paket
     
-    if ( __DDL->spiMode) {
-      memset (&spi, 0, sizeof (spi)) ;
-      spi.bits_per_word = 8;
-      spi.tx_buf = (unsigned long)spiBuffer;
-      switch (packet_type) {
+    memset (&spi, 0, sizeof (spi)) ;
+    spi.bits_per_word = 8;
+    spi.tx_buf = (unsigned long)spiBuffer;
+    switch (packet_type) {
         case QNBLOCOPKT:
         case QNBACCPKT:
           __DDL->spiLastMM = 0;
@@ -1706,20 +1272,11 @@ void send_packet(bus_t busnumber, char *packet,
             exit(1);
           }
           break;
-      }
-    }
-    else {
-      waitUARTempty(busnumber);
     }
 
     switch (packet_type) {
         case QM1LOCOPKT:
         case QM2LOCOPKT:
-            if (! __DDL->spiMode) {
-              if (setSerialMode(busnumber, SDM_MAERKLIN) < 0) {
-                return;
-              }
-            }
             if (refresh) {
               laps = 1;
             }
@@ -1727,162 +1284,46 @@ void send_packet(bus_t busnumber, char *packet,
               laps = 4;       /* YYTV 9 */
             }
             for (i = 0; i < laps; i++) {
-              if (__DDL->spiMode) {
                 if (ioctl(buses[busnumber].device.file.fd, SPI_IOC_MESSAGE(1), &spi) < 0) {
                   syslog_bus(busnumber, DBG_FATAL, "Error SPI Transfer ioctl.");
                   return;
                 }
-              }
-              else {
-                //Pause vor einen Paket
-                nanosleep_DDL(&rqtp_end19K, &__DDL->rmtp);
-                result = write(buses[busnumber].device.file.fd, packet, 18);
-                if (result == -1) {
-                    syslog_bus(busnumber, DBG_ERROR,
-                               "write() failed: %s (errno = %d)\n",
-                               strerror(errno), errno);
-                }
-                waitUARTempty_MM(busnumber);
-                nanosleep_DDL(&rqtp_btw19K, &__DDL->rmtp);
-                result =
-                    write(buses[busnumber].device.file.fd, packet, 18);
-                if (result == -1) {
-                    syslog_bus(busnumber, DBG_ERROR,
-                               "write() failed: %s (errno = %d)\n",
-                               strerror(errno), errno);
-                }
-                waitUARTempty_MM(busnumber);
-              }
             }
             break;
         case QM2FXPKT:
-            if (! __DDL->spiMode) {
-              if (setSerialMode(busnumber, SDM_MAERKLIN) < 0)
-                return;
-            }
             if (refresh)
                 laps = 1;
             else
                 laps = 3;       /* YYTV 6 */
             for (i = 0; i < laps; i++) {
-              if (__DDL->spiMode) {
                 if (ioctl(buses[busnumber].device.file.fd, SPI_IOC_MESSAGE(1), &spi) < 0) {
                   syslog_bus(busnumber, DBG_FATAL, "Error SPI Transfer ioctl.");
                   return;
                 }
-              }
-              else {
-                //Pause vor einen Paket
-                nanosleep_DDL(&rqtp_end19K, &__DDL->rmtp);
-                result = write(buses[busnumber].device.file.fd, packet, 18);
-                if (result == -1) {
-                    syslog_bus(busnumber, DBG_ERROR,
-                               "write() failed: %s (errno = %d)\n",
-                               strerror(errno), errno);
-                }
-                waitUARTempty_MM(busnumber);
-                nanosleep_DDL(&rqtp_btw19K, &__DDL->rmtp);
-                result =
-                    write(buses[busnumber].device.file.fd, packet, 18);
-                if (result == -1) {
-                    syslog_bus(busnumber, DBG_ERROR,
-                               "write() failed: %s (errno = %d)\n",
-                               strerror(errno), errno);
-                }
-                waitUARTempty_MM(busnumber);
-              }
             }
             break;
         case QM1FUNCPKT:
         case QM1SOLEPKT:
-            if (! __DDL->spiMode) {
-              if (setSerialMode(busnumber, SDM_MAERKLIN) < 0) {
-                return;
-              }
-            }
-            if (__DDL->MOBILE_STATION_MODE) {
-              //Booster muss nun für Ausgabe GA Kommando von Mobile-Station auf SRCP umgeschaltet werden
-              set_SerialLine(busnumber, SL_RTS, OFF); //Invertierte Ausgabe
-              //20ms warten wegen Relais Anzugsverzögerung
-              nanosleep_DDL(&mobileStationRelaisDelay, NULL);
-            }
             for (i = 0; i < 2; i++) {
-              if (__DDL->spiMode) {
-                set_SerialLine(busnumber, SL_RTS, ON); 
                 if (ioctl(buses[busnumber].device.file.fd, SPI_IOC_MESSAGE(1), &spi) < 0) {
                   syslog_bus(busnumber, DBG_FATAL, "Error SPI Transfer ioctl.");
                   return;
                 }
-                set_SerialLine(busnumber, SL_RTS, OFF);
-              }
-              else {
-                //Pause vor Paket
-                nanosleep_DDL(&rqtp_end38K, &__DDL->rmtp);
-                result = write(buses[busnumber].device.file.fd, packet, 9);
-                if (result == -1) {
-                    syslog_bus(busnumber, DBG_ERROR,
-                               "write() failed: %s (errno = %d)\n",
-                               strerror(errno), errno);
-                }
-                waitUARTempty_COMMON(busnumber);
-                nanosleep_DDL(&rqtp_btw38K, &__DDL->rmtp);
-                result = write(buses[busnumber].device.file.fd, packet, 9);
-                if (result == -1) {
-                    syslog_bus(busnumber, DBG_ERROR,
-                               "write() failed: %s (errno = %d)\n",
-                               strerror(errno), errno);
-                }
-                waitUARTempty_COMMON(busnumber);
-              }
-            }
-            if (__DDL->MOBILE_STATION_MODE) {
-              //Booster zurück an Mobile Station
-              set_SerialLine(busnumber, SL_RTS, ON); //Invertierte Ausgabe
             }
             break;
         case QNBLOCOPKT:
         case QNBACCPKT:
-            if (! __DDL->spiMode) {
-              if (setSerialMode(busnumber, SDM_NMRA) < 0)
-                  return;
-            }
-            if (__DDL->MOBILE_STATION_MODE && (packet_type == QNBACCPKT)) {
-              //Booster muss nun für Ausgabe GA Kommando von Mobile-Station auf SRCP umgeschaltet werden
-              set_SerialLine(busnumber, SL_RTS, OFF); //Invertierte Ausgabe
-              //20ms warten wegen Relais Anzugsverzögerung
-              nanosleep_DDL(&mobileStationRelaisDelay, NULL);
-            }
-            if (__DDL->spiMode) {
-              if (ioctl(buses[busnumber].device.file.fd, SPI_IOC_MESSAGE(1), &spi) < 0) {
+            if (ioctl(buses[busnumber].device.file.fd, SPI_IOC_MESSAGE(1), &spi) < 0) {
                 syslog_bus(busnumber, DBG_FATAL, "Error SPI Transfer ioctl.");
                 return;
-              }
-              if (ioctl(buses[busnumber].device.file.fd, SPI_IOC_MESSAGE(1), &spi_nmra_idle) < 0) {
+            }
+            if (ioctl(buses[busnumber].device.file.fd, SPI_IOC_MESSAGE(1), &spi_nmra_idle) < 0) {
                 syslog_bus(busnumber, DBG_FATAL, "Error SPI Transfer ioctl.");
                 return;
-              }
-              if (ioctl(buses[busnumber].device.file.fd, SPI_IOC_MESSAGE(1), &spi) < 0) {
+            }
+            if (ioctl(buses[busnumber].device.file.fd, SPI_IOC_MESSAGE(1), &spi) < 0) {
                 syslog_bus(busnumber, DBG_FATAL, "Error SPI Transfer ioctl.");
                 return;
-              }
-            }
-            else {
-              result = write(buses[busnumber].device.file.fd, packet, packet_size);
-              if (result == -1) {
-                syslog_bus(busnumber, DBG_ERROR, "write() failed: %s (errno = %d)\n", strerror(errno), errno);
-              }
-              waitUARTempty_CLEANNMRADCC(busnumber);
-              result = write(buses[busnumber].device.file.fd, __DDL->NMRA_idle_data, __DDL->NMRA_idle_data_size);
-              waitUARTempty_CLEANNMRADCC(busnumber);
-              result = write(buses[busnumber].device.file.fd, packet, packet_size);
-              if (result == -1) {
-                syslog_bus(busnumber, DBG_ERROR, "write() failed: %s (errno = %d)\n", strerror(errno), errno);
-              }
-            }
-            if (__DDL->MOBILE_STATION_MODE && (packet_type == QNBACCPKT)) {
-              //Booster zurück an Mobile Station
-              waitUARTempty_CLEANNMRADCC(busnumber);
-              set_SerialLine(busnumber, SL_RTS, ON); //Invertierte Ausgabe
             }
             break;
         case QMFX0PKT:
@@ -1891,11 +1332,7 @@ void send_packet(bus_t busnumber, char *packet,
         case QMFX8PKT:
         case QMFX16PKT:
         case QMFX32PKT:
-        case QMFX64PKT:
-            if (! __DDL->spiMode) {
-              syslog_bus(busnumber, DBG_WARN, "MFX support only on SPI Devices!");
-              break;
-            }
+        case QMFX64PKT:	{	}
             //Die "1 Bit" Rückmeldungen (RDS Signal vorhanden) erfolgen direkt über SPI MISO
             unsigned int spiRxBufferSize = 0;
             MFXRDSBits mfxRDSBits;
@@ -1965,7 +1402,7 @@ static bool refresh_loco_one(bus_t busnumber, bool fast) {
   tRefreshInfo *refreshInfo = fast ? &__DDL->refreshInfoFast : &__DDL->refreshInfo;
 
   int adr;
-  int result;
+//  int result;
   bool refreshGesendet = false;
   bool busComplete = false;
 
@@ -1975,15 +1412,6 @@ static bool refresh_loco_one(bus_t busnumber, bool fast) {
       //Bei "Fast" nur die Loks, die nicht zu alt sind,
       //bei "nicht fast" / "Normal" nur die Loks, die alt sind
       refreshGesendet = true;
-      if (! __DDL->spiMode) {
-        result = tcflush(buses[busnumber].device.file.fd, TCOFLUSH);
-        if (result == -1) {
-          syslog_bus(busnumber, DBG_FATAL,
-                     "tcflush() failed: %s (errno = %d).",
-                     strerror(result), result);
-          /*What to do now? */
-        }
-      }
       send_packet(busnumber, __DDL->MaerklinPacketPool.packets[adr].packet, 18, QM2LOCOPKT, true);
       //bei jeden Durchgang (alle Loks) das nächste Fx Paket
       send_packet(busnumber, __DDL->MaerklinPacketPool.packets[adr].f_packets[refreshInfo -> last_refreshed_maerklin_fx], 18, QM2FXPKT, true);
@@ -2034,7 +1462,7 @@ static bool refresh_loco_one(bus_t busnumber, bool fast) {
     else {
       //Keine DCC Lok vorhanden -> mit nächstem Protokoll weitermachen
       busComplete = true;
-  }
+  	}
   }
     
   if (refreshInfo -> protocol_refresh & EP_MFX) {
@@ -2129,188 +1557,38 @@ long int compute_delta(struct timeval tv1, struct timeval tv2)
     return delta_usec;
 }
 
-/* ************************************************ */
-
-static void set_lines_on(bus_t busnumber)
-{
-#ifdef BANANAPI
-    set_SerialLine(busnumber, SL_RTS, ON);
-#else
-    int result;
-
-    if (__DDL->SIGG_MODE) {
-      set_SerialLine(busnumber, SL_RTS, ON); //START Impuls
-      set_SerialLine(busnumber, SL_DTR, OFF);
-    }
-    else {
-      set_SerialLine(busnumber, SL_DTR, ON);
-    }
-    if (! __DDL->spiMode) {
-      result = tcflow(buses[busnumber].device.file.fd, TCOON);
-      if (result == -1) {
-        syslog_bus(busnumber, DBG_FATAL,
-                   "tcflow() failed: %s (errno = %d).",
-                   strerror(result), result);
-        /*What to do now */
-      }
-    }
-#endif
-}
-
-static void set_lines_off(bus_t busnumber)
-{
-#ifdef BANANAPI
-    set_SerialLine(busnumber, SL_RTS, OFF);
-#else
-    int result;
-
-    if (! __DDL->spiMode) {
-      /* set interface lines to the off state */
-      result = tcflush(buses[busnumber].device.file.fd, TCOFLUSH);
-      if (result == -1) {
-        syslog_bus(busnumber, DBG_FATAL,
-                   "tcflush() failed: %s (errno = %d).",
-                   strerror(result), result);
-        /*What to do now */
-      }
-
-      result = tcflow(buses[busnumber].device.file.fd, TCOOFF);
-      if (result == -1) {
-        syslog_bus(busnumber, DBG_FATAL,
-                   "tcflow() failed: %s (errno = %d).",
-                   strerror(result), result);
-        /*What to do now */
-      }
-    }
-    if (__DDL->SIGG_MODE) {
-      set_SerialLine(busnumber, SL_RTS, OFF);
-      set_SerialLine(busnumber, SL_DTR, ON); //STOP Impuls
-      usleep(DAUER_STOP_IMPULS_SIGG_MODE);
-      set_SerialLine(busnumber, SL_DTR, OFF); //STOP Impuls
-    }
-    else {
-      set_SerialLine(busnumber, SL_DTR, OFF);
-    }
-#endif
-}
 
 /* check if shortcut or emergengy break happened
-   return "true" if power is off
-   return "false" if power is on
- */
+   return "true" if power is off, return "false" if power is on */
 static bool power_is_off(bus_t busnumber)
 {
     static struct timeval t_rts_on;
     char msg[110];
     if (__DDL->CHECKSHORT) {
-        if (__DDL->SIGG_MODE) {
-//                syslog_bus(busnumber, DBG_FATAL, "10");
-          if (buses[busnumber].power_state != 0) {
-//                syslog_bus(busnumber, DBG_FATAL, "11");
-            if (checkShortcut(busnumber) == 1) {
-//                syslog_bus(busnumber, DBG_FATAL, "12");
-                //SIGG, 24.01.12
-                //Wenn die Einschaltung schon länger her ist wird gleich nochmals versucht einzuschalten (Kurzzeitige ¨Uberlast / Kurzschluss).
-                struct timeval akt_time;
-                gettimeofday(&akt_time, NULL);
-		long int deltaT_StartImpuls;
-		deltaT_StartImpuls = compute_delta(t_rts_on, akt_time);
-		if (deltaT_StartImpuls > (2 * DAUER_START_IMPULS_SIGG_MODE)) {
-		  //Erst nach dem Startimpuls werten wir den Kurzschluss aus
-                  if (deltaT_StartImpuls > TIMEOUT_SHORTCUT_POWEROFF) {
-                    //Gleich wieder einschalten, läuft schon lange
-                    set_lines_on(busnumber);
-                    gettimeofday(&t_rts_on, NULL); //Wird nicht automatisch gesetzt, da Booster offiziell nie "Off" war, ist aber notwendig damit korrekt zurückgenommen werden kann
-                  }
-                  else {
-                    //Ausschalten, einschalten war erst vor kurzem, es wird tatsächlich ein Schluss sein
-                    buses[busnumber].power_state = 0;
-                    buses[busnumber].power_changed = 1;
-                    strcpy(buses[busnumber].power_msg, "SHORTCUT DETECTED");
-                    infoPower(busnumber, msg);
-                    enqueueInfoMessage(msg);
-                 }
-               }
-            }
-          }
-          else {
-            //Prüfen ob Booster "von Hand" eingeschaltet wurden
-            sleep(1); //Pause, damit nach SW Ausschaltung der Booster noch Zeit hat auszuschalten und nicht sofort wieder eingeschaltet wird.
-            if (__checkShortcut(busnumber, true) == 0) {
-              buses[busnumber].power_state = 1;
-              buses[busnumber].power_changed = 1;
-              strcpy(buses[busnumber].power_msg, "BOOSTER GO");
-              infoPower(busnumber, msg);
-              enqueueInfoMessage(msg);
-            }
-          }
-        }
-        else {
-          if (__DDL->MOBILE_STATION_MODE) {
-            //SHORTCUT DETECTED wird direkt für GO/STOP übernommen
-            if (checkShortcut(busnumber) == 1) {
-              if (buses[busnumber].power_state != 0) {
-                buses[busnumber].power_state = 0;
+		if (buses[busnumber].power_state) {
+			if (checkShortcut(busnumber) == 1) {
+            	buses[busnumber].power_state = 0;
                 buses[busnumber].power_changed = 1;
-                strcpy(buses[busnumber].power_msg, "BOOSTER STOP");
+                strcpy(buses[busnumber].power_msg, "SHORTCUT DETECTED");
                 infoPower(busnumber, msg);
                 enqueueInfoMessage(msg);
-              }
-            }
-            else {
-              if (buses[busnumber].power_state == 0) {
-                buses[busnumber].power_state = 1;
-                buses[busnumber].power_changed = 1;
-                strcpy(buses[busnumber].power_msg, "BOOSTER GO");
-                infoPower(busnumber, msg);
-                enqueueInfoMessage(msg);
-              }
-            }
-          }
-          else {
-             if (buses[busnumber].power_state) {
-                if (checkShortcut(busnumber) == 1) {
-                    buses[busnumber].power_state = 0;
-                    buses[busnumber].power_changed = 1;
-                    strcpy(buses[busnumber].power_msg, "SHORTCUT DETECTED");
-                    infoPower(busnumber, msg);
-                    enqueueInfoMessage(msg);
-                }
              }
-          }
         }
     }
-    if (__DDL->RI_CHECK)
-        if (checkRingIndicator(busnumber) == 1) {
-            buses[busnumber].power_state = 0;
-            buses[busnumber].power_changed = 1;
-            strcpy(buses[busnumber].power_msg, "RINGINDICATOR DETECTED");
-            infoPower(busnumber, msg);
-            enqueueInfoMessage(msg);
-        }
-
     if (buses[busnumber].power_changed == 1) {
         if (buses[busnumber].power_state == 0) {
-            set_lines_off(busnumber);
+            set_SerialLine(busnumber, SL_RTS, OFF);
             syslog_bus(busnumber, DBG_INFO, "Refresh cycle stopped.");
         }
         if (buses[busnumber].power_state == 1) {
             gettimeofday(&t_rts_on, NULL);
-            set_lines_on(busnumber);
+            set_SerialLine(busnumber, SL_RTS, ON);
             syslog_bus(busnumber, DBG_INFO, "Refresh cycle started.");
         }
         buses[busnumber].power_changed = 0;
         infoPower(busnumber, msg);
         enqueueInfoMessage(msg);
     }
-    if (__DDL->SIGG_MODE) {
-        struct timeval aktTime;
-        gettimeofday(&aktTime, NULL);
-        if (compute_delta(t_rts_on,aktTime)>DAUER_START_IMPULS_SIGG_MODE) {
-            set_SerialLine(busnumber, SL_RTS,OFF);
-        }
-    }
-
     if (buses[busnumber].power_state == 0) {
         if (usleep(1000) == -1) {
             syslog_bus(busnumber, DBG_ERROR,
@@ -2322,37 +1600,9 @@ static bool power_is_off(bus_t busnumber)
     return false;
 }
 
-/* tvo 2005-12-03 */
-static int krnl26_nanosleep(const struct timespec *req,
-                            struct timespec *rem)
-{
-    struct timeval start_tv, stop_tv;
-    struct timezone start_tz, stop_tz;
-    long int sleep_usec;
-    double slept;
-
-    /* Falls "Schlafwerte" zu groß, soll ein normales nanosleep gemacht werden */
-    if ((*req).tv_sec > 0 || (*req).tv_nsec > 2000000) {
-        return nanosleep(req, rem);     /* non-busy waiting */
-    }
-
-    /* here begins the busy waiting section */
-    /* Genauigkeit nur im usec-Bereich!!! */
-    sleep_usec = (*req).tv_nsec / 1000;
-    gettimeofday(&start_tv, &start_tz);
-    do {
-        gettimeofday(&stop_tv, &stop_tz);
-        slept = ((stop_tv.tv_sec + (stop_tv.tv_usec / 1000000.) -
-                  (start_tv.tv_sec +
-                   (start_tv.tv_usec / 1000000.))) * 1000000.);
-    } while (slept < sleep_usec);
-    return 0;
-}
-
-
 static void *thr_refresh_cycle(void *v)
 {
-    ssize_t wresult;
+//    ssize_t wresult;
     int result;
     struct sched_param sparam;
     int policy;
@@ -2367,19 +1617,9 @@ static void *thr_refresh_cycle(void *v)
     /* argument for nanosleep to do non-busy waiting */
     static struct timespec rqtp_sleep = { 0, 2500000 };
 
-    /* set the best waitUARTempty-Routine */
-    if (__DDL->WAITUART_USLEEP_PATCH) {
-        waitUARTempty = waitUARTempty_COMMON_USLEEPPATCH;
-        waitUARTempty_MM = waitUARTempty_COMMON_USLEEPPATCH;
-    }
-    else {
-        waitUARTempty = waitUARTempty_COMMON;
-        waitUARTempty_MM = waitUARTempty_COMMON;
-    }
-
     nanosleep_DDL = nanosleep;
     if (__DDL->oslevel == 1) {
-        nanosleep_DDL = krnl26_nanosleep;
+// da eh nur nanosleep gerufen wird        nanosleep_DDL = krnl26_nanosleep;
 
         result = pthread_getschedparam(pthread_self(), &policy, &sparam);
         if (result != 0) {
@@ -2389,6 +1629,7 @@ static void *thr_refresh_cycle(void *v)
             /*TODO: Add an expressive error message */
             pthread_exit((void *) 1);
         }
+        
         sparam.sched_priority = 10;
         result =
             pthread_setschedparam(pthread_self(), SCHED_FIFO, &sparam);
@@ -2401,91 +1642,14 @@ static void *thr_refresh_cycle(void *v)
         }
     }
 
-    /* some boosters like the Maerklin 6017 must be initialized */
-    if (! __DDL->spiMode) {
-      result = tcflow(buses[busnumber].device.file.fd, TCOON);
-      if (result == -1) {
-        syslog_bus(busnumber, DBG_FATAL,
-                   "tcflow() failed: %s (errno = %d).",
-                   strerror(result), result);
-        /*What to do now */
-      }
-    }
-
-#ifndef BANANAPI
-    if (! __DDL->SIGG_MODE) {
-      //SIGG: scheint nicht notwendig, da ein paar Zeilen weiter oben korrekt gesetzt....
-      //aber lassen wirs mal ohne SIGG_MODE so wie es war.
-      set_SerialLine(busnumber, SL_DTR, ON);
-    }
-
-    if ( __DDL->spiMode) {
-      //Hier gibt es bei SPI Mode nichts zu tun.
-      //Mir ist auch nicht klar weshalb da im RS232 Modus zuerst mal "SRCP-DAEMON" ausgegeben wird....
-    }
-    else {
-      wresult = write(buses[busnumber].device.file.fd, "SRCP-DAEMON", 11);
-      if (wresult == -1) {
-        syslog_bus(busnumber, DBG_ERROR,
-                   "write() failed: %s (errno = %d)\n",
-                   strerror(errno), errno);
-      }
-      result = tcflush(buses[busnumber].device.file.fd, TCOFLUSH);
-      if (result == -1) {
-        syslog_bus(busnumber, DBG_FATAL,
-                   "tcflush() failed: %s (errno = %d).",
-                   strerror(result), result);
-        /*What to do now */
-      }
-    }
-
-    /* now set some serial lines */
-    result = tcflow(buses[busnumber].device.file.fd, TCOOFF);
-    if (result == -1) {
-        syslog_bus(busnumber, DBG_FATAL,
-                   "tcflow() failed: %s (errno = %d).",
-                   strerror(result), result);
-        /*What to do now */
-    }
-    if (__DDL->SIGG_MODE) {
-      set_SerialLine(busnumber, SL_RTS, OFF);     /* Kein Startimpuls   */
-      set_SerialLine(busnumber, SL_CTS, OFF);     /* -12V for ever on CTS   */
-      set_SerialLine(busnumber, SL_DTR, ON);      /* Stopimpuls */
-      usleep(DAUER_STOP_IMPULS_SIGG_MODE);
-      set_SerialLine(busnumber, SL_DTR, OFF);
-    }
-    else {
-      set_SerialLine(busnumber, SL_RTS, ON);      /* +12V for ever on RTS   */
-      set_SerialLine(busnumber, SL_CTS, OFF);     /* -12V for ever on CTS   */
-      set_SerialLine(busnumber, SL_DTR, OFF);     /* disable booster output */
-    }
-
-    if (! __DDL->spiMode) {
-      result = tcflow(buses[busnumber].device.file.fd, TCOON);
-      if (result == -1) {
-        syslog_bus(busnumber, DBG_FATAL,
-                   "tcflow() failed: %s (errno = %d).",
-                   strerror(result), result);
-        /*What to do now? */
-      }
-    }
-    if (! __DDL->SIGG_MODE) {
-      //SIGG: scheint nicht notwendig, da ein paar Zeilen weiter oben korrekt gesetzt....
-      //aber lassen wirs mal ohne SIGG_MODE so wie es war.
-      set_SerialLine(busnumber, SL_DTR, ON);
-    }
-#endif
-
     struct spi_ioc_transfer spi_idlePacket;
-    if ( __DDL->spiMode) {
-      memset (&spi_idlePacket, 0, sizeof (spi_idlePacket)) ;
-      spi_idlePacket.tx_buf =  (unsigned long)__DDL->idle_data;
-      spi_idlePacket.len = MAXDATA;
-      spi_idlePacket.bits_per_word = 8;
-      spi_idlePacket.speed_hz = SPI_BAUDRATE_MAERKLIN_LOCO;
-    }
 
-    
+    memset (&spi_idlePacket, 0, sizeof (spi_idlePacket)) ;
+    spi_idlePacket.tx_buf =  (unsigned long)__DDL->idle_data;
+    spi_idlePacket.len = MAXDATA;
+    spi_idlePacket.bits_per_word = 8;
+    spi_idlePacket.speed_hz = SPI_BAUDRATE_MAERKLIN_LOCO;
+   
     gettimeofday(&tv1, &tz);
     for (;;) {
         if (power_is_off(busnumber)) {
@@ -2496,16 +1660,6 @@ static void *thr_refresh_cycle(void *v)
         /* Check if there are new commands and send them. */
         packet_type = queue_get(busnumber, &addr, packet, &packet_size);
         if (packet_type > QNOVALIDPKT) {
-            if (! __DDL->spiMode) {
-              result = tcflush(buses[busnumber].device.file.fd, TCOFLUSH);
-              if (result == -1) {
-                syslog_bus(busnumber, DBG_FATAL,
-                           "tcflush() failed: %s (errno = %d).",
-                           strerror(result), result);
-                /*What to do now? */
-              }
-            }
-
             while (packet_type > QNOVALIDPKT) {
                 if (packet_type != QOVERRIDE) { //Nicht mehr gültiges Paket, bereits überholt.
                   /* if power is off, wait here until power is turned on
@@ -2518,21 +1672,9 @@ static void *thr_refresh_cycle(void *v)
                   send_packet(busnumber, packet, packet_size,
                               packet_type, false);
                   if (__DDL->ENABLED_PROTOCOLS == (EP_MAERKLIN | EP_NMRADCC)) {
-                    if (__DDL->spiMode) {
                       if (ioctl(buses[busnumber].device.file.fd, SPI_IOC_MESSAGE(1), &spi_nmra_idle) < 0) {
                         syslog_bus(busnumber, DBG_FATAL, "Error SPI Transfer ioctl.");
                       }
-                    }
-                    else {
-                      wresult = write(buses[busnumber].device.file.fd,
-                                      __DDL->NMRA_idle_data,
-                                      __DDL->NMRA_idle_data_size);
-                      if (wresult == -1) {
-                          syslog_bus(busnumber, DBG_ERROR,
-                                     "write() failed: %s (errno = %d)\n",
-                                     strerror(errno), errno);
-                      }
-                    }
                   }
                 }
                 packet_type =
@@ -2542,28 +1684,18 @@ static void *thr_refresh_cycle(void *v)
 
         /* If there are no new commands, send a loco state refresch. */
         else {
-          if (power_is_off(busnumber) || __DDL->MOBILE_STATION_MODE) { 
+          if (power_is_off(busnumber) /*|| __DDL->MOBILE_STATION_MODE*/ ) { 
             //Im "Mobile Station Mode" nur GA's, keine Loks.
             nanosleep_DDL(&rqtp_sleep, &__DDL->rmtp);
             continue;
           }
 
           if (! refresh_loco(busnumber)) {
-            //Keine Lok für Refreshkommando vorhanden -> Idle Data senden damit kein DC am Gleis anliegt.
-            if (__DDL->spiMode) {
+              //Keine Lok für Refreshkommando vorhanden -> Idle Data senden damit kein DC am Gleis anliegt.
               __DDL->spiLastMM = 0;
               if (ioctl(buses[busnumber].device.file.fd, SPI_IOC_MESSAGE(1), &spi_idlePacket) < 0) {
                 syslog_bus(busnumber, DBG_FATAL, "Error SPI Transfer ioctl.");
               }
-            }
-            else {
-              wresult = write(buses[busnumber].device.file.fd, __DDL->idle_data, MAXDATA);
-              if (wresult == -1) {
-                syslog_bus(busnumber, DBG_ERROR,
-                           "write() failed: %s (errno = %d)\n",
-                           strerror(errno), errno);
-              }
-            }
           }
         }
     }
@@ -2573,6 +1705,7 @@ static void *thr_refresh_cycle(void *v)
 
 static int init_gl_DDL(bus_t bus, gl_data_t * gl, char *optData)
 {
+/* called old code in original version, TODO replace by new */
     switch (gl->protocol) {
         case 'M':              /* Motorola Codes */
             return (gl->protocolversion > 0 && gl->protocolversion <= 5) ? SRCP_OK : SRCP_WRONGVALUE;
@@ -2681,22 +1814,11 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
     __DDL->number_gl = 255;
     __DDL->number_ga = 324;
 
-    __DDL->RI_CHECK = false;    /* ring indicator checking      */
     __DDL->CHECKSHORT = false;  /* default no shortcut checking */
-    __DDL->DSR_INVERSE = false; /* controls how DSR is used to  */
-    /*                             check short-circuits         */
     __DDL->SHORTCUTDELAY = 0;   /* usecs shortcut delay         */
-    __DDL->NMRADCC_TR_V = 3;    /* version of the NMRA dcc      */
-    /*                             translation routine(1, 2 or 3) */
     __DDL->ENABLED_PROTOCOLS = (EP_MAERKLIN | EP_NMRADCC);      /* enabled p's */
-    __DDL->IMPROVE_NMRADCC_TIMING = 0;  /* NMRA DCC: improve timing    */
-
-    __DDL->WAITUART_USLEEP_PATCH = true;        /* enable/disable usleep patch */
-    __DDL->WAITUART_USLEEP_USEC = 100;  /* usecs for usleep patch      */
     __DDL->NMRA_GA_OFFSET = 0;  /* offset for ga base address 0 or 1  */
     __DDL->PROGRAM_TRACK = 1;   /* 0: suppress SM commands to PT address */
-
-    __DDL->SERIAL_DEVICE_MODE = SDM_NOTINITIALIZED;
 
     xmlNodePtr child = node->children;
     xmlChar *txt = NULL;
@@ -2725,33 +1847,16 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
         }
 
         else if (xmlStrcmp
-                 (child->name,
-                  BAD_CAST "enable_ringindicator_checking") == 0) {
-            txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
-            if (txt != NULL) {
-                __DDL->RI_CHECK =
-                    (xmlStrcmp(txt, BAD_CAST "yes") == 0) ? true : false;
-                xmlFree(txt);
-            }
-        }
-
-        else if (xmlStrcmp
                  (child->name, BAD_CAST "enable_checkshort_checking")
                  == 0) {
             txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
             if (txt != NULL) {
                 __DDL->CHECKSHORT =
                     (xmlStrcmp(txt, BAD_CAST "yes") == 0) ? true : false;
+                if (xmlStrcmp(txt, BAD_CAST "inverse") == 0)
+                	__DDL->CHECKSHORT = 2;
                 xmlFree(txt);
             }
-        }
-
-        else if (xmlStrcmp(child->name, BAD_CAST "inverse_dsr_handling") ==
-                 0) {
-            txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
-            __DDL->DSR_INVERSE =
-                (xmlStrcmp(txt, BAD_CAST "yes") == 0) ? true : false;
-            xmlFree(txt);
         }
 
         else if (xmlStrcmp(child->name, BAD_CAST "enable_maerklin") == 0) {
@@ -2794,52 +1899,12 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
               __DDL->ENABLED_PROTOCOLS &= ~EP_MFX;
             }
         }
-        
-       else if (xmlStrcmp(child->name, BAD_CAST "improve_nmradcc_timing")
-                 == 0) {
-            txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
-            if (txt != NULL) {
-                __DDL->IMPROVE_NMRADCC_TIMING = (xmlStrcmp(txt,
-                                                           BAD_CAST "yes")
-                                                 == 0) ? true : false;
-                xmlFree(txt);
-            }
-        }
 
         else if (xmlStrcmp(child->name, BAD_CAST "shortcut_failure_delay")
                  == 0) {
             txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
             if (txt != NULL) {
                 __DDL->SHORTCUTDELAY = atoi((char *) txt);
-                xmlFree(txt);
-            }
-        }
-
-        else if (xmlStrcmp
-                 (child->name, BAD_CAST "nmradcc_translation_routine")
-                 == 0) {
-            txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
-            if (txt != NULL) {
-                __DDL->NMRADCC_TR_V = atoi((char *) txt);
-                xmlFree(txt);
-            }
-        }
-
-        else if (xmlStrcmp(child->name, BAD_CAST "enable_usleep_patch") ==
-                 0) {
-            txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
-            if (txt != NULL) {
-                __DDL->WAITUART_USLEEP_PATCH = (xmlStrcmp(txt,
-                                                          BAD_CAST "yes")
-                                                == 0) ? true : false;
-                xmlFree(txt);
-            }
-        }
-
-        else if (xmlStrcmp(child->name, BAD_CAST "usleep_usec") == 0) {
-            txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
-            if (txt != NULL) {
-                __DDL->WAITUART_USLEEP_USEC = atoi((char *) txt);
                 xmlFree(txt);
             }
         }
@@ -2857,28 +1922,6 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
             if (txt != NULL) {
                 __DDL->PROGRAM_TRACK = (xmlStrcmp(txt, BAD_CAST "yes")
                                         == 0) ? true : false;
-                xmlFree(txt);
-            }
-        }
-        else if (xmlStrcmp(child->name, BAD_CAST "sigg_mode") == 0) {
-            txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
-            if (txt != NULL) {
-                __DDL->SIGG_MODE = (xmlStrcmp(txt, BAD_CAST "yes")
-                                        == 0) ? true : false;
-                if (__DDL->SIGG_MODE) {
-                  __DDL->CHECKSHORT = true;
-                }
-                xmlFree(txt);
-            }
-        }
-        else if (xmlStrcmp(child->name, BAD_CAST "mobile_station_mode") == 0) {
-            txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
-            if (txt != NULL) {
-                __DDL->MOBILE_STATION_MODE = (xmlStrcmp(txt, BAD_CAST "yes")
-                                        == 0) ? true : false;
-                if (__DDL->MOBILE_STATION_MODE) {
-                  __DDL->CHECKSHORT = true;
-                }
                 xmlFree(txt);
             }
         }
@@ -2900,13 +1943,6 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
         __DDL->number_gl = 0;
         syslog_bus(busnumber, DBG_ERROR,
                    "Can't create array for locomotives");
-    }
-    if (__DDL->IMPROVE_NMRADCC_TIMING && __DDL->oslevel == 1) {
-        syslog_bus(busnumber, DBG_NONE,
-                   "Improve nmra dcc timing causes changes on serial "
-                   "lines custom divisor."
-                   "This is deprecated on kernel 2.6 or later. You "
-                   "better disable this feature in srcpd.conf");
     }
 
     return (1);
@@ -3024,7 +2060,7 @@ static void end_bus_thread(bus_thread_t * btd)
                    strerror(result), result);
     }
 
-    set_lines_off(btd->bus);
+    set_SerialLine(btd->bus, SL_RTS, OFF);
 
     /* pthread_cond_destroy(&(__DDL->refresh_cond)); */
     if (buses[btd->bus].device.file.fd != -1)
@@ -3167,30 +2203,19 @@ static void *thr_sendrec_DDL(void *v)
             }
             switch (p) {
                 case 'M':      /* Motorola Codes */
-                    if (speed == 1) {
+                    if (speed) {
                         speed++;        /* Never send FS1 */
                     }
                     if (direction == 2)
                         speed = 0;
-                    switch (pv) {
-                        case 1:
-                            comp_maerklin_1(btd->bus, addr,
+                    
+					if (pv == 1) {	comp_maerklin_1(btd->bus, addr,
                                             gltmp.direction, speed,
                                             gltmp.funcs & 0x01,
                                             gltmp.prio);
-                            break;
-                        case 2:
-                            comp_maerklin_2(btd->bus, addr,
-                                            gltmp.direction, speed,
-                                            gltmp.funcs & 0x01,
-                                            ((gltmp.funcs >> 1) & 0x01),
-                                            ((gltmp.funcs >> 2) & 0x01),
-                                            ((gltmp.funcs >> 3) & 0x01),
-                                            ((gltmp.funcs >> 4) & 0x01),
-                                            gltmp.prio);
-                            break;
-                        case 3:
-                            comp_maerklin_3(btd->bus, addr,
+                            }
+                    else switch (gltmp.n_fs) {
+                        case 14:	comp_maerklin_2(btd->bus, addr,
                                             gltmp.direction, speed,
                                             gltmp.funcs & 0x01,
                                             ((gltmp.funcs >> 1) & 0x01),
@@ -3198,9 +2223,8 @@ static void *thr_sendrec_DDL(void *v)
                                             ((gltmp.funcs >> 3) & 0x01),
                                             ((gltmp.funcs >> 4) & 0x01),
                                             gltmp.prio);
-                            break;
-                        case 4:
-                            comp_maerklin_4(btd->bus, addr,
+                            		break;
+                         case 27:	comp_maerklin_27(btd->bus, addr,
                                             gltmp.direction, speed,
                                             gltmp.funcs & 0x01,
                                             ((gltmp.funcs >> 1) & 0x01),
@@ -3208,9 +2232,8 @@ static void *thr_sendrec_DDL(void *v)
                                             ((gltmp.funcs >> 3) & 0x01),
                                             ((gltmp.funcs >> 4) & 0x01),
                                             gltmp.prio);
-                            break;
-                        case 5:
-                            comp_maerklin_5(btd->bus, addr,
+                            		break;
+                        case 28:	comp_maerklin_28(btd->bus, addr,
                                             gltmp.direction, speed,
                                             gltmp.funcs & 0x01,
                                             ((gltmp.funcs >> 1) & 0x01),
@@ -3218,7 +2241,7 @@ static void *thr_sendrec_DDL(void *v)
                                             ((gltmp.funcs >> 3) & 0x01),
                                             ((gltmp.funcs >> 4) & 0x01),
                                             gltmp.prio);
-                            break;
+                            		break;
                     }
                     break;
                 case 'N':      /* NMRA / DCC Codes */

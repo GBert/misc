@@ -160,7 +160,7 @@ void *thr_doClient(void *v)
 
         memset(cmd, 0, sizeof(cmd));
         memset(parameter, 0, sizeof(parameter));
-        nelem = sscanf(line, "%s %1000c", cmd, parameter);
+        nelem = sscanf(line, "%1000s %1000c", cmd, parameter);
 
 	/* ugly musl workaround */
 	if ((nelem == 1) && *parameter)
@@ -174,7 +174,7 @@ void *thr_doClient(void *v)
                 register_session(sn);
 
                 gettimeofday(&time, NULL);
-                snprintf(reply, sizeof(reply), "%lu.%.3lu 200 OK GO %ld\n",
+                snprintf(reply, sizeof(reply), "%lu.%.3lu 200 OK GO %lu\n",
                          time.tv_sec, time.tv_usec / 1000, sn->session);
 
                 sresult = writen(sn->socket, reply, strlen(reply));
@@ -211,11 +211,11 @@ void *thr_doClient(void *v)
             }
 
             else if (strncasecmp(cmd, "SET", 3) == 0) {
-		char p[MAXSRCPLINELEN] = {};
-		char setcmd[MAXSRCPLINELEN] = {};
-                int n = sscanf(parameter, "%s %1000c", setcmd, p);
+				char p[MAXSRCPLINELEN] = {};
+				char setcmd[MAXSRCPLINELEN] = {};
+                int n = sscanf(parameter, "%1000s %1000c", setcmd, p);
 
-	        /* ugly musl workaround */
+	    /* ugly musl workaround */
 		if ((n == 1) && *p)
 		    n++;
 
