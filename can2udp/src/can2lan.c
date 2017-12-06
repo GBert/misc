@@ -56,6 +56,7 @@ char *ms2_configs[] = {
     NULL
 };
 
+int pidFilehandle;
 char config_dir[MAXLINE];
 char config_file[MAXLINE];
 char **page_name;
@@ -63,6 +64,23 @@ char **cs2_page_name;
 int ms1_workaround;
 int cs2fake_ping;
 struct timeval last_sent;
+
+void signal_handler(int sig) {
+    switch(sig) {
+    case SIGHUP:
+	syslog(LOG_WARNING, "Received SIGHUP signal.");
+	break;
+    case SIGINT:
+    case SIGTERM:
+	syslog(LOG_INFO, "Daemon exiting");
+	close(pidFilehandle);
+	exit(EXIT_SUCCESS);
+	break;
+    default:
+	syslog(LOG_WARNING, "Unhandled signal %s", strsignal(sig));
+	break;
+    }
+}
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
