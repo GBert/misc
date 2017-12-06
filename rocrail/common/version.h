@@ -1,9 +1,13 @@
 const int revisionnr = 
-13159
+13163
 ;
 const char* commithash = 
-"58db4a3520b26a398521a61939da6e06c66b81a0";
+"3e1bf86158af6f8e875e46c8953b00ceb6e40abe";
 const char* revlog = 
+"13163 2017-12-06 18:07:18 +0100 loconet lbtcp: recovery fix\n" \
+"13162 2017-12-06 17:38:50 +0100 rocview: context menu on dclick option added for touch\n" \
+"13161 2017-12-06 13:46:22 +0100 item: open/close stage exit on dclick\n" \
+"13160 2017-12-06 08:45:14 +0100 stage: halt flag added for stop/start all locos\n" \
 "13159 2017-12-05 19:26:30 +0100 blockdialog: allow main signals used as distant signals\n" \
 "13158 2017-12-05 19:17:53 +0100 operatordlg: button added to open the props of the loco which the train is assigned to\n" \
 "13157 2017-12-05 17:53:11 +0100 guiframe: close throttles on changing workspace\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "13116 2017-11-29 12:52:27 +0100 item: fix for invalid locoID pointer\n" \
 "13115 2017-11-29 11:51:24 +0100 mem: isValid function added\n" \
 "13114 2017-11-28 17:23:59 +0100 item: try fix locoid mystery...\n" \
-"13113 2017-11-28 17:22:35 +0100 locdialog: calibrate labels changed\n" \
-"13112 2017-11-28 16:01:25 +0100 innosetup: skip ask for install directory if already installed\n" \
-"13111 2017-11-28 11:50:49 +0100 wiki demo plan added\n" \
-"13110 2017-11-28 11:34:08 +0100 car: use identifier instead of ident to be conform other objects\n" \
 
 "log end";
