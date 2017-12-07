@@ -56,7 +56,6 @@ define Package/can2udp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ms2wifi $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/read-cs2-ini $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/read_lococard $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/s88udp $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/s88test-bpi $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pio-i2c-udp $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/wake-up-links88 $(1)/usr/bin/
@@ -65,18 +64,25 @@ define Package/can2udp/install
 	$(INSTALL_BIN) ./files/cs2ping.init $(1)/etc/init.d/cs2ping
 	$(INSTALL_BIN) ./files/can2lan.init $(1)/etc/init.d/can2lan
 ifneq (,$(findstring a5-v11,$(CONFIG_TARGET_PROFILE)))
+	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init_slcan_a5v11 $(1)/etc/init.d/can2lan
 endif
 ifneq (,$(findstring banana,$(CONFIG_TARGET_PROFILE)))
+	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init_bpi $(1)/etc/init.d/can2lan
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/s88udp-bpi $(1)/usr/bin/s88udp
 endif
 ifneq (,$(findstring carambola,$(CONFIG_TARGET_PROFILE)))
+	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init_carambola $(1)/etc/init.d/can2lan
 endif
 ifneq (,$(findstring omega2,$(CONFIG_TARGET_PROFILE)))
+	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init_srse2 $(1)/etc/init.d/can2lan
 endif
 ifneq (,$(findstring wr841,$(CONFIG_TARGET_PROFILE)))
+	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init_slcan $(1)/etc/init.d/can2lan
 endif
 	$(INSTALL_DIR) $(1)/root

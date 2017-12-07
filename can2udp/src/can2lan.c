@@ -674,19 +674,17 @@ int main(int argc, char **argv) {
 
     /* daemonize the process if requested */
     if (background) {
-	/* fork off the parent process */
-	pid = fork();
-	if (pid < 0)
+	if (daemon(0, 0) < 0) {
+	    fprintf(stderr, "Going into background failed\n");
 	    exit(EXIT_FAILURE);
-	/* if we got a good PID, then we can exit the parent process */
-	if (pid > 0) {
-	    printf("Going into background ...\n");
-	    exit(EXIT_SUCCESS);
 	}
     }
-
     setlogmask(LOG_UPTO(LOG_NOTICE));
     openlog("can2lan", LOG_CONS | LOG_NDELAY, LOG_DAEMON);
+
+    signal(SIGINT, signal_handler);
+    signal(SIGHUP, signal_handler);
+    signal(SIGTERM, signal_handler);
 
     /* set select timeout -> send periodic CAN Ping */
     memset(&tv, 0, sizeof(tv));

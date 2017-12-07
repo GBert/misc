@@ -111,7 +111,7 @@ read_lococard: read_lococard.o
 	$(CC) $(CFLAGS) -o read_lococard read_lococard.o
 
 s88udp-bpi: allwinner.o s88udp-bpi.o
-	$(CC) $(CFLAGS) -o s88udp allwinner.o s88udp-bpi.o
+	$(CC) $(CFLAGS) -o s88udp-bpi allwinner.o s88udp-bpi.o
 
 s88udp-rpi: raspi.o s88udp-rpi.o
 	$(CC) $(CFLAGS) -o s88udp-rpi raspi.o s88udp-rpi.o
