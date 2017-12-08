@@ -23,6 +23,7 @@ static char *NET_UDP_FORMAT_STRG  = "      UDP->   0x%08X   [%d]";
 static char *NET_TCP_FORMAT_STRG  = "      TCP->   0x%08X   [%d]";
 
 static char *BROADCAST_C0NFIG_UPDATE = "broadcast_update.cs2";
+static char *PID_FILE = "/var/run/can2lan.pid";
 
 static unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[] = { 0x00, 0x36, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
 static unsigned char M_GLEISBOX_ALL_PROTO_ENABLE[]     = { 0x00, 0x00, 0x03, 0x01, 0x06, 0x00, 0x00, 0x00, 0x00, 0x08, 0x07, 0x00, 0x00 };
@@ -375,7 +376,6 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 }
 
 int main(int argc, char **argv) {
-    pid_t pid;
     int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, timeout, ret, tcp_client[MAX_TCP_CONN];
     struct can_frame frame;
     char timestamp[16];
@@ -675,9 +675,14 @@ int main(int argc, char **argv) {
     /* daemonize the process if requested */
     if (background) {
 	if (daemon(0, 0) < 0) {
-	    fprintf(stderr, "Going into background failed\n");
+	    fprintf(stderr, "Going into background failed: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
 	}
+	/* TODO
+	if (write_pid_file(PID_FILE) < 0) {
+	    syslog(LOG_ERR, "failed writing PID file\n");
+	    exit(EXIT_FAILURE);
+	} */
     }
     setlogmask(LOG_UPTO(LOG_NOTICE));
     openlog("can2lan", LOG_CONS | LOG_NDELAY, LOG_DAEMON);

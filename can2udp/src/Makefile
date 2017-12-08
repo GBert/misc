@@ -71,8 +71,8 @@ gb2-update: crc-ccitt.o gb2-update.o
 scan2lan: crc-ccitt.o sgio.o scan2lan.o
 	$(CC) $(CFLAGS) -o scan2lan crc-ccitt.o sgio.o scan2lan.o -lz
 
-can2lan: crc-ccitt.o gio.o can2lan.o
-	$(CC) $(CFLAGS) -o can2lan crc-ccitt.o gio.o can2lan.o -lz
+can2lan: crc-ccitt.o gio.o can2lan.o util.o
+	$(CC) $(CFLAGS) -o can2lan crc-ccitt.o gio.o util.o can2lan.o -lz
 
 can2lan_m: crc-ccitt.o gio.o can2lan_m.o
 	$(CC) $(CFLAGS) -o can2lan_m crc-ccitt.o gio.o can2lan_m.o -lz
