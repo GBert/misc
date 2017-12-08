@@ -144,5 +144,6 @@ struct id_node *ms1_search_for_slave(struct id_node *node, uint8_t slave_node);
 int ms1_add_id(struct id_node *root_node, uint32_t id, uint8_t slave_node);
 int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netframe);
 uint16_t CRCCCITT(uint8_t *data, size_t length, uint16_t seed);
+extern int write_pid_file(const char *pid_fn);
 #endif /* _CAN2LAN_H_ */
 
