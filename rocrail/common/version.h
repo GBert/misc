@@ -1,9 +1,12 @@
 const int revisionnr = 
-13181
+13184
 ;
 const char* commithash = 
-"cc4a42d2183fe17b3fafeab93eddfbd4f30855b4";
+"35a44a55a37219a43fba21b0d32a0e9ad82ea676";
 const char* revlog = 
+"13184 2017-12-08 17:07:56 +0100 keyboarddlg: keep layout (toggle)button text\n" \
+"13183 2017-12-08 16:25:32 +0100 keyboarddlg: revert set focus to the text field\n" \
+"13182 2017-12-08 16:18:32 +0100 keyboarddlg: return focus to the text field after button click\n" \
 "13181 2017-12-08 15:28:33 +0100 keyboard: DE layout support\n" \
 "13180 2017-12-08 14:56:29 +0100 keyboard: alt, ctrl and layout added\n" \
 "13179 2017-12-08 11:55:09 +0100 cardlg: keyboard support added\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "13137 2017-12-03 14:33:37 +0100 rocctrl: python 3...\n" \
 "13136 2017-12-03 14:31:41 +0100 rocctrl: python 2 and 3 support (Liviu)\n" \
 "13135 2017-12-03 12:46:58 +0100 rocrail makefile: added rocctrl\n" \
-"13134 2017-12-03 12:41:01 +0100 RocControl desktop shortcut added\n" \
-"13133 2017-12-03 12:28:58 +0100 rocctrl: automenu extended\n" \
-"13132 2017-12-03 11:18:18 +0100 rocctrl: wip\n" \
 
 "log end";
