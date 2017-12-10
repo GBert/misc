@@ -23,7 +23,7 @@ static char *NET_UDP_FORMAT_STRG  = "      UDP->   0x%08X   [%d]";
 static char *NET_TCP_FORMAT_STRG  = "      TCP->   0x%08X   [%d]";
 
 static char *BROADCAST_C0NFIG_UPDATE = "broadcast_update.cs2";
-static char *PID_FILE = "/var/run/can2lan.pid";
+static char *PIDFILE = "/var/run/can2lan.pid";
 
 static unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[] = { 0x00, 0x36, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
 static unsigned char M_GLEISBOX_ALL_PROTO_ENABLE[]     = { 0x00, 0x00, 0x03, 0x01, 0x06, 0x00, 0x00, 0x00, 0x00, 0x08, 0x07, 0x00, 0x00 };
@@ -376,10 +376,10 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 }
 
 int main(int argc, char **argv) {
-    int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, timeout, ret, tcp_client[MAX_TCP_CONN];
+    int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, pidfd, timeout, ret, tcp_client[MAX_TCP_CONN];
     struct can_frame frame;
     char timestamp[16];
-    /* UDP incoming socket , CAN socket, UDP broadcast socket, TCP socket */
+    /* UDP incoming socket, CAN socket, UDP broadcast socket, TCP socket */
     int sa, sc, sb, st, st2, tcp_socket;
     struct sockaddr_in saddr, baddr, tcp_addr, tcp_addr2;
     /* vars for determing broadcast address */
@@ -678,11 +678,22 @@ int main(int argc, char **argv) {
 	    fprintf(stderr, "Going into background failed: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
 	}
-	/* TODO
-	if (write_pid_file(PID_FILE) < 0) {
-	    syslog(LOG_ERR, "failed writing PID file\n");
-	    exit(EXIT_FAILURE);
-	} */
+	/* normally only root can write PID file */
+	if (getuid() == 0) {
+	    pidfd = open(PIDFILE, O_RDWR|O_CREAT|O_EXCL|O_NOCTTY, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+	    if (pidfd < 0) {
+		syslog(LOG_ERR, "cannot open PID file\n");
+		exit(EXIT_FAILURE);
+	    }
+	    if (dprintf(pidfd, "%d\n", getpid()) < 0) {
+		syslog(LOG_ERR, "cannot write to PID file\n");
+		exit(EXIT_FAILURE);
+	    }
+	    if (close(pidfd) == -1) {
+		syslog(LOG_ERR, "cannot close PID file\n");
+		exit(EXIT_FAILURE);
+	    }
+	}
     }
     setlogmask(LOG_UPTO(LOG_NOTICE));
     openlog("can2lan", LOG_CONS | LOG_NDELAY, LOG_DAEMON);
