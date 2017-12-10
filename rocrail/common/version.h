@@ -1,9 +1,15 @@
 const int revisionnr = 
-13184
+13190
 ;
 const char* commithash = 
-"35a44a55a37219a43fba21b0d32a0e9ad82ea676";
+"718b657f4c099afaf67a21d5b7043ab02f1282aa";
 const char* revlog = 
+"13190 2017-12-09 18:06:17 +0100 stage: stop all locos reverted\n" \
+"13189 2017-12-09 11:17:34 +0100 rocctrl: ask before shutdown and EoD\n" \
+"13188 2017-12-09 10:51:21 +0100 dialogs: keyboard support sensor, signal, text, output, action\n" \
+"13187 2017-12-09 09:40:55 +0100 switchdialog: keyboard support\n" \
+"13186 2017-12-09 08:54:03 +0100 routedialog: keyboard support\n" \
+"13185 2017-12-09 08:27:08 +0100 finder: unsupported random option removed\n" \
 "13184 2017-12-08 17:07:56 +0100 keyboarddlg: keep layout (toggle)button text\n" \
 "13183 2017-12-08 16:25:32 +0100 keyboarddlg: revert set focus to the text field\n" \
 "13182 2017-12-08 16:18:32 +0100 keyboarddlg: return focus to the text field after button click\n" \
@@ -48,11 +54,5 @@ const char* revlog =
 "13143 2017-12-04 10:22:56 +0100 rocctrl: resume and virtual button added\n" \
 "13142 2017-12-04 10:18:07 +0100 rocctrl: automate frame added\n" \
 "13141 2017-12-03 22:01:14 +0100 rocctrl: quit on eod\n" \
-"13140 2017-12-03 17:21:51 +0100 routedialog: multi delete\n" \
-"13139 2017-12-03 17:00:28 +0100 rocctrl: clean up\n" \
-"13138 2017-12-03 15:15:09 +0100 rocctrl: messagebox for python 2 and 3\n" \
-"13137 2017-12-03 14:33:37 +0100 rocctrl: python 3...\n" \
-"13136 2017-12-03 14:31:41 +0100 rocctrl: python 2 and 3 support (Liviu)\n" \
-"13135 2017-12-03 12:46:58 +0100 rocrail makefile: added rocctrl\n" \
 
 "log end";
