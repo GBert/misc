@@ -62,7 +62,7 @@ can2lan nutzen
 sudo apt-get install lighttpd
 # zumindest geraet.vrs unter /var/www/html/config/ anlegen:
 sudo mkdir /var/www/html/config/
-cat << EOF > /var/www/html/config/geraet.vrs
+sudo cat << EOF > /var/www/html/config/geraet.vrs
 [geraet]
 version
  .minor=1
