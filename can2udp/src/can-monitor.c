@@ -685,9 +685,10 @@ int main(int argc, char **argv) {
 			uid = be32(frame.data);
 			printf("Lok Discovery - 0x%04X Protokoll Kennung 0x%02X\n", uid, frame.data[4]);
 		    }
-		    if (frame.can_dlc == 6)
+		    if (frame.can_dlc == 6) {
 			uid = be32(frame.data);
 			printf("Lok Discovery - 0x%04X Range %d ASK %d\n", uid, frame.data[4], frame.data[5]);
+		    }
 		    break;
 		/* MFX Bind */
 		case 0x04:
