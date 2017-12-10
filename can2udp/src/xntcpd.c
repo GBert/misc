@@ -401,9 +401,10 @@ int main(int argc, char **argv) {
 			    /* we need to check if TCP consist of more than one command */
 			    if (n > 1) {
 				rs485_length = (frame[1] & 0x0F) + 3;
-				if (write(se, frame, rs485_length) != rs485_length)
+				if (write(se, frame, rs485_length) != rs485_length) {
 				    fprintf(stderr, "%s: error sending RS485 frame: %s\n", __func__, strerror(errno));
 				    usec_sleep(rs485_length * 200);
+				}
 				if (n > rs485_length) {
 				    /* TODO - maybe for RS485 Adapter */
 				    usec_sleep(rs485_length * 200);

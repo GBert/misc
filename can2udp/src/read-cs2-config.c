@@ -572,7 +572,7 @@ void read_track_pages(char *dir) {
 
 int read_loco_data(char *config_file, int config_type) {
     int l0_token_n, l1_token_n, l2_token_n, loco_complete;
-    FILE *fp;
+    FILE *fp = NULL;
     char line[MAXSIZE];
     char *name, *type, *icon, *sret;
     int16_t function, temp;
