@@ -62,27 +62,11 @@ char config_file[MAXLINE];
 char **page_name;
 char **cs2_page_name;
 int ms1_workaround;
-int cs2fake_ping;
+int cs2fake_ping, pidfd, signalcontinue = 1;
 struct timeval last_sent;
 
 void signal_handler(int sig) {
-    switch(sig) {
-    case SIGHUP:
-	syslog(LOG_WARNING, "Received SIGHUP signal\n");
-	break;
-    case SIGINT:
-    case SIGTERM:
-	syslog(LOG_INFO, "Daemon exiting");
-	if(unlink(PIDFILE) == -1) {
-	    syslog(LOG_ERR,"Cannot remove pidfile '%s'\n", PIDFILE);
-	    exit(EXIT_FAILURE);
-	}
-	exit(EXIT_SUCCESS);
-	break;
-    default:
-	syslog(LOG_WARNING, "Unhandled signal %s\n", strsignal(sig));
-	break;
-    }
+    syslog(LOG_WARNING, "got signal %s\n", strsignal(sig));
 }
 
 void print_usage(char *prg) {
@@ -378,7 +362,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 }
 
 int main(int argc, char **argv) {
-    int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, pidfd, timeout, ret, tcp_client[MAX_TCP_CONN];
+    int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, timeout, ret, tcp_client[MAX_TCP_CONN];
     struct can_frame frame;
     char timestamp[16];
     /* UDP incoming socket, CAN socket, UDP broadcast socket, TCP socket */
@@ -398,6 +382,7 @@ int main(int argc, char **argv) {
     char *bcast_interface;
     struct cs2_config_data_t cs2_config_data;
 
+    pidfd = 0;
     int local_udp_port = 15731;
     int local_tcp_port = 15731;
     int local2_tcp_port = 15732;
@@ -716,7 +701,7 @@ int main(int argc, char **argv) {
     FD_SET(st2, &all_fds);
     max_fds = MAX(MAX(MAX(sc, sa), st), st2);
 
-    while (1) {
+    while (signalcontinue) {
 	read_fds = all_fds;
 	nready = select(max_fds + 1, &read_fds, NULL, NULL, &tv);
 	if (nready == 0) {
@@ -724,8 +709,13 @@ int main(int argc, char **argv) {
 	    tv.tv_sec = 1;
 	    tv.tv_usec = 0;
 	    continue;
-	} else if (nready < 0)
-	    fprintf(stderr, "select error: %s\n", strerror(errno));
+	} else if (nready < 0) {
+	    if (!background)
+		fprintf(stderr, "select exception: [%d] %s\n", nready, strerror(errno));
+	    syslog(LOG_WARNING, "select exception: [%d] %s\n", nready, strerror(errno));
+	    signalcontinue = 0;
+	    continue;
+	}
 
 	tv.tv_sec = 1;
 	tv.tv_usec = 0;
@@ -883,5 +873,11 @@ int main(int argc, char **argv) {
     close(sb);
     close(st);
     close(st2);
-    return 0;
+    if (pidfd) {
+	if(unlink(PIDFILE) == -1) {
+	    syslog(LOG_ERR,"Cannot remove pidfile '%s'\n", PIDFILE);
+	    exit(EXIT_FAILURE);
+	}
+    }
+    return(0);
 }
