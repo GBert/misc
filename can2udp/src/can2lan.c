@@ -57,7 +57,6 @@ char *ms2_configs[] = {
     NULL
 };
 
-int pidFilehandle;
 char config_dir[MAXLINE];
 char config_file[MAXLINE];
 char **page_name;
@@ -69,16 +68,19 @@ struct timeval last_sent;
 void signal_handler(int sig) {
     switch(sig) {
     case SIGHUP:
-	syslog(LOG_WARNING, "Received SIGHUP signal.");
+	syslog(LOG_WARNING, "Received SIGHUP signal\n");
 	break;
     case SIGINT:
     case SIGTERM:
 	syslog(LOG_INFO, "Daemon exiting");
-	close(pidFilehandle);
+	if(unlink(PIDFILE) == -1) {
+	    syslog(LOG_ERR,"Cannot remove pidfile '%s'\n", PIDFILE);
+	    exit(EXIT_FAILURE);
+	}
 	exit(EXIT_SUCCESS);
 	break;
     default:
-	syslog(LOG_WARNING, "Unhandled signal %s", strsignal(sig));
+	syslog(LOG_WARNING, "Unhandled signal %s\n", strsignal(sig));
 	break;
     }
 }
@@ -682,15 +684,15 @@ int main(int argc, char **argv) {
 	if (getuid() == 0) {
 	    pidfd = open(PIDFILE, O_RDWR|O_CREAT|O_EXCL|O_NOCTTY, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
 	    if (pidfd < 0) {
-		syslog(LOG_ERR, "cannot open PID file\n");
+		syslog(LOG_ERR, "Cannot open PID file %s\n", PIDFILE);
 		exit(EXIT_FAILURE);
 	    }
 	    if (dprintf(pidfd, "%d\n", getpid()) < 0) {
-		syslog(LOG_ERR, "cannot write to PID file\n");
+		syslog(LOG_ERR, "Cannot write to PID file %s\n", PIDFILE);
 		exit(EXIT_FAILURE);
 	    }
 	    if (close(pidfd) == -1) {
-		syslog(LOG_ERR, "cannot close PID file\n");
+		syslog(LOG_ERR, "Cannot close PID file %s\n", PIDFILE);
 		exit(EXIT_FAILURE);
 	    }
 	}
