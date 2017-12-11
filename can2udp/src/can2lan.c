@@ -283,7 +283,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 		page_number = atoi(&config_name[4]);
 		strcat(gbs_name, "gleisbilder/");
 		if (page_number <= MAX_TRACK_PAGE) {
-		    if (page_name[page_number])  {
+		    if (page_name[page_number]) {
 			strcat(gbs_name, page_name[page_number]);
 			syslog(LOG_NOTICE, "%s: sending %s\n", __func__, gbs_name);
 			send_tcp_config_data(gbs_name, config_dir, canid, tcp_socket, CRC | COMPRESSED);
@@ -332,12 +332,12 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	    break;
 	}
     case (0x00420000UL):
-        /* check for bordcast config change: DLC = 7 */
+	/* check for bordcast config change: DLC = 7 */
 	if (netframe[4] == 7) {
 	    /* TODO */
 	    syslog(LOG_NOTICE, "%s: broadcast config change", __func__);
-            cs2_config_data->name = BROADCAST_C0NFIG_UPDATE;
-            cs2_config_data->state = CS2_STATE_BROADCAST_UPDATE;
+	    cs2_config_data->name = BROADCAST_C0NFIG_UPDATE;
+	    cs2_config_data->state = CS2_STATE_BROADCAST_UPDATE;
 	}
 	/* check for initiated copy request or brodcast update */
 	reassemble_data(cs2_config_data, netframe);
@@ -667,7 +667,7 @@ int main(int argc, char **argv) {
 	}
 	/* normally only root can write PID file */
 	if (getuid() == 0) {
-	    pidfd = open(PIDFILE, O_RDWR|O_CREAT|O_EXCL|O_NOCTTY, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+	    pidfd = open(PIDFILE, O_RDWR | O_CREAT | O_EXCL | O_NOCTTY, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	    if (pidfd < 0) {
 		syslog(LOG_ERR, "Cannot open PID file %s\n", PIDFILE);
 		exit(EXIT_FAILURE);
@@ -844,7 +844,7 @@ int main(int argc, char **argv) {
 			time_stamp(timestamp);
 			if (!background)
 			    fprintf(stderr, "%s received packet %% 13 : length %d - maybe close connection\n", timestamp, n);
-			syslog(LOG_ERR, "%s: received packet %% 13 : length %d - maybe close connection\n", __func__, n);
+			    syslog(LOG_ERR, "%s: received packet %% 13 : length %d - maybe close connection\n", __func__, n);
 		    } else {
 			for (i = 0; i < n; i += CAN_ENCAP_SIZE) {
 			    /* check if we need to forward the message to CAN */
@@ -874,10 +874,10 @@ int main(int argc, char **argv) {
     close(st);
     close(st2);
     if (pidfd) {
-	if(unlink(PIDFILE) == -1) {
-	    syslog(LOG_ERR,"Cannot remove pidfile '%s'\n", PIDFILE);
+	if (unlink(PIDFILE) == -1) {
+	    syslog(LOG_ERR, "Cannot remove pidfile '%s'\n", PIDFILE);
 	    exit(EXIT_FAILURE);
 	}
     }
-    return(0);
+    return (EXIT_SUCCESS);
 }
