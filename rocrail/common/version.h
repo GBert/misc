@@ -1,9 +1,20 @@
 const int revisionnr = 
-13190
+13201
 ;
 const char* commithash = 
-"718b657f4c099afaf67a21d5b7043ab02f1282aa";
+"277e6fe07d285c72a106e1de60935e1750801788";
 const char* revlog = 
+"13201 2017-12-11 12:10:17 +0100 themepropsdlg: show color\n" \
+"13200 2017-12-11 11:41:12 +0100 themepropsdlg added\n" \
+"13199 2017-12-11 09:41:46 +0100 model: check actions on stop all locos\n" \
+"13198 2017-12-10 16:10:27 +0100 swdlg: gray icons\n" \
+"13197 2017-12-10 15:29:59 +0100 swdlg: layout corrections\n" \
+"13196 2017-12-10 13:51:24 +0100 swdlg: alt icons\n" \
+"13195 2017-12-10 13:13:08 +0100 swctrldlg: icon\n" \
+"13194 2017-12-10 13:01:10 +0100 keyboarddlg: removed unused control key\n" \
+"13193 2017-12-10 11:37:05 +0100 swdlg: restore position\n" \
+"13192 2017-12-10 10:47:00 +0100 swdlg: combobox for IIDs\n" \
+"13191 2017-12-10 10:27:26 +0100 swdlg: use bitmaps on buttons\n" \
 "13190 2017-12-09 18:06:17 +0100 stage: stop all locos reverted\n" \
 "13189 2017-12-09 11:17:34 +0100 rocctrl: ask before shutdown and EoD\n" \
 "13188 2017-12-09 10:51:21 +0100 dialogs: keyboard support sensor, signal, text, output, action\n" \
@@ -43,16 +54,5 @@ const char* revlog =
 "13154 2017-12-05 14:26:20 +0100 bidib: check run flag before attempting to (re)connect\n" \
 "13153 2017-12-05 13:43:30 +0100 rocctrl: quit on shutdown event\n" \
 "13152 2017-12-05 08:56:24 +0100 control: set var lcid on event timeout\n" \
-"13151 2017-12-05 08:32:00 +0100 translation merge: de, sl, sr_latin, fr, en_GB, nl\n" \
-"13150 2017-12-04 17:36:15 +0100 trace: level char for analyser\n" \
-"13149 2017-12-04 16:41:03 +0100 analyse: added extra trace level and corrected trace level to avoid a flood of messages to the clients\n" \
-"13148 2017-12-04 14:37:25 +0100 makefile: copy rocctrl icon\n" \
-"13147 2017-12-04 14:32:46 +0100 rocctrl: own icon\n" \
-"13146 2017-12-04 14:14:08 +0100 rocctrl: informall flag for system commands added\n" \
-"13145 2017-12-04 13:21:00 +0100 rocctrl: menu and frame buttons equal text\n" \
-"13144 2017-12-04 13:07:20 +0100 bigger font for buttons\n" \
-"13143 2017-12-04 10:22:56 +0100 rocctrl: resume and virtual button added\n" \
-"13142 2017-12-04 10:18:07 +0100 rocctrl: automate frame added\n" \
-"13141 2017-12-03 22:01:14 +0100 rocctrl: quit on eod\n" \
 
 "log end";
