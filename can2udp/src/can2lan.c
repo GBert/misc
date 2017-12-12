@@ -689,12 +689,6 @@ int main(int argc, char **argv) {
     setlogmask(LOG_UPTO(LOG_NOTICE));
     openlog("can2lan", LOG_CONS | LOG_NDELAY, LOG_DAEMON);
 
-    memset(&sigact, 0, sizeof(struct sigaction));
-    sigact.sa_handler = signal_handler;
-    sigaction(SIGINT, &sigact, NULL);
-    sigaction(SIGQUIT, &sigact, NULL);
-    sigaction(SIGTERM, &sigact, NULL);
-
     sigemptyset(&sig_mask);
     sigaddset(&sig_mask, SIGINT);
     sigaddset(&sig_mask, SIGQUIT);
@@ -705,8 +699,13 @@ int main(int argc, char **argv) {
 	return (EXIT_FAILURE);
     }
 
+    memset(&sigact, 0, sizeof(struct sigaction));
+    sigact.sa_handler = signal_handler;
+    sigaction(SIGINT, &sigact, NULL);
+    sigaction(SIGQUIT, &sigact, NULL);
+    sigaction(SIGTERM, &sigact, NULL);
+
     /* set select timeout -> send periodic CAN Ping */
-    memset(&ts, 0, sizeof(ts));
     ts.tv_sec = 1;
     ts.tv_nsec = 0;
 
