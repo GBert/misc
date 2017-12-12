@@ -13,6 +13,8 @@
 /* it seems Gleisbox needs a short break after every CAN message */
 /* use 10ms delay between two consequences CAN frames */
 #define TIME_WAIT_US	10 * 1000
+/* a shorter break for updates */
+#define TIME_WAIT_US_SH	1 * 1000
 
 /* CHUNK is the size of the memory chunk used by the zlib routines. */
 #define CHUNK		0x8000
@@ -206,7 +208,7 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
     struct can_frame frame;
     struct timespec to_wait;
     struct timeval actual_time;
-    long usec;
+    long usec, wait_usec;
 
     /* Maerklin TCP/UDP Format: always 13 (CAN_ENCAP_SIZE) bytes
      *   byte 0 - 3  CAN ID
@@ -224,12 +226,17 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
 
     /* we calculate the difference between the actual time and the time the last command was sent */
     /* probably we don't need to wait anymore before putting next CAN frame on the wire */
+    if ((canid & 0x00430000) == 0x00430000)
+	wait_usec = TIME_WAIT_US;
+    else
+	wait_usec = TIME_WAIT_US_SH;
+
     gettimeofday(&actual_time, NULL);
     usec = (actual_time.tv_sec - last_sent.tv_sec) * 1000000;
     usec += (actual_time.tv_usec - last_sent.tv_usec);
-    if (usec < TIME_WAIT_US) {
+    if (usec < wait_usec) {
 	to_wait.tv_sec = 0;
-	to_wait.tv_nsec = (TIME_WAIT_US - usec) * 1000;
+	to_wait.tv_nsec = (wait_usec - usec) * 1000;
 	nanosleep(&to_wait, NULL);
     }
 
