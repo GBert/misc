@@ -1,9 +1,10 @@
 const int revisionnr = 
-13201
+13202
 ;
 const char* commithash = 
-"277e6fe07d285c72a106e1de60935e1750801788";
+"4c5226bfd1839f2bef6dba6cc08b2cfb28b23ced";
 const char* revlog = 
+"13202 2017-12-12 11:09:29 +0100 rocview: fix for changing workspace\n" \
 "13201 2017-12-11 12:10:17 +0100 themepropsdlg: show color\n" \
 "13200 2017-12-11 11:41:12 +0100 themepropsdlg added\n" \
 "13199 2017-12-11 09:41:46 +0100 model: check actions on stop all locos\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "13155 2017-12-05 15:44:04 +0100 route: skip manual signal commands\n" \
 "13154 2017-12-05 14:26:20 +0100 bidib: check run flag before attempting to (re)connect\n" \
 "13153 2017-12-05 13:43:30 +0100 rocctrl: quit on shutdown event\n" \
-"13152 2017-12-05 08:56:24 +0100 control: set var lcid on event timeout\n" \
 
 "log end";
