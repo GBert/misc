@@ -871,9 +871,10 @@ int main(int argc, char **argv) {
 	    }
 	}
     }
+    free_track_file(page_name);
     free(page_name);
-    free(cs2_page_name);
     /* free(udp_dst_address); */
+    free(cs2_page_name);
     free(bcast_interface);
     closelog();
     close(sc);

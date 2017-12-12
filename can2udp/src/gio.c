@@ -125,6 +125,15 @@ char **read_track_file(char *filename, char **page_name) {
     }
 }
 
+void free_track_file(char **page_name) {
+    int i = 0;
+
+    while (page_name[i]) {
+	free(page_name[i]);
+	i++;
+    }
+}
+
 void print_can_frame(char *format_string, unsigned char *netframe, int verbose) {
     uint32_t canid;
     int i, dlc;
