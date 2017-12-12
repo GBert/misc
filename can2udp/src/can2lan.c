@@ -62,11 +62,11 @@ char config_file[MAXLINE];
 char **page_name;
 char **cs2_page_name;
 int ms1_workaround;
-int cs2fake_ping, pidfd, signalcontinue = 1;
+int cs2fake_ping, pidfd, do_loop = 1;
 struct timeval last_sent;
 
 void signal_handler(int sig) {
-    signalcontinue = 0;
+    do_loop = 0;
     syslog(LOG_WARNING, "got signal %s\n", strsignal(sig));
 }
 
@@ -717,7 +717,7 @@ int main(int argc, char **argv) {
     FD_SET(st2, &all_fds);
     max_fds = MAX(MAX(MAX(sc, sa), st), st2);
 
-    while (signalcontinue) {
+    while (do_loop) {
 	read_fds = all_fds;
 	nready = pselect(max_fds + 1, &read_fds, NULL, NULL, &ts, &orig_sig_mask);
 	if (nready == 0) {
