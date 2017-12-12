@@ -542,6 +542,7 @@ int main(int argc, char **argv) {
 		}
 	    }
 	}
+	freeifaddrs(ifap);
 	/* try to prepare UDP sending socket struct */
 	memset(&baddr, 0, sizeof(baddr));
 	baddr.sin_family = AF_INET;
@@ -870,6 +871,10 @@ int main(int argc, char **argv) {
 	    }
 	}
     }
+    free(page_name);
+    free(cs2_page_name);
+    /* free(udp_dst_address); */
+    free(bcast_interface);
     closelog();
     close(sc);
     close(sa);
