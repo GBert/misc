@@ -66,6 +66,7 @@ int cs2fake_ping, pidfd, signalcontinue = 1;
 struct timeval last_sent;
 
 void signal_handler(int sig) {
+    signalcontinue = 0;
     syslog(LOG_WARNING, "got signal %s\n", strsignal(sig));
 }
 
@@ -364,6 +365,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 int main(int argc, char **argv) {
     int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, timeout, ret, tcp_client[MAX_TCP_CONN];
     struct sigaction sigact;
+    sigset_t sig_mask, orig_sig_mask;
     struct can_frame frame;
     char timestamp[16];
     /* UDP incoming socket, CAN socket, UDP broadcast socket, TCP socket */
@@ -378,7 +380,7 @@ int main(int argc, char **argv) {
     socklen_t tcp_client_length = sizeof(tcp_addr);
     fd_set all_fds, read_fds;
     int s = 0;
-    struct timeval tv;
+    struct timespec ts;
     char *udp_dst_address;
     char *bcast_interface;
     struct cs2_config_data_t cs2_config_data;
@@ -693,10 +695,20 @@ int main(int argc, char **argv) {
     sigaction(SIGQUIT, &sigact, NULL);
     sigaction(SIGTERM, &sigact, NULL);
 
+    sigemptyset(&sig_mask);
+    sigaddset(&sig_mask, SIGINT);
+    sigaddset(&sig_mask, SIGQUIT);
+    sigaddset(&sig_mask, SIGTERM);
+ 
+    if (sigprocmask(SIG_BLOCK, &sig_mask, &orig_sig_mask) < 0) {
+	fprint_syslog(stderr, LOG_ERR, "cannot set SIGNAL mask\n");
+	return (EXIT_FAILURE);
+    }
+
     /* set select timeout -> send periodic CAN Ping */
-    memset(&tv, 0, sizeof(tv));
-    tv.tv_sec = 1;
-    tv.tv_usec = 0;
+    memset(&ts, 0, sizeof(ts));
+    ts.tv_sec = 1;
+    ts.tv_nsec = 0;
 
     FD_ZERO(&all_fds);
     FD_SET(sc, &all_fds);
@@ -707,22 +719,21 @@ int main(int argc, char **argv) {
 
     while (signalcontinue) {
 	read_fds = all_fds;
-	nready = select(max_fds + 1, &read_fds, NULL, NULL, &tv);
+	nready = pselect(max_fds + 1, &read_fds, NULL, NULL, &ts, &orig_sig_mask);
 	if (nready == 0) {
 	    /*    send_can_ping(sc); */
-	    tv.tv_sec = 1;
-	    tv.tv_usec = 0;
+	    ts.tv_sec = 1;
+	    ts.tv_nsec = 0;
 	    continue;
 	} else if (nready < 0) {
 	    if (!background)
 		fprintf(stderr, "select exception: [%d] %s\n", nready, strerror(errno));
 	    syslog(LOG_WARNING, "select exception: [%d] %s\n", nready, strerror(errno));
-	    signalcontinue = 0;
 	    continue;
 	}
 
-	tv.tv_sec = 1;
-	tv.tv_usec = 0;
+	ts.tv_sec = 1;
+	ts.tv_nsec = 0;
 
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &read_fds)) {
