@@ -363,6 +363,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 
 int main(int argc, char **argv) {
     int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, timeout, ret, tcp_client[MAX_TCP_CONN];
+    struct sigaction sigact;
     struct can_frame frame;
     char timestamp[16];
     /* UDP incoming socket, CAN socket, UDP broadcast socket, TCP socket */
@@ -685,9 +686,11 @@ int main(int argc, char **argv) {
     setlogmask(LOG_UPTO(LOG_NOTICE));
     openlog("can2lan", LOG_CONS | LOG_NDELAY, LOG_DAEMON);
 
-    signal(SIGINT, signal_handler);
-    signal(SIGHUP, signal_handler);
-    signal(SIGTERM, signal_handler);
+    memset(&sigact, 0, sizeof(struct sigaction));
+    sigact.sa_handler = signal_handler;
+    sigaction(SIGINT, &sigact, NULL);
+    sigaction(SIGQUIT, &sigact, NULL);
+    sigaction(SIGTERM, &sigact, NULL);
 
     /* set select timeout -> send periodic CAN Ping */
     memset(&tv, 0, sizeof(tv));
