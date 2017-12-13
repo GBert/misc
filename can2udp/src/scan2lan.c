@@ -142,7 +142,6 @@ int main(int argc, char **argv) {
     local_udp_port = 15731;
     local_tcp_port = 15731;
     destination_port = 15730;
-    verbose = 0;
     strcpy(if_name, "/dev/ttyUSB0");
 
     config_file[0] = '\0';

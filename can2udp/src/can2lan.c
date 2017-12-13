@@ -479,11 +479,9 @@ int main(int argc, char **argv) {
 	    if (strnlen(optarg, MAXIPLEN) <= MAXIPLEN - 1) {
 		/* IP address begins with a number */
 		if ((optarg[0] >= '0') && (optarg[0] <= '9')) {
-		    memset(udp_dst_address, 0, MAXIPLEN);
 		    strncpy(udp_dst_address, optarg, MAXIPLEN - 1);
 		} else {
 		    memset(udp_dst_address, 0, MAXIPLEN);
-		    memset(bcast_interface, 0, MAXIPLEN);
 		    strncpy(bcast_interface, optarg, MAXIPLEN - 1);
 		}
 	    } else {

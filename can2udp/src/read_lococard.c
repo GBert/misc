@@ -89,7 +89,7 @@ unsigned char *read_data(struct loco_config_t *loco_config) {
     fseek(fp, 0, SEEK_SET);
 
     if ((data = malloc(loco_config->eeprom_size)) == NULL) {
-	fprintf(stderr, "%s: can't alloc %d bytes for data\n", __func__, loco_config->eeprom_size);
+	fprintf(stderr, "%s: can't alloc %u bytes for data\n", __func__, loco_config->eeprom_size);
 	fclose(fp);
 	return NULL;
     }
@@ -164,14 +164,14 @@ int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_d
 	switch (index) {
 
 	case 0:
-	    printf("index [0x%02x @ 0x%04x] sub-index [%d]: ", index, i, length);
+	    printf("index [0x%02x @ 0x%04x] sub-index [%u]: ", index, i, length);
 	    temp = loco_config->bin[i++];
 	    length = (loco_config->bin[i++] << 8) + temp;
-	    printf(" total length [%d]\n", length);
+	    printf(" total length [%u]\n", length);
 	    id = loco_config->bin[i++];
 	    while ((id != 0) && (id != 255)) {
 		length = loco_config->bin[i++];
-		/* printf("i 0x%02x [i] 0x%02x length %d\n" , i, loco_config->bin[i], length); */
+		/* printf("i 0x%02x [i] 0x%02x length %u\n" , i, loco_config->bin[i], length); */
 		switch (id) {
 		case 0x1e:
 		    loco_name = extract_string(&i, loco_config->bin, length);
@@ -196,7 +196,7 @@ int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_d
 		    break;
 		case 0x05:
 		    png_size = length + (loco_config->bin[i++] << 8);
-		    printf("png start: 0x%04x  end: 0x%04x  size: 0x%04x  %d bytes\n",
+		    printf("png start: 0x%04x  end: 0x%04x  size: 0x%04x  %u bytes\n",
 			   i, i + png_size, png_size, png_size);
 		    return EXIT_SUCCESS;
 		default:
@@ -341,7 +341,7 @@ int main(int argc, char **argv) {
 	return EXIT_FAILURE;
 
     if (verbose)
-	printf("EEPROM Size (%s) : %d\n", filename, loco_config.eeprom_size);
+	printf("EEPROM Size (%s) : %u\n", filename, loco_config.eeprom_size);
 
     if (verbose)
 	decode_sc_data(&loco_config, &loco_data);

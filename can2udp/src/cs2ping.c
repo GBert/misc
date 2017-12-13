@@ -52,14 +52,6 @@ void usage(char *prg) {
     fprintf(stderr, "         -v                  be verbose\n\n");
 }
 
-void usec_sleep(int usec) {
-    struct timespec to_wait;
-
-    to_wait.tv_sec = 0;
-    to_wait.tv_nsec = usec * 1000;
-    nanosleep(&to_wait, NULL);
-}
-
 int time_stamp(void) {
     struct timeval tv;
     struct tm *tm;
@@ -78,7 +70,7 @@ void print_net_frame(unsigned char *netframe) {
     memcpy(&canid, netframe, 4);
     dlc = netframe[4];
     time_stamp();
-    printf("         UDP->  0x%08X   [%d]", ntohl(canid), netframe[4]);
+    printf("         UDP->  0x%08X   [%u]", ntohl(canid), netframe[4]);
     for (i = 5; i < 5 + dlc; i++) {
 	printf(" %02x", netframe[i]);
     }
@@ -150,10 +142,8 @@ int main(int argc, char **argv) {
 	    if (strnlen(optarg, MAXIPLEN) <= MAXIPLEN - 1) {
 		/* broadcat IP begins with a number */
 		if ((optarg[0] >= '0') && (optarg[0] <= '9')) {
-		    memset(udp_dst_address, 0, MAXIPLEN);
 		    strncpy(udp_dst_address, optarg, MAXIPLEN - 1);
 		} else {
-		    memset(bcast_interface, 0, MAXIPLEN);
 		    strncpy(bcast_interface, optarg, MAXIPLEN - 1);
 		}
 	    } else {

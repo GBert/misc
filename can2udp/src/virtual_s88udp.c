@@ -70,7 +70,7 @@ int time_stamp(void) {
     gettimeofday(&tv, NULL);
     tm = localtime(&tv.tv_sec);
 
-    printf("%02d:%02d:%02d.%06d ", tm->tm_hour, tm->tm_min, tm->tm_sec, (int)tv.tv_usec);
+    printf("%02u:%02u:%02u.%06u ", tm->tm_hour, tm->tm_min, tm->tm_sec, (unsigned int)tv.tv_usec);
     return 0;
 }
 
@@ -81,7 +81,7 @@ void print_net_frame(unsigned char *netframe) {
     memcpy(&canid, netframe, 4);
     dlc = netframe[4];
     time_stamp();
-    printf(" ->S88>UDP  CANID 0x%08X   [%d]", ntohl(canid), netframe[4]);
+    printf(" ->S88>UDP  CANID 0x%08X   [%u]", ntohl(canid), netframe[4]);
     for (i = 5; i < 5 + dlc; i++) {
 	printf(" %02x", netframe[i]);
     }
@@ -182,10 +182,8 @@ int main(int argc, char **argv) {
 	    if (strnlen(optarg, MAXIPLEN) <= MAXIPLEN - 1) {
 		/* broadcat IP begins with a number */
 		if ((optarg[0] >= '0') && (optarg[0] <= '9')) {
-		    memset(udp_dst_address, 0, MAXIPLEN);
 		    strncpy(udp_dst_address, optarg, MAXIPLEN - 1);
 		} else {
-		    memset(bcast_interface, 0, MAXIPLEN);
 		    strncpy(bcast_interface, optarg, MAXIPLEN - 1);
 		}
 	    } else {

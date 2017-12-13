@@ -118,7 +118,7 @@ unsigned char *read_data(struct loco_db_t *loco_db) {
     fseek(fp, 0, SEEK_SET);
 
     if ((data = malloc(loco_db->eeprom_size)) == NULL) {
-	fprintf(stderr, "%s: can't alloc %d bytes for data\n", __func__, loco_db->eeprom_size);
+	fprintf(stderr, "%s: can't alloc %u bytes for data\n", __func__, loco_db->eeprom_size);
 	fclose(fp);
 	return NULL;
     }
@@ -194,7 +194,7 @@ int decode_sc_data(struct loco_db_t *loco_db, struct loco_data_t *loco_data) {
 	    break;
 	}
 
-	printf("%4d loco id: %8s %15s proto: %8s  default address: %2d\n", n, loco_id, loco_name, proto_name, address);
+	printf("%4u loco id: %8s %15s proto: %8s  default address: %2u\n", n, loco_id, loco_name, proto_name, address);
 	free(loco_id);
 	free(loco_name);
 
@@ -357,7 +357,7 @@ int main(int argc, char **argv) {
 	return EXIT_FAILURE;
 
     if (verbose)
-	printf("Flash DB Size (%s) : %d\n", filename, loco_db.eeprom_size);
+	printf("Flash DB Size (%s) : %u\n", filename, loco_db.eeprom_size);
 
     if (verbose)
 	decode_sc_data(&loco_db, &loco_data);

@@ -77,12 +77,11 @@ int insert_right(struct knoten *liste, void *element) {
 }
 
 struct messwert_t *suche_messwert(struct knoten *liste, uint64_t messwert) {
-    struct messwert_t *messwert_tmp = NULL;
     struct knoten *tmp = liste;
     int i = 0;
 
     while (tmp) {
-	messwert_tmp = (void *)tmp->daten;
+	struct messwert_t *messwert_tmp = (void *)tmp->daten;
 	if (messwert_tmp->geraete_id_messwert == messwert) {
 	    return messwert_tmp;
 	} else {
@@ -734,18 +733,24 @@ int main(int argc, char **argv) {
 
 		    printf("Lok: %s, ", getLoco(frame.data, s));
 		    if (frame.can_dlc == 4)
-			strncat(s, " wird abgefragt", sizeof(s));
-		    else if (frame.data[4] == 0)
-			strncat(s, " bleibt gleich", sizeof(s));
-		    else if (frame.data[4] == 1)
-			strncat(s, ": vorwärts", sizeof(s));
-		    else if (frame.data[4] == 2)
-			strncat(s, ": rückwärts", sizeof(s));
-		    else if (frame.data[4] == 3)
-			strncat(s, " wechseln", sizeof(s));
-		    else
-			strncat(s, "unbekannt", sizeof(s));
-
+			strcat(s, " wird abgefragt");
+		    switch (frame.data[4]) {
+		    case 0:
+			strcat(s, " bleibt gleich");
+			break;
+		    case 1:
+			strcat(s, ": vorwärts");
+			break;
+		    case 2:
+			strcat(s, ": rückwärts");
+			break;
+		    case 3:
+			strcat(s, " wechseln");
+			break;
+		    default:
+			strcat(s, "unbekannt");
+			break;
+		    }
 		    printf("Richtung %s\n", s);
 
 		    break;

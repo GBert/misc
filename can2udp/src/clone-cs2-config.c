@@ -330,10 +330,8 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "can't open gleisbild.cs2: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
-    if (dir)
-	free(dir);
-    if (gleisbild)
-	free(gleisbild);
+    free(dir);
+    free(gleisbild);
     fclose(fp);
     return EXIT_SUCCESS;
 }

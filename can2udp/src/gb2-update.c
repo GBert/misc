@@ -153,7 +153,6 @@ void print_can_frame(char *format_string, unsigned char *netframe, int verbose) 
 void format_can_to_netframe(struct can_frame *frame, unsigned char *netframe) {
     uint32_t canid;
 
-    memset(netframe, 0, 13);
     frame->can_id &= CAN_EFF_MASK;
     canid = htonl(frame->can_id);
     memcpy(netframe, &canid, 4);
@@ -238,10 +237,10 @@ unsigned char *read_data(struct update_config *device_config) {
     fclose(fp);
     if (device_config->id == GB2_ID) {
 	memcpy(&device_file_version, &data[6], 2);
-	printf("[%s] Device File Version %d.%d\n", device_config->filename, data[6], data[7]);
+	printf("[%s] Device File Version %u.%u\n", device_config->filename, data[6], data[7]);
     } else if (device_config->id == MS2_ID) {
 	memcpy(&device_file_version, &data[252], 2);
-	printf("[%s] Device File Version %d.%d\n", device_config->filename, data[252], data[253]);
+	printf("[%s] Device File Version %u.%u\n", device_config->filename, data[252], data[253]);
     }
     return data;
 }
@@ -314,9 +313,9 @@ void fsm(unsigned char *netframe, struct update_config *device_config) {
 	    memcpy(&device_id, &netframe[5], 4);
 	    memcpy(&version, &netframe[9], 2);
 	    if (netframe[5] == GB2_ID)
-		printf("found Gleisbox with ID 0x%08X  Version %d.%d\n", ntohl(device_id), netframe[9], netframe[10]);
+		printf("found Gleisbox with ID 0x%08X  Version %u.%u\n", ntohl(device_id), netframe[9], netframe[10]);
 	    if (netframe[5] == MS2_ID)
-		printf("found MS2 with ID 0x%08X  Version %d.%d\n", ntohl(device_id), netframe[9], netframe[10]);
+		printf("found MS2 with ID 0x%08X  Version %u.%u\n", ntohl(device_id), netframe[9], netframe[10]);
 	    if ((version == device_file_version) && (!force)) {
 		printf("file and device version are the same - use -f to force update\n");
 		exit(EXIT_FAILURE);
@@ -495,7 +494,7 @@ int main(int argc, char **argv) {
     }
     if (optind < argc) {
 	filename = (char *)malloc(strlen(argv[optind] + 1));
-	strncpy(filename, argv[optind], sizeof(filename) - 1);
+	strncpy(filename, argv[optind], sizeof(*filename) - 1);
 	device_config.filename = filename;
     }
 

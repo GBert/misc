@@ -235,7 +235,7 @@ int main(int argc, char **argv) {
 
 		if (verbose && !background) {
 		    printf("->CAN>UDP CANID 0x%06X R", frame.can_id);
-		    printf(" [%d]", udpframe[4]);
+		    printf(" [%u]", udpframe[4]);
 		    for (i = 5; i < 5 + frame.can_dlc; i++) {
 			printf(" %02x", udpframe[i]);
 		    }
@@ -281,7 +281,7 @@ int main(int argc, char **argv) {
 
 		if (verbose && !background) {
 		    printf("<-UDP>CAN CANID 0x%06X  ", frame.can_id & CAN_EFF_MASK);
-		    printf(" [%d]", udpframe[4]);
+		    printf(" [%u]", udpframe[4]);
 		    for (i = 5; i < 5 + frame.can_dlc; i++)
 			printf(" %02x", udpframe[i]);
 		    printf("\n");

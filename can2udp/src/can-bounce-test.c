@@ -91,20 +91,19 @@ void print_can_frame(struct can_frame *can_frame) {
 }
 
 void bounce_can_frame(int socket_can, struct can_frame *can_frame) {
-    int nbytes;
     uint32_t counter;
     uint32_t be_counter;
     counter = be32(can_frame->data);
     counter++;
     be_counter = htonl(counter);
     memcpy(&can_frame->data[0], &be_counter, 4);
-    if ((nbytes = write(socket_can, can_frame, sizeof(*can_frame))) != sizeof(*can_frame)) {
+    if ((write(socket_can, can_frame, sizeof(*can_frame))) != sizeof(*can_frame)) {
 	perror("CAN write error");
     }
 }
 
 int main(void) {
-    int nbytes, socket_can1, socket_can2, ret;
+    int socket_can1, socket_can2, ret;
     fd_set readfds;
     long count;
     struct can_frame *pcan_frame;
@@ -136,7 +135,7 @@ int main(void) {
 
 	/* received a CAN frame */
 	if (FD_ISSET(socket_can1, &readfds)) {
-	    if ((nbytes = read(socket_can1, pcan_frame, sizeof(struct can_frame))) < 0) {
+	    if ((read(socket_can1, pcan_frame, sizeof(struct can_frame))) < 0) {
 		perror("read error on CAN\n");
 		free(pcan_frame);
 		return -1;
@@ -144,7 +143,7 @@ int main(void) {
 	    bounce_can_frame(socket_can1, pcan_frame);
 	}
 	if (FD_ISSET(socket_can2, &readfds)) {
-	    if ((nbytes = read(socket_can2, pcan_frame, sizeof(struct can_frame))) < 0) {
+	    if ((read(socket_can2, pcan_frame, sizeof(struct can_frame))) < 0) {
 		perror("read error on CAN\n");
 		free(pcan_frame);
 		return -1;

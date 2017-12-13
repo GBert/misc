@@ -435,8 +435,10 @@ void *LEDMod(void *ptr) {
 	    break;
 	case LED_ST_ERROR:
 	    led_pattern_p = LED_ERROR;
+	    break;
 	default:
 	    led_pattern_p = LED_ERROR;
+	    break;
 	}
 
 	for (i = 0; i < LED_PATTERN_MAX; i++) {

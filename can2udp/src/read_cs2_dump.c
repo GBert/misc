@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
 	    if (ip_hdr->ip_p == IPPROTO_UDP) {
 		myudp = (struct udphdr *)(pkt_ptr + sizeof(struct ip));
 		int size_payload = packet_length - (IPHDR_LEN+ sizeof(struct udphdr));
-		printf("%04d UDP %s -> ", pkt_counter, inet_ntoa(ip_hdr->ip_src));
+		printf("%04u UDP %s -> ", pkt_counter, inet_ntoa(ip_hdr->ip_src));
 		printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(myudp->uh_sport), ntohs(myudp->uh_dport));
 		printf("  packet_length %d\n", size_payload);
 		print_content((unsigned char *)pkt_ptr + IPHDR_LEN+ sizeof(struct udphdr), size_payload);
@@ -114,7 +114,7 @@ int main(int argc, char **argv) {
 		int size_payload = packet_length - (IPHDR_LEN + tcp_offset);
 
 		if (size_payload > 0) {
-		    printf("%04d TCP %s -> ", pkt_counter, inet_ntoa(ip_hdr->ip_src));
+		    printf("%04u TCP %s -> ", pkt_counter, inet_ntoa(ip_hdr->ip_src));
 		    printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(mytcp->th_sport),
 			   ntohs(mytcp->th_dport));
 		    unsigned char *dump = (unsigned char *)pkt_ptr + IPHDR_LEN + tcp_offset;

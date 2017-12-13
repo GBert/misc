@@ -211,7 +211,6 @@ int main(int argc, char **argv) {
 		if (frame.can_id & CAN_EFF_FLAG) {
 		    /* prepare UDP packet */
 		    canid = htonl(frame.can_id);
-		    memset(udpframe, 0, 13);
 		    canid &= CAN_EFF_MASK;
 		    memcpy(udpframe, &canid, 4);
 		    udpframe[4] = frame.can_dlc;

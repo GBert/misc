@@ -325,7 +325,7 @@ void print_pages(void) {
     struct track_page_t *s;
 
     for (s = track_page; s != NULL; s = s->hh.next) {
-	printf("page %2d: name %s\n", s->id, s->name);
+	printf("page %2u: name %s\n", s->id, s->name);
     }
 }
 
