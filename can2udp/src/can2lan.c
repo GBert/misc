@@ -373,7 +373,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 int main(int argc, char **argv) {
     int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, timeout, ret, tcp_client[MAX_TCP_CONN];
     struct sigaction sigact;
-    sigset_t blockset, origset;
+    sigset_t blockset;
     struct can_frame frame;
     char timestamp[16];
     /* UDP incoming socket, CAN socket, UDP broadcast socket, TCP socket */
@@ -697,19 +697,18 @@ int main(int argc, char **argv) {
     setlogmask(LOG_UPTO(LOG_NOTICE));
     openlog("can2lan", LOG_CONS | LOG_NDELAY, LOG_DAEMON);
 
-    sigemptyset(&blockset);
-    sigaddset(&blockset, SIGINT);
-    sigaddset(&blockset, SIGQUIT);
-    sigaddset(&blockset, SIGTERM);
- 
-    if (sigprocmask(SIG_BLOCK, &blockset, &origset) < 0) {
-	fprint_syslog(stderr, LOG_ERR, "cannot set SIGNAL mask\n");
+    sigfillset(&blockset);
+    if (sigprocmask(SIG_BLOCK, &blockset, 0) < 0) {
+	fprint_syslog(stderr, LOG_ERR, "cannot set SIGNAL block mask\n");
 	return (EXIT_FAILURE);
     }
 
     sigact.sa_handler = signal_handler;
     sigact.sa_flags = 0;
-    sigemptyset(&sigact.sa_mask);
+    sigfillset(&sigact.sa_mask);
+    sigdelset(&sigact.sa_mask, SIGINT);
+    sigdelset(&sigact.sa_mask, SIGQUIT);
+    sigdelset(&sigact.sa_mask, SIGTERM);
     sigaction(SIGINT, &sigact, NULL);
     sigaction(SIGQUIT, &sigact, NULL);
     sigaction(SIGTERM, &sigact, NULL);
@@ -727,7 +726,7 @@ int main(int argc, char **argv) {
 
     while (do_loop) {
 	read_fds = all_fds;
-	nready = pselect(max_fds + 1, &read_fds, NULL, NULL, &ts, &origset);
+	nready = pselect(max_fds + 1, &read_fds, NULL, NULL, &ts, &sigact.sa_mask);
 	if (nready == 0) {
 	    /*    send_can_ping(sc); */
 	    ts.tv_sec = 1;
@@ -890,7 +889,6 @@ int main(int argc, char **argv) {
 	    }
 	}
     }
-    printf("out of loop\n");
     free_track_file(page_name);
     free(page_name);
     /* free(udp_dst_address); */
