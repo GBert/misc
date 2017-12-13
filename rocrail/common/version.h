@@ -1,9 +1,18 @@
 const int revisionnr = 
-13202
+13211
 ;
 const char* commithash = 
-"4c5226bfd1839f2bef6dba6cc08b2cfb28b23ced";
+"bab2775b52ae43bf64b4632af52f1b02fbb463f2";
 const char* revlog = 
+"13211 2017-12-13 15:33:22 +0100 extra traces on gui exit\n" \
+"13210 2017-12-13 14:48:39 +0100 rcon: trace corrections\n" \
+"13209 2017-12-13 14:18:27 +0100 rocnetnode: reset pi01 LEDs before shutdown/exit main\n" \
+"13208 2017-12-13 13:50:10 +0100 guiframe: removed asking shutdown all rocnet node because this is already handled in the rocnet setup\n" \
+"13207 2017-12-13 13:35:20 +0100 themepropsdlg: close handler added\n" \
+"13206 2017-12-13 11:56:47 +0100 rocweb: logo without shade\n" \
+"13205 2017-12-13 10:11:24 +0100 themepropsdlg: translations added\n" \
+"13204 2017-12-13 09:16:25 +0100 rocweb: show clock on URL parameter z=1000\n" \
+"13203 2017-12-13 08:35:07 +0100 clntcon, guiapp: switching workspace fix\n" \
 "13202 2017-12-12 11:09:29 +0100 rocview: fix for changing workspace\n" \
 "13201 2017-12-11 12:10:17 +0100 themepropsdlg: show color\n" \
 "13200 2017-12-11 11:41:12 +0100 themepropsdlg added\n" \
@@ -45,14 +54,5 @@ const char* revlog =
 "13164 2017-12-07 09:58:58 +0100 keyboard for touch: wip\n" \
 "13163 2017-12-06 18:07:18 +0100 loconet lbtcp: recovery fix\n" \
 "13162 2017-12-06 17:38:50 +0100 rocview: context menu on dclick option added for touch\n" \
-"13161 2017-12-06 13:46:22 +0100 item: open/close stage exit on dclick\n" \
-"13160 2017-12-06 08:45:14 +0100 stage: halt flag added for stop/start all locos\n" \
-"13159 2017-12-05 19:26:30 +0100 blockdialog: allow main signals used as distant signals\n" \
-"13158 2017-12-05 19:17:53 +0100 operatordlg: button added to open the props of the loco which the train is assigned to\n" \
-"13157 2017-12-05 17:53:11 +0100 guiframe: close throttles on changing workspace\n" \
-"13156 2017-12-05 16:39:43 +0100 trackdialog: remove index tab in case it should not be populated\n" \
-"13155 2017-12-05 15:44:04 +0100 route: skip manual signal commands\n" \
-"13154 2017-12-05 14:26:20 +0100 bidib: check run flag before attempting to (re)connect\n" \
-"13153 2017-12-05 13:43:30 +0100 rocctrl: quit on shutdown event\n" \
 
 "log end";
