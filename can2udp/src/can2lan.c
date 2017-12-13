@@ -66,8 +66,16 @@ int cs2fake_ping, pidfd, do_loop = 1;
 struct timeval last_sent;
 
 void signal_handler(int sig) {
-    do_loop = 0;
     syslog(LOG_WARNING, "got signal %s\n", strsignal(sig));
+    switch(sig) {
+    case SIGINT:
+    case SIGQUIT:
+    case SIGTERM:
+	do_loop = 0;
+	break;
+    default:
+	break;
+    }
 }
 
 void print_usage(char *prg) {
@@ -365,7 +373,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 int main(int argc, char **argv) {
     int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, timeout, ret, tcp_client[MAX_TCP_CONN];
     struct sigaction sigact;
-    sigset_t sig_mask, orig_sig_mask;
+    sigset_t blockset, origset;
     struct can_frame frame;
     char timestamp[16];
     /* UDP incoming socket, CAN socket, UDP broadcast socket, TCP socket */
@@ -689,18 +697,19 @@ int main(int argc, char **argv) {
     setlogmask(LOG_UPTO(LOG_NOTICE));
     openlog("can2lan", LOG_CONS | LOG_NDELAY, LOG_DAEMON);
 
-    sigemptyset(&sig_mask);
-    sigaddset(&sig_mask, SIGINT);
-    sigaddset(&sig_mask, SIGQUIT);
-    sigaddset(&sig_mask, SIGTERM);
+    sigemptyset(&blockset);
+    sigaddset(&blockset, SIGINT);
+    sigaddset(&blockset, SIGQUIT);
+    sigaddset(&blockset, SIGTERM);
  
-    if (sigprocmask(SIG_BLOCK, &sig_mask, &orig_sig_mask) < 0) {
+    if (sigprocmask(SIG_BLOCK, &blockset, &origset) < 0) {
 	fprint_syslog(stderr, LOG_ERR, "cannot set SIGNAL mask\n");
 	return (EXIT_FAILURE);
     }
 
-    memset(&sigact, 0, sizeof(struct sigaction));
     sigact.sa_handler = signal_handler;
+    sigact.sa_flags = 0;
+    sigemptyset(&sigact.sa_mask);
     sigaction(SIGINT, &sigact, NULL);
     sigaction(SIGQUIT, &sigact, NULL);
     sigaction(SIGTERM, &sigact, NULL);
@@ -718,7 +727,7 @@ int main(int argc, char **argv) {
 
     while (do_loop) {
 	read_fds = all_fds;
-	nready = pselect(max_fds + 1, &read_fds, NULL, NULL, &ts, &orig_sig_mask);
+	nready = pselect(max_fds + 1, &read_fds, NULL, NULL, &ts, &origset);
 	if (nready == 0) {
 	    /*    send_can_ping(sc); */
 	    ts.tv_sec = 1;
@@ -881,6 +890,7 @@ int main(int argc, char **argv) {
 	    }
 	}
     }
+    printf("out of loop\n");
     free_track_file(page_name);
     free(page_name);
     /* free(udp_dst_address); */
