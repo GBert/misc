@@ -1,9 +1,16 @@
 const int revisionnr = 
-13211
+13218
 ;
 const char* commithash = 
-"bab2775b52ae43bf64b4632af52f1b02fbb463f2";
+"0c9794aabeaf3b319f81590d52557e91c3d66281";
 const char* revlog = 
+"13218 2017-12-14 17:29:45 +0100 wrapper: default mqtt broker port number\n" \
+"13217 2017-12-14 15:13:48 +0100 bidib: revert update messages because unknown types are used\n" \
+"13216 2017-12-14 13:41:45 +0100 bidib: messages update\n" \
+"13215 2017-12-14 12:09:07 +0100 tt: set id in switch commands for dccpp support\n" \
+"13214 2017-12-14 11:19:41 +0100 rocview shutdown fix for deadlock\n" \
+"13213 2017-12-14 09:25:06 +0100 guiframe: reset the option reconnect to server at open workspace\n" \
+"13212 2017-12-14 09:05:34 +0100 guiapp: removed not needed semaphore at sending server commands\n" \
 "13211 2017-12-13 15:33:22 +0100 extra traces on gui exit\n" \
 "13210 2017-12-13 14:48:39 +0100 rcon: trace corrections\n" \
 "13209 2017-12-13 14:18:27 +0100 rocnetnode: reset pi01 LEDs before shutdown/exit main\n" \
@@ -47,12 +54,5 @@ const char* revlog =
 "13171 2017-12-07 17:09:40 +0100 locdialog: keyboard support (wip)\n" \
 "13170 2017-12-07 14:20:46 +0100 item: always take over the loco blockenterside on update (TEST)\n" \
 "13169 2017-12-07 13:51:37 +0100 stage: check manual signal if it should be reset\n" \
-"13168 2017-12-07 13:39:36 +0100 toolbardlg: forum item added\n" \
-"13167 2017-12-07 13:11:20 +0100 blockdialog: keyboard support\n" \
-"13166 2017-12-07 12:33:31 +0100 keyboarddlg: layout correction -> US\n" \
-"13165 2017-12-07 11:55:17 +0100 keyboarddlg: wip\n" \
-"13164 2017-12-07 09:58:58 +0100 keyboard for touch: wip\n" \
-"13163 2017-12-06 18:07:18 +0100 loconet lbtcp: recovery fix\n" \
-"13162 2017-12-06 17:38:50 +0100 rocview: context menu on dclick option added for touch\n" \
 
 "log end";
