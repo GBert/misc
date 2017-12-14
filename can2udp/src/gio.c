@@ -14,7 +14,7 @@
 /* use 10ms delay between two consequences CAN frames */
 #define TIME_WAIT_US	10 * 1000
 /* a shorter break for updates */
-#define TIME_WAIT_US_SH	1 * 1000
+#define TIME_WAIT_US_SH	5 * 1000
 
 /* CHUNK is the size of the memory chunk used by the zlib routines. */
 #define CHUNK		0x8000
@@ -226,7 +226,7 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
 
     /* we calculate the difference between the actual time and the time the last command was sent */
     /* probably we don't need to wait anymore before putting next CAN frame on the wire */
-    if ((canid & 0x00430000) == 0x00430000)
+    if ((canid & 0x00420000) == 0x00420000)
 	wait_usec = TIME_WAIT_US;
     else
 	wait_usec = TIME_WAIT_US_SH;

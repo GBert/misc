@@ -661,7 +661,8 @@ int main(int argc, char **argv) {
 	    printf(RESET);
 	    if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
 		fprintf(stderr, "error reading CAN frame: %s\n", strerror(errno));
-	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
+	    } else if((frame.can_id & CAN_EFF_FLAG) 	/* only EFF frames are valid */
+		&& ((frame.can_id & 0x000380UL) == 0x000300UL)) {	/* MS2/CS2 hash ? */
 		print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
 		if (frame.can_id & 0x00010000UL)
 		    printf(CYN);
@@ -1020,7 +1021,7 @@ int main(int argc, char **argv) {
 		    break;
 		}
 	    } else {
-		print_can_frame(F_S_CAN_FORMAT_STRG, &frame);
+		print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
 		printf("\n");
 	    }
 	}
