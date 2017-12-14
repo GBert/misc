@@ -6,8 +6,6 @@ BINS := can-bounce-test can-monitor can2eth can2udp can4lnx2udp can2serial clone
 
 PREFIX=/usr/sbin
 
-CC=cgcc
-
 BIN = $@
 
 all:	$(BINS)
