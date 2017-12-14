@@ -199,7 +199,7 @@ int main(int argc, char **argv) {
 	    if (sendto(sb, udpframe, 13, 0, (struct sockaddr *) &baddr, sizeof(baddr)) !=13)
 		fprintf(stderr, "UDP write error: %s\n", strerror(errno));
 
-	    print_can_frame("->CAN>UDP CANID 0x%08lX R", &frame, verbose & !background);
+	    print_can_frame("->CAN>UDP CANID 0x%08lX R", &frame, verbose && !background);
 	}
 	/* received a UDP packet */
 	if (FD_ISSET(sa, &readfds)) {
@@ -216,7 +216,7 @@ int main(int argc, char **argv) {
 		if (write(fdc, &frame, 1) != 1)
 		    fprintf(stderr, "CAN write error: %s\n", strerror(errno));
 
-		print_can_frame("->UDP>CAN CANID 0x%08lX  ", &frame, verbose & !background);
+		print_can_frame("->UDP>CAN CANID 0x%08lX  ", &frame, verbose && !background);
 	    }
 	}
     }

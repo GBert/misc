@@ -232,7 +232,7 @@ int main(int argc, char **argv) {
     }
 
     /* mini config string parser */
-    if (config_string != 0) {
+    if (config_string != NULL) {
 	while ((token = strsep(&config_string, delimiters))) {
 	    if (*token == 'B') {
 		token++;
