@@ -455,7 +455,7 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     }
 
-    if (cs2_config_data.verbose & !background)
+    if (cs2_config_data.verbose && !background)
 	printf("using broadcast address %s\n", udp_dst_address);
 
     /* prepare UDP sending socket */
@@ -608,7 +608,7 @@ int main(int argc, char **argv) {
 	    if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		/* send UDP frame */
 		frame_to_net(sb, (struct sockaddr *)&baddr, (struct can_frame *)&frame);
-		print_can_frame(UDP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
+		print_can_frame(UDP_FORMAT_STRG, netframe, cs2_config_data.verbose && !background);
 		/* send CAN frame to all connected TCP clients */
 		/* TODO: need all clients the packets ? */
 		for (i = 0; i <= max_tcp_i; i++) {	/* check all clients for data */
@@ -616,7 +616,7 @@ int main(int argc, char **argv) {
 		    if (tcp_socket < 0)
 			continue;
 		    frame_to_net(tcp_socket, (struct sockaddr *)&tcp_addr, (struct can_frame *)&frame);
-		    print_can_frame(CAN_TCP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
+		    print_can_frame(CAN_TCP_FORMAT_STRG, netframe, cs2_config_data.verbose && !background);
 		}
 	    }
 	}
@@ -625,7 +625,7 @@ int main(int argc, char **argv) {
 	    if (read(sa, netframe, MAXDG) == CAN_ENCAP_SIZE) {
 		/* send packet on CAN */
 		ret = frame_to_can(sc, netframe);
-		print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
+		print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data.verbose && !background);
 		check_data_udp(sb, (struct sockaddr *)&baddr, &cs2_config_data, netframe);
 	    }
 	}
@@ -703,12 +703,12 @@ int main(int argc, char **argv) {
 			    ret = frame_to_can(sc, netframe);
 			    if (!ret) {
 				if (i > 0)
-				    print_can_frame(TCP_FORMATS_STRG, netframe, cs2_config_data.verbose & !background);
+				    print_can_frame(TCP_FORMATS_STRG, netframe, cs2_config_data.verbose && !background);
 				else
-				    print_can_frame(TCP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
+				    print_can_frame(TCP_FORMAT_STRG, netframe, cs2_config_data.verbose && !background);
 			    }
 			    net_to_net(sb, (struct sockaddr *)&baddr, netframe, CAN_ENCAP_SIZE);
-			    print_can_frame(UDP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
+			    print_can_frame(UDP_FORMAT_STRG, netframe, cs2_config_data.verbose && !background);
 			}
 		    }
 		}

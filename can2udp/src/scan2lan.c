@@ -365,7 +365,7 @@ int main(int argc, char **argv) {
 		/* answer to encapsulated CAN ping from LAN to LAN */
 		if (((canid & 0x00FF0000UL) == 0x00310000UL)
 		    && (netframe[11] = 0xEE) && (netframe[12] = 0xEE)) {
-		    if (verbose & !background)
+		    if (verbose && !background)
 			printf("                received CAN ping\n");
 		    netframe[0] = 0x00;
 		    netframe[1] = 0x30;
@@ -374,7 +374,7 @@ int main(int argc, char **argv) {
 		    netframe[4] = 0x00;
 		    if (net_to_net(sb, (struct sockaddr *)&baddr, netframe, 13)) {
 			fprintf(stderr, "sending UDP data (CAN Ping) error:%s \n", strerror(errno));
-		    } else if (verbose & !background) {
+		    } else if (verbose && !background) {
 			print_can_frame(NET_UDP_FORMAT_STRG, netframe);
 			printf("                replied CAN ping\n");
 		    }

@@ -67,15 +67,7 @@ struct timeval last_sent;
 
 void signal_handler(int sig) {
     syslog(LOG_WARNING, "got signal %s\n", strsignal(sig));
-    switch(sig) {
-    case SIGINT:
-    case SIGQUIT:
-    case SIGTERM:
-	do_loop = 0;
-	break;
-    default:
-	break;
-    }
+    do_loop = 0;
 }
 
 void print_usage(char *prg) {
@@ -373,7 +365,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 int main(int argc, char **argv) {
     int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, timeout, ret, tcp_client[MAX_TCP_CONN];
     struct sigaction sigact;
-    sigset_t blockset;
+    sigset_t blockset, emptyset;
     struct can_frame frame;
     char timestamp[16];
     /* UDP incoming socket, CAN socket, UDP broadcast socket, TCP socket */
@@ -570,7 +562,7 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     }
 
-    if (cs2_config_data.verbose & !background)
+    if (cs2_config_data.verbose && !background)
 	printf("using broadcast address %s\n", udp_dst_address);
 
     /* prepare UDP sending socket */
@@ -695,21 +687,22 @@ int main(int argc, char **argv) {
     setlogmask(LOG_UPTO(LOG_NOTICE));
     openlog("can2lan", LOG_CONS | LOG_NDELAY, LOG_DAEMON);
 
-    sigfillset(&blockset);
-    if (sigprocmask(SIG_BLOCK, &blockset, 0) < 0) {
+    sigemptyset(&blockset);
+    sigaddset(&sigact.sa_mask, SIGHUP);
+    sigaddset(&sigact.sa_mask, SIGINT);
+    sigaddset(&sigact.sa_mask, SIGTERM);
+    if (sigprocmask(SIG_BLOCK, &blockset, NULL) < 0) {
 	fprint_syslog(stderr, LOG_ERR, "cannot set SIGNAL block mask\n");
 	return (EXIT_FAILURE);
     }
 
     sigact.sa_handler = signal_handler;
     sigact.sa_flags = 0;
-    sigfillset(&sigact.sa_mask);
-    sigdelset(&sigact.sa_mask, SIGINT);
-    sigdelset(&sigact.sa_mask, SIGQUIT);
-    sigdelset(&sigact.sa_mask, SIGTERM);
+    sigemptyset(&sigact.sa_mask);
+    sigaction(SIGHUP, &sigact, NULL);
     sigaction(SIGINT, &sigact, NULL);
-    sigaction(SIGQUIT, &sigact, NULL);
     sigaction(SIGTERM, &sigact, NULL);
+    sigemptyset(&emptyset);
 
     /* set select timeout -> send periodic CAN Ping */
     ts.tv_sec = 1;
@@ -724,7 +717,7 @@ int main(int argc, char **argv) {
 
     while (do_loop) {
 	read_fds = all_fds;
-	nready = pselect(max_fds + 1, &read_fds, NULL, NULL, &ts, &sigact.sa_mask);
+	nready = pselect(max_fds + 1, &read_fds, NULL, NULL, &ts, &emptyset);
 	if (nready == 0) {
 	    /*    send_can_ping(sc); */
 	    ts.tv_sec = 1;
@@ -751,7 +744,7 @@ int main(int argc, char **argv) {
 	    if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		/* send UDP frame */
 		frame_to_net(sb, (struct sockaddr *)&baddr, (struct can_frame *)&frame);
-		print_can_frame(UDP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
+		print_can_frame(UDP_FORMAT_STRG, netframe, cs2_config_data.verbose && !background);
 		/* send CAN frame to all connected TCP clients */
 		/* TODO: need all clients the packets ? */
 		for (i = 0; i <= max_tcp_i; i++) {	/* check all clients for data */
@@ -759,7 +752,7 @@ int main(int argc, char **argv) {
 		    if (tcp_socket < 0)
 			continue;
 		    frame_to_net(tcp_socket, (struct sockaddr *)&tcp_addr, (struct can_frame *)&frame);
-		    print_can_frame(CAN_TCP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
+		    print_can_frame(CAN_TCP_FORMAT_STRG, netframe, cs2_config_data.verbose && !background);
 		}
 	    }
 	}
@@ -775,14 +768,14 @@ int main(int argc, char **argv) {
 			if (tcp_socket < 0)
 			    continue;
 			net_to_net(tcp_socket, NULL, netframe, CAN_ENCAP_SIZE);
-			print_can_frame(UDP_TCP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
+			print_can_frame(UDP_TCP_FORMAT_STRG, netframe, cs2_config_data.verbose && !background);
 		    }
 		    net_to_net(sb, (struct sockaddr *)&baddr, netframe, CAN_ENCAP_SIZE);
-		    print_can_frame(UDP_UDP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
+		    print_can_frame(UDP_UDP_FORMAT_STRG, netframe, cs2_config_data.verbose && !background);
 		} else {
 		/* send packet on CAN */
 		    ret = frame_to_can(sc, netframe);
-		    print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
+		    print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data.verbose && !background);
 		    check_data_udp(sb, (struct sockaddr *)&baddr, &cs2_config_data, netframe);
 		}
 	    }
@@ -872,12 +865,12 @@ int main(int argc, char **argv) {
 				ret = frame_to_can(sc, &netframe[i]);
 				if (!ret) {
 				    if (i > 0)
-					print_can_frame(TCP_FORMATS_STRG, &netframe[i], cs2_config_data.verbose & !background);
+					print_can_frame(TCP_FORMATS_STRG, &netframe[i], cs2_config_data.verbose && !background);
 				    else
-					print_can_frame(TCP_FORMAT_STRG, &netframe[i], cs2_config_data.verbose & !background);
+					print_can_frame(TCP_FORMAT_STRG, &netframe[i], cs2_config_data.verbose && !background);
 				}
 				net_to_net(sb, (struct sockaddr *)&baddr, netframe, CAN_ENCAP_SIZE);
-				print_can_frame(UDP_FORMAT_STRG, netframe, cs2_config_data.verbose & !background);
+				print_can_frame(UDP_FORMAT_STRG, netframe, cs2_config_data.verbose && !background);
 			    }
 			}
 		    }
