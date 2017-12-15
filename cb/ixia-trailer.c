@@ -33,10 +33,10 @@ unsigned int timespec_sub(struct timespec *a, struct timespec *b, struct timespe
 
     if (timespeccmp(a, b, <)) {
 	timersub_nano(b, a, res);
-	us = 1;
+	us = -1;
     } else {
 	timersub_nano(a, b, res);
-	us = -1;
+	us = 1;
     }
     us = us * (res->tv_sec * 1000000 + res->tv_nsec / 1000);
     return (us);
