@@ -54,15 +54,15 @@ sudo shutdown -h now
 ```
 CAN Interface konfigurieren
 ```
-ip link set can0 up type can bitrate 250000 restart-ms 100
+sudo ip link set can0 up type can bitrate 250000 restart-ms 100
 ```
 
 can2lan nutzen
 ```
 sudo apt-get install lighttpd
 # zumindest geraet.vrs unter /var/www/html/config/ anlegen:
-mkdir /var/www/html/config/
-cat << EOF > /var/www/html/config/geraet.vrs
+sudo mkdir /var/www/html/config/
+sudo cat << EOF > /var/www/html/config/geraet.vrs
 [geraet]
 version
  .minor=1
