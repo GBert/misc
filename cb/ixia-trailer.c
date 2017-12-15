@@ -33,10 +33,10 @@ unsigned int timespec_sub(struct timespec *a, struct timespec *b, struct timespe
 
     if (timespeccmp(a, b, <)) {
 	timersub_nano(b, a, res);
-	us = -1;
+	us = 1;
     } else {
 	timersub_nano(a, b, res);
-	us = 1;
+	us = -1;
     }
     us = us * (res->tv_sec * 1000000 + res->tv_nsec / 1000);
     return (us);
@@ -92,7 +92,7 @@ int main(int argc, char **argv) {
 	    memcpy(&ts2.tv_nsec, &pkt_ptr[header1.caplen - 9], 4);
 	    ts2.tv_sec = ntohl(ts2.tv_sec);
 	    ts2.tv_nsec = ntohl(ts2.tv_nsec);
-	    us = timespec_sub(&ts1, &ts2, &ts_diff);
+	    us = timespec_sub(&ts2, &ts1, &ts_diff);
 	    printf("(%ld.%09ld) - (%ld.%09ld) ->  %6d us\n", ts1.tv_sec, ts1.tv_nsec, ts2.tv_sec, ts2.tv_nsec, us);
 	} else {
 	    printf("\n");
