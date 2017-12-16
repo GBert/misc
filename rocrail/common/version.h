@@ -1,9 +1,12 @@
 const int revisionnr = 
-13223
+13226
 ;
 const char* commithash = 
-"ec850eb6cc94dd8563a8ece883a9f2728189b566";
+"59d10b97efdef5505d786830ae578983b699d1e9";
 const char* revlog = 
+"13226 2017-12-16 16:30:54 +0100 tt: set tt id for multiport type and dccpp\n" \
+"13225 2017-12-16 14:52:15 +0100 clntcon: use only one socket for the broker discovery service\n" \
+"13224 2017-12-16 14:41:29 +0100 clntcon: broker discovery use host and port at reply\n" \
 "13223 2017-12-16 08:21:52 +0100 rocweb: support for road theme sensors\n" \
 "13222 2017-12-15 17:14:20 +0100 clntcon: mqtt broker discovery service added\n" \
 "13221 2017-12-15 09:28:04 +0100 rocview shutdown fix for deadlock\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "13179 2017-12-08 11:55:09 +0100 cardlg: keyboard support added\n" \
 "13178 2017-12-08 11:29:24 +0100 keyboarddlg: put focus back after ok/cancel\n" \
 "13177 2017-12-08 09:57:09 +0100 toolbardlg: fix for print option\n" \
-"13176 2017-12-08 09:17:27 +0100 planpanel: use soft keyboard for asking item ID in case context on dclick is active\n" \
-"13175 2017-12-08 08:40:46 +0100 rocrailinidialog: keyboard support (wip)\n" \
-"13174 2017-12-07 21:15:16 +0100 connectiondialog: keyboard support added\n" \
 
 "log end";
