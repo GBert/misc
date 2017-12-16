@@ -31,7 +31,6 @@ case "$1" in
         start-stop-daemon --start --verbose --pidfile /var/run/$NAME.pid \
                 --oknodo --exec $DAEMON -- $OPTIONS
         echo "$NAME."
-	pidof can2lan > /var/run/$NAME.pid
     ;;
   stop)
         echo -n "Stopping $DESC: "

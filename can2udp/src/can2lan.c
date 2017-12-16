@@ -663,25 +663,25 @@ int main(int argc, char **argv) {
 
     /* daemonize the process if requested */
     if (background) {
-	if (daemon(0, 0) < 0) {
-	    fprintf(stderr, "Going into background failed: %s\n", strerror(errno));
-	    exit(EXIT_FAILURE);
-	}
 	/* normally only root can write PID file */
 	if (getuid() == 0) {
 	    pidfd = open(PIDFILE, O_RDWR | O_CREAT | O_EXCL | O_NOCTTY, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	    if (pidfd < 0) {
-		syslog(LOG_ERR, "Cannot open PID file %s\n", PIDFILE);
+		fprintf(stderr, "Cannot open PID file %s\n", PIDFILE);
 		exit(EXIT_FAILURE);
 	    }
-	    if (dprintf(pidfd, "%d\n", getpid()) < 0) {
-		syslog(LOG_ERR, "Cannot write to PID file %s\n", PIDFILE);
-		exit(EXIT_FAILURE);
-	    }
-	    if (close(pidfd) == -1) {
-		syslog(LOG_ERR, "Cannot close PID file %s\n", PIDFILE);
-		exit(EXIT_FAILURE);
-	    }
+	}
+	if (daemon(0, 0) < 0) {
+	    fprintf(stderr, "Going into background failed: %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
+	if (dprintf(pidfd, "%d\n", getpid()) < 0) {
+	    syslog(LOG_ERR, "Cannot write to PID file %s\n", PIDFILE);
+	    exit(EXIT_FAILURE);
+	}
+	if (close(pidfd) == -1) {
+	    syslog(LOG_ERR, "Cannot close PID file %s\n", PIDFILE);
+	    exit(EXIT_FAILURE);
 	}
     }
     setlogmask(LOG_UPTO(LOG_NOTICE));
