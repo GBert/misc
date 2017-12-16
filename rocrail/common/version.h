@@ -1,9 +1,13 @@
 const int revisionnr = 
-13218
+13222
 ;
 const char* commithash = 
-"0c9794aabeaf3b319f81590d52557e91c3d66281";
+"26a5736bbc6be3bc8af70de09c5798d7a15eaf90";
 const char* revlog = 
+"13222 2017-12-15 17:14:20 +0100 clntcon: mqtt broker discovery service added\n" \
+"13221 2017-12-15 09:28:04 +0100 rocview shutdown fix for deadlock\n" \
+"13220 2017-12-15 08:14:57 +0100 rocview shutdown fix for deadlock\n" \
+"13219 2017-12-15 08:05:37 +0100 thempropsdlg: title translation\n" \
 "13218 2017-12-14 17:29:45 +0100 wrapper: default mqtt broker port number\n" \
 "13217 2017-12-14 15:13:48 +0100 bidib: revert update messages because unknown types are used\n" \
 "13216 2017-12-14 13:41:45 +0100 bidib: messages update\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "13175 2017-12-08 08:40:46 +0100 rocrailinidialog: keyboard support (wip)\n" \
 "13174 2017-12-07 21:15:16 +0100 connectiondialog: keyboard support added\n" \
 "13173 2017-12-07 19:41:50 +0100 guiapp: fix for crash setting statis text out of event context\n" \
-"13172 2017-12-07 19:09:32 +0100 blockdialog, locdialog: reset last focus pointer on page change\n" \
-"13171 2017-12-07 17:09:40 +0100 locdialog: keyboard support (wip)\n" \
-"13170 2017-12-07 14:20:46 +0100 item: always take over the loco blockenterside on update (TEST)\n" \
-"13169 2017-12-07 13:51:37 +0100 stage: check manual signal if it should be reset\n" \
 
 "log end";
