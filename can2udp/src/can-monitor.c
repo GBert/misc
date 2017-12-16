@@ -51,7 +51,6 @@ struct knoten *messwert = NULL;
 
 unsigned char buffer[MAX_PAKETE * 8];
 
-static char *F_S_CAN_FORMAT_STRG = "S CAN  0x%08X  [%d]";
 static char *F_N_CAN_FORMAT_STRG = "  CAN  0x%08X  [%d]";
 
 uint16_t be16(uint8_t *u) {
@@ -64,7 +63,7 @@ uint32_t be32(uint8_t *u) {
 
 int insert_right(struct knoten *liste, void *element) {
     struct knoten *tmp = liste;
-    struct knoten *node = calloc(sizeof(struct knoten), 1);
+    struct knoten *node = calloc(1, sizeof(struct knoten));
     if (node == NULL) {
 	fprintf(stderr, "calloc failed in %s: %s\n", __func__, strerror(errno));
 	return -1;

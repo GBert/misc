@@ -147,7 +147,7 @@ int add_loco(struct loco_data_t *loco) {
 	if (!loco->name)
 	    return (EXIT_FAILURE);
 
-	l = (struct loco_data_t *)calloc(sizeof(struct loco_data_t), 1);
+	l = (struct loco_data_t *)calloc(1, sizeof(struct loco_data_t));
 	if (!l) {
 	    fprintf(stderr, "%s: can't calloc loco data: %s\n", __func__, strerror(errno));
 	    return (EXIT_FAILURE);
@@ -224,7 +224,7 @@ int add_track_data(struct track_data_t *td) {
 
     HASH_FIND_INT(track_data, &td->id, t);	/* id already in the hash? */
     if (t == NULL) {
-	t = (struct track_data_t *)calloc(sizeof(struct track_data_t), 1);
+	t = (struct track_data_t *)calloc(1, sizeof(struct track_data_t));
 	if (!t) {
 	    fprintf(stderr, "%s: can't calloc track data struct: %s\n", __func__, strerror(errno));
 	    return (EXIT_FAILURE);
@@ -274,7 +274,7 @@ int add_track_page(struct track_page_t *page, char *name) {
 
     HASH_FIND_INT(track_page, &page->id, t);	/* id already in the hash? */
     if (t == NULL) {
-	t = (struct track_page_t *)calloc(sizeof(struct track_page_t), 1);
+	t = (struct track_page_t *)calloc(1, sizeof(struct track_page_t));
 	if (!t) {
 	    fprintf(stderr, "%s: can't calloc track page: %s\n", __func__, strerror(errno));
 	    return (EXIT_FAILURE);
@@ -378,14 +378,14 @@ int read_track_data(char *config_file) {
 	return (EXIT_FAILURE);
     }
 
-    tp = calloc(sizeof(struct track_page_t), 1);
+    tp = calloc(1, sizeof(struct track_page_t));
     if (!tp) {
 	fprintf(stderr, "%s: can't calloc track page: %s\n", __func__, strerror(errno));
 	fclose(fp);
 	return (EXIT_FAILURE);
     }
 
-    td = calloc(sizeof(struct track_data_t), 1);
+    td = calloc(1, sizeof(struct track_data_t));
     if (!td) {
 	fprintf(stderr, "%s: can't calloc track data: %s\n", __func__, strerror(errno));
 	free(tp);
@@ -494,7 +494,7 @@ int read_track_config(char *config_file) {
 	return (EXIT_FAILURE);
     }
 
-    page = calloc(sizeof(struct track_page_t), 1);
+    page = calloc(1, sizeof(struct track_page_t));
     if (page == NULL) {
 	fprintf(stderr, "can't calloc bufer for track pages: %s\n", strerror(errno));
 	fclose(fp);
@@ -574,7 +574,7 @@ int read_loco_data(char *config_file, int config_type) {
     int l0_token_n, l1_token_n, l2_token_n, loco_complete;
     FILE *fp = NULL;
     char line[MAXSIZE];
-    char *name, *type, *icon, *sret;
+    char *name = NULL, *type =NULL, *icon = NULL, *sret = NULL;
     int16_t function, temp;
     struct loco_data_t *loco;
     struct mfxAdr_t *mfx;
@@ -592,14 +592,14 @@ int read_loco_data(char *config_file, int config_type) {
 	}
     }
 
-    loco = calloc(sizeof(struct loco_data_t), 1);
+    loco = calloc(1, sizeof(struct loco_data_t));
     if (loco == NULL) {
 	fprintf(stderr, "can't calloc buffer for loco data: %s\n", strerror(errno));
 	fclose(fp);
 	return (EXIT_FAILURE);
     }
 
-    loco->mfxAdr = calloc(sizeof(struct mfxAdr_t), 1);
+    loco->mfxAdr = calloc(1, sizeof(struct mfxAdr_t));
     if (loco->mfxAdr == NULL) {
 	fprintf(stderr, "can't calloc buffer for loco mfx data: %s\n", strerror(errno));
 	free(loco);

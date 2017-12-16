@@ -857,7 +857,7 @@ int main(int argc, char **argv) {
 			time_stamp(timestamp);
 			if (!background)
 			    fprintf(stderr, "%s received packet %% 13 : length %d - maybe close connection\n", timestamp, n);
-			    syslog(LOG_ERR, "%s: received packet %% 13 : length %d - maybe close connection\n", __func__, n);
+			syslog(LOG_ERR, "%s: received packet %% 13 : length %d - maybe close connection\n", __func__, n);
 		    } else {
 			for (i = 0; i < n; i += CAN_ENCAP_SIZE) {
 			    /* check if we need to forward the message to CAN */

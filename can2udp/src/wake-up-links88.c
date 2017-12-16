@@ -78,7 +78,7 @@ struct node {
 };
 
 struct node *insert_right(struct node *list, int id) {
-    struct node *new_node = (struct node *)calloc(sizeof(struct node), 1);
+    struct node *new_node = (struct node *)calloc(1, sizeof(struct node));
     new_node->id = id;
     new_node->next = list->next;
     list->next = new_node;
@@ -192,7 +192,7 @@ int main(int argc, char **argv) {
     to_wait.tv_sec = 0;
     to_wait.tv_nsec = SLEEPING * 1000;
 
-    links88_head = (struct node *)calloc(sizeof(struct node), 1);
+    links88_head = (struct node *)calloc(1, sizeof(struct node));
     if (links88_head == NULL) {
 	fprintf(stderr, "can't malloc LinkS88 node\n");
 	exit(EXIT_FAILURE);

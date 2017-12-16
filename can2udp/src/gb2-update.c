@@ -50,11 +50,11 @@ static char *MS2_DEFAULT_FILENAME = "050-ms2.bin";
 #define MS2_ID			0x4d
 
 struct update_config {
-    int block_size;
-    int shift;
-    int boot_blocks;
-    int padding;
-    int id;
+    unsigned int block_size;
+    unsigned int shift;
+    unsigned int boot_blocks;
+    unsigned int padding;
+    unsigned int id;
     char *filename;
 };
 

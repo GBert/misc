@@ -102,7 +102,7 @@ struct cs2_config_data_t {
     int next;
     int verbose;
     int track_index;
-    int state;
+    unsigned int state;
     int start;
     int stream;
     int cs2_tcp_socket;

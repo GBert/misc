@@ -239,9 +239,10 @@ int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_d
 	    break;
 	default:
 	    printf("index [0x%02x @ 0x%04x] length [%3d]: ", index, i, length);
-	    if (length <= 4) {
+	    if (length <= 4)
 		memcpy(&temp, loco_config->bin, length);
-	    }
+	    else
+		temp = 0;
 	    switch (index) {
 	    case 1:
 		loco_data->long_uid = temp;

@@ -364,7 +364,7 @@ int main(int argc, char **argv) {
 		canid = ntohl(canid);
 		/* answer to encapsulated CAN ping from LAN to LAN */
 		if (((canid & 0x00FF0000UL) == 0x00310000UL)
-		    && (netframe[11] = 0xEE) && (netframe[12] = 0xEE)) {
+		    && (netframe[11] == 0xEE) && (netframe[12] == 0xEE)) {
 		    if (verbose && !background)
 			printf("                received CAN ping\n");
 		    netframe[0] = 0x00;

@@ -325,7 +325,7 @@ int config_write(struct cs2_config_data_t *config_data) {
 }
 
 int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netframe) {
-    unsigned int temp;
+    unsigned int state, temp;
     unsigned char newframe[CAN_ENCAP_SIZE];
     char *filename;
     char *ptr;
@@ -376,7 +376,8 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 		    free(config_data->deflated_data);
 		*/
 		/* TODO next */
-		switch (config_data->state) {
+		state = config_data->state;
+		switch (state) {
 		case CS2_STATE_INACTIVE:
 		    break;
 		case CS2_STATE_NORMAL_CONFIG:
