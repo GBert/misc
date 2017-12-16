@@ -1,9 +1,10 @@
 const int revisionnr = 
-13222
+13223
 ;
 const char* commithash = 
-"26a5736bbc6be3bc8af70de09c5798d7a15eaf90";
+"ec850eb6cc94dd8563a8ece883a9f2728189b566";
 const char* revlog = 
+"13223 2017-12-16 08:21:52 +0100 rocweb: support for road theme sensors\n" \
 "13222 2017-12-15 17:14:20 +0100 clntcon: mqtt broker discovery service added\n" \
 "13221 2017-12-15 09:28:04 +0100 rocview shutdown fix for deadlock\n" \
 "13220 2017-12-15 08:14:57 +0100 rocview shutdown fix for deadlock\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "13176 2017-12-08 09:17:27 +0100 planpanel: use soft keyboard for asking item ID in case context on dclick is active\n" \
 "13175 2017-12-08 08:40:46 +0100 rocrailinidialog: keyboard support (wip)\n" \
 "13174 2017-12-07 21:15:16 +0100 connectiondialog: keyboard support added\n" \
-"13173 2017-12-07 19:41:50 +0100 guiapp: fix for crash setting statis text out of event context\n" \
 
 "log end";
