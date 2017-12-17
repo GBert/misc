@@ -1,9 +1,12 @@
 const int revisionnr = 
-13226
+13229
 ;
 const char* commithash = 
-"59d10b97efdef5505d786830ae578983b699d1e9";
+"9119cdeeccc015134d259fded553cb27877ea06e";
 const char* revlog = 
+"13229 2017-12-17 11:03:56 +0100 clntcon: check BROKER-GET not with equals but start with\n" \
+"13228 2017-12-17 08:39:07 +0100 dccpp: check for protocol NMRA-DCC\n" \
+"13227 2017-12-17 08:16:20 +0100 connectiondialog: always set code values to overwrite the ABC label\n" \
 "13226 2017-12-16 16:30:54 +0100 tt: set tt id for multiport type and dccpp\n" \
 "13225 2017-12-16 14:52:15 +0100 clntcon: use only one socket for the broker discovery service\n" \
 "13224 2017-12-16 14:41:29 +0100 clntcon: broker discovery use host and port at reply\n" \
@@ -51,8 +54,5 @@ const char* revlog =
 "13182 2017-12-08 16:18:32 +0100 keyboarddlg: return focus to the text field after button click\n" \
 "13181 2017-12-08 15:28:33 +0100 keyboard: DE layout support\n" \
 "13180 2017-12-08 14:56:29 +0100 keyboard: alt, ctrl and layout added\n" \
-"13179 2017-12-08 11:55:09 +0100 cardlg: keyboard support added\n" \
-"13178 2017-12-08 11:29:24 +0100 keyboarddlg: put focus back after ok/cancel\n" \
-"13177 2017-12-08 09:57:09 +0100 toolbardlg: fix for print option\n" \
 
 "log end";
