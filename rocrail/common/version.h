@@ -1,9 +1,13 @@
 const int revisionnr = 
-13229
+13233
 ;
 const char* commithash = 
-"9119cdeeccc015134d259fded553cb27877ea06e";
+"b4257a1e4a5853bbd189031d6671882e97724393";
 const char* revlog = 
+"13233 2017-12-17 15:22:11 +0100 mqtt, rocnet: auto discovery\n" \
+"13232 2017-12-17 13:20:13 +0100 guiapp: removed global pending exit flag\n" \
+"13231 2017-12-17 11:46:38 +0100 swdlg: fix for bitmapbutton in header\n" \
+"13230 2017-12-17 11:18:31 +0100 clntcon: extra trace incase broker info is send back\n" \
 "13229 2017-12-17 11:03:56 +0100 clntcon: check BROKER-GET not with equals but start with\n" \
 "13228 2017-12-17 08:39:07 +0100 dccpp: check for protocol NMRA-DCC\n" \
 "13227 2017-12-17 08:16:20 +0100 connectiondialog: always set code values to overwrite the ABC label\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "13186 2017-12-09 08:54:03 +0100 routedialog: keyboard support\n" \
 "13185 2017-12-09 08:27:08 +0100 finder: unsupported random option removed\n" \
 "13184 2017-12-08 17:07:56 +0100 keyboarddlg: keep layout (toggle)button text\n" \
-"13183 2017-12-08 16:25:32 +0100 keyboarddlg: revert set focus to the text field\n" \
-"13182 2017-12-08 16:18:32 +0100 keyboarddlg: return focus to the text field after button click\n" \
-"13181 2017-12-08 15:28:33 +0100 keyboard: DE layout support\n" \
-"13180 2017-12-08 14:56:29 +0100 keyboard: alt, ctrl and layout added\n" \
 
 "log end";
