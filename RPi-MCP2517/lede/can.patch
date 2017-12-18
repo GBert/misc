@@ -1,0 +1,31 @@
+diff --git a/package/kernel/linux/modules/can.mk b/package/kernel/linux/modules/can.mk
+index 5529fe0..f7eb84f 100644
+--- a/package/kernel/linux/modules/can.mk
++++ b/package/kernel/linux/modules/can.mk
+@@ -17,7 +17,6 @@ define KernelPackage/can
+        CONFIG_CAN_LEDS=y \
+        CONFIG_CAN_AT91=n \
+        CONFIG_CAN_TI_HECC=n \
+-       CONFIG_CAN_MCP251X=n \
+        CONFIG_CAN_BFIN=n \
+        CONFIG_CAN_JANZ_ICAN3=n \
+        CONFIG_PCH_CAN=n \
+@@ -275,3 +274,18 @@ endef
+
+ $(eval $(call KernelPackage,can-c-can-pci))
+
++define KernelPackage/can-mcp251x
++  TITLE:=MCP251x CAN Driver
++  KCONFIG:=CONFIG_CAN_MCP251X
++  FILES:=$(LINUX_DIR)/drivers/net/can/spi/mcp251x.ko
++  AUTOLOAD:=$(call AutoProbe,mcp251x)
++  $(call AddDepends/can)
++endef
++
++define KernelPackage/can-mcp251x/description
++ This driver adds support for the MCP251X connected
++ to the SPI bus.
++endef
++
++$(eval $(call KernelPackage,can-mcp251x))
++
