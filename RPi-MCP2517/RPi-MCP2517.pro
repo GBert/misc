@@ -1,4 +1,4 @@
-update=Mon 26 Jun 2017 09:52:22 AM CEST
+update=Mo 18 Dez 2017 17:55:41 CET
 version=1
 last_client=kicad
 [pcbnew]
@@ -37,7 +37,7 @@ SpiceUseNetNumbers=0
 LabSize=60
 [eeschema]
 version=1
-LibDir=
+LibDir=/home/eh2be5j/projekte/github-misc/RPi-MCP2517
 [eeschema/libraries]
 LibName1=RPi-MCP2517-rescue
 LibName2=power
@@ -73,3 +73,5 @@ LibName31=libs/mylib
 LibName32=ISO1050
 LibName33=libs/p82b715
 LibName34=rfcom
+LibName35=RPi-MCP2517-cache
+LibName36=MCP2517FD
