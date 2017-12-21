@@ -1,9 +1,35 @@
 const int revisionnr = 
-13233
+13259
 ;
 const char* commithash = 
-"b4257a1e4a5853bbd189031d6671882e97724393";
+"4ed5bce2d5ed08b3006278ae441c0b0ab541fe11";
 const char* revlog = 
+"13259 2017-12-21 14:12:54 +0100 roclcdr: replaced long with time_t to prevent win64 crash\n" \
+"13258 2017-12-20 17:42:13 +0100 bidib: typo\n" \
+"13257 2017-12-20 17:17:29 +0100 bidib: revert messages update ...\n" \
+"13256 2017-12-20 16:53:17 +0100 bidib: messages update (introduced c99 check)\n" \
+"13255 2017-12-20 11:21:09 +0100 rocnetnode: revision correction\n" \
+"13254 2017-12-20 10:41:45 +0100 rocnetnode: mqtt support (wip)\n" \
+"13253 2017-12-20 10:05:38 +0100 rocnetnode: mqtt support (wip)\n" \
+"13252 2017-12-20 09:20:47 +0100 rocnetnode: mqtt support (wip)\n" \
+"13251 2017-12-20 09:18:24 +0100 rocnet: sublibrary evaluation fix\n" \
+"13250 2017-12-19 18:03:47 +0100 mqtt: subscribe as soon as the broker connection is OK\n" \
+"13249 2017-12-19 17:27:09 +0100 rocnetnode: initialise the mqtt mutex\n" \
+"13248 2017-12-19 16:32:27 +0100 rocnet: cleanup discovery thread\n" \
+"13247 2017-12-19 16:15:57 +0100 rocnet: use the mqtt library return code to prevent draining cpu\n" \
+"13246 2017-12-19 15:41:03 +0100 mqtt: trace level corrections\n" \
+"13245 2017-12-19 15:31:57 +0100 rocnetnode: support for mqtt (WIP)\n" \
+"13244 2017-12-19 15:19:08 +0100 blockgroup: removed the pre-reserve option\n" \
+"13243 2017-12-19 14:48:37 +0100 groupingdialog: use blockdialog for selecting free blocks\n" \
+"13242 2017-12-19 11:26:25 +0100 blockgroup: reserve option extended\n" \
+"13241 2017-12-19 09:48:33 +0100 blockgroup: set loco via block in case of prereserve\n" \
+"13240 2017-12-19 08:57:02 +0100 output: param off added for light support\n" \
+"13239 2017-12-18 16:13:07 +0100 bidib: position address correction (Achim)\n" \
+"13238 2017-12-18 12:25:00 +0100 swdlg: allign corrections to save space\n" \
+"13237 2017-12-18 11:54:55 +0100 blockgroup, block: remove prereservations on lock\n" \
+"13236 2017-12-18 11:37:08 +0100 rocnet: use the original ini to add rocnetnodes\n" \
+"13235 2017-12-18 11:31:10 +0100 roclcdr: speed corrections\n" \
+"13234 2017-12-18 08:51:12 +0100 swdlg: protocol and port type added\n" \
 "13233 2017-12-17 15:22:11 +0100 mqtt, rocnet: auto discovery\n" \
 "13232 2017-12-17 13:20:13 +0100 guiapp: removed global pending exit flag\n" \
 "13231 2017-12-17 11:46:38 +0100 swdlg: fix for bitmapbutton in header\n" \
@@ -28,31 +54,5 @@ const char* revlog =
 "13212 2017-12-14 09:05:34 +0100 guiapp: removed not needed semaphore at sending server commands\n" \
 "13211 2017-12-13 15:33:22 +0100 extra traces on gui exit\n" \
 "13210 2017-12-13 14:48:39 +0100 rcon: trace corrections\n" \
-"13209 2017-12-13 14:18:27 +0100 rocnetnode: reset pi01 LEDs before shutdown/exit main\n" \
-"13208 2017-12-13 13:50:10 +0100 guiframe: removed asking shutdown all rocnet node because this is already handled in the rocnet setup\n" \
-"13207 2017-12-13 13:35:20 +0100 themepropsdlg: close handler added\n" \
-"13206 2017-12-13 11:56:47 +0100 rocweb: logo without shade\n" \
-"13205 2017-12-13 10:11:24 +0100 themepropsdlg: translations added\n" \
-"13204 2017-12-13 09:16:25 +0100 rocweb: show clock on URL parameter z=1000\n" \
-"13203 2017-12-13 08:35:07 +0100 clntcon, guiapp: switching workspace fix\n" \
-"13202 2017-12-12 11:09:29 +0100 rocview: fix for changing workspace\n" \
-"13201 2017-12-11 12:10:17 +0100 themepropsdlg: show color\n" \
-"13200 2017-12-11 11:41:12 +0100 themepropsdlg added\n" \
-"13199 2017-12-11 09:41:46 +0100 model: check actions on stop all locos\n" \
-"13198 2017-12-10 16:10:27 +0100 swdlg: gray icons\n" \
-"13197 2017-12-10 15:29:59 +0100 swdlg: layout corrections\n" \
-"13196 2017-12-10 13:51:24 +0100 swdlg: alt icons\n" \
-"13195 2017-12-10 13:13:08 +0100 swctrldlg: icon\n" \
-"13194 2017-12-10 13:01:10 +0100 keyboarddlg: removed unused control key\n" \
-"13193 2017-12-10 11:37:05 +0100 swdlg: restore position\n" \
-"13192 2017-12-10 10:47:00 +0100 swdlg: combobox for IIDs\n" \
-"13191 2017-12-10 10:27:26 +0100 swdlg: use bitmaps on buttons\n" \
-"13190 2017-12-09 18:06:17 +0100 stage: stop all locos reverted\n" \
-"13189 2017-12-09 11:17:34 +0100 rocctrl: ask before shutdown and EoD\n" \
-"13188 2017-12-09 10:51:21 +0100 dialogs: keyboard support sensor, signal, text, output, action\n" \
-"13187 2017-12-09 09:40:55 +0100 switchdialog: keyboard support\n" \
-"13186 2017-12-09 08:54:03 +0100 routedialog: keyboard support\n" \
-"13185 2017-12-09 08:27:08 +0100 finder: unsupported random option removed\n" \
-"13184 2017-12-08 17:07:56 +0100 keyboarddlg: keep layout (toggle)button text\n" \
 
 "log end";
