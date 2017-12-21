@@ -1,9 +1,10 @@
 const int revisionnr = 
-13259
+13260
 ;
 const char* commithash = 
-"4ed5bce2d5ed08b3006278ae441c0b0ab541fe11";
+"6778b9ab80c369ddb4e46ab9e50ca9bd05748abf";
 const char* revlog = 
+"13260 2017-12-21 14:59:03 +0100 action, block: eventlcid variable added\n" \
 "13259 2017-12-21 14:12:54 +0100 roclcdr: replaced long with time_t to prevent win64 crash\n" \
 "13258 2017-12-20 17:42:13 +0100 bidib: typo\n" \
 "13257 2017-12-20 17:17:29 +0100 bidib: revert messages update ...\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "13213 2017-12-14 09:25:06 +0100 guiframe: reset the option reconnect to server at open workspace\n" \
 "13212 2017-12-14 09:05:34 +0100 guiapp: removed not needed semaphore at sending server commands\n" \
 "13211 2017-12-13 15:33:22 +0100 extra traces on gui exit\n" \
-"13210 2017-12-13 14:48:39 +0100 rcon: trace corrections\n" \
 
 "log end";
