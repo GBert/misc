@@ -347,7 +347,7 @@ static int slcan_command(void) {
 	dlc = get_nibbles(1);
 	break;
     case 'S':
-	c = ring_read_ch(&input_ring, NULL);
+	c = get_nibbles(1);
 	can_speed(c);
 	send = false;
 	break;
