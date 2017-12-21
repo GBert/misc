@@ -14,7 +14,7 @@
 /* use 10ms delay between two consequences CAN frames */
 #define TIME_WAIT_US	10 * 1000
 /* a shorter break for updates */
-#define TIME_WAIT_US_SH	5 * 1000
+#define TIME_WAIT_US_SH	2 * 1000
 
 /* CHUNK is the size of the memory chunk used by the zlib routines. */
 #define CHUNK		0x8000
