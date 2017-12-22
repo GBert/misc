@@ -1,9 +1,13 @@
 const int revisionnr = 
-13260
+13264
 ;
 const char* commithash = 
-"6778b9ab80c369ddb4e46ab9e50ca9bd05748abf";
+"c65db7a1a553c1a434a012bab772090a2c71af10";
 const char* revlog = 
+"13264 2017-12-22 09:04:47 +0100 block: fifoin action state added\n" \
+"13263 2017-12-22 08:45:03 +0100 block, text, action: eventlcid variable support\n" \
+"13262 2017-12-22 08:44:02 +0100 actionsctrldlg: crash fix at add\n" \
+"13261 2017-12-21 20:05:48 +0100 blockgroupingdlg: translation correction\n" \
 "13260 2017-12-21 14:59:03 +0100 action, block: eventlcid variable added\n" \
 "13259 2017-12-21 14:12:54 +0100 roclcdr: replaced long with time_t to prevent win64 crash\n" \
 "13258 2017-12-20 17:42:13 +0100 bidib: typo\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "13217 2017-12-14 15:13:48 +0100 bidib: revert update messages because unknown types are used\n" \
 "13216 2017-12-14 13:41:45 +0100 bidib: messages update\n" \
 "13215 2017-12-14 12:09:07 +0100 tt: set id in switch commands for dccpp support\n" \
-"13214 2017-12-14 11:19:41 +0100 rocview shutdown fix for deadlock\n" \
-"13213 2017-12-14 09:25:06 +0100 guiframe: reset the option reconnect to server at open workspace\n" \
-"13212 2017-12-14 09:05:34 +0100 guiapp: removed not needed semaphore at sending server commands\n" \
-"13211 2017-12-13 15:33:22 +0100 extra traces on gui exit\n" \
 
 "log end";
