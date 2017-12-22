@@ -1,9 +1,11 @@
 const int revisionnr = 
-13264
+13266
 ;
 const char* commithash = 
-"c65db7a1a553c1a434a012bab772090a2c71af10";
+"a7196666a82d3bc118b331e8d7feae71f8c02d7d";
 const char* revlog = 
+"13266 2017-12-22 12:33:04 +0100 block: fifoin for first car too\n" \
+"13265 2017-12-22 11:17:41 +0100 route, signal: fix for atfree commands in manual mode\n" \
 "13264 2017-12-22 09:04:47 +0100 block: fifoin action state added\n" \
 "13263 2017-12-22 08:45:03 +0100 block, text, action: eventlcid variable support\n" \
 "13262 2017-12-22 08:44:02 +0100 actionsctrldlg: crash fix at add\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "13219 2017-12-15 08:05:37 +0100 thempropsdlg: title translation\n" \
 "13218 2017-12-14 17:29:45 +0100 wrapper: default mqtt broker port number\n" \
 "13217 2017-12-14 15:13:48 +0100 bidib: revert update messages because unknown types are used\n" \
-"13216 2017-12-14 13:41:45 +0100 bidib: messages update\n" \
-"13215 2017-12-14 12:09:07 +0100 tt: set id in switch commands for dccpp support\n" \
 
 "log end";
