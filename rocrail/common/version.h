@@ -1,9 +1,16 @@
 const int revisionnr = 
-13266
+13273
 ;
 const char* commithash = 
-"a7196666a82d3bc118b331e8d7feae71f8c02d7d";
+"a8c9169086e45046ef991abfcb3b76349e63963f";
 const char* revlog = 
+"13273 2017-12-23 16:24:21 +0100 loc: trace level correction for checking function events\n" \
+"13272 2017-12-23 15:47:59 +0100 actionsctrldlg: minimal index list height\n" \
+"13271 2017-12-23 15:37:41 +0100 keyboarddlg: capture enter from text field to exit dialog with ok\n" \
+"13270 2017-12-23 14:05:10 +0100 location: check first if a block in the location is already reserved before looking up the first free block available\n" \
+"13269 2017-12-23 11:57:18 +0100 action: clone the action control node before starting the timed therad\n" \
+"13268 2017-12-23 11:36:27 +0100 action: check for global shutdown and or quit flag\n" \
+"13267 2017-12-23 10:07:59 +0100 rocview: app exit minor change to prevent using trace and connection after disconnect\n" \
 "13266 2017-12-22 12:33:04 +0100 block: fifoin for first car too\n" \
 "13265 2017-12-22 11:17:41 +0100 route, signal: fix for atfree commands in manual mode\n" \
 "13264 2017-12-22 09:04:47 +0100 block: fifoin action state added\n" \
@@ -47,12 +54,5 @@ const char* revlog =
 "13226 2017-12-16 16:30:54 +0100 tt: set tt id for multiport type and dccpp\n" \
 "13225 2017-12-16 14:52:15 +0100 clntcon: use only one socket for the broker discovery service\n" \
 "13224 2017-12-16 14:41:29 +0100 clntcon: broker discovery use host and port at reply\n" \
-"13223 2017-12-16 08:21:52 +0100 rocweb: support for road theme sensors\n" \
-"13222 2017-12-15 17:14:20 +0100 clntcon: mqtt broker discovery service added\n" \
-"13221 2017-12-15 09:28:04 +0100 rocview shutdown fix for deadlock\n" \
-"13220 2017-12-15 08:14:57 +0100 rocview shutdown fix for deadlock\n" \
-"13219 2017-12-15 08:05:37 +0100 thempropsdlg: title translation\n" \
-"13218 2017-12-14 17:29:45 +0100 wrapper: default mqtt broker port number\n" \
-"13217 2017-12-14 15:13:48 +0100 bidib: revert update messages because unknown types are used\n" \
 
 "log end";
