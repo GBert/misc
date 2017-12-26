@@ -60,8 +60,7 @@ uint16_t generateHash(uint32_t uid) {
     lowword = uid & 0xFFFF;
     hash = highword ^ lowword;
     hash = ((hash << 3) & 0xFF00) | (hash & 0x7F);
-    hash = hash | 0x0300;
-    return hash;
+    return hash | 0x0300;
 }
 
 uint16_t generateLocId(uint16_t prot, uint16_t adrs) {
