@@ -110,11 +110,11 @@ pio-i2c-udp: pio-i2c-udp.o
 read_lococard: read_lococard.o
 	$(CC) $(CFLAGS) -o read_lococard read_lococard.o
 
-s88udp-bpi: allwinner.o s88udp-bpi.o
-	$(CC) $(CFLAGS) -o s88udp-bpi allwinner.o s88udp-bpi.o
+s88udp-bpi: allwinner.o s88udp-bpi.o mcan.o
+	$(CC) $(CFLAGS) -o s88udp-bpi allwinner.o mcan.o s88udp-bpi.o
 
 s88udp-rpi: raspi.o s88udp-rpi.o
-	$(CC) $(CFLAGS) -o s88udp-rpi raspi.o s88udp-rpi.o
+	$(CC) $(CFLAGS) -o s88udp-rpi mcan.o raspi.o s88udp-rpi.o
 
 s88test-bpi: allwinner.o s88test-bpi.o
 	$(CC) $(CFLAGS) -o s88test-bpi allwinner.o s88test-bpi.o
