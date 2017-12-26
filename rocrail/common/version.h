@@ -1,9 +1,19 @@
 const int revisionnr = 
-13273
+13283
 ;
 const char* commithash = 
-"a8c9169086e45046ef991abfcb3b76349e63963f";
+"2761d37ac19d8304d80313078c4881a8bbee97ca";
 const char* revlog = 
+"13283 2017-12-26 08:16:27 +0100 switch, signal: sod flag added\n" \
+"13282 2017-12-25 12:10:05 +0100 node-red: update\n" \
+"13281 2017-12-25 08:37:47 +0100 node-red: rcp send exceptions also to the info output\n" \
+"13280 2017-12-24 17:21:32 +0100 stage: fix for evaluating the stopspeedtolastsection option\n" \
+"13279 2017-12-24 16:53:43 +0100 node-red: fix for getting the node reference\n" \
+"13278 2017-12-24 15:44:39 +0100 mqtt: fix for stack overflow\n" \
+"13277 2017-12-24 15:09:50 +0100 rnmqtt: check if the keep alive timer > 0\n" \
+"13276 2017-12-24 14:46:30 +0100 node-red: rcp node with 2 outputs for exceptions and info\n" \
+"13275 2017-12-24 14:27:07 +0100 node-red: evaluate rcp node\n" \
+"13274 2017-12-24 14:07:31 +0100 node-red: command node (wip)\n" \
 "13273 2017-12-23 16:24:21 +0100 loc: trace level correction for checking function events\n" \
 "13272 2017-12-23 15:47:59 +0100 actionsctrldlg: minimal index list height\n" \
 "13271 2017-12-23 15:37:41 +0100 keyboarddlg: capture enter from text field to exit dialog with ok\n" \
@@ -44,15 +54,5 @@ const char* revlog =
 "13236 2017-12-18 11:37:08 +0100 rocnet: use the original ini to add rocnetnodes\n" \
 "13235 2017-12-18 11:31:10 +0100 roclcdr: speed corrections\n" \
 "13234 2017-12-18 08:51:12 +0100 swdlg: protocol and port type added\n" \
-"13233 2017-12-17 15:22:11 +0100 mqtt, rocnet: auto discovery\n" \
-"13232 2017-12-17 13:20:13 +0100 guiapp: removed global pending exit flag\n" \
-"13231 2017-12-17 11:46:38 +0100 swdlg: fix for bitmapbutton in header\n" \
-"13230 2017-12-17 11:18:31 +0100 clntcon: extra trace incase broker info is send back\n" \
-"13229 2017-12-17 11:03:56 +0100 clntcon: check BROKER-GET not with equals but start with\n" \
-"13228 2017-12-17 08:39:07 +0100 dccpp: check for protocol NMRA-DCC\n" \
-"13227 2017-12-17 08:16:20 +0100 connectiondialog: always set code values to overwrite the ABC label\n" \
-"13226 2017-12-16 16:30:54 +0100 tt: set tt id for multiport type and dccpp\n" \
-"13225 2017-12-16 14:52:15 +0100 clntcon: use only one socket for the broker discovery service\n" \
-"13224 2017-12-16 14:41:29 +0100 clntcon: broker discovery use host and port at reply\n" \
 
 "log end";
