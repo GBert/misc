@@ -1,9 +1,21 @@
 const int revisionnr = 
-13283
+13295
 ;
 const char* commithash = 
-"2761d37ac19d8304d80313078c4881a8bbee97ca";
+"8b357ce741b23a32b3beccfcc92516c574cf1ec4";
 const char* revlog = 
+"13295 2017-12-27 20:07:00 +0100 initialize: trace level correction\n" \
+"13294 2017-12-27 19:19:51 +0100 routedialog: crash fix\n" \
+"13293 2017-12-27 16:58:50 +0100 roclcdr: get state name function added for tracing\n" \
+"13292 2017-12-27 11:47:16 +0100 rocview makefile: -Wno-deprecated-declarations\n" \
+"13291 2017-12-27 10:37:35 +0100 loconet: railcom dyn messages support added\n" \
+"13290 2017-12-27 10:22:36 +0100 z21: railcom dyn messages support added\n" \
+"13289 2017-12-27 09:41:27 +0100 http: prevent deadlock in the rocwweb broadcast service\n" \
+"13288 2017-12-27 09:18:17 +0100 rocview: replaced setstringselection with setvalue in comboboxes to be case sensitive (wx work-around)\n" \
+"13287 2017-12-26 22:03:56 +0100 blockdialog: wx work-around for setting signal IDs\n" \
+"13286 2017-12-26 16:02:42 +0100 block: correction of the depart fifo flag\n" \
+"13285 2017-12-26 10:56:33 +0100 moved node-red to its own repository\n" \
+"13284 2017-12-26 09:45:32 +0100 blockgroup: check the conditions too on isFree at destination selection\n" \
 "13283 2017-12-26 08:16:27 +0100 switch, signal: sod flag added\n" \
 "13282 2017-12-25 12:10:05 +0100 node-red: update\n" \
 "13281 2017-12-25 08:37:47 +0100 node-red: rcp send exceptions also to the info output\n" \
@@ -42,17 +54,5 @@ const char* revlog =
 "13248 2017-12-19 16:32:27 +0100 rocnet: cleanup discovery thread\n" \
 "13247 2017-12-19 16:15:57 +0100 rocnet: use the mqtt library return code to prevent draining cpu\n" \
 "13246 2017-12-19 15:41:03 +0100 mqtt: trace level corrections\n" \
-"13245 2017-12-19 15:31:57 +0100 rocnetnode: support for mqtt (WIP)\n" \
-"13244 2017-12-19 15:19:08 +0100 blockgroup: removed the pre-reserve option\n" \
-"13243 2017-12-19 14:48:37 +0100 groupingdialog: use blockdialog for selecting free blocks\n" \
-"13242 2017-12-19 11:26:25 +0100 blockgroup: reserve option extended\n" \
-"13241 2017-12-19 09:48:33 +0100 blockgroup: set loco via block in case of prereserve\n" \
-"13240 2017-12-19 08:57:02 +0100 output: param off added for light support\n" \
-"13239 2017-12-18 16:13:07 +0100 bidib: position address correction (Achim)\n" \
-"13238 2017-12-18 12:25:00 +0100 swdlg: allign corrections to save space\n" \
-"13237 2017-12-18 11:54:55 +0100 blockgroup, block: remove prereservations on lock\n" \
-"13236 2017-12-18 11:37:08 +0100 rocnet: use the original ini to add rocnetnodes\n" \
-"13235 2017-12-18 11:31:10 +0100 roclcdr: speed corrections\n" \
-"13234 2017-12-18 08:51:12 +0100 swdlg: protocol and port type added\n" \
 
 "log end";
