@@ -1,9 +1,10 @@
 const int revisionnr = 
-13298
+13299
 ;
 const char* commithash = 
-"6e10517b7960ee77d53f4bb006a3bcd8e630457d";
+"745dc54cf2dbd6fcd445286f36d5241bcff09c54";
 const char* revlog = 
+"13299 2017-12-28 13:59:50 +0100 block, signal: trace level corrections\n" \
 "13298 2017-12-28 11:32:57 +0100 block: remove fifo flags from reset trigs\n" \
 "13297 2017-12-28 11:14:20 +0100 block: fifoDepart function added to be able to stop the follower at IN\n" \
 "13296 2017-12-28 08:43:26 +0100 http: wait for post instead of poll for it to save CPU resources\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "13252 2017-12-20 09:20:47 +0100 rocnetnode: mqtt support (wip)\n" \
 "13251 2017-12-20 09:18:24 +0100 rocnet: sublibrary evaluation fix\n" \
 "13250 2017-12-19 18:03:47 +0100 mqtt: subscribe as soon as the broker connection is OK\n" \
-"13249 2017-12-19 17:27:09 +0100 rocnetnode: initialise the mqtt mutex\n" \
 
 "log end";
