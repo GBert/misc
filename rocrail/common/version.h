@@ -1,9 +1,10 @@
 const int revisionnr = 
-13295
+13296
 ;
 const char* commithash = 
-"8b357ce741b23a32b3beccfcc92516c574cf1ec4";
+"876b56f1b2f1554c79d7e5ec71cca2f91eae418e";
 const char* revlog = 
+"13296 2017-12-28 08:43:26 +0100 http: wait for post instead of poll for it to save CPU resources\n" \
 "13295 2017-12-27 20:07:00 +0100 initialize: trace level correction\n" \
 "13294 2017-12-27 19:19:51 +0100 routedialog: crash fix\n" \
 "13293 2017-12-27 16:58:50 +0100 roclcdr: get state name function added for tracing\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "13249 2017-12-19 17:27:09 +0100 rocnetnode: initialise the mqtt mutex\n" \
 "13248 2017-12-19 16:32:27 +0100 rocnet: cleanup discovery thread\n" \
 "13247 2017-12-19 16:15:57 +0100 rocnet: use the mqtt library return code to prevent draining cpu\n" \
-"13246 2017-12-19 15:41:03 +0100 mqtt: trace level corrections\n" \
 
 "log end";
