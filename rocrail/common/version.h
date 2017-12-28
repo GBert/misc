@@ -1,9 +1,10 @@
 const int revisionnr = 
-13301
+13302
 ;
 const char* commithash = 
-"6d3c99061fccbe868a5c2e6b4777c4544d368c5c";
+"ba8e846ca9743d62f96490b49f73becee6d1c347";
 const char* revlog = 
+"13302 2017-12-28 19:03:07 +0100 actionsctrldlg: revert replace setstringselection\n" \
 "13301 2017-12-28 15:42:34 +0100 loconet: dyn correction\n" \
 "13300 2017-12-28 15:40:25 +0100 z21: correction for qos\n" \
 "13299 2017-12-28 13:59:50 +0100 block, signal: trace level corrections\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "13255 2017-12-20 11:21:09 +0100 rocnetnode: revision correction\n" \
 "13254 2017-12-20 10:41:45 +0100 rocnetnode: mqtt support (wip)\n" \
 "13253 2017-12-20 10:05:38 +0100 rocnetnode: mqtt support (wip)\n" \
-"13252 2017-12-20 09:20:47 +0100 rocnetnode: mqtt support (wip)\n" \
 
 "log end";
