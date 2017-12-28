@@ -53,8 +53,8 @@ uint16_t CRCCCITT(uint8_t * data, size_t length, uint16_t seed);
 unsigned int led_period;
 pthread_mutex_t lock;
 
-unsigned char GET_MS2_LOCO_NAMES[]    = { 0x6c, 0x6f, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x6e };	/* loknamen */
-unsigned char GET_MS2_CONFIG_LOCO_I[] = { 0x6c, 0x6f, 0x6b, 0x69, 0x6e, 0x66, 0x6f, 0x00 };	/* lokinfo  */
+static unsigned char GET_MS2_LOCO_NAMES[]    = { 0x6c, 0x6f, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x6e };	/* loknamen */
+static unsigned char GET_MS2_CONFIG_LOCO_I[] = { 0x6c, 0x6f, 0x6b, 0x69, 0x6e, 0x66, 0x6f, 0x00 };	/* lokinfo  */
 
 static char *T_CAN_FORMAT_STRG = "   -> CAN     0x%08X   [%d]";
 static char *F_CAN_FORMAT_STRG = "      CAN ->  0x%08X   [%d]";
@@ -164,24 +164,24 @@ int send_can_frame(int can_socket, struct can_frame *frame, int verbose) {
 int get_ms2_loco_names(struct trigger_t *trigger, uint8_t start, int8_t end) {
     struct can_frame frame;
 
-    memset(&frame, 0, sizeof(frame));
+    if ((start > 99) || (end > 99))
+	return (EXIT_FAILURE);
 
+    memset(&frame, 0, sizeof(frame));
     /* get Config Data */
     frame.can_id = 0x00400300;
-
     /* first frame */
     frame.can_dlc = 8;
     memcpy(frame.data, GET_MS2_LOCO_NAMES, sizeof(frame.data));
     if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
-	return (-1);
+	return (EXIT_FAILURE);
 
     /* second frame */
     memset(frame.data, 0, sizeof(frame.data));
-    frame.data[0] = start + '0';
-    frame.data[1] = ' ';
-    frame.data[2] = end + '0';
+    snprintf((char *)frame.data, sizeof(frame.data), "%d %d", start, end);
+
     if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
-	return (-1);
+	return (EXIT_FAILURE);
     return 0;
 }
 
@@ -203,17 +203,17 @@ int get_ms2_locoinfo(struct trigger_t *trigger, char *loco_name) {
     frame.can_dlc = 8;
     memcpy(frame.data, GET_MS2_CONFIG_LOCO_I, sizeof(frame.data));
     if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
-	return (-1);
+	return (EXIT_FAILURE);
     memset(frame.data, 0, 8);
     strncpy((char *)frame.data, loco_name, 8);
     if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
-	return (-1);
+	return (EXIT_FAILURE);
 
     memset(frame.data, 0, 8);
     if (strnlen(loco_name, 16) > 8)
 	strncpy((char *)frame.data, &loco_name[8], 8);
     if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
-	return (-1);
+	return (EXIT_FAILURE);
     return 0;
 }
 
@@ -265,7 +265,7 @@ int gpio_direction(int pin, int dir) {
     fd = open(path, O_WRONLY);
     if (fd < 0) {
 	fprintf(stderr, "%s: Failed to open gpio direction for writing: %s\n", __func__, strerror(errno));
-	return (-1);
+	return (EXIT_FAILURE);
     }
 
     if (dir)
@@ -275,7 +275,7 @@ int gpio_direction(int pin, int dir) {
 
     if (ret == -1) {
 	fprintf(stderr, "%s: Failed to set direction: %s\n", __func__, strerror(errno));
-	return (-1);
+	return (EXIT_FAILURE);
     }
 
     close(fd);
@@ -616,8 +616,8 @@ int main(int argc, char **argv) {
 		    break;
 		case 0x42:
 		    get_data(&trigger_data, &frame);
-		    /* if (trigger_data.verbose)
-		       print_can_frame(F_CAN_FORMAT_STRG, &frame); */
+		    if (trigger_data.verbose)
+			print_can_frame(F_CAN_FORMAT_STRG, &frame);
 		    break;
 		default:
 		    if (trigger_data.verbose)
@@ -655,5 +655,5 @@ int main(int argc, char **argv) {
 	pthread_join(pth, (void *)&trigger_data);
 	pthread_mutex_unlock(&lock);
     }
-    return 0;
+    return (EXIT_SUCCESS);
 }
