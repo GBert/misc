@@ -1,9 +1,11 @@
 const int revisionnr = 
-13296
+13298
 ;
 const char* commithash = 
-"876b56f1b2f1554c79d7e5ec71cca2f91eae418e";
+"6e10517b7960ee77d53f4bb006a3bcd8e630457d";
 const char* revlog = 
+"13298 2017-12-28 11:32:57 +0100 block: remove fifo flags from reset trigs\n" \
+"13297 2017-12-28 11:14:20 +0100 block: fifoDepart function added to be able to stop the follower at IN\n" \
 "13296 2017-12-28 08:43:26 +0100 http: wait for post instead of poll for it to save CPU resources\n" \
 "13295 2017-12-27 20:07:00 +0100 initialize: trace level correction\n" \
 "13294 2017-12-27 19:19:51 +0100 routedialog: crash fix\n" \
@@ -52,7 +54,5 @@ const char* revlog =
 "13251 2017-12-20 09:18:24 +0100 rocnet: sublibrary evaluation fix\n" \
 "13250 2017-12-19 18:03:47 +0100 mqtt: subscribe as soon as the broker connection is OK\n" \
 "13249 2017-12-19 17:27:09 +0100 rocnetnode: initialise the mqtt mutex\n" \
-"13248 2017-12-19 16:32:27 +0100 rocnet: cleanup discovery thread\n" \
-"13247 2017-12-19 16:15:57 +0100 rocnet: use the mqtt library return code to prevent draining cpu\n" \
 
 "log end";
