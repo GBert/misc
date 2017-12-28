@@ -22,7 +22,7 @@ define Package/can2udp
 endef
 
 define Package/can2udp/description
-  can2udp bridges CAN frames to UDP and vice versa
+  can2udp/can2lan bridge CAN frames to UDP/UDP&TCP and vice versa
 endef
 
 define Build/Prepare

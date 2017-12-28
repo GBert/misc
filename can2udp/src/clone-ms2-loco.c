@@ -164,12 +164,12 @@ int send_can_frame(int can_socket, struct can_frame *frame, int verbose) {
 int get_ms2_loco_names(struct trigger_t *trigger, uint8_t start, int8_t end) {
     struct can_frame frame;
 
+    memset(&frame, 0, sizeof(frame));
     if ((start > 99) || (end > 99))
 	return (EXIT_FAILURE);
-
-    memset(&frame, 0, sizeof(frame));
     /* get Config Data */
     frame.can_id = 0x00400300;
+
     /* first frame */
     frame.can_dlc = 8;
     memcpy(frame.data, GET_MS2_LOCO_NAMES, sizeof(frame.data));
@@ -204,6 +204,7 @@ int get_ms2_locoinfo(struct trigger_t *trigger, char *loco_name) {
     memcpy(frame.data, GET_MS2_CONFIG_LOCO_I, sizeof(frame.data));
     if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
 	return (EXIT_FAILURE);
+
     memset(frame.data, 0, 8);
     strncpy((char *)frame.data, loco_name, 8);
     if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
