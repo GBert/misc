@@ -14,6 +14,8 @@ start() {
 	# sleep 10
 
 	[ -e /www/config/ ] && {
+		# we don't care about existing PID
+		rm -f /var/run/can2lan.pid
 		# for WLAN
 		# can2lan -m -c /www/config -b wlan0
 		# for LAN
