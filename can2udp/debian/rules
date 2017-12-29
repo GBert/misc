@@ -9,7 +9,7 @@ override_dh_auto_clean:
 	dh_clean
 
 override_dh_auto_build:
-	cd src; make can2lan can2serial lan-schnitte can-monitor cs2ping gb2-update pio-i2c-udp s88udp-rpi s88udp-bpi
+	cd src; CPPFLAGS=-DSUNXI_A20 make can2lan can2serial lan-schnitte can-monitor cs2ping gb2-update pio-i2c-udp s88udp-rpi s88udp-bpi
 
 override_dh_auto_install:
 	cp src/can2lan $$(pwd)/debian/can2lan/usr/sbin
