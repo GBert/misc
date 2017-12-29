@@ -117,7 +117,7 @@ struct loco_data_t {
     unsigned int spm;
     unsigned int ft;
     unsigned int mfxtype;
-    struct loco_func function[16];
+    struct loco_func function[32];
     struct mfxAdr_t *mfxAdr;
     UT_hash_handle hh;
 };
