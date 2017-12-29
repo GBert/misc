@@ -1,9 +1,18 @@
 const int revisionnr = 
-13302
+13311
 ;
 const char* commithash = 
-"ba8e846ca9743d62f96490b49f73becee6d1c347";
+"b35060b19e608dc4e60f724b86a51f35b7bede7a";
 const char* revlog = 
+"13311 2017-12-29 16:56:31 +0100 replaced internal cargo type person with local\n" \
+"13310 2017-12-29 15:22:18 +0100 z21, loconet: fix for kmh/qos values > 127\n" \
+"13309 2017-12-29 13:54:31 +0100 translation merge: sl, pt_BT, de, sr_latin, nl\n" \
+"13308 2017-12-29 13:42:32 +0100 messages: removed unused 'person' translation\n" \
+"13307 2017-12-29 12:16:58 +0100 block: added missing post mutex in case virtual block could not unlock slave block (Achim)\n" \
+"13306 2017-12-29 11:39:57 +0100 z21: removed test code for qos\n" \
+"13305 2017-12-29 11:38:59 +0100 z21, locnet: crash fix for evaluating multi sense QosQ\n" \
+"13304 2017-12-29 11:04:29 +0100 textdialog: fix for updating color buttons\n" \
+"13303 2017-12-29 08:15:37 +0100 renamed loconet railcom specs file\n" \
 "13302 2017-12-28 19:03:07 +0100 actionsctrldlg: revert replace setstringselection\n" \
 "13301 2017-12-28 15:42:34 +0100 loconet: dyn correction\n" \
 "13300 2017-12-28 15:40:25 +0100 z21: correction for qos\n" \
@@ -45,14 +54,5 @@ const char* revlog =
 "13264 2017-12-22 09:04:47 +0100 block: fifoin action state added\n" \
 "13263 2017-12-22 08:45:03 +0100 block, text, action: eventlcid variable support\n" \
 "13262 2017-12-22 08:44:02 +0100 actionsctrldlg: crash fix at add\n" \
-"13261 2017-12-21 20:05:48 +0100 blockgroupingdlg: translation correction\n" \
-"13260 2017-12-21 14:59:03 +0100 action, block: eventlcid variable added\n" \
-"13259 2017-12-21 14:12:54 +0100 roclcdr: replaced long with time_t to prevent win64 crash\n" \
-"13258 2017-12-20 17:42:13 +0100 bidib: typo\n" \
-"13257 2017-12-20 17:17:29 +0100 bidib: revert messages update ...\n" \
-"13256 2017-12-20 16:53:17 +0100 bidib: messages update (introduced c99 check)\n" \
-"13255 2017-12-20 11:21:09 +0100 rocnetnode: revision correction\n" \
-"13254 2017-12-20 10:41:45 +0100 rocnetnode: mqtt support (wip)\n" \
-"13253 2017-12-20 10:05:38 +0100 rocnetnode: mqtt support (wip)\n" \
 
 "log end";
