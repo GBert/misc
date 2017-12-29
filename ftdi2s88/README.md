@@ -12,6 +12,3 @@ so it dosn't need much CPU cycles.
 
 The programm sends M\*rklin S88 events on UDP port 15731 (broadcast).
 The datagrams are encapsulated CAN-Frames.
-
-Plan:
-- debouncing
