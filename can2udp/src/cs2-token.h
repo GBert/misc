@@ -7,8 +7,8 @@
  * ----------------------------------------------------------------------------
  */
 
-#ifndef _CS2_TOKEN_H
-#define _CS2_TOKEN_H
+#ifndef _CS2_TOKEN_H_
+#define _CS2_TOKEN_H_
 
 enum {
     L00_TRACK_PAGE = 0,
@@ -54,6 +54,7 @@ const char *l0_token [] = {
 enum {
     L1_FUNCTION = 0,
     L1_FCT,
+    L1_MFXADR,
     L1_MAJOR,
     L1_MINOR,
     L1_ID,
@@ -94,6 +95,7 @@ enum {
 const char *l1_token [] = {
     " .funktionen",
     " .fkt",
+    " .mfxAdr",
     " .major=",
     " .minor=",
     " .id=",
@@ -303,7 +305,7 @@ lok
 ..typ=32
 .mfxAdr
 ..target=2
-..name=3
+..name3
 ..addr=136
 ..xcel=78
 ..speedtable=79
@@ -325,7 +327,7 @@ enum {
     L2_SPEEDTABLE,
     L2_VOLUME,
     L2_NUMFUNCTION,
-    L2_FUNKTION
+    L2_FUNCTION
 };
     
 const char *l2_token [] = {
@@ -334,12 +336,12 @@ const char *l2_token [] = {
     " ..dauer=",
     " ..wert=",
     " ..target=",
-    " ..name=",
+    " ..name",
     " ..addr=",
     " ..xcel=",
     " ..speedtable=",
     " ..volume=",
-    " ..numfunct=",
+    " ..numfunc=",
     " ..func=",
     "\0"
 };
@@ -350,11 +352,12 @@ const char *l2_token [] = {
 #define L2_TYPE_LENGTH		7
 #define L2_VALUE_LENGTH		8
 #define L2_TARGET_LENGTH	10
-#define L2_NAME_LENGTH		8
+#define L2_NAME_LENGTH		7
 #define L2_ADDRESS_LENGTH	8
+#define L2_XCEL_LENGTH		8
 #define L2_SPEEDTABLE_LENGTH	14
 #define L2_VOLUME_LENGTH	10
-#define L2_NUMFUNCTION_LENGTH	10
+#define L2_NUMFUNCTION_LENGTH	11
 #define L2_FUNCTION_LENGTH	8
 
 #endif /* _CS2_TOKEN_H_ */

@@ -66,13 +66,13 @@ struct loco_func {
  
 struct mfxAdr_t {
     unsigned int target;
-    char *name;
+    unsigned int name;
     unsigned int address;
     unsigned int xcel;
     unsigned int speedtable;
     unsigned int volume;
-    unsigned int numfunc;
-    unsigned int funcy;
+    unsigned int numfunction;
+    unsigned int function;
 };
 
 struct loco_config_t {

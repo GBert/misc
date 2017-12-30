@@ -575,11 +575,12 @@ int read_loco_data(char *config_file, int config_type) {
     FILE *fp = NULL;
     char line[MAXSIZE];
     char *name = NULL, *type =NULL, *icon = NULL, *sret = NULL;
-    int16_t function, temp;
+    int16_t function, temp, mfx_data;
     struct loco_data_t *loco;
     struct mfxAdr_t *mfx;
 
     function = -1;
+    mfx_data = -1;
     temp = -1;
 
     /* trigger for new entry */
@@ -655,8 +656,14 @@ int read_loco_data(char *config_file, int config_type) {
 	    l1_token_n = get_char_index(l1_token, line);
 	    switch (l1_token_n) {
 	    case L1_FCT:
+		mfx_data = -1;
 		function++;
+		break;
 	    case L1_FUNCTION:
+		mfx_data = -1;
+		break;
+	    case L1_MFXADR:
+		mfx_data = 0;
 		break;
 	    case L1_ID:
 		loco->id = strtoul(&line[L1_ID_LENGTH], NULL, 10);
@@ -689,6 +696,7 @@ int read_loco_data(char *config_file, int config_type) {
 	    case L1_NAME:
 		if (asprintf(&name, "%s", &line[L1_NAME_LENGTH]) < 0)
 		    fprintf(stderr, "can't alloc memory for loco->name: %s\n", __func__);
+		function = -1;
 		loco->name = name;
 		debug_print("match name:      >%s<\n", loco->name);
 		break;
@@ -771,7 +779,10 @@ int read_loco_data(char *config_file, int config_type) {
 	    /* Level 2 */
 	} else {
 	    l2_token_n = get_char_index(l2_token, line);
+	    if (mfx_data >= 0)
+		    debug_print(" mfx data");
 	    switch (l2_token_n) {
+	    /* function token */
 	    case L2_NUMBER:
 		function = strtoul(&line[L2_NUMBER_LENGTH], NULL, 10) & 0x1f;
 		break;
@@ -794,6 +805,55 @@ int read_loco_data(char *config_file, int config_type) {
 		    temp = strtoul(&line[L2_VALUE_LENGTH], NULL, 10);
 		    loco->function[function].value = temp;
 		    debug_print(" loco function %2d value %d\n", function, temp);
+		}
+		break;
+	    /* mfxAdr token */
+	    case L2_TARGET:
+		if (mfx_data >= 0) {
+		    loco->mfxAdr->target = strtoul(&line[L2_TARGET_LENGTH], NULL, 10);
+		    debug_print(" mfxAdr target %d\n", loco->mfxAdr->target);
+		}
+		break;
+	    case L2_NAME:
+		if (mfx_data >= 0) {
+		    loco->mfxAdr->name = strtoul(&line[L2_NAME_LENGTH], NULL, 10);
+		    debug_print(" mfxAdr name %d\n", loco->mfxAdr->name);
+		}
+		break;
+	    case L2_ADDRESS:
+		if (mfx_data >= 0) {
+		    loco->mfxAdr->address = strtoul(&line[L2_ADDRESS_LENGTH], NULL, 10);
+		    debug_print(" mfxAdr addr %d\n", loco->mfxAdr->address);
+		}
+		break;
+	    case L2_XCEL:
+		if (mfx_data >= 0) {
+		    loco->mfxAdr->xcel = strtoul(&line[L2_XCEL_LENGTH], NULL, 10);
+		    debug_print(" mfxAdr xcel %d\n", loco->mfxAdr->xcel);
+		}
+		break;
+	    case L2_SPEEDTABLE:
+		if (mfx_data >= 0) {
+		    loco->mfxAdr->speedtable = strtoul(&line[L2_SPEEDTABLE_LENGTH], NULL, 10);
+		    debug_print(" mfxAdr speedtable %d\n", loco->mfxAdr->speedtable);
+		}
+		break;
+	    case L2_VOLUME:
+		if (mfx_data >= 0) {
+		    loco->mfxAdr->volume = strtoul(&line[L2_VOLUME_LENGTH], NULL, 10);
+		    debug_print(" mfxAdr voulume %d\n", loco->mfxAdr->volume);
+		}
+		break;
+	    case L2_NUMFUNCTION:
+		if (mfx_data >= 0) {
+		    loco->mfxAdr->numfunction = strtoul(&line[L2_NUMFUNCTION_LENGTH], NULL, 10);
+		    debug_print(" mfxAdr numfunction %d\n", loco->mfxAdr->numfunction);
+		}
+		break;
+	    case L2_FUNCTION:
+		if (mfx_data >= 0) {
+		    loco->mfxAdr->function = strtoul(&line[L2_FUNCTION_LENGTH], NULL, 10);
+		    debug_print(" mfxAdr func %d\n", loco->mfxAdr->function);
 		}
 		break;
 	    default:
