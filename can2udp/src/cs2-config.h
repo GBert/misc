@@ -12,6 +12,8 @@
 
 #include "uthash.h"
 
+#define MAX_LOCO_FUNCTIONS	16
+
 extern char *track_dir;
 extern char *track_name;
 extern char *loco_name;
@@ -117,7 +119,7 @@ struct loco_data_t {
     unsigned int spm;
     unsigned int ft;
     unsigned int mfxtype;
-    struct loco_func function[32];
+    struct loco_func function[MAX_LOCO_FUNCTIONS];
     struct mfxAdr_t *mfxAdr;
     UT_hash_handle hh;
 };

@@ -398,7 +398,7 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 	printf("Data:\n%s\n", trigger->data);
 	read_loco_data((char *)trigger->data, CONFIG_STRING);
 
-	print_locos();
+	print_locos(stdout);
 	printf("max locos : %d\n", get_loco_max());
 
 	set_led_pattern(trigger, LED_ST_HB_SLOW);

@@ -141,6 +141,8 @@ int add_loco(struct loco_data_t *loco) {
     struct loco_data_t *l;
 
     HASH_FIND_STR(loco_data, loco->name, l);
+
+
     if (l == NULL) {
 	/* if ((!loco->name) || (!loco->type))
 	    return (EXIT_FAILURE); */
@@ -160,6 +162,12 @@ int add_loco(struct loco_data_t *loco) {
 	}
 	strcpy(l->name, loco->name);
 
+	l->mfxAdr = calloc(1, sizeof(struct mfxAdr_t));
+	if (!l->mfxAdr) {
+	    fprintf(stderr, "can't calloc buffer for loco mfx data: %s\n", strerror(errno));
+	    return (EXIT_FAILURE);
+	}
+
 	if (loco->type) {
 	    l->type = calloc(strlen(loco->type) + 1, 1);
 	    if (!l->type) {
@@ -176,6 +184,7 @@ int add_loco(struct loco_data_t *loco) {
 	l->velocity = loco->velocity;
 	l->address = loco->address;
 	l->sid = loco->sid;
+	l->symbol = loco->symbol;
 	l->long_uid = loco->long_uid;
 	l->address = loco->address;
 	l->mfxuid = loco->mfxuid;
@@ -185,14 +194,19 @@ int add_loco(struct loco_data_t *loco) {
 	l->progmask = loco->progmask;
 	l->vmax = loco->vmax;
 	l->vmin = loco->vmin;
+	l->spm = loco->spm;
+	l->ft = loco->ft;
 	l->mfxtype = loco->mfxtype;
 	HASH_ADD_STR(loco_data, name, l);
-	/* TODO: mfx & function struct */
     } else {
+	check_modify(loco->minor, l->minor);
+	check_modify(loco->major, l->major);
+
 	check_modify(loco->direction, l->direction);
 	check_modify(loco->velocity, l->velocity);
 	check_modify(loco->address, l->address);
 	check_modify(loco->sid, l->sid);
+	check_modify(loco->symbol, l->symbol);
 	check_modify(loco->long_uid, l->long_uid);
 	check_modify(loco->address, l->address);
 	check_modify(loco->mfxuid, l->mfxuid);
@@ -202,9 +216,14 @@ int add_loco(struct loco_data_t *loco) {
 	check_modify(loco->progmask, l->progmask);
 	check_modify(loco->vmax, l->vmax);
 	check_modify(loco->vmin, l->vmin);
+	check_modify(loco->spm, l->spm);
+	check_modify(loco->ft, l->ft);
 	check_modify(loco->mfxtype, l->mfxtype);
-	/* TODO: mfx & function struct */
     }
+    memcpy(l->function, loco->function, sizeof(l->function));
+
+    memcpy(l->mfxAdr, loco->mfxAdr, sizeof(struct mfxAdr_t));
+
     return (EXIT_SUCCESS);
 }
 
@@ -354,12 +373,47 @@ void print_tracks(void) {
     }
 }
 
-void print_locos(void) {
+void print_locos(FILE *file) {
+    int i;
     struct loco_data_t *l;
 
+    l = loco_data;
+    fprintf(file, "[lokomotive]\n");
+    fprintf(file, "version\n");
+    fprintf(file, " .major=%d\n", l->major);
+    fprintf(file, " .minor=%d\n", l->minor);
+    fprintf(file, "session\n");
+    fprintf(file, " .id=%d\n", l->id);
+
     for (l = loco_data; l != NULL; l = l->hh.next) {
-	printf("[loco]\n");
-	printf(" .name=%s\n", l->name);
+	fprintf(file, "lokomotive\n");
+	fprintf(file, " .name=%s\n", l->name);
+	fprintf(file, " .uid=0x%x\n", l->uid);
+	fprintf(file, " .adresse=0x%x\n", l->address);
+	fprintf(file, " .typ=%s\n", l->type);
+	fprintf(file, " .sid=0x%x\n", l->sid);
+	if (l->mfxuid)	fprintf(file, " .mfxuid=0x%x\n", l->mfxuid);
+	if (l->icon)	fprintf(file, " .icon=%s\n", l->icon);
+	if (l->symbol)	fprintf(file, " .symbol=%d\n", l->symbol);
+	fprintf(file, " .av=%d\n", l->acc_delay);
+	fprintf(file, " .bv=%d\n", l->slow_down_delay);
+	fprintf(file, " .volume=%d\n", l->volume);
+
+	if (l->direction) fprintf(file, " .richtung=%d\n", l->direction);
+	if (l->progmask) fprintf(file, " .progmask=0x%x\n", l->progmask);
+	fprintf(file, " .tachomax=%d\n", l->tmax);
+	if (l->vmax)	fprintf(file, " .vmax=%d\n", l->vmax);
+	if (l->vmin)	fprintf(file, " .vmin=%d\n", l->vmin);
+	if (l->spm)	fprintf(file, " .spm=%d\n", l->spm);
+	if (l->ft)	fprintf(file, " .ft=0x%x\n", l->ft);
+	if (l->mfxtype)	fprintf(file, " .mfxtyp=%d\n", l->mfxtype);
+	for (i=0; i < MAX_LOCO_FUNCTIONS; i++) {
+	    fprintf(file, " .funktionen\n");
+	    fprintf(file, " ..nr=%d\n", i);
+	    if (l->function[i].type) fprintf(file, " ..typ=%d\n", l->function[i].type);
+	    if (l->function[i].value) fprintf(file, " ..wert=%d\n", l->function[i].value);
+	    if (l->function[i].duration) fprintf(file, " ..dauer=%d\n", l->function[i].duration);
+	}
     }
 }
 
@@ -716,7 +770,7 @@ int read_loco_data(char *config_file, int config_type) {
 		break;
 	    case L1_SYMBOL:
 		loco->symbol = strtoul(&line[L1_SYMBOL_LENGTH], NULL, 10);
-		debug_print("match symbol:    >0%d<\n", loco->symbol);
+		debug_print("match symbol:    >%d<\n", loco->symbol);
 		break;
 	    case L1_ICON:
 		if (asprintf(&icon, "%s", &line[L1_ICON_LENGTH]) < 0)
@@ -782,6 +836,7 @@ int read_loco_data(char *config_file, int config_type) {
 	    if (mfx_data >= 0)
 		    debug_print(" mfx data");
 	    switch (l2_token_n) {
+	    /* TODO function value check */
 	    /* function token */
 	    case L2_NUMBER:
 		function = strtoul(&line[L2_NUMBER_LENGTH], NULL, 10) & 0x1f;
