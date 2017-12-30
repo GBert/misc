@@ -1,9 +1,13 @@
 const int revisionnr = 
-13311
+13315
 ;
 const char* commithash = 
-"b35060b19e608dc4e60f724b86a51f35b7bede7a";
+"d97753a0e98e8e48179f08c6b37d7ff1d18917d9";
 const char* revlog = 
+"13315 2017-12-30 14:41:54 +0100 block: check last fifo physical IN guiframe: auto reset all also available in none auto mode\n" \
+"13314 2017-12-30 09:27:35 +0100 lc, meter: fix for maxkmh in speedometer\n" \
+"13313 2017-12-30 08:20:08 +0100 stagedlg: fix for evaluating IDs on the general tab\n" \
+"13312 2017-12-30 08:02:00 +0100 model: crash fix for init field\n" \
 "13311 2017-12-29 16:56:31 +0100 replaced internal cargo type person with local\n" \
 "13310 2017-12-29 15:22:18 +0100 z21, loconet: fix for kmh/qos values > 127\n" \
 "13309 2017-12-29 13:54:31 +0100 translation merge: sl, pt_BT, de, sr_latin, nl\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "13268 2017-12-23 11:36:27 +0100 action: check for global shutdown and or quit flag\n" \
 "13267 2017-12-23 10:07:59 +0100 rocview: app exit minor change to prevent using trace and connection after disconnect\n" \
 "13266 2017-12-22 12:33:04 +0100 block: fifoin for first car too\n" \
-"13265 2017-12-22 11:17:41 +0100 route, signal: fix for atfree commands in manual mode\n" \
-"13264 2017-12-22 09:04:47 +0100 block: fifoin action state added\n" \
-"13263 2017-12-22 08:45:03 +0100 block, text, action: eventlcid variable support\n" \
-"13262 2017-12-22 08:44:02 +0100 actionsctrldlg: crash fix at add\n" \
 
 "log end";
