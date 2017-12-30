@@ -32,7 +32,7 @@
 #define MAXGBS		16
 #define MAXSTRING	1024
 
-#define DEBUG		1
+#define DEBUG		0
 
 #define debug_print(...) \
             do { if (DEBUG) fprintf(stdout, ##__VA_ARGS__); } while (0)
@@ -162,6 +162,16 @@ int add_loco(struct loco_data_t *loco) {
 	}
 	strcpy(l->name, loco->name);
 
+	if (loco->icon) {
+	    l->icon = calloc(strlen(loco->icon) + 1, 1);
+	    if (!l->icon) {
+		fprintf(stderr, "%s: can't calloc loco icon string: %s\n", __func__, strerror(errno));
+		free(l);
+		return (EXIT_FAILURE);
+	    }
+	    strcpy(l->icon, loco->icon);
+	}
+
 	l->mfxAdr = calloc(1, sizeof(struct mfxAdr_t));
 	if (!l->mfxAdr) {
 	    fprintf(stderr, "can't calloc buffer for loco mfx data: %s\n", strerror(errno));
@@ -178,6 +188,9 @@ int add_loco(struct loco_data_t *loco) {
 	    strcpy(l->type, loco->type);
 	}
 
+	l->minor = loco->minor;
+	l->major = loco->major;
+	l->id = loco->id;
 	l->uid = loco->uid;
 	l->direction = loco->direction;
 	l->number = loco->number;
@@ -192,6 +205,7 @@ int add_loco(struct loco_data_t *loco) {
 	l->slow_down_delay = loco->slow_down_delay;
 	l->volume = loco->volume;
 	l->progmask = loco->progmask;
+	l->tmax = loco->tmax;
 	l->vmax = loco->vmax;
 	l->vmin = loco->vmin;
 	l->spm = loco->spm;
@@ -201,7 +215,7 @@ int add_loco(struct loco_data_t *loco) {
     } else {
 	check_modify(loco->minor, l->minor);
 	check_modify(loco->major, l->major);
-
+	check_modify(loco->id, l->id);
 	check_modify(loco->direction, l->direction);
 	check_modify(loco->velocity, l->velocity);
 	check_modify(loco->address, l->address);
@@ -214,6 +228,7 @@ int add_loco(struct loco_data_t *loco) {
 	check_modify(loco->slow_down_delay, l->slow_down_delay);
 	check_modify(loco->volume, l->volume);
 	check_modify(loco->progmask, l->progmask);
+	check_modify(loco->tmax, l->tmax);
 	check_modify(loco->vmax, l->vmax);
 	check_modify(loco->vmin, l->vmin);
 	check_modify(loco->spm, l->spm);
@@ -380,7 +395,7 @@ void print_locos(FILE *file) {
     l = loco_data;
     fprintf(file, "[lokomotive]\n");
     fprintf(file, "version\n");
-    fprintf(file, " .major=%d\n", l->major);
+    if (l->major) fprintf(file, " .major=%d\n", l->major);
     fprintf(file, " .minor=%d\n", l->minor);
     fprintf(file, "session\n");
     fprintf(file, " .id=%d\n", l->id);
@@ -388,18 +403,17 @@ void print_locos(FILE *file) {
     for (l = loco_data; l != NULL; l = l->hh.next) {
 	fprintf(file, "lokomotive\n");
 	fprintf(file, " .name=%s\n", l->name);
+	if (l->direction) fprintf(file, " .richtung=%d\n", l->direction);
 	fprintf(file, " .uid=0x%x\n", l->uid);
 	fprintf(file, " .adresse=0x%x\n", l->address);
 	fprintf(file, " .typ=%s\n", l->type);
-	fprintf(file, " .sid=0x%x\n", l->sid);
+	if (l->sid)	fprintf(file, " .sid=0x%x\n", l->sid);
 	if (l->mfxuid)	fprintf(file, " .mfxuid=0x%x\n", l->mfxuid);
 	if (l->icon)	fprintf(file, " .icon=%s\n", l->icon);
 	if (l->symbol)	fprintf(file, " .symbol=%d\n", l->symbol);
-	fprintf(file, " .av=%d\n", l->acc_delay);
-	fprintf(file, " .bv=%d\n", l->slow_down_delay);
-	fprintf(file, " .volume=%d\n", l->volume);
-
-	if (l->direction) fprintf(file, " .richtung=%d\n", l->direction);
+	if (l->acc_delay) fprintf(file, " .av=%d\n", l->acc_delay);
+	if (l->slow_down_delay) fprintf(file, " .bv=%d\n", l->slow_down_delay);
+	if (l->volume)	fprintf(file, " .volume=%d\n", l->volume);
 	if (l->progmask) fprintf(file, " .progmask=0x%x\n", l->progmask);
 	fprintf(file, " .tachomax=%d\n", l->tmax);
 	if (l->vmax)	fprintf(file, " .vmax=%d\n", l->vmax);
@@ -760,6 +774,12 @@ int read_loco_data(char *config_file, int config_type) {
 		loco->type = type;
 		debug_print("match type:      >%s<\n", loco->type);
 		break;
+	    case L1_ICON:
+		if (asprintf(&icon, "%s", &line[L1_ICON_LENGTH]) < 0)
+		    fprintf(stderr, "can't alloc memory for loco->icon: %s\n", __func__);
+		loco->icon = icon;
+		debug_print("match icon:      >%s<\n", loco->icon);
+		break;
 	    case L1_SID:
 		loco->sid = strtoul(&line[L1_SID_LENGTH], NULL, 16);
 		debug_print("match sid:       >0x%x<\n", loco->sid);
@@ -771,12 +791,6 @@ int read_loco_data(char *config_file, int config_type) {
 	    case L1_SYMBOL:
 		loco->symbol = strtoul(&line[L1_SYMBOL_LENGTH], NULL, 10);
 		debug_print("match symbol:    >%d<\n", loco->symbol);
-		break;
-	    case L1_ICON:
-		if (asprintf(&icon, "%s", &line[L1_ICON_LENGTH]) < 0)
-		    fprintf(stderr, "can't alloc memory for loco->icon: %s\n", __func__);
-		loco->icon = icon;
-		debug_print("match icon:      >%s<\n", loco->icon);
 		break;
 	    case L1_AV:
 		loco->acc_delay = strtoul(&line[L1_AV_LENGTH], NULL, 10);
