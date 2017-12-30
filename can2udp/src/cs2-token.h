@@ -19,6 +19,7 @@ enum {
     L00_MAGS,
     L00_ATRACK,
     L0_LOCO,
+    L0_LOC,
     L0_ATRACK,
     L0_VERSION,
     L0_SESSION,
@@ -38,6 +39,7 @@ const char *l0_token [] = {
     "[magnetartikel]",
     "[fahrstrassen]",
     "lokomotive",
+    "lok",
     "fahrstrasse",
     "version",
     "session",
@@ -51,6 +53,7 @@ const char *l0_token [] = {
 
 enum {
     L1_FUNCTION = 0,
+    L1_FCT,
     L1_MAJOR,
     L1_MINOR,
     L1_ID,
@@ -90,6 +93,7 @@ enum {
 
 const char *l1_token [] = {
     " .funktionen",
+    " .fkt",
     " .major=",
     " .minor=",
     " .id=",

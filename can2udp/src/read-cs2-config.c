@@ -32,10 +32,10 @@
 #define MAXGBS		16
 #define MAXSTRING	1024
 
-#define DEBUG		0
+#define DEBUG		1
 
 #define debug_print(...) \
-            do { if (DEBUG) fprintf(stdin, ##__VA_ARGS__); } while (0)
+            do { if (DEBUG) fprintf(stdout, ##__VA_ARGS__); } while (0)
 
 #define check_modify(a, b) \
 	    do { if ( a ) b = a; } while (0)
@@ -631,6 +631,7 @@ int read_loco_data(char *config_file, int config_type) {
 	    case L0_SESSION:
 		break;
 	    case L00_LOCO_SHORT:
+	    case L0_LOC:
 	    case L0_LOCO:
 		/* TODO: next loco */
 		if (loco_complete) {
@@ -653,6 +654,8 @@ int read_loco_data(char *config_file, int config_type) {
 	} else if (line[2] != '.') {
 	    l1_token_n = get_char_index(l1_token, line);
 	    switch (l1_token_n) {
+	    case L1_FCT:
+		function++;
 	    case L1_FUNCTION:
 		break;
 	    case L1_ID:
@@ -770,7 +773,7 @@ int read_loco_data(char *config_file, int config_type) {
 	    l2_token_n = get_char_index(l2_token, line);
 	    switch (l2_token_n) {
 	    case L2_NUMBER:
-		function = strtoul(&line[L2_NUMBER_LENGTH], NULL, 10) & 0x0f;
+		function = strtoul(&line[L2_NUMBER_LENGTH], NULL, 10) & 0x1f;
 		break;
 	    case L2_TYPE:
 		if (function >= 0) {

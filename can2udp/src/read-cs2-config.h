@@ -18,18 +18,8 @@
 #define MAXGBS		16
 #define MAXSTRING	1024
 
-#define DEBUG		0
 #define CONFIG_STRING	0x00
 #define CONFIG_FILE	0x01
-
-#define debug_print(...) \
-            do { if (DEBUG) fprintf(stdin, ##__VA_ARGS__); } while (0)
-
-#define check_modify(a, b) \
-            do { if ( a ) b = a; } while (0)
-
-#define check_free(a) \
-            do { if ( a ) free(a); } while (0)
 
 int get_char_index(const char **list, char *str);
 void delete_all_track_pages(void);
