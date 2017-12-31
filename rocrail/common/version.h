@@ -1,9 +1,13 @@
 const int revisionnr = 
-13316
+13320
 ;
 const char* commithash = 
-"332fbfabefec28ebc29e8b75ad951811ff838f4c";
+"63a6504afcb6d335b9b56199507f5c7016fff529";
 const char* revlog = 
+"13320 2017-12-31 15:39:25 +0100 location: init schedule table (wip)\n" \
+"13319 2017-12-31 15:11:48 +0100 NodeOp.base.toString(scte)\n" \
+"13318 2017-12-31 15:02:29 +0100 location: init schedule table (wip)\n" \
+"13317 2017-12-31 13:17:43 +0100 route: AND condition option block: platform field added location: schedule table (wip)\n" \
 "13316 2017-12-31 08:33:47 +0100 columndlg: check for which tab the config is for the right labels\n" \
 "13315 2017-12-30 14:41:54 +0100 block: check last fifo physical IN guiframe: auto reset all also available in none auto mode\n" \
 "13314 2017-12-30 09:27:35 +0100 lc, meter: fix for maxkmh in speedometer\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "13273 2017-12-23 16:24:21 +0100 loc: trace level correction for checking function events\n" \
 "13272 2017-12-23 15:47:59 +0100 actionsctrldlg: minimal index list height\n" \
 "13271 2017-12-23 15:37:41 +0100 keyboarddlg: capture enter from text field to exit dialog with ok\n" \
-"13270 2017-12-23 14:05:10 +0100 location: check first if a block in the location is already reserved before looking up the first free block available\n" \
-"13269 2017-12-23 11:57:18 +0100 action: clone the action control node before starting the timed therad\n" \
-"13268 2017-12-23 11:36:27 +0100 action: check for global shutdown and or quit flag\n" \
-"13267 2017-12-23 10:07:59 +0100 rocview: app exit minor change to prevent using trace and connection after disconnect\n" \
 
 "log end";
