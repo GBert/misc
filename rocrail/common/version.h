@@ -1,9 +1,10 @@
 const int revisionnr = 
-13315
+13316
 ;
 const char* commithash = 
-"d97753a0e98e8e48179f08c6b37d7ff1d18917d9";
+"332fbfabefec28ebc29e8b75ad951811ff838f4c";
 const char* revlog = 
+"13316 2017-12-31 08:33:47 +0100 columndlg: check for which tab the config is for the right labels\n" \
 "13315 2017-12-30 14:41:54 +0100 block: check last fifo physical IN guiframe: auto reset all also available in none auto mode\n" \
 "13314 2017-12-30 09:27:35 +0100 lc, meter: fix for maxkmh in speedometer\n" \
 "13313 2017-12-30 08:20:08 +0100 stagedlg: fix for evaluating IDs on the general tab\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "13269 2017-12-23 11:57:18 +0100 action: clone the action control node before starting the timed therad\n" \
 "13268 2017-12-23 11:36:27 +0100 action: check for global shutdown and or quit flag\n" \
 "13267 2017-12-23 10:07:59 +0100 rocview: app exit minor change to prevent using trace and connection after disconnect\n" \
-"13266 2017-12-22 12:33:04 +0100 block: fifoin for first car too\n" \
 
 "log end";
