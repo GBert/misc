@@ -127,7 +127,6 @@ int send_defined_can_frame(int can_socket, unsigned char *data, int verbose) {
 }
 
 int main(int argc, char **argv) {
-    pid_t pid;
     int max_fds, opt;
     struct can_frame frame;
 
@@ -184,15 +183,9 @@ int main(int argc, char **argv) {
 
     /* daemonize the process if requested */
     if (background) {
-	/* fork off the parent process */
-	pid = fork();
-	if (pid < 0) {
+	if (daemon(0, 0) < 0) {
+	    fprintf(stderr, "Going into background failed: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
-	}
-	/* if we got a good PID, then we can exit the parent process */
-	if (pid > 0) {
-	    printf("Going into background ...\n");
-	    exit(EXIT_SUCCESS);
 	}
     }
 
