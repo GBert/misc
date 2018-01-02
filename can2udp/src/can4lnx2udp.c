@@ -51,7 +51,6 @@ void print_can_frame(char *str, canmsg_t *frame, int verbose) {
 
 
 int main(int argc, char **argv) {
-    pid_t pid;
     int opt;
     canmsg_t frame;
     int sa,sb;			/* UDP socket UDP Broadcast Socket */
@@ -161,16 +160,9 @@ int main(int argc, char **argv) {
     }
 
     if (background) {
-	/* Fork off the parent process */
-	pid = fork();
-	if (pid < 0) {
+	if (daemon(0, 0) < 0) {
+	    fprintf(stderr, "Going into background failed: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
-	}
-	/* If we got a good PID, then we can exit the parent process */
-
-	if (pid > 0) {
-	    printf("Going into background ...\n");
-	    exit(EXIT_SUCCESS);
 	}
     }
 
