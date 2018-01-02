@@ -44,7 +44,7 @@ static char *UDP_SRC_STRG = "->UDP>CAN  CANID ";
 void print_usage(char *prg)
 {
     fprintf(stderr, "\nUsage: %s -l <port> -d <port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.1\n\n");
+    fprintf(stderr, "   Version 1.2\n\n");
     fprintf(stderr, "         -l <port>           listening UDP port for the server - default %d\n", DEF_UDP_RECV_PORT);
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default %d\n", DEF_UDP_SEND_PORT);
     fprintf(stderr, "         -b <broadcast_addr> broadcast address - default 255.255.255.255\n");
@@ -80,7 +80,6 @@ void print_can_frame(struct can_frame *frame, char *format, int verbose)
 
 int main(int argc, char **argv)
 {
-    pid_t pid;
     int ret, s, opt;
     struct can_frame frame;
     /* UDP socket , CAN socket, UDP broadcast socket */
@@ -201,15 +200,9 @@ int main(int argc, char **argv)
     }
 
     if (!foreground) {
-	/* Fork off the parent process */
-	pid = fork();
-	if (pid < 0)
+	if (daemon(0, 0) < 0) {
+	    fprintf(stderr, "Going into background failed: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
-	/* If we got a good PID, then we can exit the parent process */
-
-	if (pid > 0) {
-	    printf("Going into background ...\n");
-	    exit(EXIT_SUCCESS);
 	}
     }
 
