@@ -11,6 +11,7 @@
  *  bush button PI10	266
  */
 
+#define _GNU_SOURCE
 #include <ctype.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -46,15 +47,18 @@ extern struct loco_data_t *loco_data;
 #define MAX_BUFFER	8
 #define MAX_SYSFS_LEN	256
 #define DEF_INTERVAL	300
+#define MAXLINE		256
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
+
+char loco_dir[MAXLINE];
 
 uint16_t CRCCCITT(uint8_t * data, size_t length, uint16_t seed);
 
 unsigned int led_period;
 pthread_mutex_t lock;
 
-static unsigned char GET_MS2_LOCO_NAMES[]    = { 0x6c, 0x6f, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x6e };	/* loknamen */
-static unsigned char GET_MS2_CONFIG_LOCO_I[] = { 0x6c, 0x6f, 0x6b, 0x69, 0x6e, 0x66, 0x6f, 0x00 };	/* lokinfo  */
+static unsigned char GET_MS2_LOCO_NAMES[]  = { 0x6c, 0x6f, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x6e };	/* loknamen */
+static unsigned char GET_MS2_CONFIG_LOCO[] = { 0x6c, 0x6f, 0x6b, 0x69, 0x6e, 0x66, 0x6f, 0x00 };	/* lokinfo  */
 
 static char *T_CAN_FORMAT_STRG = "   -> CAN     0x%08X   [%d]";
 static char *F_CAN_FORMAT_STRG = "      CAN ->  0x%08X   [%d]";
@@ -98,6 +102,7 @@ struct trigger_t {
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -vf [-i <can int>][-t <sec>] \n", prg);
     fprintf(stderr, "   Version 1.0\n\n");
+    fprintf(stderr, "         -c <loco_dir>        set the locomotive file dir - default %s\n", loco_dir);
     fprintf(stderr, "         -i <can interface>   using can interface\n");
     fprintf(stderr, "         -t <interval in sec> using timer in sec / 0 -> only once - default %d\n", DEF_INTERVAL);
     fprintf(stderr, "         -l <led pin>         LED pin (e.g. BPi PI14 -> 270)\n");
@@ -201,7 +206,7 @@ int get_ms2_locoinfo(struct trigger_t *trigger, char *loco_name) {
     frame.can_id = 0x00400300;
 
     frame.can_dlc = 8;
-    memcpy(frame.data, GET_MS2_CONFIG_LOCO_I, sizeof(frame.data));
+    memcpy(frame.data, GET_MS2_CONFIG_LOCO, sizeof(frame.data));
     if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
 	return (EXIT_FAILURE);
 
@@ -216,6 +221,23 @@ int get_ms2_locoinfo(struct trigger_t *trigger, char *loco_name) {
     if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
 	return (EXIT_FAILURE);
     return 0;
+}
+
+int get_locos(struct trigger_t *trigger, char *loco_file) {
+    FILE *fp;
+    int ret;
+
+    ret = get_ms2_dbsize(trigger);
+    /* TODO */
+    fp = fopen(loco_file, "wb");
+    if (fp == NULL) {
+	fprintf(stderr, "%s: error writing locomotive file [%s]\n", __func__, loco_file);
+	return EXIT_FAILURE;
+    } else {
+	print_locos(fp);
+    }
+
+    return ret;
 }
 
 int gpio_export(int pin) {
@@ -463,7 +485,7 @@ void *LEDMod(void *ptr) {
 
 int main(int argc, char **argv) {
     pthread_t pth;
-    int opt;
+    int opt, do_loop;
     struct ifreq ifr;
     struct trigger_t trigger_data;
     struct sockaddr_can caddr;
@@ -471,18 +493,31 @@ int main(int argc, char **argv) {
     struct can_frame frame;
     uint16_t member;
     uint8_t buffer[MAXLEN];
+    char *loco_file;
 
     memset(&trigger_data, 0, sizeof(trigger_data));
     memset(ifr.ifr_name, 0, sizeof(ifr.ifr_name));
     strcpy(ifr.ifr_name, "can0");
+    do_loop = 1;
+
+    strcpy(loco_dir, "/www/config");
 
     trigger_data.led_pin = -1;
     trigger_data.pb_pin = -1;
 
     trigger_data.interval = DEF_INTERVAL;
+    trigger_data.background = 1;
 
-    while ((opt = getopt(argc, argv, "i:l:p:t:fvh?")) != -1) {
+    while ((opt = getopt(argc, argv, "c:i:l:p:t:fvh?")) != -1) {
 	switch (opt) {
+	case 'c':
+	    if (strnlen(optarg, MAXLINE) < MAXLINE) {
+		strncpy(loco_dir, optarg, sizeof(loco_dir) - 1);
+	    } else {
+		fprintf(stderr, "config file dir to long\n");
+		exit(EXIT_FAILURE);
+	    }
+	    break;
 	case 'i':
 	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name));
 	    break;
@@ -552,20 +587,20 @@ int main(int argc, char **argv) {
     }
 
     if (trigger_data.background) {
-	pid_t pid;
-
-	/* fork off the parent process */
-	pid = fork();
-	if (pid < 0) {
+	if (daemon(0, 0) < 0) {
+	    fprintf(stderr, "Going into background failed: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
 	}
-	/* if we got a good PID, then we can exit the parent process. */
-	if (pid > 0) {
-	    if (trigger_data.verbose)
-		printf("Going into background ...\n");
-	    exit(EXIT_SUCCESS);
-	}
     }
+
+    if (asprintf(&loco_file, "%s/%s", loco_dir, "lokomotive.cs2") < 0) {
+        fprintf(stderr, "can't alloc buffer for loco_name: %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+
+    read_loco_data(loco_file, CONFIG_FILE);
+    /* print_locos(stdout);
+    printf("max locos : %d\n", get_loco_max()); */
 
     /* initialize push button */
     if ((trigger_data.pb_pin) > 0) {
@@ -586,7 +621,7 @@ int main(int argc, char **argv) {
 	lseek(trigger_data.pb_fd, 0, SEEK_SET);
     }
     /* loop forever TODO: if interval is set */
-    while (1) {
+    while (do_loop) {
 	FD_SET(trigger_data.socket, &readfds);
 	/* extend FD_SET only if push button pin is set */
 	if (trigger_data.pb_pin > 0)
@@ -646,7 +681,6 @@ int main(int argc, char **argv) {
 	    printf("push button event\n");
 	}
     }
-
     /* TODO : wait until copy is done */
 
     if ((trigger_data.pb_pin) > 0)
@@ -656,5 +690,5 @@ int main(int argc, char **argv) {
 	pthread_join(pth, (void *)&trigger_data);
 	pthread_mutex_unlock(&lock);
     }
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
