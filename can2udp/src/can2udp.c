@@ -69,7 +69,6 @@ void send_magic_start_60113_frame(int can_socket, int verbose) {
 }
 
 int main(int argc, char **argv) {
-    pid_t pid;
     int s, i, opt;
     struct can_frame frame;
     int sa, sc, sb;		/* UDP socket , CAN socket, UDP Broadcast Socket */
@@ -193,15 +192,9 @@ int main(int argc, char **argv) {
     send_magic_start_60113_frame(sc, verbose);
 
     if (background) {
-	/* Fork off the parent process */
-	pid = fork();
-	if (pid < 0) {
+	if (daemon(0, 0) < 0) {
+	    fprintf(stderr, "Going into background failed: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
-	}
-	/* If we got a valid PID, then we can exit the parent process */
-	if (pid > 0) {
-	    printf("Going into background ...\n");
-	    exit(EXIT_SUCCESS);
 	}
     }
 

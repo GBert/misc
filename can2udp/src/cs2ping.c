@@ -210,18 +210,9 @@ int main(int argc, char **argv) {
     trigger_data.baddr = destaddr;
 
     if (trigger_data.background) {
-	pid_t pid;
-
-	/* fork off the parent process */
-	pid = fork();
-	if (pid < 0) {
+	if (daemon(0, 0) < 0) {
+	    fprintf(stderr, "Going into background failed: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
-	}
-	/* if we got a good PID, then we can exit the parent process. */
-	if (pid > 0) {
-	    if (trigger_data.verbose)
-		printf("Going into background ...\n");
-	    exit(EXIT_SUCCESS);
 	}
     }
 

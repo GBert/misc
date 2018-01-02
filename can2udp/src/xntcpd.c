@@ -174,7 +174,6 @@ int print_frame(unsigned char *frame, int length, int background) {
 }
 
 int main(int argc, char **argv) {
-    pid_t pid;
     int length, rs485_length, n, i, max_fds, opt, local_tcp_port, nready, conn_fd;
     char timestamp[16];
     /* UDP incoming socket , CAN socket, UDP broadcast socket, TCP socket */
@@ -282,14 +281,9 @@ int main(int argc, char **argv) {
 
     /* daemonize the process if requested */
     if (background) {
-	/* fork off the parent process */
-	pid = fork();
-	if (pid < 0)
+	if (daemon(0, 0) < 0) {
+	    fprintf(stderr, "Going into background failed: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
-	/* if we got a good PID, then we can exit the parent process */
-	if (pid > 0) {
-	    printf("Going into background ...\n");
-	    exit(EXIT_SUCCESS);
 	}
     }
 

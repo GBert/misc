@@ -141,7 +141,6 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
 }
 
 int main(int argc, char **argv) {
-    pid_t pid;
     int n, i, max_fds, opt, max_tcp_i, nready, conn_fd, tcp_client[MAX_TCP_CONN];
     struct can_frame frame;
     char timestamp[16];
@@ -234,14 +233,9 @@ int main(int argc, char **argv) {
 
     /* daemonize the process if requested */
     if (background) {
-	/* fork off the parent process */
-	pid = fork();
-	if (pid < 0)
+	if (daemon(0, 0) < 0) {
+	    fprintf(stderr, "Going into background failed: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
-	/* if we got a good PID, then we can exit the parent process */
-	if (pid > 0) {
-	    printf("Going into background ...\n");
-	    exit(EXIT_SUCCESS);
 	}
     }
 
