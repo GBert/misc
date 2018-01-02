@@ -1,9 +1,13 @@
 const int revisionnr = 
-13326
+13330
 ;
 const char* commithash = 
-"1b7243602a10d329a89d9df48531d5ede4d0beaa";
+"68e0c07098609d5794a50dbc02ec051cdd5ef3a2";
 const char* revlog = 
+"13330 2018-01-02 16:54:34 +0100 location: copy/paste fix check for free block (Achim)\n" \
+"13329 2018-01-02 16:34:59 +0100 carpanel, trainpanel: no init at create\n" \
+"13328 2018-01-02 11:18:57 +0100 carpanel, trainpanel: fix for column selection\n" \
+"13327 2018-01-02 10:48:39 +0100 location: add one hour ahead for hourly schedules\n" \
 "13326 2018-01-02 10:26:49 +0100 location: set id in the schedulettable node\n" \
 "13325 2018-01-02 10:18:07 +0100 location: publich schedule table\n" \
 "13324 2018-01-02 09:39:45 +0100 location: update schedulle table every model minute\n" \
@@ -50,9 +54,5 @@ const char* revlog =
 "13283 2017-12-26 08:16:27 +0100 switch, signal: sod flag added\n" \
 "13282 2017-12-25 12:10:05 +0100 node-red: update\n" \
 "13281 2017-12-25 08:37:47 +0100 node-red: rcp send exceptions also to the info output\n" \
-"13280 2017-12-24 17:21:32 +0100 stage: fix for evaluating the stopspeedtolastsection option\n" \
-"13279 2017-12-24 16:53:43 +0100 node-red: fix for getting the node reference\n" \
-"13278 2017-12-24 15:44:39 +0100 mqtt: fix for stack overflow\n" \
-"13277 2017-12-24 15:09:50 +0100 rnmqtt: check if the keep alive timer > 0\n" \
 
 "log end";
