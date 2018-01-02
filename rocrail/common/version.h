@@ -1,9 +1,15 @@
 const int revisionnr = 
-13320
+13326
 ;
 const char* commithash = 
-"63a6504afcb6d335b9b56199507f5c7016fff529";
+"1b7243602a10d329a89d9df48531d5ede4d0beaa";
 const char* revlog = 
+"13326 2018-01-02 10:26:49 +0100 location: set id in the schedulettable node\n" \
+"13325 2018-01-02 10:18:07 +0100 location: publich schedule table\n" \
+"13324 2018-01-02 09:39:45 +0100 location: update schedulle table every model minute\n" \
+"13323 2018-01-02 07:29:32 +0100 wiki demo plan correction\n" \
+"13322 2018-01-01 15:30:57 +0100 schedule: trainnr attribute added\n" \
+"13321 2018-01-01 12:05:59 +0100 location: init schedule table (wip)\n" \
 "13320 2017-12-31 15:39:25 +0100 location: init schedule table (wip)\n" \
 "13319 2017-12-31 15:11:48 +0100 NodeOp.base.toString(scte)\n" \
 "13318 2017-12-31 15:02:29 +0100 location: init schedule table (wip)\n" \
@@ -48,11 +54,5 @@ const char* revlog =
 "13279 2017-12-24 16:53:43 +0100 node-red: fix for getting the node reference\n" \
 "13278 2017-12-24 15:44:39 +0100 mqtt: fix for stack overflow\n" \
 "13277 2017-12-24 15:09:50 +0100 rnmqtt: check if the keep alive timer > 0\n" \
-"13276 2017-12-24 14:46:30 +0100 node-red: rcp node with 2 outputs for exceptions and info\n" \
-"13275 2017-12-24 14:27:07 +0100 node-red: evaluate rcp node\n" \
-"13274 2017-12-24 14:07:31 +0100 node-red: command node (wip)\n" \
-"13273 2017-12-23 16:24:21 +0100 loc: trace level correction for checking function events\n" \
-"13272 2017-12-23 15:47:59 +0100 actionsctrldlg: minimal index list height\n" \
-"13271 2017-12-23 15:37:41 +0100 keyboarddlg: capture enter from text field to exit dialog with ok\n" \
 
 "log end";
