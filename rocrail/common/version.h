@@ -1,9 +1,15 @@
 const int revisionnr = 
-13330
+13336
 ;
 const char* commithash = 
-"68e0c07098609d5794a50dbc02ec051cdd5ef3a2";
+"c97dde69ed1f28354df29b2381da2a6b6359315b";
 const char* revlog = 
+"13336 2018-01-03 16:42:40 +0100 location, loc: lcbkid added es current or entering block\n" \
+"13335 2018-01-03 16:23:38 +0100 loconet, z21: fix for reporting QoS to an uknown sensor address\n" \
+"13334 2018-01-03 14:56:42 +0100 location: sort schedule table by depart time\n" \
+"13333 2018-01-03 11:32:04 +0100 update schedule tables in case of a delay\n" \
+"13332 2018-01-03 08:47:41 +0100 operator: train combination added\n" \
+"13331 2018-01-03 08:46:58 +0100 sensorevents: QoS column added\n" \
 "13330 2018-01-02 16:54:34 +0100 location: copy/paste fix check for free block (Achim)\n" \
 "13329 2018-01-02 16:34:59 +0100 carpanel, trainpanel: no init at create\n" \
 "13328 2018-01-02 11:18:57 +0100 carpanel, trainpanel: fix for column selection\n" \
@@ -48,11 +54,5 @@ const char* revlog =
 "13289 2017-12-27 09:41:27 +0100 http: prevent deadlock in the rocwweb broadcast service\n" \
 "13288 2017-12-27 09:18:17 +0100 rocview: replaced setstringselection with setvalue in comboboxes to be case sensitive (wx work-around)\n" \
 "13287 2017-12-26 22:03:56 +0100 blockdialog: wx work-around for setting signal IDs\n" \
-"13286 2017-12-26 16:02:42 +0100 block: correction of the depart fifo flag\n" \
-"13285 2017-12-26 10:56:33 +0100 moved node-red to its own repository\n" \
-"13284 2017-12-26 09:45:32 +0100 blockgroup: check the conditions too on isFree at destination selection\n" \
-"13283 2017-12-26 08:16:27 +0100 switch, signal: sod flag added\n" \
-"13282 2017-12-25 12:10:05 +0100 node-red: update\n" \
-"13281 2017-12-25 08:37:47 +0100 node-red: rcp send exceptions also to the info output\n" \
 
 "log end";
