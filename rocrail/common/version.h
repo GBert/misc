@@ -1,9 +1,19 @@
 const int revisionnr = 
-13336
+13346
 ;
 const char* commithash = 
-"c97dde69ed1f28354df29b2381da2a6b6359315b";
+"19043cce3fa1697943600260adc655ad533affed";
 const char* revlog = 
+"13346 2018-01-04 15:30:12 +0100 location: check for future hourly schedules if the exceed hour 23 and subtract 24\n" \
+"13345 2018-01-04 14:19:45 +0100 location: regard schedule delay in future test\n" \
+"13344 2018-01-04 14:06:33 +0100 block: fifo speed corrections\n" \
+"13343 2018-01-04 13:20:32 +0100 guiapp: splashscreen without border\n" \
+"13342 2018-01-04 11:21:33 +0100 location: skip schedule entries which are in the past\n" \
+"13341 2018-01-04 10:36:21 +0100 control: hour and minute attribute added in the clock sync event\n" \
+"13340 2018-01-04 10:21:48 +0100 route: check first if the route is reserved before closed\n" \
+"13339 2018-01-04 08:56:22 +0100 block, fback: take over new qos if its not equals with the las reported\n" \
+"13338 2018-01-04 08:49:55 +0100 block: traceline for QoS corrected\n" \
+"13337 2018-01-04 08:44:39 +0100 block: statistics added for QoS\n" \
 "13336 2018-01-03 16:42:40 +0100 location, loc: lcbkid added es current or entering block\n" \
 "13335 2018-01-03 16:23:38 +0100 loconet, z21: fix for reporting QoS to an uknown sensor address\n" \
 "13334 2018-01-03 14:56:42 +0100 location: sort schedule table by depart time\n" \
@@ -44,15 +54,5 @@ const char* revlog =
 "13299 2017-12-28 13:59:50 +0100 block, signal: trace level corrections\n" \
 "13298 2017-12-28 11:32:57 +0100 block: remove fifo flags from reset trigs\n" \
 "13297 2017-12-28 11:14:20 +0100 block: fifoDepart function added to be able to stop the follower at IN\n" \
-"13296 2017-12-28 08:43:26 +0100 http: wait for post instead of poll for it to save CPU resources\n" \
-"13295 2017-12-27 20:07:00 +0100 initialize: trace level correction\n" \
-"13294 2017-12-27 19:19:51 +0100 routedialog: crash fix\n" \
-"13293 2017-12-27 16:58:50 +0100 roclcdr: get state name function added for tracing\n" \
-"13292 2017-12-27 11:47:16 +0100 rocview makefile: -Wno-deprecated-declarations\n" \
-"13291 2017-12-27 10:37:35 +0100 loconet: railcom dyn messages support added\n" \
-"13290 2017-12-27 10:22:36 +0100 z21: railcom dyn messages support added\n" \
-"13289 2017-12-27 09:41:27 +0100 http: prevent deadlock in the rocwweb broadcast service\n" \
-"13288 2017-12-27 09:18:17 +0100 rocview: replaced setstringselection with setvalue in comboboxes to be case sensitive (wx work-around)\n" \
-"13287 2017-12-26 22:03:56 +0100 blockdialog: wx work-around for setting signal IDs\n" \
 
 "log end";
