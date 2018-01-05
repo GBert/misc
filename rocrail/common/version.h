@@ -1,9 +1,14 @@
 const int revisionnr = 
-13346
+13351
 ;
 const char* commithash = 
-"19043cce3fa1697943600260adc655ad533affed";
+"4069145a83ab045290ebafe081546f6ffca6fadc";
 const char* revlog = 
+"13351 2018-01-05 14:51:48 +0100 location: no time update on loco event\n" \
+"13350 2018-01-05 11:29:24 +0100 location: schedule table skip old schedule times respecting delay\n" \
+"13349 2018-01-05 11:21:30 +0100 http: sleep 10ms if no post was available for rocweb\n" \
+"13348 2018-01-05 11:04:02 +0100 http: fix for rocweb support\n" \
+"13347 2018-01-05 10:49:48 +0100 route: conditions extended with not type and class\n" \
 "13346 2018-01-04 15:30:12 +0100 location: check for future hourly schedules if the exceed hour 23 and subtract 24\n" \
 "13345 2018-01-04 14:19:45 +0100 location: regard schedule delay in future test\n" \
 "13344 2018-01-04 14:06:33 +0100 block: fifo speed corrections\n" \
@@ -49,10 +54,5 @@ const char* revlog =
 "13304 2017-12-29 11:04:29 +0100 textdialog: fix for updating color buttons\n" \
 "13303 2017-12-29 08:15:37 +0100 renamed loconet railcom specs file\n" \
 "13302 2017-12-28 19:03:07 +0100 actionsctrldlg: revert replace setstringselection\n" \
-"13301 2017-12-28 15:42:34 +0100 loconet: dyn correction\n" \
-"13300 2017-12-28 15:40:25 +0100 z21: correction for qos\n" \
-"13299 2017-12-28 13:59:50 +0100 block, signal: trace level corrections\n" \
-"13298 2017-12-28 11:32:57 +0100 block: remove fifo flags from reset trigs\n" \
-"13297 2017-12-28 11:14:20 +0100 block: fifoDepart function added to be able to stop the follower at IN\n" \
 
 "log end";
