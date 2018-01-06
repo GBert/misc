@@ -1,9 +1,16 @@
 const int revisionnr = 
-13351
+13358
 ;
 const char* commithash = 
-"4069145a83ab045290ebafe081546f6ffca6fadc";
+"30d06b0f326845bade60a3ce151ba69b513e3798";
 const char* revlog = 
+"13358 2018-01-06 12:30:18 +0100 in: ignore wait in case next destination is reserved and the engine type is automobile\n" \
+"13357 2018-01-06 10:50:17 +0100 location: fix for updating the wrong hourly schedule\n" \
+"13356 2018-01-06 10:42:44 +0100 location: start time added in the schedule table entries\n" \
+"13355 2018-01-06 09:04:37 +0100 route: only set the route after lock just one time\n" \
+"13354 2018-01-06 08:35:03 +0100 blockgroup: fix for overwriting the groupfree flag with conditions if its not free\n" \
+"13353 2018-01-06 08:14:00 +0100 route: fix for not type condition\n" \
+"13352 2018-01-06 08:05:12 +0100 location: show current loco, block and delay in the dump\n" \
 "13351 2018-01-05 14:51:48 +0100 location: no time update on loco event\n" \
 "13350 2018-01-05 11:29:24 +0100 location: schedule table skip old schedule times respecting delay\n" \
 "13349 2018-01-05 11:21:30 +0100 http: sleep 10ms if no post was available for rocweb\n" \
@@ -47,12 +54,5 @@ const char* revlog =
 "13311 2017-12-29 16:56:31 +0100 replaced internal cargo type person with local\n" \
 "13310 2017-12-29 15:22:18 +0100 z21, loconet: fix for kmh/qos values > 127\n" \
 "13309 2017-12-29 13:54:31 +0100 translation merge: sl, pt_BT, de, sr_latin, nl\n" \
-"13308 2017-12-29 13:42:32 +0100 messages: removed unused 'person' translation\n" \
-"13307 2017-12-29 12:16:58 +0100 block: added missing post mutex in case virtual block could not unlock slave block (Achim)\n" \
-"13306 2017-12-29 11:39:57 +0100 z21: removed test code for qos\n" \
-"13305 2017-12-29 11:38:59 +0100 z21, locnet: crash fix for evaluating multi sense QosQ\n" \
-"13304 2017-12-29 11:04:29 +0100 textdialog: fix for updating color buttons\n" \
-"13303 2017-12-29 08:15:37 +0100 renamed loconet railcom specs file\n" \
-"13302 2017-12-28 19:03:07 +0100 actionsctrldlg: revert replace setstringselection\n" \
 
 "log end";
