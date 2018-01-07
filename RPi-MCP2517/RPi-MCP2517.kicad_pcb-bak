@@ -1,4 +1,4 @@
-(kicad_pcb (version 4) (host pcbnew 4.0.7-e2-6376~58~ubuntu16.04.1)
+(kicad_pcb (version 4) (host pcbnew 4.0.7)
 
   (general
     (links 94)
@@ -1132,14 +1132,14 @@
     )
   )
 
-  (module w_smd_dil:so-8 (layer F.Cu) (tedit 5A5247D0) (tstamp 5A387E5C)
+  (module w_smd_dil:so-8 (layer F.Cu) (tedit 5A528CA7) (tstamp 5A387E5C)
     (at 141.605 84.963)
     (descr SO-8)
     (path /5950C44B)
     (fp_text reference U3 (at 0.254 0.127) (layer F.SilkS)
       (effects (font (size 0.7493 0.7493) (thickness 0.14986)))
     )
-    (fp_text value P82B715 (at 0.1016 4.8768) (layer F.SilkS)
+    (fp_text value P82B715 (at 0.0508 4.6228) (layer F.SilkS)
       (effects (font (size 0.7493 0.7493) (thickness 0.14986)))
     )
     (fp_line (start -2.413 -1.9812) (end -2.413 1.9812) (layer F.SilkS) (width 0.127))
@@ -2089,7 +2089,7 @@
     )
   )
 
-  (module Pin_Headers:Pin_Header_Straight_1x02_Pitch2.54mm (layer F.Cu) (tedit 59650532) (tstamp 5A5D2EAE)
+  (module Pin_Headers:Pin_Header_Straight_1x02_Pitch2.54mm (layer F.Cu) (tedit 5A527039) (tstamp 5A5D2EAE)
     (at 189.484 113.157)
     (descr "Through hole straight pin header, 1x02, 2.54mm pitch, single row")
     (tags "Through hole pin header THT 1x02 2.54mm single row")
@@ -2097,7 +2097,7 @@
     (fp_text reference J2 (at 0 -2.33) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value Conn_01x02 (at 0 4.87) (layer F.Fab)
+    (fp_text value Conn_01x02 (at 0 4.87) (layer F.Fab) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -0.635 -1.27) (end 1.27 -1.27) (layer F.Fab) (width 0.1))
