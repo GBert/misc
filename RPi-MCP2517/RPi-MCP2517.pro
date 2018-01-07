@@ -1,4 +1,4 @@
-update=Mo 18 Dez 2017 17:55:41 CET
+update=Fr 05 Jan 2018 17:58:24 CET
 version=1
 last_client=kicad
 [pcbnew]
@@ -75,3 +75,4 @@ LibName33=libs/p82b715
 LibName34=rfcom
 LibName35=RPi-MCP2517-cache
 LibName36=MCP2517FD
+LibName37=silabs
