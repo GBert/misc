@@ -1,9 +1,10 @@
 const int revisionnr = 
-13359
+13360
 ;
 const char* commithash = 
-"99c30fd28838ffdc0ddd96916bf63605d90c1820";
+"91ffddf5d0bd5c0dd98a50043d76a53f1cd5f262";
 const char* revlog = 
+"13360 2018-01-07 08:19:09 +0100 operatordlg: sorting columns added\n" \
 "13359 2018-01-06 16:22:16 +0100 loc: isHome function added\n" \
 "13358 2018-01-06 12:30:18 +0100 in: ignore wait in case next destination is reserved and the engine type is automobile\n" \
 "13357 2018-01-06 10:50:17 +0100 location: fix for updating the wrong hourly schedule\n" \
@@ -53,6 +54,5 @@ const char* revlog =
 "13313 2017-12-30 08:20:08 +0100 stagedlg: fix for evaluating IDs on the general tab\n" \
 "13312 2017-12-30 08:02:00 +0100 model: crash fix for init field\n" \
 "13311 2017-12-29 16:56:31 +0100 replaced internal cargo type person with local\n" \
-"13310 2017-12-29 15:22:18 +0100 z21, loconet: fix for kmh/qos values > 127\n" \
 
 "log end";
