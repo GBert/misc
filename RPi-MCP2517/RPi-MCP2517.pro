@@ -1,4 +1,4 @@
-update=Fr 05 Jan 2018 17:58:24 CET
+update=Mo 08 Jan 2018 11:16:57 CET
 version=1
 last_client=kicad
 [pcbnew]
@@ -25,16 +25,6 @@ version=1
 NetIExt=net
 [general]
 version=1
-[schematic_editor]
-version=1
-PageLayoutDescrFile=
-PlotDirectoryName=
-SubpartIdSeparator=0
-SubpartFirstId=65
-NetFmtName=
-SpiceForceRefPrefix=0
-SpiceUseNetNumbers=0
-LabSize=60
 [eeschema]
 version=1
 LibDir=/home/eh2be5j/projekte/github-misc/RPi-MCP2517
@@ -76,3 +66,13 @@ LibName34=rfcom
 LibName35=RPi-MCP2517-cache
 LibName36=MCP2517FD
 LibName37=silabs
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=
+SpiceForceRefPrefix=0
+SpiceUseNetNumbers=0
+LabSize=60
