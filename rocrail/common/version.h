@@ -1,11 +1,12 @@
 const int revisionnr = 
-13372
+13373
 ;
 const char* commithash = 
-"b01665a06c1a339a0fc8f52e595ca8c2583f2282";
+"8b5f87bd7b6fbd12c1ba69135a7fde4287c88323";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13373 2018-01-08 17:48:01 +0100 makefile: version fix for native win\n" \
 "13372 2018-01-08 16:09:59 +0100 location: regard hours < model time to skip\n" \
 "13371 2018-01-08 15:38:24 +0100 loc: set light attribute incase an event ist dispatched to the operator\n" \
 "13370 2018-01-08 10:49:12 +0100 location: keep valid schedule entries in the list to save additional information\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13326 2018-01-02 10:26:49 +0100 location: set id in the schedulettable node\n" \
 "13325 2018-01-02 10:18:07 +0100 location: publich schedule table\n" \
 "13324 2018-01-02 09:39:45 +0100 location: update schedulle table every model minute\n" \
-"13323 2018-01-02 07:29:32 +0100 wiki demo plan correction\n" \
 
 "log end";
