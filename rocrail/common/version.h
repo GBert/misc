@@ -1,11 +1,16 @@
 const int revisionnr = 
-13367
+13372
 ;
 const char* commithash = 
-"a45d643be4f53c563d668cddbb1d49729e931526";
+"b01665a06c1a339a0fc8f52e595ca8c2583f2282";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13372 2018-01-08 16:09:59 +0100 location: regard hours < model time to skip\n" \
+"13371 2018-01-08 15:38:24 +0100 loc: set light attribute incase an event ist dispatched to the operator\n" \
+"13370 2018-01-08 10:49:12 +0100 location: keep valid schedule entries in the list to save additional information\n" \
+"13369 2018-01-08 10:46:41 +0100 routedialog: layout correction\n" \
+"13368 2018-01-08 10:34:05 +0100 routedialog: layout and label corrections\n" \
 "13367 2018-01-08 08:30:02 +0100 makefile: do not overwrite the version.h with the build of rocnetnode\n" \
 "13366 2018-01-08 08:01:34 +0100 version.h: dummy\n" \
 "13365 2018-01-07 17:51:02 +0100 a tip from the build\n" \
@@ -51,10 +56,5 @@ const char* revlog =
 "13325 2018-01-02 10:18:07 +0100 location: publich schedule table\n" \
 "13324 2018-01-02 09:39:45 +0100 location: update schedulle table every model minute\n" \
 "13323 2018-01-02 07:29:32 +0100 wiki demo plan correction\n" \
-"13322 2018-01-01 15:30:57 +0100 schedule: trainnr attribute added\n" \
-"13321 2018-01-01 12:05:59 +0100 location: init schedule table (wip)\n" \
-"13320 2017-12-31 15:39:25 +0100 location: init schedule table (wip)\n" \
-"13319 2017-12-31 15:11:48 +0100 NodeOp.base.toString(scte)\n" \
-"13318 2017-12-31 15:02:29 +0100 location: init schedule table (wip)\n" \
 
 "log end";
