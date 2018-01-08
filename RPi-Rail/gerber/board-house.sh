@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -x
-BOARD='RPi-MCP2517'
+BOARD='RPi-Railroad'
 
 cp ${BOARD}-F.Cu.gtl      ${BOARD}.GTL
 cp ${BOARD}-B.Cu.gbl      ${BOARD}.GBL
