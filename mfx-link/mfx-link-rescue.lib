@@ -1,25 +1,29 @@
 EESchema-LIBRARY Version 2.3
 #encoding utf-8
 #
-# D-RESCUE-mfx-link
+# LED-RESCUE-mfx-link
 #
-DEF D-RESCUE-mfx-link D 0 40 N N 1 F N
+DEF LED-RESCUE-mfx-link D 0 40 Y N 1 F N
 F0 "D" 0 100 50 H V C CNN
-F1 "D-RESCUE-mfx-link" 0 -100 50 H V C CNN
+F1 "LED-RESCUE-mfx-link" 0 -100 50 H V C CNN
 F2 "" 0 0 50 H V C CNN
 F3 "" 0 0 50 H V C CNN
 $FPLIST
- Diode_*
- D-Pak_TO252AA
- *SingleDiode
- *_Diode_*
- *SingleDiode*
+ LED-3MM
+ LED-5MM
+ LED-10MM
+ LED-0603
+ LED-0805
+ LED-1206
+ LEDV
 $ENDFPLIST
 DRAW
-P 2 0 1 6  -50 50  -50 -50 N
-P 3 0 1 0  50 50  -50 0  50 -50 F
-X A 1 150 0 100 L 50 50 1 1 P
-X K 2 -150 0 100 R 50 50 1 1 P
+P 2 0 1 0 -50 50 -50 -50 N
+P 3 0 1 0 -80 -25 -125 -65 -120 -40 N
+P 3 0 1 0 -65 -40 -110 -80 -105 -55 N
+P 3 0 1 0 50 50 -50 0 50 -50 F
+X K 1 -200 0 150 R 40 40 1 1 P
+X A 2 200 0 150 L 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
