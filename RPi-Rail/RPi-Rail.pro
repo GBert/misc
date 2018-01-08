@@ -1,4 +1,4 @@
-update=Mo 08 Jan 2018 12:09:46 CET
+update=Mo 08 Jan 2018 18:56:19 CET
 version=1
 last_client=kicad
 [pcbnew]
@@ -25,11 +25,21 @@ version=1
 NetIExt=net
 [general]
 version=1
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=
+SpiceForceRefPrefix=0
+SpiceUseNetNumbers=0
+LabSize=60
 [eeschema]
 version=1
-LibDir=/home/eh2be5j/projekte/github-misc/RPi-MCP2517
+LibDir=/home/eh2be5j/projekte/github-misc/RPi-Rail
 [eeschema/libraries]
-LibName1=RPi-MCP2517-rescue
+LibName1=RPi-Rail-rescue
 LibName2=power
 LibName3=device
 LibName4=transistors
@@ -63,16 +73,8 @@ LibName31=libs/mylib
 LibName32=ISO1050
 LibName33=libs/p82b715
 LibName34=rfcom
-LibName35=RPi-MCP2517-cache
+LibName35=RPi-Rail-cache
 LibName36=MCP2517FD
 LibName37=silabs
-[schematic_editor]
-version=1
-PageLayoutDescrFile=
-PlotDirectoryName=
-SubpartIdSeparator=0
-SubpartFirstId=65
-NetFmtName=
-SpiceForceRefPrefix=0
-SpiceUseNetNumbers=0
-LabSize=60
+LibName38=libs/ISO1050
+LibName39=microchip_dspic33dsc

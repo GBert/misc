@@ -1,0 +1,5 @@
+$CMP P82B715
+D Dual I2C Bus Buffer, DIP8/SO8/TSSOP8
+K I2C Bus Buffer
+F http://www.nxp.com/documents/data_sheet/P82B715.pdf
+$ENDCMP
