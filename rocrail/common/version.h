@@ -1,9 +1,18 @@
 const int revisionnr = 
-13360
+13367
 ;
 const char* commithash = 
-"91ffddf5d0bd5c0dd98a50043d76a53f1cd5f262";
+"a45d643be4f53c563d668cddbb1d49729e931526";
+const char* origin = "LOCAL"
+;
 const char* revlog = 
+"13367 2018-01-08 08:30:02 +0100 makefile: do not overwrite the version.h with the build of rocnetnode\n" \
+"13366 2018-01-08 08:01:34 +0100 version.h: dummy\n" \
+"13365 2018-01-07 17:51:02 +0100 a tip from the build\n" \
+"13364 2018-01-07 17:49:52 +0100 a tip from the build\n" \
+"13363 2018-01-07 17:41:58 +0100 a tip from the build\n" \
+"13362 2018-01-07 14:27:11 +0100 loc: extra trace in case of direct swap placing\n" \
+"13361 2018-01-07 13:36:46 +0100 block: inform fifo of a red signal event\n" \
 "13360 2018-01-07 08:19:09 +0100 operatordlg: sorting columns added\n" \
 "13359 2018-01-06 16:22:16 +0100 loc: isHome function added\n" \
 "13358 2018-01-06 12:30:18 +0100 in: ignore wait in case next destination is reserved and the engine type is automobile\n" \
@@ -47,12 +56,5 @@ const char* revlog =
 "13320 2017-12-31 15:39:25 +0100 location: init schedule table (wip)\n" \
 "13319 2017-12-31 15:11:48 +0100 NodeOp.base.toString(scte)\n" \
 "13318 2017-12-31 15:02:29 +0100 location: init schedule table (wip)\n" \
-"13317 2017-12-31 13:17:43 +0100 route: AND condition option block: platform field added location: schedule table (wip)\n" \
-"13316 2017-12-31 08:33:47 +0100 columndlg: check for which tab the config is for the right labels\n" \
-"13315 2017-12-30 14:41:54 +0100 block: check last fifo physical IN guiframe: auto reset all also available in none auto mode\n" \
-"13314 2017-12-30 09:27:35 +0100 lc, meter: fix for maxkmh in speedometer\n" \
-"13313 2017-12-30 08:20:08 +0100 stagedlg: fix for evaluating IDs on the general tab\n" \
-"13312 2017-12-30 08:02:00 +0100 model: crash fix for init field\n" \
-"13311 2017-12-29 16:56:31 +0100 replaced internal cargo type person with local\n" \
 
 "log end";
