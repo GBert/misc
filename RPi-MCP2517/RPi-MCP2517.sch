@@ -39,8 +39,8 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
-Title "RPiCAN"
-Date "2017-02-21"
+Title "RPi-CANFD"
+Date "2018-01-08"
 Rev "V1.0"
 Comp "Gerhard Bertelsmann"
 Comment1 ""
