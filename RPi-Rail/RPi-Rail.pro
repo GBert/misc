@@ -1,4 +1,4 @@
-update=Mo 08 Jan 2018 18:56:19 CET
+update=Di 09 Jan 2018 17:56:25 CET
 version=1
 last_client=kicad
 [pcbnew]
@@ -78,3 +78,4 @@ LibName36=MCP2517FD
 LibName37=silabs
 LibName38=libs/ISO1050
 LibName39=microchip_dspic33dsc
+LibName40=isolators
