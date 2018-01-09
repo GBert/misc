@@ -1,11 +1,14 @@
 const int revisionnr = 
-13373
+13376
 ;
 const char* commithash = 
-"8b5f87bd7b6fbd12c1ba69135a7fde4287c88323";
+"d4076a73a2c17cdbc05f74a4127206608cc29725";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13376 2018-01-09 11:20:09 +0100 makewin64-full.sh: fix for commandline parameter\n" \
+"13375 2018-01-09 10:51:03 +0100 location: fix for compare schedule entry time with model time\n" \
+"13374 2018-01-09 07:30:45 +0100 dccpp: do not initialise DTR on connect to avoid a reset\n" \
 "13373 2018-01-08 17:48:01 +0100 makefile: version fix for native win\n" \
 "13372 2018-01-08 16:09:59 +0100 location: regard hours < model time to skip\n" \
 "13371 2018-01-08 15:38:24 +0100 loc: set light attribute incase an event ist dispatched to the operator\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13329 2018-01-02 16:34:59 +0100 carpanel, trainpanel: no init at create\n" \
 "13328 2018-01-02 11:18:57 +0100 carpanel, trainpanel: fix for column selection\n" \
 "13327 2018-01-02 10:48:39 +0100 location: add one hour ahead for hourly schedules\n" \
-"13326 2018-01-02 10:26:49 +0100 location: set id in the schedulettable node\n" \
-"13325 2018-01-02 10:18:07 +0100 location: publich schedule table\n" \
-"13324 2018-01-02 09:39:45 +0100 location: update schedulle table every model minute\n" \
 
 "log end";
