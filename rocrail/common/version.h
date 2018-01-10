@@ -1,11 +1,18 @@
 const int revisionnr = 
-13376
+13383
 ;
 const char* commithash = 
-"d4076a73a2c17cdbc05f74a4127206608cc29725";
+"ede7ed32eed05842b546125ba328eda541a1b1a6";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13383 2018-01-10 11:24:08 +0100 route: added missing flag for cargo condition\n" \
+"13382 2018-01-10 10:32:35 +0100 bidib: extra trace line on location report\n" \
+"13381 2018-01-09 15:35:26 +0100 loc: update schedule tables in case a schedule is activated\n" \
+"13380 2018-01-09 14:09:58 +0100 location: not lookup a loco for a schedule at init\n" \
+"13379 2018-01-09 14:00:51 +0100 location: not evaluate\n" \
+"13378 2018-01-09 13:50:39 +0100 route: include/exclude conditions option added\n" \
+"13377 2018-01-09 13:37:44 +0100 control: list up the build origin in the issue.txt\n" \
 "13376 2018-01-09 11:20:09 +0100 makewin64-full.sh: fix for commandline parameter\n" \
 "13375 2018-01-09 10:51:03 +0100 location: fix for compare schedule entry time with model time\n" \
 "13374 2018-01-09 07:30:45 +0100 dccpp: do not initialise DTR on connect to avoid a reset\n" \
@@ -49,12 +56,5 @@ const char* revlog =
 "13336 2018-01-03 16:42:40 +0100 location, loc: lcbkid added es current or entering block\n" \
 "13335 2018-01-03 16:23:38 +0100 loconet, z21: fix for reporting QoS to an uknown sensor address\n" \
 "13334 2018-01-03 14:56:42 +0100 location: sort schedule table by depart time\n" \
-"13333 2018-01-03 11:32:04 +0100 update schedule tables in case of a delay\n" \
-"13332 2018-01-03 08:47:41 +0100 operator: train combination added\n" \
-"13331 2018-01-03 08:46:58 +0100 sensorevents: QoS column added\n" \
-"13330 2018-01-02 16:54:34 +0100 location: copy/paste fix check for free block (Achim)\n" \
-"13329 2018-01-02 16:34:59 +0100 carpanel, trainpanel: no init at create\n" \
-"13328 2018-01-02 11:18:57 +0100 carpanel, trainpanel: fix for column selection\n" \
-"13327 2018-01-02 10:48:39 +0100 location: add one hour ahead for hourly schedules\n" \
 
 "log end";
