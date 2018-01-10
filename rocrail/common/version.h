@@ -1,11 +1,14 @@
 const int revisionnr = 
-13384
+13387
 ;
 const char* commithash = 
-"28b4fad10b8378813632c6b872d449239daa6046";
+"a7a9427c3b1944fe8309d90cc1d790252db523a5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13387 2018-01-10 18:25:24 +0100 z21: 2018 and commented out some dyn tests\n" \
+"13386 2018-01-10 18:21:55 +0100 2018: as every year\n" \
+"13385 2018-01-10 17:51:19 +0100 translation merge: sr_latin, pt_BR, sl, de, nl\n" \
 "13384 2018-01-10 14:01:48 +0100 route: optional yellow in case of white aspect\n" \
 "13383 2018-01-10 11:24:08 +0100 route: added missing flag for cargo condition\n" \
 "13382 2018-01-10 10:32:35 +0100 bidib: extra trace line on location report\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13340 2018-01-04 10:21:48 +0100 route: check first if the route is reserved before closed\n" \
 "13339 2018-01-04 08:56:22 +0100 block, fback: take over new qos if its not equals with the las reported\n" \
 "13338 2018-01-04 08:49:55 +0100 block: traceline for QoS corrected\n" \
-"13337 2018-01-04 08:44:39 +0100 block: statistics added for QoS\n" \
-"13336 2018-01-03 16:42:40 +0100 location, loc: lcbkid added es current or entering block\n" \
-"13335 2018-01-03 16:23:38 +0100 loconet, z21: fix for reporting QoS to an uknown sensor address\n" \
 
 "log end";
