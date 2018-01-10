@@ -1,4 +1,4 @@
-update=Di 09 Jan 2018 17:56:25 CET
+update=Mi 10 Jan 2018 19:02:44 CET
 version=1
 last_client=kicad
 [pcbnew]
@@ -79,3 +79,5 @@ LibName37=silabs
 LibName38=libs/ISO1050
 LibName39=microchip_dspic33dsc
 LibName40=isolators
+LibName41=libs/LC72725
+LibName42=libs/ICSP
