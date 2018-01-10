@@ -89,7 +89,8 @@ enum {
     L1_HEIGHT,
     L1_TEXT,
     L1_STATE,
-    L1_DEVICEID
+    L1_DEVICEID,
+    L1_INTRACTION
 };
 
 const char *l1_token [] = {
@@ -131,6 +132,7 @@ const char *l1_token [] = {
     " .text=",
     " .zustand=",
     " .deviceId=",
+    " .inTraktion=",
     "\0"
 };
 
@@ -170,6 +172,7 @@ const char *l1_token [] = {
 #define L1_TEXT_LENGTH		7
 #define L1_STATE_LENGTH		10
 #define L1_DEVICEID_LENGTH	11
+#define L1_INTRACTION_LENGTH	13
 
 const char *track_types[] = {
     "leer",
@@ -327,7 +330,9 @@ enum {
     L2_SPEEDTABLE,
     L2_VOLUME,
     L2_NUMFUNCTION,
-    L2_FUNCTION
+    L2_FUNCTION,
+    L2_FORWARD,
+    L2_BACKWARD
 };
     
 const char *l2_token [] = {
@@ -343,6 +348,8 @@ const char *l2_token [] = {
     " ..volume=",
     " ..numfunc=",
     " ..func=",
+    " ..vorwaerts=",
+    " ..rueckwaerts=",
     "\0"
 };
 
@@ -359,5 +366,7 @@ const char *l2_token [] = {
 #define L2_VOLUME_LENGTH	10
 #define L2_NUMFUNCTION_LENGTH	11
 #define L2_FUNCTION_LENGTH	8
+#define L2_FOWARD_LENGTH	13
+#define L2_BACKWARD_LENGTH	15
 
 #endif /* _CS2_TOKEN_H_ */

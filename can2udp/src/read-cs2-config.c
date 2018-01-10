@@ -211,6 +211,7 @@ int add_loco(struct loco_data_t *loco) {
 	l->spm = loco->spm;
 	l->ft = loco->ft;
 	l->mfxtype = loco->mfxtype;
+	l->intraction = loco->intraction;
 	HASH_ADD_STR(loco_data, name, l);
     } else {
 	check_modify(loco->minor, l->minor);
@@ -234,6 +235,7 @@ int add_loco(struct loco_data_t *loco) {
 	check_modify(loco->spm, l->spm);
 	check_modify(loco->ft, l->ft);
 	check_modify(loco->mfxtype, l->mfxtype);
+	check_modify(loco->intraction, l->intraction);
     }
     memcpy(l->function, loco->function, sizeof(l->function));
 
@@ -427,7 +429,10 @@ void print_locos(FILE *file) {
 	    if (l->function[i].type) fprintf(file, " ..typ=%d\n", l->function[i].type);
 	    if (l->function[i].value) fprintf(file, " ..wert=%d\n", l->function[i].value);
 	    if (l->function[i].duration) fprintf(file, " ..dauer=%d\n", l->function[i].duration);
+	    if (l->function[i].forward) fprintf(file, " ..vorwaerts=0x%x\n", l->function[i].forward);
+	    if (l->function[i].backward) fprintf(file, " ..rueckwaerts=0x%x\n", l->function[i].backward);
 	}
+	if (l->intraction) fprintf(file, " .inTraktion=0x%08x\n", l->intraction);
     }
 }
 
@@ -840,6 +845,10 @@ int read_loco_data(char *config_file, int config_type) {
 		loco->address = strtoul(&line[L1_ADDRESS_LENGTH], NULL, 16);
 		debug_print("match address:   >0x%x<\n", loco->address);
 		break;
+	    case L1_INTRACTION:
+		loco->intraction = strtoul(&line[L1_INTRACTION_LENGTH], NULL, 16);
+		debug_print("match intraction:  >0x%08x<\n", loco->intraction);
+		break;
 	    default:
 		printf(">>%s<<\n", line);
 		break;
@@ -874,6 +883,20 @@ int read_loco_data(char *config_file, int config_type) {
 		    temp = strtoul(&line[L2_VALUE_LENGTH], NULL, 10);
 		    loco->function[function].value = temp;
 		    debug_print(" loco function %2d value %d\n", function, temp);
+		}
+		break;
+	    case L2_FORWARD:
+		if (function >= 0) {
+		    temp = strtoul(&line[L2_FOWARD_LENGTH], NULL, 10);
+		    loco->function[function].forward = temp;
+		    debug_print(" loco function %2d forward 0x%0x\n", function, temp);
+		}
+		break;
+	    case L2_BACKWARD:
+		if (function >= 0) {
+		    temp = strtoul(&line[L2_BACKWARD_LENGTH], NULL, 10);
+		    loco->function[function].backward = temp;
+		    debug_print(" loco function %2d backward 0x%0x\n", function, temp);
 		}
 		break;
 	    /* mfxAdr token */

@@ -62,6 +62,8 @@ struct track_data_t {
 struct loco_func {
     uint8_t number;
     uint8_t type;
+    uint8_t forward;
+    uint8_t backward;
     uint16_t duration;
     uint16_t value;
 };
@@ -119,6 +121,7 @@ struct loco_data_t {
     unsigned int spm;
     unsigned int ft;
     unsigned int mfxtype;
+    unsigned int intraction;
     struct loco_func function[MAX_LOCO_FUNCTIONS];
     struct mfxAdr_t *mfxAdr;
     UT_hash_handle hh;
