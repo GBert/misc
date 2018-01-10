@@ -208,6 +208,7 @@ int add_loco(struct loco_data_t *loco) {
 	l->tmax = loco->tmax;
 	l->vmax = loco->vmax;
 	l->vmin = loco->vmin;
+	l->xprot = loco->xprot;
 	l->spm = loco->spm;
 	l->ft = loco->ft;
 	l->mfxtype = loco->mfxtype;
@@ -233,6 +234,7 @@ int add_loco(struct loco_data_t *loco) {
 	check_modify(loco->vmax, l->vmax);
 	check_modify(loco->vmin, l->vmin);
 	check_modify(loco->spm, l->spm);
+	check_modify(loco->xprot, l->xprot);
 	check_modify(loco->ft, l->ft);
 	check_modify(loco->mfxtype, l->mfxtype);
 	check_modify(loco->intraction, l->intraction);
@@ -420,6 +422,7 @@ void print_locos(FILE *file) {
 	fprintf(file, " .tachomax=%d\n", l->tmax);
 	if (l->vmax)	fprintf(file, " .vmax=%d\n", l->vmax);
 	if (l->vmin)	fprintf(file, " .vmin=%d\n", l->vmin);
+	if (l->xprot)	fprintf(file, " .xprot=%d\n", l->xprot);
 	if (l->spm)	fprintf(file, " .spm=%d\n", l->spm);
 	if (l->ft)	fprintf(file, " .ft=0x%x\n", l->ft);
 	if (l->mfxtype)	fprintf(file, " .mfxtyp=%d\n", l->mfxtype);

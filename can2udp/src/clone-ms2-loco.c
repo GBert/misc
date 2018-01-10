@@ -193,7 +193,7 @@ int get_ms2_loco_names(struct trigger_t *trigger, uint8_t start, int8_t end) {
 int get_ms2_dbsize(struct trigger_t *trigger) {
     int ret;
 
-    ret = get_ms2_loco_names(trigger, 0, 2);
+    ret = get_ms2_loco_names(trigger, 0, 0);
     return ret;
 }
 
