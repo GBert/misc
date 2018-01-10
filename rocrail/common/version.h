@@ -1,11 +1,12 @@
 const int revisionnr = 
-13383
+13384
 ;
 const char* commithash = 
-"ede7ed32eed05842b546125ba328eda541a1b1a6";
+"28b4fad10b8378813632c6b872d449239daa6046";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13384 2018-01-10 14:01:48 +0100 route: optional yellow in case of white aspect\n" \
 "13383 2018-01-10 11:24:08 +0100 route: added missing flag for cargo condition\n" \
 "13382 2018-01-10 10:32:35 +0100 bidib: extra trace line on location report\n" \
 "13381 2018-01-09 15:35:26 +0100 loc: update schedule tables in case a schedule is activated\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13337 2018-01-04 08:44:39 +0100 block: statistics added for QoS\n" \
 "13336 2018-01-03 16:42:40 +0100 location, loc: lcbkid added es current or entering block\n" \
 "13335 2018-01-03 16:23:38 +0100 loconet, z21: fix for reporting QoS to an uknown sensor address\n" \
-"13334 2018-01-03 14:56:42 +0100 location: sort schedule table by depart time\n" \
 
 "log end";
