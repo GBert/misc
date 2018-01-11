@@ -1,11 +1,14 @@
 const int revisionnr = 
-13387
+13390
 ;
 const char* commithash = 
-"a7a9427c3b1944fe8309d90cc1d790252db523a5";
+"ac10ddca2c5fb33aba414ab557520c0a802e38a5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13390 2018-01-11 10:28:33 +0100 schedules: fix for update schedule table in case of max delay\n" \
+"13389 2018-01-11 09:15:56 +0100 location: schedule table entry maxdelay added\n" \
+"13388 2018-01-11 09:02:44 +0100 bidib: support added for more protocol formats\n" \
 "13387 2018-01-10 18:25:24 +0100 z21: 2018 and commented out some dyn tests\n" \
 "13386 2018-01-10 18:21:55 +0100 2018: as every year\n" \
 "13385 2018-01-10 17:51:19 +0100 translation merge: sr_latin, pt_BR, sl, de, nl\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13343 2018-01-04 13:20:32 +0100 guiapp: splashscreen without border\n" \
 "13342 2018-01-04 11:21:33 +0100 location: skip schedule entries which are in the past\n" \
 "13341 2018-01-04 10:36:21 +0100 control: hour and minute attribute added in the clock sync event\n" \
-"13340 2018-01-04 10:21:48 +0100 route: check first if the route is reserved before closed\n" \
-"13339 2018-01-04 08:56:22 +0100 block, fback: take over new qos if its not equals with the las reported\n" \
-"13338 2018-01-04 08:49:55 +0100 block: traceline for QoS corrected\n" \
 
 "log end";
