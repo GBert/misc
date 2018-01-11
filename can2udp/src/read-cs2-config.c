@@ -92,6 +92,22 @@ int strip_ms2_spaces(uint8_t *st, int len) {
     return 0;
 }
 
+int get_value(char *st, char *search) {
+    char line[MAXSIZE];
+    char *sret;
+    char *config = st;
+
+    sret = fgets_buffer(line, MAXSIZE, config);
+    while (sret != NULL) {
+	line[strcspn(line, "\r\n")] = 0;
+	if (strncmp(line, search, strlen(line)) == 0)
+	    return strtoul(&line[strlen(search)], NULL, 10) ;
+	sret = fgets_buffer(line, MAXSIZE, config);
+	config = sret;
+    }
+    return 0;
+}
+
 int get_char_index(const char **list, char *str) {
     int index;
 
@@ -137,7 +153,7 @@ void delete_all_loco_data(void) {
     }
 }
 
-int add_loco(struct loco_data_t *loco) {
+int add_loco(struct loco_data_t *loco, int incomplete) {
     struct loco_data_t *l;
 
     HASH_FIND_STR(loco_data, loco->name, l);
@@ -239,6 +255,7 @@ int add_loco(struct loco_data_t *loco) {
 	check_modify(loco->mfxtype, l->mfxtype);
 	check_modify(loco->intraction, l->intraction);
     }
+    l->incomplete = incomplete;
     memcpy(l->function, loco->function, sizeof(l->function));
 
     memcpy(l->mfxAdr, loco->mfxAdr, sizeof(struct mfxAdr_t));
@@ -646,7 +663,7 @@ void read_track_pages(char *dir) {
     }
 }
 
-int read_loco_data(char *config_file, int config_type) {
+int read_loco_data(char *config_file, int incomplete, int config_type) {
     int l0_token_n, l1_token_n, l2_token_n, loco_complete;
     FILE *fp = NULL;
     char line[MAXSIZE];
@@ -712,7 +729,7 @@ int read_loco_data(char *config_file, int config_type) {
 	    case L0_LOCO:
 		/* TODO: next loco */
 		if (loco_complete) {
-		    add_loco(loco);
+		    add_loco(loco, incomplete);
 		    memset(loco->mfxAdr, 0, sizeof(struct mfxAdr_t));
 		    memset(loco, 0, sizeof(struct loco_data_t));
 		    loco->mfxAdr = mfx;
@@ -964,7 +981,7 @@ int read_loco_data(char *config_file, int config_type) {
 	}
     }
     if (loco->name)
-	add_loco(loco);
+	add_loco(loco, incomplete);
     if (name)
 	free(name);
     if (type)

@@ -83,7 +83,7 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     }
     
-    read_loco_data(loco_file, CONFIG_FILE);
+    read_loco_data(loco_file, 0, CONFIG_FILE);
 
     printf("\n\ntrack pages: %u\n", HASH_COUNT(track_page));
     printf("track data elements: %u\n", HASH_COUNT(track_data));

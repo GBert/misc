@@ -70,6 +70,12 @@ enum gpio_edges {
     EDGE_BOTH
 };
 
+enum fsm_get_data {
+    FSM_START,
+    FSM_GET_LOCO_NAMES,
+    FSM_GET_LOCOS_BY_NAME
+};
+
 #define LED_PATTERN_MAX	4
 uint32_t LED_HB_SLOW[]	= { 100, 100, 100, 600 };
 uint32_t LED_HB_FAST[]	= {  70,  70,  70, 220 };
@@ -91,6 +97,9 @@ struct trigger_t {
     int led_pattern;
     int pb_pin;
     int pb_fd;
+    int fsm_state;
+    int loco_number;
+    int loco_counter;
     uint16_t hash;
     uint16_t hw_id;
     uint16_t length;
@@ -417,11 +426,25 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 
 	    strip_ms2_spaces(trigger->data, trigger->length);
 	}
-	printf("Data:\n%s\n", trigger->data);
-	read_loco_data((char *)trigger->data, CONFIG_STRING);
+	if (!trigger->background && trigger->verbose)
+	    printf("Data:\n%s\n", trigger->data);
 
-	print_locos(stdout);
-	printf("max locos : %d\n", get_loco_max());
+	switch (trigger->fsm_state) {
+	case FSM_START:
+	    trigger->loco_number = get_value((char *)trigger->data, " .wert=");
+	    if (!trigger->background && trigger->verbose)
+		printf("Number of new locos: %d\n", trigger->loco_number);
+	    break;
+	    /* mark as incomplete first read */
+	    /* read_loco_data((char *)trigger->data, 1, CONFIG_STRING); */
+	default:
+	    break;
+	}
+
+	if (!trigger->background && trigger->verbose) {
+	    print_locos(stdout);
+	    printf("max locos : %d\n", get_loco_max());
+	}
 
 	set_led_pattern(trigger, LED_ST_HB_SLOW);
 	free(trigger->data);
@@ -502,6 +525,7 @@ int main(int argc, char **argv) {
 
     strcpy(loco_dir, "/www/config");
 
+    trigger_data.fsm_state = FSM_START;
     trigger_data.led_pin = -1;
     trigger_data.pb_pin = -1;
 
@@ -598,7 +622,7 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    read_loco_data(loco_file, CONFIG_FILE);
+    read_loco_data(loco_file, 0, CONFIG_FILE);
     /* print_locos(stdout);
     printf("max locos : %d\n", get_loco_max()); */
 
