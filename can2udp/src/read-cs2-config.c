@@ -100,7 +100,7 @@ int get_value(char *st, char *search) {
     sret = fgets_buffer(line, MAXSIZE, config);
     while (sret != NULL) {
 	line[strcspn(line, "\r\n")] = 0;
-	if (strncmp(line, search, strlen(line)) == 0)
+	if (strncmp(search, line, strlen(search)) == 0)
 	    return strtoul(&line[strlen(search)], NULL, 10) ;
 	sret = fgets_buffer(line, MAXSIZE, config);
 	config = sret;

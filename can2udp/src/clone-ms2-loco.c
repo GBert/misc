@@ -243,7 +243,7 @@ int get_locos(struct trigger_t *trigger, char *loco_file) {
 	fprintf(stderr, "%s: error writing locomotive file [%s]\n", __func__, loco_file);
 	return EXIT_FAILURE;
     } else {
-	print_locos(fp);
+	/* print_locos(fp); */
     }
 
     return ret;
@@ -434,17 +434,33 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 	    trigger->loco_number = get_value((char *)trigger->data, " .wert=");
 	    if (!trigger->background && trigger->verbose)
 		printf("Number of new locos: %d\n", trigger->loco_number);
+	    if (trigger->loco_number) {
+		trigger->fsm_state = FSM_GET_LOCO_NAMES;
+		get_ms2_loco_names(trigger, 0, 1);
+	    }
 	    break;
 	    /* mark as incomplete first read */
 	    /* read_loco_data((char *)trigger->data, 1, CONFIG_STRING); */
+	case FSM_GET_LOCO_NAMES:
+	    /* mark as incomplete first read */
+	    read_loco_data((char *)trigger->data, 1, CONFIG_STRING);
+	    if (trigger->loco_counter + 1 <= trigger->loco_number) {
+		get_ms2_loco_names(trigger, trigger->loco_counter + 1, 2);
+		trigger->loco_counter += 2;
+	    } else {
+		trigger->fsm_state = FSM_GET_LOCOS_BY_NAME;
+	    }
+	    break;
+	case FSM_GET_LOCOS_BY_NAME:
+	    break;
 	default:
 	    break;
 	}
 
-	if (!trigger->background && trigger->verbose) {
+	/* if (!trigger->background && trigger->verbose) {
 	    print_locos(stdout);
 	    printf("max locos : %d\n", get_loco_max());
-	}
+	} */
 
 	set_led_pattern(trigger, LED_ST_HB_SLOW);
 	free(trigger->data);
