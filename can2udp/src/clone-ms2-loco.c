@@ -107,6 +107,7 @@ struct trigger_t {
     uint16_t crc;
     int data_index;
     uint8_t *data;
+    char *loco_file;
     struct loco_names_t *loco_names;
 };
 
@@ -393,6 +394,7 @@ void set_led_pattern(struct trigger_t *trigger, int pattern) {
 }
 
 int get_data(struct trigger_t *trigger, struct can_frame *frame) {
+    FILE *fp;
     uint16_t crc;
 
     if (frame->can_dlc == 6) {
@@ -449,15 +451,30 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 	    } else {
 		trigger->fsm_state = FSM_GET_LOCOS_BY_NAME;
 		trigger->loco_names = loco_names;
+		if (trigger->loco_names) {
+		    get_ms2_locoinfo(trigger, trigger->loco_names->name);
+		    trigger->loco_names = trigger->loco_names->hh.next;
+		} else {
+		    trigger->fsm_state = FSM_START;
+		}
 		if (!trigger->background && trigger->verbose)
 		    print_loco_names(stdout);
 	    }
 	    break;
 	case FSM_GET_LOCOS_BY_NAME:
+	    read_loco_data((char *)trigger->data, CONFIG_STRING);
 	    if (trigger->loco_names) {
 		get_ms2_locoinfo(trigger, trigger->loco_names->name);
 		trigger->loco_names = trigger->loco_names->hh.next;
 	    } else {
+		fp = fopen(trigger->loco_file, "wb");
+		if (fp == NULL) {
+		    fprintf(stderr, "%s: error writing loco file [%s]\n", __func__, trigger->loco_file);
+		} else {
+		    if (!trigger->background && trigger->verbose)
+			printf("writing new loco file [%s]\n", trigger->loco_file);
+		    print_locos(fp);
+		}
 		trigger->fsm_state = FSM_START;
 	    }
 	    break;
@@ -540,7 +557,6 @@ int main(int argc, char **argv) {
     struct can_frame frame;
     uint16_t member;
     uint8_t buffer[MAXLEN];
-    char *loco_file;
 
     memset(&trigger_data, 0, sizeof(trigger_data));
     memset(ifr.ifr_name, 0, sizeof(ifr.ifr_name));
@@ -641,12 +657,12 @@ int main(int argc, char **argv) {
 	}
     }
 
-    if (asprintf(&loco_file, "%s/%s", loco_dir, "lokomotive.cs2") < 0) {
+    if (asprintf(&trigger_data.loco_file, "%s/%s", loco_dir, "lokomotive.cs2") < 0) {
         fprintf(stderr, "can't alloc buffer for loco_name: %s\n", strerror(errno));
         exit(EXIT_FAILURE);
     }
 
-    read_loco_data(loco_file, CONFIG_FILE);
+    read_loco_data(trigger_data.loco_file, CONFIG_FILE);
     /* print_locos(stdout);
     printf("max locos : %d\n", get_loco_max()); */
 
