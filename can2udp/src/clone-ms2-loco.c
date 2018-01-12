@@ -40,6 +40,7 @@
 #include "read-cs2-config.h"
 
 extern struct loco_data_t *loco_data;
+extern struct loco_names_t *loco_names;
 
 #define BIT(x)		(1<<x)
 #define MINDELAY	1000000	/* min delay in usec */
@@ -106,6 +107,7 @@ struct trigger_t {
     uint16_t crc;
     int data_index;
     uint8_t *data;
+    struct loco_names_t *loco_names;
 };
 
 void usage(char *prg) {
@@ -439,21 +441,24 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 		get_ms2_loco_names(trigger, 0, 1);
 	    }
 	    break;
-	    /* mark as incomplete first read */
-	    /* read_loco_data((char *)trigger->data,CONFIG_STRING); */
 	case FSM_GET_LOCO_NAMES:
-	    /* mark as incomplete first read */
 	    read_loco_names((char *)trigger->data);
 	    if (trigger->loco_counter + 1 <= trigger->loco_number) {
 		get_ms2_loco_names(trigger, trigger->loco_counter + 1, 2);
 		trigger->loco_counter += 2;
 	    } else {
 		trigger->fsm_state = FSM_GET_LOCOS_BY_NAME;
+		trigger->loco_names = loco_names;
 		if (!trigger->background && trigger->verbose)
 		    print_loco_names(stdout);
 	    }
 	    break;
 	case FSM_GET_LOCOS_BY_NAME:
+	    if (trigger->loco_names) {
+		get_ms2_locoinfo(trigger, trigger->loco_names->name);
+	    } else {
+		trigger->fsm_state = FSM_START;
+	    }
 	    break;
 	default:
 	    break;
