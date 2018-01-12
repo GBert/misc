@@ -84,7 +84,7 @@ enum fsm_get_data {
 };
 
 #define LED_PATTERN_MAX	4
-uint32_t LED_HB_SLOW[]	= { 100, 100, 100, 600 };
+uint32_t LED_HB_SLOW[]	= { 100, 200, 100, 800 };
 uint32_t LED_HB_FAST[]	= {  70,  70,  70, 220 };
 uint32_t LED_ERROR[]	= { 600, 400, 600, 400 };
 
@@ -446,6 +446,7 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 
 	switch (trigger->fsm_state) {
 	case FSM_START:
+	    set_led_pattern(trigger, LED_ST_HB_FAST);
 	    trigger->loco_number = get_value((char *)trigger->data, " .wert=");
 	    if (!trigger->background && trigger->verbose)
 		printf("Number of new locos: %d\n", trigger->loco_number);
@@ -488,6 +489,7 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 		}
 		/* start over with a new list */
 		delete_all_loco_names();
+		set_led_pattern(trigger, LED_ST_HB_SLOW);
 		trigger->fsm_state = FSM_START;
 	    }
 	    break;
@@ -500,7 +502,6 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 	    printf("max locos : %d\n", get_loco_max());
 	} */
 
-	set_led_pattern(trigger, LED_ST_HB_SLOW);
 	free(trigger->data);
     }
     return 0;
@@ -647,6 +648,13 @@ int main(int argc, char **argv) {
 
     trigger_data.caddr = caddr;
 
+    if (trigger_data.background) {
+	if (daemon(0, 0) < 0) {
+	    fprintf(stderr, "Going into background failed: %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
+    }
+
     /* Create thread if LED pin defined */
     if ((trigger_data.led_pin) > 0) {
 	trigger_data.led_pattern = LED_ST_HB_SLOW;
@@ -665,14 +673,6 @@ int main(int argc, char **argv) {
 	if (!trigger_data.background && trigger_data.verbose)
 	    printf("created LED thread\n");
     }
-
-    if (trigger_data.background) {
-	if (daemon(0, 0) < 0) {
-	    fprintf(stderr, "Going into background failed: %s\n", strerror(errno));
-	    exit(EXIT_FAILURE);
-	}
-    }
-
 
     setlogmask(LOG_UPTO(LOG_NOTICE));
     openlog("clone-ms2-config", LOG_CONS | LOG_NDELAY, LOG_DAEMON);
@@ -776,10 +776,6 @@ int main(int argc, char **argv) {
 	}
 	/* push button event */
 	if (FD_ISSET(trigger_data.pb_fd, &exceptfds)) {
-	    set_led_pattern(&trigger_data, LED_ST_HB_FAST);
-
-	    /* wait some time for LED pattern change */
-	    usec_sleep(1000 * 1000);
 	    /* send CAN Member Ping */
 	    frame.can_id = 0x00300300;
 	    frame.can_dlc = 0;
@@ -798,9 +794,9 @@ int main(int argc, char **argv) {
     if ((trigger_data.pb_pin) > 0)
 	gpio_unexport(trigger_data.pb_pin);
     if ((trigger_data.led_pin) > 0) {
+	/* pthread_join(pth, (void *)&trigger_data);
+	pthread_mutex_unlock(&lock); */
 	gpio_unexport(trigger_data.led_pin);
-	pthread_join(pth, (void *)&trigger_data);
-	pthread_mutex_unlock(&lock);
     }
     return EXIT_SUCCESS;
 }
