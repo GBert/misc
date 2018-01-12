@@ -90,6 +90,7 @@ endif
 	$(INSTALL_BIN) ./files/lan-schnitte.init $(1)/root/lan-schnitte
 	$(INSTALL_BIN) ./files/ir.sh $(1)/root/
 	$(INSTALL_BIN) ./files/card-reader.sh $(1)/root/card-reader.sh
+	$(INSTALL_BIN) ./files/clone-ms2-loco.init $(1)/root/clone-ms2-loco
 	$(INSTALL_BIN) ./files/pio-i2c-udp.init $(1)/root/pio-i2c-udp
 	$(INSTALL_BIN) ./files/wake-up-links88.init $(1)/root/wake-up-links88
 	$(INSTALL_BIN) ./files/scripts/get-icons.sh $(1)/root/get-icons.sh
