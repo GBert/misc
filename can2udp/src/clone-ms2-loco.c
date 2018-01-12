@@ -36,11 +36,14 @@
 #include <netinet/in.h>
 #include <linux/can.h>
 
+#include <syslog.h>
+
 #include "cs2-config.h"
 #include "read-cs2-config.h"
 
 extern struct loco_data_t *loco_data;
 extern struct loco_names_t *loco_names;
+int do_loop;
 
 #define BIT(x)		(1<<x)
 #define MINDELAY	1000000	/* min delay in usec */
@@ -50,6 +53,9 @@ extern struct loco_names_t *loco_names;
 #define DEF_INTERVAL	300
 #define MAXLINE		256
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
+#define fprint_syslog(pipe, spipe, text) \
+	   do { fprintf( pipe, "%s: " text "\n", __func__); \
+		syslog( spipe, "%s: " text "\n", __func__); } while (0)
 
 char loco_dir[MAXLINE];
 
@@ -110,6 +116,11 @@ struct trigger_t {
     char *loco_file;
     struct loco_names_t *loco_names;
 };
+
+void signal_handler(int sig) {
+    syslog(LOG_WARNING, "got signal %s\n", strsignal(sig));
+    do_loop = 0;
+}
 
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -vf [-i <can int>][-t <sec>] \n", prg);
@@ -549,7 +560,9 @@ void *LEDMod(void *ptr) {
 
 int main(int argc, char **argv) {
     pthread_t pth;
-    int opt, do_loop;
+    struct sigaction sigact;
+    sigset_t blockset, emptyset;
+    int opt;
     struct ifreq ifr;
     struct trigger_t trigger_data;
     struct sockaddr_can caddr;
@@ -657,6 +670,27 @@ int main(int argc, char **argv) {
 	}
     }
 
+
+    setlogmask(LOG_UPTO(LOG_NOTICE));
+    openlog("can2lan", LOG_CONS | LOG_NDELAY, LOG_DAEMON);
+
+    sigemptyset(&blockset);
+    sigaddset(&sigact.sa_mask, SIGHUP);
+    sigaddset(&sigact.sa_mask, SIGINT);
+    sigaddset(&sigact.sa_mask, SIGTERM);
+    if (sigprocmask(SIG_BLOCK, &blockset, NULL) < 0) {
+	fprint_syslog(stderr, LOG_ERR, "cannot set SIGNAL block mask\n");
+	return (EXIT_FAILURE);
+    }
+
+    sigact.sa_handler = signal_handler;
+    sigact.sa_flags = 0;
+    sigemptyset(&sigact.sa_mask);
+    sigaction(SIGHUP, &sigact, NULL);
+    sigaction(SIGINT, &sigact, NULL);
+    sigaction(SIGTERM, &sigact, NULL);
+    sigemptyset(&emptyset);
+
     if (asprintf(&trigger_data.loco_file, "%s/%s", loco_dir, "lokomotive.cs2") < 0) {
         fprintf(stderr, "can't alloc buffer for loco_name: %s\n", strerror(errno));
         exit(EXIT_FAILURE);
@@ -690,7 +724,7 @@ int main(int argc, char **argv) {
 	/* extend FD_SET only if push button pin is set */
 	if (trigger_data.pb_pin > 0)
 	    FD_SET(trigger_data.pb_fd, &exceptfds);
-	if (select(MAX(trigger_data.socket, trigger_data.pb_fd) + 1, &readfds, NULL, &exceptfds, NULL) < 0) {
+	if (pselect(MAX(trigger_data.socket, trigger_data.pb_fd) + 1, &readfds, NULL, &exceptfds, NULL, &emptyset) < 0) {
 	    fprintf(stderr, "select error: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
 	}
