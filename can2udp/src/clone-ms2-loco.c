@@ -725,8 +725,10 @@ int main(int argc, char **argv) {
 	if (trigger_data.pb_pin > 0)
 	    FD_SET(trigger_data.pb_fd, &exceptfds);
 	if (pselect(MAX(trigger_data.socket, trigger_data.pb_fd) + 1, &readfds, NULL, &exceptfds, NULL, &emptyset) < 0) {
-	    fprintf(stderr, "select error: %s\n", strerror(errno));
-	    exit(EXIT_FAILURE);
+	    fprintf(stderr, "pselect exception: %s\n", strerror(errno));
+	    syslog(LOG_WARNING, "pselect exception: %s\n", strerror(errno));
+	    /* will be interrupted by do_loop = 0 */
+	    continue;
 	}
 	/* CAN frame event */
 	if (FD_ISSET(trigger_data.socket, &readfds)) {
