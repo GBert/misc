@@ -128,4 +128,11 @@ struct loco_data_t {
     UT_hash_handle hh;
 };
 
+struct loco_names_t {
+    char *name;
+    unsigned int number;
+    unsigned int max_value;
+    UT_hash_handle hh;
+};
+
 #endif /* _CS2_CONFIG_H_ */

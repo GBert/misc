@@ -65,6 +65,7 @@ int main(int argc, char **argv) {
 
     config_data.name = calloc(strlen(gbs_default) + 1, 1);
     strcpy(config_data.name, gbs_default);
+    free(config_data.name);
     strcat(config_data.directory, track_dir);
 
     printf("reading track pages ...\n");
@@ -88,7 +89,7 @@ int main(int argc, char **argv) {
     printf("\n\ntrack pages: %u\n", HASH_COUNT(track_page));
     printf("track data elements: %u\n", HASH_COUNT(track_data));
     printf("loco data: %u\n", HASH_COUNT(loco_data));
-    print_locos(stdout);
+    /* print_locos(stdout); */
 
     delete_all_track_pages();
     delete_all_track_data();
