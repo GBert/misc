@@ -1,11 +1,14 @@
 const int revisionnr = 
-13390
+13393
 ;
 const char* commithash = 
-"ac10ddca2c5fb33aba414ab557520c0a802e38a5";
+"8a03afd095beb8686bb50e46f0be49f78674f211";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13393 2018-01-12 11:15:27 +0100 bidib: trace correction for output\n" \
+"13392 2018-01-12 07:58:05 +0100 actionsctrldlg: loco state home added\n" \
+"13391 2018-01-12 07:52:17 +0100 loc: state home added\n" \
 "13390 2018-01-11 10:28:33 +0100 schedules: fix for update schedule table in case of max delay\n" \
 "13389 2018-01-11 09:15:56 +0100 location: schedule table entry maxdelay added\n" \
 "13388 2018-01-11 09:02:44 +0100 bidib: support added for more protocol formats\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13346 2018-01-04 15:30:12 +0100 location: check for future hourly schedules if the exceed hour 23 and subtract 24\n" \
 "13345 2018-01-04 14:19:45 +0100 location: regard schedule delay in future test\n" \
 "13344 2018-01-04 14:06:33 +0100 block: fifo speed corrections\n" \
-"13343 2018-01-04 13:20:32 +0100 guiapp: splashscreen without border\n" \
-"13342 2018-01-04 11:21:33 +0100 location: skip schedule entries which are in the past\n" \
-"13341 2018-01-04 10:36:21 +0100 control: hour and minute attribute added in the clock sync event\n" \
 
 "log end";
