@@ -127,7 +127,7 @@ void usage(char *prg) {
     fprintf(stderr, "   Version 1.0\n\n");
     fprintf(stderr, "         -c <loco_dir>        set the locomotive file dir - default %s\n", loco_dir);
     fprintf(stderr, "         -i <can interface>   using can interface\n");
-    fprintf(stderr, "         -t <interval in sec> using timer in sec / 0 -> only once - default %d\n", DEF_INTERVAL);
+    fprintf(stderr, "         -t <interval in sec> using timer in sec\n");
     fprintf(stderr, "         -l <led pin>         LED pin (e.g. BPi PI14 -> 270)\n");
     fprintf(stderr, "         -p <push button>     push button (e.g. BPi PI10 -> 266)\n");
     fprintf(stderr, "         -f                   run in foreground (for debugging)\n");
@@ -476,6 +476,9 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 	case FSM_GET_LOCOS_BY_NAME:
 	    read_loco_data((char *)trigger->data, CONFIG_STRING);
 	    if (trigger->loco_names) {
+		if (!trigger->background && trigger->verbose)
+		    printf("delete loco [%s] and read data (again)\n", trigger->loco_names->name);
+		delete_loco_by_name(trigger->loco_names->name);
 		get_ms2_locoinfo(trigger, trigger->loco_names->name);
 		trigger->loco_names = trigger->loco_names->hh.next;
 	    } else {
@@ -491,6 +494,7 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 		delete_all_loco_names();
 		set_led_pattern(trigger, LED_ST_HB_SLOW);
 		trigger->fsm_state = FSM_START;
+		trigger->loco_counter = 0;
 	    }
 	    break;
 	default:
@@ -565,7 +569,7 @@ int main(int argc, char **argv) {
     pthread_t pth;
     struct sigaction sigact;
     sigset_t blockset, emptyset;
-    int opt, nready;
+    int opt, nready, interval;
     struct ifreq ifr;
     struct trigger_t trigger_data;
     struct sockaddr_can caddr;
@@ -579,6 +583,7 @@ int main(int argc, char **argv) {
     memset(ifr.ifr_name, 0, sizeof(ifr.ifr_name));
     strcpy(ifr.ifr_name, "can0");
     do_loop = 1;
+    interval = 0;
 
     strcpy(loco_dir, "/www/config");
 
@@ -586,7 +591,7 @@ int main(int argc, char **argv) {
     trigger_data.led_pin = -1;
     trigger_data.pb_pin = -1;
 
-    trigger_data.interval = DEF_INTERVAL;
+    trigger_data.interval = 0;
     trigger_data.background = 1;
 
     while ((opt = getopt(argc, argv, "c:i:l:p:t:fvh?")) != -1) {
@@ -604,6 +609,7 @@ int main(int argc, char **argv) {
 	    break;
 	case 't':
 	    trigger_data.interval = atoi(optarg);
+	    interval = trigger_data.interval;
 	    break;
 	case 'l':
 	    trigger_data.led_pin = atoi(optarg);
@@ -724,7 +730,6 @@ int main(int argc, char **argv) {
 	    fprintf(stderr, "error reading GPIO trigger: %s\n", strerror(errno));
 	lseek(trigger_data.pb_fd, 0, SEEK_SET);
     }
-    /* loop forever TODO: if interval is set */
     while (do_loop) {
 	FD_SET(trigger_data.socket, &readfds);
 	/* extend FD_SET only if push button pin is set */
@@ -735,6 +740,12 @@ int main(int argc, char **argv) {
 	    /* periodic task check */
 	    ts.tv_sec = 1;
 	    ts.tv_nsec = 0;
+	    if (trigger_data.interval) {
+		if (interval-- == 0) {
+		    get_ms2_dbsize(&trigger_data);
+		    interval = trigger_data.interval;
+		}
+	    }
 	    continue;
 	} else if (nready < 0) {
 	    fprintf(stderr, "pselect exception: %s\n", strerror(errno));
@@ -789,8 +800,6 @@ int main(int argc, char **argv) {
 	    printf("push button event\n");
 	}
     }
-    /* TODO : wait until copy is done */
-
     if ((trigger_data.pb_pin) > 0)
 	gpio_unexport(trigger_data.pb_pin);
     if ((trigger_data.led_pin) > 0) {

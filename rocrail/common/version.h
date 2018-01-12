@@ -1,11 +1,13 @@
 const int revisionnr = 
-13393
+13395
 ;
 const char* commithash = 
-"8a03afd095beb8686bb50e46f0be49f78674f211";
+"7e3ad73bd90ac787fe7748c35c04d48469c70d0c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13395 2018-01-12 14:13:53 +0100 makefile: install demoplan\n" \
+"13394 2018-01-12 14:00:29 +0100 bidib: POM support for M4/MfX added\n" \
 "13393 2018-01-12 11:15:27 +0100 bidib: trace correction for output\n" \
 "13392 2018-01-12 07:58:05 +0100 actionsctrldlg: loco state home added\n" \
 "13391 2018-01-12 07:52:17 +0100 loc: state home added\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "13348 2018-01-05 11:04:02 +0100 http: fix for rocweb support\n" \
 "13347 2018-01-05 10:49:48 +0100 route: conditions extended with not type and class\n" \
 "13346 2018-01-04 15:30:12 +0100 location: check for future hourly schedules if the exceed hour 23 and subtract 24\n" \
-"13345 2018-01-04 14:19:45 +0100 location: regard schedule delay in future test\n" \
-"13344 2018-01-04 14:06:33 +0100 block: fifo speed corrections\n" \
 
 "log end";

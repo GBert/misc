@@ -154,6 +154,13 @@ void delete_all_loco_data(void) {
     }
 }
 
+void delete_loco_by_name(char *name) {
+    struct loco_data_t *l;
+    HASH_FIND_STR(loco_data, name, l);
+    if (l)
+	HASH_DEL(loco_data, l);
+}
+
 void delete_all_loco_names(void) {
     struct loco_names_t *nloco, *tmp;
 
