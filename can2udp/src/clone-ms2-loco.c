@@ -440,10 +440,10 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 	    }
 	    break;
 	    /* mark as incomplete first read */
-	    /* read_loco_data((char *)trigger->data, 1, CONFIG_STRING); */
+	    /* read_loco_data((char *)trigger->data,CONFIG_STRING); */
 	case FSM_GET_LOCO_NAMES:
 	    /* mark as incomplete first read */
-	    read_loco_data((char *)trigger->data, 1, CONFIG_STRING);
+	    read_loco_data((char *)trigger->data, CONFIG_STRING);
 	    if (trigger->loco_counter + 1 <= trigger->loco_number) {
 		get_ms2_loco_names(trigger, trigger->loco_counter + 1, 2);
 		trigger->loco_counter += 2;
@@ -638,7 +638,7 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    read_loco_data(loco_file, 0, CONFIG_FILE);
+    read_loco_data(loco_file, CONFIG_FILE);
     /* print_locos(stdout);
     printf("max locos : %d\n", get_loco_max()); */
 

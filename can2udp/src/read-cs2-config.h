@@ -26,7 +26,7 @@ int get_value(char *st, char *search);
 void delete_all_track_pages(void);
 void delete_all_track_data(void);
 void delete_all_loco_data(void);
-int add_loco(struct loco_data_t *loco, int incomplete);
+int add_loco(struct loco_data_t *loco);
 int add_track_data(struct track_data_t *td);
 int add_track_page(struct track_page_t *page, char *name);
 int td_id_sort(struct track_data_t *a, struct track_data_t *b);
@@ -40,7 +40,7 @@ void print_locos(FILE *file);
 int read_track_data(char *config_file);
 int read_track_config(char *config_file);
 void read_track_pages(char *dir);
-int read_loco_data(char *config_file, int incomplete, int config_type);
+int read_loco_data(char *config_file, int config_type);
 int get_loco_max(void);
 
 int strip_ms2_spaces(uint8_t *data, int len);

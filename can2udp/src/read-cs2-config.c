@@ -69,7 +69,7 @@ char *fgets_buffer(char *dest, int max, char *src) {
     return ++src;
 }
 
-int strip_ms2_spaces(uint8_t * st, int len) {
+int strip_ms2_spaces(uint8_t *st, int len) {
     int i, index, nl;
     index = 0;
     nl = 0;
@@ -188,7 +188,7 @@ int add_loco_name(struct loco_names_t *loco) {
     return (EXIT_SUCCESS);
 }
 
-int add_loco(struct loco_data_t *loco, int incomplete) {
+int add_loco(struct loco_data_t *loco) {
     struct loco_data_t *l;
 
     HASH_FIND_STR(loco_data, loco->name, l);
@@ -289,7 +289,6 @@ int add_loco(struct loco_data_t *loco, int incomplete) {
 	check_modify(loco->mfxtype, l->mfxtype);
 	check_modify(loco->intraction, l->intraction);
     }
-    l->incomplete = incomplete;
     memcpy(l->function, loco->function, sizeof(l->function));
 
     memcpy(l->mfxAdr, loco->mfxAdr, sizeof(struct mfxAdr_t));
@@ -443,15 +442,14 @@ void print_tracks(void) {
     }
 }
 
-void print_locos(FILE * file) {
+void print_locos(FILE *file) {
     int i;
     struct loco_data_t *l;
 
     l = loco_data;
     fprintf(file, "[lokomotive]\n");
     fprintf(file, "version\n");
-    if (l->major)
-	fprintf(file, " .major=%d\n", l->major);
+    if (l->major) fprintf(file, " .major=%d\n", l->major);
     fprintf(file, " .minor=%d\n", l->minor);
     fprintf(file, "session\n");
     fprintf(file, " .id=%d\n", l->id);
@@ -698,7 +696,7 @@ void read_track_pages(char *dir) {
     }
 }
 
-int read_loco_data(char *config_file, int incomplete, int config_type) {
+int read_loco_data(char *config_file, int config_type) {
     int l0_token_n, l1_token_n, l2_token_n, loco_complete;
     FILE *fp = NULL;
     char line[MAXSIZE];
@@ -763,7 +761,7 @@ int read_loco_data(char *config_file, int incomplete, int config_type) {
 	    case L0_LOCO:
 		/* TODO: next loco */
 		if (loco_complete) {
-		    add_loco(loco, incomplete);
+		    add_loco(loco);
 		    memset(loco->mfxAdr, 0, sizeof(struct mfxAdr_t));
 		    memset(loco, 0, sizeof(struct loco_data_t));
 		    loco->mfxAdr = mfx;
@@ -913,8 +911,8 @@ int read_loco_data(char *config_file, int incomplete, int config_type) {
 	    if (mfx_data >= 0)
 		debug_print(" mfx data");
 	    switch (l2_token_n) {
-		/* TODO function value check */
-		/* function token */
+	    /* TODO function value check */
+	    /* function token */
 	    case L2_NUMBER:
 		function = strtoul(&line[L2_NUMBER_LENGTH], NULL, 10) & 0x1f;
 		break;
@@ -953,7 +951,7 @@ int read_loco_data(char *config_file, int incomplete, int config_type) {
 		    debug_print(" loco function %2d backward 0x%0x\n", function, temp);
 		}
 		break;
-		/* mfxAdr token */
+	    /* mfxAdr token */
 	    case L2_TARGET:
 		if (mfx_data >= 0) {
 		    loco->mfxAdr->target = strtoul(&line[L2_TARGET_LENGTH], NULL, 10);
@@ -1015,7 +1013,7 @@ int read_loco_data(char *config_file, int incomplete, int config_type) {
 	}
     }
     if (loco->name)
-	add_loco(loco, incomplete);
+	add_loco(loco);
     if (name)
 	free(name);
     if (type)
