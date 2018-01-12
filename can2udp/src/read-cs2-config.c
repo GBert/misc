@@ -184,6 +184,7 @@ int add_loco_name(struct loco_names_t *loco) {
 	strcpy(l->name, loco->name);
 	l->number = loco->number;
 	l->max_value = loco->max_value;
+	HASH_ADD_STR(loco_names, name, l);
     }
     return (EXIT_SUCCESS);
 }
@@ -493,7 +494,7 @@ void print_loco_names(FILE *file) {
     struct loco_names_t *l;
 
     for (l = loco_names; l != NULL; l = l->hh.next) {
-	fprintf(file, "lok\n");
+	fprintf(file, "[lok]\n");
 	fprintf(file, " .name=%s\n", l->name);
 	if (l->number) fprintf(file, " .nr=%d\n", l->number);
     }
@@ -1068,12 +1069,12 @@ int read_loco_names(char *config_file) {
 		    fprintf(stderr, "can't alloc memory for loco->name: %s\n", __func__);
 		loco->name = name;
 		debug_print("match name:      >%s<\n", loco->name);
+		if (loco->name)
+		    add_loco_name(loco);
 		break;
 	    case L1_NR:
 		loco->number = strtoul(&line[L1_NR_LENGTH], NULL, 10);
 		debug_print("match nr:  >%d<\n", loco->number);
-		if (loco->name)
-		    add_loco_name(loco);
 		break;
 	    case L1_VALUE:
 		loco->max_value = strtoul(&line[L1_VALUE_LENGTH], NULL, 10);
