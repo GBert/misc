@@ -486,6 +486,8 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 			printf("writing new loco file [%s]\n", trigger->loco_file);
 		    print_locos(fp);
 		}
+		/* start over with a new list */
+		delete_all_loco_names();
 		trigger->fsm_state = FSM_START;
 	    }
 	    break;
@@ -562,7 +564,7 @@ int main(int argc, char **argv) {
     pthread_t pth;
     struct sigaction sigact;
     sigset_t blockset, emptyset;
-    int opt;
+    int opt, nready;
     struct ifreq ifr;
     struct trigger_t trigger_data;
     struct sockaddr_can caddr;
@@ -570,6 +572,7 @@ int main(int argc, char **argv) {
     struct can_frame frame;
     uint16_t member;
     uint8_t buffer[MAXLEN];
+    struct timespec ts;
 
     memset(&trigger_data, 0, sizeof(trigger_data));
     memset(ifr.ifr_name, 0, sizeof(ifr.ifr_name));
@@ -672,7 +675,7 @@ int main(int argc, char **argv) {
 
 
     setlogmask(LOG_UPTO(LOG_NOTICE));
-    openlog("can2lan", LOG_CONS | LOG_NDELAY, LOG_DAEMON);
+    openlog("clone-ms2-config", LOG_CONS | LOG_NDELAY, LOG_DAEMON);
 
     sigemptyset(&blockset);
     sigaddset(&sigact.sa_mask, SIGHUP);
@@ -710,6 +713,9 @@ int main(int argc, char **argv) {
 	trigger_data.pb_fd = gpio_open(trigger_data.pb_pin);
     }
 
+    ts.tv_sec = 1;
+    ts.tv_nsec = 0;
+
     FD_ZERO(&readfds);
     FD_ZERO(&exceptfds);
     /* delete pending push button event */
@@ -724,7 +730,13 @@ int main(int argc, char **argv) {
 	/* extend FD_SET only if push button pin is set */
 	if (trigger_data.pb_pin > 0)
 	    FD_SET(trigger_data.pb_fd, &exceptfds);
-	if (pselect(MAX(trigger_data.socket, trigger_data.pb_fd) + 1, &readfds, NULL, &exceptfds, NULL, &emptyset) < 0) {
+	nready = pselect(MAX(trigger_data.socket, trigger_data.pb_fd) + 1, &readfds, NULL, &exceptfds, &ts, &emptyset);
+	if (nready == 0) {
+	    /* periodic task check */
+	    ts.tv_sec = 1;
+	    ts.tv_nsec = 0;
+	    continue;
+	} else if (nready < 0) {
 	    fprintf(stderr, "pselect exception: %s\n", strerror(errno));
 	    syslog(LOG_WARNING, "pselect exception: %s\n", strerror(errno));
 	    /* will be interrupted by do_loop = 0 */
