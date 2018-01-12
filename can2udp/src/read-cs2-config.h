@@ -37,10 +37,12 @@ void print_pages(void);
 void print_gbstats(void);
 void print_tracks(void);
 void print_locos(FILE *file);
+void print_loco_names(FILE *file);
 int read_track_data(char *config_file);
 int read_track_config(char *config_file);
 void read_track_pages(char *dir);
 int read_loco_data(char *config_file, int config_type);
+int read_loco_names(char *config_file);
 int get_loco_max(void);
 
 int strip_ms2_spaces(uint8_t *data, int len);

@@ -489,6 +489,16 @@ void print_locos(FILE *file) {
     }
 }
 
+void print_loco_names(FILE *file) {
+    struct loco_names_t *l;
+
+    for (l = loco_names; l != NULL; l = l->hh.next) {
+	fprintf(file, "lok\n");
+	fprintf(file, " .name=%s\n", l->name);
+	if (l->number) fprintf(file, " .nr=%d\n", l->number);
+    }
+}
+
 int read_track_data(char *config_file) {
     int l0_token_n, l1_token_n, element;
     FILE *fp;

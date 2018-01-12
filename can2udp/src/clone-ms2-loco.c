@@ -443,12 +443,14 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 	    /* read_loco_data((char *)trigger->data,CONFIG_STRING); */
 	case FSM_GET_LOCO_NAMES:
 	    /* mark as incomplete first read */
-	    read_loco_data((char *)trigger->data, CONFIG_STRING);
+	    read_loco_names((char *)trigger->data);
 	    if (trigger->loco_counter + 1 <= trigger->loco_number) {
 		get_ms2_loco_names(trigger, trigger->loco_counter + 1, 2);
 		trigger->loco_counter += 2;
 	    } else {
 		trigger->fsm_state = FSM_GET_LOCOS_BY_NAME;
+		if (!trigger->background && trigger->verbose)
+		    print_loco_names(stdout);
 	    }
 	    break;
 	case FSM_GET_LOCOS_BY_NAME:
