@@ -315,6 +315,17 @@ int get_loco_max(void) {
     return (loco_max);
 }
 
+int get_loco_uid(char *name) {
+    struct loco_data_t *l;
+    int loco_uid = 0;
+
+    HASH_FIND_STR(loco_data, name, l);
+    if (l) {
+	loco_uid = l->uid;
+    }
+    return (loco_uid);
+}
+
 int add_track_data(struct track_data_t *td) {
     struct track_data_t *t;
 

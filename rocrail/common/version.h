@@ -1,11 +1,15 @@
 const int revisionnr = 
-13395
+13399
 ;
 const char* commithash = 
-"7e3ad73bd90ac787fe7748c35c04d48469c70d0c";
+"aa4cbc9910007b1f01643f2fe088ce662b5bfe76";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13399 2018-01-13 12:34:30 +0100 text: monospace option added\n" \
+"13398 2018-01-13 11:40:58 +0100 messages: publish added\n" \
+"13397 2018-01-13 11:39:08 +0100 location: action option added\n" \
+"13396 2018-01-13 07:28:16 +0100 tracedlg: type OLcDrive added\n" \
 "13395 2018-01-12 14:13:53 +0100 makefile: install demoplan\n" \
 "13394 2018-01-12 14:00:29 +0100 bidib: POM support for M4/MfX added\n" \
 "13393 2018-01-12 11:15:27 +0100 bidib: trace correction for output\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "13352 2018-01-06 08:05:12 +0100 location: show current loco, block and delay in the dump\n" \
 "13351 2018-01-05 14:51:48 +0100 location: no time update on loco event\n" \
 "13350 2018-01-05 11:29:24 +0100 location: schedule table skip old schedule times respecting delay\n" \
-"13349 2018-01-05 11:21:30 +0100 http: sleep 10ms if no post was available for rocweb\n" \
-"13348 2018-01-05 11:04:02 +0100 http: fix for rocweb support\n" \
-"13347 2018-01-05 10:49:48 +0100 route: conditions extended with not type and class\n" \
-"13346 2018-01-04 15:30:12 +0100 location: check for future hourly schedules if the exceed hour 23 and subtract 24\n" \
 
 "log end";

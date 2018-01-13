@@ -67,8 +67,10 @@ pthread_mutex_t lock;
 static unsigned char GET_MS2_LOCO_NAMES[]  = { 0x6c, 0x6f, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x6e };	/* loknamen */
 static unsigned char GET_MS2_CONFIG_LOCO[] = { 0x6c, 0x6f, 0x6b, 0x69, 0x6e, 0x66, 0x6f, 0x00 };	/* lokinfo  */
 
-static char *T_CAN_FORMAT_STRG = "   -> CAN     0x%08X   [%d]";
-static char *F_CAN_FORMAT_STRG = "      CAN ->  0x%08X   [%d]";
+static char *T_CAN_FORMAT_STRG	= "   -> CAN     0x%08X   [%d]";
+static char *F_CAN_FORMAT_STRG	= "      CAN ->  0x%08X   [%d]";
+
+static char *LOCOLIST = "Lokliste";
 
 enum gpio_edges {
     EDGE_NONE,
@@ -107,6 +109,7 @@ struct trigger_t {
     int fsm_state;
     int loco_number;
     int loco_counter;
+    int loco_uid;
     uint16_t hash;
     uint16_t hw_id;
     uint16_t length;
@@ -117,19 +120,24 @@ struct trigger_t {
     struct loco_names_t *loco_names;
 };
 
+uint16_t be16(uint8_t *u) {
+    return (u[0] << 8) | u[1];
+}
+
 void signal_handler(int sig) {
     syslog(LOG_WARNING, "got signal %s\n", strsignal(sig));
     do_loop = 0;
 }
 
 void usage(char *prg) {
-    fprintf(stderr, "\nUsage: %s -vf [-i <can int>][-t <sec>] \n", prg);
-    fprintf(stderr, "   Version 1.0\n\n");
+    fprintf(stderr, "\nUsage: %s -kfv [-i <CAN int>][-t <sec>][-l <LED pin>][-p <push button pin>]\n", prg);
+    fprintf(stderr, "   Version 1.1\n\n");
     fprintf(stderr, "         -c <loco_dir>        set the locomotive file dir - default %s\n", loco_dir);
-    fprintf(stderr, "         -i <can interface>   using can interface\n");
+    fprintf(stderr, "         -i <CAN interface>   using can interface\n");
     fprintf(stderr, "         -t <interval in sec> using timer in sec\n");
-    fprintf(stderr, "         -l <led pin>         LED pin (e.g. BPi PI14 -> 270)\n");
+    fprintf(stderr, "         -l <LED pin>         LED pin (e.g. BPi PI14 -> 270)\n");
     fprintf(stderr, "         -p <push button>     push button (e.g. BPi PI10 -> 266)\n");
+    fprintf(stderr, "         -k                   use F0 from 'Lokliste' loco as trigger\n");
     fprintf(stderr, "         -f                   run in foreground (for debugging)\n");
     fprintf(stderr, "         -v                   be verbose\n\n");
 }
@@ -575,7 +583,7 @@ int main(int argc, char **argv) {
     struct sockaddr_can caddr;
     fd_set readfds, exceptfds;
     struct can_frame frame;
-    uint16_t member;
+    uint16_t member, uid;
     uint8_t buffer[MAXLEN];
     struct timespec ts;
 
@@ -591,10 +599,9 @@ int main(int argc, char **argv) {
     trigger_data.led_pin = -1;
     trigger_data.pb_pin = -1;
 
-    trigger_data.interval = 0;
     trigger_data.background = 1;
 
-    while ((opt = getopt(argc, argv, "c:i:l:p:t:fvh?")) != -1) {
+    while ((opt = getopt(argc, argv, "c:i:l:p:t:kfvh?")) != -1) {
 	switch (opt) {
 	case 'c':
 	    if (strnlen(optarg, MAXLINE) < MAXLINE) {
@@ -616,6 +623,9 @@ int main(int argc, char **argv) {
 	    break;
 	case 'p':
 	    trigger_data.pb_pin = atoi(optarg);
+	    break;
+	case 'k':
+	    trigger_data.loco_uid = 1;
 	    break;
 	case 'v':
 	    trigger_data.verbose = 1;
@@ -679,6 +689,10 @@ int main(int argc, char **argv) {
 	if (!trigger_data.background && trigger_data.verbose)
 	    printf("created LED thread\n");
     }
+
+    /* find trigger loco if requested */
+    if (trigger_data.loco_uid)
+	trigger_data.loco_uid = get_loco_uid(LOCOLIST);
 
     setlogmask(LOG_UPTO(LOG_NOTICE));
     openlog("clone-ms2-config", LOG_CONS | LOG_NDELAY, LOG_DAEMON);
@@ -767,6 +781,12 @@ int main(int argc, char **argv) {
 		    member = ntohs(member);
 		    /* look for MS2 */
 		    if ((member & 0xfff0) == 0x4d50)
+			get_ms2_dbsize(&trigger_data);
+		    break;
+		case 0x0C:
+		    uid = be16(&frame.data[2]);
+		    /* initiate trigger when loco "Lokliste" and F0 pressed */
+		    if ((uid == trigger_data.loco_uid) && (frame.data[7] == 0))
 			get_ms2_dbsize(&trigger_data);
 		    break;
 		case 0x41:
