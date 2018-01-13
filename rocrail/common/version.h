@@ -1,11 +1,14 @@
 const int revisionnr = 
-13399
+13402
 ;
 const char* commithash = 
-"aa4cbc9910007b1f01643f2fe088ce662b5bfe76";
+"1e87e23f8430e9f7d7b99f4f78d7c54c85cbe19d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13402 2018-01-13 18:00:30 +0100 location: optional html format for actions\n" \
+"13401 2018-01-13 15:02:10 +0100 text: html option added\n" \
+"13400 2018-01-13 13:19:17 +0100 location: via fix for cloned hourly schedules\n" \
 "13399 2018-01-13 12:34:30 +0100 text: monospace option added\n" \
 "13398 2018-01-13 11:40:58 +0100 messages: publish added\n" \
 "13397 2018-01-13 11:39:08 +0100 location: action option added\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13355 2018-01-06 09:04:37 +0100 route: only set the route after lock just one time\n" \
 "13354 2018-01-06 08:35:03 +0100 blockgroup: fix for overwriting the groupfree flag with conditions if its not free\n" \
 "13353 2018-01-06 08:14:00 +0100 route: fix for not type condition\n" \
-"13352 2018-01-06 08:05:12 +0100 location: show current loco, block and delay in the dump\n" \
-"13351 2018-01-05 14:51:48 +0100 location: no time update on loco event\n" \
-"13350 2018-01-05 11:29:24 +0100 location: schedule table skip old schedule times respecting delay\n" \
 
 "log end";

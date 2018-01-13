@@ -526,7 +526,6 @@ void *LEDMod(void *ptr) {
     struct trigger_t *trigger = (struct trigger_t *)ptr;
     uint32_t *led_pattern_p;
 
-#if 1
     snprintf(path, MAX_SYSFS_LEN, "/sys/class/gpio/gpio%d/value", trigger->led_pin);
     fd = open(path, O_WRONLY);
     if (fd < 0) {
@@ -563,14 +562,6 @@ void *LEDMod(void *ptr) {
 	    usec_sleep(led_pattern_p[i] * 1000);
 	}
     }
-#else
-    while (1) {
-	usec_sleep(led_period);
-	printf("*");
-	usec_sleep(led_period);
-	printf("-");
-    }
-#endif
 }
 
 int main(int argc, char **argv) {
