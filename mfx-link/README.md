@@ -14,7 +14,7 @@ Bauteile
 
 Geeignete &Uuml;bertrager:
 ```
-Murata 56100C bzw 56T100C (primaer 2,5 Windungen -> 1:40)
+Murata 56100C bzw 56T100C (primaer 2 Windungen -> 1:50)
 Murata 53040C
 Pulse Electronics PA1005.040QNL
 oder hangewickelt auf Ferrit-Ring
