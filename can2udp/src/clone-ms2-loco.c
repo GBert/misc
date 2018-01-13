@@ -45,6 +45,7 @@ extern struct loco_data_t *loco_data;
 extern struct loco_names_t *loco_names;
 int do_loop;
 
+#define OUR_HASH	0x4712
 #define BIT(x)		(1<<x)
 #define MINDELAY	1000000	/* min delay in usec */
 #define MAXLEN		64	/* maximum string length */
@@ -204,7 +205,7 @@ int get_ms2_loco_names(struct trigger_t *trigger, uint8_t start, int8_t end) {
     if ((start > 99) || (end > 99))
 	return (EXIT_FAILURE);
     /* get Config Data */
-    frame.can_id = 0x00400300;
+    frame.can_id = 0x00400300 | trigger->hash;
 
     /* first frame */
     frame.can_dlc = 8;
@@ -234,7 +235,7 @@ int get_ms2_locoinfo(struct trigger_t *trigger, char *loco_name) {
     memset(&frame, 0, sizeof(frame));
 
     /* get Config Data */
-    frame.can_id = 0x00400300;
+    frame.can_id = 0x00400300 | trigger->hash;
 
     frame.can_dlc = 8;
     memcpy(frame.data, GET_MS2_CONFIG_LOCO, sizeof(frame.data));
@@ -586,6 +587,7 @@ int main(int argc, char **argv) {
 
     strcpy(loco_dir, "/www/config");
 
+    trigger_data.hash = OUR_HASH;
     trigger_data.fsm_state = FSM_START;
     trigger_data.led_pin = -1;
     trigger_data.pb_pin = -1;
@@ -771,14 +773,11 @@ int main(int argc, char **argv) {
 		case 0x31:
 		    if (trigger_data.verbose)
 			print_can_frame(F_CAN_FORMAT_STRG, &frame);
-		    memcpy(&member, frame.data, sizeof(member));
-		    member = ntohs(member);
-		    /* look for MS2 */
-		    if ((member & 0xfff0) == 0x4d50)
-			get_ms2_dbsize(&trigger_data);
 		    break;
 		case 0x0C:
 		    uid = be16(&frame.data[2]);
+		    if (trigger_data.verbose)
+			print_can_frame(F_CAN_FORMAT_STRG, &frame);
 		    /* initiate trigger when loco "Lokliste" and F0 pressed */
 		    if ((uid == trigger_data.loco_uid) && (frame.data[4] == 0))
 			get_ms2_dbsize(&trigger_data);
@@ -788,9 +787,12 @@ int main(int argc, char **argv) {
 			print_can_frame(F_CAN_FORMAT_STRG, &frame);
 		    break;
 		case 0x42:
-		    get_data(&trigger_data, &frame);
 		    if (trigger_data.verbose)
 			print_can_frame(F_CAN_FORMAT_STRG, &frame);
+		    /* check if the data belongs to us */
+		    if ((frame.can_id & 0x0000FFFF) != OUR_HASH)
+			break;
+		    get_data(&trigger_data, &frame);
 		    break;
 		default:
 		    if (trigger_data.verbose)
@@ -801,12 +803,7 @@ int main(int argc, char **argv) {
 	}
 	/* push button event */
 	if (FD_ISSET(trigger_data.pb_fd, &exceptfds)) {
-	    /* send CAN Member Ping */
-	    frame.can_id = 0x00300300;
-	    frame.can_dlc = 0;
-	    memset(frame.data, 0, 8);
-	    if (send_can_frame(trigger_data.socket, &frame, trigger_data.verbose) < 0)
-		fprintf(stderr, "can't send CAN Member Ping: %s\n", strerror(errno));
+	    get_ms2_dbsize(&trigger_data);
 
 	    lseek(trigger_data.pb_fd, 0, SEEK_SET);
 	    if (read(trigger_data.pb_fd, buffer, sizeof(buffer)) < 0)
