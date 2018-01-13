@@ -320,9 +320,8 @@ int get_loco_uid(char *name) {
     int loco_uid = 0;
 
     HASH_FIND_STR(loco_data, name, l);
-    if (l) {
+    if (l)
 	loco_uid = l->uid;
-    }
     return (loco_uid);
 }
 

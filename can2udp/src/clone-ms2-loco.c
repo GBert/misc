@@ -690,10 +690,6 @@ int main(int argc, char **argv) {
 	    printf("created LED thread\n");
     }
 
-    /* find trigger loco if requested */
-    if (trigger_data.loco_uid)
-	trigger_data.loco_uid = get_loco_uid(LOCOLIST);
-
     setlogmask(LOG_UPTO(LOG_NOTICE));
     openlog("clone-ms2-config", LOG_CONS | LOG_NDELAY, LOG_DAEMON);
 
@@ -722,6 +718,13 @@ int main(int argc, char **argv) {
     read_loco_data(trigger_data.loco_file, CONFIG_FILE);
     /* print_locos(stdout);
     printf("max locos : %d\n", get_loco_max()); */
+
+    /* find trigger loco if requested */
+    if (trigger_data.loco_uid) {
+	trigger_data.loco_uid = get_loco_uid(LOCOLIST);
+	if (!trigger_data.background && trigger_data.verbose)
+	    printf("trigger set: Lokliste F0 UID 0x%04x\n", trigger_data.loco_uid);
+    }
 
     /* initialize push button */
     if ((trigger_data.pb_pin) > 0) {
@@ -786,7 +789,7 @@ int main(int argc, char **argv) {
 		case 0x0C:
 		    uid = be16(&frame.data[2]);
 		    /* initiate trigger when loco "Lokliste" and F0 pressed */
-		    if ((uid == trigger_data.loco_uid) && (frame.data[7] == 0))
+		    if ((uid == trigger_data.loco_uid) && (frame.data[4] == 0))
 			get_ms2_dbsize(&trigger_data);
 		    break;
 		case 0x41:
