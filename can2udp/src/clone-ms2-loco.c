@@ -137,7 +137,7 @@ void usage(char *prg) {
     fprintf(stderr, "         -t <interval in sec> using timer in sec\n");
     fprintf(stderr, "         -l <LED pin>         LED pin (e.g. BPi PI14 -> 270)\n");
     fprintf(stderr, "         -p <push button>     push button (e.g. BPi PI10 -> 266)\n");
-    fprintf(stderr, "         -k                   use F0 from 'Lokliste' loco as trigger\n");
+    fprintf(stderr, "         -k                   use loco 'Lokliste' F0 as trigger\n");
     fprintf(stderr, "         -f                   run in foreground (for debugging)\n");
     fprintf(stderr, "         -v                   be verbose\n\n");
 }
