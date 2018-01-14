@@ -1,11 +1,17 @@
 const int revisionnr = 
-13402
+13408
 ;
 const char* commithash = 
-"1e87e23f8430e9f7d7b99f4f78d7c54c85cbe19d";
+"718677db244636b357708f4ffdeb0492a53b23b1";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13408 2018-01-14 16:57:29 +0100 automatically popup timetables for locations\n" \
+"13407 2018-01-14 10:37:50 +0100 location: format of timetable adjusted\n" \
+"13406 2018-01-14 09:34:58 +0100 textdialog: layout correction\n" \
+"13405 2018-01-14 09:02:26 +0100 locationsdlg: layout change for options\n" \
+"13404 2018-01-14 08:21:30 +0100 location: schedule table html corrections\n" \
+"13403 2018-01-14 07:45:54 +0100 planpanel: added the missing capturelost function\n" \
 "13402 2018-01-13 18:00:30 +0100 location: optional html format for actions\n" \
 "13401 2018-01-13 15:02:10 +0100 text: html option added\n" \
 "13400 2018-01-13 13:19:17 +0100 location: via fix for cloned hourly schedules\n" \
@@ -50,11 +56,5 @@ const char* revlog =
 "13361 2018-01-07 13:36:46 +0100 block: inform fifo of a red signal event\n" \
 "13360 2018-01-07 08:19:09 +0100 operatordlg: sorting columns added\n" \
 "13359 2018-01-06 16:22:16 +0100 loc: isHome function added\n" \
-"13358 2018-01-06 12:30:18 +0100 in: ignore wait in case next destination is reserved and the engine type is automobile\n" \
-"13357 2018-01-06 10:50:17 +0100 location: fix for updating the wrong hourly schedule\n" \
-"13356 2018-01-06 10:42:44 +0100 location: start time added in the schedule table entries\n" \
-"13355 2018-01-06 09:04:37 +0100 route: only set the route after lock just one time\n" \
-"13354 2018-01-06 08:35:03 +0100 blockgroup: fix for overwriting the groupfree flag with conditions if its not free\n" \
-"13353 2018-01-06 08:14:00 +0100 route: fix for not type condition\n" \
 
 "log end";
