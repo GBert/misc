@@ -29,11 +29,18 @@ define Build/Compile
 endef
 
 define Package/maecan-server/install
-	$(INSTALL_DIR) $(1)/www/
-	$(INSTALL_DIR) $(1)/www/node
-	$(CP) -r ./node/* $(1)/www/node
-	$(INSTALL_DIR) $(1)/www/html
-	$(CP) -r ./html/* $(1)/www/node
+	$(INSTALL_DIR) $(1)/www/MaeCAN-Server
+	$(CP) -r ./node $(1)/www/MaeCAN-Server
+	$(CP) -r ./html $(1)/www/MaeCAN-Server
+endef
+
+define Package/maecan-server/postinst
+#!/bin/sh
+uci set uhttpd.llmp=uhttpd
+uci set uhttpd.llmp.listen_http=81
+uci set uhttpd.llmp.home=/www/MaeCAN-Server
+uci commit uhttpd
+exit 0
 endef
 
 $(eval $(call BuildPackage,maecan-server))
