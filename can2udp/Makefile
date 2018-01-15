@@ -109,14 +109,4 @@ define Package/can2udp/postinst
         ln -sf /www/config $${IPKG_INSTROOT}/betatest/cs2
 endef
 
-define Package/can2udp/postinst
-#!/bin/sh
-# check if we are on real system
-if [ -z "$${IPKG_INSTROOT}" ]; then
-        echo "Removing rc.d symlink for s88udp"
-        /etc/init.d/s88udp disable
-fi
-exit 0
-endef
-
 $(eval $(call BuildPackage,can2udp))
