@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Beispiellok DCC 1",
+    "typ": "dcc",
+    "uid": 49153,
+    "adress": 1
+  },
+  {
+    "name": "Beispiellok DCC 5",
+    "typ": "dcc",
+    "uid": 49157,
+    "adress": 5
+  }
+]

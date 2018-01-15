@@ -1,0 +1,35 @@
+#alertbox {
+	height: 100vh;
+	width: 100vw;
+	top: 0;
+	left: 0;
+	position: absolute;
+	background-color: #a0a0a0ab;
+}
+
+.alertbox{
+	top: 50%;
+	left: 50%;
+	margin-top: -102px;
+	margin-left: -152px;
+	height: 200px;
+	width: 300px;
+	border: 2px solid #adadad;
+	background-color: white;
+	border-radius: 15px;
+	position: absolute;
+	color: black;
+	box-shadow: 0 0 10px black;
+}
+
+.alertbox p {
+	font-size: 20px;
+	line-height: 22px;
+	margin: 13px;
+	text-align: center;
+	height: 86px;
+}
+
+.sub_alertbox {
+	height: 133px;
+}

@@ -22,6 +22,10 @@ start() {
 		# can2lan -m -c /www/config -b wlan0
 		# for LAN
 		can2lan -m -c /www/config -b br-lan
+
+		# for MaeCAN
+		# can2udp -d 15733 -l 15734 -b 127.0.0.1
+		# cd /www/node && node maecanserver.js
 	}
 }
 

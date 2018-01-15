@@ -1,0 +1,9 @@
+html/loco_icons/*.png
+*.cs2
+*.sr2
+*.vrs
+html/config/gleisbilder/
+*.bak
+node/node_modules/
+node/package-lock.json
+html/test.php
