@@ -1,11 +1,12 @@
 const int revisionnr = 
-13414
+13415
 ;
 const char* commithash = 
-"f826b72c819f4f9ca84e6e115b4b33fa0b900c09";
+"ccc1cdbc873729de07c70b844ec1709faa94ef96";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13415 2018-01-15 15:13:46 +0100 wrapper: item showid attribute\n" \
 "13414 2018-01-15 14:25:13 +0100 messages: show ID translation added\n" \
 "13413 2018-01-15 14:13:38 +0100 output: showid option added\n" \
 "13412 2018-01-15 11:10:07 +0100 timetable: no stay on top\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13368 2018-01-08 10:34:05 +0100 routedialog: layout and label corrections\n" \
 "13367 2018-01-08 08:30:02 +0100 makefile: do not overwrite the version.h with the build of rocnetnode\n" \
 "13366 2018-01-08 08:01:34 +0100 version.h: dummy\n" \
-"13365 2018-01-07 17:51:02 +0100 a tip from the build\n" \
 
 "log end";
