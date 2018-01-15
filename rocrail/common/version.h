@@ -1,11 +1,17 @@
 const int revisionnr = 
-13408
+13414
 ;
 const char* commithash = 
-"718677db244636b357708f4ffdeb0492a53b23b1";
+"f826b72c819f4f9ca84e6e115b4b33fa0b900c09";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13414 2018-01-15 14:25:13 +0100 messages: show ID translation added\n" \
+"13413 2018-01-15 14:13:38 +0100 output: showid option added\n" \
+"13412 2018-01-15 11:10:07 +0100 timetable: no stay on top\n" \
+"13411 2018-01-15 09:42:00 +0100 timetabledlg: minimize option added\n" \
+"13410 2018-01-15 08:38:16 +0100 timetabledlg: translations added\n" \
+"13409 2018-01-15 08:12:25 +0100 timetabledlg: save size and position\n" \
 "13408 2018-01-14 16:57:29 +0100 automatically popup timetables for locations\n" \
 "13407 2018-01-14 10:37:50 +0100 location: format of timetable adjusted\n" \
 "13406 2018-01-14 09:34:58 +0100 textdialog: layout correction\n" \
@@ -50,11 +56,5 @@ const char* revlog =
 "13367 2018-01-08 08:30:02 +0100 makefile: do not overwrite the version.h with the build of rocnetnode\n" \
 "13366 2018-01-08 08:01:34 +0100 version.h: dummy\n" \
 "13365 2018-01-07 17:51:02 +0100 a tip from the build\n" \
-"13364 2018-01-07 17:49:52 +0100 a tip from the build\n" \
-"13363 2018-01-07 17:41:58 +0100 a tip from the build\n" \
-"13362 2018-01-07 14:27:11 +0100 loc: extra trace in case of direct swap placing\n" \
-"13361 2018-01-07 13:36:46 +0100 block: inform fifo of a red signal event\n" \
-"13360 2018-01-07 08:19:09 +0100 operatordlg: sorting columns added\n" \
-"13359 2018-01-06 16:22:16 +0100 loc: isHome function added\n" \
 
 "log end";
