@@ -18,7 +18,7 @@ define Package/maecan-server
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=MaeCAN Server
-  DEPENDS:= +can2udp +php7 +node
+  DEPENDS:= +can2udp +php7 +php7-cgi +node
 endef
 
 define Package/maecan-server/description
@@ -35,14 +35,17 @@ define Package/maecan-server/install
 endef
 
 define Package/maecan-server/postinst
-	sed -i 's,doc_root.*,doc_root = "",g' /etc/php.ini
-	sed -i 's,;short_open_tag = Off,short_open_tag = On,g' /etc/php.ini
-	uci set uhttpd.llmp=uhttpd
-	uci set uhttpd.llmp.listen_http=81
-	uci set uhttpd.llmp.home=/www/MaeCAN-Server/html
-	uci add_list uhttpd.llmp.interpreter=".php=/usr/bin/php-cgi"
-	uci set uhttpd.llmp.index_page="index.html index.htm default.html default.htm index.php"
-	uci commit uhttpd
+#!/bin/sh
+[ -n "$${IPKG_INSTROOT}" ] || {
+    sed -i 's,doc_root.*,doc_root = "",g' /etc/php.ini
+    sed -i 's,;short_open_tag = Off,short_open_tag = On,g' /etc/php.ini
+    uci set uhttpd.llmp=uhttpd
+    uci set uhttpd.llmp.listen_http=81
+    uci set uhttpd.llmp.home=/www/MaeCAN-Server/html
+    uci add_list uhttpd.llmp.interpreter=".php=/usr/bin/php-cgi"
+    uci set uhttpd.llmp.index_page="index.html index.htm default.html default.htm index.php"
+    uci commit uhttpd
+}
 endef
 
 $(eval $(call BuildPackage,maecan-server))
