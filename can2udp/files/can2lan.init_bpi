@@ -25,7 +25,7 @@ start() {
 
 		# for MaeCAN
 		# can2udp -d 15733 -l 15734 -b 127.0.0.1
-		# cd /www/node && node maecanserver.js
+		# cd /www/MaeCAN-Server/node && node maecanserver.js
 	}
 }
 
