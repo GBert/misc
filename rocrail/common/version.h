@@ -1,11 +1,12 @@
 const int revisionnr = 
-13416
+13417
 ;
 const char* commithash = 
-"415ff6d8764f2af6665f3a08cfb3d2756633382e";
+"c8bedf9e9744a20ef0a94d8afb5da910005d3c1c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13417 2018-01-16 08:15:12 +0100 translation merge: de, nl, sl\n" \
 "13416 2018-01-15 16:49:50 +0100 showid: more objects\n" \
 "13415 2018-01-15 15:13:46 +0100 wrapper: item showid attribute\n" \
 "13414 2018-01-15 14:25:13 +0100 messages: show ID translation added\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13370 2018-01-08 10:49:12 +0100 location: keep valid schedule entries in the list to save additional information\n" \
 "13369 2018-01-08 10:46:41 +0100 routedialog: layout correction\n" \
 "13368 2018-01-08 10:34:05 +0100 routedialog: layout and label corrections\n" \
-"13367 2018-01-08 08:30:02 +0100 makefile: do not overwrite the version.h with the build of rocnetnode\n" \
 
 "log end";
