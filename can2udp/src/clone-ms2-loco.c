@@ -575,7 +575,7 @@ int main(int argc, char **argv) {
     struct sockaddr_can caddr;
     fd_set readfds, exceptfds;
     struct can_frame frame;
-    uint16_t member, uid;
+    uint16_t uid;
     uint8_t buffer[MAXLEN];
     struct timespec ts;
 
