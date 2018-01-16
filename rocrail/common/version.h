@@ -1,11 +1,12 @@
 const int revisionnr = 
-13419
+13420
 ;
 const char* commithash = 
-"d036d8667099996a24782415b7818fda5c7b66a5";
+"d701cf0ba477259453f694e389b72bf3735301ee";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13420 2018-01-16 18:06:21 +0100 upnp: show udp sender\n" \
 "13419 2018-01-16 16:55:26 +0100 renaming smarthome to upnp\n" \
 "13418 2018-01-16 14:55:51 +0100 smarthome: wip\n" \
 "13417 2018-01-16 08:15:12 +0100 translation merge: de, nl, sl\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13373 2018-01-08 17:48:01 +0100 makefile: version fix for native win\n" \
 "13372 2018-01-08 16:09:59 +0100 location: regard hours < model time to skip\n" \
 "13371 2018-01-08 15:38:24 +0100 loc: set light attribute incase an event ist dispatched to the operator\n" \
-"13370 2018-01-08 10:49:12 +0100 location: keep valid schedule entries in the list to save additional information\n" \
 
 "log end";
