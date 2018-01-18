@@ -724,35 +724,39 @@ int main(int argc, char **argv) {
 		case 0x09:
 		    v = be16(&frame.data[4]);
 		    v = v / 10;
-		    printf("Lok: %s, Geschwindigkeit: %3.1f\n", getLoco(frame.data, s), v);
+		    if (frame.can_dlc == 4)
+			printf("Lok: %s, Abfrage Fahrstufe\n", getLoco(frame.data, s));
+		    else if (frame.can_dlc == 6)
+			printf("Lok: %s, Geschwindigkeit: %3.1f\n", getLoco(frame.data, s), v);
 		    break;
 		/* Lok Richtung */
 		case 0x0A:
 		case 0x0B:
 		    memset(s, 0, sizeof(s));
 
-		    printf("Lok: %s, ", getLoco(frame.data, s));
-		    if (frame.can_dlc == 4)
-			strcat(s, " wird abgefragt");
-		    switch (frame.data[4]) {
-		    case 0:
-			strcat(s, " bleibt gleich");
-			break;
-		    case 1:
-			strcat(s, ": vorwärts");
-			break;
-		    case 2:
-			strcat(s, ": rückwärts");
-			break;
-		    case 3:
-			strcat(s, " wechseln");
-			break;
-		    default:
-			strcat(s, "unbekannt");
-			break;
+		    printf("Lok: %s ", getLoco(frame.data, s));
+		    if (frame.can_dlc == 4) {
+			printf(" wird abgefragt\n");
+		    } else if (frame.can_dlc == 5) {
+			switch (frame.data[4]) {
+			case 0:
+			    strcat(s, " bleibt gleich");
+			    break;
+			case 1:
+			    strcat(s, ": vorwärts");
+			    break;
+			case 2:
+			    strcat(s, ": rückwärts");
+			    break;
+			case 3:
+			    strcat(s, " wechseln");
+			    break;
+			default:
+			    strcat(s, "unbekannt");
+			    break;
+			}
+			printf("Richtung %s\n", s);
 		    }
-		    printf("Richtung %s\n", s);
-
 		    break;
 		/* Lok Funktion */
 		case 0x0C:

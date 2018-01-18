@@ -32,8 +32,8 @@ define Package/maecan-server/install
 	$(INSTALL_DIR) $(1)/www/MaeCAN-Server
 	$(CP) -r ./node $(1)/www/MaeCAN-Server
 	$(CP) -r ./html $(1)/www/MaeCAN-Server
-        $(INSTALL_DIR) $(1)/etc/uci-defaults
-        $(INSTALL_DATA) ./files/maecan-server $(1)/etc/uci-defaults/90_maecan_server
+	$(INSTALL_DIR) $(1)/etc/uci-defaults
+	$(INSTALL_DATA) ./files/maecan-server $(1)/etc/uci-defaults/90_maecan_server
 endef
 
 $(eval $(call BuildPackage,maecan-server))
