@@ -1,11 +1,19 @@
 const int revisionnr = 
-13420
+13428
 ;
 const char* commithash = 
-"d701cf0ba477259453f694e389b72bf3735301ee";
+"e3f28d1ccf8a0daffd14371f967d6973c09cb493";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13428 2018-01-18 12:42:12 +0100 dinamo: fix for packet length in case of a long DCC address\n" \
+"13427 2018-01-18 10:27:32 +0100 model: fix for crash in case of a pre-reservation\n" \
+"13426 2018-01-18 08:39:49 +0100 rocomp: fix for loco address >= 128\n" \
+"13425 2018-01-18 08:19:38 +0100 model: check in case of a schedule if a block in a location is already reserved\n" \
+"13424 2018-01-17 14:28:28 +0100 blockgroup: regard loco schedule in case of reserve\n" \
+"13423 2018-01-17 13:55:19 +0100 upnp: wip\n" \
+"13422 2018-01-17 13:12:00 +0100 upnp: wip\n" \
+"13421 2018-01-17 09:05:44 +0100 usocket: mac address OSX\n" \
 "13420 2018-01-16 18:06:21 +0100 upnp: show udp sender\n" \
 "13419 2018-01-16 16:55:26 +0100 renaming smarthome to upnp\n" \
 "13418 2018-01-16 14:55:51 +0100 smarthome: wip\n" \
@@ -48,13 +56,5 @@ const char* revlog =
 "13381 2018-01-09 15:35:26 +0100 loc: update schedule tables in case a schedule is activated\n" \
 "13380 2018-01-09 14:09:58 +0100 location: not lookup a loco for a schedule at init\n" \
 "13379 2018-01-09 14:00:51 +0100 location: not evaluate\n" \
-"13378 2018-01-09 13:50:39 +0100 route: include/exclude conditions option added\n" \
-"13377 2018-01-09 13:37:44 +0100 control: list up the build origin in the issue.txt\n" \
-"13376 2018-01-09 11:20:09 +0100 makewin64-full.sh: fix for commandline parameter\n" \
-"13375 2018-01-09 10:51:03 +0100 location: fix for compare schedule entry time with model time\n" \
-"13374 2018-01-09 07:30:45 +0100 dccpp: do not initialise DTR on connect to avoid a reset\n" \
-"13373 2018-01-08 17:48:01 +0100 makefile: version fix for native win\n" \
-"13372 2018-01-08 16:09:59 +0100 location: regard hours < model time to skip\n" \
-"13371 2018-01-08 15:38:24 +0100 loc: set light attribute incase an event ist dispatched to the operator\n" \
 
 "log end";
