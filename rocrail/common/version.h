@@ -1,11 +1,16 @@
 const int revisionnr = 
-13428
+13433
 ;
 const char* commithash = 
-"e3f28d1ccf8a0daffd14371f967d6973c09cb493";
+"3ce82ac1c67aa460b84a396842ab987bc222a5b7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13433 2018-01-19 15:48:56 +0100 upnp: basic description file\n" \
+"13432 2018-01-19 15:46:43 +0100 upnp: wip\n" \
+"13431 2018-01-19 13:38:58 +0100 blockgroupingdlg: label correction from to first block\n" \
+"13430 2018-01-19 10:37:23 +0100 blockgroup: optional enterside for conditions\n" \
+"13429 2018-01-19 08:32:44 +0100 blockgroupingdlg: label correction from to first block\n" \
 "13428 2018-01-18 12:42:12 +0100 dinamo: fix for packet length in case of a long DCC address\n" \
 "13427 2018-01-18 10:27:32 +0100 model: fix for crash in case of a pre-reservation\n" \
 "13426 2018-01-18 08:39:49 +0100 rocomp: fix for loco address >= 128\n" \
@@ -51,10 +56,5 @@ const char* revlog =
 "13386 2018-01-10 18:21:55 +0100 2018: as every year\n" \
 "13385 2018-01-10 17:51:19 +0100 translation merge: sr_latin, pt_BR, sl, de, nl\n" \
 "13384 2018-01-10 14:01:48 +0100 route: optional yellow in case of white aspect\n" \
-"13383 2018-01-10 11:24:08 +0100 route: added missing flag for cargo condition\n" \
-"13382 2018-01-10 10:32:35 +0100 bidib: extra trace line on location report\n" \
-"13381 2018-01-09 15:35:26 +0100 loc: update schedule tables in case a schedule is activated\n" \
-"13380 2018-01-09 14:09:58 +0100 location: not lookup a loco for a schedule at init\n" \
-"13379 2018-01-09 14:00:51 +0100 location: not evaluate\n" \
 
 "log end";
