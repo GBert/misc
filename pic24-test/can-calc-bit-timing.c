@@ -201,6 +201,22 @@ static void printf_btr_mcp251x(struct can_bittiming *bt, bool hdr)
 	}
 }
 
+static void printf_btr_mcp2517fd(struct can_bittiming *bt, bool hdr)
+{
+	uint32_t cinbtcfg;
+
+	if (hdr) {
+		printf("CiNBTCFG");
+	} else {
+		cinbtcfg = (((bt->brp                       - 1) << 24) | 
+			    ((bt->phase_seg1 + bt->prop_seg - 1) << 16) |
+			    ((bt->phase_seg2                - 1) <<  8) |
+			    ((bt->sjw                       - 1) <<  0));
+			   
+		printf("0x%08x", cinbtcfg);
+	}
+}
+
 static void printf_btr_pic24(struct can_bittiming *bt, bool hdr)
 {
 	uint16_t c1cfg1, c1cfg2;
@@ -346,6 +362,23 @@ static struct calc_bittiming_const can_calc_consts[] = {
 			{ .clk = 16000000, },
 		},
 		.printf_btr = printf_btr_mcp251x,
+	}, {
+		.bittiming_const = {
+			.name = "mcp2517fd",
+			.tseg1_min = 1,
+			.tseg1_max = 256,
+			.tseg2_min = 1,
+			.tseg2_max = 128,
+			.sjw_max = 128,
+			.brp_min = 1,
+			.brp_max = 256,
+			.brp_inc = 1,
+		},
+		.ref_clk = {
+			{ .clk = 20000000, },
+			{ .clk = 40000000, },
+		},
+		.printf_btr = printf_btr_mcp2517fd,
 	}, {
 		.bittiming_const = {
 			.name = "PIC24",
