@@ -1,11 +1,12 @@
 const int revisionnr = 
-13433
+13434
 ;
 const char* commithash = 
-"3ce82ac1c67aa460b84a396842ab987bc222a5b7";
+"36b2616bb71ff425a639f7927a3de8228c7c6902";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13434 2018-01-20 08:33:31 +0100 wserial: use getlasterror in case the clearcommerror did not succeed\n" \
 "13433 2018-01-19 15:48:56 +0100 upnp: basic description file\n" \
 "13432 2018-01-19 15:46:43 +0100 upnp: wip\n" \
 "13431 2018-01-19 13:38:58 +0100 blockgroupingdlg: label correction from to first block\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13387 2018-01-10 18:25:24 +0100 z21: 2018 and commented out some dyn tests\n" \
 "13386 2018-01-10 18:21:55 +0100 2018: as every year\n" \
 "13385 2018-01-10 17:51:19 +0100 translation merge: sr_latin, pt_BR, sl, de, nl\n" \
-"13384 2018-01-10 14:01:48 +0100 route: optional yellow in case of white aspect\n" \
 
 "log end";
