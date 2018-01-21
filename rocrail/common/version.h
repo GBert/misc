@@ -1,11 +1,15 @@
 const int revisionnr = 
-13440
+13444
 ;
 const char* commithash = 
-"888e3a1ab0b587aa63a35c759bb95e49fecd79e7";
+"9b7e705c3eac143ecb0a8570ed00dac0a9e0d1db";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13444 2018-01-21 16:09:08 +0100 upnpdlg: clear tree on discover\n" \
+"13443 2018-01-21 15:21:12 +0100 upnp: smarthome icon\n" \
+"13442 2018-01-21 14:08:14 +0100 upnpdlg: wip\n" \
+"13441 2018-01-21 10:50:18 +0100 upnp: discover and dialog (WIP)\n" \
 "13440 2018-01-20 18:13:32 +0100 rocweb: update speed always on event\n" \
 "13439 2018-01-20 17:57:42 +0100 upnp: more realistic service description\n" \
 "13438 2018-01-20 15:50:43 +0100 upnp: WIP\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "13397 2018-01-13 11:39:08 +0100 location: action option added\n" \
 "13396 2018-01-13 07:28:16 +0100 tracedlg: type OLcDrive added\n" \
 "13395 2018-01-12 14:13:53 +0100 makefile: install demoplan\n" \
-"13394 2018-01-12 14:00:29 +0100 bidib: POM support for M4/MfX added\n" \
-"13393 2018-01-12 11:15:27 +0100 bidib: trace correction for output\n" \
-"13392 2018-01-12 07:58:05 +0100 actionsctrldlg: loco state home added\n" \
-"13391 2018-01-12 07:52:17 +0100 loc: state home added\n" \
 
 "log end";
