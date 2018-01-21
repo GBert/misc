@@ -1,11 +1,17 @@
 const int revisionnr = 
-13434
+13440
 ;
 const char* commithash = 
-"36b2616bb71ff425a639f7927a3de8228c7c6902";
+"888e3a1ab0b587aa63a35c759bb95e49fecd79e7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13440 2018-01-20 18:13:32 +0100 rocweb: update speed always on event\n" \
+"13439 2018-01-20 17:57:42 +0100 upnp: more realistic service description\n" \
+"13438 2018-01-20 15:50:43 +0100 upnp: WIP\n" \
+"13437 2018-01-20 14:16:09 +0100 wrapper: removed unused gotoblockgo commando\n" \
+"13436 2018-01-20 13:40:28 +0100 importantchanges: xml parser extended\n" \
+"13435 2018-01-20 13:17:01 +0100 rocs: added optional support for using xml element values\n" \
 "13434 2018-01-20 08:33:31 +0100 wserial: use getlasterror in case the clearcommerror did not succeed\n" \
 "13433 2018-01-19 15:48:56 +0100 upnp: basic description file\n" \
 "13432 2018-01-19 15:46:43 +0100 upnp: wip\n" \
@@ -50,11 +56,5 @@ const char* revlog =
 "13393 2018-01-12 11:15:27 +0100 bidib: trace correction for output\n" \
 "13392 2018-01-12 07:58:05 +0100 actionsctrldlg: loco state home added\n" \
 "13391 2018-01-12 07:52:17 +0100 loc: state home added\n" \
-"13390 2018-01-11 10:28:33 +0100 schedules: fix for update schedule table in case of max delay\n" \
-"13389 2018-01-11 09:15:56 +0100 location: schedule table entry maxdelay added\n" \
-"13388 2018-01-11 09:02:44 +0100 bidib: support added for more protocol formats\n" \
-"13387 2018-01-10 18:25:24 +0100 z21: 2018 and commented out some dyn tests\n" \
-"13386 2018-01-10 18:21:55 +0100 2018: as every year\n" \
-"13385 2018-01-10 17:51:19 +0100 translation merge: sr_latin, pt_BR, sl, de, nl\n" \
 
 "log end";
