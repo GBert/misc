@@ -1,11 +1,16 @@
 const int revisionnr = 
-13444
+13449
 ;
 const char* commithash = 
-"9b7e705c3eac143ecb0a8570ed00dac0a9e0d1db";
+"ce7db2a1b3e8485c22b8257c6ccd681a51de3a18";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13449 2018-01-22 13:31:17 +0100 demoplan: removed ZEP\n" \
+"13448 2018-01-22 11:50:38 +0100 upnpdlg: removed unused apply button\n" \
+"13447 2018-01-22 11:17:33 +0100 upnp: wip\n" \
+"13446 2018-01-22 10:38:15 +0100 location: attribute timeframe added to the schedule table entries\n" \
+"13445 2018-01-22 09:29:06 +0100 location: add time frame to the schedule entries\n" \
 "13444 2018-01-21 16:09:08 +0100 upnpdlg: clear tree on discover\n" \
 "13443 2018-01-21 15:21:12 +0100 upnp: smarthome icon\n" \
 "13442 2018-01-21 14:08:14 +0100 upnpdlg: wip\n" \
@@ -51,10 +56,5 @@ const char* revlog =
 "13402 2018-01-13 18:00:30 +0100 location: optional html format for actions\n" \
 "13401 2018-01-13 15:02:10 +0100 text: html option added\n" \
 "13400 2018-01-13 13:19:17 +0100 location: via fix for cloned hourly schedules\n" \
-"13399 2018-01-13 12:34:30 +0100 text: monospace option added\n" \
-"13398 2018-01-13 11:40:58 +0100 messages: publish added\n" \
-"13397 2018-01-13 11:39:08 +0100 location: action option added\n" \
-"13396 2018-01-13 07:28:16 +0100 tracedlg: type OLcDrive added\n" \
-"13395 2018-01-12 14:13:53 +0100 makefile: install demoplan\n" \
 
 "log end";
