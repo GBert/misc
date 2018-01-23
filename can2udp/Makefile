@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=can2udp
-PKG_RELEASE:=1.34
+PKG_RELEASE:=1.35
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_BUILD_PARALLEL:=1
@@ -44,7 +44,6 @@ define Package/can2udp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/can-monitor $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/can2udp $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/can2lan $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/can2lan_m $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/can2serial $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/clone-cs2-config $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/clone-cs2-trigger $(1)/usr/bin/
