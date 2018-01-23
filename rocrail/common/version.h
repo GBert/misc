@@ -1,11 +1,13 @@
 const int revisionnr = 
-13449
+13451
 ;
 const char* commithash = 
-"ce7db2a1b3e8485c22b8257c6ccd681a51de3a18";
+"a9d55783a3f926c0d879ca6c32055edac75b6a1a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13451 2018-01-23 14:27:25 +0100 upnpdlg: add hue bridge\n" \
+"13450 2018-01-23 10:30:11 +0100 timetabledlg: html extended with a via column\n" \
 "13449 2018-01-22 13:31:17 +0100 demoplan: removed ZEP\n" \
 "13448 2018-01-22 11:50:38 +0100 upnpdlg: removed unused apply button\n" \
 "13447 2018-01-22 11:17:33 +0100 upnp: wip\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "13404 2018-01-14 08:21:30 +0100 location: schedule table html corrections\n" \
 "13403 2018-01-14 07:45:54 +0100 planpanel: added the missing capturelost function\n" \
 "13402 2018-01-13 18:00:30 +0100 location: optional html format for actions\n" \
-"13401 2018-01-13 15:02:10 +0100 text: html option added\n" \
-"13400 2018-01-13 13:19:17 +0100 location: via fix for cloned hourly schedules\n" \
 
 "log end";
