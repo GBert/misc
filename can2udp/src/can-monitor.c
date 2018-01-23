@@ -660,8 +660,9 @@ int main(int argc, char **argv) {
 	    printf(RESET);
 	    if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
 		fprintf(stderr, "error reading CAN frame: %s\n", strerror(errno));
-	    } else if((frame.can_id & CAN_EFF_FLAG) 	/* only EFF frames are valid */
-		&& ((frame.can_id & 0x000380UL) == 0x000300UL)) {	/* MS2/CS2 hash ? */
+	    } else if((frame.can_id & CAN_EFF_FLAG) 			/* only EFF frames are valid */
+		&& (((frame.can_id & 0x00000380UL) == 0x00000300UL)	/* MS2/CS2 hash ? */
+		|| (frame.can_id == (0x00310000UL | CAN_EFF_FLAG)))) {	/* or Ping reply from CS2 GUI */
 		print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
 		if (frame.can_id & 0x00010000UL)
 		    printf(CYN);

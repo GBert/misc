@@ -226,10 +226,11 @@ int frame_to_can(int can_socket, unsigned char *netframe) {
 
     /* we calculate the difference between the actual time and the time the last command was sent */
     /* probably we don't need to wait anymore before putting next CAN frame on the wire */
-    if ((canid & 0x00420000) == 0x00420000)
-	wait_usec = TIME_WAIT_US;
-    else
+    if (((frame.can_id & 0x00FE0000) == 0x00420000) ||
+	((frame.can_id & 0x00FE0000) == 0x00360000))
 	wait_usec = TIME_WAIT_US_SH;
+    else
+	wait_usec = TIME_WAIT_US;
 
     gettimeofday(&actual_time, NULL);
     usec = (actual_time.tv_sec - last_sent.tv_sec) * 1000000;

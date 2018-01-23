@@ -1,11 +1,32 @@
 const int revisionnr = 
-13428
+13449
 ;
 const char* commithash = 
-"e3f28d1ccf8a0daffd14371f967d6973c09cb493";
+"ce7db2a1b3e8485c22b8257c6ccd681a51de3a18";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13449 2018-01-22 13:31:17 +0100 demoplan: removed ZEP\n" \
+"13448 2018-01-22 11:50:38 +0100 upnpdlg: removed unused apply button\n" \
+"13447 2018-01-22 11:17:33 +0100 upnp: wip\n" \
+"13446 2018-01-22 10:38:15 +0100 location: attribute timeframe added to the schedule table entries\n" \
+"13445 2018-01-22 09:29:06 +0100 location: add time frame to the schedule entries\n" \
+"13444 2018-01-21 16:09:08 +0100 upnpdlg: clear tree on discover\n" \
+"13443 2018-01-21 15:21:12 +0100 upnp: smarthome icon\n" \
+"13442 2018-01-21 14:08:14 +0100 upnpdlg: wip\n" \
+"13441 2018-01-21 10:50:18 +0100 upnp: discover and dialog (WIP)\n" \
+"13440 2018-01-20 18:13:32 +0100 rocweb: update speed always on event\n" \
+"13439 2018-01-20 17:57:42 +0100 upnp: more realistic service description\n" \
+"13438 2018-01-20 15:50:43 +0100 upnp: WIP\n" \
+"13437 2018-01-20 14:16:09 +0100 wrapper: removed unused gotoblockgo commando\n" \
+"13436 2018-01-20 13:40:28 +0100 importantchanges: xml parser extended\n" \
+"13435 2018-01-20 13:17:01 +0100 rocs: added optional support for using xml element values\n" \
+"13434 2018-01-20 08:33:31 +0100 wserial: use getlasterror in case the clearcommerror did not succeed\n" \
+"13433 2018-01-19 15:48:56 +0100 upnp: basic description file\n" \
+"13432 2018-01-19 15:46:43 +0100 upnp: wip\n" \
+"13431 2018-01-19 13:38:58 +0100 blockgroupingdlg: label correction from to first block\n" \
+"13430 2018-01-19 10:37:23 +0100 blockgroup: optional enterside for conditions\n" \
+"13429 2018-01-19 08:32:44 +0100 blockgroupingdlg: label correction from to first block\n" \
 "13428 2018-01-18 12:42:12 +0100 dinamo: fix for packet length in case of a long DCC address\n" \
 "13427 2018-01-18 10:27:32 +0100 model: fix for crash in case of a pre-reservation\n" \
 "13426 2018-01-18 08:39:49 +0100 rocomp: fix for loco address >= 128\n" \
@@ -35,26 +56,5 @@ const char* revlog =
 "13402 2018-01-13 18:00:30 +0100 location: optional html format for actions\n" \
 "13401 2018-01-13 15:02:10 +0100 text: html option added\n" \
 "13400 2018-01-13 13:19:17 +0100 location: via fix for cloned hourly schedules\n" \
-"13399 2018-01-13 12:34:30 +0100 text: monospace option added\n" \
-"13398 2018-01-13 11:40:58 +0100 messages: publish added\n" \
-"13397 2018-01-13 11:39:08 +0100 location: action option added\n" \
-"13396 2018-01-13 07:28:16 +0100 tracedlg: type OLcDrive added\n" \
-"13395 2018-01-12 14:13:53 +0100 makefile: install demoplan\n" \
-"13394 2018-01-12 14:00:29 +0100 bidib: POM support for M4/MfX added\n" \
-"13393 2018-01-12 11:15:27 +0100 bidib: trace correction for output\n" \
-"13392 2018-01-12 07:58:05 +0100 actionsctrldlg: loco state home added\n" \
-"13391 2018-01-12 07:52:17 +0100 loc: state home added\n" \
-"13390 2018-01-11 10:28:33 +0100 schedules: fix for update schedule table in case of max delay\n" \
-"13389 2018-01-11 09:15:56 +0100 location: schedule table entry maxdelay added\n" \
-"13388 2018-01-11 09:02:44 +0100 bidib: support added for more protocol formats\n" \
-"13387 2018-01-10 18:25:24 +0100 z21: 2018 and commented out some dyn tests\n" \
-"13386 2018-01-10 18:21:55 +0100 2018: as every year\n" \
-"13385 2018-01-10 17:51:19 +0100 translation merge: sr_latin, pt_BR, sl, de, nl\n" \
-"13384 2018-01-10 14:01:48 +0100 route: optional yellow in case of white aspect\n" \
-"13383 2018-01-10 11:24:08 +0100 route: added missing flag for cargo condition\n" \
-"13382 2018-01-10 10:32:35 +0100 bidib: extra trace line on location report\n" \
-"13381 2018-01-09 15:35:26 +0100 loc: update schedule tables in case a schedule is activated\n" \
-"13380 2018-01-09 14:09:58 +0100 location: not lookup a loco for a schedule at init\n" \
-"13379 2018-01-09 14:00:51 +0100 location: not evaluate\n" \
 
 "log end";
