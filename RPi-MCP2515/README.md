@@ -50,7 +50,7 @@ dtoverlay=spi-bcm2835-overlay
 ```
 reboot
 ```
-sudo shutdown -h now
+sudo shutdown -r now
 ```
 CAN Interface konfigurieren
 ```
