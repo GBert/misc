@@ -1,11 +1,16 @@
 const int revisionnr = 
-13451
+13456
 ;
 const char* commithash = 
-"a9d55783a3f926c0d879ca6c32055edac75b6a1a";
+"85bcde96020253aa80fbba473575006bf2fab54b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13456 2018-01-24 11:20:26 +0100 schedule: reamrk field added to the entries\n" \
+"13455 2018-01-24 09:27:41 +0100 mqtt, clntcon: check if the socket object is valid before using it\n" \
+"13454 2018-01-24 09:02:18 +0100 http: fix for c style comment\n" \
+"13453 2018-01-24 08:39:06 +0100 http: fix for draining cpu in case os a rocweb connection\n" \
+"13452 2018-01-24 08:17:47 +0100 clntcon: wait for the mqtt socket mutex before closing the socket if broken\n" \
 "13451 2018-01-23 14:27:25 +0100 upnpdlg: add hue bridge\n" \
 "13450 2018-01-23 10:30:11 +0100 timetabledlg: html extended with a via column\n" \
 "13449 2018-01-22 13:31:17 +0100 demoplan: removed ZEP\n" \
@@ -51,10 +56,5 @@ const char* revlog =
 "13409 2018-01-15 08:12:25 +0100 timetabledlg: save size and position\n" \
 "13408 2018-01-14 16:57:29 +0100 automatically popup timetables for locations\n" \
 "13407 2018-01-14 10:37:50 +0100 location: format of timetable adjusted\n" \
-"13406 2018-01-14 09:34:58 +0100 textdialog: layout correction\n" \
-"13405 2018-01-14 09:02:26 +0100 locationsdlg: layout change for options\n" \
-"13404 2018-01-14 08:21:30 +0100 location: schedule table html corrections\n" \
-"13403 2018-01-14 07:45:54 +0100 planpanel: added the missing capturelost function\n" \
-"13402 2018-01-13 18:00:30 +0100 location: optional html format for actions\n" \
 
 "log end";
