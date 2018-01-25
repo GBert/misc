@@ -1,11 +1,13 @@
 const int revisionnr = 
-13456
+13458
 ;
 const char* commithash = 
-"85bcde96020253aa80fbba473575006bf2fab54b";
+"b8293ef8160e8e20f9e3d4ba8309b0230eda82e5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13458 2018-01-25 16:46:45 +0100 cbus: warning on PADA addressing -> must be FLAT\n" \
+"13457 2018-01-25 15:59:26 +0100 location: corrections for timetable formating\n" \
 "13456 2018-01-24 11:20:26 +0100 schedule: reamrk field added to the entries\n" \
 "13455 2018-01-24 09:27:41 +0100 mqtt, clntcon: check if the socket object is valid before using it\n" \
 "13454 2018-01-24 09:02:18 +0100 http: fix for c style comment\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "13411 2018-01-15 09:42:00 +0100 timetabledlg: minimize option added\n" \
 "13410 2018-01-15 08:38:16 +0100 timetabledlg: translations added\n" \
 "13409 2018-01-15 08:12:25 +0100 timetabledlg: save size and position\n" \
-"13408 2018-01-14 16:57:29 +0100 automatically popup timetables for locations\n" \
-"13407 2018-01-14 10:37:50 +0100 location: format of timetable adjusted\n" \
 
 "log end";
