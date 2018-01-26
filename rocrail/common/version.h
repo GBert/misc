@@ -1,11 +1,14 @@
 const int revisionnr = 
-13458
+13461
 ;
 const char* commithash = 
-"b8293ef8160e8e20f9e3d4ba8309b0230eda82e5";
+"efab5bd4085b2105bfc6a00dc85b03243446c290";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13461 2018-01-26 11:26:05 +0100 rocrailinidialog: show warning and set the rocweb port to zero in case the http service port conflicts with the rocweb port\n" \
+"13460 2018-01-26 09:23:22 +0100 http: do not start the Rocweb service if the port is the same as the HTTP service\n" \
+"13459 2018-01-26 08:49:31 +0100 bidib: option to reset last known accessory state in case of a manual operation\n" \
 "13458 2018-01-25 16:46:45 +0100 cbus: warning on PADA addressing -> must be FLAT\n" \
 "13457 2018-01-25 15:59:26 +0100 location: corrections for timetable formating\n" \
 "13456 2018-01-24 11:20:26 +0100 schedule: reamrk field added to the entries\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13414 2018-01-15 14:25:13 +0100 messages: show ID translation added\n" \
 "13413 2018-01-15 14:13:38 +0100 output: showid option added\n" \
 "13412 2018-01-15 11:10:07 +0100 timetable: no stay on top\n" \
-"13411 2018-01-15 09:42:00 +0100 timetabledlg: minimize option added\n" \
-"13410 2018-01-15 08:38:16 +0100 timetabledlg: translations added\n" \
-"13409 2018-01-15 08:12:25 +0100 timetabledlg: save size and position\n" \
 
 "log end";
