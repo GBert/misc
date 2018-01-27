@@ -1,11 +1,14 @@
 const int revisionnr = 
-13461
+13464
 ;
 const char* commithash = 
-"efab5bd4085b2105bfc6a00dc85b03243446c290";
+"4a67c4354b7e51e79b22dd0f2c5e33f8f354c949";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13464 2018-01-27 07:58:18 +0100 switch: exclude from analyse option added\n" \
+"13463 2018-01-27 07:47:36 +0100 bidib: do not report aspect in case > 127\n" \
+"13462 2018-01-27 07:30:10 +0100 bidib: only reset manual operated accessory if aspect < 128\n" \
 "13461 2018-01-26 11:26:05 +0100 rocrailinidialog: show warning and set the rocweb port to zero in case the http service port conflicts with the rocweb port\n" \
 "13460 2018-01-26 09:23:22 +0100 http: do not start the Rocweb service if the port is the same as the HTTP service\n" \
 "13459 2018-01-26 08:49:31 +0100 bidib: option to reset last known accessory state in case of a manual operation\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13417 2018-01-16 08:15:12 +0100 translation merge: de, nl, sl\n" \
 "13416 2018-01-15 16:49:50 +0100 showid: more objects\n" \
 "13415 2018-01-15 15:13:46 +0100 wrapper: item showid attribute\n" \
-"13414 2018-01-15 14:25:13 +0100 messages: show ID translation added\n" \
-"13413 2018-01-15 14:13:38 +0100 output: showid option added\n" \
-"13412 2018-01-15 11:10:07 +0100 timetable: no stay on top\n" \
 
 "log end";
