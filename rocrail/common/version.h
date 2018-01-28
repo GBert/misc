@@ -1,11 +1,15 @@
 const int revisionnr = 
-13464
+13468
 ;
 const char* commithash = 
-"4a67c4354b7e51e79b22dd0f2c5e33f8f354c949";
+"c3f84a4b2cc3325f368c8e5ea9ebc4d91bdbfddc";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13468 2018-01-28 15:31:00 +0100 rocs: check for _WIN32 and for _WIN64\n" \
+"13467 2018-01-28 14:49:10 +0100 import/export workspace messages\n" \
+"13466 2018-01-28 12:10:42 +0100 rocview: import workspace and go\n" \
+"13465 2018-01-28 11:37:31 +0100 rocview: export active workspace\n" \
 "13464 2018-01-27 07:58:18 +0100 switch: exclude from analyse option added\n" \
 "13463 2018-01-27 07:47:36 +0100 bidib: do not report aspect in case > 127\n" \
 "13462 2018-01-27 07:30:10 +0100 bidib: only reset manual operated accessory if aspect < 128\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "13421 2018-01-17 09:05:44 +0100 usocket: mac address OSX\n" \
 "13420 2018-01-16 18:06:21 +0100 upnp: show udp sender\n" \
 "13419 2018-01-16 16:55:26 +0100 renaming smarthome to upnp\n" \
-"13418 2018-01-16 14:55:51 +0100 smarthome: wip\n" \
-"13417 2018-01-16 08:15:12 +0100 translation merge: de, nl, sl\n" \
-"13416 2018-01-15 16:49:50 +0100 showid: more objects\n" \
-"13415 2018-01-15 15:13:46 +0100 wrapper: item showid attribute\n" \
 
 "log end";
