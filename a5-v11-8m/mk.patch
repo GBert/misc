@@ -313,7 +313,7 @@ index 14f5ec2..3b1262e 100755
 	air3gii|\
 	all0239-3g|\
 diff --git a/target/linux/ramips/image/rt305x.mk b/target/linux/ramips/image/rt305x.mk
-index 628b84b..a49321b 100644
+index 4e82eb4..8a24cf2 100644
 --- a/target/linux/ramips/image/rt305x.mk
 +++ b/target/linux/ramips/image/rt305x.mk
 @@ -67,6 +67,28 @@ define Device/a5-v11
@@ -323,7 +323,7 @@ index 628b84b..a49321b 100644
 +define Device/a5-v11-8M
 +  DTS := A5-V11-8M
 +  SUPPORTED_DEVICES += a5-v11
-+  IMAGES += factory.bin
++  IMAGE_SIZE := $(ralink_default_fw_size_8M)
 +  IMAGE/factory.bin := \
 +       $$(sysupgrade_bin) | check-size $$$$(IMAGE_SIZE) | poray-header -B A5-V11 -F 8M
 +  DEVICE_TITLE := A5-V11 (8M)
@@ -334,7 +334,7 @@ index 628b84b..a49321b 100644
 +define Device/a5-v11-16M
 +  DTS := A5-V11-16M
 +  SUPPORTED_DEVICES += a5-v11
-+  IMAGES += factory.bin
++  IMAGE_SIZE := $(ralink_default_fw_size_16M)
 +  IMAGE/factory.bin := \
 +       $$(sysupgrade_bin) | check-size $$$$(IMAGE_SIZE) | poray-header -B A5-V11 -F 16M
 +  DEVICE_TITLE := A5-V11 (16M)
