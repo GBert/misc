@@ -1,7 +1,12 @@
 RPI-I2C/CAN Adapter with optional I2C Bus Extender
 ==================================================
 
-RPi2 Setup
+```
+# Determine RPi Version
+cat /sys/firmware/devicetree/base/model
+```
+
+RPi2B Setup
 ----------
 ```
 cd /tmp
@@ -43,3 +48,12 @@ EOF
 reboot
 ```
 
+CAN Setup
+---------
+
+```
+# setup 250kBaud
+#  time quantum 250ns time quanta 16 => 16*250ns = 4us => 250kb
+ip link set can0 up type can fd off tq 250 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1 berr-reporting off restart-ms 100
+ip -s -d link show can0
+```
