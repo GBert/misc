@@ -48,9 +48,16 @@ EOF
 reboot
 ```
 
+Result
+------
+```
+dmesg | egrep -i "can|spi" 
+[    4.821482] CAN device driver interface
+[    4.840982] mcp25xxfd spi0.0 can0: MCP2517 successfully initialized.
+```
+
 CAN Setup
 ---------
-
 ```
 # setup 250kBaud
 #  time quantum 250ns time quanta 16 => 16*250ns = 4us => 250kb
