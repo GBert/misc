@@ -1,11 +1,14 @@
 const int revisionnr = 
-13472
+13475
 ;
 const char* commithash = 
-"53bc170268c5cf44a22420861f268dfb99945375";
+"206e955ae2b78773b15781edc42ef3635d3b9e93";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13475 2018-01-30 11:55:48 +0100 guiframe: help menu reduced\n" \
+"13474 2018-01-30 08:28:47 +0100 bidib: save sensor state also on multi sensor messages\n" \
+"13473 2018-01-30 08:18:42 +0100 translation merge: sl, sr_latin, en_GB, de, nl, pt_BR\n" \
 "13472 2018-01-29 22:16:10 +0100 bidib: always process sensor reports in case of occupied\n" \
 "13471 2018-01-29 14:11:14 +0100 file: skip creating the drive letter directory under windows\n" \
 "13470 2018-01-29 09:50:22 +0100 wdir: do not skip directories\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13428 2018-01-18 12:42:12 +0100 dinamo: fix for packet length in case of a long DCC address\n" \
 "13427 2018-01-18 10:27:32 +0100 model: fix for crash in case of a pre-reservation\n" \
 "13426 2018-01-18 08:39:49 +0100 rocomp: fix for loco address >= 128\n" \
-"13425 2018-01-18 08:19:38 +0100 model: check in case of a schedule if a block in a location is already reserved\n" \
-"13424 2018-01-17 14:28:28 +0100 blockgroup: regard loco schedule in case of reserve\n" \
-"13423 2018-01-17 13:55:19 +0100 upnp: wip\n" \
 
 "log end";
