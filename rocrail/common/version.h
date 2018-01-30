@@ -1,11 +1,12 @@
 const int revisionnr = 
-13471
+13472
 ;
 const char* commithash = 
-"877d53db8b9ba1f1600c6937e64418af915bb58c";
+"53bc170268c5cf44a22420861f268dfb99945375";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13472 2018-01-29 22:16:10 +0100 bidib: always process sensor reports in case of occupied\n" \
 "13471 2018-01-29 14:11:14 +0100 file: skip creating the drive letter directory under windows\n" \
 "13470 2018-01-29 09:50:22 +0100 wdir: do not skip directories\n" \
 "13469 2018-01-29 08:30:04 +0100 rocweb: fix for XS and modular layouts\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13425 2018-01-18 08:19:38 +0100 model: check in case of a schedule if a block in a location is already reserved\n" \
 "13424 2018-01-17 14:28:28 +0100 blockgroup: regard loco schedule in case of reserve\n" \
 "13423 2018-01-17 13:55:19 +0100 upnp: wip\n" \
-"13422 2018-01-17 13:12:00 +0100 upnp: wip\n" \
 
 "log end";
