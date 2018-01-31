@@ -1,11 +1,13 @@
 const int revisionnr = 
-13475
+13477
 ;
 const char* commithash = 
-"206e955ae2b78773b15781edc42ef3635d3b9e93";
+"9f9b3369d964b25239ce3da6ecac69fea61f46ef";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13477 2018-01-31 11:36:43 +0100 openhab: output support on/off\n" \
+"13476 2018-01-31 10:55:35 +0100 http: rocweb port check fix\n" \
 "13475 2018-01-30 11:55:48 +0100 guiframe: help menu reduced\n" \
 "13474 2018-01-30 08:28:47 +0100 bidib: save sensor state also on multi sensor messages\n" \
 "13473 2018-01-30 08:18:42 +0100 translation merge: sl, sr_latin, en_GB, de, nl, pt_BR\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "13430 2018-01-19 10:37:23 +0100 blockgroup: optional enterside for conditions\n" \
 "13429 2018-01-19 08:32:44 +0100 blockgroupingdlg: label correction from to first block\n" \
 "13428 2018-01-18 12:42:12 +0100 dinamo: fix for packet length in case of a long DCC address\n" \
-"13427 2018-01-18 10:27:32 +0100 model: fix for crash in case of a pre-reservation\n" \
-"13426 2018-01-18 08:39:49 +0100 rocomp: fix for loco address >= 128\n" \
 
 "log end";
