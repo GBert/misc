@@ -372,7 +372,7 @@ static int slcan_command(void) {
     /* consume chars until eol reached */
     do {
 	ret = ring_read_ch(&input_ring, NULL);
-    } while (ret == '\r');
+    } until (ret == '\r');
 
 #if 1
     if (send) {
