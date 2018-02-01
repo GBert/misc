@@ -1,11 +1,14 @@
 const int revisionnr = 
-13477
+13480
 ;
 const char* commithash = 
-"9f9b3369d964b25239ce3da6ecac69fea61f46ef";
+"b4f57db1025e59d619ce6c97e6412e3dd9d4377a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13480 2018-02-01 11:17:00 +0100 openhab: output brightness support added\n" \
+"13479 2018-02-01 08:27:30 +0100 model: write occ.xml only if the occupancy filename is set\n" \
+"13478 2018-02-01 08:18:31 +0100 location: fix for overwriting the schedule delay\n" \
 "13477 2018-01-31 11:36:43 +0100 openhab: output support on/off\n" \
 "13476 2018-01-31 10:55:35 +0100 http: rocweb port check fix\n" \
 "13475 2018-01-30 11:55:48 +0100 guiframe: help menu reduced\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13433 2018-01-19 15:48:56 +0100 upnp: basic description file\n" \
 "13432 2018-01-19 15:46:43 +0100 upnp: wip\n" \
 "13431 2018-01-19 13:38:58 +0100 blockgroupingdlg: label correction from to first block\n" \
-"13430 2018-01-19 10:37:23 +0100 blockgroup: optional enterside for conditions\n" \
-"13429 2018-01-19 08:32:44 +0100 blockgroupingdlg: label correction from to first block\n" \
-"13428 2018-01-18 12:42:12 +0100 dinamo: fix for packet length in case of a long DCC address\n" \
 
 "log end";
