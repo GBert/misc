@@ -1,11 +1,19 @@
 const int revisionnr = 
-13480
+13488
 ;
 const char* commithash = 
-"b4f57db1025e59d619ce6c97e6412e3dd9d4377a";
+"04117d3335da1c079df4d36932db8ccb7f259dee";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13488 2018-02-02 15:47:04 +0100 location: check the reporting loco at update if it has already passed this location\n" \
+"13487 2018-02-02 13:08:20 +0100 tt: onestep bus added to the commands\n" \
+"13486 2018-02-02 09:30:22 +0100 http: start the 5 demo minutes for rocweb after the first connection\n" \
+"13485 2018-02-02 08:51:04 +0100 tt: fix for sound on/off command\n" \
+"13484 2018-02-02 08:33:34 +0100 tt: onestep support added (wip)\n" \
+"13483 2018-02-01 17:20:38 +0100 planpanel: check the tabindex if its not > nr pages\n" \
+"13482 2018-02-01 14:07:58 +0100 location: reset lcid,lcbkid at cloning hourly schedules\n" \
+"13481 2018-02-01 13:51:59 +0100 location: reset delay for cloned hourly schedules\n" \
 "13480 2018-02-01 11:17:00 +0100 openhab: output brightness support added\n" \
 "13479 2018-02-01 08:27:30 +0100 model: write occ.xml only if the occupancy filename is set\n" \
 "13478 2018-02-01 08:18:31 +0100 location: fix for overwriting the schedule delay\n" \
@@ -48,13 +56,5 @@ const char* revlog =
 "13441 2018-01-21 10:50:18 +0100 upnp: discover and dialog (WIP)\n" \
 "13440 2018-01-20 18:13:32 +0100 rocweb: update speed always on event\n" \
 "13439 2018-01-20 17:57:42 +0100 upnp: more realistic service description\n" \
-"13438 2018-01-20 15:50:43 +0100 upnp: WIP\n" \
-"13437 2018-01-20 14:16:09 +0100 wrapper: removed unused gotoblockgo commando\n" \
-"13436 2018-01-20 13:40:28 +0100 importantchanges: xml parser extended\n" \
-"13435 2018-01-20 13:17:01 +0100 rocs: added optional support for using xml element values\n" \
-"13434 2018-01-20 08:33:31 +0100 wserial: use getlasterror in case the clearcommerror did not succeed\n" \
-"13433 2018-01-19 15:48:56 +0100 upnp: basic description file\n" \
-"13432 2018-01-19 15:46:43 +0100 upnp: wip\n" \
-"13431 2018-01-19 13:38:58 +0100 blockgroupingdlg: label correction from to first block\n" \
 
 "log end";
