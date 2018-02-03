@@ -1,11 +1,14 @@
 const int revisionnr = 
-13488
+13491
 ;
 const char* commithash = 
-"04117d3335da1c079df4d36932db8ccb7f259dee";
+"c728e1b803023649c2c501726c2f638b01c85ba0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13491 2018-02-03 10:58:11 +0100 tt: use decoder track mapping for type onestep\n" \
+"13490 2018-02-03 10:44:39 +0100 timetables: use initial hour for lookup a schedule entry in case of hourly schedules\n" \
+"13489 2018-02-03 08:54:39 +0100 tt: onestep support (wip)\n" \
 "13488 2018-02-02 15:47:04 +0100 location: check the reporting loco at update if it has already passed this location\n" \
 "13487 2018-02-02 13:08:20 +0100 tt: onestep bus added to the commands\n" \
 "13486 2018-02-02 09:30:22 +0100 http: start the 5 demo minutes for rocweb after the first connection\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13444 2018-01-21 16:09:08 +0100 upnpdlg: clear tree on discover\n" \
 "13443 2018-01-21 15:21:12 +0100 upnp: smarthome icon\n" \
 "13442 2018-01-21 14:08:14 +0100 upnpdlg: wip\n" \
-"13441 2018-01-21 10:50:18 +0100 upnp: discover and dialog (WIP)\n" \
-"13440 2018-01-20 18:13:32 +0100 rocweb: update speed always on event\n" \
-"13439 2018-01-20 17:57:42 +0100 upnp: more realistic service description\n" \
 
 "log end";
