@@ -1,11 +1,13 @@
 const int revisionnr = 
-13491
+13493
 ;
 const char* commithash = 
-"c728e1b803023649c2c501726c2f638b01c85ba0";
+"d0060113a8f56f002205be0bc9290a2501082a4d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13493 2018-02-04 09:13:27 +0100 blockgroup: only lock a reserve block if its not already locked\n" \
+"13492 2018-02-04 08:43:31 +0100 block: do not save the from block ID in case its not set (Lock by block group)\n" \
 "13491 2018-02-03 10:58:11 +0100 tt: use decoder track mapping for type onestep\n" \
 "13490 2018-02-03 10:44:39 +0100 timetables: use initial hour for lookup a schedule entry in case of hourly schedules\n" \
 "13489 2018-02-03 08:54:39 +0100 tt: onestep support (wip)\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "13446 2018-01-22 10:38:15 +0100 location: attribute timeframe added to the schedule table entries\n" \
 "13445 2018-01-22 09:29:06 +0100 location: add time frame to the schedule entries\n" \
 "13444 2018-01-21 16:09:08 +0100 upnpdlg: clear tree on discover\n" \
-"13443 2018-01-21 15:21:12 +0100 upnp: smarthome icon\n" \
-"13442 2018-01-21 14:08:14 +0100 upnpdlg: wip\n" \
 
 "log end";
