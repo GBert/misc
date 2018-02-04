@@ -53,6 +53,7 @@ const char *l0_token [] = {
 
 enum {
     L1_FUNCTION = 0,
+    L1_FUNCTION2,
     L1_FCT,
     L1_MFXADR,
     L1_MAJOR,
@@ -96,6 +97,7 @@ enum {
 
 const char *l1_token [] = {
     " .funktionen",
+    " .funktionen_2",
     " .fkt",
     " .mfxAdr",
     " .major=",

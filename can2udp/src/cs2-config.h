@@ -12,7 +12,7 @@
 
 #include "uthash.h"
 
-#define MAX_LOCO_FUNCTIONS	16
+#define MAX_LOCO_FUNCTIONS	32
 
 extern char *track_dir;
 extern char *track_name;

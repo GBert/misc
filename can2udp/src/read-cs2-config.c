@@ -495,7 +495,13 @@ void print_locos(FILE *file) {
 	if (l->ft)	fprintf(file, " .ft=0x%x\n", l->ft);
 	if (l->mfxtype)	fprintf(file, " .mfxtyp=%d\n", l->mfxtype);
 	for (i = 0; i < MAX_LOCO_FUNCTIONS; i++) {
-	    fprintf(file, " .funktionen\n");
+	    if (i < 16) {
+		fprintf(file, " .funktionen\n");
+	    } else {
+		if (!l->function[i].type)
+		    continue;
+		fprintf(file, " .funktionen_2\n");
+	    }
 	    fprintf(file, " ..nr=%d\n", i);
 	    if (l->function[i].type)	fprintf(file, " ..typ=%d\n", l->function[i].type);
 	    if (l->function[i].value)	fprintf(file, " ..wert=%d\n", l->function[i].value);
@@ -813,6 +819,7 @@ int read_loco_data(char *config_file, int config_type) {
 		function++;
 		break;
 	    case L1_FUNCTION:
+	    case L1_FUNCTION2:
 		mfx_data = -1;
 		break;
 	    case L1_MFXADR:
