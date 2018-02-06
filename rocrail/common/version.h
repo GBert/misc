@@ -1,11 +1,33 @@
 const int revisionnr = 
-13493
+13515
 ;
 const char* commithash = 
-"d0060113a8f56f002205be0bc9290a2501082a4d";
+"58008885a9a3bec8f6dd26d09b1adaca523b2506";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13515 2018-02-06 14:38:49 +0100 cbus: ignore accessory events from node 0xFFFF CANCAB v2\n" \
+"13514 2018-02-06 11:21:50 +0100 dsd2010: fix for reporting the bridge sensor state\n" \
+"13513 2018-02-06 09:31:05 +0100 dsd2010: function command support\n" \
+"13512 2018-02-06 08:45:50 +0100 dsd2010: trace turn direction\n" \
+"13511 2018-02-06 08:12:51 +0100 dsd2010: error/info evaluating extended\n" \
+"13510 2018-02-06 07:14:48 +0100 dsd2010: sound bit fix (Sven)\n" \
+"13509 2018-02-05 16:06:15 +0100 location: substate for platform actions\n" \
+"13508 2018-02-05 14:55:28 +0100 dsd2010: report position + 1\n" \
+"13507 2018-02-05 14:45:47 +0100 dsd2010: fix for sending data\n" \
+"13506 2018-02-05 14:36:40 +0100 dsd2010: trace level correction for read bytes\n" \
+"13505 2018-02-05 14:22:36 +0100 dsd2010: use addr and bus reported by the commands\n" \
+"13504 2018-02-05 13:16:26 +0100 dsd2010: pause between send bytes\n" \
+"13503 2018-02-05 13:10:53 +0100 dsd2010: only report new positions\n" \
+"13502 2018-02-05 13:10:03 +0100 dsd2010: only report new positions\n" \
+"13501 2018-02-05 12:55:41 +0100 dsd2010: only report new errors\n" \
+"13500 2018-02-05 11:50:10 +0100 dsd2010: goto and direction commands added\n" \
+"13499 2018-02-05 11:23:52 +0100 dsd2010: library added for rs232 support\n" \
+"13498 2018-02-05 08:46:23 +0100 mcs2,mgbox: use constants for reporting switch state\n" \
+"13497 2018-02-05 08:44:53 +0100 mgbox: fix for reporting the switch state\n" \
+"13496 2018-02-05 08:40:36 +0100 switch: revert field correction\n" \
+"13495 2018-02-05 08:37:14 +0100 switch: fix for take over the field state\n" \
+"13494 2018-02-05 08:24:07 +0100 blockgroup: first check all condition blocks if one is already reserved to avoid multiple block reservations\n" \
 "13493 2018-02-04 09:13:27 +0100 blockgroup: only lock a reserve block if its not already locked\n" \
 "13492 2018-02-04 08:43:31 +0100 block: do not save the from block ID in case its not set (Lock by block group)\n" \
 "13491 2018-02-03 10:58:11 +0100 tt: use decoder track mapping for type onestep\n" \
@@ -34,27 +56,5 @@ const char* revlog =
 "13468 2018-01-28 15:31:00 +0100 rocs: check for _WIN32 and for _WIN64\n" \
 "13467 2018-01-28 14:49:10 +0100 import/export workspace messages\n" \
 "13466 2018-01-28 12:10:42 +0100 rocview: import workspace and go\n" \
-"13465 2018-01-28 11:37:31 +0100 rocview: export active workspace\n" \
-"13464 2018-01-27 07:58:18 +0100 switch: exclude from analyse option added\n" \
-"13463 2018-01-27 07:47:36 +0100 bidib: do not report aspect in case > 127\n" \
-"13462 2018-01-27 07:30:10 +0100 bidib: only reset manual operated accessory if aspect < 128\n" \
-"13461 2018-01-26 11:26:05 +0100 rocrailinidialog: show warning and set the rocweb port to zero in case the http service port conflicts with the rocweb port\n" \
-"13460 2018-01-26 09:23:22 +0100 http: do not start the Rocweb service if the port is the same as the HTTP service\n" \
-"13459 2018-01-26 08:49:31 +0100 bidib: option to reset last known accessory state in case of a manual operation\n" \
-"13458 2018-01-25 16:46:45 +0100 cbus: warning on PADA addressing -> must be FLAT\n" \
-"13457 2018-01-25 15:59:26 +0100 location: corrections for timetable formating\n" \
-"13456 2018-01-24 11:20:26 +0100 schedule: reamrk field added to the entries\n" \
-"13455 2018-01-24 09:27:41 +0100 mqtt, clntcon: check if the socket object is valid before using it\n" \
-"13454 2018-01-24 09:02:18 +0100 http: fix for c style comment\n" \
-"13453 2018-01-24 08:39:06 +0100 http: fix for draining cpu in case os a rocweb connection\n" \
-"13452 2018-01-24 08:17:47 +0100 clntcon: wait for the mqtt socket mutex before closing the socket if broken\n" \
-"13451 2018-01-23 14:27:25 +0100 upnpdlg: add hue bridge\n" \
-"13450 2018-01-23 10:30:11 +0100 timetabledlg: html extended with a via column\n" \
-"13449 2018-01-22 13:31:17 +0100 demoplan: removed ZEP\n" \
-"13448 2018-01-22 11:50:38 +0100 upnpdlg: removed unused apply button\n" \
-"13447 2018-01-22 11:17:33 +0100 upnp: wip\n" \
-"13446 2018-01-22 10:38:15 +0100 location: attribute timeframe added to the schedule table entries\n" \
-"13445 2018-01-22 09:29:06 +0100 location: add time frame to the schedule entries\n" \
-"13444 2018-01-21 16:09:08 +0100 upnpdlg: clear tree on discover\n" \
 
 "log end";
