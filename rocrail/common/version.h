@@ -1,11 +1,12 @@
 const int revisionnr = 
-13515
+13516
 ;
 const char* commithash = 
-"58008885a9a3bec8f6dd26d09b1adaca523b2506";
+"602fc7541373d5a2b1025195f5e7951956b3c40a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13516 2018-02-06 15:33:27 +0100 cbus: trace the unexpected event from cancab v2 because MERG should fix this\n" \
 "13515 2018-02-06 14:38:49 +0100 cbus: ignore accessory events from node 0xFFFF CANCAB v2\n" \
 "13514 2018-02-06 11:21:50 +0100 dsd2010: fix for reporting the bridge sensor state\n" \
 "13513 2018-02-06 09:31:05 +0100 dsd2010: function command support\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13469 2018-01-29 08:30:04 +0100 rocweb: fix for XS and modular layouts\n" \
 "13468 2018-01-28 15:31:00 +0100 rocs: check for _WIN32 and for _WIN64\n" \
 "13467 2018-01-28 14:49:10 +0100 import/export workspace messages\n" \
-"13466 2018-01-28 12:10:42 +0100 rocview: import workspace and go\n" \
 
 "log end";
