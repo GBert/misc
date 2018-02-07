@@ -1,11 +1,19 @@
 const int revisionnr = 
-13517
+13525
 ;
 const char* commithash = 
-"7a0ecced5f28b00401a04b5a02a117fa83df489a";
+"1902788845a4f295c48a714b68d72dd88df20697";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13525 2018-02-07 12:18:29 +0100 signals: correction for checking the wrong route for white signal aspect\n" \
+"13524 2018-02-07 12:06:00 +0100 roclcdrv: check at enter if its the last goto block\n" \
+"13523 2018-02-07 09:33:50 +0100 tt: revert invert flag for dsd2010\n" \
+"13522 2018-02-07 09:21:35 +0100 tt: invert flag support for dsd2010 added\n" \
+"13521 2018-02-07 08:53:44 +0100 translation merge: sl\n" \
+"13520 2018-02-07 07:55:57 +0100 model: fix for overwriting the schedule init hour with real time\n" \
+"13519 2018-02-07 07:51:50 +0100 item: format function menu entries for the tt without prefix zero\n" \
+"13518 2018-02-07 07:50:03 +0100 issuedlg: replace invalid chars for the file system with underscores in the subject\n" \
 "13517 2018-02-06 17:50:51 +0100 location: replace children on modify\n" \
 "13516 2018-02-06 15:33:27 +0100 cbus: trace the unexpected event from cancab v2 because MERG should fix this\n" \
 "13515 2018-02-06 14:38:49 +0100 cbus: ignore accessory events from node 0xFFFF CANCAB v2\n" \
@@ -48,13 +56,5 @@ const char* revlog =
 "13478 2018-02-01 08:18:31 +0100 location: fix for overwriting the schedule delay\n" \
 "13477 2018-01-31 11:36:43 +0100 openhab: output support on/off\n" \
 "13476 2018-01-31 10:55:35 +0100 http: rocweb port check fix\n" \
-"13475 2018-01-30 11:55:48 +0100 guiframe: help menu reduced\n" \
-"13474 2018-01-30 08:28:47 +0100 bidib: save sensor state also on multi sensor messages\n" \
-"13473 2018-01-30 08:18:42 +0100 translation merge: sl, sr_latin, en_GB, de, nl, pt_BR\n" \
-"13472 2018-01-29 22:16:10 +0100 bidib: always process sensor reports in case of occupied\n" \
-"13471 2018-01-29 14:11:14 +0100 file: skip creating the drive letter directory under windows\n" \
-"13470 2018-01-29 09:50:22 +0100 wdir: do not skip directories\n" \
-"13469 2018-01-29 08:30:04 +0100 rocweb: fix for XS and modular layouts\n" \
-"13468 2018-01-28 15:31:00 +0100 rocs: check for _WIN32 and for _WIN64\n" \
 
 "log end";
