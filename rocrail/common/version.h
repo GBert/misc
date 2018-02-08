@@ -1,11 +1,13 @@
 const int revisionnr = 
-13525
+13527
 ;
 const char* commithash = 
-"1902788845a4f295c48a714b68d72dd88df20697";
+"7b663279357f6f44f8b451cdd2b9d43b2a2d2025";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13527 2018-02-08 08:57:16 +0100 location: fix for updating child nodes, actions\n" \
+"13526 2018-02-08 08:00:16 +0100 dsd2010: error/info messages corrected\n" \
 "13525 2018-02-07 12:18:29 +0100 signals: correction for checking the wrong route for white signal aspect\n" \
 "13524 2018-02-07 12:06:00 +0100 roclcdrv: check at enter if its the last goto block\n" \
 "13523 2018-02-07 09:33:50 +0100 tt: revert invert flag for dsd2010\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "13480 2018-02-01 11:17:00 +0100 openhab: output brightness support added\n" \
 "13479 2018-02-01 08:27:30 +0100 model: write occ.xml only if the occupancy filename is set\n" \
 "13478 2018-02-01 08:18:31 +0100 location: fix for overwriting the schedule delay\n" \
-"13477 2018-01-31 11:36:43 +0100 openhab: output support on/off\n" \
-"13476 2018-01-31 10:55:35 +0100 http: rocweb port check fix\n" \
 
 "log end";
