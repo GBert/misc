@@ -60,7 +60,10 @@ enum {
     L1_MINOR,
     L1_ID,
     L1_UID,
+    L1_NICKNAME,
+    L1_RECOGNITION,
     L1_DIRECTION,
+    L1_CHANNEL,
     L1_VALUE,
     L1_NR,
     L1_VELOCITY,
@@ -104,7 +107,10 @@ const char *l1_token [] = {
     " .minor=",
     " .id=",
     " .uid=",
+    " .nickname=",
+    " .kennung=",
     " .richtung=",
+    " .kanal=",
     " .wert=",
     " .nr=",
     " .velocity=",
@@ -145,7 +151,10 @@ const char *l1_token [] = {
 #define L1_MINOR_LENGTH		8
 #define L1_ID_LENGTH		5
 #define L1_UID_LENGTH		6
+#define L1_NICKNAME_LENGTH	11
+#define L1_RECOGNITION_LENGTH	10
 #define L1_DIRECTION_LENGTH	11
+#define L1_CHANNEL_LENGTH	8
 #define L1_VALUE_LENGTH		7
 #define L1_NR_LENGTH		5
 #define L1_VELOCITY_LENGTH	11
