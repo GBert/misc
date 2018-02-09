@@ -1,11 +1,14 @@
 const int revisionnr = 
-13527
+13530
 ;
 const char* commithash = 
-"7b663279357f6f44f8b451cdd2b9d43b2a2d2025";
+"ff126ccf2e9bb36479c8ebe210617c19dd6db350";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13530 2018-02-09 15:32:32 +0100 rocnetnode: raspi type 3 added for using ttyS0 instead of ttyAMA0, this is only for RFID reader directly connected to the RasPi\n" \
+"13529 2018-02-09 12:24:17 +0100 rocview: loco show/hide added in the loco filter view menu\n" \
+"13528 2018-02-09 07:53:42 +0100 location: use %callerdesc% for (fake) train ID\n" \
 "13527 2018-02-08 08:57:16 +0100 location: fix for updating child nodes, actions\n" \
 "13526 2018-02-08 08:00:16 +0100 dsd2010: error/info messages corrected\n" \
 "13525 2018-02-07 12:18:29 +0100 signals: correction for checking the wrong route for white signal aspect\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13483 2018-02-01 17:20:38 +0100 planpanel: check the tabindex if its not > nr pages\n" \
 "13482 2018-02-01 14:07:58 +0100 location: reset lcid,lcbkid at cloning hourly schedules\n" \
 "13481 2018-02-01 13:51:59 +0100 location: reset delay for cloned hourly schedules\n" \
-"13480 2018-02-01 11:17:00 +0100 openhab: output brightness support added\n" \
-"13479 2018-02-01 08:27:30 +0100 model: write occ.xml only if the occupancy filename is set\n" \
-"13478 2018-02-01 08:18:31 +0100 location: fix for overwriting the schedule delay\n" \
 
 "log end";
