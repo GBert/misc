@@ -293,11 +293,12 @@ void command_system(struct can_frame *frame) {
 	}
 	break;
     case 0x0c:
-	wert = be16(&frame->data[5]);
-	if (frame->can_dlc == 6)
-	    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X", uid, frame->data[5]);
-	if (frame->can_dlc == 7)
-	    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X Wert %d", uid, frame->data[5], frame->data[6]);
+	if (frame->can_dlc == 5) {
+	    printf("System-Befehl: Anfrage UID");
+	} else {
+	    wert = be16(&frame->data[5]);
+	    printf("System-Befehl: Bestaetigung UID 0x%04X", wert);
+	}
 	break;
     case 0x20:
 	printf("System-Befehl: Systemzeit UID 0x%08X Stunde %d Minute %d Faktor %d",
@@ -831,7 +832,7 @@ int main(int argc, char **argv) {
 		    kenner = be16(frame.data);
 		    kontakt = be16(&frame.data[2]);
 		    if (frame.can_dlc == 8)
-			printf("S88 Event: Kennung %d Kontakt %d Zusand alt %d Zusand neu %d Zeit %d\n",
+			printf("S88 Event: Kennung %d Kontakt %d Zustand alt %d Zusand neu %d Zeit %d\n",
 			       kenner, kontakt, frame.data[4], frame.data[5], be16(&frame.data[6]));
 		    break;
 		/* SX1 Event */
@@ -860,6 +861,9 @@ int main(int argc, char **argv) {
 		    case 0x0032:
 		    case 0x0033:
 			printf("MS2");
+			break;
+		    case 0x0040:
+			printf("LinkS88");
 			break;
 		    case 0x0053:
 			printf("Cg Servo");
@@ -899,6 +903,9 @@ int main(int argc, char **argv) {
 		    case 0x0032:
 		    case 0x0033:
 			printf("MS2");
+			break;
+		    case 0x0040:
+			printf("LinkS88");
 			break;
 		    case 0x0053:
 			printf("Cg Servo");
