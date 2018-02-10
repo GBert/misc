@@ -1,11 +1,15 @@
 const int revisionnr = 
-13530
+13534
 ;
 const char* commithash = 
-"ff126ccf2e9bb36479c8ebe210617c19dd6db350";
+"f27d6e191a353fc0145b3dbd7fcf3b1a57522aa5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13534 2018-02-10 08:27:14 +0100 turntabledialog: label correction for embeded block speed\n" \
+"13533 2018-02-10 08:23:41 +0100 tt: optional bridgespeed in case of embeded block\n" \
+"13532 2018-02-09 18:20:29 +0100 output: trace level correction\n" \
+"13531 2018-02-09 18:17:43 +0100 rocnetnode: revert pi3 hardware option\n" \
 "13530 2018-02-09 15:32:32 +0100 rocnetnode: raspi type 3 added for using ttyS0 instead of ttyAMA0, this is only for RFID reader directly connected to the RasPi\n" \
 "13529 2018-02-09 12:24:17 +0100 rocview: loco show/hide added in the loco filter view menu\n" \
 "13528 2018-02-09 07:53:42 +0100 location: use %callerdesc% for (fake) train ID\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "13487 2018-02-02 13:08:20 +0100 tt: onestep bus added to the commands\n" \
 "13486 2018-02-02 09:30:22 +0100 http: start the 5 demo minutes for rocweb after the first connection\n" \
 "13485 2018-02-02 08:51:04 +0100 tt: fix for sound on/off command\n" \
-"13484 2018-02-02 08:33:34 +0100 tt: onestep support added (wip)\n" \
-"13483 2018-02-01 17:20:38 +0100 planpanel: check the tabindex if its not > nr pages\n" \
-"13482 2018-02-01 14:07:58 +0100 location: reset lcid,lcbkid at cloning hourly schedules\n" \
-"13481 2018-02-01 13:51:59 +0100 location: reset delay for cloned hourly schedules\n" \
 
 "log end";
