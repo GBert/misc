@@ -11,13 +11,15 @@
 #define _CS2_TOKEN_H_
 
 enum {
-    L00_TRACK_PAGE = 0,
+    L00_DEVICES = 0,
+    L00_TRACK_PAGE,
     L00_TRACK,
     L00_LOCO_SHORT,
     L00_LOCO,
     L00_LOCO_NUMBER,
     L00_MAGS,
     L00_ATRACK,
+    L0_DEVICE,
     L0_LOCO,
     L0_LOC,
     L0_ATRACK,
@@ -31,6 +33,7 @@ enum {
 };
 
 const char *l0_token [] = {
+    "[geraete]",
     "[gleisbildseite]",
     "[gleisbild]",
     "[lok]",
@@ -38,6 +41,7 @@ const char *l0_token [] = {
     "[numloks]",
     "[magnetartikel]",
     "[fahrstrassen]",
+    "device",
     "lokomotive",
     "lok",
     "fahrstrasse",
