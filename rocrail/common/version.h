@@ -1,11 +1,14 @@
 const int revisionnr = 
-13535
+13538
 ;
 const char* commithash = 
-"57d11af10e7403eb90fead0826807168ae994225";
+"3b9f325153dc1df9dd3b41580e0979e2c20c936d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13538 2018-02-11 15:19:16 +0100 bidib: ignore error in case of MSG_LC_NA reports port 0xFFFF ???\n" \
+"13537 2018-02-11 15:11:26 +0100 bidib: ignore error in case of MSG_LC_NA reports port 0xFFFF ???\n" \
+"13536 2018-02-11 14:54:57 +0100 route: trigger signals set\n" \
 "13535 2018-02-11 13:40:23 +0100 locseldlg: show all option added\n" \
 "13534 2018-02-10 08:27:14 +0100 turntabledialog: label correction for embeded block speed\n" \
 "13533 2018-02-10 08:23:41 +0100 tt: optional bridgespeed in case of embeded block\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13491 2018-02-03 10:58:11 +0100 tt: use decoder track mapping for type onestep\n" \
 "13490 2018-02-03 10:44:39 +0100 timetables: use initial hour for lookup a schedule entry in case of hourly schedules\n" \
 "13489 2018-02-03 08:54:39 +0100 tt: onestep support (wip)\n" \
-"13488 2018-02-02 15:47:04 +0100 location: check the reporting loco at update if it has already passed this location\n" \
-"13487 2018-02-02 13:08:20 +0100 tt: onestep bus added to the commands\n" \
-"13486 2018-02-02 09:30:22 +0100 http: start the 5 demo minutes for rocweb after the first connection\n" \
 
 "log end";
