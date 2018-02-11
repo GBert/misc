@@ -44,6 +44,7 @@
  #define SYS_GO		0x01	//System - Go
  #define SYS_HALT	0x02	//System - Halt
  #define SYS_STAT	0x0b	//System - Status (sendet geänderte Konfiguration oder übermittelt Messwerte)
+ #define SYS_ID		0x0c	//System - ID Frage / setzen fuer Rueckmelder
 #define SWITCH_ACC 	0x0b	//Magnetartikel Schalten
 #define S88_EVENT	0x11	//Rückmelde-Event
 #define PING		0x18	//CAN-Teilnehmer anpingen
@@ -67,6 +68,11 @@ typedef struct {
 	uint32_t uid;			  //UID des Geräts
 	uint16_t type;			//Typ des Geräts (z.B. MäCAN Magnetartikeldecoder: 0x0050)
 } CanDevice;
+
+/* debug */
+
+void print_net_frm(struct can_frame *frm);
+void print_canmsg(MCANMSG *msg);
 
 /******************************************************************************
  *  Name: generateHash
@@ -158,6 +164,15 @@ void sendAccessoryFrame(int canfd, CanDevice device, uint32_t locId, bool state,
  *              des abzufragenden Kontakt.
  ******************************************************************************/
 void checkS88StateFrame(int canfd, CanDevice device, uint16_t dev_id, uint16_t contact_id);
+
+/******************************************************************************
+ *  Name: sendS88Event
+ *  Funktion: Sendet aktuellen und alten Zustand eines Rueckmeldekontakts
+ *  Parameter: Geräteinformationen, Gerätekennung, Kontaktkennung,
+ *              alter Zustand, neuer Zustand des Kontakt.
+ ******************************************************************************/
+void sendS88Event(int canfd, CanDevice device, uint16_t dev_id, uint16_t contact_id, uint8_t old, uint8_t new);
+
 
 /******************************************************************************
  *  Name: getCanFrame

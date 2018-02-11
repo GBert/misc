@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=can2udp
-PKG_RELEASE:=1.36
+PKG_RELEASE:=1.37
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_BUILD_PARALLEL:=1
@@ -71,6 +71,7 @@ ifneq (,$(findstring banana,$(CONFIG_TARGET_PROFILE)))
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/s88udp-bpi $(1)/usr/bin/s88udp
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/s88test-bpi $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/s88can $(1)/usr/bin/
 endif
 ifneq (,$(findstring carambola,$(CONFIG_TARGET_PROFILE)))
 	$(INSTALL_DIR) $(1)/etc/init.d

@@ -1,11 +1,12 @@
 const int revisionnr = 
-13534
+13535
 ;
 const char* commithash = 
-"f27d6e191a353fc0145b3dbd7fcf3b1a57522aa5";
+"57d11af10e7403eb90fead0826807168ae994225";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13535 2018-02-11 13:40:23 +0100 locseldlg: show all option added\n" \
 "13534 2018-02-10 08:27:14 +0100 turntabledialog: label correction for embeded block speed\n" \
 "13533 2018-02-10 08:23:41 +0100 tt: optional bridgespeed in case of embeded block\n" \
 "13532 2018-02-09 18:20:29 +0100 output: trace level correction\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13488 2018-02-02 15:47:04 +0100 location: check the reporting loco at update if it has already passed this location\n" \
 "13487 2018-02-02 13:08:20 +0100 tt: onestep bus added to the commands\n" \
 "13486 2018-02-02 09:30:22 +0100 http: start the 5 demo minutes for rocweb after the first connection\n" \
-"13485 2018-02-02 08:51:04 +0100 tt: fix for sound on/off command\n" \
 
 "log end";

@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <sched.h>
 #include <arpa/inet.h>
 #include "mcan.h"
 
@@ -21,25 +22,43 @@
 #define bitWrite(a, b, c) ((c)?(a|=BIT(b)):(a&=~BIT(b)))
 #define bitRead(a, b) ((a&BIT(b))?1:0)
 
-
-uint16_t be16(uint8_t *u) {
+uint16_t be16(uint8_t * u) {
     return (u[0] << 8) | u[1];
 }
 
-uint32_t be32(uint8_t *u) {
+uint32_t be32(uint8_t * u) {
     return (u[0] << 24) | (u[1] << 16) | (u[2] << 8) | u[3];
 }
 
-void be16_to_pu8(uint32_t x, uint8_t *u) {
+void be16_to_pu8(uint32_t x, uint8_t * u) {
     u[0] = x >> 8;
     u[1] = x;
 }
 
-void set_uid(uint8_t *u, uint32_t x) {
+void set_uid(uint8_t * u, uint32_t x) {
     u[0] = x >> 24;
     u[1] = x >> 16;
     u[2] = x >> 8;
     u[3] = x;
+}
+
+void print_net_frm(struct can_frame *frm) {
+    int i;
+
+    printf("      CANID 0x%08x  dlc [%u] (", frm->can_id, frm->can_dlc);
+    for (i = 0; i < frm->can_dlc; i++) {
+	printf(" 0x%02x", frm->data[i]);
+    }
+    printf(")\n");
+}
+
+void print_canmsg(MCANMSG * msg) {
+    int i;
+    printf("  cmd 0x%02x  hash 0x%04x  resp %d  dlc %u (", msg->cmd, msg->hash, msg->resp_bit, msg->dlc);
+    for (i = 0; i < msg->dlc; i++) {
+	printf("0x%02x ", msg->data[i]);
+    }
+    printf(")\n");
 }
 
 /*
@@ -59,8 +78,8 @@ uint16_t generateHash(uint32_t uid) {
     highword = uid >> 16;
     lowword = uid & 0xFFFF;
     hash = highword ^ lowword;
-    hash = ((hash << 3) & 0xFF00) | (hash & 0x7F);
-    return hash | 0x0300;
+    hash = (((hash << 3) & 0xFF00) | 0x0300) | (hash & 0x7F);
+    return hash;
 }
 
 uint16_t generateLocId(uint16_t prot, uint16_t adrs) {
@@ -78,23 +97,30 @@ uint16_t getadrs(uint16_t prot, uint16_t locid) {
 
 void sendCanFrame(int canfd, MCANMSG can_frame) {
     struct can_frame frm;
+    uint32_t canid;
+    int e;
 
     memset(&frm, 0, sizeof(frm));
 
-    frm.can_id = (can_frame.cmd << 17) | can_frame.hash;
-    bitWrite(frm.can_id, 16, can_frame.resp_bit);
-    frm.can_id &= CAN_EFF_MASK;
-    frm.can_id |= CAN_EFF_FLAG;
+    canid = (can_frame.cmd << 17) | can_frame.hash;
+    bitWrite(canid, 16, can_frame.resp_bit);
+    canid &= CAN_EFF_MASK;
+    canid |= CAN_EFF_FLAG;
+    frm.can_id = canid;
 
     frm.can_dlc = can_frame.dlc;
-    memcpy(&frm.data, can_frame.data, 8);
+    memcpy(frm.data, can_frame.data, 8);
 
     /* TODO error handling */
-
-    if (write(canfd, &frm, sizeof(frm) !=sizeof(frm)))
+    while (write(canfd, &frm, sizeof(frm)) != sizeof(frm)) {
+	e = errno;
 	fprintf(stderr, "%s: error writing CAN frame: %s\n", __func__, strerror(errno));
-//      can.sendMsgBuf(txId, 1, can_frame.dlc, can_frame.data);
-//      Serial.println(canFrameToString(can_frame, 1));
+	if (e != ENOBUFS) {
+	    return;
+	}
+	fprintf(stderr, "Working around short txqueuelen by trying to sleep\n");
+	sched_yield();
+    }
 }
 
 /*
@@ -341,7 +367,6 @@ void sendAccessoryFrame(int canfd, CanDevice device, uint32_t locId, bool state,
 }
 
 void checkS88StateFrame(int canfd, CanDevice device, uint16_t dev_id, uint16_t contact_id) {
-
     MCANMSG can_frame;
 
     can_frame.cmd = S88_EVENT;
@@ -355,20 +380,40 @@ void checkS88StateFrame(int canfd, CanDevice device, uint16_t dev_id, uint16_t c
     sendCanFrame(canfd, can_frame);
 }
 
+void sendS88Event(int canfd, CanDevice device, uint16_t dev_id, uint16_t contact_id, uint8_t old, uint8_t new) {
+    MCANMSG can_frame;
+
+    can_frame.cmd = S88_EVENT;
+    can_frame.resp_bit = 1;
+    can_frame.hash = device.hash;
+    can_frame.dlc = 8;
+    can_frame.data[0] = dev_id >> 8;
+    can_frame.data[1] = dev_id;
+    can_frame.data[2] = contact_id >> 8;
+    can_frame.data[3] = contact_id;
+    can_frame.data[4] = old;
+    can_frame.data[5] = new;
+    can_frame.data[6] = 0;	/* time not implemented */
+    can_frame.data[7] = 0;	/* time not implemented */
+    sendCanFrame(canfd, can_frame);
+}
+
 MCANMSG getCanFrame(int canfd) {
-/* XXX to be reviewed */
     struct can_frame frm;
     uint32_t rxId;
     MCANMSG can_frame;
 
+    /* TODO: error handling */
     memset(&frm, 0, sizeof(frm));
     read(canfd, &frm, sizeof(frm));
 
     memset(&can_frame, 0, sizeof(can_frame));
-    memcpy(&can_frame.data, &frm.data, 8);
-    rxId = ntohl(frm.can_id);
-    can_frame.cmd = rxId >> 17;
-    can_frame.hash = rxId;
+    memcpy(can_frame.data, frm.data, 8);
+    can_frame.dlc = frm.can_dlc;
+    rxId = frm.can_id;
+    /* & CAN_EFF_FLAG check skipped */
+    can_frame.cmd = (rxId >> 17);
+    can_frame.hash = rxId & 0xffff;
     can_frame.resp_bit = bitRead(rxId, 16);
 
 //      Serial.println(canFrameToString(can_frame, false));
