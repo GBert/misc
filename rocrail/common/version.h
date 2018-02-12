@@ -1,11 +1,18 @@
 const int revisionnr = 
-13538
+13545
 ;
 const char* commithash = 
-"3b9f325153dc1df9dd3b41580e0979e2c20c936d";
+"982b86540b22ab06cd81c534d583742a1ab15b37";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13545 2018-02-12 12:22:12 +0100 route: removed the NOTs from the conditions\n" \
+"13544 2018-02-12 11:59:01 +0100 basedlg: show bus also in HEX in case the UID is set\n" \
+"13543 2018-02-12 11:52:22 +0100 route: fix for condition with type all\n" \
+"13542 2018-02-12 11:21:10 +0100 bidib: show uid in hex at command\n" \
+"13541 2018-02-12 09:30:52 +0100 sensorevents: show bus as hex in case the value > 16 bit\n" \
+"13540 2018-02-12 09:16:08 +0100 bidib: filter MSG_LC_STAT on product ID to report a sensor or accessory\n" \
+"13539 2018-02-12 07:58:59 +0100 item: activate the hidden selected loco before setting it in a block\n" \
 "13538 2018-02-11 15:19:16 +0100 bidib: ignore error in case of MSG_LC_NA reports port 0xFFFF ???\n" \
 "13537 2018-02-11 15:11:26 +0100 bidib: ignore error in case of MSG_LC_NA reports port 0xFFFF ???\n" \
 "13536 2018-02-11 14:54:57 +0100 route: trigger signals set\n" \
@@ -49,12 +56,5 @@ const char* revlog =
 "13498 2018-02-05 08:46:23 +0100 mcs2,mgbox: use constants for reporting switch state\n" \
 "13497 2018-02-05 08:44:53 +0100 mgbox: fix for reporting the switch state\n" \
 "13496 2018-02-05 08:40:36 +0100 switch: revert field correction\n" \
-"13495 2018-02-05 08:37:14 +0100 switch: fix for take over the field state\n" \
-"13494 2018-02-05 08:24:07 +0100 blockgroup: first check all condition blocks if one is already reserved to avoid multiple block reservations\n" \
-"13493 2018-02-04 09:13:27 +0100 blockgroup: only lock a reserve block if its not already locked\n" \
-"13492 2018-02-04 08:43:31 +0100 block: do not save the from block ID in case its not set (Lock by block group)\n" \
-"13491 2018-02-03 10:58:11 +0100 tt: use decoder track mapping for type onestep\n" \
-"13490 2018-02-03 10:44:39 +0100 timetables: use initial hour for lookup a schedule entry in case of hourly schedules\n" \
-"13489 2018-02-03 08:54:39 +0100 tt: onestep support (wip)\n" \
 
 "log end";
