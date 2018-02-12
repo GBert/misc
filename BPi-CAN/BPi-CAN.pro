@@ -1,4 +1,4 @@
-update=So 26 Nov 2017 19:01:23 CET
+update=Mo 12 Feb 2018 15:32:44 CET
 version=1
 last_client=kicad
 [pcbnew]
@@ -71,3 +71,4 @@ LibName29=contrib
 LibName30=valves
 LibName31=ISO1050
 LibName32=ftdi
+LibName33=microchip_pic16mcu
