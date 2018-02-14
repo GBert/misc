@@ -1,11 +1,16 @@
 const int revisionnr = 
-13549
+13554
 ;
 const char* commithash = 
-"b8892cab58c3d028ce57a4b413354d4ca706b1c8";
+"cd4cc4cd9ba49d4f3006bcde575b63d4478a9400";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13554 2018-02-14 17:49:19 +0100 srcp: init S88 bus after connect\n" \
+"13553 2018-02-14 15:36:12 +0100 http: check support key only at start\n" \
+"13552 2018-02-14 12:16:34 +0100 guiframe: commented out the loco show/hide in the view menu\n" \
+"13551 2018-02-14 11:11:26 +0100 guiframe: hide context menu item in the loco grid\n" \
+"13550 2018-02-14 08:12:09 +0100 srcp: trace corrections\n" \
 "13549 2018-02-13 11:17:35 +0100 p50x: removed the unused ctsretry variable\n" \
 "13548 2018-02-13 11:14:12 +0100 digints: ctsretry is in ms which must be divided by 10\n" \
 "13547 2018-02-13 11:00:03 +0100 p50: reduce wait for CTS to max 10 x 10ms\n" \
@@ -51,10 +56,5 @@ const char* revlog =
 "13507 2018-02-05 14:45:47 +0100 dsd2010: fix for sending data\n" \
 "13506 2018-02-05 14:36:40 +0100 dsd2010: trace level correction for read bytes\n" \
 "13505 2018-02-05 14:22:36 +0100 dsd2010: use addr and bus reported by the commands\n" \
-"13504 2018-02-05 13:16:26 +0100 dsd2010: pause between send bytes\n" \
-"13503 2018-02-05 13:10:53 +0100 dsd2010: only report new positions\n" \
-"13502 2018-02-05 13:10:03 +0100 dsd2010: only report new positions\n" \
-"13501 2018-02-05 12:55:41 +0100 dsd2010: only report new errors\n" \
-"13500 2018-02-05 11:50:10 +0100 dsd2010: goto and direction commands added\n" \
 
 "log end";

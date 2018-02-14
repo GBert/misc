@@ -28,7 +28,8 @@ static char *PIDFILE = "/var/run/can2lan.pid";
 static unsigned char M_GLEISBOX_MAGIC_START_SEQUENCE[] = { 0x00, 0x36, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 };
 static unsigned char M_GLEISBOX_ALL_PROTO_ENABLE[]     = { 0x00, 0x00, 0x03, 0x01, 0x06, 0x00, 0x00, 0x00, 0x00, 0x08, 0x07, 0x00, 0x00 };
 static unsigned char M_CAN_PING[]                      = { 0x00, 0x30, 0x47, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-static unsigned char M_CAN_PING_CS2[]                  = { 0x00, 0x30, 0x47, 0x11, 0x08, 0x00, 0x00, 0x00, 0x00, 0x03, 0x08, 0xff, 0xff };
+static unsigned char M_CAN_PING_CS2_1[]                = { 0x00, 0x31, 0x63, 0x4A, 0x08, 0x00, 0x00, 0x00, 0x00, 0x04, 0x02, 0xFF, 0xF0 };
+static unsigned char M_CAN_PING_CS2_2[]                = { 0x00, 0x31, 0x63, 0x4B, 0x08, 0x00, 0x00, 0x00, 0x00, 0x03, 0x44, 0x00, 0x00 };
 static unsigned char M_PING_RESPONSE[] = { 0x00, 0x30, 0x00, 0x00, 0x00 };
 
 unsigned char GETCONFIG[]          = { 0x00, 0x40, 0xaf, 0x7e, 0x08 };
@@ -172,13 +173,21 @@ int check_data_udp(int udp_socket, struct sockaddr *baddr, struct cs2_config_dat
 	if (cs2fake_ping) {
 	    if (cs2_config_data->verbose)
 		printf("                received CAN ping\n");
-	    memcpy(netframe, M_CAN_PING_CS2, 13);
+	    memcpy(netframe, M_CAN_PING_CS2_1, 13);
 	    if (net_to_net(udp_socket, baddr, netframe, CAN_ENCAP_SIZE)) {
 		fprint_syslog_wc(stderr, LOG_ERR, "sending UDP data (CAN Ping fake CS2) error:", strerror(errno));
 	    } else {
 		print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data->verbose);
 		if (cs2_config_data->verbose)
 		    printf("                replied CAN ping (fake CS2)\n");
+	    }
+	    memcpy(netframe, M_CAN_PING_CS2_2, 13);
+	    if (net_to_net(udp_socket, baddr, netframe, CAN_ENCAP_SIZE)) {
+		fprint_syslog_wc(stderr, LOG_ERR, "sending UDP data (CAN Ping fake CS2) error:", strerror(errno));
+	    } else {
+		print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data->verbose);
+		if (cs2_config_data->verbose)
+		    printf("                replied CAN ping (fake GFP)\n");
 	    }
 	}
 	break;
@@ -196,6 +205,26 @@ int check_data_udp(int udp_socket, struct sockaddr *baddr, struct cs2_config_dat
 	    }
 	    if (cs2_config_data->cs2_config_copy)
 		copy_cs2_config(cs2_config_data);
+	}
+	if (cs2fake_ping) {
+	    if (cs2_config_data->verbose)
+		printf("                received CAN ping\n");
+	    memcpy(netframe, M_CAN_PING_CS2_1, 13);
+	    if (net_to_net(udp_socket, baddr, netframe, CAN_ENCAP_SIZE)) {
+		fprint_syslog_wc(stderr, LOG_ERR, "sending UDP data (CAN Ping fake CS2) error:", strerror(errno));
+	    } else {
+		print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data->verbose);
+		if (cs2_config_data->verbose)
+		    printf("                replied CAN ping (fake CS2)\n");
+	    }
+	    memcpy(netframe, M_CAN_PING_CS2_2, 13);
+	    if (net_to_net(udp_socket, baddr, netframe, CAN_ENCAP_SIZE)) {
+		fprint_syslog_wc(stderr, LOG_ERR, "sending UDP data (CAN Ping fake CS2) error:", strerror(errno));
+	    } else {
+		print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data->verbose);
+		if (cs2_config_data->verbose)
+		    printf("                replied CAN ping (fake GFP)\n");
+	    }
 	}
 	break;
     case (0x00400000UL):
@@ -244,6 +273,26 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	    cs2_config_data->cs2_tcp_socket = tcp_socket;
 	    if (cs2_config_data->cs2_config_copy)
 		copy_cs2_config(cs2_config_data);
+	}
+	if (cs2fake_ping) {
+	    if (cs2_config_data->verbose)
+		printf("                received CAN ping\n");
+	    memcpy(netframe, M_CAN_PING_CS2_1, 13);
+	    if (net_to_net(tcp_socket, NULL, netframe, CAN_ENCAP_SIZE)) {
+		fprint_syslog_wc(stderr, LOG_ERR, "sending UDP data (CAN Ping fake CS2) error:", strerror(errno));
+	    } else {
+		print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data->verbose);
+		if (cs2_config_data->verbose)
+		    printf("                replied CAN ping (fake CS2)\n");
+	    }
+	    memcpy(netframe, M_CAN_PING_CS2_2, 13);
+	    if (net_to_net(tcp_socket, NULL, netframe, CAN_ENCAP_SIZE)) {
+		fprint_syslog_wc(stderr, LOG_ERR, "sending UDP data (CAN Ping fake CS2) error:", strerror(errno));
+	    } else {
+		print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data->verbose);
+		if (cs2_config_data->verbose)
+		    printf("                replied CAN ping (fake GFP)\n");
+	    }
 	}
 	break;
     case (0x00400000UL):	/* config data */
