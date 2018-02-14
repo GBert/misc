@@ -51,7 +51,7 @@
 
 #define IPHDR_LEN       (20)
 /* defines for the packet type code in an ETHERNET header */
-#define ETHER_TYPE_IP (0x0800)
+#define ETHER_TYPE_IP	 (0x0800)
 #define ETHER_TYPE_8021Q (0x8100)
 
 unsigned char netframe[MAXDG];
@@ -60,6 +60,7 @@ struct knoten *statusdaten = NULL;
 struct knoten *messwert = NULL;
 
 unsigned char buffer[MAX_PAKETE * 8];
+int verbose = 0;
 
 static char *F_N_CAN_FORMAT_STRG = "  CAN  0x%08X  [%d]";
 static char *F_N_UDP_FORMAT_STRG = "  UDP  0x%08X  [%d]";
@@ -134,6 +135,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "   Version 2.0\n\n");
     fprintf(stderr, "         -i <can int>    CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>  read PCAP file instead from CAN socket\n");
+    fprintf(stderr, "         -v              verbose output for TCP/UDP\n\n");
     fprintf(stderr, "         -h              show this help\n\n");
 }
 
@@ -156,9 +158,6 @@ void frame_to_can(unsigned char *netframe, struct can_frame *frame) {
 
 void print_can_frame(char *format_string, struct can_frame *frame) {
     int i;
-    char timestamp[16];
-    time_stamp(timestamp);
-    printf("%s ", timestamp);
     printf(format_string, frame->can_id & CAN_EFF_MASK, frame->can_dlc);
     for (i = 0; i < frame->can_dlc; i++) {
 	printf(" %02X", frame->data[i]);
@@ -623,12 +622,12 @@ void decode_frame(struct can_frame *frame) {
 	printf(YEL);
 
     switch ((frame->can_id & 0x00FF0000UL) >> 16) {
-	/* System Befehle */
+    /* System Befehle */
     case 0x00:
     case 0x01:
 	command_system(frame);
 	break;
-	/* Lok Discovery */
+    /* Lok Discovery */
     case 0x02:
     case 0x03:
 	if (frame->can_dlc == 0)
@@ -644,7 +643,7 @@ void decode_frame(struct can_frame *frame) {
 	    printf("Lok Discovery - 0x%04X Range %d ASK %d\n", uid, frame->data[4], frame->data[5]);
 	}
 	break;
-	/* MFX Bind */
+    /* MFX Bind */
     case 0x04:
     case 0x05:
 	if ((frame->can_dlc == 2) || (frame->can_dlc == 4))
@@ -654,7 +653,7 @@ void decode_frame(struct can_frame *frame) {
 	    printf("MFX Bind: MFX UID 0x%08X MFX SID %d\n", uid, be16(&frame->data[4]));
 	}
 	break;
-	/* MFX Verify */
+    /* MFX Verify */
     case 0x06:
     case 0x07:
 	uid = be32(frame->data);
@@ -674,7 +673,7 @@ void decode_frame(struct can_frame *frame) {
 	    printf("MFX Verify: MFX UID 0x%08X MFX SID %d ASK-Verhältnis %d\n",
 		   uid, be16(&frame->data[4]), frame->data[6]);
 	break;
-	/* Lok Geschwindigkeit */
+    /* Lok Geschwindigkeit */
     case 0x08:
     case 0x09:
 	v = be16(&frame->data[4]);
@@ -684,7 +683,7 @@ void decode_frame(struct can_frame *frame) {
 	else if (frame->can_dlc == 6)
 	    printf("Lok: %s, Geschwindigkeit: %3.1f\n", getLoco(frame->data, s), v);
 	break;
-	/* Lok Richtung */
+    /* Lok Richtung */
     case 0x0A:
     case 0x0B:
 	memset(s, 0, sizeof(s));
@@ -713,7 +712,7 @@ void decode_frame(struct can_frame *frame) {
 	    printf("Richtung %s\n", s);
 	}
 	break;
-	/* Lok Funktion */
+    /* Lok Funktion */
     case 0x0C:
     case 0x0D:
 	if (frame->can_dlc == 5)
@@ -724,7 +723,7 @@ void decode_frame(struct can_frame *frame) {
 	    printf("Lok %s Funktion %d Wert %d Funktionswert %d\n",
 		   getLoco(frame->data, s), frame->data[4], frame->data[5], be16(&frame->data[6]));
 	break;
-	/* Read Config */
+    /* Read Config */
     case 0x0E:
 	if (frame->can_dlc == 7) {
 	    cv_number = ((frame->data[4] & 0x3) << 8) + frame->data[5];
@@ -742,7 +741,7 @@ void decode_frame(struct can_frame *frame) {
 	    printf("Read Config Lok %s CV Nummer %d Index %d Wert %d\n",
 		   getLoco(frame->data, s), cv_number, cv_index, frame->data[6]);
 	break;
-	/* Write Config */
+    /* Write Config */
     case 0x10:
     case 0x11:
 	/* TODO */
@@ -754,7 +753,7 @@ void decode_frame(struct can_frame *frame) {
 	else
 	    printf("Write Config Lok %s Befehl unbekannt\n", getLoco(frame->data, s));
 	break;
-	/* Zubehör schalten */
+    /* Zubehör schalten */
     case 0x16:
     case 0x17:
 	if (frame->can_dlc == 6)
@@ -789,7 +788,7 @@ void decode_frame(struct can_frame *frame) {
 	    printf("S88 Event: Kennung %d Kontakt %d Zustand alt %d Zusand neu %d Zeit %d\n",
 		   kenner, kontakt, frame->data[4], frame->data[5], be16(&frame->data[6]));
 	break;
-	/* SX1 Event */
+    /* SX1 Event */
     case 0x24:
     case 0x25:
 	uid = be32(frame->data);
@@ -798,7 +797,7 @@ void decode_frame(struct can_frame *frame) {
 	if (frame->can_dlc == 5)
 	    printf("SX1 Event: UID 0x%08X SX1-Adresse %d Zustand %d\n", uid, frame->data[4], frame->data[5]);
 	break;
-	/* Ping */
+    /* Ping */
     case 0x30:
 	printf("Ping Anfrage\n");
 	break;
@@ -840,7 +839,7 @@ void decode_frame(struct can_frame *frame) {
 	}
 	printf(" UID 0x%08X, Software Version %d.%d\n", uid, frame->data[4], frame->data[5]);
 	break;
-	/* CAN Bootloader */
+    /* CAN Bootloader */
     case 0x36:
 	printf("CAN Bootloader Anfrage\n");
 	break;
@@ -882,7 +881,7 @@ void decode_frame(struct can_frame *frame) {
 	}
 	printf(" UID 0x%08X, Software Version %d.%d\n", uid, frame->data[4], frame->data[5]);
 	break;
-	/* Statusdaten Konfiguration */
+    /* Statusdaten Konfiguration */
     case 0x3A:
     case 0x3B:
 	/* TODO Daten analysiert ausgeben */
@@ -916,7 +915,7 @@ void decode_frame(struct can_frame *frame) {
 	    printf("\n");
 	}
 	break;
-	/* Anfordern Config Daten */
+    /* Anfordern Config Daten */
     case 0x40:
     case 0x41:
 	memset(s, 0, sizeof(s));
@@ -941,7 +940,7 @@ void decode_frame(struct can_frame *frame) {
 	    printf("Anfordern Config Data: %s\n", s);
 	}
 	break;
-	/* Config Data Stream */
+    /* Config Data Stream */
     case 0x42:
     case 0x43:
 	stream_size = be32(frame->data);
@@ -954,12 +953,12 @@ void decode_frame(struct can_frame *frame) {
 	if (frame->can_dlc == 8)
 	    printf("Config Data Stream: Daten\n");
 	break;
-	/* CdB: WeichenChef */
+    /* CdB: WeichenChef */
     case 0x44:
     case 0x45:
 	cdb_extension_wc(frame);
 	break;
-	/* Automatik schalten */
+    /* Automatik schalten */
     case 0x60:
     case 0x61:
 	kenner = be16(frame->data);
@@ -984,7 +983,8 @@ void decode_frame(struct can_frame *frame) {
 	break;
     case 0x64:
     case 0x65:
-	printf("GFP unknown\n");
+	printf("unknown (GFP?)\n");
+	break;
     default:
 	printf("unknown\n");
 	break;
@@ -999,19 +999,23 @@ int main(int argc, char **argv) {
     struct ifreq ifr;
     socklen_t caddrlen = sizeof(caddr);
     fd_set read_fds;
+    char timestamp[16];
 
     strcpy(ifr.ifr_name, "can0");
     memset(pcap_file, 0, sizeof(pcap_file));
 
     signal(SIGINT, INThandler);
 
-    while ((opt = getopt(argc, argv, "i:r:h?")) != -1) {
+    while ((opt = getopt(argc, argv, "i:r:vh?")) != -1) {
 	switch (opt) {
 	case 'i':
 	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
 	    break;
 	case 'r':
 	    strncpy(pcap_file, optarg, sizeof(pcap_file) - 1);
+	    break;
+	case 'v':
+	    verbose = 1;
 	    break;
 	case 'h':
 	case '?':
@@ -1034,6 +1038,9 @@ int main(int argc, char **argv) {
 	char errbuf[PCAP_ERRBUF_SIZE];
 	const unsigned char *packet;
 	struct pcap_pkthdr header;
+	struct ip *ip_hdr;
+	struct tm *tm;
+	memset(timestamp, 0, sizeof(timestamp));
 
 	handle = pcap_open_offline(pcap_file, errbuf);
 	if (handle == NULL) {
@@ -1044,9 +1051,11 @@ int main(int argc, char **argv) {
 	    /* header contains information about the packet (e.g. timestamp) */
 	    /* cast a pointer to the packet data */
 	    unsigned char *pkt_ptr = (u_char *) packet;
+	    tm = localtime(&header.ts.tv_sec);
+	    sprintf(timestamp, "%02d:%02d:%02d.%03d", tm->tm_hour, tm->tm_min, tm->tm_sec, (int)header.ts.tv_usec / 1000);
 
 	    /* parse the first (ethernet) header, grabbing the type field */
-	    int ether_type = ((int)(pkt_ptr[12]) << 8) | (int)pkt_ptr[13];
+	    int ether_type = be16(&pkt_ptr[12]);
 	    int ether_offset = 0;
 
 	    if (ether_type == ETHER_TYPE_IP)	/* most common */
@@ -1054,49 +1063,67 @@ int main(int argc, char **argv) {
 	    else if (ether_type == ETHER_TYPE_8021Q)	/* dot1q tag ? */
 		ether_offset = 18;
 	    else
-		fprintf(stderr, "Unknown ethernet type, %04X, skipping...\n", ether_type);
+		if (verbose)
+		    fprintf(stderr, "Unknown ethernet type, %04X, skipping...\n", ether_type);
 	    /* skip past the Ethernet II header */
-	    pkt_ptr += ether_offset;	/* skip past the Ethernet II header */
-	    struct ip *ip_hdr = (struct ip *)pkt_ptr;	/* point to an IP header structure  */
+	    pkt_ptr += ether_offset;
+	    /* point to an IP header structure  */
+	    ip_hdr = (struct ip *)pkt_ptr;
 
 	    int packet_length = ntohs(ip_hdr->ip_len);
 
 	    if (ip_hdr->ip_p == IPPROTO_UDP) {
 		myudp = (struct udphdr *)(pkt_ptr + sizeof(struct ip));
 		int size_payload = packet_length - (IPHDR_LEN + sizeof(struct udphdr));
-		printf("%04u UDP %s -> ", pkt_counter, inet_ntoa(ip_hdr->ip_src));
-		printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(myudp->uh_sport), ntohs(myudp->uh_dport));
-		printf("  packet_length %d\n", size_payload);
-		// print_content((unsigned char *)pkt_ptr + IPHDR_LEN + sizeof(struct udphdr), size_payload);
+		if (verbose) {
+		    printf("%s ", timestamp);
+		    printf("%04u UDP %s -> ", pkt_counter, inet_ntoa(ip_hdr->ip_src));
+		    printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(myudp->uh_sport), ntohs(myudp->uh_dport));
+		    printf("  packet_length %d\n", size_payload);
+		}
 		unsigned char *dump = (unsigned char *)pkt_ptr + IPHDR_LEN + sizeof(struct udphdr);
-		frame_to_can(dump, &frame);
-		print_can_frame(F_N_UDP_FORMAT_STRG, &frame);
-		decode_frame(&frame);
-		printf("\n");
+		for (int i = 0; i < size_payload; i += 13) {
+		    printf("%s ", timestamp);
+		    frame_to_can(dump + i, &frame);
+		    print_can_frame(F_N_UDP_FORMAT_STRG, &frame);
+		    decode_frame(&frame);
+		    printf(RESET);
+		}
 	    }
 	    if (ip_hdr->ip_p == IPPROTO_TCP) {
 		mytcp = (struct tcphdr *)(pkt_ptr + sizeof(struct ip));
-
 		int tcp_offset = mytcp->th_off * 4;
 		int size_payload = packet_length - (IPHDR_LEN + tcp_offset);
+		unsigned char *dump = (unsigned char *)pkt_ptr + IPHDR_LEN + tcp_offset;
 
+		/* look for HTTP */
+		if ((ntohs(mytcp->th_dport) == 80) || (ntohs(mytcp->th_sport) == 80)) {
+		    if (size_payload) {
+			printf("%s   HTTP    -> %s", timestamp, dump);
+		    }
+		    continue;
+		}
 		if (size_payload > 0) {
-		    printf("%04u TCP %s -> ", pkt_counter, inet_ntoa(ip_hdr->ip_src));
-		    printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(mytcp->th_sport),
-			   ntohs(mytcp->th_dport));
-		    unsigned char *dump = (unsigned char *)pkt_ptr + IPHDR_LEN + tcp_offset;
-		    printf("  packet_length %d\n", size_payload);
-		    frame_to_can(dump, &frame);
-		    print_can_frame(F_N_TCP_FORMAT_STRG, &frame);
-		    decode_frame(&frame);
-		    // print_content(dump, size_payload);
-		    printf("\n");
+		    if (verbose) {
+			printf("%s ", timestamp);
+			printf("%04u TCP %s -> ", pkt_counter, inet_ntoa(ip_hdr->ip_src));
+			printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(mytcp->th_sport), ntohs(mytcp->th_dport));
+			printf("  packet_length %d\n", size_payload);
+		    }
+		    for (int i = 0; i < size_payload; i += 13) {
+			printf("%s ", timestamp);
+			frame_to_can(dump + i, &frame);
+			print_can_frame(F_N_TCP_FORMAT_STRG, &frame);
+			decode_frame(&frame);
+			// print_content(dump, size_payload);
+			printf(RESET);
+		    }
 		}
 	    }
 	    pkt_counter++;
 	    printf(RESET);
 	}
-	return(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
     /* reading from CAN socket */
     } else {
 
@@ -1131,14 +1158,17 @@ int main(int argc, char **argv) {
 	    /* received a CAN frame */
 	    if (FD_ISSET(sc, &read_fds)) {
 		printf(RESET);
+		time_stamp(timestamp);
 		if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
 		    fprintf(stderr, "error reading CAN frame: %s\n", strerror(errno));
 		} else if ((frame.can_id & CAN_EFF_FLAG)	/* only EFF frames are valid */
 			   &&(((frame.can_id & 0x00000380UL) == 0x00000300UL)	/* MS2/CS2 hash ? */
 			      ||(frame.can_id == (0x00310000UL | CAN_EFF_FLAG)))) {	/* or Ping reply from CS2 GUI */
+		    printf("%s ", timestamp);
 		    print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
 		    decode_frame(&frame);
 		} else {
+		    printf("%s ", timestamp);
 		    print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
 		    printf("\n");
 		}
