@@ -62,6 +62,8 @@ struct knoten *messwert = NULL;
 unsigned char buffer[MAX_PAKETE * 8];
 
 static char *F_N_CAN_FORMAT_STRG = "  CAN  0x%08X  [%d]";
+static char *F_N_UDP_FORMAT_STRG = "  UDP  0x%08X  [%d]";
+static char *F_N_TCP_FORMAT_STRG = "  TCP  0x%08X  [%d]";
 
 uint16_t be16(uint8_t *u) {
     return (u[0] << 8) | u[1];
@@ -615,6 +617,11 @@ void decode_frame(struct can_frame *frame) {
     char s[32];
     float v;
 
+    if (frame->can_id & 0x00010000UL)
+	printf(CYN);
+    else
+	printf(YEL);
+
     switch ((frame->can_id & 0x00FF0000UL) >> 16) {
 	/* System Befehle */
     case 0x00:
@@ -1062,8 +1069,8 @@ int main(int argc, char **argv) {
 		printf("  packet_length %d\n", size_payload);
 		// print_content((unsigned char *)pkt_ptr + IPHDR_LEN + sizeof(struct udphdr), size_payload);
 		unsigned char *dump = (unsigned char *)pkt_ptr + IPHDR_LEN + sizeof(struct udphdr);
-		print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
 		frame_to_can(dump, &frame);
+		print_can_frame(F_N_UDP_FORMAT_STRG, &frame);
 		decode_frame(&frame);
 		printf("\n");
 	    }
@@ -1079,10 +1086,15 @@ int main(int argc, char **argv) {
 			   ntohs(mytcp->th_dport));
 		    unsigned char *dump = (unsigned char *)pkt_ptr + IPHDR_LEN + tcp_offset;
 		    printf("  packet_length %d\n", size_payload);
+		    frame_to_can(dump, &frame);
+		    print_can_frame(F_N_TCP_FORMAT_STRG, &frame);
+		    decode_frame(&frame);
 		    // print_content(dump, size_payload);
 		    printf("\n");
 		}
 	    }
+	    pkt_counter++;
+	    printf(RESET);
 	}
 	return(EXIT_SUCCESS);
     /* reading from CAN socket */
@@ -1125,10 +1137,6 @@ int main(int argc, char **argv) {
 			   &&(((frame.can_id & 0x00000380UL) == 0x00000300UL)	/* MS2/CS2 hash ? */
 			      ||(frame.can_id == (0x00310000UL | CAN_EFF_FLAG)))) {	/* or Ping reply from CS2 GUI */
 		    print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
-		    if (frame.can_id & 0x00010000UL)
-			printf(CYN);
-		    else
-			printf(YEL);
 		    decode_frame(&frame);
 		} else {
 		    print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
