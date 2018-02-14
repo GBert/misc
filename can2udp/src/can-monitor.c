@@ -16,6 +16,7 @@
 #include <signal.h>
 #include <errno.h>
 #include <ctype.h>
+#include <pcap.h>
 
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -23,6 +24,10 @@
 #include <sys/ioctl.h>
 #include <net/if.h>
 #include <netinet/in.h>
+#define  __FAVOR_BSD
+#include <netinet/ip.h>
+#include <netinet/tcp.h>
+#include <netinet/udp.h>
 #include <arpa/inet.h>
 #include <sys/time.h>
 #include <time.h>
@@ -43,6 +48,11 @@
 #define MAXDG   	4096	/* maximum datagram size */
 #define MAXUDP  	16	/* maximum datagram size */
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
+
+#define IPHDR_LEN       (20)
+/* defines for the packet type code in an ETHERNET header */
+#define ETHER_TYPE_IP (0x0800)
+#define ETHER_TYPE_8021Q (0x8100)
 
 unsigned char netframe[MAXDG];
 
@@ -119,9 +129,10 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.1\n\n");
-    fprintf(stderr, "         -i <can int>  CAN interface - default can0\n");
-    fprintf(stderr, "         -h            show this help\n\n");
+    fprintf(stderr, "   Version 2.0\n\n");
+    fprintf(stderr, "         -i <can int>    CAN interface - default can0\n");
+    fprintf(stderr, "         -r <pcap file>  read PCAP file instead from CAN socket\n");
+    fprintf(stderr, "         -h              show this help\n\n");
 }
 
 int time_stamp(char *timestamp) {
@@ -133,6 +144,12 @@ int time_stamp(char *timestamp) {
 
     sprintf(timestamp, "%02d:%02d:%02d.%03d", tm->tm_hour, tm->tm_min, tm->tm_sec, (int)tv.tv_usec / 1000);
     return 0;
+}
+
+void frame_to_can(unsigned char *netframe, struct can_frame *frame) {
+    frame->can_id = be32(netframe);
+    frame->can_dlc = netframe[4];
+    memcpy(&frame->data, &netframe[5], 8);
 }
 
 void print_can_frame(char *format_string, struct can_frame *frame) {
@@ -361,7 +378,7 @@ void cdb_extension_grd(struct can_frame *frame) {
 		break;
 	    }
 	}
-    /* System */
+	/* System */
     } else {
 	if (frame->can_dlc == 2) {
 	    printf("CdB: Abfrage ");
@@ -524,7 +541,7 @@ void cdb_extension_wc(struct can_frame *frame) {
 		printf("Servo %d unbekannter Wert %d\n", servo, wert);
 		break;
 	    }
-	/* Servo 0 -> System */
+	    /* Servo 0 -> System */
 	} else {
 	    switch (frame->data[1]) {
 	    case 0x01:
@@ -593,9 +610,10 @@ void cdb_extension_set_grd(struct can_frame *frame) {
 
 void decode_frame(struct can_frame *frame) {
     uint32_t id, kennung, function, uid, cv_number, cv_index, stream_size;
-    uint16_t v,paket, crc, kenner, kontakt;
+    uint16_t paket, crc, kenner, kontakt;
     uint8_t n_kanaele, n_messwerte, kanal = 0;
     char s[32];
+    float v;
 
     switch ((frame->can_id & 0x00FF0000UL) >> 16) {
 	/* System Befehle */
@@ -724,8 +742,8 @@ void decode_frame(struct can_frame *frame) {
 	cv_number = ((frame->data[4] & 0x3) << 8) + frame->data[5];
 	cv_index = frame->data[4] >> 2;
 	if (frame->can_dlc == 8)
-	    printf("Write Config Lok %s CV Nummer %d Index %d Wert %d Ctrl 0x%02X\n", getLoco(frame->data, s), cv_number,
-		   cv_index, frame->data[6], frame->data[7]);
+	    printf("Write Config Lok %s CV Nummer %d Index %d Wert %d Ctrl 0x%02X\n", getLoco(frame->data, s),
+		   cv_number, cv_index, frame->data[6], frame->data[7]);
 	else
 	    printf("Write Config Lok %s Befehl unbekannt\n", getLoco(frame->data, s));
 	break;
@@ -924,7 +942,8 @@ void decode_frame(struct can_frame *frame) {
 	if (frame->can_dlc == 6)
 	    printf("Config Data Stream: Länge 0x%08X CRC 0x%04X\n", stream_size, crc);
 	if (frame->can_dlc == 7)
-	    printf("Config Data Stream: Länge 0x%08X CRC 0x%04X (unbekannt 0x%02X)\n", stream_size, crc, frame->data[6]);
+	    printf("Config Data Stream: Länge 0x%08X CRC 0x%04X (unbekannt 0x%02X)\n", stream_size, crc,
+		   frame->data[6]);
 	if (frame->can_dlc == 8)
 	    printf("Config Data Stream: Daten\n");
 	break;
@@ -968,21 +987,24 @@ void decode_frame(struct can_frame *frame) {
 int main(int argc, char **argv) {
     int max_fds, opt, sc;
     struct can_frame frame;
-
+    char pcap_file[256];
     struct sockaddr_can caddr;
     struct ifreq ifr;
     socklen_t caddrlen = sizeof(caddr);
-
     fd_set read_fds;
 
     strcpy(ifr.ifr_name, "can0");
+    memset(pcap_file, 0, sizeof(pcap_file));
 
     signal(SIGINT, INThandler);
 
-    while ((opt = getopt(argc, argv, "i:dh?")) != -1) {
+    while ((opt = getopt(argc, argv, "i:r:h?")) != -1) {
 	switch (opt) {
 	case 'i':
 	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
+	    break;
+	case 'r':
+	    strncpy(pcap_file, optarg, sizeof(pcap_file) - 1);
 	    break;
 	case 'h':
 	case '?':
@@ -996,51 +1018,122 @@ int main(int argc, char **argv) {
 	}
     }
 
-    memset(&caddr, 0, sizeof(caddr));
+    /* do we have a PCAP file ? */
+    if (pcap_file[0] != 0) {
+	unsigned int pkt_counter = 1;
+	struct tcphdr *mytcp;
+	struct udphdr *myudp;
+	pcap_t *handle;
+	char errbuf[PCAP_ERRBUF_SIZE];
+	const unsigned char *packet;
+	struct pcap_pkthdr header;
 
-    /* prepare CAN socket */
-    if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
-	fprintf(stderr, "error creating CAN socket: %s\n", strerror(errno));
-	exit(EXIT_FAILURE);
-    }
-    caddr.can_family = AF_CAN;
-    if (ioctl(sc, SIOCGIFINDEX, &ifr) < 0) {
-	fprintf(stderr, "setup CAN socket error: %s\n", strerror(errno));
-	exit(EXIT_FAILURE);
-    }
-    caddr.can_ifindex = ifr.ifr_ifindex;
+	handle = pcap_open_offline(pcap_file, errbuf);
+	if (handle == NULL) {
+	    fprintf(stderr, "Couldn't open pcap file %s: %s\n", pcap_file, errbuf);
+	    return (EXIT_FAILURE);
+	}
+	while ((packet = pcap_next(handle, &header)) != NULL) {
+	    /* header contains information about the packet (e.g. timestamp) */
+	    /* cast a pointer to the packet data */
+	    unsigned char *pkt_ptr = (u_char *) packet;
 
-    if (bind(sc, (struct sockaddr *)&caddr, caddrlen) < 0) {
-	fprintf(stderr, "error binding CAN socket: %s\n", strerror(errno));
-	exit(EXIT_FAILURE);
-    }
+	    /* parse the first (ethernet) header, grabbing the type field */
+	    int ether_type = ((int)(pkt_ptr[12]) << 8) | (int)pkt_ptr[13];
+	    int ether_offset = 0;
 
-    FD_ZERO(&read_fds);
-    FD_SET(sc, &read_fds);
-    max_fds = sc;
+	    if (ether_type == ETHER_TYPE_IP)	/* most common */
+		ether_offset = 14;
+	    else if (ether_type == ETHER_TYPE_8021Q)	/* dot1q tag ? */
+		ether_offset = 18;
+	    else
+		fprintf(stderr, "Unknown ethernet type, %04X, skipping...\n", ether_type);
+	    /* skip past the Ethernet II header */
+	    pkt_ptr += ether_offset;	/* skip past the Ethernet II header */
+	    struct ip *ip_hdr = (struct ip *)pkt_ptr;	/* point to an IP header structure  */
 
-    while (1) {
-	if (select(max_fds + 1, &read_fds, NULL, NULL, NULL) < 0) {
-	    fprintf(stderr, "select error: %s\n", strerror(errno));
+	    int packet_length = ntohs(ip_hdr->ip_len);
+
+	    if (ip_hdr->ip_p == IPPROTO_UDP) {
+		myudp = (struct udphdr *)(pkt_ptr + sizeof(struct ip));
+		int size_payload = packet_length - (IPHDR_LEN + sizeof(struct udphdr));
+		printf("%04u UDP %s -> ", pkt_counter, inet_ntoa(ip_hdr->ip_src));
+		printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(myudp->uh_sport), ntohs(myudp->uh_dport));
+		printf("  packet_length %d\n", size_payload);
+		// print_content((unsigned char *)pkt_ptr + IPHDR_LEN + sizeof(struct udphdr), size_payload);
+		unsigned char *dump = (unsigned char *)pkt_ptr + IPHDR_LEN + sizeof(struct udphdr);
+		print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
+		frame_to_can(dump, &frame);
+		decode_frame(&frame);
+		printf("\n");
+	    }
+	    if (ip_hdr->ip_p == IPPROTO_TCP) {
+		mytcp = (struct tcphdr *)(pkt_ptr + sizeof(struct ip));
+
+		int tcp_offset = mytcp->th_off * 4;
+		int size_payload = packet_length - (IPHDR_LEN + tcp_offset);
+
+		if (size_payload > 0) {
+		    printf("%04u TCP %s -> ", pkt_counter, inet_ntoa(ip_hdr->ip_src));
+		    printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(mytcp->th_sport),
+			   ntohs(mytcp->th_dport));
+		    unsigned char *dump = (unsigned char *)pkt_ptr + IPHDR_LEN + tcp_offset;
+		    printf("  packet_length %d\n", size_payload);
+		    // print_content(dump, size_payload);
+		    printf("\n");
+		}
+	    }
+	}
+	return(EXIT_SUCCESS);
+    /* reading from CAN socket */
+    } else {
+
+	memset(&caddr, 0, sizeof(caddr));
+
+	/* prepare CAN socket */
+	if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
+	    fprintf(stderr, "error creating CAN socket: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
 	}
-	/* received a CAN frame */
-	if (FD_ISSET(sc, &read_fds)) {
-	    printf(RESET);
-	    if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
-		fprintf(stderr, "error reading CAN frame: %s\n", strerror(errno));
-	    } else if ((frame.can_id & CAN_EFF_FLAG)	/* only EFF frames are valid */
-			&&(((frame.can_id & 0x00000380UL) == 0x00000300UL)	/* MS2/CS2 hash ? */
-			||(frame.can_id == (0x00310000UL | CAN_EFF_FLAG)))) {	/* or Ping reply from CS2 GUI */
-		print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
-		if (frame.can_id & 0x00010000UL)
-		    printf(CYN);
-		else
-		    printf(YEL);
-		decode_frame(&frame);
-	    } else {
-		print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
-		printf("\n");
+	caddr.can_family = AF_CAN;
+	if (ioctl(sc, SIOCGIFINDEX, &ifr) < 0) {
+	    fprintf(stderr, "setup CAN socket error: %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
+	caddr.can_ifindex = ifr.ifr_ifindex;
+
+	if (bind(sc, (struct sockaddr *)&caddr, caddrlen) < 0) {
+	    fprintf(stderr, "error binding CAN socket: %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
+
+	FD_ZERO(&read_fds);
+	FD_SET(sc, &read_fds);
+	max_fds = sc;
+
+	while (1) {
+	    if (select(max_fds + 1, &read_fds, NULL, NULL, NULL) < 0) {
+		fprintf(stderr, "select error: %s\n", strerror(errno));
+		exit(EXIT_FAILURE);
+	    }
+	    /* received a CAN frame */
+	    if (FD_ISSET(sc, &read_fds)) {
+		printf(RESET);
+		if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
+		    fprintf(stderr, "error reading CAN frame: %s\n", strerror(errno));
+		} else if ((frame.can_id & CAN_EFF_FLAG)	/* only EFF frames are valid */
+			   &&(((frame.can_id & 0x00000380UL) == 0x00000300UL)	/* MS2/CS2 hash ? */
+			      ||(frame.can_id == (0x00310000UL | CAN_EFF_FLAG)))) {	/* or Ping reply from CS2 GUI */
+		    print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
+		    if (frame.can_id & 0x00010000UL)
+			printf(CYN);
+		    else
+			printf(YEL);
+		    decode_frame(&frame);
+		} else {
+		    print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
+		    printf("\n");
+		}
 	    }
 	}
     }

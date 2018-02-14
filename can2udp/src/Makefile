@@ -29,7 +29,7 @@ can-bounce-test: can-bounce-test.o
 	$(CC) $(CFLAGS) -o can-bounce-test can-bounce-test.o
 
 can-monitor: can-monitor.o
-	$(CC) $(CFLAGS) -o can-monitor can-monitor.o
+	$(CC) $(CFLAGS) -o can-monitor can-monitor.o -lpcap
 
 can2eth: can2eth.o
 	$(CC) $(CFLAGS) -o can2eth can2eth.o
