@@ -1,11 +1,15 @@
 const int revisionnr = 
-13545
+13549
 ;
 const char* commithash = 
-"982b86540b22ab06cd81c534d583742a1ab15b37";
+"b8892cab58c3d028ce57a4b413354d4ca706b1c8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13549 2018-02-13 11:17:35 +0100 p50x: removed the unused ctsretry variable\n" \
+"13548 2018-02-13 11:14:12 +0100 digints: ctsretry is in ms which must be divided by 10\n" \
+"13547 2018-02-13 11:00:03 +0100 p50: reduce wait for CTS to max 10 x 10ms\n" \
+"13546 2018-02-13 09:27:18 +0100 funcmd: standalone option added to disable an extra V command in case of f0\n" \
 "13545 2018-02-12 12:22:12 +0100 route: removed the NOTs from the conditions\n" \
 "13544 2018-02-12 11:59:01 +0100 basedlg: show bus also in HEX in case the UID is set\n" \
 "13543 2018-02-12 11:52:22 +0100 route: fix for condition with type all\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "13502 2018-02-05 13:10:03 +0100 dsd2010: only report new positions\n" \
 "13501 2018-02-05 12:55:41 +0100 dsd2010: only report new errors\n" \
 "13500 2018-02-05 11:50:10 +0100 dsd2010: goto and direction commands added\n" \
-"13499 2018-02-05 11:23:52 +0100 dsd2010: library added for rs232 support\n" \
-"13498 2018-02-05 08:46:23 +0100 mcs2,mgbox: use constants for reporting switch state\n" \
-"13497 2018-02-05 08:44:53 +0100 mgbox: fix for reporting the switch state\n" \
-"13496 2018-02-05 08:40:36 +0100 switch: revert field correction\n" \
 
 "log end";
