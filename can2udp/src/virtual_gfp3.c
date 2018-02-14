@@ -56,9 +56,7 @@ static char *F_S_CAN_FORMAT_STRG = "short CAN->  CANID 0x%08X R [%d]";
 static char *T_CAN_FORMAT_STRG   = "      CAN<-  CANID 0x%08X   [%d]";
 
 static unsigned char M_ALL_ID[]            = { 0x00, 0x00, 0x00, 0x00 };
-static unsigned char M_GLEISBOX_ID1[]      = { 0x00, 0x37, 0x9B, 0x32, 0x08, 0x43, 0x54, 0x6F, 0x46, 0x03, 0x1B, 0x00, 0x10 };
-static unsigned char M_GLEISBOX_ID2[]      = { 0x00, 0x37, 0x9B, 0x32, 0x08, 0x43, 0x54, 0x6F, 0x46, 0x03, 0x1B, 0x00, 0x20 };
-static unsigned char M_GLEISBOX_ID3[]      = { 0x00, 0x37, 0x9B, 0x32, 0x08, 0x43, 0x54, 0x6F, 0x46, 0x03, 0x1B, 0x00, 0xee };
+static unsigned char M_GLEISBOX_ID[]       = { 0x00, 0x31, 0x9B, 0x32, 0x08, 0x43, 0x54, 0x6F, 0x46, 0x03, 0x1B, 0x00, 0x00 };
 
 static unsigned char M_GLEISBOX_VAL1[]     = { 0x00, 0x01, 0x9B, 0x32, 0x08, 0x43, 0x54, 0x6F, 0x46, 0x0B, 0x01, 0x00, 0x2E };
 static unsigned char M_GLEISBOX_VAL3[]     = { 0x00, 0x01, 0x9B, 0x32, 0x08, 0x43, 0x54, 0x6F, 0x46, 0x0B, 0x03, 0x08, 0x81 };
@@ -92,7 +90,6 @@ static unsigned char M_GLEISBOX_INDEX3_4[] = { 0x00, 0x3B, 0x03, 0x04, 0x08, 0x0
 static unsigned char M_GLEISBOX_INDEX3_5[] = { 0x00, 0x3B, 0x9B, 0x32, 0x05, 0x43, 0x54, 0x6F, 0x46, 0x03, 0x00, 0x00, 0x00 };
 
 static unsigned char M_GLEISBOX_BL_INIT[]  = { 0x00, 0x37, 0x9B, 0x32, 0x08, 0x43, 0x54, 0x6F, 0x46, 0x01, 0x27, 0x00, 0x10 };
-static unsigned char M_GFP3_UNKNOWN1[]     = { 0x00, 0x65, 0x03, 0x00, 0x08, 0x29, 0xFA, 0xE5, 0x7E, 0x8F, 0x1D, 0x4F, 0xA9 };
 
 unsigned char netframe[MAXDG];
 
@@ -246,7 +243,7 @@ int main(int argc, char **argv) {
 
 		switch ((frame.can_id & 0x00FF0000UL) >> 16) {
 		case 0x00:
-		    if ((memcmp(&frame.data[0], &M_GLEISBOX_ID1[5], 4) == 0) ||
+		    if ((memcmp(&frame.data[0], &M_GLEISBOX_ID[5], 4) == 0) ||
 			(memcmp(&frame.data[0], M_ALL_ID, 4) == 0)) {
 			if (frame.data[4] == 0x0b) {
 			    switch (frame.data[5]) {
@@ -278,12 +275,10 @@ int main(int argc, char **argv) {
 		    send_can_frame(sc, &frame, verbose);
 		    break;
 		case 0x30:	/* ping / ID /software  */
-		    send_defined_can_frame(sc, M_GLEISBOX_ID1, verbose);
-		    send_defined_can_frame(sc, M_GLEISBOX_ID2, verbose);
-		    send_defined_can_frame(sc, M_GLEISBOX_ID3, verbose);
+		    send_defined_can_frame(sc, M_GLEISBOX_ID, verbose);
 		    break;
 		case 0x3A:	/* status               */
-		    if (memcmp(&frame.data[0], &M_GLEISBOX_ID1[5], 4) == 0) {
+		    if (memcmp(&frame.data[0], &M_GLEISBOX_ID[5], 4) == 0) {
 			switch (frame.data[4]) {
 			case 0x00:
 			    send_defined_can_frame(sc, M_GLEISBOX_STATUS1, verbose);
@@ -334,9 +329,6 @@ int main(int argc, char **argv) {
 			/* frame.data[4] = 0xf2; */
 			send_can_frame(sc, &frame, verbose);
 		    }
-		    break;
-		case 0x64:	/* new unknown */
-		    send_defined_can_frame(sc, M_GFP3_UNKNOWN1, verbose);
 		    break;
 		default:
 		    break;

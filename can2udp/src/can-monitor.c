@@ -1040,6 +1040,7 @@ int main(int argc, char **argv) {
 	struct pcap_pkthdr header;
 	struct ip *ip_hdr;
 	struct tm *tm;
+	uint16_t sport, dport;
 	memset(timestamp, 0, sizeof(timestamp));
 
 	handle = pcap_open_offline(pcap_file, errbuf);
@@ -1074,6 +1075,10 @@ int main(int argc, char **argv) {
 
 	    if (ip_hdr->ip_p == IPPROTO_UDP) {
 		myudp = (struct udphdr *)(pkt_ptr + sizeof(struct ip));
+		dport = ntohs(myudp->uh_dport);
+		sport = ntohs(myudp->uh_sport);
+		if ((dport != 15730) && (sport != 15730) && (dport != 15731) && (sport != 15731))
+		    continue;
 		int size_payload = packet_length - (IPHDR_LEN + sizeof(struct udphdr));
 		if (verbose) {
 		    printf("%s ", timestamp);
@@ -1103,6 +1108,12 @@ int main(int argc, char **argv) {
 		    }
 		    continue;
 		}
+		dport = ntohs(mytcp->th_dport);
+		sport = ntohs(mytcp->th_sport);
+		if ((dport != 15730) && (sport != 15731) &&
+		    (dport != 15731) && (sport != 15731) &&
+		    (dport != 15732) && (sport != 15732))
+		    continue;
 		if (size_payload > 0) {
 		    if (verbose) {
 			printf("%s ", timestamp);

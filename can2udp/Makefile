@@ -18,7 +18,7 @@ define Package/can2udp
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=can2udp/can2lan gateway
-  DEPENDS:= +zlib
+  DEPENDS:= +zlib +libpcap
 endef
 
 define Package/can2udp/description
@@ -57,7 +57,6 @@ define Package/can2udp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/read_lococard $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pio-i2c-udp $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/wake-up-links88 $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/virtual_gfp3 $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/xntcpd $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/cs2ping.init $(1)/etc/init.d/cs2ping
