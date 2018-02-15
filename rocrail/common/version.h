@@ -1,11 +1,13 @@
 const int revisionnr = 
-13554
+13556
 ;
 const char* commithash = 
-"cd4cc4cd9ba49d4f3006bcde575b63d4478a9400";
+"778e051c682deb1318ebe62a9baea1cda13aa490";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13556 2018-02-15 11:54:18 +0100 translation merge: sl, de, fr, sr_latin, pr_BR, nl\n" \
+"13555 2018-02-15 08:22:39 +0100 loc,seltab: update occ.xml with the reserved seltab blockID\n" \
 "13554 2018-02-14 17:49:19 +0100 srcp: init S88 bus after connect\n" \
 "13553 2018-02-14 15:36:12 +0100 http: check support key only at start\n" \
 "13552 2018-02-14 12:16:34 +0100 guiframe: commented out the loco show/hide in the view menu\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "13509 2018-02-05 16:06:15 +0100 location: substate for platform actions\n" \
 "13508 2018-02-05 14:55:28 +0100 dsd2010: report position + 1\n" \
 "13507 2018-02-05 14:45:47 +0100 dsd2010: fix for sending data\n" \
-"13506 2018-02-05 14:36:40 +0100 dsd2010: trace level correction for read bytes\n" \
-"13505 2018-02-05 14:22:36 +0100 dsd2010: use addr and bus reported by the commands\n" \
 
 "log end";
