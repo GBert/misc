@@ -318,7 +318,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	    netframe[1] |= 1;
 	    net_to_net(tcp_socket, NULL, netframe, CAN_ENCAP_SIZE);
 	    if (strcmp("loks", config_name) == 0) {
-		ret = 0;
+		ret = 1;
 		syslog(LOG_NOTICE, "%s: sending lokomotive.cs2\n", __func__);
 		send_tcp_config_data("lokomotive.cs2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;

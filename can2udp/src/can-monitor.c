@@ -225,9 +225,9 @@ void command_system(struct can_frame *frame) {
     if (frame->can_dlc == 0) {
 	modul = frame->can_id & 0x7F;
 	if (response)
-	    printf("System-Befehl: CdB Such-Antwort Modul %d\n", modul);
+	    printf("System: CdB Such-Antwort Modul %d\n", modul);
 	else
-	    printf("System-Befehl: CdB Suche\n");
+	    printf("System: CdB Suche\n");
 	return;
     }
 
@@ -235,48 +235,48 @@ void command_system(struct can_frame *frame) {
     switch (frame->data[4]) {
     case 0x00:
 	if (uid)
-	    printf("System-Befehl: UID 0x%08X ", uid);
+	    printf("System: UID 0x%08X ", uid);
 	else
-	    printf("System-Befehl: alle ");
+	    printf("System: alle ");
 	writeRed("Stopp");
 	break;
     case 0x01:
 	if (uid)
-	    printf("System-Befehl: UID 0x%08X ", uid);
+	    printf("System: UID 0x%08X ", uid);
 	else
-	    printf("System-Befehl: alle ");
+	    printf("System: alle ");
 	writeGreen("Go");
 	break;
     case 0x02:
 	if (uid)
-	    printf("System-Befehl: UID 0x%08X ", uid);
+	    printf("System: UID 0x%08X ", uid);
 	else
-	    printf("System-Befehl: alle ");
+	    printf("System: alle ");
 	writeRed("Halt");
 	break;
     case 0x03:
-	printf("System-Befehl: ");
+	printf("System: ");
 	if (uid)
 	    printf("Lok %s Nothalt", getLoco(frame->data, s));
 	else
 	    writeRed("Nothalt alle Loks");
 	break;
     case 0x04:
-	printf("System-Befehl: Lok %s Zyklus Ende", getLoco(frame->data, s));
+	printf("System: Lok %s Zyklus Ende", getLoco(frame->data, s));
 	break;
     case 0x05:
-	printf("System-Befehl: Lok %s Gleisprotokoll: %d", getLoco(frame->data, s), frame->data[5]);
+	printf("System: Lok %s Gleisprotokoll: %d", getLoco(frame->data, s), frame->data[5]);
 	break;
     case 0x06:
 	wert = be16(&frame->data[5]);
-	printf("System-Befehl: System Schaltzeit Zubehör UID 0x%08X Zeit 0x%04X", uid, wert);
+	printf("System: System Schaltzeit Zubehör UID 0x%08X Zeit 0x%04X", uid, wert);
 	break;
     case 0x07:
 	sid = be16(&frame->data[5]);
-	printf("System-Befehl: Fast Read mfx UID 0x%08X SID %d", uid, sid);
+	printf("System: Fast Read mfx UID 0x%08X SID %d", uid, sid);
 	break;
     case 0x08:
-	printf("System-Befehl: Gleisprotokoll freischalten -");
+	printf("System: Gleisprotokoll freischalten -");
 	if (frame->data[5] & 1)
 	    printf(" MM2");
 	if (frame->data[5] & 2)
@@ -290,46 +290,46 @@ void command_system(struct can_frame *frame) {
 	break;
     case 0x09:
 	wert = be16(&frame->data[5]);
-	printf("System-Befehl: Neuanmeldezähler setzen UID 0x%08X Zähler 0x%04X", uid, wert);
+	printf("System: Neuanmeldezähler setzen UID 0x%08X Zähler 0x%04X", uid, wert);
 	break;
     case 0x0a:
-	printf("System-Befehl: Überlast UID 0x%08X Kanal 0x%04X", uid, frame->data[5]);
+	printf("System: Überlast UID 0x%08X Kanal 0x%04X", uid, frame->data[5]);
 	break;
     case 0x0b:
 	if (frame->can_dlc == 6)
-	    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X", uid, frame->data[5]);
+	    printf("System: Statusabfrage UID 0x%08X Kanal 0x%02X", uid, frame->data[5]);
 	if (frame->can_dlc == 7)
-	    printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X Wert %d", uid, frame->data[5], frame->data[6]);
+	    printf("System: Statusabfrage UID 0x%08X Kanal 0x%02X Wert %d", uid, frame->data[5], frame->data[6]);
 	if (frame->can_dlc == 8) {
 	    wert = be16(&frame->data[6]);
 	    if (response)
-		printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X Messwert 0x%04X",
+		printf("System: Statusabfrage UID 0x%08X Kanal 0x%02X Messwert 0x%04X",
 		       uid, frame->data[5], wert);
 	    else
-		printf("System-Befehl: Statusabfrage UID 0x%08X Kanal 0x%02X Konfigurationswert 0x%04X",
+		printf("System: Statusabfrage UID 0x%08X Kanal 0x%02X Konfigurationswert 0x%04X",
 		       uid, frame->data[5], wert);
 	}
 	break;
     case 0x0c:
 	if (frame->can_dlc == 5) {
-	    printf("System-Befehl: Anfrage UID");
+	    printf("System: Geraetekennung UID");
 	} else {
 	    wert = be16(&frame->data[5]);
-	    printf("System-Befehl: Bestaetigung UID 0x%04X", wert);
+	    printf("System: Geraetekennung UID 0x%04X", wert);
 	}
 	break;
     case 0x20:
-	printf("System-Befehl: Systemzeit UID 0x%08X Stunde %d Minute %d Faktor %d",
+	printf("System: Systemzeit UID 0x%08X Stunde %d Minute %d Faktor %d",
 	       uid, frame->data[5], frame->data[6], frame->data[7]);
 	break;
     case 0x30:
-	printf("System-Befehl: mfx Seek 0x%08X", uid);
+	printf("System: mfx Seek 0x%08X", uid);
 	break;
     case 0x80:
-	printf("System-Befehl: System Reset UID 0x%08X Ziel 0x%02X", uid, frame->data[5]);
+	printf("System: System Reset UID 0x%08X Ziel 0x%02X", uid, frame->data[5]);
 	break;
     default:
-	printf("System-Befehl: unbekannt 0x%02X", frame->data[4]);
+	printf("System: unbekannt 0x%02X", frame->data[4]);
 	break;
     }
     printf("\n");
@@ -983,7 +983,7 @@ void decode_frame(struct can_frame *frame) {
 	break;
     case 0x64:
     case 0x65:
-	printf("unknown (GFP?)\n");
+	printf("Debug\n");
 	break;
     default:
 	printf("unknown\n");
