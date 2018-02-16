@@ -12,6 +12,7 @@
 
 #include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <sched.h>
@@ -405,13 +406,22 @@ MCANMSG getCanFrame(int canfd) {
 
     /* TODO: error handling */
     memset(&frm, 0, sizeof(frm));
-    read(canfd, &frm, sizeof(frm));
+    if (read(canfd, &frm, sizeof(frm)) < 0 ) {
+	fprintf(stderr, "error reading CAN frame: %s\n", strerror(errno));
+	exit(EXIT_FAILURE);
+    }
 
     memset(&can_frame, 0, sizeof(can_frame));
     memcpy(can_frame.data, frm.data, 8);
     can_frame.dlc = frm.can_dlc;
     rxId = frm.can_id;
     /* & CAN_EFF_FLAG check skipped */
+    if (rxId & CAN_EFF_FLAG) {
+	can_frame.cmd = (rxId >> 17) ;
+	can_frame.hash = rxId & 0xffff;
+	can_frame.resp_bit = bitRead(rxId, 16);
+    }
+
     can_frame.cmd = (rxId >> 17);
     can_frame.hash = rxId & 0xffff;
     can_frame.resp_bit = bitRead(rxId, 16);
