@@ -1,11 +1,15 @@
 const int revisionnr = 
-13556
+13560
 ;
 const char* commithash = 
-"778e051c682deb1318ebe62a9baea1cda13aa490";
+"e18e7865fd98e642ce85268322fb395daf5cf6ab";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13560 2018-02-16 17:53:11 +0100 schedulegraph: scale 5 added\n" \
+"13559 2018-02-16 15:27:51 +0100 control: set booster uid to 1 in case both uid and address are not set for use in the power manager\n" \
+"13558 2018-02-16 14:15:46 +0100 schedulegraph: wip\n" \
+"13557 2018-02-16 12:20:12 +0100 schedulegraph: WIP\n" \
 "13556 2018-02-15 11:54:18 +0100 translation merge: sl, de, fr, sr_latin, pr_BR, nl\n" \
 "13555 2018-02-15 08:22:39 +0100 loc,seltab: update occ.xml with the reserved seltab blockID\n" \
 "13554 2018-02-14 17:49:19 +0100 srcp: init S88 bus after connect\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "13513 2018-02-06 09:31:05 +0100 dsd2010: function command support\n" \
 "13512 2018-02-06 08:45:50 +0100 dsd2010: trace turn direction\n" \
 "13511 2018-02-06 08:12:51 +0100 dsd2010: error/info evaluating extended\n" \
-"13510 2018-02-06 07:14:48 +0100 dsd2010: sound bit fix (Sven)\n" \
-"13509 2018-02-05 16:06:15 +0100 location: substate for platform actions\n" \
-"13508 2018-02-05 14:55:28 +0100 dsd2010: report position + 1\n" \
-"13507 2018-02-05 14:45:47 +0100 dsd2010: fix for sending data\n" \
 
 "log end";
