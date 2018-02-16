@@ -1049,6 +1049,7 @@ int main(int argc, char **argv) {
 	    return (EXIT_FAILURE);
 	}
 	while ((packet = pcap_next(handle, &header)) != NULL) {
+	    pkt_counter++;
 	    /* header contains information about the packet (e.g. timestamp) */
 	    /* cast a pointer to the packet data */
 	    unsigned char *pkt_ptr = (u_char *) packet;
@@ -1131,7 +1132,6 @@ int main(int argc, char **argv) {
 		    }
 		}
 	    }
-	    pkt_counter++;
 	    printf(RESET);
 	}
 	return (EXIT_SUCCESS);
