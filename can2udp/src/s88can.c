@@ -47,6 +47,8 @@
 
 #define DEF_INT "can0"
 
+#define PIDFILE "/var/run/s88can.pid"
+
 #define MAXMODULES 31
 
 CanDevice cd = {
@@ -101,7 +103,7 @@ struct s88_bus {
 #include "allwinner.h"
 
 void usage(char *p) {
-    fprintf(stderr, "\nUsage %s [-v] [-f] [-b <int>] [-i] [-e <id>] [-t <time>]\n", p);
+    fprintf(stderr, "\nUsage %s [-v] [-f] [-b <int>] [-i] [-e <id>] [-t <time>] [-l <len,len,...>]\n", p);
     fprintf(stderr, "  Version: " VERSION "\n");
     fprintf(stderr, "    -v        verbose\n");
     fprintf(stderr, "    -f        run in foreground\n");
@@ -109,6 +111,7 @@ void usage(char *p) {
     fprintf(stderr, "    -i        invert signals - default no\n");
     fprintf(stderr, "    -e <id>   set id; default " str(SYSID) "\n");
     fprintf(stderr, "    -t <time> polltime in ms; default " str(POLLTIME) "\n");
+    fprintf(stderr, "    -l <len,len,...> Number of Modules per S88-Bus - default 1\n");
 }
 
 uint32_t bptol(uint8_t * p) {
@@ -265,11 +268,14 @@ void generate_events(int bus) {
 int main(int argc, char **argv) {
     int opt;
     char *canint = DEF_INT;
+    char *lenp = NULL;
+    char *tp;
     struct sockaddr_can caddr;
     struct ifreq ifr;
     fd_set rfds;
     struct timeval stv, btv, atv, rtv;
     int x, i;
+    int pidfd;
 
     while ((opt = getopt(argc, argv, "vfib:e:h?")) != -1)
 	switch (opt) {
@@ -290,6 +296,9 @@ int main(int argc, char **argv) {
 	    break;
 	case 't':
 	    pollt = atoi(optarg) * 1000;
+	    break;
+	case 'l':
+	    lenp = strdup(optarg);
 	    break;
 	case 'h':
 	case '?':
@@ -345,6 +354,25 @@ int main(int argc, char **argv) {
     memset(s88[config_num - 3].bus_ct0, 0xff, sizeof(s88[config_num - 3].bus_ct0));
     memset(s88[config_num - 3].bus_ct1, 0xff, sizeof(s88[config_num - 3].bus_ct1));
     s88[config_num - 3].poll = bpi_poll;
+
+    for( i = 0, tp = strtok(lenp, ","); (tp != NULL) && (i < config_num - 2); i++) {
+	s88[i].blen = atoi(tp);
+	tp = strtok(NULL, ",");
+    }
+
+    if (!foreground) {
+	if ((pidfd = open(PIDFILE,  O_RDWR|O_CREAT|O_EXCL|O_NOCTTY, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)) < 0 ) {
+	    fprintf(stderr, "Cannot open pidfile %s: %s\n", PIDFILE, strerror(errno));
+	    exit(EXIT_FAILURE);
+        }
+	if (daemon(0, 0) < 0) {
+	    fprintf(stderr, "Cannot daemon()ise: %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
+	/* TODO: Catch errors here */
+	dprintf(pidfd, "%d\n", getpid());
+	close(pidfd);
+    }
 
 /* main loop */
     stv.tv_sec = 0;
