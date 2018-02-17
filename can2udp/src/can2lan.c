@@ -73,7 +73,7 @@ void signal_handler(int sig) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.24\n\n");
+    fprintf(stderr, "   Version 1.25\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
@@ -918,7 +918,7 @@ int main(int argc, char **argv) {
 				    else
 					print_can_frame(TCP_FORMAT_STRG, &netframe[i], cs2_config_data.verbose && !background);
 				}
-				net_to_net(sb, (struct sockaddr *)&baddr, netframe, CAN_ENCAP_SIZE);
+				net_to_net(sb, (struct sockaddr *)&baddr, &netframe[i], CAN_ENCAP_SIZE);
 				print_can_frame(UDP_FORMAT_STRG, netframe, cs2_config_data.verbose && !background);
 			    }
 			}
