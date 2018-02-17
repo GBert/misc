@@ -1,11 +1,12 @@
 const int revisionnr = 
-13560
+13561
 ;
 const char* commithash = 
-"e18e7865fd98e642ce85268322fb395daf5cf6ab";
+"a1074be3bf923bbd9ff5faf4ab754c745da6e400";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13561 2018-02-17 10:36:27 +0100 actionctrldlg: changed person state into local\n" \
 "13560 2018-02-16 17:53:11 +0100 schedulegraph: scale 5 added\n" \
 "13559 2018-02-16 15:27:51 +0100 control: set booster uid to 1 in case both uid and address are not set for use in the power manager\n" \
 "13558 2018-02-16 14:15:46 +0100 schedulegraph: wip\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13514 2018-02-06 11:21:50 +0100 dsd2010: fix for reporting the bridge sensor state\n" \
 "13513 2018-02-06 09:31:05 +0100 dsd2010: function command support\n" \
 "13512 2018-02-06 08:45:50 +0100 dsd2010: trace turn direction\n" \
-"13511 2018-02-06 08:12:51 +0100 dsd2010: error/info evaluating extended\n" \
 
 "log end";
