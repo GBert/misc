@@ -9,7 +9,7 @@ override_dh_auto_clean:
 	dh_clean
 
 override_dh_auto_build:
-	cd src; CPPFLAGS=-DSUNXI_A20 make can2lan can2serial lan-schnitte can-monitor cs2ping gb2-update pio-i2c-udp s88udp-rpi s88udp-bpi
+	cd src; CPPFLAGS=-DSUNXI_A20 make can2lan can2serial lan-schnitte can-monitor cs2ping gb2-update pio-i2c-udp s88udp-rpi s88udp-bpi s88can
 
 override_dh_auto_install:
 	cp src/can2lan $$(pwd)/debian/can2lan/usr/sbin
@@ -21,6 +21,7 @@ override_dh_auto_install:
 	cp src/pio-i2c-udp $$(pwd)/debian/can2udp-utils/usr/bin
 	cp src/s88udp-bpi $$(pwd)/debian/can2udp-utils/usr/bin
 	cp src/s88udp-rpi $$(pwd)/debian/can2udp-utils/usr/bin
+	cp src/s88can $$(pwd)/debian/can2udp-utils/usr/bin
 
 override_dh_shlibdeps:
 	dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info

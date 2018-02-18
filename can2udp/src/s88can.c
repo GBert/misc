@@ -355,9 +355,11 @@ int main(int argc, char **argv) {
     memset(s88[config_num - 3].bus_ct1, 0xff, sizeof(s88[config_num - 3].bus_ct1));
     s88[config_num - 3].poll = bpi_poll;
 
-    for( i = 0, tp = strtok(lenp, ","); (tp != NULL) && (i < config_num - 2); i++) {
-	s88[i].blen = atoi(tp);
-	tp = strtok(NULL, ",");
+    if (lenp != NULL) {
+	for( i = 0, tp = strtok(lenp, ","); (tp != NULL) && (i < config_num - 2); i++) {
+	    s88[i].blen = atoi(tp);
+	    tp = strtok(NULL, ",");
+	}
     }
 
     if (!foreground) {
