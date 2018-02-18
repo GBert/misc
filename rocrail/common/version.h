@@ -1,11 +1,20 @@
 const int revisionnr = 
-13561
+13570
 ;
 const char* commithash = 
-"a1074be3bf923bbd9ff5faf4ab754c745da6e400";
+"63bc4429264102b7f5d4a9575834303af34487be";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13570 2018-02-18 15:36:17 +0100 schedualgraph: line thickness set to 1\n" \
+"13569 2018-02-18 15:08:51 +0100 schedulegraph: show group\n" \
+"13568 2018-02-18 14:10:09 +0100 virtual: disable fake state information in case booster UID is not set\n" \
+"13567 2018-02-18 14:03:42 +0100 guiframe: save show flag\n" \
+"13566 2018-02-18 11:59:39 +0100 powerctrldlg: fix for right/left click on grid header\n" \
+"13565 2018-02-18 10:02:04 +0100 schedulegraph: time from up to down\n" \
+"13564 2018-02-18 09:21:24 +0100 SLIM-COLOR: fix for turnoutleft-t-route\n" \
+"13563 2018-02-18 08:35:25 +0100 SLIM: fix for turnout left turn occ\n" \
+"13562 2018-02-18 08:02:11 +0100 actionsctrldlg: added state idel,wait,auto to the loco type\n" \
 "13561 2018-02-17 10:36:27 +0100 actionctrldlg: changed person state into local\n" \
 "13560 2018-02-16 17:53:11 +0100 schedulegraph: scale 5 added\n" \
 "13559 2018-02-16 15:27:51 +0100 control: set booster uid to 1 in case both uid and address are not set for use in the power manager\n" \
@@ -47,14 +56,5 @@ const char* revlog =
 "13523 2018-02-07 09:33:50 +0100 tt: revert invert flag for dsd2010\n" \
 "13522 2018-02-07 09:21:35 +0100 tt: invert flag support for dsd2010 added\n" \
 "13521 2018-02-07 08:53:44 +0100 translation merge: sl\n" \
-"13520 2018-02-07 07:55:57 +0100 model: fix for overwriting the schedule init hour with real time\n" \
-"13519 2018-02-07 07:51:50 +0100 item: format function menu entries for the tt without prefix zero\n" \
-"13518 2018-02-07 07:50:03 +0100 issuedlg: replace invalid chars for the file system with underscores in the subject\n" \
-"13517 2018-02-06 17:50:51 +0100 location: replace children on modify\n" \
-"13516 2018-02-06 15:33:27 +0100 cbus: trace the unexpected event from cancab v2 because MERG should fix this\n" \
-"13515 2018-02-06 14:38:49 +0100 cbus: ignore accessory events from node 0xFFFF CANCAB v2\n" \
-"13514 2018-02-06 11:21:50 +0100 dsd2010: fix for reporting the bridge sensor state\n" \
-"13513 2018-02-06 09:31:05 +0100 dsd2010: function command support\n" \
-"13512 2018-02-06 08:45:50 +0100 dsd2010: trace turn direction\n" \
 
 "log end";
