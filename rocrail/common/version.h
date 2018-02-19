@@ -1,11 +1,22 @@
 const int revisionnr = 
-13570
+13581
 ;
 const char* commithash = 
-"63bc4429264102b7f5d4a9575834303af34487be";
+"8f3d8ece6f463c25b4abd6e144f5d55f33ef39c0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13581 2018-02-19 15:45:51 +0100 schedulegraph: white location label backgound color\n" \
+"13580 2018-02-19 15:20:32 +0100 schedulegraph: floating location labels\n" \
+"13579 2018-02-19 15:03:22 +0100 schedulegraph: scale factor selection added\n" \
+"13578 2018-02-19 14:17:47 +0100 location: skip last schedule entries\n" \
+"13577 2018-02-19 14:05:13 +0100 schedulegraph: use graphicalcontext at a later point\n" \
+"13576 2018-02-19 12:25:23 +0100 schedulegraph: use graphiccontext for the lines\n" \
+"13575 2018-02-19 11:29:21 +0100 loc: action state manual added\n" \
+"13574 2018-02-19 10:59:39 +0100 schedulegraph: show trainID\n" \
+"13573 2018-02-19 10:46:03 +0100 schedulegraph: fix for time over hour, show trainID\n" \
+"13572 2018-02-19 09:04:13 +0100 schedulegtraph: color added, fix for time through the hour\n" \
+"13571 2018-02-19 07:55:15 +0100 loc: isState run added\n" \
 "13570 2018-02-18 15:36:17 +0100 schedualgraph: line thickness set to 1\n" \
 "13569 2018-02-18 15:08:51 +0100 schedulegraph: show group\n" \
 "13568 2018-02-18 14:10:09 +0100 virtual: disable fake state information in case booster UID is not set\n" \
@@ -45,16 +56,5 @@ const char* revlog =
 "13534 2018-02-10 08:27:14 +0100 turntabledialog: label correction for embeded block speed\n" \
 "13533 2018-02-10 08:23:41 +0100 tt: optional bridgespeed in case of embeded block\n" \
 "13532 2018-02-09 18:20:29 +0100 output: trace level correction\n" \
-"13531 2018-02-09 18:17:43 +0100 rocnetnode: revert pi3 hardware option\n" \
-"13530 2018-02-09 15:32:32 +0100 rocnetnode: raspi type 3 added for using ttyS0 instead of ttyAMA0, this is only for RFID reader directly connected to the RasPi\n" \
-"13529 2018-02-09 12:24:17 +0100 rocview: loco show/hide added in the loco filter view menu\n" \
-"13528 2018-02-09 07:53:42 +0100 location: use %callerdesc% for (fake) train ID\n" \
-"13527 2018-02-08 08:57:16 +0100 location: fix for updating child nodes, actions\n" \
-"13526 2018-02-08 08:00:16 +0100 dsd2010: error/info messages corrected\n" \
-"13525 2018-02-07 12:18:29 +0100 signals: correction for checking the wrong route for white signal aspect\n" \
-"13524 2018-02-07 12:06:00 +0100 roclcdrv: check at enter if its the last goto block\n" \
-"13523 2018-02-07 09:33:50 +0100 tt: revert invert flag for dsd2010\n" \
-"13522 2018-02-07 09:21:35 +0100 tt: invert flag support for dsd2010 added\n" \
-"13521 2018-02-07 08:53:44 +0100 translation merge: sl\n" \
 
 "log end";

@@ -22,6 +22,8 @@ static char *UDP_UDP_FORMAT_STRG  = "->UDP>UDP     0x%08X   [%d]";
 static char *NET_UDP_FORMAT_STRG  = "      UDP->   0x%08X   [%d]";
 static char *NET_TCP_FORMAT_STRG  = "      TCP->   0x%08X   [%d]";
 
+#define PING_TIME	12
+
 static char *BROADCAST_C0NFIG_UPDATE = "broadcast_update.cs2";
 static char *PIDFILE = "/var/run/can2lan.pid";
 
@@ -440,6 +442,7 @@ int main(int argc, char **argv) {
     int local2_tcp_port = 15732;
     int destination_port = 15730;
     int background = 1;
+    int cs2ping_timer = 0;
     /* const int off = 0; */
     const int on = 1;
     uint32_t canid;
@@ -768,9 +771,24 @@ int main(int argc, char **argv) {
 	read_fds = all_fds;
 	nready = pselect(max_fds + 1, &read_fds, NULL, NULL, &ts, &emptyset);
 	if (nready == 0) {
-	    /*    send_can_ping(sc); */
+	    /* send periodic ping */
 	    ts.tv_sec = 1;
 	    ts.tv_nsec = 0;
+	    cs2ping_timer++;
+	    if (cs2ping_timer >= PING_TIME) {
+		cs2ping_timer = 0;
+		print_can_frame(UDP_FORMAT_STRG, netframe, cs2_config_data.verbose && !background);
+		if (frame_to_can(sc, M_CAN_PING) < 0) {
+		    fprint_syslog(stderr, LOG_ERR, "can't send CAN magic 60113 start sequence");
+		}
+		for (i = 0; i <= max_tcp_i; i++) {	/* check all clients for data */
+		    tcp_socket = tcp_client[i];
+		    if (tcp_socket <= 0)
+			continue;
+		    net_to_net(tcp_socket, NULL, M_CAN_PING, CAN_ENCAP_SIZE);
+		    print_can_frame(CAN_TCP_FORMAT_STRG, M_CAN_PING, cs2_config_data.verbose && !background);
+		}
+	    }
 	    continue;
 	} else if (nready < 0) {
 	    if (!background)
@@ -778,9 +796,6 @@ int main(int argc, char **argv) {
 	    syslog(LOG_WARNING, "select exception: [%d] %s\n", nready, strerror(errno));
 	    continue;
 	}
-
-	ts.tv_sec = 1;
-	ts.tv_nsec = 0;
 
 	/* received a CAN frame */
 	if (FD_ISSET(sc, &read_fds)) {
