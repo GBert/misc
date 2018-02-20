@@ -1,11 +1,21 @@
 const int revisionnr = 
-13581
+13591
 ;
 const char* commithash = 
-"8f3d8ece6f463c25b4abd6e144f5d55f33ef39c0";
+"e2fe898b809411e36364807e57392f181b614ba3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13591 2018-02-20 17:23:00 +0100 action: check state idle,wait,auto,run,manual\n" \
+"13590 2018-02-20 15:57:29 +0100 schedulegraph: show loco in regular stop (wip)\n" \
+"13589 2018-02-20 15:12:06 +0100 translation for schedulegraph added (Graphic timetable)\n" \
+"13588 2018-02-20 15:07:42 +0100 schedulesgraphdlg: translations and titlebar\n" \
+"13587 2018-02-20 14:41:51 +0100 schedulegraphdlg: new, wip\n" \
+"13586 2018-02-20 11:21:17 +0100 wrapper: jsmap throttle attribute\n" \
+"13585 2018-02-20 10:36:04 +0100 wmz21: Z21 App support\n" \
+"13584 2018-02-20 09:44:34 +0100 wmz21: z21 app support\n" \
+"13583 2018-02-20 08:48:29 +0100 schedulegraph: skip none regular stops\n" \
+"13582 2018-02-20 08:47:51 +0100 jssupport: throttle action added\n" \
 "13581 2018-02-19 15:45:51 +0100 schedulegraph: white location label backgound color\n" \
 "13580 2018-02-19 15:20:32 +0100 schedulegraph: floating location labels\n" \
 "13579 2018-02-19 15:03:22 +0100 schedulegraph: scale factor selection added\n" \
@@ -46,15 +56,5 @@ const char* revlog =
 "13544 2018-02-12 11:59:01 +0100 basedlg: show bus also in HEX in case the UID is set\n" \
 "13543 2018-02-12 11:52:22 +0100 route: fix for condition with type all\n" \
 "13542 2018-02-12 11:21:10 +0100 bidib: show uid in hex at command\n" \
-"13541 2018-02-12 09:30:52 +0100 sensorevents: show bus as hex in case the value > 16 bit\n" \
-"13540 2018-02-12 09:16:08 +0100 bidib: filter MSG_LC_STAT on product ID to report a sensor or accessory\n" \
-"13539 2018-02-12 07:58:59 +0100 item: activate the hidden selected loco before setting it in a block\n" \
-"13538 2018-02-11 15:19:16 +0100 bidib: ignore error in case of MSG_LC_NA reports port 0xFFFF ???\n" \
-"13537 2018-02-11 15:11:26 +0100 bidib: ignore error in case of MSG_LC_NA reports port 0xFFFF ???\n" \
-"13536 2018-02-11 14:54:57 +0100 route: trigger signals set\n" \
-"13535 2018-02-11 13:40:23 +0100 locseldlg: show all option added\n" \
-"13534 2018-02-10 08:27:14 +0100 turntabledialog: label correction for embeded block speed\n" \
-"13533 2018-02-10 08:23:41 +0100 tt: optional bridgespeed in case of embeded block\n" \
-"13532 2018-02-09 18:20:29 +0100 output: trace level correction\n" \
 
 "log end";
