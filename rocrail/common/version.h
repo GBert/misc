@@ -1,11 +1,18 @@
 const int revisionnr = 
-13591
+13598
 ;
 const char* commithash = 
-"e2fe898b809411e36364807e57392f181b614ba3";
+"0e639d7455b722ef0c12bf58124c2c0ac34ff1b6";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13598 2018-02-21 12:30:52 +0100 schedulegraphdlg: select first group automatically at open\n" \
+"13597 2018-02-21 11:09:00 +0100 schedulegraph: try to scroll the timenow line into the Y middle\n" \
+"13596 2018-02-21 10:47:04 +0100 schedulegraph: show current train location\n" \
+"13595 2018-02-21 10:20:55 +0100 wmz21: fix for screwing up the locoinfo\n" \
+"13594 2018-02-21 09:22:12 +0100 wmz21: extra support for Z21 App\n" \
+"13593 2018-02-21 08:41:14 +0100 loc: publish scheduleinithour to the clients\n" \
+"13592 2018-02-21 07:58:16 +0100 jssupport: open/close throttldlg\n" \
 "13591 2018-02-20 17:23:00 +0100 action: check state idle,wait,auto,run,manual\n" \
 "13590 2018-02-20 15:57:29 +0100 schedulegraph: show loco in regular stop (wip)\n" \
 "13589 2018-02-20 15:12:06 +0100 translation for schedulegraph added (Graphic timetable)\n" \
@@ -49,12 +56,5 @@ const char* revlog =
 "13551 2018-02-14 11:11:26 +0100 guiframe: hide context menu item in the loco grid\n" \
 "13550 2018-02-14 08:12:09 +0100 srcp: trace corrections\n" \
 "13549 2018-02-13 11:17:35 +0100 p50x: removed the unused ctsretry variable\n" \
-"13548 2018-02-13 11:14:12 +0100 digints: ctsretry is in ms which must be divided by 10\n" \
-"13547 2018-02-13 11:00:03 +0100 p50: reduce wait for CTS to max 10 x 10ms\n" \
-"13546 2018-02-13 09:27:18 +0100 funcmd: standalone option added to disable an extra V command in case of f0\n" \
-"13545 2018-02-12 12:22:12 +0100 route: removed the NOTs from the conditions\n" \
-"13544 2018-02-12 11:59:01 +0100 basedlg: show bus also in HEX in case the UID is set\n" \
-"13543 2018-02-12 11:52:22 +0100 route: fix for condition with type all\n" \
-"13542 2018-02-12 11:21:10 +0100 bidib: show uid in hex at command\n" \
 
 "log end";
