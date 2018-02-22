@@ -1,11 +1,13 @@
 const int revisionnr = 
-13598
+13600
 ;
 const char* commithash = 
-"0e639d7455b722ef0c12bf58124c2c0ac34ff1b6";
+"3432238bbfaa75374d6b22eda103931d9e6ee572";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13600 2018-02-22 22:02:45 +0100 jssupport: provide the throttle list for update events\n" \
+"13599 2018-02-22 14:37:48 +0100 cbus,loc: send release command to the CS\n" \
 "13598 2018-02-21 12:30:52 +0100 schedulegraphdlg: select first group automatically at open\n" \
 "13597 2018-02-21 11:09:00 +0100 schedulegraph: try to scroll the timenow line into the Y middle\n" \
 "13596 2018-02-21 10:47:04 +0100 schedulegraph: show current train location\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "13553 2018-02-14 15:36:12 +0100 http: check support key only at start\n" \
 "13552 2018-02-14 12:16:34 +0100 guiframe: commented out the loco show/hide in the view menu\n" \
 "13551 2018-02-14 11:11:26 +0100 guiframe: hide context menu item in the loco grid\n" \
-"13550 2018-02-14 08:12:09 +0100 srcp: trace corrections\n" \
-"13549 2018-02-13 11:17:35 +0100 p50x: removed the unused ctsretry variable\n" \
 
 "log end";
