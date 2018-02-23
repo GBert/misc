@@ -12,7 +12,7 @@ OBJECT=$(SOURCE:.c=.o)
 build:$(TARGET)
 
 $(TARGET):$(OBJECT)
-	@echo -n "[LINK] "
+	# @echo -n "[LINK] "
 	$(CC) $(CFLAGS) $(OBJECT) -o $(TARGET) $(CLIB) -m$(MCU)
 
 $(OBJECT):$(HEADER) Makefile
