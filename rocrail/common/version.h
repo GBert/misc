@@ -1,11 +1,14 @@
 const int revisionnr = 
-13600
+13603
 ;
 const char* commithash = 
-"3432238bbfaa75374d6b22eda103931d9e6ee572";
+"749a63365f7065510e57e5131d0185dc5bd2bd10";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13603 2018-02-23 11:55:11 +0100 stage: reject reserve as crossing block\n" \
+"13602 2018-02-23 08:12:18 +0100 action: support for loc state automatic added\n" \
+"13601 2018-02-23 08:10:50 +0100 loc,actionctrldlg: state automatic added which ist NOT manual\n" \
 "13600 2018-02-22 22:02:45 +0100 jssupport: provide the throttle list for update events\n" \
 "13599 2018-02-22 14:37:48 +0100 cbus,loc: send release command to the CS\n" \
 "13598 2018-02-21 12:30:52 +0100 schedulegraphdlg: select first group automatically at open\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13556 2018-02-15 11:54:18 +0100 translation merge: sl, de, fr, sr_latin, pr_BR, nl\n" \
 "13555 2018-02-15 08:22:39 +0100 loc,seltab: update occ.xml with the reserved seltab blockID\n" \
 "13554 2018-02-14 17:49:19 +0100 srcp: init S88 bus after connect\n" \
-"13553 2018-02-14 15:36:12 +0100 http: check support key only at start\n" \
-"13552 2018-02-14 12:16:34 +0100 guiframe: commented out the loco show/hide in the view menu\n" \
-"13551 2018-02-14 11:11:26 +0100 guiframe: hide context menu item in the loco grid\n" \
 
 "log end";
