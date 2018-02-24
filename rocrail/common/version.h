@@ -1,11 +1,12 @@
 const int revisionnr = 
-13603
+13604
 ;
 const char* commithash = 
-"749a63365f7065510e57e5131d0185dc5bd2bd10";
+"d4ba0d29712b3ac211c073bf02ce9312fd7d29b3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13604 2018-02-24 14:44:40 +0100 model: stop looking for a fitting schedule entry if the given index is out of range\n" \
 "13603 2018-02-23 11:55:11 +0100 stage: reject reserve as crossing block\n" \
 "13602 2018-02-23 08:12:18 +0100 action: support for loc state automatic added\n" \
 "13601 2018-02-23 08:10:50 +0100 loc,actionctrldlg: state automatic added which ist NOT manual\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13557 2018-02-16 12:20:12 +0100 schedulegraph: WIP\n" \
 "13556 2018-02-15 11:54:18 +0100 translation merge: sl, de, fr, sr_latin, pr_BR, nl\n" \
 "13555 2018-02-15 08:22:39 +0100 loc,seltab: update occ.xml with the reserved seltab blockID\n" \
-"13554 2018-02-14 17:49:19 +0100 srcp: init S88 bus after connect\n" \
 
 "log end";
