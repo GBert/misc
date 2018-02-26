@@ -1,11 +1,19 @@
 const int revisionnr = 
-13604
+13612
 ;
 const char* commithash = 
-"d4ba0d29712b3ac211c073bf02ce9312fd7d29b3";
+"681d4928726fbacf6e893913431eff0703fa3b54";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13612 2018-02-26 14:22:01 +0100 location: kmpos option added\n" \
+"13611 2018-02-26 10:46:05 +0100 wmz21: switch command broadcast to the apps\n" \
+"13610 2018-02-25 19:37:49 +0100 xmlscript. weather command support added\n" \
+"13609 2018-02-25 18:11:54 +0100 loc: set flag to signal of function with own address\n" \
+"13608 2018-02-25 12:17:15 +0100 xmlscript: replace vars in nodes recursive\n" \
+"13607 2018-02-25 11:09:11 +0100 wmz21: broadcast switch/output events to the devices\n" \
+"13606 2018-02-25 10:38:03 +0100 wmz21: broadcast loco events to the connected devices\n" \
+"13605 2018-02-25 08:49:57 +0100 translation merge: nl, de, pt_BR\n" \
 "13604 2018-02-24 14:44:40 +0100 model: stop looking for a fitting schedule entry if the given index is out of range\n" \
 "13603 2018-02-23 11:55:11 +0100 stage: reject reserve as crossing block\n" \
 "13602 2018-02-23 08:12:18 +0100 action: support for loc state automatic added\n" \
@@ -48,13 +56,5 @@ const char* revlog =
 "13565 2018-02-18 10:02:04 +0100 schedulegraph: time from up to down\n" \
 "13564 2018-02-18 09:21:24 +0100 SLIM-COLOR: fix for turnoutleft-t-route\n" \
 "13563 2018-02-18 08:35:25 +0100 SLIM: fix for turnout left turn occ\n" \
-"13562 2018-02-18 08:02:11 +0100 actionsctrldlg: added state idel,wait,auto to the loco type\n" \
-"13561 2018-02-17 10:36:27 +0100 actionctrldlg: changed person state into local\n" \
-"13560 2018-02-16 17:53:11 +0100 schedulegraph: scale 5 added\n" \
-"13559 2018-02-16 15:27:51 +0100 control: set booster uid to 1 in case both uid and address are not set for use in the power manager\n" \
-"13558 2018-02-16 14:15:46 +0100 schedulegraph: wip\n" \
-"13557 2018-02-16 12:20:12 +0100 schedulegraph: WIP\n" \
-"13556 2018-02-15 11:54:18 +0100 translation merge: sl, de, fr, sr_latin, pr_BR, nl\n" \
-"13555 2018-02-15 08:22:39 +0100 loc,seltab: update occ.xml with the reserved seltab blockID\n" \
 
 "log end";
