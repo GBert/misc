@@ -272,7 +272,7 @@
     (fp_text reference D5 (at -0.4445 0.08636 90) (layer F.SilkS)
       (effects (font (thickness 0.3048)))
     )
-    (fp_text value 1N4007 (at 0 -2.54 90) (layer F.SilkS) hide
+    (fp_text value UF4007 (at 0 -2.54 90) (layer F.SilkS) hide
       (effects (font (thickness 0.3048)))
     )
     (fp_line (start 1.524 1.016) (end 1.524 -1.016) (layer F.SilkS) (width 0.254))
@@ -518,7 +518,7 @@
     (fp_text reference D1 (at -0.762 0 180) (layer F.SilkS)
       (effects (font (thickness 0.3048)))
     )
-    (fp_text value 1N4007 (at 0 -2.54 180) (layer F.SilkS) hide
+    (fp_text value UF4007 (at 0 -2.54 180) (layer F.SilkS) hide
       (effects (font (thickness 0.3048)))
     )
     (fp_line (start 1.524 1.016) (end 1.524 -1.016) (layer F.SilkS) (width 0.254))
@@ -547,7 +547,7 @@
     (fp_text reference D2 (at -0.3556 0.127 180) (layer F.SilkS)
       (effects (font (thickness 0.3048)))
     )
-    (fp_text value 1N4007 (at -5.0419 3.6322 180) (layer F.SilkS) hide
+    (fp_text value UF4007 (at -5.0419 3.6322 180) (layer F.SilkS) hide
       (effects (font (thickness 0.3048)))
     )
     (fp_line (start 1.524 1.016) (end 1.524 -1.016) (layer F.SilkS) (width 0.254))
@@ -634,7 +634,7 @@
     (fp_text reference D6 (at -0.4699 -0.08128 90) (layer F.SilkS)
       (effects (font (thickness 0.3048)))
     )
-    (fp_text value 1N4007 (at 0 -2.54 90) (layer F.SilkS) hide
+    (fp_text value UF4007 (at 0 -2.54 90) (layer F.SilkS) hide
       (effects (font (thickness 0.3048)))
     )
     (fp_line (start 1.524 1.016) (end 1.524 -1.016) (layer F.SilkS) (width 0.254))
@@ -663,7 +663,7 @@
     (fp_text reference D7 (at -0.24384 -0.0254 270) (layer F.SilkS)
       (effects (font (size 1.2 1) (thickness 0.25)))
     )
-    (fp_text value 1N4007 (at 0 -2.54 270) (layer F.SilkS) hide
+    (fp_text value UF4007 (at 0 -2.54 270) (layer F.SilkS) hide
       (effects (font (thickness 0.3048)))
     )
     (fp_line (start 1.524 1.016) (end 1.524 -1.016) (layer F.SilkS) (width 0.254))
@@ -692,7 +692,7 @@
     (fp_text reference D8 (at -0.4318 0.06858) (layer F.SilkS)
       (effects (font (size 1.2 1) (thickness 0.25)))
     )
-    (fp_text value 1N4007 (at -0.2032 2.39268) (layer F.SilkS) hide
+    (fp_text value UF4007 (at -0.2032 2.39268) (layer F.SilkS) hide
       (effects (font (thickness 0.3048)))
     )
     (fp_line (start 1.524 1.016) (end 1.524 -1.016) (layer F.SilkS) (width 0.254))
@@ -721,7 +721,7 @@
     (fp_text reference D9 (at -0.4191 -0.05588 180) (layer F.SilkS)
       (effects (font (size 1.2 1) (thickness 0.25)))
     )
-    (fp_text value 1N4007 (at 0 -2.54 180) (layer F.SilkS) hide
+    (fp_text value UF4007 (at 0 -2.54 180) (layer F.SilkS) hide
       (effects (font (thickness 0.3048)))
     )
     (fp_line (start 1.524 1.016) (end 1.524 -1.016) (layer F.SilkS) (width 0.254))
@@ -1283,7 +1283,7 @@
     (fp_text reference R11 (at 0 0 270) (layer F.SilkS)
       (effects (font (size 1.397 1.27) (thickness 0.2032)))
     )
-    (fp_text value 1k (at 0 2.032 270) (layer F.SilkS) hide
+    (fp_text value 330 (at 0 2.032 270) (layer F.SilkS) hide
       (effects (font (size 1.397 1.27) (thickness 0.2032)))
     )
     (fp_line (start 2.159 0) (end 3.81 0) (layer F.SilkS) (width 0.254))
@@ -1675,7 +1675,7 @@
     )
   )
 
-  (module TO_SOT_Packages_THT:TO-220_Neutral123_Vertical_LargePads (layer F.Cu) (tedit 590434B1) (tstamp 58B9C617)
+  (module TO_SOT_Packages_THT:TO-220_Neutral123_Vertical_LargePads (layer F.Cu) (tedit 5A95817F) (tstamp 58B9C617)
     (at 135.128 119.5832)
     (descr "TO-220, Neutral, Vertical, Large Pads,")
     (tags "TO-220, Neutral, Vertical, Large Pads,")
@@ -1710,7 +1710,7 @@
     )
   )
 
-  (module TO_SOT_Packages_THT:TO-220_Neutral123_Vertical_LargePads (layer F.Cu) (tedit 5904357C) (tstamp 58B9C629)
+  (module TO_SOT_Packages_THT:TO-220_Neutral123_Vertical_LargePads (layer F.Cu) (tedit 5A95818D) (tstamp 58B9C629)
     (at 97.1931 90.0303 270)
     (descr "TO-220, Neutral, Vertical, Large Pads,")
     (tags "TO-220, Neutral, Vertical, Large Pads,")
@@ -1920,7 +1920,7 @@
     (fp_text reference Q1 (at 0 -4) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value BC337 (at 1.4605 -1.524) (layer F.Fab)
+    (fp_text value BC517 (at 1.4605 -1.524) (layer F.Fab)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -1.4 1.95) (end -1.4 -2.65) (layer F.CrtYd) (width 0.05))
@@ -1982,7 +1982,7 @@
     (fp_text reference Q2 (at 0 -4) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value BC337 (at 1.2954 -1.4859) (layer F.Fab)
+    (fp_text value BC517 (at 1.2954 -1.4859) (layer F.Fab)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -1.4 1.95) (end -1.4 -2.65) (layer F.CrtYd) (width 0.05))
@@ -2251,6 +2251,8 @@
   (segment (start 128.375847 109.687401) (end 129.434153 109.687401) (width 0.3048) (layer B.Cu) (net 11))
   (via (at 130.7211 106.8451) (size 0.6) (drill 0.4) (layers F.Cu B.Cu) (net 11))
   (segment (start 125.6665 111.1885) (end 125.603 111.125) (width 0.3048) (layer B.Cu) (net 11))
+  (segment (start 137.668 119.5832) (end 137.668 120.6754) (width 0.8) (layer F.Cu) (net 12))
+  (segment (start 137.668 119.5832) (end 137.668 118.7196) (width 0.8) (layer F.Cu) (net 12))
   (segment (start 130.821002 113.085662) (end 130.81 113.07466) (width 0.8) (layer F.Cu) (net 12))
   (segment (start 130.821002 116.066998) (end 130.821002 113.085662) (width 0.8) (layer F.Cu) (net 12))
   (segment (start 130.81 116.078) (end 130.821002 116.066998) (width 0.8) (layer F.Cu) (net 12))
@@ -2262,8 +2264,6 @@
   (segment (start 128.143 118.745) (end 130.81 116.078) (width 0.8) (layer F.Cu) (net 12))
   (segment (start 137.668 119.5832) (end 137.668 119.265) (width 0.8) (layer B.Cu) (net 12))
   (segment (start 137.668 119.265) (end 133.846 115.443) (width 0.8) (layer B.Cu) (net 12))
-  (segment (start 137.668 119.5832) (end 137.668 120.6754) (width 0.8) (layer F.Cu) (net 12))
-  (segment (start 137.668 119.5832) (end 137.668 118.7196) (width 0.8) (layer F.Cu) (net 12))
   (segment (start 130.9624 112.014) (end 130.81 112.014) (width 0.8) (layer F.Cu) (net 12) (tstamp 59009A66))
   (segment (start 130.81 112.014) (end 130.060001 112.763999) (width 0.5) (layer F.Cu) (net 12))
   (segment (start 126.94242 111.971546) (end 126.94242 109.84208) (width 0.5) (layer F.Cu) (net 12))
