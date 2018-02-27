@@ -1,11 +1,18 @@
 const int revisionnr = 
-13612
+13619
 ;
 const char* commithash = 
-"681d4928726fbacf6e893913431eff0703fa3b54";
+"2144f32b341caa6d65c245252e0734a18b0dda3f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13619 2018-02-27 21:40:22 +0100 rocview: added the preview flag for GTK filedialog\n" \
+"13618 2018-02-27 15:20:46 +0100 schedulegraph: use kmpos in case all locations are set\n" \
+"13617 2018-02-27 13:38:32 +0100 xmlscript: optional connect attribute for if statement for connection condition, state and class; default and.\n" \
+"13616 2018-02-27 11:50:36 +0100 bidib: update product list\n" \
+"13615 2018-02-27 08:04:51 +0100 xmlscript: revert; previous version is OK\n" \
+"13614 2018-02-27 07:56:18 +0100 xmlscript: regard the not alltrue flag in case of testing the state argument\n" \
+"13613 2018-02-26 21:58:11 +0100 bidibidentdlg: revert disable programming tabs\n" \
 "13612 2018-02-26 14:22:01 +0100 location: kmpos option added\n" \
 "13611 2018-02-26 10:46:05 +0100 wmz21: switch command broadcast to the apps\n" \
 "13610 2018-02-25 19:37:49 +0100 xmlscript. weather command support added\n" \
@@ -49,12 +56,5 @@ const char* revlog =
 "13572 2018-02-19 09:04:13 +0100 schedulegtraph: color added, fix for time through the hour\n" \
 "13571 2018-02-19 07:55:15 +0100 loc: isState run added\n" \
 "13570 2018-02-18 15:36:17 +0100 schedualgraph: line thickness set to 1\n" \
-"13569 2018-02-18 15:08:51 +0100 schedulegraph: show group\n" \
-"13568 2018-02-18 14:10:09 +0100 virtual: disable fake state information in case booster UID is not set\n" \
-"13567 2018-02-18 14:03:42 +0100 guiframe: save show flag\n" \
-"13566 2018-02-18 11:59:39 +0100 powerctrldlg: fix for right/left click on grid header\n" \
-"13565 2018-02-18 10:02:04 +0100 schedulegraph: time from up to down\n" \
-"13564 2018-02-18 09:21:24 +0100 SLIM-COLOR: fix for turnoutleft-t-route\n" \
-"13563 2018-02-18 08:35:25 +0100 SLIM: fix for turnout left turn occ\n" \
 
 "log end";
