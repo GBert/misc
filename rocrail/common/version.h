@@ -1,11 +1,17 @@
 const int revisionnr = 
-13619
+13625
 ;
 const char* commithash = 
-"2144f32b341caa6d65c245252e0734a18b0dda3f";
+"1cd4aefb64edec3a71abf9b1e70800cc49d5118c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13625 2018-02-28 15:41:41 +0100 locations: use independet position units\n" \
+"13624 2018-02-28 15:05:54 +0100 rocnetnode: not removing ttyAMA0 as console: Admin job.\n" \
+"13623 2018-02-28 11:53:28 +0100 locationsdlg: changed kmpos label\n" \
+"13622 2018-02-28 11:34:36 +0100 location: added railway section and changed kmpos in hmpos\n" \
+"13621 2018-02-28 09:24:25 +0100 locationsdlg: added modify button on the index tab\n" \
+"13620 2018-02-28 08:46:18 +0100 locationdlg: show kmpos in the position column\n" \
 "13619 2018-02-27 21:40:22 +0100 rocview: added the preview flag for GTK filedialog\n" \
 "13618 2018-02-27 15:20:46 +0100 schedulegraph: use kmpos in case all locations are set\n" \
 "13617 2018-02-27 13:38:32 +0100 xmlscript: optional connect attribute for if statement for connection condition, state and class; default and.\n" \
@@ -50,11 +56,5 @@ const char* revlog =
 "13578 2018-02-19 14:17:47 +0100 location: skip last schedule entries\n" \
 "13577 2018-02-19 14:05:13 +0100 schedulegraph: use graphicalcontext at a later point\n" \
 "13576 2018-02-19 12:25:23 +0100 schedulegraph: use graphiccontext for the lines\n" \
-"13575 2018-02-19 11:29:21 +0100 loc: action state manual added\n" \
-"13574 2018-02-19 10:59:39 +0100 schedulegraph: show trainID\n" \
-"13573 2018-02-19 10:46:03 +0100 schedulegraph: fix for time over hour, show trainID\n" \
-"13572 2018-02-19 09:04:13 +0100 schedulegtraph: color added, fix for time through the hour\n" \
-"13571 2018-02-19 07:55:15 +0100 loc: isState run added\n" \
-"13570 2018-02-18 15:36:17 +0100 schedualgraph: line thickness set to 1\n" \
 
 "log end";
