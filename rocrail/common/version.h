@@ -1,11 +1,12 @@
 const int revisionnr = 
-13629
+13630
 ;
 const char* commithash = 
-"ed0d2bee74c546bc109729a360d577bf95af147b";
+"870e8cc5f3f33ccfdde89118483d2ed31f28b32b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13630 2018-03-02 10:32:19 +0100 stage: allow crossing if empty\n" \
 "13629 2018-03-02 08:22:07 +0100 xmlscript: fix for connect OR\n" \
 "13628 2018-03-01 15:10:05 +0100 schedulegraph: use section as selection\n" \
 "13627 2018-03-01 14:54:52 +0100 wrapper: section attribute added in schedule\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13583 2018-02-20 08:48:29 +0100 schedulegraph: skip none regular stops\n" \
 "13582 2018-02-20 08:47:51 +0100 jssupport: throttle action added\n" \
 "13581 2018-02-19 15:45:51 +0100 schedulegraph: white location label backgound color\n" \
-"13580 2018-02-19 15:20:32 +0100 schedulegraph: floating location labels\n" \
 
 "log end";
