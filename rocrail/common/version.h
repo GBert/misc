@@ -1,11 +1,15 @@
 const int revisionnr = 
-13625
+13629
 ;
 const char* commithash = 
-"1cd4aefb64edec3a71abf9b1e70800cc49d5118c";
+"ed0d2bee74c546bc109729a360d577bf95af147b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13629 2018-03-02 08:22:07 +0100 xmlscript: fix for connect OR\n" \
+"13628 2018-03-01 15:10:05 +0100 schedulegraph: use section as selection\n" \
+"13627 2018-03-01 14:54:52 +0100 wrapper: section attribute added in schedule\n" \
+"13626 2018-03-01 14:28:46 +0100 bidibdlg: cleaned up\n" \
 "13625 2018-02-28 15:41:41 +0100 locations: use independet position units\n" \
 "13624 2018-02-28 15:05:54 +0100 rocnetnode: not removing ttyAMA0 as console: Admin job.\n" \
 "13623 2018-02-28 11:53:28 +0100 locationsdlg: changed kmpos label\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "13582 2018-02-20 08:47:51 +0100 jssupport: throttle action added\n" \
 "13581 2018-02-19 15:45:51 +0100 schedulegraph: white location label backgound color\n" \
 "13580 2018-02-19 15:20:32 +0100 schedulegraph: floating location labels\n" \
-"13579 2018-02-19 15:03:22 +0100 schedulegraph: scale factor selection added\n" \
-"13578 2018-02-19 14:17:47 +0100 location: skip last schedule entries\n" \
-"13577 2018-02-19 14:05:13 +0100 schedulegraph: use graphicalcontext at a later point\n" \
-"13576 2018-02-19 12:25:23 +0100 schedulegraph: use graphiccontext for the lines\n" \
 
 "log end";
