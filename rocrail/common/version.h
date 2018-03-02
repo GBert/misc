@@ -1,11 +1,14 @@
 const int revisionnr = 
-13630
+13633
 ;
 const char* commithash = 
-"870e8cc5f3f33ccfdde89118483d2ed31f28b32b";
+"bcd2a88abf7f45eff474823f4c727d74150b2328";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13633 2018-03-02 14:30:58 +0100 ecos: trace corrections\n" \
+"13632 2018-03-02 14:26:02 +0100 ecos: ignore set oid 1000+ reply\n" \
+"13631 2018-03-02 13:37:19 +0100 ecos: recovery fix\n" \
 "13630 2018-03-02 10:32:19 +0100 stage: allow crossing if empty\n" \
 "13629 2018-03-02 08:22:07 +0100 xmlscript: fix for connect OR\n" \
 "13628 2018-03-01 15:10:05 +0100 schedulegraph: use section as selection\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13586 2018-02-20 11:21:17 +0100 wrapper: jsmap throttle attribute\n" \
 "13585 2018-02-20 10:36:04 +0100 wmz21: Z21 App support\n" \
 "13584 2018-02-20 09:44:34 +0100 wmz21: z21 app support\n" \
-"13583 2018-02-20 08:48:29 +0100 schedulegraph: skip none regular stops\n" \
-"13582 2018-02-20 08:47:51 +0100 jssupport: throttle action added\n" \
-"13581 2018-02-19 15:45:51 +0100 schedulegraph: white location label backgound color\n" \
 
 "log end";
