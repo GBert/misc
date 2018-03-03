@@ -15,8 +15,11 @@ Bauteile
 Geeignete &Uuml;bertrager:
 ```
 Murata 56100C bzw 56T100C (primaer 2 Windungen -> 1:50)
-Murata 53040C
-Pulse Electronics PA1005.040QNL
 oder hangewickelt auf Ferrit-Ring
 ```
+
+Verdrahtung:
+------------
+!["mfx-BoosterLink-IBT2"](https://raw.githubusercontent.com/GBert/misc/master/mfx-link/pictures/mfxBoosterLink-IBT2_s.png)](https://raw.githubusercontent.com/GBert/misc/master/mfx-link/pictures/mfxBoosterLink-IBT2.png)
+
 
