@@ -15,7 +15,7 @@ Bauteile
 Geeignete &Uuml;bertrager:
 ```
 Murata 56100C bzw 56T100C (primaer 2 Windungen -> 1:50)
-oder hangewickelt auf Ferrit-Ring
+oder handgewickelt auf Ferrit-Ring
 ```
 
 Verdrahtung:
