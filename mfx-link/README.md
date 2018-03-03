@@ -20,6 +20,6 @@ oder hangewickelt auf Ferrit-Ring
 
 Verdrahtung:
 ------------
-!["mfx-BoosterLink-IBT2"](https://raw.githubusercontent.com/GBert/misc/master/mfx-link/pictures/mfxBoosterLink-IBT2_s.png)](https://raw.githubusercontent.com/GBert/misc/master/mfx-link/pictures/mfxBoosterLink-IBT2.png)
+[!["mfx-BoosterLink-IBT2"](https://raw.githubusercontent.com/GBert/misc/master/mfx-link/pictures/mfxBoosterLink-IBT2_s.png)](https://raw.githubusercontent.com/GBert/misc/master/mfx-link/pictures/mfxBoosterLink-IBT2.png)
 
 
