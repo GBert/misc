@@ -18,6 +18,12 @@ Murata 56100C bzw 56T100C (primaer 2 Windungen -> 1:50)
 oder handgewickelt auf Ferrit-Ring
 ```
 
+Errata
+------
+Version 1.1:
+
+Der Platinen-Aufdruck der Schottky-Diode (BAT43) D12 nahe dem Resetknopf ist falsch. Die Kathode muss in Richtung Mini-Taster zeigen.
+
 Verdrahtung:
 ------------
 [!["mfx-BoosterLink-IBT2"](https://raw.githubusercontent.com/GBert/misc/master/mfx-link/pictures/mfxBoosterLink-IBT2_s.png)](https://raw.githubusercontent.com/GBert/misc/master/mfx-link/pictures/mfxBoosterLink-IBT2.png)
