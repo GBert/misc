@@ -1,11 +1,16 @@
 const int revisionnr = 
-13642
+13647
 ;
 const char* commithash = 
-"3bb675c41ed5bb8f8024b654d7f895d7993f899c";
+"c7de9ba0d911c10e6eee7c68df4c3f2167d89776";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13647 2018-03-04 11:48:44 +0100 bidibprogdlg: use switch commands in case of porttype servo\n" \
+"13646 2018-03-04 11:39:55 +0100 bidib: use switch command for testing a servo\n" \
+"13645 2018-03-04 11:22:53 +0100 bidib programming dialog: removed accessory\n" \
+"13644 2018-03-04 08:58:56 +0100 translation merge: de, nl, sl, pt_BR\n" \
+"13643 2018-03-04 08:31:05 +0100 stage: crossing flag at isFree to beable to run through without length\n" \
 "13642 2018-03-03 14:27:20 +0100 locationdlg: use linesections in combo\n" \
 "13641 2018-03-03 14:06:15 +0100 railwayline dialog: wip\n" \
 "13640 2018-03-03 11:40:28 +0100 stage: check section locoid also if length > 0\n" \
@@ -51,10 +56,5 @@ const char* revlog =
 "13600 2018-02-22 22:02:45 +0100 jssupport: provide the throttle list for update events\n" \
 "13599 2018-02-22 14:37:48 +0100 cbus,loc: send release command to the CS\n" \
 "13598 2018-02-21 12:30:52 +0100 schedulegraphdlg: select first group automatically at open\n" \
-"13597 2018-02-21 11:09:00 +0100 schedulegraph: try to scroll the timenow line into the Y middle\n" \
-"13596 2018-02-21 10:47:04 +0100 schedulegraph: show current train location\n" \
-"13595 2018-02-21 10:20:55 +0100 wmz21: fix for screwing up the locoinfo\n" \
-"13594 2018-02-21 09:22:12 +0100 wmz21: extra support for Z21 App\n" \
-"13593 2018-02-21 08:41:14 +0100 loc: publish scheduleinithour to the clients\n" \
 
 "log end";
