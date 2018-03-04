@@ -76,7 +76,7 @@ void signal_handler(int sig) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.25\n\n");
+    fprintf(stderr, "   Version 1.26\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
@@ -747,12 +747,13 @@ int main(int argc, char **argv) {
 	    /* send periodic ping */
 	    ts.tv_sec = 1;
 	    ts.tv_nsec = 0;
-	    cs2ping_timer++;
+	    if (cs2fake_ping)
+		cs2ping_timer++;
 	    if (cs2ping_timer >= PING_TIME) {
 		cs2ping_timer = 0;
 		print_can_frame(UDP_FORMAT_STRG, netframe, cs2_config_data.verbose && !background);
 		if (frame_to_can(sc, M_CAN_PING) < 0) {
-		    fprint_syslog(stderr, LOG_ERR, "can't send CAN magic 60113 start sequence");
+		    fprint_syslog(stderr, LOG_ERR, "can't send CAN ping");
 		}
 		for (i = 0; i <= max_tcp_i; i++) {	/* check all clients for data */
 		    tcp_socket = tcp_client[i];

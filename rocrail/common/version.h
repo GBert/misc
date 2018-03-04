@@ -1,11 +1,20 @@
 const int revisionnr = 
-13633
+13642
 ;
 const char* commithash = 
-"bcd2a88abf7f45eff474823f4c727d74150b2328";
+"3bb675c41ed5bb8f8024b654d7f895d7993f899c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13642 2018-03-03 14:27:20 +0100 locationdlg: use linesections in combo\n" \
+"13641 2018-03-03 14:06:15 +0100 railwayline dialog: wip\n" \
+"13640 2018-03-03 11:40:28 +0100 stage: check section locoid also if length > 0\n" \
+"13639 2018-03-03 11:18:23 +0100 swdlg: set fake id for some command stations like dccpp\n" \
+"13638 2018-03-03 10:54:19 +0100 virtual: sod generator active at protver=1\n" \
+"13637 2018-03-03 10:49:19 +0100 model,fback: only lookup an offset variable if set to avoid waisting time\n" \
+"13636 2018-03-03 08:09:10 +0100 virtual: use a thread for reporting SoD events\n" \
+"13635 2018-03-03 07:50:43 +0100 virtual: report 1024 sensor at SoD in case version ist set to 2\n" \
+"13634 2018-03-03 07:44:55 +0100 virtual: removed 1024 sensor reports at SoD\n" \
 "13633 2018-03-02 14:30:58 +0100 ecos: trace corrections\n" \
 "13632 2018-03-02 14:26:02 +0100 ecos: ignore set oid 1000+ reply\n" \
 "13631 2018-03-02 13:37:19 +0100 ecos: recovery fix\n" \
@@ -47,14 +56,5 @@ const char* revlog =
 "13595 2018-02-21 10:20:55 +0100 wmz21: fix for screwing up the locoinfo\n" \
 "13594 2018-02-21 09:22:12 +0100 wmz21: extra support for Z21 App\n" \
 "13593 2018-02-21 08:41:14 +0100 loc: publish scheduleinithour to the clients\n" \
-"13592 2018-02-21 07:58:16 +0100 jssupport: open/close throttldlg\n" \
-"13591 2018-02-20 17:23:00 +0100 action: check state idle,wait,auto,run,manual\n" \
-"13590 2018-02-20 15:57:29 +0100 schedulegraph: show loco in regular stop (wip)\n" \
-"13589 2018-02-20 15:12:06 +0100 translation for schedulegraph added (Graphic timetable)\n" \
-"13588 2018-02-20 15:07:42 +0100 schedulesgraphdlg: translations and titlebar\n" \
-"13587 2018-02-20 14:41:51 +0100 schedulegraphdlg: new, wip\n" \
-"13586 2018-02-20 11:21:17 +0100 wrapper: jsmap throttle attribute\n" \
-"13585 2018-02-20 10:36:04 +0100 wmz21: Z21 App support\n" \
-"13584 2018-02-20 09:44:34 +0100 wmz21: z21 app support\n" \
 
 "log end";
