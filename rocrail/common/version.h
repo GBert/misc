@@ -1,11 +1,18 @@
 const int revisionnr = 
-13647
+13654
 ;
 const char* commithash = 
-"c7de9ba0d911c10e6eee7c68df4c3f2167d89776";
+"edfe3a8b1d1dba2399c91bdf7d01e98759b49f8b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13654 2018-03-05 15:53:00 +0100 bidib: removed obsolete iocfg flag\n" \
+"13653 2018-03-05 15:33:57 +0100 loc, lindesection: nraxis and axle wait added\n" \
+"13652 2018-03-05 13:44:45 +0100 cardlg: nraxis added to the details\n" \
+"13651 2018-03-05 12:07:47 +0100 mcs2: reader thread set to high priority in case of serial communication\n" \
+"13650 2018-03-05 11:20:38 +0100 railwaylinedlg: layout corrections and translations\n" \
+"13649 2018-03-05 10:59:57 +0100 mcs2: cc-schnitte support minor improvement\n" \
+"13648 2018-03-05 08:29:11 +0100 rocnetnodedlg: button for linking decoder\n" \
 "13647 2018-03-04 11:48:44 +0100 bidibprogdlg: use switch commands in case of porttype servo\n" \
 "13646 2018-03-04 11:39:55 +0100 bidib: use switch command for testing a servo\n" \
 "13645 2018-03-04 11:22:53 +0100 bidib programming dialog: removed accessory\n" \
@@ -49,12 +56,5 @@ const char* revlog =
 "13607 2018-02-25 11:09:11 +0100 wmz21: broadcast switch/output events to the devices\n" \
 "13606 2018-02-25 10:38:03 +0100 wmz21: broadcast loco events to the connected devices\n" \
 "13605 2018-02-25 08:49:57 +0100 translation merge: nl, de, pt_BR\n" \
-"13604 2018-02-24 14:44:40 +0100 model: stop looking for a fitting schedule entry if the given index is out of range\n" \
-"13603 2018-02-23 11:55:11 +0100 stage: reject reserve as crossing block\n" \
-"13602 2018-02-23 08:12:18 +0100 action: support for loc state automatic added\n" \
-"13601 2018-02-23 08:10:50 +0100 loc,actionctrldlg: state automatic added which ist NOT manual\n" \
-"13600 2018-02-22 22:02:45 +0100 jssupport: provide the throttle list for update events\n" \
-"13599 2018-02-22 14:37:48 +0100 cbus,loc: send release command to the CS\n" \
-"13598 2018-02-21 12:30:52 +0100 schedulegraphdlg: select first group automatically at open\n" \
 
 "log end";
