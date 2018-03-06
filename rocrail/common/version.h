@@ -1,11 +1,14 @@
 const int revisionnr = 
-13654
+13657
 ;
 const char* commithash = 
-"edfe3a8b1d1dba2399c91bdf7d01e98759b49f8b";
+"b9a472bae6be96561a24ac118bd5b61f70b8cf96";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13657 2018-03-06 10:04:16 +0100 app: give the clients some more time to disconnect after a shutdown\n" \
+"13656 2018-03-06 08:47:35 +0100 routedialog: use the gotodlg for selecting crossing blocks\n" \
+"13655 2018-03-06 07:52:01 +0100 rocnetnodedlg: show I2C group in decimal also\n" \
 "13654 2018-03-05 15:53:00 +0100 bidib: removed obsolete iocfg flag\n" \
 "13653 2018-03-05 15:33:57 +0100 loc, lindesection: nraxis and axle wait added\n" \
 "13652 2018-03-05 13:44:45 +0100 cardlg: nraxis added to the details\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13610 2018-02-25 19:37:49 +0100 xmlscript. weather command support added\n" \
 "13609 2018-02-25 18:11:54 +0100 loc: set flag to signal of function with own address\n" \
 "13608 2018-02-25 12:17:15 +0100 xmlscript: replace vars in nodes recursive\n" \
-"13607 2018-02-25 11:09:11 +0100 wmz21: broadcast switch/output events to the devices\n" \
-"13606 2018-02-25 10:38:03 +0100 wmz21: broadcast loco events to the connected devices\n" \
-"13605 2018-02-25 08:49:57 +0100 translation merge: nl, de, pt_BR\n" \
 
 "log end";
