@@ -1,11 +1,25 @@
 const int revisionnr = 
-13657
+13671
 ;
 const char* commithash = 
-"b9a472bae6be96561a24ac118bd5b61f70b8cf96";
+"a7dbe4611eec6c519ff1efd0d5173240725c64c8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13671 2018-03-08 15:11:13 +0100 rocrailinidialog: layout correction signal on automatic tab\n" \
+"13670 2018-03-08 15:04:30 +0100 rocrailinidlialog: replaced text fields with spinbuttons in case of integer values on the automatic tab\n" \
+"13669 2018-03-08 11:55:34 +0100 rocrailinidlg: reorganised auto tab\n" \
+"13668 2018-03-08 11:20:34 +0100 dsd2010: swapped the rotation direction\n" \
+"13667 2018-03-08 07:20:38 +0100 gotodlg: use title viablocks in case of multisel\n" \
+"13666 2018-03-07 19:08:02 +0100 dsd2010: sleep little baby sleep\n" \
+"13665 2018-03-07 16:33:01 +0100 guiframe: table menu without sub menus\n" \
+"13664 2018-03-07 15:49:30 +0100 guiframe: reorganised table menu\n" \
+"13663 2018-03-07 14:54:20 +0100 stage: velocity fix at in\n" \
+"13662 2018-03-07 14:18:09 +0100 guiframe: reorganised menu tables\n" \
+"13661 2018-03-07 11:24:07 +0100 guiframe: table menu reorganised\n" \
+"13660 2018-03-07 11:09:13 +0100 guiframe: table menu reorganised\n" \
+"13659 2018-03-07 10:34:00 +0100 seltabdlg: index tab added\n" \
+"13658 2018-03-07 08:26:57 +0100 translation merge: de, nl, pt_BR, sr_latin\n" \
 "13657 2018-03-06 10:04:16 +0100 app: give the clients some more time to disconnect after a shutdown\n" \
 "13656 2018-03-06 08:47:35 +0100 routedialog: use the gotodlg for selecting crossing blocks\n" \
 "13655 2018-03-06 07:52:01 +0100 rocnetnodedlg: show I2C group in decimal also\n" \
@@ -42,19 +56,5 @@ const char* revlog =
 "13624 2018-02-28 15:05:54 +0100 rocnetnode: not removing ttyAMA0 as console: Admin job.\n" \
 "13623 2018-02-28 11:53:28 +0100 locationsdlg: changed kmpos label\n" \
 "13622 2018-02-28 11:34:36 +0100 location: added railway section and changed kmpos in hmpos\n" \
-"13621 2018-02-28 09:24:25 +0100 locationsdlg: added modify button on the index tab\n" \
-"13620 2018-02-28 08:46:18 +0100 locationdlg: show kmpos in the position column\n" \
-"13619 2018-02-27 21:40:22 +0100 rocview: added the preview flag for GTK filedialog\n" \
-"13618 2018-02-27 15:20:46 +0100 schedulegraph: use kmpos in case all locations are set\n" \
-"13617 2018-02-27 13:38:32 +0100 xmlscript: optional connect attribute for if statement for connection condition, state and class; default and.\n" \
-"13616 2018-02-27 11:50:36 +0100 bidib: update product list\n" \
-"13615 2018-02-27 08:04:51 +0100 xmlscript: revert; previous version is OK\n" \
-"13614 2018-02-27 07:56:18 +0100 xmlscript: regard the not alltrue flag in case of testing the state argument\n" \
-"13613 2018-02-26 21:58:11 +0100 bidibidentdlg: revert disable programming tabs\n" \
-"13612 2018-02-26 14:22:01 +0100 location: kmpos option added\n" \
-"13611 2018-02-26 10:46:05 +0100 wmz21: switch command broadcast to the apps\n" \
-"13610 2018-02-25 19:37:49 +0100 xmlscript. weather command support added\n" \
-"13609 2018-02-25 18:11:54 +0100 loc: set flag to signal of function with own address\n" \
-"13608 2018-02-25 12:17:15 +0100 xmlscript: replace vars in nodes recursive\n" \
 
 "log end";
