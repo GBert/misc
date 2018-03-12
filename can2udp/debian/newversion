@@ -1,1 +1,0 @@
-dch -v 0.0.git`git log -1 --format=%cd --date=format:%Y%m%d`

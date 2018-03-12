@@ -1,5 +1,0 @@
-# Testdatei
-
-port 10234
-interface "lo"
-cs2_path /www/config
