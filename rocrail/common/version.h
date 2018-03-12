@@ -1,11 +1,12 @@
 const int revisionnr = 
-13695
+13696
 ;
 const char* commithash = 
-"da460bb7eea89d0c944b529e4b13277761a8fb12";
+"26f8a669b1765f2fc6772c8669a13470c27a2d19";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13696 2018-03-12 18:14:08 +0100 roco: trace fix for sensors\n" \
 "13695 2018-03-12 16:14:19 +0100 routedialog: set command combo with array\n" \
 "13694 2018-03-12 16:03:13 +0100 timedactions: init ID combo with array\n" \
 "13693 2018-03-12 13:59:02 +0100 roco: group offset fix\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13649 2018-03-05 10:59:57 +0100 mcs2: cc-schnitte support minor improvement\n" \
 "13648 2018-03-05 08:29:11 +0100 rocnetnodedlg: button for linking decoder\n" \
 "13647 2018-03-04 11:48:44 +0100 bidibprogdlg: use switch commands in case of porttype servo\n" \
-"13646 2018-03-04 11:39:55 +0100 bidib: use switch command for testing a servo\n" \
 
 "log end";
