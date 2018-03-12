@@ -1,11 +1,28 @@
 const int revisionnr = 
-13671
+13688
 ;
 const char* commithash = 
-"a7dbe4611eec6c519ff1efd0d5173240725c64c8";
+"f0b9b3ce86507c4015cc8ab9d474a016b10b271e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13688 2018-03-12 08:20:32 +0100 blockdialog: init comboboxes\n" \
+"13687 2018-03-12 08:01:28 +0100 roco: fix for fbmods > 10\n" \
+"13686 2018-03-11 15:27:00 +0100 schedulegraph: skip relative timing schedules\n" \
+"13685 2018-03-11 15:09:52 +0100 locodialog, blockdialog: init comboboxes\n" \
+"13684 2018-03-11 13:48:51 +0100 blockdialog: init\n" \
+"13683 2018-03-11 12:07:38 +0100 item: only use the reported bridge position in case it is set\n" \
+"13682 2018-03-11 10:43:32 +0100 dialogs: fill comboboxes with string arrays to speed up init\n" \
+"13681 2018-03-10 17:19:31 +0100 dsd2010: trce level correction\n" \
+"13680 2018-03-10 14:16:02 +0100 rocguiinidlg: moved the help url to the path tab\n" \
+"13679 2018-03-10 14:09:05 +0100 roco: use sensor group byte as bus number\n" \
+"13678 2018-03-10 13:35:18 +0100 tttrackdialog: block ID appended with blank\n" \
+"13677 2018-03-10 11:19:18 +0100 mvtrack: tracelevel changed for init sensors\n" \
+"13676 2018-03-10 08:45:15 +0100 block: do not check in case of lock for crossing if the locking ID is an existing loco\n" \
+"13675 2018-03-10 08:26:32 +0100 renderer: use transparent brush for drawing the turntable outer circle\n" \
+"13674 2018-03-10 07:57:18 +0100 timetabledlg: added the nowrap td attribute\n" \
+"13673 2018-03-09 10:31:48 +0100 seltab: remove system event listener on delete\n" \
+"13672 2018-03-09 10:28:37 +0100 tt: report new positions to clients (dsd2010)\n" \
 "13671 2018-03-08 15:11:13 +0100 rocrailinidialog: layout correction signal on automatic tab\n" \
 "13670 2018-03-08 15:04:30 +0100 rocrailinidlialog: replaced text fields with spinbuttons in case of integer values on the automatic tab\n" \
 "13669 2018-03-08 11:55:34 +0100 rocrailinidlg: reorganised auto tab\n" \
@@ -39,22 +56,5 @@ const char* revlog =
 "13641 2018-03-03 14:06:15 +0100 railwayline dialog: wip\n" \
 "13640 2018-03-03 11:40:28 +0100 stage: check section locoid also if length > 0\n" \
 "13639 2018-03-03 11:18:23 +0100 swdlg: set fake id for some command stations like dccpp\n" \
-"13638 2018-03-03 10:54:19 +0100 virtual: sod generator active at protver=1\n" \
-"13637 2018-03-03 10:49:19 +0100 model,fback: only lookup an offset variable if set to avoid waisting time\n" \
-"13636 2018-03-03 08:09:10 +0100 virtual: use a thread for reporting SoD events\n" \
-"13635 2018-03-03 07:50:43 +0100 virtual: report 1024 sensor at SoD in case version ist set to 2\n" \
-"13634 2018-03-03 07:44:55 +0100 virtual: removed 1024 sensor reports at SoD\n" \
-"13633 2018-03-02 14:30:58 +0100 ecos: trace corrections\n" \
-"13632 2018-03-02 14:26:02 +0100 ecos: ignore set oid 1000+ reply\n" \
-"13631 2018-03-02 13:37:19 +0100 ecos: recovery fix\n" \
-"13630 2018-03-02 10:32:19 +0100 stage: allow crossing if empty\n" \
-"13629 2018-03-02 08:22:07 +0100 xmlscript: fix for connect OR\n" \
-"13628 2018-03-01 15:10:05 +0100 schedulegraph: use section as selection\n" \
-"13627 2018-03-01 14:54:52 +0100 wrapper: section attribute added in schedule\n" \
-"13626 2018-03-01 14:28:46 +0100 bidibdlg: cleaned up\n" \
-"13625 2018-02-28 15:41:41 +0100 locations: use independet position units\n" \
-"13624 2018-02-28 15:05:54 +0100 rocnetnode: not removing ttyAMA0 as console: Admin job.\n" \
-"13623 2018-02-28 11:53:28 +0100 locationsdlg: changed kmpos label\n" \
-"13622 2018-02-28 11:34:36 +0100 location: added railway section and changed kmpos in hmpos\n" \
 
 "log end";
