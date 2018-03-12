@@ -1,11 +1,18 @@
 const int revisionnr = 
-13688
+13695
 ;
 const char* commithash = 
-"f0b9b3ce86507c4015cc8ab9d474a016b10b271e";
+"da460bb7eea89d0c944b529e4b13277761a8fb12";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13695 2018-03-12 16:14:19 +0100 routedialog: set command combo with array\n" \
+"13694 2018-03-12 16:03:13 +0100 timedactions: init ID combo with array\n" \
+"13693 2018-03-12 13:59:02 +0100 roco: group offset fix\n" \
+"13692 2018-03-12 13:52:22 +0100 roco: fix for info byte group 1\n" \
+"13691 2018-03-12 12:20:45 +0100 tt: dsd2010 next/prev fixes\n" \
+"13690 2018-03-12 11:28:53 +0100 bidib: report absent in case a railcom sensor lost a loco\n" \
+"13689 2018-03-12 10:55:01 +0100 tt: dsd2010 set rotation direction in case of next or prev track\n" \
 "13688 2018-03-12 08:20:32 +0100 blockdialog: init comboboxes\n" \
 "13687 2018-03-12 08:01:28 +0100 roco: fix for fbmods > 10\n" \
 "13686 2018-03-11 15:27:00 +0100 schedulegraph: skip relative timing schedules\n" \
@@ -49,12 +56,5 @@ const char* revlog =
 "13648 2018-03-05 08:29:11 +0100 rocnetnodedlg: button for linking decoder\n" \
 "13647 2018-03-04 11:48:44 +0100 bidibprogdlg: use switch commands in case of porttype servo\n" \
 "13646 2018-03-04 11:39:55 +0100 bidib: use switch command for testing a servo\n" \
-"13645 2018-03-04 11:22:53 +0100 bidib programming dialog: removed accessory\n" \
-"13644 2018-03-04 08:58:56 +0100 translation merge: de, nl, sl, pt_BR\n" \
-"13643 2018-03-04 08:31:05 +0100 stage: crossing flag at isFree to beable to run through without length\n" \
-"13642 2018-03-03 14:27:20 +0100 locationdlg: use linesections in combo\n" \
-"13641 2018-03-03 14:06:15 +0100 railwayline dialog: wip\n" \
-"13640 2018-03-03 11:40:28 +0100 stage: check section locoid also if length > 0\n" \
-"13639 2018-03-03 11:18:23 +0100 swdlg: set fake id for some command stations like dccpp\n" \
 
 "log end";
