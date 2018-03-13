@@ -1,11 +1,16 @@
 const int revisionnr = 
-13696
+13701
 ;
 const char* commithash = 
-"26f8a669b1765f2fc6772c8669a13470c27a2d19";
+"242e7f6b746626a09bfdb62b7bbb8801aeb4f15c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13701 2018-03-13 15:54:00 +0100 seltabdlg,textdialog: close dialog on OK in case nothing is selected or empty\n" \
+"13700 2018-03-13 11:30:43 +0100 tt: syntax fixes\n" \
+"13699 2018-03-13 11:17:31 +0100 tt: optional skip range to avoid running with the bridge into a gap\n" \
+"13698 2018-03-13 09:23:15 +0100 block: use also bidi direction in case of a generated loco\n" \
+"13697 2018-03-13 09:21:18 +0100 xmlscript: allow multiple case values separated with pipes\n" \
 "13696 2018-03-12 18:14:08 +0100 roco: trace fix for sensors\n" \
 "13695 2018-03-12 16:14:19 +0100 routedialog: set command combo with array\n" \
 "13694 2018-03-12 16:03:13 +0100 timedactions: init ID combo with array\n" \
@@ -51,10 +56,5 @@ const char* revlog =
 "13654 2018-03-05 15:53:00 +0100 bidib: removed obsolete iocfg flag\n" \
 "13653 2018-03-05 15:33:57 +0100 loc, lindesection: nraxis and axle wait added\n" \
 "13652 2018-03-05 13:44:45 +0100 cardlg: nraxis added to the details\n" \
-"13651 2018-03-05 12:07:47 +0100 mcs2: reader thread set to high priority in case of serial communication\n" \
-"13650 2018-03-05 11:20:38 +0100 railwaylinedlg: layout corrections and translations\n" \
-"13649 2018-03-05 10:59:57 +0100 mcs2: cc-schnitte support minor improvement\n" \
-"13648 2018-03-05 08:29:11 +0100 rocnetnodedlg: button for linking decoder\n" \
-"13647 2018-03-04 11:48:44 +0100 bidibprogdlg: use switch commands in case of porttype servo\n" \
 
 "log end";
