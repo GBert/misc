@@ -1,11 +1,17 @@
 const int revisionnr = 
-13701
+13707
 ;
 const char* commithash = 
-"242e7f6b746626a09bfdb62b7bbb8801aeb4f15c";
+"6d4bcef5627dcf865ec7601c4670aba88270b391";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13707 2018-03-15 07:53:07 +0100 dsd2010: use a turntable event for reporting the position instead of an accessory event\n" \
+"13706 2018-03-14 21:35:34 +0100 model: the iid must match in case of a turntable event\n" \
+"13705 2018-03-14 21:29:18 +0100 model: ignore zero addr/port events for objects other then turntables\n" \
+"13704 2018-03-14 10:47:34 +0100 z21: use protver=1 for loconet transponder address 1 offset (DR5088)\n" \
+"13703 2018-03-14 08:52:53 +0100 xmlscript: resolve clock variables\n" \
+"13702 2018-03-14 07:33:52 +0100 bidib: POM and PT traces corrected\n" \
 "13701 2018-03-13 15:54:00 +0100 seltabdlg,textdialog: close dialog on OK in case nothing is selected or empty\n" \
 "13700 2018-03-13 11:30:43 +0100 tt: syntax fixes\n" \
 "13699 2018-03-13 11:17:31 +0100 tt: optional skip range to avoid running with the bridge into a gap\n" \
@@ -50,11 +56,5 @@ const char* revlog =
 "13660 2018-03-07 11:09:13 +0100 guiframe: table menu reorganised\n" \
 "13659 2018-03-07 10:34:00 +0100 seltabdlg: index tab added\n" \
 "13658 2018-03-07 08:26:57 +0100 translation merge: de, nl, pt_BR, sr_latin\n" \
-"13657 2018-03-06 10:04:16 +0100 app: give the clients some more time to disconnect after a shutdown\n" \
-"13656 2018-03-06 08:47:35 +0100 routedialog: use the gotodlg for selecting crossing blocks\n" \
-"13655 2018-03-06 07:52:01 +0100 rocnetnodedlg: show I2C group in decimal also\n" \
-"13654 2018-03-05 15:53:00 +0100 bidib: removed obsolete iocfg flag\n" \
-"13653 2018-03-05 15:33:57 +0100 loc, lindesection: nraxis and axle wait added\n" \
-"13652 2018-03-05 13:44:45 +0100 cardlg: nraxis added to the details\n" \
 
 "log end";
