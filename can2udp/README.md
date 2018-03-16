@@ -31,7 +31,7 @@ Usage: can2lan -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i
          -d <port>           destination UDP port for the server - default 15730
          -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan
          -i <can int>        can interface - default can0
-         -k                  use a connected CS2.exe for config source
+         -k                  use a connected CAN member for config source
          -m                  doing MS1 workaround - default: don't do it
          -f                  running in foreground
          -v                  verbose output (in foreground)
