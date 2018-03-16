@@ -413,7 +413,7 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 		    syslog(LOG_NOTICE, "%s: read track file %s dir %s\n", __func__, filename, config_data->dir);
 		    config_data->page_name = read_track_file(filename, config_data->page_name);
 		    if (config_data->page_name == NULL) {
-			fprint_syslog(stderr, LOG_ERR, "can't finish CS2 copy config request");
+			fprint_syslog(stderr, LOG_ERR, "can't finish CAN member copy config request");
 			config_data->state = CS2_STATE_INACTIVE;
 			return (EXIT_FAILURE);
 		    }

@@ -84,8 +84,8 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default 15730\n");
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -i <can int>        CAN interface - default can0\n");
-    fprintf(stderr, "         -k                  use a connected CS2.exe as config source\n");
-    fprintf(stderr, "         -g                  fake CS2 ping response\n");
+    fprintf(stderr, "         -k                  use a connected CAN member as config source\n");
+    fprintf(stderr, "         -g                  fake CAN memeber ping response\n");
     fprintf(stderr, "         -T                  timeout starting %s in sec - default %d sec\n", prg, MAX_UDP_BCAST_RETRY);
     fprintf(stderr, "         -m                  doing MS1 workaround - default: don't do it\n");
     fprintf(stderr, "         -f                  running in foreground\n");
@@ -152,16 +152,16 @@ int copy_cs2_config(struct cs2_config_data_t *cs2_config_data) {
 	cs2_config_data->next = 1;
 
 	if (cs2_config_data->verbose)
-	    printf("send to CS2.exe ...\n");
+	    printf("send to CAN member ...\n");
 	net_to_net(cs2_config_data->cs2_tcp_socket, NULL, newframe, CAN_ENCAP_SIZE);
 	/* done - don't copy again */
 	cs2_config_data->cs2_config_copy = 0;
 	cs2_config_data->state = CS2_STATE_NORMAL_CONFIG;
     } else {
 	if (cs2_config_data->verbose)
-	    fprintf(stderr, "can't clone CS2 config - no CS2 TCP connection yet\n");
-	/* syslog(LOG_ERR, "%s: can't clone CS2 config - no CS2 TCP connection yet\n", __func__); */
-	syslog(LOG_ERR, "%s: can't clone CS2 config - no CS2 TCP connection yet\n", __func__);
+	    fprintf(stderr, "can't clone CAN member config - no CAN member TCP connection yet\n");
+	/* syslog(LOG_ERR, "%s: can't clone CAN member config - no CS2 TCP connection yet\n", __func__); */
+	syslog(LOG_ERR, "%s: can't clone CAN member config - no CAN member TCP connection yet\n", __func__);
     }
     return 0;
 }
@@ -178,7 +178,7 @@ int check_data_udp(int udp_socket, struct sockaddr *baddr, struct cs2_config_dat
 		printf("                received CAN ping\n");
 	    memcpy(netframe, M_CAN_PING_CS2, 13);
 	    if (net_to_net(udp_socket, baddr, netframe, CAN_ENCAP_SIZE)) {
-		fprint_syslog_wc(stderr, LOG_ERR, "sending UDP data (CAN Ping fake CS2) error:", strerror(errno));
+		fprint_syslog_wc(stderr, LOG_ERR, "sending UDP data (CAN Ping member) error:", strerror(errno));
 	    } else {
 		print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data->verbose);
 		if (cs2_config_data->verbose)
@@ -206,15 +206,15 @@ int check_data_udp(int udp_socket, struct sockaddr *baddr, struct cs2_config_dat
 		printf("                received CAN ping\n");
 	    memcpy(netframe, M_CAN_PING_CS2_1, 13);
 	    if (net_to_net(udp_socket, baddr, netframe, CAN_ENCAP_SIZE)) {
-		fprint_syslog_wc(stderr, LOG_ERR, "sending UDP data (CAN Ping fake CS2) error:", strerror(errno));
+		fprint_syslog_wc(stderr, LOG_ERR, "sending UDP data (CAN Ping fake memeber) error:", strerror(errno));
 	    } else {
 		print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data->verbose);
 		if (cs2_config_data->verbose)
-		    printf("                replied CAN ping (fake CS2)\n");
+		    printf("                replied CAN ping (fake member)\n");
 	    }
 	    memcpy(netframe, M_CAN_PING_CS2_2, 13);
 	    if (net_to_net(udp_socket, baddr, netframe, CAN_ENCAP_SIZE)) {
-		fprint_syslog_wc(stderr, LOG_ERR, "sending UDP data (CAN Ping fake CS2) error:", strerror(errno));
+		fprint_syslog_wc(stderr, LOG_ERR, "sending UDP data (CAN Ping fake member) error:", strerror(errno));
 	    } else {
 		print_can_frame(NET_UDP_FORMAT_STRG, netframe, cs2_config_data->verbose);
 		if (cs2_config_data->verbose)
@@ -259,12 +259,12 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
     switch (canid & 0xFFFF0000UL) {
     case (0x00310000UL):	/* CAN ping */
 	ret = 0;
-	/* looking for CS2.exe ping answer */
+	/* looking for CAN member ping answer */
 	print_can_frame(NET_TCP_FORMAT_STRG, netframe, cs2_config_data->verbose);
 	if ((netframe[11] == 0xFF) && (netframe[12] == 0xFF)) {
 	    if (cs2_config_data->verbose)
-		printf("got CS2 TCP ping - copy config var: %d\n", cs2_config_data->cs2_config_copy);
-	    syslog(LOG_NOTICE, "%s: got CS2 TCP ping - copy config var: %d\n", __func__, cs2_config_data->cs2_config_copy);
+		printf("got CAN member TCP ping - copy config var: %d\n", cs2_config_data->cs2_config_copy);
+	    syslog(LOG_NOTICE, "%s: got CAN member TCP ping - copy config var: %d\n", __func__, cs2_config_data->cs2_config_copy);
 	    cs2_config_data->cs2_tcp_socket = tcp_socket;
 	    if (cs2_config_data->cs2_config_copy)
 		copy_cs2_config(cs2_config_data);
@@ -281,8 +281,8 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	    strcpy((char *)&netframe[5], "copy");
 	    net_to_net(tcp_socket, NULL, netframe, CAN_ENCAP_SIZE);
 	    if (cs2_config_data->verbose)
-		printf("CS2 copy request\n");
-	    syslog(LOG_NOTICE, "%s: CS2 copy request\n", __func__);
+		printf("CAN member copy request\n");
+	    syslog(LOG_NOTICE, "%s: CAN member copy request\n", __func__);
 	    cs2_config_data->cs2_config_copy = 1;
 	} else {
 	    strncpy(config_name, (char *)&netframe[5], 8);
@@ -367,7 +367,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	/* check for initiated copy request or brodcast update */
 	reassemble_data(cs2_config_data, netframe);
 	print_can_frame(NET_TCP_FORMAT_STRG, netframe, cs2_config_data->verbose);
-	/* none CS2 copy request needs to be send over CAN */
+	/* none CAN member copy request needs to be send over CAN */
 	if (canid & 0x0000fcff)
 	    ret = 0;
 	else
