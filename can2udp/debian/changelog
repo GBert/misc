@@ -1,0 +1,6 @@
+can2udp (0.0.git20171229) UNRELEASED; urgency=medium
+
+  * Debianised
+  * include s88can
+
+ -- Joerg Dorchain <joerg@Redstar.dorchain.net>  Sun, 18 Feb 2018 09:07:52 +0100

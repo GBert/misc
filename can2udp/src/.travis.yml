@@ -1,0 +1,16 @@
+language: c
+
+compiler: gcc
+
+script:
+    - make
+
+notifications:
+  recipients:
+    - info@gerhard-bertelsmann.de
+  email:
+    on_success: change
+    on_failure: always
+
+os:
+    - linux

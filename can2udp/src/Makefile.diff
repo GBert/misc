@@ -1,0 +1,34 @@
+diff --git a/can2udp/src/Makefile b/can2udp/src/Makefile
+index 6437a82..6ed5cdb 100644
+--- a/can2udp/src/Makefile
++++ b/can2udp/src/Makefile
+@@ -2,7 +2,8 @@ BINS := can-bounce-test can-monitor can2eth can2udp can4lnx2udp can2serial clone
+         clone-ms2-loco read-cs2-ini gb2-update ir-tester cs2ping bpi-rs485 scan2lan can2lan \
+         can2lan_m ms2wifi virtual_canbuster virtual_gfp virtual_gfp3 virtual_links88 virtual_ms2 \
+         get-cs-data get-cs-config pio-i2c-udp read_lococard s88udp-bpi s88udp-rpi s88test-bpi \
+-        wake-up-links88 virtual_s88udp gpio-poll lan-schnitte xntcpd
++        wake-up-links88 virtual_s88udp gpio-poll lan-schnitte xntcpd \
++	s88can
+ 
+ PREFIX=/usr/sbin
+ 
+@@ -17,10 +18,6 @@ install: all
+ # CFLAGS+=-Wall -Wextra -Wmaybe-uninitialized -pedantic-errors -std=gnu99 -g
+ CFLAGS+=-g -O2 -fstack-protector-strong -Wformat -Werror=format-security -Wall -Wextra -Wmaybe-uninitialized -std=gnu99 -pedantic-errors -Wdate-time
+ 
+-install: all
+-	mkdir -p $(DESTDIR)/$(PREFIX)
+-	cp $(BINS) $(DESTDIR)/$(PREFIX)
+-
+ size_of-test: size_of-test.o
+ 	$(CC) $(CFLAGS) -o size_of-test size_of-test.o -lpcap
+ 
+@@ -135,5 +132,8 @@ gpio-poll: gpio-poll.o
+ xntcpd: xntcpd.o
+ 	$(CC) $(CFLAGS) -o xntcpd xntcpd.o
+ 
++s88can: s88can.o mcan.o allwinner.o
++	$(CC) $(CFLAGS) -o s88can allwinner.o mcan.o s88can.o
++
+ clean:
+ 	$(RM) *.o $(BINS) s88udp

@@ -1,0 +1,18 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2017 OpenWrt.org
+
+START=99
+
+start() {
+	# prepare USB OTG
+	/sbin/usb-schnitte.sh
+	# can0 <-> /dev/ttyGS0
+	# can2serial
+
+	# connecting to can2lan using /dev/ttyGS0
+	can2serial -t 127.0.0.1
+}
+
+stop() {
+	killall can2serial
+}
