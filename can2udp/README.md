@@ -1,6 +1,6 @@
-## M\*rklin CS2 Gateway emulator
+## CAN Gateway
 
-This Git (OpenWRT feed) contains files to emulate the M\*rklin CS2 Gateway:
+This Git (OpenWRT feed) contains files to exchange data between CAN and LAN:
 
 - can2udp only transfers CAN frames to UDP and vice versa
 - can2lan does the same as can2udp, but also listen on TCP
