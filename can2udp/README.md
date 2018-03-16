@@ -6,7 +6,10 @@ This Git (OpenWRT feed) contains files to exchange data between CAN and LAN:
 - can2lan does the same as can2udp, but also listen on TCP
 
 can2udp is working fine with Rocrail and Gleisbox (60113). The can2lan aims
-to emulate the CS2 CAN2LAN protocol more closely
+to emulate the CS2 CAN2LAN protocol more closely.
+
+The programm ist based on:
+http://streaming.maerklin.de/public-media/cs2/cs2CAN-Protokoll-2_0.pdf
 
 The other files are for testing or pre-alpha state.
 
