@@ -1,0 +1,163 @@
+                                     Dliste
+                                     ======
+Dieses Modul ist eine Listenverwaltung fuer eine sortierte Liste. Sie kann
+aber auch als unsortierte Liste verwendet werden, um damit z.B. als
+Container fuer einen Stack oder eine Queue zu dienen.
+Datentypen:
+-----------
+typedef void *DlisteKeyType;
+   Dies ist ein typloser Zeiger auf den Schluessel in der Liste.
+typedef void *DlisteDataType;
+   Dies ist ein typloser Zeiger auf die Daten, die in der Liste gespeichert
+   werden sollen.
+typedef struct dliste_element {
+   DlisteKeyType Key;
+   DlisteDataType Data;
+   struct dliste_element *Prev;
+   struct dliste_element *Next;
+} DlisteElement, *DlisteKnoten;
+   Dieser Datentyp definiert einen Knoten der Liste.
+typedef struct {
+   DlisteKnoten DatenAnfang;
+   DlisteKnoten DatenEnde;
+   DlisteKnoten Aktuell;
+   CmpFkt Compare;
+} Dliste;
+   Dieser Datentyp ist die Wurzel der Liste.
+typedef void (*DlisteDelCbFkt)(DlisteKnoten Blatt);
+   Dies ist eine Callback Funktion, die an DlisteDestroy uebergeben wird und
+   den Key und die Daten eines Listenknotens aufraeumen muss. Da Key und Daten
+   typlose Zeiger sind, weiss die Listenverwaltung nicht, ob und wie fuer
+   diese Zeiger Speicher freizugeben ist.
+Funktionen:
+-----------
+Dliste *DlisteCreate(CmpFkt Cmp);
+   Diese Funktion erzeugt eine neue Liste.
+   Cmp    - Dies ist die Vergleichsfunktion fuer die Daten in der Liste.
+            Diese Funktion bekommt zwei Argumente vom Typ ListeKeyType
+            und muss einen Wert < 0 liefern, wenn der erste Parameter
+            kleienr als der zweite ist; 0 wenn beide gleich sind und einen
+            Wert groesser 0 wenn der erste Parameter groesser als der
+            zweite ist.
+   Rueckgabe: Eine neue Liste im Erfolgsfall, NULL im Fehlerfall
+void DlisteDestroy(Dliste *Wurzel, DlisteDelCbFkt Cb);
+   Diese Funktion gibt Liste wieder frei. Auch saemtliche Listenknoten
+   werden automatisch freigegeben.
+   Wurzel - Dies ist die Adresse der Listenwurzel. Die Liste muss durch
+            DlisteCreate angelegt werden.
+   Cb     - Dies ist eine Callback Funktion, die den Key und die Daten eines
+            Listenknotens aufraeumen (freigeben) muss.
+BOOL DlisteInsert(Dliste *Wurzel, DlisteKeyType Key, DlisteDataType Daten);
+   Diese Funktion fuegt einen neuen Knoten in die Liste ein.
+   Wurzel - Dies ist die Adresse der Listenwurzel. Die Liste muss durch
+            DlisteCreate angelegt werden.
+   Key    - einzufuegender Schluessel (typloser Zeiger auf den Schluessel).
+   Daten  - einzufuegende Daten (typloser Zeiger auf die Daten).
+   Rueckgabe: TRUE im Erfolgsfall, FALSE im Fehlerfall
+BOOL ListeAhead(Liste *Wurzel, ListeKeyType Key, ListeDataType Daten);
+   Diese Funktion fuegt einen neuen Knoten am Anfang der Liste ein.
+   Wurzel - Dies ist die Adresse der Listenwurzel. Die Liste muss durch
+            ListeCreate angelegt werden.
+   Key    - einzufuegender Schluessel (typloser Zeiger auf den Schluessel).
+   Daten  - einzufuegende Daten (typloser Zeiger auf die Daten).
+   Rueckgabe: TRUE im Erfolgsfall, FALSE im Fehlerfall
+BOOL ListeAppend(Liste *Wurzel, ListeKeyType Key, ListeDataType Daten);
+   Diese Funktion fuegt einen neuen Knoten am Ende der Liste ein.
+   Wurzel - Dies ist die Adresse der Listenwurzel. Die Liste muss durch
+            ListeCreate angelegt werden.
+   Key    - einzufuegender Schluessel (typloser Zeiger auf den Schluessel).
+   Daten  - einzufuegende Daten (typloser Zeiger auf die Daten).
+   Rueckgabe: TRUE im Erfolgsfall, FALSE im Fehlerfall
+DlisteKnoten DlisteDelete(Dliste *Wurzel, DlisteKeyType Key);
+   Diese Funktion loescht das Element mit dem Schluessel key aus der Liste.
+   Der ausgehaengte Listenknoten wird zurueckgeliefert. Der Benutzer muss
+   selbst den Speicher fuer den Schluessel, die Daten und den
+   zurueckgelieferten Knoten freigeben!
+   Wurzel - Dies ist die Adresse der Listenwurzel. Die Liste muss durch
+            DlisteCreate angelegt werden.
+   Key    - Schluessel fuer die zu loeschenden Daten.
+   Rueckgabe: Zeiger auf den ausgeh&auml;ngten Datensatz oder NULL.
+DlisteKnoten DlisteFinde(Dliste *Wurzel, DlisteKeyType Key);
+   Diese Funktion sucht das Element mit dem Schluessel key.
+   Wurzel - Dies ist die Adresse der Listenwurzel. Die Liste muss durch
+            DlisteCreate angelegt werden.
+   Key    - Schluesse fuer die zu suchenden Daten.
+   Rueckgabe: Zeiger auf den gefundenen Datensatz.
+DlisteKnoten DlisteFirst(Dliste *Wurzel);
+   Diese Funktion liefert das erste Element der Liste.
+   Wurzel - Dies ist die Adresse der Listenwurzel. Die Liste muss durch
+            DlisteCreate angelegt werden.
+   Rueckgabe: Zeiger auf den gefundenen Datensatz.
+DlisteKnoten DlisteNext(Dliste *Wurzel);
+   Diese Funktion liefert das naechste Element der Liste. Der Benutzer muss
+   zuerst mit DlisteFinde oder DlisteFirst ein Element gesucht haben!
+   Wurzel - Dies ist die Adresse der Listenwurzel. Die Liste muss durch
+            DlisteCreate angelegt werden.
+   Rueckgabe: Zeiger auf den gefundenen Datensatz.
+DlisteKnoten DlisteLast(Dliste *Wurzel);
+   Diese Funktion liefert das letzte Element der Liste.
+   Wurzel - Dies ist die Adresse der Listenwurzel. Die Liste muss durch
+            DlisteCreate angelegt werden.
+   Rueckgabe: Zeiger auf den gefundenen Datensatz.
+DlisteKnoten DlistePrev(Dliste *Wurzel);
+   Diese Funktion liefert das vorherige Element der Liste. Der Benutzer muss
+   zuerst mit DlisteFinde oder DlisteLast ein Element gesucht haben!
+   Wurzel - Dies ist die Adresse der Listenwurzel. Die Liste muss durch
+            DlisteCreate angelegt werden.
+   Rueckgabe: Zeiger auf den gefundenen Datensatz.
+Benutzung:
+----------
+Ein Program muss fuer jede neue Liste eine Variable vom Typ Dliste* anlegen.
+Als erste Aktion muss ListeCreate aufgerufen werden. Der Parameter ist eine
+Vergleichsfunktion, die zwei Keys uebergeben bekommt und einen Wert <0
+liefert, wenn der erste Key kleienr als der zweite ist, 0 bei Gleichheit und
+>0 wenn der erste Key groesser ist. Danach koennen neue Knoten eigefuegt
+werden, nach Knoten mit einem vorgegebenen Schluessel gesucht werden und
+Knoten geloescht werden.
+
+Das Beispiel benutzt als Schluessel und fuer die Daten einen long. Da
+ein Pointer auf 68K Systemen gleich einem long ist, wird anstelle eines
+Pointers der long uebergeben. Sollen Daten abgespeichert werden, die sich
+nicht per Cast in dem Pointer abspeichern lassen, muss per malloc Speicher
+angefordert werden und der Zeiger auf diese Daten uebergeben werden.
+
+Wenn die Liste nicht mehr benoetigt wird, sollten die Elemente wieder
+freigegeben werden. Dies kann dadurch geschehen, dass in einer Schleife
+das erste Element geholt wird un anschliessend geloescht wird.
+
+#include <stddef.h>
+#include <stdio.h>
+#include <compare.h>
+#include <dliste.h>
+
+int MyCmp(void *d1, void *d2)
+{
+   return((long)d2 - (long)d1);
+}
+
+int main(void)
+{  Dliste *TestListe;
+   DlisteKnoten Node;
+
+   /* Liste anlegen */
+   TestListe = DlisteCreate(MyCmp);
+   if (TestListe != NULL)
+   {
+      /* ein Element einfuegen */
+      DlisteInsert(TestListe, (DlisteKeyType)3L, (DlisteDataType)5L);
+      /* Ein element suchen */
+      Node = DlisteFinde(TestListe, (DlisteKeyType)3L);
+      if (Node != NULL)
+         printf("gefunden, Daten = %ld\n", (long)(Node->Data));
+      /* Alle Elemente wieder freigebene */
+      Node = DlisteFirst(TestListe);
+      while (Node != NULL)
+      {
+         DlisteDelete(MyListe, Node->Key);
+         Node = DlisteFirst(TestListe);
+      }
+      DlisteDestroy(TestListe, NULL);
+   }
+   else
+      puts("Fehler beim Anlegen der Liste");
+}

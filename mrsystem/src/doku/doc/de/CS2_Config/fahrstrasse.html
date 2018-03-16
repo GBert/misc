@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<meta content="text/html;charset=ISO-8859-1" http-equiv="Content-Type"><title>fahrstrasse.cs2</title></head>
+<body>
+<hr>
+<br>
+<table style="width: 100%;" summary="" border="0" cellpadding="1" cellspacing="0">
+<tbody>
+<tr>
+<td colspan="2" class="NavBarCell1" bgcolor="#eeeeff">
+<table summary="" border="0" cellpadding="0" cellspacing="3">
+<tbody>
+<tr align="center" valign="top">
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../overview-summary.html"><font class="NavBarFont1"><b>Übersicht</b></font></a></td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../CMD_0System/kapitel-summary.html"><font class="NavBarFont1"><b>Kapitel</b></font></a></td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td style="background-color: white; text-align: right; vertical-align: middle;" class="NavBarCell2"><font size="-2"> <a href="../../index.html?de/CMD_0System/0_Stop.html" target="_top"><b>FRAMES</b></a>
+<a href="../CMD_0System/0_Stop.html" target="_top"><b>NO
+FRAMES</b></a>
+<script type="text/javascript">
+<!--
+if(window==top) {
+document.writeln('<A HREF="../../allclasses-noframe.html"><B>All Classes</B></A>');
+}
+//-->
+</script>
+<noscript> <A
+HREF="../../allclasses-noframe.html"><B>All
+Classes</B></A>
+</noscript>
+</font></td>
+</tr>
+</tbody>
+</table>
+<br>
+<hr>
+<h2>Konfigurationsdatei Fahrstrasse.cs2</h2>
+<hr>
+<p>Enthält die Konfiguration und Stellungen der Magnetartikel. Jede Konfiguration kann eine der vorkonfigurierten Plätze belegen.<br>
+</p>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="2" align="left"><font size="+2">
+Grundformat</font></th>
+</tr>
+<tr class="TableRowColor" bgcolor="white">
+<td>
+[fahrstrassen]<br><a href="#1">version</a><br>&nbsp;.major=0<br>&nbsp;.minor=1<br><a href="#2">fahrstrasse</a><br>&nbsp;.id=1<br>&nbsp;.name=FS1ein<br>&nbsp;.s88=1<br>&nbsp;.s88Ein=1<br>&nbsp;.extern=1<br>&nbsp;.<a href="#3">item</a><br>&nbsp;..fsverweis=-1<br>&nbsp;..magnetartikel=23<br>&nbsp;..stellung=1<br>
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="2" align="left"><font size="+2"><a name="1"></a>
+Sektion "version"</font></th>
+</tr>
+<tr>
+<td colspan="2" rowspan="1">Entält die Versionsnummer der
+Konfigurationsdatei. Wird verwendet um die Rückwärtskompatibilität
+herzustellen. Diese Sektion darf nur einmal vorhanden sein.<br></td>
+</tr>
+<tr>
+<td>.major</td>
+<td>Versionsnummer Aktuelle Werte sind .major=0 und .minor=3</td>
+</tr>
+<tr class="TableRowColor" bgcolor="white">
+<td style="width: 10%;">
+.minor</td>
+<td>Versionsnummer Aktuelle Werte sind .major=0 und .minor=3</td>
+</tr>
+</tbody>
+</table>
+<br>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="2" align="left"><font size="+2"><a name="2"></a>
+Sektion "fahrstrasse"</font></th>
+</tr>
+<tr>
+<td colspan="2" rowspan="1">Listet einen Eintrag einer Fahrstrasse auf<br>
+</td>
+</tr>
+<tr>
+<td>.id=1</td>
+<td>Nummer der Fahrstrasse bestimmt gleichzeitig die Position der Fahrstrasse im "memory"<br></td>
+</tr>
+<tr class="TableRowColor" bgcolor="white">
+<td style="width: 10%;">.name=FS1ein</td>
+<td>Name der Fahrstrasse</td>
+</tr><tr><td>.s88=1</td><td>S88-Kontakt, der diese Fahrstrasse beim Schließen auslöst, 0 wenn keine S88-Steuerung gewünscht</td></tr><tr><td>.s88Ein=1</td><td>S88-Kontakt, der diese Fahrstrasse beim Öffnen auslöst, ansonsten 0</td></tr><tr><td>.extern=1</td><td>Handbetrieb (0) oder gemischter Automatikbetrieb.</td></tr><tr><td>&nbsp;.item</td><td>Beginn einer weiteren Subsektion. <br>Bereich mit zu schaltendem Artikeln oder Fahrstrassen. Pro Artikel ein Abschnitt.</td></tr>
+</tbody>
+</table>
+<br>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="2" align="left"><font size="+2"><a name="3"></a>
+Sektion ".item"</font></th>
+</tr>
+<tr>
+<td colspan="2" rowspan="1">Listet die zu schaltenden Elemente der Fahrstrasse auf.<br></td></tr><tr><td>..fsverweis= -1</td><td>Verweis auf andere Fahrstrasse. Entweder Nummer der Fahrstrasse oder -1
+für Magnetartikel. Bei Verweis auf weitere Fahrstrasse ist
+..magnetartikel und ..stellung auf 0 zu setzen.</td></tr><tr class="TableRowColor" bgcolor="white"><td style="width: 10%;">..magnetartikel=23</td><td>Magnetartikel, Nummer aus Keyboard, 0 bei Verweis auf weitere Fahrstrasse</td></tr><tr><td>..stellung=1</td><td>Zu schaltende Stellung, je nach Artikel zwischen 1 und 4 oder 0 bei Verweis auf weitere Fahrstrasse.</td></tr>
+</tbody>
+</table>
+<br>
+<hr><br>
+<table style="width: 100%;" border="0" cellpadding="1" cellspacing="0">
+<tbody>
+<tr>
+<td colspan="2" class="NavBarCell1" bgcolor="#eeeeff">
+<table border="0" cellpadding="0" cellspacing="3">
+<tbody>
+<tr align="center" valign="top">
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../overview-summary.html"><font class="NavBarFont1"><b>Übersicht</b></font></a></td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../CMD_0System/kapitel-summary.html"><font class="NavBarFont1"><b>Kapitel</b></font></a></td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td style="background-color: white; text-align: right;" class="NavBarCell2"><font size="-2"> <a href="../../index.html?de/CMD_0System/0_Stop.html" target="_top"><b>FRAMES</b></a>
+<a href="../CMD_0System/0_Stop.html" target="_top"><b>NO
+FRAMES</b></a>
+<script type="text/javascript">
+<!--
+if(window==top) {
+document.writeln('<A HREF="../../allclasses-noframe.html"><B>All Classes</B></A>');
+}
+//-->
+</script>
+<noscript> <A
+HREF="../../allclasses-noframe.html"><B>All
+Classes</B></A>
+</noscript>
+</font></td>
+</tr>
+</tbody>
+</table>
+<br>
+<hr>
+</body></html>

@@ -1,0 +1,550 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+<!--NewPage--><!-- Extract of javadoc --><title>Verwaltung Write Config</title>
+
+<meta name="date" content="2009-09-23">
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css" title="Style">
+<script type="text/javascript">
+function windowTitle()
+{
+if (location.href.indexOf('is-external=true') == -1) {
+parent.document.title="Write CV";
+}
+}
+</script>
+</head>
+<body onload="windowTitle();" style="background-color: white;">
+<hr>
+<br>
+<table style="width: 100%;" summary="" border="0" cellpadding="1" cellspacing="0">
+<tbody>
+<tr>
+<td colspan="2" class="NavBarCell1" bgcolor="#eeeeff">
+<table summary="" border="0" cellpadding="0" cellspacing="3">
+<tbody>
+<tr align="center" valign="top">
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../overview-summary.html"><font class="NavBarFont1"><b>Überblick</b></font></a>&nbsp;</td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="kapitel-summary.html"><font class="NavBarFont1"><b>Kapitel</b></font></a>&nbsp;</td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td style="background-color: white; text-align: right; vertical-align: middle;" class="NavBarCell2"><font size="-2"> <a href="../../index.html" target="_top"><b>FRAMES</b></a>
+&nbsp;
+&nbsp;<a href="8_WriteCV.html" target="_top"><b>NO
+FRAMES</b></a> &nbsp;
+&nbsp;
+<script type="text/javascript">
+<!--
+if(window==top) {
+document.writeln('<A HREF="../../allclasses-noframe.html"><B>All Classes</B></A>');
+}
+//-->
+</script>
+<noscript> <A
+HREF="../../allclasses-noframe.html"><B>All
+Classes</B></A>
+</noscript>
+</font></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>Write Config</h2>
+<hr>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="2" align="left"><font size="+2">
+<b>Kennung</b></font></th>
+</tr>
+<tr class="TableRowColor" bgcolor="white">
+<td>
+Write Config
+(<i><font color="#0000ff">0x08</font></i>,
+in CAN-ID:<i><font color="#0000ff"> </font><font color="#ff0000">0x10</font></i>)&nbsp;
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+<b>Format</b></font></th>
+</tr>
+</tbody>
+</table>
+<br>
+<table style="text-align: center; width: 653px;" class="CanTable" border="1" bordercolor="#000000" cellspacing="1">
+<tbody>
+<tr>
+<td style="width: 7%;">
+Prio
+</td>
+<td style="width: 9%;">
+Command
+</td>
+<td style="width: 5%;">
+Resp.
+</td>
+<td style="width: 6%;">
+Hash
+</td>
+<td style="width: 6%;">
+DLC
+</td>
+<td style="width: 8%;">
+D-Byte 0
+</td>
+<td style="width: 8%;">
+D-Byte 1
+</td>
+<td style="width: 8%;">
+D-Byte 2
+</td>
+<td style="width: 8%;">
+D-Byte 3
+</td>
+<td style="width: 8%;">
+D-Byte 4
+</td>
+<td style="width: 8%;">
+D-Byte 5
+</td>
+<td style="width: 8%;">
+D-Byte 6
+</td>
+<td style="width: 8%;">
+D-Byte 7
+</td>
+</tr>
+<tr>
+<td>2+2 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+1 Bit
+</td>
+<td>
+16 Bit
+</td>
+<td>
+4 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+</tr>
+<tr>
+<td rowspan="2">
+Message
+Prio
+</td>
+<td rowspan="2">
+<font color="#0000ff">Write-Config</font>
+</td>
+<td rowspan="2">
+0
+</td>
+<td rowspan="2">
+-</td>
+<td rowspan="2">
+8
+</td>
+<td colspan="4">
+LOC - ID
+</td>
+<td colspan="2" rowspan="2">CV-Index
+(6 Bit) <br>
+CV-Nummer (10Bit)</td>
+<td rowspan="2">
+Wert</td>
+<td rowspan="2">
+Ctrl(2Bit)</td>
+</tr>
+<tr>
+<td>
+High
+</td>
+<td>
+-</td>
+<td>
+-</td>
+<td>
+Low
+</td>
+</tr>
+<tr>
+<td rowspan="2">
+Message
+Prio
+</td>
+<td rowspan="2">
+<font color="#0000ff">Write-Config</font>
+</td>
+<td rowspan="2">
+1
+</td>
+<td rowspan="2">
+-</td>
+<td rowspan="2">
+8
+</td>
+<td colspan="4">
+LOC - ID
+</td>
+<td colspan="2" rowspan="2">CV-Index
+(6 Bit) <br>
+CV-Nummer (10Bit)</td>
+<td rowspan="2">
+Wert</td>
+<td rowspan="2">
+Rslt(2Bit)</td>
+</tr>
+<tr>
+<td>
+High
+</td>
+<td>
+-</td>
+<td>
+-</td>
+<td>
+Low
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+<b>Beschreibung</b></font></th>
+</tr>
+</tbody>
+</table>
+<p>Schreiben
+von CV-Werten in einen programmierbaren Decoder.</p>
+<p>Abhängig vom
+Protokoll des zu programmierenden Decoders sind
+unterschiedliche Parameter möglich. Das Schreiben der CV-Werte wird,
+sofern möglich, durch ein nachträgliches Lesen verifiziert. Im
+Bestätigungsframe wird das Ergebnis der Verifikation mitgeteilt.
+(&gt; V3.0)<br>
+</p>
+<p>In Loc-ID
+stehen Protokoll und Adresse des zu programmierenden
+Decoders. <br>
+</p>
+<p>CV-Nummer
+bestimmt, welche Konfigurationsvariable verändert werden
+soll. Möglich sind insgesamt 1024 Adressen. CV-Nummer steht in D-Byte 5
+und den 2 niedrig wertigen Bits von D-Byte 4.<br>
+</p>
+<p>CV-Index
+bestimmt einen möglichen Index der zu verändernden CV-Nummer.
+CV-Index ist nur für Mfx zulässig. CV-Index steht in den 6
+höchstwertigen Bits von D-Byte 4.<br>
+</p>
+<p>Parameter Wert
+enthält das zu schreibende Byte. Bei Programmierart
+"DCC-Bitprogrammierung" hat das Datenbyte die Information im
+entsprechenden DCC Format also: <br>
+1111DBBB D: Wert des Bits, BBB: Bitposition.<br>
+</p>
+<p>Die Bedeutung
+des letzten Bytes im Telegramm ist für Anforderung und
+Bestätigung unterschiedlich:<br>
+</p>
+<p>Anforderung:<br>
+</p>
+<p>Ctrl (Bit 8
+&amp; Bit 7) enthält Anweisungen zum Befehl.<br>
+</p>
+<dl>
+<dd>Bit 8:
+Unterscheidung
+Gleis Hauptgleis (Wert = 1) oder
+Programmiergleis (Wert = 0)</dd>
+<dd>Bit 7:
+Multibyteschreiben. Es folgen weitere
+Schreibbefehle.</dd>
+<dd>Bit 6: DCC
+Programmierart
+1 (DCC Register oder Direct /
+Bitprogrammierung )</dd>
+<dd>Bit 5: DCC
+Programmierart 2</dd>
+</dl>
+<p>Anz (Bits 4
+bis 0) ist Reserviert</p>
+<p>DCC
+Programmierartauswahl:</p>
+<table style="text-align: center; width: 284px; height: 177px;" border="1" cellpadding="2" cellspacing="2">
+<tbody>
+<tr>
+<td>DCC1</td>
+<td>DCC2</td>
+<td>Art</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>Direct
+Programmierung<br>
+</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>Register
+Programmierung<br>
+</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>Bitprogrammierung</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>Reserviert</td>
+</tr>
+</tbody>
+</table>
+<br>
+<p>Erweiterung
+Mehrbyte Schreiben (&gt; V3.0): Bei gesetztem Bit erwartet der
+Gleis Format Prozessor weitere Schreibbefehle für den Decoder und hält
+diesen im Programmiermodus. (Bei DCC durch Senden von Resetpaketen).
+Beim Erhalt des letzten Programmierbefehls (mit gelöschtem Bit
+Multibyteschreiben) wird die Sequenz abgeschlossen (DCC: Stromlose
+Pause). Der nächste Programmierbefehl darf erst nach dem Bestätigen des
+vorhergehenden gesendet werden, da der Gleis Format Prozessor keine
+Werte zwischenspeichert. Die Programmierzeit wird durch den Gleis
+Format Prozessor überwacht, damit das Programmiergleis nicht dauerhaft
+im Programmiermodus bleibt. Nach Ablauf dieser Zeit schaltet der Gleis
+Format Prozessor selbstständig den Modus aus.&nbsp;</p>
+<p>Je
+nach Decodertyp können negative Ergebnisse trotz allem erfolgreich
+verlaufen sein. Z.B. wenn diese weder Auslesen noch Bestätigen
+beherrschen.</p>
+<p>Protokolltypische
+Wertebereiche und Verhalten:</p>
+<dl>
+<dt>DCC: <br>
+</dt>
+</dl>
+<dl>
+<dd>CV-Index
+wird nicht behandelt. </dd>
+<dd>CV-Nummer
+liegt im Bereich 1 - 1024.</dd>
+<dd>Schreiben
+auf Programmiergleis und Hauptgleis </dd>
+<dd>Decoder
+kann vollständig auf dem Programmiergleis beschrieben werden.</dd>
+<dd>Parameter,
+die mit "POM" manipuliert werden können, sind auch auf dem Hauptgleis
+veränderbar. </dd>
+</dl>
+<p></p>
+<p>MFX:<br>
+</p>
+<dl>
+<dd>CV-Nummer
+liegt im Bereich zwischen 1 und 1024. </dd>
+<dd>CV-Index
+wird beachtet und liegt im Bereich zwischen 1 und 63.</dd>
+<dd>Das
+Schreiben findet grundsätzlich auf Hauptgleis und Programmiergleis
+statt.</dd>
+</dl>
+<p></p>
+<p>SX1: <br>
+</p>
+<dl>
+<dd>CV-Index
+wird nicht behandelt. CV-Nummer liegt im Bereich 1 - 5.</dd>
+<dd>Ein Decoder
+kann nur auf dem Programmiergleis programmiert werden.</dd>
+<dd>Bei SX1
+haben die Parameter keine Nummern. Folgende Umsetzung wird vorgenommen:</dd>
+</dl>
+<table style="text-align: center; width: 363px; height: 185px; margin-left: 40px;" border="1" cellpadding="2" cellspacing="2">
+<tbody>
+<tr>
+<td>CV-Nummer</td>
+<td>Bedeutung</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Adresse</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Höchstgeschwindigkeit</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Beschleunigung</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Impulsbreite des Motorimpulses</td>
+</tr>
+<tr>
+<td>5</td>
+<td>1 / 2 &#8211; Halteabschnitte</td>
+</tr>
+</tbody>
+</table>
+<p>MM2:<br>
+</p>
+<dl>
+<dd>CV-Index
+wird nicht behandelt. CV-Nummer liegt im Bereich 1 - 256.</dd>
+<dd>Die
+Programmierung kann sowohl auf Programmiergleis als auch auf Hauptgleis
+(&gt; V3.0) stattfinden.</dd>
+<dd>Durch
+die in der Loc-ID angegebene MM2 Adresse lässt sich die "MM2
+Programmieradresse" festlegen. Ein programmierbarer MM2 - Decoder kann
+entweder unter seiner eigenen Adresse oder auf Adresse 80 programmiert
+werden. Dies ist auf dem Hauptgleis zu beachten.</dd>
+</dl>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+Beispiel</font></th>
+</tr>
+</tbody>
+</table>
+<br>
+<p>00104711 8 00 00 C0 05 00 01 03 00
+CV 1 Schreiben DCC Adr 03</p>
+<br>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+Antwort</font></th>
+</tr>
+</tbody>
+</table>
+<br>
+<p>In Result (Bit
+8 &amp; Bit 7) stehen die Ergebnisse zu Schreiben und Verifizieren:
+<br>
+</p>
+<dl>
+<dd>
+Bit 8: Schreiben erfolgreich betätigt durch Kontroller.</dd>
+<dd>
+Bit 7: Verifiy erfolgreich verlaufen.</dd>
+</dl>
+<br>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+Besonderheiten</font></th>
+</tr>
+</tbody>
+</table>
+<br>
+<p>Wird immer von
+Graphical User Interface Prozessor ausgelöst.</p>
+<p>Der Befehl
+nimmt Lok/Funktionsdecoder nicht in Zyklus auf.<br>
+</p>
+<p>Bei MM2
+bestimmt diese Adresse die Programmieradresse, unter welcher das
+Programmieren stattfindet. Also auch von Adresse 80 abweichende
+Adressen.</p>
+<p>Bei diesem
+Kommando handelt es sich um ein sequenziell in der Abarbeitung
+befindlichen Programmierbefehl. Diese werden nicht in einer Befehlqueue
+zwischengespeichert. Erst nach einer Antwort durch den Gleis Format
+Prozessor darf der nächste Programmierbefehl angefordert werden. Genau
+ein Programmierbefehl wird durch den Gleis Format Prozessor zeitgleich
+abgearbeitet.</p>
+<br>
+<hr><br>
+<table style="width: 100%;" summary="" border="0" cellpadding="1" cellspacing="0">
+<tbody>
+<tr>
+<td colspan="2" class="NavBarCell1" bgcolor="#eeeeff">
+<table summary="" border="0" cellpadding="0" cellspacing="3">
+<tbody>
+<tr align="center" valign="top">
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../overview-summary.html"><font class="NavBarFont1"><b>Überblick</b></font></a>&nbsp;</td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="kapitel-summary.html"><font class="NavBarFont1"><b>Kapitel</b></font></a>&nbsp;</td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td style="background-color: white; text-align: right;" class="NavBarCell2"><font size="-2"> <a href="../../index.html" target="_top"><b>FRAMES</b></a>
+&nbsp;
+&nbsp;<a href="8_WriteCV.html" target="_top"><b>NO
+FRAMES</b></a> &nbsp;
+&nbsp;
+<script type="text/javascript">
+<!--
+if(window==top) {
+document.writeln('<A HREF="../../allclasses-noframe.html"><B>All Classes</B></A>');
+}
+//-->
+</script>
+<noscript> <A
+HREF="../../allclasses-noframe.html"><B>All
+Classes</B></A>
+</noscript>
+</font></td>
+</tr>
+</tbody>
+</table>
+&nbsp;<br>
+<hr>
+</body></html>
