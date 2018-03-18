@@ -1,11 +1,23 @@
 const int revisionnr = 
-13707
+13719
 ;
 const char* commithash = 
-"6d4bcef5627dcf865ec7601c4670aba88270b391";
+"eb3f74627f09138cd85b7c81ee8825aded8d9d7b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13719 2018-03-18 11:29:56 +0100 model: getRealBlock type correction\n" \
+"13718 2018-03-18 10:39:48 +0100 z21: option rbus added to be able to disable it\n" \
+"13717 2018-03-18 10:25:52 +0100 z21: protver=1 loconet sensor reporting only\n" \
+"13716 2018-03-18 09:56:19 +0100 model: lookup real block in case of a modify\n" \
+"13715 2018-03-18 08:05:51 +0100 routedialog: fix for evaluating the wiring output IDs\n" \
+"13714 2018-03-18 07:56:37 +0100 loc: fix for setting the block enterside and placing\n" \
+"13713 2018-03-17 08:25:43 +0100 loconet: save decoder type for dispatching\n" \
+"13712 2018-03-16 13:59:56 +0100 stage: check if the stage is closed in case of reserve as crossing block\n" \
+"13711 2018-03-16 11:00:11 +0100 z21: support for LocoNet SV programming for LocoIO/GCA50\n" \
+"13710 2018-03-16 10:21:03 +0100 esunavi: reduced speed range to 126\n" \
+"13709 2018-03-16 10:17:00 +0100 z21: removed version workaround, LocoIO setup (wip)\n" \
+"13708 2018-03-16 10:09:53 +0100 issuedlg: replace gt and lt chars with underscores\n" \
 "13707 2018-03-15 07:53:07 +0100 dsd2010: use a turntable event for reporting the position instead of an accessory event\n" \
 "13706 2018-03-14 21:35:34 +0100 model: the iid must match in case of a turntable event\n" \
 "13705 2018-03-14 21:29:18 +0100 model: ignore zero addr/port events for objects other then turntables\n" \
@@ -44,17 +56,5 @@ const char* revlog =
 "13672 2018-03-09 10:28:37 +0100 tt: report new positions to clients (dsd2010)\n" \
 "13671 2018-03-08 15:11:13 +0100 rocrailinidialog: layout correction signal on automatic tab\n" \
 "13670 2018-03-08 15:04:30 +0100 rocrailinidlialog: replaced text fields with spinbuttons in case of integer values on the automatic tab\n" \
-"13669 2018-03-08 11:55:34 +0100 rocrailinidlg: reorganised auto tab\n" \
-"13668 2018-03-08 11:20:34 +0100 dsd2010: swapped the rotation direction\n" \
-"13667 2018-03-08 07:20:38 +0100 gotodlg: use title viablocks in case of multisel\n" \
-"13666 2018-03-07 19:08:02 +0100 dsd2010: sleep little baby sleep\n" \
-"13665 2018-03-07 16:33:01 +0100 guiframe: table menu without sub menus\n" \
-"13664 2018-03-07 15:49:30 +0100 guiframe: reorganised table menu\n" \
-"13663 2018-03-07 14:54:20 +0100 stage: velocity fix at in\n" \
-"13662 2018-03-07 14:18:09 +0100 guiframe: reorganised menu tables\n" \
-"13661 2018-03-07 11:24:07 +0100 guiframe: table menu reorganised\n" \
-"13660 2018-03-07 11:09:13 +0100 guiframe: table menu reorganised\n" \
-"13659 2018-03-07 10:34:00 +0100 seltabdlg: index tab added\n" \
-"13658 2018-03-07 08:26:57 +0100 translation merge: de, nl, pt_BR, sr_latin\n" \
 
 "log end";
