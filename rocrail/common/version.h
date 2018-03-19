@@ -1,11 +1,13 @@
 const int revisionnr = 
-13719
+13721
 ;
 const char* commithash = 
-"eb3f74627f09138cd85b7c81ee8825aded8d9d7b";
+"e15cb929c70c4928477beb8d9e1aba668759d361";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13721 2018-03-19 14:55:07 +0100 route: support for virtual running over a TT by sending it a position event\n" \
+"13720 2018-03-19 11:01:15 +0100 z21: use the fbread attribute to enable or disable evaluating the R-BUS\n" \
 "13719 2018-03-18 11:29:56 +0100 model: getRealBlock type correction\n" \
 "13718 2018-03-18 10:39:48 +0100 z21: option rbus added to be able to disable it\n" \
 "13717 2018-03-18 10:25:52 +0100 z21: protver=1 loconet sensor reporting only\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "13674 2018-03-10 07:57:18 +0100 timetabledlg: added the nowrap td attribute\n" \
 "13673 2018-03-09 10:31:48 +0100 seltab: remove system event listener on delete\n" \
 "13672 2018-03-09 10:28:37 +0100 tt: report new positions to clients (dsd2010)\n" \
-"13671 2018-03-08 15:11:13 +0100 rocrailinidialog: layout correction signal on automatic tab\n" \
-"13670 2018-03-08 15:04:30 +0100 rocrailinidlialog: replaced text fields with spinbuttons in case of integer values on the automatic tab\n" \
 
 "log end";
