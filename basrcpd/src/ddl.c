@@ -396,6 +396,8 @@ static int queue_get(bus_t busnumber, int *addr, char *packet,
 // OBSOLETE
 int setSerialMode(bus_t busnumber, int mode)
 {
+    syslog_bus(busnumber, DBG_WARN, 
+			"obsolete procedure setSerialMode called to set mode %d", mode);
     return 0;
 }
 
@@ -1485,8 +1487,8 @@ static bool refresh_loco_one(bus_t busnumber, bool fast) {
         }
         //Bei Fast Zyklus wird die nächste Lok mit neuem Kommando gesucht,
         //bei "normal" die nächste Lok ohne neues Kommando
-        adr = __DDL->NMRAPacketPool.knownAddresses[refreshInfo -> last_refreshed_mfx_loco];
-      } while (fast != ((time(NULL) - __DDL->NMRAPacketPool.packets[adr] -> timeLastUpdate) <= FAST_REFRESH_TIMEOUT));
+        adr = __DDL->MFXPacketPool.knownAddresses[refreshInfo -> last_refreshed_mfx_loco];
+      } while (fast != ((time(NULL) - __DDL->MFXPacketPool.packets[adr] -> timeLastUpdate) <= FAST_REFRESH_TIMEOUT));
     }
     else {
       //Keine MFX Lok vorhanden -> mit nächstem Protokoll weitermachen
@@ -1563,12 +1565,14 @@ long int compute_delta(struct timeval tv1, struct timeval tv2)
 static bool power_is_off(bus_t busnumber)
 {
     static struct timeval t_rts_on;
-    char msg[110];
+    char msg[110], info[4];
     if (__DDL->CHECKSHORT) {
 		if (buses[busnumber].power_state) {
 			if (checkShortcut(busnumber) == 1) {
             	buses[busnumber].power_state = 0;
                 buses[busnumber].power_changed = 1;
+                info[0] = 2;	info[1] = 0xA;	info[2] = 1;
+                info_mcs(busnumber, 1, 0, info);
                 strcpy(buses[busnumber].power_msg, "SHORTCUT DETECTED");
                 infoPower(busnumber, msg);
                 enqueueInfoMessage(msg);
@@ -1586,14 +1590,17 @@ static bool power_is_off(bus_t busnumber)
             syslog_bus(busnumber, DBG_INFO, "Refresh cycle started.");
         }
         buses[busnumber].power_changed = 0;
+        info[0] = 1;	
+		info[1] = buses[busnumber].power_state;
+        info_mcs(busnumber, 1, 0, info);
         infoPower(busnumber, msg);
         enqueueInfoMessage(msg);
     }
     if (buses[busnumber].power_state == 0) {
         if (usleep(1000) == -1) {
             syslog_bus(busnumber, DBG_ERROR,
-                       "usleep() failed: %s (errno = %d)\n",
-                       strerror(errno), errno);
+                       "usleep() failed in DDL line %d: %s (errno = %d)",
+                       __LINE__, strerror(errno), errno);
         }
         return true;
     }
@@ -1620,7 +1627,7 @@ static void *thr_refresh_cycle(void *v)
     nanosleep_DDL = nanosleep;
     if (__DDL->oslevel == 1) {
 // da eh nur nanosleep gerufen wird        nanosleep_DDL = krnl26_nanosleep;
-
+        
         result = pthread_getschedparam(pthread_self(), &policy, &sparam);
         if (result != 0) {
             syslog_bus(busnumber, DBG_ERROR,
@@ -1638,7 +1645,7 @@ static void *thr_refresh_cycle(void *v)
                        "pthread_setschedparam() failed: %s (errno = %d).",
                        strerror(result), result);
             /*TODO: Add an expressive error message */
-            pthread_exit((void *) 1);
+// HACK:            pthread_exit((void *) 1);
         }
     }
 
@@ -1722,19 +1729,22 @@ static int init_gl_DDL(bus_t bus, gl_data_t * gl, char *optData)
             // - UID: 32 Bit Dekoder UID
             // - "LokName" Der Name der Lok
             // - fx0 .. fx15: 16 Fx Definition, je eine dez. Zahl die die 3 Byte Gruppe und 2 Bytes zusätzliche Informationen enthält.
-            int nelem = sscanf(optData, "%u \"%[^\"]\" %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u", 
+/* TODO:    int nelem = sscanf(optData, "%u \"%[^\"]\" %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u", 
                                &gl->optData.mfx.uid, gl->optData.mfx.name, 
                                &gl->optData.mfx.fx[0], &gl->optData.mfx.fx[1], &gl->optData.mfx.fx[2], &gl->optData.mfx.fx[3],
                                &gl->optData.mfx.fx[4], &gl->optData.mfx.fx[5], &gl->optData.mfx.fx[6], &gl->optData.mfx.fx[7],
                                &gl->optData.mfx.fx[8], &gl->optData.mfx.fx[9], &gl->optData.mfx.fx[10], &gl->optData.mfx.fx[11],
                                &gl->optData.mfx.fx[12], &gl->optData.mfx.fx[13], &gl->optData.mfx.fx[14], &gl->optData.mfx.fx[15]);
-            int result = nelem >= 18 ? SRCP_OK : SRCP_LISTTOOSHORT;
+            int result = nelem >= 18 ? SRCP_OK : SRCP_LISTTOOSHORT;   */
+            return  SRCP_OK;
+/*            int nelem = sscanf(optData, "%u", &gl->optData.mfx.uid);
+            int result = nelem >= 1 ? SRCP_OK : SRCP_LISTTOOSHORT;
             if (result == SRCP_OK) {
               //Mitteilung an MFX damit ggf. neue Lokadresse gesetzt werden kann
               newGLInit(gl->id, gl->optData.mfx.uid);
             }
             return result;
-            break;
+            break; 	*/
     }
     return SRCP_UNSUPPORTEDDEVICEPROTOCOL;
 }
@@ -1819,6 +1829,7 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
     __DDL->ENABLED_PROTOCOLS = (EP_MAERKLIN | EP_NMRADCC);      /* enabled p's */
     __DDL->NMRA_GA_OFFSET = 0;  /* offset for ga base address 0 or 1  */
     __DDL->PROGRAM_TRACK = 1;   /* 0: suppress SM commands to PT address */
+    __DDL->MCS_DEVNAME[0] = 0;	/* if empty you do not use such a device */
 
     xmlNodePtr child = node->children;
     xmlChar *txt = NULL;
@@ -1925,6 +1936,13 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
                 xmlFree(txt);
             }
         }
+        else if (xmlStrcmp(child->name, BAD_CAST "mcs_device") == 0) {
+            txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
+            if (txt != NULL) {
+            	strncpy(__DDL->MCS_DEVNAME, (char *)txt, 15);
+                xmlFree(txt);
+            }
+        }
         else
             syslog_bus(busnumber, DBG_WARN,
                        "WARNING, unknown tag found: \"%s\"!\n",
@@ -1957,7 +1975,7 @@ int init_bus_DDL(bus_t busnumber)
     static char protocols[3] = { '\0', '\0', '\0' };
     int protocol = 0;
 
-    syslog_bus(busnumber, DBG_INFO, "DDL init with debug level %d",
+    syslog_bus(busnumber, DBG_INFO, "DDL start initialization (verbosity = %d).",
                buses[busnumber].debuglevel);
 
     if (buses[busnumber].device.file.fd <= 0) {
@@ -2029,6 +2047,8 @@ int init_bus_DDL(bus_t busnumber)
         init_MFXPacketPool(busnumber);
         protocols[protocol++] = 'X';
     }
+	if (__DDL->MCS_DEVNAME[0]) init_mcs_gateway(busnumber);
+	
     syslog_bus(busnumber, DBG_INFO, "DDL init done");
     buses[busnumber].protocols = protocols;
     return 0;
@@ -2079,7 +2099,8 @@ static void end_bus_thread(bus_thread_t * btd)
                    "pthread_cond_destroy() failed: %s (errno = %d).",
                    strerror(result), result);
     }
-
+    
+	if (__DDL->MCS_DEVNAME[0]) term_mcs_gateway();
     syslog_bus(btd->bus, DBG_INFO, "DDL bus terminated.");
 
     if (__DDL->ENABLED_PROTOCOLS & EP_NMRADCC) {
@@ -2110,8 +2131,8 @@ void *thr_delayedGAResetCmd(void *v)
 
     if (usleep((unsigned long) gatmp->activetime * 1000) == -1) {
         syslog_bus(busnumber, DBG_ERROR,
-                   "usleep() failed: %s (errno = %d)\n",
-                   strerror(errno), errno);
+                   "usleep() failed in DDL line %d: %s (errno = %d)",
+                   __LINE__, strerror(errno), errno);
     }
     gatmp->action = 0;
     syslog_bus(busnumber, DBG_DEBUG,
@@ -2492,8 +2513,8 @@ static void *thr_sendrec_DDL(void *v)
                     if (usleep((unsigned long) gatmp.activetime * 1000) ==
                         -1) {
                         syslog_bus(btd->bus, DBG_ERROR,
-                                   "usleep() failed: %s (errno = %d)\n",
-                                   strerror(errno), errno);
+                                "usleep() failed in DDL line %d: %s (errno = %d)",
+                                __LINE__, strerror(errno), errno);
                     }
                     gatmp.action = 0;
                     syslog_bus(btd->bus, DBG_DEBUG,
@@ -2538,8 +2559,8 @@ static void *thr_sendrec_DDL(void *v)
         }
         if (usleep(3000) == -1) {
             syslog_bus(btd->bus, DBG_ERROR,
-                       "usleep() failed: %s (errno = %d)\n",
-                       strerror(errno), errno);
+                       "usleep() failed in DDL line %d: %s (errno = %d)",
+                       __LINE__, strerror(errno), errno);
         }
     }
 

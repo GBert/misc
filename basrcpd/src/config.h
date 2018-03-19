@@ -18,7 +18,7 @@
 
 
 /* define to 1 if you want canbus support */
-//#define USE_CANBUS 1
+#define USE_CANBUS 1
 
 /* define to 1 if you want ddl support */
 #define USE_DDL 1

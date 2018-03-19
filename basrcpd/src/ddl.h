@@ -121,6 +121,8 @@ typedef struct _DDL_DATA {
     int ENABLED_PROTOCOLS;      /* enabled p's                  */
     int NMRA_GA_OFFSET;         /* offset for ga base address 0/1*/
     int PROGRAM_TRACK;          /* 0: suppress SM commands to PT address */
+   	char MCS_DEVNAME[16];    	/* name of CAN interface for mCS */
+
     int spiLastMM;              //War das letzte Paket ein Märklin Motorola Paket?
     unsigned int uid;           /* Für MFX die UID der Zentrale */
 // OBSOLETE
@@ -162,8 +164,7 @@ typedef struct _DDL_DATA {
     int rdsPipeNew[2]; //FD's für Zugriff auf MFX RDS Auftrags Pipe (Info an RDS Thread, dass es Arbeit gibt).
 
     int oslevel;                /* 0: ancient linux 2.4, 1 linux 2.6 */
-    int program_track;          /* 0: suppress SM commands to PT address */
-
+    
 } DDL_DATA;
 
 int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber);
@@ -239,5 +240,14 @@ void send_packet(bus_t busnumber, char *packet,
 /* calculate difference between two time values and return the
  * difference in microseconds */
 long int compute_delta(struct timeval tv1, struct timeval tv2);
+
+/* start and stop MCS gateway */
+void init_mcs_gateway(bus_t busnumber);
+void term_mcs_gateway(void);
+
+/* mfx specific commands */
+void handle_regcnt(bus_t bus, uint16_t val);
+void handle_mfx_bind_verify(bus_t bus, int cmd, uint32_t uid, uint16_t sid);
+
 
 #endif

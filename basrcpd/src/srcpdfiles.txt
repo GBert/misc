@@ -1,0 +1,120 @@
+﻿Makefile        neu
+	171206	erweitert um check und install
+	1803**	neue Module aufgenommen
+a20hw.c         neu
+a20hw.h         neu
+canbus.c	neu	1803**
+canbus.h	neu	1803**
+clientservice.c unverändert aus Original-srcpd Stand 1710
+    171115  ugly musl workaround
+	171206	übernommen
+clientservice.h unverändert aus Original-srcpd Stand 1710
+config-srcpd.c  aus Sigg-srcpd Rev96, modifiziert -> Original
+	1803**	neue Module aufgenommen
+config-srcpd.h  aus Sigg-srcpd Rev96, modifiziert -> Original
+	1803**	neue Module aufgenommen
+config.h        erzeugt per config-Script, modifiziert 
+	1803**	neue Module aufgenommen
+    ** optimieren          
+ddl.c           aus Sigg-srcpd Rev96, modifiziert BaPi, SPI-Timing
+	1803**	MCS-Anssteuerung eingebaut
+    ** UART-Methoden entfernen
+    ** Config-Variablen überarbeiten
+ddl.h           aus Sigg-srcpd Rev96, original
+	1803**	MCS-Anssteuerung eingebaut
+    ** Config-Variablen überarbeiten
+ddl_maerklin.c  aus Sigg-srcpd Rev96, modifiziert -> Original
+	1803**	GL-Cachezugriff angepasst
+    ** UART-Methoden entfernen
+ddl_maerklin.h  aus Sigg-srcpd Rev96, original
+    171115  Definitionen ergänzt, 1122 übernommen
+ddl_mfx.c       aus Sigg-srcpd Rev96, modifiziert -> Original + BaPi
+    [Gerd: SYSCONFDIR]
+	171206	Log-Ausgaben hinzugefügt
+	1803**	MCS-Anssteuerung eingebaut
+ddl_mfx.h       aus Sigg-srcpd Rev96, modifiziert -> Original
+ddl_nmra.c      aus Sigg-srcpd Rev96, original
+	1803**	kleine Optimierungen
+    ** UART-Methoden entfernen
+ddl_nmra.h      aus Sigg-srcpd Rev96, original
+io.c            aus Original-srcpd Stand 1710, "ttycygwin.h" entfernt. 
+io.h            unverändert aus Original-srcpd Stand 1710
+loopback.c      aus Sigg-srcpd Rev96, modifiziert -> Original
+	1803**	GL-Cachezugriff angepasst
+loopback.h      aus Sigg-srcpd Rev96, modifiziert -> Original
+mcs-gateway.c	neu	1803**
+netservice.c    unverändert aus Original-srcpd Stand 1710
+netservice.h    unverändert aus Original-srcpd Stand 1710
+srcp-command.c  aus Sigg-srcpd Rev96, modifiziert -> Original
+    171115  ugly musl workaround + devgrp, 1122 übernommen
+srcp-command.h  unverändert aus Original-srcpd Stand 1710
+srcp-descr.c    unverändert aus Original-srcpd Stand 1710
+srcp-descr.h    unverändert aus Original-srcpd Stand 1710
+srcp-error.c    unverändert aus Original-srcpd Stand 1710
+srcp-error.h    unverändert aus Original-srcpd Stand 1710
+srcp-fb.c       unverändert aus Original-srcpd Stand 1710
+srcp-fb.h       unverändert aus Original-srcpd Stand 1710
+srcp-ga.c       unverändert aus Original-srcpd Stand 1710
+srcp-ga.h       unverändert aus Original-srcpd Stand 1710
+srcp-gl.c       aus Sigg-srcpd Rev96, modifiziert -> Original
+	1803**	MCS-Anssteuerung eingebaut
+srcp-gl.h       aus Sigg-srcpd Rev96, modifiziert -> Original
+	1803**	MCS-Anssteuerung eingebaut
+srcp-gm.c       unverändert aus Original-srcpd Stand 1710
+srcp-gm.h       unverändert aus Original-srcpd Stand 1710
+srcp-info.c     unverändert aus Original-srcpd Stand 1710
+srcp-info.h     unverändert aus Original-srcpd Stand 1710
+	1803**	MCS-Anssteuerung eingebaut
+srcp-power.c    unverändert aus Original-srcpd Stand 1710
+srcp-power.h    unverändert aus Original-srcpd Stand 1710
+srcp-server.c   unverändert aus Original-srcpd Stand 1710      
+srcp-server.h   unverändert aus Original-srcpd Stand 1710
+srcp-session.c  unverändert aus Original-srcpd Stand 1710
+srcp-session.h  unverändert aus Original-srcpd Stand 1710
+srcp-sm.c       aus Sigg-srcpd Rev96, original
+srcp-sm.h       aus Sigg-srcpd Rev96, original
+srcp-time.c     unverändert aus Original-srcpd Stand 1710
+srcp-time.h     unverändert aus Original-srcpd Stand 1710
+srcpd.c         aus Sigg-srcpd Rev96, modifiziert -> Original + BaPi
+    [Gerd: SYSCONFDIR]
+	171206	lock-Referenzen entfernt, printlog-Option
+syslogmessage.c unverändert aus Original-srcpd Stand 1710
+    171115  va_end im Fehlerzweig ergänzt
+	171206	übernommen und überarbeitet, printlog-Option
+syslogmessage.h unverändert aus Original-srcpd Stand 1710
+	171206	printlog-Option
+toolbox.c       unverändert aus Original-srcpd Stand 1710
+toolbox.h       unverändert aus Original-srcpd Stand 1710
+
+
+Von Original-srcpd und Sigg-srcpd nicht weiterverwendete Dateien:
+dcc-address.c 
+dcc-address.h 
+ddl-s88.c     
+ddl-s88.h     
+hsi-88.c      
+hsi-88.h      
+i2c-dev.c     
+i2c-dev.h     
+ib.c          
+ib.h          
+li100-main.c  
+li100.c       
+li100.h       
+loconet.c     
+loconet.h     
+m605x.c       
+m605x.h       
+portio.c      
+portio.h      
+selectrix.c   
+selectrix.h   
+srcp-lock.c		17**** entfallen, da praktisch leer, vorher Ori-srcpd Stand 1710
+srcp-lock.h		17**** entfallen, da praktisch leer, vorher Ori-srcpd Stand 1710
+ttycygwin.c   
+ttycygwin.h   
+xbee.c        
+xbee.h        
+zimo.c        
+zimo.h        
+

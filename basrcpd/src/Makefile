@@ -14,8 +14,8 @@ INSTDIR = /usr/local/bin
 #
 #rausgespart: can.c   
 
-SRC = clientservice.c config-srcpd.c ddl.c ddl_maerklin.c ddl_mfx.c ddl_nmra.c io.c loopback.c \
-	netservice.c srcp-command.c srcpd.c srcp-descr.c srcp-error.c srcp-fb.c srcp-ga.c \
+SRC = canbus.c clientservice.c config-srcpd.c ddl.c ddl_maerklin.c ddl_mfx.c ddl_nmra.c io.c loopback.c \
+	mcs-gateway.c netservice.c srcp-command.c srcpd.c srcp-descr.c srcp-error.c srcp-fb.c srcp-ga.c \
 	srcp-gl.c srcp-gm.c srcp-info.c srcp-power.c srcp-server.c srcp-session.c \
 	srcp-sm.c srcp-time.c syslogmessage.c toolbox.c a20hw.c
 OBJ = $(patsubst %.c,obj/%.o,$(SRC))

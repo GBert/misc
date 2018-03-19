@@ -147,6 +147,8 @@ enum blockCA_e {
 
 //MFX Verwaltungsthread
 static pthread_t mfxManageThread;
+static uint16_t registrationCounter;
+
 //MFX RDS Feedback thread
 static pthread_t mfxRDSThread;//Global zugängliche Parameter -> Code ist nur für eine DDL Instanz zu gebrauchen...
 static bus_t busnumber;
@@ -217,12 +219,14 @@ static bool waitRDS() {
  *            Minimale Länge muss für alles ausreichend sein:
  *            Länge UID und fx max 10, Name 16+2 plus Spaces
  */
-void getMFXInitParam(uint32_t uid, char *name, uint32_t *fx, char *msg) {
-  sprintf(msg + strlen(msg), " %u \"%s\"", uid, name);
+void getMFXInitParam(uint32_t uid, /*char *name, uint32_t *fx,*/ char *msg) 
+{
+  sprintf(msg + strlen(msg), " %u", uid);
+/*  sprintf(msg + strlen(msg), " %u \"%s\"", uid, name);
   int i;
   for (i = 0; i<MFX_FX_COUNT; i++) {
     sprintf(msg + strlen(msg), " %u", fx[i]);
-  }
+  }	*/
 }
 
 /**
@@ -230,9 +234,10 @@ void getMFXInitParam(uint32_t uid, char *name, uint32_t *fx, char *msg) {
  * @param gl Lok, zu der die MFX spezifischen INIT Paramater ermittelt werden sollen.
  * @param msg Message, an die die Paramater gehängt werden sollen.
  */
-void describeGLmfx(gl_data_t *gl, char *msg) {
+void describeGLmfx(gl_data_t *gl, char *msg) 
+{
   if (gl->protocol == 'X') {
-    getMFXInitParam(gl->optData.mfx.uid, gl->optData.mfx.name, gl->optData.mfx.fx, msg);
+    getMFXInitParam(gl->optData.mfx.uid, /* gl->optData.mfx.name, gl->optData.mfx.fx,*/ msg);
   }
 }
 
@@ -365,7 +370,7 @@ int comp_mfx_loco(int address, int direction,
   memset(packetstream, 0, PKTSIZE);
 
   syslog_bus(busnumber, DBG_DEBUG,
-             "command for MFX protocol received \naddr:%d "
+             "command for MFX protocol received addr:%d "
              "dir:%d speed:%d nspeeds:%d nfunc:%d",
              address, direction, speed, nspeed, nfuncs);
   /* no special error handling, it's job of the clients */
@@ -602,7 +607,7 @@ static bool sendSearchNewDecoder(unsigned int countUIDBits, uint32_t *dekoderUID
  */
 void assignSID(uint32_t dekoderUID, unsigned int sid) {
   //printf("New SID=%d für UID=%u\n", sid, dekoderUID);
-  syslog_bus(busnumber, DBG_INFO, "New SID=%d für UID=%u\n", sid, dekoderUID);
+  syslog_bus(busnumber, DBG_INFO, "New SID=%d for UID=%u\n", sid, dekoderUID);
   char packetstream[PKTSIZE];
   memset(packetstream, 0, PKTSIZE);
   //Format des Bitstreams:
@@ -1079,7 +1084,7 @@ static void *thr_mfxManageThread(void *threadParam) {
   //UID dieser Zentrale
   uint32_t uid = ddl -> uid;
   //Neuanmeldezähler mit letztem gespeichertem Wert laden
-  uint16_t registrationCounter = loadRegistrationCounter();
+  /*uint16_t*/ registrationCounter = loadRegistrationCounter();
   syslog_bus(busnumber, DBG_INFO, "ReRegistration counter = %d", registrationCounter);
   //Aktuelle Lok SID für periodische Dekoder Existenzabfrage
   int lokAdrExist = 0;
@@ -1146,7 +1151,7 @@ static void *thr_mfxManageThread(void *threadParam) {
               //<UID> <"Lokname"> <fx0> .. <fx15>
               char optData[(MFX_FX_COUNT + 1) * (10+1) + 16 + 2 + 1 + 10]; //Länge UID und fx max 10, Name 16+2 plus Spaces und etwas Reserve ...
               optData[0] = 0;
-              getMFXInitParam(dekoderUID, lokName, lokFunktionen, optData);
+              getMFXInitParam(dekoderUID, /*lokName, lokFunktionen,*/ optData);
               //printf("INIT MFX Lok Optdata: %s\n", optData);
               if (cacheInitGL(busnumber, adresse, 'X', 0, 128, MFX_FX_COUNT, optData) != SRCP_OK) {
                 syslog_bus(busnumber, DBG_ERROR, "MFX cacheInitGL fail");
@@ -1587,4 +1592,20 @@ int smMfxGetCA(int address, int blockNr, int ca, int caIndex, int index) {
     return smMfxGetCV(address, cv, index);
   }
   return -1;
+}
+
+
+// new from R.M. in 2018
+
+
+void handle_regcnt(bus_t bus, uint16_t val)
+{
+	registrationCounter = val;
+	syslog_bus(bus, DBG_INFO, "** mfx RegCount set to %x", val);
+}
+
+void handle_mfx_bind_verify(bus_t bus, int cmd, uint32_t uid, uint16_t sid)
+{
+	syslog_bus(bus, DBG_INFO,
+		"***** Interface für mfx bind / verify noch nicht implementiert");
 }

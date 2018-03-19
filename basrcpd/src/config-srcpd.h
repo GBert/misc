@@ -57,6 +57,7 @@ typedef unsigned long int sessionid_t;
 #define SERVER_LOCONET         12    /* Loconet Gateway */
 #define SERVER_DCCAR           13    /* DC-Car Gateway */
 #define SERVER_XBEE            14    /* Digi XBee Modules */
+#define SERVER_CANBUS          15    /* CANBUS Gateway */
 
 /* generic flags */
 #define USE_WATCHDOG          0x0001 /* use watchdog */
