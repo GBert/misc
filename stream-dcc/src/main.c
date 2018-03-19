@@ -1,4 +1,4 @@
-#include <pic16f1704.h>
+#include <pic16f1705.h>
  #include <stdint.h>
 
 static __code uint16_t __at (_CONFIG1) configword1 = _FOSC_INTOSC & _WDTE_OFF & _MCLRE_ON & _CP_OFF & _PWRTE_OFF & _BOREN_OFF & _CLKOUTEN_OFF;
