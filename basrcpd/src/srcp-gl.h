@@ -13,15 +13,19 @@
 
 /* locomotive decoder */
 typedef struct _GLSTATE {
-    int state;                  /* 0==dead, 1==living, 2==terminating */
+    char state;                  /* 0==dead, 1==living, 2==terminating */
     char protocol;
-    int protocolversion;
-    int n_func;
-    int n_fs;
-    int id;                     /* address  */
-    int speed;                  /* Sollgeschwindigkeit skal. auf 0..14 */
-    int direction;              /* 0/1/2                               */
-    int funcs;                  /* Fx..F1, F                           */
+    char protocolversion;
+    char n_func;
+    uint16_t id;                /* address  */
+    uint8_t  n_fs;
+    uint8_t  speed;                  /* Sollgeschwindigkeit skal. auf 0..14 */
+    char direction;              /* 0/1/2                               */
+    uint32_t funcs;             /* Fx, F1, ... F31                     */
+    uint32_t funcschange;
+    uint8_t	 speedchange;
+    uint8_t  cachedspeed; 
+    char cacheddirection;  	   
     struct timeval tv;          /* Last time of change                 */
     struct timeval inittime;
     struct timeval locktime;
@@ -33,8 +37,8 @@ typedef struct _GLSTATE {
       //Bei MFX Protokoll
       struct {
         uint32_t uid;
-        char name[17];
-        uint32_t fx[16];
+//      char name[17];
+//      uint32_t fx[16];
       } mfx;
     } optData; 
 } gl_data_t;
@@ -71,5 +75,10 @@ void unlock_gl_bytime(void);
 int describeLOCKGL(bus_t bus, int addr, char *reply);
 void debugGL(bus_t busnumber, int start, int end);
 int resetAllGL(bus_t bus);
+
+int handle_mcs_prot(bus_t bus, uint32_t locid, int val);
+int handle_mcs_speed(bus_t bus, uint32_t locid, int val);
+int handle_mcs_dir(bus_t bus, uint32_t locid, int val);
+int handle_mcs_func(bus_t bus, uint32_t locid, int funr, int val);
 
 #endif

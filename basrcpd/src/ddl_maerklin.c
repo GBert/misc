@@ -104,7 +104,7 @@ int comp_maerklin_1(bus_t busnumber, int address, int direction,
         || speed > 15 || direction < 0 || direction > 1)
         return 1;
     cacheGetGL(busnumber, address, &loco);
-    if (direction != loco.direction) {
+    if (direction != loco.cacheddirection) {
         speed = 1;
     }
 
@@ -570,7 +570,7 @@ int comp_maerklin_27(bus_t busnumber, int address, int direction,
      */
 
     cacheGetGL(busnumber, address, &loco);
-    speed_old = loco.speed;
+    speed_old = loco.cachedspeed;
 
     acceleration = (speed_old < speed);
 

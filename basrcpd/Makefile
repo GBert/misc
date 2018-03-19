@@ -1,4 +1,4 @@
-# Copyright (C) 2013 OpenWrt.org
+# Copyright (C) 2018 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 # http://sourceforge.net/projects/srcpd/files/srcpd/2.1.2/srcpd-2.1.2.tar.gz/download
 
 PKG_NAME:=basrcpd
-PKG_VERSION:=1711
+PKG_VERSION:=1803
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_PARALLEL:=1

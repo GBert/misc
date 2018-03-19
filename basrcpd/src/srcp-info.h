@@ -23,5 +23,6 @@
 int doInfoClient(session_node_t*);
 void startup_INFO();
 int enqueueInfoMessage(char *);
+int info_mcs(bus_t bus, uint16_t infoid, uint32_t itemid, char * info);
 
 #endif

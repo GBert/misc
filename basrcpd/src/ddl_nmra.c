@@ -664,7 +664,7 @@ int protocol_nmra_sm_write_cvbyte_pom(bus_t busnumber, int address, int cv,
     int adr = 0;
 
     syslog_bus(busnumber, DBG_DEBUG,
-               "command for PoM %d received \naddr:%d CV:%d value:%d",
+               "command for PoM %d received addr:%d CV:%d value:%d",
                mode, address, cv, value);
     cv -= 1;
     /* do not allow to change the address on the main ==> cv 1 is disabled */
@@ -718,8 +718,8 @@ int protocol_nmra_sm_write_cvbit_pom(bus_t busnumber, int address, int cv,
     int adr = 0;
 
     syslog_bus(busnumber, DBG_DEBUG,
-               "command for PoM %d received \naddr:%d CV:%d value:%d",
-               mode, address, cv, value);
+               "command for PoM %d received addr:%d CV:%d bit:%d value:%d",
+               mode, address, cv, bit, value);
     cv -= 1;
     /* do not allow to change the address on the main ==> cv 1 is disabled */
     if (address < 1 || address > 10239 || cv < 1 || cv > 1023
@@ -859,8 +859,8 @@ static int waitUARTempty_scanACK(bus_t busnumber)
     } while (!value);
 
     /* if power is on do not turn it off */
-    if (!buses[busnumber].power_state)
-        tcflow(buses[busnumber].device.file.fd, TCOOFF);
+//    if (!buses[busnumber].power_state)
+//        tcflow(buses[busnumber].device.file.fd, TCOOFF);
     return ack;
 }
 
@@ -1013,7 +1013,7 @@ static int protocol_nmra_sm_phregister(bus_t bus, int reg, int value,
     }
 
     setSerialMode(bus, SDM_NMRA);
-    tcflow(buses[bus].device.file.fd, TCOON);
+//    tcflow(buses[bus].device.file.fd, TCOON);
 
     l = write(buses[bus].device.file.fd, SendStream, y);
     if (l == -1) {
@@ -1094,7 +1094,7 @@ static int protocol_nmra_sm_page(bus_t bus, int page, int reg, int value,
     y = 50 * is_size + 54 * rs_size + 30 * j + 10 * k;
 
     setSerialMode(bus, SDM_NMRA);
-    tcflow(buses[bus].device.file.fd, TCOON);
+//    tcflow(buses[bus].device.file.fd, TCOON);
 
     l = write(buses[bus].device.file.fd, SendStream, y);
     if (l == -1) {
@@ -1222,7 +1222,7 @@ static int protocol_nmra_sm_direct_cvbyte(bus_t busnumber, int cv,
     }
 
     setSerialMode(busnumber, SDM_NMRA);
-    tcflow(buses[busnumber].device.file.fd, TCOON);
+//    tcflow(buses[busnumber].device.file.fd, TCOON);
     result = write(buses[busnumber].device.file.fd, SendStream, l);
     if (result == -1) {
         syslog_bus(busnumber, DBG_ERROR,
@@ -1317,7 +1317,7 @@ static int protocol_nmra_sm_direct_cvbit(bus_t bus, int cv, int bit,
     l = 30 * is_size + 15 * rs_size + 20 * j;
 
     setSerialMode(bus, SDM_NMRA);
-    tcflow(buses[bus].device.file.fd, TCOON);
+//    tcflow(buses[bus].device.file.fd, TCOON);
     result = write(buses[bus].device.file.fd, SendStream, l);
     if (result == -1) {
         syslog_bus(bus, DBG_ERROR,

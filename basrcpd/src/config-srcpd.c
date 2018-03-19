@@ -71,6 +71,10 @@
 #include "xbee.h"
 #endif
 
+#ifdef USE_CANBUS
+#include "canbus.h"
+#endif
+
 #include "syslogmessage.h"
 
 
@@ -320,7 +324,13 @@ static bus_t register_bus(bus_t busnumber, xmlDocPtr doc, xmlNodePtr node)
             syslog_bus(0, DBG_ERROR, DISABLE_MSG, child->name);
 #endif
         }
-
+        else if (xmlStrcmp(child->name, BAD_CAST "canbus") == 0) {
+#ifdef USE_CANBUS
+            busnumber += readconfig_CANBUS(doc, child, busnumber);
+#else
+            syslog_bus(0, DBG_ERROR, DISABLE_MSG, child->name);
+#endif
+        }
 
         /* some attributes are common for all (real) buses */
         else if (xmlStrcmp(child->name, BAD_CAST "device") == 0) {

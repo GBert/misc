@@ -373,7 +373,7 @@ static void handle_gl_command(bus_t bus)
 
       if (gltmp.direction == 2) {
         gltmp.speed = 0;
-        gltmp.direction = !glakt.direction;
+        gltmp.direction = !glakt.cacheddirection;
       }
       cacheSetGL(bus, addr, gltmp);
     }
