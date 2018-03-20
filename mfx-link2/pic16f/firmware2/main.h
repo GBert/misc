@@ -23,7 +23,7 @@
 
 #define I2C_BAUDRATE	100000
 
-#define BAUDRATE	100000
+#define BAUDRATE	115200
 #define USE_BRG16	0
 #define USE_BRGH	1
 
@@ -64,6 +64,8 @@ void putchar_wait(unsigned char c);
 void puts_rom(const char *c);
 void init_usart(void);
 char fifo_putchar(struct serial_buffer *fifo);
+char putchar_fifo(char c, struct serial_buffer *fifo);
+char getchar_fifo(struct serial_buffer *fifo);
 char print_rom_fifo(const unsigned char * s, struct serial_buffer *fifo);
 void print_debug_value(char c, unsigned char value);
 void print_debug_fifo(struct serial_buffer *fifo);

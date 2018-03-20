@@ -28,7 +28,7 @@ volatile uint16_t pulse_low = 75;
 volatile uint8_t timer0_counter;
 volatile uint16_t adc_poti;
 volatile uint16_t adc_sense;
-
+volatile uint8_t complete, c;
 
 void interrupt ISR(void) {
     if (CCP1IF) {
@@ -41,6 +41,23 @@ void interrupt ISR(void) {
 	    CCPR1 += pulse_low;
 	}
     }
+
+    if (RCIF) {
+	RCIF = 0;
+	CREN = 0;
+	if (RC1REG == 0x0a)
+	    complete = 1;
+	putchar_fifo(RC1REG, &rx_fifo);
+    }
+
+    if (TXIF) {
+	TXIF = 0;
+	if ( c = getchar_fifo (&tx_fifo))
+	    TX1REG = c;
+	else
+	    TXIE = 0;
+    }
+
     if (TMR0IF && TMR0IE) {
 	TMR0IF = 0;
 	TMR0 = TIMER0_VAL;
@@ -187,7 +204,7 @@ void uart_init(void) {
 
     SPBRG = SBRG_VAL;		// calculated by defines
 
-    RCIF = 0;
+    RCIF = 1;
 }
 
 void timer0_init(void) {
@@ -290,9 +307,33 @@ char nibble_to_hex(uint8_t c) {
     return (nibble);
 }
 
+void command_parser() {
+    char c;
+
+    if (c = getchar_fifo(&rx_fifo)) {
+	switch (c) {
+	case 'F':
+	    pulse_high = 13;
+	    pulse_low = 13;
+	    break;
+	case 'M':
+	    pulse_high = 13;
+	    pulse_low = 26;
+	    break;
+	case 'S':
+	    pulse_high = 26;
+	    pulse_low = 26;
+	    break;
+	}
+	putchar_fifo(c, &tx_fifo);
+	/* start USART transmit */
+	TXIE = 1;
+    }
+}
+
 void main(void) {
     uint8_t counter = 0;
-    uint8_t temp;
+    uint8_t temp, c;
     uint16_t ad_value;
 
     pps_init();
@@ -315,6 +356,14 @@ void main(void) {
     LCD_init(LCD_01_ADDRESS);
 
     while (1) {
+	/* command complete */
+	if (complete) {
+	    complete = 0;
+	    while (c = getchar_fifo(&rx_fifo) != 0)
+		putchar_fifo(c, &tx_fifo);
+	    TXIE = 1;
+	}
+	    
 	if (counter == 0) {
 	    // temp = ad(AD_SENSE);
 	    /* 14mA per digit / atomic read */
@@ -330,7 +379,6 @@ void main(void) {
 	    LCD_puts(LCD_01_ADDRESS, "  On      0.0%\0");
 	    //LATCbits.LATC0 = 1;
 	    //LATCbits.LATC0 ^= 1;
-	    putchar_wait(0x55);
 	    // LATA0 ^= 1;
 	    LATC5 ^= 1;
 	}

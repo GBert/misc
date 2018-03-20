@@ -11,7 +11,7 @@
 
 const char *sData = " Data: ";
 
-/* prints char on USART if pssible */
+/* prints char on USART if possible */
 char putchar(unsigned char c) {
     if (TRMT) {
 	TXREG1 = c;
@@ -59,15 +59,6 @@ void print_debug_fifo(struct serial_buffer *fifo) {
     putchar_wait(' ');
     print_debug_value('M', SERIAL_BUFFER_SIZE_MASK);
     putchar_wait(' ');
-//    print_debug_value('H',fifo->head);
-//    putchar_wait(' ');
-//    print_debug_value('T',fifo->tail);
-//    putchar_wait(' ');
-//    puts_rom(sData);
-/*    for (i=0; i<SERIAL_BUFFER_SIZE; i++) {
-        print_hex_wait(fifo->data[i]);
-        putchar_wait(' ');
-    }*/
     putchar_wait('\r');
     putchar_wait('\n');
 }
@@ -76,22 +67,43 @@ void print_debug_fifo(struct serial_buffer *fifo) {
 char fifo_putchar(struct serial_buffer *fifo) {
     unsigned char tail;
     tail = fifo->tail;
-    print_debug_fifo(fifo);
+    // print_debug_fifo(fifo);
     if (fifo->head != tail) {
 	tail++;
 	tail &= SERIAL_BUFFER_SIZE_MASK;	/* wrap around if neededd */
-
-	putchar_wait('f');
-	print_debug_value('T', fifo->tail);
-	putchar_wait(' ');
-	print_debug_value('T', tail);
-	putchar_wait('\r');
-	putchar_wait('\n');
 
 	if (putchar(fifo->data[tail])) {
 	    fifo->tail = tail;
 	    return 1;
 	}
+    }
+    return 0;
+}
+
+/* place char into fifo */
+char putchar_fifo(char c, struct serial_buffer *fifo) {
+    unsigned char head;
+    head = fifo->head;
+    head++;
+    head &= SERIAL_BUFFER_SIZE_MASK;	/* wrap around if neededd */
+    if (head != fifo->tail) {
+        fifo->head = head;
+        fifo->data[head] = c;
+        return 1;
+    };
+    return 0;
+}
+
+char getchar_fifo(struct serial_buffer *fifo) {
+    unsigned char tail;
+    char c;
+    tail = fifo->tail;
+    if (tail != fifo->head) {
+        tail++;
+        tail &= SERIAL_BUFFER_SIZE_MASK;	/* wrap around if neededd */
+	c = fifo->data[tail];
+	fifo->tail = tail;
+	return c;
     }
     return 0;
 }
