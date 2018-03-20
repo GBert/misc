@@ -45,10 +45,10 @@ void interrupt ISR(void) {
 
     if (RCIF) {
 	RCIF = 0;
-	CREN = 0;
 	if (RC1REG == 0x0a)
 	    complete = 1;
 	putchar_fifo(RC1REG, &rx_fifo);
+	LATC3 ^= 1;
     }
 
     if (TXIF) {
@@ -157,7 +157,7 @@ void system_init(void) {
     TRISB5 = 0;
     TRISB6 = 0;
     TRISC0 = 1;
-    TRISC3 = 1;	/***/	/* Rail Data */
+    TRISC3 = 0;	/***/	/* Rail Data */
     TRISC4 = 0;		/* CCP1 */
     TRISB4 = 0;		/* Enable */
     TRISC5 = 0;		/* LED */
@@ -167,7 +167,7 @@ void system_init(void) {
     TMR1IF = 0;
     CCP1IF = 0;
     //activate interrupt bits
-    CCP1IE = 1;			// disable interrupt on CCP1 will be check by polling as of today
+    CCP1IE = 1;			// start
     PEIE = 1;
     GIE = 1;
 }
@@ -205,7 +205,7 @@ void uart_init(void) {
 
     SPBRG = SBRG_VAL;		// calculated by defines
 
-    RCIF = 1;
+    RCIE = 1;
 }
 
 void timer0_init(void) {
