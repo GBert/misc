@@ -11,12 +11,13 @@
 #include "main.h"
 #include "i2c_lcd.h"
 #include "lcd.h"
+#include "utils.h"
 
 #pragma config FOSC=INTOSC, PLLEN=OFF, MCLRE=ON, WDTE=OFF
 #pragma config LVP=ON, CLKOUTEN=OFF
 
   /* DCC DC	58us		*/
-  /* MM1 M1	26us 		*/
+  /* MM1 M1	26us		*/
   /* MM2 M2	52us		*/
   /* mfx M4	50us		*/
   /* slx SX	40us + 10us	*/
@@ -52,7 +53,7 @@ void interrupt ISR(void) {
 
     if (TXIF) {
 	TXIF = 0;
-	if ( c = getchar_fifo (&tx_fifo))
+	if (c = getchar_fifo(&tx_fifo))
 	    TX1REG = c;
 	else
 	    TXIE = 0;
@@ -113,7 +114,7 @@ void pps_init(void) {
     RXPPS = 0b10001;		// input  EUSART RX -> RC1
     RC2PPS = 0b10100;		// RC2 output TX/CK
     /* CLC */
-    /* RB4PPS = 0b00100;		// LC1OUT -> ENABLE */
+    /* RB4PPS = 0b00100;	// LC1OUT -> ENABLE */
     /* COG */
     // COGINPPS = 0b10011;	// RC3 PULSE
     RC4PPS = 0b01100;
@@ -257,22 +258,22 @@ void cog_init(void) {
     COG1FIS = 0b00010000;	/* CCP1 falling event	*/
     COG1FSIM = 0x0;		/* no falling delay	*/
 
-    COG1ASD0 = 0;	/* don't use shutdown		*/
+    COG1ASD0 = 0;		/* don't use shutdown           */
     COG1ASD1 = 0;
 
-    COG1STR = 0;	/* don't use steering control	*/
-    COG1DBR = 0;	/* no dead band			*/
+    COG1STR = 0;		/* don't use steering control   */
+    COG1DBR = 0;		/* no dead band                 */
     COG1DBF = 0;
-    COG1BLKR = 0;	/* don't use blanking		*/
+    COG1BLKR = 0;		/* don't use blanking           */
     COG1BLKF = 0;
-    COG1PHR = 0;	/* normal phase			*/
+    COG1PHR = 0;		/* normal phase                 */
     COG1PHF = 0;
 
     COG1CON0 = 0b10001100;
-	      /* 1-------	G1EN COG1 Enable
-		 -0------	G1LD0 no buffer
-		 ---01---	G1CS Fosc clock source
-		 -----100	G1MD COG Half Bridge mode */
+              /* 1-------       G1EN COG1 Enable
+                 -0------       G1LD0 no buffer
+                 ---01---       G1CS Fosc clock source
+                 -----100       G1MD COG Half Bridge mode */
 
 }
 
@@ -299,16 +300,9 @@ uint8_t ad(uint8_t channel) {
     return (ADRESH);
 }
 
-char nibble_to_hex(uint8_t c) {
-    char nibble;
-    nibble = (c & 0x0f) + '0';
-    if (nibble >= 0x3a)
-	nibble += 7;
-    return (nibble);
-}
-
 void command_parser() {
-    char c;
+    char c, cn;
+    uint8_t tmp;
 
     if (c = getchar_fifo(&rx_fifo)) {
 	switch (c) {
@@ -323,6 +317,12 @@ void command_parser() {
 	case 'S':
 	    pulse_high = 26;
 	    pulse_low = 26;
+	    break;
+	case 'T':
+	    pulse_high = hex_to_byte(&rx_fifo);
+	    pulse_low =  hex_to_byte(&rx_fifo);
+	    break;
+	default:
 	    break;
 	}
 	putchar_fifo(c, &tx_fifo);
@@ -351,7 +351,7 @@ void main(void) {
     rx_fifo.head = 0;
     rx_fifo.tail = 0;
 
-    LATB4 = 1;		/* enable	*/
+    LATB4 = 1;		/* enable       */
     GIE = 1;
     LCD_init(LCD_01_ADDRESS);
 
@@ -363,7 +363,7 @@ void main(void) {
 		putchar_fifo(c, &tx_fifo);
 	    TXIE = 1;
 	}
-	    
+
 	if (counter == 0) {
 	    // temp = ad(AD_SENSE);
 	    /* 14mA per digit / atomic read */
