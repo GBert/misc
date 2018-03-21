@@ -1,11 +1,19 @@
 const int revisionnr = 
-13721
+13729
 ;
 const char* commithash = 
-"e15cb929c70c4928477beb8d9e1aba668759d361";
+"6fb8e85104b40333c2a046e41fa94d1ec549c545";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13729 2018-03-21 15:44:03 +0100 block: ignore an absent event in case of running in automatic mode\n" \
+"13728 2018-03-21 11:05:38 +0100 renderer: mapping fix for dcrossingright-tr-l-occ\n" \
+"13727 2018-03-21 09:14:02 +0100 dcrossing fix (Martin)\n" \
+"13726 2018-03-21 09:09:10 +0100 tt: virtual automatic support in case of embeded block\n" \
+"13725 2018-03-21 08:25:44 +0100 tttrackdialog: fix for evaluating\n" \
+"13724 2018-03-20 10:20:25 +0100 renderer: mapping correction for dcrossing right\n" \
+"13723 2018-03-20 08:50:23 +0100 analyse,tt: typo fix\n" \
+"13722 2018-03-20 07:53:52 +0100 blockdialog, routedialog: disable adding the same loco into the include and exclude list\n" \
 "13721 2018-03-19 14:55:07 +0100 route: support for virtual running over a TT by sending it a position event\n" \
 "13720 2018-03-19 11:01:15 +0100 z21: use the fbread attribute to enable or disable evaluating the R-BUS\n" \
 "13719 2018-03-18 11:29:56 +0100 model: getRealBlock type correction\n" \
@@ -48,13 +56,5 @@ const char* revlog =
 "13682 2018-03-11 10:43:32 +0100 dialogs: fill comboboxes with string arrays to speed up init\n" \
 "13681 2018-03-10 17:19:31 +0100 dsd2010: trce level correction\n" \
 "13680 2018-03-10 14:16:02 +0100 rocguiinidlg: moved the help url to the path tab\n" \
-"13679 2018-03-10 14:09:05 +0100 roco: use sensor group byte as bus number\n" \
-"13678 2018-03-10 13:35:18 +0100 tttrackdialog: block ID appended with blank\n" \
-"13677 2018-03-10 11:19:18 +0100 mvtrack: tracelevel changed for init sensors\n" \
-"13676 2018-03-10 08:45:15 +0100 block: do not check in case of lock for crossing if the locking ID is an existing loco\n" \
-"13675 2018-03-10 08:26:32 +0100 renderer: use transparent brush for drawing the turntable outer circle\n" \
-"13674 2018-03-10 07:57:18 +0100 timetabledlg: added the nowrap td attribute\n" \
-"13673 2018-03-09 10:31:48 +0100 seltab: remove system event listener on delete\n" \
-"13672 2018-03-09 10:28:37 +0100 tt: report new positions to clients (dsd2010)\n" \
 
 "log end";
