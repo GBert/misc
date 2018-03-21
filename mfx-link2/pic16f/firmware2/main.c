@@ -46,10 +46,10 @@ void interrupt ISR(void) {
     if (RCIF) {
 	RCIF = 0;
 
-	if (RC1REG == 0x0d)
-	    complete = 1;
 	if (RC1REG != 0x0a)
 	    putchar_fifo(RC1REG, &rx_fifo);
+	if (RC1REG == 0x0d)
+	    complete = 1;
 	LATC3 ^= 1;
     }
 
