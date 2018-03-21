@@ -24,10 +24,10 @@
  * avoid rounding errors
  */
 
-#if USE_BRGH == 0
-#define	SBRG_VAL	( (((_XTAL_FREQ / BAUDRATE) / 32) - 1) / 2 )
-#else
+#if USE_BRGH == 1
 #define	SBRG_VAL	( (((_XTAL_FREQ / BAUDRATE) / 8) - 1) / 2 )
+#else
+#define	SBRG_VAL	( (((_XTAL_FREQ / BAUDRATE) / 32) - 1) / 2 )
 #endif
 
 

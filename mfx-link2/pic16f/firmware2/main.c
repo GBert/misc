@@ -12,6 +12,7 @@
 #include "i2c_lcd.h"
 #include "lcd.h"
 #include "utils.h"
+#include "timings.h"
 
 #pragma config FOSC=INTOSC, PLLEN=OFF, MCLRE=ON, WDTE=OFF
 #pragma config LVP=ON, CLKOUTEN=OFF
@@ -45,7 +46,6 @@ void interrupt ISR(void) {
 
     if (RCIF) {
 	RCIF = 0;
-
 	if (RC1REG != 0x0a)
 	    putchar_fifo(RC1REG, &rx_fifo);
 	if (RC1REG == 0x0d)
@@ -204,9 +204,7 @@ void uart_init(void) {
     RX9 = 0;			// 8-bit reception
     CREN = 1;			// enable receiver
     BRG16 = USE_BRG16;		// 8-bit baud rate generator
-
     SPBRG = SBRG_VAL;		// calculated by defines
-
     RCIE = 1;
 }
 
@@ -361,9 +359,10 @@ void main(void) {
 	/* command complete */
 	if (complete) {
 	    complete = 0;
-	    while ((c = getchar_fifo(&rx_fifo)) != 0)
-		putchar_fifo(c, &tx_fifo);
-	    TXIE = 1;
+	    //while ((c = getchar_fifo(&rx_fifo)) != 0)
+	    //	putchar_fifo(c, &tx_fifo);
+	    //TXIE = 1;
+	    command_parser();
 	}
 
 	if (counter == 0) {
