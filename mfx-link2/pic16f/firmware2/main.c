@@ -361,7 +361,7 @@ void main(void) {
 	/* command complete */
 	if (complete) {
 	    complete = 0;
-	    while (c = getchar_fifo(&rx_fifo) != 0)
+	    while ((c = getchar_fifo(&rx_fifo)) != 0)
 		putchar_fifo(c, &tx_fifo);
 	    TXIE = 1;
 	}
