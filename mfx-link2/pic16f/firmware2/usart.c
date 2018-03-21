@@ -101,8 +101,8 @@ char getchar_fifo(struct serial_buffer *fifo) {
     if (tail != fifo->head) {
         tail++;
         tail &= SERIAL_BUFFER_SIZE_MASK;	/* wrap around if neededd */
-	c = fifo->data[tail];
 	fifo->tail = tail;
+	c = fifo->data[tail];
 	return c;
     }
     return 0;

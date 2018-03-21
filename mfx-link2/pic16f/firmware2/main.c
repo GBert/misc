@@ -40,11 +40,9 @@ void interrupt ISR(void) {
 
     if (RCIF) {
 	RCIF = 0;
-	if (RC1REG != 0x0a)
-	    putchar_fifo(RC1REG, &rx_fifo);
+	putchar_fifo(RC1REG, &rx_fifo);
 	if (RC1REG == 0x0d)
 	    complete = 1;
-	LATC3 ^= 1;
     }
 
     if (TXIF) {
@@ -56,6 +54,7 @@ void interrupt ISR(void) {
     }
 
     if (TMR0IF && TMR0IE) {
+	LATC3 = 1;
 	TMR0IF = 0;
 	TMR0 = TIMER0_VAL;
 	LATC4 ^= 1;
@@ -84,6 +83,7 @@ void interrupt ISR(void) {
 		adc_sense >>= 1;
 	    }
 	}
+	LATC3 = 0;
     }
 }
 
@@ -301,18 +301,22 @@ void command_parser() {
     if (c = getchar_fifo(&rx_fifo)) {
 	switch (c) {
 	case 'F':
+	    putchar_fifo('*', &tx_fifo);
 	    pulse_high = 13;
 	    pulse_low = 13;
 	    break;
 	case 'M':
+	    putchar_fifo('*', &tx_fifo);
 	    pulse_high = 13;
 	    pulse_low = 26;
 	    break;
 	case 'S':
+	    putchar_fifo('*', &tx_fifo);
 	    pulse_high = 26;
 	    pulse_low = 26;
 	    break;
 	case 'T':
+	    putchar_fifo('*', &tx_fifo);
 	    pulse_high = hex_to_byte(&rx_fifo);
 	    pulse_low =  hex_to_byte(&rx_fifo);
 	    break;
@@ -353,16 +357,16 @@ void main(void) {
 	/* command complete */
 	if (complete) {
 	    complete = 0;
-	    //while ((c = getchar_fifo(&rx_fifo)) != 0)
-	    //	putchar_fifo(c, &tx_fifo);
-	    //TXIE = 1;
 	    command_parser();
+	    while ((c = getchar_fifo(&rx_fifo)) != 0)
+		putchar_fifo(c, &tx_fifo);
+	    TXIE = 1;
 	}
 
 	if (counter == 0) {
 	    // temp = ad(AD_SENSE);
 	    /* 14mA per digit / atomic read */
-	    GIE = 0;
+	    GIE = 1;
 	    ad_value = adc_sense * 14;
 	    temp = adc_poti;
 	    GIE = 1;
