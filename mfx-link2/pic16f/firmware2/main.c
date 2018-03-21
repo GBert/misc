@@ -17,12 +17,6 @@
 #pragma config FOSC=INTOSC, PLLEN=OFF, MCLRE=ON, WDTE=OFF
 #pragma config LVP=ON, CLKOUTEN=OFF
 
-  /* DCC DC	58us		*/
-  /* MM1 M1	26us		*/
-  /* MM2 M2	52us		*/
-  /* mfx M4	50us		*/
-  /* slx SX	40us + 10us	*/
-
 struct serial_buffer tx_fifo, rx_fifo;
 
 volatile uint16_t pulse_high = 25;
