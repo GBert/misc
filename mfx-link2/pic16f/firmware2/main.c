@@ -69,8 +69,7 @@ void interrupt ISR(void) {
 	    /* check if ADC completed) */
 	    } else if (!ADGO) {
 		/* use sliding average */
-		adc_poti += ADRESL;
-		adc_poti >>= 1;
+		adc_poti = (adc_poti + ADRESL) >> 1;
 	    }
 	} else {
 	    if (timer0_counter & 0x01) {
@@ -79,8 +78,7 @@ void interrupt ISR(void) {
 	    /* check if ADC completed) */
 	    } else if (!ADGO) {
 		/* use sliding average */
-		adc_sense += ADRESL;
-		adc_sense >>= 1;
+		adc_sense = (adc_sense + ADRESL) >> 1;
 	    }
 	}
 	LATC3 = 0;
