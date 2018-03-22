@@ -60,6 +60,8 @@ struct serial_buffer {
 
 void delay_ms(uint16_t ms);
 char putchar(unsigned char c);
+void putc(char c);
+char getc(void);
 void putchar_wait(unsigned char c);
 void puts_rom(const char *c);
 void init_usart(void);

@@ -10,6 +10,7 @@
 #include "usart.h"
 
 const char *sData = " Data: ";
+extern struct serial_buffer rx_fifo, tx_fifo;
 
 /* prints char on USART if possible */
 char putchar(unsigned char c) {
@@ -94,6 +95,18 @@ char putchar_fifo(char c, struct serial_buffer *fifo) {
     return 0;
 }
 
+/* simplfied for ISR */
+void putc(char c) {
+    unsigned char head;
+    head = rx_fifo.head;
+    head++;
+    head &= SERIAL_BUFFER_SIZE_MASK;	/* wrap around if neededd */
+    if (head != rx_fifo.tail) {
+        rx_fifo.head = head;
+        rx_fifo.data[head] = c;
+    };
+}
+
 char getchar_fifo(struct serial_buffer *fifo) {
     unsigned char tail;
     char c;
@@ -104,6 +117,19 @@ char getchar_fifo(struct serial_buffer *fifo) {
 	fifo->tail = tail;
 	c = fifo->data[tail];
 	return c;
+    }
+    return 0;
+}
+
+/* simplified for ISR */
+char getc() {
+    unsigned char tail;
+    tail = tx_fifo.tail;
+    if (tail != tx_fifo.head) {
+        tail++;
+        tail &= SERIAL_BUFFER_SIZE_MASK;	/* wrap around if neededd */
+	tx_fifo.tail = tail;
+	return tx_fifo.data[tail];
     }
     return 0;
 }

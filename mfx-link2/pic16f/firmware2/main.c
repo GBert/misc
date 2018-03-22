@@ -40,7 +40,7 @@ void interrupt ISR(void) {
 
     if (RCIF) {
 	RCIF = 0;
-	putchar_fifo(RC1REG, &rx_fifo);
+	putc(RC1REG);
 	if (RC1REG == 0x0d)
 	    complete = 1;
     }
