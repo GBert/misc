@@ -47,7 +47,7 @@ void interrupt ISR(void) {
 
     if (TXIF) {
 	TXIF = 0;
-	if (c = getchar_fifo(&tx_fifo))
+	if (c = getc())
 	    TX1REG = c;
 	else
 	    TXIE = 0;
