@@ -19,8 +19,8 @@
 
 struct serial_buffer tx_fifo, rx_fifo;
 
-volatile uint16_t pulse_high = 25;
-volatile uint16_t pulse_low = 75;
+uint16_t pulse_high @ 0x2A0;
+uint16_t pulse_low  @ 0x2A2;
 volatile uint8_t timer0_counter;
 volatile uint16_t adc_poti;
 volatile uint16_t adc_sense;
@@ -340,6 +340,9 @@ void main(void) {
     timer0_init();
     timer1_init();
     cog_init();
+
+    pulse_high = 40;
+    pulse_low = 20;
 
     /* empty circular buffers */
     tx_fifo.head = 0;
