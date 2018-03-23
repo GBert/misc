@@ -1,11 +1,17 @@
 const int revisionnr = 
-13729
+13735
 ;
 const char* commithash = 
-"6fb8e85104b40333c2a046e41fa94d1ec549c545";
+"42b95d00e4ab01fec12b7a56075a4b1976833ad7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13735 2018-03-23 11:41:31 +0100 rocpro,bidib: accext support added\n" \
+"13734 2018-03-23 08:48:57 +0100 z21: usesamesensorbus option added for all LocoNet type sensors on bus 1\n" \
+"13733 2018-03-22 14:13:56 +0100 z21: removed the rbus option\n" \
+"13732 2018-03-22 14:02:10 +0100 z21: bus test correction\n" \
+"13731 2018-03-22 14:00:39 +0100 z21: trace for type LN detector input\n" \
+"13730 2018-03-22 08:17:54 +0100 bidib: POM accessory support added\n" \
 "13729 2018-03-21 15:44:03 +0100 block: ignore an absent event in case of running in automatic mode\n" \
 "13728 2018-03-21 11:05:38 +0100 renderer: mapping fix for dcrossingright-tr-l-occ\n" \
 "13727 2018-03-21 09:14:02 +0100 dcrossing fix (Martin)\n" \
@@ -50,11 +56,5 @@ const char* revlog =
 "13688 2018-03-12 08:20:32 +0100 blockdialog: init comboboxes\n" \
 "13687 2018-03-12 08:01:28 +0100 roco: fix for fbmods > 10\n" \
 "13686 2018-03-11 15:27:00 +0100 schedulegraph: skip relative timing schedules\n" \
-"13685 2018-03-11 15:09:52 +0100 locodialog, blockdialog: init comboboxes\n" \
-"13684 2018-03-11 13:48:51 +0100 blockdialog: init\n" \
-"13683 2018-03-11 12:07:38 +0100 item: only use the reported bridge position in case it is set\n" \
-"13682 2018-03-11 10:43:32 +0100 dialogs: fill comboboxes with string arrays to speed up init\n" \
-"13681 2018-03-10 17:19:31 +0100 dsd2010: trce level correction\n" \
-"13680 2018-03-10 14:16:02 +0100 rocguiinidlg: moved the help url to the path tab\n" \
 
 "log end";
