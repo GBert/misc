@@ -21,6 +21,8 @@ struct serial_buffer tx_fifo, rx_fifo;
 
 uint16_t pulse_high @ 0x2A0;
 uint16_t pulse_low  @ 0x2A2;
+uint8_t  rx_data @ 0x1A0;
+uint8_t  tx_data @ 0x1A1;
 volatile uint8_t timer0_counter;
 volatile uint16_t adc_poti;
 volatile uint16_t adc_sense;
@@ -40,17 +42,21 @@ void interrupt ISR(void) {
 
     if (RCIF) {
 	RCIF = 0;
-	putc(RC1REG);
+	rx_data = RC1REG;
+	//**putc(RC1REG);
 	if (RC1REG == 0x0d)
 	    complete = 1;
     }
 
     if (TXIF) {
 	TXIF = 0;
-	if (c = getc())
-	    TX1REG = c;
-	else
+	//if (c = getc())
+	if (tx_data) {
+	    TX1REG = tx_data;
+	    tx_data = 0;
+	} else {
 	    TXIE = 0;
+	}
     }
 
     if (TMR0IF && TMR0IE) {
@@ -355,6 +361,15 @@ void main(void) {
     LCD_init(LCD_01_ADDRESS);
 
     while (1) {
+	if (rx_data) {
+	   putc(rx_data);
+	   rx_data = 0;
+	}
+	if (!tx_data) {
+	    tx_data=getc();
+	    TXIE = 1;
+	}
+
 	/* command complete */
 	if (complete) {
 	    complete = 0;
