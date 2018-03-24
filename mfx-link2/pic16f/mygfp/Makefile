@@ -6,6 +6,8 @@
 #
 #------------------------------------------------------------------------------
 
+PROCESSOR	= 16F1709
+
 GPASM:=$(shell gpasm -l 2>/dev/null)
 ifeq ($(strip $(GPASM)),)
 $(error gputils unavailable)
@@ -21,12 +23,17 @@ build:$(AOBJECT)
 
 $(AOBJECT):$(AHEADER) Makefile
 
+all: mygfp.hex
+
 %.hex:%.asm
 	@echo -n "[AS] "
 	$(AS) $< -o $@
 
+flash: all
+	pk2cmd -B/usr/share/pickit2 -PPIC$(PROCESSOR) -Fmygfp.hex -M -R -T
+
 upload:build
-	easy-loader -v /dev/ttyPL2303 $(AOBJECT)
+	easy-loader -v /dev/ttyUSBx $(AOBJECT)
 
 install:build
 
