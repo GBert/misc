@@ -41,16 +41,12 @@ void interrupt ISR(void) {
     }
 
     if (RCIF) {
-	RCIF = 0;
 	rx_data = RC1REG;
-	//**putc(RC1REG);
 	if (RC1REG == 0x0d)
 	    complete = 1;
     }
 
     if (TXIF) {
-	TXIF = 0;
-	//if (c = getc())
 	if (tx_data) {
 	    TX1REG = tx_data;
 	    tx_data = 0;
@@ -59,7 +55,8 @@ void interrupt ISR(void) {
 	}
     }
 
-    if (TMR0IF && TMR0IE) {
+    //if (TMR0IF && TMR0IE) {
+    if (TMR0IF) {
 	LATC3 = 1;
 	TMR0IF = 0;
 	TMR0 = TIMER0_VAL;
@@ -112,6 +109,7 @@ void pps_init(void) {
     RA4PPS = 0b10001;		// RA4 output SDA
     /* USART */
     RXPPS = 0b10001;		// input  EUSART RX -> RC1
+    LATC2 = 1;			// void first byte error
     RC2PPS = 0b10100;		// RC2 output TX/CK
     /* CLC */
     /* RB4PPS = 0b00100;	// LC1OUT -> ENABLE */
@@ -209,7 +207,7 @@ void uart_init(void) {
 void timer0_init(void) {
     TMR0CS = 0;			// FOSC / 4
     PSA = 0;			// use prescaler
-    PS1 = 1;			// prescaler 1:8
+    PS0 = 0;			// prescaler 1:8
     TMR0 = TIMER0_VAL;
     TMR0IE = 1;
 }
@@ -376,16 +374,12 @@ void main(void) {
 	    command_parser();
 	    while ((c = getchar_fifo(&rx_fifo)) != 0)
 		putchar_fifo(c, &tx_fifo);
-	    TXIE = 1;
 	}
-
-	if (counter == 0) {
+	if (timer0_counter == 0) {
 	    // temp = ad(AD_SENSE);
 	    /* 14mA per digit / atomic read */
-	    GIE = 1;
 	    ad_value = adc_sense * 14;
 	    temp = adc_poti;
-	    GIE = 1;
 	    LCD_putcmd(LCD_01_ADDRESS, LCD_CLEAR, 1);
 	    LCD_puts(LCD_01_ADDRESS, "Booster Max=8.0A\0");
 	    LCD_goto(LCD_01_ADDRESS, 2, 1);
@@ -397,8 +391,5 @@ void main(void) {
 	    // LATA0 ^= 1;
 	    LATC5 ^= 1;
 	}
-	delay_ms(4);
-
-	counter++;
     }
 }
