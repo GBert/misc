@@ -29,6 +29,7 @@ volatile uint16_t adc_sense;
 volatile uint8_t complete, c;
 
 void interrupt ISR(void) {
+    LATC3 = 1;
     if (CCP1IF) {
 	CCP1IF = 0;
 	if (CCP1M0) {
@@ -41,15 +42,15 @@ void interrupt ISR(void) {
     }
 
     if (RCIF) {
-	rx_data = RC1REG;
+	putc(RC1REG);
 	if (RC1REG == 0x0d)
 	    complete = 1;
     }
 
     if (TXIF) {
+	tx_data=getc();
 	if (tx_data) {
 	    TX1REG = tx_data;
-	    tx_data = 0;
 	} else {
 	    TXIE = 0;
 	}
@@ -57,10 +58,8 @@ void interrupt ISR(void) {
 
     //if (TMR0IF && TMR0IE) {
     if (TMR0IF) {
-	LATC3 = 1;
 	TMR0IF = 0;
 	TMR0 = TIMER0_VAL;
-	LATC4 ^= 1;
 
 	timer0_counter++;
 	/* kind of state machine
@@ -84,8 +83,8 @@ void interrupt ISR(void) {
 		adc_sense = (adc_sense + ADRESL) >> 1;
 	    }
 	}
-	LATC3 = 0;
     }
+    LATC3 = 0;
 }
 
 /* RA4 SDA I2C
@@ -359,21 +358,12 @@ void main(void) {
     LCD_init(LCD_01_ADDRESS);
 
     while (1) {
-	if (rx_data) {
-	   putc(rx_data);
-	   rx_data = 0;
-	}
-	if (!tx_data) {
-	    tx_data=getc();
-	    TXIE = 1;
-	}
-
 	/* command complete */
 	if (complete) {
 	    complete = 0;
-	    command_parser();
+	    //command_parser();
 	    while ((c = getchar_fifo(&rx_fifo)) != 0)
-		putchar_fifo(c, &tx_fifo);
+	    	putchar_fifo(c, &tx_fifo);
 	}
 	if (timer0_counter == 0) {
 	    // temp = ad(AD_SENSE);
