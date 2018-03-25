@@ -63,6 +63,13 @@ TOGGLE_C3	MACRO
 		MOVLW   b'000001000'
 		XORWF   LATC,F
 		ENDM
+
+;------------------------------------------------------------------------------
+
+		CBLOCK	0x0070
+		PULSE_LOW	: 2
+		PULSE_HIGH	: 2
+		ENDC
 		
 ;------------------------------------------------------------------------------
 
@@ -71,10 +78,29 @@ TOGGLE_C3	MACRO
 
 		ORG	0x0004
 ISR
+		; CCP1
 		BANKSEL	PIR1
 		BTFSS	PIR1,CCP1IF
 		GOTO    ISRNEXT1
+		;
 		BCF	PIR1,CCP1IF
+		BANKSEL	CCP1M0
+		BTFSS	CCP1CON,CCP1M0
+		GOTO	ISRCCP1LOW
+		BCF	CCP1CON,CCP1M0
+		MOVF	LOW PULSE_LOW,W
+		ADDWF	CCPR1L,F
+		MOVF	HIGH PULSE_LOW,W
+		GOTO	ISRCCP1END
+ISRCCP1LOW
+		;
+		BANKSEL	CCP1CON
+		BSF	CCP1CON,CCP1M0
+		MOVF	LOW PULSE_HIGH,W
+		ADDWF	CCPR1L,F
+		MOVF	HIGH PULSE_LOW,W
+ISRCCP1END
+		ADDWFC	CCPR1H,F
 
 ISRNEXT1
 		; UART
@@ -153,10 +179,19 @@ INIT
 		BANKSEL	PIR1
 		CLRF    PIR1
 
+		; init all peripherals
 		CALL	INITGPIO
 		CALL	INITPPS
 		CALL	INITUART
 		CALL	INITTIMER
+		CALL	INITCOG
+
+		CLRF	HIGH PULSE_LOW
+		MOVLW	20
+		MOVWF	LOW PULSE_LOW
+		CLRF	HIGH PULSE_HIGH
+		MOVLW	40
+		MOVWF	LOW PULSE_HIGH
 
 		BSF	INTCON,TMR0IE
 		BSF	INTCON,PEIE	; Init. ISR
@@ -173,6 +208,7 @@ MAIN
 #INCLUDE	"pps.inc"
 #INCLUDE	"uart.inc"
 #INCLUDE	"timer.inc"
+#INCLUDE	"cog.inc"
 
 ;------------------------------------------------------------------------------
 THE
