@@ -1,11 +1,14 @@
 const int revisionnr = 
-13735
+13738
 ;
 const char* commithash = 
-"42b95d00e4ab01fec12b7a56075a4b1976833ad7";
+"52746e0923e3fce933bd0259eddddeaf7a4e7686";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13738 2018-03-24 12:18:39 +0100 locdialog: speed++ changed in speed +/-\n" \
+"13737 2018-03-24 11:07:14 +0100 block: extra freeonenter option route added\n" \
+"13736 2018-03-24 10:35:04 +0100 loc: BBT key speed++ added (block enter side)\n" \
 "13735 2018-03-23 11:41:31 +0100 rocpro,bidib: accext support added\n" \
 "13734 2018-03-23 08:48:57 +0100 z21: usesamesensorbus option added for all LocoNet type sensors on bus 1\n" \
 "13733 2018-03-22 14:13:56 +0100 z21: removed the rbus option\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13691 2018-03-12 12:20:45 +0100 tt: dsd2010 next/prev fixes\n" \
 "13690 2018-03-12 11:28:53 +0100 bidib: report absent in case a railcom sensor lost a loco\n" \
 "13689 2018-03-12 10:55:01 +0100 tt: dsd2010 set rotation direction in case of next or prev track\n" \
-"13688 2018-03-12 08:20:32 +0100 blockdialog: init comboboxes\n" \
-"13687 2018-03-12 08:01:28 +0100 roco: fix for fbmods > 10\n" \
-"13686 2018-03-11 15:27:00 +0100 schedulegraph: skip relative timing schedules\n" \
 
 "log end";
