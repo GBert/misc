@@ -14,7 +14,7 @@
 ; UART Baud Rate Generator (FOSC / BAUDRATE / 4 - 1)
 ;------------------------------------------------------------------------------
 
-#DEFINE UBAUD   ((((CLOCK / BAUDRATE) / 8) - 1) / 2)
+#DEFINE UBAUD   ((((CLOCK / BAUDRATE) / 2) - 1) / 2)
 #IF UBAUD > 65535
     ERROR       "UART BRG overflow"
 #ENDIF
