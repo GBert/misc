@@ -1,4 +1,4 @@
-RS422 R&uuml;chmelder
+RS422 R&uuml;ckmelder
 =====================
 
 Ziel: einfach (leichter Nachbau), preiswert und robust / kompatibel
