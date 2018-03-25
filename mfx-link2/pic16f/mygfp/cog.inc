@@ -1,6 +1,6 @@
 ;------------------------------------------------------------------------------
 ;
-; My GFP Timer
+; My GFP - COG Complementary Outpute Generator
 ;
 ; Copyright (c) 2018 Gerhard Bertelsmann
 ;
@@ -15,9 +15,11 @@
 INITCOG
 		BANKSEL	COG1CON0
 		CLRF	COG1CON0
+		CLRF	COG1CON1
 		MOVLW	b'000010000'
 		MOVWF	COG1RIS
 		CLRF	COG1RSIM
+		MOVLW	b'000010000'
 		MOVWF	COG1FIS
 		CLRF	COG1FSIM
 		CLRF	COG1ASD0
@@ -30,6 +32,5 @@ INITCOG
 		CLRF	COG1PHR
 		CLRF	COG1PHF
 		MOVLW	b'10001100'
-		CLRF	COG1CON0
-                RETURN
-
+		MOVWF	COG1CON0
+		RETURN
