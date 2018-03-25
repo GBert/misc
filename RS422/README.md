@@ -14,7 +14,7 @@ Ideensammlung:
 - ASCII Protokoll SLCAN -> M*rklin CAN bzw. XnTCP
 - gerichtet wie S88 mit Richtung auf - zur Zentrale - und ab - von der Zentrale weg -
 - Aufbau mit RJ45 incl. Stromversorgung (Inline Power &uuml;ber nicht benutzte Adern)
-- Adernpaare wie Fastethernet 12 36 / "PoE" &uuml;ber restlich Adern
+- Adernpaare wie Fastethernet 12 36 / "PoE" &uuml;ber restliche Adern
 - Umsetzung auf Ethernet (can2udp bzw. XnTCPd)
 
 Platform
@@ -24,7 +24,7 @@ SN75179
 Router A5-V11 - f&uuml;r LAN
 libopencm3
 
-Aber auch andere Paltformen - bevorzugt MCUs mit 2xUART
+Aber auch andere Platformen - bevorzugt MCUs mit 2xUART
 
 
 
