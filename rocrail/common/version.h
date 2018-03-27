@@ -1,11 +1,19 @@
 const int revisionnr = 
-13738
+13746
 ;
 const char* commithash = 
-"52746e0923e3fce933bd0259eddddeaf7a4e7686";
+"937ef5de9fc3e72d5354d624c366267ff792d275";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13746 2018-03-27 13:40:21 +0200 rocpro: take over value from DIP\n" \
+"13745 2018-03-27 11:34:55 +0200 tt,action: fixes for broadcasting new state\n" \
+"13744 2018-03-27 10:33:59 +0200 tt,traverser: closed symbols, fix for keep state\n" \
+"13743 2018-03-26 08:45:48 +0200 translation merge: sl,pr_BR,sr_latin,de,nl\n" \
+"13742 2018-03-26 08:23:05 +0200 action,control: time set trace added\n" \
+"13741 2018-03-25 13:58:54 +0200 loc: fix for BBT speed!!!\n" \
+"13740 2018-03-25 10:23:08 +0200 timedactions: added open/close as commands to the turntable\n" \
+"13739 2018-03-25 09:11:50 +0200 tt: regard close state in case of embedded block\n" \
 "13738 2018-03-24 12:18:39 +0100 locdialog: speed++ changed in speed +/-\n" \
 "13737 2018-03-24 11:07:14 +0100 block: extra freeonenter option route added\n" \
 "13736 2018-03-24 10:35:04 +0100 loc: BBT key speed++ added (block enter side)\n" \
@@ -48,13 +56,5 @@ const char* revlog =
 "13699 2018-03-13 11:17:31 +0100 tt: optional skip range to avoid running with the bridge into a gap\n" \
 "13698 2018-03-13 09:23:15 +0100 block: use also bidi direction in case of a generated loco\n" \
 "13697 2018-03-13 09:21:18 +0100 xmlscript: allow multiple case values separated with pipes\n" \
-"13696 2018-03-12 18:14:08 +0100 roco: trace fix for sensors\n" \
-"13695 2018-03-12 16:14:19 +0100 routedialog: set command combo with array\n" \
-"13694 2018-03-12 16:03:13 +0100 timedactions: init ID combo with array\n" \
-"13693 2018-03-12 13:59:02 +0100 roco: group offset fix\n" \
-"13692 2018-03-12 13:52:22 +0100 roco: fix for info byte group 1\n" \
-"13691 2018-03-12 12:20:45 +0100 tt: dsd2010 next/prev fixes\n" \
-"13690 2018-03-12 11:28:53 +0100 bidib: report absent in case a railcom sensor lost a loco\n" \
-"13689 2018-03-12 10:55:01 +0100 tt: dsd2010 set rotation direction in case of next or prev track\n" \
 
 "log end";
