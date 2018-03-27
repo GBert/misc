@@ -28,6 +28,11 @@ U7	LM7805
 Y1	16MHz Quarz
 ```
 
+Aufbau
+------
+Die CAN-Anbindung erfolgt bei der Nutzung des ISO1050 über P7 mit VCOM (7-24V), GND, CANL und CANH.
+Sollte ein MCP2562 eingesetzt werden erfolgt die Anbindung über P3. 
+
 Nutzung
 -------
 
