@@ -72,6 +72,7 @@ TOGGLE_C3	MACRO
 		PULSE_LOW	: 2
 		PULSE_HIGH	: 2
 		B_SAVE		: 1
+		TMR0_COUNT	: 1
 		ENDC
 		
 ;------------------------------------------------------------------------------
@@ -131,6 +132,7 @@ ISRNEXT3
 		MOVLW	TIMER0_VAL
 		BANKSEL	TMR0
 		MOVWF	TMR0
+		INCF	TMR0_COUNT
 
 ISRNEXT4
 		CLR_C3
@@ -190,6 +192,7 @@ INIT
 		CALL	INITCOG
 		CALL	INITI2C
 
+		CLRF	TMR0_COUNT
 		CLRF	HIGH PULSE_LOW
 		MOVLW	10
 		MOVWF	LOW PULSE_LOW
@@ -205,7 +208,18 @@ INIT
 		BSF	PIE1,CCP1IE
 
 MAIN
-		BRA	MAIN
+		; ELO
+		BTFSS	TMR0_COUNT,7
+		BRA	LED_N1
+		BANKSEL	LATC
+		BSF	LATC,5
+		BRA	MAIN_NEXT1
+LED_N1
+		BANKSEL	LATC
+		BCF	LATC,5
+
+MAIN_NEXT1
+		GOTO	MAIN
 
 
 #INCLUDE	"pps.inc"
@@ -213,6 +227,7 @@ MAIN
 #INCLUDE	"timer.inc"
 #INCLUDE	"cog.inc"
 #INCLUDE	"i2c.inc"
+#INCLUDE	"i2c_lcd.inc"
 
 ;------------------------------------------------------------------------------
 THE

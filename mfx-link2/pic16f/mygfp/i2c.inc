@@ -9,7 +9,12 @@
 		LIST
 		RADIX   DEC
 
-#DEFINE         SSP1ADD_VAL     ( (((CLOCK / I2C_BAUDRATE) / 2) - 1) / 2) 
+#DEFINE         SSP1ADD_VAL     ( (((CLOCK / I2C_BAUDRATE) / 2) - 1) / 2)
+
+		CBLOCK 0x02a0
+		I2C_ADDR	: 1
+		I2C_DATA	: 1
+		ENDC
 
 ;------------------------------------------------------------------------------
 ; Init. I2C
@@ -45,9 +50,19 @@ I2C_START
 		BSF	SSP1CON2,SEN
 		RETURN
 	
-I2C_START
+I2C_STOP
 		CALL	I2C_WAIT
 		BANKSEL	SSP1CON2
 		BCF	SSP1CON2,SEN
+		RETURN
+
+I2C_WRITE
+		CALL	I2C_WAIT
+		BANKSEL	SSP1STAT
+		MOVFW	I2C_DATA
+		MOVWF	SSP1BUF
+		MOVLW	255
+		BTFSS	SSP1STAT,WCOL
+		CLRF	0
 		RETURN
 
