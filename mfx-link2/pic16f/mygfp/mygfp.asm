@@ -216,6 +216,8 @@ MAIN
 		BRA	MAIN_NEXT1
 LED_N1
 		BANKSEL	LATC
+		BTFSS	LATC,5		; look for change
+		BRA	MAIN_NEXT1	; used as trigger 128 * 4ms = 512 ms
 		BCF	LATC,5
 
 MAIN_NEXT1

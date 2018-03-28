@@ -11,7 +11,7 @@
 
 #DEFINE         SSP1ADD_VAL     ( (((CLOCK / I2C_BAUDRATE) / 2) - 1) / 2)
 
-		CBLOCK 0x02a0
+		CBLOCK 0x0220
 		I2C_ADDR	: 1
 		I2C_DATA	: 1
 		ENDC
