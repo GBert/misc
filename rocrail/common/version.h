@@ -1,11 +1,18 @@
 const int revisionnr = 
-13755
+13762
 ;
 const char* commithash = 
-"16e2296062e47012acae69d5e840cbfc5465d2fd";
+"f7cdb35e6c7b2bb56d0aeba63194959398a99cbd";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13762 2018-03-29 15:54:35 +0200 rocnetnode: clock dot banging\n" \
+"13761 2018-03-29 15:11:04 +0200 rocnetnode: fix for nrclocks\n" \
+"13760 2018-03-29 14:45:24 +0200 rocnetnode: clock brightness setup added\n" \
+"13759 2018-03-29 13:23:33 +0200 rocnetnode: clock dot step 1 1000ms in case div > 1\n" \
+"13758 2018-03-29 12:18:00 +0200 rocnetnode: clock dot step every 5 model seconds\n" \
+"13757 2018-03-29 12:09:24 +0200 rocnetnode: clock running dot in case divider > 1\n" \
+"13756 2018-03-29 12:06:12 +0200 rocnetnode: clock running dots in case divider > 1\n" \
 "13755 2018-03-29 11:46:30 +0200 rocnetnode: flash clock colon only if divider is 1\n" \
 "13754 2018-03-29 11:12:25 +0200 rocnetnode: clock support\n" \
 "13753 2018-03-29 11:08:19 +0200 rocnetnode: clock support (WIP)\n" \
@@ -49,12 +56,5 @@ const char* revlog =
 "13715 2018-03-18 08:05:51 +0100 routedialog: fix for evaluating the wiring output IDs\n" \
 "13714 2018-03-18 07:56:37 +0100 loc: fix for setting the block enterside and placing\n" \
 "13713 2018-03-17 08:25:43 +0100 loconet: save decoder type for dispatching\n" \
-"13712 2018-03-16 13:59:56 +0100 stage: check if the stage is closed in case of reserve as crossing block\n" \
-"13711 2018-03-16 11:00:11 +0100 z21: support for LocoNet SV programming for LocoIO/GCA50\n" \
-"13710 2018-03-16 10:21:03 +0100 esunavi: reduced speed range to 126\n" \
-"13709 2018-03-16 10:17:00 +0100 z21: removed version workaround, LocoIO setup (wip)\n" \
-"13708 2018-03-16 10:09:53 +0100 issuedlg: replace gt and lt chars with underscores\n" \
-"13707 2018-03-15 07:53:07 +0100 dsd2010: use a turntable event for reporting the position instead of an accessory event\n" \
-"13706 2018-03-14 21:35:34 +0100 model: the iid must match in case of a turntable event\n" \
 
 "log end";
