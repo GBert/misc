@@ -35,8 +35,8 @@ INITUART
                 MOVLW   LOW  (UBAUD)
                 MOVWF   SPBRG
 
-                ; Enable 9-bit Mode + Enable Transmit + High Speed Mode + BIT9 = 1
-                MOVLW   (1 << TX9) + (1 << TXEN) + (1 << BRGH) + (1 << TX9D)
+                ; Enable Transmit + High Speed Mode + BIT9 = 1
+                MOVLW   (1 << TXEN) + (1 << BRGH) + (1 << TX9D)
                 MOVWF   TXSTA
 INITUARTAGAIN
                 ; Disable Rx ring ISR
