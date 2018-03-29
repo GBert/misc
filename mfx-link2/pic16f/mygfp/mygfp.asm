@@ -140,6 +140,15 @@ ISRNEXT4
 
 ;---------------------------------------
 
+		; RA4 SDA I2C
+		; RA5 SCL I2C
+		; RC1 RxD UART
+		; RC2 TxD UART
+		; RC3 Rail Signal
+		; RB5 RPWM
+		; RB6 LPWM
+		; RC3 CCP1  -> debugging
+
 INITGPIO
 		BANKSEL	ANSELA
 		MOVLW	b'00000100'	; RA2 analog
@@ -158,6 +167,7 @@ INITGPIO
 		MOVWF	ADCON1
 		CLRF	ADCON2
 
+		; define RA4&RA5 as inputs for I2C as described in the docs
 		MOVLW	b'00110100'
 		BANKSEL	TRISA
 		MOVWF	TRISA
