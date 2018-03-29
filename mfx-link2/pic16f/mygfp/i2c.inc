@@ -21,13 +21,18 @@
 ;------------------------------------------------------------------------------
 INITI2C
 		BANKSEL	SSP1CON1
-		MOVLW	b'11010110'
+		MOVLW	b'00101000'
+			; --1-----   SSPEN Synchronous Serial Port Enable bit
+			; ----1000   I2C Master mode, clock = F OSC / (4 * (SSPxADD+1))
 		MOVWF	SSP1CON1
 		CLRF	SSP1CON2
 		CLRF	SSP1CON3
 		MOVLW	SSP1ADD_VAL
 		MOVWF	SSP1ADD
 		MOVLW	b'11000000'
+			; 1-------   1 = Slew rate control disabled for Standard Speed mode (100 kHz and 1 MHz)
+			; -1------   1 = Enable input logic so that thresholds are compliant with SMBus specification
+			; --0-----   0 = Indicates that the last byte received or transmitted was address
 		MOVWF	SSP1STAT
 		RETURN
 

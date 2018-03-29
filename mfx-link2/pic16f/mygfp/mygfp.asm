@@ -219,6 +219,7 @@ LED_N1
 		BTFSS	LATC,5		; look for change
 		BRA	MAIN_NEXT1	; used as trigger 128 * 4ms = 512 ms
 		BCF	LATC,5
+		CALL	I2C_TEST
 
 MAIN_NEXT1
 		GOTO	MAIN
