@@ -1,11 +1,20 @@
 const int revisionnr = 
-13746
+13755
 ;
 const char* commithash = 
-"937ef5de9fc3e72d5354d624c366267ff792d275";
+"16e2296062e47012acae69d5e840cbfc5465d2fd";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13755 2018-03-29 11:46:30 +0200 rocnetnode: flash clock colon only if divider is 1\n" \
+"13754 2018-03-29 11:12:25 +0200 rocnetnode: clock support\n" \
+"13753 2018-03-29 11:08:19 +0200 rocnetnode: clock support (WIP)\n" \
+"13752 2018-03-29 10:47:52 +0200 rocnetnode: clock support (WIP)\n" \
+"13751 2018-03-29 08:35:51 +0200 rocnetnode: trace I2C scan\n" \
+"13750 2018-03-29 08:08:14 +0200 rocnet: clock config added\n" \
+"13749 2018-03-28 11:44:54 +0200 rocnetnode: clock display support (WIP)\n" \
+"13748 2018-03-28 10:37:18 +0200 rocprodlg: take over values after a DIP OK/Apply\n" \
+"13747 2018-03-28 03:49:11 +0200 location: scheduletable on/off command added\n" \
 "13746 2018-03-27 13:40:21 +0200 rocpro: take over value from DIP\n" \
 "13745 2018-03-27 11:34:55 +0200 tt,action: fixes for broadcasting new state\n" \
 "13744 2018-03-27 10:33:59 +0200 tt,traverser: closed symbols, fix for keep state\n" \
@@ -47,14 +56,5 @@ const char* revlog =
 "13708 2018-03-16 10:09:53 +0100 issuedlg: replace gt and lt chars with underscores\n" \
 "13707 2018-03-15 07:53:07 +0100 dsd2010: use a turntable event for reporting the position instead of an accessory event\n" \
 "13706 2018-03-14 21:35:34 +0100 model: the iid must match in case of a turntable event\n" \
-"13705 2018-03-14 21:29:18 +0100 model: ignore zero addr/port events for objects other then turntables\n" \
-"13704 2018-03-14 10:47:34 +0100 z21: use protver=1 for loconet transponder address 1 offset (DR5088)\n" \
-"13703 2018-03-14 08:52:53 +0100 xmlscript: resolve clock variables\n" \
-"13702 2018-03-14 07:33:52 +0100 bidib: POM and PT traces corrected\n" \
-"13701 2018-03-13 15:54:00 +0100 seltabdlg,textdialog: close dialog on OK in case nothing is selected or empty\n" \
-"13700 2018-03-13 11:30:43 +0100 tt: syntax fixes\n" \
-"13699 2018-03-13 11:17:31 +0100 tt: optional skip range to avoid running with the bridge into a gap\n" \
-"13698 2018-03-13 09:23:15 +0100 block: use also bidi direction in case of a generated loco\n" \
-"13697 2018-03-13 09:21:18 +0100 xmlscript: allow multiple case values separated with pipes\n" \
 
 "log end";
