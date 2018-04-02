@@ -1,11 +1,40 @@
 const int revisionnr = 
-13762
+13791
 ;
 const char* commithash = 
-"f7cdb35e6c7b2bb56d0aeba63194959398a99cbd";
+"ba0607c150d64826b437b2260103eaa9b047e260";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13791 2018-04-02 16:36:40 +0200 z21: adjust loconetdetector reported sensor address\n" \
+"13790 2018-04-02 07:55:05 +0200 rocpro: fix for setting long address in the loco properties\n" \
+"13789 2018-04-01 16:51:48 +0200 sensorevents: fix for bus field on sorting columns\n" \
+"13788 2018-04-01 08:12:37 +0200 SLIM-COLOR: stage.svg in SLIM format\n" \
+"13787 2018-04-01 07:36:34 +0200 SLIM-COLOR: stage corrections (Peter)\n" \
+"13786 2018-03-31 17:44:36 +0200 in: fix for using the block enterside\n" \
+"13785 2018-03-31 10:39:54 +0200 rocnetnode: set clock divider back to 1 in case of a timeout\n" \
+"13784 2018-03-31 10:37:34 +0200 rocnetnode: set clock sync timeout mode on startup\n" \
+"13783 2018-03-31 10:32:06 +0200 rocnetnode: display timeout watchdog\n" \
+"13782 2018-03-31 10:28:28 +0200 rocnetnode: display timeout watchdog, show floating dashes\n" \
+"13781 2018-03-31 10:15:54 +0200 rocnetnode: display timeout watchdog\n" \
+"13780 2018-03-31 10:10:20 +0200 rocnetnode: display timeout watchdog\n" \
+"13779 2018-03-31 10:03:55 +0200 rocnetnode: display timeout watchdog\n" \
+"13778 2018-03-31 09:48:08 +0200 block: enterside wait option, default both sides\n" \
+"13777 2018-03-31 06:54:53 +0200 rocnetnode: clock options\n" \
+"13776 2018-03-31 05:03:58 +0200 guiapp: merge route in case of modify and not visible\n" \
+"13775 2018-03-30 15:49:19 +0200 modelutils: rename signal ID dependencies\n" \
+"13774 2018-03-30 14:10:45 +0200 rocnetnode: negative temp\n" \
+"13773 2018-03-30 14:08:06 +0200 rocnet: fix for negative temp\n" \
+"13772 2018-03-30 13:40:29 +0200 rocnetnode: negative temp.\n" \
+"13771 2018-03-30 13:27:17 +0200 rocnetnode: show temp\n" \
+"13770 2018-03-30 12:06:41 +0200 rocnetnode: show temp\n" \
+"13769 2018-03-30 11:56:50 +0200 rocnetnode: show temp\n" \
+"13768 2018-03-30 11:31:48 +0200 rocnetnode: auto display scan, show date\n" \
+"13767 2018-03-30 10:49:22 +0200 base: genID with 3 digits\n" \
+"13766 2018-03-30 10:41:37 +0200 planpanel: use genID also for track type\n" \
+"13765 2018-03-30 10:35:33 +0200 rocnetnodedlg: set readonly flag for the I2C scan results\n" \
+"13764 2018-03-30 10:34:54 +0200 planpanel: popup ID dialog option added\n" \
+"13763 2018-03-30 09:06:40 +0200 blockdialog: allow 5% arrive/depart speed\n" \
 "13762 2018-03-29 15:54:35 +0200 rocnetnode: clock dot banging\n" \
 "13761 2018-03-29 15:11:04 +0200 rocnetnode: fix for nrclocks\n" \
 "13760 2018-03-29 14:45:24 +0200 rocnetnode: clock brightness setup added\n" \
@@ -27,34 +56,5 @@ const char* revlog =
 "13744 2018-03-27 10:33:59 +0200 tt,traverser: closed symbols, fix for keep state\n" \
 "13743 2018-03-26 08:45:48 +0200 translation merge: sl,pr_BR,sr_latin,de,nl\n" \
 "13742 2018-03-26 08:23:05 +0200 action,control: time set trace added\n" \
-"13741 2018-03-25 13:58:54 +0200 loc: fix for BBT speed!!!\n" \
-"13740 2018-03-25 10:23:08 +0200 timedactions: added open/close as commands to the turntable\n" \
-"13739 2018-03-25 09:11:50 +0200 tt: regard close state in case of embedded block\n" \
-"13738 2018-03-24 12:18:39 +0100 locdialog: speed++ changed in speed +/-\n" \
-"13737 2018-03-24 11:07:14 +0100 block: extra freeonenter option route added\n" \
-"13736 2018-03-24 10:35:04 +0100 loc: BBT key speed++ added (block enter side)\n" \
-"13735 2018-03-23 11:41:31 +0100 rocpro,bidib: accext support added\n" \
-"13734 2018-03-23 08:48:57 +0100 z21: usesamesensorbus option added for all LocoNet type sensors on bus 1\n" \
-"13733 2018-03-22 14:13:56 +0100 z21: removed the rbus option\n" \
-"13732 2018-03-22 14:02:10 +0100 z21: bus test correction\n" \
-"13731 2018-03-22 14:00:39 +0100 z21: trace for type LN detector input\n" \
-"13730 2018-03-22 08:17:54 +0100 bidib: POM accessory support added\n" \
-"13729 2018-03-21 15:44:03 +0100 block: ignore an absent event in case of running in automatic mode\n" \
-"13728 2018-03-21 11:05:38 +0100 renderer: mapping fix for dcrossingright-tr-l-occ\n" \
-"13727 2018-03-21 09:14:02 +0100 dcrossing fix (Martin)\n" \
-"13726 2018-03-21 09:09:10 +0100 tt: virtual automatic support in case of embeded block\n" \
-"13725 2018-03-21 08:25:44 +0100 tttrackdialog: fix for evaluating\n" \
-"13724 2018-03-20 10:20:25 +0100 renderer: mapping correction for dcrossing right\n" \
-"13723 2018-03-20 08:50:23 +0100 analyse,tt: typo fix\n" \
-"13722 2018-03-20 07:53:52 +0100 blockdialog, routedialog: disable adding the same loco into the include and exclude list\n" \
-"13721 2018-03-19 14:55:07 +0100 route: support for virtual running over a TT by sending it a position event\n" \
-"13720 2018-03-19 11:01:15 +0100 z21: use the fbread attribute to enable or disable evaluating the R-BUS\n" \
-"13719 2018-03-18 11:29:56 +0100 model: getRealBlock type correction\n" \
-"13718 2018-03-18 10:39:48 +0100 z21: option rbus added to be able to disable it\n" \
-"13717 2018-03-18 10:25:52 +0100 z21: protver=1 loconet sensor reporting only\n" \
-"13716 2018-03-18 09:56:19 +0100 model: lookup real block in case of a modify\n" \
-"13715 2018-03-18 08:05:51 +0100 routedialog: fix for evaluating the wiring output IDs\n" \
-"13714 2018-03-18 07:56:37 +0100 loc: fix for setting the block enterside and placing\n" \
-"13713 2018-03-17 08:25:43 +0100 loconet: save decoder type for dispatching\n" \
 
 "log end";
