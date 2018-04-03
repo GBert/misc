@@ -1,11 +1,17 @@
 const int revisionnr = 
-13791
+13797
 ;
 const char* commithash = 
-"ba0607c150d64826b437b2260103eaa9b047e260";
+"29a224284bf0c0b40eba0c54a294abbe79f31d17";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13797 2018-04-03 11:11:02 +0200 z21: removed trace line for loconet detector support\n" \
+"13796 2018-04-03 10:10:47 +0200 action: vcurrentloco action added to restore/reactivate the current speed after for example an ebreak\n" \
+"13795 2018-04-03 09:51:54 +0200 z21: disable LAN_LOCONETDETECTOR without any option\n" \
+"13794 2018-04-03 08:29:15 +0200 z21: disable LocoNetDetector broadcasting if not wanted\n" \
+"13793 2018-04-03 08:22:45 +0200 z21: default no loconet detector evaluation, to activate set protver to 1\n" \
+"13792 2018-04-03 08:00:05 +0200 translation merge: pt_BR, sl, nl, de\n" \
 "13791 2018-04-02 16:36:40 +0200 z21: adjust loconetdetector reported sensor address\n" \
 "13790 2018-04-02 07:55:05 +0200 rocpro: fix for setting long address in the loco properties\n" \
 "13789 2018-04-01 16:51:48 +0200 sensorevents: fix for bus field on sorting columns\n" \
@@ -50,11 +56,5 @@ const char* revlog =
 "13750 2018-03-29 08:08:14 +0200 rocnet: clock config added\n" \
 "13749 2018-03-28 11:44:54 +0200 rocnetnode: clock display support (WIP)\n" \
 "13748 2018-03-28 10:37:18 +0200 rocprodlg: take over values after a DIP OK/Apply\n" \
-"13747 2018-03-28 03:49:11 +0200 location: scheduletable on/off command added\n" \
-"13746 2018-03-27 13:40:21 +0200 rocpro: take over value from DIP\n" \
-"13745 2018-03-27 11:34:55 +0200 tt,action: fixes for broadcasting new state\n" \
-"13744 2018-03-27 10:33:59 +0200 tt,traverser: closed symbols, fix for keep state\n" \
-"13743 2018-03-26 08:45:48 +0200 translation merge: sl,pr_BR,sr_latin,de,nl\n" \
-"13742 2018-03-26 08:23:05 +0200 action,control: time set trace added\n" \
 
 "log end";
