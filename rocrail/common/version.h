@@ -1,11 +1,13 @@
 const int revisionnr = 
-13797
+13799
 ;
 const char* commithash = 
-"29a224284bf0c0b40eba0c54a294abbe79f31d17";
+"0b00a80c399f1d1dd0844a2c8fd19ca63d9b561e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13799 2018-04-05 07:17:35 +0200 modplan: fix for merge nodes in lists in case the ID is already in the list\n" \
+"13798 2018-04-04 08:42:36 +0200 socket: readln extra buffer len parameter to avoid overflow\n" \
 "13797 2018-04-03 11:11:02 +0200 z21: removed trace line for loconet detector support\n" \
 "13796 2018-04-03 10:10:47 +0200 action: vcurrentloco action added to restore/reactivate the current speed after for example an ebreak\n" \
 "13795 2018-04-03 09:51:54 +0200 z21: disable LAN_LOCONETDETECTOR without any option\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "13752 2018-03-29 10:47:52 +0200 rocnetnode: clock support (WIP)\n" \
 "13751 2018-03-29 08:35:51 +0200 rocnetnode: trace I2C scan\n" \
 "13750 2018-03-29 08:08:14 +0200 rocnet: clock config added\n" \
-"13749 2018-03-28 11:44:54 +0200 rocnetnode: clock display support (WIP)\n" \
-"13748 2018-03-28 10:37:18 +0200 rocprodlg: take over values after a DIP OK/Apply\n" \
 
 "log end";
