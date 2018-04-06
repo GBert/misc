@@ -37,7 +37,7 @@ PUTC            5 cycles
 BIN2ASC        25 cycles
 UART Tx IRQ  (15) cycles
 
-Estimation for EFF (DLC 0) and SFF (DLC8)
+Estimation for SFF (DLC 0) and EFF (DLC8)
 -----------------------------------------
 
 SFF t1230
