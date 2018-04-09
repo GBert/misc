@@ -1,11 +1,44 @@
 const int revisionnr = 
-13799
+13832
 ;
 const char* commithash = 
-"0b00a80c399f1d1dd0844a2c8fd19ca63d9b561e";
+"55b4bf31ec63a8b146c3bf9b7c5e3f63217b3bb8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13832 2018-04-09 12:00:37 +0200 cellrenderer: check if image is OK\n" \
+"13831 2018-04-09 10:11:09 +0200 rocweb: use default zlevel 0 if no z attribute is found\n" \
+"13830 2018-04-09 08:30:37 +0200 model: load occ.xml only if exist\n" \
+"13829 2018-04-09 08:11:05 +0200 json: memory leak fix\n" \
+"13828 2018-04-09 08:09:51 +0200 rocweb: revert test changes\n" \
+"13827 2018-04-08 11:02:00 +0200 powermandlg: show the HEX UID as static text\n" \
+"13826 2018-04-08 10:39:36 +0200 powermandlg: booster index extended with IID and description\n" \
+"13825 2018-04-08 08:32:47 +0200 weather: run weater in case of one or more outputs or with color table for updating temp and bri\n" \
+"13824 2018-04-08 08:27:59 +0200 weather: do weather also in case of no lamps for temperature and brightness\n" \
+"13823 2018-04-08 08:22:46 +0200 weatherdlg: select outputs by dialog\n" \
+"13822 2018-04-08 07:22:26 +0200 powermandlg: show UID as unsigned\n" \
+"13821 2018-04-07 16:49:05 +0200 guiapp: merge a route event only deep if it has child nodes to avoid loosing commands\n" \
+"13820 2018-04-07 15:26:53 +0200 powermandlg: take over the UID in the HEX field after apply\n" \
+"13819 2018-04-07 14:54:58 +0200 powerman: fix for negative booster UID\n" \
+"13818 2018-04-07 11:43:45 +0200 rocnetnode: show temp. in trace in case of a clock sync\n" \
+"13817 2018-04-07 11:21:05 +0200 clock brightness set by weather\n" \
+"13816 2018-04-07 10:52:37 +0200 weatherdlg: label correction\n" \
+"13815 2018-04-07 10:47:55 +0200 colorpanel: show temperature color picker added\n" \
+"13814 2018-04-07 08:43:25 +0200 weather: temperature line added\n" \
+"13813 2018-04-06 15:21:08 +0200 rocnetnode: show temp and date only the half time of the clock\n" \
+"13812 2018-04-06 15:14:50 +0200 rocnetnode: scan I2C for Pi08 art startup\n" \
+"13811 2018-04-06 11:45:15 +0200 tt: state pending added\n" \
+"13810 2018-04-06 10:55:13 +0200 rocnetnode: pi08 (wip)\n" \
+"13809 2018-04-06 10:47:21 +0200 analyse,model: trace level corrections\n" \
+"13808 2018-04-06 10:33:44 +0200 analyse: broadcast item changes to the clients\n" \
+"13807 2018-04-06 10:15:37 +0200 tt,xmlscript: tt state support\n" \
+"13806 2018-04-06 08:49:53 +0200 fundialog: list stage blocks too\n" \
+"13805 2018-04-06 08:36:51 +0200 hue: tracing correctiongs to avoid overflow\n" \
+"13804 2018-04-06 08:01:50 +0200 hue: clean up the xml node after use to avoid memory leak\n" \
+"13803 2018-04-06 07:34:44 +0200 wrapper: reset whell counter option default not active\n" \
+"13802 2018-04-06 00:47:45 +0200 locseldlg: fix for showing cars without address set\n" \
+"13801 2018-04-06 00:29:44 +0200 hue: byte trace length fix\n" \
+"13800 2018-04-05 14:19:28 +0200 control: clock sync year+1900 fix\n" \
 "13799 2018-04-05 07:17:35 +0200 modplan: fix for merge nodes in lists in case the ID is already in the list\n" \
 "13798 2018-04-04 08:42:36 +0200 socket: readln extra buffer len parameter to avoid overflow\n" \
 "13797 2018-04-03 11:11:02 +0200 z21: removed trace line for loconet detector support\n" \
@@ -23,38 +56,5 @@ const char* revlog =
 "13785 2018-03-31 10:39:54 +0200 rocnetnode: set clock divider back to 1 in case of a timeout\n" \
 "13784 2018-03-31 10:37:34 +0200 rocnetnode: set clock sync timeout mode on startup\n" \
 "13783 2018-03-31 10:32:06 +0200 rocnetnode: display timeout watchdog\n" \
-"13782 2018-03-31 10:28:28 +0200 rocnetnode: display timeout watchdog, show floating dashes\n" \
-"13781 2018-03-31 10:15:54 +0200 rocnetnode: display timeout watchdog\n" \
-"13780 2018-03-31 10:10:20 +0200 rocnetnode: display timeout watchdog\n" \
-"13779 2018-03-31 10:03:55 +0200 rocnetnode: display timeout watchdog\n" \
-"13778 2018-03-31 09:48:08 +0200 block: enterside wait option, default both sides\n" \
-"13777 2018-03-31 06:54:53 +0200 rocnetnode: clock options\n" \
-"13776 2018-03-31 05:03:58 +0200 guiapp: merge route in case of modify and not visible\n" \
-"13775 2018-03-30 15:49:19 +0200 modelutils: rename signal ID dependencies\n" \
-"13774 2018-03-30 14:10:45 +0200 rocnetnode: negative temp\n" \
-"13773 2018-03-30 14:08:06 +0200 rocnet: fix for negative temp\n" \
-"13772 2018-03-30 13:40:29 +0200 rocnetnode: negative temp.\n" \
-"13771 2018-03-30 13:27:17 +0200 rocnetnode: show temp\n" \
-"13770 2018-03-30 12:06:41 +0200 rocnetnode: show temp\n" \
-"13769 2018-03-30 11:56:50 +0200 rocnetnode: show temp\n" \
-"13768 2018-03-30 11:31:48 +0200 rocnetnode: auto display scan, show date\n" \
-"13767 2018-03-30 10:49:22 +0200 base: genID with 3 digits\n" \
-"13766 2018-03-30 10:41:37 +0200 planpanel: use genID also for track type\n" \
-"13765 2018-03-30 10:35:33 +0200 rocnetnodedlg: set readonly flag for the I2C scan results\n" \
-"13764 2018-03-30 10:34:54 +0200 planpanel: popup ID dialog option added\n" \
-"13763 2018-03-30 09:06:40 +0200 blockdialog: allow 5% arrive/depart speed\n" \
-"13762 2018-03-29 15:54:35 +0200 rocnetnode: clock dot banging\n" \
-"13761 2018-03-29 15:11:04 +0200 rocnetnode: fix for nrclocks\n" \
-"13760 2018-03-29 14:45:24 +0200 rocnetnode: clock brightness setup added\n" \
-"13759 2018-03-29 13:23:33 +0200 rocnetnode: clock dot step 1 1000ms in case div > 1\n" \
-"13758 2018-03-29 12:18:00 +0200 rocnetnode: clock dot step every 5 model seconds\n" \
-"13757 2018-03-29 12:09:24 +0200 rocnetnode: clock running dot in case divider > 1\n" \
-"13756 2018-03-29 12:06:12 +0200 rocnetnode: clock running dots in case divider > 1\n" \
-"13755 2018-03-29 11:46:30 +0200 rocnetnode: flash clock colon only if divider is 1\n" \
-"13754 2018-03-29 11:12:25 +0200 rocnetnode: clock support\n" \
-"13753 2018-03-29 11:08:19 +0200 rocnetnode: clock support (WIP)\n" \
-"13752 2018-03-29 10:47:52 +0200 rocnetnode: clock support (WIP)\n" \
-"13751 2018-03-29 08:35:51 +0200 rocnetnode: trace I2C scan\n" \
-"13750 2018-03-29 08:08:14 +0200 rocnet: clock config added\n" \
 
 "log end";
