@@ -1,11 +1,18 @@
 const int revisionnr = 
-13832
+13839
 ;
 const char* commithash = 
-"55b4bf31ec63a8b146c3bf9b7c5e3f63217b3bb8";
+"615980f5bcd525ad3777d32c7ba239ca54f2729f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13839 2018-04-10 11:57:42 +0200 operator: redirect unhandled commands to the linked loco\n" \
+"13838 2018-04-10 08:30:20 +0200 lc: replaced nested calls to the meter\n" \
+"13837 2018-04-10 07:53:32 +0200 analyse: broadcast block changes\n" \
+"13836 2018-04-10 07:18:17 +0200 json: use alloc instaed of dup\n" \
+"13835 2018-04-09 14:36:04 +0200 locdialog: layout correction\n" \
+"13834 2018-04-09 14:35:41 +0200 lc: init kmhMax\n" \
+"13833 2018-04-09 14:35:08 +0200 translation merge: en_GB,fr,pt_BR,de\n" \
 "13832 2018-04-09 12:00:37 +0200 cellrenderer: check if image is OK\n" \
 "13831 2018-04-09 10:11:09 +0200 rocweb: use default zlevel 0 if no z attribute is found\n" \
 "13830 2018-04-09 08:30:37 +0200 model: load occ.xml only if exist\n" \
@@ -49,12 +56,5 @@ const char* revlog =
 "13792 2018-04-03 08:00:05 +0200 translation merge: pt_BR, sl, nl, de\n" \
 "13791 2018-04-02 16:36:40 +0200 z21: adjust loconetdetector reported sensor address\n" \
 "13790 2018-04-02 07:55:05 +0200 rocpro: fix for setting long address in the loco properties\n" \
-"13789 2018-04-01 16:51:48 +0200 sensorevents: fix for bus field on sorting columns\n" \
-"13788 2018-04-01 08:12:37 +0200 SLIM-COLOR: stage.svg in SLIM format\n" \
-"13787 2018-04-01 07:36:34 +0200 SLIM-COLOR: stage corrections (Peter)\n" \
-"13786 2018-03-31 17:44:36 +0200 in: fix for using the block enterside\n" \
-"13785 2018-03-31 10:39:54 +0200 rocnetnode: set clock divider back to 1 in case of a timeout\n" \
-"13784 2018-03-31 10:37:34 +0200 rocnetnode: set clock sync timeout mode on startup\n" \
-"13783 2018-03-31 10:32:06 +0200 rocnetnode: display timeout watchdog\n" \
 
 "log end";
