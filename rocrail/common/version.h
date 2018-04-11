@@ -1,11 +1,19 @@
 const int revisionnr = 
-13839
+13847
 ;
 const char* commithash = 
-"615980f5bcd525ad3777d32c7ba239ca54f2729f";
+"863705a9b3d0132b0976d4b4e42feed2ed7bbdd1";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13847 2018-04-11 15:46:32 +0200 SLIM: raster switches (WIP)\n" \
+"13846 2018-04-11 12:01:46 +0200 rocprodlg: removed decoderdb link\n" \
+"13845 2018-04-11 11:56:51 +0200 wrapper: default string section value set to empty instead of zero\n" \
+"13844 2018-04-11 11:08:11 +0200 operatordlg: moved the train ID to the index tab\n" \
+"13843 2018-04-11 10:57:47 +0200 operatordlg,railwaydlg: abox support added\n" \
+"13842 2018-04-11 06:28:26 +0200 analyse: broadcast block properties after removing the generated routes\n" \
+"13841 2018-04-10 14:06:51 +0200 SLIM-COLOR: button svg #4 added\n" \
+"13840 2018-04-10 13:58:19 +0200 SLIM: button svg #4 added\n" \
 "13839 2018-04-10 11:57:42 +0200 operator: redirect unhandled commands to the linked loco\n" \
 "13838 2018-04-10 08:30:20 +0200 lc: replaced nested calls to the meter\n" \
 "13837 2018-04-10 07:53:32 +0200 analyse: broadcast block changes\n" \
@@ -48,13 +56,5 @@ const char* revlog =
 "13800 2018-04-05 14:19:28 +0200 control: clock sync year+1900 fix\n" \
 "13799 2018-04-05 07:17:35 +0200 modplan: fix for merge nodes in lists in case the ID is already in the list\n" \
 "13798 2018-04-04 08:42:36 +0200 socket: readln extra buffer len parameter to avoid overflow\n" \
-"13797 2018-04-03 11:11:02 +0200 z21: removed trace line for loconet detector support\n" \
-"13796 2018-04-03 10:10:47 +0200 action: vcurrentloco action added to restore/reactivate the current speed after for example an ebreak\n" \
-"13795 2018-04-03 09:51:54 +0200 z21: disable LAN_LOCONETDETECTOR without any option\n" \
-"13794 2018-04-03 08:29:15 +0200 z21: disable LocoNetDetector broadcasting if not wanted\n" \
-"13793 2018-04-03 08:22:45 +0200 z21: default no loconet detector evaluation, to activate set protver to 1\n" \
-"13792 2018-04-03 08:00:05 +0200 translation merge: pt_BR, sl, nl, de\n" \
-"13791 2018-04-02 16:36:40 +0200 z21: adjust loconetdetector reported sensor address\n" \
-"13790 2018-04-02 07:55:05 +0200 rocpro: fix for setting long address in the loco properties\n" \
 
 "log end";
