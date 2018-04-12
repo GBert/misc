@@ -1,11 +1,16 @@
 const int revisionnr = 
-13847
+13852
 ;
 const char* commithash = 
-"863705a9b3d0132b0976d4b4e42feed2ed7bbdd1";
+"142f32b02bc9d2d9a78235bc327b8b707b434249";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13852 2018-04-12 14:44:28 +0200 rocnet: show in clock sync trace the brightness\n" \
+"13851 2018-04-12 10:34:22 +0200 ulni: tracelevel changed to BYTE for undocumented OPCs\n" \
+"13850 2018-04-12 10:32:32 +0200 ulni: trace level changed to BYTE for undocumented OPCs\n" \
+"13849 2018-04-12 10:28:57 +0200 trackpickerdlg,planpanel: raster switch type support\n" \
+"13848 2018-04-12 08:31:17 +0200 SLIM: raster switches\n" \
 "13847 2018-04-11 15:46:32 +0200 SLIM: raster switches (WIP)\n" \
 "13846 2018-04-11 12:01:46 +0200 rocprodlg: removed decoderdb link\n" \
 "13845 2018-04-11 11:56:51 +0200 wrapper: default string section value set to empty instead of zero\n" \
@@ -51,10 +56,5 @@ const char* revlog =
 "13805 2018-04-06 08:36:51 +0200 hue: tracing correctiongs to avoid overflow\n" \
 "13804 2018-04-06 08:01:50 +0200 hue: clean up the xml node after use to avoid memory leak\n" \
 "13803 2018-04-06 07:34:44 +0200 wrapper: reset whell counter option default not active\n" \
-"13802 2018-04-06 00:47:45 +0200 locseldlg: fix for showing cars without address set\n" \
-"13801 2018-04-06 00:29:44 +0200 hue: byte trace length fix\n" \
-"13800 2018-04-05 14:19:28 +0200 control: clock sync year+1900 fix\n" \
-"13799 2018-04-05 07:17:35 +0200 modplan: fix for merge nodes in lists in case the ID is already in the list\n" \
-"13798 2018-04-04 08:42:36 +0200 socket: readln extra buffer len parameter to avoid overflow\n" \
 
 "log end";
