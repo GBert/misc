@@ -1,11 +1,17 @@
 const int revisionnr = 
-13852
+13858
 ;
 const char* commithash = 
-"142f32b02bc9d2d9a78235bc327b8b707b434249";
+"fb801ca5c85700a6dad70d0a621ce1f243fd3f73";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13858 2018-04-13 16:36:04 +0200 analyse: inform blocks of changed properties to re-initialise listeners\n" \
+"13857 2018-04-13 16:30:23 +0200 operator: fix for race condition?\n" \
+"13856 2018-04-13 15:38:24 +0200 operator: revert redirecting commands to the assigned loco\n" \
+"13855 2018-04-13 08:45:33 +0200 seltab: BBT option added\n" \
+"13854 2018-04-13 08:08:50 +0200 analyse: set analysed flag on broadcast to signal to replace all child nodes even if there are none in the modified properties\n" \
+"13853 2018-04-13 06:36:13 +0200 model: trace corrections after analyse\n" \
 "13852 2018-04-12 14:44:28 +0200 rocnet: show in clock sync trace the brightness\n" \
 "13851 2018-04-12 10:34:22 +0200 ulni: tracelevel changed to BYTE for undocumented OPCs\n" \
 "13850 2018-04-12 10:32:32 +0200 ulni: trace level changed to BYTE for undocumented OPCs\n" \
@@ -50,11 +56,5 @@ const char* revlog =
 "13811 2018-04-06 11:45:15 +0200 tt: state pending added\n" \
 "13810 2018-04-06 10:55:13 +0200 rocnetnode: pi08 (wip)\n" \
 "13809 2018-04-06 10:47:21 +0200 analyse,model: trace level corrections\n" \
-"13808 2018-04-06 10:33:44 +0200 analyse: broadcast item changes to the clients\n" \
-"13807 2018-04-06 10:15:37 +0200 tt,xmlscript: tt state support\n" \
-"13806 2018-04-06 08:49:53 +0200 fundialog: list stage blocks too\n" \
-"13805 2018-04-06 08:36:51 +0200 hue: tracing correctiongs to avoid overflow\n" \
-"13804 2018-04-06 08:01:50 +0200 hue: clean up the xml node after use to avoid memory leak\n" \
-"13803 2018-04-06 07:34:44 +0200 wrapper: reset whell counter option default not active\n" \
 
 "log end";
