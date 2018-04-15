@@ -1,11 +1,18 @@
 const int revisionnr = 
-13858
+13865
 ;
 const char* commithash = 
-"fb801ca5c85700a6dad70d0a621ce1f243fd3f73";
+"aa71d445e58687025a57182850b8f43fa072da12";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13865 2018-04-15 16:22:46 +0200 rocnetnode: macro extended for LED outputs, signal extended for simple LED aspect signals\n" \
+"13864 2018-04-15 14:04:24 +0200 rocnetnode: support for LED with temp. base 0x06\n" \
+"13863 2018-04-15 10:28:52 +0200 locationdlg: show line position\n" \
+"13862 2018-04-15 10:20:32 +0200 location: railway line position\n" \
+"13861 2018-04-15 08:49:05 +0200 analyse: reset/init listeners improved\n" \
+"13860 2018-04-14 15:41:57 +0200 locationsdlg: fix for moving down blocks\n" \
+"13859 2018-04-14 14:53:48 +0200 location: removed railway/position from properties; should be maintained in the railwayline properties\n" \
 "13858 2018-04-13 16:36:04 +0200 analyse: inform blocks of changed properties to re-initialise listeners\n" \
 "13857 2018-04-13 16:30:23 +0200 operator: fix for race condition?\n" \
 "13856 2018-04-13 15:38:24 +0200 operator: revert redirecting commands to the assigned loco\n" \
@@ -49,12 +56,5 @@ const char* revlog =
 "13818 2018-04-07 11:43:45 +0200 rocnetnode: show temp. in trace in case of a clock sync\n" \
 "13817 2018-04-07 11:21:05 +0200 clock brightness set by weather\n" \
 "13816 2018-04-07 10:52:37 +0200 weatherdlg: label correction\n" \
-"13815 2018-04-07 10:47:55 +0200 colorpanel: show temperature color picker added\n" \
-"13814 2018-04-07 08:43:25 +0200 weather: temperature line added\n" \
-"13813 2018-04-06 15:21:08 +0200 rocnetnode: show temp and date only the half time of the clock\n" \
-"13812 2018-04-06 15:14:50 +0200 rocnetnode: scan I2C for Pi08 art startup\n" \
-"13811 2018-04-06 11:45:15 +0200 tt: state pending added\n" \
-"13810 2018-04-06 10:55:13 +0200 rocnetnode: pi08 (wip)\n" \
-"13809 2018-04-06 10:47:21 +0200 analyse,model: trace level corrections\n" \
 
 "log end";
