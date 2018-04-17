@@ -1,11 +1,18 @@
 const int revisionnr = 
-13865
+13872
 ;
 const char* commithash = 
-"aa71d445e58687025a57182850b8f43fa072da12";
+"76a702c2e4f7c9e9dae9baccc0b27532f3355560";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13872 2018-04-17 08:17:29 +0200 rocnetnode: disable blink on first signal LED\n" \
+"13871 2018-04-17 08:01:58 +0200 rocnetnode: simple aspect signals extended\n" \
+"13870 2018-04-17 07:47:28 +0200 model: extended the lcprops command to itterate all\n" \
+"13869 2018-04-16 11:42:17 +0200 timetabledlg: only show loco ID in case the train ID is not set\n" \
+"13868 2018-04-16 09:08:10 +0200 rocnetnode: dimming fix for LEDs\n" \
+"13867 2018-04-16 08:54:45 +0200 rocnetnode: simple aspect LED signal support\n" \
+"13866 2018-04-16 08:24:54 +0200 rocnetnode: LED output blink support\n" \
 "13865 2018-04-15 16:22:46 +0200 rocnetnode: macro extended for LED outputs, signal extended for simple LED aspect signals\n" \
 "13864 2018-04-15 14:04:24 +0200 rocnetnode: support for LED with temp. base 0x06\n" \
 "13863 2018-04-15 10:28:52 +0200 locationdlg: show line position\n" \
@@ -49,12 +56,5 @@ const char* revlog =
 "13825 2018-04-08 08:32:47 +0200 weather: run weater in case of one or more outputs or with color table for updating temp and bri\n" \
 "13824 2018-04-08 08:27:59 +0200 weather: do weather also in case of no lamps for temperature and brightness\n" \
 "13823 2018-04-08 08:22:46 +0200 weatherdlg: select outputs by dialog\n" \
-"13822 2018-04-08 07:22:26 +0200 powermandlg: show UID as unsigned\n" \
-"13821 2018-04-07 16:49:05 +0200 guiapp: merge a route event only deep if it has child nodes to avoid loosing commands\n" \
-"13820 2018-04-07 15:26:53 +0200 powermandlg: take over the UID in the HEX field after apply\n" \
-"13819 2018-04-07 14:54:58 +0200 powerman: fix for negative booster UID\n" \
-"13818 2018-04-07 11:43:45 +0200 rocnetnode: show temp. in trace in case of a clock sync\n" \
-"13817 2018-04-07 11:21:05 +0200 clock brightness set by weather\n" \
-"13816 2018-04-07 10:52:37 +0200 weatherdlg: label correction\n" \
 
 "log end";
