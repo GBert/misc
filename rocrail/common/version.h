@@ -1,11 +1,13 @@
 const int revisionnr = 
-13872
+13874
 ;
 const char* commithash = 
-"76a702c2e4f7c9e9dae9baccc0b27532f3355560";
+"0629f6c0e52f8497be06cd262f7edc54bc0f0773";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13874 2018-04-17 14:47:21 +0200 rocnetnode: use weather brightness for signal LEDs\n" \
+"13873 2018-04-17 11:14:39 +0200 rocnetnode: signal aspect value support added\n" \
 "13872 2018-04-17 08:17:29 +0200 rocnetnode: disable blink on first signal LED\n" \
 "13871 2018-04-17 08:01:58 +0200 rocnetnode: simple aspect signals extended\n" \
 "13870 2018-04-17 07:47:28 +0200 model: extended the lcprops command to itterate all\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "13827 2018-04-08 11:02:00 +0200 powermandlg: show the HEX UID as static text\n" \
 "13826 2018-04-08 10:39:36 +0200 powermandlg: booster index extended with IID and description\n" \
 "13825 2018-04-08 08:32:47 +0200 weather: run weater in case of one or more outputs or with color table for updating temp and bri\n" \
-"13824 2018-04-08 08:27:59 +0200 weather: do weather also in case of no lamps for temperature and brightness\n" \
-"13823 2018-04-08 08:22:46 +0200 weatherdlg: select outputs by dialog\n" \
 
 "log end";
