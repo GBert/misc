@@ -1,11 +1,19 @@
 const int revisionnr = 
-13874
+13882
 ;
 const char* commithash = 
-"0629f6c0e52f8497be06cd262f7edc54bc0f0773";
+"147a51518b568665e5701fb293213f436060175f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13882 2018-04-19 08:33:22 +0200 bidib: Tams update\n" \
+"13881 2018-04-18 16:04:52 +0200 bidib images\n" \
+"13880 2018-04-18 15:59:17 +0200 bidib: Tams images\n" \
+"13879 2018-04-18 14:51:59 +0200 rocnetnode: scan and init Pi08 boards after read options\n" \
+"13878 2018-04-18 10:48:43 +0200 signal: calculate the number of LEDs by evaluating the aspect values (for LED signals and aspect number control only)\n" \
+"13877 2018-04-18 10:28:17 +0200 rocnetnode: fix for brightness mode\n" \
+"13876 2018-04-18 08:20:26 +0200 rocnetnode: brightness mode for weather, day, night\n" \
+"13875 2018-04-18 08:03:19 +0200 timetabledlg: cellspacing option added\n" \
 "13874 2018-04-17 14:47:21 +0200 rocnetnode: use weather brightness for signal LEDs\n" \
 "13873 2018-04-17 11:14:39 +0200 rocnetnode: signal aspect value support added\n" \
 "13872 2018-04-17 08:17:29 +0200 rocnetnode: disable blink on first signal LED\n" \
@@ -48,13 +56,5 @@ const char* revlog =
 "13835 2018-04-09 14:36:04 +0200 locdialog: layout correction\n" \
 "13834 2018-04-09 14:35:41 +0200 lc: init kmhMax\n" \
 "13833 2018-04-09 14:35:08 +0200 translation merge: en_GB,fr,pt_BR,de\n" \
-"13832 2018-04-09 12:00:37 +0200 cellrenderer: check if image is OK\n" \
-"13831 2018-04-09 10:11:09 +0200 rocweb: use default zlevel 0 if no z attribute is found\n" \
-"13830 2018-04-09 08:30:37 +0200 model: load occ.xml only if exist\n" \
-"13829 2018-04-09 08:11:05 +0200 json: memory leak fix\n" \
-"13828 2018-04-09 08:09:51 +0200 rocweb: revert test changes\n" \
-"13827 2018-04-08 11:02:00 +0200 powermandlg: show the HEX UID as static text\n" \
-"13826 2018-04-08 10:39:36 +0200 powermandlg: booster index extended with IID and description\n" \
-"13825 2018-04-08 08:32:47 +0200 weather: run weater in case of one or more outputs or with color table for updating temp and bri\n" \
 
 "log end";
