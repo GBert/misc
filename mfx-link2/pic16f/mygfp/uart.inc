@@ -23,8 +23,32 @@
 #ENDIF
 
 ;------------------------------------------------------------------------------
+;		highly optimized - don't change !
+		CBLOCK	0x01A0
+		RX_RING	: 32	; 0x01A0
+		TX_RING	: 32	; 0x01C0
+		RX_HEAD	: 1	; 0x01E0
+		RX_TAIL	: 1	; 0x01E1
+		TX_HEAD	: 1	; 0x01E2
+		TX_TAIL	: 1	; 0x01E3
+		ENDC
+
+;------------------------------------------------------------------------------
 ; Init. UART
 ;------------------------------------------------------------------------------
+
+INITBUFFER	BANKSEL	RX_RING
+		MOVLW	HIGH RX_RING
+		MOVWF	FSR0H
+		MOVWF	FSR1H
+		MOVLW   LOW RX_RING
+		MOVWF	RX_HEAD
+		MOVWF	RX_TAIL
+		MOVLW   LOW TX_RING
+		MOVWF	TX_HEAD
+		MOVWF	TX_TAIL
+		RETURN
+
 INITUART
 		BANKSEl	BAUDCTL
                 MOVLW   (1 << BRG16)
