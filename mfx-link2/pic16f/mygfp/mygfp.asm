@@ -68,13 +68,18 @@ TOGGLE_C3	MACRO
 
 ;------------------------------------------------------------------------------
 
+#INCLUDE	ring.inc
+
+
+;------------------------------------------------------------------------------
+
 		CBLOCK	0x0070
 		PULSE_LOW	: 2
 		PULSE_HIGH	: 2
 		B_SAVE		: 1
 		TMR0_COUNT	: 1
 		ENDC
-		
+
 ;------------------------------------------------------------------------------
 
 		ORG	0x0000
@@ -108,20 +113,44 @@ ISRCCP1END
 		ADDWFC	CCPR1H,F
 
 ISRNEXT1
-		; UART
+		; UART RX
 		BANKSEL	PIR1
 		BTFSS	PIR1,RCIF
 		GOTO	ISRNEXT2
 		BANKSEL	RC1REG
 		MOVF	RC1REG,W
-		; TODO
+		; put char onto rx ring buffer
+		MOVWF	RX_TEMP
+		INCF	RX_HEAD,W
+		ANDLW	0x1F		; limit to 31
+		MOVWF	FSR1L
+		MOVF	RX_TEMP,W
+		MOVWI	0x00[FSR1]
+		CLRF	FSR1L		; TODO maybe unnecessary
+
+		; TODO test shortcut
 		MOVWF	TX1REG
 
 ISRNEXT2
+		; UART TX
 		BANKSEL	PIR1
 		BTFSS   PIR1,TXIF
 		GOTO	ISRNEXT3
-		; TODO
+		; send next char from tx ring buffer
+		BANKSEL	TX_TAIL
+		INCF	TX_TAIL,W
+		ANDLW	0x1F
+		MOVWF	FSR1L
+		MOVIW	-0x20[FSR1]
+		; send 
+		MOVWF	TX1REG
+		; check for empty buffer 
+		MOVFW	TX_TAIL
+		XORWF	TX_HEAD,W
+		BTFSS	STATUS,Z
+		GOTO	ISRNEXT3
+		BANKSEL	PIE1
+		BCF	PIE1,TXIE
 
 ISRNEXT3
 		; TIMER 0
