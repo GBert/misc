@@ -1,11 +1,15 @@
 const int revisionnr = 
-13882
+13886
 ;
 const char* commithash = 
-"147a51518b568665e5701fb293213f436060175f";
+"943b5b21d35355af98e4edbd903e5b4cbf93c938";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13886 2018-04-20 15:37:37 +0200 rocnetnode: signal processor thread added to be able to wait between LEDs be turned off and LEDs be turned on.\n" \
+"13885 2018-04-20 08:08:21 +0200 scheduledialog: timeprocessing index column added\n" \
+"13884 2018-04-20 07:51:17 +0200 model: swprops command added\n" \
+"13883 2018-04-20 07:37:29 +0200 timetabledlg: memory leak fix\n" \
 "13882 2018-04-19 08:33:22 +0200 bidib: Tams update\n" \
 "13881 2018-04-18 16:04:52 +0200 bidib images\n" \
 "13880 2018-04-18 15:59:17 +0200 bidib: Tams images\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "13839 2018-04-10 11:57:42 +0200 operator: redirect unhandled commands to the linked loco\n" \
 "13838 2018-04-10 08:30:20 +0200 lc: replaced nested calls to the meter\n" \
 "13837 2018-04-10 07:53:32 +0200 analyse: broadcast block changes\n" \
-"13836 2018-04-10 07:18:17 +0200 json: use alloc instaed of dup\n" \
-"13835 2018-04-09 14:36:04 +0200 locdialog: layout correction\n" \
-"13834 2018-04-09 14:35:41 +0200 lc: init kmhMax\n" \
-"13833 2018-04-09 14:35:08 +0200 translation merge: en_GB,fr,pt_BR,de\n" \
 
 "log end";
