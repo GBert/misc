@@ -1,11 +1,17 @@
 const int revisionnr = 
-13886
+13892
 ;
 const char* commithash = 
-"943b5b21d35355af98e4edbd903e5b4cbf93c938";
+"37a24083ce1f5628b11fe86c46e5e38196202761";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13892 2018-04-22 11:45:58 +0200 rocnetnode: fix for calculating the on delay\n" \
+"13891 2018-04-22 10:26:59 +0200 signal: dim parameter added for dimming LED type signals\n" \
+"13890 2018-04-22 07:57:07 +0200 model: common lookupschedule command added\n" \
+"13889 2018-04-21 10:46:17 +0200 rocnetnode: auto brightnes fix for keep two blinking LED in sync\n" \
+"13888 2018-04-21 08:20:18 +0200 rocnetnode: fix for update LED brightness\n" \
+"13887 2018-04-21 08:17:23 +0200 rocnetnode: improved signal processing\n" \
 "13886 2018-04-20 15:37:37 +0200 rocnetnode: signal processor thread added to be able to wait between LEDs be turned off and LEDs be turned on.\n" \
 "13885 2018-04-20 08:08:21 +0200 scheduledialog: timeprocessing index column added\n" \
 "13884 2018-04-20 07:51:17 +0200 model: swprops command added\n" \
@@ -50,11 +56,5 @@ const char* revlog =
 "13845 2018-04-11 11:56:51 +0200 wrapper: default string section value set to empty instead of zero\n" \
 "13844 2018-04-11 11:08:11 +0200 operatordlg: moved the train ID to the index tab\n" \
 "13843 2018-04-11 10:57:47 +0200 operatordlg,railwaydlg: abox support added\n" \
-"13842 2018-04-11 06:28:26 +0200 analyse: broadcast block properties after removing the generated routes\n" \
-"13841 2018-04-10 14:06:51 +0200 SLIM-COLOR: button svg #4 added\n" \
-"13840 2018-04-10 13:58:19 +0200 SLIM: button svg #4 added\n" \
-"13839 2018-04-10 11:57:42 +0200 operator: redirect unhandled commands to the linked loco\n" \
-"13838 2018-04-10 08:30:20 +0200 lc: replaced nested calls to the meter\n" \
-"13837 2018-04-10 07:53:32 +0200 analyse: broadcast block changes\n" \
 
 "log end";
