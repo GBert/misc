@@ -13,7 +13,7 @@ ifeq ($(strip $(GPASM)),)
 $(error gputils unavailable)
 endif
 
-AS:=gpasm -a inhx32 -e on -I ../include/
+AS:=gpasm -a inhx32 -e on
 
 ASOURCE:=$(filter-out template.asm, $(wildcard *.asm))
 AHEADER:=$(wildcard ../include/*.inc)
