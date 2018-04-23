@@ -1,11 +1,12 @@
 const int revisionnr = 
-13892
+13893
 ;
 const char* commithash = 
-"37a24083ce1f5628b11fe86c46e5e38196202761";
+"e244af18f7c8d46414416f235712591e5acaffee";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13893 2018-04-23 12:02:22 +0200 model: added missing return in case lookup schedule is disabled\n" \
 "13892 2018-04-22 11:45:58 +0200 rocnetnode: fix for calculating the on delay\n" \
 "13891 2018-04-22 10:26:59 +0200 signal: dim parameter added for dimming LED type signals\n" \
 "13890 2018-04-22 07:57:07 +0200 model: common lookupschedule command added\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13846 2018-04-11 12:01:46 +0200 rocprodlg: removed decoderdb link\n" \
 "13845 2018-04-11 11:56:51 +0200 wrapper: default string section value set to empty instead of zero\n" \
 "13844 2018-04-11 11:08:11 +0200 operatordlg: moved the train ID to the index tab\n" \
-"13843 2018-04-11 10:57:47 +0200 operatordlg,railwaydlg: abox support added\n" \
 
 "log end";
