@@ -1,11 +1,17 @@
 const int revisionnr = 
-13894
+13900
 ;
 const char* commithash = 
-"5939c0a1b686433d832895b4352776042f93a239";
+"0092c9f48cbac94bc7325a20d19a634c67f7f4cd";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13900 2018-04-27 11:19:04 +0200 rocnetnode: crash fix if no rocnetnode.ini is available\n" \
+"13899 2018-04-27 07:32:08 +0200 text: new text variable for date and temp. added\n" \
+"13898 2018-04-26 15:49:36 +0200 loc: informall flag added\n" \
+"13897 2018-04-26 08:14:31 +0200 guiframe: disable edit actions and variables in case of automatic mode\n" \
+"13896 2018-04-26 07:52:37 +0200 operator: removed the combination field\n" \
+"13895 2018-04-25 12:43:26 +0200 basedlg: regard the active suffix at sorting the show column\n" \
 "13894 2018-04-24 07:56:59 +0200 locdialog: show active flag on the index tab\n" \
 "13893 2018-04-23 12:02:22 +0200 model: added missing return in case lookup schedule is disabled\n" \
 "13892 2018-04-22 11:45:58 +0200 rocnetnode: fix for calculating the on delay\n" \
@@ -50,11 +56,5 @@ const char* revlog =
 "13853 2018-04-13 06:36:13 +0200 model: trace corrections after analyse\n" \
 "13852 2018-04-12 14:44:28 +0200 rocnet: show in clock sync trace the brightness\n" \
 "13851 2018-04-12 10:34:22 +0200 ulni: tracelevel changed to BYTE for undocumented OPCs\n" \
-"13850 2018-04-12 10:32:32 +0200 ulni: trace level changed to BYTE for undocumented OPCs\n" \
-"13849 2018-04-12 10:28:57 +0200 trackpickerdlg,planpanel: raster switch type support\n" \
-"13848 2018-04-12 08:31:17 +0200 SLIM: raster switches\n" \
-"13847 2018-04-11 15:46:32 +0200 SLIM: raster switches (WIP)\n" \
-"13846 2018-04-11 12:01:46 +0200 rocprodlg: removed decoderdb link\n" \
-"13845 2018-04-11 11:56:51 +0200 wrapper: default string section value set to empty instead of zero\n" \
 
 "log end";
