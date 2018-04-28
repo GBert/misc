@@ -1,11 +1,14 @@
 const int revisionnr = 
-13900
+13903
 ;
 const char* commithash = 
-"0092c9f48cbac94bc7325a20d19a634c67f7f4cd";
+"8366f9d6b26fe36cc60c8d5e9fd36a485ac2a79b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13903 2018-04-28 10:47:06 +0200 loc: reset pause flag on init to signal the clients the correct state at startup\n" \
+"13902 2018-04-28 09:51:18 +0200 loc: allow turn of pause in case of no auto mode\n" \
+"13901 2018-04-28 08:21:57 +0200 loc: pause flag added\n" \
 "13900 2018-04-27 11:19:04 +0200 rocnetnode: crash fix if no rocnetnode.ini is available\n" \
 "13899 2018-04-27 07:32:08 +0200 text: new text variable for date and temp. added\n" \
 "13898 2018-04-26 15:49:36 +0200 loc: informall flag added\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13856 2018-04-13 15:38:24 +0200 operator: revert redirecting commands to the assigned loco\n" \
 "13855 2018-04-13 08:45:33 +0200 seltab: BBT option added\n" \
 "13854 2018-04-13 08:08:50 +0200 analyse: set analysed flag on broadcast to signal to replace all child nodes even if there are none in the modified properties\n" \
-"13853 2018-04-13 06:36:13 +0200 model: trace corrections after analyse\n" \
-"13852 2018-04-12 14:44:28 +0200 rocnet: show in clock sync trace the brightness\n" \
-"13851 2018-04-12 10:34:22 +0200 ulni: tracelevel changed to BYTE for undocumented OPCs\n" \
 
 "log end";
