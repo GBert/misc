@@ -1,11 +1,20 @@
 const int revisionnr = 
-13903
+13912
 ;
 const char* commithash = 
-"8366f9d6b26fe36cc60c8d5e9fd36a485ac2a79b";
+"5be140f25f18a7c029e685062cca7d43200127ee";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13912 2018-04-29 13:02:30 +0200 rocnetnode: trace level correction\n" \
+"13911 2018-04-29 11:51:00 +0200 loc: fix for pause\n" \
+"13910 2018-04-29 11:10:12 +0200 powerctrl: history log size in minutes added\n" \
+"13909 2018-04-29 08:12:19 +0200 model: disable usebididir after the first auto on command\n" \
+"13908 2018-04-29 07:55:46 +0200 rocnetnode: only try to init the LED chips incase one or more has been detected\n" \
+"13907 2018-04-29 07:47:31 +0200 rocnetnode: trace fix\n" \
+"13906 2018-04-29 07:46:25 +0200 rocnet: do not automatically take over the found MQTT broker\n" \
+"13905 2018-04-29 07:33:18 +0200 SLIM-COLOR: raster switches (Peter)\n" \
+"13904 2018-04-29 07:26:00 +0200 loc: fix for pause\n" \
 "13903 2018-04-28 10:47:06 +0200 loc: reset pause flag on init to signal the clients the correct state at startup\n" \
 "13902 2018-04-28 09:51:18 +0200 loc: allow turn of pause in case of no auto mode\n" \
 "13901 2018-04-28 08:21:57 +0200 loc: pause flag added\n" \
@@ -47,14 +56,5 @@ const char* revlog =
 "13865 2018-04-15 16:22:46 +0200 rocnetnode: macro extended for LED outputs, signal extended for simple LED aspect signals\n" \
 "13864 2018-04-15 14:04:24 +0200 rocnetnode: support for LED with temp. base 0x06\n" \
 "13863 2018-04-15 10:28:52 +0200 locationdlg: show line position\n" \
-"13862 2018-04-15 10:20:32 +0200 location: railway line position\n" \
-"13861 2018-04-15 08:49:05 +0200 analyse: reset/init listeners improved\n" \
-"13860 2018-04-14 15:41:57 +0200 locationsdlg: fix for moving down blocks\n" \
-"13859 2018-04-14 14:53:48 +0200 location: removed railway/position from properties; should be maintained in the railwayline properties\n" \
-"13858 2018-04-13 16:36:04 +0200 analyse: inform blocks of changed properties to re-initialise listeners\n" \
-"13857 2018-04-13 16:30:23 +0200 operator: fix for race condition?\n" \
-"13856 2018-04-13 15:38:24 +0200 operator: revert redirecting commands to the assigned loco\n" \
-"13855 2018-04-13 08:45:33 +0200 seltab: BBT option added\n" \
-"13854 2018-04-13 08:08:50 +0200 analyse: set analysed flag on broadcast to signal to replace all child nodes even if there are none in the modified properties\n" \
 
 "log end";
