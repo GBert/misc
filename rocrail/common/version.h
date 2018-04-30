@@ -1,11 +1,14 @@
 const int revisionnr = 
-13912
+13915
 ;
 const char* commithash = 
-"5be140f25f18a7c029e685062cca7d43200127ee";
+"e451982c5123346259b2a73c7b84147259778bff";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13915 2018-04-30 19:32:13 +0200 analyse: fix for direction arrows next to blocks (Lothar)\n" \
+"13914 2018-04-30 18:08:06 +0200 routedialog: remove autogen flag also removes description (Lothar)\n" \
+"13913 2018-04-30 10:24:35 +0200 translation merge: pt_BR, en_GB, sr_latin, nl, de\n" \
 "13912 2018-04-29 13:02:30 +0200 rocnetnode: trace level correction\n" \
 "13911 2018-04-29 11:51:00 +0200 loc: fix for pause\n" \
 "13910 2018-04-29 11:10:12 +0200 powerctrl: history log size in minutes added\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13868 2018-04-16 09:08:10 +0200 rocnetnode: dimming fix for LEDs\n" \
 "13867 2018-04-16 08:54:45 +0200 rocnetnode: simple aspect LED signal support\n" \
 "13866 2018-04-16 08:24:54 +0200 rocnetnode: LED output blink support\n" \
-"13865 2018-04-15 16:22:46 +0200 rocnetnode: macro extended for LED outputs, signal extended for simple LED aspect signals\n" \
-"13864 2018-04-15 14:04:24 +0200 rocnetnode: support for LED with temp. base 0x06\n" \
-"13863 2018-04-15 10:28:52 +0200 locationdlg: show line position\n" \
 
 "log end";
