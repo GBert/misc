@@ -265,11 +265,11 @@ LED_N1
 		BTFSS	LATC,5		; look for change
 		BRA	MAIN_NEXT1	; used as trigger 128 * 4ms = 512 ms
 		BCF	LATC,5
-		MOVLW	'w'
+		MOVLW	'a'
 		PUTC
-		MOVLW	'w'
+		MOVLW	'b'
 		PUTC
-		MOVLW	'w'
+		MOVLW	'c'
 		PUTC
 		BANKSEL	PIE1
 		BSF	PIE1,TXIE
