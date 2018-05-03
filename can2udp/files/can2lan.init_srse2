@@ -6,11 +6,12 @@ START=99
 start() {
 	omega2-ctrl gpiomux set uart1 uart
 	slcand -S 500000 /dev/ttyS1 can0
+	sleep 1
 	ifconfig can0 up
 
 	[ -e /www/config/ ] && {
 		rm -f /var/run/can2lan.pid
-		can2lan -m -c /www/config -b eth0
+		can2lan -T30 -mc /www/config -b eth0
 		# can2lan -m -c /www/config -b apcli0
 		# can2lan -m -c /www/config -b br-wlan
 	}
