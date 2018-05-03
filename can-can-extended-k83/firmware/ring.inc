@@ -83,7 +83,7 @@ GETC            MACRO
 PUTC            MACRO
                 MOVWF   TXTEMP
                 MOVF    TXPUT,W
-                MOVFF   TXTEMP,PLUSW2
+                MOVFFL  TXTEMP,PLUSW2
                 INCF    TXPUT,F             ; TXPUT++
                 ENDM
 
@@ -95,7 +95,7 @@ PUTC            MACRO
 ISRHIGH
                 ; Read Rx Data & Flush IRQ
                 MOVF    RXPUT,W
-                MOVFF   URCREG,PLUSW1       ; Won't clobber with Overflow On
+                MOVFFL  URCREG,PLUSW1       ; Won't clobber with Overflow On
 
                 ; If Rx packet counter = trigger Then Drop Data
                 MOVF    RXCNT,W
@@ -152,7 +152,7 @@ ISRHIGHEND
 ;  Affects TXGET & uses FSR2; do not use these elsewhere.
 ;------------------------------------------------------------------------------
 ISRLOW
-                MOVFF   STATUS,S_SAVE       ; SAVE STATUS
+                MOVFFL  STATUS,S_SAVE       ; SAVE STATUS
                 MOVWF   W_SAVE              ; SAVE WORKING REGISTER
 
                 MOVF    TXGET,W
@@ -168,7 +168,7 @@ ISRLOW
                 BCF     UPIE,UTXIE          ; Disable Tx ring ISR
 ISRLOWEND
                 MOVF    W_SAVE,W            ; RESTORE WORKING REGISTER
-                MOVFF   S_SAVE,STATUS       ; RESTORE STATUS
+                MOVFFL  S_SAVE,STATUS       ; RESTORE STATUS
 
                 RETFIE
 

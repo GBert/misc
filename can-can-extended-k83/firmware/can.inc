@@ -127,11 +127,11 @@ INITCAN1
 
                 ; Set bit rate
                 TBLRD+*                     ; ignore first entry
-                MOVFF   TABLAT,BRGCON1
+                MOVFFL  TABLAT,BRGCON1
                 TBLRD+*
-                MOVFF   TABLAT,BRGCON2
+                MOVFFL  TABLAT,BRGCON2
                 TBLRD+*
-                MOVFF   TABLAT,BRGCON3
+                MOVFFL  TABLAT,BRGCON3
 
                 ; Enable CANTX
                 BANKSEL CIOCON

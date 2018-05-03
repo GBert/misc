@@ -13,7 +13,7 @@
 		CONFIG	PR1WAY = OFF
 
 ;   Clock Switch Enable bit:
-		CONFIG	CSWEN = ON           Writing to NOSC and NDIV is allowed
+		CONFIG	CSWEN = ON
 
 ;   Fail-Safe Clock Monitor Enable bit:
 		CONFIG	FCMEN = OFF
@@ -105,7 +105,7 @@
 		CONFIG	SAFEN = OFF
 ;
 ;   Application Block write protection bit:
-		CONFIG	WRTAPP = OFF         Application Block not write protected
+		CONFIG	WRTAPP = OFF
 
 ;   Configuration Register Write Protection bit:
 		CONFIG	WRTB = OFF
