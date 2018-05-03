@@ -9,7 +9,10 @@ start() {
 	ifconfig can0 up
 
 	[ -e /www/config/ ] && {
-		can2lan -m -c /www/config -b br-lan
+		rm -f /var/run/can2lan.pid
+		can2lan -m -c /www/config -b eth0
+		# can2lan -m -c /www/config -b apcli0
+		# can2lan -m -c /www/config -b br-wlan
 	}
 }
 
