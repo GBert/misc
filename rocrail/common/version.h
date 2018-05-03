@@ -1,11 +1,13 @@
 const int revisionnr = 
-13917
+13919
 ;
 const char* commithash = 
-"1613a48601683c853811d8a8f9f3fb5f0669b992";
+"c98ea652805b6e7aa009c3af943d8222b8a59590";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13919 2018-05-03 08:31:44 +0200 initialize: fix for checking the auto state in case of checking the block wait flag\n" \
+"13918 2018-05-02 18:15:04 +0200 z21: revert loconet detector address change\n" \
 "13917 2018-05-02 08:10:08 +0200 z21: Xpressnet GBM option added for activating Loconet Detector evaluation\n" \
 "13916 2018-05-01 14:43:20 +0200 loc: check if loco is in auto mode before pause request\n" \
 "13915 2018-04-30 19:32:13 +0200 analyse: fix for direction arrows next to blocks (Lothar)\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "13872 2018-04-17 08:17:29 +0200 rocnetnode: disable blink on first signal LED\n" \
 "13871 2018-04-17 08:01:58 +0200 rocnetnode: simple aspect signals extended\n" \
 "13870 2018-04-17 07:47:28 +0200 model: extended the lcprops command to itterate all\n" \
-"13869 2018-04-16 11:42:17 +0200 timetabledlg: only show loco ID in case the train ID is not set\n" \
-"13868 2018-04-16 09:08:10 +0200 rocnetnode: dimming fix for LEDs\n" \
 
 "log end";
