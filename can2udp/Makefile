@@ -76,7 +76,7 @@ ifneq (,$(findstring carambola,$(CONFIG_TARGET_PROFILE)))
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init_carambola $(1)/etc/init.d/can2lan
 endif
-ifneq (,$(findstring omega2,$(CONFIG_TARGET_PROFILE)))
+ifneq (,$(findstring mt7688,$(CONFIG_TARGET_SUBTARGET)))
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init_srse2 $(1)/etc/init.d/can2lan
 endif
