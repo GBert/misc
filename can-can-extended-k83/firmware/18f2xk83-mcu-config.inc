@@ -1,5 +1,3 @@
-; VREG Sleep Enable bit:
-                CONFIG    RETEN=ON
 ; LF-INTOSC Low-power Enable bit:
 ;               CONFIG    INTOSCSEL=LOW
 ; SOSC Power Selection and mode Configuration bits:
@@ -36,16 +34,8 @@
                 CONFIG    STVREN=ON
 ; Boot Block Size:
                 CONFIG    BBSIZ=BB1K
-; Code Protect 00800-03FFF:
-;                CONFIG    CP0=OFF
-; Code Protect 04000-07FFF:
-;                CONFIG    CP1=OFF
-; Code Protect 08000-0BFFF:
-;               CONFIG    CP2=OFF
-; Code Protect 0C000-0FFFF:
-;                CONFIG    CP3=OFF
-; Code Protect Boot:
-;                CONFIG    CPB=OFF
+; Code Protect
+                CONFIG    CP=OFF
 ; Data EE Read Protect:
                 CONFIG    CPD=OFF
 ; Table Write Protect 00800-03FFF:
