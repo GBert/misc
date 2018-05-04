@@ -1,11 +1,21 @@
 const int revisionnr = 
-13919
+13929
 ;
 const char* commithash = 
-"c98ea652805b6e7aa009c3af943d8222b8a59590";
+"4694477b3304185499b839d2c0307bc28b3e3f77";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13929 2018-05-04 15:33:44 +0200 scheduledialog: show none regular stop time in the destination table between brackets\n" \
+"13928 2018-05-04 14:44:41 +0200 locationgraph: scaling support\n" \
+"13927 2018-05-04 13:18:52 +0200 locationgraph: show trainid or scheduleid\n" \
+"13926 2018-05-04 12:29:46 +0200 locationgraph: disabled scale height\n" \
+"13925 2018-05-04 12:10:02 +0200 locationgraph: use schedule color\n" \
+"13924 2018-05-04 12:02:02 +0200 locationgraph: skip none regular stops and a fix for hourly time\n" \
+"13923 2018-05-04 11:41:44 +0200 locationgraph: show schedule entries es red line\n" \
+"13922 2018-05-04 11:07:18 +0200 locationgraph: WIP\n" \
+"13921 2018-05-04 08:20:11 +0200 locationdlg: graph tab added (wip)\n" \
+"13920 2018-05-04 07:40:09 +0200 om32: show switch delay in trace\n" \
 "13919 2018-05-03 08:31:44 +0200 initialize: fix for checking the auto state in case of checking the block wait flag\n" \
 "13918 2018-05-02 18:15:04 +0200 z21: revert loconet detector address change\n" \
 "13917 2018-05-02 08:10:08 +0200 z21: Xpressnet GBM option added for activating Loconet Detector evaluation\n" \
@@ -46,15 +56,5 @@ const char* revlog =
 "13882 2018-04-19 08:33:22 +0200 bidib: Tams update\n" \
 "13881 2018-04-18 16:04:52 +0200 bidib images\n" \
 "13880 2018-04-18 15:59:17 +0200 bidib: Tams images\n" \
-"13879 2018-04-18 14:51:59 +0200 rocnetnode: scan and init Pi08 boards after read options\n" \
-"13878 2018-04-18 10:48:43 +0200 signal: calculate the number of LEDs by evaluating the aspect values (for LED signals and aspect number control only)\n" \
-"13877 2018-04-18 10:28:17 +0200 rocnetnode: fix for brightness mode\n" \
-"13876 2018-04-18 08:20:26 +0200 rocnetnode: brightness mode for weather, day, night\n" \
-"13875 2018-04-18 08:03:19 +0200 timetabledlg: cellspacing option added\n" \
-"13874 2018-04-17 14:47:21 +0200 rocnetnode: use weather brightness for signal LEDs\n" \
-"13873 2018-04-17 11:14:39 +0200 rocnetnode: signal aspect value support added\n" \
-"13872 2018-04-17 08:17:29 +0200 rocnetnode: disable blink on first signal LED\n" \
-"13871 2018-04-17 08:01:58 +0200 rocnetnode: simple aspect signals extended\n" \
-"13870 2018-04-17 07:47:28 +0200 model: extended the lcprops command to itterate all\n" \
 
 "log end";
