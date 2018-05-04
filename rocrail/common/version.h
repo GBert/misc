@@ -1,11 +1,12 @@
 const int revisionnr = 
-13929
+13930
 ;
 const char* commithash = 
-"4694477b3304185499b839d2c0307bc28b3e3f77";
+"045f5a65353ab920751c1150689949330a44c8ff";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13930 2018-05-04 22:16:47 +0200 locationgraph: fix for calculating y position\n" \
 "13929 2018-05-04 15:33:44 +0200 scheduledialog: show none regular stop time in the destination table between brackets\n" \
 "13928 2018-05-04 14:44:41 +0200 locationgraph: scaling support\n" \
 "13927 2018-05-04 13:18:52 +0200 locationgraph: show trainid or scheduleid\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13883 2018-04-20 07:37:29 +0200 timetabledlg: memory leak fix\n" \
 "13882 2018-04-19 08:33:22 +0200 bidib: Tams update\n" \
 "13881 2018-04-18 16:04:52 +0200 bidib images\n" \
-"13880 2018-04-18 15:59:17 +0200 bidib: Tams images\n" \
 
 "log end";
