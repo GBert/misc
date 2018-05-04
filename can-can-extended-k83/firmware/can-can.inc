@@ -76,21 +76,22 @@ RTSSET          MACRO
 ; Init.
 ;------------------------------------------------------------------------------
 INIT
-                MOVLB   0x0F                ; Default to Bank 15
+                BANKSEL	PIE1                ; Default to Bank 
 
-                CLRF    INTCON0              ; Reset ISR
+                CLRF    INTCON0             ; Reset ISR
                 CLRF    PIE1
                 CLRF    PIR1
 
                 ; switch off A/Ds, D/As and comaprators
-                CLRF    ADCON0          ;D
-                CLRF    ADCON1          ;D
-                CLRF    ADCON2          ;D
-		CLRF	ANSELA		;N
-		CLRF	ANSELB		;N
-		CLRF	ANSELC		;N
-                CLRF    CM1CON0         ;C
-                CLRF    CM2CON0         ;C
+                BANKSEL ADCON0
+                CLRF    ADCON0              ;D
+                CLRF    ADCON1              ;D
+                CLRF    ADCON2              ;D
+                CLRF    ANSELA		    ;N
+                CLRF    ANSELB		    ;N
+		CLRF    ANSELC		    ;N
+                CLRF    CM1CON0             ;C
+                CLRF    CM2CON0             ;C
                 CLRF    CM1CON1         ;C
                 CLRF    CM2CON1         ;C
 
