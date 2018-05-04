@@ -78,7 +78,7 @@ RTSSET          MACRO
 INIT
                 MOVLB   0x0F                ; Default to Bank 15
 
-                CLRF    INTCON              ; Reset ISR
+                CLRF    INTCON0              ; Reset ISR
                 CLRF    PIE1
                 CLRF    PIR1
 
@@ -86,10 +86,13 @@ INIT
                 CLRF    ADCON0          ;D
                 CLRF    ADCON1          ;D
                 CLRF    ADCON2          ;D
-                CLRF    ANCON0          ;N
-                CLRF    ANCON1          ;N
+		CLRF	ANSELA		;N
+		CLRF	ANSELB		;N
+		CLRF	ANSELC		;N
                 CLRF    CM1CON0         ;C
                 CLRF    CM2CON0         ;C
+                CLRF    CM1CON1         ;C
+                CLRF    CM2CON1         ;C
 
                 CLRF    GPIO                ; Init. LED
                 RTSCLR                      ; Init. RTS
@@ -103,8 +106,8 @@ INIT
                 RCALL   PIOINIT             ; Init. PIO
 
                 BSF     RCON,IPEN           ; Enable priority interrupts
-                BSF     INTCON,PEIE         ; Init. ISR
-                BSF     INTCON,GIE
+                BSF     INTCON0,PEIE         ; Init. ISR
+                BSF     INTCON0,GIE
                
 ;------------------------------------------------------------------------------
 ; Main
@@ -113,7 +116,7 @@ MAIN
                 RCALL   RESETUART           ; UART RESET
                 RCALL   RXCAN               ; RECEIVE CAN
                 RCALL   TXCAN               ; SEND CAN
-		BTFSC	INTCON, TMR0IF
+		BTFSC	INTCON0, TMR0IF
 		RCALL   SCHEDULE
                 BRA     MAIN
 
