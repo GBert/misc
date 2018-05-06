@@ -1,11 +1,21 @@
 const int revisionnr = 
-13930
+13940
 ;
 const char* commithash = 
-"045f5a65353ab920751c1150689949330a44c8ff";
+"75c3a3b6e61d07561904090bb5cc9282b79d6392";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13940 2018-05-05 18:36:47 +0200 scheduledialog: fix for destination grid scroll\n" \
+"13939 2018-05-05 14:57:15 +0200 locationsdlg: only show schedules in the list on the graph tab which contains a block of the slected loctaion\n" \
+"13938 2018-05-05 12:57:35 +0200 locationgraph: destination text option added\n" \
+"13937 2018-05-05 12:18:17 +0200 locationgraph: show destination\n" \
+"13936 2018-05-05 10:52:04 +0200 locationsdlg: open schedule on dclick in list\n" \
+"13935 2018-05-05 10:33:13 +0200 schedule entry: arrive time added\n" \
+"13934 2018-05-05 08:28:06 +0200 locationsdlg: sort schedule color list\n" \
+"13933 2018-05-05 08:19:48 +0200 locationsdialog: show schedule colors on the graph tab\n" \
+"13932 2018-05-05 07:41:11 +0200 loc: inform slave locos in case of a pause command\n" \
+"13931 2018-05-05 06:57:47 +0200 ecos: fix for address offset in case of RailCom\n" \
 "13930 2018-05-04 22:16:47 +0200 locationgraph: fix for calculating y position\n" \
 "13929 2018-05-04 15:33:44 +0200 scheduledialog: show none regular stop time in the destination table between brackets\n" \
 "13928 2018-05-04 14:44:41 +0200 locationgraph: scaling support\n" \
@@ -46,15 +56,5 @@ const char* revlog =
 "13893 2018-04-23 12:02:22 +0200 model: added missing return in case lookup schedule is disabled\n" \
 "13892 2018-04-22 11:45:58 +0200 rocnetnode: fix for calculating the on delay\n" \
 "13891 2018-04-22 10:26:59 +0200 signal: dim parameter added for dimming LED type signals\n" \
-"13890 2018-04-22 07:57:07 +0200 model: common lookupschedule command added\n" \
-"13889 2018-04-21 10:46:17 +0200 rocnetnode: auto brightnes fix for keep two blinking LED in sync\n" \
-"13888 2018-04-21 08:20:18 +0200 rocnetnode: fix for update LED brightness\n" \
-"13887 2018-04-21 08:17:23 +0200 rocnetnode: improved signal processing\n" \
-"13886 2018-04-20 15:37:37 +0200 rocnetnode: signal processor thread added to be able to wait between LEDs be turned off and LEDs be turned on.\n" \
-"13885 2018-04-20 08:08:21 +0200 scheduledialog: timeprocessing index column added\n" \
-"13884 2018-04-20 07:51:17 +0200 model: swprops command added\n" \
-"13883 2018-04-20 07:37:29 +0200 timetabledlg: memory leak fix\n" \
-"13882 2018-04-19 08:33:22 +0200 bidib: Tams update\n" \
-"13881 2018-04-18 16:04:52 +0200 bidib images\n" \
 
 "log end";
