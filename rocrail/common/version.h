@@ -1,11 +1,14 @@
 const int revisionnr = 
-13940
+13943
 ;
 const char* commithash = 
-"75c3a3b6e61d07561904090bb5cc9282b79d6392";
+"090f1cf8c176d88d594469f9a1e769a1dd320834";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13943 2018-05-06 15:38:32 +0200 messages: adjust added\n" \
+"13942 2018-05-06 11:25:46 +0200 locationgraph: set vertical scroll style flag\n" \
+"13941 2018-05-06 07:47:06 +0200 scheduledlg: fix for showing depart time for first entry\n" \
 "13940 2018-05-05 18:36:47 +0200 scheduledialog: fix for destination grid scroll\n" \
 "13939 2018-05-05 14:57:15 +0200 locationsdlg: only show schedules in the list on the graph tab which contains a block of the slected loctaion\n" \
 "13938 2018-05-05 12:57:35 +0200 locationgraph: destination text option added\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13896 2018-04-26 07:52:37 +0200 operator: removed the combination field\n" \
 "13895 2018-04-25 12:43:26 +0200 basedlg: regard the active suffix at sorting the show column\n" \
 "13894 2018-04-24 07:56:59 +0200 locdialog: show active flag on the index tab\n" \
-"13893 2018-04-23 12:02:22 +0200 model: added missing return in case lookup schedule is disabled\n" \
-"13892 2018-04-22 11:45:58 +0200 rocnetnode: fix for calculating the on delay\n" \
-"13891 2018-04-22 10:26:59 +0200 signal: dim parameter added for dimming LED type signals\n" \
 
 "log end";
