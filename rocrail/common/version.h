@@ -1,11 +1,33 @@
 const int revisionnr = 
-13943
+13965
 ;
 const char* commithash = 
-"090f1cf8c176d88d594469f9a1e769a1dd320834";
+"de8cb846392b29d1ca9aba72c72487c380935ad2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13965 2018-05-13 08:12:38 +0200 locdialog: add train on multiunit tab\n" \
+"13964 2018-05-12 08:12:38 +0200 trainimage: show linked trains\n" \
+"13963 2018-05-12 07:52:37 +0200 translation merge: de, nl, fr, sl\n" \
+"13962 2018-05-11 15:06:05 +0200 loc,guiframe: fixes for (un)link a train\n" \
+"13961 2018-05-11 07:48:44 +0200 link/unlink train (wip)\n" \
+"13960 2018-05-08 13:53:29 +0200 schedulegraphdlg: default settings to none scaled\n" \
+"13959 2018-05-08 12:14:39 +0200 scheduledialog: process enter in the group filter combobox\n" \
+"13958 2018-05-08 11:29:08 +0200 locationgraph: show time now\n" \
+"13957 2018-05-08 11:17:30 +0200 schedulegraphdlg: label fix from scale to adjust\n" \
+"13956 2018-05-08 10:43:39 +0200 scheduledialog: use combobox for groupID and groupFilter\n" \
+"13955 2018-05-08 09:17:51 +0200 locationsdlg: fix for selecting schedules\n" \
+"13954 2018-05-07 16:05:38 +0200 scheduledialog: translation fix\n" \
+"13953 2018-05-07 15:41:54 +0200 railwayline: removed\n" \
+"13952 2018-05-07 12:19:00 +0200 schedules: record schedule time for none regular stops too\n" \
+"13951 2018-05-07 12:13:09 +0200 scheduledialog: layout correction\n" \
+"13950 2018-05-07 11:51:11 +0200 schedule: removed railway line\n" \
+"13949 2018-05-07 10:52:19 +0200 translation merge: nl, en_GB, de, fr\n" \
+"13948 2018-05-07 09:17:14 +0200 schedulegraph: copy/paste fix\n" \
+"13947 2018-05-07 09:14:49 +0200 locationgraph,schedulegraph: use scrollwin* events to refresh the whole canvas under windows and linux\n" \
+"13946 2018-05-07 08:24:26 +0200 schedulegraph: mousewheel eventhandler to invalidate the whole canvas\n" \
+"13945 2018-05-07 08:17:10 +0200 locationgraph: mousewheel eventhandler to invalidate the whole canvas\n" \
+"13944 2018-05-07 07:48:38 +0200 locationgraph: mousewheel eventhandler to invalidate the whole canvas\n" \
 "13943 2018-05-06 15:38:32 +0200 messages: adjust added\n" \
 "13942 2018-05-06 11:25:46 +0200 locationgraph: set vertical scroll style flag\n" \
 "13941 2018-05-06 07:47:06 +0200 scheduledlg: fix for showing depart time for first entry\n" \
@@ -34,27 +56,5 @@ const char* revlog =
 "13918 2018-05-02 18:15:04 +0200 z21: revert loconet detector address change\n" \
 "13917 2018-05-02 08:10:08 +0200 z21: Xpressnet GBM option added for activating Loconet Detector evaluation\n" \
 "13916 2018-05-01 14:43:20 +0200 loc: check if loco is in auto mode before pause request\n" \
-"13915 2018-04-30 19:32:13 +0200 analyse: fix for direction arrows next to blocks (Lothar)\n" \
-"13914 2018-04-30 18:08:06 +0200 routedialog: remove autogen flag also removes description (Lothar)\n" \
-"13913 2018-04-30 10:24:35 +0200 translation merge: pt_BR, en_GB, sr_latin, nl, de\n" \
-"13912 2018-04-29 13:02:30 +0200 rocnetnode: trace level correction\n" \
-"13911 2018-04-29 11:51:00 +0200 loc: fix for pause\n" \
-"13910 2018-04-29 11:10:12 +0200 powerctrl: history log size in minutes added\n" \
-"13909 2018-04-29 08:12:19 +0200 model: disable usebididir after the first auto on command\n" \
-"13908 2018-04-29 07:55:46 +0200 rocnetnode: only try to init the LED chips incase one or more has been detected\n" \
-"13907 2018-04-29 07:47:31 +0200 rocnetnode: trace fix\n" \
-"13906 2018-04-29 07:46:25 +0200 rocnet: do not automatically take over the found MQTT broker\n" \
-"13905 2018-04-29 07:33:18 +0200 SLIM-COLOR: raster switches (Peter)\n" \
-"13904 2018-04-29 07:26:00 +0200 loc: fix for pause\n" \
-"13903 2018-04-28 10:47:06 +0200 loc: reset pause flag on init to signal the clients the correct state at startup\n" \
-"13902 2018-04-28 09:51:18 +0200 loc: allow turn of pause in case of no auto mode\n" \
-"13901 2018-04-28 08:21:57 +0200 loc: pause flag added\n" \
-"13900 2018-04-27 11:19:04 +0200 rocnetnode: crash fix if no rocnetnode.ini is available\n" \
-"13899 2018-04-27 07:32:08 +0200 text: new text variable for date and temp. added\n" \
-"13898 2018-04-26 15:49:36 +0200 loc: informall flag added\n" \
-"13897 2018-04-26 08:14:31 +0200 guiframe: disable edit actions and variables in case of automatic mode\n" \
-"13896 2018-04-26 07:52:37 +0200 operator: removed the combination field\n" \
-"13895 2018-04-25 12:43:26 +0200 basedlg: regard the active suffix at sorting the show column\n" \
-"13894 2018-04-24 07:56:59 +0200 locdialog: show active flag on the index tab\n" \
 
 "log end";
