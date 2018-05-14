@@ -1,11 +1,14 @@
 const int revisionnr = 
-13965
+13968
 ;
 const char* commithash = 
-"de8cb846392b29d1ca9aba72c72487c380935ad2";
+"a6bf9e0bf44038a0271a45070b2b85b33de754df";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13968 2018-05-14 12:21:28 +0200 block: followup lock ID in case of an unlink train command\n" \
+"13967 2018-05-14 08:19:20 +0200 ecos: check is socket is valid before using it\n" \
+"13966 2018-05-14 08:07:53 +0200 wmz21: fix for lights in case of none rocrail loco\n" \
 "13965 2018-05-13 08:12:38 +0200 locdialog: add train on multiunit tab\n" \
 "13964 2018-05-12 08:12:38 +0200 trainimage: show linked trains\n" \
 "13963 2018-05-12 07:52:37 +0200 translation merge: de, nl, fr, sl\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13921 2018-05-04 08:20:11 +0200 locationdlg: graph tab added (wip)\n" \
 "13920 2018-05-04 07:40:09 +0200 om32: show switch delay in trace\n" \
 "13919 2018-05-03 08:31:44 +0200 initialize: fix for checking the auto state in case of checking the block wait flag\n" \
-"13918 2018-05-02 18:15:04 +0200 z21: revert loconet detector address change\n" \
-"13917 2018-05-02 08:10:08 +0200 z21: Xpressnet GBM option added for activating Loconet Detector evaluation\n" \
-"13916 2018-05-01 14:43:20 +0200 loc: check if loco is in auto mode before pause request\n" \
 
 "log end";
