@@ -1,11 +1,12 @@
 const int revisionnr = 
-13968
+13969
 ;
 const char* commithash = 
-"a6bf9e0bf44038a0271a45070b2b85b33de754df";
+"b6f753787342486ed5904910602f30fae49e2a4f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13969 2018-05-15 12:11:36 +0200 lcdriver: activate first schedule of tour if no free destination is available\n" \
 "13968 2018-05-14 12:21:28 +0200 block: followup lock ID in case of an unlink train command\n" \
 "13967 2018-05-14 08:19:20 +0200 ecos: check is socket is valid before using it\n" \
 "13966 2018-05-14 08:07:53 +0200 wmz21: fix for lights in case of none rocrail loco\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13922 2018-05-04 11:07:18 +0200 locationgraph: WIP\n" \
 "13921 2018-05-04 08:20:11 +0200 locationdlg: graph tab added (wip)\n" \
 "13920 2018-05-04 07:40:09 +0200 om32: show switch delay in trace\n" \
-"13919 2018-05-03 08:31:44 +0200 initialize: fix for checking the auto state in case of checking the block wait flag\n" \
 
 "log end";
