@@ -1,11 +1,12 @@
 const int revisionnr = 
-13972
+13973
 ;
 const char* commithash = 
-"90e70bdfc55a00725d234935828bcf2f0a20aefa";
+"2e11c0fd4c8312f64d5bf122deedea8daf140b2b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13973 2018-05-17 11:57:28 +0200 loc: unlink support in a virtual block\n" \
 "13972 2018-05-16 14:32:22 +0200 linktrain: virtual block support added (unlinktrain in vb is WIP)\n" \
 "13971 2018-05-16 11:43:00 +0200 locdialog: exclude locos and trains from consist selection if they are already in the consist\n" \
 "13970 2018-05-16 11:40:58 +0200 blockdialog: select slave blocks by dialog\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13926 2018-05-04 12:29:46 +0200 locationgraph: disabled scale height\n" \
 "13925 2018-05-04 12:10:02 +0200 locationgraph: use schedule color\n" \
 "13924 2018-05-04 12:02:02 +0200 locationgraph: skip none regular stops and a fix for hourly time\n" \
-"13923 2018-05-04 11:41:44 +0200 locationgraph: show schedule entries es red line\n" \
 
 "log end";
