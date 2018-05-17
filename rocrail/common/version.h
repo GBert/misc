@@ -1,11 +1,14 @@
 const int revisionnr = 
-13969
+13972
 ;
 const char* commithash = 
-"b6f753787342486ed5904910602f30fae49e2a4f";
+"90e70bdfc55a00725d234935828bcf2f0a20aefa";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13972 2018-05-16 14:32:22 +0200 linktrain: virtual block support added (unlinktrain in vb is WIP)\n" \
+"13971 2018-05-16 11:43:00 +0200 locdialog: exclude locos and trains from consist selection if they are already in the consist\n" \
+"13970 2018-05-16 11:40:58 +0200 blockdialog: select slave blocks by dialog\n" \
 "13969 2018-05-15 12:11:36 +0200 lcdriver: activate first schedule of tour if no free destination is available\n" \
 "13968 2018-05-14 12:21:28 +0200 block: followup lock ID in case of an unlink train command\n" \
 "13967 2018-05-14 08:19:20 +0200 ecos: check is socket is valid before using it\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13925 2018-05-04 12:10:02 +0200 locationgraph: use schedule color\n" \
 "13924 2018-05-04 12:02:02 +0200 locationgraph: skip none regular stops and a fix for hourly time\n" \
 "13923 2018-05-04 11:41:44 +0200 locationgraph: show schedule entries es red line\n" \
-"13922 2018-05-04 11:07:18 +0200 locationgraph: WIP\n" \
-"13921 2018-05-04 08:20:11 +0200 locationdlg: graph tab added (wip)\n" \
-"13920 2018-05-04 07:40:09 +0200 om32: show switch delay in trace\n" \
 
 "log end";
