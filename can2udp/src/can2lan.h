@@ -97,6 +97,7 @@ struct cs2_config_data_t {
     int deflated_size_counter;
     int inflated_size;
     uint16_t crc;
+    uint16_t guihash;
     char *dir;
     char *name;
     int next;
@@ -129,6 +130,7 @@ unsigned char ec_frame[13];
 /* prototypes */
 uint8_t * read_config_file(char *filename, char *config_dir, uint32_t *nbytes);
 int time_stamp(char *timestamp);
+uint16_t generateHash(uint32_t uid);
 char **read_track_file(char *filename, char **page_name);
 int send_tcp_config_data(char *filename, char *config_dir,  uint32_t canid, int tcp_socket, int flags);
 void print_can_frame(char *format_string, unsigned char *netframe, int verbose);

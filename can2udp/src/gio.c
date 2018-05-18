@@ -90,6 +90,29 @@ int time_stamp(char *timestamp) {
     return 0;
 }
 
+/*
+  CS2 CAN hash generation
+
+  hash' = highword ^ lowword
+
+  xxxxxxx11 0xxxxxxxx
+  ^^^^^^^    ^^^^^^^^
+   \\\\\\\   ||||||||
+    \\\\\\-- ||||||||
+     \\\\\\ \||||||||
+  000xxxxxx xxxxxxxxx
+ */
+
+uint16_t generateHash(uint32_t uid) {
+    uint16_t hash, highword, lowword;
+
+    highword = uid >> 16;
+    lowword = uid & 0xFFFF;
+    hash = highword ^ lowword;
+    hash = (((hash << 3) & 0xFF00) | 0x0300) | (hash & 0x7F);
+    return hash;
+}
+
 char **read_track_file(char *filename, char **page_name) {
     FILE *fp;
     int id = 0;
