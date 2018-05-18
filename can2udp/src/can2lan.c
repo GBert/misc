@@ -257,6 +257,17 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
     memcpy(&canid, netframe, 4);
     canid = ntohl(canid);
     switch (canid & 0xFFFF0000UL) {
+    case (0x00000000UL):
+	if (netframe[9] == 0x0C) {
+	    netframe[1] |= 1;
+	    netframe[4]  = 7;
+	    netframe[10] = 0xff;
+	    netframe[11] = 0xff;
+	    net_to_net(tcp_socket, NULL, netframe, CAN_ENCAP_SIZE);
+	    if (cs2_config_data->verbose)
+		printf("got CAN device registration\n");
+	}
+	break;
     case (0x00310000UL):	/* CAN ping */
 	ret = 0;
 	/* looking for CAN member ping answer */
