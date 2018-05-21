@@ -1,11 +1,25 @@
 const int revisionnr = 
-13973
+13987
 ;
 const char* commithash = 
-"2e11c0fd4c8312f64d5bf122deedea8daf140b2b";
+"b88ccc7f4d2b4c827cfa4d6bcf4fd8c7f619103a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13987 2018-05-21 16:52:36 +0200 guiframe: sort by image file name\n" \
+"13986 2018-05-21 15:51:57 +0200 rocnet: report rc/rs at state\n" \
+"13985 2018-05-21 15:44:19 +0200 wmz21: provide turnout info\n" \
+"13984 2018-05-21 14:04:10 +0200 wmz21: LAN_X_TURNOUT_INFO fix\n" \
+"13983 2018-05-21 12:22:17 +0200 mgbox: the maerklin cs2+ links88 drama (to be continued by Bert)\n" \
+"13982 2018-05-21 12:06:02 +0200 guiframe: system action state error added\n" \
+"13981 2018-05-21 08:40:11 +0200 loc: link/unlink train: added missing loco block commands\n" \
+"13980 2018-05-21 08:23:44 +0200 planpanel: fix for status bar clipboard text\n" \
+"13979 2018-05-21 07:33:39 +0200 wmz21: save lights on function command, send all function states to the CS\n" \
+"13978 2018-05-20 08:33:38 +0200 control: crash fix\n" \
+"13977 2018-05-19 11:00:44 +0200 control: use %regval% for error code\n" \
+"13976 2018-05-18 21:34:16 +0200 mgbox: support message changed\n" \
+"13975 2018-05-18 20:44:32 +0200 mgbox: corrections (Bert)\n" \
+"13974 2018-05-18 08:11:00 +0200 ecos: POM support added (firmware 4.2.3+ is needed)\n" \
 "13973 2018-05-17 11:57:28 +0200 loc: unlink support in a virtual block\n" \
 "13972 2018-05-16 14:32:22 +0200 linktrain: virtual block support added (unlinktrain in vb is WIP)\n" \
 "13971 2018-05-16 11:43:00 +0200 locdialog: exclude locos and trains from consist selection if they are already in the consist\n" \
@@ -42,19 +56,5 @@ const char* revlog =
 "13940 2018-05-05 18:36:47 +0200 scheduledialog: fix for destination grid scroll\n" \
 "13939 2018-05-05 14:57:15 +0200 locationsdlg: only show schedules in the list on the graph tab which contains a block of the slected loctaion\n" \
 "13938 2018-05-05 12:57:35 +0200 locationgraph: destination text option added\n" \
-"13937 2018-05-05 12:18:17 +0200 locationgraph: show destination\n" \
-"13936 2018-05-05 10:52:04 +0200 locationsdlg: open schedule on dclick in list\n" \
-"13935 2018-05-05 10:33:13 +0200 schedule entry: arrive time added\n" \
-"13934 2018-05-05 08:28:06 +0200 locationsdlg: sort schedule color list\n" \
-"13933 2018-05-05 08:19:48 +0200 locationsdialog: show schedule colors on the graph tab\n" \
-"13932 2018-05-05 07:41:11 +0200 loc: inform slave locos in case of a pause command\n" \
-"13931 2018-05-05 06:57:47 +0200 ecos: fix for address offset in case of RailCom\n" \
-"13930 2018-05-04 22:16:47 +0200 locationgraph: fix for calculating y position\n" \
-"13929 2018-05-04 15:33:44 +0200 scheduledialog: show none regular stop time in the destination table between brackets\n" \
-"13928 2018-05-04 14:44:41 +0200 locationgraph: scaling support\n" \
-"13927 2018-05-04 13:18:52 +0200 locationgraph: show trainid or scheduleid\n" \
-"13926 2018-05-04 12:29:46 +0200 locationgraph: disabled scale height\n" \
-"13925 2018-05-04 12:10:02 +0200 locationgraph: use schedule color\n" \
-"13924 2018-05-04 12:02:02 +0200 locationgraph: skip none regular stops and a fix for hourly time\n" \
 
 "log end";
