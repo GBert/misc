@@ -1,11 +1,13 @@
 const int revisionnr = 
-13987
+13989
 ;
 const char* commithash = 
-"b88ccc7f4d2b4c827cfa4d6bcf4fd8c7f619103a";
+"2c7ffc9b558d4fb4b814124e552cba15c8b794c2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13989 2018-05-22 07:55:12 +0200 loc: fix for unlinktrain in case enter side is min\n" \
+"13988 2018-05-22 07:27:48 +0200 mgbox: check bus length (Bert)\n" \
 "13987 2018-05-21 16:52:36 +0200 guiframe: sort by image file name\n" \
 "13986 2018-05-21 15:51:57 +0200 rocnet: report rc/rs at state\n" \
 "13985 2018-05-21 15:44:19 +0200 wmz21: provide turnout info\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "13942 2018-05-06 11:25:46 +0200 locationgraph: set vertical scroll style flag\n" \
 "13941 2018-05-06 07:47:06 +0200 scheduledlg: fix for showing depart time for first entry\n" \
 "13940 2018-05-05 18:36:47 +0200 scheduledialog: fix for destination grid scroll\n" \
-"13939 2018-05-05 14:57:15 +0200 locationsdlg: only show schedules in the list on the graph tab which contains a block of the slected loctaion\n" \
-"13938 2018-05-05 12:57:35 +0200 locationgraph: destination text option added\n" \
 
 "log end";
