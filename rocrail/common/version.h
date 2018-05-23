@@ -1,11 +1,12 @@
 const int revisionnr = 
-13992
+13993
 ;
 const char* commithash = 
-"13821a56edb32667e64d05d2b6bfde1e38839174";
+"5ca081408cb7810fa53e39a8ea7ec3c0c293fa48";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13993 2018-05-23 13:59:40 +0200 action, xmlscript: propagate regval\n" \
 "13992 2018-05-23 07:49:42 +0200 loc: save placing at linktrain for use at unlinktrain\n" \
 "13991 2018-05-23 06:31:50 +0200 loc: unlinktrain take over block enter side from master\n" \
 "13990 2018-05-23 06:05:44 +0200 mgbox: retrieving the link device ID (Bert)\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13946 2018-05-07 08:24:26 +0200 schedulegraph: mousewheel eventhandler to invalidate the whole canvas\n" \
 "13945 2018-05-07 08:17:10 +0200 locationgraph: mousewheel eventhandler to invalidate the whole canvas\n" \
 "13944 2018-05-07 07:48:38 +0200 locationgraph: mousewheel eventhandler to invalidate the whole canvas\n" \
-"13943 2018-05-06 15:38:32 +0200 messages: adjust added\n" \
 
 "log end";
