@@ -1,11 +1,14 @@
 const int revisionnr = 
-13989
+13992
 ;
 const char* commithash = 
-"2c7ffc9b558d4fb4b814124e552cba15c8b794c2";
+"13821a56edb32667e64d05d2b6bfde1e38839174";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13992 2018-05-23 07:49:42 +0200 loc: save placing at linktrain for use at unlinktrain\n" \
+"13991 2018-05-23 06:31:50 +0200 loc: unlinktrain take over block enter side from master\n" \
+"13990 2018-05-23 06:05:44 +0200 mgbox: retrieving the link device ID (Bert)\n" \
 "13989 2018-05-22 07:55:12 +0200 loc: fix for unlinktrain in case enter side is min\n" \
 "13988 2018-05-22 07:27:48 +0200 mgbox: check bus length (Bert)\n" \
 "13987 2018-05-21 16:52:36 +0200 guiframe: sort by image file name\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13945 2018-05-07 08:17:10 +0200 locationgraph: mousewheel eventhandler to invalidate the whole canvas\n" \
 "13944 2018-05-07 07:48:38 +0200 locationgraph: mousewheel eventhandler to invalidate the whole canvas\n" \
 "13943 2018-05-06 15:38:32 +0200 messages: adjust added\n" \
-"13942 2018-05-06 11:25:46 +0200 locationgraph: set vertical scroll style flag\n" \
-"13941 2018-05-06 07:47:06 +0200 scheduledlg: fix for showing depart time for first entry\n" \
-"13940 2018-05-05 18:36:47 +0200 scheduledialog: fix for destination grid scroll\n" \
 
 "log end";
