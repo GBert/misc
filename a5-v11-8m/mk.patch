@@ -316,7 +316,7 @@ diff --git a/target/linux/ramips/image/rt305x.mk b/target/linux/ramips/image/rt3
 index 4e82eb4..8a24cf2 100644
 --- a/target/linux/ramips/image/rt305x.mk
 +++ b/target/linux/ramips/image/rt305x.mk
-@@ -67,6 +67,28 @@ define Device/a5-v11
+@@ -77,6 +77,28 @@ define Device/a5-v11
  endef
  TARGET_DEVICES += a5-v11
  
