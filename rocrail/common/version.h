@@ -1,11 +1,14 @@
 const int revisionnr = 
-13993
+13996
 ;
 const char* commithash = 
-"5ca081408cb7810fa53e39a8ea7ec3c0c293fa48";
+"a93d1280b4278544c28d51ae77db24e4debc9975";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13996 2018-05-27 07:46:47 +0200 ecos: removed version 1 option -> report switch events always as switch events\n" \
+"13995 2018-05-26 14:51:48 +0200 basedlg: crash fix if no xxlist is available in the plan.xml\n" \
+"13994 2018-05-26 13:40:18 +0200 mgbox: only send measurement changes (Bert)\n" \
 "13993 2018-05-23 13:59:40 +0200 action, xmlscript: propagate regval\n" \
 "13992 2018-05-23 07:49:42 +0200 loc: save placing at linktrain for use at unlinktrain\n" \
 "13991 2018-05-23 06:31:50 +0200 loc: unlinktrain take over block enter side from master\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13949 2018-05-07 10:52:19 +0200 translation merge: nl, en_GB, de, fr\n" \
 "13948 2018-05-07 09:17:14 +0200 schedulegraph: copy/paste fix\n" \
 "13947 2018-05-07 09:14:49 +0200 locationgraph,schedulegraph: use scrollwin* events to refresh the whole canvas under windows and linux\n" \
-"13946 2018-05-07 08:24:26 +0200 schedulegraph: mousewheel eventhandler to invalidate the whole canvas\n" \
-"13945 2018-05-07 08:17:10 +0200 locationgraph: mousewheel eventhandler to invalidate the whole canvas\n" \
-"13944 2018-05-07 07:48:38 +0200 locationgraph: mousewheel eventhandler to invalidate the whole canvas\n" \
 
 "log end";
