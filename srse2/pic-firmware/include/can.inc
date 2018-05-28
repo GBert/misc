@@ -60,6 +60,7 @@ RXB0DBEN        EQU     H'0002'
 ; Init. CAN bus
 ;------------------------------------------------------------------------------
 INITCAN
+                BANKSEL LATC
 #IF CAN == PORTC
                 BSF     LATC,6              ; set to high before switching to output
                 BCF     TRISC,6             ; CANTX I/P
@@ -69,6 +70,7 @@ INITCAN
                 BCF     TRISB,2             ; CANTX I/P
                 BSF     TRISB,3             ; CANRX I/P
 #ENDIF
+
                 MOVLW   UPPER CANRATE_ROM_DEFAULT
                 MOVWF   TBLPTRU
                 MOVLW   HIGH CANRATE_ROM_DEFAULT
@@ -128,12 +130,25 @@ INITCAN1
                 CLRF    RXF5SIDL
 
                 ; Set bit rate
+                BANKSEL BRGCON1
                 TBLRD+*                     ; ignore first entry
                 MOVFF   TABLAT,BRGCON1
                 TBLRD+*
                 MOVFF   TABLAT,BRGCON2
                 TBLRD+*
                 MOVFF   TABLAT,BRGCON3
+
+		;;;;; TODO Test Setup CAN Baudrate - fix ;;;;;
+                ; Set bit rate
+        #DEFINE BRG1 0x07
+        #DEFINE BRG2 0xBC
+        #DEFINE BRG3 0x01
+                MOVLW   BRG1
+                MOVWF   BRGCON1
+                MOVLW   BRG2
+                MOVWF   BRGCON2
+                MOVLW   BRG3
+                MOVWF   BRGCON3
 
                 ; Enable CANTX
                 BANKSEL CIOCON
