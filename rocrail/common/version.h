@@ -1,11 +1,14 @@
 const int revisionnr = 
-13996
+13999
 ;
 const char* commithash = 
-"a93d1280b4278544c28d51ae77db24e4debc9975";
+"d497bdae5e0e622926d9cafd3fc48db7c390991e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13999 2018-05-30 12:54:00 +0200 loconet: multi sense address correction\n" \
+"13998 2018-05-30 07:29:44 +0200 ecos: pom read/write for accessory support added\n" \
+"13997 2018-05-29 17:20:55 +0200 schedulegraphdlg: fix for setting schedule #1\n" \
 "13996 2018-05-27 07:46:47 +0200 ecos: removed version 1 option -> report switch events always as switch events\n" \
 "13995 2018-05-26 14:51:48 +0200 basedlg: crash fix if no xxlist is available in the plan.xml\n" \
 "13994 2018-05-26 13:40:18 +0200 mgbox: only send measurement changes (Bert)\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13952 2018-05-07 12:19:00 +0200 schedules: record schedule time for none regular stops too\n" \
 "13951 2018-05-07 12:13:09 +0200 scheduledialog: layout correction\n" \
 "13950 2018-05-07 11:51:11 +0200 schedule: removed railway line\n" \
-"13949 2018-05-07 10:52:19 +0200 translation merge: nl, en_GB, de, fr\n" \
-"13948 2018-05-07 09:17:14 +0200 schedulegraph: copy/paste fix\n" \
-"13947 2018-05-07 09:14:49 +0200 locationgraph,schedulegraph: use scrollwin* events to refresh the whole canvas under windows and linux\n" \
 
 "log end";
