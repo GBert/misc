@@ -3,13 +3,13 @@ index f6208fb..e7596e5 100644
 --- a/target/linux/ramips/base-files/etc/board.d/01_leds
 +++ b/target/linux/ramips/base-files/etc/board.d/01_leds
 @@ -45,6 +45,8 @@ mzk-w300nh2)
-	set_wifi_led "$board:amber:wlan"
+	set_wifi_led "$boardname:amber:wlan"
 	;;
  a5-v11|\
 +a5-v11-8M|\
 +a5-v11-16M|\
  cs-qr10)
-	ucidef_set_led_default "power" "POWER" "$board:red:power" "1"
+	ucidef_set_led_default "power" "POWER" "$boardname:red:power" "1"
 	;;
 diff --git a/target/linux/ramips/base-files/etc/board.d/02_network b/target/linux/ramips/base-files/etc/board.d/02_network
 index 7de6377..2aa90f8 100755
@@ -311,7 +311,7 @@ index 14f5ec2..3b1262e 100755
 +	a5-v11-16M|\
 	ai-br100|\
 	air3gii|\
-	all0239-3g|\
+	alfa-network,ac1200rm|\
 diff --git a/target/linux/ramips/image/rt305x.mk b/target/linux/ramips/image/rt305x.mk
 index 4e82eb4..8a24cf2 100644
 --- a/target/linux/ramips/image/rt305x.mk

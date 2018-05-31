@@ -1,7 +1,7 @@
 ; VREG Sleep Enable bit:
                 CONFIG    RETEN=ON
 ; LF-INTOSC Low-power Enable bit:
-;               CONFIG    INTOSCSEL=LOW
+;               CONFIG    INTOSCSEL=HIGH
 ; SOSC Power Selection and mode Configuration bits:
                 CONFIG    SOSCSEL=DIG
 ; Extended Instruction Set:

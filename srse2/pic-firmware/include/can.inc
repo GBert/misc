@@ -138,18 +138,6 @@ INITCAN1
                 TBLRD+*
                 MOVFF   TABLAT,BRGCON3
 
-		;;;;; TODO Test Setup CAN Baudrate - fix ;;;;;
-                ; Set bit rate
-        #DEFINE BRG1 0x07
-        #DEFINE BRG2 0xBC
-        #DEFINE BRG3 0x01
-                MOVLW   BRG1
-                MOVWF   BRGCON1
-                MOVLW   BRG2
-                MOVWF   BRGCON2
-                MOVLW   BRG3
-                MOVWF   BRGCON3
-
                 ; Enable CANTX
                 BANKSEL CIOCON
                 BSF     CIOCON,ENDRHI
