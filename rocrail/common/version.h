@@ -1,11 +1,16 @@
 const int revisionnr = 
-13999
+14004
 ;
 const char* commithash = 
-"d497bdae5e0e622926d9cafd3fc48db7c390991e";
+"085a33b2b8b35e7a9040d97450ae56d021cb7497";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14004 2018-06-02 11:40:29 +0200 renamedlg: find OID in action list\n" \
+"14003 2018-06-02 08:19:21 +0200 loc: isstate stop added\n" \
+"14002 2018-06-02 08:10:54 +0200 roclcdr: use mode string stop in case of idle and auto off\n" \
+"14001 2018-06-01 08:46:10 +0200 wmz21: only send a response on a LAN_X_GET_TURNOUT_INFO if the switch is known in Rocrail\n" \
+"14000 2018-05-31 17:10:26 +0200 wmz21: revert switch info fix\n" \
 "13999 2018-05-30 12:54:00 +0200 loconet: multi sense address correction\n" \
 "13998 2018-05-30 07:29:44 +0200 ecos: pom read/write for accessory support added\n" \
 "13997 2018-05-29 17:20:55 +0200 schedulegraphdlg: fix for setting schedule #1\n" \
@@ -51,10 +56,5 @@ const char* revlog =
 "13957 2018-05-08 11:17:30 +0200 schedulegraphdlg: label fix from scale to adjust\n" \
 "13956 2018-05-08 10:43:39 +0200 scheduledialog: use combobox for groupID and groupFilter\n" \
 "13955 2018-05-08 09:17:51 +0200 locationsdlg: fix for selecting schedules\n" \
-"13954 2018-05-07 16:05:38 +0200 scheduledialog: translation fix\n" \
-"13953 2018-05-07 15:41:54 +0200 railwayline: removed\n" \
-"13952 2018-05-07 12:19:00 +0200 schedules: record schedule time for none regular stops too\n" \
-"13951 2018-05-07 12:13:09 +0200 scheduledialog: layout correction\n" \
-"13950 2018-05-07 11:51:11 +0200 schedule: removed railway line\n" \
 
 "log end";
