@@ -34,7 +34,6 @@ LIBS:microchip_pic18mcu
 LIBS:ftdi
 LIBS:Omega2
 LIBS:cmos_ieee
-LIBS:common-ICs
 LIBS:SRSE2-cache
 EELAYER 25 0
 EELAYER END
@@ -51,7 +50,7 @@ Comment3 "http://lnxpps.de/maerklin/srse2"
 Comment4 "Gleisbox 60113 connected "
 $EndDescr
 $Comp
-L PIC18F25K80_I/SS U4
+L PIC18F25K80_I/SS-RESCUE-SRSE2 U4
 U 1 1 56AE1E68
 P 7600 6475
 F 0 "U4" H 6900 7425 50  0000 L CNN
@@ -99,7 +98,7 @@ F 3 "" H 6250 5425 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L LED D2
+L LED-RESCUE-SRSE2 D2
 U 1 1 56BA169D
 P 6050 4925
 F 0 "D2" H 6000 4825 50  0000 C CNN
@@ -110,7 +109,7 @@ F 3 "" H 6050 4925 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L LED D3
+L LED-RESCUE-SRSE2 D3
 U 1 1 56BA171A
 P 6250 4925
 F 0 "D3" H 6200 4825 50  0000 C CNN
@@ -495,7 +494,7 @@ F 3 "" H 5850 5425 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L LED D1
+L LED-RESCUE-SRSE2 D1
 U 1 1 57BF7BF4
 P 5850 4925
 F 0 "D1" H 5800 5025 50  0000 C CNN
@@ -1931,7 +1930,7 @@ U 1 1 58AD74F3
 P 2575 10525
 F 0 "P21" H 2575 10875 50  0000 C CNN
 F 1 "CONN_01X06" V 2675 10525 50  0001 C CNN
-F 2 "Socket_Strips:Socket_Strip_Angled_1x06" H 2575 10525 50  0001 C CNN
+F 2 "Socket_Strips:Socket_Strip_Straight_1x06" H 2575 10525 50  0001 C CNN
 F 3 "" H 2575 10525 50  0000 C CNN
 	1    2575 10525
 	0    -1   1    0   
