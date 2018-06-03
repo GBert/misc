@@ -1,11 +1,12 @@
 const int revisionnr = 
-14004
+14005
 ;
 const char* commithash = 
-"085a33b2b8b35e7a9040d97450ae56d021cb7497";
+"7937f330582b96d876a88bdb140f1d91f82862ba";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14005 2018-06-03 16:20:55 +0200 loc: if a consist loco is not found at swap, try by train\n" \
 "14004 2018-06-02 11:40:29 +0200 renamedlg: find OID in action list\n" \
 "14003 2018-06-02 08:19:21 +0200 loc: isstate stop added\n" \
 "14002 2018-06-02 08:10:54 +0200 roclcdr: use mode string stop in case of idle and auto off\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13958 2018-05-08 11:29:08 +0200 locationgraph: show time now\n" \
 "13957 2018-05-08 11:17:30 +0200 schedulegraphdlg: label fix from scale to adjust\n" \
 "13956 2018-05-08 10:43:39 +0200 scheduledialog: use combobox for groupID and groupFilter\n" \
-"13955 2018-05-08 09:17:51 +0200 locationsdlg: fix for selecting schedules\n" \
 
 "log end";
