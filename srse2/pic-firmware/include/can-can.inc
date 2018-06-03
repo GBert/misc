@@ -28,37 +28,36 @@ DJNZ            MACRO   REG,LOC
                 ENDM
 
 CANOVFL         MACRO
-#IFDEF LEDHIGH
-                BSF     GPIO,1              ; LED1 CAN Packet dropped
+#IF LEDON == 0
+                BCF     GPIO,1              ; LED1 CAN Packet dropped
 #ELSE
-                BCF     GPIO,1
+                BSF     GPIO,1
 #ENDIF
                 ENDM
 
 CANRECV         MACRO
-#IFDEF LEDHIGH
-                BCF     GPIO,1              ; LED1 CAN Packet received
+#IF LEDON == 0
+                BCF     GPIO,1              ; LED1 CAN Packet dropped
 #ELSE
                 BSF     GPIO,1
 #ENDIF
                 ENDM
 
 UARTOVFL        MACRO
-#IFDEF LEDHIGH
-                BSF     GPIO,0              ; LED2 UART Packet dropped
+#IF LEDON == 0
+                BCF     GPIO,0              ; LED2 UART Packet dropped
 #ELSE
-                BCF     GPIO,0
+                BSF     GPIO,0
 #ENDIF
                 ENDM
 
 UARTRECV        MACRO
-#IFDEF LEDHIGH
-                BCF     GPIO,0              ; LED2 UART Packet received
+#IF LEDON == 0
+                BCF     GPIO,0              ; LED2 UART Packet dropped
 #ELSE
-                BCF     GPIO,0
+                BSF     GPIO,0
 #ENDIF
                 ENDM
-
 
 RTSCLR          MACRO
 #IFDEF SRSE2_SLCAN

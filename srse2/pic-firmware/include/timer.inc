@@ -79,7 +79,7 @@ SCHEDULE
 
 SCHEDULE_NEXT1
                 DCFSNZ	PIOTCOUNTER,F	; PIO routine
-                ; CALL    S88_FSM
+                CALL    S88_FSM
                 ; look for events in the buffer
                 RCALL   SENDEVENT
 
