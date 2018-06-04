@@ -155,6 +155,7 @@ ISRLOW
                 MOVFF   STATUS,S_SAVE       ; SAVE STATUS
                 MOVWF   W_SAVE              ; SAVE WORKING REGISTER
 
+                BSF     LATC,0    ; TODO
                 MOVF    TXGET,W
                 MOVF    PLUSW2,W
                 INCF    TXGET,F
@@ -170,6 +171,7 @@ ISRLOWEND
                 MOVF    W_SAVE,W            ; RESTORE WORKING REGISTER
                 MOVFF   S_SAVE,STATUS       ; RESTORE STATUS
 
+                BCF     LATC,0    ; TODO
                 RETFIE
 
 ;------------------------------------------------------------------------------

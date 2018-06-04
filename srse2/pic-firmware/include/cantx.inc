@@ -25,6 +25,7 @@ TXCAN
                 BNZ     TXCAN1
                 RETURN
 
+                BSF     LATC,1              ; TODO
 ;------------------------------------------------------------------------------
 TXCAN1
                 ; Find a Tx slot
@@ -167,6 +168,7 @@ TXCANEND
                 ; Clear to Send; RXCNT = 0
                 RTSCLR
 TXCANRET
+                BCF     LATC,1              ; TODO
                 RETURN
 
 ;------------------------------------------------------------------------------

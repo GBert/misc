@@ -92,27 +92,43 @@ S88_CHANGE EQU  0x3E0
 ;------------------------------------------------------------------------------
 
 S88_LOAD_HIGH   MACRO
+#IFDEF SRSE2_SLCAN
                 BSF     LATB,S88_LOAD
+#ELSE
+                BSF     LATC,S88_LOAD
+#ENDIF
                 ENDM
 
 S88_LOAD_LOW    MACRO
+#IFDEF SRSE2_SLCAN
                 BCF     LATB,S88_LOAD
+#ELSE
+                BCF     LATC,S88_LOAD
+#ENDIF
                 ENDM
 
 S88_RESET_HIGH  MACRO
+#IFDEF SRSE2_SLCAN
                 BSF     LATB,S88_RESET
+#ELSE
+                BSF     LATC,S88_RESET
+#ENDIF
                 ENDM
 
 S88_RESET_LOW   MACRO
+#IFDEF SRSE2_SLCAN
                 BCF     LATB,S88_RESET
+#ELSE
+                BCF     LATC,S88_RESET
+#ENDIF
                 ENDM
 
 S88_CLOCK_HIGH  MACRO
-                BSF     LATC,S88_CLOCK
+                BSF     LATB,S88_CLOCK
                 ENDM
 
 S88_CLOCK_LOW   MACRO
-                BCF     LATC,S88_CLOCK
+                BCF     LATB,S88_CLOCK
                 ENDM
 
 ;------------

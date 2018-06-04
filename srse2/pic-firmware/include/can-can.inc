@@ -133,6 +133,10 @@ INIT
                 RTSCLR                      ; Init. RTS
                 CLRF    DDR                 ; All O/P
 
+                ; test pins
+                BCF     TRISC,0
+                BCF     TRISC,1
+
                 CALL    INITUART            ; Init. UART
                 CALL    INITRING            ; Init. Rx/Tx Ring Buffer
                 CALL    INITCAN             ; Init. CAN Bus
