@@ -51,7 +51,7 @@ TXCAN2
                 XORLW   EXTDATA
                 BZ      TXCANEXT
 
-                MOVWF   CANCMD              ; t?
+                MOVF    CANCMD,W            ; t?
                 XORLW   STDDATA
                 BZ      TXCANSTD
 
