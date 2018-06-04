@@ -157,7 +157,7 @@ MAIN
                 CALL    TXCAN               ; SEND CAN
                 CALL    CANINSPECT
 
-                BTFSC	INTCON, TMR0IF
+                BTFSC   INTCON, TMR0IF
                 RCALL   SCHEDULE
                 BRA     MAIN
 
