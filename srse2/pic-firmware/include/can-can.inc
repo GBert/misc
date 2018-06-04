@@ -125,7 +125,11 @@ INIT
 
                 CLRF    LATC
                 BCF     TRISC, 2
+#IF LEDON == 0
+                SETF    GPIO
+#ELSE
                 CLRF    GPIO                ; Init. LED
+#ENDIF
                 RTSCLR                      ; Init. RTS
                 CLRF    DDR                 ; All O/P
 
