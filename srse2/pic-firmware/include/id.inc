@@ -163,25 +163,27 @@ SET_UID
 ;------------------------------------------------------------------------------
 READCANHASH
                 RCALL   READ_UID
-                MOVLW   'C'
-                XORWF   ID_H,W
-                MOVWF   CANHASH_HIGH
+                MOVFF   ID_H,W
+                XORLW   'C'
                 ; shift left 3
-                SWAPF	CANHASH_HIGH,F
-                RRNCF	CANHASH_HIGH,F
-                ; set two lower bits
-                BSF     CANHASH_HIGH,0
-                BSF     CANHASH_HIGH,1
+                RLNCF   W
+                RLNCF   W
+                RLNCF   W
+                BSF     W,0
+                BSF     W,1
+                BSF     W,2
+                MOVFF   W,CANHASH_HIGH
 
-                MOVLW   'B'
-                XORWF   ID_L,W
-                MOVWF   CANHASH_LOW
-                BSF     CANHASH_HIGH,2
-                BTFSS   ID_L,7
-                BCF     CANHASH_HIGH,2
-                BCF     CANHASH_LOW,7
+                MOVFF   ID_L,W
+                XORLW   'B'
+                BCF     W,7
+                MOVFF   W,CANHASH_LOW
+                BTFSC   W,7
                 RETURN
-
+                MOVFF   CANHASH_HIGH,W
+                BCF     W,7
+                MOVFF   W,CANHASH_HIGH
+                RETURN
 
 ;------------------------------------------------------------------------------
 ; send variable definitions

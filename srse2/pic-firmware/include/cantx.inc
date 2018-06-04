@@ -25,7 +25,6 @@ TXCAN
                 BNZ     TXCAN1
                 RETURN
 
-                BSF     LATC,1              ; TODO
 ;------------------------------------------------------------------------------
 TXCAN1
                 ; Find a Tx slot
@@ -48,7 +47,7 @@ TXCAN1
 TXCAN2
                 GETC                        ; W = <RXBUF>,RXGET++
 
-                MOVF    CANCMD,W            ; T?
+                MOVWF   CANCMD              ; T?
                 XORLW   EXTDATA
                 BZ      TXCANEXT
 
@@ -168,7 +167,6 @@ TXCANEND
                 ; Clear to Send; RXCNT = 0
                 RTSCLR
 TXCANRET
-                BCF     LATC,1              ; TODO
                 RETURN
 
 ;------------------------------------------------------------------------------
