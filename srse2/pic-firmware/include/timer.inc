@@ -68,6 +68,7 @@ SCHEDULE
                 ; must reset Timer0 overflow flag
                 BCF	INTCON, TMR0IF
                 INFSNZ	TCOUNTER,F	; heartbeat routine
+                CALL    S88_FSM
                 RCALL	DO_HEARTBEAT
 
                 ; update free running counter (4.096ms)
@@ -79,15 +80,9 @@ SCHEDULE
 
 SCHEDULE_NEXT1
                 DCFSNZ	PIOTCOUNTER,F	; PIO routine
-                BRA     DO_S88
                 ; look for events in the buffer
-                RCALL   SENDEVENT
+                CALL    SENDEVENT
 
-                RETURN
-DO_S88
-                CALL    S88_FSM
-                MOVLW   4
-                MOVWF   PIOTCOUNTER
                 RETURN
 
 DO_HEARTBEAT
