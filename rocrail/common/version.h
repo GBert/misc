@@ -1,11 +1,18 @@
 const int revisionnr = 
-14005
+14012
 ;
 const char* commithash = 
-"7937f330582b96d876a88bdb140f1d91f82862ba";
+"bdc01a661f48e9c6f60bdd1407d8ddffb03c7882";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14012 2018-06-05 12:05:53 +0200 control: filter swdbsize on useshortid\n" \
+"14011 2018-06-05 12:01:51 +0200 control: determine the swdbsize for WLM only for the useshortid switches\n" \
+"14010 2018-06-05 11:58:52 +0200 switch: useshortid option added\n" \
+"14009 2018-06-05 11:31:35 +0200 virtual: filter out the shortid command\n" \
+"14008 2018-06-05 10:26:47 +0200 wmz21: send switch IDs to the wlms\n" \
+"14007 2018-06-04 08:31:04 +0200 sensorevents: export/import added\n" \
+"14006 2018-06-04 07:33:27 +0200 loc: broadcast the complete properties on modify\n" \
 "14005 2018-06-03 16:20:55 +0200 loc: if a consist loco is not found at swap, try by train\n" \
 "14004 2018-06-02 11:40:29 +0200 renamedlg: find OID in action list\n" \
 "14003 2018-06-02 08:19:21 +0200 loc: isstate stop added\n" \
@@ -49,12 +56,5 @@ const char* revlog =
 "13965 2018-05-13 08:12:38 +0200 locdialog: add train on multiunit tab\n" \
 "13964 2018-05-12 08:12:38 +0200 trainimage: show linked trains\n" \
 "13963 2018-05-12 07:52:37 +0200 translation merge: de, nl, fr, sl\n" \
-"13962 2018-05-11 15:06:05 +0200 loc,guiframe: fixes for (un)link a train\n" \
-"13961 2018-05-11 07:48:44 +0200 link/unlink train (wip)\n" \
-"13960 2018-05-08 13:53:29 +0200 schedulegraphdlg: default settings to none scaled\n" \
-"13959 2018-05-08 12:14:39 +0200 scheduledialog: process enter in the group filter combobox\n" \
-"13958 2018-05-08 11:29:08 +0200 locationgraph: show time now\n" \
-"13957 2018-05-08 11:17:30 +0200 schedulegraphdlg: label fix from scale to adjust\n" \
-"13956 2018-05-08 10:43:39 +0200 scheduledialog: use combobox for groupID and groupFilter\n" \
 
 "log end";
