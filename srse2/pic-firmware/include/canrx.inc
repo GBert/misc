@@ -145,7 +145,7 @@ RXCANEOLN
 
 ;------------------------------------------------------------------------------
 
-                CANRECV                     ; CAN packet status LED
+                ;CANRECV                     ; CAN packet status LED
                 BCF     RXB0CON,RXFUL       ; Packet received
                 RETURN
 

@@ -68,8 +68,8 @@ SCHEDULE
                 ; must reset Timer0 overflow flag
                 BCF	INTCON, TMR0IF
                 INFSNZ	TCOUNTER,F	; heartbeat routine
-                CALL    S88_FSM
                 RCALL	DO_HEARTBEAT
+                CALL    S88_FSM
 
                 ; update free running counter (4.096ms)
                 BTFSS   PIR2, TMR3IF
