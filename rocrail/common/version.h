@@ -1,11 +1,12 @@
 const int revisionnr = 
-14012
+14013
 ;
 const char* commithash = 
-"bdc01a661f48e9c6f60bdd1407d8ddffb03c7882";
+"249b7f225b821f0264a881f81d6b1eb4633448ab";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14013 2018-06-06 07:59:22 +0200 block: use bidi direction in case auto is off or accept ident and the loco ist auto off\n" \
 "14012 2018-06-05 12:05:53 +0200 control: filter swdbsize on useshortid\n" \
 "14011 2018-06-05 12:01:51 +0200 control: determine the swdbsize for WLM only for the useshortid switches\n" \
 "14010 2018-06-05 11:58:52 +0200 switch: useshortid option added\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13966 2018-05-14 08:07:53 +0200 wmz21: fix for lights in case of none rocrail loco\n" \
 "13965 2018-05-13 08:12:38 +0200 locdialog: add train on multiunit tab\n" \
 "13964 2018-05-12 08:12:38 +0200 trainimage: show linked trains\n" \
-"13963 2018-05-12 07:52:37 +0200 translation merge: de, nl, fr, sl\n" \
 
 "log end";
