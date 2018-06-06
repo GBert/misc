@@ -1,11 +1,12 @@
 const int revisionnr = 
-14013
+14014
 ;
 const char* commithash = 
-"249b7f225b821f0264a881f81d6b1eb4633448ab";
+"6f3a3fb116bdc215c3d37171b6dd0bd5976bdbab";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14014 2018-06-06 14:43:43 +0200 rocnetnode: adjusted the base address for pi08 to 0x60\n" \
 "14013 2018-06-06 07:59:22 +0200 block: use bidi direction in case auto is off or accept ident and the loco ist auto off\n" \
 "14012 2018-06-05 12:05:53 +0200 control: filter swdbsize on useshortid\n" \
 "14011 2018-06-05 12:01:51 +0200 control: determine the swdbsize for WLM only for the useshortid switches\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13967 2018-05-14 08:19:20 +0200 ecos: check is socket is valid before using it\n" \
 "13966 2018-05-14 08:07:53 +0200 wmz21: fix for lights in case of none rocrail loco\n" \
 "13965 2018-05-13 08:12:38 +0200 locdialog: add train on multiunit tab\n" \
-"13964 2018-05-12 08:12:38 +0200 trainimage: show linked trains\n" \
 
 "log end";
