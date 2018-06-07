@@ -143,7 +143,7 @@ ISRHIGH3
                 ; Not Clear to Send; RXCNT > CONTROL
                 RTSSET
 ISRHIGHEND
-                ;UARTRECV                    ; UART packet status LED
+                UARTRECV                    ; UART packet status LED
                 RETFIE  FAST
 
 ;------------------------------------------------------------------------------

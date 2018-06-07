@@ -37,9 +37,9 @@ CANOVFL         MACRO
 
 CANRECV         MACRO
 #IF LEDON == 0
-                BCF     GPIO,1              ; LED1 CAN Packet dropped
+                BSF     GPIO,1              ; LED1 CAN Packet received
 #ELSE
-                BSF     GPIO,1
+                BCF     GPIO,1
 #ENDIF
                 ENDM
 
@@ -53,9 +53,9 @@ UARTOVFL        MACRO
 
 UARTRECV        MACRO
 #IF LEDON == 0
-                BCF     GPIO,0              ; LED2 UART Packet dropped
+                BSF     GPIO,0              ; LED2 UART Packet received
 #ELSE
-                BSF     GPIO,0
+                BCF     GPIO,0
 #ENDIF
                 ENDM
 
