@@ -1,11 +1,19 @@
 const int revisionnr = 
-14014
+14022
 ;
 const char* commithash = 
-"6f3a3fb116bdc215c3d37171b6dd0bd5976bdbab";
+"bd74ec00100614808d1139bc9125709f9d602652";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14022 2018-06-08 13:50:56 +0200 mysensors: wip\n" \
+"14021 2018-06-08 13:47:52 +0200 app: trace correction on ini changes\n" \
+"14020 2018-06-08 08:27:35 +0200 enter: check schedule entry actions correction in case no dest found and no swap\n" \
+"14019 2018-06-08 07:42:06 +0200 wmz21: use number for switch address in cass of A2ID mapping and shortids\n" \
+"14018 2018-06-07 11:16:44 +0200 app: take over the modified analyser options on the fly\n" \
+"14017 2018-06-07 10:39:42 +0200 rocview: show analyser traces in the server window\n" \
+"14016 2018-06-07 09:44:53 +0200 rocrailinidialog: added trace level analyser\n" \
+"14015 2018-06-07 08:14:43 +0200 wmz21: filter event on dirfun to avoid taking over default direction\n" \
 "14014 2018-06-06 14:43:43 +0200 rocnetnode: adjusted the base address for pi08 to 0x60\n" \
 "14013 2018-06-06 07:59:22 +0200 block: use bidi direction in case auto is off or accept ident and the loco ist auto off\n" \
 "14012 2018-06-05 12:05:53 +0200 control: filter swdbsize on useshortid\n" \
@@ -48,13 +56,5 @@ const char* revlog =
 "13975 2018-05-18 20:44:32 +0200 mgbox: corrections (Bert)\n" \
 "13974 2018-05-18 08:11:00 +0200 ecos: POM support added (firmware 4.2.3+ is needed)\n" \
 "13973 2018-05-17 11:57:28 +0200 loc: unlink support in a virtual block\n" \
-"13972 2018-05-16 14:32:22 +0200 linktrain: virtual block support added (unlinktrain in vb is WIP)\n" \
-"13971 2018-05-16 11:43:00 +0200 locdialog: exclude locos and trains from consist selection if they are already in the consist\n" \
-"13970 2018-05-16 11:40:58 +0200 blockdialog: select slave blocks by dialog\n" \
-"13969 2018-05-15 12:11:36 +0200 lcdriver: activate first schedule of tour if no free destination is available\n" \
-"13968 2018-05-14 12:21:28 +0200 block: followup lock ID in case of an unlink train command\n" \
-"13967 2018-05-14 08:19:20 +0200 ecos: check is socket is valid before using it\n" \
-"13966 2018-05-14 08:07:53 +0200 wmz21: fix for lights in case of none rocrail loco\n" \
-"13965 2018-05-13 08:12:38 +0200 locdialog: add train on multiunit tab\n" \
 
 "log end";
