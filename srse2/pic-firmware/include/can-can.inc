@@ -145,7 +145,7 @@ INIT
                 CALL    I2CINIT             ; Init. I2C
                 CALL    INITEVENTRING       ; Init. Event Ring Buffer
                 CALL    S88INIT
-                CALL    READ_UID
+                CALL    READCANHASH
 
                 BSF     RCON,IPEN           ; Enable priority interrupts
                 BSF     INTCON,PEIE         ; Init. ISR
