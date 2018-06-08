@@ -1,5 +1,17 @@
-diff --git a/trunk/can-tils/cangen.c b/trunk/can-utils/cangen.c
-index db4c803..8adfcb2 100644
+diff --git a/trunk/can-utils/Makefile b/trunk/can-utils/Makefile
+index 0fd201a..c027bfe 100644
+--- a/trunk/can-utils/Makefile
++++ b/trunk/can-utils/Makefile
+@@ -62,7 +62,6 @@ PROGRAMS = can-calc-bit-timing candump cansniffer cansend canplayer cangen canbu
+ 	   $(PROGRAMS_ISOTP)\
+ 	   $(PROGRAMS_CANGW)\
+ 	   $(PROGRAMS_SLCAN)\
+-	   $(PROGRAMS_J1939)\
+ 	   slcanpty canfdtest
+ 
+ all: $(PROGRAMS)
+diff --git a/trunk/can-utils/cangen.c b/trunk/can-utils/cangen.c
+index 769fac2..21163d4 100644
 --- a/trunk/can-utils/cangen.c
 +++ b/trunk/can-utils/cangen.c
 @@ -64,7 +64,7 @@
@@ -22,7 +34,7 @@ index db4c803..8adfcb2 100644
  	fprintf(stderr, "         -e            (generate extended frame mode "
  		"(EFF) CAN frames)\n");
  	fprintf(stderr, "         -f            (generate CAN FD CAN frames)\n");
-@@ -131,7 +131,7 @@ void sigterm(int signo)
+@@ -133,7 +133,7 @@ void sigterm(int signo)
  
  int main(int argc, char **argv)
  {
@@ -31,7 +43,7 @@ index db4c803..8adfcb2 100644
  	unsigned long polltimeout = 0;
  	unsigned char ignore_enobufs = 0;
  	unsigned char extended = 0;
-@@ -159,7 +159,6 @@ int main(int argc, char **argv)
+@@ -163,7 +163,6 @@ int main(int argc, char **argv)
  	int i;
  	struct ifreq ifr;
  
@@ -39,7 +51,7 @@ index db4c803..8adfcb2 100644
  	struct timeval now;
  
  	/* set seed value for pseudo random numbers */
-@@ -178,7 +177,7 @@ int main(int argc, char **argv)
+@@ -182,7 +181,7 @@ int main(int argc, char **argv)
  			break;
  
  		case 'g':
@@ -48,7 +60,7 @@ index db4c803..8adfcb2 100644
  			break;
  
  		case 'e':
-@@ -268,9 +267,6 @@ int main(int argc, char **argv)
+@@ -277,9 +276,6 @@ int main(int argc, char **argv)
  		return 1;
  	}
  
@@ -58,15 +70,74 @@ index db4c803..8adfcb2 100644
  	/* recognize obviously missing commandline option */
  	if (id_mode == MODE_FIX && frame.can_id > 0x7FF && !extended) {
  		printf("The given CAN-ID is greater than 0x7FF and "
-@@ -444,9 +440,8 @@ resend:
- 			return 1;
+@@ -458,8 +454,7 @@ resend:
  		}
  
--		if (gap) /* gap == 0 => performance test :-] */
+ 		if (gap) /* gap == 0 => performance test :-] */
 -			if (nanosleep(&ts, NULL))
 -				return 1;
-+		if (gap)
 +			usleep(gap);
- 		    
+ 
  		if (id_mode == MODE_INCREMENT)
  			frame.can_id++;
+diff --git a/trunk/can-utils/jacd.c b/trunk/can-utils/jacd.c
+index bac4060..b333f4e 100644
+--- a/trunk/can-utils/jacd.c
++++ b/trunk/can-utils/jacd.c
+@@ -19,7 +19,6 @@
+ 
+ #include <unistd.h>
+ #include <getopt.h>
+-#include <error.h>
+ #include <sys/time.h>
+ #include <sys/socket.h>
+ #include <net/if.h>
+diff --git a/trunk/can-utils/jspy.c b/trunk/can-utils/jspy.c
+index 55ddeb7..6edeb81 100644
+--- a/trunk/can-utils/jspy.c
++++ b/trunk/can-utils/jspy.c
+@@ -18,7 +18,6 @@
+ 
+ #include <unistd.h>
+ #include <getopt.h>
+-#include <error.h>
+ #include <sys/socket.h>
+ #include <sys/ioctl.h>
+ #include <sys/time.h>
+diff --git a/trunk/can-utils/jsr.c b/trunk/can-utils/jsr.c
+index 0303af0..baabc16 100644
+--- a/trunk/can-utils/jsr.c
++++ b/trunk/can-utils/jsr.c
+@@ -17,7 +17,6 @@
+ 
+ #include <unistd.h>
+ #include <getopt.h>
+-#include <error.h>
+ #include <poll.h>
+ #include <sys/types.h>
+ #include <sys/socket.h>
+diff --git a/trunk/can-utils/libj1939.c b/trunk/can-utils/libj1939.c
+index dc51582..8ab955c 100644
+--- a/trunk/can-utils/libj1939.c
++++ b/trunk/can-utils/libj1939.c
+@@ -15,7 +15,6 @@
+ #include <errno.h>
+ #include <inttypes.h>
+ 
+-#include <error.h>
+ #include <unistd.h>
+ #include <fcntl.h>
+ #include <net/if.h>
+diff --git a/trunk/can-utils/testj1939.c b/trunk/can-utils/testj1939.c
+index 06ca9a9..9638c08 100644
+--- a/trunk/can-utils/testj1939.c
++++ b/trunk/can-utils/testj1939.c
+@@ -19,7 +19,6 @@
+ 
+ #include <unistd.h>
+ #include <getopt.h>
+-#include <error.h>
+ #include <sys/time.h>
+ #include <sys/socket.h>
+ #include <net/if.h>
+

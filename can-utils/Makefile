@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2015 OpenWrt.org
+# Copyright (C) 2018 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=can-utils
-PKG_REV:=86023b8
 PKG_REV:=f0abaaa
+PKG_REV:=33a9249
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
