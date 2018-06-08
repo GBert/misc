@@ -816,7 +816,10 @@ void decode_frame(struct can_frame *frame) {
 	    printf("MS2");
 	    break;
 	case 0x0040:
-	    printf("LinkS88");
+	    if ((uid & 0x53380000) == 0x53380000)
+		printf("LinkS88");
+	    else
+		printf("S88 Gateway");
 	    break;
 	case 0x0053:
 	    printf("Cg Servo");
