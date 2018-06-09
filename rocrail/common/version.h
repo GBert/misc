@@ -1,11 +1,12 @@
 const int revisionnr = 
-14022
+14023
 ;
 const char* commithash = 
-"bd74ec00100614808d1139bc9125709f9d602652";
+"107a07ea6e5f23f4b64d40aaf139902b15921e9d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14023 2018-06-09 07:21:33 +0200 block: regard bidi direction in case the loco runs in halfautomatic mode\n" \
 "14022 2018-06-08 13:50:56 +0200 mysensors: wip\n" \
 "14021 2018-06-08 13:47:52 +0200 app: trace correction on ini changes\n" \
 "14020 2018-06-08 08:27:35 +0200 enter: check schedule entry actions correction in case no dest found and no swap\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13976 2018-05-18 21:34:16 +0200 mgbox: support message changed\n" \
 "13975 2018-05-18 20:44:32 +0200 mgbox: corrections (Bert)\n" \
 "13974 2018-05-18 08:11:00 +0200 ecos: POM support added (firmware 4.2.3+ is needed)\n" \
-"13973 2018-05-17 11:57:28 +0200 loc: unlink support in a virtual block\n" \
 
 "log end";
