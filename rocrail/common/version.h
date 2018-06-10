@@ -1,11 +1,15 @@
 const int revisionnr = 
-14023
+14027
 ;
 const char* commithash = 
-"107a07ea6e5f23f4b64d40aaf139902b15921e9d";
+"304a4c3fb17d2e464276961c5aeca75d07914d6d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14027 2018-06-10 13:49:07 +0200 item: regard stop state for state signals\n" \
+"14026 2018-06-10 10:31:51 +0200 switchdialog: bus presentation and evaluatioon correction frog\n" \
+"14025 2018-06-10 10:13:43 +0200 route-,signal-,switchdialog: fix for CTC bus number evaluation and presentation\n" \
+"14024 2018-06-10 07:41:56 +0200 ecos: work around for the ecos detector\n" \
 "14023 2018-06-09 07:21:33 +0200 block: regard bidi direction in case the loco runs in halfautomatic mode\n" \
 "14022 2018-06-08 13:50:56 +0200 mysensors: wip\n" \
 "14021 2018-06-08 13:47:52 +0200 app: trace correction on ini changes\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "13980 2018-05-21 08:23:44 +0200 planpanel: fix for status bar clipboard text\n" \
 "13979 2018-05-21 07:33:39 +0200 wmz21: save lights on function command, send all function states to the CS\n" \
 "13978 2018-05-20 08:33:38 +0200 control: crash fix\n" \
-"13977 2018-05-19 11:00:44 +0200 control: use %regval% for error code\n" \
-"13976 2018-05-18 21:34:16 +0200 mgbox: support message changed\n" \
-"13975 2018-05-18 20:44:32 +0200 mgbox: corrections (Bert)\n" \
-"13974 2018-05-18 08:11:00 +0200 ecos: POM support added (firmware 4.2.3+ is needed)\n" \
 
 "log end";
