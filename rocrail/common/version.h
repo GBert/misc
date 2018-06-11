@@ -1,11 +1,15 @@
 const int revisionnr = 
-14027
+14031
 ;
 const char* commithash = 
-"304a4c3fb17d2e464276961c5aeca75d07914d6d";
+"5e38bb89f0d0bb0462a0bf663c4fcb6924b0e39f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14031 2018-06-11 19:24:36 +0200 fback: fixes for broadcast event without IID\n" \
+"14030 2018-06-11 11:55:17 +0200 p.o. box replaced with real address\n" \
+"14029 2018-06-11 07:58:10 +0200 bididir: disable at auto option added\n" \
+"14028 2018-06-11 07:31:14 +0200 print: disable DC user scale\n" \
 "14027 2018-06-10 13:49:07 +0200 item: regard stop state for state signals\n" \
 "14026 2018-06-10 10:31:51 +0200 switchdialog: bus presentation and evaluatioon correction frog\n" \
 "14025 2018-06-10 10:13:43 +0200 route-,signal-,switchdialog: fix for CTC bus number evaluation and presentation\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "13984 2018-05-21 14:04:10 +0200 wmz21: LAN_X_TURNOUT_INFO fix\n" \
 "13983 2018-05-21 12:22:17 +0200 mgbox: the maerklin cs2+ links88 drama (to be continued by Bert)\n" \
 "13982 2018-05-21 12:06:02 +0200 guiframe: system action state error added\n" \
-"13981 2018-05-21 08:40:11 +0200 loc: link/unlink train: added missing loco block commands\n" \
-"13980 2018-05-21 08:23:44 +0200 planpanel: fix for status bar clipboard text\n" \
-"13979 2018-05-21 07:33:39 +0200 wmz21: save lights on function command, send all function states to the CS\n" \
-"13978 2018-05-20 08:33:38 +0200 control: crash fix\n" \
 
 "log end";
