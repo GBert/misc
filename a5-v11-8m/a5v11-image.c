@@ -11,12 +11,13 @@
 #include <libgen.h>
 #include <signal.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
 #define DEFAULT_SIZE	16
-#define UBOOT_SIZE	256*1024
+#define UBOOT_SIZE	192*1024
 #define UBOOT_ENV_SIZE	64*1024
 #define MTD2_SIZE	64*1024
 #define OPENWRT_SIZE	(16*1024*1024 - MTD2_SIZE - UBOOT_SIZE - UBOOT_ENV_SIZE)
@@ -37,7 +38,10 @@
 	} \
     } while(0)
 
-static char OUTPUT_FILE[] = "a5v11.img";
+char OUTPUT_FILE[] = "a5v11_XXXXXXXXXXXX.img\0\0\0\0";
+int verbose = 0;
+uint8_t *data;
+char mac[13];
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -h -m <meg> -v <boot.img> <mtd2.bin> <openwrt.img>\n", prg);
@@ -46,10 +50,13 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -m <meg>            image size e.g. 8 or 16M defaullt %d M\n\n", DEFAULT_SIZE);
 }
 
-int read_data(char *filename, char *position, int max) {
+int read_data(char *filename, uint8_t *position, int max) {
     FILE *fp;
     int size;
 
+    if (verbose)
+	printf("read filename: %s offset 0x%08X\n", filename, (int) (position - data));
+	      
     fp = fopen(filename, "rb");
     if (fp == NULL) {
 	fprintf(stderr, "%s: error fopen failed [%s]\n", __func__, filename);
@@ -70,13 +77,20 @@ int read_data(char *filename, char *position, int max) {
 	fclose(fp);
 	return 0;
     }
+
+    if ((position - data) == UBOOT_SIZE + UBOOT_ENV_SIZE) {
+	memset(mac, 0, sizeof(mac));
+	for (int i = 0; i <= 5; i++)
+	    sprintf(&mac[i*2], "%02x", position[0x28 + i]);
+	if (verbose)
+	    printf(" mac %s\n", mac);
+    }
     return size;
 }
 
 int main(int argc, char **argv) {
     FILE *fp;
     int opt, ret, size;
-    char *data;
     char *filename = NULL;
 
     size = DEFAULT_SIZE * 1024 *1024;
@@ -85,6 +99,9 @@ int main(int argc, char **argv) {
 	switch (opt) {
 	case 'm':
 	    size = atoi(optarg);
+	    break;
+	case 'v':
+	    verbose = 1;
 	    break;
 	case 'h':
 	case '?':
@@ -104,6 +121,9 @@ int main(int argc, char **argv) {
     }
     memset(data, 0xff, size);
 
+    if (argc != 5)
+	return EXIT_FAILURE;
+	
     if (optind < argc) {
 #if 0
 	filename = (char *)realloc(filename, strlen(argv[optind]) + 1);
@@ -119,14 +139,14 @@ int main(int argc, char **argv) {
 	    return EXIT_FAILURE;
 	}
 #endif
-	printf ("argc %d\n", argc);
 	INSERT_DATA(filename, data, UBOOT_SIZE);
 	INSERT_DATA(filename, data + UBOOT_SIZE, UBOOT_ENV_SIZE);
 	INSERT_DATA(filename, data + UBOOT_SIZE + UBOOT_ENV_SIZE, MTD2_SIZE);
 	INSERT_DATA(filename, data + UBOOT_SIZE + UBOOT_ENV_SIZE + MTD2_SIZE, size - MTD2_SIZE - UBOOT_ENV_SIZE - UBOOT_SIZE);
     }
-    filename = OUTPUT_FILE;
-    fp = fopen(filename, "w");
+    sprintf(OUTPUT_FILE, "a5v11_%s.img", mac); 
+    printf("output to %s\n", OUTPUT_FILE);
+    fp = fopen(OUTPUT_FILE, "w");
     if (fp == NULL) {
 	fprintf(stderr, "%s: error fopen failed [%s]\n", __func__, filename);
 	return EXIT_FAILURE;
