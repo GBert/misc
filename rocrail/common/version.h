@@ -1,11 +1,14 @@
 const int revisionnr = 
-14031
+14034
 ;
 const char* commithash = 
-"5e38bb89f0d0bb0462a0bf663c4fcb6924b0e39f";
+"6ddef016390bdbe4da90a4221b4a303ac1a5888d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14034 2018-06-12 17:14:12 +0200 translation merge: es, sl, sr_latin, de, fr, pt_BR, nl\n" \
+"14033 2018-06-12 16:53:06 +0200 loc: take over V_cru in case of modify in auto mode\n" \
+"14032 2018-06-12 08:11:33 +0200 fback: broadcast the original properties on modify\n" \
 "14031 2018-06-11 19:24:36 +0200 fback: fixes for broadcast event without IID\n" \
 "14030 2018-06-11 11:55:17 +0200 p.o. box replaced with real address\n" \
 "14029 2018-06-11 07:58:10 +0200 bididir: disable at auto option added\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13987 2018-05-21 16:52:36 +0200 guiframe: sort by image file name\n" \
 "13986 2018-05-21 15:51:57 +0200 rocnet: report rc/rs at state\n" \
 "13985 2018-05-21 15:44:19 +0200 wmz21: provide turnout info\n" \
-"13984 2018-05-21 14:04:10 +0200 wmz21: LAN_X_TURNOUT_INFO fix\n" \
-"13983 2018-05-21 12:22:17 +0200 mgbox: the maerklin cs2+ links88 drama (to be continued by Bert)\n" \
-"13982 2018-05-21 12:06:02 +0200 guiframe: system action state error added\n" \
 
 "log end";
