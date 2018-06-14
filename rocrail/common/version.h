@@ -1,11 +1,14 @@
 const int revisionnr = 
-14034
+14037
 ;
 const char* commithash = 
-"6ddef016390bdbe4da90a4221b4a303ac1a5888d";
+"6dfc6ab0bf7aae32a5f0a4d74168f1ac46490db4";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14037 2018-06-13 10:22:25 +0200 lcdriver: set the run flag to true in case of a gogo command\n" \
+"14036 2018-06-13 09:25:56 +0200 lcdriver: fix for isRun in case phase is not IDLE\n" \
+"14035 2018-06-13 08:03:10 +0200 item,planpanel: check if the window has mouse capture before releasing the mouse\n" \
 "14034 2018-06-12 17:14:12 +0200 translation merge: es, sl, sr_latin, de, fr, pt_BR, nl\n" \
 "14033 2018-06-12 16:53:06 +0200 loc: take over V_cru in case of modify in auto mode\n" \
 "14032 2018-06-12 08:11:33 +0200 fback: broadcast the original properties on modify\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "13990 2018-05-23 06:05:44 +0200 mgbox: retrieving the link device ID (Bert)\n" \
 "13989 2018-05-22 07:55:12 +0200 loc: fix for unlinktrain in case enter side is min\n" \
 "13988 2018-05-22 07:27:48 +0200 mgbox: check bus length (Bert)\n" \
-"13987 2018-05-21 16:52:36 +0200 guiframe: sort by image file name\n" \
-"13986 2018-05-21 15:51:57 +0200 rocnet: report rc/rs at state\n" \
-"13985 2018-05-21 15:44:19 +0200 wmz21: provide turnout info\n" \
 
 "log end";
