@@ -45,7 +45,7 @@ TIMER0INIT
                 MOVLW   (1 << TMR0ON) + (1 << T08BIT) + (1 << T0PS1)
                 MOVWF   T0CON
                 CLRF	HEARTBEAT
-                MOVLW	4		; 4 * 128us = 512us
+                MOVLW	64		; 64 * 128us = 8.2 ms
                 MOVWF	PIOTCOUNTER
                 RETURN
 
@@ -79,10 +79,13 @@ SCHEDULE
                 INCF    TIMER3,F
 
 SCHEDULE_NEXT1
-                DCFSNZ	PIOTCOUNTER,F	; PIO routine
+                DECFSZ  PIOTCOUNTER,F	; PIO routine
+                BRA     SCHEDULE_NEXT2
+                MOVLW   64              ; 64 * 128us = 8.2 ms
+                MOVWF   PIOTCOUNTER
                 ; look for events in the buffer
                 CALL    SENDEVENT
-
+SCHEDULE_NEXT2
                 RETURN
 
 DO_HEARTBEAT
