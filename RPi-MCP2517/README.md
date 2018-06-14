@@ -1,6 +1,8 @@
 RPI-I2C/CAN Adapter with optional I2C Bus Extender
 ==================================================
 
+[![alt text](https://github.com/GBert/misc/raw/master/RPi-MCP2517/pictures/build_up_02_s.jpg "PCB front")](https://github.com/GBert/misc/raw/master/RPi-MCP2517/pictures/build_up_02.jpg)
+
 ```
 # Determine RPi Version
 cat /sys/firmware/devicetree/base/model
