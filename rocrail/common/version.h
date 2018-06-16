@@ -1,11 +1,13 @@
 const int revisionnr = 
-14037
+14039
 ;
 const char* commithash = 
-"6dfc6ab0bf7aae32a5f0a4d74168f1ac46490db4";
+"2adf72a7a33a795acb3aa41297fe03ab298516ec";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14039 2018-06-16 11:41:54 +0200 blockgroupingdlg: show condition column schedule\n" \
+"14038 2018-06-16 11:31:50 +0200 blockgroup: condition option schedule added\n" \
 "14037 2018-06-13 10:22:25 +0200 lcdriver: set the run flag to true in case of a gogo command\n" \
 "14036 2018-06-13 09:25:56 +0200 lcdriver: fix for isRun in case phase is not IDLE\n" \
 "14035 2018-06-13 08:03:10 +0200 item,planpanel: check if the window has mouse capture before releasing the mouse\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "13992 2018-05-23 07:49:42 +0200 loc: save placing at linktrain for use at unlinktrain\n" \
 "13991 2018-05-23 06:31:50 +0200 loc: unlinktrain take over block enter side from master\n" \
 "13990 2018-05-23 06:05:44 +0200 mgbox: retrieving the link device ID (Bert)\n" \
-"13989 2018-05-22 07:55:12 +0200 loc: fix for unlinktrain in case enter side is min\n" \
-"13988 2018-05-22 07:27:48 +0200 mgbox: check bus length (Bert)\n" \
 
 "log end";
