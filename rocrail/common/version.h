@@ -1,11 +1,12 @@
 const int revisionnr = 
-14039
+14040
 ;
 const char* commithash = 
-"2adf72a7a33a795acb3aa41297fe03ab298516ec";
+"870caa6c0ce5d95d5476c444a82ce36fb0f6f1d6";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14040 2018-06-17 07:46:38 +0200 ecos: crash fix for tracing the protver as string...\n" \
 "14039 2018-06-16 11:41:54 +0200 blockgroupingdlg: show condition column schedule\n" \
 "14038 2018-06-16 11:31:50 +0200 blockgroup: condition option schedule added\n" \
 "14037 2018-06-13 10:22:25 +0200 lcdriver: set the run flag to true in case of a gogo command\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13993 2018-05-23 13:59:40 +0200 action, xmlscript: propagate regval\n" \
 "13992 2018-05-23 07:49:42 +0200 loc: save placing at linktrain for use at unlinktrain\n" \
 "13991 2018-05-23 06:31:50 +0200 loc: unlinktrain take over block enter side from master\n" \
-"13990 2018-05-23 06:05:44 +0200 mgbox: retrieving the link device ID (Bert)\n" \
 
 "log end";
