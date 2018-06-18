@@ -1,11 +1,13 @@
 const int revisionnr = 
-14040
+14042
 ;
 const char* commithash = 
-"870caa6c0ce5d95d5476c444a82ce36fb0f6f1d6";
+"6711f702b70c3281a48ffe46988c2675bccd6236";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14042 2018-06-18 09:40:43 +0200 ecos: fix for reporting correct PADA switch address\n" \
+"14041 2018-06-18 07:40:09 +0200 blockgroupingdlg: translation fix for condition schedule\n" \
 "14040 2018-06-17 07:46:38 +0200 ecos: crash fix for tracing the protver as string...\n" \
 "14039 2018-06-16 11:41:54 +0200 blockgroupingdlg: show condition column schedule\n" \
 "14038 2018-06-16 11:31:50 +0200 blockgroup: condition option schedule added\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "13995 2018-05-26 14:51:48 +0200 basedlg: crash fix if no xxlist is available in the plan.xml\n" \
 "13994 2018-05-26 13:40:18 +0200 mgbox: only send measurement changes (Bert)\n" \
 "13993 2018-05-23 13:59:40 +0200 action, xmlscript: propagate regval\n" \
-"13992 2018-05-23 07:49:42 +0200 loc: save placing at linktrain for use at unlinktrain\n" \
-"13991 2018-05-23 06:31:50 +0200 loc: unlinktrain take over block enter side from master\n" \
 
 "log end";
