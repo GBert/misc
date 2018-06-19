@@ -2029,7 +2029,7 @@
   )
 
   (module w_smd_dil:soic-28 (layer F.Cu) (tedit 58A5E345) (tstamp 57C18987)
-    (at 143.891 107.315 180)
+    (at 143.891 107.45724 180)
     (descr "SOIC Wide, 28 pins")
     (path /56AE1E68)
     (fp_text reference U4 (at 0 -1.016 180) (layer F.SilkS)
