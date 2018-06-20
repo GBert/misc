@@ -16,8 +16,8 @@ BOM CAN S88
 |C13		|100nF		|SMD 0805	|
 |C16		|100nF		|SMD 0805	|
 |C17		|100nF		|SMD 0805	|
-|C5		|10uF		|THT P2.5	|
-|C18		|10uF		|THT P2.5	|
+|C5		|22uF		|THT P2.5	|
+|C18		|22uF		|THT P2.5	|
 |D1		|5mA LED	|5MM     	|
 |J1		|s88-N		|MEGB8-8	|
 |J2		|CAN		|MEGB8-8	|
