@@ -1,11 +1,12 @@
 const int revisionnr = 
-14042
+14043
 ;
 const char* commithash = 
-"6711f702b70c3281a48ffe46988c2675bccd6236";
+"d0c67e6027959b7da81885cb86b846eb5aba43f3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14043 2018-06-19 10:01:33 +0200 rfbooster: ignore upper/lower case for evaluating car events\n" \
 "14042 2018-06-18 09:40:43 +0200 ecos: fix for reporting correct PADA switch address\n" \
 "14041 2018-06-18 07:40:09 +0200 blockgroupingdlg: translation fix for condition schedule\n" \
 "14040 2018-06-17 07:46:38 +0200 ecos: crash fix for tracing the protver as string...\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13996 2018-05-27 07:46:47 +0200 ecos: removed version 1 option -> report switch events always as switch events\n" \
 "13995 2018-05-26 14:51:48 +0200 basedlg: crash fix if no xxlist is available in the plan.xml\n" \
 "13994 2018-05-26 13:40:18 +0200 mgbox: only send measurement changes (Bert)\n" \
-"13993 2018-05-23 13:59:40 +0200 action, xmlscript: propagate regval\n" \
 
 "log end";
