@@ -53,6 +53,6 @@ BOM CAN S88
 |U8		|CD4504		|SO16		|
 |U9		|MC7812		|TO-252-2Lead	|
 |Y1		|16MHz		|Crystal HC-49S	|
-|		|iu.FL Pigtail  | RP SMA	|
-|		|ANtenna	| SMA		|
+|		|u.FL Pigtail  | RP SMA	|
+|		|Antenna	| SMA		|
 
