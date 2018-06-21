@@ -1,11 +1,12 @@
 const int revisionnr = 
-14043
+14044
 ;
 const char* commithash = 
-"d0c67e6027959b7da81885cb86b846eb5aba43f3";
+"74bf432ab488df9cbb3acd960b863098295c4424";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14044 2018-06-21 08:16:18 +0200 block: copy the lock ID string to avoid loosing it with temp. IDs\n" \
 "14043 2018-06-19 10:01:33 +0200 rfbooster: ignore upper/lower case for evaluating car events\n" \
 "14042 2018-06-18 09:40:43 +0200 ecos: fix for reporting correct PADA switch address\n" \
 "14041 2018-06-18 07:40:09 +0200 blockgroupingdlg: translation fix for condition schedule\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "13997 2018-05-29 17:20:55 +0200 schedulegraphdlg: fix for setting schedule #1\n" \
 "13996 2018-05-27 07:46:47 +0200 ecos: removed version 1 option -> report switch events always as switch events\n" \
 "13995 2018-05-26 14:51:48 +0200 basedlg: crash fix if no xxlist is available in the plan.xml\n" \
-"13994 2018-05-26 13:40:18 +0200 mgbox: only send measurement changes (Bert)\n" \
 
 "log end";
