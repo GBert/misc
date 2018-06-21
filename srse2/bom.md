@@ -41,7 +41,7 @@ BOM CAN S88
 |R18		|49R9		|SMD 0805	|
 |R19		|49R9		|SMD 0805	|
 |R20		|49R9		|SMD 0805	|
-|R24		|1k		|SMD 1206	|
+|R24		|1k5		|SMD 1206	|
 |		|		|		|
 |U1		|Omega2		|Onion Omega2	|
 |PIN HEADER	|RM2.00 1x16	|16 pol Pin Hole|
