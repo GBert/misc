@@ -1,11 +1,16 @@
 const int revisionnr = 
-14044
+14049
 ;
 const char* commithash = 
-"74bf432ab488df9cbb3acd960b863098295c4424";
+"a5d800fe06ac19ed52e550922035845f932993ec";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14049 2018-06-22 16:09:00 +0200 rocview base: better readable color for analyser trace\n" \
+"14048 2018-06-22 14:42:10 +0200 user theme crossing update from Duesselklaus\n" \
+"14047 2018-06-22 10:19:38 +0200 blockgroupingdlg: set prev_id in case the ID has been modified\n" \
+"14046 2018-06-22 10:06:53 +0200 model: regard the stop mode also for checking if all locos are idle\n" \
+"14045 2018-06-22 09:51:06 +0200 guiframe: fix for D&D in case the loco mode is stop instead of idle\n" \
 "14044 2018-06-21 08:16:18 +0200 block: copy the lock ID string to avoid loosing it with temp. IDs\n" \
 "14043 2018-06-19 10:01:33 +0200 rfbooster: ignore upper/lower case for evaluating car events\n" \
 "14042 2018-06-18 09:40:43 +0200 ecos: fix for reporting correct PADA switch address\n" \
@@ -51,10 +56,5 @@ const char* revlog =
 "14002 2018-06-02 08:10:54 +0200 roclcdr: use mode string stop in case of idle and auto off\n" \
 "14001 2018-06-01 08:46:10 +0200 wmz21: only send a response on a LAN_X_GET_TURNOUT_INFO if the switch is known in Rocrail\n" \
 "14000 2018-05-31 17:10:26 +0200 wmz21: revert switch info fix\n" \
-"13999 2018-05-30 12:54:00 +0200 loconet: multi sense address correction\n" \
-"13998 2018-05-30 07:29:44 +0200 ecos: pom read/write for accessory support added\n" \
-"13997 2018-05-29 17:20:55 +0200 schedulegraphdlg: fix for setting schedule #1\n" \
-"13996 2018-05-27 07:46:47 +0200 ecos: removed version 1 option -> report switch events always as switch events\n" \
-"13995 2018-05-26 14:51:48 +0200 basedlg: crash fix if no xxlist is available in the plan.xml\n" \
 
 "log end";
