@@ -1,3 +1,5 @@
+// io.c - adapted for basrcpd project 2018 by Rainer Müller 
+
 /***************************************************************************
                           io.c  -  description
                              -------------------
@@ -26,20 +28,15 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <string.h>
+#include <stdarg.h>
 #include <sys/ioctl.h>
 
-#ifdef __CYGWIN__
-#include <sys/socket.h>         /*for FIONREAD */
-#endif
-#ifdef __sun__
-#include <sys/filio.h>
-#endif
 #include "config-srcpd.h"
 #include "io.h"
 #include "syslogmessage.h"
-//#include "ttycygwin.h"
 
-
+#if 0
+// TODO: check if UART code could be reused, eg for Railcom
 int readByte(bus_t bus, bool wait, unsigned char *the_byte)
 {
     ssize_t i;
@@ -163,6 +160,31 @@ void close_comport(bus_t bus)
     cfsetospeed(&interface, B0);
     tcsetattr(buses[bus].device.file.fd, TCSANOW, &interface);
     close(buses[bus].device.file.fd);
+}
+#endif
+
+// ssplitstr splits a string str into n tokens by assigning n pointers
+// if the nr of tokens is bigger than the nr of pointers, last points to remainder
+// original string is modified with term zeros, retval is nr of assigned pointers
+int ssplitstr(char * str, int n, ...)
+{
+	int s = 1, i = 0;
+	unsigned char c;
+
+    va_list vl;
+    va_start(vl,n);
+	while ((c = *str)) {
+		if (s && (c > 0x20)) {
+			*(va_arg(vl, char **)) = str;	// fill pointer
+			if(++i == n) break; 			// no more pointer available
+		}
+		if ((s = (c <= 0x20))) *str = 0;	// end of token terminated with 0
+		str++;
+	}
+	while (n-- > i) 						// no more token available
+		*(va_arg(vl, char **)) = str; 		// point to terminating zero
+	va_end(vl);
+	return i;
 }
 
 /* Zeilenweises Lesen vom Socket      */

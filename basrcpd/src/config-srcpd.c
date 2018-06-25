@@ -1,3 +1,4 @@
+// config_srcpd.c - adapted for basrcpd project 2018 by Rainer Müller 
 /*
 * This software is published under the terms of the GNU General Public
 * License, Version 2, 1991. (c) Matthias Trute, 2000-2001.
@@ -107,8 +108,8 @@ int bus_has_devicegroup(bus_t bus, int dg)
         case DG_LOCK:
             return strstr(buses[bus].description, "LOCK") != NULL;
         case DG_DESCRIPTION:
-            return strstr(buses[bus].description, "DESCRIPTION") != NULL;
-
+//          return strstr(buses[bus].description, "DESCRIPTION") != NULL;
+            return (buses[bus].description[0] != 0);
     }
     return 0;
 }

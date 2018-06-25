@@ -1,4 +1,9 @@
+// loopback.h - adapted for basrcpd project 2018 by Rainer Müller 
+
 /* $Id: loopback.h 1176 2008-01-29 22:42:17Z schmischi $ */
+/* This software is published under the terms of the GNU General Public
+   License, Version 2, 1991. 
+*/
 
 #ifndef _LOOPBACK_H
 #define _LOOPBACK_H

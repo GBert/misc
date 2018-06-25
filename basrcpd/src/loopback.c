@@ -1,8 +1,18 @@
+// loopback.c - adapted for basrcpd project 2018 by Rainer Müller 
+
 /* $Id: loopback.c 1456 2010-02-28 20:01:39Z gscholz $ */
 
 /**
  * loopback: simple bus driver without any hardware.
  **/
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
 #include <errno.h>
 
@@ -141,11 +151,11 @@ int init_gl_LOOPBACK(bus_t busnumber, gl_data_t * gl, char *optData)
         case 'N':
             switch (gl->protocolversion) {
                 case 1:
-                    return ((gl->n_fs == 14) ||
+                    return ((gl->n_fs == 14) || (gl->n_fs == 28) ||
                             (gl->n_fs == 128)) ? SRCP_OK : SRCP_WRONGVALUE;
                     break;
                 case 2:
-                    return ((gl->n_fs == 14) ||
+                    return ((gl->n_fs == 14) || (gl->n_fs == 28) ||
                             (gl->n_fs == 128)) ? SRCP_OK : SRCP_WRONGVALUE;
                     break;
             }
@@ -208,7 +218,7 @@ static void handle_sm_command(bus_t bus)
     struct _SM smtmp;
     /* registers 1-4 == CV#1-4; reg5 == CV#29; reg 7-8 == CV#7-8 */
     int reg6 = 1;
-    int cv[MAX_CV_NUMBER + 1];
+    static int cv[MAX_CV_NUMBER + 1];
 
 
     dequeueNextSM(bus, &smtmp);
@@ -221,13 +231,13 @@ static void handle_sm_command(bus_t bus)
             smtmp.value = -1;
             switch (smtmp.type) {
                 case REGISTER:
-                    if ((smtmp.cv_caIndex > 0) && (smtmp.cv_caIndex < 9)) {
-                        if (smtmp.cv_caIndex < 5 || smtmp.cv_caIndex > 6) {
-                            smtmp.value = cv[smtmp.cv_caIndex];
-                            if (smtmp.cv_caIndex < 5)
+                    if ((smtmp.cvaddr > 0) && (smtmp.cvaddr < 9)) {
+                        if (smtmp.cvaddr < 5 || smtmp.cvaddr > 6) {
+                            smtmp.value = cv[smtmp.cvaddr];
+                            if (smtmp.cvaddr < 5)
                                 reg6 = 1;
                         }
-                        else if (smtmp.cv_caIndex == 5) {
+                        else if (smtmp.cvaddr == 5) {
                             cv[29] = smtmp.value = cv[29];
                         }
                         else {
@@ -237,17 +247,14 @@ static void handle_sm_command(bus_t bus)
                     break;
                 case PAGE:
                 case CV:
-                    if ((smtmp.cv_caIndex >= 0) &&
-                        (smtmp.cv_caIndex <= MAX_CV_NUMBER)) {
-                        smtmp.value = cv[smtmp.cv_caIndex];
+                    if ((smtmp.cvaddr >= 0) && (smtmp.cvaddr <= MAX_CV_NUMBER)) {
+                        smtmp.value = cv[smtmp.cvaddr];
                     }
                     break;
                 case CV_BIT:
-                    if ((smtmp.cv_caIndex >= 0) && (smtmp.bit_index >= 0)
-                        && (smtmp.bit_index < 8) &&
-                        (smtmp.cv_caIndex <= MAX_CV_NUMBER)) {
-                        smtmp.value = (1 &
-                                       (cv[smtmp.cv_caIndex] >> smtmp.bit_index));
+                    if ((smtmp.cvaddr >= 0) && (smtmp.index >= 0)
+                        && (smtmp.index < 8) && (smtmp.cvaddr <= MAX_CV_NUMBER)) {
+                        smtmp.value = (1 & (cv[smtmp.cvaddr] >> smtmp.index));
                     }
                     break;
                 default:    ;
@@ -256,13 +263,13 @@ static void handle_sm_command(bus_t bus)
         case SET:
             switch (smtmp.type) {
                 case REGISTER:
-                    if ((smtmp.cv_caIndex > 0) && (smtmp.cv_caIndex < 9)) {
-                        if (smtmp.cv_caIndex < 5 || smtmp.cv_caIndex > 6) {
-                            if (smtmp.cv_caIndex < 5)
+                    if ((smtmp.cvaddr > 0) && (smtmp.cvaddr < 9)) {
+                        if (smtmp.cvaddr < 5 || smtmp.cvaddr > 6) {
+                            if (smtmp.cvaddr < 5)
                                 reg6 = 1;
-                            cv[smtmp.cv_caIndex] = smtmp.value;
+                            cv[smtmp.cvaddr] = smtmp.value;
                         }
-                        else if (smtmp.cv_caIndex == 5) {
+                        else if (smtmp.cvaddr == 5) {
                             cv[29] = smtmp.value;
                         }
                         else {
@@ -275,24 +282,22 @@ static void handle_sm_command(bus_t bus)
                     break;
                 case PAGE:
                 case CV:
-                    if ((smtmp.cv_caIndex >= 0) &&
-                        (smtmp.cv_caIndex <= MAX_CV_NUMBER)) {
-                        cv[smtmp.cv_caIndex] = smtmp.value;
+                    if ((smtmp.cvaddr >= 0) && (smtmp.cvaddr <= MAX_CV_NUMBER)) {
+                        cv[smtmp.cvaddr] = smtmp.value;
                     }
                     else {
                         smtmp.value = -1;
                     }
                     break;
                 case CV_BIT:
-                    if ((smtmp.cv_caIndex >= 0) && (smtmp.bit_index >= 0)
-                        && (smtmp.bit_index < 8) && (smtmp.value >= 0) &&
-                        (smtmp.value <= 1) &&
-                        (smtmp.cv_caIndex <= MAX_CV_NUMBER)) {
+                    if ((smtmp.cvaddr >= 0) && (smtmp.index >= 0)
+                        && (smtmp.index < 8) && (smtmp.value >= 0) &&
+                        (smtmp.value <= 1) && (smtmp.cvaddr <= MAX_CV_NUMBER)) {
                         if (smtmp.value) {
-                            cv[smtmp.cv_caIndex] |= (1 << smtmp.bit_index);
+                            cv[smtmp.cvaddr] |= (1 << smtmp.index);
                         }
                         else {
-                            cv[smtmp.cv_caIndex] &= ~(1 << smtmp.bit_index);
+                            cv[smtmp.cvaddr] &= ~(1 << smtmp.index);
                         }
                     }
                     else {
@@ -305,14 +310,14 @@ static void handle_sm_command(bus_t bus)
         case VERIFY:
             switch (smtmp.type) {
                 case REGISTER:
-                    if ((smtmp.cv_caIndex > 0) && (smtmp.cv_caIndex < 9)) {
-                        if (smtmp.cv_caIndex < 5 || smtmp.cv_caIndex > 6) {
-                            if (smtmp.cv_caIndex < 5)
+                    if ((smtmp.cvaddr > 0) && (smtmp.cvaddr < 9)) {
+                        if (smtmp.cvaddr < 5 || smtmp.cvaddr > 6) {
+                            if (smtmp.cvaddr < 5)
                                 reg6 = 1;
-                            if (smtmp.value != cv[smtmp.cv_caIndex])
+                            if (smtmp.value != cv[smtmp.cvaddr])
                                 smtmp.value = -1;
                         }
-                        else if (smtmp.cv_caIndex == 5) {
+                        else if (smtmp.cvaddr == 5) {
                             if (cv[29] != smtmp.value)
                                 smtmp.value = -1;
                         }
@@ -327,9 +332,8 @@ static void handle_sm_command(bus_t bus)
                     break;
                 case PAGE:
                 case CV:
-                    if ((smtmp.cv_caIndex >= 0) &&
-                        (smtmp.cv_caIndex <= MAX_CV_NUMBER)) {
-                        if (smtmp.value != cv[smtmp.cv_caIndex])
+                    if ((smtmp.cvaddr >= 0) && (smtmp.cvaddr <= MAX_CV_NUMBER)) {
+                        if (smtmp.value != cv[smtmp.cvaddr])
                             smtmp.value = -1;
                     }
                     else {
@@ -337,12 +341,10 @@ static void handle_sm_command(bus_t bus)
                     }
                     break;
                 case CV_BIT:
-                    if ((smtmp.cv_caIndex >= 0) && (smtmp.bit_index >= 0)
-                        && (smtmp.bit_index < 8) &&
-                        (smtmp.cv_caIndex <= MAX_CV_NUMBER)) {
-                        if (smtmp.value != (1 &
-                                            (cv[smtmp.cv_caIndex] >>
-                                             smtmp.bit_index)))
+                    if ((smtmp.cvaddr >= 0) && (smtmp.index >= 0)
+                        && (smtmp.index < 8) &&
+                        (smtmp.cvaddr <= MAX_CV_NUMBER)) {
+                        if (smtmp.value != (1 & (cv[smtmp.cvaddr] >> smtmp.index)))
                             smtmp.value = -1;
                     }
                     else {
@@ -501,7 +503,7 @@ void *thr_sendrec_LOOPBACK(void *v)
         /* handle delayed switching of GAs (there is a better place) */
         gettimeofday(&akt_time, NULL);
         for (ctr = 0; ctr < 50; ctr++) {
-            if (__loopbackt->tga[ctr].id) {
+            if (__loopbackt->tga[ctr].id > 0) {
                 cmp_time = __loopbackt->tga[ctr].t;
 
                 /* switch off time reached? */

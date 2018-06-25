@@ -1,3 +1,5 @@
+// srcpd-server.c - adapted for basrcpd project 2018 by Rainer Müller 
+
 /* $Id: srcp-server.c 1725 2016-03-20 17:06:01Z gscholz $ */
 
 /*
@@ -15,9 +17,11 @@
 #include "srcp-error.h"
 #include "srcp-info.h"
 #include "syslogmessage.h"
+#include "platform.h"
 
 #define __server ((SERVER_DATA*)buses[0].driverdata)
 
+xmlFreeFunc xmlFree = (xmlFreeFunc) free;
 
 char PIDFILENAME[MAXPATHLEN] = "/var/run/srcpd.pid";
 
@@ -144,7 +148,16 @@ void startup_SERVER()
 
 int describeSERVER(bus_t bus, int addr, char *reply)
 {
-    return SRCP_UNSUPPORTEDOPERATION;
+    if (bus) return SRCP_UNSUPPORTEDOPERATION;
+    
+	struct timeval tv = { 0, 0 };
+	gettimeofday(&tv, NULL);
+    sprintf(reply, "%lu.%.3lu 101 INFO 0 SERVER BASRCPD " VERSION 
+					" SERIAL %llu TEMP %llu\n",
+            		tv.tv_sec, tv.tv_usec / 1000, 
+					getPlatformData(PL_SERIAL), getPlatformData(PL_TEMP)/100);
+
+    return SRCP_INFO;
 }
 
 int init_bus_server(bus_t bus)
@@ -170,6 +183,7 @@ void server_reset()
     set_server_state(ssResetting);
     infoSERVER(msg);
     enqueueInfoMessage(msg);
+    syslog_bus(0, DBG_INFO, "Server reset - cleaning all buses.");
 
     /* It is not quite clear what the server may do now. This is a
      * proposal:

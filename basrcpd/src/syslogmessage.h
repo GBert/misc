@@ -1,5 +1,5 @@
 /*
- * syslogmessage.h
+ * syslogmessage.h - adapted for basrcpd project 2018 by Rainer Müller 
  */
 
 /**************************************************************************

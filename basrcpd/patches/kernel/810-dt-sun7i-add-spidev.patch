@@ -1,0 +1,17 @@
+Index: linux-4.4.93/arch/arm/boot/dts/sun7i-a20-bananapi.dts
+===================================================================
+--- linux-4.4.93.orig/arch/arm/boot/dts/sun7i-a20-bananapi.dts
++++ linux-4.4.93/arch/arm/boot/dts/sun7i-a20-bananapi.dts
+@@ -284,6 +284,12 @@
+ 		    <&spi0_cs0_pins_a>,
+ 		    <&spi0_cs1_pins_a>;
+ 	status = "okay";
++
++	spidev@0 {
++		compatible = "rohm,dh2228fv";
++		spi-max-frequency = <12000000>;
++		reg = <0>;
++	};
+ };
+ 
+ &uart0 {

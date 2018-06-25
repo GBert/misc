@@ -1,3 +1,5 @@
+// srcp-sm.c - adapted for basrcpd project 2018 by Rainer Müller 
+
 /***************************************************************************
                          srcp-sm.c  -  description
                             -------------------
@@ -38,8 +40,8 @@
  *   - Set address of decoder is only available at programming track
  *   - Every GET/VERIFY only available at programming track
  *   - The answer of GET is delivered via INFO-port!
- *   - Address = -1, means to use program-track
- *   - Address > 0, means to use pom (only available with CV)
+ *   - Address = 0 or -1, means to use program-track
+ *   - Address > 0, means to use POM (only available with CV)
  *
  *   For instance:
  *     SET 1 SM -1 CV 29 2        write 2 into CV 29 at program-track
@@ -57,7 +59,6 @@
  *       Achtung: meine MFX Loksuche während aktiviertem SM, mit "TERM x SM MFX" beenden!
  *   Beispiele:
  *     SET 1 SM 10 CVMFX 15 2 3      schreibe 3 an CV 15 Index 2 der Lok 10
- *     SET 1 SM 10 CAMFX 5 19 0 2 50 schreibe 50 an 1. Vorkommen (CA Index 0) CA 19 in Block 5 an Index 2 (=Bremsverzögerung)
  */
 
 
@@ -71,87 +72,6 @@ static int queue_len(bus_t busnumber);
 static int queue_isfull(bus_t busnumber);
 
 
-int enqueueInfoSM(bus_t busnumber, int addr, int type, int typeaddr,
-                  int bit, int value, int return_code,
-                  struct timeval *akt_time)
-{
-    char buffer[1000], msg[1000];
-    char tmp[100];
-
-    if (return_code == 0) {
-        sprintf(buffer, "%lu.%.3lu 100 INFO %ld SM %d",
-                akt_time->tv_sec, akt_time->tv_usec / 1000, busnumber,
-                addr);
-        switch (type) {
-            case REGISTER:
-                sprintf(tmp, "REG %d %d", typeaddr, value);
-                break;
-            case CV:
-                sprintf(tmp, "CV %d %d", typeaddr, value);
-                break;
-            case CV_BIT:
-                sprintf(tmp, "CVBIT %d %d %d", typeaddr, bit, value);
-                break;
-            case PAGE:
-                sprintf(tmp, "PAGE %d %d", typeaddr, value);
-                break;
-        }
-    }
-    else {
-        sprintf(buffer, "%lu.%.3lu 600 ERROR %ld SM %d %d",
-                akt_time->tv_sec, akt_time->tv_usec / 1000,
-                busnumber, addr, return_code);
-        switch (return_code) {
-            case 0xF2:
-                sprintf(tmp, "Cannot terminate task ");
-                break;
-            case 0xF3:
-                sprintf(tmp, "No task to terminate");
-                break;
-            case 0xF4:
-                sprintf(tmp, "Task terminated");
-                break;
-            case 0xF6:
-                sprintf(tmp, "XPT_DCCQD: Not Ok (direct bit read mode "
-                        "is (probably) not supported)");
-                break;
-            case 0xF7:
-                sprintf(tmp, "XPT_DCCQD: Ok (direct bit read mode is "
-                        "(probably) supported)");
-                break;
-            case 0xF8:
-                sprintf(tmp, "Error during Selectrix read");
-                break;
-            case 0xF9:
-                sprintf(tmp, "No acknowledge to paged operation "
-                        "(paged r/w not supported?)");
-                break;
-            case 0xFA:
-                sprintf(tmp, "Error during DCC direct bit mode operation");
-                break;
-            case 0xFB:
-                sprintf(tmp, "Generic Error");
-                break;
-            case 0xFC:
-                sprintf(tmp, "No decoder detected");
-                break;
-            case 0xFD:
-                sprintf(tmp, "Short! (on the PT)");
-                break;
-            case 0xFE:
-                sprintf(tmp, "No acknowledge from decoder (but a write "
-                        "maybe was successful)");
-                break;
-            case 0xFF:
-                sprintf(tmp, "Timeout");
-                break;
-        }
-    }
-    sprintf(msg, "%s %s\n", buffer, tmp);
-    enqueueInfoMessage(msg);
-    return SRCP_OK;
-}
-
 /**
  * SM Kommando in Queue zur Ausführung. Wenn ein Paramter für ein Kommando nciht benötigt wird, muss -1 übergeben werden.
  * @param busnumber
@@ -160,16 +80,13 @@ int enqueueInfoSM(bus_t busnumber, int addr, int type, int typeaddr,
  * @param type SM Type (CV, CV Bit etc.)
  * @param addr Adresse der Lok. Bei NMRA auf Programmiergleis kann hier -1 übergeben werden (Broadcast),
  *             sonst eine Adresse >0
- * @param blockNr Nur bei type==CA_MFX: MFX Blocknr.
- * @param caNr Nur bei type==CA_MFX: MFX CA Typnr.
- * @param caNr Bei type==CA_MFX: 1 für erstes Vorkommen CA im Block, 2. für 2. Vorkommen etc.
- *             Bei allem anderen: CV Nr
+ * @param caNr Bei allem anderen: CV Nr
  * @param bit_index Bei type==CV_BIT: die Bitnummer 0..7
  *                  Bei type==CV_MFX und CA_MFX: Der Index innerhalb CV Zeile
  * @param value Bei type==CV_BIT 0 oder 1, sondet 0..255 Byte Value zum schreiben oder verify
  */
-int enqueueSM(bus_t busnumber, sm_protocol_t protocol, sm_command_t command, sm_type_t type, int addr,
-              int blockNr, int caNr, int cv_caIndex, int bit_index, int value)
+int enqueueSM(bus_t busnumber, sm_protocol_t protocol, sm_command_t command, sm_type_t type, 
+				int addr, int typeaddr, int bit_index, int value)
 {
     int result;
     struct timeval akt_time;
@@ -197,12 +114,10 @@ int enqueueSM(bus_t busnumber, sm_protocol_t protocol, sm_command_t command, sm_
                    strerror(result), result);
     }
 
-    queue[busnumber][in[busnumber]].blockNr = blockNr;
-    queue[busnumber][in[busnumber]].caNr = caNr;
-    queue[busnumber][in[busnumber]].bit_index = bit_index;
+    queue[busnumber][in[busnumber]].index = bit_index;
     queue[busnumber][in[busnumber]].type = type;
     queue[busnumber][in[busnumber]].value = value;
-    queue[busnumber][in[busnumber]].cv_caIndex = cv_caIndex;
+    queue[busnumber][in[busnumber]].cvaddr = typeaddr;
     queue[busnumber][in[busnumber]].command = command;
     gettimeofday(&akt_time, NULL);
     queue[busnumber][in[busnumber]].tv = akt_time;
@@ -271,27 +186,6 @@ int dequeueNextSM(bus_t busnumber, sm_t * l)
     return out[busnumber];
 }
 
-int setSM(bus_t busnumber, int type, int addr, int typeaddr, int bit,
-          int value, int return_code)
-{
-    struct timeval tv;
-
-    syslog_bus(busnumber, DBG_DEBUG,
-               "CV: %d         BIT: %d         VALUE: 0x%02x", typeaddr,
-               bit, value);
-    if (addr == -1) {
-        gettimeofday(&tv, NULL);
-        if (type == CV_BIT)
-            value = (value & (1 << bit)) ? 1 : 0;
-        enqueueInfoSM(busnumber, addr, type, typeaddr, bit, value,
-                      return_code, &tv);
-        return SRCP_OK;
-    }
-    else {
-        return SRCP_NODATA;
-    }
-}
-
 /**
  * SM Kommando ausführen. Wenn ein Paramter für ein Kommando nciht benötigt wird, muss -1 übergeben werden.
  * @param busnumber
@@ -300,81 +194,106 @@ int setSM(bus_t busnumber, int type, int addr, int typeaddr, int bit,
  * @param type SM Type (CV, CV Bit etc.)
  * @param addr Adresse der Lok. Bei NMRA auf Programmiergleis kann hier -1 übergeben werden (Broadcast),
  *             sonst eine Adresse >0
- * @param blockNr Nur bei type==CA_MFX: MFX Blocknr.
- * @param caNr Nur bei type==CA_MFX: MFX CA Typnr.
- * @param caNr Bei type==CA_MFX: 1 für erstes Vorkommen CA im Block, 2. für 2. Vorkommen etc.
- *             Bei allem anderen: CV Nr
+ * @param caNr Bei allem anderen: CV Nr
  * @param bit_index Bei type==CV_BIT: die Bitnummer 0..7
  *                  Bei type==CV_MFX und CA_MFX: Der Index innerhalb CV Zeile
  * @param value Bei type==CV_BIT 0 oder 1, sondet 0..255 Byte Value zum schreiben oder verify
  * @param info Buffer für Meldungsrückgabe
  */
-int infoSM(bus_t busnumber, sm_protocol_t protocol, sm_command_t command, sm_type_t type, int addr,
-           int blockNr, int caNr, int cv_caIndex, int bit_index, int value, char *info)
+int infoSM(bus_t busnumber, sm_protocol_t protocol, sm_command_t command, sm_type_t type,
+			int addr, int typeaddr, int bit_index, int value, char *info)
 {
     int status, result;
     struct timeval now;
 
     syslog_bus(busnumber, DBG_INFO,
-               "TYPE: %d, CV: %d, BIT: %d, VALUE: 0x%02x", type, cv_caIndex,
+               "SM - TYPE: %d, CV: %d, BIT: %d, VALUE: 0x%02x", type, typeaddr,
                bit_index, value);
     session_lock_wait(busnumber);
     status =
-        enqueueSM(busnumber, protocol, command, type, addr, blockNr, caNr, cv_caIndex, bit_index, value);
+        enqueueSM(busnumber, protocol, command, type, addr, typeaddr, bit_index, value);
 
     if (session_condt_wait(busnumber, 90, &result) == ETIMEDOUT) {
-        gettimeofday(&now, NULL);
-        sprintf(info, "%lu.%.3lu 417 ERROR timeout\n", now.tv_sec,
-                now.tv_usec / 1000);
+    	status = SRCP_TIMEOUT;
     }
     else {
         gettimeofday(&now, NULL);
-        if ((result == -1) || (command == VERIFY && value != result)) {
-            sprintf(info, "%lu.%.3lu 412 ERROR wrong value\n", now.tv_sec,
-                    now.tv_usec / 1000);
+        if (result == -2) {
+            status = SRCP_TEMPORARILYPROHIBITED;
+		}
+        else if ((result == -1) || 
+				(command == VERIFY && value != result && type != BIND_MFX)) {
             status = SRCP_WRONGVALUE;
         }
         else {
-            switch (type) {
+        	char minfo[6] = { 0 };
+			switch (type) {
                 case CV:
-                    sprintf(info,
-                            "%lu.%.3lu 100 INFO %ld SM %d CV %d %d\n",
+                    snprintf(info, MAXSRCPLINELEN,
+                            "%lu.%.3lu 100 INFO %lu SM %d CV %d %d\n",
                             now.tv_sec, now.tv_usec / 1000, busnumber,
-                            addr, cv_caIndex, result);
+                            addr, typeaddr, result);
                     break;
                 case REGISTER:
-                    sprintf(info,
-                            "%lu.%.3lu 100 INFO %ld SM %d REG %d %d\n",
+                    snprintf(info, MAXSRCPLINELEN,
+                            "%lu.%.3lu 100 INFO %lu SM %d REG %d %d\n",
                             now.tv_sec, now.tv_usec / 1000, busnumber,
-                            addr, cv_caIndex, result);
+                            addr, typeaddr, result);
                     break;
                 case PAGE:
-                    sprintf(info,
-                            "%lu.%.3lu 100 INFO %ld SM %d PAGE %d %d\n",
+                    snprintf(info, MAXSRCPLINELEN,
+                            "%lu.%.3lu 100 INFO %lu SM %d PAGE %d %d\n",
                             now.tv_sec, now.tv_usec / 1000, busnumber,
-                            addr, cv_caIndex, result);
+                            addr, typeaddr, result);
                     break;
                 case CV_BIT:
-                    sprintf(info,
-                            "%lu.%.3lu 100 INFO %ld SM %d CVBIT %d %d %d\n",
+                    snprintf(info, MAXSRCPLINELEN,
+                            "%lu.%.3lu 100 INFO %lu SM %d CVBIT %d %d %d\n",
                             now.tv_sec, now.tv_usec / 1000, busnumber,
-                            addr, cv_caIndex, bit_index, result);
+                            addr, typeaddr, bit_index, result);
+                    break;
+                case BIND_MFX:
+                    snprintf(info, MAXSRCPLINELEN,
+                            "%lu.%.3lu 100 INFO %lu SM %d BIND %d\n",
+                            now.tv_sec, now.tv_usec / 1000, busnumber,
+                            addr, value);
+                    if (addr == 0) {			// SET ^ GET x GM 0 BIND
+       	                minfo[0] = 3;	minfo[1] = 9;	
+						minfo[2] = result >> 8; minfo[3] = result & 0xFF;
+                    	info_mcs(busnumber, 1, 0, minfo);
+					}
+					else { 						// SET ^ GET x GM y BIND
+						minfo[0] = 2;	
+						minfo[1] = addr >> 8; 	minfo[2] = addr & 0xFF;
+						minfo[5] = 5;
+						if (command != SET) {	// VERIFY x GM y BIND
+							if (result) {	// Amplitude Shift Keying value
+								minfo[0] = 3;	minfo[3] = result;	
+							}
+							minfo[5] = 7;
+						}
+                    	info_mcs(busnumber, minfo[5], value, minfo);
+                    }
                     break;
                 case CV_MFX:
-                    sprintf(info,
-                            "%lu.%.3lu 100 INFO %ld SM %d CVMFX %d %d %d\n",
+                    snprintf(info, MAXSRCPLINELEN,
+                            "%lu.%.3lu 100 INFO %lu SM %d CVMFX %d %d %d\n",
                             now.tv_sec, now.tv_usec / 1000, busnumber,
-                            addr, cv_caIndex, bit_index, result);
+                            addr, typeaddr, bit_index, result);
                     break;
-                case CA_MFX:
-                    sprintf(info,
-                            "%lu.%.3lu 100 INFO %ld SM %d CAMFX %d %d %d %d %d\n",
-                            now.tv_sec, now.tv_usec / 1000, busnumber,
-                            addr, blockNr, caNr, cv_caIndex, bit_index, result);
-                    break;
-            }
-        }
+        	}
+   			if (info[0]) {
+				enqueueInfoMessage(info);
+			}
+		}
     }
     session_unlock_wait(busnumber);
     return status;
+}
+
+// Helper for the mcs-Gateway
+void handle_mfx_bind_verify(bus_t bus, sm_command_t cmnd, uint32_t val, int addr)
+{
+	char reply[MAXSRCPLINELEN];
+	infoSM(bus, PROTO_MFX, cmnd, BIND_MFX, addr, -1, -1, val, reply);
 }

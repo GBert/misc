@@ -1,3 +1,15 @@
+// srcp-gl.c - adapted for basrcpd project 2018 by Rainer Müller 
+
+/* $Id: srcp-gl.c 1740 2016-04-24 12:36:36Z gscholz $ */
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
 #include <string.h>
 #include <stdio.h>
@@ -15,15 +27,7 @@
 static struct _GL gl[MAX_BUSES];
 
 /* command queues for each bus */
-typedef struct _tQueueGL {
-    int out, in;
-    gl_data_t queue[QUEUELEN];
-} tQueueGL;
-typedef struct _tQueue2GL {
-    tQueueGL queue[2];  //Extra Queue für Lok Halt Kommandos, diese haben Priorität und können andere überholen. 0=normal, 1=priorität
-} tQueue2GL;
-static tQueue2GL queue[MAX_BUSES];
-#define GET_QUEUE_PRIO(prio) ((prio) ? 1 : 0)
+static gl_data_t * queue[MAX_BUSES][QUEUELEN];
 
 static pthread_mutex_t queue_mutex[MAX_BUSES];
 
@@ -31,9 +35,8 @@ static pthread_mutex_t queue_mutex[MAX_BUSES];
 static int out[MAX_BUSES], in[MAX_BUSES];
 
 /* forward declaration of internal functions */
-// TODO: braucht man das noch?    static int queue_len(bus_t busnumber);
-static int queue_isfull(tQueueGL *q);
-static int queue_len_one(tQueueGL *q);
+static int queue_len(bus_t busnumber);
+static int queue_isfull(bus_t busnumber);
 
 /**
  * isValidGL: checks if a given address could be a valid GL.
@@ -46,33 +49,26 @@ int isValidGL(bus_t busnumber, int addr)
     /* number of GL is set */
     /* address must be greater 0 */
     /* but not more than the maximum address on that bus */
-    if (busnumber <= num_buses &&
+    return (busnumber <= num_buses &&
         gl[busnumber].numberOfGl > 0 && addr > 0 &&
-        addr <= gl[busnumber].numberOfGl) {
-        return 1 == 1;
-    }
-    else {
-        return 1 == 0;
-    }
+        addr <= gl[busnumber].numberOfGl);
 }
 
 /**
- * getMaxAddrGL: returns the maximum Address for GL on the given bus
- * returns: <0: invalid bus number
-            =0: no GL on that bus
-      >0: maximum address
+ * getMaxAddrGL: returns the maximum address for GL on the given bus
+ * returns: =0: no GL on that bus, or busid not valid
+ *          >0: maximum address
  */
 unsigned int getMaxAddrGL(bus_t busnumber)
 {
     if (busnumber <= num_buses) {
         return gl[busnumber].numberOfGl;
     }
-    else {
+    else
         return 0;
-    }
 }
 
-/* es gibt Decoder fr 14, 27, 28 und 128 FS */
+/* there are decoders for 14, 27, 28 and 128 speed steps */
 static int calcspeed(int vs, int vmax, int n_fs)
 {
     int rs;
@@ -103,39 +99,36 @@ static int calcspeed(int vs, int vmax, int n_fs)
 bool isInitializedGL(bus_t busnumber, int addr)
 {
     if (isValidGL(busnumber, addr)) {
-        return (gl[busnumber].glstate[addr].state == 1);
+        return (gl[busnumber].glstate[addr].state == glsActive);
     }
     else {
         return false;
     }
 }
 
-static void mutex_unlock(bus_t busnumber, pthread_mutex_t *mutex) {
-    int result;
-    result = pthread_mutex_unlock(mutex);
-    if (result != 0) {
-      syslog_bus(busnumber, DBG_ERROR,
-                 "pthread_mutex_unlock() failed: %s (errno = %d).",
-                 strerror(result), result);
-    }
-}
+/* Take new locomotive data and make some checks.
+ * Lock is ignored! Lock is payed attention to in SRCP procedures, here not
+ * necessary (emergency stop)*/
 
-/* Uebernehme die neuen Angaben für die Lok, einige wenige Prüfungen.
-   Lock wird ignoriert! Lock wird in den SRCP Routinen beachtet, hier
-   ist das nicht angebracht (Notstop)
-*/
-
-int enqueueGLorig(bus_t busnumber, int addr, int dir, int speed, int maxspeed,
-              const int f)
+// static void     --- TODO: brauchen wir den Rückgabewert und die Defaultinitialisierung?
+static int gl_enqueue(bus_t busnumber, gl_data_t * p)
 {
-    int result;
-    struct timeval akt_time;
+    syslog_bus(busnumber, DBG_DEBUG, "gl_info enqueued for addr %d", p->id);
+	if (buses[busnumber].debuglevel >= DBG_DEBUG)
+			debugGL(busnumber, p->id, p->id); 	
+
+    int result;  
+	int addr = p->id;
 
     if (isValidGL(busnumber, addr)) {
         if (!isInitializedGL(busnumber, addr)) {
             cacheInitGL(busnumber, addr, 'P', 1, 14, 1, NULL);
             syslog_bus(busnumber, DBG_WARN, "GL default init for %d-%d",
                        busnumber, addr);
+        }
+        if (queue_isfull(busnumber)) {
+            syslog_bus(busnumber, DBG_WARN, "GL command queue full");
+            return SRCP_TEMPORARILYPROHIBITED;
         }
 
         result = pthread_mutex_lock(&queue_mutex[busnumber]);
@@ -145,145 +138,71 @@ int enqueueGLorig(bus_t busnumber, int addr, int dir, int speed, int maxspeed,
                        strerror(result), result);
         }
 
-        //Priorität ist dann vorhanden, wenn die Lok noch fährt und nun angehalten werden soll.
-        bool prio = (gl[busnumber].glstate[addr].speed > 0) && (speed == 0);
-        tQueueGL *q = &(queue[busnumber].queue[GET_QUEUE_PRIO(prio)]);
-        if (queue_isfull(q)) {
-            //Wenn es die Prio Queue war können wir es noch mit der normalem probieren, besser als Kommando ganz verwerfen.
-            if (prio) {
-              q = &(queue[busnumber].queue[GET_QUEUE_PRIO(false)]);
-              if (queue_isfull(q)) {
-                syslog_bus(busnumber, DBG_WARN, "GL Command Queue double full");
-                mutex_unlock(busnumber, &queue_mutex[busnumber]);
-                return SRCP_TEMPORARILYPROHIBITED;
-              }
-            }
-            else {
-              syslog_bus(busnumber, DBG_WARN, "GL Command Queue full");
-              mutex_unlock(busnumber, &queue_mutex[busnumber]);
-              return SRCP_TEMPORARILYPROHIBITED;
-            }
-        }
-        else if (prio) {
-          //Kommando wird der Prio Queue hinzugefügt
-          //Wenn in der normalen Queue nun ein Kommandof für die selbe Lok ist wurde dieses überholt und ist nicht mehr gültig
-          tQueueGL *qNormal = &(queue[busnumber].queue[GET_QUEUE_PRIO(false)]);
-          int i = qNormal -> out;
-          while (i != qNormal -> in) {
-            if (qNormal -> queue[i].id == addr) {
-              //Nun nicht mehr gültiger, überholter, Eintrag gefunden
-              qNormal -> queue[i].id = -1;
-            }
-            i++;
-            if (i == QUEUELEN) {
-              i = 0;
-            }
-          }
-          //Wenn die Queue zu 75% voll ist und es schon ein Prio Halt Kommando für die selbe Lok hat muss dieses hier nicht auch noch dazu -> verwerfen
-          //75% Regel: wenn keine Überlast dürfen mehrere Halt Komnados da sein (z.B. mit Schaltung verschiedener Funktionen).
-          if (queue_len_one(q) > (QUEUELEN * 3 / 4)) {
-            i = q -> out;
-            while (i != q -> in) {
-	      if (q -> queue[i].id == addr) {
-	        //Schon ein Prio Stop Kommando vorhanden -> neues verwerfen
-                mutex_unlock(busnumber, &queue_mutex[busnumber]);
-                return SRCP_OK;
-	      }
-	      i++;
-              if (i == QUEUELEN) {
-                i = 0;
-              }
-	    }
-	  }
+		/* avoid double queue entries */        
+        int i = out[busnumber];
+        while (i != in[busnumber]) {
+        	if (queue[busnumber][i] == p) goto enqueue_unlock;
+        	i++;
+            if (i == QUEUELEN) i = 0;
         }
         
-        /* Protokollbezeichner und sonstige INIT Werte in die Queue kopieren! */
-        (q -> queue[q -> in]).prio = prio;
-        (q -> queue[q -> in]).protocol =
-            gl[busnumber].glstate[addr].protocol;
-        (q -> queue[q -> in]).protocolversion =
-            gl[busnumber].glstate[addr].protocolversion;
-
-        (q -> queue[q -> in]).speed =
-            calcspeed(speed, maxspeed, gl[busnumber].glstate[addr].n_fs);
-
-        (q -> queue[q -> in]).n_fs =
-            gl[busnumber].glstate[addr].n_fs;
-
-        (q -> queue[q -> in]).n_func =
-            gl[busnumber].glstate[addr].n_func;
-
-        (q -> queue[q -> in]).direction = dir;
-        (q -> queue[q -> in]).funcs = f;
-        gettimeofday(&akt_time, NULL);
-        (q -> queue[q -> in]).tv = akt_time;
-        (q -> queue[q -> in]).id = addr;
-        q -> in++;
-        if (q -> in == QUEUELEN) {
-            q -> in = 0;
+        /* copy pointer to new values to queue */
+        queue[busnumber][in[busnumber]] = p;
+        in[busnumber]++;
+        if (in[busnumber] == QUEUELEN) in[busnumber] = 0;
+        
+enqueue_unlock:
+        result = pthread_mutex_unlock(&queue_mutex[busnumber]);
+        if (result != 0) {
+            syslog_bus(busnumber, DBG_ERROR,
+                       "pthread_mutex_unlock() failed: %s (errno = %d).",
+                       strerror(result), result);
         }
-
-        mutex_unlock(busnumber, &queue_mutex[busnumber]);
 
         /* Restart thread to send GL command */
         resume_bus_thread(busnumber);
         return SRCP_OK;
     }
-    else {
+    else 
         return SRCP_WRONGVALUE;
-    }
 }
 
 int queue_GL_isempty(bus_t busnumber)
 {
-    return (queue[busnumber].queue[0].in == queue[busnumber].queue[0].out) &&
-           (queue[busnumber].queue[1].in == queue[busnumber].queue[1].out);
+    return (in[busnumber] == out[busnumber]);
 }
 
-static int queue_len_one(tQueueGL *q)
-{
-    if (q ->in >= q->out)
-        return q->in - q->out;
-    else
-        return QUEUELEN + q->in - q->out;
-}
-/* TODO: braucht man das noch?
 static int queue_len(bus_t busnumber)
 {
-    return queue_len_one(&queue[busnumber].queue[0]) + queue_len_one(&queue[busnumber].queue[1]);
-}	*/
+    if (in[busnumber] >= out[busnumber])
+        return in[busnumber] - out[busnumber];
+    else
+        return QUEUELEN + in[busnumber] - out[busnumber];
+}
 
 /* maybe, 1 element in the queue cannot be used.. */
-static int queue_isfull(tQueueGL *q)
+static int queue_isfull(bus_t busnumber)
 {
-    return queue_len_one(q) >= QUEUELEN - 1;
+    return queue_len(busnumber) >= QUEUELEN - 1;
 }
 
-/** liefert nächsten Eintrag oder -1, setzt fifo pointer neu! */
-int dequeueNextGL(bus_t busnumber, gl_data_t * l)
+/** result is next item or -1, updates fifo pointer! */
+int dequeueNextGL(bus_t busnumber, gl_data_t *gld)
 {
-    if (queue_GL_isempty(busnumber)) {
+    if (in[busnumber] == out[busnumber])
         return -1;
-    }
-
-    //Zuerst Prio Queue
-    tQueueGL *q = &queue[busnumber].queue[GET_QUEUE_PRIO(true)];
-    if (queue_len_one(q) == 0) {
-      //Keine Prio Kommandos -> normale Queue kommt drann
-      q = &queue[busnumber].queue[GET_QUEUE_PRIO(false)];
-    }
-    *l = q -> queue[q -> out];
-    q -> out++;
-    if (q -> out == QUEUELEN) {
-        q -> out = 0;
-    }
-    return q -> out;
+ 
+    *gld = *(queue[busnumber][out[busnumber]]);
+    out[busnumber]++;
+    if (out[busnumber] == QUEUELEN)
+        out[busnumber] = 0;
+    return out[busnumber];
 }
 
-int cacheGetGL(bus_t busnumber, int addr, gl_data_t * l)
+int cacheGetGL(bus_t busnumber, int addr, gl_data_t *gld)
 {
     if (isInitializedGL(busnumber, addr)) {
-        *l = gl[busnumber].glstate[addr]; 
+        *gld = gl[busnumber].glstate[addr];
         return SRCP_OK;
     }
     else {
@@ -307,8 +226,8 @@ int cacheSetGL(bus_t busnumber, int addr, gl_data_t l)
 //      gl[busnumber].glstate[addr].n_fs = l.n_fs;
 //      gl[busnumber].glstate[addr].n_func = l.n_func;
         gettimeofday(&gl[busnumber].glstate[addr].tv, NULL);
-        if (gl[busnumber].glstate[addr].state == 2) {
-            snprintf(msg, sizeof(msg), "%lu.%.3lu 102 INFO %ld GL %d\n",
+        if (gl[busnumber].glstate[addr].state == glsTerm) {
+            snprintf(msg, sizeof(msg), "%lu.%.3lu 102 INFO %lu GL %d\n",
                      gl[busnumber].glstate[addr].tv.tv_sec,
                      gl[busnumber].glstate[addr].tv.tv_usec / 1000,
                      busnumber, addr);
@@ -332,14 +251,14 @@ int cacheInitGL(bus_t busnumber, int addr, const char protocol,
     if (isValidGL(busnumber, addr)) {
         char msg[1000];
         gl_data_t tgl;
-        memset(&tgl, 0, sizeof(tgl));
+        memset(&tgl, 0, sizeof(tgl)); 
         rc = bus_supports_protocol(busnumber, protocol);
         if (rc != SRCP_OK) {
             return rc;
         }
         gettimeofday(&tgl.inittime, NULL);
         tgl.tv = tgl.inittime;
-        tgl.n_fs = n_fs;
+        tgl.n_fs = n_fs ? n_fs : 14;
         tgl.n_func = n_func;
         tgl.protocolversion = protoversion;
         tgl.protocol = protocol;
@@ -349,41 +268,19 @@ int cacheInitGL(bus_t busnumber, int addr, const char protocol,
         }
         if (rc == SRCP_OK) {
             gl[busnumber].glstate[addr] = tgl;
-            gl[busnumber].glstate[addr].state = 1;
+            gl[busnumber].glstate[addr].state = glsActive;
             cacheDescribeGL(busnumber, addr, msg);
             enqueueInfoMessage(msg);
             enqueueGL(busnumber, addr, 0, 0, 1, 0);
         }
     }
-    else {
-    printf("7\n");
-        rc = SRCP_WRONGVALUE;
-    }
     return rc;
-}
-
-//SID, 15.9.08
-//Alle GL sate aller Buse werden auf 0 gesetzt -> Lok nicht mehr vorhanden
-int resetAllGL(bus_t bus)
-{
-  int glAddr;
-  if (bus > 0 && bus <= num_buses) {
-    for (glAddr=1; glAddr<=gl[bus].numberOfGl; glAddr++) {
-      gl[bus].glstate[glAddr].state = 0;
-    }
-    int rc = SRCP_OK;
-    if (buses[bus].init_func) {
-      rc = (*buses[bus].init_func) (bus);
-    }
-    return rc;
-  }
-  return SRCP_WRONGVALUE;
 }
 
 int cacheTermGL(bus_t busnumber, int addr)
 {
     if (isInitializedGL(busnumber, addr)) {
-        gl[busnumber].glstate[addr].state = 2;
+        gl[busnumber].glstate[addr].state = glsTerm;
         //Bei MFX muss eine Abmeldung bis zum Lokdekoder
         if (gl[busnumber].glstate[addr].protocol == 'X') {
           enqueueGL(busnumber, addr, -1, 0, 1, 0); //Direction -1 -> Info Term
@@ -396,7 +293,6 @@ int cacheTermGL(bus_t busnumber, int addr)
     else {
         return SRCP_NODATA;
     }
-
 }
 
 /*
@@ -417,26 +313,28 @@ int resetGL(bus_t busnumber, int addr)
 void cacheCleanGL(bus_t bus)
 {
     for (unsigned int i = 1; i <= gl[bus].numberOfGl; i++) {
-        bzero(&gl[bus].glstate[i], sizeof(gl_data_t));
+//        bzero(&gl[bus].glstate[i], sizeof(gl_data_t));
+// TODO: mixture of original and Danis code, what to use?
+      	gl[bus].glstate[i].state = glsNone;
     }
+    if (buses[bus].init_func)  	(*buses[bus].init_func) (bus);
 }
 
 
 int cacheDescribeGL(bus_t busnumber, int addr, char *msg)
 {
     if (isInitializedGL(busnumber, addr)) {
-        sprintf(msg, "%lu.%.3lu 101 INFO %ld GL %d %c %d %d %d",
+        sprintf(msg, "%lu.%.3lu 101 INFO %lu GL %d %c %d %d %d",
                 gl[busnumber].glstate[addr].inittime.tv_sec,
                 gl[busnumber].glstate[addr].inittime.tv_usec / 1000,
                 busnumber, addr, gl[busnumber].glstate[addr].protocol,
                 gl[busnumber].glstate[addr].protocolversion,
                 gl[busnumber].glstate[addr].n_fs,
                 gl[busnumber].glstate[addr].n_func);
-        //Protokoll / Busspezifische Daten ergänzen
+        // add bus specific data and newline
         if (buses[busnumber].describe_gl_func) {
           (*buses[busnumber].describe_gl_func) (&(gl[busnumber].glstate[addr]), msg);
         }
-        //Noch Newline anhängen
         sprintf(msg + strlen(msg), "\n");
      }
     else {
@@ -452,7 +350,7 @@ int cacheInfoGL(bus_t busnumber, int addr, char *msg)
     char *tmp;
 
     if (isInitializedGL(busnumber, addr)) {
-        sprintf(msg, "%lu.%.3lu 100 INFO %ld GL %d %d %d %d %d",
+        sprintf(msg, "%lu.%.3lu 100 INFO %lu GL %d %d %d %d %d",
                 gl[busnumber].glstate[addr].tv.tv_sec,
                 gl[busnumber].glstate[addr].tv.tv_usec / 1000,
                 busnumber, addr, gl[busnumber].glstate[addr].direction,
@@ -473,11 +371,9 @@ int cacheInfoGL(bus_t busnumber, int addr, char *msg)
         strcpy(msg, tmp);
         free(tmp);
 
+        return SRCP_INFO;
     }
-    else {
-        return SRCP_NODATA;
-    }
-    return SRCP_INFO;
+    return SRCP_NODATA;
 }
 
 /* has to use a semaphore, must be atomized! */
@@ -521,7 +417,7 @@ int describeLOCKGL(bus_t bus, int addr, char *reply)
 {
     if (isInitializedGL(bus, addr)) {
 
-        sprintf(reply, "%lu.%.3lu 100 INFO %ld LOCK GL %d %ld %ld\n",
+        sprintf(reply, "%lu.%.3lu 100 INFO %lu LOCK GL %d %ld %lu\n",
                 gl[bus].glstate[addr].locktime.tv_sec,
                 gl[bus].glstate[addr].locktime.tv_usec / 1000,
                 bus, addr, gl[bus].glstate[addr].lockduration,
@@ -542,7 +438,7 @@ int cacheUnlockGL(bus_t busnumber, int addr, sessionid_t sessionid)
             char msg[256];
             gl[busnumber].glstate[addr].locked_by = 0;
             gettimeofday(&gl[busnumber].glstate[addr].locktime, NULL);
-            sprintf(msg, "%lu.%.3lu 102 INFO %ld LOCK GL %d %ld\n",
+            sprintf(msg, "%lu.%.3lu 102 INFO %lu LOCK GL %d %lu\n",
                     gl[busnumber].glstate[addr].locktime.tv_sec,
                     gl[busnumber].glstate[addr].locktime.tv_usec / 1000,
                     busnumber, addr, sessionid);
@@ -661,7 +557,6 @@ void debugGL(bus_t busnumber, int start, int end)
 {
     gl_data_t *gld;
 
-//  syslog_bus(busnumber, DBG_WARN, "debug GLSTATE from %d to %d", start, end);
     for (int i = start; i <= end; i++) {
         gld = &gl[busnumber].glstate[i];
         syslog_bus(busnumber, DBG_WARN, "*** GLSTATE for %d/%d state %d",
@@ -669,8 +564,8 @@ void debugGL(bus_t busnumber, int start, int end)
         syslog_bus(busnumber, DBG_WARN, "* id %d, protocol %c, protocolversion %d",
 		 				gld->id, gld->protocol, gld->protocolversion);
         syslog_bus(busnumber, DBG_WARN, "* n_func %d, n_fs %d", gld->n_func, gld->n_fs);
-        syslog_bus(busnumber, DBG_WARN, "* speed %d, direction %d, funcs %x",
-						gld->speed, gld->direction, gld->funcs);
+        syslog_bus(busnumber, DBG_WARN, "* speed %d, direction %d, funcs %x, UID %x",
+						gld->speed, gld->direction, gld->funcs, gld->decuid);
 //      syslog_bus(busnumber, DBG_WARN, "lockduration %ld",
 //                 gld->lockduration);
 //      syslog_bus(busnumber, DBG_WARN, "locked_by %ld", gld->locked_by);
@@ -681,21 +576,13 @@ void debugGL(bus_t busnumber, int start, int end)
 }
 
 // Helpers for the mcs-Gateway
-static void gl_enqueue(bus_t bus, gl_data_t * p)
-{
-    syslog_bus(bus, DBG_INFO, "mcs_info enqueued for %d", p->id);
-	// TODO: put pointer p in queue
-	debugGL(bus, p->id, p->id); 	// nur zum Test
-	enqueueGLorig(bus, p->id, p->direction, p->speed, 0, p->funcs);
-}
-
 static gl_data_t * get_gldata_ptr(bus_t bus, uint32_t locid)
 {
     int rc = SRCP_WRONGVALUE;
 	gl_data_t *p = NULL;
     if (isValidGL(bus, locid & 0x3FFF)) {
         p = &gl[bus].glstate[locid & 0x3FFF];
-        if (p->state == 0) {			// new item to be considered
+        if (p->state == glsNone) {			// new item to be considered
         	memset(p, 0, sizeof(gl_data_t));
         	p->id = locid & 0x3FFF;
         	switch(locid >> 14) {
@@ -715,14 +602,15 @@ static gl_data_t * get_gldata_ptr(bus_t bus, uint32_t locid)
             			p->n_func = 16;
 						break;			
 			}
-			// TODO: was muss sonst noch initialisiert werden ?
+			// TODO: was muss sonst noch initialisiert werden ?    z.B.
+			gettimeofday(&p->inittime, NULL);
         	if (bus_supports_protocol(bus, p->protocol) == SRCP_OK) {
         		if (buses[bus].init_gl_func) {
-            		rc = (*buses[bus].init_gl_func) (bus, p, NULL);
-        			if (rc == SRCP_OK)  p->state = 1;
+            		rc = (*buses[bus].init_gl_func) (bus, p, "");
+        			if (rc == SRCP_OK)  p->state = glsActive;
         		}
             }
-            if (p->state == 0) p = NULL;	// init failed
+            if (p->state == glsNone) p = NULL;	// init failed
     		else syslog_bus(bus, DBG_INFO, "data initialized for %x to %c %d NFS %d",
 						locid, p->protocol, p->protocolversion, p->n_fs);
 		}
@@ -745,7 +633,7 @@ uint32_t getglid(gl_data_t *p)
 
 int handle_mcs_prot(bus_t bus, uint32_t locid, int val)
 {
-    syslog_bus(bus, DBG_INFO, "mcs_prot for %d set to %d", locid, val);
+    syslog_bus(bus, DBG_DEBUG, "mcs_prot for %d set to %d", locid, val);
     gl_data_t *p = get_gldata_ptr(bus, locid);  
     if (p == NULL) return -1;
     switch (p->protocol) {
@@ -765,7 +653,7 @@ int handle_mcs_prot(bus_t bus, uint32_t locid, int val)
 int handle_mcs_speed(bus_t bus, uint32_t locid, int val)
 {
 	int oldspeed;
-//  syslog_bus(bus, DBG_INFO, "mcs_speed for %d set to %d", locid, val);
+//  syslog_bus(bus, DBG_DEBUG, "mcs_speed for %d set to %d", locid, val);
     gl_data_t *p = get_gldata_ptr(bus, locid);
     if (p == NULL) return -1;
     if (val >= 0) {
@@ -773,7 +661,7 @@ int handle_mcs_speed(bus_t bus, uint32_t locid, int val)
 		p->speed = calcspeed(val, 1000, p->n_fs);
 		if (p->speed != oldspeed) {
         	p->speedchange |= 1;
-			gl_enqueue(bus, p);
+			gl_enqueue(bus, p); 
 		}
 	}
     else val = (p->speed * 1000) / p->n_fs;	// TODO: mal irgendwas: calcspeed umgekehrt!
@@ -783,7 +671,7 @@ int handle_mcs_speed(bus_t bus, uint32_t locid, int val)
 /* val:	0 = no change, 1 = forward, 2 = backward, 3 = change, 4 = emergency */
 int handle_mcs_dir(bus_t bus, uint32_t locid, int val)
 {
-//  syslog_bus(bus, DBG_INFO, "mcs_dir for %d set to %d", locid, val);
+//  syslog_bus(bus, DBG_DEBUG, "mcs_dir for %d set to %d", locid, val);
     gl_data_t *p = get_gldata_ptr(bus, locid);  
     if (p == NULL) return -1;
     if (val >= 0) {
@@ -793,6 +681,7 @@ int handle_mcs_dir(bus_t bus, uint32_t locid, int val)
 			case 3: p->direction ^= 1;	break;	// change
 			case 4:	p->direction = 2;	break;	// emergency
 		}
+		if (p->direction != p->cacheddirection) p->speed = 0;
 		gl_enqueue(bus, p);
 	}
 	val = 2 - p->direction;
@@ -803,7 +692,7 @@ int handle_mcs_func(bus_t bus, uint32_t locid, int funr, int val)
 {
 	int oldval;
 	uint32_t mask;
-//  syslog_bus(bus, DBG_INFO, "mcs_func for %d, f%d set to %d", locid, funr, val);
+//  syslog_bus(bus, DBG_DEBUG, "mcs_func for %d, f%d set to %d", locid, funr, val);
     gl_data_t *p = get_gldata_ptr(bus, locid);
     if (p == NULL) return -1;
     if (val >= 0) {
@@ -826,7 +715,7 @@ int enqueueGL(bus_t bus, int addr, int dir, int speed, int maxspeed, const int f
 	uint32_t itemid;
 	char sync[5];
 	
-	syslog_bus(bus, DBG_INFO, "srcp_info for %d set", addr);
+	syslog_bus(bus, DBG_DEBUG, "srcp_info for %d set", addr);
     gl_data_t *p = get_gldata_ptr(bus, addr);
     if (p == NULL) return SRCP_WRONGVALUE;
 
@@ -847,7 +736,12 @@ int enqueueGL(bus_t bus, int addr, int dir, int speed, int maxspeed, const int f
 
     itemid = getglid(p);
 	sync[0] = 1;	sync[1] = 2 - p->direction;
-	if (info_mcs(bus, 0x0B, itemid, sync) < 0) return SRCP_OK;
+	if (sync[1]) {
+		if (info_mcs(bus, 0x0B, itemid, sync) < 0) return SRCP_OK;
+	} else {
+		sync[1] = 3;			// emergency
+		if (info_mcs(bus, 0x01, itemid, sync) < 0) return SRCP_OK;
+	}
 
 	i = (p->speed * 1000) / p->n_fs;	
 	sync[0] = 2;	sync[1] = i >> 8; 	sync[2] = i & 0xFF;

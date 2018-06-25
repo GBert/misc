@@ -1,36 +1,27 @@
+// ddl.h - adapted for basrcpd project 2018 by Rainer Müller 
+
 /* $Id: ddl.h 1419 2009-12-10 20:06:19Z gscholz $ */
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
 #ifndef DDL_H
 #define DDL_H
 
-#include <syslog.h>
 #include <errno.h>
 #include <string.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/time.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
-#include <stdlib.h>
-#include <time.h>
-#include <sys/socket.h>
-#include <sys/uio.h>
-#include <termios.h>
-#include <signal.h>
-
-#include <pthread.h>
-#include <sched.h>
-
-#if linux
-#include <sys/io.h>
-#include <linux/serial.h>
-#endif
-
 #include <libxml/tree.h>        /*xmlDocPtr, xmlNodePtr */
 
-#include "config-srcpd.h"
 #include "netservice.h"
 
 #define QSIZE       2000
@@ -125,9 +116,6 @@ typedef struct _DDL_DATA {
 
     int spiLastMM;              //War das letzte Paket ein Märklin Motorola Paket?
     unsigned int uid;           /* Für MFX die UID der Zentrale */
-// OBSOLETE
-//    struct termios maerklin_dev_termios;
-//    struct termios nmra_dev_termios;
 
     pthread_mutex_t queue_mutex;        /* mutex to synchronize queue inserts */
     int queue_initialized;
@@ -173,13 +161,6 @@ int init_bus_DDL(bus_t busnumber);
 #define  EP_MAERKLIN  1         /* maerklin protocol */
 #define  EP_NMRADCC   2         /* nmra dcc protocol */
 #define  EP_MFX       4         /* maerklin mfx protocol */
-
-/* constants for setSerialMode() */
-#define SDM_NOTINITIALIZED -1
-#define SDM_DEFAULT         1   /* must be one of the following values */
-#define SDM_MAERKLIN        0
-#define SDM_NMRA            1
-int setSerialMode(bus_t busnumber, int mode);
 
 #define QEMPTY      -1
 #define QNOVALIDPKT 0
@@ -244,10 +225,6 @@ long int compute_delta(struct timeval tv1, struct timeval tv2);
 /* start and stop MCS gateway */
 void init_mcs_gateway(bus_t busnumber);
 void term_mcs_gateway(void);
-
-/* mfx specific commands */
-void handle_regcnt(bus_t bus, uint16_t val);
-void handle_mfx_bind_verify(bus_t bus, int cmd, uint32_t uid, uint16_t sid);
 
 
 #endif

@@ -1,3 +1,5 @@
+// srcpd.c - adapted for basrcpd project 2018 by Rainer Müller 
+
 /***************************************************************************
                           srcpd.c  -  description
                           -----------------------
@@ -26,7 +28,6 @@
 #include "srcp-ga.h"
 #include "srcp-gl.h"
 #include "srcp-info.h"
-//#include "srcp-lock.h"
 #include "srcp-server.h"
 #include "srcp-session.h"
 #include "srcp-time.h"
@@ -292,7 +293,6 @@ int main(int argc, char **argv)
     startup_GA();
     startup_FB();
     startup_INFO();
-//    startup_LOCK();
     startup_DESCRIPTION();
     startup_TIME();
     startup_SERVER();

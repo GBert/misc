@@ -664,13 +664,13 @@ int protocol_nmra_sm_write_cvbyte_pom(bus_t busnumber, int address, int cv,
     int adr = 0;
 
     syslog_bus(busnumber, DBG_DEBUG,
-               "command for PoM %d received addr:%d CV:%d value:%d",
+               "WR Byte command for PoM %d received addr:%d CV:%d value:%d",
                mode, address, cv, value);
     cv -= 1;
     /* do not allow to change the address on the main ==> cv 1 is disabled */
     if (address < 1 || address > 10239 || cv < 1 || cv > 1023 ||
         value < 0 || value > 255 || (address > 127 && mode == 1))
-        return 1;
+        return -1;
 
     adr = address;
     if (mode == 2) {
@@ -689,9 +689,9 @@ int protocol_nmra_sm_write_cvbyte_pom(bus_t busnumber, int address, int cv,
 
     if (j > 0) {
         queue_add(busnumber, adr, packetstream, QNBLOCOPKT, j, false);
-        return 0;
+        return value;
     }
-    return 1;
+    return -1;
 }
 
 /**
@@ -718,14 +718,14 @@ int protocol_nmra_sm_write_cvbit_pom(bus_t busnumber, int address, int cv,
     int adr = 0;
 
     syslog_bus(busnumber, DBG_DEBUG,
-               "command for PoM %d received addr:%d CV:%d bit:%d value:%d",
+               "WR Bit command for PoM %d received addr:%d CV:%d bit:%d value:%d",
                mode, address, cv, bit, value);
     cv -= 1;
     /* do not allow to change the address on the main ==> cv 1 is disabled */
     if (address < 1 || address > 10239 || cv < 1 || cv > 1023
         || bit < 0 || bit > 7 || value < 0 || value > 1
         || (address > 127 && mode == 1))
-        return 1;
+        return -1;
 
     adr = address;
     if (mode == 2) {
@@ -744,9 +744,9 @@ int protocol_nmra_sm_write_cvbit_pom(bus_t busnumber, int address, int cv,
 
     if (j > 0) {
         queue_add(busnumber, adr, packetstream, QNBLOCOPKT, j, false);
-        return 0;
+        return value;
     }
-    return 1;
+    return -1;
 }
 
 /**
@@ -791,6 +791,8 @@ static void sm_init(bus_t busnumber)
     sm_initialized = true;
 }
 
+#if 0
+// TODO: obsolete code for UART to be replaced by code for SPI
 /**
   Check the serial line for an acknowledgment (ack)
   @par Input: bus_t busnumber
@@ -886,6 +888,7 @@ static int handleACK(bus_t busnumber, int ack)
     else
         return ack;
 }
+#endif
 
 /**
   Generate command stream to access a physical register
@@ -896,6 +899,8 @@ static int handleACK(bus_t busnumber, int ack)
   @par Output:char *packetstream
   @return length of packetstream
 */
+#if 0
+// TODO: obsolete code for UART to be replaced by code for SPI
 static int calc_reg_stream(bus_t bus, int reg, int value, int verify,
                            char *packetstream)
 {
@@ -934,7 +939,7 @@ static int calc_reg_stream(bus_t bus, int reg, int value, int verify,
                                         true);
     return j;
 }
-
+#endif
 /**
   Write or verify a byte of a physical register
   special case: a write to register 1 is the address only command
@@ -950,10 +955,10 @@ static int protocol_nmra_sm_phregister(bus_t bus, int reg, int value,
 {
     /* physical register addressing */
 
-    char packetstream[PKTSIZE];
-    char SendStream[4096];
+//    char packetstream[PKTSIZE];
+//    char SendStream[4096];
 
-    int j, l, y, ack;
+//    int j, l, y, ack;
 
     syslog_bus(bus, DBG_DEBUG,
                "command for NMRA service mode instruction (SMPRA) received"
@@ -965,7 +970,8 @@ static int protocol_nmra_sm_phregister(bus_t bus, int reg, int value,
 
     if (!sm_initialized)
         sm_init(bus);
-
+#if 0
+// TODO: obsolete code for UART to be replaced by code for SPI
     reg -= 1;
     j = calc_reg_stream(bus, reg, value, verify, packetstream);
 
@@ -1026,6 +1032,8 @@ static int protocol_nmra_sm_phregister(bus_t bus, int reg, int value,
     setSerialMode(bus, SDM_DEFAULT);
 
     return handleACK(bus, ack);
+#endif
+    return -1;
 }
 
 /**
@@ -1042,11 +1050,11 @@ static int protocol_nmra_sm_page(bus_t bus, int page, int reg, int value,
 {
     /* physical register addressing */
 
-    char packetstream[PKTSIZE];
-    char packetstream_page[PKTSIZE];
-    char SendStream[4096];
+//    char packetstream[PKTSIZE];
+//    char packetstream_page[PKTSIZE];
+//    char SendStream[4096];
 
-    int j, k, l, y, ack;
+//    int j, k, l, y, ack;
 
     syslog_bus(bus, DBG_DEBUG,
                "command for NMRA service mode instruction (SMPRA) received"
@@ -1059,7 +1067,8 @@ static int protocol_nmra_sm_page(bus_t bus, int page, int reg, int value,
 
     if (!sm_initialized)
         sm_init(bus);
-
+ #if 0
+// TODO: obsolete code for UART to be replaced by code for SPI
     j = calc_reg_stream(bus, reg, value, verify, packetstream);
     /* set page to register 6 (number 5) */
     k = calc_reg_stream(bus, 5, page, false, packetstream_page);
@@ -1107,6 +1116,8 @@ static int protocol_nmra_sm_page(bus_t bus, int page, int reg, int value,
     setSerialMode(bus, SDM_DEFAULT);
 
     return handleACK(bus, ack);
+#endif
+    return -1;
 }
 
 /**
@@ -1162,15 +1173,13 @@ int protocol_nmra_sm_get_phregister(bus_t bus, int reg)
 static int protocol_nmra_sm_direct_cvbyte(bus_t busnumber, int cv,
                                           int value, int verify)
 {
-    ssize_t result;
-
     /* direct cv access */
     char bitstream[BUFFERSIZE];
     char progstream[BUFFERSIZE];
-    char packetstream[PKTSIZE];
-    char SendStream[2048];
+//    char packetstream[PKTSIZE];
+//    char SendStream[2048];
     char progerrbyte[9];
-    int j, l, ack = 0;
+//    int j, l, ack = 0;
 
     cv -= 1;
     syslog_bus(busnumber, DBG_DEBUG,
@@ -1196,6 +1205,8 @@ static int protocol_nmra_sm_direct_cvbyte(bus_t busnumber, int cv,
     strcat(bitstream, longpreamble);
     strcat(bitstream, "0");
     strcat(bitstream, progstream);
+#if 0
+// TODO: obsolete code for UART to be replaced by code for SPI
 
     j = translateBitstream2Packetstream(busnumber, bitstream, packetstream,
                                         false);
@@ -1223,7 +1234,7 @@ static int protocol_nmra_sm_direct_cvbyte(bus_t busnumber, int cv,
 
     setSerialMode(busnumber, SDM_NMRA);
 //    tcflow(buses[busnumber].device.file.fd, TCOON);
-    result = write(buses[busnumber].device.file.fd, SendStream, l);
+    ssize_t result = write(buses[busnumber].device.file.fd, SendStream, l);
     if (result == -1) {
         syslog_bus(busnumber, DBG_ERROR,
                    "write() failed: %s (errno = %d)\n",
@@ -1232,6 +1243,8 @@ static int protocol_nmra_sm_direct_cvbyte(bus_t busnumber, int cv,
     ack = waitUARTempty_scanACK(busnumber);
     setSerialMode(busnumber, SDM_DEFAULT);
     return handleACK(busnumber, ack);
+#endif
+    return -1;
 }
 
 /**
@@ -1270,16 +1283,14 @@ int protocol_nmra_sm_verify_cvbyte(bus_t bus, int cv, int value)
 static int protocol_nmra_sm_direct_cvbit(bus_t bus, int cv, int bit,
                                          int value, int verify)
 {
-    ssize_t result;
-
     /* direct cv access */
     char progerrbyte[9];
     char bitstream[BUFFERSIZE];
     char progstream[BUFFERSIZE];
-    char packetstream[PKTSIZE];
-    char SendStream[2048];
+//    char packetstream[PKTSIZE];
+//    char SendStream[2048];
 
-    int j, l, ack;
+//    int j, l, ack;
 
     cv -= 1;
     syslog_bus(bus, DBG_DEBUG,
@@ -1303,7 +1314,8 @@ static int protocol_nmra_sm_direct_cvbit(bus_t bus, int cv, int bit,
     strcat(bitstream, longpreamble);
     strcat(bitstream, "0");
     strcat(bitstream, progstream);
-
+#if 0
+// TODO: obsolete code for UART to be replaced by code for SPI
     j = translateBitstream2Packetstream(bus, bitstream, packetstream,
                                         false);
 
@@ -1318,7 +1330,7 @@ static int protocol_nmra_sm_direct_cvbit(bus_t bus, int cv, int bit,
 
     setSerialMode(bus, SDM_NMRA);
 //    tcflow(buses[bus].device.file.fd, TCOON);
-    result = write(buses[bus].device.file.fd, SendStream, l);
+    ssize_t result = write(buses[bus].device.file.fd, SendStream, l);
     if (result == -1) {
         syslog_bus(bus, DBG_ERROR,
                    "write() failed: %s (errno = %d)\n",
@@ -1328,6 +1340,8 @@ static int protocol_nmra_sm_direct_cvbit(bus_t bus, int cv, int bit,
     setSerialMode(bus, SDM_DEFAULT);
 
     return handleACK(bus, ack);
+#endif
+    return -1;
 }
 
 /**

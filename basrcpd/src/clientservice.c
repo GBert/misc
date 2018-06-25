@@ -1,3 +1,4 @@
+// clientservice.c - adapted for basrcpd project 2018 by Rainer Müller 
 /*
  * Vorliegende Software unterliegt der General Public License,
  * Version 2, 1991. (c) Matthias Trute, 2000-2001.
@@ -81,9 +82,9 @@ void end_client_thread(session_node_t * sn)
 /* handle connected SRCP clients, start with shake hand phase. */
 void *thr_doClient(void *v)
 {
-    char line[MAXSRCPLINELEN], cmd[MAXSRCPLINELEN],
-        parameter[MAXSRCPLINELEN], reply[MAXSRCPLINELEN];
-    int rc, nelem;
+    char line[MAXSRCPLINELEN], reply[MAXSRCPLINELEN];
+	char *cmd, *setcmd, *parm; 
+    int rc;	
     struct timeval time;
     int last_cancel_state, last_cancel_type;
     int result;
@@ -158,14 +159,7 @@ void *thr_doClient(void *v)
         if (linelen > 1 && (line[linelen - 1] == '\n'))
             line[linelen - 1] = '\0';
 
-        memset(cmd, 0, sizeof(cmd));
-        memset(parameter, 0, sizeof(parameter));
-        nelem = sscanf(line, "%1000s %1000c", cmd, parameter);
-
-	/* ugly musl workaround */
-	if ((nelem == 1) && *parameter)
-	    nelem++;
-
+		int nelem = ssplitstr(line, 3, &cmd, &setcmd, &parm);
         if (nelem > 0) {
             rc = SRCP_UNKNOWNCOMMAND;
 
@@ -211,21 +205,13 @@ void *thr_doClient(void *v)
             }
 
             else if (strncasecmp(cmd, "SET", 3) == 0) {
-				char p[MAXSRCPLINELEN] = {};
-				char setcmd[MAXSRCPLINELEN] = {};
-                int n = sscanf(parameter, "%1000s %1000c", setcmd, p);
-
-	    /* ugly musl workaround */
-		if ((n == 1) && *p)
-		    n++;
-
-                if (n == 2
+                if (nelem == 3
                     && strncasecmp(setcmd, "CONNECTIONMODE", 14) == 0) {
-                    if (strncasecmp(p, "SRCP INFO", 9) == 0) {
+                    if (strncasecmp(parm, "SRCP INFO", 9) == 0) {
                         sn->mode = smInfo;
                         rc = SRCP_OK_CONNMODE;
                     }
-                    else if (strncasecmp(p, "SRCP COMMAND", 12) == 0) {
+                    else if (strncasecmp(parm, "SRCP COMMAND", 12) == 0) {
                         sn->mode = smCommand;
                         rc = SRCP_OK_CONNMODE;
                     }
@@ -233,8 +219,8 @@ void *thr_doClient(void *v)
                         rc = SRCP_HS_WRONGCONNMODE;
                 }
 
-                if (nelem == 2 && strncasecmp(setcmd, "PROTOCOL", 8) == 0) {
-                    if (strncasecmp(p, "SRCP 0.8", 8) == 0)
+                if (nelem == 3 && strncasecmp(setcmd, "PROTOCOL", 8) == 0) {
+                    if (strncasecmp(parm, "SRCP 0.8", 8) == 0)
                         rc = SRCP_OK_PROTOCOL;
                     else
                         rc = SRCP_HS_WRONGPROTOCOL;

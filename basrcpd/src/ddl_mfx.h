@@ -1,3 +1,5 @@
+// ddl-mfx.h - adapted for basrcpd project 2018 by Rainer Müller 
+
 /* +----------------------------------------------------------------------+ */
 /* | DDL - Digital Direct for Linux                                       | */
 /* +----------------------------------------------------------------------+ */
@@ -93,7 +95,7 @@ void sendDekoderTerm(int adresse);
  * @param gl Lok, zu der die MFX spezifischen INIT Paramater ermittelt werden sollen.
  * @param msg Message, an die die Paramater gehängt werden sollen.
  */
-void describeGLmfx(gl_data_t *gl, char *msg);
+//void describeGLmfx(gl_data_t *gl, char *msg);
 
 /**
  * MFX RDS Rückmeldung ist eingetroffen.
@@ -116,7 +118,7 @@ void setMfxSM(bool smOn);
  * @param index Index innerhalb CV
  * @param value Zu schreibendes Byte
  */
-void smMfxSetCV(int address, int cv, int index, int value);
+int smMfxSetCV(int address, int cv, int index, int value);
 
 /**
  * SM SET: 1 Byte in den MFX Dekoder an CV/Index schreiben.
@@ -125,31 +127,14 @@ void smMfxSetCV(int address, int cv, int index, int value);
  * @param index Index innerhalb CV
  * @return Gelesenes Byte 0..255, < 0 für Error
  */
-int smMfxGetCV(int address, int cv, int index);
+int smMfxGetCV(int address, int cv, int index, int nmbr);
 
 
-/**
- * SM SET: 1 Byte in den MFX Dekoder an Block/CA/Index schreiben.
- * @param address Lokadresse
- * @param blockNr Die Blocknummer, in dem CA gesucht wird
- * @param ca CA Typ
- * @param caIndex Das wivielte vorkommen des CA im Block wird gesucht (0...)
- * @param index Index innerhalb CV
- * @param value Zu schreibendes Byte
- * @return 0 : Fehler (CA nicht gefunden), 1 OK
- */
-int smMfxSetCA(int address, int blockNr, int ca, int caIndex, int index, int value);
+/* MFX BIND */
+int smMfxSetBind(int address, uint32_t uid);
 
-/**
- * SM SET: 1 Byte in den MFX Dekoder an Block/CA/Index schreiben.
- * @param address Lokadresse
- * @param blockNr Die Blocknummer, in dem CA gesucht wird
- * @param ca CA Typ
- * @param caIndex Das wivielte vorkommen des CA im Block wird gesucht (0...)
- * @param index Index innerhalb CV
- * @return Gelesenes Byte 0..255, < 0 für Error
- */
-int smMfxGetCA(int address, int blockNr, int ca, int caIndex, int index);
+/* MFX VERIFY */
+int smMfxVerBind(int address, uint32_t uid);
 
 
 #endif

@@ -1,4 +1,5 @@
-/* +----------------------------------------------------------------------+ */
+// ddl_mfx.c - adapted for basrcpd project 2018 by Rainer Müller 
+
 /* +----------------------------------------------------------------------+ */
 /* | DDL - Digital Direct for Linux                                       | */
 /* +----------------------------------------------------------------------+ */
@@ -11,6 +12,7 @@
 /* | Author:   Daniel Sigg daniel@siggsoftware.ch                         | */
 /* |                                                                      | */
 /* +----------------------------------------------------------------------+ */
+
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
@@ -71,79 +73,6 @@
 
 #endif
 
-//Alle möglichen MFX Dekoder Blocktypen
-enum blockTypen_e {
-  BLOCK_GRUNDEINSTELLUNGEN = 1,
-  BLOCK_FUNKTIONALITAET = 2,
-  BLOCK_AUTOFUNKTIONEN = 3,
-  BLOCK_FUNKTION_MAPPING = 4,
-  BLOCK_FAHR = 5,
-  BLOCK_AUSGAENGE = 6,
-  BLOCK_PROTOKOLLE = 7,
-  BLOCK_SOUND = 8,
-  BLOCK_OPTIONEN = 9
-};
-//CA's für alle Blöcke
-// Low Byte: CA ID
-// High Byte: Anzahl Bytes in diesem CA (ohne. CA ID)
-enum blockCA_e {
-  //Blockbeschreibungen
-  CA_NICHT_VERWENDET = 0x0000,
-  CA_BLOCK_BESCHREIBUNG = 0x0501,
-  //BLOCK_GRUNDEINSTELLUNGEN
-  CA_GRUND_HERSTELLER = 0x0810,
-  CA_GRUND_KENNUNG = 0x0811,
-  CA_GRUND_VERSIONB = 0x0812,
-  CA_GRUND_VERSIONA = 0x0C13,
-  CA_GRUND_PROTOKOLL_INFO = 0x1014,
-  CA_GRUND_LOKID = 0x0816,
-  CA_GRUND_BLOCKTAB = 0x3E17,
-  CA_GRUND_LOKNAME = 0x1018,
-  CA_GRUND_BENUTZER = 0x1019,
-  CA_GRUND_VERSIONHW = 0x0C17,
-  //BLOCK_FUNKTIONALITAET
-  CA_FUNK_FAHRFUNKTION = 0x0110,
-  CA_FUNK_SCHALTFUNKTION = 0x1011,
-  //BLOCK_AUTOFUNKTIONEN
-  CA_AUTO_SCHALTFUNKTION_STAND = 0x0110,
-  CA_AUTO_SCHALTFUNKTION_FAHR = 0x0111,
-  //BLOCK_FUNKTION_MAPPING
-  CA_FMAP_FUNKTION_SYMBOL = 0x0310,
-  CA_FMAP_FUNKTION_VORWAERTS = 0x0412,
-  CA_FMAP_FUNKTION_RUECKWAERTS = 0x0413,
-  //BLOCK_FAHR
-  CA_FAHR_MOTOREN = 0x0110,
-  CA_FAHR_MOTORTYP = 0x0111,
-  CA_FAHR_MOTORFREQ = 0x0212,
-  CA_FAHR_BESCH_BREMS = 0x0213,
-  CA_FAHR_TRIMM = 0x0214,
-  CA_FAHR_REGELUNG = 0x0415,
-  CA_FAHR_BREMSTRECKE = 0x0116,
-  CA_FAHR_VTAB = 0x1C17,
-  CA_FAHR_TACHO = 0x0218,
-  CA_FAHR_REVERSE = 0x0119,
-  //BLOCK_AUSGAENGE
-  CA_AUSGAENGE_KONFIG = 0x0310,
-  CA_AUSGAENGE_KONFIG_INT = 0x0211,
-  CA_AUSGAENGE_KONFIG_SOUND = 0x0212,
-  //BLOCK_PROTOKOLLE
-  CA_PROTOKOLLE_PROTOKOLL = 0x0110,
-  CA_PROTOKOLLE_KONFIG = 0x0111,
-  CA_PROTOKOLLE_FUNKTION_ON = 0x0212,
-  CA_PROTOKOLLE_ADRESSE_MM_DCC = 0x0413,
-  CA_PROTOKOLLE_ANALOG = 0x0214,
-  //BLOCK_SOUND
-  CA_SOUND_VOLUME = 0x0110,
-  CA_SOUND_TYP_DIESEL_E = 0x0211,
-  CA_SOUND_TYP_DAMPF = 0x0212,
-  CA_SOUND_GESCHWINDIGKEIT = 0x0213,
-  CA_SOUND_ZUFALL = 0x0214,
-  CA_SOUND_BREMS = 0x0115,
-  CA_SOUND_AUTO = 0x0216,
-  //BLOCK_OPTIONEN
-  CA_OPT_DIV = 0x0110,
-  CA_OPT_RICHTUNG = 0x0111
-};
 
 //MFX Verwaltungsthread
 static pthread_t mfxManageThread;
@@ -151,7 +80,7 @@ static uint16_t registrationCounter;
 
 //MFX RDS Feedback thread
 static pthread_t mfxRDSThread;//Global zugängliche Parameter -> Code ist nur für eine DDL Instanz zu gebrauchen...
-static bus_t busnumber;
+static bus_t busnumber = 0;
 static int fdRDSNewRx; //Handle auf Pipe über die der RDS Rückmelde Thread Aufträge erhält
 
 static tMFXRDSFeedback rdsFeedback; //RDS Rückmeldungen
@@ -186,7 +115,6 @@ void newMFXRDSFeedback(tMFXRDSFeedback mfxRDSFeedback) {
   rdsFeedback = mfxRDSFeedback;
   if (sem_post(&semRDSFeedback) != 0) {
     syslog_bus(busnumber, DBG_ERROR, "newMFXRDSFeedback sem_post fail");
-    //printf("newMFXRDSFeedback sem_post fail\n");
   }
 }
 
@@ -210,6 +138,8 @@ static bool waitRDS() {
   }
 }
 
+#if 0
+// HACK: das brauchen wir wohl nicht
 /**
  * MFX spezifische INIT Parameter als String.
  * @param uid
@@ -237,10 +167,11 @@ void getMFXInitParam(uint32_t uid, /*char *name, uint32_t *fx,*/ char *msg)
 void describeGLmfx(gl_data_t *gl, char *msg) 
 {
   if (gl->protocol == 'X') {
-    getMFXInitParam(gl->optData.mfx.uid, /* gl->optData.mfx.name, gl->optData.mfx.fx,*/ msg);
+//    getMFXInitParam(gl->decuid, /* gl->optData.mfx.name, gl->optData.mfx.fx,*/ msg);
+  	sprintf(msg + strlen(msg), " %u", gl->decuid);
   }
 }
-
+#endif
 /**
  * Fügt n Bits in einen Ausgabestrem hinzu.
  * @param bits Bis zu 32 Bits die hinzugefügt werden sollen.
@@ -363,9 +294,8 @@ static unsigned int sendMFXPaket(int address, char *stream, bool prio, unsigned 
 */
 int comp_mfx_loco(int address, int direction,
                   int speed, int func, int nspeed, int nfuncs,
-                  int pv, bool prio) {
-  //printf("COMP MFX Loco. Adr=%d, Dir=%d, Speed=%d, Func=%d, nfuncs=%d\n", address, direction, speed, func, nfuncs);
-              
+                  int pv, bool prio) 
+{
   char packetstream[PKTSIZE];
   memset(packetstream, 0, PKTSIZE);
 
@@ -580,7 +510,7 @@ static bool sendSearchNewDecoder(unsigned int countUIDBits, uint32_t *dekoderUID
       //Alle UID Bist sind ermittelt, Dekoder ist gefunden.
       //printf("MFX Dekoder UID ermittelt:%u\n", *dekoderUID);
       //Falls UID==0 ist, war das eine Störung, kann kein Dekoder sein.
-      return dekoderUID != 0;
+      return (*dekoderUID != 0);
     }
     countUIDBits++;
     //Rekursiv weiter suchen. Nächstes Bit 0.
@@ -605,9 +535,9 @@ static bool sendSearchNewDecoder(unsigned int countUIDBits, uint32_t *dekoderUID
  * @param dekoderUID UID des neuen Dekoders
  * @return Die neu zugewiesene Schienenadresse. 0 wenn nicht möglich weil keine freie Adresse gefunden wurde.
  */
-void assignSID(uint32_t dekoderUID, unsigned int sid) {
-  //printf("New SID=%d für UID=%u\n", sid, dekoderUID);
-  syslog_bus(busnumber, DBG_INFO, "New SID=%d for UID=%u\n", sid, dekoderUID);
+void assignSID(uint32_t dekoderUID, unsigned int sid) 
+{
+  syslog_bus(busnumber, DBG_INFO, "New SID %d for UID %u", sid, dekoderUID);
   char packetstream[PKTSIZE];
   memset(packetstream, 0, PKTSIZE);
   //Format des Bitstreams:
@@ -723,242 +653,14 @@ static bool readCV(int adresse, uint16_t cv, uint16_t index, unsigned int bytes,
   }
   else {
     syslog_bus(busnumber, DBG_WARN, "RDS Feedback Abbruch. Zuviele ungültige Versuche.");
-    //printf("RDS Feedback Abbruch. Zuviele ungültige Versuche.\n");
   }
   //Kurzs Pause damit nicht alles mit MFX Lesebefehlen geflutet wird.
   usleep(PAUSE_MFX_READ);
   return rdsFeedback.ok;
 }
 
-//Forward Dekleration
-static bool readCA(int adresse, enum blockTypen_e block, enum blockCA_e ca, uint8_t caIndex, uint16_t *cv, char *buffer);
-/**
- * Findet einen bestimmten Block in den MFX CV's.
- * @param adresse Schienenadresse des Dekoders
- * @param block Der gesuchte Blocktyp
- * @param startCV Wenn Block gefunden: wird auf die Start CV Nr. des Blockes gesetzt
- * @param anzGruppen Wenn Block gefunden: Anzahl Gruppen im Block
- * @param anzCAinGruppe Wenn Block gefunden: Anzahl CA pro Gruppe
- * @return true wenn der Block gefunden wurde.
- */
-static bool findBlock(int adresse, enum blockTypen_e block, uint16_t *startCV, uint8_t *anzGruppen, uint8_t *anzCAinGruppe) {
-  //printf("findBlock %u\n", block);
-  if (block == BLOCK_GRUNDEINSTELLUNGEN) {
-    //Der erste Block mit den Dekoder Grunddaten ist immer an CV 0
-    *startCV = 0;
-    //Noch Gruppen Infos auslesen
-    char blockGroesse[2];
-    if (! readCV(adresse, 0, 4, 2, blockGroesse)) {
-      //Fehler, Abbruch
-      syslog_bus(busnumber, DBG_WARN,
-                 "findBlock Abbruch. readCV fail. SID=%d", adresse);
-      //printf("findBlock Abbruch. readCV fail. SID=%d\n", adresse);
-      return false;
-    }
-    *anzGruppen = blockGroesse[0];
-    *anzCAinGruppe = blockGroesse[1];
-    return true;
-  }
-  //Alle andern Blöcke müssen gesucht werden -> zuerst Liste mit allen Blöcken auslesen
-  char blockListe[64];
-  uint16_t cvBL;
-  //Das gibt eine kleine Rekursion...
-  if (! readCA(adresse, BLOCK_GRUNDEINSTELLUNGEN, CA_GRUND_BLOCKTAB, 0, &cvBL, blockListe)) {
-    //Fehler, Abbruch
-    syslog_bus(busnumber, DBG_WARN,
-               "findBlock Abbruch. readCA fail. SID=%d", adresse);
-    //printf("findBlock Abbruch. readCA fail. SID=%d\n", adresse);
-    return false;
-  }
-  //Blockliste abarbeiten
-  int i;
-  for (i = 0; i<sizeof(blockListe); i++) {
-    if (blockListe[i] == 0) {
-      //Block nicht gefunden, keiner mehr vorhanden
-      syslog_bus(busnumber, DBG_WARN,
-                 "findBlock Abbruch. Block nicht gefunden. SID=%d Block=%u", adresse, block);
-      //printf("findBlock Abbruch. Block nicht gefunden. SID=%d Block=%u\n", adresse, block);
-      return false;
-    }
-    char blockID;
-    *startCV = blockListe[i] * 4;
-    //printf("Blockliste Index=%d, Block at CV=%u\n", i, *startCV);
-    if (! readCV(adresse, *startCV, 1, 1, &blockID)) {
-      //Fehler, Abbruch
-      syslog_bus(busnumber, DBG_WARN,
-                 "findBlock Abbruch. readCV fail. SID=%d", adresse);
-      //printf("findBlock Abbruch. readCV fail. SID=%d\n", adresse);
-      return false;
-    }
-    if (blockID == block) {
-      //printf("Block %u gefunden at CV=%u\n", block, *startCV);
-      //Block gefunden
-      //Noch Gruppen Infos auslesen
-      char blockGroesse[2];
-      if (! readCV(adresse, *startCV, 4, 2, blockGroesse)) {
-        //Fehler, Abbruch
-        syslog_bus(busnumber, DBG_WARN,
-                   "findBlock Abbruch. readCV fail. SID=%d", adresse);
-        //printf("findBlock Abbruch. readCV fail. SID=%d\n", adresse);
-        return false;
-      }
-      *anzGruppen = blockGroesse[0];
-      *anzCAinGruppe = blockGroesse[1];
-      return true;
-    }
-  }
-  return false;
-}
-
-/**
- * Findet eine gewünschte CA in einem gewünschten Block.
- * @param adresse Schienenadresse des Dekoders
- * @param block Blocktyp in dem nach der CA gesucht wird.
- * @param ca gesuchte CA im Block
- * @param caIndex Das wievielte Vorkommen des CA's wird gesucht? Erstes Vorkommen ist die 0
- * @param cv CV an dem CA gefunden wurde
- * @return true wenn CA gefunden wurde.
- */
-static bool findCA(int adresse, uint8_t block, uint8_t ca, uint8_t caIndex, uint16_t *cv) {
-  //printf("findCA adresse=%d, block=%u, ca=0x%x, caIndex=%u\n", adresse, block, ca, caIndex);
-  uint8_t anzGruppen;
-  uint8_t anzCAinGruppe;
-  if (! findBlock(adresse, block, cv, &anzGruppen, &anzCAinGruppe)) {
-    syslog_bus(busnumber, DBG_WARN,
-               "findCA findBlock fail. SID=%d, Block=%u", adresse, block);
-    //printf("findCA findBlock fail. SID=%d, Block=%u\n", adresse, block);
-    return false;
-  }
-  //Alle CA's in diesem Block durchsuchen
-  int i;
-  char caTyp;
-  for (i = 0; i<=(anzGruppen * anzCAinGruppe); i++) { //<= um auch den ersten CA mit Blockbeschreibung zu berücksichtigen
-    if (! readCV(adresse, *cv, 0, 1, &caTyp)) {
-      //Fehler, Abbruch
-      syslog_bus(busnumber, DBG_WARN,
-                 "findCA Abbruch. readCV fail. SID=%d, CV=%u", adresse, *cv);
-      //printf("findCA Abbruch. readCV fail. SID=%d, CV=%u\n", adresse, *cv);
-      return false;
-    }
-    //Ist das der gesuchte CA?
-    if (caTyp == ca) {
-      //printf("CA 0x%x gefunden an CV %u\n", ca & 0xFF, *cv);
-      if (caIndex == 0) {
-        //Gewünschter CA gefunden
-        return true;
-      }
-      caIndex--;
-    }
-    (*cv)++;
-  }
-  //Fehler, CA nicht gefunden
-  syslog_bus(busnumber, DBG_WARN,
-             "SID=%d, CA=0x%x in Block %u nicht gefunden", adresse, ca, block);
-  //printf("SID=%d, CA=0x%x in Block %u nicht gefunden\n", adresse, ca, block);
-  return false;
-}
-
-
-/**
- * Liest eine gewünschte CA aus.
- * @param adresse Schienenadresse des Dekoders
- * @param block Blocktyp in dem nach der CA gesucht wird.
- * @param ca gesuchte CA im Block
- * @param caIndex Das wievielte Vorkommen des CA's wird gesucht? Erstes Vorkommen ist die 0
- * @param cv CV an dem CA gefunden wurde
- * @param buffer Buffer von 64 Bytes. Es werden nur soviele Bytes geschrieben, wie zum gewünschten CA gehören (in 4 Byte Blöcken)!
- * @return true wenn CA gefunden wurde.
- */
-static bool readCA(int adresse, enum blockTypen_e block, enum blockCA_e ca, uint8_t caIndex, uint16_t *cv, char *buffer) {
-  //printf("readCA adresse=%d, block=%u, ca=0x%x\n", adresse, block, ca & 0xFF);
-  if (! findCA(adresse, block, ca & 0xFF, caIndex, cv)) {
-      syslog_bus(busnumber, DBG_WARN,
-                 "SID=%d, CA=0x%x in Block %u nicht gefunden", adresse, ca, block);
-      //printf("SID=%d, CA=0x%x in Block %u nicht gefunden\n", adresse, ca, block);
-    return false;
-  }
-  //CV zu CA gefunden
-  //printf("CA 0x%x gefunden an CV %u\n", ca & 0xFF, *cv);
-  //Ganzer CA auslesen
-  int len = ca >> 8;
-  int j;
-  for (j = 0; (j*4) < len; j++) {
-    //Start ab Index 1 (nach CA Typ)
-    if (! readCV(adresse, *cv, 1 + (j*4), 4, buffer+(j*4))) {
-      //Fehler, Abbruch
-      syslog_bus(busnumber, DBG_WARN,
-                 "readCA Abbruch. readCV fail. SID=%d, CV=%u", adresse, *cv);
-      //printf("readCA Abbruch. readCV fail. SID=%d, CV=%u\n", adresse, *cv);
-      return false;
-    }
-  }
-  return true;
-}
-
-/**
- * Name und Funktionen einer Lok lesen.
- * @param adresse Schienenadresse des Dekoders
- * @param name Der ermittelte Lokname, max. 16 Zeichen plus 0
- * @param fx 16 Funktionen, jede als 32 Bit, jedoch nur die 3 Unterbytes verwendet (Funktionsgruppe, Symbolinfo 1 und 2)
- * @return true wenn ohne Fehler ausgelesen werden konnte.
- */
-static bool readLokNameFx(int adresse, char *name, uint32_t *fx) {
-  uint16_t cv;
-  //Lokname
-  if (! readCA(adresse, BLOCK_GRUNDEINSTELLUNGEN, CA_GRUND_LOKNAME, 0, &cv, name)) {
-    //Fehler, Abbruch
-    syslog_bus(busnumber, DBG_WARN,
-               "readLokNameFx Abbruch. readCA fail. SID=%d", adresse);
-    //printf("readLokNameFx Abbruch. readCA fail. SID=%d\n", adresse);
-    return false;
-  }
-  //Spaces am Schluss abschneiden falls vorhanden
-  char* end = name + strlen(name);
-  while ((end != name) && isspace( *(end-1))) {
-    --end;
-  }
-  *end = '\0';  
-  //printf("Lokname: %s\n", name);
-  
-  //Funktionszuordnungen
-  char funktionen[64];
-  memset(funktionen, 0, sizeof(funktionen));
-  //Auslesen Funktionsindexe für Funktionsdefinitionen im Block BLOCK_FUNKTION_MAPPING
-  if (! readCA(adresse, BLOCK_FUNKTIONALITAET, CA_FUNK_SCHALTFUNKTION, 0, &cv, funktionen)) {
-    //Fehler, Abbruch
-    syslog_bus(busnumber, DBG_WARN,
-               "readLokNameFx Abbruch. readCA fail. SID=%d", adresse);
-    //printf("readLokNameFx Abbruch. readCA fail. SID=%d\n", adresse);
-    return false;
-  }
-  
-  //Funktionstypen auslesen
-  //Zuerst Start CV des Block BLOCK_FUNKTION_MAPPING ermitteln (in "buffer" zurückgelesene Blockinfodaten werden nicht benötigt)
-  char buffer[64];
-  if (! readCA(adresse, BLOCK_FUNKTION_MAPPING, CA_BLOCK_BESCHREIBUNG, 0, &cv, buffer)) {
-    //Fehler, Abbruch
-    syslog_bus(busnumber, DBG_WARN,
-               "readLokNameFx Abbruch. readCA fail. SID=%d", adresse);
-    //printf("readLokNameFx Abbruch. readCA fail. SID=%d\n", adresse);
-    return false;
-  }
-  //Nun haben wir in cv die CV Nummer, an der der BLOCK_FUNKTION_MAPPING startet
-  int i;
-  for (i=0; i<MFX_FX_COUNT; i++) {
-    memset(buffer, 0, sizeof(buffer));
-    if (! readCV(adresse, cv + funktionen[i], 0, 4, buffer)) {
-      //Fehler, Abbruch
-      syslog_bus(busnumber, DBG_WARN,
-                 "readLokNameFx Abbruch. readCA fail. SID=%d", adresse);
-      //printf("readLokNameFx Abbruch. readCA fail. SID=%d\n", adresse);
-      return false;
-    }
-    fx[i] = (buffer[1] << 16) | (buffer[2] << 8) | buffer[3];
-    //printf("F%d %c Gruppe=0x%x S1=0x%x S2=0x%x\n", i, (buffer[1] & 0x80) ? 'I' : 'D', buffer[1] & 0x7F, buffer[2], buffer[3]);
-  }
-  return true;
-}
-
+#if 0
+// HACK: da die einzige Stelle an der das benötigt wurde ausge-IF-t wurde
 /**
  * Nächste MFX Lok ermitteln.
  * @param adr Aktuelle Lokadresse.
@@ -980,12 +682,13 @@ static uint32_t getNextMFXLok(int *adr) {
     if (cacheGetGL(busnumber, *adr, &gl) == SRCP_OK) {
       if (gl.protocol == 'X') {
         //Nächste (oder wieder dieselbe) MFX Lok gefunden
-        return gl.optData.mfx.uid;
+        return gl.decuid;
       }
     }
   }
   return 0;
 }
+#endif
 
 /**
  * Vorhandene Loks nach UID durchsuchen.
@@ -1003,7 +706,7 @@ static int searchLokUID(int adrBekannt, uint32_t uid) {
     if (adrBekannt != i) { //Bekannte Adresse übergehen
       gl_data_t gl;
       if (cacheGetGL(busnumber, i, &gl) == SRCP_OK) {
-        if ((gl.protocol == 'X') && (gl.optData.mfx.uid == uid)) {
+        if ((gl.protocol == 'X') && (gl.decuid == uid)) {
           //Lok gibt es schon
           glAddr = i;
           break;
@@ -1028,7 +731,6 @@ static int searchLokUID(int adrBekannt, uint32_t uid) {
     assignSID(uid, adresse);
     //Alten Lokeintrag löschen
     if (cacheTermGL(busnumber, glAddr) != SRCP_OK) {
-      //printf("Neues INIT Adr %d zu bestehender Adr %d für UID=%u, alte Lok kann nicht gelöscht werden!\n", adresse, glAddr, uid);
       syslog_bus(busnumber, DBG_ERROR,
                  "Neues INIT Adr %d zu bestehender Adr %d für UID=%u, alte Lok kann nicht gelöscht werden!", adresse, glAddr, uid);
     }
@@ -1064,7 +766,6 @@ static unsigned int getSID(uint32_t dekoderUID, bool *bereitsVorhanden) {
   if (glAddr == 0) {
     syslog_bus(busnumber, DBG_WARN,
                "Keine freie GL Adresse vorhanden, neue MFX Lok kann nicht angemeldet werden");
-    //printf("Keine freie GL Adresse vorhanden, neue MFX Lok kann nicht angemeldet werden!\n", maxAddr);
     return 0;
   }
   //Adresse zuweisen
@@ -1087,16 +788,18 @@ static void *thr_mfxManageThread(void *threadParam) {
   /*uint16_t*/ registrationCounter = loadRegistrationCounter();
   syslog_bus(busnumber, DBG_INFO, "ReRegistration counter = %d", registrationCounter);
   //Aktuelle Lok SID für periodische Dekoder Existenzabfrage
-  int lokAdrExist = 0;
+//  int lokAdrExist = 0;
   //Erste MFX UID, zu der ein "DekoderExist" gesendet wurde. Zur Erkennung, wenn ein Durchgang über alle MFX Loks fertig ist
-  uint32_t firstUID = 0;
+//  uint32_t firstUID = 0;
   //Zähler Anzahl "assignSID" Durchläufe nach Power Up-Down
-  int countUIDLoops = 0;
+//  int countUIDLoops = 0;
   for (;;) {
     if ((DDL_DATA*)buses[busnumber].power_state) {
       //Bus ist ein -> UID / Neuanmeldezähler versenden, neue Dekoder suchen
       sendUIDandRegCounter(uid, registrationCounter);
       usleep(INTERVALL_UID);
+#if 0
+// HACK: disable automatic PING and re-BIND by server
       //Periodische Existenzabfrage an alle angemeldeten Dekoder.
       //Rückmeldung wird nie ausgewertet, ich überwache sowieso nicht die ganze Anlage mit MFX fähigen Boostern
       uint32_t uidExist = getNextMFXLok(&lokAdrExist);
@@ -1118,8 +821,9 @@ static void *thr_mfxManageThread(void *threadParam) {
           firstUID = uidExist;
         }
       }
+#endif
       //Wenn SM aktiv ist machen wir hier nichts mehr. Loksuche ist unterbrochen bis SM wieder ausgeschaltet wird.
-      if (! sm) {
+      if (0) {		// HACK: disable temporarely (! sm) {
         //Suche nach noch nicht angemeldeten MFX Dekodern
         uint32_t dekoderUID = 0;
         //Wenn eine Dekoder UID 0 gefunden wurde, wird dies ignoriert. Die sollte es nicht geben,
@@ -1128,7 +832,6 @@ static void *thr_mfxManageThread(void *threadParam) {
           //Neuem MFX Dekoder die nächste freie Schienenadresse zuweisen
           bool bereitsVorhanden;
           int adresse = getSID(dekoderUID, &bereitsVorhanden);
-          //printf("Neue MFX Lok gefunden. UID=%u, zugewiesene Adresse=%d", dekoderUID, adresse);
           syslog_bus(busnumber, DBG_INFO,
                      "Neue MFX Lok gefunden. UID=%u, zugewiesene Adresse=%d", dekoderUID, adresse);
           //Neuanmeldezähler Inkrement
@@ -1136,8 +839,9 @@ static void *thr_mfxManageThread(void *threadParam) {
           if (! saveRegistrationCounter(registrationCounter)) {
             syslog_bus(busnumber, DBG_ERROR,
                        "Neuanmeldezähler konnte nicht gespeichert werden");
-            //printf("Neuanmeldezähler konnte nicht gespeichert werden!\n");
           }
+#if 0
+// HACK: das brauchen wir wohl nicht
           //Lokname und Funktionen abfragen, wenn es eine neue Lok ist
           if (! bereitsVorhanden) {
             char lokName[17];
@@ -1155,26 +859,27 @@ static void *thr_mfxManageThread(void *threadParam) {
               //printf("INIT MFX Lok Optdata: %s\n", optData);
               if (cacheInitGL(busnumber, adresse, 'X', 0, 128, MFX_FX_COUNT, optData) != SRCP_OK) {
                 syslog_bus(busnumber, DBG_ERROR, "MFX cacheInitGL fail");
-                //printf("MFX cacheInitGL fail\n");
               }
             }
             else {
               syslog_bus(busnumber, DBG_WARN,
                          "MFX Lokname und Funktionen konnten nicht gelesen werden. SID=%d Neuanmeldung", adresse);
-              //printf("MFX Lokname und Funktionen konnten nicht gelesen werden. SID=%d Neuanmeldung\n", adresse);
               //Dekoder SID löschen, Dekoder wird sich wieder neu anmleden
               sendDekoderTerm(adresse);
             }
           }
+#endif
         }
       }
     }
+#if 0
     else {
       //Beim nächsten Power Up wider von vorne beginnen mit SID Zuordnungen senden
       firstUID = 0;
       lokAdrExist = 0;
       countUIDLoops = 0;
     }
+#endif
     usleep(INTERVALL_UID);
   }
   return NULL;
@@ -1435,8 +1140,10 @@ static void *thr_mfxRDSThread(void *threadParam) {
  *                   Es wir jeweils "MFXRDSBits" übertragen.
  * @return 0 für OK, !=0 für Fehler
  */
-int startMFXThreads(bus_t _busnumber, int _fdRDSNewRx) {
-  busnumber = _busnumber;
+int startMFXThreads(bus_t _busnumber, int _fdRDSNewRx)
+{
+	if (busnumber) return 2;		// don't start threads twice
+  	busnumber = _busnumber;
   fdRDSNewRx = _fdRDSNewRx;
   if (sem_init(&semRDSFeedback, 0, 0) != 0) {
     syslog_bus(busnumber, DBG_ERROR,
@@ -1450,7 +1157,7 @@ int startMFXThreads(bus_t _busnumber, int _fdRDSNewRx) {
   }
   if (pthread_create(&mfxRDSThread, NULL, thr_mfxRDSThread, NULL) != 0) {
     syslog_bus(busnumber, DBG_ERROR,
-               "pthread_create thr_mfxManageThread fail");
+               "pthread_create thr_mfxRDSThread fail");
     return 1;
   }
   return 0;
@@ -1499,16 +1206,17 @@ void setMfxSM(bool smOn) {
  * @param index Index innerhalb CV
  * @param value Zu schreibendes Byte
  */
-void smMfxSetCV(int address, int cv, int index, int value) {
-  if ((cv >= CV_SIZE) || (index >= CVINDEX_SIZE)) {
-    //Ungültige CV / Index Angaben
-    return;
-  }
+int smMfxSetCV(int address, int cv, int index, int value)
+{
+	if ((cv >= CV_SIZE) || (index >= CVINDEX_SIZE)) return -1;
+    if (! (DDL_DATA*)buses[busnumber].power_state) return -2;
+  
   checkMFXConfigCache(address);
   //Was neu geschrieben wurde wird im Cache als ungültig markiert damit sichergestellt ist, dass es bei einem Read von der Lok gelesen wird (Verify)
   mfxKonfigCache.valid[cv][index] = false;
   
-  //printf("SM MFX Adr=%d, Set CV=%d, Index=%d\n", address, cv, index);
+	syslog_bus(busnumber, DBG_INFO, "SM MFX Adr=%d, Set CV=%d, Index=%d, Val=%d",
+									address, cv, index, value);
   char packetstream[PKTSIZE];
   memset(packetstream, 0, PKTSIZE);
   unsigned int pos = 0;
@@ -1521,6 +1229,7 @@ void smMfxSetCV(int address, int cv, int index, int value) {
   addCRCBits(packetstream, &pos);
     
   sendMFXPaket(address, packetstream, false, QMFX0PKT);
+	return 0;
 }
 
 /**
@@ -1530,82 +1239,50 @@ void smMfxSetCV(int address, int cv, int index, int value) {
  * @param index Index innerhalb CV
  * @return Gelesenes Byte 0..255, < 0 für Error
  */
-int smMfxGetCV(int address, int cv, int index) {
+int smMfxGetCV(int address, int cv, int index, int nmbr) 
+{
   //Nur erlaubt wenn SM Initialisiert ist, MFX Loksuche ausgeschaltet
-  if (! sm) {
-    return -1;
-  }
-  char result;
-  //printf("SM GET MFX Adr=%d, Get CV=%d, Index=%d\n", address, cv, index);
-  if (readCV(address, cv, index, 1, &result)) {
+	if (! sm) return -1;
+    if (! (DDL_DATA*)buses[busnumber].power_state) return -2;
+    
+  	char result = 0;
+	syslog_bus(busnumber, DBG_INFO, "SM GET MFX Adr=%d, Get CV=%d, Index=%d, Len=%d",
+									address, cv, index, nmbr);
+  	if (readCV(address, cv, index, nmbr, &result)) {
     //printf("SM GET MFX Adr=%d, Get CV=%d, Index=%d Result=%d\n", address, cv, index, result);
-    return result;
-  }
-  //printf("SM GET MFX Adr=%d, Get CV=%d, Index=%d FAIL!\n", address, cv, index);
-  return -1;
-}
-
-
-/**
- * SM SET: 1 Byte in den MFX Dekoder an Block/CA/Index schreiben.
- * @param busnumber SRCPD Busnummer
- * @param address Lokadresse
- * @param blockNr Die Blocknummer, in dem CA gesucht wird
- * @param ca CA Typ
- * @param caIndex Das wivielte vorkommen des CA im Block wird gesucht (0...)
- * @param index Index innerhalb CV
- * @param value Zu schreibendes Byte
- * @return 0 : Fehler (CA nicht gefunden), 1 OK
- */
-int smMfxSetCA(int address, int blockNr, int ca, int caIndex, int index, int value) {
-  //Nur erlaubt wenn SM Initialisiert ist, MFX Loksuche ausgeschaltet
-  if (! sm) {
-    return -1;
-  }
-  //printf("smMfxSetCA address=%d blockNr=%d ca=%d caIndex=%d index=%d value=%d\n", address, blockNr, ca, caIndex, index, value);
-  uint16_t cv;
-  if (findCA(address, blockNr & 0xFF, ca & 0xFF, caIndex, &cv)) {
-    smMfxSetCV(address, cv, index, value);
-    return 1;
-  }
-  return -1;
-}
-
-/**
- * SM SET: 1 Byte in den MFX Dekoder an Block/CA/Index schreiben.
- * @param busnumber SRCPD Busnummer
- * @param address Lokadresse
- * @param blockNr Die Blocknummer, in dem CA gesucht wird
- * @param ca CA Typ
- * @param caIndex Das wivielte vorkommen des CA im Block wird gesucht (0...)
- * @param index Index innerhalb CV
- * @return Gelesenes Byte 0..255, < 0 für Error
- */
-int smMfxGetCA(int address, int blockNr, int ca, int caIndex, int index) {
-  //Nur erlaubt wenn SM Initialisiert ist, MFX Loksuche ausgeschaltet
-  if (! sm) {
-    return -1;
-  }
-  //printf("smMfxGetCA address=%d blockNr=%d ca=%d caIndex=%d index=%d\n", address, blockNr, ca, caIndex, index);
-  uint16_t cv;
-  if (findCA(address, blockNr & 0xFF, ca & 0xFF, caIndex, &cv)) {
-    return smMfxGetCV(address, cv, index);
-  }
-  return -1;
+    	return result;
+  	}
+  	//printf("SM GET MFX Adr=%d, Get CV=%d, Index=%d FAIL!\n", address, cv, index);
+  	return -1;
 }
 
 
 // new from R.M. in 2018
 
-
-void handle_regcnt(bus_t bus, uint16_t val)
+/* MFX BIND */
+// if address == 0 uid is used to set the registration counter
+// TODO: clarify type and meaning of return value [-2 ... pos32] 
+int smMfxSetBind(int address, uint32_t uid)
 {
-	registrationCounter = val;
-	syslog_bus(bus, DBG_INFO, "** mfx RegCount set to %x", val);
+	if (address == 0) {
+		registrationCounter = uid;
+		syslog_bus(busnumber, DBG_INFO, "** mfx RegCount set to %x", uid);
+		return uid;
+	}
+    if (!(DDL_DATA*)buses[busnumber].power_state) return -2;
+
+	assignSID(uid, address);
+	return 0;
 }
 
-void handle_mfx_bind_verify(bus_t bus, int cmd, uint32_t uid, uint16_t sid)
+/* MFX VERIFY */
+int smMfxVerBind(int address, uint32_t uid)
 {
-	syslog_bus(bus, DBG_INFO,
-		"***** Interface für mfx bind / verify noch nicht implementiert");
+	if (address == 0) return registrationCounter;
+
+    if (!(DDL_DATA*)buses[busnumber].power_state) return -2;
+    
+	syslog_bus(busnumber, DBG_WARN,
+		"***** FAKE RESULT - mfx verify not yet implemented");
+	return 123;
 }

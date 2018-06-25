@@ -14,6 +14,7 @@
 #include <linux/can/error.h>
 //#include <unistd.h>
 
+#include "config.h"
 #include "ddl.h"
 //#include "config-srcpd.h"
 //#include "canbus.h"
@@ -21,12 +22,13 @@
 //#include "srcp-fb.h"
 //#include "srcp-ga.h"
 //#include "srcp-gl.h"
-//#include "srcp-sm.h"
+#include "srcp-sm.h"
 #include "srcp-power.h"
 //#include "srcp-server.h"
 #include "srcp-info.h"
 //#include "srcp-error.h"
 #include "syslogmessage.h"
+#include "platform.h"
 
 #define INVALID_SOCKET -1
 #define __DDL ((DDL_DATA*)buses[busnumber].driverdata)
@@ -35,14 +37,41 @@ static bus_t mcs_bus = 0;
 static int fd = INVALID_SOCKET;
 static pthread_t mcsGatewayThread;
 
-static unsigned char M_SOFTVERS[]	= {0x00, 0x01, 0x9B, 0x32, 0x02, 0x05, 0x00, 0x00};
+// configuration data: basrcpd Device with temperature reporting
+static unsigned char softvers[8] = {0x00};
+static char gfpstkonf0H[8]  = {0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static char gfpstkonf0N[8]  = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static char *gfpstkonf0[] = {gfpstkonf0H, "60473\0\0", "basrcpd", gfpstkonf0N, NULL};
 
+static char gfpstkonf10[8]  = {0x01, 0xFF, 0x31, 0xF2, 0xC3, 0xC3, 0x00, 0x96 };
+static char gfpstkonf11[8]  = {0x01, 0xC2, 0x02, 0x58, 0x02, 0xBC, 0x02, 0xEE };
+static char *gfpstkonf1[] = {gfpstkonf10, gfpstkonf11, "TEMP\0" "15", "75\0°C\0", NULL};
+
+// type conversion routines
 static inline uint16_t be16(uint8_t *u) {
     return (u[0] << 8) | u[1];
 }
 
 static inline uint32_t be32(uint8_t *u) {
     return (u[0] << 24) | (u[1] << 16) | (u[2] << 8) | u[3];
+}
+
+// send data blocks via CAN 
+static int send_datablock(char *info[])
+{
+	int pkts = 0;
+  	struct can_frame frame;
+	frame.can_dlc = 8;
+
+	while (info[pkts]) {
+    	memcpy(frame.data, info[pkts++], 8);	
+		frame.can_id = (0x003B0300 + pkts) | CAN_EFF_FLAG;
+		// send data block frame
+		if (write(fd, &frame, sizeof(struct can_frame)) < 0)
+			syslog_bus(mcs_bus, DBG_ERROR, "sending CAN frame error in MCS line %d: %s",
+						__LINE__, strerror(errno));
+	}
+	return pkts;
 }
 
 /* thread cleanup routine */
@@ -101,10 +130,10 @@ void *thr_handleCAN(void *vp)
 				case 0x00:	switch (frame.data[4]) {
 						// Stopp
     					case 0x00:	setPower(mcs_bus, 0, "BY MCS");	
-									continue;		// reply later
+									continue;		// reply after done
     					// Go
     					case 0x01:  setPower(mcs_bus, 1, "BY MCS");
-									continue;		// reply later
+									continue;		// reply after done
     					// Emergency Stopp
     					case 0x03:  handle_mcs_dir(mcs_bus, uid, 4);
 									break;
@@ -113,7 +142,17 @@ void *thr_handleCAN(void *vp)
 											< 0) continue;
 									break;
 						// Neuanmeldezähler setzen
-						case 0x09:	handle_regcnt(mcs_bus, be16(&frame.data[5]));
+						case 0x09:	handle_mfx_bind_verify(mcs_bus, SET,
+													be16(&frame.data[5]), 0);
+									continue;		// reply after done
+						// System State
+						case 0x0B:	if (memcmp(frame.data, softvers, 4)) continue;
+									if (frame.data[5] == 1) {
+										v = getPlatformData(PL_TEMP)/100;
+										frame.can_dlc = 8;
+										frame.data[6] = v >> 8;
+										frame.data[7] = v & 0xFF;
+									}
 									break;
 						/* discarded without notice */
 						case 0x20:	// System Time
@@ -123,16 +162,21 @@ void *thr_handleCAN(void *vp)
 						}
 						break;
 				/* mfx bind / verify */
-				case 0x04:  handle_mfx_bind_verify(mcs_bus, 0, uid,
+				case 0x04:  handle_mfx_bind_verify(mcs_bus, SET, uid,
 													be16(&frame.data[4]));
-							continue;		// reply later
-				case 0x06:	handle_mfx_bind_verify(mcs_bus, 1, uid,
+							continue;			// reply after done
+				case 0x06:	handle_mfx_bind_verify(mcs_bus, VERIFY, uid,
 													be16(&frame.data[4]));
-							continue;		// reply later
+							continue;			// reply after done
 				/* Lok Geschwindigkeit */
 				case 0x08:  v = be16(&frame.data[4]);
 							v = handle_mcs_speed(mcs_bus, uid, 
 									(frame.can_dlc == 6) ? v : -1);
+							if ((frame.can_dlc == 4) && (v >= 0)) {
+								frame.can_dlc = 6;
+								frame.data[4] = v >> 8;
+								frame.data[5] = v & 0xFF;
+							}
 							break;
 				/* Lok Richtung */
 				case 0x0A:  v = handle_mcs_dir(mcs_bus, uid, 
@@ -146,19 +190,38 @@ void *thr_handleCAN(void *vp)
 							frame.data[5] = v;
 							if (v >= 0) frame.can_dlc = 6;
 							break;
-				/* read / write config */
-				case 0x0E:
-				case 0x10:	syslog_bus(mcs_bus, DBG_INFO,
-									"***** read / write config fehlt noch");
-							continue;
+				/* read config */
+				case 0x0E:  v = be16(&frame.data[4]) & 0x3FF;
+							syslog_bus(mcs_bus, DBG_INFO,
+								"***** read config fehlt noch, id %x, CV %d, idx %d, anz %d",
+								uid, v, frame.data[4]>>2, frame.data[6]);
+							continue;			// reply after done
+				/* write config */
+				case 0x10:	v = be16(&frame.data[4]) & 0x3FF;
+							syslog_bus(mcs_bus, DBG_INFO,
+								"***** write config fehlt noch, id %x, CV %d, idx %d, val %d, ctrl %x",
+								uid, v, frame.data[4]>>2, frame.data[6], frame.data[7]);
+							continue;			// reply after done
 				/* Ping */
 				case 0x30:  frame.can_dlc = 8; 
-				            memcpy(&frame.data, M_SOFTVERS, 8);
+				            memcpy(frame.data, softvers, 8);
 				            break;
 				/* discarded without notice */
 				case 0x31:  // Ping response
 				case 0x36:	// Bootloader CAN
 							continue;
+				/* status data config */
+				case 0x3A:	if (memcmp(frame.data, softvers, 4)) continue;
+							switch (frame.data[4]) {
+							case 0x00:  frame.data[5] = send_datablock(gfpstkonf0);
+										frame.can_dlc = 6;
+										break;
+							case 0x01:  frame.data[5] = send_datablock(gfpstkonf1);
+										frame.can_dlc = 6;
+										break;
+							default:	goto defmsg;
+							}
+				            break;
     			/* unhandled codes */
 				default:
     			defmsg:		sprintf(msg, "0x%08X [%d]", 
@@ -205,9 +268,21 @@ void init_mcs_gateway(bus_t busnumber)
     struct ifreq ifr;
     int ret;
     
+  	// store own UID for PING answer 
+	uint32_t ouid = htonl(__DDL->uid);
+	memcpy(softvers, &ouid, 4);	
+
+	// and add version and shorted serial
+    int version = atoi(VERSION);
+    softvers[4] = version / 100;
+    softvers[5] = version % 100;
+   	uint32_t serial = htonl(getPlatformData(PL_SERIAL) % 1000000L);
+    memcpy(&gfpstkonf0H[4], &serial, 4);	
+
 	syslog_bus(busnumber, DBG_INFO, "MCS Gateway will use device %s.",
                	__DDL->MCS_DEVNAME);
-    
+
+	if (fd > INVALID_SOCKET) return;		// already done    
     fd = socket(PF_CAN, SOCK_RAW, CAN_RAW);
 
 	strcpy(ifr.ifr_name, __DDL->MCS_DEVNAME);
@@ -229,7 +304,7 @@ void init_mcs_gateway(bus_t busnumber)
 	mcs_bus = busnumber;	
 	ret = pthread_create(&mcsGatewayThread, NULL, thr_handleCAN, NULL);
     if (ret) syslog_bus(busnumber, DBG_ERROR,
-               	"pthread_create mcsGatewayThread fail");
+               	"pthread_create mcsGatewayThread fail");    
 }
 
 void term_mcs_gateway(void)
@@ -239,6 +314,3 @@ void term_mcs_gateway(void)
     if (ret) syslog_bus(mcs_bus, DBG_ERROR,
                	"pthread_cancel mcsGatewayThread fail");
 }
-
-// Da gibts noch einiges zu erledigen:
-// TODO:	Lok-Antworten in Responsepaket einarbeiten

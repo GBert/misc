@@ -1,3 +1,5 @@
+// ddl.c - adapted for basrcpd project 2018 by Rainer Müller 
+
 /* $Id: ddl.c 1456 2010-02-28 20:01:39Z gscholz $ */
 
 /*
@@ -393,14 +395,6 @@ static int queue_get(bus_t busnumber, int *addr, char *packet,
     return rtc;
 }
 
-// OBSOLETE
-int setSerialMode(bus_t busnumber, int mode)
-{
-    syslog_bus(busnumber, DBG_WARN, 
-			"obsolete procedure setSerialMode called to set mode %d", mode);
-    return 0;
-}
-
 int init_lineDDL(bus_t busnumber)
 {
     /* opens and initializes the selected SPI port */
@@ -463,7 +457,7 @@ static void init_MaerklinPacketPool(bus_t busnumber)
         syslog_bus(busnumber, DBG_ERROR,
                    "pthread_mutex_init() failed: %s (errno = %d). Abort!",
                    strerror(result), result);
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     result = pthread_mutex_lock(&__DDL->maerklin_pktpool_mutex);
@@ -1126,9 +1120,6 @@ static int checkShortcut(bus_t busnumber)
         short_now = tv_shortcut.tv_sec * 1000000 + tv_shortcut.tv_usec;
         if (__DDL->SHORTCUTDELAY <=
                 (short_now - __DDL->short_detected)) {
-//                char buffer[1000];
-//                sprintf(buffer, "__DDL->SHORTCUTDELAY=%u short_now=%u __DDL->short_detected=%u", __DDL->SHORTCUTDELAY, short_now, __DDL->short_detected);
-//                syslog_bus(busnumber, DBG_FATAL, buffer);
         	syslog_bus(busnumber, DBG_INFO,
                            "Shortcut detected. Power on tracks stopped!");
             return 1;
@@ -1659,6 +1650,7 @@ static void *thr_refresh_cycle(void *v)
    
     gettimeofday(&tv1, &tz);
     for (;;) {
+        pthread_testcancel();
         if (power_is_off(busnumber)) {
            nanosleep_DDL(&rqtp_sleep, &__DDL->rmtp);
            continue;
@@ -1724,27 +1716,13 @@ static int init_gl_DDL(bus_t bus, gl_data_t * gl, char *optData)
             if (gl->protocolversion < 0 || gl->protocolversion > 1) {
                 return SRCP_WRONGVALUE;
             }
-            //Bei MFX müssen folgende zusätzlichen Daten vorhanden sein:
-            //UID "LokName" fx0 ... fx15
-            // - UID: 32 Bit Dekoder UID
-            // - "LokName" Der Name der Lok
-            // - fx0 .. fx15: 16 Fx Definition, je eine dez. Zahl die die 3 Byte Gruppe und 2 Bytes zusätzliche Informationen enthält.
-/* TODO:    int nelem = sscanf(optData, "%u \"%[^\"]\" %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u", 
-                               &gl->optData.mfx.uid, gl->optData.mfx.name, 
-                               &gl->optData.mfx.fx[0], &gl->optData.mfx.fx[1], &gl->optData.mfx.fx[2], &gl->optData.mfx.fx[3],
-                               &gl->optData.mfx.fx[4], &gl->optData.mfx.fx[5], &gl->optData.mfx.fx[6], &gl->optData.mfx.fx[7],
-                               &gl->optData.mfx.fx[8], &gl->optData.mfx.fx[9], &gl->optData.mfx.fx[10], &gl->optData.mfx.fx[11],
-                               &gl->optData.mfx.fx[12], &gl->optData.mfx.fx[13], &gl->optData.mfx.fx[14], &gl->optData.mfx.fx[15]);
-            int result = nelem >= 18 ? SRCP_OK : SRCP_LISTTOOSHORT;   */
+            // in case of MFX, UID could be appended optionally:
+			sscanf(optData, "%u", &gl->decuid);
+/* 
+	TODO: brauchen wir Mitteilung an MFX damit ggf. neue Lokadresse gesetzt werden kann
+            newGLInit(gl->id, gl->optData.mfx.uid);
+*/
             return  SRCP_OK;
-/*            int nelem = sscanf(optData, "%u", &gl->optData.mfx.uid);
-            int result = nelem >= 1 ? SRCP_OK : SRCP_LISTTOOSHORT;
-            if (result == SRCP_OK) {
-              //Mitteilung an MFX damit ggf. neue Lokadresse gesetzt werden kann
-              newGLInit(gl->id, gl->optData.mfx.uid);
-            }
-            return result;
-            break; 	*/
     }
     return SRCP_UNSUPPORTEDDEVICEPROTOCOL;
 }
@@ -1754,12 +1732,14 @@ static int init_gl_DDL(bus_t bus, gl_data_t * gl, char *optData)
  * @param gl Lok, von der die Infor geliefert werden sollen.
  * @param msg Message, an die die Infos gehängt werden sollen
  */
-static void describe_gl_DDL(gl_data_t *gl, char *msg) {
-  switch (gl->protocol) {
-    case 'X':
-      describeGLmfx(gl, msg);
-      break;
-  }
+static void describe_gl_DDL(gl_data_t *gl, char *msg)
+{
+	switch (gl->protocol) {
+    	case 'X':
+//    		describeGLmfx(gl, msg);
+  			sprintf(msg + strlen(msg), " %u", gl->decuid);
+      		break;
+	}
 }
 
 static int init_ga_DDL(ga_data_t * ga)
@@ -2160,7 +2140,9 @@ static void *thr_sendrec_DDL(void *v)
     ga_data_t gatmp;
     int addr, error;
     int last_cancel_state, last_cancel_type;
-
+    bool prio;
+    char * scmd, * sprot, * stype;
+    
     delayedGAResetCmdData *tmpv;
     pthread_t ptid_delacccmd;
 
@@ -2200,7 +2182,7 @@ static void *thr_sendrec_DDL(void *v)
                    strerror(error), error);
     }
 
-    while (1) {
+    while (true) {
         pthread_testcancel();
         if (!queue_GL_isempty(btd->bus)) {
           char p;
@@ -2217,8 +2199,9 @@ static void *thr_sendrec_DDL(void *v)
             addr = gltmp.id;
             speed = gltmp.speed;
             direction = gltmp.direction;
-            syslog_bus(btd->bus, DBG_DEBUG, "Next command: %c (%x) %d %d",
-                       p, p, pv, addr);
+            prio = (gltmp.cachedspeed > 0) && (speed == 0);
+            syslog_bus(btd->bus, DBG_DEBUG, "Next command: %c (%x) %d %d %c",
+                       p, p, pv, addr, prio ? 'P' : ' ');
             if (addr > 127) {
                 pv = 2;
             }
@@ -2232,8 +2215,7 @@ static void *thr_sendrec_DDL(void *v)
                     
 					if (pv == 1) {	comp_maerklin_1(btd->bus, addr,
                                             gltmp.direction, speed,
-                                            gltmp.funcs & 0x01,
-                                            gltmp.prio);
+                                            gltmp.funcs & 0x01, prio);
                             }
                     else switch (gltmp.n_fs) {
                         case 14:	comp_maerklin_2(btd->bus, addr,
@@ -2243,7 +2225,7 @@ static void *thr_sendrec_DDL(void *v)
                                             ((gltmp.funcs >> 2) & 0x01),
                                             ((gltmp.funcs >> 3) & 0x01),
                                             ((gltmp.funcs >> 4) & 0x01),
-                                            gltmp.prio);
+                                            prio);
                             		break;
                          case 27:	comp_maerklin_27(btd->bus, addr,
                                             gltmp.direction, speed,
@@ -2252,7 +2234,7 @@ static void *thr_sendrec_DDL(void *v)
                                             ((gltmp.funcs >> 2) & 0x01),
                                             ((gltmp.funcs >> 3) & 0x01),
                                             ((gltmp.funcs >> 4) & 0x01),
-                                            gltmp.prio);
+                                            prio);
                             		break;
                         case 28:	comp_maerklin_28(btd->bus, addr,
                                             gltmp.direction, speed,
@@ -2261,7 +2243,7 @@ static void *thr_sendrec_DDL(void *v)
                                             ((gltmp.funcs >> 2) & 0x01),
                                             ((gltmp.funcs >> 3) & 0x01),
                                             ((gltmp.funcs >> 4) & 0x01),
-                                            gltmp.prio);
+                                            prio);
                             		break;
                     }
                     break;
@@ -2272,13 +2254,12 @@ static void *thr_sendrec_DDL(void *v)
                         comp_nmra_multi_func(btd->bus, addr, direction,
                                              speed, gltmp.funcs,
                                              gltmp.n_fs, gltmp.n_func, pv,
-                                             gltmp.prio);
+                                             prio);
                     else
                         /* emergency halt: FS 1 */
                         comp_nmra_multi_func(btd->bus, addr, 0,
                                              1, gltmp.funcs, gltmp.n_fs,
-                                             gltmp.n_func, pv,
-                                             gltmp.prio);
+                                             gltmp.n_func, pv, prio);
                     break;
                 case 'X':      /* MFX */
                     if (direction != 2) {
@@ -2291,15 +2272,13 @@ static void *thr_sendrec_DDL(void *v)
                         }
                         comp_mfx_loco(addr, direction,
                                       speed, gltmp.funcs,
-                                      gltmp.n_fs, gltmp.n_func, pv,
-                                      gltmp.prio);
+                                      gltmp.n_fs, gltmp.n_func, pv, prio);
                     }
                     else {
                         /* emergency halt: FS 1 */
                         comp_mfx_loco(addr, 0,
                                       1, gltmp.funcs, gltmp.n_fs,
-                                      gltmp.n_func, pv,
-                                      gltmp.prio);
+                                      gltmp.n_func, pv, prio);
                     }
                     if (gltmp.direction == -1) { //Lok TERM
                       sendDekoderTerm(addr);
@@ -2311,6 +2290,33 @@ static void *thr_sendrec_DDL(void *v)
         }
         if (!queue_SM_isempty(btd->bus)) {
             dequeueNextSM(btd->bus, &smakt);
+			switch(smakt.protocol) {
+    			case PROTO_NMRA:	sprot = "NMRA";	break;
+    			case PROTO_MM:		sprot = "MM";   break;
+    			case PROTO_MFX:		sprot = "MFX";	break;
+    			default:			sprot = "??";
+			} 
+			switch(smakt.command) {
+    			case SET:		scmd = "SET";		break; 
+    			case GET:		scmd = "GET";  		break;
+    			case VERIFY:	scmd = "VERIFY";	break;
+    			case INIT:		scmd = "INIT";   	break;
+    			case TERM:		scmd = "TERM";    	break;
+    			default:		scmd = "??";
+			}
+			switch(smakt.type) {
+    			case REGISTER:	stype = "REGISTER"; break;
+    			case PAGE:		stype = "PAGE";    	break;
+    			case CV:		stype = "CV";      	break;
+    			case CV_BIT:	stype = "CVBIT";  	break;
+    			case BIND_MFX:	stype = "BIND";    	break;
+    			case CV_MFX:	stype = "CVMFX";  	break;
+    			default:		stype = "??";
+			}
+            syslog_bus(btd->bus, DBG_DEBUG,
+				"Next SM: %s %s %d %d %s %d Index %d Val 0x%02x", scmd, sprot,
+				smakt.protocolversion, smakt.addr, stype, smakt.cvaddr, 
+				smakt.index, smakt.value);
             int rc = -1;
             if (smakt.protocol == PROTO_NMRA) {
                 switch (smakt.command) {
@@ -2324,24 +2330,24 @@ static void *thr_sendrec_DDL(void *v)
                             switch (smakt.type) {
                                 case REGISTER:
                                     rc = protocol_nmra_sm_write_phregister
-                                        (btd->bus, smakt.cv_caIndex,
+                                        (btd->bus, smakt.cvaddr,
                                          smakt.value);
                                     break;
                                 case CV:
                                     rc = protocol_nmra_sm_write_cvbyte
-                                        (btd->bus, smakt.cv_caIndex,
+                                        (btd->bus, smakt.cvaddr,
                                          smakt.value);
                                     break;
                                 case CV_BIT:
                                     rc = protocol_nmra_sm_write_cvbit(btd->
                                                                       bus,
-                                                                      smakt.cv_caIndex,
-                                                                      smakt.bit_index,
+                                                                      smakt.cvaddr,
+                                                                      smakt.index,
                                                                       smakt.value);
                                     break;
                                 case PAGE:
                                     rc = protocol_nmra_sm_write_page
-                                        (btd->bus, smakt.cv_caIndex,
+                                        (btd->bus, smakt.cvaddr,
                                          smakt.value);
                                     break;
                                 default:    ;
@@ -2356,13 +2362,12 @@ static void *thr_sendrec_DDL(void *v)
                                 case CV:
                                     rc = protocol_nmra_sm_write_cvbyte_pom
                                         (btd->bus, smakt.addr,
-                                         smakt.cv_caIndex, smakt.value,
-                                         mode);
+                                         smakt.cvaddr, smakt.value, mode);
                                     break;
                                 case CV_BIT:
                                     rc = protocol_nmra_sm_write_cvbit_pom
                                         (btd->bus, smakt.addr,
-                                         smakt.cv_caIndex, smakt.bit_index,
+                                         smakt.cvaddr, smakt.index,
                                          smakt.value, mode);
                                 default:    ;
                             }
@@ -2373,21 +2378,20 @@ static void *thr_sendrec_DDL(void *v)
                             switch (smakt.type) {
                                 case REGISTER:
                                     rc = protocol_nmra_sm_get_phregister
-                                        (btd->bus, smakt.cv_caIndex);
+                                        (btd->bus, smakt.cvaddr);
                                     break;
                                 case CV:
-                                    rc = protocol_nmra_sm_get_cvbyte(btd->
-                                                                     bus,
-                                                                     smakt.cv_caIndex);
+                                    rc = protocol_nmra_sm_get_cvbyte(btd->bus,
+                                                                smakt.cvaddr);
                                     break;
                                 case CV_BIT:
                                     rc = protocol_nmra_sm_verify_cvbit
-                                        (btd->bus, smakt.cv_caIndex,
-                                         smakt.bit_index, 1);
+                                        (btd->bus, smakt.cvaddr,
+                                         smakt.index, 1);
                                     break;
                                 case PAGE:
                                     rc = protocol_nmra_sm_get_page
-                                        (btd->bus, smakt.cv_caIndex);
+                                        (btd->bus, smakt.cvaddr);
                                     break;
                                 default:    ;
                             }
@@ -2400,27 +2404,23 @@ static void *thr_sendrec_DDL(void *v)
                                 case REGISTER:
                                     my_rc =
                                         protocol_nmra_sm_verify_phregister
-                                        (btd->bus, smakt.cv_caIndex,
-                                         smakt.value);
+                                        (btd->bus, smakt.cvaddr, smakt.value);
                                     break;
                                 case CV:
                                     my_rc =
                                         protocol_nmra_sm_verify_cvbyte
-                                        (btd->bus, smakt.cv_caIndex,
+                                        (btd->bus, smakt.cvaddr,
                                          smakt.value);
                                     break;
                                 case CV_BIT:
                                     my_rc =
-                                        protocol_nmra_sm_verify_cvbit(btd->
-                                                                      bus,
-                                                                      smakt.cv_caIndex,
-                                                                      smakt.bit_index,
-                                                                      smakt.value);
+                                        protocol_nmra_sm_verify_cvbit(btd->bus,
+                                                    smakt.cvaddr, smakt.index,
+                                                    smakt.value);
                                     break;
                                 case PAGE:
                                     my_rc = protocol_nmra_sm_verify_page
-                                        (btd->bus, smakt.cv_caIndex,
-                                         smakt.value);
+                                        (btd->bus, smakt.cvaddr, smakt.value);
                                     break;
                                 default:    ;
                             }
@@ -2438,16 +2438,15 @@ static void *thr_sendrec_DDL(void *v)
                 }
             }
             if (smakt.protocol == PROTO_MFX) {
-              if (buses[btd->bus].power_state) {
+//              if (buses[btd->bus].power_state) {
                 switch (smakt.command) {
                   case SET:
                     switch (smakt.type) {
                       case CV_MFX:
-                        rc = 1;
-                        smMfxSetCV(smakt.addr, smakt.cv_caIndex, smakt.bit_index, smakt.value);
+                        rc = smMfxSetCV(smakt.addr, smakt.cvaddr, smakt.index, smakt.value);
                         break;
-                      case CA_MFX:
-                        rc = smMfxSetCA(smakt.addr, smakt.blockNr, smakt.caNr, smakt.cv_caIndex, smakt.bit_index, smakt.value);
+                      case BIND_MFX:
+                      	rc = smMfxSetBind(smakt.addr, smakt.value);
                         break;
                       default:  ;
                     }
@@ -2456,10 +2455,10 @@ static void *thr_sendrec_DDL(void *v)
                   case VERIFY:
                     switch (smakt.type) {
                       case CV_MFX:
-                        rc = smMfxGetCV(smakt.addr, smakt.cv_caIndex, smakt.bit_index);
+                        rc = smMfxGetCV(smakt.addr, smakt.cvaddr, smakt.index, smakt.value);
                         break;
-                      case CA_MFX:
-                        rc = smMfxGetCA(smakt.addr, smakt.blockNr, smakt.caNr, smakt.cv_caIndex, smakt.bit_index);
+                      case BIND_MFX:
+                      	rc = smMfxVerBind(smakt.addr, smakt.value);
                         break;
                       default:  ;
                     }
@@ -2473,10 +2472,6 @@ static void *thr_sendrec_DDL(void *v)
                     rc = 0;
                     break;
                 }
-              }
-              else {
-                rc = -1;
-              }
             }
             session_endwait(btd->bus, rc);
         }

@@ -1,4 +1,15 @@
+// srcp-gl.h - adapted for basrcpd project 2018 by Rainer Müller 
+
 /* $Id: srcp-gl.h 1346 2009-06-06 18:15:28Z mtrute $ */
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
 #ifndef _SRCP_GL_H
 #define _SRCP_GL_H
@@ -10,17 +21,18 @@
 #include "config-srcpd.h"
 #include "srcp-session.h"
 
+enum gl_state_t {glsNone = 0, glsActive, glsTerm};
 
 /* locomotive decoder */
 typedef struct _GLSTATE {
-    char state;                  /* 0==dead, 1==living, 2==terminating */
+    char state;                 /* 0==dead, 1==living, 2==terminating */
     char protocol;
     char protocolversion;
     char n_func;
     uint16_t id;                /* address  */
     uint8_t  n_fs;
-    uint8_t  speed;                  /* Sollgeschwindigkeit skal. auf 0..14 */
-    char direction;              /* 0/1/2                               */
+    uint8_t  speed;             /* Sollgeschwindigkeit skal. auf 0..14 */
+    char direction;             /* 0/1/2                               */
     uint32_t funcs;             /* Fx, F1, ... F31                     */
     uint32_t funcschange;
     uint8_t	 speedchange;
@@ -31,16 +43,7 @@ typedef struct _GLSTATE {
     struct timeval locktime;
     long int lockduration;
     sessionid_t locked_by;
-    bool prio;                  //Priorität ist gesetzt wenn Lok angehalten werden soll (Aktuelle speed>0, neuer speed==0)
-    //Protokollabhängige zusätzliche Informationen
-    union {
-      //Bei MFX Protokoll
-      struct {
-        uint32_t uid;
-//      char name[17];
-//      uint32_t fx[16];
-      } mfx;
-    } optData; 
+    uint32_t decuid; 			/* mfx decoder UID					   */
 } gl_data_t;
 
 typedef struct _GL {
@@ -74,7 +77,6 @@ void unlock_gl_bysessionid(sessionid_t sessionid);
 void unlock_gl_bytime(void);
 int describeLOCKGL(bus_t bus, int addr, char *reply);
 void debugGL(bus_t busnumber, int start, int end);
-int resetAllGL(bus_t bus);
 
 int handle_mcs_prot(bus_t bus, uint32_t locid, int val);
 int handle_mcs_speed(bus_t bus, uint32_t locid, int val);

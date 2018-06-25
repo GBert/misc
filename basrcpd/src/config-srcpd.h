@@ -1,3 +1,5 @@
+// config_srcpd.h - adapted for basrcpd project 2018 by Rainer Müller 
+
 /***************************************************************************
                           config_srcpd.h  -  description
                              -------------------
@@ -38,7 +40,7 @@ typedef unsigned long int sessionid_t;
 #include "srcp-ga.h"
 
 
-#define MAX_BUSES              20 /* max number of integrated buses in srcpd */
+#define MAX_BUSES               8 /* max number of integrated buses in srcpd */
 #define MAXSRCPLINELEN       1001 /* max number of bytes per line plus 0x00 */
 
 /* srcp bus types */

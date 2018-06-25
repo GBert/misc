@@ -1,3 +1,4 @@
+// config.h - adapted for basrcpd project 2018 by Rainer Müller 
 
 /* Activate IP V6 */
 #define ENABLE_IPV6 1
@@ -54,4 +55,4 @@
 //#define USE_ZIMO 1
 
 /* Version number of package */
-#define VERSION "2.1.3"
+#define VERSION "1806"

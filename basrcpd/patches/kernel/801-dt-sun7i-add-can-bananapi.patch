@@ -1,0 +1,15 @@
+--- a/arch/arm/boot/dts/sun7i-a20-bananapi.dts	2016-01-11 00:01:32.000000000 +0100
++++ b/arch/arm/boot/dts/sun7i-a20-bananapi.dts	2016-02-03 20:07:27.074726689 +0100
+@@ -92,6 +92,12 @@
+ 	status = "okay";
+ };
+ 
++&can0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&can0_pins_a>;
++	status = "okay";
++};
++
+ &cpu0 {
+ 	cpu-supply = <&reg_dcdc2>;
+ 	operating-points = <
