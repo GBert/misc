@@ -1,11 +1,15 @@
 const int revisionnr = 
-14049
+14053
 ;
 const char* commithash = 
-"a5d800fe06ac19ed52e550922035845f932993ec";
+"38d5544a938cd35b23e91249803579c88200d248";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14053 2018-06-24 10:06:07 +0200 blockgroup: broadcast changes to the clients\n" \
+"14052 2018-06-24 10:05:25 +0200 model: save schedule ID pointer in case it did not change on modify\n" \
+"14051 2018-06-23 16:22:15 +0200 roclcdr: crash fixes\n" \
+"14050 2018-06-23 11:36:26 +0200 modplan: save the MVTrack in the route file\n" \
 "14049 2018-06-22 16:09:00 +0200 rocview base: better readable color for analyser trace\n" \
 "14048 2018-06-22 14:42:10 +0200 user theme crossing update from Duesselklaus\n" \
 "14047 2018-06-22 10:19:38 +0200 blockgroupingdlg: set prev_id in case the ID has been modified\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "14006 2018-06-04 07:33:27 +0200 loc: broadcast the complete properties on modify\n" \
 "14005 2018-06-03 16:20:55 +0200 loc: if a consist loco is not found at swap, try by train\n" \
 "14004 2018-06-02 11:40:29 +0200 renamedlg: find OID in action list\n" \
-"14003 2018-06-02 08:19:21 +0200 loc: isstate stop added\n" \
-"14002 2018-06-02 08:10:54 +0200 roclcdr: use mode string stop in case of idle and auto off\n" \
-"14001 2018-06-01 08:46:10 +0200 wmz21: only send a response on a LAN_X_GET_TURNOUT_INFO if the switch is known in Rocrail\n" \
-"14000 2018-05-31 17:10:26 +0200 wmz21: revert switch info fix\n" \
 
 "log end";
