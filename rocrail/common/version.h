@@ -1,11 +1,16 @@
 const int revisionnr = 
-14053
+14058
 ;
 const char* commithash = 
-"38d5544a938cd35b23e91249803579c88200d248";
+"99e29eeb0f1a52ceca9dfd420e8e60204fbe3345";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14058 2018-06-27 11:09:01 +0200 routedlg: reset button added\n" \
+"14057 2018-06-27 09:47:37 +0200 guiapp: merge route node also in case it has no commands or other child nodes\n" \
+"14056 2018-06-27 07:56:06 +0200 blockgroup: default critical section\n" \
+"14055 2018-06-26 17:21:09 +0200 blockgroup: trace improvements\n" \
+"14054 2018-06-26 07:38:39 +0200 mgbox: fix voor uitlezen channel config cs2 (Bert)\n" \
 "14053 2018-06-24 10:06:07 +0200 blockgroup: broadcast changes to the clients\n" \
 "14052 2018-06-24 10:05:25 +0200 model: save schedule ID pointer in case it did not change on modify\n" \
 "14051 2018-06-23 16:22:15 +0200 roclcdr: crash fixes\n" \
@@ -51,10 +56,5 @@ const char* revlog =
 "14011 2018-06-05 12:01:51 +0200 control: determine the swdbsize for WLM only for the useshortid switches\n" \
 "14010 2018-06-05 11:58:52 +0200 switch: useshortid option added\n" \
 "14009 2018-06-05 11:31:35 +0200 virtual: filter out the shortid command\n" \
-"14008 2018-06-05 10:26:47 +0200 wmz21: send switch IDs to the wlms\n" \
-"14007 2018-06-04 08:31:04 +0200 sensorevents: export/import added\n" \
-"14006 2018-06-04 07:33:27 +0200 loc: broadcast the complete properties on modify\n" \
-"14005 2018-06-03 16:20:55 +0200 loc: if a consist loco is not found at swap, try by train\n" \
-"14004 2018-06-02 11:40:29 +0200 renamedlg: find OID in action list\n" \
 
 "log end";
