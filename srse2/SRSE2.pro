@@ -1,4 +1,4 @@
-update=Fr 01 Jun 2018 16:13:23 CEST
+update=Donnerstag, 28. Juni 2018 'u47' 08:47:50
 version=1
 last_client=kicad
 [pcbnew]
@@ -65,3 +65,13 @@ LibName33=ftdi
 LibName34=Omega2
 LibName35=cmos_ieee
 LibName36=common-ICs
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=
+SpiceForceRefPrefix=0
+SpiceUseNetNumbers=0
+LabSize=60
