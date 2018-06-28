@@ -1,0 +1,13 @@
+#!/bin/sh
+
+sed -i 's,doc_root.*,doc_root = "",g' /etc/php.ini
+sed -i 's,;short_open_tag = Off,short_open_tag = On,g' /etc/php.ini
+
+uci -q batch <<-EOT >/dev/null
+  set uhttpd.llmp=uhttpd
+  set uhttpd.llmp.listen_http=81
+  set uhttpd.llmp.home=/www/MaeCAN-Server/html
+  add_list uhttpd.llmp.interpreter=".php=/usr/bin/php-cgi"
+  set uhttpd.llmp.index_page="index.html index.htm default.html default.htm index.php"
+  commit uhttpd
+EOT
