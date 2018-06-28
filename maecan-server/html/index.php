@@ -123,7 +123,7 @@
 * this stuff is worth it, you can buy me a beer in return.
 * Maximilian Goldschmidt
 * ----------------------------------------------------------------------------
-* MäCAN-Server, 2018-06-24
+* MäCAN-Server
 * https://github.com/Ixam97/MaeCAN-Server/
 * ----------------------------------------------------------------------------
 */
@@ -376,6 +376,12 @@
 					settings.contentWindow.updateCanMonitor(msg);
 				} else if (cmd == 'updateVersion') {
 					settings.contentWindow.version.innerHTML = "Version: " + msg[1];
+				} else {
+					/*let data = [];
+					for (let i = 0; i < dgram.data.length; i++) {
+						data[i] = dgram.data[i].charCodeAt(0).toString(16);
+					}*/
+					console.log(dgram.data.toString());
 				}
 			}
 

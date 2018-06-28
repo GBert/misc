@@ -131,7 +131,7 @@
 * this stuff is worth it, you can buy me a beer in return.
 * Maximilian Goldschmidt
 * ----------------------------------------------------------------------------
-* MäCAN-Server, 2018-06-24
+* MäCAN-Server
 * https://github.com/Ixam97/MaeCAN-Server/
 * ----------------------------------------------------------------------------
 */

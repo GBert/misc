@@ -6,7 +6,7 @@
 * this stuff is worth it, you can buy me a beer in return.
 * Maximilian Goldschmidt
 * ----------------------------------------------------------------------------
-* MäCAN-Server, 2018-06-24
+* MäCAN-Server
 * https://github.com/Ixam97/MaeCAN-Server/
 * ----------------------------------------------------------------------------
 */
@@ -128,6 +128,7 @@ var gbox_uid;
 //----------------------------------------------------------------------------------//
 // VARIABLEN FÜR DEVICE INFOS:
 var config_buffer = [];
+var temp_mfx_loco = {};
 
 // Loknamen data query
 var loknamen_request = false;
@@ -667,11 +668,13 @@ function addMfxLocoToList(mfxuid) {
     
     fs.writeFile('../html/config/locolist.json', JSON.stringify(locolist, null, 2), function(){
       console.log("Adding MFX loco to locolist (UID: " + toUnsignedString(mfxuid) + ").");
-      exportCS2Locolist(locolist);
+      //exportCS2Locolist(locolist);
       for (var i in clients){
         clients[i].sendUTF("updateLocolist");
       }
     });
+
+    temp_mfx_loco = loco;
 
     readMfxConfig(loco.uid, 3, 1, 0x10); // Loknamen auslesen, weiter in processMfxBuffer() ...
 
@@ -722,14 +725,14 @@ function fillMfxBuffer(data) {
 function processMfxBuffer() {
   let cv_n = mfx_buffer[0];
 
-  let locolist = JSON.parse(fs.readFileSync("../html/config/locolist.json"));
-  let index;
+  //let locolist = JSON.parse(fs.readFileSync("../html/config/locolist.json"));
+  /*let index;
   for (let i = 0; i < locolist.length; i++ ){
     if (last_mfx_call[2] == locolist[i].uid) {
       index = i;
       break;
     }
-  }
+  }*/
   
   if (cv_n == 3) {
     // Lokname
@@ -740,63 +743,72 @@ function processMfxBuffer() {
       data[i-1] = mfx_buffer[i];
     }
 
-    locolist[index].name = new Buffer(data).toString();
+    temp_mfx_loco.name = new Buffer(data).toString();
 
     readMfxConfig(last_mfx_call[2], 4, 1, 9);
 
   } else if (cv_n == 4) {
     // Blockdefinitionen auslesen
 
-    locolist[index].mfxadr = {};
-    locolist[index].mfxadr.xcel = (mfx_buffer[4] * 4) + 2;
-    locolist[index].mfxadr.speedtable = (mfx_buffer[4] * 4) +3
-    locolist[index].mfxadr.volume = (mfx_buffer[7] * 4) + 1;
-    locolist[index].mfxadr.func = (mfx_buffer[3] * 4) + 1;
+    temp_mfx_loco.mfxadr = {};
+    temp_mfx_loco.mfxadr.xcel = (mfx_buffer[4] * 4) + 2;
+    temp_mfx_loco.mfxadr.speedtable = (mfx_buffer[4] * 4) +3
+    temp_mfx_loco.mfxadr.volume = (mfx_buffer[7] * 4) + 1;
+    temp_mfx_loco.mfxadr.func = (mfx_buffer[3] * 4) + 1;
 
-    readMfxConfig(last_mfx_call[2], locolist[index].mfxadr.xcel, 1, 2);
+    readMfxConfig(last_mfx_call[2], temp_mfx_loco.mfxadr.xcel, 1, 2);
 
   } else {
-    if (cv_n == locolist[index].mfxadr.xcel) {
-      locolist[index].av = mfx_buffer[1];
-      locolist[index].bv = mfx_buffer[2];
+    if (cv_n == temp_mfx_loco.mfxadr.xcel) {
+      temp_mfx_loco.av = mfx_buffer[1];
+      temp_mfx_loco.bv = mfx_buffer[2];
 
-      readMfxConfig(last_mfx_call[2], locolist[index].mfxadr.speedtable, 1, 2);
-    } else if (cv_n == locolist[index].mfxadr.speedtable) {
-      locolist[index].vmin = mfx_buffer[1];
-      locolist[index].vmax = mfx_buffer[2];
+      readMfxConfig(last_mfx_call[2], temp_mfx_loco.mfxadr.speedtable, 1, 2);
+    } else if (cv_n == temp_mfx_loco.mfxadr.speedtable) {
+      temp_mfx_loco.vmin = mfx_buffer[1];
+      temp_mfx_loco.vmax = mfx_buffer[2];
 
-      readMfxConfig(last_mfx_call[2], locolist[index].mfxadr.volume, 1, 1);
-    } else if (cv_n == locolist[index].mfxadr.volume) {
-      locolist[index].volume = mfx_buffer[1];
-      locolist[index].functions = [];
+      readMfxConfig(last_mfx_call[2], temp_mfx_loco.mfxadr.volume, 1, 1);
+    } else if (cv_n == temp_mfx_loco.mfxadr.volume) {
+      temp_mfx_loco.volume = mfx_buffer[1];
+      temp_mfx_loco.functions = [];
 
-      readMfxConfig(last_mfx_call[2], locolist[index].mfxadr.func, 1, 2)
+      readMfxConfig(last_mfx_call[2], temp_mfx_loco.mfxadr.func, 1, 2)
     } else {
       for (let i = 0; i < 16; i++) {
-        if (cv_n == locolist[index].mfxadr.func + (i * 3)) {
+        if (cv_n == temp_mfx_loco.mfxadr.func + (i * 3)) {
           if (mfx_buffer[2]) {
-            if (i == 0) locolist[index].functions[i] = 1;
-            else locolist[index].functions[i] = 50 + i;
+            if (i == 0) temp_mfx_loco.functions[i] = 1;
+            else temp_mfx_loco.functions[i] = 50 + i;
           } 
           if (i < 15) {
-            readMfxConfig(last_mfx_call[2], locolist[index].mfxadr.func + ((i + 1) * 3), 1, 2);
-          } else {            
-            for (var j in clients){
-              clients[j].sendUTF(`foundMfx:${locolist[index].name}`);
+            readMfxConfig(last_mfx_call[2], temp_mfx_loco.mfxadr.func + ((i + 1) * 3), 1, 2);
+          } else {
+            let locolist = JSON.parse(fs.readFileSync("../html/config/locolist.json"));
+            let index;
+            for (let i = 0; i < locolist.length; i++ ){
+              if (last_mfx_call[2] == locolist[i].uid) {
+                index = i;
+                break;
+              }
             }
+            locolist[index] = temp_mfx_loco;
+            fs.writeFile('../html/config/locolist.json', JSON.stringify(locolist, null, 2), function(){
+              console.log('Updating loco ' + temp_mfx_loco.name);
+              exportCS2Locolist(locolist);
+              for (var i in clients){
+                clients[i].sendUTF("updateLocolist");
+                clients[i].sendUTF(`foundMfx:${temp_mfx_loco.name}`);
+              }
+              temp_mfx_loco = {};
+            }); 
           }
         }
       }
-      exportCS2Locolist(locolist);
     }
   }
     
-  fs.writeFile('../html/config/locolist.json', JSON.stringify(locolist, null, 2), function(){
-    console.log('Updating loco ' + locolist[index].name);
-    for (var i in clients){
-      clients[i].sendUTF("updateLocolist");
-    }
-  });
+  
 
   mfx_buffer = [];
 } 
@@ -1070,6 +1082,16 @@ udpServer.on('error', (err) => {
 
 // Befehle vom CAN verarbeiten:
 udpServer.on('message', (udp_msg, rinfo) => {
+
+  /*let buffer_forward = "Frame:";
+
+  for(let i = 0; i < udp_msg.length; i++) {
+    buffer_forward += (parseInt(udp_msg[i]).toString(16) + ' ');
+  }
+
+  for (var i in clients){
+    clients[i].sendUTF(buffer_forward);
+  }*/
 
   var ws_msg = '';
   var cmd = parseInt(udp_msg[1]);
