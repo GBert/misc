@@ -1,11 +1,12 @@
 const int revisionnr = 
-14058
+14059
 ;
 const char* commithash = 
-"99e29eeb0f1a52ceca9dfd420e8e60204fbe3345";
+"f1b48e588e7567871843e6c63593bc1e5adb63f9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14059 2018-06-28 08:16:56 +0200 mysensors: removed\n" \
 "14058 2018-06-27 11:09:01 +0200 routedlg: reset button added\n" \
 "14057 2018-06-27 09:47:37 +0200 guiapp: merge route node also in case it has no commands or other child nodes\n" \
 "14056 2018-06-27 07:56:06 +0200 blockgroup: default critical section\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14012 2018-06-05 12:05:53 +0200 control: filter swdbsize on useshortid\n" \
 "14011 2018-06-05 12:01:51 +0200 control: determine the swdbsize for WLM only for the useshortid switches\n" \
 "14010 2018-06-05 11:58:52 +0200 switch: useshortid option added\n" \
-"14009 2018-06-05 11:31:35 +0200 virtual: filter out the shortid command\n" \
 
 "log end";
