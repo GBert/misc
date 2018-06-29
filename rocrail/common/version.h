@@ -1,11 +1,12 @@
 const int revisionnr = 
-14059
+14060
 ;
 const char* commithash = 
-"f1b48e588e7567871843e6c63593bc1e5adb63f9";
+"2397d40106614ecddf44cc2b8141a1e0b06c856b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14060 2018-06-29 07:54:33 +0200 control: use the switch model list for checking the save positions to avoid a crash using the map iteration\n" \
 "14059 2018-06-28 08:16:56 +0200 mysensors: removed\n" \
 "14058 2018-06-27 11:09:01 +0200 routedlg: reset button added\n" \
 "14057 2018-06-27 09:47:37 +0200 guiapp: merge route node also in case it has no commands or other child nodes\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14013 2018-06-06 07:59:22 +0200 block: use bidi direction in case auto is off or accept ident and the loco ist auto off\n" \
 "14012 2018-06-05 12:05:53 +0200 control: filter swdbsize on useshortid\n" \
 "14011 2018-06-05 12:01:51 +0200 control: determine the swdbsize for WLM only for the useshortid switches\n" \
-"14010 2018-06-05 11:58:52 +0200 switch: useshortid option added\n" \
 
 "log end";
