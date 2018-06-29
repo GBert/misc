@@ -18,7 +18,7 @@ define Package/maecan-server
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=MaeCAN Server
-  DEPENDS:= +can2udp +php7 +php7-cgi +node
+  DEPENDS:= +can2udp +php7 +php7-cgi +nodejs
 endef
 
 define Package/maecan-server/description
@@ -32,6 +32,9 @@ define Package/maecan-server/install
 	$(INSTALL_DIR) $(1)/www/MaeCAN-Server
 	$(CP) -r ./node $(1)/www/MaeCAN-Server
 	$(CP) -r ./html $(1)/www/MaeCAN-Server
+	$(LN) /www/MaeCAN-Server/html $(1)/www/maecan
+	$(INSTALL_DIR) $(1)/www/MaeCAN-Server/config
+	$(LN) /www/MaeCAN-Server/config $(1)/www/maeconf
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
 	$(INSTALL_DATA) ./files/maecan-server $(1)/etc/uci-defaults/90_maecan_server
 endef
