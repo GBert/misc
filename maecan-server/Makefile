@@ -18,11 +18,16 @@ define Package/maecan-server
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=MaeCAN Server
+ifneq (,$(findstring omega2,$(CONFIG_TARGET_PROFILE)))
   DEPENDS:= +can2udp +php7 +php7-cgi +nodejs
+else
+  DEPENDS:= +can2udp +php7 +php7-cgi +node
+endif
+
 endef
 
 define Package/maecan-server/description
-  MaeCAN Server
+  MaeCAN Server by Maximilian Goldschmidt
 endef
 
 define Build/Compile
