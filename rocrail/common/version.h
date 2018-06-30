@@ -1,11 +1,13 @@
 const int revisionnr = 
-14060
+14062
 ;
 const char* commithash = 
-"2397d40106614ecddf44cc2b8141a1e0b06c856b";
+"b41a87cb6a07e5380cf9e5e4e80c6ec19621df33";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14062 2018-06-30 10:24:03 +0200 translation merge: en_GB\n" \
+"14061 2018-06-30 09:07:13 +0200 actionsctrldlg: stage added to the conditions\n" \
 "14060 2018-06-29 07:54:33 +0200 control: use the switch model list for checking the save positions to avoid a crash using the map iteration\n" \
 "14059 2018-06-28 08:16:56 +0200 mysensors: removed\n" \
 "14058 2018-06-27 11:09:01 +0200 routedlg: reset button added\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14015 2018-06-07 08:14:43 +0200 wmz21: filter event on dirfun to avoid taking over default direction\n" \
 "14014 2018-06-06 14:43:43 +0200 rocnetnode: adjusted the base address for pi08 to 0x60\n" \
 "14013 2018-06-06 07:59:22 +0200 block: use bidi direction in case auto is off or accept ident and the loco ist auto off\n" \
-"14012 2018-06-05 12:05:53 +0200 control: filter swdbsize on useshortid\n" \
-"14011 2018-06-05 12:01:51 +0200 control: determine the swdbsize for WLM only for the useshortid switches\n" \
 
 "log end";
