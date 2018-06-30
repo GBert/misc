@@ -27,6 +27,11 @@ start() {
 		# can2udp -d 15733 -l 15734 -b 127.0.0.1
 		# cd /www/MaeCAN-Server/node && nohup node maecanserver.js 2>&1 > /dev/null &
 	}
+
+	# start MaeCAN can2udp if MaeCAN is installed
+	[ -e /www/MaeCAN-Server/ ] && {
+		can2udp -l 15734 -d 15733
+        }
 }
 
 stop() {

@@ -15,6 +15,11 @@ start() {
 		# can2lan -m -c /www/config -b apcli0
 		# can2lan -m -c /www/config -b br-wlan
 	}
+
+        # start MaeCAN can2udp if MaeCAN is installed
+	[ -e /www/MaeCAN-Server/ ] && {
+		can2udp -l 15734 -d 15733
+	}
 }
 
 stop() {
