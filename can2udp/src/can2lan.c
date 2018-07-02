@@ -919,7 +919,7 @@ int main(int argc, char **argv) {
 					print_can_frame(TCP_FORMAT_STRG, &netframe[i], cs2_config_data.verbose && !background);
 				}
 				net_to_net(sb, (struct sockaddr *)&baddr, &netframe[i], CAN_ENCAP_SIZE);
-				print_can_frame(UDP_FORMAT_STRG, netframe, cs2_config_data.verbose && !background);
+				print_can_frame(UDP_FORMAT_STRG, &netframe[i], cs2_config_data.verbose && !background);
 			    }
 			}
 		    }
