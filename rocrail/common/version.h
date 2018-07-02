@@ -1,11 +1,15 @@
 const int revisionnr = 
-14062
+14066
 ;
 const char* commithash = 
-"b41a87cb6a07e5380cf9e5e4e80c6ec19621df33";
+"c1c88534f2b5592acb5d2d04d80e4a7b0814c59b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14066 2018-07-02 13:06:41 +0200 switch: fixed the route pause for dual motor switches\n" \
+"14065 2018-07-02 08:00:16 +0200 block: check for state acceptghost\n" \
+"14064 2018-07-02 07:55:04 +0200 block: start/stopacceptghost commands/actions added\n" \
+"14063 2018-07-01 08:13:30 +0200 loc: skip speed command for consist members in case the loco is paused\n" \
 "14062 2018-06-30 10:24:03 +0200 translation merge: en_GB\n" \
 "14061 2018-06-30 09:07:13 +0200 actionsctrldlg: stage added to the conditions\n" \
 "14060 2018-06-29 07:54:33 +0200 control: use the switch model list for checking the save positions to avoid a crash using the map iteration\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "14019 2018-06-08 07:42:06 +0200 wmz21: use number for switch address in cass of A2ID mapping and shortids\n" \
 "14018 2018-06-07 11:16:44 +0200 app: take over the modified analyser options on the fly\n" \
 "14017 2018-06-07 10:39:42 +0200 rocview: show analyser traces in the server window\n" \
-"14016 2018-06-07 09:44:53 +0200 rocrailinidialog: added trace level analyser\n" \
-"14015 2018-06-07 08:14:43 +0200 wmz21: filter event on dirfun to avoid taking over default direction\n" \
-"14014 2018-06-06 14:43:43 +0200 rocnetnode: adjusted the base address for pi08 to 0x60\n" \
-"14013 2018-06-06 07:59:22 +0200 block: use bidi direction in case auto is off or accept ident and the loco ist auto off\n" \
 
 "log end";
