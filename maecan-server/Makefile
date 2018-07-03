@@ -18,10 +18,7 @@ define Package/maecan-server
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=MaeCAN Server
-ifneq (,$(findstring omega2,$(CONFIG_TARGET_PROFILE)))
-  DEPENDS:= +can2udp +php7 +php7-cgi +nodejs
-else
-  DEPENDS:= +can2udp +php7 +php7-cgi +node
+  DEPENDS:= +can2udp +php7 +php7-cgi
 endif
 
 endef
