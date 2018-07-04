@@ -1,11 +1,17 @@
 const int revisionnr = 
-14066
+14072
 ;
 const char* commithash = 
-"c1c88534f2b5592acb5d2d04d80e4a7b0814c59b";
+"42794ae638e05a3c5d8820e23478787b10c45f70";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14072 2018-07-04 15:23:12 +0200 throttledlg: no border around the loco image\n" \
+"14071 2018-07-04 14:24:51 +0200 throttledlg: fix for restore size and position\n" \
+"14070 2018-07-04 13:50:41 +0200 slider: fix for resize and update current thumb position\n" \
+"14069 2018-07-04 12:10:25 +0200 slider: fix for resizing and value range\n" \
+"14068 2018-07-04 10:46:02 +0200 throttledlg: smaller and better resizing\n" \
+"14067 2018-07-03 13:19:48 +0200 switch: traces added for pause and delay timing\n" \
 "14066 2018-07-02 13:06:41 +0200 switch: fixed the route pause for dual motor switches\n" \
 "14065 2018-07-02 08:00:16 +0200 block: check for state acceptghost\n" \
 "14064 2018-07-02 07:55:04 +0200 block: start/stopacceptghost commands/actions added\n" \
@@ -50,11 +56,5 @@ const char* revlog =
 "14025 2018-06-10 10:13:43 +0200 route-,signal-,switchdialog: fix for CTC bus number evaluation and presentation\n" \
 "14024 2018-06-10 07:41:56 +0200 ecos: work around for the ecos detector\n" \
 "14023 2018-06-09 07:21:33 +0200 block: regard bidi direction in case the loco runs in halfautomatic mode\n" \
-"14022 2018-06-08 13:50:56 +0200 mysensors: wip\n" \
-"14021 2018-06-08 13:47:52 +0200 app: trace correction on ini changes\n" \
-"14020 2018-06-08 08:27:35 +0200 enter: check schedule entry actions correction in case no dest found and no swap\n" \
-"14019 2018-06-08 07:42:06 +0200 wmz21: use number for switch address in cass of A2ID mapping and shortids\n" \
-"14018 2018-06-07 11:16:44 +0200 app: take over the modified analyser options on the fly\n" \
-"14017 2018-06-07 10:39:42 +0200 rocview: show analyser traces in the server window\n" \
 
 "log end";
