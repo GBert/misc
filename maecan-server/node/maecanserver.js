@@ -492,11 +492,15 @@ function buildLocoStringForCS2(loco, is_cs2_locolist){
 
     if (loco.functions && !is_cs2_locolist) {
       for (let i = 0; i < loco.functions.length; i++) {
-        loco_string += "\x0a .fkt\x0a ..nr=" + i + "\x0a ..typ=" + loco.functions[i].toString();
+        let loco_function = "0";
+        if (!(typeof loco.functions[i].toString() === "undefined")) loco_function = loco.functions[i].toString();
+        loco_string += "\x0a .fkt\x0a ..nr=" + i + "\x0a ..typ=" + loco_function;
       }
     } else if(loco.functions && is_cs2_locolist) {
       for (let i = 0; i < loco.functions.length; i++) {
-        loco_string += "\x0a .funktionen\x0a ..nr=" + i + "\x0a ..typ=" + loco.functions[i].toString();
+        let loco_function = "0";
+        if (!(typeof loco.functions[i].toString() === "undefined")) loco_function = loco.functions[i].toString();
+        loco_string += "\x0a .funktionen\x0a ..nr=" + i + "\x0a ..typ=" + loco_function;
       }
     }
 
@@ -516,7 +520,7 @@ function exportCS2Locolist(locolist){
     locolist_string += buildLocoStringForCS2(locolist[i], true);
   }
   
-  fs.writeFile('../html/config/lokomotive.cs2', locolist_string, () => {
+  fs.writeFile('/www/config/lokomotive.cs2', locolist_string, () => {
     console.log('Exported Lokomotive.cs2');
   });
 }
@@ -793,13 +797,18 @@ function processMfxBuffer() {
               }
             }
             locolist[index] = temp_mfx_loco;
+            
             fs.writeFile('../html/config/locolist.json', JSON.stringify(locolist, null, 2), function(){
               console.log('Updating loco ' + temp_mfx_loco.name);
-              exportCS2Locolist(locolist);
-              for (var i in clients){
-                clients[i].sendUTF("updateLocolist");
-                clients[i].sendUTF(`foundMfx:${temp_mfx_loco.name}`);
-              }
+
+              setTimeout(()=> {
+                exportCS2Locolist(locolist);
+                for (var i in clients){
+                  clients[i].sendUTF("updateLocolist");
+                  clients[i].sendUTF(`foundMfx:${temp_mfx_loco.name}`);
+                }
+              }, 500)
+                
               temp_mfx_loco = {};
             }); 
           }

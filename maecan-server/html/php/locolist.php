@@ -48,7 +48,7 @@
 				<option id="dcc" value="dcc">DCC</option>
 				<option id="mm_prog" value="mm_prog">Motorola (Programmierbar)</option>
 				<option id="mm_dil8" value="mm_dil8">Mototola (Kodierschalter)</option>
-				<option id="mfx" value="mfx" disabled>MFX</option>
+				<option id="mfx" value="mfx" disabled>mfx/M4</option>
 			</select>
 			<!--
 			<p>Fahrstufen:</p>

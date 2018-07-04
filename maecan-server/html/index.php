@@ -231,7 +231,7 @@
 
 			function mfxAlert(name){
 				showAlertbox(mfx);
-				mfx_p.innerHTML = 'MFX/M4-Lok "' + name + '" wurde der Lokliste hinzugefügt!';
+				mfx_p.innerHTML = 'mfx/M4-Lok "' + name + '" wurde der Lokliste hinzugefügt!';
 			}
 
 			function delLocoAlert(index, name){

@@ -100,7 +100,7 @@
 			<div class="button protocol_button">mfx</div>
 		</div>
 		<h2>MFX/M4:</h2>
-		<div class="button" id="set_naz">Neuanmeldezäler setzen</div>
+		<div class="button" id="set_naz">Neuanmeldezähler setzen</div>
 
 	</div>
 </div>
