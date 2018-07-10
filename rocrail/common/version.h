@@ -1,11 +1,21 @@
 const int revisionnr = 
-14072
+14082
 ;
 const char* commithash = 
-"42794ae638e05a3c5d8820e23478787b10c45f70";
+"74e12e2ab5a0eaf0eb786ae23a996dc60f90aa33";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14082 2018-07-09 15:09:49 +0200 guiframe, rocrailinidlg: info level moved to user\n" \
+"14081 2018-07-09 07:41:55 +0200 guiframe: rocrail trace menu order changed to resemble the dialog\n" \
+"14080 2018-07-08 10:58:30 +0200 throttle, ledbutton, slider: check minimal size before paint\n" \
+"14079 2018-07-08 10:10:31 +0200 rocview: option for pause at stop rocview: rocrail trace menu\n" \
+"14078 2018-07-08 07:44:44 +0200 throttledlg: set absolute min size\n" \
+"14077 2018-07-07 15:54:31 +0200 throttledlg: fix for for default dialog size\n" \
+"14076 2018-07-07 14:24:03 +0200 throttledlg: no resize in case another loco is selected\n" \
+"14075 2018-07-06 10:09:27 +0200 locdialog: SBT export/import added\n" \
+"14074 2018-07-06 09:59:22 +0200 guiframe: fix for restoring throttle size and position\n" \
+"14073 2018-07-06 08:18:13 +0200 slider: fix for calculating the new value\n" \
 "14072 2018-07-04 15:23:12 +0200 throttledlg: no border around the loco image\n" \
 "14071 2018-07-04 14:24:51 +0200 throttledlg: fix for restore size and position\n" \
 "14070 2018-07-04 13:50:41 +0200 slider: fix for resize and update current thumb position\n" \
@@ -46,15 +56,5 @@ const char* revlog =
 "14035 2018-06-13 08:03:10 +0200 item,planpanel: check if the window has mouse capture before releasing the mouse\n" \
 "14034 2018-06-12 17:14:12 +0200 translation merge: es, sl, sr_latin, de, fr, pt_BR, nl\n" \
 "14033 2018-06-12 16:53:06 +0200 loc: take over V_cru in case of modify in auto mode\n" \
-"14032 2018-06-12 08:11:33 +0200 fback: broadcast the original properties on modify\n" \
-"14031 2018-06-11 19:24:36 +0200 fback: fixes for broadcast event without IID\n" \
-"14030 2018-06-11 11:55:17 +0200 p.o. box replaced with real address\n" \
-"14029 2018-06-11 07:58:10 +0200 bididir: disable at auto option added\n" \
-"14028 2018-06-11 07:31:14 +0200 print: disable DC user scale\n" \
-"14027 2018-06-10 13:49:07 +0200 item: regard stop state for state signals\n" \
-"14026 2018-06-10 10:31:51 +0200 switchdialog: bus presentation and evaluatioon correction frog\n" \
-"14025 2018-06-10 10:13:43 +0200 route-,signal-,switchdialog: fix for CTC bus number evaluation and presentation\n" \
-"14024 2018-06-10 07:41:56 +0200 ecos: work around for the ecos detector\n" \
-"14023 2018-06-09 07:21:33 +0200 block: regard bidi direction in case the loco runs in halfautomatic mode\n" \
 
 "log end";
