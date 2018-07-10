@@ -1,11 +1,14 @@
 const int revisionnr = 
-14082
+14085
 ;
 const char* commithash = 
-"74e12e2ab5a0eaf0eb786ae23a996dc60f90aa33";
+"3b3aace10a9549665738fa0ca43085331d820e3e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14085 2018-07-10 08:35:05 +0200 switch: only use delay in case of two switch motors\n" \
+"14084 2018-07-10 08:32:10 +0200 loc: fix for ignore IN event in case of BBT genrate IN\n" \
+"14083 2018-07-10 08:05:43 +0200 blockgroup: not calling goto block in case the reserving loco runs with a schedule\n" \
 "14082 2018-07-09 15:09:49 +0200 guiframe, rocrailinidlg: info level moved to user\n" \
 "14081 2018-07-09 07:41:55 +0200 guiframe: rocrail trace menu order changed to resemble the dialog\n" \
 "14080 2018-07-08 10:58:30 +0200 throttle, ledbutton, slider: check minimal size before paint\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "14038 2018-06-16 11:31:50 +0200 blockgroup: condition option schedule added\n" \
 "14037 2018-06-13 10:22:25 +0200 lcdriver: set the run flag to true in case of a gogo command\n" \
 "14036 2018-06-13 09:25:56 +0200 lcdriver: fix for isRun in case phase is not IDLE\n" \
-"14035 2018-06-13 08:03:10 +0200 item,planpanel: check if the window has mouse capture before releasing the mouse\n" \
-"14034 2018-06-12 17:14:12 +0200 translation merge: es, sl, sr_latin, de, fr, pt_BR, nl\n" \
-"14033 2018-06-12 16:53:06 +0200 loc: take over V_cru in case of modify in auto mode\n" \
 
 "log end";
