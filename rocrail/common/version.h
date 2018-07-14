@@ -1,11 +1,15 @@
 const int revisionnr = 
-14085
+14089
 ;
 const char* commithash = 
-"3b3aace10a9549665738fa0ca43085331d820e3e";
+"4b0c0d6e4bb63c17a529d9b13911b858da58046c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14089 2018-07-12 09:22:39 +0200 modplan: merge node attributes from the rt.xml\n" \
+"14088 2018-07-11 15:48:42 +0200 mkrpm.sh: update\n" \
+"14087 2018-07-11 09:05:44 +0200 translation merge: nl, de, pt_BR, en_GB\n" \
+"14086 2018-07-11 08:10:25 +0200 model: fix for getSwitchList return type\n" \
 "14085 2018-07-10 08:35:05 +0200 switch: only use delay in case of two switch motors\n" \
 "14084 2018-07-10 08:32:10 +0200 loc: fix for ignore IN event in case of BBT genrate IN\n" \
 "14083 2018-07-10 08:05:43 +0200 blockgroup: not calling goto block in case the reserving loco runs with a schedule\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "14042 2018-06-18 09:40:43 +0200 ecos: fix for reporting correct PADA switch address\n" \
 "14041 2018-06-18 07:40:09 +0200 blockgroupingdlg: translation fix for condition schedule\n" \
 "14040 2018-06-17 07:46:38 +0200 ecos: crash fix for tracing the protver as string...\n" \
-"14039 2018-06-16 11:41:54 +0200 blockgroupingdlg: show condition column schedule\n" \
-"14038 2018-06-16 11:31:50 +0200 blockgroup: condition option schedule added\n" \
-"14037 2018-06-13 10:22:25 +0200 lcdriver: set the run flag to true in case of a gogo command\n" \
-"14036 2018-06-13 09:25:56 +0200 lcdriver: fix for isRun in case phase is not IDLE\n" \
 
 "log end";
