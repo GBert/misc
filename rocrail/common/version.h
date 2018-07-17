@@ -1,11 +1,13 @@
 const int revisionnr = 
-14089
+14091
 ;
 const char* commithash = 
-"4b0c0d6e4bb63c17a529d9b13911b858da58046c";
+"00624fe5182b48efc1c81166a757c3f25c9f1c6a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14091 2018-07-16 08:48:03 +0200 zimocan: trace level corrections\n" \
+"14090 2018-07-16 07:59:19 +0200 zimocan: support for sensor module range 0xD000-0xDFFF added\n" \
 "14089 2018-07-12 09:22:39 +0200 modplan: merge node attributes from the rt.xml\n" \
 "14088 2018-07-11 15:48:42 +0200 mkrpm.sh: update\n" \
 "14087 2018-07-11 09:05:44 +0200 translation merge: nl, de, pt_BR, en_GB\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14044 2018-06-21 08:16:18 +0200 block: copy the lock ID string to avoid loosing it with temp. IDs\n" \
 "14043 2018-06-19 10:01:33 +0200 rfbooster: ignore upper/lower case for evaluating car events\n" \
 "14042 2018-06-18 09:40:43 +0200 ecos: fix for reporting correct PADA switch address\n" \
-"14041 2018-06-18 07:40:09 +0200 blockgroupingdlg: translation fix for condition schedule\n" \
-"14040 2018-06-17 07:46:38 +0200 ecos: crash fix for tracing the protver as string...\n" \
 
 "log end";
