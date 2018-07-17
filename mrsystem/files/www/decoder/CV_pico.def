@@ -1,0 +1,14 @@
+//CV_pico.def
+//CV-Parameter fuer Loks: definitions
+//last change: 06.02.2016
+//put type in quotes here if value has to quoted in config file
+//name type range description
+CV6 int "1 255" "Mittlere Spannung: Definiert die Fahrspannung, die bei mittlerer Fahrstufe am Motor anliegt."
+CV7 int "1 255" "Versionsnummer: Gibt die Versionsnummer der Decoder-Software an. JMRI hat eine &Uuml;bersicht."
+CV8 int "0 255" "Herstellerkennung: see Appendix zur 9.2.2 der NMRA"
+CV9 int "0 255" "PWM-Periode: Die am Motor anliegende Spannung wird durch eine Pulsweitenmodulation (Ein- und Ausschalten der Maximal-Spannung) erzeugt. Die Intervalle zwischen den Einschaltpunkten ist die PWM-Periode. Durch Ver&auml;ndern kann die Laufeigenschaft des Motors optimiert werden."
+CV17 int "192 255" "Erweiterte Adresse Hi: wird mit CV18 zur erweiterten Adresse (1-10239) verrechnet"
+CV18 int "0 255" "Erweiterte Adresse Lo: wird mit CV17 zur erweiterten Adresse (1-10239) verrechnet"
+CV19 int "0 127" "Consist-Adresse: Definiert die alternative (zweite Adresse) des Decoders."
+CV28 bits "BiDi1 BiDi2 dynamic res. PA253 res. ? railcom+" "Konfigurationsdaten f&uuml;r BiDi: Definiert das Verhalten bei BiDi. Damit diese Einstellungen wirken, muﬂ Bit 3 in CV29 eingeschaltet sein."
+

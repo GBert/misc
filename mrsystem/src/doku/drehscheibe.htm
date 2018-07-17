@@ -1,9 +1,12 @@
 <HTML>
 <HEAD>
+<LINK HREF="../../mrsystem.css" REL="stylesheet">
 <TITLE>Drehscheibe</TITLE>
 </HEAD>
 <BODY>
+<DIV CLASS="odiv">
 <H1>Drehscheibe</H1>
+</DIV>
 <P>
 <H2>Daemon</H2>
 <P>
@@ -19,6 +22,8 @@ Kommandozeilenparameter sind:
 <TABLE BORDER="1">
 <TR><TH>Parameter</TH><TH>Beschreibung</TH></TR>
 <TR><TD>-a &lt;addr&gt;</TD><TD>Adresse, auf der auf Verbindungen von clients gewaret wird</TD></TR>
+<TR><TD>-i &lt;iface&gt;</TD><TD>Interface, auf dem auf Verbindungen von anderen
+Clients zu drehscheibe gewartet wird.</TD></TR>
 <TR><TD>-p &lt;port&gt;</TD><TD>Port, auf der auf Verbindungen von clients gewaret wird</TD></TR>
 <TR><TD>-f</TD><TD>optional, im Vordergrund starten (don't fork)</TD></TR>
 <TR><TD>-v</TD><TD>optional, mit zus&auml;tzluchen Ausgaben (verbose) starten</TD><TD>

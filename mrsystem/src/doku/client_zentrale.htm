@@ -1,9 +1,12 @@
 <HTML>
 <HEAD>
+<LINK HREF="../../mrsystem.css" REL="stylesheet">
 <TITLE>Client_ZENTRALE</TITLE>
 </HEAD>
 <BODY>
+<DIV CLASS="odiv">
 <H1>Client_ZENTRALE</H1>
+</DIV>
 <P>
 <H2>Daemon</H2>
 <P>
@@ -18,11 +21,31 @@ Kommandozeilenparameter sind:
 <P>
 <TABLE BORDER="1">
 <TR><TH>Parameter</TH><TH>Beschreibung</TH></TR>
-<TR><TD>-a &lt;addr&gt;</TD><TD>Adresse der Servers, mit dem eine Verbindung aufgebaut weden soll</TD></TR>
-<TR><TD>-p &lt;port&gt;</TD><TD>Port der Servers, mit dem eine Verbindung aufgebaut weden soll</TD></TR>
+<TR><TD>-a &lt;addr&gt;</TD><TD>Adresse der Servers, mit dem eine Verbindung
+aufgebaut weden soll</TD></TR>
+<TR><TD>-i &lt;iface&gt;</TD><TD>Interface, auf dem auf Verbindungen von
+anderen Clients zu drehscheibe gewartet wird.</TD></TR>
+<TR><TD>-p &lt;port&gt;</TD><TD>Port der Servers, mit dem eine Verbindung
+aufgebaut weden soll</TD></TR>
+<TR><TD>-z &lt;zentrale&gt;</TD><TD>0=proxy mode, 1=ethernet addon f&uuml;r
+ms2</TD></TR>
 <TR><TD>-f</TD><TD>optional, im Vordergrund starten (don't fork)</TD></TR>
-<TR><TD>-v</TD><TD>optional, mit zus&auml;tzlichen Ausgaben (verbose) starten</TD><TD>
-<TR><TD>-l path</TD><TD>optional, Pfad unter dem lokomotive.cs2 gespeichert werden soll</TD><TD>
+<TR><TD>-k</TD><TD>optional, Anzahl Lokfunktionen, die in die *.cs2 bzw *.csr
+Datei geschrieben werden sollen.</TD></TR>
+<TR><TD>-v</TD><TD>optional, mit zus&auml;tzlichen Ausgaben (verbose)
+starten</TD><TD>
+<TR><TD>-l path</TD><TD>optional, Pfad unter dem lokomotive.cs2 gespeichert
+werden soll</TD><TD>
+<TR><TD>-s &lt;proto&gt;</TD><TD>Bitmaske f&uuml;r das Gleisrotokoll,
+1=motorola, 2=mfx, 4=dcc</TD><TD>
+<TR><TD>-g</TD><TD>System Start, Gleissignal einschalten</TD><TD>
+<TR><TD>-2 &lt;syncmask&gt;</TD><TD>Bitmaske, welche Daten periodisch von einer
+Master CS2 / MS2 abgefragt werden sollen, 1=periodisches Pollen, 2==keybd,
+2=layout 3=mem 4=contr</TD><TD>
+<TR><TD>-8 &lt;param&gt;</TD><TD>Start s88 Module, Der Parameter ist der
+gleiche wie f&uuml;r das wakeup-links-88 from G.B.</TD><TD>
+<TR><TD>-k &lt;num_lokfkt&gt;</TD><TD>Anzahl der Lokfunktionen, die in die
+lokomotive.cs2 geschrieben werden.</TD><TD>
 <TR><TD>-?</TD><TD>optional, gibt eine kurze Hilfe aus</TD></TR>
 </TABLE>
 <P>

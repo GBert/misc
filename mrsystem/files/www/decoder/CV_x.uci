@@ -1,0 +1,10 @@
+//CV_x.uci
+// cfg list for decoders
+//last change: 25.01.2016
+cfgname = decoder
+//define type of selector (one of "but", "tab" or "sel"), "but" is used as default if nothing is defined
+seltype = sel
+
+// tabtext cfg-file definitions-file (optionally quoted)
+M&auml;rklin ./decoder/CV_maerklin.cfg ./decoder/CV_maerklin.def
+Pico ./decoder/CV_pico.cfg ./decoder/CV_pico.def

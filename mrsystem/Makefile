@@ -56,7 +56,7 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client_log/mrlog $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client_logms2/mrlogms2 $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client_ms2/mrms2 $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client_zentrale/mrzentrale $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client_zentrale/release/mrzentrale $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/root
 	$(CP) ./files/mrsystem.init $(1)/root/
 	$(INSTALL_DIR) $(1)/etc

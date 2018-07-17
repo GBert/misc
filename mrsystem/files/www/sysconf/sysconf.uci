@@ -1,0 +1,13 @@
+//sysconf.uci
+// cfg list for system configuration
+//last change: 25.01.2016
+cfgname = sysconfig
+//define type of selector (one of "but", "tab" or "sel"), "but" is used as default if nothing is defined
+seltype = tab
+
+// tabtext cfg-file definitions-file (optionally quoted)
+MR-System ./sysconf/mrsystem.cfg ./sysconf/mrsystem.def
+Update ./sysconf/update.cfg ./sysconf/update.def
+Linux ./sysconf/linux.cfg ./sysconf/linux.def
+Start ./sysconf/daemons.cfg ./sysconf/daemons.def
+Neustart ./sysconf/reboot.cfg ./sysconf/reboot.def

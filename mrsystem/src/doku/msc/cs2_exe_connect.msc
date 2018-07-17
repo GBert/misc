@@ -1,0 +1,19 @@
+msc {
+   CS2, cs2exe;
+
+   CS2 box CS2 [ label = "CS2" ],
+   cs2exe box cs2exe [ label = "cs2.exe" ];
+   cs2exe->CS2 [ label = "ping member" ];
+   CS2->cs2exe [ label = "ping member request" ];
+   cs2exe->CS2 [ label = "http get config/geraet.csr" ];
+   CS2->cs2exe [ label = "http data config/geraet.csr" ];
+   cs2exe->CS2 [ label = "CAN Anfordern Config Data (lokomotive.cs2)" ];
+   CS2->cs2exe [ label = "CAN Anfordern Config Data (lokomotive.cs2) Response" ];
+   CS2->cs2exe [ label = "CAN Config Data (DLC=6)" ];
+   CS2->cs2exe [ label = "CAN Config Data (DLC=8)" ];
+   ...;
+   CS2->cs2exe [ label = "CAN Config Data (DLC=8)" ];
+   ...;
+   --- [ label = "Uebertragung weiterer *.cs2 Dateien" ];
+   CS2 abox cs2exe [ label = "cs2 master connected to cs2 master" ];
+}

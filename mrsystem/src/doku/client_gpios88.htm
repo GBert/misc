@@ -1,0 +1,44 @@
+<HTML>
+<HEAD>
+<LINK HREF="../../mrsystem.css" REL="stylesheet">
+<TITLE>Client_GPIOS88</TITLE>
+</HEAD>
+<BODY>
+<DIV CLASS="odiv">
+<H1>Client_GPIOS88</H1>
+</DIV>
+<P>
+<H2>Daemon</H2>
+<P>
+<TABLE BORDER="1">
+<TR><TH>Daemon</TH><TD>mrgpios88</TD></TR>
+<TR><TH>Projekt</TH><TD>client_gpios88</TD></TR>
+</TABLE>
+<P>
+<H2>Parameter</H2>
+<P>
+Kommandozeilenparameter sind:
+<P>
+<TABLE BORDER="1">
+<TR><TH>Parameter</TH><TH>Beschreibung</TH></TR>
+<TR><TD>-b &lt;bcast_addr/int&gt;</TD><TD>broadcast address or interface -
+default 255.255.255.255/br-lan</TD></TR>
+<TR><TD>-i [0|1]</TD><TD>invert signals - default 0 -> not inverting</TD></TR>
+<TR><TD>-d &lt;event id&gt;</TD><TD>using event id - default 0</TD></TR>
+<TR><TD>-e &lt;hash&gt;</TD><TD>using CAN <hash></TD></TR>
+<TR><TD>-m &lt;s88modules&gt;</TD><TD>number of connected S88 modules -
+default 1</TD></TR>
+<TR><TD>-o &lt;offset&gt;</TD><TD>addressing offset - default 0</TD></TR>
+<TR><TD>-s &lt;port&gt;</TD><TD>second destination port of the server</TD></TR>
+<TR><TD>-t &lt;time in usec&gt;</TD><TD>microtiming in usec -
+default 15 usec</TD></TR>
+<TR><TD>-f</TD><TD>run in foreground (for debugging)</TD></TR>
+<TR><TD>-v</TD><TD>be verbose</TD></TR>
+</TABLE>
+<P>
+<H2>Beschreibung</H2>
+<P>
+Der Daemon <VAR>mrgpios88</VAR> fragt auf dem BPi &uuml;ber GPIOs
+R&uuml;ckmelder auf dem den S88 Bus von M&auml;rklin ab.
+</BODY>
+</HTML>

@@ -1,9 +1,12 @@
 <HTML>
 <HEAD>
+<LINK HREF="../../mrsystem.css" REL="stylesheet">
 <TITLE>Erg&auml;nzungen</TITLE>
 </HEAD>
 <BODY>
+<DIV CLASS="odiv">
 <H1>Erg&auml;nzungen</H1>
+</DIV>
 <P>
 <H2>CAN Bootloader 0x1B</H2>
 <P>
@@ -165,20 +168,31 @@ Data Stream Nachricht mit 7 Bytes L&auml;nge wird &uuml;ber s&auml;mtliche
 Daten inclusive der unkomprimierten L&auml;nge und der F&uuml;llbytes
 berechnet.
 <P>
-Die CAN Prio der Datennpakete mu&szlig; auf 0 gesetzt werden! Obwohl die Prio
-als nicht ma%&zlig;geblich f&uuml;r die Kommandoauswertung definiert ist und
+Die CAN Prio der Datenpakete mu&szlig; auf 0 gesetzt werden! Obwohl die Prio
+als nicht ma&zlig;geblich f&uuml;r die Kommandoauswertung definiert ist und
 die Daten mit geringer Prio gesendet werden sollen.
 <P>
 <H2>Ger&auml;te-ID in Ping Nachricht</H2>
 <P>
-Die CS2 hat die Ger&auml;teid 0xeeee.<BR>
-Die cs2.exe hat die Ger&auml;teid 0xfff0.
+Die cs2.exe hat die Ger&auml;teid 0xeeee. Die MS2 hat laut Doku die ID 0x0030,
+meldet sich aber in meinem Trace mit 0x0032.
 <P>
-<H2>Ping der cs2.exe</H2>
+<H2>cs2.exe</H2>
 <P>
 Die cs2.exe kann auch statt einem Ping Request eine Ping Antwort senden. Um
-eine CS2 zu emulieren, sollte auf beide Nachrichten eine eigene Ping Antwort
-geschickt werden.
+eine CS2 zu emulieren, sollte auf beide Nachrichten eine eigener Ping Request
+geschickt werden. Die cs2.exe im slave Mode erkennt anscheinend eine CS2 Master
+&uuml;ber eine Heuristik. Wenn mit dem Ping Request die CAN Members abgefragt
+werden, gibt es eine CS2 Master.
+<P>
+Wenn eine CS2 einen Ping Request schickt, versucht die cs2.exe die Datei
+<VAR>geraet.vrs</VAR> per http aus dem Verzeichnis <VAR>config</VAR> zu
+laden.
+<P>
+Anschlie&szlig;end versucht die cs2.exe die *.cs2 Dateien und dazu die
+Stausdateien *.sr2 per CAN Frames zu laden.
+<P>
+<IMG SRC="cs2_exe_connect.png">
 <P>
 <H2>MS2 als Slave</H2>
 <P>
@@ -199,10 +213,19 @@ in den Binaries ist wie folgt:
 <TR><TD>050-ms2.bin</TD><TD>Version an Byte 253 ( .vhigh) und 254 (.vlow)</TD></TR>
 </TABLE>
 <P>
+<H2>Anmerkungen zu den *.cs2 Dateien</H2>
+<P>
+<H3>lokomotive.cs2</H3>
+<P>
+Die App <VAR>RemoteCS2</VAR> erwartet in der <VAR>lokomotive.cs2</VAR> in
+jedem Datensatz einer Lokomotive zuerst das Feld mit dem Namen, da dies
+eindeutig ist und als Key verwendet werden kann. Diese Eigenschaft ist nicht
+aus der Beschreibung von M&auml;rklin ableitbar!
+<P>
 <H2>Editor in cs2.exe als Slave</H2>
 <P>
 L&auml;uft die cs2.exe als Slave, so fordert sie die *.cs2 Daten von einer
-Master CS2 an. Die empfangenen Dateien k&oml;nnen auch auf der cs2.exe
+Master CS2 an. Die empfangenen Dateien k&ouml;nnen auch auf der cs2.exe
 editiert werden. Wenn die &Auml;nderung quitiert wird, wendet die cs2 den
 ge&auml;nderten Block im Format der entsprechenden cs2-Datei (mit Paragraph
 als Kennung) zur&uuml;ck. Die Gleisbilder bekommen dabei als Paragraph die
@@ -235,5 +258,177 @@ werden immer s&auml;tliche Gleisbildpages &uuml;bertragen.
 <P>
 Die Gleibildepages werden mit der Kennung "<VAR>[gleisbildseite]</VAR>"
 geschickt. Eine Gleisbildseite wird immer komplett &uuml;bertragen.
+<P>
+<H2>Statusdateien</H2>
+<P>
+Der Syntax der Statusdateien ist an den Syntax der entsprechenden
+Konfigurationsdatei angelehnt und enth&auml;lt neben dem Schl&uuml;ssel auch
+den Wert. Wenn der Wert nicht bekannt ist oder auf dem Default sitzt, kann der
+Wert auch entfallen.
+<P>
+<H3>Lokstatus</H3>
+<P>
+Der Lokstatus wird in der Datei <VAR>lokstatus.sr2</VAR> gespeichert. Die Datei
+wird anscheinend erst wenn sie angefordert wird, erzeugt. Der Syntax ist an den
+der <VAR>lokomotive.cs2</VAR> angelehnt. Es ist ein Eintrag f&uuml;r jede Lok
+vorhanden. Pro Lok ist ein Eintrag pro Funktion enthalten. Auch wenn diese
+Eintr&auml;ge keinen Wert enthalten. Ein Ausschnitt aus der Datei:
+<P>
+<PRE>
+[lokstatus]
+version
+ .minor=4
+lokomotive
+ .name=ELOK
+ .funktionen
+ ..nr=0
+ .funktionen
+ ..nr=1
+ .funktionen
+ ..nr=2
+ .funktionen
+ ..nr=3
+ .funktionen
+ ..nr=4
+ .funktionen
+ ..nr=5
+ .funktionen
+ ..nr=6
+ .funktionen
+ ..nr=7
+ .funktionen
+ ..nr=8
+ .funktionen
+ ..nr=9
+ .funktionen
+ ..nr=10
+ .funktionen
+ ..nr=11
+ .funktionen
+ ..nr=12
+ .funktionen
+ ..nr=13
+ .funktionen
+ ..nr=14
+ .funktionen
+ ..nr=15
+lokomotive
+ .name=218 245-9 DB
+ .velocity=49
+ .richtung=1
+ .funktionen
+ ..nr=0
+ ..wert=1
+ .funktionen
+ ..nr=1
+ .funktionen
+ ..nr=2
+ .funktionen
+ ..nr=3
+ .funktionen
+ ..nr=4
+ .funktionen
+ ..nr=5
+ .funktionen
+ ..nr=6
+ .funktionen
+ ..nr=7
+ .funktionen
+ ..nr=8
+ .funktionen
+ ..nr=9
+ .funktionen
+ ..nr=10
+ .funktionen
+ ..nr=11
+ .funktionen
+ ..nr=12
+ .funktionen
+ ..nr=13
+ .funktionen
+ ..nr=14
+ .funktionen
+ ..nr=15
+</PRE>
+<P>
+<H3>Magnetartikelstatus</H3>
+<P>
+Der Magnetartikelstatus wird in der Datei <VAR>magnetartikel.sr2</VAR>
+gespeichert. Die Datei wird anscheinend erst wenn sie angefordert wird,
+erzeugt. Der Syntax ist an den der <VAR>magnetartikel.cs2</VAR> angelehnt. Es
+ist ein Eintrag f&uuml;r jeden Magnetartikel vorhanden. Auch wenn diese
+Eintr&auml;ge keinen Wert enthalten. Ein Ausschnitt aus der Datei:
+<P>
+<PRE>
+[magnetartikel]
+version
+ .minor=2
+artikel
+ .id=1
+ .stellung=1
+artikel
+ .id=2
+ .stellung=1
+artikel
+ .id=3
+ .stellung=1
+artikel
+ .id=4
+artikel
+ .id=5
+artikel
+ .id=6
+ .stellung=1
+........
+artikel
+ .id=193
+ .stellung=3
+</PRE>
+<P>
+<H3>Fahrstrassenstatus</H3>
+<P>
+Der Fahrstrassenstatus wird in der Datei <VAR>fahrstrassen.sr2</VAR>
+gespeichert. Die Datei wird anscheinend erst wenn sie angefordert wird,
+erzeugt. Der Syntax ist an den der <VAR>fahrstrassen.cs2</VAR> angelehnt. Es
+ist ein Eintrag f&uuml;r jeden Fahrstrasse vorhanden. Auch wenn diese
+Eintr&auml;ge keinen Wert enthalten. Ein Ausschnitt aus der Datei:
+<P>
+<PRE>
+[fahrstrassen]
+version
+ .minor=4
+fahrstrasse
+ .id=17
+ .on=1
+fahrstrasse
+ .id=25
+</PRE>
+<P>
+<H3>Gleisbildstatus</H3>
+<P>
+Der Gleisbildstatus wird in der Datei <VAR>gleisbild.sr2</VAR> gespeichert. Die
+Datei wird anscheinend erst wenn sie angefordert wird, erzeugt. Der Syntax ist
+an den der <VAR>gleisbild.cs2</VAR> angelehnt. Es ist ein Eintrag f&uuml;r
+jedes Element vorhanden. Auch wenn diese Eintr&auml;ge keinen Wert enthalten.
+Ein Ausschnitt aus der Datei:
+<P>
+<PRE>
+[gleisbild]
+version
+ .major=1
+element
+ .id=0x101
+element
+ .id=0x102
+element
+ .id=0x10507
+ .zustand=1
+</PRE>
+<P>
+<H2>Verzeichnisse</H2>
+<P>
+Neben der "&uuml;blichen" URL <VAR>&lt;ip-cs2&gt;/config</VAR> exisistiert noch
+die URL <VAR>&lt;ip-cs2&gt;/betatest/cs2</VAR>, die auf das gleiche Verzeichnis
+zeigt und auch von Win-Digipet benutzt wird.
 </BODY>
 </HTML>

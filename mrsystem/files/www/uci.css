@@ -1,0 +1,55 @@
+/* uci.css styles for uci.php     */
+/* RN, last change: 20.01.2016    */
+
+h1, h2, h3, div, p, body, html { margin:0; padding: 0;}
+
+body {font-family: Verdana, Arial, Sans; font-size:16pt; font-weight:normal; padding:20px; color:#424242; background-color:#BBBBBB;}
+
+input, select{font-size:14pt; text-align:center;}
+
+.odiv {width:80%;text-align:center; margin-left:auto; margin-right:auto;}
+.cdiv {clear:left;}
+
+.tdiv1 {width:100%; padding:0px; background-color:transparent}
+.tdiv2 {width:98%; padding:1%; background-color:#EEEEEE}
+
+.cseltab1 {width: 20%; height:50px; margin: 10px 20px 10px 0; padding:5px; float:left;
+           color: #FAFAFA; background-color: #61ACAC; box-shadow: 2px 2px 4px #212121;
+           text-align: center; font-size: 12pt; font-weight: normal; cursor:pointer;}
+.cseltab1:hover {background-color:#398D8D; font-size: 14pt;}
+.cactive1 {background-color:#035252; color:#FAFAFA; font-weight: bold; font-size: 16pt;}
+
+.cseltab2 {width: 18%; height:50px; margin: 10px 10px 0 0; padding:5px; border:0; float:left;
+           color: #FAFAFA; background-color: #AAAAAA; border-radius:15px 15px 0 0; 
+           text-align: center; font-size: 12pt; font-weight: normal; cursor:pointer;}
+.cseltab2:hover {background-color:#CCCCCC; font-size: 14pt;}
+.cactive2 {background-color:#EEEEEE; color:#035252; font-weight: bold; font-size: 16pt;}
+
+
+
+th{background-color: #999999;}
+
+.ctable1{width:100%; border:none; background-color: #888888; box-shadow: 2px 2px 4px #212121; color:#000; font-size:14pt;}
+
+.ced {width:100%; }
+.csel {width:80%; font-weight: bold; font-size: 20pt; }
+.tdsel { text-align:center; padding:10px; }
+
+.cpnam, .cpval{border-top: 2px solid #000000; text-align:center;}
+.cpval{text-align:center;}
+.nameven{background-color: #AAAAAA;}
+.namodd{background-color: #AAAAAA;}
+.valeven{background-color: #BBBBBB;}
+.valodd{background-color: #BBBBBB;}
+
+.cbutton1, .cbutton2{width:100%; margin: 10px 0 0 0; padding: 5px; text-align: center; font-size: 14pt; font-weight: normal; box-shadow: 2px 2px 4px #212121; cursor:pointer;}
+.cbutton1{ background-color: #046E04; color: #FAFAFA; }
+.cbutton1:hover{ background-color: #168C16; color: #FAFAFA; font-weight:bold; }
+.cbutton2{ background-color: #4CBC4C; color: #FFFFFF; }
+.cbutton2:hover{ background-color: #79D579; color: #FFFFFF; font-weight:bold; }
+
+
+@keyframes kfv{ from {color:#00FF00;} to {color:#000000;} }
+.v0n, .v0v{color:#000000;}
+.v1n, .v1v{animation-name:kfv; animation-duration:3s;}
+.v2n, .v2v{color:#FF0000;}
