@@ -266,11 +266,11 @@ void MrIpcEncodeFromCan(MrIpcCmdType *Data, MrCs2CanDataType *CanMsg)
             {
                case 6:
                   MrCs2DecAccSwitch6(CanMsg, &LocId, &p1, &p2);
-                  MrIpcCmdSetAccPos(Data, LocId, (PositionType)p1);
+                  MrIpcCmdSetAccPos(Data, LocId, (PositionType)p1, p2);
                   break;
                case 8:
                   MrCs2DecAccSwitch8(CanMsg, &LocId, &p1, &p2, &p3);
-                  MrIpcCmdSetAccPos(Data, LocId, (PositionType)p1);
+                  MrIpcCmdSetAccPos(Data, LocId, (PositionType)p1, p2);
                   MrIpcCmdSetNull(Data, MrCs2GetDlc(CanMsg),
                                   MrCs2GetData(CanMsg));
                   break;
@@ -362,20 +362,23 @@ void MrIpcEncodeFromCan(MrIpcCmdType *Data, MrCs2CanDataType *CanMsg)
             break;
          case MR_MS2_CMD_BOOTLDR_TRACK:
             MrCs2DecCanBootldr(CanMsg, Buf);
-            MrIpcCmdSetCanBootldr(Data, MrCs2GetDlc(CanMsg), Buf);
+            MrIpcCmdSetCanBootldr(Data, MrCs2GetDlc(CanMsg),
+                                  (unsigned char *)Buf);
             break;
          case MR_MS2_CMD_STATUS:
             switch (MrCs2GetNumParamBytes(CanMsg))
             {
                case 5:
                   MrCs2DecStatus5(CanMsg, &Uid, &p1);
-                  MrIpcCmdSetNull(Data, MrCs2GetDlc(CanMsg),
-                                  MrCs2GetData(CanMsg));
+                  MrIpcCmdSetStatusRequest(Data, Uid, p1);
                   break;
                case 6:
                   MrCs2DecStatus6(CanMsg, &Uid, &p1, &p2);
-                  MrIpcCmdSetNull(Data, MrCs2GetDlc(CanMsg),
-                                  MrCs2GetData(CanMsg));
+                  MrIpcCmdSetStatusPos(Data, Uid, p1, p2);
+                  break;
+               case 8:
+                  MrCs2DecStatus8(CanMsg, Buf);
+                  MrIpcCmdSetStatusData(Data, MrCs2GetData(CanMsg));
                   break;
                default:
                   MrIpcCmdSetNull(Data, MrCs2GetDlc(CanMsg),
@@ -385,7 +388,7 @@ void MrIpcEncodeFromCan(MrIpcCmdType *Data, MrCs2CanDataType *CanMsg)
             break;
          case MR_MS2_CMD_CONFIG_QUERY:
             MrCs2DecConfigQuery(CanMsg, Buf);
-            MrIpcCmdSetQuery(Data, Buf);
+            MrIpcCmdSetQuery(Data, MrCs2GetDlc(CanMsg), Buf);
             break;
          case MR_MS2_CMD_CFGDAT_STREAM:
             switch (MrCs2GetNumParamBytes(CanMsg))

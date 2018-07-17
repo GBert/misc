@@ -1,4 +1,5 @@
-PROJECTS=client_cs2sl client_cs2eth client_inject client_log client_logms2 client_ms1 client_ms2 client_zentrale drehscheibe libs
+#PROJECTS=client_cs2sl client_cs2eth client_inject client_log client_logms2 client_ms1 client_ms2 client_cc client_slcan client_srcp client_tty client_gpios88 client_zentrale drehscheibe
+PROJECTS=client_cs2sl client_cs2eth client_cceth client_inject client_log client_logms2 client_logeth client_ms2 client_cc client_slcan client_srcp client_tty client_zentrale drehscheibe
 CFLAGS=
 INCLUDE_PATH=include
 LIB_PATH=lib
@@ -9,43 +10,58 @@ LDFLAGS=
 
 .PHONY: $(PROJECTS) libs
 
-all: $(PROJECTS)
+all: $(PROJECTS) libs
+
+common: libs
+	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH) TRACE=$(TRACE)
 
 client_cs2sl: libs
-	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH)
+	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH) TRACE=$(TRACE)
 
-client_cs2eth: libs
-	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH)
+client_cs2eth: libs common
+	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH) TRACE=$(TRACE)
+
+client_cceth: libs common
+	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH) TRACE=$(TRACE)
 
 client_inject: libs
-	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH)
+	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH) TRACE=$(TRACE)
 
 client_log: libs
-	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH)
+	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH) TRACE=$(TRACE)
+
+client_logeth: libs client_cs2sl
+	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH) TRACE=$(TRACE)
 
 client_logms2: libs
-	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH)
+	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH) TRACE=$(TRACE)
 
 client_ms1: libs
-	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH)
+	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH) TRACE=$(TRACE)
 
-client_ms2: libs
-	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH)
+client_ms2: libs common
+	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH) TRACE=$(TRACE)
 
-client_cc: libs
-	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH)
+client_cc: libs common
+	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH) TRACE=$(TRACE)
 
-client_slcan: libs
-	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH)
+client_slcan: libs common
+	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH) TRACE=$(TRACE)
+
+client_srcp: libs common
+	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH) TRACE=$(TRACE)
+
+client_tty: libs common
+	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH) TRACE=$(TRACE)
 
 client_gpios88: libs
-	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH)
+	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH) TRACE=$(TRACE)
 
 client_zentrale: libs
-	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH)
+	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH) TRACE=$(TRACE)
 
 drehscheibe: libs
-	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH)
+	make -C $@ CFLAGS="$(CFLAGS)" INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH) TRACE=$(TRACE)
 
 libs:
 	if [ ! -d include ] ; then mkdir include ; fi

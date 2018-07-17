@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <cs2parse.h>
 #include "zentrale.h"
 #include "cs2cfg.h"

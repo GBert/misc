@@ -6,6 +6,6 @@
 void MrCs2DecSysDecoderTimeing(MrCs2CanDataType *CanMsg, unsigned long *Uid,
                                int *Time)
 {
-   *Uid = GetLongFromByteArray((char *)CanMsg->Data);
-   *Time = GetIntFromByteArray((char *)&(CanMsg->Data[5]));
+   *Uid = GetLongFromByteArray(CanMsg->Data);
+   *Time = GetIntFromByteArray(&(CanMsg->Data[5]));
 }

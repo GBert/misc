@@ -14,7 +14,7 @@ GleisbildStruct *GleisbildCreate(void)
    NewData = (GleisbildStruct *)malloc(sizeof(GleisbildStruct));
    if (NewData != (GleisbildStruct *)NULL)
    {
-      GleisbildSetGleisbildFilePath(NewData, "/www/config/");
+      GleisbildSetGleisbildFilePath(NewData, "/var/www/config/");
       GleisbildSetNumPages(NewData, 0);
       GleisbildSetGleisbildDb(NewData, MapCreate());
       if (GleisbildGetGleisbildDb(NewData) == (Map *)NULL)
@@ -168,6 +168,7 @@ void GleisbildParseGleisbildCs2(GleisbildStruct *Data, char *Buf, int Len)
       }
    } while (LineInfo != PARSER_EOF);
    GleisbildSetNumPages(Data, NumPages);
+   Cs2pExit(GleisbildParser);
    Cs2pDestroy(GleisbildParser);
 }
 

@@ -6,16 +6,16 @@
 void MrCs2DecAccSwitch6(MrCs2CanDataType *CanMsg, unsigned long *LocId,
                         int *Position, int *Current)
 {
-   *LocId = GetLongFromByteArray((char *)CanMsg->Data);
-   *Position = CanMsg->Data[4];
-   *Current = CanMsg->Data[5];
+   *LocId = GetLongFromByteArray(CanMsg->Data);
+   *Position = (int)(CanMsg->Data[4]);
+   *Current = (int)(CanMsg->Data[5]);
 }
 
 void MrCs2DecAccSwitch8(MrCs2CanDataType *CanMsg, unsigned long *LocId,
                         int *Position, int *Current, int *TimeFkt)
 {
-   *LocId = GetLongFromByteArray((char *)CanMsg->Data);
-   *Position = CanMsg->Data[4];
-   *Current = CanMsg->Data[5];
-   *TimeFkt = GetIntFromByteArray((char *)&(CanMsg->Data[6]));
+   *LocId = GetLongFromByteArray(CanMsg->Data);
+   *Position = (int)(CanMsg->Data[4]);
+   *Current = (int)(CanMsg->Data[5]);
+   *TimeFkt = GetIntFromByteArray(&(CanMsg->Data[6]));
 }

@@ -1,7 +1,7 @@
 #include <stddef.h>
 #include "mr_ipc.h"
 
-void MrIpcCmdGetTrackProto(MrIpcCmdType *Data, int *Protokoll)
+void MrIpcCmdGetTrackProto(MrIpcCmdType *Data, unsigned *Protokoll)
 {
    if (Data != (MrIpcCmdType *)NULL)
    {

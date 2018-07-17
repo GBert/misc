@@ -16,7 +16,7 @@ static void usage(char *name)
 {
    printf("mrms1 V%s\nUsage:\n", SOFTWARE_VERSION);
    printf("%s ([-v] [-f] [-a <addr> | -i <iface>] -p <port> [-i <can if>] ) | -?\n", name);
-   puts("-a - ip address of drehscheibe");
+   puts("-a - network address of drehscheibe");
    puts("-i - interface to drehscheibe");
    puts("-p - port of drehscheibe");
    puts("-c - name of can interface");

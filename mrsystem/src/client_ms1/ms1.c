@@ -235,7 +235,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 					case 0x00 : //Stufe 0
 						
 						printf("found MS1 slave device\n");
-						printf("<- 0x%lX Stufe 0\n",CanFrame->CanId);
+						printf("<- 0x%X Stufe 0\n",CanFrame->CanId);
 				
 						ms_uid[3] = (CanFrame->CanId & 0x3FC0000) >> 18;
 						//printf("MS UID[3]: 0x%X\n",ms_uid[3]);
@@ -265,7 +265,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 					
 					case 0x04 /*0b00100*/ : //Stufe 1
 						
-						printf("<- 0x%lX Stufe 1\n",CanFrame->CanId);
+						printf("<- 0x%X Stufe 1\n",CanFrame->CanId);
 						
 						ms_uid[2] = (CanFrame->CanId & 0x3FC0000) >> 18;
 						//printf("MS UID[2]: 0x%X\n",ms_uid[2]);
@@ -295,7 +295,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 						
 					case 0x08 /*0b01000*/ : //Stufe 2
 						
-						printf("<- 0x%lX Stufe 2\n",CanFrame->CanId);
+						printf("<- 0x%X Stufe 2\n",CanFrame->CanId);
 						
 						ms_uid[1] = (CanFrame->CanId & 0x3FC0000) >> 18;
 						//printf("MS UID[1]: 0x%X\n",ms_uid[1]);
@@ -326,7 +326,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 						
 					case 0x0c /*0b01100*/ : // Stufe 3
 						
-						printf("<- 0x%lX Stufe 3\n",CanFrame->CanId);
+						printf("<- 0x%X Stufe 3\n",CanFrame->CanId);
 						
 						ms_uid[0] = (CanFrame->CanId & 0x3FC0000) >> 18;
 						//printf("MS UID[0]: 0x%X\n",ms_uid[0]);
@@ -355,20 +355,20 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 						break;	
 						
 					case 0x10 /*0b10000*/ : //Stufe 4
-						printf("<- 0x%lX Stufe 4\n",CanFrame->CanId);
+						printf("<- 0x%X Stufe 4\n",CanFrame->CanId);
 						break;
 						
 					case 0x14 /*0b10100*/ : //Stufe 5
-						printf("<- 0x%lX Stufe 5\n",CanFrame->CanId);
+						printf("<- 0x%X Stufe 5\n",CanFrame->CanId);
 						break;
 						
 					case 0x18 /*0b11000*/ : //Stufe 6
-						printf("<- 0x%lX Stufe 6\n",CanFrame->CanId);
+						printf("<- 0x%X Stufe 6\n",CanFrame->CanId);
 						break;
 						
 					case 0x1c /*0b11100*/ : //Stufe 7
 						
-						printf("<- 0x%lX Stufe 7\n",CanFrame->CanId);
+						printf("<- 0x%X Stufe 7\n",CanFrame->CanId);
 						
 						// sende Quittung Stufe 7
 						out_msg.can_id = CanFrame->CanId ^ 0x80; //MID=0
@@ -411,7 +411,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 
                             case 0x03 : // Get Lok Typ
 
-                                printf("<- 0x%lX Get Lok Type\n",CanFrame->CanId);
+                                printf("<- 0x%X Get Lok Type\n",CanFrame->CanId);
 
                                 out_msg.can_id = CanFrame->CanId - 1;
 
@@ -435,7 +435,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 
                             case 0x01 : // Schienenformat
 
-                                printf("<- 0x%lX Request Schienenformat\n",CanFrame->CanId);
+                                printf("<- 0x%X Request Schienenformat\n",CanFrame->CanId);
 
                                 out_msg.can_id = CanFrame->CanId - 1;
 
@@ -476,7 +476,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 
 					case 0x04 /*0b100*/ : // Anfrage bzgl. Slave Description
 
-						printf("<- 0x%lX Anfrage Slave Description\n",CanFrame->CanId);
+						printf("<- 0x%X Anfrage Slave Description\n",CanFrame->CanId);
 
 						out_msg.can_id = CanFrame->CanId - 1;
 
@@ -508,7 +508,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 
                             case 0x03 : // Anfrage bzgl. System-Status-Handle
 
-                                printf("<- 0x%lX Anfrage System-Status-Handle\n",CanFrame->CanId);
+                                printf("<- 0x%X Anfrage System-Status-Handle\n",CanFrame->CanId);
 
                                 out_msg.can_id = CanFrame->CanId - 1;
 
@@ -534,11 +534,11 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 
                             case 0x80 : // Lokstat
 
-                                //dirty hack! Es wird testweise eine einzige Lok æbertragen
+                                //dirty hack! Es wird testweise eine einzige Lok übertragen
 
                                 if (CanFrame->CanData[2] == 0x00) { //erste Anfrage, noch keine Lok. Eine Lok wird gesendet
 
-                                    printf("<- 0x%lX Lokstat Austausch (1)\n",CanFrame->CanId);
+                                    printf("<- 0x%X Lokstat Austausch (1)\n",CanFrame->CanId);
 
                                     out_msg.can_id = CanFrame->CanId - 1;
 
@@ -559,7 +559,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 
                                 if (CanFrame->CanData[2] == 0x02) { //bereits eine Lok vorhanden, wir senden keine neue
 
-                                    printf("<- 0x%lX Lokstat Austausch (2)\n",CanFrame->CanId);
+                                    printf("<- 0x%X Lokstat Austausch (2)\n",CanFrame->CanId);
 
                                     out_msg.can_id = CanFrame->CanId - 1;
 
@@ -587,14 +587,14 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 
                     case 0x02 /*0b010*/ : // Anfrage bzgl. System-Status-Austausch
 
-                        printf("<- 0x%lX Anfrage System-Status-Austausch\n",CanFrame->CanId);
+                        printf("<- 0x%X Anfrage System-Status-Austausch\n",CanFrame->CanId);
 
 
                         if (CanFrame->CanData[1] == 0x01) { //Anfrage nach dem Statustyp
 
                             if (CanFrame->CanData[0] <= 0x04) {
 
-                                //Verknæpfung Index und Statustyp an Slave senden
+                                //Verknüpfung Index und Statustyp an Slave senden
                                 out_msg.can_id = CanFrame->CanId - 1;
 
                                 printf("-> 0x%X Sende Statustyp\n",out_msg.can_id);
@@ -611,7 +611,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
                                     perror("CAN write error");
                                 }
 
-                                statustyp[CanFrame->CanData[0]] = out_msg.data[2];  //Verknæpfung Index und Statustyp speichern
+                                statustyp[CanFrame->CanData[0]] = out_msg.data[2];  //Verknüpfung Index und Statustyp speichern
 
                                 if (CanFrame->CanData[0] == 0x03) { // 0x03 ubekannter STATUSTYP, es wird direkt der WERT gesendet
                                     goto Wertsenden;
@@ -621,7 +621,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 
                             if (CanFrame->CanData[0] == 0x05) {
 
-                                //Verknæpfung Index und Statustyp an Slave senden
+                                //Verknüpfung Index und Statustyp an Slave senden
                                 out_msg.can_id = CanFrame->CanId - 1;
 
                                 printf("-> 0x%X Sende Statustyp\n",out_msg.can_id);
@@ -637,7 +637,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
                                     perror("CAN write error");
                                 }
 
-                                statustyp[CanFrame->CanData[0]] = out_msg.data[2];  //Verknæpfung Index und Statustyp speichern
+                                statustyp[CanFrame->CanData[0]] = out_msg.data[2];  //Verknüpfung Index und Statustyp speichern
 
                             }
 
@@ -650,7 +650,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 
                             printf("-> 0x%X Sende Statustyp\n",out_msg.can_id);
 
-                            //Wert fær Index an Slave senden
+                            //Wert für Index an Slave senden
                             out_msg.can_id = CanFrame->CanId - 1;
 
                             out_msg.can_dlc = 3;
@@ -674,12 +674,12 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 
 			}
 
-			// Zyklische ãberwachung
+			// Zyklische Überwachung
 			if (my_ms1_handle.prio == 0x03 /*0b011*/) {
 
                 if (CanFrame->CanDlc == 4) {
 
-                    printf("<- 0x%lX Ping 1\n",CanFrame->CanId);
+                    printf("<- 0x%X Ping 1\n",CanFrame->CanId);
 
                     out_msg.can_id = CanFrame->CanId - 1;
                     //out_msg.can_id = 0xC000380;  //Master Knoten ist 00
@@ -729,7 +729,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 
                 if (CanFrame->CanDlc == 8) {
 
-                    printf("<- 0x%lX Ping 2\n",CanFrame->CanId);
+                    printf("<- 0x%X Ping 2\n",CanFrame->CanId);
 
                 }
 
@@ -741,7 +741,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 				udpsend = 1;
 
 /* this should be done in client_zentrale */
-				printf("CAN>UDP MFX 0x%06lX\n",CanFrame->CanId);
+				printf("CAN>UDP MFX 0x%06X\n",CanFrame->CanId);
 				lastmfxnr = lastmfxnr + 1;
 
 				out_msg.can_id = 0x040301UL;
@@ -789,7 +789,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 			}
 
 			// send UDP frame
-			if (udpsend == 1) { // nicht jeder CAN Frame muss æber UDP raus!
+			if (udpsend == 1) { // nicht jeder CAN Frame muss über UDP raus!
 /* should be done in client_cs2eth */
 #if 0
 				s=sendto(sb, udpframe, 13, 0, (struct sockaddr *)&baddr, sizeof(baddr));
@@ -797,7 +797,7 @@ static void ProcessCanData(Ms1Struct *Data, CanFrameStruct *CanFrame)
 					perror("UDP write __");
 #endif
 				if (Ms1GetVerbose(Data) ) {
-					printf("->CAN>UDP CANID 0x%06lX R",CanFrame->CanId);
+					printf("->CAN>UDP CANID 0x%06X R",CanFrame->CanId);
 					printf(" [%d]", udpframe[4]);
 					for (i=5; i<5+CanFrame->CanDlc;i++) {
 						printf(" %02x", udpframe[i]);

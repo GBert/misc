@@ -39,9 +39,8 @@ void InjectInit(InjectStruct *Data, BOOL Verbose, char *Iface, char *Addr,
    InjectSetClientSock(Data, -1);
 }
 
-void InjectRun(InjectStruct *Data)
-{  MrIpcCmdType CmdFrame;
-
+static void OpenSocket(InjectStruct *Data)
+{
    if ((strlen(InjectGetInterface(Data)) > 0) &&
        ((strlen(InjectGetAddress(Data)) == 0) ||
         (strcmp(InjectGetAddress(Data), "0.0.0.0") == 0)))
@@ -56,6 +55,69 @@ void InjectRun(InjectStruct *Data)
                           MrIpcConnect(InjectGetAddress(Data),
                                        InjectGetServerPort(Data)));
    }
+}
+
+static void SendCmd(int socket, unsigned long CanId, int DLC, int *CanBytes)
+{  MrCs2CanDataType CanMsg;
+   struct can_frame CanFrame;
+   MrIpcCmdType Cmd;
+
+   CanFrame.can_id = CanId;
+   CanFrame.can_dlc = DLC;
+   memcpy(&(CanFrame.data), CanBytes, MR_CS2_NUM_CAN_BYTES);
+   MrCs2Decode(&CanMsg, &CanFrame);
+   MrIpcInit(&Cmd);
+   MrIpcEncodeFromCan(&Cmd, &CanMsg);
+   MrIpcSetSenderSocket(&Cmd, socket);
+   MrIpcSend(socket, &Cmd);
+}
+
+void InjectRunCmd(InjectStruct *Data, unsigned long CanId, int DLC,
+                  int *CanBytes)
+{
+   OpenSocket(Data);
+   if (InjectGetClientSock(Data) >= 0)
+   {
+      SendCmd(InjectGetClientSock(Data), CanId, DLC, CanBytes);
+      MrIpcClose(InjectGetClientSock(Data));
+   }
+}
+
+void InjectRunFile(InjectStruct *Data, char *Filename)
+{  FILE *CmdStream;
+   char Line[80], *Param;
+   int DLC, CanBytes[8], i;
+   unsigned long CanId;
+
+   CmdStream = fopen(Filename, "r");
+   if (CmdStream != (FILE *)NULL)
+   {
+      OpenSocket(Data);
+      if (InjectGetClientSock(Data) >= 0)
+      {
+         while (fgets(Line, sizeof(Line), CmdStream) != (char *)NULL)
+         {
+            Param = strtok(Line, " ");
+            CanId = strtol(Param, (char **)NULL, 0);
+            Param = strtok((char *)NULL, " ");
+            DLC = strtol(Param, (char **)NULL, 0);
+            for (i = 0; i < 8; i++)
+            {
+               Param = strtok((char *)NULL, " ");
+               CanBytes[i] = strtol(Param, (char **)NULL, 0);
+            }
+            SendCmd(InjectGetClientSock(Data), CanId, DLC, CanBytes);
+         }
+         MrIpcClose(InjectGetClientSock(Data));
+      }
+      fclose(CmdStream);
+   }
+}
+
+void InjectRun(InjectStruct *Data)
+{  MrIpcCmdType CmdFrame;
+
+   OpenSocket(Data);
    if (InjectGetClientSock(Data) >= 0)
    {
       if (InjectGetVerbose(Data))

@@ -111,6 +111,7 @@ typedef struct {
 Cs2parser *Cs2pCreate(void);
 void Cs2pDestroy(Cs2parser *Data);
 void Cs2pInit(Cs2parser *Data, int Type, char *InputLine, int Len);
+#define Cs2pExit(Data)
 int Cs2pParse(Cs2parser *Data);
 
 #define Cs2pSetVerbose(Data, Val) (Data)->Verbose=Val

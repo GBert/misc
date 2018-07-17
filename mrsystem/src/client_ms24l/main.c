@@ -4,7 +4,7 @@
 #include <time.h>
 #include <config.h>
 #include "can_client.h"
-#include "ms2.h"
+#include "../common/ms2.h"
 
 #define SOFTWARE_VERSION "1.01"
 
@@ -12,7 +12,7 @@ static void usage(char *name)
 {
    printf("mrms2 V%s\nUsage:\n", SOFTWARE_VERSION);
    printf("%s ([-v] [-f] [-a <addr> | -i <iface>] -p <port> [-i <can if>] [-z <zentrale>]) | -?\n", name);
-   puts("-a - ip address of drehscheibe");
+   puts("-a - network address of drehscheibe");
    puts("-i - interface to drehscheibe");
    puts("-p - port of drehscheibe");
    puts("-c - name of can interface");

@@ -5,11 +5,11 @@
 
 void MrCs2DecSpeed4(MrCs2CanDataType *CanMsg, unsigned long *LocId)
 {
-   *LocId = GetLongFromByteArray((char *)CanMsg->Data);
+   *LocId = GetLongFromByteArray(CanMsg->Data);
 }
 
 void MrCs2DecSpeed6(MrCs2CanDataType *CanMsg, unsigned long *LocId, int *Speed)
 {
-   *LocId = GetLongFromByteArray((char *)CanMsg->Data);
-   *Speed = GetIntFromByteArray((char *)&(CanMsg->Data[4]));
+   *LocId = GetLongFromByteArray(CanMsg->Data);
+   *Speed = GetIntFromByteArray(&(CanMsg->Data[4]));
 }

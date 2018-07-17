@@ -6,6 +6,6 @@
 void MrCs2DecSysMfxFastRead(MrCs2CanDataType *CanMsg, unsigned long *Uid,
                             int *MfxSid)
 {
-   *Uid = GetLongFromByteArray((char *)CanMsg->Data);
-   *MfxSid = GetIntFromByteArray((char *)&(CanMsg->Data[5]));
+   *Uid = GetLongFromByteArray(CanMsg->Data);
+   *MfxSid = GetIntFromByteArray(&(CanMsg->Data[5]));
 }

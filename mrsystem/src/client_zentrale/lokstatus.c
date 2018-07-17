@@ -99,6 +99,7 @@ void LokStatusParseLokomotiveSr2(LokStruct *Data, char *Buf, int Len)
             break;
       }
    } while (LineInfo != PARSER_EOF);
+   Cs2pExit(LokStatusParser);
    Cs2pDestroy(LokStatusParser);
 }
 
@@ -145,7 +146,9 @@ static void WriteLokOfLokomotiveSr2(void *PrivData,
 {  int i;
    LokInfo *Lok;
    FILE *LokStatusSr2Stream;
+   LokStruct *Data;
 
+   Data = (LokStruct *)PrivData;
    Lok = (LokInfo *)Daten;
    LokStatusSr2Stream = (FILE *)PrivData;
    if (!LokInfoGetIsDeleted(Lok))
@@ -162,7 +165,7 @@ static void WriteLokOfLokomotiveSr2(void *PrivData,
          Cs2WriteIntValueByName(LokStatusSr2Stream, "richtung",
                                 LokInfoGetRichtung(Lok), 1);
       }
-      for (i = 0; i < LOK_NUM_FUNCTIONS; i++)
+      for (i = 0; i < LokGetNumLokFkts(Data); i++)
       {
          Cs2WriteTitleByName(LokStatusSr2Stream, "funktionen", 1);
          Cs2WriteIntValueByName(LokStatusSr2Stream, "nr", i, 2);

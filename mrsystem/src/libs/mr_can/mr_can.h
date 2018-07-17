@@ -40,6 +40,11 @@
 #define MR_CS2_UDP_REMOTE_PORT 15730
 #define MR_CS2_UDP_LENGTH 13
 
+/* return values for function MrEthCs2Recv() */
+#define MR_ETH_CS2_RCV_ERROR  -1
+#define MR_ETH_CS2_RCV_CLOSED 0
+#define MR_ETH_CS2_RCV_OK     1
+
 #define MrEthCs2Close(socket)   close(socket)
 
 void MrEthCs2Encode(char *UdpFrame, MrCs2CanDataType *CanMsg);
@@ -49,7 +54,7 @@ int MrEthCs2StartBcServer(void);
 int MrEthCs2StartAppServer(void);
 int MrEthCs2Accept(int ServSock);
 void MrEthCs2MkBcAddr(struct sockaddr_in *baddr, char *IpAddr);
-BOOL MrEthCs2Recv(int Socket, struct sockaddr_in *ClntAddr, char *Data);
+int MrEthCs2Recv(int Socket, struct sockaddr_in *ClntAddr, char *Data);
 void MrEthCs2SendTo(int Socket, struct sockaddr_in *baddr, char *Data);
 void MrEthCs2Send(int Socket, char *Data);
 int MrEthCs2ConnectClient(void);

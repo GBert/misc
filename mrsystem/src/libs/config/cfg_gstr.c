@@ -35,6 +35,15 @@ char *ConfigGetStrVal(ConfigStruct *Data, CfgStrValues Value)
       case CfgWakeUpS88:
          p = INI_STR_WAKEUP_S88;
          break;
+      case CfgGpioS88:
+         p = INI_STR_GPIO_S88;
+         break;
+      case CfgHideMs2Val:
+         p = INI_STR_HIDE_MS2;
+         break;
+      case CfgSerialLineVal:
+         p = INI_STR_SERIAL_LINE;
+         break;
    }
    CfgWert = (IniValue *)MapGet(ConfigGetConfig(Data), (MapKeyType)p);
    if (CfgWert != (IniValue *)NULL)

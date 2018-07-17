@@ -3,16 +3,11 @@
 #include "mr_can.h"
 
 void MrEthCs2Decode(MrCs2CanDataType *CanMsg, char *UdpFrame)
-{  unsigned CanHash, Response, Command, Prio, i;
+{  unsigned CanHash, Response, Command, Prio;
 
-   MrCs2SetId(CanMsg,
-              ((unsigned long)UdpFrame[0] << 24) |
-              ((unsigned long)UdpFrame[1] << 16) |
-              ((unsigned long)UdpFrame[2] <<  8) |
-              ((unsigned long)UdpFrame[3] <<  0));
+   MrCs2SetId(CanMsg, GetLongFromByteArray((unsigned char *)UdpFrame));
    MrCs2SetDlc(CanMsg, UdpFrame[4]);
-   for (i = 0; i < 8; i++)
-      CanMsg->Data[i] = UdpFrame[5 + i];
+   memcpy(CanMsg->Data, &UdpFrame[5], MR_CS2_NUM_CAN_BYTES);
    MrCs2DecodeId(MrCs2GetId(CanMsg), &CanHash, &Response, &Command, &Prio);
    MrCs2SetHash(CanMsg, CanHash & ~MR_CS2_MASK_HASH_MAGIC);
    MrCs2SetResponse(CanMsg, Response);

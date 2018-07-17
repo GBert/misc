@@ -6,9 +6,5 @@ unsigned long MrCs2EncodeId(unsigned short Hash, unsigned Response,
    return(((unsigned long)Hash     << MR_CS2_SHIFT_HASH) |
           ((unsigned long)Response << MR_CS2_SHIFT_RESP) |
           ((unsigned long)Command  << MR_CS2_SHIFT_COMMAND) |
-#if 0
           ((unsigned long)Prio     << MR_CS2_SHIFT_PRIO));
-#else
-          (0l                      << MR_CS2_SHIFT_PRIO));
-#endif
 }

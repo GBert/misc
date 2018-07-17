@@ -77,6 +77,7 @@ void FsStatParseFsStatSr2(FahrstrasseStruct *Data, char *Buf, int Len)
             break;
       }
    } while (LineInfo != PARSER_EOF);
+   Cs2pExit(FsStatParser);
    Cs2pDestroy(FsStatParser);
 }
 

@@ -8,8 +8,9 @@
 #include <boolean.h>
 #include <config.h>
 #include "cs2sl.h"
+#include "can_sleth.h"
 
-#define SOFTWARE_VERSION "1.01"
+#define SOFTWARE_VERSION "1.02"
 
 static void usage(char *name)
 {
@@ -19,7 +20,7 @@ static void usage(char *name)
    printf(" -t");
 #endif
    puts(" | -?\n");
-   puts("-a - network interface to drehscheibe");
+   puts("-a - network address of drehscheibe");
    puts("-i - interface to drehscheibe");
    puts("-p - port of drehscheibe");
    puts("-f - dont fork to go in background");
@@ -33,6 +34,7 @@ static void usage(char *name)
 
 int main(int argc, char *argv[])
 {  Cs2slStruct *Cs2sl;
+   IoFktStruct *IoFunctions;
    ConfigStruct *Config;
    pid_t ChildPid;
    time_t Now;
@@ -47,9 +49,9 @@ int main(int argc, char *argv[])
       ConfigInit(Config, MRSYSTEM_CONFIG_FILE);
       ConfigReadfile(Config);
 #ifdef TRACE
-      ConfigCmdLine(Config, "a:p:ftv?", NumArgs, ValArgs);
+      ConfigCmdLine(Config, "a:p:ftvx?", NumArgs, ValArgs);
 #else
-      ConfigCmdLine(Config, "a:p:fv?", NumArgs, ValArgs);
+      ConfigCmdLine(Config, "a:p:fvx?", NumArgs, ValArgs);
 #endif
       if (ConfigGetIntVal(Config, CfgUsageVal))
       {
@@ -71,26 +73,36 @@ int main(int argc, char *argv[])
          {
             if (ConfigGetIntVal(Config, CfgVerboseVal))
                puts("child running");
-            Cs2sl = Cs2slCreate();
-            if (Cs2sl != (Cs2slStruct *)NULL)
+            IoFunctions = SlethClientInit(ConfigGetIntVal(Config, CfgVerboseVal),
+                                          ConfigGetIntVal(Config, CfgConnTcpVal));
+            if (IoFunctions != (IoFktStruct *)NULL)
             {
-               Cs2slInit(Cs2sl, ConfigGetIntVal(Config, CfgVerboseVal),
-                         ConfigGetStrVal(Config, CfgIfaceVal),
-                         ConfigGetStrVal(Config, CfgAddrVal),
-                         ConfigGetIntVal(Config, CfgPortVal),
-                         ConfigGetIntVal(Config, CfgConnTcpVal)
+               Cs2sl = Cs2slCreate();
+               if (Cs2sl != (Cs2slStruct *)NULL)
+               {
+                  Cs2slInit(Cs2sl, ConfigGetIntVal(Config, CfgVerboseVal),
+                            ConfigGetStrVal(Config, CfgIfaceVal),
+                            ConfigGetStrVal(Config, CfgAddrVal),
+                            ConfigGetIntVal(Config, CfgPortVal),
 #ifdef TRACE
-                         , ConfigGetIntVal(Config, CfgTraceVal)
+                            ConfigGetIntVal(Config, CfgTraceVal),
 #endif
-                         );
-               Cs2slRun(Cs2sl);
-               Cs2slDestroy(Cs2sl);
-               Ret = 0;
+                            IoFunctions);
+                  Cs2slRun(Cs2sl);
+                  Cs2slDestroy(Cs2sl);
+                  Ret = 0;
+               }
+               else
+               {
+                  puts("ERROR: can not create IoFunctions module");
+                  Ret = 1;
+               }
             }
             else
             {
                Ret = 2;
             }
+            SlethClientExit(IoFunctions);
          }
          else
          {
@@ -105,25 +117,35 @@ int main(int argc, char *argv[])
          Now = time(NULL);
          if (ConfigGetIntVal(Config, CfgVerboseVal))
             printf("start with no fork at %s\n", asctime(localtime(&Now)));
-         Cs2sl = Cs2slCreate();
-         if (Cs2sl != (Cs2slStruct *)NULL)
+         IoFunctions = SlethClientInit(ConfigGetIntVal(Config, CfgVerboseVal),
+                                       ConfigGetIntVal(Config, CfgConnTcpVal));
+         if (IoFunctions != (IoFktStruct *)NULL)
          {
-            Cs2slInit(Cs2sl, ConfigGetIntVal(Config, CfgVerboseVal),
-                      ConfigGetStrVal(Config, CfgIfaceVal),
-                      ConfigGetStrVal(Config, CfgAddrVal),
-                      ConfigGetIntVal(Config, CfgPortVal),
-                      ConfigGetIntVal(Config, CfgConnTcpVal)
+            Cs2sl = Cs2slCreate();
+            if (Cs2sl != (Cs2slStruct *)NULL)
+            {
+               Cs2slInit(Cs2sl, ConfigGetIntVal(Config, CfgVerboseVal),
+                         ConfigGetStrVal(Config, CfgIfaceVal),
+                         ConfigGetStrVal(Config, CfgAddrVal),
+                         ConfigGetIntVal(Config, CfgPortVal),
 #ifdef TRACE
-                      , ConfigGetIntVal(Config, CfgTraceVal)
+                         ConfigGetIntVal(Config, CfgTraceVal),
 #endif
-                      );
-            Cs2slRun(Cs2sl);
-            Cs2slDestroy(Cs2sl);
-            Ret = 0;
+                         IoFunctions);
+               Cs2slRun(Cs2sl);
+               Cs2slDestroy(Cs2sl);
+               Ret = 0;
+            }
+            else
+            {
+               Ret = 2;
+            }
+            SlethClientExit(IoFunctions);
          }
          else
          {
-            Ret = 2;
+            puts("ERROR: can not create IoFunctions module");
+            Ret = 1;
          }
       }
       ConfigExit(Config);

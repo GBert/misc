@@ -34,7 +34,10 @@ typedef enum {
    MrIpcCmdCfgZHeader,          /* command with header of z-packed cfg data */
    MrIpcCmdCfgData,             /* command with data of cfg data */
    MrIpcCmdSystemStatusVal,     /* command to set systam status cfg val */
-   MrIpcCmdCanBootldrGeb        /* command can bootloader gebunden */
+   MrIpcCmdCanBootldrGeb,       /* command can bootloader gebunden */
+   MrIpcCmdStatusRequest,       /* command request status */
+   MrIpcCmdStatusSize,          /* command with number of packets in status */
+   MrIpcCmdStatusData           /* command with status data */
 } MrIpcCommandValue;
 
 typedef struct {
@@ -96,7 +99,6 @@ MrIpcCmdType *MrIpcCreate(void);
 void MrIpcDestroy(MrIpcCmdType *Data);
 void MrIpcInit(MrIpcCmdType *Data);
 void MrIpcExit(MrIpcCmdType *Data);
-void MrIpcClear(MrIpcCmdType *Data);
 int MrIpcConnect(char *Address, int Port);
 int MrIpcConnectIf(char *Interface, int Port);
 int MrIpcStartServer(char *Adress, int Port);
@@ -111,14 +113,14 @@ void MrIpcDecodeToCan(MrIpcCmdType *Data, MrCs2CanDataType *CanMsg);
 void MrIpcCmdSetNull(MrIpcCmdType *Data, unsigned char Dlc,
                      unsigned char *CanData);
 void MrIpcCmdSetRun(MrIpcCmdType *Data, SwitchType Switch);
-void MrIpcCmdSetTrackProto(MrIpcCmdType *Data, int Protokoll);
+void MrIpcCmdSetTrackProto(MrIpcCmdType *Data, unsigned Protokoll);
 void MrIpcCmdSetLocomotiveSpeed(MrIpcCmdType *Data, unsigned long Addr,
                                 unsigned Speed);
 void MrIpcCmdSetLocomotiveDir(MrIpcCmdType *Data, unsigned long Addr, DirectionType Direction);
 void MrIpcCmdSetLocomotiveFkt(MrIpcCmdType *Data, unsigned long Addr,
                               unsigned Function, SwitchType Switch);
 void MrIpcCmdSetAccPos(MrIpcCmdType *Data, unsigned long Addr,
-                       PositionType Position);
+                       PositionType Position, int Current);
 void MrIpcCmdSetRequest(MrIpcCmdType *Data);
 void MrIpcCmdSetRequestMember(MrIpcCmdType *Data);
 void MrIpcCmdSetMember(MrIpcCmdType *Data, unsigned long Addr,
@@ -126,19 +128,25 @@ void MrIpcCmdSetMember(MrIpcCmdType *Data, unsigned long Addr,
 void MrIpcCmdSetReqestLocname(MrIpcCmdType *Data, unsigned StartIdx,
                               unsigned EndIdx);
 void MrIpcCmdSetReqestLocinfo(MrIpcCmdType *Data, char *Locname);
-void MrIpcCmdSetQuery(MrIpcCmdType *Data, char *Name);
-void MrIpcCmdSetCfgHeader(MrIpcCmdType *Data, unsigned long Length, int Crc);
+void MrIpcCmdSetQuery(MrIpcCmdType *Data, unsigned char Dlc, char *Name);
+void MrIpcCmdSetCfgHeader(MrIpcCmdType *Data, unsigned long Length,
+                          unsigned Crc);
 void MrIpcCmdSetCfgZHeader(MrIpcCmdType *Data, unsigned long Length,
                            unsigned Crc);
 void MrIpcCmdSetCfgData(MrIpcCmdType *Data, char *Buf);
 void MrIpcCmdSetSystemStatusVal(MrIpcCmdType *Data, unsigned long Addr,
                                 unsigned int Channel, unsigned int Value);
-void MrIpcCmdSetCanBootldr(MrIpcCmdType *Data, unsigned char Dlc,
+void MrIpcCmdSetCanBootldr(MrIpcCmdType *Data, unsigned Dlc,
                            unsigned char *CanData);
+void MrIpcCmdSetStatusRequest(MrIpcCmdType *Data, unsigned long Addr,
+                              unsigned int Index);
+void MrIpcCmdSetStatusPos(MrIpcCmdType *Data, unsigned long Addr,
+                          unsigned int Index, unsigned int NumPackets);
+void MrIpcCmdSetStatusData(MrIpcCmdType *Data, unsigned char *Buf);
 
 void MrIpcCmdGetNull(MrIpcCmdType *Data, unsigned char *Dlc, char *CanData);
 void MrIpcCmdGetRun(MrIpcCmdType *Data, SwitchType *Switch);
-void MrIpcCmdGetTrackProto(MrIpcCmdType *Data, int *Protokoll);
+void MrIpcCmdGetTrackProto(MrIpcCmdType *Data, unsigned *Protokoll);
 void MrIpcCmdGetLocomotiveDir(MrIpcCmdType *Data, unsigned long *Addr,
                               DirectionType *Direction);
 void MrIpcCmdGetLocomotiveSpeed(MrIpcCmdType *Data, unsigned long *Addr,
@@ -146,7 +154,7 @@ void MrIpcCmdGetLocomotiveSpeed(MrIpcCmdType *Data, unsigned long *Addr,
 void MrIpcCmdGetLocomotiveFkt(MrIpcCmdType *Data, unsigned long *Addr,
                               unsigned *Function, SwitchType *Switch);
 void MrIpcCmdGetAccPos(MrIpcCmdType *Data, unsigned long *Addr,
-                       PositionType *Position);
+                       PositionType *Position, int *Current);
 #define MrIpcCmdGetRequestMember(Data)
 void MrIpcCmdGetMember(MrIpcCmdType *Data, unsigned long *Addr,
                        unsigned *Version, unsigned *Type);
@@ -154,12 +162,18 @@ void MrIpcCmdGetReqestLocname(MrIpcCmdType *Data, unsigned *StartIdx,
                               unsigned *EndIdx);
 void MrIpcCmdGetReqestLocinfo(MrIpcCmdType *Data, char *Locinfo);
 void MrIpcCmdGetQuery(MrIpcCmdType *Data, char *Name);
-void MrIpcCmdGetCfgHeader(MrIpcCmdType *Data, unsigned long *Length, int *Crc);
+void MrIpcCmdGetCfgHeader(MrIpcCmdType *Data, unsigned long *Length,
+                          unsigned *Crc);
 void MrIpcCmdGetCfgZHeader(MrIpcCmdType *Data, unsigned long *Length,
                            unsigned *Crc);
 void MrIpcCmdGetCfgData(MrIpcCmdType *Data, char *Buf);
 void MrIpcCmdGetSystemStatusVal(MrIpcCmdType *Data, unsigned long *Addr, unsigned int *Channel, unsigned int *Value);
-void MrIpcCmdGetCanBootldr(MrIpcCmdType *Data, unsigned char *Dlc,
+void MrIpcCmdGetCanBootldr(MrIpcCmdType *Data, unsigned *Dlc,
                            char *CanData);
+void MrIpcCmdGetStatusRequest(MrIpcCmdType *Data, unsigned long *Addr,
+                              unsigned int *Index);
+void MrIpcCmdGetStatusPos(MrIpcCmdType *Data, unsigned long *Addr,
+                          unsigned int *Index, unsigned int *NumPackets);
+void MrIpcCmdGetStatusData(MrIpcCmdType *Data, unsigned char *Buf);
 
 #endif

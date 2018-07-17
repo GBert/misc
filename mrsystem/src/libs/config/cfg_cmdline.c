@@ -4,7 +4,7 @@
 #include "config.h"
 
 
-void ConfigCmdLine(ConfigStruct *Data, char *optstr, int argc, char *argv[])
+int ConfigCmdLine(ConfigStruct *Data, char *optstr, int argc, char *argv[])
 {  int c;
 
    do {
@@ -24,17 +24,29 @@ void ConfigCmdLine(ConfigStruct *Data, char *optstr, int argc, char *argv[])
          case 'c':
             ConfigAddStrVal(Data, CfgCanIfVal, optarg);
             break;
+         case 'e':
+            ConfigAddIntVal(Data, CfgEmuHostCom, atoi(optarg));
+            break;
          case 'f':
             ConfigAddIntVal(Data, CfgForkVal, FALSE);
             break;
          case 'g':
             ConfigAddStrVal(Data, CfgStartVal, optarg);
             break;
+         case 'h':
+            ConfigAddStrVal(Data, CfgHideMs2Val, optarg);
+            break;
          case 'i':
             ConfigAddStrVal(Data, CfgIfaceVal, optarg);
             break;
+         case 'k':
+            ConfigAddIntVal(Data, CfgNumLokfkts, atoi(optarg));
+            break;
          case 'l':
             ConfigAddStrVal(Data, CfgPathVal, optarg);
+            break;
+         case 'm':
+            ConfigAddStrVal(Data, CfgSerialLineVal, optarg);
             break;
          case 'p':
             ConfigAddIntVal(Data, CfgPortVal, atoi(optarg));
@@ -61,4 +73,5 @@ void ConfigCmdLine(ConfigStruct *Data, char *optstr, int argc, char *argv[])
             break;
       }
    } while (c != -1);
+   return(optind);
 }

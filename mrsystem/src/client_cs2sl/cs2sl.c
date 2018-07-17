@@ -27,8 +27,6 @@ Cs2slStruct *Cs2slCreate(void)
    {
       Cs2slSetVerbose(Data, FALSE);
       Cs2slSetInterface(Data, (char *)NULL);
-      Cs2slSetCs2Addr(Data, FALSE);
-      Cs2slSetDoTcp(Data, FALSE);
       Cs2slSetServerPort(Data, -1);
       Cs2slSetClientSock(Data, -1);
    }
@@ -43,11 +41,11 @@ void Cs2slDestroy(Cs2slStruct *Data)
 }
 
 void Cs2slInit(Cs2slStruct *Data, BOOL Verbose, char *Iface, char *Addr,
-                int Port, BOOL DoTcp
+               int Port,
 #ifdef TRACE
-               , BOOL Trace
+               BOOL Trace,
 #endif
-               )
+               IoFktStruct *IoFunctions)
 {
    Cs2slSetVerbose(Data, Verbose);
    if (Cs2slGetVerbose(Data))
@@ -58,13 +56,8 @@ void Cs2slInit(Cs2slStruct *Data, BOOL Verbose, char *Iface, char *Addr,
    Cs2slSetInterface(Data, Iface);
    Cs2slSetAddress(Data, Addr);
    Cs2slSetServerPort(Data, Port);
-   Cs2slSetCs2Addr(Data, FALSE);
-   Cs2slSetDoTcp(Data, DoTcp);
    Cs2slSetClientSock(Data, -1);
-   Cs2slSetOutsideUdpSock(Data, -1);
-   Cs2slSetOutsideTcpSock(Data, -1);
-   memset((void *)(&(Cs2slGetClientAddr(Data))), 0,
-          sizeof(struct sockaddr_in));
+   Cs2slSetIoFunctions(Data, IoFunctions);
 }
 
 static void SigHandler(int sig)
@@ -95,8 +88,7 @@ static BOOL Start(Cs2slStruct *Data)
    {
       if (Cs2slGetVerbose(Data))
          puts("start mrCs2sl; start udp client");
-      Cs2slSetOutsideUdpSock(Data, MrEthCs2ConnectClient());
-      if (Cs2slGetOutsideUdpSock(Data) >= 0)
+      if (Cs2slGetIoFunctions(Data)->Open(Cs2slGetIoFunctions(Data)->private))
       {
          if (Cs2slGetVerbose(Data))
             puts("ready for incoming comands from system");
@@ -125,15 +117,11 @@ static void Stop(Cs2slStruct *Data)
    if (Cs2slGetVerbose(Data))
       puts("stop mrCs2sl");
    MrIpcClose(Cs2slGetClientSock(Data));
-   if (Cs2slGetOutsideUdpSock(Data) >= -1)
-      MrEthCs2Close(Cs2slGetOutsideUdpSock(Data));
-   if (Cs2slGetOutsideTcpSock(Data) >= 0)
-      MrEthCs2Close(Cs2slGetOutsideTcpSock(Data));
+   Cs2slGetIoFunctions(Data)->Close(Cs2slGetIoFunctions(Data)->private);
 }
 
 static void ProcessSystemData(Cs2slStruct *Data, MrIpcCmdType *CmdFrame)
-{  char UdpFrame[MR_CS2_UDP_LENGTH];
-   MrCs2CanDataType CanMsg;
+{  MrCs2CanDataType CanMsg;
    int i;
 
    if (MrIpcGetCommand(CmdFrame) != MrIpcCmdNull)
@@ -144,36 +132,23 @@ static void ProcessSystemData(Cs2slStruct *Data, MrIpcCmdType *CmdFrame)
          case MrIpcCmdRequestLocInfo:
             break;
          default:
-            if ((MrIpcGetReceiverSocket(CmdFrame) == MR_IPC_SOCKET_ALL) ||
-                (MrIpcGetReceiverSocket(CmdFrame) == Cs2slGetOutsideUdpSock(Data)))
-            {
-               MrIpcDecodeToCan(CmdFrame, &CanMsg);
+            MrIpcDecodeToCan(CmdFrame, &CanMsg);
 #ifdef TRACE
-               if (Cs2slGetVerbose(Data) && Cs2slGetTrace(Data))
-                  MrCs2Trace(&CanMsg);
+            if (Cs2slGetVerbose(Data) && Cs2slGetTrace(Data))
+               MrCs2Trace(&CanMsg);
 #endif
-               if (Cs2slGetVerbose(Data))
-               {
-                  printf("send can data 0x%lx %d to UDP client\n    ",
-                         MrCs2GetId(&CanMsg), MrCs2GetDlc(&CanMsg));
-                  for (i = 0; i < 8; i++)
-                     printf("0x%02x ", CanMsg.Data[i]);
-                  printf("\n    hash 0x%x resp 0x%x cmd 0x%x prio 0x%x\n",
-                         MrCs2GetHash(&CanMsg), MrCs2GetResponse(&CanMsg),
-                         MrCs2GetCommand(&CanMsg), MrCs2GetPrio(&CanMsg));
-               }
-               MrEthCs2Encode(UdpFrame, &CanMsg);
-               if (Cs2slGetOutsideTcpSock(Data) != -1)
-               {
-                  MrEthCs2Send(Cs2slGetOutsideTcpSock(Data), UdpFrame);
-               }
-               else if (Cs2slGetCs2Addr(Data))
-               {
-                  MrEthCs2SendTo(Cs2slGetOutsideUdpSock(Data),
-                                 (struct sockaddr_in *)&(Cs2slGetClientAddr(Data)),
-                                 UdpFrame);
-               }
+            if (Cs2slGetVerbose(Data))
+            {
+               printf("send can data 0x%lx %d to UDP client\n    ",
+                      MrCs2GetId(&CanMsg), MrCs2GetDlc(&CanMsg));
+               for (i = 0; i < 8; i++)
+                  printf("0x%02x ", CanMsg.Data[i]);
+               printf("\n    hash 0x%x resp 0x%x cmd 0x%x prio 0x%x\n",
+                      MrCs2GetHash(&CanMsg), MrCs2GetResponse(&CanMsg),
+                      MrCs2GetCommand(&CanMsg), MrCs2GetPrio(&CanMsg));
             }
+            Cs2slGetIoFunctions(Data)->Write(Cs2slGetIoFunctions(Data)->private,
+                                             MrIpcGetReceiverSocket(CmdFrame), &CanMsg);
             break;
       }
    }
@@ -236,60 +211,25 @@ static void ProcessOutsideData(Cs2slStruct *Data, MrCs2CanDataType *CanMsg,
    MrIpcExit(&Cmd);
 }
 
-static void HandleOutsideTcpData(Cs2slStruct *Data)
-{  char UdpFrame[MAX_DATAGRAM_SIZE];
-   MrCs2CanDataType CanMsg;
-   BOOL HaveRecv;
+static void HandleOutsideData(Cs2slStruct *Data, int Fd)
+{  MrCs2CanDataType CanMsg;
+   BOOL Ret;
 
-   HaveRecv = MrEthCs2Recv(Cs2slGetOutsideTcpSock(Data),
-                           &Cs2slGetClientAddr(Data), UdpFrame);
-   if (HaveRecv)
+   Ret = Cs2slGetIoFunctions(Data)->Read(Cs2slGetIoFunctions(Data)->private,
+                                          Fd, FALSE, &CanMsg);
+   while (Ret)
    {
       if (Cs2slGetVerbose(Data))
          puts("read new udp frame");
-      MrEthCs2Decode(&CanMsg, UdpFrame);
-      ProcessOutsideData(Data, &CanMsg, Cs2slGetOutsideTcpSock(Data));
-   } 
-}
-
-static void HandleOutsideData(Cs2slStruct *Data)
-{  char UdpFrame[MAX_DATAGRAM_SIZE];
-   MrCs2CanDataType CanMsg;
-   BOOL HaveRecv;
-
-   HaveRecv = MrEthCs2Recv(Cs2slGetOutsideUdpSock(Data),
-                           &Cs2slGetClientAddr(Data), UdpFrame);
-   if (!Cs2slGetCs2Addr(Data))
-   {
-      if (Cs2slGetVerbose(Data))
-         puts("found new cs2");
-      Cs2slSetCs2Addr(Data, TRUE);
-      if (Cs2slGetDoTcp(Data))
-      {
-         Cs2slSetOutsideTcpSock(Data,
-                                MrEthCs2ConnectTcpClient(&Cs2slGetClientAddr(Data)));
-         if (Cs2slGetOutsideTcpSock(Data) != -1)
-         {
-            MrEthCs2Close(Cs2slGetOutsideUdpSock(Data));
-            Cs2slSetOutsideUdpSock(Data, -1);
-            if (Cs2slGetVerbose(Data))
-               printf("tcp connection socket %d\n",
-                      Cs2slGetOutsideTcpSock(Data));
-         }
-      }
+      ProcessOutsideData(Data, &CanMsg, Fd);
+      Ret = Cs2slGetIoFunctions(Data)->Read(Cs2slGetIoFunctions(Data)->private,
+                                            Fd, TRUE, &CanMsg);
    }
-   if (HaveRecv)
-   {
-      if (Cs2slGetVerbose(Data))
-         puts("read new udp frame");
-      MrEthCs2Decode(&CanMsg, UdpFrame);
-      ProcessOutsideData(Data, &CanMsg, Cs2slGetOutsideUdpSock(Data));
-   } 
 }
 
 void Cs2slRun(Cs2slStruct *Data)
 {  fd_set ReadFds;
-   int RetVal, HighFd;
+   int RetVal, HighFd, IoFd;
    struct timeval SelectTimeout;
    time_t Now;
 
@@ -306,23 +246,13 @@ void Cs2slRun(Cs2slStruct *Data)
          FD_SET(Cs2slGetClientSock(Data), &ReadFds);
          if (Cs2slGetClientSock(Data) > HighFd)
             HighFd = Cs2slGetClientSock(Data);
-         if (Cs2slGetOutsideUdpSock(Data) != -1)
+         while ((IoFd = Cs2slGetIoFunctions(Data)->GetFd(Cs2slGetIoFunctions(Data)->private)) != IOFKT_INVALID_FD)
          {
             if (Cs2slGetVerbose(Data))
-               printf("add outside udp socket %d\n",
-                      Cs2slGetOutsideUdpSock(Data));
-            FD_SET(Cs2slGetOutsideUdpSock(Data), &ReadFds);
-            if (Cs2slGetOutsideUdpSock(Data) > HighFd)
-               HighFd = Cs2slGetOutsideUdpSock(Data);
-         }
-         if (Cs2slGetOutsideTcpSock(Data) != -1)
-         {
-            if (Cs2slGetVerbose(Data))
-               printf("add outside tcp socket %d\n",
-                      Cs2slGetOutsideTcpSock(Data));
-            FD_SET(Cs2slGetOutsideTcpSock(Data), &ReadFds);
-            if (Cs2slGetOutsideTcpSock(Data) > HighFd)
-               HighFd = Cs2slGetOutsideTcpSock(Data);
+               printf("add outside socket %d\n", IoFd);
+            FD_SET(IoFd, &ReadFds);
+            if (IoFd > HighFd)
+               HighFd = IoFd;
          }
          SelectTimeout.tv_sec = SELECT_TIMEOUT;
          SelectTimeout.tv_usec = 0;
@@ -351,22 +281,11 @@ void Cs2slRun(Cs2slStruct *Data)
                   puts("data on cmd socket to drehscheibe");
                HandleSystemData(Data);
             }
-            if (Cs2slGetOutsideUdpSock(Data) != -1)
+            while ((IoFd = Cs2slGetIoFunctions(Data)->GetFd(Cs2slGetIoFunctions(Data)->private)) != IOFKT_INVALID_FD)
             {
-               if (FD_ISSET(Cs2slGetOutsideUdpSock(Data), &ReadFds))
+               if (FD_ISSET(IoFd, &ReadFds))
                {
-                  if (Cs2slGetVerbose(Data))
-                     puts("data on udp socket to remote");
-                  HandleOutsideData(Data);
-               }
-            }
-            if (Cs2slGetOutsideTcpSock(Data) != -1)
-            {
-               if (FD_ISSET(Cs2slGetOutsideTcpSock(Data), &ReadFds))
-               {
-                  if (Cs2slGetVerbose(Data))
-                     puts("data on tcp socket server to remote");
-                  HandleOutsideTcpData(Data);
+                  HandleOutsideData(Data, IoFd);
                }
             }
          }

@@ -203,8 +203,8 @@ static BOOL HandleSystemData(DrehscheibeStruct *Data,
    else
    {
       if (DrehscheibeGetVerbose(Data))
-         printf("read new comand frame from socket %d\n",
-                MrIpcGetCommand(&CmdFrame));
+         printf("read new comand frame from socket %d, cmd %02x\n",
+                MrIpcGetCommand(&CmdFrame), CmdFrame.CanCommand);
       ProcessSystemData(Data, &CmdFrame, ClientEntry);
       Ret = FALSE;
    }

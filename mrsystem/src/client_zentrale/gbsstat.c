@@ -82,6 +82,7 @@ void GbsStatParseGbsStatSr2(GleisbildStruct *Data, char *Buf, int Len)
             break;
       }
    } while (LineInfo != PARSER_EOF);
+   Cs2pExit(GbsStatParser);
    Cs2pDestroy(GbsStatParser);
 }
 

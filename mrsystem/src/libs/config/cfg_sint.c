@@ -41,6 +41,12 @@ void ConfigAddIntVal(ConfigStruct *Data, CfgIntValues ValueTyp, int Value)
       case CfgConnTcpVal:
          p = INI_STR_CONN_TCP;
          break;
+      case CfgEmuHostCom:
+         p = INI_STR_EMU_HOST_COM;
+         break;
+      case CfgNumLokfkts:
+         p = INI_STR_NUM_LOKFKT;
+         break;
    }
    ValuePtr = (IniValue *)MapGet(ConfigGetConfig(Data), (MapKeyType)p);
    if (ValuePtr == (IniValue *)NULL)

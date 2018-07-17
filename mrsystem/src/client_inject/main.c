@@ -8,13 +8,15 @@
 #include <config.h>
 #include "inject.h"
 
-#define SOFTWARE_VERSION "1.02"
+#define SOFTWARE_VERSION "1.03"
+
+typedef enum { EvalIntern, EvalCmdline, EvalFile } EvalModeTyp;
 
 static void usage(char *name)
 {
    printf("mrinject V%s\nUsage:\n", SOFTWARE_VERSION);
    printf("%s ([-v] [-a <addr> | -i <iface>] -p <port> [-v] ) | -?\n", name);
-   puts("-a - network interface to drehscheibe");
+   puts("-a - network address of drehscheibe");
    puts("-i - interface to drehscheibe");
    puts("-p - port of drehscheibe");
    puts("-v - verbose");
@@ -25,8 +27,10 @@ int main(int argc, char *argv[])
 {  InjectStruct *Inject;
    ConfigStruct *Config;
    time_t Now;
-   int Ret, NumArgs;
-   char **ValArgs;
+   int Ret, NumArgs, NameArgIndex, DLC, CanBytes[8], i;
+   unsigned long CanId;
+   char **ValArgs, *Filename, *Param;
+   EvalModeTyp EvalMode;
 
    Config = ConfigCreate();
    if (Config != (ConfigStruct *)NULL)
@@ -35,7 +39,7 @@ int main(int argc, char *argv[])
       ValArgs = argv;
       ConfigInit(Config, MRSYSTEM_CONFIG_FILE);
       ConfigReadfile(Config);
-      ConfigCmdLine(Config, "a:i:p:v?", NumArgs, ValArgs);
+      NameArgIndex = ConfigCmdLine(Config, "a:i:p:v?", NumArgs, ValArgs);
       if (ConfigGetIntVal(Config, CfgUsageVal))
       {
          usage(argv[0]);
@@ -43,6 +47,34 @@ int main(int argc, char *argv[])
       }
       else
       {
+         if (argc >= NameArgIndex)
+         {
+            if (argc == NameArgIndex)
+            {
+               Filename = argv[NameArgIndex];
+               EvalMode = EvalFile;
+            }
+            else
+            {
+               Param = argv[NameArgIndex];
+               CanId = strtol(Param, (char **)NULL, 0);
+               NameArgIndex++;
+               Param = argv[NameArgIndex];
+               DLC = strtol(Param, (char **)NULL, 0);
+               NameArgIndex++;
+               for (i = 0; i < 8; i++)
+               {
+                  Param = argv[NameArgIndex];
+                  CanBytes[i] = strtol(Param, (char **)NULL, 0);
+                  NameArgIndex++;
+               }
+               EvalMode = EvalCmdline;
+            }
+         }
+         else
+         {
+            EvalMode = EvalIntern;
+         }
          Now = time(NULL);
          if (ConfigGetIntVal(Config, CfgVerboseVal))
             printf("start with no fork at %s\n", asctime(localtime(&Now)));
@@ -53,7 +85,18 @@ int main(int argc, char *argv[])
                        ConfigGetStrVal(Config, CfgIfaceVal),
                        ConfigGetStrVal(Config, CfgAddrVal),
                        ConfigGetIntVal(Config, CfgPortVal));
-            InjectRun(Inject);
+            switch (EvalMode)
+            {
+               case EvalIntern:
+                  InjectRun(Inject);
+                  break;
+               case EvalCmdline:
+                  InjectRunCmd(Inject, CanId, DLC, CanBytes);
+                  break;
+               case EvalFile:
+                  InjectRunFile(Inject, Filename);
+                  break;
+            }
             InjectDestroy(Inject);
             Ret = 0;
          }

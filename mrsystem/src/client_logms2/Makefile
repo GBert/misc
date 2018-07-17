@@ -1,21 +1,23 @@
 TARGET=mrlogms2
-OBJS=main.o can_client.o logms2.o
+OBJS=main.o ../client_ms2/can_client.o ../common/logms2.o
 LOCALLIBS=-lmr_ipc -lmr_can -lm -lbytestream -lmrconfig -linipars -lscanner -lmap -lavl
 DESTDIR=/usr/local/bin
 
 %.o: %.c
-	$(CC) $(CFLAGS) -I$(INCLUDE_PATH) -c $<
+	$(CC) $(CFLAGS) -DTRACE=$(TRACE) -I$(INCLUDE_PATH) -c $<
 
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
 	$(CC) $(LDFLAGS) -L$(LIB_PATH) -o $@ $(OBJS) $(LDLIBS) $(LOCALLIBS)
 
-main.o: main.c logms2.h
+main.o: main.c ../common/logms2.h
 
-can_client.o: can_client.c can_client.h
+../client_ms2/can_client.o: ../client_ms2/can_client.c ../client_ms2/can_client.h
+	$(CC) $(CFLAGS) -I$(INCLUDE_PATH) -o $@ -c $<
 
-logms2.o: logms2.c logms2.h
+../common/logms2.o:
+	make -C ../common CC=$(CC) CFLAGS="$(CFLAGS)" INCLUDE_PATH=$(INCLUDE_PATH) LIB_PATH=$(LIB_PATH)
 
 install: $(TARGET)
 	install -D $(TARGET) $(DESTDIR)/$(TARGET)
@@ -26,6 +28,9 @@ uninstall:
 clean:
 	rm -f $(TARGET)
 	rm -f $(OBJS)
+
+clean_link:
+	rm -f $(TARGET)
 
 distclean:
 	rm -f $(TARGET)

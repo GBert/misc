@@ -225,7 +225,7 @@ static void LoadGleisPage(void *PrivData, MapKeyType Key, MapDataType Daten)
 void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, int MasterMode,
                   char *Interface, char *Addr, int Port, char *LocPath,
                   int Protokolle, char *SystemStart, int SyncMask,
-                  char *WakeUpS88)
+                  char *WakeUpS88, int NumLokFkts)
 {  Cs2parser *GeraetVrsParser;
    int LineInfo, handle;
    char *FileBuffer, *GeraetVrsFile;
@@ -244,6 +244,7 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, int MasterMode,
    ZentraleInitFsm(Data, ZentraleGetMasterMode(Data));
    ZentraleSetLocPath(Data, LocPath);
    ZentraleSetProtokolle(Data, Protokolle);
+   ZentraleSetIsInPoll(Data, FALSE);
    ZentraleSetSystemStart(Data,
                           (strcmp(MRSYSTEM_CFG_SYSTEM_START, SystemStart) == 0));
    ZentraleSetSyncMask(Data, SyncMask);
@@ -301,7 +302,7 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, int MasterMode,
                               sizeof(ZentraleLokName)));
    CanMemberInit(ZentraleGetCanMember(Data));
    Cs2CfgDataInit(ZentraleGetCs2CfgDaten(Data), ZentraleGetVerbose(Data));
-   LokInit(ZentraleGetLoks(Data), LocPath);
+   LokInit(ZentraleGetLoks(Data), LocPath, NumLokFkts);
    LokLoadLokomotiveCs2(ZentraleGetLoks(Data));
    LokStatusLoadLokomotiveSr2(ZentraleGetLoks(Data));
    GleisbildInit(ZentraleGetGleisbild(Data), LocPath);
@@ -442,7 +443,7 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, int MasterMode,
          else
          {
             if (ZentraleGetVerbose(Data))
-               printf("kann kein Speicher fuer Dateipuffer (%lld) anlegen\n",
+               printf("kann kein Speicher fuer Dateipuffer (%ld) anlegen\n",
                       FileLaenge);
          }
          close(handle);

@@ -6,14 +6,28 @@
 #include <sys/socket.h>
 #include <net/if.h>
 #include <linux/can.h>
-#include <mr_can.h>
+#include <m_cs2ms2.h>
 #include "can_io.h"
 #include "can_client.h"
 
 
 static int CanClientGetFd(void *private)
-{
-   return(CanClientGetCanSock((CanClientStruct *)private));
+{  CanClientStruct *Data;
+   int ReturnFd;
+
+   Data = (CanClientStruct *)private;
+   switch (CanClientGetFdPos(Data))
+   {
+      case FD_POS_CAN:
+         ReturnFd = CanClientGetCanSock(Data);
+         CanClientSetFdPos(Data, FD_POS_ENDE);
+         break;
+      case FD_POS_ENDE:
+         ReturnFd = IOFKT_INVALID_FD;
+         CanClientSetFdPos(Data, FD_POS_CAN);
+         break;
+   }
+   return(ReturnFd);
 }
 
 static BOOL CanClientOpen(void *private)
@@ -33,49 +47,62 @@ static BOOL CanClientOpen(void *private)
          if (bind(CanClientGetCanSock(Data), (struct sockaddr *)&caddr, sizeof(caddr)) < 0)
          {
             close(CanClientGetCanSock(Data));
-            CanClientSetCanSock(Data, -1);
+            CanClientSetCanSock(Data, IOFKT_INVALID_FD);
+         }
+         else
+         {
+            CanClientSetFdPos(Data, FD_POS_CAN);
          }
       }
       else
       {
          close(CanClientGetCanSock(Data));
-         CanClientSetCanSock(Data, -1);
+         CanClientSetCanSock(Data, IOFKT_INVALID_FD);
       }
    }
    return(CanClientGetCanSock(Data) >= 0);
 }
 
 static void CanClientClose(void *private)
-{
+{  CanClientStruct *Data;
+
+   Data = (CanClientStruct *)private;
    close(CanClientGetCanSock((CanClientStruct *)private));
+   CanClientSetCanSock(Data, IOFKT_INVALID_FD);
 }
 
-static int CanClientRead(void *private, CanFrameStruct *CanFrame)
+static BOOL CanClientRead(void *private, int fd, BOOL PendingData,
+                          MrCs2CanDataType *CanMsg)
 {  struct can_frame ReadCanFrame;
-   int i, Ret;
+   int Ret;
 
-   Ret = read(CanClientGetCanSock((CanClientStruct *)private),
-              (void *)&ReadCanFrame, sizeof(struct can_frame));
-   if (Ret > 0)
+   if (PendingData)
    {
-      CanFrame->CanId = ReadCanFrame.can_id;
-      CanFrame->CanDlc = ReadCanFrame.can_dlc;
-      for (i = 0; i < 8; i++)
-         CanFrame->CanData[i] = ReadCanFrame.data[i];
+      return(FALSE);
    }
-   return(Ret);
+   else
+   {
+      Ret = read(fd, (void *)&ReadCanFrame, sizeof(struct can_frame));
+      if (Ret > 0)
+      {
+         MrCs2Decode(CanMsg, &ReadCanFrame);
+         return(TRUE);
+      }
+      else
+      {
+         return(FALSE);
+      }
+   }
 }
 
-static int CanClientWrite(void *private, CanFrameStruct *CanFrame)
+static BOOL CanClientWrite(void *private, int ReceiverSocket,
+                           MrCs2CanDataType *CanMsg)
 {  struct can_frame SendCanFrame;
-   int i;
 
-   SendCanFrame.can_id = CanFrame->CanId;
-   SendCanFrame.can_dlc = CanFrame->CanDlc;
-   for (i = 0; i < 8; i++)
-      SendCanFrame.data[i] = CanFrame->CanData[i];
+   MrCs2Encode(CanMsg, &SendCanFrame);
    return(write(CanClientGetCanSock((CanClientStruct *)private),
-                (const void *)&SendCanFrame, sizeof(struct can_frame)));
+                (const void *)&SendCanFrame, sizeof(struct can_frame)) ==
+          sizeof(struct can_frame));
 }
 
 static IoFktStruct CanClientIoFunctions =
@@ -95,7 +122,7 @@ IoFktStruct *CanClientInit(BOOL Verbose, char *CanIf)
    if (Data != (CanClientStruct *)NULL)
    {
       CanClientSetVerbose(Data, Verbose);
-      CanClientSetCanSock(Data, -1);
+      CanClientSetCanSock(Data, IOFKT_INVALID_FD);
       CanClientSetCanName(Data, CanIf);
       CanClientIoFunctions.private = (void *)Data;
       return(&CanClientIoFunctions);

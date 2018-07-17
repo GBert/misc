@@ -7,5 +7,5 @@ void MrCs2DecCanBootldr(MrCs2CanDataType *CanMsg, char *Bytes)
 {  int i;
 
    for (i = 0; i < 8; i++)
-      Bytes[i] = CanMsg->Data[i];
+      Bytes[i] = (char)(CanMsg->Data[i]);
 }

@@ -4,13 +4,27 @@
 #include <unistd.h>
 #include <can4linux.h>
 #include <mr_can.h>
-#include "../client_ms2/can_io.h"
+#include "can_io.h"
 #include "c4l_client.h"
 
 
 static int C4lClientGetFd(void *private)
-{
-   return(C4lClientGetCanFd((C4lClientStruct *)private));
+{  C4lClientStruct *Data;
+   int ReturnFd;
+
+   Data = (C4lClientStruct *)private;
+   switch (C4lClientGetFdPos(Data))
+   {
+      case FD_POS_CAN:
+         ReturnFd = C4lClientGetCanFd(Data);
+         C4lClientSetFdPos(Data, FD_POS_ENDE);
+         break;
+      case FD_POS_ENDE:
+         ReturnFd = IOFKT_INVALID_FD;
+         C4lClientSetFdPos(Data, FD_POS_CAN);
+         break;
+   }
+   return(ReturnFd);
 }
 
 static BOOL C4lClientOpen(void *private)
@@ -27,34 +41,55 @@ static BOOL C4lClientOpen(void *private)
 static void C4lClientClose(void *private)
 {
    close(C4lClientGetCanFd((C4lClientStruct *)private));
+   C4lClientSetCanSock(Data, IOFKT_INVALID_FD);
 }
 
-static int C4lClientRead(void *private, CanFrameStruct *CanFrame)
+static BOOL C4lClientRead(void *private, int fd, BOOL PendingData,
+                          MrCs2CanDataType *CanMsg)
 {  canmsg_t ReadCanFrame;
    int i, Ret;
+   unsigned CanHash, Response, Command, Prio;
 
-   Ret = read(C4lClientGetCanFd((C4lClientStruct *)private),
-              (void *)&ReadCanFrame, 1);
-   if (Ret > 0)
+   if (PendingData)
    {
-      CanFrame->CanId = ReadCanFrame.id;
-      CanFrame->CanDlc = ReadCanFrame.length;
-      for (i = 0; i < 8; i++)
-         CanFrame->CanData[i] = ReadCanFrame.data[i];
+      return(FALSE);
    }
-   return(Ret);
+   else
+   {
+      Ret = read(fd, (void *)&ReadCanFrame, sizeof(canmsg_t));
+      if (Ret > 0)
+      {
+         MrCs2SetId(CanMsg, ReadCanFrame.id);
+         MrCs2SetDlc(CanMsg, ReadCanFrame.length);
+         for (i = 0; i < 8; i++)
+            MrCs2GetData(CanMsg)[i] = ReadCanFrame.data[i];
+         MrCs2DecodeId(MrCs2GetId(CanMsg), &CanHash, &Response, &Command, &Prio);
+         MrCs2SetHash(CanMsg, CanHash & ~MR_CS2_MASK_HASH_MAGIC);
+         MrCs2SetResponse(CanMsg, Response);
+         MrCs2SetCommand(CanMsg, Command);
+         MrCs2SetPrio(CanMsg, Prio);
+         MrCs2SetIsCs2(CanMsg, MrCs2IsCs2Msg(CanHash, MrCs2GetCommand(CanMsg)));
+         return(TRUE);
+      }
+      else
+      {
+         return(FALSE);
+      }
+   }
 }
 
-static int C4lClientWrite(void *private, CanFrameStruct *CanFrame)
+static BOOL C4lClientWrite(void *private, int ReceiverSocket,
+                           MrCs2CanDataType *CanMsg)
 {  canmsg_t SendCanFrame;
    int i;
 
-   SendCanFrame.id = CanFrame->CanId;
-   SendCanFrame.length = CanFrame->CanDlc;
+   SendCanFrame.id = MrCs2GetId(CanMsg);
+   SendCanFrame.length = MrCs2GetDlc(CanMsg);
    for (i = 0; i < 8; i++)
-      SendCanFrame.data[i] = CanFrame->CanData[i];
+      SendCanFrame.data[i] = MrCs2GetData(CanMag)[i];
    return(write(C4lClientGetCanSock((C4lClientStruct *)private),
-                (const void *)&SendCanFrame, 1));
+                (const void *)&SendCanFrame, sizeof(canmsg_t)) ==
+          sizeof(canmsg_t));
 }
 
 static IoFktStruct C4lClientIoFunctions =
@@ -74,7 +109,7 @@ IoFktStruct *C4lClientInit(BOOL Verbose, char *CanIf)
    if (Data != (C4lClientStruct *)NULL)
    {
       C4lClientSetVerbose(Data, Verbose);
-      C4lClientSetCanSock(Data, -1);
+      C4lClientSetCanSock(Data, IOFKT_INVALID_FD);
       C4lClientSetCanName(Data, CanIf);
       C4lClientIoFunctions.private = (void *)Data;
       return(&C4lClientIoFunctions);

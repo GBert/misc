@@ -36,7 +36,7 @@ static void InitConfigValues(ConfigStruct *Data)
    ValuePtr = malloc(sizeof(IniValue));
    ValuePtr->DataType = IniParsString;
    ValuePtr->IntValue = 0;
-   strcpy(ValuePtr->StringValue, "/www/config");
+   strcpy(ValuePtr->StringValue, "/var/www/config");
    MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_CS2_PATH),
           (MapDataType)ValuePtr);
    ValuePtr = malloc(sizeof(IniValue));
@@ -82,7 +82,7 @@ static void InitConfigValues(ConfigStruct *Data)
    MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_PROTOKOLL),
           (MapDataType)ValuePtr);
    ValuePtr = malloc(sizeof(IniValue));
-   ValuePtr->DataType = IniParsInt;
+   ValuePtr->DataType = IniParsString;
    ValuePtr->IntValue = 0;
    strcpy(ValuePtr->StringValue, "stop");
    MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_START),
@@ -105,10 +105,34 @@ static void InitConfigValues(ConfigStruct *Data)
    strcpy(ValuePtr->StringValue, DISABLE_WAKEUP_S88);
    MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_WAKEUP_S88),
           (MapDataType)ValuePtr);
+   ValuePtr = malloc(sizeof(IniValue));
+   ValuePtr->DataType = IniParsString;
+   ValuePtr->IntValue = 0;
+   strcpy(ValuePtr->StringValue, "unhide");
+   MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_HIDE_MS2),
+          (MapDataType)ValuePtr);
+   ValuePtr = malloc(sizeof(IniValue));
+   ValuePtr->DataType = IniParsInt;
+   ValuePtr->IntValue = 7970;
+   ValuePtr->StringValue[0] = '\0';
+   MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_EMU_HOST_COM),
+          (MapDataType)ValuePtr);
+   ValuePtr = malloc(sizeof(IniValue));
+   ValuePtr->DataType = IniParsString;
+   ValuePtr->IntValue = 0;
+   strcpy(ValuePtr->StringValue, "tty0,500000");
+   MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_SERIAL_LINE),
+          (MapDataType)ValuePtr);
+   ValuePtr = malloc(sizeof(IniValue));
+   ValuePtr->DataType = IniParsInt;
+   ValuePtr->IntValue = 32;
+   ValuePtr->StringValue[0] = '\0';
+   MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_NUM_LOKFKT),
+          (MapDataType)ValuePtr);
 }
 
 void ConfigInit(ConfigStruct *Data, char *IniFile)
-{  IniParsKeyword IniKeywords[14];
+{  IniParsKeyword IniKeywords[18];
 
    MapInit(ConfigGetConfig(Data), (CmpFkt)strcmp, (MapKeyDelCbFkt)free,
            (MapDataDelCbFkt)free);
@@ -139,6 +163,9 @@ void ConfigInit(ConfigStruct *Data, char *IniFile)
    strcpy(IniKeywords[8].Keyword, INI_STR_PROTOKOLL);
    IniKeywords[8].Symbol = INI_TOK_PROTOKOLL;
    IniKeywords[8].DataType = IniParsInt;
+   strcpy(IniKeywords[9].Keyword, INI_STR_START);
+   IniKeywords[9].Symbol = INI_TOK_START;
+   IniKeywords[9].DataType = IniParsString;
    strcpy(IniKeywords[10].Keyword, INI_STR_SYNC);
    IniKeywords[10].Symbol = INI_TOK_SYNC;
    IniKeywords[10].DataType = IniParsInt;
@@ -151,6 +178,18 @@ void ConfigInit(ConfigStruct *Data, char *IniFile)
    strcpy(IniKeywords[13].Keyword, INI_STR_GPIO_S88);
    IniKeywords[13].Symbol = INI_TOK_GPIO_S88;
    IniKeywords[13].DataType = IniParsString;
-   IniParsInit(ConfigGetParser(Data), IniFile, 14, IniKeywords);
+   strcpy(IniKeywords[14].Keyword, INI_STR_HIDE_MS2);
+   IniKeywords[14].Symbol = INI_TOK_HIDE_MS2;
+   IniKeywords[14].DataType = IniParsString;
+   strcpy(IniKeywords[15].Keyword, INI_STR_EMU_HOST_COM);
+   IniKeywords[15].Symbol = INI_TOK_EMU_HOST_COM;
+   IniKeywords[15].DataType = IniParsInt;
+   strcpy(IniKeywords[16].Keyword, INI_STR_SERIAL_LINE);
+   IniKeywords[16].Symbol = INI_TOK_SERIAL_LINE;
+   IniKeywords[16].DataType = IniParsString;
+   strcpy(IniKeywords[17].Keyword, INI_STR_NUM_LOKFKT);
+   IniKeywords[17].Symbol = INI_TOK_NUM_LOKFKT;
+   IniKeywords[17].DataType = IniParsInt;
+   IniParsInit(ConfigGetParser(Data), IniFile, 18, IniKeywords);
    InitConfigValues(Data);
 }

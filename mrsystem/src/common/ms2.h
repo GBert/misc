@@ -22,6 +22,7 @@ typedef struct {
    time_t LastTime;
    MrCs2CanDataType *ActualCmd;
    IoFktStruct *IoFunctions;
+   int Ms2PollSock;
 } Ms2Struct;
 
 #define Ms2SetVerbose(Data, Verbose)       (Data)->Verbosity=Verbose
@@ -36,6 +37,7 @@ typedef struct {
 #define Ms2SetLastTime(Data, Time)         (Data)->LastTime=Time
 #define Ms2SetActualCmd(Data, Cmd)         (Data)->ActualCmd=Cmd
 #define Ms2SetIoFunctions(Data, Fkts)      (Data)->IoFunctions=Fkts
+#define Ms2SetMs2PollSock(Data, Sock)      (Data)->Ms2PollSock=Sock
 
 #define Ms2GetVerbose(Data)      (Data)->Verbosity
 #define Ms2GetInterface(Data)    (Data)->Interface
@@ -49,6 +51,7 @@ typedef struct {
 #define Ms2GetLastTime(Data)     (Data)->LastTime
 #define Ms2GetActualCmd(Data)    (Data)->ActualCmd
 #define Ms2GetIoFunctions(Data)  (Data)->IoFunctions
+#define Ms2GetMs2PollSock(Data)  (Data)->Ms2PollSock
 
 Ms2Struct *Ms2Create(void);
 void Ms2Destroy(Ms2Struct *Data);

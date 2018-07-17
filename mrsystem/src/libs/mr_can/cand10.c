@@ -6,14 +6,14 @@
 void MrCs2DecS88Poll5(MrCs2CanDataType *CanMsg, unsigned long *Uid,
                       int *NumModuls)
 {
-   *Uid = GetLongFromByteArray((char *)CanMsg->Data);
-   *NumModuls = CanMsg->Data[4];
+   *Uid = GetLongFromByteArray(CanMsg->Data);
+   *NumModuls = (int)(CanMsg->Data[4]);
 }
 
 void MrCs2DecS88Poll7(MrCs2CanDataType *CanMsg, unsigned long *Uid,
                       int *Modul, int *State)
 {
-   *Uid = GetLongFromByteArray((char *)CanMsg->Data);
-   *Modul = CanMsg->Data[4];
-   *State = GetIntFromByteArray((char *)&(CanMsg->Data[5]));
+   *Uid = GetLongFromByteArray(CanMsg->Data);
+   *Modul = (int)(CanMsg->Data[4]);
+   *State = GetIntFromByteArray(&(CanMsg->Data[5]));
 }

@@ -3,6 +3,7 @@
 
 #include <arpa/inet.h>
 #include <boolean.h>
+#include "can_io.h"
 
 typedef struct {
    BOOL Verbosity;
@@ -13,12 +14,7 @@ typedef struct {
    char *Address;
    int ServerPort;
    int ClientSock;
-   BOOL Cs2Addr;
-   BOOL DoTcp;
-   int OutsideUdpSock;
-   int OutsideBcSock;
-   int OutsideTcpSock;
-   struct sockaddr_in ClientAddr;
+   IoFktStruct *IoFunctions;
 } Cs2slStruct;
 
 #define Cs2slSetVerbose(Data, Verbose)     (Data)->Verbosity=Verbose
@@ -29,11 +25,7 @@ typedef struct {
 #define Cs2slSetAddress(Data, Addr)        (Data)->Address=Addr
 #define Cs2slSetServerPort(Data, Port)     (Data)->ServerPort=Port
 #define Cs2slSetClientSock(Data, Sock)     (Data)->ClientSock=Sock
-#define Cs2slSetCs2Addr(Data, HaveCs2)     (Data)->Cs2Addr=HaveCs2
-#define Cs2slSetDoTcp(Data, Tcp)           (Data)->DoTcp=Tcp
-#define Cs2slSetOutsideUdpSock(Data, Sock) (Data)->OutsideUdpSock=Sock
-#define Cs2slSetOutsideBcSock(Data, Sock)  (Data)->OutsideBcSock=Sock
-#define Cs2slSetOutsideTcpSock(Data, Sock) (Data)->OutsideTcpSock=Sock
+#define Cs2slSetIoFunctions(Data, Fkts)    (Data)->IoFunctions=Fkts
 
 #define Cs2slGetVerbose(Data)       (Data)->Verbosity
 #ifdef TRACE
@@ -43,21 +35,16 @@ typedef struct {
 #define Cs2slGetAddress(Data)        (Data)->Address
 #define Cs2slGetServerPort(Data)     (Data)->ServerPort
 #define Cs2slGetClientSock(Data)     (Data)->ClientSock
-#define Cs2slGetCs2Addr(Data)        (Data)->Cs2Addr
-#define Cs2slGetDoTcp(Data)          (Data)->DoTcp
-#define Cs2slGetOutsideUdpSock(Data) (Data)->OutsideUdpSock
-#define Cs2slGetOutsideBcSock(Data)  (Data)->OutsideBcSock
-#define Cs2slGetOutsideTcpSock(Data) (Data)->OutsideTcpSock
-#define Cs2slGetClientAddr(Data)     (Data)->ClientAddr
+#define Cs2slGetIoFunctions(Data)    (Data)->IoFunctions
 
 Cs2slStruct *Cs2slCreate(void);
 void Cs2slDestroy(Cs2slStruct *Data);
 void Cs2slInit(Cs2slStruct *Data, BOOL Verbose, char *Iface, char *Addr,
-               int Port, BOOL DoTcp
+               int Port,
 #ifdef TRACE
-               , BOOL Trace
+               BOOL Trace,
 #endif
-              );
+               IoFktStruct *IoFunctions);
 void Cs2slRun(Cs2slStruct *Data);
 
 #endif

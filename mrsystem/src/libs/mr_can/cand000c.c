@@ -5,12 +5,12 @@
 
 void MrCs2DecSysSystemId5(MrCs2CanDataType *CanMsg, unsigned long *Uid)
 {
-   *Uid = GetLongFromByteArray((char *)CanMsg->Data);
+   *Uid = GetLongFromByteArray(CanMsg->Data);
 }
 
 void MrCs2DecSysSystemId7(MrCs2CanDataType *CanMsg, unsigned long *Uid,
                          int *Id)
 {
-   *Uid = GetLongFromByteArray((char *)CanMsg->Data);
-   *Id = GetIntFromByteArray((char *)&(CanMsg->Data[5]));
+   *Uid = GetLongFromByteArray(CanMsg->Data);
+   *Id = GetIntFromByteArray(&(CanMsg->Data[5]));
 }

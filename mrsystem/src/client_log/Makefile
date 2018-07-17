@@ -4,7 +4,7 @@ LOCALLIBS=-lmr_ipc -lm -lmrconfig -linipars -lscanner -lmap -lavl
 DESTDIR=/usr/local/bin
 
 %.o: %.c
-	$(CC) $(CFLAGS) -I$(INCLUDE_PATH) -c $<
+	$(CC) $(CFLAGS) -DTRACE=$(TRACE) -I$(INCLUDE_PATH) -c $<
 
 all: $(TARGET)
 
@@ -24,6 +24,9 @@ uninstall:
 clean:
 	rm -f $(TARGET)
 	rm -f $(OBJS)
+
+clean_link:
+	rm -f $(TARGET)
 
 distclean:
 	rm -f $(TARGET)

@@ -14,7 +14,7 @@ static void usage(char *name)
 {
    printf("dehscheibe V%s\nUsage:\n", SOFTWARE_VERSION);
    printf("%s ([-v] [-f] [-a <addr> | -i <iface>] -p <port> ) | -?\n", name);
-   puts("-a - ip address to listen");
+   puts("-a - network address to listen");
    puts("-i - interface to drehscheibe");
    puts("-p - port to listen");
    puts("-f - dont fork to go in background");

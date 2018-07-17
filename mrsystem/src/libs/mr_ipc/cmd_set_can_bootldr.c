@@ -2,7 +2,7 @@
 #include <string.h>
 #include "mr_ipc.h"
 
-void MrIpcCmdSetCanBootldr(MrIpcCmdType *Data, unsigned char Dlc,
+void MrIpcCmdSetCanBootldr(MrIpcCmdType *Data, unsigned Dlc,
                            unsigned char *CanData)
 {
    MrIpcSetCommand(Data, MrIpcCmdCanBootldrGeb);

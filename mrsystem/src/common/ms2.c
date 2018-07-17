@@ -1,9 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <time.h>
 #include <signal.h>
+#include <time.h>
 #include <sys/select.h>
 #include <sys/socket.h>
+#include <sys/time.h>
 #include <arpa/inet.h>
 #include <linux/can.h>
 #include <string.h>
@@ -15,29 +16,28 @@
 #include "ms2.h"
 
 #define SELECT_LONG_TIMEOUT  100
-#define SELECT_SHORT_TIMEOUT   1
-#define TIMER_INTERVALL  10
+#define SELECT_SHORT_TIMEOUT_SEC  0
+#define SELECT_SHORT_TIMEOUT_USEC 500000
+#define TIMER_INTERVALL  5
 #define NUM_BUFFERS 20
 
 static BOOL Loop = TRUE;
 
 static void SendMagicStart60113Frame(Ms2Struct *Data, int Verbose)
-{  CanFrameStruct CanFrame;
+{  MrCs2CanDataType CanMsg;
 
-   CanFrame.CanId = 0x360301UL;
    /* use EFF */
-   CanFrame.CanId &= CAN_EFF_MASK;
-   CanFrame.CanId |= CAN_EFF_FLAG;
-   CanFrame.CanDlc = 5;
-   CanFrame.CanData[0] = 0;
-   CanFrame.CanData[1] = 0;
-   CanFrame.CanData[2] = 0;
-   CanFrame.CanData[3] = 0;
-   CanFrame.CanData[4] = 0x11;
+   MrCs2SetId(&CanMsg, (0x360301UL & CAN_EFF_MASK) | CAN_EFF_FLAG);
+   MrCs2SetDlc(&CanMsg, 5);
+   MrCs2GetData(&CanMsg)[0] = 0;
+   MrCs2GetData(&CanMsg)[1] = 0;
+   MrCs2GetData(&CanMsg)[2] = 0;
+   MrCs2GetData(&CanMsg)[3] = 0;
+   MrCs2GetData(&CanMsg)[4] = 0x11;
    if (Ms2GetIoFunctions(Data)->Write(Ms2GetIoFunctions(Data)->private,
-                                      &CanFrame) != sizeof(CanFrame))
+                                      MR_IPC_SOCKET_ALL, &CanMsg))
    {
-      perror("CAN magic 60113 start write __");
+      perror("CAN magic 60113 start write");
    }
    else
    {
@@ -150,6 +150,7 @@ void Ms2Init(Ms2Struct *Data, BOOL Verbose, char *Interface,
    Ms2SetZentraleMode(Data, ZentraleMode);
    Ms2SetActualCmd(Data, (MrCs2CanDataType *)NULL);
    Ms2SetIoFunctions(Data, IoFunctions);
+   Ms2SetMs2PollSock(Data, MR_IPC_SOCKET_ALL);
 }
 
 static void SigHandler(int sig)
@@ -215,7 +216,6 @@ static void Stop(Ms2Struct *Data)
 
 static void QueryLoknamen(Ms2Struct *Data, int Start, int End)
 {  MrCs2CanDataType CanMsg;
-   CanFrameStruct CanFrame;
    char MsgBuf[9];
 
    if (Ms2GetVerbose(Data))
@@ -224,22 +224,19 @@ static void QueryLoknamen(Ms2Struct *Data, int Start, int End)
    MrCs2SetResponse(&CanMsg, 0);
    MrCs2SetPrio(&CanMsg, MR_CS2_PRIO_0);
    MrCs2EncConfigQuery(&CanMsg, MR_MS2_CFG_LOCNAMES);
-   MrMs2Encode(&CanMsg, &CanFrame);
    Ms2GetIoFunctions(Data)->Write(Ms2GetIoFunctions(Data)->private,
-                                        &CanFrame);
+                                  MR_IPC_SOCKET_ALL, &CanMsg);
    MrCs2SetHash(&CanMsg, MrMs2CalcHash(MR_CS2_UID_BROADCAST));
    MrCs2SetResponse(&CanMsg, 0);
    MrCs2SetPrio(&CanMsg, MR_CS2_PRIO_0);
    sprintf(MsgBuf, "%d %d", Start, End);
    MrCs2EncConfigQuery(&CanMsg, MsgBuf);
-   MrMs2Encode(&CanMsg, &CanFrame);
    Ms2GetIoFunctions(Data)->Write(Ms2GetIoFunctions(Data)->private,
-                                        &CanFrame);
+                                  MR_IPC_SOCKET_ALL, &CanMsg);
 }
 
 static void QueryLokinfo(Ms2Struct *Data, char *Locname)
 {  MrCs2CanDataType CanMsg;
-   CanFrameStruct CanFrame;
    char MsgBuf[9];
 
    if (Ms2GetVerbose(Data))
@@ -248,18 +245,16 @@ static void QueryLokinfo(Ms2Struct *Data, char *Locname)
    MrCs2SetResponse(&CanMsg, 0);
    MrCs2SetPrio(&CanMsg, MR_CS2_PRIO_0);
    MrCs2EncConfigQuery(&CanMsg, MR_MS2_CFG_LOCINFO);
-   MrMs2Encode(&CanMsg, &CanFrame);
    Ms2GetIoFunctions(Data)->Write(Ms2GetIoFunctions(Data)->private,
-                                        &CanFrame);
+                                  MR_IPC_SOCKET_ALL, &CanMsg);
    MrCs2SetHash(&CanMsg, MrMs2CalcHash(MR_CS2_UID_BROADCAST));
    MrCs2SetResponse(&CanMsg, 0);
    MrCs2SetPrio(&CanMsg, MR_CS2_PRIO_0);
    strncpy(MsgBuf, Locname, 8);
    MsgBuf[8] = '\0';
    MrCs2EncConfigQuery(&CanMsg, MsgBuf);
-   MrMs2Encode(&CanMsg, &CanFrame);
    Ms2GetIoFunctions(Data)->Write(Ms2GetIoFunctions(Data)->private,
-                                        &CanFrame);
+                                  MR_IPC_SOCKET_ALL, &CanMsg);
    MrCs2SetHash(&CanMsg, MrMs2CalcHash(MR_CS2_UID_BROADCAST));
    MrCs2SetResponse(&CanMsg, 0);
    MrCs2SetPrio(&CanMsg, MR_CS2_PRIO_0);
@@ -273,9 +268,8 @@ static void QueryLokinfo(Ms2Struct *Data, char *Locname)
       MsgBuf[0] = '\0';
    }
    MrCs2EncConfigQuery(&CanMsg, MsgBuf);
-   MrMs2Encode(&CanMsg, &CanFrame);
    Ms2GetIoFunctions(Data)->Write(Ms2GetIoFunctions(Data)->private,
-                                        &CanFrame);
+                                  MR_IPC_SOCKET_ALL, &CanMsg);
 }
 
 static BOOL ShouldQueue(Ms2Struct *Data, MrIpcCmdType *CmdFrame)
@@ -289,15 +283,13 @@ static BOOL ShouldQueue(Ms2Struct *Data, MrIpcCmdType *CmdFrame)
 
 static void ForwardToCan(Ms2Struct *Data, MrMs2CanDataType *CanMsg)
 {  int i;
-   CanFrameStruct CanFrame;
 
-   MrMs2Encode(CanMsg, &CanFrame);
    if (Ms2GetVerbose(Data))
    {
       printf("send can data 0x%lx %d\n    ",
              MrCs2GetId(CanMsg), MrCs2GetDlc(CanMsg));
       for (i = 0; i < 8; i++)
-         printf("0x%02x ", CanMsg->Data[i]);
+         printf("0x%02x ", MrCs2GetData(CanMsg)[i]);
       printf("\n    hash 0x%x resp 0x%x cmd 0x%x prio 0x%x\n",
              MrCs2GetHash(CanMsg), MrCs2GetResponse(CanMsg),
              MrCs2GetCommand(CanMsg), MrCs2GetPrio(CanMsg));
@@ -306,47 +298,65 @@ static void ForwardToCan(Ms2Struct *Data, MrMs2CanDataType *CanMsg)
        (MrCs2GetCommand(CanMsg) != MR_CS2_CMD_BOOTLDR_CAN))
    {
       Ms2GetIoFunctions(Data)->Write(Ms2GetIoFunctions(Data)->private,
-                                     &CanFrame);
+                                     MR_IPC_SOCKET_ALL, CanMsg);
    }
 }
 
 static void ProcessSystemData(Ms2Struct *Data, MrIpcCmdType *CmdFrame)
 {  MrMs2CanDataType CanMsg, *BufCanMsg;
-   CanFrameStruct CanFrame;
    unsigned int i, StartIdx, EndIdx;
    char LokName[17];
+   struct timeval Now;
 
    switch (MrIpcGetCommand(CmdFrame))
    {
-      case MrIpcCmdMember:
       case MrIpcCmdRequestFile:
+         MrIpcDecodeToCan(CmdFrame, &CanMsg);
+         if ((Ms2GetZentraleMode(Data) == MASTER_MODE_PROXY) ||
+             (MrCs2GetDlc(&CanMsg) == 0))
+         {
+            if (Ms2GetVerbose(Data))
+            {
+               printf("send can data 0x%lx %d\n    ",
+                      MrCs2GetId(&CanMsg), MrCs2GetDlc(&CanMsg));
+               for (i = 0; i < 8; i++)
+                  printf("0x%02x ", MrCs2GetData(&CanMsg)[i]);
+               printf("\n    hash 0x%x resp 0x%x cmd 0x%x prio 0x%x\n",
+                      MrCs2GetHash(&CanMsg), MrCs2GetResponse(&CanMsg),
+                      MrCs2GetCommand(&CanMsg), MrCs2GetPrio(&CanMsg));
+            }
+            Ms2GetIoFunctions(Data)->Write(Ms2GetIoFunctions(Data)->private,
+                                           MR_IPC_SOCKET_ALL, &CanMsg);
+         }
+      case MrIpcCmdMember:
       case MrIpcCmdCfgHeader:
       case MrIpcCmdCfgZHeader:
       case MrIpcCmdCfgData:
          if (Ms2GetZentraleMode(Data) == MASTER_MODE_PROXY)
          {
             MrIpcDecodeToCan(CmdFrame, &CanMsg);
-            MrMs2Encode(&CanMsg, &CanFrame);
             if (Ms2GetVerbose(Data))
             {
                printf("send can data 0x%lx %d\n    ",
                       MrCs2GetId(&CanMsg), MrCs2GetDlc(&CanMsg));
                for (i = 0; i < 8; i++)
-                  printf("0x%02x ", CanMsg.Data[i]);
+                  printf("0x%02x ", MrCs2GetData(&CanMsg)[i]);
                printf("\n    hash 0x%x resp 0x%x cmd 0x%x prio 0x%x\n",
                       MrCs2GetHash(&CanMsg), MrCs2GetResponse(&CanMsg),
                       MrCs2GetCommand(&CanMsg), MrCs2GetPrio(&CanMsg));
             }
             Ms2GetIoFunctions(Data)->Write(Ms2GetIoFunctions(Data)->private,
-                                                 &CanFrame);
+                                           MR_IPC_SOCKET_ALL, &CanMsg);
          }
          break;
       case MrIpcCmdRequestLocName:
          MrIpcCmdGetReqestLocname(CmdFrame, &StartIdx, &EndIdx);
+         Ms2SetMs2PollSock(Data, MrIpcGetSenderSocket(CmdFrame));
          QueryLoknamen(Data, StartIdx, EndIdx);
          break;
       case MrIpcCmdRequestLocInfo:
          MrIpcCmdGetReqestLocinfo(CmdFrame, LokName);
+         Ms2SetMs2PollSock(Data, MrIpcGetSenderSocket(CmdFrame));
          QueryLokinfo(Data, LokName);
          break;
       default:
@@ -381,7 +391,9 @@ static void ProcessSystemData(Ms2Struct *Data, MrIpcCmdType *CmdFrame)
                   {
                      Ms2SetActualCmd(Data, BufCanMsg);
                      ForwardToCan(Data, BufCanMsg);
-                     Ms2SetLastTime(Data, time(NULL));
+                     gettimeofday(&Now, (struct timezone *)NULL);
+                     Ms2SetLastTime(Data,
+                                    (Now.tv_sec * 10) + (Now.tv_usec / 100000l));
                   }
                   else
                   {
@@ -445,25 +457,25 @@ static BOOL IsQueuedAnswer(Ms2Struct *Data, MrMs2CanDataType *CanMsg)
 static void ProcessCanData(Ms2Struct *Data, MrMs2CanDataType *CanMsg,
                            int SenderSocket)
 {  MrIpcCmdType Cmd;
-   int i;
 
-   if (MrCs2GetIsCs2(CanMsg))
+   if (TRUE/*MrCs2GetIsCs2(CanMsg)*/)
    {
       if (Ms2GetVerbose(Data))
-      {
-         printf("get can data 0x%lx %d\n    ",
-                MrCs2GetId(CanMsg), MrCs2GetDlc(CanMsg));
-         for (i = 0; i < 8; i++)
-            printf("0x%02x ", CanMsg->Data[i]);
-         printf("\n    hash 0x%x resp 0x%x cmd 0x%x prio 0x%x\n",
-                MrCs2GetHash(CanMsg), MrCs2GetResponse(CanMsg),
-                MrCs2GetCommand(CanMsg), MrCs2GetPrio(CanMsg));
-         puts("send to drehscheibe");
-      }
+         MrCs2DumpCanMsg(CanMsg, "get can data, send to drehscheibe");
       MrIpcInit(&Cmd);
       MrIpcEncodeFromCan(&Cmd, CanMsg);
       MrIpcSetSenderSocket(&Cmd, SenderSocket);
-      MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
+      switch (MrIpcGetCommand(&Cmd))
+      {
+         case MrIpcCmdCfgHeader:
+         case MrIpcCmdCfgZHeader:
+         case MrIpcCmdCfgData:
+            MrIpcSetReceiverSocket(&Cmd, Ms2GetMs2PollSock(Data));
+            break;
+         default:
+           MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
+           break;
+      }
       MrIpcSend(Ms2GetClientSock(Data), &Cmd);
       if ((Ms2GetActualCmd(Data) != (MrCs2CanDataType *)NULL) &&
           IsQueuedAnswer(Data, CanMsg))
@@ -490,39 +502,28 @@ static void ProcessCanData(Ms2Struct *Data, MrMs2CanDataType *CanMsg,
    }
 }
 
-static void HandleCanData(Ms2Struct *Data)
-{  CanFrameStruct CanFrame;
-   MrMs2CanDataType CanMsg;
+static void HandleCanData(Ms2Struct *Data, int Fd)
+{  MrMs2CanDataType CanMsg;
+   BOOL Ret;
 
    if (Ms2GetVerbose(Data))
-      puts("new can data available");
-   if (Ms2GetIoFunctions(Data)->Read(Ms2GetIoFunctions(Data)->private,
-                                           &CanFrame) == sizeof(CanFrameStruct))
+      printf("new can data available on socket %d\n", Fd);
+   Ret = Ms2GetIoFunctions(Data)->Read(Ms2GetIoFunctions(Data)->private,
+                                       Fd, FALSE, &CanMsg);
+   while (Ret)
    {
-      MrMs2Decode(&CanMsg, &CanFrame);
-      ProcessCanData(Data, &CanMsg,
-                     Ms2GetIoFunctions(Data)->GetFd(Ms2GetIoFunctions(Data)->private));
+      ProcessCanData(Data, &CanMsg, Fd);
+      Ret = Ms2GetIoFunctions(Data)->Read(Ms2GetIoFunctions(Data)->private,
+                                          Fd, TRUE, &CanMsg);
    }
 }
 
 static void HandleTimeout(Ms2Struct *Data)
-{  int i;
-
+{
    if (Ms2GetActualCmd(Data) != (MrCs2CanDataType *)NULL)
    {
       if (Ms2GetVerbose(Data))
-      {
-         printf("timeout for can data 0x%lx %d\n    ",
-                MrCs2GetId(Ms2GetActualCmd(Data)),
-                MrCs2GetDlc(Ms2GetActualCmd(Data)));
-         for (i = 0; i < 8; i++)
-            printf("0x%02x ", Ms2GetActualCmd(Data)->Data[i]);
-         printf("\n    hash 0x%x resp 0x%x cmd 0x%x prio 0x%x\n",
-                MrCs2GetHash(Ms2GetActualCmd(Data)),
-                MrCs2GetResponse(Ms2GetActualCmd(Data)),
-                MrCs2GetCommand(Ms2GetActualCmd(Data)), 
-                MrCs2GetPrio(Ms2GetActualCmd(Data)));
-      }
+         MrCs2DumpCanMsg(Ms2GetActualCmd(Data), "timeout for can data");
       if (Ms2GetNumBuffers(Data) > NUM_BUFFERS)
       {
          free((void *)Ms2GetActualCmd(Data));
@@ -541,9 +542,8 @@ static void HandleTimeout(Ms2Struct *Data)
 
 void Ms2Run(Ms2Struct *Data)
 {  fd_set ReadFds;
-   int RetVal, HighFd;
-   struct timeval SelectTimeout;
-   time_t Now;
+   int RetVal, HighFd, IoFd;
+   struct timeval SelectTimeout, Now;
 
    if (Start(Data))
    {
@@ -557,28 +557,36 @@ void Ms2Run(Ms2Struct *Data)
          FD_SET(Ms2GetClientSock(Data), &ReadFds);
          if (Ms2GetClientSock(Data) > HighFd)
             HighFd = Ms2GetClientSock(Data);
-         if (Ms2GetVerbose(Data))
-            printf("add can socket %d\n",
-                   Ms2GetIoFunctions(Data)->GetFd(Ms2GetIoFunctions(Data)->private));
-         FD_SET(Ms2GetIoFunctions(Data)->GetFd(Ms2GetIoFunctions(Data)->private),
-                &ReadFds);
-         if (Ms2GetIoFunctions(Data)->GetFd(Ms2GetIoFunctions(Data)->private) > HighFd)
-            HighFd = Ms2GetIoFunctions(Data)->GetFd(Ms2GetIoFunctions(Data)->private);
+
+         while ((IoFd = Ms2GetIoFunctions(Data)->GetFd(Ms2GetIoFunctions(Data)->private)) != IOFKT_INVALID_FD)
+         {
+            if (Ms2GetVerbose(Data))
+               printf("add can socket %d\n", IoFd);
+            FD_SET(IoFd, &ReadFds);
+            if (IoFd > HighFd)
+               HighFd = IoFd;
+         }
          if (Ms2GetActualCmd(Data) != (MrCs2CanDataType *)NULL)
-            SelectTimeout.tv_sec = SELECT_SHORT_TIMEOUT;
+         {
+            SelectTimeout.tv_sec = SELECT_SHORT_TIMEOUT_SEC;
+            SelectTimeout.tv_usec = SELECT_SHORT_TIMEOUT_USEC;
+         }
          else
+         {
             SelectTimeout.tv_sec = SELECT_LONG_TIMEOUT;
-         SelectTimeout.tv_usec = 0;
+            SelectTimeout.tv_usec = 0;
+         }
          if (Ms2GetVerbose(Data))
             printf("wait for %d fd, max %ld s\n", HighFd, SelectTimeout.tv_sec);
          RetVal = select(HighFd + 1, &ReadFds, NULL, NULL, &SelectTimeout);
-         Now = time(NULL);
+         gettimeofday(&Now, (struct timezone *)NULL);
          if (Ms2GetVerbose(Data))
             printf("select liefert %d\n", RetVal);
          if (((RetVal == -1) && (errno == EINTR)) || (RetVal == 0))
          {
             if (Ms2GetVerbose(Data))
-               printf("interrupt at %s\n", asctime(localtime(&Now)));
+               printf("interrupt at %s\n",
+                      asctime(localtime(&(Now.tv_sec))));
          }
          else if (RetVal < 0)
          {
@@ -594,16 +602,18 @@ void Ms2Run(Ms2Struct *Data)
                   puts("new data on cmd socket to drehscheibe");
                HandleSystemData(Data);
             }
-            if (FD_ISSET(Ms2GetIoFunctions(Data)->GetFd(Ms2GetIoFunctions(Data)->private),
-                         &ReadFds))
+            while ((IoFd = Ms2GetIoFunctions(Data)->GetFd(Ms2GetIoFunctions(Data)->private)) != IOFKT_INVALID_FD)
             {
-               if (Ms2GetVerbose(Data))
-                  puts("new data on can socket");
-               HandleCanData(Data);
+               if (FD_ISSET(IoFd, &ReadFds))
+               {
+                  if (Ms2GetVerbose(Data))
+                     printf("new data on can socket %d\n",IoFd);
+                  HandleCanData(Data, IoFd);
+               }
             }
          }
          if ((Ms2GetActualCmd(Data) != (MrCs2CanDataType *)NULL) &&
-             ((Now - Ms2GetLastTime(Data)) > TIMER_INTERVALL))
+             (((Now.tv_sec * 10) + (Now.tv_usec / 100000l) - Ms2GetLastTime(Data)) > TIMER_INTERVALL))
          {
             HandleTimeout(Data);
          }

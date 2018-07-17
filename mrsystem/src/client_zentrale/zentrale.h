@@ -65,6 +65,7 @@ typedef struct {
    unsigned long Uid;
    ZlibFile *PackedCs2File;
    BOOL HaveDb;
+   BOOL IsInPoll;
    Cs2CfgData *Cs2CgfDaten;
    int ActualIndex;
    int NumLoks;
@@ -100,6 +101,7 @@ typedef struct {
 #define ZentraleSetSerialNumber(Data, Serial)           (Data)->SerialNumber=Serial
 #define ZentraleSetGfpUid(Data, MyUid)                  (Data)->GfpUid=MyUid
 #define ZentraleSetUid(Data, MyUid)                     (Data)->Uid=MyUid
+#define ZentraleSetIsInPoll(Data, Poll)                 (Data)->IsInPoll=Poll
 #define ZentraleSetPackedCs2File(Data, Zfile)           (Data)->PackedCs2File=Zfile
 #define ZentraleSetCs2CfgDaten(Data, Cs2Daten)          (Data)->Cs2CgfDaten=Cs2Daten
 #define ZentraleSetActualIndex(Data, i)                 (Data)->ActualIndex=i
@@ -138,6 +140,7 @@ typedef struct {
 #define ZentraleGetSerialNumber(Data)         (Data)->Serial
 #define ZentraleGetGfpUid(Data)               (Data)->GfpUid
 #define ZentraleGetUid(Data)                  (Data)->Uid
+#define ZentraleGetIsInPoll(Data)             (Data)->IsInPoll
 #define ZentraleGetPackedCs2File(Data)        (Data)->PackedCs2File
 #define ZentraleGetCs2CfgDaten(Data)          (Data)->Cs2CgfDaten
 #define ZentraleGetLoks(Data)                 (Data)->Loks
@@ -164,7 +167,7 @@ void ZentraleDestroy(ZentraleStruct *Data);
 void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, int MasterMode,
                   char *Interface, char *Addr, int Port, char *LocPath,
                   int Protokolle, char *SystemStart, int SyncMask,
-                  char *WakeUpS88);
+                  char *WakeUpS88, int NumLokFkts);
 void ZentraleInitFsm(ZentraleStruct *Data, int MasterMode);
 void ZentraleExit(ZentraleStruct *Data);
 void ZentraleRun(ZentraleStruct *Data);

@@ -19,8 +19,8 @@ void MrCs2EncDiscovery1(MrCs2CanDataType *CanMsg, int Proto)
 void MrCs2EncDiscovery5(MrCs2CanDataType *CanMsg, unsigned long Uid,
                         int Range)
 {
-   SetLongToByteArray((char *)CanMsg->Data, Uid);
-   CanMsg->Data[4] = Range;
+   SetLongToByteArray(CanMsg->Data, Uid);
+   CanMsg->Data[4] = (unsigned char)Range;
    MrCs2SetCommand(CanMsg, MR_CS2_CMD_DISCOVERY);
    MrCs2SetDlc(CanMsg, 5);
 }
@@ -28,9 +28,9 @@ void MrCs2EncDiscovery5(MrCs2CanDataType *CanMsg, unsigned long Uid,
 void MrCs2EncDiscovery6(MrCs2CanDataType *CanMsg, unsigned long Uid,
                         int Range, int Ask)
 {
-   SetLongToByteArray((char *)CanMsg->Data, Uid);
-   CanMsg->Data[4] = Range;
-   CanMsg->Data[5] = Ask;
+   SetLongToByteArray(CanMsg->Data, Uid);
+   CanMsg->Data[4] = (unsigned char)Range;
+   CanMsg->Data[5] = (unsigned char)Ask;
    MrCs2SetCommand(CanMsg, MR_CS2_CMD_DISCOVERY);
    MrCs2SetDlc(CanMsg, 6);
 }

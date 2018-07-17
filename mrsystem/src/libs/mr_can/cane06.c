@@ -6,8 +6,8 @@
 void MrCs2EncFunction5(MrCs2CanDataType *CanMsg, unsigned long LocId,
                        int Function)
 {
-   SetLongToByteArray((char *)CanMsg->Data, LocId);
-   CanMsg->Data[4] = Function;
+   SetLongToByteArray(CanMsg->Data, LocId);
+   CanMsg->Data[4] = (unsigned char)Function;
    MrCs2SetCommand(CanMsg, MR_CS2_CMD_FUNCTION);
    MrCs2SetDlc(CanMsg, 5);
 }
@@ -15,9 +15,9 @@ void MrCs2EncFunction5(MrCs2CanDataType *CanMsg, unsigned long LocId,
 void MrCs2EncFunction6(MrCs2CanDataType *CanMsg, unsigned long LocId,
                        int Function, int Value)
 {
-   SetLongToByteArray((char *)CanMsg->Data, LocId);
-   CanMsg->Data[4] = Function;
-   CanMsg->Data[5] = Value;
+   SetLongToByteArray(CanMsg->Data, LocId);
+   CanMsg->Data[4] = (unsigned char)Function;
+   CanMsg->Data[5] = (unsigned char)Value;
    MrCs2SetCommand(CanMsg, MR_CS2_CMD_FUNCTION);
    MrCs2SetDlc(CanMsg, 6);
 }
@@ -25,10 +25,10 @@ void MrCs2EncFunction6(MrCs2CanDataType *CanMsg, unsigned long LocId,
 void MrCs2EncFunction8(MrCs2CanDataType *CanMsg, unsigned long LocId,
                        int Function, int Value, int FktVal)
 {
-   SetLongToByteArray((char *)CanMsg->Data, LocId);
-   CanMsg->Data[4] = Function;
-   CanMsg->Data[5] = Value;
-   SetIntToByteArray((char *)&(CanMsg->Data[6]), FktVal);
+   SetLongToByteArray(CanMsg->Data, LocId);
+   CanMsg->Data[4] = (unsigned char)Function;
+   CanMsg->Data[5] = (unsigned char)Value;
+   SetIntToByteArray(&(CanMsg->Data[6]), FktVal);
    MrCs2SetCommand(CanMsg, MR_CS2_CMD_FUNCTION);
    MrCs2SetDlc(CanMsg, 8);
 }

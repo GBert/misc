@@ -79,6 +79,7 @@ void MagStatusParseMagStatusSr2(MagnetartikelStruct *Data, char *Buf, int Len)
             break;
       }
    } while (LineInfo != PARSER_EOF);
+   Cs2pExit(MagStatParser);
    Cs2pDestroy(MagStatParser);
 }
 

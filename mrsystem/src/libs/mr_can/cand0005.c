@@ -6,6 +6,6 @@
 void MrCs2DecSysDataProtocoll(MrCs2CanDataType *CanMsg, unsigned long *Uid,
                               int *Proto)
 {
-   *Uid = GetLongFromByteArray((char *)CanMsg->Data);
+   *Uid = GetLongFromByteArray(CanMsg->Data);
    *Proto = CanMsg->Data[5];
 }

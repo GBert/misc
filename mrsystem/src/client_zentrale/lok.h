@@ -5,7 +5,7 @@
 #include <map.h>
 
 #define LOK_MAX_LOKS 40
-#define LOK_NUM_FUNCTIONS 16
+#define LOK_NUM_FUNCTIONS 32
 
 typedef struct {
    int Typ;
@@ -80,23 +80,26 @@ typedef struct {
 typedef struct {
    char *LocFilePath;
    int NumLoks;
+   int NumLokFkts;
    BOOL IsChanged;
    Map *LokDb;
 } LokStruct;
 
 #define LokSetLocFilePath(Data,Val) (Data)->LocFilePath=Val
 #define LokSetNumLoks(Data,Val)     (Data)->NumLoks=Val
+#define LokSetNumLokFkts(Data,Val)  (Data)->NumLokFkts=Val
 #define LokSetIsChanged(Data,Val)   (Data)->IsChanged=Val
 #define LokSetLokDb(Data,Val)       (Data)->LokDb=Val
 
 #define LokGetLocFilePath(Data) (Data)->LocFilePath
 #define LokGetNumLoks(Data)     (Data)->NumLoks
+#define LokGetNumLokFkts(Data)  (Data)->NumLokFkts
 #define LokGetIsChanged(Data)   (Data)->IsChanged
 #define LokGetLokDb(Data)       (Data)->LokDb
 
 LokStruct *LokCreate(void);
 void LokDestroy(LokStruct *Data);
-void LokInit(LokStruct *Data, char *LocPath);
+void LokInit(LokStruct *Data, char *LocPath, int NumLokFkts);
 void LokExit(LokStruct *Data);
 void LokClear(LokStruct *Data);
 void LokInsert(LokStruct *Data, LokInfo *Lok);

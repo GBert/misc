@@ -1,12 +1,13 @@
 TARGET=libmr_can.a
-OBJS=enceth.o deceth.o sendeth.o sendtoeth.o recveth.o starteth.o starteth_bc.o mk_bcaddr.o starteth_tcp.o accept_tcp.o cs2_encode.o cs2_decode.o trace.o \
+OBJS=enceth.o deceth.o sendeth.o sendtoeth.o recveth.o starteth.o starteth_bc.o mk_bcaddr.o starteth_tcp.o accept_tcp.o cs2_encode.o cs2_decode.o \
 	calc_hash.o calc_hash_fnr.o crc.o iscs2msg.o encode_id.o decode_id.o conn_eth.o conn_tcp.o \
 	cand0000.o cand0001.o cand0002.o cand0003.o cand0004.o cand0005.o cand0006.o cand0007.o cand0008.o cand0009.o cand000a.o cand000b.o cand000c.o cand0080.o \
 	cane0000.o cane0001.o cane0002.o cane0003.o cane0004.o cane0005.o cane0006.o cane0007.o cane0008.o cane0009.o cane000a.o cane000b.o cane000c.o cane0080.o \
 	cand01.o cand02.o cand03.o cand04.o cand05.o cand06.o cand07.o cand08.o \
 	cand0b.o cand10.o cand11.o cand18.o cand1b.o cand1d.o cand20.o cand21.o cand30.o \
 	cane01.o cane02.o cane03.o cane04.o cane05.o cane06.o cane07.o cane08.o \
-	cane0b.o cane10.o cane11.o cane18.o cane1b.o cane1d.o cane20.o cane21.o cane30.o
+	cane0b.o cane10.o cane11.o cane18.o cane1b.o cane1d.o cane20.o cane21.o cane30.o \
+	statinfenc.o statinfdec.o trace.o dump_msg.o
 
 %.o: %.c
 	$(CC) $(CFLAGS) -I$(INCLUDE_PATH) -c $<
@@ -52,6 +53,10 @@ cs2_decode.o: cs2_decode.c mr_can.h m_cs2ms2.h
 calc_hash.o: calc_hash.c mr_can.h m_cs2ms2.h
 
 trace.o: trace.c mr_can.h m_cs2ms2.h
+
+dump_frame.o: dump_frame.c mr_can.h m_cs2ms2.h
+
+dump_msg.o: dump_msg.c mr_can.h m_cs2ms2.h
 
 cand0000.o: cand0000.c mr_can.h m_cs2ms2.h
 
@@ -176,6 +181,10 @@ cane20.o: cane20.c mr_can.h m_cs2ms2.h
 cane21.o: cane21.c mr_can.h m_cs2ms2.h
 
 cane30.o: cane30.c mr_can.h m_cs2ms2.h
+
+statinfenc.o: statinfenc.c m_cs2ms2.h
+
+statinfdec.o: statinfdec.c m_cs2ms2.h
 
 clean:
 	rm -f $(TARGET)

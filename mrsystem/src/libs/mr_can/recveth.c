@@ -2,7 +2,7 @@
 #include <arpa/inet.h>
 #include "mr_can.h"
 
-BOOL MrEthCs2Recv(int Socket, struct sockaddr_in *ClntAddr, char *Data)
+int MrEthCs2Recv(int Socket, struct sockaddr_in *ClntAddr, char *Data)
 {  unsigned int ClntAddrLen;
    int RecvMsgSize;
 
@@ -10,5 +10,19 @@ BOOL MrEthCs2Recv(int Socket, struct sockaddr_in *ClntAddr, char *Data)
    ClntAddrLen = sizeof(*ClntAddr);
    RecvMsgSize = recvfrom(Socket, Data, MR_CS2_UDP_LENGTH, 0,
                           (struct sockaddr *)ClntAddr, &ClntAddrLen);
-   return(RecvMsgSize > 0);
+   if (RecvMsgSize < 0)
+   {
+      /* Error in read, maybe no data left */
+      return MR_ETH_CS2_RCV_ERROR;
+   }
+   else if (RecvMsgSize == 0)
+   {
+      /* socket was closed at remote side */
+      return MR_ETH_CS2_RCV_CLOSED;
+   }
+   else
+   {
+      /* we have one complete message */
+      return MR_ETH_CS2_RCV_OK;
+   }
 }

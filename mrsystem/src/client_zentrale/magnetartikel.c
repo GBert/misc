@@ -14,7 +14,7 @@ MagnetartikelStruct *MagnetartikelCreate(void)
    NewData = (MagnetartikelStruct *)malloc(sizeof(MagnetartikelStruct));
    if (NewData != (MagnetartikelStruct *)NULL)
    {
-      MagnetartikelSetMagnetartikelFilePath(NewData, "/www/config/");
+      MagnetartikelSetMagnetartikelFilePath(NewData, "/var/www/config/");
       MagnetartikelSetNumArtikel(NewData, 0);
       MagnetartikelSetMagnetartikelDb(NewData, MapCreate());
       if (MagnetartikelGetMagnetartikelDb(NewData) == (Map *)NULL)
@@ -206,6 +206,7 @@ void MagnetartikelParseMagnetartikelCs2(MagnetartikelStruct *Data, char *Buf, in
             break;
       }
    } while (LineInfo != PARSER_EOF);
+   Cs2pExit(MagnetartikelParser);
    Cs2pDestroy(MagnetartikelParser);
 }
 

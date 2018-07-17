@@ -5,5 +5,5 @@
 
 void MrCs2DecSysCycleEnd(MrCs2CanDataType *CanMsg, unsigned long *Uid)
 {
-   *Uid = GetLongFromByteArray((char *)CanMsg->Data);
+   *Uid = GetLongFromByteArray(CanMsg->Data);
 }

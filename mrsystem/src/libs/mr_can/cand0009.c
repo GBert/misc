@@ -6,6 +6,6 @@
 void MrCs2DecSysResetMfxCounter(MrCs2CanDataType *CanMsg, unsigned long *Uid,
                                 int *Counter)
 {
-   *Uid = GetLongFromByteArray((char *)CanMsg->Data);
-   *Counter = GetIntFromByteArray((char *)&(CanMsg->Data[5]));
+   *Uid = GetLongFromByteArray(CanMsg->Data);
+   *Counter = GetIntFromByteArray(&(CanMsg->Data[5]));
 }

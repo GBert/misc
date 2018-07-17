@@ -6,6 +6,6 @@
 void MrCs2DecSysSystemReset(MrCs2CanDataType *CanMsg, unsigned long *Uid,
                             int *ResetTarget)
 {
-   *Uid = GetLongFromByteArray((char *)CanMsg->Data);
-   *ResetTarget = CanMsg->Data[5];
+   *Uid = GetLongFromByteArray(CanMsg->Data);
+   *ResetTarget = (int)(CanMsg->Data[5]);
 }

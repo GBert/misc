@@ -8,12 +8,6 @@
 #define MR_CS2_NUM_CAN_BYTES 8
 
 typedef struct {
-   unsigned long CanId;
-   unsigned char CanDlc;
-   unsigned char CanData[8];
-} CanFrameStruct;
-
-typedef struct {
    unsigned long Id;
    unsigned char Dlc; /* = number of data bytes */
    unsigned char Data[MR_CS2_NUM_CAN_BYTES];
@@ -67,11 +61,19 @@ typedef struct {
 #define MR_CS2_FOLGENUMMER_HIGH BIT_MASK(10,15)
 
 /* defines fo prio field */
+#ifdef MR_CS2_USE_PRIO
 #define MR_CS2_PRIO_0 0 /* not prio set */
 #define MR_CS2_PRIO_1 1 /* Stopp / Go / Kurzschluss-Meldungen */
 #define MR_CS2_PRIO_2 2 /* Rueckmeldungen */
 #define MR_CS2_PRIO_3 3 /* Lok anhalten */
 #define MR_CS2_PRIO_4 4 /* Lok / Zubehoerbefehle */
+#else
+#define MR_CS2_PRIO_0 0 /* not prio set */
+#define MR_CS2_PRIO_1 0 /* Stopp / Go / Kurzschluss-Meldungen */
+#define MR_CS2_PRIO_2 0 /* Rueckmeldungen */
+#define MR_CS2_PRIO_3 0 /* Lok anhalten */
+#define MR_CS2_PRIO_4 0 /* Lok / Zubehoerbefehle */
+#endif
 
 /* defines for command field of CS2 can id */
 #define MR_CS2_CMD_SYSTEM        0x00
@@ -174,7 +176,8 @@ typedef struct {
 #define MR_CS2_DEVID_GFP      0x0000
 #define MR_CS2_DEVID_GLEISBOX 0x0010
 #define MR_CS2_DEVID_CONNECT  0x0020
-#define MR_CS2_DEVID_MS2      0x0030
+#define MR_CS2_DEVID_MS2_1    0x0030
+#define MR_CS2_DEVID_MS2_2    0x0032
 #define MR_CS2_DEVID_CS2      0xEEEE
 #define MR_CS2_DEVID_WIRELESS 0xFFE0
 #define MR_CS2_DEVID_WIRED    0xFFF0
@@ -197,6 +200,7 @@ typedef struct {
 #define MR_CS2_CFG_MAG_STAT "magstat"
 #define MR_CS2_CFG_GBS_STAT "gbsstat"
 #define MR_CS2_CFG_FS_STAT  "fsstat"
+#define MR_CS2_CFG_DLC 8
 
 /* names for cs2 files */
 #define MR_CS2_FILE_EXTENSION ".cs2"
@@ -205,6 +209,7 @@ typedef struct {
 /* Namen fuer MS2 CAN Auswertung */
 #define MrMs2Decode(CanMsg,CanFrame) MrCs2Decode(CanMsg,CanFrame)
 #define MrMs2Encode(CanMsg,CanFrame) MrCs2Encode(CanMsg,CanFrame)
+#define MrMs2DumpCanMsg MrCs2DumpCanMsg
 #define MrMs2Trace(CanMsg) MrCs2Trace(CanMsg)
 #define MrMs2CalcHash(Uid) MrCs2CalcHash(Uid)
 #define MrMs2CalcHashFromFolgenummer(Folgenummer) MrCs2CalcHashFromFolgenummer(Folgenummer)
@@ -213,8 +218,9 @@ typedef struct {
 #define MrMs2GetNumParamBytes MrCs2GetNumParamBytes
 
 
-void MrCs2Decode(MrCs2CanDataType *CanMsg, CanFrameStruct *CanFrame);
-void MrCs2Encode(MrCs2CanDataType *CanMsg, CanFrameStruct *CanFrame);
+void MrCs2Decode(MrCs2CanDataType *CanMsg, struct can_frame *CanFrame);
+void MrCs2Encode(MrCs2CanDataType *CanMsg, struct can_frame *CanFrame);
+void MrCs2DumpCanMsg(MrCs2CanDataType *CanMsg, char *Info);
 void MrCs2Trace(MrCs2CanDataType *CanMsg);
 unsigned MrCs2CalcHash(unsigned long Uid);
 unsigned MrCs2CalcHashFromFolgenummer(unsigned Folgenummer);
@@ -333,6 +339,7 @@ void MrCs2DecCanBootldr(MrCs2CanDataType *CanMsg, char *Bytes);
 void MrCs2DecStatus5(MrCs2CanDataType *CanMsg, unsigned long *Uid, int *Index);
 void MrCs2DecStatus6(MrCs2CanDataType *CanMsg, unsigned long *Uid, int *Index,
                      int *NumPackets);
+void MrCs2DecStatus8(MrCs2CanDataType *CanMsg, char *Bytes);
 #define MrCs2DecConfigQuery0(CanMsg)
 void MrCs2DecConfigQuery(MrCs2CanDataType *CanMsg, char *FileName);
 void MrCs2DecCfgdatStream6(MrCs2CanDataType *CanMsg, unsigned long *Length,
@@ -394,6 +401,7 @@ void MrCs2EncCanBootldr(MrCs2CanDataType *CanMsg, char *Bytes);
 void MrCs2EncStatus5(MrCs2CanDataType *CanMsg, unsigned long Uid, int Index);
 void MrCs2EncStatus6(MrCs2CanDataType *CanMsg, unsigned long Uid, int Index,
                      int NumPackets);
+void MrCs2EncStatus8(MrCs2CanDataType *CanMsg, char *Bytes);
 void MrCs2EncConfigQuery0(MrCs2CanDataType *CanMsg);
 void MrCs2EncConfigQuery(MrCs2CanDataType *CanMsg, char *FileName);
 void MrCs2EncCfgdatStream6(MrCs2CanDataType *CanMsg, unsigned long Length,
@@ -405,6 +413,13 @@ void MrCs2EncAutomatic6(MrCs2CanDataType *CanMsg, int DeviceId, int Func,
                         int Status, int Param);
 void MrCs2EncAutomatic8(MrCs2CanDataType *CanMsg, int DeviceId, int Func,
                         unsigned long LocId);
+
+int MrCs2StatusInfoEncode(char *Buffer, int NumCfg, int NumStat,
+                          unsigned long SerienNummer, char *ArtikelNummer,
+                          char *ArtikelName);
+void MrCs2StatusInfoDecode(char *Buffer, int *NumCfg, int *NumStat,
+                           unsigned long *SerienNummer, char *ArtikelNummer,
+                           char *ArtikelName);
 
 /* andere Namen fuer MS2 */
 
@@ -632,6 +647,7 @@ void MrCs2EncAutomatic8(MrCs2CanDataType *CanMsg, int DeviceId, int Func,
 #define MrMs2DecCanBootldr    MrCs2DecCanBootldr
 #define MrMs2DecStatus5       MrCs2DecStatus5
 #define MrMs2DecStatus6       MrCs2DecStatus6
+#define MrMs2DecStatus8       MrCs2DecStatus8
 #define MrMs2DecConfigQuery0  MrCs2DecConfigQuery0
 #define MrMs2DecConfigQuery   MrCs2DecConfigQuery
 #define MrMs2DecCfgdatStream6 MrCs2DecCfgdatStream6
@@ -669,6 +685,7 @@ void MrCs2EncAutomatic8(MrCs2CanDataType *CanMsg, int DeviceId, int Func,
 #define MrMs2EncCanBootldr    MrCs2EncCanBootldr
 #define MrMs2EncStatus5       MrCs2EncStatus5
 #define MrMs2EncStatus6       MrCs2EncStatus6
+#define MrMs2EncStatus8       MrCs2EncStatus8
 #define MrMs2EncConfigQuery0  MrCs2EncConfigQuery0
 #define MrMs2EncConfigQuery   MrCs2EncConfigQuery
 #define MrMs2EncCfgdatStream6 MrCs2EncCfgdatStream6

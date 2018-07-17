@@ -6,6 +6,6 @@
 void MrCs2DecBind(MrCs2CanDataType *CanMsg, unsigned long *Uid,
                   unsigned int *Sid)
 {
-   *Uid = GetLongFromByteArray((char *)CanMsg->Data);
-   *Sid = GetIntFromByteArray((char *)&(CanMsg->Data[4]));
+   *Uid = GetLongFromByteArray(CanMsg->Data);
+   *Sid = GetIntFromByteArray(&(CanMsg->Data[4]));
 }

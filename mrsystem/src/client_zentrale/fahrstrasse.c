@@ -14,7 +14,7 @@ FahrstrasseStruct *FahrstrasseCreate(void)
    NewData = (FahrstrasseStruct *)malloc(sizeof(FahrstrasseStruct));
    if (NewData != (FahrstrasseStruct *)NULL)
    {
-      FahrstrasseSetFahrstrasseFilePath(NewData, "/www/config/");
+      FahrstrasseSetFahrstrasseFilePath(NewData, "/var/www/config/");
       FahrstrasseSetNumPages(NewData, 0);
       FahrstrasseSetFahrstrasseDb(NewData, MapCreate());
       if (FahrstrasseGetFahrstrasseDb(NewData) == (Map *)NULL)
@@ -355,6 +355,7 @@ void FahrstrasseParseFahrstrasseCs2(FahrstrasseStruct *Data, char *Buf, int Len)
       }
    } while (LineInfo != PARSER_EOF);
    FahrstrasseSetNumPages(Data, NumFahrstrassen);
+   Cs2pExit(FahrstrasseParser);
    Cs2pDestroy(FahrstrasseParser);
 }
 

@@ -13,7 +13,7 @@ LokStruct *LokCreate(void)
    NewData = (LokStruct *)malloc(sizeof(LokStruct));
    if (NewData != (LokStruct *)NULL)
    {
-      LokSetLocFilePath(NewData, "/www/config/");
+      LokSetLocFilePath(NewData, "/var/www/config/");
       LokSetNumLoks(NewData, 0);
       LokSetLokDb(NewData, MapCreate());
       if (LokGetLokDb(NewData) == (Map *)NULL)
@@ -32,10 +32,11 @@ void LokDestroy(LokStruct *Data)
    free(Data);
 }
 
-void LokInit(LokStruct *Data, char *LocPath)
+void LokInit(LokStruct *Data, char *LocPath, int NumLokFkts)
 {
    LokSetLocFilePath(Data, LocPath);
    LokSetNumLoks(Data, 0);
+   LokSetNumLokFkts(Data, NumLokFkts);
    LokSetIsChanged(Data, FALSE);
    MapInit(LokGetLokDb(Data), (CmpFkt)strcmp,
            (MapKeyDelCbFkt)NULL, (MapDataDelCbFkt)free);
@@ -277,6 +278,7 @@ void LokParseLokomotiveCs2(LokStruct *Data, char *Buf, int Len)
             break;
       }
    } while (LineInfo != PARSER_EOF);
+   Cs2pExit(LokParser);
    Cs2pDestroy(LokParser);
 }
 
@@ -358,7 +360,9 @@ static void WriteLokOfLokomotiveCs2(void *PrivData,
 {  int i;
    LokInfo *Lok;
    FILE *LokCs2Stream;
+   LokStruct *Data;
 
+   Data = (LokStruct *)PrivData;
    Lok = (LokInfo *)Daten;
    LokCs2Stream = (FILE *)PrivData;
    if (!LokInfoGetIsDeleted(Lok))
@@ -384,7 +388,7 @@ static void WriteLokOfLokomotiveCs2(void *PrivData,
       Cs2WriteIntValueByName(LokCs2Stream, "mfxtyp", 0, 1);
       Cs2WriteHexValueByName(LokCs2Stream, "stand", 0, 1);
       Cs2WriteHexValueByName(LokCs2Stream, "fahrt", 0, 1);
-      for (i = 0; i < LOK_NUM_FUNCTIONS; i++)
+      for (i = 0; i < LokGetNumLokFkts(Data); i++)
       {
          Cs2WriteTitleByName(LokCs2Stream, "funktionen", 1);
          Cs2WriteIntValueByName(LokCs2Stream, "nr", i, 2);

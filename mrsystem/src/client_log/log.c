@@ -97,9 +97,12 @@ static void Stop(LogStruct *Data)
 }
 
 static void ProcessSystemData(LogStruct *Data, MrIpcCmdType *CmdFrame)
-{  unsigned int Param;
+{  unsigned int Param1, Param2;
    unsigned long Adr;
+   char Name[32];
+   SwitchType Switch;
    DirectionType Direction;
+   PositionType Position;
    time_t Now;
    int i;
 
@@ -108,17 +111,142 @@ static void ProcessSystemData(LogStruct *Data, MrIpcCmdType *CmdFrame)
    switch (MrIpcGetCommand(CmdFrame))
    {
       case MrIpcCmdNull:
-         puts("   cmd null");
+         printf("   cmd null, CAN cmd 0x%x, %d Bytes\n",
+                MrIpcGetCanCommand(CmdFrame),
+                MrIpcGetRawDlc(CmdFrame));
+         printf("sender %d receiver %d\n",
+                MrIpcGetSenderSocket(CmdFrame),
+                MrIpcGetReceiverSocket(CmdFrame));
+         printf("lp1 %lx ip1 %0x ip2%0x\n",
+                MrIpcGetIntLp1(CmdFrame),
+                MrIpcGetIntIp1(CmdFrame),
+                MrIpcGetIntIp2(CmdFrame));
+         for (i = 0; i < MR_CS2_NUM_CAN_BYTES; i++)
+            printf(" %02x", MrIpcGetRawDataI(CmdFrame, i));
+         printf("\n");
+         break;
+      case MrIpcCmdRun:
+         MrIpcCmdGetRun(CmdFrame, &Switch);
+         switch (Switch)
+         {
+            case Off:
+               puts("   cmd switch system to off");
+               break;
+            case On:
+               puts("   cmd switch system to on");
+               break;
+         }
+         break;
+      case MrIpcCmdTrackProto:
+         MrIpcCmdGetTrackProto(CmdFrame, &Param1);
+         printf("   cmd track protocol 0x%x\n", Param1);
+         break;
+      case MrIpcCmdLocomotiveSpeed:
+         MrIpcCmdGetLocomotiveSpeed(CmdFrame, &Adr, &Param1);
+         printf("   cmd locomotive addr %ld speed %d\n",
+                Adr, Param1);
          break;
       case MrIpcCmdLocomotiveDirection:
          MrIpcCmdGetLocomotiveDir(CmdFrame, &Adr, &Direction);
          printf("   cmd locomotive addr %ld dir %d\n",
                 Adr, Direction);
          break;
-      case MrIpcCmdLocomotiveSpeed:
-         MrIpcCmdGetLocomotiveSpeed(CmdFrame, &Adr, &Param);
-         printf("   cmd locomotive addr %ld speed %d\n",
-                Adr, Param);
+      case MrIpcCmdLocomotiveFunction:
+         /* command to set function of a locomotive */
+         MrIpcCmdGetLocomotiveFkt(CmdFrame, &Adr, &Param1, &Switch);
+         switch (Switch)
+         {
+            case Off:
+               printf("   cmd locomotive addr %ld function %d to off\n",
+                      Adr, Param1);
+               break;
+            case On:
+               printf("   cmd locomotive addr %ld function %d to on\n",
+                      Adr, Param1);
+               break;
+         }
+         break;
+      case MrIpcCmdAccSwitch:
+         MrIpcCmdGetAccPos(CmdFrame, &Adr, &Position, (int *)&Param1);
+         switch (Position)
+         {
+            case Left:
+               printf("   cmd accessory addr %ld to left\n",
+                      Adr);
+               break;
+            case Right:
+               printf("   cmd accessory addr %ld to right\n",
+                      Adr);
+               break;
+         };
+         break;
+      case MrIpcCmdRequestMember:
+         puts("   cmd request member");
+         break;
+      case MrIpcCmdMember:
+         MrIpcCmdGetMember(CmdFrame, &Adr, &Param1, &Param2);
+         printf("   cmd member addr %ld Version 0x%x Type 0x%x\n",
+                Adr, Param1, Param2);
+         break;
+      case MrIpcCmdRequestLocName:
+         MrIpcCmdGetReqestLocname(CmdFrame, &Param1, &Param2);
+         printf("   cmd request locname startidx %d endidx %d\n",
+                Param1, Param2);
+         break;
+      case MrIpcCmdRequestLocInfo:
+         MrIpcCmdGetReqestLocinfo(CmdFrame, Name);
+         printf("   cmd request locinfo for %s\n",
+                Name);
+         break;
+      case MrIpcCmdRequestFile:
+         MrIpcCmdGetQuery(CmdFrame, Name);
+         printf("   cmd request file %s\n",
+                Name);
+         break;
+      case MrIpcCmdCfgHeader:
+         MrIpcCmdGetCfgHeader(CmdFrame, &Adr, &Param1);
+         printf("   cmd cfg header length %ld CRC 0x%x\n",
+                Adr, Param1);
+         break;
+      case MrIpcCmdCfgZHeader:
+         MrIpcCmdGetCfgZHeader(CmdFrame, &Adr, &Param1);
+         printf("   cmd cfg header length %ld CRC 0x%x\n",
+                Adr, Param1);
+         break;
+      case MrIpcCmdCfgData:
+         puts("   cmd cfg data");
+         for (i = 0; i < MR_CS2_NUM_CAN_BYTES; i++)
+            printf(" %02x", MrIpcGetRawDataI(CmdFrame, i));
+         printf("\n");
+         break;
+      case MrIpcCmdSystemStatusVal:
+         MrIpcCmdGetSystemStatusVal(CmdFrame, &Adr, &Param1, &Param2);
+         printf("   cmd system status addr %ld channel %d value %d\n",
+                Adr, Param1, Param2);
+         break;
+      case MrIpcCmdCanBootldrGeb:
+         MrIpcCmdGetCanBootldr(CmdFrame, &Param1, Name);
+         printf("   cmd can bootloader gebunden DLC %d",
+                Param1);
+         for (i = 0; i < MR_CS2_NUM_CAN_BYTES; i++)
+            printf(" %02x", MrIpcGetRawDataI(CmdFrame, i));
+         printf("\n");
+         break;
+      case MrIpcCmdStatusRequest:
+         MrIpcCmdGetStatusRequest(CmdFrame, &Adr, &Param1);
+         printf("   cmd status request addr %ld index%d\n",
+                Adr, Param1);
+         break;
+      case MrIpcCmdStatusSize:
+         MrIpcCmdGetStatusPos(CmdFrame, &Adr, &Param1, &Param2);
+         printf("   cmd status request addr %ld index%d num packets %d\n",
+                Adr, Param1, Param2);
+         break;
+      case MrIpcCmdStatusData:
+         puts("   cmd status data");
+         for (i = 0; i < MR_CS2_NUM_CAN_BYTES; i++)
+            printf(" %02x", MrIpcGetRawDataI(CmdFrame, i));
+         printf("\n");
          break;
       default:
          printf("   command %d, CAN cmd 0x%x, %d Bytes\n",

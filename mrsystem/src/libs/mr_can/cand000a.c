@@ -6,6 +6,6 @@
 void MrCs2DecSysOverload(MrCs2CanDataType *CanMsg, unsigned long *Uid,
                          int *Channel)
 {
-   *Uid = GetLongFromByteArray((char *)CanMsg->Data);
-   *Channel = CanMsg->Data[5];
+   *Uid = GetLongFromByteArray(CanMsg->Data);
+   *Channel = (int)(CanMsg->Data[5]);
 }
