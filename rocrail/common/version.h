@@ -1,11 +1,12 @@
 const int revisionnr = 
-14091
+14092
 ;
 const char* commithash = 
-"00624fe5182b48efc1c81166a757c3f25c9f1c6a";
+"413e4c101ce9efa4d2a4e2a65647bc4d43056be6";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14092 2018-07-17 15:19:48 +0200 stage,lcdriver: virtual automatic improved for staging blocks\n" \
 "14091 2018-07-16 08:48:03 +0200 zimocan: trace level corrections\n" \
 "14090 2018-07-16 07:59:19 +0200 zimocan: support for sensor module range 0xD000-0xDFFF added\n" \
 "14089 2018-07-12 09:22:39 +0200 modplan: merge node attributes from the rt.xml\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14045 2018-06-22 09:51:06 +0200 guiframe: fix for D&D in case the loco mode is stop instead of idle\n" \
 "14044 2018-06-21 08:16:18 +0200 block: copy the lock ID string to avoid loosing it with temp. IDs\n" \
 "14043 2018-06-19 10:01:33 +0200 rfbooster: ignore upper/lower case for evaluating car events\n" \
-"14042 2018-06-18 09:40:43 +0200 ecos: fix for reporting correct PADA switch address\n" \
 
 "log end";
