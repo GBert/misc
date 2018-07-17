@@ -142,12 +142,6 @@
 #define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_30 "drehscheibe_dig_30"
 #define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_31 "drehscheibe_dig_31"
 
-#define CS2_TYP_TYPE_MM2_DIL8 1
-#define CS2_TYP_TYPE_MM2_LOK  2
-
-#define CS2_TYP_STRING_MM2_DIL8 "mm2_dil8"
-#define CS2_TYP_STRING_MM2_LOK  "mm2_lok"
-
 
 char *Cs2GetTypAsString(int Typ);
 FILE *Cs2OpenByName(char *Name);

@@ -24,17 +24,6 @@ static char *ParagraphNames[] = {
    CS2_PARAGRAPH_STRING_FAHRSTRASSEN
 };
 
-static char *TypNames[] = {
-   "",
-   CS2_TYP_STRING_MM2_DIL8,
-   CS2_TYP_STRING_MM2_LOK
-};
-
-
-char *Cs2GetTypAsString(int Typ)
-{
-   return(TypNames[Typ]);
-}
 
 FILE *Cs2OpenByName(char *Name)
 {
