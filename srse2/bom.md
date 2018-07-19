@@ -16,8 +16,8 @@ BOM CAN S88
 |C13		|100nF		|SMD 0805	|
 |C16		|100nF		|SMD 0805	|
 |C17		|100nF		|SMD 0805	|
-|C5		|22uF		|THT P2.5	|
-|C18		|22uF		|THT P2.5	|
+|C5		  |10uF - 47uF |THT P2.5	|
+|C18		|10uF - 47uF |THT P2.5	|
 |D1		|5mA LED	|5MM     	|
 |J1		|s88-N		|MEGB8-8	|
 |J2		|CAN		|MEGB8-8	|
@@ -46,7 +46,7 @@ BOM CAN S88
 |U1		|Omega2		|Onion Omega2	|
 |PIN HEADER	|RM2.00 1x16	|16 pol Pin Hole|
 |PIN HEADER	|RM2.00 1x16	|16 pol Pin Hole|
-|U10		|OKI-78SR	|OKI-78SR	|
+|U10		|OKI-78SR	| OKI-78SR-3.3/1.5-W36H-C|
 |U3		|MCP2562	|SO8		|
 |U4		|PIC18F25K80	|SOIC-28	|
 |U5		|HR911105A	|RJ45		|
