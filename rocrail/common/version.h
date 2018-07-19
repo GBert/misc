@@ -1,11 +1,12 @@
 const int revisionnr = 
-14093
+14094
 ;
 const char* commithash = 
-"a53563a37983242b001fe876df2d598b35934055";
+"3a75e8abbe12b5e140ef2187ce731c8a957fc15d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14094 2018-07-19 17:42:23 +0200 lc: fix for new meter parameter\n" \
 "14093 2018-07-19 08:18:13 +0200 meter: show optional the bidi speed reported by the decoder\n" \
 "14092 2018-07-17 15:19:48 +0200 stage,lcdriver: virtual automatic improved for staging blocks\n" \
 "14091 2018-07-16 08:48:03 +0200 zimocan: trace level corrections\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14047 2018-06-22 10:19:38 +0200 blockgroupingdlg: set prev_id in case the ID has been modified\n" \
 "14046 2018-06-22 10:06:53 +0200 model: regard the stop mode also for checking if all locos are idle\n" \
 "14045 2018-06-22 09:51:06 +0200 guiframe: fix for D&D in case the loco mode is stop instead of idle\n" \
-"14044 2018-06-21 08:16:18 +0200 block: copy the lock ID string to avoid loosing it with temp. IDs\n" \
 
 "log end";
