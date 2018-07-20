@@ -42,8 +42,8 @@ $Descr A3 16535 11693
 encoding utf-8
 Sheet 1 1
 Title "Smallest Rocrail Server Ever II"
-Date "2018-06-28"
-Rev "1.11"
+Date "2018-07-20"
+Rev "1.2"
 Comp "Gerhard Bertelsmann"
 Comment1 ""
 Comment2 ""
