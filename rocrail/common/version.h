@@ -1,11 +1,12 @@
 const int revisionnr = 
-14094
+14095
 ;
 const char* commithash = 
-"3a75e8abbe12b5e140ef2187ce731c8a957fc15d";
+"60731a365763887bd072256e4348828157e900a3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14095 2018-07-20 08:08:03 +0200 throttledlg: fix for scaling loco image and resizing controls\n" \
 "14094 2018-07-19 17:42:23 +0200 lc: fix for new meter parameter\n" \
 "14093 2018-07-19 08:18:13 +0200 meter: show optional the bidi speed reported by the decoder\n" \
 "14092 2018-07-17 15:19:48 +0200 stage,lcdriver: virtual automatic improved for staging blocks\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14048 2018-06-22 14:42:10 +0200 user theme crossing update from Duesselklaus\n" \
 "14047 2018-06-22 10:19:38 +0200 blockgroupingdlg: set prev_id in case the ID has been modified\n" \
 "14046 2018-06-22 10:06:53 +0200 model: regard the stop mode also for checking if all locos are idle\n" \
-"14045 2018-06-22 09:51:06 +0200 guiframe: fix for D&D in case the loco mode is stop instead of idle\n" \
 
 "log end";
