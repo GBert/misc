@@ -7,8 +7,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rocrail
-PKG_REV:=60731a3657
-PKG_VERSION:=14095
+PKG_REV:=2f0a4f1aaa
+PKG_VERSION:=14099
 PKG_RELEASE:=
 
 PKG_SOURCE_PROTO:=git
@@ -166,12 +166,6 @@ define Build/Compile
 		GENSUFFIX=_x86 DEBUG= CC_EXTRA_FLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -fPIC -D__NO_DIRECT_IO__" \
 		TOOLPREFIX=$(TARGET_CROSS) CPP=$(TARGET_CROSS)gcc \
 		PLATFORM=LINUX server
-endef
-
-define Package/rocrail/conffiles
-/opt/rocrail/plan.xml
-/opt/rocrail/rocnetnode.ini
-/opt/rocrail/rocrail.ini
 endef
 
 define Package/rocrail/install

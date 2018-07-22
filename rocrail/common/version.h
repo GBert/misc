@@ -1,11 +1,15 @@
 const int revisionnr = 
-14095
+14099
 ;
 const char* commithash = 
-"60731a365763887bd072256e4348828157e900a3";
+"2f0a4f1aaa2a69867f5ffd010b18141d281bc1f9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14099 2018-07-21 17:25:50 +0200 zimocan: never ending story\n" \
+"14098 2018-07-21 14:17:41 +0200 throttledlg: static image border under linux 10 pix :(\n" \
+"14097 2018-07-21 10:24:23 +0200 throttledlg: use 4 pixels for border before scaling image\n" \
+"14096 2018-07-21 08:10:30 +0200 throttle,guiframe: save and restore default throttle size\n" \
 "14095 2018-07-20 08:08:03 +0200 throttledlg: fix for scaling loco image and resizing controls\n" \
 "14094 2018-07-19 17:42:23 +0200 lc: fix for new meter parameter\n" \
 "14093 2018-07-19 08:18:13 +0200 meter: show optional the bidi speed reported by the decoder\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "14052 2018-06-24 10:05:25 +0200 model: save schedule ID pointer in case it did not change on modify\n" \
 "14051 2018-06-23 16:22:15 +0200 roclcdr: crash fixes\n" \
 "14050 2018-06-23 11:36:26 +0200 modplan: save the MVTrack in the route file\n" \
-"14049 2018-06-22 16:09:00 +0200 rocview base: better readable color for analyser trace\n" \
-"14048 2018-06-22 14:42:10 +0200 user theme crossing update from Duesselklaus\n" \
-"14047 2018-06-22 10:19:38 +0200 blockgroupingdlg: set prev_id in case the ID has been modified\n" \
-"14046 2018-06-22 10:06:53 +0200 model: regard the stop mode also for checking if all locos are idle\n" \
 
 "log end";
