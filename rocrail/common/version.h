@@ -1,11 +1,15 @@
 const int revisionnr = 
-14099
+14103
 ;
 const char* commithash = 
-"2f0a4f1aaa2a69867f5ffd010b18141d281bc1f9";
+"6b75ecf0bfee89ffacac435c367a38f10971c985";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14103 2018-07-22 10:45:19 +0200 block: memory leak fix\n" \
+"14102 2018-07-22 08:06:02 +0200 zimocan: evaluate direction bit of accessory data\n" \
+"14101 2018-07-22 07:59:52 +0200 zimocan: accessory data only support for type=0x11\n" \
+"14100 2018-07-22 07:50:10 +0200 zimocan: support for accessory port6 added\n" \
 "14099 2018-07-21 17:25:50 +0200 zimocan: never ending story\n" \
 "14098 2018-07-21 14:17:41 +0200 throttledlg: static image border under linux 10 pix :(\n" \
 "14097 2018-07-21 10:24:23 +0200 throttledlg: use 4 pixels for border before scaling image\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "14056 2018-06-27 07:56:06 +0200 blockgroup: default critical section\n" \
 "14055 2018-06-26 17:21:09 +0200 blockgroup: trace improvements\n" \
 "14054 2018-06-26 07:38:39 +0200 mgbox: fix voor uitlezen channel config cs2 (Bert)\n" \
-"14053 2018-06-24 10:06:07 +0200 blockgroup: broadcast changes to the clients\n" \
-"14052 2018-06-24 10:05:25 +0200 model: save schedule ID pointer in case it did not change on modify\n" \
-"14051 2018-06-23 16:22:15 +0200 roclcdr: crash fixes\n" \
-"14050 2018-06-23 11:36:26 +0200 modplan: save the MVTrack in the route file\n" \
 
 "log end";
