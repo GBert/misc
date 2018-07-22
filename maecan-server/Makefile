@@ -19,8 +19,6 @@ define Package/maecan-server
   CATEGORY:=Utilities
   TITLE:=MaeCAN Server
   DEPENDS:= +can2udp +php7 +php7-cgi
-endif
-
 endef
 
 define Package/maecan-server/description
