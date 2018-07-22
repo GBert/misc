@@ -41,33 +41,97 @@ index 3efdeda..436a869 100755
  	*"Ai-BR100")
  		name="ai-br100"
  		;;
+diff --git a/target/linux/ramips/base-files/lib/upgrade/platform.sh b/target/linux/ramips/base-files/lib/upgrade/platform.sh
+index 14f5ec2..3b1262e 100755
+--- a/target/linux/ramips/base-files/lib/upgrade/platform.sh
++++ b/target/linux/ramips/base-files/lib/upgrade/platform.sh
+@@ -14,6 +14,8 @@ platform_check_image() {
+	3g150b|\
+	3g300m|\
+	a5-v11|\
++	a5-v11-8M|\
++	a5-v11-16M|\
+	ai-br100|\
+	air3gii|\
+	alfa-network,ac1200rm|\
+diff --git a/target/linux/ramips/image/rt305x.mk b/target/linux/ramips/image/rt305x.mk
+index 4e82eb4..8a24cf2 100644
+--- a/target/linux/ramips/image/rt305x.mk
++++ b/target/linux/ramips/image/rt305x.mk
+@@ -77,6 +77,28 @@ define Device/a5-v11
+ endef
+ TARGET_DEVICES += a5-v11
+ 
++define Device/a5-v11-8M
++  DTS := A5-V11-8M
++  SUPPORTED_DEVICES += a5-v11
++  IMAGE_SIZE := $(ralink_default_fw_size_8M)
++  IMAGE/factory.bin := \
++       $$(sysupgrade_bin) | check-size $$$$(IMAGE_SIZE) | poray-header -B A5-V11 -F 8M
++  DEVICE_TITLE := A5-V11 (8M)
++  DEVICE_PACKAGES := kmod-usb-core kmod-usb-ohci kmod-usb2
++endef
++TARGET_DEVICES += a5-v11-8M
++
++define Device/a5-v11-16M
++  DTS := A5-V11-16M
++  SUPPORTED_DEVICES += a5-v11
++  IMAGE_SIZE := $(ralink_default_fw_size_16M)
++  IMAGE/factory.bin := \
++       $$(sysupgrade_bin) | check-size $$$$(IMAGE_SIZE) | poray-header -B A5-V11 -F 16M
++  DEVICE_TITLE := A5-V11 (16M)
++  DEVICE_PACKAGES := kmod-usb-core kmod-usb-ohci kmod-usb2
++endef
++TARGET_DEVICES += a5-v11-16M
++
+ define Device/air3gii
+   DTS := AIR3GII
+   BLOCKSIZE := 64k
+diff --git a/tools/firmware-utils/src/mkporayfw.c b/tools/firmware-utils/src/mkporayfw.c
+index 6ec4f32..4497e0b 100644
+--- a/tools/firmware-utils/src/mkporayfw.c
++++ b/tools/firmware-utils/src/mkporayfw.c
+@@ -136,6 +136,9 @@ static struct flash_layout layouts[] = {
+ 		.id		= "8M",
+ 		.fw_max_len	= 0x7c0000,
+ 	}, {
++		.id		= "16M",
++		.fw_max_len	= 0xfc0000,
++	}, {
+ 		/* terminating entry */
+ 	}
+ };
 diff --git a/target/linux/ramips/dts/A5-V11-16M.dts b/target/linux/ramips/dts/A5-V11-16M.dts
 new file mode 100644
-index 0000000..cbe2da6
 --- /dev/null
-+++ b/target/linux/ramips/dts/A5-V11-16M.dts
-@@ -0,0 +1,123 @@
++++ target/linux/ramips/dts/A5-V11-16M.dts
+@@ -0,0 +1,128 @@
 +/dts-v1/;
 +
 +#include "rt5350.dtsi"
 +
++#include <dt-bindings/gpio/gpio.h>
 +#include <dt-bindings/input/input.h>
 +
 +/ {
-+	compatible = "A5-V11", "ralink,rt5350-soc";
++	compatible = "unbranded,a5-v11", "ralink,rt5350-soc";
 +	model = "A5-V11";
++
++	aliases {
++		led-status = &led_power;
++	};
 +
 +	gpio-leds {
 +		compatible = "gpio-leds";
 +
 +		system {
 +			label = "a5-v11:blue:system";
-+			gpios = <&gpio0 20 1>;
++			gpios = <&gpio0 20 GPIO_ACTIVE_LOW>;
 +		};
 +
-+		power {
++		led_power: power {
 +			label = "a5-v11:red:power";
-+			gpios = <&gpio0 17 1>;
++			gpios = <&gpio0 17 GPIO_ACTIVE_LOW>;
 +		};
 +	};
 +
@@ -79,7 +143,7 @@ index 0000000..cbe2da6
 +
 +		reset {
 +			label = "reset";
-+			gpios = <&gpio0 0 1>;
++			gpios = <&gpio0 0 GPIO_ACTIVE_LOW>;
 +			linux,code = <KEY_RESTART>;
 +		};
 +	};
@@ -91,13 +155,13 @@ index 0000000..cbe2da6
 +		usb {
 +			gpio-export,name = "usb";
 +			gpio-export,output = <1>;
-+			gpios = <&gpio0 7 0>;
++			gpios = <&gpio0 7 GPIO_ACTIVE_HIGH>;
 +		};
 +
 +		root_hub {
 +			gpio-export,name = "root_hub";
 +			gpio-export,output = <1>;
-+			gpios = <&gpio0 12 0>;
++			gpios = <&gpio0 12 GPIO_ACTIVE_HIGH>;
 +		};
 +	};
 +};
@@ -172,31 +236,35 @@ index 0000000..cbe2da6
 +};
 diff --git a/target/linux/ramips/dts/A5-V11-8M.dts b/target/linux/ramips/dts/A5-V11-8M.dts
 new file mode 100644
-index 0000000..cb13958
 --- /dev/null
-+++ b/target/linux/ramips/dts/A5-V11-8M.dts
-@@ -0,0 +1,123 @@
++++ target/linux/ramips/dts/A5-V11-8M.dts
+@@ -0,0 +1,128 @@
 +/dts-v1/;
 +
 +#include "rt5350.dtsi"
 +
++#include <dt-bindings/gpio/gpio.h>
 +#include <dt-bindings/input/input.h>
 +
 +/ {
-+	compatible = "A5-V11", "ralink,rt5350-soc";
++	compatible = "unbranded,a5-v11", "ralink,rt5350-soc";
 +	model = "A5-V11";
++
++	aliases {
++		led-status = &led_power;
++	};
 +
 +	gpio-leds {
 +		compatible = "gpio-leds";
 +
 +		system {
 +			label = "a5-v11:blue:system";
-+			gpios = <&gpio0 20 1>;
++			gpios = <&gpio0 20 GPIO_ACTIVE_LOW>;
 +		};
 +
-+		power {
++		led_power: power {
 +			label = "a5-v11:red:power";
-+			gpios = <&gpio0 17 1>;
++			gpios = <&gpio0 17 GPIO_ACTIVE_LOW>;
 +		};
 +	};
 +
@@ -208,7 +276,7 @@ index 0000000..cb13958
 +
 +		reset {
 +			label = "reset";
-+			gpios = <&gpio0 0 1>;
++			gpios = <&gpio0 0 GPIO_ACTIVE_LOW>;
 +			linux,code = <KEY_RESTART>;
 +		};
 +	};
@@ -220,13 +288,13 @@ index 0000000..cb13958
 +		usb {
 +			gpio-export,name = "usb";
 +			gpio-export,output = <1>;
-+			gpios = <&gpio0 7 0>;
++			gpios = <&gpio0 7 GPIO_ACTIVE_HIGH>;
 +		};
 +
 +		root_hub {
 +			gpio-export,name = "root_hub";
 +			gpio-export,output = <1>;
-+			gpios = <&gpio0 12 0>;
++			gpios = <&gpio0 12 GPIO_ACTIVE_HIGH>;
 +		};
 +	};
 +};
@@ -299,63 +367,3 @@ index 0000000..cb13958
 +&ohci {
 +	status = "okay";
 +};
-diff --git a/target/linux/ramips/base-files/lib/upgrade/platform.sh b/target/linux/ramips/base-files/lib/upgrade/platform.sh
-index 14f5ec2..3b1262e 100755
---- a/target/linux/ramips/base-files/lib/upgrade/platform.sh
-+++ b/target/linux/ramips/base-files/lib/upgrade/platform.sh
-@@ -14,6 +14,8 @@ platform_check_image() {
-	3g150b|\
-	3g300m|\
-	a5-v11|\
-+	a5-v11-8M|\
-+	a5-v11-16M|\
-	ai-br100|\
-	air3gii|\
-	alfa-network,ac1200rm|\
-diff --git a/target/linux/ramips/image/rt305x.mk b/target/linux/ramips/image/rt305x.mk
-index 4e82eb4..8a24cf2 100644
---- a/target/linux/ramips/image/rt305x.mk
-+++ b/target/linux/ramips/image/rt305x.mk
-@@ -77,6 +77,28 @@ define Device/a5-v11
- endef
- TARGET_DEVICES += a5-v11
- 
-+define Device/a5-v11-8M
-+  DTS := A5-V11-8M
-+  SUPPORTED_DEVICES += a5-v11
-+  IMAGE_SIZE := $(ralink_default_fw_size_8M)
-+  IMAGE/factory.bin := \
-+       $$(sysupgrade_bin) | check-size $$$$(IMAGE_SIZE) | poray-header -B A5-V11 -F 8M
-+  DEVICE_TITLE := A5-V11 (8M)
-+  DEVICE_PACKAGES := kmod-usb-core kmod-usb-ohci kmod-usb2
-+endef
-+TARGET_DEVICES += a5-v11-8M
-+
-+define Device/a5-v11-16M
-+  DTS := A5-V11-16M
-+  SUPPORTED_DEVICES += a5-v11
-+  IMAGE_SIZE := $(ralink_default_fw_size_16M)
-+  IMAGE/factory.bin := \
-+       $$(sysupgrade_bin) | check-size $$$$(IMAGE_SIZE) | poray-header -B A5-V11 -F 16M
-+  DEVICE_TITLE := A5-V11 (16M)
-+  DEVICE_PACKAGES := kmod-usb-core kmod-usb-ohci kmod-usb2
-+endef
-+TARGET_DEVICES += a5-v11-16M
-+
- define Device/air3gii
-   DTS := AIR3GII
-   BLOCKSIZE := 64k
-diff --git a/tools/firmware-utils/src/mkporayfw.c b/tools/firmware-utils/src/mkporayfw.c
-index 6ec4f32..4497e0b 100644
---- a/tools/firmware-utils/src/mkporayfw.c
-+++ b/tools/firmware-utils/src/mkporayfw.c
-@@ -136,6 +136,9 @@ static struct flash_layout layouts[] = {
- 		.id		= "8M",
- 		.fw_max_len	= 0x7c0000,
- 	}, {
-+		.id		= "16M",
-+		.fw_max_len	= 0xfc0000,
-+	}, {
- 		/* terminating entry */
- 	}
- };
