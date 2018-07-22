@@ -168,6 +168,12 @@ define Build/Compile
 		PLATFORM=LINUX server
 endef
 
+define Package/rocrail/conffiles
+/opt/rocrail/plan.xml
+/opt/rocrail/rocnetnode.ini
+/opt/rocrail/rocrail.ini
+endef
+
 define Package/rocrail/install
 	$(INSTALL_DIR) $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/clock.so $(1)/opt/rocrail
