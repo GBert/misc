@@ -1,0 +1,187 @@
+Cmp-Mod V01 Created by PcbNew   date = Mo 23 Jul 2018 17:17:22 CEST
+
+BeginCmp
+TimeStamp = 5931A77A
+Path = /5A11BCEB
+Reference = P1;
+ValeurCmp = Conn_01x04;
+IdModule  = w_conn_mkds:akl0711,5-4;
+EndCmp
+
+BeginCmp
+TimeStamp = 590BE461
+Path = 
+Reference = REF**;
+ValeurCmp = 1pin;
+IdModule  = Connect:1pin;
+EndCmp
+
+BeginCmp
+TimeStamp = 590BE454
+Path = 
+Reference = REF**;
+ValeurCmp = 1pin;
+IdModule  = Connect:1pin;
+EndCmp
+
+BeginCmp
+TimeStamp = 590BE436
+Path = 
+Reference = REF**;
+ValeurCmp = 1pin;
+IdModule  = Connect:1pin;
+EndCmp
+
+BeginCmp
+TimeStamp = 590D1692
+Path = /58FE5EB8
+Reference = P2;
+ValeurCmp = IBT-2;
+IdModule  = Socket_Strips:Socket_Strip_Straight_2x04;
+EndCmp
+
+BeginCmp
+TimeStamp = 590BE42E
+Path = 
+Reference = REF**;
+ValeurCmp = 1pin;
+IdModule  = Connect:1pin;
+EndCmp
+
+BeginCmp
+TimeStamp = 593907DC
+Path = 
+Reference = G***;
+ValeurCmp = LOGO;
+IdModule  = w_logo:Logo_copper_CC-BY-NC-SA_5x2mm;
+EndCmp
+
+BeginCmp
+TimeStamp = 5B55E4AC
+Path = /58FE3358
+Reference = C1;
+ValeurCmp = 100nF;
+IdModule  = w_capacitors:cnp_3mm_disc;
+EndCmp
+
+BeginCmp
+TimeStamp = 5B55E4B2
+Path = /5B55F997
+Reference = C3;
+ValeurCmp = 100nF;
+IdModule  = w_capacitors:cnp_3mm_disc;
+EndCmp
+
+BeginCmp
+TimeStamp = 5B55E4B8
+Path = /5909C601
+Reference = C2;
+ValeurCmp = 10uF;
+IdModule  = w_capacitors:CP_4x5mm;
+EndCmp
+
+BeginCmp
+TimeStamp = 5B55E4BE
+Path = /590921A7
+Reference = D8;
+ValeurCmp = 1N4148;
+IdModule  = w_pth_diodes:diode_do35;
+EndCmp
+
+BeginCmp
+TimeStamp = 5B55E4C8
+Path = /5B560AA0
+Reference = P3;
+ValeurCmp = CONN_02X03;
+IdModule  = Pin_Headers:Pin_Header_Straight_2x03;
+EndCmp
+
+BeginCmp
+TimeStamp = 5B55E4CF
+Path = /5B561E22
+Reference = P4;
+ValeurCmp = CONN_01X03;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x03;
+EndCmp
+
+BeginCmp
+TimeStamp = 5B55E4D6
+Path = /5B55FBD7
+Reference = Q1;
+ValeurCmp = BC517;
+IdModule  = TO_SOT_Packages_THT:TO-92_Inline_Narrow_Oval;
+EndCmp
+
+BeginCmp
+TimeStamp = 5B55E4DD
+Path = /5B55FFFA
+Reference = Q2;
+ValeurCmp = BC517;
+IdModule  = TO_SOT_Packages_THT:TO-92_Inline_Narrow_Oval;
+EndCmp
+
+BeginCmp
+TimeStamp = 5B55E50D
+Path = /589225D0
+Reference = U2;
+ValeurCmp = 6N137;
+IdModule  = w_pth_circuits:dil_8-300_socket;
+EndCmp
+
+BeginCmp
+TimeStamp = 5B55E4E3
+Path = /590922AB
+Reference = R1;
+ValeurCmp = 1k5;
+IdModule  = w_pth_resistors:RC03;
+EndCmp
+
+BeginCmp
+TimeStamp = 5B55E4EF
+Path = /5B55E0A6
+Reference = R3;
+ValeurCmp = 1k5;
+IdModule  = w_pth_resistors:RC03;
+EndCmp
+
+BeginCmp
+TimeStamp = 5B55E4F5
+Path = /5B55EF0C
+Reference = R4;
+ValeurCmp = 390;
+IdModule  = w_pth_resistors:RC03;
+EndCmp
+
+BeginCmp
+TimeStamp = 5B55E4FB
+Path = /5B5622A6
+Reference = R5;
+ValeurCmp = 1k5;
+IdModule  = w_pth_resistors:RC03;
+EndCmp
+
+BeginCmp
+TimeStamp = 5B55E4E9
+Path = /59099D6E
+Reference = R2;
+ValeurCmp = 390;
+IdModule  = w_pth_resistors:RC03;
+EndCmp
+
+BeginCmp
+TimeStamp = 5B55E501
+Path = /5B561886
+Reference = R6;
+ValeurCmp = 390;
+IdModule  = w_pth_resistors:RC03;
+EndCmp
+
+BeginCmp
+TimeStamp = 5B55E54C
+Path = /58FE3224
+Reference = U1;
+ValeurCmp = 7805;
+IdModule  = 78xx:TO-220-78xx;
+EndCmp
+
+EndListe

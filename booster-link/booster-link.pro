@@ -1,4 +1,4 @@
-update=Mo 23 Jul 2018 16:50:32 CEST
+update=Mo 23 Jul 2018 14:33:19 CEST
 version=1
 last_client=kicad
 [pcbnew]
@@ -31,7 +31,7 @@ PageLayoutDescrFile=
 PlotDirectoryName=
 SubpartIdSeparator=0
 SubpartFirstId=65
-NetFmtName=Pcbnew
+NetFmtName=
 SpiceForceRefPrefix=0
 SpiceUseNetNumbers=0
 LabSize=60
@@ -39,7 +39,7 @@ LabSize=60
 version=1
 LibDir=
 [eeschema/libraries]
-LibName1=mfx-link-rescue
+LibName1=booster-link-rescue
 LibName2=power
 LibName3=device
 LibName4=transistors
@@ -69,6 +69,6 @@ LibName27=opto
 LibName28=atmel
 LibName29=contrib
 LibName30=valves
-LibName31=transf
-LibName32=my
+LibName31=microchip_pic16mcu
+LibName32=PIC16F1709
 LibName33=ICSP
