@@ -1,4 +1,4 @@
-update=Di 24 Jul 2018 12:13:34 CEST
+update=Di 24 Jul 2018 15:49:17 CEST
 version=1
 last_client=kicad
 [pcbnew]
@@ -25,16 +25,6 @@ version=1
 NetIExt=net
 [general]
 version=1
-[schematic_editor]
-version=1
-PageLayoutDescrFile=
-PlotDirectoryName=
-SubpartIdSeparator=0
-SubpartFirstId=65
-NetFmtName=
-SpiceForceRefPrefix=0
-SpiceUseNetNumbers=0
-LabSize=60
 [eeschema]
 version=1
 LibDir=
@@ -70,6 +60,14 @@ LibName28=atmel
 LibName29=contrib
 LibName30=valves
 LibName31=microchip_pic16mcu
-LibName32=PIC16F1709
-LibName33=ICSP
 LibName34=leds
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=
+SpiceForceRefPrefix=0
+SpiceUseNetNumbers=0
+LabSize=60
