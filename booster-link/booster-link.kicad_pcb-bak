@@ -6,7 +6,7 @@
     (area 102.300001 82.5 172.135715 145.8055)
     (thickness 1.6)
     (drawings 28)
-    (tracks 193)
+    (tracks 203)
     (zones 0)
     (modules 34)
     (nets 21)
@@ -1552,7 +1552,7 @@
   (gr_text red (at 153.797 113.792) (layer F.SilkS)
     (effects (font (size 1 1) (thickness 0.2)))
   )
-  (gr_text "  V1.0 072018\nGerhard Bertelsmann" (at 135.255 109.728) (layer F.Cu)
+  (gr_text "  V1.01 072018\nGerhard Bertelsmann" (at 135.255 109.728) (layer F.Cu)
     (effects (font (size 0.6 0.6) (thickness 0.125)))
   )
   (dimension 10.5 (width 0.3) (layer Dwgs.User)
@@ -1620,6 +1620,16 @@
     (arrow2b (pts (xy 108.95 93.35) (xy 109.536421 94.476504)))
   )
 
+  (segment (start 160.655 135.636) (end 161.417 135.636) (width 0.6) (layer B.Cu) (net 1))
+  (segment (start 160.02 132.334) (end 158.496 133.858) (width 0.6) (layer F.Cu) (net 1) (tstamp 5B573B85))
+  (via (at 158.496 133.858) (size 0.8) (drill 0.7) (layers F.Cu B.Cu) (net 1))
+  (segment (start 158.496 133.858) (end 160.274 135.636) (width 0.6) (layer B.Cu) (net 1) (tstamp 5B573B88))
+  (segment (start 160.274 135.636) (end 160.655 135.636) (width 0.6) (layer B.Cu) (net 1) (tstamp 5B573B89))
+  (segment (start 160.02 131.064) (end 160.02 132.334) (width 0.6) (layer F.Cu) (net 1))
+  (via (at 160.655 135.636) (size 0.8) (drill 0.7) (layers F.Cu B.Cu) (net 1))
+  (via (at 161.925 137.922) (size 0.8) (drill 0.7) (layers F.Cu B.Cu) (net 1))
+  (segment (start 161.925 136.144) (end 161.925 137.922) (width 0.6) (layer B.Cu) (net 1) (tstamp 5B573BD9))
+  (segment (start 161.417 135.636) (end 161.925 136.144) (width 0.6) (layer B.Cu) (net 1) (tstamp 5B573BD8))
   (segment (start 146.177 141.605) (end 147.193 141.605) (width 0.6) (layer B.Cu) (net 1))
   (via (at 150.495 137.16) (size 0.8) (drill 0.7) (layers F.Cu B.Cu) (net 1))
   (segment (start 148.336 137.16) (end 150.495 137.16) (width 0.6) (layer F.Cu) (net 1) (tstamp 5B573B4A))
@@ -2211,6 +2221,18 @@
         (xy 158.888234 128.748096) (xy 159.060142 129.164146) (xy 159.37818 129.482739) (xy 159.793929 129.655373) (xy 160.244096 129.655766)
         (xy 160.660146 129.483858) (xy 160.978739 129.16582) (xy 161.151373 128.750071) (xy 161.151766 128.299904) (xy 160.979858 127.883854)
         (xy 160.701 127.604509) (xy 160.701 122.20208) (xy 163.09608 119.807) (xy 164.153758 119.807)
+      )
+    )
+    (filled_polygon
+      (pts
+        (xy 161.700058 138.9166) (xy 160.302064 138.9166) (xy 160.302064 138.5864) (xy 160.275497 138.44521) (xy 160.192054 138.315535)
+        (xy 160.064734 138.228541) (xy 159.9136 138.197936) (xy 158.466405 138.197936) (xy 159.097941 137.5664) (xy 163.050258 137.5664)
+      )
+    )
+    (filled_polygon
+      (pts
+        (xy 161.942936 133.477) (xy 161.942936 135.509) (xy 161.969503 135.65019) (xy 162.052946 135.779865) (xy 162.180266 135.866859)
+        (xy 162.3314 135.897464) (xy 163.576194 135.897464) (xy 162.974058 136.4996) (xy 158.894742 136.4996) (xy 161.949435 133.444907)
       )
     )
     (filled_polygon

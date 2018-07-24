@@ -15,7 +15,7 @@
   (page A4)
   (title_block
     (title Booster-Link)
-    (date 2018-07-23)
+    (date 2018-07-24)
   )
 
   (layers
@@ -1552,7 +1552,7 @@
   (gr_text red (at 153.797 113.792) (layer F.SilkS)
     (effects (font (size 1 1) (thickness 0.2)))
   )
-  (gr_text "  V1.0 072018\nGerhard Bertelsmann" (at 135.255 109.728) (layer F.Cu)
+  (gr_text "  V1.01 072018\nGerhard Bertelsmann" (at 135.255 109.728) (layer F.Cu)
     (effects (font (size 0.6 0.6) (thickness 0.125)))
   )
   (dimension 10.5 (width 0.3) (layer Dwgs.User)
