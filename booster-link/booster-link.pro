@@ -1,4 +1,4 @@
-update=Di 24 Jul 2018 09:23:02 CEST
+update=Di 24 Jul 2018 12:13:34 CEST
 version=1
 last_client=kicad
 [pcbnew]
@@ -72,3 +72,4 @@ LibName30=valves
 LibName31=microchip_pic16mcu
 LibName32=PIC16F1709
 LibName33=ICSP
+LibName34=leds
