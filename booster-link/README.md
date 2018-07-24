@@ -8,7 +8,7 @@ Optionen:
 
 BOM
 ---
-Reichelt	https://www.reichelt.de/my/1491379
+[Reichelt Liste](https://www.reichelt.de/my/1491379)
 
 |Reference	| Value		| Footprint	|
 |---------------|---------------|---------------|
@@ -24,7 +24,13 @@ Reichelt	https://www.reichelt.de/my/1491379
 |U1		|MC7805		|TO-220		|
 |U2		|6N137		|DIP-8		|
 |U3		|NE555		|DIP-8		|
-|Sockel		|DIP-8		|DIP-8		|
+|P1		|Anreihklemme	|RM5.04		|
+|P2		|Pinsocket 2x4	|RM2.54		|
+|P3		|Pinheader 2x3	|RM2.54		|
+|P4		|Pinheader 1x3	|RM2.54		|
+|		|Jumper		|RM2.54		|
+|		|Spcket		|DIP-8		|
+
 
 BOM (über interne Signale der Gleisbox)
 ---------------------------------------
