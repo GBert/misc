@@ -1,11 +1,12 @@
 const int revisionnr = 
-14109
+14110
 ;
 const char* commithash = 
-"0fd5ddcabd74c51e5395994f6a99fa4ff020ff78";
+"87f4cc5b09aa17bfa26822fe5963aa60e5c40a6d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14110 2018-07-25 08:15:15 +0200 guiframe: show init field ready in the statusbar\n" \
 "14109 2018-07-25 08:08:25 +0200 guiframe: disable initfieldready popup\n" \
 "14108 2018-07-25 07:48:26 +0200 node: safty checks at clone\n" \
 "14107 2018-07-24 15:56:47 +0200 initfield popup in case its ready\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14063 2018-07-01 08:13:30 +0200 loc: skip speed command for consist members in case the loco is paused\n" \
 "14062 2018-06-30 10:24:03 +0200 translation merge: en_GB\n" \
 "14061 2018-06-30 09:07:13 +0200 actionsctrldlg: stage added to the conditions\n" \
-"14060 2018-06-29 07:54:33 +0200 control: use the switch model list for checking the save positions to avoid a crash using the map iteration\n" \
 
 "log end";
