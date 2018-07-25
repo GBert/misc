@@ -34,7 +34,6 @@ LIBS:microchip_pic18mcu
 LIBS:ftdi
 LIBS:Omega2
 LIBS:cmos_ieee
-LIBS:common-ICs
 LIBS:SRSE2-cache
 EELAYER 25 0
 EELAYER END
