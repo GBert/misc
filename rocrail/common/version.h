@@ -1,11 +1,13 @@
 const int revisionnr = 
-14107
+14109
 ;
 const char* commithash = 
-"c0e0c99f358dc9f32ace00da17677a02f2c652d5";
+"0fd5ddcabd74c51e5395994f6a99fa4ff020ff78";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14109 2018-07-25 08:08:25 +0200 guiframe: disable initfieldready popup\n" \
+"14108 2018-07-25 07:48:26 +0200 node: safty checks at clone\n" \
 "14107 2018-07-24 15:56:47 +0200 initfield popup in case its ready\n" \
 "14106 2018-07-24 09:23:59 +0200 throttledlg: button stop and dir swapped\n" \
 "14105 2018-07-24 07:37:09 +0200 throttledlg: resize improvements\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14062 2018-06-30 10:24:03 +0200 translation merge: en_GB\n" \
 "14061 2018-06-30 09:07:13 +0200 actionsctrldlg: stage added to the conditions\n" \
 "14060 2018-06-29 07:54:33 +0200 control: use the switch model list for checking the save positions to avoid a crash using the map iteration\n" \
-"14059 2018-06-28 08:16:56 +0200 mysensors: removed\n" \
-"14058 2018-06-27 11:09:01 +0200 routedlg: reset button added\n" \
 
 "log end";
