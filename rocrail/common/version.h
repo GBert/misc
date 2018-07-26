@@ -1,11 +1,13 @@
 const int revisionnr = 
-14110
+14112
 ;
 const char* commithash = 
-"87f4cc5b09aa17bfa26822fe5963aa60e5c40a6d";
+"a22022478035525e964043937f8892d746760d4b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14112 2018-07-26 08:32:33 +0200 statbar: lamp added for init field\n" \
+"14111 2018-07-26 08:08:01 +0200 throttledlg: resize fixes\n" \
 "14110 2018-07-25 08:15:15 +0200 guiframe: show init field ready in the statusbar\n" \
 "14109 2018-07-25 08:08:25 +0200 guiframe: disable initfieldready popup\n" \
 "14108 2018-07-25 07:48:26 +0200 node: safty checks at clone\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14065 2018-07-02 08:00:16 +0200 block: check for state acceptghost\n" \
 "14064 2018-07-02 07:55:04 +0200 block: start/stopacceptghost commands/actions added\n" \
 "14063 2018-07-01 08:13:30 +0200 loc: skip speed command for consist members in case the loco is paused\n" \
-"14062 2018-06-30 10:24:03 +0200 translation merge: en_GB\n" \
-"14061 2018-06-30 09:07:13 +0200 actionsctrldlg: stage added to the conditions\n" \
 
 "log end";
