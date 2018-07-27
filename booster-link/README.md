@@ -8,7 +8,7 @@ Optionen:
 
 BOM
 ---
-[Reichelt Liste](https://www.reichelt.de/my/1491379)
+[Reichelt Liste](https://www.reichelt.de/my/1491385)
 
 |Reference	| Value		| Footprint	|
 |---------------|---------------|---------------|
