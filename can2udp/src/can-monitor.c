@@ -298,15 +298,20 @@ void command_system(struct can_frame *frame) {
     case 0x0b:
 	if (frame->can_dlc == 6)
 	    printf("System: Statusabfrage UID 0x%08X Kanal 0x%02X", uid, frame->data[5]);
-	if (frame->can_dlc == 7)
-	    printf("System: Statusabfrage UID 0x%08X Kanal 0x%02X Wert %d", uid, frame->data[5], frame->data[6]);
+	if (frame->can_dlc == 7) {
+	    printf("System: Konfiguration UID 0x%08X Kanal 0x%02X ", uid, frame->data[5]);
+	    if (frame->data[6])
+	    	printf(" gültig(%d)", frame->data[6]);
+	    else
+	    	printf(" ungügltig(%d)", frame->data[6]);
+	}
 	if (frame->can_dlc == 8) {
 	    wert = be16(&frame->data[6]);
 	    if (response)
 		printf("System: Statusabfrage UID 0x%08X Kanal 0x%02X Messwert 0x%04X",
 		       uid, frame->data[5], wert);
 	    else
-		printf("System: Statusabfrage UID 0x%08X Kanal 0x%02X Konfigurationswert 0x%04X",
+		printf("System: Konfiguration UID 0x%08X Kanal 0x%02X Konfigurationswert 0x%04X",
 		       uid, frame->data[5], wert);
 	}
 	break;
