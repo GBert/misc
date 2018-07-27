@@ -76,7 +76,7 @@ void signal_handler(int sig) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.27\n\n");
+    fprintf(stderr, "   Version 1.28\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
@@ -85,7 +85,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -i <can int>        CAN interface - default can0\n");
     fprintf(stderr, "         -k                  use a connected CAN member as config source\n");
-    fprintf(stderr, "         -g                  fake CAN memeber ping response\n");
+    fprintf(stderr, "         -g                  send peridoic CAN member ping\n");
     fprintf(stderr, "         -T                  timeout starting %s in sec - default %d sec\n", prg, MAX_UDP_BCAST_RETRY);
     fprintf(stderr, "         -m                  doing MS1 workaround - default: don't do it\n");
     fprintf(stderr, "         -f                  running in foreground\n");
