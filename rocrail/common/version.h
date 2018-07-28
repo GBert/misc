@@ -1,11 +1,12 @@
 const int revisionnr = 
-14112
+14113
 ;
 const char* commithash = 
-"a22022478035525e964043937f8892d746760d4b";
+"2b0844c0859cddae245f60e841f7c9e99088b12d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14113 2018-07-28 10:18:49 +0200 translation merge: sl, en_GB, pt_BR, sr_latin, nl, de\n" \
 "14112 2018-07-26 08:32:33 +0200 statbar: lamp added for init field\n" \
 "14111 2018-07-26 08:08:01 +0200 throttledlg: resize fixes\n" \
 "14110 2018-07-25 08:15:15 +0200 guiframe: show init field ready in the statusbar\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14066 2018-07-02 13:06:41 +0200 switch: fixed the route pause for dual motor switches\n" \
 "14065 2018-07-02 08:00:16 +0200 block: check for state acceptghost\n" \
 "14064 2018-07-02 07:55:04 +0200 block: start/stopacceptghost commands/actions added\n" \
-"14063 2018-07-01 08:13:30 +0200 loc: skip speed command for consist members in case the loco is paused\n" \
 
 "log end";
