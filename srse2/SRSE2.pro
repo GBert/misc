@@ -64,7 +64,6 @@ LibName32=microchip_pic18mcu
 LibName33=ftdi
 LibName34=Omega2
 LibName35=cmos_ieee
-LibName36=common-ICs
 [schematic_editor]
 version=1
 PageLayoutDescrFile=
