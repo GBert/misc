@@ -1,11 +1,17 @@
 const int revisionnr = 
-14113
+14119
 ;
 const char* commithash = 
-"2b0844c0859cddae245f60e841f7c9e99088b12d";
+"dd0f3fd36bf81447aafe3f98de9d6e8caa00cd4c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14119 2018-07-29 12:15:35 +0200 removed obsolete svnlog references and wrappers\n" \
+"14118 2018-07-29 10:31:57 +0200 item: show bididir in sensor tooltip\n" \
+"14117 2018-07-29 10:26:05 +0200 bidi direction: use only if its reported\n" \
+"14116 2018-07-29 09:04:29 +0200 bidi direction: use only if its reported\n" \
+"14115 2018-07-29 07:54:14 +0200 zimocan: ABA value guesed for port6 events\n" \
+"14114 2018-07-28 19:28:42 +0200 zimocan: port6 address offset fix\n" \
 "14113 2018-07-28 10:18:49 +0200 translation merge: sl, en_GB, pt_BR, sr_latin, nl, de\n" \
 "14112 2018-07-26 08:32:33 +0200 statbar: lamp added for init field\n" \
 "14111 2018-07-26 08:08:01 +0200 throttledlg: resize fixes\n" \
@@ -50,11 +56,5 @@ const char* revlog =
 "14072 2018-07-04 15:23:12 +0200 throttledlg: no border around the loco image\n" \
 "14071 2018-07-04 14:24:51 +0200 throttledlg: fix for restore size and position\n" \
 "14070 2018-07-04 13:50:41 +0200 slider: fix for resize and update current thumb position\n" \
-"14069 2018-07-04 12:10:25 +0200 slider: fix for resizing and value range\n" \
-"14068 2018-07-04 10:46:02 +0200 throttledlg: smaller and better resizing\n" \
-"14067 2018-07-03 13:19:48 +0200 switch: traces added for pause and delay timing\n" \
-"14066 2018-07-02 13:06:41 +0200 switch: fixed the route pause for dual motor switches\n" \
-"14065 2018-07-02 08:00:16 +0200 block: check for state acceptghost\n" \
-"14064 2018-07-02 07:55:04 +0200 block: start/stopacceptghost commands/actions added\n" \
 
 "log end";
