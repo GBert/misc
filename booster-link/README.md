@@ -4,11 +4,11 @@ Einfacher Gleisboxbooster
 Optionen:
 - ohne öffnen der Gleisbox 
 - automatishce Gleisspannungsabschaltung (Stopp) nach 250ms
-- direkte Anbindung an die Gleisbox (nur zwei Widerstände + Transitor)
+- direkte Anbindung an die Gleisbox (nur zwei Widerstände + Transistor)
 
 BOM
 ---
-[Reichelt Liste](https://www.reichelt.de/my/1491379)
+[Reichelt Liste](https://www.reichelt.de/my/1491385)
 
 |Reference	| Value		| Footprint	|
 |---------------|---------------|---------------|
