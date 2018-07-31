@@ -1,11 +1,14 @@
 const int revisionnr = 
-14119
+14122
 ;
 const char* commithash = 
-"dd0f3fd36bf81447aafe3f98de9d6e8caa00cd4c";
+"5d0b21e0ed9d106688b932b4dcc1623e80888a08";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14122 2018-07-31 12:13:27 +0200 loconet,ibcom: Uhli POM write packet\n" \
+"14121 2018-07-30 15:20:27 +0200 ecos: fix for multiple cereating locos in case the ecos does not respond fast enough\n" \
+"14120 2018-07-30 10:08:20 +0200 loc: BAT\n" \
 "14119 2018-07-29 12:15:35 +0200 removed obsolete svnlog references and wrappers\n" \
 "14118 2018-07-29 10:31:57 +0200 item: show bididir in sensor tooltip\n" \
 "14117 2018-07-29 10:26:05 +0200 bidi direction: use only if its reported\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "14075 2018-07-06 10:09:27 +0200 locdialog: SBT export/import added\n" \
 "14074 2018-07-06 09:59:22 +0200 guiframe: fix for restoring throttle size and position\n" \
 "14073 2018-07-06 08:18:13 +0200 slider: fix for calculating the new value\n" \
-"14072 2018-07-04 15:23:12 +0200 throttledlg: no border around the loco image\n" \
-"14071 2018-07-04 14:24:51 +0200 throttledlg: fix for restore size and position\n" \
-"14070 2018-07-04 13:50:41 +0200 slider: fix for resize and update current thumb position\n" \
 
 "log end";
