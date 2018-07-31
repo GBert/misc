@@ -1,11 +1,12 @@
 const int revisionnr = 
-14122
+14123
 ;
 const char* commithash = 
-"5d0b21e0ed9d106688b932b4dcc1623e80888a08";
+"50e3534c0786f15cc0bd5adf4dbc2914a17600b1";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14123 2018-07-31 13:27:44 +0200 loconet: fix calling ibcom pom for reading\n" \
 "14122 2018-07-31 12:13:27 +0200 loconet,ibcom: Uhli POM write packet\n" \
 "14121 2018-07-30 15:20:27 +0200 ecos: fix for multiple cereating locos in case the ecos does not respond fast enough\n" \
 "14120 2018-07-30 10:08:20 +0200 loc: BAT\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14076 2018-07-07 14:24:03 +0200 throttledlg: no resize in case another loco is selected\n" \
 "14075 2018-07-06 10:09:27 +0200 locdialog: SBT export/import added\n" \
 "14074 2018-07-06 09:59:22 +0200 guiframe: fix for restoring throttle size and position\n" \
-"14073 2018-07-06 08:18:13 +0200 slider: fix for calculating the new value\n" \
 
 "log end";
