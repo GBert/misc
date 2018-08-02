@@ -1,11 +1,13 @@
 const int revisionnr = 
-14126
+14128
 ;
 const char* commithash = 
-"df20b4cb73e5cadae0e4db95f7dd71d243de9f21";
+"d1accc217e53609f0a2db1f2011cf53b7d29dba0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14128 2018-08-02 15:49:58 +0200 modbus: polling digital inputs\n" \
+"14127 2018-08-02 15:20:21 +0200 modbus: WIP\n" \
 "14126 2018-08-02 12:56:30 +0200 operatordlg: documentation button added\n" \
 "14125 2018-08-02 11:58:36 +0200 modbus: request header fix\n" \
 "14124 2018-08-02 10:44:01 +0200 modbus: WIP\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14081 2018-07-09 07:41:55 +0200 guiframe: rocrail trace menu order changed to resemble the dialog\n" \
 "14080 2018-07-08 10:58:30 +0200 throttle, ledbutton, slider: check minimal size before paint\n" \
 "14079 2018-07-08 10:10:31 +0200 rocview: option for pause at stop rocview: rocrail trace menu\n" \
-"14078 2018-07-08 07:44:44 +0200 throttledlg: set absolute min size\n" \
-"14077 2018-07-07 15:54:31 +0200 throttledlg: fix for for default dialog size\n" \
 
 "log end";
