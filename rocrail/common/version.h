@@ -1,11 +1,12 @@
 const int revisionnr = 
-14128
+14129
 ;
 const char* commithash = 
-"d1accc217e53609f0a2db1f2011cf53b7d29dba0";
+"2a9c52d837912e1a4a19ce29a2a1c4f132e375b2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14129 2018-08-02 18:18:25 +0200 modbus: check if fb polling is activated, use a different user defined communication port\n" \
 "14128 2018-08-02 15:49:58 +0200 modbus: polling digital inputs\n" \
 "14127 2018-08-02 15:20:21 +0200 modbus: WIP\n" \
 "14126 2018-08-02 12:56:30 +0200 operatordlg: documentation button added\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14082 2018-07-09 15:09:49 +0200 guiframe, rocrailinidlg: info level moved to user\n" \
 "14081 2018-07-09 07:41:55 +0200 guiframe: rocrail trace menu order changed to resemble the dialog\n" \
 "14080 2018-07-08 10:58:30 +0200 throttle, ledbutton, slider: check minimal size before paint\n" \
-"14079 2018-07-08 10:10:31 +0200 rocview: option for pause at stop rocview: rocrail trace menu\n" \
 
 "log end";
