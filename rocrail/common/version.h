@@ -1,11 +1,14 @@
 const int revisionnr = 
-14123
+14126
 ;
 const char* commithash = 
-"50e3534c0786f15cc0bd5adf4dbc2914a17600b1";
+"df20b4cb73e5cadae0e4db95f7dd71d243de9f21";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14126 2018-08-02 12:56:30 +0200 operatordlg: documentation button added\n" \
+"14125 2018-08-02 11:58:36 +0200 modbus: request header fix\n" \
+"14124 2018-08-02 10:44:01 +0200 modbus: WIP\n" \
 "14123 2018-07-31 13:27:44 +0200 loconet: fix calling ibcom pom for reading\n" \
 "14122 2018-07-31 12:13:27 +0200 loconet,ibcom: Uhli POM write packet\n" \
 "14121 2018-07-30 15:20:27 +0200 ecos: fix for multiple cereating locos in case the ecos does not respond fast enough\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "14079 2018-07-08 10:10:31 +0200 rocview: option for pause at stop rocview: rocrail trace menu\n" \
 "14078 2018-07-08 07:44:44 +0200 throttledlg: set absolute min size\n" \
 "14077 2018-07-07 15:54:31 +0200 throttledlg: fix for for default dialog size\n" \
-"14076 2018-07-07 14:24:03 +0200 throttledlg: no resize in case another loco is selected\n" \
-"14075 2018-07-06 10:09:27 +0200 locdialog: SBT export/import added\n" \
-"14074 2018-07-06 09:59:22 +0200 guiframe: fix for restoring throttle size and position\n" \
 
 "log end";
