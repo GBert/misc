@@ -1,0 +1,142 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:s88n-adapter-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title "S88N Adapter"
+Date "2018-08-03"
+Rev "1.0"
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L RJ45 J1
+U 1 1 5B643D34
+P 3600 3700
+F 0 "J1" H 3800 4200 50  0000 C CNN
+F 1 "RJ45" H 3450 4200 50  0000 C CNN
+F 2 "w_conn_pc:megb8-8" H 3600 3700 50  0001 C CNN
+F 3 "" H 3600 3700 50  0000 C CNN
+	1    3600 3700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3350 4150 3350 4875
+$Comp
+L CONN_01X02 P3
+U 1 1 5B643FB6
+P 2750 4250
+F 0 "P3" H 2750 4100 50  0000 C CNN
+F 1 "Power" V 2850 4250 50  0000 C CNN
+F 2 "w_conn_pt-1,5:pt_1,5-2-3,5-h" V 2750 4250 50  0001 C CNN
+F 3 "" H 2750 4250 50  0000 C CNN
+	1    2750 4250
+	-1   0    0    -1  
+$EndComp
+Text Label 3350 4850 1    60   ~ 0
+DATA
+$Comp
+L CONN_01X02 P2
+U 1 1 5B644093
+P 2750 4550
+F 0 "P2" H 2750 4700 50  0000 C CNN
+F 1 "PWR" V 2850 4550 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x02" V 2750 4550 50  0001 C CNN
+F 3 "" H 2750 4550 50  0000 C CNN
+	1    2750 4550
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	2950 4200 3250 4200
+Wire Wire Line
+	3250 4150 3250 4500
+Text Label 3025 4200 0    60   ~ 0
+eVcc
+Wire Wire Line
+	3450 4150 3450 4875
+Wire Wire Line
+	2950 4300 3650 4300
+Connection ~ 3450 4300
+Wire Wire Line
+	3550 4150 3550 4875
+Text Label 3025 4300 0    60   ~ 0
+GND
+$Comp
+L CONN_01X06 P1
+U 1 1 5B644280
+P 3600 5075
+F 0 "P1" H 3600 5425 50  0000 C CNN
+F 1 "S88" V 3700 5075 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Angled_1x06" H 3600 5075 50  0001 C CNN
+F 3 "" H 3600 5075 50  0000 C CNN
+	1    3600 5075
+	0    -1   1    0   
+$EndComp
+Wire Wire Line
+	3650 4300 3650 4150
+Wire Wire Line
+	3750 4150 3750 4400
+Wire Wire Line
+	3750 4400 3650 4400
+Wire Wire Line
+	3650 4400 3650 4875
+Wire Wire Line
+	3850 4150 3850 4500
+Wire Wire Line
+	3850 4500 3750 4500
+Wire Wire Line
+	3750 4500 3750 4875
+Wire Wire Line
+	3250 4500 2950 4500
+Connection ~ 3250 4200
+Wire Wire Line
+	2950 4600 3850 4600
+Wire Wire Line
+	3850 4600 3850 4875
+Text Label 3550 4875 1    60   ~ 0
+Clock
+Text Label 3650 4875 1    60   ~ 0
+Load
+Text Label 3750 4875 1    60   ~ 0
+Reset
+NoConn ~ 3950 4150
+NoConn ~ 4150 3350
+Text Label 3450 4825 1    60   ~ 0
+GND
+Text Label 3850 4800 1    60   ~ 0
+Vcc
+$EndSCHEMATC
