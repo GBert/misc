@@ -1,11 +1,13 @@
 const int revisionnr = 
-14129
+14131
 ;
 const char* commithash = 
-"2a9c52d837912e1a4a19ce29a2a1c4f132e375b2";
+"460f9e35a9d0d7bdd9686d55fdcc534b04b68772";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14131 2018-08-03 08:29:44 +0200 modbus: reconnect fixes\n" \
+"14130 2018-08-03 07:51:38 +0200 modbus: keep connections alive\n" \
 "14129 2018-08-02 18:18:25 +0200 modbus: check if fb polling is activated, use a different user defined communication port\n" \
 "14128 2018-08-02 15:49:58 +0200 modbus: polling digital inputs\n" \
 "14127 2018-08-02 15:20:21 +0200 modbus: WIP\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14084 2018-07-10 08:32:10 +0200 loc: fix for ignore IN event in case of BBT genrate IN\n" \
 "14083 2018-07-10 08:05:43 +0200 blockgroup: not calling goto block in case the reserving loco runs with a schedule\n" \
 "14082 2018-07-09 15:09:49 +0200 guiframe, rocrailinidlg: info level moved to user\n" \
-"14081 2018-07-09 07:41:55 +0200 guiframe: rocrail trace menu order changed to resemble the dialog\n" \
-"14080 2018-07-08 10:58:30 +0200 throttle, ledbutton, slider: check minimal size before paint\n" \
 
 "log end";
