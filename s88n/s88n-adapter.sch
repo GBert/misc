@@ -55,7 +55,7 @@ F 3 "" H 4450 3850 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	4200 4300 4200 5025
+	4200 4300 4200 5675
 $Comp
 L CONN_01X02 P3
 U 1 1 5B643FB6
@@ -67,7 +67,7 @@ F 3 "" H 3600 4400 50  0000 C CNN
 	1    3600 4400
 	-1   0    0    -1  
 $EndComp
-Text Label 4200 5000 1    60   ~ 0
+Text Label 4200 5675 1    60   ~ 0
 DATA
 $Comp
 L CONN_01X02 P2
@@ -87,23 +87,23 @@ Wire Wire Line
 Text Label 3875 4350 0    60   ~ 0
 eVcc
 Wire Wire Line
-	4300 4300 4300 5025
+	4300 4300 4300 5675
 Wire Wire Line
 	3800 4450 4500 4450
 Connection ~ 4300 4450
 Wire Wire Line
-	4400 4300 4400 5025
+	4400 4300 4400 5675
 Text Label 3875 4450 0    60   ~ 0
 GND
 $Comp
 L CONN_01X06 P1
 U 1 1 5B644280
-P 4450 5225
-F 0 "P1" H 4450 5575 50  0000 C CNN
-F 1 "S88" V 4550 5225 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Angled_1x06" H 4450 5225 50  0001 C CNN
-F 3 "" H 4450 5225 50  0000 C CNN
-	1    4450 5225
+P 4450 5875
+F 0 "P1" H 4450 6225 50  0000 C CNN
+F 1 "S88" V 4550 5875 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Angled_1x06" H 4450 5875 50  0001 C CNN
+F 3 "" H 4450 5875 50  0000 C CNN
+	1    4450 5875
 	0    -1   1    0   
 $EndComp
 Wire Wire Line
@@ -113,30 +113,59 @@ Wire Wire Line
 Wire Wire Line
 	4600 4550 4500 4550
 Wire Wire Line
-	4500 4550 4500 5025
+	4500 4550 4500 5675
 Wire Wire Line
 	4700 4300 4700 4650
 Wire Wire Line
 	4700 4650 4600 4650
 Wire Wire Line
-	4600 4650 4600 5025
+	4600 4650 4600 5675
 Wire Wire Line
 	4100 4650 3800 4650
 Connection ~ 4100 4350
 Wire Wire Line
 	3800 4750 4700 4750
 Wire Wire Line
-	4700 4750 4700 5025
-Text Label 4400 5025 1    60   ~ 0
+	4700 4750 4700 5675
+Text Label 4400 5675 1    60   ~ 0
 Clock
-Text Label 4500 5025 1    60   ~ 0
+Text Label 4500 5675 1    60   ~ 0
 Load
-Text Label 4600 5025 1    60   ~ 0
+Text Label 4600 5675 1    60   ~ 0
 Reset
 NoConn ~ 4800 4300
 NoConn ~ 5000 3500
-Text Label 4300 4975 1    60   ~ 0
+Text Label 4300 5675 1    60   ~ 0
 GND
-Text Label 4700 4950 1    60   ~ 0
+Text Label 4700 5675 1    60   ~ 0
 Vcc
+$Comp
+L Conn_01x06 J2
+U 1 1 5B649124
+P 5100 5050
+F 0 "J2" H 5100 5350 50  0000 C CNN
+F 1 "Conn_01x06" V 5100 4650 50  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x06_Pitch2.54mm" H 5100 5050 50  0001 C CNN
+F 3 "" H 5100 5050 50  0001 C CNN
+	1    5100 5050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4200 4850 4900 4850
+Connection ~ 4200 4850
+Wire Wire Line
+	4900 4950 4300 4950
+Connection ~ 4300 4950
+Wire Wire Line
+	4900 5050 4400 5050
+Connection ~ 4400 5050
+Wire Wire Line
+	4900 5150 4500 5150
+Connection ~ 4500 5150
+Wire Wire Line
+	4900 5250 4600 5250
+Connection ~ 4600 5250
+Wire Wire Line
+	4900 5350 4700 5350
+Connection ~ 4700 5350
 $EndSCHEMATC
