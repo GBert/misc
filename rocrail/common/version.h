@@ -1,11 +1,14 @@
 const int revisionnr = 
-14134
+14137
 ;
 const char* commithash = 
-"80a1755495c0e2ac4991d658beaaf90cad85732e";
+"25cef37a311136ec49073d91bc0b00d861bbb498";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14137 2018-08-04 15:12:51 +0200 modbus: transact async to avoid blocking at connect if the device is not online\n" \
+"14136 2018-08-04 14:24:53 +0200 inno-setup: optional desktop icon for Rocview\n" \
+"14135 2018-08-04 09:41:46 +0200 modbus setup dlg added\n" \
 "14134 2018-08-03 15:45:10 +0200 modbus: input register support added\n" \
 "14133 2018-08-03 14:19:22 +0200 translation merge: de, pt_BR, fr, sl, nl\n" \
 "14132 2018-08-03 10:51:33 +0200 modbus: try to get the device vendor name at initial connect\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "14090 2018-07-16 07:59:19 +0200 zimocan: support for sensor module range 0xD000-0xDFFF added\n" \
 "14089 2018-07-12 09:22:39 +0200 modplan: merge node attributes from the rt.xml\n" \
 "14088 2018-07-11 15:48:42 +0200 mkrpm.sh: update\n" \
-"14087 2018-07-11 09:05:44 +0200 translation merge: nl, de, pt_BR, en_GB\n" \
-"14086 2018-07-11 08:10:25 +0200 model: fix for getSwitchList return type\n" \
-"14085 2018-07-10 08:35:05 +0200 switch: only use delay in case of two switch motors\n" \
 
 "log end";
