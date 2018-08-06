@@ -1,11 +1,16 @@
 const int revisionnr = 
-14137
+14142
 ;
 const char* commithash = 
-"25cef37a311136ec49073d91bc0b00d861bbb498";
+"1ac95a46edfccbf96cfbd50210fd26cdd7b66337";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14142 2018-08-06 07:11:50 +0200 modbusdlg: help link fix\n" \
+"14141 2018-08-05 10:12:49 +0200 modbus: poll fine tuning added\n" \
+"14140 2018-08-05 09:53:58 +0200 model: fix for initialising static arrays for updating sensor info\n" \
+"14139 2018-08-05 08:38:38 +0200 modbusdlg: IP field added\n" \
+"14138 2018-08-05 07:55:24 +0200 innosetup script fix\n" \
 "14137 2018-08-04 15:12:51 +0200 modbus: transact async to avoid blocking at connect if the device is not online\n" \
 "14136 2018-08-04 14:24:53 +0200 inno-setup: optional desktop icon for Rocview\n" \
 "14135 2018-08-04 09:41:46 +0200 modbus setup dlg added\n" \
@@ -51,10 +56,5 @@ const char* revlog =
 "14095 2018-07-20 08:08:03 +0200 throttledlg: fix for scaling loco image and resizing controls\n" \
 "14094 2018-07-19 17:42:23 +0200 lc: fix for new meter parameter\n" \
 "14093 2018-07-19 08:18:13 +0200 meter: show optional the bidi speed reported by the decoder\n" \
-"14092 2018-07-17 15:19:48 +0200 stage,lcdriver: virtual automatic improved for staging blocks\n" \
-"14091 2018-07-16 08:48:03 +0200 zimocan: trace level corrections\n" \
-"14090 2018-07-16 07:59:19 +0200 zimocan: support for sensor module range 0xD000-0xDFFF added\n" \
-"14089 2018-07-12 09:22:39 +0200 modplan: merge node attributes from the rt.xml\n" \
-"14088 2018-07-11 15:48:42 +0200 mkrpm.sh: update\n" \
 
 "log end";
