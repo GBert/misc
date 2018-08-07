@@ -1,11 +1,13 @@
 const int revisionnr = 
-14142
+14144
 ;
 const char* commithash = 
-"1ac95a46edfccbf96cfbd50210fd26cdd7b66337";
+"efab8b290f1cff43970d60f4ee7fd8a810ba8c7e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14144 2018-08-07 06:49:14 +0200 model: fix checking if all locos are idle or stop\n" \
+"14143 2018-08-07 06:37:57 +0200 model: fix for itterating the feedback map, use list instead\n" \
 "14142 2018-08-06 07:11:50 +0200 modbusdlg: help link fix\n" \
 "14141 2018-08-05 10:12:49 +0200 modbus: poll fine tuning added\n" \
 "14140 2018-08-05 09:53:58 +0200 model: fix for initialising static arrays for updating sensor info\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14097 2018-07-21 10:24:23 +0200 throttledlg: use 4 pixels for border before scaling image\n" \
 "14096 2018-07-21 08:10:30 +0200 throttle,guiframe: save and restore default throttle size\n" \
 "14095 2018-07-20 08:08:03 +0200 throttledlg: fix for scaling loco image and resizing controls\n" \
-"14094 2018-07-19 17:42:23 +0200 lc: fix for new meter parameter\n" \
-"14093 2018-07-19 08:18:13 +0200 meter: show optional the bidi speed reported by the decoder\n" \
 
 "log end";
