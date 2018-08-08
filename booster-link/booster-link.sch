@@ -37,7 +37,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "IBT-2 Booster"
-Date "2018-07-24"
+Date "2018-08-08"
 Rev "0.1"
 Comp "GBe"
 Comment1 ""
@@ -838,7 +838,7 @@ U 1 1 5B6B104A
 P 6350 3775
 F 0 "Q1" H 6550 3850 50  0000 L CNN
 F 1 "BC337" H 6550 3775 50  0000 L CNN
-F 2 "TO_SOT_Packages_THT:TO-92_Molded_Narrow" H 6550 3700 50  0001 L CIN
+F 2 "TO_SOT_Packages_THT:TO-92_Inline_Narrow_Oval" H 6550 3700 50  0001 L CIN
 F 3 "" H 6350 3775 50  0001 L CNN
 	1    6350 3775
 	1    0    0    -1  
@@ -849,7 +849,7 @@ U 1 1 5B6B12EF
 P 8050 1875
 F 0 "Q21" H 8250 1950 50  0000 L CNN
 F 1 "BC337" H 8250 1875 50  0000 L CNN
-F 2 "TO_SOT_Packages_THT:TO-92_Molded_Narrow" H 8250 1800 50  0001 L CIN
+F 2 "TO_SOT_Packages_THT:TO-92_Inline_Narrow_Oval" H 8250 1800 50  0001 L CIN
 F 3 "" H 8050 1875 50  0001 L CNN
 	1    8050 1875
 	1    0    0    -1  
