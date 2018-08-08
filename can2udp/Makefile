@@ -1,4 +1,4 @@
-# Copyright (C) 2014 OpenWrt.org
+# Copyright (C) 2018 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=can2udp
-PKG_RELEASE:=1.45
+PKG_RELEASE:=1.46
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_BUILD_PARALLEL:=1
@@ -38,6 +38,11 @@ define Build/Compile
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -std=gnu99 -g"
 endef
+
+define Package/can2udp/conffiles
+/etc/init.d/can2lan
+endef
+
 
 define Package/can2udp/install
 	$(INSTALL_DIR) $(1)/usr/bin
