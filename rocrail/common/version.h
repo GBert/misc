@@ -1,11 +1,14 @@
 const int revisionnr = 
-14144
+14147
 ;
 const char* commithash = 
-"efab8b290f1cff43970d60f4ee7fd8a810ba8c7e";
+"17b217741b6d0bfb074347b7aa61197ed8042f6c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14147 2018-08-08 08:35:16 +0200 zimocan: save port4 state in the nidnode too\n" \
+"14146 2018-08-08 08:10:34 +0200 zimocan: use a nidnode to combine port6 and data\n" \
+"14145 2018-08-08 07:26:02 +0200 rocguiinidlg: reset MDIFrame position at disable\n" \
 "14144 2018-08-07 06:49:14 +0200 model: fix checking if all locos are idle or stop\n" \
 "14143 2018-08-07 06:37:57 +0200 model: fix for itterating the feedback map, use list instead\n" \
 "14142 2018-08-06 07:11:50 +0200 modbusdlg: help link fix\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "14100 2018-07-22 07:50:10 +0200 zimocan: support for accessory port6 added\n" \
 "14099 2018-07-21 17:25:50 +0200 zimocan: never ending story\n" \
 "14098 2018-07-21 14:17:41 +0200 throttledlg: static image border under linux 10 pix :(\n" \
-"14097 2018-07-21 10:24:23 +0200 throttledlg: use 4 pixels for border before scaling image\n" \
-"14096 2018-07-21 08:10:30 +0200 throttle,guiframe: save and restore default throttle size\n" \
-"14095 2018-07-20 08:08:03 +0200 throttledlg: fix for scaling loco image and resizing controls\n" \
 
 "log end";
