@@ -1,11 +1,16 @@
 const int revisionnr = 
-14151
+14156
 ;
 const char* commithash = 
-"f05ceb30bf30d4b269556da879ef2631520558f8";
+"68fcc0ff136874c929c39ff093feecbdfd745b77";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14156 2018-08-10 16:50:48 +0200 model: fix to avoid double mapping sensors\n" \
+"14155 2018-08-10 10:38:10 +0200 translation merge: de, nl, en_GB, pt_BR\n" \
+"14154 2018-08-10 09:01:21 +0200 rocview: fix for offline status\n" \
+"14153 2018-08-10 08:47:16 +0200 rocview: show edit mode in the status bar\n" \
+"14152 2018-08-10 08:10:48 +0200 rocview: show edit mode in the status bar\n" \
 "14151 2018-08-09 18:04:52 +0200 max. running option added: zero is default where all may run\n" \
 "14150 2018-08-09 13:55:17 +0200 item: disable operating in case of edit mode\n" \
 "14149 2018-08-09 11:27:44 +0200 guiframe,mdimanager: trace out display size and MDI position\n" \
@@ -51,10 +56,5 @@ const char* revlog =
 "14109 2018-07-25 08:08:25 +0200 guiframe: disable initfieldready popup\n" \
 "14108 2018-07-25 07:48:26 +0200 node: safty checks at clone\n" \
 "14107 2018-07-24 15:56:47 +0200 initfield popup in case its ready\n" \
-"14106 2018-07-24 09:23:59 +0200 throttledlg: button stop and dir swapped\n" \
-"14105 2018-07-24 07:37:09 +0200 throttledlg: resize improvements\n" \
-"14104 2018-07-23 11:43:13 +0200 lc node memory leak fixed\n" \
-"14103 2018-07-22 10:45:19 +0200 block: memory leak fix\n" \
-"14102 2018-07-22 08:06:02 +0200 zimocan: evaluate direction bit of accessory data\n" \
 
 "log end";
