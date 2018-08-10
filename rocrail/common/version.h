@@ -1,11 +1,15 @@
 const int revisionnr = 
-14147
+14151
 ;
 const char* commithash = 
-"17b217741b6d0bfb074347b7aa61197ed8042f6c";
+"f05ceb30bf30d4b269556da879ef2631520558f8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14151 2018-08-09 18:04:52 +0200 max. running option added: zero is default where all may run\n" \
+"14150 2018-08-09 13:55:17 +0200 item: disable operating in case of edit mode\n" \
+"14149 2018-08-09 11:27:44 +0200 guiframe,mdimanager: trace out display size and MDI position\n" \
+"14148 2018-08-09 10:32:55 +0200 modbus: write single coil server support\n" \
 "14147 2018-08-08 08:35:16 +0200 zimocan: save port4 state in the nidnode too\n" \
 "14146 2018-08-08 08:10:34 +0200 zimocan: use a nidnode to combine port6 and data\n" \
 "14145 2018-08-08 07:26:02 +0200 rocguiinidlg: reset MDIFrame position at disable\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "14104 2018-07-23 11:43:13 +0200 lc node memory leak fixed\n" \
 "14103 2018-07-22 10:45:19 +0200 block: memory leak fix\n" \
 "14102 2018-07-22 08:06:02 +0200 zimocan: evaluate direction bit of accessory data\n" \
-"14101 2018-07-22 07:59:52 +0200 zimocan: accessory data only support for type=0x11\n" \
-"14100 2018-07-22 07:50:10 +0200 zimocan: support for accessory port6 added\n" \
-"14099 2018-07-21 17:25:50 +0200 zimocan: never ending story\n" \
-"14098 2018-07-21 14:17:41 +0200 throttledlg: static image border under linux 10 pix :(\n" \
 
 "log end";
