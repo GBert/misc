@@ -1,11 +1,16 @@
 const int revisionnr = 
-14156
+14161
 ;
 const char* commithash = 
-"68fcc0ff136874c929c39ff093feecbdfd745b77";
+"1a639265a797ccdb390f7fa2ce90ef6f3d91c1e2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14161 2018-08-11 15:09:30 +0200 readme: update links\n" \
+"14160 2018-08-11 15:04:39 +0200 readme: update\n" \
+"14159 2018-08-11 11:02:56 +0200 mdimanager: reset position to 10,10 in case the mdi frame is no longer visible\n" \
+"14158 2018-08-11 08:23:39 +0200 loclcdr: reset reserved routes and blocks in case of ghost by IN\n" \
+"14157 2018-08-11 07:55:22 +0200 car stylesheet: update Andy\n" \
 "14156 2018-08-10 16:50:48 +0200 model: fix to avoid double mapping sensors\n" \
 "14155 2018-08-10 10:38:10 +0200 translation merge: de, nl, en_GB, pt_BR\n" \
 "14154 2018-08-10 09:01:21 +0200 rocview: fix for offline status\n" \
@@ -51,10 +56,5 @@ const char* revlog =
 "14114 2018-07-28 19:28:42 +0200 zimocan: port6 address offset fix\n" \
 "14113 2018-07-28 10:18:49 +0200 translation merge: sl, en_GB, pt_BR, sr_latin, nl, de\n" \
 "14112 2018-07-26 08:32:33 +0200 statbar: lamp added for init field\n" \
-"14111 2018-07-26 08:08:01 +0200 throttledlg: resize fixes\n" \
-"14110 2018-07-25 08:15:15 +0200 guiframe: show init field ready in the statusbar\n" \
-"14109 2018-07-25 08:08:25 +0200 guiframe: disable initfieldready popup\n" \
-"14108 2018-07-25 07:48:26 +0200 node: safty checks at clone\n" \
-"14107 2018-07-24 15:56:47 +0200 initfield popup in case its ready\n" \
 
 "log end";
