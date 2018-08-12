@@ -1,11 +1,12 @@
 const int revisionnr = 
-14161
+14162
 ;
 const char* commithash = 
-"1a639265a797ccdb390f7fa2ce90ef6f3d91c1e2";
+"a402d05cbf86f72839b060d3663f75817b7c8f9a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14162 2018-08-12 12:48:14 +0200 tt: fix for not showing routes (Lothar)\n" \
 "14161 2018-08-11 15:09:30 +0200 readme: update links\n" \
 "14160 2018-08-11 15:04:39 +0200 readme: update\n" \
 "14159 2018-08-11 11:02:56 +0200 mdimanager: reset position to 10,10 in case the mdi frame is no longer visible\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14115 2018-07-29 07:54:14 +0200 zimocan: ABA value guesed for port6 events\n" \
 "14114 2018-07-28 19:28:42 +0200 zimocan: port6 address offset fix\n" \
 "14113 2018-07-28 10:18:49 +0200 translation merge: sl, en_GB, pt_BR, sr_latin, nl, de\n" \
-"14112 2018-07-26 08:32:33 +0200 statbar: lamp added for init field\n" \
 
 "log end";
