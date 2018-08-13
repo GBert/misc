@@ -1,11 +1,13 @@
 const int revisionnr = 
-14162
+14164
 ;
 const char* commithash = 
-"a402d05cbf86f72839b060d3663f75817b7c8f9a";
+"9f4a335581165755575534f75d9a27e10f3e5f48";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14164 2018-08-13 08:13:52 +0200 blockgroup: fix for reserving and loco via block\n" \
+"14163 2018-08-13 07:35:38 +0200 modbusdlg: fix for sleep label\n" \
 "14162 2018-08-12 12:48:14 +0200 tt: fix for not showing routes (Lothar)\n" \
 "14161 2018-08-11 15:09:30 +0200 readme: update links\n" \
 "14160 2018-08-11 15:04:39 +0200 readme: update\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14117 2018-07-29 10:26:05 +0200 bidi direction: use only if its reported\n" \
 "14116 2018-07-29 09:04:29 +0200 bidi direction: use only if its reported\n" \
 "14115 2018-07-29 07:54:14 +0200 zimocan: ABA value guesed for port6 events\n" \
-"14114 2018-07-28 19:28:42 +0200 zimocan: port6 address offset fix\n" \
-"14113 2018-07-28 10:18:49 +0200 translation merge: sl, en_GB, pt_BR, sr_latin, nl, de\n" \
 
 "log end";
