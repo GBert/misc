@@ -1,11 +1,20 @@
 const int revisionnr = 
-14164
+14173
 ;
 const char* commithash = 
-"9f4a335581165755575534f75d9a27e10f3e5f48";
+"8bfe73fbcef71591076193c14a82b1f63c72b882";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14173 2018-08-14 15:48:34 +0200 update wiki plan\n" \
+"14172 2018-08-14 14:02:47 +0200 cbusnodedlg: ArduCAN IR write vars and events (WIP)\n" \
+"14171 2018-08-14 11:32:29 +0200 cbusnodedlg: ArduCAN IR support\n" \
+"14170 2018-08-14 11:06:54 +0200 cbusnodedlg: ArduCAN IR support (WIP)\n" \
+"14169 2018-08-14 07:55:09 +0200 lcdriver: fix for ghost detection in second next block\n" \
+"14168 2018-08-14 07:23:49 +0200 cbusnodedlg: manu DIY added\n" \
+"14167 2018-08-14 07:23:03 +0200 cbusnodedlg: manu DIY added\n" \
+"14166 2018-08-13 11:35:14 +0200 cbusnodedlg: show schumo99 with small caps\n" \
+"14165 2018-08-13 11:32:43 +0200 cbusnodedlg: show schumo99 IR module in the index\n" \
 "14164 2018-08-13 08:13:52 +0200 blockgroup: fix for reserving and loco via block\n" \
 "14163 2018-08-13 07:35:38 +0200 modbusdlg: fix for sleep label\n" \
 "14162 2018-08-12 12:48:14 +0200 tt: fix for not showing routes (Lothar)\n" \
@@ -47,14 +56,5 @@ const char* revlog =
 "14126 2018-08-02 12:56:30 +0200 operatordlg: documentation button added\n" \
 "14125 2018-08-02 11:58:36 +0200 modbus: request header fix\n" \
 "14124 2018-08-02 10:44:01 +0200 modbus: WIP\n" \
-"14123 2018-07-31 13:27:44 +0200 loconet: fix calling ibcom pom for reading\n" \
-"14122 2018-07-31 12:13:27 +0200 loconet,ibcom: Uhli POM write packet\n" \
-"14121 2018-07-30 15:20:27 +0200 ecos: fix for multiple cereating locos in case the ecos does not respond fast enough\n" \
-"14120 2018-07-30 10:08:20 +0200 loc: BAT\n" \
-"14119 2018-07-29 12:15:35 +0200 removed obsolete svnlog references and wrappers\n" \
-"14118 2018-07-29 10:31:57 +0200 item: show bididir in sensor tooltip\n" \
-"14117 2018-07-29 10:26:05 +0200 bidi direction: use only if its reported\n" \
-"14116 2018-07-29 09:04:29 +0200 bidi direction: use only if its reported\n" \
-"14115 2018-07-29 07:54:14 +0200 zimocan: ABA value guesed for port6 events\n" \
 
 "log end";
