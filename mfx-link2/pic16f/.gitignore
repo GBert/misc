@@ -1,0 +1,13 @@
+*.asm
+*.swp
+*.lst
+*.cod
+MPLABXLog.*
+*.o
+*.p1
+*.pre
+*.cmf
+*.d
+*.hex
+*.as
+*.cof
