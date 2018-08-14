@@ -20,22 +20,13 @@
 #define UBOOT_SIZE	192*1024
 #define UBOOT_ENV_SIZE	64*1024
 #define MTD2_SIZE	64*1024
-#define OPENWRT_SIZE	(16*1024*1024 - MTD2_SIZE - UBOOT_SIZE - UBOOT_ENV_SIZE)
 
 #define INSERT_DATA(filename, data, max) \
     do { \
- 	filename = (char *)malloc(strlen(argv[optind]) + 1); \
-	if (filename == NULL) { \
-	    fprintf(stderr, "can't alloc for filename %s\n", filename); \
-	    free(data); \
+	if (read_data(argv[optind], data, max) == 0) { \
 	    return EXIT_FAILURE; \
 	} \
-	strncpy(filename, argv[optind], strlen(argv[optind])); \
 	optind++; \
-	if (read_data(filename, data, max) == 0) { \
-	    free(data); \
-	    return EXIT_FAILURE; \
-	} \
     } while(0)
 
 char OUTPUT_FILE[] = "a5v11_XXXXXXXXXXXX.img\0\0\0\0";
@@ -44,8 +35,8 @@ uint8_t *data;
 char mac[13];
 
 void print_usage(char *prg) {
-    fprintf(stderr, "\nUsage: %s -h -m <meg> -v <boot.img> <mtd2.bin> <openwrt.img>\n", prg);
-    fprintf(stderr, "   Version 0.1\n\n");
+    fprintf(stderr, "\nUsage: %s -h -m <meg> -v <uboot.img> <uboot-env.img> <mtd2.bin> <openwrt.img>\n", prg);
+    fprintf(stderr, "   Version 0.2\n\n");
     fprintf(stderr, "         -h                  this help\n");
     fprintf(stderr, "         -m <meg>            image size e.g. 8 or 16M defaullt %d M\n\n", DEFAULT_SIZE);
 }
@@ -55,7 +46,7 @@ int read_data(char *filename, uint8_t *position, int max) {
     int size;
 
     if (verbose)
-	printf("read filename: %s offset 0x%08X\n", filename, (int) (position - data));
+	printf("read filename: %s writing at offset 0x%08X\n", filename, (int) (position - data));
 	      
     fp = fopen(filename, "rb");
     if (fp == NULL) {
@@ -83,7 +74,7 @@ int read_data(char *filename, uint8_t *position, int max) {
 	for (int i = 0; i <= 5; i++)
 	    sprintf(&mac[i*2], "%02x", position[0x28 + i]);
 	if (verbose)
-	    printf(" mac %s\n", mac);
+	    printf(" MAC is %s\n", mac);
     }
     return size;
 }
@@ -98,7 +89,7 @@ int main(int argc, char **argv) {
     while ((opt = getopt(argc, argv, "m:vh?")) != -1) {
 	switch (opt) {
 	case 'm':
-	    size = atoi(optarg);
+	    size = atoi(optarg) * 1024 * 1024;
 	    break;
 	case 'v':
 	    verbose = 1;
@@ -121,24 +112,12 @@ int main(int argc, char **argv) {
     }
     memset(data, 0xff, size);
 
-    if (argc != 5)
+    if ((argc - optind) != 4) {
+	free(data);
 	return EXIT_FAILURE;
+    }
 	
     if (optind < argc) {
-#if 0
-	filename = (char *)realloc(filename, strlen(argv[optind]) + 1);
-	if (filename == NULL) {
-	    fprintf(stderr, "can't alloc for filename %s\n", filename);
-	    free(data);
-	    return EXIT_FAILURE;
-	}
-	strncpy(filename, argv[optind], strlen(argv[optind]));
-	optind++;
-	if (read_data(filename, data, UBOOT_SIZE) == 0) {
-	    free(data);
-	    return EXIT_FAILURE;
-	}
-#endif
 	INSERT_DATA(filename, data, UBOOT_SIZE);
 	INSERT_DATA(filename, data + UBOOT_SIZE, UBOOT_ENV_SIZE);
 	INSERT_DATA(filename, data + UBOOT_SIZE + UBOOT_ENV_SIZE, MTD2_SIZE);
