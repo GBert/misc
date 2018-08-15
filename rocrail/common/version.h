@@ -1,11 +1,12 @@
 const int revisionnr = 
-14173
+14174
 ;
 const char* commithash = 
-"8bfe73fbcef71591076193c14a82b1f63c72b882";
+"bd8478e331df89a27ce722369a2706c526c1be75";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14174 2018-08-15 07:36:37 +0200 blockgroup: check for blockgroup on reserve for conditions\n" \
 "14173 2018-08-14 15:48:34 +0200 update wiki plan\n" \
 "14172 2018-08-14 14:02:47 +0200 cbusnodedlg: ArduCAN IR write vars and events (WIP)\n" \
 "14171 2018-08-14 11:32:29 +0200 cbusnodedlg: ArduCAN IR support\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14127 2018-08-02 15:20:21 +0200 modbus: WIP\n" \
 "14126 2018-08-02 12:56:30 +0200 operatordlg: documentation button added\n" \
 "14125 2018-08-02 11:58:36 +0200 modbus: request header fix\n" \
-"14124 2018-08-02 10:44:01 +0200 modbus: WIP\n" \
 
 "log end";
