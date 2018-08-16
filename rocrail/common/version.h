@@ -1,11 +1,20 @@
 const int revisionnr = 
-14174
+14183
 ;
 const char* commithash = 
-"bd8478e331df89a27ce722369a2706c526c1be75";
+"29b936436b22d2f9b605eced2d14c556f754c055";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14183 2018-08-16 14:49:18 +0200 modbusdlg: poll coil flag fix\n" \
+"14182 2018-08-16 14:37:50 +0200 REVERT blockgroup: check for blockgroup on reserve for conditions\n" \
+"14181 2018-08-16 08:30:32 +0200 modbus: trace correction\n" \
+"14180 2018-08-16 08:29:51 +0200 modbus: report coils as output field events\n" \
+"14179 2018-08-15 15:30:45 +0200 modbus: coil polling added\n" \
+"14178 2018-08-15 14:28:08 +0200 modbus: holding register support\n" \
+"14177 2018-08-15 13:24:20 +0200 modbus: regard poll offset\n" \
+"14176 2018-08-15 12:16:21 +0200 modbus: device list added for polling inputs, registers and holdings\n" \
+"14175 2018-08-15 11:44:25 +0200 model: check at isDepartAllowed also if the loco is in mode auto\n" \
 "14174 2018-08-15 07:36:37 +0200 blockgroup: check for blockgroup on reserve for conditions\n" \
 "14173 2018-08-14 15:48:34 +0200 update wiki plan\n" \
 "14172 2018-08-14 14:02:47 +0200 cbusnodedlg: ArduCAN IR write vars and events (WIP)\n" \
@@ -47,14 +56,5 @@ const char* revlog =
 "14136 2018-08-04 14:24:53 +0200 inno-setup: optional desktop icon for Rocview\n" \
 "14135 2018-08-04 09:41:46 +0200 modbus setup dlg added\n" \
 "14134 2018-08-03 15:45:10 +0200 modbus: input register support added\n" \
-"14133 2018-08-03 14:19:22 +0200 translation merge: de, pt_BR, fr, sl, nl\n" \
-"14132 2018-08-03 10:51:33 +0200 modbus: try to get the device vendor name at initial connect\n" \
-"14131 2018-08-03 08:29:44 +0200 modbus: reconnect fixes\n" \
-"14130 2018-08-03 07:51:38 +0200 modbus: keep connections alive\n" \
-"14129 2018-08-02 18:18:25 +0200 modbus: check if fb polling is activated, use a different user defined communication port\n" \
-"14128 2018-08-02 15:49:58 +0200 modbus: polling digital inputs\n" \
-"14127 2018-08-02 15:20:21 +0200 modbus: WIP\n" \
-"14126 2018-08-02 12:56:30 +0200 operatordlg: documentation button added\n" \
-"14125 2018-08-02 11:58:36 +0200 modbus: request header fix\n" \
 
 "log end";
