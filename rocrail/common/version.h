@@ -1,11 +1,21 @@
 const int revisionnr = 
-14183
+14193
 ;
 const char* commithash = 
-"29b936436b22d2f9b605eced2d14c556f754c055";
+"f6d6a77de343b24ef2ca5bd4635c8da0df16be3b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14193 2018-08-18 10:28:50 +0200 stage: return rest length of the trailing free section on is suited\n" \
+"14192 2018-08-18 08:16:02 +0200 loc: skip the go command if the current block is the same as gotoblock\n" \
+"14191 2018-08-17 15:32:33 +0200 renderer: draw the tt tracks to the symbol rectangle border\n" \
+"14190 2018-08-17 11:16:15 +0200 model: free the goto block destination, if reserved, if its found and cannot be used and/or is reserved\n" \
+"14189 2018-08-17 10:15:30 +0200 lcdriver: trace on reset goto block\n" \
+"14188 2018-08-17 10:14:32 +0200 lcdriver: release a reserved goto block on reset\n" \
+"14187 2018-08-17 10:00:45 +0200 blockgroup: check for blockgroup on reserve for conditions none recursive\n" \
+"14186 2018-08-17 08:12:08 +0200 cbusnodedlg: correction for the ArduIR help link\n" \
+"14185 2018-08-17 07:59:40 +0200 cbusnodedlg: ArduIR invert checkboxes added\n" \
+"14184 2018-08-17 07:32:56 +0200 locowidget: fix for throttle size\n" \
 "14183 2018-08-16 14:49:18 +0200 modbusdlg: poll coil flag fix\n" \
 "14182 2018-08-16 14:37:50 +0200 REVERT blockgroup: check for blockgroup on reserve for conditions\n" \
 "14181 2018-08-16 08:30:32 +0200 modbus: trace correction\n" \
@@ -46,15 +56,5 @@ const char* revlog =
 "14146 2018-08-08 08:10:34 +0200 zimocan: use a nidnode to combine port6 and data\n" \
 "14145 2018-08-08 07:26:02 +0200 rocguiinidlg: reset MDIFrame position at disable\n" \
 "14144 2018-08-07 06:49:14 +0200 model: fix checking if all locos are idle or stop\n" \
-"14143 2018-08-07 06:37:57 +0200 model: fix for itterating the feedback map, use list instead\n" \
-"14142 2018-08-06 07:11:50 +0200 modbusdlg: help link fix\n" \
-"14141 2018-08-05 10:12:49 +0200 modbus: poll fine tuning added\n" \
-"14140 2018-08-05 09:53:58 +0200 model: fix for initialising static arrays for updating sensor info\n" \
-"14139 2018-08-05 08:38:38 +0200 modbusdlg: IP field added\n" \
-"14138 2018-08-05 07:55:24 +0200 innosetup script fix\n" \
-"14137 2018-08-04 15:12:51 +0200 modbus: transact async to avoid blocking at connect if the device is not online\n" \
-"14136 2018-08-04 14:24:53 +0200 inno-setup: optional desktop icon for Rocview\n" \
-"14135 2018-08-04 09:41:46 +0200 modbus setup dlg added\n" \
-"14134 2018-08-03 15:45:10 +0200 modbus: input register support added\n" \
 
 "log end";
