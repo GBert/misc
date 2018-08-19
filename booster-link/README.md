@@ -1,10 +1,17 @@
 Einfacher Gleisboxbooster
 =========================
 
+[![alt text](https://github.com/GBert/misc/raw/master/booster-link/pictures/ibt2-link_01_s.jpg "Einfach Booster I")](https://github.com/GBert/misc/raw/master/booster-link/pictures/ibt2-link_01.jpg)[![alt text](https://github.com/GBert/misc/raw/master/booster-link/pictures/ibt2-link_02_s.jpg "Einfach Booster II")](https://github.com/GBert/misc/raw/master/booster-link/pictures/ibt2-link_02.jpg)
+
+Siehe auch:
+[Stummi Forum Thread](https://stummiforum.de/viewtopic.php?f=7&t=160368&start=50#p1859777)
+
 Optionen:
 - ohne öffnen der Gleisbox 
 - automatishce Gleisspannungsabschaltung (Stopp) nach 250ms
 - direkte Anbindung an die Gleisbox (nur zwei Widerstände + Transistor)
+
+
 
 BOM
 ---
