@@ -1,11 +1,13 @@
 const int revisionnr = 
-14209
+14211
 ;
 const char* commithash = 
-"3483d6784badbbe365cfce18e49da37a57ff3128";
+"dd5e402a962e42bee9025c32fec862a5ecf97e8c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14211 2018-08-20 15:16:07 +0200 inno setup script: use userpf instead of pf\n" \
+"14210 2018-08-20 15:01:27 +0200 rocnetnode: signal aspect value 0xFF is regarded as turn off all LEDs\n" \
 "14209 2018-08-20 12:24:27 +0200 renderer: fix for scale the plus side of the bridge\n" \
 "14208 2018-08-20 11:25:32 +0200 turntabledialog: show grid connection in the tracks overview\n" \
 "14207 2018-08-20 10:53:18 +0200 signal: 5 extra aspect nr.values\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14164 2018-08-13 08:13:52 +0200 blockgroup: fix for reserving and loco via block\n" \
 "14163 2018-08-13 07:35:38 +0200 modbusdlg: fix for sleep label\n" \
 "14162 2018-08-12 12:48:14 +0200 tt: fix for not showing routes (Lothar)\n" \
-"14161 2018-08-11 15:09:30 +0200 readme: update links\n" \
-"14160 2018-08-11 15:04:39 +0200 readme: update\n" \
 
 "log end";
