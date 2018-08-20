@@ -1,11 +1,17 @@
 const int revisionnr = 
-14203
+14209
 ;
 const char* commithash = 
-"24da2673424eb7e96a03501f30294dfb867b8b14";
+"3483d6784badbbe365cfce18e49da37a57ff3128";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14209 2018-08-20 12:24:27 +0200 renderer: fix for scale the plus side of the bridge\n" \
+"14208 2018-08-20 11:25:32 +0200 turntabledialog: show grid connection in the tracks overview\n" \
+"14207 2018-08-20 10:53:18 +0200 signal: 5 extra aspect nr.values\n" \
+"14206 2018-08-20 09:58:31 +0200 modbus: fix for polling ranges\n" \
+"14205 2018-08-20 09:48:48 +0200 renderer: turntable track connection rotation support\n" \
+"14204 2018-08-20 08:39:14 +0200 renderer: grin connection option added for backwards compat\n" \
 "14203 2018-08-20 07:33:31 +0200 userial: no direct IO for platform __aarch64__\n" \
 "14202 2018-08-20 07:28:48 +0200 usystem: disable direct IO for __aarch64__\n" \
 "14201 2018-08-20 07:11:45 +0200 usystems: #elif fix\n" \
@@ -50,11 +56,5 @@ const char* revlog =
 "14162 2018-08-12 12:48:14 +0200 tt: fix for not showing routes (Lothar)\n" \
 "14161 2018-08-11 15:09:30 +0200 readme: update links\n" \
 "14160 2018-08-11 15:04:39 +0200 readme: update\n" \
-"14159 2018-08-11 11:02:56 +0200 mdimanager: reset position to 10,10 in case the mdi frame is no longer visible\n" \
-"14158 2018-08-11 08:23:39 +0200 loclcdr: reset reserved routes and blocks in case of ghost by IN\n" \
-"14157 2018-08-11 07:55:22 +0200 car stylesheet: update Andy\n" \
-"14156 2018-08-10 16:50:48 +0200 model: fix to avoid double mapping sensors\n" \
-"14155 2018-08-10 10:38:10 +0200 translation merge: de, nl, en_GB, pt_BR\n" \
-"14154 2018-08-10 09:01:21 +0200 rocview: fix for offline status\n" \
 
 "log end";
