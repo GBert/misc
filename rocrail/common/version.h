@@ -1,11 +1,21 @@
 const int revisionnr = 
-14193
+14203
 ;
 const char* commithash = 
-"f6d6a77de343b24ef2ca5bd4635c8da0df16be3b";
+"24da2673424eb7e96a03501f30294dfb867b8b14";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14203 2018-08-20 07:33:31 +0200 userial: no direct IO for platform __aarch64__\n" \
+"14202 2018-08-20 07:28:48 +0200 usystem: disable direct IO for __aarch64__\n" \
+"14201 2018-08-20 07:11:45 +0200 usystems: #elif fix\n" \
+"14200 2018-08-20 06:41:28 +0200 usystem: fix for none sys/io.h platforms\n" \
+"14199 2018-08-20 06:17:40 +0200 renderer: optiona turntable track grid connections\n" \
+"14198 2018-08-20 06:01:06 +0200 renderer: revert drawing tracks inline to the border\n" \
+"14197 2018-08-19 15:59:26 +0200 inno setup: set priviledge to lowest\n" \
+"14196 2018-08-19 10:25:29 +0200 modbus: analog output support added\n" \
+"14195 2018-08-19 08:10:39 +0200 cbusnodedlg: arducan calibrate buttons added\n" \
+"14194 2018-08-19 07:43:47 +0200 car: imagenr added\n" \
 "14193 2018-08-18 10:28:50 +0200 stage: return rest length of the trailing free section on is suited\n" \
 "14192 2018-08-18 08:16:02 +0200 loc: skip the go command if the current block is the same as gotoblock\n" \
 "14191 2018-08-17 15:32:33 +0200 renderer: draw the tt tracks to the symbol rectangle border\n" \
@@ -46,15 +56,5 @@ const char* revlog =
 "14156 2018-08-10 16:50:48 +0200 model: fix to avoid double mapping sensors\n" \
 "14155 2018-08-10 10:38:10 +0200 translation merge: de, nl, en_GB, pt_BR\n" \
 "14154 2018-08-10 09:01:21 +0200 rocview: fix for offline status\n" \
-"14153 2018-08-10 08:47:16 +0200 rocview: show edit mode in the status bar\n" \
-"14152 2018-08-10 08:10:48 +0200 rocview: show edit mode in the status bar\n" \
-"14151 2018-08-09 18:04:52 +0200 max. running option added: zero is default where all may run\n" \
-"14150 2018-08-09 13:55:17 +0200 item: disable operating in case of edit mode\n" \
-"14149 2018-08-09 11:27:44 +0200 guiframe,mdimanager: trace out display size and MDI position\n" \
-"14148 2018-08-09 10:32:55 +0200 modbus: write single coil server support\n" \
-"14147 2018-08-08 08:35:16 +0200 zimocan: save port4 state in the nidnode too\n" \
-"14146 2018-08-08 08:10:34 +0200 zimocan: use a nidnode to combine port6 and data\n" \
-"14145 2018-08-08 07:26:02 +0200 rocguiinidlg: reset MDIFrame position at disable\n" \
-"14144 2018-08-07 06:49:14 +0200 model: fix checking if all locos are idle or stop\n" \
 
 "log end";
