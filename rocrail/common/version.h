@@ -1,11 +1,16 @@
 const int revisionnr = 
-14214
+14219
 ;
 const char* commithash = 
-"79af5e1f5a68a689b5bc7c2ba6595452ecc0541b";
+"a40b2f9a30d2e70f9d1a2931a5e2d1f0fc34c015";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14219 2018-08-21 16:06:54 +0200 trace corrections\n" \
+"14218 2018-08-21 16:00:45 +0200 rocrail: trace corrections\n" \
+"14217 2018-08-21 14:25:49 +0200 modbus: switch support added\n" \
+"14216 2018-08-21 11:59:25 +0200 translation merge: de, nl, sl, pt_BR, fr\n" \
+"14215 2018-08-21 10:56:11 +0200 modbus: report coils as output events\n" \
 "14214 2018-08-21 10:16:22 +0200 rocnet: support 8 leds for aspect signals with 16bit value\n" \
 "14213 2018-08-21 10:05:41 +0200 modbus: addressing fix for reading coils and inputs\n" \
 "14212 2018-08-21 07:25:37 +0200 cbusnodedlg: AdruCAN I/O and Servo added\n" \
@@ -51,10 +56,5 @@ const char* revlog =
 "14172 2018-08-14 14:02:47 +0200 cbusnodedlg: ArduCAN IR write vars and events (WIP)\n" \
 "14171 2018-08-14 11:32:29 +0200 cbusnodedlg: ArduCAN IR support\n" \
 "14170 2018-08-14 11:06:54 +0200 cbusnodedlg: ArduCAN IR support (WIP)\n" \
-"14169 2018-08-14 07:55:09 +0200 lcdriver: fix for ghost detection in second next block\n" \
-"14168 2018-08-14 07:23:49 +0200 cbusnodedlg: manu DIY added\n" \
-"14167 2018-08-14 07:23:03 +0200 cbusnodedlg: manu DIY added\n" \
-"14166 2018-08-13 11:35:14 +0200 cbusnodedlg: show schumo99 with small caps\n" \
-"14165 2018-08-13 11:32:43 +0200 cbusnodedlg: show schumo99 IR module in the index\n" \
 
 "log end";
