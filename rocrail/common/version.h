@@ -1,11 +1,14 @@
 const int revisionnr = 
-14211
+14214
 ;
 const char* commithash = 
-"dd5e402a962e42bee9025c32fec862a5ecf97e8c";
+"79af5e1f5a68a689b5bc7c2ba6595452ecc0541b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14214 2018-08-21 10:16:22 +0200 rocnet: support 8 leds for aspect signals with 16bit value\n" \
+"14213 2018-08-21 10:05:41 +0200 modbus: addressing fix for reading coils and inputs\n" \
+"14212 2018-08-21 07:25:37 +0200 cbusnodedlg: AdruCAN I/O and Servo added\n" \
 "14211 2018-08-20 15:16:07 +0200 inno setup script: use userpf instead of pf\n" \
 "14210 2018-08-20 15:01:27 +0200 rocnetnode: signal aspect value 0xFF is regarded as turn off all LEDs\n" \
 "14209 2018-08-20 12:24:27 +0200 renderer: fix for scale the plus side of the bridge\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "14167 2018-08-14 07:23:03 +0200 cbusnodedlg: manu DIY added\n" \
 "14166 2018-08-13 11:35:14 +0200 cbusnodedlg: show schumo99 with small caps\n" \
 "14165 2018-08-13 11:32:43 +0200 cbusnodedlg: show schumo99 IR module in the index\n" \
-"14164 2018-08-13 08:13:52 +0200 blockgroup: fix for reserving and loco via block\n" \
-"14163 2018-08-13 07:35:38 +0200 modbusdlg: fix for sleep label\n" \
-"14162 2018-08-12 12:48:14 +0200 tt: fix for not showing routes (Lothar)\n" \
 
 "log end";
