@@ -1,11 +1,15 @@
 const int revisionnr = 
-14219
+14223
 ;
 const char* commithash = 
-"a40b2f9a30d2e70f9d1a2931a5e2d1f0fc34c015";
+"0ff41a1778c8f0e17af563e99c6720bdc10e162b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14223 2018-08-22 10:55:41 +0200 block: fix for broadcasting reserved in case of block group lock\n" \
+"14222 2018-08-22 10:12:14 +0200 block,model: trace corrections\n" \
+"14221 2018-08-22 09:52:02 +0200 modbus: write single coil rocrail addr-1\n" \
+"14220 2018-08-22 08:31:42 +0200 locdialog: removed placing option\n" \
 "14219 2018-08-21 16:06:54 +0200 trace corrections\n" \
 "14218 2018-08-21 16:00:45 +0200 rocrail: trace corrections\n" \
 "14217 2018-08-21 14:25:49 +0200 modbus: switch support added\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "14176 2018-08-15 12:16:21 +0200 modbus: device list added for polling inputs, registers and holdings\n" \
 "14175 2018-08-15 11:44:25 +0200 model: check at isDepartAllowed also if the loco is in mode auto\n" \
 "14174 2018-08-15 07:36:37 +0200 blockgroup: check for blockgroup on reserve for conditions\n" \
-"14173 2018-08-14 15:48:34 +0200 update wiki plan\n" \
-"14172 2018-08-14 14:02:47 +0200 cbusnodedlg: ArduCAN IR write vars and events (WIP)\n" \
-"14171 2018-08-14 11:32:29 +0200 cbusnodedlg: ArduCAN IR support\n" \
-"14170 2018-08-14 11:06:54 +0200 cbusnodedlg: ArduCAN IR support (WIP)\n" \
 
 "log end";
