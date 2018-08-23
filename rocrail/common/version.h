@@ -1,11 +1,21 @@
 const int revisionnr = 
-14223
+14233
 ;
 const char* commithash = 
-"0ff41a1778c8f0e17af563e99c6720bdc10e162b";
+"a780e87ac753337429eb4999102c46e7d47798b6";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14233 2018-08-23 14:09:57 +0200 innosetup script fix for double entry\n" \
+"14232 2018-08-23 12:21:35 +0200 innosetup: readme added\n" \
+"14231 2018-08-23 11:21:58 +0200 signal: filter out the blank command for saving in case the signal is already blank\n" \
+"14230 2018-08-23 10:32:22 +0200 signal: fix for evaluating state in case of aspect control\n" \
+"14229 2018-08-23 10:08:57 +0200 block: fix for setting reserved flag in case of group lock\n" \
+"14228 2018-08-23 08:28:53 +0200 signal: fix for unknown unblank command\n" \
+"14227 2018-08-22 17:31:23 +0200 signal: revert copy command before blank\n" \
+"14226 2018-08-22 16:56:40 +0200 cbusnodedlg: update arducan servo description\n" \
+"14225 2018-08-22 14:40:56 +0200 signal: save always the last command to be available at unblank\n" \
+"14224 2018-08-22 14:02:35 +0200 modbusdlg: translation for coil range added\n" \
 "14223 2018-08-22 10:55:41 +0200 block: fix for broadcasting reserved in case of block group lock\n" \
 "14222 2018-08-22 10:12:14 +0200 block,model: trace corrections\n" \
 "14221 2018-08-22 09:52:02 +0200 modbus: write single coil rocrail addr-1\n" \
@@ -46,15 +56,5 @@ const char* revlog =
 "14186 2018-08-17 08:12:08 +0200 cbusnodedlg: correction for the ArduIR help link\n" \
 "14185 2018-08-17 07:59:40 +0200 cbusnodedlg: ArduIR invert checkboxes added\n" \
 "14184 2018-08-17 07:32:56 +0200 locowidget: fix for throttle size\n" \
-"14183 2018-08-16 14:49:18 +0200 modbusdlg: poll coil flag fix\n" \
-"14182 2018-08-16 14:37:50 +0200 REVERT blockgroup: check for blockgroup on reserve for conditions\n" \
-"14181 2018-08-16 08:30:32 +0200 modbus: trace correction\n" \
-"14180 2018-08-16 08:29:51 +0200 modbus: report coils as output field events\n" \
-"14179 2018-08-15 15:30:45 +0200 modbus: coil polling added\n" \
-"14178 2018-08-15 14:28:08 +0200 modbus: holding register support\n" \
-"14177 2018-08-15 13:24:20 +0200 modbus: regard poll offset\n" \
-"14176 2018-08-15 12:16:21 +0200 modbus: device list added for polling inputs, registers and holdings\n" \
-"14175 2018-08-15 11:44:25 +0200 model: check at isDepartAllowed also if the loco is in mode auto\n" \
-"14174 2018-08-15 07:36:37 +0200 blockgroup: check for blockgroup on reserve for conditions\n" \
 
 "log end";
