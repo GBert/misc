@@ -1,11 +1,12 @@
 const int revisionnr = 
-14234
+14235
 ;
 const char* commithash = 
-"5d3ba996e36d8ada7ed6aeb71f81dcd781600f57";
+"342b7c0cca8cbdb488f042ce69fb7b78e46187fc";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14235 2018-08-24 07:19:53 +0200 readme: DE fix (RainerK)\n" \
 "14234 2018-08-23 14:22:09 +0200 readme.txt: added windows line feeds\n" \
 "14233 2018-08-23 14:09:57 +0200 innosetup script fix for double entry\n" \
 "14232 2018-08-23 12:21:35 +0200 innosetup: readme added\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14188 2018-08-17 10:14:32 +0200 lcdriver: release a reserved goto block on reset\n" \
 "14187 2018-08-17 10:00:45 +0200 blockgroup: check for blockgroup on reserve for conditions none recursive\n" \
 "14186 2018-08-17 08:12:08 +0200 cbusnodedlg: correction for the ArduIR help link\n" \
-"14185 2018-08-17 07:59:40 +0200 cbusnodedlg: ArduIR invert checkboxes added\n" \
 
 "log end";
