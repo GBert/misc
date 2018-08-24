@@ -1,11 +1,20 @@
 const int revisionnr = 
-14235
+14244
 ;
 const char* commithash = 
-"342b7c0cca8cbdb488f042ce69fb7b78e46187fc";
+"0015fba622fd1373e9605bffbe68568e639cad27";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14244 2018-08-24 14:03:08 +0200 rocnetnode: blank all LEDs with aspect value 0xFFFF\n" \
+"14243 2018-08-24 13:52:14 +0200 signal: calculate nr of LEDs for the new extra aspect values a1-a5\n" \
+"14242 2018-08-24 12:11:02 +0200 loc: reset gotoblock after arrive\n" \
+"14241 2018-08-24 11:58:14 +0200 loc: reset gotoblock at reset and mode stop\n" \
+"14240 2018-08-24 11:48:12 +0200 loc: reset gotoblock at stop command\n" \
+"14239 2018-08-24 10:58:36 +0200 modbusdlg: translation fix for register range\n" \
+"14238 2018-08-24 10:48:19 +0200 signal: data structure for the save state\n" \
+"14237 2018-08-24 10:11:59 +0200 guiframe: load loco images alos in case the image is not shown\n" \
+"14236 2018-08-24 10:11:11 +0200 signal: save state before blank\n" \
 "14235 2018-08-24 07:19:53 +0200 readme: DE fix (RainerK)\n" \
 "14234 2018-08-23 14:22:09 +0200 readme.txt: added windows line feeds\n" \
 "14233 2018-08-23 14:09:57 +0200 innosetup script fix for double entry\n" \
@@ -47,14 +56,5 @@ const char* revlog =
 "14197 2018-08-19 15:59:26 +0200 inno setup: set priviledge to lowest\n" \
 "14196 2018-08-19 10:25:29 +0200 modbus: analog output support added\n" \
 "14195 2018-08-19 08:10:39 +0200 cbusnodedlg: arducan calibrate buttons added\n" \
-"14194 2018-08-19 07:43:47 +0200 car: imagenr added\n" \
-"14193 2018-08-18 10:28:50 +0200 stage: return rest length of the trailing free section on is suited\n" \
-"14192 2018-08-18 08:16:02 +0200 loc: skip the go command if the current block is the same as gotoblock\n" \
-"14191 2018-08-17 15:32:33 +0200 renderer: draw the tt tracks to the symbol rectangle border\n" \
-"14190 2018-08-17 11:16:15 +0200 model: free the goto block destination, if reserved, if its found and cannot be used and/or is reserved\n" \
-"14189 2018-08-17 10:15:30 +0200 lcdriver: trace on reset goto block\n" \
-"14188 2018-08-17 10:14:32 +0200 lcdriver: release a reserved goto block on reset\n" \
-"14187 2018-08-17 10:00:45 +0200 blockgroup: check for blockgroup on reserve for conditions none recursive\n" \
-"14186 2018-08-17 08:12:08 +0200 cbusnodedlg: correction for the ArduIR help link\n" \
 
 "log end";
