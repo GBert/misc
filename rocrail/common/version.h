@@ -1,11 +1,17 @@
 const int revisionnr = 
-14244
+14250
 ;
 const char* commithash = 
-"0015fba622fd1373e9605bffbe68568e639cad27";
+"d6972e04eb0846776e9e9d8f7aac2bd5828ac9cd";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14250 2018-08-25 16:41:38 +0200 inno setup: sym link to web\n" \
+"14249 2018-08-25 15:34:04 +0200 inno setup: link to svg directory\n" \
+"14248 2018-08-25 14:50:23 +0200 rocview: default workspace .\n" \
+"14247 2018-08-25 12:21:38 +0200 roclcdr: redesigned blockgroup reservation and release management\n" \
+"14246 2018-08-25 08:52:07 +0200 system: trace errno in case child process could not be started\n" \
+"14245 2018-08-25 08:35:17 +0200 system: trace error on fail starting a child process guiapp: reduced the connect wait from 300 to 30\n" \
 "14244 2018-08-24 14:03:08 +0200 rocnetnode: blank all LEDs with aspect value 0xFFFF\n" \
 "14243 2018-08-24 13:52:14 +0200 signal: calculate nr of LEDs for the new extra aspect values a1-a5\n" \
 "14242 2018-08-24 12:11:02 +0200 loc: reset gotoblock after arrive\n" \
@@ -50,11 +56,5 @@ const char* revlog =
 "14203 2018-08-20 07:33:31 +0200 userial: no direct IO for platform __aarch64__\n" \
 "14202 2018-08-20 07:28:48 +0200 usystem: disable direct IO for __aarch64__\n" \
 "14201 2018-08-20 07:11:45 +0200 usystems: #elif fix\n" \
-"14200 2018-08-20 06:41:28 +0200 usystem: fix for none sys/io.h platforms\n" \
-"14199 2018-08-20 06:17:40 +0200 renderer: optiona turntable track grid connections\n" \
-"14198 2018-08-20 06:01:06 +0200 renderer: revert drawing tracks inline to the border\n" \
-"14197 2018-08-19 15:59:26 +0200 inno setup: set priviledge to lowest\n" \
-"14196 2018-08-19 10:25:29 +0200 modbus: analog output support added\n" \
-"14195 2018-08-19 08:10:39 +0200 cbusnodedlg: arducan calibrate buttons added\n" \
 
 "log end";
