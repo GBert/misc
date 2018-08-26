@@ -1,11 +1,16 @@
 const int revisionnr = 
-14250
+14255
 ;
 const char* commithash = 
-"d6972e04eb0846776e9e9d8f7aac2bd5828ac9cd";
+"685c83d3dceb5ccafb83d9f5c911ab0839682039";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14255 2018-08-26 15:09:52 +0200 turntable: show border option added\n" \
+"14254 2018-08-26 11:08:39 +0200 item: fix for moving a text object\n" \
+"14253 2018-08-26 10:02:55 +0200 roclcdr: evaluation fix for initialize blockgroup in case of second next block\n" \
+"14252 2018-08-26 08:22:18 +0200 trainimage: request image from server in case not locally found\n" \
+"14251 2018-08-26 07:33:58 +0200 inno setup: themespath corrected to user links\n" \
 "14250 2018-08-25 16:41:38 +0200 inno setup: sym link to web\n" \
 "14249 2018-08-25 15:34:04 +0200 inno setup: link to svg directory\n" \
 "14248 2018-08-25 14:50:23 +0200 rocview: default workspace .\n" \
@@ -51,10 +56,5 @@ const char* revlog =
 "14208 2018-08-20 11:25:32 +0200 turntabledialog: show grid connection in the tracks overview\n" \
 "14207 2018-08-20 10:53:18 +0200 signal: 5 extra aspect nr.values\n" \
 "14206 2018-08-20 09:58:31 +0200 modbus: fix for polling ranges\n" \
-"14205 2018-08-20 09:48:48 +0200 renderer: turntable track connection rotation support\n" \
-"14204 2018-08-20 08:39:14 +0200 renderer: grin connection option added for backwards compat\n" \
-"14203 2018-08-20 07:33:31 +0200 userial: no direct IO for platform __aarch64__\n" \
-"14202 2018-08-20 07:28:48 +0200 usystem: disable direct IO for __aarch64__\n" \
-"14201 2018-08-20 07:11:45 +0200 usystems: #elif fix\n" \
 
 "log end";
