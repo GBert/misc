@@ -1,11 +1,12 @@
 const int revisionnr = 
-14255
+14256
 ;
 const char* commithash = 
-"685c83d3dceb5ccafb83d9f5c911ab0839682039";
+"132470db69e430209f5655b62d355bbf9033a669";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14256 2018-08-26 17:31:47 +0200 rocview: no default workspace\n" \
 "14255 2018-08-26 15:09:52 +0200 turntable: show border option added\n" \
 "14254 2018-08-26 11:08:39 +0200 item: fix for moving a text object\n" \
 "14253 2018-08-26 10:02:55 +0200 roclcdr: evaluation fix for initialize blockgroup in case of second next block\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14209 2018-08-20 12:24:27 +0200 renderer: fix for scale the plus side of the bridge\n" \
 "14208 2018-08-20 11:25:32 +0200 turntabledialog: show grid connection in the tracks overview\n" \
 "14207 2018-08-20 10:53:18 +0200 signal: 5 extra aspect nr.values\n" \
-"14206 2018-08-20 09:58:31 +0200 modbus: fix for polling ranges\n" \
 
 "log end";
