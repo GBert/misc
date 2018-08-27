@@ -1,11 +1,12 @@
 const int revisionnr = 
-14259
+14260
 ;
 const char* commithash = 
-"3df125aa39394b42c6d545ec1324f81dd7445647";
+"9f0fa10df8961f6f9890eacd3bc1bff963ebe6a9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14260 2018-08-27 08:16:19 +0200 fback: write register value in a variable with reg_ prefix\n" \
 "14259 2018-08-27 03:32:05 +0200 guiframe: open demo workspave menu item added\n" \
 "14258 2018-08-27 03:20:34 +0200 wrapper: default no auto open workspace\n" \
 "14257 2018-08-26 18:29:17 +0200 swim to the moon\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14213 2018-08-21 10:05:41 +0200 modbus: addressing fix for reading coils and inputs\n" \
 "14212 2018-08-21 07:25:37 +0200 cbusnodedlg: AdruCAN I/O and Servo added\n" \
 "14211 2018-08-20 15:16:07 +0200 inno setup script: use userpf instead of pf\n" \
-"14210 2018-08-20 15:01:27 +0200 rocnetnode: signal aspect value 0xFF is regarded as turn off all LEDs\n" \
 
 "log end";
