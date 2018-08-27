@@ -1,11 +1,12 @@
 const int revisionnr = 
-14260
+14261
 ;
 const char* commithash = 
-"9f0fa10df8961f6f9890eacd3bc1bff963ebe6a9";
+"33b3a639c5aea35e202c42edf015c437f46ca46e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14261 2018-08-27 10:34:55 +0200 roclcdr: check if the event match for durrent oder destination block\n" \
 "14260 2018-08-27 08:16:19 +0200 fback: write register value in a variable with reg_ prefix\n" \
 "14259 2018-08-27 03:32:05 +0200 guiframe: open demo workspave menu item added\n" \
 "14258 2018-08-27 03:20:34 +0200 wrapper: default no auto open workspace\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14214 2018-08-21 10:16:22 +0200 rocnet: support 8 leds for aspect signals with 16bit value\n" \
 "14213 2018-08-21 10:05:41 +0200 modbus: addressing fix for reading coils and inputs\n" \
 "14212 2018-08-21 07:25:37 +0200 cbusnodedlg: AdruCAN I/O and Servo added\n" \
-"14211 2018-08-20 15:16:07 +0200 inno setup script: use userpf instead of pf\n" \
 
 "log end";
