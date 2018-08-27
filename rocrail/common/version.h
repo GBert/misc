@@ -1,11 +1,14 @@
 const int revisionnr = 
-14256
+14259
 ;
 const char* commithash = 
-"132470db69e430209f5655b62d355bbf9033a669";
+"3df125aa39394b42c6d545ec1324f81dd7445647";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14259 2018-08-27 03:32:05 +0200 guiframe: open demo workspave menu item added\n" \
+"14258 2018-08-27 03:20:34 +0200 wrapper: default no auto open workspace\n" \
+"14257 2018-08-26 18:29:17 +0200 swim to the moon\n" \
 "14256 2018-08-26 17:31:47 +0200 rocview: no default workspace\n" \
 "14255 2018-08-26 15:09:52 +0200 turntable: show border option added\n" \
 "14254 2018-08-26 11:08:39 +0200 item: fix for moving a text object\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "14212 2018-08-21 07:25:37 +0200 cbusnodedlg: AdruCAN I/O and Servo added\n" \
 "14211 2018-08-20 15:16:07 +0200 inno setup script: use userpf instead of pf\n" \
 "14210 2018-08-20 15:01:27 +0200 rocnetnode: signal aspect value 0xFF is regarded as turn off all LEDs\n" \
-"14209 2018-08-20 12:24:27 +0200 renderer: fix for scale the plus side of the bridge\n" \
-"14208 2018-08-20 11:25:32 +0200 turntabledialog: show grid connection in the tracks overview\n" \
-"14207 2018-08-20 10:53:18 +0200 signal: 5 extra aspect nr.values\n" \
 
 "log end";
