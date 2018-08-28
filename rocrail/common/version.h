@@ -1,11 +1,13 @@
 const int revisionnr = 
-14261
+14263
 ;
 const char* commithash = 
-"33b3a639c5aea35e202c42edf015c437f46ca46e";
+"4e9e0beaab4e81174c54903c875e629de36a186a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14263 2018-08-28 07:32:34 +0200 guiframe: openworkspace initial with '.'\n" \
+"14262 2018-08-27 14:12:15 +0200 fback: removed double check regval on actions\n" \
 "14261 2018-08-27 10:34:55 +0200 roclcdr: check if the event match for durrent oder destination block\n" \
 "14260 2018-08-27 08:16:19 +0200 fback: write register value in a variable with reg_ prefix\n" \
 "14259 2018-08-27 03:32:05 +0200 guiframe: open demo workspave menu item added\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14216 2018-08-21 11:59:25 +0200 translation merge: de, nl, sl, pt_BR, fr\n" \
 "14215 2018-08-21 10:56:11 +0200 modbus: report coils as output events\n" \
 "14214 2018-08-21 10:16:22 +0200 rocnet: support 8 leds for aspect signals with 16bit value\n" \
-"14213 2018-08-21 10:05:41 +0200 modbus: addressing fix for reading coils and inputs\n" \
-"14212 2018-08-21 07:25:37 +0200 cbusnodedlg: AdruCAN I/O and Servo added\n" \
 
 "log end";
