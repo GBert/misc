@@ -1,11 +1,16 @@
 const int revisionnr = 
-14263
+14268
 ;
 const char* commithash = 
-"4e9e0beaab4e81174c54903c875e629de36a186a";
+"afbb53e87c8135e57ce2c4a43d9b62595683b92a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14268 2018-08-28 15:01:44 +0200 translation merge: en_GB, sr_latin, sl, nl, de\n" \
+"14267 2018-08-28 12:09:39 +0200 roclcdr: fix for schedule wait flag in case of second next block\n" \
+"14266 2018-08-28 10:50:06 +0200 base: use no leading zeros in the generated symbol ID\n" \
+"14265 2018-08-28 10:40:56 +0200 roclcdr: call loco reset in case of an (ghost) exception reset\n" \
+"14264 2018-08-28 09:20:20 +0200 planpanel: symbol prefix added\n" \
 "14263 2018-08-28 07:32:34 +0200 guiframe: openworkspace initial with '.'\n" \
 "14262 2018-08-27 14:12:15 +0200 fback: removed double check regval on actions\n" \
 "14261 2018-08-27 10:34:55 +0200 roclcdr: check if the event match for durrent oder destination block\n" \
@@ -51,10 +56,5 @@ const char* revlog =
 "14221 2018-08-22 09:52:02 +0200 modbus: write single coil rocrail addr-1\n" \
 "14220 2018-08-22 08:31:42 +0200 locdialog: removed placing option\n" \
 "14219 2018-08-21 16:06:54 +0200 trace corrections\n" \
-"14218 2018-08-21 16:00:45 +0200 rocrail: trace corrections\n" \
-"14217 2018-08-21 14:25:49 +0200 modbus: switch support added\n" \
-"14216 2018-08-21 11:59:25 +0200 translation merge: de, nl, sl, pt_BR, fr\n" \
-"14215 2018-08-21 10:56:11 +0200 modbus: report coils as output events\n" \
-"14214 2018-08-21 10:16:22 +0200 rocnet: support 8 leds for aspect signals with 16bit value\n" \
 
 "log end";
