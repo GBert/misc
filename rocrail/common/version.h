@@ -1,11 +1,16 @@
 const int revisionnr = 
-14268
+14273
 ;
 const char* commithash = 
-"afbb53e87c8135e57ce2c4a43d9b62595683b92a";
+"751ab350f7b7b45bd2e05afc3b9c14735588d318";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14273 2018-08-29 11:42:35 +0200 events/in: check if the automatic is on before tracing an exception for IN\n" \
+"14272 2018-08-29 11:36:54 +0200 fback: trace correction for bidi direction\n" \
+"14271 2018-08-29 11:28:48 +0200 blockgroup: remove unused reservations\n" \
+"14270 2018-08-29 10:14:45 +0200 route: synsgcmd option added\n" \
+"14269 2018-08-29 07:50:24 +0200 guiframe: get pwd path for opening initial the workspace dialog\n" \
 "14268 2018-08-28 15:01:44 +0200 translation merge: en_GB, sr_latin, sl, nl, de\n" \
 "14267 2018-08-28 12:09:39 +0200 roclcdr: fix for schedule wait flag in case of second next block\n" \
 "14266 2018-08-28 10:50:06 +0200 base: use no leading zeros in the generated symbol ID\n" \
@@ -51,10 +56,5 @@ const char* revlog =
 "14226 2018-08-22 16:56:40 +0200 cbusnodedlg: update arducan servo description\n" \
 "14225 2018-08-22 14:40:56 +0200 signal: save always the last command to be available at unblank\n" \
 "14224 2018-08-22 14:02:35 +0200 modbusdlg: translation for coil range added\n" \
-"14223 2018-08-22 10:55:41 +0200 block: fix for broadcasting reserved in case of block group lock\n" \
-"14222 2018-08-22 10:12:14 +0200 block,model: trace corrections\n" \
-"14221 2018-08-22 09:52:02 +0200 modbus: write single coil rocrail addr-1\n" \
-"14220 2018-08-22 08:31:42 +0200 locdialog: removed placing option\n" \
-"14219 2018-08-21 16:06:54 +0200 trace corrections\n" \
 
 "log end";
