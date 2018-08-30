@@ -1,11 +1,15 @@
 const int revisionnr = 
-14273
+14277
 ;
 const char* commithash = 
-"751ab350f7b7b45bd2e05afc3b9c14735588d318";
+"4b55eb83edfd70f27fa28654b5f16324a4332e11";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14277 2018-08-30 14:58:31 +0200 blockgroup: check the driver of the loco if a block is reserved as destination to prevent a ghost\n" \
+"14276 2018-08-30 14:34:47 +0200 planpanel: test flag for drag symbol cursor, default false\n" \
+"14275 2018-08-30 14:06:20 +0200 rocview: fix for demo workspace path trackpickerdlg: show selected symbol as cursor (wip)\n" \
+"14274 2018-08-30 07:58:06 +0200 rocrailinidialog: moved unlock at ebreak to route\n" \
 "14273 2018-08-29 11:42:35 +0200 events/in: check if the automatic is on before tracing an exception for IN\n" \
 "14272 2018-08-29 11:36:54 +0200 fback: trace correction for bidi direction\n" \
 "14271 2018-08-29 11:28:48 +0200 blockgroup: remove unused reservations\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "14230 2018-08-23 10:32:22 +0200 signal: fix for evaluating state in case of aspect control\n" \
 "14229 2018-08-23 10:08:57 +0200 block: fix for setting reserved flag in case of group lock\n" \
 "14228 2018-08-23 08:28:53 +0200 signal: fix for unknown unblank command\n" \
-"14227 2018-08-22 17:31:23 +0200 signal: revert copy command before blank\n" \
-"14226 2018-08-22 16:56:40 +0200 cbusnodedlg: update arducan servo description\n" \
-"14225 2018-08-22 14:40:56 +0200 signal: save always the last command to be available at unblank\n" \
-"14224 2018-08-22 14:02:35 +0200 modbusdlg: translation for coil range added\n" \
 
 "log end";
