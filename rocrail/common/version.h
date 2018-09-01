@@ -1,11 +1,13 @@
 const int revisionnr = 
-14280
+14282
 ;
 const char* commithash = 
-"fdde63506e7186212a2972f0806ab8de34fa7e54";
+"5bd0c71cc99536e9db49e6893e3df00fde49f289";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14282 2018-09-01 14:49:01 +0200 rocguidialog: added option imagecursor\n" \
+"14281 2018-09-01 11:17:15 +0200 imagecursor option (wip)\n" \
 "14280 2018-09-01 08:18:20 +0200 translation merge: de, nl, sl, sr_latin\n" \
 "14279 2018-09-01 07:35:44 +0200 trackpickerdlg: imagecursor\n" \
 "14278 2018-08-31 10:37:19 +0200 in: trace level correction for an unexpected IN\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14235 2018-08-24 07:19:53 +0200 readme: DE fix (RainerK)\n" \
 "14234 2018-08-23 14:22:09 +0200 readme.txt: added windows line feeds\n" \
 "14233 2018-08-23 14:09:57 +0200 innosetup script fix for double entry\n" \
-"14232 2018-08-23 12:21:35 +0200 innosetup: readme added\n" \
-"14231 2018-08-23 11:21:58 +0200 signal: filter out the blank command for saving in case the signal is already blank\n" \
 
 "log end";
