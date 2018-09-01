@@ -1,11 +1,14 @@
 const int revisionnr = 
-14277
+14280
 ;
 const char* commithash = 
-"4b55eb83edfd70f27fa28654b5f16324a4332e11";
+"fdde63506e7186212a2972f0806ab8de34fa7e54";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14280 2018-09-01 08:18:20 +0200 translation merge: de, nl, sl, sr_latin\n" \
+"14279 2018-09-01 07:35:44 +0200 trackpickerdlg: imagecursor\n" \
+"14278 2018-08-31 10:37:19 +0200 in: trace level correction for an unexpected IN\n" \
 "14277 2018-08-30 14:58:31 +0200 blockgroup: check the driver of the loco if a block is reserved as destination to prevent a ghost\n" \
 "14276 2018-08-30 14:34:47 +0200 planpanel: test flag for drag symbol cursor, default false\n" \
 "14275 2018-08-30 14:06:20 +0200 rocview: fix for demo workspace path trackpickerdlg: show selected symbol as cursor (wip)\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "14233 2018-08-23 14:09:57 +0200 innosetup script fix for double entry\n" \
 "14232 2018-08-23 12:21:35 +0200 innosetup: readme added\n" \
 "14231 2018-08-23 11:21:58 +0200 signal: filter out the blank command for saving in case the signal is already blank\n" \
-"14230 2018-08-23 10:32:22 +0200 signal: fix for evaluating state in case of aspect control\n" \
-"14229 2018-08-23 10:08:57 +0200 block: fix for setting reserved flag in case of group lock\n" \
-"14228 2018-08-23 08:28:53 +0200 signal: fix for unknown unblank command\n" \
 
 "log end";
