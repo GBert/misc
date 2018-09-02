@@ -1,11 +1,13 @@
 const int revisionnr = 
-14282
+14284
 ;
 const char* commithash = 
-"5bd0c71cc99536e9db49e6893e3df00fde49f289";
+"9de4538684e7009212ebbf20fbf765f74dd2cb34";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14284 2018-09-02 14:55:46 +0200 trackpickerdlg: no d&d in case of image cursor\n" \
+"14283 2018-09-02 09:37:23 +0200 planpanel: image cursor (wip)\n" \
 "14282 2018-09-01 14:49:01 +0200 rocguidialog: added option imagecursor\n" \
 "14281 2018-09-01 11:17:15 +0200 imagecursor option (wip)\n" \
 "14280 2018-09-01 08:18:20 +0200 translation merge: de, nl, sl, sr_latin\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14237 2018-08-24 10:11:59 +0200 guiframe: load loco images alos in case the image is not shown\n" \
 "14236 2018-08-24 10:11:11 +0200 signal: save state before blank\n" \
 "14235 2018-08-24 07:19:53 +0200 readme: DE fix (RainerK)\n" \
-"14234 2018-08-23 14:22:09 +0200 readme.txt: added windows line feeds\n" \
-"14233 2018-08-23 14:09:57 +0200 innosetup script fix for double entry\n" \
 
 "log end";
