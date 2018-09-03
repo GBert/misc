@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 # http://sourceforge.net/projects/srcpd/files/srcpd/2.1.2/srcpd-2.1.2.tar.gz/download
 
 PKG_NAME:=basrcpd
-PKG_VERSION:=1806
+PKG_VERSION:=1809
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_PARALLEL:=1
