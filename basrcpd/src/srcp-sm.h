@@ -100,5 +100,6 @@ int infoSM(bus_t busnumber, sm_protocol_t protocol, sm_command_t command, sm_typ
 				int addr, int typeaddr, int bit_index, int value, char *info);
 
 void handle_mfx_bind_verify(bus_t bus, sm_command_t cmnd, uint32_t val, int addr);
-
+void handle_mcs_config(bus_t bus, sm_command_t command, 
+						int uid, int cvaddr, int cvindex, int value, int ctrl);
 #endif

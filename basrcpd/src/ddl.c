@@ -2136,7 +2136,7 @@ void *thr_delayedGAResetCmd(void *v)
 static void *thr_sendrec_DDL(void *v)
 {
     struct _SM smakt;
-    gl_data_t gltmp;
+    gl_data_t gltmp, *glp;
     ga_data_t gatmp;
     int addr, error;
     int last_cancel_state, last_cancel_type;
@@ -2190,8 +2190,9 @@ static void *thr_sendrec_DDL(void *v)
           int speed;
           int direction;
 
-          dequeueNextGL(btd->bus, &gltmp);
-          if (gltmp.id > -1) {
+          glp = dequeueNextGL(btd->bus);	//, &gltmp);
+		  if (glp) {
+	  		gltmp = *glp;
             //Gültiger, nicht gelöschter Eintrag verarbeiten
             p = gltmp.protocol;
             /* need to compute from the n_fs and n_func parameters */
@@ -2215,7 +2216,8 @@ static void *thr_sendrec_DDL(void *v)
                     
 					if (pv == 1) {	comp_maerklin_1(btd->bus, addr,
                                             gltmp.direction, speed,
-                                            gltmp.funcs & 0x01, prio);
+                                            gltmp.funcs & 0x01, prio,
+											gltmp.cacheddirection);
                             }
                     else switch (gltmp.n_fs) {
                         case 14:	comp_maerklin_2(btd->bus, addr,
@@ -2234,7 +2236,7 @@ static void *thr_sendrec_DDL(void *v)
                                             ((gltmp.funcs >> 2) & 0x01),
                                             ((gltmp.funcs >> 3) & 0x01),
                                             ((gltmp.funcs >> 4) & 0x01),
-                                            prio);
+                                            prio, gltmp.cachedspeed);
                             		break;
                         case 28:	comp_maerklin_28(btd->bus, addr,
                                             gltmp.direction, speed,
@@ -2285,7 +2287,7 @@ static void *thr_sendrec_DDL(void *v)
                     }
                     break;
             }
-            cacheSetGL(btd->bus, addr, gltmp);
+            cacheSetGL(btd->bus, glp, gltmp);
           }
         }
         if (!queue_SM_isempty(btd->bus)) {

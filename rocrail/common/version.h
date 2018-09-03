@@ -1,11 +1,15 @@
 const int revisionnr = 
-14284
+14288
 ;
 const char* commithash = 
-"9de4538684e7009212ebbf20fbf765f74dd2cb34";
+"4cea1131cdcde01e08f49b5bcdfeddbfa8b9840a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14288 2018-09-03 11:55:35 +0200 car: broadcast change of locality ion case of modify and the locality changed\n" \
+"14287 2018-09-03 10:37:29 +0200 trackpickerdlg: rescale image cursor in case of Windows\n" \
+"14286 2018-09-03 09:50:40 +0200 lcdriver: trace level correction\n" \
+"14285 2018-09-03 09:50:07 +0200 trainimage: memory leak fix\n" \
 "14284 2018-09-02 14:55:46 +0200 trackpickerdlg: no d&d in case of image cursor\n" \
 "14283 2018-09-02 09:37:23 +0200 planpanel: image cursor (wip)\n" \
 "14282 2018-09-01 14:49:01 +0200 rocguidialog: added option imagecursor\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "14241 2018-08-24 11:58:14 +0200 loc: reset gotoblock at reset and mode stop\n" \
 "14240 2018-08-24 11:48:12 +0200 loc: reset gotoblock at stop command\n" \
 "14239 2018-08-24 10:58:36 +0200 modbusdlg: translation fix for register range\n" \
-"14238 2018-08-24 10:48:19 +0200 signal: data structure for the save state\n" \
-"14237 2018-08-24 10:11:59 +0200 guiframe: load loco images alos in case the image is not shown\n" \
-"14236 2018-08-24 10:11:11 +0200 signal: save state before blank\n" \
-"14235 2018-08-24 07:19:53 +0200 readme: DE fix (RainerK)\n" \
 
 "log end";

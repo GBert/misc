@@ -364,20 +364,17 @@ static void handle_sm_command(bus_t bus)
 
 static void handle_gl_command(bus_t bus)
 {
-    gl_data_t gltmp, glakt;
-    int addr;
+    gl_data_t gltmp, *glp;	
 
-    dequeueNextGL(bus, &gltmp);
-    if (gltmp.id > -1) {
-      //Gültiger, nicht gelöschter Eintrag verarbeiten
-      addr = gltmp.id;
-      cacheGetGL(bus, addr, &glakt);
+    glp = dequeueNextGL(bus);
+	if (glp) {
+	  gltmp = *glp;
 
       if (gltmp.direction == 2) {
         gltmp.speed = 0;
-        gltmp.direction = !glakt.cacheddirection;
+        gltmp.direction = !gltmp.cacheddirection;
       }
-      cacheSetGL(bus, addr, gltmp);
+      cacheSetGL(bus, glp, gltmp);
     }
     buses[bus].watchdog++;
 }

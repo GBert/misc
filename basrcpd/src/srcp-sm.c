@@ -254,7 +254,7 @@ int infoSM(bus_t busnumber, sm_protocol_t protocol, sm_command_t command, sm_typ
                     break;
                 case BIND_MFX:
                     snprintf(info, MAXSRCPLINELEN,
-                            "%lu.%.3lu 100 INFO %lu SM %d BIND %d\n",
+                            "%lu.%.3lu 100 INFO %lu SM %d BIND %u\n",
                             now.tv_sec, now.tv_usec / 1000, busnumber,
                             addr, value);
                     if (addr == 0) {			// SET ^ GET x GM 0 BIND
@@ -296,4 +296,41 @@ void handle_mfx_bind_verify(bus_t bus, sm_command_t cmnd, uint32_t val, int addr
 {
 	char reply[MAXSRCPLINELEN];
 	infoSM(bus, PROTO_MFX, cmnd, BIND_MFX, addr, -1, -1, val, reply);
+}
+
+void handle_mcs_config(bus_t bus, sm_command_t command, 
+					int uid, int cvaddr, int cvindex, int value, int ctrl)
+{
+	char reply[MAXSRCPLINELEN];
+	sm_protocol_t protocol;
+    sm_type_t type;
+	
+    switch(uid >> 14) {
+		case 0:	protocol = PROTO_MM;
+				if (command == GET) goto defmsg;
+				type = CV; 
+				break;
+		case 1:	protocol = PROTO_MFX;
+				type = CV_MFX;
+				break;
+		case 3:	protocol = PROTO_NMRA;
+				switch (ctrl & 0x30) {
+					case 0x00:	type = CV;
+								break; 			
+					case 0x10:	type = REGISTER;
+								break; 			
+					case 0x20:	type = CV_BIT;
+								cvindex = value & 7;
+								value = (value >> 3) & 1;
+								break; 			
+					default:	goto defmsg;	
+				}
+				if ((ctrl & 0x80) == 0) uid = -uid;		// programming track
+				break;	
+		default:
+		defmsg:	syslog_bus(bus, DBG_WARN, 
+					"*** Config command for UID %x not supported.", uid);
+				return;		
+	}
+	infoSM(bus, protocol, command, type, uid, cvaddr, cvindex, value, reply);
 }

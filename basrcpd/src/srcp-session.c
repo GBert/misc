@@ -1,3 +1,5 @@
+// srcp-session.c - adapted for basrcpd project 2018 by Rainer Müller 
+
 /**************************************************************************
                           srcp-session.c
                          -------------------
@@ -558,8 +560,8 @@ int session_lock_wait(bus_t bus)
 {
     int result;
 
-    syslog_bus(bus, DBG_DEBUG, "SESSION process wait1 for bus.");
-
+	syslog_bus(bus, DBG_DEBUG, "SESSION - start of lock the bus.");
+	
     result = pthread_mutex_lock(&cb_mutex[bus]);
     if (result != 0) {
         syslog_bus(bus, DBG_ERROR,
@@ -567,7 +569,6 @@ int session_lock_wait(bus_t bus)
                    strerror(result), result);
     }
 
-    syslog_bus(bus, DBG_DEBUG, "SESSION process wait2 for bus.");
     return result;
 }
 
@@ -575,7 +576,8 @@ int session_unlock_wait(bus_t bus)
 {
     int result;
 
-    syslog_bus(bus, DBG_DEBUG, "SESSION cleanup wait for bus.");
+    syslog_bus(bus, DBG_DEBUG, "SESSION - end of lock the bus.");
+
     result = pthread_mutex_unlock(&cb_mutex[bus]);
     if (result != 0) {
         syslog_bus(bus, DBG_ERROR,
@@ -595,7 +597,7 @@ int session_condt_wait(bus_t bus, unsigned int timeout, int *value)
     stimeout.tv_sec = now.tv_sec + timeout;
     stimeout.tv_nsec = now.tv_usec * 1000;
 
-    syslog_bus(bus, DBG_DEBUG, "SESSION start wait1");
+    syslog_bus(bus, DBG_DEBUG, "SESSION - start waiting.");
 
     result = pthread_cond_timedwait(&cb_cond[bus], &cb_mutex[bus],
                                     &stimeout);
@@ -606,7 +608,7 @@ int session_condt_wait(bus_t bus, unsigned int timeout, int *value)
     }
 
     *value = cb_data[bus];
-    syslog_bus(bus, DBG_DEBUG, "SESSION start wait2");
+    syslog_bus(bus, DBG_DEBUG, "SESSION - result available: %d.", *value);
     return result;
 }
 
@@ -614,8 +616,16 @@ int session_endwait(bus_t bus, int returnvalue)
 {
     int result;
 
-    syslog_bus(bus, DBG_DEBUG, "SESSION end wait1 for bus.");
+    syslog_bus(bus, DBG_DEBUG, "SESSION - end wait for result.");
     cb_data[bus] = returnvalue;
+    
+	/* lock until other thread is waiting for condition change */
+    result = pthread_mutex_lock(&cb_mutex[bus]);
+    if (result != 0) {
+        syslog_bus(bus, DBG_ERROR,
+                   "pthread_mutex_lock() failed: %s (errno = %d).",
+                   strerror(result), result);
+    }
 
     result = pthread_cond_broadcast(&cb_cond[bus]);
     if (result != 0) {
@@ -631,6 +641,5 @@ int session_endwait(bus_t bus, int returnvalue)
                    strerror(result), result);
     }
 
-    syslog_bus(bus, DBG_DEBUG, "SESSION end wait2 for bus.");
     return returnvalue;
 }

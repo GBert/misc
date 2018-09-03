@@ -1,3 +1,5 @@
+// srcp-info.c - adapted for basrcpd project 2018 by Rainer Müller 
+//
 /***************************************************************************
                           srcp-info.c  -  description
                              -------------------
@@ -71,7 +73,7 @@ void startup_INFO()
  **/
 int doInfoClient(session_node_t * sn)
 {
-    int i, number, value, result, linelen, bufferlen;
+    int i, n, number, value, result, linelen, bufferlen;
     char reply[MAXSRCPLINELEN], description[MAXSRCPLINELEN];
     char pipebuffer[2048];
     char *buffer = &pipebuffer[0];
@@ -150,8 +152,9 @@ int doInfoClient(session_node_t * sn)
         /* send all needed generic locomotives */
         if (strstr(description, "GL")) {
             number = getMaxAddrGL(bus);
-            for (i = 1; i <= number; i++) {
-                if (isInitializedGL(bus, i)) {
+            for (n = 1; n <= number; n++) {
+                i = isInitializedGL(bus, n);
+				if (i > 0) {
                     sessionid_t lockid;
                     cacheDescribeGL(bus, i, reply);
                     if (writen(sn->socket, reply, strlen(reply)) == -1) {

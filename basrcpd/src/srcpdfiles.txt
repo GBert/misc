@@ -20,9 +20,11 @@ config-srcpd.h  aus Sigg-srcpd Rev96, modifiziert -> Original
 config.h        erzeugt per config-Script, modifiziert 
 	1803	neue Module aufgenommen
     1806	korrekte Versionsangabe
+    1809	korrekte Versionsangabe
 ddl.c           aus Sigg-srcpd Rev96, modifiziert BaPi, SPI-Timing
 	1803	MCS-Anssteuerung eingebaut
     1806	Optimierungen
+	1809	erweiterte Lokadressierung
     ** UART-Methoden entfernen
     ** Config-Variablen überarbeiten
 ddl.h           aus Sigg-srcpd Rev96, original
@@ -31,8 +33,10 @@ ddl.h           aus Sigg-srcpd Rev96, original
     ** Config-Variablen überarbeiten
 ddl_maerklin.c  aus Sigg-srcpd Rev96, modifiziert -> Original
 	1803	GL-Cachezugriff angepasst
+	1809	erweiterte Lokadressierung
 ddl_maerklin.h  aus Sigg-srcpd Rev96, original
     1711	Definitionen ergänzt, 1122 übernommen
+	1809	erweiterte Lokadressierung
 ddl_mfx.c       aus Sigg-srcpd Rev96, modifiziert -> Original + BaPi
     [Gerd: SYSCONFDIR]
 	1712	Log-Ausgaben hinzugefügt
@@ -51,9 +55,11 @@ io.h            unverändert aus Original-srcpd Stand 1710
     1806	unbenutzen Code ausgeklammert, ssplitstr neu
 loopback.c      aus Sigg-srcpd Rev96, modifiziert -> Original
 	1803	GL-Cachezugriff angepasst
+	1809	erweiterte Lokadressierung
 loopback.h      aus Sigg-srcpd Rev96, modifiziert -> Original
 mcs-gateway.c	neu	180307
     1806	Weiterentwicklung
+	1809	Konfigurationsschnittstelle, Hash-Behandlung
 netservice.c    unverändert aus Original-srcpd Stand 1710
 netservice.h    unverändert aus Original-srcpd Stand 1710
 platform.c		neu ab 1806
@@ -73,12 +79,15 @@ srcp-ga.h       unverändert aus Original-srcpd Stand 1710
 srcp-gl.c       aus Sigg-srcpd Rev96, modifiziert -> Original
 	1803	MCS-Anssteuerung eingebaut
 	1806	Queuehandling überarbeitet
+	1809	erweiterte Lokadressierung
 srcp-gl.h       aus Sigg-srcpd Rev96, modifiziert -> Original
 	1803	MCS-Anssteuerung eingebaut
     1806    aufgeräumt
+	1809	erweiterte Lokadressierung
 srcp-gm.c       unverändert aus Original-srcpd Stand 1710
 srcp-gm.h       unverändert aus Original-srcpd Stand 1710
 srcp-info.c     unverändert aus Original-srcpd Stand 1710
+	1809	erweiterte Lokadressierung
 srcp-info.h     unverändert aus Original-srcpd Stand 1710
 	1803	MCS-Anssteuerung eingebaut
 srcp-power.c    unverändert aus Original-srcpd Stand 1710
@@ -87,11 +96,14 @@ srcp-server.c   unverändert aus Original-srcpd Stand 1710
     1806	Server-Description hinzugefügt
 srcp-server.h   unverändert aus Original-srcpd Stand 1710
 srcp-session.c  unverändert aus Original-srcpd Stand 1710
+	1809	Aufhänger-Beseitigung
 srcp-session.h  unverändert aus Original-srcpd Stand 1710
 srcp-sm.c       aus Sigg-srcpd Rev96, original
     1806	Anpassungen für mfx, aufräumen
+	1809	Konfigurationsschnittstelle für MCS
 srcp-sm.h       aus Sigg-srcpd Rev96, original
     1806    Anpassungen für mfx
+	1809	Konfigurationsschnittstelle für MCS
 srcp-time.c     unverändert aus Original-srcpd Stand 1710
 srcp-time.h     unverändert aus Original-srcpd Stand 1710
 srcpd.c         aus Sigg-srcpd Rev96, modifiziert -> Original + BaPi

@@ -35,6 +35,7 @@
 
 static bus_t mcs_bus = 0;
 static int fd = INVALID_SOCKET;
+static uint32_t ownhash = 0;
 static pthread_t mcsGatewayThread;
 
 // configuration data: basrcpd Device with temperature reporting
@@ -79,7 +80,7 @@ static void end_handleCAN(void *arg)
 {
     close(fd);
     fd = INVALID_SOCKET;
-	syslog_bus(mcs_bus, DBG_INFO, "MCS gateway Thread ended");
+	syslog_bus(mcs_bus, DBG_INFO, "MCS gateway Thread ended.");
 	mcs_bus = 0;
 }
 
@@ -92,9 +93,10 @@ void *thr_handleCAN(void *vp)
   	int nready, v;
   	char msg[64];
   	uint32_t uid;
-
+    uint16_t sid;
+    
 	sleep(1);
-	syslog_bus(mcs_bus, DBG_INFO, "MCS gateway Thread started");
+	syslog_bus(mcs_bus, DBG_INFO, "MCS gateway Thread started.");
     pthread_cleanup_push((void *) end_handleCAN, NULL);	
     FD_ZERO(&rfds);
 
@@ -109,7 +111,7 @@ void *thr_handleCAN(void *vp)
 					nready, strerror(errno));
 		/* send PING via CAN interface */
 		else if (nready == 0) {
-			frame.can_id = 0x00300300 | CAN_EFF_FLAG;
+			frame.can_id = 0x00300000 | ownhash | CAN_EFF_FLAG;
 			frame.can_dlc = 0;
 			if (write(fd, &frame, sizeof(struct can_frame)) < 0)
 					syslog_bus(mcs_bus, DBG_ERROR, "sending PING frame error: %s", 
@@ -125,6 +127,9 @@ void *thr_handleCAN(void *vp)
 	   		else if(frame.can_id & CAN_EFF_FLAG) {
 //				printf("0x%08X [%d]\n", frame.can_id & CAN_EFF_MASK, frame.can_dlc);
 				uid = be32(frame.data);
+				if ((frame.can_id & 0x0001FFFFUL) == ownhash)
+					syslog_bus(mcs_bus, DBG_WARN, 
+							"*** Own hash value received in: 0x%08X.", frame.can_id);
 	    		switch ((frame.can_id & 0x00FF0000UL) >> 16) {
 				/* System Befehle */
 				case 0x00:	switch (frame.data[4]) {
@@ -140,6 +145,11 @@ void *thr_handleCAN(void *vp)
 						// Protokoll  
     					case 0x05:  if (handle_mcs_prot(mcs_bus, uid, frame.data[5])
 											< 0) continue;
+									break;
+						// Rail protocol selection
+						case 0x08:  syslog_bus(mcs_bus, DBG_INFO,
+										"*** Select protocol %x not yet implemented",
+										frame.data[5]); 
 									break;
 						// Neuanmeldezähler setzen
 						case 0x09:	handle_mfx_bind_verify(mcs_bus, SET,
@@ -162,11 +172,13 @@ void *thr_handleCAN(void *vp)
 						}
 						break;
 				/* mfx bind / verify */
-				case 0x04:  handle_mfx_bind_verify(mcs_bus, SET, uid,
-													be16(&frame.data[4]));
+				case 0x04:	sid = be16(&frame.data[4]);  
+							if ((sid < 1) || (sid > 0x3fff)) goto defmsg;
+							handle_mfx_bind_verify(mcs_bus, SET, uid, sid);
 							continue;			// reply after done
-				case 0x06:	handle_mfx_bind_verify(mcs_bus, VERIFY, uid,
-													be16(&frame.data[4]));
+				case 0x06:	sid = be16(&frame.data[4]);  
+							if ((sid < 1) || (sid > 0x3fff)) goto defmsg;
+							handle_mfx_bind_verify(mcs_bus, VERIFY, uid, sid);
 							continue;			// reply after done
 				/* Lok Geschwindigkeit */
 				case 0x08:  v = be16(&frame.data[4]);
@@ -192,21 +204,20 @@ void *thr_handleCAN(void *vp)
 							break;
 				/* read config */
 				case 0x0E:  v = be16(&frame.data[4]) & 0x3FF;
-							syslog_bus(mcs_bus, DBG_INFO,
-								"***** read config fehlt noch, id %x, CV %d, idx %d, anz %d",
-								uid, v, frame.data[4]>>2, frame.data[6]);
+							handle_mcs_config(mcs_bus, GET, uid, v, frame.data[4]>>2, 
+													frame.data[6], 0x80);
 							continue;			// reply after done
 				/* write config */
 				case 0x10:	v = be16(&frame.data[4]) & 0x3FF;
-							syslog_bus(mcs_bus, DBG_INFO,
-								"***** write config fehlt noch, id %x, CV %d, idx %d, val %d, ctrl %x",
-								uid, v, frame.data[4]>>2, frame.data[6], frame.data[7]);
+							handle_mcs_config(mcs_bus, SET, uid, v, frame.data[4]>>2, 
+													frame.data[6], frame.data[7]);
 							continue;			// reply after done
 				/* Ping */
 				case 0x30:  frame.can_dlc = 8; 
 				            memcpy(frame.data, softvers, 8);
 				            break;
 				/* discarded without notice */
+				case 0x01:  if (frame.data[4] != 0x0C) goto defmsg;	// Gerätekennung
 				case 0x31:  // Ping response
 				case 0x36:	// Bootloader CAN
 							continue;
@@ -232,7 +243,7 @@ void *thr_handleCAN(void *vp)
 							continue;
 				}
 				// send response
-				frame.can_id |= 0x00010000UL;		// set response bit
+				frame.can_id = (frame.can_id & ~0xffff) | ownhash | 0x00010000UL;
 				if (write(fd, &frame, sizeof(struct can_frame)) < 0)
 					syslog_bus(mcs_bus, DBG_ERROR,
 								"sending CAN frame error in MCS line %d: %s",
@@ -250,7 +261,7 @@ int info_mcs(bus_t bus, uint16_t infoid, uint32_t itemid, char * info)
   	struct can_frame frame;
   	
 	if (bus != mcs_bus) return -1;
-	frame.can_id = ((infoid << 16) + 0x300) | CAN_EFF_FLAG;
+	frame.can_id = (infoid << 16) | ownhash | CAN_EFF_FLAG;
 	frame.can_dlc = info[0] + 4;
 	uint32_t nid = htonl(itemid);
     memcpy(&frame.data[0], &nid, 4);	
@@ -268,9 +279,10 @@ void init_mcs_gateway(bus_t busnumber)
     struct ifreq ifr;
     int ret;
     
-  	// store own UID for PING answer 
+  	// store own UID and calculate own hash 
 	uint32_t ouid = htonl(__DDL->uid);
 	memcpy(softvers, &ouid, 4);	
+	ownhash = (((ouid >> 16) ^ ouid) & 0xff7f) | 0x300;
 
 	// and add version and shorted serial
     int version = atoi(VERSION);
@@ -279,8 +291,8 @@ void init_mcs_gateway(bus_t busnumber)
    	uint32_t serial = htonl(getPlatformData(PL_SERIAL) % 1000000L);
     memcpy(&gfpstkonf0H[4], &serial, 4);	
 
-	syslog_bus(busnumber, DBG_INFO, "MCS Gateway will use device %s.",
-               	__DDL->MCS_DEVNAME);
+	syslog_bus(busnumber, DBG_INFO, "MCS Gateway will use device %s and hash %x.",
+               	__DDL->MCS_DEVNAME, ownhash);
 
 	if (fd > INVALID_SOCKET) return;		// already done    
     fd = socket(PF_CAN, SOCK_RAW, CAN_RAW);

@@ -1,3 +1,5 @@
+// ddl_maerklin.c - adapted for basrcpd project 2018 by Rainer Müller 
+//
 /* +----------------------------------------------------------------------+ */
 /* | DDL - Digital Direct for Linux                                       | */
 /* +----------------------------------------------------------------------+ */
@@ -88,13 +90,12 @@ char getMaerklinHI() {
 }
 
 int comp_maerklin_1(bus_t busnumber, int address, int direction,
-                    int speed, int func, bool prio)
+                    int speed, int func, bool prio, char cacheddirection)
 {
 
     char trits[9];
     char packet[18];
     int i, j;
-    gl_data_t loco;
     syslog_bus(busnumber, DBG_DEBUG,
     	"Command for M1 protocol received addr:%d dir:%d speed:%d func:%d",
         address, direction, speed, func);
@@ -103,8 +104,7 @@ int comp_maerklin_1(bus_t busnumber, int address, int direction,
     if (address < 0 || address > 80 || func < 0 || func > 1 || speed < 0
         || speed > 15 || direction < 0 || direction > 1)
         return 1;
-    cacheGetGL(busnumber, address, &loco);
-    if (direction != loco.cacheddirection) {
+    if (direction != cacheddirection) {
         speed = 1;
     }
 
@@ -518,15 +518,14 @@ int comp_maerklin_28(bus_t busnumber, int address, int direction,
 }
 
 int comp_maerklin_27(bus_t busnumber, int address, int direction,
-                    int speed, int func, int f1, int f2, int f3, int f4, bool prio)
+                    int speed, int func, int f1, int f2, int f3, int f4, 
+					bool prio, int speed_old)
 {
 
     int sFS1, sFS2;
     int rtc;
-    int speed_old;
     int two_commands = false;
     int acceleration = false;
-    gl_data_t loco;
 
     syslog_bus(busnumber, DBG_DEBUG,
     	"Command for M2 protocol 27 steps received addr:%d dir:%d speed:%d func:%d",
@@ -568,9 +567,6 @@ int comp_maerklin_27(bus_t busnumber, int address, int direction,
        27   14.5     15                 14
        28     15     14                 15
      */
-
-    cacheGetGL(busnumber, address, &loco);
-    speed_old = loco.cachedspeed;
 
     acceleration = (speed_old < speed);
 
