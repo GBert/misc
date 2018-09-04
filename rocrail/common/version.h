@@ -1,11 +1,13 @@
 const int revisionnr = 
-14288
+14290
 ;
 const char* commithash = 
-"4cea1131cdcde01e08f49b5bcdfeddbfa8b9840a";
+"5d492b32df9247ed1168bc411d9d01d0ba673686";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14290 2018-09-04 10:12:00 +0200 cellrenderer: use bitmap depth of 8 instead the default screen color depth\n" \
+"14289 2018-09-04 08:20:12 +0200 rocprodlg: fix for setting the expected CV\n" \
 "14288 2018-09-03 11:55:35 +0200 car: broadcast change of locality ion case of modify and the locality changed\n" \
 "14287 2018-09-03 10:37:29 +0200 trackpickerdlg: rescale image cursor in case of Windows\n" \
 "14286 2018-09-03 09:50:40 +0200 lcdriver: trace level correction\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14243 2018-08-24 13:52:14 +0200 signal: calculate nr of LEDs for the new extra aspect values a1-a5\n" \
 "14242 2018-08-24 12:11:02 +0200 loc: reset gotoblock after arrive\n" \
 "14241 2018-08-24 11:58:14 +0200 loc: reset gotoblock at reset and mode stop\n" \
-"14240 2018-08-24 11:48:12 +0200 loc: reset gotoblock at stop command\n" \
-"14239 2018-08-24 10:58:36 +0200 modbusdlg: translation fix for register range\n" \
 
 "log end";
