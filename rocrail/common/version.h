@@ -1,11 +1,17 @@
 const int revisionnr = 
-14291
+14297
 ;
 const char* commithash = 
-"26fc80b5d7b30c805b5aee3b7dda77851170a963";
+"ed53ab0db4c090734b0b91df83c35c2f3a202f16";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14297 2018-09-05 14:38:07 +0200 trainimage: only reinit the complete train image in case somethings has been changed\n" \
+"14296 2018-09-05 12:18:57 +0200 cellrenderer: use default bitmap depth\n" \
+"14295 2018-09-05 12:12:23 +0200 bidib: use bigger buffer sizes for reading\n" \
+"14294 2018-09-05 11:25:00 +0200 block: replaced the stack sensor key[256] with a dynamic string to avoid stack overflow\n" \
+"14293 2018-09-05 10:58:36 +0200 loc: take over the manual flag in case of modify\n" \
+"14292 2018-09-05 10:34:38 +0200 block: fix for setting loco current block in case of reserved and not occupied\n" \
 "14291 2018-09-05 08:51:22 +0200 rocpro: fix for triggering detect\n" \
 "14290 2018-09-04 10:12:00 +0200 cellrenderer: use bitmap depth of 8 instead the default screen color depth\n" \
 "14289 2018-09-04 08:20:12 +0200 rocprodlg: fix for setting the expected CV\n" \
@@ -50,11 +56,5 @@ const char* revlog =
 "14250 2018-08-25 16:41:38 +0200 inno setup: sym link to web\n" \
 "14249 2018-08-25 15:34:04 +0200 inno setup: link to svg directory\n" \
 "14248 2018-08-25 14:50:23 +0200 rocview: default workspace .\n" \
-"14247 2018-08-25 12:21:38 +0200 roclcdr: redesigned blockgroup reservation and release management\n" \
-"14246 2018-08-25 08:52:07 +0200 system: trace errno in case child process could not be started\n" \
-"14245 2018-08-25 08:35:17 +0200 system: trace error on fail starting a child process guiapp: reduced the connect wait from 300 to 30\n" \
-"14244 2018-08-24 14:03:08 +0200 rocnetnode: blank all LEDs with aspect value 0xFFFF\n" \
-"14243 2018-08-24 13:52:14 +0200 signal: calculate nr of LEDs for the new extra aspect values a1-a5\n" \
-"14242 2018-08-24 12:11:02 +0200 loc: reset gotoblock after arrive\n" \
 
 "log end";
