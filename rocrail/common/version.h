@@ -1,11 +1,12 @@
 const int revisionnr = 
-14290
+14291
 ;
 const char* commithash = 
-"5d492b32df9247ed1168bc411d9d01d0ba673686";
+"26fc80b5d7b30c805b5aee3b7dda77851170a963";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14291 2018-09-05 08:51:22 +0200 rocpro: fix for triggering detect\n" \
 "14290 2018-09-04 10:12:00 +0200 cellrenderer: use bitmap depth of 8 instead the default screen color depth\n" \
 "14289 2018-09-04 08:20:12 +0200 rocprodlg: fix for setting the expected CV\n" \
 "14288 2018-09-03 11:55:35 +0200 car: broadcast change of locality ion case of modify and the locality changed\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14244 2018-08-24 14:03:08 +0200 rocnetnode: blank all LEDs with aspect value 0xFFFF\n" \
 "14243 2018-08-24 13:52:14 +0200 signal: calculate nr of LEDs for the new extra aspect values a1-a5\n" \
 "14242 2018-08-24 12:11:02 +0200 loc: reset gotoblock after arrive\n" \
-"14241 2018-08-24 11:58:14 +0200 loc: reset gotoblock at reset and mode stop\n" \
 
 "log end";
