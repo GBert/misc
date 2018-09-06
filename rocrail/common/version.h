@@ -1,11 +1,16 @@
 const int revisionnr = 
-14297
+14302
 ;
 const char* commithash = 
-"ed53ab0db4c090734b0b91df83c35c2f3a202f16";
+"09af147d0f74ab1b880bc8460bf9b6ed856360b2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14302 2018-09-06 14:19:46 +0200 roads theme: clean up and make compatible with the standard theme\n" \
+"14301 2018-09-06 11:47:29 +0200 rocguiinidlg: minimal toolbar icon size 24\n" \
+"14300 2018-09-06 10:55:20 +0200 guiframe: toolbar icon size option added\n" \
+"14299 2018-09-06 09:51:22 +0200 trackpicker: fix for road threeway and crossing\n" \
+"14298 2018-09-06 08:02:27 +0200 renderer: use SLIM grey for the turntable tracks in case SLIM is active\n" \
 "14297 2018-09-05 14:38:07 +0200 trainimage: only reinit the complete train image in case somethings has been changed\n" \
 "14296 2018-09-05 12:18:57 +0200 cellrenderer: use default bitmap depth\n" \
 "14295 2018-09-05 12:12:23 +0200 bidib: use bigger buffer sizes for reading\n" \
@@ -51,10 +56,5 @@ const char* revlog =
 "14255 2018-08-26 15:09:52 +0200 turntable: show border option added\n" \
 "14254 2018-08-26 11:08:39 +0200 item: fix for moving a text object\n" \
 "14253 2018-08-26 10:02:55 +0200 roclcdr: evaluation fix for initialize blockgroup in case of second next block\n" \
-"14252 2018-08-26 08:22:18 +0200 trainimage: request image from server in case not locally found\n" \
-"14251 2018-08-26 07:33:58 +0200 inno setup: themespath corrected to user links\n" \
-"14250 2018-08-25 16:41:38 +0200 inno setup: sym link to web\n" \
-"14249 2018-08-25 15:34:04 +0200 inno setup: link to svg directory\n" \
-"14248 2018-08-25 14:50:23 +0200 rocview: default workspace .\n" \
 
 "log end";
