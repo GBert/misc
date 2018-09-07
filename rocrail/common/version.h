@@ -1,11 +1,25 @@
 const int revisionnr = 
-14302
+14316
 ;
 const char* commithash = 
-"09af147d0f74ab1b880bc8460bf9b6ed856360b2";
+"5193b5605de15e494d085aef5f4e7c08af9deb64";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14316 2018-09-07 19:30:03 +0200 inno setup: theme paths corrections\n" \
+"14315 2018-09-07 16:34:14 +0200 moved SpDrS60-extra to the user themes\n" \
+"14314 2018-09-07 16:20:30 +0200 inno setup: typo correction\n" \
+"14313 2018-09-07 15:58:57 +0200 inno setup: user themes option added\n" \
+"14312 2018-09-07 15:55:56 +0200 userthemes\n" \
+"14311 2018-09-07 14:34:03 +0200 themes: removed basic and iltis\n" \
+"14310 2018-09-07 14:27:35 +0200 rocguiinidlg: layout correction\n" \
+"14309 2018-09-07 10:58:32 +0200 trackpickerdlg: removed roads threeway\n" \
+"14308 2018-09-07 10:38:16 +0200 renderer: disable show IDs for road symbols\n" \
+"14307 2018-09-07 10:12:59 +0200 roads: added ccrossing and road/track option in the selectiondlg\n" \
+"14306 2018-09-07 08:57:45 +0200 roclcdr: fix for reenter in case of half automatic mode\n" \
+"14305 2018-09-07 08:11:06 +0200 trackpickerdlg: added road short block\n" \
+"14304 2018-09-07 07:58:28 +0200 Roads: fixes for small block symbol and occ color\n" \
+"14303 2018-09-07 07:49:56 +0200 rocrailinidialog: moved the 'half auto stop at in' to the loco section\n" \
 "14302 2018-09-06 14:19:46 +0200 roads theme: clean up and make compatible with the standard theme\n" \
 "14301 2018-09-06 11:47:29 +0200 rocguiinidlg: minimal toolbar icon size 24\n" \
 "14300 2018-09-06 10:55:20 +0200 guiframe: toolbar icon size option added\n" \
@@ -42,19 +56,5 @@ const char* revlog =
 "14269 2018-08-29 07:50:24 +0200 guiframe: get pwd path for opening initial the workspace dialog\n" \
 "14268 2018-08-28 15:01:44 +0200 translation merge: en_GB, sr_latin, sl, nl, de\n" \
 "14267 2018-08-28 12:09:39 +0200 roclcdr: fix for schedule wait flag in case of second next block\n" \
-"14266 2018-08-28 10:50:06 +0200 base: use no leading zeros in the generated symbol ID\n" \
-"14265 2018-08-28 10:40:56 +0200 roclcdr: call loco reset in case of an (ghost) exception reset\n" \
-"14264 2018-08-28 09:20:20 +0200 planpanel: symbol prefix added\n" \
-"14263 2018-08-28 07:32:34 +0200 guiframe: openworkspace initial with '.'\n" \
-"14262 2018-08-27 14:12:15 +0200 fback: removed double check regval on actions\n" \
-"14261 2018-08-27 10:34:55 +0200 roclcdr: check if the event match for durrent oder destination block\n" \
-"14260 2018-08-27 08:16:19 +0200 fback: write register value in a variable with reg_ prefix\n" \
-"14259 2018-08-27 03:32:05 +0200 guiframe: open demo workspave menu item added\n" \
-"14258 2018-08-27 03:20:34 +0200 wrapper: default no auto open workspace\n" \
-"14257 2018-08-26 18:29:17 +0200 swim to the moon\n" \
-"14256 2018-08-26 17:31:47 +0200 rocview: no default workspace\n" \
-"14255 2018-08-26 15:09:52 +0200 turntable: show border option added\n" \
-"14254 2018-08-26 11:08:39 +0200 item: fix for moving a text object\n" \
-"14253 2018-08-26 10:02:55 +0200 roclcdr: evaluation fix for initialize blockgroup in case of second next block\n" \
 
 "log end";
