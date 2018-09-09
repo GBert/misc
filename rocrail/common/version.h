@@ -1,11 +1,18 @@
 const int revisionnr = 
-14316
+14323
 ;
 const char* commithash = 
-"5193b5605de15e494d085aef5f4e7c08af9deb64";
+"093a8e4e0038ae9fce4902582e682ac81e6ffec0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14323 2018-09-09 10:53:01 +0200 rocweb: default tt bridgepos corrected\n" \
+"14322 2018-09-09 10:43:59 +0200 rocweb: fix for missing tt symbol size\n" \
+"14321 2018-09-09 10:09:26 +0200 mttmfcc: slot purger added\n" \
+"14320 2018-09-09 08:59:04 +0200 translation merge: nl, de, sl\n" \
+"14319 2018-09-08 15:34:44 +0200 block: inform loco in case of delete\n" \
+"14318 2018-09-08 10:36:59 +0200 planpanel: prevent overwriting the add item node with mouse re-enter\n" \
+"14317 2018-09-08 08:39:00 +0200 basedlg: check if the dialog is in a visible screen position to restore, if not the x,y will be reset to 10,10\n" \
 "14316 2018-09-07 19:30:03 +0200 inno setup: theme paths corrections\n" \
 "14315 2018-09-07 16:34:14 +0200 moved SpDrS60-extra to the user themes\n" \
 "14314 2018-09-07 16:20:30 +0200 inno setup: typo correction\n" \
@@ -49,12 +56,5 @@ const char* revlog =
 "14276 2018-08-30 14:34:47 +0200 planpanel: test flag for drag symbol cursor, default false\n" \
 "14275 2018-08-30 14:06:20 +0200 rocview: fix for demo workspace path trackpickerdlg: show selected symbol as cursor (wip)\n" \
 "14274 2018-08-30 07:58:06 +0200 rocrailinidialog: moved unlock at ebreak to route\n" \
-"14273 2018-08-29 11:42:35 +0200 events/in: check if the automatic is on before tracing an exception for IN\n" \
-"14272 2018-08-29 11:36:54 +0200 fback: trace correction for bidi direction\n" \
-"14271 2018-08-29 11:28:48 +0200 blockgroup: remove unused reservations\n" \
-"14270 2018-08-29 10:14:45 +0200 route: synsgcmd option added\n" \
-"14269 2018-08-29 07:50:24 +0200 guiframe: get pwd path for opening initial the workspace dialog\n" \
-"14268 2018-08-28 15:01:44 +0200 translation merge: en_GB, sr_latin, sl, nl, de\n" \
-"14267 2018-08-28 12:09:39 +0200 roclcdr: fix for schedule wait flag in case of second next block\n" \
 
 "log end";
