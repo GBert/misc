@@ -1,11 +1,14 @@
 const int revisionnr = 
-14323
+14326
 ;
 const char* commithash = 
-"093a8e4e0038ae9fce4902582e682ac81e6ffec0";
+"4ca5339bcff6c603aee2b2298cedd08c20562149";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14326 2018-09-10 14:46:54 +0200 renderer: show the tt bridge plus side as circle instead of a square\n" \
+"14325 2018-09-10 08:21:47 +0200 route: trace level correction for setting crossing block signals\n" \
+"14324 2018-09-10 08:02:38 +0200 routedialog: reactiveted the crossingblocksignals option\n" \
 "14323 2018-09-09 10:53:01 +0200 rocweb: default tt bridgepos corrected\n" \
 "14322 2018-09-09 10:43:59 +0200 rocweb: fix for missing tt symbol size\n" \
 "14321 2018-09-09 10:09:26 +0200 mttmfcc: slot purger added\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "14279 2018-09-01 07:35:44 +0200 trackpickerdlg: imagecursor\n" \
 "14278 2018-08-31 10:37:19 +0200 in: trace level correction for an unexpected IN\n" \
 "14277 2018-08-30 14:58:31 +0200 blockgroup: check the driver of the loco if a block is reserved as destination to prevent a ghost\n" \
-"14276 2018-08-30 14:34:47 +0200 planpanel: test flag for drag symbol cursor, default false\n" \
-"14275 2018-08-30 14:06:20 +0200 rocview: fix for demo workspace path trackpickerdlg: show selected symbol as cursor (wip)\n" \
-"14274 2018-08-30 07:58:06 +0200 rocrailinidialog: moved unlock at ebreak to route\n" \
 
 "log end";
