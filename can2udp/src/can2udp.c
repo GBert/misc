@@ -36,7 +36,7 @@ unsigned char udpframe_reply[MAXDG];
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -l <port> -d <port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 0.92\n");
+    fprintf(stderr, "   Version 0.93\n");
     fprintf(stderr, "\n");
     fprintf(stderr, "         -l <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -d <port>           destination UDP port for the server - default 15730\n");
@@ -44,6 +44,33 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -i <can int>        can interface - default can0\n");
     fprintf(stderr, "         -f                  running in foreground\n\n");
     fprintf(stderr, "         -v                  verbose output (in foreground)\n\n");
+}
+
+uint32_t be32(uint8_t *u) {
+    return (u[0] << 24) | (u[1] << 16) | (u[2] << 8) | u[3];
+}
+
+/*
+  CS2 CAN hash generation
+
+  hash' = highword ^ lowword
+
+  xxxxxxx11 0xxxxxxxx
+  ^^^^^^^    ^^^^^^^^
+   \\\\\\\   ||||||||
+    \\\\\\-- ||||||||
+     \\\\\\ \||||||||
+  000xxxxxx xxxxxxxxx
+ */
+
+uint16_t generateHash(uint32_t uid) {
+    uint16_t hash, highword, lowword;
+
+    highword = uid >> 16;
+    lowword = uid & 0xFFFF;
+    hash = highword ^ lowword;
+    hash = (((hash << 3) & 0xFF00) | 0x0300) | (hash & 0x7F);
+    return hash;
 }
 
 void send_magic_start_60113_frame(int can_socket, int verbose) {
@@ -55,10 +82,6 @@ void send_magic_start_60113_frame(int can_socket, int verbose) {
     frame.can_id &= CAN_EFF_MASK;
     frame.can_id |= CAN_EFF_FLAG;
     frame.can_dlc = 5;
-    frame.data[0] = 0;
-    frame.data[1] = 0;
-    frame.data[2] = 0;
-    frame.data[3] = 0;
     frame.data[4] = 0x11;
     if (write(can_socket, &frame, sizeof(frame)) != sizeof(frame)) {
 	fprintf(stderr, "CAN magic 60113 start write error: %s\n", strerror(errno));
@@ -215,10 +238,8 @@ int main(int argc, char **argv) {
 	    } else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 		/* prepare UDP frame */
 		frame.can_id &= CAN_EFF_MASK;
-		udpframe[0] = (frame.can_id >> 24) & 0x000000FF;
-		udpframe[1] = (frame.can_id >> 16) & 0x000000FF;
-		udpframe[2] = (frame.can_id >> 8) & 0x000000FF;
-		udpframe[3] = frame.can_id & 0x000000FF;
+		canid = htonl(frame.can_id);
+		memcpy(udpframe, &canid, 4);
 		udpframe[4] = frame.can_dlc;
 		memcpy(&udpframe[5], &frame.data, frame.can_dlc);
 
