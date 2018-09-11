@@ -1,11 +1,18 @@
 const int revisionnr = 
-14326
+14333
 ;
 const char* commithash = 
-"4ca5339bcff6c603aee2b2298cedd08c20562149";
+"ee62d1a2edb21e92fd207c7d878cf01cdb685488";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14333 2018-09-11 21:07:07 +0200 virtual: return lenz standard decoder ID for CV7 and 8\n" \
+"14332 2018-09-11 15:03:19 +0200 xmlscriptdlg: save anyway option added in case xml is not well formed\n" \
+"14331 2018-09-11 12:09:31 +0200 rocweb: show the tt bridge plus side\n" \
+"14330 2018-09-11 10:17:09 +0200 mttmfcc: trash reply buffer in case > 256\n" \
+"14329 2018-09-11 10:14:56 +0200 mttmfcc: exception in case numer of reply bytes are more then 256\n" \
+"14328 2018-09-11 10:03:15 +0200 mttmfcc: function 17-32 implemented for firmware 1.13\n" \
+"14327 2018-09-11 08:05:12 +0200 mttmfcc: purge option added\n" \
 "14326 2018-09-10 14:46:54 +0200 renderer: show the tt bridge plus side as circle instead of a square\n" \
 "14325 2018-09-10 08:21:47 +0200 route: trace level correction for setting crossing block signals\n" \
 "14324 2018-09-10 08:02:38 +0200 routedialog: reactiveted the crossingblocksignals option\n" \
@@ -49,12 +56,5 @@ const char* revlog =
 "14286 2018-09-03 09:50:40 +0200 lcdriver: trace level correction\n" \
 "14285 2018-09-03 09:50:07 +0200 trainimage: memory leak fix\n" \
 "14284 2018-09-02 14:55:46 +0200 trackpickerdlg: no d&d in case of image cursor\n" \
-"14283 2018-09-02 09:37:23 +0200 planpanel: image cursor (wip)\n" \
-"14282 2018-09-01 14:49:01 +0200 rocguidialog: added option imagecursor\n" \
-"14281 2018-09-01 11:17:15 +0200 imagecursor option (wip)\n" \
-"14280 2018-09-01 08:18:20 +0200 translation merge: de, nl, sl, sr_latin\n" \
-"14279 2018-09-01 07:35:44 +0200 trackpickerdlg: imagecursor\n" \
-"14278 2018-08-31 10:37:19 +0200 in: trace level correction for an unexpected IN\n" \
-"14277 2018-08-30 14:58:31 +0200 blockgroup: check the driver of the loco if a block is reserved as destination to prevent a ghost\n" \
 
 "log end";

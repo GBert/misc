@@ -1,4 +1,4 @@
-BINS := can-bounce-test can-monitor can2eth can2udp can4lnx2udp can2serial clone-cs2-config clone-cs2-trigger \
+BINS := can-bounce-test can-monitor can2eth can2udp can2udpf can4lnx2udp can2serial clone-cs2-config clone-cs2-trigger \
         clone-ms2-loco read-cs2-ini gb2-update ir-tester cs2ping bpi-rs485 scan2lan can2lan \
         ms2wifi virtual_canbuster virtual_gfp virtual_links88 virtual_ms2 \
         get-cs-data get-cs-config pio-i2c-udp read_lococard s88udp-bpi s88udp-rpi s88test-bpi \
@@ -39,6 +39,9 @@ lan-schnitte: lan-schnitte.o
 
 can2udp: can2udp.o
 	$(CC) $(CFLAGS) -o can2udp can2udp.o
+
+can2udpf: can2udpf.o
+	$(CC) $(CFLAGS) -o can2udpf can2udpf.o
 
 can2serial: can2serial.o
 	$(CC) $(CFLAGS) -o can2serial can2serial.o
