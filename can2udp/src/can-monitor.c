@@ -5,8 +5,9 @@
  * and you think this stuff is worth it, you can buy me a beer in return
  * Gerhard Bertelsmann
  * ----------------------------------------------------------------------------
- *
  */
+
+/* Contributions by Rainer Müller */
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -60,7 +61,7 @@ struct knoten *statusdaten = NULL;
 struct knoten *messwert = NULL;
 
 unsigned char buffer[MAX_PAKETE * 8];
-int verbose = 0;
+int verbose = 0, kanal = 0;
 
 static char *F_N_CAN_FORMAT_STRG = "  CAN  0x%08X  [%d]";
 static char *F_N_UDP_FORMAT_STRG = "  UDP  0x%08X  [%d]";
@@ -132,9 +133,10 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 2.0\n\n");
+    fprintf(stderr, "   Version 2.1\n\n");
     fprintf(stderr, "         -i <can int>    CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>  read PCAP file instead from CAN socket\n");
+    fprintf(stderr, "         -s              select only network internal frames\n");
     fprintf(stderr, "         -v              verbose output for TCP/UDP\n\n");
     fprintf(stderr, "         -h              show this help\n\n");
 }
@@ -301,18 +303,16 @@ void command_system(struct can_frame *frame) {
 	if (frame->can_dlc == 7) {
 	    printf("System: Konfiguration UID 0x%08X Kanal 0x%02X ", uid, frame->data[5]);
 	    if (frame->data[6])
-	    	printf(" gültig(%d)", frame->data[6]);
+		printf(" gültig(%d)", frame->data[6]);
 	    else
-	    	printf(" ungügltig(%d)", frame->data[6]);
+		printf(" ungültig(%d)", frame->data[6]);
 	}
 	if (frame->can_dlc == 8) {
 	    wert = be16(&frame->data[6]);
 	    if (response)
-		printf("System: Statusabfrage UID 0x%08X Kanal 0x%02X Messwert 0x%04X",
-		       uid, frame->data[5], wert);
+		printf("System: Statusabfrage UID 0x%08X Kanal 0x%02X Messwert 0x%04X", uid, frame->data[5], wert);
 	    else
-		printf("System: Konfiguration UID 0x%08X Kanal 0x%02X Konfigurationswert 0x%04X",
-		       uid, frame->data[5], wert);
+		printf("System: Konfiguration UID 0x%08X Kanal 0x%02X Konfigurationswert 0x%04X", uid, frame->data[5], wert);
 	}
 	break;
     case 0x0c:
@@ -384,7 +384,7 @@ void cdb_extension_grd(struct can_frame *frame) {
 		break;
 	    }
 	}
-	/* System */
+    /* System */
     } else {
 	if (frame->can_dlc == 2) {
 	    printf("CdB: Abfrage ");
@@ -547,7 +547,7 @@ void cdb_extension_wc(struct can_frame *frame) {
 		printf("Servo %d unbekannter Wert %d\n", servo, wert);
 		break;
 	    }
-	    /* Servo 0 -> System */
+	/* Servo 0 -> System */
 	} else {
 	    switch (frame->data[1]) {
 	    case 0x01:
@@ -617,7 +617,7 @@ void cdb_extension_set_grd(struct can_frame *frame) {
 void decode_frame(struct can_frame *frame) {
     uint32_t id, kennung, function, uid, cv_number, cv_index, stream_size;
     uint16_t paket, crc, kenner, kontakt;
-    uint8_t n_kanaele, n_messwerte, kanal = 0;
+    uint8_t n_kanaele, n_messwerte;
     char s[32];
     float v;
 
@@ -768,7 +768,7 @@ void decode_frame(struct can_frame *frame) {
 	    printf("Zubehör Schalten Lok %s Stellung %d Strom %d Schaltzeit/Sonderfunktionswert %d\n",
 		   getLoco(frame->data, s), frame->data[4], frame->data[5], be16(&frame->data[6]));
 	break;
-	/* S88 Polling */
+    /* S88 Polling */
     case 0x20:
 	uid = be32(frame->data);
 	printf("S88 Polling 0x%04X Modul Anzahl %d\n", uid, frame->data[4]);
@@ -777,7 +777,7 @@ void decode_frame(struct can_frame *frame) {
 	uid = be32(frame->data);
 	printf("S88 Polling 0x%04X Modul %d Zustand %d\n", uid, frame->data[4], be16(&frame->data[5]));
 	break;
-	/* S88 Event */
+    /* S88 Event */
     case 0x22:
 	kenner = be16(frame->data);
 	kontakt = be16(&frame->data[2]);
@@ -978,7 +978,7 @@ void decode_frame(struct can_frame *frame) {
 	    printf("Automatik schalten: ID 0x%04X Funktion 0x%04X Lok %s\n", kenner, function,
 		   getLoco(&frame->data[4], s));
 	break;
-	/* Blocktext zuordnen */
+    /* Blocktext zuordnen */
     case 0x62:
     case 0x63:
 	kenner = be16(frame->data);
@@ -1007,20 +1007,24 @@ int main(int argc, char **argv) {
     struct ifreq ifr;
     socklen_t caddrlen = sizeof(caddr);
     fd_set read_fds;
-    char timestamp[16];
+    char timestamp[32];
+    int selint = 0;
 
     strcpy(ifr.ifr_name, "can0");
     memset(pcap_file, 0, sizeof(pcap_file));
 
     signal(SIGINT, INThandler);
 
-    while ((opt = getopt(argc, argv, "i:r:vh?")) != -1) {
+    while ((opt = getopt(argc, argv, "i:r:svh?")) != -1) {
 	switch (opt) {
 	case 'i':
 	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
 	    break;
 	case 'r':
 	    strncpy(pcap_file, optarg, sizeof(pcap_file) - 1);
+	    break;
+	case 's':
+	    selint = 1;
 	    break;
 	case 'v':
 	    verbose = 1;
@@ -1056,30 +1060,42 @@ int main(int argc, char **argv) {
 	    fprintf(stderr, "Couldn't open pcap file %s: %s\n", pcap_file, errbuf);
 	    return (EXIT_FAILURE);
 	}
+	int caplinktype = pcap_datalink(handle);
+	if (verbose)
+	    printf("Analyzing file %s with capture link type %d\n", pcap_file, caplinktype);
+
 	while ((packet = pcap_next(handle, &header)) != NULL) {
 	    pkt_counter++;
 	    /* header contains information about the packet (e.g. timestamp) */
 	    /* cast a pointer to the packet data */
 	    unsigned char *pkt_ptr = (u_char *) packet;
 	    tm = localtime(&header.ts.tv_sec);
-	    sprintf(timestamp, "%02d:%02d:%02d.%03d", tm->tm_hour, tm->tm_min, tm->tm_sec, (int)header.ts.tv_usec / 1000);
+	    sprintf(timestamp, "%02d:%02d:%02d.%03d", tm->tm_hour, tm->tm_min, tm->tm_sec,
+		    (int)header.ts.tv_usec / 1000);
 
 	    /* parse the first (ethernet) header, grabbing the type field */
-	    int ether_type = be16(&pkt_ptr[12]);
-	    int ether_offset = 0;
+	    int ether_offset = (caplinktype == DLT_LINUX_SLL) ? 14 : 12;
+	    int ether_type = be16(&pkt_ptr[ether_offset]);
 
-	    if (ether_type == ETHER_TYPE_IP)	/* most common */
-		ether_offset = 14;
-	    else if (ether_type == ETHER_TYPE_8021Q)	/* dot1q tag ? */
-		ether_offset = 18;
-	    else
+	    if (ether_type == ETHER_TYPE_IP) {			/* most common */
+		ether_offset += 2;
+	    } else if (ether_type == ETHER_TYPE_8021Q) {	/* dot1q tag ? */
+		ether_offset += 6;
+	    } else {
 		if (verbose)
 		    fprintf(stderr, "Unknown ethernet type, %04X, skipping...\n", ether_type);
+		continue;
+	    }
+
 	    /* skip past the Ethernet II header */
 	    pkt_ptr += ether_offset;
 	    /* point to an IP header structure  */
 	    ip_hdr = (struct ip *)pkt_ptr;
 
+	    /* take only frames with source and destination in the same network */
+	    if (selint && ((ip_hdr->ip_src.s_addr ^ ip_hdr->ip_dst.s_addr) & 0xFF) &&
+		(ip_hdr->ip_dst.s_addr != 0xFFFFFFFF))
+		continue;
 	    int packet_length = ntohs(ip_hdr->ip_len);
 
 	    if (ip_hdr->ip_p == IPPROTO_UDP) {
@@ -1097,7 +1113,7 @@ int main(int argc, char **argv) {
 		}
 		unsigned char *dump = (unsigned char *)pkt_ptr + IPHDR_LEN + sizeof(struct udphdr);
 		for (int i = 0; i < size_payload; i += 13) {
-		    printf("%s ", timestamp);
+		    printf("%s %.3d>", timestamp, (ip_hdr->ip_src.s_addr) >> 24);
 		    frame_to_can(dump + i, &frame);
 		    print_can_frame(F_N_UDP_FORMAT_STRG, &frame);
 		    decode_frame(&frame);
@@ -1113,25 +1129,35 @@ int main(int argc, char **argv) {
 		/* look for HTTP */
 		if ((ntohs(mytcp->th_dport) == 80) || (ntohs(mytcp->th_sport) == 80)) {
 		    if (size_payload) {
-			printf("%s   HTTP    -> %s", timestamp, dump);
+			if (verbose) {
+			    printf("%s ", timestamp);
+			    printf("%04u HTTP %s -> ", pkt_counter, inet_ntoa(ip_hdr->ip_src));
+			    printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(mytcp->th_sport), ntohs(mytcp->th_dport));
+			    printf("  packet_length %d\n", size_payload);
+			}
+			printf("%s %.3d>  HTTP    -> ", timestamp, (ip_hdr->ip_src.s_addr) >> 24);
+			for (int i = 0; i < size_payload; i++)
+			    putchar(dump[i]);
+			if (dump[size_payload - 1] != '\n')
+			    putchar('\n');
 		    }
 		    continue;
 		}
 		dport = ntohs(mytcp->th_dport);
 		sport = ntohs(mytcp->th_sport);
 		if ((dport != 15730) && (sport != 15731) &&
-		    (dport != 15731) && (sport != 15731) &&
-		    (dport != 15732) && (sport != 15732))
+		    (dport != 15731) && (sport != 15731) && (dport != 15732) && (sport != 15732))
 		    continue;
 		if (size_payload > 0) {
 		    if (verbose) {
 			printf("%s ", timestamp);
 			printf("%04u TCP %s -> ", pkt_counter, inet_ntoa(ip_hdr->ip_src));
-			printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(mytcp->th_sport), ntohs(mytcp->th_dport));
+			printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(mytcp->th_sport),
+			       ntohs(mytcp->th_dport));
 			printf("  packet_length %d\n", size_payload);
 		    }
 		    for (int i = 0; i < size_payload; i += 13) {
-			printf("%s ", timestamp);
+			printf("%s %.3d>", timestamp, (ip_hdr->ip_src.s_addr) >> 24);
 			frame_to_can(dump + i, &frame);
 			print_can_frame(F_N_TCP_FORMAT_STRG, &frame);
 			decode_frame(&frame);
