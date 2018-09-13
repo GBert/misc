@@ -1,11 +1,25 @@
 const int revisionnr = 
-14333
+14347
 ;
 const char* commithash = 
-"ee62d1a2edb21e92fd207c7d878cf01cdb685488";
+"ae1255e1e73cdc261dd73cff5bef53af59e2dfc9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14347 2018-09-13 13:56:15 +0200 rocweb: bridge sensor/plus symbol corrections\n" \
+"14346 2018-09-13 13:28:30 +0200 rocweb: tt sensor correction\n" \
+"14345 2018-09-13 11:56:43 +0200 rocweb: SLIM option added for rendering the TT to fit to the SLIM theme\n" \
+"14344 2018-09-13 11:05:08 +0200 translation merge: fr\n" \
+"14343 2018-09-13 10:13:23 +0200 renderer: function for rotationg only one point for orientation\n" \
+"14342 2018-09-13 10:04:25 +0200 rocweb: rotate tt gridcon point to match orientation\n" \
+"14341 2018-09-13 08:40:29 +0200 rocweb: render turntable gridcon\n" \
+"14340 2018-09-13 08:13:12 +0200 mttmfcc: purge only if all functions are off too\n" \
+"14339 2018-09-12 15:32:13 +0200 renderer: simplify rotating\n" \
+"14338 2018-09-12 15:10:04 +0200 renderer: simplification of roatating points\n" \
+"14337 2018-09-12 09:58:41 +0200 renderer: rotate tt track with a sub function\n" \
+"14336 2018-09-12 08:34:10 +0200 renderer: some fine tuning for calculating the tt bridge plus side\n" \
+"14335 2018-09-12 08:12:39 +0200 renderer: use cos(-1) as pi\n" \
+"14334 2018-09-12 07:53:53 +0200 renderer: fix for drawing the tt bridge plus side in case of graphicalcontext\n" \
 "14333 2018-09-11 21:07:07 +0200 virtual: return lenz standard decoder ID for CV7 and 8\n" \
 "14332 2018-09-11 15:03:19 +0200 xmlscriptdlg: save anyway option added in case xml is not well formed\n" \
 "14331 2018-09-11 12:09:31 +0200 rocweb: show the tt bridge plus side\n" \
@@ -42,19 +56,5 @@ const char* revlog =
 "14300 2018-09-06 10:55:20 +0200 guiframe: toolbar icon size option added\n" \
 "14299 2018-09-06 09:51:22 +0200 trackpicker: fix for road threeway and crossing\n" \
 "14298 2018-09-06 08:02:27 +0200 renderer: use SLIM grey for the turntable tracks in case SLIM is active\n" \
-"14297 2018-09-05 14:38:07 +0200 trainimage: only reinit the complete train image in case somethings has been changed\n" \
-"14296 2018-09-05 12:18:57 +0200 cellrenderer: use default bitmap depth\n" \
-"14295 2018-09-05 12:12:23 +0200 bidib: use bigger buffer sizes for reading\n" \
-"14294 2018-09-05 11:25:00 +0200 block: replaced the stack sensor key[256] with a dynamic string to avoid stack overflow\n" \
-"14293 2018-09-05 10:58:36 +0200 loc: take over the manual flag in case of modify\n" \
-"14292 2018-09-05 10:34:38 +0200 block: fix for setting loco current block in case of reserved and not occupied\n" \
-"14291 2018-09-05 08:51:22 +0200 rocpro: fix for triggering detect\n" \
-"14290 2018-09-04 10:12:00 +0200 cellrenderer: use bitmap depth of 8 instead the default screen color depth\n" \
-"14289 2018-09-04 08:20:12 +0200 rocprodlg: fix for setting the expected CV\n" \
-"14288 2018-09-03 11:55:35 +0200 car: broadcast change of locality ion case of modify and the locality changed\n" \
-"14287 2018-09-03 10:37:29 +0200 trackpickerdlg: rescale image cursor in case of Windows\n" \
-"14286 2018-09-03 09:50:40 +0200 lcdriver: trace level correction\n" \
-"14285 2018-09-03 09:50:07 +0200 trainimage: memory leak fix\n" \
-"14284 2018-09-02 14:55:46 +0200 trackpickerdlg: no d&d in case of image cursor\n" \
 
 "log end";
