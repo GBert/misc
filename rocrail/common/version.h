@@ -1,11 +1,13 @@
 const int revisionnr = 
-14347
+14349
 ;
 const char* commithash = 
-"ae1255e1e73cdc261dd73cff5bef53af59e2dfc9";
+"a9ac78fa5a6cbddb3eda6c92e6c1e3da02dd3abc";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14349 2018-09-14 14:52:46 +0200 massoth: trace loco command in case of getting a slot\n" \
+"14348 2018-09-14 12:20:18 +0200 renamedlg: bus field added\n" \
 "14347 2018-09-13 13:56:15 +0200 rocweb: bridge sensor/plus symbol corrections\n" \
 "14346 2018-09-13 13:28:30 +0200 rocweb: tt sensor correction\n" \
 "14345 2018-09-13 11:56:43 +0200 rocweb: SLIM option added for rendering the TT to fit to the SLIM theme\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14302 2018-09-06 14:19:46 +0200 roads theme: clean up and make compatible with the standard theme\n" \
 "14301 2018-09-06 11:47:29 +0200 rocguiinidlg: minimal toolbar icon size 24\n" \
 "14300 2018-09-06 10:55:20 +0200 guiframe: toolbar icon size option added\n" \
-"14299 2018-09-06 09:51:22 +0200 trackpicker: fix for road threeway and crossing\n" \
-"14298 2018-09-06 08:02:27 +0200 renderer: use SLIM grey for the turntable tracks in case SLIM is active\n" \
 
 "log end";
