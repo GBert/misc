@@ -1,11 +1,12 @@
 const int revisionnr = 
-14349
+14350
 ;
 const char* commithash = 
-"a9ac78fa5a6cbddb3eda6c92e6c1e3da02dd3abc";
+"d6df55e8ce581a398736b07b532495ce29487ae6";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14350 2018-09-14 15:51:15 +0200 renamedlg: clear IIDs from the comboboxes in case of other selection then IID\n" \
 "14349 2018-09-14 14:52:46 +0200 massoth: trace loco command in case of getting a slot\n" \
 "14348 2018-09-14 12:20:18 +0200 renamedlg: bus field added\n" \
 "14347 2018-09-13 13:56:15 +0200 rocweb: bridge sensor/plus symbol corrections\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14303 2018-09-07 07:49:56 +0200 rocrailinidialog: moved the 'half auto stop at in' to the loco section\n" \
 "14302 2018-09-06 14:19:46 +0200 roads theme: clean up and make compatible with the standard theme\n" \
 "14301 2018-09-06 11:47:29 +0200 rocguiinidlg: minimal toolbar icon size 24\n" \
-"14300 2018-09-06 10:55:20 +0200 guiframe: toolbar icon size option added\n" \
 
 "log end";
