@@ -1,11 +1,12 @@
 const int revisionnr = 
-14350
+14351
 ;
 const char* commithash = 
-"d6df55e8ce581a398736b07b532495ce29487ae6";
+"15d92d8931f7e7fee30b4e5e116a109ad0320e7c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14351 2018-09-14 18:17:31 +0200 routedialog: fix for init crossingblocksignals (Achim)\n" \
 "14350 2018-09-14 15:51:15 +0200 renamedlg: clear IIDs from the comboboxes in case of other selection then IID\n" \
 "14349 2018-09-14 14:52:46 +0200 massoth: trace loco command in case of getting a slot\n" \
 "14348 2018-09-14 12:20:18 +0200 renamedlg: bus field added\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14304 2018-09-07 07:58:28 +0200 Roads: fixes for small block symbol and occ color\n" \
 "14303 2018-09-07 07:49:56 +0200 rocrailinidialog: moved the 'half auto stop at in' to the loco section\n" \
 "14302 2018-09-06 14:19:46 +0200 roads theme: clean up and make compatible with the standard theme\n" \
-"14301 2018-09-06 11:47:29 +0200 rocguiinidlg: minimal toolbar icon size 24\n" \
 
 "log end";
