@@ -1,11 +1,15 @@
 const int revisionnr = 
-14351
+14355
 ;
 const char* commithash = 
-"15d92d8931f7e7fee30b4e5e116a109ad0320e7c";
+"ce4089eb0edbc8209ab241866d65da8a0bdb3697";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14355 2018-09-16 09:40:38 +0200 loc: SBT correction in case of a V_hint\n" \
+"14354 2018-09-16 08:24:16 +0200 loc: SBT correction in case of a V_hint\n" \
+"14353 2018-09-15 12:23:36 +0200 loc: ignore SBT and BAT incase of go manual (half automatic)\n" \
+"14352 2018-09-15 08:29:28 +0200 switch: occupancy sensors not exclusive but shared\n" \
 "14351 2018-09-14 18:17:31 +0200 routedialog: fix for init crossingblocksignals (Achim)\n" \
 "14350 2018-09-14 15:51:15 +0200 renamedlg: clear IIDs from the comboboxes in case of other selection then IID\n" \
 "14349 2018-09-14 14:52:46 +0200 massoth: trace loco command in case of getting a slot\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "14308 2018-09-07 10:38:16 +0200 renderer: disable show IDs for road symbols\n" \
 "14307 2018-09-07 10:12:59 +0200 roads: added ccrossing and road/track option in the selectiondlg\n" \
 "14306 2018-09-07 08:57:45 +0200 roclcdr: fix for reenter in case of half automatic mode\n" \
-"14305 2018-09-07 08:11:06 +0200 trackpickerdlg: added road short block\n" \
-"14304 2018-09-07 07:58:28 +0200 Roads: fixes for small block symbol and occ color\n" \
-"14303 2018-09-07 07:49:56 +0200 rocrailinidialog: moved the 'half auto stop at in' to the loco section\n" \
-"14302 2018-09-06 14:19:46 +0200 roads theme: clean up and make compatible with the standard theme\n" \
 
 "log end";
