@@ -1,11 +1,12 @@
 const int revisionnr = 
-14355
+14356
 ;
 const char* commithash = 
-"ce4089eb0edbc8209ab241866d65da8a0bdb3697";
+"69e63a55ef5f755f88a063bfb378b376f53368a4";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14356 2018-09-16 10:55:31 +0200 stage: set loco current block in case of D&D\n" \
 "14355 2018-09-16 09:40:38 +0200 loc: SBT correction in case of a V_hint\n" \
 "14354 2018-09-16 08:24:16 +0200 loc: SBT correction in case of a V_hint\n" \
 "14353 2018-09-15 12:23:36 +0200 loc: ignore SBT and BAT incase of go manual (half automatic)\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14309 2018-09-07 10:58:32 +0200 trackpickerdlg: removed roads threeway\n" \
 "14308 2018-09-07 10:38:16 +0200 renderer: disable show IDs for road symbols\n" \
 "14307 2018-09-07 10:12:59 +0200 roads: added ccrossing and road/track option in the selectiondlg\n" \
-"14306 2018-09-07 08:57:45 +0200 roclcdr: fix for reenter in case of half automatic mode\n" \
 
 "log end";
