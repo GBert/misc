@@ -43,8 +43,8 @@ pio-i2c-udp setzt Events in das M\*rklin Format um und stellt sich als S88 dar.
 CAN Nutzung vorbereiten
 ```
 sudo apt-get update
-sudo apt-get install can-utils
 sudo apt-get upgrade
+sudo apt-get install can-utils
 ```
 /boot/config.txt editieren
 ```
