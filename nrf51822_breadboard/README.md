@@ -1,7 +1,7 @@
 NRF-51822 Test Board
 ====================
 
-![NRF Board](https://github.com/GBert/misc/raw/master/nrf51822_breadboard/pictures/nrf_borad_01.jpeg)
+[![NRF Board](https://github.com/GBert/misc/raw/master/nrf51822_breadboard/pictures/nrf_borad_01_s.jpeg)](https://github.com/GBert/misc/raw/master/nrf51822_breadboard/pictures/nrf_borad_01.jpeg)
 
 Quick Guide
 -----------
