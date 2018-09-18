@@ -1,11 +1,17 @@
 const int revisionnr = 
-14356
+14362
 ;
 const char* commithash = 
-"69e63a55ef5f755f88a063bfb378b376f53368a4";
+"913336f2c164043aa04a3689944eabbb975cb2cc";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14362 2018-09-18 10:37:44 +0200 location: get loco list from stage blocks at init\n" \
+"14361 2018-09-18 08:27:47 +0200 p50: sleep 50ms after CTS is active at protver 2\n" \
+"14360 2018-09-18 08:21:05 +0200 mttmfcc: purge all at shutdown\n" \
+"14359 2018-09-17 12:12:09 +0200 rocweb: update and base file preparation\n" \
+"14358 2018-09-17 08:33:14 +0200 loc: release loco from stage in case of a moveto D&D command\n" \
+"14357 2018-09-17 08:09:28 +0200 p50: protver 2 for sending a change direction without pefixing a V=0 command\n" \
 "14356 2018-09-16 10:55:31 +0200 stage: set loco current block in case of D&D\n" \
 "14355 2018-09-16 09:40:38 +0200 loc: SBT correction in case of a V_hint\n" \
 "14354 2018-09-16 08:24:16 +0200 loc: SBT correction in case of a V_hint\n" \
@@ -50,11 +56,5 @@ const char* revlog =
 "14315 2018-09-07 16:34:14 +0200 moved SpDrS60-extra to the user themes\n" \
 "14314 2018-09-07 16:20:30 +0200 inno setup: typo correction\n" \
 "14313 2018-09-07 15:58:57 +0200 inno setup: user themes option added\n" \
-"14312 2018-09-07 15:55:56 +0200 userthemes\n" \
-"14311 2018-09-07 14:34:03 +0200 themes: removed basic and iltis\n" \
-"14310 2018-09-07 14:27:35 +0200 rocguiinidlg: layout correction\n" \
-"14309 2018-09-07 10:58:32 +0200 trackpickerdlg: removed roads threeway\n" \
-"14308 2018-09-07 10:38:16 +0200 renderer: disable show IDs for road symbols\n" \
-"14307 2018-09-07 10:12:59 +0200 roads: added ccrossing and road/track option in the selectiondlg\n" \
 
 "log end";
