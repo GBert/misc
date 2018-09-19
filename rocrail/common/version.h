@@ -1,11 +1,19 @@
 const int revisionnr = 
-14366
+14374
 ;
 const char* commithash = 
-"de2f4d89f72f26aa21ec58b0125c86fb66f4f3f2";
+"aa8b50fbcfae0b321d9f763cf7602bb80e9ff0cc";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14374 2018-09-19 13:07:12 +0200 cbus: can wip\n" \
+"14373 2018-09-19 12:30:00 +0200 cbus: can wip\n" \
+"14372 2018-09-19 12:11:10 +0200 cbus: can wip\n" \
+"14371 2018-09-19 12:04:05 +0200 cbus: can wip\n" \
+"14370 2018-09-19 11:56:33 +0200 cbus: can wip\n" \
+"14369 2018-09-19 11:18:52 +0200 cbus: socketCAN wip\n" \
+"14368 2018-09-19 10:40:25 +0200 ucan: WIP\n" \
+"14367 2018-09-19 10:12:24 +0200 cbus: socketcan support (WIP)\n" \
 "14366 2018-09-19 08:36:05 +0200 ucan: include added\n" \
 "14365 2018-09-19 08:33:45 +0200 ucan: includes added\n" \
 "14364 2018-09-19 08:29:19 +0200 rocs: can added\n" \
@@ -48,13 +56,5 @@ const char* revlog =
 "14327 2018-09-11 08:05:12 +0200 mttmfcc: purge option added\n" \
 "14326 2018-09-10 14:46:54 +0200 renderer: show the tt bridge plus side as circle instead of a square\n" \
 "14325 2018-09-10 08:21:47 +0200 route: trace level correction for setting crossing block signals\n" \
-"14324 2018-09-10 08:02:38 +0200 routedialog: reactiveted the crossingblocksignals option\n" \
-"14323 2018-09-09 10:53:01 +0200 rocweb: default tt bridgepos corrected\n" \
-"14322 2018-09-09 10:43:59 +0200 rocweb: fix for missing tt symbol size\n" \
-"14321 2018-09-09 10:09:26 +0200 mttmfcc: slot purger added\n" \
-"14320 2018-09-09 08:59:04 +0200 translation merge: nl, de, sl\n" \
-"14319 2018-09-08 15:34:44 +0200 block: inform loco in case of delete\n" \
-"14318 2018-09-08 10:36:59 +0200 planpanel: prevent overwriting the add item node with mouse re-enter\n" \
-"14317 2018-09-08 08:39:00 +0200 basedlg: check if the dialog is in a visible screen position to restore, if not the x,y will be reset to 10,10\n" \
 
 "log end";
