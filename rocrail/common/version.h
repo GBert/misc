@@ -1,11 +1,15 @@
 const int revisionnr = 
-14362
+14366
 ;
 const char* commithash = 
-"913336f2c164043aa04a3689944eabbb975cb2cc";
+"de2f4d89f72f26aa21ec58b0125c86fb66f4f3f2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14366 2018-09-19 08:36:05 +0200 ucan: include added\n" \
+"14365 2018-09-19 08:33:45 +0200 ucan: includes added\n" \
+"14364 2018-09-19 08:29:19 +0200 rocs: can added\n" \
+"14363 2018-09-19 07:32:45 +0200 crosscompile text update (copy from wiki)\n" \
 "14362 2018-09-18 10:37:44 +0200 location: get loco list from stage blocks at init\n" \
 "14361 2018-09-18 08:27:47 +0200 p50: sleep 50ms after CTS is active at protver 2\n" \
 "14360 2018-09-18 08:21:05 +0200 mttmfcc: purge all at shutdown\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "14319 2018-09-08 15:34:44 +0200 block: inform loco in case of delete\n" \
 "14318 2018-09-08 10:36:59 +0200 planpanel: prevent overwriting the add item node with mouse re-enter\n" \
 "14317 2018-09-08 08:39:00 +0200 basedlg: check if the dialog is in a visible screen position to restore, if not the x,y will be reset to 10,10\n" \
-"14316 2018-09-07 19:30:03 +0200 inno setup: theme paths corrections\n" \
-"14315 2018-09-07 16:34:14 +0200 moved SpDrS60-extra to the user themes\n" \
-"14314 2018-09-07 16:20:30 +0200 inno setup: typo correction\n" \
-"14313 2018-09-07 15:58:57 +0200 inno setup: user themes option added\n" \
 
 "log end";
