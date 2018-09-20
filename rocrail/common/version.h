@@ -1,11 +1,16 @@
 const int revisionnr = 
-14374
+14379
 ;
 const char* commithash = 
-"aa8b50fbcfae0b321d9f763cf7602bb80e9ff0cc";
+"7782b21229876da35163a9e91c4874e042cbd7b6";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14379 2018-09-20 10:46:03 +0200 cbus: can fix for available\n" \
+"14378 2018-09-20 10:40:34 +0200 cbus: can wip\n" \
+"14377 2018-09-20 10:18:10 +0200 cbus: can revert\n" \
+"14376 2018-09-20 10:02:48 +0200 cbus: can use binary frame as CANGCA1\n" \
+"14375 2018-09-20 09:03:02 +0200 cbus: can trace level correction\n" \
 "14374 2018-09-19 13:07:12 +0200 cbus: can wip\n" \
 "14373 2018-09-19 12:30:00 +0200 cbus: can wip\n" \
 "14372 2018-09-19 12:11:10 +0200 cbus: can wip\n" \
@@ -51,10 +56,5 @@ const char* revlog =
 "14332 2018-09-11 15:03:19 +0200 xmlscriptdlg: save anyway option added in case xml is not well formed\n" \
 "14331 2018-09-11 12:09:31 +0200 rocweb: show the tt bridge plus side\n" \
 "14330 2018-09-11 10:17:09 +0200 mttmfcc: trash reply buffer in case > 256\n" \
-"14329 2018-09-11 10:14:56 +0200 mttmfcc: exception in case numer of reply bytes are more then 256\n" \
-"14328 2018-09-11 10:03:15 +0200 mttmfcc: function 17-32 implemented for firmware 1.13\n" \
-"14327 2018-09-11 08:05:12 +0200 mttmfcc: purge option added\n" \
-"14326 2018-09-10 14:46:54 +0200 renderer: show the tt bridge plus side as circle instead of a square\n" \
-"14325 2018-09-10 08:21:47 +0200 route: trace level correction for setting crossing block signals\n" \
 
 "log end";
