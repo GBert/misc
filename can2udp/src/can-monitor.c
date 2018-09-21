@@ -46,6 +46,7 @@
 #define RESET	"\x1B[0m"
 
 #define	MAX_PAKETE	256
+#define	MAXSIZE		256
 #define MAXDG   	4096	/* maximum datagram size */
 #define MAXUDP  	16	/* maximum datagram size */
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
@@ -133,12 +134,13 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 2.1\n\n");
-    fprintf(stderr, "         -i <can int>    CAN interface - default can0\n");
-    fprintf(stderr, "         -r <pcap file>  read PCAP file instead from CAN socket\n");
-    fprintf(stderr, "         -s              select only network internal frames\n");
-    fprintf(stderr, "         -v              verbose output for TCP/UDP\n\n");
-    fprintf(stderr, "         -h              show this help\n\n");
+    fprintf(stderr, "   Version 2.2\n\n");
+    fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
+    fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
+    fprintf(stderr, "         -s                select only network internal frames\n");
+    fprintf(stderr, "         -t <rocrail file> read PCAP file instead from CAN socket\n");
+    fprintf(stderr, "         -v                verbose output for TCP/UDP\n\n");
+    fprintf(stderr, "         -h                show this help\n\n");
 }
 
 int time_stamp(char *timestamp) {
@@ -156,6 +158,16 @@ void frame_to_can(unsigned char *netframe, struct can_frame *frame) {
     frame->can_id = be32(netframe);
     frame->can_dlc = netframe[4];
     memcpy(&frame->data, &netframe[5], 8);
+}
+
+void ascii_to_can(char *s, struct can_frame *frame) {
+    int i;
+
+    sscanf(s, "T%8X%1X", &frame->can_id, (unsigned int *)&frame->can_dlc);
+    memset(&frame->data, 0, 8);
+    for (i = 1; i <= frame->can_dlc; i++) {
+	sscanf(&s[8 + i*2], "%2X", (unsigned int *)&frame->data[i - 1]);
+    }
 }
 
 void print_can_frame(char *format_string, struct can_frame *frame) {
@@ -1003,6 +1015,7 @@ int main(int argc, char **argv) {
     int max_fds, opt, sc;
     struct can_frame frame;
     char pcap_file[256];
+    char roctrc_file[256];
     struct sockaddr_can caddr;
     struct ifreq ifr;
     socklen_t caddrlen = sizeof(caddr);
@@ -1012,16 +1025,20 @@ int main(int argc, char **argv) {
 
     strcpy(ifr.ifr_name, "can0");
     memset(pcap_file, 0, sizeof(pcap_file));
+    memset(roctrc_file, 0, sizeof(roctrc_file));
 
     signal(SIGINT, INThandler);
 
-    while ((opt = getopt(argc, argv, "i:r:svh?")) != -1) {
+    while ((opt = getopt(argc, argv, "i:r:t:svh?")) != -1) {
 	switch (opt) {
 	case 'i':
 	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
 	    break;
 	case 'r':
 	    strncpy(pcap_file, optarg, sizeof(pcap_file) - 1);
+	    break;
+	case 't':
+	    strncpy(roctrc_file, optarg, sizeof(roctrc_file) - 1);
 	    break;
 	case 's':
 	    selint = 1;
@@ -1040,6 +1057,48 @@ int main(int argc, char **argv) {
 	    exit(EXIT_FAILURE);
 	}
     }
+
+    /* do we have a Rocrail trace file ? */
+    if (roctrc_file[0] != 0) {
+	FILE *fp;
+	char *line;
+	char slcan[MAXSIZE];
+	size_t size = MAXSIZE;
+	char *pos_r, *pos_w;
+	struct can_frame aframe;
+
+	fp = fopen(roctrc_file, "r");
+	if (!fp) {
+	    fprintf(stderr, "\ncan't open file %s for reading - error: %s\n", roctrc_file, strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
+
+	line = (char *)malloc(MAXSIZE);
+	if( line == NULL) {
+	    fprintf(stderr, "Unable to allocate buffer\n");
+	    exit(EXIT_FAILURE);
+	}
+	
+	while (getline(&line, &size, fp) > 0) {
+	    //line[strcspn(line, "\r\n")] = 0;
+	    memset(slcan, 0, sizeof(slcan));
+	    pos_r = strstr(line, "ASCII read: ");
+	    if (pos_r)
+		sscanf(pos_r, "ASCII read: %s", slcan);
+	    pos_w = strstr(line, "ASCII write: ");
+	    if (pos_w)
+		sscanf(pos_w, "ASCII write: %s", slcan);
+	    if (pos_r || pos_w) {
+		memset(&aframe, 0, sizeof(aframe));
+		ascii_to_can(slcan, &aframe);
+		printf(RESET "%50s", slcan);
+		print_can_frame(F_N_CAN_FORMAT_STRG, &aframe);
+		decode_frame(&aframe);
+	    }
+	}
+	return (EXIT_SUCCESS);
+    }
+    
 
     /* do we have a PCAP file ? */
     if (pcap_file[0] != 0) {
