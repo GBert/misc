@@ -1,11 +1,13 @@
 const int revisionnr = 
-14379
+14381
 ;
 const char* commithash = 
-"7782b21229876da35163a9e91c4874e042cbd7b6";
+"acc362c5c41b7c3d42d73bad87373b4fc8b8031d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14381 2018-09-21 11:51:54 +0200 cbus: can init CAN frame buffer\n" \
+"14380 2018-09-21 11:15:23 +0200 cbus,rocs: CAN flags added\n" \
 "14379 2018-09-20 10:46:03 +0200 cbus: can fix for available\n" \
 "14378 2018-09-20 10:40:34 +0200 cbus: can wip\n" \
 "14377 2018-09-20 10:18:10 +0200 cbus: can revert\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14334 2018-09-12 07:53:53 +0200 renderer: fix for drawing the tt bridge plus side in case of graphicalcontext\n" \
 "14333 2018-09-11 21:07:07 +0200 virtual: return lenz standard decoder ID for CV7 and 8\n" \
 "14332 2018-09-11 15:03:19 +0200 xmlscriptdlg: save anyway option added in case xml is not well formed\n" \
-"14331 2018-09-11 12:09:31 +0200 rocweb: show the tt bridge plus side\n" \
-"14330 2018-09-11 10:17:09 +0200 mttmfcc: trash reply buffer in case > 256\n" \
 
 "log end";
