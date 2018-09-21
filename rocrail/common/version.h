@@ -1,11 +1,12 @@
 const int revisionnr = 
-14381
+14382
 ;
 const char* commithash = 
-"acc362c5c41b7c3d42d73bad87373b4fc8b8031d";
+"308bad61b7a07127ce4dd3d1b630635d01decd46";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14382 2018-09-21 15:05:29 +0200 cbus: can extended ID support\n" \
 "14381 2018-09-21 11:51:54 +0200 cbus: can init CAN frame buffer\n" \
 "14380 2018-09-21 11:15:23 +0200 cbus,rocs: CAN flags added\n" \
 "14379 2018-09-20 10:46:03 +0200 cbus: can fix for available\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14335 2018-09-12 08:12:39 +0200 renderer: use cos(-1) as pi\n" \
 "14334 2018-09-12 07:53:53 +0200 renderer: fix for drawing the tt bridge plus side in case of graphicalcontext\n" \
 "14333 2018-09-11 21:07:07 +0200 virtual: return lenz standard decoder ID for CV7 and 8\n" \
-"14332 2018-09-11 15:03:19 +0200 xmlscriptdlg: save anyway option added in case xml is not well formed\n" \
 
 "log end";
