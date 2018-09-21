@@ -696,16 +696,16 @@ void decode_frame(struct can_frame *frame) {
 	v = be16(&frame->data[4]);
 	v = v / 10;
 	if (frame->can_dlc == 4)
-	    printf("Lok: %s, Abfrage Fahrstufe\n", getLoco(frame->data, s));
+	    printf("Lok %s Abfrage Fahrstufe\n", getLoco(frame->data, s));
 	else if (frame->can_dlc == 6)
-	    printf("Lok: %s, Geschwindigkeit: %3.1f\n", getLoco(frame->data, s), v);
+	    printf("Lok %s Geschwindigkeit: %3.1f\n", getLoco(frame->data, s), v);
 	break;
     /* Lok Richtung */
     case 0x0A:
     case 0x0B:
 	memset(s, 0, sizeof(s));
 
-	printf("Lok: %s ", getLoco(frame->data, s));
+	printf("Lok %s ", getLoco(frame->data, s));
 	if (frame->can_dlc == 4) {
 	    printf(" wird abgefragt\n");
 	} else if (frame->can_dlc == 5) {
@@ -1063,6 +1063,7 @@ int main(int argc, char **argv) {
 	FILE *fp;
 	char *line;
 	char slcan[MAXSIZE];
+	char datum[MAXSIZE];
 	size_t size = MAXSIZE;
 	char *pos_r, *pos_w;
 	struct can_frame aframe;
@@ -1082,6 +1083,8 @@ int main(int argc, char **argv) {
 	while (getline(&line, &size, fp) > 0) {
 	    //line[strcspn(line, "\r\n")] = 0;
 	    memset(slcan, 0, sizeof(slcan));
+	    memset(datum, 0, sizeof(datum));
+	    sscanf(line, "%s ", datum);
 	    pos_r = strstr(line, "ASCII read: ");
 	    if (pos_r)
 		sscanf(pos_r, "ASCII read: %s", slcan);
@@ -1091,7 +1094,7 @@ int main(int argc, char **argv) {
 	    if (pos_r || pos_w) {
 		memset(&aframe, 0, sizeof(aframe));
 		ascii_to_can(slcan, &aframe);
-		printf(RESET "%50s", slcan);
+		printf(RESET "%s %30s", datum, slcan);
 		print_can_frame(F_N_CAN_FORMAT_STRG, &aframe);
 		decode_frame(&aframe);
 	    }
