@@ -1,11 +1,13 @@
 const int revisionnr = 
-14382
+14384
 ;
 const char* commithash = 
-"308bad61b7a07127ce4dd3d1b630635d01decd46";
+"ac397d97ce71b322cf14c1ba4ef67492b3dc2128";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14384 2018-09-22 17:02:30 +0200 spl: LED port type support for 32 bits\n" \
+"14383 2018-09-22 15:01:16 +0200 cbus: changed internal communication from ASCII to binary\n" \
 "14382 2018-09-21 15:05:29 +0200 cbus: can extended ID support\n" \
 "14381 2018-09-21 11:51:54 +0200 cbus: can init CAN frame buffer\n" \
 "14380 2018-09-21 11:15:23 +0200 cbus,rocs: CAN flags added\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14337 2018-09-12 09:58:41 +0200 renderer: rotate tt track with a sub function\n" \
 "14336 2018-09-12 08:34:10 +0200 renderer: some fine tuning for calculating the tt bridge plus side\n" \
 "14335 2018-09-12 08:12:39 +0200 renderer: use cos(-1) as pi\n" \
-"14334 2018-09-12 07:53:53 +0200 renderer: fix for drawing the tt bridge plus side in case of graphicalcontext\n" \
-"14333 2018-09-11 21:07:07 +0200 virtual: return lenz standard decoder ID for CV7 and 8\n" \
 
 "log end";
