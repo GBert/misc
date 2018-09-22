@@ -101,7 +101,7 @@ FIN_WRITE_DATA
 ; 0x200004	Start counting at X-High for event - S88
 ; 0x200005	Start counting at X-Low for event - S88
 ; 0x200006	Scan Interval (in 512us steps)
-; 0x200007	free
+; 0x200007	S88 Bus length
 ;------------------------------------------------------------------------------
 
 SETLOCIDP
@@ -129,6 +129,8 @@ READ_UID
                 MOVFF   TABLAT,S88C_L
                 TBLRD*+
                 MOVFF   TABLAT,SCAN_INTERVAL
+                TBLRD*+
+                MOVFF   TABLAT,S88LENGTH
                 RETURN
 
 SET_UID
@@ -150,6 +152,8 @@ SET_UID
                 MOVFF   S88C_L,TABLAT
                 TBLWT*+
                 MOVFF   SCAN_INTERVAL,TABLAT
+                TBLWT*+
+                MOVFF	S88LENGTH,TABLAT
                 TBLWT*+
 
                 MOVLW   0

@@ -180,15 +180,14 @@ SETUP_VALUE_CONT1
                 MOVLW   0x02
                 XORWF   CANFRAME+10,W
                 BNZ     SETUP_VALUE_CONT2
-                MOVFF   CANFRAME+11,PIOC_H
-                MOVFF   CANFRAME+12,PIOC_L
+                MOVFF   CANFRAME+11,S88C_H
+                MOVFF   CANFRAME+12,S88C_L
                 BRA     SETUP_VALUE_WRITE
 SETUP_VALUE_CONT2
                 MOVLW   0x03
                 XORWF   CANFRAME+10,W
                 BNZ     SETUP_VALUE_CONT3
-                MOVFF   CANFRAME+11,S88C_H
-                MOVFF   CANFRAME+12,S88C_L
+                MOVFF   CANFRAME+12,S88LENGTH
                 BRA     SETUP_VALUE_WRITE
 SETUP_VALUE_CONT3
                 MOVLW   0x04
