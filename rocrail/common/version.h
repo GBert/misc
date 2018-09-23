@@ -1,11 +1,13 @@
 const int revisionnr = 
-14387
+14389
 ;
 const char* commithash = 
-"ddbbbfb036ecc409c58044ef66ce56098a313ebb";
+"8ad43e2300847445d11fc754e5b83044c4951171";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14389 2018-09-23 15:11:08 +0200 mgbox: serial fix (Bert)\n" \
+"14388 2018-09-23 13:59:34 +0200 cbus: qCmd out size increased; too small for a CAN frame\n" \
 "14387 2018-09-23 08:49:46 +0200 guiframe: show length,weight in the consist column in case > 0 and no train is assigned\n" \
 "14386 2018-09-23 08:09:13 +0200 spl: LED type support\n" \
 "14385 2018-09-23 07:37:15 +0200 spl: revert protocol extension\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14342 2018-09-13 10:04:25 +0200 rocweb: rotate tt gridcon point to match orientation\n" \
 "14341 2018-09-13 08:40:29 +0200 rocweb: render turntable gridcon\n" \
 "14340 2018-09-13 08:13:12 +0200 mttmfcc: purge only if all functions are off too\n" \
-"14339 2018-09-12 15:32:13 +0200 renderer: simplify rotating\n" \
-"14338 2018-09-12 15:10:04 +0200 renderer: simplification of roatating points\n" \
 
 "log end";
