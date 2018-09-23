@@ -1,11 +1,14 @@
 const int revisionnr = 
-14384
+14387
 ;
 const char* commithash = 
-"ac397d97ce71b322cf14c1ba4ef67492b3dc2128";
+"ddbbbfb036ecc409c58044ef66ce56098a313ebb";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14387 2018-09-23 08:49:46 +0200 guiframe: show length,weight in the consist column in case > 0 and no train is assigned\n" \
+"14386 2018-09-23 08:09:13 +0200 spl: LED type support\n" \
+"14385 2018-09-23 07:37:15 +0200 spl: revert protocol extension\n" \
 "14384 2018-09-22 17:02:30 +0200 spl: LED port type support for 32 bits\n" \
 "14383 2018-09-22 15:01:16 +0200 cbus: changed internal communication from ASCII to binary\n" \
 "14382 2018-09-21 15:05:29 +0200 cbus: can extended ID support\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "14340 2018-09-13 08:13:12 +0200 mttmfcc: purge only if all functions are off too\n" \
 "14339 2018-09-12 15:32:13 +0200 renderer: simplify rotating\n" \
 "14338 2018-09-12 15:10:04 +0200 renderer: simplification of roatating points\n" \
-"14337 2018-09-12 09:58:41 +0200 renderer: rotate tt track with a sub function\n" \
-"14336 2018-09-12 08:34:10 +0200 renderer: some fine tuning for calculating the tt bridge plus side\n" \
-"14335 2018-09-12 08:12:39 +0200 renderer: use cos(-1) as pi\n" \
 
 "log end";
