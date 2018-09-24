@@ -1,11 +1,17 @@
 const int revisionnr = 
-14389
+14395
 ;
 const char* commithash = 
-"8ad43e2300847445d11fc754e5b83044c4951171";
+"811d0a66fe7aa9d53b1f3083d0abaa7a86aad776";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14395 2018-09-24 17:10:09 +0200 cbus,utils: fix for extended ASCII id\n" \
+"14394 2018-09-24 17:06:32 +0200 cbus,utils: fix for parsing MERG CAN-ID\n" \
+"14393 2018-09-24 12:27:20 +0200 cbusnodedlg: help index fix\n" \
+"14392 2018-09-24 12:18:44 +0200 cbus: fix for initial loco command in case of session request\n" \
+"14391 2018-09-24 11:45:39 +0200 cbusnodedlg: removed the firmware tab\n" \
+"14390 2018-09-24 11:13:24 +0200 cbus: moved the ASCII layer down to the sub library level\n" \
 "14389 2018-09-23 15:11:08 +0200 mgbox: serial fix (Bert)\n" \
 "14388 2018-09-23 13:59:34 +0200 cbus: qCmd out size increased; too small for a CAN frame\n" \
 "14387 2018-09-23 08:49:46 +0200 guiframe: show length,weight in the consist column in case > 0 and no train is assigned\n" \
@@ -50,11 +56,5 @@ const char* revlog =
 "14348 2018-09-14 12:20:18 +0200 renamedlg: bus field added\n" \
 "14347 2018-09-13 13:56:15 +0200 rocweb: bridge sensor/plus symbol corrections\n" \
 "14346 2018-09-13 13:28:30 +0200 rocweb: tt sensor correction\n" \
-"14345 2018-09-13 11:56:43 +0200 rocweb: SLIM option added for rendering the TT to fit to the SLIM theme\n" \
-"14344 2018-09-13 11:05:08 +0200 translation merge: fr\n" \
-"14343 2018-09-13 10:13:23 +0200 renderer: function for rotationg only one point for orientation\n" \
-"14342 2018-09-13 10:04:25 +0200 rocweb: rotate tt gridcon point to match orientation\n" \
-"14341 2018-09-13 08:40:29 +0200 rocweb: render turntable gridcon\n" \
-"14340 2018-09-13 08:13:12 +0200 mttmfcc: purge only if all functions are off too\n" \
 
 "log end";
