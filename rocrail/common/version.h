@@ -1,11 +1,15 @@
 const int revisionnr = 
-14395
+14399
 ;
 const char* commithash = 
-"811d0a66fe7aa9d53b1f3083d0abaa7a86aad776";
+"dd53959eb1ef6f9c4cdf251853e77e75c60d1720";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14399 2018-09-25 20:14:43 +0200 model: use the signal list for llokup a fitting event instead of the map\n" \
+"14398 2018-09-25 08:23:10 +0200 cbus: trace corrections\n" \
+"14397 2018-09-25 07:56:21 +0200 cbusdlg: only enable command ack in case of tcp/ip (GC1e)\n" \
+"14396 2018-09-25 07:49:46 +0200 cbus: command ack only in case of the GC1e\n" \
 "14395 2018-09-24 17:10:09 +0200 cbus,utils: fix for extended ASCII id\n" \
 "14394 2018-09-24 17:06:32 +0200 cbus,utils: fix for parsing MERG CAN-ID\n" \
 "14393 2018-09-24 12:27:20 +0200 cbusnodedlg: help index fix\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "14352 2018-09-15 08:29:28 +0200 switch: occupancy sensors not exclusive but shared\n" \
 "14351 2018-09-14 18:17:31 +0200 routedialog: fix for init crossingblocksignals (Achim)\n" \
 "14350 2018-09-14 15:51:15 +0200 renamedlg: clear IIDs from the comboboxes in case of other selection then IID\n" \
-"14349 2018-09-14 14:52:46 +0200 massoth: trace loco command in case of getting a slot\n" \
-"14348 2018-09-14 12:20:18 +0200 renamedlg: bus field added\n" \
-"14347 2018-09-13 13:56:15 +0200 rocweb: bridge sensor/plus symbol corrections\n" \
-"14346 2018-09-13 13:28:30 +0200 rocweb: tt sensor correction\n" \
 
 "log end";
