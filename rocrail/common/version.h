@@ -1,11 +1,14 @@
 const int revisionnr = 
-14399
+14402
 ;
 const char* commithash = 
-"dd53959eb1ef6f9c4cdf251853e77e75c60d1720";
+"dfe6f7bb39614a90d226fd501446ac52c14a4583";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14402 2018-09-26 09:20:00 +0200 bidibidentdlg: removed firmware update tab\n" \
+"14401 2018-09-26 08:36:59 +0200 model: regard depart side in case of lookup schedule\n" \
+"14400 2018-09-26 07:41:08 +0200 guiframe: update loco length and weight also at update loco list\n" \
 "14399 2018-09-25 20:14:43 +0200 model: use the signal list for llokup a fitting event instead of the map\n" \
 "14398 2018-09-25 08:23:10 +0200 cbus: trace corrections\n" \
 "14397 2018-09-25 07:56:21 +0200 cbusdlg: only enable command ack in case of tcp/ip (GC1e)\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "14355 2018-09-16 09:40:38 +0200 loc: SBT correction in case of a V_hint\n" \
 "14354 2018-09-16 08:24:16 +0200 loc: SBT correction in case of a V_hint\n" \
 "14353 2018-09-15 12:23:36 +0200 loc: ignore SBT and BAT incase of go manual (half automatic)\n" \
-"14352 2018-09-15 08:29:28 +0200 switch: occupancy sensors not exclusive but shared\n" \
-"14351 2018-09-14 18:17:31 +0200 routedialog: fix for init crossingblocksignals (Achim)\n" \
-"14350 2018-09-14 15:51:15 +0200 renamedlg: clear IIDs from the comboboxes in case of other selection then IID\n" \
 
 "log end";
