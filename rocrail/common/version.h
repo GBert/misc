@@ -1,11 +1,17 @@
 const int revisionnr = 
-14402
+14408
 ;
 const char* commithash = 
-"dfe6f7bb39614a90d226fd501446ac52c14a4583";
+"72b86d1e2dcd2b1c6ef56ec5acd64b85cc02aa67";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14408 2018-09-27 10:18:01 +0200 loc: broadcast loco length and weight too\n" \
+"14407 2018-09-27 09:32:00 +0200 app: main returns 70 in case a shutdown command came from a client\n" \
+"14406 2018-09-27 08:05:08 +0200 switch: support undef field state event in case of error\n" \
+"14405 2018-09-27 07:30:51 +0200 virtual: show command in loco trace\n" \
+"14404 2018-09-27 07:29:05 +0200 modbus: trace correction\n" \
+"14403 2018-09-27 07:20:33 +0200 mgbox: ms2 enumeratie fix (Bert)\n" \
 "14402 2018-09-26 09:20:00 +0200 bidibidentdlg: removed firmware update tab\n" \
 "14401 2018-09-26 08:36:59 +0200 model: regard depart side in case of lookup schedule\n" \
 "14400 2018-09-26 07:41:08 +0200 guiframe: update loco length and weight also at update loco list\n" \
@@ -50,11 +56,5 @@ const char* revlog =
 "14361 2018-09-18 08:27:47 +0200 p50: sleep 50ms after CTS is active at protver 2\n" \
 "14360 2018-09-18 08:21:05 +0200 mttmfcc: purge all at shutdown\n" \
 "14359 2018-09-17 12:12:09 +0200 rocweb: update and base file preparation\n" \
-"14358 2018-09-17 08:33:14 +0200 loc: release loco from stage in case of a moveto D&D command\n" \
-"14357 2018-09-17 08:09:28 +0200 p50: protver 2 for sending a change direction without pefixing a V=0 command\n" \
-"14356 2018-09-16 10:55:31 +0200 stage: set loco current block in case of D&D\n" \
-"14355 2018-09-16 09:40:38 +0200 loc: SBT correction in case of a V_hint\n" \
-"14354 2018-09-16 08:24:16 +0200 loc: SBT correction in case of a V_hint\n" \
-"14353 2018-09-15 12:23:36 +0200 loc: ignore SBT and BAT incase of go manual (half automatic)\n" \
 
 "log end";
