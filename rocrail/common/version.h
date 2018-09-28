@@ -1,11 +1,13 @@
 const int revisionnr = 
-14408
+14410
 ;
 const char* commithash = 
-"72b86d1e2dcd2b1c6ef56ec5acd64b85cc02aa67";
+"40528933e2ea28d9a2748e6e8845ae0b48159165";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14410 2018-09-28 07:52:00 +0200 xmlscript: resolve all variables in the attributes\n" \
+"14409 2018-09-28 07:34:06 +0200 main: shutdown needs a rc\n" \
 "14408 2018-09-27 10:18:01 +0200 loc: broadcast loco length and weight too\n" \
 "14407 2018-09-27 09:32:00 +0200 app: main returns 70 in case a shutdown command came from a client\n" \
 "14406 2018-09-27 08:05:08 +0200 switch: support undef field state event in case of error\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14363 2018-09-19 07:32:45 +0200 crosscompile text update (copy from wiki)\n" \
 "14362 2018-09-18 10:37:44 +0200 location: get loco list from stage blocks at init\n" \
 "14361 2018-09-18 08:27:47 +0200 p50: sleep 50ms after CTS is active at protver 2\n" \
-"14360 2018-09-18 08:21:05 +0200 mttmfcc: purge all at shutdown\n" \
-"14359 2018-09-17 12:12:09 +0200 rocweb: update and base file preparation\n" \
 
 "log end";
