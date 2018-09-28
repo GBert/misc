@@ -1,11 +1,13 @@
 const int revisionnr = 
-14410
+14412
 ;
 const char* commithash = 
-"40528933e2ea28d9a2748e6e8845ae0b48159165";
+"044659494d977b21c20dda8e6a0dba7cf94ea707";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14412 2018-09-28 14:29:07 +0200 bidib: fix for accessory error flag\n" \
+"14411 2018-09-28 11:33:30 +0200 makewin64: use 2 make jobs instead of only one\n" \
 "14410 2018-09-28 07:52:00 +0200 xmlscript: resolve all variables in the attributes\n" \
 "14409 2018-09-28 07:34:06 +0200 main: shutdown needs a rc\n" \
 "14408 2018-09-27 10:18:01 +0200 loc: broadcast loco length and weight too\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14365 2018-09-19 08:33:45 +0200 ucan: includes added\n" \
 "14364 2018-09-19 08:29:19 +0200 rocs: can added\n" \
 "14363 2018-09-19 07:32:45 +0200 crosscompile text update (copy from wiki)\n" \
-"14362 2018-09-18 10:37:44 +0200 location: get loco list from stage blocks at init\n" \
-"14361 2018-09-18 08:27:47 +0200 p50: sleep 50ms after CTS is active at protver 2\n" \
 
 "log end";
