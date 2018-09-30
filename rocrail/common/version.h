@@ -1,11 +1,16 @@
 const int revisionnr = 
-14413
+14418
 ;
 const char* commithash = 
-"a194b5bae2ba6136f18a2209768af89fb45eabb8";
+"b4b6936a925b2c7f9d7288ecca7fe68b2cb181aa";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14418 2018-09-30 17:21:02 +0200 cbus: use node number for checking the decoders\n" \
+"14417 2018-09-30 17:04:48 +0200 cbusdlg: decoder check\n" \
+"14416 2018-09-30 16:53:08 +0200 cbus: optional decoder check\n" \
+"14415 2018-09-30 15:41:07 +0200 bidib: switch trace fix\n" \
+"14414 2018-09-30 10:49:58 +0200 rocrailinidialog: fixed missing IID\n" \
 "14413 2018-09-29 19:18:22 +0200 rocrailinidialog: command mapping bus unsigned\n" \
 "14412 2018-09-28 14:29:07 +0200 bidib: fix for accessory error flag\n" \
 "14411 2018-09-28 11:33:30 +0200 makewin64: use 2 make jobs instead of only one\n" \
@@ -51,10 +56,5 @@ const char* revlog =
 "14371 2018-09-19 12:04:05 +0200 cbus: can wip\n" \
 "14370 2018-09-19 11:56:33 +0200 cbus: can wip\n" \
 "14369 2018-09-19 11:18:52 +0200 cbus: socketCAN wip\n" \
-"14368 2018-09-19 10:40:25 +0200 ucan: WIP\n" \
-"14367 2018-09-19 10:12:24 +0200 cbus: socketcan support (WIP)\n" \
-"14366 2018-09-19 08:36:05 +0200 ucan: include added\n" \
-"14365 2018-09-19 08:33:45 +0200 ucan: includes added\n" \
-"14364 2018-09-19 08:29:19 +0200 rocs: can added\n" \
 
 "log end";
