@@ -1,11 +1,12 @@
 const int revisionnr = 
-14412
+14413
 ;
 const char* commithash = 
-"044659494d977b21c20dda8e6a0dba7cf94ea707";
+"a194b5bae2ba6136f18a2209768af89fb45eabb8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14413 2018-09-29 19:18:22 +0200 rocrailinidialog: command mapping bus unsigned\n" \
 "14412 2018-09-28 14:29:07 +0200 bidib: fix for accessory error flag\n" \
 "14411 2018-09-28 11:33:30 +0200 makewin64: use 2 make jobs instead of only one\n" \
 "14410 2018-09-28 07:52:00 +0200 xmlscript: resolve all variables in the attributes\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14366 2018-09-19 08:36:05 +0200 ucan: include added\n" \
 "14365 2018-09-19 08:33:45 +0200 ucan: includes added\n" \
 "14364 2018-09-19 08:29:19 +0200 rocs: can added\n" \
-"14363 2018-09-19 07:32:45 +0200 crosscompile text update (copy from wiki)\n" \
 
 "log end";
