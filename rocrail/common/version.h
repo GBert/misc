@@ -1,11 +1,20 @@
 const int revisionnr = 
-14418
+14427
 ;
 const char* commithash = 
-"b4b6936a925b2c7f9d7288ecca7fe68b2cb181aa";
+"837083f71f8258522f7f5d74658f4e99eaad7479";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14427 2018-10-01 19:26:25 +0200 rocrailinidialog: preselect virtual controller\n" \
+"14426 2018-10-01 16:47:23 +0200 accdecdlg: enable programming in case of cbus protocol\n" \
+"14425 2018-10-01 13:22:26 +0200 model: broadcast decoder state to the clients\n" \
+"14424 2018-10-01 12:39:01 +0200 model: fix for decoder on/offline flag\n" \
+"14423 2018-10-01 11:40:51 +0200 cbus: specify an emergency message with missing node numbers\n" \
+"14422 2018-10-01 11:26:58 +0200 guiframe: show popup in case of an emergency\n" \
+"14421 2018-10-01 11:14:38 +0200 cbus: report emergency state in case not all decoders are online\n" \
+"14420 2018-10-01 08:28:35 +0200 model: rip occ.xml path in case its not found\n" \
+"14419 2018-10-01 08:08:23 +0200 rocrail app: virtual command line option added\n" \
 "14418 2018-09-30 17:21:02 +0200 cbus: use node number for checking the decoders\n" \
 "14417 2018-09-30 17:04:48 +0200 cbusdlg: decoder check\n" \
 "14416 2018-09-30 16:53:08 +0200 cbus: optional decoder check\n" \
@@ -47,14 +56,5 @@ const char* revlog =
 "14380 2018-09-21 11:15:23 +0200 cbus,rocs: CAN flags added\n" \
 "14379 2018-09-20 10:46:03 +0200 cbus: can fix for available\n" \
 "14378 2018-09-20 10:40:34 +0200 cbus: can wip\n" \
-"14377 2018-09-20 10:18:10 +0200 cbus: can revert\n" \
-"14376 2018-09-20 10:02:48 +0200 cbus: can use binary frame as CANGCA1\n" \
-"14375 2018-09-20 09:03:02 +0200 cbus: can trace level correction\n" \
-"14374 2018-09-19 13:07:12 +0200 cbus: can wip\n" \
-"14373 2018-09-19 12:30:00 +0200 cbus: can wip\n" \
-"14372 2018-09-19 12:11:10 +0200 cbus: can wip\n" \
-"14371 2018-09-19 12:04:05 +0200 cbus: can wip\n" \
-"14370 2018-09-19 11:56:33 +0200 cbus: can wip\n" \
-"14369 2018-09-19 11:18:52 +0200 cbus: socketCAN wip\n" \
 
 "log end";
