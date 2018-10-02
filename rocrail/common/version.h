@@ -1,11 +1,12 @@
 const int revisionnr = 
-14427
+14428
 ;
 const char* commithash = 
-"837083f71f8258522f7f5d74658f4e99eaad7479";
+"75a1722a6c36209b4698696c9b06917b496459ec";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14428 2018-10-02 10:42:31 +0200 guiframe,item: use own translation for locomotive (soft) reset\n" \
 "14427 2018-10-01 19:26:25 +0200 rocrailinidialog: preselect virtual controller\n" \
 "14426 2018-10-01 16:47:23 +0200 accdecdlg: enable programming in case of cbus protocol\n" \
 "14425 2018-10-01 13:22:26 +0200 model: broadcast decoder state to the clients\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14381 2018-09-21 11:51:54 +0200 cbus: can init CAN frame buffer\n" \
 "14380 2018-09-21 11:15:23 +0200 cbus,rocs: CAN flags added\n" \
 "14379 2018-09-20 10:46:03 +0200 cbus: can fix for available\n" \
-"14378 2018-09-20 10:40:34 +0200 cbus: can wip\n" \
 
 "log end";
