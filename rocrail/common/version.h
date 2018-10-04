@@ -1,11 +1,18 @@
 const int revisionnr = 
-14428
+14435
 ;
 const char* commithash = 
-"75a1722a6c36209b4698696c9b06917b496459ec";
+"9ed923344e794707f643ee1328a7e07e634ba153";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14435 2018-10-04 13:08:28 +0200 cbus: revert -> CBUS only uses 7bit CAN-ID, 4 high bits for prio\n" \
+"14434 2018-10-04 11:33:42 +0200 cbus: fix for CANID -> 8 bit instead of 7\n" \
+"14433 2018-10-03 15:56:31 +0200 throttle: fix for macOS Mojave (wrong constructor for graphic context)\n" \
+"14432 2018-10-03 14:37:41 +0200 guiframe: popup a confirmation in case of global soft reset\n" \
+"14431 2018-10-03 12:22:33 +0200 translation corrections for reset auto mode\n" \
+"14430 2018-10-03 10:38:53 +0200 loc: fix for setting loco in block after a reset all\n" \
+"14429 2018-10-02 21:13:28 +0200 messages: replaced automat with auto mode\n" \
 "14428 2018-10-02 10:42:31 +0200 guiframe,item: use own translation for locomotive (soft) reset\n" \
 "14427 2018-10-01 19:26:25 +0200 rocrailinidialog: preselect virtual controller\n" \
 "14426 2018-10-01 16:47:23 +0200 accdecdlg: enable programming in case of cbus protocol\n" \
@@ -49,12 +56,5 @@ const char* revlog =
 "14388 2018-09-23 13:59:34 +0200 cbus: qCmd out size increased; too small for a CAN frame\n" \
 "14387 2018-09-23 08:49:46 +0200 guiframe: show length,weight in the consist column in case > 0 and no train is assigned\n" \
 "14386 2018-09-23 08:09:13 +0200 spl: LED type support\n" \
-"14385 2018-09-23 07:37:15 +0200 spl: revert protocol extension\n" \
-"14384 2018-09-22 17:02:30 +0200 spl: LED port type support for 32 bits\n" \
-"14383 2018-09-22 15:01:16 +0200 cbus: changed internal communication from ASCII to binary\n" \
-"14382 2018-09-21 15:05:29 +0200 cbus: can extended ID support\n" \
-"14381 2018-09-21 11:51:54 +0200 cbus: can init CAN frame buffer\n" \
-"14380 2018-09-21 11:15:23 +0200 cbus,rocs: CAN flags added\n" \
-"14379 2018-09-20 10:46:03 +0200 cbus: can fix for available\n" \
 
 "log end";
