@@ -1,11 +1,21 @@
 const int revisionnr = 
-14435
+14445
 ;
 const char* commithash = 
-"9ed923344e794707f643ee1328a7e07e634ba153";
+"952d9380bff81cf56298c8ef9f3e9ebc0ae5c07b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14445 2018-10-06 15:16:37 +0200 cbus: fix for extended ASCII frames\n" \
+"14444 2018-10-06 13:15:25 +0200 cbusnodedlg: firmware tab restored\n" \
+"14443 2018-10-06 12:31:15 +0200 rascii: reset in buffer before reading\n" \
+"14442 2018-10-06 08:22:57 +0200 changed netid from int to string\n" \
+"14441 2018-10-05 16:01:15 +0200 translation merge: sr_latin, fr, sl, de, pt_BR nl, en_GB\n" \
+"14440 2018-10-05 14:48:52 +0200 cbus: set CBUS protocol on generate\n" \
+"14439 2018-10-05 14:46:26 +0200 model: publish found decoders to all clients, and remove generated at shutdown\n" \
+"14438 2018-10-05 11:18:08 +0200 cbus: watch automatically the CAN modules\n" \
+"14437 2018-10-05 10:33:04 +0200 output: svg type accessory option added\n" \
+"14436 2018-10-05 08:49:45 +0200 cbus: invalidate session in case the CS goes offline\n" \
 "14435 2018-10-04 13:08:28 +0200 cbus: revert -> CBUS only uses 7bit CAN-ID, 4 high bits for prio\n" \
 "14434 2018-10-04 11:33:42 +0200 cbus: fix for CANID -> 8 bit instead of 7\n" \
 "14433 2018-10-03 15:56:31 +0200 throttle: fix for macOS Mojave (wrong constructor for graphic context)\n" \
@@ -46,15 +56,5 @@ const char* revlog =
 "14398 2018-09-25 08:23:10 +0200 cbus: trace corrections\n" \
 "14397 2018-09-25 07:56:21 +0200 cbusdlg: only enable command ack in case of tcp/ip (GC1e)\n" \
 "14396 2018-09-25 07:49:46 +0200 cbus: command ack only in case of the GC1e\n" \
-"14395 2018-09-24 17:10:09 +0200 cbus,utils: fix for extended ASCII id\n" \
-"14394 2018-09-24 17:06:32 +0200 cbus,utils: fix for parsing MERG CAN-ID\n" \
-"14393 2018-09-24 12:27:20 +0200 cbusnodedlg: help index fix\n" \
-"14392 2018-09-24 12:18:44 +0200 cbus: fix for initial loco command in case of session request\n" \
-"14391 2018-09-24 11:45:39 +0200 cbusnodedlg: removed the firmware tab\n" \
-"14390 2018-09-24 11:13:24 +0200 cbus: moved the ASCII layer down to the sub library level\n" \
-"14389 2018-09-23 15:11:08 +0200 mgbox: serial fix (Bert)\n" \
-"14388 2018-09-23 13:59:34 +0200 cbus: qCmd out size increased; too small for a CAN frame\n" \
-"14387 2018-09-23 08:49:46 +0200 guiframe: show length,weight in the consist column in case > 0 and no train is assigned\n" \
-"14386 2018-09-23 08:09:13 +0200 spl: LED type support\n" \
 
 "log end";
