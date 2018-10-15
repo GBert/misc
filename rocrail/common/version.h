@@ -1,11 +1,35 @@
 const int revisionnr = 
-14445
+14469
 ;
 const char* commithash = 
-"952d9380bff81cf56298c8ef9f3e9ebc0ae5c07b";
+"3a339f8e3beeee21b51760296aab725ddfd4f593";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14469 2018-10-15 07:39:56 +0200 cbus: simplified reading the dlc of an ASCII frame\n" \
+"14468 2018-10-14 15:37:04 +0200 cbus: syncid added\n" \
+"14467 2018-10-14 11:45:06 +0200 cbus: determine the dlc by detecting the ';'\n" \
+"14466 2018-10-14 08:45:09 +0200 cbus: linefeed option added for the GC2a\n" \
+"14465 2018-10-13 11:37:14 +0200 mgbox: crash fix\n" \
+"14464 2018-10-13 08:56:13 +0200 popup cbusnodedlg after getting a opc_pnn\n" \
+"14463 2018-10-13 07:58:52 +0200 cbus: canid range 1...255\n" \
+"14462 2018-10-12 15:39:07 +0200 cbus: module type gc2a added\n" \
+"14461 2018-10-12 15:20:35 +0200 cbus: hw version correction\n" \
+"14460 2018-10-12 15:12:32 +0200 ucan: trace correction\n" \
+"14459 2018-10-12 12:58:56 +0200 xmlscript: string not equal comparator - added\n" \
+"14458 2018-10-12 11:18:29 +0200 cbusnodedlg: enable options for flat nodes\n" \
+"14457 2018-10-12 11:16:58 +0200 routedialog: keep selected command after up/down\n" \
+"14456 2018-10-12 07:55:38 +0200 cbus: removed bootloader support\n" \
+"14455 2018-10-11 11:42:44 +0200 cbus tcp: fix for keep alive message\n" \
+"14454 2018-10-10 17:20:12 +0200 xmlscript: fix for feedback state\n" \
+"14453 2018-10-10 14:33:51 +0200 cbus: use long event OPCs in case the bus is set > 0\n" \
+"14452 2018-10-10 10:18:49 +0200 cbusnodedlg: disable evtnr/evtaddr column in case of flat model\n" \
+"14451 2018-10-10 08:41:09 +0200 cbus: regard the long OPCs\n" \
+"14450 2018-10-10 07:42:25 +0200 cbus: alternative SoD nodenumber 0x8000\n" \
+"14449 2018-10-09 13:17:12 +0200 xmlscript: fix for resolving the sensor command variables at start\n" \
+"14448 2018-10-09 10:18:18 +0200 xmlscript: add output properties\n" \
+"14447 2018-10-07 10:34:43 +0200 stage: ignore sensor events from already occupied sections\n" \
+"14446 2018-10-07 09:50:48 +0200 lcdriver: reset pending location in case of loco reset\n" \
 "14445 2018-10-06 15:16:37 +0200 cbus: fix for extended ASCII frames\n" \
 "14444 2018-10-06 13:15:25 +0200 cbusnodedlg: firmware tab restored\n" \
 "14443 2018-10-06 12:31:15 +0200 rascii: reset in buffer before reading\n" \
@@ -32,29 +56,5 @@ const char* revlog =
 "14422 2018-10-01 11:26:58 +0200 guiframe: show popup in case of an emergency\n" \
 "14421 2018-10-01 11:14:38 +0200 cbus: report emergency state in case not all decoders are online\n" \
 "14420 2018-10-01 08:28:35 +0200 model: rip occ.xml path in case its not found\n" \
-"14419 2018-10-01 08:08:23 +0200 rocrail app: virtual command line option added\n" \
-"14418 2018-09-30 17:21:02 +0200 cbus: use node number for checking the decoders\n" \
-"14417 2018-09-30 17:04:48 +0200 cbusdlg: decoder check\n" \
-"14416 2018-09-30 16:53:08 +0200 cbus: optional decoder check\n" \
-"14415 2018-09-30 15:41:07 +0200 bidib: switch trace fix\n" \
-"14414 2018-09-30 10:49:58 +0200 rocrailinidialog: fixed missing IID\n" \
-"14413 2018-09-29 19:18:22 +0200 rocrailinidialog: command mapping bus unsigned\n" \
-"14412 2018-09-28 14:29:07 +0200 bidib: fix for accessory error flag\n" \
-"14411 2018-09-28 11:33:30 +0200 makewin64: use 2 make jobs instead of only one\n" \
-"14410 2018-09-28 07:52:00 +0200 xmlscript: resolve all variables in the attributes\n" \
-"14409 2018-09-28 07:34:06 +0200 main: shutdown needs a rc\n" \
-"14408 2018-09-27 10:18:01 +0200 loc: broadcast loco length and weight too\n" \
-"14407 2018-09-27 09:32:00 +0200 app: main returns 70 in case a shutdown command came from a client\n" \
-"14406 2018-09-27 08:05:08 +0200 switch: support undef field state event in case of error\n" \
-"14405 2018-09-27 07:30:51 +0200 virtual: show command in loco trace\n" \
-"14404 2018-09-27 07:29:05 +0200 modbus: trace correction\n" \
-"14403 2018-09-27 07:20:33 +0200 mgbox: ms2 enumeratie fix (Bert)\n" \
-"14402 2018-09-26 09:20:00 +0200 bidibidentdlg: removed firmware update tab\n" \
-"14401 2018-09-26 08:36:59 +0200 model: regard depart side in case of lookup schedule\n" \
-"14400 2018-09-26 07:41:08 +0200 guiframe: update loco length and weight also at update loco list\n" \
-"14399 2018-09-25 20:14:43 +0200 model: use the signal list for llokup a fitting event instead of the map\n" \
-"14398 2018-09-25 08:23:10 +0200 cbus: trace corrections\n" \
-"14397 2018-09-25 07:56:21 +0200 cbusdlg: only enable command ack in case of tcp/ip (GC1e)\n" \
-"14396 2018-09-25 07:49:46 +0200 cbus: command ack only in case of the GC1e\n" \
 
 "log end";
