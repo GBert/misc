@@ -1,11 +1,12 @@
 const int revisionnr = 
-14471
+14472
 ;
 const char* commithash = 
-"dd9f24ef27f0d521ce1b03767046522c6298e658";
+"1874c6002ffd138d5b9b48c5f4a7e6be4a2e4e3e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14472 2018-10-15 16:17:05 +0200 guiframe: fix for save as\n" \
 "14471 2018-10-15 09:58:32 +0200 loc: fix for BBT blockenterside in case of terminal station\n" \
 "14470 2018-10-15 08:36:26 +0200 cbusnodedlg: fix for setall index and gc2 sync option\n" \
 "14469 2018-10-15 07:39:56 +0200 cbus: simplified reading the dlc of an ASCII frame\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14425 2018-10-01 13:22:26 +0200 model: broadcast decoder state to the clients\n" \
 "14424 2018-10-01 12:39:01 +0200 model: fix for decoder on/offline flag\n" \
 "14423 2018-10-01 11:40:51 +0200 cbus: specify an emergency message with missing node numbers\n" \
-"14422 2018-10-01 11:26:58 +0200 guiframe: show popup in case of an emergency\n" \
 
 "log end";
