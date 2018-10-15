@@ -1,11 +1,12 @@
 const int revisionnr = 
-14469
+14470
 ;
 const char* commithash = 
-"3a339f8e3beeee21b51760296aab725ddfd4f593";
+"b114bedc09723cab3bb6b2e0ceac6e7680cc7aa3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14470 2018-10-15 08:36:26 +0200 cbusnodedlg: fix for setall index and gc2 sync option\n" \
 "14469 2018-10-15 07:39:56 +0200 cbus: simplified reading the dlc of an ASCII frame\n" \
 "14468 2018-10-14 15:37:04 +0200 cbus: syncid added\n" \
 "14467 2018-10-14 11:45:06 +0200 cbus: determine the dlc by detecting the ';'\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14423 2018-10-01 11:40:51 +0200 cbus: specify an emergency message with missing node numbers\n" \
 "14422 2018-10-01 11:26:58 +0200 guiframe: show popup in case of an emergency\n" \
 "14421 2018-10-01 11:14:38 +0200 cbus: report emergency state in case not all decoders are online\n" \
-"14420 2018-10-01 08:28:35 +0200 model: rip occ.xml path in case its not found\n" \
 
 "log end";
