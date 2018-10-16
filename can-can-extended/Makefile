@@ -1,32 +1,10 @@
-#------------------------------------------------------------------------------
-#
-# Can-Can Makefile
-#
-# Copyright (c) 2014 Darron M Broad
-#
-#------------------------------------------------------------------------------
-#
-# This file is part of the Can-Can CAN bus interface project.
-#
-# Can-Can is licensed under the CC BY-NC-SA 4.0.
-#
-# See file /LICENSE for details.
-# 
-#------------------------------------------------------------------------------
+CFLAGS ?= -g -O2 -Wall -Wextra -D_FORTIFY_SOURCE=2 -fstack-protector --param ssp-buffer-size=4
 
-build:
-	cd firmware && $(MAKE) build
-#	cd test && $(MAKE) build
+all: read-dev-usbmon
 
-install:build
-	cd firmware && $(MAKE) install
-#	cd test && $(MAKE) install
+read-dev-usbmon: read-dev-usbmon.c
 
+.PHONY: all clean install-home install install-udevrule uninstall
 clean:
-	cd firmware && $(MAKE) clean
-	cd test && $(MAKE) clean
-#	rm -f *~ etc/*~ include/*~
+	rm -f read-dev-usbmon
 
-uninstall:clean
-	cd firmware && $(MAKE) uninstall
-#	cd test && $(MAKE) uninstall
