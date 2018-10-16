@@ -1,11 +1,14 @@
 const int revisionnr = 
-14472
+14475
 ;
 const char* commithash = 
-"1874c6002ffd138d5b9b48c5f4a7e6be4a2e4e3e";
+"2e87e522feecb6b91040344ac24f4ff90a7cecfd";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14475 2018-10-16 10:57:12 +0200 carpanel: regard the car show flag at init\n" \
+"14474 2018-10-16 10:48:54 +0200 trainimage: fix for init\n" \
+"14473 2018-10-16 10:30:00 +0200 trainimage: option swap loco added\n" \
 "14472 2018-10-15 16:17:05 +0200 guiframe: fix for save as\n" \
 "14471 2018-10-15 09:58:32 +0200 loc: fix for BBT blockenterside in case of terminal station\n" \
 "14470 2018-10-15 08:36:26 +0200 cbusnodedlg: fix for setall index and gc2 sync option\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "14428 2018-10-02 10:42:31 +0200 guiframe,item: use own translation for locomotive (soft) reset\n" \
 "14427 2018-10-01 19:26:25 +0200 rocrailinidialog: preselect virtual controller\n" \
 "14426 2018-10-01 16:47:23 +0200 accdecdlg: enable programming in case of cbus protocol\n" \
-"14425 2018-10-01 13:22:26 +0200 model: broadcast decoder state to the clients\n" \
-"14424 2018-10-01 12:39:01 +0200 model: fix for decoder on/offline flag\n" \
-"14423 2018-10-01 11:40:51 +0200 cbus: specify an emergency message with missing node numbers\n" \
 
 "log end";
