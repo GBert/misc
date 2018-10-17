@@ -1,11 +1,12 @@
 const int revisionnr = 
-14475
+14476
 ;
 const char* commithash = 
-"2e87e522feecb6b91040344ac24f4ff90a7cecfd";
+"20d48fb0ce508a9e157ed58b0e00e00d414e70e9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14476 2018-10-17 07:47:33 +0200 check if mdi and dialog position is not negative\n" \
 "14475 2018-10-16 10:57:12 +0200 carpanel: regard the car show flag at init\n" \
 "14474 2018-10-16 10:48:54 +0200 trainimage: fix for init\n" \
 "14473 2018-10-16 10:30:00 +0200 trainimage: option swap loco added\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14429 2018-10-02 21:13:28 +0200 messages: replaced automat with auto mode\n" \
 "14428 2018-10-02 10:42:31 +0200 guiframe,item: use own translation for locomotive (soft) reset\n" \
 "14427 2018-10-01 19:26:25 +0200 rocrailinidialog: preselect virtual controller\n" \
-"14426 2018-10-01 16:47:23 +0200 accdecdlg: enable programming in case of cbus protocol\n" \
 
 "log end";
