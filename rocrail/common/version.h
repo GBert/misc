@@ -1,11 +1,15 @@
 const int revisionnr = 
-14476
+14480
 ;
 const char* commithash = 
-"20d48fb0ce508a9e157ed58b0e00e00d414e70e9";
+"d7bbdbd80fa6f2998528ef2e03adcff68ed06a62";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14480 2018-10-17 14:57:36 +0200 messages: keep 'swap loco image', no better translation\n" \
+"14479 2018-10-17 14:56:50 +0200 var: fix for negative values\n" \
+"14478 2018-10-17 11:44:15 +0200 car/trainpanel: reset train image on init\n" \
+"14477 2018-10-17 10:34:45 +0200 rn-cbus: translate rn to cbus and visa versa (wip)\n" \
 "14476 2018-10-17 07:47:33 +0200 check if mdi and dialog position is not negative\n" \
 "14475 2018-10-16 10:57:12 +0200 carpanel: regard the car show flag at init\n" \
 "14474 2018-10-16 10:48:54 +0200 trainimage: fix for init\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "14433 2018-10-03 15:56:31 +0200 throttle: fix for macOS Mojave (wrong constructor for graphic context)\n" \
 "14432 2018-10-03 14:37:41 +0200 guiframe: popup a confirmation in case of global soft reset\n" \
 "14431 2018-10-03 12:22:33 +0200 translation corrections for reset auto mode\n" \
-"14430 2018-10-03 10:38:53 +0200 loc: fix for setting loco in block after a reset all\n" \
-"14429 2018-10-02 21:13:28 +0200 messages: replaced automat with auto mode\n" \
-"14428 2018-10-02 10:42:31 +0200 guiframe,item: use own translation for locomotive (soft) reset\n" \
-"14427 2018-10-01 19:26:25 +0200 rocrailinidialog: preselect virtual controller\n" \
 
 "log end";
