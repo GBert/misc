@@ -1,11 +1,14 @@
 const int revisionnr = 
-14480
+14483
 ;
 const char* commithash = 
-"d7bbdbd80fa6f2998528ef2e03adcff68ed06a62";
+"c3e7e83568468a231ee14f6c3eb7b46ae1600583";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14483 2018-10-18 10:41:24 +0200 fback: fix for initial inverted state\n" \
+"14482 2018-10-18 10:17:35 +0200 loc: activate manual mode also if the loco runs\n" \
+"14481 2018-10-18 08:31:31 +0200 loc: fix for BBT key in case of terminal station\n" \
 "14480 2018-10-17 14:57:36 +0200 messages: keep 'swap loco image', no better translation\n" \
 "14479 2018-10-17 14:56:50 +0200 var: fix for negative values\n" \
 "14478 2018-10-17 11:44:15 +0200 car/trainpanel: reset train image on init\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "14436 2018-10-05 08:49:45 +0200 cbus: invalidate session in case the CS goes offline\n" \
 "14435 2018-10-04 13:08:28 +0200 cbus: revert -> CBUS only uses 7bit CAN-ID, 4 high bits for prio\n" \
 "14434 2018-10-04 11:33:42 +0200 cbus: fix for CANID -> 8 bit instead of 7\n" \
-"14433 2018-10-03 15:56:31 +0200 throttle: fix for macOS Mojave (wrong constructor for graphic context)\n" \
-"14432 2018-10-03 14:37:41 +0200 guiframe: popup a confirmation in case of global soft reset\n" \
-"14431 2018-10-03 12:22:33 +0200 translation corrections for reset auto mode\n" \
 
 "log end";
