@@ -1,11 +1,15 @@
 const int revisionnr = 
-14483
+14487
 ;
 const char* commithash = 
-"c3e7e83568468a231ee14f6c3eb7b46ae1600583";
+"30050b6b59a142f9453747cab307a817858f938d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14487 2018-10-18 15:17:58 +0200 xmlscript: light support added\n" \
+"14486 2018-10-18 15:03:29 +0200 lightctrl action support added\n" \
+"14485 2018-10-18 13:10:31 +0200 umsetzen -> run around\n" \
+"14484 2018-10-18 13:08:08 +0200 translation for 'Umsetzen'\n" \
 "14483 2018-10-18 10:41:24 +0200 fback: fix for initial inverted state\n" \
 "14482 2018-10-18 10:17:35 +0200 loc: activate manual mode also if the loco runs\n" \
 "14481 2018-10-18 08:31:31 +0200 loc: fix for BBT key in case of terminal station\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "14440 2018-10-05 14:48:52 +0200 cbus: set CBUS protocol on generate\n" \
 "14439 2018-10-05 14:46:26 +0200 model: publish found decoders to all clients, and remove generated at shutdown\n" \
 "14438 2018-10-05 11:18:08 +0200 cbus: watch automatically the CAN modules\n" \
-"14437 2018-10-05 10:33:04 +0200 output: svg type accessory option added\n" \
-"14436 2018-10-05 08:49:45 +0200 cbus: invalidate session in case the CS goes offline\n" \
-"14435 2018-10-04 13:08:28 +0200 cbus: revert -> CBUS only uses 7bit CAN-ID, 4 high bits for prio\n" \
-"14434 2018-10-04 11:33:42 +0200 cbus: fix for CANID -> 8 bit instead of 7\n" \
 
 "log end";
