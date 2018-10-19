@@ -1,11 +1,17 @@
 const int revisionnr = 
-14487
+14493
 ;
 const char* commithash = 
-"30050b6b59a142f9453747cab307a817858f938d";
+"0c2956a80d69829987e333ddf4631cc2013d0eae";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14493 2018-10-19 14:43:04 +0200 demo images modified by Rainer\n" \
+"14492 2018-10-19 11:53:14 +0200 wiki plan update\n" \
+"14491 2018-10-19 11:43:43 +0200 check window/dialog position only in case of one monitor\n" \
+"14490 2018-10-19 11:00:56 +0200 mdimanager: check if the tab xy position is on the current monitor size\n" \
+"14489 2018-10-19 10:35:07 +0200 trainimage: invert invert\n" \
+"14488 2018-10-19 09:03:16 +0200 translation merge: de, nl, sl, sr_latin\n" \
 "14487 2018-10-18 15:17:58 +0200 xmlscript: light support added\n" \
 "14486 2018-10-18 15:03:29 +0200 lightctrl action support added\n" \
 "14485 2018-10-18 13:10:31 +0200 umsetzen -> run around\n" \
@@ -50,11 +56,5 @@ const char* revlog =
 "14446 2018-10-07 09:50:48 +0200 lcdriver: reset pending location in case of loco reset\n" \
 "14445 2018-10-06 15:16:37 +0200 cbus: fix for extended ASCII frames\n" \
 "14444 2018-10-06 13:15:25 +0200 cbusnodedlg: firmware tab restored\n" \
-"14443 2018-10-06 12:31:15 +0200 rascii: reset in buffer before reading\n" \
-"14442 2018-10-06 08:22:57 +0200 changed netid from int to string\n" \
-"14441 2018-10-05 16:01:15 +0200 translation merge: sr_latin, fr, sl, de, pt_BR nl, en_GB\n" \
-"14440 2018-10-05 14:48:52 +0200 cbus: set CBUS protocol on generate\n" \
-"14439 2018-10-05 14:46:26 +0200 model: publish found decoders to all clients, and remove generated at shutdown\n" \
-"14438 2018-10-05 11:18:08 +0200 cbus: watch automatically the CAN modules\n" \
 
 "log end";
