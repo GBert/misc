@@ -1,11 +1,13 @@
 const int revisionnr = 
-14493
+14495
 ;
 const char* commithash = 
-"0c2956a80d69829987e333ddf4631cc2013d0eae";
+"41b74cd927e787283525d4124422d553570ae8fe";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14495 2018-10-20 16:44:12 +0200 mbus library added for testing\n" \
+"14494 2018-10-20 07:32:11 +0200 locdialog: fix for testing the consist locos\n" \
 "14493 2018-10-19 14:43:04 +0200 demo images modified by Rainer\n" \
 "14492 2018-10-19 11:53:14 +0200 wiki plan update\n" \
 "14491 2018-10-19 11:43:43 +0200 check window/dialog position only in case of one monitor\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14448 2018-10-09 10:18:18 +0200 xmlscript: add output properties\n" \
 "14447 2018-10-07 10:34:43 +0200 stage: ignore sensor events from already occupied sections\n" \
 "14446 2018-10-07 09:50:48 +0200 lcdriver: reset pending location in case of loco reset\n" \
-"14445 2018-10-06 15:16:37 +0200 cbus: fix for extended ASCII frames\n" \
-"14444 2018-10-06 13:15:25 +0200 cbusnodedlg: firmware tab restored\n" \
 
 "log end";
