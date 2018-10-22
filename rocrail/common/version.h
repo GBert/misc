@@ -1,11 +1,21 @@
 const int revisionnr = 
-14495
+14505
 ;
 const char* commithash = 
-"41b74cd927e787283525d4124422d553570ae8fe";
+"24d37d3e21323c929f47d2465d889aadfaff78bc";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14505 2018-10-22 15:54:44 +0200 mcs2,mgbox: fix for reading serial ASCII\n" \
+"14504 2018-10-22 13:03:33 +0200 var: check by text values for ## to skip\n" \
+"14503 2018-10-22 11:05:31 +0200 mbus: accessory event support\n" \
+"14502 2018-10-22 10:42:13 +0200 mbus: discovery response\n" \
+"14501 2018-10-22 09:33:54 +0200 mbus: wip\n" \
+"14500 2018-10-22 07:22:22 +0200 var: fix for negative numbers\n" \
+"14499 2018-10-21 19:32:20 +0200 use (s)rand\n" \
+"14498 2018-10-21 18:23:44 +0200 locdialog: revert placing checkbox\n" \
+"14497 2018-10-21 17:09:49 +0200 mbus: wip\n" \
+"14496 2018-10-21 10:52:00 +0200 wrapper: mbus added\n" \
 "14495 2018-10-20 16:44:12 +0200 mbus library added for testing\n" \
 "14494 2018-10-20 07:32:11 +0200 locdialog: fix for testing the consist locos\n" \
 "14493 2018-10-19 14:43:04 +0200 demo images modified by Rainer\n" \
@@ -46,15 +56,5 @@ const char* revlog =
 "14458 2018-10-12 11:18:29 +0200 cbusnodedlg: enable options for flat nodes\n" \
 "14457 2018-10-12 11:16:58 +0200 routedialog: keep selected command after up/down\n" \
 "14456 2018-10-12 07:55:38 +0200 cbus: removed bootloader support\n" \
-"14455 2018-10-11 11:42:44 +0200 cbus tcp: fix for keep alive message\n" \
-"14454 2018-10-10 17:20:12 +0200 xmlscript: fix for feedback state\n" \
-"14453 2018-10-10 14:33:51 +0200 cbus: use long event OPCs in case the bus is set > 0\n" \
-"14452 2018-10-10 10:18:49 +0200 cbusnodedlg: disable evtnr/evtaddr column in case of flat model\n" \
-"14451 2018-10-10 08:41:09 +0200 cbus: regard the long OPCs\n" \
-"14450 2018-10-10 07:42:25 +0200 cbus: alternative SoD nodenumber 0x8000\n" \
-"14449 2018-10-09 13:17:12 +0200 xmlscript: fix for resolving the sensor command variables at start\n" \
-"14448 2018-10-09 10:18:18 +0200 xmlscript: add output properties\n" \
-"14447 2018-10-07 10:34:43 +0200 stage: ignore sensor events from already occupied sections\n" \
-"14446 2018-10-07 09:50:48 +0200 lcdriver: reset pending location in case of loco reset\n" \
 
 "log end";
