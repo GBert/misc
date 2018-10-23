@@ -1,11 +1,13 @@
 const int revisionnr = 
-14505
+14507
 ;
 const char* commithash = 
-"24d37d3e21323c929f47d2465d889aadfaff78bc";
+"b96b66373fce7771e7cb29ed7acafcfd127b590f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14507 2018-10-23 15:34:01 +0200 mbus: ping support\n" \
+"14506 2018-10-23 11:42:47 +0200 xmlscript: use tokenizer also for replace all vars\n" \
 "14505 2018-10-22 15:54:44 +0200 mcs2,mgbox: fix for reading serial ASCII\n" \
 "14504 2018-10-22 13:03:33 +0200 var: check by text values for ## to skip\n" \
 "14503 2018-10-22 11:05:31 +0200 mbus: accessory event support\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14460 2018-10-12 15:12:32 +0200 ucan: trace correction\n" \
 "14459 2018-10-12 12:58:56 +0200 xmlscript: string not equal comparator - added\n" \
 "14458 2018-10-12 11:18:29 +0200 cbusnodedlg: enable options for flat nodes\n" \
-"14457 2018-10-12 11:16:58 +0200 routedialog: keep selected command after up/down\n" \
-"14456 2018-10-12 07:55:38 +0200 cbus: removed bootloader support\n" \
 
 "log end";
