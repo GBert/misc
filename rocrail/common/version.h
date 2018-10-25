@@ -1,11 +1,15 @@
 const int revisionnr = 
-14507
+14511
 ;
 const char* commithash = 
-"b96b66373fce7771e7cb29ed7acafcfd127b590f";
+"02a399c2a7c9ee6894e0396a7cebed92f9859724";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14511 2018-10-25 10:53:19 +0200 rocview: option popup for device ping\n" \
+"14510 2018-10-24 16:36:40 +0200 mbus: wip\n" \
+"14509 2018-10-24 11:03:18 +0200 cbusnodedlg: version corrected\n" \
+"14508 2018-10-24 11:02:23 +0200 mbus: wip\n" \
 "14507 2018-10-23 15:34:01 +0200 mbus: ping support\n" \
 "14506 2018-10-23 11:42:47 +0200 xmlscript: use tokenizer also for replace all vars\n" \
 "14505 2018-10-22 15:54:44 +0200 mcs2,mgbox: fix for reading serial ASCII\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "14464 2018-10-13 08:56:13 +0200 popup cbusnodedlg after getting a opc_pnn\n" \
 "14463 2018-10-13 07:58:52 +0200 cbus: canid range 1...255\n" \
 "14462 2018-10-12 15:39:07 +0200 cbus: module type gc2a added\n" \
-"14461 2018-10-12 15:20:35 +0200 cbus: hw version correction\n" \
-"14460 2018-10-12 15:12:32 +0200 ucan: trace correction\n" \
-"14459 2018-10-12 12:58:56 +0200 xmlscript: string not equal comparator - added\n" \
-"14458 2018-10-12 11:18:29 +0200 cbusnodedlg: enable options for flat nodes\n" \
 
 "log end";
