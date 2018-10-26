@@ -1,11 +1,14 @@
 const int revisionnr = 
-14511
+14514
 ;
 const char* commithash = 
-"02a399c2a7c9ee6894e0396a7cebed92f9859724";
+"f3483e8adab7af7e69f19ef8a8dd70a097bf4258";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14514 2018-10-26 09:10:19 +0200 car: mdate field added\n" \
+"14513 2018-10-26 08:16:43 +0200 block: save reserved flag at startup\n" \
+"14512 2018-10-26 07:46:23 +0200 mbus: write config added\n" \
 "14511 2018-10-25 10:53:19 +0200 rocview: option popup for device ping\n" \
 "14510 2018-10-24 16:36:40 +0200 mbus: wip\n" \
 "14509 2018-10-24 11:03:18 +0200 cbusnodedlg: version corrected\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "14467 2018-10-14 11:45:06 +0200 cbus: determine the dlc by detecting the ';'\n" \
 "14466 2018-10-14 08:45:09 +0200 cbus: linefeed option added for the GC2a\n" \
 "14465 2018-10-13 11:37:14 +0200 mgbox: crash fix\n" \
-"14464 2018-10-13 08:56:13 +0200 popup cbusnodedlg after getting a opc_pnn\n" \
-"14463 2018-10-13 07:58:52 +0200 cbus: canid range 1...255\n" \
-"14462 2018-10-12 15:39:07 +0200 cbus: module type gc2a added\n" \
 
 "log end";
