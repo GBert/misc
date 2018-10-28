@@ -1,11 +1,17 @@
 const int revisionnr = 
-14514
+14520
 ;
 const char* commithash = 
-"f3483e8adab7af7e69f19ef8a8dd70a097bf4258";
+"bc01761520edb07f72b1cf208a09035a4f8b60b1";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14520 2018-10-28 18:12:41 +0100 trackdialog: fix for setting blockid and sensorid\n" \
+"14519 2018-10-28 15:51:08 +0100 mbus: wip\n" \
+"14518 2018-10-28 13:46:19 +0100 loc: save gotoblock on exit and restore on startup\n" \
+"14517 2018-10-27 14:02:12 +0200 hue: leave out sat attribute in case of use xy\n" \
+"14516 2018-10-27 11:27:41 +0200 zimocan: typo fixes\n" \
+"14515 2018-10-26 15:09:47 +0200 cbusnodedlg: fix for testing flat node outputs\n" \
 "14514 2018-10-26 09:10:19 +0200 car: mdate field added\n" \
 "14513 2018-10-26 08:16:43 +0200 block: save reserved flag at startup\n" \
 "14512 2018-10-26 07:46:23 +0200 mbus: write config added\n" \
@@ -50,11 +56,5 @@ const char* revlog =
 "14473 2018-10-16 10:30:00 +0200 trainimage: option swap loco added\n" \
 "14472 2018-10-15 16:17:05 +0200 guiframe: fix for save as\n" \
 "14471 2018-10-15 09:58:32 +0200 loc: fix for BBT blockenterside in case of terminal station\n" \
-"14470 2018-10-15 08:36:26 +0200 cbusnodedlg: fix for setall index and gc2 sync option\n" \
-"14469 2018-10-15 07:39:56 +0200 cbus: simplified reading the dlc of an ASCII frame\n" \
-"14468 2018-10-14 15:37:04 +0200 cbus: syncid added\n" \
-"14467 2018-10-14 11:45:06 +0200 cbus: determine the dlc by detecting the ';'\n" \
-"14466 2018-10-14 08:45:09 +0200 cbus: linefeed option added for the GC2a\n" \
-"14465 2018-10-13 11:37:14 +0200 mgbox: crash fix\n" \
 
 "log end";
