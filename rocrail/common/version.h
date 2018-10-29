@@ -1,11 +1,13 @@
 const int revisionnr = 
-14522
+14524
 ;
 const char* commithash = 
-"8a4884f08edba6ec2877d0ddf5968a13db24633d";
+"4b35c816c62044ddb3203410232892e4b3276a5f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14524 2018-10-29 14:39:37 +0100 makefile: removes -ansi option\n" \
+"14523 2018-10-29 14:31:01 +0100 loc: replace cpp comments with c\n" \
 "14522 2018-10-29 10:45:46 +0100 mbus: loco/function support added\n" \
 "14521 2018-10-29 10:05:01 +0100 loc: fix for restore gotoblock\n" \
 "14520 2018-10-28 18:12:41 +0100 trackdialog: fix for setting blockid and sensorid\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14477 2018-10-17 10:34:45 +0200 rn-cbus: translate rn to cbus and visa versa (wip)\n" \
 "14476 2018-10-17 07:47:33 +0200 check if mdi and dialog position is not negative\n" \
 "14475 2018-10-16 10:57:12 +0200 carpanel: regard the car show flag at init\n" \
-"14474 2018-10-16 10:48:54 +0200 trainimage: fix for init\n" \
-"14473 2018-10-16 10:30:00 +0200 trainimage: option swap loco added\n" \
 
 "log end";
