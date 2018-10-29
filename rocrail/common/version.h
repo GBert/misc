@@ -1,11 +1,12 @@
 const int revisionnr = 
-14524
+14525
 ;
 const char* commithash = 
-"4b35c816c62044ddb3203410232892e4b3276a5f";
+"4e7534e1b5a231c3e97f1cefbfda320b8786dbbc";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14525 2018-10-29 14:58:36 +0100 dccpp: echo only for Arduino pin I/O\n" \
 "14524 2018-10-29 14:39:37 +0100 makefile: removes -ansi option\n" \
 "14523 2018-10-29 14:31:01 +0100 loc: replace cpp comments with c\n" \
 "14522 2018-10-29 10:45:46 +0100 mbus: loco/function support added\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14478 2018-10-17 11:44:15 +0200 car/trainpanel: reset train image on init\n" \
 "14477 2018-10-17 10:34:45 +0200 rn-cbus: translate rn to cbus and visa versa (wip)\n" \
 "14476 2018-10-17 07:47:33 +0200 check if mdi and dialog position is not negative\n" \
-"14475 2018-10-16 10:57:12 +0200 carpanel: regard the car show flag at init\n" \
 
 "log end";
