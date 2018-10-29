@@ -1,0 +1,24 @@
+--- a/rocrail/impl/loc.c
++++ b/rocrail/impl/loc.c
+@@ -3741,8 +3741,8 @@ static void _setMode( iOLoc inst, const char* mode, const char* reason, int wait
+   Boolean modeEvents  = wCtrl.ismodeevents(AppOp.getIniNode(wCtrl.name()));
+ 
+   if( StrOp.equals( wLoc.mode_stop, mode ) ) {
+-    //TraceOp.trc( name, TRCLEVEL_USER1, __LINE__, 9999, "reset gotoblock [%s] for [%s]: stop.", data->gotoBlock, LocOp.getId(inst) );
+-    //data->gotoBlock = NULL;
++    /* TraceOp.trc( name, TRCLEVEL_USER1, __LINE__, 9999, "reset gotoblock [%s] for [%s]: stop.", data->gotoBlock, LocOp.getId(inst) ); */
++    /* data->gotoBlock = NULL; */
+   }
+ 
+   /* Only take over the new mode if it is different; Broadcast to clients. */
+@@ -3837,8 +3837,8 @@ static void _stop( iOLoc inst, Boolean resume, Boolean stopschedule ) {
+ 
+   data->go = False;
+   data->released = False;
+-  //TraceOp.trc( name, TRCLEVEL_USER1, __LINE__, 9999, "reset gotoblock [%s] for [%s]: stop", data->gotoBlock, LocOp.getId(inst) );
+-  //data->gotoBlock = NULL;
++  /* TraceOp.trc( name, TRCLEVEL_USER1, __LINE__, 9999, "reset gotoblock [%s] for [%s]: stop", data->gotoBlock, LocOp.getId(inst) ); */
++  /* data->gotoBlock = NULL; */
+ 
+   if( !wCtrl.isresetscheduleonstop(AppOp.getIniNode(wCtrl.name())) )
+     stopschedule = False;
