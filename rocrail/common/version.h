@@ -1,11 +1,13 @@
 const int revisionnr = 
-14520
+14522
 ;
 const char* commithash = 
-"bc01761520edb07f72b1cf208a09035a4f8b60b1";
+"8a4884f08edba6ec2877d0ddf5968a13db24633d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14522 2018-10-29 10:45:46 +0100 mbus: loco/function support added\n" \
+"14521 2018-10-29 10:05:01 +0100 loc: fix for restore gotoblock\n" \
 "14520 2018-10-28 18:12:41 +0100 trackdialog: fix for setting blockid and sensorid\n" \
 "14519 2018-10-28 15:51:08 +0100 mbus: wip\n" \
 "14518 2018-10-28 13:46:19 +0100 loc: save gotoblock on exit and restore on startup\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14475 2018-10-16 10:57:12 +0200 carpanel: regard the car show flag at init\n" \
 "14474 2018-10-16 10:48:54 +0200 trainimage: fix for init\n" \
 "14473 2018-10-16 10:30:00 +0200 trainimage: option swap loco added\n" \
-"14472 2018-10-15 16:17:05 +0200 guiframe: fix for save as\n" \
-"14471 2018-10-15 09:58:32 +0200 loc: fix for BBT blockenterside in case of terminal station\n" \
 
 "log end";
