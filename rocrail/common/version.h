@@ -1,11 +1,13 @@
 const int revisionnr = 
-14525
+14527
 ;
 const char* commithash = 
-"4e7534e1b5a231c3e97f1cefbfda320b8786dbbc";
+"78ac0ab20b84579d7c2a74c5e4944a3ba34eaf0f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14527 2018-10-30 10:52:39 +0100 planpanel: fix for moving an item multiple times\n" \
+"14526 2018-10-30 08:16:14 +0100 mbus: report state mcs2: trace fix z21: trace fix\n" \
 "14525 2018-10-29 14:58:36 +0100 dccpp: echo only for Arduino pin I/O\n" \
 "14524 2018-10-29 14:39:37 +0100 makefile: removes -ansi option\n" \
 "14523 2018-10-29 14:31:01 +0100 loc: replace cpp comments with c\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14480 2018-10-17 14:57:36 +0200 messages: keep 'swap loco image', no better translation\n" \
 "14479 2018-10-17 14:56:50 +0200 var: fix for negative values\n" \
 "14478 2018-10-17 11:44:15 +0200 car/trainpanel: reset train image on init\n" \
-"14477 2018-10-17 10:34:45 +0200 rn-cbus: translate rn to cbus and visa versa (wip)\n" \
-"14476 2018-10-17 07:47:33 +0200 check if mdi and dialog position is not negative\n" \
 
 "log end";
