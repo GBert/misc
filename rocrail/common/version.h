@@ -1,11 +1,12 @@
 const int revisionnr = 
-14527
+14528
 ;
 const char* commithash = 
-"78ac0ab20b84579d7c2a74c5e4944a3ba34eaf0f";
+"a77902ca9b799358fb9bb8f1eb4087b44921ddd3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14528 2018-10-31 08:17:05 +0100 SLIM-COLOR: button 5 added for outputs as decoupler\n" \
 "14527 2018-10-30 10:52:39 +0100 planpanel: fix for moving an item multiple times\n" \
 "14526 2018-10-30 08:16:14 +0100 mbus: report state mcs2: trace fix z21: trace fix\n" \
 "14525 2018-10-29 14:58:36 +0100 dccpp: echo only for Arduino pin I/O\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14481 2018-10-18 08:31:31 +0200 loc: fix for BBT key in case of terminal station\n" \
 "14480 2018-10-17 14:57:36 +0200 messages: keep 'swap loco image', no better translation\n" \
 "14479 2018-10-17 14:56:50 +0200 var: fix for negative values\n" \
-"14478 2018-10-17 11:44:15 +0200 car/trainpanel: reset train image on init\n" \
 
 "log end";
