@@ -1,11 +1,20 @@
 const int revisionnr = 
-14528
+14537
 ;
 const char* commithash = 
-"a77902ca9b799358fb9bb8f1eb4087b44921ddd3";
+"b36bdc8ed0acfb4e42735e85fd38cd568a5767de";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14537 2018-11-01 12:16:04 +0100 DB-Signals user theme added (Bernd)\n" \
+"14536 2018-11-01 12:11:15 +0100 zimocan: commented out the nocheck udp option\n" \
+"14535 2018-11-01 11:03:34 +0100 wsocket: copy fix\n" \
+"14534 2018-11-01 10:11:35 +0100 SLIM-COLOR: button-5 complete\n" \
+"14533 2018-11-01 09:23:02 +0100 usocket: copy error fixed\n" \
+"14532 2018-11-01 09:19:11 +0100 socket function UDPNoCeck added\n" \
+"14531 2018-11-01 09:03:52 +0100 SLIM-COLOR: bunnton-5\n" \
+"14530 2018-11-01 08:16:42 +0100 dccpp: regard swap gates on report\n" \
+"14529 2018-11-01 08:06:17 +0100 SLIM: button 5 occ and route\n" \
 "14528 2018-10-31 08:17:05 +0100 SLIM-COLOR: button 5 added for outputs as decoupler\n" \
 "14527 2018-10-30 10:52:39 +0100 planpanel: fix for moving an item multiple times\n" \
 "14526 2018-10-30 08:16:14 +0100 mbus: report state mcs2: trace fix z21: trace fix\n" \
@@ -47,14 +56,5 @@ const char* revlog =
 "14490 2018-10-19 11:00:56 +0200 mdimanager: check if the tab xy position is on the current monitor size\n" \
 "14489 2018-10-19 10:35:07 +0200 trainimage: invert invert\n" \
 "14488 2018-10-19 09:03:16 +0200 translation merge: de, nl, sl, sr_latin\n" \
-"14487 2018-10-18 15:17:58 +0200 xmlscript: light support added\n" \
-"14486 2018-10-18 15:03:29 +0200 lightctrl action support added\n" \
-"14485 2018-10-18 13:10:31 +0200 umsetzen -> run around\n" \
-"14484 2018-10-18 13:08:08 +0200 translation for 'Umsetzen'\n" \
-"14483 2018-10-18 10:41:24 +0200 fback: fix for initial inverted state\n" \
-"14482 2018-10-18 10:17:35 +0200 loc: activate manual mode also if the loco runs\n" \
-"14481 2018-10-18 08:31:31 +0200 loc: fix for BBT key in case of terminal station\n" \
-"14480 2018-10-17 14:57:36 +0200 messages: keep 'swap loco image', no better translation\n" \
-"14479 2018-10-17 14:56:50 +0200 var: fix for negative values\n" \
 
 "log end";
