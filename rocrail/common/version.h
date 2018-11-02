@@ -1,11 +1,12 @@
 const int revisionnr = 
-14539
+14540
 ;
 const char* commithash = 
-"35b00d8769be6edea17c8744071a6da13f510d12";
+"44e3ccc56518dc1a726786779c74de1038aa5e71";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14540 2018-11-02 10:54:49 +0100 mbus: evaluate config date... not realy usable\n" \
 "14539 2018-11-01 16:58:30 +0100 timedactions: rip path in case of a xml command\n" \
 "14538 2018-11-01 15:08:39 +0100 mbus: inform Rocrail of a verified loco\n" \
 "14537 2018-11-01 12:16:04 +0100 DB-Signals user theme added (Bernd)\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14493 2018-10-19 14:43:04 +0200 demo images modified by Rainer\n" \
 "14492 2018-10-19 11:53:14 +0200 wiki plan update\n" \
 "14491 2018-10-19 11:43:43 +0200 check window/dialog position only in case of one monitor\n" \
-"14490 2018-10-19 11:00:56 +0200 mdimanager: check if the tab xy position is on the current monitor size\n" \
 
 "log end";
