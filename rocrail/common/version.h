@@ -1,11 +1,12 @@
 const int revisionnr = 
-14538
+14539
 ;
 const char* commithash = 
-"cd0f99107a307e2d1e4059ef2fa08412435c19d7";
+"35b00d8769be6edea17c8744071a6da13f510d12";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14539 2018-11-01 16:58:30 +0100 timedactions: rip path in case of a xml command\n" \
 "14538 2018-11-01 15:08:39 +0100 mbus: inform Rocrail of a verified loco\n" \
 "14537 2018-11-01 12:16:04 +0100 DB-Signals user theme added (Bernd)\n" \
 "14536 2018-11-01 12:11:15 +0100 zimocan: commented out the nocheck udp option\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14492 2018-10-19 11:53:14 +0200 wiki plan update\n" \
 "14491 2018-10-19 11:43:43 +0200 check window/dialog position only in case of one monitor\n" \
 "14490 2018-10-19 11:00:56 +0200 mdimanager: check if the tab xy position is on the current monitor size\n" \
-"14489 2018-10-19 10:35:07 +0200 trainimage: invert invert\n" \
 
 "log end";
