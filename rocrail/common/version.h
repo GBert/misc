@@ -1,11 +1,15 @@
 const int revisionnr = 
-14540
+14544
 ;
 const char* commithash = 
-"44e3ccc56518dc1a726786779c74de1038aa5e71";
+"31fca91c497897e0f5ce9e9c94fc926951c24f41";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14544 2018-11-03 19:04:47 +0100 output: support for command on,off,active added\n" \
+"14543 2018-11-03 09:49:18 +0100 signaldialog: added show id option\n" \
+"14542 2018-11-02 19:18:07 +0100 blockdialog: evaluate sensors also on apply to take over none selected\n" \
+"14541 2018-11-02 15:45:47 +0100 model: moved sleep in timedoff thread to avoid loop with wrong number of sensors\n" \
 "14540 2018-11-02 10:54:49 +0100 mbus: evaluate config date... not realy usable\n" \
 "14539 2018-11-01 16:58:30 +0100 timedactions: rip path in case of a xml command\n" \
 "14538 2018-11-01 15:08:39 +0100 mbus: inform Rocrail of a verified loco\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "14497 2018-10-21 17:09:49 +0200 mbus: wip\n" \
 "14496 2018-10-21 10:52:00 +0200 wrapper: mbus added\n" \
 "14495 2018-10-20 16:44:12 +0200 mbus library added for testing\n" \
-"14494 2018-10-20 07:32:11 +0200 locdialog: fix for testing the consist locos\n" \
-"14493 2018-10-19 14:43:04 +0200 demo images modified by Rainer\n" \
-"14492 2018-10-19 11:53:14 +0200 wiki plan update\n" \
-"14491 2018-10-19 11:43:43 +0200 check window/dialog position only in case of one monitor\n" \
 
 "log end";
