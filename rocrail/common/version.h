@@ -1,11 +1,21 @@
 const int revisionnr = 
-14544
+14554
 ;
 const char* commithash = 
-"31fca91c497897e0f5ce9e9c94fc926951c24f41";
+"71937f7f28c3c080a1e341955f0a459e61ceae72";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14554 2018-11-04 17:02:57 +0100 renderer: revert change for wx master branch\n" \
+"14553 2018-11-04 16:50:43 +0100 rocview:fixes for the wx master branch\n" \
+"14552 2018-11-04 15:53:11 +0100 rocnetnodedlg: fix for looking up the channel usage in case of none servo\n" \
+"14551 2018-11-04 15:15:04 +0100 xmlscript: fix for condition text not equal\n" \
+"14550 2018-11-04 13:08:28 +0100 rocnetnodedlg: fix for initializing usage\n" \
+"14549 2018-11-04 10:49:50 +0100 cbus/utils: show junk/trace at reading ASCII Frames\n" \
+"14548 2018-11-04 10:48:06 +0100 mbus: try to read the loks from MS2\n" \
+"14547 2018-11-04 10:13:53 +0100 tamsmc: fix for inendbyte\n" \
+"14546 2018-11-04 10:05:30 +0100 model: take over some extra attributes at generate loco\n" \
+"14545 2018-11-04 07:52:48 +0100 SLIM-COLOR: fix for accessory 20 (Peter)\n" \
 "14544 2018-11-03 19:04:47 +0100 output: support for command on,off,active added\n" \
 "14543 2018-11-03 09:49:18 +0100 signaldialog: added show id option\n" \
 "14542 2018-11-02 19:18:07 +0100 blockdialog: evaluate sensors also on apply to take over none selected\n" \
@@ -46,15 +56,5 @@ const char* revlog =
 "14507 2018-10-23 15:34:01 +0200 mbus: ping support\n" \
 "14506 2018-10-23 11:42:47 +0200 xmlscript: use tokenizer also for replace all vars\n" \
 "14505 2018-10-22 15:54:44 +0200 mcs2,mgbox: fix for reading serial ASCII\n" \
-"14504 2018-10-22 13:03:33 +0200 var: check by text values for ## to skip\n" \
-"14503 2018-10-22 11:05:31 +0200 mbus: accessory event support\n" \
-"14502 2018-10-22 10:42:13 +0200 mbus: discovery response\n" \
-"14501 2018-10-22 09:33:54 +0200 mbus: wip\n" \
-"14500 2018-10-22 07:22:22 +0200 var: fix for negative numbers\n" \
-"14499 2018-10-21 19:32:20 +0200 use (s)rand\n" \
-"14498 2018-10-21 18:23:44 +0200 locdialog: revert placing checkbox\n" \
-"14497 2018-10-21 17:09:49 +0200 mbus: wip\n" \
-"14496 2018-10-21 10:52:00 +0200 wrapper: mbus added\n" \
-"14495 2018-10-20 16:44:12 +0200 mbus library added for testing\n" \
 
 "log end";
