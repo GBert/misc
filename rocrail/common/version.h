@@ -1,11 +1,12 @@
 const int revisionnr = 
-14554
+14555
 ;
 const char* commithash = 
-"71937f7f28c3c080a1e341955f0a459e61ceae72";
+"42e6795226d2f33d9c5ccb5ac233dae818fdfc75";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14555 2018-11-05 09:13:36 +0100 actionsctrldlg: use combobox for loco ID\n" \
 "14554 2018-11-04 17:02:57 +0100 renderer: revert change for wx master branch\n" \
 "14553 2018-11-04 16:50:43 +0100 rocview:fixes for the wx master branch\n" \
 "14552 2018-11-04 15:53:11 +0100 rocnetnodedlg: fix for looking up the channel usage in case of none servo\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14508 2018-10-24 11:02:23 +0200 mbus: wip\n" \
 "14507 2018-10-23 15:34:01 +0200 mbus: ping support\n" \
 "14506 2018-10-23 11:42:47 +0200 xmlscript: use tokenizer also for replace all vars\n" \
-"14505 2018-10-22 15:54:44 +0200 mcs2,mgbox: fix for reading serial ASCII\n" \
 
 "log end";
