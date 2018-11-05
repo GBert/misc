@@ -1,16 +1,3 @@
-diff --git a/target/linux/ramips/base-files/etc/board.d/02_network b/target/linux/ramips/base-files/etc/board.d/02_network
-index 7de6377..2aa90f8 100755
---- a/target/linux/ramips/base-files/etc/board.d/02_network
-+++ b/target/linux/ramips/base-files/etc/board.d/02_network
-@@ -40,6 +40,8 @@ ramips_setup_interfaces()
-	3g150b|\
-	3g300m|\
-	a5-v11|\
-+	a5-v11-8M|\
-+	a5-v11-16M|\
-	all0256n-4M|\
-	all0256n-8M|\
-	all5002|\
 diff --git a/target/linux/ramips/base-files/lib/ramips.sh b/target/linux/ramips/base-files/lib/ramips.sh
 index 3efdeda..436a869 100755
 --- a/target/linux/ramips/base-files/lib/ramips.sh
