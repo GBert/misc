@@ -1,11 +1,15 @@
 const int revisionnr = 
-14555
+14559
 ;
 const char* commithash = 
-"42e6795226d2f33d9c5ccb5ac233dae818fdfc75";
+"7d82c5fb28b23dee4913db62e55222acf831f374";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14559 2018-11-06 11:40:05 +0100 ucan: return can file descripter as -1 on error\n" \
+"14558 2018-11-06 11:36:25 +0100 ucan: use close directly in the openCAN function\n" \
+"14557 2018-11-06 11:34:41 +0100 ucan: check return codes at openCAN\n" \
+"14556 2018-11-06 10:10:05 +0100 roclcdr: trace level corrections\n" \
 "14555 2018-11-05 09:13:36 +0100 actionsctrldlg: use combobox for loco ID\n" \
 "14554 2018-11-04 17:02:57 +0100 renderer: revert change for wx master branch\n" \
 "14553 2018-11-04 16:50:43 +0100 rocview:fixes for the wx master branch\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "14512 2018-10-26 07:46:23 +0200 mbus: write config added\n" \
 "14511 2018-10-25 10:53:19 +0200 rocview: option popup for device ping\n" \
 "14510 2018-10-24 16:36:40 +0200 mbus: wip\n" \
-"14509 2018-10-24 11:03:18 +0200 cbusnodedlg: version corrected\n" \
-"14508 2018-10-24 11:02:23 +0200 mbus: wip\n" \
-"14507 2018-10-23 15:34:01 +0200 mbus: ping support\n" \
-"14506 2018-10-23 11:42:47 +0200 xmlscript: use tokenizer also for replace all vars\n" \
 
 "log end";
