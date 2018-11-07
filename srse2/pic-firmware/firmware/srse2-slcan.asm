@@ -77,6 +77,7 @@
 
 #INCLUDE        "18f2xk80-mcu-config.inc"
 #INCLUDE        "can-can.inc"
+#INCLUDE        "idlocs.inc"
 
 ;------------------------------------------------------------------------------
 THE
