@@ -336,10 +336,10 @@ CAN_PING_CONT
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                ; Version 1.1
+                ; Version 1.2
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	1
+                MOVLW	2
                 MOVWF	POSTINC0
 		MOVLW	0
                 MOVWF	POSTINC0
