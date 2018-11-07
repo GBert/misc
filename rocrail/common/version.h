@@ -1,11 +1,14 @@
 const int revisionnr = 
-14559
+14562
 ;
 const char* commithash = 
-"7d82c5fb28b23dee4913db62e55222acf831f374";
+"d2b0d88c2044feb12b6f4f75738b53d37c7b49cc";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14562 2018-11-07 08:24:05 +0100 modify: added recursive flag\n" \
+"14561 2018-11-07 07:46:46 +0100 timedactions: revert rip xmlscript path\n" \
+"14560 2018-11-06 16:17:40 +0100 loc: revert removing all child nodes at modify if no new are available\n" \
 "14559 2018-11-06 11:40:05 +0100 ucan: return can file descripter as -1 on error\n" \
 "14558 2018-11-06 11:36:25 +0100 ucan: use close directly in the openCAN function\n" \
 "14557 2018-11-06 11:34:41 +0100 ucan: check return codes at openCAN\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "14515 2018-10-26 15:09:47 +0200 cbusnodedlg: fix for testing flat node outputs\n" \
 "14514 2018-10-26 09:10:19 +0200 car: mdate field added\n" \
 "14513 2018-10-26 08:16:43 +0200 block: save reserved flag at startup\n" \
-"14512 2018-10-26 07:46:23 +0200 mbus: write config added\n" \
-"14511 2018-10-25 10:53:19 +0200 rocview: option popup for device ping\n" \
-"14510 2018-10-24 16:36:40 +0200 mbus: wip\n" \
 
 "log end";
