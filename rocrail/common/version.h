@@ -1,11 +1,12 @@
 const int revisionnr = 
-14563
+14564
 ;
 const char* commithash = 
-"58571eae6c9dc5cd6a0d80daef22ba71101e1049";
+"dc5785f831daf4221d9c11769591bc2171d2ee2e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14564 2018-11-08 10:44:48 +0100 rcan: wip\n" \
 "14563 2018-11-07 16:38:01 +0100 guiframe: loco number added to the grid\n" \
 "14562 2018-11-07 08:24:05 +0100 modify: added recursive flag\n" \
 "14561 2018-11-07 07:46:46 +0100 timedactions: revert rip xmlscript path\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14517 2018-10-27 14:02:12 +0200 hue: leave out sat attribute in case of use xy\n" \
 "14516 2018-10-27 11:27:41 +0200 zimocan: typo fixes\n" \
 "14515 2018-10-26 15:09:47 +0200 cbusnodedlg: fix for testing flat node outputs\n" \
-"14514 2018-10-26 09:10:19 +0200 car: mdate field added\n" \
 
 "log end";
