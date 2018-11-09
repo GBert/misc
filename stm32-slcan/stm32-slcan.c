@@ -211,6 +211,7 @@ void sys_tick_handler(void) {
     }
 }
 
+#if 0
 static void gpio_debug(int n) {
 
     switch(n) {
@@ -232,6 +233,7 @@ static void gpio_debug(int n) {
 	break;
     }
 }
+#endif
 
 static void put_hex(uint8_t c) {
     uint8_t s[2];
@@ -372,7 +374,7 @@ static int slcan_command(void) {
     /* consume chars until eol reached */
     do {
 	ret = ring_read_ch(&input_ring, NULL);
-    } until (ret == '\r');
+    } while (ret == '\r');
 
 #if 1
     if (send) {
