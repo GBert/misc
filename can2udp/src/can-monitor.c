@@ -917,7 +917,7 @@ void decode_frame(struct can_frame *frame) {
 	    printf("Statusdaten: UID 0x%08X Index 0x%02X Paketanzahl %d\n", uid, frame->data[4], frame->data[5]);
 	if (frame->can_dlc == 8) {
 	    paket = (frame->can_id & 0xFCFF) - 1;
-	    printf("Statusdaten: Paket %d", paket);
+	    printf("Statusdaten: Paket %d ", paket);
 	    if (paket == 0)
 		memset(buffer, 0, sizeof(buffer));
 	    if (paket < MAX_PAKETE)
