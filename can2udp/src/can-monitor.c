@@ -928,9 +928,12 @@ void decode_frame(struct can_frame *frame) {
 		id = be32(&frame->data[4]);
 		printf(" Anzahl Messwerte: %d Anzahl Kanäle: %d Gerätenummer: 0x%08x", n_messwerte, n_kanaele, id);
 	    }
-            for (int i = 0 ; i < 8; i++)
-		if (isdigit(frame->data[i]))
+            for (int i = 0 ; i < 8; i++) {
+		if (isprint(frame->data[i]))
 		    putchar(frame->data[i]);
+		else
+		    putchar(' ');
+		}
 	    printf("\n");
 	}
 	break;
