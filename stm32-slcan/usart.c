@@ -69,7 +69,6 @@ int32_t ring_read_ch(struct ring *ring, uint8_t * ch) {
     return ret;
 }
 
-
 struct ring output_ring;
 struct ring input_ring;
 uint8_t output_ring_buffer[BUFFER_SIZE];

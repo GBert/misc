@@ -307,7 +307,6 @@ static uint32_t get_nibbles(int nibbles) {
     return id;
 }
 
-
 static int slcan_command(void) {
     bool ext, rtr;
     uint8_t i, dlc, data[8];
