@@ -263,7 +263,11 @@ S88_STATE_1
 
                 SWAPF   S88LENGTH,W
                 ANDLW   0xF0
-                ADDLW	0xFF
+                ; return if length is zero
+                BTFSC   STATUS,Z
+                RETURN
+
+                ADDLW   0xFF
                 MOVWF   S88COUNT
                 S88_LOAD_HIGH
                 INCF    S88STATE,F

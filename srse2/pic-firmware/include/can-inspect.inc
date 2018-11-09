@@ -336,12 +336,12 @@ CAN_PING_CONT
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                ; Version 1.2
+                ; Version 1.3
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	2
+                MOVLW	3
                 MOVWF	POSTINC0
-		MOVLW	0
+                MOVLW	0
                 MOVWF	POSTINC0
                 ; this is a back detector (german Rueckmelder)
                 MOVLW	0x40
