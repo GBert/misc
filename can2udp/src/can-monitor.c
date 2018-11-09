@@ -134,7 +134,7 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 2.2\n\n");
+    fprintf(stderr, "   Version 2.3\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
@@ -928,10 +928,9 @@ void decode_frame(struct can_frame *frame) {
 		id = be32(&frame->data[4]);
 		printf(" Anzahl Messwerte: %d Anzahl Kanäle: %d Gerätenummer: 0x%08x", n_messwerte, n_kanaele, id);
 	    }
-	    if ((kanal == 0) && (paket == 1))
-		printf("    %s", &buffer[8]);
-	    if ((kanal == 0) && (paket == 3))
-		printf("    %s", &buffer[16]);
+            for (int i = 0 ; i < 8; i++)
+		if (isdigit(frame->data[i]))
+		    putchar(frame->data[i]);
 	    printf("\n");
 	}
 	break;
