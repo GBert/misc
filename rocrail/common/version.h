@@ -1,11 +1,13 @@
 const int revisionnr = 
-14566
+14568
 ;
 const char* commithash = 
-"e086f6e57dac4a9740d28a46890b1e27db224a54";
+"e8ace87a0dbb65b3e5fcc14579b8477a108a9625";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14568 2018-11-10 15:27:44 +0100 model: reject objects without ID set\n" \
+"14567 2018-11-10 14:08:17 +0100 rcan: wip freeze\n" \
 "14566 2018-11-09 16:32:09 +0100 rocrail.xml: fix for feedback array\n" \
 "14565 2018-11-09 11:37:06 +0100 rcan: wip\n" \
 "14564 2018-11-08 10:44:48 +0100 rcan: wip\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14521 2018-10-29 10:05:01 +0100 loc: fix for restore gotoblock\n" \
 "14520 2018-10-28 18:12:41 +0100 trackdialog: fix for setting blockid and sensorid\n" \
 "14519 2018-10-28 15:51:08 +0100 mbus: wip\n" \
-"14518 2018-10-28 13:46:19 +0100 loc: save gotoblock on exit and restore on startup\n" \
-"14517 2018-10-27 14:02:12 +0200 hue: leave out sat attribute in case of use xy\n" \
 
 "log end";
