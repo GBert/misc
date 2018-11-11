@@ -32,8 +32,8 @@ CANTX B9                           C15
       5V       PC13     POWER      C14
       GND      LED      LED        C13
       3V3           SWD           VBAT
-          3V3 DIO  DCLK GND
-              PA13 PA14
+             3V3 DIO  DCLK GND
+                 PA13 PA14
 
 *100K IN SERIES
  */
