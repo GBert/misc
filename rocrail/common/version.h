@@ -1,11 +1,12 @@
 const int revisionnr = 
-14569
+14570
 ;
 const char* commithash = 
-"bc32cd5f25b27d7dc2c930ddbfa7beed434a2c1d";
+"57a110f487798b323f863aecdd1162265e9adfd9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14570 2018-11-13 10:07:11 +0100 translation merge: de, sr_latin, fr, sl, en_UK, nl\n" \
 "14569 2018-11-11 08:18:38 +0100 wmz21: fix for reporting a switch event to the wlm\n" \
 "14568 2018-11-10 15:27:44 +0100 model: reject objects without ID set\n" \
 "14567 2018-11-10 14:08:17 +0100 rcan: wip freeze\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14523 2018-10-29 14:31:01 +0100 loc: replace cpp comments with c\n" \
 "14522 2018-10-29 10:45:46 +0100 mbus: loco/function support added\n" \
 "14521 2018-10-29 10:05:01 +0100 loc: fix for restore gotoblock\n" \
-"14520 2018-10-28 18:12:41 +0100 trackdialog: fix for setting blockid and sensorid\n" \
 
 "log end";
