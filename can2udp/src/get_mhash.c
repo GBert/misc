@@ -27,6 +27,16 @@ uint16_t generateHash(uint32_t uid) {
 
 int main(int argc, char **argv) {
     uint32_t uid;
+    uint16_t hash;
+
+    if (argc == 1) {
+	for (uid = 0; uid < 0x100000000UL; uid++) {
+	    hash = generateHash(uid);
+	    if (hash == 0x3b6a)
+		printf("uid 0x%08x -> hash 0x%04x\n", uid, hash);
+	}
+	return 0;
+    }
 
     if (argc != 2) {
         printf("error: usage %s hex_uid\n", argv[0]);
