@@ -1,11 +1,12 @@
 const int revisionnr = 
-14570
+14571
 ;
 const char* commithash = 
-"57a110f487798b323f863aecdd1162265e9adfd9";
+"20e81c7737dc4668e5b3b50fc66d80e2daf545b1";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14571 2018-11-14 07:43:13 +0100 locdialog: increased function timers from 1000 to 10000\n" \
 "14570 2018-11-13 10:07:11 +0100 translation merge: de, sr_latin, fr, sl, en_UK, nl\n" \
 "14569 2018-11-11 08:18:38 +0100 wmz21: fix for reporting a switch event to the wlm\n" \
 "14568 2018-11-10 15:27:44 +0100 model: reject objects without ID set\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14524 2018-10-29 14:39:37 +0100 makefile: removes -ansi option\n" \
 "14523 2018-10-29 14:31:01 +0100 loc: replace cpp comments with c\n" \
 "14522 2018-10-29 10:45:46 +0100 mbus: loco/function support added\n" \
-"14521 2018-10-29 10:05:01 +0100 loc: fix for restore gotoblock\n" \
 
 "log end";
