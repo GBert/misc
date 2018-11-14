@@ -1,14 +1,14 @@
 /*
-* ----------------------------------------------------------------------------
-* "THE BEER-WARE LICENSE" (Revision 42):
-* <ixam97@ixam97.de> wrote this file. As long as you retain this notice you
-* can do whatever you want with this stuff. If we meet some day, and you think
-* this stuff is worth it, you can buy me a beer in return.
-* Maximilian Goldschmidt
-* ----------------------------------------------------------------------------
-* https://github.com/Ixam97
-* ----------------------------------------------------------------------------
-*/
+ * ----------------------------------------------------------------------------
+ * "THE BEER-WARE LICENSE" (Revision 42):
+ * <ixam97@ixam97.de> wrote this file. As long as you retain this notice you
+ * can do whatever you want with this stuff. If we meet some day, and you think
+ * this stuff is worth it, you can buy me a beer in return.
+ * Maximilian Goldschmidt
+ * ----------------------------------------------------------------------------
+ * https://github.com/Ixam97
+ * ----------------------------------------------------------------------------
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,36 +41,36 @@ uint8_t first_ping_loop = 0;
 
 uint8_t master = 0;
 
-uint8_t power = 0;		// Track power on (1) or off (0)
+uint8_t power = 0;		/* Track power on (1) or off (0) */
 
-device_t *devices;		// Array of CAN-bus devices
-uint8_t n_devices;		// Number of CAN-Bus devices
+device_t *devices;		/* Array of CAN-bus devices */
+uint8_t n_devices;		/* Number of CAN-Bus devices */
 
-// Socket stuff:
+/* Socket stuff */
 struct ifreq ifr;
 struct sockaddr_can addr;
 int socketcan;
 
 fd_set readfds;
 
-uint8_t can_monitor, lws_monitor, print_timestamps;	// Logging arguments 
+uint8_t can_monitor, lws_monitor, print_timestamps;	/* Logging arguments */
 
-uint8_t busy_request = 0;	// Currely requesting something
+uint8_t busy_request = 0;	/* Currely requesting something */
 uint8_t devices_changed;
-uint32_t *request_que = 0;	// Array of qued UIDs
-uint8_t *request_que_index = 0;	//Array of qued channel indexes
-uint8_t que_len = 0;		// Lenght of the current request que
+uint32_t *request_que = 0;	/* Array of qued UIDs */
+uint8_t *request_que_index = 0;	/* Array of qued channel indexes */
+uint8_t que_len = 0;		/* Lenght of the current request queue */
 
 uint32_t last_que;
 uint8_t last_que_index;
 uint8_t last_que_tries;
 uintmax_t last_que_us;
 
-// Websocket stuff:
+/* Websocket stuff */
 struct lws_context *context;
-uint8_t num_clients = 0;	// number of connected websocket clients
-uint8_t callback_request;	// 1 if data needs to be sent, don't interrupt if possible
-char *lws_tx_buffer;	// Buffer to send to websocket
+uint8_t num_clients = 0;	/* number of connected websocket clients */
+uint8_t callback_request;	/* 1 if data needs to be sent, don't interrupt if possible */
+char *lws_tx_buffer;		/* Buffer to send to websocket */
 
 void printUsage(char *progname) {
     printf("\nUsage: %s [can] [lws] [stamp]\n  Version: %s\n\n", progname, version);
@@ -224,13 +224,13 @@ void updateDeviceFromBuffer(uint32_t uid, uint8_t index, char * buffer, uint8_t 
 
 		uint8_t name_len = strlen(&buffer[16]);
 
-		/*for (uint8_t j = 16; j < ((buffer_len * 8)); j++) {
-		   if (buffer[j] == 0) {
-		   break;
-		   } else {
-		   name_len++;
-		   }
-		   } */
+		/* for (uint8_t j = 16; j < ((buffer_len * 8)); j++) {
+		    if (buffer[j] == 0) {
+			break;
+		    } else {
+			name_len++;
+		    }
+		} */
 
 		devices[i].name = (char *)malloc((name_len + 1) * sizeof(char));
 
@@ -414,13 +414,12 @@ static int callback_http(struct lws *wsi, enum lws_callback_reasons reason, void
 static int callback_maecan(struct lws *wsi, enum lws_callback_reasons reason, void *user, void *in, size_t len) {
     switch (reason) {
     case LWS_CALLBACK_ESTABLISHED:{
-	    // notify about newly connected clients
+	    /* notify about newly connected clients */
 	    num_clients++;
 	    logTime();
-	    printf(MAG "[Notice]   " RESET "Client connetcted to WebSocket, %d clients currently connected.\n",
-		   num_clients);
+	    printf(MAG "[Notice]   " RESET "Client connetcted to WebSocket, %d clients currently connected.\n", num_clients);
 
-	    // Send power state to newly connected clients
+	    /* Send power state to newly connected clients */
 	    if (power == 0) {
 		fillLwsTxBuffer("stop");
 	    } else {
@@ -432,47 +431,46 @@ static int callback_maecan(struct lws *wsi, enum lws_callback_reasons reason, vo
 	}
 
     case LWS_CALLBACK_CLOSED:{
-	    // notify about disconnected clients
+	    /* notify about disconnected clients */
 	    num_clients--;
 	    logTime();
-	    printf(MAG "[Notice]  " RESET "Client disconnected from WebSocket, %d clients currently connected.\n",
-		   num_clients);
+	    printf(MAG "[Notice]  " RESET "Client disconnected from WebSocket, %d clients currently connected.\n", num_clients);
 	    break;
 	}
 
     case LWS_CALLBACK_RECEIVE:{
-	    // put incoming websocket data into buffer for further processing
+	    /* put incoming websocket data into buffer for further processing */
 	    char buffer[len + 1];
 	    memset(buffer, '\0', len + 1);
 	    strncpy(buffer, (char *)in, len);
 
-	    // extract command from buffer
+	    /* extract command from buffer */
 	    uint8_t cmd_len = 1 + strchr(buffer, ':') - buffer;
 	    char cmd[cmd_len];
 	    memset(cmd, 0, cmd_len);
 	    memcpy(cmd, buffer, cmd_len - 1);
 
 	    if (lws_monitor == 1) {
-		// print websocket data
+		/* print websocket data */
 		logTime();
 		printf("LWS  -> Size: %d, Content: %s\n", len, buffer);
 	    }
-	    // Do stuff with buffer ...
+	    /* Do stuff with buffer ... */
 
 	    if (strcmp(cmd, "go") == 0) {
-		// Received GO command
+		/* Received GO command */
 		go();
 		logTime();
 		printf(YEL "[Request] " RESET " GO\n");
 
 	    } else if (strcmp(cmd, "stop") == 0) {
-		// Received STOP command
+		/* Received STOP command */
 		stop();
 		logTime();
 		printf(YEL "[Request] " RESET " STOP\n");
 
 	    } else if (strcmp(cmd, "getVersion") == 0) {
-		// Redeived request for server version
+		/* Redeived request for server version */
 		char tmp_buf[30];
 		memset(tmp_buf, 0, 30);
 		sprintf(tmp_buf, "updateVersion:%s", version);
@@ -481,21 +479,21 @@ static int callback_maecan(struct lws *wsi, enum lws_callback_reasons reason, vo
 		lws_callback_on_writable(wsi);
 
 	    } else if (strcmp(cmd, "getDevicelist") == 0) {
-		// Received request for device list
+		/* Received request for device list */
 		char *device_buffer = malloc(0);
 		generateDevicesJson(&device_buffer, devices, n_devices);
 		lws_tx_buffer = realloc(lws_tx_buffer, strlen("updateDevicelist:") + strlen(device_buffer) + 1);
 		memset(lws_tx_buffer, 0, strlen("updateDevicelist:") + strlen(device_buffer) + 1);
 		sprintf(lws_tx_buffer, "updateDevicelist:%s", device_buffer);
 		free(device_buffer);
-		/*FILE *f = fopen("/www/MaeCAN-Server/html/devices.json", "w");
-		   fwrite(&lws_tx_buffer[17], strlen(lws_tx_buffer) - 17, 1, f);
-		   fclose(f); */
+		/* FILE *f = fopen("/www/MaeCAN-Server/html/devices.json", "w");
+		fwrite(&lws_tx_buffer[17], strlen(lws_tx_buffer) - 17, 1, f);
+		fclose(f); */
 		callback_request = 1;
 		lws_callback_on_writable(wsi);
 
 	    } else if (strcmp(cmd, "getStatus") == 0) {
-		// Received request for reading
+		/* Received request for reading */
 		uint32_t uid;
 		uint16_t channel;
 		sscanf(&buffer[cmd_len], "%ud:%hud", &uid, &channel);
@@ -519,7 +517,7 @@ static int callback_maecan(struct lws *wsi, enum lws_callback_reasons reason, vo
 	}
     case LWS_CALLBACK_SERVER_WRITEABLE:{
 	    if (lws_tx_buffer != NULL) {
-		// transmit prepared websocket buffer
+		/* transmit prepared websocket buffer */
 		size_t len = strlen(lws_tx_buffer) + 1;
 		unsigned char buf[LWS_PRE + len];
 		unsigned char *p = &buf[LWS_PRE];
@@ -577,7 +575,7 @@ void *pinger(void *argument) {
     first_ping_loop = 1;
 
     while (1) {
-	// Send proadcast ping every 10 seconds
+	/* Send proadcast ping every 10 seconds */
 
 	usleep(1000000);
 	loops++;
@@ -631,7 +629,7 @@ void *canListener() {
 	FD_ZERO(&readfds);
 	FD_SET(socketcan, &readfds);
 
-	// Reading can frame:
+	/* Reading can frame: */
 	if (FD_ISSET(socketcan, &readfds)) {
 	    if (read(socketcan, &frame, sizeof(struct can_frame))) {
 
@@ -649,18 +647,18 @@ void *canListener() {
 		for (uint8_t i = dlc; i < 8; i++) {
 		    data[i] = 0;
 		}
-		// Debug can monitor:
+		/* Debug can monitor: */
 		if (can_monitor == 1)
 		    printCanFrame(&frame, 0);
 
-		// check for relevant commands from CAN:
+		/* check for relevant commands from CAN: */
 		switch (cmd) {
 		case SYS_CMD:{
 
-			// check for relevant SYS_CMDs:
+			/* check for relevant SYS_CMDs: */
 			switch (data[4]) {
 			case 0x00:{
-				// Stop
+				/* Stop */
 				if (resp == 1) {
 				    power = 0;
 				    logTime();
@@ -672,7 +670,7 @@ void *canListener() {
 				break;
 			    }
 			case 0x01:{
-				// Go
+				/* Go */
 				if (resp == 1) {
 				    power = 1;
 				    logTime();
@@ -745,7 +743,7 @@ void *canListener() {
 		case SX1_EVENT:
 		    break;
 
-		    // Ping-Frame:
+		/* Ping-Frame: */
 		case PING:{
 			if (resp == 1) {
 			    uint32_t uid = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
@@ -761,7 +759,7 @@ void *canListener() {
 				    }
 				}
 				if (known_device == 0) {
-				    // Add to device que:
+				    /* Add to device que: */
 				    createDeviceFromPing(data);
 				    request_que = realloc(request_que, (que_len + 1) * sizeof(uint32_t));
 				    request_que_index = realloc(request_que_index, (que_len + 1) * sizeof(uint8_t));
@@ -808,7 +806,7 @@ void *canListener() {
 			    }
 			} else if (resp == 1) {
 			    uint32_t uid = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
-			    // Work with buffer:
+			    /* Work with buffer: */
 			    logTime();
 			    printf(GRN "[Done]     " RESET "device info from UID 0x%08x, index %d.\n", uid, data[4]);
 			    updateDeviceFromBuffer(uid, data[4], status_buffer, buffer_len);
@@ -828,7 +826,7 @@ void *canListener() {
 			break;
 		    }
 
-		    //usleep(50000);
+		    /* usleep(50000); */
 		}
 	    }
 	}
@@ -1037,18 +1035,18 @@ int main(int argc, char *argv[]) {
 
     bind(socketcan, (struct sockaddr *)&addr, sizeof(addr));
 
-    stop();			// initial STOP
+    stop();			/* initial STOP */
 
     pthread_t ping_tread;
     pthread_t can_listener_thread;
     int ping_interval_sec = 10;
 
     if (!pthread_create(&ping_tread, NULL, pinger, &ping_interval_sec)) {
-	//printf(GRN "Created pinger thread.%s\n", RESET);
+	/* printf(GRN "Created pinger thread.%s\n", RESET); */
     }
 
     if (!pthread_create(&can_listener_thread, NULL, canListener, NULL)) {
-	//printf(GRN "Created can listener thread.%S\n", RESET);
+	/* printf(GRN "Created can listener thread.%S\n", RESET); */
     }
 
     struct lws_context_creation_info info;
@@ -1068,5 +1066,4 @@ int main(int argc, char *argv[]) {
     }
 
     lws_context_destroy(context);
-
 }
