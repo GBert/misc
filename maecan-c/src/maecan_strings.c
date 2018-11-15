@@ -1,14 +1,14 @@
 /*
-* ----------------------------------------------------------------------------
-* "THE BEER-WARE LICENSE" (Revision 42):
-* <ixam97@ixam97.de> wrote this file. As long as you retain this notice you
-* can do whatever you want with this stuff. If we meet some day, and you think
-* this stuff is worth it, you can buy me a beer in return.
-* Maximilian Goldschmidt
-* ----------------------------------------------------------------------------
-* https://github.com/Ixam97
-* ----------------------------------------------------------------------------
-*/
+ * ----------------------------------------------------------------------------
+ * "THE BEER-WARE LICENSE" (Revision 42):
+ * <ixam97@ixam97.de> wrote this file. As long as you retain this notice you
+ * can do whatever you want with this stuff. If we meet some day, and you think
+ * this stuff is worth it, you can buy me a beer in return.
+ * Maximilian Goldschmidt
+ * ----------------------------------------------------------------------------
+ * https://github.com/Ixam97
+ * ----------------------------------------------------------------------------
+ */
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -23,7 +23,7 @@
 #define BASE_DROPDOWN_LENGTH	85
 #define BASE_SLIDER_LENGTH	115
 
-// Return Digits of int.
+/* Return Digits of int. */
 
 int digits(int value) {
     if (value == 0) {
@@ -52,16 +52,16 @@ void generateDevicesJson(char **buffer, device_t * devices, uint8_t n_devices) {
     for (uint8_t i = 0; i < n_devices; i++) {
 
 	size_t i_len = BASE_DEVICE_LENGTH;
-	i_len += digits(devices[i].uid);	// UID digits
-	i_len += strlen(devices[i].name);	// Name
-	i_len += digits(devices[i].v_low) + digits(devices[i].v_high) + 1;	// Digits of high and low version number and point
-	i_len += digits(devices[i].n_reads);	// digits of n_reads
+	i_len += digits(devices[i].uid);	/* UID digits */
+	i_len += strlen(devices[i].name);	/* Name */
+	i_len += digits(devices[i].v_low) + digits(devices[i].v_high) + 1;	/* Digits of high and low version number and point */
+	i_len += digits(devices[i].n_reads);	/* digits of n_reads */
 	for (uint8_t j = 0; j < devices[i].n_reads; j++) {
 
 	    if (j == 0)
 		i_len += strlen(",\"status_chanels_info\":[]");
 
-	    // Caclulating for each readings channel
+	    /* Caclulating for each readings channel */
 	    i_len += BASE_READINGS_LENGTH;
 	    i_len += digits(devices[i].readings[j].index);
 	    i_len += digits(devices[i].readings[j].power);
@@ -76,9 +76,11 @@ void generateDevicesJson(char **buffer, device_t * devices, uint8_t n_devices) {
 	    i_len += strlen(devices[i].readings[j].unit);
 
 	    if (j < (devices[i].n_reads - 1))
-		i_len++;	// Comma seperator
+		/* Comma seperator */
+		i_len++;
 	}
-	i_len += digits(devices[i].n_configs);	// digits of n_configs
+	i_len += digits(devices[i].n_configs);
+	/* digits of n_configs */
 	for (uint8_t j = 0; j < devices[i].n_configs; j++) {
 
 	    if (j == 0)
@@ -98,7 +100,7 @@ void generateDevicesJson(char **buffer, device_t * devices, uint8_t n_devices) {
 		    if (k < (devices[i].configs[j].dropdown.n_options - 1))
 			i_len++;
 		}
-		//i_len += 2;
+		/* i_len += 2; */
 	    } else if (devices[i].config_types[j] == 2) {
 		i_len += BASE_SLIDER_LENGTH;
 		i_len += digits(devices[i].configs[j].slider.index);
@@ -112,18 +114,19 @@ void generateDevicesJson(char **buffer, device_t * devices, uint8_t n_devices) {
 
 	    }
 	}
-	i_len += digits(devices[i].serial_nbr);	// digits of serial number
-	i_len += strlen(devices[i].product_nbr);	// Product number
+	i_len += digits(devices[i].serial_nbr);		/* digits of serial number */
+	i_len += strlen(devices[i].product_nbr);	/* Product number */
 	if (i < (n_devices - 1))
-	    i_len++;		// Comma seperator
+	    /* Comma seperator */
+	    i_len++;
 
-	char *temp_device_buffer = malloc(i_len + 1);	// create temporary buffer to hold device
+	char *temp_device_buffer = malloc(i_len + 1);	/* create temporary buffer to hold device */
 	memset(temp_device_buffer, 0, i_len + 1);
 
-	// construct basic device info:
+	/* construct basic device info: */
 	sprintf(temp_device_buffer, "{\"uid\": %ud,\"name\": \"%s\",\"version\": \"%d.%d\",\"status_chanels\": %d,\"config_chanels\": %d,\"serial_number\": %d,\"product_number\": \"%s\"", devices[i].uid, devices[i].name, devices[i].v_low, devices[i].v_high, devices[i].n_reads, devices[i].n_configs, devices[i].serial_nbr, devices[i].product_nbr);
 
-	// construct readings:
+	/* construct readings: */
 	if (devices[i].n_reads > 0) {
 	    strcat(temp_device_buffer, ",\"status_chanels_info\":[");
 	    for (uint8_t j = 0; j < devices[i].n_reads; j++) {
@@ -140,14 +143,13 @@ void generateDevicesJson(char **buffer, device_t * devices, uint8_t n_devices) {
 	    }
 	    strcat(temp_device_buffer, "]");
 	}
-	// construct configs
+	/* construct configs */
 	if (devices[i].n_configs > 0) {
 	    strcat(temp_device_buffer, ",\"config_chanels_info\":[");
 	    for (uint8_t j = 0; j < devices[i].n_configs; j++) {
 
 		if (devices[i].config_types[j] == 1) {
-		    // Dropdown
-
+		    /* Dropdown */
 		    sprintf(&temp_device_buffer[strlen(temp_device_buffer)],
 			    "{\"chanel\": %d,\"type\": %d,\"num_options\": %d,\"def_option\": %d,\"description\": \"%s\",\"options\":[",
 			    devices[i].configs[j].dropdown.index, devices[i].config_types[j],
@@ -161,8 +163,7 @@ void generateDevicesJson(char **buffer, device_t * devices, uint8_t n_devices) {
 		    }
 		    strcat(temp_device_buffer, "]}");
 		} else {
-		    // Slider
-
+		    /* Slider */
 		    sprintf(&temp_device_buffer[strlen(temp_device_buffer)],
 			    "{\"chanel\": %d,\"type\": %d,\"min_value\": %d,\"max_value\": %d,\"def_value\": %d,\"description\": \"%s\",\"start\": \"%s\",\"end\": \"%s\",\"unit\": \"%s\"}",
 			    devices[i].configs[j].slider.index, devices[i].config_types[j],
@@ -189,7 +190,7 @@ void generateDevicesJson(char **buffer, device_t * devices, uint8_t n_devices) {
     }
     strcat(temp_list_buffer, "]");
 
-    // copy complete device list string to buffer
+    /* copy complete device list string to buffer */
     *buffer = realloc(*buffer, len);
     memset(*buffer, 0, len);
     memcpy(*buffer, temp_list_buffer, len - 1);
@@ -262,8 +263,7 @@ void generateLocoInfoCs2(struct loco_info_t *loco) {
 	break;
     }
 
-    printf
-	("[lokomotive]\nlok\n.uid=0x%04x\n.name=%s\n.adresse=0x%04x\n.typ=%s\n.sid=0x%08x\n.mfxuid=0x%08x\n.icon=%s\n.symbol=%d\n.av=%d\n.bv=%d\n.volume=%d\n.tachomax=%d\n.vmax=%d\n.vmin=%d\n",
+    printf("[lokomotive]\nlok\n.uid=0x%04x\n.name=%s\n.adresse=0x%04x\n.typ=%s\n.sid=0x%08x\n.mfxuid=0x%08x\n.icon=%s\n.symbol=%d\n.av=%d\n.bv=%d\n.volume=%d\n.tachomax=%d\n.vmax=%d\n.vmin=%d\n",
 	 loco->uid, loco->name, loco->address, s_type, loco->sid, loco->mfxuid, loco->icon, loco->symbol, loco->av,
 	 loco->bv, loco->volume, loco->tachomax, loco->vmax, loco->vmin);
 
