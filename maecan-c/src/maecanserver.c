@@ -455,7 +455,7 @@ static int callback_maecan(struct lws *wsi, enum lws_callback_reasons reason, vo
 	    if (lws_monitor == 1) {
 		// print websocket data
 		logTime();
-		printf("LWS  -> Size: %d, Content: %s\n", len, buffer);
+		printf("LWS  -> Size: %ld, Content: %s\n", (unsigned long) len, buffer);
 	    }
 	    // Do stuff with buffer ...
 
@@ -527,7 +527,7 @@ static int callback_maecan(struct lws *wsi, enum lws_callback_reasons reason, vo
 		memcpy(p, lws_tx_buffer, len - 1);
 		if (lws_write(wsi, p, len - 1, LWS_WRITE_TEXT) != 0 && lws_monitor == 1) {
 		    logTime();
-		    printf("LWS <-  Size: %d, content: %s\n", len - 1, p);
+		    printf("LWS <-  Size: %ld, content: %s\n", (unsigned long) len - 1, p);
 		}
 		if (callback_request > 0)
 		    callback_request--;
