@@ -206,7 +206,7 @@ void readingColor(uint8_t value, char **color) {
     sprintf(*color, "rgb(%d,%d,%d)", rgb[0], rgb[1], rgb[2]);
 }
 
-void updateDeviceFromBuffer(uint32_t uid, uint8_t index, char * buffer, uint8_t buffer_len) {
+void updateDeviceFromBuffer(uint32_t uid, uint8_t index, char *buffer, uint8_t buffer_len) {
     /* update device with new information */
     for (uint8_t i = 0; i < n_devices; i++) {
 	if (devices[i].uid == uid) {
@@ -453,7 +453,7 @@ static int callback_maecan(struct lws *wsi, enum lws_callback_reasons reason, vo
 	    if (lws_monitor == 1) {
 		/* print websocket data */
 		logTime();
-		printf("LWS  -> Size: %ld, Content: %s\n", (unsigned long) len, buffer);
+		printf("LWS  -> Size: %ld, Content: %s\n", (unsigned long)len, buffer);
 	    }
 	    /* Do stuff with buffer ... */
 
@@ -497,8 +497,7 @@ static int callback_maecan(struct lws *wsi, enum lws_callback_reasons reason, vo
 		uint32_t uid;
 		uint16_t channel;
 		sscanf(&buffer[cmd_len], "%ud:%hud", &uid, &channel);
-		uint8_t data[] = { (uint8_t) (uid >> 24), (uint8_t) (uid >> 16), (uint8_t) (uid >> 8), (uint8_t) (uid), SYS_STATUS,
-	   channel };
+		uint8_t data[] = { (uint8_t) (uid >> 24), (uint8_t) (uid >> 16), (uint8_t) (uid >> 8), (uint8_t) (uid), SYS_STATUS, channel };
 		sendCanFrame(SYS_CMD, 0, 0x300, 6, data);
 		logTime();
 		printf(YEL "[Request] " RESET "statusinfo from UID 0x%08x, channel %d.\n", uid, channel);
@@ -508,7 +507,7 @@ static int callback_maecan(struct lws *wsi, enum lws_callback_reasons reason, vo
 		uint16_t value;
 		sscanf(&buffer[cmd_len], "%ud:%hhud:%hud", &uid, &channel, &value);
 		uint8_t data[] = { (uint8_t) (uid >> 24), (uint8_t) (uid >> 16), (uint8_t) (uid >> 8), (uint8_t) (uid), SYS_STATUS,
-				channel, (uint8_t) (value >> 8), (uint8_t) (value) };
+		    channel, (uint8_t) (value >> 8), (uint8_t) (value) };
 		sendCanFrame(SYS_CMD, 0, 0x300, 8, data);
 		logTime();
 		printf(YEL "[Request] " RESET "Set config value of UID 0x%08x, channel %d, to %d.\n", uid, channel, value);
@@ -525,7 +524,7 @@ static int callback_maecan(struct lws *wsi, enum lws_callback_reasons reason, vo
 		memcpy(p, lws_tx_buffer, len - 1);
 		if (lws_write(wsi, p, len - 1, LWS_WRITE_TEXT) != 0 && lws_monitor == 1) {
 		    logTime();
-		    printf("LWS <-  Size: %ld, content: %s\n", (unsigned long) len - 1, p);
+		    printf("LWS <-  Size: %ld, content: %s\n", (unsigned long)len - 1, p);
 		}
 		if (callback_request > 0)
 		    callback_request--;
@@ -588,9 +587,8 @@ void *pinger(void *argument) {
 	    last_que_tries++;
 	    logTime();
 	    printf(RED "[RETRY]    " RESET "device info from UID 0x%08x, index %d.\n", last_que, last_que_index);
-	    uint8_t data[] =
-		{ (uint8_t) (last_que >> 24), (uint8_t) (last_que >> 16), (uint8_t) (last_que >> 8),
-       (uint8_t) (last_que), last_que_index, 0, 0, 0 };
+	    uint8_t data[] = { (uint8_t) (last_que >> 24), (uint8_t) (last_que >> 16), (uint8_t) (last_que >> 8),
+		(uint8_t) (last_que), last_que_index, 0, 0, 0 };
 	    sendCanFrame(STATUS_CONFIG, 0, 0x300, 5, data);
 	    if (last_que_tries >= 20) {
 		busy_request = 0;
@@ -700,16 +698,13 @@ void *canListener() {
 				    uint32_t uid =
 					(uint32_t) (data[0] << 24) + (uint32_t) (data[1] << 16) +
 					(uint32_t) (data[2] << 8) + (uint32_t) (data[3]);
-				    if (data[6] == 1)
-					logTime(),
-					    printf(GRN "[Done]     " RESET
-						   "Config value of UID 0x%08x, channel %d, successfully set.\n", uid,
-						   data[5]);
-				    else
+				    if (data[6] == 1) {
 					logTime();
-				    printf(RED "[Warning]  " RESET
-					   "Config value of UID 0x%08x, channel %d, could not be written!", uid,
-					   data[5]);
+					printf(GRN "[Done]     " RESET "Config value of UID 0x%08x, channel %d, successfully set.\n", uid, data[5]);
+				    } else {
+					logTime();
+					printf(RED "[Warning]  " RESET "Config value of UID 0x%08x, channel %d, could not be written!", uid, data[5]);
+				    }
 				}
 			    }
 			}
@@ -847,7 +842,7 @@ void *canListener() {
 		   request_que_index[0]);
 	    uint8_t data[] =
 		{ (uint8_t) (request_que[0] >> 24), (uint8_t) (request_que[0] >> 16), (uint8_t) (request_que[0] >> 8),
-       (uint8_t) (request_que[0]), request_que_index[0], 0, 0, 0 };
+		(uint8_t) (request_que[0]), request_que_index[0], 0, 0, 0 };
 	    sendCanFrame(STATUS_CONFIG, 0, 0x300, 5, data);
 	    busy_request = 1;
 	    for (uint8_t i = 0; i < que_len; i++) {
@@ -868,137 +863,149 @@ int main(int argc, char *argv[]) {
     devices = malloc(0);
     n_devices = 0;
 
-    // RANDOM TESTING CODE:
+    /* RANDOM TESTING CODE: */
+#if 0
+    char **test_buffer = malloc(sizeof(int));
 
-    /*char **test_buffer = malloc(sizeof(int));
+    test_buffer[0] = malloc(strlen("Test_1") + 1);
+    strcpy(test_buffer[0], "Test_1");
+    test_buffer[1] = malloc(strlen("Test_1") + 1);
+    strcpy(test_buffer[1], "Test_2");
+    test_buffer[2] = malloc(strlen("Test_1") + 1);
+    strcpy(test_buffer[2], "Test_3");
 
-       test_buffer[0] = malloc(strlen("Test_1") + 1);
-       strcpy(test_buffer[0], "Test_1");
-       test_buffer[1] = malloc(strlen("Test_1") + 1);
-       strcpy(test_buffer[1], "Test_2");
-       test_buffer[2] = malloc(strlen("Test_1") + 1);
-       strcpy(test_buffer[2], "Test_3");
+    printf("Array size: %ld\n", sizeof(test_buffer));
 
-       printf("Array size: %ld\n", sizeof(test_buffer));
+    for (int i = 0; i < 3; i++) {
+	printf("Address: %ld, Content: %s\n", &test_buffer[i], test_buffer[i]);
 
-       for ( int i = 0; i < 3; i++) {
-       printf("Address: %ld, Content: %s\n", &test_buffer[i], test_buffer[i]);
+    }
 
-       }
+    for (int i = 0; i < 2; i++) {
+	test_buffer[i] = &test_buffer[i + 1];
+    }
 
-       for (int i = 0; i < 2; i++) {
-       test_buffer[i] = &test_buffer[i+1];
-       }
+    test_buffer = realloc(test_buffer, 0);
 
-       test_buffer = realloc(test_buffer, 0);
+    test_buffer = realloc(test_buffer, sizeof(int));
 
-       test_buffer = realloc(test_buffer, sizeof(int));
+    printf("Array size: %ld\n", sizeof(test_buffer));
 
-       printf("Array size: %ld\n", sizeof(test_buffer));
+    for (int i = 0; i < 2; i++) {
+	printf("Address: %ld, Content: %s\n", &test_buffer[i], test_buffer[i]);
+    }
 
-       for (int i = 0; i < 2; i++) {
-       printf("Address: %ld, Content: %s\n", &test_buffer[i], test_buffer[i]);
-       }
+    exit(EXIT_SUCCESS);
 
-       exit(EXIT_SUCCESS);
+    struct loco_info_t test_locolist[] = { {
+					    0x1234,
+					    "Test Lok 1",
+					    1,
+					    2,
+					    3,
+					    4,
+					    "Test_loco_1",
+					    5,
+					    6,
+					    7,
+					    255,
+					    140,
+					    250,
+					    2
+					   }, {
+					    0x1234,
+					    "Test Lok 2",
+					    1,
+					    2,
+					    3,
+					    4,
+					    "Test_loco_2",
+					    5,
+					    6,
+					    7,
+					    255,
+					    140,
+					    250,
+					    2}
+    };
 
-       struct loco_info_t test_locolist[] = {{
-						0x1234,
-						"Test Lok 1",
-						1,
-						2,
-						3,
-						4,
-						"Test_loco_1",
-						5,
-						6,
-						7,
-						255,
-						140,
-						250,
-						2
-					},{
-						0x1234,
-						"Test Lok 2",
-						1,
-						2,
-						3,
-						4,
-						"Test_loco_2",
-						5,
-						6,
-						7,
-						255,
-						140,
-						250,
-						2
-						}};
+    char *loco_buffer = malloc(0);
+    generateLokNamenResponse(&loco_buffer, &test_locolist, 2, 0, 3);
+    printf("%s\n", loco_buffer);
 
-       char *loco_buffer = malloc(0);
-       generateLokNamenResponse(&loco_buffer, &test_locolist, 2, 0, 3);
-       printf("%s\n", loco_buffer);
+    free(loco_buffer);
 
-       free(loco_buffer);
+    exit(EXIT_SUCCESS);
+#endif
 
-       exit(EXIT_SUCCESS);
+#if 0
 
-       /*FILE *devices_json;
+    FILE *devices_json;
 
-       if (devices_json = fopen("/www/MaeCAN-Server/html/devices.json", "r")) {
-       fseek(devices_json, 0, SEEK_END);
-       size_t devices_json_len = ftell(devices_json) + 1;
-       fseek(devices_json, 0, SEEK_SET);
-       char *devices_json_string = malloc(devices_json_len);
-       memset(devices_json_string, 0, devices_json_len);
+    if (devices_json = fopen("/www/MaeCAN-Server/html/devices.json", "r")) {
+	fseek(devices_json, 0, SEEK_END);
+	size_t devices_json_len = ftell(devices_json) + 1;
+	fseek(devices_json, 0, SEEK_SET);
+	char *devices_json_string = malloc(devices_json_len);
+	memset(devices_json_string, 0, devices_json_len);
 
-       fread(devices_json_string, devices_json_len, 1, devices_json);
+	fread(devices_json_string, devices_json_len, 1, devices_json);
 
-       int last_uid_index = strstr(devices_json_string, "\"uid\": ") - devices_json_string + 7;
-       int last_name_index = strstr(devices_json_string, "\"name\": \"") - devices_json_string + 9;
-       size_t last_name_len = strpbrk(&devices_json_string[last_name_index], "\"") - devices_json_string - last_name_index;
-       int last_version_index = strstr(devices_json_string, "\"version\": \"") - devices_json_string + 12;
-       int last_version_index_2 = strstr(&devices_json_string[last_version_index], ".") - devices_json_string + 1;
+	int last_uid_index = strstr(devices_json_string, "\"uid\": ") - devices_json_string + 7;
+	int last_name_index = strstr(devices_json_string, "\"name\": \"") - devices_json_string + 9;
+	size_t last_name_len =
+	    strpbrk(&devices_json_string[last_name_index], "\"") - devices_json_string - last_name_index;
+	int last_version_index = strstr(devices_json_string, "\"version\": \"") - devices_json_string + 12;
+	int last_version_index_2 = strstr(&devices_json_string[last_version_index], ".") - devices_json_string + 1;
 
-       while(1){    
-       n_devices++;
-       devices = realloc(devices, n_devices * sizeof(device));
+	while (1) {
+	    n_devices++;
+	    devices = realloc(devices, n_devices * sizeof(device));
 
-       // get uid:
-       sscanf(&devices_json_string[last_uid_index], "%ld", &devices[n_devices - 1].uid);
+	    // get uid:
+	    sscanf(&devices_json_string[last_uid_index], "%ld", &devices[n_devices - 1].uid);
 
-       // get name:
-       devices[n_devices - 1].name = malloc(last_name_len + 1);
-       memset(devices[n_devices - 1].name, 0, last_name_len + 1);
-       memcpy(devices[n_devices - 1].name, &devices_json_string[last_name_index], last_name_len);
+	    // get name:
+	    devices[n_devices - 1].name = malloc(last_name_len + 1);
+	    memset(devices[n_devices - 1].name, 0, last_name_len + 1);
+	    memcpy(devices[n_devices - 1].name, &devices_json_string[last_name_index], last_name_len);
 
-       // get version:
-       sscanf(&devices_json_string[last_version_index], "%d.", &devices[n_devices - 1].v_low);
-       sscanf(&devices_json_string[last_version_index_2], "%d\"", &devices[n_devices - 1].v_high);
+	    // get version:
+	    sscanf(&devices_json_string[last_version_index], "%d.", &devices[n_devices - 1].v_low);
+	    sscanf(&devices_json_string[last_version_index_2], "%d\"", &devices[n_devices - 1].v_high);
 
-       printf("Index: %d, UID: %08x, Name: %s, Version: %d.%d\n", last_uid_index, devices[n_devices - 1].uid, devices[n_devices - 1].name, devices[n_devices - 1].v_low, devices[n_devices - 1].v_high);
+	    printf("Index: %d, UID: %08x, Name: %s, Version: %d.%d\n", last_uid_index, devices[n_devices - 1].uid,
+		   devices[n_devices - 1].name, devices[n_devices - 1].v_low, devices[n_devices - 1].v_high);
 
-       if (strstr(&devices_json_string[last_uid_index],  "\"uid\": ") == NULL) break;
+	    if (strstr(&devices_json_string[last_uid_index], "\"uid\": ") == NULL)
+		break;
 
-       last_uid_index = strstr(&devices_json_string[last_uid_index], "\"uid\": ") - devices_json_string + strlen("\"uid\": ");
-       last_name_index = strstr(&devices_json_string[last_name_index], "\"name\": \"") -devices_json_string + strlen("\"name\": \"");
-       last_name_len = strpbrk(&devices_json_string[last_name_index], "\"") - devices_json_string - last_name_index;
-       last_version_index = strstr(&devices_json_string[last_version_index], "\"version\": \"") - devices_json_string + 12;
-       last_version_index_2 = strstr(&devices_json_string[last_version_index], ".") - devices_json_string + 1;
-       }
-       //printf("Freeing Sting ... ");
-       free(devices_json_string);
-       //printf("Done\n");
-       printf("Device count: %d\n", n_devices);
+	    last_uid_index =
+		strstr(&devices_json_string[last_uid_index], "\"uid\": ") - devices_json_string + strlen("\"uid\": ");
+	    last_name_index =
+		strstr(&devices_json_string[last_name_index],
+		       "\"name\": \"") - devices_json_string + strlen("\"name\": \"");
+	    last_name_len =
+		strpbrk(&devices_json_string[last_name_index], "\"") - devices_json_string - last_name_index;
+	    last_version_index =
+		strstr(&devices_json_string[last_version_index], "\"version\": \"") - devices_json_string + 12;
+	    last_version_index_2 = strstr(&devices_json_string[last_version_index], ".") - devices_json_string + 1;
+	}
+	//printf("Freeing Sting ... ");
+	free(devices_json_string);
+	//printf("Done\n");
+	printf("Device count: %d\n", n_devices);
 
-       fclose(devices_json);
+	fclose(devices_json);
 
-       /*int uid_index =  strstr(devices_json_string, "\"uid\": ") - devices_json_string + strlen("\"uid\": ");
-       int nl_index = strpbrk(&devices_json_string[uid_index], "\n,") - devices_json_string;
-       sscanf(&devices_json_string[uid_index], "%ld", &known_uid); */
+	/*int uid_index =  strstr(devices_json_string, "\"uid\": ") - devices_json_string + strlen("\"uid\": ");
+	   int nl_index = strpbrk(&devices_json_string[uid_index], "\n,") - devices_json_string;
+	   sscanf(&devices_json_string[uid_index], "%ld", &known_uid); */
 
-    //}
+    }
 
-    //exit(EXIT_SUCCESS);
+    exit(EXIT_SUCCESS);
+#endif
 
     sprintf(version, "%s.%d", DATE, BUILD);
 
@@ -1066,4 +1073,5 @@ int main(int argc, char *argv[]) {
     }
 
     lws_context_destroy(context);
+    exit(EXIT_SUCCESS);
 }
