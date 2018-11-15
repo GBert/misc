@@ -1,11 +1,12 @@
 const int revisionnr = 
-14571
+14572
 ;
 const char* commithash = 
-"20e81c7737dc4668e5b3b50fc66d80e2daf545b1";
+"1be588f5dd5dc7f56c13349d454ade7d7b87ccfa";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14572 2018-11-15 16:55:58 +0100 block: reset the reserved flag on reset\n" \
 "14571 2018-11-14 07:43:13 +0100 locdialog: increased function timers from 1000 to 10000\n" \
 "14570 2018-11-13 10:07:11 +0100 translation merge: de, sr_latin, fr, sl, en_UK, nl\n" \
 "14569 2018-11-11 08:18:38 +0100 wmz21: fix for reporting a switch event to the wlm\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14525 2018-10-29 14:58:36 +0100 dccpp: echo only for Arduino pin I/O\n" \
 "14524 2018-10-29 14:39:37 +0100 makefile: removes -ansi option\n" \
 "14523 2018-10-29 14:31:01 +0100 loc: replace cpp comments with c\n" \
-"14522 2018-10-29 10:45:46 +0100 mbus: loco/function support added\n" \
 
 "log end";
