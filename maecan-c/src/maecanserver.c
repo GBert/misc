@@ -76,7 +76,15 @@ void printUsage(char *progname) {
     printf("\nUsage: %s [can] [lws] [stamp]\n  Version: %s\n\n", progname, version);
     printf("         can    Print CAN-Bus trace.\n");
     printf("         lws    Print websocket trace.\n");
-    printf("         stamp   Print timestamps\n\n");
+    printf("         stamp  Print timestamps\n\n");
+}
+
+uint16_t be16(uint8_t *u) {
+    return (u[0] << 8) | u[1];
+}
+
+uint32_t be32(uint8_t *u) {
+    return (u[0] << 24) | (u[1] << 16) | (u[2] << 8) | u[3];
 }
 
 void logTime() {
@@ -186,10 +194,10 @@ void createDeviceFromPing(uint8_t * data) {
     /* Add device to devices array */
     n_devices++;
     devices = realloc(devices, n_devices * sizeof(device_t));
-    devices[n_devices - 1].uid = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
+    devices[n_devices - 1].uid = be32((uint8_t *)&data[0]);
     devices[n_devices - 1].v_low = data[4];
     devices[n_devices - 1].v_high = data[5];
-    devices[n_devices - 1].type = (uint16_t) (data[6] << 8) | data[7];
+    devices[n_devices - 1].type = be16(&data[6]);
     logTimeDummy();
     printf("           ƒööƒöÇ Added device 0x%08x.\n", devices[n_devices - 1].uid);
     logTimeDummy();
@@ -216,9 +224,7 @@ void updateDeviceFromBuffer(uint32_t uid, uint8_t index, char *buffer, uint8_t b
 
 		devices[i].n_reads = buffer[0];
 		devices[i].n_configs = buffer[1];
-		devices[i].serial_nbr =
-		    (uint32_t) (buffer[4] << 24) | (uint32_t) (buffer[5] << 16) | (uint32_t) (buffer[6] << 8) |
-		    buffer[7];
+		devices[i].serial_nbr = be32((uint8_t *)&buffer[4]);
 
 		memcpy(devices[i].product_nbr, buffer + 8, 8);
 
@@ -277,7 +283,7 @@ void updateDeviceFromBuffer(uint32_t uid, uint8_t index, char *buffer, uint8_t b
 		devices[i].readings[index - 1].index = buffer[0];
 		devices[i].readings[index - 1].power = buffer[1];
 
-		devices[i].readings[index - 1].origin = (uint16_t) (buffer[6] << 8) + (uint16_t) buffer[7];
+		devices[i].readings[index - 1].origin = be16((uint8_t *)&buffer[6]);
 
 		char *tmp_color = malloc(17);
 
@@ -285,8 +291,7 @@ void updateDeviceFromBuffer(uint32_t uid, uint8_t index, char *buffer, uint8_t b
 		    memset(tmp_color, 0, 17);
 		    readingColor(buffer[j + 2], &tmp_color);
 		    strcpy(devices[i].readings[index - 1].colors[j], tmp_color);
-		    devices[i].readings[index - 1].ranges[j] =
-			(uint16_t) (buffer[8 + (j * 2)] << 8) + (uint16_t) buffer[9 + (j * 2)];
+		    devices[i].readings[index - 1].ranges[j] = be16((uint8_t *)&buffer[8 + (j * 2)]);
 
 		}
 
@@ -361,18 +366,16 @@ void updateDeviceFromBuffer(uint32_t uid, uint8_t index, char *buffer, uint8_t b
 			       limiter[j + 1] - limiter[j]);
 			printf("Option %d: %s\n", j + 1, devices[i].configs[i_config].dropdown.options[j]);
 		    }
-
 		} else if (buffer[1] == 2) {
 		    /* Slider */
-
 		    devices[i].config_types = realloc(devices[i].config_types, sizeof(uint8_t) * (index - devices[i].n_reads));
 		    devices[i].configs = realloc(devices[i].configs, sizeof(config_t) * (index - devices[i].n_reads));
 		    devices[i].config_types[i_config] = 2;
 
 		    devices[i].configs[i_config].slider.index = buffer[0];
-		    devices[i].configs[i_config].slider.min = (uint16_t) (buffer[2] << 8) + buffer[3];
-		    devices[i].configs[i_config].slider.max = (uint16_t) (buffer[4] << 8) + buffer[5];
-		    devices[i].configs[i_config].slider.def_value = (uint16_t) (buffer[6] << 8) + buffer[7];
+		    devices[i].configs[i_config].slider.min = be16((uint8_t *)&buffer[2]);
+		    devices[i].configs[i_config].slider.max = be16((uint8_t *)&buffer[4]);
+		    devices[i].configs[i_config].slider.def_value = be16((uint8_t *)&buffer[6]);
 
 		    uint8_t limiter = 8;
 
@@ -395,13 +398,10 @@ void updateDeviceFromBuffer(uint32_t uid, uint8_t index, char *buffer, uint8_t b
 		    memset(devices[i].configs[i_config].slider.unit, 0, strlen(&buffer[limiter]) + 1);
 		    memcpy(devices[i].configs[i_config].slider.unit, &buffer[limiter], strlen(&buffer[limiter]));
 		}
-
 		logTimeDummy();
 		printf("           ƒööƒöÇ Updated device 0x%08x with config index %d.\n", uid, index);
 		devices_changed = 1;
-
 	    }
-
 	    break;
 	}
     }
@@ -535,7 +535,6 @@ static int callback_maecan(struct lws *wsi, enum lws_callback_reasons reason, vo
     default:
 	break;
     }
-
     return 0;
 }
 
@@ -681,23 +680,17 @@ void *canListener() {
 			    }
 			case SYS_STATUS:{
 				if (resp == 1 && dlc == 8) {
-				    uint32_t uid =
-					(uint32_t) (data[0] << 24) + (uint32_t) (data[1] << 16) +
-					(uint32_t) (data[2] << 8) + (uint32_t) (data[3]);
+				    uint32_t uid = be32(&data[0]);
 				    logTime();
-				    printf(CYN "[Received] " RESET
-					   "statusinfo from UID 0x%08x, channel: %d, value: %d\n", uid, data[5],
-					   (uint16_t) (data[6] << 8) + (uint16_t) data[7]);
+				    printf(CYN "[Received] " RESET "statusinfo from UID 0x%08x, channel: %d, value: %d\n", uid, data[5], be16(&data[6]));
 				    char tx_msg[40];
 				    memset(tx_msg, 0, 40);
-				    sprintf(tx_msg, "updateReading:%ud:%d:%d", uid, data[5], (uint16_t) (data[6] << 8) + (uint16_t) data[7]);
+				    sprintf(tx_msg, "updateReading:%ud:%d:%d", uid, data[5], be16(&data[6]));
 				    fillLwsTxBuffer(tx_msg);
 				    callback_request = num_clients;
 				    lws_callback_on_writable_all_protocol(context, &protocols[1]);
 				} else if (resp == 1 && dlc == 7) {
-				    uint32_t uid =
-					(uint32_t) (data[0] << 24) + (uint32_t) (data[1] << 16) +
-					(uint32_t) (data[2] << 8) + (uint32_t) (data[3]);
+				    uint32_t uid = be32(&data[0]);
 				    if (data[6] == 1) {
 					logTime();
 					printf(GRN "[Done]     " RESET "Config value of UID 0x%08x, channel %d, successfully set.\n", uid, data[5]);
@@ -741,7 +734,7 @@ void *canListener() {
 		/* Ping-Frame: */
 		case PING:{
 			if (resp == 1) {
-			    uint32_t uid = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
+			    uint32_t uid = be32(&data[0]);
 			    logTime();
 			    printf(CYN "[Received] " RESET "ping response from UID 0x%08x.\n", uid);
 
@@ -800,7 +793,7 @@ void *canListener() {
 				status_buffer[i + ((buffer_len - 1) * 8)] = data[i];
 			    }
 			} else if (resp == 1) {
-			    uint32_t uid = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
+			    uint32_t uid = be32(&data[0]);
 			    /* Work with buffer: */
 			    logTime();
 			    printf(GRN "[Done]     " RESET "device info from UID 0x%08x, index %d.\n", uid, data[4]);
