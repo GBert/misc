@@ -31,7 +31,6 @@
 #include <libwebsockets.h>
 
 #include "maecan_common.h"
-#include "maecan_strings.c"
 #include "color_defs.h"
 
 #include "version.h"
