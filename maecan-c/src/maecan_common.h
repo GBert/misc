@@ -1,14 +1,14 @@
 /*
-* ----------------------------------------------------------------------------
-* "THE BEER-WARE LICENSE" (Revision 42):
-* <ixam97@ixam97.de> wrote this file. As long as you retain this notice you
-* can do whatever you want with this stuff. If we meet some day, and you think
-* this stuff is worth it, you can buy me a beer in return.
-* Maximilian Goldschmidt
-* ----------------------------------------------------------------------------
-* https://github.com/Ixam97
-* ----------------------------------------------------------------------------
-*/
+ * ----------------------------------------------------------------------------
+ * "THE BEER-WARE LICENSE" (Revision 42):
+ * <ixam97@ixam97.de> wrote this file. As long as you retain this notice you
+ * can do whatever you want with this stuff. If we meet some day, and you think
+ * this stuff is worth it, you can buy me a beer in return.
+ * Maximilian Goldschmidt
+ * ----------------------------------------------------------------------------
+ * https://github.com/Ixam97
+ * ----------------------------------------------------------------------------
+ */
 
 #ifndef _MAECAN_COMMON
 #define _MAECAN_COMMON
@@ -16,9 +16,9 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-// MÃñrklin CAN-Bus commands:
+/* MÃ¤rklin CAN-Bus commands: */
 #define SYS_CMD             0x00
-// Sys-Subcmds
+/* Sys-Subcmds */
     #define SYS_STOP        0x00
     #define SYS_GO          0x01
     #define SYS_HALT        0x02
@@ -56,87 +56,83 @@
 #define DATA_QUERY          0x20
 #define CONFIG_DATA_STREAM  0x21
 
+struct reading_t {
+    /* Describing a reading channel of a device */
+    uint8_t index;
+    int8_t power;
+    char colors[4][17];
+    uint16_t origin;
+    uint16_t ranges[4];
+    char *name;
+    char *start;
+    char *end;
+    char *unit;
+};
 
-typedef struct {
-	// Describing a reading channel of a device
-	uint8_t index;
-	int8_t power;
-	char colors[4][17];
-	uint16_t origin;
-	uint16_t ranges[4];
-	char *name;
-	char *start;
-	char *end;
-	char *unit;
-} reading_t;
+struct config_dropdown_t {
+    /* Describing a dropdown config channel of a device */
+    uint8_t index;
+    uint8_t n_options;
+    uint8_t def_option;
+    char *description;
+    char **options;
+};
 
-typedef struct {
-	// Describing a dropdown config channel of a device
-	uint8_t index;
-	uint8_t n_options;
-	uint8_t def_option;
-	char *description;
-	char **options;
-} config_dropdown_t;
+struct config_slider_t {
+    /* Describing a slider config channel of a device */
+    uint8_t index;
+    uint16_t min;
+    uint16_t max;
+    uint16_t def_value;
+    char *description;
+    char *start;
+    char *end;
+    char *unit;
+};
 
-typedef struct {
-	// Describing a slider config channel of a device
-	uint8_t index;
-	uint16_t min;
-	uint16_t max;
-	uint16_t def_value;
-	char *description;
-	char *start;
-	char *end;
-	char *unit;
-} config_slider_t;
+union config_t {
+    struct config_dropdown_t dropdown;
+    struct config_slider_t slider;
+};
 
-typedef union {
-	config_dropdown_t dropdown;
-	config_slider_t slider;
-} config_t;
-
-typedef struct {
-	// Describing a CAN-bus device
-	uint32_t uid;
-	uint8_t v_low;
-	uint8_t v_high;
-	uint16_t type;
-	uint8_t n_reads;
-	uint8_t n_configs;
-	uint32_t serial_nbr;
-	char product_nbr[8];
-	char *name;
-	reading_t *readings;
-	uint8_t *config_types;
-	config_t *configs;
-} device_t;
+struct device_t {
+    /* Describing a CAN-bus device */
+    uint32_t uid;
+    uint8_t v_low;
+    uint8_t v_high;
+    uint16_t type;
+    uint8_t n_reads;
+    uint8_t n_configs;
+    uint32_t serial_nbr;
+    char product_nbr[8];
+    char *name;
+    struct reading_t *readings;
+    uint8_t *config_types;
+    union config_t *configs;
+};
 
 struct loco_function_t{
-	uint16_t type;
-	uint8_t time;
-	uint8_t value;
+    uint16_t type;
+    uint8_t time;
+    uint8_t value;
 };
 
 struct loco_info_t{
-	uint16_t uid;
-	char *name;
-	uint16_t address;
-	uint8_t type; // 0: mm2_prg, 1: mm2_dil8, 2: dcc, 3: mfx, 4: sx1
-	uint32_t sid;
-	uint32_t mfxuid;
-	char *icon;
-	uint8_t symbol; // 0: E-Lok, 1: Diesellok, 2: Dampflok, 3: -/-
-	uint8_t av;
-	uint8_t bv;
-	uint8_t volume;
-	uint16_t tachomax;
-	uint8_t vmax;
-	uint8_t vmin;
-	//loco_function_t functions[16];
+    uint16_t uid;
+    char *name;
+    uint16_t address;
+    uint8_t type; /* 0: mm2_prg, 1: mm2_dil8, 2: dcc, 3: mfx, 4: sx1 */
+    uint32_t sid;
+    uint32_t mfxuid;
+    char *icon;
+    uint8_t symbol; /* 0: E-Lok, 1: Diesellok, 2: Dampflok, 3: -/- */
+    uint8_t av;
+    uint8_t bv;
+    uint8_t volume;
+    uint16_t tachomax;
+    uint8_t vmax;
+    uint8_t vmin;
+    /* loco_function_t functions[16]; */
 };
-
-int digits(int value);
-void generateDevicesJson(char **buffer, device_t * devices, uint8_t n_devices);
 
 #endif
