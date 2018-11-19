@@ -114,6 +114,13 @@ NORM_POINTER1
                 RETURN
 
 ;------------------------------------------------------------------------------
+; System Sub CMD Reset 0x80 -> reboot - e.g. for updates
+;------------------------------------------------------------------------------
+
+CAN_REBOOT
+                GOTO	0
+
+;------------------------------------------------------------------------------
 ; answer System Command (0x00)
 ;------------------------------------------------------------------------------
 
@@ -181,7 +188,51 @@ SYSYTEM_CMD_OTHER
 ;------------------------------------------------------------------------------
 
 CHANNEL_GET
-                RETURN
+                MOVFF   EVENTPP,FSR0H
+                MOVFF   EVENTPP+1,FSR0L
+                CLRF    POSTINC0
+                MOVLW   0x01
+                MOVWF   POSTINC0
+                MOVFF   CANHASH_HIGH,POSTINC0
+                MOVFF   CANHASH_LOW,POSTINC0
+                MOVLW   8
+                MOVWF   POSTINC0
+                MOVFF   CANFRAME+5,POSTINC0
+                MOVFF   CANFRAME+6,POSTINC0
+                MOVFF   CANFRAME+7,POSTINC0
+                MOVFF   CANFRAME+8,POSTINC0
+		; system sub command 0x0B
+                MOVFF   CANFRAME+9,POSTINC0
+                ; number of channel
+                MOVFF   CANFRAME+10,POSTINC0
+                MOVFF   CANFRAME+10,W
+                XORLW   2
+                BNZ     CHANNEL_CHECK_3
+                MOVFF   S88C_H,POSTINC0
+                MOVFF   S88C_L,POSTINC0
+                BRA     EVENT_RING_NORMALIZE
+
+CHANNEL_CHECK_3
+                XORLW   3
+                BNZ     CHANNEL_CHECK_4
+                MOVLW	0
+                MOVWF   POSTINC0
+                MOVFF   S88LENGTH,POSTINC0
+                BRA     EVENT_RING_NORMALIZE
+
+CHANNEL_CHECK_4
+                XORLW   4
+                BNZ     CHANNEL_CHECK_UNKNOWN
+                MOVLW	0
+                MOVWF   POSTINC0
+                MOVFF   SCAN_INTERVAL,POSTINC0
+                BRA     EVENT_RING_NORMALIZE
+
+CHANNEL_CHECK_UNKNOWN
+                MOVLW	0
+                MOVWF   POSTINC0
+                MOVWF   POSTINC0
+                BRA     EVENT_RING_NORMALIZE
 
 ;------------------------------------------------------------------------------
 ; System CMD 0x0B -> save value
@@ -245,13 +296,6 @@ SETUP_VALUE_RESPONSE
                 BRA     EVENT_RING_NORMALIZE
 
                 RETURN
-
-;------------------------------------------------------------------------------
-; System Sub CMD Reset 0x80 -> reboot - e.g. for updates
-;------------------------------------------------------------------------------
-
-CAN_REBOOT
-                GOTO	0
 
 ;------------------------------------------------------------------------------
 ; Switch Accessois (0x1B)
