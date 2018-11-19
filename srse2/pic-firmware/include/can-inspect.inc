@@ -119,19 +119,31 @@ NORM_POINTER1
 
 SYSYTEM_CMD
                 RCALL   CHECK_ID
-                BNZ	SYSYTEM_CMD_EXIT
-                ; Configuration DLC = 8 & Sub Command 0x0b
-                ; DLC = 8
-                MOVF	CANFRAME+4,W
-                XORLW	8
-                BNZ	SYSYTEM_CMD_NEXT1
+                BNZ     SYSYTEM_CMD_EXIT
+
+                ; System Command & Sub Command 0x0B
                 MOVF    CANFRAME+9,W
-                XORLW	0x0B
-                BZ	SETUP_VALUE
+                XORLW   0x0B
+                BNZ     SYSYTEM_CMD_NEXT
+
+                ; DLC = 6 Status
+                MOVF    CANFRAME+4,W
+                XORLW   6
+                BNZ     SYSYTEM_CMD_NEXT1
+                ; TODO
+                BRA     CHANNEL_GET
+
 SYSYTEM_CMD_NEXT1
+                ; DLC = 8 Configuration
+                MOVF    CANFRAME+4,W
+                XORLW   8
+                BZ      SETUP_VALUE
+                RETURN
+
+SYSYTEM_CMD_NEXT
                 ; Reboot ?
                 ; DLC = 6
-                MOVF	CANFRAME+4,W
+                MOVF    CANFRAME+4,W
                 XORLW	6
                 BNZ	SYSYTEM_CMD_NEXT2
                 MOVF    CANFRAME+9,W
@@ -165,7 +177,14 @@ SYSYTEM_CMD_OTHER
                 BRA	EVENT_RING_NORMALIZE
 
 ;------------------------------------------------------------------------------
-; System Sub CMD Reset 0x0B -> save value
+; System CMD 0x0B -> channel value
+;------------------------------------------------------------------------------
+
+CHANNEL_GET
+                RETURN
+
+;------------------------------------------------------------------------------
+; System CMD 0x0B -> save value
 ;------------------------------------------------------------------------------
 
 SETUP_VALUE
@@ -207,13 +226,13 @@ SETUP_VALUE_WRITE
 SETUP_VALUE_RESPONSE
                 MOVFF   EVENTPP,FSR0H
                 MOVFF   EVENTPP+1,FSR0L
-                CLRF	POSTINC0
-                MOVLW	0x01
-                MOVWF	POSTINC0
+                CLRF    POSTINC0
+                MOVLW   0x01
+                MOVWF   POSTINC0
                 MOVFF   CANHASH_HIGH,POSTINC0
                 MOVFF   CANHASH_LOW,POSTINC0
-                MOVLW	7
-                MOVWF	POSTINC0
+                MOVLW   7
+                MOVWF   POSTINC0
                 MOVFF   CANFRAME+5,POSTINC0
                 MOVFF   CANFRAME+6,POSTINC0
                 MOVFF   CANFRAME+7,POSTINC0
@@ -223,7 +242,7 @@ SETUP_VALUE_RESPONSE
                 ; 1 -> success
                 MOVLW   1
                 MOVWF   POSTINC0
-                BRA	EVENT_RING_NORMALIZE
+                BRA     EVENT_RING_NORMALIZE
 
                 RETURN
 
@@ -336,10 +355,10 @@ CAN_PING_CONT
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                ; Version 1.3
+                ; Version 1.4
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	3
+                MOVLW	4
                 MOVWF	POSTINC0
                 MOVLW	0
                 MOVWF	POSTINC0
