@@ -205,7 +205,7 @@ CHANNEL_GET
                 MOVFF   CANFRAME+9,POSTINC0
                 ; number of channel
                 MOVFF   CANFRAME+10,POSTINC0
-                MOVFF   CANFRAME+10,W
+                MOVFF   CANFRAME+10,WREG
                 XORLW   2
                 BNZ     CHANNEL_CHECK_3
                 MOVFF   S88C_H,POSTINC0
