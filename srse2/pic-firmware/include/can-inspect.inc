@@ -213,6 +213,7 @@ CHANNEL_GET
                 BRA     EVENT_RING_NORMALIZE
 
 CHANNEL_CHECK_3
+                MOVFF   CANFRAME+10,WREG
                 XORLW   3
                 BNZ     CHANNEL_CHECK_4
                 MOVLW	0
@@ -221,6 +222,7 @@ CHANNEL_CHECK_3
                 BRA     EVENT_RING_NORMALIZE
 
 CHANNEL_CHECK_4
+                MOVFF   CANFRAME+10,WREG
                 XORLW   4
                 BNZ     CHANNEL_CHECK_UNKNOWN
                 MOVLW	0
@@ -229,7 +231,7 @@ CHANNEL_CHECK_4
                 BRA     EVENT_RING_NORMALIZE
 
 CHANNEL_CHECK_UNKNOWN
-                MOVLW	0
+                MOVLW	0xFF
                 MOVWF   POSTINC0
                 MOVWF   POSTINC0
                 BRA     EVENT_RING_NORMALIZE
