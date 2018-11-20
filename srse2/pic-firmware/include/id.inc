@@ -19,6 +19,9 @@
 
                 CBLOCK
                 INDEX : 1
+                INDEX_APOS : 1
+                INDEX_VL : 1
+                INDEX_VH : 1
                 INDEX_N : 1
                 INDEX_L : 1
                 INDEX_C : 1
@@ -218,6 +221,7 @@ SEND_INDEX
                 CLRF    INDEX_C
                 ; align
                 TBLRD*+
+                MOVFF   TABLAT,INDEX_APOS
 
                 ; load Event Queue pointer
                 MOVFF   EVENTPP,FSR0H
@@ -238,6 +242,10 @@ SEND_INDEX_LOOP1
 SEND_INDEX_LOOP2
                 TBLRD*+
                 MOVFF   TABLAT,POSTINC0
+                DECFSZ  INDEX_APOS
+                BRA     SEND_INDEX_LOOP3
+                ; TODO
+SEND_INDEX_LOOP3
                 DECFSZ  INDEX_L,F
                 BRA     SEND_INDEX_LOOP2
                 CALL    EVENT_RING_NORMALIZE
@@ -283,56 +291,69 @@ INDEX0
 #ENDIF
 
 INDEX1
-                DB        4 ,  0
+                ;  5 rows - actual value at positon 28
+                DB        5 , 28
                 DB        1 ,  2 ,  0 ,  0 ,  0 ,0xFF,  0 ,  0
                 DB       'C', 'A', 'N', 'B', 'u', 's', 't', 'e'
                 DB       'r', ' ', 'I', 'D',  0 , '0',  0 , '2'
                 DB       '5', '5',  0 ,  0 ,  0 ,  0 ,  0 ,  0
+                DB        0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0
 
 INDEX2
-                DB        4 ,  0
+                ;  5 rows - actual value at positon 26
+                DB        5 , 26
                 DB        2 ,  2 ,  0 ,  0 ,0x27,0x10,0x03,0xe8
                 DB       'S', 't', 'a', 'r', 't', ' ', 'N', 'r'
                 DB        0 , '0',  0 , '1', '0', '0', '0', '0'
                 DB        0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0
+                DB        0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0
 
 INDEX3
 #IFDEF PWM
-                DB        4 ,  0
+                ;  5 rows - actual value at positon 33
+                DB        5 , 33
                 DB        3 ,  2 ,0x07,0xD0,0x0F,0xa0,0x0B,0xB8
                 DB       'S', 'e', 'r', 'v', 'o', ' ', '1',  0
                 DB       '2', '0', '0', '0',  0 , '4', '0', '0'
                 DB       '0',  0 , 't', 'i', 'c', 'k', 's',  0
+                DB        0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0
 #ELSE
-                DB        4 ,  0
+                ;  5 rows - actual value at positon 29
+                DB        5 , 29
                 DB        3 ,  2 ,  0 ,  0 ,  0 ,0x0F,  0 ,  1
                 DB       'L',0xc3,0xa4, 'n', 'g', 'e', ' ', 'S'
                 DB       '8', '8', '-', 'B', 'u', 's',  0 , '0'
                 DB        0 , '1', '5',  0 ,  0 ,  0 ,  0 ,  0
+                DB        0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0
 #ENDIF
 
 INDEX4
 #IFDEF PWM
-                DB        4 ,  0
+                ;  5 rows - actual value at positon 32
+                DB        5 , 32
                 DB        4 ,  2 ,0x07,0xD0,0x0F,0xa0,0x0B,0xB8
                 DB       'S', 'e', 'r', 'v', 'o', ' ', '2',  0
                 DB       '2', '0', '0', '0',  0 , '4', '0', '0'
                 DB       '0',  0 , 't', 'i', 'c', 'k', 's',  0
+                DB        0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0
 #ELSE
-                DB        4 ,  0
+                ;  5 rows - actual value at positon 35
+                DB        5 , 35
                 DB        4 ,  2 ,  0 ,  0 ,0x27,0x10,0x03,0xe8
                 DB       'S', '8', '8', ' ', 'S', 't', 'a', 'r'
                 DB       't',  0 , '0',  0 , '1', '0', '0', '0'
                 DB       '0',  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0
+                DB        0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0
 #ENDIF
 
 #IFDEF PWM
 INDEX5
-                DB        4 ,  0
+                DB        5 ,  33
                 DB        5 ,  2 ,0x07,0xD0,0x0F,0xa0,0x0B,0xB8
                 DB       'S', 'e', 'r', 'v', 'o', ' ', '3',  0
                 DB       '2', '0', '0', '0',  0 , '4', '0', '0'
                 DB       '0',  0 , 't', 'i', 'c', 'k', 's',  0
+                DB        0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0
 #ENDIF
 
 ;

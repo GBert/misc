@@ -180,6 +180,7 @@ MAIN
 #INCLUDE        "s88.inc"                   ; S88
 #INCLUDE        "event-ring.inc"            ; Event ring
 #INCLUDE        "can-inspect.inc"           ; CAN Inspector
+#INCLUDE        "bindecascii.inc"           ; 16 binary to decimal converter
 
 ;------------------------------------------------------------------------------
 ;
