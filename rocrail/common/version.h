@@ -1,11 +1,17 @@
 const int revisionnr = 
-14572
+14578
 ;
 const char* commithash = 
-"1be588f5dd5dc7f56c13349d454ade7d7b87ccfa";
+"7ec944a57de99c08b83b2cd657741de2998ef538";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14578 2018-11-21 16:38:11 +0100 rocview: zoom2fit icon added\n" \
+"14577 2018-11-21 16:09:56 +0100 rocview: zoomm to fit added\n" \
+"14576 2018-11-21 14:23:48 +0100 rocweb: error fix in case of a function definition > 28\n" \
+"14575 2018-11-21 10:46:12 +0100 rocnetnode: tcpip CAN connection added\n" \
+"14574 2018-11-21 08:24:19 +0100 rcan: utils fix\n" \
+"14573 2018-11-20 18:28:51 +0100 guiframe: show server work space in title bar\n" \
 "14572 2018-11-15 16:55:58 +0100 block: reset the reserved flag on reset\n" \
 "14571 2018-11-14 07:43:13 +0100 locdialog: increased function timers from 1000 to 10000\n" \
 "14570 2018-11-13 10:07:11 +0100 translation merge: de, sr_latin, fr, sl, en_UK, nl\n" \
@@ -50,11 +56,5 @@ const char* revlog =
 "14531 2018-11-01 09:03:52 +0100 SLIM-COLOR: bunnton-5\n" \
 "14530 2018-11-01 08:16:42 +0100 dccpp: regard swap gates on report\n" \
 "14529 2018-11-01 08:06:17 +0100 SLIM: button 5 occ and route\n" \
-"14528 2018-10-31 08:17:05 +0100 SLIM-COLOR: button 5 added for outputs as decoupler\n" \
-"14527 2018-10-30 10:52:39 +0100 planpanel: fix for moving an item multiple times\n" \
-"14526 2018-10-30 08:16:14 +0100 mbus: report state mcs2: trace fix z21: trace fix\n" \
-"14525 2018-10-29 14:58:36 +0100 dccpp: echo only for Arduino pin I/O\n" \
-"14524 2018-10-29 14:39:37 +0100 makefile: removes -ansi option\n" \
-"14523 2018-10-29 14:31:01 +0100 loc: replace cpp comments with c\n" \
 
 "log end";
