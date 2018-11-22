@@ -1,11 +1,21 @@
 const int revisionnr = 
-14578
+14588
 ;
 const char* commithash = 
-"7ec944a57de99c08b83b2cd657741de2998ef538";
+"5a95f502db0898ea169ab3f52f0b5fda5b4650be";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14588 2018-11-22 16:47:57 +0100 zoom range corrections\n" \
+"14587 2018-11-22 16:43:40 +0100 zoom range corrections\n" \
+"14586 2018-11-22 16:30:10 +0100 zoomdlg: max 400\n" \
+"14585 2018-11-22 16:17:13 +0100 zoom max 400\n" \
+"14584 2018-11-22 15:04:25 +0100 rocnetnode: sensor report over CAN\n" \
+"14583 2018-11-22 12:31:22 +0100 guiframe: increase maxX and maxY in case of fit zoom\n" \
+"14582 2018-11-22 11:18:44 +0100 rcan tcp: thread for (re)connect\n" \
+"14581 2018-11-22 08:47:57 +0100 rocview: zoom color icons added\n" \
+"14580 2018-11-22 08:16:28 +0100 translation merge: de, nl\n" \
+"14579 2018-11-22 07:55:18 +0100 rocweb: fix for clicking on the FG text\n" \
 "14578 2018-11-21 16:38:11 +0100 rocview: zoom2fit icon added\n" \
 "14577 2018-11-21 16:09:56 +0100 rocview: zoomm to fit added\n" \
 "14576 2018-11-21 14:23:48 +0100 rocweb: error fix in case of a function definition > 28\n" \
@@ -46,15 +56,5 @@ const char* revlog =
 "14541 2018-11-02 15:45:47 +0100 model: moved sleep in timedoff thread to avoid loop with wrong number of sensors\n" \
 "14540 2018-11-02 10:54:49 +0100 mbus: evaluate config date... not realy usable\n" \
 "14539 2018-11-01 16:58:30 +0100 timedactions: rip path in case of a xml command\n" \
-"14538 2018-11-01 15:08:39 +0100 mbus: inform Rocrail of a verified loco\n" \
-"14537 2018-11-01 12:16:04 +0100 DB-Signals user theme added (Bernd)\n" \
-"14536 2018-11-01 12:11:15 +0100 zimocan: commented out the nocheck udp option\n" \
-"14535 2018-11-01 11:03:34 +0100 wsocket: copy fix\n" \
-"14534 2018-11-01 10:11:35 +0100 SLIM-COLOR: button-5 complete\n" \
-"14533 2018-11-01 09:23:02 +0100 usocket: copy error fixed\n" \
-"14532 2018-11-01 09:19:11 +0100 socket function UDPNoCeck added\n" \
-"14531 2018-11-01 09:03:52 +0100 SLIM-COLOR: bunnton-5\n" \
-"14530 2018-11-01 08:16:42 +0100 dccpp: regard swap gates on report\n" \
-"14529 2018-11-01 08:06:17 +0100 SLIM: button 5 occ and route\n" \
 
 "log end";
