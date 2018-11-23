@@ -1,11 +1,14 @@
 const int revisionnr = 
-14588
+14591
 ;
 const char* commithash = 
-"5a95f502db0898ea169ab3f52f0b5fda5b4650be";
+"bdc5f99fa821298740421449ac92aed1991d051d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14591 2018-11-23 08:19:21 +0100 zoom to fit: use the selected tab\n" \
+"14590 2018-11-23 08:11:44 +0100 zoomdlg: process enter in the combobox\n" \
+"14589 2018-11-23 07:19:11 +0100 scalecombo check correction\n" \
 "14588 2018-11-22 16:47:57 +0100 zoom range corrections\n" \
 "14587 2018-11-22 16:43:40 +0100 zoom range corrections\n" \
 "14586 2018-11-22 16:30:10 +0100 zoomdlg: max 400\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "14544 2018-11-03 19:04:47 +0100 output: support for command on,off,active added\n" \
 "14543 2018-11-03 09:49:18 +0100 signaldialog: added show id option\n" \
 "14542 2018-11-02 19:18:07 +0100 blockdialog: evaluate sensors also on apply to take over none selected\n" \
-"14541 2018-11-02 15:45:47 +0100 model: moved sleep in timedoff thread to avoid loop with wrong number of sensors\n" \
-"14540 2018-11-02 10:54:49 +0100 mbus: evaluate config date... not realy usable\n" \
-"14539 2018-11-01 16:58:30 +0100 timedactions: rip path in case of a xml command\n" \
 
 "log end";
