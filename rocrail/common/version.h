@@ -1,11 +1,18 @@
 const int revisionnr = 
-14591
+14598
 ;
 const char* commithash = 
-"bdc5f99fa821298740421449ac92aed1991d051d";
+"9612c92a1d220cdd7f496a1a22fe4ca8948e676a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14598 2018-11-25 16:13:33 +0100 zimocan: only evaluate events, no acks, in case of port4\n" \
+"14597 2018-11-25 15:25:01 +0100 zimocan: fix for evaluating port4 event\n" \
+"14596 2018-11-25 15:08:22 +0100 loc: check for goto block in the route\n" \
+"14595 2018-11-25 09:07:05 +0100 loc: trace correction in case of check consist\n" \
+"14594 2018-11-25 08:52:12 +0100 loc: skip finder in case the goto block has a direct route\n" \
+"14593 2018-11-25 08:05:16 +0100 loc: polarisation flag added\n" \
+"14592 2018-11-24 11:55:01 +0100 model: traces added on resume all\n" \
 "14591 2018-11-23 08:19:21 +0100 zoom to fit: use the selected tab\n" \
 "14590 2018-11-23 08:11:44 +0100 zoomdlg: process enter in the combobox\n" \
 "14589 2018-11-23 07:19:11 +0100 scalecombo check correction\n" \
@@ -49,12 +56,5 @@ const char* revlog =
 "14551 2018-11-04 15:15:04 +0100 xmlscript: fix for condition text not equal\n" \
 "14550 2018-11-04 13:08:28 +0100 rocnetnodedlg: fix for initializing usage\n" \
 "14549 2018-11-04 10:49:50 +0100 cbus/utils: show junk/trace at reading ASCII Frames\n" \
-"14548 2018-11-04 10:48:06 +0100 mbus: try to read the loks from MS2\n" \
-"14547 2018-11-04 10:13:53 +0100 tamsmc: fix for inendbyte\n" \
-"14546 2018-11-04 10:05:30 +0100 model: take over some extra attributes at generate loco\n" \
-"14545 2018-11-04 07:52:48 +0100 SLIM-COLOR: fix for accessory 20 (Peter)\n" \
-"14544 2018-11-03 19:04:47 +0100 output: support for command on,off,active added\n" \
-"14543 2018-11-03 09:49:18 +0100 signaldialog: added show id option\n" \
-"14542 2018-11-02 19:18:07 +0100 blockdialog: evaluate sensors also on apply to take over none selected\n" \
 
 "log end";
