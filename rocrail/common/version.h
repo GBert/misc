@@ -1,11 +1,15 @@
 const int revisionnr = 
-14598
+14602
 ;
 const char* commithash = 
-"9612c92a1d220cdd7f496a1a22fe4ca8948e676a";
+"096c60b36e0bd2a85233e78c8e1803b6ef01826e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14602 2018-11-26 14:00:18 +0100 locdialog: use empty png to reset function icons under GTK\n" \
+"14601 2018-11-26 10:13:41 +0100 switch: fix for processing occupancy/ctc events\n" \
+"14600 2018-11-26 09:14:12 +0100 locdialog: work around for updating the function bitmaps\n" \
+"14599 2018-11-26 08:28:56 +0100 locdialog: init function icon improvement; no effect...\n" \
 "14598 2018-11-25 16:13:33 +0100 zimocan: only evaluate events, no acks, in case of port4\n" \
 "14597 2018-11-25 15:25:01 +0100 zimocan: fix for evaluating port4 event\n" \
 "14596 2018-11-25 15:08:22 +0100 loc: check for goto block in the route\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "14555 2018-11-05 09:13:36 +0100 actionsctrldlg: use combobox for loco ID\n" \
 "14554 2018-11-04 17:02:57 +0100 renderer: revert change for wx master branch\n" \
 "14553 2018-11-04 16:50:43 +0100 rocview:fixes for the wx master branch\n" \
-"14552 2018-11-04 15:53:11 +0100 rocnetnodedlg: fix for looking up the channel usage in case of none servo\n" \
-"14551 2018-11-04 15:15:04 +0100 xmlscript: fix for condition text not equal\n" \
-"14550 2018-11-04 13:08:28 +0100 rocnetnodedlg: fix for initializing usage\n" \
-"14549 2018-11-04 10:49:50 +0100 cbus/utils: show junk/trace at reading ASCII Frames\n" \
 
 "log end";
