@@ -882,6 +882,8 @@ void decode_frame(struct can_frame *frame) {
 		printf(" ???");
 		break;
 	    }
+	} else if (frame->can_dlc == 8) {
+	    printf(" Data");
 	} else {
 	    printf(" Anfrage");
 	}

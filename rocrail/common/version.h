@@ -1,11 +1,12 @@
 const int revisionnr = 
-14612
+14613
 ;
 const char* commithash = 
-"e4ef1aac63bbdc7bd0022f800db1c474e0cbe728";
+"92ebff2af97fec56ff50208abfb22d106ec1033d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14613 2018-11-28 15:52:07 +0100 z21: signal absent in case of multi sense\n" \
 "14612 2018-11-28 10:37:44 +0100 rocview: option tool separators added\n" \
 "14611 2018-11-28 10:14:25 +0100 cbus: revert checking delay at this level -> switch object\n" \
 "14610 2018-11-28 10:06:58 +0100 switch: regard active delay in case of followup commands\n" \
@@ -55,6 +56,5 @@ const char* revlog =
 "14566 2018-11-09 16:32:09 +0100 rocrail.xml: fix for feedback array\n" \
 "14565 2018-11-09 11:37:06 +0100 rcan: wip\n" \
 "14564 2018-11-08 10:44:48 +0100 rcan: wip\n" \
-"14563 2018-11-07 16:38:01 +0100 guiframe: loco number added to the grid\n" \
 
 "log end";
