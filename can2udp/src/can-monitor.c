@@ -134,7 +134,7 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 2.4\n\n");
+    fprintf(stderr, "   Version 2.5\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
@@ -864,7 +864,28 @@ void decode_frame(struct can_frame *frame) {
 	break;
     /* CAN Bootloader */
     case 0x36:
-	printf("CAN Bootloader Anfrage\n");
+	printf("CAN Bootloader");
+	uid = be32(frame->data);
+	if (frame->can_dlc == 5) {
+	    if (uid)
+		printf(" UID 0x%08X", uid);
+	    else
+		printf(" alle");
+	    switch(frame->data[4]) {
+	    case 0x11:
+		printf(" Go");
+		break;
+	    case 0xE4:
+		printf(" ?");
+		break;
+	    default:
+		printf(" ???");
+		break;
+	    }
+	} else {
+	    printf(" Anfrage");
+	}
+	printf("\n");
 	break;
     case 0x37:
 	uid = be32(frame->data);
