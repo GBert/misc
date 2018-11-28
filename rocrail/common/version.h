@@ -1,11 +1,21 @@
 const int revisionnr = 
-14602
+14612
 ;
 const char* commithash = 
-"096c60b36e0bd2a85233e78c8e1803b6ef01826e";
+"e4ef1aac63bbdc7bd0022f800db1c474e0cbe728";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14612 2018-11-28 10:37:44 +0100 rocview: option tool separators added\n" \
+"14611 2018-11-28 10:14:25 +0100 cbus: revert checking delay at this level -> switch object\n" \
+"14610 2018-11-28 10:06:58 +0100 switch: regard active delay in case of followup commands\n" \
+"14609 2018-11-28 08:12:17 +0100 loconet, z21: type absend -> absent\n" \
+"14608 2018-11-28 07:14:35 +0100 cbusnodedlg: ArdCAN GBM M+C added\n" \
+"14607 2018-11-27 19:57:42 +0100 adding the missing rocweb-base.js\n" \
+"14606 2018-11-27 15:04:05 +0100 cbus: reject switch commands regarding switch time\n" \
+"14605 2018-11-27 10:32:37 +0100 loc: remove pending timed events on IN\n" \
+"14604 2018-11-27 08:35:08 +0100 port range increased to 65535\n" \
+"14603 2018-11-27 08:03:40 +0100 rocdigs: ignore wloc.release command in case it is not supported by the CS\n" \
 "14602 2018-11-26 14:00:18 +0100 locdialog: use empty png to reset function icons under GTK\n" \
 "14601 2018-11-26 10:13:41 +0100 switch: fix for processing occupancy/ctc events\n" \
 "14600 2018-11-26 09:14:12 +0100 locdialog: work around for updating the function bitmaps\n" \
@@ -46,15 +56,5 @@ const char* revlog =
 "14565 2018-11-09 11:37:06 +0100 rcan: wip\n" \
 "14564 2018-11-08 10:44:48 +0100 rcan: wip\n" \
 "14563 2018-11-07 16:38:01 +0100 guiframe: loco number added to the grid\n" \
-"14562 2018-11-07 08:24:05 +0100 modify: added recursive flag\n" \
-"14561 2018-11-07 07:46:46 +0100 timedactions: revert rip xmlscript path\n" \
-"14560 2018-11-06 16:17:40 +0100 loc: revert removing all child nodes at modify if no new are available\n" \
-"14559 2018-11-06 11:40:05 +0100 ucan: return can file descripter as -1 on error\n" \
-"14558 2018-11-06 11:36:25 +0100 ucan: use close directly in the openCAN function\n" \
-"14557 2018-11-06 11:34:41 +0100 ucan: check return codes at openCAN\n" \
-"14556 2018-11-06 10:10:05 +0100 roclcdr: trace level corrections\n" \
-"14555 2018-11-05 09:13:36 +0100 actionsctrldlg: use combobox for loco ID\n" \
-"14554 2018-11-04 17:02:57 +0100 renderer: revert change for wx master branch\n" \
-"14553 2018-11-04 16:50:43 +0100 rocview:fixes for the wx master branch\n" \
 
 "log end";
