@@ -1,11 +1,18 @@
 const int revisionnr = 
-14613
+14620
 ;
 const char* commithash = 
-"92ebff2af97fec56ff50208abfb22d106ec1033d";
+"74758492c4628d0528eb24313ae6af908457bef3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14620 2018-11-29 15:18:45 +0100 control: include all trace files in the issue\n" \
+"14619 2018-11-29 13:27:02 +0100 cardlg: type dependent UIC combo content\n" \
+"14618 2018-11-29 12:21:59 +0100 car: evaluate UIC in function isState\n" \
+"14617 2018-11-29 12:14:42 +0100 cardlg: UIC combo with category letters\n" \
+"14616 2018-11-29 11:54:44 +0100 car: UIC field added\n" \
+"14615 2018-11-29 08:48:06 +0100 find in block,switch.feedback dialogs added\n" \
+"14614 2018-11-29 08:27:41 +0100 routedialog: find text field added (test)\n" \
 "14613 2018-11-28 15:52:07 +0100 z21: signal absent in case of multi sense\n" \
 "14612 2018-11-28 10:37:44 +0100 rocview: option tool separators added\n" \
 "14611 2018-11-28 10:14:25 +0100 cbus: revert checking delay at this level -> switch object\n" \
@@ -49,12 +56,5 @@ const char* revlog =
 "14573 2018-11-20 18:28:51 +0100 guiframe: show server work space in title bar\n" \
 "14572 2018-11-15 16:55:58 +0100 block: reset the reserved flag on reset\n" \
 "14571 2018-11-14 07:43:13 +0100 locdialog: increased function timers from 1000 to 10000\n" \
-"14570 2018-11-13 10:07:11 +0100 translation merge: de, sr_latin, fr, sl, en_UK, nl\n" \
-"14569 2018-11-11 08:18:38 +0100 wmz21: fix for reporting a switch event to the wlm\n" \
-"14568 2018-11-10 15:27:44 +0100 model: reject objects without ID set\n" \
-"14567 2018-11-10 14:08:17 +0100 rcan: wip freeze\n" \
-"14566 2018-11-09 16:32:09 +0100 rocrail.xml: fix for feedback array\n" \
-"14565 2018-11-09 11:37:06 +0100 rcan: wip\n" \
-"14564 2018-11-08 10:44:48 +0100 rcan: wip\n" \
 
 "log end";
