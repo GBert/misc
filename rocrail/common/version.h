@@ -1,11 +1,13 @@
 const int revisionnr = 
-14620
+14622
 ;
 const char* commithash = 
-"74758492c4628d0528eb24313ae6af908457bef3";
+"41cd519d717103e76e8172c2400e28fe30905bee";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14622 2018-11-30 08:15:24 +0100 model: if no car is found by ID try it by address\n" \
+"14621 2018-11-30 07:58:01 +0100 rocnet: generate decoder ID\n" \
 "14620 2018-11-29 15:18:45 +0100 control: include all trace files in the issue\n" \
 "14619 2018-11-29 13:27:02 +0100 cardlg: type dependent UIC combo content\n" \
 "14618 2018-11-29 12:21:59 +0100 car: evaluate UIC in function isState\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14575 2018-11-21 10:46:12 +0100 rocnetnode: tcpip CAN connection added\n" \
 "14574 2018-11-21 08:24:19 +0100 rcan: utils fix\n" \
 "14573 2018-11-20 18:28:51 +0100 guiframe: show server work space in title bar\n" \
-"14572 2018-11-15 16:55:58 +0100 block: reset the reserved flag on reset\n" \
-"14571 2018-11-14 07:43:13 +0100 locdialog: increased function timers from 1000 to 10000\n" \
 
 "log end";
