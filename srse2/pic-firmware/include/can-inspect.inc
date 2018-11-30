@@ -483,7 +483,7 @@ CAN_BOOTLOADER_GO
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                MOVLW	80
+                MOVLW	0x80
                 MOVWF	POSTINC0
                 MOVLW	0
                 MOVWF	POSTINC0
