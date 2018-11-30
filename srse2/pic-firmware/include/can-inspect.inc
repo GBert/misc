@@ -401,10 +401,10 @@ CAN_PING_CONT
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                ; Version 1.4
+                ; Version 1.5
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	4
+                MOVLW	5
                 MOVWF	POSTINC0
                 MOVLW	0
                 MOVWF	POSTINC0
@@ -422,7 +422,7 @@ CAN_BOOTLOADER
                 MOVF	CANFRAME+4,F
                 BZ	CAN_BOOTLOADER_PING
                 ; if DLC == 5
-                MOVF	CANFRAME+4,F
+                MOVF	CANFRAME+4,W
                 XORLW   5
                 BZ	CAN_BOOTLOADER_SYSTEM
                 RETURN
@@ -431,7 +431,7 @@ CAN_BOOTLOADER_SYSTEM
                 RCALL	CHECK_ID
                 BNZ	CAN_BOOTLOADER_EXIT
                 ; check for CAN-Bootloader Go 0x11
-                MOVF	CANFRAME+9,F
+                MOVF	CANFRAME+9,W
                 XORLW   0x11
                 BZ	CAN_BOOTLOADER_GO
 CAN_BOOTLOADER_EXIT
@@ -454,9 +454,10 @@ CAN_BOOTLOADER_PING
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
+                ; Version 1.5
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	0
+                MOVLW	5
                 MOVWF	POSTINC0
                 MOVWF	POSTINC0
                 ; this is a back detector (german Rueckmelder)
