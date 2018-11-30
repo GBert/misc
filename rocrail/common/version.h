@@ -1,11 +1,13 @@
 const int revisionnr = 
-14622
+14624
 ;
 const char* commithash = 
-"41cd519d717103e76e8172c2400e28fe30905bee";
+"d393d5414649fb87c89d50bf705c92d595b7c6c5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14624 2018-11-30 09:27:46 +0100 translation merge: de, nl, en_GB, sl, sr_latin\n" \
+"14623 2018-11-30 08:50:15 +0100 control: fix for init actions\n" \
 "14622 2018-11-30 08:15:24 +0100 model: if no car is found by ID try it by address\n" \
 "14621 2018-11-30 07:58:01 +0100 rocnet: generate decoder ID\n" \
 "14620 2018-11-29 15:18:45 +0100 control: include all trace files in the issue\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14577 2018-11-21 16:09:56 +0100 rocview: zoomm to fit added\n" \
 "14576 2018-11-21 14:23:48 +0100 rocweb: error fix in case of a function definition > 28\n" \
 "14575 2018-11-21 10:46:12 +0100 rocnetnode: tcpip CAN connection added\n" \
-"14574 2018-11-21 08:24:19 +0100 rcan: utils fix\n" \
-"14573 2018-11-20 18:28:51 +0100 guiframe: show server work space in title bar\n" \
 
 "log end";
