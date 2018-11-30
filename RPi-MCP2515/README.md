@@ -8,7 +8,7 @@ Hinweis
 -------
 In der Platinen-Version 1.0 hatte sich ein Fehler eingeschlichen so das der Längsregler MC7805 spiegelverkehrt eingebaut werden musste. Das ist mit der Version >= 1.1 behoben, d.h. das der Längsregler wie auf dem Bestückungsdruck ersichtlich eingebaut werden muss.
 
-[Reichelt Liste (ohne P82B715P)](https://www.reichelt.de/my/1344615)
+[Reichelt Liste (ohne P82B715P)](https://www.reichelt.de/my/1344615) Variante galv. Trennung mit externer Spannungsversorgung
 
 Bauteilliste
 ------------
