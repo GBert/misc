@@ -1,11 +1,29 @@
 const int revisionnr = 
-14624
+14642
 ;
 const char* commithash = 
-"d393d5414649fb87c89d50bf705c92d595b7c6c5";
+"7fb8d9b8a3a841b01285e512caf23d1ac020e001";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14642 2018-12-02 18:41:39 +0100 bidib: removed the echo commands option\n" \
+"14641 2018-12-02 17:23:10 +0100 control: copy the last trace in case the list of trace files is invalid\n" \
+"14640 2018-12-02 15:53:51 +0100 control: trace level correction for switch mapping\n" \
+"14639 2018-12-02 12:01:52 +0100 z12,loconet: block address + 1 in the new long multi sense\n" \
+"14638 2018-12-02 11:08:07 +0100 loconet: multi sense long support\n" \
+"14637 2018-12-02 10:51:28 +0100 z21: multi sense long support\n" \
+"14636 2018-12-02 08:01:51 +0100 importdlg: use the find selection off the caller dialog\n" \
+"14635 2018-12-01 16:02:41 +0100 rocview: keep original ID on import\n" \
+"14634 2018-12-01 14:50:27 +0100 issue: keep original trace file timestamp\n" \
+"14633 2018-12-01 13:26:36 +0100 importdlg: crash fix incase index is empty\n" \
+"14632 2018-12-01 10:10:03 +0100 find added in output and action dialog\n" \
+"14631 2018-12-01 08:04:10 +0100 control: trace level fix for switch mapping\n" \
+"14630 2018-11-30 16:20:30 +0100 control: fix for double path separator\n" \
+"14629 2018-11-30 15:16:24 +0100 control: removed extra prefix for trace file in case of issue listing\n" \
+"14628 2018-11-30 14:48:52 +0100 control: trace added on copy issue trace files\n" \
+"14627 2018-11-30 14:43:43 +0100 find in signal and schedule dialog\n" \
+"14626 2018-11-30 11:58:28 +0100 regard find field content on refresh index\n" \
+"14625 2018-11-30 11:47:15 +0100 importdlg: find textfield added\n" \
 "14624 2018-11-30 09:27:46 +0100 translation merge: de, nl, en_GB, sl, sr_latin\n" \
 "14623 2018-11-30 08:50:15 +0100 control: fix for init actions\n" \
 "14622 2018-11-30 08:15:24 +0100 model: if no car is found by ID try it by address\n" \
@@ -38,23 +56,5 @@ const char* revlog =
 "14595 2018-11-25 09:07:05 +0100 loc: trace correction in case of check consist\n" \
 "14594 2018-11-25 08:52:12 +0100 loc: skip finder in case the goto block has a direct route\n" \
 "14593 2018-11-25 08:05:16 +0100 loc: polarisation flag added\n" \
-"14592 2018-11-24 11:55:01 +0100 model: traces added on resume all\n" \
-"14591 2018-11-23 08:19:21 +0100 zoom to fit: use the selected tab\n" \
-"14590 2018-11-23 08:11:44 +0100 zoomdlg: process enter in the combobox\n" \
-"14589 2018-11-23 07:19:11 +0100 scalecombo check correction\n" \
-"14588 2018-11-22 16:47:57 +0100 zoom range corrections\n" \
-"14587 2018-11-22 16:43:40 +0100 zoom range corrections\n" \
-"14586 2018-11-22 16:30:10 +0100 zoomdlg: max 400\n" \
-"14585 2018-11-22 16:17:13 +0100 zoom max 400\n" \
-"14584 2018-11-22 15:04:25 +0100 rocnetnode: sensor report over CAN\n" \
-"14583 2018-11-22 12:31:22 +0100 guiframe: increase maxX and maxY in case of fit zoom\n" \
-"14582 2018-11-22 11:18:44 +0100 rcan tcp: thread for (re)connect\n" \
-"14581 2018-11-22 08:47:57 +0100 rocview: zoom color icons added\n" \
-"14580 2018-11-22 08:16:28 +0100 translation merge: de, nl\n" \
-"14579 2018-11-22 07:55:18 +0100 rocweb: fix for clicking on the FG text\n" \
-"14578 2018-11-21 16:38:11 +0100 rocview: zoom2fit icon added\n" \
-"14577 2018-11-21 16:09:56 +0100 rocview: zoomm to fit added\n" \
-"14576 2018-11-21 14:23:48 +0100 rocweb: error fix in case of a function definition > 28\n" \
-"14575 2018-11-21 10:46:12 +0100 rocnetnode: tcpip CAN connection added\n" \
 
 "log end";
