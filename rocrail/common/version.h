@@ -1,11 +1,13 @@
 const int revisionnr = 
-14642
+14644
 ;
 const char* commithash = 
-"7fb8d9b8a3a841b01285e512caf23d1ac020e001";
+"ee7170a353401c946dac1e25a7a5185b428105a0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14644 2018-12-03 10:15:59 +0100 mttmfcc: support for slx815\n" \
+"14643 2018-12-03 08:01:05 +0100 control,switch: regard route switch time in case of save position is set\n" \
 "14642 2018-12-02 18:41:39 +0100 bidib: removed the echo commands option\n" \
 "14641 2018-12-02 17:23:10 +0100 control: copy the last trace in case the list of trace files is invalid\n" \
 "14640 2018-12-02 15:53:51 +0100 control: trace level correction for switch mapping\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14597 2018-11-25 15:25:01 +0100 zimocan: fix for evaluating port4 event\n" \
 "14596 2018-11-25 15:08:22 +0100 loc: check for goto block in the route\n" \
 "14595 2018-11-25 09:07:05 +0100 loc: trace correction in case of check consist\n" \
-"14594 2018-11-25 08:52:12 +0100 loc: skip finder in case the goto block has a direct route\n" \
-"14593 2018-11-25 08:05:16 +0100 loc: polarisation flag added\n" \
 
 "log end";
