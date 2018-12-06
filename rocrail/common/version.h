@@ -1,11 +1,16 @@
 const int revisionnr = 
-14644
+14649
 ;
 const char* commithash = 
-"ee7170a353401c946dac1e25a7a5185b428105a0";
+"36a7a919a93b89d029fac06f231df0b597578018";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14649 2018-12-05 14:35:47 +0100 loc: reset route sync on softreset\n" \
+"14648 2018-12-05 10:25:28 +0100 themeprops: added missing evaluation of options\n" \
+"14647 2018-12-05 07:57:02 +0100 mttmfcc: bus byte added for the tt command (copied from slx)\n" \
+"14646 2018-12-04 10:51:48 +0100 block: fix for setting occupancy in case of state closed/open\n" \
+"14645 2018-12-04 08:27:56 +0100 item,block: show platform name in blocks in case of free (commented out)\n" \
 "14644 2018-12-03 10:15:59 +0100 mttmfcc: support for slx815\n" \
 "14643 2018-12-03 08:01:05 +0100 control,switch: regard route switch time in case of save position is set\n" \
 "14642 2018-12-02 18:41:39 +0100 bidib: removed the echo commands option\n" \
@@ -51,10 +56,5 @@ const char* revlog =
 "14602 2018-11-26 14:00:18 +0100 locdialog: use empty png to reset function icons under GTK\n" \
 "14601 2018-11-26 10:13:41 +0100 switch: fix for processing occupancy/ctc events\n" \
 "14600 2018-11-26 09:14:12 +0100 locdialog: work around for updating the function bitmaps\n" \
-"14599 2018-11-26 08:28:56 +0100 locdialog: init function icon improvement; no effect...\n" \
-"14598 2018-11-25 16:13:33 +0100 zimocan: only evaluate events, no acks, in case of port4\n" \
-"14597 2018-11-25 15:25:01 +0100 zimocan: fix for evaluating port4 event\n" \
-"14596 2018-11-25 15:08:22 +0100 loc: check for goto block in the route\n" \
-"14595 2018-11-25 09:07:05 +0100 loc: trace correction in case of check consist\n" \
 
 "log end";
