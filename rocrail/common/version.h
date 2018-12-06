@@ -1,11 +1,13 @@
 const int revisionnr = 
-14649
+14651
 ;
 const char* commithash = 
-"36a7a919a93b89d029fac06f231df0b597578018";
+"da93c5fe1de93f6e418e55047f9d0923d066d9e0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14651 2018-12-06 10:40:55 +0100 block: ignore event timers in case the loco is already IN\n" \
+"14650 2018-12-06 09:06:16 +0100 mttmfcc: slx815 support -> bus value added\n" \
 "14649 2018-12-05 14:35:47 +0100 loc: reset route sync on softreset\n" \
 "14648 2018-12-05 10:25:28 +0100 themeprops: added missing evaluation of options\n" \
 "14647 2018-12-05 07:57:02 +0100 mttmfcc: bus byte added for the tt command (copied from slx)\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14604 2018-11-27 08:35:08 +0100 port range increased to 65535\n" \
 "14603 2018-11-27 08:03:40 +0100 rocdigs: ignore wloc.release command in case it is not supported by the CS\n" \
 "14602 2018-11-26 14:00:18 +0100 locdialog: use empty png to reset function icons under GTK\n" \
-"14601 2018-11-26 10:13:41 +0100 switch: fix for processing occupancy/ctc events\n" \
-"14600 2018-11-26 09:14:12 +0100 locdialog: work around for updating the function bitmaps\n" \
 
 "log end";
