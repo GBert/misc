@@ -1,11 +1,14 @@
 const int revisionnr = 
-14651
+14654
 ;
 const char* commithash = 
-"da93c5fe1de93f6e418e55047f9d0923d066d9e0";
+"e5dc4e8656c44ece0403baab7216e51f15096ecf";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14654 2018-12-07 13:53:25 +0100 locdialog: fix for set serviced\n" \
+"14653 2018-12-06 19:53:17 +0100 model: fix for get real block\n" \
+"14652 2018-12-06 11:38:10 +0100 model: ignore the loco direction at selecting a destination\n" \
 "14651 2018-12-06 10:40:55 +0100 block: ignore event timers in case the loco is already IN\n" \
 "14650 2018-12-06 09:06:16 +0100 mttmfcc: slx815 support -> bus value added\n" \
 "14649 2018-12-05 14:35:47 +0100 loc: reset route sync on softreset\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "14607 2018-11-27 19:57:42 +0100 adding the missing rocweb-base.js\n" \
 "14606 2018-11-27 15:04:05 +0100 cbus: reject switch commands regarding switch time\n" \
 "14605 2018-11-27 10:32:37 +0100 loc: remove pending timed events on IN\n" \
-"14604 2018-11-27 08:35:08 +0100 port range increased to 65535\n" \
-"14603 2018-11-27 08:03:40 +0100 rocdigs: ignore wloc.release command in case it is not supported by the CS\n" \
-"14602 2018-11-26 14:00:18 +0100 locdialog: use empty png to reset function icons under GTK\n" \
 
 "log end";
