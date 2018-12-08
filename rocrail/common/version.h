@@ -1,11 +1,13 @@
 const int revisionnr = 
-14654
+14656
 ;
 const char* commithash = 
-"e5dc4e8656c44ece0403baab7216e51f15096ecf";
+"979e032129c2975ba2eab22ec7eee39985e9b572";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14656 2018-12-08 08:11:21 +0100 model: crash fix incase looking up a car with id null\n" \
+"14655 2018-12-08 07:46:15 +0100 z21: use always the same bus for loconet detectors and inputs\n" \
 "14654 2018-12-07 13:53:25 +0100 locdialog: fix for set serviced\n" \
 "14653 2018-12-06 19:53:17 +0100 model: fix for get real block\n" \
 "14652 2018-12-06 11:38:10 +0100 model: ignore the loco direction at selecting a destination\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14609 2018-11-28 08:12:17 +0100 loconet, z21: type absend -> absent\n" \
 "14608 2018-11-28 07:14:35 +0100 cbusnodedlg: ArdCAN GBM M+C added\n" \
 "14607 2018-11-27 19:57:42 +0100 adding the missing rocweb-base.js\n" \
-"14606 2018-11-27 15:04:05 +0100 cbus: reject switch commands regarding switch time\n" \
-"14605 2018-11-27 10:32:37 +0100 loc: remove pending timed events on IN\n" \
 
 "log end";
