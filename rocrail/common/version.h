@@ -1,11 +1,15 @@
 const int revisionnr = 
-14656
+14660
 ;
 const char* commithash = 
-"979e032129c2975ba2eab22ec7eee39985e9b572";
+"bd7afabb5a4fbbf702a6ff0b1f1973b0ffb9f9c2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14660 2018-12-08 15:07:11 +0100 auipanel: further implementation of common function\n" \
+"14659 2018-12-08 14:42:09 +0100 auipanel: save perspective, promote model events to all panels\n" \
+"14658 2018-12-08 11:38:08 +0100 rocview make file: aui added\n" \
+"14657 2018-12-08 10:58:10 +0100 rocview: optiona AUI view (WIP)\n" \
 "14656 2018-12-08 08:11:21 +0100 model: crash fix incase looking up a car with id null\n" \
 "14655 2018-12-08 07:46:15 +0100 z21: use always the same bus for loconet detectors and inputs\n" \
 "14654 2018-12-07 13:53:25 +0100 locdialog: fix for set serviced\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "14613 2018-11-28 15:52:07 +0100 z21: signal absent in case of multi sense\n" \
 "14612 2018-11-28 10:37:44 +0100 rocview: option tool separators added\n" \
 "14611 2018-11-28 10:14:25 +0100 cbus: revert checking delay at this level -> switch object\n" \
-"14610 2018-11-28 10:06:58 +0100 switch: regard active delay in case of followup commands\n" \
-"14609 2018-11-28 08:12:17 +0100 loconet, z21: type absend -> absent\n" \
-"14608 2018-11-28 07:14:35 +0100 cbusnodedlg: ArdCAN GBM M+C added\n" \
-"14607 2018-11-27 19:57:42 +0100 adding the missing rocweb-base.js\n" \
 
 "log end";
