@@ -1,11 +1,15 @@
 const int revisionnr = 
-14660
+14664
 ;
 const char* commithash = 
-"bd7afabb5a4fbbf702a6ff0b1f1973b0ffb9f9c2";
+"edb0ab587825a3ac219821ea2bbb0c7790a7e7a8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14664 2018-12-09 10:53:02 +0100 info.plist: 4k support\n" \
+"14663 2018-12-09 10:22:59 +0100 rocview: reset AUI perspective checkbox\n" \
+"14662 2018-12-09 07:52:41 +0100 virtual: trace level correction for release loco command\n" \
+"14661 2018-12-08 20:09:04 +0100 auipanel: disable close button\n" \
 "14660 2018-12-08 15:07:11 +0100 auipanel: further implementation of common function\n" \
 "14659 2018-12-08 14:42:09 +0100 auipanel: save perspective, promote model events to all panels\n" \
 "14658 2018-12-08 11:38:08 +0100 rocview make file: aui added\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "14617 2018-11-29 12:14:42 +0100 cardlg: UIC combo with category letters\n" \
 "14616 2018-11-29 11:54:44 +0100 car: UIC field added\n" \
 "14615 2018-11-29 08:48:06 +0100 find in block,switch.feedback dialogs added\n" \
-"14614 2018-11-29 08:27:41 +0100 routedialog: find text field added (test)\n" \
-"14613 2018-11-28 15:52:07 +0100 z21: signal absent in case of multi sense\n" \
-"14612 2018-11-28 10:37:44 +0100 rocview: option tool separators added\n" \
-"14611 2018-11-28 10:14:25 +0100 cbus: revert checking delay at this level -> switch object\n" \
 
 "log end";
