@@ -1,11 +1,13 @@
 const int revisionnr = 
-14674
+14676
 ;
 const char* commithash = 
-"cd1e972b2cbacf699e3d7c96c205f7f2a92612d8";
+"34467ed3bf9c7ec68313f2f026caf6b85cada28a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14676 2018-12-10 18:35:18 +0100 auipanel: fix for switching workspace\n" \
+"14675 2018-12-10 15:44:44 +0100 item: throttle popup menu item added\n" \
 "14674 2018-12-10 12:42:06 +0100 rocguiinidlg: layout corrections\n" \
 "14673 2018-12-10 11:30:55 +0100 improvement of signal wait in case of lightsignals\n" \
 "14672 2018-12-10 10:53:09 +0100 auipanel: set title to Track panels\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14629 2018-11-30 15:16:24 +0100 control: removed extra prefix for trace file in case of issue listing\n" \
 "14628 2018-11-30 14:48:52 +0100 control: trace added on copy issue trace files\n" \
 "14627 2018-11-30 14:43:43 +0100 find in signal and schedule dialog\n" \
-"14626 2018-11-30 11:58:28 +0100 regard find field content on refresh index\n" \
-"14625 2018-11-30 11:47:15 +0100 importdlg: find textfield added\n" \
 
 "log end";
