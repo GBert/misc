@@ -1,11 +1,21 @@
 const int revisionnr = 
-14664
+14674
 ;
 const char* commithash = 
-"edb0ab587825a3ac219821ea2bbb0c7790a7e7a8";
+"cd1e972b2cbacf699e3d7c96c205f7f2a92612d8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14674 2018-12-10 12:42:06 +0100 rocguiinidlg: layout corrections\n" \
+"14673 2018-12-10 11:30:55 +0100 improvement of signal wait in case of lightsignals\n" \
+"14672 2018-12-10 10:53:09 +0100 auipanel: set title to Track panels\n" \
+"14671 2018-12-10 08:29:40 +0100 auipanel: save and restore perspective in the workspace node\n" \
+"14670 2018-12-10 08:11:40 +0100 control: check if the issue directory is absolute before copy traces\n" \
+"14669 2018-12-09 16:58:23 +0100 dtc: DinaSys support removed\n" \
+"14668 2018-12-09 16:06:30 +0100 rocguiinidlg: removed the reset AUI perspective\n" \
+"14667 2018-12-09 14:03:51 +0100 auipanel: reject perspective in case one or more level titles are not included\n" \
+"14666 2018-12-09 13:11:53 +0100 sensorevents: fix for qos/stamp model: fix for reporting\n" \
+"14665 2018-12-09 11:25:28 +0100 auipanel: added unsupported functions\n" \
 "14664 2018-12-09 10:53:02 +0100 info.plist: 4k support\n" \
 "14663 2018-12-09 10:22:59 +0100 rocview: reset AUI perspective checkbox\n" \
 "14662 2018-12-09 07:52:41 +0100 virtual: trace level correction for release loco command\n" \
@@ -46,15 +56,5 @@ const char* revlog =
 "14627 2018-11-30 14:43:43 +0100 find in signal and schedule dialog\n" \
 "14626 2018-11-30 11:58:28 +0100 regard find field content on refresh index\n" \
 "14625 2018-11-30 11:47:15 +0100 importdlg: find textfield added\n" \
-"14624 2018-11-30 09:27:46 +0100 translation merge: de, nl, en_GB, sl, sr_latin\n" \
-"14623 2018-11-30 08:50:15 +0100 control: fix for init actions\n" \
-"14622 2018-11-30 08:15:24 +0100 model: if no car is found by ID try it by address\n" \
-"14621 2018-11-30 07:58:01 +0100 rocnet: generate decoder ID\n" \
-"14620 2018-11-29 15:18:45 +0100 control: include all trace files in the issue\n" \
-"14619 2018-11-29 13:27:02 +0100 cardlg: type dependent UIC combo content\n" \
-"14618 2018-11-29 12:21:59 +0100 car: evaluate UIC in function isState\n" \
-"14617 2018-11-29 12:14:42 +0100 cardlg: UIC combo with category letters\n" \
-"14616 2018-11-29 11:54:44 +0100 car: UIC field added\n" \
-"14615 2018-11-29 08:48:06 +0100 find in block,switch.feedback dialogs added\n" \
 
 "log end";
