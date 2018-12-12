@@ -1,11 +1,13 @@
 const int revisionnr = 
-14680
+14682
 ;
 const char* commithash = 
-"64f291dcf550be9ca75f4b308e67b2e961bbc8b1";
+"98c59e26a09eeb9206aea4ff710ab6a1df0d6e6f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14682 2018-12-12 14:46:25 +0100 throttledlg,loc: standalone command added\n" \
+"14681 2018-12-12 12:06:56 +0100 throttledlg: show master/slave\n" \
 "14680 2018-12-12 09:05:09 +0100 loc: fix for check2in modification\n" \
 "14679 2018-12-11 10:00:12 +0100 actionsctrldlg: condition state reserved added for blocks\n" \
 "14678 2018-12-11 08:31:27 +0100 guiframe: restore MDI and AUI flags on init plan notebook\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14635 2018-12-01 16:02:41 +0100 rocview: keep original ID on import\n" \
 "14634 2018-12-01 14:50:27 +0100 issue: keep original trace file timestamp\n" \
 "14633 2018-12-01 13:26:36 +0100 importdlg: crash fix incase index is empty\n" \
-"14632 2018-12-01 10:10:03 +0100 find added in output and action dialog\n" \
-"14631 2018-12-01 08:04:10 +0100 control: trace level fix for switch mapping\n" \
 
 "log end";
