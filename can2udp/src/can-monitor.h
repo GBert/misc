@@ -13,6 +13,7 @@
 
 #define MAX_MESSWERTE	256
 
+#if 0					/* FIXME: actually not used in canmon */
 struct statusdaten_t {
     uint32_t geraete_id;
     uint8_t messwerte;
@@ -21,6 +22,7 @@ struct statusdaten_t {
     char artikelnummer[8];
     char geratebezeichnung[32];
 };
+#endif
 
 struct messwert_t {
     uint64_t geraete_id_messwert;
@@ -45,6 +47,7 @@ struct knoten {
     struct knoten *next;
 };
 
+#if 0					/* FIXME: actually not used in canmon */
 enum cs2_copy_state {
     CS2_STATE_INACTIVE,
     CS2_STATE_NORMAL_CONFIG,
@@ -58,28 +61,34 @@ struct id_node {
     uint8_t slave_node;
     struct id_node *next;
 };
+#endif
 
 struct cs2_config_data_t {
-    int deflated_stream_size;
+/*  int deflated_stream_size; */
     int deflated_size;
     int deflated_size_counter;
     int inflated_size;
     uint16_t crc;
-    char *dir;
-    char *name;
-    int next;
-    int verbose;
-    int track_index;
-    unsigned int state;
-    int start;
-    int stream;
-    int cs2_tcp_socket;
-    int cs2_config_copy;
-    unsigned int ddi;
+/*  char *dir;		*/	/* FIXME: which members are required in this structure? */
+/*  char *name;		*/
+    char name[256];
+/*  int next;		*/
+/*  int verbose;	*/
+/*  int track_index;	*/
+/*  unsigned int state;	*/
+/*  int start;		*/
+/*  int stream;		*/
+/*  int cs2_tcp_socket;	*/
+/*  int cs2_config_copy;*/
+/*  unsigned int ddi;	*/
     uint8_t *deflated_data;
-    uint8_t *inflated_data;
-    char **page_name;
+/*  uint8_t *inflated_data;*/
+/*  char **page_name;	*/
 };
+
+
+int config_write(struct cs2_config_data_t *config_data);
+uint16_t CRCCCITT(unsigned char *data, size_t length, unsigned short seed);
 
 #endif /* _CAN_MONITOR_H */
 

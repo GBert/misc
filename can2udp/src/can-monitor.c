@@ -60,6 +60,7 @@ unsigned char netframe[MAXDG];
 
 struct knoten *statusdaten = NULL;
 struct knoten *messwert = NULL;
+struct cs2_config_data_t config_data;
 
 unsigned char buffer[MAX_PAKETE * 8];
 int verbose = 0, kanal = 0;
@@ -134,7 +135,7 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 2.5\n\n");
+    fprintf(stderr, "   Version 2.6\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
@@ -166,12 +167,16 @@ void ascii_to_can(char *s, struct can_frame *frame) {
     sscanf(s, "T%8X%1X", &frame->can_id, (unsigned int *)&frame->can_dlc);
     memset(&frame->data, 0, 8);
     for (i = 1; i <= frame->can_dlc; i++) {
-	sscanf(&s[8 + i*2], "%2X", (unsigned int *)&frame->data[i - 1]);
+	sscanf(&s[8 + i * 2], "%2X", (unsigned int *)&frame->data[i - 1]);
     }
 }
 
-void print_can_frame(char *format_string, struct can_frame *frame) {
+int print_can_frame(char *format_string, struct can_frame *frame) {
     int i;
+    if (frame->can_dlc > 8) {
+	printf(RED " Invalid DLC %d found\n" RESET, frame->can_dlc);
+	return -1;
+    }
     printf(format_string, frame->can_id & CAN_EFF_MASK, frame->can_dlc);
     for (i = 0; i < frame->can_dlc; i++) {
 	printf(" %02X", frame->data[i]);
@@ -192,6 +197,7 @@ void print_can_frame(char *format_string, struct can_frame *frame) {
     }
     printf("\n");
 #endif
+    return 0;
 }
 
 int CS1(int hash) {
@@ -627,7 +633,7 @@ void cdb_extension_set_grd(struct can_frame *frame) {
 }
 
 void decode_frame(struct can_frame *frame) {
-    uint32_t id, kennung, function, uid, cv_number, cv_index, stream_size;
+    uint32_t id, kennung, function, uid, cv_number, cv_index;
     uint16_t paket, crc, kenner, kontakt;
     uint8_t n_kanaele, n_messwerte;
     char s[32];
@@ -871,7 +877,7 @@ void decode_frame(struct can_frame *frame) {
 		printf(" UID 0x%08X", uid);
 	    else
 		printf(" alle");
-	    switch(frame->data[4]) {
+	    switch (frame->data[4]) {
 	    case 0x11:
 		printf(" Go");
 		break;
@@ -953,19 +959,24 @@ void decode_frame(struct can_frame *frame) {
 		n_kanaele = frame->data[1];
 		id = be32(&frame->data[4]);
 		printf(" Anzahl Messwerte: %d Anzahl Kanäle: %d Gerätenummer: 0x%08x", n_messwerte, n_kanaele, id);
-	    }
-            for (int i = 0 ; i < 8; i++) {
-		if (isprint(frame->data[i]))
-		    putchar(frame->data[i]);
-		else
-		    putchar(' ');
+	    } else
+		for (int i = 0; i < 8; i++) {
+		    if (isprint(frame->data[i]))
+			putchar(frame->data[i]);
+		    else
+			putchar(' ');
 		}
 	    printf("\n");
 	}
 	break;
     /* Anfordern Config Daten */
-    case 0x40:
     case 0x41:
+	if (config_data.deflated_data && (config_data.deflated_size_counter < config_data.deflated_size))
+	    printf("[Config Data %s unvollständig] ", config_data.name);
+	memset(config_data.name, 0, sizeof(config_data.name));
+	memcpy(config_data.name, frame->data, 8);
+	/* fall through */
+    case 0x40:
 	memset(s, 0, sizeof(s));
 	memcpy(s, frame->data, 8);
 	/* WeichenChef Erweiterung */
@@ -991,15 +1002,46 @@ void decode_frame(struct can_frame *frame) {
     /* Config Data Stream */
     case 0x42:
     case 0x43:
-	stream_size = be32(frame->data);
-	crc = be16(&frame->data[4]);
-	if (frame->can_dlc == 6)
-	    printf("Config Data Stream: Länge 0x%08X CRC 0x%04X\n", stream_size, crc);
-	if (frame->can_dlc == 7)
-	    printf("Config Data Stream: Länge 0x%08X CRC 0x%04X (unbekannt 0x%02X)\n", stream_size, crc,
-		   frame->data[6]);
-	if (frame->can_dlc == 8)
-	    printf("Config Data Stream: Daten\n");
+	switch (frame->can_dlc) {
+	case 6:
+	    config_data.deflated_size = be32(frame->data);
+	    config_data.crc = be16(&frame->data[4]);
+	    if (config_data.deflated_data)
+		free(config_data.deflated_data);
+	    config_data.deflated_data = malloc(config_data.deflated_size + 8);
+	    config_data.deflated_size_counter = 0;
+	    printf("Config Data Stream: Länge 0x%08X CRC 0x%04X\n", config_data.deflated_size, config_data.crc);
+	    break;
+	case 7:
+	    config_data.deflated_size = be32(frame->data);
+	    config_data.crc = be16(&frame->data[4]);
+	    printf("Config Data Stream: Länge 0x%08X CRC 0x%04X (unbekannt 0x%02X)\n",
+		   config_data.deflated_size, config_data.crc, frame->data[6]);
+	    break;
+	case 8:
+	    if (config_data.deflated_size_counter < config_data.deflated_size) {
+		memcpy(config_data.deflated_data + config_data.deflated_size_counter, frame->data, 8);
+		config_data.deflated_size_counter += 8;
+	    }
+	    printf("Config Data Stream: Daten (%d/%d)\n", config_data.deflated_size_counter, config_data.deflated_size);
+	    if (config_data.deflated_size_counter >= config_data.deflated_size) {
+		crc = CRCCCITT(config_data.deflated_data, config_data.deflated_size_counter, 0xFFFF);
+		if (crc == config_data.crc) {
+		    config_data.inflated_size = ntohl(*(uint32_t *) config_data.deflated_data);
+		    printf(GRN "Config Data %s mit CRC 0x%04X, Länge %d, inflated %d Bytes\n",
+			   config_data.name, config_data.crc, config_data.deflated_size, config_data.inflated_size);
+		    /* TODO: now you can inflate collected data */
+		} else {
+		    printf(RED "Config Data %s mit ungültigem CRC 0x%04X, erwartet 0x%04X\n",
+			   config_data.name, crc, config_data.crc);
+		}
+		free(config_data.deflated_data);
+		config_data.deflated_data = NULL;
+	    }
+	    break;
+	default:
+	    printf("Data Stream mit unerwartetem DLC %d\n", frame->can_dlc);
+	}
 	break;
     /* CdB: WeichenChef */
     case 0x44:
@@ -1103,13 +1145,13 @@ int main(int argc, char **argv) {
 	}
 
 	line = (char *)malloc(MAXSIZE);
-	if( line == NULL) {
+	if (line == NULL) {
 	    fprintf(stderr, "Unable to allocate buffer\n");
 	    exit(EXIT_FAILURE);
 	}
-	
+
 	while (getline(&line, &size, fp) > 0) {
-	    //line[strcspn(line, "\r\n")] = 0;
+	    /* line[strcspn(line, "\r\n")] = 0; */
 	    memset(slcan, 0, sizeof(slcan));
 	    memset(datum, 0, sizeof(datum));
 	    sscanf(line, "%s ", datum);
@@ -1129,7 +1171,6 @@ int main(int argc, char **argv) {
 	}
 	return (EXIT_SUCCESS);
     }
-    
 
     /* do we have a PCAP file ? */
     if (pcap_file[0] != 0) {
@@ -1167,7 +1208,7 @@ int main(int argc, char **argv) {
 	    int ether_offset = (caplinktype == DLT_LINUX_SLL) ? 14 : 12;
 	    int ether_type = be16(&pkt_ptr[ether_offset]);
 
-	    if (ether_type == ETHER_TYPE_IP) {			/* most common */
+	    if (ether_type == ETHER_TYPE_IP) {	/* most common */
 		ether_offset += 2;
 	    } else if (ether_type == ETHER_TYPE_8021Q) {	/* dot1q tag ? */
 		ether_offset += 6;
@@ -1235,7 +1276,7 @@ int main(int argc, char **argv) {
 		}
 		dport = ntohs(mytcp->th_dport);
 		sport = ntohs(mytcp->th_sport);
-		if ((dport != 15730) && (sport != 15731) &&
+		if ((dport != 15730) && (sport != 15730) &&
 		    (dport != 15731) && (sport != 15731) && (dport != 15732) && (sport != 15732))
 		    continue;
 		if (size_payload > 0) {
@@ -1251,7 +1292,7 @@ int main(int argc, char **argv) {
 			frame_to_can(dump + i, &frame);
 			print_can_frame(F_N_TCP_FORMAT_STRG, &frame);
 			decode_frame(&frame);
-			// print_content(dump, size_payload);
+			/* print_content(dump, size_payload); */
 			printf(RESET);
 		    }
 		}
