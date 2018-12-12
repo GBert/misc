@@ -1,11 +1,15 @@
 const int revisionnr = 
-14676
+14680
 ;
 const char* commithash = 
-"34467ed3bf9c7ec68313f2f026caf6b85cada28a";
+"64f291dcf550be9ca75f4b308e67b2e961bbc8b1";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14680 2018-12-12 09:05:09 +0100 loc: fix for check2in modification\n" \
+"14679 2018-12-11 10:00:12 +0100 actionsctrldlg: condition state reserved added for blocks\n" \
+"14678 2018-12-11 08:31:27 +0100 guiframe: restore MDI and AUI flags on init plan notebook\n" \
+"14677 2018-12-11 08:15:09 +0100 guiframe: switch back to modview in caase of a modular layout and remove the AUI panel if defined\n" \
 "14676 2018-12-10 18:35:18 +0100 auipanel: fix for switching workspace\n" \
 "14675 2018-12-10 15:44:44 +0100 item: throttle popup menu item added\n" \
 "14674 2018-12-10 12:42:06 +0100 rocguiinidlg: layout corrections\n" \
@@ -52,9 +56,5 @@ const char* revlog =
 "14633 2018-12-01 13:26:36 +0100 importdlg: crash fix incase index is empty\n" \
 "14632 2018-12-01 10:10:03 +0100 find added in output and action dialog\n" \
 "14631 2018-12-01 08:04:10 +0100 control: trace level fix for switch mapping\n" \
-"14630 2018-11-30 16:20:30 +0100 control: fix for double path separator\n" \
-"14629 2018-11-30 15:16:24 +0100 control: removed extra prefix for trace file in case of issue listing\n" \
-"14628 2018-11-30 14:48:52 +0100 control: trace added on copy issue trace files\n" \
-"14627 2018-11-30 14:43:43 +0100 find in signal and schedule dialog\n" \
 
 "log end";
