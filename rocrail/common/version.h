@@ -1,11 +1,18 @@
 const int revisionnr = 
-14682
+14689
 ;
 const char* commithash = 
-"98c59e26a09eeb9206aea4ff710ab6a1df0d6e6f";
+"91b60131ed4a04708a2bdfacbb3bae02fc287155";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14689 2018-12-13 15:25:57 +0100 cbusnodedlg: arducangbmc links to arducanir\n" \
+"14688 2018-12-13 13:51:11 +0100 translation merge: sr_latin, sl,de, en_GB, nl\n" \
+"14687 2018-12-13 11:48:30 +0100 rocnetnode: fix for crash after disconnecting client from CAN service\n" \
+"14686 2018-12-13 11:43:00 +0100 added a line for the removal of MDI\n" \
+"14685 2018-12-13 10:16:41 +0100 loc,timer: revert reset schedule in timer, reset schedule after arrive in the gotoblock\n" \
+"14684 2018-12-13 09:17:48 +0100 timer: reset schedule in case the run flag is off\n" \
+"14683 2018-12-13 07:53:48 +0100 throttledlg: open loco dialog on the consist tab\n" \
 "14682 2018-12-12 14:46:25 +0100 throttledlg,loc: standalone command added\n" \
 "14681 2018-12-12 12:06:56 +0100 throttledlg: show master/slave\n" \
 "14680 2018-12-12 09:05:09 +0100 loc: fix for check2in modification\n" \
@@ -49,12 +56,5 @@ const char* revlog =
 "14642 2018-12-02 18:41:39 +0100 bidib: removed the echo commands option\n" \
 "14641 2018-12-02 17:23:10 +0100 control: copy the last trace in case the list of trace files is invalid\n" \
 "14640 2018-12-02 15:53:51 +0100 control: trace level correction for switch mapping\n" \
-"14639 2018-12-02 12:01:52 +0100 z12,loconet: block address + 1 in the new long multi sense\n" \
-"14638 2018-12-02 11:08:07 +0100 loconet: multi sense long support\n" \
-"14637 2018-12-02 10:51:28 +0100 z21: multi sense long support\n" \
-"14636 2018-12-02 08:01:51 +0100 importdlg: use the find selection off the caller dialog\n" \
-"14635 2018-12-01 16:02:41 +0100 rocview: keep original ID on import\n" \
-"14634 2018-12-01 14:50:27 +0100 issue: keep original trace file timestamp\n" \
-"14633 2018-12-01 13:26:36 +0100 importdlg: crash fix incase index is empty\n" \
 
 "log end";
