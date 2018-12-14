@@ -1154,13 +1154,13 @@ int main(int argc, char **argv) {
 	    /* line[strcspn(line, "\r\n")] = 0; */
 	    memset(slcan, 0, sizeof(slcan));
 	    memset(datum, 0, sizeof(datum));
-	    sscanf(line, "%s ", datum);
+	    sscanf(line, "%19s ", datum);
 	    pos_r = strstr(line, "ASCII read: ");
 	    if (pos_r)
-		sscanf(pos_r, "ASCII read: %s", slcan);
+		sscanf(pos_r, "ASCII read: %27s", slcan);
 	    pos_w = strstr(line, "ASCII write: ");
 	    if (pos_w)
-		sscanf(pos_w, "ASCII write: %s", slcan);
+		sscanf(pos_w, "ASCII write: %27s", slcan);
 	    if (pos_r || pos_w) {
 		memset(&aframe, 0, sizeof(aframe));
 		ascii_to_can(slcan, &aframe);
