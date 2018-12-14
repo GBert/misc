@@ -1,11 +1,14 @@
 const int revisionnr = 
-14689
+14692
 ;
 const char* commithash = 
-"91b60131ed4a04708a2bdfacbb3bae02fc287155";
+"b3bf2636232cdb5a8fc270545d25a2f908953aa4";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14692 2018-12-14 13:04:58 +0100 item: show number of cars in block symbols\n" \
+"14691 2018-12-14 09:11:12 +0100 cbusnodedlg: fix for set gc2\n" \
+"14690 2018-12-14 07:36:26 +0100 locdialog: standalone flag on consist tab\n" \
 "14689 2018-12-13 15:25:57 +0100 cbusnodedlg: arducangbmc links to arducanir\n" \
 "14688 2018-12-13 13:51:11 +0100 translation merge: sr_latin, sl,de, en_GB, nl\n" \
 "14687 2018-12-13 11:48:30 +0100 rocnetnode: fix for crash after disconnecting client from CAN service\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "14645 2018-12-04 08:27:56 +0100 item,block: show platform name in blocks in case of free (commented out)\n" \
 "14644 2018-12-03 10:15:59 +0100 mttmfcc: support for slx815\n" \
 "14643 2018-12-03 08:01:05 +0100 control,switch: regard route switch time in case of save position is set\n" \
-"14642 2018-12-02 18:41:39 +0100 bidib: removed the echo commands option\n" \
-"14641 2018-12-02 17:23:10 +0100 control: copy the last trace in case the list of trace files is invalid\n" \
-"14640 2018-12-02 15:53:51 +0100 control: trace level correction for switch mapping\n" \
 
 "log end";
