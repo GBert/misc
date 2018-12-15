@@ -1,11 +1,13 @@
 const int revisionnr = 
-14692
+14694
 ;
 const char* commithash = 
-"b3bf2636232cdb5a8fc270545d25a2f908953aa4";
+"d1d860197fc143c30d2ae4df955004bcfddf53db";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14694 2018-12-15 10:35:51 +0100 cbusnodedlg: fix for set gc2\n" \
+"14693 2018-12-15 10:19:04 +0100 item: fix for invalid block text\n" \
 "14692 2018-12-14 13:04:58 +0100 item: show number of cars in block symbols\n" \
 "14691 2018-12-14 09:11:12 +0100 cbusnodedlg: fix for set gc2\n" \
 "14690 2018-12-14 07:36:26 +0100 locdialog: standalone flag on consist tab\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14647 2018-12-05 07:57:02 +0100 mttmfcc: bus byte added for the tt command (copied from slx)\n" \
 "14646 2018-12-04 10:51:48 +0100 block: fix for setting occupancy in case of state closed/open\n" \
 "14645 2018-12-04 08:27:56 +0100 item,block: show platform name in blocks in case of free (commented out)\n" \
-"14644 2018-12-03 10:15:59 +0100 mttmfcc: support for slx815\n" \
-"14643 2018-12-03 08:01:05 +0100 control,switch: regard route switch time in case of save position is set\n" \
 
 "log end";
