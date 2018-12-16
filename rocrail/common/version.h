@@ -1,11 +1,14 @@
 const int revisionnr = 
-14696
+14699
 ;
 const char* commithash = 
-"7e54ea90e91fac3dad5ee4080a8dd921cbacaa6b";
+"e231c1958ae96a6b808cfd58c4b5e3cd953e6ad0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14699 2018-12-16 15:06:38 +0100 planpanel: auipanel support for looking up an ID\n" \
+"14698 2018-12-16 14:03:48 +0100 auipanel: model update function added\n" \
+"14697 2018-12-16 10:41:44 +0100 cbusnodedlg: fix for getting GC2 port stat, desc corrections for ArduCAN\n" \
 "14696 2018-12-16 08:45:13 +0100 loc: check active state\n" \
 "14695 2018-12-16 08:34:27 +0100 block: ignore events in case not reserved option added\n" \
 "14694 2018-12-15 10:35:51 +0100 cbusnodedlg: fix for set gc2\n" \
@@ -53,8 +56,5 @@ const char* revlog =
 "14652 2018-12-06 11:38:10 +0100 model: ignore the loco direction at selecting a destination\n" \
 "14651 2018-12-06 10:40:55 +0100 block: ignore event timers in case the loco is already IN\n" \
 "14650 2018-12-06 09:06:16 +0100 mttmfcc: slx815 support -> bus value added\n" \
-"14649 2018-12-05 14:35:47 +0100 loc: reset route sync on softreset\n" \
-"14648 2018-12-05 10:25:28 +0100 themeprops: added missing evaluation of options\n" \
-"14647 2018-12-05 07:57:02 +0100 mttmfcc: bus byte added for the tt command (copied from slx)\n" \
 
 "log end";
