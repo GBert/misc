@@ -1,11 +1,13 @@
 const int revisionnr = 
-14694
+14696
 ;
 const char* commithash = 
-"d1d860197fc143c30d2ae4df955004bcfddf53db";
+"7e54ea90e91fac3dad5ee4080a8dd921cbacaa6b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14696 2018-12-16 08:45:13 +0100 loc: check active state\n" \
+"14695 2018-12-16 08:34:27 +0100 block: ignore events in case not reserved option added\n" \
 "14694 2018-12-15 10:35:51 +0100 cbusnodedlg: fix for set gc2\n" \
 "14693 2018-12-15 10:19:04 +0100 item: fix for invalid block text\n" \
 "14692 2018-12-14 13:04:58 +0100 item: show number of cars in block symbols\n" \
@@ -54,7 +56,5 @@ const char* revlog =
 "14649 2018-12-05 14:35:47 +0100 loc: reset route sync on softreset\n" \
 "14648 2018-12-05 10:25:28 +0100 themeprops: added missing evaluation of options\n" \
 "14647 2018-12-05 07:57:02 +0100 mttmfcc: bus byte added for the tt command (copied from slx)\n" \
-"14646 2018-12-04 10:51:48 +0100 block: fix for setting occupancy in case of state closed/open\n" \
-"14645 2018-12-04 08:27:56 +0100 item,block: show platform name in blocks in case of free (commented out)\n" \
 
 "log end";
