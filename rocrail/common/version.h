@@ -1,11 +1,12 @@
 const int revisionnr = 
-14713
+14714
 ;
 const char* commithash = 
-"888237925d154252cf8e71b06cef073e4bdb5288";
+"03d2277ca9dcf0be8af689e8ca024f158e518998";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14714 2018-12-19 11:02:57 +0100 rocview: save/load AUI perspective incl. rotation\n" \
 "14713 2018-12-19 08:11:09 +0100 auipanel: panel name is needed for restoring the perspective\n" \
 "14712 2018-12-18 21:07:09 +0100 auipanel: use a generated name to avoid conflicts\n" \
 "14711 2018-12-18 15:58:15 +0100 planpanel: rotate 0,90,180,270\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "12717 2017-09-19 10:17:54 +0200 z21dlg added\n" \
 "12716 2017-09-19 07:57:46 +0200 app: trace pwd and args at startup\n" \
 "12715 2017-09-18 16:45:14 +0200 z21: trace CAN detector direction info\n" \
-"12714 2017-09-18 16:40:39 +0200 z21: evaluate CAN detector direction info\n" \
 
 "log end";
