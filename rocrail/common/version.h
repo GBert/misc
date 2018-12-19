@@ -1,11 +1,18 @@
 const int revisionnr = 
-14706
+14713
 ;
 const char* commithash = 
-"537a0d4f9053d281f2b11de5722bbc8649a2d35e";
+"888237925d154252cf8e71b06cef073e4bdb5288";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14713 2018-12-19 08:11:09 +0100 auipanel: panel name is needed for restoring the perspective\n" \
+"14712 2018-12-18 21:07:09 +0100 auipanel: use a generated name to avoid conflicts\n" \
+"14711 2018-12-18 15:58:15 +0100 planpanel: rotate 0,90,180,270\n" \
+"14710 2018-12-18 12:24:57 +0100 block: reset closereq flag in case of open state command\n" \
+"14709 2018-12-18 10:26:12 +0100 block: reservedevents plus/min option added\n" \
+"14708 2018-12-18 08:57:59 +0100 guiframe: crash fix fo deleting and creating modpanel\n" \
+"14707 2018-12-18 08:10:11 +0100 guiframe: crash fix fo deleting and creating modpanel\n" \
 "14706 2018-12-17 15:34:06 +0100 planpanel: show rotate menuitem as check item so its visible if the panel is already rotated\n" \
 "14705 2018-12-17 15:12:31 +0100 auipanel without notebook\n" \
 "14704 2018-12-17 13:56:25 +0100 planpanel: popup menu iten flip changed in rotate\n" \
@@ -1999,12 +2006,5 @@ const char* revlog =
 "12716 2017-09-19 07:57:46 +0200 app: trace pwd and args at startup\n" \
 "12715 2017-09-18 16:45:14 +0200 z21: trace CAN detector direction info\n" \
 "12714 2017-09-18 16:40:39 +0200 z21: evaluate CAN detector direction info\n" \
-"12713 2017-09-18 16:39:55 +0200 virtual: trace output color info\n" \
-"12712 2017-09-18 14:25:04 +0200 lightctrl: short pause before processing\n" \
-"12711 2017-09-18 14:24:03 +0200 stage: fix for unexpected bidi loco\n" \
-"12710 2017-09-18 10:31:38 +0200 infodialog: important changes button added to open the default webbrowser\n" \
-"12709 2017-09-17 12:30:36 +0200 planpanel: create always an object for text even if the show flag is not set\n" \
-"12708 2017-09-17 10:12:58 +0200 z21: CAN bus 3\n" \
-"12707 2017-09-17 10:03:19 +0200 z21: removed option system info -> always active\n" \
 
 "log end";
