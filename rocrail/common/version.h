@@ -1,11 +1,13 @@
 const int revisionnr = 
-14725
+14727
 ;
 const char* commithash = 
-"5712fa40a8636e687c3de2f02f213c048bf33883";
+"e7dcf24a1106c0d98f40117d7f812992ed8300b2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14727 2018-12-21 15:00:54 +0100 actionsctrldlg: fix for condition type stage\n" \
+"14726 2018-12-21 14:53:24 +0100 auipanel,planpanel: disable scrollbars in case of view mode AUI\n" \
 "14725 2018-12-21 07:56:09 +0100 auipanel: modular layout support\n" \
 "14724 2018-12-20 17:19:38 +0100 auipanel: trace level fix for panel events\n" \
 "14723 2018-12-20 16:44:05 +0100 item: fix for update throttle initiated from block\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "12730 2017-09-22 16:34:35 +0200 p50x: echo switch commands support added\n" \
 "12729 2017-09-22 15:07:15 +0200 drcmd: WIP\n" \
 "12728 2017-09-22 10:10:22 +0200 massoth: echo commands option added\n" \
-"12727 2017-09-22 09:54:59 +0200 basedlg: state column for routes added\n" \
-"12726 2017-09-22 08:31:08 +0200 rocview: fix for updating a block with old data to avoid loosing the reserved flag\n" \
 
 "log end";
