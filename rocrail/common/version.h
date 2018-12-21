@@ -1,11 +1,22 @@
 const int revisionnr = 
-14714
+14725
 ;
 const char* commithash = 
-"03d2277ca9dcf0be8af689e8ca024f158e518998";
+"5712fa40a8636e687c3de2f02f213c048bf33883";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14725 2018-12-21 07:56:09 +0100 auipanel: modular layout support\n" \
+"14724 2018-12-20 17:19:38 +0100 auipanel: trace level fix for panel events\n" \
+"14723 2018-12-20 16:44:05 +0100 item: fix for update throttle initiated from block\n" \
+"14722 2018-12-20 16:26:25 +0100 guiframe: inform AUI panel of loco events too\n" \
+"14721 2018-12-20 12:25:33 +0100 auipanel: use a translated message in case of a zlevel title conflict\n" \
+"14720 2018-12-20 12:05:09 +0100 auipanel: handle zlevel title conflicts\n" \
+"14719 2018-12-20 10:24:21 +0100 auipanel: rescale panels induvidual, save scale in perspective\n" \
+"14718 2018-12-20 08:23:16 +0100 renderer: bigger direction arrow\n" \
+"14717 2018-12-20 08:03:03 +0100 cmdrecoder,trace: stay on top flag\n" \
+"14716 2018-12-20 07:39:09 +0100 timedactions: revert stay on top flag\n" \
+"14715 2018-12-19 14:08:55 +0100 timedactions: stay on top flag set\n" \
 "14714 2018-12-19 11:02:57 +0100 rocview: save/load AUI perspective incl. rotation\n" \
 "14713 2018-12-19 08:11:09 +0100 auipanel: panel name is needed for restoring the perspective\n" \
 "14712 2018-12-18 21:07:09 +0100 auipanel: use a generated name to avoid conflicts\n" \
@@ -1995,16 +2006,5 @@ const char* revlog =
 "12728 2017-09-22 10:10:22 +0200 massoth: echo commands option added\n" \
 "12727 2017-09-22 09:54:59 +0200 basedlg: state column for routes added\n" \
 "12726 2017-09-22 08:31:08 +0200 rocview: fix for updating a block with old data to avoid loosing the reserved flag\n" \
-"12725 2017-09-22 07:55:00 +0200 app: console command 9 added for triggering the xmlh trace level\n" \
-"12724 2017-09-20 10:50:27 +0200 z21: report QoS in case > 0 with address 10000\n" \
-"12723 2017-09-20 08:28:18 +0200 z21: send RailCom Data to the control\n" \
-"12722 2017-09-20 08:00:56 +0200 translation merge: pt_BR\n" \
-"12721 2017-09-20 07:41:27 +0200 z21: removed unused zerobased variable\n" \
-"12720 2017-09-19 15:27:44 +0200 renderer: occroute support removed\n" \
-"12719 2017-09-19 14:45:14 +0200 removed SpDrS60 'alt'\n" \
-"12718 2017-09-19 10:33:27 +0200 translation merge: nl, de, fr, sl\n" \
-"12717 2017-09-19 10:17:54 +0200 z21dlg added\n" \
-"12716 2017-09-19 07:57:46 +0200 app: trace pwd and args at startup\n" \
-"12715 2017-09-18 16:45:14 +0200 z21: trace CAN detector direction info\n" \
 
 "log end";
