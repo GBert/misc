@@ -135,11 +135,11 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 2.6\n\n");
+    fprintf(stderr, "   Version 2.7\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
-    fprintf(stderr, "         -t <rocrail file> read PCAP file instead from CAN socket\n");
+    fprintf(stderr, "         -t <rocrail file> read Rocrail file instead from CAN socket\n");
     fprintf(stderr, "         -v                verbose output for TCP/UDP\n\n");
     fprintf(stderr, "         -h                show this help\n\n");
 }
@@ -779,12 +779,13 @@ void decode_frame(struct can_frame *frame) {
     /* Zubehör schalten */
     case 0x16:
     case 0x17:
+	uid = be32(frame->data);
 	if (frame->can_dlc == 6)
-	    printf("Zubehör Schalten Lok %s Stellung %d Strom %d\n",
-		   getLoco(frame->data, s), frame->data[4], frame->data[5]);
+	    printf("Zubehör Schalten UID 0x%08X Stellung %d Strom %d\n",
+		   uid, frame->data[4], frame->data[5]);
 	if (frame->can_dlc == 8)
-	    printf("Zubehör Schalten Lok %s Stellung %d Strom %d Schaltzeit/Sonderfunktionswert %d\n",
-		   getLoco(frame->data, s), frame->data[4], frame->data[5], be16(&frame->data[6]));
+	    printf("Zubehör Schalten UID 0x%08X Stellung %d Strom %d Schaltzeit/Sonderfunktionswert %d\n",
+		   uid, frame->data[4], frame->data[5], be16(&frame->data[6]));
 	break;
     /* S88 Polling */
     case 0x20:
