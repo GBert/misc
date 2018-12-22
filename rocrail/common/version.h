@@ -1,11 +1,15 @@
 const int revisionnr = 
-14727
+14731
 ;
 const char* commithash = 
-"e7dcf24a1106c0d98f40117d7f812992ed8300b2";
+"e1d4e12df87e4167a3fa0b49ec17f8facb8712b0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14731 2018-12-22 15:07:03 +0100 wrapper,timedactions: fix for light control\n" \
+"14730 2018-12-22 13:48:07 +0100 rocview: suffix tripple dot at menu items save/load perspective\n" \
+"14729 2018-12-22 10:29:19 +0100 translation merge: de, en_GB, nl\n" \
+"14728 2018-12-22 08:38:26 +0100 rocview: trace corrections\n" \
 "14727 2018-12-21 15:00:54 +0100 actionsctrldlg: fix for condition type stage\n" \
 "14726 2018-12-21 14:53:24 +0100 auipanel,planpanel: disable scrollbars in case of view mode AUI\n" \
 "14725 2018-12-21 07:56:09 +0100 auipanel: modular layout support\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "12734 2017-09-23 11:03:49 +0200 drcmd: power event support\n" \
 "12733 2017-09-23 10:26:48 +0200 drcmd: sensor, S88, evaluation added\n" \
 "12732 2017-09-23 10:08:53 +0200 drcmd: WIP\n" \
-"12731 2017-09-23 08:26:34 +0200 infodlg: important changes panel added\n" \
-"12730 2017-09-22 16:34:35 +0200 p50x: echo switch commands support added\n" \
-"12729 2017-09-22 15:07:15 +0200 drcmd: WIP\n" \
-"12728 2017-09-22 10:10:22 +0200 massoth: echo commands option added\n" \
 
 "log end";
