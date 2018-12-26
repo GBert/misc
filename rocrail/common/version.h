@@ -1,11 +1,22 @@
 const int revisionnr = 
-14731
+14742
 ;
 const char* commithash = 
-"e1d4e12df87e4167a3fa0b49ec17f8facb8712b0";
+"2e7ce1bd946a0a7de1667f9c07394fecebdd2d1d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14742 2018-12-26 14:29:47 +0100 model: fix for corrupt map first/next at block init\n" \
+"14741 2018-12-25 12:08:07 +0100 install: no longer provide a server icon\n" \
+"14740 2018-12-25 09:04:36 +0100 lenzdlg: correction for double ID\n" \
+"14739 2018-12-25 08:11:43 +0100 block: removed ignore reserved events plus/min\n" \
+"14738 2018-12-24 15:53:03 +0100 xpressnet: option for roco functions > 12 which are not conform xpressnet\n" \
+"14737 2018-12-24 10:23:23 +0100 xpressnet: function traces extended\n" \
+"14736 2018-12-23 15:08:47 +0100 rocview: fixes for none utf8 file systems for reading svg and opening workspaces\n" \
+"14735 2018-12-23 13:07:04 +0100 cmdln: REVERT convert windows latin command line args to utf8\n" \
+"14734 2018-12-23 11:40:04 +0100 cmdln: convert windows latin command line args to utf8\n" \
+"14733 2018-12-23 10:29:29 +0100 auipanel,planpanel: resize fix to disable scrollbars\n" \
+"14732 2018-12-23 08:36:25 +0100 ecosdlg: moved the baudrate choice up\n" \
 "14731 2018-12-22 15:07:03 +0100 wrapper,timedactions: fix for light control\n" \
 "14730 2018-12-22 13:48:07 +0100 rocview: suffix tripple dot at menu items save/load perspective\n" \
 "14729 2018-12-22 10:29:19 +0100 translation merge: de, en_GB, nl\n" \
@@ -1995,16 +2006,5 @@ const char* revlog =
 "12745 2017-09-28 11:03:36 +0200 rocview: fixes for xcode 9.0\n" \
 "12744 2017-09-27 11:05:08 +0200 operatordlg: reset location button added\n" \
 "12743 2017-09-26 15:48:53 +0200 analyse: dcurve replacement in check health\n" \
-"12742 2017-09-26 10:28:42 +0200 track: replace type dcurve with curvenr\n" \
-"12741 2017-09-26 07:57:07 +0200 stage: except unexpected in case the train will fit\n" \
-"12740 2017-09-25 09:59:00 +0200 drcmd: save function string for send it with speed commands\n" \
-"12739 2017-09-25 09:50:33 +0200 drcmd: f1-f28 support\n" \
-"12738 2017-09-24 10:27:48 +0200 drcmd: PT and POM support added\n" \
-"12737 2017-09-24 08:35:57 +0200 drcmd: loco reporting\n" \
-"12736 2017-09-24 08:18:27 +0200 drcmd: event support for switches, load and temp\n" \
-"12735 2017-09-23 18:34:15 +0200 z21: trace spelling correction\n" \
-"12734 2017-09-23 11:03:49 +0200 drcmd: power event support\n" \
-"12733 2017-09-23 10:26:48 +0200 drcmd: sensor, S88, evaluation added\n" \
-"12732 2017-09-23 10:08:53 +0200 drcmd: WIP\n" \
 
 "log end";
