@@ -1,11 +1,12 @@
 const int revisionnr = 
-14743
+14744
 ;
 const char* commithash = 
-"e9ea381575ff84dc827c53dca6cff027198475b3";
+"6723e958d57f5fe73c4f39123cbe5394efcaf73b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14744 2018-12-27 18:05:53 +0100 block: reactivated the exit event\n" \
 "14743 2018-12-27 10:40:05 +0100 guiapp: command line option -persp added\n" \
 "14742 2018-12-26 14:29:47 +0100 model: fix for corrupt map first/next at block init\n" \
 "14741 2018-12-25 12:08:07 +0100 install: no longer provide a server icon\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "12747 2017-09-28 11:39:40 +0200 rocs: tracelevel added for client connection\n" \
 "12746 2017-09-28 11:38:52 +0200 rocview: # fix for setting a loco with train in a block\n" \
 "12745 2017-09-28 11:03:36 +0200 rocview: fixes for xcode 9.0\n" \
-"12744 2017-09-27 11:05:08 +0200 operatordlg: reset location button added\n" \
 
 "log end";
