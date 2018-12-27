@@ -223,6 +223,7 @@ int main(int argc, char **argv) {
 		    direction ^= 1;
 		    data[9] = direction & 0x01;
 		    send_defined_can_frame(sc, data);
+		    break;
 		case 0x10:
 		    printf("loco %d speed + %d\n", loco, speed);
 		    memcpy(data, LOCO_SPEED, sizeof(data));

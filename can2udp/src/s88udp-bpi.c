@@ -200,6 +200,7 @@ int main(int argc, char **argv) {
     uint8_t newvalue;
 
     const int on = 1;
+    mask = 0;
 
     int destination_port = UDPPORT;
     int destination_second_port = 0;

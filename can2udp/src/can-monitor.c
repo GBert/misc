@@ -976,7 +976,7 @@ void decode_frame(struct can_frame *frame) {
 	    printf("[Config Data %s unvollständig] ", config_data.name);
 	memset(config_data.name, 0, sizeof(config_data.name));
 	memcpy(config_data.name, frame->data, 8);
-	/* fall through */
+	/* falls through */
     case 0x40:
 	memset(s, 0, sizeof(s));
 	memcpy(s, frame->data, 8);

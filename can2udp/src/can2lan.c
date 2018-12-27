@@ -367,6 +367,7 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 	    }
 	    break;
 	}
+	break;
     case (0x00420000UL):
 	/* check for bordcast config change: DLC = 7 */
 	if (netframe[4] == 7) {

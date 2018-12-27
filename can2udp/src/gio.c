@@ -295,7 +295,8 @@ int inflate_data(struct cs2_config_data_t *config_data) {
     assert(ret != Z_STREAM_ERROR);	/* state not clobbered */
     switch (ret) {
     case Z_NEED_DICT:
-	ret = Z_DATA_ERROR;	/* and fall through */
+	ret = Z_DATA_ERROR;
+    /* falls through */
     case Z_DATA_ERROR:
     case Z_MEM_ERROR:
 	(void)inflateEnd(&strm);
@@ -421,7 +422,7 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 			/* list is done if no entry is left */
 			config_data->state = CS2_STATE_TRACK_SUM;
 		    }
-		    /* we need to fallthrough here */
+		    /* falls through */
 		case CS2_STATE_TRACK_SUM:
 		    filename = calloc(MAXLINE, 1);
 		    if (filename == NULL) {
@@ -451,7 +452,7 @@ int reassemble_data(struct cs2_config_data_t *config_data, unsigned char *netfra
 		    free(filename);
 		    config_data->track_index = 0;
 		    config_data->state = CS2_STATE_GET_TRACKS;
-		    /* we need to fallthrough here */
+		    /* falls through */
 		case CS2_STATE_GET_TRACKS:
 		    if (config_data->page_name[config_data->track_index]) {
 			memset(newframe, 0, CAN_ENCAP_SIZE);

@@ -315,6 +315,7 @@ int main(int argc, char **argv) {
 			    break;
 			}
 		    }
+		    break;
 		case 0x36:	/* upgrade process) */
 		    if (frame.can_dlc == 0)
 			send_defined_can_frame(sc, M_GLEISBOX_BL_INIT, verbose);
