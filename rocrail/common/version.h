@@ -1,11 +1,12 @@
 const int revisionnr = 
-14742
+14743
 ;
 const char* commithash = 
-"2e7ce1bd946a0a7de1667f9c07394fecebdd2d1d";
+"e9ea381575ff84dc827c53dca6cff027198475b3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14743 2018-12-27 10:40:05 +0100 guiapp: command line option -persp added\n" \
 "14742 2018-12-26 14:29:47 +0100 model: fix for corrupt map first/next at block init\n" \
 "14741 2018-12-25 12:08:07 +0100 install: no longer provide a server icon\n" \
 "14740 2018-12-25 09:04:36 +0100 lenzdlg: correction for double ID\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "12746 2017-09-28 11:38:52 +0200 rocview: # fix for setting a loco with train in a block\n" \
 "12745 2017-09-28 11:03:36 +0200 rocview: fixes for xcode 9.0\n" \
 "12744 2017-09-27 11:05:08 +0200 operatordlg: reset location button added\n" \
-"12743 2017-09-26 15:48:53 +0200 analyse: dcurve replacement in check health\n" \
 
 "log end";
