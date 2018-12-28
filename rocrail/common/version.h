@@ -1,11 +1,13 @@
 const int revisionnr = 
-14745
+14747
 ;
 const char* commithash = 
-"7179abdc5cec7b4fd3af3f3985e761960b397091";
+"038fe3d1c11f5fb3b09babf496f847f9638c0c3e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14747 2018-12-28 09:21:12 +0100 Rocrail.desktop: remove\n" \
+"14746 2018-12-28 09:17:39 +0100 loc,block: set show flag if needed on identified locos\n" \
 "14745 2018-12-27 20:23:57 +0100 ecosdlg: (mcs2) fix for preselecting 500000bps\n" \
 "14744 2018-12-27 18:05:53 +0100 block: reactivated the exit event\n" \
 "14743 2018-12-27 10:40:05 +0100 guiapp: command line option -persp added\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "12750 2017-09-29 08:08:05 +0200 loc: fix for find RC messages\n" \
 "12749 2017-09-28 16:17:58 +0200 translation merge: fr\n" \
 "12748 2017-09-28 11:52:22 +0200 bidib: echo switch commands option added\n" \
-"12747 2017-09-28 11:39:40 +0200 rocs: tracelevel added for client connection\n" \
-"12746 2017-09-28 11:38:52 +0200 rocview: # fix for setting a loco with train in a block\n" \
 
 "log end";
