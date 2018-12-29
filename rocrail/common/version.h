@@ -1,11 +1,23 @@
 const int revisionnr = 
-14747
+14759
 ;
 const char* commithash = 
-"038fe3d1c11f5fb3b09babf496f847f9638c0c3e";
+"43bdd3fb17cedeb7396e7d8df235200ea4f2beed";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14759 2018-12-29 19:52:52 +0100 rocview: compiler fixes for Ubuntu 12.04\n" \
+"14758 2018-12-29 19:16:06 +0100 mttmfcc: fix for checking none bidi unit\n" \
+"14757 2018-12-29 19:07:03 +0100 mbus: optional activate the mm2 mfx and dcc protocol\n" \
+"14756 2018-12-29 17:47:24 +0100 mbus: ping added after activating for check for a trackbox\n" \
+"14755 2018-12-29 17:31:58 +0100 mbus: activate trackbox\n" \
+"14754 2018-12-29 15:49:34 +0100 mbus: set extended frame flag\n" \
+"14753 2018-12-29 15:14:43 +0100 mbus: socketcan added\n" \
+"14752 2018-12-29 13:23:34 +0100 mttmfcc: read tt confirmation byte\n" \
+"14751 2018-12-29 10:58:14 +0100 rocview: AUI perspective support extended\n" \
+"14750 2018-12-29 07:25:51 +0100 guiapp: no use the perspective xml file as plan file\n" \
+"14749 2018-12-28 12:21:06 +0100 finddest: trace level change from warning to find for no destination found\n" \
+"14748 2018-12-28 12:19:51 +0100 nmra-rp922: split up primary and extended addressing\n" \
 "14747 2018-12-28 09:21:12 +0100 Rocrail.desktop: remove\n" \
 "14746 2018-12-28 09:17:39 +0100 loc,block: set show flag if needed on identified locos\n" \
 "14745 2018-12-27 20:23:57 +0100 ecosdlg: (mcs2) fix for preselecting 500000bps\n" \
@@ -1994,17 +2006,5 @@ const char* revlog =
 "12762 2017-10-02 07:51:07 +0200 infodialog: translation fix for the third tab\n" \
 "12761 2017-10-02 07:29:15 +0200 analyse: fix for address calculation with offset variable (Lothar)\n" \
 "12760 2017-10-01 16:35:41 +0200 slim: 2 pixel (wip)\n" \
-"12759 2017-10-01 13:20:44 +0200 slim: block reserved an enter\n" \
-"12758 2017-10-01 11:59:53 +0200 slim: block symbols\n" \
-"12757 2017-10-01 11:10:35 +0200 slim: wip\n" \
-"12756 2017-10-01 08:29:37 +0200 SLIM: wip\n" \
-"12755 2017-09-30 10:28:28 +0200 stage: added loco commands on set or reset in sections\n" \
-"12754 2017-09-30 10:20:24 +0200 makemac.sh: fix for create with wrong format\n" \
-"12753 2017-09-29 15:51:38 +0200 loc: fix for setting the resume flag\n" \
-"12752 2017-09-29 15:34:50 +0200 SLIM theme: WIP\n" \
-"12751 2017-09-29 13:14:55 +0200 decoders stylesheet update (Andy)\n" \
-"12750 2017-09-29 08:08:05 +0200 loc: fix for find RC messages\n" \
-"12749 2017-09-28 16:17:58 +0200 translation merge: fr\n" \
-"12748 2017-09-28 11:52:22 +0200 bidib: echo switch commands option added\n" \
 
 "log end";
