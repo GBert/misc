@@ -1,11 +1,38 @@
 const int revisionnr = 
-14759
+14786
 ;
 const char* commithash = 
-"43bdd3fb17cedeb7396e7d8df235200ea4f2beed";
+"8f80369eacaaa45d887495a024be044b263f7fe2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14786 2019-01-02 20:26:15 +0100 auipanel: support for zoom2fit in case of 90,270 rotation\n" \
+"14785 2019-01-02 13:31:27 +0100 throttledlg: removed stay on top\n" \
+"14784 2019-01-02 12:19:59 +0100 mbus: send poll command at SoD to get events from Gleisreporter*\n" \
+"14783 2019-01-01 21:56:33 +0100 throttle too narrow...\n" \
+"14782 2019-01-01 19:02:15 +0100 guiframe: fix for zoo2fit in case the plan is rotated 90 or 270\n" \
+"14781 2019-01-01 17:47:30 +0100 tt: set accessory flag for ttdec switch commands (bidib)\n" \
+"14780 2019-01-01 16:45:29 +0100 mbus: trace level corrections\n" \
+"14779 2019-01-01 11:40:06 +0100 mbus: PT fix\n" \
+"14778 2019-01-01 11:07:30 +0100 mbus: report accessory command response\n" \
+"14777 2019-01-01 10:28:27 +0100 mbus: fix for PT\n" \
+"14776 2019-01-01 07:56:35 +0100 update 2019\n" \
+"14775 2018-12-31 15:51:51 +0100 mbus: server type added\n" \
+"14774 2018-12-31 15:35:09 +0100 cbusnodedlg: new types added\n" \
+"14773 2018-12-31 15:25:02 +0100 mbus: respond to ping with a Pi01CAN on board\n" \
+"14772 2018-12-31 14:58:55 +0100 signal: fix for swapped green/yellow addresses in case of 3 and 4 apect signals with default processing\n" \
+"14771 2018-12-31 14:37:49 +0100 tt: add bus parameter for ttdec\n" \
+"14770 2018-12-31 11:35:09 +0100 fix for desktop item\n" \
+"14769 2018-12-31 09:46:03 +0100 mbus: accessorry config added\n" \
+"14768 2018-12-30 18:09:38 +0100 mbusdlg: pt added\n" \
+"14767 2018-12-30 17:55:25 +0100 mbus: pt relais support\n" \
+"14766 2018-12-30 15:22:24 +0100 rocdigs: generation definitions update for mbus\n" \
+"14765 2018-12-30 15:19:52 +0100 wiki plan: fixes\n" \
+"14764 2018-12-30 15:06:12 +0100 operatordlg: open throttle with parent the Rocview frame instead of this dialog to avoid a crash after closing it\n" \
+"14763 2018-12-30 15:02:33 +0100 basepanel: get rotation\n" \
+"14762 2018-12-30 13:39:12 +0100 mbus: ebraek and pom added\n" \
+"14761 2018-12-30 13:17:37 +0100 throttledlg: stay on top flag set\n" \
+"14760 2018-12-30 09:15:24 +0100 mbusdlg: new dialog added for MBus\n" \
 "14759 2018-12-29 19:52:52 +0100 rocview: compiler fixes for Ubuntu 12.04\n" \
 "14758 2018-12-29 19:16:06 +0100 mttmfcc: fix for checking none bidi unit\n" \
 "14757 2018-12-29 19:07:03 +0100 mbus: optional activate the mm2 mfx and dcc protocol\n" \
@@ -1979,32 +2006,5 @@ const char* revlog =
 "12789 2017-10-06 10:56:53 +0200 SLIM: WIP\n" \
 "12788 2017-10-06 10:12:49 +0200 loc, guiframe: system action condition eventtimeout added\n" \
 "12787 2017-10-05 18:02:09 +0200 locdialog: accept typed input in the multihead loco ID SLIM: wip\n" \
-"12786 2017-10-05 17:04:08 +0200 SLIM: smaller dir tracks\n" \
-"12785 2017-10-05 16:56:53 +0200 SLIM: smaller off sensors\n" \
-"12784 2017-10-05 15:52:41 +0200 fix for evaluating an unsigned int with atoi -> replaced with strtoul\n" \
-"12783 2017-10-05 14:46:02 +0200 SLIM: wip to 1 pixel\n" \
-"12782 2017-10-05 14:11:04 +0200 SLIM: wip\n" \
-"12781 2017-10-05 12:11:46 +0200 block: reset byRouteId at reset and init\n" \
-"12780 2017-10-05 08:47:38 +0200 block: fix for formatting an event key to prevent using a null pointer\n" \
-"12779 2017-10-05 08:19:18 +0200 block: fix for buffer overflow in case of formating an event key\n" \
-"12778 2017-10-05 07:49:51 +0200 block: fix for buffer overflow in case of formating an event key\n" \
-"12777 2017-10-04 15:34:49 +0200 SLIM: dcrossing WIP\n" \
-"12776 2017-10-04 14:45:25 +0200 SLIM: wip\n" \
-"12775 2017-10-04 11:23:07 +0200 SLIM: curve sensors added\n" \
-"12774 2017-10-04 10:56:02 +0200 SLIM: more symbols added\n" \
-"12773 2017-10-03 16:52:59 +0200 slim: blockstate added\n" \
-"12772 2017-10-03 16:39:54 +0200 trackpickerdlg: use normal switch symbols instead of route types\n" \
-"12771 2017-10-03 16:39:03 +0200 theme properties: routeprio added to overwrite occupied\n" \
-"12770 2017-10-03 16:38:01 +0200 slim: wip\n" \
-"12769 2017-10-03 16:26:46 +0200 xpressnet: trace correction for lenz ethernet\n" \
-"12768 2017-10-03 10:01:58 +0200 item, guiframe: filter out locoevents to prevent loosing reserved flag\n" \
-"12767 2017-10-02 15:45:46 +0200 dccpp: trace level correction\n" \
-"12766 2017-10-02 12:14:48 +0200 SLIM: wip\n" \
-"12765 2017-10-02 08:36:02 +0200 trainimage: fix for rendering after the auto mode was switched on\n" \
-"12764 2017-10-02 08:18:39 +0200 SLIM: 2 pixel width symbols\n" \
-"12763 2017-10-02 08:06:10 +0200 model, fback: fix for evaluating sensor address with offset\n" \
-"12762 2017-10-02 07:51:07 +0200 infodialog: translation fix for the third tab\n" \
-"12761 2017-10-02 07:29:15 +0200 analyse: fix for address calculation with offset variable (Lothar)\n" \
-"12760 2017-10-01 16:35:41 +0200 slim: 2 pixel (wip)\n" \
 
 "log end";
