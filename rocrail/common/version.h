@@ -1,11 +1,13 @@
 const int revisionnr = 
-14786
+14788
 ;
 const char* commithash = 
-"8f80369eacaaa45d887495a024be044b263f7fe2";
+"ce1447bca3b52c958f92816d6752f2a0c5cae618";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14788 2019-01-03 14:01:40 +0100 canservice: wip\n" \
+"14787 2019-01-03 12:21:03 +0100 mbus: cc added for testing\n" \
 "14786 2019-01-02 20:26:15 +0100 auipanel: support for zoom2fit in case of 90,270 rotation\n" \
 "14785 2019-01-02 13:31:27 +0100 throttledlg: removed stay on top\n" \
 "14784 2019-01-02 12:19:59 +0100 mbus: send poll command at SoD to get events from Gleisreporter*\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "12791 2017-10-06 11:29:03 +0200 SLIM: signalmain white added for occ and route\n" \
 "12790 2017-10-06 11:23:22 +0200 SLIM: decoupler added\n" \
 "12789 2017-10-06 10:56:53 +0200 SLIM: WIP\n" \
-"12788 2017-10-06 10:12:49 +0200 loc, guiframe: system action condition eventtimeout added\n" \
-"12787 2017-10-05 18:02:09 +0200 locdialog: accept typed input in the multihead loco ID SLIM: wip\n" \
 
 "log end";
