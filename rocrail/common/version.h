@@ -1,11 +1,13 @@
 const int revisionnr = 
-14788
+14790
 ;
 const char* commithash = 
-"ce1447bca3b52c958f92816d6752f2a0c5cae618";
+"2486de1c396151c0402e161c36474b93be253986";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14790 2019-01-04 09:46:08 +0100 mbus: trace fix\n" \
+"14789 2019-01-04 09:19:15 +0100 rocview: renamed MGV in GCA\n" \
 "14788 2019-01-03 14:01:40 +0100 canservice: wip\n" \
 "14787 2019-01-03 12:21:03 +0100 mbus: cc added for testing\n" \
 "14786 2019-01-02 20:26:15 +0100 auipanel: support for zoom2fit in case of 90,270 rotation\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "12793 2017-10-07 08:22:21 +0200 fback: fix for checking action twice in case of off status\n" \
 "12792 2017-10-06 16:58:22 +0200 SLIM: switch curves...\n" \
 "12791 2017-10-06 11:29:03 +0200 SLIM: signalmain white added for occ and route\n" \
-"12790 2017-10-06 11:23:22 +0200 SLIM: decoupler added\n" \
-"12789 2017-10-06 10:56:53 +0200 SLIM: WIP\n" \
 
 "log end";
