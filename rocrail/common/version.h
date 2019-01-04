@@ -1,11 +1,12 @@
 const int revisionnr = 
-14790
+14791
 ;
 const char* commithash = 
-"2486de1c396151c0402e161c36474b93be253986";
+"79404f39046ecbdf94323bfc617a753d7b586539";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14791 2019-01-04 19:34:55 +0100 dccpp: update\n" \
 "14790 2019-01-04 09:46:08 +0100 mbus: trace fix\n" \
 "14789 2019-01-04 09:19:15 +0100 rocview: renamed MGV in GCA\n" \
 "14788 2019-01-03 14:01:40 +0100 canservice: wip\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "12794 2017-10-07 08:30:45 +0200 actionctrldlg: state column added\n" \
 "12793 2017-10-07 08:22:21 +0200 fback: fix for checking action twice in case of off status\n" \
 "12792 2017-10-06 16:58:22 +0200 SLIM: switch curves...\n" \
-"12791 2017-10-06 11:29:03 +0200 SLIM: signalmain white added for occ and route\n" \
 
 "log end";
