@@ -1,11 +1,19 @@
 const int revisionnr = 
-14791
+14799
 ;
 const char* commithash = 
-"79404f39046ecbdf94323bfc617a753d7b586539";
+"ad2f1e7eb6854feadb5f49a8244f1046eedbeee6";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14799 2019-01-06 16:01:49 +0100 block: reset accept ident flag on startup\n" \
+"14798 2019-01-06 14:53:52 +0100 routedialog: wiring layout fix\n" \
+"14797 2019-01-06 13:40:29 +0100 guiframe: crash fix\n" \
+"14796 2019-01-06 12:26:53 +0100 wmz21: trace level correction\n" \
+"14795 2019-01-06 09:11:14 +0100 loc: fix for matching ident code\n" \
+"14794 2019-01-05 16:51:35 +0100 system: trace correction in execRunner\n" \
+"14793 2019-01-05 16:22:52 +0100 guiframe: support for stage block type added in case of loco event\n" \
+"14792 2019-01-05 14:45:56 +0100 rocnetnode: mbus support WIP\n" \
 "14791 2019-01-04 19:34:55 +0100 dccpp: update\n" \
 "14790 2019-01-04 09:46:08 +0100 mbus: trace fix\n" \
 "14789 2019-01-04 09:19:15 +0100 rocview: renamed MGV in GCA\n" \
@@ -1998,13 +2006,5 @@ const char* revlog =
 "12802 2017-10-08 08:48:35 +0200 SLIM: dcrossing route symbols\n" \
 "12801 2017-10-08 08:39:28 +0200 SLIM: wip\n" \
 "12800 2017-10-08 07:51:48 +0200 cppcheck corrections\n" \
-"12799 2017-10-07 16:25:21 +0200 SLIM: wip\n" \
-"12798 2017-10-07 15:29:17 +0200 translation merge: sr_latin\n" \
-"12797 2017-10-07 12:16:37 +0200 SLIM: dcrossingleft...\n" \
-"12796 2017-10-07 11:30:59 +0200 SLIM: dcrossingright...\n" \
-"12795 2017-10-07 09:58:51 +0200 cbus: socket semaphore added to prevent using a null pointer\n" \
-"12794 2017-10-07 08:30:45 +0200 actionctrldlg: state column added\n" \
-"12793 2017-10-07 08:22:21 +0200 fback: fix for checking action twice in case of off status\n" \
-"12792 2017-10-06 16:58:22 +0200 SLIM: switch curves...\n" \
 
 "log end";
