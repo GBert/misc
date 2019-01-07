@@ -1,11 +1,13 @@
 const int revisionnr = 
-14799
+14801
 ;
 const char* commithash = 
-"ad2f1e7eb6854feadb5f49a8244f1046eedbeee6";
+"07f44435be5d98029008ef231d0b0250daaae46b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14801 2019-01-07 12:09:10 +0100 powerman,z21: define the z21 as booster with addr 21\n" \
+"14800 2019-01-07 09:14:25 +0100 switch: fix for unregister sensors\n" \
 "14799 2019-01-06 16:01:49 +0100 block: reset accept ident flag on startup\n" \
 "14798 2019-01-06 14:53:52 +0100 routedialog: wiring layout fix\n" \
 "14797 2019-01-06 13:40:29 +0100 guiframe: crash fix\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "12804 2017-10-08 09:14:45 +0200 SLIM: turnout occ symbols\n" \
 "12803 2017-10-08 09:04:41 +0200 SLIM: dcrossing occ symbols\n" \
 "12802 2017-10-08 08:48:35 +0200 SLIM: dcrossing route symbols\n" \
-"12801 2017-10-08 08:39:28 +0200 SLIM: wip\n" \
-"12800 2017-10-08 07:51:48 +0200 cppcheck corrections\n" \
 
 "log end";
