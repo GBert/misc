@@ -1,11 +1,13 @@
 const int revisionnr = 
-14801
+14803
 ;
 const char* commithash = 
-"07f44435be5d98029008ef231d0b0250daaae46b";
+"e3c7c349c49aebd7f9e871dac6d1e999ab2a5f50";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14803 2019-01-07 20:14:01 +0100 mbus: report A,V,T only in case of a change\n" \
+"14802 2019-01-07 19:48:50 +0100 mbus: poll A,V,C\n" \
 "14801 2019-01-07 12:09:10 +0100 powerman,z21: define the z21 as booster with addr 21\n" \
 "14800 2019-01-07 09:14:25 +0100 switch: fix for unregister sensors\n" \
 "14799 2019-01-06 16:01:49 +0100 block: reset accept ident flag on startup\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "12806 2017-10-08 11:55:03 +0200 SLIM: shunting signals\n" \
 "12805 2017-10-08 10:53:56 +0200 SLIM:color correction for turnoutright-t-route\n" \
 "12804 2017-10-08 09:14:45 +0200 SLIM: turnout occ symbols\n" \
-"12803 2017-10-08 09:04:41 +0200 SLIM: dcrossing occ symbols\n" \
-"12802 2017-10-08 08:48:35 +0200 SLIM: dcrossing route symbols\n" \
 
 "log end";
