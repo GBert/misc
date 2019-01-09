@@ -1,11 +1,18 @@
 const int revisionnr = 
-14813
+14820
 ;
 const char* commithash = 
-"361f6ea466e1883e6c9dfe6db0b6e9713da8299d";
+"ea486bef31ab5e09da0aeec04b0574aff3b5fd4e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14820 2019-01-09 14:21:37 +0100 mbus: udp communication added (not tested)\n" \
+"14819 2019-01-09 13:22:34 +0100 mbus utils: trace correction and standard frame support added\n" \
+"14818 2019-01-09 13:15:00 +0100 rocnetnode: fix for extended ASCII frame\n" \
+"14817 2019-01-09 13:05:45 +0100 rocnetnode: fix for creating an extended ASCII frame\n" \
+"14816 2019-01-09 12:21:11 +0100 mbusdlg: fix for evaluating sublib\n" \
+"14815 2019-01-09 12:20:36 +0100 mbus,rocnetnode: tcp support\n" \
+"14814 2019-01-09 11:54:44 +0100 mbus: tcpip support added\n" \
 "14813 2019-01-09 11:36:56 +0100 mbusdlg: layout correction\n" \
 "14812 2019-01-09 11:36:24 +0100 mbus,rocnetnode: fix for utils\n" \
 "14811 2019-01-09 10:15:48 +0100 mbus: purgetime correction -> seconds instead of minutes\n" \
@@ -1999,12 +2006,5 @@ const char* revlog =
 "12823 2017-10-09 17:56:10 +0200 routedlg: fix for crash\n" \
 "12822 2017-10-09 16:04:13 +0200 SLIM: blockstate signal correction\n" \
 "12821 2017-10-09 15:30:21 +0200 renderer: trace level correction svg: memory leak fixed\n" \
-"12820 2017-10-09 15:28:52 +0200 basedlg: last run date column added\n" \
-"12819 2017-10-09 12:10:01 +0200 SLIM: support for tri-state button 0\n" \
-"12818 2017-10-09 10:13:32 +0200 rocguiinidlg: show train ID in block as tri-state\n" \
-"12817 2017-10-09 08:36:36 +0200 cardlg: export added\n" \
-"12816 2017-10-09 08:14:22 +0200 action stylesheets improved (Andy)\n" \
-"12815 2017-10-09 07:59:23 +0200 SLIM: correction for left disabled\n" \
-"12814 2017-10-09 07:38:11 +0200 switch: trace improvement in case action state does not match\n" \
 
 "log end";
