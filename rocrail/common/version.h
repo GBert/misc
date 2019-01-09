@@ -1,11 +1,13 @@
 const int revisionnr = 
-14811
+14813
 ;
 const char* commithash = 
-"e5530eff99ea28f00e0a6a0601ea72ee0333129b";
+"361f6ea466e1883e6c9dfe6db0b6e9713da8299d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14813 2019-01-09 11:36:56 +0100 mbusdlg: layout correction\n" \
+"14812 2019-01-09 11:36:24 +0100 mbus,rocnetnode: fix for utils\n" \
 "14811 2019-01-09 10:15:48 +0100 mbus: purgetime correction -> seconds instead of minutes\n" \
 "14810 2019-01-09 09:50:00 +0100 mbus: purge only in case purgetime > 0\n" \
 "14809 2019-01-09 09:48:25 +0100 mbusdlg: purgetime option added\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "12816 2017-10-09 08:14:22 +0200 action stylesheets improved (Andy)\n" \
 "12815 2017-10-09 07:59:23 +0200 SLIM: correction for left disabled\n" \
 "12814 2017-10-09 07:38:11 +0200 switch: trace improvement in case action state does not match\n" \
-"12813 2017-10-09 06:31:04 +0200 mgbox: init corrections (Bert)\n" \
-"12812 2017-10-08 18:31:18 +0200 SLIM: twoway\n" \
 
 "log end";
