@@ -1,11 +1,19 @@
 const int revisionnr = 
-14803
+14811
 ;
 const char* commithash = 
-"e3c7c349c49aebd7f9e871dac6d1e999ab2a5f50";
+"e5530eff99ea28f00e0a6a0601ea72ee0333129b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14811 2019-01-09 10:15:48 +0100 mbus: purgetime correction -> seconds instead of minutes\n" \
+"14810 2019-01-09 09:50:00 +0100 mbus: purge only in case purgetime > 0\n" \
+"14809 2019-01-09 09:48:25 +0100 mbusdlg: purgetime option added\n" \
+"14808 2019-01-09 09:17:53 +0100 mbus: purge function added rcan: removed\n" \
+"14807 2019-01-08 17:18:26 +0100 mbus: set DCC sub protocol on first access\n" \
+"14806 2019-01-08 15:52:11 +0100 block: only generate timed events in case arrival is pending\n" \
+"14805 2019-01-08 12:06:21 +0100 z21: new function for getting type and firmware\n" \
+"14804 2019-01-08 08:46:03 +0100 mbus: statereport option, usb auto reconnect\n" \
 "14803 2019-01-07 20:14:01 +0100 mbus: report A,V,T only in case of a change\n" \
 "14802 2019-01-07 19:48:50 +0100 mbus: poll A,V,C\n" \
 "14801 2019-01-07 12:09:10 +0100 powerman,z21: define the z21 as booster with addr 21\n" \
@@ -1998,13 +2006,5 @@ const char* revlog =
 "12814 2017-10-09 07:38:11 +0200 switch: trace improvement in case action state does not match\n" \
 "12813 2017-10-09 06:31:04 +0200 mgbox: init corrections (Bert)\n" \
 "12812 2017-10-08 18:31:18 +0200 SLIM: twoway\n" \
-"12811 2017-10-08 15:54:03 +0200 SLIM: threeway\n" \
-"12810 2017-10-08 14:52:44 +0200 item: a closed block is visible by symbol, no need for the closed text\n" \
-"12809 2017-10-08 14:23:07 +0200 SLIM: ccrossing\n" \
-"12808 2017-10-08 14:04:06 +0200 SLIM: crossing added\n" \
-"12807 2017-10-08 12:38:24 +0200 SLIM: signaldistant 4 aspects\n" \
-"12806 2017-10-08 11:55:03 +0200 SLIM: shunting signals\n" \
-"12805 2017-10-08 10:53:56 +0200 SLIM:color correction for turnoutright-t-route\n" \
-"12804 2017-10-08 09:14:45 +0200 SLIM: turnout occ symbols\n" \
 
 "log end";
