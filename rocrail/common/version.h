@@ -1,11 +1,13 @@
 const int revisionnr = 
-14836
+14838
 ;
 const char* commithash = 
-"104c2afb121e211dc9a7b3962dc48b882ed0e887";
+"c1f41bc9756e6f2a66e54605e85d102911457969";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14838 2019-01-11 22:04:34 +0100 z21,mbus: voltmin added\n" \
+"14837 2019-01-11 21:43:15 +0100 z21,mbus: provide load and temp. max values\n" \
 "14836 2019-01-11 19:55:35 +0100 bidib: only set absent flag in case the power is on\n" \
 "14835 2019-01-11 14:53:45 +0100 model: fix for function count for guest locos\n" \
 "14834 2019-01-11 14:30:12 +0100 wmz21: trace correction\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "12841 2017-10-13 11:13:07 +0200 loc: fix for forwarding the eventtimeout to the system actions\n" \
 "12840 2017-10-13 10:50:35 +0200 switch: sensor support for dcrossing with one motor\n" \
 "12839 2017-10-13 08:40:24 +0200 switch: dcrossing with 1 motor invert support added\n" \
-"12838 2017-10-13 08:15:12 +0200 locdialog: manuid added\n" \
-"12837 2017-10-12 19:48:18 +0200 renderer: fix for show routes over switches\n" \
 
 "log end";
