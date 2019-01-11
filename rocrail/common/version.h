@@ -1,11 +1,24 @@
 const int revisionnr = 
-14820
+14833
 ;
 const char* commithash = 
-"ea486bef31ab5e09da0aeec04b0574aff3b5fd4e";
+"32153a3d1f6ee48e5cee5dab88ad9d29ec9e9b4a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14833 2019-01-11 11:07:09 +0100 mbus: set sensor value\n" \
+"14832 2019-01-11 08:59:37 +0100 bidibidentdlg: label UniqueID extended\n" \
+"14831 2019-01-10 17:02:32 +0100 block: do not reset loco current block in case the block is not its current block\n" \
+"14830 2019-01-10 14:17:55 +0100 canservice: tcpip support\n" \
+"14829 2019-01-10 14:13:15 +0100 canservice: tcpip support (wip)\n" \
+"14828 2019-01-10 12:15:06 +0100 makefile,mkdeb.sh: canservice added in case platform is linux\n" \
+"14827 2019-01-10 12:06:13 +0100 canservice: trace level corrections\n" \
+"14826 2019-01-10 12:01:53 +0100 canservice: client list\n" \
+"14825 2019-01-10 11:43:18 +0100 ucan: trace extended for write failed\n" \
+"14824 2019-01-10 11:21:13 +0100 canservice: UDP read trace\n" \
+"14823 2019-01-10 11:14:39 +0100 canservice: UDP support\n" \
+"14822 2019-01-10 10:38:56 +0100 mbus: sleep fix in usb sublib, discovery console command\n" \
+"14821 2019-01-09 20:14:08 +0100 block: revert acceptident\n" \
 "14820 2019-01-09 14:21:37 +0100 mbus: udp communication added (not tested)\n" \
 "14819 2019-01-09 13:22:34 +0100 mbus utils: trace correction and standard frame support added\n" \
 "14818 2019-01-09 13:15:00 +0100 rocnetnode: fix for extended ASCII frame\n" \
@@ -1993,18 +2006,5 @@ const char* revlog =
 "12836 2017-10-12 13:50:23 +0200 translation merge: sv\n" \
 "12835 2017-10-12 10:37:44 +0200 switch: dcrossing support with one motor\n" \
 "12834 2017-10-12 08:35:23 +0200 loconet: sensor query fix\n" \
-"12833 2017-10-11 10:09:22 +0200 blockdialog: save sorting\n" \
-"12832 2017-10-11 08:44:14 +0200 basedlg: save dialog index sorting in rocview.ini\n" \
-"12831 2017-10-11 07:57:23 +0200 item: regard show block ID in case the block is closed\n" \
-"12830 2017-10-10 15:16:57 +0200 renderer: fix for rendering blckstate in case of a graphic context...\n" \
-"12829 2017-10-10 11:56:10 +0200 basedlg: initial sorting support lodialog: save sorting for the beeing session\n" \
-"12828 2017-10-10 08:20:21 +0200 item: fix for small block text\n" \
-"12827 2017-10-10 08:07:16 +0200 mgbox: init (Bert)\n" \
-"12826 2017-10-10 08:03:58 +0200 SLIM: blockstate occ and route added\n" \
-"12825 2017-10-10 07:51:55 +0200 loc: fix secondnextblock4wait did overwrite secondnextblock at modify\n" \
-"12824 2017-10-10 07:28:49 +0200 actionsctrldlg: fix for initial values\n" \
-"12823 2017-10-09 17:56:10 +0200 routedlg: fix for crash\n" \
-"12822 2017-10-09 16:04:13 +0200 SLIM: blockstate signal correction\n" \
-"12821 2017-10-09 15:30:21 +0200 renderer: trace level correction svg: memory leak fixed\n" \
 
 "log end";
