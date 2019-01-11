@@ -1,11 +1,14 @@
 const int revisionnr = 
-14833
+14836
 ;
 const char* commithash = 
-"32153a3d1f6ee48e5cee5dab88ad9d29ec9e9b4a";
+"104c2afb121e211dc9a7b3962dc48b882ed0e887";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14836 2019-01-11 19:55:35 +0100 bidib: only set absent flag in case the power is on\n" \
+"14835 2019-01-11 14:53:45 +0100 model: fix for function count for guest locos\n" \
+"14834 2019-01-11 14:30:12 +0100 wmz21: trace correction\n" \
 "14833 2019-01-11 11:07:09 +0100 mbus: set sensor value\n" \
 "14832 2019-01-11 08:59:37 +0100 bidibidentdlg: label UniqueID extended\n" \
 "14831 2019-01-10 17:02:32 +0100 block: do not reset loco current block in case the block is not its current block\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "12839 2017-10-13 08:40:24 +0200 switch: dcrossing with 1 motor invert support added\n" \
 "12838 2017-10-13 08:15:12 +0200 locdialog: manuid added\n" \
 "12837 2017-10-12 19:48:18 +0200 renderer: fix for show routes over switches\n" \
-"12836 2017-10-12 13:50:23 +0200 translation merge: sv\n" \
-"12835 2017-10-12 10:37:44 +0200 switch: dcrossing support with one motor\n" \
-"12834 2017-10-12 08:35:23 +0200 loconet: sensor query fix\n" \
 
 "log end";
