@@ -1,11 +1,12 @@
 const int revisionnr = 
-14843
+14844
 ;
 const char* commithash = 
-"131cb326c44cc7b13697c56d4a5fc95d99064ab2";
+"ca296ba7c21d692323425cb2d2bc2d97eac0c541";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14844 2019-01-12 18:02:48 +0100 block: embededfb (WIP)\n" \
 "14843 2019-01-12 11:44:36 +0100 powerctrldlg: fix for evaluating the history value\n" \
 "14842 2019-01-12 09:31:46 +0100 bidib: report absent option added\n" \
 "14841 2019-01-12 08:29:22 +0100 block: fix for arrival pending in case it was already locked by the same loco\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "12847 2017-10-13 18:19:45 +0200 item: use buffered paint under Windows\n" \
 "12846 2017-10-13 18:14:19 +0200 item: use buffered paint under Windows\n" \
 "12845 2017-10-13 17:56:53 +0200 item: revert freeze/thaw\n" \
-"12844 2017-10-13 17:45:26 +0200 SLIM: road crossing 10 added\n" \
 
 "log end";
