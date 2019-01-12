@@ -1,11 +1,16 @@
 const int revisionnr = 
-14838
+14843
 ;
 const char* commithash = 
-"c1f41bc9756e6f2a66e54605e85d102911457969";
+"131cb326c44cc7b13697c56d4a5fc95d99064ab2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14843 2019-01-12 11:44:36 +0100 powerctrldlg: fix for evaluating the history value\n" \
+"14842 2019-01-12 09:31:46 +0100 bidib: report absent option added\n" \
+"14841 2019-01-12 08:29:22 +0100 block: fix for arrival pending in case it was already locked by the same loco\n" \
+"14840 2019-01-12 08:16:45 +0100 roads: dirall removed\n" \
+"14839 2019-01-12 08:05:26 +0100 dirall removed and replaced with straight\n" \
 "14838 2019-01-11 22:04:34 +0100 z21,mbus: voltmin added\n" \
 "14837 2019-01-11 21:43:15 +0100 z21,mbus: provide load and temp. max values\n" \
 "14836 2019-01-11 19:55:35 +0100 bidib: only set absent flag in case the power is on\n" \
@@ -2001,10 +2006,5 @@ const char* revlog =
 "12846 2017-10-13 18:14:19 +0200 item: use buffered paint under Windows\n" \
 "12845 2017-10-13 17:56:53 +0200 item: revert freeze/thaw\n" \
 "12844 2017-10-13 17:45:26 +0200 SLIM: road crossing 10 added\n" \
-"12843 2017-10-13 16:15:48 +0200 item: freeze/thaw added to prevent flickering under Windows\n" \
-"12842 2017-10-13 15:53:42 +0200 SLIM: track-2 added\n" \
-"12841 2017-10-13 11:13:07 +0200 loc: fix for forwarding the eventtimeout to the system actions\n" \
-"12840 2017-10-13 10:50:35 +0200 switch: sensor support for dcrossing with one motor\n" \
-"12839 2017-10-13 08:40:24 +0200 switch: dcrossing with 1 motor invert support added\n" \
 
 "log end";
