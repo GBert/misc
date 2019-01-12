@@ -1,11 +1,12 @@
 const int revisionnr = 
-14844
+14845
 ;
 const char* commithash = 
-"ca296ba7c21d692323425cb2d2bc2d97eac0c541";
+"bdb9c987c99b47a3bd59dcdf1411b58c14893146";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14845 2019-01-12 18:50:40 +0100 trackepickerdlg: block with embeded sensors added\n" \
 "14844 2019-01-12 18:02:48 +0100 block: embededfb (WIP)\n" \
 "14843 2019-01-12 11:44:36 +0100 powerctrldlg: fix for evaluating the history value\n" \
 "14842 2019-01-12 09:31:46 +0100 bidib: report absent option added\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "12848 2017-10-13 18:35:09 +0200 model: extra trace at setting occupancy in the occ.xml\n" \
 "12847 2017-10-13 18:19:45 +0200 item: use buffered paint under Windows\n" \
 "12846 2017-10-13 18:14:19 +0200 item: use buffered paint under Windows\n" \
-"12845 2017-10-13 17:56:53 +0200 item: revert freeze/thaw\n" \
 
 "log end";
