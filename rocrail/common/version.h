@@ -1,11 +1,16 @@
 const int revisionnr = 
-14845
+14850
 ;
 const char* commithash = 
-"bdb9c987c99b47a3bd59dcdf1411b58c14893146";
+"cece351d50ef4239b60462805883a7874a2eba4d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14850 2019-01-13 15:54:31 +0100 renderer: adjust block sensor position in case of theme SLIM\n" \
+"14849 2019-01-13 15:35:50 +0100 item: use alt+shift to simulate embeded sensors\n" \
+"14848 2019-01-13 14:18:52 +0100 block: embededfb IDs changed to %bkid%+/-\n" \
+"14847 2019-01-13 12:25:41 +0100 block,item,planpanel: update item recursive on modify\n" \
+"14846 2019-01-12 22:10:28 +0100 trackpicker: block embededfb symbol\n" \
 "14845 2019-01-12 18:50:40 +0100 trackepickerdlg: block with embeded sensors added\n" \
 "14844 2019-01-12 18:02:48 +0100 block: embededfb (WIP)\n" \
 "14843 2019-01-12 11:44:36 +0100 powerctrldlg: fix for evaluating the history value\n" \
@@ -2001,10 +2006,5 @@ const char* revlog =
 "12853 2017-10-14 08:39:32 +0200 item: test auto buffered paint\n" \
 "12852 2017-10-13 21:36:15 +0200 SLIM: minor improvement\n" \
 "12851 2017-10-13 19:23:50 +0200 item: revert buffered paint\n" \
-"12850 2017-10-13 19:10:13 +0200 Analyser-Fix: no warnings for second address 9999 in dcrossing with one motor (Lothar)\n" \
-"12849 2017-10-13 18:45:28 +0200 item: buffered paint...\n" \
-"12848 2017-10-13 18:35:09 +0200 model: extra trace at setting occupancy in the occ.xml\n" \
-"12847 2017-10-13 18:19:45 +0200 item: use buffered paint under Windows\n" \
-"12846 2017-10-13 18:14:19 +0200 item: use buffered paint under Windows\n" \
 
 "log end";
