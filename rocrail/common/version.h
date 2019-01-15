@@ -1,11 +1,19 @@
 const int revisionnr = 
-14850
+14858
 ;
 const char* commithash = 
-"cece351d50ef4239b60462805883a7874a2eba4d";
+"991913111bc4634c9fa9b3ab44ed898eb85c45f0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14858 2019-01-15 09:19:41 +0100 renderer: fix for vertical embeded sensors (wrong side)\n" \
+"14857 2019-01-15 08:23:05 +0100 block: stop loop in case the sensor was found to be deleted\n" \
+"14856 2019-01-15 08:15:49 +0100 block: delete generated sensors on remove in case of embedded sensors\n" \
+"14855 2019-01-15 07:34:55 +0100 translation merge: nl, fr, de, cs, en_GB, sl, sv\n" \
+"14854 2019-01-14 17:24:09 +0100 renderer: embedded sensor corrections\n" \
+"14853 2019-01-14 15:33:36 +0100 mbus: fix for evaluating programming response addresses\n" \
+"14852 2019-01-14 15:25:59 +0100 mbus: fix for accessory commands\n" \
+"14851 2019-01-14 10:14:07 +0100 item,renderer: use only parts of the block for simulating embedded sensors\n" \
 "14850 2019-01-13 15:54:31 +0100 renderer: adjust block sensor position in case of theme SLIM\n" \
 "14849 2019-01-13 15:35:50 +0100 item: use alt+shift to simulate embeded sensors\n" \
 "14848 2019-01-13 14:18:52 +0100 block: embededfb IDs changed to %bkid%+/-\n" \
@@ -1998,13 +2006,5 @@ const char* revlog =
 "12861 2017-10-16 11:47:00 +0200 routedialog: autogen checkbox added to be able to remove this flag\n" \
 "12860 2017-10-16 11:24:15 +0200 analyse: set description in the generated routes\n" \
 "12859 2017-10-16 11:10:56 +0200 autogen flag added for routes to replace the autogen- prefix\n" \
-"12858 2017-10-16 07:59:39 +0200 rocguiinidlg: reenabled the lnsv tab option\n" \
-"12857 2017-10-15 13:13:02 +0200 actionsctrldlg: has conditions column added to the index\n" \
-"12856 2017-10-15 11:05:38 +0200 renderer: regard the SLIM theme in case of seltab and turntable\n" \
-"12855 2017-10-15 10:17:49 +0200 cars and locos update from Andy\n" \
-"12854 2017-10-15 09:29:05 +0200 node: fix for replacechilds attribute\n" \
-"12853 2017-10-14 08:39:32 +0200 item: test auto buffered paint\n" \
-"12852 2017-10-13 21:36:15 +0200 SLIM: minor improvement\n" \
-"12851 2017-10-13 19:23:50 +0200 item: revert buffered paint\n" \
 
 "log end";
