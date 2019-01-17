@@ -260,7 +260,7 @@ void command_system(struct can_frame *frame) {
 	    printf("System: UID 0x%08X ", uid);
 	else
 	    printf("System: alle ");
-    printf("Stopp/Go-Abfrage\n");
+	printf("Stopp/Go-Abfrage\n");
 	return;
     }
     switch (frame->data[4]) {
@@ -792,8 +792,7 @@ void decode_frame(struct can_frame *frame) {
     case 0x17:
 	uid = be32(frame->data);
 	if (frame->can_dlc == 6)
-	    printf("Zubehör Schalten UID 0x%08X Stellung %d Strom %d\n",
-		   uid, frame->data[4], frame->data[5]);
+	    printf("Zubehör Schalten UID 0x%08X Stellung %d Strom %d\n", uid, frame->data[4], frame->data[5]);
 	if (frame->can_dlc == 8)
 	    printf("Zubehör Schalten UID 0x%08X Stellung %d Strom %d Schaltzeit/Sonderfunktionswert %d\n",
 		   uid, frame->data[4], frame->data[5], be16(&frame->data[6]));
@@ -1048,15 +1047,15 @@ void decode_frame(struct can_frame *frame) {
 		if (crc == config_data.crc) {
 		    printf(GRN "Config Data %s mit CRC 0x%04X, Länge %d, ",
 			   config_data.name, config_data.crc, config_data.deflated_size);
-			if (config_data.deflated_data[0] == 0) {
-		    	config_data.inflated_size = ntohl(*(uint32_t *) config_data.deflated_data);
-				printf("inflated %d Bytes\n", config_data.inflated_size);
-		    	/* TODO: now you can inflate collected data */
+		    if (config_data.deflated_data[0] == 0) {
+			config_data.inflated_size = ntohl(*(uint32_t *) config_data.deflated_data);
+			printf("inflated %d Bytes\n", config_data.inflated_size);
+			/* TODO: now you can inflate collected data */
 		    } else {
-				printf("unkomprimiert\n");
-				if (expconf)
-	    			printf(RESET "%s", config_data.deflated_data);
-			}
+			printf("unkomprimiert\n");
+			if (expconf)
+			    printf(RESET "%s", config_data.deflated_data);
+		    }
 		} else {
 		    printf(RED "Config Data %s mit ungültigem CRC 0x%04X, erwartet 0x%04X\n",
 			   config_data.name, crc, config_data.crc);
