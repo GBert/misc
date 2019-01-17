@@ -63,7 +63,7 @@ struct knoten *messwert = NULL;
 struct cs2_config_data_t config_data;
 
 unsigned char buffer[MAX_PAKETE * 8];
-int verbose = 0, kanal = 0;
+int verbose = 0, kanal = 0, expconf = 0;
 
 static char *F_N_CAN_FORMAT_STRG = "  CAN  0x%08X  [%d]";
 static char *F_N_UDP_FORMAT_STRG = "  UDP  0x%08X  [%d]";
@@ -141,6 +141,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -s                select only network internal frames\n");
     fprintf(stderr, "         -t <rocrail file> read Rocrail file instead from CAN socket\n");
     fprintf(stderr, "         -v                verbose output for TCP/UDP\n\n");
+    fprintf(stderr, "         -x                expose config data\n\n");
     fprintf(stderr, "         -h                show this help\n\n");
 }
 
@@ -163,11 +164,13 @@ void frame_to_can(unsigned char *netframe, struct can_frame *frame) {
 
 void ascii_to_can(char *s, struct can_frame *frame) {
     int i;
+    unsigned int dat;
 
     sscanf(s, "T%8X%1X", &frame->can_id, (unsigned int *)&frame->can_dlc);
     memset(&frame->data, 0, 8);
     for (i = 1; i <= frame->can_dlc; i++) {
-	sscanf(&s[8 + i * 2], "%2X", (unsigned int *)&frame->data[i - 1]);
+	sscanf(&s[8 + i * 2], "%2X", &dat);
+	frame->data[i - 1] = dat;
     }
 }
 
@@ -252,6 +255,14 @@ void command_system(struct can_frame *frame) {
     }
 
     uid = be32(frame->data);
+    if (frame->can_dlc == 4) {
+	if (uid)
+	    printf("System: UID 0x%08X ", uid);
+	else
+	    printf("System: alle ");
+    printf("Stopp/Go-Abfrage\n");
+	return;
+    }
     switch (frame->data[4]) {
     case 0x00:
 	if (uid)
@@ -836,6 +847,9 @@ void decode_frame(struct can_frame *frame) {
 	case 0x0010:
 	    printf("Gleisbox");
 	    break;
+	case 0x0020:
+	    printf("Connect6021");
+	    break;
 	case 0x0030:
 	case 0x0031:
 	case 0x0032:
@@ -1016,6 +1030,10 @@ void decode_frame(struct can_frame *frame) {
 	case 7:
 	    config_data.deflated_size = be32(frame->data);
 	    config_data.crc = be16(&frame->data[4]);
+	    if (config_data.deflated_data)
+		free(config_data.deflated_data);
+	    config_data.deflated_data = malloc(config_data.deflated_size + 8);
+	    config_data.deflated_size_counter = 0;
 	    printf("Config Data Stream: Länge 0x%08X CRC 0x%04X (unbekannt 0x%02X)\n",
 		   config_data.deflated_size, config_data.crc, frame->data[6]);
 	    break;
@@ -1028,10 +1046,17 @@ void decode_frame(struct can_frame *frame) {
 	    if (config_data.deflated_size_counter >= config_data.deflated_size) {
 		crc = CRCCCITT(config_data.deflated_data, config_data.deflated_size_counter, 0xFFFF);
 		if (crc == config_data.crc) {
-		    config_data.inflated_size = ntohl(*(uint32_t *) config_data.deflated_data);
-		    printf(GRN "Config Data %s mit CRC 0x%04X, Länge %d, inflated %d Bytes\n",
-			   config_data.name, config_data.crc, config_data.deflated_size, config_data.inflated_size);
-		    /* TODO: now you can inflate collected data */
+		    printf(GRN "Config Data %s mit CRC 0x%04X, Länge %d, ",
+			   config_data.name, config_data.crc, config_data.deflated_size);
+			if (config_data.deflated_data[0] == 0) {
+		    	config_data.inflated_size = ntohl(*(uint32_t *) config_data.deflated_data);
+				printf("inflated %d Bytes\n", config_data.inflated_size);
+		    	/* TODO: now you can inflate collected data */
+		    } else {
+				printf("unkomprimiert\n");
+				if (expconf)
+	    			printf(RESET "%s", config_data.deflated_data);
+			}
 		} else {
 		    printf(RED "Config Data %s mit ungültigem CRC 0x%04X, erwartet 0x%04X\n",
 			   config_data.name, crc, config_data.crc);
@@ -1100,7 +1125,7 @@ int main(int argc, char **argv) {
 
     signal(SIGINT, INThandler);
 
-    while ((opt = getopt(argc, argv, "i:r:t:svh?")) != -1) {
+    while ((opt = getopt(argc, argv, "i:r:t:svxh?")) != -1) {
 	switch (opt) {
 	case 'i':
 	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
@@ -1116,6 +1141,9 @@ int main(int argc, char **argv) {
 	    break;
 	case 'v':
 	    verbose = 1;
+	    break;
+	case 'x':
+	    expconf = 1;
 	    break;
 	case 'h':
 	case '?':
