@@ -1,11 +1,14 @@
 const int revisionnr = 
-14871
+14874
 ;
 const char* commithash = 
-"c0dcb51a30a702dc8860a1c134829fd74d7df3c7";
+"69f9d405670ccc8230c5b20812a0e1e770eafaff";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14874 2019-01-17 12:50:50 +0100 mbus: usb fix for recovery\n" \
+"14873 2019-01-17 09:24:56 +0100 renderer: comment corrections\n" \
+"14872 2019-01-17 09:23:47 +0100 block: fix for unexpected enter flag in case of embeddedfb\n" \
 "14871 2019-01-16 17:30:50 +0100 item: fix for take over the block enterside\n" \
 "14870 2019-01-16 11:34:19 +0100 mbus,model: signal response\n" \
 "14869 2019-01-16 09:18:18 +0100 mbus: use queue for accessory DCC/MM commands\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "12877 2017-10-21 18:51:27 +0200 signaldialog: help index fix\n" \
 "12876 2017-10-21 10:00:37 +0200 item: reset updateenterside flag always after processing\n" \
 "12875 2017-10-20 14:10:10 +0200 model: fix for update sensor module list in case of register type\n" \
-"12874 2017-10-20 10:50:09 +0200 weather: todo added\n" \
-"12873 2017-10-20 10:35:40 +0200 route: removed the 100ms sleep between the route alias broadcasts\n" \
-"12872 2017-10-19 20:46:32 +0200 system: typo fix\n" \
 
 "log end";
