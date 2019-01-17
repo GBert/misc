@@ -1,11 +1,24 @@
 const int revisionnr = 
-14858
+14871
 ;
 const char* commithash = 
-"991913111bc4634c9fa9b3ab44ed898eb85c45f0";
+"c0dcb51a30a702dc8860a1c134829fd74d7df3c7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14871 2019-01-16 17:30:50 +0100 item: fix for take over the block enterside\n" \
+"14870 2019-01-16 11:34:19 +0100 mbus,model: signal response\n" \
+"14869 2019-01-16 09:18:18 +0100 mbus: use queue for accessory DCC/MM commands\n" \
+"14868 2019-01-16 07:29:51 +0100 renderer: fix for determine the plus/min side of a fbblock\n" \
+"14867 2019-01-16 07:10:50 +0100 block: reset embeddedfb flags on inst\n" \
+"14866 2019-01-15 18:07:57 +0100 typo fix: embeddedfb\n" \
+"14865 2019-01-15 17:37:21 +0100 rnnmqtt: extra parameter added\n" \
+"14864 2019-01-15 17:14:15 +0100 typo fix: embeddedfb\n" \
+"14863 2019-01-15 14:54:39 +0100 clntcon,mqtt: switch dispatching by topic\n" \
+"14862 2019-01-15 13:17:09 +0100 mbus: signal aspect support added incl. blink\n" \
+"14861 2019-01-15 12:09:30 +0100 analyse: regard embedded sensors in block at cleanup (Lothar)\n" \
+"14860 2019-01-15 10:45:56 +0100 item: fix for D&D and first embedded sensor click\n" \
+"14859 2019-01-15 10:45:28 +0100 block: fix for enter flag in case of embedded sensors and auto off\n" \
 "14858 2019-01-15 09:19:41 +0100 renderer: fix for vertical embeded sensors (wrong side)\n" \
 "14857 2019-01-15 08:23:05 +0100 block: stop loop in case the sensor was found to be deleted\n" \
 "14856 2019-01-15 08:15:49 +0100 block: delete generated sensors on remove in case of embedded sensors\n" \
@@ -1993,18 +2006,5 @@ const char* revlog =
 "12874 2017-10-20 10:50:09 +0200 weather: todo added\n" \
 "12873 2017-10-20 10:35:40 +0200 route: removed the 100ms sleep between the route alias broadcasts\n" \
 "12872 2017-10-19 20:46:32 +0200 system: typo fix\n" \
-"12871 2017-10-19 19:12:47 +0200 renderer: fix for short circuit stageblock in case no fitting symbol\n" \
-"12870 2017-10-19 17:17:33 +0200 update trademark\n" \
-"12869 2017-10-19 13:57:36 +0200 update readme file\n" \
-"12868 2017-10-19 12:57:40 +0200 loconet: use slot response address instead using the expected address\n" \
-"12867 2017-10-19 12:05:48 +0200 tt: optional register sensor for bridge position\n" \
-"12866 2017-10-19 11:11:12 +0200 register sensor type added\n" \
-"12865 2017-10-18 20:17:00 +0200 rocrail icon as png\n" \
-"12864 2017-10-18 09:31:51 +0200 roclcdr: prevent looping in case of enter state\n" \
-"12863 2017-10-18 07:35:20 +0200 rocview makefile corrections for native builds\n" \
-"12862 2017-10-17 17:25:24 +0200 routedlg: not list up closed routes\n" \
-"12861 2017-10-16 11:47:00 +0200 routedialog: autogen checkbox added to be able to remove this flag\n" \
-"12860 2017-10-16 11:24:15 +0200 analyse: set description in the generated routes\n" \
-"12859 2017-10-16 11:10:56 +0200 autogen flag added for routes to replace the autogen- prefix\n" \
 
 "log end";
