@@ -1,11 +1,22 @@
 const int revisionnr = 
-14875
+14886
 ;
 const char* commithash = 
-"94675cf997521d5e1d06be02b16ff2dfb828a6d4";
+"13a7e3ee46fae08c658387c9e3f21d221ccd58e2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14886 2019-01-18 15:50:43 +0100 mbus,gc2a: experimetal sensor ack\n" \
+"14885 2019-01-18 15:42:04 +0100 renderer: fixed incompat function call 3.0 and 3.1\n" \
+"14884 2019-01-18 13:54:45 +0100 hueconfdlg: deprecated events replaced\n" \
+"14883 2019-01-18 13:49:13 +0100 rocnetnodedlg: deprecated events replaced\n" \
+"14882 2019-01-18 13:23:31 +0100 blockdialog,hueconfdlg: deprecated set cell alignment replaced\n" \
+"14881 2019-01-18 13:11:38 +0100 feedbackdialog: fix for deprecated cell alignment call\n" \
+"14880 2019-01-18 12:52:30 +0100 rocrailinidialog: replaced deprecated cell alignment functions\n" \
+"14879 2019-01-18 12:17:41 +0100 trackpickerdlg: correction for deprecated grid cell function\n" \
+"14878 2019-01-18 12:07:49 +0100 rocview dialogs: removed deprecated wxADJUST_MINSIZE\n" \
+"14877 2019-01-18 11:45:25 +0100 weatherdlg: fix for deprecated 3.1\n" \
+"14876 2019-01-18 11:39:24 +0100 weatherdlg: fix for 3.1\n" \
 "14875 2019-01-18 08:19:00 +0100 loconetdlg: fix for saving cmdstn\n" \
 "14874 2019-01-17 12:50:50 +0100 mbus: usb fix for recovery\n" \
 "14873 2019-01-17 09:24:56 +0100 renderer: comment corrections\n" \
@@ -1995,16 +2006,5 @@ const char* revlog =
 "12889 2017-10-23 11:43:30 +0200 fback: use base address too at broadcast to clients\n" \
 "12888 2017-10-23 11:10:31 +0200 car: getHome function return value fix\n" \
 "12887 2017-10-23 08:46:22 +0200 car: getHome function added\n" \
-"12886 2017-10-23 08:32:28 +0200 car: home location added as preparation for shuting\n" \
-"12885 2017-10-22 16:03:42 +0200 stage: trace level change for unexpected event\n" \
-"12884 2017-10-22 15:29:45 +0200 guiframe: use the event node to update the block state\n" \
-"12883 2017-10-22 14:10:30 +0200 item: extra trace for reserved and entering flags\n" \
-"12882 2017-10-22 12:09:06 +0200 model: fix for gotoblock in case its occupied\n" \
-"12881 2017-10-22 11:08:13 +0200 SLIM: small ghost block\n" \
-"12880 2017-10-22 09:20:29 +0200 SLIM: ghost block added\n" \
-"12879 2017-10-22 08:48:00 +0200 block: resetghost command added\n" \
-"12878 2017-10-21 20:13:32 +0200 actionctrldlg: loco state schedule added\n" \
-"12877 2017-10-21 18:51:27 +0200 signaldialog: help index fix\n" \
-"12876 2017-10-21 10:00:37 +0200 item: reset updateenterside flag always after processing\n" \
 
 "log end";
