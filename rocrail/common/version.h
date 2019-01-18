@@ -1,11 +1,12 @@
 const int revisionnr = 
-14874
+14875
 ;
 const char* commithash = 
-"69f9d405670ccc8230c5b20812a0e1e770eafaff";
+"94675cf997521d5e1d06be02b16ff2dfb828a6d4";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14875 2019-01-18 08:19:00 +0100 loconetdlg: fix for saving cmdstn\n" \
 "14874 2019-01-17 12:50:50 +0100 mbus: usb fix for recovery\n" \
 "14873 2019-01-17 09:24:56 +0100 renderer: comment corrections\n" \
 "14872 2019-01-17 09:23:47 +0100 block: fix for unexpected enter flag in case of embeddedfb\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "12878 2017-10-21 20:13:32 +0200 actionctrldlg: loco state schedule added\n" \
 "12877 2017-10-21 18:51:27 +0200 signaldialog: help index fix\n" \
 "12876 2017-10-21 10:00:37 +0200 item: reset updateenterside flag always after processing\n" \
-"12875 2017-10-20 14:10:10 +0200 model: fix for update sensor module list in case of register type\n" \
 
 "log end";
