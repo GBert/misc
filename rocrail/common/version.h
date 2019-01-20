@@ -1,11 +1,12 @@
 const int revisionnr = 
-14895
+14896
 ;
 const char* commithash = 
-"f62cdb89405626e4672c98bad3c5d03726b0239e";
+"aa1685a6097d99d5271ceff4cc8fd92082fa335f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14896 2019-01-20 17:22:45 +0100 mbus: config data (WIP)\n" \
 "14895 2019-01-20 09:08:33 +0100 xpressnet: swoffset option added\n" \
 "14894 2019-01-20 08:30:10 +0100 loconetdlg: fix for options panel\n" \
 "14893 2019-01-19 12:35:59 +0100 rocview controller dialog fixes for 3.2\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "12899 2017-10-24 17:27:25 +0200 wrapper: default trace file name for rocview\n" \
 "12898 2017-10-24 17:22:17 +0200 text variable sensor regval added\n" \
 "12897 2017-10-24 17:07:18 +0200 powerctrldlg: time var fix\n" \
-"12896 2017-10-24 16:44:49 +0200 competitiondlg: time var fix\n" \
 
 "log end";
