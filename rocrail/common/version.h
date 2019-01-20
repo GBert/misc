@@ -1,11 +1,20 @@
 const int revisionnr = 
-14886
+14895
 ;
 const char* commithash = 
-"13a7e3ee46fae08c658387c9e3f21d221ccd58e2";
+"f62cdb89405626e4672c98bad3c5d03726b0239e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14895 2019-01-20 09:08:33 +0100 xpressnet: swoffset option added\n" \
+"14894 2019-01-20 08:30:10 +0100 loconetdlg: fix for options panel\n" \
+"14893 2019-01-19 12:35:59 +0100 rocview controller dialog fixes for 3.2\n" \
+"14892 2019-01-19 11:29:36 +0100 mbus: trace sensor ack\n" \
+"14891 2019-01-19 10:34:16 +0100 mutex: save thread ID on lock\n" \
+"14890 2019-01-19 08:46:47 +0100 model: finddestination lock timeout added\n" \
+"14889 2019-01-18 20:21:30 +0100 rocview dialogs: make fit for wx 3.2\n" \
+"14888 2019-01-18 19:26:37 +0100 rocview dialogs: make fit for wx 3.2 (WIP)\n" \
+"14887 2019-01-18 17:02:44 +0100 rocprodlg: fix for expand flags\n" \
 "14886 2019-01-18 15:50:43 +0100 mbus,gc2a: experimetal sensor ack\n" \
 "14885 2019-01-18 15:42:04 +0100 renderer: fixed incompat function call 3.0 and 3.1\n" \
 "14884 2019-01-18 13:54:45 +0100 hueconfdlg: deprecated events replaced\n" \
@@ -1997,14 +2006,5 @@ const char* revlog =
 "12898 2017-10-24 17:22:17 +0200 text variable sensor regval added\n" \
 "12897 2017-10-24 17:07:18 +0200 powerctrldlg: time var fix\n" \
 "12896 2017-10-24 16:44:49 +0200 competitiondlg: time var fix\n" \
-"12895 2017-10-24 16:13:37 +0200 loc: getHome function added\n" \
-"12894 2017-10-24 12:57:35 +0200 loc: use home location of train if defined\n" \
-"12893 2017-10-24 12:46:10 +0200 translation merge: fr, pr_BR, sl, sr_latin, de, nl\n" \
-"12892 2017-10-24 10:44:05 +0200 operator: home location added\n" \
-"12891 2017-10-23 18:18:23 +0200 SLIM: blank distant signal added signal: fix for flipping blank aspect\n" \
-"12890 2017-10-23 15:28:42 +0200 SLIM: button 5 added (decoupler as output)\n" \
-"12889 2017-10-23 11:43:30 +0200 fback: use base address too at broadcast to clients\n" \
-"12888 2017-10-23 11:10:31 +0200 car: getHome function return value fix\n" \
-"12887 2017-10-23 08:46:22 +0200 car: getHome function added\n" \
 
 "log end";
