@@ -1,11 +1,15 @@
 const int revisionnr = 
-14896
+14900
 ;
 const char* commithash = 
-"aa1685a6097d99d5271ceff4cc8fd92082fa335f";
+"d5c4dbdc1f163357116a9c9ccc64ee8ab7d4653b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14900 2019-01-21 08:25:17 +0100 z21: send unconditional speed commands\n" \
+"14899 2019-01-21 07:55:48 +0100 locoio: allow 16 servos\n" \
+"14898 2019-01-20 21:58:41 +0100 serial: init default timeout values\n" \
+"14897 2019-01-20 21:49:03 +0100 dsd2010: set serial timeout\n" \
 "14896 2019-01-20 17:22:45 +0100 mbus: config data (WIP)\n" \
 "14895 2019-01-20 09:08:33 +0100 xpressnet: swoffset option added\n" \
 "14894 2019-01-20 08:30:10 +0100 loconetdlg: fix for options panel\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "12903 2017-10-25 10:47:51 +0200 mttmfcc: sensor simulation added\n" \
 "12902 2017-10-25 08:36:07 +0200 rocguiinidlg: SVG ID color\n" \
 "12901 2017-10-24 22:04:11 +0200 renderer: fix for showroute4switches\n" \
-"12900 2017-10-24 21:56:25 +0200 SLIM-COLOR: WIP (Peter)\n" \
-"12899 2017-10-24 17:27:25 +0200 wrapper: default trace file name for rocview\n" \
-"12898 2017-10-24 17:22:17 +0200 text variable sensor regval added\n" \
-"12897 2017-10-24 17:07:18 +0200 powerctrldlg: time var fix\n" \
 
 "log end";
