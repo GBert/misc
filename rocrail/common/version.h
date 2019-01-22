@@ -1,11 +1,12 @@
 const int revisionnr = 
-14907
+14908
 ;
 const char* commithash = 
-"25a093f66c63d3967674239d30ae2934b47f103f";
+"6e5ef2fb4f2bf8f3dc983966ad8db546875ea485";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14908 2019-01-22 13:27:00 +0100 function type changed in code\n" \
 "14907 2019-01-22 09:19:57 +0100 mbus: set locoinfo vmax according the digital protocol\n" \
 "14906 2019-01-22 08:25:06 +0100 mbus: function type added\n" \
 "14905 2019-01-22 08:21:16 +0100 mgbox: fixes (Bert)\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "12911 2017-10-26 16:33:16 +0200 SLIM-COLOR: symbols added (Peter)\n" \
 "12910 2017-10-26 16:07:04 +0200 block: evaluate absent events in manual mode\n" \
 "12909 2017-10-26 14:57:10 +0200 SLIM-COLOR: corrections (Peter)\n" \
-"12908 2017-10-26 14:26:48 +0200 fback: trigger the action check too if the regval did change\n" \
 
 "log end";
