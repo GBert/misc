@@ -30,7 +30,6 @@ volatile uint16_t pulse_t;
 volatile uint8_t complete, c;
 
 void interrupt ISR(void) {
-    // LATC3 = 1;
     if (CCP1IF) {
 	CCP1IF = 0;
 	if (CCP1M0) {
@@ -95,7 +94,6 @@ void interrupt ISR(void) {
 	    }
 	}
     }
-    // LATC3 = 0;
 }
 
 /* RA4 SDA I2C
@@ -112,6 +110,7 @@ void pps_init(void) {
     PPSLOCK = 0x55;
     PPSLOCK = 0xaa;
     PPSLOCK = 0;		// unlock PPS
+
     /* I2C */
     SSPCLKPPS = 0x05;
     RA5PPS = 0b10000;		// RA5 output SCL
@@ -127,9 +126,6 @@ void pps_init(void) {
     // COGINPPS = 0b10011;	// RC3 PULSE
     RC3PPS = 0b01101;		// CCP1 -> RPWM
     RC4PPS = 0b01100;		// CCP2 -> LPWM
-    RC0PPS = 0b01100;
-    ;RC3PPS = 0b01001;		// COG1B -> RPWM
-    ;RC4PPS = 0b01000;		// COG1A -> LPWM
 
     PPSLOCK = 0x55;
     PPSLOCK = 0xaa;
@@ -143,7 +139,6 @@ void system_init(void) {
     //-1110--- 8 MHz internal oscillator (instruction clock)
     //------00 oscillator selected with INTOSC
     ANSELA = 0;
-    ANSELB = 0;
     ANSELC = 0;
     ADCON0 = 0;
     ADCON1 = 0;
@@ -158,18 +153,14 @@ void system_init(void) {
     /* I2C MSSP 40001729B.pdf page 302 */
     TRISA4 = 1;
     TRISA5 = 1;
-    TRISC0 = 0;
     /* USART */
     TRISC1 = 1;
     TRISC2 = 0;
     /* RA2&RC0 analog input */
     TRISA2 = 1;
-    TRISB5 = 0;
-    TRISB6 = 0;
-    TRISC0 = 0;
-    TRISC3 = 0;	/***/	/* Rail Data */
-    TRISC4 = 0;		/* CCP1 */
-    TRISB4 = 0;		/* Enable */
+    TRISC0 = 0;		/* enable */
+    TRISC3 = 0;		/* CCP1 */
+    TRISC4 = 0;		/* CCP2 */
     TRISC5 = 0;		/* LED */
     // setup interrupt events
     //clear all relevant interrupt flags
@@ -366,7 +357,7 @@ void main(void) {
     // cog_init();
 
     pulse_high = 50;
-    pulse_low = 100;
+    pulse_low = 150;
 
     /* empty circular buffers */
     tx_fifo.head = 0;
@@ -374,7 +365,6 @@ void main(void) {
     rx_fifo.head = 0;
     rx_fifo.tail = 0;
 
-    LATB4 = 1;		/* enable       */
     GIE = 1;
     LCD_init(LCD_01_ADDRESS);
 
@@ -400,7 +390,7 @@ void main(void) {
 	    //LATCbits.LATC0 = 1;
 	    //LATCbits.LATC0 ^= 1;
 	    // LATA0 ^= 1;
-	    LATC5 ^= 1;
+	    //LATC5 ^= 1;
 	}
     }
 }

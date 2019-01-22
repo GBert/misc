@@ -10,7 +10,7 @@
 #ifndef _MAIN_H_
 #define _MAIN_H_
 
-#include <pic16f1709.h>
+#include <pic16f1705.h>
 #include <stdint.h>
 
 #define LCD_01_ADDRESS  0x27
