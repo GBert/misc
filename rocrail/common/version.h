@@ -1,11 +1,18 @@
 const int revisionnr = 
-14900
+14907
 ;
 const char* commithash = 
-"d5c4dbdc1f163357116a9c9ccc64ee8ab7d4653b";
+"25a093f66c63d3967674239d30ae2934b47f103f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14907 2019-01-22 09:19:57 +0100 mbus: set locoinfo vmax according the digital protocol\n" \
+"14906 2019-01-22 08:25:06 +0100 mbus: function type added\n" \
+"14905 2019-01-22 08:21:16 +0100 mgbox: fixes (Bert)\n" \
+"14904 2019-01-21 18:20:36 +0100 mbus: send loco info to the MS\n" \
+"14903 2019-01-21 17:01:58 +0100 mbus: provide loco IDs dynamically for the MS\n" \
+"14902 2019-01-21 14:11:13 +0100 mbus: fix for interpreting emergancy break\n" \
+"14901 2019-01-21 11:25:28 +0100 locodialog: fix for assert on set null color\n" \
 "14900 2019-01-21 08:25:17 +0100 z21: send unconditional speed commands\n" \
 "14899 2019-01-21 07:55:48 +0100 locoio: allow 16 servos\n" \
 "14898 2019-01-20 21:58:41 +0100 serial: init default timeout values\n" \
@@ -1999,12 +2006,5 @@ const char* revlog =
 "12910 2017-10-26 16:07:04 +0200 block: evaluate absent events in manual mode\n" \
 "12909 2017-10-26 14:57:10 +0200 SLIM-COLOR: corrections (Peter)\n" \
 "12908 2017-10-26 14:26:48 +0200 fback: trigger the action check too if the regval did change\n" \
-"12907 2017-10-26 14:15:56 +0200 SLIM-COLOR: update (Peter)\n" \
-"12906 2017-10-26 14:09:32 +0200 block: only evaluate the code event in case the block type is shunting\n" \
-"12905 2017-10-26 12:20:51 +0200 block: code sensor added for shunting cars\n" \
-"12904 2017-10-26 07:25:44 +0200 SLIM-COLOR: update (Peter)\n" \
-"12903 2017-10-25 10:47:51 +0200 mttmfcc: sensor simulation added\n" \
-"12902 2017-10-25 08:36:07 +0200 rocguiinidlg: SVG ID color\n" \
-"12901 2017-10-24 22:04:11 +0200 renderer: fix for showroute4switches\n" \
 
 "log end";
