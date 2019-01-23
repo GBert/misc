@@ -1,11 +1,19 @@
 const int revisionnr = 
-14908
+14916
 ;
 const char* commithash = 
-"6e5ef2fb4f2bf8f3dc983966ad8db546875ea485";
+"81b3a057db77a0863d846b32efbf296996d7286b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14916 2019-01-23 19:25:35 +0100 loc: fix for swap timer\n" \
+"14915 2019-01-23 19:09:34 +0100 mbusdlg: readonly option added, layout changes\n" \
+"14914 2019-01-23 18:37:21 +0100 lcdriver: fix for ghost in virtual slave blocks\n" \
+"14913 2019-01-23 16:48:11 +0100 planpanel: fix for module oversizing\n" \
+"14912 2019-01-23 15:00:22 +0100 mbus: discovery (WIP)\n" \
+"14911 2019-01-23 13:14:30 +0100 loconet: extra bit for F9-F11 in case of IB II\n" \
+"14910 2019-01-22 19:24:22 +0100 mbus: fix for activating the standalone trackbox\n" \
+"14909 2019-01-22 18:05:55 +0100 mbus: discovery/bind (WIP)\n" \
 "14908 2019-01-22 13:27:00 +0100 function type changed in code\n" \
 "14907 2019-01-22 09:19:57 +0100 mbus: set locoinfo vmax according the digital protocol\n" \
 "14906 2019-01-22 08:25:06 +0100 mbus: function type added\n" \
@@ -1998,13 +2006,5 @@ const char* revlog =
 "12919 2017-10-27 08:55:28 +0200 route: set signals first after all switches are set\n" \
 "12918 2017-10-27 08:08:41 +0200 SLIM: accessory-20\n" \
 "12917 2017-10-27 07:31:52 +0200 SLIM-COLOR: accessory-20 (Peter)\n" \
-"12916 2017-10-27 07:27:15 +0200 SLIM-COLOR: button-0 update (Peter)\n" \
-"12915 2017-10-26 22:17:00 +0200 SLIM: signaldistant-b fill color correction\n" \
-"12914 2017-10-26 21:58:14 +0200 SLIM: button-0 correction\n" \
-"12913 2017-10-26 21:48:34 +0200 SLIM-COLOR: button-1 (Peter)\n" \
-"12912 2017-10-26 18:28:01 +0200 SLIM-COLOR: decoupler (Peter)\n" \
-"12911 2017-10-26 16:33:16 +0200 SLIM-COLOR: symbols added (Peter)\n" \
-"12910 2017-10-26 16:07:04 +0200 block: evaluate absent events in manual mode\n" \
-"12909 2017-10-26 14:57:10 +0200 SLIM-COLOR: corrections (Peter)\n" \
 
 "log end";
