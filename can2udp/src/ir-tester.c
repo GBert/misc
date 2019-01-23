@@ -6,6 +6,10 @@
  * Gerhard Bertelsmann
  * ----------------------------------------------------------------------------
  *
+ * Contributions by Rainer Müller
+ *
+ *	NOTE: RC5 protocol should be activated before using this program by entering
+ *			 echo rc-5 > /sys/class/rc/rc0/protocols
  */
 
 #include <fcntl.h>
@@ -34,6 +38,7 @@
 #define DEFAULT_LOCO	5
 #define DEFAULT_STEP	16
 #define MAXSPEED	1000
+#define BLINDTIME	250000	/* ignore codes for a number of us */
 
 static unsigned char LOCO_SPEED[]     = { 0x00, 0x08, 0x03, 0x00, 0x06, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static unsigned char LOCO_DIRECTION[] = { 0x00, 0x0A, 0x03, 0x00, 0x05, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -44,7 +49,7 @@ unsigned char netframe[MAXDG];
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface> -r <infrared-interface> -s <step>\n", prg);
-    fprintf(stderr, "   Version 0.4\n\n");
+    fprintf(stderr, "   Version 0.5\n\n");
     fprintf(stderr, "         -l <loco id>        loco id - default %d\n", DEFAULT_LOCO);
     fprintf(stderr, "         -i <can int>        can interface - default can0\n");
     fprintf(stderr, "         -r <ir int>         infrared event interface - default /dev/input/event1\n");
@@ -119,6 +124,7 @@ int main(int argc, char **argv) {
     unsigned char loco_function[32];
     unsigned char direction;
     socklen_t caddrlen = sizeof(caddr);
+    time_t last = 0;
 
     status = 0;
     loco = DEFAULT_LOCO;
@@ -187,10 +193,15 @@ int main(int argc, char **argv) {
 	    exit(EXIT_FAILURE);
 	}
 	for (n = 0; n < (int)(ret / sizeof(struct input_event)); n++) {
-	    /* printf("event type :0x%02x - looking for 0x%02x\n", ev[n].type, EV_MSC); */
+	    /* printf("Event: time %ld.%06ld, ", ev[n].time.tv_sec, ev[n].time.tv_usec); */
+	    /* printf(" type :0x%02x, code 0x%02x, value 0x%04x\n", ev[n].type, ev[n].code, ev[n].value); */
 	    if (ev[n].type == EV_MSC && (ev[n].code == MSC_RAW || ev[n].code == MSC_SCAN)) {
+	    time_t timestamp = ev[n].time.tv_sec * 1000000 + ev[n].time.tv_usec;
+	    if ((timestamp - last) < BLINDTIME) continue;
+	    last = timestamp;
+		int keycode = ev[n].value & 0xff;
 		memcpy(&frame.data, &data[5], 8);
-		switch (ev[n].value) {
+		switch (keycode) {
 		case 0x00:
 		case 0x01:
 		case 0x02:
@@ -201,12 +212,12 @@ int main(int argc, char **argv) {
 		case 0x07:
 		case 0x08:
 		case 0x09:
-		    printf("function %d\n", ev[n].value);
-		    loco_function[ev[n].value] ^= 1;
+		    printf("function %d\n", keycode);
+		    loco_function[keycode] ^= 1;
 		    memcpy(data, LOCO_FUNCTION, sizeof(data));
 		    data[8] = loco & 0xff;
-		    data[9] = ev[n].value & 0xff;
-		    data[10] = loco_function[ev[n].value] & 0xff;
+		    data[9] = keycode;
+		    data[10] = loco_function[keycode] & 0xff;
 		    send_defined_can_frame(sc, data);
 		    break;
 		case 0x0c:
@@ -221,28 +232,28 @@ int main(int argc, char **argv) {
 		    memcpy(data, LOCO_DIRECTION, sizeof(data));
 		    data[8] = loco & 0xff;
 		    direction ^= 1;
-		    data[9] = direction & 0x01;
+		    data[9] = (direction & 0x01) + 1;
 		    send_defined_can_frame(sc, data);
 		    break;
 		case 0x10:
-		    printf("loco %d speed + %d\n", loco, speed);
 		    memcpy(data, LOCO_SPEED, sizeof(data));
 		    data[8] = loco & 0xff;
 		    speed += step;
 		    if (speed > MAXSPEED)
 			speed = MAXSPEED;
+		    printf("loco %d speed + %d\n", loco, speed);
 		    data[9] = (speed >> 8) & 0x03;
 		    data[10] = speed & 0xff;
 		    send_defined_can_frame(sc, data);
 		    break;
 		case 0x11:
-		    printf("loco %d speed - %d \n", loco, speed);
 		    memcpy(data, LOCO_SPEED, sizeof(data));
 		    data[8] = loco & 0xff;
 		    if (speed > 0)
 			speed -= step;
 		    if (speed < 0)
 			speed = 0;
+		    printf("loco %d speed - %d \n", loco, speed);
 		    data[9] = (speed >> 8) & 0x03;
 		    data[10] = speed & 0xff;
 		    send_defined_can_frame(sc, data);
