@@ -1,11 +1,12 @@
 const int revisionnr = 
-14922
+14923
 ;
 const char* commithash = 
-"86061bd1dd369d80d70363fc49be836e0d951e34";
+"f947203115e5b9c0c4e0227aebac9cc6cd5888a1";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14923 2019-01-24 17:27:33 +0100 loconet: revert extra bit for IB II and F9-F11\n" \
 "14922 2019-01-24 14:21:34 +0100 mbus: reset discovery vars after verify\n" \
 "14921 2019-01-24 14:18:54 +0100 renderer: support for ccrossing-t\n" \
 "14920 2019-01-24 13:05:12 +0100 save loco throttles in the workspace node\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "12926 2017-10-28 13:10:11 +0200 mttmfcc: show digital format support\n" \
 "12925 2017-10-28 11:33:12 +0200 mttmfcc: trace level corrections\n" \
 "12924 2017-10-28 11:31:36 +0200 switch: trace level corrections\n" \
-"12923 2017-10-28 07:29:20 +0200 SLIM-COLOR: update (Peter)\n" \
 
 "log end";
