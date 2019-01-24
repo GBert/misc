@@ -1,11 +1,17 @@
 const int revisionnr = 
-14916
+14922
 ;
 const char* commithash = 
-"81b3a057db77a0863d846b32efbf296996d7286b";
+"86061bd1dd369d80d70363fc49be836e0d951e34";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14922 2019-01-24 14:21:34 +0100 mbus: reset discovery vars after verify\n" \
+"14921 2019-01-24 14:18:54 +0100 renderer: support for ccrossing-t\n" \
+"14920 2019-01-24 13:05:12 +0100 save loco throttles in the workspace node\n" \
+"14919 2019-01-24 11:52:48 +0100 mbus: discovery (WIP)\n" \
+"14918 2019-01-24 09:16:54 +0100 control: semi realtime option added\n" \
+"14917 2019-01-24 08:07:00 +0100 mbus: fast clock added\n" \
 "14916 2019-01-23 19:25:35 +0100 loc: fix for swap timer\n" \
 "14915 2019-01-23 19:09:34 +0100 mbusdlg: readonly option added, layout changes\n" \
 "14914 2019-01-23 18:37:21 +0100 lcdriver: fix for ghost in virtual slave blocks\n" \
@@ -2000,11 +2006,5 @@ const char* revlog =
 "12925 2017-10-28 11:33:12 +0200 mttmfcc: trace level corrections\n" \
 "12924 2017-10-28 11:31:36 +0200 switch: trace level corrections\n" \
 "12923 2017-10-28 07:29:20 +0200 SLIM-COLOR: update (Peter)\n" \
-"12922 2017-10-27 15:30:31 +0200 route: fix for ignore signal commands at set\n" \
-"12921 2017-10-27 14:34:02 +0200 action: unlock route only forced in case no parameter is provided\n" \
-"12920 2017-10-27 09:49:10 +0200 rocview: attribute for route prio\n" \
-"12919 2017-10-27 08:55:28 +0200 route: set signals first after all switches are set\n" \
-"12918 2017-10-27 08:08:41 +0200 SLIM: accessory-20\n" \
-"12917 2017-10-27 07:31:52 +0200 SLIM-COLOR: accessory-20 (Peter)\n" \
 
 "log end";
