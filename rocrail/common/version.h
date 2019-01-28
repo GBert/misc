@@ -1,11 +1,32 @@
 const int revisionnr = 
-14923
+14944
 ;
 const char* commithash = 
-"f947203115e5b9c0c4e0227aebac9cc6cd5888a1";
+"0b4f9b80d02bf1e405e33d007064c9c2cfadba0d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14944 2019-01-28 11:15:50 +0100 meter: fix for default background color\n" \
+"14943 2019-01-27 18:10:06 +0100 guiframe: use base colors for cell backgroud\n" \
+"14942 2019-01-27 17:26:19 +0100 correction user theme acc43 (Lothar)\n" \
+"14941 2019-01-27 17:06:30 +0100 base: darkblue improvement\n" \
+"14940 2019-01-27 15:52:28 +0100 rocview wrapper: default no mono space font\n" \
+"14939 2019-01-27 15:50:58 +0100 rocguiinidlg: fix for graybackground option\n" \
+"14938 2019-01-27 15:34:03 +0100 rocview: support for dark theme\n" \
+"14937 2019-01-27 13:33:26 +0100 bidib: trace corrections for outputs\n" \
+"14936 2019-01-27 13:32:51 +0100 user theme: new symbols\n" \
+"14935 2019-01-27 08:09:10 +0100 ledbutton: pushbutton support\n" \
+"14934 2019-01-27 07:36:29 +0100 mbus: msapp support (WIP)\n" \
+"14933 2019-01-27 07:35:54 +0100 usertheme SLIM added for crossing and ccrossing\n" \
+"14932 2019-01-26 18:11:17 +0100 control: command mapping output support added\n" \
+"14931 2019-01-26 17:07:01 +0100 item: show goto TT track menu only if there are tracks defined\n" \
+"14930 2019-01-26 08:28:32 +0100 function pushbutton support\n" \
+"14929 2019-01-26 08:23:59 +0100 function pushbutton support\n" \
+"14928 2019-01-25 19:14:15 +0100 guiframe: allow discor only if the automatic mode is off\n" \
+"14927 2019-01-25 17:19:49 +0100 locdialog: code is iconnr\n" \
+"14926 2019-01-25 16:24:17 +0100 mbus: fix for reading function CVs\n" \
+"14925 2019-01-25 16:08:00 +0100 mbus: get functions from the discoverred loco\n" \
+"14924 2019-01-25 11:40:13 +0100 rocview: save and restore throttles WS dependent\n" \
 "14923 2019-01-24 17:27:33 +0100 loconet: revert extra bit for IB II and F9-F11\n" \
 "14922 2019-01-24 14:21:34 +0100 mbus: reset discovery vars after verify\n" \
 "14921 2019-01-24 14:18:54 +0100 renderer: support for ccrossing-t\n" \
@@ -1985,26 +2006,5 @@ const char* revlog =
 "12947 2017-10-30 19:25:25 +0100 enter, initialize: revert use route speed on enter\n" \
 "12946 2017-10-30 16:18:44 +0100 initialize: trace fix\n" \
 "12945 2017-10-30 14:40:58 +0100 enter, initialize: regard route wait speed in case no dest if found\n" \
-"12944 2017-10-30 12:06:08 +0100 guiframe: fix for evaluating the slim attribute\n" \
-"12943 2017-10-30 12:02:20 +0100 enter: regard check2in in case of setting signals\n" \
-"12942 2017-10-30 11:41:38 +0100 xmlscript: variable generated flag added\n" \
-"12941 2017-10-30 11:33:51 +0100 loc: extra check for rearprotection to make sure the loco is already in\n" \
-"12940 2017-10-30 09:12:18 +0100 routedialog: combine autogen and generated flag\n" \
-"12939 2017-10-29 18:38:36 +0100 tt: allow manager routes set static\n" \
-"12938 2017-10-29 18:01:08 +0100 fback: register bits added\n" \
-"12937 2017-10-29 16:27:14 +0100 hsi88dlg: translation bps\n" \
-"12936 2017-10-29 16:25:12 +0100 hsi88: selectable baudrate, default 9600\n" \
-"12935 2017-10-29 13:09:53 +0100 translation merge: de, nl, pt_BR, sl\n" \
-"12934 2017-10-29 11:58:44 +0100 SLIM: accessory-20 state swapped\n" \
-"12933 2017-10-29 08:21:16 +0100 renderer: changed behaviour of showroute4switches\n" \
-"12932 2017-10-29 08:09:26 +0100 theme properties: color option added in combination with SLIM\n" \
-"12931 2017-10-29 07:20:15 +0100 SLIM-COLOR: accessory-20 correction (Peter)\n" \
-"12930 2017-10-28 22:09:57 +0200 symbols: removed not used virtual switch\n" \
-"12929 2017-10-28 17:37:33 +0200 cbusnodedlg: 250ms pause between the getall commands CANGCA1e\n" \
-"12928 2017-10-28 16:44:44 +0200 cbus: trace level corrections\n" \
-"12927 2017-10-28 15:36:22 +0200 guiframe: fix for update block in case no locoid is set in the event\n" \
-"12926 2017-10-28 13:10:11 +0200 mttmfcc: show digital format support\n" \
-"12925 2017-10-28 11:33:12 +0200 mttmfcc: trace level corrections\n" \
-"12924 2017-10-28 11:31:36 +0200 switch: trace level corrections\n" \
 
 "log end";
