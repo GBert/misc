@@ -1,11 +1,13 @@
 const int revisionnr = 
-14944
+14946
 ;
 const char* commithash = 
-"0b4f9b80d02bf1e405e33d007064c9c2cfadba0d";
+"d0f19b9cbcf433e92e4e0ba97e312bf61061a48e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14946 2019-01-28 20:51:27 +0100 bidib: fix for single coil switch command in case of flat model\n" \
+"14945 2019-01-28 19:14:39 +0100 bidib: do no longer regard MSG_LC_STAT as sensor report\n" \
 "14944 2019-01-28 11:15:50 +0100 meter: fix for default background color\n" \
 "14943 2019-01-27 18:10:06 +0100 guiframe: use base colors for cell backgroud\n" \
 "14942 2019-01-27 17:26:19 +0100 correction user theme acc43 (Lothar)\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "12949 2017-10-30 21:22:54 +0100 SLIM-COLOR: connector-curve* added (Peter)\n" \
 "12948 2017-10-30 19:58:39 +0100 SLIM: connector-curve* added\n" \
 "12947 2017-10-30 19:25:25 +0100 enter, initialize: revert use route speed on enter\n" \
-"12946 2017-10-30 16:18:44 +0100 initialize: trace fix\n" \
-"12945 2017-10-30 14:40:58 +0100 enter, initialize: regard route wait speed in case no dest if found\n" \
 
 "log end";
