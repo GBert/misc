@@ -1,11 +1,14 @@
 const int revisionnr = 
-14947
+14950
 ;
 const char* commithash = 
-"12f3ccba64fcafa56822b09b77b023b652d5a267";
+"82e8a40ad57b3ecfb72526587c6a8f5a7bd16f9c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14950 2019-01-29 16:39:28 +0100 block: convert to embedded sensor block\n" \
+"14949 2019-01-29 11:49:45 +0100 item: regard the simulate sensor flag in blocks with embeded sensors\n" \
+"14948 2019-01-29 09:40:39 +0100 tt: process sensor events in case off and regval != -1\n" \
 "14947 2019-01-28 21:18:31 +0100 guiapp,guiframe: fix for update stage block\n" \
 "14946 2019-01-28 20:51:27 +0100 bidib: fix for single coil switch command in case of flat model\n" \
 "14945 2019-01-28 19:14:39 +0100 bidib: do no longer regard MSG_LC_STAT as sensor report\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "12953 2017-10-31 13:10:20 +0100 routedialog: fix for autogen and generated flag\n" \
 "12952 2017-10-31 11:46:09 +0100 routedialog: extended sensor index\n" \
 "12951 2017-10-31 08:31:02 +0100 virtual: sensor trace extended with UID and bus\n" \
-"12950 2017-10-31 08:14:41 +0100 model: filter sensor events on UID too if set\n" \
-"12949 2017-10-30 21:22:54 +0100 SLIM-COLOR: connector-curve* added (Peter)\n" \
-"12948 2017-10-30 19:58:39 +0100 SLIM: connector-curve* added\n" \
 
 "log end";
