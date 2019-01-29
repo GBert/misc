@@ -1,11 +1,12 @@
 const int revisionnr = 
-14946
+14947
 ;
 const char* commithash = 
-"d0f19b9cbcf433e92e4e0ba97e312bf61061a48e";
+"12f3ccba64fcafa56822b09b77b023b652d5a267";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14947 2019-01-28 21:18:31 +0100 guiapp,guiframe: fix for update stage block\n" \
 "14946 2019-01-28 20:51:27 +0100 bidib: fix for single coil switch command in case of flat model\n" \
 "14945 2019-01-28 19:14:39 +0100 bidib: do no longer regard MSG_LC_STAT as sensor report\n" \
 "14944 2019-01-28 11:15:50 +0100 meter: fix for default background color\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "12950 2017-10-31 08:14:41 +0100 model: filter sensor events on UID too if set\n" \
 "12949 2017-10-30 21:22:54 +0100 SLIM-COLOR: connector-curve* added (Peter)\n" \
 "12948 2017-10-30 19:58:39 +0100 SLIM: connector-curve* added\n" \
-"12947 2017-10-30 19:25:25 +0100 enter, initialize: revert use route speed on enter\n" \
 
 "log end";
