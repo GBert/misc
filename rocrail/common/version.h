@@ -1,11 +1,19 @@
 const int revisionnr = 
-14950
+14958
 ;
 const char* commithash = 
-"82e8a40ad57b3ecfb72526587c6a8f5a7bd16f9c";
+"c89ee73784b9857b7f7368bcb5cd20b398b59448";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14958 2019-01-30 21:52:16 +0100 renderer: regard fill none as transparent (Lothar)\n" \
+"14957 2019-01-30 17:13:18 +0100 model: check decoder string for NULL value before adding it\n" \
+"14956 2019-01-30 14:04:33 +0100 block: update embedded sensor state at init\n" \
+"14955 2019-01-30 12:58:07 +0100 hclient: use utility to serialize loco to CS2 format\n" \
+"14954 2019-01-30 11:12:23 +0100 block: convert to embedded only for enter/in events, set sensors to 0,0,0\n" \
+"14953 2019-01-30 10:36:33 +0100 item: regard the show flag in case of check for overlapping\n" \
+"14952 2019-01-30 09:41:51 +0100 mbus: MSApp support (WIP)\n" \
+"14951 2019-01-29 19:17:39 +0100 mbus: MSApp support (WIP)\n" \
 "14950 2019-01-29 16:39:28 +0100 block: convert to embedded sensor block\n" \
 "14949 2019-01-29 11:49:45 +0100 item: regard the simulate sensor flag in blocks with embeded sensors\n" \
 "14948 2019-01-29 09:40:39 +0100 tt: process sensor events in case off and regval != -1\n" \
@@ -1998,13 +2006,5 @@ const char* revlog =
 "12961 2017-11-03 08:09:32 +0100 blockdialog: show catenary in brackets\n" \
 "12960 2017-11-02 20:24:15 +0100 blockdialog: translation electrified replaced with catenary\n" \
 "12959 2017-11-01 20:09:04 +0100 car: desc attribute added\n" \
-"12958 2017-11-01 19:18:02 +0100 cardlg: description field added\n" \
-"12957 2017-11-01 08:50:32 +0100 loc: check at rear protection if V=0\n" \
-"12956 2017-11-01 08:45:22 +0100 switch, route: regard manual operated switch objects\n" \
-"12955 2017-11-01 08:25:46 +0100 switch: manualoperated option replaced with manual (impl. like signal WIP)\n" \
-"12954 2017-10-31 20:46:45 +0100 CV19 update\n" \
-"12953 2017-10-31 13:10:20 +0100 routedialog: fix for autogen and generated flag\n" \
-"12952 2017-10-31 11:46:09 +0100 routedialog: extended sensor index\n" \
-"12951 2017-10-31 08:31:02 +0100 virtual: sensor trace extended with UID and bus\n" \
 
 "log end";
