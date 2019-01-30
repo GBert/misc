@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=can2udp
-PKG_RELEASE:=1.58
+PKG_RELEASE:=1.59
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_BUILD_PARALLEL:=1
@@ -84,6 +84,8 @@ endif
 ifneq (,$(findstring mt7688,$(CONFIG_TARGET_SUBTARGET)))
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init_srse2 $(1)/etc/init.d/can2lan
+	$(INSTALL_DIR) $(1)/root
+	$(INSTALL_BIN) ./files/no-pic.sh $(1)/root
 endif
 ifneq (,$(findstring wr841,$(CONFIG_TARGET_PROFILE)))
 	$(INSTALL_DIR) $(1)/etc/init.d
