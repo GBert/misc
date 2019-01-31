@@ -1,11 +1,16 @@
 const int revisionnr = 
-14958
+14963
 ;
 const char* commithash = 
-"c89ee73784b9857b7f7368bcb5cd20b398b59448";
+"3b1577811041d94680443a8a7e08b48e8f913f69";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14963 2019-01-31 11:46:42 +0100 mbusdlg: option msapp added\n" \
+"14962 2019-01-31 11:33:00 +0100 exportutils: provide always 16 (dummy) function entries\n" \
+"14961 2019-01-31 10:00:41 +0100 block: init embeded sensor state at startup\n" \
+"14960 2019-01-31 09:02:18 +0100 exportutils added\n" \
+"14959 2019-01-31 08:19:15 +0100 cs2utils: impossible dependency\n" \
 "14958 2019-01-30 21:52:16 +0100 renderer: regard fill none as transparent (Lothar)\n" \
 "14957 2019-01-30 17:13:18 +0100 model: check decoder string for NULL value before adding it\n" \
 "14956 2019-01-30 14:04:33 +0100 block: update embedded sensor state at init\n" \
@@ -2001,10 +2006,5 @@ const char* revlog =
 "12966 2017-11-05 08:37:22 +0100 loconet: trace corrections\n" \
 "12965 2017-11-04 13:09:04 +0100 stagedlg: label extended electrified (catenary)\n" \
 "12964 2017-11-04 08:37:21 +0100 translation merge: de, nl, sl, sr_latin\n" \
-"12963 2017-11-03 12:15:30 +0100 z21: LocoNet detector support added\n" \
-"12962 2017-11-03 11:20:39 +0100 guiframe: forum link added to the tooltar\n" \
-"12961 2017-11-03 08:09:32 +0100 blockdialog: show catenary in brackets\n" \
-"12960 2017-11-02 20:24:15 +0100 blockdialog: translation electrified replaced with catenary\n" \
-"12959 2017-11-01 20:09:04 +0100 car: desc attribute added\n" \
 
 "log end";
