@@ -1,11 +1,15 @@
 const int revisionnr = 
-14963
+14967
 ;
 const char* commithash = 
-"3b1577811041d94680443a8a7e08b48e8f913f69";
+"c6887832288b3ad3385ad58cfa08b119f9176582";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14967 2019-01-31 15:23:42 +0100 mbus: use export utilities\n" \
+"14966 2019-01-31 13:40:40 +0100 mbus: dummy: only echo frames with commands < ping\n" \
+"14965 2019-01-31 12:14:21 +0100 translation merge: fr, en_GB, sr_latin, de, sl, cs, nl\n" \
+"14964 2019-01-31 12:03:06 +0100 block: crash fix for create an fbblock\n" \
 "14963 2019-01-31 11:46:42 +0100 mbusdlg: option msapp added\n" \
 "14962 2019-01-31 11:33:00 +0100 exportutils: provide always 16 (dummy) function entries\n" \
 "14961 2019-01-31 10:00:41 +0100 block: init embeded sensor state at startup\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "12970 2017-11-05 15:01:22 +0100 output: longclick support added for toggle\n" \
 "12969 2017-11-05 11:16:49 +0100 translation merge: it\n" \
 "12968 2017-11-05 11:00:22 +0100 loc: figure out the changed function if not set\n" \
-"12967 2017-11-05 09:55:35 +0100 block: check also route events for rear protection\n" \
-"12966 2017-11-05 08:37:22 +0100 loconet: trace corrections\n" \
-"12965 2017-11-04 13:09:04 +0100 stagedlg: label extended electrified (catenary)\n" \
-"12964 2017-11-04 08:37:21 +0100 translation merge: de, nl, sl, sr_latin\n" \
 
 "log end";
