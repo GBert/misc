@@ -1,11 +1,12 @@
 const int revisionnr = 
-14967
+14968
 ;
 const char* commithash = 
-"c6887832288b3ad3385ad58cfa08b119f9176582";
+"f3761fc6442dbb0851b620eb1436ee5979ea56be";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14968 2019-01-31 17:22:15 +0100 exportutils: more CS2 info functions (WIP)\n" \
 "14967 2019-01-31 15:23:42 +0100 mbus: use export utilities\n" \
 "14966 2019-01-31 13:40:40 +0100 mbus: dummy: only echo frames with commands < ping\n" \
 "14965 2019-01-31 12:14:21 +0100 translation merge: fr, en_GB, sr_latin, de, sl, cs, nl\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "12971 2017-11-05 15:58:08 +0100 bidib: state report 'fix'\n" \
 "12970 2017-11-05 15:01:22 +0100 output: longclick support added for toggle\n" \
 "12969 2017-11-05 11:16:49 +0100 translation merge: it\n" \
-"12968 2017-11-05 11:00:22 +0100 loc: figure out the changed function if not set\n" \
 
 "log end";
