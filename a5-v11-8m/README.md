@@ -39,6 +39,28 @@ dd if=combined_image.img of=paddedFile_16m.bin conv=notrunc
 sudo flashrom -c MX25L12835F/MX25L12845E/MX25L12865E -p ch341a_spi -w paddedFile_16m.bin
 ```
 
+Serial connection
+-----------------
+If you put the PCB on the table with the USB jack to the left and the Ethernet jack to the right (Ralink CPU is on the other side of the board), you see the 4 pads in the bottom-right corner of the PCB. They are (from left to right):
+
+- VCC (3.3V; do not connect)
+- TX (connect to RXI on a 3.3V serial USB adapter)
+- RX (connect to TXO on a 3.3V serial USB adapter using a 470 Ohm to 1k Ohm resistor)
+- GND (connect to GND on a 3.3V serial USB adapter)
+
+Fallback U-Boot update
+----------------------
+
+```
+setenv ipaddr 192.168.0.199
+setenv serverip 192.168.0.9
+setenv bootfile openwrt-ramips-rt305x-vmlinux.bin
+tftpboot
+erase linux
+cp.linux
+reset
+```
+
 Backup
 ------
 
