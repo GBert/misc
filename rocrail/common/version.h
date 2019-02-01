@@ -1,11 +1,12 @@
 const int revisionnr = 
-14971
+14972
 ;
 const char* commithash = 
-"09c6b13ad4c8bfe2c07263e4b95647e38088bd87";
+"41e7215d113da6d48af2506e08fd8c7d1359d655";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14972 2019-02-01 12:29:08 +0100 exportutils: CS2 layout (WIP)\n" \
 "14971 2019-02-01 08:40:25 +0100 lcdriver: generate an IN event for the previous block in case it was missing at enter\n" \
 "14970 2019-02-01 08:31:55 +0100 signaldialog: pattern label correction\n" \
 "14969 2019-01-31 19:16:57 +0100 tt: process sensor events in case off and regval != -1\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "12975 2017-11-07 13:42:35 +0100 guiframe: split up EoD text\n" \
 "12974 2017-11-07 12:19:41 +0100 eof: (wip)\n" \
 "12973 2017-11-06 17:17:11 +0100 enter: do not reset BBT on re_enter (no dest found search2in)\n" \
-"12972 2017-11-06 07:24:27 +0100 copying: update\n" \
 
 "log end";
