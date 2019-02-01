@@ -1,11 +1,14 @@
 const int revisionnr = 
-14968
+14971
 ;
 const char* commithash = 
-"f3761fc6442dbb0851b620eb1436ee5979ea56be";
+"09c6b13ad4c8bfe2c07263e4b95647e38088bd87";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14971 2019-02-01 08:40:25 +0100 lcdriver: generate an IN event for the previous block in case it was missing at enter\n" \
+"14970 2019-02-01 08:31:55 +0100 signaldialog: pattern label correction\n" \
+"14969 2019-01-31 19:16:57 +0100 tt: process sensor events in case off and regval != -1\n" \
 "14968 2019-01-31 17:22:15 +0100 exportutils: more CS2 info functions (WIP)\n" \
 "14967 2019-01-31 15:23:42 +0100 mbus: use export utilities\n" \
 "14966 2019-01-31 13:40:40 +0100 mbus: dummy: only echo frames with commands < ping\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "12974 2017-11-07 12:19:41 +0100 eof: (wip)\n" \
 "12973 2017-11-06 17:17:11 +0100 enter: do not reset BBT on re_enter (no dest found search2in)\n" \
 "12972 2017-11-06 07:24:27 +0100 copying: update\n" \
-"12971 2017-11-05 15:58:08 +0100 bidib: state report 'fix'\n" \
-"12970 2017-11-05 15:01:22 +0100 output: longclick support added for toggle\n" \
-"12969 2017-11-05 11:16:49 +0100 translation merge: it\n" \
 
 "log end";
