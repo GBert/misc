@@ -191,6 +191,7 @@ define Package/rocrail/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/rocnet.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/virtual.so $(1)/opt/rocrail
 	$(INSTALL_BIN) ./config/rocrail.ini $(1)/opt/rocrail
+	$(INSTALL_BIN) ./config/rocrail_mbus.ini $(1)/opt/rocrail
 	$(INSTALL_BIN) ./config/plan.xml $(1)/opt/rocrail
 	$(INSTALL_DIR) $(1)/root
 	$(INSTALL_BIN) ./config/rocrail.init $(1)/root/rocrail
