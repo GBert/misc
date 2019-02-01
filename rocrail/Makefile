@@ -67,6 +67,17 @@ define Package/rocrail-mqtt/description
  MQTT extension for Rocrail
 endef
 
+define Package/rocrail-cs-mbus
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=Maerklin CS2/MS2 CAN-Bus (e.g. SocketCAN)  
+  DEPENDS:=rocrail
+endef
+
+define Package/rocrail-cs-mbus/description
+ Maerklin CS2/MS2 CAN-Bus (e.g. SocketCAN)
+endef
+
 define Package/rocrail-cs-mcs2
   SECTION:=utils
   CATEGORY:=Utilities
@@ -184,6 +195,7 @@ define Package/rocrail/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/rocnet.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/virtual.so $(1)/opt/rocrail
 	$(INSTALL_BIN) ./config/rocrail.ini $(1)/opt/rocrail
+	$(INSTALL_BIN) ./config/rocrail_mbus.ini $(1)/opt/rocrail
 	$(INSTALL_BIN) ./config/plan.xml $(1)/opt/rocrail
 	$(INSTALL_DIR) $(1)/root
 	$(INSTALL_BIN) ./config/rocrail.init $(1)/root/rocrail
@@ -214,6 +226,11 @@ endef
 define Package/rocrail-cs-ddx/install
 	$(INSTALL_DIR) $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/ddx.so $(1)/opt/rocrail
+endef
+
+define Package/rocrail-cs-mbus/install
+	$(INSTALL_DIR) $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/mbus.so $(1)/opt/rocrail
 endef
 
 define Package/rocrail-cs-mcs2/install
@@ -306,6 +323,7 @@ $(eval $(call BuildPackage,rocnetnode))
 $(eval $(call BuildPackage,rocweb))
 $(eval $(call BuildPackage,rocrail-mqtt))
 $(eval $(call BuildPackage,rocrail-cs-ddx))
+$(eval $(call BuildPackage,rocrail-cs-mbus))
 $(eval $(call BuildPackage,rocrail-cs-mcs2))
 $(eval $(call BuildPackage,rocrail-cs-mgbox))
 $(eval $(call BuildPackage,rocrail-cs-rclink))
