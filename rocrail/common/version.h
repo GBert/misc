@@ -1,11 +1,12 @@
 const int revisionnr = 
-14979
+14980
 ;
 const char* commithash = 
-"e587c9d01b59f0a9c830205041b4e5d3a487f5fb";
+"badd1697636526285c5224b25ff679814d542c1e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14980 2019-02-03 10:33:53 +0100 mbusdlg: tcp port field added\n" \
 "14979 2019-02-03 09:27:39 +0100 canservice: tcp binary\n" \
 "14978 2019-02-03 08:50:29 +0100 mbus: tcp binary instead of ASCII\n" \
 "14977 2019-02-02 13:22:08 +0100 trackpickerdlg: set cell background to white; same as SVG background\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "12983 2017-11-08 07:48:04 +0100 eod: timeout value on automatic tab\n" \
 "12982 2017-11-07 17:35:48 +0100 lnmaster: ignore OPC_IDLE\n" \
 "12981 2017-11-07 16:07:47 +0100 eod: options added\n" \
-"12980 2017-11-07 15:17:19 +0100 guiframe: EoD support in case of active WorkSpace\n" \
 
 "log end";
