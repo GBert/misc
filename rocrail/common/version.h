@@ -1,11 +1,18 @@
 const int revisionnr = 
-14972
+14979
 ;
 const char* commithash = 
-"41e7215d113da6d48af2506e08fd8c7d1359d655";
+"e587c9d01b59f0a9c830205041b4e5d3a487f5fb";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14979 2019-02-03 09:27:39 +0100 canservice: tcp binary\n" \
+"14978 2019-02-03 08:50:29 +0100 mbus: tcp binary instead of ASCII\n" \
+"14977 2019-02-02 13:22:08 +0100 trackpickerdlg: set cell background to white; same as SVG background\n" \
+"14976 2019-02-02 12:18:09 +0100 exportutils: cs2 level support\n" \
+"14975 2019-02-02 11:36:16 +0100 block: check if the embedded fb is operable in case of a simulate command\n" \
+"14974 2019-02-02 07:42:53 +0100 lcdriver: casting corrections and comment correction for generating IN in case of enter\n" \
+"14973 2019-02-01 16:34:13 +0100 rocdigs makefile: work around for win32 linker\n" \
 "14972 2019-02-01 12:29:08 +0100 exportutils: CS2 layout (WIP)\n" \
 "14971 2019-02-01 08:40:25 +0100 lcdriver: generate an IN event for the previous block in case it was missing at enter\n" \
 "14970 2019-02-01 08:31:55 +0100 signaldialog: pattern label correction\n" \
@@ -1999,12 +2006,5 @@ const char* revlog =
 "12982 2017-11-07 17:35:48 +0100 lnmaster: ignore OPC_IDLE\n" \
 "12981 2017-11-07 16:07:47 +0100 eod: options added\n" \
 "12980 2017-11-07 15:17:19 +0100 guiframe: EoD support in case of active WorkSpace\n" \
-"12979 2017-11-07 14:49:35 +0100 wsystem: try to set the shutdown privilege\n" \
-"12978 2017-11-07 14:44:06 +0100 wsystem: try to set the shutdown privilege\n" \
-"12977 2017-11-07 14:16:19 +0100 wsystem: force power off\n" \
-"12976 2017-11-07 13:49:41 +0100 main: added new shutdown parameter in the windows section\n" \
-"12975 2017-11-07 13:42:35 +0100 guiframe: split up EoD text\n" \
-"12974 2017-11-07 12:19:41 +0100 eof: (wip)\n" \
-"12973 2017-11-06 17:17:11 +0100 enter: do not reset BBT on re_enter (no dest found search2in)\n" \
 
 "log end";
