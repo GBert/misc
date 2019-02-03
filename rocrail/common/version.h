@@ -1,11 +1,14 @@
 const int revisionnr = 
-14980
+14983
 ;
 const char* commithash = 
-"badd1697636526285c5224b25ff679814d542c1e";
+"d6e327f73ba1f9ca042ef19f196ea561541f508a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14983 2019-02-03 18:25:33 +0100 tt: revert sensors events for register values off\n" \
+"14982 2019-02-03 14:23:37 +0100 embedded block: support for D&D sensor bus and address\n" \
+"14981 2019-02-03 11:57:30 +0100 mgbox: update for link88 (Bert)\n" \
 "14980 2019-02-03 10:33:53 +0100 mbusdlg: tcp port field added\n" \
 "14979 2019-02-03 09:27:39 +0100 canservice: tcp binary\n" \
 "14978 2019-02-03 08:50:29 +0100 mbus: tcp binary instead of ASCII\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "12986 2017-11-09 08:17:52 +0100 guiframe: option for workspace control/slave code\n" \
 "12985 2017-11-08 14:51:33 +0100 loc: fix for none regulated decoders and stop request\n" \
 "12984 2017-11-08 08:24:30 +0100 guiframe: eod directly under sod\n" \
-"12983 2017-11-08 07:48:04 +0100 eod: timeout value on automatic tab\n" \
-"12982 2017-11-07 17:35:48 +0100 lnmaster: ignore OPC_IDLE\n" \
-"12981 2017-11-07 16:07:47 +0100 eod: options added\n" \
 
 "log end";
