@@ -1,11 +1,15 @@
 const int revisionnr = 
-14983
+14987
 ;
 const char* commithash = 
-"d6e327f73ba1f9ca042ef19f196ea561541f508a";
+"dd344a103c7132f563f6e7bed6db2ba13016c717";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14987 2019-02-04 14:14:07 +0100 rocview: option grid cell background color\n" \
+"14986 2019-02-04 11:49:14 +0100 fback: broadcast a model modify command in case the sensor is invisible\n" \
+"14985 2019-02-04 10:40:33 +0100 guiframe: grid cell background color disabled\n" \
+"14984 2019-02-03 19:46:06 +0100 feedbackdialog: corrected threshold range and allow zero\n" \
 "14983 2019-02-03 18:25:33 +0100 tt: revert sensors events for register values off\n" \
 "14982 2019-02-03 14:23:37 +0100 embedded block: support for D&D sensor bus and address\n" \
 "14981 2019-02-03 11:57:30 +0100 mgbox: update for link88 (Bert)\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "12990 2017-11-10 08:36:08 +0100 stagedlg: fix for free all sections\n" \
 "12989 2017-11-09 19:46:33 +0100 EoD: power off delay added\n" \
 "12988 2017-11-09 08:49:17 +0100 virtual: report switch type on report\n" \
-"12987 2017-11-09 08:29:52 +0100 rocguiini: label corrections\n" \
-"12986 2017-11-09 08:17:52 +0100 guiframe: option for workspace control/slave code\n" \
-"12985 2017-11-08 14:51:33 +0100 loc: fix for none regulated decoders and stop request\n" \
-"12984 2017-11-08 08:24:30 +0100 guiframe: eod directly under sod\n" \
 
 "log end";
