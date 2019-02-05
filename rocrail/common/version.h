@@ -1,11 +1,16 @@
 const int revisionnr = 
-14987
+14992
 ;
 const char* commithash = 
-"dd344a103c7132f563f6e7bed6db2ba13016c717";
+"996ab60e393dbff1c87ce8b64ce916d788a816aa";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14992 2019-02-05 14:07:35 +0100 loc,in: swap timer\n" \
+"14991 2019-02-05 12:16:29 +0100 planpanel: regard item size on scale to fit\n" \
+"14990 2019-02-05 11:50:01 +0100 loc,model: swap placing timer only for terminal stations\n" \
+"14989 2019-02-05 11:38:22 +0100 loconet: evaluate sound 2 packet\n" \
+"14988 2019-02-05 08:23:28 +0100 loconet: ibcom f9-f12\n" \
 "14987 2019-02-04 14:14:07 +0100 rocview: option grid cell background color\n" \
 "14986 2019-02-04 11:49:14 +0100 fback: broadcast a model modify command in case the sensor is invisible\n" \
 "14985 2019-02-04 10:40:33 +0100 guiframe: grid cell background color disabled\n" \
@@ -2001,10 +2006,5 @@ const char* revlog =
 "12995 2017-11-10 18:08:20 +0100 translation merge: nl, de, sl, pt_BR\n" \
 "12994 2017-11-10 12:56:28 +0100 rocint: interface update for blockbase\n" \
 "12993 2017-11-10 11:23:16 +0100 blockgroup: condition prereserve option added\n" \
-"12992 2017-11-10 10:40:10 +0100 blockgroup: pre-reserve function added\n" \
-"12991 2017-11-10 09:25:01 +0100 app: check if planfile is not empty\n" \
-"12990 2017-11-10 08:36:08 +0100 stagedlg: fix for free all sections\n" \
-"12989 2017-11-09 19:46:33 +0100 EoD: power off delay added\n" \
-"12988 2017-11-09 08:49:17 +0100 virtual: report switch type on report\n" \
 
 "log end";
