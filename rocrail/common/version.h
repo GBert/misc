@@ -1,11 +1,14 @@
 const int revisionnr = 
-14992
+14995
 ;
 const char* commithash = 
-"996ab60e393dbff1c87ce8b64ce916d788a816aa";
+"0ca4aa3897f9817d5a95a2ed4aa912ea8f5887c9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14995 2019-02-06 12:55:26 +0100 item: fix for rotate offset in AUI view\n" \
+"14994 2019-02-06 12:03:19 +0100 guiframe: disable show caption becaus it does not work\n" \
+"14993 2019-02-06 11:38:22 +0100 auipanel: show on/off panel caption (seems not to work...)\n" \
 "14992 2019-02-05 14:07:35 +0100 loc,in: swap timer\n" \
 "14991 2019-02-05 12:16:29 +0100 planpanel: regard item size on scale to fit\n" \
 "14990 2019-02-05 11:50:01 +0100 loc,model: swap placing timer only for terminal stations\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "12998 2017-11-11 15:35:26 +0100 rocnet: 32 functions support added\n" \
 "12997 2017-11-11 08:19:27 +0100 basedlg: optimised selectIDs function added\n" \
 "12996 2017-11-10 22:09:48 +0100 makemac.sh: removed unnecessary hdiutil commands\n" \
-"12995 2017-11-10 18:08:20 +0100 translation merge: nl, de, sl, pt_BR\n" \
-"12994 2017-11-10 12:56:28 +0100 rocint: interface update for blockbase\n" \
-"12993 2017-11-10 11:23:16 +0100 blockgroup: condition prereserve option added\n" \
 
 "log end";
