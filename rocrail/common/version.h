@@ -1,11 +1,13 @@
 const int revisionnr = 
-14995
+14997
 ;
 const char* commithash = 
-"0ca4aa3897f9817d5a95a2ed4aa912ea8f5887c9";
+"616a284fc6fc454c0ac3195a59e54389528cdf36";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14997 2019-02-06 16:22:32 +0100 planpaneldlg: scale and rotation added\n" \
+"14996 2019-02-06 14:42:39 +0100 auipanel: calculate panel size in case the panels is not yet initialised\n" \
 "14995 2019-02-06 12:55:26 +0100 item: fix for rotate offset in AUI view\n" \
 "14994 2019-02-06 12:03:19 +0100 guiframe: disable show caption becaus it does not work\n" \
 "14993 2019-02-06 11:38:22 +0100 auipanel: show on/off panel caption (seems not to work...)\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13000 2017-11-12 10:11:08 +0100 rocpro: fix for saving the decspec from server if local directory does not exist\n" \
 "12999 2017-11-11 15:53:42 +0100 SLIM: closed small block fix\n" \
 "12998 2017-11-11 15:35:26 +0100 rocnet: 32 functions support added\n" \
-"12997 2017-11-11 08:19:27 +0100 basedlg: optimised selectIDs function added\n" \
-"12996 2017-11-10 22:09:48 +0100 makemac.sh: removed unnecessary hdiutil commands\n" \
 
 "log end";
