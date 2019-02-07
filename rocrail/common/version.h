@@ -1,11 +1,12 @@
 const int revisionnr = 
-14999
+15000
 ;
 const char* commithash = 
-"dd1fc8f61af34c479f753a9f8d1d61bcf7036be2";
+"1a79591c16021294583dd62f5bc6c3f17e8623f5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15000 2019-02-07 11:26:03 +0100 delete complete level incl. all items without broadcasting dependency modifications\n" \
 "14999 2019-02-07 09:24:37 +0100 bidib: evaluate MSG_LC_STAT not as accessory event\n" \
 "14998 2019-02-07 09:16:13 +0100 guiframe: not change label/grid back ground in case of invisible locos and cell background color off\n" \
 "14997 2019-02-06 16:22:32 +0100 planpaneldlg: scale and rotation added\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13003 2017-11-12 16:34:11 +0100 new demo plan\n" \
 "13002 2017-11-12 16:05:00 +0100 analyser: dir track exception option added\n" \
 "13001 2017-11-12 10:13:26 +0100 z21: trace level correction\n" \
-"13000 2017-11-12 10:11:08 +0100 rocpro: fix for saving the decspec from server if local directory does not exist\n" \
 
 "log end";
