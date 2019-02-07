@@ -1,11 +1,13 @@
 const int revisionnr = 
-14997
+14999
 ;
 const char* commithash = 
-"616a284fc6fc454c0ac3195a59e54389528cdf36";
+"dd1fc8f61af34c479f753a9f8d1d61bcf7036be2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"14999 2019-02-07 09:24:37 +0100 bidib: evaluate MSG_LC_STAT not as accessory event\n" \
+"14998 2019-02-07 09:16:13 +0100 guiframe: not change label/grid back ground in case of invisible locos and cell background color off\n" \
 "14997 2019-02-06 16:22:32 +0100 planpaneldlg: scale and rotation added\n" \
 "14996 2019-02-06 14:42:39 +0100 auipanel: calculate panel size in case the panels is not yet initialised\n" \
 "14995 2019-02-06 12:55:26 +0100 item: fix for rotate offset in AUI view\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13002 2017-11-12 16:05:00 +0100 analyser: dir track exception option added\n" \
 "13001 2017-11-12 10:13:26 +0100 z21: trace level correction\n" \
 "13000 2017-11-12 10:11:08 +0100 rocpro: fix for saving the decspec from server if local directory does not exist\n" \
-"12999 2017-11-11 15:53:42 +0100 SLIM: closed small block fix\n" \
-"12998 2017-11-11 15:35:26 +0100 rocnet: 32 functions support added\n" \
 
 "log end";
