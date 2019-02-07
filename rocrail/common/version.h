@@ -1,11 +1,12 @@
 const int revisionnr = 
-15000
+15001
 ;
 const char* commithash = 
-"1a79591c16021294583dd62f5bc6c3f17e8623f5";
+"8eaeed7af5a3840e84ac95d6c6f23258fae9d1ca";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15001 2019-02-07 15:33:33 +0100 caption perspective menuitem added\n" \
 "15000 2019-02-07 11:26:03 +0100 delete complete level incl. all items without broadcasting dependency modifications\n" \
 "14999 2019-02-07 09:24:37 +0100 bidib: evaluate MSG_LC_STAT not as accessory event\n" \
 "14998 2019-02-07 09:16:13 +0100 guiframe: not change label/grid back ground in case of invisible locos and cell background color off\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13004 2017-11-12 16:46:06 +0100 dccpp: fix for choosing the default sublib\n" \
 "13003 2017-11-12 16:34:11 +0100 new demo plan\n" \
 "13002 2017-11-12 16:05:00 +0100 analyser: dir track exception option added\n" \
-"13001 2017-11-12 10:13:26 +0100 z21: trace level correction\n" \
 
 "log end";
