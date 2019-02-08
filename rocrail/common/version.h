@@ -1,11 +1,14 @@
 const int revisionnr = 
-15001
+15004
 ;
 const char* commithash = 
-"8eaeed7af5a3840e84ac95d6c6f23258fae9d1ca";
+"06ad8003056caac09dfcf743764ac8417484d429";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15004 2019-02-08 15:53:45 +0100 save clock freeze/go state\n" \
+"15003 2019-02-08 11:47:25 +0100 action: clock go/freeze added\n" \
+"15002 2019-02-08 11:02:19 +0100 auipanel: remove panel also from list in case of a remove to avoid crash on invalid pointer\n" \
 "15001 2019-02-07 15:33:33 +0100 caption perspective menuitem added\n" \
 "15000 2019-02-07 11:26:03 +0100 delete complete level incl. all items without broadcasting dependency modifications\n" \
 "14999 2019-02-07 09:24:37 +0100 bidib: evaluate MSG_LC_STAT not as accessory event\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13007 2017-11-13 07:40:19 +0100 stagedlg: sort column fix\n" \
 "13006 2017-11-12 21:37:23 +0100 ecos: SoD support added\n" \
 "13005 2017-11-12 17:03:10 +0100 app: count down power off delay\n" \
-"13004 2017-11-12 16:46:06 +0100 dccpp: fix for choosing the default sublib\n" \
-"13003 2017-11-12 16:34:11 +0100 new demo plan\n" \
-"13002 2017-11-12 16:05:00 +0100 analyser: dir track exception option added\n" \
 
 "log end";
