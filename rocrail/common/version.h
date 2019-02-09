@@ -1,11 +1,12 @@
 const int revisionnr = 
-15004
+15005
 ;
 const char* commithash = 
-"06ad8003056caac09dfcf743764ac8417484d429";
+"08a572a2319266bbbb150f35158e1ea383209d76";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15005 2019-02-08 18:13:55 +0100 model: use output list for finding an output by address instead of the not thread save map.next\n" \
 "15004 2019-02-08 15:53:45 +0100 save clock freeze/go state\n" \
 "15003 2019-02-08 11:47:25 +0100 action: clock go/freeze added\n" \
 "15002 2019-02-08 11:02:19 +0100 auipanel: remove panel also from list in case of a remove to avoid crash on invalid pointer\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13008 2017-11-13 08:30:37 +0100 translation merge: sl, de\n" \
 "13007 2017-11-13 07:40:19 +0100 stagedlg: sort column fix\n" \
 "13006 2017-11-12 21:37:23 +0100 ecos: SoD support added\n" \
-"13005 2017-11-12 17:03:10 +0100 app: count down power off delay\n" \
 
 "log end";
