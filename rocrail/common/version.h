@@ -1,11 +1,12 @@
 const int revisionnr = 
-15008
+15009
 ;
 const char* commithash = 
-"920d94245b4b558de63e7384ca7d8e8d3da6ca69";
+"a09fb1ced4ab9d117466f6b5c8f08e892acd317f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15009 2019-02-09 16:25:51 +0100 mbus: fix for programming decoder protocol\n" \
 "15008 2019-02-09 09:08:30 +0100 keyboarddlg: fix for expand\n" \
 "15007 2019-02-09 08:36:55 +0100 keyboarddlg: fix for wx3.2\n" \
 "15006 2019-02-09 08:36:05 +0100 model: remove tt,seltab,stage objects also from the block list after a remove\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13012 2017-11-14 07:33:11 +0100 stylesheets: update switches EN/DE (Andy)\n" \
 "13011 2017-11-13 18:15:03 +0100 demo plan update\n" \
 "13010 2017-11-13 16:52:41 +0100 speed percent values minimal 10\n" \
-"13009 2017-11-13 11:35:42 +0100 app: fix for power off delay\n" \
 
 "log end";
