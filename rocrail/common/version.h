@@ -1,11 +1,14 @@
 const int revisionnr = 
-15005
+15008
 ;
 const char* commithash = 
-"08a572a2319266bbbb150f35158e1ea383209d76";
+"920d94245b4b558de63e7384ca7d8e8d3da6ca69";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15008 2019-02-09 09:08:30 +0100 keyboarddlg: fix for expand\n" \
+"15007 2019-02-09 08:36:55 +0100 keyboarddlg: fix for wx3.2\n" \
+"15006 2019-02-09 08:36:05 +0100 model: remove tt,seltab,stage objects also from the block list after a remove\n" \
 "15005 2019-02-08 18:13:55 +0100 model: use output list for finding an output by address instead of the not thread save map.next\n" \
 "15004 2019-02-08 15:53:45 +0100 save clock freeze/go state\n" \
 "15003 2019-02-08 11:47:25 +0100 action: clock go/freeze added\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13011 2017-11-13 18:15:03 +0100 demo plan update\n" \
 "13010 2017-11-13 16:52:41 +0100 speed percent values minimal 10\n" \
 "13009 2017-11-13 11:35:42 +0100 app: fix for power off delay\n" \
-"13008 2017-11-13 08:30:37 +0100 translation merge: sl, de\n" \
-"13007 2017-11-13 07:40:19 +0100 stagedlg: sort column fix\n" \
-"13006 2017-11-12 21:37:23 +0100 ecos: SoD support added\n" \
 
 "log end";
