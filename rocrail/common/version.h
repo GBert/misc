@@ -1,11 +1,12 @@
 const int revisionnr = 
-15014
+15015
 ;
 const char* commithash = 
-"819b8c635fe55237efe6bdc8c931e96603d9af49";
+"6ac664388a5a514ec46156d9bda2b4c9fd130f90";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15015 2019-02-10 19:34:28 +0100 rocview: fixed deprecateed calls\n" \
 "15014 2019-02-10 18:00:55 +0100 rocview makefile: removed deprecated flag -> todo: fix them\n" \
 "15013 2019-02-10 17:21:21 +0100 freeonenter: maxlen added\n" \
 "15012 2019-02-10 15:07:31 +0100 bidib: regard free in case at MSG_BM_ADDRESS no longer an address is detected\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13018 2017-11-16 15:16:07 +0100 rocraild: image command line optione removed\n" \
 "13017 2017-11-16 14:22:20 +0100 rocnet: removed extra byte at output commands\n" \
 "13016 2017-11-16 11:17:54 +0100 rocrailinidialog: layout corrections\n" \
-"13015 2017-11-15 13:40:53 +0100 block fifo: regard block and automobile length\n" \
 
 "log end";
