@@ -1,11 +1,13 @@
 const int revisionnr = 
-15012
+15014
 ;
 const char* commithash = 
-"b20400b2add9e3e770f4780599a109fa6bc9490d";
+"819b8c635fe55237efe6bdc8c931e96603d9af49";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15014 2019-02-10 18:00:55 +0100 rocview makefile: removed deprecated flag -> todo: fix them\n" \
+"15013 2019-02-10 17:21:21 +0100 freeonenter: maxlen added\n" \
 "15012 2019-02-10 15:07:31 +0100 bidib: regard free in case at MSG_BM_ADDRESS no longer an address is detected\n" \
 "15011 2019-02-10 14:12:30 +0100 planpropsdlg: translations\n" \
 "15010 2019-02-10 13:46:09 +0100 planpropsdlg: show and edit plan properties like title and remark\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13017 2017-11-16 14:22:20 +0100 rocnet: removed extra byte at output commands\n" \
 "13016 2017-11-16 11:17:54 +0100 rocrailinidialog: layout corrections\n" \
 "13015 2017-11-15 13:40:53 +0100 block fifo: regard block and automobile length\n" \
-"13014 2017-11-14 17:09:40 +0100 app: shutdown controller before power off delay\n" \
-"13013 2017-11-14 11:53:34 +0100 routedialog: select via blocks with the blockdialog\n" \
 
 "log end";
