@@ -1,11 +1,14 @@
 const int revisionnr = 
-15009
+15012
 ;
 const char* commithash = 
-"a09fb1ced4ab9d117466f6b5c8f08e892acd317f";
+"b20400b2add9e3e770f4780599a109fa6bc9490d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15012 2019-02-10 15:07:31 +0100 bidib: regard free in case at MSG_BM_ADDRESS no longer an address is detected\n" \
+"15011 2019-02-10 14:12:30 +0100 planpropsdlg: translations\n" \
+"15010 2019-02-10 13:46:09 +0100 planpropsdlg: show and edit plan properties like title and remark\n" \
 "15009 2019-02-09 16:25:51 +0100 mbus: fix for programming decoder protocol\n" \
 "15008 2019-02-09 09:08:30 +0100 keyboarddlg: fix for expand\n" \
 "15007 2019-02-09 08:36:55 +0100 keyboarddlg: fix for wx3.2\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13015 2017-11-15 13:40:53 +0100 block fifo: regard block and automobile length\n" \
 "13014 2017-11-14 17:09:40 +0100 app: shutdown controller before power off delay\n" \
 "13013 2017-11-14 11:53:34 +0100 routedialog: select via blocks with the blockdialog\n" \
-"13012 2017-11-14 07:33:11 +0100 stylesheets: update switches EN/DE (Andy)\n" \
-"13011 2017-11-13 18:15:03 +0100 demo plan update\n" \
-"13010 2017-11-13 16:52:41 +0100 speed percent values minimal 10\n" \
 
 "log end";
