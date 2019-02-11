@@ -65,10 +65,12 @@ define Package/can2udp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/xntcpd $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init $(1)/etc/init.d/can2lan
+
 ifneq (,$(findstring a5-v11,$(CONFIG_TARGET_PROFILE)))
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init_slcan_a5v11 $(1)/etc/init.d/can2lan
 endif
+
 ifneq (,$(findstring banana,$(CONFIG_TARGET_PROFILE)))
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init_bpi $(1)/etc/init.d/can2lan
@@ -77,16 +79,25 @@ ifneq (,$(findstring banana,$(CONFIG_TARGET_PROFILE)))
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/s88test-bpi $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/s88can $(1)/usr/bin/
 endif
+
 ifneq (,$(findstring carambola,$(CONFIG_TARGET_PROFILE)))
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init_carambola $(1)/etc/init.d/can2lan
 endif
-ifneq (,$(findstring mt76x8,$(CONFIG_TARGET_SUBTARGET)) or $(findstring mt7688,$(CONFIG_TARGET_SUBTARGET)))
+
+ifneq (,$(findstring mt76x8,$(CONFIG_TARGET_SUBTARGET)))
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init_srse2 $(1)/etc/init.d/can2lan
 	$(INSTALL_DIR) $(1)/root
 	$(INSTALL_BIN) ./files/no-pic.sh $(1)/root
 endif
+ifneq (,$(findstring mt7688,$(CONFIG_TARGET_SUBTARGET)))
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/can2lan.init_srse2 $(1)/etc/init.d/can2lan
+	$(INSTALL_DIR) $(1)/root
+	$(INSTALL_BIN) ./files/no-pic.sh $(1)/root
+endif
+
 ifneq (,$(findstring wr841,$(CONFIG_TARGET_PROFILE)))
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init_slcan $(1)/etc/init.d/can2lan
