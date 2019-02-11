@@ -1,11 +1,13 @@
 const int revisionnr = 
-15015
+15017
 ;
 const char* commithash = 
-"6ac664388a5a514ec46156d9bda2b4c9fd130f90";
+"ba6956791a96043060dcd94b509241aa1d689266";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15017 2019-02-11 12:24:18 +0100 guiframe: update plan title on planproperties dialog OK\n" \
+"15016 2019-02-11 11:22:23 +0100 block: ignore embedded sensor events in case of crossing\n" \
 "15015 2019-02-10 19:34:28 +0100 rocview: fixed deprecateed calls\n" \
 "15014 2019-02-10 18:00:55 +0100 rocview makefile: removed deprecated flag -> todo: fix them\n" \
 "15013 2019-02-10 17:21:21 +0100 freeonenter: maxlen added\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13020 2017-11-17 08:08:37 +0100 rocguiinidlg, rocrailinidlg: save size and position\n" \
 "13019 2017-11-16 21:48:08 +0100 autosave, scrollview in rocrail and rocview tabs\n" \
 "13018 2017-11-16 15:16:07 +0100 rocraild: image command line optione removed\n" \
-"13017 2017-11-16 14:22:20 +0100 rocnet: removed extra byte at output commands\n" \
-"13016 2017-11-16 11:17:54 +0100 rocrailinidialog: layout corrections\n" \
 
 "log end";
