@@ -1,11 +1,15 @@
 const int revisionnr = 
-15023
+15027
 ;
 const char* commithash = 
-"8eff6eb81880c7af56214f6d857e2f0315603ffc";
+"3ed04d16c455527a5d3cb51a9d0c872094196e9f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15027 2019-02-12 18:39:06 +0100 notespanel: maxlength is not compat allowed for multiline text controls\n" \
+"15026 2019-02-12 17:16:46 +0100 roclcdr,wait: do not reset block triggers in the wait phase\n" \
+"15025 2019-02-12 14:39:53 +0100 notespanel: set max text length to 4000\n" \
+"15024 2019-02-12 13:13:48 +0100 notespanel: max text set to length 2000\n" \
 "15023 2019-02-12 08:21:23 +0100 planpropsdlg: save size and position guiframe: notes tab option\n" \
 "15022 2019-02-11 19:48:33 +0100 bidib: revert MSG_BM_ADDRESS null as none occupied\n" \
 "15021 2019-02-11 19:12:17 +0100 notespanel: copy/paste fixes\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13030 2017-11-17 15:26:55 +0100 feedbackdialog: scrolling added\n" \
 "13029 2017-11-17 15:16:01 +0100 switchdialog: scrolling added\n" \
 "13028 2017-11-17 15:06:41 +0100 blockdialog: scrolling added\n" \
-"13027 2017-11-17 14:32:24 +0100 routedialog: scrolling added\n" \
-"13026 2017-11-17 14:16:55 +0100 cardlg: scrolling added\n" \
-"13025 2017-11-17 13:56:22 +0100 locdialog: scrolling added\n" \
-"13024 2017-11-17 13:27:50 +0100 rocrailinidlg: scroll added on panels service, finder, r2rnet, controllers\n" \
 
 "log end";
