@@ -1,11 +1,17 @@
 const int revisionnr = 
-15017
+15023
 ;
 const char* commithash = 
-"ba6956791a96043060dcd94b509241aa1d689266";
+"8eff6eb81880c7af56214f6d857e2f0315603ffc";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15023 2019-02-12 08:21:23 +0100 planpropsdlg: save size and position guiframe: notes tab option\n" \
+"15022 2019-02-11 19:48:33 +0100 bidib: revert MSG_BM_ADDRESS null as none occupied\n" \
+"15021 2019-02-11 19:12:17 +0100 notespanel: copy/paste fixes\n" \
+"15020 2019-02-11 17:38:17 +0100 item: only activate the accelleration table on focus in edit mode\n" \
+"15019 2019-02-11 17:24:30 +0100 item: removed cursor accellerators\n" \
+"15018 2019-02-11 16:52:44 +0100 rocview: notes panel added\n" \
 "15017 2019-02-11 12:24:18 +0100 guiframe: update plan title on planproperties dialog OK\n" \
 "15016 2019-02-11 11:22:23 +0100 block: ignore embedded sensor events in case of crossing\n" \
 "15015 2019-02-10 19:34:28 +0100 rocview: fixed deprecateed calls\n" \
@@ -2000,11 +2006,5 @@ const char* revlog =
 "13026 2017-11-17 14:16:55 +0100 cardlg: scrolling added\n" \
 "13025 2017-11-17 13:56:22 +0100 locdialog: scrolling added\n" \
 "13024 2017-11-17 13:27:50 +0100 rocrailinidlg: scroll added on panels service, finder, r2rnet, controllers\n" \
-"13023 2017-11-17 13:15:54 +0100 rocrailinidlg: rpic library added\n" \
-"13022 2017-11-17 12:25:15 +0100 rocguiinidlg: added scroll container in path, svg, gamepad\n" \
-"13021 2017-11-17 11:56:14 +0100 rpic: WIP\n" \
-"13020 2017-11-17 08:08:37 +0100 rocguiinidlg, rocrailinidlg: save size and position\n" \
-"13019 2017-11-16 21:48:08 +0100 autosave, scrollview in rocrail and rocview tabs\n" \
-"13018 2017-11-16 15:16:07 +0100 rocraild: image command line optione removed\n" \
 
 "log end";
