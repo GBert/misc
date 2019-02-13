@@ -1,11 +1,15 @@
 const int revisionnr = 
-15027
+15031
 ;
 const char* commithash = 
-"3ed04d16c455527a5d3cb51a9d0c872094196e9f";
+"c49a7a2d3244a09f5df5bd6876918ad85ac54eb2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15031 2019-02-13 14:59:30 +0100 translation merge: zh_CN, cs, en_GB, fr, de, nl\n" \
+"15030 2019-02-13 14:35:04 +0100 radius added to loc,block,car,route,operator\n" \
+"15029 2019-02-13 09:37:20 +0100 action: add all time&date vars before calling an xmlscript\n" \
+"15028 2019-02-13 08:33:42 +0100 xmlscriptdlg: fix for wx 3.1\n" \
 "15027 2019-02-12 18:39:06 +0100 notespanel: maxlength is not compat allowed for multiline text controls\n" \
 "15026 2019-02-12 17:16:46 +0100 roclcdr,wait: do not reset block triggers in the wait phase\n" \
 "15025 2019-02-12 14:39:53 +0100 notespanel: set max text length to 4000\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13034 2017-11-17 19:26:00 +0100 dialog min height reduced to 400\n" \
 "13033 2017-11-17 17:44:50 +0100 signaldialog: scrolling added\n" \
 "13032 2017-11-17 16:08:17 +0100 dialogs: eliminated multiple defines with the same name\n" \
-"13031 2017-11-17 15:32:49 +0100 outputdialog: scrolling added\n" \
-"13030 2017-11-17 15:26:55 +0100 feedbackdialog: scrolling added\n" \
-"13029 2017-11-17 15:16:01 +0100 switchdialog: scrolling added\n" \
-"13028 2017-11-17 15:06:41 +0100 blockdialog: scrolling added\n" \
 
 "log end";
