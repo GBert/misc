@@ -1,11 +1,16 @@
 const int revisionnr = 
-15031
+15036
 ;
 const char* commithash = 
-"c49a7a2d3244a09f5df5bd6876918ad85ac54eb2";
+"127000a5de1e0fa7f76f56d6f06e673c21e628a2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15036 2019-02-14 18:03:30 +0100 mbus: ascii fix read string\n" \
+"15035 2019-02-14 15:16:42 +0100 mbus: ascii protocol corrections\n" \
+"15034 2019-02-14 13:14:51 +0100 mbusdlg: enable host:port field dependent on selected sub library\n" \
+"15033 2019-02-14 09:54:13 +0100 mbusdlg: corrected sublib description\n" \
+"15032 2019-02-14 09:08:58 +0100 mbus: Lawicel ASCII format added as sublib\n" \
 "15031 2019-02-13 14:59:30 +0100 translation merge: zh_CN, cs, en_GB, fr, de, nl\n" \
 "15030 2019-02-13 14:35:04 +0100 radius added to loc,block,car,route,operator\n" \
 "15029 2019-02-13 09:37:20 +0100 action: add all time&date vars before calling an xmlscript\n" \
@@ -2001,10 +2006,5 @@ const char* revlog =
 "13039 2017-11-18 09:16:27 +0100 fback: fix for setting baseaddr in case of an offset variable\n" \
 "13038 2017-11-18 09:08:43 +0100 block: update block occupancy after modify (by dialog)\n" \
 "13037 2017-11-17 22:32:31 +0100 scheduledialog: scrolling added\n" \
-"13036 2017-11-17 22:23:07 +0100 locdialog: scrolling added on the index tab\n" \
-"13035 2017-11-17 21:17:12 +0100 rocnetnode: fix bindir makefile\n" \
-"13034 2017-11-17 19:26:00 +0100 dialog min height reduced to 400\n" \
-"13033 2017-11-17 17:44:50 +0100 signaldialog: scrolling added\n" \
-"13032 2017-11-17 16:08:17 +0100 dialogs: eliminated multiple defines with the same name\n" \
 
 "log end";
