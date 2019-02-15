@@ -1,11 +1,12 @@
 const int revisionnr = 
-15043
+15044
 ;
 const char* commithash = 
-"84d75e5f05c132822b3e21ed02ad82e8158119e3";
+"d48fc164ee0290e09db98a8c9ffc4ecedbe1b59d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15044 2019-02-15 16:42:48 +0100 mbus: tcp do not set receive time out, it should read blocking\n" \
 "15043 2019-02-15 14:20:40 +0100 cbusnodedlg: update for CS3\n" \
 "15042 2019-02-15 12:31:34 +0100 planpropsdlg: replaced translation remark with notes\n" \
 "15041 2019-02-15 12:15:41 +0100 mbus: tcp fix for read in case of block\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13047 2017-11-19 11:56:09 +0100 makewin64-full.sh script added\n" \
 "13046 2017-11-19 11:19:39 +0100 rocs: isoDate and isoTime use time_t\n" \
 "13045 2017-11-19 11:07:52 +0100 time_ use time_t\n" \
-"13044 2017-11-19 10:51:12 +0100 time: use time_t instead of long\n" \
 
 "log end";
