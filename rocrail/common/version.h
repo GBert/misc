@@ -1,11 +1,12 @@
 const int revisionnr = 
-15036
+15037
 ;
 const char* commithash = 
-"127000a5de1e0fa7f76f56d6f06e673c21e628a2";
+"4563670039b8c3258142e7039262d2c03453d0f7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15037 2019-02-14 20:11:30 +0100 guiframe: first signal to take over the remark before save\n" \
 "15036 2019-02-14 18:03:30 +0100 mbus: ascii fix read string\n" \
 "15035 2019-02-14 15:16:42 +0100 mbus: ascii protocol corrections\n" \
 "15034 2019-02-14 13:14:51 +0100 mbusdlg: enable host:port field dependent on selected sub library\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13040 2017-11-18 11:05:55 +0100 rocnetnode: mkdeb.sh remark set to nightly build\n" \
 "13039 2017-11-18 09:16:27 +0100 fback: fix for setting baseaddr in case of an offset variable\n" \
 "13038 2017-11-18 09:08:43 +0100 block: update block occupancy after modify (by dialog)\n" \
-"13037 2017-11-17 22:32:31 +0100 scheduledialog: scrolling added\n" \
 
 "log end";
