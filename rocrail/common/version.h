@@ -1,11 +1,14 @@
 const int revisionnr = 
-15040
+15043
 ;
 const char* commithash = 
-"b937933af77b95f1367755819a5e3d117780f4d3";
+"84d75e5f05c132822b3e21ed02ad82e8158119e3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15043 2019-02-15 14:20:40 +0100 cbusnodedlg: update for CS3\n" \
+"15042 2019-02-15 12:31:34 +0100 planpropsdlg: replaced translation remark with notes\n" \
+"15041 2019-02-15 12:15:41 +0100 mbus: tcp fix for read in case of block\n" \
 "15040 2019-02-15 08:26:18 +0100 rocview: -auiview command line option added guiframe: save remark on plan save too\n" \
 "15039 2019-02-15 07:31:22 +0100 guiframe: save remark before shutdown command\n" \
 "15038 2019-02-15 07:18:21 +0100 operatordlg: tanslation for label length added\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13046 2017-11-19 11:19:39 +0100 rocs: isoDate and isoTime use time_t\n" \
 "13045 2017-11-19 11:07:52 +0100 time_ use time_t\n" \
 "13044 2017-11-19 10:51:12 +0100 time: use time_t instead of long\n" \
-"13043 2017-11-18 22:42:42 +0100 trace: win64 os string\n" \
-"13042 2017-11-18 15:58:28 +0100 xpressnet: removed accessory output behaviour\n" \
-"13041 2017-11-18 15:57:45 +0100 rpic added to the makefile\n" \
 
 "log end";
