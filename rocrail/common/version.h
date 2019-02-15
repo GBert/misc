@@ -1,11 +1,14 @@
 const int revisionnr = 
-15037
+15040
 ;
 const char* commithash = 
-"4563670039b8c3258142e7039262d2c03453d0f7";
+"b937933af77b95f1367755819a5e3d117780f4d3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15040 2019-02-15 08:26:18 +0100 rocview: -auiview command line option added guiframe: save remark on plan save too\n" \
+"15039 2019-02-15 07:31:22 +0100 guiframe: save remark before shutdown command\n" \
+"15038 2019-02-15 07:18:21 +0100 operatordlg: tanslation for label length added\n" \
 "15037 2019-02-14 20:11:30 +0100 guiframe: first signal to take over the remark before save\n" \
 "15036 2019-02-14 18:03:30 +0100 mbus: ascii fix read string\n" \
 "15035 2019-02-14 15:16:42 +0100 mbus: ascii protocol corrections\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13043 2017-11-18 22:42:42 +0100 trace: win64 os string\n" \
 "13042 2017-11-18 15:58:28 +0100 xpressnet: removed accessory output behaviour\n" \
 "13041 2017-11-18 15:57:45 +0100 rpic added to the makefile\n" \
-"13040 2017-11-18 11:05:55 +0100 rocnetnode: mkdeb.sh remark set to nightly build\n" \
-"13039 2017-11-18 09:16:27 +0100 fback: fix for setting baseaddr in case of an offset variable\n" \
-"13038 2017-11-18 09:08:43 +0100 block: update block occupancy after modify (by dialog)\n" \
 
 "log end";
