@@ -1,11 +1,13 @@
 const int revisionnr = 
-15044
+15046
 ;
 const char* commithash = 
-"d48fc164ee0290e09db98a8c9ffc4ecedbe1b59d";
+"a665382631e531fb686d50a873a173b9f50cbd30";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15046 2019-02-16 11:52:04 +0100 mbus: A/V/T factors added for CS3, no response on channel definitions...\n" \
+"15045 2019-02-16 10:20:43 +0100 mbus: fix for reader\n" \
 "15044 2019-02-15 16:42:48 +0100 mbus: tcp do not set receive time out, it should read blocking\n" \
 "15043 2019-02-15 14:20:40 +0100 cbusnodedlg: update for CS3\n" \
 "15042 2019-02-15 12:31:34 +0100 planpropsdlg: replaced translation remark with notes\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13049 2017-11-19 12:57:42 +0100 added architecture parameter to the inno setup template\n" \
 "13048 2017-11-19 12:24:05 +0100 makewin64 update for raspi\n" \
 "13047 2017-11-19 11:56:09 +0100 makewin64-full.sh script added\n" \
-"13046 2017-11-19 11:19:39 +0100 rocs: isoDate and isoTime use time_t\n" \
-"13045 2017-11-19 11:07:52 +0100 time_ use time_t\n" \
 
 "log end";
