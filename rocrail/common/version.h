@@ -1,11 +1,13 @@
 const int revisionnr = 
-15047
+15049
 ;
 const char* commithash = 
-"2e407db4e0140510d0329d64034e900988f10f6b";
+"d09476beffdf2d09bc19b0fce270623ed074335a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15049 2019-02-16 17:37:32 +0100 mbus: added type 64, connect6021\n" \
+"15048 2019-02-16 15:41:13 +0100 mbus: ascii fixes\n" \
 "15047 2019-02-16 14:54:14 +0100 mbus: CS3plus S88 query SoD\n" \
 "15046 2019-02-16 11:52:04 +0100 mbus: A/V/T factors added for CS3, no response on channel definitions...\n" \
 "15045 2019-02-16 10:20:43 +0100 mbus: fix for reader\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13052 2017-11-19 21:53:22 +0100 demo plan: fix for sensor events in block cb2 and sb2\n" \
 "13051 2017-11-19 13:32:50 +0100 x64 innosetup support added\n" \
 "13050 2017-11-19 13:30:27 +0100 x64 innosetup support added\n" \
-"13049 2017-11-19 12:57:42 +0100 added architecture parameter to the inno setup template\n" \
-"13048 2017-11-19 12:24:05 +0100 makewin64 update for raspi\n" \
 
 "log end";
