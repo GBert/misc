@@ -1,11 +1,17 @@
 const int revisionnr = 
-15049
+15055
 ;
 const char* commithash = 
-"d09476beffdf2d09bc19b0fce270623ed074335a";
+"10845e8645bb44e06a14c6df76f171e54fc43fdd";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15055 2019-02-17 10:46:05 +0100 mbus: support for links88 SoD\n" \
+"15054 2019-02-17 09:00:53 +0100 mbus: correction for type links88\n" \
+"15053 2019-02-17 08:52:46 +0100 mbus: tcp no sleep if a read was successful\n" \
+"15052 2019-02-17 08:48:17 +0100 mbus: tcp read queue size increased from 1000 to 10000...\n" \
+"15051 2019-02-17 08:32:45 +0100 mbus: fix for calculating MM accessory address from response\n" \
+"15050 2019-02-17 08:25:32 +0100 mbus: fix for evaluating MM accessory responses\n" \
 "15049 2019-02-16 17:37:32 +0100 mbus: added type 64, connect6021\n" \
 "15048 2019-02-16 15:41:13 +0100 mbus: ascii fixes\n" \
 "15047 2019-02-16 14:54:14 +0100 mbus: CS3plus S88 query SoD\n" \
@@ -2000,11 +2006,5 @@ const char* revlog =
 "13058 2017-11-20 15:55:30 +0100 basedlg: use time_t instead of long\n" \
 "13057 2017-11-20 14:05:08 +0100 makefiles: native WIN64 support\n" \
 "13056 2017-11-20 13:26:23 +0100 makefiles: native WIN64 support\n" \
-"13055 2017-11-20 13:21:48 +0100 makefiles: native WIN64 support\n" \
-"13054 2017-11-20 12:56:03 +0100 makefiles: native WIN64 support\n" \
-"13053 2017-11-20 12:53:20 +0100 makefiles: native WIN64 support\n" \
-"13052 2017-11-19 21:53:22 +0100 demo plan: fix for sensor events in block cb2 and sb2\n" \
-"13051 2017-11-19 13:32:50 +0100 x64 innosetup support added\n" \
-"13050 2017-11-19 13:30:27 +0100 x64 innosetup support added\n" \
 
 "log end";
