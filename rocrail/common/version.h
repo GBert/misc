@@ -1,11 +1,12 @@
 const int revisionnr = 
-15058
+15059
 ;
 const char* commithash = 
-"22762318d3fee2f3830cbcb24331f8683308db0d";
+"e3dd3110109ae7d9fa4f44c89d31f234e8c029e1";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15059 2019-02-17 15:55:13 +0100 mbus: power on at startup option added\n" \
 "15058 2019-02-17 14:35:13 +0100 mbusdlg: translations and column resizing\n" \
 "15057 2019-02-17 13:07:38 +0100 mbus: only SoD sensors if the number of connected modules > 0\n" \
 "15056 2019-02-17 12:16:21 +0100 mbusdlg: added lins88 list\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13062 2017-11-20 18:15:59 +0100 rpic: wip\n" \
 "13061 2017-11-20 17:04:46 +0100 guiapp: update route in case not visable\n" \
 "13060 2017-11-20 16:34:23 +0100 innosetup: set support for 64bit only in case of 64bit build\n" \
-"13059 2017-11-20 16:16:06 +0100 locdialog: use time_t instead of long\n" \
 
 "log end";
