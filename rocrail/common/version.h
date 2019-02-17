@@ -1,11 +1,14 @@
 const int revisionnr = 
-15055
+15058
 ;
 const char* commithash = 
-"10845e8645bb44e06a14c6df76f171e54fc43fdd";
+"22762318d3fee2f3830cbcb24331f8683308db0d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15058 2019-02-17 14:35:13 +0100 mbusdlg: translations and column resizing\n" \
+"15057 2019-02-17 13:07:38 +0100 mbus: only SoD sensors if the number of connected modules > 0\n" \
+"15056 2019-02-17 12:16:21 +0100 mbusdlg: added lins88 list\n" \
 "15055 2019-02-17 10:46:05 +0100 mbus: support for links88 SoD\n" \
 "15054 2019-02-17 09:00:53 +0100 mbus: correction for type links88\n" \
 "15053 2019-02-17 08:52:46 +0100 mbus: tcp no sleep if a read was successful\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13061 2017-11-20 17:04:46 +0100 guiapp: update route in case not visable\n" \
 "13060 2017-11-20 16:34:23 +0100 innosetup: set support for 64bit only in case of 64bit build\n" \
 "13059 2017-11-20 16:16:06 +0100 locdialog: use time_t instead of long\n" \
-"13058 2017-11-20 15:55:30 +0100 basedlg: use time_t instead of long\n" \
-"13057 2017-11-20 14:05:08 +0100 makefiles: native WIN64 support\n" \
-"13056 2017-11-20 13:26:23 +0100 makefiles: native WIN64 support\n" \
 
 "log end";
