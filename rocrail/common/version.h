@@ -1,11 +1,13 @@
 const int revisionnr = 
-15061
+15063
 ;
 const char* commithash = 
-"78110512c8565ce92ce7c3ce38c8b4215eae50ac";
+"552620fc62291521216a34658339e0af8dc5aea0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15063 2019-02-17 19:37:19 +0100 mbus: removed accessory acknowledge completely\n" \
+"15062 2019-02-17 18:19:14 +0100 mbus: switch acknowledge option off\n" \
 "15061 2019-02-17 16:10:44 +0100 mbus: removed initial sensor query :|\n" \
 "15060 2019-02-17 16:03:49 +0100 mbus: tcp trace fix for port number\n" \
 "15059 2019-02-17 15:55:13 +0100 mbus: power on at startup option added\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13066 2017-11-20 21:08:37 +0100 rpic: 100ms refresh rate\n" \
 "13065 2017-11-20 20:54:01 +0100 rpic: wip\n" \
 "13064 2017-11-20 20:05:24 +0100 rpic: wip\n" \
-"13063 2017-11-20 19:21:20 +0100 rpic: wip\n" \
-"13062 2017-11-20 18:15:59 +0100 rpic: wip\n" \
 
 "log end";
