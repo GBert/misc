@@ -1,11 +1,12 @@
 const int revisionnr = 
-15063
+15064
 ;
 const char* commithash = 
-"552620fc62291521216a34658339e0af8dc5aea0";
+"2f3afb48dc9d1b533c4ebfe3902239bd5e2a96ce";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15064 2019-02-18 07:27:20 +0100 mbusdlg: added missing translations\n" \
 "15063 2019-02-17 19:37:19 +0100 mbus: removed accessory acknowledge completely\n" \
 "15062 2019-02-17 18:19:14 +0100 mbus: switch acknowledge option off\n" \
 "15061 2019-02-17 16:10:44 +0100 mbus: removed initial sensor query :|\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13067 2017-11-21 08:39:47 +0100 rpic: fix for header and input checksum\n" \
 "13066 2017-11-20 21:08:37 +0100 rpic: 100ms refresh rate\n" \
 "13065 2017-11-20 20:54:01 +0100 rpic: wip\n" \
-"13064 2017-11-20 20:05:24 +0100 rpic: wip\n" \
 
 "log end";
