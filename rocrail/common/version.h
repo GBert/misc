@@ -1,11 +1,13 @@
 const int revisionnr = 
-15064
+15066
 ;
 const char* commithash = 
-"2f3afb48dc9d1b533c4ebfe3902239bd5e2a96ce";
+"e4b81da08cb9c6277a825b7ab558a8e4ea6d3a9e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15066 2019-02-18 14:36:33 +0100 mbus: list up scanned products on query network\n" \
+"15065 2019-02-18 13:44:07 +0100 model: trace level changed to FIND in case of no route found from A to B\n" \
 "15064 2019-02-18 07:27:20 +0100 mbusdlg: added missing translations\n" \
 "15063 2019-02-17 19:37:19 +0100 mbus: removed accessory acknowledge completely\n" \
 "15062 2019-02-17 18:19:14 +0100 mbus: switch acknowledge option off\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13069 2017-11-21 13:32:34 +0100 innosetup: do not use the previous install directory automatically\n" \
 "13068 2017-11-21 08:51:23 +0100 makewin64-full.sh: innosetup file variable\n" \
 "13067 2017-11-21 08:39:47 +0100 rpic: fix for header and input checksum\n" \
-"13066 2017-11-20 21:08:37 +0100 rpic: 100ms refresh rate\n" \
-"13065 2017-11-20 20:54:01 +0100 rpic: wip\n" \
 
 "log end";
