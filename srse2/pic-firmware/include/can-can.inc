@@ -85,6 +85,7 @@ RTSSET          MACRO
                 B_SAVE  : 1                 ; ISR BANK SELECT REGISTER
                 S_SAVE  : 1                 ; ISR STATUS REGISTER
                 W_SAVE  : 1                 ; ISR WORKING REGISTER
+                STATE   : 1
                 ENDC
 
 ;------------------------------------------------------------------------------
@@ -114,6 +115,9 @@ INIT
                 CLRF    PIR1
 #ENDIF
 
+                ; after boot we are in cold state
+                MOVLW	0
+                MOVWF   STATE	
                 ; switch off A/Ds, D/As and comaprators
                 CLRF    ADCON0          ;D
                 CLRF    ADCON1          ;D

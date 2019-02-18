@@ -418,6 +418,13 @@ CAN_PING_CONT
 ;------------------------------------------------------------------------------
 
 CAN_BOOTLOADER
+                ; cold state ?
+                MOVF    STATE,W
+                IORLW   0
+                ; return if != 0 (warm state)
+                BTFSS   STATUS,Z
+                RETURN
+
                 ; if DLC == 0
                 MOVF	CANFRAME+4,F
                 BZ	CAN_BOOTLOADER_PING
@@ -467,6 +474,9 @@ CAN_BOOTLOADER_PING
                 BRA	EVENT_RING_NORMALIZE
 
 CAN_BOOTLOADER_GO
+                ; we are now in warm state
+                MOVLW   1
+                MOVWF   STATE
                 ; respond to CAN Bootloader Go with System Reset CAN Frame
                 ; w/o doing something
                 MOVFF	EVENTPP,FSR0H
