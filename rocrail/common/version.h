@@ -1,11 +1,12 @@
 const int revisionnr = 
-15066
+15067
 ;
 const char* commithash = 
-"e4b81da08cb9c6277a825b7ab558a8e4ea6d3a9e";
+"aa815eaef412e6437e4d5706d0716fca101d628f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15067 2019-02-18 16:46:58 +0100 control: ignore clock state freeze in case divider=1 and no semirealtime\n" \
 "15066 2019-02-18 14:36:33 +0100 mbus: list up scanned products on query network\n" \
 "15065 2019-02-18 13:44:07 +0100 model: trace level changed to FIND in case of no route found from A to B\n" \
 "15064 2019-02-18 07:27:20 +0100 mbusdlg: added missing translations\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13070 2017-11-21 15:09:45 +0100 cbus, loconet: dialog scrolling added\n" \
 "13069 2017-11-21 13:32:34 +0100 innosetup: do not use the previous install directory automatically\n" \
 "13068 2017-11-21 08:51:23 +0100 makewin64-full.sh: innosetup file variable\n" \
-"13067 2017-11-21 08:39:47 +0100 rpic: fix for header and input checksum\n" \
 
 "log end";
