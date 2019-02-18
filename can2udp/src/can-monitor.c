@@ -135,7 +135,7 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 2.8\n\n");
+    fprintf(stderr, "   Version 2.81\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
@@ -924,7 +924,10 @@ void decode_frame(struct can_frame *frame) {
 	    printf("MS2");
 	    break;
 	case 0x0040:
-	    printf("LinkS88");
+	    if ((uid & 0x53380000) == 0x53380000)
+		printf("LinkS88");
+	    else
+		printf("S88 Gateway");
 	    break;
 	case 0x0053:
 	    printf("Cg Servo");
