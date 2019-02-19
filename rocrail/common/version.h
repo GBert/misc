@@ -1,11 +1,13 @@
 const int revisionnr = 
-15067
+15069
 ;
 const char* commithash = 
-"aa815eaef412e6437e4d5706d0716fca101d628f";
+"0f69256300e41503bdda342250d2da55574380f7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15069 2019-02-19 10:19:11 +0100 inno-setup script: reenable Rocrail Server shortcut to link the icon\n" \
+"15068 2019-02-19 08:29:50 +0100 guiapp: reset initial fsutf8 flag in case of Windows\n" \
 "15067 2019-02-18 16:46:58 +0100 control: ignore clock state freeze in case divider=1 and no semirealtime\n" \
 "15066 2019-02-18 14:36:33 +0100 mbus: list up scanned products on query network\n" \
 "15065 2019-02-18 13:44:07 +0100 model: trace level changed to FIND in case of no route found from A to B\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13072 2017-11-21 17:25:23 +0100 use wheelcount for free up previous block\n" \
 "13071 2017-11-21 17:15:20 +0100 rpic: checksum byte offset correction\n" \
 "13070 2017-11-21 15:09:45 +0100 cbus, loconet: dialog scrolling added\n" \
-"13069 2017-11-21 13:32:34 +0100 innosetup: do not use the previous install directory automatically\n" \
-"13068 2017-11-21 08:51:23 +0100 makewin64-full.sh: innosetup file variable\n" \
 
 "log end";
