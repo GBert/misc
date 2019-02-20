@@ -1,11 +1,14 @@
 const int revisionnr = 
-15069
+15072
 ;
 const char* commithash = 
-"0f69256300e41503bdda342250d2da55574380f7";
+"b00850d118cf4ef95fcca411c05110914e7112f7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15072 2019-02-19 18:26:27 +0100 guiframe: no red cell color in case the loco placing is reverse\n" \
+"15071 2019-02-19 18:09:33 +0100 mbus: removed throttle ID in case of loco events\n" \
+"15070 2019-02-19 17:31:26 +0100 mbus: correction for CS3 state values\n" \
 "15069 2019-02-19 10:19:11 +0100 inno-setup script: reenable Rocrail Server shortcut to link the icon\n" \
 "15068 2019-02-19 08:29:50 +0100 guiapp: reset initial fsutf8 flag in case of Windows\n" \
 "15067 2019-02-18 16:46:58 +0100 control: ignore clock state freeze in case divider=1 and no semirealtime\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13075 2017-11-22 11:27:56 +0100 guiapp: fix for show routes\n" \
 "13074 2017-11-22 08:42:15 +0100 Rocweb desktop file added\n" \
 "13073 2017-11-21 18:15:31 +0100 use wheelcount for free up previous block\n" \
-"13072 2017-11-21 17:25:23 +0100 use wheelcount for free up previous block\n" \
-"13071 2017-11-21 17:15:20 +0100 rpic: checksum byte offset correction\n" \
-"13070 2017-11-21 15:09:45 +0100 cbus, loconet: dialog scrolling added\n" \
 
 "log end";
