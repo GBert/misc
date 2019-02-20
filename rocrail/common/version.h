@@ -1,11 +1,14 @@
 const int revisionnr = 
-15078
+15081
 ;
 const char* commithash = 
-"b6c52e185c069873e3d1930e0ca629a130d5f8e5";
+"ed1fc991130762f0898936eb789c90664375cfde";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15081 2019-02-20 20:05:05 +0100 clock,meter: check divider > 0 to prevent divide by zero exception\n" \
+"15080 2019-02-20 19:25:11 +0100 clock: fix for divide by zero\n" \
+"15079 2019-02-20 18:18:23 +0100 mbus: activate channel query\n" \
 "15078 2019-02-20 16:46:21 +0100 carpanel: open throttle on dclick\n" \
 "15077 2019-02-20 16:05:17 +0100 item: changed conflicting rgb attributes to bgrgb\n" \
 "15076 2019-02-20 15:54:54 +0100 item: show correct background color\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13084 2017-11-24 20:14:09 +0100 rocnetnodedlg: prevent programming left channel position greater then the right poisition\n" \
 "13083 2017-11-24 16:38:01 +0100 channeltunedlg: prevent setting left(off) position higher then the right(on) position\n" \
 "13082 2017-11-24 15:15:54 +0100 switch control: wait until its in position before frre up the routes\n" \
-"13081 2017-11-23 17:30:21 +0100 rocnetnode: comment in ansi style...\n" \
-"13080 2017-11-23 17:28:23 +0100 rocnetnode: get hostaddress by socket\n" \
-"13079 2017-11-23 17:09:46 +0100 rocnetnodedlg: fix for getting update info\n" \
 
 "log end";
