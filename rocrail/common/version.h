@@ -1,11 +1,16 @@
 const int revisionnr = 
-15073
+15078
 ;
 const char* commithash = 
-"e068f720a4e752d2f23362eedcb8511db5b061f4";
+"b6c52e185c069873e3d1930e0ca629a130d5f8e5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15078 2019-02-20 16:46:21 +0100 carpanel: open throttle on dclick\n" \
+"15077 2019-02-20 16:05:17 +0100 item: changed conflicting rgb attributes to bgrgb\n" \
+"15076 2019-02-20 15:54:54 +0100 item: show correct background color\n" \
+"15075 2019-02-20 15:05:59 +0100 item: translation background color\n" \
+"15074 2019-02-20 14:21:11 +0100 item: own background color option\n" \
 "15073 2019-02-20 11:59:51 +0100 mbus: SoD automatically for LinkS88 devices\n" \
 "15072 2019-02-19 18:26:27 +0100 guiframe: no red cell color in case the loco placing is reverse\n" \
 "15071 2019-02-19 18:09:33 +0100 mbus: removed throttle ID in case of loco events\n" \
@@ -2001,10 +2006,5 @@ const char* revlog =
 "13081 2017-11-23 17:30:21 +0100 rocnetnode: comment in ansi style...\n" \
 "13080 2017-11-23 17:28:23 +0100 rocnetnode: get hostaddress by socket\n" \
 "13079 2017-11-23 17:09:46 +0100 rocnetnodedlg: fix for getting update info\n" \
-"13078 2017-11-23 08:00:37 +0100 locoio: fix for resizing and save size&position\n" \
-"13077 2017-11-22 13:28:52 +0100 makefile: Rocweb desktop added to target install\n" \
-"13076 2017-11-22 11:34:48 +0100 rocnet: removed extra byte at switch commands\n" \
-"13075 2017-11-22 11:27:56 +0100 guiapp: fix for show routes\n" \
-"13074 2017-11-22 08:42:15 +0100 Rocweb desktop file added\n" \
 
 "log end";
