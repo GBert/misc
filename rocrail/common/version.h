@@ -1,11 +1,12 @@
 const int revisionnr = 
-15072
+15073
 ;
 const char* commithash = 
-"b00850d118cf4ef95fcca411c05110914e7112f7";
+"e068f720a4e752d2f23362eedcb8511db5b061f4";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15073 2019-02-20 11:59:51 +0100 mbus: SoD automatically for LinkS88 devices\n" \
 "15072 2019-02-19 18:26:27 +0100 guiframe: no red cell color in case the loco placing is reverse\n" \
 "15071 2019-02-19 18:09:33 +0100 mbus: removed throttle ID in case of loco events\n" \
 "15070 2019-02-19 17:31:26 +0100 mbus: correction for CS3 state values\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13076 2017-11-22 11:34:48 +0100 rocnet: removed extra byte at switch commands\n" \
 "13075 2017-11-22 11:27:56 +0100 guiapp: fix for show routes\n" \
 "13074 2017-11-22 08:42:15 +0100 Rocweb desktop file added\n" \
-"13073 2017-11-21 18:15:31 +0100 use wheelcount for free up previous block\n" \
 
 "log end";
