@@ -268,7 +268,7 @@ int get_locos(struct trigger_t *trigger, char *loco_file) {
     } else {
 	/* print_locos(fp); */
     }
-    close(fp);
+    fclose(fp);
     return ret;
 }
 

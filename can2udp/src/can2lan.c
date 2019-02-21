@@ -238,14 +238,6 @@ int check_data_udp(int udp_socket, struct sockaddr *baddr, struct cs2_config_dat
     return 0;
 }
 
-char *check_in_list(char *list, char *compare) {
-    while (!list) {
-	if (strstr(list, compare) == list)
-	    return list;
-    }
-    return NULL;
-}
-
 int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsigned char *netframe) {
     uint32_t canid;
     char config_name[9];
