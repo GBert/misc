@@ -1,11 +1,14 @@
 const int revisionnr = 
-15084
+15087
 ;
 const char* commithash = 
-"25919fbd95637d499370cfbd88a8978d6a4f722b";
+"5e19285cac0b5b9344f4981d566826b7313a8261";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15087 2019-02-21 12:27:13 +0100 SpDrS60: removed button background\n" \
+"15086 2019-02-21 11:47:21 +0100 mbusdlg: added SoD poll option for CDB and GC2a\n" \
+"15085 2019-02-21 11:08:44 +0100 mbus: multi booster support\n" \
 "15084 2019-02-21 09:14:09 +0100 item: do not show gototrack submenu in case no tracks are defined\n" \
 "15083 2019-02-21 07:54:56 +0100 renderer: seltab symbol SLIM compatible\n" \
 "15082 2019-02-21 07:30:25 +0100 loc,locdialog: set address to zero in case protocol is analog\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13090 2017-11-25 12:04:01 +0100 switch: automode option added for the controller\n" \
 "13089 2017-11-25 11:27:08 +0100 switch: control option invert added\n" \
 "13088 2017-11-25 10:01:14 +0100 rocnetnode: own default trace file name\n" \
-"13087 2017-11-25 09:59:28 +0100 rpic: faster refresh rate\n" \
-"13086 2017-11-25 09:43:52 +0100 rocnetnode: fix for unloading and removing the DCC generator\n" \
-"13085 2017-11-25 08:32:41 +0100 rocnetnode: fix for unloading and removing the DCC generator\n" \
 
 "log end";
