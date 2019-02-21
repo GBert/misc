@@ -16,6 +16,7 @@ RELEASE_OBJS=$(RELEASE_DIR)/main.o \
 	$(RELEASE_DIR)/lokstatus.o \
 	$(RELEASE_DIR)/gbsstat.o \
 	$(RELEASE_DIR)/fsstat.o \
+	$(RELEASE_DIR)/config.o \
 	$(RELEASE_DIR)/zfile.o \
 	$(RELEASE_DIR)/canmember.o \
 	$(RELEASE_DIR)/cs2cfg.o
@@ -32,11 +33,12 @@ DEBUG_OBJS=$(DEBUG_DIR)/main.o \
 	$(DEBUG_DIR)/lokstatus.o \
 	$(DEBUG_DIR)/gbsstat.o \
 	$(DEBUG_DIR)/fsstat.o \
+	$(DEBUG_DIR)/config.o \
 	$(DEBUG_DIR)/zfile.o \
 	$(DEBUG_DIR)/canmember.o \
 	$(DEBUG_DIR)/cs2cfg.o
-LOCALLIBS=-lmr_ipc -lmr_can -lcs2_parse -lfsm -lm -lbytestream -lmrconfig -linipars -lscanner -lmap -lmenge -lavl -ldliste -lz
-DEBUG_LOCALLIBS=-lmr_ipc -lmr_can -lcs2_parse -lfsm -lm -lbytestream -lmrconfig -linipars -lscanner -lmap -lmenge -lavl -ldliste -lz -llxdbg -lefence
+LOCALLIBS=-lmr_ipc -lmr_can -lcs2_parse -lfsm -lm -lbytestream -lmrconfig -linipars -luci -lscanner -lmap -lmenge -lavl -ldliste -lz
+DEBUG_LOCALLIBS=-lmr_ipc -lmr_can -lcs2_parse -lfsm -lm -lbytestream -lmrconfig -linipars -luci -lscanner -lmap -lmenge -lavl -ldliste -lz -llxdbg -lefence
 DESTDIR=/usr/local/bin
 
 $(RELEASE_DIR)/%.o: %.c
@@ -65,11 +67,11 @@ $(DEBUG_DIR)/main.o: main.c zentrale.h
 
 $(RELEASE_DIR)/zentrale.o: zentrale.c zentrale.h canmember.h cron.h lok.h lokstatus.h gleisbild.h gleisbildpage.h gbsstat.h magnetartikel.h magstat.h fahrstrasse.h fsstat.h zfile.h cs2cfg.h
 
-$(DEBUG_DIR)/zentrale.o: zentrale.c zentrale.h canmember.h cron.h lok.h lokstatus.h gleisbild.h gleisbildpage.h gbsstat.h magnetartikel.h magstat.h fahrstrasse.h fsstat.h zfile.h cs2cfg.h
+$(DEBUG_DIR)/zentrale.o: zentrale.c zentrale.h canmember.h cron.h lok.h lokstatus.h gleisbild.h gleisbildpage.h gbsstat.h magnetartikel.h magstat.h fahrstrasse.h fsstat.h zfile.h cs2cfg.h config.h
 
-$(RELEASE_DIR)/states.o: states.c zentrale.h cron.h lokstatus.h magstat.h gbsstat.h fsstat.h cs2cfg.h
+$(RELEASE_DIR)/states.o: states.c zentrale.h cron.h lokstatus.h magstat.h gbsstat.h fsstat.h cs2cfg.h fsmfkt_ms2master.h fsmfkt_proxy.h fsmtab_ms2master.h fsmtab_proxy.h
 
-$(DEBUG_DIR)/states.o: states.c zentrale.h cron.h lokstatus.h magstat.h gbsstat.h fsstat.h cs2cfg.h
+$(DEBUG_DIR)/states.o: states.c zentrale.h cron.h lokstatus.h magstat.h gbsstat.h fsstat.h config.h cs2cfg.h fsmfkt_ms2master.h fsmfkt_proxy.h fsmtab_ms2master.h fsmtab_proxy.h
 
 $(RELEASE_DIR)/cron.o: cron.c cron.h
 
@@ -110,6 +112,10 @@ $(DEBUG_DIR)/fahrstrasse.o: fahrstrasse.c fahrstrasse.h
 $(RELEASE_DIR)/fsstat.o: fsstat.c fsstat.h fahrstrasse.h
 
 $(DEBUG_DIR)/fsstat.o: fsstat.c fsstat.h fahrstrasse.h
+
+$(RELEASE_DIR)/config.o: config.c config.h
+
+$(DEBUG_DIR)/config.o: config.c config.h
 
 $(RELEASE_DIR)/canmember.o: canmember.c canmember.h
 

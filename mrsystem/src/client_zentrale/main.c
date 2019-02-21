@@ -11,12 +11,12 @@
 #endif
 #include "zentrale.h"
 
-#define SOFTWARE_VERSION "3.03"
+#define SOFTWARE_VERSION "4.01"
 
 static void usage(char *name)
 {
    printf("mrzentrale V%s\nUsage:\n", SOFTWARE_VERSION);
-   printf("%s ([-v] [-f] [-a <addr> | -i <iface>] -p <port> [-s <proto>] [-l path] [-z <zentrale>] [-g}) [-2 <syncmask>] [-8 <param>] | -?\n", name);
+   printf("%s ([-v] [-f] [-a <addr> | -i <iface>] -p <port> [-s <proto>] [-l path] [-z <zentrale>] [-g}) [-2 <syncmask>] [-8 <param>] [ -w ] | -?\n", name);
    puts("-a - network address of drehscheibe");
    puts("-i - interface to drehscheibe");
    puts("-p - port of drehscheibe");
@@ -29,6 +29,7 @@ static void usage(char *name)
    puts("-g - system start, start power on tracks");
    puts("-2 - bitmask for syn with master CS2 / MS2, 1=sync periodic, 2=keybd, 2=layout 3=mem 4=contr");
    puts("-8 - start s88 modules, params like wakeup-links-88 from G.B.");
+   puts("-w - write can member and config into web page");
    puts("-? - this help");
 }
 
@@ -47,7 +48,7 @@ int main(int argc, char *argv[])
       ValArgs = argv;
       ConfigInit(Config, MRSYSTEM_CONFIG_FILE);
       ConfigReadfile(Config);
-      ConfigCmdLine(Config, "2:8:a:i:p:fgs:vl:z:?", NumArgs, ValArgs);
+      ConfigCmdLine(Config, "2:8:a:i:p:fgs:vwl:z:?", NumArgs, ValArgs);
       if (ConfigGetIntVal(Config, CfgUsageVal))
       {
          usage(argv[0]);
@@ -79,7 +80,8 @@ int main(int argc, char *argv[])
                             ConfigGetStrVal(Config, CfgStartVal),
                             ConfigGetIntVal(Config, CfgSyncVal),
                             ConfigGetStrVal(Config, CfgWakeUpS88),
-                            ConfigGetIntVal(Config, CfgNumLokfkts));
+                            ConfigGetIntVal(Config, CfgNumLokfkts),
+                            ConfigGetIntVal(Config, CfgWriteWebVal));
                ZentraleRun(Zentrale);
                ZentraleDestroy(Zentrale);
                Ret = 0;
@@ -123,7 +125,8 @@ int main(int argc, char *argv[])
                          ConfigGetStrVal(Config, CfgStartVal),
                          ConfigGetIntVal(Config, CfgSyncVal),
                          ConfigGetStrVal(Config, CfgWakeUpS88),
-                         ConfigGetIntVal(Config, CfgNumLokfkts));
+                         ConfigGetIntVal(Config, CfgNumLokfkts),
+                         ConfigGetIntVal(Config, CfgWriteWebVal));
             ZentraleRun(Zentrale);
             ZentraleDestroy(Zentrale);
             Ret = 0;

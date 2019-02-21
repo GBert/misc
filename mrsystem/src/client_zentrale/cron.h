@@ -49,6 +49,7 @@ void CronExit(CronStruct *Data);
 void CronAdd(CronStruct *Data, char *Name, unsigned int Intervall,
              CronFktType CronFkt, void *PrivData);
 void CronEnable(CronStruct *Data, char *Name);
+void CronResume(CronStruct *Data, char *Name);
 void CronDisable(CronStruct *Data, char *Name);
 int CronDo(CronStruct *Data);
 

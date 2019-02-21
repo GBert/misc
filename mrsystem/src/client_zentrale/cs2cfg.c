@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 #include <cs2parse.h>
 #include "zentrale.h"
 #include "cs2cfg.h"
@@ -69,6 +68,33 @@ BOOL Cs2CfgDataStart(Cs2CfgData *Data, unsigned int CanHash,
    return(Entry != (Cs2CfgEntry *)NULL);
 }
 
+void Cs2CfgDataSetLen(Cs2CfgData *Data, unsigned int CanHash,
+                      unsigned long Length)
+{  Cs2CfgEntry *Entry;
+
+   Entry = (Cs2CfgEntry *)MapGet(Cs2CfgDataGetCfgDatas(Data),
+                                 (MapKeyType)CanHash);
+   if (Entry != (Cs2CfgEntry *)NULL)
+   {
+      Cs2CfgEntrySetCfgLength(Entry, Length);
+   }
+}
+
+BOOL Cs2CfgDataAllRead(Cs2CfgData *Data, unsigned int CanHash)
+{  Cs2CfgEntry *Entry;
+
+   Entry = (Cs2CfgEntry *)MapGet(Cs2CfgDataGetCfgDatas(Data),
+                                 (MapKeyType)CanHash);
+   if (Entry != (Cs2CfgEntry *)NULL)
+   {
+      return(Cs2CfgEntryGetCfgHaveRead(Entry) >= Cs2CfgEntryGetCfgLength(Entry));
+   }
+   else
+   {
+      return(FALSE);
+   }
+}
+
 BOOL Cs2CfgDataNextBuf(Cs2CfgData *Data, unsigned int CanHash, char *Buf)
 {  Cs2CfgEntry *Entry;
 
@@ -129,6 +155,21 @@ char *Cs2CfgDataGetBuf(Cs2CfgData *Data, unsigned int CanHash)
    else
    {
       return((char *)NULL);
+   }
+}
+
+unsigned long Cs2CfgDataGetLen(Cs2CfgData *Data, unsigned int CanHash)
+{  Cs2CfgEntry *Entry;
+
+   Entry = (Cs2CfgEntry *)MapGet(Cs2CfgDataGetCfgDatas(Data),
+                                 (MapKeyType)CanHash);
+   if (Entry != (Cs2CfgEntry *)NULL)
+   {
+      return(Cs2CfgEntryGetCfgHaveRead(Entry));
+   }
+   else
+   {
+      return(0);
    }
 }
 

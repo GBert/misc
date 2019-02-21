@@ -225,7 +225,7 @@ static void LoadGleisPage(void *PrivData, MapKeyType Key, MapDataType Daten)
 void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, int MasterMode,
                   char *Interface, char *Addr, int Port, char *LocPath,
                   int Protokolle, char *SystemStart, int SyncMask,
-                  char *WakeUpS88, int NumLokFkts)
+                  char *WakeUpS88, int NumLokFkts, BOOL WriteWeb)
 {  Cs2parser *GeraetVrsParser;
    int LineInfo, handle;
    char *FileBuffer, *GeraetVrsFile;
@@ -244,11 +244,14 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, int MasterMode,
    ZentraleInitFsm(Data, ZentraleGetMasterMode(Data));
    ZentraleSetLocPath(Data, LocPath);
    ZentraleSetProtokolle(Data, Protokolle);
+   ZentraleSetWriteWeb(Data, WriteWeb);
    ZentraleSetIsInPoll(Data, FALSE);
    ZentraleSetSystemStart(Data,
                           (strcmp(MRSYSTEM_CFG_SYSTEM_START, SystemStart) == 0));
    ZentraleSetSyncMask(Data, SyncMask);
    ZentraleSetShouldWakeUpS88(Data, (strcmp(WakeUpS88,DISABLE_WAKEUP_S88)!=0));
+   ZentraleSetActualMesswert(Data, (ConfigMesswertTyp *)NULL);
+   ZentraleSetActualKonfig(Data, (ConfigTyp *)NULL);
    ZentraleSetWakeUpS88(Data, WakeUpS88);
    if (ZentraleGetShouldWakeUpS88(Data))
    {  char *token, *TmpPtr;
@@ -396,6 +399,13 @@ void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, int MasterMode,
                               if (ZentraleGetVerbose(Data))
                                  puts("minor version");
                               ZentraleSetMinorVersion(Data,
+                                                      strtoul(Cs2pGetValue(GeraetVrsParser),
+                                                              NULL, 0));
+                              break;
+                           case PARSER_VALUE_MAJOR:
+                              if (ZentraleGetVerbose(Data))
+                                 puts("major version");
+                              ZentraleSetMajorVersion(Data,
                                                       strtoul(Cs2pGetValue(GeraetVrsParser),
                                                               NULL, 0));
                               break;
@@ -685,6 +695,6 @@ void ZentraleRun(ZentraleStruct *Data)
    }
    else
    {
-      puts("ERROR: can not start Ms2 module");
+      puts("ERROR: can not start zentrrale module");
    }
 }

@@ -1,0 +1,88 @@
+<HTML>
+<HEAD>
+<LINK HREF="mrsystem.css" REL="stylesheet">
+<TITLE>Konfiguration</TITLE>
+</HEAD>
+<BODY>
+<DIV CLASS="odiv">
+<H1>Konfiguration</H1>
+<TABLE class="mtab1">
+   <colgroup span="2" width="50%"></colgroup>
+   <TR>
+      <TD><IMG class="fit" SRC="ICE-Train.png" ALT="ICE"></TD>
+      <TD>
+         <DIV>
+            <TABLE class="mtab2">
+               <TR>
+                  <TD>
+                     <FORM NAME='sel' ACTION='./uci.php' METHOD='post'>
+                        <INPUT TYPE='hidden' NAME='uci' VALUE='sysconf/sysconf.uci'>
+                        <INPUT TYPE='hidden' NAME='back' VALUE='./index.htm'>
+                        <INPUT CLASS='cmenu cnorm' TYPE='submit' VALUE='mrsystem Konfiguration'>
+                     </FORM>
+                  </TD>
+               </TR>
+               <TR>
+                  <TD>
+                     <FORM NAME='sel' ACTION='canmember.htm' METHOD='post'>
+                        <INPUT CLASS='cmenu cnorm' TYPE='submit' VALUE='CAN Ger&auml;te/Messwerte/Konfig'>
+                     </FORM>
+                  </TD>
+               </TR>
+               <TR>
+                  <TD>
+                     <FORM NAME='sel' ACTION="system.php" METHOD='post'>
+                        <INPUT CLASS='cmenu cnorm' TYPE='submit' VALUE='System Konfiguration'>
+                     </FORM>
+                  </TD>
+               </TR>
+               <!-- TR><TD>
+                  <FORM NAME='sel' ACTION='./uci.php' METHOD='post'>
+                     <INPUT TYPE='hidden' NAME='uci' VALUE='decoder/CV_x.uci'>
+                     <INPUT TYPE='hidden' NAME='back' VALUE='./index.htm'>
+                     <INPUT CLASS='cmenu cnorm' TYPE='submit' VALUE='Dekoderprogrammierung'>
+                  </FORM>
+               </TD></TR -->
+               <TR>
+                  <TD>
+                     <FORM NAME='sel' ACTION='update.htm' METHOD='post'>
+                        <INPUT CLASS='cmenu cnorm' TYPE='submit' VALUE='Update'>
+                     </FORM>
+                  </TD>
+               </TR>
+               <TR>
+                  <TD>
+                     <FORM NAME='sel' ACTION='reboot_mr.php' METHOD='post'>
+                        <INPUT CLASS='cmenu cnorm' TYPE='submit' VALUE='Restart MRSystem'>
+                     </FORM>
+                  </TD>
+               </TR>
+               <TR>
+                  <TD>
+                     <FORM NAME='sel' ACTION='reboot.php' METHOD='post'>
+                        <INPUT CLASS='cmenu cnorm' TYPE='submit' VALUE='Reboot System'>
+                     </FORM>
+                  </TD>
+               </TR>
+               <TR>
+                  <TD>
+                     <FORM NAME='sel' ACTION='halt.php' METHOD='post'>
+                        <INPUT CLASS='cmenu cnorm' TYPE='submit' VALUE='Halt System'>
+                     </FORM>
+                  </TD>
+               </TR>
+               <TR>
+                  <TD>
+                     <FORM NAME='sel' ACTION='index.htm'>
+                        <INPUT CLASS='cmenu cback' TYPE='submit' VALUE='zur&uuml;ck zum Hauptmen&uuml;'>
+                     </FORM>
+                  </TD>
+               </TR>
+            </TABLE>
+         </DIV>
+      </TD>
+   </TR>
+</TABLE>
+</DIV>
+</BODY>
+</HTML>

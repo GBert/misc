@@ -38,10 +38,14 @@ void Cs2CfgDataInit(Cs2CfgData *Data, BOOL Verbose);
 void Cs2CfgDataExit(Cs2CfgData *Data);
 BOOL Cs2CfgDataStart(Cs2CfgData *Data, unsigned int CanHash,
                      unsigned long Length, BOOL IsZlibCompressed);
+void Cs2CfgDataSetLen(Cs2CfgData *Data, unsigned int CanHash,
+                      unsigned long Length);
+BOOL Cs2CfgDataAllRead(Cs2CfgData *Data, unsigned int CanHash);
 BOOL Cs2CfgDataNextBuf(Cs2CfgData *Data, unsigned int CanHash, char *Buf);
 unsigned long Cs2CfgDataGetLength(Cs2CfgData *Data, unsigned int CanHash);
 unsigned long Cs2CfgDataGetHaveRead(Cs2CfgData *Data, unsigned int CanHash);
 char *Cs2CfgDataGetBuf(Cs2CfgData *Data, unsigned int CanHash);
+unsigned long Cs2CfgDataGetLen(Cs2CfgData *Data, unsigned int CanHash);
 BOOL Cs2CfgDataGetIsCompressed(Cs2CfgData *Data, unsigned int CanHash);
 void Cs2CfgDataEnd(Cs2CfgData *Data, unsigned int CanHash);
 

@@ -157,6 +157,8 @@ void MagStatusSaveMagStatusSr2(MagnetartikelStruct *Data)
          MagStatusSr2Stream = Cs2OpenByName(MagStatusFile);
          if (MagStatusSr2Stream != NULL)
          {
+            fchmod(fileno(MagStatusSr2Stream),
+                   S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
             Cs2WriteParagraphByType(MagStatusSr2Stream,
                                     CS2_PARAGRAPH_TYPE_MAGNETARTIKEL);
             Cs2WriteTitleByName(MagStatusSr2Stream, "version", 0);

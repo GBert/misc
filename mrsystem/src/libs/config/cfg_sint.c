@@ -47,6 +47,9 @@ void ConfigAddIntVal(ConfigStruct *Data, CfgIntValues ValueTyp, int Value)
       case CfgNumLokfkts:
          p = INI_STR_NUM_LOKFKT;
          break;
+      case CfgWriteWebVal:
+         p = INI_STR_WRITE_WEB;
+         break;
    }
    ValuePtr = (IniValue *)MapGet(ConfigGetConfig(Data), (MapKeyType)p);
    if (ValuePtr == (IniValue *)NULL)

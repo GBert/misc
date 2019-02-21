@@ -42,7 +42,7 @@ void GleisbildClear(GleisbildStruct *Data);
 void GleisbildInsert(GleisbildStruct *Data, GleisbildInfo *Gleisbild);
 void GleisbildDelete(GleisbildStruct *Data, GleisbildInfo *Gleisbild);
 GleisbildInfo *GleisbildSearch(GleisbildStruct *Data, int Id);
-void GleisbildParseGleisbildCs2(GleisbildStruct *Data, char *Buf, int Len);
+BOOL GleisbildParseGleisbildCs2(GleisbildStruct *Data, char *Buf, int Len);
 void GleisbildLoadGleisbildCs2(GleisbildStruct *Data);
 void GleisbildSaveGleisbildCs2(GleisbildStruct *Data);
 

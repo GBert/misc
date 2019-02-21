@@ -113,6 +113,7 @@ ScanKeyword GeraetVrsKeywords[] = {
    { PARSER_PARAGRAPH_STRING_GERAET, PARSER_TOKEN_KEYWORD_GERAET },
    { PARSER_VALUE_STRING_VERSION,    PARSER_TOKEN_KEYWORD_VERSION },
    { PARSER_VALUE_STRING_MINOR,      PARSER_TOKEN_KEYWORD_MINOR },
+   { PARSER_VALUE_STRING_MAJOR,      PARSER_TOKEN_KEYWORD_MAJOR },
    { PARSER_VALUE_STRING_SERNUM,     PARSER_TOKEN_KEYWORD_SERNUM },
    { PARSER_VALUE_STRING_GFPUID,     PARSER_TOKEN_KEYWORD_GFPUID },
    { PARSER_VALUE_STRING_GUIUID,     PARSER_TOKEN_KEYWORD_GUIUID },
@@ -253,7 +254,7 @@ void Cs2pInit(Cs2parser *Data, int Type, char *InputLine, int Len)
    else if (Type == PARSER_TYPE_GERAET_VRS)
    {
       ScanInit(Cs2pGetScanner(Data), (char *)NULL, InputLine, Len,
-               7, GeraetVrsKeywords);
+               8, GeraetVrsKeywords);
    }
    else if (Type == PARSER_TYPE_LOK_CS2)
    {

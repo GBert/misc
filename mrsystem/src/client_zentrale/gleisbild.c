@@ -104,7 +104,7 @@ GleisbildInfo *GleisbildSearch(GleisbildStruct *Data, int Id)
                                   (MapKeyType)Id));
 }
 
-void GleisbildParseGleisbildCs2(GleisbildStruct *Data, char *Buf, int Len)
+BOOL GleisbildParseGleisbildCs2(GleisbildStruct *Data, char *Buf, int Len)
 {  Cs2parser *GleisbildParser;
    int NumPages, LineInfo;
    GleisbildInfo NewGleisbild;
@@ -166,10 +166,11 @@ void GleisbildParseGleisbildCs2(GleisbildStruct *Data, char *Buf, int Len)
             }
             break;
       }
-   } while (LineInfo != PARSER_EOF);
+   } while ((LineInfo != PARSER_EOF) && (LineInfo != PARSER_ERROR));
    GleisbildSetNumPages(Data, NumPages);
    Cs2pExit(GleisbildParser);
    Cs2pDestroy(GleisbildParser);
+   return(LineInfo == PARSER_EOF);
 }
 
 void GleisbildLoadGleisbildCs2(GleisbildStruct *Data)
@@ -197,8 +198,11 @@ void GleisbildLoadGleisbildCs2(GleisbildStruct *Data)
                {
                   fread(GleisbildFileContent, 1, attribut.st_size,
                         GleisbildCs2Stream);
-                  GleisbildParseGleisbildCs2(Data, GleisbildFileContent,
-                                             attribut.st_size);
+                  if (!GleisbildParseGleisbildCs2(Data, GleisbildFileContent,
+                                                  attribut.st_size))
+                  {
+                     GleisbildClear(Data);
+                  }
                   Cs2Close(GleisbildCs2Stream);
                }
                free(GleisbildFileContent);
@@ -244,6 +248,8 @@ void GleisbildSaveGleisbildCs2(GleisbildStruct *Data)
          GleisbildCs2Stream = Cs2OpenByName(GleisbildFile);
          if (GleisbildCs2Stream != NULL)
          {
+            fchmod(fileno(GleisbildCs2Stream),
+                   S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
             Cs2WriteParagraphByType(GleisbildCs2Stream,
                                     CS2_PARAGRAPH_TYPE_GLEISBILD);
             Cs2WriteTitleByName(GleisbildCs2Stream, "version", 0);

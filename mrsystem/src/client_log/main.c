@@ -8,7 +8,7 @@
 #include <config.h>
 #include "log.h"
 
-#define SOFTWARE_VERSION "1.03"
+#define SOFTWARE_VERSION "1.04"
 
 static void usage(char *name)
 {

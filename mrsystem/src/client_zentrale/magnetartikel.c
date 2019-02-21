@@ -115,7 +115,7 @@ MagnetartikelInfo *MagnetartikelSearch(MagnetartikelStruct *Data, int Id)
                                       (MapKeyType)Id));
 }
 
-void MagnetartikelParseMagnetartikelCs2(MagnetartikelStruct *Data, char *Buf, int Len)
+BOOL MagnetartikelParseMagnetartikelCs2(MagnetartikelStruct *Data, char *Buf, int Len)
 {  Cs2parser *MagnetartikelParser;
    int NumArtikel, LineInfo;
    MagnetartikelInfo NewMagnetartikel;
@@ -205,9 +205,10 @@ void MagnetartikelParseMagnetartikelCs2(MagnetartikelStruct *Data, char *Buf, in
             }
             break;
       }
-   } while (LineInfo != PARSER_EOF);
+   } while ((LineInfo != PARSER_EOF) && (LineInfo != PARSER_ERROR));
    Cs2pExit(MagnetartikelParser);
    Cs2pDestroy(MagnetartikelParser);
+   return(LineInfo == PARSER_EOF);
 }
 
 void MagnetartikelLoadMagnetartikelCs2(MagnetartikelStruct *Data)
@@ -236,9 +237,12 @@ void MagnetartikelLoadMagnetartikelCs2(MagnetartikelStruct *Data)
                {
                   fread(MagnetartikelFileContent, 1, attribut.st_size,
                         MagnetartikelCs2Stream);
-                  MagnetartikelParseMagnetartikelCs2(Data,
-                                                     MagnetartikelFileContent,
-                                                     attribut.st_size);
+                  if (!MagnetartikelParseMagnetartikelCs2(Data,
+                                                          MagnetartikelFileContent,
+                                                          attribut.st_size))
+                  {
+                     MagnetartikelClear(Data);
+                  }
                   Cs2Close(MagnetartikelCs2Stream);
                }
                free(MagnetartikelFileContent);
@@ -295,6 +299,8 @@ void MagnetartikelSaveMagnetartikelCs2(MagnetartikelStruct *Data)
          MagnetartikelCs2Stream = Cs2OpenByName(MagnetartikelFile);
          if (MagnetartikelCs2Stream != NULL)
          {
+            fchmod(fileno(MagnetartikelCs2Stream),
+                   S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
             Cs2WriteParagraphByType(MagnetartikelCs2Stream,
                                     CS2_PARAGRAPH_TYPE_MAGNETARTIKEL);
             Cs2WriteTitleByName(MagnetartikelCs2Stream, "version", 0);

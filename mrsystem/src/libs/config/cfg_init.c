@@ -129,10 +129,16 @@ static void InitConfigValues(ConfigStruct *Data)
    ValuePtr->StringValue[0] = '\0';
    MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_NUM_LOKFKT),
           (MapDataType)ValuePtr);
+   ValuePtr = malloc(sizeof(IniValue));
+   ValuePtr->DataType = IniParsInt;
+   ValuePtr->IntValue = 0;
+   ValuePtr->StringValue[0] = '\0';
+   MapSet(ConfigGetConfig(Data), (MapKeyType)strdup(INI_STR_WRITE_WEB),
+          (MapDataType)ValuePtr);
 }
 
 void ConfigInit(ConfigStruct *Data, char *IniFile)
-{  IniParsKeyword IniKeywords[18];
+{  IniParsKeyword IniKeywords[19];
 
    MapInit(ConfigGetConfig(Data), (CmpFkt)strcmp, (MapKeyDelCbFkt)free,
            (MapDataDelCbFkt)free);
@@ -190,6 +196,9 @@ void ConfigInit(ConfigStruct *Data, char *IniFile)
    strcpy(IniKeywords[17].Keyword, INI_STR_NUM_LOKFKT);
    IniKeywords[17].Symbol = INI_TOK_NUM_LOKFKT;
    IniKeywords[17].DataType = IniParsInt;
-   IniParsInit(ConfigGetParser(Data), IniFile, 18, IniKeywords);
+   strcpy(IniKeywords[18].Keyword, INI_STR_WRITE_WEB);
+   IniKeywords[18].Symbol = INI_TOK_WRITE_WEB;
+   IniKeywords[18].DataType = IniParsInt;
+   IniParsInit(ConfigGetParser(Data), IniFile, 19, IniKeywords);
    InitConfigValues(Data);
 }

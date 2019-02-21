@@ -61,7 +61,7 @@ void GleisbildPageInsert(GleisbildPageStruct *Data,
 void GleisbildPageDelete(GleisbildPageStruct *Data,
                          GleisbildBildElement *PageItem);
 GleisbildBildElement *GleisbildPageSearch(GleisbildPageStruct *Data, int Id);
-void GleisbildPageParseGleisbildPageCs2(GleisbildPageStruct *Data,
+BOOL GleisbildPageParseGleisbildPageCs2(GleisbildPageStruct *Data,
                                         char *Buf, int Len);
 void GleisbildPageLoadGleisbildPageCs2(GleisbildPageStruct *Data);
 void GleisbildPageSaveGleisbildPageCs2(GleisbildPageStruct *Data);

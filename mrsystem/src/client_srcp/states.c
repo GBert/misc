@@ -8,7 +8,7 @@
 #define STATE_COMMAND_MODE     1
 #define STATE_INFORMATION_MODE 2
 
-#define NUM_SIGNALS 12
+#define NUM_SIGNALS 11
 #define SIGNAL_INVALID -1
 #define SIGNAL_SET     0
 #define SIGNAL_GET     1
@@ -102,7 +102,7 @@ static int HandleSetHandshake(void *Priv, void *SignalData)
                                     {
                                        SrcpSendAnswer(SignalDataGetClient(Signal),
                                                       ANTWORT_HANDSHAKE_PROTO_OK);
-				    }
+                                    }
                                     else
                                     {
                                        SrcpSendAnswer(SignalDataGetClient(Signal),

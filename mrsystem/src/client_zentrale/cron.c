@@ -81,6 +81,16 @@ void CronEnable(CronStruct *Data, char *Name)
    }
 }
 
+void CronResume(CronStruct *Data, char *Name)
+{  CronEntryStruct *Entry;
+
+   Entry = (CronEntryStruct *)MapGet(CronGetCronFkts(Data), (MapKeyType)Name);
+   if (Entry != (CronEntryStruct *)NULL)
+   {
+      CronEntrySetIsActive(Entry, TRUE);
+   }
+}
+
 void CronDisable(CronStruct *Data, char *Name)
 {  CronEntryStruct *Entry;
 

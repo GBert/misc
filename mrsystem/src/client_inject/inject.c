@@ -57,14 +57,19 @@ static void OpenSocket(InjectStruct *Data)
    }
 }
 
-static void SendCmd(int socket, unsigned long CanId, int DLC, int *CanBytes)
+static void SendCmd(int socket, unsigned long Uid, unsigned Response,
+                    unsigned Command, unsigned Prio, int DLC, int *CanBytes)
 {  MrCs2CanDataType CanMsg;
    struct can_frame CanFrame;
    MrIpcCmdType Cmd;
+   unsigned int i;
 
-   CanFrame.can_id = CanId;
+   CanFrame.can_id = MrCs2EncodeId(MrCs2CalcHash(Uid), Response, Command, Prio);
    CanFrame.can_dlc = DLC;
-   memcpy(&(CanFrame.data), CanBytes, MR_CS2_NUM_CAN_BYTES);
+   for (i = 0; i < MR_CS2_NUM_CAN_BYTES; i++)
+   {
+      CanFrame.data[i] = CanBytes[i];
+   }
    MrCs2Decode(&CanMsg, &CanFrame);
    MrIpcInit(&Cmd);
    MrIpcEncodeFromCan(&Cmd, &CanMsg);
@@ -72,13 +77,13 @@ static void SendCmd(int socket, unsigned long CanId, int DLC, int *CanBytes)
    MrIpcSend(socket, &Cmd);
 }
 
-void InjectRunCmd(InjectStruct *Data, unsigned long CanId, int DLC,
-                  int *CanBytes)
+void InjectRunCmd(InjectStruct *Data, unsigned long Uid, unsigned Response,
+                    unsigned Command, unsigned Prio, int DLC, int *CanBytes)
 {
    OpenSocket(Data);
    if (InjectGetClientSock(Data) >= 0)
    {
-      SendCmd(InjectGetClientSock(Data), CanId, DLC, CanBytes);
+      SendCmd(InjectGetClientSock(Data), Uid, Response, Command, Prio, DLC, CanBytes);
       MrIpcClose(InjectGetClientSock(Data));
    }
 }
@@ -86,8 +91,8 @@ void InjectRunCmd(InjectStruct *Data, unsigned long CanId, int DLC,
 void InjectRunFile(InjectStruct *Data, char *Filename)
 {  FILE *CmdStream;
    char Line[80], *Param;
-   int DLC, CanBytes[8], i;
-   unsigned long CanId;
+   int Response, Command, Prio, DLC, CanBytes[8], i;
+   unsigned long Uid;
 
    CmdStream = fopen(Filename, "r");
    if (CmdStream != (FILE *)NULL)
@@ -98,7 +103,13 @@ void InjectRunFile(InjectStruct *Data, char *Filename)
          while (fgets(Line, sizeof(Line), CmdStream) != (char *)NULL)
          {
             Param = strtok(Line, " ");
-            CanId = strtol(Param, (char **)NULL, 0);
+            Uid = strtol(Param, (char **)NULL, 0);
+            Param = strtok(Line, " ");
+            Response = strtol(Param, (char **)NULL, 0);
+            Param = strtok(Line, " ");
+            Command = strtol(Param, (char **)NULL, 0);
+            Param = strtok(Line, " ");
+            Prio = strtol(Param, (char **)NULL, 0);
             Param = strtok((char *)NULL, " ");
             DLC = strtol(Param, (char **)NULL, 0);
             for (i = 0; i < 8; i++)
@@ -106,34 +117,10 @@ void InjectRunFile(InjectStruct *Data, char *Filename)
                Param = strtok((char *)NULL, " ");
                CanBytes[i] = strtol(Param, (char **)NULL, 0);
             }
-            SendCmd(InjectGetClientSock(Data), CanId, DLC, CanBytes);
+            SendCmd(InjectGetClientSock(Data), Uid, Response, Command, Prio, DLC, CanBytes);
          }
          MrIpcClose(InjectGetClientSock(Data));
       }
       fclose(CmdStream);
-   }
-}
-
-void InjectRun(InjectStruct *Data)
-{  MrIpcCmdType CmdFrame;
-
-   OpenSocket(Data);
-   if (InjectGetClientSock(Data) >= 0)
-   {
-      if (InjectGetVerbose(Data))
-         puts("ready to send commands");
-      MrIpcInit(&CmdFrame);
-      MrIpcCalcHash(&CmdFrame, 0l);
-      MrIpcCmdSetLocomotiveDir(&CmdFrame, 1, Forward);
-      MrIpcSend(InjectGetClientSock(Data), &CmdFrame);
-      MrIpcExit(&CmdFrame);
-      MrIpcInit(&CmdFrame);
-      MrIpcCalcHash(&CmdFrame, 0l);
-      MrIpcCmdSetLocomotiveSpeed(&CmdFrame, 1, 25);
-      MrIpcSend(InjectGetClientSock(Data), &CmdFrame);
-      MrIpcExit(&CmdFrame);
-      if (InjectGetVerbose(Data))
-         puts("stop network client");
-      MrIpcClose(InjectGetClientSock(Data));
    }
 }

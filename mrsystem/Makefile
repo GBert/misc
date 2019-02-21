@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mrsystem
-PKG_VERSION:=2.5
+PKG_VERSION:=2.6
 
 PKG_SOURCE_MIRROR:=0 
 PKG_SOURCE_VERSION:=$(PKG_REV)

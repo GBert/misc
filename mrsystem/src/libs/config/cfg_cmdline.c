@@ -60,6 +60,9 @@ int ConfigCmdLine(ConfigStruct *Data, char *optstr, int argc, char *argv[])
          case 'v':
             ConfigAddIntVal(Data, CfgVerboseVal, TRUE);
             break;
+         case 'w':
+            ConfigAddIntVal(Data, CfgWriteWebVal, TRUE);
+            break;
          case 'z':
             ConfigAddIntVal(Data, CfgZentraleVal, atoi(optarg));
             break;

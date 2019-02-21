@@ -397,7 +397,7 @@ static void ProcessSystemData(Ms2Struct *Data, MrIpcCmdType *CmdFrame)
                   }
                   else
                   {
-                     QueueAdd(Ms2GetCmdBuffers(Data), (QueueDataType)BufCanMsg);
+                     QueueAdd(Ms2GetGbCommands(Data), (QueueDataType)BufCanMsg);
                   }
                }
             }

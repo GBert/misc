@@ -25,7 +25,8 @@
 
 typedef enum { CfgPortVal, CfgBcVal, CfgForkVal, CfgTraceVal, CfgVerboseVal,
                CfgUsageVal, CfgZentraleVal, CfgProtokollVal, CfgSyncVal,
-               CfgConnTcpVal, CfgEmuHostCom,  CfgNumLokfkts } CfgIntValues;
+               CfgConnTcpVal, CfgEmuHostCom,  CfgNumLokfkts,
+               CfgWriteWebVal } CfgIntValues;
 typedef enum { CfgIfaceVal, CfgAddrVal, CfgCanIfVal, CfgPathVal,
                CfgUdpBcVal, CfgStartVal, CfgWakeUpS88, CfgGpioS88,
                CfgHideMs2Val, CfgSerialLineVal } CfgStrValues;

@@ -186,7 +186,7 @@ FahrstrasseItem *FahrstrasseSearchItem(FahrstrasseInfo *Data, int Nr)
                                     (MapKeyType)Nr));
 }
 
-void FahrstrasseParseFahrstrasseCs2(FahrstrasseStruct *Data, char *Buf, int Len)
+BOOL FahrstrasseParseFahrstrasseCs2(FahrstrasseStruct *Data, char *Buf, int Len)
 {  Cs2parser *FahrstrasseParser;
    int NumFahrstrassen, NumItem, LineInfo;
    FahrstrasseInfo NewFahrstrasse;
@@ -353,10 +353,11 @@ void FahrstrasseParseFahrstrasseCs2(FahrstrasseStruct *Data, char *Buf, int Len)
             }
             break;
       }
-   } while (LineInfo != PARSER_EOF);
+   } while ((LineInfo != PARSER_EOF) && (LineInfo != PARSER_ERROR));
    FahrstrasseSetNumPages(Data, NumFahrstrassen);
    Cs2pExit(FahrstrasseParser);
    Cs2pDestroy(FahrstrasseParser);
+   return(LineInfo == PARSER_EOF);
 }
 
 void FahrstrasseLoadFahrstrasseCs2(FahrstrasseStruct *Data)
@@ -384,8 +385,11 @@ void FahrstrasseLoadFahrstrasseCs2(FahrstrasseStruct *Data)
                {
                   fread(FahrstrasseFileContent, 1, attribut.st_size,
                         FahrstrasseCs2Stream);
-                  FahrstrasseParseFahrstrasseCs2(Data, FahrstrasseFileContent,
-                                                 attribut.st_size);
+                  if (!FahrstrasseParseFahrstrasseCs2(Data, FahrstrasseFileContent,
+                                                      attribut.st_size))
+                  {
+                     FahrstrasseClear(Data);
+                  }
                   Cs2Close(FahrstrasseCs2Stream);
                }
                free(FahrstrasseFileContent);
@@ -470,6 +474,8 @@ void FahrstrasseSaveFahrstrasseCs2(FahrstrasseStruct *Data)
          FahrstrasseCs2Stream = Cs2OpenByName(FahrstrasseFile);
          if (FahrstrasseCs2Stream != NULL)
          {
+            fchmod(fileno(FahrstrasseCs2Stream),
+                   S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
             Cs2WriteParagraphByType(FahrstrasseCs2Stream,
                                     CS2_PARAGRAPH_TYPE_FAHRSTRASSEN);
             Cs2WriteTitleByName(FahrstrasseCs2Stream, "version", 0);

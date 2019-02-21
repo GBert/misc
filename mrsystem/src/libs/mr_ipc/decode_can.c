@@ -83,10 +83,6 @@ void MrIpcDecodeToCan(MrIpcCmdType *Data, MrCs2CanDataType *CanMsg)
             MrIpcCmdGetCfgData(Data, Buf);
             MrCs2EncCfgdatStream8(CanMsg, Buf);
             break;
-         case MrIpcCmdSystemStatusVal:
-            MrIpcCmdGetSystemStatusVal(Data, &Addr, &p1, &p2);
-            MrCs2EncSysStatus8(CanMsg, Addr, p1, p2);
-            break;
          case MrIpcCmdCanBootldrGeb:
             MrIpcCmdGetCanBootldr(Data, &p1, Buf);
             MrCs2SetDlc(CanMsg, p1);
@@ -103,6 +99,26 @@ void MrIpcDecodeToCan(MrIpcCmdType *Data, MrCs2CanDataType *CanMsg)
          case MrIpcCmdStatusData:
             MrIpcCmdGetStatusData(Data, (unsigned char*)Buf);
             MrCs2EncStatus8(CanMsg, Buf);
+            break;
+         case MrIpcCmdStatusResponse:
+            MrIpcCmdGetStatusResponse(Data, &Addr, &p1);
+            MrCs2EncStatus5(CanMsg, Addr, p1);
+            break;
+         case MrIpcCmdRequestMesswert:
+            MrIpcCmdGetMesswertRequest(Data, &Addr, &p1);
+            MrCs2EncSysStatus6(CanMsg, Addr, p1);
+            break;
+         case MrIpcCmdSetConfig:
+            MrIpcCmdGetSetConfig(Data, &Addr, &p1, &p2);
+            MrCs2EncSysStatus8(CanMsg, Addr, p1, p2);
+            break;
+         case MrIpcCmdConfigResponse:
+            MrIpcCmdGetConfigResponse(Data, &Addr, &p1, &p2);
+            MrCs2EncSysStatus7(CanMsg, Addr, p1, p2);
+            break;
+         case MrIpcCmdMesswertResponse:
+            MrIpcCmdGetMesswertResponse(Data, &Addr, &p1, &p2);
+            MrCs2EncSysStatus8(CanMsg, Addr, p1, p2);
             break;
       }
    }

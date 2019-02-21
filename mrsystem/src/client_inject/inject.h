@@ -27,9 +27,8 @@ InjectStruct *InjectCreate(void);
 void InjectDestroy(InjectStruct *Data);
 void InjectInit(InjectStruct *Data, BOOL Verbose, char *Iface, char *Addr,
                 int Port);
-void InjectRunCmd(InjectStruct *Data, unsigned long CanId, int DLC,
-                  int *CanBytes);
+void InjectRunCmd(InjectStruct *Data, unsigned long Uid, unsigned Response,
+                    unsigned Command, unsigned Prio, int DLC, int *CanBytes);
 void InjectRunFile(InjectStruct *Data, char *Filename);
-void InjectRun(InjectStruct *Data);
 
 #endif

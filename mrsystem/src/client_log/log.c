@@ -219,11 +219,6 @@ static void ProcessSystemData(LogStruct *Data, MrIpcCmdType *CmdFrame)
             printf(" %02x", MrIpcGetRawDataI(CmdFrame, i));
          printf("\n");
          break;
-      case MrIpcCmdSystemStatusVal:
-         MrIpcCmdGetSystemStatusVal(CmdFrame, &Adr, &Param1, &Param2);
-         printf("   cmd system status addr %ld channel %d value %d\n",
-                Adr, Param1, Param2);
-         break;
       case MrIpcCmdCanBootldrGeb:
          MrIpcCmdGetCanBootldr(CmdFrame, &Param1, Name);
          printf("   cmd can bootloader gebunden DLC %d",
@@ -239,7 +234,7 @@ static void ProcessSystemData(LogStruct *Data, MrIpcCmdType *CmdFrame)
          break;
       case MrIpcCmdStatusSize:
          MrIpcCmdGetStatusPos(CmdFrame, &Adr, &Param1, &Param2);
-         printf("   cmd status request addr %ld index%d num packets %d\n",
+         printf("   cmd status request addr %ld index %d num packets %d\n",
                 Adr, Param1, Param2);
          break;
       case MrIpcCmdStatusData:
@@ -247,6 +242,30 @@ static void ProcessSystemData(LogStruct *Data, MrIpcCmdType *CmdFrame)
          for (i = 0; i < MR_CS2_NUM_CAN_BYTES; i++)
             printf(" %02x", MrIpcGetRawDataI(CmdFrame, i));
          printf("\n");
+         break;
+      case MrIpcCmdStatusResponse:
+         MrIpcCmdGetStatusResponse(CmdFrame, &Adr, &Param1);
+         printf("   cmd status response addr %ld index %d\n", Adr, Param1);
+         break;
+      case MrIpcCmdRequestMesswert:
+         MrIpcCmdGetMesswertRequest(CmdFrame, &Adr, &Param1);
+         printf("   cmd messwert request addr %ld channel %d\n",
+                Adr, Param1);
+         break;
+      case MrIpcCmdSetConfig:
+         MrIpcCmdGetSetConfig(CmdFrame, &Adr, &Param1, &Param2);
+         printf("   cmd system config addr %ld channel %d value %d\n",
+                Adr, Param1, Param2);
+         break;
+      case MrIpcCmdConfigResponse:
+         MrIpcCmdGetConfigResponse(CmdFrame, &Adr, &Param1, &Param2);
+         printf("   cmd system config response addr %ld channel %d response %d\n",
+                Adr, Param1, Param2);
+         break;
+      case MrIpcCmdMesswertResponse:
+         MrIpcCmdGetMesswertResponse(CmdFrame, &Adr, &Param1, &Param2);
+         printf("   cmd messwert response addr %ld channel %d value %d\n",
+                Adr, Param1, Param2);
          break;
       default:
          printf("   command %d, CAN cmd 0x%x, %d Bytes\n",

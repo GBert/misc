@@ -154,6 +154,8 @@ void FsStatSaveFsStatSr2(FahrstrasseStruct *Data)
          FsStatSr2Stream = Cs2OpenByName(FsStatFile);
          if (FsStatSr2Stream != NULL)
          {
+            fchmod(fileno(FsStatSr2Stream),
+                   S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
             Cs2WriteParagraphByType(FsStatSr2Stream,
                                     CS2_PARAGRAPH_TYPE_FAHRSTRASSEN);
             Cs2WriteTitleByName(FsStatSr2Stream, "version", 0);

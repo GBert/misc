@@ -75,17 +75,18 @@ void MrIpcEncodeFromCan(MrIpcCmdType *Data, MrCs2CanDataType *CanMsg)
                   {
                      case 6:
                         MrMs2DecSysStatus6(CanMsg, &Uid, &p1);
-                        MrIpcCmdSetNull(Data, MrCs2GetDlc(CanMsg),
-                                        MrCs2GetData(CanMsg));
+                        MrIpcCmdSetMesswertRequest(Data, Uid, p1);
                         break;
                      case 7:
                         MrMs2DecSysStatus7(CanMsg, &Uid, &p1, &p2);
-                        MrIpcCmdSetNull(Data, MrCs2GetDlc(CanMsg),
-                                        MrCs2GetData(CanMsg));
+                        MrIpcCmdSetConfigResponse(Data, Uid, p1, p2);
                         break;
                      case 8:
                         MrMs2DecSysStatus8(CanMsg, &Uid, &p1, &p2);
-                        MrIpcCmdSetSystemStatusVal(Data, Uid, p1, p2);
+                        if (MrCs2GetResponse(CanMsg))
+                           MrIpcCmdSetMesswertResponse(Data, Uid, p1, p2);
+                        else
+                           MrIpcCmdSetSetConfig(Data, Uid, p1, p2);
                         break;
                      default:
                         MrIpcCmdSetNull(Data, MrCs2GetDlc(CanMsg),
@@ -370,7 +371,10 @@ void MrIpcEncodeFromCan(MrIpcCmdType *Data, MrCs2CanDataType *CanMsg)
             {
                case 5:
                   MrCs2DecStatus5(CanMsg, &Uid, &p1);
-                  MrIpcCmdSetStatusRequest(Data, Uid, p1);
+                  if (MrCs2GetResponse(CanMsg))
+                     MrIpcCmdSetStatusResponse(Data, Uid, p1);
+                  else
+                     MrIpcCmdSetStatusRequest(Data, Uid, p1);
                   break;
                case 6:
                   MrCs2DecStatus6(CanMsg, &Uid, &p1, &p2);

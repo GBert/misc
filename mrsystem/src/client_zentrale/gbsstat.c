@@ -162,6 +162,8 @@ void GbsStatSaveGbsStatSr2(GleisbildStruct *Data)
          GbsStatSr2Stream = Cs2OpenByName(GbsStatFile);
          if (GbsStatSr2Stream != NULL)
          {
+            fchmod(fileno(GbsStatSr2Stream),
+                   S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
             Cs2WriteParagraphByType(GbsStatSr2Stream,
                                     CS2_PARAGRAPH_TYPE_GLEISBILD);
             Cs2WriteTitleByName(GbsStatSr2Stream, "version", 0);

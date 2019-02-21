@@ -57,7 +57,7 @@ void MagnetartikelInsert(MagnetartikelStruct *Data,
 void MagnetartikelDelete(MagnetartikelStruct *Data,
                          MagnetartikelInfo *Magnetartikel);
 MagnetartikelInfo *MagnetartikelSearch(MagnetartikelStruct *Data, int Id);
-void MagnetartikelParseMagnetartikelCs2(MagnetartikelStruct *Data, char *Buf, int Len);
+BOOL MagnetartikelParseMagnetartikelCs2(MagnetartikelStruct *Data, char *Buf, int Len);
 void MagnetartikelLoadMagnetartikelCs2(MagnetartikelStruct *Data);
 void MagnetartikelSaveMagnetartikelCs2(MagnetartikelStruct *Data);
 

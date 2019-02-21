@@ -5,7 +5,7 @@
 #include "write_cs2.h"
 
 
-#define PATH "/www/config/"
+#define PATH "/var/www/config/"
 
 
 static char *FileNames[] = {

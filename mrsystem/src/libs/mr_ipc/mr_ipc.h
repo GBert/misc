@@ -33,11 +33,15 @@ typedef enum {
    MrIpcCmdCfgHeader,           /* command with header of cfg data */
    MrIpcCmdCfgZHeader,          /* command with header of z-packed cfg data */
    MrIpcCmdCfgData,             /* command with data of cfg data */
-   MrIpcCmdSystemStatusVal,     /* command to set systam status cfg val */
    MrIpcCmdCanBootldrGeb,       /* command can bootloader gebunden */
    MrIpcCmdStatusRequest,       /* command request status */
    MrIpcCmdStatusSize,          /* command with number of packets in status */
-   MrIpcCmdStatusData           /* command with status data */
+   MrIpcCmdStatusData,          /* command with status data */
+   MrIpcCmdStatusResponse,      /* command response status */
+   MrIpcCmdRequestMesswert,     /* command request system status */
+   MrIpcCmdSetConfig,           /* command set config system status */
+   MrIpcCmdConfigResponse,      /* command response set config system status */
+   MrIpcCmdMesswertResponse,    /* command response request system status */
 } MrIpcCommandValue;
 
 typedef struct {
@@ -120,7 +124,7 @@ void MrIpcCmdSetLocomotiveDir(MrIpcCmdType *Data, unsigned long Addr, DirectionT
 void MrIpcCmdSetLocomotiveFkt(MrIpcCmdType *Data, unsigned long Addr,
                               unsigned Function, SwitchType Switch);
 void MrIpcCmdSetAccPos(MrIpcCmdType *Data, unsigned long Addr,
-                       PositionType Position, int Current);
+                       PositionType Position, unsigned int Current);
 void MrIpcCmdSetRequest(MrIpcCmdType *Data);
 void MrIpcCmdSetRequestMember(MrIpcCmdType *Data);
 void MrIpcCmdSetMember(MrIpcCmdType *Data, unsigned long Addr,
@@ -134,8 +138,6 @@ void MrIpcCmdSetCfgHeader(MrIpcCmdType *Data, unsigned long Length,
 void MrIpcCmdSetCfgZHeader(MrIpcCmdType *Data, unsigned long Length,
                            unsigned Crc);
 void MrIpcCmdSetCfgData(MrIpcCmdType *Data, char *Buf);
-void MrIpcCmdSetSystemStatusVal(MrIpcCmdType *Data, unsigned long Addr,
-                                unsigned int Channel, unsigned int Value);
 void MrIpcCmdSetCanBootldr(MrIpcCmdType *Data, unsigned Dlc,
                            unsigned char *CanData);
 void MrIpcCmdSetStatusRequest(MrIpcCmdType *Data, unsigned long Addr,
@@ -143,6 +145,14 @@ void MrIpcCmdSetStatusRequest(MrIpcCmdType *Data, unsigned long Addr,
 void MrIpcCmdSetStatusPos(MrIpcCmdType *Data, unsigned long Addr,
                           unsigned int Index, unsigned int NumPackets);
 void MrIpcCmdSetStatusData(MrIpcCmdType *Data, unsigned char *Buf);
+void MrIpcCmdSetStatusResponse(MrIpcCmdType *Data, unsigned long Addr,
+                               unsigned int Index);
+void MrIpcCmdSetMesswertRequest(MrIpcCmdType *Data, unsigned long Addr,
+                                unsigned int Kanalnummer);
+void MrIpcCmdSetSetConfig(MrIpcCmdType *Data, unsigned long Addr,
+                          unsigned int Kanalnummer, unsigned int Value);
+void MrIpcCmdSetConfigResponse(MrIpcCmdType *Data, unsigned long Addr,
+                               unsigned int Kanalnummer, unsigned int Response);
 
 void MrIpcCmdGetNull(MrIpcCmdType *Data, unsigned char *Dlc, char *CanData);
 void MrIpcCmdGetRun(MrIpcCmdType *Data, SwitchType *Switch);
@@ -154,7 +164,7 @@ void MrIpcCmdGetLocomotiveSpeed(MrIpcCmdType *Data, unsigned long *Addr,
 void MrIpcCmdGetLocomotiveFkt(MrIpcCmdType *Data, unsigned long *Addr,
                               unsigned *Function, SwitchType *Switch);
 void MrIpcCmdGetAccPos(MrIpcCmdType *Data, unsigned long *Addr,
-                       PositionType *Position, int *Current);
+                       PositionType *Position, unsigned int *Current);
 #define MrIpcCmdGetRequestMember(Data)
 void MrIpcCmdGetMember(MrIpcCmdType *Data, unsigned long *Addr,
                        unsigned *Version, unsigned *Type);
@@ -167,7 +177,6 @@ void MrIpcCmdGetCfgHeader(MrIpcCmdType *Data, unsigned long *Length,
 void MrIpcCmdGetCfgZHeader(MrIpcCmdType *Data, unsigned long *Length,
                            unsigned *Crc);
 void MrIpcCmdGetCfgData(MrIpcCmdType *Data, char *Buf);
-void MrIpcCmdGetSystemStatusVal(MrIpcCmdType *Data, unsigned long *Addr, unsigned int *Channel, unsigned int *Value);
 void MrIpcCmdGetCanBootldr(MrIpcCmdType *Data, unsigned *Dlc,
                            char *CanData);
 void MrIpcCmdGetStatusRequest(MrIpcCmdType *Data, unsigned long *Addr,
@@ -175,5 +184,15 @@ void MrIpcCmdGetStatusRequest(MrIpcCmdType *Data, unsigned long *Addr,
 void MrIpcCmdGetStatusPos(MrIpcCmdType *Data, unsigned long *Addr,
                           unsigned int *Index, unsigned int *NumPackets);
 void MrIpcCmdGetStatusData(MrIpcCmdType *Data, unsigned char *Buf);
+#define MrIpcCmdGetStatusResponse(Data, Addr, Index) MrIpcCmdGetStatusRequest(Data, Addr, Index)
+void MrIpcCmdGetMesswertRequest(MrIpcCmdType *Data, unsigned long *Addr,
+                                unsigned int *Kanalnummer);
+void MrIpcCmdGetSetConfig(MrIpcCmdType *Data, unsigned long *Addr,
+                          unsigned int *Kanalnummer, unsigned int *Value);
+void MrIpcCmdGetConfigResponse(MrIpcCmdType *Data, unsigned long *Addr,
+                               unsigned int *Kanalnummer, unsigned int *Response);
+#define MrIpcCmdGetMesswertResponse(Data, Addr, Kanalnummer, Value) MrIpcCmdGetConfigResponse(Data, Addr, Kanalnummer, Value)
+void MrIpcCmdSetMesswertResponse(MrIpcCmdType *Data, unsigned long Addr,
+                                 unsigned int Kanalnummer, unsigned int Response);
 
 #endif

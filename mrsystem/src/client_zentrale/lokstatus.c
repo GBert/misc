@@ -121,19 +121,22 @@ void LokStatusLoadLokomotiveSr2(LokStruct *Data)
          strcat(LokStatusFileName, CS2_FILE_STRING_STATUS_LOKOMOTIVE);
          if (stat(LokStatusFileName, &attribut) == 0)
          {
-            LokStatusFileContent = (char *)malloc(attribut.st_size);
-            if (LokStatusFileContent != (char *)NULL)
+            if (attribut.st_size > 0)
             {
-               LokStatusSr2Stream = fopen(LokStatusFileName, "r");
-               if (LokStatusSr2Stream != NULL)
+               LokStatusFileContent = (char *)malloc(attribut.st_size);
+               if (LokStatusFileContent != (char *)NULL)
                {
-                  fread(LokStatusFileContent, 1, attribut.st_size,
-                        LokStatusSr2Stream);
-                  LokParseLokomotiveCs2(Data, LokStatusFileContent,
-                                        attribut.st_size);
-                  Cs2Close(LokStatusSr2Stream);
+                  LokStatusSr2Stream = fopen(LokStatusFileName, "r");
+                  if (LokStatusSr2Stream != NULL)
+                  {
+                     fread(LokStatusFileContent, 1, attribut.st_size,
+                           LokStatusSr2Stream);
+                     LokParseLokomotiveCs2(Data, LokStatusFileContent,
+                                           attribut.st_size);
+                     Cs2Close(LokStatusSr2Stream);
+                  }
+                  free(LokStatusFileContent);
                }
-               free(LokStatusFileContent);
             }
          }
          free(LokStatusFileName);
@@ -198,6 +201,8 @@ void LokStatusSaveLokomotiveSr2(LokStruct *Data)
             LokStatusSr2Stream = Cs2OpenByName(LokStatusFile);
             if (LokStatusSr2Stream != NULL)
             {
+               fchmod(fileno(LokStatusSr2Stream),
+                      S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
                Cs2WriteParagraphByType(LokStatusSr2Stream,
                                        CS2_PARAGRAPH_TYPE_LOKOMOTIVE);
                Cs2WriteTitleByName(LokStatusSr2Stream, "version", 0);

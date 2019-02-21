@@ -60,6 +60,30 @@ void LokClear(LokStruct *Data)
    }
 }
 
+void LokInfoInit(LokInfo *Data)
+{
+   memset(Data, 0, sizeof(LokInfo));
+}
+
+static BOOL LokIsEqual(LokInfo *Lok1, LokInfo *Lok2)
+{  BOOL IsEqual;
+
+   IsEqual = (LokInfoGetUid(Lok1) == LokInfoGetUid(Lok2)) &&
+             (strcmp(LokInfoGetName(Lok1), LokInfoGetName(Lok2)) == 0) &&
+             (LokInfoGetAdresse(Lok1) == LokInfoGetAdresse(Lok2)) &&
+             (strcmp(LokInfoGetTyp(Lok1), LokInfoGetTyp(Lok2)) == 0) &&
+             (LokInfoGetMfxUid(Lok1) == LokInfoGetMfxUid(Lok2)) &&
+             (LokInfoGetSymbol(Lok1) == LokInfoGetSymbol(Lok2)) &&
+             (LokInfoGetAv(Lok1) == LokInfoGetAv(Lok2)) &&
+             (LokInfoGetBv(Lok1) == LokInfoGetBv(Lok2)) &&
+             (LokInfoGetVolume(Lok1) == LokInfoGetVolume(Lok2)) &&
+             (LokInfoGetVelocity(Lok1) == LokInfoGetVelocity(Lok2)) &&
+             (LokInfoGetRichtung(Lok1) == LokInfoGetRichtung(Lok2)) &&
+             (LokInfoGetVmax(Lok1) == LokInfoGetVmax(Lok2)) &&
+             (LokInfoGetVmin(Lok1) == LokInfoGetVmin(Lok2));
+   return(IsEqual);
+}
+
 void LokInsert(LokStruct *Data, LokInfo *Lok)
 {  char *Name;
    LokInfo *OldLok;
@@ -70,9 +94,7 @@ void LokInsert(LokStruct *Data, LokInfo *Lok)
       OldLok = (LokInfo *)MapGet(LokGetLokDb(Data), (MapKeyType)Name);
       if (OldLok != (LokInfo *)NULL)
       {
-         if ((LokInfoGetUid(OldLok) != LokInfoGetUid(Lok)) ||
-             (LokInfoGetAdresse(OldLok) != LokInfoGetAdresse(Lok)) ||
-             (strcmp(LokInfoGetTyp(OldLok), LokInfoGetTyp(Lok))))
+         if (!LokIsEqual(OldLok, Lok))
          {
             LokSetIsChanged(Data, TRUE);
             memcpy(OldLok, Lok, sizeof(LokInfo));
@@ -121,7 +143,7 @@ LokInfo *LokSearch(LokStruct *Data, unsigned long Addr)
    return(Search.Result);
 }
 
-void LokParseLokomotiveCs2(LokStruct *Data, char *Buf, int Len)
+BOOL LokParseLokomotiveCs2(LokStruct *Data, char *Buf, int Len)
 {  Cs2parser *LokParser;
    int NumLoks, LineInfo, FktIndex;
    LokInfo NewLok;
@@ -132,6 +154,7 @@ void LokParseLokomotiveCs2(LokStruct *Data, char *Buf, int Len)
    Cs2pInit(LokParser, PARSER_TYPE_LOK_CS2, Buf, Len);
    Cs2pSetVerbose(LokParser, FALSE);
    LokInfoSetIsDeleted(&NewLok, FALSE);
+   LokInfoInit(&NewLok);
    do {
       LineInfo = Cs2pParse(LokParser);
       switch (LineInfo)
@@ -156,6 +179,7 @@ void LokParseLokomotiveCs2(LokStruct *Data, char *Buf, int Len)
                      LokInsert(Data, &NewLok);
                   NumLoks++;
                   FktIndex = -1;
+                  LokInfoInit(&NewLok);
                   LokInfoSetIsDeleted(&NewLok, FALSE);
                   break;
                case PARSER_VALUE_LOK:
@@ -181,9 +205,12 @@ void LokParseLokomotiveCs2(LokStruct *Data, char *Buf, int Len)
                   }
                   else if (Cs2pGetLevel(LokParser) == 2)
                   {
-                     LokInfoSetFktTyp(&NewLok, FktIndex,
-                                      strtoul(Cs2pGetValue(LokParser),
-                                              NULL, 0));
+                     if (FktIndex < LOK_NUM_FUNCTIONS)
+                     {
+                        LokInfoSetFktTyp(&NewLok, FktIndex,
+                                         strtoul(Cs2pGetValue(LokParser),
+                                                 NULL, 0));
+                     }
                   }
                   break;
                case PARSER_VALUE_MFXUID:
@@ -235,14 +262,20 @@ void LokParseLokomotiveCs2(LokStruct *Data, char *Buf, int Len)
                   FktIndex++;
                   break;
                case PARSER_VALUE_DAUER:
-                  LokInfoSetFktDauer(&NewLok, FktIndex,
-                                     strtoul(Cs2pGetValue(LokParser),
-                                             NULL, 0));
+                  if (FktIndex < LOK_NUM_FUNCTIONS)
+                  {
+                     LokInfoSetFktDauer(&NewLok, FktIndex,
+                                        strtoul(Cs2pGetValue(LokParser),
+                                                NULL, 0));
+                  }
                   break;
                case PARSER_VALUE_WERT:
-                  LokInfoSetFktWert(&NewLok, FktIndex,
-                                    strtoul(Cs2pGetValue(LokParser),
-                                            NULL, 0));
+                  if (FktIndex < LOK_NUM_FUNCTIONS)
+                  {
+                     LokInfoSetFktWert(&NewLok, FktIndex,
+                                       strtoul(Cs2pGetValue(LokParser),
+                                               NULL, 0));
+                  }
                   break;
                case PARSER_VALUE_MAJOR:
                   break;
@@ -277,9 +310,10 @@ void LokParseLokomotiveCs2(LokStruct *Data, char *Buf, int Len)
             }
             break;
       }
-   } while (LineInfo != PARSER_EOF);
+   } while ((LineInfo != PARSER_EOF) && (LineInfo != PARSER_ERROR));
    Cs2pExit(LokParser);
    Cs2pDestroy(LokParser);
+   return(LineInfo == PARSER_EOF);
 }
 
 void LokLoadLokomotiveCs2(LokStruct *Data)
@@ -299,18 +333,25 @@ void LokLoadLokomotiveCs2(LokStruct *Data)
          strcat(LokFileName, CS2_FILE_STRING_LOKOMOTIVE);
          if (stat(LokFileName, &attribut) == 0)
          {
-            LokFileContent = (char *)malloc(attribut.st_size);
-            if (LokFileContent != (char *)NULL)
+            if (attribut.st_size > 0)
             {
-               LokCs2Stream = fopen(LokFileName, "r");
-               if (LokCs2Stream != NULL)
+               LokFileContent = (char *)malloc(attribut.st_size);
+               if (LokFileContent != (char *)NULL)
                {
-                  fread(LokFileContent, 1, attribut.st_size, LokCs2Stream);
-                  LokParseLokomotiveCs2(Data, LokFileContent, attribut.st_size);
-                  Cs2Close(LokCs2Stream);
-                  LokSetIsChanged(Data, FALSE);
+                  LokCs2Stream = fopen(LokFileName, "r");
+                  if (LokCs2Stream != NULL)
+                  {
+                     fread(LokFileContent, 1, attribut.st_size, LokCs2Stream);
+                     if (!LokParseLokomotiveCs2(Data, LokFileContent, 
+                                                attribut.st_size))
+                     {
+                        LokClear(Data);
+                     }
+                     Cs2Close(LokCs2Stream);
+                     LokSetIsChanged(Data, FALSE);
+                  }
+                  free(LokFileContent);
                }
-               free(LokFileContent);
             }
          }
          free(LokFileName);
@@ -355,16 +396,21 @@ static void PurgeDeletedLoks(LokStruct *Data)
    } while (Search.Result != (LokInfo *)NULL);
 }
 
+typedef struct {
+   LokStruct *Data;
+   FILE *LokCs2Stream;
+} LokWalkType;
+
 static void WriteLokOfLokomotiveCs2(void *PrivData,
                                     MapKeyType Key, MapDataType Daten)
 {  int i;
+   LokStruct *Data;
    LokInfo *Lok;
    FILE *LokCs2Stream;
-   LokStruct *Data;
 
-   Data = (LokStruct *)PrivData;
    Lok = (LokInfo *)Daten;
-   LokCs2Stream = (FILE *)PrivData;
+   Data = ((LokWalkType *)PrivData)->Data;
+   LokCs2Stream = ((LokWalkType *)PrivData)->LokCs2Stream;
    if (!LokInfoGetIsDeleted(Lok))
    {
       Cs2WriteTitleByName(LokCs2Stream, "lokomotive", 0);
@@ -392,11 +438,19 @@ static void WriteLokOfLokomotiveCs2(void *PrivData,
       {
          Cs2WriteTitleByName(LokCs2Stream, "funktionen", 1);
          Cs2WriteIntValueByName(LokCs2Stream, "nr", i, 2);
-         Cs2WriteIntValueByName(LokCs2Stream, "typ", LokInfoGetFktTyp(Lok, i), 2);
-         Cs2WriteIntValueByName(LokCs2Stream, "dauer", LokInfoGetFktDauer(Lok, i), 2);
-         Cs2WriteIntValueByName(LokCs2Stream, "wert", LokInfoGetFktWert(Lok, i), 2);
-         Cs2WriteHexValueByName(LokCs2Stream, "vorwaerts", 0, 2);
-         Cs2WriteHexValueByName(LokCs2Stream, "rueckwaerts", 0, 2);
+         if (LokInfoGetFktTyp(Lok, i) != 0)
+            Cs2WriteIntValueByName(LokCs2Stream, "typ", LokInfoGetFktTyp(Lok, i), 2);
+         if (LokInfoGetFktDauer(Lok, i) != 0)
+            Cs2WriteIntValueByName(LokCs2Stream, "dauer", LokInfoGetFktDauer(Lok, i), 2);
+         if (LokInfoGetFktWert(Lok, i) != 0)
+            Cs2WriteIntValueByName(LokCs2Stream, "wert", LokInfoGetFktWert(Lok, i), 2);
+         if ((LokInfoGetFktTyp(Lok, i) != 0) &&
+             (LokInfoGetFktDauer(Lok, i) != 0) &&
+             (LokInfoGetFktWert(Lok, i) != 0))
+         {
+            Cs2WriteHexValueByName(LokCs2Stream, "vorwaerts", 0, 2);
+            Cs2WriteHexValueByName(LokCs2Stream, "rueckwaerts", 0, 2);
+         }
       }
       Cs2WriteHexLongValueByName(LokCs2Stream, "inTraktion", 0xffffffff, 1);
    }
@@ -405,6 +459,7 @@ static void WriteLokOfLokomotiveCs2(void *PrivData,
 void LokSaveLokomotiveCs2(LokStruct *Data)
 {  FILE *LokCs2Stream;
    char *LokFile;
+   LokWalkType LokWalk;
 
    if (LokGetIsChanged(Data) || LokHaveDeleted(Data))
    {
@@ -421,15 +476,19 @@ void LokSaveLokomotiveCs2(LokStruct *Data)
             LokCs2Stream = Cs2OpenByName(LokFile);
             if (LokCs2Stream != NULL)
             {
+               fchmod(fileno(LokCs2Stream),
+                      S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
                Cs2WriteParagraphByType(LokCs2Stream, CS2_PARAGRAPH_TYPE_LOKOMOTIVE);
                Cs2WriteTitleByName(LokCs2Stream, "version", 0);
                Cs2WriteIntValueByName(LokCs2Stream, "major", 0, 1);
                Cs2WriteIntValueByName(LokCs2Stream, "minor", 1, 1);
                Cs2WriteTitleByName(LokCs2Stream, "session", 0);
                Cs2WriteIntValueByName(LokCs2Stream, "id", 1, 1);
+               LokWalk.Data = Data;
+               LokWalk.LokCs2Stream = LokCs2Stream;
                MapWalkAscend(LokGetLokDb(Data),
                              (MapWalkCbFkt)WriteLokOfLokomotiveCs2,
-                             (void *)LokCs2Stream);
+                             (void *)&LokWalk);
                Cs2Close(LokCs2Stream);
                PurgeDeletedLoks(Data);
                LokSetIsChanged(Data, FALSE);

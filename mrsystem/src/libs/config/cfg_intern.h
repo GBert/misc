@@ -24,6 +24,7 @@
 #define INI_STR_EMU_HOST_COM "emu_host_com"
 #define INI_STR_SERIAL_LINE  "serial_line"
 #define INI_STR_NUM_LOKFKT   "num_lokfkt"
+#define INI_STR_WRITE_WEB    "write_web"
 
 #define INI_TOK_PORT         INI_PARS_FIRST_KEYWORD_TOK
 #define INI_TOK_UDP_BC       (INI_TOK_PORT+1)
@@ -43,6 +44,7 @@
 #define INI_TOK_EMU_HOST_COM (INI_TOK_PORT+15)
 #define INI_TOK_SERIAL_LINE  (INI_TOK_PORT+16)
 #define INI_TOK_NUM_LOKFKT   (INI_TOK_PORT+17)
+#define INI_TOK_WRITE_WEB    (INI_TOK_PORT+18)
 
 
 #endif

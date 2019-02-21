@@ -63,6 +63,7 @@ typedef struct {
    unsigned SerialNumber;
    unsigned long GfpUid;
    unsigned long Uid;
+   BOOL WriteWeb;
    ZlibFile *PackedCs2File;
    BOOL HaveDb;
    BOOL IsInPoll;
@@ -71,6 +72,10 @@ typedef struct {
    int NumLoks;
    int MaxLoks;
    LokInfo ActualLok;
+   unsigned long ActualConfig;
+   MengeIterator ActualKonfigWert;
+   ConfigMesswertTyp *ActualMesswert;
+   ConfigTyp *ActualKonfig;
    ZentraleLokName *LokNamen;
    CanMemberStruct *CanMember;
    CronStruct *CronJobs;
@@ -101,12 +106,17 @@ typedef struct {
 #define ZentraleSetSerialNumber(Data, Serial)           (Data)->SerialNumber=Serial
 #define ZentraleSetGfpUid(Data, MyUid)                  (Data)->GfpUid=MyUid
 #define ZentraleSetUid(Data, MyUid)                     (Data)->Uid=MyUid
+#define ZentraleSetWriteWeb(Data, Write)                (Data)->WriteWeb=Write
 #define ZentraleSetIsInPoll(Data, Poll)                 (Data)->IsInPoll=Poll
 #define ZentraleSetPackedCs2File(Data, Zfile)           (Data)->PackedCs2File=Zfile
 #define ZentraleSetCs2CfgDaten(Data, Cs2Daten)          (Data)->Cs2CgfDaten=Cs2Daten
 #define ZentraleSetActualIndex(Data, i)                 (Data)->ActualIndex=i
 #define ZentraleSetNumLoks(Data, i)                     (Data)->NumLoks=i
 #define ZentraleSetMaxLoks(Data, i)                     (Data)->MaxLoks=i
+#define ZentraleSetMaxLoks(Data, i)                     (Data)->MaxLoks=i
+#define ZentraleSetActualConfig(Data, Uid)              (Data)->ActualConfig=Uid
+#define ZentraleSetActualMesswert(Data, Messwert)       (Data)->ActualMesswert=Messwert
+#define ZentraleSetActualKonfig(Data, Konfig)           (Data)->ActualKonfig=Konfig
 #define ZentraleSetLokNamen(Data, Namen)                (Data)->LokNamen=Namen
 #define ZentraleSetLokNamenNr(Data, i, Namen)           strcpy((Data)->LokNamen[i].Name, Namen)
 #define ZentraleSetCanMember(Data, CanMemberDb)         (Data)->CanMember=CanMemberDb
@@ -140,6 +150,7 @@ typedef struct {
 #define ZentraleGetSerialNumber(Data)         (Data)->Serial
 #define ZentraleGetGfpUid(Data)               (Data)->GfpUid
 #define ZentraleGetUid(Data)                  (Data)->Uid
+#define ZentraleGetWriteWeb(Data)             (Data)->WriteWeb
 #define ZentraleGetIsInPoll(Data)             (Data)->IsInPoll
 #define ZentraleGetPackedCs2File(Data)        (Data)->PackedCs2File
 #define ZentraleGetCs2CfgDaten(Data)          (Data)->Cs2CgfDaten
@@ -148,6 +159,10 @@ typedef struct {
 #define ZentraleGetNumLoks(Data)              (Data)->NumLoks
 #define ZentraleGetMaxLoks(Data)              (Data)->MaxLoks
 #define ZentraleGetActualLok(Data)            (&((Data)->ActualLok))
+#define ZentraleGetActualConfig(Data)         (Data)->ActualConfig
+#define ZentraleGetActualKonfigWert(Data)     (Data)->ActualKonfigWert
+#define ZentraleGetActualMesswert(Data)       (Data)->ActualMesswert
+#define ZentraleGetActualKonfig(Data)         (Data)->ActualKonfig
 #define ZentraleGetLokNamen(Data)             (Data)->LokNamen
 #define ZentraleGetLokNamenNr(Data, i)        (Data)->LokNamen[i].Name
 #define ZentraleGetCanMember(Data)            (Data)->CanMember
@@ -167,7 +182,7 @@ void ZentraleDestroy(ZentraleStruct *Data);
 void ZentraleInit(ZentraleStruct *Data, BOOL Verbose, int MasterMode,
                   char *Interface, char *Addr, int Port, char *LocPath,
                   int Protokolle, char *SystemStart, int SyncMask,
-                  char *WakeUpS88, int NumLokFkts);
+                  char *WakeUpS88, int NumLokFkts, BOOL WriteWeb);
 void ZentraleInitFsm(ZentraleStruct *Data, int MasterMode);
 void ZentraleExit(ZentraleStruct *Data);
 void ZentraleRun(ZentraleStruct *Data);

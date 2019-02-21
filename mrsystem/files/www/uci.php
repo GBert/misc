@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <!-- Universal Config Interface -->
-<!-- Author: RN | last change: 06.02.2016  -->
+<!-- Author: RN | last change: 16.09.2018  -->
 <!-- designed for MB'S digital model railroad system  -->
 <html>
 	<head>
@@ -178,6 +178,9 @@
 						case "ip":
 							$rangeinfo = "d.d.d.d  ";
 							break;
+						case "txt":
+							$rangeinfo = (string)$parlinearr[2]."..".(string)$parlinearr[3]." chars  ";
+							break;
 					}//switch
 				}//if
 				return "title='$rangeinfo$presinfo'";
@@ -251,6 +254,12 @@
 						}//for
 						$validated = 1;//no real validation required
 						break;
+					case "txt": //string => "text"
+						$rawval = unquote($rawval);//force defined syntax to examine
+						//$setvalue = quote($rawval);//force defined syntax to store
+						$setvalue = $rawval;//quotes amy be added on store if needed
+						$validated = ((strlen($rawval) >= $pvala[0]) && (strlen($rawval) <= $pvala[1]))?1:2;
+						break;
 					default: //undefined=> text
 						if(isset($_POST[$parname]))
 						{
@@ -301,6 +310,7 @@
 
 			$icfg = (isset($_POST["icfg"]))?$_POST["icfg"]:0; //get index of selected config
 			$cmd = (isset($_POST["cmd"]))?$_POST["cmd"]:"get"; //get command
+			$tabdesc = $cfgs[$icfg]["tabtxt"]; // get tab description
 
 			$cfglinearr = file($cfgs[$icfg]["filcfg"]); // get config
 			$defarr = file($cfgs[$icfg]["fildef"]); // get defines and help for selected config
@@ -334,11 +344,11 @@
 								$valtostore=(1==$parquote)?quote($setvalue):$setvalue;
 								if(DIRECTORY_SEPARATOR == '/')
 								{
-									system("./valchanged.sh $cfgname $parname $storedval $valtostore"); // CONFIG CHANGE EVENT
+									system("./valchanged.sh $cfgname $tabdesc $parname $storedval $valtostore"); // CONFIG CHANGE EVENT
 								}
 								else
 								{
-									system("valchanged.bat $cfgname $parname $storedval $valtostore"); // CONFIG CHANGE EVENT
+									system("valchanged.bat $cfgname $tabdesc $parname $storedval $valtostore"); // CONFIG CHANGE EVENT
 								}
 								$parvalue = $setvalue;
 								if($validated == 0) $validated = 1;//unvalidated change -> validated
@@ -449,8 +459,10 @@
 				global $back;
 				global $uci;
 				global $seltype;
+				global $numactive;
 				echo("<form name='cfg' action='".$_SERVER['PHP_SELF']."' method='post'>");
 				echo("<div class='tdiv".(($seltype=="tab")?"2":"1")."'><table class='ctable1'><tr><th>Parameter</th><th>Wert</th></tr>");
+				$numactive = 0;
 				for($i=0; $i<count($params); $i++)
 				{
 					$neo = ($i&1)?"nameven":"namodd";
@@ -463,6 +475,7 @@
 					{
 						case "cb": //=>checkbox
 							echo("<input name='".$params[$i]["pnam"]."' type='checkbox' ".(($params[$i]["pset"]=="1")?"checked":"")." >");
+							$numactive = $numactive + 1;
 							break;
 						case "sel": //=>select
 							echo("<select name='".$params[$i]["pnam"]."' class='ced ".$vst."v $veo' >");
@@ -472,6 +485,7 @@
 								echo("<option ".(($params[$i]["pset"]==$pvala[$j])?"selected":"").">".$pvala[$j]."</option>");
 							}//for
 							echo("</select>");
+							$numactive = $numactive + 1;
 							break;
 						case "rb": //=>radio
 							$pvala = getparvals($params[$i]["pnam"]);//get array of predefined vaues
@@ -480,6 +494,7 @@
 								//echo("$j=".$pvala[$j]."  ");
 								echo("<input type='radio' name='".$params[$i]["pnam"]."' value='".$pvala[$j]."' ".(($params[$i]["pset"]==$pvala[$j])?"checked":"")."/>".$pvala[$j]);
 							}//for
+							$numactive = $numactive + 1;
 							break;
 						case "bits": //=>cbs
 							$pvala = getparvals($params[$i]["pnam"]);//get array of predefined vaues
@@ -488,9 +503,14 @@
 								$chk = (((integer)$params[$i]["pset"] & (1<<$j)) > 0)?"checked":"";
 								echo("<input type='checkbox' name='".$params[$i]["pnam"]."_$j'".$chk."/>".$pvala[$j]);
 							}//for
+							$numactive = $numactive + 1;
+							break;
+						case "txt": //str, ip, int => text
+							echo("<input class='ced ".$vst."v $veo' name='".$params[$i]["pnam"]."' type='text' value='".$params[$i]["pset"]."' disabled >");
 							break;
 						default: //str, ip, int => text
 							echo("<input class='ced ".$vst."v $veo' name='".$params[$i]["pnam"]."' type='text' value='".$params[$i]["pset"]."' >");
+							$numactive = $numactive + 1;
 							break;
 					}//switch
 					echo("</td></tr>");
@@ -501,7 +521,10 @@
 				echo("<input type='hidden' name='icfg' value='".$icfg."'>");
 				echo("<input type='hidden' name='uci' value='".$uci."'>");
 				echo("<input type='hidden' name='back' value='".$back."'>");
-				echo("<input class='cbutton1' type='submit' value='&uuml;bernehmen'></form>");
+				if ($numactive > 0)
+				{
+					echo("<input class='cbutton1' type='submit' value='&uuml;bernehmen'></form>");
+				}//if
 
 				//reload-button:
 				echo("<form name='rel' action='".$_SERVER['PHP_SELF']."' method='post'>");
@@ -509,7 +532,10 @@
 				echo("<input type='hidden' name='icfg' value='".$icfg."'>");
 				echo("<input type='hidden' name='uci' value='".$uci."'>");
 				echo("<input type='hidden' name='back' value='".$back."'>");
-				echo("<input class='cbutton2' type='submit' value='neu laden'></form>");
+				if ($numactive > 0)
+				{
+					echo("<input class='cbutton2' type='submit' value='neu laden'></form>");
+				}//if
 
 				//back to main menu ?:
 				if(strlen($back) > 2)

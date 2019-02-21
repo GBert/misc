@@ -133,7 +133,7 @@ GleisbildBildElement *GleisbildPageSearch(GleisbildPageStruct *Data, int Id)
                                          (MapKeyType)Id));
 }
 
-void GleisbildPageParseGleisbildPageCs2(GleisbildPageStruct *Data,
+BOOL GleisbildPageParseGleisbildPageCs2(GleisbildPageStruct *Data,
                                         char *Buf, int Len)
 {  Cs2parser *GleisbildPageParser;
    int NumElements, LineInfo;
@@ -228,10 +228,11 @@ void GleisbildPageParseGleisbildPageCs2(GleisbildPageStruct *Data,
             }
             break;
       }
-   } while (LineInfo != PARSER_EOF);
+   } while ((LineInfo != PARSER_EOF) && (LineInfo != PARSER_ERROR));
    GleisbildPageSetNumElements(Data, NumElements);
    Cs2pExit(GleisbildPageParser);
    Cs2pDestroy(GleisbildPageParser);
+   return(LineInfo == PARSER_EOF);
 }
 
 void GleisbildPageLoadGleisbildPageCs2(GleisbildPageStruct *Data)
@@ -265,9 +266,12 @@ void GleisbildPageLoadGleisbildPageCs2(GleisbildPageStruct *Data)
                {
                   fread(GleisbildPageFileContent, 1, attribut.st_size,
                         GleisbildPageCs2Stream);
-                  GleisbildPageParseGleisbildPageCs2(Data,
-                                                     GleisbildPageFileContent,
-                                                     attribut.st_size);
+                  if (!GleisbildPageParseGleisbildPageCs2(Data,
+                                                          GleisbildPageFileContent,
+                                                          attribut.st_size))
+                  {
+                     GleisbildPageClear(Data);
+                  }
                   Cs2Close(GleisbildPageCs2Stream);
                }
                free(GleisbildPageFileContent);
@@ -327,6 +331,8 @@ void GleisbildPageSaveGleisbildPageCs2(GleisbildPageStruct *Data)
          GleisbildPageCs2Stream = Cs2OpenByName(GleisbildPageFile);
          if (GleisbildPageCs2Stream != NULL)
          {
+            fchmod(fileno(GleisbildPageCs2Stream),
+                   S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
             Cs2WriteParagraphByType(GleisbildPageCs2Stream,
                                     CS2_PARAGRAPH_TYPE_GLEISBILDSEITE);
             Cs2WriteTitleByName(GleisbildPageCs2Stream, "version", 0);

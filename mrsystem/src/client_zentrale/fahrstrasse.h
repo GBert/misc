@@ -85,7 +85,7 @@ void FahrstrasseItemInsert(FahrstrasseInfo *Data, int Nr,
                             FahrstrasseItem *Item);
 void FahrstrasseDeleteItem(FahrstrasseInfo *Data, int Nr);
 FahrstrasseItem *FahrstrasseSearchItem(FahrstrasseInfo *Data, int Nr);
-void FahrstrasseParseFahrstrasseCs2(FahrstrasseStruct *Data, char *Buf, int Len);
+BOOL FahrstrasseParseFahrstrasseCs2(FahrstrasseStruct *Data, char *Buf, int Len);
 void FahrstrasseLoadFahrstrasseCs2(FahrstrasseStruct *Data);
 void FahrstrasseSaveFahrstrasseCs2(FahrstrasseStruct *Data);
 

@@ -47,6 +47,9 @@ int ConfigGetIntVal(ConfigStruct *Data, CfgIntValues Value)
       case CfgNumLokfkts:
          p = INI_STR_NUM_LOKFKT;
          break;
+      case CfgWriteWebVal:
+         p = INI_STR_WRITE_WEB;
+         break;
    }
    CfgWert = (IniValue *)MapGet(ConfigGetConfig(Data), (MapKeyType)p);
    if (CfgWert != (IniValue *)NULL)
