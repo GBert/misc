@@ -1,11 +1,14 @@
 const int revisionnr = 
-15081
+15084
 ;
 const char* commithash = 
-"ed1fc991130762f0898936eb789c90664375cfde";
+"25919fbd95637d499370cfbd88a8978d6a4f722b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15084 2019-02-21 09:14:09 +0100 item: do not show gototrack submenu in case no tracks are defined\n" \
+"15083 2019-02-21 07:54:56 +0100 renderer: seltab symbol SLIM compatible\n" \
+"15082 2019-02-21 07:30:25 +0100 loc,locdialog: set address to zero in case protocol is analog\n" \
 "15081 2019-02-20 20:05:05 +0100 clock,meter: check divider > 0 to prevent divide by zero exception\n" \
 "15080 2019-02-20 19:25:11 +0100 clock: fix for divide by zero\n" \
 "15079 2019-02-20 18:18:23 +0100 mbus: activate channel query\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13087 2017-11-25 09:59:28 +0100 rpic: faster refresh rate\n" \
 "13086 2017-11-25 09:43:52 +0100 rocnetnode: fix for unloading and removing the DCC generator\n" \
 "13085 2017-11-25 08:32:41 +0100 rocnetnode: fix for unloading and removing the DCC generator\n" \
-"13084 2017-11-24 20:14:09 +0100 rocnetnodedlg: prevent programming left channel position greater then the right poisition\n" \
-"13083 2017-11-24 16:38:01 +0100 channeltunedlg: prevent setting left(off) position higher then the right(on) position\n" \
-"13082 2017-11-24 15:15:54 +0100 switch control: wait until its in position before frre up the routes\n" \
 
 "log end";
