@@ -1,11 +1,12 @@
 const int revisionnr = 
-15087
+15088
 ;
 const char* commithash = 
-"5e19285cac0b5b9344f4981d566826b7313a8261";
+"5afd7c16ee7ba859358364667a7898aae15041e7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15088 2019-02-21 16:56:48 +0100 item: fix for restoring switch background color after unlock\n" \
 "15087 2019-02-21 12:27:13 +0100 SpDrS60: removed button background\n" \
 "15086 2019-02-21 11:47:21 +0100 mbusdlg: added SoD poll option for CDB and GC2a\n" \
 "15085 2019-02-21 11:08:44 +0100 mbus: multi booster support\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13091 2017-11-25 12:14:39 +0100 rocnetnode: trace errno text\n" \
 "13090 2017-11-25 12:04:01 +0100 switch: automode option added for the controller\n" \
 "13089 2017-11-25 11:27:08 +0100 switch: control option invert added\n" \
-"13088 2017-11-25 10:01:14 +0100 rocnetnode: own default trace file name\n" \
 
 "log end";
