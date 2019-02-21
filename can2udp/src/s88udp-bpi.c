@@ -133,7 +133,7 @@ int create_event(struct s88_t *s88, int bus, int offset, uint32_t changed_bits, 
     netframe[11] = 0;
     netframe[12] = 0;
 
-    mask = BIT(31);
+    mask = 0x80000000;
     for (i = 0; i < 32; i++) {
 	if (changed_bits & mask) {
 	    temp16 = htons(s88->deviceid);
@@ -393,7 +393,7 @@ int main(int argc, char **argv) {
 	/* get sensor data */
 	for (i = 0; i < modulcount; i++) {
 	    if ((s88_bit & 0x1f) == 0)
-		mask = BIT(31);
+		mask = 0x80000000;
 	    for (j = 0; j < 16; j++) {
 		gpio_aw_get(DATA_PIN, &newvalue);
 		if (newvalue ^= s88_data.invert)

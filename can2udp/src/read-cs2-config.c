@@ -576,27 +576,27 @@ int read_track_data(char *config_file) {
 	    switch (l1_token_n) {
 	    case L1_MAJOR:
 		tp->major = strtoul(&line[L1_MAJOR_LENGTH], NULL, 10);
-		debug_print("match major:   >%d<\n", tp->major);
+		debug_print("match major:   >%u<\n", tp->major);
 		break;
 	    case L1_MINOR:
 		tp->minor = strtoul(&line[L1_MINOR_LENGTH], NULL, 10);
-		debug_print("match minor:   >%d<\n", tp->minor);
+		debug_print("match minor:   >%u<\n", tp->minor);
 		break;
 	    case L1_XOFFSET:
 		tp->xoffset = strtoul(&line[L1_XOFFSET_LENGTH], NULL, 10);
-		debug_print("match xoffset: >%d<\n", tp->xoffset);
+		debug_print("match xoffset: >%u<\n", tp->xoffset);
 		break;
 	    case L1_YOFFSET:
 		tp->yoffset = strtoul(&line[L1_YOFFSET_LENGTH], NULL, 10);
-		debug_print("match yoffset: >%d<\n", tp->yoffset);
+		debug_print("match yoffset: >%u<\n", tp->yoffset);
 		break;
 	    case L1_WIDTH:
 		tp->width = strtoul(&line[L1_WIDTH_LENGTH], NULL, 10);
-		debug_print("match width:   >%d<\n", tp->width);
+		debug_print("match width:   >%u<\n", tp->width);
 		break;
 	    case L1_HEIGHT:
 		tp->height = strtoul(&line[L1_HEIGHT_LENGTH], NULL, 10);
-		debug_print("match height:  >%d<\n", tp->height);
+		debug_print("match height:  >%u<\n", tp->height);
 		break;
 	    case L1_ID:
 		td->id = strtoul(&line[L1_ID_LENGTH], NULL, 16);
@@ -624,7 +624,7 @@ int read_track_data(char *config_file) {
 		break;
 	    case L1_DEVICEID:
 		td->deviceid = strtoul(&line[L1_DEVICEID_LENGTH], NULL, 10);
-		debug_print("match deviceId:>%d<\n", td->deviceid);
+		debug_print("match deviceId:>%u<\n", td->deviceid);
 		break;
 	    default:
 		fprintf(stderr, "unknown:       >%s<\n", line);
@@ -676,35 +676,35 @@ int read_track_config(char *config_file) {
 	    switch (l1_token_n) {
 	    case L1_ID:
 		page->id = strtoul(&line[L1_ID_LENGTH], NULL, 10);
-		debug_print("match id:      >%d<\n", page->id);
+		debug_print("match id:      >%u<\n", page->id);
 		break;
 	    case L1_MAJOR:
 		page->major = strtoul(&line[L1_MAJOR_LENGTH], NULL, 10);
-		debug_print("match major:   >%d<\n", page->major);
+		debug_print("match major:   >%u<\n", page->major);
 		break;
 	    case L1_MINOR:
 		page->minor = strtoul(&line[L1_MINOR_LENGTH], NULL, 10);
-		debug_print("match minor:   >%d<\n", page->minor);
+		debug_print("match minor:   >%u<\n", page->minor);
 		break;
 	    case L1_XOFFSET:
 		page->xoffset = strtoul(&line[L1_XOFFSET_LENGTH], NULL, 10);
-		debug_print("match xoffset: >%d<\n", page->xoffset);
+		debug_print("match xoffset: >%u<\n", page->xoffset);
 		break;
 	    case L1_YOFFSET:
 		page->yoffset = strtoul(&line[L1_YOFFSET_LENGTH], NULL, 10);
-		debug_print("match yoffset: >%d<\n", page->yoffset);
+		debug_print("match yoffset: >%u<\n", page->yoffset);
 		break;
 	    case L1_WIDTH:
 		page->width = strtoul(&line[L1_WIDTH_LENGTH], NULL, 10);
-		debug_print("match width:   >%d<\n", page->width);
+		debug_print("match width:   >%u<\n", page->width);
 		break;
 	    case L1_HEIGHT:
 		page->height = strtoul(&line[L1_HEIGHT_LENGTH], NULL, 10);
-		debug_print("match height:  >%d<\n", page->height);
+		debug_print("match height:  >%u<\n", page->height);
 		break;
 	    case L1_NAME:
 		if (gbs_valid) {
-		    debug_print("match name:    >%s<  id %d\n", &line[L1_NAME_LENGTH], page->id);
+		    debug_print("match name:    >%s<  id %u\n", &line[L1_NAME_LENGTH], page->id);
 		    add_track_page(page, &line[L1_NAME_LENGTH]);
 		}
 		break;
@@ -828,19 +828,19 @@ int read_loco_data(char *config_file, int config_type) {
 		break;
 	    case L1_ID:
 		loco->id = strtoul(&line[L1_ID_LENGTH], NULL, 10);
-		debug_print("match id:        >%d<\n", loco->id);
+		debug_print("match id:        >%u<\n", loco->id);
 		break;
 	    case L1_MAJOR:
 		loco->major = strtoul(&line[L1_MAJOR_LENGTH], NULL, 10);
-		debug_print("match major:     >%d<\n", loco->major);
+		debug_print("match major:     >%u<\n", loco->major);
 		break;
 	    case L1_MINOR:
 		loco->minor = strtoul(&line[L1_MINOR_LENGTH], NULL, 10);
-		debug_print("match minor:     >%d<\n", loco->minor);
+		debug_print("match minor:     >%u<\n", loco->minor);
 		break;
 	    case L1_DIRECTION:
 		loco->direction = strtoul(&line[L1_DIRECTION_LENGTH], NULL, 10);
-		debug_print("match direction: >%d<\n", loco->direction);
+		debug_print("match direction: >%u<\n", loco->direction);
 		break;
 	    case L1_VALUE:
 		loco->number = strtoul(&line[L1_VALUE_LENGTH], NULL, 10);
@@ -848,7 +848,7 @@ int read_loco_data(char *config_file, int config_type) {
 		break;
 	    case L1_VELOCITY:
 		loco->velocity = strtoul(&line[L1_VELOCITY_LENGTH], NULL, 10);
-		debug_print("match velocity:  >%d<\n", loco->velocity);
+		debug_print("match velocity:  >%u<\n", loco->velocity);
 		break;
 	    case L1_UID:
 		loco->uid = strtoul(&line[L1_UID_LENGTH], NULL, 16);
@@ -883,19 +883,19 @@ int read_loco_data(char *config_file, int config_type) {
 		break;
 	    case L1_SYMBOL:
 		loco->symbol = strtoul(&line[L1_SYMBOL_LENGTH], NULL, 10);
-		debug_print("match symbol:    >%d<\n", loco->symbol);
+		debug_print("match symbol:    >%u<\n", loco->symbol);
 		break;
 	    case L1_AV:
 		loco->acc_delay = strtoul(&line[L1_AV_LENGTH], NULL, 10);
-		debug_print("match av:        >%d<\n", loco->acc_delay);
+		debug_print("match av:        >%u<\n", loco->acc_delay);
 		break;
 	    case L1_BV:
 		loco->slow_down_delay = strtoul(&line[L1_BV_LENGTH], NULL, 10);
-		debug_print("match bv:        >%d<\n", loco->slow_down_delay);
+		debug_print("match bv:        >%u<\n", loco->slow_down_delay);
 		break;
 	    case L1_VOLUME:
 		loco->volume = strtoul(&line[L1_VOLUME_LENGTH], NULL, 10);
-		debug_print("match volume:    >%d<\n", loco->volume);
+		debug_print("match volume:    >%u<\n", loco->volume);
 		break;
 	    case L1_PROGMASK:
 		loco->progmask = strtoul(&line[L1_PROGMASK_LENGTH], NULL, 16);
@@ -903,23 +903,23 @@ int read_loco_data(char *config_file, int config_type) {
 		break;
 	    case L1_VMIN:
 		loco->vmin = strtoul(&line[L1_VMIN_LENGTH], NULL, 10);
-		debug_print("match vmin:      >%d<\n", loco->vmin);
+		debug_print("match vmin:      >%u<\n", loco->vmin);
 		break;
 	    case L1_VMAX:
 		loco->vmax = strtoul(&line[L1_VMAX_LENGTH], NULL, 10);
-		debug_print("match vmax:      >%d<\n", loco->vmax);
+		debug_print("match vmax:      >%u<\n", loco->vmax);
 		break;
 	    case L1_XPROT:
 		loco->xprot = strtoul(&line[L1_XPROT_LENGTH], NULL, 10);
-		debug_print("match xprot:     >%d<\n", loco->xprot);
+		debug_print("match xprot:     >%u<\n", loco->xprot);
 		break;
 	    case L1_TMAX:
 		loco->tmax = strtoul(&line[L1_TMAX_LENGTH], NULL, 10);
-		debug_print("match tmax:      >%d<\n", loco->tmax);
+		debug_print("match tmax:      >%u<\n", loco->tmax);
 		break;
 	    case L1_SPM:
 		loco->spm = strtoul(&line[L1_SPM_LENGTH], NULL, 10);
-		debug_print("match spm:       >%d<\n", loco->spm);
+		debug_print("match spm:       >%u<\n", loco->spm);
 		break;
 	    case L1_FT:
 		loco->ft = strtoul(&line[L1_FT_LENGTH], NULL, 16);
@@ -927,7 +927,7 @@ int read_loco_data(char *config_file, int config_type) {
 		break;
 	    case L1_MFXTYPE:
 		loco->mfxtype = strtoul(&line[L1_MFXTYPE_LENGTH], NULL, 10);
-		debug_print("match mfxtype:   >%d<\n", loco->mfxtype);
+		debug_print("match mfxtype:   >%u<\n", loco->mfxtype);
 		break;
 	    case L1_ADDRESS:
 		loco->address = strtoul(&line[L1_ADDRESS_LENGTH], NULL, 16);
@@ -991,49 +991,49 @@ int read_loco_data(char *config_file, int config_type) {
 	    case L2_TARGET:
 		if (mfx_data >= 0) {
 		    loco->mfxAdr->target = strtoul(&line[L2_TARGET_LENGTH], NULL, 10);
-		    debug_print(" mfxAdr target %d\n", loco->mfxAdr->target);
+		    debug_print(" mfxAdr target %u\n", loco->mfxAdr->target);
 		}
 		break;
 	    case L2_NAME:
 		if (mfx_data >= 0) {
 		    loco->mfxAdr->name = strtoul(&line[L2_NAME_LENGTH], NULL, 10);
-		    debug_print(" mfxAdr name %d\n", loco->mfxAdr->name);
+		    debug_print(" mfxAdr name %u\n", loco->mfxAdr->name);
 		}
 		break;
 	    case L2_ADDRESS:
 		if (mfx_data >= 0) {
 		    loco->mfxAdr->address = strtoul(&line[L2_ADDRESS_LENGTH], NULL, 10);
-		    debug_print(" mfxAdr addr %d\n", loco->mfxAdr->address);
+		    debug_print(" mfxAdr addr %u\n", loco->mfxAdr->address);
 		}
 		break;
 	    case L2_XCEL:
 		if (mfx_data >= 0) {
 		    loco->mfxAdr->xcel = strtoul(&line[L2_XCEL_LENGTH], NULL, 10);
-		    debug_print(" mfxAdr xcel %d\n", loco->mfxAdr->xcel);
+		    debug_print(" mfxAdr xcel %u\n", loco->mfxAdr->xcel);
 		}
 		break;
 	    case L2_SPEEDTABLE:
 		if (mfx_data >= 0) {
 		    loco->mfxAdr->speedtable = strtoul(&line[L2_SPEEDTABLE_LENGTH], NULL, 10);
-		    debug_print(" mfxAdr speedtable %d\n", loco->mfxAdr->speedtable);
+		    debug_print(" mfxAdr speedtable %u\n", loco->mfxAdr->speedtable);
 		}
 		break;
 	    case L2_VOLUME:
 		if (mfx_data >= 0) {
 		    loco->mfxAdr->volume = strtoul(&line[L2_VOLUME_LENGTH], NULL, 10);
-		    debug_print(" mfxAdr voulume %d\n", loco->mfxAdr->volume);
+		    debug_print(" mfxAdr voulume %u\n", loco->mfxAdr->volume);
 		}
 		break;
 	    case L2_NUMFUNCTION:
 		if (mfx_data >= 0) {
 		    loco->mfxAdr->numfunction = strtoul(&line[L2_NUMFUNCTION_LENGTH], NULL, 10);
-		    debug_print(" mfxAdr numfunction %d\n", loco->mfxAdr->numfunction);
+		    debug_print(" mfxAdr numfunction %u\n", loco->mfxAdr->numfunction);
 		}
 		break;
 	    case L2_FUNCTION:
 		if (mfx_data >= 0) {
 		    loco->mfxAdr->function = strtoul(&line[L2_FUNCTION_LENGTH], NULL, 10);
-		    debug_print(" mfxAdr func %d\n", loco->mfxAdr->function);
+		    debug_print(" mfxAdr func %u\n", loco->mfxAdr->function);
 		}
 		break;
 	    default:
@@ -1099,11 +1099,11 @@ int read_loco_names(char *config_file) {
 		break;
 	    case L1_NR:
 		loco->number = strtoul(&line[L1_NR_LENGTH], NULL, 10);
-		debug_print("match nr:  >%d<\n", loco->number);
+		debug_print("match nr:  >%u<\n", loco->number);
 		break;
 	    case L1_VALUE:
 		loco->max_value = strtoul(&line[L1_VALUE_LENGTH], NULL, 10);
-		debug_print("match value:  >%d<\n", loco->max_value);
+		debug_print("match value:  >%u<\n", loco->max_value);
 		if (loco->name)
 		    add_loco_name(loco);
 		break;

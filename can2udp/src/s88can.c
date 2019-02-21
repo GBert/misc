@@ -210,7 +210,7 @@ void bpi_poll(struct s88_bus *s88) {
 
     for (i = 0; i < s88->blen; i++) {
 	if ((s88_bit & 0x1f) == 0)
-	    mask = BIT(31);
+	    mask = 0x80000000;
 	for (j = 0; j < 16; j++) {
 	    gpio_aw_get(DATA_PIN, &newvalue);
 	    if (newvalue ^= invert)

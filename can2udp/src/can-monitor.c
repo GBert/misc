@@ -77,6 +77,7 @@ uint32_t be32(uint8_t *u) {
     return (u[0] << 24) | (u[1] << 16) | (u[2] << 8) | u[3];
 }
 
+#if 0
 int insert_right(struct knoten *liste, void *element) {
     struct knoten *tmp = liste;
     struct knoten *node = calloc(1, sizeof(struct knoten));
@@ -108,6 +109,7 @@ struct messwert_t *suche_messwert(struct knoten *liste, uint64_t messwert) {
     }
     return NULL;
 }
+#endif
 
 void INThandler(int sig) {
     signal(sig, SIG_IGN);
@@ -125,6 +127,7 @@ void writeGreen(const char *s) {
     printf(RESET);
 }
 
+#if 0
 void writeCyan(const char *s) {
     printf(CYN "%s\n", s);
 }
@@ -132,6 +135,7 @@ void writeCyan(const char *s) {
 void writeYellow(const char *s) {
     printf(YEL "%s\n", s);
 }
+#endif
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
@@ -203,12 +207,14 @@ int print_can_frame(char *format_string, struct can_frame *frame) {
     return 0;
 }
 
+#if 0
 int CS1(int hash) {
     if ((hash & (1 << 7)) == 0 && (hash & (1 << 8)) != 0 && (hash & (1 << 9)) != 0)
 	return 0;
     else
 	return 1;
 }
+#endif
 
 char *getLoco(uint8_t * data, char *s) {
     uint16_t locID = be16(&data[2]);
@@ -762,7 +768,7 @@ void decode_frame(struct can_frame *frame) {
 	if (frame->can_dlc == 7) {
 	    cv_number = ((frame->data[4] & 0x3) << 8) + frame->data[5];
 	    cv_index = frame->data[4] >> 2;
-	    printf("Read Config Lok %s CV Nummer %d Index %d Anzahl %d\n",
+	    printf("Read Config Lok %s CV Nummer %u Index %u Anzahl %u\n",
 		   getLoco(frame->data, s), cv_number, cv_index, frame->data[6]);
 	}
 	break;
@@ -770,9 +776,9 @@ void decode_frame(struct can_frame *frame) {
 	cv_number = ((frame->data[4] & 0x3) << 8) + frame->data[5];
 	cv_index = frame->data[4] >> 2;
 	if (frame->can_dlc == 6)
-	    printf("Read Config Lok %s CV Nummer %d Index %d\n", getLoco(frame->data, s), cv_number, cv_index);
+	    printf("Read Config Lok %s CV Nummer %u Index %u\n", getLoco(frame->data, s), cv_number, cv_index);
 	if (frame->can_dlc == 7)
-	    printf("Read Config Lok %s CV Nummer %d Index %d Wert %d\n",
+	    printf("Read Config Lok %s CV Nummer %u Index %u Wert %u\n",
 		   getLoco(frame->data, s), cv_number, cv_index, frame->data[6]);
 	break;
     /* Write Config */
@@ -782,7 +788,7 @@ void decode_frame(struct can_frame *frame) {
 	cv_number = ((frame->data[4] & 0x3) << 8) + frame->data[5];
 	cv_index = frame->data[4] >> 2;
 	if (frame->can_dlc == 8)
-	    printf("Write Config Lok %s CV Nummer %d Index %d Wert %d Ctrl 0x%02X\n", getLoco(frame->data, s),
+	    printf("Write Config Lok %s CV Nummer %u Index %u Wert %u Ctrl 0x%02X\n", getLoco(frame->data, s),
 		   cv_number, cv_index, frame->data[6], frame->data[7]);
 	else
 	    printf("Write Config Lok %s Befehl unbekannt\n", getLoco(frame->data, s));
@@ -792,9 +798,9 @@ void decode_frame(struct can_frame *frame) {
     case 0x17:
 	uid = be32(frame->data);
 	if (frame->can_dlc == 6)
-	    printf("Zubehör Schalten UID 0x%08X Stellung %d Strom %d\n", uid, frame->data[4], frame->data[5]);
+	    printf("Zubehör Schalten UID 0x%08X Stellung %u Strom %u\n", uid, frame->data[4], frame->data[5]);
 	if (frame->can_dlc == 8)
-	    printf("Zubehör Schalten UID 0x%08X Stellung %d Strom %d Schaltzeit/Sonderfunktionswert %d\n",
+	    printf("Zubehör Schalten UID 0x%08X Stellung %u Strom %u Schaltzeit/Sonderfunktionswert %u\n",
 		   uid, frame->data[4], frame->data[5], be16(&frame->data[6]));
 	break;
     /* S88 Polling */

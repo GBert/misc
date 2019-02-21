@@ -99,6 +99,7 @@ void add_crc(uint8_t *data, int length) {
     *data = xor;
 }
 
+#if 0
 uint8_t add_parity(uint8_t data) {
     uint8_t temp, parity = 0;
     data &= 0x7f;
@@ -112,6 +113,7 @@ uint8_t add_parity(uint8_t data) {
 	data |= 0x80;
     return data;
 }
+#endif
 
 int rawframe_to_socket(int net_socket, unsigned char *netframe, int length) {
     int s;
@@ -163,10 +165,8 @@ void xntcp_internal(unsigned char *frame) {
 }
 
 int print_frame(unsigned char *frame, int length, int background) {
-    int i;
-
     if (!background) {
-	for (i = 0; i < length; i++)
+	for (int i = 0; i < length; i++)
 	    printf("0x%02x ", frame[i]);
 	printf("\n");
     }
@@ -174,7 +174,7 @@ int print_frame(unsigned char *frame, int length, int background) {
 }
 
 int main(int argc, char **argv) {
-    int length, rs485_length, n, i, max_fds, opt, local_tcp_port, nready, conn_fd;
+    int length, rs485_length, n, i, max_fds, nready, opt, local_tcp_port, conn_fd;
     char timestamp[16];
     /* UDP incoming socket , CAN socket, UDP broadcast socket, TCP socket */
     int eci, ret, tcp_socket, ec_index;

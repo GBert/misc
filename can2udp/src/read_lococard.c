@@ -214,7 +214,7 @@ int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_d
 	    func = 0;
 	    printf("\n");
 	    for (j = 0; j < length / 10; j++) {
-		printf(" function %2d: ", func++);
+		printf(" function %2u: ", func++);
 		for (k = 0; k < 10; k++) {
 		    printf(" 0x%02x", loco_config->bin[i++]);
 		}

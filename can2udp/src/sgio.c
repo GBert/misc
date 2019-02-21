@@ -266,7 +266,7 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
 	CALL_ZLIB(deflate(&strm, Z_FINISH));
 	deflated_size = CHUNK - strm.avail_out;
 	if (strm.avail_out == 0) {
-	    printf("%s: compressed file to large : %d filesize %d strm.avail_out\n", __func__, nbytes, strm.avail_out);
+	    printf("%s: compressed file to large : %u filesize %d strm.avail_out\n", __func__, nbytes, strm.avail_out);
 	    deflateEnd(&strm);
 	    free(config);
 	    free(out);
@@ -287,8 +287,7 @@ int send_tcp_config_data(char *filename, char *config_dir, uint32_t canid, int t
 	}
 
 	crc = CRCCCITT(out, padded_nbytes, 0xffff);
-	printf("%s: canid 0x%08x filesize %d deflated size: %d crc 0x%04x\n", __func__, canid, nbytes, deflated_size,
-	       crc);
+	printf("%s: canid 0x%08x filesize %u deflated size: %d crc 0x%04x\n", __func__, canid, nbytes, deflated_size, crc);
 	memset(netframe, 0, MAXMTU);
 	/* prepare first CAN frame   */
 	/* delete response bit and set canid to config data stream */
