@@ -1,4 +1,4 @@
-LIBS=cs2_parse mr_can mr_ipc config io_fkts
+LIBS=cs2_parse mr_can mr_ipc config io_fkts uci
 
 
 .PHONY: $(LIBS)

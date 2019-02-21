@@ -3,6 +3,7 @@
 
 #include <boolean.h>
 #include <fsm.h>
+#include <time.h>
 #include "canmember.h"
 #include "cron.h"
 #include "lok.h"
