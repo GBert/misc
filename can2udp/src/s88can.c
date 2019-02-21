@@ -149,7 +149,7 @@ void handlecan() {
 	else if (config_index > config_num) {
 	    fprintf(stderr, "Ignoring query undefined config point %d\n", config_index);
 	} else {
-	    snprintf(configstring, sizeof(configstring), "Bus %3u Laenge:_0_" str(MAXMODULES), config_index - 2);
+	    snprintf(configstring, sizeof(configstring), "Bus %3d Laenge:_0_" str(MAXMODULES), config_index - 2);
 	    sendConfigInfoSlider(canfd, cd, config_index, 0, MAXMODULES, s88[config_index - 3].blen, configstring);
 	}
     }

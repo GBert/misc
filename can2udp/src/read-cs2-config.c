@@ -233,6 +233,7 @@ int add_loco(struct loco_data_t *loco) {
 	l->mfxAdr = calloc(1, sizeof(struct mfxAdr_t));
 	if (!l->mfxAdr) {
 	    fprintf(stderr, "can't calloc buffer for loco mfx data: %s\n", strerror(errno));
+	    free(l);
 	    return (EXIT_FAILURE);
 	}
 
@@ -1115,5 +1116,7 @@ int read_loco_names(char *config_file) {
     }
     if (name)
 	free(name);
+    if (loco)
+	free(loco);
     return (EXIT_SUCCESS);
 }
