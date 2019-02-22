@@ -1,11 +1,16 @@
 const int revisionnr = 
-15088
+15093
 ;
 const char* commithash = 
-"5afd7c16ee7ba859358364667a7898aae15041e7";
+"9746a608927cfec00f6da8717bccd9bd6fc604ce";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15093 2019-02-22 09:37:34 +0100 dinamo: serialise XML command to show in trace in case of zero address\n" \
+"15092 2019-02-22 08:28:12 +0100 dinamo: loco command trace correction\n" \
+"15091 2019-02-22 08:18:01 +0100 dinamo: reject DCC loco commands with zero address\n" \
+"15090 2019-02-22 08:09:25 +0100 planpanel: select option backcolor added\n" \
+"15089 2019-02-21 21:24:19 +0100 finder: check destination permission only if set\n" \
 "15088 2019-02-21 16:56:48 +0100 item: fix for restoring switch background color after unlock\n" \
 "15087 2019-02-21 12:27:13 +0100 SpDrS60: removed button background\n" \
 "15086 2019-02-21 11:47:21 +0100 mbusdlg: added SoD poll option for CDB and GC2a\n" \
@@ -2001,10 +2006,5 @@ const char* revlog =
 "13096 2017-11-25 19:00:46 +0100 makewin64-full.sh: only one task on the raspi\n" \
 "13095 2017-11-25 18:13:47 +0100 roclcdr: free on enter/wheel count fixes\n" \
 "13094 2017-11-25 17:05:21 +0100 roclcdr: free on enter/wheel count fixes\n" \
-"13093 2017-11-25 15:09:49 +0100 rocnetnode: start of day fix\n" \
-"13092 2017-11-25 14:06:33 +0100 rocnetnode: SoD traces added\n" \
-"13091 2017-11-25 12:14:39 +0100 rocnetnode: trace errno text\n" \
-"13090 2017-11-25 12:04:01 +0100 switch: automode option added for the controller\n" \
-"13089 2017-11-25 11:27:08 +0100 switch: control option invert added\n" \
 
 "log end";
