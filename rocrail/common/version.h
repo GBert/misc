@@ -1,11 +1,14 @@
 const int revisionnr = 
-15093
+15096
 ;
 const char* commithash = 
-"9746a608927cfec00f6da8717bccd9bd6fc604ce";
+"a436b1abf752f9d4c7eb956802a2699a4001d8f4";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15096 2019-02-22 18:07:39 +0100 item: fix for reset selected background color\n" \
+"15095 2019-02-22 15:06:31 +0100 carpanel: show dummy image in case\n" \
+"15094 2019-02-22 13:59:20 +0100 cardlg: function pushbutton option added\n" \
 "15093 2019-02-22 09:37:34 +0100 dinamo: serialise XML command to show in trace in case of zero address\n" \
 "15092 2019-02-22 08:28:12 +0100 dinamo: loco command trace correction\n" \
 "15091 2019-02-22 08:18:01 +0100 dinamo: reject DCC loco commands with zero address\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13099 2017-11-26 13:52:02 +0100 fback: do not increase wheelcounter at command\n" \
 "13098 2017-11-26 08:48:13 +0100 rocnetnode: init outputs at startup\n" \
 "13097 2017-11-26 08:34:05 +0100 rocnetnode: check the new ini from SD before rename it to rocnetnode.ini\n" \
-"13096 2017-11-25 19:00:46 +0100 makewin64-full.sh: only one task on the raspi\n" \
-"13095 2017-11-25 18:13:47 +0100 roclcdr: free on enter/wheel count fixes\n" \
-"13094 2017-11-25 17:05:21 +0100 roclcdr: free on enter/wheel count fixes\n" \
 
 "log end";
