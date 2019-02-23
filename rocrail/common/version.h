@@ -1,11 +1,14 @@
 const int revisionnr = 
-15096
+15099
 ;
 const char* commithash = 
-"a436b1abf752f9d4c7eb956802a2699a4001d8f4";
+"77c1cbebfb71e3a33b9499463b37278cce630695";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15099 2019-02-23 08:38:06 +0100 item: restore own background color in edit mode\n" \
+"15098 2019-02-22 21:42:42 +0100 renderer: fix for seltab text\n" \
+"15097 2019-02-22 19:41:52 +0100 schedule: fix retrieving the schedule entry by index for executing actions\n" \
 "15096 2019-02-22 18:07:39 +0100 item: fix for reset selected background color\n" \
 "15095 2019-02-22 15:06:31 +0100 carpanel: show dummy image in case\n" \
 "15094 2019-02-22 13:59:20 +0100 cardlg: function pushbutton option added\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13102 2017-11-27 09:57:35 +0100 locdialog: prev function group from 1 to 8\n" \
 "13101 2017-11-27 08:12:53 +0100 loc: fix for function > 28 timers\n" \
 "13100 2017-11-26 14:38:57 +0100 mvtrack: reset command support added\n" \
-"13099 2017-11-26 13:52:02 +0100 fback: do not increase wheelcounter at command\n" \
-"13098 2017-11-26 08:48:13 +0100 rocnetnode: init outputs at startup\n" \
-"13097 2017-11-26 08:34:05 +0100 rocnetnode: check the new ini from SD before rename it to rocnetnode.ini\n" \
 
 "log end";
