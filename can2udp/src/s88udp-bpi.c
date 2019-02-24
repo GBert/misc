@@ -59,12 +59,12 @@ struct s88_t {
 
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -vf [-b <bcast_addr/int>][-i <0|1>][-p <port>][-m <s88modules>][-o <offset>]\n", prg);
-    fprintf(stderr, "   Version 1.4\n\n");
+    fprintf(stderr, "   Version 1.5\n\n");
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -i [0|1]            invert signals - default 0 -> not inverting\n");
     fprintf(stderr, "         -d <event id>       using event id - default 0\n");
     fprintf(stderr, "         -e <hash>           using CAN <hash>\n");
-    fprintf(stderr, "         -m <s88modules>     number of connected S88 modules - default 1\n");
+    fprintf(stderr, "         -m <s88modules>     number of connected S88 modules - default 1 (0 fake messages for testing)\n");
     fprintf(stderr, "         -o <offset>         addressing offset - default 0\n");
     fprintf(stderr, "         -p <port>           destination port of the server - default %d\n", UDPPORT);
     fprintf(stderr, "         -s <port>           second destination port of the server\n");
@@ -196,11 +196,12 @@ int main(int argc, char **argv) {
     struct s88_t s88_data;
     char *udp_dst_address;
     char *bcast_interface;
-    uint32_t mask, s88_bit;
+    uint32_t counter, mask, s88_bit;
     uint8_t newvalue;
 
     const int on = 1;
     mask = 0;
+    counter = 0;
 
     int destination_port = UDPPORT;
     int destination_second_port = 0;
@@ -225,8 +226,6 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "can't alloc memory for bcast_interface: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     };
-
-    /* printf ( stderr, "\ns88udp <modulcount>\n\n" ); */
 
     /* prepare udp sending socket struct */
     memset(&destaddr, 0, sizeof(destaddr));
@@ -267,7 +266,7 @@ int main(int argc, char **argv) {
 	    break;
 	case 'm':
 	    modulcount = atoi(optarg);
-	    if (modulcount < 1 || modulcount > MAXMODULES) {
+	    if (modulcount < 0 || modulcount > MAXMODULES) {
 		usage(basename(argv[0]));
 		exit(EXIT_FAILURE);
 	    }
@@ -365,56 +364,66 @@ int main(int argc, char **argv) {
 	}
     }
 
-    if (gpio_aw_open("/dev/mem") < 0) {
-	fprintf(stderr, "Can't open IO mem: %s\n", strerror(errno));
-	exit(EXIT_FAILURE);
+    if (modulcount > 0) {
+	if (gpio_aw_open("/dev/mem") < 0) {
+	    fprintf(stderr, "Can't open IO mem: %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
+	gpio_aw_select_output(CLOCK_PIN);
+	gpio_aw_select_output(LOAD_PIN);
+	gpio_aw_select_output(RESET_PIN);
+	gpio_aw_select_input(DATA_PIN);
     }
-
-    gpio_aw_select_output(CLOCK_PIN);
-    gpio_aw_select_output(LOAD_PIN);
-    gpio_aw_select_output(RESET_PIN);
-    gpio_aw_select_input(DATA_PIN);
 
     /* loop forever */
     while (1) {
-	s88_bit = 0;
-	gpio_aw_set(LOAD_PIN, HIGH ^ s88_data.invert);
-	usec_sleep(utime);
-	gpio_aw_set(CLOCK_PIN, HIGH ^ s88_data.invert);
-	usec_sleep(utime);
-	gpio_aw_set(CLOCK_PIN, LOW ^ s88_data.invert);
-	usec_sleep(utime);
-	gpio_aw_set(RESET_PIN, HIGH ^ s88_data.invert);
-	usec_sleep(utime);
-	gpio_aw_set(RESET_PIN, LOW ^ s88_data.invert);
-	usec_sleep(utime);
-	gpio_aw_set(LOAD_PIN, LOW ^ s88_data.invert);
-	s88_data.count++;
-	/* get sensor data */
-	for (i = 0; i < modulcount; i++) {
-	    if ((s88_bit & 0x1f) == 0)
-		mask = 0x80000000;
-	    for (j = 0; j < 16; j++) {
-		gpio_aw_get(DATA_PIN, &newvalue);
-		if (newvalue ^= s88_data.invert)
-		    bus_actual[i >> 1] |= mask;
-		else
-		    bus_actual[i >> 1] &= ~mask;
-		usec_sleep(utime);
-		gpio_aw_set(CLOCK_PIN, HIGH ^ s88_data.invert);
-		usec_sleep(utime);
-		gpio_aw_set(CLOCK_PIN, LOW ^ s88_data.invert);
-		s88_bit++;
-		mask >>= 1;
+	/* fake S88 events for testing */
+	if (modulcount == 0) {
+	    ret = create_event(&s88_data, 0, 0, 1, counter & 1);
+	    if (ret)
+		return -1;
+	    usec_sleep(900000);
+	    counter++;
+	} else {
+	    s88_bit = 0;
+	    gpio_aw_set(LOAD_PIN, HIGH ^ s88_data.invert);
+	    usec_sleep(utime);
+	    gpio_aw_set(CLOCK_PIN, HIGH ^ s88_data.invert);
+	    usec_sleep(utime);
+	    gpio_aw_set(CLOCK_PIN, LOW ^ s88_data.invert);
+	    usec_sleep(utime);
+	    gpio_aw_set(RESET_PIN, HIGH ^ s88_data.invert);
+	    usec_sleep(utime);
+	    gpio_aw_set(RESET_PIN, LOW ^ s88_data.invert);
+	    usec_sleep(utime);
+	    gpio_aw_set(LOAD_PIN, LOW ^ s88_data.invert);
+	    s88_data.count++;
+	    /* get sensor data */
+	    for (i = 0; i < modulcount; i++) {
+		if ((s88_bit & 0x1f) == 0)
+		    mask = 0x80000000;
+		for (j = 0; j < 16; j++) {
+		    gpio_aw_get(DATA_PIN, &newvalue);
+		    if (newvalue ^= s88_data.invert)
+			bus_actual[i >> 1] |= mask;
+		    else
+			bus_actual[i >> 1] &= ~mask;
+		    usec_sleep(utime);
+		    gpio_aw_set(CLOCK_PIN, HIGH ^ s88_data.invert);
+		    usec_sleep(utime);
+		    gpio_aw_set(CLOCK_PIN, LOW ^ s88_data.invert);
+		    s88_bit++;
+		    mask >>= 1;
+		}
 	    }
+	    /* now check data */
+	    ret = analyze_data(&s88_data, modulcount * 16);
+	    if (ret < 0) {
+		fprintf(stderr, "problem sending event data - terminating\n");
+		exit(EXIT_FAILURE);
+	    }
+	    usec_sleep(100 * utime);
 	}
-	/* now check data */
-	ret = analyze_data(&s88_data, modulcount * 16);
-	if (ret < 0) {
-	    fprintf(stderr, "problem sending event data - terminating\n");
-	    exit(EXIT_FAILURE);
-	}
-	usec_sleep(100 * utime);
     }
     return 0;
 }
