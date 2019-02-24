@@ -1,11 +1,14 @@
 const int revisionnr = 
-15112
+15115
 ;
 const char* commithash = 
-"46955db8e795a2760742cf42aaf592e95a718479";
+"846ec0022a98d22f6baaacc8f4af70d535e975b4";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15115 2019-02-24 17:13:38 +0100 planpanel: fix for calculating the module size\n" \
+"15114 2019-02-24 15:50:51 +0100 mbus: loco names from master (wip)\n" \
+"15113 2019-02-24 15:19:10 +0100 mbus: getting loknamen from CS3 (WIP)\n" \
 "15112 2019-02-24 10:25:04 +0100 planpanel: set background color locally too\n" \
 "15111 2019-02-24 10:15:35 +0100 dinamo: revert unlink test\n" \
 "15110 2019-02-23 20:17:15 +0100 item: set background color locally also if rocview is online\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13118 2017-11-29 14:32:45 +0100 InnoSetup: do not popup if the destination directory already exist\n" \
 "13117 2017-11-29 14:22:46 +0100 innosetup: do not use the previous install directory automatically\n" \
 "13116 2017-11-29 12:52:27 +0100 item: fix for invalid locoID pointer\n" \
-"13115 2017-11-29 11:51:24 +0100 mem: isValid function added\n" \
-"13114 2017-11-28 17:23:59 +0100 item: try fix locoid mystery...\n" \
-"13113 2017-11-28 17:22:35 +0100 locdialog: calibrate labels changed\n" \
 
 "log end";
