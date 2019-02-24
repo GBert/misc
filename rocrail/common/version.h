@@ -1,11 +1,14 @@
 const int revisionnr = 
-15115
+15118
 ;
 const char* commithash = 
-"846ec0022a98d22f6baaacc8f4af70d535e975b4";
+"3a63604b612dfeef0d7d49f3ae52b96332845d56";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15118 2019-02-24 20:07:28 +0100 mbus: work around for nr of channels and trackbox\n" \
+"15117 2019-02-24 19:39:26 +0100 mbus: fix for polling channels of the trackbox\n" \
+"15116 2019-02-24 19:09:18 +0100 itemutils: fix for ori cx/cy\n" \
 "15115 2019-02-24 17:13:38 +0100 planpanel: fix for calculating the module size\n" \
 "15114 2019-02-24 15:50:51 +0100 mbus: loco names from master (wip)\n" \
 "15113 2019-02-24 15:19:10 +0100 mbus: getting loknamen from CS3 (WIP)\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13121 2017-11-29 22:06:19 +0100 mvtrack: toString implemented\n" \
 "13120 2017-11-29 18:55:46 +0100 disable properties in auto mode for stage too\n" \
 "13119 2017-11-29 16:13:33 +0100 InnoSetup: do not popup if the destination directory already exist\n" \
-"13118 2017-11-29 14:32:45 +0100 InnoSetup: do not popup if the destination directory already exist\n" \
-"13117 2017-11-29 14:22:46 +0100 innosetup: do not use the previous install directory automatically\n" \
-"13116 2017-11-29 12:52:27 +0100 item: fix for invalid locoID pointer\n" \
 
 "log end";
