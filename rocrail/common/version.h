@@ -1,11 +1,24 @@
 const int revisionnr = 
-15099
+15112
 ;
 const char* commithash = 
-"77c1cbebfb71e3a33b9499463b37278cce630695";
+"46955db8e795a2760742cf42aaf592e95a718479";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15112 2019-02-24 10:25:04 +0100 planpanel: set background color locally too\n" \
+"15111 2019-02-24 10:15:35 +0100 dinamo: revert unlink test\n" \
+"15110 2019-02-23 20:17:15 +0100 item: set background color locally also if rocview is online\n" \
+"15109 2019-02-23 20:11:54 +0100 dinamo: do not clean/reset unlinked blocks\n" \
+"15108 2019-02-23 17:19:12 +0100 block: reset trackdriver to V zero with analog flag set\n" \
+"15107 2019-02-23 16:20:07 +0100 renderer: seltab text left aligned in case of slim theme\n" \
+"15106 2019-02-23 16:18:46 +0100 renderer: seltab text left aligned\n" \
+"15105 2019-02-23 15:40:46 +0100 item: background color fix\n" \
+"15104 2019-02-23 14:51:30 +0100 issuedlg: show normalized issue subject\n" \
+"15103 2019-02-23 14:20:57 +0100 finder: avoid terminal block, but not for the destination\n" \
+"15102 2019-02-23 13:30:50 +0100 issuedlg: nomalise subject on OK (a-z,0-9,A-Z)\n" \
+"15101 2019-02-23 13:11:03 +0100 schedules: remove invalid trace\n" \
+"15100 2019-02-23 11:47:30 +0100 finder: revert screwing up the finder\n" \
 "15099 2019-02-23 08:38:06 +0100 item: restore own background color in edit mode\n" \
 "15098 2019-02-22 21:42:42 +0100 renderer: fix for seltab text\n" \
 "15097 2019-02-22 19:41:52 +0100 schedule: fix retrieving the schedule entry by index for executing actions\n" \
@@ -1993,18 +2006,5 @@ const char* revlog =
 "13115 2017-11-29 11:51:24 +0100 mem: isValid function added\n" \
 "13114 2017-11-28 17:23:59 +0100 item: try fix locoid mystery...\n" \
 "13113 2017-11-28 17:22:35 +0100 locdialog: calibrate labels changed\n" \
-"13112 2017-11-28 16:01:25 +0100 innosetup: skip ask for install directory if already installed\n" \
-"13111 2017-11-28 11:50:49 +0100 wiki demo plan added\n" \
-"13110 2017-11-28 11:34:08 +0100 car: use identifier instead of ident to be conform other objects\n" \
-"13109 2017-11-28 09:37:50 +0100 demo/wiki plan options\n" \
-"13108 2017-11-28 08:10:34 +0100 rpic: save and restore field bytes\n" \
-"13107 2017-11-27 19:55:08 +0100 innosetup: demo or wiki plan choice\n" \
-"13106 2017-11-27 13:58:30 +0100 block: trace correction for none matching code\n" \
-"13105 2017-11-27 13:36:27 +0100 wait4event: release blockgroup on enter too (test)\n" \
-"13104 2017-11-27 11:54:51 +0100 routedialog: popup for removing all autogen with questionmark\n" \
-"13103 2017-11-27 11:17:42 +0100 routedialog: remove also tt generated flags\n" \
-"13102 2017-11-27 09:57:35 +0100 locdialog: prev function group from 1 to 8\n" \
-"13101 2017-11-27 08:12:53 +0100 loc: fix for function > 28 timers\n" \
-"13100 2017-11-26 14:38:57 +0100 mvtrack: reset command support added\n" \
 
 "log end";
