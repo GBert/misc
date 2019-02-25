@@ -1,11 +1,14 @@
 const int revisionnr = 
-15121
+15124
 ;
 const char* commithash = 
-"058a95e0489b0fca73a54dddb06182eb4477a7ab";
+"afa1481a349075042379e846ca4ed8e97dffe0b9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15124 2019-02-25 13:02:06 +0100 mbus: correction for volt offset\n" \
+"15123 2019-02-25 12:22:30 +0100 mgbox: fix (Bert)\n" \
+"15122 2019-02-25 11:57:38 +0100 mbus: get loco names and info from master (wip)\n" \
 "15121 2019-02-25 09:10:19 +0100 planpaneldlg: check if choosen level already exist\n" \
 "15120 2019-02-25 08:28:39 +0100 planpanel: fix for changing item background color to none\n" \
 "15119 2019-02-25 08:21:49 +0100 mbus: trackbox measurement corrections\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13127 2017-12-01 16:16:14 +0100 rocview: extra status info at startup\n" \
 "13126 2017-12-01 11:30:42 +0100 loc: fix for function timers > 27\n" \
 "13125 2017-11-30 22:09:48 +0100 app: -pwr command line option added\n" \
-"13124 2017-11-30 22:07:35 +0100 app: -pwr command line option added\n" \
-"13123 2017-11-30 14:20:35 +0100 fback: not delete command node in case of redirection to the controller\n" \
-"13122 2017-11-30 08:02:19 +0100 mvtrack: reset by xmlscript\n" \
 
 "log end";
