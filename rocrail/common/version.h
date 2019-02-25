@@ -1,11 +1,13 @@
 const int revisionnr = 
-15124
+15126
 ;
 const char* commithash = 
-"afa1481a349075042379e846ca4ed8e97dffe0b9";
+"dc479f30b6af2d3f314eca264061c57b9d576e2f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15126 2019-02-25 15:11:04 +0100 mbus: report booster state also with the SID attribute\n" \
+"15125 2019-02-25 14:45:18 +0100 mbus: discover locos from master list\n" \
 "15124 2019-02-25 13:02:06 +0100 mbus: correction for volt offset\n" \
 "15123 2019-02-25 12:22:30 +0100 mgbox: fix (Bert)\n" \
 "15122 2019-02-25 11:57:38 +0100 mbus: get loco names and info from master (wip)\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13129 2017-12-02 18:42:06 +0100 rocctrl: create read handler first after connect\n" \
 "13128 2017-12-02 18:31:21 +0100 rocctrl: (WIP) a small Python utility for a small display\n" \
 "13127 2017-12-01 16:16:14 +0100 rocview: extra status info at startup\n" \
-"13126 2017-12-01 11:30:42 +0100 loc: fix for function timers > 27\n" \
-"13125 2017-11-30 22:09:48 +0100 app: -pwr command line option added\n" \
 
 "log end";
