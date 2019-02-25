@@ -1,11 +1,12 @@
 const int revisionnr = 
-15126
+15127
 ;
 const char* commithash = 
-"dc479f30b6af2d3f314eca264061c57b9d576e2f";
+"05afdfe02cbd1ef618737a5ed9650897777d2b58";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15127 2019-02-25 16:40:42 +0100 guiframe: add new zlevel to model\n" \
 "15126 2019-02-25 15:11:04 +0100 mbus: report booster state also with the SID attribute\n" \
 "15125 2019-02-25 14:45:18 +0100 mbus: discover locos from master list\n" \
 "15124 2019-02-25 13:02:06 +0100 mbus: correction for volt offset\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13130 2017-12-02 22:37:29 +0100 rocctrl: WIP\n" \
 "13129 2017-12-02 18:42:06 +0100 rocctrl: create read handler first after connect\n" \
 "13128 2017-12-02 18:31:21 +0100 rocctrl: (WIP) a small Python utility for a small display\n" \
-"13127 2017-12-01 16:16:14 +0100 rocview: extra status info at startup\n" \
 
 "log end";
