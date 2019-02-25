@@ -1,11 +1,14 @@
 const int revisionnr = 
-15118
+15121
 ;
 const char* commithash = 
-"3a63604b612dfeef0d7d49f3ae52b96332845d56";
+"058a95e0489b0fca73a54dddb06182eb4477a7ab";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15121 2019-02-25 09:10:19 +0100 planpaneldlg: check if choosen level already exist\n" \
+"15120 2019-02-25 08:28:39 +0100 planpanel: fix for changing item background color to none\n" \
+"15119 2019-02-25 08:21:49 +0100 mbus: trackbox measurement corrections\n" \
 "15118 2019-02-24 20:07:28 +0100 mbus: work around for nr of channels and trackbox\n" \
 "15117 2019-02-24 19:39:26 +0100 mbus: fix for polling channels of the trackbox\n" \
 "15116 2019-02-24 19:09:18 +0100 itemutils: fix for ori cx/cy\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13124 2017-11-30 22:07:35 +0100 app: -pwr command line option added\n" \
 "13123 2017-11-30 14:20:35 +0100 fback: not delete command node in case of redirection to the controller\n" \
 "13122 2017-11-30 08:02:19 +0100 mvtrack: reset by xmlscript\n" \
-"13121 2017-11-29 22:06:19 +0100 mvtrack: toString implemented\n" \
-"13120 2017-11-29 18:55:46 +0100 disable properties in auto mode for stage too\n" \
-"13119 2017-11-29 16:13:33 +0100 InnoSetup: do not popup if the destination directory already exist\n" \
 
 "log end";
