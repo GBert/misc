@@ -2,7 +2,7 @@ BINS := can-bounce-test can-monitor can2eth can2udp can4lnx2udp can2serial clone
         clone-ms2-loco read-cs2-ini gb2-update ir-tester cs2ping bpi-rs485 scan2lan can2lan \
         ms2wifi virtual_canbuster virtual_gfp virtual_links88 virtual_ms2 \
         get-cs-data get-cs-config pio-i2c-udp read_lococard s88udp-bpi s88udp-rpi s88test-bpi \
-        wake-up-links88 virtual_s88udp gpio-poll lan-schnitte xntcpd s88can
+        wake-up-links88 virtual_s88udp gpio-poll lan-schnitte xntcpd s88can spitest
 
 PREFIX=/usr/sbin
 
@@ -11,7 +11,7 @@ BIN = $@
 all:	$(BINS)
 
 # CFLAGS+=-Wall -Wextra -Wmaybe-uninitialized -pedantic-errors -std=gnu99 -g
-CFLAGS+=-g -O2 -fstack-protector-strong -Wformat -Werror=format-security -Wall -Wextra -Wmaybe-uninitialized -std=gnu99 -pedantic-errors -Wdate-time
+CFLAGS+=-g -O2 -fstack-protector-strong -Wformat -Werror=format-security -Wall -Wextra -Wmaybe-uninitialized -std=gnu99 -pedantic-errors 
 
 size_of-test: size_of-test.o
 	$(CC) $(CFLAGS) -o size_of-test size_of-test.o -lpcap
@@ -126,6 +126,9 @@ xntcpd: xntcpd.o
 
 s88can: s88can.o mcan.o allwinner.o
 	$(CC) $(CFLAGS) -o s88can allwinner.o mcan.o s88can.o
+
+spitest: spitest.o
+	$(CC) $(CFLAGS) -o spitest spitest.o
 
 clean:
 	$(RM) *.o $(BINS) s88udp
