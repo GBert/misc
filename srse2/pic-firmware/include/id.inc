@@ -242,7 +242,7 @@ SEND_INDEX_LOOP1
 SEND_INDEX_LOOP2
                 TBLRD*+
                 MOVFF   TABLAT,POSTINC0
-                DECFSZ  INDEX_APOS
+             DECFSZ  INDEX_APOS
                 BRA     SEND_INDEX_LOOP3
                 ; TODO
 SEND_INDEX_LOOP3

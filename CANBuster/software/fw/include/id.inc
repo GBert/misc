@@ -19,6 +19,9 @@
 
                 CBLOCK
                 INDEX : 1
+                INDEX_APOS : 1
+                INDEX_VL : 1
+                INDEX_VH : 1
                 INDEX_N : 1
                 INDEX_L : 1
                 INDEX_C : 1
@@ -101,7 +104,7 @@ FIN_WRITE_DATA
 ; 0x200004	Start counting at X-High for event - S88
 ; 0x200005	Start counting at X-Low for event - S88
 ; 0x200006	Scan Interval (in 512us steps)
-; 0x200007	free
+; 0x200007	S88 Bus length
 ;------------------------------------------------------------------------------
 
 SETLOCIDP
@@ -129,6 +132,11 @@ READ_UID
                 MOVFF   TABLAT,S88C_L
                 TBLRD*+
                 MOVFF   TABLAT,SCAN_INTERVAL
+#IFDEF PWM_FW
+#ELSE
+                TBLRD*+
+                MOVFF   TABLAT,S88LENGTH
+#ENDIF
                 RETURN
 
 SET_UID
@@ -150,6 +158,11 @@ SET_UID
                 MOVFF   S88C_L,TABLAT
                 TBLWT*+
                 MOVFF   SCAN_INTERVAL,TABLAT
+#IFDEF PWM_FW
+#ELSE
+                TBLWT*+
+                MOVFF	S88LENGTH,TABLAT
+#ENDIF
                 TBLWT*+
 
                 MOVLW   0
@@ -161,14 +174,27 @@ SET_UID
 ;------------------------------------------------------------------------------
 ; Set CAN Hash according to Maerklin documentation
 ;------------------------------------------------------------------------------
+;
+;  CS2 CAN hash generation
+;
+;  hash' = highword ^ lowword
+;
+;  xxxxxxx11 0xxxxxxxx
+;  ^^^^^^^    ^^^^^^^^
+;   \\\\\\\   ||||||||
+;    \\\\\\-- ||||||||
+;     \\\\\\ \||||||||
+;  000xxxxxx xxxxxxxxx
+
+
 READCANHASH
                 RCALL   READ_UID
                 MOVLW   'C'
                 XORWF   ID_H,W
                 MOVWF   CANHASH_HIGH
                 ; shift left 3
-                SWAPF	CANHASH_HIGH,F
-                RRNCF	CANHASH_HIGH,F
+                SWAPF   CANHASH_HIGH,F
+                RRNCF   CANHASH_HIGH,F
                 ; set two lower bits
                 BSF     CANHASH_HIGH,0
                 BSF     CANHASH_HIGH,1
@@ -181,7 +207,6 @@ READCANHASH
                 BCF     CANHASH_HIGH,2
                 BCF     CANHASH_LOW,7
                 RETURN
-
 
 ;------------------------------------------------------------------------------
 ; send variable definitions
@@ -202,6 +227,7 @@ SEND_INDEX
                 CLRF    INDEX_C
                 ; align
                 TBLRD*+
+                MOVFF   TABLAT,INDEX_APOS
 
                 ; load Event Queue pointer
                 MOVFF   EVENTPP,FSR0H
@@ -222,6 +248,10 @@ SEND_INDEX_LOOP1
 SEND_INDEX_LOOP2
                 TBLRD*+
                 MOVFF   TABLAT,POSTINC0
+                DECFSZ  INDEX_APOS
+                BRA     SEND_INDEX_LOOP3
+                ; TODO
+SEND_INDEX_LOOP3
                 DECFSZ  INDEX_L,F
                 BRA     SEND_INDEX_LOOP2
                 CALL    EVENT_RING_NORMALIZE
@@ -290,7 +320,7 @@ INDEX3
 #ELSE
                 DB        4 ,  0
                 DB        3 ,  2 ,  0 ,  0 ,  0 ,0x0F,  0 ,  1
-                DB       'L',0xc3,0xa4, 'n', 'g', 'e',  0 , 'S'
+                DB       'L',0xc3,0xa4, 'n', 'g', 'e', ' ', 'S'
                 DB       '8', '8', '-', 'B', 'u', 's',  0 , '0'
                 DB        0 , '1', '6',  0 ,  0 ,  0 ,  0 ,  0
 #ENDIF

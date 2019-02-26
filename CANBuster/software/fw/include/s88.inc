@@ -46,6 +46,7 @@
                 S88MASK  : 1
                 S88STATE : 1
                 S88COUNT : 1
+                S88LENGTH : 1
                 S88_BYTE_COUNT : 1
                 S88_CT0_TMP : 1
                 S88_CT1_TMP : 1
@@ -251,7 +252,13 @@ S88_STATE_1
                 CLRF    S88_BYTE_COUNT
                 S88_LOAD_MEM  S88_BYTE_COUNT
 
-                MOVLW   15
+                SWAPF   S88LENGTH,W
+                ANDLW   0xF0
+                ; return if length is zero
+                BTFSC   STATUS,Z
+                RETURN
+
+                ADDLW   0xFF
                 MOVWF   S88COUNT
                 S88_LOAD_HIGH
                 INCF    S88STATE,F
