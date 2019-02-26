@@ -138,8 +138,6 @@ typedef struct _DDL_DATA {
     //Alternierende Ausgabe "fast" und "normaler" Refresh.
     bool lastRefreshFast;
 
-    struct timespec rmtp;       /* Do we really nead rmtp? */
-
     pthread_mutex_t nmra_pktpool_mutex;
     tNMRAPacketPool NMRAPacketPool;
 
@@ -150,9 +148,6 @@ typedef struct _DDL_DATA {
     tMFXPacketPool MFXPacketPool;
     
     int rdsPipeNew[2]; //FD's für Zugriff auf MFX RDS Auftrags Pipe (Info an RDS Thread, dass es Arbeit gibt).
-
-    int oslevel;                /* 0: ancient linux 2.4, 1 linux 2.6 */
-    
 } DDL_DATA;
 
 int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber);

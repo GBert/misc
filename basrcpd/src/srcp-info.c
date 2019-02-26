@@ -164,12 +164,13 @@ int doInfoClient(session_node_t * sn)
                         return -1;
                     }
                     *reply = 0x00;
-                    cacheInfoGL(bus, i, reply);
-                    if (writen(sn->socket, reply, strlen(reply)) == -1) {
-                        syslog_session(sn->session, DBG_ERROR,
+                    if (cacheInfoGL(bus, i, reply) == SRCP_INFO) {
+                    	if (writen(sn->socket, reply, strlen(reply)) == -1) {
+                        	syslog_session(sn->session, DBG_ERROR,
                                        "Socket write failed: %s (errno = %d)\n",
                                        strerror(errno), errno);
-                        return -1;
+                        	return -1;
+                        }
                     }
                     *reply = 0x00;
                     cacheGetLockGL(bus, i, &lockid);

@@ -225,9 +225,6 @@ static struct spi_ioc_transfer spi_nmra_idle;
 //Breite RDS Sync Impulse (in usec)
 #define MFX_RDS_SYNC_IMPULS_USEC 25
 
-
-static int (*nanosleep_DDL) (const struct timespec * req,
-                             struct timespec * rem);
 static void *thr_sendrec_DDL(void *);
 
 /********* Q U E U E *****************/
@@ -397,8 +394,7 @@ static int queue_get(bus_t busnumber, int *addr, char *packet,
 
 int init_lineDDL(bus_t busnumber)
 {
-    /* opens and initializes the selected SPI port */
-    /* returns a file handle                       */
+    /* opens and initializes the selected SPI port and returns a file handle */
 
     int dev;
 
@@ -427,20 +423,18 @@ int init_lineDDL(bus_t busnumber)
     int mode = 1; 
     if (ioctl (dev, SPI_IOC_WR_MODE, &mode) < 0) {
         syslog_bus(busnumber, DBG_FATAL, "SPI Mode Change failure: %s", strerror(errno));
-        return 1;
+        return -1;
     }
     uint8_t spiBPW = 8;
     if (ioctl (dev, SPI_IOC_WR_BITS_PER_WORD, &spiBPW) < 0) {
         syslog_bus(busnumber, DBG_FATAL, "SPI BPW Change failure: %s", strerror(errno));
-        return 1;
+        return -1;
     }
     int speed = SPI_BAUDRATE_MAERKLIN_LOCO_2;
     if (ioctl (dev, SPI_IOC_WR_MAX_SPEED_HZ, &speed) < 0) {
         syslog_bus(busnumber, DBG_FATAL, "SPI Speed Change failure: %s", strerror(errno));
-        return 1;
+        return -1;
     }
-    buses[busnumber].device.file.fd = dev;      /* we need that value at the next step */
-
     return dev;
 }
 
@@ -1429,16 +1423,12 @@ static bool refresh_loco_one(bus_t busnumber, bool fast) {
   if (refreshInfo -> protocol_refresh & EP_NMRADCC) {
     adr = __DDL->NMRAPacketPool.knownAddresses[refreshInfo -> last_refreshed_nmra_loco];
     if (adr >= 0) {
-      if (fast != ((time(NULL) - __DDL->NMRAPacketPool.packets[adr] -> timeLastUpdate) > FAST_REFRESH_TIMEOUT)) {
+      tNMRAPacket* tNp = __DDL->NMRAPacketPool.packets[adr];
+      if (tNp == NULL) return 0;
+      if (fast != ((time(NULL) - tNp->timeLastUpdate) > FAST_REFRESH_TIMEOUT)) {
         refreshGesendet = true;
-        send_packet(busnumber,
-                    __DDL->NMRAPacketPool.packets[adr]->packet,
-                    __DDL->NMRAPacketPool.packets[adr]->packet_size,
-                    QNBLOCOPKT, true);
-        send_packet(busnumber,
-                    __DDL->NMRAPacketPool.packets[adr]->fx_packet,
-                    __DDL->NMRAPacketPool.packets[adr]->
-                    fx_packet_size, QNBLOCOPKT, true);
+        send_packet(busnumber, tNp->packet, tNp->packet_size, QNBLOCOPKT, true);
+        send_packet(busnumber, tNp->fx_packet, tNp->fx_packet_size, QNBLOCOPKT, true);
       }
       do {
         refreshInfo -> last_refreshed_nmra_loco++;
@@ -1462,12 +1452,11 @@ static bool refresh_loco_one(bus_t busnumber, bool fast) {
     //MFX Refresh Cycle
     adr = __DDL->MFXPacketPool.knownAddresses[refreshInfo -> last_refreshed_mfx_loco];
     if (adr > 0) {
-      if (fast != ((time(NULL) - __DDL->MFXPacketPool.packets[adr] -> timeLastUpdate) > FAST_REFRESH_TIMEOUT)) {
+      tMFXPacket* tMp = __DDL->MFXPacketPool.packets[adr];
+      if (tMp == NULL) return 0;
+      if (fast != ((time(NULL) - tMp->timeLastUpdate) > FAST_REFRESH_TIMEOUT)) {
         refreshGesendet = true;
-        send_packet(busnumber,
-                    __DDL->MFXPacketPool.packets[adr]->packet,
-                    __DDL->MFXPacketPool.packets[adr]->packet_size,
-                    QMFX0PKT, true);
+        send_packet(busnumber, tMp->packet, tMp->packet_size, QMFX0PKT, true);
       }
       do {
         refreshInfo -> last_refreshed_mfx_loco++;
@@ -1563,7 +1552,7 @@ static bool power_is_off(bus_t busnumber)
             	buses[busnumber].power_state = 0;
                 buses[busnumber].power_changed = 1;
                 info[0] = 2;	info[1] = 0xA;	info[2] = 1;
-                info_mcs(busnumber, 1, 0, info);
+                info_mcs(busnumber, 1, __DDL->uid, info);
                 strcpy(buses[busnumber].power_msg, "SHORTCUT DETECTED");
                 infoPower(busnumber, msg);
                 enqueueInfoMessage(msg);
@@ -1573,17 +1562,17 @@ static bool power_is_off(bus_t busnumber)
     if (buses[busnumber].power_changed == 1) {
         if (buses[busnumber].power_state == 0) {
             set_SerialLine(busnumber, SL_RTS, OFF);
-            syslog_bus(busnumber, DBG_INFO, "Refresh cycle stopped.");
+            syslog_bus(busnumber, DBG_INFO, "Rail signal generation stopped.");
         }
         if (buses[busnumber].power_state == 1) {
             gettimeofday(&t_rts_on, NULL);
             set_SerialLine(busnumber, SL_RTS, ON);
-            syslog_bus(busnumber, DBG_INFO, "Refresh cycle started.");
+            syslog_bus(busnumber, DBG_INFO, "Rail signal generation started.");
         }
         buses[busnumber].power_changed = 0;
         info[0] = 1;	
 		info[1] = buses[busnumber].power_state;
-        info_mcs(busnumber, 1, 0, info);
+        info_mcs(busnumber, 1, __DDL->uid, info);
         infoPower(busnumber, msg);
         enqueueInfoMessage(msg);
     }
@@ -1600,7 +1589,6 @@ static bool power_is_off(bus_t busnumber)
 
 static void *thr_refresh_cycle(void *v)
 {
-//    ssize_t wresult;
     int result;
     struct sched_param sparam;
     int policy;
@@ -1610,34 +1598,26 @@ static void *thr_refresh_cycle(void *v)
     int addr;
     struct _thr_param *tp = v;
     bus_t busnumber = tp->busnumber;
-    struct timeval tv1;     // tv2;
+    struct timeval tv1;    
     struct timezone tz;
     /* argument for nanosleep to do non-busy waiting */
     static struct timespec rqtp_sleep = { 0, 2500000 };
 
-    nanosleep_DDL = nanosleep;
-    if (__DDL->oslevel == 1) {
-// da eh nur nanosleep gerufen wird        nanosleep_DDL = krnl26_nanosleep;
-        
-        result = pthread_getschedparam(pthread_self(), &policy, &sparam);
-        if (result != 0) {
-            syslog_bus(busnumber, DBG_ERROR,
+    result = pthread_getschedparam(pthread_self(), &policy, &sparam);
+    if (result != 0) {
+        syslog_bus(busnumber, DBG_ERROR,
                        "pthread_getschedparam() failed: %s (errno = %d).",
                        strerror(result), result);
-            /*TODO: Add an expressive error message */
-            pthread_exit((void *) 1);
-        }
+        pthread_exit((void *) 1);
+    }
         
-        sparam.sched_priority = 10;
-        result =
-            pthread_setschedparam(pthread_self(), SCHED_FIFO, &sparam);
-        if (result != 0) {
-            syslog_bus(busnumber, DBG_ERROR,
+    sparam.sched_priority = 10;
+    result = pthread_setschedparam(pthread_self(), SCHED_FIFO, &sparam);
+    if (result != 0) {
+        syslog_bus(busnumber, DBG_ERROR,
                        "pthread_setschedparam() failed: %s (errno = %d).",
                        strerror(result), result);
-            /*TODO: Add an expressive error message */
 // HACK:            pthread_exit((void *) 1);
-        }
     }
 
     struct spi_ioc_transfer spi_idlePacket;
@@ -1652,8 +1632,8 @@ static void *thr_refresh_cycle(void *v)
     for (;;) {
         pthread_testcancel();
         if (power_is_off(busnumber)) {
-           nanosleep_DDL(&rqtp_sleep, &__DDL->rmtp);
-           continue;
+	  nanosleep(&rqtp_sleep, NULL);
+	  continue;
         }
 
         /* Check if there are new commands and send them. */
@@ -1683,9 +1663,8 @@ static void *thr_refresh_cycle(void *v)
 
         /* If there are no new commands, send a loco state refresch. */
         else {
-          if (power_is_off(busnumber) /*|| __DDL->MOBILE_STATION_MODE*/ ) { 
-            //Im "Mobile Station Mode" nur GA's, keine Loks.
-            nanosleep_DDL(&rqtp_sleep, &__DDL->rmtp);
+          if (power_is_off(busnumber)) { 
+           	nanosleep(&rqtp_sleep, NULL);
             continue;
           }
 
@@ -1758,10 +1737,6 @@ static int init_ga_DDL(ga_data_t * ga)
 
 int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
 {
-    struct utsname utsBuffer;
-    char buf[3];
-    int result;
-
     buses[busnumber].driverdata = malloc(sizeof(struct _DDL_DATA));
 
     if (buses[busnumber].driverdata == NULL) {
@@ -1780,26 +1755,6 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
 
     strcpy(buses[busnumber].description,
            "GA GL SM POWER LOCK DESCRIPTION");
-    __DDL->oslevel = 1;         /* kernel 2.6 */
-
-    /* we need to check for kernel version below 2.6 or below */
-    /* the following code breaks if a kernel version 2.10 will ever occur */
-    result = uname(&utsBuffer);
-    if (result == -1) {
-        syslog_bus(busnumber, DBG_FATAL,
-                   "uname() failed: %s (errno = %d).",
-                   strerror(result), result);
-        /*What to do now */
-    }
-    snprintf(buf, sizeof(buf), "%c%c", utsBuffer.release[0],
-             utsBuffer.release[2]);
-
-    if (atoi(buf) > 25) {
-        __DDL->oslevel = 1;     /* kernel 2.6 or later */
-    }
-    else {
-        __DDL->oslevel = 0;     /* kernel 2.5 or earlier */
-    }
 
     __DDL->number_gl = 255;
     __DDL->number_ga = 324;
@@ -1955,6 +1910,11 @@ int init_bus_DDL(bus_t busnumber)
     static char protocols[3] = { '\0', '\0', '\0' };
     int protocol = 0;
 
+	if (__DDL->refresh_ptid)  {		
+    	syslog_bus(busnumber, DBG_INFO, "DDL refresh already active, must be reset.");
+	    reset_NMRAPacketPool(busnumber);
+	    reset_MFXPacketPool(busnumber);
+	}
     syslog_bus(busnumber, DBG_INFO, "DDL start initialization (verbosity = %d).",
                buses[busnumber].debuglevel);
 

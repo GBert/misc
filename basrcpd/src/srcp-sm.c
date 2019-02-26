@@ -210,8 +210,8 @@ int infoSM(bus_t busnumber, sm_protocol_t protocol, sm_command_t command, sm_typ
                "SM - TYPE: %d, CV: %d, BIT: %d, VALUE: 0x%02x", type, typeaddr,
                bit_index, value);
     session_lock_wait(busnumber);
-    status =
-        enqueueSM(busnumber, protocol, command, type, addr, typeaddr, bit_index, value);
+    status = enqueueSM(busnumber, protocol, command, type, addr & 0x3fff,
+												typeaddr, bit_index, value);
 
     if (session_condt_wait(busnumber, 90, &result) == ETIMEDOUT) {
     	status = SRCP_TIMEOUT;
@@ -276,10 +276,18 @@ int infoSM(bus_t busnumber, sm_protocol_t protocol, sm_command_t command, sm_typ
                     }
                     break;
                 case CV_MFX:
+					// HACK: dirty fast trial for write config
+					if (command == SET) result = value;
                     snprintf(info, MAXSRCPLINELEN,
                             "%lu.%.3lu 100 INFO %lu SM %d CVMFX %d %d %d\n",
                             now.tv_sec, now.tv_usec / 1000, busnumber,
                             addr, typeaddr, bit_index, result);
+					minfo[0] = 4;
+					minfo[1] = (typeaddr >> 8) | (bit_index << 2);
+					minfo[2] = typeaddr & 0xFF;
+					minfo[3] = value;
+					minfo[4] = 0x80;	//result;
+                    info_mcs(busnumber, 0x11, addr, minfo);
                     break;
         	}
    			if (info[0]) {

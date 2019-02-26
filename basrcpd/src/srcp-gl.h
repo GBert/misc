@@ -33,11 +33,11 @@ typedef struct _GLDIR {
 	char		proto[MAXSRCPGL];	/* protocol used by srcp */
 } gl_dir_t;
 
-enum gl_state_t {glsNone = 0, glsActive, glsTerm};
+enum gl_state_t {glsNone = 0, glsTerm, glsInit, glsActive};
 
 /* locomotive decoder */
 typedef struct _GLSTATE {
-    char state;                 /* 0==dead, 1==living, 2==terminating */
+    char state;                 /* 0=dead, 1=terminating, 2=init, 3=active */
     char protocol;
     char protocolversion;
     char n_func;

@@ -1,72 +1,77 @@
 Makefile        neu
-	1712	erweitert um check und install
-	1803	neue Module aufgenommen
-    1806	Optimierungen
+    1712    erweitert um check und install
+    1803    neue Module aufgenommen
+    1806    Optimierungen
 a20hw.c         neu
 a20hw.h         neu
-canbus.c	neu	1803
-canbus.h	neu	1803
+canbus.c    neu 1803
+canbus.h    neu 1803
 clientservice.c unverändert aus Original-srcpd Stand 1710
-    1711	ugly musl workaround
-	1712	übernommen
-    1806	Optimierungen
+    1711    ugly musl workaround
+    1712    übernommen
+    1806    Optimierungen
 clientservice.h unverändert aus Original-srcpd Stand 1710
 config-srcpd.c  aus Sigg-srcpd Rev96, modifiziert -> Original
-	1803	neue Module aufgenommen
-    1806	Änderung "DESCRIPTION"
+    1803    neue Module aufgenommen
+    1806    Änderung "DESCRIPTION"
 config-srcpd.h  aus Sigg-srcpd Rev96, modifiziert -> Original
-	1803	neue Module aufgenommen
+    1803    neue Module aufgenommen
     1806    MAX_BUSES auf 8 reduziert
 config.h        erzeugt per config-Script, modifiziert 
-	1803	neue Module aufgenommen
-    1806	korrekte Versionsangabe
-    1809	korrekte Versionsangabe
+    1803    neue Module aufgenommen
+    1806    korrekte Versionsangabe
+    1809    korrekte Versionsangabe
+    1902    korrekte Versionsangabe
 ddl.c           aus Sigg-srcpd Rev96, modifiziert BaPi, SPI-Timing
-	1803	MCS-Anssteuerung eingebaut
-    1806	Optimierungen
-	1809	erweiterte Lokadressierung
+    1803    MCS-Anssteuerung eingebaut
+    1806    Optimierungen
+    1809    erweiterte Lokadressierung
+    1902    UID in Meldung an MCS-Client
+    1902    Stabilitätskorrekturen
     ** UART-Methoden entfernen
     ** Config-Variablen überarbeiten
 ddl.h           aus Sigg-srcpd Rev96, original
-	1803	MCS-Anssteuerung eingebaut
-    1806	Unbenutztes entfernt
+    1803    MCS-Anssteuerung eingebaut
+    1806    Unbenutztes entfernt
     ** Config-Variablen überarbeiten
 ddl_maerklin.c  aus Sigg-srcpd Rev96, modifiziert -> Original
-	1803	GL-Cachezugriff angepasst
-	1809	erweiterte Lokadressierung
+    1803    GL-Cachezugriff angepasst
+    1809    erweiterte Lokadressierung
 ddl_maerklin.h  aus Sigg-srcpd Rev96, original
-    1711	Definitionen ergänzt, 1122 übernommen
-	1809	erweiterte Lokadressierung
+    1711    Definitionen ergänzt, 1122 übernommen
+    1809    erweiterte Lokadressierung
 ddl_mfx.c       aus Sigg-srcpd Rev96, modifiziert -> Original + BaPi
     [Gerd: SYSCONFDIR]
-	1712	Log-Ausgaben hinzugefügt
-	1803	MCS-Anssteuerung eingebaut
-    1806	unbenutzten Code entfernt, Weiterentwicklung
+    1712    Log-Ausgaben hinzugefügt
+    1803    MCS-Anssteuerung eingebaut
+    1806    unbenutzten Code entfernt, Weiterentwicklung
 ddl_mfx.h       aus Sigg-srcpd Rev96, modifiziert -> Original
-    1806	Optimierungen
+    1806    Optimierungen
 ddl_nmra.c      aus Sigg-srcpd Rev96, original
-	1803	kleine Optimierungen
-    1806	unbenutzen Code ausgeklammert
+    1803    kleine Optimierungen
+    1806    unbenutzen Code ausgeklammert
     ** UART-Methoden entfernen
 ddl_nmra.h      aus Sigg-srcpd Rev96, original
 io.c            aus Original-srcpd Stand 1710, "ttycygwin.h" entfernt. 
-    1806	unbenutzen Code ausgeklammert, ssplitstr neu
+    1806    unbenutzen Code ausgeklammert, ssplitstr neu
 io.h            unverändert aus Original-srcpd Stand 1710
-    1806	unbenutzen Code ausgeklammert, ssplitstr neu
+    1806    unbenutzen Code ausgeklammert, ssplitstr neu
 loopback.c      aus Sigg-srcpd Rev96, modifiziert -> Original
-	1803	GL-Cachezugriff angepasst
-	1809	erweiterte Lokadressierung
+    1803    GL-Cachezugriff angepasst
+    1809    erweiterte Lokadressierung
 loopback.h      aus Sigg-srcpd Rev96, modifiziert -> Original
-mcs-gateway.c	neu	180307
-    1806	Weiterentwicklung
-	1809	Konfigurationsschnittstelle, Hash-Behandlung
+mcs-gateway.c   neu 180307
+    1806    Weiterentwicklung
+    1809    Konfigurationsschnittstelle, Hash-Behandlung
+    1902    Stopp/Go-Abfrage hinzugefügt
+    1902    Dummyantwort auf Stellbefehle
 netservice.c    unverändert aus Original-srcpd Stand 1710
 netservice.h    unverändert aus Original-srcpd Stand 1710
-platform.c		neu ab 1806
-platform.h		neu ab 1806
+platform.c      neu ab 1806
+platform.h      neu ab 1806
 srcp-command.c  aus Sigg-srcpd Rev96, modifiziert -> Original
-    1711	ugly musl workaround + devgrp, 1122 übernommen
-    1806	Optimierungen, Anpassungen für mfx
+    1711    ugly musl workaround + devgrp, 1122 übernommen
+    1806    Optimierungen, Anpassungen für mfx
 srcp-command.h  unverändert aus Original-srcpd Stand 1710
 srcp-descr.c    unverändert aus Original-srcpd Stand 1710
 srcp-descr.h    unverändert aus Original-srcpd Stand 1710
@@ -77,43 +82,47 @@ srcp-fb.h       unverändert aus Original-srcpd Stand 1710
 srcp-ga.c       unverändert aus Original-srcpd Stand 1710
 srcp-ga.h       unverändert aus Original-srcpd Stand 1710
 srcp-gl.c       aus Sigg-srcpd Rev96, modifiziert -> Original
-	1803	MCS-Anssteuerung eingebaut
-	1806	Queuehandling überarbeitet
-	1809	erweiterte Lokadressierung
+    1803    MCS-Anssteuerung eingebaut
+    1806    Queuehandling überarbeitet
+    1809    erweiterte Lokadressierung
+    1902    verbesserte Datenübernahme bei mehreren Clients
 srcp-gl.h       aus Sigg-srcpd Rev96, modifiziert -> Original
-	1803	MCS-Anssteuerung eingebaut
+    1803    MCS-Anssteuerung eingebaut
     1806    aufgeräumt
-	1809	erweiterte Lokadressierung
+    1809    erweiterte Lokadressierung
+    1902    verbesserte Datenübernahme bei mehreren Clients
 srcp-gm.c       unverändert aus Original-srcpd Stand 1710
 srcp-gm.h       unverändert aus Original-srcpd Stand 1710
 srcp-info.c     unverändert aus Original-srcpd Stand 1710
-	1809	erweiterte Lokadressierung
+    1809    erweiterte Lokadressierung
+    1902    verbesserte Datenübernahme bei mehreren Clients
 srcp-info.h     unverändert aus Original-srcpd Stand 1710
-	1803	MCS-Anssteuerung eingebaut
+    1803    MCS-Anssteuerung eingebaut
 srcp-power.c    unverändert aus Original-srcpd Stand 1710
 srcp-power.h    unverändert aus Original-srcpd Stand 1710
 srcp-server.c   unverändert aus Original-srcpd Stand 1710      
-    1806	Server-Description hinzugefügt
+    1806    Server-Description hinzugefügt
 srcp-server.h   unverändert aus Original-srcpd Stand 1710
 srcp-session.c  unverändert aus Original-srcpd Stand 1710
-	1809	Aufhänger-Beseitigung
+    1809    Aufhänger-Beseitigung
 srcp-session.h  unverändert aus Original-srcpd Stand 1710
 srcp-sm.c       aus Sigg-srcpd Rev96, original
-    1806	Anpassungen für mfx, aufräumen
-	1809	Konfigurationsschnittstelle für MCS
+    1806    Anpassungen für mfx, aufräumen
+    1809    Konfigurationsschnittstelle für MCS
+    1902    Schreiben von mfx-CV
 srcp-sm.h       aus Sigg-srcpd Rev96, original
     1806    Anpassungen für mfx
-	1809	Konfigurationsschnittstelle für MCS
+    1809    Konfigurationsschnittstelle für MCS
 srcp-time.c     unverändert aus Original-srcpd Stand 1710
 srcp-time.h     unverändert aus Original-srcpd Stand 1710
 srcpd.c         aus Sigg-srcpd Rev96, modifiziert -> Original + BaPi
     [Gerd: SYSCONFDIR]
-	1712	lock-Referenzen entfernt, printlog-Option
+    1712    lock-Referenzen entfernt, printlog-Option
 syslogmessage.c unverändert aus Original-srcpd Stand 1710
-    1711	va_end im Fehlerzweig ergänzt
-	1712	übernommen und überarbeitet, printlog-Option
+    1711    va_end im Fehlerzweig ergänzt
+    1712    übernommen und überarbeitet, printlog-Option
 syslogmessage.h unverändert aus Original-srcpd Stand 1710
-	1712	printlog-Option
+    1712    printlog-Option
 toolbox.c       unverändert aus Original-srcpd Stand 1710
 toolbox.h       unverändert aus Original-srcpd Stand 1710
 
@@ -140,8 +149,8 @@ portio.c
 portio.h      
 selectrix.c   
 selectrix.h   
-srcp-lock.c		17**** entfallen, da praktisch leer, vorher Ori-srcpd Stand 1710
-srcp-lock.h		17**** entfallen, da praktisch leer, vorher Ori-srcpd Stand 1710
+srcp-lock.c     17**** entfallen, da praktisch leer, vorher Ori-srcpd Stand 1710
+srcp-lock.h     17**** entfallen, da praktisch leer, vorher Ori-srcpd Stand 1710
 ttycygwin.c   
 ttycygwin.h   
 xbee.c        

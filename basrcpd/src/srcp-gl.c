@@ -107,18 +107,15 @@ uint16_t * getGLIndex(bus_t bus, uint32_t locid, char prot)
 					if (prot && (prot != 'N')) break;	// else fallthru
 			case 3:	// DCC internal
 			case 7:	// DCC via MCS
-					if (id >= MAXNMRAGL) break;
-					return &(gl[bus].gldir->nmradir[id]);
-        	
+					if (id < MAXNMRAGL) return &(gl[bus].gldir->nmradir[id]);
+        	        break;
 			case 4:	// MM via MCS
-					if (id >= MAXMMGL) break;
-					return &(gl[bus].gldir->mmdir[id]);
-
+					if (id < MAXMMGL) return &(gl[bus].gldir->mmdir[id]);
+                    break;
         	case 1:	// mfx via srcp-x
 					if (prot && (prot != 'X')) break;	// else fallthru
 			case 5:	// mfx via MCS
-					if (id >= MAXMFXGL) break;
-					return &(gl[bus].gldir->mfxdir[id]);
+					if (id < MAXMFXGL) return &(gl[bus].gldir->mfxdir[id]);
 		}  
 	}
 	return NULL;	// invalid parameters
@@ -152,7 +149,6 @@ uint16_t isInitializedGL(bus_t busnumber, int index)
    			if ((i >= MAXSRCPGL) || (gl[busnumber].gldir->proto[i] != 
 			   				gl[busnumber].glstate[index].protocol)) {
         		if (gl[busnumber].glstate[index].protocol == 'X') i += 0x4000;
-// ?? uint32_t getglid(gl_data_t *p)
 			}
 // printf("idx %d -> ID %x\n", index, i);
         	return i;
@@ -174,47 +170,48 @@ static void gl_enqueue(bus_t busnumber, gl_data_t * p)
     int result;  
 	int addr = p->id;
 
-//  if (isValidGL(busnumber, addr)) {
-        if (p->state == glsNone) {
-            cacheInitGL(busnumber, addr, 'P', 1, 14, 1, NULL);
-            syslog_bus(busnumber, DBG_WARN, "GL default init for %d-%d",
+    if (p->state == glsNone) {
+        cacheInitGL(busnumber, addr, 'P', 1, 14, 1, NULL);
+        syslog_bus(busnumber, DBG_WARN, "GL default init for %d-%d",
                        busnumber, addr);
-        }
-        if (queue_isfull(busnumber)) {
-            syslog_bus(busnumber, DBG_WARN, "GL command queue full");
-            return;
-        }
+    }
+   	if (p->state == glsInit)  p->state = glsActive;
 
-        result = pthread_mutex_lock(&queue_mutex[busnumber]);
-        if (result != 0) {
-            syslog_bus(busnumber, DBG_ERROR,
+    if (queue_isfull(busnumber)) {
+        syslog_bus(busnumber, DBG_WARN, "GL command queue full");
+        return;
+    }
+
+    result = pthread_mutex_lock(&queue_mutex[busnumber]);
+    if (result != 0) {
+        syslog_bus(busnumber, DBG_ERROR,
                        "pthread_mutex_lock() failed: %s (errno = %d).",
                        strerror(result), result);
-        }
+    }
 
-		/* avoid double queue entries */        
-        int i = out[busnumber];
-        while (i != in[busnumber]) {
-        	if (queue[busnumber][i] == p) goto enqueue_unlock;
-        	i++;
-            if (i == QUEUELEN) i = 0;
-        }
+	/* avoid double queue entries */        
+    int i = out[busnumber];
+    while (i != in[busnumber]) {
+      	if (queue[busnumber][i] == p) goto enqueue_unlock;
+       	i++;
+        if (i == QUEUELEN) i = 0;
+    }
         
-        /* copy pointer to new values to queue */
-        queue[busnumber][in[busnumber]] = p;
-        in[busnumber]++;
-        if (in[busnumber] == QUEUELEN) in[busnumber] = 0;
+    /* copy pointer to new values to queue */
+    queue[busnumber][in[busnumber]] = p;
+    in[busnumber]++;
+    if (in[busnumber] == QUEUELEN) in[busnumber] = 0;
         
 enqueue_unlock:
-        result = pthread_mutex_unlock(&queue_mutex[busnumber]);
-        if (result != 0) {
-            syslog_bus(busnumber, DBG_ERROR,
+    result = pthread_mutex_unlock(&queue_mutex[busnumber]);
+    if (result != 0) {
+        syslog_bus(busnumber, DBG_ERROR,
                        "pthread_mutex_unlock() failed: %s (errno = %d).",
                        strerror(result), result);
-        }
+    }
 
         /* Restart thread to send GL command */
-        resume_bus_thread(busnumber);
+    resume_bus_thread(busnumber);
 }
 
 int queue_GL_isempty(bus_t busnumber)
@@ -271,7 +268,7 @@ int cacheGetGL(bus_t busnumber, int addr, gl_data_t *gld)
 void cacheSetGL(bus_t busnumber, gl_data_t *glp, gl_data_t l)
 {
     char msg[1000];
-
+    int rc = SRCP_WRONGVALUE;
     uint16_t *gli = getGLIndex(busnumber, getglid(glp), 0);
     int i = gli ? *gli : 0;
     if (i) {
@@ -283,6 +280,7 @@ void cacheSetGL(bus_t busnumber, gl_data_t *glp, gl_data_t l)
 //      gl[busnumber].glstate[addr].n_func = l.n_func;
         gettimeofday(&gl[busnumber].glstate[i].tv, NULL);
         if (gl[busnumber].glstate[i].state == glsTerm) {
+        	rc = SRCP_INFO;
             snprintf(msg, sizeof(msg), "%lu.%.3lu 102 INFO %lu GL %d\n",
                      gl[busnumber].glstate[i].tv.tv_sec,
                      gl[busnumber].glstate[i].tv.tv_usec / 1000,
@@ -293,44 +291,41 @@ void cacheSetGL(bus_t busnumber, gl_data_t *glp, gl_data_t l)
 			if (addr < MAXSRCPGL) gl[busnumber].gldir->proto[addr] = 0;
         }
         else {
-            cacheInfoGL(busnumber, addr, msg);
+            rc = cacheInfoGL(busnumber, addr, msg);
         }
-        enqueueInfoMessage(msg);
+        if (rc == SRCP_INFO) enqueueInfoMessage(msg);
     }
 }
 
 int cacheInitGL(bus_t busnumber, uint32_t locid, const char protocol,
                 int protoversion, int n_fs, int n_func, char *optData)
 {
+    char msg[1000];
     int rc = SRCP_WRONGVALUE;
+    gl_data_t *p = NULL;
     uint16_t *gli = getGLIndex(busnumber, locid, protocol);
     if (gli) {
-        char msg[1000];
-        gl_data_t tgl;
-        memset(&tgl, 0, sizeof(tgl)); 
-        rc = bus_supports_protocol(busnumber, protocol);
-        if (rc != SRCP_OK) {
-            return rc;
-        }
-        gettimeofday(&tgl.inittime, NULL);
-        tgl.tv = tgl.inittime;
-        tgl.n_fs = n_fs ? n_fs : 14;
-        tgl.n_func = n_func;
-        tgl.protocolversion = protoversion;
-        tgl.protocol = protocol;
-        tgl.id = locid & 0x3FFF;
-        if (buses[busnumber].init_gl_func) {
-            rc = (*buses[busnumber].init_gl_func) (busnumber, &tgl, optData);
-        }
-        if (rc == SRCP_OK) {
-    		if (*gli == 0) *gli = addGLEntry(busnumber, locid);
-    		if (*gli) {
-            	gl[busnumber].glstate[*gli] = tgl;
-            	gl[busnumber].glstate[*gli].state = glsActive;
-            	cacheDescribeGL(busnumber, tgl.id, msg);
-            	enqueueInfoMessage(msg);
-            	enqueueGL(busnumber, tgl.id, 0, 0, 1, 0);
+    	if (*gli == 0) *gli = addGLEntry(busnumber, locid);
+    	if (*gli) {
+    		p = &gl[busnumber].glstate[*gli];
+    		if (p->state == glsNone) {			// new item to be considered
+		        rc = bus_supports_protocol(busnumber, protocol);
+				if (rc != SRCP_OK) return rc;
+        		gettimeofday(&p->inittime, NULL);
+        		p->tv = p->inittime;
+        		p->n_fs = n_fs ? n_fs : 14;
+        		p->n_func = n_func;
+        		p->protocolversion = protoversion;
+        		p->protocol = protocol;
+        		p->id = locid & 0x3FFF;
+        		if (buses[busnumber].init_gl_func) 
+            		rc = (*buses[busnumber].init_gl_func) (busnumber, p, optData);
+		        if (rc == SRCP_OK) p->state = glsInit;
             }
+            else rc = SRCP_DEVICEREINITIALIZED;
+            
+            cacheDescribeGL(busnumber, p->id, msg);
+            enqueueInfoMessage(msg);
         }
     }
     return rc;
@@ -340,7 +335,7 @@ int cacheTermGL(bus_t busnumber, uint32_t locid)
 {
     uint16_t *gli = getGLIndex(busnumber, locid, 0);
     int i = gli ? *gli : 0;
-    if (i && (gl[busnumber].glstate[i].state == glsActive)) {
+    if (i && (gl[busnumber].glstate[i].state >= glsInit)) {
         gl[busnumber].glstate[i].state = glsTerm;
         //Bei MFX muss eine Abmeldung bis zum Lokdekoder
         if (gl[busnumber].glstate[i].protocol == 'X') {
@@ -376,9 +371,9 @@ void cacheCleanGL(bus_t bus)
     for (unsigned int i = 1; i <= gl[bus].numberOfGl; i++) {
 //        bzero(&gl[bus].glstate[i], sizeof(gl_data_t));
 // TODO: mixture of original and Danis code, what to use?
-//			clean gl-directories too !
       	gl[bus].glstate[i].state = glsNone;
     }
+    if (gl[bus].gldir) bzero(gl[bus].gldir, sizeof(gl_dir_t));
     if (buses[bus].init_func)  	(*buses[bus].init_func) (bus);
 }
 
@@ -387,7 +382,7 @@ int cacheDescribeGL(bus_t busnumber, uint32_t locid, char *msg)
 {
     uint16_t *gli = getGLIndex(busnumber, locid, 0);
     int i = gli ? *gli : 0;
-    if (i && (gl[busnumber].glstate[i].state == glsActive)) {
+    if (i && (gl[busnumber].glstate[i].state >= glsInit)) {
         sprintf(msg, "%lu.%.3lu 101 INFO %lu GL %d %c %d %d %d",
                 gl[busnumber].glstate[i].inittime.tv_sec,
                 gl[busnumber].glstate[i].inittime.tv_usec / 1000,
@@ -477,7 +472,7 @@ int cacheGetLockGL(bus_t busnumber, uint32_t locid, sessionid_t * session_id)
 //    if (isInitializedGL(busnumber, addr)) {
     uint16_t *gli = getGLIndex(busnumber, locid, 0);
     int i = gli ? *gli : 0;
-    if (i && (gl[busnumber].glstate[i].state == glsActive)) {
+    if (i && (gl[busnumber].glstate[i].state >= glsInit)) {
         *session_id = gl[busnumber].glstate[i].locked_by;
         return SRCP_OK;
     }
@@ -711,7 +706,7 @@ int handle_mcs_prot(bus_t bus, uint32_t locid, int val)
 					}
 					break;
 	}
-	gl_enqueue(bus, p);
+//	TODO: needed?	gl_enqueue(bus, p);
 	return val;
 }
 

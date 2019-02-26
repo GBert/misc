@@ -35,7 +35,7 @@
 
 static bus_t mcs_bus = 0;
 static int fd = INVALID_SOCKET;
-static uint32_t ownhash = 0;
+static uint32_t ownuid, ownhash = 0;
 static pthread_t mcsGatewayThread;
 
 // configuration data: basrcpd Device with temperature reporting
@@ -132,12 +132,21 @@ void *thr_handleCAN(void *vp)
 							"*** Own hash value received in: 0x%08X.", frame.can_id);
 	    		switch ((frame.can_id & 0x00FF0000UL) >> 16) {
 				/* System Befehle */
-				case 0x00:	switch (frame.data[4]) {
+				case 0x00:	if (frame.can_dlc < 5) {	// Query Stopp/Go
+								if ((uid != 0) && (uid != ownuid)) continue;
+								frame.can_dlc = 5;
+								memcpy(frame.data, softvers, 4);	// uid
+								frame.data[4] = getPower(mcs_bus);
+								break;	
+							}	
+					switch (frame.data[4]) {
 						// Stopp
-    					case 0x00:	setPower(mcs_bus, 0, "BY MCS");	
+    					case 0x00:	if ((uid != 0) && (uid != ownuid)) continue;
+									setPower(mcs_bus, 0, "BY MCS");	
 									continue;		// reply after done
     					// Go
-    					case 0x01:  setPower(mcs_bus, 1, "BY MCS");
+    					case 0x01:  if ((uid != 0) && (uid != ownuid)) continue;
+									setPower(mcs_bus, 1, "BY MCS");
 									continue;		// reply after done
     					// Emergency Stopp
     					case 0x03:  handle_mcs_dir(mcs_bus, uid, 4);
@@ -212,6 +221,11 @@ void *thr_handleCAN(void *vp)
 							handle_mcs_config(mcs_bus, SET, uid, v, frame.data[4]>>2, 
 													frame.data[6], frame.data[7]);
 							continue;			// reply after done
+				/* switch accessories */
+				case 0x16:  // reply to avoid blocking
+							syslog_bus(mcs_bus, DBG_INFO,
+								"*** accessory handling not yet implemented");
+							break;				
 				/* Ping */
 				case 0x30:  frame.can_dlc = 8; 
 				            memcpy(frame.data, softvers, 8);
@@ -280,7 +294,8 @@ void init_mcs_gateway(bus_t busnumber)
     int ret;
     
   	// store own UID and calculate own hash 
-	uint32_t ouid = htonl(__DDL->uid);
+  	ownuid = __DDL->uid;
+	uint32_t ouid = htonl(ownuid);
 	memcpy(softvers, &ouid, 4);	
 	ownhash = (((ouid >> 16) ^ ouid) & 0xff7f) | 0x300;
 
