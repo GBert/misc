@@ -1,11 +1,13 @@
 const int revisionnr = 
-15129
+15131
 ;
 const char* commithash = 
-"a745d0da939cfc2a128b2b558d3ffba754ac0206";
+"9a86ad56bb840a53068ebcefe6036bb46a99e64d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15131 2019-02-26 20:54:21 +0100 mbus: evaluate channel description (wip)\n" \
+"15130 2019-02-26 19:30:14 +0100 mbus: evaluate channel description (wip)\n" \
 "15129 2019-02-26 10:57:34 +0100 mbus: watchdog for timeout on requests\n" \
 "15128 2019-02-26 10:41:41 +0100 scheduledialog: layout fix\n" \
 "15127 2019-02-25 16:40:42 +0100 guiframe: add new zlevel to model\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13134 2017-12-03 12:41:01 +0100 RocControl desktop shortcut added\n" \
 "13133 2017-12-03 12:28:58 +0100 rocctrl: automenu extended\n" \
 "13132 2017-12-03 11:18:18 +0100 rocctrl: wip\n" \
-"13131 2017-12-03 09:00:57 +0100 rocctrl: WIP\n" \
-"13130 2017-12-02 22:37:29 +0100 rocctrl: WIP\n" \
 
 "log end";
