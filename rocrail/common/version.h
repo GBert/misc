@@ -1,11 +1,12 @@
 const int revisionnr = 
-15132
+15133
 ;
 const char* commithash = 
-"44262a9575dc15dabf20ef6f35d03959581a8862";
+"65cc4d0017fc5ff174c83aa43bf6df92aeaeb565";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15133 2019-02-27 09:11:58 +0100 mbus: channel value calculation by definition\n" \
 "15132 2019-02-27 08:24:23 +0100 mbus: channel definition (wip)\n" \
 "15131 2019-02-26 20:54:21 +0100 mbus: evaluate channel description (wip)\n" \
 "15130 2019-02-26 19:30:14 +0100 mbus: evaluate channel description (wip)\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13136 2017-12-03 14:31:41 +0100 rocctrl: python 2 and 3 support (Liviu)\n" \
 "13135 2017-12-03 12:46:58 +0100 rocrail makefile: added rocctrl\n" \
 "13134 2017-12-03 12:41:01 +0100 RocControl desktop shortcut added\n" \
-"13133 2017-12-03 12:28:58 +0100 rocctrl: automenu extended\n" \
 
 "log end";
