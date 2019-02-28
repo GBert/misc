@@ -1,11 +1,13 @@
 const int revisionnr = 
-15134
+15136
 ;
 const char* commithash = 
-"ca1e2889973cd770194f22a762ae7ce1865aac28";
+"c9878e73ba2b44b7ceb520b6bcae278c97d79b0f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15136 2019-02-28 08:58:12 +0100 guiframe: remove zlevel locally from model\n" \
+"15135 2019-02-28 08:26:37 +0100 dinamo: trace analog speed events\n" \
 "15134 2019-02-27 15:24:00 +0100 mbus: fix for last status data packet and trackbox\n" \
 "15133 2019-02-27 09:11:58 +0100 mbus: channel value calculation by definition\n" \
 "15132 2019-02-27 08:24:23 +0100 mbus: channel definition (wip)\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13139 2017-12-03 17:00:28 +0100 rocctrl: clean up\n" \
 "13138 2017-12-03 15:15:09 +0100 rocctrl: messagebox for python 2 and 3\n" \
 "13137 2017-12-03 14:33:37 +0100 rocctrl: python 3...\n" \
-"13136 2017-12-03 14:31:41 +0100 rocctrl: python 2 and 3 support (Liviu)\n" \
-"13135 2017-12-03 12:46:58 +0100 rocrail makefile: added rocctrl\n" \
 
 "log end";
