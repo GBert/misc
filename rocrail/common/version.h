@@ -1,11 +1,12 @@
 const int revisionnr = 
-15136
+15137
 ;
 const char* commithash = 
-"c9878e73ba2b44b7ceb520b6bcae278c97d79b0f";
+"82a9ead6dff4c7b8ba51b34e9901b816ef0cdaf0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15137 2019-02-28 10:19:55 +0100 dinamo: evaluate responses for analog and DCC speed\n" \
 "15136 2019-02-28 08:58:12 +0100 guiframe: remove zlevel locally from model\n" \
 "15135 2019-02-28 08:26:37 +0100 dinamo: trace analog speed events\n" \
 "15134 2019-02-27 15:24:00 +0100 mbus: fix for last status data packet and trackbox\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13140 2017-12-03 17:21:51 +0100 routedialog: multi delete\n" \
 "13139 2017-12-03 17:00:28 +0100 rocctrl: clean up\n" \
 "13138 2017-12-03 15:15:09 +0100 rocctrl: messagebox for python 2 and 3\n" \
-"13137 2017-12-03 14:33:37 +0100 rocctrl: python 3...\n" \
 
 "log end";
