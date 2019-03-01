@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP BTN8962
+D High Current PN Half Bridge
+K bridge
+F https://www.infineon.com/dgdl/Infineon-BTN8962TA-DS-v01_00-EN.pdf?fileId=db3a30433fa9412f013fbe2d247a7bf5
+$ENDCMP
+#
+#End Doc Library

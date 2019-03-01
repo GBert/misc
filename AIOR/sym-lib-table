@@ -1,0 +1,9 @@
+(sym_lib_table
+  (lib (name AIOR-rescue)(type Legacy)(uri ${KIPRJMOD}/AIOR-rescue.lib)(options "")(descr ""))
+  (lib (name c8051f502)(type Legacy)(uri ${KIPRJMOD}/c8051f502.lib)(options "")(descr ""))
+  (lib (name ISO1050)(type Legacy)(uri ${KIPRJMOD}/ISO1050.lib)(options "")(descr ""))
+  (lib (name BTN8962)(type Legacy)(uri ${KIPRJMOD}/BTN8962.lib)(options "")(descr ""))
+  (lib (name adum1251)(type Legacy)(uri ${KIPRJMOD}/adum1251.lib)(options "")(descr ""))
+  (lib (name Si8605)(type Legacy)(uri ${KIPRJMOD}/Si8605.lib)(options "")(descr ""))
+  (lib (name SAA6579T)(type Legacy)(uri /home/eh2be5j/projekte/github-misc/AIOR/SAA6579T.lib)(options "")(descr ""))
+)
