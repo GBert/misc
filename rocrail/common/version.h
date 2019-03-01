@@ -1,11 +1,14 @@
 const int revisionnr = 
-15137
+15140
 ;
 const char* commithash = 
-"82a9ead6dff4c7b8ba51b34e9901b816ef0cdaf0";
+"982eea1922b1fa3f287edf85440a5d253bc06c63";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15140 2019-03-01 09:16:47 +0100 roclcdr: crash fix\n" \
+"15139 2019-03-01 08:24:48 +0100 schedule: actionsonin flag added\n" \
+"15138 2019-03-01 07:58:48 +0100 dinamo: trace corrections for speed event\n" \
 "15137 2019-02-28 10:19:55 +0100 dinamo: evaluate responses for analog and DCC speed\n" \
 "15136 2019-02-28 08:58:12 +0100 guiframe: remove zlevel locally from model\n" \
 "15135 2019-02-28 08:26:37 +0100 dinamo: trace analog speed events\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13143 2017-12-04 10:22:56 +0100 rocctrl: resume and virtual button added\n" \
 "13142 2017-12-04 10:18:07 +0100 rocctrl: automate frame added\n" \
 "13141 2017-12-03 22:01:14 +0100 rocctrl: quit on eod\n" \
-"13140 2017-12-03 17:21:51 +0100 routedialog: multi delete\n" \
-"13139 2017-12-03 17:00:28 +0100 rocctrl: clean up\n" \
-"13138 2017-12-03 15:15:09 +0100 rocctrl: messagebox for python 2 and 3\n" \
 
 "log end";
