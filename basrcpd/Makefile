@@ -48,9 +48,9 @@ define Package/basrcpd/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/srcpd $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc
 ifdef CONFIG_LINUX_4_19
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/srcpd.conf $(1)/etc
-else
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/srcpd.conf_spi0 $(1)/etc
+else
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/srcpd.conf $(1)/etc
 endif
 endef
 
