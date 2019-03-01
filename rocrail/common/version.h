@@ -1,11 +1,14 @@
 const int revisionnr = 
-15140
+15143
 ;
 const char* commithash = 
-"982eea1922b1fa3f287edf85440a5d253bc06c63";
+"1ac31321e8c14c38207b4f0ccab277c2e7d0053a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15143 2019-03-01 14:40:10 +0100 powerctrldlg: only change cell background color is value is not normal\n" \
+"15142 2019-03-01 14:33:31 +0100 powerman: generate automatically boosters on events with UID > 0\n" \
+"15141 2019-03-01 11:49:51 +0100 lcdr: schedule actions at IN\n" \
 "15140 2019-03-01 09:16:47 +0100 roclcdr: crash fix\n" \
 "15139 2019-03-01 08:24:48 +0100 schedule: actionsonin flag added\n" \
 "15138 2019-03-01 07:58:48 +0100 dinamo: trace corrections for speed event\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13146 2017-12-04 14:14:08 +0100 rocctrl: informall flag for system commands added\n" \
 "13145 2017-12-04 13:21:00 +0100 rocctrl: menu and frame buttons equal text\n" \
 "13144 2017-12-04 13:07:20 +0100 bigger font for buttons\n" \
-"13143 2017-12-04 10:22:56 +0100 rocctrl: resume and virtual button added\n" \
-"13142 2017-12-04 10:18:07 +0100 rocctrl: automate frame added\n" \
-"13141 2017-12-03 22:01:14 +0100 rocctrl: quit on eod\n" \
 
 "log end";
