@@ -1,11 +1,13 @@
 const int revisionnr = 
-15144
+15146
 ;
 const char* commithash = 
-"933009d5996e763d6c5297215d54fd7d78abfcb8";
+"2a741eb9f1131c7b8fef128bff90b8fa09ed804f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15146 2019-03-02 14:55:24 +0100 revert schedule actions at IN\n" \
+"15145 2019-03-02 14:22:24 +0100 finder: avoid putting the from block on the blacklist\n" \
 "15144 2019-03-01 17:45:59 +0100 text back* color obsolete\n" \
 "15143 2019-03-01 14:40:10 +0100 powerctrldlg: only change cell background color is value is not normal\n" \
 "15142 2019-03-01 14:33:31 +0100 powerman: generate automatically boosters on events with UID > 0\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13149 2017-12-04 16:41:03 +0100 analyse: added extra trace level and corrected trace level to avoid a flood of messages to the clients\n" \
 "13148 2017-12-04 14:37:25 +0100 makefile: copy rocctrl icon\n" \
 "13147 2017-12-04 14:32:46 +0100 rocctrl: own icon\n" \
-"13146 2017-12-04 14:14:08 +0100 rocctrl: informall flag for system commands added\n" \
-"13145 2017-12-04 13:21:00 +0100 rocctrl: menu and frame buttons equal text\n" \
 
 "log end";
