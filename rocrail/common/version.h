@@ -1,11 +1,12 @@
 const int revisionnr = 
-15149
+15150
 ;
 const char* commithash = 
-"ac207c1e175fdf3b3ffc96fdbf4b647d12c64d69";
+"a01c94f98f384bb246556ab83edff62e0b458577";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15150 2019-03-04 18:05:01 +0100 renderer: check for transparent\n" \
 "15149 2019-03-04 14:51:29 +0100 renderer: regard change background flag\n" \
 "15148 2019-03-04 10:06:29 +0100 rascii: switch support added\n" \
 "15147 2019-03-04 09:48:07 +0100 loc: fix for reset BAT in case of delayed command\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13153 2017-12-05 13:43:30 +0100 rocctrl: quit on shutdown event\n" \
 "13152 2017-12-05 08:56:24 +0100 control: set var lcid on event timeout\n" \
 "13151 2017-12-05 08:32:00 +0100 translation merge: de, sl, sr_latin, fr, en_GB, nl\n" \
-"13150 2017-12-04 17:36:15 +0100 trace: level char for analyser\n" \
 
 "log end";
