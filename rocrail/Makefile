@@ -7,8 +7,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rocrail
-PKG_REV:=a01c94f98f
-PKG_VERSION:=15150
+PKG_REV:=5289c100d7
+PKG_VERSION:=15151
 PKG_RELEASE:=
 
 PKG_SOURCE_PROTO:=git
@@ -200,8 +200,6 @@ define Package/rocrail/install
 	$(INSTALL_BIN) ./config/plan_mbus.xml $(1)/opt/rocrail
 	$(INSTALL_DIR) $(1)/root
 	$(INSTALL_BIN) ./config/rocrail.init $(1)/root/rocrail
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./config/rocrail.init $(1)/etc/init.d/rocrail
 endef
 
 define Package/rocnetnode/install
@@ -210,8 +208,6 @@ define Package/rocnetnode/install
 	$(INSTALL_BIN) ./config/rocnetnode.ini $(1)/opt/rocrail
 	$(INSTALL_DIR) $(1)/root
 	$(INSTALL_BIN) ./config/rocnetnode.init $(1)/root/rocnetnode
-	$(INSTALL_DIR) $(1)/etc/init.d/
-	$(INSTALL_BIN) ./config/rocnetnode.init $(1)/etc/init.d/rocnetnode
 endef
 
 define Package/rocweb/install

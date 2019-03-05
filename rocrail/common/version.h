@@ -1,11 +1,12 @@
 const int revisionnr = 
-15150
+15151
 ;
 const char* commithash = 
-"a01c94f98f384bb246556ab83edff62e0b458577";
+"5289c100d7b1fe556e44fd84b948ad0a1cacbbc7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15151 2019-03-05 15:20:37 +0100 guiframe: loco list sorting fixes\n" \
 "15150 2019-03-04 18:05:01 +0100 renderer: check for transparent\n" \
 "15149 2019-03-04 14:51:29 +0100 renderer: regard change background flag\n" \
 "15148 2019-03-04 10:06:29 +0100 rascii: switch support added\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13154 2017-12-05 14:26:20 +0100 bidib: check run flag before attempting to (re)connect\n" \
 "13153 2017-12-05 13:43:30 +0100 rocctrl: quit on shutdown event\n" \
 "13152 2017-12-05 08:56:24 +0100 control: set var lcid on event timeout\n" \
-"13151 2017-12-05 08:32:00 +0100 translation merge: de, sl, sr_latin, fr, en_GB, nl\n" \
 
 "log end";
