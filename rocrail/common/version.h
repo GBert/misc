@@ -1,11 +1,12 @@
 const int revisionnr = 
-15154
+15155
 ;
 const char* commithash = 
-"bcb74c4b00ccb0b0b6d324e5434ac3dad995a3e9";
+"0797cf8167a07a891922ac5197aba0db80d583af";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15155 2019-03-06 16:34:03 +0100 z21: fixes for CAN detector\n" \
 "15154 2019-03-06 14:18:14 +0100 block: freeonenter maxlen -> reject trains with zero length\n" \
 "15153 2019-03-06 14:07:35 +0100 schedule IN: revert actions at in\n" \
 "15152 2019-03-06 12:35:38 +0100 rascii: fix for switch addressing\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13158 2017-12-05 19:17:53 +0100 operatordlg: button added to open the props of the loco which the train is assigned to\n" \
 "13157 2017-12-05 17:53:11 +0100 guiframe: close throttles on changing workspace\n" \
 "13156 2017-12-05 16:39:43 +0100 trackdialog: remove index tab in case it should not be populated\n" \
-"13155 2017-12-05 15:44:04 +0100 route: skip manual signal commands\n" \
 
 "log end";
