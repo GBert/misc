@@ -1,11 +1,13 @@
 const int revisionnr = 
-15152
+15154
 ;
 const char* commithash = 
-"74b673c19dae172af705e48ddce7d353d49208f6";
+"bcb74c4b00ccb0b0b6d324e5434ac3dad995a3e9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15154 2019-03-06 14:18:14 +0100 block: freeonenter maxlen -> reject trains with zero length\n" \
+"15153 2019-03-06 14:07:35 +0100 schedule IN: revert actions at in\n" \
 "15152 2019-03-06 12:35:38 +0100 rascii: fix for switch addressing\n" \
 "15151 2019-03-05 15:20:37 +0100 guiframe: loco list sorting fixes\n" \
 "15150 2019-03-04 18:05:01 +0100 renderer: check for transparent\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13157 2017-12-05 17:53:11 +0100 guiframe: close throttles on changing workspace\n" \
 "13156 2017-12-05 16:39:43 +0100 trackdialog: remove index tab in case it should not be populated\n" \
 "13155 2017-12-05 15:44:04 +0100 route: skip manual signal commands\n" \
-"13154 2017-12-05 14:26:20 +0100 bidib: check run flag before attempting to (re)connect\n" \
-"13153 2017-12-05 13:43:30 +0100 rocctrl: quit on shutdown event\n" \
 
 "log end";
