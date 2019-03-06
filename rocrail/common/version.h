@@ -1,11 +1,12 @@
 const int revisionnr = 
-15151
+15152
 ;
 const char* commithash = 
-"5289c100d7b1fe556e44fd84b948ad0a1cacbbc7";
+"74b673c19dae172af705e48ddce7d353d49208f6";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15152 2019-03-06 12:35:38 +0100 rascii: fix for switch addressing\n" \
 "15151 2019-03-05 15:20:37 +0100 guiframe: loco list sorting fixes\n" \
 "15150 2019-03-04 18:05:01 +0100 renderer: check for transparent\n" \
 "15149 2019-03-04 14:51:29 +0100 renderer: regard change background flag\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13155 2017-12-05 15:44:04 +0100 route: skip manual signal commands\n" \
 "13154 2017-12-05 14:26:20 +0100 bidib: check run flag before attempting to (re)connect\n" \
 "13153 2017-12-05 13:43:30 +0100 rocctrl: quit on shutdown event\n" \
-"13152 2017-12-05 08:56:24 +0100 control: set var lcid on event timeout\n" \
 
 "log end";
