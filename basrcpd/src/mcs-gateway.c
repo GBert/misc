@@ -107,8 +107,8 @@ void *thr_handleCAN(void *vp)
     	nready = select(fd+1, &rfds, NULL, NULL, &tv); 
 
 		if(nready < 0) 
-	    	syslog_bus(mcs_bus, DBG_ERROR, "select exception: [%d] %s",
-					nready, strerror(errno));
+	    	syslog_bus(mcs_bus, DBG_ERROR, "select exception in MCS line %d: %s",
+								__LINE__, strerror(errno));
 		/* send PING via CAN interface */
 		else if (nready == 0) {
 			frame.can_id = 0x00300000 | ownhash | CAN_EFF_FLAG;
@@ -118,7 +118,7 @@ void *thr_handleCAN(void *vp)
 									strerror(errno));
 		}
 		/* receive a CAN frame */
-		if(FD_ISSET(fd, &rfds)) {
+		else if(FD_ISSET(fd, &rfds)) {
 	    	/* reading via SockatCAN */
 	    	if (read(fd, &frame, sizeof(struct can_frame)) < 0) {
 				syslog_bus(mcs_bus, DBG_ERROR, "reading CAN frame error: %s", 

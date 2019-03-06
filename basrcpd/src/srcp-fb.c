@@ -1,4 +1,13 @@
+// srcp-fb.c - adapted for basrcpd project 2019 by Rainer Müller 
 
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 /*
  * Vorliegende Software unterliegt der General Public License,
  * Version 2, 1991. (c) Matthias Trute, 2000-2001.
@@ -119,8 +128,8 @@ static void queue_reset_fb(bus_t busnumber, int port,
         /* wait 1 ms */
         if (usleep(1000) == -1) {
             syslog_bus(busnumber, DBG_ERROR,
-                       "usleep() failed: %s (errno = %d)\n",
-                       strerror(errno), errno);
+                       "usleep() failed in srcp-fb line %d: %s (errno = %d)",
+                       __LINE__, strerror(errno), errno);
         }
     }
 
@@ -292,7 +301,7 @@ int infoFB(bus_t bus, int port, char *msg, size_t length)
     msg[0] = 0x00;
 
     if (rc >= SRCP_OK) {
-        snprintf(msg, length, "%lu.%.3lu 100 INFO %ld FB %d %d\n",
+        snprintf(msg, length, "%lu.%.3lu 100 INFO %lu FB %d %d\n",
                  time.tv_sec, time.tv_usec / 1000, bus, port, state);
         return SRCP_INFO;
     }

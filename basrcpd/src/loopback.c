@@ -486,8 +486,8 @@ void *thr_sendrec_LOOPBACK(void *v)
             /* wait 1 ms */
             if (usleep(1000) == -1) {
                 syslog_bus(btd->bus, DBG_ERROR,
-                           "usleep() failed: %s (errno = %d)\n",
-                           strerror(errno), errno);
+                       "usleep() failed in Loopback line %d: %s (errno = %d)",
+                       __LINE__, strerror(errno), errno);
             }
             continue;
         }
@@ -526,8 +526,8 @@ void *thr_sendrec_LOOPBACK(void *v)
         /* wait 1 ms */
         if (usleep(1000) == -1) {
             syslog_bus(btd->bus, DBG_ERROR,
-                       "usleep() failed: %s (errno = %d)\n",
-                       strerror(errno), errno);
+                       "usleep() failed in Loopback line %d: %s (errno = %d)",
+                       __LINE__, strerror(errno), errno);
         }
     }
 

@@ -480,8 +480,8 @@ static int handleWAIT(sessionid_t sessionid, bus_t bus, char *device,
                 do {
                     if (usleep(50000) == -1) {
                         syslog_bus(bus, DBG_ERROR,
-                                   "usleep() failed: %s (errno = %d)\n",
-                                   strerror(errno), errno);
+                       		"usleep() failed in srcp-command line %d: %s (errno = %d)",
+                       		__LINE__, strerror(errno), errno);
                     }
                     getFB(bus, port, &time, &value);
                     timeout--;
@@ -521,8 +521,8 @@ static int handleWAIT(sessionid_t sessionid, bus_t bus, char *device,
                     if (mustwait) {
                         if (usleep(10000) == -1) {
                             syslog_bus(bus, DBG_ERROR,
-                                       "usleep() failed: %s (errno = %d)\n",
-                                       strerror(errno), errno);
+                       			"usleep() failed in srcp-command line %d: %s (errno = %d)",
+                       			__LINE__, strerror(errno), errno);
                         }
                         getTIME(&vt);
                     }

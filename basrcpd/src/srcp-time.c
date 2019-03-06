@@ -1,3 +1,13 @@
+// srcp-time.c - adapted for basrcpd project 2019 by Rainer Müller 
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 /* 
  * Vorliegende Software unterliegt der General Public License, 
  * Version 2, 1991. (c) Matthias Trute, 2000-2001.
@@ -293,8 +303,8 @@ void *thr_clock(void *v)
 
         if (usleep(sleeptime) == -1) {
             syslog_bus(0, DBG_ERROR,
-                       "usleep() failed: %s (errno = %d)\n",
-                       strerror(errno), errno);
+                       "usleep() failed in srcp-time line %d: %s (errno = %d)",
+                       __LINE__, strerror(errno), errno);
         }
 
         /* use temporary copy for calculations, so vtime is always valid */

@@ -28,6 +28,7 @@ ddl.c           aus Sigg-srcpd Rev96, modifiziert BaPi, SPI-Timing
     1809    erweiterte Lokadressierung
     1902    UID in Meldung an MCS-Client
     1902    Stabilitätskorrekturen
+    1903    Kurzschlussbehandlung verbessert
     ** UART-Methoden entfernen
     ** Config-Variablen überarbeiten
 ddl.h           aus Sigg-srcpd Rev96, original
@@ -65,6 +66,7 @@ mcs-gateway.c   neu 180307
     1809    Konfigurationsschnittstelle, Hash-Behandlung
     1902    Stopp/Go-Abfrage hinzugefügt
     1902    Dummyantwort auf Stellbefehle
+    1903    Fehlerbehandlung "select" verbessert
 netservice.c    unverändert aus Original-srcpd Stand 1710
 netservice.h    unverändert aus Original-srcpd Stand 1710
 platform.c      neu ab 1806
@@ -78,6 +80,7 @@ srcp-descr.h    unverändert aus Original-srcpd Stand 1710
 srcp-error.c    unverändert aus Original-srcpd Stand 1710
 srcp-error.h    unverändert aus Original-srcpd Stand 1710
 srcp-fb.c       unverändert aus Original-srcpd Stand 1710
+    1903   Unschönheiten beseitigt
 srcp-fb.h       unverändert aus Original-srcpd Stand 1710
 srcp-ga.c       unverändert aus Original-srcpd Stand 1710
 srcp-ga.h       unverändert aus Original-srcpd Stand 1710
@@ -114,6 +117,7 @@ srcp-sm.h       aus Sigg-srcpd Rev96, original
     1806    Anpassungen für mfx
     1809    Konfigurationsschnittstelle für MCS
 srcp-time.c     unverändert aus Original-srcpd Stand 1710
+    1903   Unschönheiten beseitigt
 srcp-time.h     unverändert aus Original-srcpd Stand 1710
 srcpd.c         aus Sigg-srcpd Rev96, modifiziert -> Original + BaPi
     [Gerd: SYSCONFDIR]

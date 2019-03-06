@@ -877,8 +877,8 @@ static int handleACK(bus_t busnumber, int ack)
 {
     if (usleep(5000) == -1) {
         syslog_bus(busnumber, DBG_ERROR,
-                   "usleep() failed: %s (errno = %d)\n",
-                   strerror(errno), errno);
+                   "usleep() failed in NMRA line %d: %s (errno = %d)",
+                   __LINE__, strerror(errno), errno);
     }
     /* ack not supported */
     if ((ack == 1) && (scanACK(busnumber) == 1)) {

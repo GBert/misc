@@ -379,8 +379,8 @@ int main(int argc, char **argv)
         /* wait 100 ms */
         if (usleep(100000) == -1) {
             syslog_bus(0, DBG_ERROR,
-                       "usleep() failed: %s (errno = %d)\n",
-                       strerror(errno), errno);
+                       "usleep() failed in srcpd line %d: %s (errno = %d)",
+                       __LINE__, strerror(errno), errno);
         }
         sleep_ctr--;
 

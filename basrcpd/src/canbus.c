@@ -2,7 +2,15 @@
 // allows communication srcp <-> canbus
 //
 // C 2015 Rainer Müller 
-// Das Programm unterliegt den Bedingungen der GNU General Public License 3 (GPL3).
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
 #include <errno.h>
 //#include <sys/socket.h>
@@ -431,8 +439,8 @@ void *thr_sendrec_CANBUS(void *v)
             /* wait 1 ms */
             if (usleep(1000) == -1) {
                 syslog_bus(btd->bus, DBG_ERROR,
-                           "usleep() failed: %s (errno = %d)\n",
-                           strerror(errno), errno);
+                       "usleep() failed in canbus line %d: %s (errno = %d)",
+                       __LINE__, strerror(errno), errno);
             }
             continue;
         }

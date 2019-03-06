@@ -1544,13 +1544,14 @@ long int compute_delta(struct timeval tv1, struct timeval tv2)
    return "true" if power is off, return "false" if power is on */
 static bool power_is_off(bus_t busnumber)
 {
-    static struct timeval t_rts_on;
+//    static struct timeval t_rts_on;
     char msg[110], info[4];
     if (__DDL->CHECKSHORT) {
 		if (buses[busnumber].power_state) {
 			if (checkShortcut(busnumber) == 1) {
             	buses[busnumber].power_state = 0;
-                buses[busnumber].power_changed = 1;
+                buses[busnumber].power_changed = 2;
+    			__DDL->short_detected = 0;
                 info[0] = 2;	info[1] = 0xA;	info[2] = 1;
                 info_mcs(busnumber, 1, __DDL->uid, info);
                 strcpy(buses[busnumber].power_msg, "SHORTCUT DETECTED");
@@ -1559,22 +1560,24 @@ static bool power_is_off(bus_t busnumber)
              }
         }
     }
-    if (buses[busnumber].power_changed == 1) {
+    if (buses[busnumber].power_changed > 0) {
         if (buses[busnumber].power_state == 0) {
             set_SerialLine(busnumber, SL_RTS, OFF);
             syslog_bus(busnumber, DBG_INFO, "Rail signal generation stopped.");
         }
         if (buses[busnumber].power_state == 1) {
-            gettimeofday(&t_rts_on, NULL);
+//            gettimeofday(&t_rts_on, NULL);
             set_SerialLine(busnumber, SL_RTS, ON);
             syslog_bus(busnumber, DBG_INFO, "Rail signal generation started.");
         }
+    	if (buses[busnumber].power_changed == 1) {
+        	info[0] = 1;	
+			info[1] = buses[busnumber].power_state;
+        	info_mcs(busnumber, 1, __DDL->uid, info);
+        	infoPower(busnumber, msg);
+        	enqueueInfoMessage(msg);
+        }
         buses[busnumber].power_changed = 0;
-        info[0] = 1;	
-		info[1] = buses[busnumber].power_state;
-        info_mcs(busnumber, 1, __DDL->uid, info);
-        infoPower(busnumber, msg);
-        enqueueInfoMessage(msg);
     }
     if (buses[busnumber].power_state == 0) {
         if (usleep(1000) == -1) {
@@ -1598,8 +1601,8 @@ static void *thr_refresh_cycle(void *v)
     int addr;
     struct _thr_param *tp = v;
     bus_t busnumber = tp->busnumber;
-    struct timeval tv1;    
-    struct timezone tz;
+//    struct timeval tv1;    
+//    struct timezone tz;
     /* argument for nanosleep to do non-busy waiting */
     static struct timespec rqtp_sleep = { 0, 2500000 };
 
@@ -1628,12 +1631,12 @@ static void *thr_refresh_cycle(void *v)
     spi_idlePacket.bits_per_word = 8;
     spi_idlePacket.speed_hz = SPI_BAUDRATE_MAERKLIN_LOCO;
    
-    gettimeofday(&tv1, &tz);
+//    gettimeofday(&tv1, &tz);
     for (;;) {
         pthread_testcancel();
         if (power_is_off(busnumber)) {
-	  nanosleep(&rqtp_sleep, NULL);
-	  continue;
+           nanosleep(&rqtp_sleep, NULL);
+           continue;
         }
 
         /* Check if there are new commands and send them. */
@@ -1696,7 +1699,7 @@ static int init_gl_DDL(bus_t bus, gl_data_t * gl, char *optData)
                 return SRCP_WRONGVALUE;
             }
             // in case of MFX, UID could be appended optionally:
-			sscanf(optData, "%u", &gl->decuid);
+			sscanf(optData, "%10u", &gl->decuid);
 /* 
 	TODO: brauchen wir Mitteilung an MFX damit ggf. neue Lokadresse gesetzt werden kann
             newGLInit(gl->id, gl->optData.mfx.uid);
