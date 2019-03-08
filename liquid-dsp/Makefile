@@ -33,7 +33,7 @@ define Build/Configure
 endef
 
 define Package/$(PKG_NAME)/install
-	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/libliquid.so $(1)/usr/lib
 endef
 
