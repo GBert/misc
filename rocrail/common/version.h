@@ -1,11 +1,12 @@
 const int revisionnr = 
-15163
+15164
 ;
 const char* commithash = 
-"7de8ae46d1ce9a6cd9d1d7c01ff74a83d3319d3d";
+"d7cf478a2d3f4bc04cb7f0976dc189b135e79137";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15164 2019-03-08 15:56:32 +0100 analyse: connector number to number only\n" \
 "15163 2019-03-08 10:42:42 +0100 locdialog: fix copy/paste errors in import/export BAT and SBT\n" \
 "15162 2019-03-08 08:30:05 +0100 rascii: loco and function commands added\n" \
 "15161 2019-03-08 07:43:30 +0100 rascii: traces added\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13167 2017-12-07 13:11:20 +0100 blockdialog: keyboard support\n" \
 "13166 2017-12-07 12:33:31 +0100 keyboarddlg: layout correction -> US\n" \
 "13165 2017-12-07 11:55:17 +0100 keyboarddlg: wip\n" \
-"13164 2017-12-07 09:58:58 +0100 keyboard for touch: wip\n" \
 
 "log end";
