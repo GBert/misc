@@ -1,11 +1,12 @@
 const int revisionnr = 
-15162
+15163
 ;
 const char* commithash = 
-"fcf089499d46ffb9265885a494b4e2da84033fb8";
+"7de8ae46d1ce9a6cd9d1d7c01ff74a83d3319d3d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15163 2019-03-08 10:42:42 +0100 locdialog: fix copy/paste errors in import/export BAT and SBT\n" \
 "15162 2019-03-08 08:30:05 +0100 rascii: loco and function commands added\n" \
 "15161 2019-03-08 07:43:30 +0100 rascii: traces added\n" \
 "15160 2019-03-08 07:39:47 +0100 RASCII: accessory command added\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13166 2017-12-07 12:33:31 +0100 keyboarddlg: layout correction -> US\n" \
 "13165 2017-12-07 11:55:17 +0100 keyboarddlg: wip\n" \
 "13164 2017-12-07 09:58:58 +0100 keyboard for touch: wip\n" \
-"13163 2017-12-06 18:07:18 +0100 loconet lbtcp: recovery fix\n" \
 
 "log end";
