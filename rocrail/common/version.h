@@ -1,11 +1,15 @@
 const int revisionnr = 
-15164
+15168
 ;
 const char* commithash = 
-"d7cf478a2d3f4bc04cb7f0976dc189b135e79137";
+"268a36d6dca4d7f8822910f1ee8633b48bba4cd5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15168 2019-03-09 08:15:33 +0100 rascii: revert flat addressing support\n" \
+"15167 2019-03-09 07:44:55 +0100 rascii: regard flat addressing in case port is set to zero\n" \
+"15166 2019-03-08 20:27:21 +0100 trackdialog: nr range extended to 16bit\n" \
+"15165 2019-03-08 16:42:32 +0100 srcp: function 29-32 added\n" \
 "15164 2019-03-08 15:56:32 +0100 analyse: connector number to number only\n" \
 "15163 2019-03-08 10:42:42 +0100 locdialog: fix copy/paste errors in import/export BAT and SBT\n" \
 "15162 2019-03-08 08:30:05 +0100 rascii: loco and function commands added\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13171 2017-12-07 17:09:40 +0100 locdialog: keyboard support (wip)\n" \
 "13170 2017-12-07 14:20:46 +0100 item: always take over the loco blockenterside on update (TEST)\n" \
 "13169 2017-12-07 13:51:37 +0100 stage: check manual signal if it should be reset\n" \
-"13168 2017-12-07 13:39:36 +0100 toolbardlg: forum item added\n" \
-"13167 2017-12-07 13:11:20 +0100 blockdialog: keyboard support\n" \
-"13166 2017-12-07 12:33:31 +0100 keyboarddlg: layout correction -> US\n" \
-"13165 2017-12-07 11:55:17 +0100 keyboarddlg: wip\n" \
 
 "log end";
