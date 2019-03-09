@@ -1,11 +1,25 @@
 const int revisionnr = 
-15155
+15169
 ;
 const char* commithash = 
-"0797cf8167a07a891922ac5197aba0db80d583af";
+"d91ac0958244c49c2430be72a4f3fa7dc6bf9cae";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15169 2019-03-09 14:16:37 +0100 finder: looping warning trace level downgraded to info\n" \
+"15168 2019-03-09 08:15:33 +0100 rascii: revert flat addressing support\n" \
+"15167 2019-03-09 07:44:55 +0100 rascii: regard flat addressing in case port is set to zero\n" \
+"15166 2019-03-08 20:27:21 +0100 trackdialog: nr range extended to 16bit\n" \
+"15165 2019-03-08 16:42:32 +0100 srcp: function 29-32 added\n" \
+"15164 2019-03-08 15:56:32 +0100 analyse: connector number to number only\n" \
+"15163 2019-03-08 10:42:42 +0100 locdialog: fix copy/paste errors in import/export BAT and SBT\n" \
+"15162 2019-03-08 08:30:05 +0100 rascii: loco and function commands added\n" \
+"15161 2019-03-08 07:43:30 +0100 rascii: traces added\n" \
+"15160 2019-03-08 07:39:47 +0100 RASCII: accessory command added\n" \
+"15159 2019-03-07 17:18:54 +0100 loc: push BAT updates to clients\n" \
+"15158 2019-03-07 13:18:59 +0100 roco: fix for nr modules in RS group 0 and 1\n" \
+"15157 2019-03-07 10:06:09 +0100 z21: CAN detector save state and reported loco addresses\n" \
+"15156 2019-03-07 07:45:03 +0100 analyse: start with counter part #1\n" \
 "15155 2019-03-06 16:34:03 +0100 z21: fixes for CAN detector\n" \
 "15154 2019-03-06 14:18:14 +0100 block: freeonenter maxlen -> reject trains with zero length\n" \
 "15153 2019-03-06 14:07:35 +0100 schedule IN: revert actions at in\n" \
@@ -1992,19 +2006,5 @@ const char* revlog =
 "13172 2017-12-07 19:09:32 +0100 blockdialog, locdialog: reset last focus pointer on page change\n" \
 "13171 2017-12-07 17:09:40 +0100 locdialog: keyboard support (wip)\n" \
 "13170 2017-12-07 14:20:46 +0100 item: always take over the loco blockenterside on update (TEST)\n" \
-"13169 2017-12-07 13:51:37 +0100 stage: check manual signal if it should be reset\n" \
-"13168 2017-12-07 13:39:36 +0100 toolbardlg: forum item added\n" \
-"13167 2017-12-07 13:11:20 +0100 blockdialog: keyboard support\n" \
-"13166 2017-12-07 12:33:31 +0100 keyboarddlg: layout correction -> US\n" \
-"13165 2017-12-07 11:55:17 +0100 keyboarddlg: wip\n" \
-"13164 2017-12-07 09:58:58 +0100 keyboard for touch: wip\n" \
-"13163 2017-12-06 18:07:18 +0100 loconet lbtcp: recovery fix\n" \
-"13162 2017-12-06 17:38:50 +0100 rocview: context menu on dclick option added for touch\n" \
-"13161 2017-12-06 13:46:22 +0100 item: open/close stage exit on dclick\n" \
-"13160 2017-12-06 08:45:14 +0100 stage: halt flag added for stop/start all locos\n" \
-"13159 2017-12-05 19:26:30 +0100 blockdialog: allow main signals used as distant signals\n" \
-"13158 2017-12-05 19:17:53 +0100 operatordlg: button added to open the props of the loco which the train is assigned to\n" \
-"13157 2017-12-05 17:53:11 +0100 guiframe: close throttles on changing workspace\n" \
-"13156 2017-12-05 16:39:43 +0100 trackdialog: remove index tab in case it should not be populated\n" \
 
 "log end";
