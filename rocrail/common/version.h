@@ -1,11 +1,12 @@
 const int revisionnr = 
-15168
+15169
 ;
 const char* commithash = 
-"268a36d6dca4d7f8822910f1ee8633b48bba4cd5";
+"d91ac0958244c49c2430be72a4f3fa7dc6bf9cae";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15169 2019-03-09 14:16:37 +0100 finder: looping warning trace level downgraded to info\n" \
 "15168 2019-03-09 08:15:33 +0100 rascii: revert flat addressing support\n" \
 "15167 2019-03-09 07:44:55 +0100 rascii: regard flat addressing in case port is set to zero\n" \
 "15166 2019-03-08 20:27:21 +0100 trackdialog: nr range extended to 16bit\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13172 2017-12-07 19:09:32 +0100 blockdialog, locdialog: reset last focus pointer on page change\n" \
 "13171 2017-12-07 17:09:40 +0100 locdialog: keyboard support (wip)\n" \
 "13170 2017-12-07 14:20:46 +0100 item: always take over the loco blockenterside on update (TEST)\n" \
-"13169 2017-12-07 13:51:37 +0100 stage: check manual signal if it should be reset\n" \
 
 "log end";
