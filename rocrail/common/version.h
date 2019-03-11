@@ -1,11 +1,12 @@
 const int revisionnr = 
-15175
+15176
 ;
 const char* commithash = 
-"65f5a9cdcf2ce05941afc4a3def5fd5c168f4624";
+"6eacb60370922e22c91bbfac327500d012e9c558";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15176 2019-03-11 14:00:40 +0100 finder: skip occupied routes\n" \
 "15175 2019-03-11 10:15:38 +0100 rocweb: support for accnr in signals\n" \
 "15174 2019-03-11 08:18:52 +0100 seltab: revert singlegate option for new position seltabdlg: layout correction\n" \
 "15173 2019-03-11 07:54:04 +0100 seltabdlg: protocol type equal to tt\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13179 2017-12-08 11:55:09 +0100 cardlg: keyboard support added\n" \
 "13178 2017-12-08 11:29:24 +0100 keyboarddlg: put focus back after ok/cancel\n" \
 "13177 2017-12-08 09:57:09 +0100 toolbardlg: fix for print option\n" \
-"13176 2017-12-08 09:17:27 +0100 planpanel: use soft keyboard for asking item ID in case context on dclick is active\n" \
 
 "log end";
