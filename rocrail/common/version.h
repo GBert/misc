@@ -1,11 +1,15 @@
 const int revisionnr = 
-15171
+15175
 ;
 const char* commithash = 
-"7b04a682b2e611d47a2137a32c5d2a80df5d7397";
+"65f5a9cdcf2ce05941afc4a3def5fd5c168f4624";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15175 2019-03-11 10:15:38 +0100 rocweb: support for accnr in signals\n" \
+"15174 2019-03-11 08:18:52 +0100 seltab: revert singlegate option for new position seltabdlg: layout correction\n" \
+"15173 2019-03-11 07:54:04 +0100 seltabdlg: protocol type equal to tt\n" \
+"15172 2019-03-11 07:43:18 +0100 seltabdlg: translation correction\n" \
 "15171 2019-03-10 14:37:57 +0100 seltab: use singlegate flag for new position too\n" \
 "15170 2019-03-10 09:04:47 +0100 loc: added a blank for readability\n" \
 "15169 2019-03-09 14:16:37 +0100 finder: looping warning trace level downgraded to info\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13178 2017-12-08 11:29:24 +0100 keyboarddlg: put focus back after ok/cancel\n" \
 "13177 2017-12-08 09:57:09 +0100 toolbardlg: fix for print option\n" \
 "13176 2017-12-08 09:17:27 +0100 planpanel: use soft keyboard for asking item ID in case context on dclick is active\n" \
-"13175 2017-12-08 08:40:46 +0100 rocrailinidialog: keyboard support (wip)\n" \
-"13174 2017-12-07 21:15:16 +0100 connectiondialog: keyboard support added\n" \
-"13173 2017-12-07 19:41:50 +0100 guiapp: fix for crash setting statis text out of event context\n" \
-"13172 2017-12-07 19:09:32 +0100 blockdialog, locdialog: reset last focus pointer on page change\n" \
 
 "log end";
