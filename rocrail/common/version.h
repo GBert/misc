@@ -1,11 +1,14 @@
 const int revisionnr = 
-15176
+15179
 ;
 const char* commithash = 
-"6eacb60370922e22c91bbfac327500d012e9c558";
+"ea9359674eb62e341a8752f05c5695e18df26be0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15179 2019-03-12 10:46:25 +0100 guiframe: update V cell color also on events\n" \
+"15178 2019-03-12 10:02:44 +0100 guiframe: fix for placing flag...\n" \
+"15177 2019-03-12 08:16:43 +0100 showing the selection rectangle: macOS work around\n" \
 "15176 2019-03-11 14:00:40 +0100 finder: skip occupied routes\n" \
 "15175 2019-03-11 10:15:38 +0100 rocweb: support for accnr in signals\n" \
 "15174 2019-03-11 08:18:52 +0100 seltab: revert singlegate option for new position seltabdlg: layout correction\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13182 2017-12-08 16:18:32 +0100 keyboarddlg: return focus to the text field after button click\n" \
 "13181 2017-12-08 15:28:33 +0100 keyboard: DE layout support\n" \
 "13180 2017-12-08 14:56:29 +0100 keyboard: alt, ctrl and layout added\n" \
-"13179 2017-12-08 11:55:09 +0100 cardlg: keyboard support added\n" \
-"13178 2017-12-08 11:29:24 +0100 keyboarddlg: put focus back after ok/cancel\n" \
-"13177 2017-12-08 09:57:09 +0100 toolbardlg: fix for print option\n" \
 
 "log end";
