@@ -1,11 +1,15 @@
 const int revisionnr = 
-15179
+15183
 ;
 const char* commithash = 
-"ea9359674eb62e341a8752f05c5695e18df26be0";
+"ffa4803172a417b67b5b1bbc512c741568b51d63";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15183 2019-03-13 12:23:13 +0100 seltabdlg: position tab removed\n" \
+"15182 2019-03-13 08:06:39 +0100 xmlscript: resolve variable at model command\n" \
+"15181 2019-03-13 07:54:16 +0100 finder: extra trace lines at using locations\n" \
+"15180 2019-03-13 07:51:20 +0100 text: convert old background color values\n" \
 "15179 2019-03-12 10:46:25 +0100 guiframe: update V cell color also on events\n" \
 "15178 2019-03-12 10:02:44 +0100 guiframe: fix for placing flag...\n" \
 "15177 2019-03-12 08:16:43 +0100 showing the selection rectangle: macOS work around\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13186 2017-12-09 08:54:03 +0100 routedialog: keyboard support\n" \
 "13185 2017-12-09 08:27:08 +0100 finder: unsupported random option removed\n" \
 "13184 2017-12-08 17:07:56 +0100 keyboarddlg: keep layout (toggle)button text\n" \
-"13183 2017-12-08 16:25:32 +0100 keyboarddlg: revert set focus to the text field\n" \
-"13182 2017-12-08 16:18:32 +0100 keyboarddlg: return focus to the text field after button click\n" \
-"13181 2017-12-08 15:28:33 +0100 keyboard: DE layout support\n" \
-"13180 2017-12-08 14:56:29 +0100 keyboard: alt, ctrl and layout added\n" \
 
 "log end";
