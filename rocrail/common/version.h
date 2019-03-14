@@ -1,11 +1,14 @@
 const int revisionnr = 
-15183
+15186
 ;
 const char* commithash = 
-"ffa4803172a417b67b5b1bbc512c741568b51d63";
+"a69581b8262eb9a2ed8da176e319fa5ebdffc075";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15186 2019-03-14 14:39:22 +0100 mbus: FADA support switch: fix for FADA\n" \
+"15185 2019-03-14 10:02:07 +0100 cbus utils: trace correction\n" \
+"15184 2019-03-14 08:01:02 +0100 blockgroupingdlg: fix for removing all linked blocks\n" \
 "15183 2019-03-13 12:23:13 +0100 seltabdlg: position tab removed\n" \
 "15182 2019-03-13 08:06:39 +0100 xmlscript: resolve variable at model command\n" \
 "15181 2019-03-13 07:54:16 +0100 finder: extra trace lines at using locations\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13189 2017-12-09 11:17:34 +0100 rocctrl: ask before shutdown and EoD\n" \
 "13188 2017-12-09 10:51:21 +0100 dialogs: keyboard support sensor, signal, text, output, action\n" \
 "13187 2017-12-09 09:40:55 +0100 switchdialog: keyboard support\n" \
-"13186 2017-12-09 08:54:03 +0100 routedialog: keyboard support\n" \
-"13185 2017-12-09 08:27:08 +0100 finder: unsupported random option removed\n" \
-"13184 2017-12-08 17:07:56 +0100 keyboarddlg: keep layout (toggle)button text\n" \
 
 "log end";
