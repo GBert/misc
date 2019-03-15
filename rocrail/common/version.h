@@ -1,11 +1,13 @@
 const int revisionnr = 
-15189
+15191
 ;
 const char* commithash = 
-"81483a7f6c5750996f461ae40d60f3fc933c78f9";
+"a93f700490806cc8b6fdedf10646f30100bd451c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15191 2019-03-15 15:30:05 +0100 cbusnodedlg: 8bit CANIDs\n" \
+"15190 2019-03-15 14:36:26 +0100 switch: fix for normalize address in case of PADA\n" \
 "15189 2019-03-15 10:59:54 +0100 cbus utils: fix for reading binary :s frames\n" \
 "15188 2019-03-15 08:21:04 +0100 wmz21: fix for undefined events to the connected WLANmauses\n" \
 "15187 2019-03-15 08:05:54 +0100 rocguiinidlg: properties dialog only available for the first SVG theme\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13194 2017-12-10 13:01:10 +0100 keyboarddlg: removed unused control key\n" \
 "13193 2017-12-10 11:37:05 +0100 swdlg: restore position\n" \
 "13192 2017-12-10 10:47:00 +0100 swdlg: combobox for IIDs\n" \
-"13191 2017-12-10 10:27:26 +0100 swdlg: use bitmaps on buttons\n" \
-"13190 2017-12-09 18:06:17 +0100 stage: stop all locos reverted\n" \
 
 "log end";
