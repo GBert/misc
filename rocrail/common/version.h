@@ -1,11 +1,14 @@
 const int revisionnr = 
-15186
+15189
 ;
 const char* commithash = 
-"a69581b8262eb9a2ed8da176e319fa5ebdffc075";
+"81483a7f6c5750996f461ae40d60f3fc933c78f9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15189 2019-03-15 10:59:54 +0100 cbus utils: fix for reading binary :s frames\n" \
+"15188 2019-03-15 08:21:04 +0100 wmz21: fix for undefined events to the connected WLANmauses\n" \
+"15187 2019-03-15 08:05:54 +0100 rocguiinidlg: properties dialog only available for the first SVG theme\n" \
 "15186 2019-03-14 14:39:22 +0100 mbus: FADA support switch: fix for FADA\n" \
 "15185 2019-03-14 10:02:07 +0100 cbus utils: trace correction\n" \
 "15184 2019-03-14 08:01:02 +0100 blockgroupingdlg: fix for removing all linked blocks\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13192 2017-12-10 10:47:00 +0100 swdlg: combobox for IIDs\n" \
 "13191 2017-12-10 10:27:26 +0100 swdlg: use bitmaps on buttons\n" \
 "13190 2017-12-09 18:06:17 +0100 stage: stop all locos reverted\n" \
-"13189 2017-12-09 11:17:34 +0100 rocctrl: ask before shutdown and EoD\n" \
-"13188 2017-12-09 10:51:21 +0100 dialogs: keyboard support sensor, signal, text, output, action\n" \
-"13187 2017-12-09 09:40:55 +0100 switchdialog: keyboard support\n" \
 
 "log end";
