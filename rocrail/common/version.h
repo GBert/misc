@@ -1,11 +1,14 @@
 const int revisionnr = 
-15191
+15194
 ;
 const char* commithash = 
-"a93f700490806cc8b6fdedf10646f30100bd451c";
+"431ff90178f621b3e30029607234b5f98e860679";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15194 2019-03-16 09:53:37 +0100 scheduledialog: fix label max delay from sec. in min.\n" \
+"15193 2019-03-16 08:14:23 +0100 mbus: dcc/mm aspect command support\n" \
+"15192 2019-03-16 07:54:55 +0100 tamsmc: XTrntX extended DCC accessory support\n" \
 "15191 2019-03-15 15:30:05 +0100 cbusnodedlg: 8bit CANIDs\n" \
 "15190 2019-03-15 14:36:26 +0100 switch: fix for normalize address in case of PADA\n" \
 "15189 2019-03-15 10:59:54 +0100 cbus utils: fix for reading binary :s frames\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13197 2017-12-10 15:29:59 +0100 swdlg: layout corrections\n" \
 "13196 2017-12-10 13:51:24 +0100 swdlg: alt icons\n" \
 "13195 2017-12-10 13:13:08 +0100 swctrldlg: icon\n" \
-"13194 2017-12-10 13:01:10 +0100 keyboarddlg: removed unused control key\n" \
-"13193 2017-12-10 11:37:05 +0100 swdlg: restore position\n" \
-"13192 2017-12-10 10:47:00 +0100 swdlg: combobox for IIDs\n" \
 
 "log end";
