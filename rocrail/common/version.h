@@ -1,11 +1,15 @@
 const int revisionnr = 
-15194
+15198
 ;
 const char* commithash = 
-"431ff90178f621b3e30029607234b5f98e860679";
+"885a0f1a1f59a7971f4f836cf239ba4795abb4a2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15198 2019-03-17 14:08:54 +0100 themepropsdlg: reset color button added\n" \
+"15197 2019-03-17 12:30:34 +0100 themepropsdlg: color transaltions\n" \
+"15196 2019-03-17 12:18:28 +0100 translation correction\n" \
+"15195 2019-03-17 11:03:28 +0100 theme colors added\n" \
 "15194 2019-03-16 09:53:37 +0100 scheduledialog: fix label max delay from sec. in min.\n" \
 "15193 2019-03-16 08:14:23 +0100 mbus: dcc/mm aspect command support\n" \
 "15192 2019-03-16 07:54:55 +0100 tamsmc: XTrntX extended DCC accessory support\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13201 2017-12-11 12:10:17 +0100 themepropsdlg: show color\n" \
 "13200 2017-12-11 11:41:12 +0100 themepropsdlg added\n" \
 "13199 2017-12-11 09:41:46 +0100 model: check actions on stop all locos\n" \
-"13198 2017-12-10 16:10:27 +0100 swdlg: gray icons\n" \
-"13197 2017-12-10 15:29:59 +0100 swdlg: layout corrections\n" \
-"13196 2017-12-10 13:51:24 +0100 swdlg: alt icons\n" \
-"13195 2017-12-10 13:13:08 +0100 swctrldlg: icon\n" \
 
 "log end";
