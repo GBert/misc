@@ -1,11 +1,15 @@
 const int revisionnr = 
-15198
+15202
 ;
 const char* commithash = 
-"885a0f1a1f59a7971f4f836cf239ba4795abb4a2";
+"16a491108c0133f2cda449c9e94760c4a4f0e128";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15202 2019-03-19 10:13:27 +0100 rocview wrapper: help url corrected\n" \
+"15201 2019-03-19 08:42:19 +0100 signal: avoid double commands to 4 default aspect ports\n" \
+"15200 2019-03-18 14:29:52 +0100 base: use the wrapper values for colors not defined\n" \
+"15199 2019-03-18 10:48:49 +0100 ecos/signal: support for signal events added\n" \
 "15198 2019-03-17 14:08:54 +0100 themepropsdlg: reset color button added\n" \
 "15197 2019-03-17 12:30:34 +0100 themepropsdlg: color transaltions\n" \
 "15196 2019-03-17 12:18:28 +0100 translation correction\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13205 2017-12-13 10:11:24 +0100 themepropsdlg: translations added\n" \
 "13204 2017-12-13 09:16:25 +0100 rocweb: show clock on URL parameter z=1000\n" \
 "13203 2017-12-13 08:35:07 +0100 clntcon, guiapp: switching workspace fix\n" \
-"13202 2017-12-12 11:09:29 +0100 rocview: fix for changing workspace\n" \
-"13201 2017-12-11 12:10:17 +0100 themepropsdlg: show color\n" \
-"13200 2017-12-11 11:41:12 +0100 themepropsdlg added\n" \
-"13199 2017-12-11 09:41:46 +0100 model: check actions on stop all locos\n" \
 
 "log end";
