@@ -1,11 +1,13 @@
 const int revisionnr = 
-15202
+15204
 ;
 const char* commithash = 
-"16a491108c0133f2cda449c9e94760c4a4f0e128";
+"d39bc5e96c496946011afdec382c7a54efb664b9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15204 2019-03-20 15:24:41 +0100 cbusnodedlg: smooth update query index\n" \
+"15203 2019-03-20 10:32:53 +0100 signal: fix for evaluating pattern events\n" \
 "15202 2019-03-19 10:13:27 +0100 rocview wrapper: help url corrected\n" \
 "15201 2019-03-19 08:42:19 +0100 signal: avoid double commands to 4 default aspect ports\n" \
 "15200 2019-03-18 14:29:52 +0100 base: use the wrapper values for colors not defined\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13207 2017-12-13 13:35:20 +0100 themepropsdlg: close handler added\n" \
 "13206 2017-12-13 11:56:47 +0100 rocweb: logo without shade\n" \
 "13205 2017-12-13 10:11:24 +0100 themepropsdlg: translations added\n" \
-"13204 2017-12-13 09:16:25 +0100 rocweb: show clock on URL parameter z=1000\n" \
-"13203 2017-12-13 08:35:07 +0100 clntcon, guiapp: switching workspace fix\n" \
 
 "log end";
