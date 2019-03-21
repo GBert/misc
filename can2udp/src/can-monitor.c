@@ -352,10 +352,10 @@ void command_system(struct can_frame *frame) {
 	break;
     case 0x0c:
 	if (frame->can_dlc == 5) {
-	    printf("System: Geraetekennung UID");
+	    printf("System: Geraetekennung UID 0x%08X", uid);
 	} else {
 	    wert = be16(&frame->data[5]);
-	    printf("System: Geraetekennung UID 0x%04X", wert);
+	    printf("System: Geraetekennung UID 0x%08X ist 0x%04X", uid, wert);
 	}
 	break;
     case 0x20:
