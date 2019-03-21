@@ -1,11 +1,12 @@
 const int revisionnr = 
-15207
+15208
 ;
 const char* commithash = 
-"1028aef795aa90c9b8d22c45a792751d65bac4be";
+"d581578eb6db7fb1822ed8459408ccf275330ec3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15208 2019-03-21 11:18:44 +0100 item: fix for updating embedded (invisible)block sensors\n" \
 "15207 2019-03-21 08:30:42 +0100 mbus: set status bulbs for accessory and sensor\n" \
 "15206 2019-03-21 08:21:39 +0100 cbus: trace correction\n" \
 "15205 2019-03-21 08:20:41 +0100 cbus: fix for retrieving CANID\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13211 2017-12-13 15:33:22 +0100 extra traces on gui exit\n" \
 "13210 2017-12-13 14:48:39 +0100 rcon: trace corrections\n" \
 "13209 2017-12-13 14:18:27 +0100 rocnetnode: reset pi01 LEDs before shutdown/exit main\n" \
-"13208 2017-12-13 13:50:10 +0100 guiframe: removed asking shutdown all rocnet node because this is already handled in the rocnet setup\n" \
 
 "log end";
