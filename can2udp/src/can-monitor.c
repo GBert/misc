@@ -1077,10 +1077,16 @@ void decode_frame(struct can_frame *frame) {
 	    printf("Data Stream mit unerwartetem DLC %d\n", frame->can_dlc);
 	}
 	break;
-    /* CdB: WeichenChef */
+    /* 6021 or CdB WeichenChef */
     case 0x44:
     case 0x45:
-	cdb_extension_wc(frame);
+	if (frame->can_dlc == 6) {
+	    uid = be32(frame->data);
+	    kenner = be16(&frame->data[4]);
+	    printf("Connect6021 UID 0x%08X mit Kenner 0x%04X\n", uid, kenner);
+	} else {
+	    cdb_extension_wc(frame);
+	}
 	break;
     /* Automatik schalten */
     case 0x60:
