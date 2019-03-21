@@ -1,11 +1,14 @@
 const int revisionnr = 
-15204
+15207
 ;
 const char* commithash = 
-"d39bc5e96c496946011afdec382c7a54efb664b9";
+"1028aef795aa90c9b8d22c45a792751d65bac4be";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15207 2019-03-21 08:30:42 +0100 mbus: set status bulbs for accessory and sensor\n" \
+"15206 2019-03-21 08:21:39 +0100 cbus: trace correction\n" \
+"15205 2019-03-21 08:20:41 +0100 cbus: fix for retrieving CANID\n" \
 "15204 2019-03-20 15:24:41 +0100 cbusnodedlg: smooth update query index\n" \
 "15203 2019-03-20 10:32:53 +0100 signal: fix for evaluating pattern events\n" \
 "15202 2019-03-19 10:13:27 +0100 rocview wrapper: help url corrected\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13210 2017-12-13 14:48:39 +0100 rcon: trace corrections\n" \
 "13209 2017-12-13 14:18:27 +0100 rocnetnode: reset pi01 LEDs before shutdown/exit main\n" \
 "13208 2017-12-13 13:50:10 +0100 guiframe: removed asking shutdown all rocnet node because this is already handled in the rocnet setup\n" \
-"13207 2017-12-13 13:35:20 +0100 themepropsdlg: close handler added\n" \
-"13206 2017-12-13 11:56:47 +0100 rocweb: logo without shade\n" \
-"13205 2017-12-13 10:11:24 +0100 themepropsdlg: translations added\n" \
 
 "log end";
