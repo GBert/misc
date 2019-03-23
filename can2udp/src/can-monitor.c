@@ -1250,7 +1250,7 @@ int main(int argc, char **argv) {
 	    int ether_offset = 4;
 	    if (caplinktype != DLT_NULL) {	/* skip for loopback encapsulation */
 		/* parse the first (ethernet) header, grabbing the type field */
-		int ether_offset = (caplinktype == DLT_LINUX_SLL) ? 14 : 12;
+		ether_offset = (caplinktype == DLT_LINUX_SLL) ? 14 : 12;
 		int ether_type = be16(&pkt_ptr[ether_offset]);
 
 		if (ether_type == ETHER_TYPE_IP) {	/* most common */
