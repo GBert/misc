@@ -1,4 +1,4 @@
-/* ----------------------------------------------------------------------------
+/* ------------------------------------------- ---------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
  * <info@gerhard-bertelsmann.de> wrote this file. As long as you retain this
  * notice you can do whatever you want with this stuff. If we meet some day,
@@ -1077,10 +1077,16 @@ void decode_frame(struct can_frame *frame) {
 	    printf("Data Stream mit unerwartetem DLC %d\n", frame->can_dlc);
 	}
 	break;
-    /* CdB: WeichenChef */
+    /* 6021 or CdB WeichenChef */
     case 0x44:
     case 0x45:
-	cdb_extension_wc(frame);
+	if (frame->can_dlc == 6) {
+	    uid = be32(frame->data);
+	    kenner = be16(&frame->data[4]);
+	    printf("Connect6021 UID 0x%08X mit Kenner 0x%04X\n", uid, kenner);
+	} else {
+	    cdb_extension_wc(frame);
+	}
 	break;
     /* Automatik schalten */
     case 0x60:
@@ -1241,18 +1247,21 @@ int main(int argc, char **argv) {
 	    sprintf(timestamp, "%02d:%02d:%02d.%03d", tm->tm_hour, tm->tm_min, tm->tm_sec,
 		    (int)header.ts.tv_usec / 1000);
 
-	    /* parse the first (ethernet) header, grabbing the type field */
-	    int ether_offset = (caplinktype == DLT_LINUX_SLL) ? 14 : 12;
-	    int ether_type = be16(&pkt_ptr[ether_offset]);
+	    int ether_offset = 4;
+	    if (caplinktype != DLT_NULL) {	/* skip for loopback encapsulation */
+		/* parse the first (ethernet) header, grabbing the type field */
+		int ether_offset = (caplinktype == DLT_LINUX_SLL) ? 14 : 12;
+		int ether_type = be16(&pkt_ptr[ether_offset]);
 
-	    if (ether_type == ETHER_TYPE_IP) {	/* most common */
-		ether_offset += 2;
-	    } else if (ether_type == ETHER_TYPE_8021Q) {	/* dot1q tag ? */
-		ether_offset += 6;
-	    } else {
-		if (verbose)
-		    fprintf(stderr, "Unknown ethernet type, %04X, skipping...\n", ether_type);
-		continue;
+		if (ether_type == ETHER_TYPE_IP) {	/* most common */
+		    ether_offset += 2;
+		} else if (ether_type == ETHER_TYPE_8021Q) {	/* dot1q tag ? */
+		    ether_offset += 6;
+		} else {
+		    if (verbose)
+			fprintf(stderr, "Unknown ethernet type, %04X, skipping...\n", ether_type);
+		    continue;
+		}
 	    }
 
 	    /* skip past the Ethernet II header */
