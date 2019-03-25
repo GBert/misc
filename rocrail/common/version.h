@@ -1,11 +1,20 @@
 const int revisionnr = 
-15212
+15221
 ;
 const char* commithash = 
-"9dc6a18e91d8ecf7e4d3ed1f5992539e9ad96af0";
+"8287d28c1365429026a2e7aa49a35e7e3a1bfafe";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15221 2019-03-25 11:49:53 +0100 model: fix for taking over the schedule entry IN-delay\n" \
+"15220 2019-03-25 11:35:29 +0100 schedule option actionsatin added\n" \
+"15219 2019-03-25 08:43:17 +0100 model: fix for taking over the schedule entry IN-delay\n" \
+"15218 2019-03-25 07:36:03 +0100 item,planpanel: tooltip in statusbar\n" \
+"15217 2019-03-24 13:43:38 +0100 routedialog: correction for the lock button command\n" \
+"15216 2019-03-24 13:41:01 +0100 routedlg: correction for the lock button command\n" \
+"15215 2019-03-24 11:30:29 +0100 item: show tooltip in statusbar\n" \
+"15214 2019-03-24 10:25:55 +0100 statbar: formatting code\n" \
+"15213 2019-03-24 10:18:04 +0100 statbar: use gray bulbs in case of gray icons\n" \
 "15212 2019-03-24 08:50:55 +0100 control: reset freeze clock state in case of divider 1 and not semirealtime\n" \
 "15211 2019-03-23 09:02:38 +0100 translation merge: sl, fr, sr_latin, nl, de, cs, zh_CN\n" \
 "15210 2019-03-22 11:37:25 +0100 route: unlock only if locked on sensor event\n" \
@@ -1997,14 +2006,5 @@ const char* revlog =
 "13224 2017-12-16 14:41:29 +0100 clntcon: broker discovery use host and port at reply\n" \
 "13223 2017-12-16 08:21:52 +0100 rocweb: support for road theme sensors\n" \
 "13222 2017-12-15 17:14:20 +0100 clntcon: mqtt broker discovery service added\n" \
-"13221 2017-12-15 09:28:04 +0100 rocview shutdown fix for deadlock\n" \
-"13220 2017-12-15 08:14:57 +0100 rocview shutdown fix for deadlock\n" \
-"13219 2017-12-15 08:05:37 +0100 thempropsdlg: title translation\n" \
-"13218 2017-12-14 17:29:45 +0100 wrapper: default mqtt broker port number\n" \
-"13217 2017-12-14 15:13:48 +0100 bidib: revert update messages because unknown types are used\n" \
-"13216 2017-12-14 13:41:45 +0100 bidib: messages update\n" \
-"13215 2017-12-14 12:09:07 +0100 tt: set id in switch commands for dccpp support\n" \
-"13214 2017-12-14 11:19:41 +0100 rocview shutdown fix for deadlock\n" \
-"13213 2017-12-14 09:25:06 +0100 guiframe: reset the option reconnect to server at open workspace\n" \
 
 "log end";
