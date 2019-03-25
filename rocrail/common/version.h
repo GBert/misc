@@ -1,11 +1,15 @@
 const int revisionnr = 
-15208
+15212
 ;
 const char* commithash = 
-"d581578eb6db7fb1822ed8459408ccf275330ec3";
+"9dc6a18e91d8ecf7e4d3ed1f5992539e9ad96af0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15212 2019-03-24 08:50:55 +0100 control: reset freeze clock state in case of divider 1 and not semirealtime\n" \
+"15211 2019-03-23 09:02:38 +0100 translation merge: sl, fr, sr_latin, nl, de, cs, zh_CN\n" \
+"15210 2019-03-22 11:37:25 +0100 route: unlock only if locked on sensor event\n" \
+"15209 2019-03-22 08:35:30 +0100 fback: put block listeners on top of the list for supporting embedded sensors\n" \
 "15208 2019-03-21 11:18:44 +0100 item: fix for updating embedded (invisible)block sensors\n" \
 "15207 2019-03-21 08:30:42 +0100 mbus: set status bulbs for accessory and sensor\n" \
 "15206 2019-03-21 08:21:39 +0100 cbus: trace correction\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13215 2017-12-14 12:09:07 +0100 tt: set id in switch commands for dccpp support\n" \
 "13214 2017-12-14 11:19:41 +0100 rocview shutdown fix for deadlock\n" \
 "13213 2017-12-14 09:25:06 +0100 guiframe: reset the option reconnect to server at open workspace\n" \
-"13212 2017-12-14 09:05:34 +0100 guiapp: removed not needed semaphore at sending server commands\n" \
-"13211 2017-12-13 15:33:22 +0100 extra traces on gui exit\n" \
-"13210 2017-12-13 14:48:39 +0100 rcon: trace corrections\n" \
-"13209 2017-12-13 14:18:27 +0100 rocnetnode: reset pi01 LEDs before shutdown/exit main\n" \
 
 "log end";
