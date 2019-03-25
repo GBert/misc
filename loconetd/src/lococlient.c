@@ -80,14 +80,12 @@ int main(int argc, char *argv[]) {
   }
 
   rc = setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one));
-  if (rc < 0) {
+  if (rc < 0)
     printf("Reuse port (SO_REUSEADDR) puked...\n");
-  }
 
   rc = setsockopt(sd, SOL_SOCKET, SO_BROADCAST, &one, sizeof(one));
-  if (rc < 0) {
+  if (rc < 0)
     printf("Receive broadcast (SO_BROADCAST) puked...\n");
-  }
 
   /* bind port */
   servAddr.sin_family = AF_INET;
@@ -138,8 +136,6 @@ int main(int argc, char *argv[]) {
       printf("%02x ", msg[i]);
     }
     printf("\n");
-
   }				/* end of infinite server loop */
-
   return 0;
 }
