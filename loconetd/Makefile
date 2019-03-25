@@ -40,8 +40,10 @@ define Build/Compile
 endef
 
 define Package/loconetd/install
-	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin $(1)/etc
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/loconetd $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lococlient $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/loconetd.conf $(1)/etc
 endef
 
 $(eval $(call BuildPackage,loconetd))
