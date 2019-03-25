@@ -1,6 +1,6 @@
 all:
-	cc loconetd.c -o loconetd
-	cc lococlient.c -o lococlient
+	cc -Wall -pedantic loconetd.c -o loconetd
+	cc -Wall -pedantic lococlient.c -o lococlient
 
 clean:
-	rm loconetd lococlient *~ DEADJOE
+	rm -f loconetd lococlient *~ DEADJOE
