@@ -71,9 +71,8 @@ int conf_next = 0;
 int is_name(const char *findname) {
   int i;
   for (i = 0; i < conf_next; i++) {
-    if (strcmp(findname, (char *)conf[i].name) == 0) {
+    if (strcmp(findname, (char *)conf[i].name) == 0)
       return (1);
-    }
   }
   return (0);
 }
@@ -97,9 +96,8 @@ int load_conf() {
   while (!feof(fd)) {
     fgets(line, 120, fd);
     line_end = strchr(line, '#');
-    if (line_end != NULL) {
+    if (line_end != NULL)
       *line_end = (char)0;
-    }
     if (strlen(line) > 1) {
       sscanf(line, "%s %s\n", name, val);
       stpcpy(conf[conf_next].name, name);
