@@ -1,11 +1,15 @@
 const int revisionnr = 
-15221
+15225
 ;
 const char* commithash = 
-"8287d28c1365429026a2e7aa49a35e7e3a1bfafe";
+"f2c0c4184f6000665272abba99600a57ad6adc09";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15225 2019-03-26 15:14:47 +0100 loc: fix for take over the train center parameter\n" \
+"15224 2019-03-26 09:16:41 +0100 scheduledialog: take over the new actionsatin flag\n" \
+"15223 2019-03-26 08:37:02 +0100 control: trace correction\n" \
+"15222 2019-03-25 17:00:35 +0100 block: regard ghost state in case of embedded sensors\n" \
 "15221 2019-03-25 11:49:53 +0100 model: fix for taking over the schedule entry IN-delay\n" \
 "15220 2019-03-25 11:35:29 +0100 schedule option actionsatin added\n" \
 "15219 2019-03-25 08:43:17 +0100 model: fix for taking over the schedule entry IN-delay\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13228 2017-12-17 08:39:07 +0100 dccpp: check for protocol NMRA-DCC\n" \
 "13227 2017-12-17 08:16:20 +0100 connectiondialog: always set code values to overwrite the ABC label\n" \
 "13226 2017-12-16 16:30:54 +0100 tt: set tt id for multiport type and dccpp\n" \
-"13225 2017-12-16 14:52:15 +0100 clntcon: use only one socket for the broker discovery service\n" \
-"13224 2017-12-16 14:41:29 +0100 clntcon: broker discovery use host and port at reply\n" \
-"13223 2017-12-16 08:21:52 +0100 rocweb: support for road theme sensors\n" \
-"13222 2017-12-15 17:14:20 +0100 clntcon: mqtt broker discovery service added\n" \
 
 "log end";
