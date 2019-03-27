@@ -1,11 +1,13 @@
 const int revisionnr = 
-15225
+15227
 ;
 const char* commithash = 
-"f2c0c4184f6000665272abba99600a57ad6adc09";
+"c7853c4c697998020dc14e6098da7f4f14bbdfa2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15227 2019-03-27 09:02:54 +0100 mbus: fix for SoD Bus1 of S88Link\n" \
+"15226 2019-03-27 07:43:03 +0100 control: use show flag to set a controller to virtual\n" \
 "15225 2019-03-26 15:14:47 +0100 loc: fix for take over the train center parameter\n" \
 "15224 2019-03-26 09:16:41 +0100 scheduledialog: take over the new actionsatin flag\n" \
 "15223 2019-03-26 08:37:02 +0100 control: trace correction\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13230 2017-12-17 11:18:31 +0100 clntcon: extra trace incase broker info is send back\n" \
 "13229 2017-12-17 11:03:56 +0100 clntcon: check BROKER-GET not with equals but start with\n" \
 "13228 2017-12-17 08:39:07 +0100 dccpp: check for protocol NMRA-DCC\n" \
-"13227 2017-12-17 08:16:20 +0100 connectiondialog: always set code values to overwrite the ABC label\n" \
-"13226 2017-12-16 16:30:54 +0100 tt: set tt id for multiport type and dccpp\n" \
 
 "log end";
