@@ -1,11 +1,12 @@
 const int revisionnr = 
-15227
+15228
 ;
 const char* commithash = 
-"c7853c4c697998020dc14e6098da7f4f14bbdfa2";
+"54a4983656b4da63fbaee3fbc7cbe4139ed9e10e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15228 2019-03-27 10:04:05 +0100 loc: reset schedule on softreset in case reset schedule on stop is set\n" \
 "15227 2019-03-27 09:02:54 +0100 mbus: fix for SoD Bus1 of S88Link\n" \
 "15226 2019-03-27 07:43:03 +0100 control: use show flag to set a controller to virtual\n" \
 "15225 2019-03-26 15:14:47 +0100 loc: fix for take over the train center parameter\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13231 2017-12-17 11:46:38 +0100 swdlg: fix for bitmapbutton in header\n" \
 "13230 2017-12-17 11:18:31 +0100 clntcon: extra trace incase broker info is send back\n" \
 "13229 2017-12-17 11:03:56 +0100 clntcon: check BROKER-GET not with equals but start with\n" \
-"13228 2017-12-17 08:39:07 +0100 dccpp: check for protocol NMRA-DCC\n" \
 
 "log end";
