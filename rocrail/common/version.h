@@ -1,11 +1,13 @@
 const int revisionnr = 
-15228
+15230
 ;
 const char* commithash = 
-"54a4983656b4da63fbaee3fbc7cbe4139ed9e10e";
+"304aba313dc3b39772ed2889d642930b7e832f1f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15230 2019-03-27 15:47:24 +0100 powerman: added implementation for base.properties\n" \
+"15229 2019-03-27 13:50:18 +0100 lcdriver: reset indelay on reset and after using it\n" \
 "15228 2019-03-27 10:04:05 +0100 loc: reset schedule on softreset in case reset schedule on stop is set\n" \
 "15227 2019-03-27 09:02:54 +0100 mbus: fix for SoD Bus1 of S88Link\n" \
 "15226 2019-03-27 07:43:03 +0100 control: use show flag to set a controller to virtual\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13233 2017-12-17 15:22:11 +0100 mqtt, rocnet: auto discovery\n" \
 "13232 2017-12-17 13:20:13 +0100 guiapp: removed global pending exit flag\n" \
 "13231 2017-12-17 11:46:38 +0100 swdlg: fix for bitmapbutton in header\n" \
-"13230 2017-12-17 11:18:31 +0100 clntcon: extra trace incase broker info is send back\n" \
-"13229 2017-12-17 11:03:56 +0100 clntcon: check BROKER-GET not with equals but start with\n" \
 
 "log end";
