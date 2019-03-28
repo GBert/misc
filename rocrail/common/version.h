@@ -1,11 +1,15 @@
 const int revisionnr = 
-15230
+15234
 ;
 const char* commithash = 
-"304aba313dc3b39772ed2889d642930b7e832f1f";
+"dab2a1bb52256ed51af5911689ef0b88505d4721";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15234 2019-03-28 14:36:52 +0100 renderer: use brightness for panel background color\n" \
+"15233 2019-03-28 14:01:08 +0100 use color output for panel background disable automode menu and toolbar in edit mode\n" \
+"15232 2019-03-28 11:04:52 +0100 model: no backup in case of an auto save on modify\n" \
+"15231 2019-03-28 10:52:12 +0100 auto save on modify option added\n" \
 "15230 2019-03-27 15:47:24 +0100 powerman: added implementation for base.properties\n" \
 "15229 2019-03-27 13:50:18 +0100 lcdriver: reset indelay on reset and after using it\n" \
 "15228 2019-03-27 10:04:05 +0100 loc: reset schedule on softreset in case reset schedule on stop is set\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13237 2017-12-18 11:54:55 +0100 blockgroup, block: remove prereservations on lock\n" \
 "13236 2017-12-18 11:37:08 +0100 rocnet: use the original ini to add rocnetnodes\n" \
 "13235 2017-12-18 11:31:10 +0100 roclcdr: speed corrections\n" \
-"13234 2017-12-18 08:51:12 +0100 swdlg: protocol and port type added\n" \
-"13233 2017-12-17 15:22:11 +0100 mqtt, rocnet: auto discovery\n" \
-"13232 2017-12-17 13:20:13 +0100 guiapp: removed global pending exit flag\n" \
-"13231 2017-12-17 11:46:38 +0100 swdlg: fix for bitmapbutton in header\n" \
 
 "log end";
