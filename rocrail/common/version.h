@@ -1,11 +1,15 @@
 const int revisionnr = 
-15234
+15238
 ;
 const char* commithash = 
-"dab2a1bb52256ed51af5911689ef0b88505d4721";
+"da4361fb208c5850665ab303a853405d9d6f643c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15238 2019-03-29 12:22:05 +0100 fback: check if the listener returns a valid properties node\n" \
+"15237 2019-03-29 11:37:54 +0100 renderer: draw a light type output also without smooth rendering\n" \
+"15236 2019-03-29 09:55:45 +0100 switch: removed unused variables\n" \
+"15235 2019-03-29 08:02:44 +0100 switch: revert using FADA utility to normalise address\n" \
 "15234 2019-03-28 14:36:52 +0100 renderer: use brightness for panel background color\n" \
 "15233 2019-03-28 14:01:08 +0100 use color output for panel background disable automode menu and toolbar in edit mode\n" \
 "15232 2019-03-28 11:04:52 +0100 model: no backup in case of an auto save on modify\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13241 2017-12-19 09:48:33 +0100 blockgroup: set loco via block in case of prereserve\n" \
 "13240 2017-12-19 08:57:02 +0100 output: param off added for light support\n" \
 "13239 2017-12-18 16:13:07 +0100 bidib: position address correction (Achim)\n" \
-"13238 2017-12-18 12:25:00 +0100 swdlg: allign corrections to save space\n" \
-"13237 2017-12-18 11:54:55 +0100 blockgroup, block: remove prereservations on lock\n" \
-"13236 2017-12-18 11:37:08 +0100 rocnet: use the original ini to add rocnetnodes\n" \
-"13235 2017-12-18 11:31:10 +0100 roclcdr: speed corrections\n" \
 
 "log end";
