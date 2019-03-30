@@ -1,11 +1,14 @@
 const int revisionnr = 
-15238
+15241
 ;
 const char* commithash = 
-"da4361fb208c5850665ab303a853405d9d6f643c";
+"0e540eadf1a9b08b74c1939efcbdc693e0e02b8b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15241 2019-03-30 08:26:44 +0100 control: allow clock divider max 600\n" \
+"15240 2019-03-29 14:40:39 +0100 guiframe: only change panel color if new color is different\n" \
+"15239 2019-03-29 14:29:09 +0100 renderer: use a post event to change the background color\n" \
 "15238 2019-03-29 12:22:05 +0100 fback: check if the listener returns a valid properties node\n" \
 "15237 2019-03-29 11:37:54 +0100 renderer: draw a light type output also without smooth rendering\n" \
 "15236 2019-03-29 09:55:45 +0100 switch: removed unused variables\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13244 2017-12-19 15:19:08 +0100 blockgroup: removed the pre-reserve option\n" \
 "13243 2017-12-19 14:48:37 +0100 groupingdialog: use blockdialog for selecting free blocks\n" \
 "13242 2017-12-19 11:26:25 +0100 blockgroup: reserve option extended\n" \
-"13241 2017-12-19 09:48:33 +0100 blockgroup: set loco via block in case of prereserve\n" \
-"13240 2017-12-19 08:57:02 +0100 output: param off added for light support\n" \
-"13239 2017-12-18 16:13:07 +0100 bidib: position address correction (Achim)\n" \
 
 "log end";
