@@ -1,11 +1,20 @@
 const int revisionnr = 
-15241
+15250
 ;
 const char* commithash = 
-"0e540eadf1a9b08b74c1939efcbdc693e0e02b8b";
+"c729067bdbee11c6c7d5921528ef4a16d99910d4";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15250 2019-03-31 16:40:58 +0200 competition: return base properties\n" \
+"15249 2019-03-31 15:33:26 +0200 renderer: use rectangle for color output in case theme is SLIM\n" \
+"15248 2019-03-31 14:49:52 +0200 rocnetnode: do not report Pi07 changes\n" \
+"15247 2019-03-31 12:15:53 +0200 rocrailinidialog: layout correction\n" \
+"15246 2019-03-31 11:41:48 +0200 renderer: fix for pushing panel color\n" \
+"15245 2019-03-31 10:45:38 +0200 roclcdr: fix for action on in\n" \
+"15244 2019-03-31 08:17:59 +0200 renderer: use draw circle for color outputs in case normal DC\n" \
+"15243 2019-03-30 14:11:13 +0100 renderer: set color output border to grey in case brightness < 50\n" \
+"15242 2019-03-30 10:08:45 +0100 panel color by output\n" \
 "15241 2019-03-30 08:26:44 +0100 control: allow clock divider max 600\n" \
 "15240 2019-03-29 14:40:39 +0100 guiframe: only change panel color if new color is different\n" \
 "15239 2019-03-29 14:29:09 +0100 renderer: use a post event to change the background color\n" \
@@ -1997,14 +2006,5 @@ const char* revlog =
 "13253 2017-12-20 10:05:38 +0100 rocnetnode: mqtt support (wip)\n" \
 "13252 2017-12-20 09:20:47 +0100 rocnetnode: mqtt support (wip)\n" \
 "13251 2017-12-20 09:18:24 +0100 rocnet: sublibrary evaluation fix\n" \
-"13250 2017-12-19 18:03:47 +0100 mqtt: subscribe as soon as the broker connection is OK\n" \
-"13249 2017-12-19 17:27:09 +0100 rocnetnode: initialise the mqtt mutex\n" \
-"13248 2017-12-19 16:32:27 +0100 rocnet: cleanup discovery thread\n" \
-"13247 2017-12-19 16:15:57 +0100 rocnet: use the mqtt library return code to prevent draining cpu\n" \
-"13246 2017-12-19 15:41:03 +0100 mqtt: trace level corrections\n" \
-"13245 2017-12-19 15:31:57 +0100 rocnetnode: support for mqtt (WIP)\n" \
-"13244 2017-12-19 15:19:08 +0100 blockgroup: removed the pre-reserve option\n" \
-"13243 2017-12-19 14:48:37 +0100 groupingdialog: use blockdialog for selecting free blocks\n" \
-"13242 2017-12-19 11:26:25 +0100 blockgroup: reserve option extended\n" \
 
 "log end";
