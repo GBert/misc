@@ -1,11 +1,12 @@
 const int revisionnr = 
-15250
+15251
 ;
 const char* commithash = 
-"c729067bdbee11c6c7d5921528ef4a16d99910d4";
+"a2ae465f60f6901ea80ab2b762f3054ab9e66020";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15251 2019-03-31 17:40:05 +0200 removed auto save on modify\n" \
 "15250 2019-03-31 16:40:58 +0200 competition: return base properties\n" \
 "15249 2019-03-31 15:33:26 +0200 renderer: use rectangle for color output in case theme is SLIM\n" \
 "15248 2019-03-31 14:49:52 +0200 rocnetnode: do not report Pi07 changes\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13254 2017-12-20 10:41:45 +0100 rocnetnode: mqtt support (wip)\n" \
 "13253 2017-12-20 10:05:38 +0100 rocnetnode: mqtt support (wip)\n" \
 "13252 2017-12-20 09:20:47 +0100 rocnetnode: mqtt support (wip)\n" \
-"13251 2017-12-20 09:18:24 +0100 rocnet: sublibrary evaluation fix\n" \
 
 "log end";
