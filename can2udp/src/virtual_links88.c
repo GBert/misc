@@ -126,6 +126,15 @@ int send_defined_can_frame(int can_socket, unsigned char *data, int verbose) {
     return 0;
 }
 
+int send_can_block(int can_socket, unsigned char data[][13], unsigned int rows, int verbose) {
+    unsigned int i;
+
+    for (i = 0; i < rows; i++)
+	send_defined_can_frame(can_socket, data[i], verbose);
+
+    return 0;
+}
+
 int main(int argc, char **argv) {
     int max_fds, opt;
     struct can_frame frame;
@@ -220,111 +229,43 @@ int main(int argc, char **argv) {
 		    if ((memcmp(&frame.data[0], &M_LINKS88_ID[5], 4) == 0)) {
 			switch (frame.data[4]) {
 			case 0x00:
-			    send_defined_can_frame(sc, M_LINKS88_DATA0_1, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA0_2, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA0_3, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA0_4, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA0_5, verbose);
+			    send_can_block(sc, M_LINKS88_DATA0, 5, verbose);
 			    break;
 			case 0x01:
-			    send_defined_can_frame(sc, M_LINKS88_DATA1_1, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA1_2, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA1_3, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA1_4, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA1_5, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA1_6, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA1_7, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA1_8, verbose);
+			    send_can_block(sc, M_LINKS88_DATA1, 8, verbose);
 			    break;
 			case 0x02:
-			    send_defined_can_frame(sc, M_LINKS88_DATA2_1, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA2_2, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA2_3, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA2_4, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA2_5, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA2_6, verbose);
+			    send_can_block(sc, M_LINKS88_DATA2, 6, verbose);
 			    break;
 			case 0x03:
-			    send_defined_can_frame(sc, M_LINKS88_DATA3_1, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA3_2, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA3_3, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA3_4, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA3_5, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA3_6, verbose);
+			    send_can_block(sc, M_LINKS88_DATA3, 6, verbose);
 			    break;
 			case 0x04:
-			    send_defined_can_frame(sc, M_LINKS88_DATA4_1, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA4_2, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA4_3, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA4_4, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA4_5, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA4_6, verbose);
+			    send_can_block(sc, M_LINKS88_DATA4, 6, verbose);
 			    break;
 			case 0x05:
-			    send_defined_can_frame(sc, M_LINKS88_DATA5_1, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA5_2, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA5_3, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA5_4, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA5_5, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA5_6, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA5_7, verbose);
+			    send_can_block(sc, M_LINKS88_DATA5, 7, verbose);
 			    break;
 			case 0x06:
-			    send_defined_can_frame(sc, M_LINKS88_DATA6_1, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA6_2, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA6_3, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA6_4, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA6_5, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA6_6, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA6_7, verbose);
+			    send_can_block(sc, M_LINKS88_DATA6, 7, verbose);
 			    break;
 			case 0x07:
-			    send_defined_can_frame(sc, M_LINKS88_DATA7_1, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA7_2, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA7_3, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA7_4, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA7_5, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA7_6, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA7_7, verbose);
+			    send_can_block(sc, M_LINKS88_DATA7, 7, verbose);
 			    break;
 			case 0x08:
-			    send_defined_can_frame(sc, M_LINKS88_DATA8_1, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA8_2, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA8_3, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA8_4, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA8_5, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA8_6, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA8_7, verbose);
+			    send_can_block(sc, M_LINKS88_DATA8, 7, verbose);
 			    break;
 			case 0x09:
-			    send_defined_can_frame(sc, M_LINKS88_DATA9_1, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA9_2, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA9_3, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA9_4, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA9_5, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATA9_6, verbose);
+			    send_can_block(sc, M_LINKS88_DATA9, 6, verbose);
 			    break;
 			case 0x0A:
-			    send_defined_can_frame(sc, M_LINKS88_DATAA_1, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATAA_2, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATAA_3, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATAA_4, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATAA_5, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATAA_6, verbose);
+			    send_can_block(sc, M_LINKS88_DATAA, 6, verbose);
 			    break;
 			case 0x0B:
-			    send_defined_can_frame(sc, M_LINKS88_DATAB_1, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATAB_2, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATAB_3, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATAB_4, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATAB_5, verbose);
+			    send_can_block(sc, M_LINKS88_DATAB, 5, verbose);
 			    break;
 			case 0x0C:
-			    send_defined_can_frame(sc, M_LINKS88_DATAC_1, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATAC_2, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATAC_3, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATAC_4, verbose);
-			    send_defined_can_frame(sc, M_LINKS88_DATAC_5, verbose);
+			    send_can_block(sc, M_LINKS88_DATAC, 5, verbose);
 			    break;
 			}
 		    }
