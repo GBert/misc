@@ -1,11 +1,12 @@
 const int revisionnr = 
-15251
+15252
 ;
 const char* commithash = 
-"a2ae465f60f6901ea80ab2b762f3054ab9e66020";
+"5a608705413d094d371497a5c95df07bce4d6e2e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15252 2019-04-01 08:32:19 +0200 autosave on modify\n" \
 "15251 2019-03-31 17:40:05 +0200 removed auto save on modify\n" \
 "15250 2019-03-31 16:40:58 +0200 competition: return base properties\n" \
 "15249 2019-03-31 15:33:26 +0200 renderer: use rectangle for color output in case theme is SLIM\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13255 2017-12-20 11:21:09 +0100 rocnetnode: revision correction\n" \
 "13254 2017-12-20 10:41:45 +0100 rocnetnode: mqtt support (wip)\n" \
 "13253 2017-12-20 10:05:38 +0100 rocnetnode: mqtt support (wip)\n" \
-"13252 2017-12-20 09:20:47 +0100 rocnetnode: mqtt support (wip)\n" \
 
 "log end";
