@@ -229,43 +229,43 @@ int main(int argc, char **argv) {
 		    if ((memcmp(&frame.data[0], &M_LINKS88_ID[5], 4) == 0)) {
 			switch (frame.data[4]) {
 			case 0x00:
-			    send_can_block(sc, M_LINKS88_DATA0, 5, verbose);
+			    send_can_block(sc, M_LINKS88_DATA0, LEN(M_LINKS88_DATA0), verbose);
 			    break;
 			case 0x01:
-			    send_can_block(sc, M_LINKS88_DATA1, 8, verbose);
+			    send_can_block(sc, M_LINKS88_DATA1, LEN(M_LINKS88_DATA1), verbose);
 			    break;
 			case 0x02:
-			    send_can_block(sc, M_LINKS88_DATA2, 6, verbose);
+			    send_can_block(sc, M_LINKS88_DATA2, LEN(M_LINKS88_DATA2), verbose);
 			    break;
 			case 0x03:
-			    send_can_block(sc, M_LINKS88_DATA3, 6, verbose);
+			    send_can_block(sc, M_LINKS88_DATA3, LEN(M_LINKS88_DATA3), verbose);
 			    break;
 			case 0x04:
-			    send_can_block(sc, M_LINKS88_DATA4, 6, verbose);
+			    send_can_block(sc, M_LINKS88_DATA4, LEN(M_LINKS88_DATA4), verbose);
 			    break;
 			case 0x05:
-			    send_can_block(sc, M_LINKS88_DATA5, 7, verbose);
+			    send_can_block(sc, M_LINKS88_DATA5, LEN(M_LINKS88_DATA5), verbose);
 			    break;
 			case 0x06:
-			    send_can_block(sc, M_LINKS88_DATA6, 7, verbose);
+			    send_can_block(sc, M_LINKS88_DATA6, LEN(M_LINKS88_DATA6), verbose);
 			    break;
 			case 0x07:
-			    send_can_block(sc, M_LINKS88_DATA7, 7, verbose);
+			    send_can_block(sc, M_LINKS88_DATA7, LEN(M_LINKS88_DATA7), verbose);
 			    break;
 			case 0x08:
-			    send_can_block(sc, M_LINKS88_DATA8, 7, verbose);
+			    send_can_block(sc, M_LINKS88_DATA8, LEN(M_LINKS88_DATA8), verbose);
 			    break;
 			case 0x09:
-			    send_can_block(sc, M_LINKS88_DATA9, 6, verbose);
+			    send_can_block(sc, M_LINKS88_DATA9, LEN(M_LINKS88_DATA9), verbose);
 			    break;
 			case 0x0A:
-			    send_can_block(sc, M_LINKS88_DATAA, 6, verbose);
+			    send_can_block(sc, M_LINKS88_DATAA, LEN(M_LINKS88_DATAA), verbose);
 			    break;
 			case 0x0B:
-			    send_can_block(sc, M_LINKS88_DATAB, 5, verbose);
+			    send_can_block(sc, M_LINKS88_DATAB, LEN(M_LINKS88_DATAB), verbose);
 			    break;
 			case 0x0C:
-			    send_can_block(sc, M_LINKS88_DATAC, 5, verbose);
+			    send_can_block(sc, M_LINKS88_DATAC, LEN(M_LINKS88_DATAC), verbose);
 			    break;
 			}
 		    }
