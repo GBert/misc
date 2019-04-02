@@ -8,6 +8,7 @@
  * this stuff is worth it, you can buy me a beer in return.
  */
 
+#include <ctype.h>
 #include <ifaddrs.h>
 #include <libgen.h>
 #include <stdio.h>
@@ -342,9 +343,9 @@ int main(int argc, char **argv) {
     if (config_string != NULL) {
 	int j = 0;
 	while ((token = strsep(&config_string, delimiters))) {
-	    if (*token == 'P') {
+	    if (toupper(*token) == 'P') {
 		token++;
-		i = *token - 'A';
+		i = toupper(*token) - 'A';
 		if ((i >= 0) && (i < 9)) {
 		    token++;
 		    s88_data.pin[j] = i * 32 + (int)strtoul(token++, (char **)NULL, 10);
