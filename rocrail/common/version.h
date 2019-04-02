@@ -1,11 +1,14 @@
 const int revisionnr = 
-15253
+15256
 ;
 const char* commithash = 
-"ad4e851ca3a917a9147f97f1d43962243f8a2617";
+"6bb561a5187496b63f3532b9654c8c9ea5718e24";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15256 2019-04-02 11:58:30 +0200 item: use value for alpha channel on output color chooser\n" \
+"15255 2019-04-01 15:30:20 +0200 guiframe: fix for saving remark without workspace\n" \
+"15254 2019-04-01 15:17:42 +0200 renderer: regard also the brightness, value, of the output for setting the panel background color\n" \
 "15253 2019-04-01 14:06:42 +0200 renderer: output rect on slim with color circle\n" \
 "15252 2019-04-01 08:32:19 +0200 autosave on modify\n" \
 "15251 2019-03-31 17:40:05 +0200 removed auto save on modify\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13259 2017-12-21 14:12:54 +0100 roclcdr: replaced long with time_t to prevent win64 crash\n" \
 "13258 2017-12-20 17:42:13 +0100 bidib: typo\n" \
 "13257 2017-12-20 17:17:29 +0100 bidib: revert messages update ...\n" \
-"13256 2017-12-20 16:53:17 +0100 bidib: messages update (introduced c99 check)\n" \
-"13255 2017-12-20 11:21:09 +0100 rocnetnode: revision correction\n" \
-"13254 2017-12-20 10:41:45 +0100 rocnetnode: mqtt support (wip)\n" \
 
 "log end";
