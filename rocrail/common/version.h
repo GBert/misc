@@ -1,11 +1,12 @@
 const int revisionnr = 
-15256
+15257
 ;
 const char* commithash = 
-"6bb561a5187496b63f3532b9654c8c9ea5718e24";
+"8f020e6ff2e070b476352e9065891e3c5e871abe";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15257 2019-04-03 08:30:50 +0200 roclcdr: added an extra index variable for schedule entry actions\n" \
 "15256 2019-04-02 11:58:30 +0200 item: use value for alpha channel on output color chooser\n" \
 "15255 2019-04-01 15:30:20 +0200 guiframe: fix for saving remark without workspace\n" \
 "15254 2019-04-01 15:17:42 +0200 renderer: regard also the brightness, value, of the output for setting the panel background color\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13260 2017-12-21 14:59:03 +0100 action, block: eventlcid variable added\n" \
 "13259 2017-12-21 14:12:54 +0100 roclcdr: replaced long with time_t to prevent win64 crash\n" \
 "13258 2017-12-20 17:42:13 +0100 bidib: typo\n" \
-"13257 2017-12-20 17:17:29 +0100 bidib: revert messages update ...\n" \
 
 "log end";
