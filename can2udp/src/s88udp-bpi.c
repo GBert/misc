@@ -70,11 +70,11 @@ void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -vf [-b <bcast_addr/int>][-i <0|1>][-p <port>][-m <s88modules>][-o <offset>]\n", prg);
     fprintf(stderr, "   Version 2.0\n\n");
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
-    fprintf(stderr, "         -c <config_string>  set GPIOs like \"PH5,PI21,PH3,PI20\"\n");
-    fprintf(stderr, "                              PH5  Data\n");
-    fprintf(stderr, "                              PI21 Clock\n");
-    fprintf(stderr, "                              PH3  Load\n");
-    fprintf(stderr, "                              PI20 Reset\n");
+    fprintf(stderr, "         -c <config_string>  set GPIOs like \"PI20,PH3,PI21,PH5\"\n");
+    fprintf(stderr, "                              Data  PI20\n");
+    fprintf(stderr, "                              Clock  PH3\n");
+    fprintf(stderr, "                              Load  PI21\n");
+    fprintf(stderr, "                              Reset  PH5\n");
     fprintf(stderr, "         -i [0|1]            invert signals - default 0 -> not inverting\n");
     fprintf(stderr, "         -d <event id>       using event id - default 0\n");
     fprintf(stderr, "         -e <hash>           using CAN <hash>\n");
@@ -320,19 +320,6 @@ int main(int argc, char **argv) {
 	}
     }
 
-    /* get the broadcast address */
-    getifaddrs(&ifap);
-    for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
-	if (ifa->ifa_addr) {
-	    if (ifa->ifa_addr->sa_family == AF_INET) {
-		bsa = (struct sockaddr_in *)ifa->ifa_broadaddr;
-		if (strncmp(ifa->ifa_name, bcast_interface, strlen(bcast_interface)) == 0)
-		    udp_dst_address = inet_ntoa(bsa->sin_addr);
-	    }
-	}
-    }
-    freeifaddrs(ifap);
-
     /* set default pins */
     s88_data.pin[DATA_PIN_I]  = DATA_PIN;
     s88_data.pin[CLOCK_PIN_I] = CLOCK_PIN;
@@ -349,12 +336,34 @@ int main(int argc, char **argv) {
 		if ((i >= 0) && (i < 9)) {
 		    token++;
 		    s88_data.pin[j] = i * 32 + (int)strtoul(token++, (char **)NULL, 10);
-		    printf("GPIO pin %d value %d\n", j, s88_data.pin[j]);
 		    j++;
+		} else {
+		    fprintf(stderr, "pin definition error: P%s\n", token);
+		    exit(EXIT_FAILURE);
 		}
 	    }
 	}
     }
+
+    if (s88_data.verbose) {
+	printf("DATA  pin is P%c%d\n", 'A' + (s88_data.pin[DATA_PIN_I]  >> 5), s88_data.pin[DATA_PIN_I]  & 31);
+	printf("CLOCK pin is P%c%d\n", 'A' + (s88_data.pin[CLOCK_PIN_I] >> 5), s88_data.pin[CLOCK_PIN_I] & 31);
+	printf("LOAD  pin is P%c%d\n", 'A' + (s88_data.pin[LOAD_PIN_I]  >> 5), s88_data.pin[LOAD_PIN_I]  & 31);
+	printf("RESET pin is P%c%d\n", 'A' + (s88_data.pin[RESET_PIN_I] >> 5), s88_data.pin[RESET_PIN_I] & 31);
+    }
+
+    /* get the broadcast address */
+    getifaddrs(&ifap);
+    for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
+	if (ifa->ifa_addr) {
+	    if (ifa->ifa_addr->sa_family == AF_INET) {
+		bsa = (struct sockaddr_in *)ifa->ifa_broadaddr;
+		if (strncmp(ifa->ifa_name, bcast_interface, strlen(bcast_interface)) == 0)
+		    udp_dst_address = inet_ntoa(bsa->sin_addr);
+	    }
+	}
+    }
+    freeifaddrs(ifap);
 
     ret = inet_pton(AF_INET, udp_dst_address, &destaddr.sin_addr);
     if (ret <= 0) {
