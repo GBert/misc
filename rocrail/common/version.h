@@ -1,11 +1,17 @@
 const int revisionnr = 
-15257
+15263
 ;
 const char* commithash = 
-"8f020e6ff2e070b476352e9065891e3c5e871abe";
+"c131e6fd5014c02cecdc71bdcdd6bb878e6e07b0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15263 2019-04-04 10:11:47 +0200 textdialog: use the color picker control\n" \
+"15262 2019-04-04 09:43:19 +0200 text,item: slider value event processing\n" \
+"15261 2019-04-04 08:53:56 +0200 textdialog: slider min/max\n" \
+"15260 2019-04-04 08:20:21 +0200 item: set slider background color\n" \
+"15259 2019-04-04 08:04:49 +0200 item,slider: initial scaling fix\n" \
+"15258 2019-04-03 15:16:58 +0200 text: slider function added\n" \
 "15257 2019-04-03 08:30:50 +0200 roclcdr: added an extra index variable for schedule entry actions\n" \
 "15256 2019-04-02 11:58:30 +0200 item: use value for alpha channel on output color chooser\n" \
 "15255 2019-04-01 15:30:20 +0200 guiframe: fix for saving remark without workspace\n" \
@@ -2000,11 +2006,5 @@ const char* revlog =
 "13266 2017-12-22 12:33:04 +0100 block: fifoin for first car too\n" \
 "13265 2017-12-22 11:17:41 +0100 route, signal: fix for atfree commands in manual mode\n" \
 "13264 2017-12-22 09:04:47 +0100 block: fifoin action state added\n" \
-"13263 2017-12-22 08:45:03 +0100 block, text, action: eventlcid variable support\n" \
-"13262 2017-12-22 08:44:02 +0100 actionsctrldlg: crash fix at add\n" \
-"13261 2017-12-21 20:05:48 +0100 blockgroupingdlg: translation correction\n" \
-"13260 2017-12-21 14:59:03 +0100 action, block: eventlcid variable added\n" \
-"13259 2017-12-21 14:12:54 +0100 roclcdr: replaced long with time_t to prevent win64 crash\n" \
-"13258 2017-12-20 17:42:13 +0100 bidib: typo\n" \
 
 "log end";
