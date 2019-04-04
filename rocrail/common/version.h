@@ -1,11 +1,13 @@
 const int revisionnr = 
-15263
+15265
 ;
 const char* commithash = 
-"c131e6fd5014c02cecdc71bdcdd6bb878e6e07b0";
+"71f69c1595f8812de28ba372a41f332994f8e237";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15265 2019-04-04 15:06:57 +0200 slider: forward mousewheel events to parent in case of plan item\n" \
+"15264 2019-04-04 11:18:00 +0200 slider fixes in range and dialog\n" \
 "15263 2019-04-04 10:11:47 +0200 textdialog: use the color picker control\n" \
 "15262 2019-04-04 09:43:19 +0200 text,item: slider value event processing\n" \
 "15261 2019-04-04 08:53:56 +0200 textdialog: slider min/max\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13268 2017-12-23 11:36:27 +0100 action: check for global shutdown and or quit flag\n" \
 "13267 2017-12-23 10:07:59 +0100 rocview: app exit minor change to prevent using trace and connection after disconnect\n" \
 "13266 2017-12-22 12:33:04 +0100 block: fifoin for first car too\n" \
-"13265 2017-12-22 11:17:41 +0100 route, signal: fix for atfree commands in manual mode\n" \
-"13264 2017-12-22 09:04:47 +0100 block: fifoin action state added\n" \
 
 "log end";
