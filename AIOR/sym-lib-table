@@ -7,4 +7,5 @@
   (lib (name Si8605)(type Legacy)(uri ${KIPRJMOD}/Si8605.lib)(options "")(descr ""))
   (lib (name SAA6579T)(type Legacy)(uri /home/eh2be5j/projekte/github-misc/AIOR/SAA6579T.lib)(options "")(descr ""))
   (lib (name dsPIC33EP128GM604)(type Legacy)(uri ${KIPRJMOD}/dsPIC33EP128GM604.lib)(options "")(descr ""))
+  (lib (name 530x0c)(type Legacy)(uri /home/eh2be5j/projekte/github-misc/AIOR/530x0c.lib)(options "")(descr ""))
 )

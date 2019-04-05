@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP 530x0c
+D 0.15-400MHz 1:1 RF Transformer, Balanced to Balanced, CD542
+K Mini-Circuits RF Transformer
+F https://ww2.minicircuits.com/pdfs/ADT1-1+.pdf
+$ENDCMP
+#
+#End Doc Library
