@@ -1,11 +1,12 @@
 const int revisionnr = 
-15265
+15266
 ;
 const char* commithash = 
-"71f69c1595f8812de28ba372a41f332994f8e237";
+"b8714e5b57631c1707d00d9d871eca8bfa4c0338";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15266 2019-04-05 10:58:43 +0200 action: callertype added\n" \
 "15265 2019-04-04 15:06:57 +0200 slider: forward mousewheel events to parent in case of plan item\n" \
 "15264 2019-04-04 11:18:00 +0200 slider fixes in range and dialog\n" \
 "15263 2019-04-04 10:11:47 +0200 textdialog: use the color picker control\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13269 2017-12-23 11:57:18 +0100 action: clone the action control node before starting the timed therad\n" \
 "13268 2017-12-23 11:36:27 +0100 action: check for global shutdown and or quit flag\n" \
 "13267 2017-12-23 10:07:59 +0100 rocview: app exit minor change to prevent using trace and connection after disconnect\n" \
-"13266 2017-12-22 12:33:04 +0100 block: fifoin for first car too\n" \
 
 "log end";
