@@ -246,7 +246,11 @@ SETUP_VALUE
                 XORWF   CANFRAME+10,W
                 BNZ     SETUP_VALUE_CONT1
                 MOVFF   CANFRAME+11,ID_H
+                MOVLW   'U'
+                ADDWF   ID_H
                 MOVFF   CANFRAME+12,ID_L
+                MOVLW   'S'
+                ADDWF   ID_L
                 BRA     SETUP_VALUE_WRITE
 SETUP_VALUE_CONT1
                 MOVLW   0x02
@@ -401,10 +405,10 @@ CAN_PING_CONT
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                ; Version 1.6
+                ; Version 1.7
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	6
+                MOVLW	7
                 MOVWF	POSTINC0
                 MOVLW	0
                 MOVWF	POSTINC0
@@ -461,10 +465,10 @@ CAN_BOOTLOADER_PING
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                ; Version 1.6
+                ; Version 1.7
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	6
+                MOVLW	7
                 MOVWF	POSTINC0
                 MOVLW	0
                 MOVWF	POSTINC0
