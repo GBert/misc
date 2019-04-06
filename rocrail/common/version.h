@@ -1,11 +1,12 @@
 const int revisionnr = 
-15266
+15267
 ;
 const char* commithash = 
-"b8714e5b57631c1707d00d9d871eca8bfa4c0338";
+"3e8ff62aeed95b2e2f6e0f85541779227cd384fc";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15267 2019-04-06 10:02:24 +0200 windows 32bit build script\n" \
 "15266 2019-04-05 10:58:43 +0200 action: callertype added\n" \
 "15265 2019-04-04 15:06:57 +0200 slider: forward mousewheel events to parent in case of plan item\n" \
 "15264 2019-04-04 11:18:00 +0200 slider fixes in range and dialog\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13270 2017-12-23 14:05:10 +0100 location: check first if a block in the location is already reserved before looking up the first free block available\n" \
 "13269 2017-12-23 11:57:18 +0100 action: clone the action control node before starting the timed therad\n" \
 "13268 2017-12-23 11:36:27 +0100 action: check for global shutdown and or quit flag\n" \
-"13267 2017-12-23 10:07:59 +0100 rocview: app exit minor change to prevent using trace and connection after disconnect\n" \
 
 "log end";
