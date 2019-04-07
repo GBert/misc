@@ -1,11 +1,16 @@
 const int revisionnr = 
-15267
+15272
 ;
 const char* commithash = 
-"3e8ff62aeed95b2e2f6e0f85541779227cd384fc";
+"3e800e6af4853a8d051f9aa17b918b9c02d687c8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15272 2019-04-07 09:16:09 +0200 win32 build script fix for ArchitecturesInstallIn64BitMode\n" \
+"15271 2019-04-07 09:11:23 +0200 dinamo,block: save block trackmode to avoid multiple mode commands\n" \
+"15270 2019-04-06 18:04:44 +0200 z21: fix for setting accessory mode mm/dcc\n" \
+"15269 2019-04-06 17:41:20 +0200 z21: fix for setting accessory mode mm/dcc\n" \
+"15268 2019-04-06 14:36:12 +0200 renderer: text type slider does render itself\n" \
 "15267 2019-04-06 10:02:24 +0200 windows 32bit build script\n" \
 "15266 2019-04-05 10:58:43 +0200 action: callertype added\n" \
 "15265 2019-04-04 15:06:57 +0200 slider: forward mousewheel events to parent in case of plan item\n" \
@@ -2001,10 +2006,5 @@ const char* revlog =
 "13275 2017-12-24 14:27:07 +0100 node-red: evaluate rcp node\n" \
 "13274 2017-12-24 14:07:31 +0100 node-red: command node (wip)\n" \
 "13273 2017-12-23 16:24:21 +0100 loc: trace level correction for checking function events\n" \
-"13272 2017-12-23 15:47:59 +0100 actionsctrldlg: minimal index list height\n" \
-"13271 2017-12-23 15:37:41 +0100 keyboarddlg: capture enter from text field to exit dialog with ok\n" \
-"13270 2017-12-23 14:05:10 +0100 location: check first if a block in the location is already reserved before looking up the first free block available\n" \
-"13269 2017-12-23 11:57:18 +0100 action: clone the action control node before starting the timed therad\n" \
-"13268 2017-12-23 11:36:27 +0100 action: check for global shutdown and or quit flag\n" \
 
 "log end";
