@@ -1,11 +1,12 @@
 const int revisionnr = 
-15272
+15273
 ;
 const char* commithash = 
-"3e800e6af4853a8d051f9aa17b918b9c02d687c8";
+"7b519fba0800452e3ab568938fdac3211a6b4034";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15273 2019-04-08 10:26:44 +0200 trackdialog: fix for renaming (OK did double evaluate)\n" \
 "15272 2019-04-07 09:16:09 +0200 win32 build script fix for ArchitecturesInstallIn64BitMode\n" \
 "15271 2019-04-07 09:11:23 +0200 dinamo,block: save block trackmode to avoid multiple mode commands\n" \
 "15270 2019-04-06 18:04:44 +0200 z21: fix for setting accessory mode mm/dcc\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13276 2017-12-24 14:46:30 +0100 node-red: rcp node with 2 outputs for exceptions and info\n" \
 "13275 2017-12-24 14:27:07 +0100 node-red: evaluate rcp node\n" \
 "13274 2017-12-24 14:07:31 +0100 node-red: command node (wip)\n" \
-"13273 2017-12-23 16:24:21 +0100 loc: trace level correction for checking function events\n" \
 
 "log end";
