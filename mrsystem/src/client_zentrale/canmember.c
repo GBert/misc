@@ -292,7 +292,7 @@ void CanMemberSaveMesswerteCs2(CanMemberStruct *Data, char *LocFilePath)
             if (MesswertCs2Stream != NULL)
             {
                fchmod(fileno(MesswertCs2Stream),
-	              S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+                      S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
                Cs2WriteParagraphByName(MesswertCs2Stream, "messwerte");
                Cs2WriteTitleByName(MesswertCs2Stream, "version", 0);
                Cs2WriteIntValueByName(MesswertCs2Stream, "major", 0, 1);
@@ -349,9 +349,9 @@ static void WriteMember(void *PrivData, MapKeyType Key, MapDataType Daten)
       if (ValueUciStream != (FILE *)NULL)
       {
          fchmod(fileno(MemberUciStream),
-	        S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+                S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
          fchmod(fileno(ValueUciStream),
-	        S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+                S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
          /* add uci tab */
          UciWrUciTab(IterParamGetStream(IteratorParam), IntStr, WEB_DIR_MEMBER);
          /* add uci tab config */
@@ -390,9 +390,9 @@ static void WriteMemberMrsystem(FILE *MemberStream, char *WebPath,
          if (ValueUciStream != (FILE *)NULL)
          {
             fchmod(fileno(MemberUciStream),
-	           S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+                   S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
             fchmod(fileno(ValueUciStream),
-	           S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+                   S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
             /* add uci tab */
             UciWrUciTab(MemberStream, IntStr, WEB_DIR_MEMBER);
             /* add uci tab config */
@@ -432,7 +432,7 @@ static void WriteWebCanMember(CanMemberStruct *Data, char *WebPath,
       if (MemberStream != (FILE *)NULL)
       {
          fchmod(fileno(MemberStream),
-	        S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+                S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
          UciWrUciHdr(MemberStream, WEB_FILE_BASE_MEMBER, UciSelTypeTab);
          WriteMemberMrsystem(MemberStream, MemberFile, LocalUid, Major, Minor);
          IterParamSetStream(&IteratorParam, MemberStream);
@@ -484,7 +484,7 @@ static void WriteWebCanMesswerte(CanMemberStruct *Data, char *WebPath)
       if (MesswertStream != (FILE *)NULL)
       {
          fchmod(fileno(MesswertStream),
-	        S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+                S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
          UciWrUciHdr(MesswertStream, WEB_FILE_BASE_MESSWERT, UciSelTypeTab);
          IterParamSetStream(&IteratorParam, MesswertStream);
          IterParamSetFilePath(&IteratorParam, MesswertFile);

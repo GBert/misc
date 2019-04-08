@@ -141,12 +141,6 @@ static int HandleMemberMs2Master(void *Priv, void *SignalData)
       CanMemberInfoSetConfigQuerried(&NewCanMember, FALSE);
       CanMemberInsert(ZentraleGetCanMember(Data), &NewCanMember);
       CanMemberSetIsChanged(ZentraleGetCanMember(Data), TRUE);
-      if (Type == MR_CS2_DEVID_CS2)
-      {
-         QueryMembers(Data, FALSE);
-         DoPingMember(Data, MR_CS2_DEVID_CS2);
-         DoPingMember(Data, MR_CS2_DEVID_CS2GUI);
-      }
       PingAnswerToS88(Data, &NewCanMember);
    }
    else
@@ -155,6 +149,12 @@ static int HandleMemberMs2Master(void *Priv, void *SignalData)
       {
          CanMemberInfoSetIsInvalid(OldCanMember, FALSE);
       }
+   }
+   if (Type == MR_CS2_DEVID_CS2)
+   {
+      QueryMembers(Data, FALSE);
+      DoPingMember(Data, MR_CS2_DEVID_CS2);
+      DoPingMember(Data, MR_CS2_DEVID_CS2GUI);
    }
    if (ZentraleGetVerbose(Data))
       printf("FSM: new state %d\n",STATE_NO_CHANGE);
