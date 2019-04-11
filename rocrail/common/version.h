@@ -1,11 +1,19 @@
 const int revisionnr = 
-15273
+15281
 ;
 const char* commithash = 
-"7b519fba0800452e3ab568938fdac3211a6b4034";
+"b478f4c644521a4da30b12325a840c5f893bd111";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15281 2019-04-11 10:46:48 +0200 bidibidentdlg: fix for setting empty bitmap\n" \
+"15280 2019-04-11 10:16:07 +0200 schedules: set callertype\n" \
+"15279 2019-04-11 08:20:02 +0200 guiframe: only show recent file menu in case there are recent files\n" \
+"15278 2019-04-11 08:03:10 +0200 scheduledialog: reset actionsatin flag in case swap is set\n" \
+"15277 2019-04-11 07:55:22 +0200 enter: reset actionsatin flag in case swap is set\n" \
+"15276 2019-04-11 07:44:55 +0200 modplan: fix for saving none z objects in the routes.xml\n" \
+"15275 2019-04-10 11:08:02 +0200 guiframe: fix for sort crash on loco image name NULL\n" \
+"15274 2019-04-10 10:28:00 +0200 lcdriver: reset saved schedule entry for IN actions in case of starting a new schedule\n" \
 "15273 2019-04-08 10:26:44 +0200 trackdialog: fix for renaming (OK did double evaluate)\n" \
 "15272 2019-04-07 09:16:09 +0200 win32 build script fix for ArchitecturesInstallIn64BitMode\n" \
 "15271 2019-04-07 09:11:23 +0200 dinamo,block: save block trackmode to avoid multiple mode commands\n" \
@@ -1998,13 +2006,5 @@ const char* revlog =
 "13284 2017-12-26 09:45:32 +0100 blockgroup: check the conditions too on isFree at destination selection\n" \
 "13283 2017-12-26 08:16:27 +0100 switch, signal: sod flag added\n" \
 "13282 2017-12-25 12:10:05 +0100 node-red: update\n" \
-"13281 2017-12-25 08:37:47 +0100 node-red: rcp send exceptions also to the info output\n" \
-"13280 2017-12-24 17:21:32 +0100 stage: fix for evaluating the stopspeedtolastsection option\n" \
-"13279 2017-12-24 16:53:43 +0100 node-red: fix for getting the node reference\n" \
-"13278 2017-12-24 15:44:39 +0100 mqtt: fix for stack overflow\n" \
-"13277 2017-12-24 15:09:50 +0100 rnmqtt: check if the keep alive timer > 0\n" \
-"13276 2017-12-24 14:46:30 +0100 node-red: rcp node with 2 outputs for exceptions and info\n" \
-"13275 2017-12-24 14:27:07 +0100 node-red: evaluate rcp node\n" \
-"13274 2017-12-24 14:07:31 +0100 node-red: command node (wip)\n" \
 
 "log end";
