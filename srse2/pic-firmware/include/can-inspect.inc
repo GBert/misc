@@ -32,19 +32,25 @@ CANINSPECT
                 RETURN
 
                 ; System CMD 0x00 ?
-                MOVF	CANFRAME+1,F
+                MOVF    CANFRAME+1,F
                 BTFSC   STATUS,Z
                 BRA     SYSYTEM_CMD
 
                 ; Switch Accessoir 0x16 (Zubehoer schalten)?
-                MOVF	CANFRAME+1,W
-                XORLW	0x16
+                MOVF    CANFRAME+1,W
+                XORLW   0x16
                 BTFSC   STATUS,Z
                 BRA     CAN_SWITCH_ACC
 
+                ; S88 Event Status 0x22 ?
+                MOVF    CANFRAME+1,W
+                XORLW   0x22
+                BTFSC   STATUS,Z
+                BRA     S88_EVENT_STATUS
+
                 ; CAN PING 0x30 ?
-                MOVF	CANFRAME+1,W
-                XORLW	0x30
+                MOVF    CANFRAME+1,W
+                XORLW   0x30
                 BTFSC   STATUS,Z
                 BRA     CAN_PING
 
@@ -362,6 +368,22 @@ CAN_SWITCH_ACC_FAULT
                 RETURN
 
 ;------------------------------------------------------------------------------
+; S88 Event Status
+;------------------------------------------------------------------------------
+
+S88_EVENT_STATUS
+                ; if DLC != 4 -> return
+                MOVF	CANFRAME+4,W
+                XORLW	4
+                BTFSS	STATUS,Z
+
+                ; TODO
+                RETURN
+
+S88_EVENT_STATUS_END
+                RETURN
+
+;------------------------------------------------------------------------------
 ; answer CAN Ping (0x30)
 ;------------------------------------------------------------------------------
 
@@ -405,10 +427,10 @@ CAN_PING_CONT
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                ; Version 1.7
+                ; Version 1.8
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	7
+                MOVLW	8
                 MOVWF	POSTINC0
                 MOVLW	0
                 MOVWF	POSTINC0
@@ -465,10 +487,10 @@ CAN_BOOTLOADER_PING
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                ; Version 1.7
+                ; Version 1.8
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	7
+                MOVLW	8
                 MOVWF	POSTINC0
                 MOVLW	0
                 MOVWF	POSTINC0
