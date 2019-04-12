@@ -1,11 +1,13 @@
 const int revisionnr = 
-15282
+15284
 ;
 const char* commithash = 
-"16982ef45e9a4e7819dfa443d9f71438a0f35198";
+"44f2d46a43ed278e29ee24f01f13c2468e754c48";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15284 2019-04-12 08:58:21 +0200 dtc restored\n" \
+"15283 2019-04-12 08:30:18 +0200 schedules: fix for actionindex to avoid double executions\n" \
 "15282 2019-04-11 15:29:43 +0200 schedule: fix for setting the callerid and callertype in case of a saved entry for executing at IN\n" \
 "15281 2019-04-11 10:46:48 +0200 bidibidentdlg: fix for setting empty bitmap\n" \
 "15280 2019-04-11 10:16:07 +0200 schedules: set callertype\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13287 2017-12-26 22:03:56 +0100 blockdialog: wx work-around for setting signal IDs\n" \
 "13286 2017-12-26 16:02:42 +0100 block: correction of the depart fifo flag\n" \
 "13285 2017-12-26 10:56:33 +0100 moved node-red to its own repository\n" \
-"13284 2017-12-26 09:45:32 +0100 blockgroup: check the conditions too on isFree at destination selection\n" \
-"13283 2017-12-26 08:16:27 +0100 switch, signal: sod flag added\n" \
 
 "log end";
