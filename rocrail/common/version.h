@@ -1,11 +1,12 @@
 const int revisionnr = 
-15281
+15282
 ;
 const char* commithash = 
-"b478f4c644521a4da30b12325a840c5f893bd111";
+"16982ef45e9a4e7819dfa443d9f71438a0f35198";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15282 2019-04-11 15:29:43 +0200 schedule: fix for setting the callerid and callertype in case of a saved entry for executing at IN\n" \
 "15281 2019-04-11 10:46:48 +0200 bidibidentdlg: fix for setting empty bitmap\n" \
 "15280 2019-04-11 10:16:07 +0200 schedules: set callertype\n" \
 "15279 2019-04-11 08:20:02 +0200 guiframe: only show recent file menu in case there are recent files\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13285 2017-12-26 10:56:33 +0100 moved node-red to its own repository\n" \
 "13284 2017-12-26 09:45:32 +0100 blockgroup: check the conditions too on isFree at destination selection\n" \
 "13283 2017-12-26 08:16:27 +0100 switch, signal: sod flag added\n" \
-"13282 2017-12-25 12:10:05 +0100 node-red: update\n" \
 
 "log end";
