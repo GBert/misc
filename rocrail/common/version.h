@@ -1,11 +1,14 @@
 const int revisionnr = 
-15284
+15287
 ;
 const char* commithash = 
-"44f2d46a43ed278e29ee24f01f13c2468e754c48";
+"b16a536da5b30bd4c27806d23705fac49ceee219";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15287 2019-04-13 13:44:08 +0200 schedules: only save entry actions on enter in case not already checked\n" \
+"15286 2019-04-13 11:03:54 +0200 textdialog: fix for clock attribute -> is not a type\n" \
+"15285 2019-04-13 08:16:57 +0200 modplan: revert and fix for saving schedules\n" \
 "15284 2019-04-12 08:58:21 +0200 dtc restored\n" \
 "15283 2019-04-12 08:30:18 +0200 schedules: fix for actionindex to avoid double executions\n" \
 "15282 2019-04-11 15:29:43 +0200 schedule: fix for setting the callerid and callertype in case of a saved entry for executing at IN\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13290 2017-12-27 10:22:36 +0100 z21: railcom dyn messages support added\n" \
 "13289 2017-12-27 09:41:27 +0100 http: prevent deadlock in the rocwweb broadcast service\n" \
 "13288 2017-12-27 09:18:17 +0100 rocview: replaced setstringselection with setvalue in comboboxes to be case sensitive (wx work-around)\n" \
-"13287 2017-12-26 22:03:56 +0100 blockdialog: wx work-around for setting signal IDs\n" \
-"13286 2017-12-26 16:02:42 +0100 block: correction of the depart fifo flag\n" \
-"13285 2017-12-26 10:56:33 +0100 moved node-red to its own repository\n" \
 
 "log end";
