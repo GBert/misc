@@ -1,11 +1,15 @@
 const int revisionnr = 
-15287
+15291
 ;
 const char* commithash = 
-"b16a536da5b30bd4c27806d23705fac49ceee219";
+"dc1c9d522b668c0259697f5a13d0605ebfcdd08f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15291 2019-04-15 07:51:56 +0200 model: fix for compare accessory addressing mbus: trace level changes\n" \
+"15290 2019-04-14 16:10:52 +0200 mbus: moved some ping messages to level INFO\n" \
+"15289 2019-04-14 14:47:19 +0200 tracedlg: disabke controls at refreshing trace content\n" \
+"15288 2019-04-14 14:21:00 +0200 tracedlg: not use enable to prevent getting default text color\n" \
 "15287 2019-04-13 13:44:08 +0200 schedules: only save entry actions on enter in case not already checked\n" \
 "15286 2019-04-13 11:03:54 +0200 textdialog: fix for clock attribute -> is not a type\n" \
 "15285 2019-04-13 08:16:57 +0200 modplan: revert and fix for saving schedules\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13294 2017-12-27 19:19:51 +0100 routedialog: crash fix\n" \
 "13293 2017-12-27 16:58:50 +0100 roclcdr: get state name function added for tracing\n" \
 "13292 2017-12-27 11:47:16 +0100 rocview makefile: -Wno-deprecated-declarations\n" \
-"13291 2017-12-27 10:37:35 +0100 loconet: railcom dyn messages support added\n" \
-"13290 2017-12-27 10:22:36 +0100 z21: railcom dyn messages support added\n" \
-"13289 2017-12-27 09:41:27 +0100 http: prevent deadlock in the rocwweb broadcast service\n" \
-"13288 2017-12-27 09:18:17 +0100 rocview: replaced setstringselection with setvalue in comboboxes to be case sensitive (wx work-around)\n" \
 
 "log end";
