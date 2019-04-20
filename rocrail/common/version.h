@@ -1,11 +1,12 @@
 const int revisionnr = 
-15307
+15308
 ;
 const char* commithash = 
-"9adef53a70d224be54078c617165e84af3e02bc2";
+"786d59c39b43cc3560d3eb9dc325dc7ba53eb8a4";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15308 2019-04-20 17:25:43 +0200 SpDrS60 shunt symbols (Rainer)\n" \
 "15307 2019-04-20 10:41:02 +0200 renderer: two aspect dwarf signal support\n" \
 "15306 2019-04-20 10:29:56 +0200 renderer: shunting (WIP)\n" \
 "15305 2019-04-20 08:54:37 +0200 renderer: shunting (WIP)\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13311 2017-12-29 16:56:31 +0100 replaced internal cargo type person with local\n" \
 "13310 2017-12-29 15:22:18 +0100 z21, loconet: fix for kmh/qos values > 127\n" \
 "13309 2017-12-29 13:54:31 +0100 translation merge: sl, pt_BT, de, sr_latin, nl\n" \
-"13308 2017-12-29 13:42:32 +0100 messages: removed unused 'person' translation\n" \
 
 "log end";
