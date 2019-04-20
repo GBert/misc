@@ -1,11 +1,27 @@
 const int revisionnr = 
-15291
+15307
 ;
 const char* commithash = 
-"dc1c9d522b668c0259697f5a13d0605ebfcdd08f";
+"9adef53a70d224be54078c617165e84af3e02bc2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15307 2019-04-20 10:41:02 +0200 renderer: two aspect dwarf signal support\n" \
+"15306 2019-04-20 10:29:56 +0200 renderer: shunting (WIP)\n" \
+"15305 2019-04-20 08:54:37 +0200 renderer: shunting (WIP)\n" \
+"15304 2019-04-20 08:54:08 +0200 control: crash fix in case the client connection is not initialised to publish MQTT for digint\n" \
+"15303 2019-04-19 14:34:51 +0200 control,clntcon: mqtt command channel added\n" \
+"15302 2019-04-19 10:51:23 +0200 renderer: shunting (WIP)\n" \
+"15301 2019-04-19 09:52:44 +0200 SLIM-COLOR: new symbols for shunting (Peter)\n" \
+"15300 2019-04-19 09:42:56 +0200 SLIM-COLOR: new symbols for shunting (WIP)\n" \
+"15299 2019-04-19 09:40:44 +0200 importantchanges: added line for mcs2 removal\n" \
+"15298 2019-04-19 08:26:15 +0200 shunting: sensor added (WIP)\n" \
+"15297 2019-04-19 08:16:21 +0200 mcs2: removed\n" \
+"15296 2019-04-18 14:53:43 +0200 rocrailinidlg: mcs2 library no longer available\n" \
+"15295 2019-04-18 10:39:19 +0200 mbus: support for V_mode_step added\n" \
+"15294 2019-04-17 08:38:35 +0200 shunting: WIP\n" \
+"15293 2019-04-16 08:24:48 +0200 zimocan udp: reject messages > 1000 bytes\n" \
+"15292 2019-04-16 07:50:53 +0200 model: fix for compare accessory addressing in case of MADA event and FADA switch\n" \
 "15291 2019-04-15 07:51:56 +0200 model: fix for compare accessory addressing mbus: trace level changes\n" \
 "15290 2019-04-14 16:10:52 +0200 mbus: moved some ping messages to level INFO\n" \
 "15289 2019-04-14 14:47:19 +0200 tracedlg: disabke controls at refreshing trace content\n" \
@@ -1990,21 +2006,5 @@ const char* revlog =
 "13310 2017-12-29 15:22:18 +0100 z21, loconet: fix for kmh/qos values > 127\n" \
 "13309 2017-12-29 13:54:31 +0100 translation merge: sl, pt_BT, de, sr_latin, nl\n" \
 "13308 2017-12-29 13:42:32 +0100 messages: removed unused 'person' translation\n" \
-"13307 2017-12-29 12:16:58 +0100 block: added missing post mutex in case virtual block could not unlock slave block (Achim)\n" \
-"13306 2017-12-29 11:39:57 +0100 z21: removed test code for qos\n" \
-"13305 2017-12-29 11:38:59 +0100 z21, locnet: crash fix for evaluating multi sense QosQ\n" \
-"13304 2017-12-29 11:04:29 +0100 textdialog: fix for updating color buttons\n" \
-"13303 2017-12-29 08:15:37 +0100 renamed loconet railcom specs file\n" \
-"13302 2017-12-28 19:03:07 +0100 actionsctrldlg: revert replace setstringselection\n" \
-"13301 2017-12-28 15:42:34 +0100 loconet: dyn correction\n" \
-"13300 2017-12-28 15:40:25 +0100 z21: correction for qos\n" \
-"13299 2017-12-28 13:59:50 +0100 block, signal: trace level corrections\n" \
-"13298 2017-12-28 11:32:57 +0100 block: remove fifo flags from reset trigs\n" \
-"13297 2017-12-28 11:14:20 +0100 block: fifoDepart function added to be able to stop the follower at IN\n" \
-"13296 2017-12-28 08:43:26 +0100 http: wait for post instead of poll for it to save CPU resources\n" \
-"13295 2017-12-27 20:07:00 +0100 initialize: trace level correction\n" \
-"13294 2017-12-27 19:19:51 +0100 routedialog: crash fix\n" \
-"13293 2017-12-27 16:58:50 +0100 roclcdr: get state name function added for tracing\n" \
-"13292 2017-12-27 11:47:16 +0100 rocview makefile: -Wno-deprecated-declarations\n" \
 
 "log end";
