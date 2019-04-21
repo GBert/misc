@@ -1,11 +1,12 @@
 const int revisionnr = 
-15308
+15309
 ;
 const char* commithash = 
-"786d59c39b43cc3560d3eb9dc325dc7ba53eb8a4";
+"e39d146eb82d58f4b8a342b04c4a16cd0d99c958";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15309 2019-04-21 08:42:57 +0200 rocnetnodedlg: IID selection added\n" \
 "15308 2019-04-20 17:25:43 +0200 SpDrS60 shunt symbols (Rainer)\n" \
 "15307 2019-04-20 10:41:02 +0200 renderer: two aspect dwarf signal support\n" \
 "15306 2019-04-20 10:29:56 +0200 renderer: shunting (WIP)\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13312 2017-12-30 08:02:00 +0100 model: crash fix for init field\n" \
 "13311 2017-12-29 16:56:31 +0100 replaced internal cargo type person with local\n" \
 "13310 2017-12-29 15:22:18 +0100 z21, loconet: fix for kmh/qos values > 127\n" \
-"13309 2017-12-29 13:54:31 +0100 translation merge: sl, pt_BT, de, sr_latin, nl\n" \
 
 "log end";
