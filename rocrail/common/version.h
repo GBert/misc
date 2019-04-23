@@ -1,11 +1,16 @@
 const int revisionnr = 
-15309
+15314
 ;
 const char* commithash = 
-"e39d146eb82d58f4b8a342b04c4a16cd0d99c958";
+"df9eda704af48d3126ed0d5a3c4b931995b88c21";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15314 2019-04-23 07:16:04 +0200 renderer: shunting fix for block signal symbol mapping\n" \
+"15313 2019-04-22 17:58:30 +0200 model: disable using id to find a loco/car by address\n" \
+"15312 2019-04-22 09:55:21 +0200 mbus: fix for reading cc-schnitte\n" \
+"15311 2019-04-21 14:30:53 +0200 ucons88: user library removed\n" \
+"15310 2019-04-21 12:16:38 +0200 mqtt cs example in python\n" \
 "15309 2019-04-21 08:42:57 +0200 rocnetnodedlg: IID selection added\n" \
 "15308 2019-04-20 17:25:43 +0200 SpDrS60 shunt symbols (Rainer)\n" \
 "15307 2019-04-20 10:41:02 +0200 renderer: two aspect dwarf signal support\n" \
@@ -2001,10 +2006,5 @@ const char* revlog =
 "13317 2017-12-31 13:17:43 +0100 route: AND condition option block: platform field added location: schedule table (wip)\n" \
 "13316 2017-12-31 08:33:47 +0100 columndlg: check for which tab the config is for the right labels\n" \
 "13315 2017-12-30 14:41:54 +0100 block: check last fifo physical IN guiframe: auto reset all also available in none auto mode\n" \
-"13314 2017-12-30 09:27:35 +0100 lc, meter: fix for maxkmh in speedometer\n" \
-"13313 2017-12-30 08:20:08 +0100 stagedlg: fix for evaluating IDs on the general tab\n" \
-"13312 2017-12-30 08:02:00 +0100 model: crash fix for init field\n" \
-"13311 2017-12-29 16:56:31 +0100 replaced internal cargo type person with local\n" \
-"13310 2017-12-29 15:22:18 +0100 z21, loconet: fix for kmh/qos values > 127\n" \
 
 "log end";
