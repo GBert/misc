@@ -1,11 +1,15 @@
 const int revisionnr = 
-15314
+15318
 ;
 const char* commithash = 
-"df9eda704af48d3126ed0d5a3c4b931995b88c21";
+"4fdd8c514b8fe5f5ef098ca1dc4559e4a0a29452";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15318 2019-04-23 17:24:47 +0200 rocweb: fix for undefined V values for speed buttons\n" \
+"15317 2019-04-23 17:05:26 +0200 model: revert: disable using id to find a loco/car by address\n" \
+"15316 2019-04-23 15:10:35 +0200 rocrailinidialog: disable selection of user libraries\n" \
+"15315 2019-04-23 11:11:35 +0200 shunting: grid context menu\n" \
 "15314 2019-04-23 07:16:04 +0200 renderer: shunting fix for block signal symbol mapping\n" \
 "15313 2019-04-22 17:58:30 +0200 model: disable using id to find a loco/car by address\n" \
 "15312 2019-04-22 09:55:21 +0200 mbus: fix for reading cc-schnitte\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13321 2018-01-01 12:05:59 +0100 location: init schedule table (wip)\n" \
 "13320 2017-12-31 15:39:25 +0100 location: init schedule table (wip)\n" \
 "13319 2017-12-31 15:11:48 +0100 NodeOp.base.toString(scte)\n" \
-"13318 2017-12-31 15:02:29 +0100 location: init schedule table (wip)\n" \
-"13317 2017-12-31 13:17:43 +0100 route: AND condition option block: platform field added location: schedule table (wip)\n" \
-"13316 2017-12-31 08:33:47 +0100 columndlg: check for which tab the config is for the right labels\n" \
-"13315 2017-12-30 14:41:54 +0100 block: check last fifo physical IN guiframe: auto reset all also available in none auto mode\n" \
 
 "log end";
