@@ -7,8 +7,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rocrail
-PKG_REV:=4fdd8c514b
-PKG_VERSION:=15318
+PKG_REV:=1ec1c234f8
+PKG_VERSION:=15321
 PKG_RELEASE:=
 
 PKG_SOURCE_PROTO:=git
@@ -76,17 +76,6 @@ endef
 
 define Package/rocrail-cs-mbus/description
  Maerklin CS2/MS2 CAN-Bus (e.g. SocketCAN)
-endef
-
-define Package/rocrail-cs-mgbox
-  SECTION:=utils
-  CATEGORY:=Utilities
-  TITLE:=Gleisbox as Command Station
-  DEPENDS:=rocrail
-endef
-
-define Package/rocrail-cs-mgbox/description
- Using a Gleisbox as Command Station (needs CAN)
 endef
 
 define Package/rocrail-cs-ddx
@@ -184,9 +173,7 @@ define Package/rocrail/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/rocnet.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/virtual.so $(1)/opt/rocrail
 	$(INSTALL_BIN) ./config/rocrail.ini $(1)/opt/rocrail
-	$(INSTALL_BIN) ./config/rocrail_mbus.ini $(1)/opt/rocrail
 	$(INSTALL_BIN) ./config/plan.xml $(1)/opt/rocrail
-	$(INSTALL_BIN) ./config/plan_mbus.xml $(1)/opt/rocrail
 	$(INSTALL_DIR) $(1)/root
 	$(INSTALL_BIN) ./config/rocrail.init $(1)/root/rocrail
 	$(INSTALL_DIR) $(1)/etc/init.d
@@ -225,11 +212,6 @@ endef
 define Package/rocrail-cs-mbus/install
 	$(INSTALL_DIR) $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/mbus.so $(1)/opt/rocrail
-endef
-
-define Package/rocrail-cs-mgbox/install
-	$(INSTALL_DIR) $(1)/opt/rocrail
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/mgbox.so $(1)/opt/rocrail
 endef
 
 define Package/rocrail-cs-rclink/install
@@ -312,7 +294,6 @@ $(eval $(call BuildPackage,rocweb))
 $(eval $(call BuildPackage,rocrail-mqtt))
 $(eval $(call BuildPackage,rocrail-cs-ddx))
 $(eval $(call BuildPackage,rocrail-cs-mbus))
-$(eval $(call BuildPackage,rocrail-cs-mgbox))
 $(eval $(call BuildPackage,rocrail-cs-rclink))
 $(eval $(call BuildPackage,rocrail-cs-srcp))
 $(eval $(call BuildPackage,rocrail-cs-p50))

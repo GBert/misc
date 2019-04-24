@@ -1,11 +1,14 @@
 const int revisionnr = 
-15318
+15321
 ;
 const char* commithash = 
-"4fdd8c514b8fe5f5ef098ca1dc4559e4a0a29452";
+"1ec1c234f86c6a6f68d4e81b5c4e1f796fccb383";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15321 2019-04-24 10:48:19 +0200 xmlscript: fix for function loco/car\n" \
+"15320 2019-04-24 10:39:56 +0200 mgbox removed\n" \
+"15319 2019-04-24 10:38:45 +0200 rocnet: added missing year to the clock messages\n" \
 "15318 2019-04-23 17:24:47 +0200 rocweb: fix for undefined V values for speed buttons\n" \
 "15317 2019-04-23 17:05:26 +0200 model: revert: disable using id to find a loco/car by address\n" \
 "15316 2019-04-23 15:10:35 +0200 rocrailinidialog: disable selection of user libraries\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13324 2018-01-02 09:39:45 +0100 location: update schedulle table every model minute\n" \
 "13323 2018-01-02 07:29:32 +0100 wiki demo plan correction\n" \
 "13322 2018-01-01 15:30:57 +0100 schedule: trainnr attribute added\n" \
-"13321 2018-01-01 12:05:59 +0100 location: init schedule table (wip)\n" \
-"13320 2017-12-31 15:39:25 +0100 location: init schedule table (wip)\n" \
-"13319 2017-12-31 15:11:48 +0100 NodeOp.base.toString(scte)\n" \
 
 "log end";
