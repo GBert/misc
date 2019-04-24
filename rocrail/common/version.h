@@ -1,11 +1,12 @@
 const int revisionnr = 
-15321
+15322
 ;
 const char* commithash = 
-"1ec1c234f86c6a6f68d4e81b5c4e1f796fccb383";
+"1a27be078d7e70b1e05f80feebedfb7199321ae2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15322 2019-04-24 15:02:30 +0200 rocnet: increased max text size from 110 to 250\n" \
 "15321 2019-04-24 10:48:19 +0200 xmlscript: fix for function loco/car\n" \
 "15320 2019-04-24 10:39:56 +0200 mgbox removed\n" \
 "15319 2019-04-24 10:38:45 +0200 rocnet: added missing year to the clock messages\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13325 2018-01-02 10:18:07 +0100 location: publich schedule table\n" \
 "13324 2018-01-02 09:39:45 +0100 location: update schedulle table every model minute\n" \
 "13323 2018-01-02 07:29:32 +0100 wiki demo plan correction\n" \
-"13322 2018-01-01 15:30:57 +0100 schedule: trainnr attribute added\n" \
 
 "log end";
