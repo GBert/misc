@@ -1,11 +1,17 @@
 const int revisionnr = 
-15322
+15328
 ;
 const char* commithash = 
-"1a27be078d7e70b1e05f80feebedfb7199321ae2";
+"9797973ab9daea2c4543035419b1e8fe707f9bd5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15328 2019-04-25 16:01:27 +0200 rnnmqtt: connection call corrected for MQTT last will\n" \
+"15327 2019-04-25 15:18:05 +0200 rnmqtt: last will added\n" \
+"15326 2019-04-25 15:11:46 +0200 mqtt: last will added\n" \
+"15325 2019-04-25 08:41:03 +0200 lcdriver: reject end of reduced speed if the loco is in wait mode\n" \
+"15324 2019-04-25 08:09:09 +0200 item: show shunting on/off in block popup\n" \
+"15323 2019-04-25 08:08:30 +0200 translation merge: cs, sr_latin, sl, de, nl\n" \
 "15322 2019-04-24 15:02:30 +0200 rocnet: increased max text size from 110 to 250\n" \
 "15321 2019-04-24 10:48:19 +0200 xmlscript: fix for function loco/car\n" \
 "15320 2019-04-24 10:39:56 +0200 mgbox removed\n" \
@@ -2000,11 +2006,5 @@ const char* revlog =
 "13331 2018-01-03 08:46:58 +0100 sensorevents: QoS column added\n" \
 "13330 2018-01-02 16:54:34 +0100 location: copy/paste fix check for free block (Achim)\n" \
 "13329 2018-01-02 16:34:59 +0100 carpanel, trainpanel: no init at create\n" \
-"13328 2018-01-02 11:18:57 +0100 carpanel, trainpanel: fix for column selection\n" \
-"13327 2018-01-02 10:48:39 +0100 location: add one hour ahead for hourly schedules\n" \
-"13326 2018-01-02 10:26:49 +0100 location: set id in the schedulettable node\n" \
-"13325 2018-01-02 10:18:07 +0100 location: publich schedule table\n" \
-"13324 2018-01-02 09:39:45 +0100 location: update schedulle table every model minute\n" \
-"13323 2018-01-02 07:29:32 +0100 wiki demo plan correction\n" \
 
 "log end";
