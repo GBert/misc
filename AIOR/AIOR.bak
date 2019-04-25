@@ -141,7 +141,7 @@ U 1 1 5873AE26
 P 7050 1500
 F 0 "P2" H 7050 1650 50  0000 C CNN
 F 1 "CONN_01X02" V 7150 1500 50  0001 C CNN
-F 2 "Pin_Headers:Pin_Header_Angled_1x02" H 7050 1500 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 7050 1500 50  0001 C CNN
 F 3 "" H 7050 1500 50  0000 C CNN
 	1    7050 1500
 	0    -1   -1   0   
@@ -607,7 +607,7 @@ U 1 1 5A5233DC
 P 4075 8350
 F 0 "J81" H 4075 8650 50  0000 C CNN
 F 1 "Conn_01x06" H 4075 7950 50  0001 C CNN
-F 2 "Pin_Headers:Pin_Header_Angled_1x06_Pitch2.54mm" H 4075 8350 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Horizontal" H 4075 8350 50  0001 C CNN
 F 3 "" H 4075 8350 50  0001 C CNN
 	1    4075 8350
 	1    0    0    -1  
