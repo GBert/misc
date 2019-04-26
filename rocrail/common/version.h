@@ -1,11 +1,13 @@
 const int revisionnr = 
-15328
+15330
 ;
 const char* commithash = 
-"9797973ab9daea2c4543035419b1e8fe707f9bd5";
+"fd049224a61326ac894f2782bf63d4ec7fe36d71";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15330 2019-04-26 09:00:33 +0200 location: add linefeed in the loco list\n" \
+"15329 2019-04-26 08:25:54 +0200 location: occupdate action state added\n" \
 "15328 2019-04-25 16:01:27 +0200 rnnmqtt: connection call corrected for MQTT last will\n" \
 "15327 2019-04-25 15:18:05 +0200 rnmqtt: last will added\n" \
 "15326 2019-04-25 15:11:46 +0200 mqtt: last will added\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13333 2018-01-03 11:32:04 +0100 update schedule tables in case of a delay\n" \
 "13332 2018-01-03 08:47:41 +0100 operator: train combination added\n" \
 "13331 2018-01-03 08:46:58 +0100 sensorevents: QoS column added\n" \
-"13330 2018-01-02 16:54:34 +0100 location: copy/paste fix check for free block (Achim)\n" \
-"13329 2018-01-02 16:34:59 +0100 carpanel, trainpanel: no init at create\n" \
 
 "log end";
