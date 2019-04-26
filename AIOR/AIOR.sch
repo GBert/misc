@@ -544,7 +544,7 @@ U 1 1 5A4FCF01
 P 7800 2350
 F 0 "P3" H 7800 2600 50  0000 C CNN
 F 1 "CONN_01X04" V 7900 2350 50  0001 C CNN
-F 2 "w_conn_jst-ph:s4b-ph-kl" H 7800 2350 50  0001 C CNN
+F 2 "w_conn_jst-ph:b4b-ph-kl" H 7800 2350 50  0001 C CNN
 F 3 "" H 7800 2350 50  0000 C CNN
 	1    7800 2350
 	1    0    0    1   
@@ -1499,8 +1499,6 @@ F 3 "" H 12550 775 50  0001 C CNN
 	1    12550 775 
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	12725 2025 12575 2025
 $Comp
 L power:GNDA #PWR0119
 U 1 1 5CB84311
@@ -2359,17 +2357,6 @@ F 3 "https://datasheets.maximintegrated.com/en/ds/MAX3070E-MAX3079E.pdf" H 5500 
 	1    0    0    -1  
 $EndComp
 $Comp
-L AIOR-rescue:CONN_01X04 P50
-U 1 1 5D4EFC4D
-P 6650 10300
-F 0 "P50" H 6650 10550 50  0000 C CNN
-F 1 "Xpressnet" V 6750 10300 50  0000 C CNN
-F 2 "w_conn_jst-ph:s4b-ph-kl" H 6650 10300 50  0001 C CNN
-F 3 "" H 6650 10300 50  0000 C CNN
-	1    6650 10300
-	1    0    0    1   
-$EndComp
-$Comp
 L power:GNDA #PWR0141
 U 1 1 5D4F082B
 P 6400 10750
@@ -2539,17 +2526,6 @@ F 3 "" H 5500 10750 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	5500 10650 5500 10750
-$Comp
-L AIOR-rescue:CONN_01X04 P70
-U 1 1 5D7B5AF9
-P 8500 9700
-F 0 "P70" H 8500 9950 50  0000 C CNN
-F 1 "LOCONET" V 8600 9700 50  0000 C CNN
-F 2 "w_conn_jst-ph:s4b-ph-kl" H 8500 9700 50  0001 C CNN
-F 3 "" H 8500 9700 50  0000 C CNN
-	1    8500 9700
-	1    0    0    1   
-$EndComp
 $Comp
 L AIOR-rescue:R R32
 U 1 1 5D818880
@@ -4116,14 +4092,14 @@ Wire Wire Line
 Wire Wire Line
 	7375 8500 7475 8500
 $Comp
-L AIOR-rescue:CONN_01X04 P60
+L Connector_Generic:Conn_01x04 P60
 U 1 1 605975C7
-P 7675 8650
-F 0 "P60" H 7675 8900 50  0000 C CNN
-F 1 "Selectrix" V 7775 8650 50  0000 C CNN
-F 2 "w_conn_jst-ph:s4b-ph-kl" H 7675 8650 50  0001 C CNN
-F 3 "" H 7675 8650 50  0000 C CNN
-	1    7675 8650
+P 7675 8700
+F 0 "P60" H 7675 8950 50  0000 C CNN
+F 1 "Selectrix" V 7775 8700 50  0000 C CNN
+F 2 "w_conn_jst-ph:b4b-ph-kl" H 7675 8700 50  0001 C CNN
+F 3 "" H 7675 8700 50  0000 C CNN
+	1    7675 8700
 	1    0    0    1   
 $EndComp
 $Comp
@@ -4965,30 +4941,8 @@ F 3 "" H 5850 6000 50  0000 C CNN
 	1    6550 6300
 	1    0    0    -1  
 $EndComp
-$Comp
-L Connector_Generic:Conn_01x01 J30
-U 1 1 5CCD1121
-P 12725 2225
-F 0 "J30" V 12725 2025 50  0000 L CNN
-F 1 "Conn_01x01" V 12688 2305 50  0001 L CNN
-F 2 "Connector:Banana_Jack_1Pin" H 12725 2225 50  0001 C CNN
-F 3 "~" H 12725 2225 50  0001 C CNN
-	1    12725 2225
-	0    1    1    0   
-$EndComp
 Wire Wire Line
 	12850 2025 13050 2025
-$Comp
-L Connector_Generic:Conn_01x01 J31
-U 1 1 5CDB535A
-P 12850 2225
-F 0 "J31" V 12850 2325 50  0000 L CNN
-F 1 "Conn_01x01" V 12813 2305 50  0001 L CNN
-F 2 "Connector:Banana_Jack_1Pin" H 12850 2225 50  0001 C CNN
-F 3 "~" H 12850 2225 50  0001 C CNN
-	1    12850 2225
-	0    1    1    0   
-$EndComp
 $Comp
 L Power_Management:BTN8982TA Q31
 U 1 1 5CCFEBB8
@@ -5032,4 +4986,62 @@ $EndComp
 Connection ~ 12750 1625
 Wire Wire Line
 	12750 1625 13250 1625
+Wire Wire Line
+	12575 2025 12750 2025
+$Comp
+L Connector_Generic:Conn_01x02 J31
+U 1 1 5CCA270B
+P 12750 2275
+F 0 "J31" V 12622 2087 50  0000 R CNN
+F 1 "Conn_01x02" V 12825 2450 50  0001 R CNN
+F 2 "w_conn_mkds:mkds_1,5-2" H 12750 2275 50  0001 C CNN
+F 3 "~" H 12750 2275 50  0001 C CNN
+	1    12750 2275
+	0    -1   1    0   
+$EndComp
+Wire Wire Line
+	12850 2025 12850 2075
+Wire Wire Line
+	12750 2025 12750 2075
+$Comp
+L Connector_Generic:Conn_01x02 J30
+U 1 1 5CF54DB7
+P 11950 1000
+F 0 "J30" V 11822 812 50  0000 R CNN
+F 1 "Conn_01x02" V 12025 1175 50  0001 R CNN
+F 2 "w_conn_mkds:mkds_1,5-2" H 11950 1000 50  0001 C CNN
+F 3 "~" H 11950 1000 50  0001 C CNN
+	1    11950 1000
+	1    0    0    1   
+$EndComp
+Wire Wire Line
+	11750 1000 11550 1000
+Wire Wire Line
+	11750 900  11550 900 
+Text Label 11550 1000 0    60   ~ 0
+GNDA
+Text Label 11550 900  0    60   ~ 0
+VCC
+$Comp
+L Connector_Generic:Conn_01x04 P50
+U 1 1 5D4EFC4D
+P 6650 10350
+F 0 "P50" H 6650 10600 50  0000 C CNN
+F 1 "Xpressnet" V 6750 10350 50  0000 C CNN
+F 2 "w_conn_jst-ph:b4b-ph-kl" H 6650 10350 50  0001 C CNN
+F 3 "" H 6650 10350 50  0000 C CNN
+	1    6650 10350
+	1    0    0    1   
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x04 P70
+U 1 1 5D7B5AF9
+P 8500 9750
+F 0 "P70" H 8500 10000 50  0000 C CNN
+F 1 "LOCONET" V 8600 9750 50  0000 C CNN
+F 2 "w_conn_jst-ph:b4b-ph-kl" H 8500 9750 50  0001 C CNN
+F 3 "" H 8500 9750 50  0000 C CNN
+	1    8500 9750
+	1    0    0    1   
+$EndComp
 $EndSCHEMATC
