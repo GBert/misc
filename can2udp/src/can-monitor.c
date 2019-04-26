@@ -139,7 +139,7 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 2.82\n\n");
+    fprintf(stderr, "   Version 2.83\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
@@ -814,14 +814,15 @@ void decode_frame(struct can_frame *frame) {
 	break;
     /* S88 Event */
     case 0x22:
+	/* TODO: Parameter */
 	kenner = be16(frame->data);
 	kontakt = be16(&frame->data[2]);
 	if (frame->can_dlc == 4)
 	    printf("S88 Event: Kennung %d Kontakt %d\n", kenner, kontakt);
 	else if (frame->can_dlc == 5)
 	    printf("S88 Event: Kennung %d Kontakt %d Parameter %d\n", kenner, kontakt, frame->data[4]);
-	else
-	    printf("\n");
+	else if (frame->can_dlc == 7)
+	    printf("S88 Event: Abfrage Kennung %d Kontakt Start %d Parameter %d\n", kenner, kontakt, frame->data[6]);
 	break;
     case 0x23:
 	kenner = be16(frame->data);
