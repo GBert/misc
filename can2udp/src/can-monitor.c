@@ -818,17 +818,17 @@ void decode_frame(struct can_frame *frame) {
 	kenner = be16(frame->data);
 	kontakt = be16(&frame->data[2]);
 	if (frame->can_dlc == 4)
-	    printf("S88 Event: Kennung %d Kontakt %d\n", kenner, kontakt);
+	    printf("S88 Event Kennung %d Kontakt %d\n", kenner, kontakt);
 	else if (frame->can_dlc == 5)
-	    printf("S88 Event: Kennung %d Kontakt %d Parameter %d\n", kenner, kontakt, frame->data[4]);
+	    printf("S88 Event Kennung %d Kontakt %d Parameter %d\n", kenner, kontakt, frame->data[4]);
 	else if (frame->can_dlc == 7)
-	    printf("S88 Event: Abfrage Kennung %d Kontakt Start %d Parameter %d\n", kenner, kontakt, frame->data[6]);
+	    printf("S88 Event Blockmodus Kennung %d Kontakt Start %d Parameter %d\n", kenner, kontakt, frame->data[6]);
 	break;
     case 0x23:
 	kenner = be16(frame->data);
 	kontakt = be16(&frame->data[2]);
 	if (frame->can_dlc == 8)
-	    printf("S88 Event: Kennung %d Kontakt %d Zustand alt %d Zusand neu %d Zeit %d\n",
+	    printf("S88 Event Kennung %d Kontakt %d Zustand alt %d Zusand neu %d Zeit %d\n",
 		   kenner, kontakt, frame->data[4], frame->data[5], be16(&frame->data[6]));
 	break;
     /* SX1 Event */
@@ -836,9 +836,9 @@ void decode_frame(struct can_frame *frame) {
     case 0x25:
 	uid = be32(frame->data);
 	if (frame->can_dlc == 5)
-	    printf("SX1 Event: UID 0x%08X SX1-Adresse %d\n", uid, frame->data[4]);
+	    printf("SX1 Event UID 0x%08X SX1-Adresse %d\n", uid, frame->data[4]);
 	if (frame->can_dlc == 5)
-	    printf("SX1 Event: UID 0x%08X SX1-Adresse %d Zustand %d\n", uid, frame->data[4], frame->data[5]);
+	    printf("SX1 Event UID 0x%08X SX1-Adresse %d Zustand %d\n", uid, frame->data[4], frame->data[5]);
 	break;
     /* Ping */
     case 0x30:
