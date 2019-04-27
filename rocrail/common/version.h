@@ -1,11 +1,17 @@
 const int revisionnr = 
-15330
+15336
 ;
 const char* commithash = 
-"fd049224a61326ac894f2782bf63d4ec7fe36d71";
+"d98491165742613a29104255d4fbb5b1201525b6";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15336 2019-04-27 10:07:40 +0200 shunting: block shunt added\n" \
+"15335 2019-04-27 08:43:32 +0200 shunting: block shunt added\n" \
+"15334 2019-04-27 07:58:53 +0200 shunting: shunt signals added\n" \
+"15333 2019-04-27 07:48:06 +0200 location: check occupdate actions in case minocc has been changed\n" \
+"15332 2019-04-27 07:37:02 +0200 mbus: Weichenchef support added\n" \
+"15331 2019-04-27 07:06:41 +0200 xpressnet: regard fnchanged if set to calculate the right group\n" \
 "15330 2019-04-26 09:00:33 +0200 location: add linefeed in the loco list\n" \
 "15329 2019-04-26 08:25:54 +0200 location: occupdate action state added\n" \
 "15328 2019-04-25 16:01:27 +0200 rnnmqtt: connection call corrected for MQTT last will\n" \
@@ -2000,11 +2006,5 @@ const char* revlog =
 "13339 2018-01-04 08:56:22 +0100 block, fback: take over new qos if its not equals with the las reported\n" \
 "13338 2018-01-04 08:49:55 +0100 block: traceline for QoS corrected\n" \
 "13337 2018-01-04 08:44:39 +0100 block: statistics added for QoS\n" \
-"13336 2018-01-03 16:42:40 +0100 location, loc: lcbkid added es current or entering block\n" \
-"13335 2018-01-03 16:23:38 +0100 loconet, z21: fix for reporting QoS to an uknown sensor address\n" \
-"13334 2018-01-03 14:56:42 +0100 location: sort schedule table by depart time\n" \
-"13333 2018-01-03 11:32:04 +0100 update schedule tables in case of a delay\n" \
-"13332 2018-01-03 08:47:41 +0100 operator: train combination added\n" \
-"13331 2018-01-03 08:46:58 +0100 sensorevents: QoS column added\n" \
 
 "log end";
