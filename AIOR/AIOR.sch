@@ -291,10 +291,6 @@ Text Label 1125 1750 0    60   ~ 0
 GPIO4
 Text Label 1125 1950 0    60   ~ 0
 GPIO17
-Text Label 1125 2050 0    60   ~ 0
-GPIO27
-Text Label 1125 2150 0    60   ~ 0
-GPIO22
 $Comp
 L power:GND #PWR017
 U 1 1 587940EE
@@ -543,7 +539,7 @@ L AIOR-rescue:CONN_01X04 P3
 U 1 1 5A4FCF01
 P 7800 2350
 F 0 "P3" H 7800 2600 50  0000 C CNN
-F 1 "CONN_01X04" V 7900 2350 50  0001 C CNN
+F 1 "CAN" V 7900 2350 50  0000 C CNN
 F 2 "w_conn_jst-ph:b4b-ph-kl" H 7800 2350 50  0001 C CNN
 F 3 "" H 7800 2350 50  0000 C CNN
 	1    7800 2350
@@ -758,10 +754,6 @@ Wire Wire Line
 	1450 1750 1125 1750
 Wire Wire Line
 	1125 1950 1450 1950
-Wire Wire Line
-	1125 2050 1450 2050
-Wire Wire Line
-	1125 2150 1450 2150
 Wire Wire Line
 	1450 1850 925  1850
 Wire Wire Line
@@ -4095,8 +4087,8 @@ $Comp
 L Connector_Generic:Conn_01x04 P60
 U 1 1 605975C7
 P 7675 8700
-F 0 "P60" H 7675 8950 50  0000 C CNN
-F 1 "Selectrix" V 7775 8700 50  0000 C CNN
+F 0 "P60" H 7675 8950 50  0001 C CNN
+F 1 "SLX" V 7775 8700 50  0000 C CNN
 F 2 "w_conn_jst-ph:b4b-ph-kl" H 7675 8700 50  0001 C CNN
 F 3 "" H 7675 8700 50  0000 C CNN
 	1    7675 8700
@@ -4779,25 +4771,6 @@ F 3 "" H 7125 3350 50  0001 C CNN
 	1    7125 3350
 	1    0    0    -1  
 $EndComp
-$Comp
-L AIOR-rescue:Conn_01x02 J1
-U 1 1 5E7D6307
-P 1800 750
-F 0 "J1" V 1675 625 50  0000 R CNN
-F 1 "Conn_01x02" V 1675 562 50  0001 R CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 1800 750 50  0001 C CNN
-F 3 "" H 1800 750 50  0001 C CNN
-	1    1800 750 
-	1    0    0    -1  
-$EndComp
-Text Label 1200 750  0    60   ~ 0
-GPIO27
-Wire Wire Line
-	1600 750  1200 750 
-Wire Wire Line
-	1600 850  1200 850 
-Text Label 1200 850  0    60   ~ 0
-GPIO22
 Wire Wire Line
 	1325 1225 1325 1450
 $Comp
@@ -5027,7 +5000,7 @@ L Connector_Generic:Conn_01x04 P50
 U 1 1 5D4EFC4D
 P 6650 10350
 F 0 "P50" H 6650 10600 50  0000 C CNN
-F 1 "Xpressnet" V 6750 10350 50  0000 C CNN
+F 1 "XPN" V 6750 10350 50  0000 C CNN
 F 2 "w_conn_jst-ph:b4b-ph-kl" H 6650 10350 50  0001 C CNN
 F 3 "" H 6650 10350 50  0000 C CNN
 	1    6650 10350
@@ -5038,10 +5011,12 @@ L Connector_Generic:Conn_01x04 P70
 U 1 1 5D7B5AF9
 P 8500 9750
 F 0 "P70" H 8500 10000 50  0000 C CNN
-F 1 "LOCONET" V 8600 9750 50  0000 C CNN
+F 1 "LCN" V 8600 9750 50  0000 C CNN
 F 2 "w_conn_jst-ph:b4b-ph-kl" H 8500 9750 50  0001 C CNN
 F 3 "" H 8500 9750 50  0000 C CNN
 	1    8500 9750
 	1    0    0    1   
 $EndComp
+NoConn ~ 1450 2050
+NoConn ~ 1450 2150
 $EndSCHEMATC
