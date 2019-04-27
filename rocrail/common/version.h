@@ -1,11 +1,13 @@
 const int revisionnr = 
-15336
+15338
 ;
 const char* commithash = 
-"d98491165742613a29104255d4fbb5b1201525b6";
+"b128dbe8407cbc26900a3d62d8f741a3f3c5df8f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15338 2019-04-27 11:18:36 +0200 mbus: report WeichenChef error as undef\n" \
+"15337 2019-04-27 10:49:11 +0200 location: fix for initArriveList to avoid multiple loco entries\n" \
 "15336 2019-04-27 10:07:40 +0200 shunting: block shunt added\n" \
 "15335 2019-04-27 08:43:32 +0200 shunting: block shunt added\n" \
 "15334 2019-04-27 07:58:53 +0200 shunting: shunt signals added\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13341 2018-01-04 10:36:21 +0100 control: hour and minute attribute added in the clock sync event\n" \
 "13340 2018-01-04 10:21:48 +0100 route: check first if the route is reserved before closed\n" \
 "13339 2018-01-04 08:56:22 +0100 block, fback: take over new qos if its not equals with the las reported\n" \
-"13338 2018-01-04 08:49:55 +0100 block: traceline for QoS corrected\n" \
-"13337 2018-01-04 08:44:39 +0100 block: statistics added for QoS\n" \
 
 "log end";
