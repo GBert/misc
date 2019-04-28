@@ -1,11 +1,15 @@
 const int revisionnr = 
-15338
+15342
 ;
 const char* commithash = 
-"b128dbe8407cbc26900a3d62d8f741a3f3c5df8f";
+"32ebc93088a00931976e97e0350ca726084a16ec";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15342 2019-04-27 18:00:35 +0200 control: replace mcs2/mgbox with virtual to avoid crash with older local libraries\n" \
+"15341 2019-04-27 15:16:46 +0200 location: dump occupancy in case of minocc command/action\n" \
+"15340 2019-04-27 14:17:35 +0200 index rocweb: type fix\n" \
+"15339 2019-04-27 14:09:31 +0200 shunting: SpDrS60 block shunt symbols (Rainer)\n" \
 "15338 2019-04-27 11:18:36 +0200 mbus: report WeichenChef error as undef\n" \
 "15337 2019-04-27 10:49:11 +0200 location: fix for initArriveList to avoid multiple loco entries\n" \
 "15336 2019-04-27 10:07:40 +0200 shunting: block shunt added\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13345 2018-01-04 14:19:45 +0100 location: regard schedule delay in future test\n" \
 "13344 2018-01-04 14:06:33 +0100 block: fifo speed corrections\n" \
 "13343 2018-01-04 13:20:32 +0100 guiapp: splashscreen without border\n" \
-"13342 2018-01-04 11:21:33 +0100 location: skip schedule entries which are in the past\n" \
-"13341 2018-01-04 10:36:21 +0100 control: hour and minute attribute added in the clock sync event\n" \
-"13340 2018-01-04 10:21:48 +0100 route: check first if the route is reserved before closed\n" \
-"13339 2018-01-04 08:56:22 +0100 block, fback: take over new qos if its not equals with the las reported\n" \
 
 "log end";
