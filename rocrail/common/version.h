@@ -1,11 +1,14 @@
 const int revisionnr = 
-15342
+15345
 ;
 const char* commithash = 
-"32ebc93088a00931976e97e0350ca726084a16ec";
+"78712315583ef83180379adb89d298abbf904ef1";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15345 2019-04-28 10:26:00 +0200 bidib: echo DCC accessory switch commands\n" \
+"15344 2019-04-28 08:51:08 +0200 renderer: shunting signal mapping fix\n" \
+"15343 2019-04-28 08:11:06 +0200 SLIM-COLOR: missing signalshunting-2-r-shunt added\n" \
 "15342 2019-04-27 18:00:35 +0200 control: replace mcs2/mgbox with virtual to avoid crash with older local libraries\n" \
 "15341 2019-04-27 15:16:46 +0200 location: dump occupancy in case of minocc command/action\n" \
 "15340 2019-04-27 14:17:35 +0200 index rocweb: type fix\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13348 2018-01-05 11:04:02 +0100 http: fix for rocweb support\n" \
 "13347 2018-01-05 10:49:48 +0100 route: conditions extended with not type and class\n" \
 "13346 2018-01-04 15:30:12 +0100 location: check for future hourly schedules if the exceed hour 23 and subtract 24\n" \
-"13345 2018-01-04 14:19:45 +0100 location: regard schedule delay in future test\n" \
-"13344 2018-01-04 14:06:33 +0100 block: fifo speed corrections\n" \
-"13343 2018-01-04 13:20:32 +0100 guiapp: splashscreen without border\n" \
 
 "log end";
