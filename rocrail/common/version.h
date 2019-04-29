@@ -1,11 +1,18 @@
 const int revisionnr = 
-15345
+15352
 ;
 const char* commithash = 
-"78712315583ef83180379adb89d298abbf904ef1";
+"4c60a8e1e3dc1554278a8ad9e42b474846b9ab9c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15352 2019-04-29 14:22:09 +0200 rocnet: increase read/write buffer to avoid crash\n" \
+"15351 2019-04-29 11:25:50 +0200 renderer: shunt accessory added\n" \
+"15350 2019-04-29 11:19:03 +0200 shunting: route speed shunt added\n" \
+"15349 2019-04-29 08:24:07 +0200 renderer: fix for mapping shunt route signals\n" \
+"15348 2019-04-29 08:06:21 +0200 location: fix for checking if a block is part of the location\n" \
+"15347 2019-04-29 07:36:38 +0200 issuedlg: reject OK incase subject is empty\n" \
+"15346 2019-04-28 14:18:11 +0200 location: ignore subblocks in the flow management\n" \
 "15345 2019-04-28 10:26:00 +0200 bidib: echo DCC accessory switch commands\n" \
 "15344 2019-04-28 08:51:08 +0200 renderer: shunting signal mapping fix\n" \
 "15343 2019-04-28 08:11:06 +0200 SLIM-COLOR: missing signalshunting-2-r-shunt added\n" \
@@ -1999,12 +2006,5 @@ const char* revlog =
 "13355 2018-01-06 09:04:37 +0100 route: only set the route after lock just one time\n" \
 "13354 2018-01-06 08:35:03 +0100 blockgroup: fix for overwriting the groupfree flag with conditions if its not free\n" \
 "13353 2018-01-06 08:14:00 +0100 route: fix for not type condition\n" \
-"13352 2018-01-06 08:05:12 +0100 location: show current loco, block and delay in the dump\n" \
-"13351 2018-01-05 14:51:48 +0100 location: no time update on loco event\n" \
-"13350 2018-01-05 11:29:24 +0100 location: schedule table skip old schedule times respecting delay\n" \
-"13349 2018-01-05 11:21:30 +0100 http: sleep 10ms if no post was available for rocweb\n" \
-"13348 2018-01-05 11:04:02 +0100 http: fix for rocweb support\n" \
-"13347 2018-01-05 10:49:48 +0100 route: conditions extended with not type and class\n" \
-"13346 2018-01-04 15:30:12 +0100 location: check for future hourly schedules if the exceed hour 23 and subtract 24\n" \
 
 "log end";
