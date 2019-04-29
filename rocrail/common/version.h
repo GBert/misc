@@ -1,11 +1,13 @@
 const int revisionnr = 
-15352
+15354
 ;
 const char* commithash = 
-"4c60a8e1e3dc1554278a8ad9e42b474846b9ab9c";
+"9fdb1600dba0918d121e89d3430ab2eeba2a78ce";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15354 2019-04-29 19:09:18 +0200 shunting: accessory symbols (Rainer)\n" \
+"15353 2019-04-29 16:06:17 +0200 issuedlg: set default subject to translated 'issue'\n" \
 "15352 2019-04-29 14:22:09 +0200 rocnet: increase read/write buffer to avoid crash\n" \
 "15351 2019-04-29 11:25:50 +0200 renderer: shunt accessory added\n" \
 "15350 2019-04-29 11:19:03 +0200 shunting: route speed shunt added\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13357 2018-01-06 10:50:17 +0100 location: fix for updating the wrong hourly schedule\n" \
 "13356 2018-01-06 10:42:44 +0100 location: start time added in the schedule table entries\n" \
 "13355 2018-01-06 09:04:37 +0100 route: only set the route after lock just one time\n" \
-"13354 2018-01-06 08:35:03 +0100 blockgroup: fix for overwriting the groupfree flag with conditions if its not free\n" \
-"13353 2018-01-06 08:14:00 +0100 route: fix for not type condition\n" \
 
 "log end";
