@@ -1,11 +1,14 @@
 const int revisionnr = 
-15354
+15357
 ;
 const char* commithash = 
-"9fdb1600dba0918d121e89d3430ab2eeba2a78ce";
+"3986df83bc145e627e847c04fda5bcda7a3fb777";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15357 2019-04-30 11:28:04 +0200 shunting loco speed added\n" \
+"15356 2019-04-30 08:08:35 +0200 mbus: added obsolete S88 handling\n" \
+"15355 2019-04-30 07:23:04 +0200 mbus: fix for ebreak\n" \
 "15354 2019-04-29 19:09:18 +0200 shunting: accessory symbols (Rainer)\n" \
 "15353 2019-04-29 16:06:17 +0200 issuedlg: set default subject to translated 'issue'\n" \
 "15352 2019-04-29 14:22:09 +0200 rocnet: increase read/write buffer to avoid crash\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13360 2018-01-07 08:19:09 +0100 operatordlg: sorting columns added\n" \
 "13359 2018-01-06 16:22:16 +0100 loc: isHome function added\n" \
 "13358 2018-01-06 12:30:18 +0100 in: ignore wait in case next destination is reserved and the engine type is automobile\n" \
-"13357 2018-01-06 10:50:17 +0100 location: fix for updating the wrong hourly schedule\n" \
-"13356 2018-01-06 10:42:44 +0100 location: start time added in the schedule table entries\n" \
-"13355 2018-01-06 09:04:37 +0100 route: only set the route after lock just one time\n" \
 
 "log end";
