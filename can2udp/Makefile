@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=can2udp
-PKG_RELEASE:=1.65
+PKG_RELEASE:=1.66
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_BUILD_PARALLEL:=1
@@ -75,6 +75,16 @@ endif
 ifneq (,$(findstring banana,$(CONFIG_TARGET_PROFILE)))
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init_bpi $(1)/etc/init.d/can2lan
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/s88udp-bpi $(1)/usr/bin/s88udp
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/s88test-bpi $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/s88can $(1)/usr/bin/
+endif
+
+ifneq (,$(findstring bananapro,$(CONFIG_TARGET_PROFILE)))
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/can2lan.init_bpi $(1)/etc/init.d/can2lan
+	$(INSTALL_BIN) ./files/s88udp.init_bpipro $(1)/etc/init.d/s88udp
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/s88udp-bpi $(1)/usr/bin/s88udp
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/s88test-bpi $(1)/usr/bin/

@@ -1,11 +1,12 @@
 const int revisionnr = 
-15357
+15358
 ;
 const char* commithash = 
-"3986df83bc145e627e847c04fda5bcda7a3fb777";
+"bf4315853b6098c99cccb8d98b1f4aa1e82b3b38";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15358 2019-04-30 17:09:10 +0200 cbusnodedlg: enable scroll\n" \
 "15357 2019-04-30 11:28:04 +0200 shunting loco speed added\n" \
 "15356 2019-04-30 08:08:35 +0200 mbus: added obsolete S88 handling\n" \
 "15355 2019-04-30 07:23:04 +0200 mbus: fix for ebreak\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13361 2018-01-07 13:36:46 +0100 block: inform fifo of a red signal event\n" \
 "13360 2018-01-07 08:19:09 +0100 operatordlg: sorting columns added\n" \
 "13359 2018-01-06 16:22:16 +0100 loc: isHome function added\n" \
-"13358 2018-01-06 12:30:18 +0100 in: ignore wait in case next destination is reserved and the engine type is automobile\n" \
 
 "log end";
