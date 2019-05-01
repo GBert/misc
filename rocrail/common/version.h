@@ -1,11 +1,16 @@
 const int revisionnr = 
-15359
+15364
 ;
 const char* commithash = 
-"5be751fe1328844dcab1012b510fc6e2c296286c";
+"bd3c18661de9451d71271da953e33021be5160ba";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15364 2019-05-01 17:45:04 +0200 locdialog: layout corrections speed tab\n" \
+"15363 2019-05-01 17:35:58 +0200 cbusnodedlg: enable get/set buttons after getall\n" \
+"15362 2019-05-01 15:30:46 +0200 renderer: block state signal text italic in case of shunting\n" \
+"15361 2019-05-01 11:05:26 +0200 locdialog: speed tab layout\n" \
+"15360 2019-05-01 10:11:17 +0200 lc,throttledlg: use shunting speed if set\n" \
 "15359 2019-05-01 09:00:59 +0200 guiframe: enable trace menuitems after connecting the server\n" \
 "15358 2019-04-30 17:09:10 +0200 cbusnodedlg: enable scroll\n" \
 "15357 2019-04-30 11:28:04 +0200 shunting loco speed added\n" \
@@ -2001,10 +2006,5 @@ const char* revlog =
 "13367 2018-01-08 08:30:02 +0100 makefile: do not overwrite the version.h with the build of rocnetnode\n" \
 "13366 2018-01-08 08:01:34 +0100 version.h: dummy\n" \
 "13365 2018-01-07 17:51:02 +0100 a tip from the build\n" \
-"13364 2018-01-07 17:49:52 +0100 a tip from the build\n" \
-"13363 2018-01-07 17:41:58 +0100 a tip from the build\n" \
-"13362 2018-01-07 14:27:11 +0100 loc: extra trace in case of direct swap placing\n" \
-"13361 2018-01-07 13:36:46 +0100 block: inform fifo of a red signal event\n" \
-"13360 2018-01-07 08:19:09 +0100 operatordlg: sorting columns added\n" \
 
 "log end";
