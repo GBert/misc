@@ -551,7 +551,7 @@
     (tags "capacitor tantalum")
     (path /5DD10B56)
     (attr smd)
-    (fp_text reference C22 (at 2.159 2.159 90) (layer F.SilkS)
+    (fp_text reference C22 (at 2.159 2.413 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 10uF (at 0.127 0.762 90) (layer F.Fab)
@@ -3649,7 +3649,7 @@
     (tags "resistor handsolder")
     (path /5873C105)
     (attr smd)
-    (fp_text reference R2 (at -2.921 0 90) (layer F.SilkS)
+    (fp_text reference R2 (at -2.9845 0.254 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 4k7 (at 0 1.65 90) (layer F.Fab) hide

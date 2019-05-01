@@ -2550,7 +2550,7 @@ U 1 1 5D971059
 P 9250 5750
 F 0 "U23" H 9250 6465 50  0000 C CNN
 F 1 "Si8605" H 9250 6374 50  0000 C CNN
-F 2 "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm" H 9500 6350 50  0001 C CNN
+F 2 "w_smd_dil:so-16" H 9500 6350 50  0001 C CNN
 F 3 "https://www.silabs.com/documents/public/data-sheets/Si860x.pdf" H 9200 5250 50  0001 C CNN
 	1    9250 5750
 	1    0    0    -1  
