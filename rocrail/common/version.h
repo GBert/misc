@@ -1,11 +1,12 @@
 const int revisionnr = 
-15364
+15365
 ;
 const char* commithash = 
-"bd3c18661de9451d71271da953e33021be5160ba";
+"dabe736e4c21c398de8ef4290950e74edb88c9e0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15365 2019-05-02 08:04:05 +0200 cbus: fix for getting CANID from the message ID\n" \
 "15364 2019-05-01 17:45:04 +0200 locdialog: layout corrections speed tab\n" \
 "15363 2019-05-01 17:35:58 +0200 cbusnodedlg: enable get/set buttons after getall\n" \
 "15362 2019-05-01 15:30:46 +0200 renderer: block state signal text italic in case of shunting\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13368 2018-01-08 10:34:05 +0100 routedialog: layout and label corrections\n" \
 "13367 2018-01-08 08:30:02 +0100 makefile: do not overwrite the version.h with the build of rocnetnode\n" \
 "13366 2018-01-08 08:01:34 +0100 version.h: dummy\n" \
-"13365 2018-01-07 17:51:02 +0100 a tip from the build\n" \
 
 "log end";
