@@ -375,7 +375,7 @@ S88_EVENT
                 ; if DLC != 7 -> return
                 MOVF	CANFRAME+4,W
                 XORLW	7
-                BTFSS	STATUS,Z
+                BTFSC	STATUS,Z
 
                 ; Reset all S88 vars to generate new events / block request
                 GOTO	S88_RESET_MEM
