@@ -1,11 +1,13 @@
 const int revisionnr = 
-15365
+15367
 ;
 const char* commithash = 
-"dabe736e4c21c398de8ef4290950e74edb88c9e0";
+"e3a24563f6fccee5f12c46a16b9f95c132364b28";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15367 2019-05-02 12:02:29 +0200 locdialog: set shunting speed kmh and percent labels\n" \
+"15366 2019-05-02 08:23:29 +0200 route: evaluate shunting in case of maxkmh too\n" \
 "15365 2019-05-02 08:04:05 +0200 cbus: fix for getting CANID from the message ID\n" \
 "15364 2019-05-01 17:45:04 +0200 locdialog: layout corrections speed tab\n" \
 "15363 2019-05-01 17:35:58 +0200 cbusnodedlg: enable get/set buttons after getall\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13370 2018-01-08 10:49:12 +0100 location: keep valid schedule entries in the list to save additional information\n" \
 "13369 2018-01-08 10:46:41 +0100 routedialog: layout correction\n" \
 "13368 2018-01-08 10:34:05 +0100 routedialog: layout and label corrections\n" \
-"13367 2018-01-08 08:30:02 +0100 makefile: do not overwrite the version.h with the build of rocnetnode\n" \
-"13366 2018-01-08 08:01:34 +0100 version.h: dummy\n" \
 
 "log end";
