@@ -46,7 +46,7 @@ CANINSPECT
                 MOVF    CANFRAME+1,W
                 XORLW   0x22
                 BTFSC   STATUS,Z
-                BRA     S88_EVENT_STATUS
+                BRA     S88_EVENT
 
                 ; CAN PING 0x30 ?
                 MOVF    CANFRAME+1,W
@@ -368,19 +368,19 @@ CAN_SWITCH_ACC_FAULT
                 RETURN
 
 ;------------------------------------------------------------------------------
-; S88 Event Status
+; S88 Event
 ;------------------------------------------------------------------------------
 
-S88_EVENT_STATUS
-                ; if DLC != 4 -> return
+S88_EVENT
+                ; if DLC != 7 -> return
                 MOVF	CANFRAME+4,W
-                XORLW	4
+                XORLW	7
                 BTFSS	STATUS,Z
 
-                ; TODO
-                RETURN
+                ; Reset all S88 vars to generate new events / block request
+                GOTO	S88_RESET_MEM
 
-S88_EVENT_STATUS_END
+S88_EVENT_END
                 RETURN
 
 ;------------------------------------------------------------------------------
@@ -427,10 +427,10 @@ CAN_PING_CONT
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                ; Version 1.8
+                ; Version 1.9
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	8
+                MOVLW	9
                 MOVWF	POSTINC0
                 MOVLW	0
                 MOVWF	POSTINC0
@@ -487,10 +487,10 @@ CAN_BOOTLOADER_PING
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                ; Version 1.8
+                ; Version 1.9
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	8
+                MOVLW	9
                 MOVWF	POSTINC0
                 MOVLW	0
                 MOVWF	POSTINC0

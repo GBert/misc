@@ -174,6 +174,7 @@ S88INIT
                 CLRF    S88_BYTE_COUNT
                 CLRF    S88STATE
 
+S88_RESET_MEM
                 ; TODO
                 MOVLW   S88_MAX_LENGTH * 2
                 MOVWF   S88COUNT
