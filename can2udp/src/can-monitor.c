@@ -139,7 +139,7 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 2.83\n\n");
+    fprintf(stderr, "   Version 2.84\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
@@ -671,17 +671,18 @@ void decode_frame(struct can_frame *frame) {
     case 0x02:
     case 0x03:
 	if (frame->can_dlc == 0)
-	    printf("Lok Discovery - Erkennen alle Protokolle\n");
+	    printf("Lok Discovery - Erkennen alle Protokolle");
 	if (frame->can_dlc == 1)
-	    printf("Lok Discovery - Protokoll Kennung 0x%02X\n", frame->data[0]);
+	    printf("Lok Discovery - Protokoll Kennung 0x%02X", frame->data[0]);
 	if (frame->can_dlc == 5) {
 	    uid = be32(frame->data);
-	    printf("Lok Discovery - 0x%04X Protokoll Kennung 0x%02X\n", uid, frame->data[4]);
+	    printf("Lok Discovery - 0x%04X Protokoll Kennung 0x%02X", uid, frame->data[4]);
 	}
 	if (frame->can_dlc == 6) {
 	    uid = be32(frame->data);
-	    printf("Lok Discovery - 0x%04X Range %d ASK %d\n", uid, frame->data[4], frame->data[5]);
+	    printf("Lok Discovery - 0x%04X Range %d ASK %d", uid, frame->data[4], frame->data[5]);
 	}
+	printf("\n");
 	break;
     /* MFX Bind */
     case 0x04:
@@ -700,18 +701,19 @@ void decode_frame(struct can_frame *frame) {
 	if (frame->can_dlc == 2) {
 	    kenner = be16(frame->data);
 	    if (kenner == 0x00ff)
-		printf("CdB: Reset\n");
+		printf("CdB: Reset");
 	    else
-		printf("CdB: unbekannt 0x%04x\n", kenner);
+		printf("CdB: unbekannt 0x%04x", kenner);
 	}
 	if (frame->can_dlc == 4) {
 	    cdb_extension_set_grd(frame);
 	}
 	if (frame->can_dlc == 6)
-	    printf("MFX Verify: MFX UID 0x%08X MFX SID %d\n", uid, be16(&frame->data[4]));
+	    printf("MFX Verify: MFX UID 0x%08X MFX SID %d", uid, be16(&frame->data[4]));
 	if (frame->can_dlc == 7)
-	    printf("MFX Verify: MFX UID 0x%08X MFX SID %d ASK-Verhältnis %d\n",
+	    printf("MFX Verify: MFX UID 0x%08X MFX SID %d ASK-Verhältnis %d",
 		   uid, be16(&frame->data[4]), frame->data[6]);
+	printf("\n");
 	break;
     /* Lok Geschwindigkeit */
     case 0x08:
@@ -719,9 +721,10 @@ void decode_frame(struct can_frame *frame) {
 	v = be16(&frame->data[4]);
 	v = v / 10;
 	if (frame->can_dlc == 4)
-	    printf("Lok %s Abfrage Fahrstufe\n", getLoco(frame->data, s));
+	    printf("Lok %s Abfrage Fahrstufe", getLoco(frame->data, s));
 	else if (frame->can_dlc == 6)
-	    printf("Lok %s Geschwindigkeit: %3.1f\n", getLoco(frame->data, s), v);
+	    printf("Lok %s Geschwindigkeit: %3.1f", getLoco(frame->data, s), v);
+	printf("\n");
 	break;
     /* Lok Richtung */
     case 0x0A:
@@ -730,7 +733,7 @@ void decode_frame(struct can_frame *frame) {
 
 	printf("Lok %s ", getLoco(frame->data, s));
 	if (frame->can_dlc == 4) {
-	    printf(" wird abgefragt\n");
+	    printf(" wird abgefragt");
 	} else if (frame->can_dlc == 5) {
 	    switch (frame->data[4]) {
 	    case 0:
@@ -749,37 +752,41 @@ void decode_frame(struct can_frame *frame) {
 		strcat(s, "unbekannt");
 		break;
 	    }
-	    printf("Richtung %s\n", s);
+	    printf("Richtung %s", s);
 	}
+	printf("\n");
 	break;
     /* Lok Funktion */
     case 0x0C:
     case 0x0D:
 	if (frame->can_dlc == 5)
-	    printf("Lok %s Funktion %d\n", getLoco(frame->data, s), frame->data[4]);
+	    printf("Lok %s Funktion %d", getLoco(frame->data, s), frame->data[4]);
 	else if (frame->can_dlc == 6)
-	    printf("Lok %s Funktion %d Wert %d\n", getLoco(frame->data, s), frame->data[4], frame->data[5]);
+	    printf("Lok %s Funktion %d Wert %d", getLoco(frame->data, s), frame->data[4], frame->data[5]);
 	else if (frame->can_dlc == 7)
-	    printf("Lok %s Funktion %d Wert %d Funktionswert %d\n",
+	    printf("Lok %s Funktion %d Wert %d Funktionswert %d",
 		   getLoco(frame->data, s), frame->data[4], frame->data[5], be16(&frame->data[6]));
+	printf("\n");
 	break;
     /* Read Config */
     case 0x0E:
 	if (frame->can_dlc == 7) {
 	    cv_number = ((frame->data[4] & 0x3) << 8) + frame->data[5];
 	    cv_index = frame->data[4] >> 2;
-	    printf("Read Config Lok %s CV Nummer %u Index %u Anzahl %u\n",
+	    printf("Read Config Lok %s CV Nummer %u Index %u Anzahl %u",
 		   getLoco(frame->data, s), cv_number, cv_index, frame->data[6]);
 	}
+	printf("\n");
 	break;
     case 0x0F:
 	cv_number = ((frame->data[4] & 0x3) << 8) + frame->data[5];
 	cv_index = frame->data[4] >> 2;
 	if (frame->can_dlc == 6)
-	    printf("Read Config Lok %s CV Nummer %u Index %u\n", getLoco(frame->data, s), cv_number, cv_index);
+	    printf("Read Config Lok %s CV Nummer %u Index %u", getLoco(frame->data, s), cv_number, cv_index);
 	if (frame->can_dlc == 7)
-	    printf("Read Config Lok %s CV Nummer %u Index %u Wert %u\n",
+	    printf("Read Config Lok %s CV Nummer %u Index %u Wert %u",
 		   getLoco(frame->data, s), cv_number, cv_index, frame->data[6]);
+	printf("\n");
 	break;
     /* Write Config */
     case 0x10:
@@ -798,10 +805,11 @@ void decode_frame(struct can_frame *frame) {
     case 0x17:
 	uid = be32(frame->data);
 	if (frame->can_dlc == 6)
-	    printf("Zubehör Schalten UID 0x%08X Stellung %u Strom %u\n", uid, frame->data[4], frame->data[5]);
+	    printf("Zubehör Schalten UID 0x%08X Stellung %u Strom %u", uid, frame->data[4], frame->data[5]);
 	if (frame->can_dlc == 8)
-	    printf("Zubehör Schalten UID 0x%08X Stellung %u Strom %u Schaltzeit/Sonderfunktionswert %u\n",
+	    printf("Zubehör Schalten UID 0x%08X Stellung %u Strom %u Schaltzeit/Sonderfunktionswert %u",
 		   uid, frame->data[4], frame->data[5], be16(&frame->data[6]));
+	printf("\n");
 	break;
     /* S88 Polling */
     case 0x20:
@@ -818,27 +826,30 @@ void decode_frame(struct can_frame *frame) {
 	kenner = be16(frame->data);
 	kontakt = be16(&frame->data[2]);
 	if (frame->can_dlc == 4)
-	    printf("S88 Event Kennung %d Kontakt %d\n", kenner, kontakt);
+	    printf("S88 Event Kennung %d Kontakt %d", kenner, kontakt);
 	else if (frame->can_dlc == 5)
-	    printf("S88 Event Kennung %d Kontakt %d Parameter %d\n", kenner, kontakt, frame->data[4]);
+	    printf("S88 Event Kennung %d Kontakt %d Parameter %d", kenner, kontakt, frame->data[4]);
 	else if (frame->can_dlc == 7)
-	    printf("S88 Event Blockmodus Kennung %d Kontakt Start %d Parameter %d\n", kenner, kontakt, frame->data[6]);
+	    printf("S88 Event Blockmodus Kennung %d Kontakt Start %d Parameter %d", kenner, kontakt, frame->data[6]);
+	printf("\n");
 	break;
     case 0x23:
 	kenner = be16(frame->data);
 	kontakt = be16(&frame->data[2]);
 	if (frame->can_dlc == 8)
-	    printf("S88 Event Kennung %d Kontakt %d Zustand alt %d Zusand neu %d Zeit %d\n",
+	    printf("S88 Event Kennung %d Kontakt %d Zustand alt %d Zusand neu %d Zeit %d",
 		   kenner, kontakt, frame->data[4], frame->data[5], be16(&frame->data[6]));
+	printf("\n");
 	break;
     /* SX1 Event */
     case 0x24:
     case 0x25:
 	uid = be32(frame->data);
 	if (frame->can_dlc == 5)
-	    printf("SX1 Event UID 0x%08X SX1-Adresse %d\n", uid, frame->data[4]);
+	    printf("SX1 Event UID 0x%08X SX1-Adresse %d", uid, frame->data[4]);
 	if (frame->can_dlc == 5)
-	    printf("SX1 Event UID 0x%08X SX1-Adresse %d Zustand %d\n", uid, frame->data[4], frame->data[5]);
+	    printf("SX1 Event UID 0x%08X SX1-Adresse %d Zustand %d", uid, frame->data[4], frame->data[5]);
+	printf("\n");
 	break;
     /* Ping */
     case 0x30:
