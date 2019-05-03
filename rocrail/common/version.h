@@ -1,11 +1,12 @@
 const int revisionnr = 
-15369
+15370
 ;
 const char* commithash = 
-"7d10ab1e4a6838bc83bb790287a44e9dfeaede25";
+"c11fef86ac7d07545a4a5649e15cbf72ef8722ec";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15370 2019-05-03 11:08:06 +0200 action: trace current loco mode on checking conditions\n" \
 "15369 2019-05-03 08:23:58 +0200 mbus: fix for bps if < 9600\n" \
 "15368 2019-05-03 08:13:42 +0200 mbus: bps and cts options added\n" \
 "15367 2019-05-02 12:02:29 +0200 locdialog: set shunting speed kmh and percent labels\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13373 2018-01-08 17:48:01 +0100 makefile: version fix for native win\n" \
 "13372 2018-01-08 16:09:59 +0100 location: regard hours < model time to skip\n" \
 "13371 2018-01-08 15:38:24 +0100 loc: set light attribute incase an event ist dispatched to the operator\n" \
-"13370 2018-01-08 10:49:12 +0100 location: keep valid schedule entries in the list to save additional information\n" \
 
 "log end";
