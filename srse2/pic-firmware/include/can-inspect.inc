@@ -375,7 +375,22 @@ S88_EVENT
                 ; if DLC != 7 -> return
                 MOVF	CANFRAME+4,W
                 XORLW	7
-                BTFSC	STATUS,Z
+                BTFSS	STATUS,Z
+                RETURN
+                ; if not S88 Counter Start -> return
+                MOVF	CANFRAME+7,W
+                XORWF   S88C_H,W
+                BTFSS	STATUS,Z
+                RETURN
+                MOVF	CANFRAME+8,W
+                XORWF   S88C_L,W
+                BTFSS	STATUS,Z
+                RETURN
+                ; skip if no read command
+                MOVF	CANFRAME+11,W
+                XORLW	1
+                BTFSS	STATUS,Z
+                RETURN
 
                 ; reset S88 as we need fresh infos
                 GOTO	S88INIT
