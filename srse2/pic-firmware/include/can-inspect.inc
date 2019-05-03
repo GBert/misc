@@ -377,8 +377,8 @@ S88_EVENT
                 XORLW	7
                 BTFSC	STATUS,Z
 
-                ; Reset all S88 vars to generate new events / block request
-                GOTO	S88_RESET_MEM
+                ; reset S88 as we need fresh infos
+                GOTO	S88INIT
 
 S88_EVENT_END
                 RETURN
