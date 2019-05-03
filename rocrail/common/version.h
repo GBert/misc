@@ -1,11 +1,13 @@
 const int revisionnr = 
-15367
+15369
 ;
 const char* commithash = 
-"e3a24563f6fccee5f12c46a16b9f95c132364b28";
+"7d10ab1e4a6838bc83bb790287a44e9dfeaede25";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15369 2019-05-03 08:23:58 +0200 mbus: fix for bps if < 9600\n" \
+"15368 2019-05-03 08:13:42 +0200 mbus: bps and cts options added\n" \
 "15367 2019-05-02 12:02:29 +0200 locdialog: set shunting speed kmh and percent labels\n" \
 "15366 2019-05-02 08:23:29 +0200 route: evaluate shunting in case of maxkmh too\n" \
 "15365 2019-05-02 08:04:05 +0200 cbus: fix for getting CANID from the message ID\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13372 2018-01-08 16:09:59 +0100 location: regard hours < model time to skip\n" \
 "13371 2018-01-08 15:38:24 +0100 loc: set light attribute incase an event ist dispatched to the operator\n" \
 "13370 2018-01-08 10:49:12 +0100 location: keep valid schedule entries in the list to save additional information\n" \
-"13369 2018-01-08 10:46:41 +0100 routedialog: layout correction\n" \
-"13368 2018-01-08 10:34:05 +0100 routedialog: layout and label corrections\n" \
 
 "log end";
