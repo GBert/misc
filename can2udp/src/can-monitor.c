@@ -837,7 +837,7 @@ void decode_frame(struct can_frame *frame) {
 	kenner = be16(frame->data);
 	kontakt = be16(&frame->data[2]);
 	if (frame->can_dlc == 8)
-	    printf("S88 Event Kennung %d Kontakt %d Zustand alt %d Zusand neu %d Zeit %d",
+	    printf("S88 Event Kennung %d Kontakt %d Zustand alt %d Zustand neu %d Zeit %d",
 		   kenner, kontakt, frame->data[4], frame->data[5], be16(&frame->data[6]));
 	printf("\n");
 	break;
