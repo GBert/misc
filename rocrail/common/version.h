@@ -1,11 +1,13 @@
 const int revisionnr = 
-15370
+15372
 ;
 const char* commithash = 
-"c11fef86ac7d07545a4a5649e15cbf72ef8722ec";
+"c9a47fb8b482295b1374c12c21c8b521025f1a53";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15372 2019-05-04 08:13:36 +0200 shunting: save state for next session, show state with a #-prefix in the mode column\n" \
+"15371 2019-05-03 14:35:19 +0200 mbus: regard active low on sensor simulation\n" \
 "15370 2019-05-03 11:08:06 +0200 action: trace current loco mode on checking conditions\n" \
 "15369 2019-05-03 08:23:58 +0200 mbus: fix for bps if < 9600\n" \
 "15368 2019-05-03 08:13:42 +0200 mbus: bps and cts options added\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13375 2018-01-09 10:51:03 +0100 location: fix for compare schedule entry time with model time\n" \
 "13374 2018-01-09 07:30:45 +0100 dccpp: do not initialise DTR on connect to avoid a reset\n" \
 "13373 2018-01-08 17:48:01 +0100 makefile: version fix for native win\n" \
-"13372 2018-01-08 16:09:59 +0100 location: regard hours < model time to skip\n" \
-"13371 2018-01-08 15:38:24 +0100 loc: set light attribute incase an event ist dispatched to the operator\n" \
 
 "log end";
