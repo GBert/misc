@@ -97,7 +97,7 @@ uint16_t * getGLIndex(bus_t bus, uint32_t locid, char prot)
 		if ((locid < MAXSRCPGL) && prot) gl[bus].gldir->proto[locid] = prot;
 		
 		uint32_t id = locid & 0x3FFF;
-        switch(locid >> 14) {
+        if (id) switch(locid >> 14) {
         	case 0:	// srcp all protocols
         			if (locid < MAXSRCPGL) switch(gl[bus].gldir->proto[locid]) {
 						case 'M':	return &(gl[bus].gldir->mmdir[id]);
@@ -174,8 +174,8 @@ static void gl_enqueue(bus_t busnumber, gl_data_t * p)
         cacheInitGL(busnumber, addr, 'P', 1, 14, 1, NULL);
         syslog_bus(busnumber, DBG_WARN, "GL default init for %d-%d",
                        busnumber, addr);
+   		if (p->state == glsInit)  p->state = glsActive;
     }
-   	if (p->state == glsInit)  p->state = glsActive;
 
     if (queue_isfull(busnumber)) {
         syslog_bus(busnumber, DBG_WARN, "GL command queue full");
@@ -210,7 +210,7 @@ enqueue_unlock:
                        strerror(result), result);
     }
 
-        /* Restart thread to send GL command */
+    /* Restart thread to send GL command */
     resume_bus_thread(busnumber);
 }
 
@@ -265,7 +265,7 @@ int cacheGetGL(bus_t busnumber, int addr, gl_data_t *gld)
  * within the SRCP SET Command code.
  * It respects the TERM function.    						
 */
-void cacheSetGL(bus_t busnumber, gl_data_t *glp, gl_data_t l)
+void cacheSetGL(bus_t busnumber, gl_data_t *glp, gl_data_t *l)
 {
     char msg[1000];
     int rc = SRCP_WRONGVALUE;
@@ -273,8 +273,8 @@ void cacheSetGL(bus_t busnumber, gl_data_t *glp, gl_data_t l)
     int i = gli ? *gli : 0;
     if (i) {
     	int addr = isInitializedGL(busnumber, i);
-      	gl[busnumber].glstate[i].cacheddirection = l.direction;
-      	gl[busnumber].glstate[i].cachedspeed = l.speed;
+      	gl[busnumber].glstate[i].cacheddirection = l->direction;
+      	gl[busnumber].glstate[i].cachedspeed = l->speed;
 //      gl[busnumber].glstate[addr].funcs = l.funcs;
 //      gl[busnumber].glstate[addr].n_fs = l.n_fs;
 //      gl[busnumber].glstate[addr].n_func = l.n_func;
@@ -319,13 +319,16 @@ int cacheInitGL(bus_t busnumber, uint32_t locid, const char protocol,
         		p->protocol = protocol;
         		p->id = locid & 0x3FFF;
         		if (buses[busnumber].init_gl_func) 
-            		rc = (*buses[busnumber].init_gl_func) (busnumber, p, optData);
-		        if (rc == SRCP_OK) p->state = glsInit;
+            		rc = (*buses[busnumber].init_gl_func) (p, optData);
+		        if (rc == SRCP_OK) {
+					p->state = glsInit;
+					gl_enqueue(busnumber, p);	// take into refresh cycle
+				}
             }
             else rc = SRCP_DEVICEREINITIALIZED;
             
-            cacheDescribeGL(busnumber, p->id, msg);
-            enqueueInfoMessage(msg);
+            if (cacheDescribeGL(busnumber, p->id, msg) == SRCP_INFO)
+            		enqueueInfoMessage(msg);
         }
     }
     return rc;
@@ -675,7 +678,7 @@ static gl_data_t * get_gldata_ptr(bus_t bus, uint32_t locid)
 				p->tv = p->inittime;
         		if (bus_supports_protocol(bus, p->protocol) == SRCP_OK) {
         			if (buses[bus].init_gl_func) {
-            			rc = (*buses[bus].init_gl_func) (bus, p, "");
+            			rc = (*buses[bus].init_gl_func) (p, "");
         				if (rc == SRCP_OK)  p->state = glsActive;
         			}
             	}
@@ -792,6 +795,7 @@ int enqueueGL(bus_t bus, uint32_t locid, int dir, int speed, int maxspeed, const
     oldfuncs ^= f;				// changed funcs
     p->funcschange |= oldfuncs;    
         
+   	if (p->state == glsInit)  p->state = glsActive;
 	gl_enqueue(bus, p);
 
     itemid = getglid(p);

@@ -1,11 +1,13 @@
 const int revisionnr = 
-15372
+15374
 ;
 const char* commithash = 
-"c9a47fb8b482295b1374c12c21c8b521025f1a53";
+"ad5cf3129211c72e4911cd9714bbba0a7f4318be";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15374 2019-05-04 16:04:58 +0200 mbus: fix for serial timeout setting\n" \
+"15373 2019-05-04 11:36:22 +0200 xmlscript: variable format option\n" \
 "15372 2019-05-04 08:13:36 +0200 shunting: save state for next session, show state with a #-prefix in the mode column\n" \
 "15371 2019-05-03 14:35:19 +0200 mbus: regard active low on sensor simulation\n" \
 "15370 2019-05-03 11:08:06 +0200 action: trace current loco mode on checking conditions\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13377 2018-01-09 13:37:44 +0100 control: list up the build origin in the issue.txt\n" \
 "13376 2018-01-09 11:20:09 +0100 makewin64-full.sh: fix for commandline parameter\n" \
 "13375 2018-01-09 10:51:03 +0100 location: fix for compare schedule entry time with model time\n" \
-"13374 2018-01-09 07:30:45 +0100 dccpp: do not initialise DTR on connect to avoid a reset\n" \
-"13373 2018-01-08 17:48:01 +0100 makefile: version fix for native win\n" \
 
 "log end";

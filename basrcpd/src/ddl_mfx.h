@@ -62,19 +62,9 @@ int stopMFXThreads();
 /**
   Generate the packet for MFX-decoder with 9-bit
   address and 128 speed steps and up to 32 functions
-  @param address GL address
-  @param direction
-  @param speed
-  @param func function bits
-  @param nspeed number of speeds for this decoder
-  @param nfuncs number of functions
-  @param pv Protokoll Version, wird nicht verwendet
-  @param prop true wenn Kommando priorisiert ist (Halt Koomandos).
-  @return 0 == OK, 1 == Error
+  @param pointer to GL data
 */
-int comp_mfx_loco(int address, int direction,
-                  int speed, int func, int nspeed, int nfuncs,
-                  int pv, bool prio);
+void comp_mfx_loco(bus_t bus, gl_data_t *glp);
 
 /**
  * Neues MFX Lok Init Kommando empfangen.
@@ -82,7 +72,7 @@ int comp_mfx_loco(int address, int direction,
  * @param adresse Lokadresse (Schienenadresse)
  * @param uid Dekoder UID der Lok
  */
- void newGLInit(int adresse, uint32_t uid);
+void newGLInit(int adresse, uint32_t uid);
 
 /**
  * Schienenadresse im Dekoder löschen -> Dekoder ist nicht mehr angemeldet.

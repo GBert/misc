@@ -40,7 +40,7 @@ typedef struct _GLSTATE {
     char state;                 /* 0=dead, 1=terminating, 2=init, 3=active */
     char protocol;
     char protocolversion;
-    char n_func;
+    uint8_t	 n_func;
     uint16_t id;                /* address  */
     uint8_t  n_fs;
     uint8_t  speed;             /* Sollgeschwindigkeit skal. auf 0..14 */
@@ -74,7 +74,7 @@ int enqueueGL(bus_t busnumber, uint32_t locid, int dir, int speed,
 int queue_GL_isempty(bus_t busnumber);
 gl_data_t * dequeueNextGL(bus_t busnumber);
 int cacheGetGL(bus_t busnumber, int addr, gl_data_t * l);
-void cacheSetGL(bus_t busnumber, gl_data_t *glp, gl_data_t l);
+void cacheSetGL(bus_t busnumber, gl_data_t *glp, gl_data_t *l);
 int cacheInfoGL(bus_t busnumber, uint32_t locid, char *info);
 int cacheDescribeGL(bus_t busnumber, uint32_t locid, char *msg);
 int cacheInitGL(bus_t busnumber, uint32_t locid, const char protocol,

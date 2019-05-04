@@ -136,6 +136,7 @@
     #include <a20hw.h>
     #define BAPI_RTS    (PORTIPIN+16)
     #define BAPI_CTS    (PORTIPIN+17)
+    #define WRONGLEN	(len == 64)
 #elif defined RASPBERRYPI
     #include <bcm2835.h>
     #ifdef RASPBERRYPI_BOARD_V1
@@ -159,16 +160,13 @@
     #else
         #error "Unsupported new RaspberryPI Board Version"
     #endif
+    #define WRONGLEN	(len < 96)
 #endif
 
 
 #define __DDL ((DDL_DATA*)buses[busnumber].driverdata)
 #define __DDLt ((DDL_DATA*)buses[btd->bus].driverdata)
 
-#define DAUER_STOP_IMPULS_SIGG_MODE 500000
-#define DAUER_START_IMPULS_SIGG_MODE 500000
-//Zeit, die Booster On sein muss in uSekunden, damit bei Off (wegen Schluss) automatisch wieder eingeschaltet wird
-#define TIMEOUT_SHORTCUT_POWEROFF 10000000
 
 //SPI Baudrate für Märklin / Motorola Protokoll.
 //Diese wäre eigentlich genau 38461 Baud (1 Bit=26us, 1Byte=208us)
@@ -614,8 +612,8 @@ static unsigned int convertNMRAPacketToSPIStream(bus_t busnumber, char *packet, 
   } 
   spiBuffer[len++] = 0xFF;  // RM: noch mindestens eine EINS dranhängen
   spiBuffer[len++] = 0x00;
-  if (len < 96) {
-    syslog_bus(busnumber, DBG_WARN, "SPI Transfer < 96 Bytes (%d Bytes) -> no DMA Mode, wrong Timing", len);
+  if (WRONGLEN) {
+    syslog_bus(busnumber, DBG_WARN, "SPI Transfer with %d Bytes -> wrong Timing", len);
   }
   return len;
 }
@@ -657,23 +655,15 @@ static void init_NMRAPacketPool(bus_t busnumber)
     }
 
     /* put idle packet in packet pool */
-    j = translateBitstream2Packetstream(busnumber, idle_packet,
-                                        idle_pktstr, false);
+    j = translateBitstream2Packetstream(busnumber, idle_packet, idle_pktstr);
     update_NMRAPacketPool(busnumber, 128, idle_pktstr, j, idle_pktstr, j);
+
     /* generate and override idle_data */
-    /* insert the NMRA idle packetstream (the standard idle stream was all
-       '1' which is OK for NMRA, so keep the rest of the idle string) */
-/*!!!!!!!! TODO, SIG 5.9.16, warum wird hier 0x55 idle Data, die mit Märklin Baudrate gesendet werden, überschrieben?????
-    for (i = 0; i < (MAXDATA / j) * j; i++)
-      __DDL->idle_data[i] = idle_pktstr[i % j]; */
-    
     memset (&spi_nmra_idle, 0, sizeof (spi_nmra_idle)) ;
     spi_nmra_idle.len = convertNMRAPacketToSPIStream(busnumber, idle_pktstr, __DDL->NMRA_idle_data);
     spi_nmra_idle.tx_buf =  (unsigned long)__DDL->NMRA_idle_data;
     spi_nmra_idle.bits_per_word = 8;
     spi_nmra_idle.speed_hz = SPI_BAUDRATE_NMRA_2;
-//      memcpy(__DDL->NMRA_idle_data, idle_pktstr, j);
-//      __DDL->NMRA_idle_data_size = j;
 }
 
 void update_NMRAPacketPool(bus_t busnumber, int adr,
@@ -993,8 +983,8 @@ static unsigned int convertMFXPacketToSPIStream(bus_t busnumber, char *packet, c
       break;
   }
   
-  if (len < 96) {
-    syslog_bus(busnumber, DBG_WARN, "SPI Transfer < 96 Bytes (%d Bytes) -> no DMA Mode, wrong Timing", len);
+  if (WRONGLEN) {
+    syslog_bus(busnumber, DBG_WARN, "SPI Transfer with %d Bytes -> wrong Timing", len);
   }
   return len;
 }
@@ -1096,7 +1086,7 @@ static int checkShortcut(bus_t busnumber)
     time_t short_now = 0;
     struct timeval tv_shortcut = { 0, 0 };
 
-    // nur CTS wird eingelesen 
+    // read the CTS input 
 #if defined BANANAPI
     arg = (a20_gpio_lev(BAPI_CTS) == LOW ? TIOCM_CTS : 0);    
 #elif defined RASPBERRYPI
@@ -1146,17 +1136,9 @@ void send_packet(bus_t busnumber, char *packet,
     int i, laps;
     /* arguments for nanosleep and Maerklin loco decoders (19KHz) */
     /* all using busy waiting */
-//    const static struct timespec rqtp_btw19K = { 0, 1250000 };
 //SID, 22.03.09: gemäss http://home.mnet-online.de/modelleisenbahn-digital/Dig-tutorial-start.html sind es 4.2ms .....
-//    const static struct timespec rqtp_end19K = { 0, 4200000 };       /* ==> busy waiting */
-//    static struct timespec rqtp_end19K = { 0, 1700000 };       /* ==> busy waiting */
     /* arguments for nanosleep and Maerklin solenoids/function decoders (38KHz) */
-//    const static struct timespec rqtp_btw38K = { 0, 625000 };
 //SID, 04.01.08 : Wartezeit wäre theoretisch schon 850us, dies geht aber mit den LDT Dekodern nicht....
-//    const static struct timespec rqtp_end38K = { 0,  3000000 }; /* ==> busy waiting     */
-//    struct timespec rqtp_end38K = { 0, 850000 };        /* ==> busy waiting */
-    //Anzugsverzögerung Umschaltrelais bei Mobile Station Mode 10ms
-//    const static struct timespec mobileStationRelaisDelay = { 0,  10000000 };
     
     //Nur für MFX RDS 1-Bit Rückmeldung: Position und Länge im SPI Bytestream an der sich die Rückmeldung befinden muss.
     unsigned int mfxRdsPos, mfxRdsLen;
@@ -1191,19 +1173,17 @@ void send_packet(bus_t busnumber, char *packet,
           //- Paket Wiederholung 
           //- 0 Bytes für Pause nach Paket: 4.2ms (Lok), resp. 2.1ms (Schaltdekoder) -> wegen bei doppleter Baudrate 1 Byte 104us (Lok). 62us (Schalt) = 42 Bytes
           //Total also 36 + 12 + 36 + 42 = 126 Bytes -> DMA Mode!
-          //Berechnung in Anzahl Bytes mit Zeiten und Baudrate für Lokbefehle
-          //-> mit doppelter Baudrate für Schaltdekoder und halben Zeiten ergibt dies die selbe Anzahl Bytes (+2: Aufrunden und etwas Reserve)
-          //Die verteilten Divisionen um die ns auf Sekunden zu bringen sind so, um Integer Overflows zu vermeiden.
+
           unsigned int pause_btw;
           unsigned int pause_end;
           if ((packet_type == QM1FUNCPKT) || (packet_type == QM1SOLEPKT)) {
-            pause_btw = 12;     // rqtp_btw38K.tv_nsec / 1000 * SPI_BAUDRATE_MAERKLIN_FUNC_2 / 1000000 / 8;
-            pause_end = 59;     // rqtp_end38K.tv_nsec / 1000 * SPI_BAUDRATE_MAERKLIN_FUNC_2 / 1000000 / 8 + 2;
+            pause_btw = 12;     // for functions multiples of 52µs
+            pause_end = 59;    
             spi.speed_hz = SPI_BAUDRATE_MAERKLIN_FUNC_2;
           }
           else {
-            pause_btw = 12;     // rqtp_btw19K.tv_nsec / 1000 * SPI_BAUDRATE_MAERKLIN_LOCO_2 / 1000000 / 8;
-            pause_end = 42;     // rqtp_end19K.tv_nsec / 1000 * SPI_BAUDRATE_MAERKLIN_LOCO_2 / 1000000 / 8 + 2;
+            pause_btw = 12;     // for locos multiples of 104µs
+            pause_end = 42;     
             spi.speed_hz = SPI_BAUDRATE_MAERKLIN_LOCO_2;
           }
           memset (spiBuffer, 0, sizeof (spiBuffer));
@@ -1389,7 +1369,6 @@ static bool refresh_loco_one(bus_t busnumber, bool fast) {
   tRefreshInfo *refreshInfo = fast ? &__DDL->refreshInfoFast : &__DDL->refreshInfo;
 
   int adr;
-//  int result;
   bool refreshGesendet = false;
   bool busComplete = false;
 
@@ -1544,7 +1523,6 @@ long int compute_delta(struct timeval tv1, struct timeval tv2)
    return "true" if power is off, return "false" if power is on */
 static bool power_is_off(bus_t busnumber)
 {
-//    static struct timeval t_rts_on;
     char msg[110], info[4];
     if (__DDL->CHECKSHORT) {
 		if (buses[busnumber].power_state) {
@@ -1566,7 +1544,6 @@ static bool power_is_off(bus_t busnumber)
             syslog_bus(busnumber, DBG_INFO, "Rail signal generation stopped.");
         }
         if (buses[busnumber].power_state == 1) {
-//            gettimeofday(&t_rts_on, NULL);
             set_SerialLine(busnumber, SL_RTS, ON);
             syslog_bus(busnumber, DBG_INFO, "Rail signal generation started.");
         }
@@ -1601,8 +1578,7 @@ static void *thr_refresh_cycle(void *v)
     int addr;
     struct _thr_param *tp = v;
     bus_t busnumber = tp->busnumber;
-//    struct timeval tv1;    
-//    struct timezone tz;
+
     /* argument for nanosleep to do non-busy waiting */
     static struct timespec rqtp_sleep = { 0, 2500000 };
 
@@ -1623,15 +1599,6 @@ static void *thr_refresh_cycle(void *v)
 // HACK:            pthread_exit((void *) 1);
     }
 
-    struct spi_ioc_transfer spi_idlePacket;
-
-    memset (&spi_idlePacket, 0, sizeof (spi_idlePacket)) ;
-    spi_idlePacket.tx_buf =  (unsigned long)__DDL->idle_data;
-    spi_idlePacket.len = MAXDATA;
-    spi_idlePacket.bits_per_word = 8;
-    spi_idlePacket.speed_hz = SPI_BAUDRATE_MAERKLIN_LOCO;
-   
-//    gettimeofday(&tv1, &tz);
     for (;;) {
         pthread_testcancel();
         if (power_is_off(busnumber)) {
@@ -1653,14 +1620,8 @@ static void *thr_refresh_cycle(void *v)
 
                   send_packet(busnumber, packet, packet_size,
                               packet_type, false);
-                  if (__DDL->ENABLED_PROTOCOLS == (EP_MAERKLIN | EP_NMRADCC)) {
-                      if (ioctl(buses[busnumber].device.file.fd, SPI_IOC_MESSAGE(1), &spi_nmra_idle) < 0) {
-                        syslog_bus(busnumber, DBG_FATAL, "Error SPI Transfer ioctl.");
-                      }
-                  }
                 }
-                packet_type =
-                    queue_get(busnumber, &addr, packet, &packet_size);
+                packet_type = queue_get(busnumber, &addr, packet, &packet_size);
             }
         }
 
@@ -1674,9 +1635,6 @@ static void *thr_refresh_cycle(void *v)
           if (! refresh_loco(busnumber)) {
               //Keine Lok für Refreshkommando vorhanden -> Idle Data senden damit kein DC am Gleis anliegt.
               __DDL->spiLastMM = 0;
-              if (ioctl(buses[busnumber].device.file.fd, SPI_IOC_MESSAGE(1), &spi_idlePacket) < 0) {
-                syslog_bus(busnumber, DBG_FATAL, "Error SPI Transfer ioctl.");
-              }
           }
         }
     }
@@ -1684,17 +1642,38 @@ static void *thr_refresh_cycle(void *v)
     return NULL;
 }
 
-static int init_gl_DDL(bus_t bus, gl_data_t * gl, char *optData)
+static int init_gl_DDL(gl_data_t * gl, char *optData)
 {
-/* called old code in original version, TODO replace by new */
     switch (gl->protocol) {
-        case 'M':              /* Motorola Codes */
-            return (gl->protocolversion > 0 && gl->protocolversion <= 5) ? SRCP_OK : SRCP_WRONGVALUE;
+        case 'M':			/* MMx */
+            if (gl->n_func > 5) return SRCP_WRONGVALUE;
+            switch (gl->protocolversion) {
+               // M1: 14 drive steps, 1 function, relative drive direction
+               case 1: return (gl->n_fs == 14 && gl->n_func == 1) ?
+                               SRCP_OK : SRCP_WRONGVALUE;
+               // M2: 14, 27 or 28 drive steps, 5 functions, absolute drive direction
+               case 2: return ((gl->n_fs == 14 || gl->n_fs == 27 || gl->n_fs == 28) &&
+                               gl->n_func >= 0 && gl->n_func <= 5 ) ?
+                               SRCP_OK : SRCP_WRONGVALUE;
+               // no other protocol versions supported
+               default: return SRCP_WRONGVALUE;
+            }
             break;
-        case 'N':
-            return (gl->protocolversion > 0 && gl->protocolversion <= 5) ? SRCP_OK : SRCP_WRONGVALUE;
+        case 'N': 			/* DCC */
+            if (gl->n_func > 32) return SRCP_WRONGVALUE;
+            switch (gl->protocolversion) {
+               // N1: short addresses, 14, 28 or 128 drive steps
+               case 1:  return (gl->id < 128 && (gl->n_fs == 14 ||
+                                gl->n_fs == 28 || gl->n_fs == 128)) ?
+                               		SRCP_OK : SRCP_WRONGVALUE;
+               // N2: long addresses, 28 or 128 drive steps
+               case 2:  return (gl->n_fs == 28 || gl->n_fs == 128) ?
+                               		SRCP_OK : SRCP_WRONGVALUE;                               
+               default: return SRCP_WRONGVALUE;
+            }
             break;
-        case 'X': //MFX
+        case 'X': 			/* MFX */
+            if (gl->n_func > 32) return SRCP_WRONGVALUE;
             if (gl->protocolversion < 0 || gl->protocolversion > 1) {
                 return SRCP_WRONGVALUE;
             }
@@ -1909,7 +1888,6 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
 /* return code wird ignoriert (vorerst) */
 int init_bus_DDL(bus_t busnumber)
 {
-    int i;
     static char protocols[3] = { '\0', '\0', '\0' };
     int protocol = 0;
 
@@ -1946,22 +1924,6 @@ int init_bus_DDL(bus_t busnumber)
 
     __DDL->queue_initialized = false;
     queue_init(busnumber);
-
-    /* generate idle_data */
-    for (i = 0; i < MAXDATA; i++)
-        __DDL->idle_data[i] = 0x55;     /* 0x55 = 01010101 */   /* TODO was soll das? */  
-    __DDL->idle_data[MAXDATA-1] = 0;        
-    for (i = 0; i < PKTSIZE; i++)
-        __DDL->NMRA_idle_data[i] = 0x55;
-    __DDL->NMRA_idle_data_size = PKTSIZE;
-
-    /*
-     * ATTENTION:
-     *   If NMRA dcc mode is activated __DDL->idle_data[] and
-     *   __DDL->NMRA_idle_data must be overridden from init_NMRAPacketPool().
-     *   This means, that init_NMRAPacketPool()
-     *   must be called after init_MaerklinPacketPool().
-     */
 
     __DDL->refreshInfo.last_refreshed_maerklin_loco = 0;
     __DDL->refreshInfo.last_refreshed_maerklin_fx = -1;
@@ -2099,11 +2061,10 @@ void *thr_delayedGAResetCmd(void *v)
 static void *thr_sendrec_DDL(void *v)
 {
     struct _SM smakt;
-    gl_data_t gltmp, *glp;
+    gl_data_t *glp;
     ga_data_t gatmp;
     int addr, error;
     int last_cancel_state, last_cancel_type;
-    bool prio;
     char * scmd, * sprot, * stype;
     
     delayedGAResetCmdData *tmpv;
@@ -2148,109 +2109,25 @@ static void *thr_sendrec_DDL(void *v)
     while (true) {
         pthread_testcancel();
         if (!queue_GL_isempty(btd->bus)) {
-          char p;
-          int pv;
-          int speed;
-          int direction;
-
-          glp = dequeueNextGL(btd->bus);	//, &gltmp);
+          glp = dequeueNextGL(btd->bus);
 		  if (glp) {
-	  		gltmp = *glp;
             //Gültiger, nicht gelöschter Eintrag verarbeiten
-            p = gltmp.protocol;
-            /* need to compute from the n_fs and n_func parameters */
-            pv = gltmp.protocolversion;
-            addr = gltmp.id;
-            speed = gltmp.speed;
-            direction = gltmp.direction;
-            prio = (gltmp.cachedspeed > 0) && (speed == 0);
-            syslog_bus(btd->bus, DBG_DEBUG, "Next command: %c (%x) %d %d %c",
-                       p, p, pv, addr, prio ? 'P' : ' ');
-            if (addr > 127) {
-                pv = 2;
-            }
+            char p = glp->protocol;
             switch (p) {
                 case 'M':      /* Motorola Codes */
-                    if (speed) {
-                        speed++;        /* Never send FS1 */
-                    }
-                    if (direction == 2)
-                        speed = 0;
-                    
-					if (pv == 1) {	comp_maerklin_1(btd->bus, addr,
-                                            gltmp.direction, speed,
-                                            gltmp.funcs & 0x01, prio,
-											gltmp.cacheddirection);
-                            }
-                    else switch (gltmp.n_fs) {
-                        case 14:	comp_maerklin_2(btd->bus, addr,
-                                            gltmp.direction, speed,
-                                            gltmp.funcs & 0x01,
-                                            ((gltmp.funcs >> 1) & 0x01),
-                                            ((gltmp.funcs >> 2) & 0x01),
-                                            ((gltmp.funcs >> 3) & 0x01),
-                                            ((gltmp.funcs >> 4) & 0x01),
-                                            prio);
-                            		break;
-                         case 27:	comp_maerklin_27(btd->bus, addr,
-                                            gltmp.direction, speed,
-                                            gltmp.funcs & 0x01,
-                                            ((gltmp.funcs >> 1) & 0x01),
-                                            ((gltmp.funcs >> 2) & 0x01),
-                                            ((gltmp.funcs >> 3) & 0x01),
-                                            ((gltmp.funcs >> 4) & 0x01),
-                                            prio, gltmp.cachedspeed);
-                            		break;
-                        case 28:	comp_maerklin_28(btd->bus, addr,
-                                            gltmp.direction, speed,
-                                            gltmp.funcs & 0x01,
-                                            ((gltmp.funcs >> 1) & 0x01),
-                                            ((gltmp.funcs >> 2) & 0x01),
-                                            ((gltmp.funcs >> 3) & 0x01),
-                                            ((gltmp.funcs >> 4) & 0x01),
-                                            prio);
-                            		break;
-                    }
+                	comp_maerklin_loco(btd->bus, glp);
                     break;
                 case 'N':      /* NMRA / DCC Codes */
-                    if (speed)
-                        speed++;
-                    if (direction != 2)
-                        comp_nmra_multi_func(btd->bus, addr, direction,
-                                             speed, gltmp.funcs,
-                                             gltmp.n_fs, gltmp.n_func, pv,
-                                             prio);
-                    else
-                        /* emergency halt: FS 1 */
-                        comp_nmra_multi_func(btd->bus, addr, 0,
-                                             1, gltmp.funcs, gltmp.n_fs,
-                                             gltmp.n_func, pv, prio);
+					comp_nmra_multi_func(btd->bus, glp);
                     break;
                 case 'X':      /* MFX */
-                    if (direction != 2) {
-                        if (speed == 1) {
-                          speed++; //1 wäre Nothalt
-                        }
-                        if (direction == -1) {
-                          //Lok TERM hier ierst mal ignorieren, zuerst Lok stoppen
-                          direction = 0;
-                        }
-                        comp_mfx_loco(addr, direction,
-                                      speed, gltmp.funcs,
-                                      gltmp.n_fs, gltmp.n_func, pv, prio);
-                    }
-                    else {
-                        /* emergency halt: FS 1 */
-                        comp_mfx_loco(addr, 0,
-                                      1, gltmp.funcs, gltmp.n_fs,
-                                      gltmp.n_func, pv, prio);
-                    }
-                    if (gltmp.direction == -1) { //Lok TERM
+                	comp_mfx_loco(btd->bus, glp);
+                    if (glp->direction == -1) { 	// mfx loco TERM
                       sendDekoderTerm(addr);
                     }
                     break;
             }
-            cacheSetGL(btd->bus, glp, gltmp);
+            cacheSetGL(btd->bus, glp, glp);
           }
         }
         if (!queue_SM_isempty(btd->bus)) {

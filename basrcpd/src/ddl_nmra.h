@@ -35,15 +35,13 @@
 #define DDL_NMRA_H
 
 int translateBitstream2Packetstream(bus_t busnumber, char *Bitstream,
-                                    char *Packetstream,
-                                    int force_translation);
+                                    char *Packetstream);
 
 /* signal generating functions for nmra dcc */
 
 /* NMRA multi function decoder */
-int comp_nmra_multi_func(bus_t busnumber, int address, int direction,
-                         int speed, int func, int nspeed, int nfuncs,
-                         int mode, bool prio);
+void comp_nmra_multi_func(bus_t busnumber, gl_data_t *glp);
+
 /* NMRA accessory decoder     */
 int comp_nmra_accessory(bus_t busnumber, int nr, int output, int activate,
                         int offset);

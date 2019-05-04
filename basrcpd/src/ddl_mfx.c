@@ -282,35 +282,32 @@ static unsigned int sendMFXPaket(int address, char *stream, bool prio, unsigned 
 /**
   Generate the packet for MFX-decoder with 9-bit
   address and 128 speed steps and up to 16 functions
-  @param address GL address
-  @param direction
-  @param speed
-  @param func function bits
-  @param nspeed number of speeds for this decoder
-  @param nfuncs number of functions
-  @param pv Protokoll Version, wird nicht verwendet
-  @param prop true wenn Kommando priorisiert ist (Halt Koomandos).
-  @return 0 == OK, 1 == Error
+  @param pointer to GL data
 */
-int comp_mfx_loco(int address, int direction,
-                  int speed, int func, int nspeed, int nfuncs,
-                  int pv, bool prio) 
-{
-  char packetstream[PKTSIZE];
-  memset(packetstream, 0, PKTSIZE);
 
-  syslog_bus(busnumber, DBG_DEBUG,
+void comp_mfx_loco(bus_t bus, gl_data_t *glp)
+{
+	char packetstream[PKTSIZE];
+	memset(packetstream, 0, PKTSIZE);
+
+    int address = glp->id;
+    int speed = glp->speed;
+    int direction = glp->direction;
+    uint8_t nspeed = glp->n_fs;
+    uint8_t	nfuncs = glp->n_func;
+	bool prio = (glp->cachedspeed > 0) && (speed == 0);
+ 
+	if (direction == 2) speed = 1;		/* Emergency Stop */
+	else {
+		if (speed == 1) speed++;		/* Never send FS1 */
+        if (direction == -1) direction = 0;	
+	}
+  	if (speed > 127) speed = 127;
+
+	syslog_bus(bus, DBG_DEBUG,
              "command for MFX protocol received addr:%d "
-             "dir:%d speed:%d nspeeds:%d nfunc:%d",
-             address, direction, speed, nspeed, nfuncs);
-  /* no special error handling, it's job of the clients */
-  if (address < 1 || address > 511 || direction < 0 || direction > 1 ||
-      speed < 0 || speed > (nspeed + 1)) {
-    return 1;
-  }
-  if (speed > 127) {
-    speed = 127;
-  }
+             "dir:%d speed:%d nspeeds:%d nfunc:%d %c",
+             address, direction, speed, nspeed, nfuncs, prio ? 'P' : ' ');
 
   //packetstream Format:
   //1. Byte länge
@@ -320,41 +317,42 @@ int comp_mfx_loco(int address, int direction,
   //<=4 Fn       : 110AAAAAAAAA001RSSSSSSS010FFFFCCCCCCCC
   //>4 .. <=8 Fn : 110AAAAAAAAA001RSSSSSSS0110FFFFFFFFCCCCCCCC
   //>8 Fn        : 110AAAAAAAAA001RSSSSSSS0111FFFFFFFFFFFFFFFFCCCCCCCC
-  //Bei speed==0 :             000RSSS.....
+  //if (speed mod 16)==0 :     000RSSS.....
   //A=Adresse, für Adressen <128 wird die 7 Bit Adressierung verwendet
   //R=Richtung
   //S=Fahrstufe
   //F=F0 bis F15
   //C=Checksumme
-  unsigned int pos = 0;
-  addAdrBits(address, packetstream, &pos);
-  //Bei Halt kann "Fahren kurz" verwendet werden, 0 ist 0
-  if (speed == 0) {
-    addBits(0b000, 3, packetstream, &pos); //Fahren mit 7 Bit
-    addBits(direction, 1, packetstream, &pos);
-    addBits(0, 3, packetstream, &pos);
-  }
-  else {
-    addBits(0b001, 3, packetstream, &pos); //Fahren mit 7 Bit
-    addBits(direction, 1, packetstream, &pos);
-    addBits(speed, 7, packetstream, &pos);
-  }
-  if (nfuncs <=4) {
-    addBits(0b010, 3, packetstream, &pos); //4 Funktionen
-    addBits(func, 4, packetstream, &pos);
-  }
-  else if (nfuncs <=8) {
-    addBits(0b0110, 4, packetstream, &pos); //8 Funktionen
-    addBits(func, 8, packetstream, &pos);
-  }
-  else {
-    addBits(0b0111, 4, packetstream, &pos); //16 Funktionen
-    addBits(func, MFX_FX_COUNT, packetstream, &pos);
-  }
+
+	unsigned int pos = 0;
+  	addAdrBits(address, packetstream, &pos);
+  	// prefer short speed format
+	if ((speed & 15) == 0) {
+		addBits(0b000, 3, packetstream, &pos);	// drive using 3 Bits
+    	addBits(~direction, 1, packetstream, &pos);
+    	addBits(speed >> 4, 3, packetstream, &pos);
+  	}
+  	else {
+    	addBits(0b001, 3, packetstream, &pos); 	// drive using 7 Bits
+    	addBits(~direction, 1, packetstream, &pos);
+    	addBits(speed, 7, packetstream, &pos);
+  	}
+	if (nfuncs <=4) {
+		addBits(0b010, 3, packetstream, &pos);	// upto 4 functions
+		addBits(glp->funcs, 4, packetstream, &pos);
+  	}
+	else if (nfuncs <=8) {
+		addBits(0b0110, 4, packetstream, &pos);	// upto 8 functions
+		addBits(glp->funcs, 8, packetstream, &pos);
+  	}
+  	else {
+		addBits(0b0111, 4, packetstream, &pos);	// upto 16 functions
+		addBits(glp->funcs, MFX_FX_COUNT, packetstream, &pos);
+  	}
   addCRCBits(packetstream, &pos);
   unsigned int sizeStream = sendMFXPaket(address, packetstream, prio, QMFX0PKT);
   update_MFXPacketPool(busnumber, address, packetstream, sizeStream);
-  return 0;
+  return;
 }
 
 #define REG_COUNTER_FILE SYSCONFDIR"/srcpd.regcount"

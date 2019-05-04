@@ -19,7 +19,7 @@ typedef struct _LOOPBACK_DATA {
 
 int readconfig_LOOPBACK(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber);
 int init_bus_LOOPBACK(bus_t );
-int init_gl_LOOPBACK(bus_t busnumber, gl_data_t *, char *optData);
+int init_gl_LOOPBACK(gl_data_t *, char *optData);
 int init_ga_LOOPBACK(ga_data_t *);
 int getDescription_LOOPBACK(char *reply);
 void* thr_sendrec_LOOPBACK(void *);

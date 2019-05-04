@@ -125,7 +125,7 @@ static int init_lineLoopback(bus_t bus)
 /**
  * cacheInitGL: modifies the gl data used to initialize the device
  **/
-int init_gl_LOOPBACK(bus_t busnumber, gl_data_t * gl, char *optData)
+int init_gl_LOOPBACK(gl_data_t * gl, char *optData)
 {
     switch (gl->protocol) {
         case 'L':
@@ -374,7 +374,7 @@ static void handle_gl_command(bus_t bus)
         gltmp.speed = 0;
         gltmp.direction = !gltmp.cacheddirection;
       }
-      cacheSetGL(bus, glp, gltmp);
+      cacheSetGL(bus, glp, &gltmp);
     }
     buses[bus].watchdog++;
 }

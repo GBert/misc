@@ -36,14 +36,8 @@
 #define __MAERKLIN_H__
 
 /* signal generating functions for maerklin */
-int comp_maerklin_1(bus_t bus, int address, int direction, int speed, int func, 
-					bool prio, char cacheddirection);
-int comp_maerklin_2(bus_t bus, int address, int direction, int speed, int func,
-                    int f1, int f2, int f3, int f4, bool prio);
-int comp_maerklin_28(bus_t bus, int address, int direction, int speed, int func,
-                    int f1, int f2, int f3, int f4, bool prio);
-int comp_maerklin_27(bus_t bus, int address, int direction, int speed, int func,
-                    int f1, int f2, int f3, int f4, bool prio, int speed_old);
+
+void comp_maerklin_loco(bus_t bus, gl_data_t *glp);
 int comp_maerklin_ms(bus_t bus, int address, int port, int action);
 int comp_maerklin_mf(bus_t bus, int address,
                      int f1, int f2, int f3, int f4);

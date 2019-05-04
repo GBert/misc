@@ -92,11 +92,8 @@ static const unsigned int ADDR14BIT_OFFSET = 128;
  * Anzahl im 1. Packetstream Byte übergeben.
  * Retunwert ist die Anzahl Byte, also erstes Löngenbyte plus alle notwendigen Datenbytes.
  */
-//static int translateBitstream2Packetstream_SPI(char *Bitstream,
-//                                               char *Packetstream)
 int translateBitstream2Packetstream(bus_t busnumber, char *Bitstream,
-                                    char *Packetstream,
-                                    int force_translation)
+                                    char *Packetstream)
 {
   int i;
   int bitLen = strlen(Bitstream);
@@ -281,8 +278,7 @@ int comp_nmra_accessory(bus_t busnumber, int nr, int output, int activate,
     strcat(bitstream, byte3);
     strcat(bitstream, "1");
 
-    j = translateBitstream2Packetstream(busnumber, bitstream,
-                                        packetstream, true);
+    j = translateBitstream2Packetstream(busnumber, bitstream, packetstream);
     if (j > 0) {
         queue_add(busnumber, address, p_packetstream, QNBACCPKT, j, false);
 #if 0                           /* GA Packet Cache */
@@ -538,13 +534,9 @@ static void calc_address_stream(char *addrstream, char *addrerrbyte,
               int nfuncs number of functions
               int mode 1 == short address, 2 == long (2byte) address
   @return 0 == OK, 1 == Error
-  
 */
-int comp_nmra_multi_func(bus_t busnumber, int address, int direction,
-                         int speed, int func, int nspeed, int nfuncs,
-                         int mode, bool prio)
+void comp_nmra_multi_func(bus_t busnumber, gl_data_t *glp)
 {
-
     char spdrbyte[9];
     char spdrbyte2[9];
     char errdbyte[9];
@@ -559,10 +551,25 @@ int comp_nmra_multi_func(bus_t busnumber, int address, int direction,
     int adr = 0;
     int j, jj;
 
+	int mode = glp->protocolversion;
+    int address = glp->id;
+    int speed = glp->speed;
+    int direction = glp->direction;
+    uint32_t func = glp->funcs;
+    uint8_t nspeed = glp->n_fs;
+    uint8_t	nfuncs = glp->n_func;
+	bool prio = (glp->cachedspeed > 0) && (speed == 0);
+	
+	if (speed) speed++;                 /* Never send FS1 */
+	if (direction == 2) {				/* Emergency Stop */
+		speed = 1;
+		direction = 0;
+	}
+
     syslog_bus(busnumber, DBG_DEBUG,
                "command for NMRA protocol (N%d) received addr:%d "
-               "dir:%d speed:%d nspeeds:%d nfunc:%d",
-               mode, address, direction, speed, nspeed, nfuncs);
+               "dir:%d speed:%d nspeeds:%d nfunc:%d %c",
+               mode, address, direction, speed, nspeed, nfuncs, prio ? 'P' : ' ');
 
     adr = address;
 
@@ -572,7 +579,7 @@ int comp_nmra_multi_func(bus_t busnumber, int address, int direction,
     /* no special error handling, it's job of the clients */
     if (address < 1 || address > 10239 || direction < 0 || direction > 1 ||
         speed < 0 || speed > (nspeed + 1) || (address > 127 && mode == 1))
-        return 1;
+        return;
 
     if (speed > 127) {
         speed = 127;
@@ -615,14 +622,11 @@ int comp_nmra_multi_func(bus_t busnumber, int address, int direction,
     if (nfuncs && (nspeed > 14)) {
         calc_function_stream(bitstream, bitstream2, addrerrbyte,
                              addrstream, func, nfuncs);
-        j = translateBitstream2Packetstream(busnumber, bitstream,
-                                            packetstream, false);
-        jj = translateBitstream2Packetstream(busnumber, bitstream2,
-                                             packetstream2, false);
+        j = translateBitstream2Packetstream(busnumber, bitstream, packetstream);
+        jj = translateBitstream2Packetstream(busnumber, bitstream2, packetstream2);
     }
     else {
-        j = translateBitstream2Packetstream(busnumber, bitstream,
-                                            packetstream, false);
+        j = translateBitstream2Packetstream(busnumber, bitstream, packetstream);
         packetstream2 = packetstream;
         jj = j;
     }
@@ -633,11 +637,9 @@ int comp_nmra_multi_func(bus_t busnumber, int address, int direction,
         if (nfuncs && (nspeed > 14)) {
             queue_add(busnumber, adr, packetstream2, QNBLOCOPKT, jj, prio);
         }
-
-        return 0;
     }
 
-    return 1;
+    return;
 }
 
 /**
@@ -684,8 +686,7 @@ int protocol_nmra_sm_write_cvbyte_pom(bus_t busnumber, int address, int cv,
     strcat(bitstream, addrstream);
     strcat(bitstream, progstream);
 
-    j = translateBitstream2Packetstream(busnumber, bitstream, packetstream,
-                                        false);
+    j = translateBitstream2Packetstream(busnumber, bitstream, packetstream);
 
     if (j > 0) {
         queue_add(busnumber, adr, packetstream, QNBLOCOPKT, j, false);
@@ -739,8 +740,7 @@ int protocol_nmra_sm_write_cvbit_pom(bus_t busnumber, int address, int cv,
     strcat(bitstream, addrstream);
     strcat(bitstream, progstream);
 
-    j = translateBitstream2Packetstream(busnumber, bitstream, packetstream,
-                                        false);
+    j = translateBitstream2Packetstream(busnumber, bitstream, packetstream);
 
     if (j > 0) {
         queue_add(busnumber, adr, packetstream, QNBLOCOPKT, j, false);
@@ -778,16 +778,13 @@ static void sm_init(bus_t busnumber)
 {
     memset(resetstream, 0, PKTSIZE);
     rs_size =
-        translateBitstream2Packetstream(busnumber, reset_packet,
-                                        resetstream, false);
+        translateBitstream2Packetstream(busnumber, reset_packet, resetstream);
     memset(idlestream, 0, PKTSIZE);
     is_size =
-        translateBitstream2Packetstream(busnumber, idle_packet, idlestream,
-                                        false);
+        translateBitstream2Packetstream(busnumber, idle_packet, idlestream);
     memset(pagepresetstream, 0, PKTSIZE);
     ps_size =
-        translateBitstream2Packetstream(busnumber, page_preset_packet,
-                                        pagepresetstream, true);
+        translateBitstream2Packetstream(busnumber, page_preset_packet, pagepresetstream);
     sm_initialized = true;
 }
 
@@ -935,8 +932,7 @@ static int calc_reg_stream(bus_t bus, int reg, int value, int verify,
     strcat(bitstream, "1");
 
     memset(packetstream, 0, PKTSIZE);
-    j = translateBitstream2Packetstream(bus, bitstream, packetstream,
-                                        true);
+    j = translateBitstream2Packetstream(bus, bitstream, packetstream);
     return j;
 }
 #endif
@@ -1208,8 +1204,7 @@ static int protocol_nmra_sm_direct_cvbyte(bus_t busnumber, int cv,
 #if 0
 // TODO: obsolete code for UART to be replaced by code for SPI
 
-    j = translateBitstream2Packetstream(busnumber, bitstream, packetstream,
-                                        false);
+    j = translateBitstream2Packetstream(busnumber, bitstream, packetstream);
 
     memset(SendStream, 0, 2048);
 
@@ -1316,8 +1311,7 @@ static int protocol_nmra_sm_direct_cvbit(bus_t bus, int cv, int bit,
     strcat(bitstream, progstream);
 #if 0
 // TODO: obsolete code for UART to be replaced by code for SPI
-    j = translateBitstream2Packetstream(bus, bitstream, packetstream,
-                                        false);
+    j = translateBitstream2Packetstream(bus, bitstream, packetstream);
 
     memset(SendStream, 0, 2048);
     for (l = 0; l < 30; l++)

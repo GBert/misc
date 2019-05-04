@@ -92,63 +92,28 @@ char getMaerklinHI() {
 int comp_maerklin_1(bus_t busnumber, int address, int direction,
                     int speed, int func, bool prio, char cacheddirection)
 {
-
-    char trits[9];
     char packet[18];
-    int i, j;
-    syslog_bus(busnumber, DBG_DEBUG,
-    	"Command for M1 protocol received addr:%d dir:%d speed:%d func:%d",
-        address, direction, speed, func);
+    int i;
 
     /* no special error handling, it's job of the clients */
-    if (address < 0 || address > 80 || func < 0 || func > 1 || speed < 0
-        || speed > 15 || direction < 0 || direction > 1)
+    if (address < 0 || address > 80 || func < 0 || func > 1 || speed < 0 || speed > 15)
         return 1;
+	if (direction == 2) direction = cacheddirection;	/* Emergency Stop */
     if (direction != cacheddirection) {
         speed = 1;
     }
 
-    /* compute address trits */
-//    for (i = 0; i < 4; i++)
-//        trits[i] = MotorolaCodes[address].Code[i];
+    /* compute address part */
     for (i = 0; i < 8; i++)
         packet[i] = (mmadr_cod[address] >> i) & 1;
 
-    /* compute func trit     */
-    if (func)
-        trits[4] = 'H';
-    else
-        trits[4] = 'L';
-    /* compute speed trits   */
+    /* compute func part */
+    packet[8] = packet[9] = func & 1;
+    
+    /* compute speed part */
     for (i = 5; i < 9; i++) {
-        j = speed % 2;
-        speed = speed / 2;
-        switch (j) {
-            case 0:
-                trits[i] = 'L';
-                break;
-            case 1:
-                trits[i] = 'H';
-                break;
-        }
-    }
-
-//    for (i = 0; i < 9; i++) {
-    for (i = 4; i < 9; i++) {
-        switch (trits[i]) {
-            case 'L':
-                packet[2 * i] = LO;
-                packet[2 * i + 1] = LO;
-                break;
-            case 'H':
-                packet[2 * i] = HI;
-                packet[2 * i + 1] = HI;
-                break;
-            case 'O':
-                packet[2 * i] = HI;
-                packet[2 * i + 1] = LO;
-                break;
-        }
+        packet[2 * i] = packet[2 * i + 1] = speed & 1;
+        speed >>= 1;
     }
 
     update_MaerklinPacketPool(busnumber, address, packet, packet, packet,
@@ -170,14 +135,8 @@ int comp_maerklin_2(bus_t busnumber, int address, int direction,
 
     char mask[5];
     int i, j;
-    int adr = 0;
     int mspeed;
 
-    syslog_bus(busnumber, DBG_DEBUG,
-    	"Command for M2 protocol 14 steps received addr:%d dir:%d speed:%d func:%d",
-        address, direction, speed, func);
-
-    adr = address;
     if (direction == 0)
         direction = -1;
     else
@@ -190,18 +149,13 @@ int comp_maerklin_2(bus_t busnumber, int address, int direction,
         || f3 > 1 || f4 < 0 || f4 > 1)
         return 1;
 
-    /* compute address trits */
-//    for (i = 0; i < 4; i++)
-//        trits[i] = MotorolaCodes[address].Code[i];
+    /* compute address part */
     for (i = 0; i < 8; i++)
         packet[i] = (mmadr_cod[address] >> i) & 1;
 
-    /* compute func trit     */
-    if (func)
-        trits[4] = 'H';
-    else
-        trits[4] = 'L';
-
+    /* compute func part */
+    packet[8] = packet[9] = func & 1;
+    
     /* so far the same procedure as by Maerklin type 1, but now ... */
     /* compute speed trits   */
     if (speed < -7)
@@ -234,7 +188,7 @@ int comp_maerklin_2(bus_t busnumber, int address, int direction,
             trits[i] = 'U';     /* Oops, whats */
     }                           /* this? :-)    */
 
-    for (i = 4; i < 9; i++) {
+    for (i = 5; i < 9; i++) {
         switch (trits[i]) {
             case 'L':
                 packet[2 * i] = LO;
@@ -310,7 +264,7 @@ int comp_maerklin_2(bus_t busnumber, int address, int direction,
 
     /* lets have a look, what has changed ... */
     for (i = 0; i < 4; i++) {
-        fx_packet = get_maerklin_packet(busnumber, adr, i);
+        fx_packet = get_maerklin_packet(busnumber, address, i);
         if (fx_packet[17] != f_packets[i][17]) {
             fx_changed = 1;
             fx = i;
@@ -318,14 +272,14 @@ int comp_maerklin_2(bus_t busnumber, int address, int direction,
         }
     }
 
-    update_MaerklinPacketPool(busnumber, adr, packet, f_packets[0],
+    update_MaerklinPacketPool(busnumber, address, packet, f_packets[0],
                               f_packets[1], f_packets[2], f_packets[3]);
 
     //Ausgabe Geschwindigkeitsbefehl erfolgt immer    
-    queue_add(busnumber, adr, packet, QM2LOCOPKT, 18, prio); //Lok stoppen hat Priorität
+    queue_add(busnumber, address, packet, QM2LOCOPKT, 18, prio); //Lok stoppen hat Priorität
     if (fx_changed) {
       //Wir berücksichtigen die Priotität auch hier weil es vorkommen kann, dass z.B. Anfahr-Bremsverzögerung ausgeschaltet werden soll um eine Lok sofort anzuhalten
-      queue_add(busnumber, adr, f_packets[fx], QM2FXPKT, 18, prio); 
+      queue_add(busnumber, address, f_packets[fx], QM2FXPKT, 18, prio); 
     }
 
     return 0;
@@ -347,10 +301,6 @@ int comp_maerklin_28(bus_t busnumber, int address, int direction,
     int speed_halfstep = 0;
     int mspeed;
 
-    syslog_bus(busnumber, DBG_DEBUG,
-    	"Command for M2 protocol 28 steps received addr:%d dir:%d speed:%d func:%d",
-        address, direction, speed, func);
-
     adr = address;
     if (direction == 0)
         direction = -1;
@@ -364,9 +314,7 @@ int comp_maerklin_28(bus_t busnumber, int address, int direction,
         || f3 > 1 || f4 < 0 || f4 > 1)
         return 1;
 
-    /* compute address trits */
-//    for (i = 0; i < 4; i++)
-//        trits[i] = MotorolaCodes[address].Code[i];
+    /* compute address part */
     for (i = 0; i < 8; i++)
         packet[i] = (mmadr_cod[address] >> i) & 1;
 
@@ -527,10 +475,6 @@ int comp_maerklin_27(bus_t busnumber, int address, int direction,
     int two_commands = false;
     int acceleration = false;
 
-    syslog_bus(busnumber, DBG_DEBUG,
-    	"Command for M2 protocol 27 steps received addr:%d dir:%d speed:%d func:%d",
-        address, direction, speed, func);
-
     /* no special error handling, it's job of the clients */
     if (speed < 0 || speed > 28)
         return 1;
@@ -612,77 +556,50 @@ int comp_maerklin_27(bus_t busnumber, int address, int direction,
 
 int comp_maerklin_ms(bus_t busnumber, int address, int port, int action)
 {
-
-    char trits[9];
-    char packet[2*9]; //Doppelte Grösse wegen SPI Mode
-    char *p_packet;
+    char packet[18]; 
     int i, j;
     int id, subid;
 
     syslog_bus(busnumber, DBG_DEBUG,
-               "command for solenoid (Maerklin) (MS) received");
+               "command for MM solenoid received addr:%d port:%d action:%d",
+			   address, port, action);
 
     /* no special error handling, it's job of the clients */
     if (address < 1 || address > 324 || action < 0 || action > 1 || port < 0 || port > 1) {
         return 1;
     }
-    p_packet = packet;
     id = ((address - 1) >> 2);
     subid = (((address - 1) & 3) << 1) + port;
     if (action)
-        trits[8] = 'H';
+    	packet[16] = packet[17] = 1;
     else
-        trits[8] = 'L';
+    	packet[16] = packet[17] = 0;
 
-    /* compute address trits */
-    for (i = 0; i < 4; i++) {
-        j = id % 3;
-        id = id / 3;
-        switch (j) {
-            case 0:
-                trits[i] = 'L';
-                break;
-            case 1:
-                trits[i] = 'H';
-                break;
-            case 2:
-                trits[i] = 'O';
-                break;
-        }
-    }
-    /* compute func trit (dummy) */
-    trits[4] = 'L';
+    /* compute address part */
+    if (id == 0) id = 80;		// special translation
+    for (i = 0; i < 8; i++)
+        packet[i] = (mmadr_cod[id] >> i) & 1;
+
+    /* compute dummy func part */
+    packet[8] = packet[9] = 0;
+
     /* compute port trits   */
     for (i = 5; i < 8; i++) {
         j = subid % 2;
         subid = subid / 2;
         switch (j) {
             case 0:
-                trits[i] = 'L';
+                packet[i*2] = LO;
+                packet[i*2+1] = LO;
                 break;
             case 1:
-                trits[i] = 'H';
+                packet[i*2] = HI;
+                packet[i*2+1] = HI;
                 break;
         }
     }
 
-    for (i = 0; i < 9; i++) {
-        switch (trits[i]) {
-            case 'L':
-                packet[i*2] = LO;
-                packet[i*2+1] = LO;
-                break;
-            case 'H':
-                packet[i*2] = HI;
-                packet[i*2+1] = HI;
-                break;
-            case 'O':
-                packet[i*2] = HI;
-                packet[i*2+1] = LO;
-                break;
-        }
-    }
-    queue_add(busnumber, address, p_packet, QM1SOLEPKT, 18, false);
+    queue_add(busnumber, address, packet, QM1SOLEPKT, 18, false);
     return 0;
 }
 
@@ -691,7 +608,7 @@ int comp_maerklin_mf(bus_t busnumber, int address, int f1, int f2,
 {
 
     char trits[9];
-    char packet[2*9]; //Doppelte Grösse wegen möglichem SPI Mode
+    char packet[18]; 
     int i;
 
     syslog_bus(busnumber, DBG_DEBUG,
@@ -702,9 +619,7 @@ int comp_maerklin_mf(bus_t busnumber, int address, int f1, int f2,
         f2 < 0 || f2 > 1 || f3 < 0 || f3 > 1 || f4 < 0 || f4 > 1)
         return 1;
 
-    /* compute address trits */
-//    for (i = 0; i < 4; i++)
-//        trits[i] = MotorolaCodes[address].Code[i];
+    /* compute address part */
     for (i = 0; i < 8; i++)
         packet[i] = (mmadr_cod[address] >> i) & 1;
 
@@ -748,4 +663,42 @@ int comp_maerklin_mf(bus_t busnumber, int address, int f1, int f2,
     queue_add(busnumber, address, packet, QM1FUNCPKT, 18, false);
 
     return 0;
+}
+
+void comp_maerklin_loco(bus_t bus, gl_data_t *glp)
+{
+	int pv = glp->protocolversion;
+    int addr = glp->id;
+    int speed = glp->speed;
+    int direction = glp->direction;
+	bool prio = (glp->cachedspeed > 0) && (speed == 0);
+ 
+    if (speed) speed++;        		/* Never send FS1 */
+	if (direction == 2) speed = 0;  /* Emergency Stop */
+
+    syslog_bus(bus, DBG_DEBUG,
+    	"command for M%d protocol received addr:%d dir:%d speed:%d of %d funcs:%x %c",
+        pv, addr, direction, speed, glp->n_fs, glp->funcs, prio ? 'P' : ' ');
+                    
+	if (pv == 1) {	comp_maerklin_1(bus, addr, direction, speed,
+                                            glp->funcs & 0x01, prio,
+											glp->cacheddirection);
+                            }
+    else switch (glp->n_fs) {
+        case 14:	comp_maerklin_2(bus, addr, direction, speed,
+                                glp->funcs & 0x01, ((glp->funcs >> 1) & 0x01),
+                                ((glp->funcs >> 2) & 0x01), ((glp->funcs >> 3) & 0x01),
+                                ((glp->funcs >> 4) & 0x01), prio);
+                    break;
+        case 27:	comp_maerklin_27(bus, addr, direction, speed,
+                                glp->funcs & 0x01, ((glp->funcs >> 1) & 0x01),
+                                ((glp->funcs >> 2) & 0x01), ((glp->funcs >> 3) & 0x01),
+                                ((glp->funcs >> 4) & 0x01), prio, glp->cachedspeed);
+                    break;
+    	case 28:	comp_maerklin_28(bus, addr, direction, speed,
+                                glp->funcs & 0x01, ((glp->funcs >> 1) & 0x01),
+                                ((glp->funcs >> 2) & 0x01), ((glp->funcs >> 3) & 0x01),
+                                ((glp->funcs >> 4) & 0x01), prio);
+                    break;
+    }
 }

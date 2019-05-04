@@ -126,9 +126,7 @@ typedef struct _DDL_DATA {
     pthread_t refresh_ptid;
     struct _thr_param refresh_param;
 
-    unsigned char idle_data[MAXDATA];
     char NMRA_idle_data[4 * 256]; //Worst Case SPI Mode
-    int NMRA_idle_data_size;
 
     //"Normaler" Refresh Zyklus
     tRefreshInfo refreshInfo;
