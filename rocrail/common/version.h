@@ -1,11 +1,12 @@
 const int revisionnr = 
-15374
+15375
 ;
 const char* commithash = 
-"ad5cf3129211c72e4911cd9714bbba0a7f4318be";
+"5a3b7cbb8a510fd573d3f3c9c1cfaa7611706610";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15375 2019-05-05 14:25:51 +0200 shunting: crossing added\n" \
 "15374 2019-05-04 16:04:58 +0200 mbus: fix for serial timeout setting\n" \
 "15373 2019-05-04 11:36:22 +0200 xmlscript: variable format option\n" \
 "15372 2019-05-04 08:13:36 +0200 shunting: save state for next session, show state with a #-prefix in the mode column\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13378 2018-01-09 13:50:39 +0100 route: include/exclude conditions option added\n" \
 "13377 2018-01-09 13:37:44 +0100 control: list up the build origin in the issue.txt\n" \
 "13376 2018-01-09 11:20:09 +0100 makewin64-full.sh: fix for commandline parameter\n" \
-"13375 2018-01-09 10:51:03 +0100 location: fix for compare schedule entry time with model time\n" \
 
 "log end";
