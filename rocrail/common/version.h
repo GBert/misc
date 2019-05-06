@@ -1,11 +1,17 @@
 const int revisionnr = 
-15375
+15381
 ;
 const char* commithash = 
-"5a3b7cbb8a510fd573d3f3c9c1cfaa7611706610";
+"62a7473556c44bc1a5e34a251f0a30aede2f53bf";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15381 2019-05-06 14:57:09 +0200 xmlscript: support for variables in case values\n" \
+"15380 2019-05-06 14:00:10 +0200 guiframe: fix for save throttles on close\n" \
+"15379 2019-05-06 08:26:02 +0200 shunting: output accessory added\n" \
+"15378 2019-05-06 08:06:19 +0200 shunting: semaphore added\n" \
+"15377 2019-05-06 07:38:09 +0200 guiframe: close throttle first after the server question\n" \
+"15376 2019-05-05 16:59:50 +0200 user theme: crossing shunt symbols (Juergen)\n" \
 "15375 2019-05-05 14:25:51 +0200 shunting: crossing added\n" \
 "15374 2019-05-04 16:04:58 +0200 mbus: fix for serial timeout setting\n" \
 "15373 2019-05-04 11:36:22 +0200 xmlscript: variable format option\n" \
@@ -2000,11 +2006,5 @@ const char* revlog =
 "13384 2018-01-10 14:01:48 +0100 route: optional yellow in case of white aspect\n" \
 "13383 2018-01-10 11:24:08 +0100 route: added missing flag for cargo condition\n" \
 "13382 2018-01-10 10:32:35 +0100 bidib: extra trace line on location report\n" \
-"13381 2018-01-09 15:35:26 +0100 loc: update schedule tables in case a schedule is activated\n" \
-"13380 2018-01-09 14:09:58 +0100 location: not lookup a loco for a schedule at init\n" \
-"13379 2018-01-09 14:00:51 +0100 location: not evaluate\n" \
-"13378 2018-01-09 13:50:39 +0100 route: include/exclude conditions option added\n" \
-"13377 2018-01-09 13:37:44 +0100 control: list up the build origin in the issue.txt\n" \
-"13376 2018-01-09 11:20:09 +0100 makewin64-full.sh: fix for commandline parameter\n" \
 
 "log end";
