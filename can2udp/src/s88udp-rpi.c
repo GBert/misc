@@ -330,7 +330,8 @@ int main(int argc, char **argv) {
 	int j = 0;
 	while ((token = strsep(&config_string, delimiters))) {
 	    s88_data.pin[j] = (int)strtoul(token++, (char **)NULL, 10);
-	    printf("GPIO pin %d value %d\n", j, s88_data.pin[j]);
+	    if (!s88_data.background && s88_data.verbose)
+		printf("GPIO pin %d value %d\n", j, s88_data.pin[j]);
 	    j++;
 	}
     }
