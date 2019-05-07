@@ -1,11 +1,13 @@
 const int revisionnr = 
-15382
+15384
 ;
 const char* commithash = 
-"fbbe98610e640db83fe1e9660d572ea20808bb3c";
+"2a373f917f023a770dc583866e9c06b82cfacf57";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15384 2019-05-07 10:57:23 +0200 guiframe: fix for aui2mon\n" \
+"15383 2019-05-07 09:58:54 +0200 rocview: option aui2mon added\n" \
 "15382 2019-05-07 07:07:16 +0200 guiframe: restore schedulegrapghdlg on startup\n" \
 "15381 2019-05-06 14:57:09 +0200 xmlscript: support for variables in case values\n" \
 "15380 2019-05-06 14:00:10 +0200 guiframe: fix for save throttles on close\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13387 2018-01-10 18:25:24 +0100 z21: 2018 and commented out some dyn tests\n" \
 "13386 2018-01-10 18:21:55 +0100 2018: as every year\n" \
 "13385 2018-01-10 17:51:19 +0100 translation merge: sr_latin, pt_BR, sl, de, nl\n" \
-"13384 2018-01-10 14:01:48 +0100 route: optional yellow in case of white aspect\n" \
-"13383 2018-01-10 11:24:08 +0100 route: added missing flag for cargo condition\n" \
 
 "log end";
