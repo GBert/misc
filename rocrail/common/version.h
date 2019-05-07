@@ -1,11 +1,12 @@
 const int revisionnr = 
-15381
+15382
 ;
 const char* commithash = 
-"62a7473556c44bc1a5e34a251f0a30aede2f53bf";
+"fbbe98610e640db83fe1e9660d572ea20808bb3c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15382 2019-05-07 07:07:16 +0200 guiframe: restore schedulegrapghdlg on startup\n" \
 "15381 2019-05-06 14:57:09 +0200 xmlscript: support for variables in case values\n" \
 "15380 2019-05-06 14:00:10 +0200 guiframe: fix for save throttles on close\n" \
 "15379 2019-05-06 08:26:02 +0200 shunting: output accessory added\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13385 2018-01-10 17:51:19 +0100 translation merge: sr_latin, pt_BR, sl, de, nl\n" \
 "13384 2018-01-10 14:01:48 +0100 route: optional yellow in case of white aspect\n" \
 "13383 2018-01-10 11:24:08 +0100 route: added missing flag for cargo condition\n" \
-"13382 2018-01-10 10:32:35 +0100 bidib: extra trace line on location report\n" \
 
 "log end";
