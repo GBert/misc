@@ -1,11 +1,12 @@
 const int revisionnr = 
-15384
+15385
 ;
 const char* commithash = 
-"2a373f917f023a770dc583866e9c06b82cfacf57";
+"83cd4a0716f5ce9afc968b7a1dbc0c3176a83be1";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15385 2019-05-07 15:25:03 +0200 mbus: removed the cc flush at connect\n" \
 "15384 2019-05-07 10:57:23 +0200 guiframe: fix for aui2mon\n" \
 "15383 2019-05-07 09:58:54 +0200 rocview: option aui2mon added\n" \
 "15382 2019-05-07 07:07:16 +0200 guiframe: restore schedulegrapghdlg on startup\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13388 2018-01-11 09:02:44 +0100 bidib: support added for more protocol formats\n" \
 "13387 2018-01-10 18:25:24 +0100 z21: 2018 and commented out some dyn tests\n" \
 "13386 2018-01-10 18:21:55 +0100 2018: as every year\n" \
-"13385 2018-01-10 17:51:19 +0100 translation merge: sr_latin, pt_BR, sl, de, nl\n" \
 
 "log end";
