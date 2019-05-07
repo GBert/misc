@@ -1,6 +1,6 @@
 /*
  * Copyright 2013 - 2014 Siegfried Lohberg
- *                  2016 Gerhard Bertelsmann
+ *                  2019 Gerhard Bertelsmann
  *
  * "THE BEER-WARE LICENSE" (Revision 42):
  * Siegfried Lohberg wrote this file. As long as you retain this notice you
@@ -44,6 +44,13 @@ uint32_t bus_ct1[PIO_BUFFER];
 uint32_t bus_actual[PIO_BUFFER];
 uint32_t bus_state[PIO_BUFFER];
 
+static char delimiters[] = " .,;:!-";
+
+#define DATA_PIN_I      0
+#define CLOCK_PIN_I     1
+#define LOAD_PIN_I      2
+#define RESET_PIN_I     3
+
 struct s88_t {
     struct sockaddr_in baddr;
     int socket;
@@ -54,12 +61,18 @@ struct s88_t {
     uint32_t count;
     uint16_t deviceid;
     uint16_t hash;
+    int pin[4];
 };
 
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -vf [-b <bcast_addr/int>][-i <0|1>][-p <port>][-m <s88modules>][-o <offset>]\n", prg);
-    fprintf(stderr, "   Version 1.3\n\n");
+    fprintf(stderr, "   Version 2.0\n\n");
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
+    fprintf(stderr, "         -c <config_string>  set GPIOs like \"4,17,27,22\"\n");
+    fprintf(stderr, "                              4  Data\n");
+    fprintf(stderr, "                              17 Clock\n");
+    fprintf(stderr, "                              27 Load\n");
+    fprintf(stderr, "                              22 Reset\n");
     fprintf(stderr, "         -i [0|1]            invert signals - default 0 -> not inverting\n");
     fprintf(stderr, "         -d <event id>       using event id - default 0\n");
     fprintf(stderr, "         -e <hash>           using CAN <hash>\n");
@@ -189,6 +202,8 @@ int main(int argc, char **argv) {
     char *bcast_interface;
     uint32_t mask, s88_bit;
     uint8_t newvalue;
+    char *config_string = NULL;
+    char *token = NULL;
 
     const int on = 1;
     mask = 0;
@@ -223,7 +238,7 @@ int main(int argc, char **argv) {
     destaddr.sin_family = AF_INET;
     destaddr.sin_port = htons(destination_port);
 
-    while ((opt = getopt(argc, argv, "b:e:d:i:p:m:o:t:fvh?")) != -1) {
+    while ((opt = getopt(argc, argv, "b:c:e:d:i:p:m:o:t:fvh?")) != -1) {
 	switch (opt) {
 	case 'p':
 	    destination_port = strtoul(optarg, (char **)NULL, 10);
@@ -241,6 +256,9 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "UDP broadcast address or interface error: %s\n", optarg);
 		exit(EXIT_FAILURE);
 	    }
+	    break;
+	case 'c':
+	    config_string = strdup(optarg);
 	    break;
 	case 'd':
 	    s88_data.deviceid = atoi(optarg) & 0xffff;
@@ -301,6 +319,22 @@ int main(int argc, char **argv) {
     }
     freeifaddrs(ifap);
 
+    /* set default pins */
+    s88_data.pin[DATA_PIN_I]  = DATA_PIN;
+    s88_data.pin[CLOCK_PIN_I] = CLOCK_PIN;
+    s88_data.pin[LOAD_PIN_I]  = LOAD_PIN;
+    s88_data.pin[RESET_PIN_I] = RESET_PIN;
+
+    /* mini config string parser */
+    if (config_string != NULL) {
+	int j = 0;
+	while ((token = strsep(&config_string, delimiters))) {
+	    s88_data.pin[j] = (int)strtoul(token++, (char **)NULL, 10);
+	    printf("GPIO pin %d value %d\n", j, s88_data.pin[j]);
+	    j++;
+	}
+    }
+
     ret = inet_pton(AF_INET, udp_dst_address, &destaddr.sin_addr);
     if (ret <= 0) {
 	if (ret == 0)
@@ -335,40 +369,40 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     }
 
-    gpio_rpi_select_output(CLOCK_PIN);
-    gpio_rpi_select_output(LOAD_PIN);
-    gpio_rpi_select_output(RESET_PIN);
-    gpio_rpi_select_input(DATA_PIN);
+    gpio_rpi_select_output(s88_data.pin[CLOCK_PIN_I]);
+    gpio_rpi_select_output(s88_data.pin[LOAD_PIN_I]);
+    gpio_rpi_select_output(s88_data.pin[RESET_PIN_I]);
+    gpio_rpi_select_input(s88_data.pin[DATA_PIN_I]);
 
     /* loop forever */
     while (1) {
 	s88_bit = 0;
-	gpio_rpi_set(LOAD_PIN, HIGH ^ s88_data.invert);
+	gpio_rpi_set(s88_data.pin[LOAD_PIN_I], HIGH ^ s88_data.invert);
 	usec_sleep(utime);
-	gpio_rpi_set(CLOCK_PIN, HIGH ^ s88_data.invert);
+	gpio_rpi_set(s88_data.pin[CLOCK_PIN_I], HIGH ^ s88_data.invert);
 	usec_sleep(utime);
-	gpio_rpi_set(CLOCK_PIN, LOW ^ s88_data.invert);
+	gpio_rpi_set(s88_data.pin[CLOCK_PIN_I], LOW ^ s88_data.invert);
 	usec_sleep(utime);
-	gpio_rpi_set(RESET_PIN, HIGH ^ s88_data.invert);
+	gpio_rpi_set(s88_data.pin[RESET_PIN_I], HIGH ^ s88_data.invert);
 	usec_sleep(utime);
-	gpio_rpi_set(RESET_PIN, LOW ^ s88_data.invert);
+	gpio_rpi_set(s88_data.pin[RESET_PIN_I], LOW ^ s88_data.invert);
 	usec_sleep(utime);
-	gpio_rpi_set(LOAD_PIN, LOW ^ s88_data.invert);
+	gpio_rpi_set(s88_data.pin[LOAD_PIN_I], LOW ^ s88_data.invert);
 	s88_data.count++;
 	/* get sensor data */
 	for (i = 0; i < modulcount; i++) {
 	    if ((s88_bit & 0x1f) == 0)
 		mask = BIT(31);
 	    for (j = 0; j < 16; j++) {
-		gpio_rpi_get(DATA_PIN, &newvalue);
+		gpio_rpi_get(s88_data.pin[DATA_PIN_I], &newvalue);
 		if (newvalue ^= s88_data.invert)
 		    bus_actual[i >> 1] |= mask;
 		else
 		    bus_actual[i >> 1] &= ~mask;
 		usec_sleep(utime);
-		gpio_rpi_set(CLOCK_PIN, HIGH ^ s88_data.invert);
+		gpio_rpi_set(s88_data.pin[CLOCK_PIN_I], HIGH ^ s88_data.invert);
 		usec_sleep(utime);
-		gpio_rpi_set(CLOCK_PIN, LOW ^ s88_data.invert);
+		gpio_rpi_set(s88_data.pin[CLOCK_PIN_I], LOW ^ s88_data.invert);
 		s88_bit++;
 		mask >>= 1;
 	    }
