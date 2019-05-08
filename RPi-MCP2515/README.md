@@ -92,6 +92,7 @@ EOF
 can2lan herunter laden und starten
 ```
 cd
+sudo apt-get install libpcap-dev
 git clone https://github.com/GBert/railroad.git
 cd railroad/can2udp/src
 make
