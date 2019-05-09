@@ -1,11 +1,18 @@
 const int revisionnr = 
-15385
+15392
 ;
 const char* commithash = 
-"83cd4a0716f5ce9afc968b7a1dbc0c3176a83be1";
+"dfda632e7030221f3e4a9023f7da49d5a093c055";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15392 2019-05-09 07:37:39 +0200 var: modulo with char !\n" \
+"15391 2019-05-08 10:27:03 +0200 revert: auipanel,modpanel: only inform panels of a model event in case the z level is equal\n" \
+"15390 2019-05-08 10:24:31 +0200 auipanel,modpanel: only inform panels of a model event in case the z level is equal\n" \
+"15389 2019-05-08 10:03:47 +0200 guiframe: added missing AUI calls in case of model events\n" \
+"15388 2019-05-08 09:04:45 +0200 tracedlg,schedulegraphdlg: changed to wxFrame to beable to move on second monitor\n" \
+"15387 2019-05-08 08:02:48 +0200 makewin64: keep debug info on server and libraries\n" \
+"15386 2019-05-08 07:45:42 +0200 var: modulo added\n" \
 "15385 2019-05-07 15:25:03 +0200 mbus: removed the cc flush at connect\n" \
 "15384 2019-05-07 10:57:23 +0200 guiframe: fix for aui2mon\n" \
 "15383 2019-05-07 09:58:54 +0200 rocview: option aui2mon added\n" \
@@ -1999,12 +2006,5 @@ const char* revlog =
 "13395 2018-01-12 14:13:53 +0100 makefile: install demoplan\n" \
 "13394 2018-01-12 14:00:29 +0100 bidib: POM support for M4/MfX added\n" \
 "13393 2018-01-12 11:15:27 +0100 bidib: trace correction for output\n" \
-"13392 2018-01-12 07:58:05 +0100 actionsctrldlg: loco state home added\n" \
-"13391 2018-01-12 07:52:17 +0100 loc: state home added\n" \
-"13390 2018-01-11 10:28:33 +0100 schedules: fix for update schedule table in case of max delay\n" \
-"13389 2018-01-11 09:15:56 +0100 location: schedule table entry maxdelay added\n" \
-"13388 2018-01-11 09:02:44 +0100 bidib: support added for more protocol formats\n" \
-"13387 2018-01-10 18:25:24 +0100 z21: 2018 and commented out some dyn tests\n" \
-"13386 2018-01-10 18:21:55 +0100 2018: as every year\n" \
 
 "log end";
