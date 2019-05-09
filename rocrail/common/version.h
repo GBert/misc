@@ -1,11 +1,13 @@
 const int revisionnr = 
-15392
+15394
 ;
 const char* commithash = 
-"dfda632e7030221f3e4a9023f7da49d5a093c055";
+"b899f5a9d538e59f5d6079e93e6eb00324f69db8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15394 2019-05-09 14:20:15 +0200 translation merge: de, nl, fr, sl\n" \
+"15393 2019-05-09 13:45:20 +0200 mbus: s88poll thread added for gleisreporter basic...\n" \
 "15392 2019-05-09 07:37:39 +0200 var: modulo with char !\n" \
 "15391 2019-05-08 10:27:03 +0200 revert: auipanel,modpanel: only inform panels of a model event in case the z level is equal\n" \
 "15390 2019-05-08 10:24:31 +0200 auipanel,modpanel: only inform panels of a model event in case the z level is equal\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13397 2018-01-13 11:39:08 +0100 location: action option added\n" \
 "13396 2018-01-13 07:28:16 +0100 tracedlg: type OLcDrive added\n" \
 "13395 2018-01-12 14:13:53 +0100 makefile: install demoplan\n" \
-"13394 2018-01-12 14:00:29 +0100 bidib: POM support for M4/MfX added\n" \
-"13393 2018-01-12 11:15:27 +0100 bidib: trace correction for output\n" \
 
 "log end";
