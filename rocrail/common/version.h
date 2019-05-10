@@ -1,11 +1,16 @@
 const int revisionnr = 
-15394
+15399
 ;
 const char* commithash = 
-"b899f5a9d538e59f5d6079e93e6eb00324f69db8";
+"f192a1ef9fd5699cb6a4f7038e1acfb09b8772c0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15399 2019-05-10 11:51:49 +0200 absent option added, default off\n" \
+"15398 2019-05-10 08:50:24 +0200 mbus: poll s88 option added\n" \
+"15397 2019-05-10 08:01:04 +0200 loconet: only set absent flag in case the track power is on\n" \
+"15396 2019-05-10 07:49:38 +0200 locdialog: set address to 3 on new loco\n" \
+"15395 2019-05-10 07:08:16 +0200 mbus: reject zero loco address\n" \
 "15394 2019-05-09 14:20:15 +0200 translation merge: de, nl, fr, sl\n" \
 "15393 2019-05-09 13:45:20 +0200 mbus: s88poll thread added for gleisreporter basic...\n" \
 "15392 2019-05-09 07:37:39 +0200 var: modulo with char !\n" \
@@ -2001,10 +2006,5 @@ const char* revlog =
 "13402 2018-01-13 18:00:30 +0100 location: optional html format for actions\n" \
 "13401 2018-01-13 15:02:10 +0100 text: html option added\n" \
 "13400 2018-01-13 13:19:17 +0100 location: via fix for cloned hourly schedules\n" \
-"13399 2018-01-13 12:34:30 +0100 text: monospace option added\n" \
-"13398 2018-01-13 11:40:58 +0100 messages: publish added\n" \
-"13397 2018-01-13 11:39:08 +0100 location: action option added\n" \
-"13396 2018-01-13 07:28:16 +0100 tracedlg: type OLcDrive added\n" \
-"13395 2018-01-12 14:13:53 +0100 makefile: install demoplan\n" \
 
 "log end";
