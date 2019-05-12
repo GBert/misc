@@ -19,6 +19,43 @@
 
 #include "raspi.h"
 
+
+unsigned int GetRevision(void) {
+    FILE *fd;
+    char buf[512];
+    char term;
+
+    unsigned int rev = 0;
+
+    fd = fopen("/proc/cpuinfo", "r");
+
+    if (fd != NULL) {
+	while (fgets(buf, sizeof(buf), fd) != NULL) {
+	    if (!strncasecmp("revision\t", buf, 9)) {
+		if (sscanf(buf + strlen(buf) - 7, "%x%c", &rev, &term) == 2) {
+		    if (term == '\n')
+			break;
+		    rev = 0;
+		}
+	    }
+	}
+	fclose(fd);
+    }
+    return rev;
+}
+
+uint8_t GetCPUType(void) {
+    unsigned int revision;
+
+    uint8_t processor = 0;
+
+    revision = GetRevision();
+    if ((revision & (1 << 23)) != 0)
+	processor = (revision & 0xF000) >> 12;
+
+    return processor;
+}
+
 /******************************************************************************
  *
  * Back-end
@@ -42,15 +79,13 @@ int
 gpio_rpi_open(const char *device)
 {
 	off_t gpio_base_addr;
-	/* TODO */
-	/* uint8_t type = p.device[3]; */
-	uint8_t type = '2';
 
 	/* Determine GPIO base address */
-	if (type == '\0' || type == '0' || type == '1') {
+	uint8_t type = GetCPUType();
+	if (type == 0 || type == 1) {
 		gpio_base_addr = BCM2835_PERI_BASE_ADDR + GPIO_BASE_ADDR_OFFSET;
 	}
-	else if (type == '2' || type == '3') {
+	else if (type == 2) {
 		gpio_base_addr = BCM2836_PERI_BASE_ADDR + GPIO_BASE_ADDR_OFFSET;
 	}
 	else {
