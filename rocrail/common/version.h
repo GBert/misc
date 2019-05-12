@@ -1,11 +1,12 @@
 const int revisionnr = 
-15401
+15402
 ;
 const char* commithash = 
-"28894468779b8e3f882b40d6dbb3d891dbc06d6d";
+"1f538e68fbead5bf79d798c6960356b5f3b27457";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15402 2019-05-12 12:23:43 +0200 block: added missing event strings for tracing\n" \
 "15401 2019-05-12 08:54:54 +0200 xmlscript: systemtick var added on clock get command\n" \
 "15400 2019-05-12 08:25:13 +0200 xmlscript: clock get command\n" \
 "15399 2019-05-10 11:51:49 +0200 absent option added, default off\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13405 2018-01-14 09:02:26 +0100 locationsdlg: layout change for options\n" \
 "13404 2018-01-14 08:21:30 +0100 location: schedule table html corrections\n" \
 "13403 2018-01-14 07:45:54 +0100 planpanel: added the missing capturelost function\n" \
-"13402 2018-01-13 18:00:30 +0100 location: optional html format for actions\n" \
 
 "log end";
