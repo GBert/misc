@@ -1,11 +1,16 @@
 const int revisionnr = 
-15404
+15409
 ;
 const char* commithash = 
-"9da5ec8f5e920ec24b1d7faa3c2f650a00ab4e4f";
+"eea14e5dc949900fd463bc5435b169c9a2231195";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15409 2019-05-14 16:04:12 +0200 mbus: removed obsolete poll option\n" \
+"15408 2019-05-14 15:42:29 +0200 mbus: SoD for GleisReporter Basic...\n" \
+"15407 2019-05-14 12:10:51 +0200 schedulegraphdlg: handle close X event\n" \
+"15406 2019-05-14 11:46:48 +0200 rocview dialogs: removed obsolete wxADJUST_MINSIZE attribute\n" \
+"15405 2019-05-14 10:24:40 +0200 route: test if there are red signals in the command list\n" \
 "15404 2019-05-13 15:44:11 +0200 seltabdlg: fix for obsolete wx flags\n" \
 "15403 2019-05-13 10:27:49 +0200 modpanel: fix for iterating panels for dispatching events\n" \
 "15402 2019-05-12 12:23:43 +0200 block: added missing event strings for tracing\n" \
@@ -2001,10 +2006,5 @@ const char* revlog =
 "13412 2018-01-15 11:10:07 +0100 timetable: no stay on top\n" \
 "13411 2018-01-15 09:42:00 +0100 timetabledlg: minimize option added\n" \
 "13410 2018-01-15 08:38:16 +0100 timetabledlg: translations added\n" \
-"13409 2018-01-15 08:12:25 +0100 timetabledlg: save size and position\n" \
-"13408 2018-01-14 16:57:29 +0100 automatically popup timetables for locations\n" \
-"13407 2018-01-14 10:37:50 +0100 location: format of timetable adjusted\n" \
-"13406 2018-01-14 09:34:58 +0100 textdialog: layout correction\n" \
-"13405 2018-01-14 09:02:26 +0100 locationsdlg: layout change for options\n" \
 
 "log end";
