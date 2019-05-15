@@ -1,11 +1,13 @@
 const int revisionnr = 
-15409
+15411
 ;
 const char* commithash = 
-"eea14e5dc949900fd463bc5435b169c9a2231195";
+"d2f7485c00c758f6e26f86390dac736f3130a323";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15411 2019-05-15 10:11:56 +0200 item: show platform name in case the block is free\n" \
+"15410 2019-05-15 08:59:34 +0200 guiframe: translation correction for save perspective\n" \
 "15409 2019-05-14 16:04:12 +0200 mbus: removed obsolete poll option\n" \
 "15408 2019-05-14 15:42:29 +0200 mbus: SoD for GleisReporter Basic...\n" \
 "15407 2019-05-14 12:10:51 +0200 schedulegraphdlg: handle close X event\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13414 2018-01-15 14:25:13 +0100 messages: show ID translation added\n" \
 "13413 2018-01-15 14:13:38 +0100 output: showid option added\n" \
 "13412 2018-01-15 11:10:07 +0100 timetable: no stay on top\n" \
-"13411 2018-01-15 09:42:00 +0100 timetabledlg: minimize option added\n" \
-"13410 2018-01-15 08:38:16 +0100 timetabledlg: translations added\n" \
 
 "log end";
