@@ -1,11 +1,12 @@
 const int revisionnr = 
-15411
+15412
 ;
 const char* commithash = 
-"d2f7485c00c758f6e26f86390dac736f3130a323";
+"00275c9ca70b4eb7294e472b08c543cd327a286a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15412 2019-05-17 08:02:54 +0200 loco type service added\n" \
 "15411 2019-05-15 10:11:56 +0200 item: show platform name in case the block is free\n" \
 "15410 2019-05-15 08:59:34 +0200 guiframe: translation correction for save perspective\n" \
 "15409 2019-05-14 16:04:12 +0200 mbus: removed obsolete poll option\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13415 2018-01-15 15:13:46 +0100 wrapper: item showid attribute\n" \
 "13414 2018-01-15 14:25:13 +0100 messages: show ID translation added\n" \
 "13413 2018-01-15 14:13:38 +0100 output: showid option added\n" \
-"13412 2018-01-15 11:10:07 +0100 timetable: no stay on top\n" \
 
 "log end";
