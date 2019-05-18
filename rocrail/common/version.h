@@ -1,11 +1,12 @@
 const int revisionnr = 
-15416
+15417
 ;
 const char* commithash = 
-"2f13955d471888bbe347ec350e6bd385a43e8d60";
+"8c9aac348559902b36c99009bfb6348c9ceed73d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15417 2019-05-17 15:48:00 +0200 route: fix for releasing pending(sync) routes in case of red signals\n" \
 "15416 2019-05-17 14:35:55 +0200 z21: use generic thread names\n" \
 "15415 2019-05-17 12:39:20 +0200 translation merge: fr, sl\n" \
 "15414 2019-05-17 08:49:18 +0200 stage: not check permissions or class for loco type service\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13420 2018-01-16 18:06:21 +0100 upnp: show udp sender\n" \
 "13419 2018-01-16 16:55:26 +0100 renaming smarthome to upnp\n" \
 "13418 2018-01-16 14:55:51 +0100 smarthome: wip\n" \
-"13417 2018-01-16 08:15:12 +0100 translation merge: de, nl, sl\n" \
 
 "log end";
