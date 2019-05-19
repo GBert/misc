@@ -1,11 +1,15 @@
 const int revisionnr = 
-15417
+15421
 ;
 const char* commithash = 
-"8c9aac348559902b36c99009bfb6348c9ceed73d";
+"5a390c4136754b53ba8ce970af1da8aaa0ca1341";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15421 2019-05-19 08:50:25 +0200 guiframe: resize loco grid not in automatic mode\n" \
+"15420 2019-05-18 17:43:18 +0200 action: loco condition state service and commuter added\n" \
+"15419 2019-05-18 15:24:07 +0200 seltab: dispatch ghost detected event to the active track block\n" \
+"15418 2019-05-18 15:11:35 +0200 operatordlg: type service added\n" \
 "15417 2019-05-17 15:48:00 +0200 route: fix for releasing pending(sync) routes in case of red signals\n" \
 "15416 2019-05-17 14:35:55 +0200 z21: use generic thread names\n" \
 "15415 2019-05-17 12:39:20 +0200 translation merge: fr, sl\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13424 2018-01-17 14:28:28 +0100 blockgroup: regard loco schedule in case of reserve\n" \
 "13423 2018-01-17 13:55:19 +0100 upnp: wip\n" \
 "13422 2018-01-17 13:12:00 +0100 upnp: wip\n" \
-"13421 2018-01-17 09:05:44 +0100 usocket: mac address OSX\n" \
-"13420 2018-01-16 18:06:21 +0100 upnp: show udp sender\n" \
-"13419 2018-01-16 16:55:26 +0100 renaming smarthome to upnp\n" \
-"13418 2018-01-16 14:55:51 +0100 smarthome: wip\n" \
 
 "log end";
