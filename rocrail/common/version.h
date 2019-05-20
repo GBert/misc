@@ -1,11 +1,13 @@
 const int revisionnr = 
-15421
+15423
 ;
 const char* commithash = 
-"5a390c4136754b53ba8ce970af1da8aaa0ca1341";
+"b8402e6b5683f2c4776ae4efb59b85f26412571e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15423 2019-05-20 08:22:47 +0200 removed auto save in auto mode; is not possible and leads to crash\n" \
+"15422 2019-05-20 08:12:28 +0200 app: broadcast only to the web service in case any client is connected\n" \
 "15421 2019-05-19 08:50:25 +0200 guiframe: resize loco grid not in automatic mode\n" \
 "15420 2019-05-18 17:43:18 +0200 action: loco condition state service and commuter added\n" \
 "15419 2019-05-18 15:24:07 +0200 seltab: dispatch ghost detected event to the active track block\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13426 2018-01-18 08:39:49 +0100 rocomp: fix for loco address >= 128\n" \
 "13425 2018-01-18 08:19:38 +0100 model: check in case of a schedule if a block in a location is already reserved\n" \
 "13424 2018-01-17 14:28:28 +0100 blockgroup: regard loco schedule in case of reserve\n" \
-"13423 2018-01-17 13:55:19 +0100 upnp: wip\n" \
-"13422 2018-01-17 13:12:00 +0100 upnp: wip\n" \
 
 "log end";
