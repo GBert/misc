@@ -1,11 +1,13 @@
 const int revisionnr = 
-15423
+15425
 ;
 const char* commithash = 
-"b8402e6b5683f2c4776ae4efb59b85f26412571e";
+"472107d4b0b51370e4c8343b96ccc896c5f22e2e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15425 2019-05-20 15:29:35 +0200 xmldlg: fix for assert at expand sizer with allignment\n" \
+"15424 2019-05-20 12:25:52 +0200 model: reject save the plan in case of active automode\n" \
 "15423 2019-05-20 08:22:47 +0200 removed auto save in auto mode; is not possible and leads to crash\n" \
 "15422 2019-05-20 08:12:28 +0200 app: broadcast only to the web service in case any client is connected\n" \
 "15421 2019-05-19 08:50:25 +0200 guiframe: resize loco grid not in automatic mode\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13428 2018-01-18 12:42:12 +0100 dinamo: fix for packet length in case of a long DCC address\n" \
 "13427 2018-01-18 10:27:32 +0100 model: fix for crash in case of a pre-reservation\n" \
 "13426 2018-01-18 08:39:49 +0100 rocomp: fix for loco address >= 128\n" \
-"13425 2018-01-18 08:19:38 +0100 model: check in case of a schedule if a block in a location is already reserved\n" \
-"13424 2018-01-17 14:28:28 +0100 blockgroup: regard loco schedule in case of reserve\n" \
 
 "log end";
