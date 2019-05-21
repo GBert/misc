@@ -6,8 +6,8 @@ $Descr A3 16535 11693
 encoding utf-8
 Sheet 1 1
 Title "All in One Railroad Interface PoC"
-Date "2019-05-05"
-Rev "V1.0"
+Date "2019-05-21"
+Rev "V1.01"
 Comp "Gerhard Bertelsmann"
 Comment1 ""
 Comment2 ""
@@ -2309,7 +2309,7 @@ L AIOR-rescue:R R51
 U 1 1 5D55AD1D
 P 6000 9950
 F 0 "R51" V 6080 9950 50  0000 C CNN
-F 1 "470" V 6000 9950 50  0000 C CNN
+F 1 "4k7" V 6000 9950 50  0000 C CNN
 F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 5930 9950 50  0001 C CNN
 F 3 "" H 6000 9950 50  0000 C CNN
 	1    6000 9950
@@ -2320,7 +2320,7 @@ L AIOR-rescue:R R50
 U 1 1 5D55AE0D
 P 6000 10550
 F 0 "R50" V 6080 10550 50  0000 C CNN
-F 1 "470" V 6000 10550 50  0000 C CNN
+F 1 "4k7" V 6000 10550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 5930 10550 50  0001 C CNN
 F 3 "" H 6000 10550 50  0000 C CNN
 	1    6000 10550

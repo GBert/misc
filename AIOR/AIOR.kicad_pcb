@@ -1,4 +1,4 @@
-(kicad_pcb (version 20171130) (host pcbnew 5.1.2-f72e74a~84~ubuntu18.04.1)
+(kicad_pcb (version 20171130) (host pcbnew 5.1.2-f72e74a~84~ubuntu16.04.1)
 
   (general
     (thickness 1.6)
@@ -5030,7 +5030,7 @@
     (fp_text reference R50 (at 0 -1.65) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 470 (at 0 1.65) (layer F.Fab) hide
+    (fp_text value 4k7 (at 0 1.65) (layer F.Fab) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -1 0.6) (end -1 -0.6) (layer F.Fab) (width 0.1))
@@ -5066,7 +5066,7 @@
     (fp_text reference R51 (at 0.7112 -1.4732 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 470 (at 0 1.65 90) (layer F.Fab) hide
+    (fp_text value 4k7 (at 0 1.65 90) (layer F.Fab) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -1 0.6) (end -1 -0.6) (layer F.Fab) (width 0.1))
