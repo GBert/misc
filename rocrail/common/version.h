@@ -1,11 +1,12 @@
 const int revisionnr = 
-15425
+15426
 ;
 const char* commithash = 
-"472107d4b0b51370e4c8343b96ccc896c5f22e2e";
+"7b00be2a1bbbf498fa1e996290f55d32be211e02";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15426 2019-05-21 15:21:57 +0200 http: crash fix in case the client map is not initialized\n" \
 "15425 2019-05-20 15:29:35 +0200 xmldlg: fix for assert at expand sizer with allignment\n" \
 "15424 2019-05-20 12:25:52 +0200 model: reject save the plan in case of active automode\n" \
 "15423 2019-05-20 08:22:47 +0200 removed auto save in auto mode; is not possible and leads to crash\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13429 2018-01-19 08:32:44 +0100 blockgroupingdlg: label correction from to first block\n" \
 "13428 2018-01-18 12:42:12 +0100 dinamo: fix for packet length in case of a long DCC address\n" \
 "13427 2018-01-18 10:27:32 +0100 model: fix for crash in case of a pre-reservation\n" \
-"13426 2018-01-18 08:39:49 +0100 rocomp: fix for loco address >= 128\n" \
 
 "log end";
