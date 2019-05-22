@@ -1,11 +1,16 @@
 const int revisionnr = 
-15426
+15431
 ;
 const char* commithash = 
-"7b00be2a1bbbf498fa1e996290f55d32be211e02";
+"805f2d76adc04fcfd3d852f9f82fa1387f1a9099";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15431 2019-05-22 17:52:28 +0200 rocview make file linking to stc too\n" \
+"15430 2019-05-22 14:46:28 +0200 loconet: put sensor trace on monitor level instead of info\n" \
+"15429 2019-05-22 14:39:33 +0200 use wxStyledTextCtrl for view and edit XML/XMLScript\n" \
+"15428 2019-05-22 10:44:40 +0200 trainpanel: translation added for cargo column\n" \
+"15427 2019-05-22 08:42:37 +0200 loc: ignore rexstorefx flag in case it was set during the session\n" \
 "15426 2019-05-21 15:21:57 +0200 http: crash fix in case the client map is not initialized\n" \
 "15425 2019-05-20 15:29:35 +0200 xmldlg: fix for assert at expand sizer with allignment\n" \
 "15424 2019-05-20 12:25:52 +0200 model: reject save the plan in case of active automode\n" \
@@ -2001,10 +2006,5 @@ const char* revlog =
 "13434 2018-01-20 08:33:31 +0100 wserial: use getlasterror in case the clearcommerror did not succeed\n" \
 "13433 2018-01-19 15:48:56 +0100 upnp: basic description file\n" \
 "13432 2018-01-19 15:46:43 +0100 upnp: wip\n" \
-"13431 2018-01-19 13:38:58 +0100 blockgroupingdlg: label correction from to first block\n" \
-"13430 2018-01-19 10:37:23 +0100 blockgroup: optional enterside for conditions\n" \
-"13429 2018-01-19 08:32:44 +0100 blockgroupingdlg: label correction from to first block\n" \
-"13428 2018-01-18 12:42:12 +0100 dinamo: fix for packet length in case of a long DCC address\n" \
-"13427 2018-01-18 10:27:32 +0100 model: fix for crash in case of a pre-reservation\n" \
 
 "log end";
