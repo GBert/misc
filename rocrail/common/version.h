@@ -1,11 +1,15 @@
 const int revisionnr = 
-15431
+15435
 ;
 const char* commithash = 
-"805f2d76adc04fcfd3d852f9f82fa1387f1a9099";
+"fa7aa09fed0a2d2dcaee83757e6de00739e3efd5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15435 2019-05-23 10:44:24 +0200 svg usertheme EStW added (Roland)\n" \
+"15434 2019-05-23 10:24:49 +0200 route: check length in case of service loco\n" \
+"15433 2019-05-23 08:47:20 +0200 block: check length and radius for service loco\n" \
+"15432 2019-05-23 07:50:17 +0200 block: check loco length in case of service\n" \
 "15431 2019-05-22 17:52:28 +0200 rocview make file linking to stc too\n" \
 "15430 2019-05-22 14:46:28 +0200 loconet: put sensor trace on monitor level instead of info\n" \
 "15429 2019-05-22 14:39:33 +0200 use wxStyledTextCtrl for view and edit XML/XMLScript\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13438 2018-01-20 15:50:43 +0100 upnp: WIP\n" \
 "13437 2018-01-20 14:16:09 +0100 wrapper: removed unused gotoblockgo commando\n" \
 "13436 2018-01-20 13:40:28 +0100 importantchanges: xml parser extended\n" \
-"13435 2018-01-20 13:17:01 +0100 rocs: added optional support for using xml element values\n" \
-"13434 2018-01-20 08:33:31 +0100 wserial: use getlasterror in case the clearcommerror did not succeed\n" \
-"13433 2018-01-19 15:48:56 +0100 upnp: basic description file\n" \
-"13432 2018-01-19 15:46:43 +0100 upnp: wip\n" \
 
 "log end";
