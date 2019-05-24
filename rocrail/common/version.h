@@ -1,11 +1,15 @@
 const int revisionnr = 
-15435
+15439
 ;
 const char* commithash = 
-"fa7aa09fed0a2d2dcaee83757e6de00739e3efd5";
+"1d33bc6bfd3331fbbe84ece26b4289198313ef70";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15439 2019-05-24 15:44:39 +0200 slider: tracelevel correction for get value\n" \
+"15438 2019-05-24 11:32:24 +0200 locoio: removed red reset button background\n" \
+"15437 2019-05-24 10:18:39 +0200 mbus: trace corrections\n" \
+"15436 2019-05-24 08:44:15 +0200 sprog: save speed step 1 in case of external throttle\n" \
 "15435 2019-05-23 10:44:24 +0200 svg usertheme EStW added (Roland)\n" \
 "15434 2019-05-23 10:24:49 +0200 route: check length in case of service loco\n" \
 "15433 2019-05-23 08:47:20 +0200 block: check length and radius for service loco\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13442 2018-01-21 14:08:14 +0100 upnpdlg: wip\n" \
 "13441 2018-01-21 10:50:18 +0100 upnp: discover and dialog (WIP)\n" \
 "13440 2018-01-20 18:13:32 +0100 rocweb: update speed always on event\n" \
-"13439 2018-01-20 17:57:42 +0100 upnp: more realistic service description\n" \
-"13438 2018-01-20 15:50:43 +0100 upnp: WIP\n" \
-"13437 2018-01-20 14:16:09 +0100 wrapper: removed unused gotoblockgo commando\n" \
-"13436 2018-01-20 13:40:28 +0100 importantchanges: xml parser extended\n" \
 
 "log end";
