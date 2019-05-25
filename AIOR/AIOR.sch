@@ -6,7 +6,7 @@ $Descr A3 16535 11693
 encoding utf-8
 Sheet 1 1
 Title "All in One Railroad Interface PoC"
-Date "2019-05-21"
+Date "2019-05-25"
 Rev "V1.01"
 Comp "Gerhard Bertelsmann"
 Comment1 ""
@@ -937,17 +937,6 @@ Wire Wire Line
 	5400 2400 5400 2450
 Wire Wire Line
 	6050 1150 6050 1250
-$Comp
-L Regulator_Linear:L7805 U21
-U 1 1 5C979CB9
-P 8300 3400
-F 0 "U21" H 8300 3642 50  0000 C CNN
-F 1 "L7805" H 8300 3551 50  0000 C CNN
-F 2 "Package_TO_SOT_SMD:TO-252-3_TabPin2" H 8325 3250 50  0001 L CIN
-F 3 "http://www.st.com/content/ccc/resource/technical/document/datasheet/41/4f/b3/b0/12/d4/47/88/CD00000444.pdf/files/CD00000444.pdf/jcr:content/translations/en.CD00000444.pdf" H 8300 3350 50  0001 C CNN
-	1    8300 3400
-	1    0    0    -1  
-$EndComp
 $Comp
 L power:GNDA #PWR0102
 U 1 1 5C97A03F
@@ -2520,12 +2509,12 @@ $EndComp
 $Comp
 L AIOR-rescue:Crystal Y90
 U 1 1 5DA1138E
-P 15150 8550
-F 0 "Y90" H 15150 8700 50  0000 C CNN
-F 1 "4MHz" H 15150 8400 50  0000 C CNN
-F 2 "w_crystal:crystal_hc-49s" H 15150 8550 50  0001 C CNN
-F 3 "" H 15150 8550 50  0000 C CNN
-	1    15150 8550
+P 15150 8300
+F 0 "Y90" H 15150 8450 50  0000 C CNN
+F 1 "4MHz" H 15150 8150 50  0000 C CNN
+F 2 "w_crystal:crystal_hc-49s" H 15150 8300 50  0001 C CNN
+F 3 "" H 15150 8300 50  0000 C CNN
+	1    15150 8300
 	-1   0    0    -1  
 $EndComp
 $Comp
@@ -2543,8 +2532,8 @@ $Comp
 L AIOR-rescue:C C92
 U 1 1 5DA1139A
 P 15350 8750
-F 0 "C92" H 15225 8850 50  0000 L CNN
-F 1 "47pF" H 15375 8650 50  0000 L CNN
+F 0 "C92" H 15175 8850 50  0000 L CNN
+F 1 "82pF" H 15375 8650 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 15388 8600 50  0001 C CNN
 F 3 "" H 15350 8750 50  0000 C CNN
 	1    15350 8750
@@ -2555,14 +2544,14 @@ Wire Wire Line
 Wire Wire Line
 	15350 8900 15350 8950
 Wire Wire Line
-	15300 8550 15350 8550
+	15300 8300 15350 8300
 Wire Wire Line
-	15350 8550 15350 8600
+	15350 8300 15350 8600
 Wire Wire Line
-	15000 8550 14950 8550
-Connection ~ 14950 8550
+	15000 8300 14950 8300
+Connection ~ 14950 8300
 Wire Wire Line
-	14950 8550 14950 8600
+	14950 8300 14950 8600
 $Comp
 L power:GNDA #PWR0149
 U 1 1 5DA33AF5
@@ -2587,8 +2576,6 @@ F 3 "" H 15350 8950 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	14450 7825 14950 7825
-Wire Wire Line
-	14950 7825 14950 8225
 Wire Wire Line
 	14450 7725 15350 7725
 Wire Wire Line
@@ -2783,28 +2770,7 @@ Wire Wire Line
 	13250 8425 13450 8425
 Wire Wire Line
 	13450 8425 13450 8225
-$Comp
-L AIOR-rescue:R R91
-U 1 1 5CA6CE42
-P 15150 8225
-F 0 "R91" V 15230 8225 50  0000 C CNN
-F 1 "1M" V 15150 8225 50  0000 C CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 15080 8225 50  0001 C CNN
-F 3 "" H 15150 8225 50  0000 C CNN
-	1    15150 8225
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	15000 8225 14950 8225
-Connection ~ 14950 8225
-Wire Wire Line
-	14950 8225 14950 8550
-Connection ~ 15350 8550
-Wire Wire Line
-	15300 8225 15350 8225
-Connection ~ 15350 8225
-Wire Wire Line
-	15350 8225 15350 8550
+Connection ~ 15350 8300
 $Comp
 L AIOR-rescue:R R90
 U 1 1 5CB31101
@@ -3381,17 +3347,6 @@ F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 14130 4200 50  
 F 3 "" H 14200 4200 50  0000 C CNN
 	1    14200 4200
 	-1   0    0    1   
-$EndComp
-$Comp
-L Regulator_Linear:L7805 U81
-U 1 1 5E010788
-P 2950 10350
-F 0 "U81" H 2950 10592 50  0000 C CNN
-F 1 "L7805" H 2950 10501 50  0000 C CNN
-F 2 "Package_TO_SOT_SMD:TO-252-3_TabPin2" H 2975 10200 50  0001 L CIN
-F 3 "http://www.st.com/content/ccc/resource/technical/document/datasheet/41/4f/b3/b0/12/d4/47/88/CD00000444.pdf/files/CD00000444.pdf/jcr:content/translations/en.CD00000444.pdf" H 2950 10300 50  0001 C CNN
-	1    2950 10350
-	1    0    0    -1  
 $EndComp
 $Comp
 L AIOR-rescue:C C81
@@ -4439,17 +4394,6 @@ NoConn ~ 1925 2250
 Wire Wire Line
 	8875 3350 8875 3400
 $Comp
-L Regulator_Linear:L7805 U20
-U 1 1 5E68CC11
-P 6550 3400
-F 0 "U20" H 6550 3642 50  0000 C CNN
-F 1 "L7833" H 6550 3551 50  0000 C CNN
-F 2 "Package_TO_SOT_SMD:TO-252-3_TabPin2" H 6575 3250 50  0001 L CIN
-F 3 "http://www.st.com/content/ccc/resource/technical/document/datasheet/41/4f/b3/b0/12/d4/47/88/CD00000444.pdf/files/CD00000444.pdf/jcr:content/translations/en.CD00000444.pdf" H 6550 3350 50  0001 C CNN
-	1    6550 3400
-	1    0    0    -1  
-$EndComp
-$Comp
 L power:GNDA #PWR0206
 U 1 1 5E68CC17
 P 6550 3800
@@ -4790,8 +4734,6 @@ F 3 "" H 6050 1625 50  0001 C CNN
 	1    6050 1625
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	15350 7725 15350 8225
 $Comp
 L power:+3V3 #PWR022
 U 1 1 58796EB9
@@ -5108,4 +5050,54 @@ F 3 "" H 2300 2350 50  0000 C CNN
 $EndComp
 Wire Wire Line
 	1925 2350 2300 2350
+$Comp
+L AIOR-rescue:R R91
+U 1 1 5CA6CE42
+P 15350 8025
+F 0 "R91" V 15430 8025 50  0000 C CNN
+F 1 "2k2" V 15350 8025 50  0000 C CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 15280 8025 50  0001 C CNN
+F 3 "" H 15350 8025 50  0000 C CNN
+	1    15350 8025
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	15350 8175 15350 8300
+Wire Wire Line
+	15350 7725 15350 7875
+Wire Wire Line
+	14950 7825 14950 8300
+$Comp
+L Regulator_Linear:L7805 U21
+U 1 1 5C979CB9
+P 8300 3400
+F 0 "U21" H 8300 3642 50  0000 C CNN
+F 1 "L7805" H 8300 3551 50  0000 C CNN
+F 2 "Package_TO_SOT_SMD:TO-252-2" H 8325 3250 50  0001 L CIN
+F 3 "http://www.st.com/content/ccc/resource/technical/document/datasheet/41/4f/b3/b0/12/d4/47/88/CD00000444.pdf/files/CD00000444.pdf/jcr:content/translations/en.CD00000444.pdf" H 8300 3350 50  0001 C CNN
+	1    8300 3400
+	1    0    0    -1  
+$EndComp
+$Comp
+L Regulator_Linear:L7805 U20
+U 1 1 5E68CC11
+P 6550 3400
+F 0 "U20" H 6550 3642 50  0000 C CNN
+F 1 "L7833" H 6550 3551 50  0000 C CNN
+F 2 "Package_TO_SOT_SMD:TO-252-2" H 6575 3250 50  0001 L CIN
+F 3 "http://www.st.com/content/ccc/resource/technical/document/datasheet/41/4f/b3/b0/12/d4/47/88/CD00000444.pdf/files/CD00000444.pdf/jcr:content/translations/en.CD00000444.pdf" H 6550 3350 50  0001 C CNN
+	1    6550 3400
+	1    0    0    -1  
+$EndComp
+$Comp
+L Regulator_Linear:L7805 U81
+U 1 1 5E010788
+P 2950 10350
+F 0 "U81" H 2950 10592 50  0000 C CNN
+F 1 "L7805" H 2950 10501 50  0000 C CNN
+F 2 "Package_TO_SOT_SMD:TO-252-2" H 2975 10200 50  0001 L CIN
+F 3 "http://www.st.com/content/ccc/resource/technical/document/datasheet/41/4f/b3/b0/12/d4/47/88/CD00000444.pdf/files/CD00000444.pdf/jcr:content/translations/en.CD00000444.pdf" H 2950 10300 50  0001 C CNN
+	1    2950 10350
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
