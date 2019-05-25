@@ -1,11 +1,17 @@
 const int revisionnr = 
-15439
+15445
 ;
 const char* commithash = 
-"1d33bc6bfd3331fbbe84ece26b4289198313ef70";
+"87ff74a6906b9155853e048fed8dbf0491204db2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15445 2019-05-25 14:28:32 +0200 control: dispatch fbinfo to all controllers\n" \
+"15444 2019-05-25 14:15:45 +0200 try to use only one manifest\n" \
+"15443 2019-05-25 08:41:53 +0200 macOS: NSHighResolutionCapable\n" \
+"15442 2019-05-25 08:29:37 +0200 rocview.manifest: stripped\n" \
+"15441 2019-05-25 08:24:55 +0200 rocview.rc: use unused manifest ID\n" \
+"15440 2019-05-25 08:09:07 +0200 rocview.rc: add manifest for DPI aware\n" \
 "15439 2019-05-24 15:44:39 +0200 slider: tracelevel correction for get value\n" \
 "15438 2019-05-24 11:32:24 +0200 locoio: removed red reset button background\n" \
 "15437 2019-05-24 10:18:39 +0200 mbus: trace corrections\n" \
@@ -2000,11 +2006,5 @@ const char* revlog =
 "13448 2018-01-22 11:50:38 +0100 upnpdlg: removed unused apply button\n" \
 "13447 2018-01-22 11:17:33 +0100 upnp: wip\n" \
 "13446 2018-01-22 10:38:15 +0100 location: attribute timeframe added to the schedule table entries\n" \
-"13445 2018-01-22 09:29:06 +0100 location: add time frame to the schedule entries\n" \
-"13444 2018-01-21 16:09:08 +0100 upnpdlg: clear tree on discover\n" \
-"13443 2018-01-21 15:21:12 +0100 upnp: smarthome icon\n" \
-"13442 2018-01-21 14:08:14 +0100 upnpdlg: wip\n" \
-"13441 2018-01-21 10:50:18 +0100 upnp: discover and dialog (WIP)\n" \
-"13440 2018-01-20 18:13:32 +0100 rocweb: update speed always on event\n" \
 
 "log end";
