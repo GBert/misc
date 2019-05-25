@@ -1,11 +1,12 @@
 const int revisionnr = 
-15445
+15446
 ;
 const char* commithash = 
-"87ff74a6906b9155853e048fed8dbf0491204db2";
+"f8330222d96210f824c1fb5dccac5659e35f9038";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15446 2019-05-25 18:14:54 +0200 route: not check type in case of service\n" \
 "15445 2019-05-25 14:28:32 +0200 control: dispatch fbinfo to all controllers\n" \
 "15444 2019-05-25 14:15:45 +0200 try to use only one manifest\n" \
 "15443 2019-05-25 08:41:53 +0200 macOS: NSHighResolutionCapable\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13449 2018-01-22 13:31:17 +0100 demoplan: removed ZEP\n" \
 "13448 2018-01-22 11:50:38 +0100 upnpdlg: removed unused apply button\n" \
 "13447 2018-01-22 11:17:33 +0100 upnp: wip\n" \
-"13446 2018-01-22 10:38:15 +0100 location: attribute timeframe added to the schedule table entries\n" \
 
 "log end";
