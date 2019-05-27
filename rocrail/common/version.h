@@ -1,11 +1,18 @@
 const int revisionnr = 
-15446
+15453
 ;
 const char* commithash = 
-"f8330222d96210f824c1fb5dccac5659e35f9038";
+"36f59d66a8f23fef6b929281532c9180fb9e91e7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15453 2019-05-26 17:29:54 +0200 tt: set accessory bit in case of f6915\n" \
+"15452 2019-05-26 15:25:09 +0200 xmlpointsize default set to 11\n" \
+"15451 2019-05-26 15:19:11 +0200 manifest: removed dpiAwareness\n" \
+"15450 2019-05-26 15:08:56 +0200 xml: add wrap and pointsize attribute\n" \
+"15449 2019-05-26 10:37:32 +0200 added cpu dependent manifest files\n" \
+"15448 2019-05-26 07:59:51 +0200 mbus: trace correction write config response\n" \
+"15447 2019-05-26 07:32:55 +0200 guiframe: disable toolbar paints tools to reflect system-wide colours\n" \
 "15446 2019-05-25 18:14:54 +0200 route: not check type in case of service\n" \
 "15445 2019-05-25 14:28:32 +0200 control: dispatch fbinfo to all controllers\n" \
 "15444 2019-05-25 14:15:45 +0200 try to use only one manifest\n" \
@@ -1999,12 +2006,5 @@ const char* revlog =
 "13456 2018-01-24 11:20:26 +0100 schedule: reamrk field added to the entries\n" \
 "13455 2018-01-24 09:27:41 +0100 mqtt, clntcon: check if the socket object is valid before using it\n" \
 "13454 2018-01-24 09:02:18 +0100 http: fix for c style comment\n" \
-"13453 2018-01-24 08:39:06 +0100 http: fix for draining cpu in case os a rocweb connection\n" \
-"13452 2018-01-24 08:17:47 +0100 clntcon: wait for the mqtt socket mutex before closing the socket if broken\n" \
-"13451 2018-01-23 14:27:25 +0100 upnpdlg: add hue bridge\n" \
-"13450 2018-01-23 10:30:11 +0100 timetabledlg: html extended with a via column\n" \
-"13449 2018-01-22 13:31:17 +0100 demoplan: removed ZEP\n" \
-"13448 2018-01-22 11:50:38 +0100 upnpdlg: removed unused apply button\n" \
-"13447 2018-01-22 11:17:33 +0100 upnp: wip\n" \
 
 "log end";
