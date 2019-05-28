@@ -1,11 +1,13 @@
 const int revisionnr = 
-15459
+15461
 ;
 const char* commithash = 
-"c652574eaebb0addcfe245c7f545a0f864e0f5fe";
+"e1c85ca6ef847e4cd1385f8a96429f5ebd84b38c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15461 2019-05-28 14:25:04 +0200 block: crosscheck fix for service\n" \
+"15460 2019-05-28 12:24:47 +0200 MBUS: not evaluating type in case of UID zero\n" \
 "15459 2019-05-28 10:24:20 +0200 cv index support for accelleration and calibrating\n" \
 "15458 2019-05-28 08:44:25 +0200 xmlscript: block throttle command added\n" \
 "15457 2019-05-27 15:49:50 +0200 locdialog: show CV index in grid\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13464 2018-01-27 07:58:18 +0100 switch: exclude from analyse option added\n" \
 "13463 2018-01-27 07:47:36 +0100 bidib: do not report aspect in case > 127\n" \
 "13462 2018-01-27 07:30:10 +0100 bidib: only reset manual operated accessory if aspect < 128\n" \
-"13461 2018-01-26 11:26:05 +0100 rocrailinidialog: show warning and set the rocweb port to zero in case the http service port conflicts with the rocweb port\n" \
-"13460 2018-01-26 09:23:22 +0100 http: do not start the Rocweb service if the port is the same as the HTTP service\n" \
 
 "log end";
