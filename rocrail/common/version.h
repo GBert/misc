@@ -1,11 +1,17 @@
 const int revisionnr = 
-15453
+15459
 ;
 const char* commithash = 
-"36f59d66a8f23fef6b929281532c9180fb9e91e7";
+"c652574eaebb0addcfe245c7f545a0f864e0f5fe";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15459 2019-05-28 10:24:20 +0200 cv index support for accelleration and calibrating\n" \
+"15458 2019-05-28 08:44:25 +0200 xmlscript: block throttle command added\n" \
+"15457 2019-05-27 15:49:50 +0200 locdialog: show CV index in grid\n" \
+"15456 2019-05-27 14:54:33 +0200 mbus,rocpro: mfx cv index support\n" \
+"15455 2019-05-27 14:26:30 +0200 block: fix for wait and service\n" \
+"15454 2019-05-27 07:41:57 +0200 block: check if occupied in case of modify and new state should be close\n" \
 "15453 2019-05-26 17:29:54 +0200 tt: set accessory bit in case of f6915\n" \
 "15452 2019-05-26 15:25:09 +0200 xmlpointsize default set to 11\n" \
 "15451 2019-05-26 15:19:11 +0200 manifest: removed dpiAwareness\n" \
@@ -2000,11 +2006,5 @@ const char* revlog =
 "13462 2018-01-27 07:30:10 +0100 bidib: only reset manual operated accessory if aspect < 128\n" \
 "13461 2018-01-26 11:26:05 +0100 rocrailinidialog: show warning and set the rocweb port to zero in case the http service port conflicts with the rocweb port\n" \
 "13460 2018-01-26 09:23:22 +0100 http: do not start the Rocweb service if the port is the same as the HTTP service\n" \
-"13459 2018-01-26 08:49:31 +0100 bidib: option to reset last known accessory state in case of a manual operation\n" \
-"13458 2018-01-25 16:46:45 +0100 cbus: warning on PADA addressing -> must be FLAT\n" \
-"13457 2018-01-25 15:59:26 +0100 location: corrections for timetable formating\n" \
-"13456 2018-01-24 11:20:26 +0100 schedule: reamrk field added to the entries\n" \
-"13455 2018-01-24 09:27:41 +0100 mqtt, clntcon: check if the socket object is valid before using it\n" \
-"13454 2018-01-24 09:02:18 +0100 http: fix for c style comment\n" \
 
 "log end";
