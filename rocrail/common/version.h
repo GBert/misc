@@ -1,11 +1,12 @@
 const int revisionnr = 
-15461
+15462
 ;
 const char* commithash = 
-"e1c85ca6ef847e4cd1385f8a96429f5ebd84b38c";
+"7024f0e365ef8c191c0d6000d1fb36b09e0aeea1";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15462 2019-05-28 16:02:28 +0200 model: trace level correction\n" \
 "15461 2019-05-28 14:25:04 +0200 block: crosscheck fix for service\n" \
 "15460 2019-05-28 12:24:47 +0200 MBUS: not evaluating type in case of UID zero\n" \
 "15459 2019-05-28 10:24:20 +0200 cv index support for accelleration and calibrating\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13465 2018-01-28 11:37:31 +0100 rocview: export active workspace\n" \
 "13464 2018-01-27 07:58:18 +0100 switch: exclude from analyse option added\n" \
 "13463 2018-01-27 07:47:36 +0100 bidib: do not report aspect in case > 127\n" \
-"13462 2018-01-27 07:30:10 +0100 bidib: only reset manual operated accessory if aspect < 128\n" \
 
 "log end";
