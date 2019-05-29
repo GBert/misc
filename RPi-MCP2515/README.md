@@ -2,7 +2,6 @@ RPI-I2C/CAN Adapter mit galv. Trennung
 ======================================
 
 [![RPI- MCP2515](https://github.com/GBert/misc/raw/master/RPi-MCP2515/pictures/rpi-mcp2515_01_s.jpg)](https://github.com/GBert/misc/raw/master/RPi-MCP2515/pictures/rpi-mcp2515_01.jpg)
-[![RPI- MCP2515](https://github.com/GBert/misc/raw/master/RPi-MCP2515/pictures/rpi-mcp2515_02_s.jpg)](https://github.com/GBert/misc/raw/master/RPi-MCP2515/pictures/rpi-mcp2515_02.jpg)
 
 Hinweis
 -------
