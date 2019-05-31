@@ -1,11 +1,17 @@
 const int revisionnr = 
-15464
+15470
 ;
 const char* commithash = 
-"0dcc01a550c074c2675b4f43d8a7ab82781c79ff";
+"8036826bc1bd18f8664970172b59acca0048f89d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15470 2019-05-30 15:37:27 +0200 xmlscriptdlg: try to select the complete invalid line\n" \
+"15469 2019-05-30 15:03:09 +0200 xmlscriptdlg: select invalid XML line\n" \
+"15468 2019-05-30 14:42:19 +0200 xmlscriptdlg: select text from invalid XML\n" \
+"15467 2019-05-30 11:04:19 +0200 block: fix for service wait\n" \
+"15466 2019-05-30 10:38:47 +0200 output: function type added\n" \
+"15465 2019-05-29 15:19:17 +0200 block: revert put out of operation behaviour in case from dialog\n" \
 "15464 2019-05-29 12:02:27 +0200 xmlscriptdlg: find added\n" \
 "15463 2019-05-29 11:37:24 +0200 xmldlg: find added\n" \
 "15462 2019-05-28 16:02:28 +0200 model: trace level correction\n" \
@@ -2000,11 +2006,5 @@ const char* revlog =
 "13473 2018-01-30 08:18:42 +0100 translation merge: sl, sr_latin, en_GB, de, nl, pt_BR\n" \
 "13472 2018-01-29 22:16:10 +0100 bidib: always process sensor reports in case of occupied\n" \
 "13471 2018-01-29 14:11:14 +0100 file: skip creating the drive letter directory under windows\n" \
-"13470 2018-01-29 09:50:22 +0100 wdir: do not skip directories\n" \
-"13469 2018-01-29 08:30:04 +0100 rocweb: fix for XS and modular layouts\n" \
-"13468 2018-01-28 15:31:00 +0100 rocs: check for _WIN32 and for _WIN64\n" \
-"13467 2018-01-28 14:49:10 +0100 import/export workspace messages\n" \
-"13466 2018-01-28 12:10:42 +0100 rocview: import workspace and go\n" \
-"13465 2018-01-28 11:37:31 +0100 rocview: export active workspace\n" \
 
 "log end";
