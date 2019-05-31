@@ -1,11 +1,16 @@
 const int revisionnr = 
-15470
+15475
 ;
 const char* commithash = 
-"8036826bc1bd18f8664970172b59acca0048f89d";
+"82ec8f5e8af7715ccbc025376958e8d5d761014d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15475 2019-05-31 15:41:46 +0200 xmlscriptdlg: OK button added to be able to save without close\n" \
+"15474 2019-05-31 14:25:26 +0200 mbus: statement correction\n" \
+"15473 2019-05-31 11:21:46 +0200 loc: trace corrections for train operations\n" \
+"15472 2019-05-31 10:37:25 +0200 xmlscriptdlg: find and replace added\n" \
+"15471 2019-05-31 08:52:12 +0200 block: throttleopen and throttlclose commands added\n" \
 "15470 2019-05-30 15:37:27 +0200 xmlscriptdlg: try to select the complete invalid line\n" \
 "15469 2019-05-30 15:03:09 +0200 xmlscriptdlg: select invalid XML line\n" \
 "15468 2019-05-30 14:42:19 +0200 xmlscriptdlg: select text from invalid XML\n" \
@@ -2001,10 +2006,5 @@ const char* revlog =
 "13478 2018-02-01 08:18:31 +0100 location: fix for overwriting the schedule delay\n" \
 "13477 2018-01-31 11:36:43 +0100 openhab: output support on/off\n" \
 "13476 2018-01-31 10:55:35 +0100 http: rocweb port check fix\n" \
-"13475 2018-01-30 11:55:48 +0100 guiframe: help menu reduced\n" \
-"13474 2018-01-30 08:28:47 +0100 bidib: save sensor state also on multi sensor messages\n" \
-"13473 2018-01-30 08:18:42 +0100 translation merge: sl, sr_latin, en_GB, de, nl, pt_BR\n" \
-"13472 2018-01-29 22:16:10 +0100 bidib: always process sensor reports in case of occupied\n" \
-"13471 2018-01-29 14:11:14 +0100 file: skip creating the drive letter directory under windows\n" \
 
 "log end";
