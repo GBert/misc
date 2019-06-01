@@ -1,11 +1,12 @@
 const int revisionnr = 
-15477
+15478
 ;
 const char* commithash = 
-"155bd0221e8c3a9f07b25a5617ef9480caf1c90d";
+"024fc5a82c6839bedfd01ca45dbbe15372c8d5c9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15478 2019-06-01 09:37:19 +0200 xmlscriptdlg: replaced settargetrange with the 3.0 start/end function\n" \
 "15477 2019-06-01 08:16:24 +0200 aboxdlg: layout fixes\n" \
 "15476 2019-06-01 07:50:16 +0200 EStW: threeway symbol added\n" \
 "15475 2019-05-31 15:41:46 +0200 xmlscriptdlg: OK button added to be able to save without close\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13481 2018-02-01 13:51:59 +0100 location: reset delay for cloned hourly schedules\n" \
 "13480 2018-02-01 11:17:00 +0100 openhab: output brightness support added\n" \
 "13479 2018-02-01 08:27:30 +0100 model: write occ.xml only if the occupancy filename is set\n" \
-"13478 2018-02-01 08:18:31 +0100 location: fix for overwriting the schedule delay\n" \
 
 "log end";
