@@ -1,11 +1,13 @@
 const int revisionnr = 
-15475
+15477
 ;
 const char* commithash = 
-"82ec8f5e8af7715ccbc025376958e8d5d761014d";
+"155bd0221e8c3a9f07b25a5617ef9480caf1c90d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15477 2019-06-01 08:16:24 +0200 aboxdlg: layout fixes\n" \
+"15476 2019-06-01 07:50:16 +0200 EStW: threeway symbol added\n" \
 "15475 2019-05-31 15:41:46 +0200 xmlscriptdlg: OK button added to be able to save without close\n" \
 "15474 2019-05-31 14:25:26 +0200 mbus: statement correction\n" \
 "15473 2019-05-31 11:21:46 +0200 loc: trace corrections for train operations\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13480 2018-02-01 11:17:00 +0100 openhab: output brightness support added\n" \
 "13479 2018-02-01 08:27:30 +0100 model: write occ.xml only if the occupancy filename is set\n" \
 "13478 2018-02-01 08:18:31 +0100 location: fix for overwriting the schedule delay\n" \
-"13477 2018-01-31 11:36:43 +0100 openhab: output support on/off\n" \
-"13476 2018-01-31 10:55:35 +0100 http: rocweb port check fix\n" \
 
 "log end";
