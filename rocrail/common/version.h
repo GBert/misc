@@ -1,11 +1,14 @@
 const int revisionnr = 
-15479
+15482
 ;
 const char* commithash = 
-"82bc3a68f95ebf58c6cee65ed3d3513ec896e05f";
+"b063002c56486b67e0f7600f62949076a2bb52d2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15482 2019-06-01 16:09:06 +0200 rocweb: http return code correction for plan and options xml\n" \
+"15481 2019-06-01 14:30:38 +0200 signal: evaluate function event\n" \
+"15480 2019-06-01 14:09:14 +0200 signal: function control type added\n" \
 "15479 2019-06-01 12:04:15 +0200 translation merge: fr\n" \
 "15478 2019-06-01 09:37:19 +0200 xmlscriptdlg: replaced settargetrange with the 3.0 start/end function\n" \
 "15477 2019-06-01 08:16:24 +0200 aboxdlg: layout fixes\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13485 2018-02-02 08:51:04 +0100 tt: fix for sound on/off command\n" \
 "13484 2018-02-02 08:33:34 +0100 tt: onestep support added (wip)\n" \
 "13483 2018-02-01 17:20:38 +0100 planpanel: check the tabindex if its not > nr pages\n" \
-"13482 2018-02-01 14:07:58 +0100 location: reset lcid,lcbkid at cloning hourly schedules\n" \
-"13481 2018-02-01 13:51:59 +0100 location: reset delay for cloned hourly schedules\n" \
-"13480 2018-02-01 11:17:00 +0100 openhab: output brightness support added\n" \
 
 "log end";
