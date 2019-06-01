@@ -1,11 +1,12 @@
 const int revisionnr = 
-15478
+15479
 ;
 const char* commithash = 
-"024fc5a82c6839bedfd01ca45dbbe15372c8d5c9";
+"82bc3a68f95ebf58c6cee65ed3d3513ec896e05f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15479 2019-06-01 12:04:15 +0200 translation merge: fr\n" \
 "15478 2019-06-01 09:37:19 +0200 xmlscriptdlg: replaced settargetrange with the 3.0 start/end function\n" \
 "15477 2019-06-01 08:16:24 +0200 aboxdlg: layout fixes\n" \
 "15476 2019-06-01 07:50:16 +0200 EStW: threeway symbol added\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13482 2018-02-01 14:07:58 +0100 location: reset lcid,lcbkid at cloning hourly schedules\n" \
 "13481 2018-02-01 13:51:59 +0100 location: reset delay for cloned hourly schedules\n" \
 "13480 2018-02-01 11:17:00 +0100 openhab: output brightness support added\n" \
-"13479 2018-02-01 08:27:30 +0100 model: write occ.xml only if the occupancy filename is set\n" \
 
 "log end";
