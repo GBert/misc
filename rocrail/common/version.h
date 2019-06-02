@@ -1,11 +1,14 @@
 const int revisionnr = 
-15483
+15486
 ;
 const char* commithash = 
-"7d60aaef22e842a0805b8f4b0cd487fd588cff0b";
+"fc4f1fe3f0af716b432bc22bca11ede45a145e60";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15486 2019-06-02 14:18:45 +0200 signal: white address as bit pattern if port is zero\n" \
+"15485 2019-06-02 13:59:19 +0200 rocwebworker: support for https\n" \
+"15484 2019-06-02 13:53:22 +0200 rocwebworker: support for https\n" \
 "15483 2019-06-02 07:57:01 +0200 tracedlg: fix for close event (X)\n" \
 "15482 2019-06-01 16:09:06 +0200 rocweb: http return code correction for plan and options xml\n" \
 "15481 2019-06-01 14:30:38 +0200 signal: evaluate function event\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13489 2018-02-03 08:54:39 +0100 tt: onestep support (wip)\n" \
 "13488 2018-02-02 15:47:04 +0100 location: check the reporting loco at update if it has already passed this location\n" \
 "13487 2018-02-02 13:08:20 +0100 tt: onestep bus added to the commands\n" \
-"13486 2018-02-02 09:30:22 +0100 http: start the 5 demo minutes for rocweb after the first connection\n" \
-"13485 2018-02-02 08:51:04 +0100 tt: fix for sound on/off command\n" \
-"13484 2018-02-02 08:33:34 +0100 tt: onestep support added (wip)\n" \
 
 "log end";
