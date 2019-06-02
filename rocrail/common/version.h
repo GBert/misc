@@ -1,11 +1,12 @@
 const int revisionnr = 
-15482
+15483
 ;
 const char* commithash = 
-"b063002c56486b67e0f7600f62949076a2bb52d2";
+"7d60aaef22e842a0805b8f4b0cd487fd588cff0b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15483 2019-06-02 07:57:01 +0200 tracedlg: fix for close event (X)\n" \
 "15482 2019-06-01 16:09:06 +0200 rocweb: http return code correction for plan and options xml\n" \
 "15481 2019-06-01 14:30:38 +0200 signal: evaluate function event\n" \
 "15480 2019-06-01 14:09:14 +0200 signal: function control type added\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13486 2018-02-02 09:30:22 +0100 http: start the 5 demo minutes for rocweb after the first connection\n" \
 "13485 2018-02-02 08:51:04 +0100 tt: fix for sound on/off command\n" \
 "13484 2018-02-02 08:33:34 +0100 tt: onestep support added (wip)\n" \
-"13483 2018-02-01 17:20:38 +0100 planpanel: check the tabindex if its not > nr pages\n" \
 
 "log end";
