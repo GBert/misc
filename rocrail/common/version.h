@@ -1,11 +1,14 @@
 const int revisionnr = 
-15487
+15490
 ;
 const char* commithash = 
-"1fa124b883b98409612760ad29185a8a485ca2b8";
+"d21d8c676e8613bf76e1a8efef6b7b2fe09eaca8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15490 2019-06-03 14:51:51 +0200 item: fix for open throttle in occupied block by popup menu\n" \
+"15489 2019-06-03 14:11:05 +0200 item: not use short cuts in popup menu\n" \
+"15488 2019-06-03 09:41:15 +0200 signal: fix for processing function control\n" \
 "15487 2019-06-03 08:02:06 +0200 xmlscriptdlg: goto/show position after find/replace\n" \
 "15486 2019-06-02 14:18:45 +0200 signal: white address as bit pattern if port is zero\n" \
 "15485 2019-06-02 13:59:19 +0200 rocwebworker: support for https\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13493 2018-02-04 09:13:27 +0100 blockgroup: only lock a reserve block if its not already locked\n" \
 "13492 2018-02-04 08:43:31 +0100 block: do not save the from block ID in case its not set (Lock by block group)\n" \
 "13491 2018-02-03 10:58:11 +0100 tt: use decoder track mapping for type onestep\n" \
-"13490 2018-02-03 10:44:39 +0100 timetables: use initial hour for lookup a schedule entry in case of hourly schedules\n" \
-"13489 2018-02-03 08:54:39 +0100 tt: onestep support (wip)\n" \
-"13488 2018-02-02 15:47:04 +0100 location: check the reporting loco at update if it has already passed this location\n" \
 
 "log end";
