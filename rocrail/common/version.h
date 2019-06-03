@@ -1,11 +1,12 @@
 const int revisionnr = 
-15486
+15487
 ;
 const char* commithash = 
-"fc4f1fe3f0af716b432bc22bca11ede45a145e60";
+"1fa124b883b98409612760ad29185a8a485ca2b8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15487 2019-06-03 08:02:06 +0200 xmlscriptdlg: goto/show position after find/replace\n" \
 "15486 2019-06-02 14:18:45 +0200 signal: white address as bit pattern if port is zero\n" \
 "15485 2019-06-02 13:59:19 +0200 rocwebworker: support for https\n" \
 "15484 2019-06-02 13:53:22 +0200 rocwebworker: support for https\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13490 2018-02-03 10:44:39 +0100 timetables: use initial hour for lookup a schedule entry in case of hourly schedules\n" \
 "13489 2018-02-03 08:54:39 +0100 tt: onestep support (wip)\n" \
 "13488 2018-02-02 15:47:04 +0100 location: check the reporting loco at update if it has already passed this location\n" \
-"13487 2018-02-02 13:08:20 +0100 tt: onestep bus added to the commands\n" \
 
 "log end";
