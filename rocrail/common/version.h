@@ -1,11 +1,13 @@
 const int revisionnr = 
-15490
+15492
 ;
 const char* commithash = 
-"d21d8c676e8613bf76e1a8efef6b7b2fe09eaca8";
+"d6926edcd6e5ed36aaab4001f714c391d415d34b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15492 2019-06-04 11:47:43 +0200 item/guiframe: restore throttle position and size dependent from loco ID\n" \
+"15491 2019-06-04 11:09:10 +0200 rocview makefile: fix for wxsubincl 3.0 -> 3.1\n" \
 "15490 2019-06-03 14:51:51 +0200 item: fix for open throttle in occupied block by popup menu\n" \
 "15489 2019-06-03 14:11:05 +0200 item: not use short cuts in popup menu\n" \
 "15488 2019-06-03 09:41:15 +0200 signal: fix for processing function control\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13495 2018-02-05 08:37:14 +0100 switch: fix for take over the field state\n" \
 "13494 2018-02-05 08:24:07 +0100 blockgroup: first check all condition blocks if one is already reserved to avoid multiple block reservations\n" \
 "13493 2018-02-04 09:13:27 +0100 blockgroup: only lock a reserve block if its not already locked\n" \
-"13492 2018-02-04 08:43:31 +0100 block: do not save the from block ID in case its not set (Lock by block group)\n" \
-"13491 2018-02-03 10:58:11 +0100 tt: use decoder track mapping for type onestep\n" \
 
 "log end";
