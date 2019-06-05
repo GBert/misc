@@ -1,11 +1,13 @@
 const int revisionnr = 
-15492
+15494
 ;
 const char* commithash = 
-"d6926edcd6e5ed36aaab4001f714c391d415d34b";
+"453f4a2345ee643a8479a12d70a5090543d3e809";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15494 2019-06-05 10:11:58 +0200 planpanel: save scroll position\n" \
+"15493 2019-06-05 07:46:30 +0200 mqtt-cs python example extended with XML parsing\n" \
 "15492 2019-06-04 11:47:43 +0200 item/guiframe: restore throttle position and size dependent from loco ID\n" \
 "15491 2019-06-04 11:09:10 +0200 rocview makefile: fix for wxsubincl 3.0 -> 3.1\n" \
 "15490 2019-06-03 14:51:51 +0200 item: fix for open throttle in occupied block by popup menu\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13497 2018-02-05 08:44:53 +0100 mgbox: fix for reporting the switch state\n" \
 "13496 2018-02-05 08:40:36 +0100 switch: revert field correction\n" \
 "13495 2018-02-05 08:37:14 +0100 switch: fix for take over the field state\n" \
-"13494 2018-02-05 08:24:07 +0100 blockgroup: first check all condition blocks if one is already reserved to avoid multiple block reservations\n" \
-"13493 2018-02-04 09:13:27 +0100 blockgroup: only lock a reserve block if its not already locked\n" \
 
 "log end";
