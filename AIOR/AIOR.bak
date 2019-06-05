@@ -6,7 +6,7 @@ $Descr A3 16535 11693
 encoding utf-8
 Sheet 1 1
 Title "All in One Railroad Interface PoC"
-Date "2019-05-21"
+Date "2019-05-25"
 Rev "V1.01"
 Comp "Gerhard Bertelsmann"
 Comment1 ""
@@ -937,17 +937,6 @@ Wire Wire Line
 	5400 2400 5400 2450
 Wire Wire Line
 	6050 1150 6050 1250
-$Comp
-L Regulator_Linear:L7805 U21
-U 1 1 5C979CB9
-P 8300 3400
-F 0 "U21" H 8300 3642 50  0000 C CNN
-F 1 "L7805" H 8300 3551 50  0000 C CNN
-F 2 "Package_TO_SOT_SMD:TO-252-3_TabPin2" H 8325 3250 50  0001 L CIN
-F 3 "http://www.st.com/content/ccc/resource/technical/document/datasheet/41/4f/b3/b0/12/d4/47/88/CD00000444.pdf/files/CD00000444.pdf/jcr:content/translations/en.CD00000444.pdf" H 8300 3350 50  0001 C CNN
-	1    8300 3400
-	1    0    0    -1  
-$EndComp
 $Comp
 L power:GNDA #PWR0102
 U 1 1 5C97A03F
@@ -3186,7 +3175,7 @@ L AIOR-rescue:R R24
 U 1 1 5D77B427
 P 10625 6700
 F 0 "R24" V 10525 6700 50  0000 C CNN
-F 1 "18k" V 10625 6700 50  0000 C CNN
+F 1 "22k" V 10625 6700 50  0000 C CNN
 F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 10555 6700 50  0001 C CNN
 F 3 "" H 10625 6700 50  0000 C CNN
 	1    10625 6700
@@ -3358,17 +3347,6 @@ F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 14130 4200 50  
 F 3 "" H 14200 4200 50  0000 C CNN
 	1    14200 4200
 	-1   0    0    1   
-$EndComp
-$Comp
-L Regulator_Linear:L7805 U81
-U 1 1 5E010788
-P 2950 10350
-F 0 "U81" H 2950 10592 50  0000 C CNN
-F 1 "L7805" H 2950 10501 50  0000 C CNN
-F 2 "Package_TO_SOT_SMD:TO-252-3_TabPin2" H 2975 10200 50  0001 L CIN
-F 3 "http://www.st.com/content/ccc/resource/technical/document/datasheet/41/4f/b3/b0/12/d4/47/88/CD00000444.pdf/files/CD00000444.pdf/jcr:content/translations/en.CD00000444.pdf" H 2950 10300 50  0001 C CNN
-	1    2950 10350
-	1    0    0    -1  
 $EndComp
 $Comp
 L AIOR-rescue:C C81
@@ -4416,17 +4394,6 @@ NoConn ~ 1925 2250
 Wire Wire Line
 	8875 3350 8875 3400
 $Comp
-L Regulator_Linear:L7805 U20
-U 1 1 5E68CC11
-P 6550 3400
-F 0 "U20" H 6550 3642 50  0000 C CNN
-F 1 "L7833" H 6550 3551 50  0000 C CNN
-F 2 "Package_TO_SOT_SMD:TO-252-3_TabPin2" H 6575 3250 50  0001 L CIN
-F 3 "http://www.st.com/content/ccc/resource/technical/document/datasheet/41/4f/b3/b0/12/d4/47/88/CD00000444.pdf/files/CD00000444.pdf/jcr:content/translations/en.CD00000444.pdf" H 6550 3350 50  0001 C CNN
-	1    6550 3400
-	1    0    0    -1  
-$EndComp
-$Comp
 L power:GNDA #PWR0206
 U 1 1 5E68CC17
 P 6550 3800
@@ -5100,4 +5067,37 @@ Wire Wire Line
 	15350 7725 15350 7875
 Wire Wire Line
 	14950 7825 14950 8300
+$Comp
+L Regulator_Linear:L7805 U21
+U 1 1 5C979CB9
+P 8300 3400
+F 0 "U21" H 8300 3642 50  0000 C CNN
+F 1 "L7805" H 8300 3551 50  0000 C CNN
+F 2 "Package_TO_SOT_SMD:TO-252-2" H 8325 3250 50  0001 L CIN
+F 3 "http://www.st.com/content/ccc/resource/technical/document/datasheet/41/4f/b3/b0/12/d4/47/88/CD00000444.pdf/files/CD00000444.pdf/jcr:content/translations/en.CD00000444.pdf" H 8300 3350 50  0001 C CNN
+	1    8300 3400
+	1    0    0    -1  
+$EndComp
+$Comp
+L Regulator_Linear:L7805 U20
+U 1 1 5E68CC11
+P 6550 3400
+F 0 "U20" H 6550 3642 50  0000 C CNN
+F 1 "L7833" H 6550 3551 50  0000 C CNN
+F 2 "Package_TO_SOT_SMD:TO-252-2" H 6575 3250 50  0001 L CIN
+F 3 "http://www.st.com/content/ccc/resource/technical/document/datasheet/41/4f/b3/b0/12/d4/47/88/CD00000444.pdf/files/CD00000444.pdf/jcr:content/translations/en.CD00000444.pdf" H 6550 3350 50  0001 C CNN
+	1    6550 3400
+	1    0    0    -1  
+$EndComp
+$Comp
+L Regulator_Linear:L7805 U81
+U 1 1 5E010788
+P 2950 10350
+F 0 "U81" H 2950 10592 50  0000 C CNN
+F 1 "L7805" H 2950 10501 50  0000 C CNN
+F 2 "Package_TO_SOT_SMD:TO-252-2" H 2975 10200 50  0001 L CIN
+F 3 "http://www.st.com/content/ccc/resource/technical/document/datasheet/41/4f/b3/b0/12/d4/47/88/CD00000444.pdf/files/CD00000444.pdf/jcr:content/translations/en.CD00000444.pdf" H 2950 10300 50  0001 C CNN
+	1    2950 10350
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
