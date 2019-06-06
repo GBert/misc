@@ -1,4 +1,5 @@
 EESchema Schematic File Version 4
+LIBS:rs232-rs485-cache
 EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
@@ -159,7 +160,7 @@ U 1 1 5CFA6694
 P 4725 3500
 F 0 "J2" V 4825 3550 50  0000 R CNN
 F 1 "Conn_01x03" V 4900 3725 50  0001 R CNN
-F 2 "Connector_PinHeader_1.27mm:PinHeader_1x03_P1.27mm_Vertical" H 4725 3500 50  0001 C CNN
+F 2 "Connector_PinHeader_2.00mm:PinHeader_1x03_P2.00mm_Vertical" H 4725 3500 50  0001 C CNN
 F 3 "~" H 4725 3500 50  0001 C CNN
 	1    4725 3500
 	0    -1   -1   0   
