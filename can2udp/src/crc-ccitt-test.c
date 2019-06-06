@@ -146,7 +146,7 @@ int main(int argc, char **argv)
     temp = htonl(inflated_size);
     memcpy(data, &temp, 4);
 
-    ret = fread((void *)data + 4, 1, nbytes, fp);
+    ret = fread(data + 4, 1, nbytes, fp);
     if (ret != nbytes) {
 	printf("error: fread failed for %s\n", argv[1]);
 	fclose(fp);
