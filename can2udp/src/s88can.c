@@ -37,7 +37,7 @@
 #define str(a) _str(a)
 #define VERSION str(VERS_HIGH) "." str(VERS_LOW)
 
-#define BIT(i) (1<<i)
+#define BIT(nr) (1UL << (nr))
 
 #define UID 0x53383842		/* S88'42' */
 #define SYSID 0x0042		/* default, from above */
