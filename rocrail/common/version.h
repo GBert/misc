@@ -1,11 +1,15 @@
 const int revisionnr = 
-15494
+15498
 ;
 const char* commithash = 
-"453f4a2345ee643a8479a12d70a5090543d3e809";
+"a65abeb13f6a4a7459e74abef7168277a2e35b76";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15498 2019-06-06 15:36:32 +0200 clntcon: fix for ping and reply with pong\n" \
+"15497 2019-06-06 15:11:00 +0200 rcon: reactivate the 5s idle ping\n" \
+"15496 2019-06-06 14:53:08 +0200 mqtt-cs: serial connect added\n" \
+"15495 2019-06-06 14:52:03 +0200 clntcon/rcon: set keepalive socket option\n" \
 "15494 2019-06-05 10:11:58 +0200 planpanel: save scroll position\n" \
 "15493 2019-06-05 07:46:30 +0200 mqtt-cs python example extended with XML parsing\n" \
 "15492 2019-06-04 11:47:43 +0200 item/guiframe: restore throttle position and size dependent from loco ID\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13501 2018-02-05 12:55:41 +0100 dsd2010: only report new errors\n" \
 "13500 2018-02-05 11:50:10 +0100 dsd2010: goto and direction commands added\n" \
 "13499 2018-02-05 11:23:52 +0100 dsd2010: library added for rs232 support\n" \
-"13498 2018-02-05 08:46:23 +0100 mcs2,mgbox: use constants for reporting switch state\n" \
-"13497 2018-02-05 08:44:53 +0100 mgbox: fix for reporting the switch state\n" \
-"13496 2018-02-05 08:40:36 +0100 switch: revert field correction\n" \
-"13495 2018-02-05 08:37:14 +0100 switch: fix for take over the field state\n" \
 
 "log end";
