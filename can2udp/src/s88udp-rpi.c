@@ -29,7 +29,7 @@
 #include <linux/can.h>
 #include "s88udp-rpi.h"
 
-#define BIT(x)		(1<<x)
+#define BIT(nr)		(1UL << (nr))
 #define MICRODELAY	50	/* clock frequency 1/MICRODELAY[us] */
 #define MINDELAY	2	/* min delay in usec */
 #define MAXMODULES	32	/* max numbers of S88 modules */
