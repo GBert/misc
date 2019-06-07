@@ -1,11 +1,12 @@
 const int revisionnr = 
-15498
+15499
 ;
 const char* commithash = 
-"a65abeb13f6a4a7459e74abef7168277a2e35b76";
+"1ed5ca4184adfb6fdb89671ba1ddeac2e9998c4c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15499 2019-06-07 10:24:57 +0200 z21: uid field added\n" \
 "15498 2019-06-06 15:36:32 +0200 clntcon: fix for ping and reply with pong\n" \
 "15497 2019-06-06 15:11:00 +0200 rcon: reactivate the 5s idle ping\n" \
 "15496 2019-06-06 14:53:08 +0200 mqtt-cs: serial connect added\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13502 2018-02-05 13:10:03 +0100 dsd2010: only report new positions\n" \
 "13501 2018-02-05 12:55:41 +0100 dsd2010: only report new errors\n" \
 "13500 2018-02-05 11:50:10 +0100 dsd2010: goto and direction commands added\n" \
-"13499 2018-02-05 11:23:52 +0100 dsd2010: library added for rs232 support\n" \
 
 "log end";
