@@ -1,11 +1,15 @@
 const int revisionnr = 
-15500
+15504
 ;
 const char* commithash = 
-"3fdadf5e944e559765ef383ba01c1e5645c0d3d1";
+"a3c4cb59b9c740d33db75e8ecbf3cc33f17addf3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15504 2019-06-09 07:53:39 +0200 z21: set UID to 21 if zero to be compatible with previous revisions\n" \
+"15503 2019-06-08 14:47:58 +0200 locationdlg: removed deprecated adjust flag\n" \
+"15502 2019-06-08 11:23:47 +0200 z21: set uid on state report\n" \
+"15501 2019-06-08 10:22:06 +0200 location: maxocc plus/min added\n" \
 "15500 2019-06-07 15:05:31 +0200 trace: fix for empty trace file name\n" \
 "15499 2019-06-07 10:24:57 +0200 z21: uid field added\n" \
 "15498 2019-06-06 15:36:32 +0200 clntcon: fix for ping and reply with pong\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13507 2018-02-05 14:45:47 +0100 dsd2010: fix for sending data\n" \
 "13506 2018-02-05 14:36:40 +0100 dsd2010: trace level correction for read bytes\n" \
 "13505 2018-02-05 14:22:36 +0100 dsd2010: use addr and bus reported by the commands\n" \
-"13504 2018-02-05 13:16:26 +0100 dsd2010: pause between send bytes\n" \
-"13503 2018-02-05 13:10:53 +0100 dsd2010: only report new positions\n" \
-"13502 2018-02-05 13:10:03 +0100 dsd2010: only report new positions\n" \
-"13501 2018-02-05 12:55:41 +0100 dsd2010: only report new errors\n" \
 
 "log end";
