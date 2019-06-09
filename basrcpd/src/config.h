@@ -55,4 +55,4 @@
 //#define USE_ZIMO 1
 
 /* Version number of package */
-#define VERSION "1905"
+#define VERSION "1906"

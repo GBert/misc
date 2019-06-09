@@ -42,8 +42,7 @@ void shutdown_GA();
 int init_GA(bus_t busnumber, int number);
 int get_number_ga(bus_t busnumber);
 
-int enqueueGA(bus_t busnumber, int addr, int port, int action,
-            long int activetime);
+int enqueueGA(bus_t busnumber, int addr, int port, int action, int activetime);
 int dequeueNextGA(bus_t busnumber, ga_data_t *);
 int queue_GA_isempty(bus_t busnumber);
 
@@ -64,4 +63,7 @@ int unlockGA(bus_t busnumber, int addr, sessionid_t sessionid);
 void unlock_ga_bysessionid(sessionid_t);
 void unlock_ga_bytime(void);
 int describeLOCKGA(bus_t bus, int addr, char *reply);
+
+void handle_mcs_gacc(bus_t bus, char protocol, int addr, int port,
+			int action, int activetime);
 #endif

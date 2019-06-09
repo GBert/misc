@@ -94,6 +94,7 @@ void *thr_handleCAN(void *vp)
   	char msg[64];
   	uint32_t uid;
     uint16_t sid;
+    uint16_t accactive = 0;	
     
 	sleep(1);
 	syslog_bus(mcs_bus, DBG_INFO, "MCS gateway Thread started.");
@@ -154,6 +155,10 @@ void *thr_handleCAN(void *vp)
 						// Protokoll  
     					case 0x05:  if (handle_mcs_prot(mcs_bus, uid, frame.data[5])
 											< 0) continue;
+									break;
+						// accessory active time in multiples of 10ms
+						case 0x06:	if ((uid != 0) && (uid != ownuid)) continue;
+									accactive = be16(&frame.data[5]);
 									break;
 						// Rail protocol selection
 						case 0x08:  syslog_bus(mcs_bus, DBG_INFO,
@@ -222,10 +227,19 @@ void *thr_handleCAN(void *vp)
 													frame.data[6], frame.data[7]);
 							continue;			// reply after done
 				/* switch accessories */
-				case 0x16:  // reply to avoid blocking
-							syslog_bus(mcs_bus, DBG_INFO,
-								"*** accessory handling not yet implemented");
-							break;				
+				case 0x16:  if ((uid < 0x3000) || (uid > 0x3FFF)) continue;
+							if (frame.data[5] == 0) v = 0;	// activetime calculation
+							else v = 10 * ((frame.can_dlc == 8) ? 
+												be16(&frame.data[6]) : accactive);
+							if  (uid & 0x800) 		// DCC
+								handle_mcs_gacc(
+									((DDL_DATA*)buses[mcs_bus].driverdata)->FWD_N_ACCESSORIES,
+									'N', (uid & 0x7FF) + 1, frame.data[4], frame.data[5], v);
+							else  					// MM
+								handle_mcs_gacc(
+									((DDL_DATA*)buses[mcs_bus].driverdata)->FWD_M_ACCESSORIES,
+									'M', (uid & 0x7FF) + 1, frame.data[4], frame.data[5], v);
+							continue;			// reply after done			
 				/* Ping */
 				case 0x30:  frame.can_dlc = 8; 
 				            memcpy(frame.data, softvers, 8);

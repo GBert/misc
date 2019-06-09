@@ -38,33 +38,30 @@ static int handle_setcheck(sessionid_t sessionid, bus_t bus, char *device,
     *reply = 0x00;
 
     if (bus_has_devicegroup(bus, DG_GL)
-        && strncasecmp(device, "GL", 2) == 0) {
-        long laddr, direction, speed, maxspeed, f[29];
-        uint32_t func = 0;
-        /* We could provide a maximum of 32 on/off functions,
-           but for now 28+1 will be good enough */
-        int nparms = sscanf(parameter, "%ld %ld %ld %ld %ld %ld %ld %ld "
-                          "%ld %ld %ld %ld %ld %ld %ld %ld %ld "
-                          "%ld %ld %ld %ld %ld %ld %ld %ld "
-                          "%ld %ld %ld %ld %ld %ld %ld %ld",
-                          &laddr, &direction, &speed, &maxspeed, &f[0],
-                          &f[1], &f[2], &f[3], &f[4], &f[5], &f[6], &f[7],
-                          &f[8], &f[9], &f[10], &f[11], &f[12], &f[13],
-                          &f[14], &f[15], &f[16], &f[17], &f[18], &f[19],
-                          &f[20], &f[21], &f[22], &f[23], &f[24], &f[25],
-                          &f[26], &f[27], &f[28]);
-        for (int i = 0; i < nparms - 4; i++) {
-            func += (f[i] ? 1 : 0) << i;
-        }
-        if (nparms >= 4) {
+        	&& strncasecmp(device, "GL", 2) == 0) {
+        char *paddr, *pdirection, *pspeed, *pmaxspeed, *pfuncs;
+        uint32_t func = 0, shift = 1;        
+		int nparms = ssplitstr(parameter, 5, 
+							&paddr, &pdirection, &pspeed, &pmaxspeed, &pfuncs);							
+
+		do switch (*pfuncs++) {
+			case '1':	func |= shift;
+			case '0':	shift <<= 1;
+		    case ' ':	break;
+		    default:	shift = 0;
+		} while (shift);
+
+        if (nparms >= 4) { 
             sessionid_t lockid = 0;
             /* Only if not locked or emergency stop !! */
-            cacheGetLockGL(bus, laddr, &lockid);
+            int addr = atoi(paddr);
+            int direction = atoi(pdirection);
+            cacheGetLockGL(bus, addr, &lockid);
             if (lockid == 0 || lockid == sessionid || direction == 2) {
                 rc = SRCP_OK;
                 if (setorcheck == 1)
-                    rc = enqueueGL(bus, laddr, direction, speed, maxspeed,
-                                   func);
+                    rc = enqueueGL(bus, addr, direction, atoi(pspeed),
+												atoi(pmaxspeed), func);
             }
             else {
                 rc = SRCP_DEVICELOCKED;
@@ -129,15 +126,14 @@ static int handle_setcheck(sessionid_t sessionid, bus_t bus, char *device,
              && strncasecmp(device, "SM", 2) == 0) {
         long addr;
 		unsigned long value1, value2, value3;
-        int type;
-        char ctype[MAXSRCPLINELEN];
+        char ctype[12];
 
-        int result = sscanf(parameter, "%ld %s %lu %lu %lu", &addr, ctype,
+        int result = sscanf(parameter, "%ld %10s %lu %lu %lu", &addr, ctype,
                         &value1, &value2, &value3);
         if (result < 3)
             rc = SRCP_LISTTOOSHORT;
         else {
-            type = -1;
+            int type = -1;
             if (strcasecmp(ctype, "REG") == 0) 
                 type = REGISTER;
             else if (strcasecmp(ctype, "CV") == 0)
@@ -194,11 +190,11 @@ static int handle_setcheck(sessionid_t sessionid, bus_t bus, char *device,
     else if (bus_has_devicegroup(bus, DG_LOCK)
              && strncasecmp(device, "LOCK", 4) == 0) {
         long int addr, duration;
-        char devgrp[MAXSRCPLINELEN];
+        char devgrp[12];
         int nelem = -1;
         if (strlen(parameter) > 0) {
             nelem =
-                sscanf(parameter, "%s %ld %ld", devgrp, &addr, &duration);
+                sscanf(parameter, "%10s %ld %ld", devgrp, &addr, &duration);
             syslog_bus(bus, DBG_INFO, "LOCK: %s", parameter);
         }
         if (nelem >= 3) {
@@ -316,16 +312,15 @@ static int handleGET(sessionid_t sessionid, bus_t bus, char *device,
     else if (bus_has_devicegroup(bus, DG_SM)
              && strncasecmp(device, "SM", 2) == 0) {
         long addr, value1, value2, value3;
-        int type;
-        char ctype[MAXSRCPLINELEN];
+        char ctype[12];
 
-        int nelem = sscanf(parameter, "%ld %s %ld %ld %ld",
+        int nelem = sscanf(parameter, "%ld %10s %ld %ld %ld",
 							&addr, ctype, &value1, &value2, &value3);        
         if (nelem < 2) {
           rc = SRCP_LISTTOOSHORT;
         }
         else {
-          type = -1;
+          int type = -1;
           if (strcasecmp(ctype, "REG") == 0) 
             type = REGISTER;
           else if (strcasecmp(ctype, "CVBIT") == 0)
@@ -426,11 +421,11 @@ static int handleGET(sessionid_t sessionid, bus_t bus, char *device,
     else if (bus_has_devicegroup(bus, DG_LOCK)
              && (strncasecmp(device, "LOCK", 4) == 0)) {
         long int addr;
-        char devgrp[10];
+        char devgrp[12];
         int nelem = -1;
 
         if (strlen(parameter) > 0)
-            nelem = sscanf(parameter, "%s %ld", devgrp, &addr);
+            nelem = sscanf(parameter, "%10s %ld", devgrp, &addr);
         if (nelem <= 1) {
             rc = srcp_fmt_msg(SRCP_LISTTOOSHORT, reply, akt_time);
         }
@@ -556,15 +551,14 @@ static int handleVERIFY(sessionid_t sessionid, bus_t bus, char *device,
         && strncasecmp(device, "SM", 2) == 0) {
         long addr;
 		unsigned long value1, value2, value3;
-        int type;
-        char ctype[MAXSRCPLINELEN];
+        char ctype[12];
 
-        int result = sscanf(parameter, "%ld %s %lu %lu %lu", &addr, ctype,
+        int result = sscanf(parameter, "%ld %10s %lu %lu %lu", &addr, ctype,
                         &value1, &value2, &value3);
         if (result < 3)
             rc = SRCP_LISTTOOSHORT;
         else {
-            type = -1;
+            int type = -1;
             if (strcasecmp(ctype, "REG") == 0) 
                 type = REGISTER;
             else if (strcasecmp(ctype, "CV") == 0)
@@ -663,10 +657,10 @@ static int handleTERM(sessionid_t sessionid, bus_t bus, char *device,
     else if (bus_has_devicegroup(bus, DG_LOCK)
              && strncasecmp(device, "LOCK", 4) == 0) {
         long int addr;
-        char devgrp[10];
+        char devgrp[12];
         int nelem = -1;
         if (strlen(parameter) > 0)
-            nelem = sscanf(parameter, "%s %ld", devgrp, &addr);
+            nelem = sscanf(parameter, "%10s %ld", devgrp, &addr);
 
         if (nelem <= 1) {
             rc = SRCP_LISTTOOSHORT;
@@ -747,7 +741,7 @@ static int handleINIT(sessionid_t sessionid, bus_t bus, char *device,
         long addr, protversion, n_fs, n_func;
         char prot;
         char optData[strlen(parameter)]; //Optionale weitere, Protokollabhängige, Zusatzdaten
-        int nelem = sscanf(parameter, "%ld %c %ld %ld %ld %[^\t\n]", &addr, &prot, &protversion, &n_fs, &n_func, optData);
+        int nelem = sscanf(parameter, "%ld %1c %ld %ld %ld %[^\t\n]", &addr, &prot, &protversion, &n_fs, &n_func, optData);
         if (nelem >= 5) {
             rc = cacheInitGL(bus, addr, prot, protversion, n_fs, n_func, optData);
         }
@@ -760,7 +754,7 @@ static int handleINIT(sessionid_t sessionid, bus_t bus, char *device,
              && strncasecmp(device, "GA", 2) == 0) {
         long addr;
         char prot;
-        int nelem = sscanf(parameter, "%ld %c", &addr, &prot);
+        int nelem = sscanf(parameter, "%ld %1c", &addr, &prot);
         if (nelem >= 2) {
             rc = initGA(bus, addr, prot);
         }
@@ -773,7 +767,7 @@ static int handleINIT(sessionid_t sessionid, bus_t bus, char *device,
              && strncasecmp(device, "FB", 2) == 0) {
         long addr, index;
         char prot;
-        int nelem = sscanf(parameter, "%ld %c %ld", &addr, &prot, &index);
+        int nelem = sscanf(parameter, "%ld %1c %ld", &addr, &prot, &index);
         if (nelem >= 3) {
             rc = initFB(bus, addr, prot, index);
         }
@@ -851,7 +845,6 @@ int doCmdClient(session_node_t * sn)
     char line[MAXSRCPLINELEN];
     char reply[MAXSRCPLINELEN];
     char *cbus, *command, *devicegroup, *parameter;	
-    bus_t bus;
     int rc;
     struct timeval akt_time;
 
@@ -883,7 +876,7 @@ int doCmdClient(session_node_t * sn)
             line[linelen - 1] = '\0';
 
 		int nelem = ssplitstr(line, 4, &command, &cbus, &devicegroup, &parameter);
-        bus = atoi(cbus);
+        bus_t bus = atoi(cbus);
         reply[0] = 0x00;
 
         if (nelem >= 3) { 		

@@ -113,6 +113,8 @@ typedef struct _DDL_DATA {
     int NMRA_GA_OFFSET;         /* offset for ga base address 0/1*/
     int PROGRAM_TRACK;          /* 0: suppress SM commands to PT address */
    	char MCS_DEVNAME[16];    	/* name of CAN interface for mCS */
+   	bus_t FWD_M_ACCESSORIES;	/* bus used for MM accessories   */ 
+   	bus_t FWD_N_ACCESSORIES;	/* bus used for NMRA accessories */ 
 
     int spiLastMM;              //War das letzte Paket ein Märklin Motorola Paket?
     unsigned int uid;           /* Für MFX die UID der Zentrale */

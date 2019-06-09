@@ -37,8 +37,7 @@ int get_number_ga(bus_t busnumber)
 }
 
 /* Uebernehme die neuen Angaben fuer die Weiche, einige wenige Pruefungen */
-int enqueueGA(bus_t busnumber, int addr, int port, int action,
-              long int activetime)
+int enqueueGA(bus_t busnumber, int addr, int port, int action, int activetime)
 {
     struct timeval now;
     int number_ga = get_number_ga(busnumber);
@@ -115,6 +114,7 @@ int dequeueNextGA(bus_t busnumber, ga_data_t *a)
     return out[busnumber];
 }
 
+// TODO: clarify why function 'getGA' is never used.
 int getGA(bus_t busnumber, int addr, ga_data_t *a)
 {
     int number_ga = get_number_ga(busnumber);
@@ -152,6 +152,19 @@ int setGA(bus_t busnumber, int addr, ga_data_t a)
 
         infoGA(busnumber, addr, a.port, msg);
         enqueueInfoMessage(msg);
+    	// send the acknowledge via MCS
+    	char minfo[5];		// 0: 2 oder 4, 1 = port, 2 = action, 3&4 = activetime
+    	minfo[1] = a.port;
+    	minfo[2] = a.action;
+    	int at = a.activetime;
+    	if (at) {
+    		minfo[0] = 4;
+    		minfo[3] = at >> 8;
+    		minfo[4] = at & 0xFF;
+    	}
+    	else minfo[0] = 2;		// short form
+    	info_mcs(busnumber, 0x17, addr + ((ga[busnumber].gastate[addr].protocol 
+									== 'N') ? 0x37FF : 0x2FFF), minfo);
         return SRCP_OK;
     }
     else {
@@ -161,19 +174,16 @@ int setGA(bus_t busnumber, int addr, ga_data_t a)
 
 int termGA(bus_t busnumber, int addr)
 {
-    /*pointer to ga state data*/
-    ga_data_t* ga_tmp;
-
     if (isInitializedGA(busnumber, addr)) {
-
-        ga_tmp = &ga[busnumber].gastate[addr];
+    	/*pointer to ga state data*/
+    	ga_data_t* ga_tmp = &ga[busnumber].gastate[addr];
         ga_tmp->state = gasTerm;
 
         /* send termination info GA */
         char msg[256];
         struct timeval now;
         gettimeofday(&now, NULL);
-        snprintf(msg, sizeof(msg), "%lu.%.3lu 102 INFO %ld GA %d\n",
+        snprintf(msg, sizeof(msg), "%lu.%.3lu 102 INFO %lu GA %d\n",
                 now.tv_sec, now.tv_usec / 1000, busnumber, addr);
         enqueueInfoMessage(msg);
 
@@ -196,7 +206,7 @@ int describeGA(bus_t busnumber, int addr, char *msg)
 
     if ((addr > 0) && (addr <= number_ga)
         && (ga[busnumber].gastate[addr].protocol)) {
-        sprintf(msg, "%lu.%.3lu 101 INFO %ld GA %d %c\n",
+        sprintf(msg, "%lu.%.3lu 101 INFO %lu GA %d %c\n",
                 ga[busnumber].gastate[addr].inittime.tv_sec,
                 ga[busnumber].gastate[addr].inittime.tv_usec / 1000,
                 busnumber, addr, ga[busnumber].gastate[addr].protocol);
@@ -215,7 +225,7 @@ int infoGA(bus_t busnumber, int addr, int port, char *msg)
     if ((addr > 0) && (addr <= number_ga) && (port >= 0)
         && (port < MAXGAPORT)
         && (ga[busnumber].gastate[addr].tv[port].tv_sec > 0)) {
-        sprintf(msg, "%lu.%.3lu 100 INFO %ld GA %d %d %d\n",
+        sprintf(msg, "%lu.%.3lu 100 INFO %lu GA %d %d %d\n",
                 ga[busnumber].gastate[addr].tv[port].tv_sec,
                 ga[busnumber].gastate[addr].tv[port].tv_usec / 1000,
                 busnumber, addr, port, ga[busnumber].gastate[addr].action);
@@ -231,16 +241,15 @@ int infoGA(bus_t busnumber, int addr, int port, char *msg)
 
 int initGA(bus_t busnumber, int addr, const char protocol)
 {
-    int rc = SRCP_OK;
     int number_ga = get_number_ga(busnumber);
     syslog_bus(busnumber, DBG_INFO, "init GA: %d %c", addr, protocol);
     if ((addr > 0) && (addr <= number_ga)) {
-        char msg[100];
-        rc = bus_supports_protocol(busnumber, protocol);
+        int rc = bus_supports_protocol(busnumber, protocol);
         if (rc != SRCP_OK) {
             return rc;
         }
         ga[busnumber].gastate[addr].protocol = protocol;
+        ga[busnumber].gastate[addr].id = addr;
         gettimeofday(&ga[busnumber].gastate[addr].inittime, NULL);
         ga[busnumber].gastate[addr].activetime = 0;
         ga[busnumber].gastate[addr].action = 0;
@@ -252,6 +261,7 @@ int initGA(bus_t busnumber, int addr, const char protocol)
             rc = (*buses[busnumber].init_ga_func) (&ga[busnumber].
                                                    gastate[addr]);
         if (rc == SRCP_OK) {
+        	char msg[100];
             ga[busnumber].gastate[addr].state = gasActive;
             describeGA(busnumber, addr, msg);
             enqueueInfoMessage(msg);
@@ -266,13 +276,13 @@ int initGA(bus_t busnumber, int addr, const char protocol)
 int lockGA(bus_t busnumber, int addr, long int duration,
            sessionid_t sessionid)
 {
-    char msg[256];
-
     if (ga[busnumber].gastate[addr].locked_by == sessionid ||
         ga[busnumber].gastate[addr].locked_by == 0) {
         ga[busnumber].gastate[addr].locked_by = sessionid;
         ga[busnumber].gastate[addr].lockduration = duration;
         gettimeofday(&ga[busnumber].gastate[addr].locktime, NULL);
+
+    	char msg[256];
         describeLOCKGA(busnumber, addr, msg);
         enqueueInfoMessage(msg);
         return SRCP_OK;
@@ -293,7 +303,7 @@ int getlockGA(bus_t busnumber, int addr, sessionid_t *sessionid)
 
 int describeLOCKGA(bus_t bus, int addr, char *reply)
 {
-    sprintf(reply, "%lu.%.3lu 100 INFO %ld LOCK GA %d %ld %ld\n",
+    sprintf(reply, "%lu.%.3lu 100 INFO %lu LOCK GA %d %ld %lu\n",
             ga[bus].gastate[addr].locktime.tv_sec,
             ga[bus].gastate[addr].locktime.tv_usec / 1000,
             bus, addr, ga[bus].gastate[addr].lockduration,
@@ -304,15 +314,13 @@ int describeLOCKGA(bus_t bus, int addr, char *reply)
 int unlockGA(bus_t busnumber, int addr, sessionid_t sessionid)
 {
     /*pointer to ga state data*/
-    ga_data_t* ga_tmp;
-    char msg[256];
-
-    ga_tmp = &ga[busnumber].gastate[addr];
+    ga_data_t* ga_tmp = &ga[busnumber].gastate[addr];
 
     if (ga_tmp->locked_by == 0 || ga_tmp->locked_by == sessionid) {
+    	char msg[256];
         ga_tmp->locked_by = 0;
         gettimeofday(&ga_tmp->locktime, NULL);
-        sprintf(msg, "%lu.%.3lu 102 INFO %ld LOCK GA %d\n",
+        sprintf(msg, "%lu.%.3lu 102 INFO %lu LOCK GA %d\n",
                 ga_tmp->locktime.tv_sec,
                 ga_tmp->locktime.tv_usec / 1000,
                 busnumber, addr);
@@ -408,3 +416,15 @@ void clean_GA(bus_t bus)
         bzero(&ga[bus].gastate[i], sizeof(ga_data_t));
     }
 }
+
+/* Interface for the mcs-Gateway */
+void handle_mcs_gacc(bus_t bus, char protocol, int addr, int port, 
+			int action, int activetime)
+{
+	if (bus) { 		// bus == 0 indicates that basrcpd should ignore 
+		if (ga[bus].gastate[addr].protocol != protocol) {
+			if (initGA(bus, addr, protocol) != SRCP_OK) return; 
+		}
+		enqueueGA(bus, addr, port, action, activetime);
+	}
+}			

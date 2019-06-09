@@ -1707,10 +1707,10 @@ static int init_ga_DDL(ga_data_t * ga)
 {
     switch (ga->protocol) {
         case 'M':              /* Motorola Codes */
-            return SRCP_OK;
+            return (ga->id <= 324) ? SRCP_OK : SRCP_WRONGVALUE;
             break;
         case 'N':
-            return SRCP_OK;
+            return (ga->id <= 2044) ? SRCP_OK : SRCP_WRONGVALUE;
             break;
     }
     return SRCP_UNSUPPORTEDDEVICEPROTOCOL;
@@ -1747,6 +1747,8 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
     __DDL->NMRA_GA_OFFSET = 0;  /* offset for ga base address 0 or 1  */
     __DDL->PROGRAM_TRACK = 1;   /* 0: suppress SM commands to PT address */
     __DDL->MCS_DEVNAME[0] = 0;	/* if empty you do not use such a device */
+   	__DDL->FWD_M_ACCESSORIES = busnumber;	/* default is own bus */ 
+   	__DDL->FWD_N_ACCESSORIES = busnumber;	/* default is own bus */
 
     xmlNodePtr child = node->children;
     xmlChar *txt = NULL;
@@ -1765,7 +1767,6 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
                 xmlFree(txt);
             }
         }
-
         else if (xmlStrcmp(child->name, BAD_CAST "number_ga") == 0) {
             txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
             if (txt != NULL) {
@@ -1773,7 +1774,6 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
                 xmlFree(txt);
             }
         }
-
         else if (xmlStrcmp
                  (child->name, BAD_CAST "enable_checkshort_checking")
                  == 0) {
@@ -1786,7 +1786,6 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
                 xmlFree(txt);
             }
         }
-
         else if (xmlStrcmp(child->name, BAD_CAST "enable_maerklin") == 0) {
             txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
             if (txt != NULL) {
@@ -1798,7 +1797,6 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
                 xmlFree(txt);
             }
         }
-
         else if (xmlStrcmp(child->name, BAD_CAST "enable_nmradcc") == 0) {
             txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
             if (txt != NULL) {
@@ -1810,7 +1808,6 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
                 xmlFree(txt);
             }
         }
-
         else if (xmlStrcmp(child->name, BAD_CAST "enable_mfx") == 0) {
             txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
             if (txt != NULL) {
@@ -1827,7 +1824,6 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
               __DDL->ENABLED_PROTOCOLS &= ~EP_MFX;
             }
         }
-
         else if (xmlStrcmp(child->name, BAD_CAST "shortcut_failure_delay")
                  == 0) {
             txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
@@ -1836,7 +1832,6 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
                 xmlFree(txt);
             }
         }
-
         else if (xmlStrcmp(child->name, BAD_CAST "nmra_ga_offset") == 0) {
             txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
             if (txt != NULL) {
@@ -1844,7 +1839,6 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
                 xmlFree(txt);
             }
         }
-
         else if (xmlStrcmp(child->name, BAD_CAST "program_track") == 0) {
             txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
             if (txt != NULL) {
@@ -1857,6 +1851,20 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
             txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
             if (txt != NULL) {
             	strncpy(__DDL->MCS_DEVNAME, (char *)txt, 15);
+                xmlFree(txt);
+            }
+        }
+        else if (xmlStrcmp(child->name, BAD_CAST "forward_mm_ga") == 0) {
+            txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
+            if (txt != NULL) {
+                __DDL->FWD_M_ACCESSORIES = atoi((char *) txt);
+                xmlFree(txt);
+            }
+        }
+        else if (xmlStrcmp(child->name, BAD_CAST "forward_nmra_ga") == 0) {
+            txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
+            if (txt != NULL) {
+                __DDL->FWD_N_ACCESSORIES = atoi((char *) txt);
                 xmlFree(txt);
             }
         }
@@ -2340,7 +2348,7 @@ static void *thr_sendrec_DDL(void *v)
             setGA(btd->bus, addr, gatmp);
             buses[btd->bus].watchdog = 5;
 
-            if (gatmp.activetime >= 0) {
+            if (gatmp.activetime > 0) {
 
                 /* the handling of delayed GA commands in this way, can only 
                    be a short term improvement. If srcpd will have better
