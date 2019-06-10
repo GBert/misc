@@ -1,11 +1,13 @@
 const int revisionnr = 
-15504
+15506
 ;
 const char* commithash = 
-"a3c4cb59b9c740d33db75e8ecbf3cc33f17addf3";
+"123ca8c3f59ed76eba2a020df5c116c5acb3111b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15506 2019-06-10 08:56:49 +0200 system actions: sub state implemented for IID\n" \
+"15505 2019-06-10 07:41:48 +0200 location: disregard maxocc if the loco already did arrive\n" \
 "15504 2019-06-09 07:53:39 +0200 z21: set UID to 21 if zero to be compatible with previous revisions\n" \
 "15503 2019-06-08 14:47:58 +0200 locationdlg: removed deprecated adjust flag\n" \
 "15502 2019-06-08 11:23:47 +0200 z21: set uid on state report\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13509 2018-02-05 16:06:15 +0100 location: substate for platform actions\n" \
 "13508 2018-02-05 14:55:28 +0100 dsd2010: report position + 1\n" \
 "13507 2018-02-05 14:45:47 +0100 dsd2010: fix for sending data\n" \
-"13506 2018-02-05 14:36:40 +0100 dsd2010: trace level correction for read bytes\n" \
-"13505 2018-02-05 14:22:36 +0100 dsd2010: use addr and bus reported by the commands\n" \
 
 "log end";
