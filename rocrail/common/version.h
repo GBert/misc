@@ -1,11 +1,12 @@
 const int revisionnr = 
-15509
+15510
 ;
 const char* commithash = 
-"412884f1a7d88dd4540f90a5eb159a1a7b14fe72";
+"f548aad460f1d74bedfe6c3a99421db7329bfde7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15510 2019-06-11 12:27:18 +0200 win64 build: strip debug info\n" \
 "15509 2019-06-11 10:40:59 +0200 guiframe: show IID in status bar as prefix for V/A/T\n" \
 "15508 2019-06-11 10:17:23 +0200 z21: report state only at change and in case of volt a delta of 100mV\n" \
 "15507 2019-06-11 08:08:04 +0200 xmlscript: use variable semaphore in query bevor changing the values\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13513 2018-02-06 09:31:05 +0100 dsd2010: function command support\n" \
 "13512 2018-02-06 08:45:50 +0100 dsd2010: trace turn direction\n" \
 "13511 2018-02-06 08:12:51 +0100 dsd2010: error/info evaluating extended\n" \
-"13510 2018-02-06 07:14:48 +0100 dsd2010: sound bit fix (Sven)\n" \
 
 "log end";
