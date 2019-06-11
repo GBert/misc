@@ -20,3 +20,12 @@ cd linux
 make scripts prepare modules_prepare
 make -C . M=drivers/net/can
 ```
+
+Prgrammer Test
+--------------
+
+|     |Si8605|
+|MCLR | 3 |
+|PGC  | 5 |
+|PGD  | 6 |
+
