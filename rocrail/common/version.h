@@ -1,11 +1,14 @@
 const int revisionnr = 
-15506
+15509
 ;
 const char* commithash = 
-"123ca8c3f59ed76eba2a020df5c116c5acb3111b";
+"412884f1a7d88dd4540f90a5eb159a1a7b14fe72";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15509 2019-06-11 10:40:59 +0200 guiframe: show IID in status bar as prefix for V/A/T\n" \
+"15508 2019-06-11 10:17:23 +0200 z21: report state only at change and in case of volt a delta of 100mV\n" \
+"15507 2019-06-11 08:08:04 +0200 xmlscript: use variable semaphore in query bevor changing the values\n" \
 "15506 2019-06-10 08:56:49 +0200 system actions: sub state implemented for IID\n" \
 "15505 2019-06-10 07:41:48 +0200 location: disregard maxocc if the loco already did arrive\n" \
 "15504 2019-06-09 07:53:39 +0200 z21: set UID to 21 if zero to be compatible with previous revisions\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13512 2018-02-06 08:45:50 +0100 dsd2010: trace turn direction\n" \
 "13511 2018-02-06 08:12:51 +0100 dsd2010: error/info evaluating extended\n" \
 "13510 2018-02-06 07:14:48 +0100 dsd2010: sound bit fix (Sven)\n" \
-"13509 2018-02-05 16:06:15 +0100 location: substate for platform actions\n" \
-"13508 2018-02-05 14:55:28 +0100 dsd2010: report position + 1\n" \
-"13507 2018-02-05 14:45:47 +0100 dsd2010: fix for sending data\n" \
 
 "log end";
