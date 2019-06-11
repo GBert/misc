@@ -25,7 +25,8 @@ Prgrammer Test
 --------------
 
 |     |Si8605|
-|MCLR | 3 |
-|PGC  | 5 |
-|PGD  | 6 |
+|-----|------|
+|MCLR | 3    |
+|PGC  | 5    |
+|PGD  | 6    |
 
