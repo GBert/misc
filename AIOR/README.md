@@ -20,6 +20,9 @@ cd linux
 make scripts prepare modules_prepare
 make -C . M=drivers/net/can
 ```
+
+CAN
+---
 /boot/config.txt
 
 ```
@@ -31,6 +34,13 @@ dtoverlay=mcp2517fd-can0
 dtparam=interrupt=25
 dtparam=oscillator=4000000
 dtparam=spimaxfrequency=20000000
+```
+
+```
+# setup 250kBaud
+#  time quantum 250ns time quanta 16 => 16*250ns = 4us => 250kb
+ip link set can0 up type can fd off tq 250 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1 berr-reporting off restart-ms 100
+ip -s -d link show can0
 ```
 
 Prgrammer Test
