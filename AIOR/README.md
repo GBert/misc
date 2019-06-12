@@ -20,6 +20,18 @@ cd linux
 make scripts prepare modules_prepare
 make -C . M=drivers/net/can
 ```
+/boot/config.txt
+
+```
+kernel=zImage
+device_tree=ms7/bcm2710-rpi-3-b-plus.dtb
+overlay_prefix=ms7/overlays/
+
+dtoverlay=mcp2517fd-can0
+dtparam=interrupt=25
+dtparam=oscillator=4000000
+dtparam=spimaxfrequency=20000000
+```
 
 Prgrammer Test
 --------------
