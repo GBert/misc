@@ -1,11 +1,12 @@
 const int revisionnr = 
-15510
+15511
 ;
 const char* commithash = 
-"f548aad460f1d74bedfe6c3a99421db7329bfde7";
+"b37b52b394595a9027e12c0ccf7d86bc97b58cde";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15511 2019-06-12 08:18:31 +0200 mbus: send lights(f0) also after the speed/dir commands\n" \
 "15510 2019-06-11 12:27:18 +0200 win64 build: strip debug info\n" \
 "15509 2019-06-11 10:40:59 +0200 guiframe: show IID in status bar as prefix for V/A/T\n" \
 "15508 2019-06-11 10:17:23 +0200 z21: report state only at change and in case of volt a delta of 100mV\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13514 2018-02-06 11:21:50 +0100 dsd2010: fix for reporting the bridge sensor state\n" \
 "13513 2018-02-06 09:31:05 +0100 dsd2010: function command support\n" \
 "13512 2018-02-06 08:45:50 +0100 dsd2010: trace turn direction\n" \
-"13511 2018-02-06 08:12:51 +0100 dsd2010: error/info evaluating extended\n" \
 
 "log end";
