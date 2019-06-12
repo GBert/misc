@@ -1,11 +1,14 @@
 const int revisionnr = 
-15511
+15514
 ;
 const char* commithash = 
-"b37b52b394595a9027e12c0ccf7d86bc97b58cde";
+"6c3badfc5c8636a75408dc20deaec3adfd4ba206";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15514 2019-06-12 10:20:29 +0200 control: set the IID in the callerid variable\n" \
+"15513 2019-06-12 10:14:18 +0200 route: check4redsignals option added, default off\n" \
+"15512 2019-06-12 08:39:56 +0200 wmz21: ignore bidikmh\n" \
 "15511 2019-06-12 08:18:31 +0200 mbus: send lights(f0) also after the speed/dir commands\n" \
 "15510 2019-06-11 12:27:18 +0200 win64 build: strip debug info\n" \
 "15509 2019-06-11 10:40:59 +0200 guiframe: show IID in status bar as prefix for V/A/T\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13517 2018-02-06 17:50:51 +0100 location: replace children on modify\n" \
 "13516 2018-02-06 15:33:27 +0100 cbus: trace the unexpected event from cancab v2 because MERG should fix this\n" \
 "13515 2018-02-06 14:38:49 +0100 cbus: ignore accessory events from node 0xFFFF CANCAB v2\n" \
-"13514 2018-02-06 11:21:50 +0100 dsd2010: fix for reporting the bridge sensor state\n" \
-"13513 2018-02-06 09:31:05 +0100 dsd2010: function command support\n" \
-"13512 2018-02-06 08:45:50 +0100 dsd2010: trace turn direction\n" \
 
 "log end";
