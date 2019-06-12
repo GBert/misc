@@ -1,11 +1,12 @@
 const int revisionnr = 
-15514
+15515
 ;
 const char* commithash = 
-"6c3badfc5c8636a75408dc20deaec3adfd4ba206";
+"18d9952e4225131654939e715c3587b99a86c827";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15515 2019-06-12 15:25:42 +0200 schedules: reset callerid and callertype\n" \
 "15514 2019-06-12 10:20:29 +0200 control: set the IID in the callerid variable\n" \
 "15513 2019-06-12 10:14:18 +0200 route: check4redsignals option added, default off\n" \
 "15512 2019-06-12 08:39:56 +0200 wmz21: ignore bidikmh\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13518 2018-02-07 07:50:03 +0100 issuedlg: replace invalid chars for the file system with underscores in the subject\n" \
 "13517 2018-02-06 17:50:51 +0100 location: replace children on modify\n" \
 "13516 2018-02-06 15:33:27 +0100 cbus: trace the unexpected event from cancab v2 because MERG should fix this\n" \
-"13515 2018-02-06 14:38:49 +0100 cbus: ignore accessory events from node 0xFFFF CANCAB v2\n" \
 
 "log end";
