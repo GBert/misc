@@ -1,11 +1,13 @@
 const int revisionnr = 
-15515
+15517
 ;
 const char* commithash = 
-"18d9952e4225131654939e715c3587b99a86c827";
+"c2668e212ac7f495837ebe6673a5ae33791a55d9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15517 2019-06-13 11:19:10 +0200 location: maxocc per cargo type\n" \
+"15516 2019-06-13 08:49:16 +0200 location: max commuter option added\n" \
 "15515 2019-06-12 15:25:42 +0200 schedules: reset callerid and callertype\n" \
 "15514 2019-06-12 10:20:29 +0200 control: set the IID in the callerid variable\n" \
 "15513 2019-06-12 10:14:18 +0200 route: check4redsignals option added, default off\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13520 2018-02-07 07:55:57 +0100 model: fix for overwriting the schedule init hour with real time\n" \
 "13519 2018-02-07 07:51:50 +0100 item: format function menu entries for the tt without prefix zero\n" \
 "13518 2018-02-07 07:50:03 +0100 issuedlg: replace invalid chars for the file system with underscores in the subject\n" \
-"13517 2018-02-06 17:50:51 +0100 location: replace children on modify\n" \
-"13516 2018-02-06 15:33:27 +0100 cbus: trace the unexpected event from cancab v2 because MERG should fix this\n" \
 
 "log end";
