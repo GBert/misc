@@ -42,6 +42,7 @@ dtparam=spimaxfrequency=20000000
 ip link set can0 up type can fd off tq 250 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1 berr-reporting off restart-ms 100
 ip -s -d link show can0
 ```
+
 ```
 [    3.960113] CAN device driver interface
 [    5.011176] mcp25xxfd spi0.0: MCP2517 successfully initialized.
@@ -50,8 +51,8 @@ ip -s -d link show can0
 ```
 'mcp25xxfd spi0.0: Controller unexpectedly switched from mode 0 to 6' is ok
 ```
-#    define CAN_CON_MODE_MIXED            0
-# define CAN_CON_MODE_CAN2_0 6
+#define CAN_CON_MODE_MIXED   0
+#define CAN_CON_MODE_CAN2_0  6
 ```
 Prgrammer Test
 --------------
