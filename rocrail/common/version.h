@@ -1,11 +1,13 @@
 const int revisionnr = 
-15525
+15527
 ;
 const char* commithash = 
-"deb0ac744394fe9485fe782956f03c17ed6d9487";
+"159b710dfec85e035d280fe59e4ab72db250d4b7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15527 2019-06-15 15:21:45 +0200 locationsdlg: layout correction\n" \
+"15526 2019-06-15 15:15:00 +0200 locationsdlg: layout correction\n" \
 "15525 2019-06-15 10:16:47 +0200 mbus: support for UID in system commands and events\n" \
 "15524 2019-06-15 09:53:21 +0200 mbus: regard bus as UID on system commands\n" \
 "15523 2019-06-15 09:38:30 +0200 aui: set stamp on replace perspective\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13530 2018-02-09 15:32:32 +0100 rocnetnode: raspi type 3 added for using ttyS0 instead of ttyAMA0, this is only for RFID reader directly connected to the RasPi\n" \
 "13529 2018-02-09 12:24:17 +0100 rocview: loco show/hide added in the loco filter view menu\n" \
 "13528 2018-02-09 07:53:42 +0100 location: use %callerdesc% for (fake) train ID\n" \
-"13527 2018-02-08 08:57:16 +0100 location: fix for updating child nodes, actions\n" \
-"13526 2018-02-08 08:00:16 +0100 dsd2010: error/info messages corrected\n" \
 
 "log end";
