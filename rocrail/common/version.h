@@ -1,11 +1,19 @@
 const int revisionnr = 
-15517
+15525
 ;
 const char* commithash = 
-"c2668e212ac7f495837ebe6673a5ae33791a55d9";
+"deb0ac744394fe9485fe782956f03c17ed6d9487";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15525 2019-06-15 10:16:47 +0200 mbus: support for UID in system commands and events\n" \
+"15524 2019-06-15 09:53:21 +0200 mbus: regard bus as UID on system commands\n" \
+"15523 2019-06-15 09:38:30 +0200 aui: set stamp on replace perspective\n" \
+"15522 2019-06-15 08:23:55 +0200 aui: perspective timestamp added for sorting and deleting\n" \
+"15521 2019-06-15 07:34:19 +0200 location: check first if the loco is already registered\n" \
+"15520 2019-06-14 13:37:08 +0200 locationdlg: layout improvement\n" \
+"15519 2019-06-14 13:28:57 +0200 location: maxocc other added\n" \
+"15518 2019-06-13 16:17:30 +0200 mbus: reject fnchanged -1\n" \
 "15517 2019-06-13 11:19:10 +0200 location: maxocc per cargo type\n" \
 "15516 2019-06-13 08:49:16 +0200 location: max commuter option added\n" \
 "15515 2019-06-12 15:25:42 +0200 schedules: reset callerid and callertype\n" \
@@ -1998,13 +2006,5 @@ const char* revlog =
 "13528 2018-02-09 07:53:42 +0100 location: use %callerdesc% for (fake) train ID\n" \
 "13527 2018-02-08 08:57:16 +0100 location: fix for updating child nodes, actions\n" \
 "13526 2018-02-08 08:00:16 +0100 dsd2010: error/info messages corrected\n" \
-"13525 2018-02-07 12:18:29 +0100 signals: correction for checking the wrong route for white signal aspect\n" \
-"13524 2018-02-07 12:06:00 +0100 roclcdrv: check at enter if its the last goto block\n" \
-"13523 2018-02-07 09:33:50 +0100 tt: revert invert flag for dsd2010\n" \
-"13522 2018-02-07 09:21:35 +0100 tt: invert flag support for dsd2010 added\n" \
-"13521 2018-02-07 08:53:44 +0100 translation merge: sl\n" \
-"13520 2018-02-07 07:55:57 +0100 model: fix for overwriting the schedule init hour with real time\n" \
-"13519 2018-02-07 07:51:50 +0100 item: format function menu entries for the tt without prefix zero\n" \
-"13518 2018-02-07 07:50:03 +0100 issuedlg: replace invalid chars for the file system with underscores in the subject\n" \
 
 "log end";
