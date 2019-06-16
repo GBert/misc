@@ -70,6 +70,7 @@ TODOs
 |--------------------------|----------|
 |RPi I2C                   | untested |
 |RPi CAN                   | working  |
+|RPi PIC24 Compiler        | working  |
 |PIC programming           | working  |
 |PIC firmware basic        | wip      |
 |PIC firmware CAN          |          |
@@ -79,7 +80,7 @@ TODOs
 |PIC firmware S88          |          |
 |PIC firmware SLX          |          |
 |PIC firmware Loconet      |          |
-|Silbas programming        |          |
-|Silbas firmware           |          |
+|Silabs programming        |          |
+|Silabs firmware           |          |
 |RDS/mfx                   |          |
 
