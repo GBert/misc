@@ -54,7 +54,7 @@ ip -s -d link show can0
 #define CAN_CON_MODE_MIXED   0
 #define CAN_CON_MODE_CAN2_0  6
 ```
-Prgrammer Test
+Programmer Test
 --------------
 
 |     |Si8605|
@@ -62,4 +62,24 @@ Prgrammer Test
 |MCLR | 3    |
 |PGC  | 5    |
 |PGD  | 6    |
+
+TODOs
+-----
+
+|Function                  | Status   |
+|--------------------------|----------|
+|RPi I2C                   | untested |
+|RPi CAN                   | working  |
+|PIC programming           | working  |
+|PIC firmware basic        | wip      |
+|PIC firmware CAN          |          |
+|PIC firmware H-Bridge     |          |
+|PIC firmware Track-Signal |          |
+|PIC firmware RS485        |          |
+|PIC firmware S88          |          |
+|PIC firmware SLX          |          |
+|PIC firmware Loconet      |          |
+|Silbas programming        |          |
+|Silbas firmware           |          |
+|RDS/mfx                   |          |
 
