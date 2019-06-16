@@ -1,11 +1,15 @@
 const int revisionnr = 
-15527
+15531
 ;
 const char* commithash = 
-"159b710dfec85e035d280fe59e4ab72db250d4b7";
+"5357933129495ca589e42ca539cb0cbc704131a5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15531 2019-06-16 15:57:59 +0200 wrapper: default 3 trace files\n" \
+"15530 2019-06-16 10:14:31 +0200 location: fix for maxocc zero\n" \
+"15529 2019-06-16 10:03:47 +0200 route,switch: check if the switch has an address set on empty commands\n" \
+"15528 2019-06-16 09:25:46 +0200 switch: check for valid command\n" \
 "15527 2019-06-15 15:21:45 +0200 locationsdlg: layout correction\n" \
 "15526 2019-06-15 15:15:00 +0200 locationsdlg: layout correction\n" \
 "15525 2019-06-15 10:16:47 +0200 mbus: support for UID in system commands and events\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13534 2018-02-10 08:27:14 +0100 turntabledialog: label correction for embeded block speed\n" \
 "13533 2018-02-10 08:23:41 +0100 tt: optional bridgespeed in case of embeded block\n" \
 "13532 2018-02-09 18:20:29 +0100 output: trace level correction\n" \
-"13531 2018-02-09 18:17:43 +0100 rocnetnode: revert pi3 hardware option\n" \
-"13530 2018-02-09 15:32:32 +0100 rocnetnode: raspi type 3 added for using ttyS0 instead of ttyAMA0, this is only for RFID reader directly connected to the RasPi\n" \
-"13529 2018-02-09 12:24:17 +0100 rocview: loco show/hide added in the loco filter view menu\n" \
-"13528 2018-02-09 07:53:42 +0100 location: use %callerdesc% for (fake) train ID\n" \
 
 "log end";
