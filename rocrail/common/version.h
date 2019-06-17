@@ -1,11 +1,13 @@
 const int revisionnr = 
-15531
+15533
 ;
 const char* commithash = 
-"5357933129495ca589e42ca539cb0cbc704131a5";
+"56cbb36fdf7455b92d6456a221c64872197cc8c5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15533 2019-06-17 15:23:50 +0200 block: fix for action call for occupied\n" \
+"15532 2019-06-17 14:57:28 +0200 modplandlg: file dialog buttons added for loco and route xml\n" \
 "15531 2019-06-16 15:57:59 +0200 wrapper: default 3 trace files\n" \
 "15530 2019-06-16 10:14:31 +0200 location: fix for maxocc zero\n" \
 "15529 2019-06-16 10:03:47 +0200 route,switch: check if the switch has an address set on empty commands\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13536 2018-02-11 14:54:57 +0100 route: trigger signals set\n" \
 "13535 2018-02-11 13:40:23 +0100 locseldlg: show all option added\n" \
 "13534 2018-02-10 08:27:14 +0100 turntabledialog: label correction for embeded block speed\n" \
-"13533 2018-02-10 08:23:41 +0100 tt: optional bridgespeed in case of embeded block\n" \
-"13532 2018-02-09 18:20:29 +0100 output: trace level correction\n" \
 
 "log end";
