@@ -1,11 +1,15 @@
 const int revisionnr = 
-15533
+15537
 ;
 const char* commithash = 
-"56cbb36fdf7455b92d6456a221c64872197cc8c5";
+"33cbbdcb94266944de944880f3a9951871190060";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15537 2019-06-18 18:23:27 +0200 timedactions: linktrain added\n" \
+"15536 2019-06-18 15:47:21 +0200 modplan: test with module z starting with 1 and 0 for rt.xml\n" \
+"15535 2019-06-18 11:07:55 +0200 modplandlg: fix for select the first index item in case its empty\n" \
+"15534 2019-06-18 09:50:17 +0200 location: fix for look up the location for a schedule entry block\n" \
 "15533 2019-06-17 15:23:50 +0200 block: fix for action call for occupied\n" \
 "15532 2019-06-17 14:57:28 +0200 modplandlg: file dialog buttons added for loco and route xml\n" \
 "15531 2019-06-16 15:57:59 +0200 wrapper: default 3 trace files\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13540 2018-02-12 09:16:08 +0100 bidib: filter MSG_LC_STAT on product ID to report a sensor or accessory\n" \
 "13539 2018-02-12 07:58:59 +0100 item: activate the hidden selected loco before setting it in a block\n" \
 "13538 2018-02-11 15:19:16 +0100 bidib: ignore error in case of MSG_LC_NA reports port 0xFFFF ???\n" \
-"13537 2018-02-11 15:11:26 +0100 bidib: ignore error in case of MSG_LC_NA reports port 0xFFFF ???\n" \
-"13536 2018-02-11 14:54:57 +0100 route: trigger signals set\n" \
-"13535 2018-02-11 13:40:23 +0100 locseldlg: show all option added\n" \
-"13534 2018-02-10 08:27:14 +0100 turntabledialog: label correction for embeded block speed\n" \
 
 "log end";
