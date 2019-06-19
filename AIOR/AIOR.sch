@@ -6,8 +6,8 @@ $Descr A3 16535 11693
 encoding utf-8
 Sheet 1 1
 Title "All in One Railroad Interface PoC"
-Date "2019-06-05"
-Rev "V1.01"
+Date "2019-06-19"
+Rev "V1.1"
 Comp "Gerhard Bertelsmann"
 Comment1 ""
 Comment2 ""
@@ -2695,7 +2695,7 @@ L AIOR-rescue:R R22
 U 1 1 5CE5AA21
 P 8100 5400
 F 0 "R22" V 8000 5400 50  0000 C CNN
-F 1 "3k3" V 8100 5400 50  0000 C CNN
+F 1 "1k" V 8100 5400 50  0000 C CNN
 F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 8030 5400 50  0001 C CNN
 F 3 "" H 8100 5400 50  0000 C CNN
 	1    8100 5400
@@ -2706,7 +2706,7 @@ L AIOR-rescue:R R23
 U 1 1 5CE5AB8C
 P 8200 5400
 F 0 "R23" V 8300 5400 50  0000 C CNN
-F 1 "3k3" V 8200 5400 50  0000 C CNN
+F 1 "1k" V 8200 5400 50  0000 C CNN
 F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 8130 5400 50  0001 C CNN
 F 3 "" H 8200 5400 50  0000 C CNN
 	1    8200 5400
@@ -3403,13 +3403,13 @@ Wire Wire Line
 	7850 6900 8300 6900
 Wire Wire Line
 	7850 7000 8300 7000
-Text Label 8300 6900 2    60   ~ 0
+Text Label 8275 6200 2    60   ~ 0
 B_LEFT
-Text Label 8300 7000 2    60   ~ 0
+Text Label 8275 6300 2    60   ~ 0
 B_RIGHT
 Wire Wire Line
 	8300 6800 7850 6800
-Text Label 8300 6800 2    60   ~ 0
+Text Label 8275 6100 2    60   ~ 0
 B_ENA
 Connection ~ 11650 4600
 Wire Wire Line
@@ -3574,11 +3574,11 @@ Wire Wire Line
 	7850 6600 8350 6600
 Wire Wire Line
 	7850 6700 8350 6700
-Text Label 8350 6500 2    60   ~ 0
+Text Label 8350 6700 2    60   ~ 0
 RS485_RX
 Text Label 8350 6600 2    60   ~ 0
 RS485_TX
-Text Label 8350 6700 2    60   ~ 0
+Text Label 8350 6500 2    60   ~ 0
 RS485_EN
 Text Label 8400 5700 0    60   ~ 0
 XINT
@@ -3592,11 +3592,11 @@ Wire Wire Line
 	7850 7300 8300 7300
 Wire Wire Line
 	7850 7400 8300 7400
-Text Label 8300 7300 2    60   ~ 0
+Text Label 8300 6900 2    60   ~ 0
 RDCL
-Text Label 8300 7200 2    60   ~ 0
+Text Label 8300 6800 2    60   ~ 0
 QUAL
-Text Label 8300 7400 2    60   ~ 0
+Text Label 8300 7000 2    60   ~ 0
 RDDA
 Wire Wire Line
 	7850 8000 8150 8000
@@ -3869,7 +3869,7 @@ L Connector_Generic:Conn_01x04 P60
 U 1 1 605975C7
 P 7675 8700
 F 0 "P60" H 7675 8950 50  0001 C CNN
-F 1 "SLX" V 7775 8700 50  0000 C CNN
+F 1 "SX" V 7775 8700 50  0000 C CNN
 F 2 "w_conn_jst-ph:b4b-ph-kl" H 7675 8700 50  0001 C CNN
 F 3 "" H 7675 8700 50  0000 C CNN
 	1    7675 8700
@@ -4339,49 +4339,12 @@ S88
 Wire Wire Line
 	1000 8250 600  8250
 NoConn ~ 7850 5500
-$Comp
-L Connector_Generic:Conn_01x04 J20
-U 1 1 5DF4FF22
-P 9350 6550
-F 0 "J20" H 9430 6542 50  0000 L CNN
-F 1 "Conn_01x04" H 9430 6451 50  0000 L CNN
-F 2 "Connector_PinHeader_1.27mm:PinHeader_1x04_P1.27mm_Vertical" H 9350 6550 50  0001 C CNN
-F 3 "~" H 9350 6550 50  0001 C CNN
-	1    9350 6550
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	9150 6450 8950 6450
-Wire Wire Line
-	9150 6550 8950 6550
-Wire Wire Line
-	9150 6650 8950 6650
-Wire Wire Line
-	9150 6750 8950 6750
-Text Label 8950 6450 0    60   ~ 0
-RB5
-Text Label 8950 6550 0    60   ~ 0
-RB6
-Text Label 8950 6650 0    60   ~ 0
-RB7
-Text Label 8950 6750 0    60   ~ 0
-RB8
 Wire Wire Line
 	7850 6000 8100 6000
 Wire Wire Line
-	8100 6100 7850 6100
-Wire Wire Line
-	7850 6200 8100 6200
-Wire Wire Line
-	7850 6300 8100 6300
+	8275 6100 7850 6100
 Text Label 8100 6000 2    60   ~ 0
 RB5
-Text Label 8100 6100 2    60   ~ 0
-RB6
-Text Label 8100 6200 2    60   ~ 0
-RB7
-Text Label 8100 6300 2    60   ~ 0
-RB8
 Text Label 12575 2025 0    60   ~ 0
 HBL
 Text Label 13000 2025 2    60   ~ 0
@@ -5097,4 +5060,13 @@ F 3 "http://www.st.com/content/ccc/resource/technical/document/datasheet/41/4f/b
 	1    2950 10350
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	7850 6300 8275 6300
+Wire Wire Line
+	7850 6200 8275 6200
+NoConn ~ 8100 6000
+NoConn ~ 8300 7200
+NoConn ~ 8300 7300
+NoConn ~ 8300 7400
+NoConn ~ 8075 2125
 $EndSCHEMATC
