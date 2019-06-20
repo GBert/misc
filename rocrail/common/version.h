@@ -1,11 +1,22 @@
 const int revisionnr = 
-15537
+15548
 ;
 const char* commithash = 
-"33cbbdcb94266944de944880f3a9951871190060";
+"ed917a020831c749598a8a8b7ac3a680b2fe774e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15548 2019-06-20 10:43:33 +0200 text: click state for triggering actions added\n" \
+"15547 2019-06-20 08:05:21 +0200 modplan: read/save tour, waybill, link, weather, lightctrl and mvtrack\n" \
+"15546 2019-06-20 07:44:34 +0200 modplan: read and save module systemactions\n" \
+"15545 2019-06-20 07:43:20 +0200 modplan: read module system\n" \
+"15544 2019-06-19 14:48:02 +0200 modplan: use modzoffset on modify; move, rotate\n" \
+"15543 2019-06-19 11:20:04 +0200 modplan: use modzoffset also at adding a new module\n" \
+"15542 2019-06-19 10:47:06 +0200 action: support for link-/unlinktrain\n" \
+"15541 2019-06-19 09:16:19 +0200 block: not set the block occupancy, occ.xml, at reserve\n" \
+"15540 2019-06-19 06:50:01 +0200 modplan: use a define for the z offset\n" \
+"15539 2019-06-19 06:17:44 +0200 timedactions: unlinktrain command added\n" \
+"15538 2019-06-19 05:14:45 +0200 modplan: fix for saving modules starting with z=1\n" \
 "15537 2019-06-18 18:23:27 +0200 timedactions: linktrain added\n" \
 "15536 2019-06-18 15:47:21 +0200 modplan: test with module z starting with 1 and 0 for rt.xml\n" \
 "15535 2019-06-18 11:07:55 +0200 modplandlg: fix for select the first index item in case its empty\n" \
@@ -1995,16 +2006,5 @@ const char* revlog =
 "13551 2018-02-14 11:11:26 +0100 guiframe: hide context menu item in the loco grid\n" \
 "13550 2018-02-14 08:12:09 +0100 srcp: trace corrections\n" \
 "13549 2018-02-13 11:17:35 +0100 p50x: removed the unused ctsretry variable\n" \
-"13548 2018-02-13 11:14:12 +0100 digints: ctsretry is in ms which must be divided by 10\n" \
-"13547 2018-02-13 11:00:03 +0100 p50: reduce wait for CTS to max 10 x 10ms\n" \
-"13546 2018-02-13 09:27:18 +0100 funcmd: standalone option added to disable an extra V command in case of f0\n" \
-"13545 2018-02-12 12:22:12 +0100 route: removed the NOTs from the conditions\n" \
-"13544 2018-02-12 11:59:01 +0100 basedlg: show bus also in HEX in case the UID is set\n" \
-"13543 2018-02-12 11:52:22 +0100 route: fix for condition with type all\n" \
-"13542 2018-02-12 11:21:10 +0100 bidib: show uid in hex at command\n" \
-"13541 2018-02-12 09:30:52 +0100 sensorevents: show bus as hex in case the value > 16 bit\n" \
-"13540 2018-02-12 09:16:08 +0100 bidib: filter MSG_LC_STAT on product ID to report a sensor or accessory\n" \
-"13539 2018-02-12 07:58:59 +0100 item: activate the hidden selected loco before setting it in a block\n" \
-"13538 2018-02-11 15:19:16 +0100 bidib: ignore error in case of MSG_LC_NA reports port 0xFFFF ???\n" \
 
 "log end";
