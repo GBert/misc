@@ -1,11 +1,12 @@
 const int revisionnr = 
-15548
+15549
 ;
 const char* commithash = 
-"ed917a020831c749598a8a8b7ac3a680b2fe774e";
+"ecd0a0b3c5be3c5301ace338ec39fdad72416586";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15549 2019-06-20 11:20:31 +0200 xmlscriptdlg: text commands added\n" \
 "15548 2019-06-20 10:43:33 +0200 text: click state for triggering actions added\n" \
 "15547 2019-06-20 08:05:21 +0200 modplan: read/save tour, waybill, link, weather, lightctrl and mvtrack\n" \
 "15546 2019-06-20 07:44:34 +0200 modplan: read and save module systemactions\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13552 2018-02-14 12:16:34 +0100 guiframe: commented out the loco show/hide in the view menu\n" \
 "13551 2018-02-14 11:11:26 +0100 guiframe: hide context menu item in the loco grid\n" \
 "13550 2018-02-14 08:12:09 +0100 srcp: trace corrections\n" \
-"13549 2018-02-13 11:17:35 +0100 p50x: removed the unused ctsretry variable\n" \
 
 "log end";
