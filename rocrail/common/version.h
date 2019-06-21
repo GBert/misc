@@ -1,11 +1,14 @@
 const int revisionnr = 
-15554
+15557
 ;
 const char* commithash = 
-"065d38d35f59605e9b7de1ac749f83a3e3892528";
+"feb57b2a7450923f83cb3e9b3617643eb7c260af";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15557 2019-06-21 11:09:27 +0200 textdialog,xmlscriptdlg: text state on and off added\n" \
+"15556 2019-06-21 10:56:47 +0200 location: ignore maxocc commuter and other if both are zero\n" \
+"15555 2019-06-21 10:11:34 +0200 text: toggle option added\n" \
 "15554 2019-06-20 17:44:34 +0200 control: trace correction\n" \
 "15553 2019-06-20 17:08:07 +0200 mbus utils: fix for MERG standard CAN frame ID\n" \
 "15552 2019-06-20 14:59:06 +0200 canservice: avoid looping without sleep in case of tcp socket error\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13560 2018-02-16 17:53:11 +0100 schedulegraph: scale 5 added\n" \
 "13559 2018-02-16 15:27:51 +0100 control: set booster uid to 1 in case both uid and address are not set for use in the power manager\n" \
 "13558 2018-02-16 14:15:46 +0100 schedulegraph: wip\n" \
-"13557 2018-02-16 12:20:12 +0100 schedulegraph: WIP\n" \
-"13556 2018-02-15 11:54:18 +0100 translation merge: sl, de, fr, sr_latin, pr_BR, nl\n" \
-"13555 2018-02-15 08:22:39 +0100 loc,seltab: update occ.xml with the reserved seltab blockID\n" \
 
 "log end";
