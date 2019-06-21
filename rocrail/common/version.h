@@ -1,11 +1,15 @@
 const int revisionnr = 
-15557
+15561
 ;
 const char* commithash = 
-"feb57b2a7450923f83cb3e9b3617643eb7c260af";
+"89cf3a3cf5617d3d43590e2f3cdcbcac3d359f0a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15561 2019-06-21 18:13:18 +0200 canservice: CBUS nodenumber 65000\n" \
+"15560 2019-06-21 16:47:49 +0200 canservice: report on QNN\n" \
+"15559 2019-06-21 15:58:42 +0200 canservice: respond on QNN with PNN in case of CBUS\n" \
+"15558 2019-06-21 14:27:29 +0200 text: fix for check action state\n" \
 "15557 2019-06-21 11:09:27 +0200 textdialog,xmlscriptdlg: text state on and off added\n" \
 "15556 2019-06-21 10:56:47 +0200 location: ignore maxocc commuter and other if both are zero\n" \
 "15555 2019-06-21 10:11:34 +0200 text: toggle option added\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13564 2018-02-18 09:21:24 +0100 SLIM-COLOR: fix for turnoutleft-t-route\n" \
 "13563 2018-02-18 08:35:25 +0100 SLIM: fix for turnout left turn occ\n" \
 "13562 2018-02-18 08:02:11 +0100 actionsctrldlg: added state idel,wait,auto to the loco type\n" \
-"13561 2018-02-17 10:36:27 +0100 actionctrldlg: changed person state into local\n" \
-"13560 2018-02-16 17:53:11 +0100 schedulegraph: scale 5 added\n" \
-"13559 2018-02-16 15:27:51 +0100 control: set booster uid to 1 in case both uid and address are not set for use in the power manager\n" \
-"13558 2018-02-16 14:15:46 +0100 schedulegraph: wip\n" \
 
 "log end";
