@@ -1,11 +1,16 @@
 const int revisionnr = 
-15549
+15554
 ;
 const char* commithash = 
-"ecd0a0b3c5be3c5301ace338ec39fdad72416586";
+"065d38d35f59605e9b7de1ac749f83a3e3892528";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15554 2019-06-20 17:44:34 +0200 control: trace correction\n" \
+"15553 2019-06-20 17:08:07 +0200 mbus utils: fix for MERG standard CAN frame ID\n" \
+"15552 2019-06-20 14:59:06 +0200 canservice: avoid looping without sleep in case of tcp socket error\n" \
+"15551 2019-06-20 14:54:47 +0200 canservice: fix for standard ASCII frame\n" \
+"15550 2019-06-20 14:40:12 +0200 canservice: ascii framing support added\n" \
 "15549 2019-06-20 11:20:31 +0200 xmlscriptdlg: text commands added\n" \
 "15548 2019-06-20 10:43:33 +0200 text: click state for triggering actions added\n" \
 "15547 2019-06-20 08:05:21 +0200 modplan: read/save tour, waybill, link, weather, lightctrl and mvtrack\n" \
@@ -2001,10 +2006,5 @@ const char* revlog =
 "13557 2018-02-16 12:20:12 +0100 schedulegraph: WIP\n" \
 "13556 2018-02-15 11:54:18 +0100 translation merge: sl, de, fr, sr_latin, pr_BR, nl\n" \
 "13555 2018-02-15 08:22:39 +0100 loc,seltab: update occ.xml with the reserved seltab blockID\n" \
-"13554 2018-02-14 17:49:19 +0100 srcp: init S88 bus after connect\n" \
-"13553 2018-02-14 15:36:12 +0100 http: check support key only at start\n" \
-"13552 2018-02-14 12:16:34 +0100 guiframe: commented out the loco show/hide in the view menu\n" \
-"13551 2018-02-14 11:11:26 +0100 guiframe: hide context menu item in the loco grid\n" \
-"13550 2018-02-14 08:12:09 +0100 srcp: trace corrections\n" \
 
 "log end";
