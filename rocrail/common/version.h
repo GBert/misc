@@ -1,11 +1,15 @@
 const int revisionnr = 
-15561
+15565
 ;
 const char* commithash = 
-"89cf3a3cf5617d3d43590e2f3cdcbcac3d359f0a";
+"06ae3ab5d0aff3c736821aacb2490f2912b0e53f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15565 2019-06-22 11:35:30 +0200 translation merge: nb, nl, de, sl\n" \
+"15564 2019-06-22 08:18:54 +0200 schedule: save scid in the last entry in case actions at IN\n" \
+"15563 2019-06-22 07:42:06 +0200 cbusnodedlg: corrected the description for CANService\n" \
+"15562 2019-06-22 07:21:08 +0200 text,xmlscript: text state added\n" \
 "15561 2019-06-21 18:13:18 +0200 canservice: CBUS nodenumber 65000\n" \
 "15560 2019-06-21 16:47:49 +0200 canservice: report on QNN\n" \
 "15559 2019-06-21 15:58:42 +0200 canservice: respond on QNN with PNN in case of CBUS\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13568 2018-02-18 14:10:09 +0100 virtual: disable fake state information in case booster UID is not set\n" \
 "13567 2018-02-18 14:03:42 +0100 guiframe: save show flag\n" \
 "13566 2018-02-18 11:59:39 +0100 powerctrldlg: fix for right/left click on grid header\n" \
-"13565 2018-02-18 10:02:04 +0100 schedulegraph: time from up to down\n" \
-"13564 2018-02-18 09:21:24 +0100 SLIM-COLOR: fix for turnoutleft-t-route\n" \
-"13563 2018-02-18 08:35:25 +0100 SLIM: fix for turnout left turn occ\n" \
-"13562 2018-02-18 08:02:11 +0100 actionsctrldlg: added state idel,wait,auto to the loco type\n" \
 
 "log end";
