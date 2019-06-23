@@ -19,8 +19,8 @@
 volatile uint16_t LED_Counter = 0;
 
 
-/* code for Output Compare 1 ISR*/
-void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt( void ) {
+/* code for Timer1 ISR*/
+void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt(void) {
     /* Clear OC1 interrupt flag} */
     IFS0bits.T1IF = 0;
     LED_Counter++;
@@ -30,30 +30,68 @@ void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt( void ) {
     }
 }
 
+/* code for Timer2 ISR*/
+void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void) {
+    IFS0bits.T2IF = 0;
+}
+
+/* Example code for Timer9 ISR */
+void __attribute__((__interrupt__, no_auto_psv)) _T3Interrupt(void) {
+        /* Clear Timer3 Interrupt Flag */
+        IFS0bits.T3IF = 0;
+}
+
 /* code for Output Compare 1 ISR*/
-void __attribute__((__interrupt__, no_auto_psv)) _OC1Interrupt( void ) {
+void __attribute__((__interrupt__, no_auto_psv)) _OC1Interrupt(void) {
     /* Clear OC1 interrupt flag} */
     IFS0bits.OC1IF = 0;
 }
 
 /* code for Output Compare 2 ISR*/
-void __attribute__((__interrupt__, no_auto_psv)) _OC2Interrupt( void ) {
+void __attribute__((__interrupt__, no_auto_psv)) _OC2Interrupt(void) {
     /* Clear OC2 interrupt flag} */
     IFS0bits.OC2IF = 0;
 }
 
 void init_timer(void) {
-	/* Timer1 for msic tasks */
-	T1CONbits.TON = 0;        // Disable Timer
-	T1CONbits.TCS = 0;        // Select internal instruction cycle clock
-	T1CONbits.TGATE = 0;      // Disable Gated Timer mode
-	T1CONbits.TCKPS = 0b10;   // Select 1:256 Prescaler
-	TMR1 = 0x00;              // Clear timer register
-	PR1 = 999;                // Load the period value
-	IPC0bits.T1IP = 0x01;     // Set Timer1 Interrupt Priority Level
-	IFS0bits.T1IF = 0;        // Clear Timer1 Interrupt Flag
-	IEC0bits.T1IE = 1;        // Enable Timer1 interrupt
-	T1CONbits.TON = 1;        // Start Timer
+    /* Timer1 for msic tasks */
+    T1CONbits.TON = 0;        // Disable Timer
+    T1CONbits.TCS = 0;        // Select internal instruction cycle clock
+    T1CONbits.TGATE = 0;      // Disable Gated Timer mode
+    T1CONbits.TCKPS = 0b10;   // Select 1:64 Prescaler
+    TMR1 = 0x0000;            // Clear timer register
+    PR1 = 999;                // Load the period value / 64MHz / 64 *1000 -> 1ms
+    IPC0bits.T1IP = 0x01;     // Set Timer1 Interrupt Priority Level
+    IFS0bits.T1IF = 0;        // Clear Timer1 Interrupt Flag
+    IEC0bits.T1IE = 1;        // Enable Timer1 interrupt
+    T1CONbits.TON = 1;        // Start Timer
+
+    /* Timer2 for track signal generating - 1 tick = 1us */
+    T2CONbits.TON = 0;        // Disable Timer
+    T2CONbits.TCS = 0;        // Select internal instruction cycle clock
+    T2CONbits.TGATE = 0;      // Disable Gated Timer mode
+    T2CONbits.TCKPS = 0b10;   // Select 1:64 Prescaler
+    TMR2 = 0x0000;            // Clear timer register
+    PR2 = 0x0000;             // Load the period value
+    IFS0bits.T2IF = 0;        // Clear Timer1 Interrupt Flag
+    IEC0bits.T2IE = 0;        // Disbale Timer1 interrupt
+    T2CONbits.TON = 1;        // Start Timer
+
+    /* Timer8&9 32 Bit free running counter - 1 tick = 1us */
+    T9CONbits.TON = 0;        // Stop any 16-bit Timer9 operation
+    T8CONbits.TON = 0;        // Stop any 16/32-bit Timer8 operation
+    T8CONbits.T32 = 1;        // Enable 32-bit Timer mode
+    T8CONbits.TCS = 0;        // Select internal instruction cycle clock
+    T8CONbits.TGATE = 0;      // Disable Gated Timer mode
+    T8CONbits.TCKPS = 0b10;   // Select 1:64 Prescaler
+    TMR9 = 0x0000;            // Clear 32-bit Timer (msw)
+    TMR8 = 0x0000;            // Clear 32-bit Timer (lsw)
+    PR9 = 0x0000;             // Load 32-bit period value (msw)
+    PR8 = 0x0000;             // Load 32-bit period value (lsw)
+    IPC13bits.T9IP = 0x01;    // Set Timer9 Interrupt Priority Level
+    IFS3bits.T9IF = 0;        // Clear Timer9 Interrupt Flag
+    IEC3bits.T9IE = 1;        // Enable Timer9 interrupt
+    T8CONbits.TON = 1;        // Start 32-bit Time
 }
 
 void init_io(void) {
