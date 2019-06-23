@@ -1,11 +1,19 @@
 const int revisionnr = 
-15565
+15573
 ;
 const char* commithash = 
-"06ae3ab5d0aff3c736821aacb2490f2912b0e53f";
+"526d4a697502f11db6e33a3ec7f3f90227d4f39a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15573 2019-06-23 14:04:13 +0200 rocweb: added text click command\n" \
+"15572 2019-06-23 10:22:31 +0200 mbus: redesigned the polling of channels\n" \
+"15571 2019-06-23 08:26:58 +0200 mbus: fix for 1.4.1 update: booster MAIN is changed in TRACK\n" \
+"15570 2019-06-22 19:18:15 +0200 canservice: report as CANID=0 and NN=0\n" \
+"15569 2019-06-22 19:12:41 +0200 text: fix for model command change\n" \
+"15568 2019-06-22 18:02:02 +0200 canservice: use same CANID and nodenumber as the GC1e in case of service on 5550\n" \
+"15567 2019-06-22 16:30:21 +0200 modplan: add all system actions\n" \
+"15566 2019-06-22 16:03:36 +0200 text: center option added\n" \
 "15565 2019-06-22 11:35:30 +0200 translation merge: nb, nl, de, sl\n" \
 "15564 2019-06-22 08:18:54 +0200 schedule: save scid in the last entry in case actions at IN\n" \
 "15563 2019-06-22 07:42:06 +0200 cbusnodedlg: corrected the description for CANService\n" \
@@ -1998,13 +2006,5 @@ const char* revlog =
 "13576 2018-02-19 12:25:23 +0100 schedulegraph: use graphiccontext for the lines\n" \
 "13575 2018-02-19 11:29:21 +0100 loc: action state manual added\n" \
 "13574 2018-02-19 10:59:39 +0100 schedulegraph: show trainID\n" \
-"13573 2018-02-19 10:46:03 +0100 schedulegraph: fix for time over hour, show trainID\n" \
-"13572 2018-02-19 09:04:13 +0100 schedulegtraph: color added, fix for time through the hour\n" \
-"13571 2018-02-19 07:55:15 +0100 loc: isState run added\n" \
-"13570 2018-02-18 15:36:17 +0100 schedualgraph: line thickness set to 1\n" \
-"13569 2018-02-18 15:08:51 +0100 schedulegraph: show group\n" \
-"13568 2018-02-18 14:10:09 +0100 virtual: disable fake state information in case booster UID is not set\n" \
-"13567 2018-02-18 14:03:42 +0100 guiframe: save show flag\n" \
-"13566 2018-02-18 11:59:39 +0100 powerctrldlg: fix for right/left click on grid header\n" \
 
 "log end";
