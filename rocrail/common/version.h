@@ -1,11 +1,12 @@
 const int revisionnr = 
-15573
+15574
 ;
 const char* commithash = 
-"526d4a697502f11db6e33a3ec7f3f90227d4f39a";
+"32209fd4275c0a440dfa9d853ec3501ff931cb3c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15574 2019-06-23 18:40:33 +0200 control: tracelevel correction for action state does not match\n" \
 "15573 2019-06-23 14:04:13 +0200 rocweb: added text click command\n" \
 "15572 2019-06-23 10:22:31 +0200 mbus: redesigned the polling of channels\n" \
 "15571 2019-06-23 08:26:58 +0200 mbus: fix for 1.4.1 update: booster MAIN is changed in TRACK\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13577 2018-02-19 14:05:13 +0100 schedulegraph: use graphicalcontext at a later point\n" \
 "13576 2018-02-19 12:25:23 +0100 schedulegraph: use graphiccontext for the lines\n" \
 "13575 2018-02-19 11:29:21 +0100 loc: action state manual added\n" \
-"13574 2018-02-19 10:59:39 +0100 schedulegraph: show trainID\n" \
 
 "log end";
