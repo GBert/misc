@@ -1,11 +1,15 @@
 const int revisionnr = 
-15574
+15578
 ;
 const char* commithash = 
-"32209fd4275c0a440dfa9d853ec3501ff931cb3c";
+"826d905cc1aa63414987dc1759c1428aced6fc6d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15578 2019-06-24 10:37:12 +0200 canservice: activate monitor level for starting services and incoming connections\n" \
+"15577 2019-06-24 08:43:33 +0200 canservice: disable tracing files and info level\n" \
+"15576 2019-06-24 08:09:23 +0200 rocnetnode: corrections for extended digint interface on halt\n" \
+"15575 2019-06-24 07:58:45 +0200 rocint: halt of interface digint extended with password\n" \
 "15574 2019-06-23 18:40:33 +0200 control: tracelevel correction for action state does not match\n" \
 "15573 2019-06-23 14:04:13 +0200 rocweb: added text click command\n" \
 "15572 2019-06-23 10:22:31 +0200 mbus: redesigned the polling of channels\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13581 2018-02-19 15:45:51 +0100 schedulegraph: white location label backgound color\n" \
 "13580 2018-02-19 15:20:32 +0100 schedulegraph: floating location labels\n" \
 "13579 2018-02-19 15:03:22 +0100 schedulegraph: scale factor selection added\n" \
-"13578 2018-02-19 14:17:47 +0100 location: skip last schedule entries\n" \
-"13577 2018-02-19 14:05:13 +0100 schedulegraph: use graphicalcontext at a later point\n" \
-"13576 2018-02-19 12:25:23 +0100 schedulegraph: use graphiccontext for the lines\n" \
-"13575 2018-02-19 11:29:21 +0100 loc: action state manual added\n" \
 
 "log end";
