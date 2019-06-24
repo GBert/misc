@@ -66,16 +66,16 @@ void init_timer(void) {
     IEC0bits.T1IE = 1;        // Enable Timer1 interrupt
     T1CONbits.TON = 1;        // Start Timer
 
-    /* Timer2 for track signal generating - 1 tick = 1us */
+    /* Timer2 for Output Compare - 1 tick = 1us */
     T2CONbits.TON = 0;        // Disable Timer
     T2CONbits.TCS = 0;        // Select internal instruction cycle clock
     T2CONbits.TGATE = 0;      // Disable Gated Timer mode
     T2CONbits.TCKPS = 0b10;   // Select 1:64 Prescaler
     TMR2 = 0x0000;            // Clear timer register
-    PR2 = 0x0000;             // Load the period value
+    PR2 = 100;             // Load the period value
     IFS0bits.T2IF = 0;        // Clear Timer1 Interrupt Flag
-    IEC0bits.T2IE = 0;        // Disbale Timer1 interrupt
-    T2CONbits.TON = 1;        // Start Timer
+    IEC0bits.T2IE = 0;        // Disable Timer1 interrupt
+    // T2CONbits.TON = 1;        // Start Timer TODO
 
     /* Timer8&9 32 Bit free running counter - 1 tick = 1us */
     T9CONbits.TON = 0;        // Stop any 16-bit Timer9 operation
@@ -86,12 +86,38 @@ void init_timer(void) {
     T8CONbits.TCKPS = 0b10;   // Select 1:64 Prescaler
     TMR9 = 0x0000;            // Clear 32-bit Timer (msw)
     TMR8 = 0x0000;            // Clear 32-bit Timer (lsw)
-    PR9 = 0x0000;             // Load 32-bit period value (msw)
-    PR8 = 0x0000;             // Load 32-bit period value (lsw)
+    PR9 = 0xffff;             // Load 32-bit period value (msw)
+    PR8 = 0xffff;             // Load 32-bit period value (lsw)
     IPC13bits.T9IP = 0x01;    // Set Timer9 Interrupt Priority Level
     IFS3bits.T9IF = 0;        // Clear Timer9 Interrupt Flag
     IEC3bits.T9IE = 1;        // Enable Timer9 interrupt
     T8CONbits.TON = 1;        // Start 32-bit Time
+
+    /* Prepare Output Compare 1 for track signal using default Timer2 */
+    OC1CON1         = 0x0000;     // Turn off Output Compare 1 Module
+    //OC1CON1         = 0x0004;     // Load new compare mode to OC1CON                      TODO
+    OC1CON1         = 0x0005;     // Load new compare mode to OC1CON                      TODO
+    OC1R            = 5;         // Initialize Compare Register1 with 5             TODO
+    OC1RS           = 45;         // Initialize Secondary Compare Register1 with 45   TODO
+    IPC0bits.OC1IP0 = 1;          // Setup Output Compare 1 interrupt for
+    IPC0bits.OC1IP1 = 0;          // desired priority level
+    IPC0bits.OC1IP2 = 0;
+    IFS0bits.OC1IF  = 0;          // Clear Output Compare 1 interrupt flag
+    IEC0bits.OC1IE  = 1;          // Enable Output Compare 1 interrupt
+
+    /* Prepare Output Compare 2 for track signal using default Timer2 */
+    OC2CON1         = 0x0000;     // Turn off Output Compare 1 Module
+    //OC2CON1         = 0x0004;     // Load new compare mode to OC1CON                      TODO
+    OC2CON1         = 0x0005;     // Load new compare mode to OC1CON                      TODO
+    OC2R            = 55;    // Initialize Compare Register1 with 0x3000             TODO
+    OC2RS           = 95;     // Initialize Secondary Compare Register1 with 0x3003   TODO
+    IPC1bits.OC2IP0 = 1;          // Setup Output Compare 1 interrupt for
+    IPC1bits.OC2IP1 = 0;          // desired priority level
+    IPC1bits.OC2IP2 = 0;
+    IFS0bits.OC2IF  = 0;          // Clear Output Compare 1 interrupt flag
+    IEC0bits.OC2IE  = 1;          // Enable Output Compare 1 interrupt
+
+    T2CONbits.TON = 1;        // Start Timer TODO
 }
 
 void init_io(void) {
@@ -138,6 +164,7 @@ int main(void) {
     while (OSCCONbits.LOCK != 1) ;
 
     init_io();
+    init_pps();
     init_timer();
 
     while (true) {
