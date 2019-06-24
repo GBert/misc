@@ -1,11 +1,13 @@
 const int revisionnr = 
-15578
+15580
 ;
 const char* commithash = 
-"826d905cc1aa63414987dc1759c1428aced6fc6d";
+"06f7e5e0064a9d775d1f8507af44351897b279b6";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15580 2019-06-24 18:20:24 +0200 clntcon: reject new client connection on shutdown\n" \
+"15579 2019-06-24 17:27:29 +0200 clntcon: trace correction\n" \
 "15578 2019-06-24 10:37:12 +0200 canservice: activate monitor level for starting services and incoming connections\n" \
 "15577 2019-06-24 08:43:33 +0200 canservice: disable tracing files and info level\n" \
 "15576 2019-06-24 08:09:23 +0200 rocnetnode: corrections for extended digint interface on halt\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13583 2018-02-20 08:48:29 +0100 schedulegraph: skip none regular stops\n" \
 "13582 2018-02-20 08:47:51 +0100 jssupport: throttle action added\n" \
 "13581 2018-02-19 15:45:51 +0100 schedulegraph: white location label backgound color\n" \
-"13580 2018-02-19 15:20:32 +0100 schedulegraph: floating location labels\n" \
-"13579 2018-02-19 15:03:22 +0100 schedulegraph: scale factor selection added\n" \
 
 "log end";
