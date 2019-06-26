@@ -8,6 +8,7 @@
  */
 
 #include "main.h"
+#include "can.h"
 
 #pragma config JTAGEN   = OFF
 #pragma config FNOSC    = PRIPLL
@@ -25,7 +26,7 @@ void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt(void) {
     IFS0bits.T1IF = 0;
     LED_Counter++;
     if (LED_Counter >= 500) {
-	__builtin_btg((unsigned int *)&LATB, 9);
+	//__builtin_btg((unsigned int *)&LATB, 9);
 	LED_Counter = 0;
     }
 }
@@ -72,7 +73,7 @@ void init_timer(void) {
     T2CONbits.TGATE = 0;      // Disable Gated Timer mode
     T2CONbits.TCKPS = 0b10;   // Select 1:64 Prescaler
     TMR2 = 0x0000;            // Clear timer register
-    PR2 = 100;             // Load the period value
+    PR2 = 99;             // Load the period value
     IFS0bits.T2IF = 0;        // Clear Timer1 Interrupt Flag
     IEC0bits.T2IE = 0;        // Disable Timer1 interrupt
     // T2CONbits.TON = 1;        // Start Timer TODO
@@ -97,8 +98,8 @@ void init_timer(void) {
     OC1CON1         = 0x0000;     // Turn off Output Compare 1 Module
     //OC1CON1         = 0x0004;     // Load new compare mode to OC1CON                      TODO
     OC1CON1         = 0x0005;     // Load new compare mode to OC1CON                      TODO
-    OC1R            = 5;         // Initialize Compare Register1 with 5             TODO
-    OC1RS           = 45;         // Initialize Secondary Compare Register1 with 45   TODO
+    OC1R            = 4;         // Initialize Compare Register1 with 5             TODO
+    OC1RS           = 44;         // Initialize Secondary Compare Register1 with 45   TODO
     IPC0bits.OC1IP0 = 1;          // Setup Output Compare 1 interrupt for
     IPC0bits.OC1IP1 = 0;          // desired priority level
     IPC0bits.OC1IP2 = 0;
@@ -109,8 +110,8 @@ void init_timer(void) {
     OC2CON1         = 0x0000;     // Turn off Output Compare 1 Module
     //OC2CON1         = 0x0004;     // Load new compare mode to OC1CON                      TODO
     OC2CON1         = 0x0005;     // Load new compare mode to OC1CON                      TODO
-    OC2R            = 55;    // Initialize Compare Register1 with 0x3000             TODO
-    OC2RS           = 95;     // Initialize Secondary Compare Register1 with 0x3003   TODO
+    OC2R            = 54;    // Initialize Compare Register1 with 0x3000             TODO
+    OC2RS           = 94;     // Initialize Secondary Compare Register1 with 0x3003   TODO
     IPC1bits.OC2IP0 = 1;          // Setup Output Compare 1 interrupt for
     IPC1bits.OC2IP1 = 0;          // desired priority level
     IPC1bits.OC2IP2 = 0;
@@ -131,10 +132,17 @@ void init_io(void) {
     CM5CON = 0;
     ANSELA = 0;
     ANSELB = 0;
+    ANSELC = 0;
     // AD1PCFG = 0xFFFF;
-
     /* RB9 LED */
     TRISB = 0;
+    //TRISC = 0x0080;
+    LATCbits.LATC6 = 1;
+    TRISCbits.TRISC6 = 0;
+    TRISCbits.TRISC7 = 1;
+    LATCbits.LATC9 = 1;
+    TRISCbits.TRISC8 = 1;
+    TRISCbits.TRISC9 = 0;
 }
 
 void init_pps(void) {
@@ -166,8 +174,11 @@ int main(void) {
     init_io();
     init_pps();
     init_timer();
+    init_can();
 
     while (true) {
 	__delay_ms(500);
+	__builtin_btg((unsigned int *)&LATB, 9);
+	can_test_send();
     }
 }

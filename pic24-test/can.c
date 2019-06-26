@@ -10,7 +10,8 @@
 #include "main.h"
 #include "can.h"
 
-uint16_t m_Can_ECanTXRXMsgBuf[NUM_OF_ECAN_BUFFERS][8] __attribute__ ((aligned(NUM_OF_ECAN_BUFFERS * 16)));
+uint16_t m_Can_ECanRXMsgBuf[8][8] __attribute__ ((aligned(8 * 16)));
+uint16_t m_Can_ECanTXMsgBuf[8][8] __attribute__ ((aligned(8 * 16)));
 
 void init_can(void)
 {
@@ -24,7 +25,7 @@ void init_can(void)
     C1CTRL1bits.CSIDL = 0;
     C1CTRL1bits.CANCAP = 0;
 
-  // can-calc-bittiming
+    /* can-calc-bittiming */
     C1CFG1=CB_C1CFG1;
     C1CFG2=CB_C1CFG2;
 
@@ -36,17 +37,17 @@ void init_can(void)
     DMA0PAD = (volatile unsigned int)&C1TXD;
     DMA0REQ = 0x0046;               //C1TX - ECAN1 Transmit Data Request
     DMA0STAH = 0;
-    DMA0STAL = (unsigned int)&m_Can_ECanTXRXMsgBuf;
+    DMA0STAL = (unsigned int)&m_Can_ECanTXMsgBuf;
     DMA0CONbits.CHEN = 1;
 
-    /* DMA Config Channel 2 for RX IRQ = 34 */
-    DMA2CON = 0x0020;
-    DMA2CNT = 7;
-    DMA2PAD = (volatile unsigned int)&C1RXD;
-    DMA2REQ = 0x0022;
-    DMA2STAH = 0;
-    DMA2STAL = (unsigned int)&m_Can_ECanTXRXMsgBuf;
-    DMA2CONbits.CHEN = 1;
+    /* DMA Config Channel 1 for RX IRQ = 34 */
+    DMA1CON = 0x0020;
+    DMA1CNT = 7;
+    DMA1PAD = (volatile unsigned int)&C1RXD;
+    DMA1REQ = 0x0022;
+    DMA1STAH = 0;
+    DMA1STAL = (unsigned int)&m_Can_ECanRXMsgBuf;
+    DMA1CONbits.CHEN = 1;
 
     //IEC0bits.DMA1IE = 1;
 
@@ -78,7 +79,7 @@ void init_can(void)
     /* Set SFR Window to Control register in RAM */
     C1CTRL1bits.WIN = 0;
 
-    // Configure Message Buffer 0 for Transmission and assign priority
+    /* Configure Message Buffer 0 for Transmission and assign priority */
     C1TR01CONbits.TXEN0 = 0x1;
     C1TR01CONbits.TX0PRI = 0x3;
 
@@ -88,22 +89,22 @@ void init_can(void)
     // start Can
     //C1CTRL1bits.REQOP = CAN_OPMODE_LOOPBACK;
     //while (C1CTRL1bits.OPMODE != CAN_OPMODE_LOOPBACK);
-    C1CTRL1bits.REQOP = CAN_OPMODE_LOOPBACK;
-    while (C1CTRL1bits.OPMODE != CAN_OPMODE_LOOPBACK);
+    C1CTRL1bits.REQOP = CAN_OPMODE_NORMAL;
+    while (C1CTRL1bits.OPMODE != CAN_OPMODE_NORMAL);
 
-    // Empfangspuffer leer setzen
+    // Empfangspuffer leeren
     C1RXFUL1 = 0;
 }
 
 void can_test_send(void) {
 
-    m_Can_ECanTXRXMsgBuf[0][0] = 0x01D3 << 2;   // IDE, SRR = 0 SID = 1D2
-    m_Can_ECanTXRXMsgBuf[0][1] = 0x0000;        // EID = 0
-    m_Can_ECanTXRXMsgBuf[0][2] = 0x0008;        // RTR = 0, DLC = Data Length counter = 8 = 8 Wör sollen üagen werden
-    m_Can_ECanTXRXMsgBuf[0][3] = 0xabcd;
-    m_Can_ECanTXRXMsgBuf[0][4] = 0xabcd;
-    m_Can_ECanTXRXMsgBuf[0][5] = 0xabcd;
-    m_Can_ECanTXRXMsgBuf[0][6] = 0xabcd;
+    m_Can_ECanTXMsgBuf[0][0] = 0x01D3 << 2;   // IDE, SRR = 0 SID = 1D2
+    m_Can_ECanTXMsgBuf[0][1] = 0x0000;        // EID = 0
+    m_Can_ECanTXMsgBuf[0][2] = 0x0008;        // RTR = 0, DLC = Data Length counter = 8 = 8 Wör sollen üagen werden
+    m_Can_ECanTXMsgBuf[0][3] = 0xabcd;
+    m_Can_ECanTXMsgBuf[0][4] = 0xabcd;
+    m_Can_ECanTXMsgBuf[0][5] = 0xabcd;
+    m_Can_ECanTXMsgBuf[0][6] = 0xabcd;
 
     while(C1TR01CONbits.TXREQ0 == 1);
     C1TR01CONbits.TXREQ0 = 0x1;
