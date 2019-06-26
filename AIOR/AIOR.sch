@@ -6,8 +6,8 @@ $Descr A3 16535 11693
 encoding utf-8
 Sheet 1 1
 Title "All in One Railroad Interface PoC"
-Date "2019-06-19"
-Rev "V1.1"
+Date "2019-06-26"
+Rev "V1.2"
 Comp "Gerhard Bertelsmann"
 Comment1 ""
 Comment2 ""
@@ -542,7 +542,7 @@ L AIOR-rescue:Conn_01x06 J81
 U 1 1 5A5233DC
 P 4075 8350
 F 0 "J81" H 4075 8650 50  0000 C CNN
-F 1 "Conn_01x06" H 4075 7950 50  0001 C CNN
+F 1 "S88" H 4075 7950 50  0001 C CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Horizontal" H 4075 8350 50  0001 C CNN
 F 3 "" H 4075 8350 50  0001 C CNN
 	1    4075 8350
@@ -3532,8 +3532,7 @@ F 3 "" H 8950 8400 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	8950 8350 8950 8400
-NoConn ~ 8350 8000
+	8950 8350 8950 8375
 $Comp
 L Device:CP C22
 U 1 1 5DD10B56
@@ -5069,4 +5068,11 @@ NoConn ~ 8300 7200
 NoConn ~ 8300 7300
 NoConn ~ 8300 7400
 NoConn ~ 8075 2125
+Wire Wire Line
+	8950 8375 8350 8375
+Wire Wire Line
+	8350 8375 8350 8000
+Connection ~ 8950 8375
+Wire Wire Line
+	8950 8375 8950 8400
 $EndSCHEMATC
