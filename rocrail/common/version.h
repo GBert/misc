@@ -1,11 +1,20 @@
 const int revisionnr = 
-15580
+15589
 ;
 const char* commithash = 
-"06f7e5e0064a9d775d1f8507af44351897b279b6";
+"372a9307cfb2386009403dfa2bc217a9cfaad6bc";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15589 2019-06-26 16:10:39 +0200 connectiondialog: removed obsolete adjust minsize\n" \
+"15588 2019-06-26 15:11:05 +0200 r2rnet: list up found servers in the connection dialog\n" \
+"15587 2019-06-26 13:10:21 +0200 base,rocguiinidlg: R2RNet\n" \
+"15586 2019-06-26 08:16:07 +0200 r2rnet: check for active server before opening a workspace\n" \
+"15585 2019-06-25 19:19:41 +0200 infodialog: removed obsolete adjustminsize flag\n" \
+"15584 2019-06-25 09:58:04 +0200 donkeydlg: layout corrections\n" \
+"15583 2019-06-25 08:32:15 +0200 wsocket: trace correction in case the hostname query did fail\n" \
+"15582 2019-06-25 07:37:49 +0200 infodialog,rocguiinidlg: layout and translation corrections\n" \
+"15581 2019-06-25 07:17:52 +0200 donkey: added missing dialog title\n" \
 "15580 2019-06-24 18:20:24 +0200 clntcon: reject new client connection on shutdown\n" \
 "15579 2019-06-24 17:27:29 +0200 clntcon: trace correction\n" \
 "15578 2019-06-24 10:37:12 +0200 canservice: activate monitor level for starting services and incoming connections\n" \
@@ -1997,14 +2006,5 @@ const char* revlog =
 "13592 2018-02-21 07:58:16 +0100 jssupport: open/close throttldlg\n" \
 "13591 2018-02-20 17:23:00 +0100 action: check state idle,wait,auto,run,manual\n" \
 "13590 2018-02-20 15:57:29 +0100 schedulegraph: show loco in regular stop (wip)\n" \
-"13589 2018-02-20 15:12:06 +0100 translation for schedulegraph added (Graphic timetable)\n" \
-"13588 2018-02-20 15:07:42 +0100 schedulesgraphdlg: translations and titlebar\n" \
-"13587 2018-02-20 14:41:51 +0100 schedulegraphdlg: new, wip\n" \
-"13586 2018-02-20 11:21:17 +0100 wrapper: jsmap throttle attribute\n" \
-"13585 2018-02-20 10:36:04 +0100 wmz21: Z21 App support\n" \
-"13584 2018-02-20 09:44:34 +0100 wmz21: z21 app support\n" \
-"13583 2018-02-20 08:48:29 +0100 schedulegraph: skip none regular stops\n" \
-"13582 2018-02-20 08:47:51 +0100 jssupport: throttle action added\n" \
-"13581 2018-02-19 15:45:51 +0100 schedulegraph: white location label backgound color\n" \
 
 "log end";
