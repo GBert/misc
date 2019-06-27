@@ -1,11 +1,14 @@
 const int revisionnr = 
-15589
+15592
 ;
 const char* commithash = 
-"372a9307cfb2386009403dfa2bc217a9cfaad6bc";
+"3b741c60db1a9e20a7b51194903040f856e6260c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15592 2019-06-27 11:16:08 +0200 connectiondialog: show plan title in the R2RNet list\n" \
+"15591 2019-06-27 09:46:03 +0200 socket: trace correction\n" \
+"15590 2019-06-27 08:01:00 +0200 base: check if the netrsp is valid before adding it to the server list\n" \
 "15589 2019-06-26 16:10:39 +0200 connectiondialog: removed obsolete adjust minsize\n" \
 "15588 2019-06-26 15:11:05 +0200 r2rnet: list up found servers in the connection dialog\n" \
 "15587 2019-06-26 13:10:21 +0200 base,rocguiinidlg: R2RNet\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13595 2018-02-21 10:20:55 +0100 wmz21: fix for screwing up the locoinfo\n" \
 "13594 2018-02-21 09:22:12 +0100 wmz21: extra support for Z21 App\n" \
 "13593 2018-02-21 08:41:14 +0100 loc: publish scheduleinithour to the clients\n" \
-"13592 2018-02-21 07:58:16 +0100 jssupport: open/close throttldlg\n" \
-"13591 2018-02-20 17:23:00 +0100 action: check state idle,wait,auto,run,manual\n" \
-"13590 2018-02-20 15:57:29 +0100 schedulegraph: show loco in regular stop (wip)\n" \
 
 "log end";
