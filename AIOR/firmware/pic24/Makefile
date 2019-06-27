@@ -45,7 +45,7 @@ OBJDUMP	:= $(COMPILE)objdump
 
 TARGET	:= main.hex
 
-CSOURCE	:= main.c
+CSOURCE	:= can.c main.c
 COBJECT	:= $(CSOURCE:.c=.o)
 CHEADER	:= $(CSOURCE:.c=.h)
 CTEMPS  := $(CSOURCE:.c=.s)
