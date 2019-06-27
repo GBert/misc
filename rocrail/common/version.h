@@ -1,11 +1,13 @@
 const int revisionnr = 
-15592
+15594
 ;
 const char* commithash = 
-"3b741c60db1a9e20a7b51194903040f856e6260c";
+"70b61ab792bb6aa81517dd49801986c8241a9415";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15594 2019-06-27 19:09:33 +0200 loc unlinktrain: use last added operator ID in case no unlink ID is provided.\n" \
+"15593 2019-06-27 18:27:23 +0200 wsocket: added missing include errno.h\n" \
 "15592 2019-06-27 11:16:08 +0200 connectiondialog: show plan title in the R2RNet list\n" \
 "15591 2019-06-27 09:46:03 +0200 socket: trace correction\n" \
 "15590 2019-06-27 08:01:00 +0200 base: check if the netrsp is valid before adding it to the server list\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13597 2018-02-21 11:09:00 +0100 schedulegraph: try to scroll the timenow line into the Y middle\n" \
 "13596 2018-02-21 10:47:04 +0100 schedulegraph: show current train location\n" \
 "13595 2018-02-21 10:20:55 +0100 wmz21: fix for screwing up the locoinfo\n" \
-"13594 2018-02-21 09:22:12 +0100 wmz21: extra support for Z21 App\n" \
-"13593 2018-02-21 08:41:14 +0100 loc: publish scheduleinithour to the clients\n" \
 
 "log end";
