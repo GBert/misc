@@ -26,6 +26,8 @@ CAN
 /boot/config.txt
 
 ```
+# ttyS0
+enable_uart=1
 kernel=zImage
 device_tree=ms7/bcm2710-rpi-3-b-plus.dtb
 overlay_prefix=ms7/overlays/
