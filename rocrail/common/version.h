@@ -1,11 +1,13 @@
 const int revisionnr = 
-15596
+15598
 ;
 const char* commithash = 
-"4be3cfc86f411255a710a32cc1583a210cade3b3";
+"d723632f3e91cd2e41657e628670e688a6506fc6";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15598 2019-06-28 16:59:43 +0200 blockgroupingdlg: bookmark support\n" \
+"15597 2019-06-28 12:26:48 +0200 rocnet: support for dual coil switches added\n" \
 "15596 2019-06-28 10:15:41 +0200 locationsdlg: fix for bookmark support\n" \
 "15595 2019-06-28 10:00:21 +0200 bookmarks: location added\n" \
 "15594 2019-06-27 19:09:33 +0200 loc unlinktrain: use last added operator ID in case no unlink ID is provided.\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13601 2018-02-23 08:10:50 +0100 loc,actionctrldlg: state automatic added which ist NOT manual\n" \
 "13600 2018-02-22 22:02:45 +0100 jssupport: provide the throttle list for update events\n" \
 "13599 2018-02-22 14:37:48 +0100 cbus,loc: send release command to the CS\n" \
-"13598 2018-02-21 12:30:52 +0100 schedulegraphdlg: select first group automatically at open\n" \
-"13597 2018-02-21 11:09:00 +0100 schedulegraph: try to scroll the timenow line into the Y middle\n" \
 
 "log end";
