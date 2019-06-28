@@ -98,3 +98,7 @@ TODOs
 |Silabs firmware           |          |
 |RDS/mfx                   |          |
 |RPi Image                 |          |
+
+Links
+-----
+https://www.circuits.dk/setup-raspberry-pi-3-gpio-uart/
