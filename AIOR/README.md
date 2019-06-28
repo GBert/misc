@@ -73,7 +73,7 @@ TODOs
 |RPi PIC24 Compiler        | working  |
 |PIC programming           | working  |
 |PIC firmware basic        | blinky   |
-|PIC firmware CAN          |          |
+|PIC firmware CAN          | TX OK    |
 |PIC firmware H-Bridge     |          |
 |PIC firmware Track-Signal |          |
 |PIC firmware RS485        |          |

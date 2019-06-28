@@ -39,7 +39,7 @@ void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void) {
 /* Example code for Timer9 ISR */
 void __attribute__((__interrupt__, no_auto_psv)) _T3Interrupt(void) {
         /* Clear Timer3 Interrupt Flag */
-        IFS0bits.T3IF = 0;
+    IFS0bits.T3IF = 0;
 }
 
 /* code for Output Compare 1 ISR*/
