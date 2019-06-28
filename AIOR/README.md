@@ -57,6 +57,18 @@ ip -s -d link show can0
 Programmer Test
 --------------
 
+/home/pi/.pickle/config
+```
+DEBUG=10
+DEVICE=RPI2
+SLEEP=10
+BITRULES=0x5B00
+VPP=4
+PGM=-1
+PGC=14
+PGD=15
+```
+
 |     |Si8605|
 |-----|------|
 |MCLR | 3    |
