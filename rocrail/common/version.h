@@ -1,11 +1,13 @@
 const int revisionnr = 
-15594
+15596
 ;
 const char* commithash = 
-"70b61ab792bb6aa81517dd49801986c8241a9415";
+"4be3cfc86f411255a710a32cc1583a210cade3b3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15596 2019-06-28 10:15:41 +0200 locationsdlg: fix for bookmark support\n" \
+"15595 2019-06-28 10:00:21 +0200 bookmarks: location added\n" \
 "15594 2019-06-27 19:09:33 +0200 loc unlinktrain: use last added operator ID in case no unlink ID is provided.\n" \
 "15593 2019-06-27 18:27:23 +0200 wsocket: added missing include errno.h\n" \
 "15592 2019-06-27 11:16:08 +0200 connectiondialog: show plan title in the R2RNet list\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13599 2018-02-22 14:37:48 +0100 cbus,loc: send release command to the CS\n" \
 "13598 2018-02-21 12:30:52 +0100 schedulegraphdlg: select first group automatically at open\n" \
 "13597 2018-02-21 11:09:00 +0100 schedulegraph: try to scroll the timenow line into the Y middle\n" \
-"13596 2018-02-21 10:47:04 +0100 schedulegraph: show current train location\n" \
-"13595 2018-02-21 10:20:55 +0100 wmz21: fix for screwing up the locoinfo\n" \
 
 "log end";
