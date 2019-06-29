@@ -16,6 +16,7 @@
 #pragma config FCKSM    = CSECMD
 #pragma config OSCIOFNC = ON
 #pragma config POSCMD   = XT
+#pragma config FWDTEN   = OFF
 
 volatile uint16_t LED_Counter = 0;
 
@@ -36,9 +37,8 @@ void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void) {
     IFS0bits.T2IF = 0;
 }
 
-/* Example code for Timer9 ISR */
+/* code for Timer9 ISR */
 void __attribute__((__interrupt__, no_auto_psv)) _T3Interrupt(void) {
-        /* Clear Timer3 Interrupt Flag */
     IFS0bits.T3IF = 0;
 }
 
