@@ -1,11 +1,12 @@
 const int revisionnr = 
-15603
+15604
 ;
 const char* commithash = 
-"eb7879615fdecdcfa7de4ed7a6816c6e017fa972";
+"52ee5482fc7cc3e8b8ea70dc18b11aac4ef767dc";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15604 2019-06-29 19:52:22 +0200 switch: test trace twin address\n" \
 "15603 2019-06-29 09:17:11 +0200 loconet: added missing halt password parameter\n" \
 "15602 2019-06-29 07:19:58 +0200 modplan: added comment for why using 1 as zoffset instead of 0\n" \
 "15601 2019-06-29 07:18:01 +0200 modplan,analyser: static function to get the zoffset\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13607 2018-02-25 11:09:11 +0100 wmz21: broadcast switch/output events to the devices\n" \
 "13606 2018-02-25 10:38:03 +0100 wmz21: broadcast loco events to the connected devices\n" \
 "13605 2018-02-25 08:49:57 +0100 translation merge: nl, de, pt_BR\n" \
-"13604 2018-02-24 14:44:40 +0100 model: stop looking for a fitting schedule entry if the given index is out of range\n" \
 
 "log end";
