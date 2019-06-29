@@ -1,11 +1,16 @@
 const int revisionnr = 
-15598
+15603
 ;
 const char* commithash = 
-"d723632f3e91cd2e41657e628670e688a6506fc6";
+"eb7879615fdecdcfa7de4ed7a6816c6e017fa972";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15603 2019-06-29 09:17:11 +0200 loconet: added missing halt password parameter\n" \
+"15602 2019-06-29 07:19:58 +0200 modplan: added comment for why using 1 as zoffset instead of 0\n" \
+"15601 2019-06-29 07:18:01 +0200 modplan,analyser: static function to get the zoffset\n" \
+"15600 2019-06-29 07:07:31 +0200 analyse: fix for checking overlapping in module plan (Lothar)\n" \
+"15599 2019-06-28 21:13:20 +0200 analyser: work around for invalid position check in case of modular layout\n" \
 "15598 2019-06-28 16:59:43 +0200 blockgroupingdlg: bookmark support\n" \
 "15597 2019-06-28 12:26:48 +0200 rocnet: support for dual coil switches added\n" \
 "15596 2019-06-28 10:15:41 +0200 locationsdlg: fix for bookmark support\n" \
@@ -2001,10 +2006,5 @@ const char* revlog =
 "13606 2018-02-25 10:38:03 +0100 wmz21: broadcast loco events to the connected devices\n" \
 "13605 2018-02-25 08:49:57 +0100 translation merge: nl, de, pt_BR\n" \
 "13604 2018-02-24 14:44:40 +0100 model: stop looking for a fitting schedule entry if the given index is out of range\n" \
-"13603 2018-02-23 11:55:11 +0100 stage: reject reserve as crossing block\n" \
-"13602 2018-02-23 08:12:18 +0100 action: support for loc state automatic added\n" \
-"13601 2018-02-23 08:10:50 +0100 loc,actionctrldlg: state automatic added which ist NOT manual\n" \
-"13600 2018-02-22 22:02:45 +0100 jssupport: provide the throttle list for update events\n" \
-"13599 2018-02-22 14:37:48 +0100 cbus,loc: send release command to the CS\n" \
 
 "log end";
