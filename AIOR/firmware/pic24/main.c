@@ -19,7 +19,7 @@
 #pragma config FWDTEN   = OFF
 
 volatile uint16_t LED_Counter = 0;
-
+volatile uint16_t tcounter = 0;
 
 /* code for Timer1 ISR*/
 void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt(void) {
@@ -38,8 +38,9 @@ void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void) {
 }
 
 /* code for Timer9 ISR */
-void __attribute__((__interrupt__, no_auto_psv)) _T3Interrupt(void) {
-    IFS0bits.T3IF = 0;
+void __attribute__((__interrupt__, no_auto_psv)) _T9Interrupt(void) {
+    IFS3bits.T9IF = 0;
+    tcounter++;
 }
 
 /* code for Output Compare 1 ISR*/
@@ -180,5 +181,6 @@ int main(void) {
 	__delay_ms(500);
 	__builtin_btg((unsigned int *)&LATB, 9);
 	can_test_send();
+	ClrWdt();
     }
 }
