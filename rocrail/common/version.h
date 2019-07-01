@@ -1,11 +1,13 @@
 const int revisionnr = 
-15605
+15607
 ;
 const char* commithash = 
-"11824043457679019e303dd9a7c27628f7afe1ec";
+"6ef04a4cdbbd548a1ffd5aae19ea236635fdd301";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15607 2019-06-30 18:05:56 +0200 text: replace pipe with <br> in case of html and concat\n" \
+"15606 2019-06-30 16:57:03 +0200 text: replace pipe with <br> in case of html and concat\n" \
 "15605 2019-06-30 10:53:40 +0200 switch: fix for evaluating twin addressing\n" \
 "15604 2019-06-29 19:52:22 +0200 switch: test trace twin address\n" \
 "15603 2019-06-29 09:17:11 +0200 loconet: added missing halt password parameter\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13610 2018-02-25 19:37:49 +0100 xmlscript. weather command support added\n" \
 "13609 2018-02-25 18:11:54 +0100 loc: set flag to signal of function with own address\n" \
 "13608 2018-02-25 12:17:15 +0100 xmlscript: replace vars in nodes recursive\n" \
-"13607 2018-02-25 11:09:11 +0100 wmz21: broadcast switch/output events to the devices\n" \
-"13606 2018-02-25 10:38:03 +0100 wmz21: broadcast loco events to the connected devices\n" \
 
 "log end";
