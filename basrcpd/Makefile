@@ -52,6 +52,7 @@ ifdef CONFIG_LINUX_4_19
 else
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/srcpd.conf $(1)/etc
 endif
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/srcpd.regcount $(1)/etc
 endef
 
 
