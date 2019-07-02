@@ -1,11 +1,12 @@
 const int revisionnr = 
-15617
+15618
 ;
 const char* commithash = 
-"6cdd3020e840448b7458bc3bfc5b460fef6cb27e";
+"fe88cf50ca655cb8f9079954980c1210ac66245e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15618 2019-07-02 19:37:53 +0200 text: border color\n" \
 "15617 2019-07-02 17:13:33 +0200 rocviewX.sh: executable flag\n" \
 "15616 2019-07-02 17:10:08 +0200 zipper.sh: macOS support\n" \
 "15615 2019-07-02 15:29:11 +0200 zipper.sh: typo\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13621 2018-02-28 09:24:25 +0100 locationsdlg: added modify button on the index tab\n" \
 "13620 2018-02-28 08:46:18 +0100 locationdlg: show kmpos in the position column\n" \
 "13619 2018-02-27 21:40:22 +0100 rocview: added the preview flag for GTK filedialog\n" \
-"13618 2018-02-27 15:20:46 +0100 schedulegraph: use kmpos in case all locations are set\n" \
 
 "log end";
