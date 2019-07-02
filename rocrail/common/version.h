@@ -1,11 +1,13 @@
 const int revisionnr = 
-15615
+15617
 ;
 const char* commithash = 
-"e8885cec750cb4ffd8a59a4907e68c2f0f5f8683";
+"6cdd3020e840448b7458bc3bfc5b460fef6cb27e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15617 2019-07-02 17:13:33 +0200 rocviewX.sh: executable flag\n" \
+"15616 2019-07-02 17:10:08 +0200 zipper.sh: macOS support\n" \
 "15615 2019-07-02 15:29:11 +0200 zipper.sh: typo\n" \
 "15614 2019-07-02 14:48:58 +0200 zipper: linux support added\n" \
 "15613 2019-07-02 11:22:23 +0200 rocview.cmd: use absolute path for server binaries\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13620 2018-02-28 08:46:18 +0100 locationdlg: show kmpos in the position column\n" \
 "13619 2018-02-27 21:40:22 +0100 rocview: added the preview flag for GTK filedialog\n" \
 "13618 2018-02-27 15:20:46 +0100 schedulegraph: use kmpos in case all locations are set\n" \
-"13617 2018-02-27 13:38:32 +0100 xmlscript: optional connect attribute for if statement for connection condition, state and class; default and.\n" \
-"13616 2018-02-27 11:50:36 +0100 bidib: update product list\n" \
 
 "log end";
