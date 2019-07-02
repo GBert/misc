@@ -1,11 +1,19 @@
 const int revisionnr = 
-15607
+15615
 ;
 const char* commithash = 
-"6ef04a4cdbbd548a1ffd5aae19ea236635fdd301";
+"e8885cec750cb4ffd8a59a4907e68c2f0f5f8683";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15615 2019-07-02 15:29:11 +0200 zipper.sh: typo\n" \
+"15614 2019-07-02 14:48:58 +0200 zipper: linux support added\n" \
+"15613 2019-07-02 11:22:23 +0200 rocview.cmd: use absolute path for server binaries\n" \
+"15612 2019-07-02 09:53:51 +0200 zipper.sh: copy zip to package\n" \
+"15611 2019-07-02 09:47:07 +0200 zipper: $1 for w32/w64\n" \
+"15610 2019-07-02 08:33:42 +0200 zipper script added\n" \
+"15609 2019-07-02 08:04:07 +0200 rocview.cmd for zip installer\n" \
+"15608 2019-07-01 19:26:34 +0200 model: remove attribute modplan\n" \
 "15607 2019-06-30 18:05:56 +0200 text: replace pipe with <br> in case of html and concat\n" \
 "15606 2019-06-30 16:57:03 +0200 text: replace pipe with <br> in case of html and concat\n" \
 "15605 2019-06-30 10:53:40 +0200 switch: fix for evaluating twin addressing\n" \
@@ -1998,13 +2006,5 @@ const char* revlog =
 "13618 2018-02-27 15:20:46 +0100 schedulegraph: use kmpos in case all locations are set\n" \
 "13617 2018-02-27 13:38:32 +0100 xmlscript: optional connect attribute for if statement for connection condition, state and class; default and.\n" \
 "13616 2018-02-27 11:50:36 +0100 bidib: update product list\n" \
-"13615 2018-02-27 08:04:51 +0100 xmlscript: revert; previous version is OK\n" \
-"13614 2018-02-27 07:56:18 +0100 xmlscript: regard the not alltrue flag in case of testing the state argument\n" \
-"13613 2018-02-26 21:58:11 +0100 bidibidentdlg: revert disable programming tabs\n" \
-"13612 2018-02-26 14:22:01 +0100 location: kmpos option added\n" \
-"13611 2018-02-26 10:46:05 +0100 wmz21: switch command broadcast to the apps\n" \
-"13610 2018-02-25 19:37:49 +0100 xmlscript. weather command support added\n" \
-"13609 2018-02-25 18:11:54 +0100 loc: set flag to signal of function with own address\n" \
-"13608 2018-02-25 12:17:15 +0100 xmlscript: replace vars in nodes recursive\n" \
 
 "log end";
