@@ -1,11 +1,19 @@
 const int revisionnr = 
-15618
+15626
 ;
 const char* commithash = 
-"fe88cf50ca655cb8f9079954980c1210ac66245e";
+"b9f8135251afdb105202bd73e3f4d69ccf4dc066";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15626 2019-07-03 18:10:13 +0200 dcc232: report invalid char\n" \
+"15625 2019-07-03 18:03:44 +0200 dcc232: sleep until stack package is processed\n" \
+"15624 2019-07-03 18:00:29 +0200 dcc232: sleep until stack package is processed\n" \
+"15623 2019-07-03 17:51:53 +0200 makefile: added wiringPi library\n" \
+"15622 2019-07-03 17:21:55 +0200 dcc232: extended with GPIO option\n" \
+"15621 2019-07-03 12:01:03 +0200 translation merge: de, nl, sl\n" \
+"15620 2019-07-03 11:37:38 +0200 text: draw border bold in case of bold\n" \
+"15619 2019-07-03 07:59:14 +0200 wrapper: default trace path\n" \
 "15618 2019-07-02 19:37:53 +0200 text: border color\n" \
 "15617 2019-07-02 17:13:33 +0200 rocviewX.sh: executable flag\n" \
 "15616 2019-07-02 17:10:08 +0200 zipper.sh: macOS support\n" \
@@ -1998,13 +2006,5 @@ const char* revlog =
 "13629 2018-03-02 08:22:07 +0100 xmlscript: fix for connect OR\n" \
 "13628 2018-03-01 15:10:05 +0100 schedulegraph: use section as selection\n" \
 "13627 2018-03-01 14:54:52 +0100 wrapper: section attribute added in schedule\n" \
-"13626 2018-03-01 14:28:46 +0100 bidibdlg: cleaned up\n" \
-"13625 2018-02-28 15:41:41 +0100 locations: use independet position units\n" \
-"13624 2018-02-28 15:05:54 +0100 rocnetnode: not removing ttyAMA0 as console: Admin job.\n" \
-"13623 2018-02-28 11:53:28 +0100 locationsdlg: changed kmpos label\n" \
-"13622 2018-02-28 11:34:36 +0100 location: added railway section and changed kmpos in hmpos\n" \
-"13621 2018-02-28 09:24:25 +0100 locationsdlg: added modify button on the index tab\n" \
-"13620 2018-02-28 08:46:18 +0100 locationdlg: show kmpos in the position column\n" \
-"13619 2018-02-27 21:40:22 +0100 rocview: added the preview flag for GTK filedialog\n" \
 
 "log end";
