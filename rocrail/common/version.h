@@ -1,11 +1,15 @@
 const int revisionnr = 
-15627
+15631
 ;
 const char* commithash = 
-"4c9894ae8f5c0bf6a375b00e1b5b036f968d5265";
+"d7eddb8fad839738d84c1e823242c44b1cc6e553";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15631 2019-07-03 19:58:17 +0200 dcc232: check if SIGALARM is supported\n" \
+"15630 2019-07-03 19:39:59 +0200 dcc232: trace corrections\n" \
+"15629 2019-07-03 19:36:43 +0200 dcc232: use static global idlestream to save pointer\n" \
+"15628 2019-07-03 19:25:20 +0200 dcc232: gpio WIP\n" \
 "15627 2019-07-03 18:24:57 +0200 nmra: fix for ascii packets\n" \
 "15626 2019-07-03 18:10:13 +0200 dcc232: report invalid char\n" \
 "15625 2019-07-03 18:03:44 +0200 dcc232: sleep until stack package is processed\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13634 2018-03-03 07:44:55 +0100 virtual: removed 1024 sensor reports at SoD\n" \
 "13633 2018-03-02 14:30:58 +0100 ecos: trace corrections\n" \
 "13632 2018-03-02 14:26:02 +0100 ecos: ignore set oid 1000+ reply\n" \
-"13631 2018-03-02 13:37:19 +0100 ecos: recovery fix\n" \
-"13630 2018-03-02 10:32:19 +0100 stage: allow crossing if empty\n" \
-"13629 2018-03-02 08:22:07 +0100 xmlscript: fix for connect OR\n" \
-"13628 2018-03-01 15:10:05 +0100 schedulegraph: use section as selection\n" \
 
 "log end";
