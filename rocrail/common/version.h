@@ -1,11 +1,12 @@
 const int revisionnr = 
-15626
+15627
 ;
 const char* commithash = 
-"b9f8135251afdb105202bd73e3f4d69ccf4dc066";
+"4c9894ae8f5c0bf6a375b00e1b5b036f968d5265";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15627 2019-07-03 18:24:57 +0200 nmra: fix for ascii packets\n" \
 "15626 2019-07-03 18:10:13 +0200 dcc232: report invalid char\n" \
 "15625 2019-07-03 18:03:44 +0200 dcc232: sleep until stack package is processed\n" \
 "15624 2019-07-03 18:00:29 +0200 dcc232: sleep until stack package is processed\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13630 2018-03-02 10:32:19 +0100 stage: allow crossing if empty\n" \
 "13629 2018-03-02 08:22:07 +0100 xmlscript: fix for connect OR\n" \
 "13628 2018-03-01 15:10:05 +0100 schedulegraph: use section as selection\n" \
-"13627 2018-03-01 14:54:52 +0100 wrapper: section attribute added in schedule\n" \
 
 "log end";
