@@ -1,11 +1,18 @@
 const int revisionnr = 
-15631
+15638
 ;
 const char* commithash = 
-"d7eddb8fad839738d84c1e823242c44b1cc6e553";
+"25e180bccb3c5b4429e0b80c3c3db411c9c65483";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15638 2019-07-04 12:48:37 +0200 mbus: trace correction\n" \
+"15637 2019-07-04 12:43:22 +0200 dcc232: revert gpio\n" \
+"15636 2019-07-04 12:08:36 +0200 dcc232: WIP\n" \
+"15635 2019-07-04 11:47:59 +0200 dcc232: gpio WIP\n" \
+"15634 2019-07-04 10:42:14 +0200 dcc232: gpio WIP\n" \
+"15633 2019-07-04 07:53:22 +0200 dccd232: gpio WIP\n" \
+"15632 2019-07-04 07:13:39 +0200 analyse: fix for zoffset (Lothar)\n" \
 "15631 2019-07-03 19:58:17 +0200 dcc232: check if SIGALARM is supported\n" \
 "15630 2019-07-03 19:39:59 +0200 dcc232: trace corrections\n" \
 "15629 2019-07-03 19:36:43 +0200 dcc232: use static global idlestream to save pointer\n" \
@@ -1999,12 +2006,5 @@ const char* revlog =
 "13641 2018-03-03 14:06:15 +0100 railwayline dialog: wip\n" \
 "13640 2018-03-03 11:40:28 +0100 stage: check section locoid also if length > 0\n" \
 "13639 2018-03-03 11:18:23 +0100 swdlg: set fake id for some command stations like dccpp\n" \
-"13638 2018-03-03 10:54:19 +0100 virtual: sod generator active at protver=1\n" \
-"13637 2018-03-03 10:49:19 +0100 model,fback: only lookup an offset variable if set to avoid waisting time\n" \
-"13636 2018-03-03 08:09:10 +0100 virtual: use a thread for reporting SoD events\n" \
-"13635 2018-03-03 07:50:43 +0100 virtual: report 1024 sensor at SoD in case version ist set to 2\n" \
-"13634 2018-03-03 07:44:55 +0100 virtual: removed 1024 sensor reports at SoD\n" \
-"13633 2018-03-02 14:30:58 +0100 ecos: trace corrections\n" \
-"13632 2018-03-02 14:26:02 +0100 ecos: ignore set oid 1000+ reply\n" \
 
 "log end";
