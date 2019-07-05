@@ -733,28 +733,26 @@ void decode_frame(struct can_frame *frame) {
 
 	printf("Lok %s ", getLoco(frame->data, s));
 	if (frame->can_dlc == 4) {
-	    printf(" wird abgefragt");
+	    printf(" wird abgefragt\n");
 	} else if (frame->can_dlc == 5) {
 	    switch (frame->data[4]) {
 	    case 0:
-		strcat(s, " bleibt gleich");
+		printf("Richtung bleibt gleich\n");
 		break;
 	    case 1:
-		strcat(s, ": vorwärts");
+		printf("Richtung: vorwärts\n");
 		break;
 	    case 2:
-		strcat(s, ": rückwärts");
+		printf("Richtung: rückwärts\n");
 		break;
 	    case 3:
-		strcat(s, " wechseln");
+		printf("Richtung wechseln\n");
 		break;
 	    default:
-		strcat(s, "unbekannt");
+		printf("Richtung unbekannt\n");
 		break;
 	    }
-	    printf("Richtung %s", s);
 	}
-	printf("\n");
 	break;
     /* Lok Funktion */
     case 0x0C:
