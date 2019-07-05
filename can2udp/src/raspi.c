@@ -19,41 +19,23 @@
 
 #include "raspi.h"
 
-
-unsigned int GetRevision(void) {
-    FILE *fd;
-    char buf[512];
-    char term;
-
-    unsigned int rev = 0;
-
-    fd = fopen("/proc/cpuinfo", "r");
-
-    if (fd != NULL) {
-	while (fgets(buf, sizeof(buf), fd) != NULL) {
-	    if (!strncasecmp("revision\t", buf, 9)) {
-		if (sscanf(buf + strlen(buf) - 7, "%x%c", &rev, &term) == 2) {
-		    if (term == '\n')
-			break;
-		    rev = 0;
-		}
-	    }
-	}
-	fclose(fd);
-    }
-    return rev;
+static unsigned get_dt_ranges(const char *filename, unsigned offset) {
+   unsigned address = ~0;
+   FILE *fp = fopen(filename, "rb");
+   if (fp)
+   {
+      unsigned char buf[4];
+      fseek(fp, offset, SEEK_SET);
+      if (fread(buf, 1, sizeof buf, fp) == sizeof buf)
+         address = buf[0] << 24 | buf[1] << 16 | buf[2] << 8 | buf[3] << 0;
+      fclose(fp);
+   }
+   return address;
 }
 
-uint8_t GetCPUType(void) {
-    unsigned int revision;
-
-    uint8_t processor = 0;
-
-    revision = GetRevision();
-    if ((revision & (1 << 23)) != 0)
-	processor = (revision & 0xF000) >> 12;
-
-    return processor;
+unsigned bcm_host_get_peripheral_address(void) {
+   unsigned address = get_dt_ranges("/proc/device-tree/soc/ranges", 4);
+   return address == ~0U ? 0x20000000 : address;
 }
 
 /******************************************************************************
@@ -81,16 +63,7 @@ gpio_rpi_open(const char *device)
 	off_t gpio_base_addr;
 
 	/* Determine GPIO base address */
-	uint8_t type = GetCPUType();
-	if (type == 0 || type == 1) {
-		gpio_base_addr = BCM2835_PERI_BASE_ADDR + GPIO_BASE_ADDR_OFFSET;
-	}
-	else if (type == 2) {
-		gpio_base_addr = BCM2836_PERI_BASE_ADDR + GPIO_BASE_ADDR_OFFSET;
-	}
-	else {
-		return -1; /* Unknown */
-	}
+	gpio_base_addr = bcm_host_get_peripheral_address() + GPIO_BASE_ADDR_OFFSET;
 
 	/* Open /dev/mem */
 	gpio_mem = open(device, O_RDWR | O_SYNC);
