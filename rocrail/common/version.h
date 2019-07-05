@@ -1,11 +1,14 @@
 const int revisionnr = 
-15638
+15641
 ;
 const char* commithash = 
-"25e180bccb3c5b4429e0b80c3c3db411c9c65483";
+"9e9a971e6e5592ee4c2733505c1daf9ece25be74";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15641 2019-07-05 08:18:21 +0200 zipper.sh: history added\n" \
+"15640 2019-07-04 15:31:25 +0200 removed wiringPI library\n" \
+"15639 2019-07-04 15:22:07 +0200 rocnetnode: added /dev/ttyAMA0 selection for dcc232\n" \
 "15638 2019-07-04 12:48:37 +0200 mbus: trace correction\n" \
 "15637 2019-07-04 12:43:22 +0200 dcc232: revert gpio\n" \
 "15636 2019-07-04 12:08:36 +0200 dcc232: WIP\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13644 2018-03-04 08:58:56 +0100 translation merge: de, nl, sl, pt_BR\n" \
 "13643 2018-03-04 08:31:05 +0100 stage: crossing flag at isFree to beable to run through without length\n" \
 "13642 2018-03-03 14:27:20 +0100 locationdlg: use linesections in combo\n" \
-"13641 2018-03-03 14:06:15 +0100 railwayline dialog: wip\n" \
-"13640 2018-03-03 11:40:28 +0100 stage: check section locoid also if length > 0\n" \
-"13639 2018-03-03 11:18:23 +0100 swdlg: set fake id for some command stations like dccpp\n" \
 
 "log end";
