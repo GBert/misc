@@ -1,11 +1,14 @@
 const int revisionnr = 
-15641
+15644
 ;
 const char* commithash = 
-"9e9a971e6e5592ee4c2733505c1daf9ece25be74";
+"7848a4bd26884e94ef3089016ed6b232838f2d23";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15644 2019-07-05 16:52:34 +0200 mbus usb: read timeout set to 10sec.\n" \
+"15643 2019-07-05 14:01:37 +0200 rocnetnodedlg: layout correction\n" \
+"15642 2019-07-05 14:00:25 +0200 mbus: disabled purging slots\n" \
 "15641 2019-07-05 08:18:21 +0200 zipper.sh: history added\n" \
 "15640 2019-07-04 15:31:25 +0200 removed wiringPI library\n" \
 "15639 2019-07-04 15:22:07 +0200 rocnetnode: added /dev/ttyAMA0 selection for dcc232\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13647 2018-03-04 11:48:44 +0100 bidibprogdlg: use switch commands in case of porttype servo\n" \
 "13646 2018-03-04 11:39:55 +0100 bidib: use switch command for testing a servo\n" \
 "13645 2018-03-04 11:22:53 +0100 bidib programming dialog: removed accessory\n" \
-"13644 2018-03-04 08:58:56 +0100 translation merge: de, nl, sl, pt_BR\n" \
-"13643 2018-03-04 08:31:05 +0100 stage: crossing flag at isFree to beable to run through without length\n" \
-"13642 2018-03-03 14:27:20 +0100 locationdlg: use linesections in combo\n" \
 
 "log end";
