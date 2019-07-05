@@ -139,7 +139,7 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 2.84\n\n");
+    fprintf(stderr, "   Version 2.85\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
@@ -167,6 +167,16 @@ void frame_to_can(unsigned char *netframe, struct can_frame *frame) {
 }
 
 void ascii_to_can(char *s, struct can_frame *frame) {
+    int i;
+    unsigned char d[13];
+
+    for (i = 0; i < 13; i++) {
+	sscanf(&s[i * 3], "%hhx", &d[i]);
+    }
+    frame_to_can(d, frame);
+}
+
+void slcan_to_can(char *s, struct can_frame *frame) {
     int i;
     unsigned int dat;
 
@@ -1187,11 +1197,12 @@ int main(int argc, char **argv) {
     if (roctrc_file[0] != 0) {
 	FILE *fp;
 	char *line;
-	char slcan[MAXSIZE];
+	char can_string[MAXSIZE];
 	char datum[MAXSIZE];
 	size_t size = MAXSIZE;
-	char *pos_r, *pos_w;
+	char *pos_r, *pos_w, *pos_0;
 	struct can_frame aframe;
+	int date, time, milli, slcan_format = 0;
 
 	fp = fopen(roctrc_file, "r");
 	if (!fp) {
@@ -1205,21 +1216,36 @@ int main(int argc, char **argv) {
 	    exit(EXIT_FAILURE);
 	}
 
+	memset(datum, 0, sizeof(datum));
 	while (getline(&line, &size, fp) > 0) {
 	    /* line[strcspn(line, "\r\n")] = 0; */
-	    memset(slcan, 0, sizeof(slcan));
-	    memset(datum, 0, sizeof(datum));
-	    sscanf(line, "%19s ", datum);
+	    memset(can_string, 0, sizeof(can_string));
+	    pos_0 = strstr(line, "00000000: ");
+	    if ((sscanf(line, "%8d.%6d.%3d", &date, &time, &milli)) == 3) {
+		sscanf(line, "%19s ", datum);
+	    }
 	    pos_r = strstr(line, "ASCII read: ");
-	    if (pos_r)
-		sscanf(pos_r, "ASCII read: %27s", slcan);
+	    if (pos_r) {
+		slcan_format = 1;
+		sscanf(pos_r, "ASCII read: %27s", can_string);
+	    }
 	    pos_w = strstr(line, "ASCII write: ");
-	    if (pos_w)
-		sscanf(pos_w, "ASCII write: %27s", slcan);
+	    if (pos_w) {
+		slcan_format = 1;
+		sscanf(pos_w, "ASCII write: %27s", can_string);
+	    }
 	    if (pos_r || pos_w) {
 		memset(&aframe, 0, sizeof(aframe));
-		ascii_to_can(slcan, &aframe);
-		printf(RESET "%s %30s", datum, slcan);
+		slcan_to_can(can_string, &aframe);
+		printf(RESET "%s %30s", datum, can_string);
+		print_can_frame(F_N_CAN_FORMAT_STRG, &aframe);
+		decode_frame(&aframe);
+	    }
+	    if ((slcan_format == 0) && pos_0) {
+		sscanf(pos_0, "00000000: %39c", can_string);
+		memset(&aframe, 0, sizeof(aframe));
+		ascii_to_can(can_string, &aframe);
+		printf(RESET "%s  %30s", datum, can_string);
 		print_can_frame(F_N_CAN_FORMAT_STRG, &aframe);
 		decode_frame(&aframe);
 	    }
