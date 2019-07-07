@@ -1,11 +1,12 @@
 const int revisionnr = 
-15648
+15649
 ;
 const char* commithash = 
-"74131154a3c144ca60938448a016872a924083f3";
+"3b764415ba8b15f8e862b6c6b21d5abbdfa39156";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15649 2019-07-07 20:53:17 +0200 lcdriver: return type correction for getNextWait\n" \
 "15648 2019-07-07 17:50:58 +0200 loc,lcdriver: virtual event timer\n" \
 "15647 2019-07-07 14:05:16 +0200 loc: use virtualeventtimer variable (todo: calculate it)\n" \
 "15646 2019-07-07 10:11:08 +0200 loc: calculate virtual timer by using route length, kmh and scale\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13652 2018-03-05 13:44:45 +0100 cardlg: nraxis added to the details\n" \
 "13651 2018-03-05 12:07:47 +0100 mcs2: reader thread set to high priority in case of serial communication\n" \
 "13650 2018-03-05 11:20:38 +0100 railwaylinedlg: layout corrections and translations\n" \
-"13649 2018-03-05 10:59:57 +0100 mcs2: cc-schnitte support minor improvement\n" \
 
 "log end";
