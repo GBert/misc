@@ -1,11 +1,15 @@
 const int revisionnr = 
-15644
+15648
 ;
 const char* commithash = 
-"7848a4bd26884e94ef3089016ed6b232838f2d23";
+"74131154a3c144ca60938448a016872a924083f3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15648 2019-07-07 17:50:58 +0200 loc,lcdriver: virtual event timer\n" \
+"15647 2019-07-07 14:05:16 +0200 loc: use virtualeventtimer variable (todo: calculate it)\n" \
+"15646 2019-07-07 10:11:08 +0200 loc: calculate virtual timer by using route length, kmh and scale\n" \
+"15645 2019-07-07 07:40:45 +0200 route: length option added\n" \
 "15644 2019-07-05 16:52:34 +0200 mbus usb: read timeout set to 10sec.\n" \
 "15643 2019-07-05 14:01:37 +0200 rocnetnodedlg: layout correction\n" \
 "15642 2019-07-05 14:00:25 +0200 mbus: disabled purging slots\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13651 2018-03-05 12:07:47 +0100 mcs2: reader thread set to high priority in case of serial communication\n" \
 "13650 2018-03-05 11:20:38 +0100 railwaylinedlg: layout corrections and translations\n" \
 "13649 2018-03-05 10:59:57 +0100 mcs2: cc-schnitte support minor improvement\n" \
-"13648 2018-03-05 08:29:11 +0100 rocnetnodedlg: button for linking decoder\n" \
-"13647 2018-03-04 11:48:44 +0100 bidibprogdlg: use switch commands in case of porttype servo\n" \
-"13646 2018-03-04 11:39:55 +0100 bidib: use switch command for testing a servo\n" \
-"13645 2018-03-04 11:22:53 +0100 bidib programming dialog: removed accessory\n" \
 
 "log end";
