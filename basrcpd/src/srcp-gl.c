@@ -267,11 +267,11 @@ int cacheGetGL(bus_t busnumber, int addr, gl_data_t *gld)
 */
 void cacheSetGL(bus_t busnumber, gl_data_t *glp, gl_data_t *l)
 {
-    char msg[1000];
-    int rc = SRCP_WRONGVALUE;
     uint16_t *gli = getGLIndex(busnumber, getglid(glp), 0);
     int i = gli ? *gli : 0;
     if (i) {
+    	char msg[1000];
+    	int rc = SRCP_WRONGVALUE;
     	int addr = isInitializedGL(busnumber, i);
       	gl[busnumber].glstate[i].cacheddirection = l->direction;
       	gl[busnumber].glstate[i].cachedspeed = l->speed;
@@ -300,13 +300,13 @@ void cacheSetGL(bus_t busnumber, gl_data_t *glp, gl_data_t *l)
 int cacheInitGL(bus_t busnumber, uint32_t locid, const char protocol,
                 int protoversion, int n_fs, int n_func, char *optData)
 {
-    char msg[1000];
     int rc = SRCP_WRONGVALUE;
     gl_data_t *p = NULL;
     uint16_t *gli = getGLIndex(busnumber, locid, protocol);
     if (gli) {
     	if (*gli == 0) *gli = addGLEntry(busnumber, locid);
     	if (*gli) {
+    		char msg[1000];
     		p = &gl[busnumber].glstate[*gli];
     		if (p->state == glsNone) {			// new item to be considered
 		        rc = bus_supports_protocol(busnumber, protocol);
@@ -409,12 +409,10 @@ int cacheDescribeGL(bus_t busnumber, uint32_t locid, char *msg)
 
 int cacheInfoGL(bus_t busnumber, uint32_t locid, char *msg)
 {
-    int f;
-    char *tmp;
-
     uint16_t *gli = getGLIndex(busnumber, locid, 0);
     int i = gli ? *gli : 0;
     if (i && (gl[busnumber].glstate[i].state == glsActive)) {
+    	char *tmp;
         sprintf(msg, "%lu.%.3lu 100 INFO %lu GL %d %d %d %d %d",
                 gl[busnumber].glstate[i].tv.tv_sec,
                 gl[busnumber].glstate[i].tv.tv_usec / 1000,
@@ -424,7 +422,7 @@ int cacheInfoGL(bus_t busnumber, uint32_t locid, char *msg)
                 gl[busnumber].glstate[i].n_fs,
                 (gl[busnumber].glstate[i].funcs & 0x01) ? 1 : 0);
 
-        for (f = 1; f < gl[busnumber].glstate[i].n_func; f++) {
+        for (int f = 1; f < gl[busnumber].glstate[i].n_func; f++) {
             tmp = malloc(strlen(msg) + 100);
             sprintf(tmp, "%s %d", msg,
                     ((gl[busnumber].glstate[i].
@@ -449,11 +447,10 @@ int cacheInfoGL(bus_t busnumber, uint32_t locid, char *msg)
 int cacheLockGL(bus_t busnumber, int addr, long int duration,
                 sessionid_t sessionid)
 {
-    char msg[256];
-
     if (isInitializedGL(busnumber, addr)) {
         if (gl[busnumber].glstate[addr].locked_by == sessionid
-            || gl[busnumber].glstate[addr].locked_by == 0) {
+            		|| gl[busnumber].glstate[addr].locked_by == 0) {
+            char msg[256];
             gl[busnumber].glstate[addr].locked_by = sessionid;
             gl[busnumber].glstate[addr].lockduration = duration;
             gettimeofday(&gl[busnumber].glstate[addr].locktime, NULL);
@@ -529,13 +526,11 @@ int cacheUnlockGL(bus_t busnumber, int addr, sessionid_t sessionid)
 void unlock_gl_bysessionid(sessionid_t sessionid)
 {
     bus_t i;
-    int j;
-    int number;
 
     syslog_session(sessionid, DBG_DEBUG, "Unlocking GLs by session-id");
     for (i = 0; i <= num_buses; i++) {
-        number = getMaxAddrGL(i);
-        for (j = 1; j <= number; j++) {
+        int number = getMaxAddrGL(i);
+        for (int j = 1; j <= number; j++) {
             if (gl[i].glstate[j].locked_by == sessionid) {
                 cacheUnlockGL(i, j, sessionid);
             }
@@ -549,12 +544,10 @@ void unlock_gl_bysessionid(sessionid_t sessionid)
 void unlock_gl_bytime(void)
 {
     bus_t i;
-    int j;
-    int number;
 
     for (i = 0; i <= num_buses; i++) {
-        number = getMaxAddrGL(i);
-        for (j = 1; j <= number; j++) {
+        int number = getMaxAddrGL(i);
+        for (int j = 1; j <= number; j++) {
             if (gl[i].glstate[j].lockduration > 0
                 && gl[i].glstate[j].lockduration-- == 1) {
                 cacheUnlockGL(i, j, gl[i].glstate[j].locked_by);
@@ -568,7 +561,6 @@ void unlock_gl_bytime(void)
  */
 void startup_GL(void)
 {
-    int result;
     bus_t i;
 
     for (i = 0; i < MAX_BUSES; i++) {
@@ -578,7 +570,7 @@ void startup_GL(void)
         gl[i].glstate = NULL;
         gl[i].gldir = NULL;
         
-        result = pthread_mutex_init(&queue_mutex[i], NULL);
+        int result = pthread_mutex_init(&queue_mutex[i], NULL);
         if (result != 0) {
             syslog_bus(0, DBG_ERROR,
                        "pthread_mutex_init() failed: %s (errno = %d).",
@@ -646,7 +638,6 @@ void debugGL(bus_t busnumber, gl_data_t *glp)
 // Helpers for the mcs-Gateway
 static gl_data_t * get_gldata_ptr(bus_t bus, uint32_t locid)
 {
-    int rc = SRCP_WRONGVALUE;
 	gl_data_t *p = NULL;
     uint16_t *gli = getGLIndex(bus, locid, 0);
     if (gli) {
@@ -678,8 +669,8 @@ static gl_data_t * get_gldata_ptr(bus_t bus, uint32_t locid)
 				p->tv = p->inittime;
         		if (bus_supports_protocol(bus, p->protocol) == SRCP_OK) {
         			if (buses[bus].init_gl_func) {
-            			rc = (*buses[bus].init_gl_func) (p, "");
-        				if (rc == SRCP_OK)  p->state = glsActive;
+    					if ((*buses[bus].init_gl_func) (p, "") == SRCP_OK)
+							p->state = glsActive;
         			}
             	}
             	if (p->state == glsNone) p = NULL;	// init failed
@@ -706,8 +697,10 @@ int handle_mcs_prot(bus_t bus, uint32_t locid, int val)
 				case 2:	p->protocolversion = 1;	p->n_fs = 126;	break;
 				case 3: p->protocolversion = 2;	p->n_fs = 28;	break;
 				case 4:	p->protocolversion = 2;	p->n_fs = 126;	break;
+				default:	return -2;
 					}
 					break;
+		default:	return -2;
 	}
 //	TODO: needed?	gl_enqueue(bus, p);
 	return val;
@@ -715,12 +708,11 @@ int handle_mcs_prot(bus_t bus, uint32_t locid, int val)
 
 int handle_mcs_speed(bus_t bus, uint32_t locid, int val)
 {
-	int oldspeed;
 //  syslog_bus(bus, DBG_DEBUG, "mcs_speed for %d set to %d", locid, val);
     gl_data_t *p = get_gldata_ptr(bus, locid | MCSADDRINDICATOR);
     if (p == NULL) return -1;
     if (val >= 0) {
-    	oldspeed = p->speed;
+    	uint8_t oldspeed = p->speed;
 		p->speed = calcspeed(val, 1000, p->n_fs);
 		if (p->speed != oldspeed) {
         	p->speedchange |= 1;
@@ -753,14 +745,12 @@ int handle_mcs_dir(bus_t bus, uint32_t locid, int val)
 
 int handle_mcs_func(bus_t bus, uint32_t locid, int funr, int val)
 {
-	int oldval;
-	uint32_t mask;
 //  syslog_bus(bus, DBG_DEBUG, "mcs_func for %d, f%d set to %d", locid, funr, val);
     gl_data_t *p = get_gldata_ptr(bus, locid | MCSADDRINDICATOR);
     if (p == NULL) return -1;
     if (val >= 0) {
-        mask = 1 << funr;
-        oldval = (p->funcs & mask) ? 1 : 0;
+        uint32_t mask = 1 << funr;
+        uint32_t oldval = (p->funcs & mask) ? 1 : 0;
         if (val) p->funcs |= mask;
         else    p->funcs &= ~mask;
         if (val != oldval) {

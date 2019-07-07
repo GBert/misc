@@ -56,6 +56,7 @@ int startMFXThreads(bus_t busnumber, int fdRDSNewRx);
  */
 int stopMFXThreads();
  
+time_t mfxManagement(bus_t busnumber);
 
 /* signal generating functions for maerklin mfx */
 

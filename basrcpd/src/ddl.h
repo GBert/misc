@@ -24,25 +24,11 @@
 
 #include "netservice.h"
 
-#define QSIZE       2000
-/* large packet size reserved for F0-F28 packets */
 #define PKTSIZE     80
 #define MAXDATA     20
 
 //Timeout in Sekunden für "fast Refresh" nach neuem Lokkommando
 #define FAST_REFRESH_TIMEOUT 60
-
-typedef struct _tQData {
-    int packet_type;
-    int packet_size;
-    char packet[PKTSIZE];
-    int addr;
-} tQData;
-
-typedef struct _tQueue {
-    int out, in;
-    tQData QData[QSIZE];
-} tQueue;
 
 #define MAX_MARKLIN_ADDRESS 256
 
@@ -119,15 +105,7 @@ typedef struct _DDL_DATA {
     int spiLastMM;              //War das letzte Paket ein Märklin Motorola Paket?
     unsigned int uid;           /* Für MFX die UID der Zentrale */
 
-    pthread_mutex_t queue_mutex;        /* mutex to synchronize queue inserts */
-    int queue_initialized;
-    tQueue queueNormal, queuePriority;
-
     time_t short_detected;
-
-    pthread_t refresh_ptid;
-    struct _thr_param refresh_param;
-
     char NMRA_idle_data[4 * 256]; //Worst Case SPI Mode
 
     //"Normaler" Refresh Zyklus
@@ -180,14 +158,6 @@ int init_bus_DDL(bus_t busnumber);
 //Paket ist nicht mehr gültig, da durch höher priorisiertes bereits überholt
 #define QOVERRIDE   100
 
-/**
- * @param priority Wenn true hat das Paket Priorität, es wird in der Queue vor allen anderen eingefügt.
- *                 Wenn nun weiter hinten solche kleinerer Prio zur gleichen Adresse bestehen werden diese
- *                 als ungültig markiert, so dass sie nicht mehr ausgegeben werden.
- */
-void queue_add(bus_t busnumber, int addr, char *const packet,
-               int packet_type, int packet_size, bool priority);
-
 char *get_maerklin_packet(bus_t busnumber, int adr, int fx);
 void update_MaerklinPacketPool(bus_t busnumber, int adr,
                                char const *const sd_packet,
@@ -200,7 +170,7 @@ void update_MFXPacketPool(bus_t busnumber, int adr,
                           char const *const packet, int packet_size);
 
 void send_packet(bus_t busnumber, char *packet,
-                 int packet_size, int packet_type, int refresh);
+                 int packet_size, int packet_type, int xmits);
 
 /* serial line modes: */
 #define ON  1
@@ -213,13 +183,14 @@ void send_packet(bus_t busnumber, char *packet,
 #define SL_DTR 20
 #define SL_RI  22
 
-/* calculate difference between two time values and return the
- * difference in microseconds */
-long int compute_delta(struct timeval tv1, struct timeval tv2);
+/* calculate difference between time value and now, returns it in µs */
+time_t timeSince(struct timeval tv);
+
+/* check if shortcut or emergengy break happened */
+bool power_is_off(bus_t busnumber);
 
 /* start and stop MCS gateway */
 void init_mcs_gateway(bus_t busnumber);
 void term_mcs_gateway(void);
-
 
 #endif

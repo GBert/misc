@@ -3,8 +3,8 @@
 // C 2018 Rainer Müller 
 // Das Programm unterliegt den Bedingungen der GNU General Public License 3 (GPL3).
 
-#ifndef _PLATFORM_H
-#define _PLATFORM_H
+#ifndef _PLATFORM_PI_H
+#define _PLATFORM_PI_H
 
 #include <stdint.h>
 
@@ -17,4 +17,4 @@ typedef enum PLFUNCTION {
 uint64_t getPlatformData(pl_function_t fucode);
 
 
-#endif	// _PLATFORM_H
+#endif	// _PLATFORM_PI_H

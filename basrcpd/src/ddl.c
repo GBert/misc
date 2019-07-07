@@ -223,177 +223,12 @@ static struct spi_ioc_transfer spi_nmra_idle;
 //Breite RDS Sync Impulse (in usec)
 #define MFX_RDS_SYNC_IMPULS_USEC 25
 
-static void *thr_sendrec_DDL(void *);
+static void *thr_Manage_DDL(void *);
 
-/********* Q U E U E *****************/
-static void queue_init_native(tQueue *queue) {
-    int i;
-    for (i = 0; i < QSIZE; i++) {
-        queue->QData[i].packet_type = QNOVALIDPKT;
-        queue->QData[i].addr = 0;
-        memset(queue->QData[i].packet, 0, PKTSIZE);
-    }
-    queue->in = 0;
-    queue->out = 0;
-}
-
-static void queue_init(bus_t busnumber)
-{
-    int result;
-
-    result = pthread_mutex_init(&__DDL->queue_mutex, NULL);
-    if (result != 0) {
-        syslog_bus(busnumber, DBG_ERROR,
-                   "pthread_mutex_init() failed: %s (errno = %d).",
-                   strerror(result), result);
-        exit(EXIT_FAILURE);
-    }
-
-    result = pthread_mutex_lock(&__DDL->queue_mutex);
-    if (result != 0) {
-        syslog_bus(busnumber, DBG_ERROR,
-                   "pthread_mutex_lock() failed: %s (errno = %d).",
-                   strerror(result), result);
-    }
-
-    queue_init_native(&__DDL->queueNormal);
-    queue_init_native(&__DDL->queuePriority);
-    __DDL->queue_initialized = true;
-
-    result = pthread_mutex_unlock(&__DDL->queue_mutex);
-    if (result != 0) {
-        syslog_bus(busnumber, DBG_ERROR,
-                   "pthread_mutex_unlock() failed: %s (errno = %d).",
-                   strerror(result), result);
-    }
-
-}
-
-static int queue_empty_native(tQueue *queue) {
-    return queue->in == queue->out;
-}
-
-static int queue_empty(bus_t busnumber)
-{
-    return queue_empty_native(&__DDL->queueNormal) && queue_empty_native(&__DDL->queuePriority);
-}
-
-static void queue_add_native(tQueue *queue, int addr, char *const packet, int packet_type, int packet_size) {
-      memset(queue->QData[queue->in].packet, 0, PKTSIZE);
-      memcpy(queue->QData[queue->in].packet, packet, packet_size);
-      queue->QData[queue->in].packet_type = packet_type;
-      queue->QData[queue->in].packet_size = packet_size;
-      queue->QData[queue->in].addr = addr;
-      queue->in++;
-      if (queue->in == QSIZE) {
-          queue->in = 0;
-      }
-}
-
-void queue_add(bus_t busnumber, int addr, char *const packet,
-               int packet_type, int packet_size, bool priority)
-{
-    int result;
-
-    result = pthread_mutex_lock(&__DDL->queue_mutex);
-    if (result != 0) {
-        syslog_bus(busnumber, DBG_ERROR,
-                   "pthread_mutex_lock() failed: %s (errno = %d).",
-                   strerror(result), result);
-    }
-
-    if (priority) {
-      //Wenn schon Pakete zur selben Adresse in der normalen Queue sind -> diese sind nicht mehr gültig
-      int next = __DDL->queueNormal.out;
-      while (next != __DDL->queueNormal.in) {
-        if ((__DDL->queueNormal.QData[next].addr == addr) && (__DDL->queueNormal.QData[next].packet_type == packet_type)) {
-          __DDL->queueNormal.QData[next].packet_type = QOVERRIDE;
-        }
-        next++;
-        if (next == QSIZE) {
-          next = 0;
-        }
-      }
-      queue_add_native(&__DDL->queuePriority, addr, packet, packet_type, packet_size);
-    }
-    else {
-      queue_add_native(&__DDL->queueNormal, addr, packet, packet_type, packet_size);
-    }
-
-    result = pthread_mutex_unlock(&__DDL->queue_mutex);
-    if (result != 0) {
-        syslog_bus(busnumber, DBG_ERROR,
-                   "pthread_mutex_unlock() failed: %s (errno = %d).",
-                   strerror(result), result);
-    }
-}
-
-/**
- * Liefert den nächsten Eintrag der Queue.
- */
-static int queue_get_native(tQueue *queue, int *addr, char *packet, int *packet_size) {
-  if (queue_empty_native(queue)) {
-    return QEMPTY;
-  }
-  memcpy(packet, queue->QData[queue->out].packet, PKTSIZE);
-  int rtc = queue->QData[queue->out].packet_type;
-  *packet_size = queue->QData[queue->out].packet_size;
-  *addr = queue->QData[queue->out].addr;
-  queue->QData[queue->out].packet_type = QNOVALIDPKT;
-  queue->out++;
-  if (queue->out >= QSIZE) {
-    queue->out = 0;
-  }
-  return rtc;
-}
-
-/**
-  * Liefert, wenn vorhanden, das nächste Paket aus der Queue. Es wird immer zuerst die 
-  * QDataPriority und erst wenn diese leer ist QData berücksichtigt.
-  */
-static int queue_get(bus_t busnumber, int *addr, char *packet,
-                     int *packet_size)
-{
-    int rtc;
-    int result;
-
-    if (!__DDL->queue_initialized) {
-        return QEMPTY;
-    }
-
-    result = pthread_mutex_lock(&__DDL->queue_mutex);
-    if (result != 0) {
-        syslog_bus(busnumber, DBG_ERROR,
-                   "pthread_mutex_lock() failed: %s (errno = %d).",
-                   strerror(result), result);
-    }
-    if (queue_empty(busnumber)) {
-      rtc = QEMPTY;
-    }
-    else {
-      //Wenn es in der Prio Queue etwas hat, dann kommt diese zuerst an die Reihe
-      if (queue_empty_native(&__DDL->queuePriority)) {
-        //Keine Prio Aufträge -> normale Queue
-        rtc = queue_get_native(&__DDL->queueNormal, addr, packet, packet_size);
-      }
-      else {
-        rtc = queue_get_native(&__DDL->queuePriority, addr, packet, packet_size);
-      }
-    }
-    result = pthread_mutex_unlock(&__DDL->queue_mutex);
-    if (result != 0) {
-        syslog_bus(busnumber, DBG_ERROR,
-                   "pthread_mutex_unlock() failed: %s (errno = %d).",
-                   strerror(result), result);
-    }
-
-    return rtc;
-}
 
 int init_lineDDL(bus_t busnumber)
 {
     /* opens and initializes the selected SPI port and returns a file handle */
-
     int dev;
 
     /* open SPI port */
@@ -1080,6 +915,15 @@ void update_MFXPacketPool(bus_t busnumber, int adr,
 }
 /**************************************************************************/
 
+/* calculate difference between time value and now, returns it in µs */
+time_t timeSince(struct timeval tv)
+{
+	struct timeval now = { 0, 0 };
+	gettimeofday(&now, NULL);
+	return (now.tv_sec - tv.tv_sec) * 1000000 + now.tv_usec - tv.tv_usec;
+}
+
+/* checks shortcut situation for persistency */
 static int checkShortcut(bus_t busnumber) 
 {
     int arg;
@@ -1131,9 +975,9 @@ static void set_SerialLine(bus_t busnumber, int line, int mode)
 
 #define PAUSE_START 2
 void send_packet(bus_t busnumber, char *packet,
-                        int packet_size, int packet_type, int refresh)
+                        int packet_size, int packet_type, int xmits)
 {
-    int i, laps;
+    int i;
     /* arguments for nanosleep and Maerklin loco decoders (19KHz) */
     /* all using busy waiting */
 //SID, 22.03.09: gemäss http://home.mnet-online.de/modelleisenbahn-digital/Dig-tutorial-start.html sind es 4.2ms .....
@@ -1141,10 +985,10 @@ void send_packet(bus_t busnumber, char *packet,
 //SID, 04.01.08 : Wartezeit wäre theoretisch schon 850us, dies geht aber mit den LDT Dekodern nicht....
     
     //Nur für MFX RDS 1-Bit Rückmeldung: Position und Länge im SPI Bytestream an der sich die Rückmeldung befinden muss.
-    unsigned int mfxRdsPos, mfxRdsLen;
-    mfxRdsPos = 0;
+    unsigned int mfxRdsLen, mfxRdsPos = 0;
     
-    struct spi_ioc_transfer spi;
+    struct spi_ioc_transfer spi;	// tx_buf; rx_buf; len; speed_hz; delay_usecs; 
+									// bits_per_word; cs_change; pad;
     char spiBuffer[2700]; //Worst Case wenn maximales MFX Paket
     
     memset (&spi, 0, sizeof (spi)) ;
@@ -1156,7 +1000,6 @@ void send_packet(bus_t busnumber, char *packet,
           __DDL->spiLastMM = 0;
           spi.len = convertNMRAPacketToSPIStream(busnumber, packet, spiBuffer);
           spi.speed_hz = SPI_BAUDRATE_NMRA_2;
-          spi.delay_usecs = 0;
           break;
         case QM1LOCOPKT:
         case QM2LOCOPKT:
@@ -1244,34 +1087,10 @@ void send_packet(bus_t busnumber, char *packet,
     switch (packet_type) {
         case QM1LOCOPKT:
         case QM2LOCOPKT:
-            if (refresh) {
-              laps = 1;
-            }
-            else {
-              laps = 4;       /* YYTV 9 */
-            }
-            for (i = 0; i < laps; i++) {
-                if (ioctl(buses[busnumber].device.file.fd, SPI_IOC_MESSAGE(1), &spi) < 0) {
-                  syslog_bus(busnumber, DBG_FATAL, "Error SPI Transfer ioctl.");
-                  return;
-                }
-            }
-            break;
         case QM2FXPKT:
-            if (refresh)
-                laps = 1;
-            else
-                laps = 3;       /* YYTV 6 */
-            for (i = 0; i < laps; i++) {
-                if (ioctl(buses[busnumber].device.file.fd, SPI_IOC_MESSAGE(1), &spi) < 0) {
-                  syslog_bus(busnumber, DBG_FATAL, "Error SPI Transfer ioctl.");
-                  return;
-                }
-            }
-            break;
         case QM1FUNCPKT:
         case QM1SOLEPKT:
-            for (i = 0; i < 2; i++) {
+            for (i = 0; i < xmits; i++) {
                 if (ioctl(buses[busnumber].device.file.fd, SPI_IOC_MESSAGE(1), &spi) < 0) {
                   syslog_bus(busnumber, DBG_FATAL, "Error SPI Transfer ioctl.");
                   return;
@@ -1280,10 +1099,13 @@ void send_packet(bus_t busnumber, char *packet,
             break;
         case QNBLOCOPKT:
         case QNBACCPKT:
-            if (ioctl(buses[busnumber].device.file.fd, SPI_IOC_MESSAGE(1), &spi) < 0) {
-                syslog_bus(busnumber, DBG_FATAL, "Error SPI Transfer ioctl.");
-                return;
+            for (i = 0; i < xmits; i++) {
+            	if (ioctl(buses[busnumber].device.file.fd, SPI_IOC_MESSAGE(1), &spi) < 0) {
+                	syslog_bus(busnumber, DBG_FATAL, "Error SPI Transfer ioctl.");
+                	return;
+                }
             }
+#if 0
             if (ioctl(buses[busnumber].device.file.fd, SPI_IOC_MESSAGE(1), &spi_nmra_idle) < 0) {
                 syslog_bus(busnumber, DBG_FATAL, "Error SPI Transfer ioctl.");
                 return;
@@ -1292,6 +1114,7 @@ void send_packet(bus_t busnumber, char *packet,
                 syslog_bus(busnumber, DBG_FATAL, "Error SPI Transfer ioctl.");
                 return;
             }
+#endif
             break;
         case QMFX0PKT:
         case QMFX1PKT:
@@ -1330,7 +1153,7 @@ void send_packet(bus_t busnumber, char *packet,
               spi.rx_buf = (unsigned long)spiRxBuffer;
             }
             //Ausgabe, doppelt für Befehle ohne Rückmeldung
-            for (i=0; i<(packet_type == QMFX0PKT ? 2 : 1); i++) {
+            for (i=0; i<(packet_type == QMFX0PKT ? xmits : 1); i++) {
               if (ioctl(buses[busnumber].device.file.fd, SPI_IOC_MESSAGE(1), &spi) < 0) {
                 syslog_bus(busnumber, DBG_FATAL, "Error SPI Transfer ioctl.");
                 return;
@@ -1378,9 +1201,10 @@ static bool refresh_loco_one(bus_t busnumber, bool fast) {
       //Bei "Fast" nur die Loks, die nicht zu alt sind,
       //bei "nicht fast" / "Normal" nur die Loks, die alt sind
       refreshGesendet = true;
-      send_packet(busnumber, __DDL->MaerklinPacketPool.packets[adr].packet, 18, QM2LOCOPKT, true);
+      send_packet(busnumber, __DDL->MaerklinPacketPool.packets[adr].packet, 18, QM2LOCOPKT, 1);
       //bei jeden Durchgang (alle Loks) das nächste Fx Paket
-      send_packet(busnumber, __DDL->MaerklinPacketPool.packets[adr].f_packets[refreshInfo -> last_refreshed_maerklin_fx], 18, QM2FXPKT, true);
+      send_packet(busnumber, __DDL->MaerklinPacketPool.packets[adr].f_packets
+	  							[refreshInfo -> last_refreshed_maerklin_fx], 18, QM2FXPKT, 1);
     }
     do {
       refreshInfo -> last_refreshed_maerklin_loco++;
@@ -1406,8 +1230,8 @@ static bool refresh_loco_one(bus_t busnumber, bool fast) {
       if (tNp == NULL) return 0;
       if (fast != ((time(NULL) - tNp->timeLastUpdate) > FAST_REFRESH_TIMEOUT)) {
         refreshGesendet = true;
-        send_packet(busnumber, tNp->packet, tNp->packet_size, QNBLOCOPKT, true);
-        send_packet(busnumber, tNp->fx_packet, tNp->fx_packet_size, QNBLOCOPKT, true);
+        send_packet(busnumber, tNp->packet, tNp->packet_size, QNBLOCOPKT, 1);
+        send_packet(busnumber, tNp->fx_packet, tNp->fx_packet_size, QNBLOCOPKT, 1);
       }
       do {
         refreshInfo -> last_refreshed_nmra_loco++;
@@ -1435,7 +1259,7 @@ static bool refresh_loco_one(bus_t busnumber, bool fast) {
       if (tMp == NULL) return 0;
       if (fast != ((time(NULL) - tMp->timeLastUpdate) > FAST_REFRESH_TIMEOUT)) {
         refreshGesendet = true;
-        send_packet(busnumber, tMp->packet, tMp->packet_size, QMFX0PKT, true);
+        send_packet(busnumber, tMp->packet, tMp->packet_size, QMFX0PKT, 1);
       }
       do {
         refreshInfo -> last_refreshed_mfx_loco++;
@@ -1497,31 +1321,9 @@ static bool refresh_loco(bus_t busnumber)
   return refresh_loco_one(busnumber, false);
 }
 
-/* calculate difference between two time values and return the
- * difference in microseconds */
-long int compute_delta(struct timeval tv1, struct timeval tv2)
-{
-    long int delta_sec;
-    long int delta_usec;
-
-    delta_sec = tv2.tv_sec - tv1.tv_sec;
-    if (delta_sec == 0)
-        delta_usec = tv2.tv_usec - tv1.tv_usec;
-    else {
-        if (delta_sec == 1)
-            delta_usec = tv2.tv_usec + (1000000 - tv1.tv_usec);
-        else
-            delta_usec =
-                1000000 * (delta_sec - 1) + tv2.tv_usec + (1000000 -
-                                                           tv1.tv_usec);
-    }
-    return delta_usec;
-}
-
-
 /* check if shortcut or emergengy break happened
    return "true" if power is off, return "false" if power is on */
-static bool power_is_off(bus_t busnumber)
+bool power_is_off(bus_t busnumber)
 {
     char msg[110], info[4];
     if (__DDL->CHECKSHORT) {
@@ -1556,90 +1358,7 @@ static bool power_is_off(bus_t busnumber)
         }
         buses[busnumber].power_changed = 0;
     }
-    if (buses[busnumber].power_state == 0) {
-        if (usleep(1000) == -1) {
-            syslog_bus(busnumber, DBG_ERROR,
-                       "usleep() failed in DDL line %d: %s (errno = %d)",
-                       __LINE__, strerror(errno), errno);
-        }
-        return true;
-    }
-    return false;
-}
-
-static void *thr_refresh_cycle(void *v)
-{
-    int result;
-    struct sched_param sparam;
-    int policy;
-    int packet_size;
-    int packet_type;
-    char packet[PKTSIZE];
-    int addr;
-    struct _thr_param *tp = v;
-    bus_t busnumber = tp->busnumber;
-
-    /* argument for nanosleep to do non-busy waiting */
-    static struct timespec rqtp_sleep = { 0, 2500000 };
-
-    result = pthread_getschedparam(pthread_self(), &policy, &sparam);
-    if (result != 0) {
-        syslog_bus(busnumber, DBG_ERROR,
-                       "pthread_getschedparam() failed: %s (errno = %d).",
-                       strerror(result), result);
-        pthread_exit((void *) 1);
-    }
-        
-    sparam.sched_priority = 10;
-    result = pthread_setschedparam(pthread_self(), SCHED_FIFO, &sparam);
-    if (result != 0) {
-        syslog_bus(busnumber, DBG_ERROR,
-                       "pthread_setschedparam() failed: %s (errno = %d).",
-                       strerror(result), result);
-// HACK:            pthread_exit((void *) 1);
-    }
-
-    for (;;) {
-        pthread_testcancel();
-        if (power_is_off(busnumber)) {
-           nanosleep(&rqtp_sleep, NULL);
-           continue;
-        }
-
-        /* Check if there are new commands and send them. */
-        packet_type = queue_get(busnumber, &addr, packet, &packet_size);
-        if (packet_type > QNOVALIDPKT) {
-            while (packet_type > QNOVALIDPKT) {
-                if (packet_type != QOVERRIDE) { //Nicht mehr gültiges Paket, bereits überholt.
-                  /* if power is off, wait here until power is turned on
-                   * again */
-                  if (power_is_off(busnumber)) {
-                    usleep(10000); //alle 10ms reicht aus
-                    continue;
-                  }
-
-                  send_packet(busnumber, packet, packet_size,
-                              packet_type, false);
-                }
-                packet_type = queue_get(busnumber, &addr, packet, &packet_size);
-            }
-        }
-
-        /* If there are no new commands, send a loco state refresch. */
-        else {
-          if (power_is_off(busnumber)) { 
-           	nanosleep(&rqtp_sleep, NULL);
-            continue;
-          }
-
-          if (! refresh_loco(busnumber)) {
-              //Keine Lok für Refreshkommando vorhanden -> Idle Data senden damit kein DC am Gleis anliegt.
-              __DDL->spiLastMM = 0;
-          }
-        }
-    }
-
-    return NULL;
+    return (buses[busnumber].power_state == 0);
 }
 
 static int init_gl_DDL(gl_data_t * gl, char *optData)
@@ -1648,12 +1367,11 @@ static int init_gl_DDL(gl_data_t * gl, char *optData)
         case 'M':			/* MMx */
             if (gl->n_func > 5) return SRCP_WRONGVALUE;
             switch (gl->protocolversion) {
-               // M1: 14 drive steps, 1 function, relative drive direction
-               case 1: return (gl->n_fs == 14 && gl->n_func == 1) ?
+               // M1: 14 drive steps, relative drive direction
+               case 1: return (gl->n_fs == 14) ?
                                SRCP_OK : SRCP_WRONGVALUE;
                // M2: 14, 27 or 28 drive steps, 5 functions, absolute drive direction
-               case 2: return ((gl->n_fs == 14 || gl->n_fs == 27 || gl->n_fs == 28) &&
-                               gl->n_func >= 0 && gl->n_func <= 5 ) ?
+               case 2: return (gl->n_fs == 14 || gl->n_fs == 27 || gl->n_fs == 28) ?
                                SRCP_OK : SRCP_WRONGVALUE;
                // no other protocol versions supported
                default: return SRCP_WRONGVALUE;
@@ -1733,7 +1451,7 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
     buses[busnumber].describe_gl_func = &describe_gl_DDL;
     buses[busnumber].init_ga_func = &init_ga_DDL;
 
-    buses[busnumber].thr_func = &thr_sendrec_DDL;
+    buses[busnumber].thr_func = &thr_Manage_DDL;
 
     strcpy(buses[busnumber].description,
            "GA GL SM POWER LOCK DESCRIPTION");
@@ -1899,17 +1617,17 @@ int init_bus_DDL(bus_t busnumber)
     static char protocols[3] = { '\0', '\0', '\0' };
     int protocol = 0;
 
-	if (__DDL->refresh_ptid)  {		
-    	syslog_bus(busnumber, DBG_INFO, "DDL refresh already active, must be reset.");
-	    reset_NMRAPacketPool(busnumber);
-	    reset_MFXPacketPool(busnumber);
-	}
     syslog_bus(busnumber, DBG_INFO, "DDL start initialization (verbosity = %d).",
                buses[busnumber].debuglevel);
 
     if (buses[busnumber].device.file.fd <= 0) {
       buses[busnumber].device.file.fd = init_lineDDL(busnumber);
     }
+    else {
+    	syslog_bus(busnumber, DBG_INFO, "DDL was already active, pools must be reset.");
+	    reset_NMRAPacketPool(busnumber);
+	    reset_MFXPacketPool(busnumber);
+	}
 
     //GPIO In-Output für Boosterstuerung setzen:
     #if defined BANANAPI
@@ -1929,9 +1647,6 @@ int init_bus_DDL(bus_t busnumber)
     #endif
 
     __DDL->short_detected = 0;
-
-    __DDL->queue_initialized = false;
-    queue_init(busnumber);
 
     __DDL->refreshInfo.last_refreshed_maerklin_loco = 0;
     __DDL->refreshInfo.last_refreshed_maerklin_fx = -1;
@@ -1971,31 +1686,8 @@ int init_bus_DDL(bus_t busnumber)
 static void end_bus_thread(bus_thread_t * btd)
 {
     int result;
-    /* store thread return value here */
-    void *pThreadReturn;
-    int busnumber = btd->bus;
-
-    /* send cancel to refresh cycle */
-    result = pthread_cancel(((DDL_DATA *) buses[btd->bus].driverdata)->
-                            refresh_ptid);
-    if (result != 0) {
-        syslog_bus(btd->bus, DBG_ERROR,
-                   "pthread_cancel() failed: %s (errno = %d).",
-                   strerror(result), result);
-    }
-    /* wait until the refresh cycle has terminated */
-    result =
-        pthread_join(((DDL_DATA *) buses[btd->bus].driverdata)->
-                     refresh_ptid, &pThreadReturn);
-    if (result != 0) {
-        syslog_bus(btd->bus, DBG_ERROR,
-                   "pthread_join() failed: %s (errno = %d).",
-                   strerror(result), result);
-    }
-
     set_SerialLine(btd->bus, SL_RTS, OFF);
 
-    /* pthread_cond_destroy(&(__DDL->refresh_cond)); */
     if (buses[btd->bus].device.file.fd != -1)
         close(buses[btd->bus].device.file.fd);
 
@@ -2013,70 +1705,29 @@ static void end_bus_thread(bus_thread_t * btd)
                    strerror(result), result);
     }
     
-	if (__DDL->MCS_DEVNAME[0]) term_mcs_gateway();
+	if (__DDLt->MCS_DEVNAME[0]) term_mcs_gateway();
     syslog_bus(btd->bus, DBG_INFO, "DDL bus terminated.");
 
-    if (__DDL->ENABLED_PROTOCOLS & EP_NMRADCC) {
+    if (__DDLt->ENABLED_PROTOCOLS & EP_NMRADCC) {
         reset_NMRAPacketPool(btd->bus);
     }
-    if (__DDL->ENABLED_PROTOCOLS & EP_MFX) {
+    if (__DDLt->ENABLED_PROTOCOLS & EP_MFX) {
         reset_MFXPacketPool(btd->bus);
     }
     free(buses[btd->bus].driverdata);
     free(btd);
 }
 
-
-typedef struct _delayedGAResetCmdData {
-    int busnumber;
-    ga_data_t *gastate;
-} delayedGAResetCmdData;
-
-
-/* sends a GA reset command after a delay */
-void *thr_delayedGAResetCmd(void *v)
-{
-
-    delayedGAResetCmdData *delgatmp = (delayedGAResetCmdData *) v;
-    ga_data_t *gatmp = delgatmp->gastate;
-    int busnumber = delgatmp->busnumber;
-    free(v);
-
-    if (usleep((unsigned long) gatmp->activetime * 1000) == -1) {
-        syslog_bus(busnumber, DBG_ERROR,
-                   "usleep() failed in DDL line %d: %s (errno = %d)",
-                   __LINE__, strerror(errno), errno);
-    }
-    gatmp->action = 0;
-    syslog_bus(busnumber, DBG_DEBUG,
-               "Delayed GA command (threaded): %c (%x) %d",
-               gatmp->protocol, gatmp->protocol, gatmp->id);
-    switch (gatmp->protocol) {
-        case 'M':              /* Motorola Codes */
-            comp_maerklin_ms(busnumber, gatmp->id, gatmp->port,
-                             gatmp->action);
-            break;
-        case 'N':              /* NMRA DCC */
-            comp_nmra_accessory(busnumber, gatmp->id, gatmp->port,
-                                gatmp->action, __DDL->NMRA_GA_OFFSET);
-            break;
-    }
-    setGA(busnumber, gatmp->id, *gatmp);
-    return NULL;
-}
-
-
-static void *thr_sendrec_DDL(void *v)
+static void *thr_Manage_DDL(void *v)
 {
     struct _SM smakt;
     gl_data_t *glp;
     ga_data_t gatmp;
-    int addr, error;
+    int gastep = 0;	
     int last_cancel_state, last_cancel_type;
     char * scmd, * sprot, * stype;
-    
-    delayedGAResetCmdData *tmpv;
-    pthread_t ptid_delacccmd;
+    time_t nextmfxman = 0;
+	struct timeval tv_ga, tv_mfx = { 0, 0 };
 
     bus_thread_t *btd = (bus_thread_t *) malloc(sizeof(bus_thread_t));
     if (btd == NULL)
@@ -2094,50 +1745,11 @@ static void *thr_sendrec_DDL(void *v)
                buses[btd->bus].device.file.path);
 
     buses[btd->bus].watchdog = 1;
-    /*
-     * Starting the thread that is responsible for the signals on 
-     * serial port.
-     */
-    ((DDL_DATA *) buses[btd->bus].driverdata)->refresh_param.busnumber =
-        btd->bus;
-    error =
-        pthread_create(&
-                       (((DDL_DATA *) buses[btd->bus].driverdata)->
-                        refresh_ptid), NULL, thr_refresh_cycle,
-                       (void *)
-                       &(((DDL_DATA *) buses[btd->bus].driverdata)->
-                         refresh_param));
-
-    if (error != 0) {
-        syslog_bus(btd->bus, DBG_ERROR,
-                   "pthread_create() failed: %s (errno = %d).",
-                   strerror(error), error);
-    }
 
     while (true) {
         pthread_testcancel();
-        if (!queue_GL_isempty(btd->bus)) {
-          glp = dequeueNextGL(btd->bus);
-		  if (glp) {
-            //Gültiger, nicht gelöschter Eintrag verarbeiten
-            char p = glp->protocol;
-            switch (p) {
-                case 'M':      /* Motorola Codes */
-                	comp_maerklin_loco(btd->bus, glp);
-                    break;
-                case 'N':      /* NMRA / DCC Codes */
-					comp_nmra_multi_func(btd->bus, glp);
-                    break;
-                case 'X':      /* MFX */
-                	comp_mfx_loco(btd->bus, glp);
-                    if (glp->direction == -1) { 	// mfx loco TERM
-                      sendDekoderTerm(addr);
-                    }
-                    break;
-            }
-            cacheSetGL(btd->bus, glp, glp);
-          }
-        }
+        
+        /* Service Mode Handling */
         if (!queue_SM_isempty(btd->bus)) {
             dequeueNextSM(btd->bus, &smakt);
 			switch(smakt.protocol) {
@@ -2189,16 +1801,12 @@ static void *thr_sendrec_DDL(void *v)
                                          smakt.value);
                                     break;
                                 case CV_BIT:
-                                    rc = protocol_nmra_sm_write_cvbit(btd->
-                                                                      bus,
-                                                                      smakt.cvaddr,
-                                                                      smakt.index,
-                                                                      smakt.value);
+                                    rc = protocol_nmra_sm_write_cvbit(btd->bus,
+                                        	smakt.cvaddr, smakt.index, smakt.value);
                                     break;
                                 case PAGE:
                                     rc = protocol_nmra_sm_write_page
-                                        (btd->bus, smakt.cvaddr,
-                                         smakt.value);
+                                        (btd->bus, smakt.cvaddr, smakt.value);
                                     break;
                                 default:    ;
                             }
@@ -2252,21 +1860,17 @@ static void *thr_sendrec_DDL(void *v)
                             int my_rc = 0;
                             switch (smakt.type) {
                                 case REGISTER:
-                                    my_rc =
-                                        protocol_nmra_sm_verify_phregister
+                                    my_rc = protocol_nmra_sm_verify_phregister
                                         (btd->bus, smakt.cvaddr, smakt.value);
                                     break;
                                 case CV:
-                                    my_rc =
-                                        protocol_nmra_sm_verify_cvbyte
+                                    my_rc = protocol_nmra_sm_verify_cvbyte
                                         (btd->bus, smakt.cvaddr,
                                          smakt.value);
                                     break;
                                 case CV_BIT:
-                                    my_rc =
-                                        protocol_nmra_sm_verify_cvbit(btd->bus,
-                                                    smakt.cvaddr, smakt.index,
-                                                    smakt.value);
+                                    my_rc = protocol_nmra_sm_verify_cvbit(btd->bus,
+                                        smakt.cvaddr, smakt.index, smakt.value);
                                     break;
                                 case PAGE:
                                     my_rc = protocol_nmra_sm_verify_page
@@ -2326,87 +1930,91 @@ static void *thr_sendrec_DDL(void *v)
             session_endwait(btd->bus, rc);
         }
         buses[btd->bus].watchdog = 4;
+        
+		/* Power State Handling */
+        if (power_is_off(btd->bus)) {
+            usleep(10000);		// wait 10ms before re-test
+            continue;
+        }
 
-        if (!queue_GA_isempty(btd->bus)) {
-            char p;
-            dequeueNextGA(btd->bus, &gatmp);
-            addr = gatmp.id;
-            p = gatmp.protocol;
-            syslog_bus(btd->bus, DBG_DEBUG, "Next GA command: %c (%x) %d",
-                       p, p, addr);
+		/* Generic Loco Handling */
+        glp = dequeueNextGL(btd->bus);
+		if (glp) {
+            char p = glp->protocol;
             switch (p) {
                 case 'M':      /* Motorola Codes */
-                    comp_maerklin_ms(btd->bus, addr, gatmp.port,
-                                     gatmp.action);
+                	comp_maerklin_loco(btd->bus, glp);
                     break;
-                case 'N':
-                    comp_nmra_accessory(btd->bus, addr, gatmp.port,
-                                        gatmp.action,
-                                        __DDLt->NMRA_GA_OFFSET);
+                case 'N':      /* NMRA / DCC Codes */
+					comp_nmra_multi_func(btd->bus, glp);
+                    break;
+                case 'X':      /* MFX */
+                	comp_mfx_loco(btd->bus, glp);
+                    if (glp->direction == -1) { 	// mfx loco TERM
+                      sendDekoderTerm(glp->id);
+                    }
                     break;
             }
-            setGA(btd->bus, addr, gatmp);
-            buses[btd->bus].watchdog = 5;
-
-            if (gatmp.activetime > 0) {
-
-                /* the handling of delayed GA commands in this way, can only 
-                   be a short term improvement. If srcpd will have better
-                   inter-thread communication, it should be replaced. */
-
-                if (gatmp.activetime < 1000) {
-                    if (usleep((unsigned long) gatmp.activetime * 1000) ==
-                        -1) {
-                        syslog_bus(btd->bus, DBG_ERROR,
-                                "usleep() failed in DDL line %d: %s (errno = %d)",
-                                __LINE__, strerror(errno), errno);
-                    }
-                    gatmp.action = 0;
-                    syslog_bus(btd->bus, DBG_DEBUG,
-                               "Delayed GA command: %c (%x) %d", p, p,
-                               addr);
-                    switch (p) {
-                        case 'M':      /* Motorola Codes */
-                            comp_maerklin_ms(btd->bus, addr, gatmp.port,
-                                             gatmp.action);
-                            break;
-                        case 'N':
-                            comp_nmra_accessory(btd->bus, addr, gatmp.port,
-                                                gatmp.action,
-                                                __DDLt->NMRA_GA_OFFSET);
-                            break;
-                    }
-                    setGA(btd->bus, addr, gatmp);
-                }
-                else {
-                    tmpv =
-                        (delayedGAResetCmdData *)
-                        malloc(sizeof(delayedGAResetCmdData));
-                    if (!tmpv) {
-                        syslog_bus(btd->bus, DBG_ERROR,
-                                   "malloc() failed!");
-                        continue;
-                    }
-                    tmpv->busnumber = btd->bus;
-                    tmpv->gastate = &gatmp;
-                    error = pthread_create(&ptid_delacccmd, NULL,
-                                           thr_delayedGAResetCmd, tmpv);
-                    if (error == 0) {
-                        pthread_detach(ptid_delacccmd);
-                    }
-                    else {
-                        syslog_bus(btd->bus, DBG_ERROR,
-                                   "pthread_create() failed: %s (errno = %d).",
-                                   strerror(error), error);
-                    }
-                }
-            }
+            cacheSetGL(btd->bus, glp, glp);
         }
-        if (usleep(3000) == -1) {
-            syslog_bus(btd->bus, DBG_ERROR,
-                       "usleep() failed in DDL line %d: %s (errno = %d)",
-                       __LINE__, strerror(errno), errno);
+        else if (! refresh_loco(btd->bus)) {
+              // TODO: Keine Lok für Refreshkommando vorhanden -> Idle Data senden damit kein DC am Gleis anliegt.
+            __DDLt->spiLastMM = 0;
         }
+
+		/* mfx Management */
+	    if ((__DDLt->ENABLED_PROTOCOLS & EP_MFX) &&
+        		((tv_mfx.tv_sec == 0) || (timeSince(tv_mfx) >= nextmfxman))) {
+        	nextmfxman = mfxManagement(btd->bus);
+			gettimeofday(&tv_mfx, NULL);
+		}	
+	
+		/* Generic Accessory Handling */
+		switch (gastep) {
+			/* activate GA element */
+			case 0:	if (queue_GA_isempty(btd->bus)) break;
+			        dequeueNextGA(btd->bus, &gatmp);
+            		syslog_bus(btd->bus, DBG_DEBUG, 
+							"Next GA command: %c %d Port %d activated for %d ms",
+                       		gatmp.protocol, gatmp.id, gatmp.port, gatmp.activetime);
+			        gettimeofday(&tv_ga, NULL);
+                    /* falls through */
+            case 1:	switch (gatmp.protocol) {
+                		case 'M':      	/* Motorola Code */
+                    		comp_maerklin_ms(btd->bus, gatmp.id, gatmp.port,
+                                     	gatmp.action);
+                    		break;
+                		case 'N':  		/* DCC Code */
+                   			comp_nmra_accessory(btd->bus, gatmp.id, gatmp.port,
+                                        gatmp.action, __DDLt->NMRA_GA_OFFSET);
+                    		break;
+            		}
+            		if (++gastep == 2) {
+            			setGA(btd->bus, gatmp.id, gatmp);
+                        if (gatmp.activetime <= 0)  gastep = 0;
+                    }
+					break;
+			/* deactivate GA element */					
+			case 2:	if (timeSince(tv_ga) < (gatmp.activetime * 1000)) break;
+					gatmp.action = 0;
+                    syslog_bus(btd->bus, DBG_DEBUG, "Delayed GA command: %c %d",
+                       				gatmp.protocol, gatmp.id);
+					/* falls through */
+            case 3:	switch (gatmp.protocol) {
+                		case 'M':      	/* Motorola Code */
+                    		comp_maerklin_ms(btd->bus, gatmp.id, gatmp.port,
+                                     	gatmp.action);
+                    		break;
+                		case 'N':  		/* DCC Code */
+                   			comp_nmra_accessory(btd->bus, gatmp.id, gatmp.port,
+                                        gatmp.action, __DDLt->NMRA_GA_OFFSET);
+                    		break;
+            		}
+            		if (++gastep == 4) {
+            			setGA(btd->bus, gatmp.id, gatmp);
+                        gastep = 0;
+                    }
+		}
     }
 
     /*run the cleanup routine */

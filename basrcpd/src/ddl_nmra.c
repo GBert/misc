@@ -75,7 +75,6 @@
 #include "syslogmessage.h"
 
 static char *preamble = "111111111111111";
-static const int NMRA_STACKSIZE = 200;
 
 /* 230 is needed for all functions F0-F28 */
 static const unsigned int BUFFERSIZE = 256;
@@ -232,7 +231,7 @@ int comp_nmra_accessory(bus_t busnumber, int nr, int output, int activate,
     char byte3[9];
     char bitstream[BUFFERSIZE];
     char packetstream[PKTSIZE];
-    char *p_packetstream;
+//    char *p_packetstream;
 
     int address = 0;            /* of the decoder                */
     int pairnr = 0;             /* decoders have pair of outputs */
@@ -249,7 +248,7 @@ int comp_nmra_accessory(bus_t busnumber, int nr, int output, int activate,
         return 1;
 
     /* packet is not available */
-    p_packetstream = packetstream;
+//    p_packetstream = packetstream;
 
     /* calculate the real address of the decoder and the pair number 
      * of the switch */
@@ -280,10 +279,7 @@ int comp_nmra_accessory(bus_t busnumber, int nr, int output, int activate,
 
     j = translateBitstream2Packetstream(busnumber, bitstream, packetstream);
     if (j > 0) {
-        queue_add(busnumber, address, p_packetstream, QNBACCPKT, j, false);
-#if 0                           /* GA Packet Cache */
-        updateNMRAGaPacketPool(nr, output, activate, p_packetstream, j);
-#endif
+    	send_packet(busnumber, packetstream, j, QNBACCPKT, 2);    
         return 0;
     }
 
@@ -558,7 +554,6 @@ void comp_nmra_multi_func(bus_t busnumber, gl_data_t *glp)
     uint32_t func = glp->funcs;
     uint8_t nspeed = glp->n_fs;
     uint8_t	nfuncs = glp->n_func;
-	bool prio = (glp->cachedspeed > 0) && (speed == 0);
 	
 	if (speed) speed++;                 /* Never send FS1 */
 	if (direction == 2) {				/* Emergency Stop */
@@ -568,8 +563,8 @@ void comp_nmra_multi_func(bus_t busnumber, gl_data_t *glp)
 
     syslog_bus(busnumber, DBG_DEBUG,
                "command for NMRA protocol (N%d) received addr:%d "
-               "dir:%d speed:%d nspeeds:%d nfunc:%d %c",
-               mode, address, direction, speed, nspeed, nfuncs, prio ? 'P' : ' ');
+               "dir:%d speed:%d nspeeds:%d nfunc:%d funcs %x",
+               mode, address, direction, speed, nspeed, nfuncs,func);
 
     adr = address;
 
@@ -633,9 +628,9 @@ void comp_nmra_multi_func(bus_t busnumber, gl_data_t *glp)
     if (j > 0 && jj > 0) {
         update_NMRAPacketPool(busnumber, adr, packetstream, j,
                               packetstream2, jj);
-        queue_add(busnumber, adr, packetstream, QNBLOCOPKT, j, prio);
+    	send_packet(busnumber, packetstream, j, QNBLOCOPKT, 2);    
         if (nfuncs && (nspeed > 14)) {
-            queue_add(busnumber, adr, packetstream2, QNBLOCOPKT, jj, prio);
+    		send_packet(busnumber, packetstream, jj, QNBLOCOPKT, 2);    
         }
     }
 
@@ -689,7 +684,7 @@ int protocol_nmra_sm_write_cvbyte_pom(bus_t busnumber, int address, int cv,
     j = translateBitstream2Packetstream(busnumber, bitstream, packetstream);
 
     if (j > 0) {
-        queue_add(busnumber, adr, packetstream, QNBLOCOPKT, j, false);
+    	send_packet(busnumber, packetstream, j, QNBLOCOPKT, 3);    
         return value;
     }
     return -1;
@@ -743,7 +738,7 @@ int protocol_nmra_sm_write_cvbit_pom(bus_t busnumber, int address, int cv,
     j = translateBitstream2Packetstream(busnumber, bitstream, packetstream);
 
     if (j > 0) {
-        queue_add(busnumber, adr, packetstream, QNBLOCOPKT, j, false);
+    	send_packet(busnumber, packetstream, j, QNBLOCOPKT, 3);    
         return value;
     }
     return -1;

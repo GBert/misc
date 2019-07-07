@@ -90,7 +90,7 @@ char getMaerklinHI() {
 }
 
 int comp_maerklin_1(bus_t busnumber, int address, int direction,
-                    int speed, int func, bool prio, char cacheddirection)
+                    		int speed, int func, char cacheddirection)
 {
     char packet[18];
     int i;
@@ -98,7 +98,7 @@ int comp_maerklin_1(bus_t busnumber, int address, int direction,
     /* no special error handling, it's job of the clients */
     if (address < 0 || address > 80 || func < 0 || func > 1 || speed < 0 || speed > 15)
         return 1;
-	if (direction == 2) direction = cacheddirection;	/* Emergency Stop */
+    if (direction == 2) direction = cacheddirection;	/* Emergency Stop */
     if (direction != cacheddirection) {
         speed = 1;
     }
@@ -118,13 +118,12 @@ int comp_maerklin_1(bus_t busnumber, int address, int direction,
 
     update_MaerklinPacketPool(busnumber, address, packet, packet, packet,
                               packet, packet);
-    queue_add(busnumber, address, packet, QM1LOCOPKT, 18, prio); //Lok stoppen hat Priorität
-
+    send_packet(busnumber, packet, 18, QM1LOCOPKT, 2);    
     return 0;
 }
 
 int comp_maerklin_2(bus_t busnumber, int address, int direction,
-                    int speed, int func, int f1, int f2, int f3, int f4, bool prio)
+                    int speed, int func, int f1, int f2, int f3, int f4)
 {
 
     char trits[9];
@@ -276,17 +275,15 @@ int comp_maerklin_2(bus_t busnumber, int address, int direction,
                               f_packets[1], f_packets[2], f_packets[3]);
 
     //Ausgabe Geschwindigkeitsbefehl erfolgt immer    
-    queue_add(busnumber, address, packet, QM2LOCOPKT, 18, prio); //Lok stoppen hat Priorität
+    send_packet(busnumber, packet, 18, QM2LOCOPKT, 2);
     if (fx_changed) {
-      //Wir berücksichtigen die Priotität auch hier weil es vorkommen kann, dass z.B. Anfahr-Bremsverzögerung ausgeschaltet werden soll um eine Lok sofort anzuhalten
-      queue_add(busnumber, address, f_packets[fx], QM2FXPKT, 18, prio); 
+    	send_packet(busnumber, f_packets[fx], 18, QM2FXPKT, 1);
     }
-
     return 0;
 }
 
 int comp_maerklin_28(bus_t busnumber, int address, int direction,
-                    int speed, int func, int f1, int f2, int f3, int f4, bool prio)
+                    int speed, int func, int f1, int f2, int f3, int f4)
 {
 
     char trits[9];
@@ -456,18 +453,15 @@ int comp_maerklin_28(bus_t busnumber, int address, int direction,
                               f_packets[1], f_packets[2], f_packets[3]);
 
     //Ausgabe Geschwindigkeitsbefehl erfolgt immer    
-    queue_add(busnumber, adr, packet, QM2LOCOPKT, 18, prio);  //Lok stoppen hat Priorität
+    send_packet(busnumber, packet, 18, QM2LOCOPKT, 2);
     if (fx_changed) {
-      //Wir berücksichtigen die Priotität auch hier weil es vorkommen kann, dass z.B. Anfahr-Bremsverzögerung ausgeschaltet werden soll um eine Lok sofort anzuhalten
-      queue_add(busnumber, adr, f_packets[fx], QM2FXPKT, 18, prio);
+    	send_packet(busnumber, f_packets[fx], 18, QM2FXPKT, 1);
     }
-
     return 0;
 }
 
 int comp_maerklin_27(bus_t busnumber, int address, int direction,
-                    int speed, int func, int f1, int f2, int f3, int f4, 
-					bool prio, int speed_old)
+                    int speed, int func, int f1, int f2, int f3, int f4, int speed_old)
 {
 
     int sFS1, sFS2;
@@ -540,8 +534,7 @@ int comp_maerklin_27(bus_t busnumber, int address, int direction,
         sFS2 = 0;
     }
 
-    rtc = comp_maerklin_2(busnumber, address, direction, sFS1, func, f1,
-                          f2, f3, f4, prio);
+    rtc = comp_maerklin_2(busnumber, address, direction, sFS1, func, f1, f2, f3, f4);
     if ((sFS2 > 0) && (rtc == 0)) {
         if (usleep(50000) == -1) {
             syslog_bus(busnumber, DBG_ERROR,
@@ -549,7 +542,7 @@ int comp_maerklin_27(bus_t busnumber, int address, int direction,
                        __LINE__, strerror(errno), errno);
         }
         rtc = comp_maerklin_2(busnumber, address, direction, sFS2, func,
-                              f1, f2, f3, f4, prio);
+                              f1, f2, f3, f4);
     }
     return rtc;
 }
@@ -599,7 +592,7 @@ int comp_maerklin_ms(bus_t busnumber, int address, int port, int action)
         }
     }
 
-    queue_add(busnumber, address, packet, QM1SOLEPKT, 18, false);
+    send_packet(busnumber, packet, 18, QM1SOLEPKT, 2);
     return 0;
 }
 
@@ -612,7 +605,7 @@ int comp_maerklin_mf(bus_t busnumber, int address, int f1, int f2,
     int i;
 
     syslog_bus(busnumber, DBG_DEBUG,
-               "Command for func decoder (Maerklin) (MF) received");
+               "Command for func decoder (Maerklin) (MF) addr %d received", address);
 
     /* no special error handling, it's job of the clients */
     if (address < 0 || address > 80 || f1 < 0 || f1 > 1 ||
@@ -660,8 +653,7 @@ int comp_maerklin_mf(bus_t busnumber, int address, int f1, int f2,
         }
     }
 
-    queue_add(busnumber, address, packet, QM1FUNCPKT, 18, false);
-
+    send_packet(busnumber, packet, 18, QM1FUNCPKT, 2);
     return 0;
 }
 
@@ -671,34 +663,36 @@ void comp_maerklin_loco(bus_t bus, gl_data_t *glp)
     int addr = glp->id;
     int speed = glp->speed;
     int direction = glp->direction;
-	bool prio = (glp->cachedspeed > 0) && (speed == 0);
  
     if (speed) speed++;        		/* Never send FS1 */
 	if (direction == 2) speed = 0;  /* Emergency Stop */
 
     syslog_bus(bus, DBG_DEBUG,
-    	"command for M%d protocol received addr:%d dir:%d speed:%d of %d funcs:%x %c",
-        pv, addr, direction, speed, glp->n_fs, glp->funcs, prio ? 'P' : ' ');
+    	"command for M%d protocol received addr:%d dir:%d speed:%d of %d funcs:%x",
+        pv, addr, direction, speed, glp->n_fs, glp->funcs);
                     
 	if (pv == 1) {	comp_maerklin_1(bus, addr, direction, speed,
-                                            glp->funcs & 0x01, prio,
-											glp->cacheddirection);
-                            }
+                                glp->funcs & 0x01, glp->cacheddirection);
+                	if (glp->n_func > 1)
+                		comp_maerklin_mf(bus, addr, ((glp->funcs >> 1) & 0x01),
+                                ((glp->funcs >> 2) & 0x01), ((glp->funcs >> 3) & 0x01),
+                                ((glp->funcs >> 4) & 0x01));
+    }
     else switch (glp->n_fs) {
         case 14:	comp_maerklin_2(bus, addr, direction, speed,
                                 glp->funcs & 0x01, ((glp->funcs >> 1) & 0x01),
                                 ((glp->funcs >> 2) & 0x01), ((glp->funcs >> 3) & 0x01),
-                                ((glp->funcs >> 4) & 0x01), prio);
+                                ((glp->funcs >> 4) & 0x01));
                     break;
         case 27:	comp_maerklin_27(bus, addr, direction, speed,
                                 glp->funcs & 0x01, ((glp->funcs >> 1) & 0x01),
                                 ((glp->funcs >> 2) & 0x01), ((glp->funcs >> 3) & 0x01),
-                                ((glp->funcs >> 4) & 0x01), prio, glp->cachedspeed);
+                                ((glp->funcs >> 4) & 0x01), glp->cachedspeed);
                     break;
     	case 28:	comp_maerklin_28(bus, addr, direction, speed,
                                 glp->funcs & 0x01, ((glp->funcs >> 1) & 0x01),
                                 ((glp->funcs >> 2) & 0x01), ((glp->funcs >> 3) & 0x01),
-                                ((glp->funcs >> 4) & 0x01), prio);
+                                ((glp->funcs >> 4) & 0x01));
                     break;
     }
 }

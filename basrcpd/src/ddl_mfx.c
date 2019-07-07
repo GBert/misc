@@ -75,8 +75,9 @@
 
 
 //MFX Verwaltungsthread
-static pthread_t mfxManageThread;
+//static pthread_t mfxManageThread;
 static uint16_t registrationCounter;
+static int searchstep = 0;
 
 //MFX RDS Feedback thread
 static pthread_t mfxRDSThread;//Global zugängliche Parameter -> Code ist nur für eine DDL Instanz zu gebrauchen...
@@ -89,6 +90,8 @@ static sem_t semRDSFeedback; //Semaphore zur Medlung von neuen RDS Daten
 //Konfig Cache einer Lok, alle Konfigregister [CVNr10Bit][Index6Bit]
 #define CV_SIZE 1024
 #define CVINDEX_SIZE 64
+
+#if 0
 typedef struct _tMFXKonfigCache {
   //Die Dekoder Adresse
   int adresse;
@@ -99,6 +102,7 @@ typedef struct _tMFXKonfigCache {
 } tMFXKonfigCache;
 //Es wird jeweils eine Lok im Cache gehalten, mit der gerade Konfig-Variablen gelesen / geschrieben werden.
 static tMFXKonfigCache mfxKonfigCache = {.adresse=0, .cache={{0}}, .valid={{0}}};
+#endif
 
 /**
  * Servicemode (SM) aktiv oder nicht.
@@ -248,11 +252,11 @@ static void addCRCBits(char *stream, unsigned int *pos) {
  * MFX Paket versenden.
  * @param address Lokadresse oder 0 (Broadcast)
  * @param stream zu versendendes MFX Paket. an [0] muss die Anzahl Bist stehen, die ab [1] LSB folgen.
- * @param prio Wenn true: priorisiert behandeln (Lok Halt)
  * @param packetTyp MFX Pakettyp (QMFX?PKT)
  * @return Anzahl Bytes aus Stream, die gesendet wurden.
  */
-static unsigned int sendMFXPaket(int address, char *stream, bool prio, unsigned int packetTyp) {
+static unsigned int sendMFXPaket(int address, char *stream, int packetTyp, int xmits)
+{
   //Da nur ein Paket mit MFX Rückmeldung unterwegs sein kann, muss die Semaphore zur RDS Rückmeldung hier immer auf 0 stehen.
   //Durch Timeout beim warten wegen z.B. Power Off und doch noch Ausführen Feedbackbefehl bei Power On
   //könnte es sein, dass die Semaphore deshalb bereits auf >0 steht.
@@ -274,9 +278,9 @@ static unsigned int sendMFXPaket(int address, char *stream, bool prio, unsigned 
     }
   }
   
-  unsigned int sizeStream = ((stream[0] + 7) / 8) + 1; //+7 damit immer bei int Division aufgerundet wird
-  queue_add(busnumber, address, stream, packetTyp, sizeStream, prio);
-  return sizeStream;
+	unsigned int sizeStream = ((stream[0] + 7) / 8) + 1; //+7 damit immer bei int Division aufgerundet wird
+	send_packet(busnumber, stream, sizeStream, packetTyp, xmits);
+	return sizeStream;
 }
 
 /**
@@ -293,9 +297,9 @@ void comp_mfx_loco(bus_t bus, gl_data_t *glp)
     int address = glp->id;
     int speed = glp->speed;
     int direction = glp->direction;
+	uint32_t funcs = glp->funcs;
     uint8_t nspeed = glp->n_fs;
     uint8_t	nfuncs = glp->n_func;
-	bool prio = (glp->cachedspeed > 0) && (speed == 0);
  
 	if (direction == 2) speed = 1;		/* Emergency Stop */
 	else {
@@ -306,8 +310,8 @@ void comp_mfx_loco(bus_t bus, gl_data_t *glp)
 
 	syslog_bus(bus, DBG_DEBUG,
              "command for MFX protocol received addr:%d "
-             "dir:%d speed:%d nspeeds:%d nfunc:%d %c",
-             address, direction, speed, nspeed, nfuncs, prio ? 'P' : ' ');
+             "dir:%d speed:%d nspeeds:%d nfunc:%d funcs %x",
+             address, direction, speed, nspeed, nfuncs, funcs);
 
   //packetstream Format:
   //1. Byte länge
@@ -339,20 +343,43 @@ void comp_mfx_loco(bus_t bus, gl_data_t *glp)
   	}
 	if (nfuncs <=4) {
 		addBits(0b010, 3, packetstream, &pos);	// upto 4 functions
-		addBits(glp->funcs, 4, packetstream, &pos);
+		addBits(funcs, 4, packetstream, &pos);
   	}
 	else if (nfuncs <=8) {
 		addBits(0b0110, 4, packetstream, &pos);	// upto 8 functions
-		addBits(glp->funcs, 8, packetstream, &pos);
+		addBits(funcs, 8, packetstream, &pos);
   	}
   	else {
 		addBits(0b0111, 4, packetstream, &pos);	// upto 16 functions
-		addBits(glp->funcs, MFX_FX_COUNT, packetstream, &pos);
+		addBits(funcs, MFX_FX_COUNT, packetstream, &pos);
   	}
-  addCRCBits(packetstream, &pos);
-  unsigned int sizeStream = sendMFXPaket(address, packetstream, prio, QMFX0PKT);
-  update_MFXPacketPool(busnumber, address, packetstream, sizeStream);
-  return;
+  	addCRCBits(packetstream, &pos);
+  	unsigned int sizeStream = sendMFXPaket(address, packetstream, QMFX0PKT, 2);
+  	update_MFXPacketPool(bus, address, packetstream, sizeStream);
+
+  //Wenn mehr als 16 MFX Funktionen vorhanden sind -> geänderte Funktionen extra senden
+  //Format des Bitstreams für Funktion Einzelansteuerung (9 Bit Adresse):
+  //110AAAAAAAAA100NNNNNNN0FCCCCCCCC
+  if (nfuncs > 16) {
+      uint32_t fxChange = glp->funcschange & 0xffff0000;
+      glp->funcschange &= ~fxChange;
+      int i;
+      for (i=16; i<32; i++) {
+        if ((fxChange & (1 << i)) != 0) {
+			syslog_bus(bus, DBG_DEBUG, "COMP MFX Loco. Adr=%d, nfuncs=%d, Fx%d=%d", 
+		  						address, nfuncs, i, (funcs >> i) & 1);
+          	memset(packetstream, 0, PKTSIZE);
+          	pos = 0;
+          	addAdrBits(address, packetstream, &pos);
+          	addBits(0b100, 3, packetstream, &pos); 		// switch one function
+          	addBits(i, 7, packetstream, &pos); 			// number of function
+          	addBits(0, 1, packetstream, &pos);
+          	addBits((funcs >> i) & 1, 1, packetstream, &pos); // new state
+          	addCRCBits(packetstream, &pos);
+          	sendMFXPaket(address, packetstream, QMFX0PKT, 2);
+		}
+      }
+  }
 }
 
 #define REG_COUNTER_FILE SYSCONFDIR"/srcpd.regcount"
@@ -377,20 +404,19 @@ static uint16_t loadRegistrationCounter() {
 /**
  * Den veränderten Neuanmeldezähler speichern.
  * @regCounter Aktueller Neuanmeldezähler, der gespeichert werden soll.
- * @return true wenn OK, false bei einem Fehler
  */
-static bool saveRegistrationCounter(uint16_t regCounter) {
-  int regCountFile = open(REG_COUNTER_FILE, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
-  if (regCountFile < 0) {
-    //Fehler
-    //printf("%s\n", strerror(errno));
-    return false;
-  }
-  char buffer[10];
-  sprintf(buffer, "%d", regCounter);
-  write(regCountFile, buffer, strlen(buffer));
-  close (regCountFile);
-  return true;
+static void saveRegistrationCounter(uint16_t regCounter) {
+	int regCountFile = open(REG_COUNTER_FILE, O_WRONLY | O_CREAT | O_TRUNC,
+												S_IRUSR | S_IWUSR);
+	if (regCountFile < 0) {
+		syslog_bus(busnumber, DBG_ERROR,
+                "Error %d when trying to store ReRegistration counter", errno);
+    	return;
+  	}
+  	char buffer[10];
+  	sprintf(buffer, "%d", regCounter);
+  	write(regCountFile, buffer, strlen(buffer));
+  	close (regCountFile);
 }
 
 /**
@@ -415,7 +441,7 @@ static void sendUIDandRegCounter(uint32_t uid, uint16_t registrationCounter) {
   addBits(registrationCounter, 16, packetstream, &pos); //16 Bit Neuanmeldezähler
   addCRCBits(packetstream, &pos);
     
-  sendMFXPaket(0, packetstream, false, QMFX0PKT);
+  sendMFXPaket(0, packetstream, QMFX0PKT, 1);
 }
 
 /**
@@ -457,7 +483,7 @@ static bool sendDekoderExist(int adresse, uint32_t dekoderUID, bool waitDekoderQ
       packetTyp = QMFX1DPKT;
     }
   }
-  sendMFXPaket(0, packetstream, false, packetTyp);
+  sendMFXPaket(0, packetstream, packetTyp, 1);
   if (packetTyp != QMFX1PKT) {
     //keine Rückmeldung
     return true;
@@ -495,7 +521,7 @@ static bool sendSearchNewDecoder(unsigned int countUIDBits, uint32_t *dekoderUID
   addBits(*dekoderUID, 32, packetstream, &pos); //32 Bit UID
   addCRCBits(packetstream, &pos);
     
-  sendMFXPaket(0, packetstream, false, QMFX1PKT);
+  sendMFXPaket(0, packetstream, QMFX1PKT, 1);
   
   //Warten auf Antwort
   if (! waitRDS()) {
@@ -551,9 +577,10 @@ void assignSID(uint32_t dekoderUID, unsigned int sid)
   addBits(dekoderUID, 32, packetstream, &pos); //32 Bit UID
   addCRCBits(packetstream, &pos);
     
-  sendMFXPaket(0, packetstream, false, QMFX0PKT);
+  sendMFXPaket(0, packetstream, QMFX0PKT, 2);
 }
 
+#if 0
 /**
  * Prüft, ob der MFX Konfig Cache für Lokadresse "adresse" gesetzt ist.
  * Wenn nict, wird der Cache nue initialisiert.
@@ -566,6 +593,7 @@ static void checkMFXConfigCache(int adresse) {
     memset(mfxKonfigCache.valid, false, sizeof(mfxKonfigCache.valid));
   }
 }
+#endif
 
 /**
  * CV einer Lok abrufen.
@@ -577,14 +605,16 @@ static void checkMFXConfigCache(int adresse) {
  * @param buffer Buffer in den die ausgelesen Bytes geschrieben werden.
  * @return true wenn ohne Fehler ausgelesen werden konnte.
  */
-static bool readCV(int adresse, uint16_t cv, uint16_t index, unsigned int bytes, char *buffer) {
-  checkMFXConfigCache(adresse);
+static bool readCV(int adresse, uint16_t cv, uint16_t index, unsigned int bytes, char *buffer) 
+{
+//  checkMFXConfigCache(adresse);
   if ((cv >= CV_SIZE) || (index >= CVINDEX_SIZE)) {
     //Ungültige CV / Index Angaben
     return false;
   }
-  //Falls der Wert bereits im Cache ist wird dieser zurückgegeben
   int i;
+#if 0
+  //Falls der Wert bereits im Cache ist wird dieser zurückgegeben
   bool cacheOK = true;
   for (i=0; i<bytes;i++) {
     if (! mfxKonfigCache.valid[cv][index+i]) {
@@ -597,6 +627,7 @@ static bool readCV(int adresse, uint16_t cv, uint16_t index, unsigned int bytes,
     memcpy(buffer, &(mfxKonfigCache.cache[cv][index]), bytes);
     return true;
   }
+#endif
   //Werte von Lokdekoder lesen
   char packetstream[PKTSIZE];
   memset(packetstream, 0, PKTSIZE);
@@ -628,7 +659,7 @@ static bool readCV(int adresse, uint16_t cv, uint16_t index, unsigned int bytes,
   addCRCBits(packetstream, &pos);
 
   for (i=0; i<MAX_RDS_REPEATS; i++) {
-    sendMFXPaket(0, packetstream, false, packetTyp);
+    sendMFXPaket(0, packetstream, packetTyp, 1);
   
     //Auf Rückmeldung warten
     if (! waitRDS()) {
@@ -646,8 +677,8 @@ static bool readCV(int adresse, uint16_t cv, uint16_t index, unsigned int bytes,
     memcpy(buffer, rdsFeedback.feedback, bytes);
     //printf("readCV return buffer[0]=0x%x\n", buffer[0]);
     //Cache aktualisieren
-    memcpy(&(mfxKonfigCache.cache[cv][index]), rdsFeedback.feedback, bytes);
-    memset(&(mfxKonfigCache.valid[cv][index]), true, bytes);
+//    memcpy(&(mfxKonfigCache.cache[cv][index]), rdsFeedback.feedback, bytes);
+//    memset(&(mfxKonfigCache.valid[cv][index]), true, bytes);
   }
   else {
     syslog_bus(busnumber, DBG_WARN, "RDS Feedback Abbruch. Zuviele ungültige Versuche.");
@@ -721,7 +752,7 @@ static int searchLokUID(int adrBekannt, uint32_t uid) {
  * @param adresse Lokadresse (Schienenadresse)
  * @param uid Dekoder UID der Lok
  */
- void newGLInit(int adresse, uint32_t uid) {
+void newGLInit(int adresse, uint32_t uid) {
   int glAddr = searchLokUID(adresse, uid);
   if (glAddr > 0) {
     //printf("Neues INIT Adr %d zu bestehender Adr %d für UID=%u\n", adresse, glAddr, uid);
@@ -735,6 +766,7 @@ static int searchLokUID(int adrBekannt, uint32_t uid) {
   }
 }
 
+#if 0
 /**
  * GL Adresse ermitteln, diese der Lok als Schienenadresse zuweisen.
  * Falls die UID der Lok schon als bekannte MFX Lok vorhanden ist,
@@ -770,6 +802,7 @@ static unsigned int getSID(uint32_t dekoderUID, bool *bereitsVorhanden) {
   assignSID(dekoderUID, glAddr);
   return glAddr;
 }
+#endif
 
 /**
  * MFX Verwaltungsthread:
@@ -778,6 +811,19 @@ static unsigned int getSID(uint32_t dekoderUID, bool *bereitsVorhanden) {
  *   dann werden diese angemeldet.
  * @param 
  */
+time_t mfxManagement(bus_t busnum)
+{
+	DDL_DATA *ddl = (DDL_DATA*)buses[busnum].driverdata;
+	if (searchstep == 0) sendUIDandRegCounter(ddl -> uid, registrationCounter);
+
+	// TODO: search for new decoders and increment searchstep accordingly
+    uint32_t dekoderUID = 0;
+    if (searchstep) sendSearchNewDecoder(0, &dekoderUID);
+    
+    return ((searchstep == 0) ? 1000000 : 100000);	// next call in about 1s or 0.1
+}
+
+#if 0
 static void *thr_mfxManageThread(void *threadParam) {
   DDL_DATA *ddl = (DDL_DATA*)buses[busnumber].driverdata;
   //UID dieser Zentrale
@@ -834,10 +880,7 @@ static void *thr_mfxManageThread(void *threadParam) {
                      "Neue MFX Lok gefunden. UID=%u, zugewiesene Adresse=%d", dekoderUID, adresse);
           //Neuanmeldezähler Inkrement
           registrationCounter++;
-          if (! saveRegistrationCounter(registrationCounter)) {
-            syslog_bus(busnumber, DBG_ERROR,
-                       "Neuanmeldezähler konnte nicht gespeichert werden");
-          }
+          saveRegistrationCounter(registrationCounter);
 #if 0
 // HACK: das brauchen wir wohl nicht
           //Lokname und Funktionen abfragen, wenn es eine neue Lok ist
@@ -882,6 +925,7 @@ static void *thr_mfxManageThread(void *threadParam) {
   }
   return NULL;
 }
+#endif
 
 /**
  * Liest die RDS QUAL Leitung ein.
@@ -935,7 +979,8 @@ static bool getRDSData() {
  * - Periodisches suchen von noch nicht angemeldeten Dekodern, wenn welche gefunden werden,
  *   dann werden diese angemeldet.
  */
-static void *thr_mfxRDSThread(void *threadParam) {
+static void *thr_mfxRDSThread(void *threadParam) 
+{
   MFXRDSBits mfxRDSBits;
   
 #if defined BANANAPI
@@ -1008,9 +1053,7 @@ static void *thr_mfxRDSThread(void *threadParam) {
         }
         clkOld = clk;
         //ggf. Abbruch wegen Timeout
-        struct timeval timeNow;
-        gettimeofday(&timeNow, NULL);
-        if (compute_delta(timeStart, timeNow) > 200000) {
+		if (timeSince(timeStart) > 200000) {
           //printf("RDS Timeout\n");
           mfxRDSFeedback.ok = false;
           break;
@@ -1142,15 +1185,15 @@ int startMFXThreads(bus_t _busnumber, int _fdRDSNewRx)
 {
 	if (busnumber) return 2;		// don't start threads twice
   	busnumber = _busnumber;
-  fdRDSNewRx = _fdRDSNewRx;
+  	fdRDSNewRx = _fdRDSNewRx;
+  	
+	registrationCounter = loadRegistrationCounter();
+	syslog_bus(busnumber, DBG_INFO, 
+				"ReRegistration counter initialized with %d", registrationCounter);
+
   if (sem_init(&semRDSFeedback, 0, 0) != 0) {
     syslog_bus(busnumber, DBG_ERROR,
                "sem_init fail");
-    return 1;
-  }
-  if (pthread_create(&mfxManageThread, NULL, thr_mfxManageThread, NULL) != 0) {
-    syslog_bus(busnumber, DBG_ERROR,
-               "pthread_create thr_mfxManageThread fail");
     return 1;
   }
   if (pthread_create(&mfxRDSThread, NULL, thr_mfxRDSThread, NULL) != 0) {
@@ -1165,16 +1208,15 @@ int startMFXThreads(bus_t _busnumber, int _fdRDSNewRx)
  * Alle MFX Threads terminieren.
  * @return 0 für OK, !=0 für Fehler
  */
-int stopMFXThreads() {
-  if (pthread_cancel(mfxManageThread) != 0) {
-    return 1;
-  }
+int stopMFXThreads() 
+{
   if (pthread_cancel(mfxRDSThread) != 0) {
     return 1;
   }
   if (sem_destroy(&semRDSFeedback) != 0) {
     return 1;
   }
+//  saveRegistrationCounter(registrationCounter);
   return 0;
 }
 
@@ -1209,9 +1251,9 @@ int smMfxSetCV(int address, int cv, int index, int value)
 	if ((cv >= CV_SIZE) || (index >= CVINDEX_SIZE)) return -1;
     if (! (DDL_DATA*)buses[busnumber].power_state) return -2;
   
-  checkMFXConfigCache(address);
+//  checkMFXConfigCache(address);
   //Was neu geschrieben wurde wird im Cache als ungültig markiert damit sichergestellt ist, dass es bei einem Read von der Lok gelesen wird (Verify)
-  mfxKonfigCache.valid[cv][index] = false;
+//  mfxKonfigCache.valid[cv][index] = false;
   
 	syslog_bus(busnumber, DBG_INFO, "SM MFX Adr=%d, Set CV=%d, Index=%d, Val=%d",
 									address, cv, index, value);
@@ -1226,7 +1268,7 @@ int smMfxSetCV(int address, int cv, int index, int value)
   addBits(value, 8, packetstream, &pos); //Das zu schreibende Byte
   addCRCBits(packetstream, &pos);
     
-  sendMFXPaket(address, packetstream, false, QMFX0PKT);
+  	sendMFXPaket(address, packetstream, QMFX0PKT, 2);
 	return 0;
 }
 
@@ -1263,6 +1305,8 @@ int smMfxGetCV(int address, int cv, int index, int nmbr)
 int smMfxSetBind(int address, uint32_t uid)
 {
 	if (address == 0) {
+		if (registrationCounter != uid) 
+  			saveRegistrationCounter(uid);  
 		registrationCounter = uid;
 		syslog_bus(busnumber, DBG_INFO, "** mfx RegCount set to %x", uid);
 		return uid;
@@ -1280,6 +1324,7 @@ int smMfxVerBind(int address, uint32_t uid)
 
     if (!(DDL_DATA*)buses[busnumber].power_state) return -2;
     
+	sendDekoderExist(address, uid, false);	// HACK: don't wait for result
 	syslog_bus(busnumber, DBG_WARN,
 		"***** FAKE RESULT - mfx verify not yet implemented");
 	return 123;
