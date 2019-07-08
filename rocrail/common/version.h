@@ -1,11 +1,14 @@
 const int revisionnr = 
-15652
+15655
 ;
 const char* commithash = 
-"89eed69fd86d28ae2f0c3d354a660f2e3581325e";
+"beb8c1223ede72d458bec9d9c922d06941264a36";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15655 2019-07-08 16:58:05 +0200 loc: init master map on consist command\n" \
+"15654 2019-07-08 15:59:18 +0200 route: support for classdel and classadd added\n" \
+"15653 2019-07-08 15:24:03 +0200 ulni: fix for sync echo\n" \
 "15652 2019-07-08 10:36:30 +0200 planproperties: metrics and scale for the whole layout and MVTrack\n" \
 "15651 2019-07-08 07:48:59 +0200 enable debug info in windows 64bit build\n" \
 "15650 2019-07-08 07:35:31 +0200 mbus: trace level correction\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13658 2018-03-07 08:26:57 +0100 translation merge: de, nl, pt_BR, sr_latin\n" \
 "13657 2018-03-06 10:04:16 +0100 app: give the clients some more time to disconnect after a shutdown\n" \
 "13656 2018-03-06 08:47:35 +0100 routedialog: use the gotodlg for selecting crossing blocks\n" \
-"13655 2018-03-06 07:52:01 +0100 rocnetnodedlg: show I2C group in decimal also\n" \
-"13654 2018-03-05 15:53:00 +0100 bidib: removed obsolete iocfg flag\n" \
-"13653 2018-03-05 15:33:57 +0100 loc, lindesection: nraxis and axle wait added\n" \
 
 "log end";
