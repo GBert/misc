@@ -1,11 +1,13 @@
 const int revisionnr = 
-15656
+15658
 ;
 const char* commithash = 
-"3e976d1efcaca1b76682f6343a0513a929019d0a";
+"84453bccfb19bdf890fb19df45d20a1473603be7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15658 2019-07-08 22:08:56 +0200 zipper: archive name format changed\n" \
+"15657 2019-07-08 21:03:37 +0200 revert debug info win64\n" \
 "15656 2019-07-08 19:05:33 +0200 zipper: rocrail server start script added for linux\n" \
 "15655 2019-07-08 16:58:05 +0200 loc: init master map on consist command\n" \
 "15654 2019-07-08 15:59:18 +0200 route: support for classdel and classadd added\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13661 2018-03-07 11:24:07 +0100 guiframe: table menu reorganised\n" \
 "13660 2018-03-07 11:09:13 +0100 guiframe: table menu reorganised\n" \
 "13659 2018-03-07 10:34:00 +0100 seltabdlg: index tab added\n" \
-"13658 2018-03-07 08:26:57 +0100 translation merge: de, nl, pt_BR, sr_latin\n" \
-"13657 2018-03-06 10:04:16 +0100 app: give the clients some more time to disconnect after a shutdown\n" \
 
 "log end";
