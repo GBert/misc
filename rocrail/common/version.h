@@ -1,11 +1,12 @@
 const int revisionnr = 
-15651
+15652
 ;
 const char* commithash = 
-"b141e9a639b903e73d370ccf92323f23181cb5cb";
+"89eed69fd86d28ae2f0c3d354a660f2e3581325e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15652 2019-07-08 10:36:30 +0200 planproperties: metrics and scale for the whole layout and MVTrack\n" \
 "15651 2019-07-08 07:48:59 +0200 enable debug info in windows 64bit build\n" \
 "15650 2019-07-08 07:35:31 +0200 mbus: trace level correction\n" \
 "15649 2019-07-07 20:53:17 +0200 lcdriver: return type correction for getNextWait\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13655 2018-03-06 07:52:01 +0100 rocnetnodedlg: show I2C group in decimal also\n" \
 "13654 2018-03-05 15:53:00 +0100 bidib: removed obsolete iocfg flag\n" \
 "13653 2018-03-05 15:33:57 +0100 loc, lindesection: nraxis and axle wait added\n" \
-"13652 2018-03-05 13:44:45 +0100 cardlg: nraxis added to the details\n" \
 
 "log end";
