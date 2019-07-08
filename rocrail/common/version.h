@@ -1,11 +1,13 @@
 const int revisionnr = 
-15649
+15651
 ;
 const char* commithash = 
-"3b764415ba8b15f8e862b6c6b21d5abbdfa39156";
+"b141e9a639b903e73d370ccf92323f23181cb5cb";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15651 2019-07-08 07:48:59 +0200 enable debug info in windows 64bit build\n" \
+"15650 2019-07-08 07:35:31 +0200 mbus: trace level correction\n" \
 "15649 2019-07-07 20:53:17 +0200 lcdriver: return type correction for getNextWait\n" \
 "15648 2019-07-07 17:50:58 +0200 loc,lcdriver: virtual event timer\n" \
 "15647 2019-07-07 14:05:16 +0200 loc: use virtualeventtimer variable (todo: calculate it)\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13654 2018-03-05 15:53:00 +0100 bidib: removed obsolete iocfg flag\n" \
 "13653 2018-03-05 15:33:57 +0100 loc, lindesection: nraxis and axle wait added\n" \
 "13652 2018-03-05 13:44:45 +0100 cardlg: nraxis added to the details\n" \
-"13651 2018-03-05 12:07:47 +0100 mcs2: reader thread set to high priority in case of serial communication\n" \
-"13650 2018-03-05 11:20:38 +0100 railwaylinedlg: layout corrections and translations\n" \
 
 "log end";
