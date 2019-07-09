@@ -1,11 +1,15 @@
 const int revisionnr = 
-15658
+15662
 ;
 const char* commithash = 
-"84453bccfb19bdf890fb19df45d20a1473603be7";
+"77abf343d36139f95a0c756c39c7503102ecdbdd";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15662 2019-07-09 17:43:00 +0200 startallfilterdlg: removed conflicting alignment flags\n" \
+"15661 2019-07-09 10:44:39 +0200 loc: translate VHint into kmh for virtual timer\n" \
+"15660 2019-07-09 10:25:07 +0200 loc: translate VHint into kmh for virtual timer\n" \
+"15659 2019-07-09 09:49:04 +0200 loc: trace warning on modify interface address\n" \
 "15658 2019-07-08 22:08:56 +0200 zipper: archive name format changed\n" \
 "15657 2019-07-08 21:03:37 +0200 revert debug info win64\n" \
 "15656 2019-07-08 19:05:33 +0200 zipper: rocrail server start script added for linux\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13665 2018-03-07 16:33:01 +0100 guiframe: table menu without sub menus\n" \
 "13664 2018-03-07 15:49:30 +0100 guiframe: reorganised table menu\n" \
 "13663 2018-03-07 14:54:20 +0100 stage: velocity fix at in\n" \
-"13662 2018-03-07 14:18:09 +0100 guiframe: reorganised menu tables\n" \
-"13661 2018-03-07 11:24:07 +0100 guiframe: table menu reorganised\n" \
-"13660 2018-03-07 11:09:13 +0100 guiframe: table menu reorganised\n" \
-"13659 2018-03-07 10:34:00 +0100 seltabdlg: index tab added\n" \
 
 "log end";
