@@ -38,7 +38,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -h -m <meg> -v <uboot.img> <uboot-env.img> <mtd2.bin> <openwrt.img>\n", prg);
     fprintf(stderr, "   Version 0.2\n\n");
     fprintf(stderr, "         -h                  this help\n");
-    fprintf(stderr, "         -m <meg>            image size e.g. 8 or 16M defaullt %d M\n\n", DEFAULT_SIZE);
+    fprintf(stderr, "         -m <meg>            image size e.g. 8 or 16M default %d M\n\n", DEFAULT_SIZE);
 }
 
 int read_data(char *filename, uint8_t *position, int max) {
