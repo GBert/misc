@@ -1,11 +1,13 @@
 const int revisionnr = 
-15662
+15664
 ;
 const char* commithash = 
-"77abf343d36139f95a0c756c39c7503102ecdbdd";
+"ae56178bdade67cc75bde1f7f72ae8f811e4c1d6";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15664 2019-07-10 13:13:17 +0200 zipper: x86_64 added\n" \
+"15663 2019-07-10 07:41:31 +0200 planpaneldlg: translation correction scale -> zoom\n" \
 "15662 2019-07-09 17:43:00 +0200 startallfilterdlg: removed conflicting alignment flags\n" \
 "15661 2019-07-09 10:44:39 +0200 loc: translate VHint into kmh for virtual timer\n" \
 "15660 2019-07-09 10:25:07 +0200 loc: translate VHint into kmh for virtual timer\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13667 2018-03-08 07:20:38 +0100 gotodlg: use title viablocks in case of multisel\n" \
 "13666 2018-03-07 19:08:02 +0100 dsd2010: sleep little baby sleep\n" \
 "13665 2018-03-07 16:33:01 +0100 guiframe: table menu without sub menus\n" \
-"13664 2018-03-07 15:49:30 +0100 guiframe: reorganised table menu\n" \
-"13663 2018-03-07 14:54:20 +0100 stage: velocity fix at in\n" \
 
 "log end";
