@@ -1,11 +1,13 @@
 const int revisionnr = 
-15664
+15666
 ;
 const char* commithash = 
-"ae56178bdade67cc75bde1f7f72ae8f811e4c1d6";
+"fc60943fe7db48105fafa918b16b808ffeb1230e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15666 2019-07-10 20:08:13 +0200 zipper: desktop link command added\n" \
+"15665 2019-07-10 18:46:15 +0200 loc: added function to translate VHint into KMH\n" \
 "15664 2019-07-10 13:13:17 +0200 zipper: x86_64 added\n" \
 "15663 2019-07-10 07:41:31 +0200 planpaneldlg: translation correction scale -> zoom\n" \
 "15662 2019-07-09 17:43:00 +0200 startallfilterdlg: removed conflicting alignment flags\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13669 2018-03-08 11:55:34 +0100 rocrailinidlg: reorganised auto tab\n" \
 "13668 2018-03-08 11:20:34 +0100 dsd2010: swapped the rotation direction\n" \
 "13667 2018-03-08 07:20:38 +0100 gotodlg: use title viablocks in case of multisel\n" \
-"13666 2018-03-07 19:08:02 +0100 dsd2010: sleep little baby sleep\n" \
-"13665 2018-03-07 16:33:01 +0100 guiframe: table menu without sub menus\n" \
 
 "log end";
