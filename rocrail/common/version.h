@@ -1,11 +1,16 @@
 const int revisionnr = 
-15666
+15671
 ;
 const char* commithash = 
-"fc60943fe7db48105fafa918b16b808ffeb1230e";
+"6bd5c657b5cfd0ee5a6db218f4805b17d84e7578";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15671 2019-07-11 12:21:58 +0200 desktoplink.sh: comment added\n" \
+"15670 2019-07-11 12:20:27 +0200 loc: trigger corrections for virtual timers\n" \
+"15669 2019-07-11 10:41:59 +0200 desktoplink.sh added for linux ZIP\n" \
+"15668 2019-07-11 08:08:46 +0200 zipper: create packege/history if needed\n" \
+"15667 2019-07-11 08:01:11 +0200 rocrail png icon added\n" \
 "15666 2019-07-10 20:08:13 +0200 zipper: desktop link command added\n" \
 "15665 2019-07-10 18:46:15 +0200 loc: added function to translate VHint into KMH\n" \
 "15664 2019-07-10 13:13:17 +0200 zipper: x86_64 added\n" \
@@ -2001,10 +2006,5 @@ const char* revlog =
 "13674 2018-03-10 07:57:18 +0100 timetabledlg: added the nowrap td attribute\n" \
 "13673 2018-03-09 10:31:48 +0100 seltab: remove system event listener on delete\n" \
 "13672 2018-03-09 10:28:37 +0100 tt: report new positions to clients (dsd2010)\n" \
-"13671 2018-03-08 15:11:13 +0100 rocrailinidialog: layout correction signal on automatic tab\n" \
-"13670 2018-03-08 15:04:30 +0100 rocrailinidlialog: replaced text fields with spinbuttons in case of integer values on the automatic tab\n" \
-"13669 2018-03-08 11:55:34 +0100 rocrailinidlg: reorganised auto tab\n" \
-"13668 2018-03-08 11:20:34 +0100 dsd2010: swapped the rotation direction\n" \
-"13667 2018-03-08 07:20:38 +0100 gotodlg: use title viablocks in case of multisel\n" \
 
 "log end";
