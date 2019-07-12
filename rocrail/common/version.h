@@ -1,11 +1,14 @@
 const int revisionnr = 
-15682
+15685
 ;
 const char* commithash = 
-"d7901735c16474455dcc398a18ec3a64fc57239b";
+"2e3131940a8a91681e1e48febbc275ff9e9dc969";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15685 2019-07-12 15:07:41 +0200 app: take over calculate virtual timer on the fly\n" \
+"15684 2019-07-12 15:01:18 +0200 infodialog: HTML for feature tab\n" \
+"15683 2019-07-12 13:33:32 +0200 infodlg: new features tab added\n" \
 "15682 2019-07-12 12:21:26 +0200 zipper.sh: get revision number if not provided\n" \
 "15681 2019-07-12 10:58:29 +0200 translation: alttxt for gauge -> scale\n" \
 "15680 2019-07-12 09:17:39 +0200 calculate virtual timers: default off\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13688 2018-03-12 08:20:32 +0100 blockdialog: init comboboxes\n" \
 "13687 2018-03-12 08:01:28 +0100 roco: fix for fbmods > 10\n" \
 "13686 2018-03-11 15:27:00 +0100 schedulegraph: skip relative timing schedules\n" \
-"13685 2018-03-11 15:09:52 +0100 locodialog, blockdialog: init comboboxes\n" \
-"13684 2018-03-11 13:48:51 +0100 blockdialog: init\n" \
-"13683 2018-03-11 12:07:38 +0100 item: only use the reported bridge position in case it is set\n" \
 
 "log end";
