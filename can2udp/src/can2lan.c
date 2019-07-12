@@ -76,7 +76,7 @@ void signal_handler(int sig) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 1.29\n\n");
+    fprintf(stderr, "   Version 1.30\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory\n");
     fprintf(stderr, "         -u <port>           listening UDP port for the server - default 15731\n");
     fprintf(stderr, "         -t <port>           listening TCP port for the server - default 15731\n");
@@ -346,9 +346,9 @@ int check_data(int tcp_socket, struct cs2_config_data_t *cs2_config_data, unsign
 		break;
 	    } else if (strcmp("gbsstat", config_name) == 0) {
 		ret = 1;
-		/* fprintf(stderr, "%s: gbsstat (gbsstat.sr2) not implemented yet\n\n", __func__); */
-		syslog(LOG_NOTICE, "%s: sending gbsstat.sr2\n", __func__);
-		send_tcp_config_data("gbsstat.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
+		/* fprintf(stderr, "%s: gbsstat (gleisbild.sr2) not implemented yet\n\n", __func__); */
+		syslog(LOG_NOTICE, "%s: sending gleisbild.sr2\n", __func__);
+		send_tcp_config_data("gleisbild.sr2", config_dir, canid, tcp_socket, CRC | COMPRESSED);
 		break;
 	    } else if (strcmp("fsstat", config_name) == 0) {
 		ret = 1;
