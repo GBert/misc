@@ -1,11 +1,22 @@
 const int revisionnr = 
-15671
+15682
 ;
 const char* commithash = 
-"6bd5c657b5cfd0ee5a6db218f4805b17d84e7578";
+"d7901735c16474455dcc398a18ec3a64fc57239b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15682 2019-07-12 12:21:26 +0200 zipper.sh: get revision number if not provided\n" \
+"15681 2019-07-12 10:58:29 +0200 translation: alttxt for gauge -> scale\n" \
+"15680 2019-07-12 09:17:39 +0200 calculate virtual timers: default off\n" \
+"15679 2019-07-12 09:09:57 +0200 desktoplink.sh: use command line option if the Desktop directory is localized\n" \
+"15678 2019-07-12 07:47:11 +0200 variable %scale% added\n" \
+"15677 2019-07-11 17:58:17 +0200 lcdriver: check regular schedule stop for virtual event timer\n" \
+"15676 2019-07-11 17:36:38 +0200 desktoplink.sh: check if XDG_DESKTOP_DIR exist\n" \
+"15675 2019-07-11 17:20:29 +0200 loc: change trace level for virtualtimers to USER1\n" \
+"15674 2019-07-11 17:17:03 +0200 added flag for calculating virtual timers\n" \
+"15673 2019-07-11 15:57:01 +0200 rocviewZ: change directory if wanted\n" \
+"15672 2019-07-11 15:17:26 +0200 r2rnet: only try to parse the netroutes if the file exist\n" \
 "15671 2019-07-11 12:21:58 +0200 desktoplink.sh: comment added\n" \
 "15670 2019-07-11 12:20:27 +0200 loc: trigger corrections for virtual timers\n" \
 "15669 2019-07-11 10:41:59 +0200 desktoplink.sh added for linux ZIP\n" \
@@ -1995,16 +2006,5 @@ const char* revlog =
 "13685 2018-03-11 15:09:52 +0100 locodialog, blockdialog: init comboboxes\n" \
 "13684 2018-03-11 13:48:51 +0100 blockdialog: init\n" \
 "13683 2018-03-11 12:07:38 +0100 item: only use the reported bridge position in case it is set\n" \
-"13682 2018-03-11 10:43:32 +0100 dialogs: fill comboboxes with string arrays to speed up init\n" \
-"13681 2018-03-10 17:19:31 +0100 dsd2010: trce level correction\n" \
-"13680 2018-03-10 14:16:02 +0100 rocguiinidlg: moved the help url to the path tab\n" \
-"13679 2018-03-10 14:09:05 +0100 roco: use sensor group byte as bus number\n" \
-"13678 2018-03-10 13:35:18 +0100 tttrackdialog: block ID appended with blank\n" \
-"13677 2018-03-10 11:19:18 +0100 mvtrack: tracelevel changed for init sensors\n" \
-"13676 2018-03-10 08:45:15 +0100 block: do not check in case of lock for crossing if the locking ID is an existing loco\n" \
-"13675 2018-03-10 08:26:32 +0100 renderer: use transparent brush for drawing the turntable outer circle\n" \
-"13674 2018-03-10 07:57:18 +0100 timetabledlg: added the nowrap td attribute\n" \
-"13673 2018-03-09 10:31:48 +0100 seltab: remove system event listener on delete\n" \
-"13672 2018-03-09 10:28:37 +0100 tt: report new positions to clients (dsd2010)\n" \
 
 "log end";
