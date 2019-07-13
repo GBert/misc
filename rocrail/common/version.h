@@ -1,11 +1,13 @@
 const int revisionnr = 
-15693
+15695
 ;
 const char* commithash = 
-"386577c9c09d0979d157cedf0be20d4e14b1f9ff";
+"602a48f5fcb2e8f650a51cb8f69ff743c920c551";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15695 2019-07-13 13:30:15 +0200 desktoplink.sh: install libwxgtk3.0\n" \
+"15694 2019-07-13 11:51:16 +0200 zipper: add distribution in filename\n" \
 "15693 2019-07-13 10:07:40 +0200 show index and count in the titlebar\n" \
 "15692 2019-07-13 09:56:23 +0200 cardlg: show index and count in the titlebar\n" \
 "15691 2019-07-13 08:19:48 +0200 show index and count in title bar of objects\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13698 2018-03-13 09:23:15 +0100 block: use also bidi direction in case of a generated loco\n" \
 "13697 2018-03-13 09:21:18 +0100 xmlscript: allow multiple case values separated with pipes\n" \
 "13696 2018-03-12 18:14:08 +0100 roco: trace fix for sensors\n" \
-"13695 2018-03-12 16:14:19 +0100 routedialog: set command combo with array\n" \
-"13694 2018-03-12 16:03:13 +0100 timedactions: init ID combo with array\n" \
 
 "log end";
