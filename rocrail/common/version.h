@@ -1,11 +1,14 @@
 const int revisionnr = 
-15688
+15691
 ;
 const char* commithash = 
-"c5bc957138edd46e687581edfe862bba9ae0f315";
+"9f363676ea545e95d7856e37de17d5a35a3028cc";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15691 2019-07-13 08:19:48 +0200 show index and count in title bar of objects\n" \
+"15690 2019-07-13 07:41:54 +0200 desktoplink.sh: changed to bash script to be able to use source\n" \
+"15689 2019-07-13 07:24:38 +0200 desktoplink.sh: try to get Desktop directory from user-dirs.dirs\n" \
 "15688 2019-07-12 21:17:52 +0200 Blockdialog: show index and count in the titlebar\n" \
 "15687 2019-07-12 19:14:31 +0200 infodialog: HTML for important changes\n" \
 "15686 2019-07-12 18:13:53 +0200 basedlg,locdialog: show selected and count in titlebar\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13694 2018-03-12 16:03:13 +0100 timedactions: init ID combo with array\n" \
 "13693 2018-03-12 13:59:02 +0100 roco: group offset fix\n" \
 "13692 2018-03-12 13:52:22 +0100 roco: fix for info byte group 1\n" \
-"13691 2018-03-12 12:20:45 +0100 tt: dsd2010 next/prev fixes\n" \
-"13690 2018-03-12 11:28:53 +0100 bidib: report absent in case a railcom sensor lost a loco\n" \
-"13689 2018-03-12 10:55:01 +0100 tt: dsd2010 set rotation direction in case of next or prev track\n" \
 
 "log end";
