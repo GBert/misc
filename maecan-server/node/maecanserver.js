@@ -35,7 +35,7 @@ const SYSTEM_CMD = 0x00
   const SYS_RESET = 0x80
 const LOCO_DISCOVERY = 0x02
 const MFX_BIND = 0x04
-const MFX_VRIFY = 0x06
+const MFX_VERIFY = 0x06
 const LOCO_SPEED = 0x08
 const LOCO_DIR = 0x0a
 const LOCO_FN = 0x0c
@@ -109,13 +109,17 @@ const function_table = [0 ,0 ,50 ,1 ,2 , 3, 14, 5, 5, 5, 8, 102];
 // Laden der Konfiguration
 
 var local_config = require('./config.json');
+var local_version = require('./version.json');
+
+var devices = require('../html/config/devices.json');
+var locolist = require('../html/config/locolist.json');
 
 var naz = local_config.new_registration_counter;
 var master = local_config.master;
 var ip = local_config.ip;
 var d_port = local_config.d_port;
 var l_port = local_config.l_port;
-var version = local_config.version;
+var version = local_version.version;
 
 var power = false;
 
@@ -137,6 +141,7 @@ var lokinfo_request = 0;
 var lokinfo_loconame = "";
 
 var bussy_fetching = false;
+var bussy_fetching_timeout;
 
 
 //----------------------------------------------------------------------------------//
@@ -170,6 +175,10 @@ function sendDatagram(data) {
   udpClient.send(new Buffer(data), 0, 13, d_port, ip);
 }
 
+function sendCanFrame(cmd, response, dlc, data) {
+  // CAN-Nachricht senden
+}
+
 function toUnsignedString(number){ 
   // Lange Hex-Zahl als Unsigned darstellen
 
@@ -194,11 +203,6 @@ function configUpdate(config) {
   // Config-Datei aktualisieren
 
   fs.writeFile('./config.json', JSON.stringify(config, null, 2), console.log('Updated config.'));
-}
-
-function locolistUpdate(locolist){
-  exportCS2Locolist(locolist);
-  fs.writeFile('../html/config/locolist.json', JSON.stringify(locolist, null, 2), console.log('Updated locolist.'));
 }
 
 function crc16(s) {
@@ -245,6 +249,7 @@ function getDeviceInfo(uid, index) {
   // Grundlegende CAN-Geräteinformationen abrufen
 
   bussy_fetching = true;
+
   console.log(`Device info request for UID ${uid}, chanel ${index}`);
   sendDatagram([0, STATUS_CONFIG, 3, 0, 5, (uid & 0xff000000)>> 24, (uid & 0x00ff0000)>> 16, (uid & 0x0000ff00) >> 8, uid & 0x000000ff, index, 0, 0, 0]);
 }
@@ -301,7 +306,7 @@ function buildStatusChanelInfo(buffer) {
 
   status_chanel.chanel = buffer[1][0];
   if (buffer[1][1] > 127) {
-    status_chanel.power = buffer[1][1] - 0xff;
+    status_chanel.power = buffer[1][1] - 0x100;
   } else { status_chanel.power = buffer[1][1];
   }
   status_chanel.color_1 = statusChanelColor(buffer[1][2]);
@@ -392,14 +397,13 @@ function setProtocol(protocol) {
   // Gleisprotokolle des GFP setzen (3 Bits: 1: MM, 2: MFX, 3: DCC)
 
   sendDatagram([0, SYSTEM_CMD, 3, 0, 6, (gbox_uid & 0xff000000)>> 24, (gbox_uid & 0x00ff0000)>> 16, (gbox_uid & 0x0000ff00) >> 8, gbox_uid & 0x000000ff, SYS_TRACK_PROTOCOL, protocol, 0, 0]);
-  let config = require('./config.json');
   let MM = "";
   let DCC = "";
   let mfx = "";
   if (protocol & 0b001) MM = ' MM';
   if (protocol & 0b010) mfx = ' mfx';
   if (protocol & 0b100) DCC = ' DCC';
-  config.protocol = protocol;
+  local_config.protocol = protocol;
   console.log('Setting Protocol to' + MM + DCC + mfx + '...');
 }
 
@@ -415,7 +419,6 @@ function setNAZ() {
 
 function sendDataQueryFrames(data_string, rec_hash) { 
   // Datenpakete versenden (z.B. Lokliste etc.)
-  // Padding durch 0x00
 
   console.log(data_string);
   let length = data_string.length;
@@ -456,9 +459,6 @@ function sendLocoNames(loco_index, loco_count, rec_hash){
 
   console.log("Loknamen-request for " + loco_count + " locos, starting at index " + loco_index + ".");
 
-  // Lokliste laden
-  let locolist = JSON.parse(fs.readFileSync("../html/config/locolist.json"));
-
   // Antwort auf Anfrage
   sendDatagram([0x00, DATA_QUERRY + 1, 0x03, 0x00, 0x08, loco_index.toString().charCodeAt(0), 0x20, loco_count.toString().charCodeAt(0), 0, 0, 0, 0x00, 0x00]);
   
@@ -490,11 +490,21 @@ function buildLocoStringForCS2(loco, is_cs2_locolist){
     }
     loco_string += ("\x0a .av=" + loco.av + "\x0a .bv=" + loco.bv + "\x0a .volume=" + loco.volume + "\x0a .vmax=" + loco.vmax + "\x0a .vmin=" + loco.vmin);
 
+    if (!is_cs2_locolist) {
+      let speed = "0";
+      let dir = "0";
+      if (loco.speed) speed = loco.speed.toString();
+      if (loco.dir) dir = (loco.dir - 1).toString();
+      loco_string += ("\x0a .velocity=" + speed + "\x0a .richtung=" + dir);
+    }
+
     if (loco.functions && !is_cs2_locolist) {
       for (let i = 0; i < loco.functions.length; i++) {
         let loco_function = "0";
+        let loco_function_value = "0";
         if (!(typeof loco.functions[i].toString() === "undefined")) loco_function = loco.functions[i].toString();
-        loco_string += "\x0a .fkt\x0a ..nr=" + i + "\x0a ..typ=" + loco_function;
+        if (loco.functions_values[i]) loco_function_value = loco.functions_values[i].toString();
+        loco_string += "\x0a .fkt\x0a ..nr=" + i + "\x0a ..typ=" + loco_function + "\x0a ..wert=" + loco_function_value;
       }
     } else if(loco.functions && is_cs2_locolist) {
       for (let i = 0; i < loco.functions.length; i++) {
@@ -512,10 +522,7 @@ function buildLocoStringForCS2(loco, is_cs2_locolist){
 function exportCS2Locolist(locolist){
   // Lokliste für CS2-Anwendungen generieren
 
-  //let locolist = JSON.parse(fs.readFileSync("../html/config/locolist.json"));
-  let config = JSON.parse(fs.readFileSync("./config.json"));
-
-  let locolist_string = "[lokomotive]\x0aversion\x0a .minor=1\x0asession\x0a .id=" + config.new_registration_counter + "\x0a";
+  let locolist_string = "[lokomotive]\x0aversion\x0a .minor=1\x0asession\x0a .id=" + naz + "\x0a";
   for (let i = 0; i < locolist.length; i++) {
     locolist_string += buildLocoStringForCS2(locolist[i], true);
   }
@@ -533,9 +540,6 @@ function sendLocoInfo(loco_name, rec_hash) {
   lokinfo_request = 0;
 
   console.log("Lokinfo-request for " + loco_name + ".");
-
-  // Lokliste laden
-  let locolist = JSON.parse(fs.readFileSync("../html/config/locolist.json"));
   
   let found_loco = false;
   let loco;
@@ -564,9 +568,10 @@ function sendLocoInfo(loco_name, rec_hash) {
   }
 }
 
-function writeCV(uid, cv_n, value) {
+function writeCV(uid, cv_n, cv_i, value) {
   // CV-Werte schreiben
 
+  let cv = (cv_i << 10) + cv_n;
   let valid = false;
   if (uid <= 0x03ff) {
     // Motorola
@@ -584,12 +589,15 @@ function writeCV(uid, cv_n, value) {
     } else {
       console.log('Exceeding DCC CV space.')
     }
+  } else if (uid >= 0x4000) {
+    //mfx
+    valid = true;
   } else {
     console.log('Unknown Protokoll, not writing CV.')
   }
 
   if (valid) {
-    sendDatagram([0, WRITE_CONFIG, 3, 0, 8, (uid & 0xff000000)>> 24, (uid & 0x00ff0000)>> 16, (uid & 0x0000ff00) >> 8, uid & 0x000000ff, cv_n >> 8, cv_n & 0xff, value, 0])
+    sendDatagram([0, WRITE_CONFIG, 3, 0, 8, (uid & 0xff000000)>> 24, (uid & 0x00ff0000)>> 16, (uid & 0x0000ff00) >> 8, uid & 0x000000ff, (cv_i << 2) + (cv_n >> 8), cv_n & 0xff, value, 0])
   }
 }
 
@@ -624,7 +632,6 @@ function bindMfxSid(mfxuid) {
   // MFX-Lok anhand der MFX-UID binden und SID ermitteln.
 
   let sid_used = true;
-  let locolist = JSON.parse(fs.readFileSync("../html/config/locolist.json"));
   let sid = mfxUidExists(mfxuid, locolist)
   console.log('Checking for unused SID...');
   if (!sid) {
@@ -649,7 +656,6 @@ function addMfxLocoToList(mfxuid) {
   // Erkannte MFX-Lok zur Lokliste hinzufügen.
 
   console.log('Found MFX loco ' + mfxuid);
-  let locolist = JSON.parse(fs.readFileSync("../html/config/locolist.json"));
   if (!mfxUidExists(mfxuid, locolist)) {
     let index = locolist.length;
     let sid = bindMfxSid(mfxuid);
@@ -691,8 +697,6 @@ function addMfxLocoToList(mfxuid) {
 function bindKnownMfx() { 
   // In der Lokliste enthaltene MFX-Loks binden.
 
-  let locolist = JSON.parse(fs.readFileSync("../html/config/locolist.json"));
-
   for (let i = 0; i < locolist.length; i++) {
     const element = locolist[i];
     if (element.typ == 'mfx') {
@@ -715,6 +719,8 @@ function readMfxConfig(mfxuid, cv_n, cv_i, count) {
 }
 
 function fillMfxBuffer(data) {
+  // Empfangene Daten zwischenspeichern
+
   let cv = (data[4] << 8) + data[5];
   let cv_i = cv >> 10;
   let cv_n = cv & 0x3ff;
@@ -727,16 +733,9 @@ function fillMfxBuffer(data) {
 }
 
 function processMfxBuffer() {
-  let cv_n = mfx_buffer[0];
+  // Den Puffer eines mfx-Config-Reads auswerten
 
-  //let locolist = JSON.parse(fs.readFileSync("../html/config/locolist.json"));
-  /*let index;
-  for (let i = 0; i < locolist.length; i++ ){
-    if (last_mfx_call[2] == locolist[i].uid) {
-      index = i;
-      break;
-    }
-  }*/
+  let cv_n = mfx_buffer[0];
   
   if (cv_n == 3) {
     // Lokname
@@ -760,24 +759,25 @@ function processMfxBuffer() {
     temp_mfx_loco.mfxadr.volume = (mfx_buffer[7] * 4) + 1;
     temp_mfx_loco.mfxadr.func = (mfx_buffer[3] * 4) + 1;
 
-    readMfxConfig(last_mfx_call[2], temp_mfx_loco.mfxadr.xcel, 1, 2);
+    readMfxConfig(last_mfx_call[2], temp_mfx_loco.mfxadr.xcel, 1, 2); //Av Bv
 
   } else {
     if (cv_n == temp_mfx_loco.mfxadr.xcel) {
       temp_mfx_loco.av = mfx_buffer[1];
       temp_mfx_loco.bv = mfx_buffer[2];
 
-      readMfxConfig(last_mfx_call[2], temp_mfx_loco.mfxadr.speedtable, 1, 2);
+      readMfxConfig(last_mfx_call[2], temp_mfx_loco.mfxadr.speedtable, 1, 2); // Vmin Vamx
     } else if (cv_n == temp_mfx_loco.mfxadr.speedtable) {
       temp_mfx_loco.vmin = mfx_buffer[1];
       temp_mfx_loco.vmax = mfx_buffer[2];
 
-      readMfxConfig(last_mfx_call[2], temp_mfx_loco.mfxadr.volume, 1, 1);
+      readMfxConfig(last_mfx_call[2], temp_mfx_loco.mfxadr.volume, 1, 1); // Lautstärke
     } else if (cv_n == temp_mfx_loco.mfxadr.volume) {
       temp_mfx_loco.volume = mfx_buffer[1];
       temp_mfx_loco.functions = [];
+      temp_mfx_loco.functions_values = [];
 
-      readMfxConfig(last_mfx_call[2], temp_mfx_loco.mfxadr.func, 1, 2)
+      readMfxConfig(last_mfx_call[2], temp_mfx_loco.mfxadr.func, 1, 2) // Lokfunktionen
     } else {
       for (let i = 0; i < 16; i++) {
         if (cv_n == temp_mfx_loco.mfxadr.func + (i * 3)) {
@@ -788,7 +788,6 @@ function processMfxBuffer() {
           if (i < 15) {
             readMfxConfig(last_mfx_call[2], temp_mfx_loco.mfxadr.func + ((i + 1) * 3), 1, 2);
           } else {
-            let locolist = JSON.parse(fs.readFileSync("../html/config/locolist.json"));
             let index;
             for (let i = 0; i < locolist.length; i++ ){
               if (last_mfx_call[2] == locolist[i].uid) {
@@ -800,12 +799,13 @@ function processMfxBuffer() {
             
             fs.writeFile('../html/config/locolist.json', JSON.stringify(locolist, null, 2), function(){
               console.log('Updating loco ' + temp_mfx_loco.name);
+              let _name = temp_mfx_loco.name;
 
               setTimeout(()=> {
                 exportCS2Locolist(locolist);
                 for (var i in clients){
                   clients[i].sendUTF("updateLocolist");
-                  clients[i].sendUTF(`foundMfx:${temp_mfx_loco.name}`);
+                  clients[i].sendUTF(`foundMfx:${_name}`);
                 }
               }, 500)
                 
@@ -823,22 +823,23 @@ function processMfxBuffer() {
 } 
 
 function mfxDiscovery() {
+  // mfx-Neuanmeldezähler erhöhen
+
   if (naz < 0xff) {
     naz++
   } else {
     naz = 1;
   }
-  let config = JSON.parse(fs.readFileSync('./config.json'));
 
-  config.new_registration_counter = naz;
-
-  configUpdate(config);
+  configUpdate(local_config);
   setNAZ();
 }
 
 function mfxDelete(sid) {
+  // Beim löschen einer mfx-Lok den NAZ erhöhen
+
   mfxDiscovery();
-  sendDatagram([0, MFX_VRIFY, 3, 0, 6, 0, 0, 0, 0, (sid & 0xFF00) >> 8, (sid & 0x00FF), 0, 0]);
+  sendDatagram([0, MFX_VERIFY, 3, 0, 6, 0, 0, 0, 0, (sid & 0xFF00) >> 8, (sid & 0x00FF), 0, 0]);
 }
 
 
@@ -876,9 +877,11 @@ function ping() {
 // Websocket-Pakete:
 
 function addLocoFromMsg(msg_string) {
+  // Manuell erstellte Lok der Liste hinzufügen
+
   let cmd = msg_string.split(":")[0]
   let new_loco = JSON.parse(msg_string.substring(msg_string.indexOf("$")+1, msg_string.indexOf("§")));
-  let locolist = JSON.parse(fs.readFileSync("../html/config/locolist.json"));
+  new_loco.functions_values = [];
 
   if (cmd == "addLoco") {
     locolist[locolist.length] = new_loco;
@@ -896,7 +899,8 @@ function addLocoFromMsg(msg_string) {
 }
 
 function deleteLoco(index) {
-  let locolist = JSON.parse(fs.readFileSync("../html/config/locolist.json"));
+  // Eine Lok aus der Liste löschen
+
   let uid = parseInt(locolist[index].uid);
   let name = locolist[index].name;
   let type = locolist[index].typ;
@@ -904,10 +908,12 @@ function deleteLoco(index) {
   locolist.splice(index, 1);
   fs.writeFile("../html/config/locolist.json", JSON.stringify(locolist, null, 2), () => {
     console.log("Deleted " + name);
-    exportCS2Locolist(locolist);
-    for (var i in clients){
+    setTimeout(() => {
+      exportCS2Locolist(locolist);
+      for (var i in clients){
         clients[i].sendUTF("updateLocolist");
-    }
+      }
+    }, 500);
   });
 
   sendDatagram([0, SYSTEM_CMD, 3, 0, 5, 0, 0, (uid & 0xFF00) >> 8, (uid & 0x00FF), SYS_LOCO_CYCLE_STOP, 0, 0, 0])
@@ -917,7 +923,11 @@ function deleteLoco(index) {
 }
 
 function clearDeviceList() {
-  fs.writeFile('../html/config/devices.json', JSON.stringify([], null, 2), function(){
+  // CAN-Geräteliste vollständig leeren
+
+  devices = [];
+
+  fs.writeFile('../html/config/devices.json', JSON.stringify(devices, null, 2), function(){
     console.log("clearing devices");
   });
 }
@@ -926,7 +936,7 @@ function clearDeviceList() {
 //----------------------------------------------------------------------------------//
 //----------------------------------------------------------------------------------//
 
-clearDeviceList();
+//clearDeviceList();
 
 
 udpServer.on('listening', () => {
@@ -981,54 +991,53 @@ wsServer.on('request', function(request){
 
 		if (cmd == 'stop') {
       stop();
-      
+
 		} else if (cmd == 'go') {
       go();
-      
+
 		} else if (cmd == 'setSpeed') {
       sendDatagram([0, LOCO_SPEED, 3, 0, 6, 0, 0, uid_high, uid_low, value_high, value_low, 0, 0]);
-      
+
 		} else if (cmd == 'getSpeed') {
 			sendDatagram([0, LOCO_SPEED, 3, 0, 4, 0, 0, uid_high, uid_low, 0, 0, 0, 0]);
-    
+
     } else if (cmd == 'lokNothalt') {
 			sendDatagram([0, SYSTEM_CMD, 3, 0, 5, 0, 0, uid_high, uid_low, SYS_LOCO_EMERGENCY_STOP, 0, 0, 0]);
-    
+
     } else if (cmd == 'setFn') {
 			sendDatagram([0, LOCO_FN, 3, 0, 6, 0, 0, uid_high, uid_low, value_high, value_low, 0, 0]);
-    
+
     } else if (cmd == 'getFn') {
 			sendDatagram([0, LOCO_FN, 3, 0, 5, 0, 0, uid_high, uid_low, value, 0, 0, 0]);
-    
+
     } else if (cmd == 'toggleDir') {
 			sendDatagram([0, LOCO_DIR, 3, 0, 5, 0, 0, uid_high, uid_low, 3, 0, 0, 0]);
 			sendDatagram([0, LOCO_DIR, 3, 0, 4, 0, 0, uid_high, uid_low, 0, 0, 0, 0]);
-    
+
     } else if (cmd == 'getDir') {
 			sendDatagram([0, LOCO_DIR, 3, 0, 4, 0, 0, uid_high, uid_low, 0, 0, 0, 0]);
-    
+
     } else if (cmd == 'getStatus') {
       getStatus(msg[1], msg[2]);
-    
+
     } else if (cmd == 'setProtocol') {
       setProtocol(msg[1]);
-    
+
     } else if (cmd == 'getProtocol') {
-      let config = require('./config.json');
       for (let i in clients){
-        clients[i].sendUTF(`updateProtocol:${config.protocol}`);
+        clients[i].sendUTF(`updateProtocol:${local_config.protocol}`);
       }
-    
+
     } else if (cmd == 'restart') {
       stop();
       wsServer.shutDown();
       exec('reboot -f -d 1');
-    
+
     } else if (cmd == 'shutdown') {
       stop();
       wsServer.shutDown();
       exec('poweroff -f -d 1');
-    
+
     } else if (cmd == 'downloadIcon') {
       let link = "";
       for (let i = 1; i < msg.length; i++){
@@ -1039,7 +1048,7 @@ wsServer.on('request', function(request){
 
     } else if (cmd == "addLoco" || cmd == "updateLoco") {
       addLocoFromMsg(dgram.utf8Data);
-    
+
     } else if (cmd == "mfxDiscovery") {
       let last_power = power;
       stop();
@@ -1049,22 +1058,17 @@ wsServer.on('request', function(request){
           go();
         }, 500)
       }
-    
+
     } else if (cmd == 'deleteLoco') {
       deleteLoco(msg[1]);
-    
-    } else if (cmd == 'clearDeviceList') {
-      delete require.cache[require.resolve('../html/config/devices.json')];
-      clearDeviceList();
 
     } else if (cmd == 'getVersion') {
       for (let i in clients){
         clients[i].sendUTF(`updateVersion:${version}`);
       }
-    
+
     } else if (cmd == 'setConfigValue') {
       sendDatagram([0x00, SYSTEM_CMD, 0x03, 0x00, 0x08, (msg[1] & 0xff000000)>> 24, (msg[1] & 0x00ff0000)>> 16, (msg[1] & 0x0000ff00) >> 8, msg[1] & 0x000000ff, SYS_STATUS, msg[2], (msg[3] & 0xff00) >> 8, msg[3] & 0x00ff]);
-      let devices = JSON.parse(fs.readFileSync('../html/config/devices.json'));
 
       for (let i = 0; i < devices.length; i++) {
         if (msg[1] == devices[i].uid) {
@@ -1077,7 +1081,29 @@ wsServer.on('request', function(request){
         }
       }
 
-      fs.writeFile('../html/config/devices.json', JSON.stringify(devices, null, 2), console.log("updating devices entry."))
+      fs.writeFile('../html/config/devices.json', JSON.stringify(devices, null, 2), console.log("updating devices entry."));
+
+
+    } else if (cmd == 'progCV') {
+      writeCV(uid, msg[2], msg[3], msg[4]);
+
+    } else if (cmd  == 'delIcon') {
+      exec('rm ../html/loco_icons/' + msg[1]);
+
+    } else if (cmd == 'delDevice') {
+      for (let i = 0; i < devices.length; i++) {
+        if (devices[i].uid == msg[1]) {
+          devices.splice(i, 1);
+          break;
+        }
+      }
+
+      fs.writeFile('../html/config/devices.json', JSON.stringify(devices, null, 2), console.log("Deleting device " + msg[1]));
+
+      ping();
+
+    } else if (cmd == 'ping') {
+      ping();
     }
 	});
 });
@@ -1091,16 +1117,6 @@ udpServer.on('error', (err) => {
 
 // Befehle vom CAN verarbeiten:
 udpServer.on('message', (udp_msg, rinfo) => {
-
-  /*let buffer_forward = "Frame:";
-
-  for(let i = 0; i < udp_msg.length; i++) {
-    buffer_forward += (parseInt(udp_msg[i]).toString(16) + ' ');
-  }
-
-  for (var i in clients){
-    clients[i].sendUTF(buffer_forward);
-  }*/
 
   var ws_msg = '';
   var cmd = parseInt(udp_msg[1]);
@@ -1132,9 +1148,8 @@ udpServer.on('message', (udp_msg, rinfo) => {
     
     } else if (sub_cmd == SYS_TRACK_PROTOCOL) {
       ws_msg = `updateProtocol:${data[5]}`;
-      let config = require('./config.json');
-      config.protocol = data[5];
-      configUpdate(config);
+      local_config.protocol = data[5];
+      configUpdate(local_config);
     
     } else if (sub_cmd == SYS_STATUS) {
       ws_msg = `updateReading:${uid}:${data[5]}:${(data[6] << 8) + data[7]}`;
@@ -1146,15 +1161,35 @@ udpServer.on('message', (udp_msg, rinfo) => {
       //ws_msg = `foundMfx:${uid}`;
     }
 
-  } else if (cmd == 0x09) {
+  } else if (cmd == LOCO_SPEED + 1) {
     if (dlc == 4) value = 0;
-  	ws_msg = `updateSpeed:${uid}:${value}`;
+    ws_msg = `updateSpeed:${uid}:${value}`;
+    for (let i = 0; i < locolist.length; i++) {
+      if (locolist[i].uid = uid) {
+        locolist[i].speed = value;
+        break;
+      }
+    }
   
   } else if (cmd == (LOCO_FN + 1)) {
-  	ws_msg = `updateFn:${uid}:${value}`;
+    ws_msg = `updateFn:${uid}:${value}`;
+    let fn_number = value >> 8;
+    let fn_value = value & 0xff;
+    for (let i = 0; i < locolist.length; i++) {
+      if (locolist[i].uid = uid) {
+        //locolist[i].functions_values[fn_number] = fn_value;
+        break;
+      }
+    }
   
   } else if (cmd == (LOCO_DIR + 1)) {
     ws_msg = `updateDir:${uid}:${parseInt(udp_msg[9])}`;
+    for (let i = 0; i < locolist.length; i++) {
+      if (locolist[i].uid = uid) {
+        locolist[i].dir = parseInt(udp_msg[9]);
+        break;
+      }
+    }
  
   } else if (cmd == (READ_CONFIG + 1)) {
     if (master) fillMfxBuffer(data);
@@ -1181,21 +1216,20 @@ udpServer.on('message', (udp_msg, rinfo) => {
     }
 
     if (dlc == 6 || dlc == 5) {
-      let devices = require('../html/config/devices.json');
       let device = devices[getDeviceIndexFromUID(uid, devices)];
       config_buffer[0] = data;
       let chanel = config_buffer[0][4];
       console.log('Done getting chanel ' + chanel + ' from device ' + device.name);
-      
+
       if (chanel > 0 && chanel <= device.status_chanels) {
         let status_chanel = buildStatusChanelInfo(config_buffer);
         device.status_chanels_info[chanel - 1] = status_chanel;
         fs.writeFile('../html/config/devices.json', JSON.stringify(devices, null, 2), console.log("updating devices entry."));
-      
+
       } else if (chanel == 0) {
         device = buildDeviceInfo(config_buffer, device);
         fs.writeFile('../html/config/devices.json', JSON.stringify(devices, null, 2), console.log("updating devices entry."));
-      
+
       } else if (chanel > 0 && chanel <= device.config_chanels && chanel >= device.status_chanels){
         let config_chanel = buildConfigChanelInfo(config_buffer);
         device.config_chanels_info[chanel - 1] = config_chanel;
@@ -1203,7 +1237,7 @@ udpServer.on('message', (udp_msg, rinfo) => {
       }
       bussy_fetching = false;
     }
-  
+
   } else if (cmd == (PING + 1)) {
   	let str_uid = toUnsignedString(uid);
   	let str_ver = `${data[4]}.${data[5]}`
@@ -1214,14 +1248,14 @@ udpServer.on('message', (udp_msg, rinfo) => {
   		console.log(`Found Gleisbox 0x${str_uid}`);
   		gbox_uid = uid;
     }
-    
-    var devices = require('../html/config/devices.json');
+
     var device_exists = false;
     let existing_index = 0;
 
     for (i = 0; i < devices.length; i++) {
       if (devices[i].uid == uid || uid == 0) {
         device_exists = true;
+        devices[i].pingResponse = true;
         existing_index = i;
         break;
       }
@@ -1233,11 +1267,20 @@ udpServer.on('message', (udp_msg, rinfo) => {
       devices[index].uid = uid;
       devices[index].version = str_ver;
       devices[index].type = str_typ;
+      devices[index].pingResponse = true;
 
       fs.writeFile('../html/config/devices.json', JSON.stringify(devices, null, 2), function(){
         console.log("writing new devices entry.");
       });
     }
+
+    for (let i = 0; i < devices.length; i++) {
+      for (var j in clients){
+        clients[j].sendUTF(`deviceConnected:${devices[i].uid}:${devices[i].pingResponse}`);
+      }
+    }
+
+
 
   } else if (cmd == DATA_QUERRY){
     let data_string = "";
@@ -1264,6 +1307,15 @@ udpServer.on('message', (udp_msg, rinfo) => {
       sendLocoInfo(lokinfo_loconame, hash);
     }
 
+  } else if (cmd == S88_EVENT) {
+    let device_ken = (data[0] << 8) + data[1];
+    let contact_ken = (data[2] << 8) + data[3];
+    let state_old = data[4];
+    let state_new = data[5];
+
+    console.log('Contact no. ' + contact_ken + ' changed state from ' + state_old + ' to ' + state_new);
+    ws_msg = `s88Event:${contact_ken}:${state_old}:${state_new}`;
+
   }
 
   if (ws_msg != '') {
@@ -1273,17 +1325,18 @@ udpServer.on('message', (udp_msg, rinfo) => {
   }
 });
 
-
 //----------------------------------------------------------------------------------//
 // Periodischer Code:
 
-setInterval(() => ping(), 10000);
+setInterval(() => {
+  for (let i = 0; i < devices.length; i++) {
+    devices[i].pingResponse = false;
+  }
+  ping();
+}, 10000);
   // Alle 10 Sekunden einen Ping senden
 
 setInterval(function(){
-  // Gleisbox aufwecken, wenn keine MS2 vorhanden ist.
-  
-  let devices = require('../html/config/devices.json');
   let gbox_found = false;
   for (let i = 0; i < devices.length; i++) {
     if (devices[i].type == 10) {
@@ -1299,8 +1352,6 @@ setInterval(function(){
 var data_fetcher = setInterval(function(){
   // Configdaten aus CAN-Geräten auslesen
 
-  var devices = require('../html/config/devices.json');
-  //var devices = JSON.parse(fs.readFileSync('../html/config/devices.json'));
   for (var i = 0; i < devices.length; i++) {
     if (!bussy_fetching) {
       if (!devices[i].name){
@@ -1321,7 +1372,6 @@ var data_fetcher = setInterval(function(){
         getDeviceInfo(devices[i].uid, devices[i].status_chanels + (devices[i].config_chanels_info.length + 1));
         break;
       }
-
       if (!devices[i].name) {
         getDeviceInfo(devices[i].uid, 0);
       }

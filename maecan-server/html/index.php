@@ -376,6 +376,8 @@
 					settings.contentWindow.updateCanMonitor(msg);
 				} else if (cmd == 'updateVersion') {
 					settings.contentWindow.version.innerHTML = "Version: " + msg[1];
+				} else if (cmd == 'deviceConnected') {
+					settings.contentWindow.deviceConnectionStatus(msg[1], msg[2]);
 				} else {
 					/*let data = [];
 					for (let i = 0; i < dgram.data.length; i++) {

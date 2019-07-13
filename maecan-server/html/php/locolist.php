@@ -14,7 +14,7 @@
 		</div>
 	</div>
 	<div class="frame_content frame_content_active" id="frame">
-	
+
 		<h1>Neue Lok anlegen</h1>
 
 		<style>
@@ -23,26 +23,33 @@
 		<div id="locolist_grid" class="locolist_grid">
 			<p>Name:</p>
 			<input id="name" type="text" class="text_input" placeholder="Lokname...">
-			<!--
+
 			<p>Lokbild:</p>
-			<div id="current_icon" class="icon_list text_input">
-				<img src="" id="current_icon_img">
+			<div class="locolist_grid" style="margin: 0;">
+				<div id="current_icon" class="icon_list text_input">
+					<img src="./loco_icons/default.png" id="current_icon_img" class="preview_icon">
+				</div>
+				<div>
+					<div class="button"	onclick="setIcon('default.png')" style="margin: 0; max-width: 150px;">Entfernen</div>
+					<p id="current_icon_name">default.png</p>
+				</div>
 			</div>
 			<p></p>
-			<div class="icon_list text_input">
+			<div class="icon_list text_input" id="icon_preview">
 				<?php
 					$dirname = "loco_icons/";
 					$images = scandir($dirname);
 					shuffle($images);
-					$ignore = Array(".", "..");
+					$ignore = Array(".", "..", "default.png");
 					foreach($images as $curimg){
 						if(!in_array($curimg, $ignore) && (strpos($curimg, 'jpg') || strpos($curimg, 'png'))) {
-							echo "<img class='preview_icon' src=".$dirname.$curimg." />";
+							$js_function = "setIcon(`".$curimg."`);";
+							echo "<img id=".$curimg." class='preview_icon' src=".$dirname.$curimg." onclick='setIcon(`".$curimg."`);'/>";
 						}
 					}                 
 				?>
 			</div>
-			-->
+
 			<p>Protokoll:</p>
 			<select name="Protokoll" id="protocol_dropdown" class="text_input">
 				<option id="dcc" value="dcc">DCC</option>
@@ -58,19 +65,34 @@
 				<option id="ds126" value="ds126">126</option>
 			</select>-->
 			<p>Adresse:</p>
-			<input id="adress" type="number" class="text_input" min="1" max="2048" value="1">
+			<div class="locolist_option_grid">
+				<input id="adress" type="number" class="text_input" min="1" max="2048" value="1">
+				<div class="button prog" id="prog_adr" onclick="progLoco('adress')">prog.</div>
+			</div>
 
 			<p>Anfahrverz.:</p>
-			<input id="av" type="number" class="text_input"  min="0" max="255" value="60" >
+			<div class="locolist_option_grid">
+				<input id="av" type="number" class="text_input"  min="0" max="255" value="60" >
+				<div class="button prog" id="prog_av" onclick="progLoco('av')">prog.</div>
+			</div>
 
 			<p>Bremsverz.:</p>
-			<input id="bv" type="number" class="text_input"  min="0" max="255" value="40" >
+			<div class="locolist_option_grid">
+				<input id="bv" type="number" class="text_input"  min="0" max="255" value="40" >
+				<div class="button prog" id="prog_bv" onclick="progLoco('bv')">prog.</div>
+			</div>
 
 			<p>Vmax:</p>
-			<input id="vmax" type="number" class="text_input"  min="0" max="255" value="255" >
+			<div class="locolist_option_grid">
+				<input id="vmax" type="number" class="text_input"  min="0" max="255" value="255" >
+				<div class="button prog" id="prog_vmax" onclick="progLoco('vmax')">prog.</div>
+			</div>
 
 			<p>Vmin:</p>
-			<input id="vmin" type="number" class="text_input"  min="0" max="255" value="3" >
+			<div class="locolist_option_grid">
+				<input id="vmin" type="number" class="text_input"  min="0" max="255" value="3" >
+				<div class="button prog" id="prog_vmin" onclick="progLoco('vmin')">prog.</div>
+			</div>
 
 			<p>Tacho:</p>
 			<input id="tacho" type="number" class="text_input"  min="0" max="300" value="120" disabled>
@@ -110,11 +132,10 @@
 			</div>
 			-->
 		</div>
-		
 
-		<div class="button_grid_3">
+
+		<div class="button_grid_2">
 			<div class="button button_active" id="save_loco">Lok speichern</div>
-			<div class="button" id="prog_loco">Lok programmieren</div>
 			<div class="button power_button" id="delete_loco">Lok löschen</div>
 		</div>
 	</div>
@@ -139,6 +160,7 @@
 	const containers = document.getElementsByClassName('frame_content');
 	const loco_button = document.getElementsByClassName('loco_button');
 	const preview_icon = document.getElementsByClassName('preview_icon');
+	const prog_buttons = document.getElementsByClassName('prog');
 
 	const settings_container = document.getElementById('settings_container');
 	const sidebar = document.getElementById('sidebar');
@@ -146,6 +168,9 @@
 	const sidebar_show_button = document.getElementById('sidebar_show_button');
 	const name = document.getElementById('name');
 	const adress = document.getElementById('adress');
+	const icon_preview = document.getElementById('icon_preview');
+
+	//var dir_list = <?//=$images?>;
 
 	let current_loco = {};
 	let current_loco_index = -1;
@@ -171,6 +196,7 @@
 	// Lokliste Laden
 
 	function createLocoButton(loco){
+		if (!loco.icon) loco.icon = "default.png";
 		let loco_button = document.createElement('div');
 		let loco_name = document.createTextNode(loco.name);
 		loco_button.className = 'button loco_button';
@@ -212,6 +238,11 @@
 		protocol_dropdown.disabled = false;
 		adress.disabled = false;
 
+		for (let i = 0; i < prog_buttons.length; i++) {
+			hide(prog_buttons[i]);
+		}
+		setIcon('default.png');
+
 	}
 
 	function setActiveLoco(index) {
@@ -223,7 +254,7 @@
 		for (let i = 0; i < loco_button.length; i++) {
 			loco_button[i].className = "button loco_button";
 		}
-		loco_button[index].className = "button button_active loco_button";
+		loco_button[index].className = "button loco_button button_active";
 
 
 		//Lok aus Lokliste laden
@@ -240,12 +271,35 @@
 		//tacho.value = current_loco.tacho;
 		frame.children[0].innerHTML = (current_loco.name + " bearbeiten:");
 
+		protocol_dropdown.disabled = true;
+		setIcon(current_loco.icon);
+
 		if (current_loco.typ == "mfx") {
-			protocol_dropdown.disabled = true;
 			adress.disabled = true;
 		} else {
-			protocol_dropdown.disabled = false;
 			adress.disabled = false;
+		}
+
+		if (current_loco.typ == "mm_dil8") {
+			for (let i = 0; i < prog_buttons.length; i++) {
+				hide(prog_buttons[i]);
+			}
+			vmin.disabled = true;
+			vmax.disabled = true;
+		} else if (current_loco.typ == 'mfx' || current_loco.typ == 'dcc') {
+			for (let i = 0; i < prog_buttons.length; i++) {
+				show(prog_buttons[i]);
+			}
+			vmin.disabled = false;
+			vmax.disabled = false;
+		} else if(current_loco.typ == 'mm_prog') {
+			for (let i = 0; i < prog_buttons.length; i++) {
+				show(prog_buttons[i]);
+			}
+			hide(prog_av);
+			hide(prog_bv);
+			vmin.disabled = false;
+			vmax.disabled = false;
 		}
 
 	}
@@ -293,7 +347,7 @@
 	function applyCurrentLoco() {
 		current_loco.name = name.value;
 		current_loco.typ = protocol_dropdown.value;
-		current_loco.adress = adress.value;
+		current_loco.adress = parseInt(adress.value);
 		if (current_loco.typ == "dcc") {
 			current_loco.uid = parseInt(current_loco.adress) + 0xc000;
 		} else if (current_loco.typ == "mfx"){
@@ -301,19 +355,91 @@
 		} else {
 			current_loco.uid = current_loco.adress;
 		}
-		current_loco.av = av.value;
-		current_loco.bv = bv.value;
-		current_loco.vmax = vmax.value;
+		current_loco.av = parseInt(av.value);
+		current_loco.bv = parseInt(bv.value);
+		current_loco.vmax = parseInt(vmax.value);
+		current_loco.vmin = parseInt(vmin.value);
+		current_loco.tacho = parseInt(tacho.value);
 	}
 
-	/*function setAvailableSettings() {
-		let protocol = protocol_dropdown.value;
-		if (protocol != "dcc") {
-			ds_dropdown.disabled = true;
-		} else {
-			ds_dropdown.disabled = false;
+	function progLoco(option){
+		if (option == "adress") {
+			if (current_loco.typ == "dcc") {
+				if (current_loco.adress <= 127) {
+					console.log("Programming short DCC-adress: " + current_loco.adress);
+				} else {
+					console.log("Programming long DCC-adress: " + current_loco.adress);
+				}
+			} else if (current_loco.typ == "mm_prog") {
+				console.log("Programming MM-adress: " + current_loco.adress);
+			}
+		} else if (option == "av") {
+			if (current_loco.typ == "mfx") {
+				parent.send(`progCV:${current_loco.uid}:${current_loco.mfxadr.xcel}:1:${current_loco.av}`);
+			} else if (current_loco.typ = "dcc") {
+
+			}
+		} else if (option == "bv") {
+			if (current_loco.typ == "mfx") {
+				parent.send(`progCV:${current_loco.uid}:${current_loco.mfxadr.xcel}:1:${current_loco.bv}`);
+			} else if (current_loco.typ = "dcc") {
+
+			}
+		} else if (option == "vmax") {
+			if (current_loco.typ == "mfx") {
+				parent.send(`progCV:${current_loco.uid}:${current_loco.mfxadr.speedtable}:2:${current_loco.vmax}`);
+			} else if (current_loco.typ = "dcc") {
+
+			}
+		} else if (option == "vmin") {
+			if (current_loco.typ == "mfx") {
+				parent.send(`progCV:${current_loco.uid}:${current_loco.mfxadr.speedtable}:1:${current_loco.vmin}`);
+			} else if (current_loco.typ = "dcc") {
+
+			}
 		}
-	}*/
+	}
+
+	function setIcon(icon_name) {
+		if (!icon_name) {
+			icon_name = "default.png";
+		}
+		current_loco.icon = icon_name;
+		current_icon_img.src = "./loco_icons/" + icon_name;
+		current_icon_name.innerHTML = icon_name;
+	}
+
+	name.onchange = () => {
+		applyCurrentLoco();
+	}
+
+	protocol_dropdown.onchange = () => {
+		applyCurrentLoco();
+	}
+
+	adress.onchange = () => {
+		applyCurrentLoco();
+	}
+
+	av.onchange = () => {
+		applyCurrentLoco();
+	}
+
+	bv.onchange = () => {
+		applyCurrentLoco();
+	}
+
+	vmax.onchange = () => {
+		applyCurrentLoco();
+	}
+
+	vmin.onchange = () => {
+		applyCurrentLoco();
+	}
+
+	tacho.onchange = () => {
+		applyCurrentLoco();
+	}
 
 	sidebar_show_button.onclick = function(){
 		if (sidebar_button_container.style.display == 'block') {
@@ -339,8 +465,6 @@
 		//resizeSettings();
 		};
 
-	//protocol_dropdown.onchange = () => { setAvailableSettings() };
-
 	// --- Eingabe --- //
 
 	save_loco.onclick = function(){
@@ -364,23 +488,11 @@
 		}
 	};
 
-	prog_loco.onclick = () => {
-		document.pare
-	}
-
 	delete_loco.onclick = function(){
 		if (current_loco_index >= 0) {
 			parent.delLocoAlert(current_loco_index, current_loco.name);
 		}
 	};
-
-	for (let i = 0; i < preview_icon.length; i++) {
-		preview_icon[i].onclick = function(){
-			let icon = this.src.split("/");
-			icon = icon[icon.length - 1];
-			console.log(icon);
-		}
-	}
 
 	loadLocolist();
 </script>

@@ -24,7 +24,9 @@
 		<div class="button" id="can_dropdown_button">Gerät auswählen</div>
 		<div id="can_dropdown_container" class="dropdown">
 		</div>
+		<p id="disconnect_warning" style="color: red; display: none">Gerät nicht verbunden!</p>
 		<div id="device_info" style="display: none;">
+		<div id="delete_device" class="button power_button">Aus Geräteliste löschen</div>
 			<h2>Informationen:</h2>
 			<p class="ml30"></p>
 			<p class="ml30"></p>
@@ -71,6 +73,29 @@
 		<input type="text" name="icon_download_link" id="icon_link" class="text_input" style="width: calc(100% - 30px); display: block;" placeholder="Downloadlink...">
 		<div class="icon_list" id="icon_list_download"></div>
 		<div class="button" id="download_icon">Herunterladen</div>
+		<h2>Vorhandene Lokbilder:</h2>
+		<div id="icon_list" class="locolist_grid">
+			<?php
+					$dirname = "loco_icons/";
+					$images = scandir($dirname);
+					shuffle($images);
+					$ignore = Array(".", "..", "default.png");
+					foreach($images as $curimg){
+						if(!in_array($curimg, $ignore) && (strpos($curimg, 'jpg') || strpos($curimg, 'png'))) {
+							$js_function = "setIcon(`".$curimg."`);";
+							echo '
+								<div class="icon_list text_input" id="'.$curimg.'_img">
+									<img class="preview_icon" src="'.$dirname.$curimg.'"/>
+								</div>
+								<div id="'.$curimg.'_name">
+									<div class="button" style="margin: 0; max-width: 150px;" onclick="deleteIcon(`'.$curimg.'`)" >Löschen</div>
+									<p>'.$curimg.'</p>
+								</div>
+							';
+						}
+					}
+				?>
+		</div>
 	</div>
 
 
@@ -145,6 +170,8 @@
 	let local_version;
 	let online_version;
 
+	var upload_icons;
+
 	//--- Allgemein ---//
 
 	function resizeSettings(){
@@ -197,6 +224,7 @@
 	//--- CAN-Devices ---//
 
 	function showDeviceInfo(device){
+
 		show(device_info);
 		can_dropdown_button.innerHTML = device.name + ' #' + device.serial_number;
 		device_info.children[1].innerHTML = "Name: " + device.name;
@@ -363,7 +391,8 @@
 					let end = parseFloat(chanels.end);
 					let origin = chanels.origin;
 					let max = chanels.range_4;
-					let clear_value = ((((end - start) / (max - origin))*value)+start).toFixed(2);
+					let divider = (end - start) / (max - origin);
+					let clear_value = (start - (origin * divider) + (value * divider)).toFixed(3);
 					value = (100 / chanels.range_4) * value;
 					document.getElementById('bar_filler_' + index).style.width = (100 - value) + "%";
 					document.getElementById('reading_name_' + index).innerHTML = getReadingName(chanels.name) + ": " + clear_value + " " + chanels.unit;
@@ -396,6 +425,7 @@
 							can_dropdown_container.setAttribute('class', 'dropdown');
 							can_dropdown_button.setAttribute('class', 'button');
 							showDeviceInfo(devices[i]);
+							parent.ws.send('ping');
 							visible_device = devices[i];
 						}
 					};
@@ -432,6 +462,7 @@
 	function fileSelection(evt) {
 		icon_list_upload.innerHTML = "";
 		let files = evt.target.files;
+		upload_icons = files;
 		for (let i = 0, f; f = files[i]; i++) {
 			if (!f.type.match('image.*')) {
 				continue;
@@ -464,18 +495,74 @@
 		}
 	}
 
+	function deleteIcon(icon_name) {
+		parent.send(`delIcon:${icon_name}`);
+		document.getElementById(icon_name + '_img').remove();
+		document.getElementById(icon_name + '_name').remove();
+		parent.locolist.contentWindow.document.getElementById(icon_name).remove();
+	}
+
+	function addIconToLists(icon_name) {
+		// Lokliste:
+		let icon_img = document.createElement('img');
+		icon_img.className = "preview_icon";
+		icon_img.src = "loco_icons/" + icon_name;
+		icon_img.id = icon_name;
+		icon_img.setAttribute('onclick', 'setIcon("' + icon_name + '")');
+		parent.locolist.contentWindow.icon_preview.appendChild(icon_img);
+
+		// Lokbilder:
+		let icon_img_div = document.createElement('div');
+		icon_img_div.className = 'icon_list text_input';
+		icon_img_div.id = icon_name + '_img';
+		let icon_img_img = document.createElement('img');
+		icon_img_img.src = 'loco_icons/' + icon_name;
+		icon_img_img.className = 'preview_icon';
+
+		icon_img_div.appendChild(icon_img_img);
+		icon_list.appendChild(icon_img_div);
+
+		let icon_name_div = document.createElement('div');
+		icon_name_div.id = icon_name + '_name';
+		let icon_name_button = document.createElement('div');
+		icon_name_button.className = "button";
+		icon_name_button.setAttribute('style', 'margin: 0; max-width: 150px;');
+		icon_name_button.setAttribute('onclick', 'deleteIcon("' + icon_name + '")');
+		icon_name_button.innerHTML = 'Löschen';
+		let icon_name_p = document.createElement('p');
+		icon_name_p.innerHTML = icon_name;
+
+		icon_name_div.appendChild(icon_name_button);
+		icon_name_div.appendChild(icon_name_p);
+		icon_list.appendChild(icon_name_div);
+
+
+	}
+
 	file_upload.addEventListener('change', fileSelection, false);
 
 	icon_link.addEventListener('input', realTimeDownloadImage, false);
 
 	upload_icon.onclick = function() {
 		icon_list_upload.innerHTML = "";
+		setTimeout(() => {
+			for (let i = 0; i < upload_icons.length; i++) {
+				addIconToLists(upload_icons[i].name);
+			}
+		}, 500*upload_icons.length);
 	}
 
 	download_icon.onclick = function() {
 		parent.ws.send('downloadIcon:' + icon_link.value);
 		icon_list_download.innerHTML = "";
+		let icons = icon_link.value.split(' ');
 		icon_link.value = '';
+		setTimeout(() => {
+			for (let i = 0; i < icons.length; i++) {
+				let icon_name = icons[i].split('/')[icons[i].split('/').length-1];
+				addIconToLists(icon_name);
+			}
+		}, 500*icons.length);
 	}
 
 	set_naz.onclick = () => {
@@ -564,6 +651,17 @@
 		document.getElementById('can_monitor').lastChild.scrollIntoView();
 	}
 
+	function deviceConnectionStatus(uid, status) {
+		if (visible_device.uid == uid) {
+			console.log("Status of " + uid + ": " + status);
+			if (status == 'false') {
+				show(disconnect_warning);
+			} else {
+				hide(disconnect_warning);
+			}
+		}
+	}
+
 	clear_device_list.onclick = () => {
 		parent.ws.send('clearDeviceList');
 		can_dropdown_button.innerHTML = "Gerät auswählen";
@@ -585,6 +683,13 @@
 
 	can_devices_help.onclick = () =>{
 		parent.showHelp("settings.html#can_devices");
+	}
+
+	delete_device.onclick = () => {
+		parent.send(`delDevice:${visible_device.uid}`);
+		can_dropdown_button.innerHTML = 'Gerät auswählen';
+		hide(device_info);
+		hide(disconnect_warning);
 	}
 
 	loco_icons_help.onclick = () => {

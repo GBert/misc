@@ -5,6 +5,5 @@
   "l_port": 15733,
   "master": true,
   "server_path": "/www/MaeCAN-Server/",
-  "ip": "localhost",
-  "version": "2018-06-30.1"
+  "ip": "localhost"
 }
