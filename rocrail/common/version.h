@@ -1,11 +1,14 @@
 const int revisionnr = 
-15685
+15688
 ;
 const char* commithash = 
-"2e3131940a8a91681e1e48febbc275ff9e9dc969";
+"c5bc957138edd46e687581edfe862bba9ae0f315";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15688 2019-07-12 21:17:52 +0200 Blockdialog: show index and count in the titlebar\n" \
+"15687 2019-07-12 19:14:31 +0200 infodialog: HTML for important changes\n" \
+"15686 2019-07-12 18:13:53 +0200 basedlg,locdialog: show selected and count in titlebar\n" \
 "15685 2019-07-12 15:07:41 +0200 app: take over calculate virtual timer on the fly\n" \
 "15684 2019-07-12 15:01:18 +0200 infodialog: HTML for feature tab\n" \
 "15683 2019-07-12 13:33:32 +0200 infodlg: new features tab added\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13691 2018-03-12 12:20:45 +0100 tt: dsd2010 next/prev fixes\n" \
 "13690 2018-03-12 11:28:53 +0100 bidib: report absent in case a railcom sensor lost a loco\n" \
 "13689 2018-03-12 10:55:01 +0100 tt: dsd2010 set rotation direction in case of next or prev track\n" \
-"13688 2018-03-12 08:20:32 +0100 blockdialog: init comboboxes\n" \
-"13687 2018-03-12 08:01:28 +0100 roco: fix for fbmods > 10\n" \
-"13686 2018-03-11 15:27:00 +0100 schedulegraph: skip relative timing schedules\n" \
 
 "log end";
