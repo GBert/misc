@@ -1,11 +1,12 @@
 const int revisionnr = 
-15696
+15697
 ;
 const char* commithash = 
-"3509b72af3d47ae77a7ed9ca2562c7c594503364";
+"bb3f05c2f8a590a37c1988c6036cea7a9a76616b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15697 2019-07-13 18:07:27 +0200 toursdlg: show index and count in the titlebar\n" \
 "15696 2019-07-13 15:01:59 +0200 desktoplink.sh: zypper support\n" \
 "15695 2019-07-13 13:30:15 +0200 desktoplink.sh: install libwxgtk3.0\n" \
 "15694 2019-07-13 11:51:16 +0200 zipper: add distribution in filename\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13700 2018-03-13 11:30:43 +0100 tt: syntax fixes\n" \
 "13699 2018-03-13 11:17:31 +0100 tt: optional skip range to avoid running with the bridge into a gap\n" \
 "13698 2018-03-13 09:23:15 +0100 block: use also bidi direction in case of a generated loco\n" \
-"13697 2018-03-13 09:21:18 +0100 xmlscript: allow multiple case values separated with pipes\n" \
 
 "log end";
