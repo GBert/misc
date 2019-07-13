@@ -1,11 +1,13 @@
 const int revisionnr = 
-15691
+15693
 ;
 const char* commithash = 
-"9f363676ea545e95d7856e37de17d5a35a3028cc";
+"386577c9c09d0979d157cedf0be20d4e14b1f9ff";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15693 2019-07-13 10:07:40 +0200 show index and count in the titlebar\n" \
+"15692 2019-07-13 09:56:23 +0200 cardlg: show index and count in the titlebar\n" \
 "15691 2019-07-13 08:19:48 +0200 show index and count in title bar of objects\n" \
 "15690 2019-07-13 07:41:54 +0200 desktoplink.sh: changed to bash script to be able to use source\n" \
 "15689 2019-07-13 07:24:38 +0200 desktoplink.sh: try to get Desktop directory from user-dirs.dirs\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13696 2018-03-12 18:14:08 +0100 roco: trace fix for sensors\n" \
 "13695 2018-03-12 16:14:19 +0100 routedialog: set command combo with array\n" \
 "13694 2018-03-12 16:03:13 +0100 timedactions: init ID combo with array\n" \
-"13693 2018-03-12 13:59:02 +0100 roco: group offset fix\n" \
-"13692 2018-03-12 13:52:22 +0100 roco: fix for info byte group 1\n" \
 
 "log end";
