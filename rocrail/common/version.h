@@ -1,11 +1,18 @@
 const int revisionnr = 
-15702
+15709
 ;
 const char* commithash = 
-"13be9eceead617adafbee0b807a258119e56a3e4";
+"b48c815cd4b10f20261729f06e0e6793defb2138";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15709 2019-07-14 14:01:17 +0200 copyright update\n" \
+"15708 2019-07-14 13:48:30 +0200 zipper: fix for copy readme.txt\n" \
+"15707 2019-07-14 13:41:29 +0200 zipper: use separate script for installing wxWidgets\n" \
+"15706 2019-07-14 12:21:57 +0200 speedcurvedlg: fix for allignment asserts\n" \
+"15705 2019-07-14 11:51:34 +0200 makemac.sh: removed building a dmg\n" \
+"15704 2019-07-14 11:21:19 +0200 rocview makefile: DISTRO added\n" \
+"15703 2019-07-14 10:01:23 +0200 rocview makefile: zip Rocrail.app\n" \
 "15702 2019-07-14 08:54:08 +0200 macos: provide ZIP instead of dmg\n" \
 "15701 2019-07-14 08:10:23 +0200 zipper.sh,readme.txt: add the readme into the ZIP\n" \
 "15700 2019-07-14 07:40:36 +0200 newfeatures: dutch tanslation added\n" \
@@ -1999,12 +2006,5 @@ const char* revlog =
 "13712 2018-03-16 13:59:56 +0100 stage: check if the stage is closed in case of reserve as crossing block\n" \
 "13711 2018-03-16 11:00:11 +0100 z21: support for LocoNet SV programming for LocoIO/GCA50\n" \
 "13710 2018-03-16 10:21:03 +0100 esunavi: reduced speed range to 126\n" \
-"13709 2018-03-16 10:17:00 +0100 z21: removed version workaround, LocoIO setup (wip)\n" \
-"13708 2018-03-16 10:09:53 +0100 issuedlg: replace gt and lt chars with underscores\n" \
-"13707 2018-03-15 07:53:07 +0100 dsd2010: use a turntable event for reporting the position instead of an accessory event\n" \
-"13706 2018-03-14 21:35:34 +0100 model: the iid must match in case of a turntable event\n" \
-"13705 2018-03-14 21:29:18 +0100 model: ignore zero addr/port events for objects other then turntables\n" \
-"13704 2018-03-14 10:47:34 +0100 z21: use protver=1 for loconet transponder address 1 offset (DR5088)\n" \
-"13703 2018-03-14 08:52:53 +0100 xmlscript: resolve clock variables\n" \
 
 "log end";
