@@ -1,11 +1,15 @@
 const int revisionnr = 
-15709
+15713
 ;
 const char* commithash = 
-"b48c815cd4b10f20261729f06e0e6793defb2138";
+"fba3a708bf8379a8b94c007cd00ba3f7ea7f200b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15713 2019-07-14 19:05:22 +0200 getLocByIdent: no change if dir parameter is zero\n" \
+"15712 2019-07-14 18:49:15 +0200 getLocByIdent: no change if dir parameter is zero\n" \
+"15711 2019-07-14 18:34:43 +0200 variabledlg: show index and count in the titlebar\n" \
+"15710 2019-07-14 17:12:18 +0200 timedactions: show index and count in the titlebar\n" \
 "15709 2019-07-14 14:01:17 +0200 copyright update\n" \
 "15708 2019-07-14 13:48:30 +0200 zipper: fix for copy readme.txt\n" \
 "15707 2019-07-14 13:41:29 +0200 zipper: use separate script for installing wxWidgets\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13716 2018-03-18 09:56:19 +0100 model: lookup real block in case of a modify\n" \
 "13715 2018-03-18 08:05:51 +0100 routedialog: fix for evaluating the wiring output IDs\n" \
 "13714 2018-03-18 07:56:37 +0100 loc: fix for setting the block enterside and placing\n" \
-"13713 2018-03-17 08:25:43 +0100 loconet: save decoder type for dispatching\n" \
-"13712 2018-03-16 13:59:56 +0100 stage: check if the stage is closed in case of reserve as crossing block\n" \
-"13711 2018-03-16 11:00:11 +0100 z21: support for LocoNet SV programming for LocoIO/GCA50\n" \
-"13710 2018-03-16 10:21:03 +0100 esunavi: reduced speed range to 126\n" \
 
 "log end";
