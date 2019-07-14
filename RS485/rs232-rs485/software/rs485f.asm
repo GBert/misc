@@ -10,9 +10,9 @@
 ; Device Pinout
 ;-------------------------------------------------------------------------------
 ;
-;  RxD   ICSPDAT/RA0   1----6 RA3/MCLR/Vpp
-;        VSS GND       2    5 VDD
-;  TxD   ICSPCLK/RA1   3    4 RA2          RE/DE
+;  RxD/DE  ICSPDAT/RA0   1----6 RA3/MCLR/Vpp
+;          VSS GND       2    5 VDD
+;  TxD     ICSPCLK/RA1   3    4 RA2          -> RS485 DI
 ;
 ;-------------------------------------------------------------------------------
 ; Device Constants
@@ -57,12 +57,13 @@ START
 		MOVLW	0x70		; 16MHz clock
 		MOVWF	OSCCON
 
-		BCF	LATA,0
-		BSF	LATA,2
+					; switch off analog
+		CLRF	ANSELA		; all digital
+		BCF	LATA,0		; clear DE
+		BSF	LATA,2		; set DI(TX)
+		BSF	WPUA,1		; weak pullup RA1
 		MOVLW	b'00000010'	; RA1 input / RA0&RA2 output
 		MOVWF	TRISA
-					; switch off analog
-                CLRF	ANSELA		; all digital
 
 		; Timer0
 		MOVLW	b'11010111'	; configure Timer0
@@ -79,11 +80,11 @@ START
 		CLRF	TMR2
 
 MAINLOOP
-		BTFSC	LATA,1
+		BTFSC	PORTA,1
 		GOTO	MAINLOOP
 		; first falling edge
 		; enable trasnmit
-		BSF	PORTA,0
+		BSF	LATA,0
 		BSF	T2CON,TMR2ON
 
 INNER_LOOP
