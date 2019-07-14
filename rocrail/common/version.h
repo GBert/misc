@@ -1,11 +1,16 @@
 const int revisionnr = 
-15697
+15702
 ;
 const char* commithash = 
-"bb3f05c2f8a590a37c1988c6036cea7a9a76616b";
+"13be9eceead617adafbee0b807a258119e56a3e4";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15702 2019-07-14 08:54:08 +0200 macos: provide ZIP instead of dmg\n" \
+"15701 2019-07-14 08:10:23 +0200 zipper.sh,readme.txt: add the readme into the ZIP\n" \
+"15700 2019-07-14 07:40:36 +0200 newfeatures: dutch tanslation added\n" \
+"15699 2019-07-14 07:14:00 +0200 loc: reset virtual timers and triggers on reset\n" \
+"15698 2019-07-14 07:00:42 +0200 newfeatures.h: DE link corrections\n" \
 "15697 2019-07-13 18:07:27 +0200 toursdlg: show index and count in the titlebar\n" \
 "15696 2019-07-13 15:01:59 +0200 desktoplink.sh: zypper support\n" \
 "15695 2019-07-13 13:30:15 +0200 desktoplink.sh: install libwxgtk3.0\n" \
@@ -2001,10 +2006,5 @@ const char* revlog =
 "13705 2018-03-14 21:29:18 +0100 model: ignore zero addr/port events for objects other then turntables\n" \
 "13704 2018-03-14 10:47:34 +0100 z21: use protver=1 for loconet transponder address 1 offset (DR5088)\n" \
 "13703 2018-03-14 08:52:53 +0100 xmlscript: resolve clock variables\n" \
-"13702 2018-03-14 07:33:52 +0100 bidib: POM and PT traces corrected\n" \
-"13701 2018-03-13 15:54:00 +0100 seltabdlg,textdialog: close dialog on OK in case nothing is selected or empty\n" \
-"13700 2018-03-13 11:30:43 +0100 tt: syntax fixes\n" \
-"13699 2018-03-13 11:17:31 +0100 tt: optional skip range to avoid running with the bridge into a gap\n" \
-"13698 2018-03-13 09:23:15 +0100 block: use also bidi direction in case of a generated loco\n" \
 
 "log end";
