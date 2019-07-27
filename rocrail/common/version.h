@@ -1,11 +1,90 @@
 const int revisionnr = 
-15713
+15792
 ;
 const char* commithash = 
-"fba3a708bf8379a8b94c007cd00ba3f7ea7f200b";
+"7f8b32f84a820b63a964c7f5a9a801fb24c4eeb9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15792 2019-07-27 17:39:47 +0200 mttmfcc: tracelevel correction for sensor events\n" \
+"15791 2019-07-27 11:03:02 +0200 no reduce speed on block exit option in case of passing through\n" \
+"15790 2019-07-27 09:11:02 +0200 dccppdlg: translation fix\n" \
+"15789 2019-07-27 08:43:30 +0200 loc,operator: removed multi class checks\n" \
+"15788 2019-07-27 08:11:47 +0200 ahome: renaming from home to ahome\n" \
+"15787 2019-07-26 15:17:42 +0200 home: subscribe to output\n" \
+"15786 2019-07-26 13:43:08 +0200 home: WIP\n" \
+"15785 2019-07-26 12:15:33 +0200 rocrailinidialog: home support\n" \
+"15784 2019-07-26 10:42:51 +0200 home: mqtt controller\n" \
+"15783 2019-07-25 17:21:17 +0200 huedlg: missing translations added\n" \
+"15782 2019-07-25 16:46:18 +0200 hueconfdlg: show accessory uid\n" \
+"15781 2019-07-25 16:33:31 +0200 huedlg: help link correction\n" \
+"15780 2019-07-25 15:49:10 +0200 hue: temp and lux sensor optional address added\n" \
+"15779 2019-07-25 14:55:04 +0200 rocview: replaced label class with group\n" \
+"15778 2019-07-25 13:40:57 +0200 hue: check if sensor is on before evaluating the state\n" \
+"15777 2019-07-25 11:37:33 +0200 allow multiple classes in loc and operator objects\n" \
+"15776 2019-07-25 10:37:05 +0200 text: fix for bri,lux\n" \
+"15775 2019-07-25 09:55:01 +0200 hue,control: provide temp100, bri and lux variables\n" \
+"15774 2019-07-24 22:29:55 +0200 hue: report temp. and brightness\n" \
+"15773 2019-07-24 15:22:09 +0200 hue: definition header\n" \
+"15772 2019-07-24 14:31:47 +0200 hue: button number in regval\n" \
+"15771 2019-07-24 14:22:20 +0200 hue: addressing for switch buttons\n" \
+"15770 2019-07-24 11:57:01 +0200 hue: register sensors\n" \
+"15769 2019-07-23 22:16:09 +0200 hueconfdlg: show sensor state by type\n" \
+"15768 2019-07-23 21:30:22 +0200 hue: separate query for lights and sensors\n" \
+"15767 2019-07-23 18:20:08 +0200 hue: query sensors (WIP)\n" \
+"15766 2019-07-23 18:19:20 +0200 addr: check if its already FADA before convert\n" \
+"15765 2019-07-23 17:50:38 +0200 hue: query sensors added json: fix for parsing json arrays\n" \
+"15764 2019-07-23 16:49:20 +0200 xmlscriptdlg: removed loco classadd/classdel\n" \
+"15763 2019-07-23 16:36:21 +0200 loc: removed classadd/classdel\n" \
+"15762 2019-07-23 14:45:49 +0200 mttmfcc: POM read added\n" \
+"15761 2019-07-23 14:34:34 +0200 loc,operator: correct invalid class containing commas\n" \
+"15760 2019-07-23 14:28:51 +0200 locdialog,operatordlg: reject class with commas\n" \
+"15759 2019-07-23 13:38:05 +0200 route symbols with arrow\n" \
+"15758 2019-07-23 13:27:49 +0200 loc,operator: reject invalid class containing commas\n" \
+"15757 2019-07-23 11:05:25 +0200 dccpp: use FADA as object ID\n" \
+"15756 2019-07-23 08:27:14 +0200 block,route,operator: class check corrections\n" \
+"15755 2019-07-23 08:10:42 +0200 loc: fix for checking for loco/train class\n" \
+"15754 2019-07-22 20:02:05 +0200 dccpp: revert\n" \
+"15753 2019-07-22 16:11:09 +0200 mttmfcc: trace correction\n" \
+"15752 2019-07-22 15:12:38 +0200 mttmfcc: fix for info address\n" \
+"15751 2019-07-22 13:08:50 +0200 mttmfcc: use longer read timeout\n" \
+"15750 2019-07-22 12:04:51 +0200 mttmfcc: check serial connection\n" \
+"15749 2019-07-22 10:57:21 +0200 mttmfcc: support for new sensor module (WIP)\n" \
+"15748 2019-07-21 18:34:55 +0200 checkroute: ignore depart delay in case the loco runs virtual\n" \
+"15747 2019-07-21 17:40:21 +0200 rocpro: regard gray icons in case of no loco image\n" \
+"15746 2019-07-21 14:51:12 +0200 wrapper update for power control\n" \
+"15745 2019-07-21 14:14:36 +0200 block: set occ in slave blocks after IN in virtual block\n" \
+"15744 2019-07-21 12:53:32 +0200 powerctrldlg: show short circuit time stamp\n" \
+"15743 2019-07-21 11:00:32 +0200 powerctrldlg: color legend added\n" \
+"15742 2019-07-20 10:09:03 +0200 fcc: write accessory cv\n" \
+"15741 2019-07-20 09:45:20 +0200 Doehler&Haass Decspec for RM\n" \
+"15740 2019-07-20 08:27:28 +0200 loc: blocktrip schedule id\n" \
+"15739 2019-07-20 08:12:30 +0200 loc: create schedule on the fly for signal block trip (WIP)\n" \
+"15738 2019-07-19 17:52:54 +0200 fcc: read acc decoder cv's added (WIP)\n" \
+"15737 2019-07-19 13:59:42 +0200 loc: correct fromside after a blocktrip rollback\n" \
+"15736 2019-07-19 11:42:52 +0200 loc,signal: save fromside signal for blocktrip\n" \
+"15735 2019-07-19 09:13:58 +0200 lok pilot nano by Tony\n" \
+"15734 2019-07-18 19:17:36 +0200 model: signalside correction\n" \
+"15733 2019-07-18 18:23:05 +0200 dccpp: fix for output id for direct I/O\n" \
+"15732 2019-07-18 14:32:38 +0200 blocktrip: use signal blockside information for selecting a route\n" \
+"15731 2019-07-18 07:58:10 +0200 desktoplink.sh: set executable flag\n" \
+"15730 2019-07-18 07:18:51 +0200 decspecs: readme added\n" \
+"15729 2019-07-18 07:09:50 +0200 ESU loksound v5 by Tony\n" \
+"15728 2019-07-17 15:25:30 +0200 loc,signal: fixes for roll back reservations\n" \
+"15727 2019-07-17 10:54:38 +0200 rocview,zipper: demo path commandline option added\n" \
+"15726 2019-07-17 10:14:04 +0200 loc: release routes and blocks in case of previous none operatable signal click\n" \
+"15725 2019-07-17 07:41:05 +0200 dccpp: trace level corrections\n" \
+"15724 2019-07-16 22:22:33 +0200 loc: try to lock the route for the signal block trip\n" \
+"15723 2019-07-16 18:23:21 +0200 signal,loc: reserve block trip blocks\n" \
+"15722 2019-07-16 16:27:40 +0200 signal: block trip by signal click\n" \
+"15721 2019-07-16 10:33:21 +0200 mbus: added responses for lokliste and ms2-conf\n" \
+"15720 2019-07-16 10:01:46 +0200 zipper: wikidemo added\n" \
+"15719 2019-07-16 09:03:59 +0200 block: enter2in optional length added for virtual timing\n" \
+"15718 2019-07-15 19:42:02 +0200 zipper: added missing web directory\n" \
+"15717 2019-07-15 17:41:08 +0200 mbus: use unsigned int for uid and sid\n" \
+"15716 2019-07-15 16:24:39 +0200 signal command actiononly added\n" \
+"15715 2019-07-15 16:03:02 +0200 model: do not set generated flag for discovered locos\n" \
+"15714 2019-07-15 15:01:24 +0200 signal: accept flip command in case of not operatable to trigger actions\n" \
 "15713 2019-07-14 19:05:22 +0200 getLocByIdent: no change if dir parameter is zero\n" \
 "15712 2019-07-14 18:49:15 +0200 getLocByIdent: no change if dir parameter is zero\n" \
 "15711 2019-07-14 18:34:43 +0200 variabledlg: show index and count in the titlebar\n" \
@@ -1927,84 +2006,5 @@ const char* revlog =
 "13795 2018-04-03 09:51:54 +0200 z21: disable LAN_LOCONETDETECTOR without any option\n" \
 "13794 2018-04-03 08:29:15 +0200 z21: disable LocoNetDetector broadcasting if not wanted\n" \
 "13793 2018-04-03 08:22:45 +0200 z21: default no loconet detector evaluation, to activate set protver to 1\n" \
-"13792 2018-04-03 08:00:05 +0200 translation merge: pt_BR, sl, nl, de\n" \
-"13791 2018-04-02 16:36:40 +0200 z21: adjust loconetdetector reported sensor address\n" \
-"13790 2018-04-02 07:55:05 +0200 rocpro: fix for setting long address in the loco properties\n" \
-"13789 2018-04-01 16:51:48 +0200 sensorevents: fix for bus field on sorting columns\n" \
-"13788 2018-04-01 08:12:37 +0200 SLIM-COLOR: stage.svg in SLIM format\n" \
-"13787 2018-04-01 07:36:34 +0200 SLIM-COLOR: stage corrections (Peter)\n" \
-"13786 2018-03-31 17:44:36 +0200 in: fix for using the block enterside\n" \
-"13785 2018-03-31 10:39:54 +0200 rocnetnode: set clock divider back to 1 in case of a timeout\n" \
-"13784 2018-03-31 10:37:34 +0200 rocnetnode: set clock sync timeout mode on startup\n" \
-"13783 2018-03-31 10:32:06 +0200 rocnetnode: display timeout watchdog\n" \
-"13782 2018-03-31 10:28:28 +0200 rocnetnode: display timeout watchdog, show floating dashes\n" \
-"13781 2018-03-31 10:15:54 +0200 rocnetnode: display timeout watchdog\n" \
-"13780 2018-03-31 10:10:20 +0200 rocnetnode: display timeout watchdog\n" \
-"13779 2018-03-31 10:03:55 +0200 rocnetnode: display timeout watchdog\n" \
-"13778 2018-03-31 09:48:08 +0200 block: enterside wait option, default both sides\n" \
-"13777 2018-03-31 06:54:53 +0200 rocnetnode: clock options\n" \
-"13776 2018-03-31 05:03:58 +0200 guiapp: merge route in case of modify and not visible\n" \
-"13775 2018-03-30 15:49:19 +0200 modelutils: rename signal ID dependencies\n" \
-"13774 2018-03-30 14:10:45 +0200 rocnetnode: negative temp\n" \
-"13773 2018-03-30 14:08:06 +0200 rocnet: fix for negative temp\n" \
-"13772 2018-03-30 13:40:29 +0200 rocnetnode: negative temp.\n" \
-"13771 2018-03-30 13:27:17 +0200 rocnetnode: show temp\n" \
-"13770 2018-03-30 12:06:41 +0200 rocnetnode: show temp\n" \
-"13769 2018-03-30 11:56:50 +0200 rocnetnode: show temp\n" \
-"13768 2018-03-30 11:31:48 +0200 rocnetnode: auto display scan, show date\n" \
-"13767 2018-03-30 10:49:22 +0200 base: genID with 3 digits\n" \
-"13766 2018-03-30 10:41:37 +0200 planpanel: use genID also for track type\n" \
-"13765 2018-03-30 10:35:33 +0200 rocnetnodedlg: set readonly flag for the I2C scan results\n" \
-"13764 2018-03-30 10:34:54 +0200 planpanel: popup ID dialog option added\n" \
-"13763 2018-03-30 09:06:40 +0200 blockdialog: allow 5% arrive/depart speed\n" \
-"13762 2018-03-29 15:54:35 +0200 rocnetnode: clock dot banging\n" \
-"13761 2018-03-29 15:11:04 +0200 rocnetnode: fix for nrclocks\n" \
-"13760 2018-03-29 14:45:24 +0200 rocnetnode: clock brightness setup added\n" \
-"13759 2018-03-29 13:23:33 +0200 rocnetnode: clock dot step 1 1000ms in case div > 1\n" \
-"13758 2018-03-29 12:18:00 +0200 rocnetnode: clock dot step every 5 model seconds\n" \
-"13757 2018-03-29 12:09:24 +0200 rocnetnode: clock running dot in case divider > 1\n" \
-"13756 2018-03-29 12:06:12 +0200 rocnetnode: clock running dots in case divider > 1\n" \
-"13755 2018-03-29 11:46:30 +0200 rocnetnode: flash clock colon only if divider is 1\n" \
-"13754 2018-03-29 11:12:25 +0200 rocnetnode: clock support\n" \
-"13753 2018-03-29 11:08:19 +0200 rocnetnode: clock support (WIP)\n" \
-"13752 2018-03-29 10:47:52 +0200 rocnetnode: clock support (WIP)\n" \
-"13751 2018-03-29 08:35:51 +0200 rocnetnode: trace I2C scan\n" \
-"13750 2018-03-29 08:08:14 +0200 rocnet: clock config added\n" \
-"13749 2018-03-28 11:44:54 +0200 rocnetnode: clock display support (WIP)\n" \
-"13748 2018-03-28 10:37:18 +0200 rocprodlg: take over values after a DIP OK/Apply\n" \
-"13747 2018-03-28 03:49:11 +0200 location: scheduletable on/off command added\n" \
-"13746 2018-03-27 13:40:21 +0200 rocpro: take over value from DIP\n" \
-"13745 2018-03-27 11:34:55 +0200 tt,action: fixes for broadcasting new state\n" \
-"13744 2018-03-27 10:33:59 +0200 tt,traverser: closed symbols, fix for keep state\n" \
-"13743 2018-03-26 08:45:48 +0200 translation merge: sl,pr_BR,sr_latin,de,nl\n" \
-"13742 2018-03-26 08:23:05 +0200 action,control: time set trace added\n" \
-"13741 2018-03-25 13:58:54 +0200 loc: fix for BBT speed!!!\n" \
-"13740 2018-03-25 10:23:08 +0200 timedactions: added open/close as commands to the turntable\n" \
-"13739 2018-03-25 09:11:50 +0200 tt: regard close state in case of embedded block\n" \
-"13738 2018-03-24 12:18:39 +0100 locdialog: speed++ changed in speed +/-\n" \
-"13737 2018-03-24 11:07:14 +0100 block: extra freeonenter option route added\n" \
-"13736 2018-03-24 10:35:04 +0100 loc: BBT key speed++ added (block enter side)\n" \
-"13735 2018-03-23 11:41:31 +0100 rocpro,bidib: accext support added\n" \
-"13734 2018-03-23 08:48:57 +0100 z21: usesamesensorbus option added for all LocoNet type sensors on bus 1\n" \
-"13733 2018-03-22 14:13:56 +0100 z21: removed the rbus option\n" \
-"13732 2018-03-22 14:02:10 +0100 z21: bus test correction\n" \
-"13731 2018-03-22 14:00:39 +0100 z21: trace for type LN detector input\n" \
-"13730 2018-03-22 08:17:54 +0100 bidib: POM accessory support added\n" \
-"13729 2018-03-21 15:44:03 +0100 block: ignore an absent event in case of running in automatic mode\n" \
-"13728 2018-03-21 11:05:38 +0100 renderer: mapping fix for dcrossingright-tr-l-occ\n" \
-"13727 2018-03-21 09:14:02 +0100 dcrossing fix (Martin)\n" \
-"13726 2018-03-21 09:09:10 +0100 tt: virtual automatic support in case of embeded block\n" \
-"13725 2018-03-21 08:25:44 +0100 tttrackdialog: fix for evaluating\n" \
-"13724 2018-03-20 10:20:25 +0100 renderer: mapping correction for dcrossing right\n" \
-"13723 2018-03-20 08:50:23 +0100 analyse,tt: typo fix\n" \
-"13722 2018-03-20 07:53:52 +0100 blockdialog, routedialog: disable adding the same loco into the include and exclude list\n" \
-"13721 2018-03-19 14:55:07 +0100 route: support for virtual running over a TT by sending it a position event\n" \
-"13720 2018-03-19 11:01:15 +0100 z21: use the fbread attribute to enable or disable evaluating the R-BUS\n" \
-"13719 2018-03-18 11:29:56 +0100 model: getRealBlock type correction\n" \
-"13718 2018-03-18 10:39:48 +0100 z21: option rbus added to be able to disable it\n" \
-"13717 2018-03-18 10:25:52 +0100 z21: protver=1 loconet sensor reporting only\n" \
-"13716 2018-03-18 09:56:19 +0100 model: lookup real block in case of a modify\n" \
-"13715 2018-03-18 08:05:51 +0100 routedialog: fix for evaluating the wiring output IDs\n" \
-"13714 2018-03-18 07:56:37 +0100 loc: fix for setting the block enterside and placing\n" \
 
 "log end";
