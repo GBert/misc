@@ -1,11 +1,12 @@
 const int revisionnr = 
-15792
+15793
 ;
 const char* commithash = 
-"7f8b32f84a820b63a964c7f5a9a801fb24c4eeb9";
+"9d9e0896a5f1cf592610af11aab6d2418d8a6329";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15793 2019-07-28 10:26:47 +0200 rocs: serial isRX function added to be able to detect activity\n" \
 "15792 2019-07-27 17:39:47 +0200 mttmfcc: tracelevel correction for sensor events\n" \
 "15791 2019-07-27 11:03:02 +0200 no reduce speed on block exit option in case of passing through\n" \
 "15790 2019-07-27 09:11:02 +0200 dccppdlg: translation fix\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13796 2018-04-03 10:10:47 +0200 action: vcurrentloco action added to restore/reactivate the current speed after for example an ebreak\n" \
 "13795 2018-04-03 09:51:54 +0200 z21: disable LAN_LOCONETDETECTOR without any option\n" \
 "13794 2018-04-03 08:29:15 +0200 z21: disable LocoNetDetector broadcasting if not wanted\n" \
-"13793 2018-04-03 08:22:45 +0200 z21: default no loconet detector evaluation, to activate set protver to 1\n" \
 
 "log end";
