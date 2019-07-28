@@ -1,11 +1,13 @@
 const int revisionnr = 
-15794
+15796
 ;
 const char* commithash = 
-"ee801f28bb02c559f92fd63706b769da95849838";
+"02fc8cec578132cd9971205bc12373765c729353";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15796 2019-07-28 16:32:10 +0200 ahome: JSON support\n" \
+"15795 2019-07-28 14:53:48 +0200 ahome: sensor support\n" \
 "15794 2019-07-28 11:09:12 +0200 loc,operator: removed stripping class attribute\n" \
 "15793 2019-07-28 10:26:47 +0200 rocs: serial isRX function added to be able to detect activity\n" \
 "15792 2019-07-27 17:39:47 +0200 mttmfcc: tracelevel correction for sensor events\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13799 2018-04-05 07:17:35 +0200 modplan: fix for merge nodes in lists in case the ID is already in the list\n" \
 "13798 2018-04-04 08:42:36 +0200 socket: readln extra buffer len parameter to avoid overflow\n" \
 "13797 2018-04-03 11:11:02 +0200 z21: removed trace line for loconet detector support\n" \
-"13796 2018-04-03 10:10:47 +0200 action: vcurrentloco action added to restore/reactivate the current speed after for example an ebreak\n" \
-"13795 2018-04-03 09:51:54 +0200 z21: disable LAN_LOCONETDETECTOR without any option\n" \
 
 "log end";
