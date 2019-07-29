@@ -1,11 +1,22 @@
 const int revisionnr = 
-15796
+15807
 ;
 const char* commithash = 
-"02fc8cec578132cd9971205bc12373765c729353";
+"c2a2f11abebbf92515eb4837850da9dd6d5565c8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15807 2019-07-29 22:21:45 +0200 fback: trace correction for regval\n" \
+"15806 2019-07-29 22:03:50 +0200 loc: check shunting state\n" \
+"15805 2019-07-29 19:27:57 +0200 powerctrldlg: remove minimal height of graphic\n" \
+"15804 2019-07-29 19:13:31 +0200 output: variable support in commands on/off\n" \
+"15803 2019-07-29 18:15:34 +0200 dumper: output support added\n" \
+"15802 2019-07-29 10:55:21 +0200 fback: array added for register value types\n" \
+"15801 2019-07-29 10:31:10 +0200 sbus: wip\n" \
+"15800 2019-07-29 08:09:18 +0200 hue: lux to brightness calculation\n" \
+"15799 2019-07-29 07:47:54 +0200 rocview: revert translation from class to group\n" \
+"15798 2019-07-28 22:08:57 +0200 button update\n" \
+"15797 2019-07-28 18:31:02 +0200 wserial: removed junk text\n" \
 "15796 2019-07-28 16:32:10 +0200 ahome: JSON support\n" \
 "15795 2019-07-28 14:53:48 +0200 ahome: sensor support\n" \
 "15794 2019-07-28 11:09:12 +0200 loc,operator: removed stripping class attribute\n" \
@@ -1995,16 +2006,5 @@ const char* revlog =
 "13810 2018-04-06 10:55:13 +0200 rocnetnode: pi08 (wip)\n" \
 "13809 2018-04-06 10:47:21 +0200 analyse,model: trace level corrections\n" \
 "13808 2018-04-06 10:33:44 +0200 analyse: broadcast item changes to the clients\n" \
-"13807 2018-04-06 10:15:37 +0200 tt,xmlscript: tt state support\n" \
-"13806 2018-04-06 08:49:53 +0200 fundialog: list stage blocks too\n" \
-"13805 2018-04-06 08:36:51 +0200 hue: tracing correctiongs to avoid overflow\n" \
-"13804 2018-04-06 08:01:50 +0200 hue: clean up the xml node after use to avoid memory leak\n" \
-"13803 2018-04-06 07:34:44 +0200 wrapper: reset whell counter option default not active\n" \
-"13802 2018-04-06 00:47:45 +0200 locseldlg: fix for showing cars without address set\n" \
-"13801 2018-04-06 00:29:44 +0200 hue: byte trace length fix\n" \
-"13800 2018-04-05 14:19:28 +0200 control: clock sync year+1900 fix\n" \
-"13799 2018-04-05 07:17:35 +0200 modplan: fix for merge nodes in lists in case the ID is already in the list\n" \
-"13798 2018-04-04 08:42:36 +0200 socket: readln extra buffer len parameter to avoid overflow\n" \
-"13797 2018-04-03 11:11:02 +0200 z21: removed trace line for loconet detector support\n" \
 
 "log end";
