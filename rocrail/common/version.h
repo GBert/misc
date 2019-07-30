@@ -1,11 +1,13 @@
 const int revisionnr = 
-15807
+15809
 ;
 const char* commithash = 
-"c2a2f11abebbf92515eb4837850da9dd6d5565c8";
+"e755944850418fb342940a717f2d2fcf178b6a40";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15809 2019-07-30 08:24:50 +0200 action,model,xmlscript: use the var pubish function to broadcast changes\n" \
+"15808 2019-07-30 08:09:16 +0200 fback,var: publish register variables\n" \
 "15807 2019-07-29 22:21:45 +0200 fback: trace correction for regval\n" \
 "15806 2019-07-29 22:03:50 +0200 loc: check shunting state\n" \
 "15805 2019-07-29 19:27:57 +0200 powerctrldlg: remove minimal height of graphic\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13812 2018-04-06 15:14:50 +0200 rocnetnode: scan I2C for Pi08 art startup\n" \
 "13811 2018-04-06 11:45:15 +0200 tt: state pending added\n" \
 "13810 2018-04-06 10:55:13 +0200 rocnetnode: pi08 (wip)\n" \
-"13809 2018-04-06 10:47:21 +0200 analyse,model: trace level corrections\n" \
-"13808 2018-04-06 10:33:44 +0200 analyse: broadcast item changes to the clients\n" \
 
 "log end";
