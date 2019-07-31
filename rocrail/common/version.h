@@ -1,11 +1,21 @@
 const int revisionnr = 
-15809
+15819
 ;
 const char* commithash = 
-"e755944850418fb342940a717f2d2fcf178b6a40";
+"55148a145deb8eaf768ef54e0eb81c7d9b0b6695";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15819 2019-07-31 12:14:03 +0200 video streaming in text and throttle\n" \
+"15818 2019-07-31 08:05:35 +0200 fback: regtrigger added\n" \
+"15817 2019-07-31 07:42:10 +0200 ahome: json power events\n" \
+"15816 2019-07-30 21:09:25 +0200 infodialog: disable webview includes in case of none apple\n" \
+"15815 2019-07-30 19:45:24 +0200 fback: format variable text\n" \
+"15814 2019-07-30 19:37:14 +0200 fback: format variable text in case the original value was a float\n" \
+"15813 2019-07-30 17:46:53 +0200 infodialog: commented out the webview\n" \
+"15812 2019-07-30 17:36:45 +0200 infodialog: check if a web kit is available\n" \
+"15811 2019-07-30 17:04:57 +0200 infodialog: webview is not included in the linux wxWidgets\n" \
+"15810 2019-07-30 16:03:19 +0200 infodialog: wiki tab added\n" \
 "15809 2019-07-30 08:24:50 +0200 action,model,xmlscript: use the var pubish function to broadcast changes\n" \
 "15808 2019-07-30 08:09:16 +0200 fback,var: publish register variables\n" \
 "15807 2019-07-29 22:21:45 +0200 fback: trace correction for regval\n" \
@@ -1996,15 +2006,5 @@ const char* revlog =
 "13822 2018-04-08 07:22:26 +0200 powermandlg: show UID as unsigned\n" \
 "13821 2018-04-07 16:49:05 +0200 guiapp: merge a route event only deep if it has child nodes to avoid loosing commands\n" \
 "13820 2018-04-07 15:26:53 +0200 powermandlg: take over the UID in the HEX field after apply\n" \
-"13819 2018-04-07 14:54:58 +0200 powerman: fix for negative booster UID\n" \
-"13818 2018-04-07 11:43:45 +0200 rocnetnode: show temp. in trace in case of a clock sync\n" \
-"13817 2018-04-07 11:21:05 +0200 clock brightness set by weather\n" \
-"13816 2018-04-07 10:52:37 +0200 weatherdlg: label correction\n" \
-"13815 2018-04-07 10:47:55 +0200 colorpanel: show temperature color picker added\n" \
-"13814 2018-04-07 08:43:25 +0200 weather: temperature line added\n" \
-"13813 2018-04-06 15:21:08 +0200 rocnetnode: show temp and date only the half time of the clock\n" \
-"13812 2018-04-06 15:14:50 +0200 rocnetnode: scan I2C for Pi08 art startup\n" \
-"13811 2018-04-06 11:45:15 +0200 tt: state pending added\n" \
-"13810 2018-04-06 10:55:13 +0200 rocnetnode: pi08 (wip)\n" \
 
 "log end";
