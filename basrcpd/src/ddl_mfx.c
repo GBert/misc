@@ -365,7 +365,7 @@ void comp_mfx_loco(bus_t bus, gl_data_t *glp)
       glp->funcschange &= ~fxChange;
       int i;
       for (i=16; i<32; i++) {
-        if ((fxChange & (1 << i)) != 0) {
+        if ((fxChange & (1U << i)) != 0) {
 			syslog_bus(bus, DBG_DEBUG, "COMP MFX Loco. Adr=%d, nfuncs=%d, Fx%d=%d", 
 		  						address, nfuncs, i, (funcs >> i) & 1);
           	memset(packetstream, 0, PKTSIZE);
