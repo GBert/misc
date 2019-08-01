@@ -1,11 +1,12 @@
 const int revisionnr = 
-15819
+15820
 ;
 const char* commithash = 
-"55148a145deb8eaf768ef54e0eb81c7d9b0b6695";
+"d5ce5b0498b2176ac7b31a5a13b8d789cf1cde51";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15820 2019-07-31 21:46:47 +0200 dependency update for webview\n" \
 "15819 2019-07-31 12:14:03 +0200 video streaming in text and throttle\n" \
 "15818 2019-07-31 08:05:35 +0200 fback: regtrigger added\n" \
 "15817 2019-07-31 07:42:10 +0200 ahome: json power events\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13823 2018-04-08 08:22:46 +0200 weatherdlg: select outputs by dialog\n" \
 "13822 2018-04-08 07:22:26 +0200 powermandlg: show UID as unsigned\n" \
 "13821 2018-04-07 16:49:05 +0200 guiapp: merge a route event only deep if it has child nodes to avoid loosing commands\n" \
-"13820 2018-04-07 15:26:53 +0200 powermandlg: take over the UID in the HEX field after apply\n" \
 
 "log end";
