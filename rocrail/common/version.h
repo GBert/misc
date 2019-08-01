@@ -1,11 +1,14 @@
 const int revisionnr = 
-15820
+15823
 ;
 const char* commithash = 
-"d5ce5b0498b2176ac7b31a5a13b8d789cf1cde51";
+"9924064f23c45d86a8cd81c93496ef7752dfbb22";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15823 2019-08-01 11:36:07 +0200 infodialog,renderer: webview also for linux\n" \
+"15822 2019-08-01 11:29:29 +0200 control: removed dependency webview\n" \
+"15821 2019-08-01 10:52:15 +0200 throttledlg: test wxWebView under Linux\n" \
 "15820 2019-07-31 21:46:47 +0200 dependency update for webview\n" \
 "15819 2019-07-31 12:14:03 +0200 video streaming in text and throttle\n" \
 "15818 2019-07-31 08:05:35 +0200 fback: regtrigger added\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13826 2018-04-08 10:39:36 +0200 powermandlg: booster index extended with IID and description\n" \
 "13825 2018-04-08 08:32:47 +0200 weather: run weater in case of one or more outputs or with color table for updating temp and bri\n" \
 "13824 2018-04-08 08:27:59 +0200 weather: do weather also in case of no lamps for temperature and brightness\n" \
-"13823 2018-04-08 08:22:46 +0200 weatherdlg: select outputs by dialog\n" \
-"13822 2018-04-08 07:22:26 +0200 powermandlg: show UID as unsigned\n" \
-"13821 2018-04-07 16:49:05 +0200 guiapp: merge a route event only deep if it has child nodes to avoid loosing commands\n" \
 
 "log end";
