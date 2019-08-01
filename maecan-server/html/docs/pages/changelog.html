@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>MäCAN-Server Hilfe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="../docs.css" />
+</head>
+<body>
+    <a href="../index.html">Startseite der Hilfe</a>
+    <h1>Changelog</h1>
+    <h2>Versionsgeschichte:</h2>
+    <ul>
+        <li><a href="#10">[2018-08-12.1]</a></li>
+        <li><a href="#9">[2018-08-11.1]</a></li>
+        <li><a href="#8">[2018-08-10.1]</a></li>
+        <li><a href="#7">[2018-07-10.1]</a></li>
+        <li><a href="#6">[2018-07-09.1]</a></li>
+        <li><a href="#5">[2018-06-30.1]</a></li>
+        <li><a href="#4">[2018-06-28.3]</a></li>
+        <li><a href="#3">[2018-06-28.2]</a></li>
+        <li><a href="#2">[2018-06-28.1]</a></li>
+        <li><a href="#1">[2018-06-27.1]</a></li>
+    </ul>
+
+    <h2 id="10">[2018-08-12.1]</h2>
+    <h3>Behoben:</h3>
+    <p>- Lokinfo überträgt nun auch Richtung, Geschwindigkeit und aktive Funktionen einer Lokbilder</p>
+    <h3>Geändert:</h3>
+    <p>- Die interne Verwaltung der Lokliste wurde Geändert</p>
+    <br>
+
+    <h2 id="9">[2018-08-11.1]</h2>
+    <h3>Geändert:</h3>
+    <p>- Die interne Verwaltung der Geräteliste wurde Geändert<br>
+        - Die Versionsnummer wird nun in einer eigenen Datei gespeichert<br>
+        - Changelog vereinheitlicht</p>
+    <h3>Hinzugefügt:</h3>
+    <p>- Es wird erkannt, ob CAN-Geräte, die in der Geräteliste vorhanden sind, tatsächlich vorhanden sind<br>
+        - CAN-Geräte können aus der Geräteliste gelöscht werden<br>
+        - Der Changelog ist nun auch über die Interne Hilfe einsehbar</p>
+    <br>
+
+    <h2 id="8">[2018-08-10.1]</h2>
+    <h3>Behoben:</h3>
+    <p>- Ein Fehler bei der Darstellung von Messwerten wurde behoben</p>
+    <h3>Hinzugefügt:</h3>
+    <p>- Platzhalter für das Keyboard (noch funktionslos)</p>
+    <br>
+
+    <h2 id="7">[2018-07-10.1]</h2>
+    <h3>Behoben:</h3>
+    <p>- Werden mehrere Bilder gleichzeitig herunter geladen werden auch alle korrekt angezeigt.<br>
+        - Auch beim Hochladen werden die Lokbilder nun ohne Neuladen angezeigt.</p>
+    <br>
+
+    <h2 id="6">[2018-07-09.1]</h2>
+    <h3>Hinzugefügt:</h3>
+    <p>- Loks können nun Lokbilder zugewiesen werden.<br>
+        - Unter "Einstellungen > Lokbilder" können nun Lokbilder hoch/heruntergeladen sowie gelöscht werden.<br>
+        - Einige Standardwerte (Adresse, Av, Bv, Vmax, Vmin) können nun programmiert werden, sofern der Decoder es unterstützt (bisher nur mfx/M4).</p>
+    <h3>Behoben:</h3>
+    <p>- Anzeigefehler bei der Anmeldung von mfx/M4-Loks.</p>
+    <br>
+
+    <h2 id="5">[2018-06-30.1]</h2>
+    <h3>Behoben:</h3>
+    <p>- mfx/M4-Anmeldung erneut überarbeitet.<br>
+        - Rechtschreibfehler behoben / Texte angepasst</p>
+    <h3>Geändert:</h3>
+    <p>- lokomotive.cs2 wird nun in /www/config/ gespeichert</p>
+    <br>
+
+    <h2 id="4">[2018-06-28.3]</h2>
+    <h3>Behoben:</h3>
+    <p>- mfx/M4-Anmeldung überarbeitet.</p>
+    <br>
+
+    <h2 id="3">[2018-06-28.2]</h2>
+    <h3>Hinzugefügt:</h3>
+    <p>- Die Lokliste wird nun zusätzlich als "lokomotive.cs2" gespeichert, um sie Anwendungen, die diese benötigen, zur verfügung zu stellen<br>
+        - Einträge in der Hilfe</p>
+    <br>
+
+    <h2 id="2">[2018-06-28.1]</h2>
+    <h3>Hinzugefügt:</h3>
+    <p>- Grunlagen für eine integrierte Hilfe<br>
+        - Einstellungen für CAN-Geräte werden für die Dauer einer Sitzung in der Geräteliste gespeichert<br>
+        - Möglichkeit, den MFX-Neuanmeldezähler zu erhöhen, um verlorene Loks wieder zu finden</p>
+    <h3>Behoben:</h3>
+    <p>- In schmalen Fenstern kann jetzt horizontal mit dem Mausrad durch die Tabs gescrollt werden</p>
+    <br>
+
+    <h2 id="1">[2018-06-27.1]</h2>
+    <h3>Behoben:</h3>
+    <p>- Anpassungen für den Onion Omega2+</p>
+</body>
+</html>
