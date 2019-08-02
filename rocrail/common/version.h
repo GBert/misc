@@ -1,11 +1,12 @@
 const int revisionnr = 
-15823
+15824
 ;
 const char* commithash = 
-"9924064f23c45d86a8cd81c93496ef7752dfbb22";
+"1f6bacb3ff53bfea33745120768e08012996f8e0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15824 2019-08-01 15:33:19 +0200 webview for macOS only until linux and windows do have fitting libraries\n" \
 "15823 2019-08-01 11:36:07 +0200 infodialog,renderer: webview also for linux\n" \
 "15822 2019-08-01 11:29:29 +0200 control: removed dependency webview\n" \
 "15821 2019-08-01 10:52:15 +0200 throttledlg: test wxWebView under Linux\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13827 2018-04-08 11:02:00 +0200 powermandlg: show the HEX UID as static text\n" \
 "13826 2018-04-08 10:39:36 +0200 powermandlg: booster index extended with IID and description\n" \
 "13825 2018-04-08 08:32:47 +0200 weather: run weater in case of one or more outputs or with color table for updating temp and bri\n" \
-"13824 2018-04-08 08:27:59 +0200 weather: do weather also in case of no lamps for temperature and brightness\n" \
 
 "log end";
