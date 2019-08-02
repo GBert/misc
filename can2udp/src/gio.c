@@ -312,6 +312,11 @@ int config_write(struct cs2_config_data_t *config_data) {
     int i;
     char *filename;
 
+    if (config_data->name == NULL) {
+	fprintf(stderr, "\nunexpected config data stream received\n");
+	return 0;
+    }
+
     filename = calloc(MAXLINE, 1);
     if (filename == NULL) {
 	fprint_syslog_wc(stderr, LOG_ERR, "can't calloc:", strerror(errno));
