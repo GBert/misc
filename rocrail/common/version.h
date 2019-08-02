@@ -1,11 +1,12 @@
 const int revisionnr = 
-15828
+15829
 ;
 const char* commithash = 
-"fa62f8af7a48239a06fc1546c4bd35c4435c3917";
+"dbe21cf34905487183d1d2921229cfd8455158f0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15829 2019-08-02 16:51:16 +0200 mjpg: fixes for text object\n" \
 "15828 2019-08-02 14:33:10 +0200 mjpg: scale to fit\n" \
 "15827 2019-08-02 14:23:46 +0200 installwx.sh: removed the webview part\n" \
 "15826 2019-08-02 14:05:00 +0200 renderer: text mjpg:<host>:<port> support\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13832 2018-04-09 12:00:37 +0200 cellrenderer: check if image is OK\n" \
 "13831 2018-04-09 10:11:09 +0200 rocweb: use default zlevel 0 if no z attribute is found\n" \
 "13830 2018-04-09 08:30:37 +0200 model: load occ.xml only if exist\n" \
-"13829 2018-04-09 08:11:05 +0200 json: memory leak fix\n" \
 
 "log end";
