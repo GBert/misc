@@ -1,11 +1,12 @@
 const int revisionnr = 
-15824
+15825
 ;
 const char* commithash = 
-"1f6bacb3ff53bfea33745120768e08012996f8e0";
+"b44e2ed98a1835d0c83129acf411d526512104d3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15825 2019-08-02 11:24:39 +0200 mjpg: video streaming interpreter\n" \
 "15824 2019-08-01 15:33:19 +0200 webview for macOS only until linux and windows do have fitting libraries\n" \
 "15823 2019-08-01 11:36:07 +0200 infodialog,renderer: webview also for linux\n" \
 "15822 2019-08-01 11:29:29 +0200 control: removed dependency webview\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13828 2018-04-09 08:09:51 +0200 rocweb: revert test changes\n" \
 "13827 2018-04-08 11:02:00 +0200 powermandlg: show the HEX UID as static text\n" \
 "13826 2018-04-08 10:39:36 +0200 powermandlg: booster index extended with IID and description\n" \
-"13825 2018-04-08 08:32:47 +0200 weather: run weater in case of one or more outputs or with color table for updating temp and bri\n" \
 
 "log end";
