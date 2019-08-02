@@ -1,11 +1,13 @@
 const int revisionnr = 
-15825
+15827
 ;
 const char* commithash = 
-"b44e2ed98a1835d0c83129acf411d526512104d3";
+"e31bb8917df9903ed16566e492d77566c9aa3228";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15827 2019-08-02 14:23:46 +0200 installwx.sh: removed the webview part\n" \
+"15826 2019-08-02 14:05:00 +0200 renderer: text mjpg:<host>:<port> support\n" \
 "15825 2019-08-02 11:24:39 +0200 mjpg: video streaming interpreter\n" \
 "15824 2019-08-01 15:33:19 +0200 webview for macOS only until linux and windows do have fitting libraries\n" \
 "15823 2019-08-01 11:36:07 +0200 infodialog,renderer: webview also for linux\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13830 2018-04-09 08:30:37 +0200 model: load occ.xml only if exist\n" \
 "13829 2018-04-09 08:11:05 +0200 json: memory leak fix\n" \
 "13828 2018-04-09 08:09:51 +0200 rocweb: revert test changes\n" \
-"13827 2018-04-08 11:02:00 +0200 powermandlg: show the HEX UID as static text\n" \
-"13826 2018-04-08 10:39:36 +0200 powermandlg: booster index extended with IID and description\n" \
 
 "log end";
