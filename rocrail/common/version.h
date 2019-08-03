@@ -1,11 +1,16 @@
 const int revisionnr = 
-15829
+15834
 ;
 const char* commithash = 
-"dbe21cf34905487183d1d2921229cfd8455158f0";
+"71e350fbed9304acc87d60e32355fe11735e712f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15834 2019-08-03 11:10:29 +0200 control: fix for dependencies\n" \
+"15833 2019-08-03 10:17:41 +0200 mjpg,renderer: size fix for text\n" \
+"15832 2019-08-03 08:20:46 +0200 mjpg: layout parent sizer after first bitmap update\n" \
+"15831 2019-08-03 07:06:58 +0200 rascii: 16 bit for CV get/set\n" \
+"15830 2019-08-02 22:00:18 +0200 throttledlg: locoimage mouse event handler added for selecting a loco\n" \
 "15829 2019-08-02 16:51:16 +0200 mjpg: fixes for text object\n" \
 "15828 2019-08-02 14:33:10 +0200 mjpg: scale to fit\n" \
 "15827 2019-08-02 14:23:46 +0200 installwx.sh: removed the webview part\n" \
@@ -2001,10 +2006,5 @@ const char* revlog =
 "13837 2018-04-10 07:53:32 +0200 analyse: broadcast block changes\n" \
 "13836 2018-04-10 07:18:17 +0200 json: use alloc instaed of dup\n" \
 "13835 2018-04-09 14:36:04 +0200 locdialog: layout correction\n" \
-"13834 2018-04-09 14:35:41 +0200 lc: init kmhMax\n" \
-"13833 2018-04-09 14:35:08 +0200 translation merge: en_GB,fr,pt_BR,de\n" \
-"13832 2018-04-09 12:00:37 +0200 cellrenderer: check if image is OK\n" \
-"13831 2018-04-09 10:11:09 +0200 rocweb: use default zlevel 0 if no z attribute is found\n" \
-"13830 2018-04-09 08:30:37 +0200 model: load occ.xml only if exist\n" \
 
 "log end";
