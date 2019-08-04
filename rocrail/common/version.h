@@ -1,11 +1,12 @@
 const int revisionnr = 
-15840
+15841
 ;
 const char* commithash = 
-"9ecef7686158d518861318bf21749f0be91c8726";
+"c135abdfd16fb8486795a1dc5eac2ed9570d640c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15841 2019-08-04 16:40:52 +0200 renderer: set static bitmap background to dark blue to show the streaming image in case of no connection\n" \
 "15840 2019-08-03 21:59:08 +0200 zipper: rocctrl.py added\n" \
 "15839 2019-08-03 21:34:57 +0200 zipper: canservice added\n" \
 "15838 2019-08-03 21:29:03 +0200 modplan: remove the deleted module also from the list to prevent saving it as empty plan\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13844 2018-04-11 11:08:11 +0200 operatordlg: moved the train ID to the index tab\n" \
 "13843 2018-04-11 10:57:47 +0200 operatordlg,railwaydlg: abox support added\n" \
 "13842 2018-04-11 06:28:26 +0200 analyse: broadcast block properties after removing the generated routes\n" \
-"13841 2018-04-10 14:06:51 +0200 SLIM-COLOR: button svg #4 added\n" \
 
 "log end";
