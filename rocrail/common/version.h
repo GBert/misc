@@ -1,11 +1,17 @@
 const int revisionnr = 
-15834
+15840
 ;
 const char* commithash = 
-"71e350fbed9304acc87d60e32355fe11735e712f";
+"9ecef7686158d518861318bf21749f0be91c8726";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15840 2019-08-03 21:59:08 +0200 zipper: rocctrl.py added\n" \
+"15839 2019-08-03 21:34:57 +0200 zipper: canservice added\n" \
+"15838 2019-08-03 21:29:03 +0200 modplan: remove the deleted module also from the list to prevent saving it as empty plan\n" \
+"15837 2019-08-03 20:41:47 +0200 installwx: use the libwxgtk3.0-dev package\n" \
+"15836 2019-08-03 20:38:20 +0200 zipper; stylesheets added\n" \
+"15835 2019-08-03 17:54:50 +0200 throttle: set static bitmap background color to gray\n" \
 "15834 2019-08-03 11:10:29 +0200 control: fix for dependencies\n" \
 "15833 2019-08-03 10:17:41 +0200 mjpg,renderer: size fix for text\n" \
 "15832 2019-08-03 08:20:46 +0200 mjpg: layout parent sizer after first bitmap update\n" \
@@ -2000,11 +2006,5 @@ const char* revlog =
 "13843 2018-04-11 10:57:47 +0200 operatordlg,railwaydlg: abox support added\n" \
 "13842 2018-04-11 06:28:26 +0200 analyse: broadcast block properties after removing the generated routes\n" \
 "13841 2018-04-10 14:06:51 +0200 SLIM-COLOR: button svg #4 added\n" \
-"13840 2018-04-10 13:58:19 +0200 SLIM: button svg #4 added\n" \
-"13839 2018-04-10 11:57:42 +0200 operator: redirect unhandled commands to the linked loco\n" \
-"13838 2018-04-10 08:30:20 +0200 lc: replaced nested calls to the meter\n" \
-"13837 2018-04-10 07:53:32 +0200 analyse: broadcast block changes\n" \
-"13836 2018-04-10 07:18:17 +0200 json: use alloc instaed of dup\n" \
-"13835 2018-04-09 14:36:04 +0200 locdialog: layout correction\n" \
 
 "log end";
