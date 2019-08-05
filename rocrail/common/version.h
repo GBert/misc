@@ -1,11 +1,17 @@
 const int revisionnr = 
-15841
+15847
 ;
 const char* commithash = 
-"c135abdfd16fb8486795a1dc5eac2ed9570d640c";
+"685bf56e4f1924285d82c7bfce9573be115cd26c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15847 2019-08-05 15:19:32 +0200 finder: find guest for block (wip)\n" \
+"15846 2019-08-05 12:37:55 +0200 throttledlg: scaling static bitmap\n" \
+"15845 2019-08-05 08:30:39 +0200 throttledlg: resize loco image; capture size events\n" \
+"15844 2019-08-04 21:34:42 +0200 throttledlg: scale image also incase the width is greater\n" \
+"15843 2019-08-04 21:28:58 +0200 throttledlg: scale image also incase the width is greater then the throttle\n" \
+"15842 2019-08-04 20:54:12 +0200 EStW: update and bew symbols\n" \
 "15841 2019-08-04 16:40:52 +0200 renderer: set static bitmap background to dark blue to show the streaming image in case of no connection\n" \
 "15840 2019-08-03 21:59:08 +0200 zipper: rocctrl.py added\n" \
 "15839 2019-08-03 21:34:57 +0200 zipper: canservice added\n" \
@@ -2000,11 +2006,5 @@ const char* revlog =
 "13850 2018-04-12 10:32:32 +0200 ulni: trace level changed to BYTE for undocumented OPCs\n" \
 "13849 2018-04-12 10:28:57 +0200 trackpickerdlg,planpanel: raster switch type support\n" \
 "13848 2018-04-12 08:31:17 +0200 SLIM: raster switches\n" \
-"13847 2018-04-11 15:46:32 +0200 SLIM: raster switches (WIP)\n" \
-"13846 2018-04-11 12:01:46 +0200 rocprodlg: removed decoderdb link\n" \
-"13845 2018-04-11 11:56:51 +0200 wrapper: default string section value set to empty instead of zero\n" \
-"13844 2018-04-11 11:08:11 +0200 operatordlg: moved the train ID to the index tab\n" \
-"13843 2018-04-11 10:57:47 +0200 operatordlg,railwaydlg: abox support added\n" \
-"13842 2018-04-11 06:28:26 +0200 analyse: broadcast block properties after removing the generated routes\n" \
 
 "log end";
