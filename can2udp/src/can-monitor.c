@@ -139,7 +139,7 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 2.85\n\n");
+    fprintf(stderr, "   Version 2.86\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
@@ -869,7 +869,10 @@ void decode_frame(struct can_frame *frame) {
 	printf("Ping Antwort von ");
 	switch (kennung) {
 	case 0x0000:
-	    printf("Booster (6017x)");
+	    if ((uid & 0xff000000) != 0x42000000)
+		printf("GFP");
+	    else
+		printf("Booster (6017x)");
 	    break;
 	case 0x0010:
 	    printf("Gleisbox");
