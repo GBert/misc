@@ -1,11 +1,14 @@
 const int revisionnr = 
-15853
+15856
 ;
 const char* commithash = 
-"99cb90874ff2cd4ea8395a6cc969a94b1aeefdd5";
+"f811a512a81243e8d2fd645b02fdc004d4412bde";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15856 2019-08-06 15:43:50 +0200 route: check for runable the tt and seltab too\n" \
+"15855 2019-08-06 14:42:12 +0200 renderer: destructor to clean up the MJPG class\n" \
+"15854 2019-08-06 14:41:31 +0200 throttledlg: use size event to rescale\n" \
 "15853 2019-08-06 12:29:46 +0200 throttledlg\n" \
 "15852 2019-08-06 12:19:54 +0200 throttledlg\n" \
 "15851 2019-08-06 09:26:51 +0200 throttledlg: revert to bitmap button\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13859 2018-04-14 14:53:48 +0200 location: removed railway/position from properties; should be maintained in the railwayline properties\n" \
 "13858 2018-04-13 16:36:04 +0200 analyse: inform blocks of changed properties to re-initialise listeners\n" \
 "13857 2018-04-13 16:30:23 +0200 operator: fix for race condition?\n" \
-"13856 2018-04-13 15:38:24 +0200 operator: revert redirecting commands to the assigned loco\n" \
-"13855 2018-04-13 08:45:33 +0200 seltab: BBT option added\n" \
-"13854 2018-04-13 08:08:50 +0200 analyse: set analysed flag on broadcast to signal to replace all child nodes even if there are none in the modified properties\n" \
 
 "log end";
