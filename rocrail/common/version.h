@@ -1,11 +1,14 @@
 const int revisionnr = 
-15847
+15850
 ;
 const char* commithash = 
-"685bf56e4f1924285d82c7bfce9573be115cd26c";
+"39ecaede93e960f455997ccbdf203749fa590815";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15850 2019-08-05 21:43:07 +0200 finder: find guest for closed blocks (wip)\n" \
+"15849 2019-08-05 18:32:30 +0200 finder: find guest for block (wip)\n" \
+"15848 2019-08-05 18:06:07 +0200 finder: find guest for block (wip)\n" \
 "15847 2019-08-05 15:19:32 +0200 finder: find guest for block (wip)\n" \
 "15846 2019-08-05 12:37:55 +0200 throttledlg: scaling static bitmap\n" \
 "15845 2019-08-05 08:30:39 +0200 throttledlg: resize loco image; capture size events\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13853 2018-04-13 06:36:13 +0200 model: trace corrections after analyse\n" \
 "13852 2018-04-12 14:44:28 +0200 rocnet: show in clock sync trace the brightness\n" \
 "13851 2018-04-12 10:34:22 +0200 ulni: tracelevel changed to BYTE for undocumented OPCs\n" \
-"13850 2018-04-12 10:32:32 +0200 ulni: trace level changed to BYTE for undocumented OPCs\n" \
-"13849 2018-04-12 10:28:57 +0200 trackpickerdlg,planpanel: raster switch type support\n" \
-"13848 2018-04-12 08:31:17 +0200 SLIM: raster switches\n" \
 
 "log end";
