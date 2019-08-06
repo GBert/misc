@@ -1,11 +1,13 @@
 const int revisionnr = 
-15851
+15853
 ;
 const char* commithash = 
-"c20ee7c1ef7cf41a0759a41709bbde3ba51f0617";
+"99cb90874ff2cd4ea8395a6cc969a94b1aeefdd5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15853 2019-08-06 12:29:46 +0200 throttledlg\n" \
+"15852 2019-08-06 12:19:54 +0200 throttledlg\n" \
 "15851 2019-08-06 09:26:51 +0200 throttledlg: revert to bitmap button\n" \
 "15850 2019-08-05 21:43:07 +0200 finder: find guest for closed blocks (wip)\n" \
 "15849 2019-08-05 18:32:30 +0200 finder: find guest for block (wip)\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13856 2018-04-13 15:38:24 +0200 operator: revert redirecting commands to the assigned loco\n" \
 "13855 2018-04-13 08:45:33 +0200 seltab: BBT option added\n" \
 "13854 2018-04-13 08:08:50 +0200 analyse: set analysed flag on broadcast to signal to replace all child nodes even if there are none in the modified properties\n" \
-"13853 2018-04-13 06:36:13 +0200 model: trace corrections after analyse\n" \
-"13852 2018-04-12 14:44:28 +0200 rocnet: show in clock sync trace the brightness\n" \
 
 "log end";
