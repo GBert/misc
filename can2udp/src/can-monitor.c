@@ -869,7 +869,7 @@ void decode_frame(struct can_frame *frame) {
 	printf("Ping Antwort von ");
 	switch (kennung) {
 	case 0x0000:
-	    if ((uid & 0xff000000) != 0x42000000)
+	    if ((uid & 0xff000000) == 0x42000000)
 		printf("GFP");
 	    else
 		printf("Booster (6017x)");
