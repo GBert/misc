@@ -1,11 +1,12 @@
 const int revisionnr = 
-15856
+15857
 ;
 const char* commithash = 
-"f811a512a81243e8d2fd645b02fdc004d4412bde";
+"31f4bc293cea48db076893cb02da427ac289be13";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15857 2019-08-06 21:24:52 +0200 block: save closed state\n" \
 "15856 2019-08-06 15:43:50 +0200 route: check for runable the tt and seltab too\n" \
 "15855 2019-08-06 14:42:12 +0200 renderer: destructor to clean up the MJPG class\n" \
 "15854 2019-08-06 14:41:31 +0200 throttledlg: use size event to rescale\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13860 2018-04-14 15:41:57 +0200 locationsdlg: fix for moving down blocks\n" \
 "13859 2018-04-14 14:53:48 +0200 location: removed railway/position from properties; should be maintained in the railwayline properties\n" \
 "13858 2018-04-13 16:36:04 +0200 analyse: inform blocks of changed properties to re-initialise listeners\n" \
-"13857 2018-04-13 16:30:23 +0200 operator: fix for race condition?\n" \
 
 "log end";
