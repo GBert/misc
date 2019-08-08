@@ -1,11 +1,12 @@
 const int revisionnr = 
-15859
+15860
 ;
 const char* commithash = 
-"782c96ae78c8beddb980905e94bd06394245d926";
+"6a67efc63718ec20e1238268eedaa95b6243e4bb";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15860 2019-08-08 10:00:14 +0200 ahome: http support\n" \
 "15859 2019-08-08 08:29:27 +0200 ahome: support for simple http outputs\n" \
 "15858 2019-08-08 08:04:29 +0200 ahome: support for simple http outputs added\n" \
 "15857 2019-08-06 21:24:52 +0200 block: save closed state\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13863 2018-04-15 10:28:52 +0200 locationdlg: show line position\n" \
 "13862 2018-04-15 10:20:32 +0200 location: railway line position\n" \
 "13861 2018-04-15 08:49:05 +0200 analyse: reset/init listeners improved\n" \
-"13860 2018-04-14 15:41:57 +0200 locationsdlg: fix for moving down blocks\n" \
 
 "log end";
