@@ -1,11 +1,14 @@
 const int revisionnr = 
-15861
+15864
 ;
 const char* commithash = 
-"cefd707812fdfb025e17bb03b58264952fc3667e";
+"2c08f875a50d8f1e44e4163f8a634a1b4f99dd4e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15864 2019-08-09 17:29:58 +0200 mjpg: use mutex to access and update the jpg image to show\n" \
+"15863 2019-08-09 16:29:43 +0200 zipper: revision info file added\n" \
+"15862 2019-08-09 16:04:14 +0200 hclient: emulation function for mjpeg\n" \
 "15861 2019-08-09 15:47:20 +0200 mjpg,throttledlg: crash fix\n" \
 "15860 2019-08-08 10:00:14 +0200 ahome: http support\n" \
 "15859 2019-08-08 08:29:27 +0200 ahome: support for simple http outputs\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13867 2018-04-16 08:54:45 +0200 rocnetnode: simple aspect LED signal support\n" \
 "13866 2018-04-16 08:24:54 +0200 rocnetnode: LED output blink support\n" \
 "13865 2018-04-15 16:22:46 +0200 rocnetnode: macro extended for LED outputs, signal extended for simple LED aspect signals\n" \
-"13864 2018-04-15 14:04:24 +0200 rocnetnode: support for LED with temp. base 0x06\n" \
-"13863 2018-04-15 10:28:52 +0200 locationdlg: show line position\n" \
-"13862 2018-04-15 10:20:32 +0200 location: railway line position\n" \
 
 "log end";
