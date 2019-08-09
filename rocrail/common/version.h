@@ -1,11 +1,12 @@
 const int revisionnr = 
-15860
+15861
 ;
 const char* commithash = 
-"6a67efc63718ec20e1238268eedaa95b6243e4bb";
+"cefd707812fdfb025e17bb03b58264952fc3667e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15861 2019-08-09 15:47:20 +0200 mjpg,throttledlg: crash fix\n" \
 "15860 2019-08-08 10:00:14 +0200 ahome: http support\n" \
 "15859 2019-08-08 08:29:27 +0200 ahome: support for simple http outputs\n" \
 "15858 2019-08-08 08:04:29 +0200 ahome: support for simple http outputs added\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13864 2018-04-15 14:04:24 +0200 rocnetnode: support for LED with temp. base 0x06\n" \
 "13863 2018-04-15 10:28:52 +0200 locationdlg: show line position\n" \
 "13862 2018-04-15 10:20:32 +0200 location: railway line position\n" \
-"13861 2018-04-15 08:49:05 +0200 analyse: reset/init listeners improved\n" \
 
 "log end";
