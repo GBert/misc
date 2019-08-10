@@ -1,11 +1,13 @@
 const int revisionnr = 
-15864
+15866
 ;
 const char* commithash = 
-"2c08f875a50d8f1e44e4163f8a634a1b4f99dd4e";
+"7f3bc3c5e27060db2d9f6db80fc21ec6d0ededc3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15866 2019-08-10 09:54:36 +0200 mjpg,item,renderer: crash fixes\n" \
+"15865 2019-08-10 07:57:20 +0200 hclient: emulation mjpg service\n" \
 "15864 2019-08-09 17:29:58 +0200 mjpg: use mutex to access and update the jpg image to show\n" \
 "15863 2019-08-09 16:29:43 +0200 zipper: revision info file added\n" \
 "15862 2019-08-09 16:04:14 +0200 hclient: emulation function for mjpeg\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13869 2018-04-16 11:42:17 +0200 timetabledlg: only show loco ID in case the train ID is not set\n" \
 "13868 2018-04-16 09:08:10 +0200 rocnetnode: dimming fix for LEDs\n" \
 "13867 2018-04-16 08:54:45 +0200 rocnetnode: simple aspect LED signal support\n" \
-"13866 2018-04-16 08:24:54 +0200 rocnetnode: LED output blink support\n" \
-"13865 2018-04-15 16:22:46 +0200 rocnetnode: macro extended for LED outputs, signal extended for simple LED aspect signals\n" \
 
 "log end";
