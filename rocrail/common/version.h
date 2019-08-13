@@ -1,11 +1,12 @@
 const int revisionnr = 
-15868
+15869
 ;
 const char* commithash = 
-"b2029c1d34ef55a9a33b60b06ab25fccea206b35";
+"6fdd15856753448a1c9cbc23beb5b372864843db";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15869 2019-08-13 11:17:21 +0200 item,renderer: moved the MJPG from renderer to item\n" \
 "15868 2019-08-13 09:53:59 +0200 loc: swap block enter side on direction change in case of manual or halb automatic mode\n" \
 "15867 2019-08-13 08:15:23 +0200 rascii: output color support added\n" \
 "15866 2019-08-10 09:54:36 +0200 mjpg,item,renderer: crash fixes\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13872 2018-04-17 08:17:29 +0200 rocnetnode: disable blink on first signal LED\n" \
 "13871 2018-04-17 08:01:58 +0200 rocnetnode: simple aspect signals extended\n" \
 "13870 2018-04-17 07:47:28 +0200 model: extended the lcprops command to itterate all\n" \
-"13869 2018-04-16 11:42:17 +0200 timetabledlg: only show loco ID in case the train ID is not set\n" \
 
 "log end";
