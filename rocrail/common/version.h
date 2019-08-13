@@ -1,11 +1,13 @@
 const int revisionnr = 
-15866
+15868
 ;
 const char* commithash = 
-"7f3bc3c5e27060db2d9f6db80fc21ec6d0ededc3";
+"b2029c1d34ef55a9a33b60b06ab25fccea206b35";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15868 2019-08-13 09:53:59 +0200 loc: swap block enter side on direction change in case of manual or halb automatic mode\n" \
+"15867 2019-08-13 08:15:23 +0200 rascii: output color support added\n" \
 "15866 2019-08-10 09:54:36 +0200 mjpg,item,renderer: crash fixes\n" \
 "15865 2019-08-10 07:57:20 +0200 hclient: emulation mjpg service\n" \
 "15864 2019-08-09 17:29:58 +0200 mjpg: use mutex to access and update the jpg image to show\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13871 2018-04-17 08:01:58 +0200 rocnetnode: simple aspect signals extended\n" \
 "13870 2018-04-17 07:47:28 +0200 model: extended the lcprops command to itterate all\n" \
 "13869 2018-04-16 11:42:17 +0200 timetabledlg: only show loco ID in case the train ID is not set\n" \
-"13868 2018-04-16 09:08:10 +0200 rocnetnode: dimming fix for LEDs\n" \
-"13867 2018-04-16 08:54:45 +0200 rocnetnode: simple aspect LED signal support\n" \
 
 "log end";
