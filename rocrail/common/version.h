@@ -1,11 +1,15 @@
 const int revisionnr = 
-15869
+15873
 ;
 const char* commithash = 
-"6fdd15856753448a1c9cbc23beb5b372864843db";
+"c1b5bfb741c929a72c02ae0268be2cc23db4dc95";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15873 2019-08-14 14:55:32 +0200 loc: flip direction flag after manual swap\n" \
+"15872 2019-08-14 14:28:46 +0200 loc: revert swap placing\n" \
+"15871 2019-08-14 11:52:28 +0200 loc: swap placing instead of enterside on direction change by throttle in manual or halfauto mode\n" \
+"15870 2019-08-14 09:45:25 +0200 text: use ledbutton class for showing video streaming\n" \
 "15869 2019-08-13 11:17:21 +0200 item,renderer: moved the MJPG from renderer to item\n" \
 "15868 2019-08-13 09:53:59 +0200 loc: swap block enter side on direction change in case of manual or halb automatic mode\n" \
 "15867 2019-08-13 08:15:23 +0200 rascii: output color support added\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13876 2018-04-18 08:20:26 +0200 rocnetnode: brightness mode for weather, day, night\n" \
 "13875 2018-04-18 08:03:19 +0200 timetabledlg: cellspacing option added\n" \
 "13874 2018-04-17 14:47:21 +0200 rocnetnode: use weather brightness for signal LEDs\n" \
-"13873 2018-04-17 11:14:39 +0200 rocnetnode: signal aspect value support added\n" \
-"13872 2018-04-17 08:17:29 +0200 rocnetnode: disable blink on first signal LED\n" \
-"13871 2018-04-17 08:01:58 +0200 rocnetnode: simple aspect signals extended\n" \
-"13870 2018-04-17 07:47:28 +0200 model: extended the lcprops command to itterate all\n" \
 
 "log end";
