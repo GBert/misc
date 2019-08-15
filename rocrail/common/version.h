@@ -1,11 +1,15 @@
 const int revisionnr = 
-15873
+15877
 ;
 const char* commithash = 
-"c1b5bfb741c929a72c02ae0268be2cc23db4dc95";
+"7e53ec8cb0201d828ff2b45b518450b0689667be";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15877 2019-08-15 14:11:47 +0200 ledbutton: memory leak fix\n" \
+"15876 2019-08-15 12:11:39 +0200 translation change for swapondir\n" \
+"15875 2019-08-15 11:18:06 +0200 mjpg,item: init text object on the fly\n" \
+"15874 2019-08-15 10:27:08 +0200 loc: swapondir option added\n" \
 "15873 2019-08-14 14:55:32 +0200 loc: flip direction flag after manual swap\n" \
 "15872 2019-08-14 14:28:46 +0200 loc: revert swap placing\n" \
 "15871 2019-08-14 11:52:28 +0200 loc: swap placing instead of enterside on direction change by throttle in manual or halfauto mode\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13880 2018-04-18 15:59:17 +0200 bidib: Tams images\n" \
 "13879 2018-04-18 14:51:59 +0200 rocnetnode: scan and init Pi08 boards after read options\n" \
 "13878 2018-04-18 10:48:43 +0200 signal: calculate the number of LEDs by evaluating the aspect values (for LED signals and aspect number control only)\n" \
-"13877 2018-04-18 10:28:17 +0200 rocnetnode: fix for brightness mode\n" \
-"13876 2018-04-18 08:20:26 +0200 rocnetnode: brightness mode for weather, day, night\n" \
-"13875 2018-04-18 08:03:19 +0200 timetabledlg: cellspacing option added\n" \
-"13874 2018-04-17 14:47:21 +0200 rocnetnode: use weather brightness for signal LEDs\n" \
 
 "log end";
