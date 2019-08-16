@@ -1,11 +1,14 @@
 const int revisionnr = 
-15877
+15880
 ;
 const char* commithash = 
-"7e53ec8cb0201d828ff2b45b518450b0689667be";
+"04a640efe62be92a97ef3e3b24b7a47c2c9d1148";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15880 2019-08-16 10:33:15 +0200 wrapper: car cam\n" \
+"15879 2019-08-16 09:44:45 +0200 stylesheets: update (Gerd)\n" \
+"15878 2019-08-16 09:43:37 +0200 cardlg: camera added\n" \
 "15877 2019-08-15 14:11:47 +0200 ledbutton: memory leak fix\n" \
 "15876 2019-08-15 12:11:39 +0200 translation change for swapondir\n" \
 "15875 2019-08-15 11:18:06 +0200 mjpg,item: init text object on the fly\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13883 2018-04-20 07:37:29 +0200 timetabledlg: memory leak fix\n" \
 "13882 2018-04-19 08:33:22 +0200 bidib: Tams update\n" \
 "13881 2018-04-18 16:04:52 +0200 bidib images\n" \
-"13880 2018-04-18 15:59:17 +0200 bidib: Tams images\n" \
-"13879 2018-04-18 14:51:59 +0200 rocnetnode: scan and init Pi08 boards after read options\n" \
-"13878 2018-04-18 10:48:43 +0200 signal: calculate the number of LEDs by evaluating the aspect values (for LED signals and aspect number control only)\n" \
 
 "log end";
