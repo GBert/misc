@@ -1,11 +1,20 @@
 const int revisionnr = 
-15880
+15889
 ;
 const char* commithash = 
-"04a640efe62be92a97ef3e3b24b7a47c2c9d1148";
+"5f73463c288868f76e893ebe37f94639ba66230d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15889 2019-08-18 15:20:23 +0200 loc: swap placing on direction change in half auto ode manual run\n" \
+"15888 2019-08-18 10:33:47 +0200 renderer: regard loco direction in case of flipping image\n" \
+"15887 2019-08-18 09:37:10 +0200 loc: evaluate field direction with current loco direction for optional swap block enter side\n" \
+"15886 2019-08-18 07:26:46 +0200 schedule: ignore automatic swap in case the loco runs in half automatic\n" \
+"15885 2019-08-18 07:16:50 +0200 schedule: ignore automatic swap in case the loco runs in half automatic mode\n" \
+"15884 2019-08-17 15:49:53 +0200 decoder: play sound async\n" \
+"15883 2019-08-17 15:19:36 +0200 decoder: play sound\n" \
+"15882 2019-08-17 11:29:50 +0200 loc: added state event\n" \
+"15881 2019-08-17 09:09:35 +0200 decoder.py: sample interpreter\n" \
 "15880 2019-08-16 10:33:15 +0200 wrapper: car cam\n" \
 "15879 2019-08-16 09:44:45 +0200 stylesheets: update (Gerd)\n" \
 "15878 2019-08-16 09:43:37 +0200 cardlg: camera added\n" \
@@ -1997,14 +2006,5 @@ const char* revlog =
 "13892 2018-04-22 11:45:58 +0200 rocnetnode: fix for calculating the on delay\n" \
 "13891 2018-04-22 10:26:59 +0200 signal: dim parameter added for dimming LED type signals\n" \
 "13890 2018-04-22 07:57:07 +0200 model: common lookupschedule command added\n" \
-"13889 2018-04-21 10:46:17 +0200 rocnetnode: auto brightnes fix for keep two blinking LED in sync\n" \
-"13888 2018-04-21 08:20:18 +0200 rocnetnode: fix for update LED brightness\n" \
-"13887 2018-04-21 08:17:23 +0200 rocnetnode: improved signal processing\n" \
-"13886 2018-04-20 15:37:37 +0200 rocnetnode: signal processor thread added to be able to wait between LEDs be turned off and LEDs be turned on.\n" \
-"13885 2018-04-20 08:08:21 +0200 scheduledialog: timeprocessing index column added\n" \
-"13884 2018-04-20 07:51:17 +0200 model: swprops command added\n" \
-"13883 2018-04-20 07:37:29 +0200 timetabledlg: memory leak fix\n" \
-"13882 2018-04-19 08:33:22 +0200 bidib: Tams update\n" \
-"13881 2018-04-18 16:04:52 +0200 bidib images\n" \
 
 "log end";
