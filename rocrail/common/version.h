@@ -1,11 +1,13 @@
 const int revisionnr = 
-15889
+15891
 ;
 const char* commithash = 
-"5f73463c288868f76e893ebe37f94639ba66230d";
+"8ae6774c217b71c0f3a6df9e14073062bd330883";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15891 2019-08-19 13:11:35 +0200 loc: regard gomanual on swap\n" \
+"15890 2019-08-19 11:33:42 +0200 rascii: set cts if wanted\n" \
 "15889 2019-08-18 15:20:23 +0200 loc: swap placing on direction change in half auto ode manual run\n" \
 "15888 2019-08-18 10:33:47 +0200 renderer: regard loco direction in case of flipping image\n" \
 "15887 2019-08-18 09:37:10 +0200 loc: evaluate field direction with current loco direction for optional swap block enter side\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13894 2018-04-24 07:56:59 +0200 locdialog: show active flag on the index tab\n" \
 "13893 2018-04-23 12:02:22 +0200 model: added missing return in case lookup schedule is disabled\n" \
 "13892 2018-04-22 11:45:58 +0200 rocnetnode: fix for calculating the on delay\n" \
-"13891 2018-04-22 10:26:59 +0200 signal: dim parameter added for dimming LED type signals\n" \
-"13890 2018-04-22 07:57:07 +0200 model: common lookupschedule command added\n" \
 
 "log end";
