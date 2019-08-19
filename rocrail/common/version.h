@@ -1,11 +1,13 @@
 const int revisionnr = 
-15891
+15893
 ;
 const char* commithash = 
-"8ae6774c217b71c0f3a6df9e14073062bd330883";
+"e42799a7bf3553d265e8f867e2b83724dfda73c2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15893 2019-08-19 16:12:20 +0200 rascii: signal type led support added\n" \
+"15892 2019-08-19 15:42:11 +0200 signal brightness added for LED signals\n" \
 "15891 2019-08-19 13:11:35 +0200 loc: regard gomanual on swap\n" \
 "15890 2019-08-19 11:33:42 +0200 rascii: set cts if wanted\n" \
 "15889 2019-08-18 15:20:23 +0200 loc: swap placing on direction change in half auto ode manual run\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13896 2018-04-26 07:52:37 +0200 operator: removed the combination field\n" \
 "13895 2018-04-25 12:43:26 +0200 basedlg: regard the active suffix at sorting the show column\n" \
 "13894 2018-04-24 07:56:59 +0200 locdialog: show active flag on the index tab\n" \
-"13893 2018-04-23 12:02:22 +0200 model: added missing return in case lookup schedule is disabled\n" \
-"13892 2018-04-22 11:45:58 +0200 rocnetnode: fix for calculating the on delay\n" \
 
 "log end";
