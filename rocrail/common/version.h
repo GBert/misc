@@ -1,11 +1,14 @@
 const int revisionnr = 
-15893
+15896
 ;
 const char* commithash = 
-"e42799a7bf3553d265e8f867e2b83724dfda73c2";
+"fc7292a38b83282c5bf5f9326028428d659bdaa1";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15896 2019-08-20 12:01:06 +0200 loc: feed srand for every loco thread on startup\n" \
+"15895 2019-08-20 11:48:33 +0200 only set srand at startup\n" \
+"15894 2019-08-20 11:42:15 +0200 initialize srand only once at startup\n" \
 "15893 2019-08-19 16:12:20 +0200 rascii: signal type led support added\n" \
 "15892 2019-08-19 15:42:11 +0200 signal brightness added for LED signals\n" \
 "15891 2019-08-19 13:11:35 +0200 loc: regard gomanual on swap\n" \
@@ -2003,8 +2006,5 @@ const char* revlog =
 "13899 2018-04-27 07:32:08 +0200 text: new text variable for date and temp. added\n" \
 "13898 2018-04-26 15:49:36 +0200 loc: informall flag added\n" \
 "13897 2018-04-26 08:14:31 +0200 guiframe: disable edit actions and variables in case of automatic mode\n" \
-"13896 2018-04-26 07:52:37 +0200 operator: removed the combination field\n" \
-"13895 2018-04-25 12:43:26 +0200 basedlg: regard the active suffix at sorting the show column\n" \
-"13894 2018-04-24 07:56:59 +0200 locdialog: show active flag on the index tab\n" \
 
 "log end";
