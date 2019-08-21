@@ -1,11 +1,13 @@
 const int revisionnr = 
-15896
+15898
 ;
 const char* commithash = 
-"fc7292a38b83282c5bf5f9326028428d659bdaa1";
+"d98e30c18c9561efe9fcf125e263c3b4cc47e9e5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15898 2019-08-21 15:52:47 +0200 zipper: removed revision number from the revision.info file name\n" \
+"15897 2019-08-21 15:30:57 +0200 desktoplink: added demo path command line parameter\n" \
 "15896 2019-08-20 12:01:06 +0200 loc: feed srand for every loco thread on startup\n" \
 "15895 2019-08-20 11:48:33 +0200 only set srand at startup\n" \
 "15894 2019-08-20 11:42:15 +0200 initialize srand only once at startup\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13901 2018-04-28 08:21:57 +0200 loc: pause flag added\n" \
 "13900 2018-04-27 11:19:04 +0200 rocnetnode: crash fix if no rocnetnode.ini is available\n" \
 "13899 2018-04-27 07:32:08 +0200 text: new text variable for date and temp. added\n" \
-"13898 2018-04-26 15:49:36 +0200 loc: informall flag added\n" \
-"13897 2018-04-26 08:14:31 +0200 guiframe: disable edit actions and variables in case of automatic mode\n" \
 
 "log end";
