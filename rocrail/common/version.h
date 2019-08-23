@@ -1,11 +1,15 @@
 const int revisionnr = 
-15898
+15902
 ;
 const char* commithash = 
-"d98e30c18c9561efe9fcf125e263c3b4cc47e9e5";
+"594c04b2dfb5a7113474c2788f6c0e02316554d1";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15902 2019-08-23 12:17:12 +0200 sbus: wip\n" \
+"15901 2019-08-22 15:17:31 +0200 sbus: write fix\n" \
+"15900 2019-08-22 14:39:12 +0200 rascii: write queue added to prevent blocking\n" \
+"15899 2019-08-22 11:31:30 +0200 rocview makefile: native windows link libraries added for wx master\n" \
 "15898 2019-08-21 15:52:47 +0200 zipper: removed revision number from the revision.info file name\n" \
 "15897 2019-08-21 15:30:57 +0200 desktoplink: added demo path command line parameter\n" \
 "15896 2019-08-20 12:01:06 +0200 loc: feed srand for every loco thread on startup\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13905 2018-04-29 07:33:18 +0200 SLIM-COLOR: raster switches (Peter)\n" \
 "13904 2018-04-29 07:26:00 +0200 loc: fix for pause\n" \
 "13903 2018-04-28 10:47:06 +0200 loc: reset pause flag on init to signal the clients the correct state at startup\n" \
-"13902 2018-04-28 09:51:18 +0200 loc: allow turn of pause in case of no auto mode\n" \
-"13901 2018-04-28 08:21:57 +0200 loc: pause flag added\n" \
-"13900 2018-04-27 11:19:04 +0200 rocnetnode: crash fix if no rocnetnode.ini is available\n" \
-"13899 2018-04-27 07:32:08 +0200 text: new text variable for date and temp. added\n" \
 
 "log end";
