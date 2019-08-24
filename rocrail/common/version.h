@@ -1,11 +1,12 @@
 const int revisionnr = 
-15902
+15903
 ;
 const char* commithash = 
-"594c04b2dfb5a7113474c2788f6c0e02316554d1";
+"e304b59c75bca0a44d11537ba8e6a95f812398dc";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15903 2019-08-23 14:48:23 +0200 sbus: wip\n" \
 "15902 2019-08-23 12:17:12 +0200 sbus: wip\n" \
 "15901 2019-08-22 15:17:31 +0200 sbus: write fix\n" \
 "15900 2019-08-22 14:39:12 +0200 rascii: write queue added to prevent blocking\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13906 2018-04-29 07:46:25 +0200 rocnet: do not automatically take over the found MQTT broker\n" \
 "13905 2018-04-29 07:33:18 +0200 SLIM-COLOR: raster switches (Peter)\n" \
 "13904 2018-04-29 07:26:00 +0200 loc: fix for pause\n" \
-"13903 2018-04-28 10:47:06 +0200 loc: reset pause flag on init to signal the clients the correct state at startup\n" \
 
 "log end";
