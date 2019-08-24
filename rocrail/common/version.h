@@ -1,11 +1,13 @@
 const int revisionnr = 
-15903
+15905
 ;
 const char* commithash = 
-"e304b59c75bca0a44d11537ba8e6a95f812398dc";
+"7cb05fc543fad7dd15eada01ef987b1156da410a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15905 2019-08-24 15:13:57 +0200 planpanel: fix for moving to other level\n" \
+"15904 2019-08-24 14:31:21 +0200 dccpp: fix for tcp port\n" \
 "15903 2019-08-23 14:48:23 +0200 sbus: wip\n" \
 "15902 2019-08-23 12:17:12 +0200 sbus: wip\n" \
 "15901 2019-08-22 15:17:31 +0200 sbus: write fix\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13908 2018-04-29 07:55:46 +0200 rocnetnode: only try to init the LED chips incase one or more has been detected\n" \
 "13907 2018-04-29 07:47:31 +0200 rocnetnode: trace fix\n" \
 "13906 2018-04-29 07:46:25 +0200 rocnet: do not automatically take over the found MQTT broker\n" \
-"13905 2018-04-29 07:33:18 +0200 SLIM-COLOR: raster switches (Peter)\n" \
-"13904 2018-04-29 07:26:00 +0200 loc: fix for pause\n" \
 
 "log end";
