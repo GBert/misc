@@ -1,11 +1,25 @@
 const int revisionnr = 
-15905
+15919
 ;
 const char* commithash = 
-"7cb05fc543fad7dd15eada01ef987b1156da410a";
+"7d30cf0a01faeb561efc321c8bde1639b237de12";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15919 2019-08-27 10:13:42 +0200 clntcon: only let expire the client mqtt service\n" \
+"15918 2019-08-27 08:35:13 +0200 rascii: trace corrections\n" \
+"15917 2019-08-27 08:21:38 +0200 rascii: udp fixes\n" \
+"15916 2019-08-26 18:38:16 +0200 rascii: offset fix\n" \
+"15915 2019-08-26 18:17:10 +0200 rascii: fix for make\n" \
+"15914 2019-08-26 16:18:23 +0200 rocnetnode: fix for port 128 crash\n" \
+"15913 2019-08-26 15:48:44 +0200 rascii: evaluate command and send info\n" \
+"15912 2019-08-26 15:18:13 +0200 rascii: multicast receive correction\n" \
+"15911 2019-08-26 15:09:15 +0200 rascii: multicast (wip)\n" \
+"15910 2019-08-26 11:43:23 +0200 rascii: udp multicast option\n" \
+"15909 2019-08-26 08:02:32 +0200 write last fitting commit in the xml\n" \
+"15908 2019-08-25 15:10:05 +0200 guiframe: fix for selecting none existing loco list row\n" \
+"15907 2019-08-25 12:02:27 +0200 clntcon: 5 minutes demo time for MQTT client commandos\n" \
+"15906 2019-08-25 10:47:52 +0200 rocnetnode: fix for port 128\n" \
 "15905 2019-08-24 15:13:57 +0200 planpanel: fix for moving to other level\n" \
 "15904 2019-08-24 14:31:21 +0200 dccpp: fix for tcp port\n" \
 "15903 2019-08-23 14:48:23 +0200 sbus: wip\n" \
@@ -1992,19 +2006,5 @@ const char* revlog =
 "13922 2018-05-04 11:07:18 +0200 locationgraph: WIP\n" \
 "13921 2018-05-04 08:20:11 +0200 locationdlg: graph tab added (wip)\n" \
 "13920 2018-05-04 07:40:09 +0200 om32: show switch delay in trace\n" \
-"13919 2018-05-03 08:31:44 +0200 initialize: fix for checking the auto state in case of checking the block wait flag\n" \
-"13918 2018-05-02 18:15:04 +0200 z21: revert loconet detector address change\n" \
-"13917 2018-05-02 08:10:08 +0200 z21: Xpressnet GBM option added for activating Loconet Detector evaluation\n" \
-"13916 2018-05-01 14:43:20 +0200 loc: check if loco is in auto mode before pause request\n" \
-"13915 2018-04-30 19:32:13 +0200 analyse: fix for direction arrows next to blocks (Lothar)\n" \
-"13914 2018-04-30 18:08:06 +0200 routedialog: remove autogen flag also removes description (Lothar)\n" \
-"13913 2018-04-30 10:24:35 +0200 translation merge: pt_BR, en_GB, sr_latin, nl, de\n" \
-"13912 2018-04-29 13:02:30 +0200 rocnetnode: trace level correction\n" \
-"13911 2018-04-29 11:51:00 +0200 loc: fix for pause\n" \
-"13910 2018-04-29 11:10:12 +0200 powerctrl: history log size in minutes added\n" \
-"13909 2018-04-29 08:12:19 +0200 model: disable usebididir after the first auto on command\n" \
-"13908 2018-04-29 07:55:46 +0200 rocnetnode: only try to init the LED chips incase one or more has been detected\n" \
-"13907 2018-04-29 07:47:31 +0200 rocnetnode: trace fix\n" \
-"13906 2018-04-29 07:46:25 +0200 rocnet: do not automatically take over the found MQTT broker\n" \
 
 "log end";
