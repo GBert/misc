@@ -1,11 +1,20 @@
 const int revisionnr = 
-15919
+15928
 ;
 const char* commithash = 
-"7d30cf0a01faeb561efc321c8bde1639b237de12";
+"0bbf5d48d3cb0f136ba66ad557acf40d46a69df2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15928 2019-08-28 15:59:31 +0200 infodialog: revert smalles font size for disclaimer\n" \
+"15927 2019-08-28 15:54:10 +0200 infodialog: smaller font size for disclaimer\n" \
+"15926 2019-08-28 15:32:09 +0200 infodialog: show system language\n" \
+"15925 2019-08-28 14:34:47 +0200 infodialog: show wx system language code\n" \
+"15924 2019-08-28 14:09:27 +0200 translation merge: de, cs, sl, fr, sr_latin, nl\n" \
+"15923 2019-08-28 11:10:39 +0200 newfeatures update\n" \
+"15922 2019-08-28 10:03:44 +0200 guiapp: added english variants for selecting language\n" \
+"15921 2019-08-28 08:50:58 +0200 rocview: select language if none is set in the rocview.ini\n" \
+"15920 2019-08-28 08:12:50 +0200 guiframe: try to get user language code\n" \
 "15919 2019-08-27 10:13:42 +0200 clntcon: only let expire the client mqtt service\n" \
 "15918 2019-08-27 08:35:13 +0200 rascii: trace corrections\n" \
 "15917 2019-08-27 08:21:38 +0200 rascii: udp fixes\n" \
@@ -1997,14 +2006,5 @@ const char* revlog =
 "13931 2018-05-05 06:57:47 +0200 ecos: fix for address offset in case of RailCom\n" \
 "13930 2018-05-04 22:16:47 +0200 locationgraph: fix for calculating y position\n" \
 "13929 2018-05-04 15:33:44 +0200 scheduledialog: show none regular stop time in the destination table between brackets\n" \
-"13928 2018-05-04 14:44:41 +0200 locationgraph: scaling support\n" \
-"13927 2018-05-04 13:18:52 +0200 locationgraph: show trainid or scheduleid\n" \
-"13926 2018-05-04 12:29:46 +0200 locationgraph: disabled scale height\n" \
-"13925 2018-05-04 12:10:02 +0200 locationgraph: use schedule color\n" \
-"13924 2018-05-04 12:02:02 +0200 locationgraph: skip none regular stops and a fix for hourly time\n" \
-"13923 2018-05-04 11:41:44 +0200 locationgraph: show schedule entries es red line\n" \
-"13922 2018-05-04 11:07:18 +0200 locationgraph: WIP\n" \
-"13921 2018-05-04 08:20:11 +0200 locationdlg: graph tab added (wip)\n" \
-"13920 2018-05-04 07:40:09 +0200 om32: show switch delay in trace\n" \
 
 "log end";
