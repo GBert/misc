@@ -1,11 +1,12 @@
 const int revisionnr = 
-15928
+15929
 ;
 const char* commithash = 
-"0bbf5d48d3cb0f136ba66ad557acf40d46a69df2";
+"49b1298836fc94a5dfa4f4eb6725b079ce346e95";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15929 2019-08-29 08:24:49 +0200 guiapp: added more language selections\n" \
 "15928 2019-08-28 15:59:31 +0200 infodialog: revert smalles font size for disclaimer\n" \
 "15927 2019-08-28 15:54:10 +0200 infodialog: smaller font size for disclaimer\n" \
 "15926 2019-08-28 15:32:09 +0200 infodialog: show system language\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13932 2018-05-05 07:41:11 +0200 loc: inform slave locos in case of a pause command\n" \
 "13931 2018-05-05 06:57:47 +0200 ecos: fix for address offset in case of RailCom\n" \
 "13930 2018-05-04 22:16:47 +0200 locationgraph: fix for calculating y position\n" \
-"13929 2018-05-04 15:33:44 +0200 scheduledialog: show none regular stop time in the destination table between brackets\n" \
 
 "log end";
