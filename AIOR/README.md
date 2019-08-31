@@ -8,7 +8,8 @@ Hints
 Raspbian ssh
 ------------
 https://www.raspberrypi.org/documentation/remote-access/ssh/
-```sfdisk -d 2019-07-10-raspbian-buster-lite.img
+```
+sfdisk -d 2019-07-10-raspbian-buster-lite.img
 label: dos
 label-id: 0x17869b7d
 device: 2019-07-10-raspbian-buster-lite.img
