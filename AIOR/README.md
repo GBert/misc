@@ -8,8 +8,20 @@ Hints
 Raspbian ssh
 ------------
 https://www.raspberrypi.org/documentation/remote-access/ssh/
-```
-touch /boot/ssh
+```sfdisk -d 2019-07-10-raspbian-buster-lite.img
+label: dos
+label-id: 0x17869b7d
+device: 2019-07-10-raspbian-buster-lite.img
+unit: sectors
+
+2019-07-10-raspbian-buster-lite.img1 : start=        8192, size=      524289, type=c
+2019-07-10-raspbian-buster-lite.img2 : start=      540672, size=     3751936, type=83
+sudo mount -o loop,offset=(8192*512) 2019-07-10-raspbian-buster-lite.img /mnt
+
+echo $((8192 * 512)
+sudo mount -o loop,offset=4194304 2019-07-10-raspbian-buster-lite.img /mnt
+sudo touch /mnt/boot/ssh
+sudo umount /mnt
 ```
 
 Kernel modules
