@@ -1,11 +1,12 @@
 const int revisionnr = 
-15931
+15932
 ;
 const char* commithash = 
-"c790aeb8034930e104ef1fa6b7251a4b560c6b9d";
+"854504f0f7b17d26a4ff9276a1e6063fb2f9df03";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15932 2019-09-03 11:06:59 +0200 rocnet: LOLii support\n" \
 "15931 2019-08-31 07:40:29 +0200 rocdigs: makefile clear rascii dir\n" \
 "15930 2019-08-30 08:07:03 +0200 demon plan: text pointsize correction\n" \
 "15929 2019-08-29 08:24:49 +0200 guiapp: added more language selections\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13935 2018-05-05 10:33:13 +0200 schedule entry: arrive time added\n" \
 "13934 2018-05-05 08:28:06 +0200 locationsdlg: sort schedule color list\n" \
 "13933 2018-05-05 08:19:48 +0200 locationsdialog: show schedule colors on the graph tab\n" \
-"13932 2018-05-05 07:41:11 +0200 loc: inform slave locos in case of a pause command\n" \
 
 "log end";
