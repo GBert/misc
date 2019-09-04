@@ -1,11 +1,13 @@
 const int revisionnr = 
-15932
+15934
 ;
 const char* commithash = 
-"854504f0f7b17d26a4ff9276a1e6063fb2f9df03";
+"9ab7fa8096c6057c79f5ecb6a64c22a5d55e0680";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15934 2019-09-04 16:50:53 +0200 rascii: freeMem fix\n" \
+"15933 2019-09-04 15:42:04 +0200 clntcon: support for simple RASCII throttles\n" \
 "15932 2019-09-03 11:06:59 +0200 rocnet: LOLii support\n" \
 "15931 2019-08-31 07:40:29 +0200 rocdigs: makefile clear rascii dir\n" \
 "15930 2019-08-30 08:07:03 +0200 demon plan: text pointsize correction\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13937 2018-05-05 12:18:17 +0200 locationgraph: show destination\n" \
 "13936 2018-05-05 10:52:04 +0200 locationsdlg: open schedule on dclick in list\n" \
 "13935 2018-05-05 10:33:13 +0200 schedule entry: arrive time added\n" \
-"13934 2018-05-05 08:28:06 +0200 locationsdlg: sort schedule color list\n" \
-"13933 2018-05-05 08:19:48 +0200 locationsdialog: show schedule colors on the graph tab\n" \
 
 "log end";
