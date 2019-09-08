@@ -1,11 +1,15 @@
 const int revisionnr = 
-15935
+15939
 ;
 const char* commithash = 
-"c1b4c9f30246dcd019cc7d6c7404054a9d4430ec";
+"0fff23600d6c2b6647c879173bb11fa97e81fc80";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15939 2019-09-08 10:46:28 +0200 hue: fix for buffer overflow\n" \
+"15938 2019-09-08 07:52:26 +0200 hue: free memory fix\n" \
+"15937 2019-09-07 14:49:48 +0200 roco cam protocol\n" \
+"15936 2019-09-06 11:05:07 +0200 clntcon: RASCII ebreak added\n" \
 "15935 2019-09-05 10:46:20 +0200 clntcon: RASCII function support\n" \
 "15934 2019-09-04 16:50:53 +0200 rascii: freeMem fix\n" \
 "15933 2019-09-04 15:42:04 +0200 clntcon: support for simple RASCII throttles\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13942 2018-05-06 11:25:46 +0200 locationgraph: set vertical scroll style flag\n" \
 "13941 2018-05-06 07:47:06 +0200 scheduledlg: fix for showing depart time for first entry\n" \
 "13940 2018-05-05 18:36:47 +0200 scheduledialog: fix for destination grid scroll\n" \
-"13939 2018-05-05 14:57:15 +0200 locationsdlg: only show schedules in the list on the graph tab which contains a block of the slected loctaion\n" \
-"13938 2018-05-05 12:57:35 +0200 locationgraph: destination text option added\n" \
-"13937 2018-05-05 12:18:17 +0200 locationgraph: show destination\n" \
-"13936 2018-05-05 10:52:04 +0200 locationsdlg: open schedule on dclick in list\n" \
 
 "log end";
