@@ -1,11 +1,15 @@
 const int revisionnr = 
-15939
+15943
 ;
 const char* commithash = 
-"0fff23600d6c2b6647c879173bb11fa97e81fc80";
+"899894d8bc837b391e475cf79fce04cd7fa04b81";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15943 2019-09-09 11:53:50 +0200 mjpg: disable popups in case the data received is corrupt\n" \
+"15942 2019-09-09 11:09:46 +0200 mjpg: crash fix\n" \
+"15941 2019-09-09 07:38:05 +0200 mjpg: compile fix\n" \
+"15940 2019-09-08 16:15:03 +0200 mjpg: wip for udp\n" \
 "15939 2019-09-08 10:46:28 +0200 hue: fix for buffer overflow\n" \
 "15938 2019-09-08 07:52:26 +0200 hue: free memory fix\n" \
 "15937 2019-09-07 14:49:48 +0200 roco cam protocol\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13946 2018-05-07 08:24:26 +0200 schedulegraph: mousewheel eventhandler to invalidate the whole canvas\n" \
 "13945 2018-05-07 08:17:10 +0200 locationgraph: mousewheel eventhandler to invalidate the whole canvas\n" \
 "13944 2018-05-07 07:48:38 +0200 locationgraph: mousewheel eventhandler to invalidate the whole canvas\n" \
-"13943 2018-05-06 15:38:32 +0200 messages: adjust added\n" \
-"13942 2018-05-06 11:25:46 +0200 locationgraph: set vertical scroll style flag\n" \
-"13941 2018-05-06 07:47:06 +0200 scheduledlg: fix for showing depart time for first entry\n" \
-"13940 2018-05-05 18:36:47 +0200 scheduledialog: fix for destination grid scroll\n" \
 
 "log end";
