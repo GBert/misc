@@ -1,11 +1,13 @@
 const int revisionnr = 
-15943
+15945
 ;
 const char* commithash = 
-"899894d8bc837b391e475cf79fce04cd7fa04b81";
+"93e4c9e6e9572067dc1aa72aee9a830a64aa895f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15945 2019-09-10 10:33:50 +0200 mjpg: use default port 5152 in case of udp and set to zero\n" \
+"15944 2019-09-10 10:11:02 +0200 mjpg: optional skip frame parameter added\n" \
 "15943 2019-09-09 11:53:50 +0200 mjpg: disable popups in case the data received is corrupt\n" \
 "15942 2019-09-09 11:09:46 +0200 mjpg: crash fix\n" \
 "15941 2019-09-09 07:38:05 +0200 mjpg: compile fix\n" \
@@ -2004,7 +2006,5 @@ const char* revlog =
 "13948 2018-05-07 09:17:14 +0200 schedulegraph: copy/paste fix\n" \
 "13947 2018-05-07 09:14:49 +0200 locationgraph,schedulegraph: use scrollwin* events to refresh the whole canvas under windows and linux\n" \
 "13946 2018-05-07 08:24:26 +0200 schedulegraph: mousewheel eventhandler to invalidate the whole canvas\n" \
-"13945 2018-05-07 08:17:10 +0200 locationgraph: mousewheel eventhandler to invalidate the whole canvas\n" \
-"13944 2018-05-07 07:48:38 +0200 locationgraph: mousewheel eventhandler to invalidate the whole canvas\n" \
 
 "log end";
