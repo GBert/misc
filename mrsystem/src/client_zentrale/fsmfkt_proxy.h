@@ -32,7 +32,7 @@ static int HandleMemberWaitCs2Proxy(void *Priv, void *SignalData)
       CanMemberInfoSetType(&NewCanMember, Type);
       CanMemberInfoSetConfigQuerried(&NewCanMember, FALSE);
       CanMemberInsert(ZentraleGetCanMember(Data), &NewCanMember);
-      if (Type == MR_CS2_DEVID_CS2)
+      if (Type == CS2_DEVID_CS2)
       {
          QueryMembers(Data, FALSE);
          if (ZentraleGetVerbose(Data))
@@ -279,14 +279,7 @@ static int HandleLCfgDataProxy(void *Priv, void *SignalData,
    {
       if (CfgFile != (char *)NULL)
       {
-         MrIpcInit(&Cmd);
-         MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetCanResponse(&Cmd, 0);
-         MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-         MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
-         MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-         MrIpcCmdSetQuery(&Cmd, MR_CS2_CFG_DLC, CfgFile);
+         MrIpcHlConfigResponse(&Cmd, ZentraleGetUid(Data), CfgFile);
          MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
       }
       if (ZentraleGetVerbose(Data))
@@ -328,21 +321,21 @@ static int HandleLokCfgDataProxy(void *Priv, void *SignalData)
    CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
    if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_KEYBD) != 0)
       return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_MAG_CS2_CFG_HDR,
-                                 STATE_WAIT_LOK_CS2_CFG_DATA, MR_CS2_CFG_MAGS));
+                                 STATE_WAIT_LOK_CS2_CFG_DATA, CS2_CFG_MAGS));
    else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_MEM) != 0)
       return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_FS_CS2_CFG_HDR,
-                                 STATE_WAIT_LOK_CS2_CFG_DATA, MR_CS2_CFG_FS));
+                                 STATE_WAIT_LOK_CS2_CFG_DATA, CS2_CFG_FS));
    else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_LAYOUT) != 0)
       return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_GBS_CS2_CFG_HDR,
-                                 STATE_WAIT_LOK_CS2_CFG_DATA, MR_CS2_CFG_GBS));
+                                 STATE_WAIT_LOK_CS2_CFG_DATA, CS2_CFG_GBS));
    else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_CONTR) != 0)
       return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_LOK_CVR_CFG_HDR,
                                  STATE_WAIT_LOK_CS2_CFG_DATA,
-                                 MR_CS2_CFG_LOK_STAT));
+                                 CS2_CFG_LOK_STAT));
    else
       return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_LOK_CVR_CFG_HDR,
                                  STATE_WAIT_LOK_CS2_CFG_DATA,
-                                 MR_CS2_CFG_LOK_STAT));
+                                 CS2_CFG_LOK_STAT));
 }
 
 static int HandleMagCfgDataProxy(void *Priv, void *SignalData)
@@ -352,18 +345,18 @@ static int HandleMagCfgDataProxy(void *Priv, void *SignalData)
    CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
    if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_MEM) != 0)
       return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_FS_CS2_CFG_HDR,
-                                 STATE_WAIT_MAG_CS2_CFG_DATA, MR_CS2_CFG_FS));
+                                 STATE_WAIT_MAG_CS2_CFG_DATA, CS2_CFG_FS));
    else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_LAYOUT) != 0)
       return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_GBS_CS2_CFG_HDR,
-                                 STATE_WAIT_MAG_CS2_CFG_DATA, MR_CS2_CFG_GBS));
+                                 STATE_WAIT_MAG_CS2_CFG_DATA, CS2_CFG_GBS));
    else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_CONTR) != 0)
       return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_LOK_CVR_CFG_HDR,
                                  STATE_WAIT_MAG_CS2_CFG_DATA,
-                                 MR_CS2_CFG_LOK_STAT));
+                                 CS2_CFG_LOK_STAT));
    else
       return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_LOK_CVR_CFG_HDR,
                                  STATE_WAIT_MAG_CS2_CFG_DATA,
-                                 MR_CS2_CFG_LOK_STAT));
+                                 CS2_CFG_LOK_STAT));
 }
 
 static int HandleFsCfgDataProxy(void *Priv, void *SignalData)
@@ -373,21 +366,21 @@ static int HandleFsCfgDataProxy(void *Priv, void *SignalData)
    CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_PING);
    if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_LAYOUT) != 0)
       return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_GBS_CS2_CFG_HDR,
-                                 STATE_WAIT_FS_CS2_CFG_DATA, MR_CS2_CFG_GBS));
+                                 STATE_WAIT_FS_CS2_CFG_DATA, CS2_CFG_GBS));
    else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_CONTR) != 0)
       return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_LOK_CVR_CFG_HDR,
                                  STATE_WAIT_FS_CS2_CFG_DATA,
-                                 MR_CS2_CFG_LOK_STAT));
+                                 CS2_CFG_LOK_STAT));
    else
       return(HandleLCfgDataProxy(Priv, SignalData, STATE_WAIT_LOK_CVR_CFG_HDR,
                                  STATE_WAIT_FS_CS2_CFG_DATA,
-                                 MR_CS2_CFG_LOK_STAT));
+                                 CS2_CFG_LOK_STAT));
 }
 
 static int HandleGbsCfgDataProxy(void *Priv, void *SignalData)
 {  ZentraleStruct *Data;
    MrIpcCmdType Cmd;
-   char PageNummerStr[MR_CS2_NUM_CAN_BYTES + 1];
+   char PageNummerStr[CS2_NUM_CAN_BYTES + 1];
 
    Data = (ZentraleStruct *)Priv;
    if (DoCfgData(Priv, SignalData))
@@ -401,15 +394,8 @@ static int HandleGbsCfgDataProxy(void *Priv, void *SignalData)
          if (ZentraleGetVerbose(Data))
             printf("FSM: fetch %d of %d\n", ZentraleGetActualIndex(Data),
                    GleisbildGetNumPages(ZentraleGetGleisbild(Data)));
-         sprintf(PageNummerStr, "%s%d", MR_CS2_CFG_GBS_PAGE, ZentraleGetActualIndex(Data));
-         MrIpcInit(&Cmd);
-         MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetCanResponse(&Cmd, 0);
-         MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-         MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
-         MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-         MrIpcCmdSetQuery(&Cmd, MR_CS2_CFG_DLC, PageNummerStr);
+         sprintf(PageNummerStr, "%s%d", CS2_CFG_GBS_PAGE, ZentraleGetActualIndex(Data));
+         MrIpcHlConfigResponse(&Cmd, ZentraleGetUid(Data), PageNummerStr);
          MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
          if (ZentraleGetVerbose(Data))
             printf("FSM: rewrite new state %d\n",STATE_WAIT_GPG_CS2_CFG_HDR);
@@ -444,15 +430,8 @@ static int HandleGpgCfgDataProxy(void *Priv, void *SignalData)
          if (ZentraleGetVerbose(Data))
             printf("FSM: fetch %d of %d\n", ZentraleGetActualIndex(Data),
                    GleisbildGetNumPages(ZentraleGetGleisbild(Data)));
-         sprintf(PageNummerStr, "%s%d", MR_CS2_CFG_GBS_PAGE, ZentraleGetActualIndex(Data));
-         MrIpcInit(&Cmd);
-         MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetCanResponse(&Cmd, 0);
-         MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-         MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
-         MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-         MrIpcCmdSetQuery(&Cmd, MR_CS2_CFG_DLC, PageNummerStr);
+         sprintf(PageNummerStr, "%s%d", CS2_CFG_GBS_PAGE, ZentraleGetActualIndex(Data));
+         MrIpcHlConfigResponse(&Cmd, ZentraleGetUid(Data), PageNummerStr);
          MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
          if (ZentraleGetVerbose(Data))
             printf("FSM: rewrite new state %d\n",STATE_WAIT_GPG_CS2_CFG_HDR);
@@ -460,14 +439,7 @@ static int HandleGpgCfgDataProxy(void *Priv, void *SignalData)
       }
       else
       {
-         MrIpcInit(&Cmd);
-         MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetCanResponse(&Cmd, 0);
-         MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-         MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
-         MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-         MrIpcCmdSetQuery(&Cmd, MR_CS2_CFG_DLC, MR_CS2_CFG_LOK_STAT);
+         MrIpcHlConfigResponse(&Cmd, ZentraleGetUid(Data), CS2_CFG_LOK_STAT);
          MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
          if (ZentraleGetVerbose(Data))
             printf("FSM: rewrite new state %d\n",STATE_WAIT_LOK_CVR_CFG_HDR);
@@ -487,14 +459,7 @@ static int PeriodicPing(void *PrivData)
    MrIpcCmdType Cmd;
 
    Data = (ZentraleStruct *)PrivData;
-   MrIpcInit(&Cmd);
-   MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-   MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-   MrIpcSetCanResponse(&Cmd, 1);
-   MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-   MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_PING);
-   MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-   MrIpcCmdSetMember(&Cmd, ZentraleGetUid(Data), 0x100, MR_CS2_DEVID_CS2);
+   MrIpcHlMemberResponse(&Cmd, ZentraleGetUid(Data), CS2_DEVID_CS2);
    MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
    return(STATE_NO_CHANGE);
 }
@@ -504,14 +469,7 @@ static int PeriodicTimeoutCs2(void *PrivData)
    MrIpcCmdType Cmd;
 
    Data = (ZentraleStruct *)PrivData;
-   MrIpcInit(&Cmd);
-   MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-   MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-   MrIpcSetCanResponse(&Cmd, 0);
-   MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-   MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
-   MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_0);
-   MrIpcCmdSetQuery(&Cmd, MR_CS2_CFG_DLC, MR_CS2_CFG_LOKS);
+   MrIpcHlConfigResponse(&Cmd, ZentraleGetUid(Data), CS2_CFG_LOKS);
    MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
    LokMarkAllDeleted(ZentraleGetLoks(Data));
    if (ZentraleGetVerbose(Data))

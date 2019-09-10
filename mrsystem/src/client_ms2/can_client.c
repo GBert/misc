@@ -6,7 +6,7 @@
 #include <sys/socket.h>
 #include <net/if.h>
 #include <linux/can.h>
-#include <m_cs2ms2.h>
+#include <mr_cs2ms2.h>
 #include "can_io.h"
 #include "can_client.h"
 

@@ -37,8 +37,8 @@ DEBUG_OBJS=$(DEBUG_DIR)/main.o \
 	$(DEBUG_DIR)/zfile.o \
 	$(DEBUG_DIR)/canmember.o \
 	$(DEBUG_DIR)/cs2cfg.o
-LOCALLIBS=-lmr_ipc -lmr_can -lcs2_parse -lfsm -lm -lbytestream -lmrconfig -linipars -luci -lscanner -lmap -lmenge -lavl -ldliste -lz
-DEBUG_LOCALLIBS=-lmr_ipc -lmr_can -lcs2_parse -lfsm -lm -lbytestream -lmrconfig -linipars -luci -lscanner -lmap -lmenge -lavl -ldliste -lz -llxdbg -lefence
+LOCALLIBS=-lmr_ipchl -lmr_ipc -lmr_cs2ms2 -lcs2 -lcs2_parse -lfsm -lm -lbytestream -lmrconfig -linipars -luci -lscanner -lmap -lmenge -lavl -ldliste -lz
+DEBUG_LOCALLIBS=-lmr_ipchl -lmr_ipc -lcs2 -lcs2_parse -lfsm -lm -lbytestream -lmrconfig -linipars -luci -lscanner -lmap -lmenge -lavl -ldliste -lz -llxdbg -lefence
 DESTDIR=/usr/local/bin
 
 $(RELEASE_DIR)/%.o: %.c

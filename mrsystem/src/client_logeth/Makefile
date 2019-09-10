@@ -1,6 +1,6 @@
 TARGET=mrlogeth
 OBJS=main.o ../client_cs2sl/can_sleth.o ../common/logms2.o
-LOCALLIBS=-lmr_ipc -lmr_can -lm -lbytestream -lmrconfig -linipars -lscanner -lmap -lavl
+LOCALLIBS=-lmr_ipc -lmr_cs2ms2 -lcs2 -lm -lbytestream -lmrconfig -linipars -lscanner -lmap -lavl
 DESTDIR=/usr/local/bin
 
 %.o: %.c

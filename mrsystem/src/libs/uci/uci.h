@@ -1,8 +1,25 @@
 #ifndef UCI_H
 #define UCI_H
 
+/**
+* @mainpage uci
+*
+* Die Bibliothek uci dient zum Schreiben der Dateien f&uuml;r das PHP System
+* UCI als universelles Konfigurationssystem. Es werden die 3 Dateitypem .uci,
+* .def und .cfg unterst&uuml;tzt.
+*
+* Es wird immer zuerst die entsprechende UciOpen*() Funktion aufgerufen. Danach
+* kann mit de UciWr*Hdr ein Header in die Datei geschrieen werden (wenn
+* unterst&uuml;tzt). Anschlie&szlig;end werden mit den UciWr* Funktionen die
+* Werte geschrieben. Und zum Schlu&szlig; wird die Datei mit dem UciClose*
+* Makro geschlossen.
+*
+* @author Michael Bernstein
+*/
+
 #include <stdio.h>
 
+/** @file */
 
 #define UCI_UCI_EXTENSION ".uci"
 #define UCI_CFG_EXTENSION ".cfg"

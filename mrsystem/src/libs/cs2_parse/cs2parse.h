@@ -1,16 +1,40 @@
 #ifndef CS2PARSE_H
 #define CS2PARSE_H
 
+/**
+* @mainpage cs2_parse
+*
+* Funktionen f&uuml;r das Einlesen einer *.cs2 Datei
+*
+* Nach dem Anlegen eines Cs2parser Objektes kann der Parser f&uuml;r
+* verschiedene *.cs Dateien initialisiert werden. Danach wird die Parse
+* Funktion in einer Schleife so lange aufgerufen, bis das Ende der Daten
+* erreicht ist.
+*
+* @author Michael Bernstein
+*/
 
 #include <boolean.h>
 #include <scanner.h>
 
+/** @file */
 
+/**
+* @addtogroup CS2P_PARSE
+*
+* @brief Konstanten f&uuml;r den Returnwert der Parse-Funktion
+*
+* @{
+*/
 #define PARSER_ERROR     0x00
 #define PARSER_EOF       0x01
 #define PARSER_PARAGRAPH 0x02
 #define PARSER_VALUE     0x03
+/** @} */
 
+/**
+* @brief Konstanten f&uuml;r den erkannten Paragraphen
+*/
 #define PARSER_PARAGRAPH_UNDEFINED      0x00
 #define PARSER_PARAGRAPH_LOK            0x01
 #define PARSER_PARAGRAPH_NUMLOKS        0x02
@@ -21,7 +45,11 @@
 #define PARSER_PARAGRAPH_FAHRSTRASSEN   0x07
 #define PARSER_PARAGRAPH_GLEISBILDSEITE 0x08
 #define PARSER_PARAGRAPH_LOKSTATUS      0x09
+#define PARSER_PARAGRAPH_LOKLISTE       0x0A
 
+/**
+* @brief Konstanten f&uuml;r den erkannten Wert
+*/
 #define PARSER_VALUE_LOK             0x01
 #define PARSER_VALUE_NAME            0x02
 #define PARSER_VALUE_WERT            0x03
@@ -87,7 +115,17 @@
 #define PARSER_VALUE_SEKUNDE         0x52
 #define PARSER_VALUE_IDX             0x53
 #define PARSER_VALUE_ON              0x54
+#define PARSER_VALUE_DV              0x55
+#define PARSER_VALUE_LLINDEX         0x56
+#define PARSER_VALUE_CRC             0x57
 
+/**
+* @addtogroup TEST_GROUP
+*
+* @brief Konstanten f&uuml;r den Typ der Konfigurationsdatei
+*
+* @{
+*/
 #define PARSER_TYPE_LOKNAMEN          0x01
 #define PARSER_TYPE_LOKINFO           0x02
 #define PARSER_TYPE_GERAET_VRS        0x03
@@ -96,8 +134,20 @@
 #define PARSER_TYPE_GLEISBILD_SEITE   0x06
 #define PARSER_TYPE_MAGNETARTIKEL_CS2 0x07
 #define PARSER_TYPE_FAHRSTRASSEN_CS2  0x08
+/** Hiermit wird nur der Header einer *.cs2 kompatiblen Datenstruktur gelesen,
+* um zu ermitteln ob es sich um einen Auszug der Loks, Fahrstra&szlig;en,
+* Gleisbilder oder Magnetartikel handelt. Damit kann dann der entsprechende
+* Parser initialisiert werden. Diese Parsertype kann verwendet werden, wenn
+* eine CS2 Slave eine  Konfigdatei ver&auml;ndert und anmschlie&szlig;end die
+* &Auml;nderungen zur&uuml;ck sendet.
+*/
 #define PARSER_TYPE_HEADER_CS2        0x09
+#define PARSER_TYPE_LOKLISTE          0x0A
+/** @} */
 
+/**
+* @brief Datentypen f&uuml;r Funktionen der Konfigurationslib
+*/
 typedef struct {
    BOOL Verbose;
    Scanner *Scanner;
@@ -114,6 +164,9 @@ void Cs2pInit(Cs2parser *Data, int Type, char *InputLine, int Len);
 #define Cs2pExit(Data)
 int Cs2pParse(Cs2parser *Data);
 
+/**
+* @brief Makros, um Felder im Kommando zu setzen
+*/
 #define Cs2pSetVerbose(Data, Val) (Data)->Verbose=Val
 #define Cs2pSetScanner(Data, Scn) (Data)->Scanner=Scn
 #define Cs2pSetType(Data, Val)    (Data)->Type=Val
@@ -122,12 +175,34 @@ int Cs2pParse(Cs2parser *Data);
 #define Cs2pSetName(Data, Str)    strcpy((Data)->Name, Str)
 #define Cs2pSetValue(Data, Str)   strcpy((Data)->Value, Str)
 
+/**
+* @brief Makros, um Felder im Kommando zu lesen
+*
+* Um weitere Informationen, wie den Typ (Verwendung) der erkannten Variable
+* oder den Wert selbst zu ermitteln, gibt es eine Reihe von Makros um auf die
+* CS3parser Struktur zuzugreifen und Informationen zu lesen bzw. zu setzen.
+* Dazu gibt es die folgenden Makros:
+*/
 #define Cs2pGetVerbose(Data) (Data)->Verbose
 #define Cs2pGetScanner(Data) (Data)->Scanner
+/** Diese Makro liefert nochmals, welcher Konfigurationstyp (Paragraph, Wert,
+* ...) erkant wurde. Also der Returnwert der Funktion Cs2pParse()
+*/
 #define Cs2pGetType(Data)    (Data)->Type
+/** Wurde ein neuer Paragraph oder ein neuer Value gefunden, dann liefert das
+* Makro Cs2pGetSubType um welchen Paragraphen bzw. welche Wert es sich handelt.
+*/
 #define Cs2pGetSubType(Data) (Data)->SubType
+/** Die *.cs2 Dateien haben eine Baumstruktur, wobei die Ebene durch die
+* Anzahl Punkte vor dem Schl&uuml;sselwort festgelegt ist. Dieses Makro
+* liefert die Ebene bzw. die Anzahl Punkte.
+*/
 #define Cs2pGetLevel(Data)   (Data)->Level
 #define Cs2pGetName(Data)    (Data)->Name
+/** Dieses Makrot liefert den Wert einer Variable als Zeichenkette. Also so,
+* wie sie in der Datei steht. Wenn diese Zeichenkette einen numerischen Wert
+* repr&auml;sentieren soll, mu&szlig; er noch in eine Zahl umgewandelt werden.
+*/
 #define Cs2pGetValue(Data)   (Data)->Value
 
 #endif

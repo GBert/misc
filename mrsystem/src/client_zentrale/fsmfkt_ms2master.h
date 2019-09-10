@@ -86,9 +86,39 @@ static int HandleCfgDataLateHeaderMs2Master(void *Priv, void *SignalData)
    return(NewState);
 }
 
+static int PollMs2(ZentraleStruct *Data, int Version)
+{  MrIpcCmdType CmdFrame;
+
+   LokMarkAllDeleted(ZentraleGetLoks(Data));
+   if (Version > 0x0300)
+   {
+      /* Version > 3.xx, hole lokliste */
+      MrIpcHlLoclistRequest(&CmdFrame, ZentraleGetUid(Data),
+                            MR_IPC_SOCKET_ALL, MR_IPC_SOCKET_ALL);
+      MrIpcSend(ZentraleGetClientSock(Data), &CmdFrame);
+      if (ZentraleGetVerbose(Data))
+         printf("FSM: new state %d\n",STATE_WAIT_LOKLISTE_CFG_HDR);
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
+      return(STATE_WAIT_LOKLISTE_CFG_HDR);
+   }
+   else
+   {
+      /* Version < 3.xx, hole loknamen */
+      ZentraleSetActualIndex(Data, 0);
+      MrIpcHlLocnameRequest(&CmdFrame, ZentraleGetUid(Data),
+                            MR_IPC_SOCKET_ALL, MR_IPC_SOCKET_ALL,
+                            ZentraleGetActualIndex(Data));
+      MrIpcSend(ZentraleGetClientSock(Data), &CmdFrame);
+      if (ZentraleGetVerbose(Data))
+         printf("FSM: new state %d\n",STATE_WAIT_LOKNAME_CFG_HDR);
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
+      return(STATE_WAIT_LOKNAME_CFG_HDR);
+   }
+}
+
 static int HandleMemberWaitMs2(void *Priv, void *SignalData)
 {  ZentraleStruct *Data;
-   MrIpcCmdType *CmdFrame, Cmd;
+   MrIpcCmdType *CmdFrame;
    unsigned long Uid;
    unsigned int Version, Type;
 
@@ -98,23 +128,9 @@ static int HandleMemberWaitMs2(void *Priv, void *SignalData)
    if (ZentraleGetVerbose(Data))
       printf("FSM: CAN member %lu, version %d, type 0x%x\n",
              Uid, Version, Type);
-   if ((Type == MR_CS2_DEVID_MS2_1) || (Type == MR_CS2_DEVID_MS2_2))
+   if ((Type == CS2_DEVID_MS2_1) || (Type == CS2_DEVID_MS2_2))
    {
-      LokMarkAllDeleted(ZentraleGetLoks(Data));
-      ZentraleSetActualIndex(Data, 0);
-      MrIpcInit(&Cmd);
-      MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-      MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-      MrIpcSetCanResponse(&Cmd, 0);
-      MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-      MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
-      MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-      MrIpcCmdSetReqestLocname(&Cmd, ZentraleGetActualIndex(Data), 2);
-      MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
-      if (ZentraleGetVerbose(Data))
-         printf("FSM: new state %d\n",STATE_WAIT_LOKNAME_CFG_HDR);
-      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
-      return(STATE_WAIT_LOKNAME_CFG_HDR);
+      return(PollMs2(Data, Version));
    }
    else
       return(STATE_NO_CHANGE);
@@ -150,11 +166,11 @@ static int HandleMemberMs2Master(void *Priv, void *SignalData)
          CanMemberInfoSetIsInvalid(OldCanMember, FALSE);
       }
    }
-   if (Type == MR_CS2_DEVID_CS2)
+   if (Type == CS2_DEVID_CS2)
    {
       QueryMembers(Data, FALSE);
-      DoPingMember(Data, MR_CS2_DEVID_CS2);
-      DoPingMember(Data, MR_CS2_DEVID_CS2GUI);
+      DoPingMember(Data, CS2_DEVID_CS2);
+      DoPingMember(Data, CS2_DEVID_CS2GUI);
    }
    if (ZentraleGetVerbose(Data))
       printf("FSM: new state %d\n",STATE_NO_CHANGE);
@@ -204,16 +220,11 @@ static int DoLokinfoWaitCfgData(ZentraleStruct *Data, void *SignalData,
                    ZentraleGetLokNamenNr(Data,
                                          ZentraleGetActualIndex(Data)),
                    ZentraleGetNumLoks(Data));
-         MrIpcInit(&Cmd);
-         MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetReceiverSocket(&Cmd, MrIpcGetSenderSocket(CmdFrame));
-         MrIpcSetCanResponse(&Cmd, 0);
-         MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-         MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
-         MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-         MrIpcCmdSetReqestLocinfo(&Cmd,
-                                  ZentraleGetLokNamenNr(Data,
-                                                        ZentraleGetActualIndex(Data)));
+         MrIpcHlLocinfoRequest(&Cmd, ZentraleGetUid(Data),
+                               MR_IPC_SOCKET_ALL,
+                               MrIpcGetSenderSocket(CmdFrame),
+                               ZentraleGetLokNamenNr(Data,
+                                                     ZentraleGetActualIndex(Data)));
          MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
          CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
          if (ZentraleGetVerbose(Data))
@@ -314,8 +325,8 @@ static int HandleLoknameWaitCfgHeader(void *Priv, void *SignalData)
    Data = (ZentraleStruct *)Priv;
    NewState = DoLoknameWaitCfgHeader(Priv, SignalData,
                                      STATE_WAIT_LOKNAME_CFG_DATA,
-                                     STATE_NORMAL);
-   if (NewState == STATE_NORMAL)
+                                     STATE_WAIT_FOR_MS2);
+   if (NewState == STATE_WAIT_FOR_MS2)
    {
       CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
       CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_QUERY);
@@ -368,16 +379,11 @@ static int DoLoknameCfgData(ZentraleStruct *Data, void *SignalData,
                    ZentraleGetActualIndex(Data),
                    ZentraleGetLokNamenNr(Data, ZentraleGetActualIndex(Data)),
                    ZentraleGetNumLoks(Data));
-         MrIpcInit(&Cmd);
-         MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetReceiverSocket(&Cmd, MrIpcGetSenderSocket(CmdFrame));
-         MrIpcSetCanResponse(&Cmd, 0);
-         MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-         MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
-         MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-         MrIpcCmdSetReqestLocinfo(&Cmd,
-                                  ZentraleGetLokNamenNr(Data,
-                                                        ZentraleGetActualIndex(Data)));
+         MrIpcHlLocinfoRequest(&Cmd, ZentraleGetUid(Data),
+                               MR_IPC_SOCKET_ALL,
+                               MrIpcGetSenderSocket(CmdFrame),
+                               ZentraleGetLokNamenNr(Data,
+                                                     ZentraleGetActualIndex(Data)));
          MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
          CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
          if (ZentraleGetVerbose(Data))
@@ -388,14 +394,10 @@ static int DoLoknameCfgData(ZentraleStruct *Data, void *SignalData,
       {
          if (ZentraleGetVerbose(Data))
             printf("request lokname %d\n", ZentraleGetActualIndex(Data));
-         MrIpcInit(&Cmd);
-         MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetReceiverSocket(&Cmd, MrIpcGetSenderSocket(CmdFrame));
-         MrIpcSetCanResponse(&Cmd, 0);
-         MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-         MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
-         MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-         MrIpcCmdSetReqestLocname(&Cmd, ZentraleGetActualIndex(Data), 2);
+         MrIpcHlLocnameRequest(&Cmd, ZentraleGetUid(Data),
+                               MR_IPC_SOCKET_ALL,
+                               MrIpcGetSenderSocket(CmdFrame),
+                               ZentraleGetActualIndex(Data));
          MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
          if (ZentraleGetVerbose(Data))
             printf("FSM: new state %d\n",NewStateForContinue);
@@ -513,8 +515,9 @@ static int PeriodicQueryMembers(void *PrivData)
 
    Data = (ZentraleStruct *)PrivData;
    CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_POLLMS2);
-   NextState = QueryMembers(Data, TRUE);
-   if (NextState == STATE_NORMAL)
+   NextState = QueryMembers(Data,
+                            FsmGetState(ZentraleGetStateMachine(Data)) == STATE_NORMAL);
+   if ((NextState == STATE_NORMAL) || (NextState == STATE_NO_CHANGE))
    {
       CronResume(ZentraleGetCronJobs(Data), PERIODIC_NAME_POLLMS2);
    }
@@ -530,14 +533,9 @@ static int PeriodicPollMs2(void *PrivData)
       puts("FSM: periodic task poll MS2");
    LokMarkAllDeleted(ZentraleGetLoks(Data));
    ZentraleSetActualIndex(Data, 0);
-   MrIpcInit(&Cmd);
-   MrIpcSetSenderSocket(&Cmd, ZentraleGetClientSock(Data));
-   MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-   MrIpcSetCanResponse(&Cmd, 0);
-   MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-   MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
-   MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-   MrIpcCmdSetReqestLocname(&Cmd, ZentraleGetActualIndex(Data), 2);
+   MrIpcHlLocnameRequest(&Cmd, ZentraleGetUid(Data),
+                         ZentraleGetClientSock(Data), MR_IPC_SOCKET_ALL,
+                         ZentraleGetActualIndex(Data));
    MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
    DisableLongPolls(Data);
    CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
@@ -553,14 +551,9 @@ static int PeriodicQueryLokname(void *PrivData)
    {
       if (ZentraleGetVerbose(Data))
          printf("request lokname %d\n", ZentraleGetActualIndex(Data));
-      MrIpcInit(&Cmd);
-      MrIpcSetSenderSocket(&Cmd, ZentraleGetClientSock(Data));
-      MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-      MrIpcSetCanResponse(&Cmd, 0);
-      MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-      MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
-      MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-      MrIpcCmdSetReqestLocname(&Cmd, ZentraleGetActualIndex(Data), 2);
+      MrIpcHlLocnameRequest(&Cmd, ZentraleGetUid(Data),
+                            ZentraleGetClientSock(Data), MR_IPC_SOCKET_ALL,
+                            ZentraleGetActualIndex(Data));
       MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
       CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
    }
@@ -572,16 +565,10 @@ static int PeriodicQueryLokname(void *PrivData)
                 ZentraleGetActualIndex(Data),
                 ZentraleGetLokNamenNr(Data, ZentraleGetActualIndex(Data)),
                 ZentraleGetNumLoks(Data));
-      MrIpcInit(&Cmd);
-      MrIpcSetSenderSocket(&Cmd, ZentraleGetClientSock(Data));
-      MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-      MrIpcSetCanResponse(&Cmd, 0);
-      MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-      MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
-      MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-      MrIpcCmdSetReqestLocinfo(&Cmd,
-                               ZentraleGetLokNamenNr(Data,
-                                                     ZentraleGetActualIndex(Data)));
+      MrIpcHlLocinfoRequest(&Cmd, ZentraleGetUid(Data),
+                            ZentraleGetClientSock(Data), MR_IPC_SOCKET_ALL,
+                            ZentraleGetLokNamenNr(Data,
+                                                  ZentraleGetActualIndex(Data)));
       MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
       CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
    }
@@ -602,16 +589,10 @@ static int PeriodicQueryLokinfo(void *PrivData)
                 ZentraleGetLokNamenNr(Data,
                                       ZentraleGetActualIndex(Data)),
                 ZentraleGetNumLoks(Data));
-      MrIpcInit(&Cmd);
-      MrIpcSetSenderSocket(&Cmd, ZentraleGetClientSock(Data));
-      MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-      MrIpcSetCanResponse(&Cmd, 0);
-      MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-      MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
-      MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-      MrIpcCmdSetReqestLocinfo(&Cmd,
-                               ZentraleGetLokNamenNr(Data,
-                                                     ZentraleGetActualIndex(Data)));
+      MrIpcHlLocinfoRequest(&Cmd, ZentraleGetUid(Data),
+                            ZentraleGetClientSock(Data), MR_IPC_SOCKET_ALL,
+                            ZentraleGetLokNamenNr(Data,
+                                                  ZentraleGetActualIndex(Data)));
       MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
       CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
    }
@@ -638,4 +619,121 @@ static int PeriodicQueryLokinfo(void *PrivData)
 static int PeriodicTimeoutWaitMS2(void *PrivData)
 {
    return(STATE_WAIT_FOR_MS2);
+}
+
+static int DoLoklisteWaitCfgHeader(void *Priv, void *SignalData,
+                                   int NewStateForContinue,
+                                   int NewStateForStay)
+{  ZentraleStruct *Data;
+   MrIpcCmdType *CmdFrame;
+
+   Data = (ZentraleStruct *)Priv;
+   CmdFrame = (MrIpcCmdType *)SignalData;
+   if (DoCfgHeader(Data, CmdFrame, FALSE))
+   {
+      if (ZentraleGetVerbose(Data))
+      {
+         puts("HandleLoklisteWaitCfgHeader: continue");
+         printf("FSM: new state %d\n",STATE_WAIT_LOKLISTE_CFG_DATA);
+      }
+      return(NewStateForContinue);
+   }
+   else
+   {
+      if (ZentraleGetVerbose(Data))
+      {
+         puts("HandleLoklisteWaitCfgHeader: error");
+         printf("FSM: new state %d\n",STATE_NORMAL);
+      }
+      return(NewStateForStay);
+   }
+}
+
+static int HandleLoklisteWaitCfgHeader(void *Priv, void *SignalData)
+{  int NewState;
+   ZentraleStruct *Data;
+
+   Data = (ZentraleStruct *)Priv;
+   NewState = DoLoklisteWaitCfgHeader(Priv, SignalData,
+                                      STATE_WAIT_LOKLISTE_CFG_DATA,
+                                      STATE_WAIT_FOR_MS2);
+   if (NewState == STATE_WAIT_FOR_MS2)
+   {
+      CronDisable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_QUERY);
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_POLLMS2);
+   }
+   else
+   {
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
+   }
+   return(NewState);
+}
+
+static int DoLoklisteCfgData(ZentraleStruct *Data, void *SignalData,
+                             int NewStateForContinue,
+                             int NewStateForStay)
+{  MrIpcCmdType Cmd, *CmdFrame;
+   char Buf[8];
+
+   CmdFrame = (MrIpcCmdType *)SignalData;
+   MrIpcCmdGetCfgData(CmdFrame, Buf);
+   if (Cs2CfgDataNextBuf(ZentraleGetCs2CfgDaten(Data),
+                         MrIpcGetCanHash(CmdFrame), Buf))
+   {
+      HandleCfgLokliste(Data, CmdFrame);
+      ZentraleSetActualIndex(Data, 0);
+      if (ZentraleGetVerbose(Data))
+         printf("request lokinfo %d >%s< from %d\n",
+                ZentraleGetActualIndex(Data),
+                ZentraleGetLokNamenNr(Data, ZentraleGetActualIndex(Data)),
+                ZentraleGetNumLoks(Data));
+      MrIpcHlLocinfoRequest(&Cmd, ZentraleGetUid(Data),
+                            MR_IPC_SOCKET_ALL,
+                            MrIpcGetSenderSocket(CmdFrame),
+                            ZentraleGetLokNamenNr(Data,
+                                                  ZentraleGetActualIndex(Data)));
+      MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
+      CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_MS2);
+      if (ZentraleGetVerbose(Data))
+         printf("FSM: new state %d\n", NewStateForContinue);
+      return(NewStateForContinue);
+   }
+   else
+   {
+      if (ZentraleGetVerbose(Data))
+         printf("FSM: new state %d\n",NewStateForStay);
+      return(NewStateForStay);
+   }
+}
+
+static int HandleLoklisteCfgData(void *Priv, void *SignalData)
+{  ZentraleStruct *Data;
+   int NextState;
+
+   Data = (ZentraleStruct *)Priv;
+   NextState = DoLoklisteCfgData(Data, SignalData,
+                                 STATE_WAIT_LOKINFO_CFG_HDR,
+                                 STATE_WAIT_LOKLISTE_CFG_DATA);
+   return(NextState);
+}
+
+static int HandleMemberInternalCmd(void *Priv, void *SignalData)
+{  ZentraleStruct *Data;
+   MrIpcCmdType *CmdFrame;
+   CanMemberInfo *Ms2;
+
+   Data = (ZentraleStruct *)Priv;
+   CmdFrame = (MrIpcCmdType *)SignalData;
+   switch (MrIpcGetCanCommand(CmdFrame))
+   {
+      case MrIpcInternalPollMs2:
+         ZentraleSetActualIndex(Data, 0);
+         Ms2 = CanMemberSearchMs2(ZentraleGetCanMember(Data));
+         return(PollMs2(Data, CanMemberInfoGetVersion(Ms2)));
+         break;
+      default:
+         return(STATE_NO_CHANGE);
+         break;
+   }
 }

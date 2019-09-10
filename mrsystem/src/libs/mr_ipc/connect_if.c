@@ -8,7 +8,19 @@
 #include <net/if.h>
 #include "mr_ipc.h"
 
+/** @file */
 
+/**
+* @brief Verbindung zur drehscheibe aufbauen
+*
+* Diese Funktion stellt eine Verbindung zur drehscheibe her.
+*
+* @param[in] Interface Interface zur drehscheibe
+* @param[in] Address IP Adresse zur drehscheibe
+* @param[in] Port Portnummer der drehscheibe
+*
+* @return Sockert
+*/
 int MrIpcConnectIf(char *Interface, int Port)
 {  int sock;
    struct sockaddr_in ServerAddr;

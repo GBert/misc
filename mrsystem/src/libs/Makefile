@@ -1,4 +1,4 @@
-LIBS=cs2_parse mr_can mr_ipc config io_fkts uci
+LIBS=cs2_parse mr_ipc mr_ipchl mr_cs2ms2 config io_fkts uci cs2 srcp
 
 
 .PHONY: $(LIBS)
@@ -12,10 +12,13 @@ $(TARGET): $(OBJS)
 cs2_parse:
 	make -C $@  CFLAGS="$(CFLAGS)"  INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH)
 
-mr_can:
+mr_ipc: mr_cs2ms2 cs2
 	make -C $@  CFLAGS="$(CFLAGS)"  INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH)
 
-mr_ipc:
+mr_ipchl: mr_ipc
+	make -C $@  CFLAGS="$(CFLAGS)"  INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH)
+
+mr_cs2ms2: cs2
 	make -C $@  CFLAGS="$(CFLAGS)"  INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH)
 
 config:
@@ -25,6 +28,12 @@ io_fkts:
 	make -C $@  CFLAGS="$(CFLAGS)"  INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH)
 
 uci:
+	make -C $@  CFLAGS="$(CFLAGS)"  INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH)
+
+cs2:
+	make -C $@  CFLAGS="$(CFLAGS)"  INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH)
+
+srcp:
 	make -C $@  CFLAGS="$(CFLAGS)"  INCLUDE_PATH=../$(INCLUDE_PATH) LIB_PATH=../$(LIB_PATH)
 
 clean:

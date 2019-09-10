@@ -10,7 +10,8 @@
 #include <errno.h>
 #include <boolean.h>
 #include <mr_ipc.h>
-#include <mr_can.h>
+#include <mr_cs2ms2.h>
+#include <cs2.h>
 #include "can_sleth.h"
 
 #define MAX_DATAGRAM_SIZE 4096

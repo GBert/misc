@@ -25,6 +25,8 @@ static StateFktType StateProxyWaitForMs2[NUM_SIGNALS] = {
    HandleOther,         /* MrIpcCmdSetConfig */
    HandleOther,         /* MrIpcCmdConfigResponse */
    HandleOther,         /* MrIpcCmdMesswertResponse */
+   HandleOther,         /* MrIpcCmdRequestLokListe */
+   HandleOther,         /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyWaitCs[NUM_SIGNALS] = {
    /* STATE_WAIT_CS2 */
@@ -53,6 +55,8 @@ static StateFktType StateProxyWaitCs[NUM_SIGNALS] = {
    HandleOther,               /* MrIpcCmdSetConfig */
    HandleOther,               /* MrIpcCmdConfigResponse */
    HandleOther,               /* MrIpcCmdMesswertResponse */
+   HandleOther,               /* MrIpcCmdRequestLokListe */
+   HandleOther,               /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyNormal[NUM_SIGNALS] = {
    /* STATE_NORMAL */
@@ -81,6 +85,8 @@ static StateFktType StateProxyNormal[NUM_SIGNALS] = {
    HandleOther,               /* MrIpcCmdSetConfig */
    HandleOther,               /* MrIpcCmdConfigResponse */
    HandleOther,               /* MrIpcCmdMesswertResponse */
+   HandleOther,               /* MrIpcCmdRequestLokListe */
+   HandleOther,               /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyWaitLokCs2CfgHdr[NUM_SIGNALS] = {
    /* STATE_WAIT_LOK_CS2_CFG_HDR */
@@ -109,6 +115,8 @@ static StateFktType StateProxyWaitLokCs2CfgHdr[NUM_SIGNALS] = {
    HandleOther,            /* MrIpcCmdSetConfig */
    HandleOther,            /* MrIpcCmdConfigResponse */
    HandleOther,            /* MrIpcCmdMesswertResponse */
+   HandleOther,            /* MrIpcCmdRequestLokListe */
+   HandleOther,            /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyGetGetLokCs2CfgData[NUM_SIGNALS] = {
    /* STATE_GET_LOK_CS2_CFG_DATA */
@@ -137,6 +145,8 @@ static StateFktType StateProxyGetGetLokCs2CfgData[NUM_SIGNALS] = {
    HandleOther,             /* MrIpcCmdSetConfig */
    HandleOther,             /* MrIpcCmdConfigResponse */
    HandleOther,             /* MrIpcCmdMesswertResponse */
+   HandleOther,             /* MrIpcCmdRequestLokListe */
+   HandleOther,             /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyWaitLokCs2CfgData[NUM_SIGNALS] = {
    /* STATE_WAIT_LOK_CS2_CFG_DATA */
@@ -165,6 +175,8 @@ static StateFktType StateProxyWaitLokCs2CfgData[NUM_SIGNALS] = {
    HandleOther,          /* MrIpcCmdSetConfig */
    HandleOther,          /* MrIpcCmdConfigResponse */
    HandleOther,          /* MrIpcCmdMesswertResponse */
+   HandleOther,          /* MrIpcCmdRequestLokListe */
+   HandleOther,          /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyWaitMagCs2CfgHdr[NUM_SIGNALS] = {
    /* STATE_WAIT_MAG_CS2_CFG_HDR */
@@ -193,6 +205,8 @@ static StateFktType StateProxyWaitMagCs2CfgHdr[NUM_SIGNALS] = {
    HandleOther,            /* MrIpcCmdSetConfig */
    HandleOther,            /* MrIpcCmdConfigResponse */
    HandleOther,            /* MrIpcCmdMesswertResponse */
+   HandleOther,            /* MrIpcCmdRequestLokListe */
+   HandleOther,            /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyWaitMagCs2CfgData[NUM_SIGNALS] = {
    /* STATE_WAIT_MAG_CS2_CFG_DATA */
@@ -221,6 +235,8 @@ static StateFktType StateProxyWaitMagCs2CfgData[NUM_SIGNALS] = {
    HandleOther,          /* MrIpcCmdSetConfig */
    HandleOther,          /* MrIpcCmdConfigResponse */
    HandleOther,          /* MrIpcCmdMesswertResponse */
+   HandleOther,          /* MrIpcCmdRequestLokListe */
+   HandleOther,          /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyWaitFsCs2CfgHdr[NUM_SIGNALS] = {
    /* STATE_WAIT_FS_CS2_CFG_HDR */
@@ -249,6 +265,8 @@ static StateFktType StateProxyWaitFsCs2CfgHdr[NUM_SIGNALS] = {
    HandleOther,           /* MrIpcCmdSetConfig */
    HandleOther,           /* MrIpcCmdConfigResponse */
    HandleOther,           /* MrIpcCmdMesswertResponse */
+   HandleOther,           /* MrIpcCmdRequestLokListe */
+   HandleOther,           /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyWaitFsCs2CfgData[NUM_SIGNALS] = {
    /* STATE_WAIT_FS_CS2_CFG_DATA */
@@ -277,6 +295,8 @@ static StateFktType StateProxyWaitFsCs2CfgData[NUM_SIGNALS] = {
    HandleOther,         /* MrIpcCmdSetConfig */
    HandleOther,         /* MrIpcCmdConfigResponse */
    HandleOther,         /* MrIpcCmdMesswertResponse */
+   HandleOther,         /* MrIpcCmdRequestLokListe */
+   HandleOther,         /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyWaitGbsCs2CfgHdr[NUM_SIGNALS] = {
    /* STATE_WAIT_GBS_CS2_CFG_HDR */
@@ -305,6 +325,8 @@ static StateFktType StateProxyWaitGbsCs2CfgHdr[NUM_SIGNALS] = {
    HandleOther,            /* MrIpcCmdSetConfig */
    HandleOther,            /* MrIpcCmdConfigResponse */
    HandleOther,            /* MrIpcCmdMesswertResponse */
+   HandleOther,            /* MrIpcCmdRequestLokListe */
+   HandleOther,            /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyWaitGbsCs2CfgData[NUM_SIGNALS] = {
    /* STATE_WAIT_GBS_CS2_CFG_DATA */
@@ -333,6 +355,8 @@ static StateFktType StateProxyWaitGbsCs2CfgData[NUM_SIGNALS] = {
    HandleOther,          /* MrIpcCmdSetConfig */
    HandleOther,          /* MrIpcCmdConfigResponse */
    HandleOther,          /* MrIpcCmdMesswertResponse */
+   HandleOther,          /* MrIpcCmdRequestLokListe */
+   HandleOther,          /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyWaitGpgCs2CfgHdr[NUM_SIGNALS] = {
    /* STATE_WAIT_GBS_CS2_CFG_HDR */
@@ -361,6 +385,8 @@ static StateFktType StateProxyWaitGpgCs2CfgHdr[NUM_SIGNALS] = {
    HandleOther,            /* MrIpcCmdSetConfig */
    HandleOther,            /* MrIpcCmdConfigResponse */
    HandleOther,            /* MrIpcCmdMesswertResponse */
+   HandleOther,            /* MrIpcCmdRequestLokListe */
+   HandleOther,            /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyWaitGpgCs2CfgData[NUM_SIGNALS] = {
    /* STATE_WAIT_GBS_CS2_CFG_DATA */
@@ -389,6 +415,8 @@ static StateFktType StateProxyWaitGpgCs2CfgData[NUM_SIGNALS] = {
    HandleOther,          /* MrIpcCmdSetConfig */
    HandleOther,          /* MrIpcCmdConfigResponse */
    HandleOther,          /* MrIpcCmdMesswertResponse */
+   HandleOther,          /* MrIpcCmdRequestLokListe */
+   HandleOther,          /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyWaitLokCvrCs2CfgHdr[NUM_SIGNALS] = {
    /* STATE_WAIT_LOK_CVR_CFG_HDR */
@@ -417,6 +445,8 @@ static StateFktType StateProxyWaitLokCvrCs2CfgHdr[NUM_SIGNALS] = {
    HandleOther,            /* MrIpcCmdSetConfig */
    HandleOther,            /* MrIpcCmdConfigResponse */
    HandleOther,            /* MrIpcCmdMesswertResponse */
+   HandleOther,            /* MrIpcCmdRequestLokListe */
+   HandleOther,            /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyWaitLokCvrCs2CfgData[NUM_SIGNALS] = {
    /* STATE_WAIT_LOK_CVR_CFG_DATA */
@@ -445,6 +475,8 @@ static StateFktType StateProxyWaitLokCvrCs2CfgData[NUM_SIGNALS] = {
    HandleOther,          /* MrIpcCmdSetConfig */
    HandleOther,          /* MrIpcCmdConfigResponse */
    HandleOther,          /* MrIpcCmdMesswertResponse */
+   HandleOther,          /* MrIpcCmdRequestLokListe */
+   HandleOther,          /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyWaitMagCvrCs2CfgHdr[NUM_SIGNALS] = {
    /* STATE_WAIT_MAG_CVR_CFG_HDR */
@@ -473,6 +505,8 @@ static StateFktType StateProxyWaitMagCvrCs2CfgHdr[NUM_SIGNALS] = {
    HandleOther,            /* MrIpcCmdSetConfig */
    HandleOther,            /* MrIpcCmdConfigResponse */
    HandleOther,            /* MrIpcCmdMesswertResponse */
+   HandleOther,            /* MrIpcCmdRequestLokListe */
+   HandleOther,            /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyWaitMagCvrCs2CfgData[NUM_SIGNALS] = {
    /* STATE_WAIT_MAG_CVR_CFG_DATA */
@@ -501,6 +535,8 @@ static StateFktType StateProxyWaitMagCvrCs2CfgData[NUM_SIGNALS] = {
    HandleOther,          /* MrIpcCmdSetConfig */
    HandleOther,          /* MrIpcCmdConfigResponse */
    HandleOther,          /* MrIpcCmdMesswertResponse */
+   HandleOther,          /* MrIpcCmdRequestLokListe */
+   HandleOther,          /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyWaitGbsCvrCs2CfgHdr[NUM_SIGNALS] = {
    /* STATE_WAIT_GBS_CVR_CFG_HDR */
@@ -529,6 +565,8 @@ static StateFktType StateProxyWaitGbsCvrCs2CfgHdr[NUM_SIGNALS] = {
    HandleOther,            /* MrIpcCmdSetConfig */
    HandleOther,            /* MrIpcCmdConfigResponse */
    HandleOther,            /* MrIpcCmdMesswertResponse */
+   HandleOther,            /* MrIpcCmdRequestLokListe */
+   HandleOther,            /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyWaitGbsCvrCs2CfgData[NUM_SIGNALS] = {
    /* STATE_WAIT_GBS_CVR_CFG_DATA */
@@ -557,6 +595,8 @@ static StateFktType StateProxyWaitGbsCvrCs2CfgData[NUM_SIGNALS] = {
    HandleOther,          /* MrIpcCmdSetConfig */
    HandleOther,          /* MrIpcCmdConfigResponse */
    HandleOther,          /* MrIpcCmdMesswertResponse */
+   HandleOther,          /* MrIpcCmdRequestLokListe */
+   HandleOther,          /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyWaitFsCvrCs2CfgHdr[NUM_SIGNALS] = {
    /* STATE_WAIT_GBS_CVR_CFG_HDR */
@@ -585,6 +625,8 @@ static StateFktType StateProxyWaitFsCvrCs2CfgHdr[NUM_SIGNALS] = {
    HandleOther,            /* MrIpcCmdSetConfig */
    HandleOther,            /* MrIpcCmdConfigResponse */
    HandleOther,            /* MrIpcCmdMesswertResponse */
+   HandleOther,            /* MrIpcCmdRequestLokListe */
+   HandleOther,            /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyWaitFsCvrCs2CfgData[NUM_SIGNALS] = {
    /* STATE_WAIT_GBS_CVR_CFG_DATA */
@@ -613,6 +655,8 @@ static StateFktType StateProxyWaitFsCvrCs2CfgData[NUM_SIGNALS] = {
    HandleOther,          /* MrIpcCmdSetConfig */
    HandleOther,          /* MrIpcCmdConfigResponse */
    HandleOther,          /* MrIpcCmdMesswertResponse */
+   HandleOther,          /* MrIpcCmdRequestLokListe */
+   HandleOther,          /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyWaitCfgDataHdr[NUM_SIGNALS] = {
    /* STATE_WAIT_CFG_DATA_HDR */
@@ -641,6 +685,8 @@ static StateFktType StateProxyWaitCfgDataHdr[NUM_SIGNALS] = {
    HandleOther,            /* MrIpcCmdSetConfig */
    HandleOther,            /* MrIpcCmdConfigResponse */
    HandleOther,            /* MrIpcCmdMesswertResponse */
+   HandleOther,            /* MrIpcCmdRequestLokListe */
+   HandleOther,            /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyWaitCfgDataData[NUM_SIGNALS] = {
    /* STATE_WAIT_CFG_DATA_DATA */
@@ -669,6 +715,8 @@ static StateFktType StateProxyWaitCfgDataData[NUM_SIGNALS] = {
    HandleOther,            /* MrIpcCmdSetConfig */
    HandleOther,            /* MrIpcCmdConfigResponse */
    HandleOther,            /* MrIpcCmdMesswertResponse */
+   HandleOther,            /* MrIpcCmdRequestLokListe */
+   HandleOther,            /* MrIpcCmdIntern */
 };
 static StateFktType StateProxyWaitSysCfgMesswert[NUM_SIGNALS] = {
    /* STATE_WAIT_SYS_CFG_MESSWERT */
@@ -697,6 +745,8 @@ static StateFktType StateProxyWaitSysCfgMesswert[NUM_SIGNALS] = {
    HandleOther,               /* MrIpcCmdSetConfig */
    HandleOther,               /* MrIpcCmdConfigResponse */
    HandleMesswertResponse,    /* MrIpcCmdMesswertResponse */
+   HandleOther,               /* MrIpcCmdRequestLokListe */
+   HandleOther,               /* MrIpcCmdIntern */
 };
 
 static SignalFunctionsType StateMachineFunctionsProxy[NUM_STATES] = {
@@ -734,4 +784,6 @@ static SignalFunctionsType StateMachineFunctionsProxy[NUM_STATES] = {
    (SignalFunctionsType)NULL,     /* STATE_WAIT_MS2_LOKNAME_CFG_DATA */
    (SignalFunctionsType)NULL,     /* STATE_WAIT_MS2_LOKINFO_CFG_HDR */
    (SignalFunctionsType)NULL,     /* STATE_WAIT_MS2_LOKINFO_CFG_DATA */
+   (SignalFunctionsType)NULL,     /* STATE_WAIT_LOKLISTE_CFG_HDR */
+   (SignalFunctionsType)NULL,     /* STATE_WAIT_LOKLISTE_CFG_DATA */
 };

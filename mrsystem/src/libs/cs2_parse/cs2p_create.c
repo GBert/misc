@@ -2,7 +2,16 @@
 #include <scanner.h>
 #include "cs2parse.h"
 
+/** @file */
 
+/**
+* @brief Erzeugen eines Parsers
+*
+* Die Cs2pCreate() Funktion wird als erste Funktion aufgerufen, um die
+* Struktur anzulegen.
+*
+* @return Zeiger auf die Parserstruktur oder NULL im Fehlerfall.
+*/
 Cs2parser *Cs2pCreate(void)
 {  Cs2parser *NewData;
 

@@ -10,7 +10,7 @@
 #include <errno.h>
 #include <boolean.h>
 #include <mr_ipc.h>
-#include <mr_can.h>
+#include <mr_cs2ms2.h>
 #include "can_eth.h"
 
 static int ClientCompare(void *d1, void *d2)

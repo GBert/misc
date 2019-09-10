@@ -12,7 +12,7 @@
 #include <menge.h>
 #include <boolean.h>
 #include <mr_ipc.h>
-#include <mr_can.h>
+#include <mr_cs2ms2.h>
 #include "srcp.h"
 
 #define MAXPENDING 5
@@ -327,19 +327,7 @@ IoFktStruct *SrcpInit(BOOL Verbose)
                MengeInit(SrcpGetClients(Data), ClientCompare, ClientDestroy);
                SrcpSetOutsideTcpSock(Data, IOFKT_INVALID_FD);
                SrcpIoFunctions.private = (void *)Data;
-               SrcpSetParser(Data, SrcpParserCreate());
-               if (SrcpGetParser(Data) != (SrcpParser *)NULL)
-               {
-                  IoFunctions = &SrcpIoFunctions;
-               }
-               else
-               {
-                  SrcpSetParser(Data, (SrcpParser *)NULL);
-                  MengeDestroyIterator(SrcpGetFdSearchIter(Data));
-                  MengeDestroyIterator(SrcpGetClientIter(Data));
-                  MengeDestroy(SrcpGetClients(Data));
-                  IoFunctions = (IoFktStruct *)NULL;
-               }
+               IoFunctions = &SrcpIoFunctions;
             }
             else
             {
@@ -364,7 +352,6 @@ IoFktStruct *SrcpInit(BOOL Verbose)
    }
    else
    {
-      SrcpSetParser(Data, (SrcpParser *)NULL);
       IoFunctions = (IoFktStruct *)NULL;
    }
    return(IoFunctions);
@@ -376,10 +363,6 @@ void SrcpExit(IoFktStruct *Data)
    if (Data->private != (void *)NULL)
    {
       SrcpData = Data->private;
-      if (SrcpGetParser(SrcpData) != (SrcpParser *)NULL)
-      {
-         SrcpParserDestroy(SrcpGetParser(SrcpData));
-      }
       if (SrcpGetFdSearchIter(SrcpData) != (MengeIterator *)NULL)
       {
          MengeDestroyIterator(SrcpGetFdSearchIter(SrcpData));

@@ -3,7 +3,8 @@
 #include <sys/stat.h>
 #include <boolean.h>
 #include <map.h>
-#include <m_cs2ms2.h>
+#include <mr_cs2ms2.h>
+#include <cs2.h>
 #include <cs2parse.h>
 #include <write_cs2.h>
 #include "gleisbildpage.h"
@@ -243,19 +244,19 @@ void GleisbildPageLoadGleisbildPageCs2(GleisbildPageStruct *Data)
    if (GleisbildPageStructGetGleisbildPageFilePath(Data) != (char *)NULL)
    {
       GleisbildPageFileName = (char *)malloc(strlen(GleisbildPageStructGetGleisbildPageFilePath(Data)) + 
-                                             strlen(MR_CS2_GLEISBILD_PAGE_SUBDIR) +
+                                             strlen(CS2_GLEISBILD_PAGE_SUBDIR) +
                                              strlen(GleisbildPageStructGetName(Data)) +
-                                             strlen(MR_CS2_FILE_EXTENSION) + 2);
+                                             strlen(CS2_FILE_EXTENSION) + 2);
       if (GleisbildPageFileName != (char *)NULL)
       {
          strcpy(GleisbildPageFileName, GleisbildPageStructGetGleisbildPageFilePath(Data));
          if (GleisbildPageFileName[strlen(GleisbildPageFileName) - 1] != '/')
             strcat(GleisbildPageFileName, "/");
-         strcat(GleisbildPageFileName, MR_CS2_GLEISBILD_PAGE_SUBDIR);
+         strcat(GleisbildPageFileName, CS2_GLEISBILD_PAGE_SUBDIR);
          if (GleisbildPageFileName[strlen(GleisbildPageFileName) - 1] != '/')
             strcat(GleisbildPageFileName, "/");
          strcat(GleisbildPageFileName, GleisbildPageStructGetName(Data));
-         strcat(GleisbildPageFileName, MR_CS2_FILE_EXTENSION);
+         strcat(GleisbildPageFileName, CS2_FILE_EXTENSION);
          if (stat(GleisbildPageFileName, &attribut) == 0)
          {
             GleisbildPageFileContent = (char *)malloc(attribut.st_size);
@@ -317,14 +318,14 @@ void GleisbildPageSaveGleisbildPageCs2(GleisbildPageStruct *Data)
    if (GleisbildPageStructGetGleisbildPageFilePath(Data) != (char *)NULL)
    {
       GleisbildPageFile = (char *)malloc(strlen(GleisbildPageStructGetGleisbildPageFilePath(Data)) +
-                                         strlen(MR_CS2_GLEISBILD_PAGE_SUBDIR) +
+                                         strlen(CS2_GLEISBILD_PAGE_SUBDIR) +
                                          strlen(GleisbildPageStructGetName(Data)) + 2);
       if (GleisbildPageFile != (char *)NULL)
       {
          strcpy(GleisbildPageFile, GleisbildPageStructGetGleisbildPageFilePath(Data));
          if (GleisbildPageFile[strlen(GleisbildPageFile) - 1] != '/')
             strcat(GleisbildPageFile, "/");
-         strcat(GleisbildPageFile, MR_CS2_GLEISBILD_PAGE_SUBDIR);
+         strcat(GleisbildPageFile, CS2_GLEISBILD_PAGE_SUBDIR);
          if (GleisbildPageFile[strlen(GleisbildPageFile) - 1] != '/')
             strcat(GleisbildPageFile, "/");
          strcat(GleisbildPageFile, GleisbildPageStructGetName(Data));
@@ -350,10 +351,10 @@ void GleisbildPageSaveGleisbildPageCs2(GleisbildPageStruct *Data)
 
 char *GleisbildPageGetName(GleisbildPageStruct *Data)
 {
-   strcpy(PageName, MR_CS2_GLEISBILD_PAGE_SUBDIR);
+   strcpy(PageName, CS2_GLEISBILD_PAGE_SUBDIR);
    if (PageName[strlen(PageName) - 1] != '/')
       strcat(PageName, "/");
    strcat(PageName, GleisbildPageStructGetName(Data));
-   strcat(PageName, MR_CS2_FILE_EXTENSION);
+   strcat(PageName, CS2_FILE_EXTENSION);
    return(PageName);
 }

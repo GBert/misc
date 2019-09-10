@@ -10,7 +10,8 @@
 #include <errno.h>
 #include <boolean.h>
 #include <mr_ipc.h>
-#include <mr_can.h>
+#include <cs2.h>
+#include <mr_cs2ms2.h>
 #include <config.h>
 #include "can_io.h"
 #include "cs2eth.h"
@@ -134,13 +135,16 @@ static void ProcessSystemData(Cs2ethStruct *Data, MrIpcCmdType *CmdFrame)
 
    switch (MrIpcGetCommand(CmdFrame))
    {
+      case MrIpcCmdIntern:
+         break;
       case MrIpcCmdRequestLocName:
       case MrIpcCmdRequestLocInfo:
+      case MrIpcCmdRequestLokListe:
          break;
       case MrIpcCmdMember:
          MrIpcCmdGetMember(CmdFrame, &Addr, &Version, &Type);
          if (!Cs2ethGetHideMs2(Data) ||
-             ((Type != MR_CS2_DEVID_MS2_1) && (Type != MR_CS2_DEVID_MS2_2)))
+             ((Type != CS2_DEVID_MS2_1) && (Type != CS2_DEVID_MS2_2)))
          {
             MrIpcDecodeToCan(CmdFrame, &CanMsg);
             if (Cs2ethGetVerbose(Data))
@@ -218,18 +222,18 @@ static void ProcessOutsideData(Cs2ethStruct *Data, MrCs2CanDataType *CanMsg,
              MrCs2GetHash(CanMsg), MrCs2GetResponse(CanMsg),
              MrCs2GetCommand(CanMsg), MrCs2GetPrio(CanMsg));
 #ifdef TRACE
-      switch (MrMs2GetCommand(CanMsg))
+      switch (MrCs2GetCommand(CanMsg))
       {
-         case MR_MS2_CMD_PING:
-            switch (MrCs2GetNumParamBytes(CanMsg))
+         case CS2_CMD_PING:
+            switch (MrCs2GetDlc(CanMsg))
             {
                case 0:
-                  MrCs2DecPing0(CanMsg);
+                  Cs2DecPing0(MrCs2GetData(CanMsg));
                   if (Cs2ethGetVerbose(Data))
                      puts("Softwarestand Anfrage/Teilnehmer Ping");
                   break;
                case 8:
-                  MrCs2DecPing8(CanMsg, &Uid, &SoftwareVersion, &DeviceId);
+                  Cs2DecPing8(MrCs2GetData(CanMsg), &Uid, &SoftwareVersion, &DeviceId);
                   if (Cs2ethGetVerbose(Data))
                      printf("Softwarestand Anfrage/Teilnehmer Ping (Uid = 0x%lx, SwVersion = 0x%x, DeviceId = 0x%x)\n",
                             Uid, SoftwareVersion, DeviceId);
@@ -252,7 +256,7 @@ static void ProcessOutsideData(Cs2ethStruct *Data, MrCs2CanDataType *CanMsg,
    MrIpcSetSenderSocket(&Cmd, SenderSocket);
    MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
    if (MrIpcGetCanHash(&Cmd) == 0)
-      MrIpcSetCanHash(&Cmd, MrCs2CalcHash(MrIpcGetCanHash(&Cmd)));
+      MrIpcSetCanHash(&Cmd, Cs2CalcHash(MrIpcGetCanHash(&Cmd)));
    MrIpcSend(Cs2ethGetClientSock(Data), &Cmd);
    MrIpcExit(&Cmd);
 }

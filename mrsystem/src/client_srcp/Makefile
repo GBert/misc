@@ -1,6 +1,6 @@
 TARGET=mrsrcp
-OBJS=main.o ../common/cs2eth.o srcp.o states.o srcp_parse.o
-LOCALLIBS=-lrt -lmr_ipc -lmr_can -lm -lbytestream -lmrconfig -linipars -lscanner -lfsm -lmap -lmenge -lavl -lqueue -ldliste
+OBJS=main.o ../common/cs2eth.o srcp.o states.o
+LOCALLIBS=-lrt -lmr_ipc -lmr_cs2ms2 -lcs2 -lsrcp -lm -lbytestream -lmrconfig -linipars -lscanner -lfsm -lmap -lmenge -lavl -lqueue -ldliste
 DESTDIR=/usr/local/bin
 
 %.o: %.c
@@ -14,11 +14,10 @@ $(TARGET): $(OBJS)
 
 main.o: main.c ../common/cs2eth.h srcp.h
 
-srcp.o: srcp.c srcp.h srcp_parse.h
+srcp.o: srcp.c srcp.h
 
-states.o: states.c srcp.h srcp_parse.h
+states.o: states.c srcp.h
 
-srcp_parse.o: srcp_parse.c srcp_parse.h
 
 install: $(TARGET)
 	install -D $(TARGET) $(DESTDIR)/$(TARGET)

@@ -9,7 +9,8 @@
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
-#include <mr_can.h>
+#include <mr_cs2ms2.h>
+#include <cs2.h>
 #include "can_io.h"
 #include "tty_client.h"
 
@@ -251,12 +252,12 @@ static BOOL TtyClientRead(void *private, int fd, BOOL PendingData,
             MrCs2SetDlc(CanMsg, ReadCanFrame[4]);
             for (i = 0; i < 8; i++)
                MrCs2GetData(CanMsg)[i] = ReadCanFrame[5 + i];
-            MrCs2DecodeId(MrCs2GetId(CanMsg), &CanHash, &Response, &Command, &Prio);
-            MrCs2SetHash(CanMsg, CanHash & ~MR_CS2_MASK_HASH_MAGIC);
+            Cs2DecodeId(MrCs2GetId(CanMsg), &CanHash, &Response, &Command, &Prio);
+            MrCs2SetHash(CanMsg, CanHash & ~CS2_MASK_HASH_MAGIC);
             MrCs2SetResponse(CanMsg, Response);
             MrCs2SetCommand(CanMsg, Command);
             MrCs2SetPrio(CanMsg, Prio);
-            MrCs2SetIsCs2(CanMsg, MrCs2IsCs2Msg(CanHash, MrCs2GetCommand(CanMsg)));
+            MrCs2SetIsCs2(CanMsg, Cs2IsCs2Msg(CanHash, MrCs2GetCommand(CanMsg)));
             RetVal = TRUE;
          }
          else

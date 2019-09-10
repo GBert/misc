@@ -3,7 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <can4linux.h>
-#include <mr_can.h>
+#include <mr_cs2ms2.h>
 #include "can_io.h"
 #include "c4l_client.h"
 

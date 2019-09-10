@@ -1,0 +1,22 @@
+//lok.def
+//System-Parameter fuer Maerklin-Zentrale: definitions
+//put type in quotes here if value has to quoted in config file
+//name type range description
+special_lok_adr int "0 4294967295" "Lokadresse"
+special_lok_name str "1 17" "Lokname"
+f01 str "1 256" "Befehle f&uuml;r F1"
+f02 str "1 256" "Befehle f&uuml;r F2"
+f03 str "1 256" "Befehle f&uuml;r F3"
+f04 str "1 256" "Befehle f&uuml;r F4"
+f05 str "1 256" "Befehle f&uuml;r F5"
+f06 str "1 256" "Befehle f&uuml;r F6"
+f07 str "1 256" "Befehle f&uuml;r F7"
+f08 str "1 256" "Befehle f&uuml;r F8"
+f09 str "1 256" "Befehle f&uuml;r F9"
+f10 str "1 256" "Befehle f&uuml;r F10"
+f11 str "1 256" "Befehle f&uuml;r F11"
+f12 str "1 256" "Befehle f&uuml;r F12"
+f13 str "1 256" "Befehle f&uuml;r F13"
+f14 str "1 256" "Befehle f&uuml;r F14"
+f15 str "1 256" "Befehle f&uuml;r F15"
+f16 str "1 256" "Befehle f&uuml;r F16"

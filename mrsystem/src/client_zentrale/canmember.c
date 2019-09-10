@@ -6,9 +6,10 @@
 #include <map.h>
 #include <menge.h>
 #include <write_cs2.h>
+#include <mr_cs2ms2.h>
+#include <cs2.h>
 #include <uci.h>
 #include "canmember.h"
-#include "m_cs2ms2.h"
 
 
 #define WRITE_ALL_INFORMATIONS
@@ -183,6 +184,28 @@ CanMemberInfo *CanMemberSearchNotConfigured(CanMemberStruct *Data)
    ConfSearch.CanMember = (CanMemberInfo *)NULL;
    MapWalkAscend(CanMemberGetCanMemberDb(Data),
                  (MapWalkCbFkt)SearchNotConfigured, (void *)&ConfSearch);
+   return(ConfSearch.CanMember);
+}
+
+static void SearchMs2(void *PrivData, MapKeyType Key, MapDataType Daten)
+{  CanMemberInfo *Data;
+   SearchConfiguredStruct *ConfSearch;
+
+   Data = (CanMemberInfo *)Daten;
+   ConfSearch = (SearchConfiguredStruct *)PrivData;
+   if ((ConfSearch->CanMember == (CanMemberInfo *)NULL) &&
+       (CanMemberInfoGetType(Data) == CS2_DEVID_MS2_2))
+   {
+      ConfSearch->CanMember = Data;
+   }
+}
+
+CanMemberInfo *CanMemberSearchMs2(CanMemberStruct *Data)
+{  SearchConfiguredStruct ConfSearch;
+
+   ConfSearch.CanMember = (CanMemberInfo *)NULL;
+   MapWalkAscend(CanMemberGetCanMemberDb(Data),
+                 (MapWalkCbFkt)SearchMs2, (void *)&ConfSearch);
    return(ConfSearch.CanMember);
 }
 
@@ -400,7 +423,7 @@ static void WriteMemberMrsystem(FILE *MemberStream, char *WebPath,
             UciWrTxt(MemberUciStream, ValueUciStream, "uid", 3, 3, IntStr);
             sprintf(IntStr, "%d.%02d", Major, Minor);
             UciWrTxt(MemberUciStream, ValueUciStream, "version", 1, 10, IntStr);
-            sprintf(IntStr, "%d", MR_CS2_DEVID_WIRED);
+            sprintf(IntStr, "%d", CS2_DEVID_WIRED);
             UciWrTxt(MemberUciStream, ValueUciStream, "type", 1, 5, IntStr);
             UciWrTxt(MemberUciStream, ValueUciStream, "artikelnr", 1, 10,
                      ConfigGeraetTypGetArtikelNr(ConfigStatusInfoGetGeraeteTyp(MrsystemInfo)));

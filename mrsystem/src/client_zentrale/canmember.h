@@ -62,6 +62,7 @@ void CanMemberInsert(CanMemberStruct *Data, CanMemberInfo *CanMember);
 void CanMemberDelete(CanMemberStruct *Data, CanMemberInfo *CanMember);
 CanMemberInfo *CanMemberSearch(CanMemberStruct *Data, unsigned long Uid);
 CanMemberInfo *CanMemberSearchNotConfigured(CanMemberStruct *Data);
+CanMemberInfo *CanMemberSearchMs2(CanMemberStruct *Data);
 void CanMemberMarkAllInvalid(CanMemberStruct *Data);
 void CanMemberDelAllInvalid(CanMemberStruct *Data);
 void CanMemberSaveMesswerteCs2(CanMemberStruct *Data, char *LocFilePath);

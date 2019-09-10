@@ -1,7 +1,8 @@
 TARGET=mrgpios88
 OBJS=s88udp-bpi.o allwinner.o
-LOCALLIBS=-lmr_ipc -lm -lmr_can -lbytestream
+LOCALLIBS=-lmr_ipc -lm -lmr_cs2ms2 -lcs2 -lbytestream
 DESTDIR=/usr/local/bin
+LOCAL_CFLAGS=-DBPI_PRO
 
 %.o: %.c
 	$(CC) $(CFLAGS) -DTRACE=$(TRACE) -std=gnu99 -DUSE_MRSYSTEM -I$(INCLUDE_PATH) -c $<

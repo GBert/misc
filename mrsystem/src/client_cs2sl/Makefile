@@ -1,6 +1,6 @@
 TARGET=mrcs2sl
 OBJS=main.o cs2sl.o can_sleth.o
-LOCALLIBS=-lmr_ipc -lmr_can -lm -lbytestream -lmrconfig -linipars -lscanner -lmap -lmenge -ldliste -lavl
+LOCALLIBS=-lmr_ipc -lmr_cs2ms2 -lcs2 -lm -lbytestream -lmrconfig -linipars -lscanner -lmap -lmenge -ldliste -lavl
 DESTDIR=/usr/local/bin
 
 %.o: %.c

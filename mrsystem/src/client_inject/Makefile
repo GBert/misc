@@ -1,6 +1,6 @@
 TARGET=mrinject
 OBJS=main.o inject.o
-LOCALLIBS=-lmr_ipc -lm -lmr_can -lmrconfig -linipars -lscanner -lbytestream -lmap -lavl
+LOCALLIBS=-lmr_ipc -lm -lmr_cs2ms2 -lcs2 -lmrconfig -linipars -lscanner -lbytestream -lmap -lavl
 DESTDIR=/usr/local/bin
 
 %.o: %.c

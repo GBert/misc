@@ -6,6 +6,7 @@
 #include <errno.h>
 #include <boolean.h>
 #include <mr_ipc.h>
+#include <cs2.h>
 #include "inject.h"
 
 InjectStruct *InjectCreate(void)
@@ -64,7 +65,7 @@ static void SendCmd(int socket, unsigned long Uid, unsigned Response,
    MrIpcCmdType Cmd;
    unsigned int i;
 
-   CanFrame.can_id = MrCs2EncodeId(MrCs2CalcHash(Uid), Response, Command, Prio);
+   CanFrame.can_id = Cs2EncodeId(Cs2CalcHash(Uid), Response, Command, Prio);
    CanFrame.can_dlc = DLC;
    for (i = 0; i < MR_CS2_NUM_CAN_BYTES; i++)
    {
@@ -104,11 +105,11 @@ void InjectRunFile(InjectStruct *Data, char *Filename)
          {
             Param = strtok(Line, " ");
             Uid = strtol(Param, (char **)NULL, 0);
-            Param = strtok(Line, " ");
+            Param = strtok((char *)NULL, " ");
             Response = strtol(Param, (char **)NULL, 0);
-            Param = strtok(Line, " ");
+            Param = strtok((char *)NULL, " ");
             Command = strtol(Param, (char **)NULL, 0);
-            Param = strtok(Line, " ");
+            Param = strtok((char *)NULL, " ");
             Prio = strtol(Param, (char **)NULL, 0);
             Param = strtok((char *)NULL, " ");
             DLC = strtol(Param, (char **)NULL, 0);

@@ -2,6 +2,18 @@
 #include <sys/socket.h>
 #include "mr_ipc.h"
 
+/** @file */
+
+/**
+* @brief IPC Nachricht senden
+*
+* Diese Funktion versendet ein IPC Paket
+*
+* @param[in] socket Socket zur drehscheibe
+* @param[in] Data Zeiger auf die IPC Struktur
+*
+* @return Fehler oder OK (MR_IPC_RCV_OK, MR_IPC_RCV_ERROR)
+*/
 int MrIpcSend(int socket, MrIpcCmdType *Data)
 {  int BytesSend;
 

@@ -597,18 +597,18 @@ static void SwitchOn(ZentraleStruct *Data)
       CfgProtokolle = ZentraleGetProtokolle(Data);
       CanProtokolle = 0;
       if ((CfgProtokolle & MRSYSTEM_CFG_PROTO_MOTOROLA) == MRSYSTEM_CFG_PROTO_MOTOROLA)
-         CanProtokolle |= MR_CS2_TRACK_PROTO_MM2;
+         CanProtokolle |= CS2_TRACK_PROTO_MM2;
       if ((CfgProtokolle & MRSYSTEM_CFG_PROTO_MFX) == MRSYSTEM_CFG_PROTO_MFX)
-         CanProtokolle |= MR_CS2_TRACK_PROTO_MFX;
+         CanProtokolle |= CS2_TRACK_PROTO_MFX;
       if ((CfgProtokolle & MRSYSTEM_CFG_PROTO_DCC) == MRSYSTEM_CFG_PROTO_DCC)
-         CanProtokolle |= MR_CS2_TRACK_PROTO_DCC;
+         CanProtokolle |= CS2_TRACK_PROTO_DCC;
       MrIpcInit(&Cmd);
       MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
       MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
       MrIpcSetCanResponse(&Cmd, 0);
       MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-      MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_SYSTEM);
-      MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_0);
+      MrIpcSetCanCommand(&Cmd, CS2_CMD_SYSTEM);
+      MrIpcSetCanPrio(&Cmd, CS2_PRIO_0);
       MrIpcCmdSetTrackProto(&Cmd, CanProtokolle);
       MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
       if (ZentraleGetVerbose(Data))
@@ -621,8 +621,8 @@ static void SwitchOn(ZentraleStruct *Data)
       MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
       MrIpcSetCanResponse(&Cmd, 0);
       MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-      MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_SYSTEM);
-      MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_0);
+      MrIpcSetCanCommand(&Cmd, CS2_CMD_SYSTEM);
+      MrIpcSetCanPrio(&Cmd, CS2_PRIO_0);
       MrIpcCmdSetRun(&Cmd, On);
       MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
       if (ZentraleGetVerbose(Data))
@@ -638,9 +638,9 @@ static void StartTimerCheck(ZentraleStruct *Data)
    MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
    MrIpcSetCommand(&Cmd, MrIpcCmdNull);
    MrIpcSetCanResponse(&Cmd, 0);
-   MrIpcCalcHash(&Cmd, MR_CS2_UID_BROADCAST);
+   MrIpcCalcHash(&Cmd, CS2_UID_BROADCAST);
    MrIpcSetCanCommand(&Cmd, 0xffff);
-   MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
+   MrIpcSetCanPrio(&Cmd, CS2_PRIO_2);
    FsmDo(ZentraleGetStateMachine(Data), 0, &Cmd);
 }
 
@@ -695,6 +695,6 @@ void ZentraleRun(ZentraleStruct *Data)
    }
    else
    {
-      puts("ERROR: can not start zentrrale module");
+      puts("ERROR: can not start zentrale module");
    }
 }

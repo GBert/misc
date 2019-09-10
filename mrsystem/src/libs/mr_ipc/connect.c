@@ -3,6 +3,18 @@
 #include <arpa/inet.h>
 #include "mr_ipc.h"
 
+/** @file */
+
+/**
+* @brief Verbindung zur drehscheibe aufbauen
+*
+* Diese Funktion stellt eine Verbindung zur drehscheibe her.
+*
+* @param[in] Address IP Adresse zur drehscheibe
+* @param[in] Port Portnummer der drehscheibe
+*
+* @return Sockert
+*/
 int MrIpcConnect(char *IpAddr, int Port)
 {  int sock;
    struct sockaddr_in ServerAddr;

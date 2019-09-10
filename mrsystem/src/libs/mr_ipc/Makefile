@@ -6,7 +6,7 @@ OBJS=create.o destroy.o init.o exit.o connect.o connect_if.o server.o server_if.
     cmd_set_locomotive_dir.o cmd_set_locomotive_speed.o cmd_set_locomotive_fkt.o \
     cmd_get_locomotive_dir.o cmd_get_locomotive_speed.o cmd_get_locomotive_fkt.o \
     cmd_set_acc_pos.o cmd_set_query.o cmd_get_acc_pos.o cmd_set_member.o cmd_get_member.o \
-    cmd_set_get_member.o cmd_set_get_locname.o cmd_get_get_locname.o \
+    cmd_set_get_member.o cmd_set_get_locname.o cmd_get_get_locname.o  cmd_set_get_loclist.o \
     cmd_set_get_locinfo.o cmd_get_get_locinfo.o cmd_get_query.o cmd_get_cfg_zheader.o \
     cmd_set_cfg_header.o cmd_get_cfg_header.o cmd_set_cfg_data.o cmd_get_cfg_data.o \
     cmd_set_can_bootldr.o cmd_get_can_bootldr.o \
@@ -70,6 +70,8 @@ cmd_set_get_member.o: cmd_set_get_member.c mr_ipc.h
 cmd_set_get_locname.o: cmd_set_get_locname.c mr_ipc.h
 
 cmd_set_get_locinfo.o: cmd_set_get_locinfo.c mr_ipc.h
+
+cmd_set_get_loclist.o: cmd_set_get_loclist.c mr_ipc.h
 
 cmd_set_query.o: cmd_set_query.c mr_ipc.h
 

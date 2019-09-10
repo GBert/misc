@@ -1,6 +1,6 @@
 TARGET=mrlogms2
 OBJS=main.o ../client_ms2/can_client.o ../common/logms2.o
-LOCALLIBS=-lmr_ipc -lmr_can -lm -lbytestream -lmrconfig -linipars -lscanner -lmap -lavl
+LOCALLIBS=-lmr_ipc -lmr_cs2ms2 -lcs2 -lm -lbytestream -lmrconfig -linipars -lscanner -lmap -lavl
 DESTDIR=/usr/local/bin
 
 %.o: %.c

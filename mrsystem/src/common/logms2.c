@@ -10,7 +10,8 @@
 #include <errno.h>
 #include <boolean.h>
 #include <mr_ipc.h>
-#include <mr_can.h>
+#include <mr_cs2ms2.h>
+#include <cs2.h>
 #include "can_io.h"
 #include "logms2.h"
 
@@ -76,19 +77,19 @@ static void Stop(Logms2Struct *Data)
    Logms2GetIoFunctions(Data)->Close(Logms2GetIoFunctions(Data)->private);
 }
 
-static void ProcessCanData(Logms2Struct *Data, MrMs2CanDataType *CanMsg)
+static void ProcessCanData(Logms2Struct *Data, MrCs2CanDataType *CanMsg)
 {
    if (Logms2GetVerbose(Data))
    {
-      if (MrMs2IsMs2(CanMsg))
+      if (MrCs2GetIsCs2(CanMsg))
       {
-         MrMs2Trace(CanMsg);
+         MrCs2Trace(CanMsg);
       }
    }
 }
 
 static void HandleCanData(Logms2Struct *Data, int Fd)
-{  MrMs2CanDataType CanMsg;
+{  MrCs2CanDataType CanMsg;
    BOOL Ret;
 
    Ret = Logms2GetIoFunctions(Data)->Read(Logms2GetIoFunctions(Data)->private,

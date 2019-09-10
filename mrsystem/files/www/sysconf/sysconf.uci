@@ -7,7 +7,5 @@ seltype = tab
 
 // tabtext cfg-file definitions-file (optionally quoted)
 MR-System ./sysconf/mrsystem.cfg ./sysconf/mrsystem.def
-Update ./sysconf/update.cfg ./sysconf/update.def
-Linux ./sysconf/linux.cfg ./sysconf/linux.def
 Start ./sysconf/daemons.cfg ./sysconf/daemons.def
-Neustart ./sysconf/reboot.cfg ./sysconf/reboot.def
+Spezial-Lok ./sysconf/lok.cfg ./sysconf/lok.def

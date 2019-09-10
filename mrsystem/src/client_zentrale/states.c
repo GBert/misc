@@ -11,6 +11,8 @@
 #include <write_cs2.h>
 #include <fsm.h>
 #include <mr_ipc.h>
+#include <mr_ipchl.h>
+#include <cs2.h>
 #include <config.h>
 #include "zentrale.h"
 #include "lok.h"
@@ -44,7 +46,7 @@
 #define PARAGRAPH_LOK       1
 #define PARAGRAPH_NUMLOKS   2
 
-#define NUM_STATES 34
+#define NUM_STATES 36
 #define STATE_WAIT_FOR_MS2                0
 #define STATE_WAIT_LOKNAME_CFG_HDR        1
 #define STATE_WAIT_LOKNAME_CFG_DATA       2
@@ -79,9 +81,11 @@
 #define STATE_WAIT_MS2_LOKNAME_CFG_DATA  31
 #define STATE_WAIT_MS2_LOKINFO_CFG_HDR   32
 #define STATE_WAIT_MS2_LOKINFO_CFG_DATA  33
+#define STATE_WAIT_LOKLISTE_CFG_HDR      34
+#define STATE_WAIT_LOKLISTE_CFG_DATA     35
 
 
-#define NUM_SIGNALS 25
+#define NUM_SIGNALS 27
 
 
 typedef struct {
@@ -98,14 +102,7 @@ static S88SystemConfig S88Bootldr[3] = {
 static void SendPing(ZentraleStruct *Data)
 {  MrIpcCmdType Cmd;
 
-   MrIpcInit(&Cmd);
-   MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-   MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-   MrIpcSetCanResponse(&Cmd, 0);
-   MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-   MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_PING);
-   MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-   MrIpcCmdSetRequestMember(&Cmd);
+   MrIpcHlMemberRequest(&Cmd, ZentraleGetUid(Data));
    MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
 }
 
@@ -131,14 +128,8 @@ static int QueryMembers(ZentraleStruct *Data, BOOL GetConfig)
             CanMemberSetIsChanged(ZentraleGetCanMember(Data), TRUE);
             ZentraleSetActualIndex(Data, 0);
             ZentraleSetActualConfig(Data, CanMemberInfoGetUid(CanMember));
-            MrIpcInit(&Cmd);
-            MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-            MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-            MrIpcSetCanResponse(&Cmd, 0);
-            MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-            MrIpcSetCanCommand(&Cmd, MR_MS2_CMD_STATUS);
-            MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-            MrIpcCmdSetStatusRequest(&Cmd, CanMemberInfoGetUid(CanMember), 0);
+            MrIpcHlStatusRequest(&Cmd, ZentraleGetUid(Data),
+                                 CanMemberInfoGetUid(CanMember), 0);
             MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
             NextState = STATE_WAIT_CFG_DATA_HDR;
          }
@@ -277,39 +268,39 @@ static int HandleFileRequest(void *Priv, void *SignalData)
    Name[8] = '\0';
    if (ZentraleGetVerbose(Data))
       printf("FSM: request %s\n", Name);
-   if (strncmp(MR_CS2_CFG_LOCINFO, Name, strlen(MR_CS2_CFG_LOCINFO)) == 0)
+   if (strncmp(CS2_CFG_LOCINFO, Name, strlen(CS2_CFG_LOCINFO)) == 0)
       Dateiname = (char *)NULL;
-   else if (strncmp(MR_CS2_CFG_LOCNAMES, Name, strlen(MR_CS2_CFG_LOCNAMES)) == 0)
+   else if (strncmp(CS2_CFG_LOCNAMES, Name, strlen(CS2_CFG_LOCNAMES)) == 0)
       Dateiname = (char *)NULL;
-   else if (strncmp(MR_CS2_CFG_MAGINFO, Name, strlen(MR_CS2_CFG_MAGINFO)) == 0)
+   else if (strncmp(CS2_CFG_MAGINFO, Name, strlen(CS2_CFG_MAGINFO)) == 0)
       Dateiname = (char *)NULL;
-   else if (strncmp(MR_CS2_CFG_LOCDB, Name, strlen(MR_CS2_CFG_LOCDB)) == 0)
+   else if (strncmp(CS2_CFG_LOCDB, Name, strlen(CS2_CFG_LOCDB)) == 0)
       Dateiname = (char *)NULL;
-   else if (strncmp(MR_CS2_CFG_LANGVER, Name, strlen(MR_CS2_CFG_LANGVER)) == 0)
+   else if (strncmp(CS2_CFG_LANGVER, Name, strlen(CS2_CFG_LANGVER)) == 0)
       Dateiname = (char *)NULL;
-   else if (strncmp(MR_CS2_CFG_LANG, Name, strlen(MR_CS2_CFG_LANG)) == 0)
+   else if (strncmp(CS2_CFG_LANG, Name, strlen(CS2_CFG_LANG)) == 0)
       Dateiname = (char *)NULL;
-   else if (strncmp(MR_CS2_CFG_LDBVER, Name, strlen(MR_CS2_CFG_LDBVER)) == 0)
+   else if (strncmp(CS2_CFG_LDBVER, Name, strlen(CS2_CFG_LDBVER)) == 0)
       Dateiname = (char *)NULL;
-   else if (strncmp(MR_CS2_CFG_LOK_STAT, Name, strlen(MR_CS2_CFG_LOK_STAT)) == 0)
+   else if (strncmp(CS2_CFG_LOK_STAT, Name, strlen(CS2_CFG_LOK_STAT)) == 0)
    {
       LokStatusSaveLokomotiveSr2(ZentraleGetLoks(Data));
       Dateiname = CS2_FILE_STRING_STATUS_LOKOMOTIVE;
    }
-   else if (strncmp(MR_CS2_CFG_LOKS, Name, strlen(MR_CS2_CFG_LOKS)) == 0)
+   else if (strncmp(CS2_CFG_LOKS, Name, strlen(CS2_CFG_LOKS)) == 0)
       Dateiname = CS2_FILE_STRING_LOKOMOTIVE;
-   else if (strncmp(MR_CS2_CFG_MAGS, Name, strlen(MR_CS2_CFG_MAGS)) == 0)
+   else if (strncmp(CS2_CFG_MAGS, Name, strlen(CS2_CFG_MAGS)) == 0)
       Dateiname = CS2_FILE_STRING_MAGNETARTIKEL;
-   else if (strncmp(MR_CS2_CFG_GBS_PAGE, Name, strlen(MR_CS2_CFG_GBS_PAGE)) == 0)
+   else if (strncmp(CS2_CFG_GBS_PAGE, Name, strlen(CS2_CFG_GBS_PAGE)) == 0)
    {
-      if (atoi(Name + strlen(MR_CS2_CFG_GBS_PAGE)) <
+      if (atoi(Name + strlen(CS2_CFG_GBS_PAGE)) <
           GleisbildGetNumPages(ZentraleGetGleisbild(Data)))
       {
          if (ZentraleGetNrGleisPages(Data,
-                                     atoi(Name + strlen(MR_CS2_CFG_GBS_PAGE))) != (GleisbildPageStruct *)NULL)
+                                     atoi(Name + strlen(CS2_CFG_GBS_PAGE))) != (GleisbildPageStruct *)NULL)
          {
             Dateiname = GleisbildPageGetName(ZentraleGetNrGleisPages(Data,
-                                                                     atoi(Name + strlen(MR_CS2_CFG_GBS_PAGE))));
+                                                                     atoi(Name + strlen(CS2_CFG_GBS_PAGE))));
          }
          else
             Dateiname = (char *)NULL;
@@ -317,21 +308,21 @@ static int HandleFileRequest(void *Priv, void *SignalData)
       else
          Dateiname = (char *)NULL;
    }
-   else if (strncmp(MR_CS2_CFG_GBS_STAT, Name, strlen(MR_CS2_CFG_GBS_STAT)) == 0)
+   else if (strncmp(CS2_CFG_GBS_STAT, Name, strlen(CS2_CFG_GBS_STAT)) == 0)
    {
       GbsStatSaveGbsStatSr2(ZentraleGetGleisbild(Data));
       Dateiname = CS2_FILE_STRING_STATUS_GLEISBILD;
    }
-   else if (strncmp(MR_CS2_CFG_GBS, Name, strlen(MR_CS2_CFG_GBS)) == 0)
+   else if (strncmp(CS2_CFG_GBS, Name, strlen(CS2_CFG_GBS)) == 0)
       Dateiname = CS2_FILE_STRING_GLEISBILD;
-   else if (strncmp(MR_CS2_CFG_FS, Name, strlen(MR_CS2_CFG_FS)) == 0)
+   else if (strncmp(CS2_CFG_FS, Name, strlen(CS2_CFG_FS)) == 0)
       Dateiname = CS2_FILE_STRING_FAHRSTRASSE;
-   else if (strncmp(MR_CS2_CFG_MAG_STAT, Name, strlen(MR_CS2_CFG_MAG_STAT)) == 0)
+   else if (strncmp(CS2_CFG_MAG_STAT, Name, strlen(CS2_CFG_MAG_STAT)) == 0)
    {
       MagStatusSaveMagStatusSr2(ZentraleGetMagnetartikel(Data));
       Dateiname = CS2_FILE_STRING_STATUS_MAGNETARTIKEL;
    }
-   else if (strncmp(MR_CS2_CFG_FS_STAT, Name, strlen(MR_CS2_CFG_FS_STAT)) == 0)
+   else if (strncmp(CS2_CFG_FS_STAT, Name, strlen(CS2_CFG_FS_STAT)) == 0)
    {
       FsStatSaveFsStatSr2(ZentraleGetFahrstrasse(Data));
       Dateiname = CS2_FILE_STRING_STATUS_FAHRSTRASSE;
@@ -363,43 +354,31 @@ static int HandleFileRequest(void *Priv, void *SignalData)
                   if (ZFileCompress(ZentraleGetPackedCs2File(Data)))
                   {
                      MrIpcSetCanResponse(CmdFrame, 1);
-                     Hash = MrCs2CalcHash(ZentraleGetUid(Data));
-                     MrIpcSetCanHash(CmdFrame, MrCs2CalcHash(ZentraleGetUid(Data)));
+                     Hash = Cs2CalcHash(ZentraleGetUid(Data));
+                     MrIpcSetCanHash(CmdFrame, Cs2CalcHash(ZentraleGetUid(Data)));
                      MrIpcSetReceiverSocket(CmdFrame,
                                             MrIpcGetSenderSocket(CmdFrame));
                      MrIpcSetSenderSocket(CmdFrame, MR_IPC_SOCKET_ALL);
                      MrIpcSend(ZentraleGetClientSock(Data), CmdFrame);
                      MrIpcSetCanHash(CmdFrame, Hash);
-                     MrIpcInit(&Cmd);
-                     MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-                     MrIpcSetReceiverSocket(&Cmd,
-                                            MrIpcGetReceiverSocket(CmdFrame));
-                     MrIpcSetCanResponse(&Cmd, 0);
-                     MrIpcSetCanHash(&Cmd, Hash);
-                     MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CFGDAT_STREAM);
-                     MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_0);
-                     MrIpcCmdSetCfgHeader(&Cmd,
-                         ZFileGetLength(ZentraleGetPackedCs2File(Data)),
-                         ZFileGetCrc(ZentraleGetPackedCs2File(Data)));
+                     MrIpcHlCfgHeaderRequest(&Cmd, ZentraleGetUid(Data),
+                                             MrIpcGetReceiverSocket(CmdFrame),
+                                             ZFileGetLength(ZentraleGetPackedCs2File(Data)),
+                                             ZFileGetCrc(ZentraleGetPackedCs2File(Data)));
                      MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
+
                      i = 0;
                      while (i < ZFileGetFrameLength(ZentraleGetPackedCs2File(Data)))
                      {
-                        MrIpcInit(&Cmd);
-                        MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-                        MrIpcSetReceiverSocket(&Cmd,
-                                               MrIpcGetReceiverSocket(CmdFrame));
-                        MrIpcSetCanResponse(&Cmd, 0);
-                        MrIpcSetCanHash(&Cmd, Hash);
-                        MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CFGDAT_STREAM);
-                        MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
                         j = 0;
                         while (j < 8)
                         {
                            Name[j] = ZFileGetBuffer(ZentraleGetPackedCs2File(Data))[i + j];
                            j++;
                         }
-                        MrIpcCmdSetCfgData(&Cmd, Name);
+                        MrIpcHlCfgDataRequest(&Cmd, ZentraleGetUid(Data),
+                                              MrIpcGetReceiverSocket(CmdFrame),
+                                              Name);
                         MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
                         i += 8;
                      }
@@ -549,6 +528,90 @@ static BOOL HandleCfgLoknamen(ZentraleStruct *Data, MrIpcCmdType *CmdFrame)
    }
 }
 
+static void HandleCfgLokliste(ZentraleStruct *Data, MrIpcCmdType *CmdFrame)
+{  Cs2parser *LokParser;
+   int LineInfo;
+   BOOL CfgIsCorrupt;
+
+   if (ZentraleGetVerbose(Data))
+      printf("FSM: evaluate lokliste cfg\n%s",
+             Cs2CfgDataGetBuf(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame)));
+   Cs2CfgDataGetBuf(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame))[Cs2CfgDataGetLength(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame))] = '\0';
+   LokParser = Cs2pCreate();
+   Cs2pInit(LokParser, PARSER_TYPE_LOKLISTE,
+            Cs2CfgDataGetBuf(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame)),
+            Cs2CfgDataGetHaveRead(ZentraleGetCs2CfgDaten(Data), MrIpcGetCanHash(CmdFrame)));
+   Cs2pSetVerbose(LokParser, FALSE);
+   ZentraleSetActualIndex(Data, 0);
+   CfgIsCorrupt = FALSE;
+   do {
+      LineInfo = Cs2pParse(LokParser);
+      switch (LineInfo)
+      {
+         case PARSER_ERROR:
+            if (ZentraleGetVerbose(Data))
+               puts("ERROR in lokliste");
+            CfgIsCorrupt = TRUE;
+            break;
+         case PARSER_EOF:
+            if (ZentraleGetVerbose(Data))
+               puts("end of lokliste");
+            break;
+         case PARSER_PARAGRAPH:
+            if (ZentraleGetVerbose(Data))
+               printf("new paragraph %s in lokliste\n",
+                      Cs2pGetName(LokParser));
+            switch (Cs2pGetSubType(LokParser))
+            {
+               case PARSER_PARAGRAPH_LOKLISTE:
+                  if (ZentraleGetVerbose(Data))
+                     puts("lokliste paragraph in lokliste");
+                  break;
+            }
+            break;
+         case PARSER_VALUE:
+            if (ZentraleGetVerbose(Data))
+               printf("new value %s=%s in lokliste\n",
+                      Cs2pGetName(LokParser), Cs2pGetValue(LokParser));
+            switch (Cs2pGetSubType(LokParser))
+            {
+               case PARSER_VALUE_DV:
+                  if (ZentraleGetVerbose(Data))
+                     printf("dv %d in lokliste\n", atoi(Cs2pGetValue(LokParser)));
+                  break;
+               case PARSER_VALUE_IDX:
+                  if (ZentraleGetVerbose(Data))
+                     printf("idx %d in lokliste\n", atoi(Cs2pGetValue(LokParser)));
+                  if (strlen(ZentraleGetLokNamenNr(Data, ZentraleGetActualIndex(Data))) != 0)
+                  {
+                     ZentraleSetActualIndex(Data,
+                                            ZentraleGetActualIndex(Data) + 1);
+                  }
+                  break;
+               case PARSER_VALUE_LLINDEX:
+                  if (ZentraleGetVerbose(Data))
+                     printf("llindex %d in lokliste\n", atoi(Cs2pGetValue(LokParser)));
+                  break;
+               case PARSER_VALUE_NAME:
+                  if (ZentraleGetVerbose(Data))
+                     printf("lok name >%s< in lokliste\n", Cs2pGetValue(LokParser));
+                  ZentraleSetLokNamenNr(Data,
+                                        ZentraleGetActualIndex(Data),
+                                        Cs2pGetValue(LokParser));
+                  break;
+               case PARSER_VALUE_CRC:
+                  if (ZentraleGetVerbose(Data))
+                     printf("crc %d in lokliste\n", atoi(Cs2pGetValue(LokParser)));
+                  break;
+            }
+            break;
+      }
+   } while ((LineInfo != PARSER_EOF) && !CfgIsCorrupt);
+   Cs2pDestroy(LokParser);
+   ZentraleSetNumLoks(Data, ZentraleGetActualIndex(Data) + 1);
+   LokMarkAllDeleted(ZentraleGetLoks(Data));
+}
+
 static BOOL HandleCfgLokinfo(ZentraleStruct *Data, MrIpcCmdType *CmdFrame)
 {  Cs2parser *LokParser;
    int LineInfo, FktIndex;
@@ -602,6 +665,10 @@ static BOOL HandleCfgLokinfo(ZentraleStruct *Data, MrIpcCmdType *CmdFrame)
                   if (ZentraleGetVerbose(Data))
                      puts("neuer lok Eintrag");
                   break;
+               case PARSER_VALUE_DV:
+                  if (ZentraleGetVerbose(Data))
+                     puts("lok dv");
+                 break;
                case PARSER_VALUE_UID:
                   if (ZentraleGetVerbose(Data))
                      puts("lok uid");
@@ -818,7 +885,7 @@ static void HandleCfgCompressedData(ZentraleStruct *Data, MrIpcCmdType *CmdFrame
                   strcpy(GleisbildPageDir, ZentraleGetLocPath(Data));
                   if (GleisbildPageDir[strlen(GleisbildPageDir) - 1] != '/')
                      strcat(GleisbildPageDir, "/");
-                  strcat(GleisbildPageDir, MR_CS2_GLEISBILD_PAGE_SUBDIR);
+                  strcat(GleisbildPageDir, CS2_GLEISBILD_PAGE_SUBDIR);
                   d = opendir(GleisbildPageDir);
                   if (d)
                   {
@@ -911,13 +978,13 @@ static void HandleCfgCompressedData(ZentraleStruct *Data, MrIpcCmdType *CmdFrame
                                                               ZentraleGetLocPath(Data));
                         GleisbildName = malloc(strlen(GleisbildInfoGetName(GleisbildSearch(ZentraleGetGleisbild(Data),
                                                                            GleisbildPageStructGetPage(NewPage)))) +
-                                               strlen(MR_CS2_FILE_EXTENSION) + 1);
+                                               strlen(CS2_FILE_EXTENSION) + 1);
                         if (GleisbildName != (char *)NULL)
                         {
                            strcpy(GleisbildName,
                                   GleisbildInfoGetName(GleisbildSearch(ZentraleGetGleisbild(Data),
                                                        GleisbildPageStructGetPage(NewPage))));
-                           strcat(GleisbildName, MR_CS2_FILE_EXTENSION);
+                           strcat(GleisbildName, CS2_FILE_EXTENSION);
                            GleisbildPageSetGleisbildName(NewPage,
                                                          GleisbildName);
                            GleisbildPageSaveGleisbildPageCs2(NewPage);
@@ -1076,14 +1143,7 @@ static int HandleSCfgDataProxy(void *Priv, void *SignalData,
    {
       if (CfgFile != (char *)NULL)
       {
-         MrIpcInit(&Cmd);
-         MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetCanResponse(&Cmd, 0);
-         MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-         MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_CONFIG_QUERY);
-         MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-         MrIpcCmdSetQuery(&Cmd, MR_CS2_CFG_DLC, CfgFile);
+         MrIpcHlConfigResponse(&Cmd, ZentraleGetUid(Data), CfgFile);
          MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
       }
       if (ZentraleGetVerbose(Data))
@@ -1099,13 +1159,13 @@ static int HandleLokCvrDataProxy(void *Priv, void *SignalData)
    Data = (ZentraleStruct *)Priv;
    if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_KEYBD) != 0)
       NewState = HandleSCfgDataProxy(Priv, SignalData, STATE_WAIT_MAG_CVR_CFG_HDR,
-                                     STATE_WAIT_LOK_CVR_CFG_DATA, MR_CS2_CFG_MAG_STAT);
+                                     STATE_WAIT_LOK_CVR_CFG_DATA, CS2_CFG_MAG_STAT);
    else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_LAYOUT) != 0)
       NewState = HandleSCfgDataProxy(Priv, SignalData, STATE_WAIT_GBS_CVR_CFG_HDR,
-                                     STATE_WAIT_LOK_CVR_CFG_DATA, MR_CS2_CFG_GBS_STAT);
+                                     STATE_WAIT_LOK_CVR_CFG_DATA, CS2_CFG_GBS_STAT);
    else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_MEM) != 0)
       NewState = HandleSCfgDataProxy(Priv, SignalData, STATE_WAIT_FS_CVR_CFG_HDR,
-                                     STATE_WAIT_LOK_CVR_CFG_DATA, MR_CS2_CFG_FS_STAT);
+                                     STATE_WAIT_LOK_CVR_CFG_DATA, CS2_CFG_FS_STAT);
    else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_CONTR) != 0)
    {
       NewState = HandleSCfgDataProxy(Priv, SignalData, STATE_NORMAL,
@@ -1134,10 +1194,10 @@ static int HandleMagCvrDataProxy(void *Priv, void *SignalData)
    Data = (ZentraleStruct *)Priv;
    if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_LAYOUT) != 0)
       NewState = HandleSCfgDataProxy(Priv, SignalData, STATE_WAIT_GBS_CVR_CFG_HDR,
-                                     STATE_WAIT_MAG_CVR_CFG_DATA, MR_CS2_CFG_GBS_STAT);
+                                     STATE_WAIT_MAG_CVR_CFG_DATA, CS2_CFG_GBS_STAT);
    else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_MEM) != 0)
       NewState = HandleSCfgDataProxy(Priv, SignalData, STATE_WAIT_FS_CVR_CFG_HDR,
-                                     STATE_WAIT_MAG_CVR_CFG_DATA, MR_CS2_CFG_FS_STAT);
+                                     STATE_WAIT_MAG_CVR_CFG_DATA, CS2_CFG_FS_STAT);
    else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_CONTR) != 0)
    {
       NewState = HandleSCfgDataProxy(Priv, SignalData, STATE_NORMAL,
@@ -1166,7 +1226,7 @@ static int HandleGbsCvrDataProxy(void *Priv, void *SignalData)
    Data = (ZentraleStruct *)Priv;
    if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_MEM) != 0)
       NewState = HandleSCfgDataProxy(Priv, SignalData, STATE_WAIT_FS_CVR_CFG_HDR,
-                                     STATE_WAIT_GBS_CVR_CFG_DATA, MR_CS2_CFG_FS_STAT);
+                                     STATE_WAIT_GBS_CVR_CFG_DATA, CS2_CFG_FS_STAT);
    else if ((ZentraleGetSyncMask(Data) & MRSYSTEM_CFG_SYNC_CONTR) != 0)
    {
       NewState = HandleSCfgDataProxy(Priv, SignalData, STATE_NORMAL,
@@ -1205,14 +1265,7 @@ static int HandleFsCvrDataProxy(void *Priv, void *SignalData)
 static void DoPingMember(ZentraleStruct *Data, unsigned int DeviceId)
 {  MrIpcCmdType Cmd;
 
-   MrIpcInit(&Cmd);
-   MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-   MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-   MrIpcSetCanResponse(&Cmd, 1);
-   MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-   MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_PING);
-   MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-   MrIpcCmdSetMember(&Cmd, ZentraleGetUid(Data), 0x100, DeviceId);
+   MrIpcHlMemberResponse(&Cmd, ZentraleGetUid(Data), DeviceId);
    MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
 }
 
@@ -1222,8 +1275,8 @@ static int HandlePing(void *Priv, void *SignalData)
    Data = (ZentraleStruct *)Priv;
    if (ZentraleGetVerbose(Data))
       puts("FSM: answer ping");
-   DoPingMember(Data, MR_CS2_DEVID_CS2);
-   DoPingMember(Data, MR_CS2_DEVID_CS2GUI);
+   DoPingMember(Data, CS2_DEVID_CS2);
+   DoPingMember(Data, CS2_DEVID_CS2GUI);
    if (ZentraleGetVerbose(Data))
       printf("FSM: new state %d\n",STATE_NO_CHANGE);
    return(STATE_NO_CHANGE);
@@ -1240,17 +1293,9 @@ static void PingAnswerToS88(ZentraleStruct *Data, CanMemberInfo *CanMember)
       {
          if (ZentraleGetS88BusIdxLength(Data, i) != 0)
          {
-            MrIpcInit(&Cmd);
-            MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-            MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-            MrIpcSetCanResponse(&Cmd, 0);
-            MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-            MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_SYSTEM);
-            MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-            MrIpcCmdSetSetConfig(&Cmd,
-                                 CanMemberInfoGetUid(CanMember),
-                                 i + 2,
-                                 ZentraleGetS88BusIdxLength(Data, i));
+            MrIpcHlConfigvalue(&Cmd, ZentraleGetUid(Data),
+                               CanMemberInfoGetUid(CanMember), i + 2,
+                                ZentraleGetS88BusIdxLength(Data, i));
             MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
          }
       }
@@ -1258,17 +1303,9 @@ static void PingAnswerToS88(ZentraleStruct *Data, CanMemberInfo *CanMember)
       {
          if (ZentraleGetS88BusIdxTCycle(Data, i) != 0)
          {
-            MrIpcInit(&Cmd);
-            MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-            MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-            MrIpcSetCanResponse(&Cmd, 0);
-            MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-            MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_SYSTEM);
-            MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-            MrIpcCmdSetSetConfig(&Cmd,
-                                 CanMemberInfoGetUid(CanMember),
-                                 i + 5,
-                                 ZentraleGetS88BusIdxTCycle(Data, i));
+            MrIpcHlConfigvalue(&Cmd, ZentraleGetUid(Data),
+                               CanMemberInfoGetUid(CanMember), i + 5,
+                               ZentraleGetS88BusIdxTCycle(Data, i));
             MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
          }
       }
@@ -1321,32 +1358,14 @@ static int HandleCanBootldr(void *Priv, void *SignalData)
        ((Uid & 0xffff0000) == S88_UID_PREFIX) &&
        (CanMemberSearch(ZentraleGetCanMember(Data), Uid) != (CanMemberInfo *)NULL))
    {
-      MrIpcInit(&Cmd);
-      MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-      MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-      MrIpcSetCanResponse(&Cmd, 0);
-      MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-      MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_BOOTLDR_CAN);
-      MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-      MrIpcCmdSetCanBootldr(&Cmd, S88Bootldr[0].Length, S88Bootldr[0].Data);
+      MrIpcHlCanBootldr(&Cmd, ZentraleGetUid(Data), S88Bootldr[0].Length,
+                        S88Bootldr[0].Data);
       MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
-      MrIpcInit(&Cmd);
-      MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-      MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-      MrIpcSetCanResponse(&Cmd, 0);
-      MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-      MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_BOOTLDR_CAN);
-      MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-      MrIpcCmdSetCanBootldr(&Cmd, S88Bootldr[1].Length, S88Bootldr[1].Data);
+      MrIpcHlCanBootldr(&Cmd, ZentraleGetUid(Data), S88Bootldr[1].Length,
+                        S88Bootldr[1].Data);
       MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
-      MrIpcInit(&Cmd);
-      MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-      MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-      MrIpcSetCanResponse(&Cmd, 0);
-      MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-      MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_BOOTLDR_CAN);
-      MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-      MrIpcCmdSetCanBootldr(&Cmd, S88Bootldr[2].Length, S88Bootldr[2].Data);
+      MrIpcHlCanBootldr(&Cmd, ZentraleGetUid(Data), S88Bootldr[2].Length,
+                        S88Bootldr[2].Data);
       MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
       QueryMembers(Data, FALSE);
    }
@@ -1499,15 +1518,9 @@ static int HandleCfgDataLateHeader(void *Priv, void *SignalData)
       {
          CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
          ZentraleSetActualIndex(Data, Index + 1);
-         MrIpcInit(&Cmd);
-         MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetCanResponse(&Cmd, 0);
-         MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-         MrIpcSetCanCommand(&Cmd, MR_MS2_CMD_STATUS);
-         MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-         MrIpcCmdSetStatusRequest(&Cmd, ZentraleGetActualConfig(Data),
-                                  ZentraleGetActualIndex(Data));
+         MrIpcHlStatusRequest(&Cmd, ZentraleGetUid(Data),
+                              ZentraleGetActualConfig(Data),
+                              ZentraleGetActualIndex(Data));
          MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
          NextState = STATE_WAIT_CFG_DATA_HDR;
       }
@@ -1519,15 +1532,9 @@ static int HandleCfgDataLateHeader(void *Priv, void *SignalData)
             CanMemberInfoSetConfigQuerried(CanMember, TRUE);
             CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
             ZentraleSetActualIndex(Data, 0);
-            MrIpcInit(&Cmd);
-            MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-            MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-            MrIpcSetCanResponse(&Cmd, 0);
-            MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-            MrIpcSetCanCommand(&Cmd, MR_MS2_CMD_STATUS);
-            MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-            MrIpcCmdSetStatusRequest(&Cmd, CanMemberInfoGetUid(CanMember),
-                                     ZentraleGetActualIndex(Data));
+            MrIpcHlStatusRequest(&Cmd, ZentraleGetUid(Data),
+                                 CanMemberInfoGetUid(CanMember),
+                                 ZentraleGetActualIndex(Data));
             MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
             NextState = STATE_WAIT_CFG_DATA_HDR;
          }
@@ -1590,14 +1597,7 @@ static void RequestNextKanal(ZentraleStruct *Data, unsigned long Uid,
                              unsigned int Kanal)
 {  MrIpcCmdType Cmd;
 
-   MrIpcInit(&Cmd);
-   MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-   MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-   MrIpcSetCanResponse(&Cmd, 0);
-   MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-   MrIpcSetCanCommand(&Cmd, MR_CS2_CMD_SYSTEM);
-   MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-   MrIpcCmdSetMesswertRequest(&Cmd, Uid, Kanal);
+   MrIpcHlMesswertRequest(&Cmd, ZentraleGetUid(Data), Uid, Kanal);
    MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
 }
 
@@ -1638,15 +1638,9 @@ static int HandleStatusResponse(void *Priv, void *SignalData)
       {
          CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
          ZentraleSetActualIndex(Data, Index + 1);
-         MrIpcInit(&Cmd);
-         MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetCanResponse(&Cmd, 0);
-         MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-         MrIpcSetCanCommand(&Cmd, MR_MS2_CMD_STATUS);
-         MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-         MrIpcCmdSetStatusRequest(&Cmd, ZentraleGetActualConfig(Data), 
-                                  ZentraleGetActualIndex(Data));
+         MrIpcHlStatusRequest(&Cmd, ZentraleGetUid(Data),
+                              ZentraleGetActualConfig(Data),
+                              ZentraleGetActualIndex(Data));
          MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
          NextState = STATE_WAIT_CFG_DATA_HDR;
       }
@@ -1696,14 +1690,8 @@ static int HandleStatusResponse(void *Priv, void *SignalData)
             CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
             ZentraleSetActualConfig(Data, CanMemberInfoGetUid(CanMember));
             ZentraleSetActualIndex(Data, 0);
-            MrIpcInit(&Cmd);
-            MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-            MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-            MrIpcSetCanResponse(&Cmd, 0);
-            MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-            MrIpcSetCanCommand(&Cmd, MR_MS2_CMD_STATUS);
-            MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-            MrIpcCmdSetStatusRequest(&Cmd, CanMemberInfoGetUid(CanMember), 0);
+            MrIpcHlStatusRequest(&Cmd, ZentraleGetUid(Data),
+                                 CanMemberInfoGetUid(CanMember), 0);
             MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
             NextState = STATE_WAIT_CFG_DATA_HDR;
          }
@@ -1841,14 +1829,8 @@ static int HandleMesswertResponse(void *Priv, void *SignalData)
          CronEnable(ZentraleGetCronJobs(Data), PERIODIC_NAME_TO_NORMAL);
          ZentraleSetActualConfig(Data, CanMemberInfoGetUid(CanMember));
          ZentraleSetActualIndex(Data, 0);
-         MrIpcInit(&Cmd);
-         MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetCanResponse(&Cmd, 0);
-         MrIpcCalcHash(&Cmd, ZentraleGetUid(Data));
-         MrIpcSetCanCommand(&Cmd, MR_MS2_CMD_STATUS);
-         MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
-         MrIpcCmdSetStatusRequest(&Cmd, CanMemberInfoGetUid(CanMember), 0);
+         MrIpcHlStatusRequest(&Cmd, ZentraleGetUid(Data),
+                              CanMemberInfoGetUid(CanMember), 0);
          MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
          NextState = STATE_WAIT_CFG_DATA_HDR;
       }
@@ -1895,40 +1877,28 @@ static int HandleStatusRequest(void *Priv, void *SignalData)
          NumBytes = ConfigStatusMrsystemGeraetebeschreibung(Buf,
                                                             ZentraleGetMajorVersion(Data),
                                                             ZentraleGetMinorVersion(Data));
-         Hash = MrCs2CalcHash(ZentraleGetUid(Data));
-         MrIpcInit(&Cmd);
-         MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-         MrIpcSetReceiverSocket(&Cmd, MrIpcGetReceiverSocket(CmdFrame));
-         MrIpcSetCanResponse(&Cmd, 1);
-         MrIpcSetCanCommand(&Cmd, MR_MS2_CMD_STATUS);
-         MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_0);
-         MrIpcCmdSetStatusPos(&Cmd, Addr, Index, (NumBytes + 7)/ 8);
+         Hash = Cs2CalcHash(ZentraleGetUid(Data));
+         MrIpcHlStatusPosResponse(&Cmd, ZentraleGetUid(Data),
+                                  MrIpcGetReceiverSocket(CmdFrame), Addr,
+                                  Index, (NumBytes + 7)/ 8);
          MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
          i = 0;
          while (i < NumBytes)
          {
-            MrIpcInit(&Cmd);
-            MrIpcSetSenderSocket(&Cmd, MR_IPC_SOCKET_ALL);
-            MrIpcSetReceiverSocket(&Cmd, MrIpcGetReceiverSocket(CmdFrame));
-            MrIpcSetCanResponse(&Cmd, 1);
-            MrIpcSetCanHash(&Cmd, Hash);
-            MrIpcSetCanCommand(&Cmd, MR_MS2_CMD_STATUS);
-            MrIpcSetCanPrio(&Cmd, MR_CS2_PRIO_2);
             j = 0;
             while (j < 8)
             {
                Name[j] = Buf[i + j];
                j++;
             }
-            MrIpcCmdSetStatusData(&Cmd, Name);
+            MrIpcHlStatusNameResponse(&Cmd, ZentraleGetUid(Data),
+                                      MrIpcGetReceiverSocket(CmdFrame), Name);
             MrIpcSend(ZentraleGetClientSock(Data), &Cmd);
             i += 8;
           }
-          MrIpcSetCanResponse(CmdFrame, 1);
-          Hash = MrCs2CalcHash(ZentraleGetUid(Data));
-          MrIpcSetCanHash(CmdFrame, MrCs2CalcHash(ZentraleGetUid(Data)));
-          MrIpcSetReceiverSocket(CmdFrame, MrIpcGetSenderSocket(CmdFrame));
-          MrIpcSetSenderSocket(CmdFrame, MR_IPC_SOCKET_ALL);
+          Hash = Cs2CalcHash(ZentraleGetUid(Data));
+          MrIpcHlStatusResponse(CmdFrame, ZentraleGetUid(Data),
+                                MrIpcGetSenderSocket(CmdFrame));
           MrIpcSend(ZentraleGetClientSock(Data), CmdFrame);
           MrIpcSetCanHash(CmdFrame, Hash);
       }

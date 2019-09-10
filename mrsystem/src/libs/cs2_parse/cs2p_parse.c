@@ -6,7 +6,6 @@
 #include "cs2parse.h"
 #include "cs2ptoken.h"
 
-
 static void PrintError(Cs2parser *Data, char *ErrorString)
 {  int i;
 
@@ -32,7 +31,8 @@ static void DoParagraph(Cs2parser *Data)
        (Token == PARSER_TOKEN_KEYWORD_MAGNETARTIKEL) ||
        (Token == PARSER_TOKEN_KEYWORD_FAHRSTRASSEN) ||
        (Token == PARSER_TOKEN_KEYWORD_GLEISBILDSEITE) ||
-       (Token == PARSER_TOKEN_KEYWORD_LOKSTATUS))
+       (Token == PARSER_TOKEN_KEYWORD_LOKSTATUS) ||
+       (Token == PARSER_TOKEN_KEYWORD_LOKLISTE))
    {
       Cs2pSetName(Data, ScanGetString(Cs2pGetScanner(Data)));
       if (Cs2pGetVerbose(Data))
@@ -55,6 +55,8 @@ static void DoParagraph(Cs2parser *Data)
          Cs2pSetSubType(Data, PARSER_PARAGRAPH_GLEISBILDSEITE);
       else if (Token == PARSER_TOKEN_KEYWORD_LOKSTATUS)
          Cs2pSetSubType(Data, PARSER_PARAGRAPH_LOKSTATUS);
+      else if (Token == PARSER_TOKEN_KEYWORD_LOKLISTE)
+         Cs2pSetSubType(Data, PARSER_PARAGRAPH_LOKLISTE);
       else
          Cs2pSetSubType(Data, 0);
       Token = Scan(Cs2pGetScanner(Data));
@@ -154,7 +156,10 @@ static void DoValue(Cs2parser *Data, int StartToken)
        (Token == PARSER_TOKEN_KEYWORD_PAGE) ||
        (Token == PARSER_TOKEN_KEYWORD_SEKUNDE) ||
        (Token == PARSER_TOKEN_KEYWORD_IDX) ||
-       (Token == PARSER_TOKEN_KEYWORD_ON))
+       (Token == PARSER_TOKEN_KEYWORD_ON) ||
+       (Token == PARSER_TOKEN_KEYWORD_DV) ||
+       (Token == PARSER_TOKEN_KEYWORD_LLINDEX) ||
+       (Token == PARSER_TOKEN_KEYWORD_CRC))
    {
       Cs2pSetName(Data, ScanGetString(Cs2pGetScanner(Data)));
       if (Cs2pGetVerbose(Data))
@@ -289,6 +294,12 @@ static void DoValue(Cs2parser *Data, int StartToken)
          Cs2pSetSubType(Data, PARSER_VALUE_IDX);
       else if (Token == PARSER_TOKEN_KEYWORD_ON)
          Cs2pSetSubType(Data, PARSER_VALUE_ON);
+      else if (Token == PARSER_TOKEN_KEYWORD_DV)
+         Cs2pSetSubType(Data, PARSER_VALUE_DV);
+      else if (Token == PARSER_TOKEN_KEYWORD_LLINDEX)
+         Cs2pSetSubType(Data, PARSER_VALUE_LLINDEX);
+      else if (Token == PARSER_TOKEN_KEYWORD_CRC)
+         Cs2pSetSubType(Data, PARSER_VALUE_CRC);
       Token = Scan(Cs2pGetScanner(Data));
       switch (Token)
       {
@@ -316,6 +327,55 @@ static void DoValue(Cs2parser *Data, int StartToken)
       PrintError(Data, "Unexpected token for name-value!");
 }
 
+/** @file */
+
+/**
+ * @defgroup CS2P_PARSE Cs2pParse Group
+ *
+ * @{
+ */
+
+/**
+* @brief Parsen des n&auml;chsten Ausdrucks
+*
+* Diese Funktion parst den Eingabestream. Sie liefert f&uuml;r jeden Aufruf
+* den Typ der Information dieser Zeile bzw. den erkannten Typ der Information.
+* Diese Funktion wird ein einer Schleife  aufgerufen, bis das Ende der
+* Eingangsdaten erreicht ist.
+*
+* Damit k&ouml;nnte eine Parserschleife wie folgt (Ausschnitt) aussehen:
+*
+*    do {
+*       LineInfo = Cs2pParse(LokParser);
+*       switch (LineInfo)
+*       {
+*          case PARSER_ERROR:
+*             break;
+*          case PARSER_EOF:
+*             break;
+*          case PARSER_PARAGRAPH:
+*             switch (Cs2pGetSubType(LokParser))
+*             {
+*                default:
+*                   break;
+*             }
+*             break;
+*          case PARSER_VALUE:
+*             switch (Cs2pGetSubType(LokParser))
+*             {
+*                case PARSER_VALUE_LOKOMOTIVE:
+*                   break;
+*                case PARSER_VALUE_LOK:
+*                   break;
+*             }
+*             break;
+*      }
+*    } while (LineInfo != PARSER_EOF);</PRE></TD></TR></TABLE>
+*
+* @param[in] Data Zeiger auf die Parserstruktur
+*
+* @return Typ der erkannten Information
+*/
 int Cs2pParse(Cs2parser *Data)
 {  int Token, Ret;
 
@@ -366,3 +426,5 @@ int Cs2pParse(Cs2parser *Data)
    }
    return(Ret);
 }
+
+/** @} */

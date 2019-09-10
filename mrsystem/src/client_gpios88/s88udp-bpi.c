@@ -31,7 +31,8 @@
 
 #ifdef USE_MRSYSTEM
 #include <mr_ipc.h>
-#include <mr_can.h>
+#include <mr_cs2ms2.h>
+#include <cs2.h>
 #endif
 
 #define BIT(x)		(1<<x)
@@ -132,7 +133,7 @@ int sendipc(int socket, unsigned char *netframe)
    MrIpcSetSenderSocket(&Cmd, socket);
    MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
    if (MrIpcGetCanHash(&Cmd) == 0)
-      MrIpcSetCanHash(&Cmd, MrCs2CalcHash(MrIpcGetCanHash(&Cmd)));
+      MrIpcSetCanHash(&Cmd, Cs2CalcHash(MrIpcGetCanHash(&Cmd)));
    MrIpcSend(socket, &Cmd);
    MrIpcExit(&Cmd);
    return(13);

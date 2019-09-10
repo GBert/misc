@@ -10,7 +10,8 @@
 #include <errno.h>
 #include <boolean.h>
 #include <mr_ipc.h>
-#include <mr_can.h>
+#include <mr_cs2ms2.h>
+#include <cs2.h>
 #include "cs2sl.h"
 
 #define SELECT_TIMEOUT 100
@@ -206,7 +207,7 @@ static void ProcessOutsideData(Cs2slStruct *Data, MrCs2CanDataType *CanMsg,
    MrIpcSetSenderSocket(&Cmd, SenderSocket);
    MrIpcSetReceiverSocket(&Cmd, MR_IPC_SOCKET_ALL);
    if (MrIpcGetCanHash(&Cmd) == 0)
-      MrIpcSetCanHash(&Cmd, MrCs2CalcHash(MrIpcGetCanHash(&Cmd)));
+      MrIpcSetCanHash(&Cmd, Cs2CalcHash(MrIpcGetCanHash(&Cmd)));
    MrIpcSend(Cs2slGetClientSock(Data), &Cmd);
    MrIpcExit(&Cmd);
 }

@@ -1,6 +1,6 @@
 TARGET=mrms24l
 OBJS=main.o c4l_client.o ../common/ms2.o
-LOCALLIBS=-lmr_ipc -lmr_can -lm -lbytestream -lmrconfig -linipars -lscanner -lmap -lavl -lqueue -ldliste
+LOCALLIBS=-lmr_ipc -lmr_cs2ms2 -lcs2 -lm -lbytestream -lmrconfig -linipars -lscanner -lmap -lavl -lqueue -ldliste
 DESTDIR=/usr/local/bin
 
 %.o: %.c

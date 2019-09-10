@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
-#include <mr_can.h>
+#include <mr_cs2ms2.h>
 #include "can_io.h"
 #include "slcan_client.h"
 

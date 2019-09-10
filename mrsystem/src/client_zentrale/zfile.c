@@ -5,7 +5,8 @@
 #include <zlib.h>
 #include <bytestream.h>
 #include <boolean.h>
-#include <m_cs2ms2.h>
+#include <mr_cs2ms2.h>
+#include <cs2.h>
 #include "zfile.h"
 
 ZlibFile *ZFileCreate(void)
@@ -73,8 +74,8 @@ BOOL ZFileCompress(ZlibFile *Data)
                memset(&(ZFileGetBuffer(Data)[ZFileGetLength(Data)]), 0,
                       ZFileGetFrameLength(Data) - ZFileGetLength(Data));
             ZFileSetCrc(Data,
-                        MrCs2CalcCrc(ZFileGetBuffer(Data),
-                                     ZFileGetFrameLength(Data)));
+                        Cs2CalcCrc(ZFileGetBuffer(Data),
+                                   ZFileGetFrameLength(Data)));
             Ret = TRUE;
          }
          else

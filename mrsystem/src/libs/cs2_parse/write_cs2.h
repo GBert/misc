@@ -1,12 +1,39 @@
 #ifndef WRITE_CS2_H
 #define WRITE_CS2_H
 
+/**
+* @mainpage cs2_parse
+*
+* Funktionen f&uuml;r das Schreiben einer *.cs2 Datei
+*
+* Das Schreiben einer *.cs2 Datei erfolgt auf Basis der C I/O Streams (FILE *).
+* F&uuml;r das &Ouml;ffnen der Datei zum Schreiben gibt es Funktionen, die den
+* Pfad (zum Apache Standard Webroot) automatisch hinzuf&uuml;gen und auch
+* automatisch den Namen der entsprechenden *.cs2 Datei kennen.
+*
+* @author Michael Bernstein
+*/
 
 #include <stdio.h>
 
+/** @file */
 
+/**
+* @addtogroup CS2P_WRITE
+*
+* @brief Konstanten f&uuml;r den Returnwert der Parse-Funktion
+*
+* @{
+*/
+
+/**
+* @brief Konstanten f&uuml;r Dateityp
+*/
 #define CS2_FILE_TYPE_LOKOMOTIVE 1
 
+/**
+* @brief Konstanten f&uuml;r Dateinamen
+*/
 #define CS2_FILE_STRING_LOKOMOTIVE           "lokomotive.cs2"
 #define CS2_FILE_STRING_MAGNETARTIKEL        "magnetartikel.cs2"
 #define CS2_FILE_STRING_GLEISBILD            "gleisbild.cs2"
@@ -16,6 +43,9 @@
 #define CS2_FILE_STRING_STATUS_GLEISBILD     "gleisbild.sr2"
 #define CS2_FILE_STRING_STATUS_FAHRSTRASSE   "fahrstrassen.sr2"
 
+/**
+* @brief Konstanten f&uuml;r Paragraphen/Abs&auml;tze (Token und Text)
+*/
 #define CS2_PARAGRAPH_TYPE_LOK            1
 #define CS2_PARAGRAPH_TYPE_NUMLOKS        2
 #define CS2_PARAGRAPH_TYPE_LOKOMOTIVE     3
@@ -24,6 +54,9 @@
 #define CS2_PARAGRAPH_TYPE_MAGNETARTIKEL  6
 #define CS2_PARAGRAPH_TYPE_FAHRSTRASSEN   7
 
+/**
+* @brief Konstanten f&uuml;r Paragraph-/Absatznamen (Token und Text)
+*/
 #define CS2_PARAGRAPH_STRING_LOK            "lok"
 #define CS2_PARAGRAPH_STRING_NUMLOKS        "numloks"
 #define CS2_PARAGRAPH_STRING_LOKOMOTIVE     "lokomotive"
@@ -32,6 +65,9 @@
 #define CS2_PARAGRAPH_STRING_MAGNETARTIKEL  "magnetartikel"
 #define CS2_PARAGRAPH_STRING_FAHRSTRASSEN   "fahrstrassen"
 
+/**
+* @brief Konstanten f&uuml;r Magnetartikel Konfigurationswerte
+*/
 #define CS_MAGNETARTIKEL_TYP_STRING_STD_ROT_GRUEN              "std_rot_gruen"
 #define CS_MAGNETARTIKEL_TYP_STRING_STD_ROT                    "std_rot"
 #define CS_MAGNETARTIKEL_TYP_STRING_STD_GRUEN                  "std_gruen"
@@ -63,6 +99,9 @@
 #define CS_MAGNETARTIKEL_TYP_STRING_DREHSCHEIBE_ALT            "drehscheibe_alt"
 #define CS_MAGNETARTIKEL_TYP_STRING_DIGITALDREHSCHEIBE         "digitaldrehscheibe"
 
+/**
+* @brief Konstanten f&uuml;r Gleisbild Konfigurationswerte
+*/
 #define CS2_GLEISBILD_TYP_STRING_LEER               "leer"
 #define CS2_GLEISBILD_TYP_STRING_GERADE             "gerade"
 #define CS2_GLEISBILD_TYP_STRING_KREUZUNG           "kreuzung"
@@ -156,5 +195,7 @@ void Cs2WriteHexValueByName(FILE *Stream, char *Title, int Value, int Level);
 void Cs2WriteULongValueByName(FILE *Stream, char *Title, unsigned long Value, int Level);
 void Cs2WriteHexLongValueByName(FILE *Stream, char *Title, unsigned long Value, int Level);
 void Cs2WriteFloatValueByName(FILE *Stream, char *Title, float Value, int Level);
+
+/** @} */
 
 #endif

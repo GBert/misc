@@ -16,6 +16,7 @@
 #define PARSER_PARAGRAPH_STRING_FAHRSTRASSEN   "fahrstrassen"
 #define PARSER_PARAGRAPH_STRING_GLEISBILDSEITE "gleisbildseite"
 #define PARSER_PARAGRAPH_STRING_LOKSTATUS      "lokstatus"
+#define PARSER_PARAGRAPH_STRING_LOKLISTE       "lokliste"
 #define PARSER_VALUE_STRING_VERSION           "version"
 #define PARSER_VALUE_STRING_NAME              "name"
 #define PARSER_VALUE_STRING_WERT              "wert"
@@ -80,6 +81,9 @@
 #define PARSER_VALUE_STRING_SEKUNDE           "sekunde"
 #define PARSER_VALUE_STRING_IDX               "idx"
 #define PARSER_VALUE_STRING_ON                "on"
+#define PARSER_VALUE_STRING_DV                "dv"
+#define PARSER_VALUE_STRING_LLINDEX           "llindex"
+#define PARSER_VALUE_STRING_CRC               "crc"
 
 ScanKeyword LokNameKeywords[] = {
    { PARSER_PARAGRAPH_STRING_LOK,     PARSER_TOKEN_KEYWORD_LOK },
@@ -91,6 +95,7 @@ ScanKeyword LokNameKeywords[] = {
 ScanKeyword LokInfoKeywords[] = {
    { PARSER_PARAGRAPH_STRING_LOKOMOTIVE, PARSER_TOKEN_KEYWORD_LOKOMOTIVE },
    { PARSER_VALUE_STRING_LOK,            PARSER_TOKEN_KEYWORD_LOK },
+   { PARSER_VALUE_STRING_DV,             PARSER_TOKEN_KEYWORD_DV },
    { PARSER_VALUE_STRING_NAME,           PARSER_TOKEN_KEYWORD_NAME },
    { PARSER_VALUE_STRING_WERT,           PARSER_TOKEN_KEYWORD_WERT },
    { PARSER_VALUE_STRING_UID,            PARSER_TOKEN_KEYWORD_UID },
@@ -238,6 +243,37 @@ ScanKeyword HeaderCs2Keywords[] = {
    { PARSER_PARAGRAPH_STRING_NUMLOKS,        PARSER_TOKEN_KEYWORD_NUMLOKS },
 };
 
+ScanKeyword LoklisteKeywords[] = {
+   { PARSER_PARAGRAPH_STRING_LOKLISTE,     PARSER_TOKEN_KEYWORD_LOKLISTE },
+   { PARSER_VALUE_STRING_DV,               PARSER_TOKEN_KEYWORD_DV },
+   { PARSER_VALUE_STRING_IDX,              PARSER_TOKEN_KEYWORD_IDX },
+   { PARSER_VALUE_STRING_LLINDEX,          PARSER_TOKEN_KEYWORD_LLINDEX },
+   { PARSER_VALUE_STRING_NAME,             PARSER_TOKEN_KEYWORD_NAME },
+   { PARSER_VALUE_STRING_CRC,              PARSER_TOKEN_KEYWORD_CRC },
+};
+
+/** @file */
+
+/**
+ * @defgroup CS2P_INIT Cs2pInit Group
+ *
+ * @{
+ */
+
+/**
+* @brief Initialisierung eines Parsers
+*
+* Die Cs2pInit() Funktion initialisiert den Parser f&uuml;r einen bestimmten
+* Typ von *.cs Datei.
+*
+* @param[in] Data Zeiger auf die Parserstruktur
+* @param[in] Type Dieser Parameter legt fest, vonm welchem Typ die zu
+*                 parsenden *.cs2 Daten sind. Also welche Informationen darin
+*                 gespeichert sind. Damit wird auch festgelegt, welche
+*                 Schl&uuml;sselworte erlaubt sind. M&ouml;gliche Werte sind:
+* @param[in] InputLine Zeiger auf die zu parsenden Daten
+* @param[in] Len L&auml;nge (Anzahl Bytes) der zu parsenden Daten
+*/
 void Cs2pInit(Cs2parser *Data, int Type, char *InputLine, int Len)
 {
    Cs2pSetVerbose(Data, FALSE);
@@ -249,7 +285,7 @@ void Cs2pInit(Cs2parser *Data, int Type, char *InputLine, int Len)
    else if (Type == PARSER_TYPE_LOKINFO)
    {
       ScanInit(Cs2pGetScanner(Data), (char *)NULL, InputLine, Len,
-               18, LokInfoKeywords);
+               19, LokInfoKeywords);
    }
    else if (Type == PARSER_TYPE_GERAET_VRS)
    {
@@ -286,4 +322,11 @@ void Cs2pInit(Cs2parser *Data, int Type, char *InputLine, int Len)
       ScanInit(Cs2pGetScanner(Data), (char *)NULL, InputLine, Len,
                8, HeaderCs2Keywords);
    }
+   else if (Type == PARSER_TYPE_LOKLISTE)
+   {
+      ScanInit(Cs2pGetScanner(Data), (char *)NULL, InputLine, Len,
+               6, LoklisteKeywords);
+   }
 }
+
+/** @} */

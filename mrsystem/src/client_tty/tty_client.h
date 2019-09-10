@@ -2,7 +2,7 @@
 #define CC_CLIENT_H
 
 #include <boolean.h>
-#include <mr_can.h>
+#include <mr_cs2ms2.h>
 #include "can_io.h"
 
 #define FD_POS_TTY  0x01

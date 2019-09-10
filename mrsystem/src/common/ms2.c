@@ -10,8 +10,9 @@
 #include <string.h>
 #include <errno.h>
 #include <boolean.h>
+#include <cs2.h>
 #include <mr_ipc.h>
-#include <mr_can.h>
+#include <mr_cs2ms2.h>
 #include "can_io.h"
 #include "ms2.h"
 
@@ -214,74 +215,7 @@ static void Stop(Ms2Struct *Data)
    Ms2GetIoFunctions(Data)->Close(Ms2GetIoFunctions(Data)->private);
 }
 
-static void QueryLoknamen(Ms2Struct *Data, int Start, int End)
-{  MrCs2CanDataType CanMsg;
-   char MsgBuf[9];
-
-   if (Ms2GetVerbose(Data))
-      printf("querry loknamen %d - %d\n", Start, End);
-   MrCs2SetHash(&CanMsg, MrMs2CalcHash(MR_CS2_UID_BROADCAST));
-   MrCs2SetResponse(&CanMsg, 0);
-   MrCs2SetPrio(&CanMsg, MR_CS2_PRIO_0);
-   MrCs2EncConfigQuery(&CanMsg, MR_MS2_CFG_LOCNAMES);
-   Ms2GetIoFunctions(Data)->Write(Ms2GetIoFunctions(Data)->private,
-                                  MR_IPC_SOCKET_ALL, &CanMsg);
-   MrCs2SetHash(&CanMsg, MrMs2CalcHash(MR_CS2_UID_BROADCAST));
-   MrCs2SetResponse(&CanMsg, 0);
-   MrCs2SetPrio(&CanMsg, MR_CS2_PRIO_0);
-   sprintf(MsgBuf, "%d %d", Start, End);
-   MrCs2EncConfigQuery(&CanMsg, MsgBuf);
-   Ms2GetIoFunctions(Data)->Write(Ms2GetIoFunctions(Data)->private,
-                                  MR_IPC_SOCKET_ALL, &CanMsg);
-}
-
-static void QueryLokinfo(Ms2Struct *Data, char *Locname)
-{  MrCs2CanDataType CanMsg;
-   char MsgBuf[9];
-
-   if (Ms2GetVerbose(Data))
-      printf("querry lokinfo >%s<\n", Locname);
-   MrCs2SetHash(&CanMsg, MrMs2CalcHash(MR_CS2_UID_BROADCAST));
-   MrCs2SetResponse(&CanMsg, 0);
-   MrCs2SetPrio(&CanMsg, MR_CS2_PRIO_0);
-   MrCs2EncConfigQuery(&CanMsg, MR_MS2_CFG_LOCINFO);
-   Ms2GetIoFunctions(Data)->Write(Ms2GetIoFunctions(Data)->private,
-                                  MR_IPC_SOCKET_ALL, &CanMsg);
-   MrCs2SetHash(&CanMsg, MrMs2CalcHash(MR_CS2_UID_BROADCAST));
-   MrCs2SetResponse(&CanMsg, 0);
-   MrCs2SetPrio(&CanMsg, MR_CS2_PRIO_0);
-   strncpy(MsgBuf, Locname, 8);
-   MsgBuf[8] = '\0';
-   MrCs2EncConfigQuery(&CanMsg, MsgBuf);
-   Ms2GetIoFunctions(Data)->Write(Ms2GetIoFunctions(Data)->private,
-                                  MR_IPC_SOCKET_ALL, &CanMsg);
-   MrCs2SetHash(&CanMsg, MrMs2CalcHash(MR_CS2_UID_BROADCAST));
-   MrCs2SetResponse(&CanMsg, 0);
-   MrCs2SetPrio(&CanMsg, MR_CS2_PRIO_0);
-   if (strlen(Locname) > 8)
-   {
-      strncpy(MsgBuf, Locname + 8, 8);
-      MsgBuf[8] = '\0';
-   }
-   else
-   {
-      MsgBuf[0] = '\0';
-   }
-   MrCs2EncConfigQuery(&CanMsg, MsgBuf);
-   Ms2GetIoFunctions(Data)->Write(Ms2GetIoFunctions(Data)->private,
-                                  MR_IPC_SOCKET_ALL, &CanMsg);
-}
-
-static BOOL ShouldQueue(Ms2Struct *Data, MrIpcCmdType *CmdFrame)
-{
-   return((MrIpcGetCanResponse(CmdFrame) == 0u) &&
-          ((MrIpcGetCanCommand(CmdFrame) == MrIpcCmdLocomotiveSpeed) ||
-           (MrIpcGetCanCommand(CmdFrame) == MrIpcCmdLocomotiveDirection) ||
-           (MrIpcGetCanCommand(CmdFrame) == MrIpcCmdLocomotiveFunction) ||
-           (MrIpcGetCanCommand(CmdFrame) == MrIpcCmdAccSwitch)));
-}
-
-static void ForwardToCan(Ms2Struct *Data, MrMs2CanDataType *CanMsg)
+static void ForwardToCan(Ms2Struct *Data, MrCs2CanDataType *CanMsg)
 {  int i;
 
    if (Ms2GetVerbose(Data))
@@ -295,21 +229,109 @@ static void ForwardToCan(Ms2Struct *Data, MrMs2CanDataType *CanMsg)
              MrCs2GetCommand(CanMsg), MrCs2GetPrio(CanMsg));
    }
    if ((Ms2GetZentraleMode(Data) == MASTER_MODE_PROXY) ||
-       (MrCs2GetCommand(CanMsg) != MR_CS2_CMD_BOOTLDR_CAN))
+       (MrCs2GetCommand(CanMsg) != CS2_CMD_BOOTLDR_CAN))
    {
       Ms2GetIoFunctions(Data)->Write(Ms2GetIoFunctions(Data)->private,
                                      MR_IPC_SOCKET_ALL, CanMsg);
    }
 }
 
+static void QueryLoknamen(Ms2Struct *Data, int Start, int End)
+{  MrCs2CanDataType CanMsg;
+   char MsgBuf[9];
+
+   if (Ms2GetVerbose(Data))
+      printf("querry loknamen %d - %d\n", Start, End);
+   MrCs2SetCommand(&CanMsg, CS2_CMD_CONFIG_QUERY);
+   MrCs2SetDlc(&CanMsg, 8);
+   MrCs2SetHash(&CanMsg, Cs2CalcHash(CS2_UID_BROADCAST));
+   MrCs2SetResponse(&CanMsg, 0);
+   MrCs2SetPrio(&CanMsg, CS2_PRIO_0);
+   Cs2EncConfigQuery(MrCs2GetData(&CanMsg), CS2_CFG_LOCNAMES);
+   ForwardToCan(Data, &CanMsg);
+   MrCs2SetCommand(&CanMsg, CS2_CMD_CONFIG_QUERY);
+   MrCs2SetDlc(&CanMsg, 8);
+   MrCs2SetHash(&CanMsg, Cs2CalcHash(CS2_UID_BROADCAST));
+   MrCs2SetResponse(&CanMsg, 0);
+   MrCs2SetPrio(&CanMsg, CS2_PRIO_0);
+   sprintf(MsgBuf, "%d %d", Start, End);
+   Cs2EncConfigQuery(MrCs2GetData(&CanMsg), MsgBuf);
+   ForwardToCan(Data, &CanMsg);
+}
+
+static void QueryLokinfo(Ms2Struct *Data, char *Locname)
+{  MrCs2CanDataType CanMsg;
+   char MsgBuf[9];
+
+   if (Ms2GetVerbose(Data))
+      printf("querry lokinfo >%s<\n", Locname);
+   MrCs2SetCommand(&CanMsg, CS2_CMD_CONFIG_QUERY);
+   MrCs2SetDlc(&CanMsg, 8);
+   MrCs2SetHash(&CanMsg, Cs2CalcHash(CS2_UID_BROADCAST));
+   MrCs2SetResponse(&CanMsg, 0);
+   MrCs2SetPrio(&CanMsg, CS2_PRIO_0);
+   Cs2EncConfigQuery(MrCs2GetData(&CanMsg), CS2_CFG_LOCINFO);
+   ForwardToCan(Data, &CanMsg);
+   MrCs2SetCommand(&CanMsg, CS2_CMD_CONFIG_QUERY);
+   MrCs2SetDlc(&CanMsg, 8);
+   MrCs2SetHash(&CanMsg, Cs2CalcHash(CS2_UID_BROADCAST));
+   MrCs2SetResponse(&CanMsg, 0);
+   MrCs2SetPrio(&CanMsg, CS2_PRIO_0);
+   strncpy(MsgBuf, Locname, 8);
+   MsgBuf[8] = '\0';
+   Cs2EncConfigQuery(MrCs2GetData(&CanMsg), MsgBuf);
+   ForwardToCan(Data, &CanMsg);
+   MrCs2SetCommand(&CanMsg, CS2_CMD_CONFIG_QUERY);
+   MrCs2SetDlc(&CanMsg, 8);
+   MrCs2SetHash(&CanMsg, Cs2CalcHash(CS2_UID_BROADCAST));
+   MrCs2SetResponse(&CanMsg, 0);
+   MrCs2SetPrio(&CanMsg, CS2_PRIO_0);
+   if (strlen(Locname) > 8)
+   {
+      strncpy(MsgBuf, Locname + 8, 8);
+      MsgBuf[8] = '\0';
+   }
+   else
+   {
+      MsgBuf[0] = '\0';
+   }
+   Cs2EncConfigQuery(MrCs2GetData(&CanMsg), MsgBuf);
+   ForwardToCan(Data, &CanMsg);
+}
+
+static void QueryLokliste(Ms2Struct *Data)
+{  MrCs2CanDataType CanMsg;
+
+   if (Ms2GetVerbose(Data))
+      puts("query lokliste");
+   MrCs2SetCommand(&CanMsg, CS2_CMD_CONFIG_QUERY);
+   MrCs2SetDlc(&CanMsg, 8);
+   MrCs2SetHash(&CanMsg, Cs2CalcHash(CS2_UID_BROADCAST));
+   MrCs2SetResponse(&CanMsg, 0);
+   MrCs2SetPrio(&CanMsg, CS2_PRIO_0);
+   Cs2EncConfigQuery(MrCs2GetData(&CanMsg), CS2_CFG_LOKLISTE);
+   ForwardToCan(Data, &CanMsg);
+}
+
+static BOOL ShouldQueue(Ms2Struct *Data, MrIpcCmdType *CmdFrame)
+{
+   return((MrIpcGetCanResponse(CmdFrame) == 0u) &&
+          ((MrIpcGetCanCommand(CmdFrame) == MrIpcCmdLocomotiveSpeed) ||
+           (MrIpcGetCanCommand(CmdFrame) == MrIpcCmdLocomotiveDirection) ||
+           (MrIpcGetCanCommand(CmdFrame) == MrIpcCmdLocomotiveFunction) ||
+           (MrIpcGetCanCommand(CmdFrame) == MrIpcCmdAccSwitch)));
+}
+
 static void ProcessSystemData(Ms2Struct *Data, MrIpcCmdType *CmdFrame)
-{  MrMs2CanDataType CanMsg, *BufCanMsg;
+{  MrCs2CanDataType CanMsg, *BufCanMsg;
    unsigned int i, StartIdx, EndIdx;
    char LokName[17];
    struct timeval Now;
 
    switch (MrIpcGetCommand(CmdFrame))
    {
+      case MrIpcCmdIntern:
+         break;
       case MrIpcCmdRequestFile:
          MrIpcDecodeToCan(CmdFrame, &CanMsg);
          if ((Ms2GetZentraleMode(Data) == MASTER_MODE_PROXY) ||
@@ -359,6 +381,11 @@ static void ProcessSystemData(Ms2Struct *Data, MrIpcCmdType *CmdFrame)
          Ms2SetMs2PollSock(Data, MrIpcGetSenderSocket(CmdFrame));
          QueryLokinfo(Data, LokName);
          break;
+      case MrIpcCmdRequestLokListe:
+         MrIpcCmdGetReqestLoclist(CmdFrame);
+         Ms2SetMs2PollSock(Data, MrIpcGetSenderSocket(CmdFrame));
+         QueryLokliste(Data);
+         break;
       default:
          if ((MrIpcGetReceiverSocket(CmdFrame) == MR_IPC_SOCKET_ALL) ||
              (MrIpcGetReceiverSocket(CmdFrame) == Ms2GetIoFunctions(Data)->GetFd(Ms2GetIoFunctions(Data)->private)))
@@ -385,7 +412,7 @@ static void ProcessSystemData(Ms2Struct *Data, MrIpcCmdType *CmdFrame)
                }
                if (!QueueIsEmpty(Ms2GetCmdBuffers(Data)))
                {
-                  BufCanMsg = (MrMs2CanDataType *)QueueGet(Ms2GetCmdBuffers(Data));
+                  BufCanMsg = (MrCs2CanDataType *)QueueGet(Ms2GetCmdBuffers(Data));
                   MrIpcDecodeToCan(CmdFrame, BufCanMsg);
                   if (Ms2GetActualCmd(Data) == (MrCs2CanDataType *)NULL)
                   {
@@ -438,14 +465,14 @@ static BOOL DataEqual(unsigned int Dlc, unsigned char *Data1,
    int i;
 
    Ret = TRUE;
-   for (i = 0; (i < Dlc) && (i < MR_CS2_NUM_CAN_BYTES); i++)
+   for (i = 0; (i < Dlc) && (i < CS2_NUM_CAN_BYTES); i++)
    {
       Ret = Ret && (Data1[i] == Data2[i]);
    }
    return(Ret);
 }
 
-static BOOL IsQueuedAnswer(Ms2Struct *Data, MrMs2CanDataType *CanMsg)
+static BOOL IsQueuedAnswer(Ms2Struct *Data, MrCs2CanDataType *CanMsg)
 {
    return((MrCs2GetResponse(CanMsg) == 1u) &&
           (MrCs2GetCommand(CanMsg) == MrCs2GetCommand(Ms2GetActualCmd(Data))) &&
@@ -454,11 +481,12 @@ static BOOL IsQueuedAnswer(Ms2Struct *Data, MrMs2CanDataType *CanMsg)
                     MrCs2GetData(Ms2GetActualCmd(Data))));
 }
 
-static void ProcessCanData(Ms2Struct *Data, MrMs2CanDataType *CanMsg,
+static void ProcessCanData(Ms2Struct *Data, MrCs2CanDataType *CanMsg,
                            int SenderSocket)
 {  MrIpcCmdType Cmd;
 
-   if (TRUE/*MrCs2GetIsCs2(CanMsg)*/)
+   if (TRUE/*MrCs2GetIsCs2(CanMsg)*/ &&
+       (MrCs2GetCommand(CanMsg) != CS2_CMD_DEBUG_MESSAGE))
    {
       if (Ms2GetVerbose(Data))
          MrCs2DumpCanMsg(CanMsg, "get can data, send to drehscheibe");
@@ -503,7 +531,7 @@ static void ProcessCanData(Ms2Struct *Data, MrMs2CanDataType *CanMsg,
 }
 
 static void HandleCanData(Ms2Struct *Data, int Fd)
-{  MrMs2CanDataType CanMsg;
+{  MrCs2CanDataType CanMsg;
    BOOL Ret;
 
    if (Ms2GetVerbose(Data))

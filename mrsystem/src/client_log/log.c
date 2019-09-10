@@ -267,6 +267,19 @@ static void ProcessSystemData(LogStruct *Data, MrIpcCmdType *CmdFrame)
          printf("   cmd messwert response addr %ld channel %d value %d\n",
                 Adr, Param1, Param2);
          break;
+      case MrIpcCmdRequestLokListe:
+         MrIpcCmdGetReqestLoclist(CmdFrame);
+         puts("   cmd request locliste");
+         break;
+      case MrIpcCmdIntern:
+         puts("   cmd internal command");
+         switch (MrIpcGetCanCommand(CmdFrame))
+         {
+            case MrIpcInternalPollMs2:
+               puts("   subcmd pol ms2");
+               break;
+         }
+         break;
       default:
          printf("   command %d, CAN cmd 0x%x, %d Bytes\n",
                 MrIpcGetCommand(CmdFrame),
@@ -275,7 +288,7 @@ static void ProcessSystemData(LogStruct *Data, MrIpcCmdType *CmdFrame)
          printf("sender %d receiver %d\n",
                 MrIpcGetSenderSocket(CmdFrame),
                 MrIpcGetReceiverSocket(CmdFrame));
-         printf("lp1 %lx ip1 %0x ip2%0x\n",
+         printf("lp1 %lx ip1 %0x ip2 %0x\n",
                 MrIpcGetIntLp1(CmdFrame),
                 MrIpcGetIntIp1(CmdFrame),
                 MrIpcGetIntIp2(CmdFrame));

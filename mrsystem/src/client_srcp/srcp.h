@@ -1,12 +1,11 @@
-#ifndef CAN_ETH_H
-#define CAN_ETH_H
+#ifndef MR_SRCP_H
+#define MR_SRCP_H
 
 #include <arpa/inet.h>
 #include <boolean.h>
 #include <menge.h>
 #include <fsm.h>
 #include <can_io.h>
-#include "srcp_parse.h"
 
 #define FD_POS_TCP_SERVER 0x01
 #define FD_POS_TCP_CLIENT 0x02
@@ -42,7 +41,6 @@ typedef struct {
    MengeIterator *FdSearchIter;
    int FdPos;
    ClientInfo *FdSearchClient;
-   SrcpParser *Parser;
    int NumPending;
    MrCs2CanDataType PendingCanMsg[MAX_PENDING_CAN_NUM];
 } SrcpStruct;

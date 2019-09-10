@@ -1,6 +1,6 @@
 TARGET=mrcc
 OBJS=main.o ../common/ms2.o cc_client.o
-LOCALLIBS=-lrt -lmr_ipc -lmr_can -lm -lbytestream -lmrconfig -linipars -lscanner -lmap -lavl -lqueue -ldliste
+LOCALLIBS=-lrt -lmr_ipc -lmr_cs2ms2 -lcs2 -lm -lbytestream -lmrconfig -linipars -lscanner -lmap -lavl -lqueue -ldliste
 DESTDIR=/usr/local/bin
 
 %.o: %.c

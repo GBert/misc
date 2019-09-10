@@ -1,6 +1,6 @@
 TARGET=mrslcan
 OBJS=main.o ../common/ms2.o slcan_client.o
-LOCALLIBS=-lrt -lmr_ipc -lmr_can -lm -lbytestream -lmrconfig -linipars -lscanner -lmap -lavl -lqueue -ldliste
+LOCALLIBS=-lrt -lmr_ipc -lmr_cs2ms2 -lcs2 -lm -lbytestream -lmrconfig -linipars -lscanner -lmap -lavl -lqueue -ldliste
 DESTDIR=/usr/local/bin
 
 %.o: %.c

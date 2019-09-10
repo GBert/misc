@@ -1,6 +1,9 @@
 #include <time.h>
 #include <scanner.h>
 #include <fsm.h>
+#include <mr_cs2ms2.h>
+#include <cs2.h>
+#include <srcp.h>
 #include "srcp.h"
 
 #define NUM_STATES 3
@@ -22,162 +25,55 @@
 #define SIGNAL_WRITE   9
 #define SIGNAL_READ   10
 
-#define V7_ERROR_NOT_SUPPORTED  -1
-#define V7_ERROR_NO_INFORMATION -2
-#define V7_ERROR_TIMEOUT        -3
-
-#define ANTWORT_HANDSHAKE_GO_OK       "200 OK GO %d"
-#define ANTWORT_HANDSHAKE_PROTO_OK    "201 OK PROTOCOL SRCP"
-#define ANTWORT_HANDSHAKE_CONMODE_OK  "202 OK CONNECTIONMODE"
-#define ANTWORT_HANDSHAKE_PROTO_ERR   "400 ERROR unsupported protocol"
-#define ANTWORT_HANDSHAKE_CONMODE_ERR "401 ERROR unsupported connection mode"
-#define ANTWORT_HANDSHAKE_INSUFFD_ERR "402 ERROR insufficient data"
-#define ANTWORT_HANDSHAKE_NORES_ERR   "500 ERROR out of resources"
-#define ANTWORT_V7_INFO "INFO %d"
-#define ANTWORT_COMMAND_INFO_OK     "100 INFO %s"
-#define ANTWORT_COMMAND_INFOINIT_OK "101 INFO %s"
-#define ANTWORT_COMMAND_INFOTERM_OK "102 INFO %s"
-#define ANTWORT_COMMAND_OK          "200 OK"
-#define ANTWORT_COMMAND_UNKNOWN_ERR "410 ERROR unknown command"
-#define ANTWORT_COMMAND_UNVAL_ERR   "411 ERROR unknown value"
-#define ANTWORT_COMMAND_WRVAL_ERR   "412 ERROR wrong value"
-#define ANTWORT_COMMAND_DEVLOCK     "414 ERROR device locked"
-#define ANTWORT_COMMAND_FORBID_ERR  "415 ERROR forbidden"
-#define ANTWORT_COMMAND_NODATA_ERR  "416 ERROR no data"
-#define ANTWORT_COMMAND_TIMEOUT     "417 ERROR timeout"
-#define ANTWORT_COMMAND_TOLONG_ERR  "418 ERROR list too long"
-#define ANTWORT_COMMAND_TOSHORT_ERR "419 ERROR list too short"
-#define ANTWORT_COMMAND_UNPROT_ERR  "420 ERROR unsupported device protocol"
-#define ANTWORT_COMMAND_UNDEV_ERR   "421 ERROR unsupported device"
-#define ANTWORT_COMMAND_UNGRP_ERR   "422 ERROR unsupported device group"
-#define ANTWORT_COMMAND_UNOP_ERR    "423 ERROR unsupported operation"
-#define ANTWORT_COMMAND_REINIT_ERR  "424 ERROR device reinitialized"
-#define ANTWORT_COMMAND_UNSUPP_ERR  "425 ERROR not supported"
-#define ANTWORT_COMMAND_ERR         "499 ERROR unspecified error"
-
 typedef struct {
    ClientInfo *Client;
    MrCs2CanDataType *CanMsg;
    BOOL HaveAnswer;
+   char *Line;
+   int Length;
 } SignalParam;
 
 #define SignalDataSetClient(Data, Clnt)     (Data)->Client=Clnt
 #define SignalDataSetCanMsg(Data, Msg)      (Data)->CanMsg=Msg
 #define SignalDataSetHaveAnswer(Data, Answ) (Data)->HaveAnswer=Answ
+#define SignalDataSetLine(Data, Ln)         (Data)->Line=Ln
+#define SignalDataSetLength(Data, Lng)      (Data)->Length=Lng
 
 #define SignalDataGetClient(Data)     (Data)->Client
 #define SignalDataGetCanMsg(Data)     (Data)->CanMsg
 #define SignalDataGetHaveAnswer(Data) (Data)->HaveAnswer
+#define SignalDataGetLine(Data)       (Data)->Line
+#define SignalDataGetLength(Data)     (Data)->Length
 
 static int HandleSetHandshake(void *Priv, void *SignalData)
 {  SrcpStruct *Data;
    SignalParam *Signal;
-   int Token;
+   char Antwort[100];
 
    Data = (SrcpStruct *)Priv;
    Signal = (SignalParam *)SignalData;
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   switch (Token)
+   switch (SrcpDecHandshake(SignalDataGetLine(Signal),
+                            SignalDataGetLength(Signal)))
    {
-      case PARSER_PROTOCOL:
-         Token = SrcpParserParse(SrcpGetParser(Data));
-         switch (Token)
-         {
-            case PARSER_SRCP:
-               Token = SrcpParserParse(SrcpGetParser(Data));
-               switch (Token)
-               {
-                  case PARSER_ZAHL:
-                     if (ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data))) == 0)
-                     {
-                        Token = SrcpParserParse(SrcpGetParser(Data));
-                        switch (Token)
-                        {
-                           case PARSER_PUNKT:
-                              Token = SrcpParserParse(SrcpGetParser(Data));
-                              switch (Token)
-                              {
-                                 case PARSER_ZAHL:
-                                    if (ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data))) == 8)
-                                    {
-                                       SrcpSendAnswer(SignalDataGetClient(Signal),
-                                                      ANTWORT_HANDSHAKE_PROTO_OK);
-                                    }
-                                    else
-                                    {
-                                       SrcpSendAnswer(SignalDataGetClient(Signal),
-                                                      ANTWORT_HANDSHAKE_PROTO_ERR);
-                                    }
-                                    break;
-                                 default:
-                                    SrcpSendAnswer(SignalDataGetClient(Signal),
-                                                   ANTWORT_HANDSHAKE_PROTO_ERR);
-                                    break;
-                              }
-                              break;
-                           default:
-                              SrcpSendAnswer(SignalDataGetClient(Signal),
-                                             ANTWORT_HANDSHAKE_PROTO_ERR);
-                              break;
-                        }
-                     }
-                     else
-                     {
-                        SrcpSendAnswer(SignalDataGetClient(Signal),
-                                       ANTWORT_HANDSHAKE_PROTO_ERR);
-                     }
-                     break;
-                  default:
-                     SrcpSendAnswer(SignalDataGetClient(Signal),
-                                    ANTWORT_HANDSHAKE_PROTO_ERR);
-                     break;
-               }
-               break;
-            default:
-               SrcpSendAnswer(SignalDataGetClient(Signal),
-                              ANTWORT_HANDSHAKE_PROTO_ERR);
-               break;
-         }
+      case SRCP_HANDSHAKE_OK:
+         SrcpEncAnswerHandshakeProtoOk(Antwort, (char *)NULL);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_CONNECTIONMODE:
-         Token = SrcpParserParse(SrcpGetParser(Data));
-         switch (Token)
-         {
-            case PARSER_SRCP:
-               Token = SrcpParserParse(SrcpGetParser(Data));
-               switch (Token)
-               {
-                  case PARSER_BEZEICHNER:
-                     if (strcmp(ScanGetString(SrcpParserGetScanner(SrcpGetParser(Data))),
-                                "INFO") == 0)
-                     {
-                        SrcpClientSetClientMode(SignalDataGetClient(Signal),
-                                                SCRP_CLIENT_MODE_INFO);
-                        SrcpSendAnswer(SignalDataGetClient(Signal),
-                                       ANTWORT_HANDSHAKE_CONMODE_OK);
-                     }
-                     else if (strcmp(ScanGetString(SrcpParserGetScanner(SrcpGetParser(Data))),
-                                     "COMMAND") == 0)
-                     {
-                        SrcpClientSetClientMode(SignalDataGetClient(Signal),
-                                                SCRP_CLIENT_MODE_COMMAND);
-                        SrcpSendAnswer(SignalDataGetClient(Signal),
-                                       ANTWORT_HANDSHAKE_CONMODE_OK);
-                     }
-                     break;
-                  default:
-                     SrcpSendAnswer(SignalDataGetClient(Signal),
-                                    ANTWORT_HANDSHAKE_CONMODE_ERR);
-                     break;
-               }
-               break;
-            default:
-               break;
-         }
+      case SRCP_HANDSHAKE_MODE_INFO:
+         SrcpClientSetClientMode(SignalDataGetClient(Signal),
+                                 SCRP_CLIENT_MODE_INFO);
+         SrcpEncAnswerHandshakeConmodeOk(Antwort, (char *)NULL);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      default:
-         if (SrcpGetVerbose(Data))
-            printf("Parser: token 0x%x\n", Token);
+      case SRCP_HANDSHAKE_MODE_COMMAND:
+         SrcpClientSetClientMode(SignalDataGetClient(Signal),
+                                 SCRP_CLIENT_MODE_COMMAND);
+         SrcpEncAnswerHandshakeConmodeOk(Antwort, (char *)NULL);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
+         break;
+      case SRCP_HANDSHAKE_ERROR:
+         SrcpEncAnswerHandshakeProtoErr(Antwort, (char *)NULL);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
    }
    if (SrcpGetVerbose(Data))
@@ -188,12 +84,12 @@ static int HandleSetHandshake(void *Priv, void *SignalData)
 static int HandleGoHandshake(void *Priv, void *SignalData)
 {  SrcpStruct *Data;
    SignalParam *Signal;
-   char Antwort[15];
+   char Antwort[100], Param[100];
 
    Data = (SrcpStruct *)Priv;
    Signal = (SignalParam *)SignalData;
-   sprintf(Antwort, ANTWORT_HANDSHAKE_GO_OK,
-           SrcpClientGetClientSock(SignalDataGetClient(Signal)));
+   sprintf(Param, "%d", SrcpClientGetClientSock(SignalDataGetClient(Signal)));
+   SrcpEncAnswerHandshakeGoOk(Antwort, Param);
    SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
    if (SrcpClientGetClientMode(SignalDataGetClient(Signal)) == SCRP_CLIENT_MODE_INFO)
    {
@@ -208,10 +104,9 @@ static int HandleGoHandshake(void *Priv, void *SignalData)
 static int HandleSetV7(void *Priv, void *SignalData)
 {  SrcpStruct *Data;
    SignalParam *Signal;
-   int Token, Addr, JulDay, Hour, Minute, Second, Fx, Fy, Value, Port, Delay,
-       Direction, V, VMax, f[16], NumF, i;
-   char Protocol[5];
+   int i;
    MrCs2CanDataType *SaveCanMsg;
+   SrcpV7ParamType Params;
 
    Data = (SrcpStruct *)Priv;
    Signal = (SignalParam *)SignalData;
@@ -219,134 +114,98 @@ static int HandleSetV7(void *Priv, void *SignalData)
    {
       puts("parse set command");
    }
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   switch (Token)
+   switch (SrcpV7DecSet(SignalDataGetLine(Signal),
+                        SignalDataGetLength(Signal), &Params))
    {
-      case PARSER_GL:
-         SrcpParserParse(SrcpGetParser(Data));
-         strcpy(Protocol,
-                ScanGetString(SrcpParserGetScanner(SrcpGetParser(Data))));
-         SrcpParserParse(SrcpGetParser(Data));
-         Addr = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Direction = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         V = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         VMax = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         Token = SrcpParserParse(SrcpGetParser(Data));
-         f[0] = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         Token = SrcpParserParse(SrcpGetParser(Data));
-         NumF = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         for (i=1; i<=NumF; i++)
-         {
-            Token = SrcpParserParse(SrcpGetParser(Data));
-            f[i] = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         }
-         MrCs2SetId(SignalDataGetCanMsg(Signal), MR_CS2_UID_BROADCAST);
+      case SRCP_V7_TARGET_GL_GENERIC_LOCO:
+         MrCs2SetId(SignalDataGetCanMsg(Signal), CS2_UID_BROADCAST);
          MrCs2SetIsCs2(SignalDataGetCanMsg(Signal), TRUE);
          MrCs2SetHash(SignalDataGetCanMsg(Signal),
-                      MrCs2CalcHash(MR_CS2_UID_BROADCAST));
+                      Cs2CalcHash(CS2_UID_BROADCAST));
          MrCs2SetResponse(SignalDataGetCanMsg(Signal), 0);
-         MrCs2SetPrio(SignalDataGetCanMsg(Signal), MR_CS2_PRIO_1);
-         if (VMax == 0)
+         MrCs2SetPrio(SignalDataGetCanMsg(Signal), CS2_PRIO_1);
+         if (Params.TargetParms.GlParams.VMax == 0)
          {
-            MrCs2EncSpeed6(SignalDataGetCanMsg(Signal), Addr, V);
+            Cs2EncSpeed6(MrCs2GetData(SignalDataGetCanMsg(Signal)),
+                         Params.TargetParms.GlParams.Addr,
+                         Params.TargetParms.GlParams.V);
          }
          else
          {
-            MrCs2EncSpeed6(SignalDataGetCanMsg(Signal), Addr, V * 1000 / VMax);
+            Cs2EncSpeed6(MrCs2GetData(SignalDataGetCanMsg(Signal)),
+                         Params.TargetParms.GlParams.Addr,
+                         Params.TargetParms.GlParams.V * 1000 / Params.TargetParms.GlParams.VMax);
          }
          SaveCanMsg = SrcpGetPendingCanMsg(Data, 0);
          SrcpSetNumPending(Data, 1);
-         MrCs2SetId(SaveCanMsg, MR_CS2_UID_BROADCAST);
+         MrCs2SetId(SaveCanMsg, CS2_UID_BROADCAST);
          MrCs2SetIsCs2(SaveCanMsg, TRUE);
-         MrCs2SetHash(SaveCanMsg, MrCs2CalcHash(MR_CS2_UID_BROADCAST));
+         MrCs2SetHash(SaveCanMsg, Cs2CalcHash(CS2_UID_BROADCAST));
          MrCs2SetResponse(SaveCanMsg, 0);
-         MrCs2SetPrio(SaveCanMsg, MR_CS2_PRIO_1);
-         MrCs2EncDirection5(SaveCanMsg, Addr, Direction);
-         for (i=0; i<=NumF; i++)
+         MrCs2SetPrio(SaveCanMsg, CS2_PRIO_1);
+         Cs2EncDirection5(MrCs2GetData(SaveCanMsg),
+                          Params.TargetParms.GlParams.Addr,
+                          Params.TargetParms.GlParams.Direction);
+         for (i=0; i<=Params.TargetParms.GlParams.NumF; i++)
          {
             SaveCanMsg = SrcpGetPendingCanMsg(Data, i + 1);
             SrcpSetNumPending(Data, i + 2);
-            MrCs2SetId(SaveCanMsg, MR_CS2_UID_BROADCAST);
+            MrCs2SetId(SaveCanMsg, CS2_UID_BROADCAST);
             MrCs2SetIsCs2(SaveCanMsg, TRUE);
-            MrCs2SetHash(SaveCanMsg, MrCs2CalcHash(MR_CS2_UID_BROADCAST));
+            MrCs2SetHash(SaveCanMsg, Cs2CalcHash(CS2_UID_BROADCAST));
             MrCs2SetResponse(SaveCanMsg, 0);
-            MrCs2SetPrio(SaveCanMsg, MR_CS2_PRIO_1);
-            MrCs2EncFunction6(SaveCanMsg, Addr, i, f[i]);
+            MrCs2SetPrio(SaveCanMsg, CS2_PRIO_1);
+            Cs2EncFunction6(MrCs2GetData(SaveCanMsg),
+                            Params.TargetParms.GlParams.Addr, i,
+                            Params.TargetParms.GlParams.f[i]);
          }
          SignalDataSetHaveAnswer(Signal, TRUE);
          break;
-      case PARSER_GA:
-         SrcpParserParse(SrcpGetParser(Data));
-         strcpy(Protocol,
-                ScanGetString(SrcpParserGetScanner(SrcpGetParser(Data))));
-         SrcpParserParse(SrcpGetParser(Data));
-         Addr = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Port = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Value = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Delay = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         MrCs2SetId(SignalDataGetCanMsg(Signal), MR_CS2_UID_BROADCAST);
+      case SRCP_V7_TARGET_GA_GENERIC_ACCESSORY:
+         MrCs2SetId(SignalDataGetCanMsg(Signal), CS2_UID_BROADCAST);
          MrCs2SetIsCs2(SignalDataGetCanMsg(Signal), TRUE);
          MrCs2SetHash(SignalDataGetCanMsg(Signal),
-                      MrCs2CalcHash(MR_CS2_UID_BROADCAST));
+                      Cs2CalcHash(CS2_UID_BROADCAST));
          MrCs2SetResponse(SignalDataGetCanMsg(Signal), 0);
-         MrCs2SetPrio(SignalDataGetCanMsg(Signal), MR_CS2_PRIO_1);
-         MrCs2EncAccSwitch8(SignalDataGetCanMsg(Signal), Addr, Value,
-                            0, Delay);
+         MrCs2SetPrio(SignalDataGetCanMsg(Signal), CS2_PRIO_1);
+         Cs2EncAccSwitch8(MrCs2GetData(SignalDataGetCanMsg(Signal)),
+                          Params.TargetParms.GaParams.Addr,
+                          Params.TargetParms.GaParams.Value, 0,
+                          Params.TargetParms.GaParams.Delay);
          SignalDataSetHaveAnswer(Signal, TRUE);
          break;
-      case PARSER_TIME:
-         SrcpParserParse(SrcpGetParser(Data));
-         JulDay = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Hour = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Minute = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Second = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Fx = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Fy = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
+      case SRCP_V7_TARGET_FB_FEEDBACK:
          break;
-      case PARSER_POWER:
-         Token = SrcpParserParse(SrcpGetParser(Data));
-         switch (Token)
+      case SRCP_V7_TARGET_TIME:
+         break;
+      case SRCP_V7_TARGET_POWER:
+         if (Params.TargetParms.PowerParams.PowerOn)
          {
-            case PARSER_ON:
-               MrCs2SetId(SignalDataGetCanMsg(Signal), MR_CS2_UID_BROADCAST);
-               MrCs2SetIsCs2(SignalDataGetCanMsg(Signal), TRUE);
-               MrCs2SetHash(SignalDataGetCanMsg(Signal),
-                            MrCs2CalcHash(MR_CS2_UID_BROADCAST));
-               MrCs2SetResponse(SignalDataGetCanMsg(Signal), 0);
-               MrCs2SetPrio(SignalDataGetCanMsg(Signal), MR_CS2_PRIO_1);
-               MrCs2EncSysGo(SignalDataGetCanMsg(Signal),
-                             MR_CS2_UID_BROADCAST);
-               SignalDataSetHaveAnswer(Signal, TRUE);
-               break;
-            case PARSER_OFF:
-               MrCs2SetId(SignalDataGetCanMsg(Signal), MR_CS2_UID_BROADCAST);
-               MrCs2SetIsCs2(SignalDataGetCanMsg(Signal), TRUE);
-               MrCs2SetHash(SignalDataGetCanMsg(Signal),
-                            MrCs2CalcHash(MR_CS2_UID_BROADCAST));
-               MrCs2SetResponse(SignalDataGetCanMsg(Signal), 0);
-               MrCs2SetPrio(SignalDataGetCanMsg(Signal), MR_CS2_PRIO_1);
-               MrCs2EncSysStop(SignalDataGetCanMsg(Signal),
-                               MR_CS2_UID_BROADCAST);
-               SignalDataSetHaveAnswer(Signal, TRUE);
-               break;
-            default:
-               break;
+            MrCs2SetId(SignalDataGetCanMsg(Signal), CS2_UID_BROADCAST);
+            MrCs2SetIsCs2(SignalDataGetCanMsg(Signal), TRUE);
+            MrCs2SetHash(SignalDataGetCanMsg(Signal),
+                         Cs2CalcHash(CS2_UID_BROADCAST));
+            MrCs2SetResponse(SignalDataGetCanMsg(Signal), 0);
+            MrCs2SetPrio(SignalDataGetCanMsg(Signal), CS2_PRIO_1);
+            Cs2EncSysGo(MrCs2GetData(SignalDataGetCanMsg(Signal)),
+                        CS2_UID_BROADCAST);
+            SignalDataSetHaveAnswer(Signal, TRUE);
+         }
+         else
+         {
+            MrCs2SetId(SignalDataGetCanMsg(Signal), CS2_UID_BROADCAST);
+            MrCs2SetIsCs2(SignalDataGetCanMsg(Signal), TRUE);
+            MrCs2SetHash(SignalDataGetCanMsg(Signal),
+                         Cs2CalcHash(CS2_UID_BROADCAST));
+            MrCs2SetResponse(SignalDataGetCanMsg(Signal), 0);
+            MrCs2SetPrio(SignalDataGetCanMsg(Signal), CS2_PRIO_1);
+            Cs2EncSysStop(MrCs2GetData(SignalDataGetCanMsg(Signal)),
+                          CS2_UID_BROADCAST);
+            SignalDataSetHaveAnswer(Signal, TRUE);
          }
          break;
-      case PARSER_FB:
-         break;
-      default:
+      case SRCP_V7_TARGET_UNKNOWN:
+      case SRCP_V7_TARGET_ERROR:
          break;
    }
    return(STATE_NO_CHANGE);
@@ -355,59 +214,42 @@ static int HandleSetV7(void *Priv, void *SignalData)
 static int HandleGetV7(void *Priv, void *SignalData)
 {  SrcpStruct *Data;
    SignalParam *Signal;
-   int Token, Addr, Port;
-   char Protocol[5], ModuleType[5], Antwort[100], Params[100];
+   char Antwort[100], AntwortParams[100];
    struct tm Now;
+   SrcpV7ParamType Params;
 
    Data = (SrcpStruct *)Priv;
    Signal = (SignalParam *)SignalData;
    if (SrcpGetVerbose(Data))
       puts("parse get command");
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   switch (Token)
+   switch (SrcpV7DecGet(SignalDataGetLine(Signal),
+                        SignalDataGetLength(Signal), &Params))
    {
-      case PARSER_GL:
-         SrcpParserParse(SrcpGetParser(Data));
-         strcpy(Protocol,
-                ScanGetString(SrcpParserGetScanner(SrcpGetParser(Data))));
-         SrcpParserParse(SrcpGetParser(Data));
-         Addr = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
+      case SRCP_V7_TARGET_GL_GENERIC_LOCO:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_GA:
-         SrcpParserParse(SrcpGetParser(Data));
-         strcpy(Protocol,
-                ScanGetString(SrcpParserGetScanner(SrcpGetParser(Data))));
-         SrcpParserParse(SrcpGetParser(Data));
-         Addr = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Port = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
+      case SRCP_V7_TARGET_GA_GENERIC_ACCESSORY:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_TIME:
+      case SRCP_V7_TARGET_FB_FEEDBACK:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
+      case SRCP_V7_TARGET_TIME:
          mktime(&Now);
-         sprintf(Params, "INFO TIME %d %d %d %d 0 0",
+         sprintf(AntwortParams, "INFO TIME %d %d %d %d 0 0",
                  Now.tm_mday, Now.tm_hour, Now.tm_min, Now.tm_sec);
-         sprintf(Antwort, ANTWORT_COMMAND_INFO_OK, Params);
+         SrcpEncAnswerCommandInfoOk(Antwort, AntwortParams);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_POWER:
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
+      case SRCP_V7_TARGET_POWER:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_FB:
-         SrcpParserParse(SrcpGetParser(Data));
-         strcpy(ModuleType,
-                ScanGetString(SrcpParserGetScanner(SrcpGetParser(Data))));
-         SrcpParserParse(SrcpGetParser(Data));
-         Addr = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
-         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
-         break;
-      default:
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
+      case SRCP_V7_TARGET_UNKNOWN:
+      case SRCP_V7_TARGET_ERROR:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
    }
@@ -417,8 +259,8 @@ static int HandleGetV7(void *Priv, void *SignalData)
 static int HandleWaitV7(void *Priv, void *SignalData)
 {  SrcpStruct *Data;
    SignalParam *Signal;
-   int Token, Addr, Value, Timeout, JulDay, Hour, Minute, Second;
-   char ModuleType[5], Antwort[100];
+   char Antwort[100];
+   SrcpV7ParamType Params;
 
    Data = (SrcpStruct *)Priv;
    Signal = (SignalParam *)SignalData;
@@ -426,48 +268,32 @@ static int HandleWaitV7(void *Priv, void *SignalData)
    {
       puts("parse wait command");
    }
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   switch (Token)
+   switch (SrcpV7DecWait(SignalDataGetLine(Signal),
+                        SignalDataGetLength(Signal), &Params))
    {
-      case PARSER_GL:
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
+      case SRCP_V7_TARGET_GL_GENERIC_LOCO:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_GA:
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
+      case SRCP_V7_TARGET_GA_GENERIC_ACCESSORY:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_TIME:
-         SrcpParserParse(SrcpGetParser(Data));
-         JulDay = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Hour = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Minute = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Second = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
+      case SRCP_V7_TARGET_FB_FEEDBACK:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_POWER:
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
+      case SRCP_V7_TARGET_TIME:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_FB:
-         SrcpParserParse(SrcpGetParser(Data));
-         strcpy(ModuleType,
-                ScanGetString(SrcpParserGetScanner(SrcpGetParser(Data))));
-         SrcpParserParse(SrcpGetParser(Data));
-         Addr = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Value = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Timeout = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
+      case SRCP_V7_TARGET_POWER:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      default:
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
+      case SRCP_V7_TARGET_UNKNOWN:
+      case SRCP_V7_TARGET_ERROR:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
    }
@@ -477,8 +303,7 @@ static int HandleWaitV7(void *Priv, void *SignalData)
 static int HandleInitV7(void *Priv, void *SignalData)
 {  SrcpStruct *Data;
    SignalParam *Signal;
-   int Token, JulDay, Hour, Minute, Second, Fx, Fy;
-   char ModuleType[5];
+   SrcpV7ParamType Params;
 
    Data = (SrcpStruct *)Priv;
    Signal = (SignalParam *)SignalData;
@@ -486,35 +311,16 @@ static int HandleInitV7(void *Priv, void *SignalData)
    {
       puts("parse init command");
    }
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   switch (Token)
+   switch (SrcpV7DecInit(SignalDataGetLine(Signal),
+                         SignalDataGetLength(Signal), &Params))
    {
-      case PARSER_GL:
-         break;
-      case PARSER_GA:
-         break;
-      case PARSER_TIME:
-         SrcpParserParse(SrcpGetParser(Data));
-         JulDay = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Hour = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Minute = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Second = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Fx = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Fy = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         break;
-      case PARSER_POWER:
-         break;
-      case PARSER_FB:
-         SrcpParserParse(SrcpGetParser(Data));
-         strcpy(ModuleType,
-                ScanGetString(SrcpParserGetScanner(SrcpGetParser(Data))));
-         break;
-      default:
+      case SRCP_V7_TARGET_GL_GENERIC_LOCO:
+      case SRCP_V7_TARGET_GA_GENERIC_ACCESSORY:
+      case SRCP_V7_TARGET_FB_FEEDBACK:
+      case SRCP_V7_TARGET_TIME:
+      case SRCP_V7_TARGET_POWER:
+      case SRCP_V7_TARGET_UNKNOWN:
+      case SRCP_V7_TARGET_ERROR:
          break;
    }
    return(STATE_NO_CHANGE);
@@ -523,8 +329,8 @@ static int HandleInitV7(void *Priv, void *SignalData)
 static int HandleTermV7(void *Priv, void *SignalData)
 {  SrcpStruct *Data;
    SignalParam *Signal;
-   int Token;
-   char ModuleType[5];
+   char Antwort[100];
+   SrcpV7ParamType Params;
 
    Data = (SrcpStruct *)Priv;
    Signal = (SignalParam *)SignalData;
@@ -532,25 +338,23 @@ static int HandleTermV7(void *Priv, void *SignalData)
    {
       puts("parse term command");
    }
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   switch (Token)
+   switch (SrcpV7DecTerm(SignalDataGetLine(Signal),
+                         SignalDataGetLength(Signal), &Params))
    {
-      case PARSER_GL:
+      case SRCP_V7_TARGET_GL_GENERIC_LOCO:
          break;
-      case PARSER_GA:
+      case SRCP_V7_TARGET_GA_GENERIC_ACCESSORY:
          break;
-      case PARSER_TIME:
+      case SRCP_V7_TARGET_FB_FEEDBACK:
          break;
-      case PARSER_POWER:
+      case SRCP_V7_TARGET_TIME:
          break;
-      case PARSER_FB:
-         SrcpParserParse(SrcpGetParser(Data));
-         strcpy(ModuleType,
-                ScanGetString(SrcpParserGetScanner(SrcpGetParser(Data))));
+      case SRCP_V7_TARGET_POWER:
          break;
-      default:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V7_TARGET_UNKNOWN:
+      case SRCP_V7_TARGET_ERROR:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
    }
    return(STATE_NO_CHANGE);
@@ -559,8 +363,7 @@ static int HandleTermV7(void *Priv, void *SignalData)
 static int HandleVerifyV7(void *Priv, void *SignalData)
 {  SrcpStruct *Data;
    SignalParam *Signal;
-   int Token, DestAddr, Value;
-   char Protocol[10], DestType[5];
+   SrcpV7ParamType Params;
 
    Data = (SrcpStruct *)Priv;
    Signal = (SignalParam *)SignalData;
@@ -568,40 +371,21 @@ static int HandleVerifyV7(void *Priv, void *SignalData)
    {
       puts("parse verify command");
    }
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   switch (Token)
+   switch (SrcpV7DecVerify(SignalDataGetLine(Signal),
+                           SignalDataGetLength(Signal), &Params))
    {
-      case PARSER_GL:
-         SrcpParserParse(SrcpGetParser(Data));
-         strcpy(Protocol,
-                ScanGetString(SrcpParserGetScanner(SrcpGetParser(Data))));
-         SrcpParserParse(SrcpGetParser(Data));
-         strcpy(DestType,
-                ScanGetString(SrcpParserGetScanner(SrcpGetParser(Data))));
-         SrcpParserParse(SrcpGetParser(Data));
-         DestAddr = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Value = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
+      case SRCP_V7_TARGET_GL_GENERIC_LOCO:
          break;
-      case PARSER_GA:
-         SrcpParserParse(SrcpGetParser(Data));
-         strcpy(Protocol,
-                ScanGetString(SrcpParserGetScanner(SrcpGetParser(Data))));
-         SrcpParserParse(SrcpGetParser(Data));
-         strcpy(DestType,
-                ScanGetString(SrcpParserGetScanner(SrcpGetParser(Data))));
-         SrcpParserParse(SrcpGetParser(Data));
-         DestAddr = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Value = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
+      case SRCP_V7_TARGET_GA_GENERIC_ACCESSORY:
          break;
-      case PARSER_TIME:
+      case SRCP_V7_TARGET_FB_FEEDBACK:
          break;
-      case PARSER_POWER:
+      case SRCP_V7_TARGET_TIME:
          break;
-      case PARSER_FB:
+      case SRCP_V7_TARGET_POWER:
          break;
-      default:
+      case SRCP_V7_TARGET_UNKNOWN:
+      case SRCP_V7_TARGET_ERROR:
          break;
    }
    return(STATE_NO_CHANGE);
@@ -610,8 +394,8 @@ static int HandleVerifyV7(void *Priv, void *SignalData)
 static int HandleWriteV7(void *Priv, void *SignalData)
 {  SrcpStruct *Data;
    SignalParam *Signal;
-   int Token, DestAddr, Value;
-   char Protocol[10], DestType[5], Antwort[100];
+   char Antwort[100];
+   SrcpV7ParamType Params;
 
    Data = (SrcpStruct *)Priv;
    Signal = (SignalParam *)SignalData;
@@ -619,51 +403,32 @@ static int HandleWriteV7(void *Priv, void *SignalData)
    {
       puts("parse verify command");
    }
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   switch (Token)
+   switch (SrcpV7DecWrite(SignalDataGetLine(Signal),
+                          SignalDataGetLength(Signal), &Params))
    {
-      case PARSER_GL:
-         SrcpParserParse(SrcpGetParser(Data));
-         strcpy(Protocol,
-                ScanGetString(SrcpParserGetScanner(SrcpGetParser(Data))));
-         SrcpParserParse(SrcpGetParser(Data));
-         strcpy(DestType,
-                ScanGetString(SrcpParserGetScanner(SrcpGetParser(Data))));
-         SrcpParserParse(SrcpGetParser(Data));
-         DestAddr = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Value = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
+      case SRCP_V7_TARGET_GL_GENERIC_LOCO:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_GA:
-         SrcpParserParse(SrcpGetParser(Data));
-         strcpy(Protocol,
-                ScanGetString(SrcpParserGetScanner(SrcpGetParser(Data))));
-         SrcpParserParse(SrcpGetParser(Data));
-         strcpy(DestType,
-                ScanGetString(SrcpParserGetScanner(SrcpGetParser(Data))));
-         SrcpParserParse(SrcpGetParser(Data));
-         DestAddr = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Value = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
+      case SRCP_V7_TARGET_GA_GENERIC_ACCESSORY:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_TIME:
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
+      case SRCP_V7_TARGET_FB_FEEDBACK:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_POWER:
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
+      case SRCP_V7_TARGET_TIME:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_FB:
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
+      case SRCP_V7_TARGET_POWER:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      default:
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
+      case SRCP_V7_TARGET_UNKNOWN:
+      case SRCP_V7_TARGET_ERROR:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
    }
@@ -673,8 +438,8 @@ static int HandleWriteV7(void *Priv, void *SignalData)
 static int HandleReadV7(void *Priv, void *SignalData)
 {  SrcpStruct *Data;
    SignalParam *Signal;
-   int Token, DestAddr;
-   char Protocol[10], DestType[5], Antwort[100];
+   char Antwort[100];
+   SrcpV7ParamType Params;
 
    Data = (SrcpStruct *)Priv;
    Signal = (SignalParam *)SignalData;
@@ -682,47 +447,32 @@ static int HandleReadV7(void *Priv, void *SignalData)
    {
       puts("parse verify command");
    }
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   switch (Token)
+   switch (SrcpV7DecRead(SignalDataGetLine(Signal),
+                         SignalDataGetLength(Signal), &Params))
    {
-      case PARSER_GL:
-         SrcpParserParse(SrcpGetParser(Data));
-         strcpy(Protocol,
-                ScanGetString(SrcpParserGetScanner(SrcpGetParser(Data))));
-         SrcpParserParse(SrcpGetParser(Data));
-         strcpy(DestType,
-                ScanGetString(SrcpParserGetScanner(SrcpGetParser(Data))));
-         SrcpParserParse(SrcpGetParser(Data));
-         DestAddr = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
+      case SRCP_V7_TARGET_GL_GENERIC_LOCO:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_GA:
-         SrcpParserParse(SrcpGetParser(Data));
-         strcpy(Protocol,
-                ScanGetString(SrcpParserGetScanner(SrcpGetParser(Data))));
-         SrcpParserParse(SrcpGetParser(Data));
-         strcpy(DestType,
-                ScanGetString(SrcpParserGetScanner(SrcpGetParser(Data))));
-         SrcpParserParse(SrcpGetParser(Data));
-         DestAddr = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
+      case SRCP_V7_TARGET_GA_GENERIC_ACCESSORY:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_TIME:
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
+      case SRCP_V7_TARGET_FB_FEEDBACK:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_POWER:
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
+      case SRCP_V7_TARGET_TIME:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_FB:
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
+      case SRCP_V7_TARGET_POWER:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      default:
-         sprintf(Antwort, ANTWORT_V7_INFO, V7_ERROR_NOT_SUPPORTED);
+      case SRCP_V7_TARGET_UNKNOWN:
+      case SRCP_V7_TARGET_ERROR:
+         SrcpV7EncAnswer(Antwort, SRCP_V7_ERRNO_ERROR_NOT_SUPPORTED);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
    }
@@ -732,9 +482,10 @@ static int HandleReadV7(void *Priv, void *SignalData)
 static int HandleSetV8(void *Priv, void *SignalData)
 {  SrcpStruct *Data;
    SignalParam *Signal;
-   int Token, Bus, DeviceGroup, Addr, Duration, JulDay, Hour, Minute, Second,
-       SendTo, ReplyTo, Value, Port, Delay, DriveMode, V, VMax, f[16], NumF, i;
+   int i;
    MrCs2CanDataType *SaveCanMsg;
+   char Antwort[100];
+   SrcpV8ParamType Params;
 
    Data = (SrcpStruct *)Priv;
    Signal = (SignalParam *)SignalData;
@@ -742,169 +493,136 @@ static int HandleSetV8(void *Priv, void *SignalData)
    {
       puts("parse set command");
    }
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   Bus = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   switch (Token)
+   switch (SrcpV8DecSet(SignalDataGetLine(Signal),
+                        SignalDataGetLength(Signal), &Params))
    {
-      case PARSER_GL:
-         SrcpParserParse(SrcpGetParser(Data));
-         Addr = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         DriveMode = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         V = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         VMax = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         NumF = 0;
-         Token = SrcpParserParse(SrcpGetParser(Data));
-         while (Token == PARSER_ZAHL && NumF<16)
-         {
-            f[NumF] = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-            Token = SrcpParserParse(SrcpGetParser(Data));
-         }
-         MrCs2SetId(SignalDataGetCanMsg(Signal), MR_CS2_UID_BROADCAST);
+      case SRCP_V8_DEVICE_GROUP_GL_GENERIC_LOCO:
+         MrCs2SetId(SignalDataGetCanMsg(Signal), CS2_UID_BROADCAST);
          MrCs2SetIsCs2(SignalDataGetCanMsg(Signal), TRUE);
          MrCs2SetHash(SignalDataGetCanMsg(Signal),
-                      MrCs2CalcHash(MR_CS2_UID_BROADCAST));
+                      Cs2CalcHash(CS2_UID_BROADCAST));
          MrCs2SetResponse(SignalDataGetCanMsg(Signal), 0);
-         MrCs2SetPrio(SignalDataGetCanMsg(Signal), MR_CS2_PRIO_1);
-         if (VMax == 0)
+         MrCs2SetPrio(SignalDataGetCanMsg(Signal), CS2_PRIO_1);
+         if (Params.DeviceGroupParms.GlParams.VMax == 0)
          {
-            MrCs2EncSpeed6(SignalDataGetCanMsg(Signal), Addr, V);
+            Cs2EncSpeed6(MrCs2GetData(SignalDataGetCanMsg(Signal)),
+                         Params.DeviceGroupParms.GlParams.Addr,
+                         Params.DeviceGroupParms.GlParams.V);
          }
          else
          {
-            MrCs2EncSpeed6(SignalDataGetCanMsg(Signal), Addr, V * 1000 / VMax);
+            Cs2EncSpeed6(MrCs2GetData(SignalDataGetCanMsg(Signal)),
+                         Params.DeviceGroupParms.GlParams.Addr,
+                         Params.DeviceGroupParms.GlParams.V * 1000 / Params.DeviceGroupParms.GlParams.VMax);
          }
          SaveCanMsg = SrcpGetPendingCanMsg(Data, 0);
          SrcpSetNumPending(Data, 1);
-         MrCs2SetId(SaveCanMsg, MR_CS2_UID_BROADCAST);
+         MrCs2SetId(SaveCanMsg, CS2_UID_BROADCAST);
          MrCs2SetIsCs2(SaveCanMsg, TRUE);
-         MrCs2SetHash(SaveCanMsg, MrCs2CalcHash(MR_CS2_UID_BROADCAST));
+         MrCs2SetHash(SaveCanMsg, Cs2CalcHash(CS2_UID_BROADCAST));
          MrCs2SetResponse(SaveCanMsg, 0);
-         MrCs2SetPrio(SaveCanMsg, MR_CS2_PRIO_1);
-         MrCs2EncDirection5(SaveCanMsg, Addr, DriveMode);
-         for (i=0; i<NumF; i++)
+         MrCs2SetPrio(SaveCanMsg, CS2_PRIO_1);
+         Cs2EncDirection5(MrCs2GetData(SaveCanMsg),
+                          Params.DeviceGroupParms.GlParams.Addr,
+                          Params.DeviceGroupParms.GlParams.DriveMode);
+         for (i = 0; i < Params.DeviceGroupParms.GlParams.NumF; i++)
          {
             SaveCanMsg = SrcpGetPendingCanMsg(Data, i + 1);
             SrcpSetNumPending(Data, i + 2);
-            MrCs2SetId(SaveCanMsg, MR_CS2_UID_BROADCAST);
+            MrCs2SetId(SaveCanMsg, CS2_UID_BROADCAST);
             MrCs2SetIsCs2(SaveCanMsg, TRUE);
-            MrCs2SetHash(SaveCanMsg, MrCs2CalcHash(MR_CS2_UID_BROADCAST));
+            MrCs2SetHash(SaveCanMsg, Cs2CalcHash(CS2_UID_BROADCAST));
             MrCs2SetResponse(SaveCanMsg, 0);
-            MrCs2SetPrio(SaveCanMsg, MR_CS2_PRIO_1);
-            MrCs2EncFunction6(SaveCanMsg, Addr, i, f[i]);
+            MrCs2SetPrio(SaveCanMsg, CS2_PRIO_1);
+            Cs2EncFunction6(MrCs2GetData(SaveCanMsg),
+                            Params.DeviceGroupParms.GlParams.Addr, i,
+                            Params.DeviceGroupParms.GlParams.f[i]);
          }
          SignalDataSetHaveAnswer(Signal, TRUE);
-         SrcpSendAnswer(SignalDataGetClient(Signal), ANTWORT_COMMAND_OK);
+         SrcpEncAnswerCommandOk(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_GA:
-         SrcpParserParse(SrcpGetParser(Data));
-         Addr = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Port = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Value = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Delay = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         MrCs2SetId(SignalDataGetCanMsg(Signal), MR_CS2_UID_BROADCAST);
+      case SRCP_V8_DEVICE_GROUP_GA_GENERIC_ACCESSORY:
+         MrCs2SetId(SignalDataGetCanMsg(Signal), CS2_UID_BROADCAST);
          MrCs2SetIsCs2(SignalDataGetCanMsg(Signal), TRUE);
          MrCs2SetHash(SignalDataGetCanMsg(Signal),
-                      MrCs2CalcHash(MR_CS2_UID_BROADCAST));
+                      Cs2CalcHash(CS2_UID_BROADCAST));
          MrCs2SetResponse(SignalDataGetCanMsg(Signal), 0);
-         MrCs2SetPrio(SignalDataGetCanMsg(Signal), MR_CS2_PRIO_1);
-         MrCs2EncAccSwitch8(SignalDataGetCanMsg(Signal), Addr, Value,
-                            0, Delay);
+         MrCs2SetPrio(SignalDataGetCanMsg(Signal), CS2_PRIO_1);
+         Cs2EncAccSwitch8(MrCs2GetData(SignalDataGetCanMsg(Signal)),
+                          Params.DeviceGroupParms.GaParams.Addr,
+                          Params.DeviceGroupParms.GaParams.Value, 0,
+                          Params.DeviceGroupParms.GaParams.Delay);
          SignalDataSetHaveAnswer(Signal, TRUE);
-         SrcpSendAnswer(SignalDataGetClient(Signal), ANTWORT_COMMAND_OK);
+         SrcpEncAnswerCommandOk(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_FB:
-         SrcpParserParse(SrcpGetParser(Data));
-         Addr = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Value = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpSendAnswer(SignalDataGetClient(Signal), ANTWORT_COMMAND_OK);
+      case SRCP_V8_DEVICE_GROUP_FB_FEEDBACK_SENSOR:
+         SrcpEncAnswerCommandOk(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_GM:
-         SrcpParserParse(SrcpGetParser(Data));
-         SendTo = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         ReplyTo = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpSendAnswer(SignalDataGetClient(Signal), ANTWORT_COMMAND_OK);
+      case SRCP_V8_DEVICE_GROUP_TIME:
+         SrcpEncAnswerCommandOk(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_SM:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNSUPP_ERR);
-         break;
-      case PARSER_TIME:
-         SrcpParserParse(SrcpGetParser(Data));
-         JulDay = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Hour = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Minute = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Second = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpSendAnswer(SignalDataGetClient(Signal), ANTWORT_COMMAND_OK);
-         break;
-      case PARSER_LOCK:
-         SrcpParserParse(SrcpGetParser(Data));
-         DeviceGroup = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Addr = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Duration = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpSendAnswer(SignalDataGetClient(Signal), ANTWORT_COMMAND_OK);
-         break;
-      case PARSER_POWER:
-         Token = SrcpParserParse(SrcpGetParser(Data));
-         switch (Token)
+      case SRCP_V8_DEVICE_GROUP_POWER:
+         if (Params.DeviceGroupParms.PowerParams.PowerOn)
          {
-            case PARSER_ON:
-               MrCs2SetId(SignalDataGetCanMsg(Signal), MR_CS2_UID_BROADCAST);
-               MrCs2SetIsCs2(SignalDataGetCanMsg(Signal), TRUE);
-               MrCs2SetHash(SignalDataGetCanMsg(Signal),
-                            MrCs2CalcHash(MR_CS2_UID_BROADCAST));
-               MrCs2SetResponse(SignalDataGetCanMsg(Signal), 0);
-               MrCs2SetPrio(SignalDataGetCanMsg(Signal), MR_CS2_PRIO_1);
-               MrCs2EncSysGo(SignalDataGetCanMsg(Signal),
-                             MR_CS2_UID_BROADCAST);
-               SignalDataSetHaveAnswer(Signal, TRUE);
-               SrcpSendAnswer(SignalDataGetClient(Signal),
-                              ANTWORT_COMMAND_OK);
-               break;
-            case PARSER_OFF:
-               MrCs2SetId(SignalDataGetCanMsg(Signal), MR_CS2_UID_BROADCAST);
-               MrCs2SetIsCs2(SignalDataGetCanMsg(Signal), TRUE);
-               MrCs2SetHash(SignalDataGetCanMsg(Signal),
-                            MrCs2CalcHash(MR_CS2_UID_BROADCAST));
-               MrCs2SetResponse(SignalDataGetCanMsg(Signal), 0);
-               MrCs2SetPrio(SignalDataGetCanMsg(Signal), MR_CS2_PRIO_1);
-               MrCs2EncSysStop(SignalDataGetCanMsg(Signal),
-                               MR_CS2_UID_BROADCAST);
-               SignalDataSetHaveAnswer(Signal, TRUE);
-               SrcpSendAnswer(SignalDataGetClient(Signal),
-                              ANTWORT_COMMAND_OK);
-               break;
-            default:
-               SrcpSendAnswer(SignalDataGetClient(Signal),
-                              ANTWORT_COMMAND_UNKNOWN_ERR);
-               break;
+            MrCs2SetId(SignalDataGetCanMsg(Signal), CS2_UID_BROADCAST);
+            MrCs2SetIsCs2(SignalDataGetCanMsg(Signal), TRUE);
+            MrCs2SetHash(SignalDataGetCanMsg(Signal),
+                         Cs2CalcHash(CS2_UID_BROADCAST));
+            MrCs2SetResponse(SignalDataGetCanMsg(Signal), 0);
+            MrCs2SetPrio(SignalDataGetCanMsg(Signal), CS2_PRIO_1);
+            Cs2EncSysGo(MrCs2GetData(SignalDataGetCanMsg(Signal)),
+                        CS2_UID_BROADCAST);
+            SignalDataSetHaveAnswer(Signal, TRUE);
+            SrcpEncAnswerCommandOk(Antwort);
+            SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
+         }
+         else
+         {
+            MrCs2SetId(SignalDataGetCanMsg(Signal), CS2_UID_BROADCAST);
+            MrCs2SetIsCs2(SignalDataGetCanMsg(Signal), TRUE);
+            MrCs2SetHash(SignalDataGetCanMsg(Signal),
+                         Cs2CalcHash(CS2_UID_BROADCAST));
+            MrCs2SetResponse(SignalDataGetCanMsg(Signal), 0);
+            MrCs2SetPrio(SignalDataGetCanMsg(Signal), CS2_PRIO_1);
+            Cs2EncSysStop(MrCs2GetData(SignalDataGetCanMsg(Signal)),
+                          CS2_UID_BROADCAST);
+            SignalDataSetHaveAnswer(Signal, TRUE);
+            SrcpEncAnswerCommandOk(Antwort);
+            SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          }
          break;
-      case PARSER_SERVER:
-         SrcpSendAnswer(SignalDataGetClient(Signal), ANTWORT_COMMAND_OK);
+      case SRCP_V8_DEVICE_GROUP_GM_GENERIC_MESSAGE:
+         SrcpEncAnswerCommandOk(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_SESSION:
-         SrcpSendAnswer(SignalDataGetClient(Signal), ANTWORT_COMMAND_OK);
+      case SRCP_V8_DEVICE_GROUP_LOCK:
+         SrcpEncAnswerCommandOk(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_DESCRIPTION:
-         SrcpSendAnswer(SignalDataGetClient(Signal), ANTWORT_COMMAND_OK);
+      case SRCP_V8_DEVICE_GROUP_SERVER:
+         SrcpEncAnswerCommandOk(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      default:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_SESSION:
+         SrcpEncAnswerCommandOk(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
+         break;
+      case SRCP_V8_DEVICE_GROUP_SM_SERVICE_MODE:
+         SrcpEncAnswerCommandUnsuppErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
+         break;
+      case SRCP_V8_DEVICE_GROUP_DESCRIPTION:
+         SrcpEncAnswerCommandOk(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
+         break;
+      case SRCP_V8_DEVICE_GROUP_UNKNOWN:
+      case SRCP_V8_DEVICE_GROUP_ERROR:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
    }
    return(STATE_NO_CHANGE);
@@ -913,81 +631,68 @@ static int HandleSetV8(void *Priv, void *SignalData)
 static int HandleGetV8(void *Priv, void *SignalData)
 {  SrcpStruct *Data;
    SignalParam *Signal;
-   int Token, Bus, Addr, Port, DecoderAddress, SessionId;
-   char Antwort[100], Params[100];
+   char Antwort[100], AntwortParams[100];
    struct tm Now;
+   SrcpV8ParamType Params;
 
    Data = (SrcpStruct *)Priv;
    Signal = (SignalParam *)SignalData;
    if (SrcpGetVerbose(Data))
       puts("parse get command");
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   Bus = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   switch (Token)
+   switch (SrcpV8DecGet(SignalDataGetLine(Signal),
+                        SignalDataGetLength(Signal), &Params))
    {
-      case PARSER_GL:
-         SrcpParserParse(SrcpGetParser(Data));
-         Addr = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
-         break;
-      case PARSER_GA:
-         SrcpParserParse(SrcpGetParser(Data));
-         Addr = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Port = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_NODATA_ERR);
-         break;
-      case PARSER_FB:
-         SrcpParserParse(SrcpGetParser(Data));
-         Addr = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_NODATA_ERR);
-         break;
-      case PARSER_GM:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
-         break;
-      case PARSER_SM:
-         SrcpParserParse(SrcpGetParser(Data));
-         DecoderAddress = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
-         break;
-      case PARSER_TIME:
-         mktime(&Now);
-         sprintf(Params, "0 TIME %d %d %d %d",
-                 Now.tm_mday, Now.tm_hour, Now.tm_min, Now.tm_sec);
-         sprintf(Antwort, ANTWORT_COMMAND_INFO_OK, Params);
+      case SRCP_V8_DEVICE_GROUP_GL_GENERIC_LOCO:
+         SrcpEncAnswerCommandUnopErr(Antwort);
          SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_LOCK:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_GA_GENERIC_ACCESSORY:
+         SrcpEncAnswerCommandNodataErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_POWER:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_FB_FEEDBACK_SENSOR:
+         SrcpEncAnswerCommandNodataErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_SERVER:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_TIME:
+         mktime(&Now);
+         sprintf(AntwortParams, "0 TIME %d %d %d %d",
+                 Now.tm_mday, Now.tm_hour, Now.tm_min, Now.tm_sec);
+         SrcpEncAnswerCommandInfoOk(Antwort, AntwortParams);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_SESSION:
-         SrcpParserParse(SrcpGetParser(Data));
-         SessionId = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_POWER:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_DESCRIPTION:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_GM_GENERIC_MESSAGE:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      default:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_LOCK:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
+         break;
+      case SRCP_V8_DEVICE_GROUP_SERVER:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
+         break;
+      case SRCP_V8_DEVICE_GROUP_SESSION:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
+         break;
+      case SRCP_V8_DEVICE_GROUP_SM_SERVICE_MODE:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
+         break;
+      case SRCP_V8_DEVICE_GROUP_DESCRIPTION:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
+         break;
+      case SRCP_V8_DEVICE_GROUP_UNKNOWN:
+      case SRCP_V8_DEVICE_GROUP_ERROR:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
    }
    return(STATE_NO_CHANGE);
@@ -996,7 +701,8 @@ static int HandleGetV8(void *Priv, void *SignalData)
 static int HandleCheckV8(void *Priv, void *SignalData)
 {  SrcpStruct *Data;
    SignalParam *Signal;
-   int Token, Bus, DecoderAddress, Type;
+   char Antwort[100];
+   SrcpV8ParamType Params;
 
    Data = (SrcpStruct *)Priv;
    Signal = (SignalParam *)SignalData;
@@ -1004,58 +710,57 @@ static int HandleCheckV8(void *Priv, void *SignalData)
    {
       puts("parse check command");
    }
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   Bus = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   switch (Token)
+   switch (SrcpV8DecCheck(SignalDataGetLine(Signal),
+                          SignalDataGetLength(Signal), &Params))
    {
-      case PARSER_GL:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_GL_GENERIC_LOCO:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_GA:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_GA_GENERIC_ACCESSORY:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_FB:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_FB_FEEDBACK_SENSOR:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_GM:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_TIME:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_SM:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_POWER:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_TIME:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_GM_GENERIC_MESSAGE:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_LOCK:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_LOCK:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_POWER:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_SERVER:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_SERVER:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_SESSION:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_SESSION:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_SM_SERVICE_MODE:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_DESCRIPTION:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_DESCRIPTION:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      default:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_UNKNOWN:
+      case SRCP_V8_DEVICE_GROUP_ERROR:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
    }
    return(STATE_NO_CHANGE);
@@ -1064,7 +769,8 @@ static int HandleCheckV8(void *Priv, void *SignalData)
 static int HandleWaitV8(void *Priv, void *SignalData)
 {  SrcpStruct *Data;
    SignalParam *Signal;
-   int Token, Bus, Addr, Value, Timeout, JulDay, Hour, Minute, Second;
+   char Antwort[100];
+   SrcpV8ParamType Params;
 
    Data = (SrcpStruct *)Priv;
    Signal = (SignalParam *)SignalData;
@@ -1072,71 +778,57 @@ static int HandleWaitV8(void *Priv, void *SignalData)
    {
       puts("parse wait command");
    }
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   Bus = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   switch (Token)
+   switch (SrcpV8DecWait(SignalDataGetLine(Signal),
+                         SignalDataGetLength(Signal), &Params))
    {
-      case PARSER_GL:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_GL_GENERIC_LOCO:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_GA:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_GA_GENERIC_ACCESSORY:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_FB:
-         SrcpParserParse(SrcpGetParser(Data));
-         Addr = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Value = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Timeout = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_FB_FEEDBACK_SENSOR:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_GM:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_TIME:
+         SrcpEncAnswerCommandOk(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_SM:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_POWER:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_TIME:
-         SrcpParserParse(SrcpGetParser(Data));
-         JulDay = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Hour = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Minute = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Second = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpSendAnswer(SignalDataGetClient(Signal), ANTWORT_COMMAND_OK);
+      case SRCP_V8_DEVICE_GROUP_GM_GENERIC_MESSAGE:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_LOCK:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_LOCK:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_POWER:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_SERVER:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_SERVER:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_SESSION:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_SESSION:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_SM_SERVICE_MODE:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_DESCRIPTION:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_DESCRIPTION:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      default:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_UNKNOWN:
+      case SRCP_V8_DEVICE_GROUP_ERROR:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
    }
    return(STATE_NO_CHANGE);
@@ -1145,7 +837,8 @@ static int HandleWaitV8(void *Priv, void *SignalData)
 static int HandleInitV8(void *Priv, void *SignalData)
 {  SrcpStruct *Data;
    SignalParam *Signal;
-   int Token, Bus;
+   char Antwort[100];
+   SrcpV8ParamType Params;
 
    Data = (SrcpStruct *)Priv;
    Signal = (SignalParam *)SignalData;
@@ -1153,57 +846,57 @@ static int HandleInitV8(void *Priv, void *SignalData)
    {
       puts("parse init command");
    }
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   Bus = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   switch (Token)
+   switch (SrcpV8DecInit(SignalDataGetLine(Signal),
+                         SignalDataGetLength(Signal), &Params))
    {
-      case PARSER_GL:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_GL_GENERIC_LOCO:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_GA:
-         SrcpSendAnswer(SignalDataGetClient(Signal), ANTWORT_COMMAND_OK);
+      case SRCP_V8_DEVICE_GROUP_GA_GENERIC_ACCESSORY:
+         SrcpEncAnswerCommandOk(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_FB:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_FB_FEEDBACK_SENSOR:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_GM:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_TIME:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_SM:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_POWER:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_TIME:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_GM_GENERIC_MESSAGE:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_LOCK:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_LOCK:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_POWER:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_SERVER:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_SERVER:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_SESSION:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_SESSION:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_SM_SERVICE_MODE:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_DESCRIPTION:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_DESCRIPTION:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      default:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_UNKNOWN:
+      case SRCP_V8_DEVICE_GROUP_ERROR:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
    }
    return(STATE_NO_CHANGE);
@@ -1212,7 +905,8 @@ static int HandleInitV8(void *Priv, void *SignalData)
 static int HandleTermV8(void *Priv, void *SignalData)
 {  SrcpStruct *Data;
    SignalParam *Signal;
-   int Token, Bus, Addr, DeviceGroup;
+   char Antwort[100];
+   SrcpV8ParamType Params;
 
    Data = (SrcpStruct *)Priv;
    Signal = (SignalParam *)SignalData;
@@ -1220,64 +914,66 @@ static int HandleTermV8(void *Priv, void *SignalData)
    {
       puts("parse term command");
    }
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   Bus = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   switch (Token)
+   switch (SrcpV8DecTerm(SignalDataGetLine(Signal),
+                         SignalDataGetLength(Signal), &Params))
    {
-      case PARSER_GL:
-         SrcpParserParse(SrcpGetParser(Data));
-         Addr = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpSendAnswer(SignalDataGetClient(Signal), ANTWORT_COMMAND_OK);
+      case SRCP_V8_DEVICE_GROUP_GL_GENERIC_LOCO:
+         SrcpEncAnswerCommandOk(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_GA:
-         SrcpSendAnswer(SignalDataGetClient(Signal), ANTWORT_COMMAND_OK);
+      case SRCP_V8_DEVICE_GROUP_GA_GENERIC_ACCESSORY:
+         SrcpEncAnswerCommandOk(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_FB:
-         SrcpSendAnswer(SignalDataGetClient(Signal), ANTWORT_COMMAND_OK);
+      case SRCP_V8_DEVICE_GROUP_FB_FEEDBACK_SENSOR:
+         SrcpEncAnswerCommandOk(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_GM:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_TIME:
+         SrcpEncAnswerCommandOk(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_SM:
-         SrcpSendAnswer(SignalDataGetClient(Signal), ANTWORT_COMMAND_OK);
-         break;
-      case PARSER_TIME:
-         SrcpSendAnswer(SignalDataGetClient(Signal), ANTWORT_COMMAND_OK);
-         break;
-      case PARSER_LOCK:
-         SrcpParserParse(SrcpGetParser(Data));
-         DeviceGroup = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpParserParse(SrcpGetParser(Data));
-         Addr = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpSendAnswer(SignalDataGetClient(Signal), ANTWORT_COMMAND_OK);
-         break;
-      case PARSER_POWER:
-         MrCs2SetId(SignalDataGetCanMsg(Signal), MR_CS2_UID_BROADCAST);
+      case SRCP_V8_DEVICE_GROUP_POWER:
+         MrCs2SetId(SignalDataGetCanMsg(Signal), CS2_UID_BROADCAST);
          MrCs2SetIsCs2(SignalDataGetCanMsg(Signal), TRUE);
          MrCs2SetHash(SignalDataGetCanMsg(Signal),
-                      MrCs2CalcHash(MR_CS2_UID_BROADCAST));
+                      Cs2CalcHash(CS2_UID_BROADCAST));
          MrCs2SetResponse(SignalDataGetCanMsg(Signal), 0);
-         MrCs2SetPrio(SignalDataGetCanMsg(Signal), MR_CS2_PRIO_1);
-         MrCs2EncSysStop(SignalDataGetCanMsg(Signal),
-                         MR_CS2_UID_BROADCAST);
+         MrCs2SetPrio(SignalDataGetCanMsg(Signal), CS2_PRIO_1);
+         Cs2EncSysStop(MrCs2GetData(SignalDataGetCanMsg(Signal)),
+                       CS2_UID_BROADCAST);
          SignalDataSetHaveAnswer(Signal, TRUE);
-         SrcpSendAnswer(SignalDataGetClient(Signal), ANTWORT_COMMAND_OK);
+         SrcpEncAnswerCommandOk(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_SERVER:
-         SrcpSendAnswer(SignalDataGetClient(Signal), ANTWORT_COMMAND_OK);
+      case SRCP_V8_DEVICE_GROUP_GM_GENERIC_MESSAGE:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_SESSION:
-         SrcpSendAnswer(SignalDataGetClient(Signal), ANTWORT_COMMAND_OK);
+      case SRCP_V8_DEVICE_GROUP_LOCK:
+         SrcpEncAnswerCommandOk(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_DESCRIPTION:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_SERVER:
+         SrcpEncAnswerCommandOk(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      default:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_SESSION:
+         SrcpEncAnswerCommandOk(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
+         break;
+      case SRCP_V8_DEVICE_GROUP_SM_SERVICE_MODE:
+         SrcpEncAnswerCommandOk(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
+         break;
+      case SRCP_V8_DEVICE_GROUP_DESCRIPTION:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
+         break;
+      case SRCP_V8_DEVICE_GROUP_UNKNOWN:
+      case SRCP_V8_DEVICE_GROUP_ERROR:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
    }
    return(STATE_NO_CHANGE);
@@ -1286,7 +982,8 @@ static int HandleTermV8(void *Priv, void *SignalData)
 static int HandleVerifyV8(void *Priv, void *SignalData)
 {  SrcpStruct *Data;
    SignalParam *Signal;
-   int Token, Bus, DecoderAddress;
+   char Antwort[100];
+   SrcpV8ParamType Params;
 
    Data = (SrcpStruct *)Priv;
    Signal = (SignalParam *)SignalData;
@@ -1294,59 +991,57 @@ static int HandleVerifyV8(void *Priv, void *SignalData)
    {
       puts("parse verify command");
    }
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   Bus = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   switch (Token)
+   switch (SrcpV8DecVerify(SignalDataGetLine(Signal),
+                           SignalDataGetLength(Signal), &Params))
    {
-      case PARSER_GL:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_GL_GENERIC_LOCO:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_GA:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_GA_GENERIC_ACCESSORY:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_FB:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_FB_FEEDBACK_SENSOR:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_GM:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_TIME:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_SM:
-         SrcpParserParse(SrcpGetParser(Data));
-         DecoderAddress = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-         SrcpSendAnswer(SignalDataGetClient(Signal), ANTWORT_COMMAND_OK);
+      case SRCP_V8_DEVICE_GROUP_POWER:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_TIME:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_GM_GENERIC_MESSAGE:
+         SrcpEncAnswerCommandOk(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_LOCK:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_LOCK:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_POWER:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_SERVER:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_SERVER:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_SESSION:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_SESSION:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_SM_SERVICE_MODE:
+         SrcpEncAnswerCommandOk(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_DESCRIPTION:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_DESCRIPTION:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      default:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_UNKNOWN:
+      case SRCP_V8_DEVICE_GROUP_ERROR:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
    }
    return(STATE_NO_CHANGE);
@@ -1355,7 +1050,8 @@ static int HandleVerifyV8(void *Priv, void *SignalData)
 static int HandleResetV8(void *Priv, void *SignalData)
 {  SrcpStruct *Data;
    SignalParam *Signal;
-   int Token, Bus;
+   char Antwort[100];
+   SrcpV8ParamType Params;
 
    Data = (SrcpStruct *)Priv;
    Signal = (SignalParam *)SignalData;
@@ -1363,65 +1059,57 @@ static int HandleResetV8(void *Priv, void *SignalData)
    {
       puts("parse reset command");
    }
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   if (Token == PARSER_ZAHL)
+   switch (SrcpV8DecReset(SignalDataGetLine(Signal),
+                          SignalDataGetLength(Signal), &Params))
    {
-      Bus = ScanGanz(SrcpParserGetScanner(SrcpGetParser(Data)));
-      Token = SrcpParserParse(SrcpGetParser(Data));
-   }
-   else
-   {
-      Bus = 0;
-   }
-   switch (Token)
-   {
-      case PARSER_GL:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_GL_GENERIC_LOCO:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_GA:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_GA_GENERIC_ACCESSORY:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_FB:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_FB_FEEDBACK_SENSOR:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_GM:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_TIME:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_SM:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_POWER:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_TIME:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_GM_GENERIC_MESSAGE:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_LOCK:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_LOCK:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_POWER:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_SERVER:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_SERVER:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_SESSION:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_SESSION:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_SM_SERVICE_MODE:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      case PARSER_DESCRIPTION:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNOP_ERR);
+      case SRCP_V8_DEVICE_GROUP_DESCRIPTION:
+         SrcpEncAnswerCommandUnopErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
-      default:
-         SrcpSendAnswer(SignalDataGetClient(Signal),
-                        ANTWORT_COMMAND_UNKNOWN_ERR);
+      case SRCP_V8_DEVICE_GROUP_UNKNOWN:
+      case SRCP_V8_DEVICE_GROUP_ERROR:
+         SrcpEncAnswerCommandUnknownErr(Antwort);
+         SrcpSendAnswer(SignalDataGetClient(Signal), Antwort);
          break;
    }
    return(STATE_NO_CHANGE);
@@ -1510,7 +1198,7 @@ void SrcpInitFsm(SrcpStruct *Data, ClientInfo *Client)
 
 BOOL SrcpDoFsm(SrcpStruct *Data, ClientInfo *Client, char *Line, int Length,
                MrCs2CanDataType *CanMsg)
-{  int Signal, Token;
+{  int Signal;
    SignalParam SignalData;
    time_t Now;
 
@@ -1524,6 +1212,8 @@ BOOL SrcpDoFsm(SrcpStruct *Data, ClientInfo *Client, char *Line, int Length,
    SignalDataSetClient(&SignalData, Client);
    SignalDataSetCanMsg(&SignalData, CanMsg);
    SignalDataSetHaveAnswer(&SignalData, FALSE);
+   SignalDataSetLine(&SignalData, Line);
+   SignalDataSetLength(&SignalData, Length);
    SrcpClientSetLastMsgTstamp(Client, Now);
    if (SrcpGetVerbose(Data))
    {
@@ -1541,46 +1231,39 @@ BOOL SrcpDoFsm(SrcpStruct *Data, ClientInfo *Client, char *Line, int Length,
             break;
       }
    }
-   SrcpParserInit(SrcpGetParser(Data), Line, Length);
-   Token = SrcpParserParse(SrcpGetParser(Data));
-   if (SrcpGetVerbose(Data))
-      printf("Befehl (Token) 0x%x\n", Token);
-   switch (Token)
+   switch (SrcpDecGetCmd(Line, Length))
    {
-      case PARSER_EOF:
+      case SRCP_CMD_ERROR:
          Signal = SIGNAL_INVALID;
          break;
-      case PARSER_SET:
+      case SRCP_CMD_SET:
          Signal = SIGNAL_SET;
          break;
-      case PARSER_GET:
+      case SRCP_CMD_GET:
          Signal = SIGNAL_GET;
          break;
-      case PARSER_WAIT:
+      case SRCP_CMD_WAIT:
          Signal = SIGNAL_WAIT;
          break;
-      case PARSER_INIT:
+      case SRCP_CMD_INIT:
          Signal = SIGNAL_INIT;
          break;
-      case PARSER_TERM:
+      case SRCP_CMD_TERM:
          Signal = SIGNAL_TERM;
          break;
-      case PARSER_VERIFY:
+      case SRCP_CMD_VERIFY:
          Signal = SIGNAL_VERIFY;
          break;
-      case PARSER_RESET:
+      case SRCP_CMD_RESET:
          Signal = SIGNAL_RESET;
          break;
-      case PARSER_GO:
+      case SRCP_CMD_GO:
          Signal = SIGNAL_GO;
          break;
-      case PARSER_ERROR:
-         Signal = SIGNAL_INVALID;
-         break;
-      case PARSER_WRITE:
+      case SRCP_CMD_WRITE:
          Signal = SIGNAL_WRITE;
          break;
-      case PARSER_READ:
+      case SRCP_CMD_READ:
          Signal = SIGNAL_READ;
          break;
    }
@@ -1588,6 +1271,5 @@ BOOL SrcpDoFsm(SrcpStruct *Data, ClientInfo *Client, char *Line, int Length,
    {
       FsmDo(SrcpClientGetStateMachine(Client), Signal, (void *)&SignalData);
    }
-   SrcpParserExit(SrcpGetParser(Data));
    return(SignalDataGetHaveAnswer(&SignalData));
 }
