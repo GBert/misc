@@ -1,11 +1,12 @@
 const int revisionnr = 
-15945
+15946
 ;
 const char* commithash = 
-"93e4c9e6e9572067dc1aa72aee9a830a64aa895f";
+"cf26767c921b7df5cfd9784a75468619e5311ce9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15946 2019-09-10 15:09:57 +0200 added camfile attribute\n" \
 "15945 2019-09-10 10:33:50 +0200 mjpg: use default port 5152 in case of udp and set to zero\n" \
 "15944 2019-09-10 10:11:02 +0200 mjpg: optional skip frame parameter added\n" \
 "15943 2019-09-09 11:53:50 +0200 mjpg: disable popups in case the data received is corrupt\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13949 2018-05-07 10:52:19 +0200 translation merge: nl, en_GB, de, fr\n" \
 "13948 2018-05-07 09:17:14 +0200 schedulegraph: copy/paste fix\n" \
 "13947 2018-05-07 09:14:49 +0200 locationgraph,schedulegraph: use scrollwin* events to refresh the whole canvas under windows and linux\n" \
-"13946 2018-05-07 08:24:26 +0200 schedulegraph: mousewheel eventhandler to invalidate the whole canvas\n" \
 
 "log end";
