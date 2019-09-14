@@ -58,7 +58,6 @@ sudo apt-get install can-utils
 dtparam=spi=on
 ; add
 dtoverlay=mcp2515-can0,oscillator=16000000,interrupt=25
-dtoverlay=spi-bcm2835-overlay
 ```
 reboot
 ```
