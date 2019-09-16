@@ -1,11 +1,12 @@
 const int revisionnr = 
-15949
+15950
 ;
 const char* commithash = 
-"26973406b137befb283a3fb6a4f9966c8eecaec1";
+"e4b51faae9d3d49b3e07637fa576f431f485d671";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15950 2019-09-16 14:43:16 +0200 wio added\n" \
 "15949 2019-09-14 08:05:06 +0200 clntcon: cleanup unused throttle connections\n" \
 "15948 2019-09-11 10:42:08 +0200 clntcon: fix for RASCII throttle id\n" \
 "15947 2019-09-11 08:29:44 +0200 clntcon: RASCII release added\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13953 2018-05-07 15:41:54 +0200 railwayline: removed\n" \
 "13952 2018-05-07 12:19:00 +0200 schedules: record schedule time for none regular stops too\n" \
 "13951 2018-05-07 12:13:09 +0200 scheduledialog: layout correction\n" \
-"13950 2018-05-07 11:51:11 +0200 schedule: removed railway line\n" \
 
 "log end";
