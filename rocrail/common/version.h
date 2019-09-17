@@ -1,11 +1,15 @@
 const int revisionnr = 
-15950
+15954
 ;
 const char* commithash = 
-"e4b51faae9d3d49b3e07637fa576f431f485d671";
+"8b7c3f3986b53082b3504cb68e20ef219a2a0971";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15954 2019-09-17 14:57:35 +0200 wio: sensor response added\n" \
+"15953 2019-09-17 14:07:38 +0200 rascii_const: update\n" \
+"15952 2019-09-17 10:37:05 +0200 clntcon,wio: fix for double wio broadcasts\n" \
+"15951 2019-09-17 08:35:15 +0200 wio: switch and output commands and events added\n" \
 "15950 2019-09-16 14:43:16 +0200 wio added\n" \
 "15949 2019-09-14 08:05:06 +0200 clntcon: cleanup unused throttle connections\n" \
 "15948 2019-09-11 10:42:08 +0200 clntcon: fix for RASCII throttle id\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13957 2018-05-08 11:17:30 +0200 schedulegraphdlg: label fix from scale to adjust\n" \
 "13956 2018-05-08 10:43:39 +0200 scheduledialog: use combobox for groupID and groupFilter\n" \
 "13955 2018-05-08 09:17:51 +0200 locationsdlg: fix for selecting schedules\n" \
-"13954 2018-05-07 16:05:38 +0200 scheduledialog: translation fix\n" \
-"13953 2018-05-07 15:41:54 +0200 railwayline: removed\n" \
-"13952 2018-05-07 12:19:00 +0200 schedules: record schedule time for none regular stops too\n" \
-"13951 2018-05-07 12:13:09 +0200 scheduledialog: layout correction\n" \
 
 "log end";
