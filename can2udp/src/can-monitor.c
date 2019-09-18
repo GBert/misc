@@ -33,6 +33,7 @@
 #include <sys/time.h>
 #include <time.h>
 #include <linux/can.h>
+#include <linux/can/raw.h>
 
 #include "can-monitor.h"
 
@@ -139,7 +140,7 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 2.87\n\n");
+    fprintf(stderr, "   Version 3.0\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
@@ -1409,6 +1410,10 @@ int main(int argc, char **argv) {
 	    exit(EXIT_FAILURE);
 	}
 
+	can_err_mask_t err_mask = CAN_ERR_MASK;
+	if (setsockopt(sc, SOL_CAN_RAW, CAN_RAW_ERR_FILTER, &err_mask, sizeof(err_mask)) < 0)
+	    fprintf(stderr, "error enabling CAN error reporting: %s\n", strerror(errno));
+
 	FD_ZERO(&read_fds);
 	FD_SET(sc, &read_fds);
 	max_fds = sc;
@@ -1431,6 +1436,8 @@ int main(int argc, char **argv) {
 		} else {
 		    printf("%s ", timestamp);
 		    print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
+		    if (frame.can_id & CAN_ERR_FLAG)
+			printf(RED " *** ERRORFRAME ***" RESET);
 		    printf("\n");
 		}
 	    }
