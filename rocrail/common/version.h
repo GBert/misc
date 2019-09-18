@@ -1,11 +1,15 @@
 const int revisionnr = 
-15954
+15958
 ;
 const char* commithash = 
-"8b7c3f3986b53082b3504cb68e20ef219a2a0971";
+"0caf810f92d1e17468e686f1267ce52e3870110c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15958 2019-09-18 14:54:45 +0200 wio: addressing fix, query added\n" \
+"15957 2019-09-18 11:16:18 +0200 wio: color output support\n" \
+"15956 2019-09-18 10:02:50 +0200 mbus: ascii sub library crash fix\n" \
+"15955 2019-09-18 08:56:52 +0200 loc: swapondir disabled for slave locos\n" \
 "15954 2019-09-17 14:57:35 +0200 wio: sensor response added\n" \
 "15953 2019-09-17 14:07:38 +0200 rascii_const: update\n" \
 "15952 2019-09-17 10:37:05 +0200 clntcon,wio: fix for double wio broadcasts\n" \
@@ -2002,9 +2006,5 @@ const char* revlog =
 "13961 2018-05-11 07:48:44 +0200 link/unlink train (wip)\n" \
 "13960 2018-05-08 13:53:29 +0200 schedulegraphdlg: default settings to none scaled\n" \
 "13959 2018-05-08 12:14:39 +0200 scheduledialog: process enter in the group filter combobox\n" \
-"13958 2018-05-08 11:29:08 +0200 locationgraph: show time now\n" \
-"13957 2018-05-08 11:17:30 +0200 schedulegraphdlg: label fix from scale to adjust\n" \
-"13956 2018-05-08 10:43:39 +0200 scheduledialog: use combobox for groupID and groupFilter\n" \
-"13955 2018-05-08 09:17:51 +0200 locationsdlg: fix for selecting schedules\n" \
 
 "log end";
