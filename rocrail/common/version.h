@@ -1,11 +1,12 @@
 const int revisionnr = 
-15958
+15959
 ;
 const char* commithash = 
-"0caf810f92d1e17468e686f1267ce52e3870110c";
+"cece893913ed8438809ccc081293ba1a6c924d44";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15959 2019-09-18 16:18:58 +0200 rascii: constants update\n" \
 "15958 2019-09-18 14:54:45 +0200 wio: addressing fix, query added\n" \
 "15957 2019-09-18 11:16:18 +0200 wio: color output support\n" \
 "15956 2019-09-18 10:02:50 +0200 mbus: ascii sub library crash fix\n" \
@@ -2005,6 +2006,5 @@ const char* revlog =
 "13962 2018-05-11 15:06:05 +0200 loc,guiframe: fixes for (un)link a train\n" \
 "13961 2018-05-11 07:48:44 +0200 link/unlink train (wip)\n" \
 "13960 2018-05-08 13:53:29 +0200 schedulegraphdlg: default settings to none scaled\n" \
-"13959 2018-05-08 12:14:39 +0200 scheduledialog: process enter in the group filter combobox\n" \
 
 "log end";
