@@ -1,11 +1,21 @@
 const int revisionnr = 
-15959
+15969
 ;
 const char* commithash = 
-"cece893913ed8438809ccc081293ba1a6c924d44";
+"5828d9e0a49993ac8138376092da9e2953f3b5fa";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"15969 2019-09-19 16:16:29 +0200 old xpm icon\n" \
+"15968 2019-09-19 15:59:12 +0200 rocrail small icon as on the old days\n" \
+"15967 2019-09-19 15:47:18 +0200 rocrail.xpm fix for rocview icon\n" \
+"15966 2019-09-19 15:40:41 +0200 xmp icon\n" \
+"15965 2019-09-19 11:47:53 +0200 icon replacement\n" \
+"15964 2019-09-19 11:37:19 +0200 replacement of icon\n" \
+"15963 2019-09-19 11:25:43 +0200 xpm for clock\n" \
+"15962 2019-09-19 11:15:02 +0200 icon fix\n" \
+"15961 2019-09-19 11:10:12 +0200 rocrail icon\n" \
+"15960 2019-09-19 08:07:07 +0200 wio: LED range added\n" \
 "15959 2019-09-18 16:18:58 +0200 rascii: constants update\n" \
 "15958 2019-09-18 14:54:45 +0200 wio: addressing fix, query added\n" \
 "15957 2019-09-18 11:16:18 +0200 wio: color output support\n" \
@@ -1996,15 +2006,5 @@ const char* revlog =
 "13972 2018-05-16 14:32:22 +0200 linktrain: virtual block support added (unlinktrain in vb is WIP)\n" \
 "13971 2018-05-16 11:43:00 +0200 locdialog: exclude locos and trains from consist selection if they are already in the consist\n" \
 "13970 2018-05-16 11:40:58 +0200 blockdialog: select slave blocks by dialog\n" \
-"13969 2018-05-15 12:11:36 +0200 lcdriver: activate first schedule of tour if no free destination is available\n" \
-"13968 2018-05-14 12:21:28 +0200 block: followup lock ID in case of an unlink train command\n" \
-"13967 2018-05-14 08:19:20 +0200 ecos: check is socket is valid before using it\n" \
-"13966 2018-05-14 08:07:53 +0200 wmz21: fix for lights in case of none rocrail loco\n" \
-"13965 2018-05-13 08:12:38 +0200 locdialog: add train on multiunit tab\n" \
-"13964 2018-05-12 08:12:38 +0200 trainimage: show linked trains\n" \
-"13963 2018-05-12 07:52:37 +0200 translation merge: de, nl, fr, sl\n" \
-"13962 2018-05-11 15:06:05 +0200 loc,guiframe: fixes for (un)link a train\n" \
-"13961 2018-05-11 07:48:44 +0200 link/unlink train (wip)\n" \
-"13960 2018-05-08 13:53:29 +0200 schedulegraphdlg: default settings to none scaled\n" \
 
 "log end";
