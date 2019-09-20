@@ -35,6 +35,7 @@
 #include <linux/can.h>
 #include <linux/can/raw.h>
 
+#include "lib.h"
 #include "can-monitor.h"
 
 #define RED	"\x1B[31m"
@@ -140,12 +141,12 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 3.0\n\n");
+    fprintf(stderr, "   Version 3.01\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
     fprintf(stderr, "         -t <rocrail file> read Rocrail file instead from CAN socket\n");
-    fprintf(stderr, "         -v                verbose output for TCP/UDP\n\n");
+    fprintf(stderr, "         -v                verbose output for TCP/UDP and errorframes\n\n");
     fprintf(stderr, "         -x                expose config data\n\n");
     fprintf(stderr, "         -h                show this help\n\n");
 }
@@ -1436,8 +1437,14 @@ int main(int argc, char **argv) {
 		} else {
 		    printf("%s ", timestamp);
 		    print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
-		    if (frame.can_id & CAN_ERR_FLAG)
-			printf(RED " *** ERRORFRAME ***" RESET);
+		    if (frame.can_id & CAN_ERR_FLAG) {
+			printf(RED "*** ERRORFRAME ***" RESET);
+			if (verbose) {
+			    char buf[CL_LONGCFSZ];
+			    snprintf_can_error_frame(buf, sizeof(buf), (struct canfd_frame *)&frame, "\n\t");
+			    printf("\n\t%s", buf);
+			}
+		    }
 		    printf("\n");
 		}
 	    }
