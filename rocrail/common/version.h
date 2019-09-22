@@ -1,11 +1,13 @@
 const int revisionnr = 
-11
+13
 ;
 const char* commithash = 
-"248f2f8f84dbcda7cfb414d65f6548ad35d85fa4";
+"56355d3f34eedcb3aac9153c60bb148231657d39";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"13 2019-09-22 15:03:49 +0200 wiodlg: WIP\n" \
+"12 2019-09-22 11:37:52 +0200 old animated gif\n" \
 "11 2019-09-22 10:00:23 +0200 removed router check at startup\n" \
 "10 2019-09-22 09:07:53 +0200 obsolete icon deleted\n" \
 "9 2019-09-22 08:55:52 +0200 wiodlg: WIP\n" \
