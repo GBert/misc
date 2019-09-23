@@ -1,11 +1,15 @@
 const int revisionnr = 
-13
+17
 ;
 const char* commithash = 
-"56355d3f34eedcb3aac9153c60bb148231657d39";
+"27812d084b22194adbae5451f1e31ee09258d7da";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"17 2019-09-23 15:40:00 +0200 wiodlg: WIP\n" \
+"16 2019-09-23 14:41:39 +0200 mbus ascii: sleep 10ms in case of nothing to read\n" \
+"15 2019-09-23 14:37:49 +0200 mbus ascii: fix for reading\n" \
+"14 2019-09-23 14:24:06 +0200 wiodlg: WIP\n" \
 "13 2019-09-22 15:03:49 +0200 wiodlg: WIP\n" \
 "12 2019-09-22 11:37:52 +0200 old animated gif\n" \
 "11 2019-09-22 10:00:23 +0200 removed router check at startup\n" \
