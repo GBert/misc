@@ -1,11 +1,12 @@
 const int revisionnr = 
-21
+22
 ;
 const char* commithash = 
-"9576818249b1215dc0fa36225f86576603ff06de";
+"d5fd2de6a66aaa2706ca751da40d8e18494710fb";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"22 2019-09-24 17:26:42 +0200 xnet\n" \
 "21 2019-09-24 16:20:01 +0200 rpm spec correction for icon\n" \
 "20 2019-09-24 13:18:50 +0200 locdialog: placing flag removed from interface tab\n" \
 "19 2019-09-24 10:58:17 +0200 wio: rici conf added\n" \
