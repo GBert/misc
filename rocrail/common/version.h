@@ -1,11 +1,15 @@
 const int revisionnr = 
-17
+21
 ;
 const char* commithash = 
-"27812d084b22194adbae5451f1e31ee09258d7da";
+"9576818249b1215dc0fa36225f86576603ff06de";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"21 2019-09-24 16:20:01 +0200 rpm spec correction for icon\n" \
+"20 2019-09-24 13:18:50 +0200 locdialog: placing flag removed from interface tab\n" \
+"19 2019-09-24 10:58:17 +0200 wio: rici conf added\n" \
+"18 2019-09-24 08:35:33 +0200 rnet and xnet added\n" \
 "17 2019-09-23 15:40:00 +0200 wiodlg: WIP\n" \
 "16 2019-09-23 14:41:39 +0200 mbus ascii: sleep 10ms in case of nothing to read\n" \
 "15 2019-09-23 14:37:49 +0200 mbus ascii: fix for reading\n" \
