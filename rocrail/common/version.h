@@ -1,11 +1,12 @@
 const int revisionnr = 
-33
+34
 ;
 const char* commithash = 
-"a8d703b09d64b47ec114c32562b737c093f8fe30";
+"e9a784adbd8111e5660ea0dad6bb8898bfa53c05";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"34 2019-09-27 14:38:04 +0200 wio: show accu level on alive event\n" \
 "33 2019-09-27 11:28:13 +0200 wio: check alive\n" \
 "32 2019-09-27 08:00:00 +0200 renderer: draw output as color in case colortype is set independent from output type\n" \
 "31 2019-09-26 15:29:47 +0200 rocweb icon\n" \

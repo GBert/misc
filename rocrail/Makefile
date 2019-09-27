@@ -7,8 +7,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rocrail
-PKG_REV:=a8d703b09d
-PKG_VERSION:=n33
+PKG_REV:=e9a784adbd
+PKG_VERSION:=n34
 PKG_RELEASE:=
 
 PKG_SOURCE_PROTO:=git
@@ -274,7 +274,7 @@ define Package/rocrail-cs-all-other/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/rfid12.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/rmx.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/rocomp.so $(1)/opt/rocrail
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/roco.so $(1)/opt/rocrail
+#	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/roco.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/slx.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/spl.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/sprog.so $(1)/opt/rocrail
