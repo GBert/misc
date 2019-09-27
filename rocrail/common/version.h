@@ -1,11 +1,22 @@
 const int revisionnr = 
-22
+33
 ;
 const char* commithash = 
-"d5fd2de6a66aaa2706ca751da40d8e18494710fb";
+"a8d703b09d64b47ec114c32562b737c093f8fe30";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"33 2019-09-27 11:28:13 +0200 wio: check alive\n" \
+"32 2019-09-27 08:00:00 +0200 renderer: draw output as color in case colortype is set independent from output type\n" \
+"31 2019-09-26 15:29:47 +0200 rocweb icon\n" \
+"30 2019-09-26 11:54:29 +0200 wiodlg: native type added\n" \
+"29 2019-09-26 11:07:17 +0200 wio: alive support (wip)\n" \
+"28 2019-09-25 17:35:44 +0200 translation merge: cs, nl, sl, pt_BR sr_latin, fr, de, zh_CN\n" \
+"27 2019-09-25 14:45:31 +0200 clntcon: remove demo timer for MQTT clients\n" \
+"26 2019-09-25 14:18:25 +0200 wiodlg: enable/disable WIO/RICi panel on select\n" \
+"25 2019-09-25 14:03:56 +0200 wiodlg: type selection\n" \
+"24 2019-09-25 11:17:30 +0200 loc: invdir option added for more confusion 8)\n" \
+"23 2019-09-25 10:21:22 +0200 wio: set i2c added\n" \
 "22 2019-09-24 17:26:42 +0200 xnet\n" \
 "21 2019-09-24 16:20:01 +0200 rpm spec correction for icon\n" \
 "20 2019-09-24 13:18:50 +0200 locdialog: placing flag removed from interface tab\n" \
