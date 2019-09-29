@@ -1,11 +1,18 @@
 const int revisionnr = 
-34
+41
 ;
 const char* commithash = 
-"e9a784adbd8111e5660ea0dad6bb8898bfa53c05";
+"3087e52df15b5010844a11e7c1429438d17cca6d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"41 2019-09-28 17:48:52 +0200 wio: goodbye event support\n" \
+"40 2019-09-28 17:48:18 +0200 wio: goodbye event support\n" \
+"39 2019-09-28 16:32:47 +0200 add the missing package folder\n" \
+"38 2019-09-28 15:13:21 +0200 48px icon\n" \
+"37 2019-09-28 15:09:16 +0200 96px icon\n" \
+"36 2019-09-28 10:25:33 +0200 wio: watchdog\n" \
+"35 2019-09-28 10:16:26 +0200 routedialog: update index after lock and reset\n" \
 "34 2019-09-27 14:38:04 +0200 wio: show accu level on alive event\n" \
 "33 2019-09-27 11:28:13 +0200 wio: check alive\n" \
 "32 2019-09-27 08:00:00 +0200 renderer: draw output as color in case colortype is set independent from output type\n" \
