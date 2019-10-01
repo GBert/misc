@@ -1,11 +1,22 @@
 const int revisionnr = 
-41
+52
 ;
 const char* commithash = 
-"3087e52df15b5010844a11e7c1429438d17cca6d";
+"d4494037dfd8e40dd6763bf0d4caf88f755c5dd4";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"52 2019-09-30 16:01:49 +0200 xnet: trace corrections\n" \
+"51 2019-09-30 15:36:01 +0200 wio: fix for conf in query\n" \
+"50 2019-09-30 15:00:07 +0200 locdialog: preselect port number on CAM type select\n" \
+"49 2019-09-30 11:38:05 +0200 wio: support for battery and rssi added\n" \
+"48 2019-09-30 10:37:58 +0200 wio: trace level corrections\n" \
+"47 2019-09-30 10:31:29 +0200 loc: save fx on get properties\n" \
+"46 2019-09-30 08:40:22 +0200 mbusdlg: fix for setting host in case of socketcan\n" \
+"45 2019-09-29 10:57:49 +0200 accdecdlg: wio type added\n" \
+"44 2019-09-29 10:41:43 +0200 loc: ignore swap on direction change if the loco is a slave\n" \
+"43 2019-09-29 08:41:44 +0200 icon update with 48px\n" \
+"42 2019-09-29 08:37:29 +0200 48px icon (Herman)\n" \
 "41 2019-09-28 17:48:52 +0200 wio: goodbye event support\n" \
 "40 2019-09-28 17:48:18 +0200 wio: goodbye event support\n" \
 "39 2019-09-28 16:32:47 +0200 add the missing package folder\n" \
