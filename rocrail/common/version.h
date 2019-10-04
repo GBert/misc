@@ -1,11 +1,24 @@
 const int revisionnr = 
-52
+65
 ;
 const char* commithash = 
-"d4494037dfd8e40dd6763bf0d4caf88f755c5dd4";
+"de3bbc169a3ba2915d87dc6a449adf4d295817a5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"65 2019-10-04 10:02:53 +0200 wiodlg: servo type added\n" \
+"64 2019-10-03 11:47:08 +0200 fine tune dialog for servo outputs and switches\n" \
+"63 2019-10-03 08:56:06 +0200 wio: servo support\n" \
+"62 2019-10-02 16:03:24 +0200 wio: single gate servo switch support\n" \
+"61 2019-10-02 14:08:26 +0200 wio: basic servo support\n" \
+"60 2019-10-02 10:32:08 +0200 lcdriver: fix for events from managed block\n" \
+"59 2019-10-02 09:56:34 +0200 wio: diff in watchdog between WIO and RICi\n" \
+"58 2019-10-02 08:05:38 +0200 mbus: use dynamic thread names to allow multiple instances\n" \
+"57 2019-10-02 07:56:11 +0200 powerman: event data corruption protection added\n" \
+"56 2019-10-01 14:07:30 +0200 issuedlg: fix for endless loop under Linux GTK\n" \
+"55 2019-10-01 12:09:05 +0200 clntcon: trace level correction\n" \
+"54 2019-10-01 08:50:37 +0200 schedules: fix for over writing the localtime structure\n" \
+"53 2019-10-01 07:35:07 +0200 loc: ignore swap on direction change in case of slave loco\n" \
 "52 2019-09-30 16:01:49 +0200 xnet: trace corrections\n" \
 "51 2019-09-30 15:36:01 +0200 wio: fix for conf in query\n" \
 "50 2019-09-30 15:00:07 +0200 locdialog: preselect port number on CAM type select\n" \
