@@ -1,11 +1,23 @@
 const int revisionnr = 
-65
+77
 ;
 const char* commithash = 
-"de3bbc169a3ba2915d87dc6a449adf4d295817a5";
+"67c7168749e07e7510b52c1d20769b77b23b9295";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"77 2019-10-07 11:51:49 +0200 wiodlg: help link corrected\n" \
+"76 2019-10-07 11:34:08 +0200 wio: mobile function support\n" \
+"75 2019-10-07 07:46:07 +0200 naming corrections\n" \
+"74 2019-10-06 14:24:17 +0200 wio: link sec loco addr with wio rfid events\n" \
+"73 2019-10-06 09:28:09 +0200 mbus: check if the configdataName is valid before opening a file\n" \
+"72 2019-10-06 09:15:50 +0200 rocweb: the css of jquery mobile must be the last one\n" \
+"71 2019-10-06 08:09:33 +0200 wio: ebreak correction\n" \
+"70 2019-10-05 11:25:01 +0200 wiodlg: support for subtype i2crfid\n" \
+"69 2019-10-05 10:42:19 +0200 wio: acknowledge RFID events\n" \
+"68 2019-10-04 15:41:32 +0200 wio: set IID to WIO on events\n" \
+"67 2019-10-04 14:11:57 +0200 wio: rfid added\n" \
+"66 2019-10-04 14:11:34 +0200 seltab: offpos option added\n" \
 "65 2019-10-04 10:02:53 +0200 wiodlg: servo type added\n" \
 "64 2019-10-03 11:47:08 +0200 fine tune dialog for servo outputs and switches\n" \
 "63 2019-10-03 08:56:06 +0200 wio: servo support\n" \
