@@ -1,11 +1,16 @@
 const int revisionnr = 
-77
+82
 ;
 const char* commithash = 
-"67c7168749e07e7510b52c1d20769b77b23b9295";
+"4ccba80b6f12d0995ad10a541b6c1d331a9ac3e7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"82 2019-10-09 10:49:02 +0200 mvtrack: optional, experimetal train length calculation\n" \
+"81 2019-10-09 08:53:31 +0200 32 pix icon added\n" \
+"80 2019-10-08 10:37:49 +0200 loc: fix for taking over the CS IID at field events\n" \
+"79 2019-10-08 09:05:33 +0200 mbus: discontinue master support\n" \
+"78 2019-10-08 08:58:34 +0200 loc: crash fix at properties -> removed save FX to avoid data corruption\n" \
 "77 2019-10-07 11:51:49 +0200 wiodlg: help link corrected\n" \
 "76 2019-10-07 11:34:08 +0200 wio: mobile function support\n" \
 "75 2019-10-07 07:46:07 +0200 naming corrections\n" \
