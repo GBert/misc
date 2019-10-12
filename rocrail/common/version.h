@@ -1,11 +1,12 @@
 const int revisionnr = 
-83
+84
 ;
 const char* commithash = 
-"c8f4f41895079a934415de32177d12896b179054";
+"ce60dc486fbacba528616d820817ece9d58fa7f6";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"84 2019-10-12 12:21:34 +0200 wio: text support\n" \
 "83 2019-10-11 08:00:37 +0200 revert 32px icon\n" \
 "82 2019-10-09 10:49:02 +0200 mvtrack: optional, experimetal train length calculation\n" \
 "81 2019-10-09 08:53:31 +0200 32 pix icon added\n" \
