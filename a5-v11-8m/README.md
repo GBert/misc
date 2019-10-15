@@ -61,6 +61,26 @@ cp.linux
 reset
 ```
 
+Loading Image via TFTP without serial access
+--------------------------------------------
+
+NOTE: This procedure was performed with the modified bootloader (uboot256.img) already flashed; it's unclear if this will work with the stock bootloader.
+
+    Obtain a known working sysupgrade image and rename it to firmware.bin
+    Hold down the reset button while powering up the device, the blue LED should start flashing
+    Connect the ethernet cable and set your host IP to 192.168.1.2
+    tftp firmware.bin to 192.168.1.1 (ensure that binary mode is used!)
+    The device should automatically restart, running the provided firmware
+
+use sysupgrade file
+```
+$ tftp 192.168.1.1
+tftp> mode binary
+tftp> put firmware.bin
+Sent 3670187 bytes in 10.9 seconds
+```
+
+
 Backup
 ------
 
