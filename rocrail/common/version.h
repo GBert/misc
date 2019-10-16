@@ -1,11 +1,20 @@
 const int revisionnr = 
-84
+93
 ;
 const char* commithash = 
-"ce60dc486fbacba528616d820817ece9d58fa7f6";
+"6061172f125fc4b9befca9fa38f8b3307d02e179";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"93 2019-10-16 14:08:49 +0200 loc: use slave direction on consist events\n" \
+"92 2019-10-15 08:56:01 +0200 text: convert display text from utf8 into iso latin\n" \
+"91 2019-10-14 15:05:11 +0200 mttmfcc: revert support for new sensor module\n" \
+"90 2019-10-13 15:27:44 +0200 wio: send brighness with clock event\n" \
+"89 2019-10-13 14:00:15 +0200 loc: fix for checking consist member\n" \
+"88 2019-10-13 13:45:31 +0200 mvtrack: fix for save the calctrainlen option\n" \
+"87 2019-10-13 12:53:45 +0200 wio: clock sync added\n" \
+"86 2019-10-13 11:19:54 +0200 wio: text message type added\n" \
+"85 2019-10-13 07:52:17 +0200 loc: fix for field direction\n" \
 "84 2019-10-12 12:21:34 +0200 wio: text support\n" \
 "83 2019-10-11 08:00:37 +0200 revert 32px icon\n" \
 "82 2019-10-09 10:49:02 +0200 mvtrack: optional, experimetal train length calculation\n" \
