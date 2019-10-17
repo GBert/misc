@@ -1,11 +1,13 @@
 const int revisionnr = 
-96
+98
 ;
 const char* commithash = 
-"2122d237a887000ce48c589e11c1b8e10f7ac0ca";
+"2ede69b26b0d962bc93763fd3fa4f7e18e5321b2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"98 2019-10-17 13:08:52 +0200 loc: swap on manual dir changes option and support removed\n" \
+"97 2019-10-17 11:21:41 +0200 renderer: ignore white space chars < blank\n" \
 "96 2019-10-17 11:04:35 +0200 renderer: show static clock in RocDisplay format\n" \
 "95 2019-10-17 10:33:14 +0200 renderer: RocDisplay format support added\n" \
 "94 2019-10-17 08:11:16 +0200 wio: reject text > 250\n" \
