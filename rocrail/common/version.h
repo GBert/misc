@@ -1,11 +1,14 @@
 const int revisionnr = 
-93
+96
 ;
 const char* commithash = 
-"6061172f125fc4b9befca9fa38f8b3307d02e179";
+"2122d237a887000ce48c589e11c1b8e10f7ac0ca";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"96 2019-10-17 11:04:35 +0200 renderer: show static clock in RocDisplay format\n" \
+"95 2019-10-17 10:33:14 +0200 renderer: RocDisplay format support added\n" \
+"94 2019-10-17 08:11:16 +0200 wio: reject text > 250\n" \
 "93 2019-10-16 14:08:49 +0200 loc: use slave direction on consist events\n" \
 "92 2019-10-15 08:56:01 +0200 text: convert display text from utf8 into iso latin\n" \
 "91 2019-10-14 15:05:11 +0200 mttmfcc: revert support for new sensor module\n" \
