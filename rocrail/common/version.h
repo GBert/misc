@@ -1,11 +1,20 @@
 const int revisionnr = 
-98
+107
 ;
 const char* commithash = 
-"2ede69b26b0d962bc93763fd3fa4f7e18e5321b2";
+"eb2cc2a82e2d06245db4630ec0bff3039e590c75";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"107 2019-10-20 15:12:45 +0200 switchdialog: translation typo fix\n" \
+"106 2019-10-20 14:04:22 +0200 loc: swapondir at commands\n" \
+"105 2019-10-20 11:18:22 +0200 wio: bus added to dcc loco commands\n" \
+"104 2019-10-20 10:27:51 +0200 wio: mobile function support\n" \
+"103 2019-10-20 09:58:34 +0200 switch/outputdlg: fix for channeltune dialog values\n" \
+"102 2019-10-20 08:25:20 +0200 wiodlg: fix for I/O next/prev\n" \
+"101 2019-10-20 07:40:42 +0200 mttmfcc: support for new bidi sensor module\n" \
+"100 2019-10-18 15:58:47 +0200 loc: allow swap on dir change, but no support for multi head\n" \
+"99 2019-10-18 13:32:27 +0200 wio: trace info at monitor level\n" \
 "98 2019-10-17 13:08:52 +0200 loc: swap on manual dir changes option and support removed\n" \
 "97 2019-10-17 11:21:41 +0200 renderer: ignore white space chars < blank\n" \
 "96 2019-10-17 11:04:35 +0200 renderer: show static clock in RocDisplay format\n" \
