@@ -89,13 +89,27 @@ geraet
  .sernum=1
  .hardvers=RPi,3
 EOF
+
 ```
 can2lan herunter laden und starten
 ```
 cd
-sudo apt-get install libpcap-dev
+sudo apt-get install git libpcap-dev
 git clone https://github.com/GBert/railroad.git
 cd railroad/can2udp/src
 make
-./can2lan -mvf -c /var/www/html
+sudo cp can2lan /usr/sbin/
+sudo cp can-monitor /usr/bin/
+sudo cp ../files/maerklin/config/gleisbild.cs2 /var/www/html/gleisbild.cs2
+
+# Debian  Init Skript installieren und testen
+sudo cp ../debian/can2lan.init /etc/init.d
+sudo /etc/init.d/can2lan.init start
+sudo /etc/init.d/can2lan.init status
+sudo /etc/init.d/can2lan.init stop
+
+sudo update-rc.d can2lan.init defaults
+
+# oder manuell im Vordergrund start
+can2lan -mvf -c /var/www/html
 ```
