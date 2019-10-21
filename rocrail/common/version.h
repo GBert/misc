@@ -1,11 +1,14 @@
 const int revisionnr = 
-107
+110
 ;
 const char* commithash = 
-"eb2cc2a82e2d06245db4630ec0bff3039e590c75";
+"be702726aabe216b8f15ad3e3a8d68b1a61f2b78";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"110 2019-10-21 10:52:43 +0200 gotodlg: support for double click\n" \
+"109 2019-10-21 10:29:01 +0200 wio: send speed steps\n" \
+"108 2019-10-21 09:50:26 +0200 mvtrack: mvtrainlen var added, regard metrics for trainlen\n" \
 "107 2019-10-20 15:12:45 +0200 switchdialog: translation typo fix\n" \
 "106 2019-10-20 14:04:22 +0200 loc: swapondir at commands\n" \
 "105 2019-10-20 11:18:22 +0200 wio: bus added to dcc loco commands\n" \
