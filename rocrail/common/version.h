@@ -1,11 +1,12 @@
 const int revisionnr = 
-110
+111
 ;
 const char* commithash = 
-"be702726aabe216b8f15ad3e3a8d68b1a61f2b78";
+"c5200b3483dd0cf78c1c092a3ab13af3086432b7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"111 2019-10-21 13:07:38 +0200 loc: swapondirchange reverted to revision 53\n" \
 "110 2019-10-21 10:52:43 +0200 gotodlg: support for double click\n" \
 "109 2019-10-21 10:29:01 +0200 wio: send speed steps\n" \
 "108 2019-10-21 09:50:26 +0200 mvtrack: mvtrainlen var added, regard metrics for trainlen\n" \
