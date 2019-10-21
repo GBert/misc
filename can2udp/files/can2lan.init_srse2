@@ -12,8 +12,9 @@ start() {
 	[ -e /www/config/ ] && {
 		rm -f /var/run/can2lan.pid
 		can2lan -T30 -mc /www/config -b eth0
-		# can2lan -m -c /www/config -b apcli0
-		# can2lan -m -c /www/config -b br-wlan
+		# can2lan -T30 -mc /www/config -b apcli0
+		# Wifi
+		# can2lan -T30 -mc /www/config -b br-wlan
 	}
 
         # start MaeCAN can2udp if MaeCAN is installed
