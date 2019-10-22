@@ -366,6 +366,10 @@ int main(int argc, char **argv) {
 	    }
 	}
     }
+
+    if (bcast_interface)
+	free(bcast_interface);
+
     freeifaddrs(ifap);
 
     ret = inet_pton(AF_INET, udp_dst_address, &destaddr.sin_addr);
