@@ -1,11 +1,17 @@
 const int revisionnr = 
-111
+117
 ;
 const char* commithash = 
-"c5200b3483dd0cf78c1c092a3ab13af3086432b7";
+"51c79a64343f375bba36c55b0467dcc3dad483e2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"117 2019-10-22 15:30:49 +0200 wio: short circuit event added\n" \
+"116 2019-10-22 10:09:03 +0200 wio: signal LED type support added bus:addr aspect\n" \
+"115 2019-10-22 09:01:51 +0200 wio: remove ebreak from 127 speed steps\n" \
+"114 2019-10-22 08:48:02 +0200 wio: fix for calculating decoder speed\n" \
+"113 2019-10-22 08:25:50 +0200 wio: POM\n" \
+"112 2019-10-21 15:45:42 +0200 wio: POM added\n" \
 "111 2019-10-21 13:07:38 +0200 loc: swapondirchange reverted to revision 53\n" \
 "110 2019-10-21 10:52:43 +0200 gotodlg: support for double click\n" \
 "109 2019-10-21 10:29:01 +0200 wio: send speed steps\n" \
