@@ -1,11 +1,17 @@
 const int revisionnr = 
-117
+123
 ;
 const char* commithash = 
-"51c79a64343f375bba36c55b0467dcc3dad483e2";
+"26b0c1a655bc68b5f905673ddc2868f591bdc230";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"123 2019-10-24 10:49:02 +0200 mttmfcc: removed user suggestion\n" \
+"122 2019-10-24 08:27:14 +0200 mvtrack: fix for grid size\n" \
+"121 2019-10-24 08:20:42 +0200 mvtrackdlg: layout\n" \
+"120 2019-10-23 15:59:51 +0200 mttmfcc: read CV correction\n" \
+"119 2019-10-23 15:26:26 +0200 wio: fix for LED signal commands\n" \
+"118 2019-10-23 08:24:38 +0200 wio: short circuit recevery\n" \
 "117 2019-10-22 15:30:49 +0200 wio: short circuit event added\n" \
 "116 2019-10-22 10:09:03 +0200 wio: signal LED type support added bus:addr aspect\n" \
 "115 2019-10-22 09:01:51 +0200 wio: remove ebreak from 127 speed steps\n" \
