@@ -1,11 +1,12 @@
 const int revisionnr = 
-123
+124
 ;
 const char* commithash = 
-"26b0c1a655bc68b5f905673ddc2868f591bdc230";
+"b602307399871732775032cc10bcc0235e2dfb0e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"124 2019-10-25 06:22:12 +0200 wiodlg: renamed RICi in RIC\n" \
 "123 2019-10-24 10:49:02 +0200 mttmfcc: removed user suggestion\n" \
 "122 2019-10-24 08:27:14 +0200 mvtrack: fix for grid size\n" \
 "121 2019-10-24 08:20:42 +0200 mvtrackdlg: layout\n" \
