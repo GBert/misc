@@ -1,11 +1,13 @@
 const int revisionnr = 
-124
+126
 ;
 const char* commithash = 
-"b602307399871732775032cc10bcc0235e2dfb0e";
+"a80b10e26eb62274adc5cf6d83f1bbd3d90bb34d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"126 2019-10-26 21:24:31 +0200 clntcon: wio correction\n" \
+"125 2019-10-25 15:09:09 +0200 wio: fix for processing loco commands\n" \
 "124 2019-10-25 06:22:12 +0200 wiodlg: renamed RICi in RIC\n" \
 "123 2019-10-24 10:49:02 +0200 mttmfcc: removed user suggestion\n" \
 "122 2019-10-24 08:27:14 +0200 mvtrack: fix for grid size\n" \
