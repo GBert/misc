@@ -1,11 +1,15 @@
 const int revisionnr = 
-127
+131
 ;
 const char* commithash = 
-"de910ea4cd7414c3e07c8474eaf4e798ef178456";
+"5def2acb7bdde1c5d62a60dae179643a22a32062";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"131 2019-10-27 15:28:26 +0100 translation merge: sr_latin, fr, de, nl\n" \
+"130 2019-10-27 15:13:20 +0100 rocrailinidlg: removed maxcon\n" \
+"129 2019-10-27 15:07:13 +0100 rocrailinidlg: removed maxcon\n" \
+"128 2019-10-27 15:04:54 +0100 rocrailinidialog: removed unused maxcon option\n" \
 "127 2019-10-27 11:31:59 +0100 wio: ack the alive event in case of WIO type DCC\n" \
 "126 2019-10-26 21:24:31 +0200 clntcon: wio correction\n" \
 "125 2019-10-25 15:09:09 +0200 wio: fix for processing loco commands\n" \
