@@ -1,11 +1,12 @@
 const int revisionnr = 
-126
+127
 ;
 const char* commithash = 
-"a80b10e26eb62274adc5cf6d83f1bbd3d90bb34d";
+"de910ea4cd7414c3e07c8474eaf4e798ef178456";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"127 2019-10-27 11:31:59 +0100 wio: ack the alive event in case of WIO type DCC\n" \
 "126 2019-10-26 21:24:31 +0200 clntcon: wio correction\n" \
 "125 2019-10-25 15:09:09 +0200 wio: fix for processing loco commands\n" \
 "124 2019-10-25 06:22:12 +0200 wiodlg: renamed RICi in RIC\n" \
