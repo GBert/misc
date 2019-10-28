@@ -1,11 +1,12 @@
 const int revisionnr = 
-131
+132
 ;
 const char* commithash = 
-"5def2acb7bdde1c5d62a60dae179643a22a32062";
+"566708c706ae5bab956f8e8c20294fab4b63e7a9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"132 2019-10-28 10:25:06 +0100 wio: signal support\n" \
 "131 2019-10-27 15:28:26 +0100 translation merge: sr_latin, fr, de, nl\n" \
 "130 2019-10-27 15:13:20 +0100 rocrailinidlg: removed maxcon\n" \
 "129 2019-10-27 15:07:13 +0100 rocrailinidlg: removed maxcon\n" \
