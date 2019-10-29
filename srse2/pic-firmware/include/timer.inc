@@ -53,7 +53,7 @@ TIMER0INIT
 
 TIMER3INIT
                 ; timer period = 1/16MHz = 0.0625 us
-                ; overflow period  = 0.0625 us * 65536 = 4.096ms
+                ; overflow period  = 0.0625 us * 65536 = 4,096ms
                 MOVLW   (1 << TMR3ON) + (1 << RD16)
                 MOVWF   T3CON
                 CLRF    TIMER3
