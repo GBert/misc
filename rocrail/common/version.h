@@ -1,11 +1,16 @@
 const int revisionnr = 
-133
+138
 ;
 const char* commithash = 
-"ef4ae7861cfde4bce3fa992f0f15b55a2af7dfc6";
+"a6eebeb6c33859b5a41b9a8c3649006a1611257a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"138 2019-10-30 08:22:48 +0100 gotodlg: start loco after a double click\n" \
+"137 2019-10-30 07:45:30 +0100 modplan: save and restore scale and metrics\n" \
+"136 2019-10-29 13:29:07 +0100 rocdigs: version set to 2.1\n" \
+"135 2019-10-29 09:59:46 +0100 version update from 2.0 to 2.1\n" \
+"134 2019-10-29 08:36:10 +0100 wio: signal support\n" \
 "133 2019-10-29 07:44:26 +0100 renderer: occupied state as highest prio\n" \
 "132 2019-10-28 10:25:06 +0100 wio: signal support\n" \
 "131 2019-10-27 15:28:26 +0100 translation merge: sr_latin, fr, de, nl\n" \
