@@ -1,11 +1,13 @@
 const int revisionnr = 
-140
+142
 ;
 const char* commithash = 
-"d9f733b40e9fcd3d1fcf3473539c23fdc9bfbd59";
+"4a9f2fc726a40abc055f13df1e07dc6d33560c3b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"142 2019-10-30 15:05:22 +0100 signal: fix for calculating the number of LEDs\n" \
+"141 2019-10-30 15:00:10 +0100 rascii-const update\n" \
 "140 2019-10-30 10:39:46 +0100 wio: fix for DCC accessory command\n" \
 "139 2019-10-30 10:16:01 +0100 wio: dcc accessory command added\n" \
 "138 2019-10-30 08:22:48 +0100 gotodlg: start loco after a double click\n" \
