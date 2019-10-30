@@ -1,11 +1,13 @@
 const int revisionnr = 
-138
+140
 ;
 const char* commithash = 
-"a6eebeb6c33859b5a41b9a8c3649006a1611257a";
+"d9f733b40e9fcd3d1fcf3473539c23fdc9bfbd59";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"140 2019-10-30 10:39:46 +0100 wio: fix for DCC accessory command\n" \
+"139 2019-10-30 10:16:01 +0100 wio: dcc accessory command added\n" \
 "138 2019-10-30 08:22:48 +0100 gotodlg: start loco after a double click\n" \
 "137 2019-10-30 07:45:30 +0100 modplan: save and restore scale and metrics\n" \
 "136 2019-10-29 13:29:07 +0100 rocdigs: version set to 2.1\n" \
