@@ -1,11 +1,17 @@
 const int revisionnr = 
-149
+155
 ;
 const char* commithash = 
-"8b84f8652a4804d0c378311cf8b00e722e03d2c9";
+"34733f35701fb637646bb336a7d822391ac7af78";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"155 2019-11-02 15:14:02 +0100 wio: trace correction for alive timeout\n" \
+"154 2019-11-02 15:09:04 +0100 wio: POM cv number correction\n" \
+"153 2019-11-02 13:41:59 +0100 trackdialog: show selected track on the plan panel\n" \
+"152 2019-11-02 12:32:58 +0100 wio: binstate added\n" \
+"151 2019-11-02 12:11:15 +0100 roads theme: fix for the twoway switch (Wolfgang)\n" \
+"150 2019-11-02 11:19:55 +0100 wio: trace correction\n" \
 "149 2019-11-02 10:12:03 +0100 loc: protect loco properties on field events\n" \
 "148 2019-11-02 08:06:19 +0100 roads theme: more symbols (Wolfgang)\n" \
 "147 2019-11-01 10:26:42 +0100 made road theme compatible with other themes\n" \
