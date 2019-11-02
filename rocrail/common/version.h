@@ -1,11 +1,18 @@
 const int revisionnr = 
-142
+149
 ;
 const char* commithash = 
-"4a9f2fc726a40abc055f13df1e07dc6d33560c3b";
+"8b84f8652a4804d0c378311cf8b00e722e03d2c9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"149 2019-11-02 10:12:03 +0100 loc: protect loco properties on field events\n" \
+"148 2019-11-02 08:06:19 +0100 roads theme: more symbols (Wolfgang)\n" \
+"147 2019-11-01 10:26:42 +0100 made road theme compatible with other themes\n" \
+"146 2019-11-01 08:05:55 +0100 powerman: check if it is a booster event before generating a booster object\n" \
+"145 2019-10-31 08:51:18 +0100 rocrailinidialog: generate booster option added\n" \
+"144 2019-10-31 08:32:07 +0100 Generate booster option in dialog\n" \
+"143 2019-10-31 08:25:28 +0100 powerman: option for generating new boosters\n" \
 "142 2019-10-30 15:05:22 +0100 signal: fix for calculating the number of LEDs\n" \
 "141 2019-10-30 15:00:10 +0100 rascii-const update\n" \
 "140 2019-10-30 10:39:46 +0100 wio: fix for DCC accessory command\n" \
