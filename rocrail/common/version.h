@@ -1,11 +1,12 @@
 const int revisionnr = 
-155
+156
 ;
 const char* commithash = 
-"34733f35701fb637646bb336a7d822391ac7af78";
+"6982163cf033ad3592a6f644e4640be589cb9172";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"156 2019-11-03 10:54:04 +0100 rocview: report action added\n" \
 "155 2019-11-02 15:14:02 +0100 wio: trace correction for alive timeout\n" \
 "154 2019-11-02 15:09:04 +0100 wio: POM cv number correction\n" \
 "153 2019-11-02 13:41:59 +0100 trackdialog: show selected track on the plan panel\n" \
