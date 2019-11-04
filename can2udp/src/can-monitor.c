@@ -141,10 +141,11 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 3.01\n\n");
+    fprintf(stderr, "   Version 3.1\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
+    fprintf(stderr, "         -l <candump file> read candump file instead from CAN socket\n");
     fprintf(stderr, "         -t <rocrail file> read Rocrail file instead from CAN socket\n");
     fprintf(stderr, "         -v                verbose output for TCP/UDP and errorframes\n\n");
     fprintf(stderr, "         -x                expose config data\n\n");
@@ -187,6 +188,22 @@ void slcan_to_can(char *s, struct can_frame *frame) {
     for (i = 1; i <= frame->can_dlc; i++) {
 	sscanf(&s[8 + i * 2], "%2X", &dat);
 	frame->data[i - 1] = dat;
+    }
+}
+
+void candump_to_can(char *s, struct can_frame *frame) {
+    int i;
+    unsigned int dat;
+    char *candata;
+
+    sscanf(s, "%08x", &frame->can_id);
+    candata = strstr(s, "#") + 1;
+    // printf("canid 0x%08X candata %s\n", frame->can_id, candata);
+    
+    frame->can_dlc = strlen(candata) / 2;
+    for (i = 0; i < frame->can_dlc; i++) {
+	sscanf(&candata[i*2], "%2X", &dat);
+	frame->data[i] = dat;
     }
 }
 
@@ -1152,6 +1169,7 @@ int main(int argc, char **argv) {
     int max_fds, opt, sc;
     struct can_frame frame;
     char pcap_file[256];
+    char candump_file[256];
     char roctrc_file[256];
     struct sockaddr_can caddr;
     struct ifreq ifr;
@@ -1162,17 +1180,21 @@ int main(int argc, char **argv) {
 
     strcpy(ifr.ifr_name, "can0");
     memset(pcap_file, 0, sizeof(pcap_file));
+    memset(candump_file, 0, sizeof(candump_file));
     memset(roctrc_file, 0, sizeof(roctrc_file));
 
     signal(SIGINT, INThandler);
 
-    while ((opt = getopt(argc, argv, "i:r:t:svxh?")) != -1) {
+    while ((opt = getopt(argc, argv, "i:r:l:t:svxh?")) != -1) {
 	switch (opt) {
 	case 'i':
 	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
 	    break;
 	case 'r':
 	    strncpy(pcap_file, optarg, sizeof(pcap_file) - 1);
+	    break;
+	case 'l':
+	    strncpy(candump_file, optarg, sizeof(candump_file) - 1);
 	    break;
 	case 't':
 	    strncpy(roctrc_file, optarg, sizeof(roctrc_file) - 1);
@@ -1196,6 +1218,46 @@ int main(int argc, char **argv) {
 	    print_usage(basename(argv[0]));
 	    exit(EXIT_FAILURE);
 	}
+    }
+    /* do we have a candump file ? */
+    if (candump_file[0] != 0) {
+	FILE *fp;
+	char *line, *pos_r;
+	char datum[MAXSIZE];
+	size_t size = MAXSIZE;
+	struct can_frame aframe;
+	int time, milli;
+	time_t rawtime;
+        struct tm ts;
+
+	fp = fopen(candump_file, "r");
+	if (!fp) {
+	    fprintf(stderr, "\ncan't open file %s for reading - error: %s\n", candump_file, strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
+
+	line = (char *)malloc(MAXSIZE);
+	if (line == NULL) {
+	    fprintf(stderr, "Unable to allocate buffer\n");
+	    exit(EXIT_FAILURE);
+	}
+
+	memset(datum, 0, sizeof(datum));
+	while (getline(&line, &size, fp) > 0) {
+	    if (sscanf(line, "(%d.%d)", &time, &milli) == 2) {
+		rawtime = time;
+		ts = *localtime(&rawtime);
+		strftime(datum, sizeof(datum), "%Y%m%d.%H%M%S", &ts);
+		pos_r = strstr(line, "can0 ");
+		pos_r += 5;
+		memset(&aframe, 0, sizeof(aframe));
+		candump_to_can(pos_r, &aframe);
+		printf(RESET "%s.%03d", datum, milli);
+		print_can_frame(F_N_CAN_FORMAT_STRG, &aframe);
+		decode_frame(&aframe);
+	    }
+	}
+	return (EXIT_SUCCESS);
     }
 
     /* do we have a Rocrail trace file ? */
