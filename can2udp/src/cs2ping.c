@@ -197,6 +197,7 @@ int main(int argc, char **argv) {
     }
     if (!trigger_data.background && trigger_data.verbose)
 	printf("using broadcast address %s interval %d sec\n", udp_dst_address, trigger_data.interval);
+
     /* open udp socket */
     if ((trigger_data.socket = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
 	fprintf(stderr, "UDP socket error: %s\n", strerror(errno));
