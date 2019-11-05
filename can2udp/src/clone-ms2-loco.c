@@ -133,7 +133,7 @@ void signal_handler(int sig) {
 
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -kfv [-i <CAN int>][-t <sec>][-l <LED pin>][-p <push button pin>]\n", prg);
-    fprintf(stderr, "   Version 1.2\n\n");
+    fprintf(stderr, "   Version 1.3\n\n");
     fprintf(stderr, "         -c <loco_dir>        set the locomotive file dir - default %s\n", loco_dir);
     fprintf(stderr, "         -i <CAN interface>   using can interface\n");
     fprintf(stderr, "         -t <interval in sec> using timer in sec\n");
@@ -422,7 +422,7 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
     FILE *fp;
     uint16_t crc;
 
-    if (frame->can_dlc == 6) {
+    if ((frame->can_dlc == 6) || (frame->can_dlc == 7)) {
 	trigger->length = (frame->data[2] << 8) | frame->data[3];
 	trigger->crc    = (frame->data[4] << 8) | frame->data[5];
 	printf("length 0x%04x  crc 0x%04x\n", trigger->length, trigger->crc);
