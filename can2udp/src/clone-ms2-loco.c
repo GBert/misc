@@ -65,6 +65,7 @@ uint16_t CRCCCITT(uint8_t * data, size_t length, uint16_t seed);
 unsigned int led_period;
 pthread_mutex_t lock;
 
+static unsigned char GET_MS2_LOCO_LIST[]   = { 0x6c, 0x6f, 0x6b, 0x6c, 0x69, 0x73, 0x74, 0x65 };	/* lokliste */
 static unsigned char GET_MS2_LOCO_NAMES[]  = { 0x6c, 0x6f, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x6e };	/* loknamen */
 static unsigned char GET_MS2_CONFIG_LOCO[] = { 0x6c, 0x6f, 0x6b, 0x69, 0x6e, 0x66, 0x6f, 0x00 };	/* lokinfo  */
 
@@ -210,6 +211,10 @@ int get_ms2_loco_names(struct trigger_t *trigger, uint8_t start, int8_t end) {
     /* first frame */
     frame.can_dlc = 8;
     memcpy(frame.data, GET_MS2_LOCO_NAMES, sizeof(frame.data));
+    if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
+	return (EXIT_FAILURE);
+
+    memcpy(frame.data, GET_MS2_LOCO_LIST, sizeof(frame.data));
     if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
 	return (EXIT_FAILURE);
 
