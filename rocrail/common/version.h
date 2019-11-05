@@ -1,11 +1,18 @@
 const int revisionnr = 
-156
+163
 ;
 const char* commithash = 
-"6982163cf033ad3592a6f644e4640be589cb9172";
+"e8a302206788147b278487e1dfdf99f4efc096b3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"163 2019-11-05 13:56:38 +0100 guiframe: report remark in case generic signal addresses\n" \
+"162 2019-11-05 08:11:39 +0100 guiframe: report location split up in separate columns\n" \
+"161 2019-11-04 11:28:23 +0100 version correction for rocs and lcdriver\n" \
+"160 2019-11-04 10:56:36 +0100 report: show gate, description and decoder\n" \
+"159 2019-11-04 10:22:35 +0100 signal: attribute rename addr -> addr1\n" \
+"158 2019-11-04 07:55:02 +0100 wiodlg: fix for showing type LED on the index tab\n" \
+"157 2019-11-03 11:13:39 +0100 guiframe: exclude the car list in case of accessory reporting\n" \
 "156 2019-11-03 10:54:04 +0100 rocview: report action added\n" \
 "155 2019-11-02 15:14:02 +0100 wio: trace correction for alive timeout\n" \
 "154 2019-11-02 15:09:04 +0100 wio: POM cv number correction\n" \
