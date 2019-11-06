@@ -1,11 +1,13 @@
 const int revisionnr = 
-163
+165
 ;
 const char* commithash = 
-"e8a302206788147b278487e1dfdf99f4efc096b3";
+"fc5429b78402429879d62f4ac01b116e99e92353";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"165 2019-11-05 15:54:47 +0100 makewin.sh: simplified windows make script\n" \
+"164 2019-11-05 15:35:15 +0100 cleanup\n" \
 "163 2019-11-05 13:56:38 +0100 guiframe: report remark in case generic signal addresses\n" \
 "162 2019-11-05 08:11:39 +0100 guiframe: report location split up in separate columns\n" \
 "161 2019-11-04 11:28:23 +0100 version correction for rocs and lcdriver\n" \
