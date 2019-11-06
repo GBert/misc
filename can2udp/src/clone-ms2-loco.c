@@ -117,6 +117,7 @@ struct trigger_t {
     uint16_t length;
     uint16_t crc;
     int data_index;
+    int v3x;
     uint8_t *data;
     char *loco_file;
     struct loco_names_t *loco_names;
@@ -140,6 +141,7 @@ void usage(char *prg) {
     fprintf(stderr, "         -l <LED pin>         LED pin (e.g. BPi PI14 -> 270)\n");
     fprintf(stderr, "         -p <push button>     push button (e.g. BPi PI10 -> 266)\n");
     fprintf(stderr, "         -k                   use loco 'Lokliste' F0 as trigger\n");
+    fprintf(stderr, "         -n                   MS2 Version >=3.55\n");
     fprintf(stderr, "         -f                   run in foreground (for debugging)\n");
     fprintf(stderr, "         -v                   be verbose\n\n");
 }
@@ -599,7 +601,7 @@ int main(int argc, char **argv) {
 
     trigger_data.background = 1;
 
-    while ((opt = getopt(argc, argv, "c:i:l:p:t:kfvh?")) != -1) {
+    while ((opt = getopt(argc, argv, "c:i:l:p:t:knfvh?")) != -1) {
 	switch (opt) {
 	case 'c':
 	    if (strnlen(optarg, MAXLINE) < MAXLINE) {
@@ -624,6 +626,9 @@ int main(int argc, char **argv) {
 	    break;
 	case 'k':
 	    trigger_data.loco_uid = 1;
+	    break;
+	case 'n':
+	    trigger_data.v3x = 1;
 	    break;
 	case 'v':
 	    trigger_data.verbose = 1;
