@@ -75,6 +75,7 @@ endif
 ifneq (,$(findstring banana,$(CONFIG_TARGET_PROFILE)))
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init_bpi $(1)/etc/init.d/can2lan
+	$(INSTALL_BIN) ./files/maecanserver.init $(1)/etc/init.d/maecanserver
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/s88udp-bpi $(1)/usr/bin/s88udp
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/s88test-bpi $(1)/usr/bin/
@@ -84,6 +85,7 @@ endif
 ifneq (,$(findstring bananapro,$(CONFIG_TARGET_PROFILE)))
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init_bpi $(1)/etc/init.d/can2lan
+	$(INSTALL_BIN) ./files/maecanserver.init $(1)/etc/init.d/maecanserver
 	$(INSTALL_BIN) ./files/s88udp.init_bpipro $(1)/etc/init.d/s88udp
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/s88udp-bpi $(1)/usr/bin/s88udp
@@ -99,12 +101,15 @@ endif
 ifneq (,$(findstring mt76x8,$(CONFIG_TARGET_SUBTARGET)))
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init_srse2_openwrt $(1)/etc/init.d/can2lan
+	$(INSTALL_BIN) ./files/maecanserver.init $(1)/etc/init.d/maecanserver
 	$(INSTALL_DIR) $(1)/root
 	$(INSTALL_BIN) ./files/no-pic.sh $(1)/root
 endif
+
 ifneq (,$(findstring mt7688,$(CONFIG_TARGET_SUBTARGET)))
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init_srse2 $(1)/etc/init.d/can2lan
+	$(INSTALL_BIN) ./files/maecanserver.init $(1)/etc/init.d/maecanserver
 	$(INSTALL_DIR) $(1)/root
 	$(INSTALL_BIN) ./files/no-pic.sh $(1)/root
 endif
