@@ -23,12 +23,6 @@ start() {
 		# for LAN
 		can2lan -m -c /www/config -b br-lan
 	}
-
-	# start MaeCAN can2udp if MaeCAN is installed
-	[ -e /www/MaeCAN-Server/ ] && {
-		can2udp -l 15734 -d 15733
-		cd /www/MaeCAN-Server/node && nohup node maecanserver.js 2>&1 > /dev/null &
-        }
 }
 
 stop() {
