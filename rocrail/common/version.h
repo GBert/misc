@@ -1,11 +1,14 @@
 const int revisionnr = 
-165
+168
 ;
 const char* commithash = 
-"fc5429b78402429879d62f4ac01b116e99e92353";
+"eadc174dd99080e982a5041d2c30be35a4dfbd06";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"168 2019-11-06 11:48:58 +0100 makewin.sh: use bash instead of sh\n" \
+"167 2019-11-06 10:50:28 +0100 wiodlg: layout correction\n" \
+"166 2019-11-06 10:01:43 +0100 makewin.sh: added the zipper command\n" \
 "165 2019-11-05 15:54:47 +0100 makewin.sh: simplified windows make script\n" \
 "164 2019-11-05 15:35:15 +0100 cleanup\n" \
 "163 2019-11-05 13:56:38 +0100 guiframe: report remark in case generic signal addresses\n" \
