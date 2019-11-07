@@ -1,11 +1,15 @@
 const int revisionnr = 
-168
+172
 ;
 const char* commithash = 
-"eadc174dd99080e982a5041d2c30be35a4dfbd06";
+"3e32e6c285b1fc08d243607f35b44bdcdddf22a8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"172 2019-11-07 08:21:36 +0100 rocrailinidialog: wio options\n" \
+"171 2019-11-07 07:40:03 +0100 rocrailinidlg: WIO options added\n" \
+"170 2019-11-07 07:34:35 +0100 wio: watchdog timeout option\n" \
+"169 2019-11-06 12:10:54 +0100 wio: show add to list trace at monitor level\n" \
 "168 2019-11-06 11:48:58 +0100 makewin.sh: use bash instead of sh\n" \
 "167 2019-11-06 10:50:28 +0100 wiodlg: layout correction\n" \
 "166 2019-11-06 10:01:43 +0100 makewin.sh: added the zipper command\n" \
