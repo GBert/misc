@@ -56,7 +56,8 @@ const char *l0_token [] = {
 };
 
 enum {
-    L1_FUNCTION = 0,
+    L1_DV = 0,
+    L1_FUNCTION,
     L1_FUNCTION2,
     L1_FCT,
     L1_MFXADR,
@@ -103,6 +104,7 @@ enum {
 };
 
 const char *l1_token [] = {
+    " .dv",
     " .funktionen",
     " .funktionen_2",
     " .fkt",
@@ -151,6 +153,7 @@ const char *l1_token [] = {
 };
 
 /* TODO : use strlen macro */
+#define L1_DV_LENGTH		5
 #define L1_MAJOR_LENGTH		8
 #define L1_MINOR_LENGTH		8
 #define L1_ID_LENGTH		5

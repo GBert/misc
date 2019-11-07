@@ -830,6 +830,10 @@ int read_loco_data(char *config_file, int config_type) {
 		loco->id = strtoul(&line[L1_ID_LENGTH], NULL, 10);
 		debug_print("match id:        >%u<\n", loco->id);
 		break;
+	    case L1_DV:
+		loco->dv = strtoul(&line[L1_DV_LENGTH], NULL, 10);
+		debug_print("match major:   >%u<\n", loco->dv);
+		break;
 	    case L1_MAJOR:
 		loco->major = strtoul(&line[L1_MAJOR_LENGTH], NULL, 10);
 		debug_print("match major:     >%u<\n", loco->major);

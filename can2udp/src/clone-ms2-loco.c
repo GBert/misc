@@ -470,6 +470,9 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 		trigger->fsm_state = FSM_GET_LOCO_NAMES;
 		get_ms2_loco_names(trigger, 0, 1);
 	    }
+	    if (trigger->v3x) {
+		trigger->fsm_state = FSM_GET_LOCO_NAMES;
+	    }
 	    break;
 	case FSM_GET_LOCO_NAMES:
 	    read_loco_names((char *)trigger->data);

@@ -104,6 +104,7 @@ struct loco_data_t {
     char *surname;
     char *type;
     char *icon;
+    unsigned int dv;
     unsigned int address;
     unsigned int sid;
     unsigned int mfxuid;
