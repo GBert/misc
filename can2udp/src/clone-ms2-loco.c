@@ -804,7 +804,6 @@ int main(int argc, char **argv) {
 			print_can_frame(F_CAN_FORMAT_STRG, &frame);
 		    /* check if the data belongs to us */
 		    /* TODO */
-		    
 		    if (((frame.can_id & 0x0000FFFF) != OUR_HASH) && !(trigger_data.v3x))
 			break;
 		    get_data(&trigger_data, &frame);
