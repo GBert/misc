@@ -1,11 +1,16 @@
 const int revisionnr = 
-172
+177
 ;
 const char* commithash = 
-"3e32e6c285b1fc08d243607f35b44bdcdddf22a8";
+"156ad75b4021629c4dce26315959a55a893dd8cf";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"177 2019-11-08 15:51:07 +0100 wio: alive timeout at monitor level\n" \
+"176 2019-11-08 14:52:52 +0100 partner added to locations\n" \
+"175 2019-11-08 14:37:02 +0100 location: partner flow management\n" \
+"174 2019-11-08 14:14:38 +0100 partner added to locations\n" \
+"173 2019-11-08 14:12:06 +0100 rocrailinidlg: WIO options added\n" \
 "172 2019-11-07 08:21:36 +0100 rocrailinidialog: wio options\n" \
 "171 2019-11-07 07:40:03 +0100 rocrailinidlg: WIO options added\n" \
 "170 2019-11-07 07:34:35 +0100 wio: watchdog timeout option\n" \
