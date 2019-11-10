@@ -134,7 +134,7 @@ void signal_handler(int sig) {
 
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -kfv [-i <CAN int>][-t <sec>][-l <LED pin>][-p <push button pin>]\n", prg);
-    fprintf(stderr, "   Version 1.3\n\n");
+    fprintf(stderr, "   Version 1.4\n\n");
     fprintf(stderr, "         -c <loco_dir>        set the locomotive file dir - default %s\n", loco_dir);
     fprintf(stderr, "         -i <CAN interface>   using can interface\n");
     fprintf(stderr, "         -t <interval in sec> using timer in sec\n");
@@ -471,7 +471,7 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 		get_ms2_loco_names(trigger, 0, 1);
 	    }
 	    if (trigger->v3x) {
-		trigger->fsm_state = FSM_GET_LOCO_NAMES;
+		trigger->fsm_state = FSM_GET_LOCOS_BY_NAME;
 	    }
 	    break;
 	case FSM_GET_LOCO_NAMES:
