@@ -74,7 +74,7 @@ int strip_ms2_spaces(uint8_t *st, int len) {
     index = 0;
     nl = 0;
 
-    /* deleting MS2 specific superfluos spaces after \n in a row
+    /* deleting MS2 specific superfluous spaces after \n in a row
      * 20 2E 66 6B 74 0A 20 20   ' .fkt.  '  -> delete 20 20
      * 20 2E 2E 74 79 70 3D 30   ' ..typ=0'
      * 0A 20 20 20 20 20 20 20   '.       '  -> delete 20 20 20 20 20 20 20
@@ -1044,7 +1044,7 @@ int read_loco_data(char *config_file, int config_type) {
 		}
 		break;
 	    default:
-		printf(">>%s<<\n", line);
+		debug_print(">>%s<<\n", line);
 		break;
 	    }
 	}
