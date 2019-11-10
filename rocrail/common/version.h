@@ -1,11 +1,13 @@
 const int revisionnr = 
-177
+179
 ;
 const char* commithash = 
-"156ad75b4021629c4dce26315959a55a893dd8cf";
+"794717996af1f284cece8a1cdaa71511ac062506";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"179 2019-11-10 11:10:02 +0100 wio: 16bit cv numbers\n" \
+"178 2019-11-09 08:16:53 +0100 locationsdlg: partner select button action added\n" \
 "177 2019-11-08 15:51:07 +0100 wio: alive timeout at monitor level\n" \
 "176 2019-11-08 14:52:52 +0100 partner added to locations\n" \
 "175 2019-11-08 14:37:02 +0100 location: partner flow management\n" \
