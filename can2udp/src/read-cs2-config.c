@@ -863,6 +863,9 @@ int read_loco_data(char *config_file, int config_type) {
 		    fprintf(stderr, "can't alloc memory for loco->name: %s\n", __func__);
 		function = -1;
 		loco->name = name;
+		/* we assume that the icon does have the same name
+		   it will be overwritten by the token .icon anyway */
+		loco->icon = name;
 		debug_print("match name:      >%s<\n", loco->name);
 		break;
 	    case L1_TYPE:
