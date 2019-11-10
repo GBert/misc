@@ -427,7 +427,8 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
     if ((frame->can_dlc == 6) || (frame->can_dlc == 7)) {
 	trigger->length = be16(&frame->data[2]);
 	trigger->crc    = be16(&frame->data[4]);
-	printf("length 0x%04x  crc 0x%04x\n", trigger->length, trigger->crc);
+	if (!trigger->background)
+	    printf("length 0x%04x  crc 0x%04x\n", trigger->length, trigger->crc);
 
 	trigger->data = (uint8_t *) calloc(trigger->length + 1, 1);
 	if (!trigger->data) {
@@ -472,6 +473,14 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 	    }
 	    if (trigger->v3x) {
 		trigger->fsm_state = FSM_GET_LOCOS_BY_NAME;
+		read_loco_names((char *)trigger->data);
+		trigger->loco_names = loco_names;
+		if (trigger->loco_names) {
+		    get_ms2_locoinfo(trigger, trigger->loco_names->name);
+		    trigger->loco_names = trigger->loco_names->hh.next;
+		}
+		if (!trigger->background && trigger->verbose)
+		    printf("FSM: V3.x State change FSM_START -> FSM_GET_LOCOS_BY_NAME\n");
 	    }
 	    break;
 	case FSM_GET_LOCO_NAMES:
