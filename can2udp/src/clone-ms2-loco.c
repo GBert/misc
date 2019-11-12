@@ -236,6 +236,14 @@ int get_ms2_dbsize(struct trigger_t *trigger) {
     return ret;
 }
 
+int delete_all_locos(struct trigger_t *trigger) {
+    int ret;
+
+    ret = 0;
+
+    return ret;
+}
+
 int get_ms2_locoinfo(struct trigger_t *trigger, char *loco_name) {
     struct can_frame frame;
 
@@ -803,6 +811,9 @@ int main(int argc, char **argv) {
 		    /* initiate trigger when loco "Lokliste" and F0 pressed */
 		    if ((uid == trigger_data.loco_uid) && (frame.data[4] == 0))
 			get_ms2_dbsize(&trigger_data);
+		    /* delete all locos if "Lokliste" exists and F4 pressed */
+		    if ((uid == trigger_data.loco_uid) && (frame.data[4] == 4))
+			delete_all_locos(&trigger_data);
 		    break;
 		case 0x41:
 		    if (trigger_data.verbose)
