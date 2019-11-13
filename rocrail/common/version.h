@@ -1,11 +1,29 @@
 const int revisionnr = 
-179
+197
 ;
 const char* commithash = 
-"794717996af1f284cece8a1cdaa71511ac062506";
+"e6ab6dfaadef7be6f1547c81d533f89a8af5d999";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"197 2019-11-13 15:18:36 +0100 switch: ctc WIO blink LED support in case of pending\n" \
+"196 2019-11-13 14:46:16 +0100 wio: output blink support added\n" \
+"195 2019-11-13 11:16:25 +0100 rocrailinidialog: router corrections\n" \
+"194 2019-11-13 11:14:11 +0100 rocrailinidialog: corrections\n" \
+"193 2019-11-13 11:10:16 +0100 rocrailinidialog: corrections\n" \
+"192 2019-11-13 09:07:22 +0100 rocrailinidialog: router source renaming\n" \
+"191 2019-11-13 09:03:50 +0100 locationdialog: layout corrections\n" \
+"190 2019-11-13 08:58:29 +0100 routedialog: trace corrections\n" \
+"189 2019-11-13 08:40:48 +0100 router: renaming source code\n" \
+"188 2019-11-13 07:45:15 +0100 model: router trace corrections\n" \
+"187 2019-11-12 17:52:36 +0100 finder: crash fix if no route is defined\n" \
+"186 2019-11-12 11:54:14 +0100 locationdialog: layout corrections\n" \
+"185 2019-11-12 11:22:18 +0100 check at enter if the block is a TT type and force wait\n" \
+"184 2019-11-12 10:45:58 +0100 routedialog: fix for selecting lock type in case of tt and seltab\n" \
+"183 2019-11-12 08:32:46 +0100 wio: send a decoder event in case of online/offline\n" \
+"182 2019-11-11 15:07:40 +0100 wiodlg: show RSSI units in the header\n" \
+"181 2019-11-11 13:08:16 +0100 wio: patch stdint.h for type int16_t (Lothar)\n" \
+"180 2019-11-11 10:14:18 +0100 wio: convert rssi into int16_t\n" \
 "179 2019-11-10 11:10:02 +0100 wio: 16bit cv numbers\n" \
 "178 2019-11-09 08:16:53 +0100 locationsdlg: partner select button action added\n" \
 "177 2019-11-08 15:51:07 +0100 wio: alive timeout at monitor level\n" \
