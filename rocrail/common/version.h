@@ -1,11 +1,12 @@
 const int revisionnr = 
-199
+200
 ;
 const char* commithash = 
-"28c6da033f3815b5c8b86b471c9a7043fdf34eda";
+"99d86978461da1ef2b01df50d9c8bcd78aaa1883";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"200 2019-11-14 18:11:50 +0100 roads theme: state signals (Wolfgang)\n" \
 "199 2019-11-14 14:33:40 +0100 wio: bidi event added\n" \
 "198 2019-11-14 08:01:29 +0100 switch: set delay on blink CTC LED\n" \
 "197 2019-11-13 15:18:36 +0100 switch: ctc WIO blink LED support in case of pending\n" \
