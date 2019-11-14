@@ -28,6 +28,7 @@ void delete_all_track_data(void);
 void delete_all_loco_data(void);
 void delete_all_loco_names(void);
 void delete_loco_by_name(char *name);
+void shrink_loco_list(char *name);
 int add_loco(struct loco_data_t *loco);
 int add_track_data(struct track_data_t *td);
 int add_track_page(struct track_page_t *page, char *name);

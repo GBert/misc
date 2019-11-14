@@ -134,7 +134,7 @@ void signal_handler(int sig) {
 
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -kfv [-i <CAN int>][-t <sec>][-l <LED pin>][-p <push button pin>]\n", prg);
-    fprintf(stderr, "   Version 1.4\n\n");
+    fprintf(stderr, "   Version 1.5\n\n");
     fprintf(stderr, "         -c <loco_dir>        set the locomotive file dir - default %s\n", loco_dir);
     fprintf(stderr, "         -i <CAN interface>   using can interface\n");
     fprintf(stderr, "         -t <interval in sec> using timer in sec\n");
@@ -236,12 +236,8 @@ int get_ms2_dbsize(struct trigger_t *trigger) {
     return ret;
 }
 
-int delete_all_locos(struct trigger_t *trigger) {
-    int ret;
-
-    ret = 0;
-
-    return ret;
+void reset_loco_list(void) {
+    shrink_loco_list(LOCOLIST);
 }
 
 int get_ms2_locoinfo(struct trigger_t *trigger, char *loco_name) {
@@ -812,8 +808,11 @@ int main(int argc, char **argv) {
 		    if ((uid == trigger_data.loco_uid) && (frame.data[4] == 0))
 			get_ms2_dbsize(&trigger_data);
 		    /* delete all locos if "Lokliste" exists and F4 pressed */
-		    if ((uid == trigger_data.loco_uid) && (frame.data[4] == 4))
-			delete_all_locos(&trigger_data);
+		    if ((uid == trigger_data.loco_uid) && (frame.data[4] == 4)) {
+			reset_loco_list();
+			if (!trigger_data.background && trigger_data.verbose)
+			    printf("reset loco file\n");
+		    }
 		    break;
 		case 0x41:
 		    if (trigger_data.verbose)
