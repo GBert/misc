@@ -155,16 +155,17 @@ void delete_all_loco_data(void) {
 }
 
 void shrink_loco_list(char *name) {
-    struct loco_data_t *cloco, *l, *tmp;
+    struct loco_data_t *cloco, *tmp;
 
     HASH_ITER(hh, loco_data, cloco, tmp) {
-	HASH_FIND_STR(loco_data, name, l);
-	if (l) continue;
-	HASH_DEL(loco_data, cloco);
-	check_free(cloco->name);
-	check_free(cloco->type);
-	check_free(cloco->mfxAdr);
-	free(cloco);
+	if ((strncmp(name, cloco->name, strlen(cloco->name)) == 0) && (strlen(cloco->name))) {
+	} else {
+	    HASH_DEL(loco_data, cloco);
+	    check_free(cloco->name);
+	    check_free(cloco->type);
+	    check_free(cloco->mfxAdr);
+	    free(cloco);
+	}
     }
 }
 

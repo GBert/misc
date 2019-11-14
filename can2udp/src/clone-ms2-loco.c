@@ -521,6 +521,7 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 		    if (!trigger->background && trigger->verbose)
 			printf("writing new loco file [%s]\n", trigger->loco_file);
 		    print_locos(fp);
+		    fclose(fp);
 		}
 		/* start over with a new list */
 		delete_all_loco_names();
@@ -805,13 +806,17 @@ int main(int argc, char **argv) {
 		    if (trigger_data.verbose)
 			print_can_frame(F_CAN_FORMAT_STRG, &frame);
 		    /* initiate trigger when loco "Lokliste" and F0 pressed */
-		    if ((uid == trigger_data.loco_uid) && (frame.data[4] == 0))
+		    if ((uid == trigger_data.loco_uid) && (frame.data[4] == 0)) {
+			if (!trigger_data.background && trigger_data.verbose)
+			    printf("clone MS2 locos\n");
 			get_ms2_dbsize(&trigger_data);
+		    }
 		    /* delete all locos if "Lokliste" exists and F4 pressed */
 		    if ((uid == trigger_data.loco_uid) && (frame.data[4] == 4)) {
 			reset_loco_list();
 			if (!trigger_data.background && trigger_data.verbose)
-			    printf("reset loco file\n");
+			    printf("reset loco file & read MS2 locos\n");
+			get_ms2_dbsize(&trigger_data);
 		    }
 		    break;
 		case 0x41:
