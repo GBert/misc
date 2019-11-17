@@ -1,11 +1,15 @@
 const int revisionnr = 
-201
+205
 ;
 const char* commithash = 
-"d2c043273a769e62abb3913a6fa22146ffaa34a0";
+"9a8d11a811e686bf5547f134f390b3301b6dbf0c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"205 2019-11-16 14:54:57 +0100 loc: use modified direction on consist dispatch\n" \
+"204 2019-11-16 08:39:09 +0100 wio: fix for old compiler\n" \
+"203 2019-11-16 08:28:52 +0100 blockdialog: remove scale\n" \
+"202 2019-11-16 08:25:45 +0100 block: use plan scale for mvtrack\n" \
 "201 2019-11-15 08:04:56 +0100 renderer: blockstate for road svg\n" \
 "200 2019-11-14 18:11:50 +0100 roads theme: state signals (Wolfgang)\n" \
 "199 2019-11-14 14:33:40 +0100 wio: bidi event added\n" \
