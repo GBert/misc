@@ -1,11 +1,13 @@
 const int revisionnr = 
-205
+207
 ;
 const char* commithash = 
-"9a8d11a811e686bf5547f134f390b3301b6dbf0c";
+"d08f74b93a699d72db4620e3319a371e7b66545b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"207 2019-11-18 15:51:22 +0100 last time removal of dtc\n" \
+"206 2019-11-18 14:46:51 +0100 z21: not trace unknown packets\n" \
 "205 2019-11-16 14:54:57 +0100 loc: use modified direction on consist dispatch\n" \
 "204 2019-11-16 08:39:09 +0100 wio: fix for old compiler\n" \
 "203 2019-11-16 08:28:52 +0100 blockdialog: remove scale\n" \
