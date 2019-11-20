@@ -1,11 +1,15 @@
 const int revisionnr = 
-207
+211
 ;
 const char* commithash = 
-"d08f74b93a699d72db4620e3319a371e7b66545b";
+"ef95f2aa67b239b2379b40ea445ffedff6f9d46c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"211 2019-11-20 15:33:31 +0100 wio: bidi address report added\n" \
+"210 2019-11-19 09:12:08 +0100 block: reset signals on exit option added\n" \
+"209 2019-11-19 08:52:18 +0100 blockdialog: reset signals on exit\n" \
+"208 2019-11-19 08:00:57 +0100 roclcdr: fix for checkinf shortin and inatpre2in\n" \
 "207 2019-11-18 15:51:22 +0100 last time removal of dtc\n" \
 "206 2019-11-18 14:46:51 +0100 z21: not trace unknown packets\n" \
 "205 2019-11-16 14:54:57 +0100 loc: use modified direction on consist dispatch\n" \
