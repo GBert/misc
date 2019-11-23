@@ -1,11 +1,12 @@
 const int revisionnr = 
-214
+215
 ;
 const char* commithash = 
-"55a9550d2fd14f8093bcc8dc3d240a308c37ebfc";
+"a4ca43ce2ccfe73c00709c0e0d7ce7d6d865b9eb";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"215 2019-11-23 10:22:00 +0100 wio: fix for bidi address event\n" \
 "214 2019-11-22 12:27:52 +0100 wiodlg: resize all columns\n" \
 "213 2019-11-22 11:11:52 +0100 wiodlg: show RailCom in the index\n" \
 "212 2019-11-22 10:38:57 +0100 wio: set RailCom reading by dialog\n" \
