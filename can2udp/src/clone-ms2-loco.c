@@ -134,7 +134,7 @@ void signal_handler(int sig) {
 
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -kfv [-i <CAN int>][-t <sec>][-l <LED pin>][-p <push button pin>]\n", prg);
-    fprintf(stderr, "   Version 1.5\n\n");
+    fprintf(stderr, "   Version 1.6\n\n");
     fprintf(stderr, "         -c <loco_dir>        set the locomotive file dir - default %s\n", loco_dir);
     fprintf(stderr, "         -i <CAN interface>   using can interface\n");
     fprintf(stderr, "         -t <interval in sec> using timer in sec\n");
@@ -212,20 +212,21 @@ int get_ms2_loco_names(struct trigger_t *trigger, uint8_t start, int8_t end) {
 
     /* first frame */
     frame.can_dlc = 8;
-    memcpy(frame.data, GET_MS2_LOCO_NAMES, sizeof(frame.data));
-    if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
-	return (EXIT_FAILURE);
+    if (trigger->v3x) {
+	memcpy(frame.data, GET_MS2_LOCO_LIST, sizeof(frame.data));
+	if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
+	    return (EXIT_FAILURE);
+    } else {
+	memcpy(frame.data, GET_MS2_LOCO_NAMES, sizeof(frame.data));
+	if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
+	    return (EXIT_FAILURE);
+	/* second frame */
+	memset(frame.data, 0, sizeof(frame.data));
+	snprintf((char *)frame.data, sizeof(frame.data), "%d %d", start, end);
 
-    memcpy(frame.data, GET_MS2_LOCO_LIST, sizeof(frame.data));
-    if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
-	return (EXIT_FAILURE);
-
-    /* second frame */
-    memset(frame.data, 0, sizeof(frame.data));
-    snprintf((char *)frame.data, sizeof(frame.data), "%d %d", start, end);
-
-    if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
-	return (EXIT_FAILURE);
+	if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
+	    return (EXIT_FAILURE);
+    }
     return 0;
 }
 
