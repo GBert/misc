@@ -1,11 +1,14 @@
 const int revisionnr = 
-215
+218
 ;
 const char* commithash = 
-"a4ca43ce2ccfe73c00709c0e0d7ce7d6d865b9eb";
+"fbaa9e230c5186a8bfdaa3ad558bad5656506db5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"218 2019-11-23 17:18:10 +0100 accdecdlg: layout fix\n" \
+"217 2019-11-23 17:07:27 +0100 debian control update\n" \
+"216 2019-11-23 17:00:13 +0100 info.plist: version update\n" \
 "215 2019-11-23 10:22:00 +0100 wio: fix for bidi address event\n" \
 "214 2019-11-22 12:27:52 +0100 wiodlg: resize all columns\n" \
 "213 2019-11-22 11:11:52 +0100 wiodlg: show RailCom in the index\n" \
