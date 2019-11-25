@@ -1,11 +1,14 @@
 const int revisionnr = 
-218
+221
 ;
 const char* commithash = 
-"fbaa9e230c5186a8bfdaa3ad558bad5656506db5";
+"a63846f818f57f74a51982ca1a16e8be77543399";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"221 2019-11-25 10:44:22 +0100 wio: sensor pressure added\n" \
+"220 2019-11-24 10:58:33 +0100 wio: temp100 support added\n" \
+"219 2019-11-24 10:35:09 +0100 wio: use temperature from alive events\n" \
 "218 2019-11-23 17:18:10 +0100 accdecdlg: layout fix\n" \
 "217 2019-11-23 17:07:27 +0100 debian control update\n" \
 "216 2019-11-23 17:00:13 +0100 info.plist: version update\n" \
