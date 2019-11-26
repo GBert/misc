@@ -1,11 +1,14 @@
 const int revisionnr = 
-221
+224
 ;
 const char* commithash = 
-"a63846f818f57f74a51982ca1a16e8be77543399";
+"6e8f57843a2ec5966781c1555fe2f148e1a13da9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"224 2019-11-26 15:10:03 +0100 wio: add humidity to the alive event\n" \
+"223 2019-11-26 11:32:19 +0100 rocview: no questions in case the server sended a shutdown\n" \
+"222 2019-11-26 11:06:14 +0100 guiframe: crash fix for scale to fit in case no plan is loaded\n" \
 "221 2019-11-25 10:44:22 +0100 wio: sensor pressure added\n" \
 "220 2019-11-24 10:58:33 +0100 wio: temp100 support added\n" \
 "219 2019-11-24 10:35:09 +0100 wio: use temperature from alive events\n" \
