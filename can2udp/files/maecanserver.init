@@ -12,5 +12,6 @@ start() {
 }
 
 stop() {
-	killall can2lan
+	killall can2udp
+	killall node
 }
