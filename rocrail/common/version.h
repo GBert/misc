@@ -1,11 +1,12 @@
 const int revisionnr = 
-239
+240
 ;
 const char* commithash = 
-"45df1099206b32134d1b917064defb62b46cad63";
+"41e5391e962fba7bf9fc04cfa08a14a5ef66a8fa";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"240 2019-11-28 14:47:56 +0100 rocnetnode: set channels flags to make sure the servo goes in sleep mode after changing settings.\n" \
 "239 2019-11-28 11:54:11 +0100 wio: filter out the 100 degree value\n" \
 "238 2019-11-28 11:32:27 +0100 enter: check in route for a swap to force wait\n" \
 "237 2019-11-28 10:50:11 +0100 wio: layout corrections for the environment columns\n" \
