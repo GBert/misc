@@ -894,6 +894,7 @@ void decode_frame(struct can_frame *frame) {
 		printf("GFP");
 	    break;
 	case 0x0010:
+	case 0x0011:
 	    printf("Gleisbox");
 	    break;
 	case 0x0020:
