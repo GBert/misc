@@ -200,7 +200,7 @@ void candump_to_can(char *s, struct can_frame *frame) {
     candata = strstr(s, "#") + 1;
     // printf("canid 0x%08X candata %s\n", frame->can_id, candata);
     
-    frame->can_dlc = strlen(candata) / 2;
+    frame->can_dlc = (uint8_t) strlen(candata) / 2;
     for (i = 0; i < frame->can_dlc; i++) {
 	sscanf(&candata[i*2], "%2X", &dat);
 	frame->data[i] = dat;
@@ -1244,7 +1244,7 @@ int main(int argc, char **argv) {
 
 	memset(datum, 0, sizeof(datum));
 	while (getline(&line, &size, fp) > 0) {
-	    if (sscanf(line, "(%d.%d)", &time, &milli) == 2) {
+	    if (sscanf(line, "(%d.%3d)", &time, &milli) == 2) {
 		rawtime = time;
 		ts = *localtime(&rawtime);
 		strftime(datum, sizeof(datum), "%Y%m%d.%H%M%S", &ts);
