@@ -1,11 +1,26 @@
 const int revisionnr = 
-224
+239
 ;
 const char* commithash = 
-"6e8f57843a2ec5966781c1555fe2f148e1a13da9";
+"45df1099206b32134d1b917064defb62b46cad63";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"239 2019-11-28 11:54:11 +0100 wio: filter out the 100 degree value\n" \
+"238 2019-11-28 11:32:27 +0100 enter: check in route for a swap to force wait\n" \
+"237 2019-11-28 10:50:11 +0100 wio: layout corrections for the environment columns\n" \
+"236 2019-11-28 08:52:14 +0100 route: automat option NO added\n" \
+"235 2019-11-28 08:26:01 +0100 route: fix for check the condition class\n" \
+"234 2019-11-28 07:45:53 +0100 http: not overwrite the rocweb image path\n" \
+"233 2019-11-27 19:09:30 +0100 wiodlg: battery column without percent sign\n" \
+"232 2019-11-27 18:15:03 +0100 wio: query with environment\n" \
+"231 2019-11-27 15:59:41 +0100 finder: new option added to skip manual routes\n" \
+"230 2019-11-27 13:24:33 +0100 guiframe: fix for assert loco grid select row if none exist\n" \
+"229 2019-11-27 11:42:25 +0100 guiframe: fix for assert loco grid select row -1\n" \
+"228 2019-11-27 11:28:25 +0100 guiframe: assert fix for select loco grid row -1\n" \
+"227 2019-11-27 11:03:28 +0100 wiodlg: added include for standard integers\n" \
+"226 2019-11-27 10:02:16 +0100 rocrailinidialog: show/edit rocweb image path\n" \
+"225 2019-11-27 09:06:57 +0100 rocweb: html file type support added\n" \
 "224 2019-11-26 15:10:03 +0100 wio: add humidity to the alive event\n" \
 "223 2019-11-26 11:32:19 +0100 rocview: no questions in case the server sended a shutdown\n" \
 "222 2019-11-26 11:06:14 +0100 guiframe: crash fix for scale to fit in case no plan is loaded\n" \
