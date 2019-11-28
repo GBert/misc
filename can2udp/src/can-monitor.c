@@ -70,6 +70,7 @@ int verbose = 0, kanal = 0, expconf = 0;
 static char *F_N_CAN_FORMAT_STRG = "  CAN  0x%08X  [%d]";
 static char *F_N_UDP_FORMAT_STRG = "  UDP  0x%08X  [%d]";
 static char *F_N_TCP_FORMAT_STRG = "  TCP  0x%08X  [%d]";
+static char *F_N_SFF_FORMAT_STRG = "  CAN  <S>  0x%03X  [%d]";
 
 uint16_t be16(uint8_t *u) {
     return (u[0] << 8) | u[1];
@@ -214,6 +215,10 @@ int print_can_frame(char *format_string, struct can_frame *frame) {
 	return -1;
     }
     printf(format_string, frame->can_id & CAN_EFF_MASK, frame->can_dlc);
+    if (frame->can_id & CAN_RTR_FLAG) {
+        printf(" <RTR>                   ");
+        return -2;
+    }
     for (i = 0; i < frame->can_dlc; i++) {
 	printf(" %02X", frame->data[i]);
     }
@@ -1510,6 +1515,8 @@ int main(int argc, char **argv) {
 			    snprintf_can_error_frame(buf, sizeof(buf), (struct canfd_frame *)&frame, "\n\t");
 			    printf("\n\t%s", buf);
 			}
+		    } else {
+			print_can_frame(F_N_SFF_FORMAT_STRG, &frame);
 		    }
 		    printf("\n");
 		}
