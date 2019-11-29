@@ -1507,8 +1507,8 @@ int main(int argc, char **argv) {
 		    decode_frame(&frame);
 		} else {
 		    printf("%s ", timestamp);
-		    print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
 		    if (frame.can_id & CAN_ERR_FLAG) {
+			print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
 			printf(RED "*** ERRORFRAME ***" RESET);
 			if (verbose) {
 			    char buf[CL_LONGCFSZ];
