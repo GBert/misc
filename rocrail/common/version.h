@@ -1,11 +1,14 @@
 const int revisionnr = 
-241
+244
 ;
 const char* commithash = 
-"5f4af09a7e7dacd7055eb6858d546d59cd919bb5";
+"83c2c65021ac74285ee39d9a8e86407b6fdf33fa";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"244 2019-11-29 12:20:54 +0100 node: use defined calls for merge attributes\n" \
+"243 2019-11-29 10:03:26 +0100 translation merge: de, nl, sl\n" \
+"242 2019-11-29 09:31:21 +0100 node: renamed analysed attribute to routed for merging node recursive\n" \
 "241 2019-11-29 08:02:47 +0100 rocweb: replace ? in file names with zero\n" \
 "240 2019-11-28 14:47:56 +0100 rocnetnode: set channels flags to make sure the servo goes in sleep mode after changing settings.\n" \
 "239 2019-11-28 11:54:11 +0100 wio: filter out the 100 degree value\n" \
