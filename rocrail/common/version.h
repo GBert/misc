@@ -1,11 +1,13 @@
 const int revisionnr = 
-244
+246
 ;
 const char* commithash = 
-"83c2c65021ac74285ee39d9a8e86407b6fdf33fa";
+"edf0dc2e1a5685ed215ab9ac0b17c8470e2a4a86";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"246 2019-11-30 11:37:33 +0100 wiodlg: mobile type added\n" \
+"245 2019-11-30 08:49:05 +0100 wrapper: removed unused module attribute\n" \
 "244 2019-11-29 12:20:54 +0100 node: use defined calls for merge attributes\n" \
 "243 2019-11-29 10:03:26 +0100 translation merge: de, nl, sl\n" \
 "242 2019-11-29 09:31:21 +0100 node: renamed analysed attribute to routed for merging node recursive\n" \
