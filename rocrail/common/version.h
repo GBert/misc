@@ -1,11 +1,13 @@
 const int revisionnr = 
-250
+252
 ;
 const char* commithash = 
-"438253f51a7db6aa1d63abb51f1893f63d2c9cb0";
+"62e2e1cf3fbdef7a973e83830dc648dac2dbc205";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"252 2019-12-02 15:36:44 +0100 wio: steerwheel angle added to the dirv command\n" \
+"251 2019-12-02 15:04:15 +0100 wio: allow 250 speed steps\n" \
 "250 2019-12-01 15:23:39 +0100 block,loc: rear protection corrections\n" \
 "249 2019-12-01 13:13:10 +0100 wio: loco dirv mass parameter added for mobile\n" \
 "248 2019-12-01 10:38:23 +0100 block: check also for V=0 in case the enter trigger was resetted in case of rear protection\n" \
