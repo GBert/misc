@@ -1,11 +1,15 @@
 const int revisionnr = 
-252
+256
 ;
 const char* commithash = 
-"62e2e1cf3fbdef7a973e83830dc648dac2dbc205";
+"a98884890b082798d555077d3d9c2851aad09092";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"256 2019-12-03 22:40:51 +0100 block: fix for none recursive modify\n" \
+"255 2019-12-03 08:35:24 +0100 loc,stage: regard stop mode as none automatic mode\n" \
+"254 2019-12-02 22:58:54 +0100 modplan: fix for setting the z on addModule to prevent double levels\n" \
+"253 2019-12-02 19:02:08 +0100 xmlscriptdlg: crash fix in case no lclist is available\n" \
 "252 2019-12-02 15:36:44 +0100 wio: steerwheel angle added to the dirv command\n" \
 "251 2019-12-02 15:04:15 +0100 wio: allow 250 speed steps\n" \
 "250 2019-12-01 15:23:39 +0100 block,loc: rear protection corrections\n" \
