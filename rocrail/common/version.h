@@ -1,11 +1,17 @@
 const int revisionnr = 
-256
+262
 ;
 const char* commithash = 
-"a98884890b082798d555077d3d9c2851aad09092";
+"799fb9265bc589e16d03f733274b99f746bcbed5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"262 2019-12-05 17:49:29 +0100 usocket: tracelevel correction system: check key remaining days\n" \
+"261 2019-12-05 17:30:41 +0100 lightctrldlg: use until for the to column header (alttxt is to )\n" \
+"260 2019-12-05 09:39:19 +0100 clntcon: set wiodcc flag also for wiomobile to ack alive events\n" \
+"259 2019-12-05 07:43:54 +0100 lightctrl: trace correction\n" \
+"258 2019-12-04 18:49:46 +0100 xmlscript: trace correction\n" \
+"257 2019-12-04 17:12:59 +0100 lightctrl: fix for turning lights off\n" \
 "256 2019-12-03 22:40:51 +0100 block: fix for none recursive modify\n" \
 "255 2019-12-03 08:35:24 +0100 loc,stage: regard stop mode as none automatic mode\n" \
 "254 2019-12-02 22:58:54 +0100 modplan: fix for setting the z on addModule to prevent double levels\n" \
