@@ -1,11 +1,14 @@
 const int revisionnr = 
-262
+265
 ;
 const char* commithash = 
-"799fb9265bc589e16d03f733274b99f746bcbed5";
+"79190cc357caa346c34e9159c7db1a4d196d32f7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"265 2019-12-06 14:45:42 +0100 wio: step range added to simulate cv2/cv5\n" \
+"264 2019-12-06 11:16:55 +0100 wio: mobile sensorid reporting added\n" \
+"263 2019-12-06 07:59:37 +0100 translation merge: de, nl, fr, sl\n" \
 "262 2019-12-05 17:49:29 +0100 usocket: tracelevel correction system: check key remaining days\n" \
 "261 2019-12-05 17:30:41 +0100 lightctrldlg: use until for the to column header (alttxt is to )\n" \
 "260 2019-12-05 09:39:19 +0100 clntcon: set wiodcc flag also for wiomobile to ack alive events\n" \
