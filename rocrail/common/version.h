@@ -1,11 +1,35 @@
 const int revisionnr = 
-241
+265
 ;
 const char* commithash = 
-"5f4af09a7e7dacd7055eb6858d546d59cd919bb5";
+"79190cc357caa346c34e9159c7db1a4d196d32f7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"265 2019-12-06 14:45:42 +0100 wio: step range added to simulate cv2/cv5\n" \
+"264 2019-12-06 11:16:55 +0100 wio: mobile sensorid reporting added\n" \
+"263 2019-12-06 07:59:37 +0100 translation merge: de, nl, fr, sl\n" \
+"262 2019-12-05 17:49:29 +0100 usocket: tracelevel correction system: check key remaining days\n" \
+"261 2019-12-05 17:30:41 +0100 lightctrldlg: use until for the to column header (alttxt is to )\n" \
+"260 2019-12-05 09:39:19 +0100 clntcon: set wiodcc flag also for wiomobile to ack alive events\n" \
+"259 2019-12-05 07:43:54 +0100 lightctrl: trace correction\n" \
+"258 2019-12-04 18:49:46 +0100 xmlscript: trace correction\n" \
+"257 2019-12-04 17:12:59 +0100 lightctrl: fix for turning lights off\n" \
+"256 2019-12-03 22:40:51 +0100 block: fix for none recursive modify\n" \
+"255 2019-12-03 08:35:24 +0100 loc,stage: regard stop mode as none automatic mode\n" \
+"254 2019-12-02 22:58:54 +0100 modplan: fix for setting the z on addModule to prevent double levels\n" \
+"253 2019-12-02 19:02:08 +0100 xmlscriptdlg: crash fix in case no lclist is available\n" \
+"252 2019-12-02 15:36:44 +0100 wio: steerwheel angle added to the dirv command\n" \
+"251 2019-12-02 15:04:15 +0100 wio: allow 250 speed steps\n" \
+"250 2019-12-01 15:23:39 +0100 block,loc: rear protection corrections\n" \
+"249 2019-12-01 13:13:10 +0100 wio: loco dirv mass parameter added for mobile\n" \
+"248 2019-12-01 10:38:23 +0100 block: check also for V=0 in case the enter trigger was resetted in case of rear protection\n" \
+"247 2019-12-01 09:01:23 +0100 modplan: fix for saving modules in case of deletions\n" \
+"246 2019-11-30 11:37:33 +0100 wiodlg: mobile type added\n" \
+"245 2019-11-30 08:49:05 +0100 wrapper: removed unused module attribute\n" \
+"244 2019-11-29 12:20:54 +0100 node: use defined calls for merge attributes\n" \
+"243 2019-11-29 10:03:26 +0100 translation merge: de, nl, sl\n" \
+"242 2019-11-29 09:31:21 +0100 node: renamed analysed attribute to routed for merging node recursive\n" \
 "241 2019-11-29 08:02:47 +0100 rocweb: replace ? in file names with zero\n" \
 "240 2019-11-28 14:47:56 +0100 rocnetnode: set channels flags to make sure the servo goes in sleep mode after changing settings.\n" \
 "239 2019-11-28 11:54:11 +0100 wio: filter out the 100 degree value\n" \
