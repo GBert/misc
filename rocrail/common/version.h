@@ -1,11 +1,20 @@
 const int revisionnr = 
-265
+274
 ;
 const char* commithash = 
-"79190cc357caa346c34e9159c7db1a4d196d32f7";
+"330bc74a7f3b978ee75aa8e98ee9e2a7303028fb";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"274 2019-12-08 11:45:59 +0100 block: broadcast embedded sensor events in case of crossing block\n" \
+"273 2019-12-07 18:20:54 +0100 wiodlg: booster 1A option added\n" \
+"272 2019-12-07 14:06:13 +0100 lightctrldlg: translation fix\n" \
+"271 2019-12-07 13:47:46 +0100 stage: re-initialize section length and train gap after a modify\n" \
+"270 2019-12-07 12:18:17 +0100 wiodlg: removed mobile option mode1\n" \
+"269 2019-12-07 11:41:28 +0100 wiodlg: option mobile mode 1 added\n" \
+"268 2019-12-07 09:04:17 +0100 wiodlg: labels for serial extended with bps\n" \
+"267 2019-12-07 08:33:24 +0100 wio: reorg options\n" \
+"266 2019-12-06 19:41:01 +0100 wio: options reorg WIP\n" \
 "265 2019-12-06 14:45:42 +0100 wio: step range added to simulate cv2/cv5\n" \
 "264 2019-12-06 11:16:55 +0100 wio: mobile sensorid reporting added\n" \
 "263 2019-12-06 07:59:37 +0100 translation merge: de, nl, fr, sl\n" \
