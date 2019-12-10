@@ -1,11 +1,13 @@
 const int revisionnr = 
-280
+282
 ;
 const char* commithash = 
-"4b2f5e6a2b48f8249ebd746d21099c7792766447";
+"b597a841ff65e70f4dcfb4ba4a4a20285ab764bf";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"282 2019-12-10 17:25:56 +0100 idle: set schedule time at next schedule in a tour\n" \
+"281 2019-12-10 17:07:00 +0100 model: softreset before processing a remove command\n" \
 "280 2019-12-10 08:17:02 +0100 wiodlg: max nodename length 8\n" \
 "279 2019-12-10 08:09:41 +0100 wio: add string terminator in case of nodename\n" \
 "278 2019-12-09 14:03:39 +0100 model: reject remove objects in auto mode\n" \
