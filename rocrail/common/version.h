@@ -1,11 +1,13 @@
 const int revisionnr = 
-278
+280
 ;
 const char* commithash = 
-"33be3c2b53e6317a35f74ee2c122bf8491e97dc1";
+"4b2f5e6a2b48f8249ebd746d21099c7792766447";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"280 2019-12-10 08:17:02 +0100 wiodlg: max nodename length 8\n" \
+"279 2019-12-10 08:09:41 +0100 wio: add string terminator in case of nodename\n" \
 "278 2019-12-09 14:03:39 +0100 model: reject remove objects in auto mode\n" \
 "277 2019-12-09 13:31:04 +0100 node: fix for evaluating the replaceChilds flag...\n" \
 "276 2019-12-09 12:02:47 +0100 wio: mobile rfid event with nodename, mapped to code (identifier)\n" \
