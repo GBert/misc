@@ -80,6 +80,10 @@ uint32_t be32(uint8_t *u) {
     return (u[0] << 24) | (u[1] << 16) | (u[2] << 8) | u[3];
 }
 
+uint32_t le32(uint8_t *u) {
+    return (u[3] << 24) | (u[2] << 16) | (u[1] << 8) | u[0];
+}
+
 #if 0
 int insert_right(struct knoten *liste, void *element) {
     struct knoten *tmp = liste;
@@ -168,6 +172,12 @@ void frame_to_can(unsigned char *netframe, struct can_frame *frame) {
     frame->can_id = be32(netframe);
     frame->can_dlc = netframe[4];
     memcpy(&frame->data, &netframe[5], 8);
+}
+
+void canframe_to_can(unsigned char *netframe, struct can_frame *frame) {
+    frame->can_id = le32(netframe);
+    frame->can_dlc = netframe[4];
+    memcpy(&frame->data, &netframe[8], 8);
 }
 
 void ascii_to_can(char *s, struct can_frame *frame) {
@@ -1367,15 +1377,28 @@ int main(int argc, char **argv) {
 		ether_offset = (caplinktype == DLT_LINUX_SLL) ? 14 : 12;
 		int ether_type = be16(&pkt_ptr[ether_offset]);
 
-		if (ether_type == ETHER_TYPE_IP) {	/* most common */
+		if (ether_type == ETHER_TYPE_IP) {		/* most common */
 		    ether_offset += 2;
 		} else if (ether_type == ETHER_TYPE_8021Q) {	/* dot1q tag ? */
 		    ether_offset += 6;
+		} else if (ether_type == 0x000C) {		/* CAN ? */
+		    ether_offset = 0;
 		} else {
 		    if (verbose)
 			fprintf(stderr, "Unknown ethernet type, %04X, skipping...\n", ether_type);
 		    continue;
 		}
+	    }
+
+	    if (ether_offset == 0) {
+		if (be16(pkt_ptr) == 0x0001) {
+		    canframe_to_can(&pkt_ptr[16], &frame);
+		    printf("%s ", timestamp);
+		    print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
+		    decode_frame(&frame);
+		    printf(RESET);
+		}
+		continue;
 	    }
 
 	    /* skip past the Ethernet II header */
