@@ -987,8 +987,8 @@ void decode_frame(struct can_frame *frame) {
 	if (frame->can_dlc == 5) {
 	    if (frame->data[4] == 0x88)
 		printf("CAN Bootloader Antwort ACK\n");
-	    if ((frame->data[4] == 0xf1) || (frame->data[4] == 0xf2))
-		printf("CAN Bootloader Antwort NACK\n");
+	    if (((frame->data[4] & 0xf0) == 0xf0) && ((frame->data[4] & 0x0f) <=4))
+		printf("CAN Bootloader Error %d\n", frame->data[4] & 0xf0);
 	    break;
 	}
 	if (frame->can_dlc == 6) {
