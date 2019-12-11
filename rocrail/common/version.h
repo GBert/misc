@@ -1,11 +1,14 @@
 const int revisionnr = 
-282
+285
 ;
 const char* commithash = 
-"b597a841ff65e70f4dcfb4ba4a4a20285ab764bf";
+"930979709caa13f9413f0e0f9574de3f2482eb27";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"285 2019-12-11 17:50:41 +0100 wrapper: set r2rnet to false\n" \
+"284 2019-12-11 17:44:11 +0100 cv: use combobox for IID, and fill it\n" \
+"283 2019-12-11 08:51:06 +0100 guiapp: disable asserts\n" \
 "282 2019-12-10 17:25:56 +0100 idle: set schedule time at next schedule in a tour\n" \
 "281 2019-12-10 17:07:00 +0100 model: softreset before processing a remove command\n" \
 "280 2019-12-10 08:17:02 +0100 wiodlg: max nodename length 8\n" \
