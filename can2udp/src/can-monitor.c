@@ -146,7 +146,7 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 3.2\n\n");
+    fprintf(stderr, "   Version 3.3\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
@@ -961,6 +961,9 @@ void decode_frame(struct can_frame *frame) {
 	    case 0x11:
 		printf(" Go");
 		break;
+	    case 0x44:
+	        printf(" Block %d", frame->data[5]);
+		break;
 	    case 0xE4:
 		printf(" ?");
 		break;
@@ -968,6 +971,10 @@ void decode_frame(struct can_frame *frame) {
 		printf(" ???");
 		break;
 	    }
+	} else if (frame->can_dlc == 6) {
+	    printf(" Anfrage Block %d", frame->data[5]);
+	} else if (frame->can_dlc == 7) {
+	    printf(" Block CRC 0x%04X", be16(&frame->data[5]));
 	} else if (frame->can_dlc == 8) {
 	    printf(" Data");
 	} else {
@@ -977,6 +984,17 @@ void decode_frame(struct can_frame *frame) {
 	break;
     case 0x37:
 	uid = be32(frame->data);
+	if (frame->can_dlc == 5) {
+	    if (frame->data[4] == 0x88)
+		printf("CAN Bootloader Antwort ACK\n");
+	    if ((frame->data[4] == 0xf1) || (frame->data[4] == 0xf2))
+		printf("CAN Bootloader Antwort NACK\n");
+	    break;
+	}
+	if (frame->can_dlc == 6) {
+	    printf("CAN Bootloader Antwort Block %d\n", frame->data[5]);
+	    break;
+	}
 	kennung = be16(&frame->data[6]);
 	printf("Bootloader Antwort von ");
 	switch (kennung) {
