@@ -1,11 +1,12 @@
 const int revisionnr = 
-285
+286
 ;
 const char* commithash = 
-"930979709caa13f9413f0e0f9574de3f2482eb27";
+"acb8269948c7f739586dd7d9ee9c319bbf18ea74";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"286 2019-12-12 10:34:10 +0100 wiodlg: layout improvements\n" \
 "285 2019-12-11 17:50:41 +0100 wrapper: set r2rnet to false\n" \
 "284 2019-12-11 17:44:11 +0100 cv: use combobox for IID, and fill it\n" \
 "283 2019-12-11 08:51:06 +0100 guiapp: disable asserts\n" \
