@@ -1,11 +1,12 @@
 const int revisionnr = 
-286
+287
 ;
 const char* commithash = 
-"acb8269948c7f739586dd7d9ee9c319bbf18ea74";
+"76f915e1083053598b291cb81fa623130b356559";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"287 2019-12-12 16:34:48 +0100 wiodlg: set display geometry\n" \
 "286 2019-12-12 10:34:10 +0100 wiodlg: layout improvements\n" \
 "285 2019-12-11 17:50:41 +0100 wrapper: set r2rnet to false\n" \
 "284 2019-12-11 17:44:11 +0100 cv: use combobox for IID, and fill it\n" \
