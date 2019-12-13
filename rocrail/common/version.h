@@ -1,11 +1,16 @@
 const int revisionnr = 
-287
+292
 ;
 const char* commithash = 
-"76f915e1083053598b291cb81fa623130b356559";
+"343a063ba71174a3893ba5af41f5574bce5ce93a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"292 2019-12-13 19:30:05 +0100 node: replacechild directly in the merge function as parameter instead of temp. attribute\n" \
+"291 2019-12-13 19:00:45 +0100 node: use underscored attribute names for control\n" \
+"290 2019-12-13 18:44:25 +0100 fix for zombie node control atttributes like 'replacechilds'\n" \
+"289 2019-12-13 08:04:44 +0100 loc: useschedule action added\n" \
+"288 2019-12-13 07:54:55 +0100 guiapp: fixes for merge node recursive and replace childs\n" \
 "287 2019-12-12 16:34:48 +0100 wiodlg: set display geometry\n" \
 "286 2019-12-12 10:34:10 +0100 wiodlg: layout improvements\n" \
 "285 2019-12-11 17:50:41 +0100 wrapper: set r2rnet to false\n" \
