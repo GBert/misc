@@ -227,8 +227,11 @@ int main(int argc, char **argv) {
 	size_t size = MAXSIZE;
 	struct can_frame aframe;
 	int hour, minute, second, milli;
+	/*
 	time_t rawtime;
 	struct tm ts;
+	*/
+	unsigned int command, response, hash, dlc;
 
 	fp = fopen(candump_file, "r");
 	if (!fp) {
@@ -245,7 +248,6 @@ int main(int argc, char **argv) {
 	memset(datum, 0, sizeof(datum));
 	while (getline(&line, &size, fp) > 0) {
 	    if (sscanf(line, "%d:%d:%d.%3d)", &hour, &minute, &second, &milli) == 4) {
-		/* printf("%s: %s", __func__, line); */
 		/* rawtime = time;
 		   printf("# getline %s", line);
 		   ts = *localtime(&rawtime);
@@ -259,6 +261,19 @@ int main(int argc, char **argv) {
 		send_can_frame(sc, &aframe);
 		/* TODO */
 		/* decode_frame(&aframe); */
+	    }
+	    if (sscanf(line, "C:%x R:%u H:%x D:%u ", &command, &response, &hash, &dlc) == 4) {
+		int sleep = 100000;
+		memset(&aframe, 0, sizeof(aframe));
+		aframe.can_id = (command << 17) | (response <<16) | hash;
+		aframe.can_dlc = dlc;
+		printf("ID 0x%08x DLC %u\n", aframe.can_id, aframe.can_dlc);
+		for (int i=0; i < aframe.can_dlc; i++) {
+		    sscanf(&line[26 + i*5], "%i ", &aframe.data[i]);
+		}
+		send_can_frame(sc, &aframe);
+		print_can_frame(F_N_CAN_FORMAT_STRG, &aframe);
+		usleep(100);
 	    }
 	}
     }
