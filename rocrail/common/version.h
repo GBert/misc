@@ -1,11 +1,24 @@
 const int revisionnr = 
-292
+305
 ;
 const char* commithash = 
-"343a063ba71174a3893ba5af41f5574bce5ce93a";
+"ef692f37ca10451062b0ce727ef8139dc6423588";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"305 2019-12-16 14:34:03 +0100 wiodlg: extended RIC layout option added\n" \
+"304 2019-12-16 12:03:23 +0100 opendcc: progress popup removed\n" \
+"303 2019-12-16 08:27:01 +0100 lightctrl: revert turning off lights: only turnoff on exact match to make it possible to define more entries for the same output\n" \
+"302 2019-12-16 08:13:12 +0100 blockdialog: increased depart delay range\n" \
+"301 2019-12-15 22:05:05 +0100 rocrailinidialog: fill IID comboboxes\n" \
+"300 2019-12-15 17:18:21 +0100 var: clone node on publish to provide all child nodes\n" \
+"299 2019-12-14 17:48:55 +0100 loc: regard the invert flag in case of field events\n" \
+"298 2019-12-14 16:53:55 +0100 model: reject removal of important objects in case they are reserved\n" \
+"297 2019-12-14 15:52:54 +0100 wiodlg: option for extern DCC\n" \
+"296 2019-12-14 15:12:04 +0100 model: removed softreset before delete\n" \
+"295 2019-12-14 10:41:37 +0100 wiodlg: option corrections\n" \
+"294 2019-12-14 08:31:16 +0100 windows setup: removed service\n" \
+"293 2019-12-14 08:19:45 +0100 node: removed unused function for setting 'replacechilds'\n" \
 "292 2019-12-13 19:30:05 +0100 node: replacechild directly in the merge function as parameter instead of temp. attribute\n" \
 "291 2019-12-13 19:00:45 +0100 node: use underscored attribute names for control\n" \
 "290 2019-12-13 18:44:25 +0100 fix for zombie node control atttributes like 'replacechilds'\n" \
