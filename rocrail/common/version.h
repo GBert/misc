@@ -1,11 +1,15 @@
 const int revisionnr = 
-307
+311
 ;
 const char* commithash = 
-"c437c9cdc4ccc88efea09a7eca396ed7fcd7b5c5";
+"23f8681fa6b67f017bdf9dee81b3c97a5a8d5ad2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"311 2019-12-18 14:09:05 +0100 desktoplink.cmd: added extra quots around the path parameters to allow blanks\n" \
+"310 2019-12-18 13:18:39 +0100 locdialog: crash fix for init functions in case of no loco selected\n" \
+"309 2019-12-18 13:07:18 +0100 wio: send short IDs\n" \
+"308 2019-12-18 08:01:36 +0100 accgroupdlg: fix for deleting accessories from the list\n" \
 "307 2019-12-17 07:49:59 +0100 rocprodlg: fix for expand/colapse tree in case of empty\n" \
 "306 2019-12-16 19:43:15 +0100 lightctrldlg: reset button added\n" \
 "305 2019-12-16 14:34:03 +0100 wiodlg: extended RIC layout option added\n" \
