@@ -1,11 +1,13 @@
 const int revisionnr = 
-305
+307
 ;
 const char* commithash = 
-"ef692f37ca10451062b0ce727ef8139dc6423588";
+"c437c9cdc4ccc88efea09a7eca396ed7fcd7b5c5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"307 2019-12-17 07:49:59 +0100 rocprodlg: fix for expand/colapse tree in case of empty\n" \
+"306 2019-12-16 19:43:15 +0100 lightctrldlg: reset button added\n" \
 "305 2019-12-16 14:34:03 +0100 wiodlg: extended RIC layout option added\n" \
 "304 2019-12-16 12:03:23 +0100 opendcc: progress popup removed\n" \
 "303 2019-12-16 08:27:01 +0100 lightctrl: revert turning off lights: only turnoff on exact match to make it possible to define more entries for the same output\n" \
