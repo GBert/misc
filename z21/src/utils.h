@@ -17,6 +17,12 @@ struct node {
 
 void usec_sleep(int usec);
 uint8_t xor(unsigned char *data, int length);
-void print_udp_frame(unsigned char *udpframe, char *format);
+void print_udp_frame(char *format, unsigned char *udpframe);
+void print_net_frame(char *format, unsigned char *udpframe);
+int time_stamp(char *timestamp);
+
+uint16_t be16(uint8_t * u);
+uint32_t be32(uint8_t * u);
+uint32_t le32(uint8_t * u);
 
 #endif /* _UTILS_H_ */

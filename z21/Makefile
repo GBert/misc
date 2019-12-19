@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=z21emu
-PKG_RELEASE:=0.1
+PKG_RELEASE:=0.2
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_BUILD_PARALLEL:=1
@@ -36,6 +36,8 @@ endef
 define Package/z21emu/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/z21emu $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_BIN) ./files/z21emu.init $(1)/etc/init.d/
 endef
 
 $(eval $(call BuildPackage,z21emu))

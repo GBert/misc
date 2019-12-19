@@ -37,10 +37,16 @@ pthread_mutex_t lock;
 
 struct z21_data_t z21_data;
 
-static char *UDP_SRC_STRG = "->UDP   ";
-static char *UDP_DST_STRG = "  UDP-> ";
+static char *UDP_SRC_STRG     = "->UDP   ";
+static char *UDP_DST_STRG     = "  UDP-> ";
+static char *TCP_FORMAT_STRG  = "->TCP    CANID 0x%06X   [%d]";
+static char *TCP_FORMATS_STRG = "->TCP*   CANID 0x%06X   [%d]";
 
-static unsigned char Z21_VERSION[]  = { 0x09, 0x00, 0x40, 0x00, 0xF3, 0x0A, 0x01, 0x23, 0xDB };
+char cs2addr[32] = "127.0.0.1";
+
+#if 0
+static unsigned char Z21_VERSION[] = { 0x09, 0x00, 0x40, 0x00, 0xF3, 0x0A, 0x01, 0x23, 0xDB };
+#endif
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -p <port> -s <port>\n", prg);
@@ -48,7 +54,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -p <port>           primary UDP port for the server - default %d\n", PRIMARY_UDP_PORT);
     fprintf(stderr, "         -s <port>           secondary UDP port for the server - default %d\n", SECONDARY_UDP_PORT);
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface\n");
-    fprintf(stderr, "         -c <CAN interface>  CAN interface\n");
+    fprintf(stderr, "         -i <CAN interface>  CAN interface\n");
     fprintf(stderr, "         -f                  running in foreground\n\n");
 }
 
@@ -65,17 +71,20 @@ int send_broadcast(unsigned char *udpframe, char *format, int verbose) {
     }
     if (s != length) {
     } else {
-	print_udp_frame(udpframe, format);
+	print_udp_frame(format, udpframe);
     }
     return (EXIT_SUCCESS);
 }
 
-int check_data(struct z21_data_t *z21_data) {
+int check_data(struct z21_data_t *z21_data, int verbose) {
     uint16_t length, header;
     uint8_t xheader;
 
-    length = z21_data->udpframe[0] + (z21_data->udpframe[1] << 8);
-    header = z21_data->udpframe[2] + (z21_data->udpframe[3] << 8);
+    length = be16(&z21_data->udpframe[0]);
+    header = be16(&z21_data->udpframe[2]);
+
+    if (verbose)
+	printf("Z21 Data Header 0x%04x length %d\n", header, length);
 
     switch (header) {
     case LAN_X_HEADER:
@@ -109,7 +118,7 @@ void *z21_periodic_tasks(void *ptr) {
 int main(int argc, char **argv) {
     pid_t pid;
     pthread_t pth;
-    int ret, opt;
+    int ret, opt, max_fds;
     /* primary UDP socket , secondary UDP socket, UDP broadcast socket */
     struct ifaddrs *ifap, *ifa;
     struct ifreq ifr;
@@ -121,6 +130,8 @@ int main(int argc, char **argv) {
     const int on = 1;
     char *udp_dst_address;
     char *bcast_interface;
+    unsigned char recvline[MAXSIZE];
+    char timestamp[16];
 
     socklen_t caddrlen = sizeof(caddr);
     memset(&ifr, 0, sizeof(ifr));
@@ -139,7 +150,7 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     };
 
-    while ((opt = getopt(argc, argv, "p:s:b:c:hf?")) != -1) {
+    while ((opt = getopt(argc, argv, "p:s:b:i:hf?")) != -1) {
 	switch (opt) {
 	case 'p':
 	    primary_port = strtoul(optarg, (char **)NULL, 10);
@@ -162,7 +173,7 @@ int main(int argc, char **argv) {
 		exit(EXIT_FAILURE);
 	    }
 	    break;
-        case 'i':
+	case 'i':
 	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
 	    break;
 	case 'f':
@@ -248,10 +259,11 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     }
 
-    if (ifr.ifr_name) {
+    if (strlen(ifr.ifr_name)) {
 	/* prepare CAN socket */
+	printf("ifr.ifr_name: >%s<\n", ifr.ifr_name);
 	if ((z21_data.sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
-	    fprintf(stderr, "error creating CAN socket: %s\n", strerror(errno));
+	    fprintf(stderr, "error creating CAN socket: %s on >%s<\n", strerror(errno), ifr.ifr_name);
 	    exit(EXIT_FAILURE);
 	}
 	caddr.can_family = AF_CAN;
@@ -263,6 +275,27 @@ int main(int argc, char **argv) {
 
 	if (bind(z21_data.sc, (struct sockaddr *)&caddr, caddrlen) < 0) {
 	    fprintf(stderr, "error binding CAN socket: %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
+    } else {
+	/* prepare TCP client socket */
+	if ((z21_data.st = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+	    fprintf(stderr, "can't create TCP socket: %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
+
+	memset(&z21_data.staddr, 0, sizeof(z21_data.staddr));
+	z21_data.staddr.sin_family = AF_INET;
+
+	if (inet_aton(cs2addr, (struct in_addr *)&z21_data.staddr.sin_addr.s_addr) == 0) {
+	    fprintf(stderr, "invalid address : %s\n", strerror(errno));
+	    exit(EXIT_FAILURE);
+	}
+
+	z21_data.staddr.sin_port = htons(MAERKLIN_PORT);
+
+	if (connect(z21_data.st, (struct sockaddr *)&z21_data.staddr, sizeof(z21_data.staddr))) {
+	    fprintf(stderr, "can't connect to TCP socket : %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
 	}
     }
@@ -297,10 +330,20 @@ int main(int argc, char **argv) {
 	FD_ZERO(&readfds);
 	FD_SET(z21_data.sp, &readfds);
 	FD_SET(z21_data.ss, &readfds);
+	if (z21_data.st) {
+	    FD_SET(z21_data.st, &readfds);
+	    max_fds = MAX(MAX(z21_data.sp, z21_data.ss), z21_data.st);
+	} else {
+	    FD_SET(z21_data.sc, &readfds);
+	    max_fds = MAX(MAX(z21_data.sp, z21_data.ss), z21_data.sc);
+	}
 
-	if (select((z21_data.sp > z21_data.ss) ? z21_data.sp + 1 : z21_data.ss + 1, &readfds, NULL, NULL, NULL) < 0) {
+	if (select(max_fds + 1, &readfds, NULL, NULL, NULL) < 0) {
 	    fprintf(stderr, "select error: %s\n", strerror(errno));
 	    break;
+	}
+
+	if (FD_ISSET(z21_data.sc, &readfds)) {
 	}
 
 	/* received a UDP packet on primary */
@@ -310,7 +353,7 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
 		break;
 	    } else {
-		print_udp_frame(z21_data.udpframe, UDP_SRC_STRG);
+		print_udp_frame(UDP_SRC_STRG, z21_data.udpframe);
 	    }
 	    /* send_broadcast(z21_data.udpframe, UDP_DST_STRG, z21_data.foreground); */
 	}
@@ -321,10 +364,29 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
 		break;
 	    } else {
-		print_udp_frame(z21_data.udpframe, UDP_SRC_STRG);
+		print_udp_frame(UDP_SRC_STRG, z21_data.udpframe);
 	    }
 	    /* TODO */
 	    send_broadcast(z21_data.udpframe, UDP_DST_STRG, z21_data.foreground);
+	}
+
+	if (FD_ISSET(z21_data.st, &readfds)) {
+	    int i, n;
+	    if ((n = recv(z21_data.st, recvline, MAXSIZE, 0)) > 0) {
+		/* check the whole TCP packet, if there are more than one CAN frame included */
+		/* TCP packets with size modulo 13 !=0 are ignored though */
+		if (n % 13) {
+		    time_stamp(timestamp);
+		    fprintf(stderr, "%s received packet %% 13 : length %d\n", timestamp, n);
+		} else {
+		    for (i = 0; i < n; i += 13) {
+			if (i >= 13)
+			    print_net_frame(TCP_FORMATS_STRG, &recvline[i]);
+			else
+			    print_net_frame(TCP_FORMAT_STRG, &recvline[i]);
+		    }
+		}
+	    }
 	}
     }
     close(z21_data.sp);

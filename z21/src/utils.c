@@ -11,6 +11,7 @@
  * Z21 Emulation for Roco WiFi Mouse
  */
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <libgen.h>
@@ -32,13 +33,28 @@
 #include "utils.h"
 #include "z21.h"
 
+#define MAX(a,b)		((a) > (b) ? (a) : (b))
 #define MAXIPLEN		40	/* maximum IP string length */
 #define PRIMARY_UDP_PORT	21105
 #define SECONDARY_UDP_PORT	21106
+#define MAERKLIN_PORT		15731
+#define MAXSIZE			16384
 
 #define MAXDG   256		/* maximum datagram size */
 
 extern struct z21_data_t z21_data;
+
+uint16_t be16(uint8_t * u) {
+    return (u[0] << 8) | u[1];
+}
+
+uint32_t be32(uint8_t * u) {
+    return (u[0] << 24) | (u[1] << 16) | (u[2] << 8) | u[3];
+}
+
+uint32_t le32(uint8_t * u) {
+    return (u[3] << 24) | (u[2] << 16) | (u[1] << 8) | u[0];
+}
 
 void usec_sleep(int usec) {
     struct timespec to_wait;
@@ -48,6 +64,17 @@ void usec_sleep(int usec) {
     to_wait.tv_sec = 0;
     to_wait.tv_nsec = usec * 1000;
     nanosleep(&to_wait, NULL);
+}
+
+int time_stamp(char *timestamp) {
+    struct timeval tv;
+    struct tm *tm;
+
+    gettimeofday(&tv, NULL);
+    tm = localtime(&tv.tv_sec);
+
+    sprintf(timestamp, "%02d:%02d:%02d.%03d", tm->tm_hour, tm->tm_min, tm->tm_sec, (int)tv.tv_usec / 1000);
+    return 0;
 }
 
 uint8_t xor(unsigned char *data, int length) {
@@ -60,7 +87,7 @@ uint8_t xor(unsigned char *data, int length) {
     return (res);
 }
 
-void print_udp_frame(unsigned char *udpframe, char *format) {
+void print_udp_frame(char *format, unsigned char *udpframe) {
     int i;
     uint16_t length, header;
     struct timeval tv;
@@ -79,6 +106,38 @@ void print_udp_frame(unsigned char *udpframe, char *format) {
 	    printf(" %02x", udpframe[i]);
 	printf("\n");
     }
+}
+
+void print_net_frame(char *format, unsigned char *netframe) {
+    uint32_t canid;
+    int i, dlc;
+    char timestamp[16];
+
+    memcpy(&canid, netframe, 4);
+    dlc = netframe[4];
+    time_stamp(timestamp);
+    printf("%s   ", timestamp);
+    printf(format, ntohl(canid) & CAN_EFF_MASK, netframe[4]);
+    for (i = 5; i < 5 + dlc; i++) {
+        printf(" %02x", netframe[i]);
+    }
+    if (dlc < 8) {
+        printf("(%02x", netframe[i]);
+        for (i = 6 + dlc; i < 13; i++) {
+            printf(" %02x", netframe[i]);
+        }
+        printf(")");
+    } else {
+        printf(" ");
+    }
+    printf("  ");
+    for (i = 5; i < 13; i++) {
+        if (isprint(netframe[i]))
+            printf("%c", netframe[i]);
+        else
+            putchar(46);
+    }
+    printf("\n");
 }
 
 struct node *insert_right(struct node *list, int id) {

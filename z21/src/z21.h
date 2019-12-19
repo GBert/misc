@@ -11,10 +11,13 @@
 #ifndef _Z21_H_
 #define _Z21_H_
 
-#define MAXDG   256             /* maximum datagram size */
-#define MAXIPLEN                40      /* maximum IP string length */
-#define PRIMARY_UDP_PORT        21105
-#define SECONDARY_UDP_PORT      21106
+#define MAX(a,b)		((a) > (b) ? (a) : (b))
+#define MAXDG			256	/* maximum datagram size */
+#define MAXIPLEN		40	/* maximum IP string length */
+#define PRIMARY_UDP_PORT	21105
+#define SECONDARY_UDP_PORT	21106
+#define MAERKLIN_PORT		15731
+#define MAXSIZE			16384
 
 struct z21data_t {
     int type;
@@ -28,10 +31,12 @@ struct z21_data_t {
     struct sockaddr_in ssaddr;
     struct sockaddr_in sbaddr;
     struct sockaddr_in scaddr;
+    struct sockaddr_in staddr;
     int sp;
     int ss;
     int sb;
     int sc;
+    int st;
     int foreground;
     char *format;
     unsigned char udpframe[MAXDG];
