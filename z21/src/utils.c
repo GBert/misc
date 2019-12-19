@@ -91,24 +91,24 @@ uint8_t xor(unsigned char *data, int length) {
     return (res);
 }
 
-void print_udp_frame(char *format, unsigned char *udpframe) {
+void print_udp_frame(char *format, int udplength, unsigned char *udpframe) {
     int i;
     uint16_t length, header;
-    struct timeval tv;
-    struct tm *tm;
+    char timestamp[16];
 
+    time_stamp(timestamp);
+    printf("%s ", timestamp);
     if (z21_data.foreground) {
 	/* print timestamp */
-	gettimeofday(&tv, NULL);
-	tm = localtime(&tv.tv_sec);
-	printf("%02d:%02d:%02d.%03d ", tm->tm_hour, tm->tm_min, tm->tm_sec, (int)tv.tv_usec / 1000);
 
-	length = le16(&udpframe[0]);
-	header = le16(&udpframe[2]);
-	printf(format, length, header);
-	for (i = 4; i < length; i++)
-	    printf(" %02x", udpframe[i]);
-	printf("\n");
+	if (udplength >= 4) {
+	    length = le16(&udpframe[0]);
+	    header = le16(&udpframe[2]);
+	    printf(format, length, header);
+	    for (i = 4; i < udplength; i++)
+		printf(" %02x", udpframe[i]);
+	    printf("\n");
+	}
     }
 }
 

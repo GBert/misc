@@ -71,12 +71,12 @@ int send_broadcast(unsigned char *udpframe, char *format, int verbose) {
     }
     if (s != length) {
     } else {
-	print_udp_frame(format, udpframe);
+	print_udp_frame(format, length, udpframe);
     }
     return (EXIT_SUCCESS);
 }
 
-int check_data_xpn(struct z21_data_t *z21_data, int verbose) {
+int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
     uint16_t length, header;
     uint8_t xheader;
 
@@ -84,7 +84,7 @@ int check_data_xpn(struct z21_data_t *z21_data, int verbose) {
     header = le16(&z21_data->udpframe[2]);
 
     if (verbose)
-	printf("Z21 Data Header 0x%04x length %d\n", header, length);
+	print_udp_frame(UDP_SRC_STRG, udplength, z21_data->udpframe);
 
     switch (header) {
     case LAN_X_HEADER:
@@ -349,23 +349,25 @@ int main(int argc, char **argv) {
 	/* received a UDP packet on primary */
 	if (FD_ISSET(z21_data.sp, &readfds)) {
 	    ret = read(z21_data.sp, z21_data.udpframe, MAXDG);
+            printf("FD_ISSET sp, ret %d\n", ret);
 	    if (ret < 0) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
 		break;
-	    } else {
-		check_data_xpn(&z21_data, z21_data.foreground);
-		print_udp_frame(UDP_SRC_STRG, z21_data.udpframe);
+	    } else if (ret) {
+		check_data_xpn(&z21_data, ret, z21_data.foreground);
+		//print_udp_frame(UDP_SRC_STRG, z21_data.udpframe);
 	    }
 	    /* send_broadcast(z21_data.udpframe, UDP_DST_STRG, z21_data.foreground); */
 	}
 	/* received a UDP packet on secondary */
 	if (FD_ISSET(z21_data.ss, &readfds)) {
 	    ret = read(z21_data.ss, z21_data.udpframe, MAXDG);
+            printf("FD_ISSET ss, ret %d\n", ret);
 	    if (ret < 0) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
 		break;
 	    } else {
-		print_udp_frame(UDP_SRC_STRG, z21_data.udpframe);
+		print_udp_frame(UDP_SRC_STRG, ret, z21_data.udpframe);
 	    }
 	    /* TODO */
 	    send_broadcast(z21_data.udpframe, UDP_DST_STRG, z21_data.foreground);
@@ -373,7 +375,8 @@ int main(int argc, char **argv) {
 
 	if (FD_ISSET(z21_data.st, &readfds)) {
 	    int i, n;
-	    if ((n = recv(z21_data.st, recvline, MAXSIZE, 0)) > 0) {
+	    n = recv(z21_data.st, recvline, MAXSIZE, 0);
+	    if (n > 0) {
 		/* check the whole TCP packet, if there are more than one CAN frame included */
 		/* TCP packets with size modulo 13 !=0 are ignored though */
 		if (n % 13) {

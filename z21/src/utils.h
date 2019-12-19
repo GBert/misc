@@ -17,7 +17,7 @@ struct node {
 
 void usec_sleep(int usec);
 uint8_t xor(unsigned char *data, int length);
-void print_udp_frame(char *format, unsigned char *udpframe);
+void print_udp_frame(char *format, int length, unsigned char *udpframe);
 void print_net_frame(char *format, unsigned char *udpframe);
 int time_stamp(char *timestamp);
 
