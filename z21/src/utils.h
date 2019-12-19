@@ -21,6 +21,7 @@ void print_udp_frame(char *format, unsigned char *udpframe);
 void print_net_frame(char *format, unsigned char *udpframe);
 int time_stamp(char *timestamp);
 
+uint16_t le16(uint8_t * u);
 uint16_t be16(uint8_t * u);
 uint32_t be32(uint8_t * u);
 uint32_t le32(uint8_t * u);

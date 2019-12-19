@@ -44,6 +44,10 @@
 
 extern struct z21_data_t z21_data;
 
+uint16_t le16(uint8_t * u) {
+    return (u[1] << 8) | u[0];
+}
+
 uint16_t be16(uint8_t * u) {
     return (u[0] << 8) | u[1];
 }
@@ -97,11 +101,11 @@ void print_udp_frame(char *format, unsigned char *udpframe) {
 	/* print timestamp */
 	gettimeofday(&tv, NULL);
 	tm = localtime(&tv.tv_sec);
-	printf("%02d:%02d:%02d.%03d  ", tm->tm_hour, tm->tm_min, tm->tm_sec, (int)tv.tv_usec / 1000);
+	printf("%02d:%02d:%02d.%03d ", tm->tm_hour, tm->tm_min, tm->tm_sec, (int)tv.tv_usec / 1000);
 
-	length = udpframe[0] + (udpframe[1] << 8);
-	header = udpframe[2] + (udpframe[3] << 8);
-	printf(" 0x%04x 0x%04x", length, header);
+	length = le16(&udpframe[0]);
+	header = le16(&udpframe[2]);
+	printf(format, length, header);
 	for (i = 4; i < length; i++)
 	    printf(" %02x", udpframe[i]);
 	printf("\n");
@@ -116,7 +120,7 @@ void print_net_frame(char *format, unsigned char *netframe) {
     memcpy(&canid, netframe, 4);
     dlc = netframe[4];
     time_stamp(timestamp);
-    printf("%s   ", timestamp);
+    printf("%s ", timestamp);
     printf(format, ntohl(canid) & CAN_EFF_MASK, netframe[4]);
     for (i = 5; i < 5 + dlc; i++) {
         printf(" %02x", netframe[i]);

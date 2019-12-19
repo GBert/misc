@@ -37,8 +37,8 @@ pthread_mutex_t lock;
 
 struct z21_data_t z21_data;
 
-static char *UDP_SRC_STRG     = "->UDP   ";
-static char *UDP_DST_STRG     = "  UDP-> ";
+static char *UDP_SRC_STRG     = "->UDP    ID  0x%04x len 0x%04x";
+static char *UDP_DST_STRG     = "  UDP->  ID  0x%04x len 0x%04x";
 static char *TCP_FORMAT_STRG  = "->TCP    CANID 0x%06X   [%d]";
 static char *TCP_FORMATS_STRG = "->TCP*   CANID 0x%06X   [%d]";
 
@@ -62,7 +62,7 @@ int send_broadcast(unsigned char *udpframe, char *format, int verbose) {
     int s;
     uint16_t length;
 
-    length = udpframe[0] + (udpframe[1] << 8);
+    length = le16(&udpframe[0]);
     s = sendto(z21_data.sb, udpframe, length, 0, (struct sockaddr *)&z21_data.sbaddr, sizeof(z21_data.sbaddr));
 
     if (s < 0) {
@@ -76,12 +76,12 @@ int send_broadcast(unsigned char *udpframe, char *format, int verbose) {
     return (EXIT_SUCCESS);
 }
 
-int check_data(struct z21_data_t *z21_data, int verbose) {
+int check_data_xpn(struct z21_data_t *z21_data, int verbose) {
     uint16_t length, header;
     uint8_t xheader;
 
-    length = be16(&z21_data->udpframe[0]);
-    header = be16(&z21_data->udpframe[2]);
+    length = le16(&z21_data->udpframe[0]);
+    header = le16(&z21_data->udpframe[2]);
 
     if (verbose)
 	printf("Z21 Data Header 0x%04x length %d\n", header, length);
@@ -353,6 +353,7 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
 		break;
 	    } else {
+		check_data_xpn(&z21_data, z21_data.foreground);
 		print_udp_frame(UDP_SRC_STRG, z21_data.udpframe);
 	    }
 	    /* send_broadcast(z21_data.udpframe, UDP_DST_STRG, z21_data.foreground); */
@@ -385,6 +386,7 @@ int main(int argc, char **argv) {
 			else
 			    print_net_frame(TCP_FORMAT_STRG, &recvline[i]);
 		    }
+		    send_broadcast(z21_data.udpframe, UDP_DST_STRG, z21_data.foreground);
 		}
 	    }
 	}
