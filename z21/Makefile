@@ -36,7 +36,7 @@ endef
 define Package/z21emu/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/z21emu $(1)/usr/bin/
-	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/z21emu.init $(1)/etc/init.d/
 endef
 
