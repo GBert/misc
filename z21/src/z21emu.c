@@ -25,6 +25,7 @@
 #include <sys/time.h>
 #include <net/if.h>
 #include <netinet/in.h>
+#include <netinet/tcp.h>
 #include <ifaddrs.h>
 #include <arpa/inet.h>
 #include <linux/can.h>
@@ -37,16 +38,20 @@ pthread_mutex_t lock;
 
 struct z21_data_t z21_data;
 
-static char *UDP_SRC_STRG     = "->UDP    ID  0x%04x len 0x%04x";
-static char *UDP_DST_STRG     = "  UDP->  ID  0x%04x len 0x%04x";
-static char *TCP_FORMAT_STRG  = "->TCP    CANID 0x%06X   [%d]";
-static char *TCP_FORMATS_STRG = "->TCP*   CANID 0x%06X   [%d]";
+static char *UDP_SRC_STRG	= "->UDP    ID  0x%04x len 0x%04x";
+static char *UDP_DST_STRG	= "  UDP->  ID  0x%04x len 0x%04x";
+static char *TCP_FORMAT_STRG	= "->TCP    CANID 0x%06X   [%d]";
+static char *TCP_FORMATS_STRG	= "->TCP*   CANID 0x%06X   [%d]";
 
 char cs2addr[32] = "127.0.0.1";
 
 #if 0
 static unsigned char Z21_VERSION[] = { 0x09, 0x00, 0x40, 0x00, 0xF3, 0x0A, 0x01, 0x23, 0xDB };
 #endif
+static unsigned char LAN_SERIAL_NUMBER_RESPONSE[] = { 0x08, 0x00, 0x10, 0x00, 0x4D, 0xc1, 0x02, 0x00 };
+
+static unsigned char MS_POWER_ON[] 	= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
+static unsigned char MS_POWER_OFF[]	= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -p <port> -s <port>\n", prg);
@@ -76,6 +81,53 @@ int send_broadcast(unsigned char *udpframe, char *format, int verbose) {
     return (EXIT_SUCCESS);
 }
 
+int send_xpn(unsigned char *data, int verbose) {
+    unsigned char udpframe[64];
+    char *format;
+    int length;
+
+    length = le16(data);
+    if (length > 64) {
+	fprintf(stderr, "Xpn length to long: %d\n", length);
+	return (EXIT_FAILURE);
+    }
+    memcpy(udpframe, data, length);
+    format = UDP_DST_STRG;
+    send_broadcast(udpframe, format, verbose);
+    return (EXIT_SUCCESS);
+}
+
+int send_tcp_frame(unsigned char *frame, char *format, int verbose) {
+    int on, s;
+    uint16_t length = 13;
+
+    s = sendto(z21_data.st, frame, length, 0, (struct sockaddr *)&z21_data.staddr, sizeof(z21_data.staddr));
+    if (s < 0) {
+	fprintf(stderr, "TCP write error: %s\n", strerror(errno));
+	return (EXIT_FAILURE);
+    }
+
+    /* disable Nagle - force PUSH */
+    if (setsockopt(z21_data.st, IPPROTO_TCP, TCP_NODELAY, &on, sizeof(on)) < 0) {
+	fprintf(stderr, "error disabling Nagle - TCP_NODELAY on: %s\n", strerror(errno));
+	return (EXIT_FAILURE);
+    }
+
+    if (s != 13) {
+    } else {
+	print_udp_frame(format, length, frame);
+    }
+    return (EXIT_SUCCESS);
+}
+
+int send_can(unsigned char *data, int verbose) {
+    unsigned char frame[16];
+
+    memcpy(frame, data, 13);
+    send_tcp_frame(frame, TCP_FORMAT_STRG, verbose);
+    return (EXIT_SUCCESS);
+}
+
 int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
     uint16_t length, header;
     uint8_t xheader;
@@ -92,15 +144,26 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	switch (xheader) {
 	case LAN_X_GET_FIRMWARE_VERSION:
 	    break;
+	case LAN_X_BC_TRACK_POWER:
+	    if (z21_data->udpframe[5] == 1)
+		send_can(MS_POWER_ON, verbose);
+	    else
+		send_can(MS_POWER_OFF, verbose);
+	    break;
 	default:
 	    break;
 	}
 	break;
     case LAN_GET_SERIAL_NUMBER:
+	send_xpn(LAN_SERIAL_NUMBER_RESPONSE, verbose);
 	break;
     default:
 	break;
     }
+    return (EXIT_SUCCESS);
+}
+
+int check_data_can(struct z21_data_t *z21_data, int verbose) {
     return (EXIT_SUCCESS);
 }
 
@@ -349,7 +412,7 @@ int main(int argc, char **argv) {
 	/* received a UDP packet on primary */
 	if (FD_ISSET(z21_data.sp, &readfds)) {
 	    ret = read(z21_data.sp, z21_data.udpframe, MAXDG);
-            printf("FD_ISSET sp, ret %d\n", ret);
+	    printf("FD_ISSET sp, ret %d\n", ret);
 	    if (ret < 0) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
 		break;
@@ -362,7 +425,7 @@ int main(int argc, char **argv) {
 	/* received a UDP packet on secondary */
 	if (FD_ISSET(z21_data.ss, &readfds)) {
 	    ret = read(z21_data.ss, z21_data.udpframe, MAXDG);
-            printf("FD_ISSET ss, ret %d\n", ret);
+	    printf("FD_ISSET ss, ret %d\n", ret);
 	    if (ret < 0) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
 		break;
