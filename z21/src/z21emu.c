@@ -38,8 +38,8 @@ pthread_mutex_t lock;
 
 struct z21_data_t z21_data;
 
-static char *UDP_SRC_STRG	= "->UDP    ID  0x%04x len 0x%04x";
-static char *UDP_DST_STRG	= "  UDP->  ID  0x%04x len 0x%04x";
+static char *UDP_SRC_STRG	= "->UDP    len  0x%04x ID 0x%04x";
+static char *UDP_DST_STRG	= "  UDP->  len  0x%04x ID 0x%04x";
 static char *TCP_FORMAT_STRG	= "->TCP    CANID 0x%06X   [%d]";
 static char *TCP_FORMATS_STRG	= "->TCP*   CANID 0x%06X   [%d]";
 
@@ -155,7 +155,8 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	}
 	break;
     case LAN_GET_SERIAL_NUMBER:
-	send_xpn(LAN_SERIAL_NUMBER_RESPONSE, verbose);
+	if (length == 4)
+	    send_xpn(LAN_SERIAL_NUMBER_RESPONSE, verbose);
 	break;
     default:
 	break;
@@ -439,6 +440,7 @@ int main(int argc, char **argv) {
 	if (FD_ISSET(z21_data.st, &readfds)) {
 	    int i, n;
 	    n = recv(z21_data.st, recvline, MAXSIZE, 0);
+	    printf("FD_ISSET st, n %d\n", n);
 	    if (n > 0) {
 		/* check the whole TCP packet, if there are more than one CAN frame included */
 		/* TCP packets with size modulo 13 !=0 are ignored though */
