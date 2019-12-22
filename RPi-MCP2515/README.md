@@ -71,7 +71,7 @@ bzw: in der Datei /etc/network/interfaces folgendes hinzufügen:
 ```
 # CAN Interface
 auto can0
-iface can0 inet manual
+iface can0 can static
         pre-up /sbin/ip link set $IFACE type can bitrate 250000 restart-ms 100
         up /sbin/ifconfig $IFACE up
         down /sbin/ifconfig $IFACE down
