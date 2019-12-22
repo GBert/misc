@@ -1,11 +1,12 @@
 const int revisionnr = 
-312
+313
 ;
 const char* commithash = 
-"2734bfa2a57232911157173162f2c6958b182fc4";
+"57c1aaf3e62eebbc1fef67ab2022d5f10432977d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"313 2019-12-22 12:27:53 +0100 wiodlg: deep sleep option added\n" \
 "312 2019-12-21 11:49:10 +0100 clock: fontsize correction\n" \
 "311 2019-12-18 14:09:05 +0100 desktoplink.cmd: added extra quots around the path parameters to allow blanks\n" \
 "310 2019-12-18 13:18:39 +0100 locdialog: crash fix for init functions in case of no loco selected\n" \
