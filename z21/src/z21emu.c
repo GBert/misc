@@ -50,7 +50,7 @@ static unsigned char Z21_VERSION[] = { 0x09, 0x00, 0x40, 0x00, 0xF3, 0x0A, 0x01,
 #endif
 static unsigned char LAN_SERIAL_NUMBER_RESPONSE[] = { 0x08, 0x00, 0x10, 0x00, 0x4D, 0xc1, 0x02, 0x00 };
 
-static unsigned char MS_POWER_ON[] 	= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
+static unsigned char MS_POWER_ON[]	= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
 static unsigned char MS_POWER_OFF[]	= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 void print_usage(char *prg) {
@@ -130,7 +130,7 @@ int send_can(unsigned char *data, int verbose) {
 
 int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
     uint16_t length, header;
-    uint8_t xheader;
+    uint8_t db0, xheader;
 
     length = le16(&z21_data->udpframe[0]);
     header = le16(&z21_data->udpframe[2]);
@@ -139,24 +139,35 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	print_udp_frame(UDP_SRC_STRG, udplength, z21_data->udpframe);
 
     switch (header) {
-    case LAN_X_HEADER:
-	xheader = z21_data->udpframe[4];
-	switch (xheader) {
-	case LAN_X_GET_FIRMWARE_VERSION:
-	    break;
-	case LAN_X_BC_TRACK_POWER:
-	    if (z21_data->udpframe[5] == 1)
-		send_can(MS_POWER_ON, verbose);
-	    else
-		send_can(MS_POWER_OFF, verbose);
-	    break;
-	default:
-	    break;
-	}
-	break;
     case LAN_GET_SERIAL_NUMBER:
 	send_xpn(LAN_SERIAL_NUMBER_RESPONSE, verbose);
 	break;
+    case LAN_GET_CODE:
+	break;
+    case LAN_GET_HWINFO:
+	break;
+    case LAN_LOGOFF:
+	break;
+    case LAN_X_HEADER:
+	xheader = z21_data->udpframe[4];
+	switch (xheader) {
+	case 0x21:
+	    db0 = z21_data->udpframe[5];
+	    switch (db0) {
+	    case LAN_X_GET_STATUS:
+		break;
+	    case LAN_X_GET_VERSION:
+		break;
+	    case LAN_X_SET_TRACK_POWER_ON:
+		send_can(MS_POWER_ON, verbose);
+		break;
+	    case LAN_X_SET_TRACK_POWER_OFF:
+		send_can(MS_POWER_OFF, verbose);
+		break;
+	    default:
+		break;
+	    }
+	}
     default:
 	break;
     }

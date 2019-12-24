@@ -42,10 +42,15 @@ struct z21_data_t {
     unsigned char udpframe[MAXDG];
 };
 
-#define LAN_X_HEADER			0x40  /* not in Spezifikation! */
 #define LAN_GET_SERIAL_NUMBER		0x10
+#define LAN_GET_CODE			0x18
+#define LAN_GET_HWINFO			0x1A
 #define LAN_LOGOFF			0x30
-#define LAN_X_GET_SETTING		0x21  
+#define LAN_X_HEADER			0x40
+#define LAN_X_GET_VERSION		0x21
+#define LAN_X_GET_STATUS		0x24
+#define LAN_X_SET_TRACK_POWER_OFF	0x80
+#define LAN_X_SET_TRACK_POWER_ON	0x81
 #define LAN_X_BC_TRACK_POWER		0x61
 #define LAN_X_UNKNOWN_COMMAND		0x61
 #define LAN_X_STATUS_CHANGED		0x62
@@ -56,7 +61,6 @@ struct z21_data_t {
 #define LAN_GET_BROADCASTFLAGS		0x51
 #define LAN_SYSTEMSTATE_DATACHANGED	0x84
 #define LAN_SYSTEMSTATE_GETDATA		0x85  //AW: LAN_SYSTEMSTATE_DATACHANGED
-#define LAN_GET_HWINFO			0x1A
 #define LAN_GET_LOCOMODE		0x60
 #define LAN_SET_LOCOMODE		0x61
 #define LAN_GET_TURNOUTMODE		0x70
