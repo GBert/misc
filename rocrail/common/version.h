@@ -1,11 +1,17 @@
 const int revisionnr = 
-331
+337
 ;
 const char* commithash = 
-"51ec0a5461dd695a072c1131a2dbc951c16f348d";
+"434303abf20c0013bc4ef04f2cfe3164b711d797";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"337 2019-12-29 18:17:33 +0100 loc: take over discoverred function text in case not set in an existing fundef child node\n" \
+"336 2019-12-29 17:03:22 +0100 clntcon: check socket\n" \
+"335 2019-12-29 16:18:07 +0100 item: dispatch mouse motion to planpanel in case of edit modplan\n" \
+"334 2019-12-29 15:27:07 +0100 zimocan: use target as nid in case of group 0x01 (accessory)\n" \
+"333 2019-12-29 14:59:02 +0100 block: only take over wheel count in case of arrival pending\n" \
+"332 2019-12-29 11:51:08 +0100 clntcon: check if wio socket is still valid befor using it\n" \
 "331 2019-12-28 15:41:19 +0100 clntcon: fix for state broadcast\n" \
 "330 2019-12-28 13:28:44 +0100 clntcon: fix for WIO RASCII read size\n" \
 "329 2019-12-28 11:09:11 +0100 wiodlg: label correction\n" \
