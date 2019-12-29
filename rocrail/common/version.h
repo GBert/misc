@@ -1,11 +1,29 @@
 const int revisionnr = 
-313
+331
 ;
 const char* commithash = 
-"57c1aaf3e62eebbc1fef67ab2022d5f10432977d";
+"51ec0a5461dd695a072c1131a2dbc951c16f348d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"331 2019-12-28 15:41:19 +0100 clntcon: fix for state broadcast\n" \
+"330 2019-12-28 13:28:44 +0100 clntcon: fix for WIO RASCII read size\n" \
+"329 2019-12-28 11:09:11 +0100 wiodlg: label correction\n" \
+"328 2019-12-28 09:08:34 +0100 wiodlg: option display rotate added\n" \
+"327 2019-12-27 18:13:10 +0100 ecos function description\n" \
+"326 2019-12-27 16:46:01 +0100 ecos: only synchronise function descriptions in case the sync option is set\n" \
+"325 2019-12-26 21:08:08 +0100 ecos: support for funcicon\n" \
+"324 2019-12-26 15:04:17 +0100 guiframe: avoid saving empty perspective id\n" \
+"323 2019-12-26 14:42:13 +0100 guiframe: check for a valid perspective id before adding it to the submenu\n" \
+"322 2019-12-26 12:02:48 +0100 ecos,loc: discover function descriptions\n" \
+"321 2019-12-25 09:23:47 +0100 selectdialog: prefix option added\n" \
+"320 2019-12-24 08:35:57 +0100 clntcon: publish state events to WIO clients\n" \
+"319 2019-12-23 19:20:43 +0100 wio: shutdown event added\n" \
+"318 2019-12-23 18:06:36 +0100 wio: state event for throttle statusbar\n" \
+"317 2019-12-23 11:51:11 +0100 wiodlg: sync option added\n" \
+"316 2019-12-23 11:40:44 +0100 wio: fix for NULL throttleid\n" \
+"315 2019-12-23 10:40:27 +0100 wio: add throttle id\n" \
+"314 2019-12-22 18:33:17 +0100 wio: power commands support\n" \
 "313 2019-12-22 12:27:53 +0100 wiodlg: deep sleep option added\n" \
 "312 2019-12-21 11:49:10 +0100 clock: fontsize correction\n" \
 "311 2019-12-18 14:09:05 +0100 desktoplink.cmd: added extra quots around the path parameters to allow blanks\n" \
