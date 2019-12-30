@@ -1,11 +1,12 @@
 const int revisionnr = 
-337
+338
 ;
 const char* commithash = 
-"434303abf20c0013bc4ef04f2cfe3164b711d797";
+"88b50dfbed490f5018b256eb4b145e9052facb82";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"338 2019-12-30 10:37:29 +0100 rascii: fix for evaluating rfid\n" \
 "337 2019-12-29 18:17:33 +0100 loc: take over discoverred function text in case not set in an existing fundef child node\n" \
 "336 2019-12-29 17:03:22 +0100 clntcon: check socket\n" \
 "335 2019-12-29 16:18:07 +0100 item: dispatch mouse motion to planpanel in case of edit modplan\n" \
