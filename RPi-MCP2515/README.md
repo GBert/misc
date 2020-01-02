@@ -67,7 +67,7 @@ CAN Interface konfigurieren
 ```
 sudo ip link set can0 up type can bitrate 250000 restart-ms 100
 ```
-bzw: in der Datei /etc/network/interfaces folgendes hinzufügen:
+bzw: die Datei /etc/network/interfaces.d/can0 wie folgt anlegen:
 ```
 iface can0 can static
     bitrate 250000
