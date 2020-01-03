@@ -1,11 +1,17 @@
 const int revisionnr = 
-338
+344
 ;
 const char* commithash = 
-"88b50dfbed490f5018b256eb4b145e9052facb82";
+"29fe404672902e74e15482c8e4fb6a8951ccd154";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"344 2020-01-01 18:27:27 +0100 added missing translation\n" \
+"343 2020-01-01 18:26:20 +0100 cv: update grid on set\n" \
+"342 2020-01-01 18:08:05 +0100 normalize version\n" \
+"341 2020-01-01 10:53:18 +0100 revert version.h to the original\n" \
+"340 2019-12-31 22:47:57 +0100 copyright update\n" \
+"339 2019-12-31 16:39:49 +0100 mbus: unique threadname for the tcp reader\n" \
 "338 2019-12-30 10:37:29 +0100 rascii: fix for evaluating rfid\n" \
 "337 2019-12-29 18:17:33 +0100 loc: take over discoverred function text in case not set in an existing fundef child node\n" \
 "336 2019-12-29 17:03:22 +0100 clntcon: check socket\n" \
