@@ -1,11 +1,16 @@
 const int revisionnr = 
-344
+349
 ;
 const char* commithash = 
-"29fe404672902e74e15482c8e4fb6a8951ccd154";
+"93fd6a9c3ef6da7debd4b35f157e88715f03b7a7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"349 2020-01-03 16:38:53 +0100 wiodlg: added html button to open browser\n" \
+"348 2020-01-03 15:05:11 +0100 translation merge: sl, fr, sr_latin, cs, sv, de, nl\n" \
+"347 2020-01-03 14:01:44 +0100 selectdialog,planpanel: use the prefix field as AMP comment\n" \
+"346 2020-01-03 13:23:54 +0100 planpanel: add comment to the generated AMP\n" \
+"345 2020-01-03 13:21:35 +0100 selectdialog, planpanel: create an AMP from selection\n" \
 "344 2020-01-01 18:27:27 +0100 added missing translation\n" \
 "343 2020-01-01 18:26:20 +0100 cv: update grid on set\n" \
 "342 2020-01-01 18:08:05 +0100 normalize version\n" \
