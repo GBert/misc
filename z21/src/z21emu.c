@@ -54,7 +54,7 @@ static unsigned char MS_POWER_ON[] = { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00,
 static unsigned char MS_POWER_OFF[] = { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 static unsigned char LAN_X_BC_TRACK_POWER_OFF[] = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x00, 0x61 };
-static unsigned char LAN_X_BC_TRACK_POWER_ON[] = { 0x07, 0x00, 0x40, 0x00, 0x60, 0x00, 0x60 };
+static unsigned char LAN_X_BC_TRACK_POWER_ON[] = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x01, 0x60 };
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -p <port> -s <port>\n", prg);
@@ -179,14 +179,14 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
     return (EXIT_SUCCESS);
 }
 
-int check_data_can(struct z21_data_t *z21_data, int verbose) {
+int check_data_can(uint8_t *data, int verbose) {
     uint32_t uid;
 
-    switch ((be32(z21_data->udpframe) & 0x00FF0000UL) >> 16)
+    switch ((be32(data) & 0x00FF0000UL) >> 16)
     case 0x01:
 	{
-	    uid = be32(&z21_data->udpframe[5]);
-	    switch (z21_data->udpframe[9]) {
+	    uid = be32(&data[5]);
+	    switch (data[9]) {
 	    case 0x00:
 		if (uid)
 		    printf("System: UID 0x%08X ", uid);
@@ -493,8 +493,8 @@ int main(int argc, char **argv) {
 			    print_net_frame(TCP_FORMATS_STRG, &recvline[i]);
 			else
 			    print_net_frame(TCP_FORMAT_STRG, &recvline[i]);
+			check_data_can(&recvline[i], z21_data.foreground);
 		    }
-		    send_broadcast(z21_data.udpframe, UDP_DST_STRG, z21_data.foreground);
 		}
 	    }
 	}
