@@ -38,10 +38,10 @@ pthread_mutex_t lock;
 
 struct z21_data_t z21_data;
 
-static char *UDP_SRC_STRG	= "->UDP    len 0x%04x ID 0x%04x";
-static char *UDP_DST_STRG	= "  UDP->  len 0x%04x ID 0x%04x";
-static char *TCP_FORMAT_STRG	= "->TCP    CANID 0x%06X   [%d]";
-static char *TCP_FORMATS_STRG	= "->TCP*   CANID 0x%06X   [%d]";
+static char *UDP_SRC_STRG = "->UDP    len 0x%04x ID 0x%04x";
+static char *UDP_DST_STRG = "  UDP->  len 0x%04x ID 0x%04x";
+static char *TCP_FORMAT_STRG = "->TCP    CANID 0x%06X   [%d]";
+static char *TCP_FORMATS_STRG = "->TCP*   CANID 0x%06X   [%d]";
 
 char cs2addr[32] = "127.0.0.1";
 
@@ -50,8 +50,11 @@ static unsigned char Z21_VERSION[] = { 0x09, 0x00, 0x40, 0x00, 0xF3, 0x0A, 0x01,
 #endif
 static unsigned char LAN_SERIAL_NUMBER_RESPONSE[] = { 0x08, 0x00, 0x10, 0x00, 0x4D, 0xc1, 0x02, 0x00 };
 
-static unsigned char MS_POWER_ON[]	= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
-static unsigned char MS_POWER_OFF[]	= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static unsigned char MS_POWER_ON[] = { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
+static unsigned char MS_POWER_OFF[] = { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+
+static unsigned char LAN_X_BC_TRACK_POWER_OFF[] = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x00, 0x61 };
+static unsigned char LAN_X_BC_TRACK_POWER_ON[] = { 0x07, 0x00, 0x40, 0x00, 0x60, 0x00, 0x60 };
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -p <port> -s <port>\n", prg);
@@ -177,6 +180,31 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 }
 
 int check_data_can(struct z21_data_t *z21_data, int verbose) {
+    uint32_t uid;
+
+    switch ((be32(z21_data->udpframe) & 0x00FF0000UL) >> 16)
+    case 0x01:
+	{
+	    uid = be32(&z21_data->udpframe[5]);
+	    switch (z21_data->udpframe[9]) {
+	    case 0x00:
+		if (uid)
+		    printf("System: UID 0x%08X ", uid);
+		else
+		    printf("System: alle ");
+		printf("Stopp\n");
+		send_xpn(LAN_X_BC_TRACK_POWER_OFF, verbose);
+		break;
+	    case 0x01:
+		if (uid)
+		    printf("System: UID 0x%08X ", uid);
+		else
+		    printf("System: alle ");
+		printf("Go\n");
+		send_xpn(LAN_X_BC_TRACK_POWER_ON, verbose);
+		break;
+	    }
+	}
     return (EXIT_SUCCESS);
 }
 
