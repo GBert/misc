@@ -38,8 +38,8 @@ pthread_mutex_t lock;
 
 struct z21_data_t z21_data;
 
-static char *UDP_SRC_STRG	= "->UDP    len  0x%04x ID 0x%04x";
-static char *UDP_DST_STRG	= "  UDP->  len  0x%04x ID 0x%04x";
+static char *UDP_SRC_STRG	= "->UDP    len 0x%04x ID 0x%04x";
+static char *UDP_DST_STRG	= "  UDP->  len 0x%04x ID 0x%04x";
 static char *TCP_FORMAT_STRG	= "->TCP    CANID 0x%06X   [%d]";
 static char *TCP_FORMATS_STRG	= "->TCP*   CANID 0x%06X   [%d]";
 
@@ -82,7 +82,7 @@ int send_broadcast(unsigned char *udpframe, char *format, int verbose) {
 }
 
 int send_xpn(unsigned char *data, int verbose) {
-    unsigned char udpframe[64];
+    unsigned char udpxpn[64];
     char *format;
     int length;
 
@@ -91,9 +91,9 @@ int send_xpn(unsigned char *data, int verbose) {
 	fprintf(stderr, "Xpn length to long: %d\n", length);
 	return (EXIT_FAILURE);
     }
-    memcpy(udpframe, data, length);
+    memcpy(udpxpn, data, length);
     format = UDP_DST_STRG;
-    send_broadcast(udpframe, format, verbose);
+    send_broadcast(udpxpn, format, verbose);
     return (EXIT_SUCCESS);
 }
 
