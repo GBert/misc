@@ -1,11 +1,15 @@
 const int revisionnr = 
-350
+354
 ;
 const char* commithash = 
-"0e14c3964abda6d28d1fefbcf0ee9572828c3c67";
+"d6ee97154a27ab00405ae68d29f6c1fd54626fe6";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"354 2020-01-04 17:23:46 +0100 switch: allow * as loco ID to unlock\n" \
+"353 2020-01-04 16:01:05 +0100 clntcon: crash fix for cleaning up socket on client disconnect\n" \
+"352 2020-01-04 13:23:47 +0100 mbus: revert master option\n" \
+"351 2020-01-04 12:28:23 +0100 wio: save WIO hostname for use in the dialog\n" \
 "350 2020-01-04 09:36:06 +0100 planpanel: added save as dialog after selecting action AMP\n" \
 "349 2020-01-03 16:38:53 +0100 wiodlg: added html button to open browser\n" \
 "348 2020-01-03 15:05:11 +0100 translation merge: sl, fr, sr_latin, cs, sv, de, nl\n" \
