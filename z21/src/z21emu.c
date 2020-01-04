@@ -57,6 +57,7 @@ static unsigned char XPN_X_STATUS_CHANGED[]       = { 0x08, 0x00, 0x40, 0x00, 0x
 static unsigned char XPN_X_BC_TRACK_POWER_OFF[]   = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x00, 0x61 };
 static unsigned char XPN_X_BC_TRACK_POWER_ON[]    = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x01, 0x60 };
 static unsigned char XPN_X_BC_STOPPED[]           = { 0x07, 0x00, 0x40, 0x00, 0x81, 0x00, 0x81 };
+static unsigned char XPN_X_LOCO_INFO[]            = { 0x0E, 0x00, 0x40, 0x00, 0xEF, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -p <port> -s <port>\n", prg);
@@ -133,6 +134,20 @@ int send_can(unsigned char *data, int verbose) {
     return (EXIT_SUCCESS);
 }
 
+int send_xpn_loco_info(uint16_t loco_id, int verbose) {
+    unsigned char xpnframe[32];
+
+    memcpy(xpnframe, XPN_X_LOCO_INFO, sizeof(XPN_X_LOCO_INFO));
+    xpnframe[5] = loco_id >> 8;
+    xpnframe[6] = loco_id & 0xff;
+    /* TODO */
+
+    xpnframe[13] = xor(&xpnframe[4], 8);
+    send_xpn(xpnframe, verbose);
+
+    return (EXIT_SUCCESS);
+}
+
 int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
     uint16_t length, header, loco_id;
     uint8_t db0, xheader;
@@ -174,12 +189,17 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	    default:
 		break;
 	    }
-	}
-	break;
-    case LAN_X_GET_LOCO_INFO:
-	if (length == 9) {
-	    loco_id = be16(&z21_data->udpframe[6]);
-
+	case LAN_X_GET_LOCO_INFO:
+	    if (length == 9) {
+		loco_id = be16(&z21_data->udpframe[6]);
+		send_xpn_loco_info(loco_id, verbose);
+	    }
+	    break;
+	case LAN_X_SET_LOCO:
+	    if (length == 10) {
+		loco_id = be16(&z21_data->udpframe[6]);
+	    }
+	    break;
 	}
 	break;
     default:
