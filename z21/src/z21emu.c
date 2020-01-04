@@ -53,8 +53,10 @@ static unsigned char MS_POWER_ON[]	= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00,
 static unsigned char MS_POWER_OFF[]	= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 static unsigned char LAN_SERIAL_NUMBER_RESPONSE[] = { 0x08, 0x00, 0x10, 0x00, 0x4D, 0xC1, 0x02, 0x00 };
-static unsigned char LAN_X_BC_TRACK_POWER_OFF[]   = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x00, 0x61 };
-static unsigned char LAN_X_BC_TRACK_POWER_ON[]    = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x01, 0x60 };
+static unsigned char XPN_X_STATUS_CHANGED[]       = { 0x08, 0x00, 0x40, 0x00, 0x62, 0x22, 0x00, 0x40 };
+static unsigned char XPN_X_BC_TRACK_POWER_OFF[]   = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x00, 0x61 };
+static unsigned char XPN_X_BC_TRACK_POWER_ON[]    = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x01, 0x60 };
+static unsigned char XPN_X_BC_STOPPED[]           = { 0x07, 0x00, 0x40, 0x00, 0x81, 0x00, 0x81 };
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -p <port> -s <port>\n", prg);
@@ -132,7 +134,7 @@ int send_can(unsigned char *data, int verbose) {
 }
 
 int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
-    uint16_t length, header;
+    uint16_t length, header, loco_id;
     uint8_t db0, xheader;
 
     length = le16(&z21_data->udpframe[0]);
@@ -159,6 +161,7 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	    db0 = z21_data->udpframe[5];
 	    switch (db0) {
 	    case LAN_X_GET_STATUS:
+		send_xpn(XPN_X_STATUS_CHANGED, verbose);
 		break;
 	    case LAN_X_GET_VERSION:
 		break;
@@ -171,6 +174,12 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	    default:
 		break;
 	    }
+	}
+	break;
+    case LAN_X_GET_LOCO_INFO:
+	if (length == 9) {
+	    loco_id = be16(&z21_data->udpframe[6]);
+
 	}
 	break;
     default:
@@ -193,7 +202,7 @@ int check_data_can(uint8_t *data, int verbose) {
 		else
 		    printf("System: alle ");
 		printf("Stopp\n");
-		send_xpn(LAN_X_BC_TRACK_POWER_OFF, verbose);
+		send_xpn(XPN_X_BC_TRACK_POWER_OFF, verbose);
 		break;
 	    case 0x01:
 		if (uid)
@@ -201,7 +210,7 @@ int check_data_can(uint8_t *data, int verbose) {
 		else
 		    printf("System: alle ");
 		printf("Go\n");
-		send_xpn(LAN_X_BC_TRACK_POWER_ON, verbose);
+		send_xpn(XPN_X_BC_TRACK_POWER_ON, verbose);
 		break;
 	    }
 	}
