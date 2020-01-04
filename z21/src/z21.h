@@ -38,6 +38,7 @@ struct z21_data_t {
     int sc;
     int st;
     int foreground;
+    int power;
     char *format;
     unsigned char udpframe[MAXDG];
 };

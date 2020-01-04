@@ -151,6 +151,7 @@ int send_xpn_loco_info(uint16_t loco_id, int verbose) {
 int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
     uint16_t length, header, loco_id;
     uint8_t db0, xheader;
+    unsigned char xpnframe[32];
 
     length = le16(&z21_data->udpframe[0]);
     header = le16(&z21_data->udpframe[2]);
@@ -176,14 +177,22 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	    db0 = z21_data->udpframe[5];
 	    switch (db0) {
 	    case LAN_X_GET_STATUS:
-		send_xpn(XPN_X_STATUS_CHANGED, verbose);
+		memcpy(xpnframe, XPN_X_STATUS_CHANGED, sizeof(XPN_X_STATUS_CHANGED));
+		if (z21_data->power == 0)
+		    xpnframe[6] = 0x02;
+		else
+		    xpnframe[6] = 0x00;
+		xpnframe[7] = xor(&xpnframe[4], 3);
+		send_xpn(xpnframe, verbose);
 		break;
 	    case LAN_X_GET_VERSION:
 		break;
 	    case LAN_X_SET_TRACK_POWER_ON:
+		z21_data->power=1;
 		send_can(MS_POWER_ON, verbose);
 		break;
 	    case LAN_X_SET_TRACK_POWER_OFF:
+		z21_data->power=0;
 		send_can(MS_POWER_OFF, verbose);
 		break;
 	    default:
@@ -208,7 +217,7 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
     return (EXIT_SUCCESS);
 }
 
-int check_data_can(uint8_t *data, int verbose) {
+int check_data_can(struct z21_data_t *z21_data, uint8_t *data, int verbose) {
     uint32_t uid;
 
     switch ((be32(data) & 0x00FF0000UL) >> 16)
@@ -522,7 +531,7 @@ int main(int argc, char **argv) {
 			    print_net_frame(TCP_FORMATS_STRG, &recvline[i]);
 			else
 			    print_net_frame(TCP_FORMAT_STRG, &recvline[i]);
-			check_data_can(&recvline[i], z21_data.foreground);
+			check_data_can(&z21_data, &recvline[i], z21_data.foreground);
 		    }
 		}
 	    }
