@@ -1,11 +1,12 @@
 const int revisionnr = 
-354
+355
 ;
 const char* commithash = 
-"d6ee97154a27ab00405ae68d29f6c1fd54626fe6";
+"c60cf7acd8d1dbca92d8a62c44ce8f064027dfb8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"355 2020-01-04 18:06:02 +0100 controler: variable typo fix\n" \
 "354 2020-01-04 17:23:46 +0100 switch: allow * as loco ID to unlock\n" \
 "353 2020-01-04 16:01:05 +0100 clntcon: crash fix for cleaning up socket on client disconnect\n" \
 "352 2020-01-04 13:23:47 +0100 mbus: revert master option\n" \

@@ -7,8 +7,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rocrail
-PKG_REV:=d6ee97154a
-PKG_VERSION:=n354
+PKG_REV:=c60cf7acd8
+PKG_VERSION:=n355
 PKG_RELEASE:=
 
 PKG_SOURCE_PROTO:=git
