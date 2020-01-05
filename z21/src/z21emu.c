@@ -45,19 +45,19 @@ static char *TCP_FORMATS_STRG	= "->TCP*   CANID 0x%06X   [%d]";
 
 char cs2addr[32] = "127.0.0.1";
 
-#if 0
-static unsigned char Z21_VERSION[] = { 0x09, 0x00, 0x40, 0x00, 0xF3, 0x0A, 0x01, 0x23, 0xDB };
-#endif
 
 static unsigned char MS_POWER_ON[]	= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
 static unsigned char MS_POWER_OFF[]	= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
-static unsigned char LAN_SERIAL_NUMBER_RESPONSE[] = { 0x08, 0x00, 0x10, 0x00, 0x4D, 0xC1, 0x02, 0x00 };
+static unsigned char XPN_SERIAL_NUMBER_RESPONSE[] = { 0x08, 0x00, 0x10, 0x00, 0x4D, 0xC1, 0x02, 0x00 };
 static unsigned char XPN_X_STATUS_CHANGED[]       = { 0x08, 0x00, 0x40, 0x00, 0x62, 0x22, 0x00, 0x40 };
 static unsigned char XPN_X_BC_TRACK_POWER_OFF[]   = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x00, 0x61 };
 static unsigned char XPN_X_BC_TRACK_POWER_ON[]    = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x01, 0x60 };
-static unsigned char XPN_X_BC_STOPPED[]           = { 0x07, 0x00, 0x40, 0x00, 0x81, 0x00, 0x81 };
 static unsigned char XPN_X_LOCO_INFO[]            = { 0x0E, 0x00, 0x40, 0x00, 0xEF, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+/*
+static unsigned char XPN_X_BC_STOPPED[]           = { 0x07, 0x00, 0x40, 0x00, 0x81, 0x00, 0x81 };
+static unsigned char Z21_VERSION[]                = { 0x09, 0x00, 0x40, 0x00, 0xF3, 0x0A, 0x01, 0x23, 0xDB };
+*/
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -p <port> -s <port>\n", prg);
@@ -162,7 +162,7 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
     switch (header) {
     case LAN_GET_SERIAL_NUMBER:
 	if (length == 4)
-	    send_xpn(LAN_SERIAL_NUMBER_RESPONSE, verbose);
+	    send_xpn(XPN_SERIAL_NUMBER_RESPONSE, verbose);
 	break;
     case LAN_GET_CODE:
 	break;
@@ -178,21 +178,18 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	    switch (db0) {
 	    case LAN_X_GET_STATUS:
 		memcpy(xpnframe, XPN_X_STATUS_CHANGED, sizeof(XPN_X_STATUS_CHANGED));
-		if (z21_data->power == 0)
-		    xpnframe[6] = 0x02;
-		else
-		    xpnframe[6] = 0x00;
+		xpnframe[6] = z21_data->power ? 0x00 : 0x02;
 		xpnframe[7] = xor(&xpnframe[4], 3);
 		send_xpn(xpnframe, verbose);
 		break;
 	    case LAN_X_GET_VERSION:
 		break;
 	    case LAN_X_SET_TRACK_POWER_ON:
-		z21_data->power=1;
+		z21_data->power = 1;
 		send_can(MS_POWER_ON, verbose);
 		break;
 	    case LAN_X_SET_TRACK_POWER_OFF:
-		z21_data->power=0;
+		z21_data->power = 0;
 		send_can(MS_POWER_OFF, verbose);
 		break;
 	    default:
@@ -226,18 +223,12 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t *data, int verbose) {
 	    uid = be32(&data[5]);
 	    switch (data[9]) {
 	    case 0x00:
-		if (uid)
-		    printf("System: UID 0x%08X ", uid);
-		else
-		    printf("System: alle ");
+		uid ? printf("System: UID 0x%08X ", uid) : printf("System: alle ");
 		printf("Stopp\n");
 		send_xpn(XPN_X_BC_TRACK_POWER_OFF, verbose);
 		break;
 	    case 0x01:
-		if (uid)
-		    printf("System: UID 0x%08X ", uid);
-		else
-		    printf("System: alle ");
+		uid ? printf("System: UID 0x%08X ", uid) : printf("System: alle ");
 		printf("Go\n");
 		send_xpn(XPN_X_BC_TRACK_POWER_ON, verbose);
 		break;
