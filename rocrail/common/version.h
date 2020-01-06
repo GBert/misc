@@ -1,11 +1,14 @@
 const int revisionnr = 
-355
+358
 ;
 const char* commithash = 
-"c60cf7acd8d1dbca92d8a62c44ce8f064027dfb8";
+"ff1f99bc05acdb9f18b184fd885f810e951c4af2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"358 2020-01-06 15:07:37 +0100 wio: support port type sound\n" \
+"357 2020-01-06 10:37:19 +0100 wio: sound action added\n" \
+"356 2020-01-05 08:17:06 +0100 loc: sent shunting commands to consist members too\n" \
 "355 2020-01-04 18:06:02 +0100 controler: variable typo fix\n" \
 "354 2020-01-04 17:23:46 +0100 switch: allow * as loco ID to unlock\n" \
 "353 2020-01-04 16:01:05 +0100 clntcon: crash fix for cleaning up socket on client disconnect\n" \
