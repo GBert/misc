@@ -1465,8 +1465,7 @@ int main(int argc, char **argv) {
 		if (verbose) {
 		    printf("%s ", timestamp);
 		    printf("%04u UDP %s -> ", pkt_counter, inet_ntoa(ip_hdr->ip_src));
-		    printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(myudp->uh_sport),
-			   ntohs(myudp->uh_dport));
+		    printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(myudp->uh_sport), ntohs(myudp->uh_dport));
 		    printf("  packet_length %d\n", size_payload);
 		}
 		unsigned char *dump = (unsigned char *)pkt_ptr + IPHDR_LEN + sizeof(struct udphdr);
@@ -1490,8 +1489,7 @@ int main(int argc, char **argv) {
 			if (verbose) {
 			    printf("%s ", timestamp);
 			    printf("%04u HTTP %s -> ", pkt_counter, inet_ntoa(ip_hdr->ip_src));
-			    printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(mytcp->th_sport),
-				   ntohs(mytcp->th_dport));
+			    printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(mytcp->th_sport), ntohs(mytcp->th_dport));
 			    printf("  packet_length %d\n", size_payload);
 			}
 			printf("%s %.3d>  HTTP    -> ", timestamp, (ip_hdr->ip_src.s_addr) >> 24);
@@ -1528,7 +1526,7 @@ int main(int argc, char **argv) {
 	    printf(RESET);
 	}
 	return (EXIT_SUCCESS);
-	/* reading from CAN socket */
+    /* reading from CAN socket */
     } else {
 
 	memset(&caddr, 0, sizeof(caddr));
