@@ -32,6 +32,7 @@
 
 #include "utils.h"
 #include "z21.h"
+#include "read-cs2-config.h"
 
 struct sockaddr_in *bsa;
 pthread_mutex_t lock;
@@ -43,8 +44,9 @@ static char *UDP_DST_STRG	= "  UDP->  len 0x%04x ID 0x%04x";
 static char *TCP_FORMAT_STRG	= "->TCP    CANID 0x%06X   [%d]";
 static char *TCP_FORMATS_STRG	= "->TCP*   CANID 0x%06X   [%d]";
 
+#define MAXLINE	256
 char cs2addr[32] = "127.0.0.1";
-
+char config_dir[MAXLINE] = "/www/config/";
 
 static unsigned char MS_POWER_ON[]	= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
 static unsigned char MS_POWER_OFF[]	= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -54,14 +56,16 @@ static unsigned char XPN_X_STATUS_CHANGED[]       = { 0x08, 0x00, 0x40, 0x00, 0x
 static unsigned char XPN_X_BC_TRACK_POWER_OFF[]   = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x00, 0x61 };
 static unsigned char XPN_X_BC_TRACK_POWER_ON[]    = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x01, 0x60 };
 static unsigned char XPN_X_LOCO_INFO[]            = { 0x0E, 0x00, 0x40, 0x00, 0xEF, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static unsigned char Z21_VERSION[]                = { 0x09, 0x00, 0x40, 0x00, 0xF3, 0x0A, 0x01, 0x23, 0xDB };
+
 /*
 static unsigned char XPN_X_BC_STOPPED[]           = { 0x07, 0x00, 0x40, 0x00, 0x81, 0x00, 0x81 };
-static unsigned char Z21_VERSION[]                = { 0x09, 0x00, 0x40, 0x00, 0xF3, 0x0A, 0x01, 0x23, 0xDB };
 */
 
 void print_usage(char *prg) {
-    fprintf(stderr, "\nUsage: %s -p <port> -s <port>\n", prg);
-    fprintf(stderr, "   Version 0.1\n\n");
+    fprintf(stderr, "\nUsage: %s -c config_dir -p <port> -s <port>\n", prg);
+    fprintf(stderr, "   Version 0.2\n\n");
+    fprintf(stderr, "         -c <config_dir>     set the config directory - default %s\n", config_dir);
     fprintf(stderr, "         -p <port>           primary UDP port for the server - default %d\n", PRIMARY_UDP_PORT);
     fprintf(stderr, "         -s <port>           secondary UDP port for the server - default %d\n", SECONDARY_UDP_PORT);
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface\n");
@@ -148,6 +152,14 @@ int send_xpn_loco_info(uint16_t loco_id, int verbose) {
     return (EXIT_SUCCESS);
 }
 
+int send_can_loco_function(uint16_t loco_id, uint8_t function, uint8_t switchtype) {
+    return (EXIT_SUCCESS);
+}
+
+int send_can_loco_drive(uint16_t loco_id, uint8_t direction, uint8_t step, uint8_t speed) {
+    return (EXIT_SUCCESS);
+}
+
 int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
     uint16_t length, header, loco_id;
     uint8_t db0, xheader;
@@ -182,7 +194,8 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 		xpnframe[7] = xor(&xpnframe[4], 3);
 		send_xpn(xpnframe, verbose);
 		break;
-	    case LAN_X_GET_VERSION:
+	    case LAN_X_GET_FIRMWARE_VERSION:
+		send_can(Z21_VERSION, verbose);
 		break;
 	    case LAN_X_SET_TRACK_POWER_ON:
 		z21_data->power = 1;
@@ -202,11 +215,24 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	    }
 	    break;
 	case LAN_X_SET_LOCO:
-	    if (length == 10) {
-		loco_id = be16(&z21_data->udpframe[6]);
+	    if (length == 0x0A ) {
+		loco_id = be16(&z21_data->udpframe[6]) & 0x3FFF;
+	    	if (xpnframe[5] == LAN_X_SET_LOCO_FUNCTION) {
+		    uint8_t switchtype = (xpnframe[5] >> 6) & 0x03;
+		    uint8_t function = xpnframe[5] & 0x3F;
+		    send_can_loco_function(loco_id, function, switchtype);
+		} else if ((xpnframe[5] & 0xF0 ) == 0x10) {
+		/* LAN_X_SET_LOCO_DRIVE */
+		    uint8_t step = xpnframe[5] & 0x03;
+		    uint8_t direction = xpnframe[8] >> 7;
+		    uint8_t speed = xpnframe[8] & 0x7F;
+		    send_can_loco_drive(loco_id, direction, step, speed);
+		}
 	    }
+	    /* LAN_X_SET_LOCO */
 	    break;
 	}
+	/* LAN_X_HEADER */
 	break;
     default:
 	break;
@@ -283,8 +309,16 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     };
 
-    while ((opt = getopt(argc, argv, "p:s:b:i:hf?")) != -1) {
+    while ((opt = getopt(argc, argv, "c:p:s:b:i:hf?")) != -1) {
 	switch (opt) {
+	case 'c':
+            if (strnlen(optarg, MAXLINE) < MAXLINE) {
+                strncpy(config_dir, optarg, sizeof(config_dir) - 1);
+            } else {
+                fprintf(stderr, "config file dir to long\n");
+                exit(EXIT_FAILURE);
+            }
+            break;
 	case 'p':
 	    primary_port = strtoul(optarg, (char **)NULL, 10);
 	    break;

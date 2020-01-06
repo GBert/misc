@@ -4,10 +4,10 @@ BIN = $@
 
 all: $(BINS)
 
-CFLAGS+=-Wall -pedantic -std=gnu99 -g
+CFLAGS+=-Wall -pedantic -std=gnu99 -g 
 
-z21emu: utils.o z21emu.o
-	$(CC) $(CFLAGS) -o z21emu utils.o z21emu.o -lpthread
+z21emu: read-cs2-config.o utils.o z21emu.o
+	$(CC) $(CFLAGS) -o z21emu utils.o read-cs2-config.o z21emu.o -lpthread
 
 clean:
 	$(RM) *.o $(BINS)
