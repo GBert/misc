@@ -209,12 +209,19 @@ void candump_to_can(char *s, struct can_frame *frame) {
 
     sscanf(s, "%08x", &frame->can_id);
     candata = strstr(s, "#") + 1;
+    i = candata - s;
+    if ((i > 5) && ((frame->can_id & CAN_ERR_FLAG) == 0))
+	frame->can_id |= CAN_EFF_FLAG;
     // printf("canid 0x%08X candata %s\n", frame->can_id, candata);
-    
-    frame->can_dlc = (uint8_t) strlen(candata) / 2;
-    for (i = 0; i < frame->can_dlc; i++) {
-	sscanf(&candata[i*2], "%2X", &dat);
-	frame->data[i] = dat;
+    if (candata[0] == 'R') {
+	frame->can_id |= CAN_RTR_FLAG;
+	frame->can_dlc = candata[1] & 0xF;
+    } else {
+	for (i = 0; i < 8; i++) {
+	    if (sscanf(&candata[i * 2], "%2X", &dat) < 1) break;
+	    frame->data[i] = dat;
+	}
+	frame->can_dlc = i;
     }
 }
 
@@ -226,8 +233,8 @@ int print_can_frame(char *format_string, struct can_frame *frame) {
     }
     printf(format_string, frame->can_id & CAN_EFF_MASK, frame->can_dlc);
     if (frame->can_id & CAN_RTR_FLAG) {
-        printf(" <RTR>                   ");
-        return -2;
+	printf(" <RTR>                   ");
+	return -2;
     }
     for (i = 0; i < frame->can_dlc; i++) {
 	printf(" %02X", frame->data[i]);
@@ -962,7 +969,7 @@ void decode_frame(struct can_frame *frame) {
 		printf(" Go");
 		break;
 	    case 0x44:
-	        printf(" Block %d", frame->data[5]);
+		printf(" Block %d", frame->data[5]);
 		break;
 	    case 0xE4:
 		printf(" ?");
@@ -987,7 +994,7 @@ void decode_frame(struct can_frame *frame) {
 	if (frame->can_dlc == 5) {
 	    if (frame->data[4] == 0x88)
 		printf("CAN Bootloader Antwort ACK\n");
-	    if (((frame->data[4] & 0xf0) == 0xf0) && ((frame->data[4] & 0x0f) <=4))
+	    if (((frame->data[4] & 0xf0) == 0xf0) && ((frame->data[4] & 0x0f) <= 4))
 		printf("CAN Bootloader Error %d\n", frame->data[4] & 0xf0);
 	    break;
 	}
@@ -1202,6 +1209,26 @@ void decode_frame(struct can_frame *frame) {
     }
 }
 
+void analyze_frame(struct can_frame *frame) {
+    if (frame->can_id & CAN_EFF_FLAG) {	/* decode only EFF frames */
+	print_can_frame(F_N_CAN_FORMAT_STRG, frame);
+	decode_frame(frame);
+    } else {
+	if (frame->can_id & CAN_ERR_FLAG) {
+	    print_can_frame(F_N_CAN_FORMAT_STRG, frame);
+	    printf(RED "*** ERRORFRAME ***" RESET);
+	    if (verbose) {
+		char buf[CL_LONGCFSZ];
+		snprintf_can_error_frame(buf, sizeof(buf), (struct canfd_frame *) frame, "\n\t");
+		printf("\n\t%s", buf);
+	    }
+	} else {
+	    print_can_frame(F_N_SFF_FORMAT_STRG, frame);
+	}
+	printf("\n");
+    }
+}
+
 int main(int argc, char **argv) {
     int max_fds, opt, sc;
     struct can_frame frame;
@@ -1265,7 +1292,7 @@ int main(int argc, char **argv) {
 	struct can_frame aframe;
 	int time, milli;
 	time_t rawtime;
-        struct tm ts;
+	struct tm ts;
 
 	fp = fopen(candump_file, "r");
 	if (!fp) {
@@ -1285,13 +1312,11 @@ int main(int argc, char **argv) {
 		rawtime = time;
 		ts = *localtime(&rawtime);
 		strftime(datum, sizeof(datum), "%Y%m%d.%H%M%S", &ts);
-		pos_r = strstr(line, "can0 ");
-		pos_r += 5;
+		pos_r = strstr(line, "can");
 		memset(&aframe, 0, sizeof(aframe));
-		candump_to_can(pos_r, &aframe);
-		printf(RESET "%s.%03d", datum, milli);
-		print_can_frame(F_N_CAN_FORMAT_STRG, &aframe);
-		decode_frame(&aframe);
+		candump_to_can(pos_r + 5, &aframe);
+		printf(RESET "%s.%03d  %.5s", datum, milli, pos_r - 1);
+		analyze_frame(&aframe);
 	    }
 	}
 	return (EXIT_SUCCESS);
@@ -1395,11 +1420,11 @@ int main(int argc, char **argv) {
 		ether_offset = (caplinktype == DLT_LINUX_SLL) ? 14 : 12;
 		int ether_type = be16(&pkt_ptr[ether_offset]);
 
-		if (ether_type == ETHER_TYPE_IP) {		/* most common */
+		if (ether_type == ETHER_TYPE_IP) {	/* most common */
 		    ether_offset += 2;
 		} else if (ether_type == ETHER_TYPE_8021Q) {	/* dot1q tag ? */
 		    ether_offset += 6;
-		} else if (ether_type == 0x000C) {		/* CAN ? */
+		} else if (ether_type == 0x000C) {	/* CAN ? */
 		    ether_offset = 0;
 		} else {
 		    if (verbose)
@@ -1440,7 +1465,8 @@ int main(int argc, char **argv) {
 		if (verbose) {
 		    printf("%s ", timestamp);
 		    printf("%04u UDP %s -> ", pkt_counter, inet_ntoa(ip_hdr->ip_src));
-		    printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(myudp->uh_sport), ntohs(myudp->uh_dport));
+		    printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(myudp->uh_sport),
+			   ntohs(myudp->uh_dport));
 		    printf("  packet_length %d\n", size_payload);
 		}
 		unsigned char *dump = (unsigned char *)pkt_ptr + IPHDR_LEN + sizeof(struct udphdr);
@@ -1464,7 +1490,8 @@ int main(int argc, char **argv) {
 			if (verbose) {
 			    printf("%s ", timestamp);
 			    printf("%04u HTTP %s -> ", pkt_counter, inet_ntoa(ip_hdr->ip_src));
-			    printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(mytcp->th_sport), ntohs(mytcp->th_dport));
+			    printf("%s port %d -> %d", inet_ntoa(ip_hdr->ip_dst), ntohs(mytcp->th_sport),
+				   ntohs(mytcp->th_dport));
 			    printf("  packet_length %d\n", size_payload);
 			}
 			printf("%s %.3d>  HTTP    -> ", timestamp, (ip_hdr->ip_src.s_addr) >> 24);
@@ -1501,7 +1528,7 @@ int main(int argc, char **argv) {
 	    printf(RESET);
 	}
 	return (EXIT_SUCCESS);
-    /* reading from CAN socket */
+	/* reading from CAN socket */
     } else {
 
 	memset(&caddr, 0, sizeof(caddr));
@@ -1542,24 +1569,9 @@ int main(int argc, char **argv) {
 		time_stamp(timestamp);
 		if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
 		    fprintf(stderr, "error reading CAN frame: %s\n", strerror(errno));
-		} else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
-		    printf("%s ", timestamp);
-		    print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
-		    decode_frame(&frame);
 		} else {
 		    printf("%s ", timestamp);
-		    if (frame.can_id & CAN_ERR_FLAG) {
-			print_can_frame(F_N_CAN_FORMAT_STRG, &frame);
-			printf(RED "*** ERRORFRAME ***" RESET);
-			if (verbose) {
-			    char buf[CL_LONGCFSZ];
-			    snprintf_can_error_frame(buf, sizeof(buf), (struct canfd_frame *)&frame, "\n\t");
-			    printf("\n\t%s", buf);
-			}
-		    } else {
-			print_can_frame(F_N_SFF_FORMAT_STRG, &frame);
-		    }
-		    printf("\n");
+		    analyze_frame(&frame);
 		}
 	    }
 	}
