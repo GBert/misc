@@ -1,11 +1,15 @@
 const int revisionnr = 
-358
+362
 ;
 const char* commithash = 
-"ff1f99bc05acdb9f18b184fd885f810e951c4af2";
+"09455b23c380d6baf6fdf3d81e9ffeb988abf00f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"362 2020-01-07 16:41:47 +0100 removed the no longer used restricted loconet flags\n" \
+"361 2020-01-07 14:25:06 +0100 powerman: use boostertemp\n" \
+"360 2020-01-07 12:21:12 +0100 guiframe: loco owner column added\n" \
+"359 2020-01-07 11:19:55 +0100 wio: repeat sound parameter\n" \
 "358 2020-01-06 15:07:37 +0100 wio: support port type sound\n" \
 "357 2020-01-06 10:37:19 +0100 wio: sound action added\n" \
 "356 2020-01-05 08:17:06 +0100 loc: sent shunting commands to consist members too\n" \
