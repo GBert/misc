@@ -48,8 +48,12 @@ static char *TCP_FORMATS_STRG	= "->TCP*   CANID 0x%06X   [%d]";
 char cs2addr[32] = "127.0.0.1";
 char config_dir[MAXLINE] = "/www/config/";
 
-static unsigned char MS_POWER_ON[]	= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
-static unsigned char MS_POWER_OFF[]	= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static unsigned char MS_POWER_ON[]		= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
+static unsigned char MS_POWER_OFF[]		= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+
+static unsigned char MS_LOCO_DRIVE[]		= { 0x00, 0x08, 0x03, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static unsigned char MS_LOCO_DIRECTION[]	= { 0x00, 0x0A, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static unsigned char MS_LOCO_FUNCTION[]		= { 0x00, 0x0A, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 static unsigned char XPN_SERIAL_NUMBER_RESPONSE[] = { 0x08, 0x00, 0x10, 0x00, 0x4D, 0xC1, 0x02, 0x00 };
 static unsigned char XPN_X_STATUS_CHANGED[]       = { 0x08, 0x00, 0x40, 0x00, 0x62, 0x22, 0x00, 0x40 };
@@ -57,6 +61,8 @@ static unsigned char XPN_X_BC_TRACK_POWER_OFF[]   = { 0x07, 0x00, 0x40, 0x00, 0x
 static unsigned char XPN_X_BC_TRACK_POWER_ON[]    = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x01, 0x60 };
 static unsigned char XPN_X_LOCO_INFO[]            = { 0x0E, 0x00, 0x40, 0x00, 0xEF, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static unsigned char Z21_VERSION[]                = { 0x09, 0x00, 0x40, 0x00, 0xF3, 0x0A, 0x01, 0x23, 0xDB };
+
+
 
 /*
 static unsigned char XPN_X_BC_STOPPED[]           = { 0x07, 0x00, 0x40, 0x00, 0x81, 0x00, 0x81 };
@@ -152,11 +158,54 @@ int send_xpn_loco_info(uint16_t loco_id, int verbose) {
     return (EXIT_SUCCESS);
 }
 
-int send_can_loco_function(uint16_t loco_id, uint8_t function, uint8_t switchtype) {
+void set_loco_id(unsigned char *data, uint16_t loco_id) {
+    /*
+      0x0000 - 0x007F mm2_prg   Adresse + 0x0000
+      0x0080 - 0x00FF mm2_dil   Adresse + 0x0080
+      0x0100 - 0x1FFF mfx       Adresse + 0x0100
+      0x2000 - 0x3FFF dcc       Adresse + 0x2000
+     */
+    if (loco_id < 0x0100) {
+	data[3] = 0x00;
+	data[4] = loco_id;
+    } else if (loco_id < 0x2000) {
+	data[3] = loco_id >> 8;
+	data[4] = loco_id & 0xff;
+	data[3] |= 0x40;
+    } else if (loco_id < 0x3FFF) {
+	data[3] = loco_id >> 8;
+	data[4] = loco_id & 0xff;
+	data[3] |= 0xC0;
+    }
+}
+
+int send_can_loco_function(uint16_t loco_id, uint8_t function, uint8_t switchtype, int verbose) {
+    unsigned char udpframe[13];
+
+    memcpy(udpframe, MS_LOCO_FUNCTION, 13);
+    set_loco_id(&udpframe[5], loco_id);
+    send_can(udpframe, verbose);
+
     return (EXIT_SUCCESS);
 }
 
-int send_can_loco_drive(uint16_t loco_id, uint8_t direction, uint8_t step, uint8_t speed) {
+int send_can_loco_drive(uint16_t loco_id, uint8_t direction, uint8_t step, uint8_t speed, int verbose) {
+    unsigned char udpframe[13];
+    uint16_t mspeed;
+
+    memcpy(udpframe, MS_LOCO_DIRECTION, 13);
+    set_loco_id(&udpframe[5], loco_id);
+    udpframe[9] = direction;
+    send_can(udpframe, verbose);
+    
+    memcpy(udpframe, MS_LOCO_DRIVE, 13);
+    set_loco_id(&udpframe[5], loco_id);
+    /* TODO */
+    mspeed = speed << 2;
+    udpframe[9] = (mspeed >> 8) & 0x03;
+    udpframe[10] = mspeed & 0xFF;
+    send_can(udpframe, verbose);
+
     return (EXIT_SUCCESS);
 }
 
@@ -220,13 +269,13 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	    	if (xpnframe[5] == LAN_X_SET_LOCO_FUNCTION) {
 		    uint8_t switchtype = (xpnframe[5] >> 6) & 0x03;
 		    uint8_t function = xpnframe[5] & 0x3F;
-		    send_can_loco_function(loco_id, function, switchtype);
+		    send_can_loco_function(loco_id, function, switchtype, z21_data->foreground);
 		} else if ((xpnframe[5] & 0xF0 ) == 0x10) {
 		/* LAN_X_SET_LOCO_DRIVE */
 		    uint8_t step = xpnframe[5] & 0x03;
 		    uint8_t direction = xpnframe[8] >> 7;
 		    uint8_t speed = xpnframe[8] & 0x7F;
-		    send_can_loco_drive(loco_id, direction, step, speed);
+		    send_can_loco_drive(loco_id, direction, step, speed, z21_data->foreground);
 		}
 	    }
 	    /* LAN_X_SET_LOCO */
