@@ -195,7 +195,10 @@ int send_can_loco_drive(uint16_t loco_id, uint8_t direction, uint8_t step, uint8
 
     memcpy(udpframe, MS_LOCO_DIRECTION, 13);
     set_loco_id(&udpframe[5], loco_id);
-    udpframe[9] = direction;
+    if (direction == 0)
+	udpframe[9] = 2;
+    else if (direction == 1)
+	udpframe[9] = 1;
     send_can(udpframe, verbose);
     
     memcpy(udpframe, MS_LOCO_DRIVE, 13);
@@ -266,15 +269,17 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	case LAN_X_SET_LOCO:
 	    if (length == 0x0A ) {
 		loco_id = be16(&z21_data->udpframe[6]) & 0x3FFF;
-	    	if (xpnframe[5] == LAN_X_SET_LOCO_FUNCTION) {
-		    uint8_t switchtype = (xpnframe[5] >> 6) & 0x03;
-		    uint8_t function = xpnframe[5] & 0x3F;
+		if (z21_data->udpframe[5] == LAN_X_SET_LOCO_FUNCTION) {
+		    printf("%s LAN_X_SET_LOCO_FUNCTION 0x%04X 0x%02X\n", __func__, loco_id, z21_data->udpframe[8]);
+		    uint8_t switchtype = (z21_data->udpframe[8] >> 6) & 0x03;
+		    uint8_t function = z21_data->udpframe[8] & 0x3F;
 		    send_can_loco_function(loco_id, function, switchtype, z21_data->foreground);
-		} else if ((xpnframe[5] & 0xF0 ) == 0x10) {
+		} else if ((z21_data->udpframe[5] & 0xF0 ) == 0x10) {
 		/* LAN_X_SET_LOCO_DRIVE */
-		    uint8_t step = xpnframe[5] & 0x03;
-		    uint8_t direction = xpnframe[8] >> 7;
-		    uint8_t speed = xpnframe[8] & 0x7F;
+		    printf("%s LAN_X_SET_LOCO_DRIVE 0x%04X 0x%02X\n", __func__, loco_id, z21_data->udpframe[8]);
+		    uint8_t step = z21_data->udpframe[5] & 0x03;
+		    uint8_t direction = z21_data->udpframe[8] >> 7;
+		    uint8_t speed = z21_data->udpframe[8] & 0x7F;
 		    send_can_loco_drive(loco_id, direction, step, speed, z21_data->foreground);
 		}
 	    }
@@ -565,7 +570,7 @@ int main(int argc, char **argv) {
 	/* received a UDP packet on primary */
 	if (FD_ISSET(z21_data.sp, &readfds)) {
 	    ret = read(z21_data.sp, z21_data.udpframe, MAXDG);
-	    printf("FD_ISSET sp, ret %d\n", ret);
+	    /* printf("FD_ISSET sp, ret %d\n", ret); */
 	    if (ret < 0) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
 		break;
@@ -578,7 +583,7 @@ int main(int argc, char **argv) {
 	/* received a UDP packet on secondary */
 	if (FD_ISSET(z21_data.ss, &readfds)) {
 	    ret = read(z21_data.ss, z21_data.udpframe, MAXDG);
-	    printf("FD_ISSET ss, ret %d\n", ret);
+	    /* printf("FD_ISSET ss, ret %d\n", ret); */
 	    if (ret < 0) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
 		break;
@@ -592,7 +597,7 @@ int main(int argc, char **argv) {
 	if (FD_ISSET(z21_data.st, &readfds)) {
 	    int i, n;
 	    n = recv(z21_data.st, recvline, MAXSIZE, 0);
-	    printf("FD_ISSET st, n %d\n", n);
+	    /* printf("FD_ISSET st, n %d\n", n); */
 	    if (n > 0) {
 		/* check the whole TCP packet, if there are more than one CAN frame included */
 		/* TCP packets with size modulo 13 !=0 are ignored though */
