@@ -1,11 +1,15 @@
 const int revisionnr = 
-362
+366
 ;
 const char* commithash = 
-"09455b23c380d6baf6fdf3d81e9ffeb988abf00f";
+"4062085f75fd7d42de927acbe9cd773a720cb912";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"366 2020-01-08 15:22:32 +0100 routedialog: fix for prev/next if no route is selected\n" \
+"365 2020-01-08 15:06:13 +0100 action: dispatch boostertemp\n" \
+"364 2020-01-08 09:16:57 +0100 wio: allow zero length sound file name to stop the current play\n" \
+"363 2020-01-08 08:28:28 +0100 switch: allow switch commands from locoID * in case of locked\n" \
 "362 2020-01-07 16:41:47 +0100 removed the no longer used restricted loconet flags\n" \
 "361 2020-01-07 14:25:06 +0100 powerman: use boostertemp\n" \
 "360 2020-01-07 12:21:12 +0100 guiframe: loco owner column added\n" \
