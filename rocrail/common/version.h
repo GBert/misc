@@ -1,11 +1,13 @@
 const int revisionnr = 
-366
+368
 ;
 const char* commithash = 
-"4062085f75fd7d42de927acbe9cd773a720cb912";
+"7b92d11981fed97df1c0e56e0b9f43c82d6540f0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"368 2020-01-09 18:14:49 +0100 action,switch: allow unloack with *\n" \
+"367 2020-01-09 15:18:32 +0100 wio: crash fix at using wio list without mutex\n" \
 "366 2020-01-08 15:22:32 +0100 routedialog: fix for prev/next if no route is selected\n" \
 "365 2020-01-08 15:06:13 +0100 action: dispatch boostertemp\n" \
 "364 2020-01-08 09:16:57 +0100 wio: allow zero length sound file name to stop the current play\n" \
