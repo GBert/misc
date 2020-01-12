@@ -1,11 +1,12 @@
 const int revisionnr = 
-374
+375
 ;
 const char* commithash = 
-"74d09667d8149759d0468b73ba75100228214337";
+"5e9a8e24666820e547a78badcffe2584e3fd3a30";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"375 2020-01-12 10:45:58 +0100 e4s: remove from makefile\n" \
 "374 2020-01-11 22:06:37 +0100 wiodlg: board option added\n" \
 "373 2020-01-11 22:05:34 +0100 e4s removed\n" \
 "372 2020-01-11 12:03:39 +0100 wio: fix for sending shortid wiodlg: size fix\n" \
