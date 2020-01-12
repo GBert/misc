@@ -1,11 +1,12 @@
 const int revisionnr = 
-375
+376
 ;
 const char* commithash = 
-"5e9a8e24666820e547a78badcffe2584e3fd3a30";
+"6092765650dd94cda4e9b05b0f7c3038aa2c8d74";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"376 2020-01-12 10:55:25 +0100 remove e4s.c\n" \
 "375 2020-01-12 10:45:58 +0100 e4s: remove from makefile\n" \
 "374 2020-01-11 22:06:37 +0100 wiodlg: board option added\n" \
 "373 2020-01-11 22:05:34 +0100 e4s removed\n" \
