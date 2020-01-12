@@ -1,11 +1,17 @@
 const int revisionnr = 
-368
+374
 ;
 const char* commithash = 
-"7b92d11981fed97df1c0e56e0b9f43c82d6540f0";
+"74d09667d8149759d0468b73ba75100228214337";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"374 2020-01-11 22:06:37 +0100 wiodlg: board option added\n" \
+"373 2020-01-11 22:05:34 +0100 e4s removed\n" \
+"372 2020-01-11 12:03:39 +0100 wio: fix for sending shortid wiodlg: size fix\n" \
+"371 2020-01-11 11:34:11 +0100 loc,wio: send dirf also in case of transfering shortids\n" \
+"370 2020-01-10 15:44:05 +0100 wio: fix for query\n" \
+"369 2020-01-10 15:28:55 +0100 WIO: reorganise WIP\n" \
 "368 2020-01-09 18:14:49 +0100 action,switch: allow unloack with *\n" \
 "367 2020-01-09 15:18:32 +0100 wio: crash fix at using wio list without mutex\n" \
 "366 2020-01-08 15:22:32 +0100 routedialog: fix for prev/next if no route is selected\n" \
