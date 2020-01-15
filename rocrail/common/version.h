@@ -1,11 +1,15 @@
 const int revisionnr = 
-390
+394
 ;
 const char* commithash = 
-"ffa3ee60562a6b995ecc9c52080d603dfd50a1b5";
+"7d13d38d7750db3b40eecb21078fd9aeeb12c32b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"394 2020-01-15 15:42:30 +0100 wiodlg: booster option\n" \
+"393 2020-01-15 15:22:04 +0100 wiodlg: changed CS to power monitor\n" \
+"392 2020-01-15 14:50:33 +0100 svg: set attributes with base class\n" \
+"391 2020-01-15 14:46:33 +0100 svg,renderer: ellipse added\n" \
 "390 2020-01-15 13:07:58 +0100 svg,renderer: polyline added\n" \
 "389 2020-01-15 11:57:35 +0100 rascii,powerman: extra trace for power event\n" \
 "388 2020-01-15 11:30:25 +0100 svg,renderer: line added, fix for rect rotation\n" \
