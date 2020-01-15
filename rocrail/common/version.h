@@ -1,11 +1,12 @@
 const int revisionnr = 
-394
+395
 ;
 const char* commithash = 
-"7d13d38d7750db3b40eecb21078fd9aeeb12c32b";
+"3dfad91df92959f5305692c83e3848d74356b14b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"395 2020-01-15 17:19:49 +0100 mjpg: no default streaming file name\n" \
 "394 2020-01-15 15:42:30 +0100 wiodlg: booster option\n" \
 "393 2020-01-15 15:22:04 +0100 wiodlg: changed CS to power monitor\n" \
 "392 2020-01-15 14:50:33 +0100 svg: set attributes with base class\n" \
