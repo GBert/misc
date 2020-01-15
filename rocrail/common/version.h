@@ -1,11 +1,25 @@
 const int revisionnr = 
-376
+390
 ;
 const char* commithash = 
-"6092765650dd94cda4e9b05b0f7c3038aa2c8d74";
+"ffa3ee60562a6b995ecc9c52080d603dfd50a1b5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"390 2020-01-15 13:07:58 +0100 svg,renderer: polyline added\n" \
+"389 2020-01-15 11:57:35 +0100 rascii,powerman: extra trace for power event\n" \
+"388 2020-01-15 11:30:25 +0100 svg,renderer: line added, fix for rect rotation\n" \
+"387 2020-01-15 09:30:13 +0100 renderer: draw arc from path using DC in case of GC: GC does not offer this function\n" \
+"386 2020-01-15 09:12:29 +0100 svg,renderer: rounded rectangle added\n" \
+"385 2020-01-15 08:21:11 +0100 item: check is bg color has been changed on model event\n" \
+"384 2020-01-14 20:06:06 +0100 svg,renderer: regard the SVG source sequence\n" \
+"383 2020-01-14 15:52:51 +0100 svg: polygon support added\n" \
+"382 2020-01-14 14:31:01 +0100 RASCII: report state on event\n" \
+"381 2020-01-14 11:48:52 +0100 svg: support for viewBox\n" \
+"380 2020-01-13 14:43:42 +0100 massoth: use maxbufsize for dumping read bytes\n" \
+"379 2020-01-13 13:08:15 +0100 wio: length correction on SETWIO\n" \
+"378 2020-01-13 10:43:20 +0100 rascii: fix for cvget response\n" \
+"377 2020-01-12 11:29:47 +0100 wiodlg: show id and type after selection in the titlebar\n" \
 "376 2020-01-12 10:55:25 +0100 remove e4s.c\n" \
 "375 2020-01-12 10:45:58 +0100 e4s: remove from makefile\n" \
 "374 2020-01-11 22:06:37 +0100 wiodlg: board option added\n" \
