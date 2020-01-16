@@ -1,11 +1,18 @@
 const int revisionnr = 
-395
+402
 ;
 const char* commithash = 
-"3dfad91df92959f5305692c83e3848d74356b14b";
+"68a895af4fe335dca8bb6ccd7944605be3cb0f33";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"402 2020-01-16 15:02:40 +0100 SpDrS60: small stage symbols\n" \
+"401 2020-01-16 14:01:31 +0100 SLIM-COLOR: small stage symbol\n" \
+"400 2020-01-16 12:16:45 +0100 SLIM: small stage symbols (Claus)\n" \
+"399 2020-01-16 10:57:46 +0100 stage-s svg added\n" \
+"398 2020-01-16 10:55:50 +0100 smallsymbol option for stage\n" \
+"397 2020-01-16 08:27:47 +0100 SLIM-COLOR: RFID sensor symbol accessory 5\n" \
+"396 2020-01-16 08:20:46 +0100 SLIM-COLOR: RFID sensor symbol accessory 5\n" \
 "395 2020-01-15 17:19:49 +0100 mjpg: no default streaming file name\n" \
 "394 2020-01-15 15:42:30 +0100 wiodlg: booster option\n" \
 "393 2020-01-15 15:22:04 +0100 wiodlg: changed CS to power monitor\n" \
