@@ -1,11 +1,19 @@
 const int revisionnr = 
-402
+410
 ;
 const char* commithash = 
-"68a895af4fe335dca8bb6ccd7944605be3cb0f33";
+"755a52c50f9e3447d0e94d13af861d0ac569c10c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"410 2020-01-18 10:18:11 +0100 SLIM: accessory 6 for register sensor\n" \
+"409 2020-01-18 07:46:13 +0100 SpDrS60: accessory 6 added\n" \
+"408 2020-01-17 15:56:42 +0100 renderer: regard SLIM grey in case of filling the register sensor\n" \
+"407 2020-01-17 15:49:19 +0100 accessory 6 for register sensor\n" \
+"406 2020-01-17 15:27:52 +0100 renderer: register sensor symbol support (WIP)\n" \
+"405 2020-01-17 15:27:03 +0100 register sensor symbol\n" \
+"404 2020-01-17 12:16:49 +0100 route: fix for resetting pending route\n" \
+"403 2020-01-17 11:57:06 +0100 wiodlg: OTA button added\n" \
 "402 2020-01-16 15:02:40 +0100 SpDrS60: small stage symbols\n" \
 "401 2020-01-16 14:01:31 +0100 SLIM-COLOR: small stage symbol\n" \
 "400 2020-01-16 12:16:45 +0100 SLIM: small stage symbols (Claus)\n" \
