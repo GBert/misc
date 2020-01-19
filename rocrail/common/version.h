@@ -1,11 +1,13 @@
 const int revisionnr = 
-410
+412
 ;
 const char* commithash = 
-"755a52c50f9e3447d0e94d13af861d0ac569c10c";
+"325f9a5f3feaf61bb67ff862140f5345cd921732";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"412 2020-01-18 21:56:00 +0100 routedialog: command buttons moved\n" \
+"411 2020-01-18 18:51:04 +0100 wio: CAM type added\n" \
 "410 2020-01-18 10:18:11 +0100 SLIM: accessory 6 for register sensor\n" \
 "409 2020-01-18 07:46:13 +0100 SpDrS60: accessory 6 added\n" \
 "408 2020-01-17 15:56:42 +0100 renderer: regard SLIM grey in case of filling the register sensor\n" \
