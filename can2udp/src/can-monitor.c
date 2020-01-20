@@ -146,7 +146,7 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 3.4\n\n");
+    fprintf(stderr, "   Version 3.5\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
@@ -853,8 +853,14 @@ void decode_frame(struct can_frame *frame) {
     case 0x16:
     case 0x17:
 	uid = be32(frame->data);
-	if (frame->can_dlc == 6)
-	    printf("Zubehör Schalten UID 0x%08X Stellung %u Strom %u", uid, frame->data[4], frame->data[5]);
+	if (frame->can_dlc == 6) {
+	    if ((uid > 0x3000) && (uid < 0x3400))
+		printf("Zubehör Schalten MM2 UID 0x%08X Stellung %u Strom %u", uid, frame->data[4], frame->data[5]);
+	    else if ((uid > 0x3800) && (uid < 0x4000))
+		printf("Zubehör Schalten DCC UID 0x%08X Stellung %u Strom %u", uid, frame->data[4], frame->data[5]);
+	    else
+		printf("Zubehör Schalten UID 0x%08X Stellung %u Strom %u", uid, frame->data[4], frame->data[5]);
+	}
 	if (frame->can_dlc == 8)
 	    printf("Zubehör Schalten UID 0x%08X Stellung %u Strom %u Schaltzeit/Sonderfunktionswert %u",
 		   uid, frame->data[4], frame->data[5], be16(&frame->data[6]));
