@@ -855,9 +855,9 @@ void decode_frame(struct can_frame *frame) {
 	uid = be32(frame->data);
 	if (frame->can_dlc == 6) {
 	    if ((uid > 0x3000) && (uid < 0x3400))
-		printf("Zubehör Schalten MM2 UID 0x%08X Stellung %u Strom %u", uid, frame->data[4], frame->data[5]);
+		printf("Zubehör Schalten MM2 UID 0x%08X Stellung %u Strom %u", uid - 0x3000, frame->data[4], frame->data[5]);
 	    else if ((uid > 0x3800) && (uid < 0x4000))
-		printf("Zubehör Schalten DCC UID 0x%08X Stellung %u Strom %u", uid, frame->data[4], frame->data[5]);
+		printf("Zubehör Schalten DCC UID 0x%08X Stellung %u Strom %u", uid - 0x3800, frame->data[4], frame->data[5]);
 	    else
 		printf("Zubehör Schalten UID 0x%08X Stellung %u Strom %u", uid, frame->data[4], frame->data[5]);
 	}
