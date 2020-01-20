@@ -1,11 +1,18 @@
 const int revisionnr = 
-412
+419
 ;
 const char* commithash = 
-"325f9a5f3feaf61bb67ff862140f5345cd921732";
+"7c396354aa3d639fe13b473eed1bda840863be50";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"419 2020-01-20 14:52:11 +0100 lodi: framework added (wip)\n" \
+"418 2020-01-20 14:50:40 +0100 route: fix for tracelevel\n" \
+"417 2020-01-20 14:36:15 +0100 route: not wait for pending route in case not locked\n" \
+"416 2020-01-20 11:52:59 +0100 wiodlg: open browser for stream in case of CAM type\n" \
+"415 2020-01-20 07:16:01 +0100 renderer: fix for register sensor color in case of none SLIM\n" \
+"414 2020-01-19 17:29:12 +0100 route: revert change for forcing routes\n" \
+"413 2020-01-19 16:19:23 +0100 wio: fix for sound action\n" \
 "412 2020-01-18 21:56:00 +0100 routedialog: command buttons moved\n" \
 "411 2020-01-18 18:51:04 +0100 wio: CAM type added\n" \
 "410 2020-01-18 10:18:11 +0100 SLIM: accessory 6 for register sensor\n" \
