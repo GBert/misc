@@ -1,11 +1,14 @@
 const int revisionnr = 
-421
+424
 ;
 const char* commithash = 
-"611cc76b90e8dd30007f237a1c992e4a3bbe90b7";
+"1917d4bb591514e0bfdd647885f62fbb28ba826a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"424 2020-01-22 17:05:36 +0100 trackpickerdlg: register sensor added\n" \
+"423 2020-01-22 16:20:11 +0100 ecos: only request function descriptions in case the sync option ist set\n" \
+"422 2020-01-22 11:00:57 +0100 wio: trace added for output servo type\n" \
 "421 2020-01-21 14:32:00 +0100 renderer: fix for register sensor in case of occ/route\n" \
 "420 2020-01-21 10:23:59 +0100 action: fix for go home\n" \
 "419 2020-01-20 14:52:11 +0100 lodi: framework added (wip)\n" \
