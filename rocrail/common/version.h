@@ -1,11 +1,13 @@
 const int revisionnr = 
-419
+421
 ;
 const char* commithash = 
-"7c396354aa3d639fe13b473eed1bda840863be50";
+"611cc76b90e8dd30007f237a1c992e4a3bbe90b7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"421 2020-01-21 14:32:00 +0100 renderer: fix for register sensor in case of occ/route\n" \
+"420 2020-01-21 10:23:59 +0100 action: fix for go home\n" \
 "419 2020-01-20 14:52:11 +0100 lodi: framework added (wip)\n" \
 "418 2020-01-20 14:50:40 +0100 route: fix for tracelevel\n" \
 "417 2020-01-20 14:36:15 +0100 route: not wait for pending route in case not locked\n" \
