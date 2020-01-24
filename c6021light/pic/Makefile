@@ -2,7 +2,7 @@ PROJ_DIR	= .
 XC8DIR		= /opt/microchip/xc8/v1.38
 CC_INCLUDE	= -I$(XC8DIR)/include
 
-PROCESSOR	= 16F1937
+PROCESSOR	= 16F1705
 MAIN		= i2c-cs
 SRC		= i2c-cs.c
 CC_FLAGS	= -P -N255 --warn=0 --addrqual=ignore --mode=free# --echo

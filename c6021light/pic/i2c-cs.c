@@ -9,8 +9,8 @@
 #pragma config WDTE = ON        // Watchdog Timer Enable (WDT enabled)
 #pragma config PWRTE = ON       // Power-up Timer Enable (PWRT enabled)
 #pragma config MCLRE = ON       // MCLR/VPP pin function is MCLR
-#pragma config CP = ON          // Flash Program Memory Code Protection enabled
-#pragma config CPD = ON         // Data memory code protection is enabled
+//#pragma config CP = ON          // Flash Program Memory Code Protection enabled
+//#pragma config CPD = ON         // Data memory code protection is enabled
 #pragma config BOREN = ON       // Brown-out Reset enabled
 #pragma config CLKOUTEN = OFF   // CLKOUT function is disabled.
                                 // I/O or oscillator function on the CLKOUT pin
@@ -19,7 +19,7 @@
 
 // CONFIG2
 #pragma config WRT = OFF        // Flash Memory Self-Write Protection off
-#pragma config VCAPEN = OFF     // All VCAP pin functionality is disabled
+//#pragma config VCAPEN = OFF     // All VCAP pin functionality is disabled
 #pragma config PLLEN = ON       // PLL Enable (4x PLL enabled)
 #pragma config STVREN = ON      // Stack Overflow/Underflow will cause a Reset
 #pragma config BORV = LO        // Brown-out Reset Voltage (Vbor),
@@ -113,10 +113,10 @@ void initialize(void)
                                 // the falling edge of SCL
     SSPCON3bits.SBCDE = 1;	// Enable slave bus collision detect interrupts
     SSPADD = I2C_slave_address; // Load the slave address
-    SSPIF = 0;                  // Clear the serial port interrupt flag
-    BCLIF = 0;                  // Clear the bus collision interrupt flag
-    BCLIE = 1;                  // Enable bus collision interrupts
-    SSPIE = 1;                  // Enable serial port interrupts
+    SSP1IF = 0;                  // Clear the serial port interrupt flag
+    BCL1IF = 0;                  // Clear the bus collision interrupt flag
+    BCL1IE = 1;                  // Enable bus collision interrupts
+    SSP1IE = 1;                  // Enable serial port interrupts
     PEIE = 1;                   // Enable peripheral interrupts
     GIE = 1; 					// Enable global interrupts
 }//end initialize
@@ -125,7 +125,7 @@ void initialize(void)
 /*************************** ISR ROUTINE **************************************/
 void interrupt ISR(void)
 {
-    if(SSPIF) {                               // check to see if SSP interrupt
+    if(SSP1IF) {                               // check to see if SSP interrupt
         if(SSPSTATbits.R_nW) {                // Master read (R_nW = 1)
             if(!SSPSTATbits.D_nA) {           // last byte was an address (D_nA = 0)
                 junk = SSPBUF;                // dummy read to clear BF bit
@@ -169,10 +169,10 @@ void interrupt ISR(void)
     	}
     }
 
-    if(BCLIF) {				// Did a bus collision occur?
+    if(BCL1IF) {				// Did a bus collision occur?
         junk = SSPBUF;			// clear SSPBUF
-	BCLIF = 0;			// clear BCLIF
+	BCL1IF = 0;			// clear BCLIF
 	SSPCON1bits.CKP = 1;		// Release CLK
     }
-    SSPIF = 0;				// clear SSPIF
+    SSP1IF = 0;				// clear SSPIF
 }
