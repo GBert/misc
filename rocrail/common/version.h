@@ -1,11 +1,13 @@
 const int revisionnr = 
-427
+429
 ;
 const char* commithash = 
-"815c13ba298ca48a4635b146189c234d6bdf8cfd";
+"55e0c56b4e4a1c3ed19ee989aa95eda0cbcdd657";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"429 2020-01-24 11:54:24 +0100 wiodlg: resorted query index\n" \
+"428 2020-01-24 11:23:33 +0100 button svg corrections\n" \
 "427 2020-01-24 10:41:28 +0100 wiodlg: enable buttons first after selection\n" \
 "426 2020-01-23 15:04:45 +0100 moved cam buttons to the accessory theme\n" \
 "425 2020-01-23 09:26:13 +0100 new symbols for CAM control\n" \
