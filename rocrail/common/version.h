@@ -1,11 +1,21 @@
 const int revisionnr = 
-419
+429
 ;
 const char* commithash = 
-"7c396354aa3d639fe13b473eed1bda840863be50";
+"55e0c56b4e4a1c3ed19ee989aa95eda0cbcdd657";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"429 2020-01-24 11:54:24 +0100 wiodlg: resorted query index\n" \
+"428 2020-01-24 11:23:33 +0100 button svg corrections\n" \
+"427 2020-01-24 10:41:28 +0100 wiodlg: enable buttons first after selection\n" \
+"426 2020-01-23 15:04:45 +0100 moved cam buttons to the accessory theme\n" \
+"425 2020-01-23 09:26:13 +0100 new symbols for CAM control\n" \
+"424 2020-01-22 17:05:36 +0100 trackpickerdlg: register sensor added\n" \
+"423 2020-01-22 16:20:11 +0100 ecos: only request function descriptions in case the sync option ist set\n" \
+"422 2020-01-22 11:00:57 +0100 wio: trace added for output servo type\n" \
+"421 2020-01-21 14:32:00 +0100 renderer: fix for register sensor in case of occ/route\n" \
+"420 2020-01-21 10:23:59 +0100 action: fix for go home\n" \
 "419 2020-01-20 14:52:11 +0100 lodi: framework added (wip)\n" \
 "418 2020-01-20 14:50:40 +0100 route: fix for tracelevel\n" \
 "417 2020-01-20 14:36:15 +0100 route: not wait for pending route in case not locked\n" \
