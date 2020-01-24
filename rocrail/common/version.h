@@ -1,11 +1,14 @@
 const int revisionnr = 
-424
+427
 ;
 const char* commithash = 
-"1917d4bb591514e0bfdd647885f62fbb28ba826a";
+"815c13ba298ca48a4635b146189c234d6bdf8cfd";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"427 2020-01-24 10:41:28 +0100 wiodlg: enable buttons first after selection\n" \
+"426 2020-01-23 15:04:45 +0100 moved cam buttons to the accessory theme\n" \
+"425 2020-01-23 09:26:13 +0100 new symbols for CAM control\n" \
 "424 2020-01-22 17:05:36 +0100 trackpickerdlg: register sensor added\n" \
 "423 2020-01-22 16:20:11 +0100 ecos: only request function descriptions in case the sync option ist set\n" \
 "422 2020-01-22 11:00:57 +0100 wio: trace added for output servo type\n" \
