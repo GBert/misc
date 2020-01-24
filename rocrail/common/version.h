@@ -1,11 +1,12 @@
 const int revisionnr = 
-429
+430
 ;
 const char* commithash = 
-"55e0c56b4e4a1c3ed19ee989aa95eda0cbcdd657";
+"3fe2b7ad726b3b63ee86a5e2d215c2a4c7fd8aea";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"430 2020-01-24 15:06:40 +0100 wiodlg: layout corrections\n" \
 "429 2020-01-24 11:54:24 +0100 wiodlg: resorted query index\n" \
 "428 2020-01-24 11:23:33 +0100 button svg corrections\n" \
 "427 2020-01-24 10:41:28 +0100 wiodlg: enable buttons first after selection\n" \
