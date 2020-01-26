@@ -1,11 +1,14 @@
 const int revisionnr = 
-430
+433
 ;
 const char* commithash = 
-"3fe2b7ad726b3b63ee86a5e2d215c2a4c7fd8aea";
+"8211032aa740590d6b08a932789f01acf085a54a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"433 2020-01-26 12:06:38 +0100 model: only reset active locos\n" \
+"432 2020-01-26 09:16:45 +0100 wio: fix for servo already in position\n" \
+"431 2020-01-26 08:05:27 +0100 routedialog: takeover command ID in case of modify\n" \
 "430 2020-01-24 15:06:40 +0100 wiodlg: layout corrections\n" \
 "429 2020-01-24 11:54:24 +0100 wiodlg: resorted query index\n" \
 "428 2020-01-24 11:23:33 +0100 button svg corrections\n" \
