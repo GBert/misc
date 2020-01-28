@@ -1,0 +1,12 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2020 OpenWrt.org
+
+START=99
+
+start() {
+	wake-up-c6020 -d -i can0
+}
+
+stop() {
+	killall wake-up-c6020
+}
