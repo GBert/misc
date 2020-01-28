@@ -61,6 +61,7 @@ define Package/can2udp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/read-cs2-ini $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/read_lococard $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pio-i2c-udp $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/wake-up-c6020 $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/wake-up-links88 $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/xntcpd $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/spitest $(1)/usr/bin/
@@ -125,8 +126,8 @@ endif
 	$(INSTALL_BIN) ./files/card-reader.sh $(1)/root/card-reader.sh
 	$(INSTALL_BIN) ./files/clone-ms2-loco.init $(1)/root/clone-ms2-loco
 	$(INSTALL_BIN) ./files/pio-i2c-udp.init $(1)/root/pio-i2c-udp
-	$(INSTALL_BIN) ./files/wake-up-links88.init $(1)/root/wake-up-links88
 	$(INSTALL_BIN) ./files/wake-up-c6020.init $(1)/root/wake-up-c6020
+	$(INSTALL_BIN) ./files/wake-up-links88.init $(1)/root/wake-up-links88
 #	$(INSTALL_BIN) ./files/scripts/get-icons.sh $(1)/root/get-icons.sh
 	$(INSTALL_BIN) ./files/s88udp.init $(1)/root
 	$(INSTALL_DIR) $(1)/sbin
