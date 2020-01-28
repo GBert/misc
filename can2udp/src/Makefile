@@ -2,7 +2,7 @@ BINS := can-bounce-test can-monitor can-replay can2eth can2udp can4lnx2udp can2s
         clone-cs2-trigger clone-ms2-loco read-cs2-ini gb2-update ir-tester cs2ping bpi-rs485 scan2lan can2lan \
         ms2wifi virtual_canbuster virtual_gfp virtual_links88 virtual_ms2 \
         get-cs-data get-cs-config pio-i2c-udp read_lococard s88udp-bpi s88udp-rpi s88test-bpi \
-        wake-up-links88 virtual_s88udp gpio-poll lan-schnitte xntcpd s88can spitest
+        wake-up-c6020 wake-up-links88 virtual_s88udp gpio-poll lan-schnitte xntcpd s88can spitest
 
 PREFIX=/usr/sbin
 
@@ -117,6 +117,9 @@ s88test-bpi: allwinner.o s88test-bpi.o
 
 wake-up-links88: wake-up-links88.o
 	$(CC) $(CFLAGS) -o wake-up-links88 wake-up-links88.o
+
+wake-up-c6020: wake-up-c6020.o
+	$(CC) $(CFLAGS) -o wake-up-c6020 wake-up-c6020.o
 
 virtual_s88udp: virtual_s88udp.o
 	$(CC) $(CFLAGS) -o virtual_s88udp virtual_s88udp.o

@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=can2udp
-PKG_RELEASE:=1.88
+PKG_RELEASE:=1.89
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_BUILD_PARALLEL:=1
@@ -126,6 +126,7 @@ endif
 	$(INSTALL_BIN) ./files/clone-ms2-loco.init $(1)/root/clone-ms2-loco
 	$(INSTALL_BIN) ./files/pio-i2c-udp.init $(1)/root/pio-i2c-udp
 	$(INSTALL_BIN) ./files/wake-up-links88.init $(1)/root/wake-up-links88
+	$(INSTALL_BIN) ./files/wake-up-c6020.init $(1)/root/wake-up-c6020
 #	$(INSTALL_BIN) ./files/scripts/get-icons.sh $(1)/root/get-icons.sh
 	$(INSTALL_BIN) ./files/s88udp.init $(1)/root
 	$(INSTALL_DIR) $(1)/sbin
