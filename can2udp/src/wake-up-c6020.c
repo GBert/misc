@@ -62,6 +62,14 @@ uint32_t be32(uint8_t *u) {
     return (u[0] << 24) | (u[1] << 16) | (u[2] << 8) | u[3];
 }
 
+void ms_sleep(unsigned int ms) {
+    struct timespec to_wait;
+
+    to_wait.tv_sec = ms / 1000;
+    to_wait.tv_nsec = (ms % 1000) * 1E6;
+    nanosleep(&to_wait, NULL);
+}
+
 int time_stamp(char *timestamp) {
     struct timeval tv;
     struct tm *tm;
@@ -121,15 +129,6 @@ int send_defined_can_frame(int can_socket, unsigned char *data, int verbose) {
     send_can_frame(can_socket, &frame, verbose);
     return 0;
 }
-
-void ms_sleep(unsigned int ms) {
-    struct timespec to_wait;
-
-    to_wait.tv_sec = ms / 1000;
-    to_wait.tv_nsec = (ms % 1000) * 1000;
-    nanosleep(&to_wait, NULL);
-}
-
 
 int main(int argc, char **argv) {
     int sc, max_fds, opt;
