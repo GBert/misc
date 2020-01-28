@@ -1,11 +1,17 @@
 const int revisionnr = 
-433
+439
 ;
 const char* commithash = 
-"8211032aa740590d6b08a932789f01acf085a54a";
+"bbeb5b09293c163c57be4650da4e183fa222bd46";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"439 2020-01-28 09:51:00 +0100 wio: reboot command added wio: cam framesize option\n" \
+"438 2020-01-27 15:10:44 +0100 xmlscript: block command unlock added\n" \
+"437 2020-01-27 13:50:06 +0100 wio: ignore wiocam for alive\n" \
+"436 2020-01-27 11:37:01 +0100 mjpg: rotate 90 left/right option added\n" \
+"435 2020-01-27 10:54:48 +0100 wiodlg: fix for setting sync option\n" \
+"434 2020-01-27 09:34:44 +0100 switch: fix for state pointer used for setting the frog\n" \
 "433 2020-01-26 12:06:38 +0100 model: only reset active locos\n" \
 "432 2020-01-26 09:16:45 +0100 wio: fix for servo already in position\n" \
 "431 2020-01-26 08:05:27 +0100 routedialog: takeover command ID in case of modify\n" \
