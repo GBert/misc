@@ -211,7 +211,7 @@ void candump_to_can(char *s, struct can_frame *frame) {
     i = candata - s;
     if ((i > 5) && ((frame->can_id & CAN_ERR_FLAG) == 0))
 	frame->can_id |= CAN_EFF_FLAG;
-	if (candata++ == NULL) return;
+    if (candata++ == NULL) return;
     if (candata[0] == 'R') {
 	frame->can_id |= CAN_RTR_FLAG;
 	frame->can_dlc = candata[1] & 0xF;
