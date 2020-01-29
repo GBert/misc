@@ -40,6 +40,7 @@ static char *F_CAN_FORMAT_STRG	= "      CAN->   0x%08X   [%d]";
 static char *T_CAN_FORMAT_STRG	= "      CAN<-   0x%08X   [%d]";
 
 static unsigned char M_CAN_BOOTLOADER[]	= { 0x00, 0x36, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static unsigned char M_CAN_PING[]	= { 0x00, 0x30, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static unsigned char M_C6020_WAKE_I[]	= { 0x00, 0x36, 0x03, 0x00, 0x05, 0x53, 0x38, 0x38, 0x00, 0xE4, 0x00, 0x00, 0x00 };
 static unsigned char M_C6020_WAKE_II[]	= { 0x00, 0x36, 0x03, 0x00, 0x05, 0x53, 0x38, 0x38, 0x00, 0x11, 0x00, 0x00, 0x00 };
 static unsigned char M_C6020_WAKE_III[]	= { 0x00, 0x44, 0x03, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -199,6 +200,9 @@ int main(int argc, char **argv) {
     max_fds = sc;
 
     /* initiate a CAN Ping */
+    memcpy(raw_frame, M_CAN_PING, 13);
+    send_defined_can_frame(sc, raw_frame, verbose);
+    ms_sleep(20);
     memcpy(raw_frame, M_CAN_BOOTLOADER, 13);
     send_defined_can_frame(sc, raw_frame, verbose);
 
@@ -220,42 +224,41 @@ int main(int argc, char **argv) {
 		case 0x31:
 		    /* looking for already known conect6020 */
 		    function = be16(&frame.data[6]);
-		    if ((function == 0x0020) && (frame.can_dlc == 8)) {
-			memcpy(&c6020_id, frame.data, 4);
+		    if ((function == 0x0020) && (be16(frame.data) == 0x3630) && (frame.can_dlc == 8)) {
+			memcpy(c6020_id, frame.data, 4);
 			printf("awoken conect6020 ID: 0x%08X\n", be32(c6020_id));
-			return(EXIT_SUCCESS);
+			return (EXIT_SUCCESS);
 		    }
 		    break;
 		case 0x37:
 		    function = be16(&frame.data[6]);
-		    printf("CAN Bootloader answer from function 0x%04x\n", function);
-		    if ((function == 0x0020) && (frame.can_dlc == 8)) {
+		    if ((function == 0x0020) && (be16(frame.data) == 0x3630) && (frame.can_dlc == 8)) {
+			memcpy(c6020_id, frame.data, 4);
 			if (verbose) {
-				printf("Found conect6020 ID: 0x%08x\n", be32(c6020_id));
-				printf("   sending wake-up sequence\n");
-			    }
-			    memcpy(&c6020_id, frame.data, 4);
+			    printf("Found conect6020 ID: 0x%08x\n", be32(c6020_id));
+			    printf("   sending wake-up sequence\n");
+			}
 
-			    memcpy(raw_frame, M_C6020_WAKE_I, 13);
-			    memcpy(&raw_frame[5], c6020_id, 4);  
-			    send_defined_can_frame(sc, raw_frame, verbose);
-			    ms_sleep(20);
+			memcpy(raw_frame, M_C6020_WAKE_I, 13);
+			memcpy(&raw_frame[5], c6020_id, 4);
+			send_defined_can_frame(sc, raw_frame, verbose);
+			ms_sleep(20);
 
-			    memcpy(raw_frame, M_C6020_WAKE_II, 13);
-			    memcpy(&raw_frame[5], c6020_id, 4);  
-			    send_defined_can_frame(sc, raw_frame, verbose);
-			    ms_sleep(1000);
+			memcpy(raw_frame, M_C6020_WAKE_II, 13);
+			memcpy(&raw_frame[5], c6020_id, 4);
+			send_defined_can_frame(sc, raw_frame, verbose);
+			ms_sleep(1000);
 
-			    memcpy(raw_frame, M_C6020_WAKE_III, 13);
-			    memcpy(&raw_frame[5], c6020_id, 4);  
-			    send_defined_can_frame(sc, raw_frame, verbose);
-			    ms_sleep(20);
+			memcpy(raw_frame, M_C6020_WAKE_III, 13);
+			memcpy(&raw_frame[5], c6020_id, 4);
+			send_defined_can_frame(sc, raw_frame, verbose);
+			ms_sleep(20);
 
-			    memcpy(raw_frame, M_C6020_WAKE_IV, 13);
-			    memcpy(&raw_frame[5], c6020_id, 4);  
-			    send_defined_can_frame(sc, raw_frame, verbose);
-			    printf("Wake-up sequence completed for ID: 0x%08x\n", be32(c6020_id));
-			    return(EXIT_SUCCESS);
+			memcpy(raw_frame, M_C6020_WAKE_IV, 13);
+			memcpy(&raw_frame[5], c6020_id, 4);
+			send_defined_can_frame(sc, raw_frame, verbose);
+			printf("Wake-up sequence completed for ID: 0x%08x\n", be32(c6020_id));
+			return (EXIT_SUCCESS);
 		    }
 		    break;
 		default:
