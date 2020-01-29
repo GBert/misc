@@ -1,11 +1,14 @@
 const int revisionnr = 
-439
+442
 ;
 const char* commithash = 
-"bbeb5b09293c163c57be4650da4e183fa222bd46";
+"d518f6bb1cf63a7c7cafaab7ed2315e03e127eb2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"442 2020-01-29 13:21:50 +0100 trackpickerdlg: fix for single slip dcrossing...\n" \
+"441 2020-01-29 10:57:37 +0100 trackpicker: single slip added\n" \
+"440 2020-01-29 08:20:01 +0100 wiodlg: CAM option\n" \
 "439 2020-01-28 09:51:00 +0100 wio: reboot command added wio: cam framesize option\n" \
 "438 2020-01-27 15:10:44 +0100 xmlscript: block command unlock added\n" \
 "437 2020-01-27 13:50:06 +0100 wio: ignore wiocam for alive\n" \
