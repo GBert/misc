@@ -203,16 +203,15 @@ void slcan_to_can(char *s, struct can_frame *frame) {
 }
 
 void candump_to_can(char *s, struct can_frame *frame) {
-    int i;
-    unsigned int dat;
+    unsigned int i, dat;
     char *candata;
 
     sscanf(s, "%08x", &frame->can_id);
-    candata = strstr(s, "#") + 1;
+    candata = strstr(s, "#");
     i = candata - s;
     if ((i > 5) && ((frame->can_id & CAN_ERR_FLAG) == 0))
 	frame->can_id |= CAN_EFF_FLAG;
-    // printf("canid 0x%08X candata %s\n", frame->can_id, candata);
+	if (candata++ == NULL) return;
     if (candata[0] == 'R') {
 	frame->can_id |= CAN_RTR_FLAG;
 	frame->can_dlc = candata[1] & 0xF;
