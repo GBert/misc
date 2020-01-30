@@ -1,11 +1,16 @@
 const int revisionnr = 
-442
+447
 ;
 const char* commithash = 
-"d518f6bb1cf63a7c7cafaab7ed2315e03e127eb2";
+"6bd47764b3c03642f8da2482e8a1d8575bbf932d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"447 2020-01-30 17:09:50 +0100 translation added for expired key\n" \
+"446 2020-01-30 13:55:38 +0100 translation merge: de\n" \
+"445 2020-01-30 12:05:06 +0100 translation merge: it, sl, fr, sr_latin, cs, nl, de\n" \
+"444 2020-01-30 09:36:57 +0100 xmlscript: switch unlock support added\n" \
+"443 2020-01-30 08:31:47 +0100 doc: check max remark length to avoid a crash\n" \
 "442 2020-01-29 13:21:50 +0100 trackpickerdlg: fix for single slip dcrossing...\n" \
 "441 2020-01-29 10:57:37 +0100 trackpicker: single slip added\n" \
 "440 2020-01-29 08:20:01 +0100 wiodlg: CAM option\n" \
