@@ -263,13 +263,13 @@ int main(int argc, char **argv) {
 		/* decode_frame(&aframe); */
 	    }
 	    if (sscanf(line, "C:%x R:%u H:%x D:%u ", &command, &response, &hash, &dlc) == 4) {
-		int sleep = 100000;
+		/* int sleep = 100000; */
 		memset(&aframe, 0, sizeof(aframe));
 		aframe.can_id = (command << 17) | (response <<16) | hash;
 		aframe.can_dlc = dlc;
 		printf("ID 0x%08x DLC %u\n", aframe.can_id, aframe.can_dlc);
 		for (int i=0; i < aframe.can_dlc; i++) {
-		    sscanf(&line[26 + i*5], "%i ", &aframe.data[i]);
+		    sscanf(&line[26 + i*5], "%hhu ", &aframe.data[i]);
 		}
 		send_can_frame(sc, &aframe);
 		print_can_frame(F_N_CAN_FORMAT_STRG, &aframe);
