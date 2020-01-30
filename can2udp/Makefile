@@ -29,7 +29,7 @@ define Build/Prepare
 	$(CP) ./src/* $(PKG_BUILD_DIR)
 endef
 
-ifneq (,$(findstring sun7i-a20,$(CONFIG_TARGET_PROFILE)))
+ifneq (,$(findstring bananapi,$(CONFIG_TARGET_PROFILE)))
         TARGET_CPPFLAGS+= -DSUNXI_A20
 endif
 
