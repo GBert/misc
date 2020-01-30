@@ -146,7 +146,7 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 3.5\n\n");
+    fprintf(stderr, "   Version 3.6\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
@@ -203,16 +203,15 @@ void slcan_to_can(char *s, struct can_frame *frame) {
 }
 
 void candump_to_can(char *s, struct can_frame *frame) {
-    int i;
-    unsigned int dat;
+    unsigned int i, dat;
     char *candata;
 
     sscanf(s, "%08x", &frame->can_id);
-    candata = strstr(s, "#") + 1;
+    candata = strstr(s, "#");
     i = candata - s;
     if ((i > 5) && ((frame->can_id & CAN_ERR_FLAG) == 0))
 	frame->can_id |= CAN_EFF_FLAG;
-    // printf("canid 0x%08X candata %s\n", frame->can_id, candata);
+    if (candata++ == NULL) return;
     if (candata[0] == 'R') {
 	frame->can_id |= CAN_RTR_FLAG;
 	frame->can_dlc = candata[1] & 0xF;
@@ -853,17 +852,16 @@ void decode_frame(struct can_frame *frame) {
     case 0x16:
     case 0x17:
 	uid = be32(frame->data);
-	if (frame->can_dlc == 6) {
-	    if ((uid >= 0x3000) && (uid < 0x3400))
-		printf("Zubehör Schalten MM2 UID 0x%08X Stellung %u Strom %u", uid - 0x3000, frame->data[4], frame->data[5]);
-	    else if ((uid >= 0x3800) && (uid < 0x4000))
-		printf("Zubehör Schalten DCC UID 0x%08X Stellung %u Strom %u", uid - 0x3800, frame->data[4], frame->data[5]);
+	if (frame->can_dlc >= 6) {
+	    if ((uid > 0x2FFF) && (uid < 0x3400))
+		printf("Magnetartikel MM1 ID %d Ausgang %u Strom %u", uid - 0x2FFF, frame->data[4], frame->data[5]);
+	    else if ((uid > 0x37FF) && (uid < 0x4000))
+		printf("Magnetartikel DCC ID %d Ausgang %u Strom %u", uid - 0x37FF, frame->data[4], frame->data[5]);
 	    else
-		printf("Zubehör Schalten UID 0x%08X Stellung %u Strom %u", uid, frame->data[4], frame->data[5]);
+		printf("Magnetartikel ID 0x%08X Ausgang %u Strom %u", uid, frame->data[4], frame->data[5]);
 	}
 	if (frame->can_dlc == 8)
-	    printf("Zubehör Schalten UID 0x%08X Stellung %u Strom %u Schaltzeit/Sonderfunktionswert %u",
-		   uid, frame->data[4], frame->data[5], be16(&frame->data[6]));
+	    printf("Schaltzeit/Sonderfunktionswert %u", be16(&frame->data[6]));
 	printf("\n");
 	break;
     /* S88 Polling */
@@ -1582,7 +1580,7 @@ int main(int argc, char **argv) {
 		}
 	    }
 	}
+	close(sc);
     }
-    close(sc);
     return 0;
 }
