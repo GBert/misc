@@ -67,15 +67,12 @@ CAN Interface konfigurieren
 ```
 sudo ip link set can0 up type can bitrate 250000 restart-ms 100
 ```
-bzw: in der Datei /etc/network/interfaces folgendes hinzufügen:
+bzw: die Datei /etc/network/interfaces.d/can0 wie folgt anlegen:
 ```
-# CAN Interface
-auto can0
-iface can0 inet manual
-        pre-up /sbin/ip link set $IFACE type can bitrate 250000 restart-ms 100
-        up /sbin/ifconfig $IFACE up
-        down /sbin/ifconfig $IFACE down
-````
+iface can0 can static
+    bitrate 250000
+        pre-up /sbin/ip link set $IFACE type can restart-ms 100
+```
 can2lan nutzen
 ```
 sudo apt-get install lighttpd
