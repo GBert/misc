@@ -1,11 +1,13 @@
 const int revisionnr = 
-447
+449
 ;
 const char* commithash = 
-"6bd47764b3c03642f8da2482e8a1d8575bbf932d";
+"21d5703a5c54a76514df6608da2a090d993f48e3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"449 2020-01-31 11:05:47 +0100 routedlg: size hints to fit labels\n" \
+"448 2020-01-31 08:14:26 +0100 rocrailinidialog: router label correction\n" \
 "447 2020-01-30 17:09:50 +0100 translation added for expired key\n" \
 "446 2020-01-30 13:55:38 +0100 translation merge: de\n" \
 "445 2020-01-30 12:05:06 +0100 translation merge: it, sl, fr, sr_latin, cs, nl, de\n" \
