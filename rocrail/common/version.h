@@ -1,11 +1,16 @@
 const int revisionnr = 
-449
+454
 ;
 const char* commithash = 
-"21d5703a5c54a76514df6608da2a090d993f48e3";
+"070b488f252710f884ae0a9031567c5fec87354d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"454 2020-02-01 16:03:31 +0100 item: regard rotate parameter on change in case of an mjpg stream\n" \
+"453 2020-02-01 14:25:41 +0100 wio: process RFID error events\n" \
+"452 2020-02-01 12:56:56 +0100 mbus: trace level change for 2.0 no-channels\n" \
+"451 2020-02-01 10:31:12 +0100 loc: in case of active BAT overwrite the V in foreign commands\n" \
+"450 2020-02-01 08:09:37 +0100 z21: send multisense long QoS to the loco instead of the reporting sensor\n" \
 "449 2020-01-31 11:05:47 +0100 routedlg: size hints to fit labels\n" \
 "448 2020-01-31 08:14:26 +0100 rocrailinidialog: router label correction\n" \
 "447 2020-01-30 17:09:50 +0100 translation added for expired key\n" \
