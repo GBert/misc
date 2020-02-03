@@ -1,11 +1,19 @@
 const int revisionnr = 
-454
+462
 ;
 const char* commithash = 
-"070b488f252710f884ae0a9031567c5fec87354d";
+"5b12ff23365062e04ba842c1ec768da159c4a4b9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"462 2020-02-03 15:08:15 +0100 wiodlg: railcom cutout option added\n" \
+"461 2020-02-03 12:03:59 +0100 wio: work around for old compilers\n" \
+"460 2020-02-03 11:23:05 +0100 mkdeb: removed rocraild\n" \
+"459 2020-02-03 10:37:41 +0100 model: generate loco on discover/sync\n" \
+"458 2020-02-03 08:48:53 +0100 guiframe: disable popupmenu items in case of none active loco\n" \
+"457 2020-02-02 16:59:41 +0100 rocrail deamon support ended\n" \
+"456 2020-02-02 14:16:12 +0100 wio: allow 50 steps for mobile\n" \
+"455 2020-02-02 10:22:31 +0100 wio: ebreak command added\n" \
 "454 2020-02-01 16:03:31 +0100 item: regard rotate parameter on change in case of an mjpg stream\n" \
 "453 2020-02-01 14:25:41 +0100 wio: process RFID error events\n" \
 "452 2020-02-01 12:56:56 +0100 mbus: trace level change for 2.0 no-channels\n" \
