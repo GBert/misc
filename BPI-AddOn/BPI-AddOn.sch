@@ -2757,23 +2757,23 @@ Wire Wire Line
 	6750 4200 6750 4550
 Wire Wire Line
 	10750 4700 10750 4750
-Text Label 1850 5350 0    60   ~ 0
+Text Label 2075 5350 0    60   ~ 0
 CANH
-Text Label 1850 5450 0    60   ~ 0
+Text Label 2075 5450 0    60   ~ 0
 CANL
-Text Label 1850 5550 0    60   ~ 0
+Text Label 1800 5550 0    60   ~ 0
 5V
-Text Label 1850 5650 0    60   ~ 0
+Text Label 1950 5650 0    60   ~ 0
 GNDA
 $Comp
 L Connector_Generic:Conn_01x04 J4
 U 1 1 5E40613A
-P 2250 5550
-F 0 "J4" H 2350 5500 50  0000 C CNN
-F 1 "Grove" H 2450 5600 50  0000 C CNN
-F 2 "w_conn_jst-ph:grove-straight" H 2250 5550 50  0001 C CNN
-F 3 "~" H 2250 5550 50  0001 C CNN
-	1    2250 5550
+P 2475 5550
+F 0 "J4" H 2575 5500 50  0000 C CNN
+F 1 "Grove" H 2300 5750 50  0000 C CNN
+F 2 "w_conn_jst-ph:grove-straight" H 2475 5550 50  0001 C CNN
+F 3 "~" H 2475 5550 50  0001 C CNN
+	1    2475 5550
 	1    0    0    1   
 $EndComp
 $Comp
@@ -2801,13 +2801,11 @@ Wire Wire Line
 Wire Wire Line
 	1800 4975 2050 4975
 Wire Wire Line
-	2050 5650 1800 5650
+	2275 5650 1800 5650
 Wire Wire Line
-	1800 5550 2050 5550
+	1800 5450 2275 5450
 Wire Wire Line
-	1800 5450 2050 5450
-Wire Wire Line
-	1800 5350 2050 5350
+	1800 5350 2275 5350
 Wire Wire Line
 	1800 3400 2000 3400
 Wire Wire Line
@@ -3064,6 +3062,21 @@ Wire Wire Line
 	1300 7450 1400 7450
 Wire Wire Line
 	700  7450 1000 7450
+Wire Wire Line
+	2250 5550 2275 5550
+Wire Wire Line
+	1850 5550 1800 5550
+$Comp
+L Jumper:Jumper_2_Open JP1
+U 1 1 5FB45949
+P 2050 5550
+F 0 "JP1" H 2050 5575 50  0000 C CNN
+F 1 "Jumper_2_Open" H 2050 5694 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 2050 5550 50  0001 C CNN
+F 3 "~" H 2050 5550 50  0001 C CNN
+	1    2050 5550
+	1    0    0    -1  
+$EndComp
 Wire Bus Line
 	2650 5825 5450 5825
 Wire Bus Line
