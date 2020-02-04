@@ -1,11 +1,14 @@
 const int revisionnr = 
-462
+465
 ;
 const char* commithash = 
-"5b12ff23365062e04ba842c1ec768da159c4a4b9";
+"d3715529abd1a6ad98ea1d7ffd4cc2470e4b3473";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"465 2020-02-04 13:15:54 +0100 wiodlg: railcom option\n" \
+"464 2020-02-04 13:15:29 +0100 translation merge: de,nl,fr\n" \
+"463 2020-02-04 11:06:28 +0100 stage: trace level for enter sensor occupied moved to level automatic\n" \
 "462 2020-02-03 15:08:15 +0100 wiodlg: railcom cutout option added\n" \
 "461 2020-02-03 12:03:59 +0100 wio: work around for old compilers\n" \
 "460 2020-02-03 11:23:05 +0100 mkdeb: removed rocraild\n" \
