@@ -521,7 +521,7 @@ CANL
 Text Label 3500 3500 0    60   ~ 0
 CANH
 $Comp
-L BPI-AddOn-rescue:CONN_01X08 P13
+L BPI-AddOn-rescue:CONN_01X08-BPI-AddOn-rescue P13
 U 1 1 5759D031
 P 4950 7550
 F 0 "P13" H 4950 8000 50  0000 C CNN
@@ -533,7 +533,7 @@ F 3 "" H 4950 7550 50  0000 C CNN
 $EndComp
 NoConn ~ 4400 6650
 $Comp
-L BPI-AddOn-rescue:MC34063 U1
+L BPI-AddOn-rescue:MC34063-BPI-AddOn-rescue U1
 U 1 1 5759E1D1
 P 7900 2350
 F 0 "U1" H 7950 2400 50  0000 L CNN
@@ -574,7 +574,7 @@ Vdd
 Text Label 3800 900  0    60   ~ 0
 Vdd
 $Comp
-L BPI-AddOn-rescue:USB_B P16
+L BPI-AddOn-rescue:USB_B-BPI-AddOn-rescue P16
 U 1 1 575B8D34
 P 1600 7000
 F 0 "P16" H 1800 6800 50  0000 C CNN
@@ -607,7 +607,7 @@ F 3 "" H 2000 7400 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BPI-AddOn-rescue:R R1
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R1
 U 1 1 575B915B
 P 2000 7150
 F 0 "R1" V 2080 7150 50  0000 C CNN
@@ -618,7 +618,7 @@ F 3 "" H 2000 7150 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BPI-AddOn-rescue:BARREL_JACK CON1
+L BPI-AddOn-rescue:BARREL_JACK-BPI-AddOn-rescue CON1
 U 1 1 575B93EA
 P 1550 6450
 F 0 "CON1" H 1550 6700 50  0000 C CNN
@@ -730,7 +730,7 @@ $EndComp
 NoConn ~ 1500 7300
 NoConn ~ 1600 7300
 $Comp
-L BPI-AddOn-rescue:C C1
+L BPI-AddOn-rescue:C-BPI-AddOn-rescue C1
 U 1 1 575AC9F4
 P 7050 2700
 F 0 "C1" H 7075 2800 50  0000 L CNN
@@ -763,7 +763,7 @@ F 3 "" H 7050 3150 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BPI-AddOn-rescue:R R5
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R5
 U 1 1 575AD58C
 P 8800 1800
 F 0 "R5" V 8880 1800 50  0000 C CNN
@@ -774,7 +774,7 @@ F 3 "" H 8800 1800 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L BPI-AddOn-rescue:R R4
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R4
 U 1 1 575AD62D
 P 7350 1850
 F 0 "R4" V 7430 1850 50  0000 C CNN
@@ -785,7 +785,7 @@ F 3 "" H 7350 1850 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L BPI-AddOn-rescue:INDUCTOR L1
+L BPI-AddOn-rescue:INDUCTOR-BPI-AddOn-rescue L1
 U 1 1 575ADBAF
 P 9300 1850
 F 0 "L1" V 9250 1850 50  0000 C CNN
@@ -796,7 +796,7 @@ F 3 "" H 9300 1850 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BPI-AddOn-rescue:R R6
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R6
 U 1 1 575ADF4D
 P 8850 2850
 F 0 "R6" V 8930 2850 50  0000 C CNN
@@ -807,7 +807,7 @@ F 3 "" H 8850 2850 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BPI-AddOn-rescue:R R7
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R7
 U 1 1 575AE02D
 P 9050 2850
 F 0 "R7" V 9130 2850 50  0000 C CNN
@@ -829,7 +829,7 @@ F 3 "" H 8850 3150 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BPI-AddOn-rescue:D_Schottky D1
+L BPI-AddOn-rescue:D_Schottky-BPI-AddOn-rescue D1
 U 1 1 575AE51D
 P 9300 2850
 F 0 "D1" H 9300 2950 50  0000 C CNN
@@ -840,7 +840,7 @@ F 3 "" H 9300 2850 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L BPI-AddOn-rescue:CP C3
+L BPI-AddOn-rescue:CP-BPI-AddOn-rescue C3
 U 1 1 575AF2D7
 P 9300 3600
 F 0 "C3" H 9325 3700 50  0000 L CNN
@@ -864,7 +864,7 @@ $EndComp
 Text Label 9500 3200 0    60   ~ 0
 Vout
 $Comp
-L BPI-AddOn-rescue:CP C2
+L BPI-AddOn-rescue:CP-BPI-AddOn-rescue C2
 U 1 1 575B0337
 P 6850 2350
 F 0 "C2" H 6875 2450 50  0000 L CNN
@@ -960,7 +960,7 @@ F 3 "" H 8850 6300 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BPI-AddOn-rescue:USB_OTG P21
+L BPI-AddOn-rescue:USB_OTG-BPI-AddOn-rescue P21
 U 1 1 57641A44
 P 6650 5450
 F 0 "P21" H 6975 5325 50  0000 C CNN
@@ -971,7 +971,7 @@ F 3 "" V 6600 5350 50  0000 C CNN
 	0    -1   1    0   
 $EndComp
 $Comp
-L BPI-AddOn-rescue:R R8
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R8
 U 1 1 576422EA
 P 7800 5350
 F 0 "R8" V 7880 5350 50  0000 C CNN
@@ -982,7 +982,7 @@ F 3 "" H 7800 5350 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L BPI-AddOn-rescue:C C6
+L BPI-AddOn-rescue:C-BPI-AddOn-rescue C6
 U 1 1 576425F3
 P 7350 5800
 F 0 "C6" H 7375 5900 50  0000 L CNN
@@ -993,7 +993,7 @@ F 3 "" H 7350 5800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BPI-AddOn-rescue:C C7
+L BPI-AddOn-rescue:C-BPI-AddOn-rescue C7
 U 1 1 5764273E
 P 7600 5800
 F 0 "C7" H 7625 5900 50  0000 L CNN
@@ -1004,7 +1004,7 @@ F 3 "" H 7600 5800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BPI-AddOn-rescue:FT230XS U2
+L BPI-AddOn-rescue:FT230XS-BPI-AddOn-rescue U2
 U 1 1 5764136A
 P 8850 5450
 F 0 "U2" H 8300 6050 50  0000 L CNN
@@ -1026,7 +1026,7 @@ F 3 "" H 7350 6150 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BPI-AddOn-rescue:C C9
+L BPI-AddOn-rescue:C-BPI-AddOn-rescue C9
 U 1 1 57645485
 P 7300 4750
 F 0 "C9" H 7325 4850 50  0000 L CNN
@@ -1037,7 +1037,7 @@ F 3 "" H 7300 4750 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BPI-AddOn-rescue:R Fe1
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue Fe1
 U 1 1 576471B3
 P 7450 4400
 F 0 "Fe1" V 7530 4400 50  0000 C CNN
@@ -1048,7 +1048,7 @@ F 3 "" H 7450 4400 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L BPI-AddOn-rescue:C C4
+L BPI-AddOn-rescue:C-BPI-AddOn-rescue C4
 U 1 1 5764923D
 P 7100 5800
 F 0 "C4" H 7125 5900 50  0000 L CNN
@@ -1060,7 +1060,7 @@ F 3 "" H 7100 5800 50  0000 C CNN
 $EndComp
 NoConn ~ 6950 5550
 $Comp
-L BPI-AddOn-rescue:R R10
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R10
 U 1 1 5764CBD0
 P 9850 5300
 F 0 "R10" V 9930 5300 50  0000 C CNN
@@ -1071,7 +1071,7 @@ F 3 "" H 9850 5300 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BPI-AddOn-rescue:R R11
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R11
 U 1 1 5764CDC5
 P 10150 5300
 F 0 "R11" V 10230 5300 50  0000 C CNN
@@ -1082,7 +1082,7 @@ F 3 "" H 10150 5300 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BPI-AddOn-rescue:LED D2
+L BPI-AddOn-rescue:LED-BPI-AddOn-rescue D2
 U 1 1 5764D095
 P 9850 4850
 F 0 "D2" H 9850 4950 50  0000 C CNN
@@ -1093,7 +1093,7 @@ F 3 "" H 9850 4850 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L BPI-AddOn-rescue:LED D3
+L BPI-AddOn-rescue:LED-BPI-AddOn-rescue D3
 U 1 1 5764D177
 P 10150 4850
 F 0 "D3" H 10150 4950 50  0000 C CNN
@@ -1112,7 +1112,7 @@ CTS
 Text Label 9700 5250 2    60   ~ 0
 RTS
 $Comp
-L BPI-AddOn-rescue:CONN_01X06 P22
+L BPI-AddOn-rescue:CONN_01X06-BPI-AddOn-rescue P22
 U 1 1 576518E4
 P 7700 3850
 F 0 "P22" H 7700 4200 50  0000 C CNN
@@ -1134,7 +1134,7 @@ F 3 "" H 8250 4200 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BPI-AddOn-rescue:C C5
+L BPI-AddOn-rescue:C-BPI-AddOn-rescue C5
 U 1 1 57653A31
 P 8050 5900
 F 0 "C5" H 8075 6000 50  0000 L CNN
@@ -1145,7 +1145,7 @@ F 3 "" H 8050 5900 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BPI-AddOn-rescue:C C8
+L BPI-AddOn-rescue:C-BPI-AddOn-rescue C8
 U 1 1 57653AF9
 P 7600 4750
 F 0 "C8" H 7625 4850 50  0000 L CNN
@@ -1175,7 +1175,7 @@ RTS
 Text Label 7900 3900 0    60   ~ 0
 CTS
 $Comp
-L BPI-AddOn-rescue:R R12
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R12
 U 1 1 57657833
 P 9750 6050
 F 0 "R12" V 9830 6050 50  0000 C CNN
@@ -1239,7 +1239,7 @@ RTS
 Text Label 6600 4450 2    60   ~ 0
 CTS
 $Comp
-L BPI-AddOn-rescue:CONN_02X02 P24
+L BPI-AddOn-rescue:CONN_02X02-BPI-AddOn-rescue P24
 U 1 1 5765DBC2
 P 10800 5000
 F 0 "P24" H 10800 5150 50  0000 C CNN
@@ -1265,7 +1265,7 @@ F 3 "" H 9800 4150 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BPI-AddOn-rescue:LED D4
+L BPI-AddOn-rescue:LED-BPI-AddOn-rescue D4
 U 1 1 57660EC6
 P 4650 4275
 F 0 "D4" H 4650 4375 50  0000 C CNN
@@ -1276,7 +1276,7 @@ F 3 "" H 4650 4275 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BPI-AddOn-rescue:R R13
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R13
 U 1 1 576611FB
 P 4050 4275
 F 0 "R13" V 4130 4275 50  0000 C CNN
@@ -1340,7 +1340,7 @@ F 3 "" H 8250 3500 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BPI-AddOn-rescue:CONN_02X11 P14
+L BPI-AddOn-rescue:CONN_02X11-BPI-AddOn-rescue P14
 U 1 1 57695004
 P 10350 1800
 F 0 "P14" H 10350 2400 50  0000 C CNN
@@ -1351,7 +1351,7 @@ F 3 "" H 10350 600 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L BPI-AddOn-rescue:CONN_02X11 P15
+L BPI-AddOn-rescue:CONN_02X11-BPI-AddOn-rescue P15
 U 1 1 5759E2E8
 P 10450 3550
 F 0 "P15" H 10450 4150 50  0000 C CNN
@@ -1448,7 +1448,7 @@ Text Label 9800 2200 0    60   ~ 0
 Text Label 9800 2300 0    60   ~ 0
 21_21
 $Comp
-L BPI-AddOn-rescue:LED D5
+L BPI-AddOn-rescue:LED-BPI-AddOn-rescue D5
 U 1 1 576A6C99
 P 5800 7100
 F 0 "D5" H 5800 7200 50  0000 C CNN
@@ -1459,7 +1459,7 @@ F 3 "" H 5800 7100 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L BPI-AddOn-rescue:R R14
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R14
 U 1 1 576A6F10
 P 5800 6650
 F 0 "R14" V 5880 6650 50  0000 C CNN
@@ -1481,7 +1481,7 @@ F 3 "" H 5800 1850 50  0000 L CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L BPI-AddOn-rescue:R R15
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R15
 U 1 1 576A73BD
 P 5500 900
 F 0 "R15" V 5580 900 50  0000 C CNN
@@ -1492,7 +1492,7 @@ F 3 "" H 5500 900 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L BPI-AddOn-rescue:R R17
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R17
 U 1 1 576A7535
 P 6100 900
 F 0 "R17" V 6180 900 50  0000 C CNN
@@ -1503,7 +1503,7 @@ F 3 "" H 6100 900 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L BPI-AddOn-rescue:R R16
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R16
 U 1 1 576A8110
 P 5500 1750
 F 0 "R16" V 5580 1750 50  0000 C CNN
@@ -1514,7 +1514,7 @@ F 3 "" H 5500 1750 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L BPI-AddOn-rescue:R R18
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R18
 U 1 1 576A836C
 P 6100 1750
 F 0 "R18" V 6180 1750 50  0000 C CNN
@@ -1538,7 +1538,7 @@ F 3 "" H 5800 1000 50  0000 L CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L BPI-AddOn-rescue:CONN_01X03 P26
+L BPI-AddOn-rescue:CONN_01X03-BPI-AddOn-rescue P26
 U 1 1 576B14C0
 P 6750 1000
 F 0 "P26" H 6750 1200 50  0000 C CNN
@@ -1560,7 +1560,7 @@ F 3 "" H 5800 2700 50  0000 L CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L BPI-AddOn-rescue:R R19
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R19
 U 1 1 576B5090
 P 5500 2600
 F 0 "R19" V 5580 2600 50  0000 C CNN
@@ -1571,7 +1571,7 @@ F 3 "" H 5500 2600 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L BPI-AddOn-rescue:R R21
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R21
 U 1 1 576B5096
 P 6100 2600
 F 0 "R21" V 6180 2600 50  0000 C CNN
@@ -1593,7 +1593,7 @@ F 3 "" H 5800 3550 50  0000 L CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L BPI-AddOn-rescue:R R20
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R20
 U 1 1 576B6BFE
 P 5500 3450
 F 0 "R20" V 5580 3450 50  0000 C CNN
@@ -1604,7 +1604,7 @@ F 3 "" H 5500 3450 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L BPI-AddOn-rescue:R R22
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R22
 U 1 1 576B6C04
 P 6100 3450
 F 0 "R22" V 6180 3450 50  0000 C CNN
@@ -2422,7 +2422,7 @@ Wire Wire Line
 Text Label 5100 950  2    60   ~ 0
 Vccio
 $Comp
-L BPI-AddOn-rescue:CONN_01X03 P28
+L BPI-AddOn-rescue:CONN_01X03-BPI-AddOn-rescue P28
 U 1 1 576E50BD
 P 7450 1150
 F 0 "P28" H 7450 1350 50  0000 C CNN
@@ -2490,7 +2490,7 @@ Wire Wire Line
 Wire Wire Line
 	4600 1200 4600 1300
 $Comp
-L BPI-AddOn-rescue:R R25
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R25
 U 1 1 576AF154
 P 10850 5400
 F 0 "R25" V 10750 5400 50  0000 C CNN
@@ -2501,7 +2501,7 @@ F 3 "" H 10850 5400 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L BPI-AddOn-rescue:R R24
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R24
 U 1 1 576B0FAC
 P 10750 4500
 F 0 "R24" V 10830 4500 50  0000 C CNN
@@ -2512,7 +2512,7 @@ F 3 "" H 10750 4500 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L BPI-AddOn-rescue:R R23
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R23
 U 1 1 576B139B
 P 10550 4700
 F 0 "R23" V 10630 4700 50  0000 C CNN
@@ -2529,7 +2529,7 @@ Wire Wire Line
 Wire Wire Line
 	10850 5550 10850 5875
 $Comp
-L BPI-AddOn-rescue:CONN_01X01 P29
+L BPI-AddOn-rescue:CONN_01X01-BPI-AddOn-rescue P29
 U 1 1 576B2E5C
 P 10400 5000
 F 0 "P29" H 10400 5100 50  0000 C CNN
@@ -2545,7 +2545,7 @@ Wire Wire Line
 	10750 4700 10700 4700
 Connection ~ 10750 4700
 $Comp
-L BPI-AddOn-rescue:CONN_01X04 P30
+L BPI-AddOn-rescue:CONN_01X04-BPI-AddOn-rescue P30
 U 1 1 576C2EDE
 P 8700 1000
 F 0 "P30" H 8700 1250 50  0000 C CNN
@@ -2556,7 +2556,7 @@ F 3 "" H 8700 1000 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BPI-AddOn-rescue:CONN_01X04 P31
+L BPI-AddOn-rescue:CONN_01X04-BPI-AddOn-rescue P31
 U 1 1 576C5433
 P 9100 1000
 F 0 "P31" H 9100 1250 50  0000 C CNN
@@ -2945,7 +2945,7 @@ CANL
 Text Label 2100 4000 0    60   ~ 0
 CANH
 $Comp
-L BPI-AddOn-rescue:R R3
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R3
 U 1 1 57658261
 P 2200 4250
 F 0 "R3" V 2280 4250 50  0000 C CNN
@@ -2971,7 +2971,7 @@ Entry Wire Line
 Entry Wire Line
 	1700 4100 1800 4000
 $Comp
-L BPI-AddOn-rescue:R R2
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R2
 U 1 1 57657D70
 P 2050 4250
 F 0 "R2" V 2130 4250 50  0000 C CNN
@@ -2997,7 +2997,7 @@ $EndComp
 Wire Wire Line
 	7950 5450 8150 5450
 $Comp
-L BPI-AddOn-rescue:R R9
+L BPI-AddOn-rescue:R-BPI-AddOn-rescue R9
 U 1 1 576423DF
 P 7800 5450
 F 0 "R9" V 7880 5450 50  0000 C CNN
