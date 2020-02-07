@@ -1,11 +1,12 @@
 const int revisionnr = 
-465
+466
 ;
 const char* commithash = 
-"d3715529abd1a6ad98ea1d7ffd4cc2470e4b3473";
+"0ba6c186ceeeab76a7d6d5abf90bbe1fbd0db89f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"466 2020-02-05 15:11:59 +0100 router: accept IID WIO as valid\n" \
 "465 2020-02-04 13:15:54 +0100 wiodlg: railcom option\n" \
 "464 2020-02-04 13:15:29 +0100 translation merge: de,nl,fr\n" \
 "463 2020-02-04 11:06:28 +0100 stage: trace level for enter sensor occupied moved to level automatic\n" \
