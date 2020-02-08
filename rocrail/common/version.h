@@ -1,11 +1,13 @@
 const int revisionnr = 
-466
+468
 ;
 const char* commithash = 
-"0ba6c186ceeeab76a7d6d5abf90bbe1fbd0db89f";
+"75df3b02e69b9b3ad37f73cb05d2412093b1ea75";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"468 2020-02-08 10:22:49 +0100 wio: try find the loco by short ID\n" \
+"467 2020-02-07 08:39:06 +0100 wio: memory leak fixes\n" \
 "466 2020-02-05 15:11:59 +0100 router: accept IID WIO as valid\n" \
 "465 2020-02-04 13:15:54 +0100 wiodlg: railcom option\n" \
 "464 2020-02-04 13:15:29 +0100 translation merge: de,nl,fr\n" \
