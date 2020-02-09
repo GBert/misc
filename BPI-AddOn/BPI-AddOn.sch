@@ -2787,10 +2787,10 @@ F 3 "" H 2800 3850 50  0000 C CNN
 	1    2800 3850
 	1    0    0    -1  
 $EndComp
-Text Label 1825 5175 0    60   ~ 0
+Text Label 1850 4875 0    60   ~ 0
 GNDA
 Connection ~ 2650 5825
-Text Label 1875 5075 0    60   ~ 0
+Text Label 1875 5175 0    60   ~ 0
 Vcc
 Text Label 1850 4975 0    60   ~ 0
 CANL
@@ -2850,10 +2850,10 @@ $Comp
 L Connector_Generic:Conn_01x04 J5
 U 1 1 5E5B848C
 P 2250 5075
-F 0 "J5" H 2350 5025 50  0000 C CNN
-F 1 "JST" H 2400 5125 50  0000 C CNN
-F 2 "Connector_JST:JST_ZE_S04B-ZESK-2D_1x04_P1.50mm_Horizontal" H 2250 5075 50  0001 C CNN
-F 3 "~" H 2250 5075 50  0001 C CNN
+F 0 "J5" H 2375 4975 50  0000 C CNN
+F 1 "JST ZH" H 2450 5075 50  0000 C CNN
+F 2 "BPI-AddOn:B4B-ZR" H 2250 5075 50  0001 C CNN
+F 3 "http://www.jst-mfg.com/product/pdf/eng/eZH.pdf" H 2250 5075 50  0001 C CNN
 	1    2250 5075
 	1    0    0    1   
 $EndComp
@@ -2920,7 +2920,7 @@ Entry Wire Line
 	1700 900  1800 800 
 Wire Wire Line
 	1800 4875 2050 4875
-Text Label 1850 4875 0    60   ~ 0
+Text Label 1850 5075 0    60   ~ 0
 CANH
 Wire Wire Line
 	2050 4000 2200 4000
