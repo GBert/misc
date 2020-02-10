@@ -1,11 +1,15 @@
 const int revisionnr = 
-468
+472
 ;
 const char* commithash = 
-"75df3b02e69b9b3ad37f73cb05d2412093b1ea75";
+"a422dcb503ba5b39a0013c40b26415ccebaf73f7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"472 2020-02-10 13:29:49 +0100 routedlg: revert layout corrections\n" \
+"471 2020-02-10 08:43:36 +0100 cardlg: stay on top flag added in the message dialog on delete\n" \
+"470 2020-02-09 13:53:22 +0100 cardlg: fix for not popup message?\n" \
+"469 2020-02-09 08:22:09 +0100 cardlg: sorting fix\n" \
 "468 2020-02-08 10:22:49 +0100 wio: try find the loco by short ID\n" \
 "467 2020-02-07 08:39:06 +0100 wio: memory leak fixes\n" \
 "466 2020-02-05 15:11:59 +0100 router: accept IID WIO as valid\n" \
