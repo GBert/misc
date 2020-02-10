@@ -26,7 +26,7 @@
 ; Device constants
 ;------------------------------------------------------------------------------
 
-                ERRORLEVEL  -302,-1301
+                ERRORLEVEL  -302
                 ;LIST        P=PIC18F25K83
 #INCLUDE        "p18f25k83.inc"
                 LIST

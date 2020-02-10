@@ -92,13 +92,14 @@ INIT
 		CLRF    ANSELC		    ;N
                 CLRF    CM1CON0             ;C
                 CLRF    CM2CON0             ;C
-                CLRF    CM1CON1         ;C
-                CLRF    CM2CON1         ;C
+                CLRF    CM1CON1             ;C
+                CLRF    CM2CON1             ;C
 
                 CLRF    GPIO                ; Init. LED
                 RTSCLR                      ; Init. RTS
                 CLRF    DDR                 ; All O/P
 
+                RCALL   INITPPS
                 RCALL   INITUART            ; Init. UART
                 RCALL   INITRING            ; Init. Rx/Tx Ring
                 RCALL   INITCAN             ; Init. CAN Bus
@@ -107,7 +108,7 @@ INIT
                 RCALL   PIOINIT             ; Init. PIO
 
                 BSF     RCON,IPEN           ; Enable priority interrupts
-                BSF     INTCON0,PEIE         ; Init. ISR
+                BSF     INTCON0,PEIE        ; Init. ISR
                 BSF     INTCON0,GIE
                
 ;------------------------------------------------------------------------------
@@ -125,6 +126,7 @@ MAIN
 ; Includes
 ;------------------------------------------------------------------------------
 
+#INCLUDE        "pps.inc"                   ; PPS
 #INCLUDE        "uart.inc"                  ; UART
 #INCLUDE        "ring.inc"                  ; Rx/Tx Ring
 #INCLUDE        "can.inc"                   ; CAN

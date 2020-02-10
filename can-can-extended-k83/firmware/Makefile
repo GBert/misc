@@ -19,7 +19,10 @@ ifeq ($(strip $(GPASM)),)
 $(error gputils unavailable)
 endif
 
-AS:=gpasm -a inhx32 -e on -I ../include/
+AS:=gpasm -a inhx32 -e on -I../include/
+AS:=/opt/microchip/mplabx/v5.30/mpasmx/mpasmx
+
+PROCESSOR	= 18f25k83
 
 ASOURCE:=$(filter-out template.asm, $(wildcard *.asm))
 AHEADER:=$(wildcard ../include/*.inc)
@@ -31,7 +34,7 @@ $(AOBJECT):$(AHEADER) Makefile
 
 %.hex:%.asm
 	@echo -n "[AS] "
-	$(AS) $< -o $@
+	$(AS) -p$(PROCESSOR) $< -e -y -o$@ $(ASMFLAGS)
 
 upload:build
 	easy-loader -v /dev/ttyPL2303 $(AOBJECT)
