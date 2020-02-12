@@ -1,11 +1,14 @@
 const int revisionnr = 
-472
+475
 ;
 const char* commithash = 
-"a422dcb503ba5b39a0013c40b26415ccebaf73f7";
+"dc7d17a6fced0b119de2a9936e44136abc603c6f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"475 2020-02-11 14:34:29 +0100 loc: save current block enterside for use on soft reset\n" \
+"474 2020-02-11 11:26:17 +0100 car: filter direction/lights changes\n" \
+"473 2020-02-11 10:43:10 +0100 wio: support for railcom dyn\n" \
 "472 2020-02-10 13:29:49 +0100 routedlg: revert layout corrections\n" \
 "471 2020-02-10 08:43:36 +0100 cardlg: stay on top flag added in the message dialog on delete\n" \
 "470 2020-02-09 13:53:22 +0100 cardlg: fix for not popup message?\n" \
