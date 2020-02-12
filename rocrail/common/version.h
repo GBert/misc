@@ -1,11 +1,12 @@
 const int revisionnr = 
-475
+476
 ;
 const char* commithash = 
-"dc7d17a6fced0b119de2a9936e44136abc603c6f";
+"d4fcde2239ac063fa823ddba97fabd9533e2f112";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"476 2020-02-12 10:06:54 +0100 wio: provide loco mode in case of events\n" \
 "475 2020-02-11 14:34:29 +0100 loc: save current block enterside for use on soft reset\n" \
 "474 2020-02-11 11:26:17 +0100 car: filter direction/lights changes\n" \
 "473 2020-02-11 10:43:10 +0100 wio: support for railcom dyn\n" \
