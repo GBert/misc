@@ -39,7 +39,7 @@ INITPPS
                 MOVLW   0x0B                ;RB3
                 MOVWF   CANRXPPS            ;RB3 = CANRX
 
-                ;I2C 1
+                ;I2C1
                 ;BANKSEL I2C1SCLPPS
                 MOVLW   0x13                ;RC3
                 MOVWF   I2C1SCLPPS          ;RC3 = I2C1 SCL
@@ -60,8 +60,15 @@ INITPPS
 
                 ;CAN
                 ;BANKSEL RB2PPS
-                MOVLW   0x33                ;CAN0 RX
+                MOVLW   0x33                ;CAN0 TX
                 MOVWF   RB2PPS              ;RB2 CANRX
+
+                ;I2C1 needs to been set as output also (DS40001943B page 264)
+                MOVLW   0x23                ;I2C1 SCL
+                MOVW    RC3PPS              ;RC3 SCL1
+
+                MOVLW   0x22                ;I2C1 SDA
+                MOVW    RC4PPS              ;RC4 SDA1
 
                 ;RS485
                 ;BANKSEL RC7PPS
