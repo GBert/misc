@@ -61,7 +61,7 @@ INITPPS
                 ;CAN
                 ;BANKSEL RB2PPS
                 MOVLW   0x33                ;CAN0 TX
-                MOVWF   RB2PPS              ;RB2 CANRX
+                MOVWF   RB2PPS              ;RB2 CANTX
 
                 ;I2C1 needs to been set as output also (DS40001943B page 264)
                 MOVLW   0x23                ;I2C1 SCL
