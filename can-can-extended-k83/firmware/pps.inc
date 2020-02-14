@@ -65,10 +65,10 @@ INITPPS
 
                 ;I2C1 needs to been set as output also (DS40001943B page 264)
                 MOVLW   0x23                ;I2C1 SCL
-                MOVW    RC3PPS              ;RC3 SCL1
+                MOVWF   RC3PPS              ;RC3 SCL1
 
                 MOVLW   0x22                ;I2C1 SDA
-                MOVW    RC4PPS              ;RC4 SDA1
+                MOVWF   RC4PPS              ;RC4 SDA1
 
                 ;RS485
                 ;BANKSEL RC7PPS
