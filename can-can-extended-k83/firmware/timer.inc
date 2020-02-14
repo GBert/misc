@@ -37,14 +37,18 @@ TIMERINIT
 		; timer period = 1/16MHz = 0.0625 us
 		; prescaler period = .0625us * 32 = 2 us
 		; overflow period  = 2 us * 256 = 512 us
-		
-                MOVLW   (1 << TMR0ON) + (1 << T08BIT) + (1 << T0PS2)
-                MOVWF   T0CON
+
+                BANKSEL T0CON0
+                MOVLW   (1 << EN)
+                MOVWF   T0CON0
+                MOVLW   5
+                MOVWF   T0CON1
                 RETURN
 
 SCHEDULE
                 ; must reset Timer1 overflow flag
-		BCF	INTCON, TMR0IF
+                BANKSEL PIR3
+		BCF	PIR3, TMR0IF
 		INCFSZ	TCOUNTER,F
 		RETURN
 
@@ -71,10 +75,12 @@ SCHEDULE
 		RETURN
 
 STATUS_LED_OFF
+                BANKSEL LATA
 		BCF	LATA, 3
 		RETURN
 
 STATUS_LED_ON
+                BANKSEL LATA
 		BSF	LATA, 3
 		RETURN
 

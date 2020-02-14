@@ -38,14 +38,16 @@
 ; Clock Rate
 #DEFINE         CLOCK       64000000
 
-; UART PORTC or PORTB
-#DEFINE         UART        PORTB
+; UART PORTC or PORTB for PIC18FxxK80
+; #DEFINE         UART        PORTB
+#DEFINE		K83	    83
+#DEFINE         UART        K83
 
 ; UART Baud Rate
 #DEFINE         BAUDRATE    500000
 
 ; I2C Rate
-#DEFINE         I2CRATE     400000
+#DEFINE         I2CRATE     100000
 
 ; CAN PORTB or PORTC
 #DEFINE         CAN         PORTB

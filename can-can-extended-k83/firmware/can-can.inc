@@ -87,13 +87,15 @@ INIT
                 CLRF    ADCON0              ;D
                 CLRF    ADCON1              ;D
                 CLRF    ADCON2              ;D
-                CLRF    ANSELA		    ;N
-                CLRF    ANSELB		    ;N
-		CLRF    ANSELC		    ;N
+                ;BANKSEL CM1CON0
                 CLRF    CM1CON0             ;C
                 CLRF    CM2CON0             ;C
                 CLRF    CM1CON1             ;C
                 CLRF    CM2CON1             ;C
+                BANKSEL ANSELA		    ;N
+                CLRF    ANSELA		    ;N
+                CLRF    ANSELB		    ;N
+		CLRF    ANSELC		    ;N
 
                 CLRF    GPIO                ; Init. LED
                 RTSCLR                      ; Init. RTS
@@ -104,11 +106,12 @@ INIT
                 RCALL   INITRING            ; Init. Rx/Tx Ring
                 RCALL   INITCAN             ; Init. CAN Bus
                 RCALL   TIMERINIT           ; Init. TIMER
-                RCALL   I2CINIT             ; Init. I2C
+                ;RCALL   I2CINIT             ; Init. I2C
                 RCALL   PIOINIT             ; Init. PIO
 
-                BSF     RCON,IPEN           ; Enable priority interrupts
-                BSF     INTCON0,PEIE        ; Init. ISR
+                BANKSEL INTCON0
+                BSF     INTCON0,IPEN_INTCON0 ; Enable priority interrupts
+                ;BSF     INTCON0,PEIE        ; Init. ISR
                 BSF     INTCON0,GIE
                
 ;------------------------------------------------------------------------------
@@ -132,7 +135,7 @@ MAIN
 #INCLUDE        "can.inc"                   ; CAN
 #INCLUDE        "ascii.inc"                 ; ASCII I/O
 #INCLUDE        "timer.inc"                 ; Timer
-#INCLUDE        "i2c.inc"                   ; I2C
+;#INCLUDE        "i2c.inc"                   ; I2C
 #INCLUDE        "pio.inc"                   ; I2C
 
 ;------------------------------------------------------------------------------

@@ -23,13 +23,16 @@
 
 #IF UART != PORTC
     #IF UART != PORTB
-        ERROR   "UART port not configured"
+        #IF UART != K83
+            ERROR   "UART port not configured"
+        #ENDIF
     #ENDIF
 #ENDIF
 
 #IFNDEF BAUDRATE
     ERROR       "UART baud rate not defined"
 #ENDIF
+
 
 #IF UART == PORTC
     #IFNDEF TXSTA1
@@ -100,6 +103,30 @@
         #DEFINE USPBRG      SPBRG2
 #ENDIF
 
+#IF UART == K83
+        #DEFINE UPIR        PIR3
+        #DEFINE URCIF       RC2IF
+        #DEFINE UTXIF       TX2IF
+
+        #DEFINE UPIE        PIE3
+        #DEFINE URCIE       RC2IE
+        #DEFINE UTXIE       TX2IE
+
+        #DEFINE UIPR        IPR3
+        #DEFINE URCIP       RC2IP
+        #DEFINE UTXIP       TX2IP
+
+        #DEFINE UTXSTA      U2CON0
+        #DEFINE URCSTA      RCSTA2
+        #DEFINE UTXREG      U2TXB
+        #DEFINE URCREG      U2RXB
+
+        #DEFINE UBAUDCON    BAUDCON2
+        #DEFINE USPBRGH     U2BRGH
+        #DEFINE USPBRG      U2BRGL
+#ENDIF
+
+
 ;------------------------------------------------------------------------------
 ; UART Baud Rate Generator (FOSC / BAUDRATE / 4 - 1)
 ;------------------------------------------------------------------------------
@@ -117,11 +144,14 @@
 ;------------------------------------------------------------------------------
 INITUART
 
-#IF UART == PORTB
+#IF UART == PORTB || UART == K83
+                BANKSEL TRISB
                 BCF     TRISB,6             ; UART2 TX
                 BSF     TRISB,7             ; UART2 RX
 #ENDIF
+
 #IF UART == PORTC
+                BANKSEL TRISC
                 BCF     TRISC,6             ; UART1 TX
                 BSF     TRISC,7             ; UART1 RX
 #ENDIF

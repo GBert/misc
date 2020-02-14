@@ -39,7 +39,7 @@ INITPPS
                 MOVLW   0x0B                ;RB3
                 MOVWF   CANRXPPS            ;RB3 = CANRX
 
-                ;I2C1
+                ; I2C1
                 ;BANKSEL I2C1SCLPPS
                 MOVLW   0x13                ;RC3
                 MOVWF   I2C1SCLPPS          ;RC3 = I2C1 SCL
@@ -48,32 +48,41 @@ INITPPS
                 MOVLW   0x14                ;RC4
                 MOVWF   I2C1SDAPPS          ;RC4 = I2C1 SDA
 
-                ;RS485
+                ; RS485
                 ;BANKSEL U1RXPPS
                 MOVLW   0x16                ;RC6
                 MOVWF   U1RXPPS             ;RB7 = RX2
+
+                ; configure U1CTSPPS to the unimplemented input RD0 (DS40001943B page 477)
+                ;BANKSEL U1CTSPPS
+                MOVLW   0x18                ;UART1 CTS
+                MOVWF   U1CTSPPS
+
 ; PPSOutput
-                ;UART
+                ; UART
                 ;BANKSEL RB6PPS
                 MOVLW   0x16                ;UART2 TX
                 MOVWF   RB6PPS              ;RB6 = UART2 TX
 
-                ;CAN
+                ; CAN
                 ;BANKSEL RB2PPS
                 MOVLW   0x33                ;CAN0 TX
                 MOVWF   RB2PPS              ;RB2 CANTX
 
-                ;I2C1 needs to been set as output also (DS40001943B page 264)
+                ; I2C1 needs to be set as output also (DS40001943B page 264)
+                ;BANKSEL RC3PPS
                 MOVLW   0x23                ;I2C1 SCL
                 MOVWF   RC3PPS              ;RC3 SCL1
 
+                ;BANKSEL RC4PPS
                 MOVLW   0x22                ;I2C1 SDA
                 MOVWF   RC4PPS              ;RC4 SDA1
 
-                ;RS485
+                ; RS485
                 ;BANKSEL RC7PPS
                 MOVLW   0x13                ;UART1 TX
                 MOVWF   RC7PPS              ;RC7 = UART2 TX
+
 ; PPSLock
                 ;BANKSEL PPSLOCK
                 MOVLW   0x55

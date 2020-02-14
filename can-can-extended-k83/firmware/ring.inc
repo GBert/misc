@@ -76,7 +76,7 @@ TXBUF           EQU     0x0280              ; Tx ring FSR2
 
 GETC            MACRO
                 MOVF    RXGET,W
-                MOVF    PLUSW1,W
+                MOVFFL  PLUSW1,W
                 INCF    RXGET,F             ; RXGET++
                 ENDM
 
