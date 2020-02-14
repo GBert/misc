@@ -1,11 +1,13 @@
 const int revisionnr = 
-476
+478
 ;
 const char* commithash = 
-"d4fcde2239ac063fa823ddba97fabd9533e2f112";
+"e3ad5e5d8023bc1553308bd9632868ae5b54908d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"478 2020-02-13 17:49:20 +0100 loc: check is a consist is not itself to avoid an endless loop\n" \
+"477 2020-02-13 10:58:38 +0100 locdialog: crash fix on export in case the file could not be opened\n" \
 "476 2020-02-12 10:06:54 +0100 wio: provide loco mode in case of events\n" \
 "475 2020-02-11 14:34:29 +0100 loc: save current block enterside for use on soft reset\n" \
 "474 2020-02-11 11:26:17 +0100 car: filter direction/lights changes\n" \
