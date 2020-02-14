@@ -1,10 +1,13 @@
-;   External Oscillator Selection:
-;	HS (crystal oscillator) above 8 MHz; PFM set to high power
-		CONFIG	FEXTOSC = HS
+;;   External Oscillator Selection:
+;;	HS (crystal oscillator) above 8 MHz; PFM set to high power
+;		CONFIG	FEXTOSC = HS
 
-;   Reset Oscillator Selection: 
-;	EXT_SC with 4x PLL, with EXTOSC operating per FEXTOSC bits
-		CONFIG	RSTOSC = EXTOSC_4PLL
+;;   Reset Oscillator Selection:
+;;	EXT_SC with 4x PLL, with EXTOSC operating per FEXTOSC bits
+;		CONFIG	RSTOSC = EXTOSC_4PLL
+
+;;   Internal Oscillator HFINTOSC with HFFRQ = 64 MHz and CDIV = 1:1
+		CONFIG	RSTOSC = HFINTOSC_64MHZ
 
 ;   Clock out Enable bit:
 		CONFIG	CLKOUTEN = OFF

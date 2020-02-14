@@ -38,11 +38,11 @@ TIMERINIT
 		; prescaler period = .0625us * 32 = 2 us
 		; overflow period  = 2 us * 256 = 512 us
 
-                BANKSEL T0CON0
+                BANKSEL T0CON1
+                MOVLW   0x45            ; Fosc/4 & Prescale 32
+                MOVWF   T0CON1
                 MOVLW   (1 << EN)
                 MOVWF   T0CON0
-                MOVLW   5
-                MOVWF   T0CON1
                 RETURN
 
 SCHEDULE
