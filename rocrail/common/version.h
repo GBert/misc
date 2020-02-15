@@ -1,11 +1,12 @@
 const int revisionnr = 
-478
+479
 ;
 const char* commithash = 
-"e3ad5e5d8023bc1553308bd9632868ae5b54908d";
+"1d3ff4de1f4c7af288dbb3ea6675a354ac06d3df";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"479 2020-02-14 11:30:52 +0100 check for manual red signal before the swap\n" \
 "478 2020-02-13 17:49:20 +0100 loc: check is a consist is not itself to avoid an endless loop\n" \
 "477 2020-02-13 10:58:38 +0100 locdialog: crash fix on export in case the file could not be opened\n" \
 "476 2020-02-12 10:06:54 +0100 wio: provide loco mode in case of events\n" \
