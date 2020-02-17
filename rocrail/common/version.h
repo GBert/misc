@@ -1,11 +1,15 @@
 const int revisionnr = 
-479
+483
 ;
 const char* commithash = 
-"1d3ff4de1f4c7af288dbb3ea6675a354ac06d3df";
+"0cb0cfc80fd4c7329efa17cead929e02cceaffbf";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"483 2020-02-16 10:16:57 +0100 xnet: check for version 3.8+ in case of request POM read data from CS\n" \
+"482 2020-02-16 09:18:00 +0100 xnet: lzv200 POM read\n" \
+"481 2020-02-15 11:17:32 +0100 rascii: update\n" \
+"480 2020-02-15 10:41:00 +0100 wio,clntcon: push mode events in case of throttle\n" \
 "479 2020-02-14 11:30:52 +0100 check for manual red signal before the swap\n" \
 "478 2020-02-13 17:49:20 +0100 loc: check is a consist is not itself to avoid an endless loop\n" \
 "477 2020-02-13 10:58:38 +0100 locdialog: crash fix on export in case the file could not be opened\n" \
