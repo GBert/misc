@@ -42,7 +42,7 @@ Usage: can2lan -c <config_dir> -u <udp_port> -t <tcp_port> -d <udp_dest_port> -i
 
 ### Using under Debian/Ubuntu
 
-To compile can2udp under Debian/Linux you need to install some libs:
+To compile can2udp under Debian/Ubuntu you need to install some libs:
 ```
 sudo apt-get install zlib1g-dev libpcap-dev
 cd src
