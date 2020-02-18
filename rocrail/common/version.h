@@ -1,11 +1,14 @@
 const int revisionnr = 
-484
+487
 ;
 const char* commithash = 
-"85bec2da309c26c1b57edf55e8634317fdf9105c";
+"711b097230021754651b43b86a3ab43bfa5532b6";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"487 2020-02-18 10:33:12 +0100 revert sensor accessory type\n" \
+"486 2020-02-18 08:51:08 +0100 schedules: trace level correction for index\n" \
+"485 2020-02-18 08:45:53 +0100 bidib: set fbtype to accessory in case of a port event\n" \
 "484 2020-02-17 08:11:05 +0100 item: show loco ID in the popup title too\n" \
 "483 2020-02-16 10:16:57 +0100 xnet: check for version 3.8+ in case of request POM read data from CS\n" \
 "482 2020-02-16 09:18:00 +0100 xnet: lzv200 POM read\n" \
