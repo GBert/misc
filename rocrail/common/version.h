@@ -1,11 +1,12 @@
 const int revisionnr = 
-487
+488
 ;
 const char* commithash = 
-"711b097230021754651b43b86a3ab43bfa5532b6";
+"e87501f66723b849e508879a84f5919e54d41747";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"488 2020-02-19 11:17:52 +0100 loc,locdialog: allow bbt delay only in case of fixed\n" \
 "487 2020-02-18 10:33:12 +0100 revert sensor accessory type\n" \
 "486 2020-02-18 08:51:08 +0100 schedules: trace level correction for index\n" \
 "485 2020-02-18 08:45:53 +0100 bidib: set fbtype to accessory in case of a port event\n" \
