@@ -1,11 +1,12 @@
 const int revisionnr = 
-494
+495
 ;
 const char* commithash = 
-"85d35e1f8f7f00ec5dd43d344646b09f5bf73c20";
+"fda9009f65e4a9a3962b051fb715386cdcb28f09";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"495 2020-02-21 17:17:56 +0100 mbus: update shifts trackbox from devtype 0x10 to 0x11\n" \
 "494 2020-02-21 15:03:16 +0100 cbusnodedlg: canservice description\n" \
 "493 2020-02-21 14:20:06 +0100 clntcon: ack alive events from CAN type too\n" \
 "492 2020-02-21 12:10:42 +0100 wiodlg: CAN type added\n" \
