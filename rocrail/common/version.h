@@ -1,11 +1,17 @@
 const int revisionnr = 
-488
+494
 ;
 const char* commithash = 
-"e87501f66723b849e508879a84f5919e54d41747";
+"85d35e1f8f7f00ec5dd43d344646b09f5bf73c20";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"494 2020-02-21 15:03:16 +0100 cbusnodedlg: canservice description\n" \
+"493 2020-02-21 14:20:06 +0100 clntcon: ack alive events from CAN type too\n" \
+"492 2020-02-21 12:10:42 +0100 wiodlg: CAN type added\n" \
+"491 2020-02-20 14:41:04 +0100 loc: revert save block enter side on soft reset\n" \
+"490 2020-02-20 14:20:12 +0100 mbus,usb: tracelevel correction\n" \
+"489 2020-02-20 12:11:44 +0100 mbus usb: avoid read timeouts\n" \
 "488 2020-02-19 11:17:52 +0100 loc,locdialog: allow bbt delay only in case of fixed\n" \
 "487 2020-02-18 10:33:12 +0100 revert sensor accessory type\n" \
 "486 2020-02-18 08:51:08 +0100 schedules: trace level correction for index\n" \
