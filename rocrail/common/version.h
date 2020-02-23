@@ -1,11 +1,12 @@
 const int revisionnr = 
-497
+498
 ;
 const char* commithash = 
-"baebac6e363619b0b065949f3aa05444e5fdb443";
+"5f7203dddd882ad4a656cb57c15683672186e22a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"498 2020-02-23 09:04:48 +0100 mbus: fix for discovering the loco name in case the packets are not sequential\n" \
 "497 2020-02-22 14:04:12 +0100 mbus,tcp: crash fix on invalid socket\n" \
 "496 2020-02-22 09:11:58 +0100 mbus: added device type WIO-CAN\n" \
 "495 2020-02-21 17:17:56 +0100 mbus: update shifts trackbox from devtype 0x10 to 0x11\n" \
