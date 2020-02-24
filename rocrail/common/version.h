@@ -1,11 +1,13 @@
 const int revisionnr = 
-498
+500
 ;
 const char* commithash = 
-"5f7203dddd882ad4a656cb57c15683672186e22a";
+"bbf06dce14019743be793f37f3eedfd3eaffb638";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"500 2020-02-24 15:22:24 +0100 app: disable blocking shutdown in case of console mode mbus,tcp: connect retry sleep increased to 5 seconds\n" \
+"499 2020-02-24 14:54:19 +0100 mbus,tcp: protect disconnect with a mutex\n" \
 "498 2020-02-23 09:04:48 +0100 mbus: fix for discovering the loco name in case the packets are not sequential\n" \
 "497 2020-02-22 14:04:12 +0100 mbus,tcp: crash fix on invalid socket\n" \
 "496 2020-02-22 09:11:58 +0100 mbus: added device type WIO-CAN\n" \
