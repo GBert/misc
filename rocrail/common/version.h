@@ -1,11 +1,13 @@
 const int revisionnr = 
-500
+502
 ;
 const char* commithash = 
-"bbf06dce14019743be793f37f3eedfd3eaffb638";
+"fc82e8a1098f96e82d7e12371d0f29dfcbc41069";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"502 2020-02-24 17:02:58 +0100 powerctrldlg: catch label right click to prevent dispatching it to the grid which is under the dialog\n" \
+"501 2020-02-24 16:47:32 +0100 powerctrldlg: sort colums with left click instead of right click\n" \
 "500 2020-02-24 15:22:24 +0100 app: disable blocking shutdown in case of console mode mbus,tcp: connect retry sleep increased to 5 seconds\n" \
 "499 2020-02-24 14:54:19 +0100 mbus,tcp: protect disconnect with a mutex\n" \
 "498 2020-02-23 09:04:48 +0100 mbus: fix for discovering the loco name in case the packets are not sequential\n" \
