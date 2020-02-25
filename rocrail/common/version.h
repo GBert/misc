@@ -1,11 +1,13 @@
 const int revisionnr = 
-502
+504
 ;
 const char* commithash = 
-"fc82e8a1098f96e82d7e12371d0f29dfcbc41069";
+"590f76496ec5c014060002b023c63422f8750ca4";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"504 2020-02-25 11:11:40 +0100 cbus: support for binary tcp\n" \
+"503 2020-02-24 19:23:47 +0100 guiframe: fix for re-restore control dialogs\n" \
 "502 2020-02-24 17:02:58 +0100 powerctrldlg: catch label right click to prevent dispatching it to the grid which is under the dialog\n" \
 "501 2020-02-24 16:47:32 +0100 powerctrldlg: sort colums with left click instead of right click\n" \
 "500 2020-02-24 15:22:24 +0100 app: disable blocking shutdown in case of console mode mbus,tcp: connect retry sleep increased to 5 seconds\n" \
