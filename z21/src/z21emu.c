@@ -60,9 +60,8 @@ static unsigned char XPN_X_STATUS_CHANGED[]       = { 0x08, 0x00, 0x40, 0x00, 0x
 static unsigned char XPN_X_BC_TRACK_POWER_OFF[]   = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x00, 0x61 };
 static unsigned char XPN_X_BC_TRACK_POWER_ON[]    = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x01, 0x60 };
 static unsigned char XPN_X_LOCO_INFO[]            = { 0x0E, 0x00, 0x40, 0x00, 0xEF, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static unsigned char XPN_X_TURNOUT_INFO[]         = { 0x09, 0x00, 0x40, 0x00, 0x43, 0x00, 0x00, 0x00, 0x00 };
 static unsigned char Z21_VERSION[]                = { 0x09, 0x00, 0x40, 0x00, 0xF3, 0x0A, 0x01, 0x23, 0xDB };
-
-
 
 /*
 static unsigned char XPN_X_BC_STOPPED[]           = { 0x07, 0x00, 0x40, 0x00, 0x81, 0x00, 0x81 };
@@ -158,6 +157,20 @@ int send_xpn_loco_info(uint16_t loco_id, int verbose) {
     return (EXIT_SUCCESS);
 }
 
+int send_xpn_turnout_info(uint16_t FAdr, uint8_t zz, int verbose) {
+    unsigned char xpnframe[32];
+
+    memcpy(xpnframe, XPN_X_TURNOUT_INFO, sizeof(XPN_X_TURNOUT_INFO));
+    xpnframe[5] = FAdr >> 8;
+    xpnframe[6] = FAdr & 0xff;
+    xpnframe[7] = zz;
+
+    xpnframe[8] = xor(&xpnframe[4], 4);
+    send_xpn(xpnframe, verbose);
+
+    return (EXIT_SUCCESS);
+}
+
 void set_loco_id(unsigned char *data, uint16_t loco_id) {
     /*
       0x0000 - 0x007F mm2_prg   Adresse + 0x0000
@@ -213,8 +226,8 @@ int send_can_loco_drive(uint16_t loco_id, uint8_t direction, uint8_t step, uint8
 }
 
 int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
-    uint16_t length, header, loco_id;
-    uint8_t db0, xheader;
+    uint16_t length, header, loco_id, FAdr;
+    uint8_t db0, xheader, zz;
     unsigned char xpnframe[32];
 
     length = le16(&z21_data->udpframe[0]);
@@ -285,6 +298,22 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	    }
 	    /* LAN_X_SET_LOCO */
 	    break;
+	case LAN_X_GET_TURNOUT_INFO:
+	     FAdr = be16(&z21_data->udpframe[5]);
+	     if (length == 0x08) {
+		printf("%s LAN_X_GET_TURNOUT_INFO 0x%04X\n", __func__, FAdr);
+	     } else if (length == 0x09) {
+		zz = z21_data->udpframe[7];
+		printf("%s LAN_X_TURNOUT_INFO 0x%04X 0x%02X\n", __func__, FAdr, zz);
+		/* TODO */
+		zz = 0x01;
+		/* send_xpn_turnout_info(FAdr, zz, verbose); */
+	     }
+	     break;
+	case LAN_X_SET_TURNOUT:
+	     FAdr = be16(&z21_data->udpframe[5]);
+	     printf("%s LAN_X_SET_TURNOUT 0x%04X\n", __func__, FAdr);
+	     break;
 	}
 	/* LAN_X_HEADER */
 	break;
