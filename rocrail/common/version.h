@@ -1,11 +1,14 @@
 const int revisionnr = 
-504
+507
 ;
 const char* commithash = 
-"590f76496ec5c014060002b023c63422f8750ca4";
+"2b617b4a3817d671d2b4f30edfdc42c3e9d6f1d2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"507 2020-02-26 13:59:21 +0100 clntcon: crash fix for using invalid socket handle\n" \
+"506 2020-02-26 13:58:34 +0100 WIO: send pwm as extra parameter with VDIR commands\n" \
+"505 2020-02-25 21:50:13 +0100 routedialog: label correction for condition type\n" \
 "504 2020-02-25 11:11:40 +0100 cbus: support for binary tcp\n" \
 "503 2020-02-24 19:23:47 +0100 guiframe: fix for re-restore control dialogs\n" \
 "502 2020-02-24 17:02:58 +0100 powerctrldlg: catch label right click to prevent dispatching it to the grid which is under the dialog\n" \
