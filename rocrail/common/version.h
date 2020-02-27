@@ -1,11 +1,13 @@
 const int revisionnr = 
-507
+509
 ;
 const char* commithash = 
-"2b617b4a3817d671d2b4f30edfdc42c3e9d6f1d2";
+"563ca7990156ee5c48c48be8e21a96d14840e0b8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"509 2020-02-26 21:47:37 +0100 start EoD in case of shutdown and automatic on\n" \
+"508 2020-02-26 19:19:00 +0100 app: stop auto mode before save the model\n" \
 "507 2020-02-26 13:59:21 +0100 clntcon: crash fix for using invalid socket handle\n" \
 "506 2020-02-26 13:58:34 +0100 WIO: send pwm as extra parameter with VDIR commands\n" \
 "505 2020-02-25 21:50:13 +0100 routedialog: label correction for condition type\n" \
