@@ -1,11 +1,12 @@
 const int revisionnr = 
-512
+513
 ;
 const char* commithash = 
-"97fc7e398d65b7bb30cc1587f4a4c01e43772f63";
+"9ba43614de69ea9f7699865356db7aa64c18ee59";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"513 2020-02-27 15:13:34 +0100 dccpp: generate ID incase of switch and output objects without any\n" \
 "512 2020-02-27 13:50:01 +0100 model: replace all blanks with underscores in case of adding a variable\n" \
 "511 2020-02-27 13:35:13 +0100 app: fix for double calling EoD\n" \
 "510 2020-02-27 10:51:03 +0100 rocrail icon in png format\n" \
