@@ -1,11 +1,14 @@
 const int revisionnr = 
-509
+512
 ;
 const char* commithash = 
-"563ca7990156ee5c48c48be8e21a96d14840e0b8";
+"97fc7e398d65b7bb30cc1587f4a4c01e43772f63";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"512 2020-02-27 13:50:01 +0100 model: replace all blanks with underscores in case of adding a variable\n" \
+"511 2020-02-27 13:35:13 +0100 app: fix for double calling EoD\n" \
+"510 2020-02-27 10:51:03 +0100 rocrail icon in png format\n" \
 "509 2020-02-26 21:47:37 +0100 start EoD in case of shutdown and automatic on\n" \
 "508 2020-02-26 19:19:00 +0100 app: stop auto mode before save the model\n" \
 "507 2020-02-26 13:59:21 +0100 clntcon: crash fix for using invalid socket handle\n" \
