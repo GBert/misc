@@ -35,6 +35,8 @@ static unsigned get_dt_ranges(const char *filename, unsigned offset) {
 
 unsigned bcm_host_get_peripheral_address(void) {
    unsigned address = get_dt_ranges("/proc/device-tree/soc/ranges", 4);
+   if (address == 0)
+      address = get_dt_ranges("/proc/device-tree/soc/ranges", 8);
    return address == ~0U ? 0x20000000 : address;
 }
 
