@@ -1,11 +1,12 @@
 const int revisionnr = 
-516
+517
 ;
 const char* commithash = 
-"5c7641474cd49c36e6f29d0c8400c05d5029c723";
+"8d9b12ad5e0e79ff8f6cec284214cdcb6e6d5b48";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"517 2020-02-27 17:04:18 +0100 app: trace line added in case of force EoD\n" \
 "516 2020-02-27 16:51:34 +0100 locodialog: pwm range extended\n" \
 "515 2020-02-27 16:50:28 +0100 mbus: udp ports selectable\n" \
 "514 2020-02-27 16:00:36 +0100 mbus udp: use generic reader thread name\n" \
