@@ -1,11 +1,14 @@
 const int revisionnr = 
-513
+516
 ;
 const char* commithash = 
-"9ba43614de69ea9f7699865356db7aa64c18ee59";
+"5c7641474cd49c36e6f29d0c8400c05d5029c723";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"516 2020-02-27 16:51:34 +0100 locodialog: pwm range extended\n" \
+"515 2020-02-27 16:50:28 +0100 mbus: udp ports selectable\n" \
+"514 2020-02-27 16:00:36 +0100 mbus udp: use generic reader thread name\n" \
 "513 2020-02-27 15:13:34 +0100 dccpp: generate ID incase of switch and output objects without any\n" \
 "512 2020-02-27 13:50:01 +0100 model: replace all blanks with underscores in case of adding a variable\n" \
 "511 2020-02-27 13:35:13 +0100 app: fix for double calling EoD\n" \
