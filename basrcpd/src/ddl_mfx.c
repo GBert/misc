@@ -134,7 +134,7 @@ static bool waitRDS() {
     if (sem_timedwait(&semRDSFeedback, &timeout) == 0) {
       return true;
     }
-    if (! (DDL_DATA*)buses[busnumber].power_state) {
+    if (! buses[busnumber].power_state) {
       //Power Off -> nicht mehr warten
       //printf("waitRDS sem_wait Timeout\n");
       return false;
@@ -838,7 +838,7 @@ static void *thr_mfxManageThread(void *threadParam) {
   //Zähler Anzahl "assignSID" Durchläufe nach Power Up-Down
 //  int countUIDLoops = 0;
   for (;;) {
-    if ((DDL_DATA*)buses[busnumber].power_state) {
+    if (buses[busnumber].power_state) {
       //Bus ist ein -> UID / Neuanmeldezähler versenden, neue Dekoder suchen
       sendUIDandRegCounter(uid, registrationCounter);
       usleep(INTERVALL_UID);
@@ -1249,7 +1249,7 @@ void setMfxSM(bool smOn) {
 int smMfxSetCV(int address, int cv, int index, int value)
 {
 	if ((cv >= CV_SIZE) || (index >= CVINDEX_SIZE)) return -1;
-    if (! (DDL_DATA*)buses[busnumber].power_state) return -2;
+    if (! buses[busnumber].power_state) return -2;
   
 //  checkMFXConfigCache(address);
   //Was neu geschrieben wurde wird im Cache als ungültig markiert damit sichergestellt ist, dass es bei einem Read von der Lok gelesen wird (Verify)
@@ -1283,7 +1283,7 @@ int smMfxGetCV(int address, int cv, int index, int nmbr)
 {
   //Nur erlaubt wenn SM Initialisiert ist, MFX Loksuche ausgeschaltet
 	if (! sm) return -1;
-    if (! (DDL_DATA*)buses[busnumber].power_state) return -2;
+    if (! buses[busnumber].power_state) return -2;
     
   	char result = 0;
 	syslog_bus(busnumber, DBG_INFO, "SM GET MFX Adr=%d, Get CV=%d, Index=%d, Len=%d",
@@ -1311,7 +1311,7 @@ int smMfxSetBind(int address, uint32_t uid)
 		syslog_bus(busnumber, DBG_INFO, "** mfx RegCount set to %x", uid);
 		return uid;
 	}
-    if (!(DDL_DATA*)buses[busnumber].power_state) return -2;
+    if (! buses[busnumber].power_state) return -2;
 
 	assignSID(uid, address);
 	return 0;
@@ -1322,7 +1322,7 @@ int smMfxVerBind(int address, uint32_t uid)
 {
 	if (address == 0) return registrationCounter;
 
-    if (!(DDL_DATA*)buses[busnumber].power_state) return -2;
+    if (! buses[busnumber].power_state) return -2;
     
 	sendDekoderExist(address, uid, false);	// HACK: don't wait for result
 	syslog_bus(busnumber, DBG_WARN,

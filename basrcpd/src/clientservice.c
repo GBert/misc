@@ -26,7 +26,7 @@
 #include "srcp-server.h"
 #include "syslogmessage.h"
 
-
+static unsigned int commandsessions = 0;
 
 /* Cleanup routine for network client thread. */
 void end_client_thread(session_node_t * sn)
@@ -58,6 +58,7 @@ void end_client_thread(session_node_t * sn)
                            strerror(errno), errno);
         }
     }
+    else if (mode == smCommand) commandsessions--;
 
     if (sn->socket != -1) {
         shutdown(sn->socket, SHUT_RDWR);
@@ -190,6 +191,7 @@ void *thr_doClient(void *v)
 
                 switch (sn->mode) {
                     case smCommand:
+						commandsessions++;
                         rc = doCmdClient(sn);
                         break;
                     case smInfo:
@@ -249,4 +251,10 @@ void *thr_doClient(void *v)
     /*run the cleanup routine */
     pthread_cleanup_pop(1);
     return NULL;
+}
+
+/* get the number of active command sesions */
+int getnbr_commandsessions(void)
+{
+	return commandsessions;
 }

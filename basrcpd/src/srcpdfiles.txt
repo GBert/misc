@@ -4,13 +4,15 @@
     1806    Optimierungen
 a20hw.c         neu
 a20hw.h         neu
-canbus.c    neu 1803
-canbus.h    neu 1803
+canbus.c        neu 1803
+canbus.h        neu 1803
 clientservice.c unverändert aus Original-srcpd Stand 1710
     1711    ugly musl workaround
     1712    übernommen
     1806    Optimierungen
+    2002    Abschalten bei Kommunikationsverlust
 clientservice.h unverändert aus Original-srcpd Stand 1710
+    2002    Abschalten bei Kommunikationsverlust
 config-srcpd.c  aus Sigg-srcpd Rev96, modifiziert -> Original
     1803    neue Module aufgenommen
     1806    Änderung "DESCRIPTION"
@@ -26,6 +28,7 @@ config.h        erzeugt per config-Script, modifiziert
     1905    korrekte Versionsangabe
     1906    korrekte Versionsangabe
     1907    korrekte Versionsangabe
+    2002    korrekte Versionsangabe
 ddl.c           aus Sigg-srcpd Rev96, modifiziert BaPi, SPI-Timing
     1803    MCS-Anssteuerung eingebaut
     1806    Optimierungen
@@ -37,6 +40,7 @@ ddl.c           aus Sigg-srcpd Rev96, modifiziert BaPi, SPI-Timing
     1906    Stellen über MCS-Gateway eingebaut
     1907    Vereinfachung der Threadstruktur zur Signalerzeugung
     1907    Zeitbegrenzung für Schaltdecoder überarbeitet
+    2002    Abschalten bei Kommunikationsverlust
     ** UART-Methoden entfernen
     ** Config-Variablen überarbeiten
 ddl.h           aus Sigg-srcpd Rev96, original
@@ -45,7 +49,7 @@ ddl.h           aus Sigg-srcpd Rev96, original
     1905    Optimierungen Signalerzeugung, Parameterprüfung
     1906    Stellen über MCS-Gateway eingebaut
     1907    Vereinfachung der Threadstruktur zur Signalerzeugung
-    ** Config-Variablen überarbeiten
+    2002    Abschalten bei Kommunikationsverlust
 ddl_maerklin.c  aus Sigg-srcpd Rev96, modifiziert -> Original
     1803    GL-Cachezugriff angepasst
     1809    erweiterte Lokadressierung
@@ -64,6 +68,7 @@ ddl_mfx.c       aus Sigg-srcpd Rev96, modifiziert -> Original + BaPi
     1905    Optimierungen Signalerzeugung, Parameterprüfung
     1907    Vereinfachung der Threadstruktur zur Signalerzeugung
     1907    Erweiterung auf 32 Funktionen
+    2002    Wanungen reduziert
 ddl_mfx.h       aus Sigg-srcpd Rev96, modifiziert -> Original
     1806    Optimierungen
     1905    Optimierungen Signalerzeugung, Parameterprüfung
@@ -84,6 +89,7 @@ loopback.c      aus Sigg-srcpd Rev96, modifiziert -> Original
     1803    GL-Cachezugriff angepasst
     1809    erweiterte Lokadressierung
     1905    Optimierungen 
+    2002    Wanungen reduziert
 loopback.h      aus Sigg-srcpd Rev96, modifiziert -> Original
     1905    Optimierungen 
 mcs-gateway.c   neu 180307
@@ -93,6 +99,7 @@ mcs-gateway.c   neu 180307
     1902    Dummyantwort auf Stellbefehle
     1903    Fehlerbehandlung "select" verbessert
     1906    Stellen über MCS-Gateway eingebaut
+    2002    Abschalten bei Kommunikationsverlust
 netservice.c    unverändert aus Original-srcpd Stand 1710
 netservice.h    unverändert aus Original-srcpd Stand 1710
 platform.c      neu ab 1806
@@ -141,6 +148,7 @@ srcp-server.c   unverändert aus Original-srcpd Stand 1710
 srcp-server.h   unverändert aus Original-srcpd Stand 1710
 srcp-session.c  unverändert aus Original-srcpd Stand 1710
     1809    Aufhänger-Beseitigung
+    2002    Unschönheit beseitigt
 srcp-session.h  unverändert aus Original-srcpd Stand 1710
 srcp-sm.c       aus Sigg-srcpd Rev96, original
     1806    Anpassungen für mfx, aufräumen

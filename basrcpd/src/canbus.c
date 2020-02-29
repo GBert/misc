@@ -295,8 +295,8 @@ int init_bus_CANBUS(bus_t i)
 
 
 	// nur zum Test
-	int	j;
-  	struct can_frame msg;
+    int	j;
+    struct can_frame msg;
     msg.can_id = 0x100; 
     msg.can_dlc = 8;
     for(j = 0; j < 8; j++) msg.data[j] = j * 10;

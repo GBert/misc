@@ -224,7 +224,7 @@ static void handle_sm_command(bus_t bus)
     dequeueNextSM(bus, &smtmp);
     session_lock_wait(bus);
     smtmp.value &= 255;
-    memset(cv, 0, MAX_CV_NUMBER + 1);
+    memset(cv, 0, sizeof(cv));
 
     switch (smtmp.command) {
         case GET:
@@ -383,18 +383,17 @@ static void handle_gl_command(bus_t bus)
 static void handle_ga_command(bus_t busnumber)
 {
     ga_data_t gatmp;
-    int addr, i;
     struct timeval akt_time;
 
     dequeueNextGA(busnumber, &gatmp);
-    addr = gatmp.id;
+    int addr = gatmp.id;
 
     gettimeofday(&akt_time, NULL);
     gatmp.tv[gatmp.port] = akt_time;
     setGA(busnumber, addr, gatmp);
 
     if (gatmp.action && (gatmp.activetime > 0)) {
-        for (i = 0; i < 50; i++) {
+        for (int i = 0; i < 50; i++) {
             if (__loopback->tga[i].id == 0) {
                 gatmp.t = akt_time;
                 gatmp.t.tv_sec += gatmp.activetime / 1000;

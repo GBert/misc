@@ -1340,6 +1340,18 @@ bool power_is_off(bus_t busnumber)
              }
         }
     }
+    if (__DDL->CHECKCLIENTS) {
+		if ((getnbr_commandsessions() == 0) && (get_pingactive() == 0) &&
+						(buses[busnumber].power_state)) {
+            buses[busnumber].power_state = 0;
+            buses[busnumber].power_changed = 2;
+            info[0] = 2;	info[1] = 0xA;	info[2] = 1;
+            info_mcs(busnumber, 1, __DDL->uid, info);
+            strcpy(buses[busnumber].power_msg, "CONTROL LOST");
+            infoPower(busnumber, msg);
+            enqueueInfoMessage(msg);
+        }
+    }
     if (buses[busnumber].power_changed > 0) {
         if (buses[busnumber].power_state == 0) {
             set_SerialLine(busnumber, SL_RTS, OFF);
@@ -1461,6 +1473,7 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
 
     __DDL->CHECKSHORT = false;  /* default no shortcut checking */
     __DDL->SHORTCUTDELAY = 0;   /* usecs shortcut delay         */
+    __DDL->CHECKCLIENTS = false;  /* default no client checking */
     __DDL->ENABLED_PROTOCOLS = (EP_MAERKLIN | EP_NMRADCC);      /* enabled p's */
     __DDL->NMRA_GA_OFFSET = 0;  /* offset for ga base address 0 or 1  */
     __DDL->PROGRAM_TRACK = 1;   /* 0: suppress SM commands to PT address */
@@ -1492,8 +1505,7 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
                 xmlFree(txt);
             }
         }
-        else if (xmlStrcmp
-                 (child->name, BAD_CAST "enable_checkshort_checking")
+        else if (xmlStrcmp(child->name, BAD_CAST "enable_checkshort_checking")
                  == 0) {
             txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
             if (txt != NULL) {
@@ -1501,6 +1513,15 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
                     (xmlStrcmp(txt, BAD_CAST "yes") == 0) ? true : false;
                 if (xmlStrcmp(txt, BAD_CAST "inverse") == 0)
                 	__DDL->CHECKSHORT = 2;
+                xmlFree(txt);
+            }
+        }
+        else if (xmlStrcmp(child->name, BAD_CAST "enable_client_checking")
+                 == 0) {
+            txt = xmlNodeListGetString(doc, child->xmlChildrenNode, 1);
+            if (txt != NULL) {
+                __DDL->CHECKCLIENTS =
+                    (xmlStrcmp(txt, BAD_CAST "yes") == 0) ? true : false;
                 xmlFree(txt);
             }
         }

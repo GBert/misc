@@ -34,6 +34,7 @@
 #define __DDL ((DDL_DATA*)buses[busnumber].driverdata)
 
 static bus_t mcs_bus = 0;
+static int pingactive = 0;
 static int fd = INVALID_SOCKET;
 static uint32_t ownuid, ownhash = 0;
 static pthread_t mcsGatewayThread;
@@ -112,6 +113,7 @@ void *thr_handleCAN(void *vp)
 								__LINE__, strerror(errno));
 		/* send PING via CAN interface */
 		else if (nready == 0) {
+			if (pingactive > 0) pingactive--;
 			frame.can_id = 0x00300000 | ownhash | CAN_EFF_FLAG;
 			frame.can_dlc = 0;
 			if (write(fd, &frame, sizeof(struct can_frame)) < 0)
@@ -244,9 +246,18 @@ void *thr_handleCAN(void *vp)
 				case 0x30:  frame.can_dlc = 8; 
 				            memcpy(frame.data, softvers, 8);
 				            break;
+				case 0x31:  // Ping response
+							v = be16(&frame.data[6]);
+							// printf("Ping response from type %04X.\n", v);
+							switch (v & 0xFFF0) {
+							case 0x0030:	// MS2
+							case 0xFFF0:	// CS2-GUI
+						pingactive = 3;
+						break;
+							}
+							continue;
 				/* discarded without notice */
 				case 0x01:  if (frame.data[4] != 0x0C) goto defmsg;	// Gerätekennung
-				case 0x31:  // Ping response
 				case 0x36:	// Bootloader CAN
 							continue;
 				/* status data config */
@@ -354,4 +365,10 @@ void term_mcs_gateway(void)
 	ret = pthread_cancel(mcsGatewayThread);
     if (ret) syslog_bus(mcs_bus, DBG_ERROR,
                	"pthread_cancel mcsGatewayThread fail");
+}
+
+/* get the info about active pings */
+int get_pingactive(void)
+{
+	return pingactive;
 }

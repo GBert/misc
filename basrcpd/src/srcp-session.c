@@ -508,7 +508,7 @@ int start_session(session_node_t * sn)
 
     snprintf(msg, sizeof(msg), "%lu.%.3lu 101 INFO 0 SESSION %lu %s\n",
              akt_time.tv_sec, akt_time.tv_usec / 1000, sn->session,
-             (sn->mode == 1 ? "COMMAND" : "INFO"));
+             (sn->mode == smCommand ? "COMMAND" : "INFO"));
     enqueueInfoMessage(msg);
 
     syslog_session(sn->session, DBG_INFO,

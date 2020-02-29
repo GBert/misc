@@ -95,6 +95,7 @@ typedef struct _DDL_DATA {
 
     int CHECKSHORT;             /* default no shortcut checking */
     time_t SHORTCUTDELAY;       /* usecs shortcut delay         */
+    int CHECKCLIENTS;			/* check if clients can control */
     int ENABLED_PROTOCOLS;      /* enabled p's                  */
     int NMRA_GA_OFFSET;         /* offset for ga base address 0/1*/
     int PROGRAM_TRACK;          /* 0: suppress SM commands to PT address */
@@ -192,5 +193,6 @@ bool power_is_off(bus_t busnumber);
 /* start and stop MCS gateway */
 void init_mcs_gateway(bus_t busnumber);
 void term_mcs_gateway(void);
+int get_pingactive(void);
 
 #endif
