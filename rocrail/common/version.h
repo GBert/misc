@@ -1,11 +1,12 @@
 const int revisionnr = 
-520
+521
 ;
 const char* commithash = 
-"848b0b9953a1b288c61f8491654cc65cbff14b46";
+"ec20f4317784f6c6f1026b9d576ebc73f5ff7a84";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"521 2020-02-29 16:14:19 +0100 control: support for datareq type svg\n" \
 "520 2020-02-29 10:31:46 +0100 weather: trace level corrections\n" \
 "519 2020-02-29 08:43:51 +0100 translation merge: nl, fr, sl, sr_latin, da, de\n" \
 "518 2020-02-28 14:20:29 +0100 mbusdlg: show tooltip for TX/RX port\n" \
