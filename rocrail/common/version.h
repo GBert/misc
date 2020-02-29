@@ -1,11 +1,13 @@
 const int revisionnr = 
-518
+520
 ;
 const char* commithash = 
-"b8a56aa6b1f7290918e6da2e255d2ebf440f3f87";
+"848b0b9953a1b288c61f8491654cc65cbff14b46";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"520 2020-02-29 10:31:46 +0100 weather: trace level corrections\n" \
+"519 2020-02-29 08:43:51 +0100 translation merge: nl, fr, sl, sr_latin, da, de\n" \
 "518 2020-02-28 14:20:29 +0100 mbusdlg: show tooltip for TX/RX port\n" \
 "517 2020-02-27 17:04:18 +0100 app: trace line added in case of force EoD\n" \
 "516 2020-02-27 16:51:34 +0100 locodialog: pwm range extended\n" \
