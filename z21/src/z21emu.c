@@ -335,11 +335,13 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t *data, int verbose) {
 		uid ? printf("System: UID 0x%08X ", uid) : printf("System: alle ");
 		printf("Stopp\n");
 		send_xpn(XPN_X_BC_TRACK_POWER_OFF, verbose);
+		z21_data->power = 0;
 		break;
 	    case 0x01:
 		uid ? printf("System: UID 0x%08X ", uid) : printf("System: alle ");
 		printf("Go\n");
 		send_xpn(XPN_X_BC_TRACK_POWER_ON, verbose);
+		z21_data->power = 1;
 		break;
 	    }
 	}
