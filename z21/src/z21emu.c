@@ -54,6 +54,7 @@ static unsigned char MS_POWER_OFF[]		= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x0
 static unsigned char MS_LOCO_DRIVE[]		= { 0x00, 0x08, 0x03, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static unsigned char MS_LOCO_DIRECTION[]	= { 0x00, 0x0A, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static unsigned char MS_LOCO_FUNCTION[]		= { 0x00, 0x0A, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static unsigned char MS_TURNOUT[]		= { 0x00, 0x16, 0x03, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 static unsigned char XPN_SERIAL_NUMBER_RESPONSE[] = { 0x08, 0x00, 0x10, 0x00, 0x4D, 0xC1, 0x02, 0x00 };
 static unsigned char XPN_X_STATUS_CHANGED[]       = { 0x08, 0x00, 0x40, 0x00, 0x62, 0x22, 0x00, 0x40 };
@@ -69,7 +70,7 @@ static unsigned char XPN_X_BC_STOPPED[]           = { 0x07, 0x00, 0x40, 0x00, 0x
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c config_dir -p <port> -s <port>\n", prg);
-    fprintf(stderr, "   Version 0.4\n\n");
+    fprintf(stderr, "   Version 0.5\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory - default %s\n", config_dir);
     fprintf(stderr, "         -p <port>           primary UDP port for the server - default %d\n", PRIMARY_UDP_PORT);
     fprintf(stderr, "         -s <port>           secondary UDP port for the server - default %d\n", SECONDARY_UDP_PORT);
@@ -225,9 +226,23 @@ int send_can_loco_drive(uint16_t loco_id, uint8_t direction, uint8_t step, uint8
     return (EXIT_SUCCESS);
 }
 
+int send_can_turnout(uint16_t id, uint8_t port,  int verbose) {
+    unsigned char udpframe[13];
+
+    memcpy(udpframe, MS_TURNOUT, 13);
+    /* TODO */
+    id += 0x3000;
+    udpframe[7] = id >> 8;
+    udpframe[8] = id & 0xFF;
+    udpframe[9] = port;
+    send_can(udpframe, verbose);
+
+    return (EXIT_SUCCESS);
+}
+
 int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
     uint16_t length, header, loco_id, FAdr;
-    uint8_t db0, xheader, zz;
+    uint8_t db0, tport, turnout, xheader, zz;
     unsigned char xpnframe[32];
 
     length = le16(&z21_data->udpframe[0]);
@@ -306,13 +321,18 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 		zz = z21_data->udpframe[7];
 		printf("%s LAN_X_TURNOUT_INFO 0x%04X 0x%02X\n", __func__, FAdr, zz);
 		/* TODO */
-		zz = 0x01;
-		/* send_xpn_turnout_info(FAdr, zz, verbose); */
+		if (!zz) {
+		    zz = 0x01;
+		    send_xpn_turnout_info(FAdr, zz, verbose);
+		}
 	     }
 	     break;
 	case LAN_X_SET_TURNOUT:
 	     FAdr = be16(&z21_data->udpframe[5]);
+	     turnout = z21_data->udpframe[7];
+	     tport = turnout & 0x1;
 	     printf("%s LAN_X_SET_TURNOUT 0x%04X\n", __func__, FAdr);
+	     send_can_turnout(FAdr, tport, verbose);
 	     break;
 	}
 	/* LAN_X_HEADER */
@@ -325,26 +345,39 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 
 int check_data_can(struct z21_data_t *z21_data, uint8_t *data, int verbose) {
     uint32_t uid;
+    uint8_t tport, tpower;
 
-    switch ((be32(data) & 0x00FF0000UL) >> 16)
+    switch ((be32(data) & 0x00FF0000UL) >> 16) {
     case 0x01:
-	{
-	    uid = be32(&data[5]);
-	    switch (data[9]) {
-	    case 0x00:
-		uid ? printf("System: UID 0x%08X ", uid) : printf("System: alle ");
-		printf("Stopp\n");
-		send_xpn(XPN_X_BC_TRACK_POWER_OFF, verbose);
-		z21_data->power = 0;
-		break;
-	    case 0x01:
-		uid ? printf("System: UID 0x%08X ", uid) : printf("System: alle ");
-		printf("Go\n");
-		send_xpn(XPN_X_BC_TRACK_POWER_ON, verbose);
-		z21_data->power = 1;
-		break;
-	    }
+	uid = be32(&data[5]);
+	switch (data[9]) {
+	case 0x00:
+	    uid ? printf("System: UID 0x%08X ", uid) : printf("System: alle ");
+	    printf("Stopp\n");
+	    send_xpn(XPN_X_BC_TRACK_POWER_OFF, verbose);
+	    z21_data->power = 0;
+	    break;
+	case 0x01:
+	    uid ? printf("System: UID 0x%08X ", uid) : printf("System: alle ");
+	    printf("Go\n");
+	    send_xpn(XPN_X_BC_TRACK_POWER_ON, verbose);
+	    z21_data->power = 1;
+	    break;
+	default:
+	    break;
 	}
+    /* turnout */
+    case 0x17:
+	/* TODO */
+	uid = be16(&data[7]) & 0xCFFF;
+	tport = 1 << (data[9] & 0x01);
+	tpower =  data[10];
+	if (!tpower)
+	    send_xpn_turnout_info(uid, tport, verbose);
+	break;
+    default:
+        break;
+    }
     return (EXIT_SUCCESS);
 }
 
