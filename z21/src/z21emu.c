@@ -34,6 +34,10 @@
 #include "z21.h"
 #include "read-cs2-config.h"
 
+
+#define v_printf(verbose, ...) \
+	do { if ((verbose)) { printf(__VA_ARGS__);} } while (0)
+
 struct sockaddr_in *bsa;
 pthread_mutex_t lock;
 
@@ -298,13 +302,13 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	    if (length == 0x0A ) {
 		loco_id = be16(&z21_data->udpframe[6]) & 0x3FFF;
 		if (z21_data->udpframe[5] == LAN_X_SET_LOCO_FUNCTION) {
-		    printf("%s LAN_X_SET_LOCO_FUNCTION 0x%04X 0x%02X\n", __func__, loco_id, z21_data->udpframe[8]);
+		    v_printf(verbose, "%s LAN_X_SET_LOCO_FUNCTION 0x%04X 0x%02X\n", __func__, loco_id, z21_data->udpframe[8]);
 		    uint8_t switchtype = (z21_data->udpframe[8] >> 6) & 0x03;
 		    uint8_t function = z21_data->udpframe[8] & 0x3F;
 		    send_can_loco_function(loco_id, function, switchtype, z21_data->foreground);
 		} else if ((z21_data->udpframe[5] & 0xF0 ) == 0x10) {
 		/* LAN_X_SET_LOCO_DRIVE */
-		    printf("%s LAN_X_SET_LOCO_DRIVE 0x%04X 0x%02X\n", __func__, loco_id, z21_data->udpframe[8]);
+		    v_printf(verbose, " %s LAN_X_SET_LOCO_DRIVE 0x%04X 0x%02X\n", __func__, loco_id, z21_data->udpframe[8]);
 		    uint8_t step = z21_data->udpframe[5] & 0x03;
 		    uint8_t direction = z21_data->udpframe[8] >> 7;
 		    uint8_t speed = z21_data->udpframe[8] & 0x7F;
@@ -316,10 +320,10 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	case LAN_X_GET_TURNOUT_INFO:
 	     FAdr = be16(&z21_data->udpframe[5]);
 	     if (length == 0x08) {
-		printf("%s LAN_X_GET_TURNOUT_INFO 0x%04X\n", __func__, FAdr);
+		v_printf(verbose, "%s LAN_X_GET_TURNOUT_INFO 0x%04X\n", __func__, FAdr);
 	     } else if (length == 0x09) {
 		zz = z21_data->udpframe[7];
-		printf("%s LAN_X_TURNOUT_INFO 0x%04X 0x%02X\n", __func__, FAdr, zz);
+		v_printf(verbose, "%s LAN_X_TURNOUT_INFO 0x%04X 0x%02X\n", __func__, FAdr, zz);
 		/* TODO */
 		if (!zz) {
 		    zz = 0x01;
@@ -331,7 +335,7 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	     FAdr = be16(&z21_data->udpframe[5]);
 	     turnout = z21_data->udpframe[7];
 	     tport = turnout & 0x1;
-	     printf("%s LAN_X_SET_TURNOUT 0x%04X\n", __func__, FAdr);
+	     v_printf(verbose, "%s LAN_X_SET_TURNOUT 0x%04X\n", __func__, FAdr);
 	     send_can_turnout(FAdr, tport, verbose);
 	     break;
 	}
@@ -352,13 +356,13 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t *data, int verbose) {
 	uid = be32(&data[5]);
 	switch (data[9]) {
 	case 0x00:
-	    uid ? printf("System: UID 0x%08X ", uid) : printf("System: alle ");
+	    if (uid) v_printf(verbose, "System: UID 0x%08X ", uid); else v_printf(verbose, "System: alle ");
 	    printf("Stopp\n");
 	    send_xpn(XPN_X_BC_TRACK_POWER_OFF, verbose);
 	    z21_data->power = 0;
 	    break;
 	case 0x01:
-	    uid ? printf("System: UID 0x%08X ", uid) : printf("System: alle ");
+	    if (uid) v_printf(verbose, "System: UID 0x%08X ", uid); else v_printf(verbose, "System: alle ");
 	    printf("Go\n");
 	    send_xpn(XPN_X_BC_TRACK_POWER_ON, verbose);
 	    z21_data->power = 1;
@@ -634,7 +638,7 @@ int main(int argc, char **argv) {
 	/* received a UDP packet on primary */
 	if (FD_ISSET(z21_data.sp, &readfds)) {
 	    ret = read(z21_data.sp, z21_data.udpframe, MAXDG);
-	    /* printf("FD_ISSET sp, ret %d\n", ret); */
+	    /* v_printf(verbose, "FD_ISSET sp, ret %d\n", ret); */
 	    if (ret < 0) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
 		break;
@@ -647,7 +651,7 @@ int main(int argc, char **argv) {
 	/* received a UDP packet on secondary */
 	if (FD_ISSET(z21_data.ss, &readfds)) {
 	    ret = read(z21_data.ss, z21_data.udpframe, MAXDG);
-	    /* printf("FD_ISSET ss, ret %d\n", ret); */
+	    /* v_printf(verbose, "FD_ISSET ss, ret %d\n", ret); */
 	    if (ret < 0) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
 		break;
@@ -661,7 +665,7 @@ int main(int argc, char **argv) {
 	if (FD_ISSET(z21_data.st, &readfds)) {
 	    int i, n;
 	    n = recv(z21_data.st, recvline, MAXSIZE, 0);
-	    /* printf("FD_ISSET st, n %d\n", n); */
+	    /* v_printf(verbose, "FD_ISSET st, n %d\n", n); */
 	    if (n > 0) {
 		/* check the whole TCP packet, if there are more than one CAN frame included */
 		/* TCP packets with size modulo 13 !=0 are ignored though */
