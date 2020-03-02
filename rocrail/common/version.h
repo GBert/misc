@@ -1,11 +1,13 @@
 const int revisionnr = 
-521
+523
 ;
 const char* commithash = 
-"ec20f4317784f6c6f1026b9d576ebc73f5ff7a84";
+"c766ae540c16ee4cfa98e51fd6596e1c44808415";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"523 2020-03-02 10:19:46 +0100 text: check if gotoblock is not null before using it as variable value\n" \
+"522 2020-03-02 10:17:07 +0100 text: lcgotoblock variable added\n" \
 "521 2020-02-29 16:14:19 +0100 control: support for datareq type svg\n" \
 "520 2020-02-29 10:31:46 +0100 weather: trace level corrections\n" \
 "519 2020-02-29 08:43:51 +0100 translation merge: nl, fr, sl, sr_latin, da, de\n" \
