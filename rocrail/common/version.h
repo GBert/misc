@@ -1,11 +1,12 @@
 const int revisionnr = 
-523
+524
 ;
 const char* commithash = 
-"c766ae540c16ee4cfa98e51fd6596e1c44808415";
+"6e7db89535726db4238d8d8a52158b94d5b0e6f2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"524 2020-03-02 14:58:07 +0100 outputdialog: fix for swapping parameter on/off with channeltune dialog\n" \
 "523 2020-03-02 10:19:46 +0100 text: check if gotoblock is not null before using it as variable value\n" \
 "522 2020-03-02 10:17:07 +0100 text: lcgotoblock variable added\n" \
 "521 2020-02-29 16:14:19 +0100 control: support for datareq type svg\n" \
