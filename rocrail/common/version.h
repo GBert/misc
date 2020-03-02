@@ -1,11 +1,13 @@
 const int revisionnr = 
-524
+526
 ;
 const char* commithash = 
-"6e7db89535726db4238d8d8a52158b94d5b0e6f2";
+"af3d48c15b090e8c64e588393e81e44c2653daee";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"526 2020-03-02 15:49:54 +0100 wrapper: removed ori attribute from datareq\n" \
+"525 2020-03-02 15:46:59 +0100 router: fix check loco function 32 (Lothar)\n" \
 "524 2020-03-02 14:58:07 +0100 outputdialog: fix for swapping parameter on/off with channeltune dialog\n" \
 "523 2020-03-02 10:19:46 +0100 text: check if gotoblock is not null before using it as variable value\n" \
 "522 2020-03-02 10:17:07 +0100 text: lcgotoblock variable added\n" \
