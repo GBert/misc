@@ -1,11 +1,12 @@
 const int revisionnr = 
-526
+527
 ;
 const char* commithash = 
-"af3d48c15b090e8c64e588393e81e44c2653daee";
+"6389dda24afebaccccd2fc9cb98f1ba01ec6040b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"527 2020-03-03 07:49:41 +0100 locationsdlg: help tab sensitive\n" \
 "526 2020-03-02 15:49:54 +0100 wrapper: removed ori attribute from datareq\n" \
 "525 2020-03-02 15:46:59 +0100 router: fix check loco function 32 (Lothar)\n" \
 "524 2020-03-02 14:58:07 +0100 outputdialog: fix for swapping parameter on/off with channeltune dialog\n" \
