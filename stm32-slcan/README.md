@@ -72,7 +72,7 @@ make PREFIX=arm-none-eabi-
 
 cd ~
 git clone https://github.com/GBert/misc gbert-misc
-cd gbert-misc
+cd gbert-misc/stm32-slcan
 make # make stm32flash
 ```
 
