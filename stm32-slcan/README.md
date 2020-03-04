@@ -55,6 +55,27 @@ ifconfig can0 up
 ```
 Now you can use it as SocketCAN interface - enjoy :-)
 
+Compile under Ubuntu/Raspbian
+-----------------------------
+```
+sudo apt-get install git gcc-arm-none-eabi stm32flash
+
+sudo mkdir -p /embedded/arm-cortex/src
+sudo chown -R pi.pi /embedded/
+
+cd /embedded/arm-cortex/src
+git clone https://github.com/libopencm3/libopencm3-examples.git
+cd libopencm3-examples
+git submodule init
+git submodule update
+make PREFIX=arm-none-eabi-
+
+cd ~
+git clone https://github.com/GBert/misc gbert-misc
+cd gbert-misc
+make # make stm32flash
+```
+
 Links
 -----
 Schematic https://github.com/GBert/misc/raw/master/stm32-slcan/pictures/arduino_stm32f103c8t6_schematics.png
