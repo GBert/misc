@@ -18,7 +18,6 @@
 ##
 
 # PREFIX = /embedded/arm-cortex/gcc-arm-none-eabi-4_9-2015q1/bin/arm-none-eabi
-PREFIX = /embedded/arm-cortex/gcc-arm-none-eabi-5_2-2015q4/bin/arm-none-eabi
 # OPENCM3_DIR = /usr/local/Cellar/arm-lib/libopencm3
 OPENCM3_DIR = /embedded/arm-cortex/src/libopencm3
 

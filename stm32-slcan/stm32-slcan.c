@@ -186,7 +186,7 @@ static void can_setup(void) {
     }
 
     /* CAN filter 0 init. */
-    can_filter_id_mask_32bit_init(CAN1,
+    can_filter_id_mask_32bit_init(
 				 0,	/* Filter ID */
 				 0,	/* CAN ID */
 				 0,	/* CAN ID mask */
@@ -243,12 +243,12 @@ static void put_hex(uint8_t c) {
 }
     
 void usb_lp_can_rx0_isr(void) {
-    uint32_t id, fmi;
+    uint32_t id;
     bool ext, rtr;
-    uint8_t i, dlc, data[8];
+    uint8_t fmi, i, dlc, data[8];
     char c;
 
-    can_receive(CAN1, 0, false, &id, &ext, &rtr, &fmi, &dlc, data);
+    can_receive(CAN1, 0, false, &id, &ext, &rtr, &fmi, &dlc, data, NULL);
 
     if (rtr) {
 	if (ext)
