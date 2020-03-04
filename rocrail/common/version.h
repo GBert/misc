@@ -1,11 +1,12 @@
 const int revisionnr = 
-527
+528
 ;
 const char* commithash = 
-"6389dda24afebaccccd2fc9cb98f1ba01ec6040b";
+"14577a194b45c0e287108a43e23f3a2475688c9d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"528 2020-03-04 07:31:46 +0100 router: fix for function check on 32bit systems (Lothar)\n" \
 "527 2020-03-03 07:49:41 +0100 locationsdlg: help tab sensitive\n" \
 "526 2020-03-02 15:49:54 +0100 wrapper: removed ori attribute from datareq\n" \
 "525 2020-03-02 15:46:59 +0100 router: fix check loco function 32 (Lothar)\n" \
