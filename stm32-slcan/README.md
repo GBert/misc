@@ -64,10 +64,8 @@ sudo mkdir -p /embedded/arm-cortex/src
 sudo chown -R "$(whoami).$(whoami)" /embedded
 
 cd /embedded/arm-cortex/src
-git clone https://github.com/libopencm3/libopencm3-examples.git
-cd libopencm3-examples
-git submodule init
-git submodule update
+git clone https://github.com/libopencm3/libopencm3.git
+cd libopencm3
 make PREFIX=arm-none-eabi-
 
 cd ~
