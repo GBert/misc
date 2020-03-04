@@ -61,7 +61,7 @@ Compile under Ubuntu/Raspbian
 sudo apt-get install git gcc-arm-none-eabi stm32flash
 
 sudo mkdir -p /embedded/arm-cortex/src
-sudo chown -R pi.pi /embedded/
+sudo chown -R "$(whoami).$(whoami)" /embedded
 
 cd /embedded/arm-cortex/src
 git clone https://github.com/libopencm3/libopencm3-examples.git
