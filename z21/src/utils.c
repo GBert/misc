@@ -107,7 +107,9 @@ void print_udp_frame(char *format, int udplength, unsigned char *udpframe) {
 	    printf(format, length, header);
 	    for (i = 4; i < udplength; i++)
 		printf(" %02x", udpframe[i]);
-	    printf("\n");
+	    /* printf("\n"); */
+	    for (; i < 13; i++)
+		printf("   ");
 	}
     }
 }
