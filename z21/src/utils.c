@@ -108,7 +108,7 @@ void print_udp_frame(char *format, int udplength, unsigned char *udpframe) {
 	    for (i = 4; i < udplength; i++)
 		printf(" %02x", udpframe[i]);
 	    /* printf("\n"); */
-	    for (; i < 13; i++)
+	    for (; i < 16; i++)
 		printf("   ");
 	}
     }
@@ -143,6 +143,7 @@ void print_net_frame(char *format, unsigned char *netframe) {
         else
             putchar(46);
     }
+    printf(" ");
 }
 
 struct node *insert_right(struct node *list, int id) {
