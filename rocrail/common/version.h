@@ -1,11 +1,12 @@
 const int revisionnr = 
-531
+532
 ;
 const char* commithash = 
-"9cb4a220e0bde8a9bde8cedc7602d39040d90023";
+"3eed13979046e80cc2bb6e867733309569971a6d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"532 2020-03-05 15:56:46 +0100 locationsdlg: fix for help links\n" \
 "531 2020-03-04 13:31:39 +0100 text: variable lcdestblock added\n" \
 "530 2020-03-04 13:11:28 +0100 got: only sleep in the read loop in case nothing has been read\n" \
 "529 2020-03-04 12:18:16 +0100 router: include stdint added\n" \
