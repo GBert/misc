@@ -301,6 +301,7 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 		v_printf(verbose, "LAN_X_HEADER type ?");
 		break;
 	    }
+            break;
 	case LAN_X_GET_LOCO_INFO:
 	    v_printf(verbose, "LAN_X_GET_LOCO_INFO");
 	    if (length == 9) {
