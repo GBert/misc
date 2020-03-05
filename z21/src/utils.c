@@ -97,7 +97,7 @@ void print_udp_frame(char *format, int udplength, unsigned char *udpframe) {
     char timestamp[16];
 
     time_stamp(timestamp);
-    printf("%s ", timestamp);
+    printf("\n%s ", timestamp);
     if (z21_data.foreground) {
 	/* print timestamp */
 
@@ -122,7 +122,7 @@ void print_net_frame(char *format, unsigned char *netframe) {
     memcpy(&canid, netframe, 4);
     dlc = netframe[4];
     time_stamp(timestamp);
-    printf("%s ", timestamp);
+    printf("\n%s ", timestamp);
     printf(format, ntohl(canid) & CAN_EFF_MASK, netframe[4]);
     for (i = 5; i < 5 + dlc; i++) {
         printf(" %02x", netframe[i]);
@@ -143,7 +143,6 @@ void print_net_frame(char *format, unsigned char *netframe) {
         else
             putchar(46);
     }
-    printf("\n");
 }
 
 struct node *insert_right(struct node *list, int id) {

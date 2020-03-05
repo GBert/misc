@@ -331,10 +331,10 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	case LAN_X_GET_TURNOUT_INFO:
 	     FAdr = be16(&z21_data->udpframe[5]);
 	     if (length == 0x08) {
-		v_printf(verbose, "%s LAN_X_GET_TURNOUT_INFO 0x%04X", __func__, FAdr);
+		v_printf(verbose, "LAN_X_GET_TURNOUT_INFO 0x%04X", FAdr);
 	     } else if (length == 0x09) {
 		zz = z21_data->udpframe[7];
-		v_printf(verbose, "%s LAN_X_TURNOUT_INFO 0x%04X 0x%02X", __func__, FAdr, zz);
+		v_printf(verbose, "LAN_X_TURNOUT_INFO 0x%04X 0x%02X", FAdr, zz);
 		/* TODO */
 		if (!zz) {
 		    zz = 0x01;
@@ -346,7 +346,7 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	     FAdr = be16(&z21_data->udpframe[5]);
 	     turnout = z21_data->udpframe[7];
 	     tport = turnout & 0x1;
-	     v_printf(verbose, "%s LAN_X_SET_TURNOUT 0x%04X", __func__, FAdr);
+	     v_printf(verbose, "LAN_X_SET_TURNOUT 0x%04X", FAdr);
 	     send_can_turnout(FAdr, tport, verbose);
 	     break;
 	}
@@ -356,7 +356,6 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	v_printf(verbose, "XPN unknown");
 	break;
     }
-    v_printf(verbose, "\n");
     return (EXIT_SUCCESS);
 }
 
@@ -383,6 +382,7 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t *data, int verbose) {
 	default:
 	    break;
 	}
+	break;
     /* turnout */
     case 0x17:
 	/* TODO */
@@ -395,7 +395,6 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t *data, int verbose) {
     default:
         break;
     }
-    v_printf(verbose, "\n");
     return (EXIT_SUCCESS);
 }
 
