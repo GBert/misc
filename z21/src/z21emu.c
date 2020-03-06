@@ -11,6 +11,7 @@
  * Z21 Emulation for Roco WiFi Mouse
  */
 
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <libgen.h>
@@ -42,6 +43,7 @@ struct sockaddr_in *bsa;
 pthread_mutex_t lock;
 
 struct z21_data_t z21_data;
+extern struct loco_data_t *loco_data;
 
 static char *UDP_SRC_STRG	= "->UDP    len 0x%04x ID 0x%04x";
 static char *UDP_DST_STRG	= "  UDP->  len 0x%04x ID 0x%04x";
@@ -163,7 +165,7 @@ int send_xpn_loco_info(uint16_t loco_id, int verbose) {
 }
 
 int send_xpn_loco_name(uint16_t loco_id, char *loco_name, uint8_t index, uint8_t n, int verbose) {
-    unsigned char xpnframe[64];
+    unsigned char xpnframe[32];
     size_t length;
 
     memset(xpnframe, 0, sizeof(xpnframe));
@@ -467,6 +469,7 @@ int main(int argc, char **argv) {
     char *bcast_interface;
     unsigned char recvline[MAXSIZE];
     char timestamp[16];
+    char *loco_file;
 
     socklen_t caddrlen = sizeof(caddr);
     memset(&ifr, 0, sizeof(ifr));
@@ -655,6 +658,13 @@ int main(int argc, char **argv) {
     if (z21_data.foreground) {
 	printf("created periodic z21 thread\n");
     }
+
+    if (asprintf(&loco_file, "%s/%s", config_dir, loco_name) < 0) {
+	fprintf(stderr, "can't alloc buffer for loco_name: %s\n", strerror(errno));
+	exit(EXIT_FAILURE);
+    }
+    read_loco_data(loco_file, CONFIG_FILE);
+    v_printf(z21_data.foreground, "loco data: %u\n", HASH_COUNT(loco_data));
 
     if (!z21_data.foreground) {
 	/* Fork off the parent process */

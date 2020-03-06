@@ -1084,7 +1084,7 @@ int read_loco_data(char *config_file, int config_type) {
     if (config_type && CONFIG_FILE)
 	fclose(fp);
 
-    printf("loco data count: %u\n", HASH_COUNT(loco_data));
+    /* printf("loco data count: %u\n", HASH_COUNT(loco_data)); */
     return (EXIT_SUCCESS);
 }
 
