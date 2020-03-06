@@ -162,6 +162,28 @@ int send_xpn_loco_info(uint16_t loco_id, int verbose) {
     return (EXIT_SUCCESS);
 }
 
+int send_xpn_loco_name(uint16_t loco_id, char *loco_name, uint8_t index, uint8_t n, int verbose) {
+    unsigned char xpnframe[64];
+    size_t length;
+
+    memset(xpnframe, 0, sizeof(xpnframe));
+    length = strnlen(loco_name, 10);
+
+    xpnframe[0] = (length + 11) & 0xff;
+    xpnframe[2] = 0x40;
+    xpnframe[4] = (length + 0xe5) & 0xff;
+    xpnframe[5] = 0xf1;
+    xpnframe[6] = loco_id >> 8;
+    xpnframe[7] = loco_id & 0xff;
+    xpnframe[8] = index;
+    xpnframe[9] = n;
+    memcpy(&xpnframe[10], loco_name, length);
+    xpnframe[length + 10] = xor(&xpnframe[4], length + 6);
+    send_xpn(xpnframe, verbose);
+
+    return (EXIT_SUCCESS);
+}
+
 int send_xpn_turnout_info(uint16_t FAdr, uint8_t zz, int verbose) {
     unsigned char xpnframe[32];
 
