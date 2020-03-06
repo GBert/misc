@@ -181,14 +181,17 @@ int send_xpn_loco_name(uint16_t loco_id, char *loco_name, uint8_t index, uint8_t
     memcpy(&xpnframe[10], loco_name, length);
     xpnframe[length + 10] = xor(&xpnframe[4], length + 6);
     send_xpn(xpnframe, verbose);
-
+    v_printf(verbose, " LAN_LOCO 0x%04X %s", loco_id, loco_name);
     return (EXIT_SUCCESS);
 }
 
-int send_xpn_locos(struct z21_data_t *z21_data, struct loco_data_t *loco_data) { 
-    int i;
+int send_xpn_locos(struct z21_data_t *z21_data, struct loco_data_t *loco_data, int verbose) { 
+    struct loco_data_t *l;
+    int i=0;
 
-    for (i = 1 ; i <= z21_data->loco_number; i++) {
+    for (l = loco_data; l != NULL; l = l->hh.next) {
+	send_xpn_loco_name(l->address, l->name, i, z21_data->loco_number, verbose);
+	i++;
     }
     return (EXIT_SUCCESS);
 } 
@@ -367,8 +370,7 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
     case LAN_X_GET_FIRMWARE_VERSION:
 	v_printf(verbose, "LAN_X_GET_FIRMWARE_VERSION");
 	send_xpn(XPN_X_Z21_FIRMWARE_VERSION, verbose);
-	v_printf(verbose, "LAN_X_FIRMWARE_VERSION %u.%u%u", XPN_X_Z21_FIRMWARE_VERSION[6], XPN_X_Z21_FIRMWARE_VERSION[7] >> 4,
-		 XPN_X_Z21_FIRMWARE_VERSION[7] & 0xF);
+	v_printf(verbose, "LAN_X_FIRMWARE_VERSION %u.%u%u", XPN_X_Z21_FIRMWARE_VERSION[6], XPN_X_Z21_FIRMWARE_VERSION[7] >> 4, XPN_X_Z21_FIRMWARE_VERSION[7] & 0xF);
 	break;
     default:
 	break;
@@ -684,6 +686,7 @@ int main(int argc, char **argv) {
     read_loco_data(loco_file, CONFIG_FILE);
     z21_data.loco_number = HASH_COUNT(loco_data);
     v_printf(z21_data.foreground, "loco data: %u\n", z21_data.loco_number);
+    /* send_xpn_locos(&z21_data, loco_data,z21_data.foreground); */
 
     if (!z21_data.foreground) {
 	/* Fork off the parent process */
