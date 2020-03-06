@@ -39,6 +39,7 @@ struct z21_data_t {
     int st;
     int foreground;
     int power;
+    uint8_t loco_number;
     char *format;
     unsigned char udpframe[MAXDG];
 };
