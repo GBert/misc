@@ -62,6 +62,7 @@ static unsigned char MS_LOCO_FUNCTION[]		= { 0x00, 0x0A, 0x03, 0x00, 0x05, 0x00,
 static unsigned char MS_TURNOUT[]		= { 0x00, 0x16, 0x03, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 static unsigned char XPN_SERIAL_NUMBER_RESPONSE[] = { 0x08, 0x00, 0x10, 0x00, 0x4D, 0xC1, 0x02, 0x00 };
+static unsigned char XPN_HWINFO_RESPONSE[]        = { 0x0C, 0x00, 0x1A, 0x00, 0x01, 0x02, 0x00, 0x00, 0x20, 0x01, 0x00, 0x00 };
 static unsigned char XPN_X_STATUS_CHANGED[]       = { 0x08, 0x00, 0x40, 0x00, 0x62, 0x22, 0x00, 0x40 };
 static unsigned char XPN_X_BC_TRACK_POWER_OFF[]   = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x00, 0x61 };
 static unsigned char XPN_X_BC_TRACK_POWER_ON[]    = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x01, 0x60 };
@@ -370,7 +371,8 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
     case LAN_X_GET_FIRMWARE_VERSION:
 	v_printf(verbose, "LAN_X_GET_FIRMWARE_VERSION");
 	send_xpn(XPN_X_Z21_FIRMWARE_VERSION, verbose);
-	v_printf(verbose, "LAN_X_FIRMWARE_VERSION %u.%u%u", XPN_X_Z21_FIRMWARE_VERSION[6], XPN_X_Z21_FIRMWARE_VERSION[7] >> 4, XPN_X_Z21_FIRMWARE_VERSION[7] & 0xF);
+	v_printf(verbose, "LAN_X_FIRMWARE_VERSION %u.%u%u", XPN_X_Z21_FIRMWARE_VERSION[6],
+		XPN_X_Z21_FIRMWARE_VERSION[7] >> 4, XPN_X_Z21_FIRMWARE_VERSION[7] & 0xF);
 	break;
     default:
 	break;
@@ -393,14 +395,19 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	if (length == 4) {
 	    v_printf(verbose, "LAN_GET_SERIAL_NUMBER");
 	    send_xpn(XPN_SERIAL_NUMBER_RESPONSE, verbose);
-	    v_printf(verbose, "LAN_SERIAL_NUMBER 0x%04X *TODO*", le32(&XPN_SERIAL_NUMBER_RESPONSE[4]));
+	    v_printf(verbose, "LAN_SERIAL_NUMBER 0x%08X", le32(&XPN_SERIAL_NUMBER_RESPONSE[4]));
 	}
 	break;
     case LAN_GET_CODE:
 	v_printf(verbose, "LAN_GET_CODE *");
 	break;
     case LAN_GET_HWINFO:
-	v_printf(verbose, "LAN_GET_HWINFO *");
+	if (length == 4) {
+	    v_printf(verbose, "LAN_GET_HWINFO *");
+	    send_xpn(XPN_HWINFO_RESPONSE, verbose);
+	    v_printf(verbose, "LAN HWINFO 0x%04X %u.%u%u", le32(&XPN_HWINFO_RESPONSE[4]),
+		 XPN_HWINFO_RESPONSE[9], XPN_HWINFO_RESPONSE[8] >> 4, XPN_HWINFO_RESPONSE[8] & 0xF);
+	}
 	break;
     case LAN_LOGOFF:
 	v_printf(verbose, "LAN_LOGOFF *");
