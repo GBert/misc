@@ -1,11 +1,12 @@
 const int revisionnr = 
-532
+533
 ;
 const char* commithash = 
-"3eed13979046e80cc2bb6e867733309569971a6d";
+"fc59a959e83518ea1541a68011f60bd6111ce570";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"533 2020-03-07 08:58:15 +0100 cbus: extra dispatch traces added\n" \
 "532 2020-03-05 15:56:46 +0100 locationsdlg: fix for help links\n" \
 "531 2020-03-04 13:31:39 +0100 text: variable lcdestblock added\n" \
 "530 2020-03-04 13:11:28 +0100 got: only sleep in the read loop in case nothing has been read\n" \
