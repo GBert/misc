@@ -1,11 +1,12 @@
 const int revisionnr = 
-533
+534
 ;
 const char* commithash = 
-"fc59a959e83518ea1541a68011f60bd6111ce570";
+"911421635f5eb0ee489750ad675025f205f3c565";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"534 2020-03-07 09:57:06 +0100 SpDrS60: blockstate occ and route added\n" \
 "533 2020-03-07 08:58:15 +0100 cbus: extra dispatch traces added\n" \
 "532 2020-03-05 15:56:46 +0100 locationsdlg: fix for help links\n" \
 "531 2020-03-04 13:31:39 +0100 text: variable lcdestblock added\n" \
