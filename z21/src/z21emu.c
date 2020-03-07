@@ -46,6 +46,7 @@ extern struct loco_data_t *loco_data;
 
 static char *UDP_SRC_STRG	= "->UDP    len 0x%04x ID 0x%04x";
 static char *UDP_DST_STRG	= "  UDP->  len 0x%04x ID 0x%04x";
+static char *TCP_FORMAT_STRG_S	= "  TCP->  CANID 0x%06X   [%d]";
 static char *TCP_FORMAT_STRG	= "->TCP    CANID 0x%06X   [%d]";
 static char *TCP_FORMATS_STRG	= "->TCP*   CANID 0x%06X   [%d]";
 
@@ -137,7 +138,7 @@ int send_tcp_frame(unsigned char *frame, char *format, int verbose) {
 
     if (s != 13) {
     } else {
-	print_udp_frame(format, length, frame);
+	print_net_frame(format, frame);
     }
     return (EXIT_SUCCESS);
 }
@@ -146,7 +147,7 @@ int send_can(unsigned char *data, int verbose) {
     unsigned char frame[16];
 
     memcpy(frame, data, 13);
-    send_tcp_frame(frame, TCP_FORMAT_STRG, verbose);
+    send_tcp_frame(frame, TCP_FORMAT_STRG_S, verbose);
     return (EXIT_SUCCESS);
 }
 
@@ -243,24 +244,25 @@ int send_can_loco_function(uint16_t loco_id, uint8_t function, uint8_t switchtyp
 }
 
 int send_can_loco_drive(uint16_t loco_id, uint8_t direction, uint8_t step, uint8_t speed, int verbose) {
-    unsigned char udpframe[13];
+    unsigned char netframe[13];
     uint16_t mspeed;
 
-    memcpy(udpframe, MS_LOCO_DIRECTION, 13);
-    set_loco_id(&udpframe[5], loco_id);
+    memcpy(netframe, MS_LOCO_DIRECTION, 13);
+    set_loco_id(&netframe[5], loco_id);
     if (direction == 0)
-	udpframe[9] = 2;
+	netframe[9] = 2;
     else if (direction == 1)
-	udpframe[9] = 1;
-    send_can(udpframe, verbose);
+	netframe[9] = 1;
+    send_can(netframe, verbose);
+    v_printf(verbose, "\n");
 
-    memcpy(udpframe, MS_LOCO_DRIVE, 13);
-    set_loco_id(&udpframe[5], loco_id);
+    memcpy(netframe, MS_LOCO_DRIVE, 13);
+    set_loco_id(&netframe[5], loco_id);
     /* TODO */
     mspeed = speed << 2;
-    udpframe[9] = (mspeed >> 8) & 0x03;
-    udpframe[10] = mspeed & 0xFF;
-    send_can(udpframe, verbose);
+    netframe[9] = (mspeed >> 8) & 0x03;
+    netframe[10] = mspeed & 0xFF;
+    send_can(netframe, verbose);
 
     return (EXIT_SUCCESS);
 }
@@ -291,7 +293,7 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
 	db0 = z21_data->udpframe[5];
 	switch (db0) {
 	case LAN_X_GET_STATUS:
-	    v_printf(verbose, "LAN_X_GET_STATUS");
+	    v_printf(verbose, "LAN_X_GET_STATUS\n");
 	    memcpy(xpnframe, XPN_X_STATUS_CHANGED, sizeof(XPN_X_STATUS_CHANGED));
 	    xpnframe[6] = z21_data->power ? 0x00 : 0x02;
 	    xpnframe[7] = xor(&xpnframe[4], 3);
@@ -299,16 +301,16 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
 	    v_printf(verbose, "LAN_X_STATUS_CHANGED");
 	    break;
 	case LAN_X_GET_FIRMWARE_VERSION:
-	    v_printf(verbose, "LAN_X_GET_FIRMWARE_VERSION");
+	    v_printf(verbose, "LAN_X_GET_FIRMWARE_VERSION\n");
 	    send_xpn(XPN_X_Z21_FIRMWARE_VERSION, verbose);
 	    break;
 	case LAN_X_SET_TRACK_POWER_ON:
-	    v_printf(verbose, "LAN_X_SET_TRACK_POWER_ON");
+	    v_printf(verbose, "LAN_X_SET_TRACK_POWER_ON\n");
 	    z21_data->power = 1;
 	    send_can(MS_POWER_ON, verbose);
 	    break;
 	case LAN_X_SET_TRACK_POWER_OFF:
-	    v_printf(verbose, "LAN_X_SET_TRACK_POWER_OFF");
+	    v_printf(verbose, "LAN_X_SET_TRACK_POWER_OFF\n");
 	    z21_data->power = 0;
 	    send_can(MS_POWER_OFF, verbose);
 	    break;
@@ -321,7 +323,7 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
 	v_printf(verbose, "LAN_X_GET_LOCO_INFO");
 	if (length == 9) {
 	    loco_id = be16(&z21_data->udpframe[6]);
-	    v_printf(verbose, " LOC ID 0x%04X", loco_id);
+	    v_printf(verbose, " LOC ID 0x%04X\n", loco_id);
 	    send_xpn_loco_info(loco_id, verbose);
 	}
 	break;
@@ -329,13 +331,13 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
 	if (length == 0x0A) {
 	    loco_id = be16(&z21_data->udpframe[6]) & 0x3FFF;
 	    if (z21_data->udpframe[5] == LAN_X_SET_LOCO_FUNCTION) {
-		v_printf(verbose, "LAN_X_SET_LOCO_FUNCTION 0x%04X 0x%02X", loco_id, z21_data->udpframe[8]);
+		v_printf(verbose, "LAN_X_SET_LOCO_FUNCTION 0x%04X 0x%02X\n", loco_id, z21_data->udpframe[8]);
 		uint8_t switchtype = (z21_data->udpframe[8] >> 6) & 0x03;
 		uint8_t function = z21_data->udpframe[8] & 0x3F;
 		send_can_loco_function(loco_id, function, switchtype, z21_data->foreground);
 	    } else if ((z21_data->udpframe[5] & 0xF0) == 0x10) {
 		/* LAN_X_SET_LOCO_DRIVE */
-		v_printf(verbose, "LAN_X_SET_LOCO_DRIVE 0x%04X 0x%02X", loco_id, z21_data->udpframe[8]);
+		v_printf(verbose, "LAN_X_SET_LOCO_DRIVE 0x%04X 0x%02X\n", loco_id, z21_data->udpframe[8]);
 		uint8_t step = z21_data->udpframe[5] & 0x03;
 		uint8_t direction = z21_data->udpframe[8] >> 7;
 		uint8_t speed = z21_data->udpframe[8] & 0x7F;
@@ -354,6 +356,7 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
 	    /* TODO */
 	    if (!zz) {
 		zz = 0x01;
+		v_printf(verbose, "\n");
 		send_xpn_turnout_info(FAdr, zz, verbose);
 	    }
 	}
@@ -362,14 +365,14 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
 	FAdr = be16(&z21_data->udpframe[5]);
 	turnout = z21_data->udpframe[7];
 	tport = turnout & 0x1;
-	v_printf(verbose, "LAN_X_SET_TURNOUT 0x%04X", FAdr);
+	v_printf(verbose, "LAN_X_SET_TURNOUT 0x%04X\n", FAdr);
 	send_can_turnout(FAdr, tport, verbose);
 	break;
     case LAN_X_CV_READ:
 	v_printf(verbose, "LAN_X_CV_READ CV %u *TODO*", be16(&z21_data->udpframe[6]));
 	break;
     case LAN_X_GET_FIRMWARE_VERSION:
-	v_printf(verbose, "LAN_X_GET_FIRMWARE_VERSION");
+	v_printf(verbose, "LAN_X_GET_FIRMWARE_VERSION\n");
 	send_xpn(XPN_X_Z21_FIRMWARE_VERSION, verbose);
 	v_printf(verbose, "LAN_X_FIRMWARE_VERSION %u.%u%u", XPN_X_Z21_FIRMWARE_VERSION[6],
 		XPN_X_Z21_FIRMWARE_VERSION[7] >> 4, XPN_X_Z21_FIRMWARE_VERSION[7] & 0xF);
@@ -393,7 +396,7 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
     switch (header) {
     case LAN_GET_SERIAL_NUMBER:
 	if (length == 4) {
-	    v_printf(verbose, "LAN_GET_SERIAL_NUMBER");
+	    v_printf(verbose, "LAN_GET_SERIAL_NUMBER\n");
 	    send_xpn(XPN_SERIAL_NUMBER_RESPONSE, verbose);
 	    v_printf(verbose, "LAN_SERIAL_NUMBER 0x%08X", le32(&XPN_SERIAL_NUMBER_RESPONSE[4]));
 	}
@@ -403,7 +406,7 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	break;
     case LAN_GET_HWINFO:
 	if (length == 4) {
-	    v_printf(verbose, "LAN_GET_HWINFO *");
+	    v_printf(verbose, "LAN_GET_HWINFO\n");
 	    send_xpn(XPN_HWINFO_RESPONSE, verbose);
 	    v_printf(verbose, "LAN HWINFO 0x%04X %u.%u%u", le32(&XPN_HWINFO_RESPONSE[4]),
 		 XPN_HWINFO_RESPONSE[9], XPN_HWINFO_RESPONSE[8] >> 4, XPN_HWINFO_RESPONSE[8] & 0xF);
@@ -426,6 +429,7 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	v_printf(verbose, "XPN unknown");
 	break;
     }
+    v_printf(verbose, "\n");
     return (EXIT_SUCCESS);
 }
 
@@ -439,13 +443,13 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
 	switch (data[9]) {
 	case 0x00:
 	    if (uid) v_printf(verbose, "System: UID 0x%08X ", uid); else v_printf(verbose, "System: alle ");
-	    printf("Stop");
+	    printf("Stop\n");
 	    send_xpn(XPN_X_BC_TRACK_POWER_OFF, verbose);
 	    z21_data->power = 0;
 	    break;
 	case 0x01:
 	    if (uid) v_printf(verbose, "System: UID 0x%08X ", uid); else v_printf(verbose, "System: alle ");
-	    printf("Go");
+	    printf("Go\n");
 	    send_xpn(XPN_X_BC_TRACK_POWER_ON, verbose);
 	    z21_data->power = 1;
 	    break;
@@ -459,12 +463,14 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
 	uid = be16(&data[7]) & 0xCFFF;
 	tport = 1 << (data[9] & 0x01);
 	tpower = data[10];
+	v_printf(verbose, "\n");
 	if (!tpower)
 	    send_xpn_turnout_info(uid, tport, verbose);
 	break;
     default:
 	break;
     }
+    v_printf(verbose, "\n");
     return (EXIT_SUCCESS);
 }
 

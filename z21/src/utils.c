@@ -97,7 +97,7 @@ void print_udp_frame(char *format, int udplength, unsigned char *udpframe) {
     char timestamp[16];
 
     time_stamp(timestamp);
-    printf("\n%s ", timestamp);
+    printf("%s ", timestamp);
     if (z21_data.foreground) {
 	/* print timestamp */
 
@@ -119,11 +119,11 @@ void print_net_frame(char *format, unsigned char *netframe) {
     int i, dlc;
     char timestamp[16];
 
-    memcpy(&canid, netframe, 4);
+    canid = be32(netframe);
     dlc = netframe[4];
     time_stamp(timestamp);
-    printf("\n%s ", timestamp);
-    printf(format, ntohl(canid) & CAN_EFF_MASK, netframe[4]);
+    printf("%s ", timestamp);
+    printf(format, canid & CAN_EFF_MASK, netframe[4]);
     for (i = 5; i < 5 + dlc; i++) {
         printf(" %02x", netframe[i]);
     }
