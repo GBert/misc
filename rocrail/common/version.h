@@ -1,11 +1,13 @@
 const int revisionnr = 
-535
+537
 ;
 const char* commithash = 
-"ab9979085b2d991a5ff3d7aaccc2123d9e770c96";
+"e14d80df689fab897eafd7a18767ece3a56abd05";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"537 2020-03-08 14:28:26 +0100 startrocrail script added into the installer\n" \
+"536 2020-03-08 14:16:57 +0100 start script added for RPi\n" \
 "535 2020-03-08 09:05:16 +0100 SLIM-COLOR: added missing block ident symbol\n" \
 "534 2020-03-07 09:57:06 +0100 SpDrS60: blockstate occ and route added\n" \
 "533 2020-03-07 08:58:15 +0100 cbus: extra dispatch traces added\n" \
