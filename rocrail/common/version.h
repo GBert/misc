@@ -1,11 +1,12 @@
 const int revisionnr = 
-534
+535
 ;
 const char* commithash = 
-"911421635f5eb0ee489750ad675025f205f3c565";
+"ab9979085b2d991a5ff3d7aaccc2123d9e770c96";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"535 2020-03-08 09:05:16 +0100 SLIM-COLOR: added missing block ident symbol\n" \
 "534 2020-03-07 09:57:06 +0100 SpDrS60: blockstate occ and route added\n" \
 "533 2020-03-07 08:58:15 +0100 cbus: extra dispatch traces added\n" \
 "532 2020-03-05 15:56:46 +0100 locationsdlg: fix for help links\n" \
