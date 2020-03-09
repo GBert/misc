@@ -1,11 +1,13 @@
 const int revisionnr = 
-537
+539
 ;
 const char* commithash = 
-"e14d80df689fab897eafd7a18767ece3a56abd05";
+"166953780e716f06564a72e90406523c11ad888b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"539 2020-03-09 12:20:26 +0100 new default r2rnet multicast address and port\n" \
+"538 2020-03-09 07:43:08 +0100 text: removed variable lcdestblock, was the same as lcdest\n" \
 "537 2020-03-08 14:28:26 +0100 startrocrail script added into the installer\n" \
 "536 2020-03-08 14:16:57 +0100 start script added for RPi\n" \
 "535 2020-03-08 09:05:16 +0100 SLIM-COLOR: added missing block ident symbol\n" \
