@@ -1,11 +1,12 @@
 const int revisionnr = 
-540
+541
 ;
 const char* commithash = 
-"8ced555d0bbeea413fdd744de0b9ae0e75ded900";
+"d49db058c0b1960cd59fe82188e17d23d7538e8a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"541 2020-03-10 09:30:47 +0100 planpaneldlg: replace option for prefix\n" \
 "540 2020-03-09 21:43:23 +0100 route: regard recursive in modify\n" \
 "539 2020-03-09 12:20:26 +0100 new default r2rnet multicast address and port\n" \
 "538 2020-03-09 07:43:08 +0100 text: removed variable lcdestblock, was the same as lcdest\n" \
