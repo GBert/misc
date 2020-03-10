@@ -176,6 +176,8 @@ int send_xpn_loco_name(uint16_t loco_id, char *loco_name, uint8_t index, uint8_t
     xpnframe[2] = 0x40;
     xpnframe[4] = (length + 0xe5) & 0xff;
     xpnframe[5] = 0xf1;
+    if (loco_id > 0x4000)
+	loco_id -= 0x3f00;
     xpnframe[6] = loco_id >> 8;
     xpnframe[7] = loco_id & 0xff;
     xpnframe[8] = index;
@@ -193,6 +195,7 @@ int send_xpn_locos(struct z21_data_t *z21_data, struct loco_data_t *loco_data, i
 
     for (l = loco_data; l != NULL; l = l->hh.next) {
 	send_xpn_loco_name(l->address, l->name, i, z21_data->loco_number, verbose);
+	v_printf(verbose, "\n");
 	i++;
     }
     return (EXIT_SUCCESS);
@@ -221,15 +224,14 @@ void set_loco_id(unsigned char *data, uint16_t loco_id) {
      */
     if (loco_id < 0x0100) {
 	data[3] = 0x00;
-	data[4] = loco_id;
+	data[3] = loco_id;
     } else if (loco_id < 0x2000) {
-	data[3] = loco_id >> 8;
-	data[4] = loco_id & 0xff;
-	data[3] |= 0x40;
+	printf("loco id 0x%04X\n", loco_id);
+	data[2] |= 0x40;
+	data[3] = loco_id & 0xff;
     } else if (loco_id < 0x3FFF) {
-	data[3] = loco_id >> 8;
-	data[4] = loco_id & 0xff;
-	data[3] |= 0xC0;
+	data[2] |= 0xC0;
+	data[3] = loco_id & 0xff;
     }
 }
 
@@ -455,6 +457,14 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
 	    break;
 	default:
 	    break;
+	}
+	break;
+    /* Lokinfo (Loco ID 0x0001 & F2 Trigger */
+    case 0x0C:
+	uid = be32(&data[5]);
+	if ((uid == 0x01) && (data[9] == 2)) {
+	    v_printf(verbose, "Send Loco names\n");
+	    send_xpn_locos(z21_data, loco_data, verbose);
 	}
 	break;
     /* turnout */
