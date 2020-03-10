@@ -1,11 +1,13 @@
 const int revisionnr = 
-541
+543
 ;
 const char* commithash = 
-"d49db058c0b1960cd59fe82188e17d23d7538e8a";
+"11481626f74c96181ef563f338cb18f4610cd00c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"543 2020-03-10 13:38:52 +0100 rocnetnode: softinit flag added to avoid reinitializing the whole I2C\n" \
+"542 2020-03-10 12:23:34 +0100 WIO: support for pulselength in query response\n" \
 "541 2020-03-10 09:30:47 +0100 planpaneldlg: replace option for prefix\n" \
 "540 2020-03-09 21:43:23 +0100 route: regard recursive in modify\n" \
 "539 2020-03-09 12:20:26 +0100 new default r2rnet multicast address and port\n" \
