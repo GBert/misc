@@ -1,11 +1,12 @@
 const int revisionnr = 
-539
+540
 ;
 const char* commithash = 
-"166953780e716f06564a72e90406523c11ad888b";
+"8ced555d0bbeea413fdd744de0b9ae0e75ded900";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"540 2020-03-09 21:43:23 +0100 route: regard recursive in modify\n" \
 "539 2020-03-09 12:20:26 +0100 new default r2rnet multicast address and port\n" \
 "538 2020-03-09 07:43:08 +0100 text: removed variable lcdestblock, was the same as lcdest\n" \
 "537 2020-03-08 14:28:26 +0100 startrocrail script added into the installer\n" \
