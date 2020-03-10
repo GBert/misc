@@ -51,7 +51,7 @@ static char *TCP_FORMAT_STRG	= "->TCP    CANID 0x%06X   [%d]";
 static char *TCP_FORMATS_STRG	= "->TCP*   CANID 0x%06X   [%d]";
 
 #define MAXLINE		256
-#define WLM_DELAY	20000
+#define WLM_DELAY	10000
 
 char cs2addr[32] = "127.0.0.1";
 char config_dir[MAXLINE] = "/www/config/";
@@ -80,7 +80,7 @@ static unsigned char XPN_X_BC_STOPPED[]           = { 0x07, 0x00, 0x40, 0x00, 0x
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c config_dir -p <port> -s <port>\n", prg);
-    fprintf(stderr, "   Version 0.7\n\n");
+    fprintf(stderr, "   Version 0.8\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory - default %s\n", config_dir);
     fprintf(stderr, "         -p <port>           primary UDP port for the server - default %d\n", PRIMARY_UDP_PORT);
     fprintf(stderr, "         -s <port>           secondary UDP port for the server - default %d\n", SECONDARY_UDP_PORT);
@@ -197,9 +197,12 @@ int send_xpn_locos(struct z21_data_t *z21_data, struct loco_data_t *loco_data, i
     int i=0;
 
     for (l = loco_data; l != NULL; l = l->hh.next) {
-	send_xpn_loco_name(l->address, l->name, i, z21_data->loco_number, verbose);
+	send_xpn_loco_name(l->uid, l->name, i, z21_data->loco_number, verbose);
 	v_printf(verbose, "\n");
 	usec_sleep(WLM_DELAY);
+	send_xpn_loco_name(l->uid, l->name, i, z21_data->loco_number, verbose);
+	v_printf(verbose, "\n");
+	usec_sleep(WLM_DELAY * 2);
 	i++;
     }
     return (EXIT_SUCCESS);
