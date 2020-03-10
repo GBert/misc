@@ -50,9 +50,12 @@ static char *TCP_FORMAT_STRG_S	= "  TCP->  CANID 0x%06X   [%d]";
 static char *TCP_FORMAT_STRG	= "->TCP    CANID 0x%06X   [%d]";
 static char *TCP_FORMATS_STRG	= "->TCP*   CANID 0x%06X   [%d]";
 
-#define MAXLINE	256
+#define MAXLINE		256
+#define WLM_DELAY	20000
+
 char cs2addr[32] = "127.0.0.1";
 char config_dir[MAXLINE] = "/www/config/";
+
 
 static unsigned char MS_POWER_ON[]		= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
 static unsigned char MS_POWER_OFF[]		= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -196,6 +199,7 @@ int send_xpn_locos(struct z21_data_t *z21_data, struct loco_data_t *loco_data, i
     for (l = loco_data; l != NULL; l = l->hh.next) {
 	send_xpn_loco_name(l->address, l->name, i, z21_data->loco_number, verbose);
 	v_printf(verbose, "\n");
+	usec_sleep(WLM_DELAY);
 	i++;
     }
     return (EXIT_SUCCESS);
