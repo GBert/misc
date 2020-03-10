@@ -223,10 +223,9 @@ void set_loco_id(unsigned char *data, uint16_t loco_id) {
       0x2000 - 0x3FFF dcc       Adresse + 0x2000
      */
     if (loco_id < 0x0100) {
-	data[3] = 0x00;
+	data[2] = 0x00;
 	data[3] = loco_id;
     } else if (loco_id < 0x2000) {
-	printf("loco id 0x%04X\n", loco_id);
 	data[2] |= 0x40;
 	data[3] = loco_id & 0xff;
     } else if (loco_id < 0x3FFF) {
