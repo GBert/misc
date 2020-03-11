@@ -42,7 +42,7 @@ struct sockaddr_in *bsa;
 pthread_mutex_t lock;
 
 struct z21_data_t z21_data;
-extern struct loco_data_t *loco_data;
+extern struct loco_data_t *loco_data, *loco_data_by_uid;
 
 static char *UDP_SRC_STRG	= "->UDP    len 0x%04x ID 0x%04x";
 static char *UDP_DST_STRG	= "  UDP->  len 0x%04x ID 0x%04x";
@@ -474,6 +474,11 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
 	}
 	break;
     /* turnout */
+    case 0x0B:
+	uid = be32(&data[5]);
+	v_printf(verbose, "loco uid 0x%08X : actual direction %u - saved direction %u", uid, data[9], loco_get_direction(uid));
+	loco_set_direction(uid, data[9]);
+	break;
     case 0x17:
 	/* TODO */
 	uid = be16(&data[7]) & 0xCFFF;
@@ -715,6 +720,10 @@ int main(int argc, char **argv) {
     read_loco_data(loco_file, CONFIG_FILE);
     z21_data.loco_number = HASH_COUNT(loco_data);
     v_printf(z21_data.foreground, "loco data: %u\n", z21_data.loco_number);
+    if (z21_data.foreground) {
+	print_locos_by_uid();
+	printf("\n");
+    }
     /* send_xpn_locos(&z21_data, loco_data,z21_data.foreground); */
 
     if (!z21_data.foreground) {

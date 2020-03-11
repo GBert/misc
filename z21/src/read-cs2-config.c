@@ -52,7 +52,7 @@ char *gbs_default = { "gbs-0" };
 
 struct track_page_t *track_page = NULL;
 struct track_data_t *track_data = NULL;
-struct loco_data_t *loco_data = NULL, *loco_data_by_address = NULL;
+struct loco_data_t *loco_data = NULL, *loco_data_by_uid = NULL;
 struct loco_names_t *loco_names = NULL;
 
 char *fgets_buffer(char *dest, int max, char *src) {
@@ -186,6 +186,34 @@ void delete_all_loco_names(void) {
     }
 }
 
+uint8_t loco_get_direction(unsigned int uid) {
+    struct loco_data_t *l;
+
+    HASH_FIND(hha, loco_data_by_uid, &uid, sizeof(unsigned int), l);
+    if (l)
+	return(l->direction);
+    return(255);
+}
+
+int loco_set_direction(unsigned int uid, uint8_t direction) {
+    struct loco_data_t *l;
+
+    HASH_FIND(hha, loco_data_by_uid, &uid, sizeof(unsigned int), l);
+    if (l) {
+	l->direction = direction;
+	return(EXIT_SUCCESS);
+    }
+    return(EXIT_FAILURE);
+}
+
+void print_locos_by_uid(void) {
+    struct loco_data_t *l, *tmp;
+
+    HASH_ITER(hha, loco_data_by_uid, l, tmp) {
+	printf("0x%08X %s\n", l->uid, l->name);
+    }
+}
+
 int add_loco_name(struct loco_names_t *loco) {
     struct loco_names_t *l;
 
@@ -288,7 +316,7 @@ int add_loco(struct loco_data_t *loco) {
 	l->mfxtype = loco->mfxtype;
 	l->intraction = loco->intraction;
 	HASH_ADD(hh, loco_data, name, strlen(l->name), l);
-	HASH_ADD(hha, loco_data_by_address, address, sizeof(int), l);
+	HASH_ADD(hha, loco_data_by_uid, uid, sizeof(int), l);
     } else {
 	check_modify(loco->minor, l->minor);
 	check_modify(loco->major, l->major);
