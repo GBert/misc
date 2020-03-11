@@ -155,9 +155,20 @@ int send_can(unsigned char *data, int verbose) {
 }
 
 int send_xpn_loco_info(uint16_t loco_id, int verbose) {
+    uint8_t direction;
     unsigned char xpnframe[32];
+    uint32_t uid;
 
     memcpy(xpnframe, XPN_X_LOCO_INFO, sizeof(XPN_X_LOCO_INFO));
+
+    uid = loco_id;
+
+    if (loco_id > 0x1fff)
+	uid += 0xa000;
+    else if (loco_id > 0xff)
+	uid += 0x3e00;
+
+    direction = loco_get_direction(uid);
     xpnframe[5] = loco_id >> 8;
     xpnframe[6] = loco_id & 0xff;
     /* TODO */
@@ -331,7 +342,9 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
 	v_printf(verbose, "LAN_X_GET_LOCO_INFO");
 	if (length == 9) {
 	    loco_id = be16(&z21_data->udpframe[6]);
+	    /* TODO */
 	    v_printf(verbose, " LOC ID 0x%04X\n", loco_id);
+	    /* TODO */
 	    send_xpn_loco_info(loco_id, verbose);
 	}
 	break;
@@ -473,12 +486,16 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
 	    send_xpn_locos(z21_data, loco_data, verbose);
 	}
 	break;
-    /* turnout */
     case 0x0B:
 	uid = be32(&data[5]);
 	v_printf(verbose, "loco uid 0x%08X : actual direction %u - saved direction %u", uid, data[9], loco_get_direction(uid));
-	loco_set_direction(uid, data[9]);
+	if (data[9] != loco_get_direction(uid)) {
+	    loco_set_direction(uid, data[9]);
+	    /* TODO */
+	    /* send_xpn_loco_info(uid, verbose); */
+	}
 	break;
+    /* turnout */
     case 0x17:
 	/* TODO */
 	uid = be16(&data[7]) & 0xCFFF;
