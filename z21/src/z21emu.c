@@ -253,6 +253,14 @@ void set_loco_id(unsigned char *data, uint16_t loco_id) {
     }
 }
 
+unsigned int m_loco_id(uint16_t loco_id) {
+    if (loco_id > 0x1fff)
+	return (loco_id + 0xa000);
+    else if (loco_id > 0xff)
+	return (loco_id + 0x3f00);
+    return((unsigned int )loco_id);
+}
+
 int send_can_loco_function(uint16_t loco_id, uint8_t function, uint8_t value, int verbose) {
     unsigned char udpframe[13];
 
@@ -356,16 +364,10 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
 	    loco_id = be16(&z21_data->udpframe[6]) & 0x3FFF;
 	    if (z21_data->udpframe[5] == LAN_X_SET_LOCO_FUNCTION) {
 		v_printf(verbose, "LAN_X_SET_LOCO_FUNCTION 0x%04X 0x%02X\n", loco_id, z21_data->udpframe[8]);
-		uint8_t function = z21_data->udpframe[8] & 0x1F;
+		uint8_t function = (z21_data->udpframe[8] - 1 )& 0x1F;
 		uint8_t switchtype = (z21_data->udpframe[8] >> 6) & 0x03;
-		/*
 		if (switchtype == 2)
-		    loco_toggle_function(loco_id, function);
-		else if (switchtype != 3)
-		    loco_set_function(loco_id, function, switchtype);
-		*/
-		if (switchtype == 2)
-		    value = loco_get_function(loco_id, function) ^ 1;
+		    value = loco_get_function(m_loco_id(loco_id), function) ^ 1;
 		else
 		    value = switchtype;
 		send_can_loco_function(loco_id, function, value, z21_data->foreground);
@@ -469,7 +471,7 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 
 int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
     uint32_t uid;
-    uint8_t tport, tpower;
+    uint8_t function, tport, tpower, value;
 
     switch ((be32(data) & 0x00FF0000UL) >> 16) {
     case 0x01:
@@ -498,6 +500,12 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
 	    v_printf(verbose, "Send Loco names\n");
 	    send_xpn_locos(z21_data, loco_data, verbose);
 	}
+	break;
+    case 0x0D:
+	uid = be32(&data[5]);
+	function = data[9];
+	value = data[10];
+	loco_save_function(uid, function, value);
 	break;
     case 0x0B:
 	uid = be32(&data[5]);

@@ -68,7 +68,7 @@ unsigned int loco_get_func_summary(unsigned int uid) {
     return(0);
 }
 
-int loco_set_function(unsigned int uid, uint8_t function, uint8_t value) {
+int loco_save_function(unsigned int uid, uint8_t function, uint8_t value) {
     struct loco_data_t *l;
 
     function &= MAX_LOCO_FUNCTIONS - 1;
