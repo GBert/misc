@@ -81,7 +81,7 @@ static unsigned char XPN_X_BC_STOPPED[]           = { 0x07, 0x00, 0x40, 0x00, 0x
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c config_dir -p <port> -s <port>\n", prg);
-    fprintf(stderr, "   Version 0.8\n\n");
+    fprintf(stderr, "   Version 0.9\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory - default %s\n", config_dir);
     fprintf(stderr, "         -p <port>           primary UDP port for the server - default %d\n", PRIMARY_UDP_PORT);
     fprintf(stderr, "         -s <port>           secondary UDP port for the server - default %d\n", SECONDARY_UDP_PORT);
@@ -526,7 +526,7 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
 	function = data[9];
 	value = data[10];
 	loco_save_function(uid, function, value);
-	v_printf(verbose, "uid 0x%08x xpn id 0x%04X\n", uid, xpn_id(uid));
+	v_printf(verbose, "\n");
 	send_xpn_loco_info(xpn_id(uid), verbose);
 	break;
     case 0x0B:
