@@ -1,11 +1,14 @@
 const int revisionnr = 
-543
+546
 ;
 const char* commithash = 
-"11481626f74c96181ef563f338cb18f4610cd00c";
+"8c61bf63d735b8ca6955c61871fd01c577d29fbd";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"546 2020-03-12 12:16:58 +0100 renderer: seltab in case of SLIM with small rounded corners\n" \
+"545 2020-03-12 08:54:54 +0100 SLIM-COLOR: fix for closed small block\n" \
+"544 2020-03-12 08:50:14 +0100 SLIM-COLOR: route symbols added\n" \
 "543 2020-03-10 13:38:52 +0100 rocnetnode: softinit flag added to avoid reinitializing the whole I2C\n" \
 "542 2020-03-10 12:23:34 +0100 WIO: support for pulselength in query response\n" \
 "541 2020-03-10 09:30:47 +0100 planpaneldlg: replace option for prefix\n" \
