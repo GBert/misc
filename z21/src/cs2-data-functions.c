@@ -49,6 +49,16 @@ int loco_set_direction(unsigned int uid, uint8_t direction) {
     return(EXIT_FAILURE);
 }
 
+uint8_t loco_get_function(unsigned int uid, uint8_t function) {
+    struct loco_data_t *l;
+
+    function &= MAX_LOCO_FUNCTIONS - 1;
+    HASH_FIND(hha, loco_data_by_uid, &uid, sizeof(unsigned int), l);
+    if (l)
+	return(l->function[function].value);
+    return(0);
+}
+
 unsigned int loco_get_func_summary(unsigned int uid) {
     struct loco_data_t *l;
 

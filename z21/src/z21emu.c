@@ -63,7 +63,7 @@ static unsigned char MS_POWER_OFF[]		= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x0
 
 static unsigned char MS_LOCO_DRIVE[]		= { 0x00, 0x08, 0x03, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static unsigned char MS_LOCO_DIRECTION[]	= { 0x00, 0x0A, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-static unsigned char MS_LOCO_FUNCTION[]		= { 0x00, 0x0A, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static unsigned char MS_LOCO_FUNCTION[]		= { 0x00, 0x0C, 0x03, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static unsigned char MS_TURNOUT[]		= { 0x00, 0x16, 0x03, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 static unsigned char XPN_SERIAL_NUMBER_RESPONSE[] = { 0x08, 0x00, 0x10, 0x00, 0x4D, 0xC1, 0x02, 0x00 };
@@ -253,11 +253,13 @@ void set_loco_id(unsigned char *data, uint16_t loco_id) {
     }
 }
 
-int send_can_loco_function(uint16_t loco_id, uint8_t function, uint8_t switchtype, int verbose) {
+int send_can_loco_function(uint16_t loco_id, uint8_t function, uint8_t value, int verbose) {
     unsigned char udpframe[13];
 
     memcpy(udpframe, MS_LOCO_FUNCTION, 13);
     set_loco_id(&udpframe[5], loco_id);
+    udpframe[9] = function;
+    udpframe[10] = value;
     send_can(udpframe, verbose);
 
     return (EXIT_SUCCESS);
@@ -302,7 +304,7 @@ int send_can_turnout(uint16_t id, uint8_t port, int verbose) {
 }
 
 int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
-    uint8_t db0, tport, turnout, xheader, zz;
+    uint8_t db0, tport, turnout, value, xheader, zz;
     uint16_t length, loco_id, FAdr;
     unsigned char xpnframe[32];
 
@@ -354,13 +356,19 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
 	    loco_id = be16(&z21_data->udpframe[6]) & 0x3FFF;
 	    if (z21_data->udpframe[5] == LAN_X_SET_LOCO_FUNCTION) {
 		v_printf(verbose, "LAN_X_SET_LOCO_FUNCTION 0x%04X 0x%02X\n", loco_id, z21_data->udpframe[8]);
-		uint8_t function = z21_data->udpframe[8] & 0x3F;
+		uint8_t function = z21_data->udpframe[8] & 0x1F;
 		uint8_t switchtype = (z21_data->udpframe[8] >> 6) & 0x03;
+		/*
 		if (switchtype == 2)
 		    loco_toggle_function(loco_id, function);
 		else if (switchtype != 3)
 		    loco_set_function(loco_id, function, switchtype);
-		send_can_loco_function(loco_id, function, switchtype, z21_data->foreground);
+		*/
+		if (switchtype == 2)
+		    value = loco_get_function(loco_id, function) ^ 1;
+		else
+		    value = switchtype;
+		send_can_loco_function(loco_id, function, value, z21_data->foreground);
 	    } else if ((z21_data->udpframe[5] & 0xF0) == 0x10) {
 		/* LAN_X_SET_LOCO_DRIVE */
 		v_printf(verbose, "LAN_X_SET_LOCO_DRIVE 0x%04X 0x%02X\n", loco_id, z21_data->udpframe[8]);
