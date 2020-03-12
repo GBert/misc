@@ -97,6 +97,26 @@ int loco_toggle_function(unsigned int uid, uint8_t function) {
     return(EXIT_FAILURE);
 }
 
+unsigned int loco_get_speed(unsigned int uid) {
+    struct loco_data_t *l;
+
+    HASH_FIND(hha, loco_data_by_uid, &uid, sizeof(unsigned int), l);
+    if (l)
+	return(l->velocity);
+    return(0);
+}
+
+int loco_save_speed(unsigned int uid, unsigned int speed) {
+    struct loco_data_t *l;
+
+    HASH_FIND(hha, loco_data_by_uid, &uid, sizeof(unsigned int), l);
+    if (l) {
+	l->velocity = speed;
+	return(EXIT_SUCCESS);
+    }
+    return(EXIT_FAILURE);
+}
+
 void print_locos_by_uid(void) {
     struct loco_data_t *l, *tmp;
 

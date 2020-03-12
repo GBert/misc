@@ -90,6 +90,25 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -f                  running in foreground\n\n");
 }
 
+unsigned int m_loco_id(uint16_t loco_id) {
+    if (loco_id > 0x1fff)
+	return (loco_id + 0xa000);
+    else if (loco_id > 0xff)
+	return (loco_id + 0x3f00);
+    return((unsigned int )loco_id);
+}
+
+uint16_t xpn_id (unsigned int m_id) {
+
+    if (m_id < 0x3FFF) {
+	return(m_id);
+    } else if (m_id < 0xC000) {
+	return(m_id - 0x3F00);
+    } else {
+	return(m_id - 0xA000);
+    }
+}
+
 int send_broadcast(unsigned char *udpframe, char *format, int verbose) {
     int s;
     uint16_t length;
@@ -158,24 +177,28 @@ int send_can(unsigned char *data, int verbose) {
 int send_xpn_loco_info(uint16_t loco_id, int verbose) {
     uint8_t direction;
     unsigned char xpnframe[32];
-    uint32_t uid;
+    unsigned int m_id;
+    unsigned int comp_func;
 
     memcpy(xpnframe, XPN_X_LOCO_INFO, sizeof(XPN_X_LOCO_INFO));
+    m_id = m_loco_id(loco_id);
+    comp_func = loco_get_func_summary(m_id);
 
-    uid = loco_id;
-
-    if (loco_id > 0x1fff)
-	uid += 0xa000;
-    else if (loco_id > 0xff)
-	uid += 0x3e00;
-
-    direction = loco_get_direction(uid);
     xpnframe[5] = loco_id >> 8;
     xpnframe[6] = loco_id & 0xff;
-    /* TODO */
-
+    xpnframe[7] = 4; /* TODO */
+    xpnframe[8] = loco_get_speed(m_id) & 0xff; /*TODO */
+    direction = loco_get_direction(m_id);
+    if (direction != 1)
+	direction = 0;
+    xpnframe[8] |= direction << 7;
+    xpnframe[9]  = ((comp_func & 1) << 4) | ((comp_func >> 1) & 0x0F);
+    xpnframe[10] = (comp_func >>  5) & 0xFF;
+    xpnframe[11] = (comp_func >> 13) & 0xFF;
+    xpnframe[12] = (comp_func >> 21) & 0xFF;
     xpnframe[13] = xor(&xpnframe[4], 8);
     send_xpn(xpnframe, verbose);
+    v_printf(verbose, "LAN_X_LOCO_INFO LOC ID 0x%04X", loco_id);
 
     return (EXIT_SUCCESS);
 }
@@ -251,14 +274,6 @@ void set_loco_id(unsigned char *data, uint16_t loco_id) {
 	data[2] |= 0xC0;
 	data[3] = loco_id & 0xff;
     }
-}
-
-unsigned int m_loco_id(uint16_t loco_id) {
-    if (loco_id > 0x1fff)
-	return (loco_id + 0xa000);
-    else if (loco_id > 0xff)
-	return (loco_id + 0x3f00);
-    return((unsigned int )loco_id);
 }
 
 int send_can_loco_function(uint16_t loco_id, uint8_t function, uint8_t value, int verbose) {
@@ -493,6 +508,10 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
 	    break;
 	}
 	break;
+    case 0x09:
+	uid = be32(&data[5]);
+	loco_save_speed(uid, be16(&data[9]));
+	break;
     /* Lokinfo (Loco ID 0x0001 & F2 Trigger */
     case 0x0C:
 	uid = be32(&data[5]);
@@ -501,19 +520,22 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
 	    send_xpn_locos(z21_data, loco_data, verbose);
 	}
 	break;
+    /* loc functions */
     case 0x0D:
 	uid = be32(&data[5]);
 	function = data[9];
 	value = data[10];
 	loco_save_function(uid, function, value);
+	v_printf(verbose, "uid 0x%08x xpn id 0x%04X\n", uid, xpn_id(uid));
+	send_xpn_loco_info(xpn_id(uid), verbose);
 	break;
     case 0x0B:
 	uid = be32(&data[5]);
 	v_printf(verbose, "loco uid 0x%08X : actual direction %u - saved direction %u", uid, data[9], loco_get_direction(uid));
 	if (data[9] != loco_get_direction(uid)) {
 	    loco_set_direction(uid, data[9]);
-	    /* TODO */
-	    /* send_xpn_loco_info(uid, verbose); */
+	    v_printf(verbose, "\n");
+	    send_xpn_loco_info(xpn_id(uid), verbose);
 	}
 	break;
     /* turnout */
