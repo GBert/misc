@@ -341,7 +341,7 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
     case LAN_X_GET_LOCO_INFO:
 	v_printf(verbose, "LAN_X_GET_LOCO_INFO");
 	if (length == 9) {
-	    loco_id = be16(&z21_data->udpframe[6]);
+	    loco_id = be16(&z21_data->udpframe[6]) & 0x3FFF;
 	    /* TODO */
 	    v_printf(verbose, " LOC ID 0x%04X\n", loco_id);
 	    /* TODO */
