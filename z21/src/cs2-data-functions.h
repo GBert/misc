@@ -15,7 +15,8 @@
 uint8_t loco_get_direction(unsigned int uid);
 int loco_set_direction(unsigned int uid, uint8_t direction);
 unsigned int loco_get_func_summary(unsigned int uid);
-int loco_set_func(unsigned int uid, uint8_t function, uint8_t value);
+int loco_set_function(unsigned int uid, uint8_t function, uint8_t value);
+int loco_toggle_function(unsigned int uid, uint8_t function);
 void print_locos_by_uid(void);
 
 #endif /* _CS2_DATA_FUNCTIONS_H */
