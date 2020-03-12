@@ -39,7 +39,6 @@ void sort_td_by_id(void);
 void print_pages(void);
 void print_gbstats(void);
 void print_tracks(void);
-void print_locos_by_uid(void);
 void print_locos(FILE *file);
 void print_loco_names(FILE *file);
 int read_track_data(char *config_file);
@@ -49,8 +48,6 @@ int read_loco_data(char *config_file, int config_type);
 int read_loco_names(char *config_file);
 int get_loco_max(void);
 int get_loco_uid(char *name);
-uint8_t loco_get_direction(unsigned int id);
-int loco_set_direction(unsigned int id, uint8_t direction);
 
 int strip_ms2_spaces(uint8_t *data, int len);
 #endif /* _READ_CS2_CONFIG_H */

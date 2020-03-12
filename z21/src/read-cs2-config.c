@@ -186,34 +186,6 @@ void delete_all_loco_names(void) {
     }
 }
 
-uint8_t loco_get_direction(unsigned int uid) {
-    struct loco_data_t *l;
-
-    HASH_FIND(hha, loco_data_by_uid, &uid, sizeof(unsigned int), l);
-    if (l)
-	return(l->direction);
-    return(255);
-}
-
-int loco_set_direction(unsigned int uid, uint8_t direction) {
-    struct loco_data_t *l;
-
-    HASH_FIND(hha, loco_data_by_uid, &uid, sizeof(unsigned int), l);
-    if (l) {
-	l->direction = direction;
-	return(EXIT_SUCCESS);
-    }
-    return(EXIT_FAILURE);
-}
-
-void print_locos_by_uid(void) {
-    struct loco_data_t *l, *tmp;
-
-    HASH_ITER(hha, loco_data_by_uid, l, tmp) {
-	printf("0x%08X %s\n", l->uid, l->name);
-    }
-}
-
 int add_loco_name(struct loco_names_t *loco) {
     struct loco_names_t *l;
 

@@ -33,6 +33,7 @@
 
 #include "utils.h"
 #include "z21.h"
+#include "cs2-data-functions.h"
 #include "read-cs2-config.h"
 
 #define v_printf(verbose, ...) \
