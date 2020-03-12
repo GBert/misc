@@ -379,7 +379,7 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
 	    loco_id = be16(&z21_data->udpframe[6]) & 0x3FFF;
 	    if (z21_data->udpframe[5] == LAN_X_SET_LOCO_FUNCTION) {
 		v_printf(verbose, "LAN_X_SET_LOCO_FUNCTION 0x%04X 0x%02X\n", loco_id, z21_data->udpframe[8]);
-		uint8_t function = (z21_data->udpframe[8] - 1 )& 0x1F;
+		uint8_t function = (z21_data->udpframe[8]) & 0x1F;
 		uint8_t switchtype = (z21_data->udpframe[8] >> 6) & 0x03;
 		if (switchtype == 2)
 		    value = loco_get_function(m_loco_id(loco_id), function) ^ 1;
