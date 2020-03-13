@@ -1,9 +1,28 @@
 Roco WLAN Maus / Gleisbox
 =========================
 
+Mit diesem kleinen Programm kann Rocos WLAN Maus 10813 zusammen mit CS2/CS3 bzw. 'Gleisbox als Zentrale' verwendet werden. Das Programm baut dazu eine Verbindung zum CAN Gateway bzw. can2lan auf. Bei vorhandener Lok-Datei (lokomotives.cs2) entfällt das aufwendigen Anlegen der Loks in der WLAN Maus.
 
-Loks 
-----
+Starten mit
+```
+z21emu -f # Vordegrund zum Test
+```
+
+Loks einlesen
+----------------
+
+Motorolas Lokdaten (lokomotive.cs2) können auf die WLAN Maus übertragen werden:
+(Lok Modus) Pfleil oben + Menu - (Lok) OK - (6 Enpfangen) OK -> RECV
+
+Auf derm MS2 über Lok 'Lokliste' (Motorola Adresse 1 F2 ) oder
+```
+cansend can0 000C0300#000000010201
+```
+Die Namen werden auf 10 Buchstaben/Ziffern gekürzt
+
+
+Backup
+------
 
 WLAN Maus Senden
 
