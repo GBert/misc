@@ -13,7 +13,7 @@ z21emu -f # Vordegrund zum Test
 Loks einlesen
 ----------------
 
-Motorolas Lokdaten (lokomotive.cs2) können auf die WLAN Maus übertragen werden:
+Märklins Lokdaten (lokomotive.cs2) können auf die WLAN Maus übertragen werden:
 (Lok Modus) Pfleil oben + Menu - (Lok) OK - (6 Enpfangen) OK -> RECV
 
 Auf derm MS2 über Lok 'Lokliste' (Motorola Adresse 1 F2 ) oder
