@@ -1,4 +1,4 @@
-# Z21 Adroid App 
+# Z21 Android App
 ```
 % ./z21emu -b br0
 created periodic z21 thread
