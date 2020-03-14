@@ -304,7 +304,7 @@ int send_can_loco_drive(uint16_t loco_id, uint8_t direction, uint8_t step, uint8
     memcpy(netframe, MS_LOCO_DRIVE, 13);
     set_loco_id(&netframe[5], loco_id);
     /* TODO */
-    mspeed = speed << 2;
+    mspeed = speed << 3;
     netframe[9] = (mspeed >> 8) & 0x03;
     netframe[10] = mspeed & 0xFF;
     send_can(netframe, verbose);
