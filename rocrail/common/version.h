@@ -1,11 +1,13 @@
 const int revisionnr = 
-548
+550
 ;
 const char* commithash = 
-"fca803ffcde67cc91e53934f82fdea0ba195e84e";
+"b1656036903ba2442832bdb0fee9e3ec95055c96";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"550 2020-03-14 11:16:42 +0100 stage: Vmin in case target section is zero and arrive speed is in percent\n" \
+"549 2020-03-14 10:33:53 +0100 new icon\n" \
 "548 2020-03-13 14:21:53 +0100 ecos: support for 'new' system events\n" \
 "547 2020-03-13 12:11:30 +0100 SLIM-COLOR: blockstate fill color fix\n" \
 "546 2020-03-12 12:16:58 +0100 renderer: seltab in case of SLIM with small rounded corners\n" \
