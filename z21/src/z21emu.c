@@ -81,7 +81,7 @@ static unsigned char XPN_X_BC_STOPPED[]           = { 0x07, 0x00, 0x40, 0x00, 0x
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c config_dir -p <port> -s <port>\n", prg);
-    fprintf(stderr, "   Version 0.9\n\n");
+    fprintf(stderr, "   Version 0.91\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory - default %s\n", config_dir);
     fprintf(stderr, "         -p <port>           primary UDP port for the server - default %d\n", PRIMARY_UDP_PORT);
     fprintf(stderr, "         -s <port>           secondary UDP port for the server - default %d\n", SECONDARY_UDP_PORT);
@@ -304,7 +304,7 @@ int send_can_loco_drive(uint16_t loco_id, uint8_t direction, uint8_t step, uint8
     memcpy(netframe, MS_LOCO_DRIVE, 13);
     set_loco_id(&netframe[5], loco_id);
     /* TODO */
-    mspeed = speed << 3;
+    mspeed = (speed << 3) - 1;
     netframe[9] = (mspeed >> 8) & 0x03;
     netframe[10] = mspeed & 0xFF;
     send_can(netframe, verbose);
