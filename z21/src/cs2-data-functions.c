@@ -38,7 +38,7 @@ uint8_t loco_get_direction(unsigned int uid) {
     return(255);
 }
 
-int loco_set_direction(unsigned int uid, uint8_t direction) {
+int loco_save_direction(unsigned int uid, uint8_t direction) {
     struct loco_data_t *l;
 
     HASH_FIND(hha, loco_data_by_uid, &uid, sizeof(unsigned int), l);
