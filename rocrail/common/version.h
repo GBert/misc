@@ -1,11 +1,13 @@
 const int revisionnr = 
-546
+548
 ;
 const char* commithash = 
-"8c61bf63d735b8ca6955c61871fd01c577d29fbd";
+"fca803ffcde67cc91e53934f82fdea0ba195e84e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"548 2020-03-13 14:21:53 +0100 ecos: support for 'new' system events\n" \
+"547 2020-03-13 12:11:30 +0100 SLIM-COLOR: blockstate fill color fix\n" \
 "546 2020-03-12 12:16:58 +0100 renderer: seltab in case of SLIM with small rounded corners\n" \
 "545 2020-03-12 08:54:54 +0100 SLIM-COLOR: fix for closed small block\n" \
 "544 2020-03-12 08:50:14 +0100 SLIM-COLOR: route symbols added\n" \
