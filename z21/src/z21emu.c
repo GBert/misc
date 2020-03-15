@@ -512,6 +512,13 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
 	    send_xpn(XPN_X_BC_TRACK_POWER_ON, verbose);
 	    z21_data->power = 1;
 	    break;
+	/* emergency stop */
+	case 0x03:
+	    if(uid) {
+		loco_save_speed(uid, 0);
+		send_xpn_loco_info(uid, verbose);
+	    }
+	    break;
 	default:
 	    break;
 	}
