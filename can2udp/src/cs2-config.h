@@ -137,4 +137,17 @@ struct loco_names_t {
     UT_hash_handle hh;
 };
 
+struct magnet_data_t {
+    unsigned int major;
+    unsigned int minor;
+    unsigned int id;
+    char *name;
+    unsigned int type;
+    unsigned int switchtime;
+    unsigned int direction;
+    unsigned int decoder_type;
+    unsigned int position;
+    UT_hash_handle hh;
+};
+
 #endif /* _CS2_CONFIG_H_ */

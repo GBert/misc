@@ -54,6 +54,7 @@ struct track_page_t *track_page = NULL;
 struct track_data_t *track_data = NULL;
 struct loco_data_t *loco_data = NULL, *loco_data_by_uid = NULL;
 struct loco_names_t *loco_names = NULL;
+struct magnet_data_t *magnet_data = NULL;
 
 char *fgets_buffer(char *dest, int max, char *src) {
 
@@ -129,6 +130,16 @@ void delete_all_track_pages(void) {
 	HASH_DEL(track_page, cpage);
 	check_free(cpage->name);
 	free(cpage);
+    }
+}
+
+void delete_all_magnet_data(void) {
+    struct magnet_data_t *cmagnet, *tmp;
+
+    HASH_ITER(hh, magnet_data, cmagnet, tmp) {
+	HASH_DEL(magnet_data, cmagnet);
+	check_free(cmagnet->name);
+	free(cmagnet);
     }
 }
 
@@ -210,6 +221,53 @@ int add_loco_name(struct loco_names_t *loco) {
     }
     return (EXIT_SUCCESS);
 }
+
+int add_magnet(struct magnet_data_t *magnet) {
+    struct magnet_data_t *m;
+
+    HASH_FIND_INT(magnet_data, &magnet->id, m);
+
+    if (m == NULL) {
+	/* if ((!loco->name) || (!loco->type))
+	   return (EXIT_FAILURE); */
+	if (!magnet->id)
+	    return (EXIT_FAILURE);
+
+	m = (struct magnet_data_t *)calloc(1, sizeof(struct magnet_data_t));
+	if (!m) {
+	    fprintf(stderr, "%s: can't calloc magnet data: %s\n", __func__, strerror(errno));
+	    return (EXIT_FAILURE);
+	}
+	m->name = calloc(strlen(magnet->name) + 1, 1);
+	if (!m->name) {
+	    fprintf(stderr, "%s: can't calloc magnet name: %s\n", __func__, strerror(errno));
+	    return (EXIT_FAILURE);
+	}
+	strcpy(m->name, magnet->name);
+
+	m->minor = magnet->minor;
+	m->major = magnet->major;
+	m->id = magnet->id;
+	m->type = magnet->type;
+	m->switchtime = magnet->switchtime;
+	m->direction = magnet->direction;
+	m->decoder_type = magnet->decoder_type;
+	m->position = magnet->position;
+    } else {
+	check_modify(magnet->minor, m->minor);
+	check_modify(magnet->major, m->major);
+	check_modify(magnet->id, m->id);
+	check_modify(magnet->type, m->type);
+	check_modify(magnet->switchtime, m->switchtime);
+	check_modify(magnet->direction, m->direction);
+	check_modify(magnet->decoder_type, m->decoder_type);
+	check_modify(magnet->position, m->position);
+    }
+    return (EXIT_SUCCESS);
+}
+
+
+
 
 int add_loco(struct loco_data_t *loco) {
     struct loco_data_t *l;
