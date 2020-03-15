@@ -48,5 +48,6 @@ int read_loco_data(char *config_file, int config_type);
 int read_loco_names(char *config_file);
 int get_loco_max(void);
 int get_loco_uid(char *name);
+
 int strip_ms2_spaces(uint8_t *data, int len);
 #endif /* _READ_CS2_CONFIG_H */

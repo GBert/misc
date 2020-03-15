@@ -52,7 +52,7 @@ char *gbs_default = { "gbs-0" };
 
 struct track_page_t *track_page = NULL;
 struct track_data_t *track_data = NULL;
-struct loco_data_t *loco_data = NULL;
+struct loco_data_t *loco_data = NULL, *loco_data_by_uid = NULL;
 struct loco_names_t *loco_names = NULL;
 
 char *fgets_buffer(char *dest, int max, char *src) {
@@ -287,7 +287,8 @@ int add_loco(struct loco_data_t *loco) {
 	l->ft = loco->ft;
 	l->mfxtype = loco->mfxtype;
 	l->intraction = loco->intraction;
-	HASH_ADD_STR(loco_data, name, l);
+	HASH_ADD(hh, loco_data, name, strlen(l->name), l);
+	HASH_ADD(hha, loco_data_by_uid, uid, sizeof(int), l);
     } else {
 	check_modify(loco->minor, l->minor);
 	check_modify(loco->major, l->major);
@@ -1083,7 +1084,7 @@ int read_loco_data(char *config_file, int config_type) {
     if (config_type && CONFIG_FILE)
 	fclose(fp);
 
-    printf("loco data count: %u\n", HASH_COUNT(loco_data));
+    /* printf("loco data count: %u\n", HASH_COUNT(loco_data)); */
     return (EXIT_SUCCESS);
 }
 

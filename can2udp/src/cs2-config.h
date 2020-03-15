@@ -12,6 +12,7 @@
 
 #include "uthash.h"
 
+/* must be power of 2 */
 #define MAX_LOCO_FUNCTIONS	32
 
 extern char *track_dir;
@@ -124,8 +125,9 @@ struct loco_data_t {
     unsigned int mfxtype;
     unsigned int intraction;
     struct loco_func function[MAX_LOCO_FUNCTIONS];
+    unsigned int loco_func_summary;
     struct mfxAdr_t *mfxAdr;
-    UT_hash_handle hh;
+    UT_hash_handle hh, hha;
 };
 
 struct loco_names_t {
