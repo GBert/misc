@@ -1,11 +1,12 @@
 const int revisionnr = 
-550
+551
 ;
 const char* commithash = 
-"b1656036903ba2442832bdb0fee9e3ec95055c96";
+"ed0d2094cd2c461865daa2bf912b8c8b3d7f0488";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"551 2020-03-15 14:40:37 +0100 remove accessory 1\n" \
 "550 2020-03-14 11:16:42 +0100 stage: Vmin in case target section is zero and arrive speed is in percent\n" \
 "549 2020-03-14 10:33:53 +0100 new icon\n" \
 "548 2020-03-13 14:21:53 +0100 ecos: support for 'new' system events\n" \
