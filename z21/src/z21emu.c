@@ -496,9 +496,9 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
     uint32_t uid;
     uint8_t function, tport, tpower, value;
 
+    uid = be32(&data[5]);
     switch ((be32(data) & 0x00FF0000UL) >> 16) {
     case 0x01:
-	uid = be32(&data[5]);
 	switch (data[9]) {
 	case 0x00:
 	    if (uid) v_printf(verbose, "System: UID 0x%08X ", uid); else v_printf(verbose, "System: alle ");
@@ -517,14 +517,12 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
 	}
 	break;
     case 0x09:
-	uid = be32(&data[5]);
 	loco_save_speed(uid, be16(&data[9]));
 	v_printf(verbose, "\n");
 	send_xpn_loco_info(uid, verbose);
 	break;
     /* Lokinfo (Loco ID 0x0001 & F2 Trigger */
     case 0x0C:
-	uid = be32(&data[5]);
 	if ((uid == 0x01) && (data[9] == 2)) {
 	    v_printf(verbose, "Send Loco names\n");
 	    send_xpn_locos(z21_data, loco_data, verbose);
@@ -532,7 +530,6 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
 	break;
     /* loc functions */
     case 0x0D:
-	uid = be32(&data[5]);
 	function = data[9];
 	value = data[10];
 	loco_save_function(uid, function, value);
@@ -540,7 +537,6 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
 	send_xpn_loco_info(uid, verbose);
 	break;
     case 0x0B:
-	uid = be32(&data[5]);
  	/* v_printf(verbose, "loco uid 0x%08X : actual direction %u - saved direction %u", uid, data[9], loco_get_direction(uid));*/
 	if (data[9] != loco_get_direction(uid)) {
 	    loco_save_direction(uid, data[9]);
