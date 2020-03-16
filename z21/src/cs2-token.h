@@ -17,7 +17,7 @@ enum {
     L00_LOCO_SHORT,
     L00_LOCO,
     L00_LOCO_NUMBER,
-    L00_MAGS,
+    L00_MAGNET,
     L00_ATRACK,
     L0_DEVICE,
     L0_LOCO,
@@ -100,7 +100,12 @@ enum {
     L1_TEXT,
     L1_STATE,
     L1_DEVICEID,
-    L1_INTRACTION
+    L1_INTRACTION,
+    L1_DECODER,
+    L1_DECODER_TYPE,
+    L1_SWITCHTIME,
+    L1_POSITION,
+    L1_TO_CURVED
 };
 
 const char *l1_token [] = {
@@ -149,6 +154,11 @@ const char *l1_token [] = {
     " .zustand=",
     " .deviceId=",
     " .inTraktion=",
+    " .decoder=",
+    " .dectyp=",
+    " .schaltzeit=",
+    " .stellung=",
+    " .ungerade=",
     "\0"
 };
 
@@ -194,6 +204,11 @@ const char *l1_token [] = {
 #define L1_STATE_LENGTH		10
 #define L1_DEVICEID_LENGTH	11
 #define L1_INTRACTION_LENGTH	13
+#define L1_DECODER_LENGTH	10
+#define L1_DECODER_TYPE_LENGTH	9
+#define L1_SWITCHTIME_LENGTH	13
+#define L1_POSITION_LENGTH	11
+#define L1_TO_CURVED_LENGTH	11
 
 const char *track_types[] = {
     "leer",
@@ -278,7 +293,7 @@ const char *track_types[] = {
     "\0"
 };
 
-const char *mag_types[] = {
+const char *magnet_types[] = {
     "digitaldrehscheibe",
     "DKW 1 Antrieb",
     "DKW 2 Antriebe",
@@ -309,6 +324,18 @@ const char *mag_types[] = {
     "urc_lichtsignal_HP012_SH01",
     "urc_lichtsignal_SH01",
     "y_weiche",
+    "\0",
+};
+
+const char *magnet_decoder[] = {
+    "mehr_alt",
+    "mehr_neu",
+    "\0",
+};
+
+const char *magnet_decoder_type[] = {
+    "mm2",
+    "dcc",
     "\0",
 };
 
