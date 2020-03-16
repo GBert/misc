@@ -46,7 +46,7 @@
 char *track_dir   = { "/gleisbilder" };
 char *track_name  = { "gleisbild.cs2" };
 char *loco_name   = { "lokomotive.cs2" };
-char *mags_name   = { "magnetartikel.cs2" };
+char *magnet_name = { "magnetartikel.cs2" };
 char *auto_name   = { "fahrstrassen.cs2" };
 char *gbs_default = { "gbs-0" };
 
@@ -238,12 +238,14 @@ int add_magnet(struct magnet_data_t *magnet) {
 	    fprintf(stderr, "%s: can't calloc magnet data: %s\n", __func__, strerror(errno));
 	    return (EXIT_FAILURE);
 	}
-	m->name = calloc(strlen(magnet->name) + 1, 1);
-	if (!m->name) {
-	    fprintf(stderr, "%s: can't calloc magnet name: %s\n", __func__, strerror(errno));
-	    return (EXIT_FAILURE);
+	if (magnet->name) {
+	    m->name = calloc(strlen(magnet->name) + 1, 1);
+	    if (!m->name) {
+		fprintf(stderr, "%s: can't calloc magnet name: %s\n", __func__, strerror(errno));
+		return (EXIT_FAILURE);
+	    }
+	    strcpy(m->name, magnet->name);
 	}
-	strcpy(m->name, magnet->name);
 
 	m->major = magnet->major;
 	m->minor = magnet->minor;
@@ -253,6 +255,7 @@ int add_magnet(struct magnet_data_t *magnet) {
 	m->direction = magnet->direction;
 	m->decoder_type = magnet->decoder_type;
 	m->position = magnet->position;
+	HASH_ADD(hh, magnet_data, id, sizeof(int), m);
     } else {
 	check_modify(magnet->major, m->major);
 	check_modify(magnet->minor, m->minor);
@@ -265,9 +268,6 @@ int add_magnet(struct magnet_data_t *magnet) {
     }
     return (EXIT_SUCCESS);
 }
-
-
-
 
 int add_loco(struct loco_data_t *loco) {
     struct loco_data_t *l;
@@ -1199,5 +1199,125 @@ int read_loco_names(char *config_file) {
 	free(name);
     if (loco)
 	free(loco);
+    return (EXIT_SUCCESS);
+}
+
+int read_magnet_data(char *config_file, int config_type) {
+    int l0_token_n, l1_token_n, magnet_complete;
+    FILE *fp = NULL;
+    char line[MAXSIZE];
+    char *name = NULL, *sret = NULL;
+    struct magnet_data_t *magnet;
+
+    /* trigger for new entry */
+    magnet_complete = 0;
+
+    if (config_type && CONFIG_FILE) {
+	if ((fp = fopen(config_file, "r")) == NULL) {
+	    fprintf(stderr, "can't open config file %s: %s\n", config_file, strerror(errno));
+	    return (EXIT_FAILURE);
+	}
+    }
+
+    magnet = calloc(1, sizeof(struct magnet_data_t));
+    if (magnet == NULL) {
+	fprintf(stderr, "can't calloc buffer for magnet data: %s\n", strerror(errno));
+	fclose(fp);
+	return (EXIT_FAILURE);
+    }
+
+    magnet->name = NULL;
+
+    if (config_type & CONFIG_FILE) {
+	sret = fgets(line, MAXSIZE, fp);
+    } else {
+	sret = fgets_buffer(line, MAXSIZE, config_file);
+	config_file = sret;
+    }
+
+    while (sret != NULL) {
+	line[strcspn(line, "\r\n")] = 0;
+	if (line[0] != ' ') {
+	    l0_token_n = get_char_index(l0_token, line);
+	    switch (l0_token_n) {
+	    case L0_VERSION:
+	    case L00_MAGNET:
+		break;
+	    case L0_ITEM:
+		/* TODO: next magnet */
+		if (magnet_complete) {
+		    add_magnet(magnet);
+		    memset(magnet, 0, sizeof(struct magnet_data_t));
+		    check_free(name);
+		} else {
+		    magnet_complete = 1;
+		}
+		break;
+	    default:
+		printf(">>%s\n", line);
+		break;
+	    }
+	} else if (line[2] != '.') {
+	    l1_token_n = get_char_index(l1_token, line);
+	    switch (l1_token_n) {
+	    case L1_MAJOR:
+		magnet->major = strtoul(&line[L1_MAJOR_LENGTH], NULL, 10);
+		debug_print("match major:     >%u<\n", magnet->major);
+		break;
+	    case L1_MINOR:
+		magnet->minor = strtoul(&line[L1_MINOR_LENGTH], NULL, 10);
+		debug_print("match minor:     >%u<\n", magnet->minor);
+		break;
+	    case L1_ID:
+		magnet->id = strtoul(&line[L1_ID_LENGTH], NULL, 10);
+		debug_print("match id:        >%u<\n", magnet->id);
+		break;
+	    case L1_NAME:
+		if (asprintf(&name, "%s", &line[L1_NAME_LENGTH]) < 0)
+		    fprintf(stderr, "can't alloc memory for magnet->name: %s\n", __func__);
+		magnet->name = name;
+		debug_print("match name:      >%s<\n", magnet->name);
+		break;
+	    case L1_TYPE:
+		magnet->type = get_char_index(magnet_types, &line[L1_TYPE_LENGTH]);
+		debug_print("match type:      >%d<\n", magnet->type);
+		break;
+	    case L1_SWITCHTIME:
+		magnet->switchtime = strtoul(&line[L1_SWITCHTIME_LENGTH], NULL, 16);
+		debug_print("switchtime:      >%d<\n", magnet->switchtime);
+		break;
+	    case L1_TO_CURVED:
+		magnet->curved = strtoul(&line[L1_TO_CURVED_LENGTH], NULL, 16);
+		debug_print("turnout curved:  >%d<\n", magnet->curved);
+		break;
+	    case L1_DECODER:
+		magnet->decoder = get_char_index(magnet_decoder, &line[L1_DECODER_LENGTH]);
+		debug_print("decoder:         >%d<\n", magnet->decoder);
+		break;
+	    case L1_DECODER_TYPE:
+		magnet->decoder_type = get_char_index(magnet_decoder_type, &line[L1_DECODER_TYPE_LENGTH]);
+		debug_print("decoder type:    >%d<\n", magnet->decoder);
+		break;
+	    case L1_POSITION:
+		magnet->position = strtoul(&line[L1_POSITION_LENGTH], NULL, 16);
+		debug_print("position:        >%d<\n", magnet->position);
+		break;
+	    default:
+		printf(">>%s<<\n", line);
+		break;
+	    }
+	}
+	if (config_type & CONFIG_FILE) {
+	    sret = fgets(line, MAXSIZE, fp);
+	} else {
+	    sret = fgets_buffer(line, MAXSIZE, config_file);
+	    config_file = sret;
+	}
+    }
+
+    if (name)
+	free(name);
+    if (magnet)
+	free(magnet);
     return (EXIT_SUCCESS);
 }

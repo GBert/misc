@@ -18,7 +18,7 @@
 extern char *track_dir;
 extern char *track_name;
 extern char *loco_name;
-extern char *mags_name;
+extern char *magnet_name;
 extern char *auto_name;
 extern char *gbs_default;
 
@@ -142,11 +142,13 @@ struct magnet_data_t {
     unsigned int minor;
     unsigned int id;
     char *name;
-    unsigned int type;
     unsigned int switchtime;
-    unsigned int direction;
-    unsigned int decoder_type;
-    unsigned int position;
+    uint16_t type;
+    uint16_t curved;
+    uint8_t direction;
+    uint8_t decoder;
+    uint8_t decoder_type;
+    uint8_t position;
     UT_hash_handle hh;
 };
 

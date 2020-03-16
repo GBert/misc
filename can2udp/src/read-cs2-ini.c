@@ -27,12 +27,14 @@
 extern struct track_page_t *track_page;
 extern struct track_data_t *track_data;
 extern struct loco_data_t *loco_data;
+extern struct magnet_data_t *magnet_data;
 
 int main(int argc, char **argv) {
     struct config_data_t config_data;
     char *dir, *var_dir;
     char *track_file;
     char *loco_file;
+    char *magnet_file;
 
     var_dir = calloc(MAXDIR, 1);
     if (var_dir == NULL) {
@@ -83,17 +85,24 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "can't alloc buffer for loco_name: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
-    
     read_loco_data(loco_file, CONFIG_FILE);
+
+    if (asprintf(&magnet_file, "%s/%s", dir, magnet_name) < 0) {
+	fprintf(stderr, "can't alloc buffer for magnet_name: %s\n", strerror(errno));
+	exit(EXIT_FAILURE);
+    }
+    read_magnet_data(magnet_file, CONFIG_FILE);
 
     printf("\n\ntrack pages: %u\n", HASH_COUNT(track_page));
     printf("track data elements: %u\n", HASH_COUNT(track_data));
     printf("loco data: %u\n", HASH_COUNT(loco_data));
+    printf("magnet data: %u\n", HASH_COUNT(magnet_data));
     /* print_locos(stdout); */
 
     delete_all_track_pages();
     delete_all_track_data();
     delete_all_loco_data();
+    delete_all_magnet_data();
 
     free(loco_file);
     free(dir);
