@@ -144,7 +144,7 @@ struct magnet_data_t {
     char *name;
     unsigned int switchtime;
     uint16_t type;
-    uint16_t curved;
+    uint16_t odd;
     uint8_t direction;
     uint8_t decoder;
     uint8_t decoder_type;

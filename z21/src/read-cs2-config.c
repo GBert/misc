@@ -1271,6 +1271,7 @@ int read_magnet_data(char *config_file, int config_type) {
 	    case L1_ID:
 		magnet->id = strtoul(&line[L1_ID_LENGTH], NULL, 10);
 		debug_print("match id:        >%u<\n", magnet->id);
+		magnet->id = magnet->id << 1;
 		break;
 	    case L1_NAME:
 		if (asprintf(&name, "%s", &line[L1_NAME_LENGTH]) < 0)
@@ -1286,9 +1287,10 @@ int read_magnet_data(char *config_file, int config_type) {
 		magnet->switchtime = strtoul(&line[L1_SWITCHTIME_LENGTH], NULL, 16);
 		debug_print("switchtime:      >%d<\n", magnet->switchtime);
 		break;
-	    case L1_TO_CURVED:
-		magnet->curved = strtoul(&line[L1_TO_CURVED_LENGTH], NULL, 16);
-		debug_print("turnout curved:  >%d<\n", magnet->curved);
+	    case L1_ODD:
+		magnet->odd = strtoul(&line[L1_ODD_LENGTH], NULL, 16);
+		debug_print("odd number:      >%d<\n", magnet->odd);
+		magnet->id++;
 		break;
 	    case L1_DECODER:
 		magnet->decoder = get_char_index(magnet_decoder, &line[L1_DECODER_LENGTH]);

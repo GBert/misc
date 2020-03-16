@@ -105,7 +105,7 @@ enum {
     L1_DECODER_TYPE,
     L1_SWITCHTIME,
     L1_POSITION,
-    L1_TO_CURVED
+    L1_ODD
 };
 
 const char *l1_token [] = {
@@ -208,7 +208,7 @@ const char *l1_token [] = {
 #define L1_DECODER_TYPE_LENGTH	9
 #define L1_SWITCHTIME_LENGTH	13
 #define L1_POSITION_LENGTH	11
-#define L1_TO_CURVED_LENGTH	11
+#define L1_ODD_LENGTH		11
 
 const char *track_types[] = {
     "leer",
