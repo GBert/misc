@@ -245,8 +245,8 @@ int add_magnet(struct magnet_data_t *magnet) {
 	}
 	strcpy(m->name, magnet->name);
 
-	m->minor = magnet->minor;
 	m->major = magnet->major;
+	m->minor = magnet->minor;
 	m->id = magnet->id;
 	m->type = magnet->type;
 	m->switchtime = magnet->switchtime;
@@ -254,8 +254,8 @@ int add_magnet(struct magnet_data_t *magnet) {
 	m->decoder_type = magnet->decoder_type;
 	m->position = magnet->position;
     } else {
-	check_modify(magnet->minor, m->minor);
 	check_modify(magnet->major, m->major);
+	check_modify(magnet->minor, m->minor);
 	check_modify(magnet->id, m->id);
 	check_modify(magnet->type, m->type);
 	check_modify(magnet->switchtime, m->switchtime);
@@ -320,8 +320,8 @@ int add_loco(struct loco_data_t *loco) {
 	    strcpy(l->type, loco->type);
 	}
 
-	l->minor = loco->minor;
 	l->major = loco->major;
+	l->minor = loco->minor;
 	l->id = loco->id;
 	l->uid = loco->uid;
 	l->direction = loco->direction;
@@ -348,8 +348,8 @@ int add_loco(struct loco_data_t *loco) {
 	HASH_ADD(hh, loco_data, name, strlen(l->name), l);
 	HASH_ADD(hha, loco_data_by_uid, uid, sizeof(int), l);
     } else {
-	check_modify(loco->minor, l->minor);
 	check_modify(loco->major, l->major);
+	check_modify(loco->minor, l->minor);
 	check_modify(loco->id, l->id);
 	check_modify(loco->direction, l->direction);
 	check_modify(loco->velocity, l->velocity);
