@@ -1,11 +1,13 @@
 const int revisionnr = 
-554
+556
 ;
 const char* commithash = 
-"9359b98746a5cb181297f7a32641248dda7d71ab";
+"b854f8f2a1471c0fe79f899cdfbeb0e715c7aa8f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"556 2020-03-17 10:54:55 +0100 trackpickerdlg: removed accessory-40\n" \
+"555 2020-03-17 10:50:48 +0100 trackpickerdlg: removed unsupported track-3\n" \
 "554 2020-03-17 08:01:58 +0100 fix for SVG track-3 accessory\n" \
 "553 2020-03-16 11:31:51 +0100 operatordlg: fix for no image icon in case of gray icons\n" \
 "552 2020-03-16 08:52:52 +0100 loc: release posible other loco from train before assign\n" \
