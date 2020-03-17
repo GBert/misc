@@ -1,11 +1,12 @@
 const int revisionnr = 
-553
+554
 ;
 const char* commithash = 
-"a1aa534704d8bb811d8e82b444c118319a199a48";
+"9359b98746a5cb181297f7a32641248dda7d71ab";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"554 2020-03-17 08:01:58 +0100 fix for SVG track-3 accessory\n" \
 "553 2020-03-16 11:31:51 +0100 operatordlg: fix for no image icon in case of gray icons\n" \
 "552 2020-03-16 08:52:52 +0100 loc: release posible other loco from train before assign\n" \
 "551 2020-03-15 14:40:37 +0100 remove accessory 1\n" \
