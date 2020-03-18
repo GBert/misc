@@ -1,11 +1,20 @@
 const int revisionnr = 
-554
+563
 ;
 const char* commithash = 
-"9359b98746a5cb181297f7a32641248dda7d71ab";
+"b8fb99360336fbcee1e7a13348cb2ecd60611f2b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"563 2020-03-18 15:23:29 +0100 stage: Vmin to first section option added\n" \
+"562 2020-03-18 12:36:10 +0100 channeltunedlg: auto ticks added\n" \
+"561 2020-03-18 12:29:11 +0100 channeltunedlg: extra buttons for plus/min/test\n" \
+"560 2020-03-18 10:34:16 +0100 switchdialog: fix for channeltune\n" \
+"559 2020-03-18 07:46:17 +0100 locdialog: added translation for swaponmanualdir\n" \
+"558 2020-03-18 07:37:37 +0100 mbus: regard actdelay switch flag to make it possible to use zero\n" \
+"557 2020-03-18 07:30:23 +0100 stagedlg: fix for selecting wait type\n" \
+"556 2020-03-17 10:54:55 +0100 trackpickerdlg: removed accessory-40\n" \
+"555 2020-03-17 10:50:48 +0100 trackpickerdlg: removed unsupported track-3\n" \
 "554 2020-03-17 08:01:58 +0100 fix for SVG track-3 accessory\n" \
 "553 2020-03-16 11:31:51 +0100 operatordlg: fix for no image icon in case of gray icons\n" \
 "552 2020-03-16 08:52:52 +0100 loc: release posible other loco from train before assign\n" \
