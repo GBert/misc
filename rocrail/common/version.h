@@ -1,11 +1,14 @@
 const int revisionnr = 
-556
+559
 ;
 const char* commithash = 
-"b854f8f2a1471c0fe79f899cdfbeb0e715c7aa8f";
+"5b09f8255ca1f0730965dd8c458734914222ff4e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"559 2020-03-18 07:46:17 +0100 locdialog: added translation for swaponmanualdir\n" \
+"558 2020-03-18 07:37:37 +0100 mbus: regard actdelay switch flag to make it possible to use zero\n" \
+"557 2020-03-18 07:30:23 +0100 stagedlg: fix for selecting wait type\n" \
 "556 2020-03-17 10:54:55 +0100 trackpickerdlg: removed accessory-40\n" \
 "555 2020-03-17 10:50:48 +0100 trackpickerdlg: removed unsupported track-3\n" \
 "554 2020-03-17 08:01:58 +0100 fix for SVG track-3 accessory\n" \
