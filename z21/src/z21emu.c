@@ -270,14 +270,17 @@ int send_xpn_system_info(int verbose) {
     xpnframe[0] = 0x14;
     xpnframe[2] = 0x84;
     /* mA */
-    xpnframe[4] = 10;
+    xpnframe[4] = 200;
     xpnframe[6] = 10;
-    xpnframe[8] = 10;
+    xpnframe[8] = 150;
     /* degree Celsius */
     xpnframe[10] = 20;
     /* Voltage */
-    xpnframe[13] = 64;
-    xpnframe[15] = 80;
+    xpnframe[12] = 0x50;
+    xpnframe[13] = 0x46;
+
+    xpnframe[14] = 0x80;
+    xpnframe[15] = 0x3E;
 
     send_xpn(xpnframe, verbose);
     return (EXIT_SUCCESS);
