@@ -1,11 +1,14 @@
 const int revisionnr = 
-560
+563
 ;
 const char* commithash = 
-"f3da8cb329880e4cb5e80e07b3196599325ed8be";
+"b8fb99360336fbcee1e7a13348cb2ecd60611f2b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"563 2020-03-18 15:23:29 +0100 stage: Vmin to first section option added\n" \
+"562 2020-03-18 12:36:10 +0100 channeltunedlg: auto ticks added\n" \
+"561 2020-03-18 12:29:11 +0100 channeltunedlg: extra buttons for plus/min/test\n" \
 "560 2020-03-18 10:34:16 +0100 switchdialog: fix for channeltune\n" \
 "559 2020-03-18 07:46:17 +0100 locdialog: added translation for swaponmanualdir\n" \
 "558 2020-03-18 07:37:37 +0100 mbus: regard actdelay switch flag to make it possible to use zero\n" \
