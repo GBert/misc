@@ -1,11 +1,12 @@
 const int revisionnr = 
-559
+560
 ;
 const char* commithash = 
-"5b09f8255ca1f0730965dd8c458734914222ff4e";
+"f3da8cb329880e4cb5e80e07b3196599325ed8be";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"560 2020-03-18 10:34:16 +0100 switchdialog: fix for channeltune\n" \
 "559 2020-03-18 07:46:17 +0100 locdialog: added translation for swaponmanualdir\n" \
 "558 2020-03-18 07:37:37 +0100 mbus: regard actdelay switch flag to make it possible to use zero\n" \
 "557 2020-03-18 07:30:23 +0100 stagedlg: fix for selecting wait type\n" \
