@@ -74,7 +74,8 @@ static unsigned char XPN_X_BC_TRACK_POWER_OFF[]   = { 0x07, 0x00, 0x40, 0x00, 0x
 static unsigned char XPN_X_BC_TRACK_POWER_ON[]    = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x01, 0x60 };
 static unsigned char XPN_X_LOCO_INFO[]            = { 0x0E, 0x00, 0x40, 0x00, 0xEF, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static unsigned char XPN_X_TURNOUT_INFO[]         = { 0x09, 0x00, 0x40, 0x00, 0x43, 0x00, 0x00, 0x00, 0x00 };
-static unsigned char XPN_X_Z21_FIRMWARE_VERSION[] = { 0x09, 0x00, 0x40, 0x00, 0xF3, 0x0A, 0x01, 0x30, 0xC8 };
+static unsigned char XPN_X_Z21_FIRMWARE_VERSION[] = { 0x09, 0x00, 0x40, 0x00, 0xF3, 0x0A, 0x01, 0x32, 0xCA };
+
 
 /*
 static unsigned char XPN_X_BC_STOPPED[]           = { 0x07, 0x00, 0x40, 0x00, 0x81, 0x00, 0x81 };
@@ -262,6 +263,27 @@ int send_xpn_turnout_info(uint16_t FAdr, uint8_t zz, int verbose) {
     return (EXIT_SUCCESS);
 }
 
+int send_xpn_system_info(int verbose) {
+    unsigned char xpnframe[32];
+
+    memset(xpnframe, 0, sizeof(xpnframe));
+    xpnframe[0] = 0x14;
+    xpnframe[2] = 0x84;
+    /* mA */
+    xpnframe[4] = 10;
+    xpnframe[6] = 10;
+    xpnframe[8] = 10;
+    /* degree Celsius */
+    xpnframe[10] = 20;
+    /* Voltage */
+    xpnframe[13] = 64;
+    xpnframe[15] = 80;
+
+    send_xpn(xpnframe, verbose);
+    return (EXIT_SUCCESS);
+}
+
+
 void set_loco_id(unsigned char *data, uint16_t loco_id) {
     /*
       0x0000 - 0x007F mm2_prg   Adresse + 0x0000
@@ -353,10 +375,6 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
 	    xpnframe[7] = xor(&xpnframe[4], 3);
 	    send_xpn(xpnframe, verbose);
 	    v_printf(verbose, "LAN_X_STATUS_CHANGED");
-	    break;
-	case LAN_X_GET_FIRMWARE_VERSION:
-	    v_printf(verbose, "LAN_X_GET_FIRMWARE_VERSION\n");
-	    send_xpn(XPN_X_Z21_FIRMWARE_VERSION, verbose);
 	    break;
 	case LAN_X_SET_TRACK_POWER_ON:
 	    v_printf(verbose, "LAN_X_SET_TRACK_POWER_ON\n");
@@ -486,6 +504,10 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	break;
     case LAN_X_HEADER:
 	check_data_lan_x_header(z21_data, verbose);
+	break;
+    case LAN_SYSTEMSTATE_GETDATA:
+	v_printf(verbose, "LAN_SYSTEMSTATE_GETDATA *TODO*\n");
+	send_xpn_system_info(verbose);
 	break;
     default:
 	v_printf(verbose, "XPN unknown");
