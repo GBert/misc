@@ -1,11 +1,13 @@
 const int revisionnr = 
-563
+565
 ;
 const char* commithash = 
-"b8fb99360336fbcee1e7a13348cb2ecd60611f2b";
+"1898353532e7119812f4dedfb3237499975b6b4f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"565 2020-03-20 13:18:59 +0100 trackpickerdlg: use standard basedlg position function\n" \
+"564 2020-03-20 08:01:35 +0100 seltab: fix for deleting an empty seltab\n" \
 "563 2020-03-18 15:23:29 +0100 stage: Vmin to first section option added\n" \
 "562 2020-03-18 12:36:10 +0100 channeltunedlg: auto ticks added\n" \
 "561 2020-03-18 12:29:11 +0100 channeltunedlg: extra buttons for plus/min/test\n" \
