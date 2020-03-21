@@ -641,7 +641,6 @@ int main(int argc, char **argv) {
     char *udp_dst_address;
     char *bcast_interface;
     unsigned char recvline[MAXSIZE];
-    char source_address[64];
     char timestamp[16];
     char *loco_file;
 
