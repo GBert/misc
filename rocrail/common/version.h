@@ -1,11 +1,14 @@
 const int revisionnr = 
-565
+568
 ;
 const char* commithash = 
-"1898353532e7119812f4dedfb3237499975b6b4f";
+"d93d9313ae67b58baa92060e33b72a2f0122232a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"568 2020-03-21 17:27:06 +0100 fix for autogen a guest loco\n" \
+"567 2020-03-21 14:14:40 +0100 zimocan: reject group count > 64\n" \
+"566 2020-03-21 08:17:34 +0100 control: fix for initial SVG paths\n" \
 "565 2020-03-20 13:18:59 +0100 trackpickerdlg: use standard basedlg position function\n" \
 "564 2020-03-20 08:01:35 +0100 seltab: fix for deleting an empty seltab\n" \
 "563 2020-03-18 15:23:29 +0100 stage: Vmin to first section option added\n" \
