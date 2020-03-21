@@ -68,22 +68,20 @@ static unsigned char MS_TURNOUT[]		= { 0x00, 0x16, 0x03, 0x00, 0x06, 0x00, 0x00,
 
 static unsigned char XPN_GET_CODE_RESPONSE[]      = { 0x05, 0x00, 0x18, 0x00, 0x00 };
 static unsigned char XPN_SERIAL_NUMBER_RESPONSE[] = { 0x08, 0x00, 0x10, 0x00, 0x4D, 0xC1, 0x02, 0x00 };
-static unsigned char XPN_HWINFO_RESPONSE[]        = { 0x0C, 0x00, 0x1A, 0x00, 0x01, 0x02, 0x00, 0x00, 0x20, 0x01, 0x00, 0x00 };
+static unsigned char XPN_HWINFO_RESPONSE[]        = { 0x0C, 0x00, 0x1A, 0x00, 0x01, 0x02, 0x00, 0x00, 0x32, 0x01, 0x00, 0x00 };
 static unsigned char XPN_X_STATUS_CHANGED[]       = { 0x08, 0x00, 0x40, 0x00, 0x62, 0x22, 0x00, 0x40 };
 static unsigned char XPN_X_BC_TRACK_POWER_OFF[]   = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x00, 0x61 };
 static unsigned char XPN_X_BC_TRACK_POWER_ON[]    = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x01, 0x60 };
 static unsigned char XPN_X_LOCO_INFO[]            = { 0x0E, 0x00, 0x40, 0x00, 0xEF, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static unsigned char XPN_X_TURNOUT_INFO[]         = { 0x09, 0x00, 0x40, 0x00, 0x43, 0x00, 0x00, 0x00, 0x00 };
 static unsigned char XPN_X_Z21_FIRMWARE_VERSION[] = { 0x09, 0x00, 0x40, 0x00, 0xF3, 0x0A, 0x01, 0x32, 0xCA };
-
-
-/*
-static unsigned char XPN_X_BC_STOPPED[]           = { 0x07, 0x00, 0x40, 0x00, 0x81, 0x00, 0x81 };
-*/
+static unsigned char XPN_X_STORE1[]               = { 0x0E, 0x00, 0x12, 0x00, 0x01, 0x00, 0x01, 0x03, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static unsigned char XPN_X_STORE2[]               = { 0x14, 0x00, 0x16, 0x00, 0x19, 0x06, 0x07, 0x01, 0x05, 0x14,
+						      0x88, 0x13, 0x10, 0x27, 0x32, 0x00, 0x50, 0x46, 0x20, 0x4e };
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c config_dir -p <port> -s <port>\n", prg);
-    fprintf(stderr, "   Version 0.93\n\n");
+    fprintf(stderr, "   Version 0.94\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory - default %s\n", config_dir);
     fprintf(stderr, "         -p <port>           primary UDP port for the server - default %d\n", PRIMARY_UDP_PORT);
     fprintf(stderr, "         -s <port>           secondary UDP port for the server - default %d\n", SECONDARY_UDP_PORT);
@@ -264,6 +262,7 @@ int send_xpn_turnout_info(uint16_t FAdr, uint8_t zz, int verbose) {
 }
 
 int send_xpn_system_info(int verbose) {
+    /* TODO */
     unsigned char xpnframe[32];
 
     memset(xpnframe, 0, sizeof(xpnframe));
@@ -471,6 +470,9 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
     length = le16(&z21_data->udpframe[0]);
     header = le16(&z21_data->udpframe[2]);
 
+    if (udplength > length)
+	printf("\n*** udplength %d length %d\n", udplength, length);
+
     if (verbose)
 	print_udp_frame(UDP_SRC_STRG, udplength, z21_data->udpframe);
 
@@ -509,8 +511,23 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	check_data_lan_x_header(z21_data, verbose);
 	break;
     case LAN_SYSTEMSTATE_GETDATA:
-	v_printf(verbose, "LAN_SYSTEMSTATE_GETDATA *TODO*\n");
+	v_printf(verbose, "LAN_SYSTEMSTATE_GETDATA\n");
 	send_xpn_system_info(verbose);
+	break;
+    case 0x12:
+	if (length == 0x04) {
+	    v_printf(verbose, "LAN_GET_STORE1?\n");
+	    send_xpn(XPN_X_STORE1, verbose);
+	}
+	break;
+    case 0x16:
+	if (length == 0x04) {
+	    v_printf(verbose, "LAN_GET_STORE2?\n");
+	    send_xpn(XPN_X_STORE2, verbose);
+	}
+	break;
+    case 0x84:
+	/* ignore self sent data */
 	break;
     default:
 	v_printf(verbose, "XPN unknown");
@@ -616,6 +633,7 @@ int main(int argc, char **argv) {
     struct ifreq ifr;
     struct sockaddr_can caddr;
     struct sockaddr_in *bsa;
+    struct sockaddr_in src_addr;
     fd_set readfds;
     int primary_port = PRIMARY_UDP_PORT;
     int secondary_port = SECONDARY_UDP_PORT;
@@ -623,10 +641,13 @@ int main(int argc, char **argv) {
     char *udp_dst_address;
     char *bcast_interface;
     unsigned char recvline[MAXSIZE];
+    char source_address[64];
     char timestamp[16];
     char *loco_file;
 
     socklen_t caddrlen = sizeof(caddr);
+    socklen_t slen = sizeof(src_addr);
+
     memset(&ifr, 0, sizeof(ifr));
     memset(&z21_data, 0, sizeof(z21_data));
     z21_data.foreground = 1;
@@ -862,12 +883,13 @@ int main(int argc, char **argv) {
 
 	/* received a UDP packet on primary */
 	if (FD_ISSET(z21_data.sp, &readfds)) {
-	    ret = read(z21_data.sp, z21_data.udpframe, MAXDG);
+	    ret = recvfrom(z21_data.sp, z21_data.udpframe, MAXDG, 0, (struct sockaddr *) &src_addr, &slen);
 	    /* v_printf(verbose, "FD_ISSET sp, ret %d\n", ret); */
 	    if (ret < 0) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
 		break;
 	    } else if (ret) {
+		printf("%s ", inet_ntoa(src_addr.sin_addr));
 		check_data_xpn(&z21_data, ret, z21_data.foreground);
 		//print_udp_frame(UDP_SRC_STRG, z21_data.udpframe);
 	    }
@@ -875,7 +897,7 @@ int main(int argc, char **argv) {
 	}
 	/* received a UDP packet on secondary */
 	if (FD_ISSET(z21_data.ss, &readfds)) {
-	    ret = read(z21_data.ss, z21_data.udpframe, MAXDG);
+	    ret = recvfrom(z21_data.ss, z21_data.udpframe, MAXDG, 0, (struct sockaddr *) &src_addr, &slen);
 	    /* v_printf(verbose, "FD_ISSET ss, ret %d\n", ret); */
 	    if (ret < 0) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
