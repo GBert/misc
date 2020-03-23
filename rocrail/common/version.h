@@ -1,11 +1,13 @@
 const int revisionnr = 
-568
+570
 ;
 const char* commithash = 
-"d93d9313ae67b58baa92060e33b72a2f0122232a";
+"2f330e9ba063f728a496a7770a6fb28ac6dd3b90";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"570 2020-03-23 11:21:55 +0100 rocview: auto size column option added\n" \
+"569 2020-03-23 07:48:21 +0100 guiframe: fix for autosize loco grid columns in automode\n" \
 "568 2020-03-21 17:27:06 +0100 fix for autogen a guest loco\n" \
 "567 2020-03-21 14:14:40 +0100 zimocan: reject group count > 64\n" \
 "566 2020-03-21 08:17:34 +0100 control: fix for initial SVG paths\n" \
