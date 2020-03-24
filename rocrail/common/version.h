@@ -1,11 +1,12 @@
 const int revisionnr = 
-570
+571
 ;
 const char* commithash = 
-"2f330e9ba063f728a496a7770a6fb28ac6dd3b90";
+"df757b52a2253e9b0975a81d748823855a2a3c74";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"571 2020-03-24 08:21:20 +0100 renderer: shunt color mapping fix\n" \
 "570 2020-03-23 11:21:55 +0100 rocview: auto size column option added\n" \
 "569 2020-03-23 07:48:21 +0100 guiframe: fix for autosize loco grid columns in automode\n" \
 "568 2020-03-21 17:27:06 +0100 fix for autogen a guest loco\n" \
