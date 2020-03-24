@@ -81,7 +81,7 @@ static unsigned char XPN_X_STORE2[]               = { 0x14, 0x00, 0x16, 0x00, 0x
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c config_dir -p <port> -s <port>\n", prg);
-    fprintf(stderr, "   Version 0.94\n\n");
+    fprintf(stderr, "   Version 0.95\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory - default %s\n", config_dir);
     fprintf(stderr, "         -p <port>           primary UDP port for the server - default %d\n", PRIMARY_UDP_PORT);
     fprintf(stderr, "         -s <port>           secondary UDP port for the server - default %d\n", SECONDARY_UDP_PORT);
@@ -218,7 +218,9 @@ int send_xpn_loco_name(uint16_t loco_id, char *loco_name, uint8_t index, uint8_t
     xpnframe[2] = 0x40;
     xpnframe[4] = (length + 0xe5) & 0xff;
     xpnframe[5] = 0xf1;
-    if (loco_id > 0x4000)
+    if (loco_id > 0xc000)
+	loco_id -= 0xa000;
+    else if (loco_id > 0x4000)
 	loco_id -= 0x3f00;
     xpnframe[6] = loco_id >> 8;
     xpnframe[7] = loco_id & 0xff;
@@ -888,9 +890,8 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
 		break;
 	    } else if (ret) {
-		printf("%s ", inet_ntoa(src_addr.sin_addr));
+		// printf("%s %s ", inet_ntoa(z21_data.sbaddr.sin_addr), inet_ntoa(src_addr.sin_addr));
 		check_data_xpn(&z21_data, ret, z21_data.foreground);
-		//print_udp_frame(UDP_SRC_STRG, z21_data.udpframe);
 	    }
 	    /* send_broadcast(z21_data.udpframe, UDP_DST_STRG, z21_data.foreground); */
 	}
