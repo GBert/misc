@@ -1,11 +1,12 @@
 const int revisionnr = 
-571
+572
 ;
 const char* commithash = 
-"df757b52a2253e9b0975a81d748823855a2a3c74";
+"18a879d37e2d720f267ca8ef9a73b7d43a5c0e23";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"572 2020-03-25 07:43:20 +0100 renderer: support for shunt and prefix signal symbols\n" \
 "571 2020-03-24 08:21:20 +0100 renderer: shunt color mapping fix\n" \
 "570 2020-03-23 11:21:55 +0100 rocview: auto size column option added\n" \
 "569 2020-03-23 07:48:21 +0100 guiframe: fix for autosize loco grid columns in automode\n" \
