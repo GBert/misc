@@ -1,11 +1,17 @@
 const int revisionnr = 
-572
+578
 ;
 const char* commithash = 
-"18a879d37e2d720f267ca8ef9a73b7d43a5c0e23";
+"b941b5b5fff4c760ffd3acdae63911d6d558c4e9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"578 2020-03-27 08:59:07 +0100 renderer: shunt support for crossing*0m\n" \
+"577 2020-03-27 08:32:08 +0100 renderer: support for accessory shunting\n" \
+"576 2020-03-27 08:10:02 +0100 rascii: fix for draining CPU in case of a write with no connection\n" \
+"575 2020-03-27 08:03:09 +0100 rascii: fix for function F0\n" \
+"574 2020-03-26 17:08:06 +0100 block/routedialog: reject adding empty ID in the include/exclude list\n" \
+"573 2020-03-26 13:14:46 +0100 renderer: fix for semphoremain shunt red\n" \
 "572 2020-03-25 07:43:20 +0100 renderer: support for shunt and prefix signal symbols\n" \
 "571 2020-03-24 08:21:20 +0100 renderer: shunt color mapping fix\n" \
 "570 2020-03-23 11:21:55 +0100 rocview: auto size column option added\n" \
