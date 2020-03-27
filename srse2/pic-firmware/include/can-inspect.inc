@@ -372,6 +372,10 @@ CAN_SWITCH_ACC_FAULT
 ;------------------------------------------------------------------------------
 
 S88_EVENT
+                MOVF	CANFRAME+4,W
+                XORLW	4
+                BTFSC	STATUS,Z
+                BRA     S88_SINGLE_IO
                 ; if DLC != 7 -> return
                 MOVF	CANFRAME+4,W
                 XORLW	7
@@ -395,7 +399,24 @@ S88_EVENT
                 ; reset S88 as we need fresh infos
                 GOTO	S88INIT
 
-S88_EVENT_END
+S88_SINGLE_IO
+                MOVFF	CANFRAME+7,TEMP16
+                MOVFF	CANFRAME+8,TEMP16+1
+                MOVF	S88C_L,W
+                SUBWF	TEMP16+1
+                MOVF	S88C_H,W
+                BTFSS	STATUS,C
+                INCFSZ	S88C_H,W
+                SUBWF	TEMP16,F
+
+                ; skip if IO > 256
+                MOVF    TEMP16,W
+                XORLW   0
+                BTFSS	STATUS,Z
+                RETURN
+
+                MOVF	TEMP16+1,W
+                CALL	S88_N_GENEVENT
                 RETURN
 
 ;------------------------------------------------------------------------------
@@ -442,10 +463,10 @@ CAN_PING_CONT
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                ; Version 1.9
+                ; Version 1.10
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	9
+                MOVLW	10
                 MOVWF	POSTINC0
                 MOVLW	0
                 MOVWF	POSTINC0
@@ -502,10 +523,10 @@ CAN_BOOTLOADER_PING
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                ; Version 1.9
+                ; Version 1.10
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	9
+                MOVLW	10
                 MOVWF	POSTINC0
                 MOVLW	0
                 MOVWF	POSTINC0
