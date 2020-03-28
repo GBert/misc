@@ -1,11 +1,13 @@
 const int revisionnr = 
-578
+580
 ;
 const char* commithash = 
-"b941b5b5fff4c760ffd3acdae63911d6d558c4e9";
+"e50af9374d2f2583b585821d6f1c2cc8f195e673";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"580 2020-03-28 14:28:57 +0100 renderer: shunt support for dcrossing left/right sl/sr\n" \
+"579 2020-03-28 14:22:07 +0100 output: tristate flip trace added\n" \
 "578 2020-03-27 08:59:07 +0100 renderer: shunt support for crossing*0m\n" \
 "577 2020-03-27 08:32:08 +0100 renderer: support for accessory shunting\n" \
 "576 2020-03-27 08:10:02 +0100 rascii: fix for draining CPU in case of a write with no connection\n" \
