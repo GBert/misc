@@ -38,6 +38,7 @@ struct z21_data_t {
     int sc;
     int st;
     int foreground;
+    int turnout_enable;
     int power;
     uint8_t loco_number;
     char *format;

@@ -81,12 +81,13 @@ static unsigned char XPN_X_STORE2[]               = { 0x14, 0x00, 0x16, 0x00, 0x
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c config_dir -p <port> -s <port>\n", prg);
-    fprintf(stderr, "   Version 0.95\n\n");
+    fprintf(stderr, "   Version 0.96\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory - default %s\n", config_dir);
     fprintf(stderr, "         -p <port>           primary UDP port for the server - default %d\n", PRIMARY_UDP_PORT);
     fprintf(stderr, "         -s <port>           secondary UDP port for the server - default %d\n", SECONDARY_UDP_PORT);
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface\n");
     fprintf(stderr, "         -i <CAN interface>  CAN interface\n");
+    fprintf(stderr, "         -x                  enable turnout switching\n");
     fprintf(stderr, "         -f                  running in foreground\n\n");
 }
 
@@ -448,7 +449,8 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
 	turnout = z21_data->udpframe[7];
 	tport = turnout & 0x1;
 	v_printf(verbose, "LAN_X_SET_TURNOUT 0x%04X\n", FAdr);
-	send_can_turnout(FAdr, tport, verbose);
+	if (z21_data->turnout_enable)
+	    send_can_turnout(FAdr, tport, verbose);
 	break;
     case LAN_X_CV_READ:
 	v_printf(verbose, "LAN_X_CV_READ CV %u *TODO*", be16(&z21_data->udpframe[6]));
@@ -651,7 +653,6 @@ int main(int argc, char **argv) {
 
     memset(&ifr, 0, sizeof(ifr));
     memset(&z21_data, 0, sizeof(z21_data));
-    z21_data.foreground = 1;
 
     udp_dst_address = (char *)calloc(MAXIPLEN, 1);
     if (!udp_dst_address) {
@@ -665,7 +666,7 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     };
 
-    while ((opt = getopt(argc, argv, "c:p:s:b:i:hf?")) != -1) {
+    while ((opt = getopt(argc, argv, "c:p:s:b:i:xhf?")) != -1) {
 	switch (opt) {
 	case 'c':
 	    if (strnlen(optarg, MAXLINE) < MAXLINE) {
@@ -701,6 +702,9 @@ int main(int argc, char **argv) {
 	    break;
 	case 'f':
 	    z21_data.foreground = 1;
+	    break;
+	case 'x':
+	    z21_data.turnout_enable = 1;
 	    break;
 	case 'h':
 	case '?':
