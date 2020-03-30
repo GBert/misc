@@ -1,0 +1,30 @@
+#!/bin/sh
+#
+# Start RailControl
+#
+
+DAEMON=/opt/railcontrol/railcontrol
+
+case "$1" in
+  start)
+	printf "Starting RailControl: "
+	cd /opt/railcontrol
+	start-stop-daemon -S -b -x $DAEMON
+	[ $? = 0 ] && echo "OK" || echo "FAIL"
+	;;
+  stop)
+	printf "Stopping RailControl: "
+	start-stop-daemon -K -x $DAEMON
+	[ $? = 0 ] && echo "OK" || echo "FAIL"
+	;;
+  restart|reload)
+	"$0" stop
+	"$0" start
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?
+

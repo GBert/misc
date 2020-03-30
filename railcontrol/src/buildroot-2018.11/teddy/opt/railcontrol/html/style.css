@@ -1,0 +1,352 @@
+@font-face {
+	font-family: symbola;
+	src: url('/symbola.ttf');
+}
+
+body {
+	background-color: white;
+	font-family: verdana, sans-serif;
+	font-size: 15px;
+	margin: 0px;
+}
+
+.symbola {
+	font-family: symbola;
+	font-size: 20px;
+}
+
+.loco_selector {
+	position: fixed;
+	left: 0px;
+	top: 55px;
+	height: 50px;
+	width: 250px;
+}
+
+.layer_selector {
+	position: fixed;
+	right: 0px;
+	top: 55px;
+	height: 50px;
+	width: calc(100% - 254px);
+}
+
+.loco_selector select {
+	width: 250px;
+}
+
+.layer_selector select {
+	width: 100%;
+}
+
+.loco {
+	height: calc(100% - 204px);
+	width: 250px;
+	position: fixed;
+	top: 90px;
+	border: solid 1px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.layout {
+	height: calc(100% - 204px);
+	width: calc(100% - 254px);
+	border: solid 1px;
+	overflow: auto;
+	position: fixed;
+	right: 0px;
+	top: 90px;
+	background-image: url("/layout_background.png");
+	background-repeat: repeat, repeat;
+	background-attachment: local;
+}
+
+.menu {
+	height: 50px;
+	width: 100%;
+	top: 0px;
+	left: 0px;
+	border: 1px;
+	position: fixed;
+}
+
+.menu_main,
+.menu_add,
+.inline-block {
+	display: inline-block;
+}
+
+@media (max-width: 735px) {
+	.layer_selector,
+	.layout {
+		display: none;
+	}
+	.menu_add {
+		display: none;
+	}
+
+}
+
+.layout_item {
+	line-height: 36px;
+	text-align: center;
+	height: 36px;
+	width: 36px;
+	position: absolute;
+	border: 0px;
+}
+
+.layout_item .tooltip {
+	line-height: 1;
+	white-space: nowrap;
+	top: 25px;
+	visibility: hidden;
+	background-color: yellow;
+	border: solid 1px black;
+	border-radius: 5px;
+	padding: 5px;
+	position: absolute;
+	z-index: 1;
+}
+
+.layout_item:hover .tooltip {
+	visibility: visible;
+}
+
+.accessory_off {
+	color: red;
+}
+
+.accessory_on {
+	color: green;
+}
+
+.switch_turnout {
+	color: red;
+}
+
+.switch_straight {
+	color: green;
+}
+
+.switch_turnout .turnout {
+	fill: black;
+}
+
+.switch_straight .straight {
+	fill: black;
+}
+
+.signal_red .red {
+	fill: red;
+}
+
+.signal_green .green {
+	fill: lightgreen;
+}
+
+.feedback_free .feedback {
+	fill: lightgreen;
+}
+
+.feedback_occupied .feedback {
+	fill: red;
+}
+
+.track_free .track {
+	fill: black;
+}
+
+.track_occupied .track,
+.track_reserved_occupied .track,
+.track_reserved_occupied .loconame {
+	fill: red;
+}
+
+.track_reserved .track,
+.track_reserved .loconame {
+	fill: green;
+}
+
+.track_blocked .track {
+	fill: gray;
+}
+
+.track_error {
+	background-color: orange;
+}
+
+.track_blocked .track_block,
+.track_unblocked .track_unblock,
+.loco_known .track_set,
+.loco_unknown .track_start_loco,
+.loco_unknown .track_stop_loco,
+.loco_unknown .track_loco_release,
+.track_free .loconame,
+.track_occupied .loconame,
+.track_blocked .loconame,
+.track_error .loconame {
+	display: none;
+}
+
+.popup {
+	position: fixed;
+	display: none;
+	height: 500px;
+	width: 600px;
+	top: 20px;
+	left: 20px;
+	z-index: 2;
+	border: solid 3px black;
+	border-radius: 10px;
+	background-color: lightgray;
+	padding: 10px;
+}
+
+.popup_content {
+	width: 100%;
+	height: 350px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+label {
+	width: 150px;
+	height: 30px;
+	display: inline-block;
+}
+
+.integer {
+	width: 40px;
+}
+
+.checkbox {
+	width: 15px;
+}
+
+.select_track {
+	width: 300px;
+}
+
+.select_direction {
+	width: 100px;
+}
+
+.select_relation_id {
+	width: 300px;
+}
+
+.select_relation_objecttype,
+.select_relation_state {
+	width: 100px;
+}
+
+input,
+select {
+	width: 400px;
+}
+
+.status {
+	position: fixed;
+	bottom: 0px;
+	height: 110px;
+	width: 100%;
+	border: solid 1px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	background: white;
+}
+
+.button {
+	height: 45px;
+	width: 45px;
+	background-color: lightgray;
+	border-radius: 5px;
+	margin: 1px;
+	display: inline-block;
+	text-align: center;
+	font-size: 15px;
+	padding: 0px;
+}
+
+.button:active {
+	background-color: darkgray;
+	transform: translateY(1px);
+}
+
+.button_on {
+	background-color: darkgray;
+}
+
+.button_off {
+	background-color: lightgray;
+}
+
+.button_booster.button_on {
+	background-color: lightgreen;
+}
+
+.button_booster.button_off {
+	background-color: red;
+}
+
+.button_direction.button_on {
+	background-color: lightgray;
+}
+
+.button_direction.button_off {
+	background-color: lightgray;
+	transform: rotate(180deg);
+}
+
+.slider {
+	width: 230px;
+}
+
+.contextmenu {
+	width: 200px;
+	position: absolute;
+	display: none;
+	z-index: 1;
+}
+
+.contextentries {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.contextentry {
+	cursor: pointer;
+	background: lightgrey;
+	padding: 5px;
+}
+
+.contextentry:hover {
+	background: darkgrey;
+}
+
+.tab_button {
+	padding: 5px;
+	border: 1px solid black;
+	border-bottom-style: none;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	background-color: lightgrey;
+}
+
+.tab_button_selected,
+.tab_button:hover {
+	background-color: #e9e9e9;
+}
+
+.tab_content {
+	border: 1px solid black;
+	padding: 3px;
+}
+
+.hidden {
+	display: none;
+}

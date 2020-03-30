@@ -1,0 +1,9 @@
+# This is the config file of RailControl
+# Lines starting with # are comments
+# before and after the = has to be placed a space
+
+# Default dbfilename is railcontrol.sqlite
+dbfilename = railcontrol.sqlite
+
+# Default webserver port is 80, default alt webserver port is 8080
+webserverport = 8080
