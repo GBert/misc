@@ -1,11 +1,14 @@
 const int revisionnr = 
-582
+585
 ;
 const char* commithash = 
-"cc4b426dce781667c3a49bfd4b998d5bec6437e8";
+"a1463457814cb2e028ea80f60a21d37e106b5f42";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"585 2020-03-30 14:27:36 +0200 locdialog: SBT/BAT delete all added\n" \
+"584 2020-03-30 13:54:12 +0200 item: regard operatable for pushbutton down\n" \
+"583 2020-03-30 10:19:31 +0200 rascii: fix for calculating speed for the DIRV command\n" \
 "582 2020-03-29 13:03:43 +0200 revert rascii utils\n" \
 "581 2020-03-29 12:23:58 +0200 signal: optional parameter added\n" \
 "580 2020-03-28 14:28:57 +0100 renderer: shunt support for dcrossing left/right sl/sr\n" \
