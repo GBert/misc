@@ -6,7 +6,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=raicontrol
+PKG_NAME:=railcontrol
 PKG_VERSION:=20200330
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -16,10 +16,10 @@ include $(INCLUDE_DIR)/package.mk
 
 # Sart make install at build time
 
-define Package/raicontrol
+define Package/railcontrol
   SECTION:=utils
   CATEGORY:=Utilities
-  TITLE:=raicontrol
+  TITLE:=railcontrol
   DEPENDS:=
   URL:=https://www.railcontrol.org
   MAINTAINER:=Gerhard Bertelsmann
@@ -40,7 +40,7 @@ define Build/Compile
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -Dlinux -D_REENTRANT -I$(STAGING_DIR)/usr/include/libxml2 -I./ -lpthread"
 endef
 
-define Package/raicontrol/install
+define Package/railcontrol/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/railcontrol $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc
@@ -48,4 +48,4 @@ define Package/raicontrol/install
 endef
 
 
-$(eval $(call BuildPackage,raicontrol))
+$(eval $(call BuildPackage,railcontrol))
