@@ -1,15 +1,9 @@
 
-CC=gcc
-CPP=g++
-CCRASPI=aarch64-linux-gcc
-CPPRASPI=aarch64-linux-g++
-
-CPPFLAGS=-I. -g -O2 -Wall -Wextra -Werror -std=c++11
-CPPFLAGSAMALGAMATION=-I. -g -O2 -Wall -Wextra -Werror -std=c++11
-CPPFLAGSRASPI=-I. -g -O2 -Wall -Wextra -Wno-cast-function-type -Werror -std=c++11 --sysroot=/home/teddy/buildroot-2018.11/output/host/aarch64-buildroot-linux-gnu/sysroot
-LDFLAGS=-g -Wl,--export-dynamic
-LIBS=-lpthread -ldl
-LIBSAMALGAMATION=-lpthread -ldl
+#CPPFLAGS+=-I. -g -O2 -Wall -Wextra -Werror -std=c++11
+#CPPFLAGSAMALGAMATION=-I. -g -O2 -Wall -Wextra -Werror -std=c++11
+#LDFLAGS=-g -Wl,--export-dynamic
+#LIBS=-lpthread -ldl
+#LIBSAMALGAMATION=-lpthread -ldl
 
 TMPDIR=RailControl
 TMPDIRCYGWIN=/RailControl
@@ -70,17 +64,17 @@ OBJ= \
 	WebServer/WebServer.o
 
 all: $(OBJ)
-	+make -C Hardware
-	+make -C Storage
-	$(CPP) $(LDFLAGS) $(OBJ) -o railcontrol $(LIBS)
+	$(MAKE) -C Hardware
+	$(MAKE) -C Storage
+	$(CXX) $(LDFLAGS) $(OBJ) -o railcontrol $(LIBS)
 	rm Timestamp.cpp
 	rm Timestamp.o
 
 dist: all
-	strip railcontrol
-	strip Hardware/*.so
-	strip Storage/*.so
-	tar cvJf railcontrol.tar.xz Hardware/*.so Storage/*.so railcontrol railcontrol.conf.dist html/*
+	$(STRIP) railcontrol
+	$(STRIP) Hardware/*.so
+	$(STRIP) Storage/*.so
+	$(TAR) cvJf railcontrol.tar.xz Hardware/*.so Storage/*.so railcontrol railcontrol.conf.dist html/*
 	mkdir $(TMPDIR)
 	mkdir $(TMPDIR)/Hardware
 	mkdir $(TMPDIR)/Storage
@@ -94,49 +88,14 @@ dist: all
 	tar cvJf railcontrol.`date +"%Y%m%d"`.tar.xz $(TMPDIR)/* $(TMPDIR)/html/*
 	rm -r $(TMPDIR)
 
-dist-cygwin: amalgamation
-	strip railcontrol.exe
-	mkdir $(TMPDIRCYGWIN)
-	cp -r \
-		/cygdrive/c/Windows/SYSTEM32/ntdll.dll \
-		/cygdrive/c/Windows/system32/KERNELBASE.dll \
-		/cygdrive/c/Windows/system32/kernel32.dll \
-		/usr/bin/cyggcc_s-seh-1.dll \
-		/usr/bin/cygstdc++-6.dll \
-		/usr/bin/cygwin1.dll \
-		html \
-		railcontrol.conf.dist \
-		railcontrol.exe \
-		$(TMPDIRCYGWIN)
-	zip -9 railcontrol.windows.`date +"%Y%m%d"`.zip $(TMPDIRCYGWIN)/* $(TMPDIRCYGWIN)/html/*
-	rm -r $(TMPDIRCYGWIN)
-
-amalgamation: Timestamp.cpp
-	./amalgamation.bash
-	$(CPP) $(CPPFLAGSAMALGAMATION) -DAMALGAMATION -c -o amalgamation.o amalgamation.cpp
-	make -C Storage amalgamation
-	$(CPP) -g amalgamation.o Storage/sqlite/sqlite3.o -o railcontrol $(LIBSAMALGAMATION)
-	rm -f amalgamation.o
-	rm -f amalgamation.cpp
-	rm Timestamp.cpp
-
-raspi: Timestamp.cpp
-	./amalgamation.bash
-	$(CPPRASPI) $(CPPFLAGSRASPI) -DAMALGAMATION -c -o amalgamation.o amalgamation.cpp
-	make -C Storage raspi
-	$(CPPRASPI) -g amalgamation.o Storage/sqlite/sqlite3.o -o railcontrol $(LIBSAMALGAMATION)
-	rm -f amalgamation.o
-	rm -f amalgamation.cpp
-	rm Timestamp.cpp
-
 sqlite-shell:
 	make -C Storage/sqlite
 
 Timestamp.o: Timestamp.cpp Timestamp.h
-	$(CPP) $(CPPFLAGS) -c -o $@ $<
+	$(CXX) $(CPPFLAGS) -c -o $@ $<
 
 %.o: %.cpp *.h DataModel/*.h Hardware/HardwareHandler.h Logger/*.h Network/*.h Storage/StorageHandler.h Utils/*.h WebServer/*.h
-	$(CPP) $(CPPFLAGS) -c -o $@ $<
+	$(CXX) $(CPPFLAGS) -c -o $@ $<
 
 clean:
 	make -C Hardware clean

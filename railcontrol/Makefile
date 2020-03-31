@@ -20,7 +20,7 @@ define Package/railcontrol
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=railcontrol
-  DEPENDS:=
+  DEPENDS:=+libpthread +libstdcpp
   URL:=https://www.railcontrol.org
   MAINTAINER:=Gerhard Bertelsmann
 endef
@@ -30,21 +30,25 @@ define Package/srcpd/description
   Dominik (Teddy) Mahrer
 endef
 
-define Build/Configure
-  $(call Build/Configure/Default,--disable-ddls88)
+
+define Build/Prepare
+        $(CP) ./src/* $(PKG_BUILD_DIR)
 endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -Dlinux -D_REENTRANT -I$(STAGING_DIR)/usr/include/libxml2 -I./ -lpthread"
+		CPPFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -I. -I.. -fPIC -Dlinux -D_REENTRANT -lpthread -ldl" 
 endef
 
 define Package/railcontrol/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/railcontrol $(1)/usr/bin/
-	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/railcontrol.conf.dist $(1)/etc/railcontrol.conf
+	$(INSTALL_DIR) $(1)/opt/railcontrol
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/railcontrol $(1)/opt/railcontrol
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/railcontrol.conf.dist $(1)/opt/railcontrol
+	$(INSTALL_DIR) $(1)/opt/railcontrol/Hardware
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/Hardware/*.so $(1)/opt/railcontrol/Hardware
+	$(INSTALL_DIR) $(1)/opt/railcontrol/Storage
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/Storage/*.so $(1)/opt/railcontrol/Storage
 endef
 
 
