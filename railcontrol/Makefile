@@ -20,7 +20,7 @@ define Package/railcontrol
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=railcontrol
-  DEPENDS:=+libpthread +libstdcpp
+  DEPENDS:=+libpthread +libstdcpp +libsqlite3
   URL:=https://www.railcontrol.org
   MAINTAINER:=Gerhard Bertelsmann
 endef
@@ -44,7 +44,7 @@ endef
 define Package/railcontrol/install
 	$(INSTALL_DIR) $(1)/opt/railcontrol
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/railcontrol $(1)/opt/railcontrol
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/railcontrol.conf.dist $(1)/opt/railcontrol
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/railcontrol.conf.dist $(1)/opt/railcontrol/railcontrol.conf
 	$(INSTALL_DIR) $(1)/opt/railcontrol/Hardware
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/Hardware/*.so $(1)/opt/railcontrol/Hardware
 	$(INSTALL_DIR) $(1)/opt/railcontrol/Storage
