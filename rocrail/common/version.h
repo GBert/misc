@@ -1,11 +1,22 @@
 const int revisionnr = 
-585
+596
 ;
 const char* commithash = 
-"a1463457814cb2e028ea80f60a21d37e106b5f42";
+"394c2680801cc3bd4d83288393a890ecd723f65d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"596 2020-04-02 13:35:45 +0200 signal: support for 3 address pattern\n" \
+"595 2020-04-02 11:18:53 +0200 item: altsvg option added\n" \
+"594 2020-04-02 10:37:31 +0200 planpanel: check for alternative SVG path for all symbols types\n" \
+"593 2020-04-02 07:59:07 +0200 bidib: MSG_BM_CONFIDENCE only as trace\n" \
+"592 2020-04-01 14:56:54 +0200 wio: show alive timeout value in trace\n" \
+"591 2020-04-01 10:47:20 +0200 wiodlg: changed type throttle into control\n" \
+"590 2020-04-01 10:33:59 +0200 wiodlg: type text extended with DCC booster\n" \
+"589 2020-04-01 08:28:10 +0200 bidib: only SoD on feature size in case master was enabled\n" \
+"588 2020-03-31 10:20:53 +0200 rasciiutils added to use the same base for WIO and RASCII (wip)\n" \
+"587 2020-03-31 10:16:32 +0200 variabledlg: description column added\n" \
+"586 2020-03-31 08:47:03 +0200 bidib: sys_enable first after power on or sod\n" \
 "585 2020-03-30 14:27:36 +0200 locdialog: SBT/BAT delete all added\n" \
 "584 2020-03-30 13:54:12 +0200 item: regard operatable for pushbutton down\n" \
 "583 2020-03-30 10:19:31 +0200 rascii: fix for calculating speed for the DIRV command\n" \
