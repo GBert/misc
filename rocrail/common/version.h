@@ -1,11 +1,12 @@
 const int revisionnr = 
-596
+597
 ;
 const char* commithash = 
-"394c2680801cc3bd4d83288393a890ecd723f65d";
+"712bd438f98070fb4f7baff777d10427c6076c0a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"597 2020-04-02 18:27:06 +0200 wrapper: altsvg default false\n" \
 "596 2020-04-02 13:35:45 +0200 signal: support for 3 address pattern\n" \
 "595 2020-04-02 11:18:53 +0200 item: altsvg option added\n" \
 "594 2020-04-02 10:37:31 +0200 planpanel: check for alternative SVG path for all symbols types\n" \
