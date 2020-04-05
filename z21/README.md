@@ -44,3 +44,12 @@ LEN   -- CMD1  -- CMD2  -- ADDR  -- IDX -- ANZ  -- NAME als ASCII    -- XOR
 
 https://www.open4me.de/index.php/2017/06/zz21-wlan-maus-lok-bibliothek-befehle/#more-848
 
+Todos
+-----
+
+- add .prg, .regs, .traktion and .blocks to cs2 reader
+- use Rocos Broadcast/Masks mechanismen instead of sending everything to broadcast address
+- calm down clang compiler
+- work on turnouts
+  
+
