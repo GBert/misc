@@ -29,7 +29,6 @@ BOM CAN S88
 |P25		|CONN_01X04	|Pin Header Straight 1x04|
 |P26		|CONN_01X02	|Pin Header Straight 1x02|
 |P27		|CONN_01X02	|Pin Header Straight 1x02|
-|		|		|		|
 |R1		|10k		|SMD 0805	|
 |R2		|680R		|SMD 0805	|
 |R4		|4k7		|SMD 0805	|
@@ -41,6 +40,7 @@ BOM CAN S88
 |R19		|49R9		|SMD 0805	|
 |R20		|49R9		|SMD 0805	|
 |R24		|1k5		|SMD 1206	|
+|R25		|47k		|SMD 0805	|
 |U1		|Omega2		|Onion Omega2	|
 |PIN HEADER	|RM2.00 1x16	|16 pol Pin Hole|
 |PIN HEADER	|RM2.00 1x16	|16 pol Pin Hole|
