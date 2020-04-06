@@ -21,7 +21,6 @@ BOM CAN S88
 |D1		|5mA LED	|5MM     	|
 |J1		|s88-N		|MEGB8-8	|
 |J2		|CAN		|MEGB8-8	|
-|		|		|		|
 |P5		|UART		|GROVE + cable	|
 |P8		|CAN		|GROVE + cable	|
 |P7		|CAN_TERM	|Pin Header Straight 1x02|
@@ -35,14 +34,13 @@ BOM CAN S88
 |R2		|680R		|SMD 0805	|
 |R4		|4k7		|SMD 0805	|
 |R11		|120R		|SMD 1206	|
-|R12		|220R		|SMD 0805	|
-|R16		|220R		|SMD 0805	|
+|R12		|270R		|SMD 0805	|
+|R16		|270R		|SMD 0805	|
 |R17		|49R9		|SMD 0805	|
 |R18		|49R9		|SMD 0805	|
 |R19		|49R9		|SMD 0805	|
 |R20		|49R9		|SMD 0805	|
 |R24		|1k5		|SMD 1206	|
-|		|		|		|
 |U1		|Omega2		|Onion Omega2	|
 |PIN HEADER	|RM2.00 1x16	|16 pol Pin Hole|
 |PIN HEADER	|RM2.00 1x16	|16 pol Pin Hole|
@@ -55,4 +53,3 @@ BOM CAN S88
 |Y1		|16MHz		|Crystal HC-49S	|
 |		|u.FL Pigtail  | RP SMA	|
 |		|Antenna	| SMA		|
-
