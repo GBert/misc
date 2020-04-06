@@ -18,7 +18,7 @@ BOM CAN S88
 |C17		|100nF		|SMD 0805	|
 |C5		  |10uF - 47uF |THT P2.5	|
 |C18		|10uF - 47uF |THT P2.5	|
-|D1		|5mA LED	|5MM     	|
+|D1		|2mA LED	|5MM     	|
 |J1		|s88-N		|MEGB8-8	|
 |J2		|CAN		|MEGB8-8	|
 |P5		|UART		|GROVE + cable	|
