@@ -1,11 +1,13 @@
 const int revisionnr = 
-613
+615
 ;
 const char* commithash = 
-"71e58348f22fc450a7d6fcbc35a2e11bcc64c921";
+"9bb6aafb06180289f2e64a764118dc35222dc861";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"615 2020-04-07 08:49:04 +0200 loc: stop automode in case of gohome command and is already at home\n" \
+"614 2020-04-07 07:48:59 +0200 stage: manual compress will overrules one time the FiFo in locations\n" \
 "613 2020-04-06 16:34:05 +0200 rascii: extended the accessory programming commands\n" \
 "612 2020-04-06 14:22:47 +0200 app: version info corrected in the trace header\n" \
 "611 2020-04-06 10:26:32 +0200 rascii: fix for function command and FX state\n" \
