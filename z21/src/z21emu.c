@@ -86,7 +86,9 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -p <port>           primary UDP port for the server - default %d\n", PRIMARY_UDP_PORT);
     fprintf(stderr, "         -s <port>           secondary UDP port for the server - default %d\n", SECONDARY_UDP_PORT);
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface\n");
+#ifndef NO_CAN
     fprintf(stderr, "         -i <CAN interface>  CAN interface\n");
+#endif
     fprintf(stderr, "         -x                  enable turnout switching\n");
     fprintf(stderr, "         -f                  running in foreground\n\n");
 }
@@ -635,7 +637,9 @@ int main(int argc, char **argv) {
     /* primary UDP socket , secondary UDP socket, UDP broadcast socket */
     struct ifaddrs *ifap, *ifa;
     struct ifreq ifr;
+#ifndef NO_CAN
     struct sockaddr_can caddr;
+#endif
     struct sockaddr_in *bsa;
     struct sockaddr_in src_addr;
     fd_set readfds;
@@ -648,7 +652,9 @@ int main(int argc, char **argv) {
     char timestamp[16];
     char *loco_file;
 
+#ifndef NO_CAN
     socklen_t caddrlen = sizeof(caddr);
+#endif
     socklen_t slen = sizeof(src_addr);
 
     memset(&ifr, 0, sizeof(ifr));
@@ -786,7 +792,9 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     }
 
+
     if (strlen(ifr.ifr_name)) {
+#ifndef NO_CAN
 	/* prepare CAN socket */
 	printf("ifr.ifr_name: >%s<\n", ifr.ifr_name);
 	if ((z21_data.sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
@@ -804,6 +812,7 @@ int main(int argc, char **argv) {
 	    fprintf(stderr, "error binding CAN socket: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
 	}
+#endif
     } else {
 	/* prepare TCP client socket */
 	if ((z21_data.st = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
@@ -883,8 +892,10 @@ int main(int argc, char **argv) {
 	    break;
 	}
 
+#ifndef NO_CAN
 	if (FD_ISSET(z21_data.sc, &readfds)) {
 	}
+#endif
 
 	/* received a UDP packet on primary */
 	if (FD_ISSET(z21_data.sp, &readfds)) {
