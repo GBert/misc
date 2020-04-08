@@ -86,6 +86,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -p <port>           primary UDP port for the server - default %d\n", PRIMARY_UDP_PORT);
     fprintf(stderr, "         -s <port>           secondary UDP port for the server - default %d\n", SECONDARY_UDP_PORT);
     fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface\n");
+    fprintf(stderr, "         -g <gateway addr>    gateway IP\n");
 #ifndef NO_CAN
     fprintf(stderr, "         -i <CAN interface>  CAN interface\n");
 #endif
@@ -672,7 +673,7 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     };
 
-    while ((opt = getopt(argc, argv, "c:p:s:b:i:xhf?")) != -1) {
+    while ((opt = getopt(argc, argv, "c:p:s:b:g:i:xhf?")) != -1) {
 	switch (opt) {
 	case 'c':
 	    if (strnlen(optarg, MAXLINE) < MAXLINE) {
@@ -702,6 +703,9 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "UDP broadcast address or interface error: %s\n", optarg);
 		exit(EXIT_FAILURE);
 	    }
+	    break;
+	case 'g':
+	    strncpy(cs2addr, optarg, sizeof(cs2addr) - 1);
 	    break;
 	case 'i':
 	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
