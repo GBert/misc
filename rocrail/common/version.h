@@ -1,11 +1,29 @@
 const int revisionnr = 
-597
+615
 ;
 const char* commithash = 
-"712bd438f98070fb4f7baff777d10427c6076c0a";
+"9bb6aafb06180289f2e64a764118dc35222dc861";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"615 2020-04-07 08:49:04 +0200 loc: stop automode in case of gohome command and is already at home\n" \
+"614 2020-04-07 07:48:59 +0200 stage: manual compress will overrules one time the FiFo in locations\n" \
+"613 2020-04-06 16:34:05 +0200 rascii: extended the accessory programming commands\n" \
+"612 2020-04-06 14:22:47 +0200 app: version info corrected in the trace header\n" \
+"611 2020-04-06 10:26:32 +0200 rascii: fix for function command and FX state\n" \
+"610 2020-04-06 10:11:04 +0200 rascii: pton/ptoff, accessory cvget/cvset and function state added\n" \
+"609 2020-04-06 08:01:10 +0200 route: fix for checking signal with blank command\n" \
+"608 2020-04-05 15:36:57 +0200 blockdialog: show the last cleaning-stamp on the statistics tab\n" \
+"607 2020-04-05 15:14:54 +0200 translation merge: pt_BR, sl, sr_latin, fr, nl, de\n" \
+"606 2020-04-05 14:59:47 +0200 guiframe: disable go home all in case automatic is off\n" \
+"605 2020-04-05 10:18:18 +0200 block: use time for last cleaning\n" \
+"604 2020-04-05 09:57:52 +0200 go home all by filter\n" \
+"603 2020-04-04 15:43:32 +0200 model: select the block with the lowest cleaning count in case of loco type cleaning\n" \
+"602 2020-04-04 10:08:18 +0200 columndlg: save/restore size and position\n" \
+"601 2020-04-04 08:15:30 +0200 signal: max 5 aspect support for pattern control\n" \
+"600 2020-04-04 07:49:55 +0200 item: disable alternative SVG context menu for tt, seltab, tx\n" \
+"599 2020-04-03 10:41:58 +0200 bidib: regard gate value if addressing is MADA\n" \
+"598 2020-04-03 10:10:19 +0200 signaldialog: layout corrections\n" \
 "597 2020-04-02 18:27:06 +0200 wrapper: altsvg default false\n" \
 "596 2020-04-02 13:35:45 +0200 signal: support for 3 address pattern\n" \
 "595 2020-04-02 11:18:53 +0200 item: altsvg option added\n" \
