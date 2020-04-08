@@ -758,15 +758,19 @@ int main(int argc, char **argv) {
 
     /* prepare UDP sending socket */
     /* get the broadcast address */
-    getifaddrs(&ifap);
-    for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
-	if (ifa->ifa_addr) {
-	    if (ifa->ifa_addr->sa_family == AF_INET) {
-		bsa = (struct sockaddr_in *)ifa->ifa_broadaddr;
-		if (strncmp(ifa->ifa_name, bcast_interface, strlen(bcast_interface)) == 0)
-		    udp_dst_address = inet_ntoa(bsa->sin_addr);
+    if (getifaddrs(&ifap) == -1) {
+	fprintf(stderr, "can't get broadcast address: %s\n", strerror(errno));
+	exit(EXIT_FAILURE);
+    }
+
+    for (ifa = ifap; ifa != NULL; ifa = ifa->ifa_next) {
+	if (ifa->ifa_addr == NULL)
+	    continue;
+	if (ifa->ifa_addr->sa_family == AF_INET) {
+	    bsa = (struct sockaddr_in *)ifa->ifa_broadaddr;
+	    if (strncmp(ifa->ifa_name, bcast_interface, strlen(bcast_interface)) == 0)
+		udp_dst_address = inet_ntoa(bsa->sin_addr);
 	    }
-	}
     }
     freeifaddrs(ifap);
 
