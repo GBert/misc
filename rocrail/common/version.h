@@ -1,11 +1,16 @@
 const int revisionnr = 
-615
+620
 ;
 const char* commithash = 
-"9bb6aafb06180289f2e64a764118dc35222dc861";
+"f9127a2899bd7cacdc1c829baa7d0a75f2ac3869";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"620 2020-04-09 15:59:32 +0200 rocview.cmd: quot parameters\n" \
+"619 2020-04-09 10:57:18 +0200 block: fix for wait check in case of type shunting\n" \
+"618 2020-04-09 10:13:02 +0200 planpanel: check for overlapping on selection copy/move\n" \
+"617 2020-04-08 08:19:16 +0200 item: add blank context menu for signals with 5 or more aspects\n" \
+"616 2020-04-07 16:39:14 +0200 signaldialog: label corrections for pattern yellow address\n" \
 "615 2020-04-07 08:49:04 +0200 loc: stop automode in case of gohome command and is already at home\n" \
 "614 2020-04-07 07:48:59 +0200 stage: manual compress will overrules one time the FiFo in locations\n" \
 "613 2020-04-06 16:34:05 +0200 rascii: extended the accessory programming commands\n" \
