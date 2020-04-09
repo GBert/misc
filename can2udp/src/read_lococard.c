@@ -30,6 +30,9 @@
 
 #include "cs2-config.h"
 
+#define check_free(a) \
+            do { if ( a ) free(a); } while (0)
+
 unsigned char pre_mm[]    = { 0x02, 0x75, 0x00 };
 unsigned char pre_mfx[]   = { 0x02, 0xf5, 0x00 };
 unsigned char pre_other[] = { 0x02, 0xc5, 0x00 };
@@ -145,6 +148,7 @@ int decode_sc_data(struct loco_config_t *loco_config, struct loco_data_t *loco_d
     char *png_name;
 
     index = 0;
+
     /* preamble */
     if (memcmp(loco_config->bin, pre_mfx, 3) == 0)
 	printf("type: mfx\n");
@@ -347,5 +351,9 @@ int main(int argc, char **argv) {
     if (verbose)
 	decode_sc_data(&loco_config, &loco_data);
 
-    return 0;
+    check_free(loco_data.icon);
+    check_free(loco_data.name);
+    check_free(loco_data.type);
+
+    return EXIT_SUCCESS;
 }
