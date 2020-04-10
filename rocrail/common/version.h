@@ -1,11 +1,14 @@
 const int revisionnr = 
-620
+623
 ;
 const char* commithash = 
-"f9127a2899bd7cacdc1c829baa7d0a75f2ac3869";
+"b504a5aaea93f0086233b2cc63300ebc7f9c8e6c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"623 2020-04-10 13:06:50 +0200 readme.txt extended with command to install wx under Archlinux\n" \
+"622 2020-04-10 09:17:19 +0200 wio: added missing rascii parameter in case of type servo\n" \
+"621 2020-04-09 22:11:15 +0200 bidib: use output value for on in case of accessory\n" \
 "620 2020-04-09 15:59:32 +0200 rocview.cmd: quot parameters\n" \
 "619 2020-04-09 10:57:18 +0200 block: fix for wait check in case of type shunting\n" \
 "618 2020-04-09 10:13:02 +0200 planpanel: check for overlapping on selection copy/move\n" \
