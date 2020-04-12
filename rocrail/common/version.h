@@ -1,11 +1,12 @@
 const int revisionnr = 
-623
+624
 ;
 const char* commithash = 
-"b504a5aaea93f0086233b2cc63300ebc7f9c8e6c";
+"2f66d971c0a9e1d9a7f8243d2073bc356ac8024f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"624 2020-04-11 18:03:56 +0200 guiframe: fix auto resize columns\n" \
 "623 2020-04-10 13:06:50 +0200 readme.txt extended with command to install wx under Archlinux\n" \
 "622 2020-04-10 09:17:19 +0200 wio: added missing rascii parameter in case of type servo\n" \
 "621 2020-04-09 22:11:15 +0200 bidib: use output value for on in case of accessory\n" \
