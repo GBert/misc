@@ -1,11 +1,13 @@
 const int revisionnr = 
-624
+626
 ;
 const char* commithash = 
-"2f66d971c0a9e1d9a7f8243d2073bc356ac8024f";
+"954877d339a9a858bec654a562e20897bd474539";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"626 2020-04-12 11:11:03 +0200 cleanstamp in all block types\n" \
+"625 2020-04-12 11:08:38 +0200 wio: trace RailCom type name\n" \
 "624 2020-04-11 18:03:56 +0200 guiframe: fix auto resize columns\n" \
 "623 2020-04-10 13:06:50 +0200 readme.txt extended with command to install wx under Archlinux\n" \
 "622 2020-04-10 09:17:19 +0200 wio: added missing rascii parameter in case of type servo\n" \
