@@ -1,11 +1,12 @@
 const int revisionnr = 
-626
+627
 ;
 const char* commithash = 
-"954877d339a9a858bec654a562e20897bd474539";
+"5094810aeb828e37177bb5850cce3edea459e53f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"627 2020-04-12 14:54:46 +0200 loc: fix for V0 on swap mutex timeout (deadlock)\n" \
 "626 2020-04-12 11:11:03 +0200 cleanstamp in all block types\n" \
 "625 2020-04-12 11:08:38 +0200 wio: trace RailCom type name\n" \
 "624 2020-04-11 18:03:56 +0200 guiframe: fix auto resize columns\n" \
