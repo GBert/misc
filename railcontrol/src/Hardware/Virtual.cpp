@@ -18,6 +18,7 @@ along with RailControl; see the file LICENCE. If not see
 <http://www.gnu.org/licenses/>.
 */
 
+#include <future>
 #include <sstream>
 #include <string>
 
@@ -79,4 +80,52 @@ namespace Hardware
 		logger->Info(Languages::TextSettingAccessoryWithProtocol, static_cast<int>(protocol), address, Languages::GetGreenRed(state), Languages::GetOnOff(on));
 	}
 
+	// read CV value
+	void Virtual::ProgramRead(const ProgramMode mode, const address_t address, const CvNumber cv)
+	{
+		switch (mode)
+		{
+			case ProgramModeDccDirect:
+				logger->Info(Languages::TextProgramDccRead, cv);
+				break;
+
+			case ProgramModeDccPomLoco:
+				logger->Info(Languages::TextProgramDccPomLocoRead, address, cv);
+				break;
+
+			case ProgramModeDccPomAccessory:
+				logger->Info(Languages::TextProgramDccPomAccessoryRead, address, cv);
+				break;
+
+			default:
+				return;
+		}
+		std::async(std::launch::async, Manager::ProgramDccValueStatic, manager, cv, cv & 0xFF);
+	}
+
+	// write DCC CV value
+	void Virtual::ProgramWrite(const ProgramMode mode, const address_t address, const CvNumber cv, const CvValue value)
+	{
+		switch (mode)
+		{
+			case ProgramModeMm:
+				logger->Info(Languages::TextProgramMm, cv, value);
+				break;
+
+			case ProgramModeDccDirect:
+				logger->Info(Languages::TextProgramDccWrite, cv, value);
+				break;
+
+			case ProgramModeDccPomLoco:
+				logger->Info(Languages::TextProgramDccPomLocoWrite, address, cv, value);
+				break;
+
+			case ProgramModeDccPomAccessory:
+				logger->Info(Languages::TextProgramDccPomAccessoryWrite, address, cv, value);
+				break;
+
+			default:
+				return;
+		}
+	}
 } // namespace

@@ -45,7 +45,6 @@ class Manager
 		void Booster(const controlType_t controlType, const boosterState_t status);
 
 		// hardware (virt, CS2, ...)
-		static const std::map<hardwareType_t,std::string> HardwareListNames();
 		bool ControlSave(const controlID_t& controlID,
 			const hardwareType_t& hardwareType,
 			const std::string& name,
@@ -56,7 +55,7 @@ class Manager
 			const std::string& arg5,
 			std::string& result);
 		bool ControlDelete(controlID_t controlID);
-		Hardware::HardwareParams* GetHardware(controlID_t controlID);
+		Hardware::HardwareParams* GetHardware(const controlID_t controlID);
 		unsigned int ControlsOfHardwareType(const hardwareType_t hardwareType);
 		bool HardwareLibraryAdd(const hardwareType_t hardwareType, void* libraryHandle);
 		void* HardwareLibraryGet(const hardwareType_t hardwareType) const;
@@ -64,11 +63,11 @@ class Manager
 
 		// control (console, web, ...)
 		const std::string GetControlName(const controlID_t controlID); // FIXME: => string& (reference)
-		const std::map<controlID_t,Hardware::HardwareParams*> controlList() const { return hardwareParams; }
 		const std::map<std::string,Hardware::HardwareParams*> ControlListByName() const;
 		const std::map<controlID_t,std::string> LocoControlListNames() const;
 		const std::map<controlID_t,std::string> AccessoryControlListNames() const;
 		const std::map<controlID_t,std::string> FeedbackControlListNames() const;
+		const std::map<controlID_t,std::string> ProgramControlListNames() const;
 		const std::map<std::string,protocol_t> LocoProtocolsOfControl(const controlID_t controlID) const { return ProtocolsOfControl(AddressTypeLoco, controlID); }
 		const std::map<std::string,protocol_t> AccessoryProtocolsOfControl(const controlID_t controlID) const { return ProtocolsOfControl(AddressTypeAccessory, controlID); }
 
@@ -260,7 +259,22 @@ class Manager
 		controlID_t GetControlForAccessory() const;
 		controlID_t GetControlForFeedback() const;
 
+		void ProgramRead(const controlID_t controlID, const ProgramMode mode, const address_t address, const CvNumber cv);
+		void ProgramWrite(const controlID_t controlID, const ProgramMode mode, const address_t address, const CvNumber cv, const CvValue value);
+		void ProgramDccValue(const CvNumber cv, const CvValue value);
+		static void ProgramDccValueStatic(Manager* manager, const CvNumber cv, const CvValue value)
+		{
+			manager->ProgramDccValue(cv, value);
+		}
+
+		bool CanHandleProgram();
+		bool CanHandleProgramMm();
+		bool CanHandleProgramDccRead();
+		bool CanHandleProgramDccWrite();
+
 	private:
+		bool ControlIsOfHardwareType(const controlID_t controlID, const hardwareType_t hardwareType);
+
 		ControlInterface* GetControl(const controlID_t controlID) const;
 		DataModel::Loco* GetLoco(const controlID_t controlID, const protocol_t protocol, const address_t address) const;
 		DataModel::Accessory* GetAccessory(const controlID_t controlID, const protocol_t protocol, const address_t address) const;
@@ -427,6 +441,8 @@ class Manager
 		}
 
 		void InitLocos();
+
+		void ProgramCheckBooster(const ProgramMode mode);
 
 		Logger::Logger* logger;
 		volatile boosterState_t boosterState;

@@ -18,26 +18,26 @@ along with RailControl; see the file LICENCE. If not see
 <http://www.gnu.org/licenses/>.
 */
 
-#include "Hardware/CS2.h"
+#include <Hardware/CS2Udp.h>
 #include "Utils/Utils.h"
 
 namespace Hardware
 {
-	extern "C" CS2* create_CS2(const HardwareParams* params)
+	extern "C" CS2Udp* create_CS2Udp(const HardwareParams* params)
 	{
-		return new CS2(params);
+		return new CS2Udp(params);
 	}
 
-	extern "C" void destroy_CS2(CS2* cs2)
+	extern "C" void destroy_CS2Udp(CS2Udp* cs2Udp)
 	{
-		delete(cs2);
+		delete(cs2Udp);
 	}
 
-	CS2::CS2(const HardwareParams* params)
+	CS2Udp::CS2Udp(const HardwareParams* params)
 	:	MaerklinCAN(params->GetManager(),
 			params->GetControlID(),
-			Logger::Logger::GetLogger("CS2 " + params->GetName() + " " + params->GetArg1()),
-			"Maerklin Central Station 2 (CS2) / " + params->GetName() + " at IP " + params->GetArg1()),
+			Logger::Logger::GetLogger("CS2UDP " + params->GetName() + " " + params->GetArg1()),
+			"Maerklin Central Station 2 (CS2) UDP / " + params->GetName() + " at IP " + params->GetArg1()),
 	 	run(true),
 	 	senderConnection(logger, params->GetArg1(), CS2SenderPort),
 	 	receiverConnection(logger, "0.0.0.0", CS2ReceiverPort)
@@ -52,70 +52,33 @@ namespace Hardware
 		{
 			logger->Error(Languages::TextUnableToCreateUdpSocketForSendingData);
 		}
-		receiverThread = std::thread(&Hardware::CS2::Receiver, this);
+		receiverThread = std::thread(&Hardware::CS2Udp::Receiver, this);
 	}
 
-	CS2::~CS2()
+	CS2Udp::~CS2Udp()
 	{
+		if (run == false)
+		{
+			return;
+		}
 		run = false;
 		receiverConnection.Terminate();
 		receiverThread.join();
 		logger->Info(Languages::TextTerminatingSenderSocket);
 	}
 
-	void CS2::Booster(const boosterState_t status)
+	void CS2Udp::Send(const unsigned char* buffer)
 	{
-		unsigned char buffer[CANCommandBufferLength];
-		CreateBoosterCommand(buffer, status);
-		if (senderConnection.Send(buffer, sizeof(buffer)) == -1)
+		logger->Hex(buffer, CANCommandBufferLength);
+		if (senderConnection.Send(buffer, CANCommandBufferLength) == -1)
 		{
 			logger->Error(Languages::TextUnableToSendDataToControl);
 		}
 	}
 
-	void CS2::LocoSpeed(const protocol_t protocol, const address_t address, const locoSpeed_t speed)
+	void CS2Udp::Receiver()
 	{
-		unsigned char buffer[CANCommandBufferLength];
-		CreateLocoSpeedCommand(buffer, protocol, address, speed);
-		if (senderConnection.Send(buffer, sizeof(buffer)) == -1)
-		{
-			logger->Error(Languages::TextUnableToSendDataToControl);
-		}
-	}
-
-	void CS2::LocoDirection(const protocol_t protocol, const address_t address, const direction_t direction)
-	{
-		unsigned char buffer[CANCommandBufferLength];
-		CreateLocoDirectionCommand(buffer, protocol, address, direction);
-		if (senderConnection.Send(buffer, sizeof(buffer)) == -1)
-		{
-			logger->Error(Languages::TextUnableToSendDataToControl);
-		}
-	}
-
-	void CS2::LocoFunction(const protocol_t protocol, const address_t address, const function_t function, const bool on)
-	{
-		unsigned char buffer[CANCommandBufferLength];
-		CreateLocoFunctionCommand(buffer, protocol, address, function, on);
-		if (senderConnection.Send(buffer, sizeof(buffer)) == -1)
-		{
-			logger->Error(Languages::TextUnableToSendDataToControl);
-		}
-	}
-
-	void CS2::AccessoryOnOrOff(const protocol_t protocol, const address_t address, const accessoryState_t state, const bool on)
-	{
-		unsigned char buffer[CANCommandBufferLength];
-		CreateAccessoryCommand(buffer, protocol, address, state, on);
-		if (senderConnection.Send(buffer, sizeof(buffer)) == -1)
-		{
-			logger->Error(Languages::TextUnableToSendDataToControl);
-		}
-	}
-
-	void CS2::Receiver()
-	{
-		Utils::Utils::SetThreadName("CS2");
+		Utils::Utils::SetThreadName("CS2Udp");
 		logger->Info(Languages::TextReceiverThreadStarted);
 		if (!receiverConnection.IsConnected())
 		{
@@ -133,7 +96,7 @@ namespace Hardware
 		while(run)
 		{
 			ssize_t datalen = receiverConnection.Receive(buffer, sizeof(buffer));
-
+			logger->Hex(buffer, datalen);
 			if (!run)
 			{
 				break;

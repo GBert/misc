@@ -58,6 +58,10 @@ class ControlInterface
 		virtual bool CanHandleAccessories() const { return false; }
 		virtual bool CanHandleFeedbacks() const { return false; }
 		virtual bool CanHandleLocos() const { return false; }
+		virtual bool CanHandleProgram() const { return false; }
+		virtual bool CanHandleProgramMm() const { return false; }
+		virtual bool CanHandleProgramDcc() const { return false; }
+		virtual bool CanHandleProgramDccPom() const { return false; }
 		virtual void FeedbackDelete(__attribute__((unused)) const feedbackID_t feedbackID, __attribute__((unused)) const std::string& name) {}
 		virtual void FeedbackSettings(__attribute__((unused)) const feedbackID_t feedbackID, __attribute__((unused)) const std::string& name) {}
 		virtual void FeedbackState(__attribute__((unused)) const std::string& name, __attribute__((unused)) const feedbackID_t feedbackID, __attribute__((unused)) const DataModel::Feedback::feedbackState_t state) {};
@@ -97,6 +101,10 @@ class ControlInterface
 				LocoFunction(ControlTypeInternal, loco, functionNr, functions[functionNr]);
 			}
 		}
+
+		virtual void ProgramRead(__attribute__((unused)) const ProgramMode mode, __attribute__((unused)) const address_t address, __attribute__((unused)) const CvNumber cv) {}
+		virtual void ProgramWrite(__attribute__((unused)) const ProgramMode mode, __attribute__((unused)) const address_t address, __attribute__((unused)) const CvNumber cv, __attribute__((unused)) const CvValue value) {}
+		virtual void ProgramDccValue(__attribute__((unused)) const CvNumber cv, __attribute__((unused)) const CvValue value) {}
 
 	private:
 		controlType_t controlType;

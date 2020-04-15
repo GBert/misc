@@ -65,6 +65,7 @@ namespace Utils
 #endif
 			}
 			static void SetMinThreadPriority();
+			static std::string TimestampToDate(const time_t timestamp);
 #ifdef __CYGWIN__
 		private:
 			static bool GetFilesInDir(std::vector<std::string>& filesFound, const std::string& path, const std::string& prefix);

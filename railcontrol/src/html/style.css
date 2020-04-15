@@ -329,6 +329,16 @@ label {
 	display: inline-block;
 }
 
+.input_integer_with_label {
+	min-width: 320px;
+	display: inline-block;
+}
+
+.narrow_label label
+{
+	width: 120px;
+}
+
 .integer {
 	width: 40px;
 }

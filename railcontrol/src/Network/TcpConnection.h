@@ -39,13 +39,15 @@ namespace Network
 			}
 
 			void Terminate();
-			int Send(const char* buf, const size_t buflen, const int flags = 0);
+			int Send(const char* buffer, const size_t bufferLength, const int flags = 0);
+			int Send(const unsigned char* buffer, const size_t bufferLength, const int flags = 0) { return Send(reinterpret_cast<const char*>(buffer), bufferLength, flags); }
 			int Send(const std::string& string, const int flags = 0)
 			{
 				return Send(string.c_str(), string.size(), flags);
 			}
 
 			int Receive(char* buf, const size_t buflen, const int flags = 0);
+			int Receive(unsigned char* buffer, const size_t bufferLength, const int flags = 0) { return Receive(reinterpret_cast<char*>(buffer), bufferLength, flags); }
 
 			bool IsConnected() const { return connected; }
 

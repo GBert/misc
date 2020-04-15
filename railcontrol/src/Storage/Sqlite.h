@@ -34,7 +34,7 @@ namespace Storage
 	class SQLite : public StorageInterface
 	{
 		public:
-			SQLite(const StorageParams& params);
+			SQLite(const StorageParams* params);
 			~SQLite();
 
 			void SaveHardwareParams(const Hardware::HardwareParams& params) override;
@@ -76,7 +76,7 @@ namespace Storage
 			static std::string EscapeString(const std::string& input);
 	};
 
-	extern "C" SQLite* create_Sqlite(const StorageParams& params);
+	extern "C" SQLite* create_Sqlite(const StorageParams* params);
 	extern "C" void destroy_Sqlite(SQLite* sqlite);
 
 } // namespace Storage

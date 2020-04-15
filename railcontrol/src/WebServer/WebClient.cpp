@@ -527,6 +527,18 @@ namespace WebServer
 			{
 				HandleControlArguments(arguments);
 			}
+			else if (arguments["cmd"].compare("program") == 0)
+			{
+				HandleProgram();
+			}
+			else if (arguments["cmd"].compare("programread") == 0)
+			{
+				HandleProgramRead(arguments);
+			}
+			else if (arguments["cmd"].compare("programwrite") == 0)
+			{
+				HandleProgramWrite(arguments);
+			}
 			else if (arguments["cmd"].compare("updater") == 0)
 			{
 				HandleUpdater(headers);
@@ -917,7 +929,8 @@ namespace WebServer
 	{
 		HtmlTag div;
 		std::map<unsigned char,argumentType_t> argumentTypes;
-		Hardware::HardwareHandler::ArgumentTypesOfHardwareType(hardwareType, argumentTypes);
+		std::string hint;
+		Hardware::HardwareHandler::ArgumentTypesOfHardwareTypeAndHint(hardwareType, argumentTypes, hint);
 		if (argumentTypes.count(1) == 1)
 		{
 			div.AddChildTag(HtmlTagControlArgument(1, argumentTypes.at(1), arg1));
@@ -938,8 +951,30 @@ namespace WebServer
 		{
 			div.AddChildTag(HtmlTagControlArgument(5, argumentTypes.at(5), arg5));
 		}
+		if (hint.size() > 0)
+		{
+			div.AddChildTag(HtmlTag("div").AddContent(Languages::GetText(Languages::TextHint)).AddContent(HtmlTag("br")).AddContent(hint));
+		}
 		return div;
 	}
+
+	const std::map<string,hardwareType_t> WebClient::ListHardwareNames()
+	{
+		std::map<string,hardwareType_t> hardwareList;
+		hardwareList["CC-Schnitte"] = HardwareTypeCcSchnitte;
+		hardwareList["ESU Ecos &amp; Märklin CS1"] = HardwareTypeEcos;
+		hardwareList["LDT HSI-88"] = HardwareTypeHsi88;
+		hardwareList["Märklin Central Station 1 (CS1)"] = HardwareTypeEcos;
+		hardwareList["Märklin Central Station 2 (CS2) TCP"] = HardwareTypeCS2Tcp;
+		hardwareList["Märklin Central Station 2 (CS2) UDP"] = HardwareTypeCS2Udp;
+		hardwareList["Märklin Interface 6050/6051"] = HardwareTypeM6051;
+		hardwareList["OpenDCC Z1"] = HardwareTypeOpenDcc;
+		hardwareList["RM485"] = HardwareTypeRM485;
+		hardwareList["Roco Z21 (RailControl => Z21 only)"] = HardwareTypeZ21;
+		hardwareList["Virtual Command Station (no Hardware)"] = HardwareTypeVirtual;
+		return hardwareList;
+	}
+
 	void WebClient::HandleControlEdit(const map<string, string>& arguments)
 	{
 		HtmlTag content;
@@ -967,12 +1002,7 @@ namespace WebServer
 			}
 		}
 
-		const std::map<hardwareType_t,string> hardwares = manager.HardwareListNames();
-		std::map<string, string> hardwareOptions;
-		for(auto hardware : hardwares)
-		{
-			hardwareOptions[to_string(hardware.first)] = hardware.second;
-		}
+		const std::map<string,hardwareType_t> hardwareOptions = ListHardwareNames();
 
 		content.AddChildTag(HtmlTag("h1").AddContent(name).AddAttribute("id", "popup_title"));
 		HtmlTag form("form");
@@ -981,7 +1011,7 @@ namespace WebServer
 		form.AddChildTag(HtmlTagInputHidden("control", to_string(controlID)));
 		form.AddChildTag(HtmlTagInputTextWithLabel("name", Languages::TextName, name).AddAttribute("onkeyup", "updateName();"));
 
-		HtmlTagSelectWithLabel selectHardwareType("hardwaretype", Languages::TextType, hardwareOptions, to_string(hardwareType));
+		HtmlTagSelectWithLabel selectHardwareType("hardwaretype", Languages::TextType, hardwareOptions, hardwareType);
 		selectHardwareType.AddAttribute("onchange", "getArgumentsOfHardwareType();");
 		form.AddChildTag(selectHardwareType);
 
@@ -1918,6 +1948,15 @@ namespace WebServer
 			}
 		}
 		return HtmlTagSelectWithLabel("control", Languages::TextControl, controlOptions, to_string(controlIDMutable)).AddAttribute("onchange", "loadProtocol('" + objectType + "', " + to_string(objectID) + ")");
+	}
+
+	HtmlTag WebClient::HtmlTagControl(const string& name, const std::map<controlID_t,string>& controls)
+	{
+		if (controls.size() == 1)
+		{
+			return HtmlTagInputHidden(name, to_string(controls.begin()->first));
+		}
+		return HtmlTagSelectWithLabel(name, Languages::TextControl, controls, ControlNone);
 	}
 
 	HtmlTag WebClient::HtmlTagControlLoco(const controlID_t controlID, const string& objectType, const objectID_t objectID)
@@ -3543,6 +3582,115 @@ namespace WebServer
 		ReplyHtmlWithHeader(HtmlTagControlArguments(hardwareType));
 	}
 
+	void WebClient::HandleProgram()
+	{
+		std::map<controlID_t,string> controls = manager.ProgramControlListNames();
+		unsigned int controlCountMm = 0;
+		unsigned int controlCountDcc = 0;
+		HtmlTag content;
+		content.AddChildTag(HtmlTag("h1").AddContent(Languages::TextProgrammer));
+		HtmlTag tabMenu("div");
+		tabMenu.AddChildTag(HtmlTagTabMenuItem("raw", Languages::TextDirect, true));
+		if (controlCountMm > 0)
+		{
+			tabMenu.AddChildTag(HtmlTagTabMenuItem("mm", Languages::TextMaerklinMotorola));
+		}
+		if (controlCountDcc > 0)
+		{
+			tabMenu.AddChildTag(HtmlTagTabMenuItem("dcc", Languages::TextDcc));
+		}
+		content.AddChildTag(tabMenu);
+
+		HtmlTag programContent("div");
+		programContent.AddClass("popup_content");
+
+		HtmlTag rawContent("div");
+		rawContent.AddAttribute("id", "tab_raw");
+		rawContent.AddClass("tab_content");
+		rawContent.AddClass("narrow_label");
+		rawContent.AddChildTag(HtmlTagControl("controlraw", controls));
+
+		map<ProgramMode,Languages::textSelector_t> programModeOptions;
+		programModeOptions[ProgramModeMm] = Languages::TextProgramModeMm;
+		programModeOptions[ProgramModeDccDirect] = Languages::TextProgramModeDccDirect;
+		programModeOptions[ProgramModeDccPomLoco] = Languages::TextProgramModeDccPomLoco;
+		programModeOptions[ProgramModeDccPomAccessory] = Languages::TextProgramModeDccPomAccessory;
+		rawContent.AddChildTag(HtmlTagSelectWithLabel("moderaw", Languages::TextProgramMode, programModeOptions, ProgramModeDccDirect));
+
+		rawContent.AddChildTag(HtmlTagInputIntegerWithLabel("addressraw", Languages::TextAddress, 1, 1, 0x4000));
+		rawContent.AddChildTag(HtmlTagInputIntegerWithLabel("cvraw", Languages::TextCV, 1, 1, 1024));
+		rawContent.AddChildTag(HtmlTagInputIntegerWithLabel("valueraw", Languages::TextValue, 0, 0, 255));
+		HtmlTagButton readButton(Languages::TextRead, "programread");
+		readButton.AddAttribute("onclick", "onClickProgramRead();return false;");
+		readButton.AddClass("wide_button");
+		rawContent.AddChildTag(readButton);
+		HtmlTagButton writeButton(Languages::TextWrite, "programwrite");
+		writeButton.AddAttribute("onclick", "onClickProgramWrite();return false;");
+		writeButton.AddClass("wide_button");
+		rawContent.AddChildTag(writeButton);
+		programContent.AddChildTag(rawContent);
+
+		HtmlTag mmContent("div");
+		mmContent.AddAttribute("id", "tab_mm");
+		mmContent.AddClass("tab_content");
+		mmContent.AddClass("hidden");
+		mmContent.AddContent("MM");
+		programContent.AddChildTag(mmContent);
+
+		HtmlTag dccContent("div");
+		dccContent.AddAttribute("id", "tab_dcc");
+		dccContent.AddClass("tab_content");
+		dccContent.AddClass("hidden");
+		dccContent.AddContent("DCC");
+		programContent.AddChildTag(dccContent);
+
+		content.AddChildTag(programContent);
+		content.AddChildTag(HtmlTagButtonCancel());
+		ReplyHtmlWithHeader(content);
+	}
+
+	void WebClient::HandleProgramRead(const map<string, string>& arguments)
+	{
+		controlID_t controlID = static_cast<controlID_t>(Utils::Utils::GetIntegerMapEntry(arguments, "control"));
+		address_t address = static_cast<address_t>(Utils::Utils::GetIntegerMapEntry(arguments, "address"));
+		CvNumber cv = static_cast<CvNumber>(Utils::Utils::GetIntegerMapEntry(arguments, "cv"));
+		ProgramMode mode = static_cast<ProgramMode>(Utils::Utils::GetIntegerMapEntry(arguments, "mode"));
+		switch (mode)
+		{
+			case ProgramModeDccDirect:
+			case ProgramModeDccPomLoco:
+			case ProgramModeDccPomAccessory:
+				manager.ProgramRead(controlID, mode, address, cv);
+				break;
+
+			default:
+				break;
+		}
+		ReplyHtmlWithHeaderAndParagraph(Languages::TextProgramDccRead, cv);
+	}
+
+	void WebClient::HandleProgramWrite(const map<string, string>& arguments)
+	{
+		controlID_t controlID = static_cast<controlID_t>(Utils::Utils::GetIntegerMapEntry(arguments, "control"));
+		ProgramMode mode = static_cast<ProgramMode>(Utils::Utils::GetIntegerMapEntry(arguments, "mode"));
+		address_t address = static_cast<address_t>(Utils::Utils::GetIntegerMapEntry(arguments, "address"));
+		CvNumber cv = static_cast<CvNumber>(Utils::Utils::GetIntegerMapEntry(arguments, "cv"));
+		CvValue value = static_cast<CvValue>(Utils::Utils::GetIntegerMapEntry(arguments, "value"));
+		switch (mode)
+		{
+			case ProgramModeMm:
+			case ProgramModeDccDirect:
+			case ProgramModeDccPomLoco:
+			case ProgramModeDccPomAccessory:
+				manager.ProgramWrite(controlID, mode, address, cv, value);
+				break;
+
+			default:
+				break;
+		}
+		ReplyHtmlWithHeaderAndParagraph(Languages::TextProgramDccWrite, cv, value);
+	}
+
 	void WebClient::HandleUpdater(const map<string, string>& headers)
 	{
 		Response response;
@@ -3684,6 +3832,12 @@ namespace WebServer
 		menuAdd.AddChildTag(HtmlTagButtonPopup("<svg width=\"36\" height=\"36\"><polyline points=\"1,20 10,20 30,15\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/><polyline points=\"28,17 28,20 34,20\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/></svg>", "accessorylist"));
 		menuAdd.AddChildTag(HtmlTagButtonPopup("<svg width=\"36\" height=\"36\"><polyline points=\"5,34 15,1\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/><polyline points=\"31,34 21,1\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/><polyline points=\"18,34 18,30\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/><polyline points=\"18,24 18,20\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/><polyline points=\"18,14 18,10\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/><polyline points=\"18,4 18,1\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/></svg>", "streetlist"));
 		menuAdd.AddChildTag(HtmlTagButtonPopup("<svg width=\"36\" height=\"36\"><polyline points=\"1,25 35,25\" fill=\"none\" stroke=\"black\"/><polygon points=\"4,25 4,23 8,23 8,25\" fill=\"black\" stroke=\"black\"/><polygon points=\"35,22 16,22 15,19 18,10 35,10\" stroke=\"black\" fill=\"black\"/><polygon points=\"20,12 25,12 25,15 19,15\" fill=\"white\"/><polyline points=\"26,10 30,8 26,6\" stroke=\"black\" fill=\"none\"/><circle cx=\"22\" cy=\"22\" r=\"3\"/><circle cx=\"30\" cy=\"22\" r=\"3\"/></svg>", "feedbacklist"));
+		if (manager.CanHandleProgram())
+		{
+			menuAdd.AddChildTag(HtmlTag().AddContent("&nbsp;&nbsp;&nbsp;"));
+			menuAdd.AddChildTag(HtmlTagButtonPopup("<svg width=\"36\" height=\"36\"><polyline points=\"1,5 35,5\" stroke=\"black\" stroke-width=\"1\" /><polyline points=\"1,16 35,16\" stroke=\"black\" stroke-width=\"1\" /><polyline points=\"3,3 3,18\" stroke=\"black\" stroke-width=\"1\" /><polyline points=\"6,3 6,18\" stroke=\"black\" stroke-width=\"1\" /><polyline points=\"9,3 9,18\" stroke=\"black\" stroke-width=\"1\" /><polyline points=\"12,3 12,18\" stroke=\"black\" stroke-width=\"1\" /><polyline points=\"15,3 15,18\" stroke=\"black\" stroke-width=\"1\" /><polyline points=\"18,3 18,18\" stroke=\"black\" stroke-width=\"1\" /><polyline points=\"21,3 21,18\" stroke=\"black\" stroke-width=\"1\" /><polyline points=\"24,3 24,18\" stroke=\"black\" stroke-width=\"1\" /><polyline points=\"27,3 27,18\" stroke=\"black\" stroke-width=\"1\" /><polyline points=\"30,3 30,18\" stroke=\"black\" stroke-width=\"1\" /><polyline points=\"33,3 33,18\" stroke=\"black\" stroke-width=\"1\" /><text x=\"3\" y=\"31\" fill=\"black\" >Prog</text></svg>", "program"));
+		}
+
 		menu.AddChildTag(menuAdd);
 		body.AddChildTag(menu);
 
@@ -3706,6 +3860,6 @@ namespace WebServer
 			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(Languages::GetText(Languages::TextAddFeedback)).AddAttribute("onClick", "loadPopup('/?cmd=feedbackedit&feedback=0');"))
 			));
 
-		connection->Send(HtmlFullResponse("Railcontrol", body));
+		connection->Send(HtmlFullResponse("RailControl", body));
 	}
 }; // namespace webserver

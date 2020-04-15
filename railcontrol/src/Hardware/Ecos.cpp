@@ -135,7 +135,7 @@ namespace Hardware
 		{
 			ReadLine();
 
-			if (!run)
+			if (run == false)
 			{
 				break;
 			}

@@ -45,7 +45,6 @@ namespace WebServer
 		plus.AddContent(" + ");
 		data.AddChildTag(plus);
 
-		data.AddChildTag(HtmlTag("br"));
 		AddChildTag(data);
 	}
 };

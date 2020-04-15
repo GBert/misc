@@ -25,7 +25,8 @@ along with RailControl; see the file LICENCE. If not see
 #include "DataModel/Loco.h"
 #include "DataTypes.h"
 #include "Logger/Logger.h"
-#include "Hardware/CS2.h"
+#include "Hardware/CS2Udp.h"
+#include "Hardware/CS2Tcp.h"
 #include "Hardware/CcSchnitte.h"
 #include "Hardware/Ecos.h"
 #include "Hardware/HardwareHandler.h"
@@ -45,14 +46,15 @@ namespace Hardware
 	{
 		"none",
 		"Virtual",
-		"CS2",
+		"CS2Udp",
 		"M6051",
 		"RM485",
 		"OpenDcc",
 		"Hsi88",
 		"Z21",
 		"CcSchnitte",
-		"Ecos"
+		"Ecos",
+		"CS2Tcp"
 	};
 
 	void HardwareHandler::Init(const HardwareParams* params)
@@ -63,9 +65,14 @@ namespace Hardware
 #ifdef AMALGAMATION
 		switch(type)
 		{
-			case HardwareTypeCS2:
-				createHardware = (Hardware::HardwareInterface* (*)(const Hardware::HardwareParams*))(&create_CS2);
-				destroyHardware = (void (*)(Hardware::HardwareInterface*))(&destroy_CS2);
+			case HardwareTypeCS2Udp:
+				createHardware = (Hardware::HardwareInterface* (*)(const Hardware::HardwareParams*))(&create_CS2Udp);
+				destroyHardware = (void (*)(Hardware::HardwareInterface*))(&destroy_CS2Udp);
+				break;
+
+			case HardwareTypeCS2Tcp:
+				createHardware = (Hardware::HardwareInterface* (*)(const Hardware::HardwareParams*))(&create_CS2Tcp);
+				destroyHardware = (void (*)(Hardware::HardwareInterface*))(&destroy_CS2Tcp);
 				break;
 
 			case HardwareTypeVirtual:
@@ -245,6 +252,46 @@ namespace Hardware
 		return instance->CanHandleFeedback();
 	}
 
+	bool HardwareHandler::CanHandleProgram() const
+	{
+		if (instance == nullptr)
+		{
+			return false;
+		}
+
+		return instance->CanHandleProgram();
+	}
+
+	bool HardwareHandler::CanHandleProgramMm() const
+	{
+		if (instance == nullptr)
+		{
+			return false;
+		}
+
+		return instance->CanHandleProgramMm();
+	}
+
+	bool HardwareHandler::CanHandleProgramDcc() const
+	{
+		if (instance == nullptr)
+		{
+			return false;
+		}
+
+		return instance->CanHandleProgramDcc();
+	}
+
+	bool HardwareHandler::CanHandleProgramDccPom() const
+	{
+		if (instance == nullptr)
+		{
+			return false;
+		}
+
+		return instance->CanHandleProgramDccPom();
+	}
+
 	void HardwareHandler::LocoProtocols(std::vector<protocol_t>& protocols) const
 	{
 		if (instance == nullptr)
@@ -366,43 +413,111 @@ namespace Hardware
 		instance->Accessory(signal->GetProtocol(), signal->GetAddress(), state, signal->GetDuration());
 	}
 
-	void HardwareHandler::ArgumentTypesOfHardwareType(const hardwareType_t hardwareType, std::map<unsigned char,argumentType_t>& arguments)
+	bool HardwareHandler::ProgramCheckValues(const ProgramMode mode, const CvNumber cv, const CvValue value)
+	{
+		if (cv == 0)
+		{
+			return false; // cvs are one based, so cv zero is not allowed
+		}
+		if (cv == 1 && value == 0)
+		{
+			return false; // loco/accessory address zero is not allowed for DCC decoders and can not be undone. It would destroy some DCC decoders.
+		}
+		CvNumber maxCv;
+		switch (mode)
+		{
+			case ProgramModeMm:
+				maxCv = 0x100;
+				break;
+
+			case ProgramModeDccDirect:
+			case ProgramModeDccPomLoco:
+				maxCv = 0x4000;
+				break;
+
+			case ProgramModeDccPomAccessory:
+				maxCv = 0x800;
+				break;
+
+			default:
+				return false;
+		}
+		return (cv <= maxCv);
+	}
+
+	void HardwareHandler::ProgramRead(const ProgramMode mode, const address_t address, const CvNumber cv)
+	{
+		if (ProgramCheckValues(mode, cv) == false)
+		{
+			return;
+		}
+		if (instance == nullptr)
+		{
+			return;
+		}
+
+		instance->ProgramRead(mode, address, cv);
+	}
+
+	void HardwareHandler::ProgramWrite(const ProgramMode mode, const address_t address, const CvNumber cv, const CvValue value)
+	{
+		if (ProgramCheckValues(mode, cv, value) == false)
+		{
+			return;
+		}
+		if (instance == nullptr)
+		{
+			return;
+		}
+		instance->ProgramWrite(mode, address, cv, value);
+	}
+
+	void HardwareHandler::ArgumentTypesOfHardwareTypeAndHint(const hardwareType_t hardwareType, std::map<unsigned char,argumentType_t>& arguments, std::string& hint)
 	{
 		switch (hardwareType)
 		{
-			case HardwareTypeCS2:
-				Hardware::CS2::GetArgumentTypes(arguments);
+			case HardwareTypeCS2Udp:
+				Hardware::CS2Udp::GetArgumentTypesAndHint(arguments, hint);
+				return;
+
+			case HardwareTypeCS2Tcp:
+				Hardware::CS2Tcp::GetArgumentTypesAndHint(arguments, hint);
 				return;
 
 			case HardwareTypeM6051:
-				Hardware::M6051::GetArgumentTypes(arguments);
+				Hardware::M6051::GetArgumentTypesAndHint(arguments, hint);
 				return;
 
 			case HardwareTypeRM485:
-				Hardware::RM485::GetArgumentTypes(arguments);
+				Hardware::RM485::GetArgumentTypesAndHint(arguments, hint);
 				return;
 
 			case HardwareTypeOpenDcc:
-				Hardware::OpenDcc::GetArgumentTypes(arguments);
+				Hardware::OpenDcc::GetArgumentTypesAndHint(arguments, hint);
 				return;
 
 			case HardwareTypeHsi88:
-				Hardware::Hsi88::GetArgumentTypes(arguments);
+				Hardware::Hsi88::GetArgumentTypesAndHint(arguments, hint);
 				return;
 
 			case HardwareTypeZ21:
-				Hardware::Z21::GetArgumentTypes(arguments);
+				Hardware::Z21::GetArgumentTypesAndHint(arguments, hint);
 				return;
 
 			case HardwareTypeCcSchnitte:
-				Hardware::CcSchnitte::GetArgumentTypes(arguments);
+				Hardware::CcSchnitte::GetArgumentTypesAndHint(arguments, hint);
 				return;
 
 			case HardwareTypeEcos:
-				Hardware::Ecos::GetArgumentTypes(arguments);
+				Hardware::Ecos::GetArgumentTypesAndHint(arguments, hint);
+				return;
+
+			case HardwareTypeVirtual:
+				Hardware::Virtual::GetHint(hint);
 				return;
 
 			default:
+				hint = "";
 				return;
 		}
 	}

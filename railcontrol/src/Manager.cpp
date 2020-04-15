@@ -73,7 +73,7 @@ Manager::Manager(Config& config)
 	StorageParams storageParams;
 	storageParams.module = "Sqlite";
 	storageParams.filename = config.getValue("dbfilename", "railcontrol.sqlite");
-	storage = new StorageHandler(this, storageParams);
+	storage = new StorageHandler(this, &storageParams);
 	if (storage == nullptr)
 	{
 		logger->Info(Languages::TextUnableToCreateStorageHandler);
@@ -116,6 +116,14 @@ Manager::Manager(Config& config)
 	storage->AllAccessories(accessories);
 	for (auto accessory : accessories)
 	{
+		// We set the protocol MM2 to MM when control is a CS2 or CC-Schnitte
+		// FIXME: remove again later
+		if (accessory.second->GetProtocol() == ProtocolMM2
+			&& (ControlIsOfHardwareType(accessory.second->GetControlID(), HardwareTypeCS2Udp)
+				|| ControlIsOfHardwareType(accessory.second->GetControlID(), HardwareTypeCcSchnitte)))
+		{
+			accessory.second->SetProtocol(ProtocolMM);
+		}
 		logger->Info(Languages::TextLoadedAccessory, accessory.second->GetID(), accessory.second->GetName());
 	}
 
@@ -134,12 +142,28 @@ Manager::Manager(Config& config)
 	storage->AllSwitches(switches);
 	for (auto mySwitch : switches)
 	{
+		// We set the protocol MM2 to MM when control is a CS2 or CC-Schnitte
+		// FIXME: remove again later
+		if (mySwitch.second->GetProtocol() == ProtocolMM2
+			&& (ControlIsOfHardwareType(mySwitch.second->GetControlID(), HardwareTypeCS2Udp)
+				|| ControlIsOfHardwareType(mySwitch.second->GetControlID(), HardwareTypeCcSchnitte)))
+		{
+			mySwitch.second->SetProtocol(ProtocolMM);
+		}
 		logger->Info(Languages::TextLoadedSwitch, mySwitch.second->GetID(), mySwitch.second->GetName());
 	}
 
 	storage->AllSignals(signals);
 	for (auto signal : signals)
 	{
+		// We set the protocol MM2 to MM when control is a CS2 or CC-Schnitte
+		// FIXME: remove again later
+		if (signal.second->GetProtocol() == ProtocolMM2
+			&& (ControlIsOfHardwareType(signal.second->GetControlID(), HardwareTypeCS2Udp)
+				|| ControlIsOfHardwareType(signal.second->GetControlID(), HardwareTypeCcSchnitte)))
+		{
+			signal.second->SetProtocol(ProtocolMM);
+		}
 		logger->Info(Languages::TextLoadedSignal, signal.second->GetID(), signal.second->GetName());
 	}
 
@@ -152,6 +176,14 @@ Manager::Manager(Config& config)
 	storage->AllLocos(locos);
 	for (auto loco : locos)
 	{
+		// We set the protocol MM2 to MM when control is a CS2 or CC-Schnitte
+		// FIXME: remove again later
+		if (loco.second->GetProtocol() == ProtocolMM2
+			&& (ControlIsOfHardwareType(loco.second->GetControlID(), HardwareTypeCS2Udp)
+				|| ControlIsOfHardwareType(loco.second->GetControlID(), HardwareTypeCcSchnitte)))
+		{
+			loco.second->SetProtocol(ProtocolMM);
+		}
 		logger->Info(Languages::TextLoadedLoco, loco.second->GetID(), loco.second->GetName());
 	}
 
@@ -275,21 +307,6 @@ void Manager::InitLocos()
 * Control                  *
 ***************************/
 
-const std::map<hardwareType_t,string> Manager::HardwareListNames()
-{
-	std::map<hardwareType_t,string> hardwareList;
-	hardwareList[HardwareTypeCcSchnitte] = "CC-Schnitte";
-	hardwareList[HardwareTypeEcos] = "ESU Ecos / Märklin Central Station 1 (CS1)";
-	hardwareList[HardwareTypeM6051] = "Märklin Interface 6050/6051";
-	hardwareList[HardwareTypeCS2] = "Märklin Central Station 2 (CS2)";
-	hardwareList[HardwareTypeOpenDcc] = "OpenDCC Z1";
-	hardwareList[HardwareTypeRM485] = "RM485";
-	hardwareList[HardwareTypeHsi88] = "HSI-88";
-	hardwareList[HardwareTypeVirtual] = "Virtual Command Station (no Hardware)";
-	hardwareList[HardwareTypeZ21] = "Z21 (Power On/Off only, untested)";
-	return hardwareList;
-}
-
 bool Manager::ControlSave(const controlID_t& controlID,
 	const hardwareType_t& hardwareType,
 	const std::string& name,
@@ -394,7 +411,7 @@ bool Manager::ControlDelete(controlID_t controlID)
 	return true;
 }
 
-HardwareParams* Manager::GetHardware(controlID_t controlID)
+HardwareParams* Manager::GetHardware(const controlID_t controlID)
 {
 	std::lock_guard<std::mutex> guard(hardwareMutex);
 	if (hardwareParams.count(controlID) != 1)
@@ -416,6 +433,20 @@ unsigned int Manager::ControlsOfHardwareType(const hardwareType_t hardwareType)
 		}
 	}
 	return counter;
+}
+
+bool Manager::ControlIsOfHardwareType(const controlID_t controlID, const hardwareType_t hardwareType)
+{
+	std::lock_guard<std::mutex> guard(hardwareMutex);
+	for (auto hardwareParam : hardwareParams)
+	{
+		if (hardwareParam.second->GetControlID() != controlID)
+		{
+			continue;
+		}
+		return hardwareParam.second->GetHardwareType() == hardwareType;
+	}
+	return false;
 }
 
 bool Manager::HardwareLibraryAdd(const hardwareType_t hardwareType, void* libraryHandle)
@@ -520,6 +551,21 @@ const std::map<controlID_t,std::string> Manager::FeedbackControlListNames() cons
 	for (auto control : controls)
 	{
 		if (control.second->ControlType() != ControlTypeHardware || control.second->CanHandleFeedbacks() == false)
+		{
+			continue;
+		}
+		ret[control.first] = control.second->GetName();
+	}
+	return ret;
+}
+
+const std::map<controlID_t,std::string> Manager::ProgramControlListNames() const
+{
+	std::map<controlID_t,std::string> ret;
+	std::lock_guard<std::mutex> guard(controlMutex);
+	for (auto control : controls)
+	{
+		if (control.second->ControlType() != ControlTypeHardware || control.second->CanHandleProgram() == false)
 		{
 			continue;
 		}
@@ -2837,6 +2883,112 @@ controlID_t Manager::GetControlForFeedback() const
 		}
 	}
 	return ControlIdNone;
+}
+
+void Manager::ProgramCheckBooster(const ProgramMode mode)
+{
+	switch (mode)
+	{
+		case ProgramModeDccPomLoco:
+		case ProgramModeDccPomAccessory:
+			if (boosterState == BoosterGo)
+			{
+				return;
+			}
+			Booster(ControlTypeInternal, BoosterGo);
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+			return;
+
+		default:
+			return;
+	}
+}
+
+void Manager::ProgramRead(const controlID_t controlID, const ProgramMode mode, const address_t address, const CvNumber cv)
+{
+	ControlInterface* control = GetControl(controlID);
+	if (control == nullptr)
+	{
+		return;
+	}
+	ProgramCheckBooster(mode);
+	control->ProgramRead(mode, address, cv);
+}
+
+void Manager::ProgramWrite(const controlID_t controlID, const ProgramMode mode, const address_t address, const CvNumber cv, const CvValue value)
+{
+	ControlInterface* control = GetControl(controlID);
+	if (control == nullptr)
+	{
+		return;
+	}
+	ProgramCheckBooster(mode);
+	control->ProgramWrite(mode, address, cv, value);
+}
+
+void Manager::ProgramDccValue(const CvNumber cv, const CvValue value)
+{
+	std::lock_guard<std::mutex> guard(controlMutex);
+	for (auto control : controls)
+	{
+		control.second->ProgramDccValue(cv, value);;
+	}
+}
+
+bool Manager::CanHandleProgram()
+{
+	std::lock_guard<std::mutex> guard(controlMutex);
+	for (auto control : controls)
+	{
+		bool ret = control.second->CanHandleProgram();
+		if (ret == true)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Manager::CanHandleProgramMm()
+{
+	std::lock_guard<std::mutex> guard(controlMutex);
+	for (auto control : controls)
+	{
+		bool ret = control.second->CanHandleProgramMm();
+		if (ret == true)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Manager::CanHandleProgramDccRead()
+{
+	std::lock_guard<std::mutex> guard(controlMutex);
+	for (auto control : controls)
+	{
+		bool ret = control.second->CanHandleProgramDccPom();
+		if (ret == true)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Manager::CanHandleProgramDccWrite()
+{
+	std::lock_guard<std::mutex> guard(controlMutex);
+	for (auto control : controls)
+	{
+		bool ret = control.second->CanHandleProgramDcc();
+		if (ret == true)
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 Hardware::HardwareParams* Manager::CreateAndAddControl()

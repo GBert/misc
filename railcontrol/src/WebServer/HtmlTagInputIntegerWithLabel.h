@@ -38,10 +38,12 @@ namespace WebServer
 			:	HtmlTagInputIntegerWithLabel(name, label, 0, min, max)
 			{}
 
-			HtmlTagInputIntegerWithLabel(const std::string& name, const Languages::textSelector_t label, const int value, const int min, const int max)
-			:	HtmlTag()
+			template<typename... TextArgs>
+			HtmlTagInputIntegerWithLabel(const std::string& name, const Languages::textSelector_t label, const int value, const int min, const int max, TextArgs... textArgs)
+			:	HtmlTag("div")
 			{
-				AddChildTag(HtmlTagLabel(label, name));
+				HtmlTag::AddClass("input_integer_with_label");
+				AddChildTag(HtmlTagLabel(label, name, textArgs...));
 				AddChildTag(HtmlTagInputInteger(name, value, min, max));
 			}
 

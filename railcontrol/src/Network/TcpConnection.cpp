@@ -36,7 +36,7 @@ namespace Network
 		}
 	}
 
-	int TcpConnection::Send(const char* buf, const size_t buflen, const int flags)
+	int TcpConnection::Send(const char* buffer, const size_t bufferLength, const int flags)
 	{
 		if (connectionSocket == 0 || connected == false)
 		{
@@ -61,7 +61,7 @@ namespace Network
 			errno = ETIMEDOUT;
 			return -1;
 		}
-		ret = send(connectionSocket, buf, buflen, flags | MSG_NOSIGNAL);
+		ret = send(connectionSocket, buffer, bufferLength, flags | MSG_NOSIGNAL);
 		if (ret <= 0)
 		{
 			errno = ECONNRESET;

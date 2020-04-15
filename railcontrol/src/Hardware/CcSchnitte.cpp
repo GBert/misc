@@ -53,7 +53,7 @@ namespace Hardware
 
 	CcSchnitte::~CcSchnitte()
 	{
-		if (!run)
+		if (run == false)
 		{
 			return;
 		}
@@ -61,72 +61,14 @@ namespace Hardware
 		receiverThread.join();
 	}
 
-	void CcSchnitte::Booster(const boosterState_t status)
+	void CcSchnitte::Send(const unsigned char* buffer)
 	{
 		if (!serialLine.IsConnected())
 		{
 			return;
 		}
-		unsigned char buffer[CANCommandBufferLength];
-		CreateBoosterCommand(buffer, status);
-		if (serialLine.Send(buffer, sizeof(buffer)) == -1)
-		{
-			logger->Error(Languages::TextUnableToSendDataToControl);
-		}
-	}
-
-	void CcSchnitte::LocoSpeed(const protocol_t protocol, const address_t address, const locoSpeed_t speed)
-	{
-		if (!serialLine.IsConnected())
-		{
-			return;
-		}
-		unsigned char buffer[CANCommandBufferLength];
-		CreateLocoSpeedCommand(buffer, protocol, address, speed);
-		if (serialLine.Send(buffer, sizeof(buffer)) == -1)
-		{
-			logger->Error(Languages::TextUnableToSendDataToControl);
-		}
-	}
-
-
-	void CcSchnitte::LocoDirection(const protocol_t protocol, const address_t address, const direction_t direction)
-	{
-		if (!serialLine.IsConnected())
-		{
-			return;
-		}
-		unsigned char buffer[CANCommandBufferLength];
-		CreateLocoDirectionCommand(buffer, protocol, address, direction);
-		if (serialLine.Send(buffer, sizeof(buffer)) == -1)
-		{
-			logger->Error(Languages::TextUnableToSendDataToControl);
-		}
-	}
-
-	void CcSchnitte::LocoFunction(const protocol_t protocol, const address_t address, const function_t function, const bool on)
-	{
-		if (!serialLine.IsConnected())
-		{
-			return;
-		}
-		unsigned char buffer[CANCommandBufferLength];
-		CreateLocoFunctionCommand(buffer, protocol, address, function, on);
-		if (serialLine.Send(buffer, sizeof(buffer)) == -1)
-		{
-			logger->Error(Languages::TextUnableToSendDataToControl);
-		}
-	}
-
-	void CcSchnitte::AccessoryOnOrOff(const protocol_t protocol, const address_t address, const accessoryState_t state, const bool on)
-	{
-		if (!serialLine.IsConnected())
-		{
-			return;
-		}
-		unsigned char buffer[CANCommandBufferLength];
-		CreateAccessoryCommand(buffer, protocol, address, state, on);
-		if (serialLine.Send(buffer, sizeof(buffer)) == -1)
+		logger->Hex(buffer, CANCommandBufferLength);
+		if (serialLine.Send(buffer, CANCommandBufferLength) == -1)
 		{
 			logger->Error(Languages::TextUnableToSendDataToControl);
 		}

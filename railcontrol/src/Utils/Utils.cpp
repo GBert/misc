@@ -259,6 +259,14 @@ namespace Utils
 		pthread_setschedparam(self, policy, &param);
 	}
 
+	std::string Utils::TimestampToDate(const time_t timestamp)
+	{
+		struct tm *tm = localtime(&timestamp);
+		char date[20];
+		strftime(date, sizeof(date), "%Y-%m-%d %H:%M:%S", tm);
+		return date;
+	}
+
 #ifdef __CYGWIN__
 	bool Utils::GetFilesInDir(vector<string>& filesFound, const string& path, const string& prefix)
 	{

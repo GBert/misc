@@ -43,7 +43,7 @@ using std::vector;
 
 namespace Storage
 {
-	StorageHandler::StorageHandler(Manager* manager, const StorageParams& params)
+	StorageHandler::StorageHandler(Manager* manager, const StorageParams* params)
 	:	manager(manager),
 		createStorage(nullptr),
 		destroyStorage(nullptr),
@@ -52,12 +52,12 @@ namespace Storage
 		transactionRunning(false)
 	{
 #ifdef AMALGAMATION
-		createStorage = (Storage::StorageInterface* (*)(Storage::StorageParams))(&create_Sqlite);
+		createStorage = (Storage::StorageInterface* (*)(const Storage::StorageParams*))(&create_Sqlite);
 		destroyStorage = (void (*)(Storage::StorageInterface*))(&destroy_Sqlite);
 #else
 		// generate symbol and library names
 		char* error;
-		string moduleName = "Storage/" + params.module + ".so";
+		string moduleName = "Storage/" + params->module + ".so";
 
 		Logger::Logger* logger = Logger::Logger::GetLogger("StorageHandler");
 		dlhandle = dlopen(moduleName.c_str(), RTLD_LAZY);
@@ -68,7 +68,7 @@ namespace Storage
 		}
 
 		// look for symbol create_*
-		string createSymbol = "create_" + params.module;
+		string createSymbol = "create_" + params->module;
 		createStorage_t* newCreateStorage = (createStorage_t*) dlsym(dlhandle, createSymbol.c_str());
 		error = dlerror();
 		if (error)
@@ -78,7 +78,7 @@ namespace Storage
 		}
 
 		// look for symbol destroy_*
-		string destroySymbol = "destroy_" + params.module;
+		string destroySymbol = "destroy_" + params->module;
 		destroyStorage_t* newDestroyStorage = (destroyStorage_t*) dlsym(dlhandle, destroySymbol.c_str());
 		error = dlerror();
 		if (error)

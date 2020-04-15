@@ -101,9 +101,10 @@ namespace Hardware
 
 			bool CanHandleFeedback() const override { return true; }
 
-			static void GetArgumentTypes(std::map<unsigned char,argumentType_t>& argumentTypes)
+			static void GetArgumentTypesAndHint(std::map<unsigned char,argumentType_t>& argumentTypes, std::string& hint)
 			{
 				argumentTypes[1] = SerialPort;
+				hint = Languages::GetText(Languages::TextHintRM485);
 			}
 
 		private:

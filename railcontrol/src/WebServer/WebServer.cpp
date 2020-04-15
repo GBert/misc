@@ -259,7 +259,7 @@ namespace WebServer {
 	void WebServer::TrackDelete(const trackID_t trackID, const std::string& name)
 	{
 		stringstream command;
-		command << "trackdelete;strack=" << trackID;
+		command << "trackdelete;track=" << trackID;
 		AddUpdate(command.str(), Languages::TextTrackDeleted, name);
 	}
 
@@ -352,6 +352,13 @@ namespace WebServer {
 		stringstream command;
 		command << "layerdelete;layer=" << layerID;
 		AddUpdate(command.str(), Languages::TextLayerDeleted, name);
+	}
+
+	void WebServer::ProgramDccValue(const CvNumber cv, const CvValue value)
+	{
+		stringstream command;
+		command << "dcccvvalue;cv=" << static_cast<int>(cv) << ";value=" << static_cast<int>(value);
+		AddUpdate(command.str(), Languages::TextProgramDccReadValue , static_cast<int>(cv), static_cast<int>(value));
 	}
 
 	void WebServer::AddUpdate(const string& command, const string& status)

@@ -1,9 +1,6 @@
 
-CC=gcc
-CPP=g++
-
-CFLAGS=-O2 -Wall -I.
-LDFLAGS=-ldl -lncurses -pthread
+CFLAGS+=-O2 -Wall -I.
+LDFLAGS+=-ldl -lncurses -pthread
 
 LIBS=shell.o sqlite.o
 
@@ -23,7 +20,7 @@ sqlite.o: sqlite3.c
 	#-DSQLITE_ENABLE_FTS5
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CPPFLAGS) -c -o $@ $<
 
 clean:
 	rm -f *.o *.so sqlite3

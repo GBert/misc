@@ -22,6 +22,7 @@ along with RailControl; see the file LICENCE. If not see
 
 #include <string>
 
+#include "Logger/Logger.h"
 #include "WebServer/HtmlTag.h"
 
 namespace WebServer
@@ -35,6 +36,16 @@ namespace WebServer
 			: HtmlTag("label")
 			{
 				std::string stringLabel = Languages::GetText(label);
+				stringLabel.append(":");
+				AddContent(stringLabel);
+				AddAttribute("for", reference);
+			};
+
+			template<typename... Args>
+			HtmlTagLabel(const Languages::textSelector_t label, const std::string& reference, Args... args)
+			: HtmlTag("label")
+			{
+				std::string stringLabel = Logger::Logger::Format(Languages::GetText(label), args...);
 				stringLabel.append(":");
 				AddContent(stringLabel);
 				AddAttribute("for", reference);

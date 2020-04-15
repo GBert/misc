@@ -37,6 +37,15 @@ namespace Hardware
 			bool CanHandleLocos() const override { return true; }
 			bool CanHandleAccessories() const override { return true; }
 			bool CanHandleFeedback() const override { return true; }
+			bool CanHandleProgram() const override { return true; }
+			bool CanHandleProgramMm() const override { return true; }
+			bool CanHandleProgramDcc() const override { return true; }
+			bool CanHandleProgramDccPom() const override { return true; }
+
+			static void GetHint(std::string& hint)
+			{
+				hint = Languages::GetText(Languages::TextHintVirtual);
+			}
 
 			void GetLocoProtocols(std::vector<protocol_t>& protocols) const override { protocols.push_back(ProtocolNone); }
 			bool LocoProtocolSupported(const protocol_t protocol) const override { return protocol == ProtocolNone; }
@@ -44,14 +53,12 @@ namespace Hardware
 			bool AccessoryProtocolSupported(const protocol_t protocol) const override { return protocol == ProtocolNone; }
 
 			void Booster(const boosterState_t status) override;
-
 			void LocoSpeed(const protocol_t protocol, const address_t address, const locoSpeed_t speed) override;
-
 			void LocoDirection(const protocol_t protocol, const address_t address, const direction_t direction) override;
-
 			void LocoFunction(const protocol_t protocol, const address_t address, const function_t function, const bool on) override;
-
 			void AccessoryOnOrOff(const protocol_t protocol, const address_t address, const accessoryState_t state, const bool on) override;
+			void ProgramRead(const ProgramMode mode, const address_t address, const CvNumber cv) override;
+			void ProgramWrite(const ProgramMode mode, const address_t address, const CvNumber cv, const CvValue value) override;
 
 		private:
 			Logger::Logger* logger;

@@ -1,12 +1,14 @@
 
-#CPPFLAGS+=-I. -g -O2 -Wall -Wextra -Werror -std=c++11
-#CPPFLAGSAMALGAMATION=-I. -g -O2 -Wall -Wextra -Werror -std=c++11
-#LDFLAGS=-g -Wl,--export-dynamic
-#LIBS=-lpthread -ldl
-#LIBSAMALGAMATION=-lpthread -ldl
+#CC=gcc
+#CPP=g++
+CCRASPI=aarch64-linux-gcc
+CPPRASPI=aarch64-linux-g++
+
+CPPFLAGS+=-I. -g -O2 -Wall -Wextra -Werror -std=c++11
+LDFLAGS+=-g -Wl,--export-dynamic
+LIBS=-lpthread -ldl
 
 TMPDIR=RailControl
-TMPDIRCYGWIN=/RailControl
 
 OBJ= \
 	WebServer/WebClient.o \
@@ -64,17 +66,17 @@ OBJ= \
 	WebServer/WebServer.o
 
 all: $(OBJ)
-	$(MAKE) -C Hardware
-	$(MAKE) -C Storage
+	+make -C Hardware
+	+make -C Storage
 	$(CXX) $(LDFLAGS) $(OBJ) -o railcontrol $(LIBS)
 	rm Timestamp.cpp
 	rm Timestamp.o
 
 dist: all
-	$(STRIP) railcontrol
-	$(STRIP) Hardware/*.so
-	$(STRIP) Storage/*.so
-	$(TAR) cvJf railcontrol.tar.xz Hardware/*.so Storage/*.so railcontrol railcontrol.conf.dist html/*
+	strip railcontrol
+	strip Hardware/*.so
+	strip Storage/*.so
+	tar cvJf railcontrol.tar.xz Hardware/*.so Storage/*.so railcontrol railcontrol.conf.dist html/*
 	mkdir $(TMPDIR)
 	mkdir $(TMPDIR)/Hardware
 	mkdir $(TMPDIR)/Storage

@@ -47,10 +47,11 @@ namespace Hardware
 
 			bool AccessoryProtocolSupported(protocol_t protocol) const override { return (protocol == ProtocolMM2); }
 
-			static void GetArgumentTypes(std::map<unsigned char,argumentType_t>& argumentTypes)
+			static void GetArgumentTypesAndHint(std::map<unsigned char,argumentType_t>& argumentTypes, std::string& hint)
 			{
 				argumentTypes[1] = SerialPort;
 				argumentTypes[2] = S88Modules;
+				hint = Languages::GetText(Languages::TextHintM6051);
 			}
 
 			void Booster(const boosterState_t status) override;

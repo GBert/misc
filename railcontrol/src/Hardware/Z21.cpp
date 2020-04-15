@@ -48,7 +48,9 @@ namespace Hardware
 	:	HardwareInterface(params->GetManager(), params->GetControlID(), "Z21 / " + params->GetName() + " at IP " + params->GetArg1()),
 	 	logger(Logger::Logger::GetLogger("Z21 " + params->GetName() + " " + params->GetArg1())),
 	 	run(true),
-	 	connection(logger, params->GetArg1(), Z21Port)
+	 	connection(logger, params->GetArg1(), Z21Port),
+	 	lastProgramMode(ProgramModeMm),
+	 	connected(false)
 	{
 		logger->Info(Languages::TextStarting, name);
 
@@ -233,6 +235,7 @@ namespace Hardware
 			default:
 				return;
 		}
+		SendSetLocoMode(address, protocol);
 		Utils::Utils::ShortToDataBigEndian(address | 0xC000, buffer + 6);
 		buffer[8] |=  static_cast<unsigned char>(direction) << 7;
 		buffer[9] = buffer[4] ^ buffer[5] ^ buffer[6] ^ buffer[7] ^ buffer[8];
@@ -260,24 +263,6 @@ namespace Hardware
 			return;
 		}
 		locoCache.SetSpeedDirectionProtocol(address, speed, direction, protocol);
-		switch (protocol)
-		{
-			case ProtocolMM1:
-			case ProtocolMM15:
-			case ProtocolMM2:
-				SendSetLocoModeMM(address);
-				break;
-
-			case ProtocolDCC14:
-			case ProtocolDCC28:
-			case ProtocolDCC128:
-				SendSetLocoModeDCC(address);
-				break;
-
-			default:
-				return;
-		}
-
 		LocoSpeedDirection(protocol, address, speed, direction);
 		for (size_t functionNr = 0; functionNr < functions.size(); ++functionNr)
 		{
@@ -290,24 +275,6 @@ namespace Hardware
 		if (!AccessoryProtocolSupported(protocol))
 		{
 			return;
-		}
-		protocol_t storedProtocol = turnoutCache.GetProtocol(address);
-		if (storedProtocol == ProtocolNone)
-		{
-			switch (protocol)
-			{
-				case ProtocolMM:
-					SendSetTurnoutModeMM(address);
-					break;
-
-				case ProtocolDCC:
-					SendSetTurnoutModeDCC(address);
-					break;
-
-				default:
-					return;
-			}
-			turnoutCache.SetProtocol(address, protocol);
 		}
 		AccessoryQueueEntry entry(protocol, address, state, waitTime);
 		accessoryQueue.Enqueue(entry);
@@ -345,6 +312,7 @@ namespace Hardware
 				// ProtocolNone is in queue when we should quit
 				continue;
 			}
+			SendSetTurnoutMode(entry.address, entry.protocol);
 			AccessoryOn(entry.protocol, entry.address, entry.state);
 			std::this_thread::sleep_for(std::chrono::milliseconds(entry.waitTime));
 			AccessoryOff(entry.protocol, entry.address, entry.state);
@@ -352,20 +320,140 @@ namespace Hardware
 		logger->Info(Languages::TextTerminatingAccessorySenderThread);
 	}
 
+	void Z21::ProgramRead(const ProgramMode mode, const address_t address, const CvNumber cv)
+	{
+		switch (mode)
+		{
+			case ProgramModeDccDirect:
+				logger->Info(Languages::TextProgramDccRead, cv);
+				ProgramDccRead(cv);
+				break;
+
+			case ProgramModeDccPomLoco:
+				logger->Info(Languages::TextProgramDccPomLocoRead, address, cv);
+				ProgramDccPom(PomLoco, PomReadByte, address, cv);
+				break;
+
+			case ProgramModeDccPomAccessory:
+				logger->Info(Languages::TextProgramDccPomAccessoryRead, address, cv);
+				ProgramDccPom(PomAccessory, PomReadByte, address, cv);
+				break;
+
+			default:
+				return;
+		}
+		lastProgramMode = mode;
+	}
+
+	void Z21::ProgramWrite(const ProgramMode mode, const address_t address, const CvNumber cv, const CvValue value)
+	{
+		switch (mode)
+		{
+			case ProgramModeMm:
+				logger->Info(Languages::TextProgramMm, cv, static_cast<int>(value));
+				ProgramMm(cv, value);
+				break;
+
+			case ProgramModeDccDirect:
+				logger->Info(Languages::TextProgramDccWrite, cv, static_cast<int>(value));
+				ProgramDccWrite(cv, value);
+				break;
+
+			case ProgramModeDccPomLoco:
+				logger->Info(Languages::TextProgramDccPomLocoWrite, address, cv, value);
+				ProgramDccPom(PomLoco, PomWriteByte, address, cv, value);
+				break;
+
+			case ProgramModeDccPomAccessory:
+				logger->Info(Languages::TextProgramDccPomAccessoryWrite, address, cv, value);
+				ProgramDccPom(PomAccessory, PomWriteByte, address, cv, value);
+				break;
+
+			default:
+				return;
+		}
+		lastProgramMode = mode;
+	}
+
+	void Z21::ProgramMm(const CvNumber cv, const CvValue value)
+	{
+		const unsigned char zeroBasedCv = static_cast<unsigned char>((cv - 1) & 0xFF);
+		unsigned char buffer[10] = { 0x0A, 0x00, 0x40, 0x00, 0x24, 0xFF, 0x00, zeroBasedCv, value };
+		buffer[9] = buffer[4] ^ buffer[5] ^ buffer[6] ^ buffer[7] ^ buffer[8];
+		Send(buffer, sizeof(buffer));
+	}
+
+	void Z21::ProgramDccRead(const CvNumber cv)
+	{
+		const CvNumber zeroBasedCv = cv - 1;
+		unsigned char buffer[9] = { 0x09, 0x00, 0x40, 0x00, 0x23, 0x11};
+		Utils::Utils::ShortToDataBigEndian(zeroBasedCv, buffer + 6);
+		buffer[8] = buffer[4] ^ buffer[5] ^ buffer[6] ^ buffer[7];
+		Send(buffer, sizeof(buffer));
+	}
+
+	void Z21::ProgramDccWrite(const CvNumber cv, const CvValue value)
+	{
+		const CvNumber zeroBasedCv = cv - 1;
+		unsigned char buffer[10] = { 0x0A, 0x00, 0x40, 0x00, 0x24, 0x12};
+		Utils::Utils::ShortToDataBigEndian(zeroBasedCv, buffer + 6);
+		buffer[8] = value;
+		buffer[9] = buffer[4] ^ buffer[5] ^ buffer[6] ^ buffer[7] ^ buffer[8];
+		Send(buffer, sizeof(buffer));
+	}
+
+	void Z21::ProgramDccPom(const PomDB0 db0, const PomOption option, const address_t address, const CvNumber cv, const CvValue value)
+	{
+		address_t internalAddress = address;
+		if (db0 == PomAccessory)
+		{
+			internalAddress <<= 4;
+		}
+		const CvNumber OptionAndZeroBasedCv = option | ((cv - 1) & 0x03FF);
+		unsigned char buffer[12] = { 0x0C, 0x00, 0x40, 0x00, 0xE6, db0 };
+		Utils::Utils::ShortToDataBigEndian(internalAddress, buffer + 6);
+		Utils::Utils::ShortToDataBigEndian(OptionAndZeroBasedCv, buffer + 8);
+		buffer[10] = value;
+		buffer[11] = buffer[4] ^ buffer[5] ^ buffer[6] ^ buffer[7] ^ buffer[8] ^ buffer[9] ^ buffer[10];
+		Send(buffer, sizeof(buffer));
+	}
+
+	void Z21::StartUpConnection()
+	{
+		SendGetSerialNumber();
+		SendGetHardwareInfo();
+		SendGetCode();
+		SendBroadcastFlags(static_cast<BroadCastFlag>(
+			BroadCastFlagBasic
+			| BroadCastFlagRBus
+			| BroadCastFlagAllLoco
+			| BroadCastFlagCanDetector));
+		SendGetDetectorState();
+	}
+
 	void Z21::HeartBeatSender()
 	{
 		Utils::Utils::SetMinThreadPriority();
 		Utils::Utils::SetThreadName("Z21 Heartbeat Sender");
 		logger->Info(Languages::TextHeartBeatThreadStarted);
-		unsigned int counter = 0;
+		const unsigned int counterMask = 0x07;
+		unsigned int counter = counterMask;
 		while(run)
 		{
 			std::this_thread::sleep_for(std::chrono::seconds(1));
 			++counter;
-			counter &= 0x0F;
-			if (counter != 0)
+			counter &= counterMask;
+			if (counter > 0)
 			{
 				continue;
+			}
+			if (connected)
+			{
+				connected = false;
+			}
+			else
+			{
+				StartUpConnection();
 			}
 			SendGetStatus();
 		}
@@ -376,19 +464,6 @@ namespace Hardware
 	{
 		Utils::Utils::SetThreadName("Z21 Receiver");
 		logger->Info(Languages::TextReceiverThreadStarted);
-
-		SendGetSerialNumber();
-		SendGetHardwareInfo();
-		SendGetCode();
-		SendBroadcastFlags(static_cast<broadCastFlags_t>(BroadCastFlagBasic
-			| BroadCastFlagRBus
-			| BroadCastFlagSystemState
-			| BroadCastFlagAllLoco
-			| BroadCastFlagCanDetector
-			| BroadCastFlagLocoNetBasic
-			| BroadCastFlagLocoNetLoco
-			| BroadCastFlagLocoNetSwitch
-			| BroadCastFlagLocoNetDetector));
 
 		unsigned char buffer[Z21CommandBufferLength];
 		while(run)
@@ -416,7 +491,7 @@ namespace Hardware
 			ssize_t dataRead = 0;
 			while (dataRead < dataLength)
 			{
-				ssize_t ret = InterpretData(buffer + dataRead, dataLength - dataRead);
+				ssize_t ret = ParseData(buffer + dataRead, dataLength - dataRead);
 				if (ret == -1)
 				{
 					break;
@@ -427,7 +502,7 @@ namespace Hardware
 		logger->Info(Languages::TextTerminatingReceiverThread);
 	}
 
-	ssize_t Z21::InterpretData(unsigned char* buffer, size_t bufferLength)
+	ssize_t Z21::ParseData(const unsigned char* buffer, size_t bufferLength)
 	{
 		unsigned short dataLength = Utils::Utils::DataLittleEndianToShort(buffer);
 		if (dataLength < 4 || dataLength > bufferLength)
@@ -435,17 +510,17 @@ namespace Hardware
 			return -1;
 		}
 
-		unsigned short header = Utils::Utils::DataLittleEndianToShort(buffer + 2);
+		uint16_t header = Utils::Utils::DataLittleEndianToShort(buffer + 2);
 		switch(header)
 		{
-			case 0x10:
+			case HeaderSerialNumber:
 			{
 				unsigned int serialNumber = Utils::Utils::DataLittleEndianToInt(buffer + 4);
 				logger->Info(Languages::TextSerialNumberIs, serialNumber);
 				break;
 			}
 
-			case 0x18:
+			case HeaderCode:
 				switch (buffer[4])
 				{
 					case FeaturesNotRestricted:
@@ -465,7 +540,7 @@ namespace Hardware
 				}
 				break;
 
-			case 0x1A:
+			case HeaderHardwareInfo:
 			{
 				unsigned int hardwareType = Utils::Utils::DataLittleEndianToInt(buffer + 4);
 				const char* hardwareTypeText;
@@ -503,282 +578,44 @@ namespace Hardware
 				break;
 			}
 
-			case 0x40:
-				switch (buffer[4])
-				{
-					case 0x43:
-					{
-						accessoryState_t state;
-						logger->Debug("Turnout command received");
-						switch (buffer[7])
-						{
-							case 0x01:
-								state = false;
-								break;
-
-							case 0x02:
-								state = true;
-								break;
-
-							default:
-								return dataLength;
-						}
-						const address_t zeroBasedAddress = Utils::Utils::DataBigEndianToInt(buffer + 5);
-						const address_t address = zeroBasedAddress + 1;
-						logger->Debug("Address: {0}", address);
-						const protocol_t protocol = turnoutCache.GetProtocol(address);
-						logger->Debug("Protocol: {0}", protocol);
-						logger->Debug("State: {0}", state);
-						manager->AccessoryState(ControlTypeHardware, controlID, protocol, address, state);
-						break;
-					}
-
-					case 0x61:
-						switch (buffer[5])
-						{
-							case 0x00:
-								if (buffer[6] != 0x61)
-								{
-									logger->Error(Languages::TextCheckSumError);
-								}
-								manager->Booster(ControlTypeHardware, BoosterStop);
-								break;
-
-							case 0x01:
-								if (buffer[6] != 0x60)
-								{
-									logger->Error(Languages::TextCheckSumError);
-								}
-								manager->Booster(ControlTypeHardware, BoosterGo);
-								break;
-
-							case 0x02:
-								logger->Warning(Languages::TextNotImplemented, __FILE__, __LINE__);
-								break;
-
-							case 0x08:
-								if (buffer[6] != 0x69)
-								{
-									logger->Error(Languages::TextCheckSumError);
-								}
-								manager->Booster(ControlTypeHardware, BoosterStop);
-								break;
-
-							case 0x12:
-								logger->Warning(Languages::TextNotImplemented, __FILE__, __LINE__);
-								break;
-
-							case 0x13:
-								logger->Warning(Languages::TextNotImplemented, __FILE__, __LINE__);
-								break;
-
-							case 0x82:
-								logger->Warning(Languages::TextZ21DoesNotUnderstand);
-								break;
-						}
-						break;
-
-					case 0x62:
-						logger->Warning(Languages::TextNotImplemented, __FILE__, __LINE__);
-						break;
-
-					case 0x63:
-						logger->Warning(Languages::TextNotImplemented, __FILE__, __LINE__);
-						break;
-
-					case 0x64:
-						logger->Warning(Languages::TextNotImplemented, __FILE__, __LINE__);
-						break;
-
-					case 0x81:
-						logger->Warning(Languages::TextNotImplemented, __FILE__, __LINE__);
-						break;
-
-					case 0xEF:
-					{
-						const address_t address = Utils::Utils::DataBigEndianToInt(buffer + 5) | 0x3FFF;
-						const bool used = (buffer[6] >> 3) & 0x01;
-						logger->Debug(used ? "Fremd gesteuert" : "RailControl gesteuert");
-						logger->Debug("Address: {0}", address);
-						const unsigned char protocolType = buffer[6] & 0x07;
-						protocol_t protocol;
-						const unsigned char speedData = buffer[7] & 0x7F;
-						locoSpeed_t newSpeed;
-						protocol_t storedProtocol = locoCache.GetProtocol(address);
-						logger->Debug("Stored Protocol: {0}", storedProtocol);
-						switch (protocolType)
-						{
-							case 0:
-								switch (storedProtocol)
-								{
-									case ProtocolNone:
-										locoCache.SetProtocol(address, ProtocolDCC14);
-										#include "Fallthrough.h"
-
-									case ProtocolDCC14:
-										protocol = ProtocolDCC14;
-										break;
-
-									case ProtocolMM1:
-										protocol = ProtocolMM1;
-										break;
-
-									default:
-										logger->Error(Languages::TextActualAndStoredProtocolsDiffer, protocolSymbols[ProtocolDCC14], protocolSymbols[storedProtocol]);
-										return dataLength;
-								}
-								newSpeed = DecodeSpeed14(speedData);
-								break;
-
-							case 2:
-								switch (storedProtocol)
-								{
-									case ProtocolNone:
-										locoCache.SetProtocol(address, ProtocolDCC28);
-										#include "Fallthrough.h"
-
-									case ProtocolDCC28:
-										protocol = ProtocolDCC28;
-										break;
-
-									case ProtocolMM15:
-										protocol = ProtocolMM15;
-										break;
-
-									default:
-										logger->Error(Languages::TextActualAndStoredProtocolsDiffer, protocolSymbols[ProtocolDCC28], protocolSymbols[storedProtocol]);
-										return dataLength;
-								}
-								newSpeed = DecodeSpeed28(speedData);
-								break;
-
-							case 4:
-								switch (storedProtocol)
-								{
-									case ProtocolNone:
-										locoCache.SetProtocol(address, ProtocolDCC128);
-										#include "Fallthrough.h"
-
-									case ProtocolDCC128:
-										protocol = ProtocolDCC128;
-										break;
-
-									case ProtocolMM2:
-										protocol = ProtocolMM2;
-										break;
-
-									default:
-										logger->Error(Languages::TextActualAndStoredProtocolsDiffer, protocolSymbols[ProtocolDCC128], protocolSymbols[storedProtocol]);
-										return dataLength;
-								}
-								newSpeed = DecodeSpeed128(speedData);
-								break;
-
-							default:
-								return dataLength;
-						}
-						logger->Debug("Actual Protocol: {0}", protocol);
-						const locoSpeed_t oldSpeed = locoCache.GetSpeed(address);
-						logger->Debug("Old speed: {0}", oldSpeed);
-						logger->Debug("New speed: {0}", newSpeed);
-						if (newSpeed != oldSpeed)
-						{
-							locoCache.SetSpeed(address, newSpeed);
-							manager->LocoSpeed(ControlTypeHardware, controlID, protocol, address, newSpeed);
-						}
-						const direction_t newDirection = (buffer[7] >> 7) ? DirectionRight : DirectionLeft;
-						const direction_t oldDirection = locoCache.GetDirection(address);
-						logger->Debug("Old Direction: {0}", oldDirection);
-						logger->Debug("New Direction: {0}", newDirection);
-						if (newDirection != oldDirection)
-						{
-							locoCache.SetDirection(address, newDirection);
-							manager->LocoDirection(ControlTypeHardware, controlID, protocol, address, newDirection);
-						}
-						const uint32_t oldFunctions = locoCache.GetFunctions(address);
-						const uint32_t f0 = (static_cast<uint32_t>(buffer[8]) >> 4) & 0x01;
-						const uint32_t f1_4 = (static_cast<uint32_t>(buffer[8]) << 1) & 0x1E;
-						const uint32_t f5_12 = static_cast<uint32_t>(buffer[9]) << 5;
-						const uint32_t f13_20 = static_cast<uint32_t>(buffer[9]) << 13;
-						const uint32_t f21_28 = static_cast<uint32_t>(buffer[9]) << 21;
-						const uint32_t newFunctions = f0 | f1_4 | f5_12 | f13_20 | f21_28;
-						logger->Debug("Old Functions: {0}", oldFunctions);
-						logger->Debug("New Functions: {0}", newFunctions);
-						if (newFunctions != oldFunctions)
-						{
-							const uint32_t functionsDiff = newFunctions ^ oldFunctions;
-							for (function_t function = 0; function <= 28; ++function)
-							{
-								const bool stateChange = (functionsDiff >> function) & 0x01;
-								if (stateChange)
-								{
-									const bool newState = (newFunctions >> function) & 0x01;
-									locoCache.SetFunction(address, function, newState);
-									manager->LocoFunction(ControlTypeHardware, controlID, protocol, address, function, newState);
-								}
-							}
-						}
-						break;
-					}
-
-					case 0xF3:
-						logger->Warning(Languages::TextNotImplemented, __FILE__, __LINE__);
-						break;
-
-					default:
-						break;
-				}
+			case HeaderSeeXHeader:
+				ParseXHeader(buffer);
 				break;
 
-			case 0x51:
+			case HeaderBroadcastFlags:
 				logger->Warning(Languages::TextNotImplemented, __FILE__, __LINE__);
 				break;
 
-			case 0x60:
+			case HeaderLocoMode:
 				logger->Warning(Languages::TextNotImplemented, __FILE__, __LINE__);
 				break;
 
-			case 0x70:
+			case HeaderTurnoutMode:
 				logger->Warning(Languages::TextNotImplemented, __FILE__, __LINE__);
 				break;
 
-			case 0x80:
+			case HeaderRmBusData:
 				logger->Warning(Languages::TextNotImplemented, __FILE__, __LINE__);
 				break;
 
-			case 0x84:
-				logger->Debug("Ignoring System State");
-				break;
-
-			case 0x88:
+			case HeaderSystemData:
 				logger->Warning(Languages::TextNotImplemented, __FILE__, __LINE__);
 				break;
 
-			case 0xA0:
-				// FIXME
-				logger->Debug("LocoNet 0xA0 received");
-				break;
-
-			case 0xA1:
-				// FIXME
-				logger->Debug("LocoNet 0xA1 received");
-				break;
-
-			case 0xA2:
-				// FIXME
-				logger->Debug("LocoNet 0xA2 received");
-				break;
-
-			case 0xA3:
+			case HeaderRailComtData:
 				logger->Warning(Languages::TextNotImplemented, __FILE__, __LINE__);
 				break;
 
-			case 0xA4:
-				logger->Warning(Languages::TextNotImplemented, __FILE__, __LINE__);
+			case HeaderLocoNetRx:
+			case HeaderLocoNetTx:
+			case HeaderLocoNetLan:
+			case HeaderLocoNetDispatch:
+			case HeaderLocoNetDetector:
+				// we do not parse LocoNet data
 				break;
 
-			case 0xC4:
-				logger->Warning(Languages::TextNotImplemented, __FILE__, __LINE__);
+			case HeaderDetector:
+				ParseDetectorData(buffer);
 				break;
 
 			default:
@@ -786,6 +623,291 @@ namespace Hardware
 				return -1;
 		}
 		return dataLength;
+	}
+
+	void Z21::ParseXHeader(const unsigned char* buffer)
+	{
+		unsigned char xHeader = buffer[4];
+		switch (xHeader)
+		{
+			case XHeaderTurnoutInfo:
+				ParseTurnoutData(buffer);
+				break;
+
+			case XHeaderSeeDB0:
+				ParseDB0(buffer);
+				break;
+
+			case XHeaderStatusChanged:
+				connected = true;
+				break;
+
+			case XHeaderVersion:
+				logger->Warning(Languages::TextNotImplemented, __FILE__, __LINE__);
+				break;
+
+			case XHeaderCvResult:
+				ParseCvData(buffer);
+				break;
+
+			case XHeaderBcStopped:
+				logger->Warning(Languages::TextNotImplemented, __FILE__, __LINE__);
+				break;
+
+			case XHeaderLocoInfo:
+				ParseLocoData(buffer);
+				break;
+
+			case XHeaderFirmwareVersion:
+				logger->Warning(Languages::TextNotImplemented, __FILE__, __LINE__);
+				break;
+
+			default:
+				break;
+		}
+	}
+
+	void Z21::ParseDB0(const unsigned char* buffer)
+	{
+		switch (buffer[5])
+		{
+			case DB0PowerOff:
+				if (buffer[6] != 0x61)
+				{
+					logger->Error(Languages::TextCheckSumError);
+				}
+				logger->Debug(Languages::TextBoosterIsTurnedOff);
+				manager->Booster(ControlTypeHardware, BoosterStop);
+				break;
+
+			case DB0PowerOn:
+				if (buffer[6] != 0x60)
+				{
+					logger->Error(Languages::TextCheckSumError);
+				}
+				logger->Debug(Languages::TextBoosterIsTurnedOn);
+				manager->Booster(ControlTypeHardware, BoosterGo);
+				break;
+
+			case DB0ProgrammingMode:
+				if (buffer[6] != 0x63)
+				{
+					logger->Error(Languages::TextCheckSumError);
+				}
+				logger->Debug(Languages::TextProgrammingMode);
+				manager->Booster(ControlTypeHardware, BoosterStop);
+				break;
+
+			case DB0ShortCircuit:
+				if (buffer[6] != 0x69)
+				{
+					logger->Error(Languages::TextCheckSumError);
+				}
+				logger->Debug(Languages::TextShortCircuit);
+				manager->Booster(ControlTypeInternal, BoosterStop);
+				break;
+
+			case DB0CvShortCircuit:
+				if (buffer[6] != 0x73)
+				{
+					logger->Error(Languages::TextCheckSumError);
+				}
+				logger->Debug(Languages::TextShortCircuit);
+				manager->Booster(ControlTypeInternal, BoosterStop);
+				break;
+
+			case DB0CvNack:
+				if (buffer[6] != 0x72)
+				{
+					logger->Error(Languages::TextCheckSumError);
+				}
+				logger->Debug(Languages::TextNoAnswerFromDecoder);
+				break;
+
+			case DB0UnknownCommand:
+				logger->Warning(Languages::TextZ21DoesNotUnderstand);
+				break;
+		}
+	}
+
+	void Z21::ParseTurnoutData(const unsigned char* buffer)
+	{
+		accessoryState_t state;
+		switch (buffer[7])
+		{
+			case 0x01:
+				state = false;
+				break;
+
+			case 0x02:
+				state = true;
+				break;
+
+			default:
+				return;
+		}
+		const address_t zeroBasedAddress = Utils::Utils::DataBigEndianToShort(buffer + 5);
+		const address_t address = zeroBasedAddress + 1;
+		const protocol_t protocol = turnoutCache.GetProtocol(address);
+		manager->AccessoryState(ControlTypeHardware, controlID, protocol, address, state);
+	}
+
+	void Z21::ParseLocoData(const unsigned char* buffer)
+	{
+		const address_t address = Utils::Utils::DataBigEndianToShort(buffer + 5) & 0x3FFF;
+		const unsigned char protocolType = buffer[7] & 0x07;
+		protocol_t protocol;
+		const unsigned char speedData = buffer[8] & 0x7F;
+		locoSpeed_t newSpeed;
+		protocol_t storedProtocol = locoCache.GetProtocol(address);
+		switch (protocolType)
+		{
+			case 0:
+				switch (storedProtocol)
+				{
+					case ProtocolDCC14:
+						protocol = ProtocolDCC14;
+						break;
+
+					case ProtocolMM1:
+						protocol = ProtocolMM1;
+						break;
+
+					default:
+						locoCache.SetProtocol(address, ProtocolDCC14);
+						protocol = ProtocolDCC14;
+						logger->Warning(Languages::TextActualAndStoredProtocolsDiffer, protocolSymbols[ProtocolDCC14], protocolSymbols[storedProtocol]);
+						break;
+				}
+				newSpeed = DecodeSpeed14(speedData);
+				break;
+
+			case 2:
+				switch (storedProtocol)
+				{
+					case ProtocolDCC28:
+						protocol = ProtocolDCC28;
+						break;
+
+					case ProtocolMM15:
+						protocol = ProtocolMM15;
+						break;
+
+					default:
+						locoCache.SetProtocol(address, ProtocolDCC28);
+						protocol = ProtocolDCC28;
+						logger->Warning(Languages::TextActualAndStoredProtocolsDiffer, protocolSymbols[ProtocolDCC28], protocolSymbols[storedProtocol]);
+						break;
+				}
+				newSpeed = DecodeSpeed28(speedData);
+				break;
+
+			case 4:
+				switch (storedProtocol)
+				{
+					case ProtocolDCC128:
+						protocol = ProtocolDCC128;
+						break;
+
+					case ProtocolMM2:
+						protocol = ProtocolMM2;
+						break;
+
+					default:
+						locoCache.SetProtocol(address, ProtocolDCC128);
+						protocol = ProtocolDCC128;
+						logger->Warning(Languages::TextActualAndStoredProtocolsDiffer, protocolSymbols[ProtocolDCC128], protocolSymbols[storedProtocol]);
+						break;
+				}
+				newSpeed = DecodeSpeed128(speedData);
+				break;
+
+			default:
+				return;
+		}
+		const locoSpeed_t oldSpeed = locoCache.GetSpeed(address);
+		if (newSpeed != oldSpeed)
+		{
+			locoCache.SetSpeed(address, newSpeed);
+			manager->LocoSpeed(ControlTypeHardware, controlID, protocol, address, newSpeed);
+		}
+		const direction_t newDirection = (buffer[8] >> 7) ? DirectionRight : DirectionLeft;
+		const direction_t oldDirection = locoCache.GetDirection(address);
+		if (newDirection != oldDirection)
+		{
+			locoCache.SetDirection(address, newDirection);
+			manager->LocoDirection(ControlTypeHardware, controlID, protocol, address, newDirection);
+		}
+		const uint32_t oldFunctions = locoCache.GetFunctions(address);
+		const uint32_t f0 = (static_cast<uint32_t>(buffer[9]) >> 4) & 0x01;
+		const uint32_t f1_4 = (static_cast<uint32_t>(buffer[9]) << 1) & 0x1E;
+		const uint32_t f5_12 = static_cast<uint32_t>(buffer[10]) << 5;
+		const uint32_t f13_20 = static_cast<uint32_t>(buffer[11]) << 13;
+		const uint32_t f21_28 = static_cast<uint32_t>(buffer[12]) << 21;
+		const uint32_t newFunctions = f0 | f1_4 | f5_12 | f13_20 | f21_28;
+		if (newFunctions == oldFunctions)
+		{
+			return;
+		}
+		const uint32_t functionsDiff = newFunctions ^ oldFunctions;
+		for (function_t function = 0; function <= 28; ++function)
+		{
+			const bool stateChange = (functionsDiff >> function) & 0x01;
+			if (stateChange == false)
+			{
+				continue;
+			}
+			const bool newState = (newFunctions >> function) & 0x01;
+			locoCache.SetFunction(address, function, newState);
+			manager->LocoFunction(ControlTypeHardware, controlID, protocol, address, function, newState);
+		}
+	}
+
+	void Z21::ParseCvData(const unsigned char* buffer)
+	{
+		if (buffer[5] != 0x14)
+		{
+			logger->Error(Languages::TextCheckSumError);
+			return;
+		}
+		if (lastProgramMode == ProgramModeMm)
+		{
+			return;
+		}
+		const CvNumber cv = Utils::Utils::DataBigEndianToShort(buffer + 6) + 1;
+		const CvValue value = buffer[8];
+		logger->Debug(Languages::TextProgramDccReadValue, cv, value);
+		manager->ProgramDccValue(cv, value);
+	}
+
+	void Z21::ParseDetectorData(const unsigned char* buffer)
+	{
+		feedbackPin_t pin = Utils::Utils::DataLittleEndianToShort(buffer + 6);
+		uint8_t port = buffer[8];
+		--pin;
+		pin <<= 3;
+		pin += port;
+		++pin;
+		uint8_t type = buffer[9];
+		uint16_t value1 = Utils::Utils::DataLittleEndianToShort(buffer + 10);
+		DataModel::Feedback::feedbackState_t state;
+		switch (type)
+		{
+			case 0x01:
+			{
+				value1 >>= 12;
+				value1 &= 0x0001;
+				state = static_cast<DataModel::Feedback::feedbackState_t>(value1);
+				break;
+			}
+
+			default:
+			{
+				state = (value1 > 0 ? DataModel::Feedback::FeedbackStateOccupied : DataModel::Feedback::FeedbackStateFree);
+				break;
+			}
+		}
+		manager->FeedbackState(controlID, pin, state);
 	}
 
 	void Z21::SendGetSerialNumber()
@@ -812,20 +934,35 @@ namespace Hardware
 		Send(buffer, sizeof(buffer));
 	}
 
+	void Z21::SendGetDetectorState()
+	{
+		unsigned char buffer[7] = { 0x07, 0x00, 0xC4, 0x00, 0x00, 0x00, 0xD0 };
+		Send(buffer, sizeof(buffer));
+	}
+
 	void Z21::SendLogOff()
 	{
 		char buffer[4] = { 0x04, 0x00, 0x30, 0x00 };
 		Send(buffer, sizeof(buffer));
 	}
 
-	void Z21::SendBroadcastFlags(const broadCastFlags_t flags)
+	void Z21::SendBroadcastFlags()
+	{
+		SendBroadcastFlags(static_cast<BroadCastFlag>(
+			BroadCastFlagBasic
+			| BroadCastFlagRBus
+			| BroadCastFlagAllLoco
+			| BroadCastFlagCanDetector));
+	}
+
+	void Z21::SendBroadcastFlags(const BroadCastFlag flags)
 	{
 		unsigned char buffer[8] = { 0x08, 0x00, 0x50, 0x00 };
 		Utils::Utils::IntToDataLittleEndian(flags, buffer + 4);
 		Send(buffer, sizeof(buffer));
 	}
 
-	void Z21::SendSetMode(const address_t address, const commands_t command, const protocolMode_t mode)
+	void Z21::SendSetMode(const address_t address, const Command command, const ProtocolMode mode)
 	{
 		switch (command)
 		{
@@ -858,6 +995,33 @@ namespace Hardware
 		Send(buffer, sizeof(buffer));
 	}
 
+	void Z21::SendSetLocoMode(const address_t address, const protocol_t protocol)
+	{
+		const protocol_t storedProtocol = locoCache.GetProtocol(address);
+		if (storedProtocol == protocol)
+		{
+			return;
+		}
+		switch (protocol)
+		{
+			case ProtocolMM1:
+			case ProtocolMM15:
+			case ProtocolMM2:
+				SendSetLocoModeMM(address);
+				break;
+
+			case ProtocolDCC14:
+			case ProtocolDCC28:
+			case ProtocolDCC128:
+				SendSetLocoModeDCC(address);
+				break;
+
+			default:
+				return;
+		}
+		locoCache.SetProtocol(address, protocol);
+	}
+
 	void Z21::SendSetLocoModeMM(const address_t address)
 	{
 		SendSetMode(address, CommandSetLocoMode, ProtocolModeMM);
@@ -866,6 +1030,29 @@ namespace Hardware
 	void Z21::SendSetLocoModeDCC(const address_t address)
 	{
 		SendSetMode(address, CommandSetLocoMode, ProtocolModeDCC);
+	}
+
+	void Z21::SendSetTurnoutMode(const address_t address, const protocol_t protocol)
+	{
+		protocol_t storedProtocol = turnoutCache.GetProtocol(address);
+		if (storedProtocol == protocol)
+		{
+			return;
+		}
+		switch (protocol)
+		{
+			case ProtocolMM:
+				SendSetTurnoutModeMM(address);
+				break;
+
+			case ProtocolDCC:
+				SendSetTurnoutModeDCC(address);
+				break;
+
+			default:
+				return;
+		}
+		turnoutCache.SetProtocol(address, protocol);
 	}
 
 	void Z21::SendSetTurnoutModeMM(const address_t address)

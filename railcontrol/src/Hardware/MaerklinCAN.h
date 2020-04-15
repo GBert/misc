@@ -23,6 +23,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "HardwareInterface.h"
 #include "HardwareParams.h"
 #include "Logger/Logger.h"
+#include "Utils/Utils.h"
 
 // CAN protocol specification at http://streaming.maerklin.de/public-media/cs2/cs2CAN-Protokoll-2_0.pdf
 
@@ -33,13 +34,63 @@ namespace Hardware
 		public:
 			MaerklinCAN() = delete;
 
+			bool CanHandleLocos() const override { return true; }
+			bool CanHandleAccessories() const override { return true; }
+			bool CanHandleFeedback() const override { return true; }
+
+			void GetLocoProtocols(std::vector<protocol_t> &protocols) const override
+			{
+				protocols.push_back(ProtocolMM);
+				protocols.push_back(ProtocolMFX);
+				protocols.push_back(ProtocolDCC);
+			}
+
+			bool LocoProtocolSupported(protocol_t protocol) const override
+			{
+				return (protocol == ProtocolMM || protocol == ProtocolMFX || protocol == ProtocolDCC);
+			}
+
+			void GetAccessoryProtocols(std::vector<protocol_t> &protocols) const override
+			{
+				protocols.push_back(ProtocolMM);
+				protocols.push_back(ProtocolDCC);
+			}
+
+			bool AccessoryProtocolSupported(protocol_t protocol) const override
+			{
+				return (protocol == ProtocolMM || protocol == ProtocolDCC);
+			}
+
+			void Booster(const boosterState_t status) override;
+			void LocoSpeed(const protocol_t protocol, const address_t address, const locoSpeed_t speed) override;
+			void LocoDirection(const protocol_t protocol, const address_t address, const direction_t direction) override;
+			void LocoFunction(const protocol_t protocol, const address_t address, const function_t function, const bool on) override;
+			void AccessoryOnOrOff(const protocol_t protocol, const address_t address, const accessoryState_t state, const bool on) override;
+
 		protected:
 
-			typedef unsigned char canPrio_t;
-			typedef unsigned char canCommand_t;
-			typedef unsigned char canResponse_t;
-			typedef unsigned char canLength_t;
-			typedef uint32_t canAddress_t;
+			enum CanCommand : unsigned char
+			{
+				CanCommandSystem = 0x00,
+				CanCommandLocoSpeed = 0x04,
+				CanCommandLocoDirection = 0x05,
+				CanCommandLocoFunction = 0x06,
+				CanCommandAccessory = 0x0B,
+				CanCommandS88Event = 0x11
+			};
+			enum CanSubCommand : unsigned char
+			{
+				CanSubCommandStop = 0x00,
+				CanSubCommandGo = 0x01
+			};
+			enum CanResponse : unsigned char
+			{
+				CanResponseCommand = 0x00,
+				CanResponseResponse = 0x01
+			};
+			typedef unsigned char CanPrio;
+			typedef unsigned char CanLength;
+			typedef uint32_t CanAddress;
 
 			MaerklinCAN(Manager* manager, controlID_t controlID, Logger::Logger* logger, std::string name)
 			:	HardwareInterface(manager, controlID, name),
@@ -48,16 +99,6 @@ namespace Hardware
 
 			virtual ~MaerklinCAN() {}
 
-			void CreateBoosterCommand(unsigned char* buffer, const boosterState_t status);
-			void CreateLocoSpeedCommand(unsigned char* buffer, const protocol_t protocol, const address_t address, const locoSpeed_t speed);
-			void CreateLocoDirectionCommand(unsigned char* buffer, const protocol_t protocol, const address_t address, const direction_t direction);
-			void CreateLocoFunctionCommand(unsigned char* buffer, const protocol_t protocol, const address_t address, const function_t function, const bool on);
-			void CreateAccessoryCommand(unsigned char* buffer, const protocol_t protocol, const address_t address, const accessoryState_t state, const bool on);
-
-			void CreateCommandHeader(unsigned char* buffer, const canPrio_t prio, const canCommand_t command, const canResponse_t response, const canLength_t length);
-			void ReadCommandHeader(const unsigned char* buffer, canPrio_t& prio, canCommand_t& command, canResponse_t& response, canLength_t& length, canAddress_t& address, protocol_t& protocol);
-			void CreateLocID(unsigned char* buffer, const protocol_t& protocol, const address_t& address);
-			void CreateAccessoryID(unsigned char* buffer, const protocol_t& protocol, const address_t& address);
 			void Parse(const unsigned char* buffer);
 
 			static const unsigned char CANCommandBufferLength = 13;
@@ -66,6 +107,43 @@ namespace Hardware
 
 		private:
 			static const unsigned short hash = 0x7337;
+
+			void CreateCommandHeader(unsigned char* buffer, const CanPrio prio, const CanCommand command, const CanResponse response, const CanLength length);
+			void ParseAddressProtocol(const unsigned char* buffer, CanAddress& address, protocol_t& protocol);
+
+			CanPrio ParsePrio(const unsigned char* buffer)
+			{
+				return buffer[0] >> 1;
+			}
+
+			CanCommand ParseCommand(const unsigned char* buffer)
+			{
+				return static_cast<CanCommand>((CanCommand)(buffer[0]) << 7 | (CanCommand)(buffer[1]) >> 1);
+			}
+
+			CanSubCommand ParseSubCommand(const unsigned char* buffer)
+			{
+				return static_cast<CanSubCommand>(buffer[9]);
+			}
+
+			CanResponse ParseResponse(const unsigned char* buffer)
+			{
+				return static_cast<CanResponse>(buffer[1] & 0x01);
+			}
+
+			CanLength ParseLength(const unsigned char* buffer)
+			{
+				return buffer[4];
+			}
+
+			CanAddress ParseAddress(const unsigned char* buffer)
+			{
+				return Utils::Utils::DataBigEndianToInt(buffer + 5);
+			}
+
+			void CreateLocID(unsigned char* buffer, const protocol_t& protocol, const address_t& address);
+			void CreateAccessoryID(unsigned char* buffer, const protocol_t& protocol, const address_t& address);
+			virtual void Send(const unsigned char* buffer) = 0;
 	};
 } // namespace
 

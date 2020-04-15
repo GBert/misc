@@ -1,3 +1,79 @@
+function onClickProgramRead(cv)
+{
+	var controlElement = document.getElementById('controlraw');
+	if (!controlElement)
+	{
+		return false;
+	}
+	var control = controlElement.value;
+
+	var modeElement = document.getElementById('s_moderaw');
+	if (!modeElement)
+	{
+		return false;
+	}
+	var mode = modeElement.value;
+
+	var addressElement = document.getElementById('addressraw');
+	if (!addressElement)
+	{
+		return false;
+	}
+	var address = addressElement.value;
+
+	var cvElement = document.getElementById('cvraw');
+	if (!cvElement)
+	{
+		return false;
+	}
+	var cv = cvElement.value;
+
+	var url = '?cmd=programread&control=' + control + '&mode=' + mode + '&address=' + address + '&cv=' + cv;
+	fireRequestAndForget(url);
+	return false;
+}
+
+function onClickProgramWrite()
+{
+	var controlElement = document.getElementById('controlraw');
+	if (!controlElement)
+	{
+		return false;
+	}
+	var control = controlElement.value;
+
+	var modeElement = document.getElementById('s_moderaw');
+	if (!modeElement)
+	{
+		return false;
+	}
+	var mode = modeElement.value;
+
+	var addressElement = document.getElementById('addressraw');
+	if (!addressElement)
+	{
+		return false;
+	}
+	var address = addressElement.value;
+
+	var cvElement = document.getElementById('cvraw');
+	if (!cvElement)
+	{
+		return false;
+	}
+	var cv = cvElement.value;
+
+	var valueElement = document.getElementById('valueraw');
+	if (!valueElement)
+	{
+		return false;
+	}
+	var value = valueElement.value;
+	var url = '?cmd=programwrite&control=' + control + '&mode=' + mode + '&address=' + address + '&cv=' + cv + '&value=' + value;
+	fireRequestAndForget(url);
+	return false;
+}
+
 function updateName()
 {
 	var nameField = document.getElementById('name');
@@ -728,6 +804,17 @@ function dataUpdate(event)
 	else if (command == 'layersettings' || command == 'layerdelete')
 	{
 		loadLayerSelector();
+	}
+	else if (command == 'dcccvvalue')
+	{
+		var cv = argumentMap.get('cv');
+		var value = argumentMap.get('value');
+		var elementName = 'valueraw';
+		var element = document.getElementById(elementName);
+		if (element)
+		{
+			element.value = value;
+		}
 	}
 }
 

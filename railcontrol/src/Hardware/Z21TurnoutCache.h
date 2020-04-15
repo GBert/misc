@@ -53,7 +53,7 @@ namespace Hardware
 			{
 				if (cache.count(address) == 0)
 				{
-					return ProtocolNone;
+					return ProtocolDCC;
 				}
 				return cache[address].protocol;
 			}

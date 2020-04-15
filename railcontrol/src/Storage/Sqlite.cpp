@@ -39,7 +39,7 @@ namespace Storage
 {
 
 	// create instance of sqlite
-	extern "C" SQLite* create_Sqlite(const StorageParams& params)
+	extern "C" SQLite* create_Sqlite(const StorageParams* params)
 	{
 		return new SQLite(params);
 	}
@@ -50,8 +50,8 @@ namespace Storage
 		delete (sqlite);
 	}
 
-	SQLite::SQLite(const StorageParams& params)
-	:	filename(params.filename),
+	SQLite::SQLite(const StorageParams* params)
+	:	filename(params->filename),
 	 	logger(Logger::Logger::GetLogger("SQLite"))
 	{
 		logger->Info(Languages::TextOpeningSQLite, filename);

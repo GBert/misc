@@ -20,36 +20,38 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
-#include <string>
-#include <thread>
-#include <vector>
+#include "HardwareParams.h"
+#include "Hardware/MaerklinCAN.h"
+#include "Logger/Logger.h"
+#include "Network/TcpClient.h"
 
-#include "Network/TcpConnection.h"
-
-struct sockaddr;
-
-namespace Network
+namespace Hardware
 {
-	class TcpServer
+	class CS2Tcp : protected MaerklinCAN
 	{
 		public:
-			TcpServer() = delete;
+			CS2Tcp(const HardwareParams* params);
+			~CS2Tcp();
 
-		protected:
-			TcpServer(const unsigned short port, const std::string& threadName);
-			virtual ~TcpServer();
-			void TerminateTcpServer();
-
-			virtual void Work(Network::TcpConnection* connection) = 0;
+			static void GetArgumentTypesAndHint(std::map<unsigned char,argumentType_t>& argumentTypes, std::string& hint)
+			{
+				argumentTypes[1] = IpAddress;
+				hint = Languages::GetText(Languages::TextHintCs2Tcp);
+			}
 
 		private:
-			void SocketCreateBindListen(int family, struct sockaddr* address);
-			void Worker(int socket);
-
 			volatile bool run;
-			std::vector<std::thread> serverThreads;
-			std::vector<TcpConnection*> connections;
-			std::string error;
-			const std::string threadName;
+			Network::TcpConnection connection;
+			std::thread receiverThread;
+
+			void Send(const unsigned char* buffer) override;
+			void Receiver();
+
+			static const unsigned short CS2Port = 15731;
 	};
-}
+
+	extern "C" CS2Tcp* create_CS2Tcp(const HardwareParams* params);
+	extern "C" void destroy_CS2Tcp(CS2Tcp* cs2tcp);
+
+} // namespace
+

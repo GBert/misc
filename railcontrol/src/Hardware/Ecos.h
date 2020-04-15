@@ -57,9 +57,10 @@ namespace Hardware
 				return (protocol == ProtocolServer);
 			}
 
-			static void GetArgumentTypes(std::map<unsigned char,argumentType_t>& argumentTypes)
+			static void GetArgumentTypesAndHint(std::map<unsigned char,argumentType_t>& argumentTypes, std::string& hint)
 			{
 				argumentTypes[1] = IpAddress;
+				hint = Languages::GetText(Languages::TextHintEcos);
 			}
 
 			void Booster(const boosterState_t status) override

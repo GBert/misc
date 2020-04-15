@@ -48,12 +48,13 @@ namespace Hardware
 
 			bool AccessoryProtocolSupported(protocol_t protocol) const override { return (protocol == ProtocolDCC); }
 
-			static void GetArgumentTypes(std::map<unsigned char,argumentType_t>& argumentTypes)
+			static void GetArgumentTypesAndHint(std::map<unsigned char,argumentType_t>& argumentTypes, std::string& hint)
 			{
 				argumentTypes[1] = SerialPort;
 				argumentTypes[2] = S88Modules;
 				argumentTypes[3] = S88Modules;
 				argumentTypes[4] = S88Modules;
+				hint = Languages::GetText(Languages::TextHintOpenDcc);
 			}
 
 			void Booster(const boosterState_t status) override;

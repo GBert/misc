@@ -33,6 +33,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "Manager.h"
 #include "Network/Select.h"
 #include "RailControl.h"
+#include "Timestamp.h"
 #include "Utils/Utils.h"
 
 using std::vector;
@@ -77,6 +78,7 @@ int main (int argc, char* argv[])
 	logger->AddConsoleLogger();
 	logger->AddFileLogger(LogFileName);
 	logger->Info(Languages::TextStarting, RailControl);
+	logger->Info(Languages::TextVersion, Utils::Utils::TimestampToDate(GetCompileTime()));
 
 	Config config(argc == 2 ? argv[1] : "railcontrol.conf");
 

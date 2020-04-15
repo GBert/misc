@@ -32,13 +32,13 @@ along with RailControl; see the file LICENCE. If not see
 namespace Storage
 {
 	// the types of the class factories
-	typedef Storage::StorageInterface* createStorage_t(struct StorageParams params);
+	typedef Storage::StorageInterface* createStorage_t(const StorageParams* params);
 	typedef void destroyStorage_t(Storage::StorageInterface*);
 
 	class StorageHandler
 	{
 		public:
-			StorageHandler(Manager* manager, const StorageParams& params);
+			StorageHandler(Manager* manager, const StorageParams* params);
 			~StorageHandler();
 			void AllHardwareParams(std::map<controlID_t,Hardware::HardwareParams*>& hardwareParams);
 			void DeleteHardwareParams(const controlID_t controlID);
