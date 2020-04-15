@@ -49,6 +49,8 @@ define Package/railcontrol/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/Hardware/*.so $(1)/opt/railcontrol/Hardware
 	$(INSTALL_DIR) $(1)/opt/railcontrol/Storage
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/Storage/*.so $(1)/opt/railcontrol/Storage
+	$(INSTALL_DIR) $(1)/opt/railcontrol/html
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/html/* $(1)/opt/railcontrol/html/
 endef
 
 
