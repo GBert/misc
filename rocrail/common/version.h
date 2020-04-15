@@ -1,11 +1,14 @@
 const int revisionnr = 
-627
+630
 ;
 const char* commithash = 
-"5094810aeb828e37177bb5850cce3edea459e53f";
+"a1e2285c2a68914207e7120ed85419ffe404807a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"630 2020-04-14 15:04:43 +0200 loc: set recorded schedule as generated\n" \
+"629 2020-04-14 14:53:19 +0200 loc: record schedule\n" \
+"628 2020-04-13 17:25:52 +0200 WIO: PT support\n" \
 "627 2020-04-12 14:54:46 +0200 loc: fix for V0 on swap mutex timeout (deadlock)\n" \
 "626 2020-04-12 11:11:03 +0200 cleanstamp in all block types\n" \
 "625 2020-04-12 11:08:38 +0200 wio: trace RailCom type name\n" \
