@@ -1,11 +1,13 @@
 const int revisionnr = 
-630
+632
 ;
 const char* commithash = 
-"a1e2285c2a68914207e7120ed85419ffe404807a";
+"0dea249023b5074ede213521db81d4bd471e119c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"632 2020-04-15 16:06:23 +0200 loc: swap function rename\n" \
+"631 2020-04-15 10:19:51 +0200 finddest: regard swap timer\n" \
 "630 2020-04-14 15:04:43 +0200 loc: set recorded schedule as generated\n" \
 "629 2020-04-14 14:53:19 +0200 loc: record schedule\n" \
 "628 2020-04-13 17:25:52 +0200 WIO: PT support\n" \
