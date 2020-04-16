@@ -1,11 +1,16 @@
 const int revisionnr = 
-632
+637
 ;
 const char* commithash = 
-"0dea249023b5074ede213521db81d4bd471e119c";
+"3598c48c83bbc7f173a34932eb8447b777bb86b5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"637 2020-04-16 19:18:28 +0200 xmlscript: regard @ prefix for variable in condition\n" \
+"636 2020-04-16 15:50:47 +0200 action: allow all block commands\n" \
+"635 2020-04-16 15:09:15 +0200 router,location: fix for forcing first free subblock\n" \
+"634 2020-04-16 13:43:00 +0200 blockdialog: actions waiton/waitoff added\n" \
+"633 2020-04-16 10:34:42 +0200 action: support added for nonecommuter\n" \
 "632 2020-04-15 16:06:23 +0200 loc: swap function rename\n" \
 "631 2020-04-15 10:19:51 +0200 finddest: regard swap timer\n" \
 "630 2020-04-14 15:04:43 +0200 loc: set recorded schedule as generated\n" \
