@@ -345,7 +345,7 @@ int add_loco(struct loco_data_t *loco) {
 	l->ft = loco->ft;
 	l->mfxtype = loco->mfxtype;
 	l->intraction = loco->intraction;
-	HASH_ADD(hh, loco_data, name, strlen(l->name), l);
+	HASH_ADD_STR(loco_data, name, l);
 	HASH_ADD(hha, loco_data_by_uid, uid, sizeof(int), l);
     } else {
 	check_modify(loco->major, l->major);
@@ -595,6 +595,14 @@ void print_loco_names(FILE *file) {
 	fprintf(file, "[lok]\n");
 	fprintf(file, " .name=%s\n", l->name);
 	if (l->number) fprintf(file, " .nr=%u\n", l->number);
+    }
+}
+
+void print_locos_short(FILE *file) {
+    struct loco_data_t *l;
+
+    for (l = loco_data; l != NULL; l = l->hh.next) {
+	fprintf(file, "%16s 0x%04x\n", l->name, l->uid);
     }
 }
 
