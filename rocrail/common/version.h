@@ -1,11 +1,13 @@
 const int revisionnr = 
-637
+639
 ;
 const char* commithash = 
-"3598c48c83bbc7f173a34932eb8447b777bb86b5";
+"bfae9d06df04de62dad60835bd1d8d189575241a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"639 2020-04-17 12:14:23 +0200 xmlscript: fix for - comparator\n" \
+"638 2020-04-17 10:43:17 +0200 bidib: auto sysenable and SoD\n" \
 "637 2020-04-16 19:18:28 +0200 xmlscript: regard @ prefix for variable in condition\n" \
 "636 2020-04-16 15:50:47 +0200 action: allow all block commands\n" \
 "635 2020-04-16 15:09:15 +0200 router,location: fix for forcing first free subblock\n" \
