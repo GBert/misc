@@ -1,11 +1,13 @@
 const int revisionnr = 
-639
+641
 ;
 const char* commithash = 
-"bfae9d06df04de62dad60835bd1d8d189575241a";
+"1a0777a19dcb9947cd1d196d4a0aa0ba507dcf9f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"641 2020-04-18 18:20:22 +0200 wio: sent also date and temp. on clock commands\n" \
+"640 2020-04-18 18:19:48 +0200 rocpro: config button added\n" \
 "639 2020-04-17 12:14:23 +0200 xmlscript: fix for - comparator\n" \
 "638 2020-04-17 10:43:17 +0200 bidib: auto sysenable and SoD\n" \
 "637 2020-04-16 19:18:28 +0200 xmlscript: regard @ prefix for variable in condition\n" \
