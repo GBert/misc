@@ -1,11 +1,16 @@
 const int revisionnr = 
-641
+646
 ;
 const char* commithash = 
-"1a0777a19dcb9947cd1d196d4a0aa0ba507dcf9f";
+"4871bc9807be4cc214688634814a18ad89d552e5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"646 2020-04-19 14:41:11 +0200 loc: allow zero function mapping address\n" \
+"645 2020-04-19 12:06:12 +0200 loc: allow zero address for function mapping\n" \
+"644 2020-04-19 10:57:02 +0200 hue: tracelevel correction for not supported sensor status\n" \
+"643 2020-04-19 10:31:54 +0200 hue: fix for free memory type\n" \
+"642 2020-04-19 07:43:10 +0200 SpDrS60: alt blinkin dir container\n" \
 "641 2020-04-18 18:20:22 +0200 wio: sent also date and temp. on clock commands\n" \
 "640 2020-04-18 18:19:48 +0200 rocpro: config button added\n" \
 "639 2020-04-17 12:14:23 +0200 xmlscript: fix for - comparator\n" \
