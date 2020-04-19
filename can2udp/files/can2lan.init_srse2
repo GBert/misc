@@ -12,8 +12,11 @@ start() {
 	[ -e /www/config/ ] && {
 		rm -f /var/run/can2lan.pid
 		can2lan -T30 -mc /www/config -b eth0
+		# -g respond to CAN pings - WDP special
+		# can2lan -mg -c /www/config -b eth0
+		# Wifi 
 		# can2lan -T30 -mc /www/config -b apcli0
-		# Wifi
+		# or Wifi 
 		# can2lan -T30 -mc /www/config -b br-wlan
 	}
 
