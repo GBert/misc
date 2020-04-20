@@ -70,7 +70,7 @@ namespace Hardware
 			bool CanHandleFeedback() const override { return true; }
 			bool CanHandleProgram() const override { return true; }
 			bool CanHandleProgramMm() const override { return true; }
-			bool CanHandleProgramDcc() const override { return true; }
+			bool CanHandleProgramDccDirect() const override { return true; }
 			bool CanHandleProgramDccPom() const override { return true; }
 
 			void GetLocoProtocols(std::vector<protocol_t>& protocols) const override

@@ -72,7 +72,8 @@ namespace Hardware
 			bool CanHandleLocos() const override;
 			bool CanHandleProgram() const override;
 			bool CanHandleProgramMm() const override;
-			bool CanHandleProgramDcc() const override;
+			bool CanHandleProgramMfx() const override;
+			bool CanHandleProgramDccDirect() const override;
 			bool CanHandleProgramDccPom() const override;
 			void LocoDirection(const controlType_t controlType, const DataModel::Loco* loco, const direction_t direction) override;
 			void LocoFunction(const controlType_t controlType, const DataModel::Loco* loco, const function_t function, const bool on) override;

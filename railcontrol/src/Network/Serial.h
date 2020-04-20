@@ -37,13 +37,15 @@ namespace Network
 				const unsigned int dataSpeed, // from termio (ex. B9600)
 				const unsigned char dataBits,
 				const char parity,
-				const unsigned char stopBits)
+				const unsigned char stopBits,
+				const bool hardwareFlowControl = false)
 			:	logger(logger),
 			 	tty(tty),
 			 	dataSpeed(dataSpeed),
 			 	dataBits(dataBits),
 			 	parity(parity),
-			 	stopBits(stopBits)
+			 	stopBits(stopBits),
+			 	hardwareFlowControl(hardwareFlowControl)
 			{
 				Init();
 			}
@@ -92,6 +94,7 @@ namespace Network
 			const unsigned char dataBits;
 			const char parity;
 			const unsigned char stopBits;
+			const bool hardwareFlowControl;
 			int fileHandle;
 			mutable std::mutex fileHandleMutex;
 	};

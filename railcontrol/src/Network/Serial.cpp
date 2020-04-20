@@ -47,15 +47,15 @@ namespace Network
 		switch (dataBits)
 		{
 			case 5:
-				options.c_cflag |= CS5;     // 8 data bits
+				options.c_cflag |= CS5;     // 5 data bits
 				break;
 
 			case 6:
-				options.c_cflag |= CS6;     // 8 data bits
+				options.c_cflag |= CS6;     // 6 data bits
 				break;
 
 			case 7:
-				options.c_cflag |= CS7;     // 8 data bits
+				options.c_cflag |= CS7;     // 7 data bits
 				break;
 
 			case 8:
@@ -87,7 +87,10 @@ namespace Network
 		}
 
 		// CSIZE not set: no datasize
-		//options.c_cflag |= CRTSCTS;  // hardware flow control
+		if (hardwareFlowControl == true)
+		{
+			options.c_cflag |= CRTSCTS;  // hardware flow control
+		}
 		options.c_cflag |= CLOCAL;  // ignore control lines
 		options.c_cflag |= CREAD;   // enable receiver
 		tcsetattr(fileHandle, TCSANOW, &options); // store options

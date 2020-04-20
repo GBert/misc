@@ -3612,6 +3612,7 @@ namespace WebServer
 
 		map<ProgramMode,Languages::textSelector_t> programModeOptions;
 		programModeOptions[ProgramModeMm] = Languages::TextProgramModeMm;
+		//programModeOptions[ProgramModeMmPom] = Languages::TextProgramModeMmPom;
 		programModeOptions[ProgramModeDccDirect] = Languages::TextProgramModeDccDirect;
 		programModeOptions[ProgramModeDccPomLoco] = Languages::TextProgramModeDccPomLoco;
 		programModeOptions[ProgramModeDccPomAccessory] = Languages::TextProgramModeDccPomAccessory;
@@ -3652,16 +3653,22 @@ namespace WebServer
 	void WebClient::HandleProgramRead(const map<string, string>& arguments)
 	{
 		controlID_t controlID = static_cast<controlID_t>(Utils::Utils::GetIntegerMapEntry(arguments, "control"));
-		address_t address = static_cast<address_t>(Utils::Utils::GetIntegerMapEntry(arguments, "address"));
 		CvNumber cv = static_cast<CvNumber>(Utils::Utils::GetIntegerMapEntry(arguments, "cv"));
 		ProgramMode mode = static_cast<ProgramMode>(Utils::Utils::GetIntegerMapEntry(arguments, "mode"));
 		switch (mode)
 		{
 			case ProgramModeDccDirect:
+				manager.ProgramRead(controlID, mode, 0, cv);
+				break;
+
 			case ProgramModeDccPomLoco:
 			case ProgramModeDccPomAccessory:
+			case ProgramModeMfx:
+			{
+				address_t address = static_cast<address_t>(Utils::Utils::GetIntegerMapEntry(arguments, "address"));
 				manager.ProgramRead(controlID, mode, address, cv);
 				break;
+			}
 
 			default:
 				break;
@@ -3673,17 +3680,24 @@ namespace WebServer
 	{
 		controlID_t controlID = static_cast<controlID_t>(Utils::Utils::GetIntegerMapEntry(arguments, "control"));
 		ProgramMode mode = static_cast<ProgramMode>(Utils::Utils::GetIntegerMapEntry(arguments, "mode"));
-		address_t address = static_cast<address_t>(Utils::Utils::GetIntegerMapEntry(arguments, "address"));
 		CvNumber cv = static_cast<CvNumber>(Utils::Utils::GetIntegerMapEntry(arguments, "cv"));
 		CvValue value = static_cast<CvValue>(Utils::Utils::GetIntegerMapEntry(arguments, "value"));
 		switch (mode)
 		{
 			case ProgramModeMm:
 			case ProgramModeDccDirect:
+				manager.ProgramWrite(controlID, mode, 0, cv, value);
+				break;
+
+			case ProgramModeMmPom:
 			case ProgramModeDccPomLoco:
 			case ProgramModeDccPomAccessory:
+			case ProgramModeMfx:
+			{
+				address_t address = static_cast<address_t>(Utils::Utils::GetIntegerMapEntry(arguments, "address"));
 				manager.ProgramWrite(controlID, mode, address, cv, value);
 				break;
+			}
 
 			default:
 				break;
@@ -3712,7 +3726,7 @@ namespace WebServer
 			if (ok == false)
 			{
 				// FIXME: use signaling instead of sleep
-				std::this_thread::sleep_for(std::chrono::milliseconds(100));
+				Utils::Utils::SleepForMilliseconds(100);
 				continue;
 			}
 

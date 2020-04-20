@@ -21,13 +21,13 @@
 #pragma once
 
 #include "Hardware/HardwareParams.h"
-#include "Hardware/MaerklinCAN.h"
+#include "Hardware/ProtocolMaerklinCAN.h"
 #include "Logger/Logger.h"
 #include "Network/Serial.h"
 
 namespace Hardware
 {
-	class CcSchnitte : MaerklinCAN
+	class CcSchnitte : ProtocolMaerklinCAN
 	{
 		public:
 			CcSchnitte(const HardwareParams* params);

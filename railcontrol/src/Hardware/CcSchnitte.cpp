@@ -34,11 +34,11 @@ namespace Hardware
 	}
 
 	CcSchnitte::CcSchnitte(const HardwareParams* params)
-	:	MaerklinCAN(params->GetManager(),
+	:	ProtocolMaerklinCAN(params->GetManager(),
 			params->GetControlID(),
 			Logger::Logger::GetLogger("CC-Schnitte " + params->GetName() + " " + params->GetArg1()),
 			"CC-Schnitte / " + params->GetName() + " at serial port " + params->GetArg1()),
-	 	serialLine(logger, params->GetArg1(), B500000, 8, 'N', 1),
+	 	serialLine(logger, params->GetArg1(), B500000, 8, 'N', 1, true),
 		run(false)
 	{
 		logger->Info(Languages::TextStarting, name);
@@ -87,10 +87,21 @@ namespace Hardware
 				return;
 			}
 			unsigned char buffer[CANCommandBufferLength];
-			if (serialLine.ReceiveExact(buffer, sizeof(buffer)) != sizeof(buffer))
+			ssize_t datalen = serialLine.ReceiveExact(buffer, sizeof(buffer));
+			if (run == false)
+			{
+				break;
+			}
+			if (datalen == 0)
 			{
 				continue;
 			}
+			if (datalen != sizeof(buffer))
+			{
+				logger->Error(Languages::TextInvalidDataReceived);
+				continue;
+			}
+			logger->Hex(buffer, sizeof(buffer));
 			Parse(buffer);
 		}
 		logger->Info(Languages::TextTerminatingReceiverThread);

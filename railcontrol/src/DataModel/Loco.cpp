@@ -46,7 +46,7 @@ namespace DataModel
 				}
 			}
 			logger->Info(Languages::TextWaitingUntilHasStopped, name);
-			std::this_thread::sleep_for(std::chrono::seconds(1));
+			Utils::Utils::SleepForSeconds(1);
 		}
 		DeleteSlaves();
 	}
@@ -335,7 +335,7 @@ namespace DataModel
 				}
 			}
 			// FIXME: make configurable
-			std::this_thread::sleep_for(std::chrono::seconds(1));
+			Utils::Utils::SleepForSeconds(1);
 		}
 	}
 

@@ -17,17 +17,20 @@ LIBS= \
 
 all: $(LIBS)
 
-CS2Tcp.so: CS2Tcp.cpp *.h ../Manager.h ../Languages.h MaerklinCAN.cpp
+CS2Tcp.so: CS2Tcp.o ProtocolMaerklinCAN.o *.h ../Manager.h ../Languages.h
 	$(CXX) $(CPPFLAGS) $(LDFLAGS)$@ -o $@ MaerklinCAN.cpp $<
 
-CS2Udp.so: CS2Udp.cpp *.h ../Manager.h ../Languages.h MaerklinCAN.cpp
+CS2Udp.so: CS2Udp.o ProtocolMaerklinCAN.o *.h ../Manager.h ../Languages.h
 	$(CXX) $(CPPFLAGS) $(LDFLAGS)$@ -o $@ MaerklinCAN.cpp $<
 
-CcSchnitte.so: CcSchnitte.cpp *.h ../Manager.h ../Languages.h MaerklinCAN.cpp
+CcSchnitte.so: CcSchnitte.o ProtocolMaerklinCAN.o *.h ../Manager.h ../Languages.h
 	$(CXX) $(CPPFLAGS) $(LDFLAGS)$@ -o $@ MaerklinCAN.cpp $<
 
 %.so: %.cpp *.h ../Manager.h ../Languages.h
 	$(CXX) $(CPPFLAGS) $(LDFLAGS)$@ -o $@ $<
+
+%.o: %.cpp *.h ../*.h ../Logger/*.h ../Languages.h
+	$(CXX) $(CPPFLAGS) -c -o $@ $< 
 
 clean:
 	rm -f *.so

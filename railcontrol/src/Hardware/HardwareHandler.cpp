@@ -272,14 +272,24 @@ namespace Hardware
 		return instance->CanHandleProgramMm();
 	}
 
-	bool HardwareHandler::CanHandleProgramDcc() const
+	bool HardwareHandler::CanHandleProgramMfx() const
 	{
 		if (instance == nullptr)
 		{
 			return false;
 		}
 
-		return instance->CanHandleProgramDcc();
+		return instance->CanHandleProgramMfx();
+	}
+
+	bool HardwareHandler::CanHandleProgramDccDirect() const
+	{
+		if (instance == nullptr)
+		{
+			return false;
+		}
+
+		return instance->CanHandleProgramDccDirect();
 	}
 
 	bool HardwareHandler::CanHandleProgramDccPom() const
@@ -427,11 +437,13 @@ namespace Hardware
 		switch (mode)
 		{
 			case ProgramModeMm:
+			case ProgramModeMmPom:
 				maxCv = 0x100;
 				break;
 
 			case ProgramModeDccDirect:
 			case ProgramModeDccPomLoco:
+			case ProgramModeMfx:
 				maxCv = 0x4000;
 				break;
 

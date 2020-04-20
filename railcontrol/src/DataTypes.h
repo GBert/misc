@@ -216,6 +216,8 @@ enum direction_t : bool
 enum ProgramMode : uint8_t
 {
 	ProgramModeMm,
+	ProgramModeMmPom,
+	ProgramModeMfx,
 	ProgramModeDccDirect,
 	ProgramModeDccPomLoco,
 	ProgramModeDccPomAccessory

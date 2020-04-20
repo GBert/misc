@@ -21,6 +21,7 @@ along with RailControl; see the file LICENCE. If not see
 #pragma once
 
 #include <climits>
+#include <future>
 #include <map>
 #include <string>
 #include <vector>
@@ -66,6 +67,8 @@ namespace Utils
 			}
 			static void SetMinThreadPriority();
 			static std::string TimestampToDate(const time_t timestamp);
+			static void SleepForSeconds(int seconds) { std::this_thread::sleep_for(std::chrono::seconds(seconds)); }
+			static void SleepForMilliseconds(int milliSeconds) { std::this_thread::sleep_for(std::chrono::milliseconds(milliSeconds)); }
 #ifdef __CYGWIN__
 		private:
 			static bool GetFilesInDir(std::vector<std::string>& filesFound, const std::string& path, const std::string& prefix);

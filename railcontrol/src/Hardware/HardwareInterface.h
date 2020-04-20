@@ -20,13 +20,13 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
-#include <future>
 #include <map>
 #include <string>
 #include <vector>
 
 #include "DataTypes.h"
 #include "Manager.h"
+#include "Utils/Utils.h"
 
 namespace Hardware
 {
@@ -62,8 +62,11 @@ namespace Hardware
 			// can this control handle program Märklin Motorola
 			virtual bool CanHandleProgramMm() const { return false; }
 
+			// can this control handle program mfx
+			virtual bool CanHandleProgramMfx() const { return false; }
+
 			// can this control handle programming DCC CV
-			virtual bool CanHandleProgramDcc() const { return false; }
+			virtual bool CanHandleProgramDccDirect() const { return false; }
 
 			// can this control handle programming DCC CV POM
 			virtual bool CanHandleProgramDccPom() const { return false; }
@@ -95,11 +98,15 @@ namespace Hardware
 			// set loco
 			virtual void LocoSpeedDirectionFunctions(const protocol_t protocol, const address_t address, const locoSpeed_t speed, const direction_t direction, std::vector<bool>& functions)
 			{
+				// sleeps are necessary to prevent command overflow in command stations (especially Märklin Gleisbox)
 				LocoSpeed(protocol, address, speed);
+				Utils::Utils::SleepForMilliseconds(25);
 				LocoDirection(protocol, address, direction);
+				Utils::Utils::SleepForMilliseconds(25);
 				for (size_t functionNr = 0; functionNr < functions.size(); ++functionNr)
 				{
 					LocoFunction(protocol, address, functionNr, functions[functionNr]);
+					Utils::Utils::SleepForMilliseconds(25);
 				}
 			}
 
@@ -126,7 +133,7 @@ namespace Hardware
 		private:
 			static void AccessoryOnOrOffStatic(HardwareInterface* hardware, const protocol_t protocol, const address_t address, const accessoryState_t state, const waitTime_t waitTime)
 			{
-				std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
+				Utils::Utils::SleepForMilliseconds(waitTime);
 				hardware->AccessoryOnOrOff(protocol, address, state, false);
 			}
 	};

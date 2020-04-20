@@ -30,6 +30,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "DataTypes.h"
 #include "Languages.h"
 #include "RailControl.h"
+#include "Utils/Utils.h"
 #include "WebServer/WebClient.h"
 #include "WebServer/WebServer.h"
 
@@ -68,7 +69,7 @@ namespace WebServer {
 			updates[++updateID] = GetStatus(Languages::TextStoppingRailControl);
 		}
 		TerminateTcpServer();
-		std::this_thread::sleep_for(std::chrono::seconds(1));
+		Utils::Utils::SleepForSeconds(1);
 		run = false;
 
 		// stopping all clients
@@ -354,11 +355,11 @@ namespace WebServer {
 		AddUpdate(command.str(), Languages::TextLayerDeleted, name);
 	}
 
-	void WebServer::ProgramDccValue(const CvNumber cv, const CvValue value)
+	void WebServer::ProgramValue(const CvNumber cv, const CvValue value)
 	{
 		stringstream command;
 		command << "dcccvvalue;cv=" << static_cast<int>(cv) << ";value=" << static_cast<int>(value);
-		AddUpdate(command.str(), Languages::TextProgramDccReadValue , static_cast<int>(cv), static_cast<int>(value));
+		AddUpdate(command.str(), Languages::TextProgramReadValue , static_cast<int>(cv), static_cast<int>(value));
 	}
 
 	void WebServer::AddUpdate(const string& command, const string& status)

@@ -147,7 +147,7 @@ namespace Hardware
 				data[byteAddress] = newData[pos];
 			}
 		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		Utils::Utils::SleepForMilliseconds(100);
 	}
 
 	void RM485::RM485Worker()

@@ -314,7 +314,7 @@ namespace Hardware
 			}
 			SendSetTurnoutMode(entry.address, entry.protocol);
 			AccessoryOn(entry.protocol, entry.address, entry.state);
-			std::this_thread::sleep_for(std::chrono::milliseconds(entry.waitTime));
+			Utils::Utils::SleepForMilliseconds(entry.waitTime);
 			AccessoryOff(entry.protocol, entry.address, entry.state);
 		}
 		logger->Info(Languages::TextTerminatingAccessorySenderThread);
@@ -440,7 +440,7 @@ namespace Hardware
 		unsigned int counter = counterMask;
 		while(run)
 		{
-			std::this_thread::sleep_for(std::chrono::seconds(1));
+			Utils::Utils::SleepForSeconds(1);
 			++counter;
 			counter &= counterMask;
 			if (counter > 0)
@@ -876,8 +876,8 @@ namespace Hardware
 		}
 		const CvNumber cv = Utils::Utils::DataBigEndianToShort(buffer + 6) + 1;
 		const CvValue value = buffer[8];
-		logger->Debug(Languages::TextProgramDccReadValue, cv, value);
-		manager->ProgramDccValue(cv, value);
+		logger->Debug(Languages::TextProgramReadValue, cv, value);
+		manager->ProgramValue(cv, value);
 	}
 
 	void Z21::ParseDetectorData(const unsigned char* buffer)

@@ -190,13 +190,14 @@ Manager::Manager(Config& config)
 	run = true;
 	debounceRun = true;
 	debounceThread = std::thread(&Manager::DebounceWorker, this);
+	InitLocos();
 }
 
 Manager::~Manager()
 {
 	while (!LocoStopAll())
 	{
-		std::this_thread::sleep_for(std::chrono::seconds(1));
+		Utils::Utils::SleepForSeconds(1);
 	}
 
 	debounceRun = false;
@@ -273,34 +274,29 @@ void Manager::Booster(const controlType_t controlType, const boosterState_t stat
 			control.second->Booster(controlType, state);
 		}
 	}
-	if (boosterState == BoosterStop)
+
+	if (boosterState != BoosterGo || initLocosDone == true)
 	{
 		return;
 	}
-	if (!initLocosDone)
-	{
-		InitLocos();
-	}
+
+	std::async(std::launch::async, InitLocosStatic, this);
+	initLocosDone = true;
 }
 
 void Manager::InitLocos()
 {
+	Utils::Utils::SleepForSeconds(1);
 	std::lock_guard<std::mutex> guard(locoMutex);
 	for (auto loco : locos)
 	{
-		if (boosterState == BoosterStop)
-		{
-			return;
-		}
 		std::lock_guard<std::mutex> guard(controlMutex);
 		for (auto control : controls)
 		{
 			std::vector<bool> functions = loco.second->GetFunctions();
 			control.second->LocoSpeedDirectionFunctions(loco.second, loco.second->Speed(), loco.second->GetDirection(), functions);
 		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(250));
 	}
-	initLocosDone = true;
 }
 
 /***************************
@@ -2533,7 +2529,7 @@ bool Manager::LocoStop(const locoID_t locoID)
 	loco->RequestManualMode();
 	while (loco->GoToManualMode() == false)
 	{
-		std::this_thread::sleep_for(std::chrono::seconds(1));
+		Utils::Utils::SleepForSeconds(1);
 	}
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto control : controls)
@@ -2559,7 +2555,7 @@ bool Manager::LocoStopAll()
 	bool anyLocosInAutoMode = true;
 	while (anyLocosInAutoMode)
 	{
-		std::this_thread::sleep_for(std::chrono::seconds(1));
+		Utils::Utils::SleepForSeconds(1);
 		anyLocosInAutoMode = false;
 		std::lock_guard<std::mutex> guard(locoMutex);
 		for (auto loco : locos)
@@ -2822,7 +2818,7 @@ void Manager::DebounceWorker()
 				feedback.second->Debounce();
 			}
 		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(250));
+		Utils::Utils::SleepForMilliseconds(250);
 	}
 	logger->Info(Languages::TextDebounceThreadTerminated);
 }
@@ -2896,7 +2892,7 @@ void Manager::ProgramCheckBooster(const ProgramMode mode)
 				return;
 			}
 			Booster(ControlTypeInternal, BoosterGo);
-			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+			Utils::Utils::SleepForMilliseconds(100);
 			return;
 
 		default:
@@ -2926,12 +2922,12 @@ void Manager::ProgramWrite(const controlID_t controlID, const ProgramMode mode, 
 	control->ProgramWrite(mode, address, cv, value);
 }
 
-void Manager::ProgramDccValue(const CvNumber cv, const CvValue value)
+void Manager::ProgramValue(const CvNumber cv, const CvValue value)
 {
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto control : controls)
 	{
-		control.second->ProgramDccValue(cv, value);;
+		control.second->ProgramValue(cv, value);;
 	}
 }
 
@@ -2982,7 +2978,7 @@ bool Manager::CanHandleProgramDccWrite()
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto control : controls)
 	{
-		bool ret = control.second->CanHandleProgramDcc();
+		bool ret = control.second->CanHandleProgramDccDirect();
 		if (ret == true)
 		{
 			return true;

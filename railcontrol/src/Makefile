@@ -13,6 +13,7 @@ TMPDIR=RailControl
 OBJ= \
 	WebServer/WebClient.o \
 	Manager.o \
+	ArgumentHandler.o \
 	Config.o \
 	DataModel/Accessory.o \
 	DataModel/Feedback.o \

@@ -34,7 +34,7 @@ namespace Hardware
 	}
 
 	CS2Udp::CS2Udp(const HardwareParams* params)
-	:	MaerklinCAN(params->GetManager(),
+	:	ProtocolMaerklinCAN(params->GetManager(),
 			params->GetControlID(),
 			Logger::Logger::GetLogger("CS2UDP " + params->GetName() + " " + params->GetArg1()),
 			"Maerklin Central Station 2 (CS2) UDP / " + params->GetName() + " at IP " + params->GetArg1()),
@@ -96,7 +96,6 @@ namespace Hardware
 		while(run)
 		{
 			ssize_t datalen = receiverConnection.Receive(buffer, sizeof(buffer));
-			logger->Hex(buffer, datalen);
 			if (!run)
 			{
 				break;
@@ -113,6 +112,7 @@ namespace Hardware
 				logger->Error(Languages::TextInvalidDataReceived);
 				continue;
 			}
+			logger->Hex(buffer, datalen);
 			Parse(buffer);
 		}
 		receiverConnection.Terminate();

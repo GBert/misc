@@ -20,14 +20,14 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
-#include "HardwareParams.h"
-#include "Hardware/MaerklinCAN.h"
+#include "Hardware/HardwareParams.h"
+#include "Hardware/ProtocolMaerklinCAN.h"
 #include "Logger/Logger.h"
 #include "Network/UdpConnection.h"
 
 namespace Hardware
 {
-	class CS2Udp : protected MaerklinCAN
+	class CS2Udp : protected ProtocolMaerklinCAN
 	{
 		public:
 			CS2Udp(const HardwareParams* params);

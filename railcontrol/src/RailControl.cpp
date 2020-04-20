@@ -27,6 +27,7 @@ along with RailControl; see the file LICENCE. If not see
 #include <unistd.h>		//close;
 #include <vector>
 
+#include "ArgumentHandler.h"
 #include "Hardware/HardwareHandler.h"
 #include "Languages.h"
 #include "Logger/Logger.h"
@@ -65,6 +66,33 @@ void stopRailControlWebserver()
 
 int main (int argc, char* argv[])
 {
+	ArgumentHandler argumentHandler(argc, argv, 'c');
+	const bool Help = argumentHandler.GetArgumentBool('h');
+	if (Help == true)
+	{
+		std::cout << "Usage: " << argv[0] << " <options>" << std::endl;
+		std::cout << "Options:" << std::endl;
+		std::cout << "-d  Daemonize RailControl. Implies -s" << std::endl;
+		std::cout << "-l  Omit writing a logfile" << std::endl;
+		std::cout << "-h  Show this help" << std::endl;
+		std::cout << "-s  Omit writing to console" << std::endl;
+		return 0;
+	}
+
+	const bool Daemonize = argumentHandler.GetArgumentBool('d');
+	if (Daemonize == true)
+	{
+		pid_t pid = fork();
+		if (pid > 0)
+		{
+			std::cout << pid << std::endl;
+			return 0;
+		}
+		close(STDERR_FILENO);
+		close(STDOUT_FILENO);
+		close(STDIN_FILENO);
+	}
+
 	stopSignalCounter = 0;
 	signal(SIGINT, stopRailControlSignal);
 	signal(SIGTERM, stopRailControlSignal);
@@ -75,50 +103,65 @@ int main (int argc, char* argv[])
 
 	runRailcontrol = true;
 	Logger::Logger* logger = Logger::Logger::GetLogger("Main");
-	logger->AddConsoleLogger();
-	logger->AddFileLogger(LogFileName);
+
+	const bool Silent = argumentHandler.GetArgumentBool('s');
+	if (Daemonize == false && Silent == false)
+	{
+		logger->AddConsoleLogger();
+	}
+
+	const bool OmitFileLogger = argumentHandler.GetArgumentBool('l');
+	if (OmitFileLogger == false)
+	{
+		logger->AddFileLogger(LogFileName);
+	}
+
 	logger->Info(Languages::TextStarting, RailControl);
 	logger->Info(Languages::TextVersion, Utils::Utils::TimestampToDate(GetCompileTime()));
 
-	Config config(argc == 2 ? argv[1] : "railcontrol.conf");
+	const string ConfigFileName = argumentHandler.GetArgumentString('c', "railcontrol.conf");
+	Config config(ConfigFileName);
 
-	// init manager that does all the stuff in a seperate thread
 	Manager m(config);
 
 	// wait for q followed by \n or SIGINT or SIGTERM
 	char input = 0;
 
-	struct timeval tv;
-	fd_set set;
-
 	do
 	{
-		tv.tv_sec = 1;
-		tv.tv_usec = 0;
-		// Zero out the fd_set - make sure it's pristine
-		FD_ZERO(&set);
-
-		// Set the FD that we want to read
-		FD_SET(STDIN_FILENO, &set); //STDIN_FILENO is 0
-
-		// select takes the last file descriptor value + 1 in the fdset to check,
-		// the fdset for reads, writes, and errors.  We are only passing in reads.
-		// the last parameter is the timeout.  select will return if an FD is ready or 
-		// the timeout has occurred
-		int ret = TEMP_FAILURE_RETRY(select(FD_SETSIZE, &set, NULL, NULL, &tv));
-
-		// only read STDIN if there really is something to read
-		if (ret > 0 && FD_ISSET(STDIN_FILENO, &set))
+		if (Daemonize == true)
 		{
-			__attribute__((unused)) size_t unused = read(STDIN_FILENO, &input, sizeof(input));
+			Utils::Utils::SleepForSeconds(1);
+		}
+		else
+		{
+			struct timeval tv;
+			fd_set set;
+
+			tv.tv_sec = 1;
+			tv.tv_usec = 0;
+			// Zero out the fd_set - make sure it's pristine
+			FD_ZERO(&set);
+
+			// Set the FD that we want to read
+			FD_SET(STDIN_FILENO, &set); //STDIN_FILENO is 0
+
+			// select takes the last file descriptor value + 1 in the fdset to check,
+			// the fdset for reads, writes, and errors.  We are only passing in reads.
+			// the last parameter is the timeout.  select will return if an FD is ready or
+			// the timeout has occurred
+			int ret = TEMP_FAILURE_RETRY(select(FD_SETSIZE, &set, NULL, NULL, &tv));
+
+			// only read STDIN if there really is something to read
+			if (ret > 0 && FD_ISSET(STDIN_FILENO, &set))
+			{
+				__attribute__((unused)) size_t unused = read(STDIN_FILENO, &input, sizeof(input));
+			}
 		}
 	} while (input != 'q' && runRailcontrol);
 
 	logger->Info(Languages::TextStoppingRailControl);
 	Utils::Utils::RenameFile(logger, LogFileName, LogFileName + "." + std::to_string(time(0)));
-
-	// manager is cleaned up implicitly while leaving scope
-
 	return 0;
 }
 

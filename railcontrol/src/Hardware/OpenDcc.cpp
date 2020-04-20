@@ -107,7 +107,7 @@ namespace Hardware
 		{
 			SendXP88Set(4, 0);
 			SendRestart();
-			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+			Utils::Utils::SleepForMilliseconds(100);
 			SendP50XOnly();
 			ok = SendNop();
 			if (!ok)

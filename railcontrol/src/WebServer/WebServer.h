@@ -76,7 +76,7 @@ namespace WebServer
 			void SignalDelete(const signalID_t signalID, const std::string& name) override;
 			void SignalSettings(const signalID_t signalID, const std::string& name) override;
 			void SignalState(const controlType_t controlType, const DataModel::Signal* signal, const signalState_t state) override;
-			void ProgramDccValue(const CvNumber cv, const CvValue value) override;
+			void ProgramValue(const CvNumber cv, const CvValue value) override;
 
 		private:
 			template<typename... Args> void AddUpdate(const std::string& command, const Languages::textSelector_t text, Args... args)

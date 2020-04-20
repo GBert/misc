@@ -37,6 +37,7 @@ along with RailControl; see the file LICENCE. If not see
 class Manager
 {
 	public:
+		Manager() = delete;
 		Manager(Config& config);
 		~Manager();
 
@@ -261,10 +262,10 @@ class Manager
 
 		void ProgramRead(const controlID_t controlID, const ProgramMode mode, const address_t address, const CvNumber cv);
 		void ProgramWrite(const controlID_t controlID, const ProgramMode mode, const address_t address, const CvNumber cv, const CvValue value);
-		void ProgramDccValue(const CvNumber cv, const CvValue value);
+		void ProgramValue(const CvNumber cv, const CvValue value);
 		static void ProgramDccValueStatic(Manager* manager, const CvNumber cv, const CvValue value)
 		{
-			manager->ProgramDccValue(cv, value);
+			manager->ProgramValue(cv, value);
 		}
 
 		bool CanHandleProgram();
@@ -441,6 +442,7 @@ class Manager
 		}
 
 		void InitLocos();
+		static void InitLocosStatic(Manager* manager) { manager->InitLocos(); }
 
 		void ProgramCheckBooster(const ProgramMode mode);
 
