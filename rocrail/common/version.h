@@ -1,11 +1,15 @@
 const int revisionnr = 
-646
+650
 ;
 const char* commithash = 
-"4871bc9807be4cc214688634814a18ad89d552e5";
+"16aca8108cb93242f2bd14e21ac0ffb79c6ee48c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"650 2020-04-20 16:07:17 +0200 rocdigs: remove ucon88\n" \
+"649 2020-04-20 11:53:43 +0200 feedbackdialog: generated flag added\n" \
+"648 2020-04-20 11:14:44 +0200 model: generate a temp. sensor node in case an event is unknown\n" \
+"647 2020-04-20 08:17:58 +0200 wio: dual coil switch type support\n" \
 "646 2020-04-19 14:41:11 +0200 loc: allow zero function mapping address\n" \
 "645 2020-04-19 12:06:12 +0200 loc: allow zero address for function mapping\n" \
 "644 2020-04-19 10:57:02 +0200 hue: tracelevel correction for not supported sensor status\n" \
