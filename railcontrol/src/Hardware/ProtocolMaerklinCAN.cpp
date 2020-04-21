@@ -18,7 +18,7 @@ along with RailControl; see the file LICENCE. If not see
 <http://www.gnu.org/licenses/>.
 */
 
-#include "ProtocolMaerklinCAN.h"
+#include "Hardware/ProtocolMaerklinCAN.h"
 
 namespace Hardware
 {

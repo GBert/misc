@@ -18,7 +18,7 @@ along with RailControl; see the file LICENCE. If not see
 <http://www.gnu.org/licenses/>.
 */
 
-#include <Hardware/CS2Udp.h>
+#include "Hardware/CS2Udp.h"
 #include "Utils/Utils.h"
 
 namespace Hardware
