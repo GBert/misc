@@ -44,6 +44,7 @@ endef
 define Package/railcontrol/install
 	$(INSTALL_DIR) $(1)/opt/railcontrol
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/railcontrol $(1)/opt/railcontrol
+	$(INSTALL_BIN) ./files/railcontrol.sqlite $(1)/opt/railcontrol
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/railcontrol.conf.dist $(1)/opt/railcontrol/railcontrol.conf
 	$(INSTALL_DIR) $(1)/opt/railcontrol/Hardware
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/Hardware/*.so $(1)/opt/railcontrol/Hardware
