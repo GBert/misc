@@ -24,6 +24,7 @@ along with RailControl; see the file LICENCE. If not see
 #include <string>
 
 #include "Logger/LoggerClient.h"
+#include "Utils/Utils.h"
 
 namespace Logger
 {
@@ -38,12 +39,13 @@ namespace Logger
 
 			~LoggerClientFile()
 			{
+				Utils::Utils::RenameFile(nullptr, logFileName, logFileName + "." + std::to_string(time(0)));
 				if (logFile.is_open() == false)
 				{
 					return;
 				}
 				logFile.close();
-}
+			}
 
 			void Send(const std::string& s) override
 			{

@@ -27,10 +27,27 @@ class ArgumentHandler
 {
 	public:
 		ArgumentHandler() = delete;
-		ArgumentHandler(const int argc, char* argv[], /*const std::map<std::string,char>& linkMap,*/ const char defaultSwitch);
+		ArgumentHandler(const int argc, char* argv[], const std::map<std::string,char>& linkMap, const char defaultSwitch);
 
-		bool GetArgumentBool(const char);
-		std::string GetArgumentString(const char, const std::string& defaultValue);
+		bool GetArgumentBool(const char argument)
+		{
+			return (argumentMap.count(argument) == 1);
+		}
+
+		std::string GetArgumentString(const char argument, const std::string& defaultValue = "")
+		{
+			if (GetArgumentBool(argument) == false)
+			{
+				return defaultValue;
+			}
+			std::string& value = argumentMap[argument];
+			if (value.size() == 0)
+			{
+				return defaultValue;
+			}
+
+			return value;
+		}
 
 	private:
 		std::map<char,std::string> argumentMap;

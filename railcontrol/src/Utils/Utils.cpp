@@ -245,7 +245,10 @@ namespace Utils
 
 	void Utils::RenameFile(Logger::Logger* logger, const std::string& from, const std::string& to)
 	{
-		logger->Info(Languages::TextRenamingFromTo, from, to);
+		if (logger != nullptr)
+		{
+			logger->Info(Languages::TextRenamingFromTo, from, to);
+		}
 		std::rename(from.c_str(), to.c_str());
 	}
 

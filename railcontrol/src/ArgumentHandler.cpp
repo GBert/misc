@@ -18,9 +18,13 @@ along with RailControl; see the file LICENCE. If not see
 <http://www.gnu.org/licenses/>.
 */
 
-#include "ArgumentHandler.h"
+#include <iostream>
+#include <vector>
 
-ArgumentHandler::ArgumentHandler(const int argc, char* argv[], /*const std::map<std::string,char>& linkMap,*/ const char defaultSwitch)
+#include "ArgumentHandler.h"
+#include "Utils/Utils.h"
+
+ArgumentHandler::ArgumentHandler(const int argc, char* argv[], const std::map<std::string,char>& linkMap, const char defaultSwitch)
 {
 	for (int i = 1; i < argc; ++i)
 	{
@@ -37,21 +41,20 @@ ArgumentHandler::ArgumentHandler(const int argc, char* argv[], /*const std::map<
 			continue;
 		}
 
-//		std::string argString = arg + 2;
-//		if (linkMap.count(argString) == 0)
-//		{
-//			continue;
-//		}
-//		const char shortArg = linkMap[argString];
+		std::string argString = arg + 2;
+		std::vector<std::string> parts;
+		Utils::Utils::SplitString(argString, "=", parts);
+		if (parts.size() < 1)
+		{
+			continue;
+		}
+		std::string& argumentLong = parts[0];
+		if (linkMap.count(argumentLong) == 0)
+		{
+			std::cout << "Unknown argument " << argumentLong << std::endl;
+			continue;
+		}
+		char argumentShort = linkMap.at(argumentLong);
+		argumentMap[argumentShort] = (parts.size() == 1 ? "" : parts[1]);
 	}
-}
-
-bool ArgumentHandler::GetArgumentBool(const char argument)
-{
-	return (argumentMap.count(argument) == 1);
-}
-
-std::string ArgumentHandler::GetArgumentString(const char argument, const std::string& defaultValue)
-{
-	return (GetArgumentBool(argument) ? argumentMap[argument] : defaultValue);
 }
