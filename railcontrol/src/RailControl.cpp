@@ -66,26 +66,32 @@ void stopRailControlWebserver()
 
 int main (int argc, char* argv[])
 {
-	ArgumentHandler argumentHandler(argc, argv, 'c');
-	const bool Help = argumentHandler.GetArgumentBool('h');
-	if (Help == true)
+	std::map<std::string,char> argumentMap;
+	argumentMap["config"] = 'c';
+	argumentMap["daemonize"] = 'd';
+	argumentMap["logfile"] = 'l';
+	argumentMap["help"] = 'h';
+	argumentMap["silent"] = 's';
+	ArgumentHandler argumentHandler(argc, argv, argumentMap, 'c');
+	const bool help = argumentHandler.GetArgumentBool('h');
+	if (help == true)
 	{
 		std::cout << "Usage: " << argv[0] << " <options>" << std::endl;
 		std::cout << "Options:" << std::endl;
-		std::cout << "-d  Daemonize RailControl. Implies -s" << std::endl;
-		std::cout << "-l  Omit writing a logfile" << std::endl;
-		std::cout << "-h  Show this help" << std::endl;
-		std::cout << "-s  Omit writing to console" << std::endl;
+		std::cout << "-c --config=ConfigFile   Read config file with file name ConfigFile (default ConfigFile: railcontrol.conf)" << std::endl;
+		std::cout << "-d --daemonize           Daemonize RailControl. Implies -s" << std::endl;
+		std::cout << "-l --logfile=LogFile     Write a logfile to file LogFile (default LogFile: railcontrol.log)" << std::endl;
+		std::cout << "-h --help                Show this help" << std::endl;
+		std::cout << "-s --silent              Omit writing to console" << std::endl;
 		return 0;
 	}
 
-	const bool Daemonize = argumentHandler.GetArgumentBool('d');
-	if (Daemonize == true)
+	const bool daemonize = argumentHandler.GetArgumentBool('d');
+	if (daemonize == true)
 	{
 		pid_t pid = fork();
 		if (pid > 0)
 		{
-			std::cout << pid << std::endl;
 			return 0;
 		}
 		close(STDERR_FILENO);
@@ -98,29 +104,29 @@ int main (int argc, char* argv[])
 	signal(SIGTERM, stopRailControlSignal);
 
 	const string RailControl = "RailControl";
-	const string LogFileName = "railcontrol.log";
 	Utils::Utils::SetThreadName(RailControl);
 
 	runRailcontrol = true;
 	Logger::Logger* logger = Logger::Logger::GetLogger("Main");
 
-	const bool Silent = argumentHandler.GetArgumentBool('s');
-	if (Daemonize == false && Silent == false)
+	const bool silent = daemonize || argumentHandler.GetArgumentBool('s');
+	if (silent == false)
 	{
 		logger->AddConsoleLogger();
 	}
 
-	const bool OmitFileLogger = argumentHandler.GetArgumentBool('l');
-	if (OmitFileLogger == false)
+	const bool fileLogger = argumentHandler.GetArgumentBool('l');
+	if (fileLogger == true)
 	{
-		logger->AddFileLogger(LogFileName);
+		const string logFileName = argumentHandler.GetArgumentString('l', "railcontrol.log");
+		logger->AddFileLogger(logFileName);
 	}
 
 	logger->Info(Languages::TextStarting, RailControl);
 	logger->Info(Languages::TextVersion, Utils::Utils::TimestampToDate(GetCompileTime()));
 
-	const string ConfigFileName = argumentHandler.GetArgumentString('c', "railcontrol.conf");
-	Config config(ConfigFileName);
+	const string configFileName = argumentHandler.GetArgumentString('c', "railcontrol.conf");
+	Config config(configFileName);
 
 	Manager m(config);
 
@@ -129,7 +135,7 @@ int main (int argc, char* argv[])
 
 	do
 	{
-		if (Daemonize == true)
+		if (silent == true)
 		{
 			Utils::Utils::SleepForSeconds(1);
 		}
@@ -161,7 +167,6 @@ int main (int argc, char* argv[])
 	} while (input != 'q' && runRailcontrol);
 
 	logger->Info(Languages::TextStoppingRailControl);
-	Utils::Utils::RenameFile(logger, LogFileName, LogFileName + "." + std::to_string(time(0)));
 	return 0;
 }
 

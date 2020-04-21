@@ -6,7 +6,7 @@ START=99
 start() {
 	[ -e /opt/railcontrol/ ] && {
 		cd /opt/railcontrol
-		./railcontrol -d
+		./railcontrol --logfile=/tmp/railcontrol.log -d
 		echo "$!" > /tmp/railcontrol.pid
 	}
 }
