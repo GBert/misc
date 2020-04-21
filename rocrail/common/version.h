@@ -1,11 +1,12 @@
 const int revisionnr = 
-650
+651
 ;
 const char* commithash = 
-"16aca8108cb93242f2bd14e21ac0ffb79c6ee48c";
+"33f15a92a56b00a3dcb4930af19152aa631a618b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"651 2020-04-21 07:57:52 +0200 stagedlg: show cleaning stamp\n" \
 "650 2020-04-20 16:07:17 +0200 rocdigs: remove ucon88\n" \
 "649 2020-04-20 11:53:43 +0200 feedbackdialog: generated flag added\n" \
 "648 2020-04-20 11:14:44 +0200 model: generate a temp. sensor node in case an event is unknown\n" \
