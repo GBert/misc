@@ -1,18 +1,8 @@
-@font-face {
-	font-family: symbola;
-	src: url('/symbola.ttf');
-}
-
 body {
 	background-color: white;
 	font-family: verdana, sans-serif;
 	font-size: 15px;
 	margin: 0px;
-}
-
-.symbola {
-	font-family: symbola;
-	font-size: 20px;
 }
 
 .loco_selector {

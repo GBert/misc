@@ -18,6 +18,8 @@ along with RailControl; see the file LICENCE. If not see
 <http://www.gnu.org/licenses/>.
 */
 
+#include <algorithm>
+#include <dirent.h>
 #include <map>
 #include <string>
 
@@ -52,8 +54,10 @@ namespace Storage
 
 	SQLite::SQLite(const StorageParams* params)
 	:	filename(params->filename),
-	 	logger(Logger::Logger::GetLogger("SQLite"))
+	 	logger(Logger::Logger::GetLogger("SQLite")),
+	 	keepBackups(params->keepBackups)
 	{
+		RemoveOldBackupFiles();
 		logger->Info(Languages::TextOpeningSQLite, filename);
 		int rc = sqlite3_open(filename.c_str(), &db);
 		if (rc)
@@ -118,6 +122,7 @@ namespace Storage
 		}
 	}
 
+
 	SQLite::~SQLite()
 	{
 		if (db == nullptr)
@@ -129,7 +134,60 @@ namespace Storage
 		sqlite3_close(db);
 		db = nullptr;
 
+		if (keepBackups == 0)
+		{
+			return;
+		}
 		Utils::Utils::CopyFile(logger, filename, filename + "." + std::to_string(time(0)));
+	}
+
+	void SQLite::RemoveOldBackupFiles()
+	{
+		DIR *dir = opendir(".");
+		if (dir == nullptr)
+		{
+			return;
+		}
+		struct dirent *ent;
+		std::vector<string> fileNames;
+		const string filenameSearch = filename + ".";
+		const size_t filenameSearchLength = filenameSearch.length() + 10;
+		while (true)
+		{
+			ent = readdir(dir);
+			if (ent == nullptr)
+			{
+				break;
+			}
+			string fileName = ent->d_name;
+			if (fileName.length() != filenameSearchLength || fileName.find(filenameSearch) == string::npos)
+			{
+				continue;
+			}
+			fileNames.push_back(ent->d_name);
+		}
+		closedir(dir);
+		std::sort(fileNames.begin(), fileNames.end());
+
+		size_t numberOfFiles = fileNames.size();
+		if (numberOfFiles == 0 || numberOfFiles < keepBackups)
+		{
+			return;
+		}
+
+		unsigned int removeBackups = fileNames.size() - keepBackups;
+		++removeBackups; // at shutdown we create another backupfile
+		for (auto fileName : fileNames)
+		{
+			if (removeBackups == 0)
+			{
+				return;
+			}
+
+			--removeBackups;
+			logger->Info(Languages::TextRemoveBackupFile, fileName);
+			remove(fileName.c_str());
+		}
 	}
 
 	int SQLite::CallbackListTables(void* v, int argc, char **argv, __attribute__((unused)) char **colName)

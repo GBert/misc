@@ -73,6 +73,7 @@ int main (int argc, char* argv[])
 	argumentMap["help"] = 'h';
 	argumentMap["silent"] = 's';
 	ArgumentHandler argumentHandler(argc, argv, argumentMap, 'c');
+
 	const bool help = argumentHandler.GetArgumentBool('h');
 	if (help == true)
 	{
@@ -83,7 +84,7 @@ int main (int argc, char* argv[])
 		std::cout << "-l --logfile=LogFile     Write a logfile to file LogFile (default LogFile: railcontrol.log)" << std::endl;
 		std::cout << "-h --help                Show this help" << std::endl;
 		std::cout << "-s --silent              Omit writing to console" << std::endl;
-		return 0;
+		return EXIT_SUCCESS;
 	}
 
 	const bool daemonize = argumentHandler.GetArgumentBool('d');
@@ -92,7 +93,7 @@ int main (int argc, char* argv[])
 		pid_t pid = fork();
 		if (pid > 0)
 		{
-			return 0;
+			return EXIT_SUCCESS;
 		}
 		close(STDERR_FILENO);
 		close(STDOUT_FILENO);
@@ -142,23 +143,12 @@ int main (int argc, char* argv[])
 		else
 		{
 			struct timeval tv;
-			fd_set set;
-
 			tv.tv_sec = 1;
 			tv.tv_usec = 0;
-			// Zero out the fd_set - make sure it's pristine
+			fd_set set;
 			FD_ZERO(&set);
-
-			// Set the FD that we want to read
-			FD_SET(STDIN_FILENO, &set); //STDIN_FILENO is 0
-
-			// select takes the last file descriptor value + 1 in the fdset to check,
-			// the fdset for reads, writes, and errors.  We are only passing in reads.
-			// the last parameter is the timeout.  select will return if an FD is ready or
-			// the timeout has occurred
+			FD_SET(STDIN_FILENO, &set);
 			int ret = TEMP_FAILURE_RETRY(select(FD_SETSIZE, &set, NULL, NULL, &tv));
-
-			// only read STDIN if there really is something to read
 			if (ret > 0 && FD_ISSET(STDIN_FILENO, &set))
 			{
 				__attribute__((unused)) size_t unused = read(STDIN_FILENO, &input, sizeof(input));
@@ -167,6 +157,6 @@ int main (int argc, char* argv[])
 	} while (input != 'q' && runRailcontrol);
 
 	logger->Info(Languages::TextStoppingRailControl);
-	return 0;
+	return EXIT_SUCCESS;
 }
 

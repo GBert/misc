@@ -73,6 +73,7 @@ Manager::Manager(Config& config)
 	StorageParams storageParams;
 	storageParams.module = "Sqlite";
 	storageParams.filename = config.getValue("dbfilename", "railcontrol.sqlite");
+	storageParams.keepBackups = config.getValue("dbkeepbackups", 10);
 	storage = new StorageHandler(this, &storageParams);
 	if (storage == nullptr)
 	{

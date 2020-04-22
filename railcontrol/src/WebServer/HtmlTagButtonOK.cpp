@@ -25,7 +25,7 @@ along with RailControl; see the file LICENCE. If not see
 namespace WebServer
 {
 	HtmlTagButtonOK::HtmlTagButtonOK()
-	:	HtmlTagButton(HtmlTag("span").AddClass("symbola").AddContent("&#x2714;"), "popup_ok")
+	:	HtmlTagButton(HtmlTag("span").AddContent("&#x2714;"), "popup_ok")
 	{
 		AddAttribute("onclick", "submitEditForm(); return false;");
 		AddClass("wide_button");

@@ -1,4 +1,4 @@
-# Copyright (C) 2019 OpenWrt.org
+# Copyright (C) 2020 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=railcontrol
-PKG_VERSION:=20200421
+PKG_VERSION:=20200422
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_PARALLEL:=1

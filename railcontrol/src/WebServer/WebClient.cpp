@@ -3796,10 +3796,10 @@ namespace WebServer
 		buttonArguments.erase("speed");
 
 		id = "locoedit_" + to_string(locoID);
-		container.AddChildTag(HtmlTagButtonPopup(HtmlTag("span").AddClass("symbola").AddContent("&#x270D;"), id, buttonArguments));
+		container.AddChildTag(HtmlTagButtonPopup("<svg width=\"36\" height=\"36\"><circle r=\"7\" cx=\"14\" cy=\"14\" fill=\"black\" /><line x1=\"14\" y1=\"5\" x2=\"14\" y2=\"23\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"9.5\" y1=\"6.2\" x2=\"18.5\" y2=\"21.8\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"6.2\" y1=\"9.5\" x2=\"21.8\" y2=\"18.5\" stroke-width=\"2\" stroke=\"black\" /><line y1=\"14\" x1=\"5\" y2=\"14\" x2=\"23\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"9.5\" y1=\"21.8\" x2=\"18.5\" y2=\"6.2\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"6.2\" y1=\"18.5\" x2=\"21.8\" y2=\"9.5\" stroke-width=\"2\" stroke=\"black\" /><circle r=\"5\" cx=\"14\" cy=\"14\" fill=\"white\" /><circle r=\"4\" cx=\"24\" cy=\"24\" fill=\"black\" /><line x1=\"18\" y1=\"24\" x2=\"30\" y2=\"24\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"28.2\" y1=\"28.2\" x2=\"19.8\" y2=\"19.8\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"24\" y1=\"18\" x2=\"24\" y2=\"30\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"19.8\" y1=\"28.2\" x2=\"28.2\" y2=\"19.8\" stroke-width=\"2\" stroke=\"black\" /><circle r=\"2\" cx=\"24\" cy=\"24\" fill=\"white\" /></svg>", id, buttonArguments));
 
 		id = "locodirection_" + to_string(locoID);
-		container.AddChildTag(HtmlTagButtonCommandToggle(HtmlTag("span").AddClass("symbola").AddContent("&#9193;"), id, loco->GetDirection(), buttonArguments).AddClass("button_direction"));
+		container.AddChildTag(HtmlTagButtonCommandToggle("<svg width=\"36\" height=\"36\"><polyline points=\"3,14 20,14 20,3 36,19 20,35 20,23 3,23\" stroke=\"black\" stroke-width=\"1\" g></svg>", id, loco->GetDirection(), buttonArguments).AddClass("button_direction"));
 
 		id = "locofunction_" + to_string(locoID);
 		function_t nrOfFunctions = loco->GetNrOfFunctions();
@@ -3807,7 +3807,7 @@ namespace WebServer
 		{
 			string nrText(to_string(nr));
 			buttonArguments["function"] = nrText;
-			container.AddChildTag(HtmlTagButtonCommandToggle("f" + nrText, id + "_" + nrText, loco->GetFunction(nr), buttonArguments));
+			container.AddChildTag(HtmlTagButtonCommandToggle("<svg width=\"36\" height=\"36\"><text x=\"8\" y=\"24\" fill=\"black\" font-size=\"11\">f" + nrText + "</text>f", id + "_" + nrText, loco->GetFunction(nr), buttonArguments));
 		}
 		buttonArguments.erase("function");
 		ReplyHtmlWithHeaderAndParagraph(container);

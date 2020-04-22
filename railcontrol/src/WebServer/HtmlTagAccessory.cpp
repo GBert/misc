@@ -45,7 +45,7 @@ namespace WebServer
 		div1.AddClass("accessory_item");
 		div1.AddClass(state == DataModel::Accessory::AccessoryStateOn ? "accessory_on" : "accessory_off");
 		div1.AddAttribute("style", "left:" + to_string(layoutPosX) + "px;top:" + to_string(layoutPosY) + "px;");
-		div1.AddChildTag(HtmlTag("span").AddClass("symbola").AddContent("&#9209;"));
+		div1.AddChildTag(HtmlTag("span").AddContent("&#x25A0;"));
 		div1.AddChildTag(HtmlTag("span").AddClass("tooltip").AddContent(accessoryName + " (addr=" + to_string(accessory->GetAddress()) + ")"));
 		div1.AddAttribute("onclick", "return onClickAccessory(" + accessoryIdString + ");");
 		div1.AddAttribute("oncontextmenu", "return onContextLayoutItem(event, '" + id + "');");

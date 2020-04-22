@@ -25,7 +25,7 @@ along with RailControl; see the file LICENCE. If not see
 namespace WebServer
 {
 	HtmlTagButtonCancel::HtmlTagButtonCancel()
-	:	HtmlTagButton(HtmlTag("span").AddClass("symbola").AddContent("&#x2718;"), "popup_cancel")
+	:	HtmlTagButton(HtmlTag("span").AddContent("&#x2718;"), "popup_cancel")
 	{
 		AddAttribute("onclick", "document.getElementById('popup').style.display = 'none'; return false;");
 		AddClass("wide_button");

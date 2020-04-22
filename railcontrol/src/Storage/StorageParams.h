@@ -27,6 +27,7 @@ namespace Storage {
 	struct StorageParams {
 		std::string module;
 		std::string filename;
+		unsigned int keepBackups;
 	};
 
 } // namespace Storage

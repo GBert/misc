@@ -23,6 +23,8 @@ along with RailControl; see the file LICENCE. If not see
 #include <map>
 #include <string>
 
+#include "Utils/Utils.h"
+
 class ArgumentHandler
 {
 	public:
@@ -47,6 +49,11 @@ class ArgumentHandler
 			}
 
 			return value;
+		}
+
+		int GetArgumentInt(const char argument, const int defaultValue = 0)
+		{
+			return Utils::Utils::StringToInteger(GetArgumentString(argument, std::to_string(defaultValue)));
 		}
 
 	private:
