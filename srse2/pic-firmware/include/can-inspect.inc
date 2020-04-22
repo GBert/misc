@@ -414,6 +414,14 @@ S88_SINGLE_IO
                 XORLW   0
                 BTFSS	STATUS,Z
                 RETURN
+                ; skip uf IO > module number * 16
+                MOVFF	S88LENGTH,WREG
+                SWAPF	WREG
+                ADDLW	1
+                BCF	STATUS,C
+                SUBFWB	TEMP16+1,W
+                BTFSS	STATUS,C
+                RETURN
 
                 MOVF	TEMP16+1,W
                 CALL	S88_N_GENEVENT
@@ -463,10 +471,10 @@ CAN_PING_CONT
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                ; Version 1.10
+                ; Version 1.11
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	10
+                MOVLW	11
                 MOVWF	POSTINC0
                 MOVLW	0
                 MOVWF	POSTINC0
@@ -523,10 +531,10 @@ CAN_BOOTLOADER_PING
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                ; Version 1.10
+                ; Version 1.11
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	10
+                MOVLW	11
                 MOVWF	POSTINC0
                 MOVLW	0
                 MOVWF	POSTINC0
