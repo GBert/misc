@@ -1,11 +1,21 @@
 const int revisionnr = 
-651
+661
 ;
 const char* commithash = 
-"33f15a92a56b00a3dcb4930af19152aa631a618b";
+"669f499f4e25ca3141a1a23a2709aa152b703b1d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"661 2020-04-22 17:41:05 +0200 canservice: server socket recovery\n" \
+"660 2020-04-22 17:30:46 +0200 ASCII logo\n" \
+"659 2020-04-22 16:58:50 +0200 canservice: socket nodelay\n" \
+"658 2020-04-22 11:12:27 +0200 model: generate unknown sensor objects first after the model has been initialized\n" \
+"657 2020-04-22 11:11:33 +0200 wio: report global RailCom reader with address 101\n" \
+"656 2020-04-22 10:15:09 +0200 canservice: extra command line options for tracing and usbdev\n" \
+"655 2020-04-22 08:27:24 +0200 canservice: usb connection recovery added\n" \
+"654 2020-04-22 08:19:23 +0200 canservice: usb service added\n" \
+"653 2020-04-22 08:16:44 +0200 bidib: tcp/ip support\n" \
+"652 2020-04-21 21:56:05 +0200 model: revert generating sensors in case unknown\n" \
 "651 2020-04-21 07:57:52 +0200 stagedlg: show cleaning stamp\n" \
 "650 2020-04-20 16:07:17 +0200 rocdigs: remove ucon88\n" \
 "649 2020-04-20 11:53:43 +0200 feedbackdialog: generated flag added\n" \
