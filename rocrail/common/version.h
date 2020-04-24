@@ -1,11 +1,18 @@
 const int revisionnr = 
-661
+668
 ;
 const char* commithash = 
-"669f499f4e25ca3141a1a23a2709aa152b703b1d";
+"d72579e06c2515162a7ee72208fcde542c7f78ef";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"668 2020-04-24 08:40:33 +0200 translation merge: en_GB, fr, sl, de, nl\n" \
+"667 2020-04-24 08:29:10 +0200 loc: only map function if its not the same in case the mapped decoder address is zero\n" \
+"666 2020-04-24 08:08:01 +0200 bidib: rewrap Wizard messages to fit the sequence as needed\n" \
+"665 2020-04-23 15:08:16 +0200 bidib: tcp service added for Wizard\n" \
+"664 2020-04-23 08:05:29 +0200 bidibdlg: removed the UDP type\n" \
+"663 2020-04-23 07:59:21 +0200 bidib: udp not using sequence number\n" \
+"662 2020-04-23 07:47:50 +0200 bidib: tcp not using sequence\n" \
 "661 2020-04-22 17:41:05 +0200 canservice: server socket recovery\n" \
 "660 2020-04-22 17:30:46 +0200 ASCII logo\n" \
 "659 2020-04-22 16:58:50 +0200 canservice: socket nodelay\n" \
