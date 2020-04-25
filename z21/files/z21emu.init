@@ -4,9 +4,9 @@
 START=99
 
 start() {
-	z21emu -b br-lan
+	z21emu
 	# with turnout switching
-	# z21emu -xb br-lan
+	# z21emu -x
 }
 
 stop() {

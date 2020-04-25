@@ -29,24 +29,48 @@ extern struct track_data_t *track_data;
 extern struct loco_data_t *loco_data, *loco_data_by_uid;
 extern struct loco_names_t *loco_names;
 
+struct loco_data_t *create_loco(unsigned int uid) {
+    struct loco_data_t *l;
+
+    l = (struct loco_data_t *)calloc(1, sizeof(struct loco_data_t));
+    if (!l) {
+	fprintf(stderr, "%s: can't calloc loco data: %s\n", __func__, strerror(errno));
+	return 0;
+    }
+    if (uid > 0x2000)
+	asprintf(&l->name, "Dummy DCC%d", uid);
+    else
+	asprintf(&l->name, "Dummy MM%d", uid);
+    l->uid = uid;
+
+    HASH_ADD_STR(loco_data, name, l);
+    HASH_ADD(hha, loco_data_by_uid, uid, sizeof(int), l);
+
+    printf("Loco added: %s %d\n", l->name, uid);
+
+    return(l);
+}
+
+
 uint8_t loco_get_direction(unsigned int uid) {
     struct loco_data_t *l;
 
     HASH_FIND(hha, loco_data_by_uid, &uid, sizeof(unsigned int), l);
     if (l)
 	return(l->direction);
-    return(255);
+    else
+	create_loco(uid);
+    return(EXIT_SUCCESS);
 }
 
 int loco_save_direction(unsigned int uid, uint8_t direction) {
     struct loco_data_t *l;
 
     HASH_FIND(hha, loco_data_by_uid, &uid, sizeof(unsigned int), l);
-    if (l) {
-	l->direction = direction;
-	return(EXIT_SUCCESS);
-    }
-    return(EXIT_FAILURE);
+    if (!l)
+	l = create_loco(uid);
+    l->direction = direction;
+    return(EXIT_SUCCESS);
 }
 
 uint8_t loco_get_function(unsigned int uid, uint8_t function) {
@@ -56,6 +80,8 @@ uint8_t loco_get_function(unsigned int uid, uint8_t function) {
     HASH_FIND(hha, loco_data_by_uid, &uid, sizeof(unsigned int), l);
     if (l)
 	return(l->function[function].value);
+    else
+	create_loco(uid);
     return(0);
 }
 
