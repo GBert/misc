@@ -37,8 +37,10 @@ struct loco_data_t *create_loco(unsigned int uid) {
 	fprintf(stderr, "%s: can't calloc loco data: %s\n", __func__, strerror(errno));
 	return 0;
     }
-    if (uid > 0x2000)
+    if (uid > 0xC000)
 	asprintf(&l->name, "Dummy DCC%d", uid);
+    else if (uid > 0x4000)
+	asprintf(&l->name, "Dummy MFX%d", uid);
     else
 	asprintf(&l->name, "Dummy MM%d", uid);
     l->uid = uid;
