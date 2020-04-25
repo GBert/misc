@@ -1,11 +1,13 @@
 const int revisionnr = 
-668
+670
 ;
 const char* commithash = 
-"d72579e06c2515162a7ee72208fcde542c7f78ef";
+"9d159ef5cff6cead122146cd4e26ac1fdc6d27c0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"670 2020-04-24 15:11:26 +0200 lodi: wip\n" \
+"669 2020-04-24 15:00:56 +0200 lodi: WIP\n" \
 "668 2020-04-24 08:40:33 +0200 translation merge: en_GB, fr, sl, de, nl\n" \
 "667 2020-04-24 08:29:10 +0200 loc: only map function if its not the same in case the mapped decoder address is zero\n" \
 "666 2020-04-24 08:08:01 +0200 bidib: rewrap Wizard messages to fit the sequence as needed\n" \
