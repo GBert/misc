@@ -1,11 +1,15 @@
 const int revisionnr = 
-670
+674
 ;
 const char* commithash = 
-"9d159ef5cff6cead122146cd4e26ac1fdc6d27c0";
+"d8bff0760804a9e6b1ab2f98c5601f4e44d210f1";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"674 2020-04-25 10:41:32 +0200 canservice: fix for draining CPU on 5550 service; CBUS\n" \
+"673 2020-04-25 10:05:36 +0200 cbus: tracelevel correction for clock commands\n" \
+"672 2020-04-25 08:55:13 +0200 bidib: stop using the message sequence after the wizard did connect\n" \
+"671 2020-04-25 08:07:11 +0200 router: fix for raster switch (Lothar)\n" \
 "670 2020-04-24 15:11:26 +0200 lodi: wip\n" \
 "669 2020-04-24 15:00:56 +0200 lodi: WIP\n" \
 "668 2020-04-24 08:40:33 +0200 translation merge: en_GB, fr, sl, de, nl\n" \
