@@ -32,6 +32,7 @@ struct z21_data_t {
     struct sockaddr_in sbaddr;
     struct sockaddr_in scaddr;
     struct sockaddr_in staddr;
+    uint32_t ip;
     int sp;
     int ss;
     int sb;

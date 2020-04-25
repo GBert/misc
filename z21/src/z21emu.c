@@ -31,6 +31,7 @@
 #include <arpa/inet.h>
 #include <linux/can.h>
 
+#include "subscriber.h"
 #include "utils.h"
 #include "z21.h"
 #include "cs2-data-functions.h"
@@ -44,6 +45,7 @@ pthread_mutex_t lock;
 
 struct z21_data_t z21_data;
 extern struct loco_data_t *loco_data, *loco_data_by_uid;
+extern struct subscriber_t *subscriber;
 
 static char *UDP_SRC_STRG	= "->UDP    len 0x%04x ID 0x%04x";
 static char *UDP_DST_STRG	= "  UDP->  len 0x%04x ID 0x%04x";
@@ -81,7 +83,7 @@ static unsigned char XPN_X_STORE2[]               = { 0x14, 0x00, 0x16, 0x00, 0x
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c config_dir -p <port> -s <port>\n", prg);
-    fprintf(stderr, "   Version 0.96\n\n");
+    fprintf(stderr, "   Version 0.97\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory - default %s\n", config_dir);
     fprintf(stderr, "         -p <port>           primary UDP port for the server - default %d\n", PRIMARY_UDP_PORT);
     fprintf(stderr, "         -s <port>           secondary UDP port for the server - default %d\n", SECONDARY_UDP_PORT);
@@ -131,6 +133,25 @@ int send_broadcast(unsigned char *udpframe, char *format, int verbose) {
     return (EXIT_SUCCESS);
 }
 
+int send_z21_clients(unsigned char *udpframe, char *format, int verbose) {
+    int s;
+    uint16_t length;
+    struct subscriber_t *z21client, *tmp;
+
+    length = le16(&udpframe[0]);
+
+    HASH_ITER(hh, subscriber, z21client, tmp) {
+	s = sendto(z21client->client_socket, udpframe, length, 0, (struct sockaddr *)&z21client->client_addr, sizeof(z21client->client_addr));
+	if (s < 0) {
+	    fprintf(stderr, "UDP write error: %s\n", strerror(errno));
+	    return (EXIT_FAILURE);
+	}
+    }
+    if ((s == length) && verbose)
+	print_udp_frame(format, length, udpframe);
+    return (EXIT_SUCCESS);
+}
+
 int send_xpn(unsigned char *data, int verbose) {
     unsigned char udpxpn[64];
     char *format;
@@ -143,7 +164,7 @@ int send_xpn(unsigned char *data, int verbose) {
     }
     memcpy(udpxpn, data, length);
     format = UDP_DST_STRG;
-    send_broadcast(udpxpn, format, verbose);
+    send_z21_clients(udpxpn, format, verbose);
     return (EXIT_SUCCESS);
 }
 
@@ -505,6 +526,7 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	}
 	break;
     case LAN_LOGOFF:
+	del_z21c_ip(z21_data->ip);
 	v_printf(verbose, "LAN_LOGOFF *");
 	break;
     case LAN_GET_LOCOMODE:
@@ -512,6 +534,7 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	break;
     case LAN_SET_BROADCASTFLAGS:
 	flags = be32(&z21_data->udpframe[4]);
+	set_z21c_bcf(z21_data->ip, flags);
 	v_printf(verbose, "LAN_SET_BROADCASTFLAGS 0x%08X", flags);
 	break;
     case LAN_X_HEADER:
@@ -913,7 +936,9 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
 		break;
 	    } else if (ret) {
-		// printf("%s %s ", inet_ntoa(z21_data.sbaddr.sin_addr), inet_ntoa(src_addr.sin_addr));
+		// printf("Client %s ", inet_ntoa(src_addr.sin_addr));
+		z21_data.ip = src_addr.sin_addr.s_addr;
+		add_z21c_ip(z21_data.ip);
 		check_data_xpn(&z21_data, ret, z21_data.foreground);
 	    }
 	    /* send_broadcast(z21_data.udpframe, UDP_DST_STRG, z21_data.foreground); */
@@ -926,10 +951,10 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
 		break;
 	    } else {
-		print_udp_frame(UDP_SRC_STRG, ret, z21_data.udpframe);
+		z21_data.ip = src_addr.sin_addr.s_addr;
+		add_z21c_ip(z21_data.ip);
+		check_data_xpn(&z21_data, ret, z21_data.foreground);
 	    }
-	    /* TODO */
-	    send_broadcast(z21_data.udpframe, UDP_DST_STRG, z21_data.foreground);
 	}
 
 	if (FD_ISSET(z21_data.st, &readfds)) {
