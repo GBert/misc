@@ -1,11 +1,14 @@
 const int revisionnr = 
-674
+677
 ;
 const char* commithash = 
-"d8bff0760804a9e6b1ab2f98c5601f4e44d210f1";
+"761d639b9d3aafa377a8f1d5727efe56b34dbef5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"677 2020-04-25 17:24:12 +0200 loc: fix for mapped function\n" \
+"676 2020-04-25 16:18:32 +0200 rocview: mirror loco image in block option added\n" \
+"675 2020-04-25 14:25:35 +0200 lodi: loco speed command\n" \
 "674 2020-04-25 10:41:32 +0200 canservice: fix for draining CPU on 5550 service; CBUS\n" \
 "673 2020-04-25 10:05:36 +0200 cbus: tracelevel correction for clock commands\n" \
 "672 2020-04-25 08:55:13 +0200 bidib: stop using the message sequence after the wizard did connect\n" \
