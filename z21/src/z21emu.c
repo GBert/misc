@@ -146,9 +146,9 @@ int send_z21_clients(unsigned char *udpframe, char *format, int verbose) {
 	    fprintf(stderr, "UDP write error: %s\n", strerror(errno));
 	    return (EXIT_FAILURE);
 	}
+	if ((s == length) && verbose)
+	    print_udp_frame(format, length, udpframe);
     }
-    if ((s == length) && verbose)
-	print_udp_frame(format, length, udpframe);
     return (EXIT_SUCCESS);
 }
 
@@ -930,6 +930,7 @@ int main(int argc, char **argv) {
 
 	/* received a UDP packet on primary */
 	if (FD_ISSET(z21_data.sp, &readfds)) {
+	    memset(&src_addr, 0, sizeof(src_addr));
 	    ret = recvfrom(z21_data.sp, z21_data.udpframe, MAXDG, 0, (struct sockaddr *) &src_addr, &slen);
 	    /* v_printf(verbose, "FD_ISSET sp, ret %d\n", ret); */
 	    if (ret < 0) {
@@ -945,6 +946,7 @@ int main(int argc, char **argv) {
 	}
 	/* received a UDP packet on secondary */
 	if (FD_ISSET(z21_data.ss, &readfds)) {
+	    memset(&src_addr, 0, sizeof(src_addr));
 	    ret = recvfrom(z21_data.ss, z21_data.udpframe, MAXDG, 0, (struct sockaddr *) &src_addr, &slen);
 	    /* v_printf(verbose, "FD_ISSET ss, ret %d\n", ret); */
 	    if (ret < 0) {
