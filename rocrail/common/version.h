@@ -1,11 +1,14 @@
 const int revisionnr = 
-677
+680
 ;
 const char* commithash = 
-"761d639b9d3aafa377a8f1d5727efe56b34dbef5";
+"8fd177e9bc2a76b5106fe15e7e0de0fe7ab3d834";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"680 2020-04-26 11:05:16 +0200 rocview: use default spinbutton size for GTK3\n" \
+"679 2020-04-26 10:26:39 +0200 bidib: allow only a tcp guest connection in case the communication is disabled\n" \
+"678 2020-04-26 07:18:02 +0200 bidib: disable message processing in case a guest is connected\n" \
 "677 2020-04-25 17:24:12 +0200 loc: fix for mapped function\n" \
 "676 2020-04-25 16:18:32 +0200 rocview: mirror loco image in block option added\n" \
 "675 2020-04-25 14:25:35 +0200 lodi: loco speed command\n" \
