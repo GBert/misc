@@ -1,11 +1,16 @@
 const int revisionnr = 
-680
+685
 ;
 const char* commithash = 
-"8fd177e9bc2a76b5106fe15e7e0de0fe7ab3d834";
+"353cf6d9089972b645a8c49d0fb477b4a269e58e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"685 2020-04-27 08:53:02 +0200 bidib: trace node sequence on seqAck\n" \
+"684 2020-04-26 15:04:00 +0200 lodi: sensor processing (wip)\n" \
+"683 2020-04-26 14:38:28 +0200 lodi: sensor evaluating (WIP)\n" \
+"682 2020-04-26 13:38:59 +0200 installwx.sh: added extra lines\n" \
+"681 2020-04-26 13:13:14 +0200 linux dependency update\n" \
 "680 2020-04-26 11:05:16 +0200 rocview: use default spinbutton size for GTK3\n" \
 "679 2020-04-26 10:26:39 +0200 bidib: allow only a tcp guest connection in case the communication is disabled\n" \
 "678 2020-04-26 07:18:02 +0200 bidib: disable message processing in case a guest is connected\n" \
