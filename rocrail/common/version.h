@@ -1,11 +1,13 @@
 const int revisionnr = 
-685
+687
 ;
 const char* commithash = 
-"353cf6d9089972b645a8c49d0fb477b4a269e58e";
+"2768965544de20c2ac5619b03ecc28ca39e2a9c8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"687 2020-04-27 15:30:48 +0200 rocrailinidialog: lodi added\n" \
+"686 2020-04-27 15:24:43 +0200 lodi: basic implementation\n" \
 "685 2020-04-27 08:53:02 +0200 bidib: trace node sequence on seqAck\n" \
 "684 2020-04-26 15:04:00 +0200 lodi: sensor processing (wip)\n" \
 "683 2020-04-26 14:38:28 +0200 lodi: sensor evaluating (WIP)\n" \
