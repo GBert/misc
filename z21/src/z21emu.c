@@ -140,14 +140,28 @@ int send_z21_clients(unsigned char *udpframe, char *format, int verbose) {
 
     length = le16(&udpframe[0]);
 
+    if (verbose)
+	print_udp_frame(format, length, udpframe);
+
+    /* check if BROACAST FLAGS indicates only directed answer to one client */
+    if (z21_data.bcf == 0) {
+	HASH_FIND_INT(subscriber, &z21_data.ip, z21client);
+	if (z21client) {
+	    s = sendto(z21client->client_socket, udpframe, length, 0, (struct sockaddr *)&z21client->client_addr, sizeof(z21client->client_addr));
+	    if (s < 0) {
+		fprintf(stderr, "UDP write error: %s\n", strerror(errno));
+		return (EXIT_FAILURE);
+	    }
+	}
+	return(EXIT_SUCCESS);
+    }
+
     HASH_ITER(hh, subscriber, z21client, tmp) {
 	s = sendto(z21client->client_socket, udpframe, length, 0, (struct sockaddr *)&z21client->client_addr, sizeof(z21client->client_addr));
 	if (s < 0) {
 	    fprintf(stderr, "UDP write error: %s\n", strerror(errno));
 	    return (EXIT_FAILURE);
 	}
-	if ((s == length) && verbose)
-	    print_udp_frame(format, length, udpframe);
     }
     return (EXIT_SUCCESS);
 }
@@ -226,6 +240,7 @@ int send_xpn_loco_info(uint16_t uid, int verbose) {
     xpnframe[11] = (comp_func >> 13) & 0xFF;
     xpnframe[12] = (comp_func >> 21) & 0xFF;
     xpnframe[13] = xor(&xpnframe[4], 8);
+    z21_data.bcf = 0x00000001;
     send_xpn(xpnframe, verbose);
     v_printf(verbose, "LAN_X_LOCO_INFO LOC ID 0x%04X", loco_id);
 
@@ -253,6 +268,7 @@ int send_xpn_loco_name(uint16_t loco_id, char *loco_name, uint8_t index, uint8_t
     xpnframe[9] = n;
     memcpy(&xpnframe[10], loco_name, length);
     xpnframe[length + 10] = xor(&xpnframe[4], length + 6);
+    z21_data.bcf = 0x00000000;
     send_xpn(xpnframe, verbose);
     v_printf(verbose, " LAN_LOCO 0x%04X %s", loco_id, loco_name);
     return (EXIT_SUCCESS);
@@ -283,6 +299,7 @@ int send_xpn_turnout_info(uint16_t FAdr, uint8_t zz, int verbose) {
     xpnframe[7] = zz;
 
     xpnframe[8] = xor(&xpnframe[4], 4);
+    z21_data.bcf = 0x00000001;
     send_xpn(xpnframe, verbose);
 
     return (EXIT_SUCCESS);
@@ -308,6 +325,7 @@ int send_xpn_system_info(int verbose) {
     xpnframe[14] = 0x80;
     xpnframe[15] = 0x3E;
 
+    z21_data.bcf = 0x00000000;
     send_xpn(xpnframe, verbose);
     return (EXIT_SUCCESS);
 }
@@ -402,6 +420,7 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
 	    memcpy(xpnframe, XPN_X_STATUS_CHANGED, sizeof(XPN_X_STATUS_CHANGED));
 	    xpnframe[6] = z21_data->power ? 0x00 : 0x02;
 	    xpnframe[7] = xor(&xpnframe[4], 3);
+	    z21_data->bcf = 0x00000000;
 	    send_xpn(xpnframe, verbose);
 	    v_printf(verbose, "LAN_X_STATUS_CHANGED");
 	    break;
@@ -464,6 +483,7 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
 	    if (!zz) {
 		zz = 0x01;
 		v_printf(verbose, "\n");
+		z21_data->bcf = 0x00000001;
 		send_xpn_turnout_info(FAdr, zz, verbose);
 	    }
 	}
@@ -481,6 +501,7 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
 	break;
     case LAN_X_GET_FIRMWARE_VERSION:
 	v_printf(verbose, "LAN_X_GET_FIRMWARE_VERSION\n");
+	z21_data->bcf = 0x00000000;
 	send_xpn(XPN_X_Z21_FIRMWARE_VERSION, verbose);
 	v_printf(verbose, "LAN_X_FIRMWARE_VERSION %u.%u%u", XPN_X_Z21_FIRMWARE_VERSION[6],
 		XPN_X_Z21_FIRMWARE_VERSION[7] >> 4, XPN_X_Z21_FIRMWARE_VERSION[7] & 0xF);
@@ -508,18 +529,21 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
     case LAN_GET_SERIAL_NUMBER:
 	if (length == 4) {
 	    v_printf(verbose, "LAN_GET_SERIAL_NUMBER\n");
+	    z21_data->bcf = 0x00000000;
 	    send_xpn(XPN_SERIAL_NUMBER_RESPONSE, verbose);
 	    v_printf(verbose, "LAN_SERIAL_NUMBER 0x%08X", le32(&XPN_SERIAL_NUMBER_RESPONSE[4]));
 	}
 	break;
     case LAN_GET_CODE:
 	v_printf(verbose, "LAN_GET_CODE\n");
+	z21_data->bcf = 0x00000000;
 	send_xpn(XPN_GET_CODE_RESPONSE, verbose);
 	v_printf(verbose, "LAN_GET_CODE_RESPONSE");
 	break;
     case LAN_GET_HWINFO:
 	if (length == 4) {
 	    v_printf(verbose, "LAN_GET_HWINFO\n");
+	    z21_data->bcf = 0x00000000;
 	    send_xpn(XPN_HWINFO_RESPONSE, verbose);
 	    v_printf(verbose, "LAN HWINFO 0x%04X %u.%u%u", le32(&XPN_HWINFO_RESPONSE[4]),
 		 XPN_HWINFO_RESPONSE[9], XPN_HWINFO_RESPONSE[8] >> 4, XPN_HWINFO_RESPONSE[8] & 0xF);
@@ -547,12 +571,14 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
     case 0x12:
 	if (length == 0x04) {
 	    v_printf(verbose, "LAN_GET_STORE1?\n");
+	    z21_data->bcf = 0x00000000;
 	    send_xpn(XPN_X_STORE1, verbose);
 	}
 	break;
     case 0x16:
 	if (length == 0x04) {
 	    v_printf(verbose, "LAN_GET_STORE2?\n");
+	    z21_data->bcf = 0x00000000;
 	    send_xpn(XPN_X_STORE2, verbose);
 	}
 	break;
@@ -578,12 +604,14 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
 	case 0x00:
 	    if (uid) v_printf(verbose, "System: UID 0x%08X ", uid); else v_printf(verbose, "System: alle ");
 	    printf("Stop\n");
+	    z21_data->bcf = 0x00000001;
 	    send_xpn(XPN_X_BC_TRACK_POWER_OFF, verbose);
 	    z21_data->power = 0;
 	    break;
 	case 0x01:
 	    if (uid) v_printf(verbose, "System: UID 0x%08X ", uid); else v_printf(verbose, "System: alle ");
 	    printf("Go\n");
+	    z21_data->bcf = 0x00000001;
 	    send_xpn(XPN_X_BC_TRACK_POWER_ON, verbose);
 	    z21_data->power = 1;
 	    break;

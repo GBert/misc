@@ -44,7 +44,7 @@ int add_z21c_ip(uint32_t ip) {
 	}
 	gettimeofday(&(sub->last_seen), NULL);
 
-	printf("Clinet IP added %s\n", inet_ntoa(sub->client_addr.sin_addr));
+	printf("Client IP added %s\n", inet_ntoa(sub->client_addr.sin_addr));
 	HASH_ADD(hh, subscriber, ip, sizeof(uint32_t), sub);
     }
 
