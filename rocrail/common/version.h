@@ -1,11 +1,14 @@
 const int revisionnr = 
-688
+691
 ;
 const char* commithash = 
-"5e90c198048fda45162a66438ad2d218de2daeca";
+"e0ee2932597e94a27c40db2a096dee11cb06391a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"691 2020-04-28 14:41:47 +0200 wiodlg: fast PT option instead RC cutout\n" \
+"690 2020-04-28 11:01:45 +0200 lodi: traces\n" \
+"689 2020-04-28 10:58:40 +0200 lodi: programming\n" \
 "688 2020-04-28 10:44:49 +0200 lodi: programming support added\n" \
 "687 2020-04-27 15:30:48 +0200 rocrailinidialog: lodi added\n" \
 "686 2020-04-27 15:24:43 +0200 lodi: basic implementation\n" \
