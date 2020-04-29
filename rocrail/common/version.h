@@ -1,11 +1,15 @@
 const int revisionnr = 
-692
+696
 ;
 const char* commithash = 
-"9a8dc7c655a402fb3988e568cebccfb832895dd5";
+"73a40df6f9f3980b16ab53cb5f9cd2db7c071a6d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"696 2020-04-29 15:06:18 +0200 bidib: watchdog fix in case of no guest connection\n" \
+"695 2020-04-29 14:09:06 +0200 blockdialog: fix for signal property buttons\n" \
+"694 2020-04-29 10:59:31 +0200 bidib: correction for evaluating CS state\n" \
+"693 2020-04-29 09:51:21 +0200 trace: use a thread to write\n" \
 "692 2020-04-29 07:53:41 +0200 guiframe: filter out booster events for updating the power icon\n" \
 "691 2020-04-28 14:41:47 +0200 wiodlg: fast PT option instead RC cutout\n" \
 "690 2020-04-28 11:01:45 +0200 lodi: traces\n" \
