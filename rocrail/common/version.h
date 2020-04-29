@@ -1,11 +1,12 @@
 const int revisionnr = 
-691
+692
 ;
 const char* commithash = 
-"e0ee2932597e94a27c40db2a096dee11cb06391a";
+"9a8dc7c655a402fb3988e568cebccfb832895dd5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"692 2020-04-29 07:53:41 +0200 guiframe: filter out booster events for updating the power icon\n" \
 "691 2020-04-28 14:41:47 +0200 wiodlg: fast PT option instead RC cutout\n" \
 "690 2020-04-28 11:01:45 +0200 lodi: traces\n" \
 "689 2020-04-28 10:58:40 +0200 lodi: programming\n" \
