@@ -147,7 +147,7 @@ int send_z21_clients(unsigned char *udpframe, char *format, int verbose) {
     if (z21_data.bcf == 0) {
 	HASH_FIND_INT(subscriber, &z21_data.ip, z21client);
 	if (z21client) {
-	    s = sendto(z21client->client_socket, udpframe, length, 0, (struct sockaddr *)&z21client->client_addr, sizeof(z21client->client_addr));
+	    s = sendto(z21_data.sp, udpframe, length, 0, (struct sockaddr *)&z21client->client_addr, sizeof(z21client->client_addr));
 	    if (s < 0) {
 		fprintf(stderr, "UDP write error: %s\n", strerror(errno));
 		return (EXIT_FAILURE);
@@ -157,7 +157,7 @@ int send_z21_clients(unsigned char *udpframe, char *format, int verbose) {
     }
 
     HASH_ITER(hh, subscriber, z21client, tmp) {
-	s = sendto(z21client->client_socket, udpframe, length, 0, (struct sockaddr *)&z21client->client_addr, sizeof(z21client->client_addr));
+	s = sendto(z21_data.sp, udpframe, length, 0, (struct sockaddr *)&z21client->client_addr, sizeof(z21client->client_addr));
 	if (s < 0) {
 	    fprintf(stderr, "UDP write error: %s\n", strerror(errno));
 	    return (EXIT_FAILURE);

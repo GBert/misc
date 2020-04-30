@@ -32,12 +32,12 @@ int add_z21c_ip(uint32_t ip) {
 	    fprintf(stderr, "%s: can't calloc subscriber IP: %s\n", __func__, strerror(errno));
 	    return (EXIT_FAILURE);
 	}
-	sub->client_addr.sin_addr.s_addr = ip;
-	sub->client_addr.sin_family = AF_INET;
 	sub->ip = ip;
+	sub->client_addr.sin_family = AF_INET;
+	sub->client_addr.sin_addr.s_addr = ip;
 	/* TODO */
 	sub->client_addr.sin_port = htons(21105);
-	sub->client_socket = socket(AF_INET, SOCK_DGRAM, 0);
+	sub->client_socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	if (sub->client_socket < 0) {
 	    fprintf(stderr, "primary sending UDP socket error: %s\n", strerror(errno));
 	    exit(EXIT_FAILURE);
