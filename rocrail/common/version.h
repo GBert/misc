@@ -1,11 +1,12 @@
 const int revisionnr = 
-697
+698
 ;
 const char* commithash = 
-"866f50c41acf7460afd10fe82490720e5f384692";
+"5ca690c1b67de5c04336c3312c9f78b34da6a1f1";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"698 2020-04-30 15:18:05 +0200 model: do not inform digints in case a generated sensor has been added\n" \
 "697 2020-04-30 12:31:53 +0200 wcan: fix for return type\n" \
 "696 2020-04-29 15:06:18 +0200 bidib: watchdog fix in case of no guest connection\n" \
 "695 2020-04-29 14:09:06 +0200 blockdialog: fix for signal property buttons\n" \
