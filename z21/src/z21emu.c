@@ -83,7 +83,7 @@ static unsigned char XPN_X_STORE2[]               = { 0x14, 0x00, 0x16, 0x00, 0x
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c config_dir -p <port> -s <port>\n", prg);
-    fprintf(stderr, "   Version 0.98\n\n");
+    fprintf(stderr, "   Version 0.99\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory - default %s\n", config_dir);
     fprintf(stderr, "         -p <port>           primary UDP port for the server - default %d\n", PRIMARY_UDP_PORT);
     fprintf(stderr, "         -s <port>           secondary UDP port for the server - default %d\n", SECONDARY_UDP_PORT);
@@ -157,10 +157,12 @@ int send_z21_clients(unsigned char *udpframe, char *format, int verbose) {
     }
 
     HASH_ITER(hh, subscriber, z21client, tmp) {
-	s = sendto(z21_data.sp, udpframe, length, 0, (struct sockaddr *)&z21client->client_addr, sizeof(z21client->client_addr));
-	if (s < 0) {
-	    fprintf(stderr, "UDP write error: %s\n", strerror(errno));
-	    return (EXIT_FAILURE);
+	if (z21_data.bcf & z21client->broadcast_flags) {
+	    s = sendto(z21_data.sp, udpframe, length, 0, (struct sockaddr *)&z21client->client_addr, sizeof(z21client->client_addr));
+	    if (s < 0) {
+		fprintf(stderr, "UDP write error: %s\n", strerror(errno));
+		return (EXIT_FAILURE);
+	    }
 	}
     }
     return (EXIT_SUCCESS);

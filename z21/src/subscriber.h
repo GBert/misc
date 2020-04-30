@@ -14,6 +14,8 @@
 #include <netinet/in.h>
 #include "uthash.h"
 
+#define	DEFAULT_BROADCAST_FLAGS	0x03000009
+
 struct subscriber_t {
     uint32_t ip;
     uint32_t broadcast_flags;
