@@ -59,7 +59,6 @@ static char *TCP_FORMATS_STRG	= "->TCP*   CANID 0x%06X   [%d]";
 char cs2addr[32] = "127.0.0.1";
 char config_dir[MAXLINE] = "/www/config/";
 
-
 static unsigned char MS_POWER_ON[]		= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
 static unsigned char MS_POWER_OFF[]		= { 0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
@@ -87,8 +86,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -c <config_dir>     set the config directory - default %s\n", config_dir);
     fprintf(stderr, "         -p <port>           primary UDP port for the server - default %d\n", PRIMARY_UDP_PORT);
     fprintf(stderr, "         -s <port>           secondary UDP port for the server - default %d\n", SECONDARY_UDP_PORT);
-    fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface\n");
-    fprintf(stderr, "         -g <gateway addr>    gateway IP\n");
+    fprintf(stderr, "         -g <gateway addr>   gateway IP\n");
 #ifndef NO_CAN
     fprintf(stderr, "         -i <CAN interface>  CAN interface\n");
 #endif
@@ -101,7 +99,7 @@ unsigned int m_id(uint16_t loco_id) {
 	return (loco_id + 0xa000);
     else if (loco_id > 0xff)
 	return (loco_id + 0x3f00);
-    return((unsigned int )loco_id);
+    return((unsigned int)loco_id);
 }
 
 uint16_t xpn_id(unsigned int m_id) {
@@ -113,24 +111,6 @@ uint16_t xpn_id(unsigned int m_id) {
     } else {
 	return(m_id - 0xA000);
     }
-}
-
-int send_broadcast(unsigned char *udpframe, char *format, int verbose) {
-    int s;
-    uint16_t length;
-
-    length = le16(&udpframe[0]);
-    s = sendto(z21_data.sb, udpframe, length, 0, (struct sockaddr *)&z21_data.sbaddr, sizeof(z21_data.sbaddr));
-
-    if (s < 0) {
-	fprintf(stderr, "UDP write error: %s\n", strerror(errno));
-	return (EXIT_FAILURE);
-    }
-    if (s != length) {
-    } else {
-	print_udp_frame(format, length, udpframe);
-    }
-    return (EXIT_SUCCESS);
 }
 
 int send_z21_clients(unsigned char *udpframe, char *format, int verbose) {
@@ -228,11 +208,11 @@ int send_xpn_loco_info(uint16_t uid, int verbose) {
 
     xpnframe[5] = loco_id >> 8;
     xpnframe[6] = loco_id & 0xff;
-    xpnframe[7] = 4; /* TODO */
+    xpnframe[7] = 4;		/* TODO */
     if ((speed > 0) && (speed < 16))
 	xpnframe[8] = 2;
     else
-	xpnframe[8] = (loco_get_speed(uid) >> 3) & 0xff; /*TODO */
+	xpnframe[8] = (loco_get_speed(uid) >> 3) & 0xff;	/*TODO */
     direction = loco_get_direction(uid);
     if (direction != 1)
 	direction = 0;
@@ -276,9 +256,9 @@ int send_xpn_loco_name(uint16_t loco_id, char *loco_name, uint8_t index, uint8_t
     return (EXIT_SUCCESS);
 }
 
-int send_xpn_locos(struct z21_data_t *z21_data, struct loco_data_t *loco_data, int verbose) { 
+int send_xpn_locos(struct z21_data_t *z21_data, struct loco_data_t *loco_data, int verbose) {
     struct loco_data_t *l;
-    int i=0;
+    int i = 0;
 
     for (l = loco_data; l != NULL; l = l->hh.next) {
 	send_xpn_loco_name(l->uid, l->name, i, z21_data->loco_number, verbose);
@@ -290,7 +270,7 @@ int send_xpn_locos(struct z21_data_t *z21_data, struct loco_data_t *loco_data, i
 	i++;
     }
     return (EXIT_SUCCESS);
-} 
+}
 
 int send_xpn_turnout_info(uint16_t FAdr, uint8_t zz, int verbose) {
     unsigned char xpnframe[32];
@@ -332,13 +312,12 @@ int send_xpn_system_info(int verbose) {
     return (EXIT_SUCCESS);
 }
 
-
 void set_loco_id(unsigned char *data, uint16_t loco_id) {
     /*
-      0x0000 - 0x007F mm2_prg   Adresse + 0x0000
-      0x0080 - 0x00FF mm2_dil   Adresse + 0x0080
-      0x0100 - 0x1FFF mfx       Adresse + 0x0100
-      0x2000 - 0x3FFF dcc       Adresse + 0x2000
+       0x0000 - 0x007F mm2_prg   Adresse + 0x0000
+       0x0080 - 0x00FF mm2_dil   Adresse + 0x0080
+       0x0100 - 0x1FFF mfx       Adresse + 0x0100
+       0x2000 - 0x3FFF dcc       Adresse + 0x2000
      */
     if (loco_id < 0x0100) {
 	data[2] = 0x00;
@@ -506,7 +485,7 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
 	z21_data->bcf = 0x00000000;
 	send_xpn(XPN_X_Z21_FIRMWARE_VERSION, verbose);
 	v_printf(verbose, "LAN_X_FIRMWARE_VERSION %u.%u%u", XPN_X_Z21_FIRMWARE_VERSION[6],
-		XPN_X_Z21_FIRMWARE_VERSION[7] >> 4, XPN_X_Z21_FIRMWARE_VERSION[7] & 0xF);
+		 XPN_X_Z21_FIRMWARE_VERSION[7] >> 4, XPN_X_Z21_FIRMWARE_VERSION[7] & 0xF);
 	break;
     default:
 	break;
@@ -548,7 +527,7 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	    z21_data->bcf = 0x00000000;
 	    send_xpn(XPN_HWINFO_RESPONSE, verbose);
 	    v_printf(verbose, "LAN HWINFO 0x%04X %u.%u%u", le32(&XPN_HWINFO_RESPONSE[4]),
-		 XPN_HWINFO_RESPONSE[9], XPN_HWINFO_RESPONSE[8] >> 4, XPN_HWINFO_RESPONSE[8] & 0xF);
+		     XPN_HWINFO_RESPONSE[9], XPN_HWINFO_RESPONSE[8] >> 4, XPN_HWINFO_RESPONSE[8] & 0xF);
 	}
 	break;
     case LAN_LOGOFF:
@@ -604,14 +583,20 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
     case 0x01:
 	switch (data[9]) {
 	case 0x00:
-	    if (uid) v_printf(verbose, "System: UID 0x%08X ", uid); else v_printf(verbose, "System: alle ");
+	    if (uid)
+		v_printf(verbose, "System: UID 0x%08X ", uid);
+	    else
+		v_printf(verbose, "System: alle ");
 	    printf("Stop\n");
 	    z21_data->bcf = 0x00000001;
 	    send_xpn(XPN_X_BC_TRACK_POWER_OFF, verbose);
 	    z21_data->power = 0;
 	    break;
 	case 0x01:
-	    if (uid) v_printf(verbose, "System: UID 0x%08X ", uid); else v_printf(verbose, "System: alle ");
+	    if (uid)
+		v_printf(verbose, "System: UID 0x%08X ", uid);
+	    else
+		v_printf(verbose, "System: alle ");
 	    printf("Go\n");
 	    z21_data->bcf = 0x00000001;
 	    send_xpn(XPN_X_BC_TRACK_POWER_ON, verbose);
@@ -619,7 +604,7 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
 	    break;
 	/* emergency stop */
 	case 0x03:
-	    if(uid) {
+	    if (uid) {
 		loco_save_speed(uid, 0);
 		send_xpn_loco_info(uid, verbose);
 	    }
@@ -649,7 +634,7 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
 	send_xpn_loco_info(uid, verbose);
 	break;
     case 0x0B:
- 	/* v_printf(verbose, "loco uid 0x%08X : actual direction %u - saved direction %u", uid, data[9], loco_get_direction(uid));*/
+	/* v_printf(verbose, "loco uid 0x%08X : actual direction %u - saved direction %u", uid, data[9], loco_get_direction(uid)); */
 	if (data[9] != loco_get_direction(uid)) {
 	    loco_save_direction(uid, data[9]);
 	    v_printf(verbose, "\n");
@@ -688,20 +673,14 @@ int main(int argc, char **argv) {
     pid_t pid;
     pthread_t pth;
     int ret, opt, max_fds;
-    /* primary UDP socket , secondary UDP socket, UDP broadcast socket */
-    struct ifaddrs *ifap, *ifa;
     struct ifreq ifr;
 #ifndef NO_CAN
     struct sockaddr_can caddr;
 #endif
-    struct sockaddr_in *bsa;
     struct sockaddr_in src_addr;
     fd_set readfds;
     int primary_port = PRIMARY_UDP_PORT;
     int secondary_port = SECONDARY_UDP_PORT;
-    const int on = 1;
-    char *udp_dst_address;
-    char *bcast_interface;
     unsigned char recvline[MAXSIZE];
     char timestamp[16];
     char *loco_file;
@@ -711,20 +690,7 @@ int main(int argc, char **argv) {
 #endif
     socklen_t slen = sizeof(src_addr);
 
-    memset(&ifr, 0, sizeof(ifr));
     memset(&z21_data, 0, sizeof(z21_data));
-
-    udp_dst_address = (char *)calloc(MAXIPLEN, 1);
-    if (!udp_dst_address) {
-	fprintf(stderr, "can't alloc memory for udp_dst_address: %s\n", strerror(errno));
-	exit(EXIT_FAILURE);
-    };
-
-    bcast_interface = (char *)calloc(MAXIPLEN, 1);
-    if (!bcast_interface) {
-	fprintf(stderr, "can't alloc memory for bcast_interface: %s\n", strerror(errno));
-	exit(EXIT_FAILURE);
-    };
 
     while ((opt = getopt(argc, argv, "c:p:s:b:g:i:xhf?")) != -1) {
 	switch (opt) {
@@ -741,21 +707,6 @@ int main(int argc, char **argv) {
 	    break;
 	case 's':
 	    secondary_port = strtoul(optarg, (char **)NULL, 10);
-	    break;
-	case 'b':
-	    if (strnlen(optarg, MAXIPLEN) <= MAXIPLEN - 1) {
-		/* broadcat IP begins with a number */
-		if ((optarg[0] >= '0') && (optarg[0] <= '9')) {
-		    memset(udp_dst_address, 0, MAXIPLEN);
-		    strncpy(udp_dst_address, optarg, MAXIPLEN - 1);
-		} else {
-		    memset(bcast_interface, 0, MAXIPLEN);
-		    strncpy(bcast_interface, optarg, MAXIPLEN - 1);
-		}
-	    } else {
-		fprintf(stderr, "UDP broadcast address or interface error: %s\n", optarg);
-		exit(EXIT_FAILURE);
-	    }
 	    break;
 	case 'g':
 	    strncpy(cs2addr, optarg, sizeof(cs2addr) - 1);
@@ -812,47 +763,6 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "scondary UDP bind error: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
-
-    /* prepare UDP sending socket */
-    /* get the broadcast address */
-    if (getifaddrs(&ifap) == -1) {
-	fprintf(stderr, "can't get broadcast address: %s\n", strerror(errno));
-	exit(EXIT_FAILURE);
-    }
-
-    for (ifa = ifap; ifa != NULL; ifa = ifa->ifa_next) {
-	if (ifa->ifa_addr == NULL)
-	    continue;
-	if (ifa->ifa_addr->sa_family == AF_INET) {
-	    bsa = (struct sockaddr_in *)ifa->ifa_broadaddr;
-	    if (strncmp(ifa->ifa_name, bcast_interface, strlen(bcast_interface)) == 0)
-		udp_dst_address = inet_ntoa(bsa->sin_addr);
-	    }
-    }
-    freeifaddrs(ifap);
-
-    z21_data.sbaddr.sin_family = AF_INET;
-    z21_data.sbaddr.sin_port = htons(primary_port);
-
-    ret = inet_pton(AF_INET, udp_dst_address, &z21_data.sbaddr.sin_addr);
-    if (ret <= 0) {
-	if (ret == 0)
-	    fprintf(stderr, "UDP IP invalid\n");
-	else
-	    fprintf(stderr, "invalid address family\n");
-	exit(EXIT_FAILURE);
-    }
-
-    z21_data.sb = socket(AF_INET, SOCK_DGRAM, 0);
-    if (z21_data.sb < 0) {
-	fprintf(stderr, "sending UDP socket error %s\n", strerror(errno));
-	exit(EXIT_FAILURE);
-    }
-    if (setsockopt(z21_data.sb, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) < 0) {
-	fprintf(stderr, "UDP set socket option error: %s\n", strerror(errno));
-	exit(EXIT_FAILURE);
-    }
-
 
     if (strlen(ifr.ifr_name)) {
 #ifndef NO_CAN
@@ -952,7 +862,6 @@ int main(int argc, char **argv) {
 	    fprintf(stderr, "select error: %s\n", strerror(errno));
 	    break;
 	}
-
 #ifndef NO_CAN
 	if (FD_ISSET(z21_data.sc, &readfds)) {
 	}
@@ -961,7 +870,7 @@ int main(int argc, char **argv) {
 	/* received a UDP packet on primary */
 	if (FD_ISSET(z21_data.sp, &readfds)) {
 	    memset(&src_addr, 0, sizeof(src_addr));
-	    ret = recvfrom(z21_data.sp, z21_data.udpframe, MAXDG, 0, (struct sockaddr *) &src_addr, &slen);
+	    ret = recvfrom(z21_data.sp, z21_data.udpframe, MAXDG, 0, (struct sockaddr *)&src_addr, &slen);
 	    /* v_printf(verbose, "FD_ISSET sp, ret %d\n", ret); */
 	    if (ret < 0) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));
@@ -972,12 +881,11 @@ int main(int argc, char **argv) {
 		add_z21c_ip(z21_data.ip);
 		check_data_xpn(&z21_data, ret, z21_data.foreground);
 	    }
-	    /* send_broadcast(z21_data.udpframe, UDP_DST_STRG, z21_data.foreground); */
 	}
 	/* received a UDP packet on secondary */
 	if (FD_ISSET(z21_data.ss, &readfds)) {
 	    memset(&src_addr, 0, sizeof(src_addr));
-	    ret = recvfrom(z21_data.ss, z21_data.udpframe, MAXDG, 0, (struct sockaddr *) &src_addr, &slen);
+	    ret = recvfrom(z21_data.ss, z21_data.udpframe, MAXDG, 0, (struct sockaddr *)&src_addr, &slen);
 	    /* v_printf(verbose, "FD_ISSET ss, ret %d\n", ret); */
 	    if (ret < 0) {
 		fprintf(stderr, "UDP read error: %s\n", strerror(errno));

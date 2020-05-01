@@ -824,7 +824,6 @@ int read_loco_data(char *config_file, int config_type) {
 
     function = -1;
     mfx_data = -1;
-    temp = -1;
 
     /* trigger for new entry */
     loco_complete = 0;

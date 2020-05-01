@@ -33,7 +33,7 @@ int add_z21c_ip(uint32_t ip) {
 	    return (EXIT_FAILURE);
 	}
 	sub->ip = ip;
-	sub->broadcast_flags=DEFAULT_BROADCAST_FLAGS;
+	sub->broadcast_flags = DEFAULT_BROADCAST_FLAGS;
 	sub->client_addr.sin_family = AF_INET;
 	sub->client_addr.sin_addr.s_addr = ip;
 	/* TODO */
@@ -73,4 +73,3 @@ int del_z21c_ip(uint32_t ip) {
     }
     return(EXIT_FAILURE);
 }
-
