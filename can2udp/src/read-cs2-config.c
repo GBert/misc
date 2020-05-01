@@ -242,6 +242,7 @@ int add_magnet(struct magnet_data_t *magnet) {
 	    m->name = calloc(strlen(magnet->name) + 1, 1);
 	    if (!m->name) {
 		fprintf(stderr, "%s: can't calloc magnet name: %s\n", __func__, strerror(errno));
+		free(m);
 		return (EXIT_FAILURE);
 	    }
 	    strcpy(m->name, magnet->name);
@@ -824,7 +825,6 @@ int read_loco_data(char *config_file, int config_type) {
 
     function = -1;
     mfx_data = -1;
-    temp = -1;
 
     /* trigger for new entry */
     loco_complete = 0;
