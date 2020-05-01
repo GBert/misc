@@ -1,11 +1,12 @@
 const int revisionnr = 
-699
+700
 ;
 const char* commithash = 
-"954800d4e95beb60a4c58124ff43f93c6161beb9";
+"5b46debfa65180e71c76fa6c6d753fa3289aa6d3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"700 2020-05-01 07:47:53 +0200 wrapper: default boosterevent attribute false in case of state events\n" \
 "699 2020-04-30 18:08:50 +0200 check if an item is selected\n" \
 "698 2020-04-30 15:18:05 +0200 model: do not inform digints in case a generated sensor has been added\n" \
 "697 2020-04-30 12:31:53 +0200 wcan: fix for return type\n" \
