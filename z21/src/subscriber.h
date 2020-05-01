@@ -14,7 +14,7 @@
 #include <netinet/in.h>
 #include "uthash.h"
 
-#define	DEFAULT_BROADCAST_FLAGS	0x03000009
+#define	DEFAULT_BROADCAST_FLAGS	0x00000001
 
 struct subscriber_t {
     uint32_t ip;
