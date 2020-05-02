@@ -1,11 +1,12 @@
 const int revisionnr = 
-700
+701
 ;
 const char* commithash = 
-"5b46debfa65180e71c76fa6c6d753fa3289aa6d3";
+"4f2aec62575ee04c85503b4c2006980e44162e27";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"701 2020-05-02 10:04:01 +0200 trace: fix for async writer using 100% CPU in case no file is specified\n" \
 "700 2020-05-01 07:47:53 +0200 wrapper: default boosterevent attribute false in case of state events\n" \
 "699 2020-04-30 18:08:50 +0200 check if an item is selected\n" \
 "698 2020-04-30 15:18:05 +0200 model: do not inform digints in case a generated sensor has been added\n" \
