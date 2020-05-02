@@ -791,7 +791,7 @@ int main(int argc, char **argv) {
 		}
 	    }
 	    if (trigger_data.fsm_state != FSM_IDLE) {
-		if (--fsm_watchdog == 0) {
+		if (fsm_watchdog-- == 0) {
 		    trigger_data.fsm_state = FSM_IDLE;
 		    fsm_watchdog = FSM_WATCHDOG_T;
 		}
