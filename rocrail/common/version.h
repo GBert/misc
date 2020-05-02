@@ -1,11 +1,12 @@
 const int revisionnr = 
-701
+702
 ;
 const char* commithash = 
-"4f2aec62575ee04c85503b4c2006980e44162e27";
+"f3796ddb7f8fad7cfdead98329088ad435d65a08";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"702 2020-05-02 14:58:52 +0200 z21: trace unhandled packets with trace level BYTE\n" \
 "701 2020-05-02 10:04:01 +0200 trace: fix for async writer using 100% CPU in case no file is specified\n" \
 "700 2020-05-01 07:47:53 +0200 wrapper: default boosterevent attribute false in case of state events\n" \
 "699 2020-04-30 18:08:50 +0200 check if an item is selected\n" \
