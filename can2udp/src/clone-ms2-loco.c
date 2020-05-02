@@ -53,6 +53,7 @@ int do_loop;
 #define MAX_SYSFS_LEN	256
 #define DEF_INTERVAL	300
 #define MAXLINE		256
+#define FSM_WATCHDOG_T	60
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
 #define fprint_syslog(pipe, spipe, text) \
 	   do { fprintf( pipe, "%s: " text "\n", __func__); \
@@ -82,6 +83,7 @@ enum gpio_edges {
 };
 
 enum fsm_get_data {
+    FSM_IDLE,
     FSM_START,
     FSM_GET_LOCO_NAMES,
     FSM_GET_LOCOS_BY_NAME
@@ -104,6 +106,7 @@ struct trigger_t {
     int background;
     int verbose;
     int interval;
+    int fsm_watchdog;
     int led_pin;
     int led_pattern;
     int pb_pin;
@@ -134,7 +137,7 @@ void signal_handler(int sig) {
 
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -kfv [-i <CAN int>][-t <sec>][-l <LED pin>][-p <push button pin>]\n", prg);
-    fprintf(stderr, "   Version 1.7\n\n");
+    fprintf(stderr, "   Version 1.8\n\n");
     fprintf(stderr, "         -c <loco_dir>        set the locomotive file dir - default %s\n", loco_dir);
     fprintf(stderr, "         -i <CAN interface>   using can interface\n");
     fprintf(stderr, "         -t <interval in sec> using timer in sec\n");
@@ -527,7 +530,9 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 		/* start over with a new list */
 		delete_all_loco_names();
 		set_led_pattern(trigger, LED_ST_HB_SLOW);
-		trigger->fsm_state = FSM_START;
+		if (!trigger->background && trigger->verbose)
+		    printf("FSM_IDLE done\n");
+		trigger->fsm_state = FSM_IDLE;
 		trigger->loco_counter = 0;
 	    }
 	    break;
@@ -594,7 +599,7 @@ int main(int argc, char **argv) {
     pthread_t pth;
     struct sigaction sigact;
     sigset_t blockset, emptyset;
-    int opt, nready, interval;
+    int opt, nready, interval, fsm_watchdog;
     struct ifreq ifr;
     struct trigger_t trigger_data;
     struct sockaddr_can caddr;
@@ -609,11 +614,12 @@ int main(int argc, char **argv) {
     strcpy(ifr.ifr_name, "can0");
     do_loop = 1;
     interval = 0;
+    fsm_watchdog = FSM_WATCHDOG_T;
 
     strcpy(loco_dir, "/www/config");
 
     trigger_data.hash = OUR_HASH;
-    trigger_data.fsm_state = FSM_START;
+    trigger_data.fsm_state = FSM_IDLE;
     trigger_data.led_pin = -1;
     trigger_data.pb_pin = -1;
 
@@ -784,6 +790,12 @@ int main(int argc, char **argv) {
 		    interval = trigger_data.interval;
 		}
 	    }
+	    if (trigger_data.fsm_state != FSM_IDLE) {
+		if (--fsm_watchdog == 0) {
+		    trigger_data.fsm_state = FSM_IDLE;
+		    fsm_watchdog = FSM_WATCHDOG_T;
+		}
+	    }
 	    continue;
 	} else if (nready < 0) {
 	    fprintf(stderr, "pselect exception: %s\n", strerror(errno));
@@ -808,16 +820,22 @@ int main(int argc, char **argv) {
 			print_can_frame(F_CAN_FORMAT_STRG, &frame);
 		    /* initiate trigger when loco "Lokliste" and F0 pressed */
 		    if ((uid == trigger_data.loco_uid) && (frame.data[4] == 0)) {
-			if (!trigger_data.background && trigger_data.verbose)
-			    printf("clone MS2 locos\n");
-			get_ms2_dbsize(&trigger_data);
+			if (trigger_data.fsm_state == FSM_IDLE) {
+			    trigger_data.fsm_state = FSM_START;
+			    if (!trigger_data.background && trigger_data.verbose)
+				printf("FSM_START clone MS2 locos\n");
+			    get_ms2_dbsize(&trigger_data);
+			}
 		    }
 		    /* delete all locos if "Lokliste" exists and F4 pressed */
 		    if ((uid == trigger_data.loco_uid) && (frame.data[4] == 4)) {
-			reset_loco_list();
-			if (!trigger_data.background && trigger_data.verbose)
-			    printf("reset loco file & read MS2 locos\n");
-			get_ms2_dbsize(&trigger_data);
+			if (trigger_data.fsm_state == FSM_IDLE) {
+			    trigger_data.fsm_state = FSM_START;
+			    reset_loco_list();
+			    if (!trigger_data.background && trigger_data.verbose)
+				printf("FSM_START reset loco file & read MS2 locos\n");
+			    get_ms2_dbsize(&trigger_data);
+			}
 		    }
 		    break;
 		case 0x41:
