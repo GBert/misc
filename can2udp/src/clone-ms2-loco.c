@@ -786,6 +786,7 @@ int main(int argc, char **argv) {
 	    ts.tv_nsec = 0;
 	    if (trigger_data.interval) {
 		if (interval-- == 0) {
+		    trigger_data.fsm_state = FSM_START;
 		    get_ms2_dbsize(&trigger_data);
 		    interval = trigger_data.interval;
 		}
@@ -862,6 +863,7 @@ int main(int argc, char **argv) {
 	}
 	/* push button event */
 	if (FD_ISSET(trigger_data.pb_fd, &exceptfds)) {
+	    trigger_data.fsm_state = FSM_START;
 	    get_ms2_dbsize(&trigger_data);
 
 	    lseek(trigger_data.pb_fd, 0, SEEK_SET);
