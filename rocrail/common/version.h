@@ -1,11 +1,15 @@
 const int revisionnr = 
-702
+706
 ;
 const char* commithash = 
-"f3796ddb7f8fad7cfdead98329088ad435d65a08";
+"394bef6ede51142ac8712232e014439bb8355da2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"706 2020-05-03 15:09:26 +0200 makewin scripts: only use 2 make jobs to avoid a g++ kill signal\n" \
+"705 2020-05-03 14:44:27 +0200 inno update\n" \
+"704 2020-05-03 10:02:21 +0200 clock: member variable normalized\n" \
+"703 2020-05-03 08:07:56 +0200 meter: smaller font size for Windows\n" \
 "702 2020-05-02 14:58:52 +0200 z21: trace unhandled packets with trace level BYTE\n" \
 "701 2020-05-02 10:04:01 +0200 trace: fix for async writer using 100% CPU in case no file is specified\n" \
 "700 2020-05-01 07:47:53 +0200 wrapper: default boosterevent attribute false in case of state events\n" \
