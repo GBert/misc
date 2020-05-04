@@ -1,12 +1,11 @@
 const int revisionnr = 
-708
+707
 ;
 const char* commithash = 
-"23a86cf165c7bd3aa965079fd48a7f95bc90cb72";
+"3433d3161467e0803d742d89f55ca8a29d08deb9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
-"708 2020-05-04 18:21:10 +0200 cleanup\n" \
 "707 2020-05-04 15:26:15 +0200 installwx.sh: check if apt or zypper\n" \
 "706 2020-05-03 15:09:26 +0200 makewin scripts: only use 2 make jobs to avoid a g++ kill signal\n" \
 "705 2020-05-03 14:44:27 +0200 inno update\n" \
