@@ -4,6 +4,58 @@ version
 session
  .id=32
 lokomotive
+ .name=Lokliste
+ .richtung=1
+ .uid=0x1
+ .adresse=0x1
+ .typ=mm2_prg
+ .icon=Lokliste
+ .symbol=2
+ .av=6
+ .bv=3
+ .volume=25
+ .tachomax=0
+ .vmax=63
+ .vmin=3
+ .funktionen
+ ..nr=0
+ ..typ=178
+ ..wert=1
+ .funktionen
+ ..nr=1
+ ..typ=179
+ .funktionen
+ ..nr=2
+ ..typ=180
+ .funktionen
+ ..nr=3
+ ..typ=181
+ .funktionen
+ ..nr=4
+ ..typ=182
+ .funktionen
+ ..nr=5
+ .funktionen
+ ..nr=6
+ .funktionen
+ ..nr=7
+ .funktionen
+ ..nr=8
+ .funktionen
+ ..nr=9
+ .funktionen
+ ..nr=10
+ .funktionen
+ ..nr=11
+ .funktionen
+ ..nr=12
+ .funktionen
+ ..nr=13
+ .funktionen
+ ..nr=14
+ .funktionen
+ ..nr=15
+lokomotive
  .name=111 088-1 DB AG
  .uid=0x4005
  .adresse=0x5
