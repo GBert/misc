@@ -40,6 +40,12 @@
 #define v_printf(verbose, ...) \
 	do { if ((verbose)) { printf(__VA_ARGS__);} } while (0)
 
+#define vas_printf(verbose, ...) \
+	do { if ((verbose)) { asprintf(__VA_ARGS__);} } while (0)
+
+#define check_free(a) \
+            do { if ( a ) free(a); } while (0)
+
 struct sockaddr_in *bsa;
 pthread_mutex_t lock;
 
@@ -113,18 +119,19 @@ uint16_t xpn_id(unsigned int m_id) {
     }
 }
 
-int send_z21_clients(unsigned char *udpframe, char *format, int verbose) {
+int send_z21_clients(unsigned char *udpframe, char *format, char *vchar) {
     int s;
     uint16_t length;
     struct subscriber_t *z21client, *tmp;
 
     length = le16(&udpframe[0]);
 
-    if (verbose)
-	print_udp_frame(format, length, udpframe);
-
     /* check if BROACAST FLAGS indicates only directed answer to one client */
     if (z21_data.bcf == 0) {
+	if (vchar) {
+	    print_udp_frame(format, length, udpframe);
+	    printf("%s", vchar);
+	}
 	HASH_FIND_INT(subscriber, &z21_data.ip, z21client);
 	if (z21client) {
 	    s = sendto(z21_data.sp, udpframe, length, 0, (struct sockaddr *)&z21client->client_addr, sizeof(z21client->client_addr));
@@ -138,6 +145,10 @@ int send_z21_clients(unsigned char *udpframe, char *format, int verbose) {
 
     HASH_ITER(hh, subscriber, z21client, tmp) {
 	if (z21_data.bcf & z21client->broadcast_flags) {
+	    if (vchar) {
+		print_udp_frame(format, length, udpframe);
+		printf("%s", vchar);
+	    }
 	    s = sendto(z21_data.sp, udpframe, length, 0, (struct sockaddr *)&z21client->client_addr, sizeof(z21client->client_addr));
 	    if (s < 0) {
 		fprintf(stderr, "UDP write error: %s\n", strerror(errno));
@@ -148,7 +159,7 @@ int send_z21_clients(unsigned char *udpframe, char *format, int verbose) {
     return (EXIT_SUCCESS);
 }
 
-int send_xpn(unsigned char *data, int verbose) {
+int send_xpn(unsigned char *data, char *vchar) {
     unsigned char udpxpn[64];
     char *format;
     int length;
@@ -160,7 +171,7 @@ int send_xpn(unsigned char *data, int verbose) {
     }
     memcpy(udpxpn, data, length);
     format = UDP_DST_STRG;
-    send_z21_clients(udpxpn, format, verbose);
+    send_z21_clients(udpxpn, format, vchar);
     return (EXIT_SUCCESS);
 }
 
@@ -200,7 +211,9 @@ int send_xpn_loco_info(uint16_t uid, int verbose) {
     unsigned char xpnframe[32];
     unsigned int comp_func;
     uint16_t loco_id, speed;
+    char *vchar;
 
+    vchar = NULL;
     memcpy(xpnframe, XPN_X_LOCO_INFO, sizeof(XPN_X_LOCO_INFO));
     loco_id = xpn_id(uid);
     comp_func = loco_get_func_summary(uid);
@@ -223,8 +236,9 @@ int send_xpn_loco_info(uint16_t uid, int verbose) {
     xpnframe[12] = (comp_func >> 21) & 0xFF;
     xpnframe[13] = xor(&xpnframe[4], 8);
     z21_data.bcf = 0x00000001;
-    send_xpn(xpnframe, verbose);
-    v_printf(verbose, "LAN_X_LOCO_INFO LOC ID 0x%04X", loco_id);
+    vas_printf(verbose, &vchar, "LAN_X_LOCO_INFO LOC ID 0x%04X\n", loco_id);
+    send_xpn(xpnframe, vchar);
+    check_free(vchar);
 
     return (EXIT_SUCCESS);
 }
@@ -232,7 +246,9 @@ int send_xpn_loco_info(uint16_t uid, int verbose) {
 int send_xpn_loco_name(uint16_t loco_id, char *loco_name, uint8_t index, uint8_t n, int verbose) {
     unsigned char xpnframe[32];
     size_t length;
+    char *vchar;
 
+    vchar = NULL;
     memset(xpnframe, 0, sizeof(xpnframe));
     length = strnlen(loco_name, 10);
 
@@ -251,8 +267,9 @@ int send_xpn_loco_name(uint16_t loco_id, char *loco_name, uint8_t index, uint8_t
     memcpy(&xpnframe[10], loco_name, length);
     xpnframe[length + 10] = xor(&xpnframe[4], length + 6);
     z21_data.bcf = 0x00000000;
-    send_xpn(xpnframe, verbose);
-    v_printf(verbose, " LAN_LOCO 0x%04X %s", loco_id, loco_name);
+    vas_printf(verbose, &vchar, " LAN_LOCO 0x%04X %s", loco_id, loco_name);
+    send_xpn(xpnframe, vchar);
+    check_free(vchar);
     return (EXIT_SUCCESS);
 }
 
@@ -272,7 +289,7 @@ int send_xpn_locos(struct z21_data_t *z21_data, struct loco_data_t *loco_data, i
     return (EXIT_SUCCESS);
 }
 
-int send_xpn_turnout_info(uint16_t FAdr, uint8_t zz, int verbose) {
+int send_xpn_turnout_info(uint16_t FAdr, uint8_t zz, char *vchar) {
     unsigned char xpnframe[32];
 
     memcpy(xpnframe, XPN_X_TURNOUT_INFO, sizeof(XPN_X_TURNOUT_INFO));
@@ -282,12 +299,12 @@ int send_xpn_turnout_info(uint16_t FAdr, uint8_t zz, int verbose) {
 
     xpnframe[8] = xor(&xpnframe[4], 4);
     z21_data.bcf = 0x00000001;
-    send_xpn(xpnframe, verbose);
+    send_xpn(xpnframe, vchar);
 
     return (EXIT_SUCCESS);
 }
 
-int send_xpn_system_info(int verbose) {
+int send_xpn_system_info(char *vchar) {
     /* TODO */
     unsigned char xpnframe[32];
 
@@ -308,7 +325,7 @@ int send_xpn_system_info(int verbose) {
     xpnframe[15] = 0x3E;
 
     z21_data.bcf = 0x00000000;
-    send_xpn(xpnframe, verbose);
+    send_xpn(xpnframe, vchar);
     return (EXIT_SUCCESS);
 }
 
@@ -389,7 +406,9 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
     uint8_t db0, tport, turnout, value, xheader, zz;
     uint16_t length, loco_id, FAdr;
     unsigned char xpnframe[32];
+    char *vchar;
 
+    vchar = NULL;
     length = le16(&z21_data->udpframe[0]);
     xheader = z21_data->udpframe[4];
     switch (xheader) {
@@ -402,30 +421,32 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
 	    xpnframe[6] = z21_data->power ? 0x00 : 0x02;
 	    xpnframe[7] = xor(&xpnframe[4], 3);
 	    z21_data->bcf = 0x00000000;
-	    send_xpn(xpnframe, verbose);
-	    v_printf(verbose, "LAN_X_STATUS_CHANGED");
+	    vas_printf(verbose, &vchar, "LAN_X_STATUS_CHANGED\n");
+	    send_xpn(xpnframe, vchar);
 	    break;
 	case LAN_X_SET_TRACK_POWER_ON:
 	    v_printf(verbose, "LAN_X_SET_TRACK_POWER_ON\n");
 	    z21_data->power = 1;
 	    send_can(MS_POWER_ON, verbose);
+	    v_printf(verbose, "\n");
 	    break;
 	case LAN_X_SET_TRACK_POWER_OFF:
 	    v_printf(verbose, "LAN_X_SET_TRACK_POWER_OFF\n");
 	    z21_data->power = 0;
 	    send_can(MS_POWER_OFF, verbose);
+	    v_printf(verbose, "\n");
 	    break;
 	default:
-	    v_printf(verbose, "LAN_X_HEADER type ?");
+	    v_printf(verbose, "LAN_X_HEADER type ?\n");
 	    break;
 	}
 	break;
     case LAN_X_GET_LOCO_INFO:
-	v_printf(verbose, "LAN_X_GET_LOCO_INFO");
+	v_printf(verbose, "LAN_X_GET_LOCO_INFO\n");
 	if (length == 9) {
 	    loco_id = be16(&z21_data->udpframe[6]) & 0x3FFF;
 	    /* TODO */
-	    v_printf(verbose, " LOC ID 0x%04X\n", loco_id);
+	    vas_printf(verbose, &vchar, " LOC ID 0x%04X\n", loco_id);
 	    /* TODO */
 	    send_xpn_loco_info(m_id(loco_id), verbose);
 	}
@@ -449,6 +470,7 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
 		uint8_t direction = z21_data->udpframe[8] >> 7;
 		uint8_t speed = z21_data->udpframe[8] & 0x7F;
 		send_can_loco_drive(loco_id, direction, step, speed, z21_data->foreground);
+		v_printf(z21_data->foreground, "\n");
 	    }
 	}
 	/* LAN_X_SET_LOCO */
@@ -456,16 +478,16 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
     case LAN_X_GET_TURNOUT_INFO:
 	FAdr = be16(&z21_data->udpframe[5]);
 	if (length == 0x08) {
-	    v_printf(verbose, "LAN_X_GET_TURNOUT_INFO 0x%04X", FAdr);
+	    v_printf(verbose, "LAN_X_GET_TURNOUT_INFO 0x%04X\n", FAdr);
 	} else if (length == 0x09) {
+	    v_printf(verbose, "LAN_X_GET_TURNOUT_INFO 0x%04X\n", FAdr);
 	    zz = z21_data->udpframe[7];
-	    v_printf(verbose, "LAN_X_TURNOUT_INFO 0x%04X 0x%02X", FAdr, zz);
+	    vas_printf(verbose, &vchar, "LAN_X_TURNOUT_INFO 0x%04X 0x%02X\n", FAdr, zz);
 	    /* TODO */
 	    if (!zz) {
 		zz = 0x01;
-		v_printf(verbose, "\n");
 		z21_data->bcf = 0x00000001;
-		send_xpn_turnout_info(FAdr, zz, verbose);
+		send_xpn_turnout_info(FAdr, zz, vchar);
 	    }
 	}
 	break;
@@ -474,29 +496,34 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, int verbose) {
 	turnout = z21_data->udpframe[7];
 	tport = turnout & 0x1;
 	v_printf(verbose, "LAN_X_SET_TURNOUT 0x%04X\n", FAdr);
-	if (z21_data->turnout_enable)
+	if (z21_data->turnout_enable) {
 	    send_can_turnout(FAdr, tport, verbose);
+	    v_printf(verbose, "\n");
+	}
 	break;
     case LAN_X_CV_READ:
-	v_printf(verbose, "LAN_X_CV_READ CV %u *TODO*", be16(&z21_data->udpframe[6]));
+	v_printf(verbose, "LAN_X_CV_READ CV %u *TODO*\n", be16(&z21_data->udpframe[6]));
 	break;
     case LAN_X_GET_FIRMWARE_VERSION:
 	v_printf(verbose, "LAN_X_GET_FIRMWARE_VERSION\n");
 	z21_data->bcf = 0x00000000;
-	send_xpn(XPN_X_Z21_FIRMWARE_VERSION, verbose);
-	v_printf(verbose, "LAN_X_FIRMWARE_VERSION %u.%u%u", XPN_X_Z21_FIRMWARE_VERSION[6],
+	vas_printf(verbose, &vchar, "LAN_X_FIRMWARE_VERSION %u.%u%u\n", XPN_X_Z21_FIRMWARE_VERSION[6],
 		 XPN_X_Z21_FIRMWARE_VERSION[7] >> 4, XPN_X_Z21_FIRMWARE_VERSION[7] & 0xF);
+	send_xpn(XPN_X_Z21_FIRMWARE_VERSION, vchar);
 	break;
     default:
 	break;
     }
+    check_free(vchar);
     return (EXIT_SUCCESS);
 }
 
 int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
     uint32_t flags;
     uint16_t length, header;
+    char *vchar;
 
+    vchar = NULL;
     length = le16(&z21_data->udpframe[0]);
     header = le16(&z21_data->udpframe[2]);
 
@@ -511,23 +538,23 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	if (length == 4) {
 	    v_printf(verbose, "LAN_GET_SERIAL_NUMBER\n");
 	    z21_data->bcf = 0x00000000;
-	    send_xpn(XPN_SERIAL_NUMBER_RESPONSE, verbose);
-	    v_printf(verbose, "LAN_SERIAL_NUMBER 0x%08X", le32(&XPN_SERIAL_NUMBER_RESPONSE[4]));
+	    vas_printf(verbose, &vchar, "LAN_SERIAL_NUMBER 0x%08X\n", le32(&XPN_SERIAL_NUMBER_RESPONSE[4]));
+	    send_xpn(XPN_SERIAL_NUMBER_RESPONSE, vchar);
 	}
 	break;
     case LAN_GET_CODE:
-	v_printf(verbose, "LAN_GET_CODE\n");
 	z21_data->bcf = 0x00000000;
-	send_xpn(XPN_GET_CODE_RESPONSE, verbose);
-	v_printf(verbose, "LAN_GET_CODE_RESPONSE");
+	v_printf(verbose, "LAN_GET_CODE\n");
+	vas_printf(verbose, &vchar, "LAN_GET_CODE_RESPONSE\n");
+	send_xpn(XPN_GET_CODE_RESPONSE, vchar);
 	break;
     case LAN_GET_HWINFO:
 	if (length == 4) {
 	    v_printf(verbose, "LAN_GET_HWINFO\n");
 	    z21_data->bcf = 0x00000000;
-	    send_xpn(XPN_HWINFO_RESPONSE, verbose);
-	    v_printf(verbose, "LAN HWINFO 0x%04X %u.%u%u", le32(&XPN_HWINFO_RESPONSE[4]),
+	    vas_printf(verbose, &vchar,"LAN HWINFO 0x%04X %u.%u%u\n", le32(&XPN_HWINFO_RESPONSE[4]),
 		     XPN_HWINFO_RESPONSE[9], XPN_HWINFO_RESPONSE[8] >> 4, XPN_HWINFO_RESPONSE[8] & 0xF);
+	    send_xpn(XPN_HWINFO_RESPONSE, vchar);
 	}
 	break;
     case LAN_LOGOFF:
@@ -535,32 +562,32 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	v_printf(verbose, "LAN_LOGOFF *");
 	break;
     case LAN_GET_LOCOMODE:
-	v_printf(verbose, "LAN_GET_LOCO_MODE 0x%04X *TODO*", be16(&z21_data->udpframe[4]));
+	v_printf(verbose, "LAN_GET_LOCO_MODE 0x%04X *TODO*\n", be16(&z21_data->udpframe[4]));
 	break;
     case LAN_SET_BROADCASTFLAGS:
 	flags = be32(&z21_data->udpframe[4]);
 	set_z21c_bcf(z21_data->ip, flags);
-	v_printf(verbose, "LAN_SET_BROADCASTFLAGS 0x%08X", flags);
+	v_printf(verbose, "LAN_SET_BROADCASTFLAGS 0x%08X\n", flags);
 	break;
     case LAN_X_HEADER:
 	check_data_lan_x_header(z21_data, verbose);
 	break;
     case LAN_SYSTEMSTATE_GETDATA:
-	v_printf(verbose, "LAN_SYSTEMSTATE_GETDATA\n");
-	send_xpn_system_info(verbose);
+	vas_printf(verbose, &vchar, "LAN_SYSTEMSTATE_GETDATA\n");
+	send_xpn_system_info(vchar);
 	break;
     case 0x12:
 	if (length == 0x04) {
-	    v_printf(verbose, "LAN_GET_STORE1?\n");
+	    vas_printf(verbose, &vchar,"LAN_GET_STORE1?\n");
 	    z21_data->bcf = 0x00000000;
-	    send_xpn(XPN_X_STORE1, verbose);
+	    send_xpn(XPN_X_STORE1, vchar);
 	}
 	break;
     case 0x16:
 	if (length == 0x04) {
-	    v_printf(verbose, "LAN_GET_STORE2?\n");
+	    vas_printf(verbose, &vchar,"LAN_GET_STORE2?\n");
 	    z21_data->bcf = 0x00000000;
-	    send_xpn(XPN_X_STORE2, verbose);
+	    send_xpn(XPN_X_STORE2, vchar);
 	}
 	break;
     case 0x84:
@@ -570,42 +597,45 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	v_printf(verbose, "XPN unknown");
 	break;
     }
-    v_printf(verbose, "\n");
+    check_free(vchar);
     return (EXIT_SUCCESS);
 }
 
 int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
     uint32_t uid;
     uint8_t function, tport, tpower, value;
+    char *vchar;
 
+    vchar = NULL;
     uid = be32(&data[5]);
     switch ((be32(data) & 0x00FF0000UL) >> 16) {
     case 0x01:
 	switch (data[9]) {
 	case 0x00:
 	    if (uid)
-		v_printf(verbose, "System: UID 0x%08X ", uid);
+		v_printf(verbose, "System: UID 0x%08X Stop\n", uid);
 	    else
-		v_printf(verbose, "System: alle ");
-	    printf("Stop\n");
+		v_printf(verbose, "System: alle Stop\n");
 	    z21_data->bcf = 0x00000001;
-	    send_xpn(XPN_X_BC_TRACK_POWER_OFF, verbose);
+	    vas_printf(verbose, &vchar, "XPN_X_BC_TRACK_POWER_OFF\n");
+	    send_xpn(XPN_X_BC_TRACK_POWER_OFF, vchar);
 	    z21_data->power = 0;
 	    break;
 	case 0x01:
 	    if (uid)
-		v_printf(verbose, "System: UID 0x%08X ", uid);
+		v_printf(verbose, "System: UID 0x%08X Go\n", uid);
 	    else
-		v_printf(verbose, "System: alle ");
-	    printf("Go\n");
+		v_printf(verbose, "System: alle Go\n");
 	    z21_data->bcf = 0x00000001;
-	    send_xpn(XPN_X_BC_TRACK_POWER_ON, verbose);
+	    vas_printf(verbose, &vchar, "XPN_X_BC_TRACK_POWER_ON\n");
+	    send_xpn(XPN_X_BC_TRACK_POWER_ON, vchar);
 	    z21_data->power = 1;
 	    break;
 	/* emergency stop */
 	case 0x03:
 	    if (uid) {
 		loco_save_speed(uid, 0);
+		v_printf(verbose, "\n");
 		send_xpn_loco_info(uid, verbose);
 	    }
 	    break;
@@ -648,13 +678,14 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
 	tport = 1 << (data[9] & 0x01);
 	tpower = data[10];
 	v_printf(verbose, "\n");
+	vas_printf(verbose, &vchar, "LAN_X_TURNOUT_INFO 0x%04X 0x%02X\n", uid, tport);
 	if (!tpower)
-	    send_xpn_turnout_info(uid, tport, verbose);
+	    send_xpn_turnout_info(uid, tport, vchar);
 	break;
     default:
 	break;
     }
-    v_printf(verbose, "\n");
+    check_free(vchar);
     return (EXIT_SUCCESS);
 }
 

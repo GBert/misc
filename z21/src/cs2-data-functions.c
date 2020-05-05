@@ -48,7 +48,7 @@ struct loco_data_t *create_loco(unsigned int uid) {
     HASH_ADD_STR(loco_data, name, l);
     HASH_ADD(hha, loco_data_by_uid, uid, sizeof(int), l);
 
-    printf("Loco added: %s %d\n", l->name, uid);
+    printf(" Loco added: %s %d\n", l->name, uid);
 
     return(l);
 }
