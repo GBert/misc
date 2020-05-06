@@ -1,11 +1,15 @@
 const int revisionnr = 
-707
+711
 ;
 const char* commithash = 
-"3433d3161467e0803d742d89f55ca8a29d08deb9";
+"7784dafdd8f26822ae35ee4790a8e48358b2f768";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"711 2020-05-06 08:34:41 +0200 control.template: removed dependency libusb\n" \
+"710 2020-05-06 07:55:10 +0200 rocomp: removed\n" \
+"709 2020-05-04 22:20:12 +0200 ddx: exit\n" \
+"708 2020-05-04 18:21:10 +0200 cleanup\n" \
 "707 2020-05-04 15:26:15 +0200 installwx.sh: check if apt or zypper\n" \
 "706 2020-05-03 15:09:26 +0200 makewin scripts: only use 2 make jobs to avoid a g++ kill signal\n" \
 "705 2020-05-03 14:44:27 +0200 inno update\n" \
