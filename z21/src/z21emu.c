@@ -690,13 +690,10 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
 }
 
 void *z21_periodic_tasks(void *ptr) {
-    struct z21_data_t *z21_data = (struct z21_data_t *)ptr;
+    /* struct z21_data_t *z21_data = (struct z21_data_t *)ptr; */
 
     while (1) {
 	usec_sleep(1E6);
-	if (z21_data->sb) {
-	    /* printf("Z21 periodic wakeup\n"); */
-	}
     }
 }
 
@@ -952,7 +949,6 @@ int main(int argc, char **argv) {
     }
     close(z21_data.sp);
     close(z21_data.ss);
-    close(z21_data.sb);
     pthread_join(pth, (void *)&z21_data);
     pthread_mutex_unlock(&lock);
     /* if we reach this point, there was an error */
