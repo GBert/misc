@@ -93,7 +93,7 @@
 								</div>
 							';
 						}
-					}
+					}                 
 				?>
 		</div>
 	</div>
@@ -224,7 +224,7 @@
 	//--- CAN-Devices ---//
 
 	function showDeviceInfo(device){
-
+		
 		show(device_info);
 		can_dropdown_button.innerHTML = device.name + ' #' + device.serial_number;
 		device_info.children[1].innerHTML = "Name: " + device.name;
@@ -403,47 +403,43 @@
 	}
 
 	can_dropdown_button.onclick = function(){
-		let date = new Date();
-		let device_request = new XMLHttpRequest();
-		device_request.open('GET', './config/devices.json?' + date.getTime(), true);
-		device_request.onload = function(){
-			if (this.status == 200){
-				devices = JSON.parse(this.responseText);
-				can_dropdown_container.innerHTML = '';
-				if (devices.length == 0) {
-					createDropdownPoint("Keine Geräte gefunden!");
-				}
-				for (let i = 0; i < devices.length; i++) {
-					createDropdownPoint(devices[i].name + " #" + devices[i].serial_number);
-				}
-				let can_dropdown_option = document.getElementsByClassName('can_dropdown_option');
-				
-				for (let i = 0; i < can_dropdown_option.length; i++) ((i)=>{
-					if (devices.length) {
-						can_dropdown_option[i].onclick = function(){
-							dropdown_visible = false;
-							can_dropdown_container.setAttribute('class', 'dropdown');
-							can_dropdown_button.setAttribute('class', 'button');
-							showDeviceInfo(devices[i]);
-							parent.ws.send('ping');
-							visible_device = devices[i];
-						}
-					};
-				})(i);
-							
-			}
-		};
-		device_request.send();
 		if (dropdown_visible) {
 			dropdown_visible = false;
 			can_dropdown_container.setAttribute('class', 'dropdown');
 			can_dropdown_button.setAttribute('class', 'button');
 		} else {
+			parent.ws.send('getDevicelist');
 			dropdown_visible = true;
 			can_dropdown_container.setAttribute('class', 'dropdown dropdown_visible');
 			can_dropdown_button.setAttribute('class', 'button button_dropdown');
 		}
 		can_dropdown_container.style.width = can_dropdown_button.clientWidth + "px";
+	}
+
+	function updateDevicelist(_devices) {
+		devices = JSON.parse(_devices);
+		console.log(devices);
+		can_dropdown_container.innerHTML = '';
+		if (devices.length == 0) {
+			createDropdownPoint("Keine Geräte gefunden!");
+		}
+		for (let i = 0; i < devices.length; i++) {
+			createDropdownPoint(devices[i].name + " #" + devices[i].serial_number);
+		}
+		let can_dropdown_option = document.getElementsByClassName('can_dropdown_option');
+		
+		for (let i = 0; i < can_dropdown_option.length; i++) ((i)=>{
+			if (devices.length) {
+				can_dropdown_option[i].onclick = function(){
+					dropdown_visible = false;
+					can_dropdown_container.setAttribute('class', 'dropdown');
+					can_dropdown_button.setAttribute('class', 'button');
+					showDeviceInfo(devices[i]);
+					parent.ws.send('ping');
+					visible_device = devices[i];
+				}
+			};
+		})(i);
 	};
 
 	let getReadings = setInterval(()=>{

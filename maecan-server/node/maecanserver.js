@@ -105,14 +105,19 @@ const crcTable = [0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5,
 
 const function_table = [0 ,0 ,50 ,1 ,2 , 3, 14, 5, 5, 5, 8, 102];
 
+const devices_path = './devices.json';
+const locolist_path = './locolist.json';
+const accessories_path = './accessories.json';
+
 //----------------------------------------------------------------------------------//
 // Laden der Konfiguration
 
 var local_config = require('./config.json');
 var local_version = require('./version.json');
 
-var devices = require('../html/config/devices.json');
-var locolist = require('../html/config/locolist.json');
+var devices = require(devices_path);
+var locolist = require(locolist_path);
+var accessories = require(accessories_path)
 
 var naz = local_config.new_registration_counter;
 var master = local_config.master;
@@ -249,9 +254,13 @@ function getDeviceInfo(uid, index) {
   // Grundlegende CAN-Geräteinformationen abrufen
 
   bussy_fetching = true;
-
+  
   console.log(`Device info request for UID ${uid}, chanel ${index}`);
   sendDatagram([0, STATUS_CONFIG, 3, 0, 5, (uid & 0xff000000)>> 24, (uid & 0x00ff0000)>> 16, (uid & 0x0000ff00) >> 8, uid & 0x000000ff, index, 0, 0, 0]);
+
+  setTimeout(() => {
+    bussy_fetching = false;
+  },3000);
 }
 
 function getStatus(uid, chanel){
@@ -556,7 +565,26 @@ function sendLocoInfo(loco_name, rec_hash) {
 
   if(found_loco) {
     // Antwort auf Anfrage
-    sendDatagram([0x00, DATA_QUERRY + 1, 0x03, 0x00, 0x08, 0, 0, 0, 0, 0, 0, 0, 0]);
+    sendDatagram([0x00, DATA_QUERRY + 1, 0x03, 0x00, 0x08, 'l', 'o', 'k', 'i', 'n', 'f', 'o', 0]);
+    let data = [0,0,0,0,0,0,0,0];
+    for (let i = 0; i < 8; i++) {
+      if (i < loco_name.length){
+        data[i] = loco_name[i].charCodeAt(0);
+      } else {
+        break;
+      }
+    }
+    sendDatagram([0x00, DATA_QUERRY + 1, 0x03, 0x00, 0x08, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7]]);
+
+    data = [0,0,0,0,0,0,0,0];
+    for (let i = 0; i < 8; i++) {
+      if (i < (loco_name.length - 8)){
+        data[i] = loco_name[i+8].charCodeAt(0);
+      } else {
+        break;
+      }
+    }
+    sendDatagram([0x00, DATA_QUERRY + 1, 0x03, 0x00, 0x08, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7]]);
 
 
     // String zusammenbauen
@@ -676,12 +704,10 @@ function addMfxLocoToList(mfxuid) {
       return 0;
     })
     
-    fs.writeFile('../html/config/locolist.json', JSON.stringify(locolist, null, 2), function(){
+    fs.writeFile(locolist_path, JSON.stringify(locolist, null, 2), function(){
       console.log("Adding MFX loco to locolist (UID: " + toUnsignedString(mfxuid) + ").");
       //exportCS2Locolist(locolist);
-      for (var i in clients){
-        clients[i].sendUTF("updateLocolist");
-      }
+      updateLocolist();
     });
 
     temp_mfx_loco = loco;
@@ -797,14 +823,14 @@ function processMfxBuffer() {
             }
             locolist[index] = temp_mfx_loco;
             
-            fs.writeFile('../html/config/locolist.json', JSON.stringify(locolist, null, 2), function(){
+            fs.writeFile(locolist_path, JSON.stringify(locolist, null, 2), function(){
               console.log('Updating loco ' + temp_mfx_loco.name);
               let _name = temp_mfx_loco.name;
 
               setTimeout(()=> {
                 exportCS2Locolist(locolist);
+                updateLocolist()
                 for (var i in clients){
-                  clients[i].sendUTF("updateLocolist");
                   clients[i].sendUTF(`foundMfx:${_name}`);
                 }
               }, 500)
@@ -872,9 +898,23 @@ function ping() {
   console.log('Ping sent.');
 }
 
+/*
+function setAcc(uid, state, time) {
+  console.log('Switching 0x' + parseInt(uid).toString(16) + ' to ' + state + ' with ontime of ' + time + 'ms.');
+  sendDatagram([0, ACC_SWITCH, 3, 0, 6, 0, 0, uid >> 8, uid & 0xff, state, 1, 0, 0]);
+  setTimeout(() => {
+    sendDatagram([0, ACC_SWITCH, 3, 0, 6, 0, 0, uid >> 8, uid & 0xff, state, 0, 0, 0]);
+  }, time);
+}
+*/
+
 
 //----------------------------------------------------------------------------------//
 // Websocket-Pakete:
+
+
+//----------------------------------------------------------------------------------//
+// Lokliste bearbeiten:
 
 function addLocoFromMsg(msg_string) {
   // Manuell erstellte Lok der Liste hinzufügen
@@ -889,13 +929,18 @@ function addLocoFromMsg(msg_string) {
     locolist[msg_string.split(':')[1]] = new_loco;
   }
 
-  fs.writeFile("../html/config/locolist.json", JSON.stringify(locolist, null, 2), () => {
+  fs.writeFile(locolist_path, JSON.stringify(locolist, null, 2), () => {
     console.log("updated loco: " + new_loco.name);
     exportCS2Locolist(locolist);
-    for (var i in clients){
-        clients[i].sendUTF("updateLocolist");
-      }
+    updateLocolist()
   });
+}
+
+function updateLocolist(){
+  let _locolist = JSON.stringify(locolist);
+  for (let i in clients){
+    clients[i].sendUTF(`updateLocolist:${_locolist}`);
+  }
 }
 
 function deleteLoco(index) {
@@ -906,13 +951,11 @@ function deleteLoco(index) {
   let type = locolist[index].typ;
 
   locolist.splice(index, 1);
-  fs.writeFile("../html/config/locolist.json", JSON.stringify(locolist, null, 2), () => {
+  fs.writeFile(locolist_path, JSON.stringify(locolist, null, 2), () => {
     console.log("Deleted " + name);
     setTimeout(() => {
       exportCS2Locolist(locolist);
-      for (var i in clients){
-        clients[i].sendUTF("updateLocolist");
-      }
+      updateLocolist();
     }, 500);
   });
 
@@ -927,11 +970,80 @@ function clearDeviceList() {
 
   devices = [];
 
-  fs.writeFile('../html/config/devices.json', JSON.stringify(devices, null, 2), function(){
+  fs.writeFile(devices_path, JSON.stringify(devices, null, 2), function(){
     console.log("clearing devices");
   });
 }
+/*
+function updateKeyboard() {
+  for (var i in clients){
+    clients[i].sendUTF(`updateKeyboard:${JSON.stringify(accessories)}`);
+  }
+}
 
+function updateAccessory(uid, state) {
+  for (var i in clients){
+    clients[i].sendUTF(`updateAccessory:${uid}:${state}`);
+  }
+}
+*/
+/*
+function updateaccessoriestate(uid, state) {
+  let protocol = '';
+  let adrs;
+  if (uid >= 0x3000 && uid <= 0x33ff) {
+    //Motorola
+    protocol = 'mm2';
+    adrs = uid + 1 - 0x3000;
+  } else if (uid >= 0x3800 && uid <= 0x3bff) {
+    //DCC
+    protocol = 'dcc';
+    adrs = uid + 1 - 0x3800;
+  }
+
+  if (protocol != '') {
+    for (let i = 0; i < accessories.length; i++) {
+      if (accessories[i].protocol == protocol && accessories[i].adrs == adrs && accessories[i].state != state) {
+        accessories[i].state = state;
+        fs.writeFile(accessories_path, JSON.stringify(accessories, null, 2), () => {updateKeyboard();})
+        break;
+      }
+    }
+  } 
+}
+
+function addAccessory(accessory){
+  accessories[accessories.length] = accessory;
+  fs.writeFile(accessories_path, JSON.stringify(accessories, null, 2), () => {
+    updateKeyboard();
+    console.log("Adding new Accessory");
+  });
+}
+*/
+
+
+//----------------------------------------------------------------------------------//
+// Magnetartikelliste bearbeiten:
+/*
+  Magnetartikelstruktur:
+    {
+      "name": "Name_String",
+      "uid": 0x1234,
+      "protocoll": 0, // 0: DCC, 1: MM, 3: MäCAN
+      "type": 0 //WIP
+    }
+*/
+function addArticle(msg_string){
+  // Artikel hinzufügen:
+
+  let accessorie = JSON.parse(msg_string)
+
+  accessories[accessories.lenght] = accessorie;
+
+  fs.writeFile(accessories_path, JSON.stringify(accessories, null, 2), () => {
+      console.log("Added Accessorie " + accessorie.name);
+    });
+}
 
 //----------------------------------------------------------------------------------//
 //----------------------------------------------------------------------------------//
@@ -963,7 +1075,7 @@ var wsServer = new WebSocketServer({
 
 //WebSocket-Clients aufnehmen:
 wsServer.on('request', function(request){
-	var connection = request.accept('echo-protocol', request.origin);
+	var connection = request.accept('maecan', request.origin);
 	var id = client_count++;
 	clients[id] = connection;
 	console.log(connection.remoteAddress + ' connected.');
@@ -991,53 +1103,53 @@ wsServer.on('request', function(request){
 
 		if (cmd == 'stop') {
       stop();
-
+      
 		} else if (cmd == 'go') {
       go();
-
+      
 		} else if (cmd == 'setSpeed') {
       sendDatagram([0, LOCO_SPEED, 3, 0, 6, 0, 0, uid_high, uid_low, value_high, value_low, 0, 0]);
-
+      
 		} else if (cmd == 'getSpeed') {
 			sendDatagram([0, LOCO_SPEED, 3, 0, 4, 0, 0, uid_high, uid_low, 0, 0, 0, 0]);
-
+    
     } else if (cmd == 'lokNothalt') {
 			sendDatagram([0, SYSTEM_CMD, 3, 0, 5, 0, 0, uid_high, uid_low, SYS_LOCO_EMERGENCY_STOP, 0, 0, 0]);
-
+    
     } else if (cmd == 'setFn') {
 			sendDatagram([0, LOCO_FN, 3, 0, 6, 0, 0, uid_high, uid_low, value_high, value_low, 0, 0]);
-
+    
     } else if (cmd == 'getFn') {
 			sendDatagram([0, LOCO_FN, 3, 0, 5, 0, 0, uid_high, uid_low, value, 0, 0, 0]);
-
+    
     } else if (cmd == 'toggleDir') {
 			sendDatagram([0, LOCO_DIR, 3, 0, 5, 0, 0, uid_high, uid_low, 3, 0, 0, 0]);
 			sendDatagram([0, LOCO_DIR, 3, 0, 4, 0, 0, uid_high, uid_low, 0, 0, 0, 0]);
-
+    
     } else if (cmd == 'getDir') {
 			sendDatagram([0, LOCO_DIR, 3, 0, 4, 0, 0, uid_high, uid_low, 0, 0, 0, 0]);
-
+    
     } else if (cmd == 'getStatus') {
       getStatus(msg[1], msg[2]);
-
+    
     } else if (cmd == 'setProtocol') {
       setProtocol(msg[1]);
-
+    
     } else if (cmd == 'getProtocol') {
       for (let i in clients){
         clients[i].sendUTF(`updateProtocol:${local_config.protocol}`);
       }
-
+    
     } else if (cmd == 'restart') {
       stop();
       wsServer.shutDown();
       exec('reboot -f -d 1');
-
+    
     } else if (cmd == 'shutdown') {
       stop();
       wsServer.shutDown();
       exec('poweroff -f -d 1');
-
+    
     } else if (cmd == 'downloadIcon') {
       let link = "";
       for (let i = 1; i < msg.length; i++){
@@ -1048,7 +1160,7 @@ wsServer.on('request', function(request){
 
     } else if (cmd == "addLoco" || cmd == "updateLoco") {
       addLocoFromMsg(dgram.utf8Data);
-
+    
     } else if (cmd == "mfxDiscovery") {
       let last_power = power;
       stop();
@@ -1058,18 +1170,18 @@ wsServer.on('request', function(request){
           go();
         }, 500)
       }
-
+    
     } else if (cmd == 'deleteLoco') {
       deleteLoco(msg[1]);
-
+      
     } else if (cmd == 'getVersion') {
       for (let i in clients){
         clients[i].sendUTF(`updateVersion:${version}`);
       }
-
+    
     } else if (cmd == 'setConfigValue') {
       sendDatagram([0x00, SYSTEM_CMD, 0x03, 0x00, 0x08, (msg[1] & 0xff000000)>> 24, (msg[1] & 0x00ff0000)>> 16, (msg[1] & 0x0000ff00) >> 8, msg[1] & 0x000000ff, SYS_STATUS, msg[2], (msg[3] & 0xff00) >> 8, msg[3] & 0x00ff]);
-
+      
       for (let i = 0; i < devices.length; i++) {
         if (msg[1] == devices[i].uid) {
           if (devices[i].config_chanels_info[msg[2]-1].type == 1) {
@@ -1080,10 +1192,10 @@ wsServer.on('request', function(request){
           break;
         }
       }
-
-      fs.writeFile('../html/config/devices.json', JSON.stringify(devices, null, 2), console.log("updating devices entry."));
-
-
+  
+      fs.writeFile(devices_path, JSON.stringify(devices, null, 2), console.log("updating devices entry."));
+      
+    
     } else if (cmd == 'progCV') {
       writeCV(uid, msg[2], msg[3], msg[4]);
 
@@ -1097,13 +1209,31 @@ wsServer.on('request', function(request){
           break;
         }
       }
-
-      fs.writeFile('../html/config/devices.json', JSON.stringify(devices, null, 2), console.log("Deleting device " + msg[1]));
+      
+      fs.writeFile(devices_path, JSON.stringify(devices, null, 2), console.log("Deleting device " + msg[1]));
 
       ping();
-
+    
     } else if (cmd == 'ping') {
       ping();
+
+    } else if (cmd == 'setAcc') {
+      setAcc(msg[1], msg[2], msg[3]);
+
+    } else if (cmd == 'getDevicelist') {
+      let _devices = JSON.stringify(devices)
+      for (let i in clients){
+        clients[i].sendUTF(`updateDevicelist:${_devices}`);
+      }
+
+    } else if (cmd == 'getKeyboard') {
+      //updateKeyboard();
+
+    } else if (cmd == 'addAccessorie') {
+      //addArticle(dgram.utf8Data.replace('addAccessory:', ''));
+
+    } else if (cmd == 'getLocolist') {
+      updateLocolist();
     }
 	});
 });
@@ -1165,7 +1295,7 @@ udpServer.on('message', (udp_msg, rinfo) => {
     if (dlc == 4) value = 0;
     ws_msg = `updateSpeed:${uid}:${value}`;
     for (let i = 0; i < locolist.length; i++) {
-      if (locolist[i].uid = uid) {
+      if (locolist[i].uid == uid) {
         locolist[i].speed = value;
         break;
       }
@@ -1176,8 +1306,8 @@ udpServer.on('message', (udp_msg, rinfo) => {
     let fn_number = value >> 8;
     let fn_value = value & 0xff;
     for (let i = 0; i < locolist.length; i++) {
-      if (locolist[i].uid = uid) {
-        //locolist[i].functions_values[fn_number] = fn_value;
+      if (locolist[i].uid == uid) {
+        locolist[i].functions_values[fn_number] = fn_value;
         break;
       }
     }
@@ -1185,7 +1315,7 @@ udpServer.on('message', (udp_msg, rinfo) => {
   } else if (cmd == (LOCO_DIR + 1)) {
     ws_msg = `updateDir:${uid}:${parseInt(udp_msg[9])}`;
     for (let i = 0; i < locolist.length; i++) {
-      if (locolist[i].uid = uid) {
+      if (locolist[i].uid == uid) {
         locolist[i].dir = parseInt(udp_msg[9]);
         break;
       }
@@ -1220,24 +1350,24 @@ udpServer.on('message', (udp_msg, rinfo) => {
       config_buffer[0] = data;
       let chanel = config_buffer[0][4];
       console.log('Done getting chanel ' + chanel + ' from device ' + device.name);
-
+      
       if (chanel > 0 && chanel <= device.status_chanels) {
         let status_chanel = buildStatusChanelInfo(config_buffer);
         device.status_chanels_info[chanel - 1] = status_chanel;
-        fs.writeFile('../html/config/devices.json', JSON.stringify(devices, null, 2), console.log("updating devices entry."));
-
+        fs.writeFile(devices_path, JSON.stringify(devices, null, 2), console.log("updating devices entry."));
+      
       } else if (chanel == 0) {
         device = buildDeviceInfo(config_buffer, device);
-        fs.writeFile('../html/config/devices.json', JSON.stringify(devices, null, 2), console.log("updating devices entry."));
-
+        fs.writeFile(devices_path, JSON.stringify(devices, null, 2), console.log("updating devices entry."));
+      
       } else if (chanel > 0 && chanel <= device.config_chanels && chanel >= device.status_chanels){
         let config_chanel = buildConfigChanelInfo(config_buffer);
         device.config_chanels_info[chanel - 1] = config_chanel;
-        fs.writeFile('../html/config/devices.json', JSON.stringify(devices, null, 2), console.log("updating devices entry."));
+        fs.writeFile(devices_path, JSON.stringify(devices, null, 2), console.log("updating devices entry."));
       }
       bussy_fetching = false;
     }
-
+  
   } else if (cmd == (PING + 1)) {
   	let str_uid = toUnsignedString(uid);
   	let str_ver = `${data[4]}.${data[5]}`
@@ -1248,10 +1378,10 @@ udpServer.on('message', (udp_msg, rinfo) => {
   		console.log(`Found Gleisbox 0x${str_uid}`);
   		gbox_uid = uid;
     }
-
+    
     var device_exists = false;
     let existing_index = 0;
-
+  
     for (i = 0; i < devices.length; i++) {
       if (devices[i].uid == uid || uid == 0) {
         device_exists = true;
@@ -1260,7 +1390,7 @@ udpServer.on('message', (udp_msg, rinfo) => {
         break;
       }
     }
-
+  
     if (!device_exists) {
       var index = devices.length;
       devices[index] = {};
@@ -1269,7 +1399,7 @@ udpServer.on('message', (udp_msg, rinfo) => {
       devices[index].type = str_typ;
       devices[index].pingResponse = true;
 
-      fs.writeFile('../html/config/devices.json', JSON.stringify(devices, null, 2), function(){
+      fs.writeFile(devices_path, JSON.stringify(devices, null, 2), function(){
         console.log("writing new devices entry.");
       });
     }
@@ -1279,8 +1409,8 @@ udpServer.on('message', (udp_msg, rinfo) => {
         clients[j].sendUTF(`deviceConnected:${devices[i].uid}:${devices[i].pingResponse}`);
       }
     }
-
-
+    
+    
 
   } else if (cmd == DATA_QUERRY){
     let data_string = "";
@@ -1316,6 +1446,11 @@ udpServer.on('message', (udp_msg, rinfo) => {
     console.log('Contact no. ' + contact_ken + ' changed state from ' + state_old + ' to ' + state_new);
     ws_msg = `s88Event:${contact_ken}:${state_old}:${state_new}`;
 
+  } else if (cmd == ACC_SWITCH + 1) {
+    let uid = (data[2] << 8) + data[3];
+    let state = data[4];
+    //updateaccessoriestate(uid, state);
+    //ws_msg = `updateAcc:${uid}:${state}`;
   }
 
   if (ws_msg != '') {
@@ -1372,8 +1507,9 @@ var data_fetcher = setInterval(function(){
         getDeviceInfo(devices[i].uid, devices[i].status_chanels + (devices[i].config_chanels_info.length + 1));
         break;
       }
-      if (!devices[i].name) {
+      if (!devices[i].name && !devices[i].device_info_request_attepted) {
         getDeviceInfo(devices[i].uid, 0);
+        devices[i].device_info_request_attepted = true;
       }
     }
   }

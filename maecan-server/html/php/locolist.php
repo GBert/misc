@@ -14,7 +14,7 @@
 		</div>
 	</div>
 	<div class="frame_content frame_content_active" id="frame">
-
+	
 		<h1>Neue Lok anlegen</h1>
 
 		<style>
@@ -23,7 +23,7 @@
 		<div id="locolist_grid" class="locolist_grid">
 			<p>Name:</p>
 			<input id="name" type="text" class="text_input" placeholder="Lokname...">
-
+			
 			<p>Lokbild:</p>
 			<div class="locolist_grid" style="margin: 0;">
 				<div id="current_icon" class="icon_list text_input">
@@ -49,7 +49,7 @@
 					}                 
 				?>
 			</div>
-
+		
 			<p>Protokoll:</p>
 			<select name="Protokoll" id="protocol_dropdown" class="text_input">
 				<option id="dcc" value="dcc">DCC</option>
@@ -132,7 +132,7 @@
 			</div>
 			-->
 		</div>
-
+		
 
 		<div class="button_grid_2">
 			<div class="button button_active" id="save_loco">Lok speichern</div>
@@ -270,7 +270,7 @@
 		vmin.value = current_loco.vmin;
 		//tacho.value = current_loco.tacho;
 		frame.children[0].innerHTML = (current_loco.name + " bearbeiten:");
-
+		
 		protocol_dropdown.disabled = true;
 		setIcon(current_loco.icon);
 
@@ -304,7 +304,7 @@
 
 	}
 
-	function loadLocolist(){
+	/*function loadLocolist(){
 		locolist_container.innerHTML = "";
 		let locolist_request = new XMLHttpRequest();
 		let date = new Date();
@@ -323,6 +323,17 @@
 		}
 
 		locolist_request.send();
+	}*/
+
+	function updateLocolist(_locolist){
+		locolist_container.innerHTML = "";
+		locolist = JSON.parse(_locolist);
+		for (let i = 0; i < locolist.length; i++) {
+			createLocoButton(locolist[i]).onclick = function(){
+				setActiveLoco(i);
+			}
+		}
+		setNewLoco();
 	}
 
 	function resizeSettings(){
@@ -461,7 +472,8 @@
 	};
 	
 	reload_loco_list.onclick = () => { 
-		loadLocolist();
+		//loadLocolist();
+		parent.ws.send('getLocolist');
 		//resizeSettings();
 		};
 
@@ -494,5 +506,5 @@
 		}
 	};
 
-	loadLocolist();
+	//loadLocolist();
 </script>

@@ -4,7 +4,7 @@ var ws;
 function connectWebsocket(){
 	var url = window.location.hostname;
 	console.log('Current Domain: ' + url);
-	ws = new WebSocket("ws://" + url + ':8080', 'echo-protocol');
+	ws = new WebSocket("ws://" + url + ':8080', 'maecan');
 	ws.onerror = function(error){
 		console.log("WebSocket-Fehler");
 	};

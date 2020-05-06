@@ -423,7 +423,7 @@ label .radio_button:after {
 }
 
 .locolist_grid select{
-	height: 34px;
+	height: 32px;
 	background-color: #dadada;
 }
 
@@ -610,4 +610,16 @@ h1 .button {
     margin: auto;
     margin-top: 10px;
     border-radius: 5px;
+}
+
+#edit_frame {
+	position: absolute;
+    top: 52px;
+	width: calc(100% - 22px);
+	max-width: 600px;
+    border: 1px solid #adadad;
+    background: #dadada;
+    border-radius: 5px;
+	left: 10px;
+	display: none;
 }

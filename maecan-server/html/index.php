@@ -367,7 +367,9 @@
 				} else if (cmd == 'foundMfx') {
 					mfxAlert(msg[1]);
 				} else if (msg[0] == 'updateLocolist') {
-					locolist.contentWindow.loadLocolist();
+					//locolist.contentWindow.loadLocolist();
+					lococontrol.contentWindow.locolist = JSON.parse(dgram.data.toString().replace('updateLocolist:', ''));
+					locolist.contentWindow.updateLocolist(dgram.data.toString().replace('updateLocolist:', ''));
 				} else if (cmd == 'updateReading') {
 					settings.contentWindow.updateFiller(msg[1], msg[2], msg[3]);
 				} else if (cmd == 'updateProtocol') {
@@ -378,12 +380,18 @@
 					settings.contentWindow.version.innerHTML = "Version: " + msg[1];
 				} else if (cmd == 'deviceConnected') {
 					settings.contentWindow.deviceConnectionStatus(msg[1], msg[2]);
+				} else if (cmd == 'updateAccessory') {
+					keyboard.contentWindow.updateKeyboard(msg[1], msg[2]);
+				} else if (cmd == 'updateKeyboard') {
+					keyboard.contentWindow.accessorys = (JSON.parse(dgram.data.toString().replace('updateKeyboard:', '')));
+				} else if (cmd == 'updateDevicelist') {
+					settings.contentWindow.updateDevicelist(dgram.data.toString().replace('updateDevicelist:', ''));
 				} else {
 					/*let data = [];
 					for (let i = 0; i < dgram.data.length; i++) {
 						data[i] = dgram.data[i].charCodeAt(0).toString(16);
 					}*/
-					console.log(dgram.data.toString());
+					console.log('Unknown command: ' + dgram.data.toString());
 				}
 			}
 
@@ -394,6 +402,13 @@
 			ws.onerror = function(error){
 				disconnectAlert();
 			};
+
+			ws.onopen = function(){
+				setTimeout(() => {
+					ws.send('getKeyboard');
+					ws.send('getLocolist');
+				}, 1000)
+			}
 
 			//--- Misc ---/
 

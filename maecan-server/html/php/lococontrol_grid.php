@@ -154,7 +154,7 @@
 	var icon = [];
 	var fn_state = [];
 
-	let locolist = [];
+	var locolist = [];
 	let loco = [];
 
 	for (var i = 0; i < sides.length; i++) {
@@ -286,34 +286,22 @@
 		}
 
 		lokliste_button[side].onclick = function(){
-			let locolist_request = new XMLHttpRequest();
-			let time = new Date()
-
-			locolist_request.open('GET', './config/locolist.json?' + time.getTime(), true);
-
-			locolist_request.onload = function(){
-				if (this.status == 200) {
-					locolist = JSON.parse(this.responseText);
-					lokliste_container[side].innerHTML = "";
-					for (let i = 0; i < locolist.length; i++) {
-						let _loco = locolist[i];
-						createDropdownPoint(locolist[i].name, locolist[i].icon, side).onclick = () => {
-							setLoco(side, _loco);
-						};
-					}
-					if (lokliste_visible[side]) {
-						lokliste_visible[side] = false;
-						hide(lokliste_container[side]);
-						lokliste_button[side].className = 'button lokliste';
-					} else {
-						lokliste_visible[side] = true;
-						show(lokliste_container[side]);
-						lokliste_button[side].className = 'button button_dropdown lokliste';
-					}
-				}
-			};
-
-			locolist_request.send();
+			lokliste_container[side].innerHTML = "";
+			for (let i = 0; i < locolist.length; i++) {
+				let _loco = locolist[i];
+				createDropdownPoint(locolist[i].name, locolist[i].icon, side).onclick = () => {
+					setLoco(side, _loco);
+				};
+			}
+			if (lokliste_visible[side]) {
+				lokliste_visible[side] = false;
+				hide(lokliste_container[side]);
+				lokliste_button[side].className = 'button lokliste';
+			} else {
+				lokliste_visible[side] = true;
+				show(lokliste_container[side]);
+				lokliste_button[side].className = 'button button_dropdown lokliste';
+			}
 		}
 	})(side);
 	
