@@ -78,17 +78,6 @@ define Package/rocrail-cs-mbus/description
  Maerklin CS2/MS2 CAN-Bus (e.g. SocketCAN)
 endef
 
-define Package/rocrail-cs-ddx
-  SECTION:=utils
-  CATEGORY:=Utilities
-  TITLE:=Command Station DDX
-  DEPENDS:=rocrail
-endef
-
-define Package/rocrail-cs-ddx/description
- Command Station DDX
-endef
-
 define Package/rocrail-cs-srcp
   SECTION:=utils
   CATEGORY:=Utilities
@@ -204,11 +193,6 @@ define Package/rccrail-mqtt/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/mqtt.so $(1)/opt/rocrail
 endef
 
-define Package/rocrail-cs-ddx/install
-	$(INSTALL_DIR) $(1)/opt/rocrail
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/ddx.so $(1)/opt/rocrail
-endef
-
 define Package/rocrail-cs-mbus/install
 	$(INSTALL_DIR) $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/mbus.so $(1)/opt/rocrail
@@ -291,7 +275,6 @@ $(eval $(call BuildPackage,rocrail))
 $(eval $(call BuildPackage,rocnetnode))
 $(eval $(call BuildPackage,rocweb))
 $(eval $(call BuildPackage,rocrail-mqtt))
-$(eval $(call BuildPackage,rocrail-cs-ddx))
 $(eval $(call BuildPackage,rocrail-cs-mbus))
 $(eval $(call BuildPackage,rocrail-cs-rclink))
 $(eval $(call BuildPackage,rocrail-cs-srcp))
