@@ -100,17 +100,6 @@ define Package/rocrail-cs-rclink/description
  Command Station RCLink
 endef
 
-define Package/rocrail-cs-p50
-  SECTION:=utils
-  CATEGORY:=Utilities
-  TITLE:=Command Station p50
-  DEPENDS:=rocrail
-endef
-
-define Package/rocrail-cs-p50/description
- Command Station p50
-endef
-
 define Package/rocrail-cs-wmz21
   SECTION:=utils
   CATEGORY:=Utilities
@@ -208,11 +197,6 @@ define Package/rocrail-cs-srcp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/srcp.so $(1)/opt/rocrail
 endef
 
-define Package/rocrail-cs-p50/install
-	$(INSTALL_DIR) $(1)/opt/rocrail
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/p50.so $(1)/opt/rocrail
-endef
-
 define Package/rocrail-cs-wmz21/install
 	$(INSTALL_DIR) $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/wmz21.so $(1)/opt/rocrail
@@ -250,7 +234,6 @@ define Package/rocrail-cs-all-other/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/nce.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/om32.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/opendcc.so $(1)/opt/rocrail
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/p50x.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/perir.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/raptor.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/rascii.so $(1)/opt/rocrail
@@ -278,6 +261,5 @@ $(eval $(call BuildPackage,rocrail-mqtt))
 $(eval $(call BuildPackage,rocrail-cs-mbus))
 $(eval $(call BuildPackage,rocrail-cs-rclink))
 $(eval $(call BuildPackage,rocrail-cs-srcp))
-$(eval $(call BuildPackage,rocrail-cs-p50))
 $(eval $(call BuildPackage,rocrail-cs-wmz21))
 $(eval $(call BuildPackage,rocrail-cs-all-other))
