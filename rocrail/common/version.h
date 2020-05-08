@@ -1,11 +1,22 @@
 const int revisionnr = 
-711
+722
 ;
 const char* commithash = 
-"7784dafdd8f26822ae35ee4790a8e48358b2f768";
+"f35fce577c0c338ac8d0ff3f9789a28974525d18";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"722 2020-05-08 13:11:35 +0200 route: check for sensor, fbevent, type\n" \
+"721 2020-05-08 10:37:51 +0200 wio: take over only brightness if temp. reported is 110\n" \
+"720 2020-05-08 10:23:24 +0200 wio: alive brightness support added\n" \
+"719 2020-05-07 10:50:04 +0200 powerctrldlg: layout fixes\n" \
+"718 2020-05-07 10:39:46 +0200 routedialog: layout fixes for gtk3\n" \
+"717 2020-05-07 10:21:52 +0200 canservice: stdint include for bidib messages header\n" \
+"716 2020-05-07 10:19:07 +0200 bidib: stdint includes\n" \
+"715 2020-05-07 10:08:48 +0200 routedialog: use default spinctrl width for gtk3\n" \
+"714 2020-05-07 09:59:48 +0200 bidib: update messages header\n" \
+"713 2020-05-07 08:45:29 +0200 routedialog: show sensor type in the list\n" \
+"712 2020-05-06 12:07:56 +0200 bidib: add stop/go at booster on/off commands in case class is dcc_main\n" \
 "711 2020-05-06 08:34:41 +0200 control.template: removed dependency libusb\n" \
 "710 2020-05-06 07:55:10 +0200 rocomp: removed\n" \
 "709 2020-05-04 22:20:12 +0200 ddx: exit\n" \
