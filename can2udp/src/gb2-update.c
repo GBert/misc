@@ -40,7 +40,7 @@ static char *MS2_DEFAULT_FILENAME = "050-ms2.bin";
 #define GB2_BLOCK_SHIFT		9	/* 2^9 = 512 */
 #define GB2_BLOCK_SIZE		(1<<GB2_BLOCK_SHIFT)
 #define GB2_BOOT_BLOCK_SIZE	(1024/GB2_BLOCK_SIZE)
-#define GB2_FILL_SBLOCK		8-1
+#define GB2_FILL_SBLOCK		(GB2_BLOCK_SIZE-1)
 #define GB2_ID			0x47
 
 #define MS2_BLOCK_SHIFT		10	/* 2^10 = 1024 */
@@ -94,7 +94,7 @@ int finished;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -l <port> -d <port> -b <broacast_addr> -i <can interface> <update file>\n", prg);
-    fprintf(stderr, "   Version 0.1\n");
+    fprintf(stderr, "   Version 0.2\n");
     fprintf(stderr, "\n");
     fprintf(stderr, "         -d <port>           destination UDP port - default 15731\n");
     fprintf(stderr, "         -l <port>           listening UDP port   - default 15730\n");
