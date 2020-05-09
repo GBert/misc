@@ -566,7 +566,7 @@ void print_locos(FILE *file) {
 	fprintf(file, " .tachomax=%u\n", l->tmax);
 	if (l->vmax)	fprintf(file, " .vmax=%u\n", l->vmax);
 	if (l->vmin)	fprintf(file, " .vmin=%u\n", l->vmin);
-	if (l->xprot)	fprintf(file, " .xprot=%u\n", l->xprot);
+	if (l->xprot)	fprintf(file, " .xprotokoll=%u\n", l->xprot);
 	if (l->spm)	fprintf(file, " .spm=%u\n", l->spm);
 	if (l->ft)	fprintf(file, " .ft=0x%x\n", l->ft);
 	if (l->mfxtype)	fprintf(file, " .mfxtyp=%u\n", l->mfxtype);
@@ -1001,6 +1001,10 @@ int read_loco_data(char *config_file, int config_type) {
 	    case L1_XPROT:
 		loco->xprot = strtoul(&line[L1_XPROT_LENGTH], NULL, 10);
 		debug_print("match xprot:     >%u<\n", loco->xprot);
+		break;
+	    case L1_XPROTOCOL:
+		loco->xprot = strtoul(&line[L1_XPROTOCOL_LENGTH], NULL, 10);
+		debug_print("match xprotocol: >%u<\n", loco->xprot);
 		break;
 	    case L1_TMAX:
 		loco->tmax = strtoul(&line[L1_TMAX_LENGTH], NULL, 10);
