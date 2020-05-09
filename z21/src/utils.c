@@ -114,10 +114,13 @@ void print_udp_frame(char *format, int udplength, unsigned char *udpframe) {
     }
 }
 
-void print_net_frame(char *format, unsigned char *netframe) {
+void print_net_frame(char *format, unsigned char *netframe, int verbose) {
     uint32_t canid;
     int i, dlc;
     char timestamp[16];
+
+    if (!verbose)
+	return;
 
     canid = be32(netframe);
     dlc = netframe[4];

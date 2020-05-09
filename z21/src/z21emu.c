@@ -191,10 +191,8 @@ int send_tcp_frame(unsigned char *frame, char *format, int verbose) {
 	return (EXIT_FAILURE);
     }
 
-    if (s != 13) {
-    } else {
-	print_net_frame(format, frame);
-    }
+    if (s == 13)
+	print_net_frame(format, frame, verbose);
     return (EXIT_SUCCESS);
 }
 
@@ -683,6 +681,7 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
 	    send_xpn_turnout_info(uid, tport, vchar);
 	break;
     default:
+	v_printf(verbose, "\n");
 	break;
     }
     check_free(vchar);
@@ -938,9 +937,9 @@ int main(int argc, char **argv) {
 		} else {
 		    for (i = 0; i < n; i += 13) {
 			if (i >= 13)
-			    print_net_frame(TCP_FORMATS_STRG, &recvline[i]);
+			    print_net_frame(TCP_FORMATS_STRG, &recvline[i], z21_data.foreground);
 			else
-			    print_net_frame(TCP_FORMAT_STRG, &recvline[i]);
+			    print_net_frame(TCP_FORMAT_STRG, &recvline[i], z21_data.foreground);
 			check_data_can(&z21_data, &recvline[i], z21_data.foreground);
 		    }
 		}
