@@ -592,7 +592,7 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	/* ignore self sent data */
 	break;
     default:
-	v_printf(verbose, "XPN unknown");
+	v_printf(verbose, "XPN unknown\n");
 	break;
     }
     check_free(vchar);
