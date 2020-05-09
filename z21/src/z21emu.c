@@ -653,6 +653,8 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
 	if ((uid == 0x01) && (data[9] == 2)) {
 	    v_printf(verbose, "Send Loco names\n");
 	    send_xpn_locos(z21_data, loco_data, verbose);
+	} else {
+	    v_printf(verbose, "\n");
 	}
 	break;
     /* loc functions */
