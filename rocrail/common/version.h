@@ -1,11 +1,13 @@
 const int revisionnr = 
-722
+724
 ;
 const char* commithash = 
-"f35fce577c0c338ac8d0ff3f9789a28974525d18";
+"bf363a37f9c59f340055a2d2897760bfbc284542";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"724 2020-05-09 14:53:36 +0200 routectrldlg: resizing fix\n" \
+"723 2020-05-09 14:31:45 +0200 routedialog: fix for modify sensor entry\n" \
 "722 2020-05-08 13:11:35 +0200 route: check for sensor, fbevent, type\n" \
 "721 2020-05-08 10:37:51 +0200 wio: take over only brightness if temp. reported is 110\n" \
 "720 2020-05-08 10:23:24 +0200 wio: alive brightness support added\n" \
