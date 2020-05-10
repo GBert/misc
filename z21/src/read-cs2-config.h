@@ -41,6 +41,7 @@ void print_pages(void);
 void print_gbstats(void);
 void print_tracks(void);
 void print_locos(FILE *file);
+void print_locos_short(FILE *file);
 void print_loco_names(FILE *file);
 int read_magnet_data(char *config_file, int config_type);
 int read_track_data(char *config_file);
