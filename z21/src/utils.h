@@ -15,6 +15,19 @@ struct node {
     struct node *next;
 };
 
+struct config_data {
+    int deflated_stream_size;
+    int deflated_size;
+    int inflated_size;
+    int verbose;
+    uint16_t crc;
+    char *name;
+    char *directory;
+    char *filename;
+    uint8_t *deflated_data;
+    uint8_t *inflated_data;
+};
+
 void usec_sleep(int usec);
 uint8_t xor(unsigned char *data, int length);
 void print_udp_frame(char *format, int length, unsigned char *udpframe);

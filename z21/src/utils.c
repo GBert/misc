@@ -11,6 +11,7 @@
  * Z21 Emulation for Roco WiFi Mouse
  */
 
+#include <assert.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,6 +30,7 @@
 #include <ifaddrs.h>
 #include <arpa/inet.h>
 #include <linux/can.h>
+#include <zlib.h>
 
 #include "utils.h"
 #include "z21.h"
@@ -41,6 +43,8 @@
 #define MAXSIZE			16384
 
 #define MAXDG   256		/* maximum datagram size */
+
+uint16_t CRCCCITT(unsigned char *data, size_t length, unsigned short seed);
 
 extern struct z21_data_t z21_data;
 
@@ -173,5 +177,37 @@ struct node *search_node(struct node *list, int id) {
 	list = list->next;
     }
     return NULL;
+}
+
+int inflate_data(struct config_data *config_data) {
+    int ret;
+    z_stream strm;
+
+    strm.zalloc = Z_NULL;
+    strm.zfree = Z_NULL;
+    strm.opaque = Z_NULL;
+    strm.avail_in = 0;
+    strm.next_in = Z_NULL;
+    ret = inflateInit(&strm);
+    if (ret != Z_OK)
+        return ret;
+    strm.avail_in = config_data->deflated_size;
+    strm.avail_out = config_data->inflated_size;
+    strm.next_in = config_data->deflated_data + 4;
+    strm.next_out = config_data->inflated_data;
+    ret = inflate(&strm, Z_NO_FLUSH);
+
+    assert(ret != Z_STREAM_ERROR);      /* state not clobbered */
+    switch (ret) {
+    case Z_NEED_DICT:
+	ret = Z_DATA_ERROR;
+	/* falls through */
+    case Z_DATA_ERROR:
+    case Z_MEM_ERROR:
+	(void)inflateEnd(&strm);
+	return ret;
+    }
+    (void)inflateEnd(&strm);
+    return 0;
 }
 
