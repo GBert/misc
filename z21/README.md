@@ -48,8 +48,6 @@ Todos
 -----
 
 - add .prg, .regs, .traktion and .blocks to cs2 reader
-- use Rocos Broadcast/Masks mechanismen instead of sending everything to broadcast address
-- calm down clang compiler
 - work on turnouts
   
 
