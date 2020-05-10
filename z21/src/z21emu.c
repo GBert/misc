@@ -302,6 +302,22 @@ int send_xpn_turnout_info(uint16_t FAdr, uint8_t zz, char *vchar) {
     return (EXIT_SUCCESS);
 }
 
+int send_xpn_lcn_detector(uint16_t id, uint8_t state, char *vchar) {
+    unsigned char xpnframe[16];
+
+    memset(xpnframe, 0, sizeof(xpnframe));
+    xpnframe[0] = 0x08;
+    xpnframe[2] = 0xA4;
+    xpnframe[4] = id & 0xFF;
+    xpnframe[5] = (id >> 8);
+    xpnframe[6] = 0x01;	/* Type */
+    xpnframe[7] = state;
+
+    z21_data.bcf = 0x00000008;
+    send_xpn(xpnframe, vchar);
+    return (EXIT_SUCCESS);
+}
+
 int send_xpn_system_info(char *vchar) {
     /* TODO */
     unsigned char xpnframe[32];
@@ -603,7 +619,8 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 
 int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
     uint32_t uid;
-    uint8_t function, tport, tpower, value;
+    uint16_t id;
+    uint8_t function, tport, tpower, value, state;
     char *vchar;
 
     vchar = NULL;
@@ -683,6 +700,15 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
 	vas_printf(verbose, &vchar, "LAN_X_TURNOUT_INFO 0x%04X 0x%02X\n", uid, tport);
 	if (!tpower)
 	    send_xpn_turnout_info(uid, tport, vchar);
+	break;
+    /* S88 Event */
+    case 0x23:
+	v_printf(verbose, "\n");
+	id = be16(&data[7]);
+	state = data[10];
+	/* we use the simplest GBM */
+	vas_printf(verbose, &vchar, "LAN_LOCONET_DETECTOR %d state %d\n", id, state);
+	send_xpn_lcn_detector(id, state, vchar);
 	break;
     default:
 	v_printf(verbose, "\n");
