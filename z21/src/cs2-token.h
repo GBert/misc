@@ -85,6 +85,8 @@ enum {
     L1_VMAX,
     L1_XPROT,
     L1_XPROTOCOL,
+    L1_LOCATION,
+    L1_JOURNEY,
     L1_TMAX,
     L1_SPM,
     L1_FT,
@@ -139,6 +141,8 @@ const char *l1_token [] = {
     " .vmax=",
     " .xprot=",
     " .xprotokoll=",
+    " .stand=",
+    " .fahrt=",
     " .tachomax=",
     " .spm=",
     " .ft=",
@@ -189,7 +193,9 @@ const char *l1_token [] = {
 #define L1_VMIN_LENGTH		7
 #define L1_VMAX_LENGTH		7
 #define L1_XPROT_LENGTH		8
-#define L1_XPROTOCOL_LENGTH     13
+#define L1_XPROTOCOL_LENGTH	13
+#define L1_LOCATION_LENGTH	8
+#define L1_JOURNEY_LENGTH	8
 #define L1_TMAX_LENGTH		11
 #define L1_SPM_LENGTH		6
 #define L1_FT_LENGTH		5
