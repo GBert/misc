@@ -342,6 +342,8 @@ int add_loco(struct loco_data_t *loco) {
 	l->vmax = loco->vmax;
 	l->vmin = loco->vmin;
 	l->xprot = loco->xprot;
+	l->location = loco->location;
+	l->journey = loco->journey;
 	l->spm = loco->spm;
 	l->ft = loco->ft;
 	l->mfxtype = loco->mfxtype;
@@ -369,6 +371,8 @@ int add_loco(struct loco_data_t *loco) {
 	check_modify(loco->vmin, l->vmin);
 	check_modify(loco->spm, l->spm);
 	check_modify(loco->xprot, l->xprot);
+	check_modify(loco->location, l->location);
+	check_modify(loco->journey, l->journey);
 	check_modify(loco->ft, l->ft);
 	check_modify(loco->mfxtype, l->mfxtype);
 	check_modify(loco->intraction, l->intraction);
@@ -566,7 +570,9 @@ void print_locos(FILE *file) {
 	fprintf(file, " .tachomax=%u\n", l->tmax);
 	if (l->vmax)	fprintf(file, " .vmax=%u\n", l->vmax);
 	if (l->vmin)	fprintf(file, " .vmin=%u\n", l->vmin);
-	if (l->xprot)	fprintf(file, " .xprot=%u\n", l->xprot);
+	if (l->xprot)	fprintf(file, " .xprotokoll=%u\n", l->xprot);
+	fprintf(file, " .stand=%u\n", l->location);
+	fprintf(file, " .fahrt=%u\n", l->journey);
 	if (l->spm)	fprintf(file, " .spm=%u\n", l->spm);
 	if (l->ft)	fprintf(file, " .ft=0x%x\n", l->ft);
 	if (l->mfxtype)	fprintf(file, " .mfxtyp=%u\n", l->mfxtype);
@@ -1001,6 +1007,18 @@ int read_loco_data(char *config_file, int config_type) {
 	    case L1_XPROT:
 		loco->xprot = strtoul(&line[L1_XPROT_LENGTH], NULL, 10);
 		debug_print("match xprot:     >%u<\n", loco->xprot);
+		break;
+	    case L1_XPROTOCOL:
+		loco->xprot = strtoul(&line[L1_XPROTOCOL_LENGTH], NULL, 10);
+		debug_print("match xprotocol: >%u<\n", loco->xprot);
+		break;
+	    case L1_LOCATION:
+		loco->location = strtoul(&line[L1_LOCATION_LENGTH], NULL, 10);
+		debug_print("match location:   >%u<\n", loco->location);
+		break;
+	    case L1_JOURNEY:
+		loco->journey = strtoul(&line[L1_JOURNEY_LENGTH], NULL, 10);
+		debug_print("match journey:   >%u<\n", loco->journey);
 		break;
 	    case L1_TMAX:
 		loco->tmax = strtoul(&line[L1_TMAX_LENGTH], NULL, 10);
