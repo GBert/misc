@@ -403,7 +403,7 @@ int send_can_loco_drive(uint16_t loco_id, uint8_t direction, uint8_t step, uint8
     return (EXIT_SUCCESS);
 }
 
-int send_can_turnout(uint16_t id, uint8_t port, int verbose) {
+int send_can_turnout(uint16_t id, uint8_t port, uint8_t activate, int verbose) {
     unsigned char udpframe[13];
 
     memcpy(udpframe, MS_TURNOUT, 13);
@@ -412,13 +412,14 @@ int send_can_turnout(uint16_t id, uint8_t port, int verbose) {
     udpframe[7] = id >> 8;
     udpframe[8] = id & 0xFF;
     udpframe[9] = port;
+    udpframe[10] = activate;
     send_can(udpframe, verbose);
 
     return (EXIT_SUCCESS);
 }
 
 int check_data_lan_x_header(struct z21_data_t *z21_data, unsigned char *udpframe, int verbose) {
-    uint8_t db0, tport, turnout, value, xheader, zz;
+    uint8_t activate, db0, tport, turnout, value, xheader, zz;
     uint16_t length, loco_id, FAdr;
     unsigned char xpnframe[32];
     char *vchar;
@@ -509,9 +510,10 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, unsigned char *udpframe
 	FAdr = be16(&udpframe[5]);
 	turnout = udpframe[7];
 	tport = turnout & 0x1;
+	activate = (turnout >> 3) & 1;
 	v_printf(verbose, "LAN_X_SET_TURNOUT 0x%04X\n", FAdr);
 	if (z21_data->turnout_enable) {
-	    send_can_turnout(FAdr, tport, verbose);
+	    send_can_turnout(FAdr, tport, activate, verbose);
 	    v_printf(verbose, "\n");
 	}
 	break;
