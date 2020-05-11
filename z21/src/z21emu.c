@@ -308,9 +308,9 @@ int send_xpn_lcn_detector(uint16_t id, uint8_t state, char *vchar) {
     memset(xpnframe, 0, sizeof(xpnframe));
     xpnframe[0] = 0x08;
     xpnframe[2] = 0xA4;
-    xpnframe[4] = id & 0xFF;
-    xpnframe[5] = (id >> 8);
-    xpnframe[6] = 0x01;	/* Type */
+    xpnframe[4] = 0x01;	/* Type */
+    xpnframe[5] = id & 0xFF;
+    xpnframe[6] = (id >> 8);
     xpnframe[7] = state;
 
     z21_data.bcf = 0x00000008;
