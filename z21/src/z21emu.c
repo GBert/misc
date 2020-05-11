@@ -370,6 +370,7 @@ int send_can_loco_function(uint16_t loco_id, uint8_t function, uint8_t value, in
     udpframe[9] = function;
     udpframe[10] = value;
     send_can(udpframe, verbose);
+    v_printf(verbose, "\n");
 
     return (EXIT_SUCCESS);
 }
@@ -484,7 +485,6 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, unsigned char *udpframe
 		uint8_t direction = udpframe[8] >> 7;
 		uint8_t speed = udpframe[8] & 0x7F;
 		send_can_loco_drive(loco_id, direction, step, speed, z21_data->foreground);
-		v_printf(z21_data->foreground, "\n");
 	    }
 	}
 	/* LAN_X_SET_LOCO */
