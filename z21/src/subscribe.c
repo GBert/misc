@@ -14,22 +14,27 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <sys/time.h>
+#include <pthread.h>
 
 #include "subscriber.h"
 #include "uthash.h"
 #include "z21.h"
 
 struct subscriber_t *subscriber = NULL;
+pthread_mutex_t lock=PTHREAD_MUTEX_INITIALIZER;
 
 int add_z21c_ip(uint32_t ip) {
     struct subscriber_t *sub;
 
+    pthread_mutex_lock(&lock);
     HASH_FIND_INT(subscriber, &ip, sub);
     if (sub) {
+	gettimeofday(&sub->last_seen, NULL);
     } else {
 	sub = (struct subscriber_t *)calloc(1, sizeof(struct subscriber_t));
 	if (!sub) {
 	    fprintf(stderr, "%s: can't calloc subscriber IP: %s\n", __func__, strerror(errno));
+	    pthread_mutex_unlock(&lock);
 	    return (EXIT_FAILURE);
 	}
 	sub->ip = ip;
@@ -41,6 +46,7 @@ int add_z21c_ip(uint32_t ip) {
 	sub->client_socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	if (sub->client_socket < 0) {
 	    fprintf(stderr, "primary sending UDP socket error: %s\n", strerror(errno));
+	    pthread_mutex_unlock(&lock);
 	    exit(EXIT_FAILURE);
 	}
 	gettimeofday(&(sub->last_seen), NULL);
@@ -49,6 +55,7 @@ int add_z21c_ip(uint32_t ip) {
 	HASH_ADD(hh, subscriber, ip, sizeof(uint32_t), sub);
     }
 
+    pthread_mutex_unlock(&lock);
     return EXIT_SUCCESS;
 }
 

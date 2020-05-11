@@ -12,6 +12,7 @@
  */
 
 #define _GNU_SOURCE
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <libgen.h>
@@ -47,7 +48,7 @@
             do { if ( a ) free(a); } while (0)
 
 struct sockaddr_in *bsa;
-pthread_mutex_t lock;
+extern pthread_mutex_t lock;
 
 struct z21_data_t z21_data;
 extern struct loco_data_t *loco_data, *loco_data_by_uid;
@@ -61,6 +62,7 @@ static char *TCP_FORMATS_STRG	= "->TCP*   CANID 0x%06X   [%d]";
 
 #define MAXLINE		256
 #define WLM_DELAY	180000
+#define SUBCRIBER_TIMEOUT	20E6
 
 char cs2addr[32] = "127.0.0.1";
 char config_dir[MAXLINE] = "/www/config/";
@@ -721,9 +723,23 @@ int check_data_can(struct z21_data_t *z21_data, uint8_t * data, int verbose) {
 }
 
 void *z21_periodic_tasks(void *ptr) {
-    /* struct z21_data_t *z21_data = (struct z21_data_t *)ptr; */
+    struct subscriber_t *sub, *tmp;
+    struct timeval actual_time;
+    long usec;
 
     while (1) {
+	pthread_mutex_lock(&lock);
+	gettimeofday(&actual_time, NULL);
+
+	HASH_ITER(hh, subscriber, sub, tmp) {
+	    usec = (actual_time.tv_sec - sub->last_seen.tv_sec) * 1000000;
+	    usec += (actual_time.tv_usec - sub->last_seen.tv_usec);
+	    if (usec > SUBCRIBER_TIMEOUT) {
+		v_printf(z21_data.foreground, "Client IP deleted %s\n", inet_ntoa(sub->client_addr.sin_addr));
+		HASH_DEL(subscriber, sub);
+	    }
+	}
+	pthread_mutex_unlock(&lock);
 	usec_sleep(1E6);
     }
 }
