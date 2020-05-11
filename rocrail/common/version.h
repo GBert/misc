@@ -1,11 +1,12 @@
 const int revisionnr = 
-724
+725
 ;
 const char* commithash = 
-"bf363a37f9c59f340055a2d2897760bfbc284542";
+"095f71e835b8e82cab87e3406ea5a73d37707e91";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"725 2020-05-11 13:25:27 +0200 allcall address option removed\n" \
 "724 2020-05-09 14:53:36 +0200 routectrldlg: resizing fix\n" \
 "723 2020-05-09 14:31:45 +0200 routedialog: fix for modify sensor entry\n" \
 "722 2020-05-08 13:11:35 +0200 route: check for sensor, fbevent, type\n" \
