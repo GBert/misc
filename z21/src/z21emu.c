@@ -173,7 +173,9 @@ int send_xpn(unsigned char *data, char *vchar) {
     }
     memcpy(udpxpn, data, length);
     format = UDP_DST_STRG;
+    pthread_mutex_lock(&lock);
     send_z21_clients(udpxpn, format, vchar);
+    pthread_mutex_unlock(&lock);
     return (EXIT_SUCCESS);
 }
 
