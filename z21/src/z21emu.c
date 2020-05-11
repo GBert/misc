@@ -579,7 +579,7 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	    break;
 	case LAN_LOGOFF:
 	    del_z21c_ip(z21_data->ip);
-	    v_printf(verbose, "LAN_LOGOFF *");
+	    v_printf(verbose, "LAN_LOGOFF");
 	    break;
 	case LAN_GET_LOCOMODE:
 	    v_printf(verbose, "LAN_GET_LOCO_MODE 0x%04X *TODO*\n", be16(&z21_data->udpframe[i + 4]));

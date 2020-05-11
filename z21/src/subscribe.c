@@ -62,21 +62,27 @@ int add_z21c_ip(uint32_t ip) {
 int set_z21c_bcf(uint32_t ip, uint32_t broadcast_flags) {
     struct subscriber_t *sub;
 
+    pthread_mutex_lock(&lock);
     HASH_FIND_INT(subscriber, &ip, sub);
     if (sub) {
 	sub->broadcast_flags = broadcast_flags;
+	pthread_mutex_unlock(&lock);
 	return EXIT_SUCCESS;
     }
+    pthread_mutex_unlock(&lock);
     return(EXIT_FAILURE);
 }
 
 int del_z21c_ip(uint32_t ip) {
     struct subscriber_t *sub;
 
+    pthread_mutex_lock(&lock);
     HASH_FIND_INT(subscriber, &ip, sub);
     if (sub) {
 	HASH_DEL(subscriber, sub);
+	pthread_mutex_unlock(&lock);
 	return EXIT_SUCCESS;
     }
+    pthread_mutex_unlock(&lock);
     return(EXIT_FAILURE);
 }
