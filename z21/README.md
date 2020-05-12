@@ -48,6 +48,8 @@ Todos
 -----
 
 - add .prg, .regs, .traktion and .blocks to cs2 reader
-- work on turnouts
+- work on turnouts / DCC-MM scheme
+- current overload -> Z21
+- measurements -> Z21
   
 
