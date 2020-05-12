@@ -173,7 +173,9 @@ int send_xpn(unsigned char *data, char *vchar) {
     }
     memcpy(udpxpn, data, length);
     format = UDP_DST_STRG;
+    pthread_mutex_lock(&lock);
     send_z21_clients(udpxpn, format, vchar);
+    pthread_mutex_unlock(&lock);
     return (EXIT_SUCCESS);
 }
 
@@ -577,7 +579,7 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	    break;
 	case LAN_LOGOFF:
 	    del_z21c_ip(z21_data->ip);
-	    v_printf(verbose, "LAN_LOGOFF *");
+	    v_printf(verbose, "LAN_LOGOFF");
 	    break;
 	case LAN_GET_LOCOMODE:
 	    v_printf(verbose, "LAN_GET_LOCO_MODE 0x%04X *TODO*\n", be16(&z21_data->udpframe[i + 4]));
