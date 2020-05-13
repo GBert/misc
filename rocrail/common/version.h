@@ -1,11 +1,14 @@
 const int revisionnr = 
-725
+728
 ;
 const char* commithash = 
-"095f71e835b8e82cab87e3406ea5a73d37707e91";
+"f5032538a88430a0a42922ab7f834076b9ac3e58";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"728 2020-05-13 11:28:02 +0200 clntcon: crash fix (1) for timing between writer and reader\n" \
+"727 2020-05-13 11:07:01 +0200 itemutils: fix for calculate symbol size for none rect crossing\n" \
+"726 2020-05-13 10:19:54 +0200 important changes update\n" \
 "725 2020-05-11 13:25:27 +0200 allcall address option removed\n" \
 "724 2020-05-09 14:53:36 +0200 routectrldlg: resizing fix\n" \
 "723 2020-05-09 14:31:45 +0200 routedialog: fix for modify sensor entry\n" \
