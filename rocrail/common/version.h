@@ -1,11 +1,13 @@
 const int revisionnr = 
-728
+730
 ;
 const char* commithash = 
-"f5032538a88430a0a42922ab7f834076b9ac3e58";
+"b0b3973bd80371bcb7aa4b6c3d2ae1ab66925703";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"730 2020-05-14 14:54:11 +0200 memory statistics work around for multiple free...\n" \
+"729 2020-05-14 08:21:40 +0200 clntcon: extra socket broken check added\n" \
 "728 2020-05-13 11:28:02 +0200 clntcon: crash fix (1) for timing between writer and reader\n" \
 "727 2020-05-13 11:07:01 +0200 itemutils: fix for calculate symbol size for none rect crossing\n" \
 "726 2020-05-13 10:19:54 +0200 important changes update\n" \
