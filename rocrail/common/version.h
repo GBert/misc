@@ -1,11 +1,12 @@
 const int revisionnr = 
-730
+731
 ;
 const char* commithash = 
-"b0b3973bd80371bcb7aa4b6c3d2ae1ab66925703";
+"13394680a13a86675a209e243cb0ef55affccfb2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"731 2020-05-15 10:00:24 +0200 rocguiinidlg: svg ID text size range increased\n" \
 "730 2020-05-14 14:54:11 +0200 memory statistics work around for multiple free...\n" \
 "729 2020-05-14 08:21:40 +0200 clntcon: extra socket broken check added\n" \
 "728 2020-05-13 11:28:02 +0200 clntcon: crash fix (1) for timing between writer and reader\n" \
