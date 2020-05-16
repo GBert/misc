@@ -1,11 +1,17 @@
 const int revisionnr = 
-731
+737
 ;
 const char* commithash = 
-"13394680a13a86675a209e243cb0ef55affccfb2";
+"0a76603a498aa0a28f18e7f129500bd6da5578e1";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"737 2020-05-16 14:49:56 +0200 block/switchdialog: layout corrections\n" \
+"736 2020-05-16 13:55:53 +0200 srcpcon: Fix: report correct rocrail version to srcp clients (Lothar)\n" \
+"735 2020-05-16 13:12:48 +0200 clntcon: protect the client socket on delete by mutex\n" \
+"734 2020-05-16 13:00:17 +0200 WIOdlg: small improvements\n" \
+"733 2020-05-15 15:27:56 +0200 rocview dialogs: spinctrl default width\n" \
+"732 2020-05-15 11:56:32 +0200 bidibidentdlg: added missing stdint header\n" \
 "731 2020-05-15 10:00:24 +0200 rocguiinidlg: svg ID text size range increased\n" \
 "730 2020-05-14 14:54:11 +0200 memory statistics work around for multiple free...\n" \
 "729 2020-05-14 08:21:40 +0200 clntcon: extra socket broken check added\n" \
