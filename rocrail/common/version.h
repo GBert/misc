@@ -1,11 +1,13 @@
 const int revisionnr = 
-737
+739
 ;
 const char* commithash = 
-"0a76603a498aa0a28f18e7f129500bd6da5578e1";
+"1066b6dbe6ed7ee1f6b57e28fdf0428a74c9ce77";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"739 2020-05-17 10:12:53 +0200 rocview: makefile fix for wx libraries in case of static\n" \
+"738 2020-05-17 07:43:24 +0200 clntcon: check if the client mutex is initilized\n" \
 "737 2020-05-16 14:49:56 +0200 block/switchdialog: layout corrections\n" \
 "736 2020-05-16 13:55:53 +0200 srcpcon: Fix: report correct rocrail version to srcp clients (Lothar)\n" \
 "735 2020-05-16 13:12:48 +0200 clntcon: protect the client socket on delete by mutex\n" \
