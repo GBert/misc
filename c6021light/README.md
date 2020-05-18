@@ -4,7 +4,7 @@ connect6021 light für Keyboard 6040
 Belegung der Buchse (Keyboard 6040 links)
 ```
 SDA  SCL                      8V   8V
- 2a   4b   6b   8b  10b  12b  14b  16b
+ 2b   4b   6b   8b  10b  12b  14b  16b
  2a   4a   6a   8a  10a  12a  14a  16a
 GND  GND  GND  GND  GND  GND  GND  GND
 ```
