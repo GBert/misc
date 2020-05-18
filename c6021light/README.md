@@ -1,5 +1,5 @@
-connect6021 für Keyboard 6040
-=============================
+connect6021 light für Keyboard 6040
+===================================
 
 Belegung der Buchse (Keyboard 6040 links)
 ```
