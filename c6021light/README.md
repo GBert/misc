@@ -9,6 +9,12 @@ SDA  SCL                      8V   8V
 GND  GND  GND  GND  GND  GND  GND  GND
 ```
 
+Federleiste DIN 41612 32-pol B/2
+z.B. ept 102-90065
+
+
+http://dl1zax.selfhost.de/ATMega/PDF/6022.pdf
+
 ```
 Für die Übertragung von Weichenstellbefehlen genügen drei Byte als Schaltanforderung.
 Es sind dies die Bytes für Empfänger (Zentrale), Keyboard-Nr. (0 bis 15) und das Datenbyte.
