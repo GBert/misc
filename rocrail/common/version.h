@@ -1,11 +1,15 @@
 const int revisionnr = 
-739
+743
 ;
 const char* commithash = 
-"1066b6dbe6ed7ee1f6b57e28fdf0428a74c9ce77";
+"8146fe62eff487a17c85abd023b63484b21dbec0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"743 2020-05-19 08:21:49 +0200 model: remove prev_* attributes on initial load\n" \
+"742 2020-05-18 15:03:23 +0200 rocview dialogs: spinctrl size set to default; correct size should be calculated by wx\n" \
+"741 2020-05-18 09:53:05 +0200 lieth: recovery improved\n" \
+"740 2020-05-18 08:07:04 +0200 clntcon: crash fix on cleanup client connection\n" \
 "739 2020-05-17 10:12:53 +0200 rocview: makefile fix for wx libraries in case of static\n" \
 "738 2020-05-17 07:43:24 +0200 clntcon: check if the client mutex is initilized\n" \
 "737 2020-05-16 14:49:56 +0200 block/switchdialog: layout corrections\n" \
