@@ -1,11 +1,14 @@
 const int revisionnr = 
-743
+746
 ;
 const char* commithash = 
-"8146fe62eff487a17c85abd023b63484b21dbec0";
+"593ab728e2bfea385166d33c18a4fdd00e214c29";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"746 2020-05-20 08:14:54 +0200 lieth: trace corrections\n" \
+"745 2020-05-20 08:06:06 +0200 lieth: trace fix at disconnect\n" \
+"744 2020-05-19 14:57:43 +0200 car: adjust function group in case of mapping\n" \
 "743 2020-05-19 08:21:49 +0200 model: remove prev_* attributes on initial load\n" \
 "742 2020-05-18 15:03:23 +0200 rocview dialogs: spinctrl size set to default; correct size should be calculated by wx\n" \
 "741 2020-05-18 09:53:05 +0200 lieth: recovery improved\n" \
