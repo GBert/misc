@@ -40,29 +40,29 @@ namespace Hardware
 			bool CanHandleAccessories() const override { return true; }
 			bool CanHandleFeedback() const override { return true; }
 
-			void GetLocoProtocols(std::vector<protocol_t>& protocols) const override { protocols.push_back(ProtocolDCC); }
+			void GetLocoProtocols(std::vector<Protocol>& protocols) const override { protocols.push_back(ProtocolDCC); }
 
-			bool LocoProtocolSupported(protocol_t protocol) const override { return (protocol == ProtocolDCC); }
+			bool LocoProtocolSupported(Protocol protocol) const override { return (protocol == ProtocolDCC); }
 
-			void GetAccessoryProtocols(std::vector<protocol_t>& protocols) const override { protocols.push_back(ProtocolDCC); }
+			void GetAccessoryProtocols(std::vector<Protocol>& protocols) const override { protocols.push_back(ProtocolDCC); }
 
-			bool AccessoryProtocolSupported(protocol_t protocol) const override { return (protocol == ProtocolDCC); }
+			bool AccessoryProtocolSupported(Protocol protocol) const override { return (protocol == ProtocolDCC); }
 
-			static void GetArgumentTypesAndHint(std::map<unsigned char,argumentType_t>& argumentTypes, std::string& hint)
+			static void GetArgumentTypesAndHint(std::map<unsigned char,ArgumentType>& argumentTypes, std::string& hint)
 			{
-				argumentTypes[1] = SerialPort;
-				argumentTypes[2] = S88Modules;
-				argumentTypes[3] = S88Modules;
-				argumentTypes[4] = S88Modules;
+				argumentTypes[1] = ArgumentTypeSerialPort;
+				argumentTypes[2] = ArgumentTypeS88Modules;
+				argumentTypes[3] = ArgumentTypeS88Modules;
+				argumentTypes[4] = ArgumentTypeS88Modules;
 				hint = Languages::GetText(Languages::TextHintOpenDcc);
 			}
 
-			void Booster(const boosterState_t status) override;
-			void LocoSpeed(const protocol_t protocol, const address_t address, const locoSpeed_t speed) override;
-			void LocoDirection(const protocol_t protocol, const address_t address, const direction_t direction) override;
-			void LocoFunction(const protocol_t protocol, const address_t address, const function_t function, const bool on) override;
-			void LocoSpeedDirectionFunctions(const protocol_t protocol, const address_t address, const locoSpeed_t speed, const direction_t direction, std::vector<bool>& functions) override;
-			void AccessoryOnOrOff(const protocol_t protocol, const address_t address, const accessoryState_t state, const bool on) override;
+			void Booster(const BoosterState status) override;
+			void LocoSpeed(const Protocol protocol, const Address address, const Speed speed) override;
+			void LocoDirection(const Protocol protocol, const Address address, const Direction direction) override;
+			void LocoFunction(const Protocol protocol, const Address address, const Function function, const DataModel::LocoFunctions::FunctionState on) override;
+			void LocoSpeedDirectionFunctions(const Protocol protocol, const Address address, const Speed speed, const Direction direction, std::vector<DataModel::LocoFunctions::FunctionState>& functions) override;
+			void AccessoryOnOrOff(const Protocol protocol, const Address address, const DataModel::AccessoryState state, const bool on) override;
 
 		private:
 			enum Commands : unsigned char
@@ -111,18 +111,18 @@ namespace Hardware
 
 			Hardware::OpenDccCache cache;
 
-			static bool CheckLocoAddress(const address_t address) { return 0 < address && address <= MaxLocoAddress; }
-			static bool CheckAccessoryAddress(const address_t address) { return 0 < address && address <= MaxAccessoryAddress; }
+			static bool CheckLocoAddress(const Address address) { return 0 < address && address <= MaxLocoAddress; }
+			static bool CheckAccessoryAddress(const Address address) { return 0 < address && address <= MaxAccessoryAddress; }
 
 			bool SendP50XOnly() const;
 			bool SendOneByteCommand(const unsigned char data) const;
 			bool SendNop() const { return SendOneByteCommand(XNop); }
 			bool SendPowerOn() const { return SendOneByteCommand(XPwrOn); }
 			bool SendPowerOff() const { return SendOneByteCommand(XPwrOff); }
-			bool SendXLok(const address_t address) const;
-			bool SendXFunc(const address_t address) const;
-			bool SendXFunc2(const address_t address) const;
-			bool SendXFunc34(const address_t address) const;
+			bool SendXLok(const Address address) const;
+			bool SendXFunc(const Address address) const;
+			bool SendXFunc2(const Address address) const;
+			bool SendXFunc34(const Address address) const;
 			bool ReceiveFunctionCommandAnswer() const;
 			bool SendRestart() const;
 			unsigned char SendXP88Get(unsigned char param) const;

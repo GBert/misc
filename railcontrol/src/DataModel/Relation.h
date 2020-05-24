@@ -36,7 +36,7 @@ namespace DataModel
 	class Relation : protected Serializable, public LockableItem
 	{
 		public:
-			enum type_t : unsigned char
+			enum Type : unsigned char
 			{
 				TypeCalculate = 0,
 				TypeStreetAtLock = ObjectTypeStreet << 3,
@@ -46,13 +46,16 @@ namespace DataModel
 				TypeFeedbackAtUnset = (ObjectTypeFeedback << 3) + 1,
 			};
 
+			typedef unsigned char Data;
+			static const Data DefaultData = 0;
+
 			Relation(Manager* manager,
-				const objectType_t objectType1,
-				const objectID_t objectID1,
-				const objectType_t objectType2,
-				const objectID_t objectID2,
-				const type_t type,
-				const priority_t priority,
+				const ObjectType objectType1,
+				const ObjectID objectID1,
+				const ObjectType objectType2,
+				const ObjectID objectID2,
+				const Type type,
+				const Priority priority,
 				const unsigned char data)
 			:	manager(manager),
 				objectType1(objectType1),
@@ -77,30 +80,30 @@ namespace DataModel
 			virtual std::string Serialize() const override;
 			virtual bool Deserialize(const std::string& serialized) override;
 
-			objectID_t ObjectID1() const { return objectID1; }
-			void ObjectID1(objectID_t objectID1) { this->objectID1 = objectID1; }
-			objectType_t ObjectType2() const { return objectType2; }
-			objectID_t ObjectID2() const { return objectID2; }
-			type_t Type() const { return type; }
-			priority_t Priority() const { return priority; }
-			unsigned char GetState() const { return data; }
+			ObjectID ObjectID1() const { return objectID1; }
+			void ObjectID1(ObjectID objectID1) { this->objectID1 = objectID1; }
+			ObjectType ObjectType2() const { return objectType2; }
+			ObjectID ObjectID2() const { return objectID2; }
+			Type GetType() const { return type; }
+			Priority GetPriority() const { return priority; }
+			Data GetData() const { return data; }
 
-			bool Reserve(Logger::Logger* logger, const locoID_t locoID) override;
-			bool Lock(Logger::Logger* logger, const locoID_t locoID) override;
-			bool Release(Logger::Logger* logger, const locoID_t locoID) override;
-			bool Execute(Logger::Logger* logger, const locoID_t locoID, const delay_t delay);
+			bool Reserve(Logger::Logger* logger, const LocoID locoID) override;
+			bool Lock(Logger::Logger* logger, const LocoID locoID) override;
+			bool Release(Logger::Logger* logger, const LocoID locoID) override;
+			bool Execute(Logger::Logger* logger, const LocoID locoID, const Delay delay);
 
 		private:
 			LockableItem* GetObject2();
 
 			Manager* manager;
-			objectType_t objectType1;
-			objectID_t objectID1;
-			objectType_t objectType2;
-			objectID_t objectID2;
-			type_t type;
-			priority_t priority;
-			unsigned char data;
+			ObjectType objectType1;
+			ObjectID objectID1;
+			ObjectType objectType2;
+			ObjectID objectID2;
+			Type type;
+			Priority priority;
+			Data data;
 	};
 } // namespace DataModel
 

@@ -63,18 +63,20 @@ namespace Network
 
 			ssize_t Send(const std::string& data)
 			{
-				std::lock_guard<std::mutex> Guard(fileHandleMutex);
-				return write(fileHandle, data.c_str(), data.length());
+				return Send(reinterpret_cast<const unsigned char*>(data.c_str()), data.length());
 			}
 
 			ssize_t Send(const unsigned char data)
 			{
-				std::lock_guard<std::mutex> Guard(fileHandleMutex);
-				return write(fileHandle, &data, 1);
+				return Send(&data, 1);
 			}
 
 			ssize_t Send(const unsigned char* data, const size_t size)
 			{
+				if (IsConnected() == false)
+				{
+					return 0;
+				}
 				std::lock_guard<std::mutex> Guard(fileHandleMutex);
 				return write(fileHandle, data, size);
 			}

@@ -22,6 +22,7 @@ along with RailControl; see the file LICENCE. If not see
 
 #include <string>
 
+#include "DataModel/ObjectIdentifier.h"
 #include "WebServer/HtmlTag.h"
 #include "WebServer/HtmlTagLabel.h"
 #include "WebServer/HtmlTagSelect.h"
@@ -33,7 +34,14 @@ namespace WebServer
 		public:
 			HtmlTagSelectWithLabel() = delete;
 
-			HtmlTagSelectWithLabel(const std::string& name, const Languages::textSelector_t label, const std::map<std::string,Languages::textSelector_t>& options, const std::string& defaultValue = "")
+			HtmlTagSelectWithLabel(const std::string& name, const Languages::TextSelector label, const std::map<std::string,Languages::TextSelector>& options, const std::string& defaultValue = "")
+			:	HtmlTag()
+			{
+				AddChildTag(HtmlTagLabel(label, "s_" + name));
+				AddChildTag(HtmlTagSelect(name, options, defaultValue));
+			}
+
+			HtmlTagSelectWithLabel(const std::string& name, const Languages::TextSelector label, const std::map<std::string,DataModel::ObjectIdentifier>& options, const DataModel::ObjectIdentifier& defaultValue = DataModel::ObjectIdentifier())
 			:	HtmlTag()
 			{
 				AddChildTag(HtmlTagLabel(label, "s_" + name));
@@ -41,7 +49,7 @@ namespace WebServer
 			}
 
 			template<typename T>
-			HtmlTagSelectWithLabel(const std::string& name, const Languages::textSelector_t label, const std::map<std::string,T>& options, const int defaultValue = 0)
+			HtmlTagSelectWithLabel(const std::string& name, const Languages::TextSelector label, const std::map<std::string,T>& options, const int defaultValue = 0)
 			:	HtmlTag()
 			{
 				AddChildTag(HtmlTagLabel(label, "s_" + name));
@@ -49,7 +57,7 @@ namespace WebServer
 			}
 
 			template<typename T>
-			HtmlTagSelectWithLabel(const std::string& name, const Languages::textSelector_t label, const std::map<T,Languages::textSelector_t>& options, const T defaultValue = 0)
+			HtmlTagSelectWithLabel(const std::string& name, const Languages::TextSelector label, const std::map<T,Languages::TextSelector>& options, const T defaultValue = 0)
 			:	HtmlTag()
 			{
 				AddChildTag(HtmlTagLabel(label, "s_" + name));
@@ -57,7 +65,7 @@ namespace WebServer
 			}
 
 			template<typename T>
-			HtmlTagSelectWithLabel(const std::string& name, const Languages::textSelector_t label, const std::map<T,std::string>& options, T defaultValue = 0)
+			HtmlTagSelectWithLabel(const std::string& name, const Languages::TextSelector label, const std::map<T,std::string>& options, T defaultValue = 0)
 			:	HtmlTag()
 			{
 				AddChildTag(HtmlTagLabel(label, "s_" + name));

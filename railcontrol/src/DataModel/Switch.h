@@ -20,48 +20,40 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
-#include <mutex>
 #include <string>
-#include <vector>
 
-#include "DataModel/Accessory.h"
+#include "DataModel/AccessoryBase.h"
+#include "DataModel/LayoutItem.h"
+#include "DataModel/LockableItem.h"
 #include "DataTypes.h"
+
+class Manager;
 
 namespace DataModel
 {
-	class Switch : public Accessory
+	class Switch : public AccessoryBase, public LayoutItem, public LockableItem
 	{
 		public:
-			enum switchType : switchType_t
-			{
-				SwitchTypeLeft = 0,
-				SwitchTypeRight
-			};
+			Switch(const SwitchID switchID)
+			:	AccessoryBase(),
+				LayoutItem(switchID),
+				LockableItem()
+			{}
 
-			enum switchState : switchState_t
-			{
-				SwitchStateTurnout = false,
-				SwitchStateStraight = true
-			};
-
-			Switch(Manager* manager, const switchID_t switchID)
-			:	Accessory(manager, switchID)
-			{
-			}
+			Switch(__attribute__((unused)) Manager* manager, const SwitchID switchID)
+			:	Switch(switchID)
+			{}
 
 			Switch(const std::string& serialized)
 			{
 				Deserialize(serialized);
 			}
 
-			objectType_t GetObjectType() const { return ObjectTypeSwitch; }
+			ObjectType GetObjectType() const override { return ObjectTypeSwitch; }
+			std::string GetLayoutType() const override { return Languages::GetText(Languages::TextSwitch); };
 
 			std::string Serialize() const override;
 			bool Deserialize(const std::string& serialized) override;
-			std::string LayoutType() const override { return Languages::GetText(Languages::TextSwitch); };
-
-			switchState_t GetState() const { return static_cast<switchState_t>(state); }
-			switchType_t GetType() const { return static_cast<switchType_t>(type); }
 	};
 
 } // namespace DataModel

@@ -23,6 +23,7 @@ along with RailControl; see the file LICENCE. If not see
 #include <string>
 
 #include "DataTypes.h"
+#include "DataModel/AccessoryBase.h"
 #include "DataModel/HardwareHandle.h"
 #include "DataModel/LayoutItem.h"
 #include "DataModel/LockableItem.h"
@@ -32,37 +33,21 @@ class Manager;
 
 namespace DataModel
 {
-	class Accessory : public LayoutItem, public LockableItem, public HardwareHandle
+	class Accessory : public AccessoryBase, public LayoutItem, public LockableItem
 	{
 		public:
-			enum accessoryType : accessoryType_t
-			{
-				AccessoryTypeDefault = 0
-			};
+			Accessory(const AccessoryID accessoryID)
+			:	AccessoryBase(),
+			 	LayoutItem(accessoryID),
+			 	LockableItem()
+			{}
 
-			enum accessoryState : accessoryState_t
-			{
-				AccessoryStateOff = false,
-				AccessoryStateOn = true
-			};
-
-			Accessory(const accessoryID_t accessoryID)
-			:	LayoutItem(accessoryID),
-			 	type(AccessoryTypeDefault),
-			 	state(AccessoryStateOff),
-			 	duration(0),
-			 	inverted(false),
-			 	lastUsed(0),
-				counter(0)
-			{
-			}
-
-			Accessory(__attribute__((unused)) Manager* manager, const accessoryID_t accessoryID)
+			Accessory(__attribute__((unused)) Manager* manager, const AccessoryID accessoryID)
 			:	Accessory(accessoryID)
-			{
-			}
+			{}
 
 			Accessory(const std::string& serialized)
+			:	Accessory(AccessoryNone)
 			{
 				Deserialize(serialized);
 			}
@@ -71,35 +56,11 @@ namespace DataModel
 
 			virtual ~Accessory() {}
 
-			virtual objectType_t GetObjectType() const { return ObjectTypeAccessory; }
+			virtual ObjectType GetObjectType() const override { return ObjectTypeAccessory; }
+			virtual std::string GetLayoutType() const override { return Languages::GetText(Languages::TextAccessory); }
 
 			virtual std::string Serialize() const override;
 			virtual bool Deserialize(const std::string& serialized) override;
-			virtual std::string LayoutType() const override { return Languages::GetText(Languages::TextAccessory); }
-
-			void SetType(accessoryType_t type) { this->type = type; }
-			accessoryType_t GetType() const { return type; }
-			void SetState(accessoryState_t state) { this->state = state; lastUsed = time(nullptr); ++counter; }
-			accessoryState_t GetState() const { return state; }
-			void SetDuration(accessoryDuration_t duration) { this->duration = duration; }
-			accessoryDuration_t GetDuration() const { return duration; }
-
-			void SetInverted(const bool inverted) { this->inverted = inverted; }
-			bool GetInverted() const { return inverted; }
-
-			time_t GetLastUsed() const { return lastUsed; }
-
-		protected:
-			std::string SerializeWithoutType() const;
-			virtual bool Deserialize(const std::map<std::string,std::string>& arguments);
-
-			accessoryType_t type;
-			accessoryState_t state;
-			accessoryDuration_t duration; // duration in ms after which the accessory command will be turned off on rails. 0 = no turn off / turn off must be made manually
-			bool inverted;
-
-			time_t lastUsed;
-			unsigned int counter;
 	};
 } // namespace DataModel
 

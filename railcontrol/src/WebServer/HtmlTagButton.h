@@ -33,7 +33,7 @@ namespace WebServer
 			HtmlTagButton() = delete;
 			HtmlTagButton(const std::string& value, const std::string& command);
 
-			HtmlTagButton(const Languages::textSelector_t value, const std::string& command)
+			HtmlTagButton(const Languages::TextSelector value, const std::string& command)
 			:	HtmlTagButton(Languages::GetText(value), command)
 			{}
 

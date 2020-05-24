@@ -22,28 +22,30 @@ along with RailControl; see the file LICENCE. If not see
 
 #include <string>
 
-#include "WebServer/HtmlTagLayoutItem.h"
+#include "DataModel/TrackBase.h"
+#include "WebServer/HtmlTagTrackBase.h"
+
+class Manager;
 
 namespace DataModel
 {
+	class LayoutItem;
 	class Signal;
+	class TrackBase;
 }
 
 namespace WebServer
 {
-	class HtmlTagSignal : public HtmlTagLayoutItem
+	class HtmlTagSignal : public HtmlTagTrackBase
 	{
 		public:
 			HtmlTagSignal() = delete;
-			HtmlTagSignal(const DataModel::Signal* signal);
+			HtmlTagSignal(const Manager& manager, const DataModel::Signal* signal);
 
 			virtual ~HtmlTagSignal() {}
 
-			virtual HtmlTag AddAttribute(const std::string& name, const std::string& value) override
-			{
-				childTags[0].AddAttribute(name, value);
-				return *this;
-			}
+		private:
+			const DataModel::Signal* signal;
 	};
 }; // namespace WebServer
 

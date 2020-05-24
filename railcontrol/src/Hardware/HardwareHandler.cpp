@@ -23,6 +23,7 @@ along with RailControl; see the file LICENCE. If not see
 #endif
 
 #include "DataModel/Loco.h"
+#include "DataModel/LocoFunctions.h"
 #include "DataTypes.h"
 #include "Logger/Logger.h"
 #include "Hardware/CS2Udp.h"
@@ -60,7 +61,7 @@ namespace Hardware
 	void HardwareHandler::Init(const HardwareParams* params)
 	{
 		this->params = params;
-		hardwareType_t type = params->GetHardwareType();
+		HardwareType type = params->GetHardwareType();
 
 #ifdef AMALGAMATION
 		switch(type)
@@ -191,7 +192,7 @@ namespace Hardware
 		destroyHardware = nullptr;
 
 #ifndef AMALGAMATION
-		hardwareType_t type = params->GetHardwareType();
+		HardwareType type = params->GetHardwareType();
 		params = nullptr;
 		// close library
 		if (manager.ControlsOfHardwareType(type) > 1)
@@ -302,7 +303,7 @@ namespace Hardware
 		return instance->CanHandleProgramDccPom();
 	}
 
-	void HardwareHandler::LocoProtocols(std::vector<protocol_t>& protocols) const
+	void HardwareHandler::LocoProtocols(std::vector<Protocol>& protocols) const
 	{
 		if (instance == nullptr)
 		{
@@ -313,7 +314,7 @@ namespace Hardware
 		instance->GetLocoProtocols(protocols);
 	}
 
-	bool HardwareHandler::LocoProtocolSupported(protocol_t protocol) const
+	bool HardwareHandler::LocoProtocolSupported(Protocol protocol) const
 	{
 		if (instance == nullptr)
 		{
@@ -322,7 +323,7 @@ namespace Hardware
 		return instance->LocoProtocolSupported(protocol);
 	}
 
-	void HardwareHandler::AccessoryProtocols(std::vector<protocol_t>& protocols) const
+	void HardwareHandler::AccessoryProtocols(std::vector<Protocol>& protocols) const
 	{
 		if (instance == nullptr)
 		{
@@ -333,7 +334,7 @@ namespace Hardware
 		instance->GetAccessoryProtocols(protocols);
 	}
 
-	bool HardwareHandler::AccessoryProtocolSupported(protocol_t protocol) const
+	bool HardwareHandler::AccessoryProtocolSupported(Protocol protocol) const
 	{
 		if (instance == nullptr)
 		{
@@ -342,7 +343,7 @@ namespace Hardware
 		return instance->AccessoryProtocolSupported(protocol);
 	}
 
-	void HardwareHandler::Booster(const controlType_t controlType, const boosterState_t status)
+	void HardwareHandler::Booster(const ControlType controlType, const BoosterState status)
 	{
 		if (controlType == ControlTypeHardware || instance == nullptr)
 		{
@@ -351,76 +352,82 @@ namespace Hardware
 		instance->Booster(status);
 	}
 
-	void HardwareHandler::LocoSpeed(const controlType_t controlType, const DataModel::Loco* loco, const locoSpeed_t speed)
+	void HardwareHandler::LocoSpeed(const ControlType controlType, const DataModel::Loco* loco, const Speed speed)
 	{
-		if (controlType == ControlTypeHardware || instance == nullptr || loco->GetControlID() != ControlID())
+		if (controlType == ControlTypeHardware || instance == nullptr || loco->GetControlID() != GetControlID())
 		{
 			return;
 		}
 		instance->LocoSpeed(loco->GetProtocol(), loco->GetAddress(), speed);
 	}
 
-	void HardwareHandler::LocoDirection(const controlType_t controlType, const DataModel::Loco* loco, const direction_t direction)
+	void HardwareHandler::LocoDirection(const ControlType controlType, const DataModel::Loco* loco, const Direction direction)
 	{
-		if (controlType == ControlTypeHardware || instance == nullptr || loco->GetControlID() != ControlID())
+		if (controlType == ControlTypeHardware || instance == nullptr || loco->GetControlID() != GetControlID())
 		{
 			return;
 		}
 		instance->LocoDirection(loco->GetProtocol(), loco->GetAddress(), direction);
 	}
 
-	void HardwareHandler::LocoFunction(const controlType_t controlType, const DataModel::Loco* loco, const function_t function, const bool on)
+	void HardwareHandler::LocoFunction(const ControlType controlType, const DataModel::Loco* loco, const Function function, const DataModel::LocoFunctions::FunctionState on)
 	{
-		if (controlType == ControlTypeHardware || instance == nullptr || loco->GetControlID() != ControlID())
+		if (controlType == ControlTypeHardware || instance == nullptr || loco->GetControlID() != GetControlID())
 		{
 			return;
 		}
 		instance->LocoFunction(loco->GetProtocol(), loco->GetAddress(), function, on);
 	}
 
-	void HardwareHandler::LocoSpeedDirectionFunctions(const DataModel::Loco* loco, const locoSpeed_t speed, const direction_t direction, std::vector<bool>& functions)
+	void HardwareHandler::LocoSpeedDirectionFunctions(const DataModel::Loco* loco, const Speed speed, const Direction direction, std::vector<DataModel::LocoFunctions::FunctionState>& functions)
 	{
-		if (instance == nullptr || loco->GetControlID() != ControlID())
+		if (instance == nullptr || loco->GetControlID() != GetControlID())
 		{
 			return;
 		}
 		instance->LocoSpeedDirectionFunctions(loco->GetProtocol(), loco->GetAddress(), speed, direction, functions);
 	}
 
-	void HardwareHandler::AccessoryState(const controlType_t controlType, const DataModel::Accessory* accessory, const accessoryState_t state)
+	void HardwareHandler::AccessoryState(const ControlType controlType, const DataModel::Accessory* accessory, const DataModel::AccessoryState state)
 	{
 		if (controlType == ControlTypeHardware
 			|| instance == nullptr
 			|| accessory == nullptr
-			|| accessory->GetControlID() != this->ControlID())
+			|| accessory->GetControlID() != this->GetControlID())
 		{
 			return;
 		}
-		instance->Accessory(accessory->GetProtocol(), accessory->GetAddress(), state, accessory->GetDuration());
+		instance->Accessory(accessory->GetProtocol(), accessory->GetAddress(), state, accessory->GetAccessoryPulseDuration());
 	}
 
-	void HardwareHandler::SwitchState(const controlType_t controlType, const DataModel::Switch* mySwitch, const switchState_t state)
+	void HardwareHandler::SwitchState(const ControlType controlType, const DataModel::Switch* mySwitch, const DataModel::AccessoryState state)
 	{
 		if (controlType == ControlTypeHardware
 			|| instance == nullptr
 			|| mySwitch == nullptr
-			|| mySwitch->GetControlID() != this->ControlID())
+			|| mySwitch->GetControlID() != this->GetControlID())
 		{
 			return;
 		}
-		instance->Accessory(mySwitch->GetProtocol(), mySwitch->GetAddress(), state, mySwitch->GetDuration());
+		instance->Accessory(mySwitch->GetProtocol(), mySwitch->GetAddress(), state, mySwitch->GetAccessoryPulseDuration());
 	}
 
-	void HardwareHandler::SignalState(const controlType_t controlType, const DataModel::Signal* signal, const signalState_t state)
+	void HardwareHandler::SignalState(const ControlType controlType, const DataModel::Signal* signal)
 	{
 		if (controlType == ControlTypeHardware
 			|| instance == nullptr
 			|| signal == nullptr
-			|| signal->GetControlID() != this->ControlID())
+			|| signal->GetControlID() != this->GetControlID())
 		{
 			return;
 		}
-		instance->Accessory(signal->GetProtocol(), signal->GetAddress(), state, signal->GetDuration());
+		bool inverted = signal->GetInverted();
+		DataModel::AccessoryState state = signal->GetAccessoryState();
+		if (inverted)
+		{
+			state = (state == DataModel::SignalStateRed ? DataModel::SignalStateGreen : DataModel::SignalStateGreen);
+		}
+		instance->Accessory(signal->GetProtocol(), signal->GetAddress(), state, signal->GetAccessoryPulseDuration());
 	}
 
 	bool HardwareHandler::ProgramCheckValues(const ProgramMode mode, const CvNumber cv, const CvValue value)
@@ -457,7 +464,7 @@ namespace Hardware
 		return (cv <= maxCv);
 	}
 
-	void HardwareHandler::ProgramRead(const ProgramMode mode, const address_t address, const CvNumber cv)
+	void HardwareHandler::ProgramRead(const ProgramMode mode, const Address address, const CvNumber cv)
 	{
 		if (ProgramCheckValues(mode, cv) == false)
 		{
@@ -471,7 +478,7 @@ namespace Hardware
 		instance->ProgramRead(mode, address, cv);
 	}
 
-	void HardwareHandler::ProgramWrite(const ProgramMode mode, const address_t address, const CvNumber cv, const CvValue value)
+	void HardwareHandler::ProgramWrite(const ProgramMode mode, const Address address, const CvNumber cv, const CvValue value)
 	{
 		if (ProgramCheckValues(mode, cv, value) == false)
 		{
@@ -484,7 +491,7 @@ namespace Hardware
 		instance->ProgramWrite(mode, address, cv, value);
 	}
 
-	void HardwareHandler::ArgumentTypesOfHardwareTypeAndHint(const hardwareType_t hardwareType, std::map<unsigned char,argumentType_t>& arguments, std::string& hint)
+	void HardwareHandler::ArgumentTypesOfHardwareTypeAndHint(const HardwareType hardwareType, std::map<unsigned char,ArgumentType>& arguments, std::string& hint)
 	{
 		switch (hardwareType)
 		{

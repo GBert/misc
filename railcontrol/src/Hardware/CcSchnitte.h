@@ -33,9 +33,9 @@ namespace Hardware
 			CcSchnitte(const HardwareParams* params);
 			~CcSchnitte();
 
-			static void GetArgumentTypesAndHint(std::map<unsigned char,argumentType_t>& argumentTypes, std::string& hint)
+			static void GetArgumentTypesAndHint(std::map<unsigned char,ArgumentType>& argumentTypes, std::string& hint)
 			{
-				argumentTypes[1] = SerialPort;
+				argumentTypes[1] = ArgumentTypeSerialPort;
 				hint = Languages::GetText(Languages::TextHintCcSchnitte);
 			}
 

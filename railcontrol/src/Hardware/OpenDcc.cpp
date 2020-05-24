@@ -130,7 +130,7 @@ namespace Hardware
 		checkEventsThread.join();
 	}
 
-	void OpenDcc::Booster(const boosterState_t status)
+	void OpenDcc::Booster(const BoosterState status)
 	{
 		if (!serialLine.IsConnected())
 		{
@@ -149,7 +149,7 @@ namespace Hardware
 		}
 	}
 
-	void OpenDcc::LocoSpeed(__attribute__((unused)) const protocol_t protocol, const address_t address, const locoSpeed_t speed)
+	void OpenDcc::LocoSpeed(__attribute__((unused)) const Protocol protocol, const Address address, const Speed speed)
 	{
 		if (!serialLine.IsConnected() || !CheckLocoAddress(address))
 		{
@@ -161,7 +161,7 @@ namespace Hardware
 	}
 
 
-	void OpenDcc::LocoDirection(__attribute__((unused)) const protocol_t protocol, const address_t address, const direction_t direction)
+	void OpenDcc::LocoDirection(__attribute__((unused)) const Protocol protocol, const Address address, const Direction direction)
 	{
 		if (!serialLine.IsConnected() || !CheckLocoAddress(address))
 		{
@@ -172,7 +172,7 @@ namespace Hardware
 		SendXLok(address);
 	}
 
-	void OpenDcc::LocoFunction(__attribute__((unused)) const protocol_t protocol, const address_t address, const function_t function, const bool on)
+	void OpenDcc::LocoFunction(__attribute__((unused)) const Protocol protocol, const Address address, const Function function, const DataModel::LocoFunctions::FunctionState on)
 	{
 		if (!serialLine.IsConnected() || !CheckLocoAddress(address))
 		{
@@ -205,7 +205,7 @@ namespace Hardware
 		SendXFunc34(address);
 	}
 
-	void OpenDcc::LocoSpeedDirectionFunctions(__attribute__((unused)) const protocol_t protocol, const address_t address, const locoSpeed_t speed, const direction_t direction, std::vector<bool>& functions)
+	void OpenDcc::LocoSpeedDirectionFunctions(__attribute__((unused)) const Protocol protocol, const Address address, const Speed speed, const Direction direction, std::vector<DataModel::LocoFunctions::FunctionState>& functions)
 	{
 		if (!serialLine.IsConnected() || !CheckLocoAddress(address))
 		{
@@ -234,10 +234,10 @@ namespace Hardware
 		}
 	}
 
-	bool OpenDcc::SendXLok(const address_t address) const
+	bool OpenDcc::SendXLok(const Address address) const
 	{
 		OpenDccCacheEntry entry = cache.GetData(address);
-		logger->Info(Languages::TextSettingSpeedDirectionLight, address, entry.speed, Languages::GetLeftRight(static_cast<direction_t>((entry.directionF0 >> 5) & 0x01)), Languages::GetOnOff((entry.directionF0 >> 4) & 0x01));
+		logger->Info(Languages::TextSettingSpeedDirectionLight, address, entry.speed, Languages::GetLeftRight(static_cast<Direction>((entry.directionF0 >> 5) & 0x01)), Languages::GetOnOff((entry.directionF0 >> 4) & 0x01));
 		const unsigned char addressLSB = (address & 0xFF);
 		const unsigned char addressMSB = (address >> 8);
 		const unsigned char data[5] = { XLok, addressLSB, addressMSB, entry.speed, entry.directionF0 };
@@ -273,7 +273,7 @@ namespace Hardware
 		}
 	}
 
-	bool OpenDcc::SendXFunc(const address_t address) const
+	bool OpenDcc::SendXFunc(const Address address) const
 	{
 		OpenDccCacheEntry entry = cache.GetData(address);
 		logger->Info(Languages::TextSettingFunctions1_8, address, entry.function[0]);
@@ -284,7 +284,7 @@ namespace Hardware
 		return ReceiveFunctionCommandAnswer();
 	}
 
-	bool OpenDcc::SendXFunc2(const address_t address) const
+	bool OpenDcc::SendXFunc2(const Address address) const
 	{
 		OpenDccCacheEntry entry = cache.GetData(address);
 		logger->Info(Languages::TextSettingFunctions9_16, address, entry.function[1]);
@@ -295,7 +295,7 @@ namespace Hardware
 		return ReceiveFunctionCommandAnswer();
 	}
 
-	bool OpenDcc::SendXFunc34(const address_t address) const
+	bool OpenDcc::SendXFunc34(const Address address) const
 	{
 		OpenDccCacheEntry entry = cache.GetData(address);
 		logger->Info(Languages::TextSettingFunctions17_28, address, entry.function[2], entry.function[3]);
@@ -334,7 +334,7 @@ namespace Hardware
 		}
 	}
 
-	void OpenDcc::AccessoryOnOrOff(__attribute__((unused)) const protocol_t protocol, const address_t address, const accessoryState_t state, const bool on)
+	void OpenDcc::AccessoryOnOrOff(__attribute__((unused)) const Protocol protocol, const Address address, const DataModel::AccessoryState state, const bool on)
 	{
 		if (!serialLine.IsConnected() || !CheckAccessoryAddress(address))
 		{
@@ -343,7 +343,7 @@ namespace Hardware
 		logger->Info(Languages::TextSettingAccessoryWithProtocol, ProtocolDCC, address, state, on);
 		const unsigned char addressLSB = (address & 0xFF);
 		const unsigned char addressMSB = (address >> 8);
-		const unsigned char statusBits = (state << 7) | (on << 6);
+		const unsigned char statusBits = ((state == DataModel::AccessoryStateOn) << 7) | (on << 6);
 		const unsigned char addressStatus = addressMSB | statusBits;
 		const unsigned char data[3] = { XTrnt, addressLSB, addressStatus };
 		serialLine.Send(data, sizeof(data));
@@ -433,13 +433,13 @@ namespace Hardware
 	{
 		unsigned char diff = s88Memory[module] ^ data;
 		s88Memory[module] = data;
-		feedbackPin_t pinOverAll = module;
+		FeedbackPin pinOverAll = module;
 		pinOverAll <<= 3;
 		for (unsigned char pinOnModule = 1; pinOnModule <= 8; ++pinOnModule)
 		{
 			if ((diff >> (8 - pinOnModule)) & 0x01)
 			{
-				DataModel::Feedback::feedbackState_t state = static_cast<DataModel::Feedback::feedbackState_t>((data >> (8 - pinOnModule)) & 0x01);
+				DataModel::Feedback::FeedbackState state = static_cast<DataModel::Feedback::FeedbackState>((data >> (8 - pinOnModule)) & 0x01);
 				logger->Info(Languages::TextFeedbackChange, pinOnModule, module, Languages::GetText(state ? Languages::TextOn : Languages::TextOff));
 				manager->FeedbackState(controlID, pinOverAll + pinOnModule, state);
 			}
@@ -524,7 +524,7 @@ namespace Hardware
 
 		if (powerEvent)
 		{
-			manager->Booster(ControlTypeHardware, BoosterStop);
+			manager->Booster(ControlTypeHardware, BoosterStateStop);
 		}
 
 		if (switchEvent)

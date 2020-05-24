@@ -73,7 +73,7 @@ namespace Utils
 		}
 	}
 
-	std::string Utils::GetStringMapEntry(const std::map<std::string, std::string>& map, const std::string& key, const std::string& defaultValue)
+	const std::string& Utils::GetStringMapEntry(const std::map<std::string, std::string>& map, const std::string& key, const std::string& defaultValue)
 	{
 		if (map.count(key) == 0)
 		{
@@ -104,7 +104,7 @@ namespace Utils
 	string Utils::ToStringWithLeadingZeros(const unsigned int number, const unsigned char chars)
 	{
 		string out = to_string(number);
-		while (out.size() < chars)
+		while (out.length() < chars)
 		{
 			out.insert(0, "0");
 		}
@@ -113,7 +113,7 @@ namespace Utils
 
 	int Utils::StringToInteger(const std::string& value, const int defaultValue, const bool hex)
 	{
-		size_t valueSize = value.size();
+		size_t valueSize = value.length();
 		if (valueSize == 0)
 		{
 			return defaultValue;

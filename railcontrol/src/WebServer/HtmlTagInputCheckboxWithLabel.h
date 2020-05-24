@@ -32,7 +32,7 @@ namespace WebServer
 	{
 		public:
 			HtmlTagInputCheckboxWithLabel() = delete;
-			HtmlTagInputCheckboxWithLabel(const std::string& name, const Languages::textSelector_t label, const std::string& value, const bool checked)
+			HtmlTagInputCheckboxWithLabel(const std::string& name, const Languages::TextSelector label, const std::string& value, const bool checked)
 			:	HtmlTag()
 			{
 				AddChildTag(HtmlTagLabel(label, name));

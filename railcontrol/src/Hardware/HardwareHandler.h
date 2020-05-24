@@ -23,6 +23,7 @@ along with RailControl; see the file LICENCE. If not see
 #include <string>
 
 #include "ControlInterface.h"
+#include "DataModel/LocoFunctions.h"
 #include "DataTypes.h"
 #include "Hardware/HardwareInterface.h"
 #include "Hardware/HardwareParams.h"
@@ -59,14 +60,14 @@ namespace Hardware
 				Init(params);
 			}
 
-			controlID_t ControlID() const { return params->GetControlID(); }
+			ControlID GetControlID() const { return params->GetControlID(); }
 			const std::string GetName() const override;
 
-			void AccessoryProtocols(std::vector<protocol_t>& protocols) const override;
-			bool AccessoryProtocolSupported(protocol_t protocol) const override;
-			void AccessoryState(const controlType_t controlType, const DataModel::Accessory* accessory, const accessoryState_t state) override;
+			void AccessoryProtocols(std::vector<Protocol>& protocols) const override;
+			bool AccessoryProtocolSupported(Protocol protocol) const override;
+			void AccessoryState(const ControlType controlType, const DataModel::Accessory* accessory, const DataModel::AccessoryState state) override;
 
-			void Booster(const controlType_t controlType, boosterState_t status) override;
+			void Booster(const ControlType controlType, BoosterState status) override;
 			bool CanHandleAccessories() const override;
 			bool CanHandleFeedbacks() const override;
 			bool CanHandleLocos() const override;
@@ -75,18 +76,18 @@ namespace Hardware
 			bool CanHandleProgramMfx() const override;
 			bool CanHandleProgramDccDirect() const override;
 			bool CanHandleProgramDccPom() const override;
-			void LocoDirection(const controlType_t controlType, const DataModel::Loco* loco, const direction_t direction) override;
-			void LocoFunction(const controlType_t controlType, const DataModel::Loco* loco, const function_t function, const bool on) override;
-			void LocoProtocols(std::vector<protocol_t>& protocols) const override;
-			bool LocoProtocolSupported(protocol_t protocol) const override;
-			void LocoSpeed(const controlType_t controlType, const DataModel::Loco* loco, const locoSpeed_t speed) override;
-			void LocoSpeedDirectionFunctions(const DataModel::Loco* loco, const locoSpeed_t speed, const direction_t direction, std::vector<bool>& functions) override;
-			void SwitchState(const controlType_t controlType, const DataModel::Switch* mySwitch, const switchState_t state) override;
-			void SignalState(const controlType_t controlType, const DataModel::Signal* signal, const signalState_t state) override;
-			void ProgramRead(const ProgramMode mode, const address_t address, const CvNumber cv) override;
-			void ProgramWrite(const ProgramMode mode, const address_t address, const CvNumber cv, const CvValue value) override;
+			void LocoDirection(const ControlType controlType, const DataModel::Loco* loco, const Direction direction) override;
+			void LocoFunction(const ControlType controlType, const DataModel::Loco* loco, const Function function, const DataModel::LocoFunctions::FunctionState on) override;
+			void LocoProtocols(std::vector<Protocol>& protocols) const override;
+			bool LocoProtocolSupported(Protocol protocol) const override;
+			void LocoSpeed(const ControlType controlType, const DataModel::Loco* loco, const Speed speed) override;
+			void LocoSpeedDirectionFunctions(const DataModel::Loco* loco, const Speed speed, const Direction direction, std::vector<DataModel::LocoFunctions::FunctionState>& functions) override;
+			void SwitchState(const ControlType controlType, const DataModel::Switch* mySwitch, const DataModel::AccessoryState state) override;
+			void SignalState(const ControlType controlType, const DataModel::Signal* signal) override;
+			void ProgramRead(const ProgramMode mode, const Address address, const CvNumber cv) override;
+			void ProgramWrite(const ProgramMode mode, const Address address, const CvNumber cv, const CvValue value) override;
 
-			static void ArgumentTypesOfHardwareTypeAndHint(const hardwareType_t hardwareType, std::map<unsigned char,argumentType_t>& arguments, std::string& hint);
+			static void ArgumentTypesOfHardwareTypeAndHint(const HardwareType hardwareType, std::map<unsigned char,ArgumentType>& arguments, std::string& hint);
 
 		private:
 			Manager& manager;

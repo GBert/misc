@@ -28,7 +28,7 @@ using std::string;
 
 namespace Logger
 {
-	Logger::logLevel_t Logger::logLevel = Logger::LevelInfo;
+	Logger::Level Logger::logLevel = Logger::LevelInfo;
 
 	string Logger::DateTime()
 	{

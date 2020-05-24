@@ -24,6 +24,7 @@ along with RailControl; see the file LICENCE. If not see
 #include <string>
 
 #include "DataTypes.h"
+#include "DataModel/ObjectIdentifier.h"
 #include "DataModel/LayoutItem.h"
 #include "Languages.h"
 
@@ -31,61 +32,69 @@ class Manager;
 
 namespace DataModel
 {
+	class TrackBase;
+
 	class Feedback : public LayoutItem
 	{
 		public:
-			enum feedbackState_t : bool
+			enum FeedbackState : bool
 			{
 				FeedbackStateFree = false,
 				FeedbackStateOccupied = true
 			};
 
 			Feedback(Manager* manager,
-				const feedbackID_t feedbackID)
+				const FeedbackID feedbackID)
 			:	LayoutItem(feedbackID),
 			 	controlID(ControlIdNone),
-			 	pin(0),
+			 	pin(FeedbackPinNone),
 			 	manager(manager),
 			 	inverted(false),
-			 	trackID(TrackNone),
+			 	relatedObject(),
+			 	track(nullptr),
 				stateCounter(0)
 			{
 			}
 
 			Feedback(Manager* manager, const std::string& serialized)
-			:	manager(manager)
+			:	manager(manager),
+				track(nullptr)
 			{
 				Deserialize(serialized);
 			}
 
-			objectType_t GetObjectType() const { return ObjectTypeFeedback; }
+			ObjectType GetObjectType() const { return ObjectTypeFeedback; }
 
 			std::string Serialize() const override;
 			bool Deserialize(const std::string& serialized) override;
-			std::string LayoutType() const override { return Languages::GetText(Languages::TextFeedback); };
+			std::string GetLayoutType() const override { return Languages::GetText(Languages::TextFeedback); };
 
 			void SetInverted(const bool inverted) { this->inverted = inverted; }
 			bool GetInverted() const { return inverted; }
 
-			void SetState(const feedbackState_t state);
-			feedbackState_t GetState() const { return static_cast<feedbackState_t>(stateCounter > 0); }
+			void SetState(const FeedbackState state);
+			FeedbackState GetState() const { return static_cast<FeedbackState>(stateCounter > 0); }
 			void Debounce();
-			void SetControlID(const controlID_t controlID) { this->controlID = controlID; }
-			controlID_t GetControlID() const { return controlID; }
-			void SetPin(const feedbackPin_t pin) { this->pin = pin; }
-			feedbackPin_t GetPin() const { return pin; }
-			void SetTrack(const trackID_t trackID) { this->trackID = trackID; }
-			trackID_t GetTrack() const { return trackID; }
+			void SetControlID(const ControlID controlID) { this->controlID = controlID; }
+			ControlID GetControlID() const { return controlID; }
+			void SetPin(const FeedbackPin pin) { this->pin = pin; }
+			FeedbackPin GetPin() const { return pin; }
+			inline void ClearRelatedObject() { relatedObject.Clear(); track = nullptr; }
+			inline bool IsRelatedObjectSet() const { return relatedObject.IsSet(); }
+			inline void SetRelatedObject(const ObjectIdentifier& relatedObject) { this->relatedObject = relatedObject; track = nullptr; }
+			inline ObjectIdentifier GetRelatedObject() const { return relatedObject; }
+			inline bool CompareRelatedObject(const ObjectIdentifier& compare) const { return relatedObject == compare; }
 
 		private:
-			controlID_t controlID;
-			feedbackPin_t pin;
+			ControlID controlID;
+			FeedbackPin pin;
 
-			void UpdateTrackState(const feedbackState_t state);
+			void UpdateTrackState(const FeedbackState state);
 
 			Manager* manager;
 			bool inverted;
-			trackID_t trackID;
+			ObjectIdentifier relatedObject;
+			TrackBase* track;
 			unsigned char stateCounter;
 			static const unsigned char MaxStateCounter = 10;
 			mutable std::mutex updateMutex;

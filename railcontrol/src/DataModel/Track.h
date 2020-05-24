@@ -24,9 +24,9 @@ along with RailControl; see the file LICENCE. If not see
 #include <string>
 #include <vector>
 
-#include "DataModel/Feedback.h"
 #include "DataModel/LayoutItem.h"
 #include "DataModel/LockableItem.h"
+#include "DataModel/TrackBase.h"
 #include "DataTypes.h"
 #include "Logger/Logger.h"
 
@@ -37,102 +37,106 @@ namespace DataModel
 	class Loco;
 	class Street;
 
-	class Track : public LayoutItem, public LockableItem
+	class Track : public TrackBase, public LayoutItem, public LockableItem
 	{
 		public:
-			enum selectStreetApproach_t : unsigned char
-			{
-				SelectStreetSystemDefault = 0,
-				SelectStreetDoNotCare = 1,
-				SelectStreetRandom = 2,
-				SelectStreetMinTrackLength = 3,
-				SelectStreetLongestUnused = 4
-			};
-
-			enum type_t : unsigned char
-			{
-				TrackTypeStraight = 0,
-				TrackTypeTurn = 1,
-				TrackTypeEnd = 2,
-				TrackTypeBridge = 3,
-				TrackTypeTunnel = 4,
-				TrackTypeTunnelEnd = 5,
-				TrackTypeLink = 6
-			};
-
-			Track(Manager* manager, const trackID_t trackID)
-			:	LayoutItem(trackID),
-			 	LockableItem(),
-			 	manager(manager),
-			 	type(TrackTypeStraight),
-			 	selectStreetApproach(SelectStreetSystemDefault),
-				state(DataModel::Feedback::FeedbackStateFree),
-				stateDelayed(DataModel::Feedback::FeedbackStateFree),
-			 	locoDirection(DirectionRight),
-			 	blocked(false),
-			 	locoIdDelayed(LocoNone),
-			 	releaseWhenFree(false)
-			{
-			}
+			Track(Manager* manager, const TrackID trackID)
+			:	TrackBase(manager),
+				LayoutItem(trackID),
+				LockableItem(),
+				trackType(TrackTypeStraight)
+			{}
 
 			Track(Manager* manager, const std::string& serialized)
-			:	manager(manager)
+			:	Track(manager, TrackNone)
 			{
 				Deserialize(serialized);
 			}
 
-			objectType_t GetObjectType() const { return ObjectTypeTrack; }
+			ObjectType GetObjectType() const { return ObjectTypeTrack; }
 
 			std::string Serialize() const override;
 			bool Deserialize(const std::string& serialized) override;
 
-			bool Reserve(Logger::Logger* logger, const locoID_t locoID) override;
-			bool ReserveForce(Logger::Logger* logger, const locoID_t locoID);
-			bool Lock(Logger::Logger* logger, const locoID_t locoID) override;
-			bool Release(Logger::Logger* logger, const locoID_t locoID) override;
-			bool ReleaseForce(Logger::Logger* logger, const locoID_t locoID);
+			std::string GetLayoutType() const override { return Languages::GetText(Languages::TextTrack); };
 
-			std::string LayoutType() const override { return Languages::GetText(Languages::TextTrack); };
-			type_t GetType() const { return type; }
-			void SetType(const type_t type) { this->type = type; }
-			std::vector<feedbackID_t> GetFeedbacks() const { return feedbacks; }
-			void Feedbacks(const std::vector<feedbackID_t>& feedbacks) { this->feedbacks = feedbacks; }
+			TrackType GetTrackType() const { return trackType; }
+			void SetTrackType(const TrackType type) { this->trackType = type; }
 
-			bool SetFeedbackState(const feedbackID_t feedbackID, const DataModel::Feedback::feedbackState_t state);
-			DataModel::Feedback::feedbackState_t GetFeedbackStateDelayed() const { return stateDelayed; };
+			bool Reserve(Logger::Logger* logger, const LocoID locoID) override
+			{
+				return BaseReserve(logger, locoID);
+			}
 
-			bool AddStreet(Street* street);
-			bool RemoveStreet(Street* street);
+			bool ReserveForce(Logger::Logger* logger, const LocoID locoID)
+			{
+				return BaseReserveForce(logger, locoID);
+			}
 
-			selectStreetApproach_t GetSelectStreetApproach() const { return selectStreetApproach; }
-			void SetSelectStreetApproach(const selectStreetApproach_t selectStreetApproach) { this->selectStreetApproach = selectStreetApproach; }
+			bool Lock(Logger::Logger* logger, const LocoID locoID) override
+			{
+				return BaseLock(logger, locoID);
+			}
 
-			bool GetValidStreets(Logger::Logger* logger, const DataModel::Loco* loco, const bool allowLocoTurn, std::vector<Street*>& validStreets) const;
-			direction_t GetLocoDirection() const { return locoDirection; }
-			void SetLocoDirection(const direction_t direction) { locoDirection = direction; }
-			bool GetBlocked() const { return blocked; }
-			void SetBlocked(const bool blocked) { this->blocked = blocked; }
-			locoID_t GetLocoDelayed() const { return this->locoIdDelayed; }
-			bool GetReleaseWhenFree() const { return releaseWhenFree; }
-			void SetReleaseWhenFree(const bool releaseWhenFree) { this->releaseWhenFree = releaseWhenFree; }
+			bool Release(Logger::Logger* logger, const LocoID locoID) override
+			{
+				return BaseRelease(logger, locoID);
+			}
+
+			bool ReleaseForce(Logger::Logger* logger, const LocoID locoID)
+			{
+				return BaseReleaseForce(logger, locoID);
+			}
+
+		protected:
+			bool ReserveInternal(Logger::Logger* logger, const LocoID locoID) override
+			{
+				return LockableItem::Reserve(logger, locoID);
+			}
+
+			bool LockInternal(Logger::Logger* logger, const LocoID locoID) override
+			{
+				return LockableItem::Lock(logger, locoID);
+			}
+
+			bool ReleaseInternal(Logger::Logger* logger, const LocoID locoID) override
+			{
+				return LockableItem::Release(logger, locoID);
+			}
+
+			void PublishState() const override;
+
+			ObjectIdentifier GetObjectIdentifier() const override
+			{
+				return ObjectIdentifier(ObjectTypeTrack, GetID());
+			}
+
+			ObjectID GetMyID() const override
+			{
+				return GetID();
+			}
+
+			const std::string& GetMyName() const override
+			{
+				return GetName();
+			}
+
+			LocoID GetMyLoco() const override
+			{
+				return GetLoco();
+			}
+
+			bool IsTrackInUse() const override
+			{
+				return IsInUse();
+			}
+
+			LocoID GetLockedLoco() const override
+			{
+				return GetLoco();
+			}
 
 		private:
-			bool FeedbackStateInternal(const feedbackID_t feedbackID, const DataModel::Feedback::feedbackState_t state);
-			void OrderValidStreets(std::vector<DataModel::Street*>& validStreets) const;
-			selectStreetApproach_t GetSelectStreetApproachCalculated() const;
-			bool ReleaseForceUnlocked(Logger::Logger* logger, const locoID_t locoID);
-
-			Manager* manager;
-			mutable std::mutex updateMutex;
-			type_t type;
-			std::vector<feedbackID_t> feedbacks;
-			selectStreetApproach_t selectStreetApproach;
-			DataModel::Feedback::feedbackState_t state;
-			DataModel::Feedback::feedbackState_t stateDelayed;
-			std::vector<Street*> streets;
-			direction_t locoDirection;
-			bool blocked;
-			locoID_t locoIdDelayed;
-			bool releaseWhenFree;
+			TrackType trackType;
 	};
 } // namespace DataModel

@@ -23,103 +23,87 @@ along with RailControl; see the file LICENCE. If not see
 #include <string>
 
 // common
-typedef unsigned char controlID_t;
+typedef unsigned char ControlID;
 
 // objects in db
-typedef unsigned short objectID_t;
+typedef unsigned short ObjectID;
 
 // loco
-typedef objectID_t locoID_t;
-typedef unsigned short address_t;
-typedef unsigned short locoSpeed_t;
-typedef unsigned char function_t;
-typedef unsigned int length_t;
-
-// layoutItem
-typedef unsigned char layoutItemSize_t;
-typedef char layoutPosition_t;
+typedef ObjectID LocoID;
+typedef unsigned short Address;
+typedef unsigned short Speed;
+typedef unsigned char Function;
+typedef unsigned int Length;
 
 // accessory
-typedef objectID_t accessoryID_t;
-typedef unsigned char accessoryType_t;
-typedef bool accessoryState_t;
-typedef unsigned short accessoryDuration_t;
-typedef unsigned long waitTime_t;
+typedef ObjectID AccessoryID;
 
 // feedback
-typedef objectID_t feedbackID_t;
-typedef unsigned int feedbackPin_t;
+typedef ObjectID FeedbackID;
+typedef unsigned int FeedbackPin;
 
 // track
-typedef objectID_t trackID_t;
+typedef ObjectID TrackID;
 
 // switch
-typedef accessoryID_t switchID_t;
-typedef accessoryDuration_t switchDuration_t;
-typedef accessoryState_t switchState_t;
-typedef accessoryType_t switchType_t;
+typedef AccessoryID SwitchID;
 
 // signal
-typedef accessoryID_t signalID_t;
-typedef accessoryDuration_t signalDuration_t;
-typedef accessoryState_t signalState_t;
-typedef accessoryType_t signalType_t;
+typedef AccessoryID SignalID;
 
 // street
-typedef objectID_t streetID_t;
-typedef unsigned short delay_t;
+typedef ObjectID StreetID;
+typedef unsigned short Delay;
 
 // layer
-typedef signed short layerID_t;
+typedef signed short LayerID;
 
 // relations
-typedef unsigned short priority_t;
+typedef unsigned short Priority;
 
-typedef unsigned char wait_t;
+typedef unsigned char Pause;
 
-static const address_t AddressNone = 0;
-static const locoID_t LocoNone = 0;
-static const objectID_t ObjectNone = 0;
-static const accessoryID_t AccessoryNone = 0;
-static const feedbackID_t FeedbackNone = 0;
-static const feedbackPin_t FeedbackPinNone = 0;
-static const trackID_t TrackNone = 0;
-static const switchID_t SwitchNone = 0;
-static const streetID_t StreetNone = 0;
-static const controlID_t ControlNone = 0;
-static const layerID_t LayerNone = 0;
-static const layerID_t LayerUndeletable = 1;
-static const signalID_t SignalNone = 0;
+static const Address AddressNone = 0;
+static const LocoID LocoNone = 0;
+static const ObjectID ObjectNone = 0;
+static const AccessoryID AccessoryNone = 0;
+static const FeedbackID FeedbackNone = 0;
+static const FeedbackPin FeedbackPinNone = 0;
+static const TrackID TrackNone = 0;
+static const SwitchID SwitchNone = 0;
+static const StreetID StreetNone = 0;
+static const ControlID ControlNone = 0;
+static const LayerID LayerNone = 0;
+static const LayerID LayerUndeletable = 1;
+static const SignalID SignalNone = 0;
 
-static const locoSpeed_t MaxSpeed = 1023;
-static const locoSpeed_t DefaultTravelSpeed = 700;
-static const locoSpeed_t DefaultReducedSpeed = 400;
-static const locoSpeed_t DefaultCreepingSpeed = 100;
-static const locoSpeed_t MinSpeed = 0;
+static const Speed MaxSpeed = 1023;
+static const Speed DefaultTravelSpeed = 700;
+static const Speed DefaultReducedSpeed = 400;
+static const Speed DefaultCreepingSpeed = 100;
+static const Speed MinSpeed = 0;
 
-static const accessoryDuration_t DefaultAccessoryDuration = 100;
-
-enum controlType_t : unsigned char
+enum ControlType : unsigned char
 {
 	ControlTypeHardware = 0,
 	ControlTypeInternal,
 	ControlTypeWebserver
 };
 
-enum controlIDs : controlID_t
+enum ControlIDs : ControlID
 {
 	ControlIdNone = 0,
 	ControlIdWebserver,
 	ControlIdFirstHardware = 10
 };
 
-enum boosterState_t : bool
+enum BoosterState : bool
 {
-	BoosterStop = false,
-	BoosterGo = true
+	BoosterStateStop = false,
+	BoosterStateGo = true
 };
 
-enum protocol_t : unsigned char
+enum Protocol : unsigned char
 {
 	ProtocolNone = 0,
 	ProtocolServer = 1,
@@ -137,7 +121,7 @@ enum protocol_t : unsigned char
 	ProtocolEnd = ProtocolSX2
 };
 
-static const std::string protocolSymbols[] =
+static const std::string ProtocolSymbols[] =
 {
 	"none",
 	"all",
@@ -154,20 +138,20 @@ static const std::string protocolSymbols[] =
 	"SX2"
 };
 
-enum addressType_t : unsigned char
+enum AddressType : unsigned char
 {
 	AddressTypeLoco = 0,
 	AddressTypeAccessory
 };
 
-enum argumentType_t : unsigned char
+enum ArgumentType : unsigned char
 {
-	IpAddress = 1,
-	SerialPort = 2,
-	S88Modules = 3
+	ArgumentTypeIpAddress = 1,
+	ArgumentTypeSerialPort = 2,
+	ArgumentTypeS88Modules = 3
 };
 
-enum hardwareType_t : unsigned char
+enum HardwareType : unsigned char
 {
 	HardwareTypeNone = 0,
 	HardwareTypeVirtual = 1,
@@ -183,20 +167,15 @@ enum hardwareType_t : unsigned char
 	HardwareTypeNumbers
 };
 
-enum visible_t : bool
-{
-	VisibleNo = false,
-	VisibleYes = true
-};
-
-enum automode_t : bool
+enum Automode : bool
 {
 	AutomodeNo = false,
 	AutomodeYes = true
 };
 
-enum objectType_t : unsigned char
+enum ObjectType : unsigned char
 {
+	ObjectTypeNone = 0,
 	ObjectTypeLoco = 1,
 	ObjectTypeTrack = 2,
 	ObjectTypeFeedback = 3,
@@ -207,7 +186,7 @@ enum objectType_t : unsigned char
 	ObjectTypeSignal = 8
 };
 
-enum direction_t : bool
+enum Direction : bool
 {
 	DirectionLeft = false,
 	DirectionRight = true

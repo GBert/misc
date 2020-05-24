@@ -28,10 +28,10 @@ using std::to_string;
 
 namespace WebServer
 {
-	HtmlTagFeedback::HtmlTagFeedback(const DataModel::Feedback* feedback, layoutPosition_t posX, layoutPosition_t posY)
+	HtmlTagFeedback::HtmlTagFeedback(const DataModel::Feedback* feedback, DataModel::LayoutItem::LayoutPosition posX, DataModel::LayoutItem::LayoutPosition posY)
 	:	HtmlTagLayoutItem()
 	{
-		DataModel::Feedback::feedbackState_t state = feedback->GetState();
+		DataModel::Feedback::FeedbackState state = feedback->GetState();
 
 		unsigned int layoutPosX = posX * EdgeLength;
 		unsigned int layoutPosY = posY * EdgeLength;

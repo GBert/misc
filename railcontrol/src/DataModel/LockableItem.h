@@ -31,7 +31,7 @@ namespace DataModel
 	class LockableItem
 	{
 		public:
-			enum lockState_t : unsigned char
+			enum LockState : unsigned char
 			{
 				LockStateFree = 0,
 				LockStateReserved,
@@ -51,19 +51,19 @@ namespace DataModel
 			bool Deserialize(const std::map<std::string,std::string> arguments);
 
 
-			locoID_t GetLoco() const { return locoID; }
-			lockState_t GetLockState() const { return lockState; }
-			virtual bool Reserve(Logger::Logger* logger, const locoID_t locoID);
-			virtual bool Lock(Logger::Logger* logger, const locoID_t locoID);
-			virtual bool Release(Logger::Logger* logger, const locoID_t locoID);
+			LocoID GetLoco() const { return locoID; }
+			LockState GetLockState() const { return lockState; }
+			virtual bool Reserve(Logger::Logger* logger, const LocoID locoID);
+			virtual bool Lock(Logger::Logger* logger, const LocoID locoID);
+			virtual bool Release(Logger::Logger* logger, const LocoID locoID);
 
 			bool IsInUse() const { return lockState != LockStateFree || locoID != LocoNone; }
 
 
 		private:
 			std::mutex lockMutex;
-			lockState_t lockState;
-			locoID_t locoID;
+			LockState lockState;
+			LocoID locoID;
 	};
 } // namespace DataModel
 

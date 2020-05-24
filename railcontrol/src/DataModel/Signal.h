@@ -20,57 +20,110 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
-#include <mutex>
 #include <string>
-#include <vector>
 
-#include "DataModel/Accessory.h"
+#include "DataModel/AccessoryBase.h"
+#include "DataModel/LayoutItem.h"
+#include "DataModel/LockableItem.h"
+#include "DataModel/TrackBase.h"
 #include "DataTypes.h"
 
 class Manager;
 
 namespace DataModel
 {
-	class Signal : public Accessory
+	class Signal : public AccessoryBase, public TrackBase, public LayoutItem, public LockableItem
 	{
 		public:
-			enum signalType : signalType_t
-			{
-				SignalTypeSimpleLeft = 0,
-				SignalTypeSimpleRight = 1
-			};
-
-			enum signalState : signalState_t
-			{
-				SignalStateRed = false,
-				SignalStateGreen = true
-			};
-
-			Signal(Manager* manager, const signalID_t signalID)
-			:	Accessory(manager, signalID),
-			 	manager(manager)
+			Signal(Manager* manager, const SignalID signalID)
+			:	AccessoryBase(),
+				TrackBase(manager),
+				LayoutItem(signalID),
+				LockableItem()
 			{
 			}
 
 			Signal(Manager* manager, const std::string& serialized)
-			:	manager(manager)
+			:	Signal(manager, SignalNone)
 			{
 				Deserialize(serialized);
 			}
 
-			objectType_t GetObjectType() const { return ObjectTypeSignal; }
+			ObjectType GetObjectType() const override { return ObjectTypeSignal; }
+			std::string GetLayoutType() const override { return Languages::GetText(Languages::TextSignal); };
 
 			std::string Serialize() const override;
 			bool Deserialize(const std::string& serialized) override;
-			std::string LayoutType() const override { return Languages::GetText(Languages::TextSignal); };
 
-			bool Release(Logger::Logger* logger, const locoID_t locoID) override;
+			bool Reserve(Logger::Logger* logger, const LocoID locoID) override
+			{
+				return BaseReserve(logger, locoID);
+			}
 
-			signalState_t GetState() const { return static_cast<signalState_t>(state); }
-			signalType_t GetType() const { return static_cast<signalType_t>(type); }
+			bool ReserveForce(Logger::Logger* logger, const LocoID locoID)
+			{
+				return BaseReserveForce(logger, locoID);
+			}
 
-		private:
-			Manager* manager;
+			bool Lock(Logger::Logger* logger, const LocoID locoID) override
+			{
+				return BaseLock(logger, locoID);
+			}
+
+			bool Release(Logger::Logger* logger, const LocoID locoID) override
+			{
+				return BaseRelease(logger, locoID);
+			}
+
+			bool ReleaseForce(Logger::Logger* logger, const LocoID locoID)
+			{
+				return BaseReleaseForce(logger, locoID);
+			}
+
+		protected:
+			bool ReserveInternal(Logger::Logger* logger, const LocoID locoID) override
+			{
+				return LockableItem::Reserve(logger, locoID);
+			}
+
+			bool LockInternal(Logger::Logger* logger, const LocoID locoID) override
+			{
+				return LockableItem::Lock(logger, locoID);
+			}
+
+			bool ReleaseInternal(Logger::Logger* logger, const LocoID locoID) override;
+
+			void PublishState() const override;
+
+			ObjectIdentifier GetObjectIdentifier() const override
+			{
+				return ObjectIdentifier(ObjectTypeSignal, GetID());
+			}
+
+			ObjectID GetMyID() const override
+			{
+				return GetID();
+			}
+
+			const std::string& GetMyName() const override
+			{
+				return GetName();
+			}
+
+			LocoID GetMyLoco() const override
+			{
+				return GetLoco();
+			}
+
+			bool IsTrackInUse() const override
+			{
+				return IsInUse();
+			}
+
+			LocoID GetLockedLoco() const override
+			{
+				return GetLoco();
+			}
 	};
 } // namespace DataModel
 

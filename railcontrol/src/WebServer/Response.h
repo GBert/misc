@@ -31,23 +31,24 @@ namespace WebServer
 	class Response
 	{
 		public:
-			enum responseCode_t : unsigned short
+			enum ResponseCode : unsigned short
 			{
 				OK = 200,
 				NotFound = 404,
 				NotImplemented = 501
 			};
+
 			Response() : responseCode(OK) {}
-			Response(const responseCode_t responseCode, const HtmlTag& content) : responseCode(responseCode), content(content) {}
+			Response(const ResponseCode responseCode, const HtmlTag& content) : responseCode(responseCode), content(content) {}
 			virtual ~Response() {};
 			void AddHeader(const std::string& key, const std::string& value);
 			operator std::string();
 
 			friend std::ostream& operator<<(std::ostream& stream, const Response& response);
 
-			responseCode_t responseCode;
+			ResponseCode responseCode;
 
-			typedef std::map<Response::responseCode_t,std::string> responseCodeMap;
+			typedef std::map<Response::ResponseCode,std::string> responseCodeMap;
 			static const responseCodeMap responseTexts;
 
 			std::map<const std::string,std::string> headers;

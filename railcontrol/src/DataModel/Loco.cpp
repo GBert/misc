@@ -20,7 +20,7 @@ along with RailControl; see the file LICENCE. If not see
 
 #include <algorithm>
 #include <map>
-#include <sstream>
+#include <string>
 
 #include "DataModel/Loco.h"
 #include "DataModel/Track.h"
@@ -28,8 +28,8 @@ along with RailControl; see the file LICENCE. If not see
 #include "Utils/Utils.h"
 
 using std::map;
-using std::stringstream;
 using std::string;
+using std::to_string;
 using std::vector;
 
 namespace DataModel
@@ -42,7 +42,7 @@ namespace DataModel
 				std::lock_guard<std::mutex> Guard(stateMutex);
 				if (state == LocoStateManual)
 				{
-					return;
+					break;
 				}
 			}
 			logger->Info(Languages::TextWaitingUntilHasStopped, name);
@@ -53,25 +53,33 @@ namespace DataModel
 
 	std::string Loco::Serialize() const
 	{
-		trackID_t trackIdFrom = TrackNone;
+		string str;
+		str += "objectType=Loco;";
+		str += Object::Serialize();
+		str += ";";
+		str += HardwareHandle::Serialize();
+		str += ";functions=";
+		str += functions.Serialize();
+		str += ";direction=";
+		str += (direction == DirectionRight ? "right" : "left");
 		if (trackFrom != nullptr)
 		{
-			trackIdFrom = trackFrom->GetID();
+			str += ";track=";
+			str += trackFrom->GetObjectIdentifier();
 		}
-		stringstream ss;
-		ss << "objectType=Loco"
-			<< ";" << Object::Serialize()
-			<< ";" << HardwareHandle::Serialize()
-			<< ";functions=" << functions.Serialize()
-			<< ";direction=" << (direction == DirectionRight ? "right" : "left")
-			<< ";trackID=" << static_cast<int>(trackIdFrom)
-			<< ";length=" << length
-			<< ";pushpull=" << static_cast<int>(pushpull)
-			<< ";maxspeed=" << maxSpeed
-			<< ";travelspeed=" << travelSpeed
-			<< ";reducedspeed=" << reducedSpeed
-			<< ";creepingspeed=" << creepingSpeed;
-		return ss.str();
+		str += ";length=";
+		str += to_string(length);
+		str += ";pushpull=";
+		str += to_string(pushpull);
+		str += ";maxspeed=";
+		str += to_string(maxSpeed);
+		str += ";travelspeed=";
+		str += to_string(travelSpeed);
+		str += ";reducedspeed=";
+		str += to_string(reducedSpeed);
+		str += ";creepingspeed=";
+		str += to_string(creepingSpeed);
+		return str;
 	}
 
 	bool Loco::Deserialize(const std::string& serialized)
@@ -84,11 +92,19 @@ namespace DataModel
 			return false;
 		}
 		HardwareHandle::Deserialize(arguments);
-		trackID_t trackIdFrom = Utils::Utils::GetIntegerMapEntry(arguments, "trackID", TrackNone);
-		trackFrom = manager->GetTrack(trackIdFrom);
+		ObjectIdentifier trackIdentifier = Utils::Utils::GetStringMapEntry(arguments, "track");
+		if (trackIdentifier.GetObjectID() == ObjectNone)
+		{
+			trackIdentifier = static_cast<ObjectID>(Utils::Utils::GetIntegerMapEntry(arguments, "trackID", TrackNone));
+			if (trackIdentifier.GetObjectID() != ObjectNone)
+			{
+				trackIdentifier = ObjectTypeTrack;
+			}
+		}
+		trackFrom = manager->GetTrackBase(trackIdentifier);
 		functions.Deserialize(Utils::Utils::GetStringMapEntry(arguments, "functions", "0"));
 		direction = (Utils::Utils::GetStringMapEntry(arguments, "direction", "right").compare("right") == 0 ? DirectionRight : DirectionLeft);
-		length = static_cast<length_t>(Utils::Utils::GetIntegerMapEntry(arguments, "length", 0));
+		length = static_cast<Length>(Utils::Utils::GetIntegerMapEntry(arguments, "length", 0));
 		pushpull = Utils::Utils::GetBoolMapEntry(arguments, "commuter", false);  // FIXME: remove later
 		pushpull = Utils::Utils::GetBoolMapEntry(arguments, "pushpull", pushpull);
 		maxSpeed = Utils::Utils::GetIntegerMapEntry(arguments, "maxspeed", MaxSpeed);
@@ -99,7 +115,7 @@ namespace DataModel
 		return true;
 	}
 
-	bool Loco::ToTrack(const trackID_t trackID)
+	bool Loco::SetTrack(const ObjectIdentifier& identifier)
 	{
 		std::lock_guard<std::mutex> Guard(stateMutex);
 		// there must not be set a track
@@ -107,7 +123,7 @@ namespace DataModel
 		{
 			return false;
 		}
-		this->trackFrom = manager->GetTrack(trackID);
+		this->trackFrom = manager->GetTrackBase(identifier);
 		return true;
 	}
 
@@ -129,17 +145,17 @@ namespace DataModel
 		}
 		if (trackFrom != nullptr)
 		{
-			trackFrom->Release(logger, objectID);
+			trackFrom->BaseRelease(logger, objectID);
 			trackFrom = nullptr;
 		}
 		if (trackFirst != nullptr)
 		{
-			trackFirst->Release(logger, objectID);
+			trackFirst->BaseRelease(logger, objectID);
 			trackFirst = nullptr;
 		}
 		if (trackSecond != nullptr)
 		{
-			trackSecond->Release(logger, objectID);
+			trackSecond->BaseRelease(logger, objectID);
 			trackSecond = nullptr;
 		}
 		feedbackIdOver = FeedbackNone;
@@ -150,10 +166,10 @@ namespace DataModel
 		return true;
 	}
 
-	bool Loco::IsRunningFromTrack(const trackID_t trackID) const
+	bool Loco::IsRunningFromTrack(const TrackID trackID) const
 	{
 		std::lock_guard<std::mutex> Guard(stateMutex);
-		return trackFirst != nullptr && trackFrom != nullptr && trackFrom->GetID() == trackID;
+		return trackFirst != nullptr && trackFrom != nullptr && trackFrom->GetMyID() == trackID;
 	}
 
 	bool Loco::GoToAutoMode()
@@ -244,7 +260,7 @@ namespace DataModel
 				std::lock_guard<std::mutex> Guard(stateMutex);
 				if (feedbackIdsReached.IsEmpty() == false)
 				{
-					feedbackID_t feedbackId = feedbackIdsReached.Dequeue();
+					FeedbackID feedbackId = feedbackIdsReached.Dequeue();
 					if (feedbackId == feedbackIdFirst)
 					{
 						FeedbackIdFirstReached();
@@ -354,8 +370,8 @@ namespace DataModel
 			return;
 		}
 
-		trackID_t newTrackIdFirst = usedStreet->GetToTrack();
-		Track* newTrack = manager->GetTrack(newTrackIdFirst);
+		const ObjectIdentifier& newTrackIdentifierFirst = usedStreet->GetToTrack();
+		TrackBase* newTrack = manager->GetTrackBase(newTrackIdentifierFirst);
 		if (newTrack == nullptr)
 		{
 			return;
@@ -370,19 +386,19 @@ namespace DataModel
 		feedbackIdOver = streetFirst->GetFeedbackIdOver();
 		wait = streetFirst->GetWaitAfterRelease();
 		bool turnLoco = (trackFrom->GetLocoDirection() != streetFirst->GetFromDirection());
-		direction_t newLocoDirection = static_cast<direction_t>(direction != turnLoco);
+		Direction newLocoDirection = static_cast<Direction>(direction != turnLoco);
 		if (turnLoco)
 		{
 			trackFrom->SetLocoDirection(streetFirst->GetFromDirection());
-			manager->TrackPublishState(trackFrom);
+			manager->TrackBasePublishState(trackFrom);
 		}
 		manager->LocoDirection(ControlTypeInternal, this, newLocoDirection);
-		newTrack->SetLocoDirection(static_cast<direction_t>(!streetFirst->GetToDirection()));
-		logger->Info(Languages::TextHeadingToVia, newTrack->GetName(), streetFirst->GetName());
+		newTrack->SetLocoDirection(static_cast<Direction>(streetFirst->GetToDirection()));
+		logger->Info(Languages::TextHeadingToVia, newTrack->GetMyName(), streetFirst->GetName());
 
 		// start loco
-		manager->TrackPublishState(newTrack);
-		locoSpeed_t newSpeed;
+		manager->TrackBasePublishState(newTrack);
+		Speed newSpeed;
 		switch (streetFirst->GetSpeed())
 		{
 			case Street::SpeedTravel:
@@ -410,8 +426,8 @@ namespace DataModel
 			return;
 		}
 
-		trackID_t newTrackIdSecond = usedStreet->GetToTrack();
-		Track* newTrack = manager->GetTrack(newTrackIdSecond);
+		const ObjectIdentifier& newTrackIdentifierSecond = usedStreet->GetToTrack();
+		TrackBase* newTrack = manager->GetTrackBase(newTrackIdentifierSecond);
 		if (newTrack == nullptr)
 		{
 			return;
@@ -443,21 +459,21 @@ namespace DataModel
 		}
 
 		wait = streetSecond->GetWaitAfterRelease();
-		newTrack->SetLocoDirection(static_cast<direction_t>(!streetSecond->GetToDirection()));
-		logger->Info(Languages::TextHeadingToViaVia, newTrack->GetName(), streetFirst->GetName(), streetSecond->GetName());
+		newTrack->SetLocoDirection(static_cast<Direction>(streetSecond->GetToDirection()));
+		logger->Info(Languages::TextHeadingToViaVia, newTrack->GetMyName(), streetFirst->GetName(), streetSecond->GetName());
 
 		// start loco
-		manager->TrackPublishState(newTrack);
+		manager->TrackBasePublishState(newTrack);
 		state = LocoStateRunning;
 	}
 
-	Street* Loco::SearchDestination(Track* track, const bool allowLocoTurn)
+	Street* Loco::SearchDestination(TrackBase* track, const bool allowLocoTurn)
 	{
-		if (manager->Booster() == BoosterStop)
+		if (manager->Booster() == BoosterStateStop)
 		{
 			return nullptr;
 		}
-		logger->Debug(Languages::TextLookingForDestination, track->GetName());
+		logger->Debug(Languages::TextLookingForDestination, track->GetMyName());
 		if (streetSecond != nullptr)
 		{
 			state = LocoStateError;
@@ -472,10 +488,11 @@ namespace DataModel
 			return nullptr;
 		}
 
-		if (track->GetLoco() != objectID)
+		LocoID locoIdOfTrack = track->GetMyLoco();
+		if (locoIdOfTrack != GetID())
 		{
 			state = LocoStateError;
-			logger->Error(Languages::TextIsOnOcupiedTrack, name, track->GetName(), manager->GetLocoName(track->GetLoco()));
+			logger->Error(Languages::TextIsOnOcupiedTrack, name, track->GetMyName(), manager->GetLocoName(locoIdOfTrack));
 			return nullptr;
 		}
 
@@ -512,12 +529,12 @@ namespace DataModel
 		return nullptr;
 	}
 
-	void Loco::LocationReached(const feedbackID_t feedbackID)
+	void Loco::LocationReached(const FeedbackID feedbackID)
 	{
 		if (feedbackID == feedbackIdOver)
 		{
 			manager->LocoSpeed(ControlTypeInternal, this, MinSpeed);
-			manager->Booster(ControlTypeInternal, BoosterStop);
+			manager->Booster(ControlTypeInternal, BoosterStateStop);
 			logger->Error(Languages::TextHitOverrun, name, manager->GetFeedbackName(feedbackID));
 			return;
 		}
@@ -554,7 +571,7 @@ namespace DataModel
 		}
 	}
 
-	void Loco::Speed(const locoSpeed_t speed, const bool withSlaves)
+	void Loco::SetSpeed(const Speed speed, const bool withSlaves)
 	{
 		this->speed = speed;
 		if (!withSlaves)
@@ -567,7 +584,7 @@ namespace DataModel
 		}
 	}
 
-	void Loco::SetDirection(const direction_t direction)
+	void Loco::SetDirection(const Direction direction)
 	{
 		this->direction = direction;
 		for (auto slave : slaves)
@@ -586,7 +603,7 @@ namespace DataModel
 			return;
 		}
 
-		locoSpeed_t newSpeed;
+		Speed newSpeed;
 		switch (streetFirst->GetSpeed())
 		{
 			case Street::SpeedTravel:
@@ -613,7 +630,7 @@ namespace DataModel
 		streetFirst = streetSecond;
 		streetSecond = nullptr;
 
-		trackFrom->Release(logger, objectID);
+		trackFrom->BaseRelease(logger, objectID);
 		trackFrom = trackFirst;
 		trackFirst = trackSecond;
 		trackSecond = nullptr;
@@ -648,11 +665,11 @@ namespace DataModel
 			return;
 		}
 
-		manager->LocoDestinationReached(objectID, streetFirst->GetID(), trackFrom->GetID());
+		manager->LocoDestinationReached(this, streetFirst, trackFrom);
 		streetFirst->Release(logger, objectID);
 		streetFirst = nullptr;
 
-		trackFrom->Release(logger, objectID);
+		trackFrom->BaseRelease(logger, objectID);
 		trackFrom = trackFirst;
 		trackFirst = nullptr;
 		logger->Info(Languages::TextReachedItsDestination, name);
@@ -681,10 +698,11 @@ namespace DataModel
 
 	void Loco::DeleteSlaves()
 	{
-		while (!slaves.empty())
+		while (slaves.size() > 0)
 		{
-			delete slaves.back();
+			Relation* slave = slaves.back();
 			slaves.pop_back();
+			delete slave;
 		}
 	}
 

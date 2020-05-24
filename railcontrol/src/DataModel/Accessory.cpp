@@ -33,22 +33,10 @@ namespace DataModel
 	std::string Accessory::Serialize() const
 	{
 		stringstream ss;
-		ss << "objectType=Accessory;" << SerializeWithoutType();
-		return ss.str();
-	}
-
-	std::string Accessory::SerializeWithoutType() const
-	{
-		stringstream ss;
-		ss << LayoutItem::Serialize()
-			<< ";" << LockableItem::Serialize()
-			<< ";" << HardwareHandle::Serialize()
-			<< ";type=" << static_cast<int>(type)
-			<< ";state=" << static_cast<int>(state)
-			<< ";duration=" << static_cast<int>(duration)
-			<< ";inverted=" << static_cast<int>(inverted)
-			<< ";lastused=" << lastUsed
-			<< ";counter=" << counter;
+		ss << "objectType=Accessory;"
+			<< ";" << AccessoryBase::Serialize()
+			<< ";" << LayoutItem::Serialize()
+			<< ";" << LockableItem::Serialize();
 		return ss.str();
 	}
 
@@ -61,25 +49,12 @@ namespace DataModel
 		{
 			return false;
 		}
-
-		return Deserialize(arguments);
-	}
-
-	bool Accessory::Deserialize(const map<string,string>& arguments)
-	{
+		AccessoryBase::Deserialize(arguments);
 		LayoutItem::Deserialize(arguments);
 		LockableItem::Deserialize(arguments);
-		HardwareHandle::Deserialize(arguments);
 		SetWidth(Width1);
 		SetHeight(Height1);
 		SetVisible(VisibleYes);
-		type = Utils::Utils::GetIntegerMapEntry(arguments, "type");
-		state = Utils::Utils::GetIntegerMapEntry(arguments, "state");
-		duration = Utils::Utils::GetIntegerMapEntry(arguments, "timeout", DefaultAccessoryDuration); // FIXME: remove in later versions, is only here for conversion
-		duration = Utils::Utils::GetIntegerMapEntry(arguments, "duration", DefaultAccessoryDuration);
-		inverted = Utils::Utils::GetBoolMapEntry(arguments, "inverted");
-		lastUsed = Utils::Utils::GetIntegerMapEntry(arguments, "lastused", 0);
-		counter = Utils::Utils::GetIntegerMapEntry(arguments, "counter", 0);
 		return true;
 	}
 } // namespace DataModel

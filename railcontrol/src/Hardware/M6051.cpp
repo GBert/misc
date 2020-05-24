@@ -70,7 +70,7 @@ namespace Hardware
 		}
 	}
 
-	void M6051::Booster(const boosterState_t status)
+	void M6051::Booster(const BoosterState status)
 	{
 		if (!serialLine.IsConnected())
 		{
@@ -92,7 +92,7 @@ namespace Hardware
 		serialLine.Send(c);
 	}
 
-	void M6051::LocoSpeed(__attribute__((unused)) const protocol_t protocol, const address_t address, const locoSpeed_t speed)
+	void M6051::LocoSpeed(__attribute__((unused)) const Protocol protocol, const Address address, const Speed speed)
 	{
 		if (!serialLine.IsConnected())
 		{
@@ -105,7 +105,7 @@ namespace Hardware
 		SendTwoBytes(speedMM, addressMM);
 	}
 
-	void M6051::LocoDirection(__attribute__((unused)) const protocol_t protocol, const address_t address, __attribute__((unused)) const direction_t direction)
+	void M6051::LocoDirection(__attribute__((unused)) const Protocol protocol, const Address address, __attribute__((unused)) const Direction direction)
 	{
 		if (!serialLine.IsConnected())
 		{
@@ -117,7 +117,7 @@ namespace Hardware
 		SendTwoBytes(speedMM, addressMM);
 	}
 
-	void M6051::LocoFunction(__attribute__((unused)) const protocol_t protocol, const address_t address, const function_t function, const bool on)
+	void M6051::LocoFunction(__attribute__((unused)) const Protocol protocol, const Address address, const Function function, const DataModel::LocoFunctions::FunctionState on)
 	{
 		if (function > 4)
 		{
@@ -142,13 +142,13 @@ namespace Hardware
 		unsigned char functionMM = GetFunctionMapEntry(address);
 		unsigned char position = function - 1;
 		functionMM &= (~(1 << position)); // mask out related function
-		functionMM |= (static_cast<unsigned char>(on) << position); // add related function
+		functionMM |= (static_cast<unsigned char>(on == DataModel::LocoFunctions::FunctionStateOn) << position); // add related function
 		functionMap[address] = functionMM;
 		functionMM += 64;
 		SendTwoBytes(functionMM, addressMM);
 	}
 
-	void M6051::AccessoryOnOrOff(__attribute__((unused)) const protocol_t protocol, const address_t address, const accessoryState_t state, const bool on)
+	void M6051::AccessoryOnOrOff(__attribute__((unused)) const Protocol protocol, const Address address, const DataModel::AccessoryState state, const bool on)
 	{
 		if (!serialLine.IsConnected())
 		{
@@ -156,7 +156,7 @@ namespace Hardware
 		}
 
 		logger->Info(Languages::TextSettingAccessory, address, Languages::GetGreenRed(state), Languages::GetOnOff(on));
-		const unsigned char stateMM = (state == DataModel::Accessory::AccessoryStateOn ? 33 : 34);
+		const unsigned char stateMM = (state == DataModel::AccessoryStateOn ? 33 : 34);
 		const unsigned char addressMM = static_cast<unsigned char>(address);
 		SendTwoBytes(stateMM, addressMM);
 	}
@@ -194,7 +194,7 @@ namespace Hardware
 						}
 
 						const char* onOff;
-						DataModel::Feedback::feedbackState_t state;
+						DataModel::Feedback::FeedbackState state;
 						if ((byte >> shift) & 0x01)
 						{
 							onOff = Languages::GetText(Languages::TextOn);
@@ -206,7 +206,7 @@ namespace Hardware
 							state = DataModel::Feedback::FeedbackStateFree;
 						}
 						logger->Info(Languages::TextFeedbackChange, pin, module, onOff);
-						address_t address = (module * 8) + pin;
+						Address address = (module * 8) + pin;
 						manager->FeedbackState(controlID, address, state);
 					}
 					s88Memory[module] = byte;

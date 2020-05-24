@@ -80,6 +80,7 @@ namespace Logger
 			}
 
 			~LoggerServer();
+
 			void Work(Network::TcpConnection* connection) override
 			{
 				clients.push_back(new LoggerClientTcp(connection));

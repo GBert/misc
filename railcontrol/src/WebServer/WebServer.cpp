@@ -38,7 +38,12 @@ using std::map;
 using std::thread;
 using std::string;
 using std::stringstream;
+using std::to_string;
 using std::vector;
+
+using DataModel::Loco;
+using DataModel::Street;
+using DataModel::TrackBase;
 
 namespace WebServer {
 
@@ -93,7 +98,7 @@ namespace WebServer {
 		clients.push_back(new WebClient(++lastClientID, connection, *this, manager));
 	}
 
-	void WebServer::Booster(__attribute__((unused)) const controlType_t controlType, const boosterState_t status)
+	void WebServer::Booster(__attribute__((unused)) const ControlType controlType, const BoosterState status)
 	{
 		if (status)
 		{
@@ -105,114 +110,125 @@ namespace WebServer {
 		}
 	}
 
-	void WebServer::LocoSpeed(__attribute__((unused)) const controlType_t controlType, const DataModel::Loco* loco, const locoSpeed_t speed)
+	void WebServer::LocoSpeed(__attribute__((unused)) const ControlType controlType, const DataModel::Loco* loco, const Speed speed)
 	{
 		stringstream command;
 		command << "locospeed;loco=" << loco->GetID() << ";speed=" << speed;
 		AddUpdate(command.str(), Languages::TextLocoSpeedIs, loco->GetName(), speed);
 	}
 
-	void WebServer::LocoDirection(__attribute__((unused)) const controlType_t controlType, const DataModel::Loco* loco, const direction_t direction)
+	void WebServer::LocoDirection(__attribute__((unused)) const ControlType controlType, const DataModel::Loco* loco, const Direction direction)
 	{
 		stringstream command;
 		command << "locodirection;loco=" << loco->GetID() << ";direction=" << (direction ? "true" : "false");
 		AddUpdate(command.str(), direction ? Languages::TextLocoDirectionIsRight : Languages::TextLocoDirectionIsLeft, loco->GetName());
 	}
 
-	void WebServer::LocoFunction(__attribute__((unused)) const controlType_t controlType, const DataModel::Loco* loco, const function_t function, const bool state)
+	void WebServer::LocoFunction(__attribute__((unused)) const ControlType controlType, const DataModel::Loco* loco, const Function function, const DataModel::LocoFunctions::FunctionState state)
 	{
 		stringstream command;
 		command << "locofunction;loco=" << loco->GetID() << ";function=" << static_cast<unsigned int>(function) << ";on=" << (state ? "true" : "false");
 		AddUpdate(command.str(), state ? Languages::TextLocoFunctionIsOn : Languages::TextLocoFunctionIsOff, loco->GetName(), function);
 	}
 
-	void WebServer::AccessoryState(__attribute__((unused)) const controlType_t controlType, const DataModel::Accessory* accessory, const accessoryState_t state)
+	void WebServer::AccessoryState(__attribute__((unused)) const ControlType controlType, const DataModel::Accessory* accessory, const DataModel::AccessoryState state)
 	{
 		stringstream command;
-		command << "accessory;accessory=" << accessory->GetID() << ";state=" << (state == DataModel::Accessory::AccessoryStateOn ? "green" : "red");
+		command << "accessory;accessory=" << accessory->GetID() << ";state=" << (state == DataModel::AccessoryStateOn ? "green" : "red");
 		AddUpdate(command.str(), state ? Languages::TextAccessoryStateIsGreen : Languages::TextAccessoryStateIsRed, accessory->GetName());
 	}
 
-	void WebServer::AccessorySettings(const accessoryID_t accessoryID, const std::string& name)
+	void WebServer::AccessorySettings(const AccessoryID accessoryID, const std::string& name)
 	{
 		stringstream command;
 		command << "accessorysettings;accessory=" << accessoryID;
 		AddUpdate(command.str(), Languages::TextAccessoryUpdated, name);
 	}
 
-	void WebServer::AccessoryDelete(const accessoryID_t accessoryID, const std::string& name)
+	void WebServer::AccessoryDelete(const AccessoryID accessoryID, const std::string& name)
 	{
 		stringstream command;
 		command << "accessorydelete;accessory=" << accessoryID;
 		AddUpdate(command.str(), Languages::TextAccessoryDeleted, name);
 	}
 
-	void WebServer::FeedbackState(const std::string& name, const feedbackID_t feedbackID, const DataModel::Feedback::feedbackState_t state)
+	void WebServer::FeedbackState(const std::string& name, const FeedbackID feedbackID, const DataModel::Feedback::FeedbackState state)
 	{
 		stringstream command;
 		command << "feedback;feedback=" << feedbackID << ";state=" << (state ? "on" : "off");
 		AddUpdate(command.str(), state ? Languages::TextFeedbackStateIsOn : Languages::TextFeedbackStateIsOff, name);
 	}
 
-	void WebServer::FeedbackSettings(const feedbackID_t feedbackID, const std::string& name)
+	void WebServer::FeedbackSettings(const FeedbackID feedbackID, const std::string& name)
 	{
 		stringstream command;
 		command << "feedbacksettings;feedback=" << feedbackID;
 		AddUpdate(command.str(), Languages::TextFeedbackUpdated, name);
 	}
 
-	void WebServer::FeedbackDelete(const feedbackID_t feedbackID, const std::string& name)
+	void WebServer::FeedbackDelete(const FeedbackID feedbackID, const std::string& name)
 	{
 		stringstream command;
 		command << "feedbackdelete;feedback=" << feedbackID;
 		AddUpdate(command.str(), Languages::TextFeedbackDeleted, name);
 	}
 
-	void WebServer::StreetSettings(const streetID_t streetID, const std::string& name)
+	void WebServer::StreetSettings(const StreetID streetID, const std::string& name)
 	{
 		stringstream command;
 		command << "streetsettings;street=" << streetID;
 		AddUpdate(command.str(), Languages::TextStreetUpdated, name);
 	}
 
-	void WebServer::StreetDelete(const streetID_t streetID, const std::string& name)
+	void WebServer::StreetDelete(const StreetID streetID, const std::string& name)
 	{
 		stringstream command;
 		command << "streetdelete;street=" << streetID;
 		AddUpdate(command.str(), Languages::TextStreetDeleted, name);
 	}
 
-	void WebServer::SwitchState(__attribute__((unused)) const controlType_t controlType, const DataModel::Switch* mySwitch, const switchState_t state)
+	void WebServer::SwitchState(__attribute__((unused)) const ControlType controlType, const DataModel::Switch* mySwitch, const DataModel::AccessoryState state)
 	{
 		stringstream command;
 		command << "switch;switch=" << mySwitch->GetID() << ";state=" << (state ? "straight" : "turnout");
 		AddUpdate(command.str(), state ? Languages::TextSwitchStateIsStraight : Languages::TextSwitchStateIsTurnout, mySwitch->GetName());
 	}
 
-	void WebServer::SwitchSettings(const switchID_t switchID, const std::string& name)
+	void WebServer::SwitchSettings(const SwitchID switchID, const std::string& name)
 	{
 		stringstream command;
 		command << "switchsettings;switch=" << switchID;
 		AddUpdate(command.str(), Languages::TextSwitchUpdated, name);
 	}
 
-	void WebServer::SwitchDelete(const switchID_t switchID, const std::string& name)
+	void WebServer::SwitchDelete(const SwitchID switchID, const std::string& name)
 	{
 		stringstream command;
 		command << "switchdelete;switch=" << switchID;
 		AddUpdate(command.str(), Languages::TextSwitchDeleted, name);
 	}
 
-	void WebServer::TrackState(const trackID_t trackID, const std::string& name, const bool occupied, const bool blocked, const direction_t direction, const std::string& locoName)
+	void WebServer::TrackState(const DataModel::Track* track)
 	{
 		stringstream command;
+		command << "trackstate;track=" << track->GetID();
+		TrackBaseState(command, dynamic_cast<const DataModel::TrackBase*>(track));
+	}
+
+	void WebServer::TrackBaseState(stringstream& command, const DataModel::TrackBase* track)
+	{
+		const DataModel::Loco* loco = manager.GetLoco(track->GetLocoDelayed());
+		const bool reserved = loco != nullptr;
+		const string& trackName = track->GetMyName();
+		const string& locoName = reserved ? loco->GetName() : "";
+		const bool occupied = track->GetFeedbackStateDelayed() == DataModel::Feedback::FeedbackStateOccupied;
+		const bool blocked = track->GetBlocked();
+		const Direction direction = track->GetLocoDirection();
 		const string occupiedText = (occupied ? "true" : "false");
 		const string blockedText = (blocked ? "true" : "false");
-		const bool reserved = locoName.length() > 0;
 		const string reservedText = (reserved ? "true" : "false");
 		const string directionText = (direction ? "true" : "false");
-		command << "trackstate;track=" << trackID
-			<< ";occupied=" << occupiedText
+		command << ";occupied=" << occupiedText
 			<< ";reserved=" << reservedText
 			<< ";blocked=" << blockedText
 			<< ";direction=" << directionText
@@ -220,135 +236,136 @@ namespace WebServer {
 
 		if (blocked)
 		{
-			if (occupied)
+			if (reserved)
 			{
-				AddUpdate(command.str(), Languages::TextTrackStatusIsBlockedAndOccupied, name, locoName);
+				AddUpdate(command.str(), Languages::TextTrackStatusIsBlockedAndReserved, trackName, locoName);
 			}
-			else if (reserved)
+			else if (occupied)
 			{
-				AddUpdate(command.str(), Languages::TextTrackStatusIsBlockedAndReserved, name, locoName);;
+				AddUpdate(command.str(), Languages::TextTrackStatusIsBlockedAndOccupied, trackName);
 			}
 			else
 			{
-				AddUpdate(command.str(), Languages::TextTrackStatusIsBlocked, name);
+				AddUpdate(command.str(), Languages::TextTrackStatusIsBlocked, trackName);
 			}
 		}
 		else
 		{
-			if (occupied)
+			if (reserved)
 			{
-				AddUpdate(command.str(), Languages::TextTrackStatusIsOccupied, name, locoName);
+				AddUpdate(command.str(), Languages::TextTrackStatusIsReserved, trackName, locoName);;
 			}
-			else if (reserved)
+			else if (occupied)
 			{
-				AddUpdate(command.str(), Languages::TextTrackStatusIsReserved, name, locoName);;
+				AddUpdate(command.str(), Languages::TextTrackStatusIsOccupied, trackName);
 			}
 			else
 			{
-				AddUpdate(command.str(), Languages::TextTrackStatusIsFree, name);
+				AddUpdate(command.str(), Languages::TextTrackStatusIsFree, trackName);
 			}
 		}
 	}
 
-	void WebServer::TrackSettings(const trackID_t trackID, const std::string& name)
+	void WebServer::TrackSettings(const TrackID trackID, const std::string& name)
 	{
 		stringstream command;
 		command << "tracksettings;track=" << trackID;
 		AddUpdate(command.str(), Languages::TextTrackUpdated, name);
 	}
 
-	void WebServer::TrackDelete(const trackID_t trackID, const std::string& name)
+	void WebServer::TrackDelete(const TrackID trackID, const std::string& name)
 	{
 		stringstream command;
 		command << "trackdelete;track=" << trackID;
 		AddUpdate(command.str(), Languages::TextTrackDeleted, name);
 	}
 
-	void WebServer::LocoIntoTrack(const locoID_t locoID, const trackID_t trackID, const string& locoName, const string& trackName)
+	void WebServer::SignalState(__attribute__((unused)) const ControlType controlType, const DataModel::Signal* signal)
 	{
 		stringstream command;
-		command << "locointotrack;loco=" << locoID << ";track=" << trackID;
-		AddUpdate(command.str(), Languages::TextLocoIsOnTrack, locoName, trackName);
-	}
-
-	void WebServer::SignalState(__attribute__((unused)) const controlType_t controlType, const DataModel::Signal* signal, const signalState_t state)
-	{
-		stringstream command;
+		DataModel::AccessoryState state = signal->GetAccessoryState();
 		command << "signal;signal=" << signal->GetID() << ";state=" << (state ? "green" : "red");
 		AddUpdate(command.str(), state ? Languages::TextSignalStateIsGreen : Languages::TextSignalStateIsRed, signal->GetName());
+		stringstream command2;
+		command2 << "trackstate;signal=" << signal->GetID();
+		TrackBaseState(command2, dynamic_cast<const DataModel::TrackBase*>(signal));
 	}
 
-	void WebServer::SignalSettings(const signalID_t signalID, const std::string& name)
+	void WebServer::SignalSettings(const SignalID signalID, const std::string& name)
 	{
 		stringstream command;
 		command << "signalsettings;signal=" << signalID;
 		AddUpdate(command.str(), Languages::TextSignalUpdated, name);
 	}
 
-	void WebServer::SignalDelete(const signalID_t signalID, const std::string& name)
+	void WebServer::SignalDelete(const SignalID signalID, const std::string& name)
 	{
 		stringstream command;
 		command << "signaldelete;signal=" << signalID;
 		AddUpdate(command.str(), Languages::TextSignalDeleted, name);
 	}
 
-	void WebServer::LocoRelease(const locoID_t locoID)
+	void WebServer::LocoRelease(const LocoID locoID)
 	{
 		stringstream command;
 		command << "locorelease;loco=" << locoID;
 		AddUpdate(command.str(), Languages::TextLocoIsReleased, manager.GetLocoName(locoID));
 	}
 
-	void WebServer::StreetRelease(const streetID_t streetID)
+	void WebServer::StreetRelease(const StreetID streetID)
 	{
 		stringstream command;
 		command << "streetRelease;street=" << streetID;
 		AddUpdate(command.str(), Languages::TextStreetIsReleased, manager.GetStreetName(streetID));
 	}
 
-	void WebServer::LocoDestinationReached(const locoID_t locoID, const streetID_t streetID, const trackID_t trackID)
+	void WebServer::LocoDestinationReached(const Loco* loco, const Street* street, const TrackBase* track)
 	{
-		stringstream command;
-		command << "locoDestinationReached;loco=" << locoID << ";street=" << streetID << ";track=" << trackID;
-		AddUpdate(command.str(), Languages::TextLocoHasReachedDestination, manager.GetLocoName(locoID), manager.GetTrackName(trackID), manager.GetStreetName(streetID));
+		string command("locoDestinationReached;loco=");
+		command += to_string(loco->GetID());
+		command += ";street=";
+		command += to_string(street->GetID());
+		command += ";";
+		command += track->GetObjectIdentifier();
+		AddUpdate(command, Languages::TextLocoHasReachedDestination, loco->GetName(), track->GetMyName(), street->GetName());
 	}
 
-	void WebServer::LocoStart(const locoID_t locoID, const std::string& name)
+	void WebServer::LocoStart(const LocoID locoID, const std::string& name)
 	{
 		stringstream command;
 		command << "locoStart;loco=" << locoID;
 		AddUpdate(command.str(), Languages::TextLocoIsInAutoMode, name);
 	}
 
-	void WebServer::LocoStop(const locoID_t locoID, const std::string& name)
+	void WebServer::LocoStop(const LocoID locoID, const std::string& name)
 	{
 		stringstream command;
 		command << "locoStop;loco=" << locoID;
 		AddUpdate(command.str(), Languages::TextLocoIsInManualMode, name);
 	}
 
-	void WebServer::LocoSettings(const locoID_t locoID, const std::string& name)
+	void WebServer::LocoSettings(const LocoID locoID, const std::string& name)
 	{
 		stringstream command;
 		command << "locosettings;loco=" << locoID;
 		AddUpdate(command.str(), Languages::TextLocoUpdated, name);
 	}
 
-	void WebServer::LocoDelete(const locoID_t locoID, const std::string& name)
+	void WebServer::LocoDelete(const LocoID locoID, const std::string& name)
 	{
 		stringstream command;
 		command << "locodelete;loco=" << locoID;
 		AddUpdate(command.str(), Languages::TextLocoDeleted, name);
 	}
 
-	void WebServer::LayerSettings(const layerID_t layerID, const std::string& name)
+	void WebServer::LayerSettings(const LayerID layerID, const std::string& name)
 	{
 		stringstream command;
 		command << "layersettings;layer=" << layerID;
 		AddUpdate(command.str(), Languages::TextLayerUpdated, name);
 	}
 
-	void WebServer::LayerDelete(const layerID_t layerID, const std::string& name)
+	void WebServer::LayerDelete(const LayerID layerID, const std::string& name)
 	{
 		stringstream command;
 		command << "layerdelete;layer=" << layerID;

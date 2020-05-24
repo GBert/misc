@@ -33,7 +33,7 @@ namespace WebServer
 		public:
 			HtmlTagButtonPopup() = delete;
 			HtmlTagButtonPopup(const std::string& value, const std::string& command, const std::map<std::string,std::string>& arguments = std::map<std::string,std::string>());
-			HtmlTagButtonPopup(const Languages::textSelector_t value, const std::string& command, const std::map<std::string,std::string>& arguments = std::map<std::string,std::string>())
+			HtmlTagButtonPopup(const Languages::TextSelector value, const std::string& command, const std::map<std::string,std::string>& arguments = std::map<std::string,std::string>())
 			:	HtmlTagButtonPopup(Languages::GetText(value), command, arguments)
 			{}
 	};

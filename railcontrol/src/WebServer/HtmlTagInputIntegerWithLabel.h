@@ -34,12 +34,12 @@ namespace WebServer
 		public:
 			HtmlTagInputIntegerWithLabel() = delete;
 
-			HtmlTagInputIntegerWithLabel(const std::string& name, const Languages::textSelector_t label, const int min, const int max)
+			HtmlTagInputIntegerWithLabel(const std::string& name, const Languages::TextSelector label, const int min, const int max)
 			:	HtmlTagInputIntegerWithLabel(name, label, 0, min, max)
 			{}
 
 			template<typename... TextArgs>
-			HtmlTagInputIntegerWithLabel(const std::string& name, const Languages::textSelector_t label, const int value, const int min, const int max, TextArgs... textArgs)
+			HtmlTagInputIntegerWithLabel(const std::string& name, const Languages::TextSelector label, const int value, const int min, const int max, TextArgs... textArgs)
 			:	HtmlTag("div")
 			{
 				HtmlTag::AddClass("input_integer_with_label");

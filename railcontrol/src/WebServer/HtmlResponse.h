@@ -31,7 +31,7 @@ namespace WebServer
 	{
 		public:
 			HtmlResponse() = delete;
-			HtmlResponse(const responseCode_t responseCode)
+			HtmlResponse(const ResponseCode responseCode)
 			:	HtmlResponse(responseCode, std::to_string(responseCode) + " " + HtmlResponse::responseTexts.at(responseCode), HtmlTag("body"))
 			{}
 
@@ -43,7 +43,7 @@ namespace WebServer
 			:	HtmlResponse(Response::OK, title, body)
 			{}
 
-			HtmlResponse(const responseCode_t responseCode, const std::string& title, const HtmlTag body);
+			HtmlResponse(const ResponseCode responseCode, const std::string& title, const HtmlTag body);
 			virtual ~HtmlResponse() {};
 			void AddAttribute(const std::string name, const std::string value);
 			void AddChildTag(HtmlTag content);

@@ -79,7 +79,7 @@ namespace Hardware
 		logger->Info(Languages::TextTerminatingSenderSocket);
 	}
 
-	void Z21::Booster(const boosterState_t status)
+	void Z21::Booster(const BoosterState status)
 	{
 		logger->Info(status ? Languages::TextTurningBoosterOn : Languages::TextTurningBoosterOff);
 		unsigned char buffer[7] = { 0x07, 0x00, 0x40, 0x00, 0x21, 0x80, 0xA1 };
@@ -87,9 +87,9 @@ namespace Hardware
 		Send(buffer, sizeof(buffer));
 	}
 
-	unsigned char Z21::EncodeSpeed14(const locoSpeed_t speed)
+	unsigned char Z21::EncodeSpeed14(const Speed speed)
 	{
-		locoSpeed_t speedInternal = speed >> 6;
+		Speed speedInternal = speed >> 6;
 		switch (speedInternal)
 		{
 			case MinSpeed:
@@ -103,7 +103,7 @@ namespace Hardware
 		}
 	}
 
-	locoSpeed_t Z21::DecodeSpeed14(unsigned char data)
+	Speed Z21::DecodeSpeed14(unsigned char data)
 	{
 		switch (data)
 		{
@@ -118,9 +118,9 @@ namespace Hardware
 		}
 	}
 
-	unsigned char Z21::EncodeSpeed28(const locoSpeed_t speed)
+	unsigned char Z21::EncodeSpeed28(const Speed speed)
 	{
-		locoSpeed_t speedInternal = speed >> 5;
+		Speed speedInternal = speed >> 5;
 		switch (speedInternal)
 		{
 			case MinSpeed:
@@ -135,7 +135,7 @@ namespace Hardware
 		}
 	}
 
-	locoSpeed_t Z21::DecodeSpeed28(unsigned char data)
+	Speed Z21::DecodeSpeed28(unsigned char data)
 	{
 		switch (data)
 		{
@@ -152,9 +152,9 @@ namespace Hardware
 		}
 	}
 
-	unsigned char Z21::EncodeSpeed128(const locoSpeed_t speed)
+	unsigned char Z21::EncodeSpeed128(const Speed speed)
 	{
-		locoSpeed_t speedInternal = speed >> 3;
+		Speed speedInternal = speed >> 3;
 		switch (speedInternal)
 		{
 			case MinSpeed:
@@ -168,7 +168,7 @@ namespace Hardware
 		}
 	}
 
-	locoSpeed_t Z21::DecodeSpeed128(unsigned char data)
+	Speed Z21::DecodeSpeed128(unsigned char data)
 	{
 		switch (data)
 		{
@@ -183,29 +183,29 @@ namespace Hardware
 		}
 	}
 
-	void Z21::LocoSpeed(const protocol_t protocol, const address_t address, const locoSpeed_t speed)
+	void Z21::LocoSpeed(const Protocol protocol, const Address address, const Speed speed)
 	{
 		if (!LocoProtocolSupported(protocol))
 		{
 			return;
 		}
-		direction_t direction = locoCache.GetDirection(address);
+		Direction direction = locoCache.GetDirection(address);
 		locoCache.SetSpeed(address, speed);
 		LocoSpeedDirection(protocol, address, speed, direction);
 	}
 
-	void Z21::LocoDirection(const protocol_t protocol, const address_t address, const direction_t direction)
+	void Z21::LocoDirection(const Protocol protocol, const Address address, const Direction direction)
 	{
 		if (!LocoProtocolSupported(protocol))
 		{
 			return;
 		}
-		locoSpeed_t speed = locoCache.GetSpeed(address);
+		Speed speed = locoCache.GetSpeed(address);
 		locoCache.SetDirection(address, direction);
 		LocoSpeedDirection(protocol, address, speed, direction);
 	}
 
-	void Z21::LocoSpeedDirection(const protocol_t protocol, const address_t address, const locoSpeed_t speed, const direction_t direction)
+	void Z21::LocoSpeedDirection(const Protocol protocol, const Address address, const Speed speed, const Direction direction)
 	{
 		if (!LocoProtocolSupported(protocol))
 		{
@@ -242,7 +242,7 @@ namespace Hardware
 		Send(buffer, sizeof(buffer));
 	}
 
-	void Z21::LocoFunction(__attribute__ ((unused)) const protocol_t protocol, const address_t address, const function_t function, const bool on)
+	void Z21::LocoFunction(__attribute__ ((unused)) const Protocol protocol, const Address address, const Function function, const DataModel::LocoFunctions::FunctionState on)
 	{
 		if (!LocoProtocolSupported(protocol))
 		{
@@ -251,12 +251,12 @@ namespace Hardware
 		locoCache.SetFunction(address, function, on);
 		unsigned char buffer[10] = { 0x0A, 0x00, 0x40, 0x00, 0xE4, 0xF8 };
 		Utils::Utils::ShortToDataBigEndian(address | 0xC000, buffer + 6);
-		buffer[8] = (static_cast<unsigned char>(on) << 6) | (function & 0x3F);
+		buffer[8] = (static_cast<unsigned char>(on == DataModel::LocoFunctions::FunctionStateOn) << 6) | (function & 0x3F);
 		buffer[9] = buffer[4] ^ buffer[5] ^ buffer[6] ^ buffer[7] ^ buffer[8];
 		Send(buffer, sizeof(buffer));
 	}
 
-	void Z21::LocoSpeedDirectionFunctions(const protocol_t protocol, const address_t address, const locoSpeed_t speed, const direction_t direction, std::vector<bool>& functions)
+	void Z21::LocoSpeedDirectionFunctions(const Protocol protocol, const Address address, const Speed speed, const Direction direction, std::vector<DataModel::LocoFunctions::FunctionState>& functions)
 	{
 		if (!LocoProtocolSupported(protocol))
 		{
@@ -270,29 +270,29 @@ namespace Hardware
 		}
 	}
 
-	void Z21::Accessory(const protocol_t protocol, const address_t address, const accessoryState_t state, const waitTime_t waitTime)
+	void Z21::Accessory(const Protocol protocol, const Address address, const DataModel::AccessoryState state, const DataModel::AccessoryPulseDuration duration)
 	{
 		if (!AccessoryProtocolSupported(protocol))
 		{
 			return;
 		}
-		AccessoryQueueEntry entry(protocol, address, state, waitTime);
+		AccessoryQueueEntry entry(protocol, address, state, duration);
 		accessoryQueue.Enqueue(entry);
 	}
 
-	void Z21::AccessoryOn(const protocol_t protocol, const address_t address, const accessoryState_t state)
+	void Z21::AccessoryOn(const Protocol protocol, const Address address, const DataModel::AccessoryState state)
 	{
 		AccessoryOnOrOff(protocol, address, state, true);
 	}
 
-	void Z21::AccessoryOff(const protocol_t protocol, const address_t address, const accessoryState_t state)
+	void Z21::AccessoryOff(const Protocol protocol, const Address address, const DataModel::AccessoryState state)
 	{
 		AccessoryOnOrOff(protocol, address, state, false);
 	}
 
-	void Z21::AccessoryOnOrOff(__attribute__((unused)) const protocol_t protocol, const address_t address, const accessoryState_t state, const bool on)
+	void Z21::AccessoryOnOrOff(__attribute__((unused)) const Protocol protocol, const Address address, const DataModel::AccessoryState state, const bool on)
 	{
-		const address_t zeroBasedAddress = address - 1;
+		const Address zeroBasedAddress = address - 1;
 		unsigned char buffer[9] = { 0x09, 0x00, 0x40, 0x00, 0x53 };
 		Utils::Utils::ShortToDataBigEndian(zeroBasedAddress, buffer + 5);
 		buffer[7] = 0x80 | (static_cast<unsigned char>(on) << 3) | static_cast<unsigned char>(state);
@@ -314,13 +314,13 @@ namespace Hardware
 			}
 			SendSetTurnoutMode(entry.address, entry.protocol);
 			AccessoryOn(entry.protocol, entry.address, entry.state);
-			Utils::Utils::SleepForMilliseconds(entry.waitTime);
+			Utils::Utils::SleepForMilliseconds(entry.duration);
 			AccessoryOff(entry.protocol, entry.address, entry.state);
 		}
 		logger->Info(Languages::TextTerminatingAccessorySenderThread);
 	}
 
-	void Z21::ProgramRead(const ProgramMode mode, const address_t address, const CvNumber cv)
+	void Z21::ProgramRead(const ProgramMode mode, const Address address, const CvNumber cv)
 	{
 		switch (mode)
 		{
@@ -345,7 +345,7 @@ namespace Hardware
 		lastProgramMode = mode;
 	}
 
-	void Z21::ProgramWrite(const ProgramMode mode, const address_t address, const CvNumber cv, const CvValue value)
+	void Z21::ProgramWrite(const ProgramMode mode, const Address address, const CvNumber cv, const CvValue value)
 	{
 		switch (mode)
 		{
@@ -402,9 +402,9 @@ namespace Hardware
 		Send(buffer, sizeof(buffer));
 	}
 
-	void Z21::ProgramDccPom(const PomDB0 db0, const PomOption option, const address_t address, const CvNumber cv, const CvValue value)
+	void Z21::ProgramDccPom(const PomDB0 db0, const PomOption option, const Address address, const CvNumber cv, const CvValue value)
 	{
-		address_t internalAddress = address;
+		Address internalAddress = address;
 		if (db0 == PomAccessory)
 		{
 			internalAddress <<= 4;
@@ -677,7 +677,7 @@ namespace Hardware
 					logger->Error(Languages::TextCheckSumError);
 				}
 				logger->Debug(Languages::TextBoosterIsTurnedOff);
-				manager->Booster(ControlTypeHardware, BoosterStop);
+				manager->Booster(ControlTypeHardware, BoosterStateStop);
 				break;
 
 			case DB0PowerOn:
@@ -686,7 +686,7 @@ namespace Hardware
 					logger->Error(Languages::TextCheckSumError);
 				}
 				logger->Debug(Languages::TextBoosterIsTurnedOn);
-				manager->Booster(ControlTypeHardware, BoosterGo);
+				manager->Booster(ControlTypeHardware, BoosterStateGo);
 				break;
 
 			case DB0ProgrammingMode:
@@ -695,7 +695,7 @@ namespace Hardware
 					logger->Error(Languages::TextCheckSumError);
 				}
 				logger->Debug(Languages::TextProgrammingMode);
-				manager->Booster(ControlTypeHardware, BoosterStop);
+				manager->Booster(ControlTypeHardware, BoosterStateStop);
 				break;
 
 			case DB0ShortCircuit:
@@ -704,7 +704,7 @@ namespace Hardware
 					logger->Error(Languages::TextCheckSumError);
 				}
 				logger->Debug(Languages::TextShortCircuit);
-				manager->Booster(ControlTypeInternal, BoosterStop);
+				manager->Booster(ControlTypeInternal, BoosterStateStop);
 				break;
 
 			case DB0CvShortCircuit:
@@ -713,7 +713,7 @@ namespace Hardware
 					logger->Error(Languages::TextCheckSumError);
 				}
 				logger->Debug(Languages::TextShortCircuit);
-				manager->Booster(ControlTypeInternal, BoosterStop);
+				manager->Booster(ControlTypeInternal, BoosterStateStop);
 				break;
 
 			case DB0CvNack:
@@ -732,34 +732,34 @@ namespace Hardware
 
 	void Z21::ParseTurnoutData(const unsigned char* buffer)
 	{
-		accessoryState_t state;
+		DataModel::AccessoryState state;
 		switch (buffer[7])
 		{
 			case 0x01:
-				state = false;
+				state = DataModel::AccessoryStateOff;
 				break;
 
 			case 0x02:
-				state = true;
+				state = DataModel::AccessoryStateOn;
 				break;
 
 			default:
 				return;
 		}
-		const address_t zeroBasedAddress = Utils::Utils::DataBigEndianToShort(buffer + 5);
-		const address_t address = zeroBasedAddress + 1;
-		const protocol_t protocol = turnoutCache.GetProtocol(address);
+		const Address zeroBasedAddress = Utils::Utils::DataBigEndianToShort(buffer + 5);
+		const Address address = zeroBasedAddress + 1;
+		const Protocol protocol = turnoutCache.GetProtocol(address);
 		manager->AccessoryState(ControlTypeHardware, controlID, protocol, address, state);
 	}
 
 	void Z21::ParseLocoData(const unsigned char* buffer)
 	{
-		const address_t address = Utils::Utils::DataBigEndianToShort(buffer + 5) & 0x3FFF;
+		const Address address = Utils::Utils::DataBigEndianToShort(buffer + 5) & 0x3FFF;
 		const unsigned char protocolType = buffer[7] & 0x07;
-		protocol_t protocol;
+		Protocol protocol;
 		const unsigned char speedData = buffer[8] & 0x7F;
-		locoSpeed_t newSpeed;
-		protocol_t storedProtocol = locoCache.GetProtocol(address);
+		Speed newSpeed;
+		Protocol storedProtocol = locoCache.GetProtocol(address);
 		switch (protocolType)
 		{
 			case 0:
@@ -776,7 +776,7 @@ namespace Hardware
 					default:
 						locoCache.SetProtocol(address, ProtocolDCC14);
 						protocol = ProtocolDCC14;
-						logger->Warning(Languages::TextActualAndStoredProtocolsDiffer, protocolSymbols[ProtocolDCC14], protocolSymbols[storedProtocol]);
+						logger->Warning(Languages::TextActualAndStoredProtocolsDiffer, ProtocolSymbols[ProtocolDCC14], ProtocolSymbols[storedProtocol]);
 						break;
 				}
 				newSpeed = DecodeSpeed14(speedData);
@@ -796,7 +796,7 @@ namespace Hardware
 					default:
 						locoCache.SetProtocol(address, ProtocolDCC28);
 						protocol = ProtocolDCC28;
-						logger->Warning(Languages::TextActualAndStoredProtocolsDiffer, protocolSymbols[ProtocolDCC28], protocolSymbols[storedProtocol]);
+						logger->Warning(Languages::TextActualAndStoredProtocolsDiffer, ProtocolSymbols[ProtocolDCC28], ProtocolSymbols[storedProtocol]);
 						break;
 				}
 				newSpeed = DecodeSpeed28(speedData);
@@ -816,7 +816,7 @@ namespace Hardware
 					default:
 						locoCache.SetProtocol(address, ProtocolDCC128);
 						protocol = ProtocolDCC128;
-						logger->Warning(Languages::TextActualAndStoredProtocolsDiffer, protocolSymbols[ProtocolDCC128], protocolSymbols[storedProtocol]);
+						logger->Warning(Languages::TextActualAndStoredProtocolsDiffer, ProtocolSymbols[ProtocolDCC128], ProtocolSymbols[storedProtocol]);
 						break;
 				}
 				newSpeed = DecodeSpeed128(speedData);
@@ -825,14 +825,14 @@ namespace Hardware
 			default:
 				return;
 		}
-		const locoSpeed_t oldSpeed = locoCache.GetSpeed(address);
+		const Speed oldSpeed = locoCache.GetSpeed(address);
 		if (newSpeed != oldSpeed)
 		{
 			locoCache.SetSpeed(address, newSpeed);
 			manager->LocoSpeed(ControlTypeHardware, controlID, protocol, address, newSpeed);
 		}
-		const direction_t newDirection = (buffer[8] >> 7) ? DirectionRight : DirectionLeft;
-		const direction_t oldDirection = locoCache.GetDirection(address);
+		const Direction newDirection = (buffer[8] >> 7) ? DirectionRight : DirectionLeft;
+		const Direction oldDirection = locoCache.GetDirection(address);
 		if (newDirection != oldDirection)
 		{
 			locoCache.SetDirection(address, newDirection);
@@ -850,14 +850,14 @@ namespace Hardware
 			return;
 		}
 		const uint32_t functionsDiff = newFunctions ^ oldFunctions;
-		for (function_t function = 0; function <= 28; ++function)
+		for (Function function = 0; function <= 28; ++function)
 		{
 			const bool stateChange = (functionsDiff >> function) & 0x01;
 			if (stateChange == false)
 			{
 				continue;
 			}
-			const bool newState = (newFunctions >> function) & 0x01;
+			const DataModel::LocoFunctions::FunctionState newState = ((newFunctions >> function) & 0x01 ? DataModel::LocoFunctions::FunctionStateOn : DataModel::LocoFunctions::FunctionStateOff);
 			locoCache.SetFunction(address, function, newState);
 			manager->LocoFunction(ControlTypeHardware, controlID, protocol, address, function, newState);
 		}
@@ -882,7 +882,7 @@ namespace Hardware
 
 	void Z21::ParseDetectorData(const unsigned char* buffer)
 	{
-		feedbackPin_t pin = Utils::Utils::DataLittleEndianToShort(buffer + 6);
+		FeedbackPin pin = Utils::Utils::DataLittleEndianToShort(buffer + 6);
 		uint8_t port = buffer[8];
 		--pin;
 		pin <<= 3;
@@ -890,14 +890,14 @@ namespace Hardware
 		++pin;
 		uint8_t type = buffer[9];
 		uint16_t value1 = Utils::Utils::DataLittleEndianToShort(buffer + 10);
-		DataModel::Feedback::feedbackState_t state;
+		DataModel::Feedback::FeedbackState state;
 		switch (type)
 		{
 			case 0x01:
 			{
 				value1 >>= 12;
 				value1 &= 0x0001;
-				state = static_cast<DataModel::Feedback::feedbackState_t>(value1);
+				state = static_cast<DataModel::Feedback::FeedbackState>(value1);
 				break;
 			}
 
@@ -962,7 +962,7 @@ namespace Hardware
 		Send(buffer, sizeof(buffer));
 	}
 
-	void Z21::SendSetMode(const address_t address, const Command command, const ProtocolMode mode)
+	void Z21::SendSetMode(const Address address, const Command command, const ProtocolMode mode)
 	{
 		switch (command)
 		{
@@ -995,9 +995,9 @@ namespace Hardware
 		Send(buffer, sizeof(buffer));
 	}
 
-	void Z21::SendSetLocoMode(const address_t address, const protocol_t protocol)
+	void Z21::SendSetLocoMode(const Address address, const Protocol protocol)
 	{
-		const protocol_t storedProtocol = locoCache.GetProtocol(address);
+		const Protocol storedProtocol = locoCache.GetProtocol(address);
 		if (storedProtocol == protocol)
 		{
 			return;
@@ -1022,19 +1022,19 @@ namespace Hardware
 		locoCache.SetProtocol(address, protocol);
 	}
 
-	void Z21::SendSetLocoModeMM(const address_t address)
+	void Z21::SendSetLocoModeMM(const Address address)
 	{
 		SendSetMode(address, CommandSetLocoMode, ProtocolModeMM);
 	}
 
-	void Z21::SendSetLocoModeDCC(const address_t address)
+	void Z21::SendSetLocoModeDCC(const Address address)
 	{
 		SendSetMode(address, CommandSetLocoMode, ProtocolModeDCC);
 	}
 
-	void Z21::SendSetTurnoutMode(const address_t address, const protocol_t protocol)
+	void Z21::SendSetTurnoutMode(const Address address, const Protocol protocol)
 	{
-		protocol_t storedProtocol = turnoutCache.GetProtocol(address);
+		Protocol storedProtocol = turnoutCache.GetProtocol(address);
 		if (storedProtocol == protocol)
 		{
 			return;
@@ -1055,15 +1055,15 @@ namespace Hardware
 		turnoutCache.SetProtocol(address, protocol);
 	}
 
-	void Z21::SendSetTurnoutModeMM(const address_t address)
+	void Z21::SendSetTurnoutModeMM(const Address address)
 	{
-		const address_t zeroBasedAddress = address - 1;
+		const Address zeroBasedAddress = address - 1;
 		SendSetMode(zeroBasedAddress, CommandSetTurnoutMode, ProtocolModeMM);
 	}
 
-	void Z21::SendSetTurnoutModeDCC(const address_t address)
+	void Z21::SendSetTurnoutModeDCC(const Address address)
 	{
-		const address_t zeroBasedAddress = address - 1;
+		const Address zeroBasedAddress = address - 1;
 		SendSetMode(zeroBasedAddress, CommandSetTurnoutMode, ProtocolModeDCC);
 	}
 

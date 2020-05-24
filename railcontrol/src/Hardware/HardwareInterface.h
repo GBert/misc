@@ -24,6 +24,7 @@ along with RailControl; see the file LICENCE. If not see
 #include <string>
 #include <vector>
 
+#include "DataModel/AccessoryBase.h"
 #include "DataTypes.h"
 #include "Manager.h"
 #include "Utils/Utils.h"
@@ -35,7 +36,7 @@ namespace Hardware
 	{
 		public:
 			// non virtual default constructor is needed to prevent polymorphism
-			HardwareInterface(Manager* manager, const controlID_t controlID, const std::string& name)
+			HardwareInterface(Manager* manager, const ControlID controlID, const std::string& name)
 			:	manager(manager),
 			 	controlID(controlID),
 			 	name(name)
@@ -72,31 +73,31 @@ namespace Hardware
 			virtual bool CanHandleProgramDccPom() const { return false; }
 
 			// get available loco protocols of this control
-			virtual void GetLocoProtocols(__attribute__((unused)) std::vector<protocol_t>& protocols) const {};
+			virtual void GetLocoProtocols(__attribute__((unused)) std::vector<Protocol>& protocols) const {};
 
 			// is given loco protocol supported
-			virtual bool LocoProtocolSupported(__attribute__((unused)) const protocol_t protocol) const { return false; }
+			virtual bool LocoProtocolSupported(__attribute__((unused)) const Protocol protocol) const { return false; }
 
 			// get available accessory protocols of this control
-			virtual void GetAccessoryProtocols(__attribute__((unused)) std::vector<protocol_t>& protocols) const {}
+			virtual void GetAccessoryProtocols(__attribute__((unused)) std::vector<Protocol>& protocols) const {}
 
 			// is given accessory protocol supported
-			virtual bool AccessoryProtocolSupported(__attribute__((unused)) const protocol_t protocol) const { return false; }
+			virtual bool AccessoryProtocolSupported(__attribute__((unused)) const Protocol protocol) const { return false; }
 
 			// turn booster on or off
-			virtual void Booster(__attribute__((unused)) const boosterState_t status) {};
+			virtual void Booster(__attribute__((unused)) const BoosterState status) {};
 
 			// set loco speed
-			virtual void LocoSpeed(__attribute__((unused)) const protocol_t protocol, __attribute__((unused)) const address_t address, __attribute__((unused)) const locoSpeed_t speed) {};
+			virtual void LocoSpeed(__attribute__((unused)) const Protocol protocol, __attribute__((unused)) const Address address, __attribute__((unused)) const Speed speed) {};
 
 			// set loco direction
-			virtual void LocoDirection(__attribute__((unused)) const protocol_t protocol, __attribute__((unused)) const address_t address, __attribute__((unused)) const direction_t direction) {};
+			virtual void LocoDirection(__attribute__((unused)) const Protocol protocol, __attribute__((unused)) const Address address, __attribute__((unused)) const Direction direction) {};
 
 			// set loco function
-			virtual void LocoFunction(__attribute__((unused)) const protocol_t protocol, __attribute__((unused)) const address_t address, __attribute__((unused)) const function_t function, __attribute__((unused)) const bool on) {};
+			virtual void LocoFunction(__attribute__((unused)) const Protocol protocol, __attribute__((unused)) const Address address, __attribute__((unused)) const Function function, __attribute__((unused)) const DataModel::LocoFunctions::FunctionState on) {};
 
 			// set loco
-			virtual void LocoSpeedDirectionFunctions(const protocol_t protocol, const address_t address, const locoSpeed_t speed, const direction_t direction, std::vector<bool>& functions)
+			virtual void LocoSpeedDirectionFunctions(const Protocol protocol, const Address address, const Speed speed, const Direction direction, std::vector<DataModel::LocoFunctions::FunctionState>& functions)
 			{
 				// sleeps are necessary to prevent command overflow in command stations (especially Märklin Gleisbox)
 				LocoSpeed(protocol, address, speed);
@@ -111,29 +112,29 @@ namespace Hardware
 			}
 
 			// accessory command
-			virtual void Accessory(const protocol_t protocol, const address_t address, const accessoryState_t state, const waitTime_t waitTime)
+			virtual void Accessory(const Protocol protocol, const Address address, const DataModel::AccessoryState state, const DataModel::AccessoryPulseDuration duration)
 			{
 				AccessoryOnOrOff(protocol, address, state, true);
-				std::async(std::launch::async, AccessoryOnOrOffStatic, this, protocol, address, state, waitTime);
+				std::async(std::launch::async, AccessoryOnOrOffStatic, this, protocol, address, state, duration);
 			};
 
 			// read CV value
-			virtual void ProgramRead(__attribute__((unused)) const ProgramMode mode, __attribute__((unused)) const address_t address, __attribute__((unused)) const CvNumber cv) {}
+			virtual void ProgramRead(__attribute__((unused)) const ProgramMode mode, __attribute__((unused)) const Address address, __attribute__((unused)) const CvNumber cv) {}
 
 			// write CV value
-			virtual void ProgramWrite(__attribute__((unused)) const ProgramMode mode, __attribute__((unused)) const address_t address, __attribute__((unused)) const CvNumber cv, __attribute__((unused)) const CvValue value) {}
+			virtual void ProgramWrite(__attribute__((unused)) const ProgramMode mode, __attribute__((unused)) const Address address, __attribute__((unused)) const CvNumber cv, __attribute__((unused)) const CvValue value) {}
 
 		protected:
 			Manager* manager;
-			const controlID_t controlID;
+			const ControlID controlID;
 			const std::string name;
 
-			virtual void AccessoryOnOrOff(__attribute__((unused)) const protocol_t protocol, __attribute__((unused)) const address_t address, __attribute__((unused)) const accessoryState_t state, __attribute__((unused)) const bool on) {}
+			virtual void AccessoryOnOrOff(__attribute__((unused)) const Protocol protocol, __attribute__((unused)) const Address address, __attribute__((unused)) const DataModel::AccessoryState state, __attribute__((unused)) const bool on) {}
 
 		private:
-			static void AccessoryOnOrOffStatic(HardwareInterface* hardware, const protocol_t protocol, const address_t address, const accessoryState_t state, const waitTime_t waitTime)
+			static void AccessoryOnOrOffStatic(HardwareInterface* hardware, const Protocol protocol, const Address address, const DataModel::AccessoryState state, const DataModel::AccessoryPulseDuration duration)
 			{
-				Utils::Utils::SleepForMilliseconds(waitTime);
+				Utils::Utils::SleepForMilliseconds(duration);
 				hardware->AccessoryOnOrOff(protocol, address, state, false);
 			}
 	};

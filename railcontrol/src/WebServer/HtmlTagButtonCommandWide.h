@@ -31,7 +31,7 @@ namespace WebServer
 	{
 		public:
 			HtmlTagButtonCommandWide() = delete;
-			HtmlTagButtonCommandWide(const Languages::textSelector_t value, const std::string& command, const std::map<std::string,std::string>& arguments = std::map<std::string,std::string>(), const std::string& additionalOnClick = "")
+			HtmlTagButtonCommandWide(const Languages::TextSelector value, const std::string& command, const std::map<std::string,std::string>& arguments = std::map<std::string,std::string>(), const std::string& additionalOnClick = "")
 			:	HtmlTagButtonCommand(value, command, arguments, additionalOnClick)
 			{
 				AddClass("wide_button");

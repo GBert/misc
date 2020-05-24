@@ -34,7 +34,7 @@ namespace WebServer
 		public:
 			HtmlTagInputTextWithLabel() = delete;
 
-			HtmlTagInputTextWithLabel(const std::string& name, const Languages::textSelector_t label, const std::string& value = "")
+			HtmlTagInputTextWithLabel(const std::string& name, const Languages::TextSelector label, const std::string& value = "")
 			:	HtmlTag()
 			{
 				AddChildTag(HtmlTagLabel(label, name));

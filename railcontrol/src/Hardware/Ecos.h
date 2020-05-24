@@ -37,41 +37,41 @@ namespace Hardware
 			bool CanHandleAccessories() const override { return true; }
 			bool CanHandleFeedback() const override { return true; }
 
-			void GetLocoProtocols(std::vector<protocol_t>& protocols) const override
+			void GetLocoProtocols(std::vector<Protocol>& protocols) const override
 			{
 				protocols.push_back(ProtocolServer);
 			}
 
-			bool LocoProtocolSupported(protocol_t protocol) const override
+			bool LocoProtocolSupported(Protocol protocol) const override
 			{
 				return (protocol == ProtocolServer);
 			}
 
-			void GetAccessoryProtocols(std::vector<protocol_t>& protocols) const override
+			void GetAccessoryProtocols(std::vector<Protocol>& protocols) const override
 			{
 				protocols.push_back(ProtocolServer);
 			}
 
-			bool AccessoryProtocolSupported(protocol_t protocol) const override
+			bool AccessoryProtocolSupported(Protocol protocol) const override
 			{
 				return (protocol == ProtocolServer);
 			}
 
-			static void GetArgumentTypesAndHint(std::map<unsigned char,argumentType_t>& argumentTypes, std::string& hint)
+			static void GetArgumentTypesAndHint(std::map<unsigned char,ArgumentType>& argumentTypes, std::string& hint)
 			{
-				argumentTypes[1] = IpAddress;
+				argumentTypes[1] = ArgumentTypeIpAddress;
 				hint = Languages::GetText(Languages::TextHintEcos);
 			}
 
-			void Booster(const boosterState_t status) override
+			void Booster(const BoosterState status) override
 			{
-				Send(status == BoosterGo ? "set(1,go)\n" : "set(1,stop)\n");
+				Send(status == BoosterStateGo ? "set(1,go)\n" : "set(1,stop)\n");
 			}
 
-			void LocoSpeed(const protocol_t protocol, const address_t address, const locoSpeed_t speed) override;
-			void LocoDirection(const protocol_t protocol, const address_t address, const direction_t direction) override;
-			void LocoFunction(const protocol_t protocol, const address_t address, const function_t function, const bool on) override;
-			void AccessoryOnOrOff(const protocol_t protocol, const address_t address, const accessoryState_t state, const bool on) override;
+			void LocoSpeed(const Protocol protocol, const Address address, const Speed speed) override;
+			void LocoDirection(const Protocol protocol, const Address address, const Direction direction) override;
+			void LocoFunction(const Protocol protocol, const Address address, const Function function, const DataModel::LocoFunctions::FunctionState on) override;
+			void AccessoryOnOrOff(const Protocol protocol, const Address address, const DataModel::AccessoryState state, const bool on) override;
 
 			static const char* const CommandActivateBoosterUpdates;
 			static const char* const CommandQueryLocos;

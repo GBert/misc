@@ -360,7 +360,7 @@ namespace Storage
 		Execute(query);
 	}
 
-	void SQLite::AllHardwareParams(std::map<controlID_t, Hardware::HardwareParams*>& hardwareParams)
+	void SQLite::AllHardwareParams(std::map<ControlID, Hardware::HardwareParams*>& hardwareParams)
 	{
 		const char* query = "SELECT controlid, hardwaretype, name, arg1, arg2, arg3, arg4, arg5 FROM hardware ORDER BY controlid;";
 		Execute(query, CallbackAllHardwareParams, &hardwareParams);
@@ -369,27 +369,27 @@ namespace Storage
 	// callback read hardwareparams
 	int SQLite::CallbackAllHardwareParams(void* v, int argc, char **argv, __attribute__((unused)) char **colName)
 	{
-		map<controlID_t,HardwareParams*>* hardwareParams = static_cast<map<controlID_t,HardwareParams*>*>(v);
+		map<ControlID,HardwareParams*>* hardwareParams = static_cast<map<ControlID,HardwareParams*>*>(v);
 		if (argc != 8)
 		{
 			return 0;
 		}
-		controlID_t controlID = Utils::Utils::StringToInteger(argv[0]);
+		ControlID controlID = Utils::Utils::StringToInteger(argv[0]);
 
-		HardwareParams* params = new HardwareParams(controlID, static_cast<hardwareType_t>(Utils::Utils::StringToInteger(argv[1])), argv[2], argv[3], argv[4], argv[5], argv[6], argv[7]);
+		HardwareParams* params = new HardwareParams(controlID, static_cast<HardwareType>(Utils::Utils::StringToInteger(argv[1])), argv[2], argv[3], argv[4], argv[5], argv[6], argv[7]);
 		(*hardwareParams)[controlID] = params;
 		return 0;
 	}
 
 	// delete control
-	void SQLite::DeleteHardwareParams(const controlID_t controlID)
+	void SQLite::DeleteHardwareParams(const ControlID controlID)
 	{
 		string query = "DELETE FROM hardware WHERE controlid = " + to_string(controlID) + ";";
 		Execute(query);
 	}
 
 	// save DataModelobject
-	void SQLite::SaveObject(const objectType_t objectType, const objectID_t objectID, const std::string& name, const std::string& object)
+	void SQLite::SaveObject(const ObjectType objectType, const ObjectID objectID, const std::string& name, const std::string& object)
 	{
 		string query = "INSERT OR REPLACE INTO objects (objecttype, objectid, name, object) VALUES ("
 			+ to_string(objectType) + ", "
@@ -400,7 +400,7 @@ namespace Storage
 	}
 
 	// delete DataModelobject
-	void SQLite::DeleteObject(const objectType_t objectType, const objectID_t objectID)
+	void SQLite::DeleteObject(const ObjectType objectType, const ObjectID objectID)
 	{
 		string query = "DELETE FROM objects WHERE objecttype = " + to_string(objectType)
 			+ " AND objectid = " + to_string(objectID) + ";";
@@ -408,14 +408,14 @@ namespace Storage
 	}
 
 	// read DataModelobjects
-	void SQLite::ObjectsOfType(const objectType_t objectType, vector<string>& objects)
+	void SQLite::ObjectsOfType(const ObjectType objectType, vector<string>& objects)
 	{
 		string query = "SELECT object FROM objects WHERE objecttype = " + to_string(objectType) + " ORDER BY objectid;";
 		Execute(query, CallbackStringVector, &objects);
 	}
 
 	// save DataModelrelation
-	void SQLite::SaveRelation(const DataModel::Relation::type_t type, const objectID_t objectID1, const objectType_t objectType2, const objectID_t objectID2, const priority_t priority, const std::string& relation)
+	void SQLite::SaveRelation(const DataModel::Relation::Type type, const ObjectID objectID1, const ObjectType objectType2, const ObjectID objectID2, const Priority priority, const std::string& relation)
 	{
 		string query = "INSERT OR REPLACE INTO relations (type, objectid1, objecttype2, objectid2, priority, relation) VALUES ("
 			+ to_string(type) + ", "
@@ -428,7 +428,7 @@ namespace Storage
 	}
 
 	// delete DataModelrelaton
-	void SQLite::DeleteRelationsFrom(const DataModel::Relation::type_t type, const objectID_t objectID)
+	void SQLite::DeleteRelationsFrom(const DataModel::Relation::Type type, const ObjectID objectID)
 	{
 		string query = "DELETE FROM relations WHERE type = " + to_string(type)
 			+ " AND objectid1 = " + to_string(objectID) + ";";
@@ -436,7 +436,7 @@ namespace Storage
 	}
 
 	// delete DataModelrelaton
-	void SQLite::DeleteRelationsTo(const objectType_t objectType, const objectID_t objectID)
+	void SQLite::DeleteRelationsTo(const ObjectType objectType, const ObjectID objectID)
 	{
 		string query = "DELETE FROM relations WHERE objecttype2 = " + to_string(objectType)
 			+ " AND objectid2 = " + to_string(objectID) + ";";
@@ -444,7 +444,7 @@ namespace Storage
 	}
 
 	// read DataModelrelations
-	void SQLite::RelationsFrom(const DataModel::Relation::type_t type, const objectID_t objectID, vector<string>& relations)
+	void SQLite::RelationsFrom(const DataModel::Relation::Type type, const ObjectID objectID, vector<string>& relations)
 	{
 		string query = "SELECT relation FROM relations WHERE type = " + to_string(type)
 			+ " AND objectid1 = " + to_string(objectID) + " ORDER BY priority ASC;";
@@ -452,7 +452,7 @@ namespace Storage
 	}
 
 	// read DataModelrelations
-	void SQLite::RelationsTo(const objectType_t objectType, const objectID_t objectID, vector<string>& relations)
+	void SQLite::RelationsTo(const ObjectType objectType, const ObjectID objectID, vector<string>& relations)
 	{
 		string query = "SELECT relation FROM relations WHERE objecttype2 = " + to_string(objectType)
 			+ " AND objectid2 = " + to_string(objectID) + ";";

@@ -39,26 +39,26 @@ namespace Hardware
 			bool CanHandleAccessories() const override { return true; }
 			bool CanHandleFeedback() const override { return true; }
 
-			void GetLocoProtocols(std::vector<protocol_t>& protocols) const override { protocols.push_back(ProtocolMM2); }
+			void GetLocoProtocols(std::vector<Protocol>& protocols) const override { protocols.push_back(ProtocolMM2); }
 
-			bool LocoProtocolSupported(protocol_t protocol) const override { return (protocol == ProtocolMM2); }
+			bool LocoProtocolSupported(Protocol protocol) const override { return (protocol == ProtocolMM2); }
 
-			void GetAccessoryProtocols(std::vector<protocol_t>& protocols) const override { protocols.push_back(ProtocolMM2); }
+			void GetAccessoryProtocols(std::vector<Protocol>& protocols) const override { protocols.push_back(ProtocolMM2); }
 
-			bool AccessoryProtocolSupported(protocol_t protocol) const override { return (protocol == ProtocolMM2); }
+			bool AccessoryProtocolSupported(Protocol protocol) const override { return (protocol == ProtocolMM2); }
 
-			static void GetArgumentTypesAndHint(std::map<unsigned char,argumentType_t>& argumentTypes, std::string& hint)
+			static void GetArgumentTypesAndHint(std::map<unsigned char,ArgumentType>& argumentTypes, std::string& hint)
 			{
-				argumentTypes[1] = SerialPort;
-				argumentTypes[2] = S88Modules;
+				argumentTypes[1] = ArgumentTypeSerialPort;
+				argumentTypes[2] = ArgumentTypeS88Modules;
 				hint = Languages::GetText(Languages::TextHintM6051);
 			}
 
-			void Booster(const boosterState_t status) override;
-			void LocoSpeed(const protocol_t protocol, const address_t address, const locoSpeed_t speed) override;
-			void LocoDirection(const protocol_t protocol, const address_t address, const direction_t direction) override;
-			void LocoFunction(const protocol_t protocol, const address_t address, const function_t function, const bool on) override;
-			void AccessoryOnOrOff(const protocol_t protocol, const address_t address, const accessoryState_t state, const bool on) override;
+			void Booster(const BoosterState status) override;
+			void LocoSpeed(const Protocol protocol, const Address address, const Speed speed) override;
+			void LocoDirection(const Protocol protocol, const Address address, const Direction direction) override;
+			void LocoFunction(const Protocol protocol, const Address address, const Function function, const DataModel::LocoFunctions::FunctionState on) override;
+			void AccessoryOnOrOff(const Protocol protocol, const Address address, const DataModel::AccessoryState state, const bool on) override;
 
 		private:
 			Logger::Logger* logger;
@@ -68,15 +68,15 @@ namespace Hardware
 			unsigned char s88Modules;
 			std::thread s88Thread;
 			unsigned char s88Memory[MaxS88Modules];
-			std::map<address_t, unsigned char> speedMap;
-			std::map<address_t, unsigned char> functionMap;
+			std::map<Address, unsigned char> speedMap;
+			std::map<Address, unsigned char> functionMap;
 
-			unsigned char GetSpeedMapEntry(address_t address)
+			unsigned char GetSpeedMapEntry(Address address)
 			{
 				return speedMap.count(address) == 0 ? 0 : speedMap[address];
 			}
 
-			unsigned char GetFunctionMapEntry(address_t address)
+			unsigned char GetFunctionMapEntry(Address address)
 			{
 				return functionMap.count(address) == 0 ? 0 : functionMap[address];
 			}

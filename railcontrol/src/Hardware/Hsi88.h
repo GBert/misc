@@ -38,12 +38,12 @@ namespace Hardware
 
 			bool CanHandleFeedback() const override { return true; }
 
-			static void GetArgumentTypesAndHint(std::map<unsigned char,argumentType_t>& argumentTypes, std::string& hint)
+			static void GetArgumentTypesAndHint(std::map<unsigned char,ArgumentType>& argumentTypes, std::string& hint)
 			{
-				argumentTypes[1] = SerialPort;
-				argumentTypes[2] = S88Modules;
-				argumentTypes[3] = S88Modules;
-				argumentTypes[4] = S88Modules;
+				argumentTypes[1] = ArgumentTypeSerialPort;
+				argumentTypes[2] = ArgumentTypeS88Modules;
+				argumentTypes[3] = ArgumentTypeS88Modules;
+				argumentTypes[4] = ArgumentTypeS88Modules;
 				hint = Languages::GetText(Languages::TextHintHsi88);
 			}
 

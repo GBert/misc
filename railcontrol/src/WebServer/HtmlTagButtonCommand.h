@@ -32,7 +32,7 @@ namespace WebServer
 		public:
 			HtmlTagButtonCommand() = delete;
 			HtmlTagButtonCommand(const std::string& value, const std::string& command, const std::map<std::string,std::string>& arguments = std::map<std::string,std::string>(), const std::string& additionalOnClick = "");
-			HtmlTagButtonCommand(const Languages::textSelector_t value, const std::string& command, const std::map<std::string,std::string>& arguments = std::map<std::string,std::string>(), const std::string& additionalOnClick = "")
+			HtmlTagButtonCommand(const Languages::TextSelector value, const std::string& command, const std::map<std::string,std::string>& arguments = std::map<std::string,std::string>(), const std::string& additionalOnClick = "")
 			:	HtmlTagButtonCommand(Languages::GetText(value), command, arguments, additionalOnClick)
 			{}
 	};

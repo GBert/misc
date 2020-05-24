@@ -20,6 +20,7 @@ along with RailControl; see the file LICENCE. If not see
 
 #include <sstream>
 
+#include "DataModel/AccessoryBase.h"
 #include "DataModel/Signal.h"
 #include "WebServer/HtmlTagSignal.h"
 
@@ -28,52 +29,32 @@ using std::to_string;
 
 namespace WebServer
 {
-	HtmlTagSignal::HtmlTagSignal(const DataModel::Signal* signal)
-	:	HtmlTagLayoutItem()
+	HtmlTagSignal::HtmlTagSignal(const Manager& manager, const DataModel::Signal* signal)
+	:	HtmlTagTrackBase(manager, ObjectTypeSignal, DataModel::TrackTypeStraight, dynamic_cast<const DataModel::TrackBase*>(signal), dynamic_cast<const DataModel::LayoutItem*>(signal)),
+		signal(signal)
 	{
-		signalState_t state = signal->GetState();
-		signalType_t type = signal->GetType();
+		DataModel::AccessoryState signalState = signal->GetAccessoryState();
+		DataModel::AccessoryType type = signal->GetType();
 
-		unsigned int layoutPosX = signal->GetPosX() * EdgeLength;
-		unsigned int layoutPosY = signal->GetPosY() * EdgeLength;
-		const string& signalName = signal->GetName();
-
-		HtmlTag div1("div");
-		string signalIdString = to_string(signal->GetID());
-		string id("si_" + signalIdString);
-		div1.AddAttribute("id", id);
-		div1.AddClass("layout_item");
-		div1.AddClass("signal_item");
-		div1.AddClass(state == DataModel::Signal::SignalStateRed ? "signal_red" : "signal_green");
-		div1.AddAttribute("style", "left:" + to_string(layoutPosX) + "px;top:" + to_string(layoutPosY) + "px;");
-		string image;
+		imageDiv.AddClass("signal_item");
+		imageDiv.AddClass(signalState == DataModel::SignalStateRed ? "signal_red" : "signal_green");
 		switch (type)
 		{
-			case DataModel::Signal::SignalTypeSimpleRight:
-				image = "<svg width=\"" + EdgeLengthString + "\" height=\"" + EdgeLengthString + "\" id=\"" + id + "_img\" style=\"transform:rotate(" + DataModel::LayoutItem::Rotation(signal->GetRotation()) + "deg);\"><polygon points=\"14,0 22,0 22,36 14,36\" fill=\"black\" /><polygon points=\"23,5 27,1 31,1 35,5 35,18 31,22 27,22 23,18\" fill=\"black\"/><polyline points=\"29,7 29,30\" style=\"stroke:black;stroke-width:2\"/><circle class=\"red\" cx=\"29\" cy=\"7\" r=\"4\" fill=\"darkgray\"/><circle class=\"green\" cx=\"29\" cy=\"16\" r=\"4\" fill=\"darkgray\"/></svg>";
+			case DataModel::SignalTypeSimpleRight:
+				image += "<polygon points=\"23,5 27,1 31,1 35,5 35,18 31,22 27,22 23,18\" fill=\"black\"/><polyline points=\"29,7 29,30\" style=\"stroke:black;stroke-width:2\"/><circle class=\"red\" cx=\"29\" cy=\"7\" r=\"4\" fill=\"darkgray\"/><circle class=\"green\" cx=\"29\" cy=\"16\" r=\"4\" fill=\"darkgray\"/>";
 				break;
 
-			case DataModel::Signal::SignalTypeSimpleLeft:
+			case DataModel::SignalTypeSimpleLeft:
 			default:
-				image = "<svg width=\"" + EdgeLengthString + "\" height=\"" + EdgeLengthString + "\" id=\"" + id + "_img\" style=\"transform:rotate(" + DataModel::LayoutItem::Rotation(signal->GetRotation()) + "deg);\"><polygon points=\"14,0 22,0 22,36 14,36\" fill=\"black\" /><polygon points=\"1,5 5,1 9,1 13,5 13,18 9,22 5,22 1,18\" fill=\"black\"/><polyline points=\"7,7 7,30\" style=\"stroke:black;stroke-width:2\"/><circle class=\"red\" cx=\"7\" cy=\"7\" r=\"4\" fill=\"darkgray\"/><circle class=\"green\" cx=\"7\" cy=\"16\" r=\"4\" fill=\"darkgray\"/></svg>";
+				image += "<polygon points=\"1,5 5,1 9,1 13,5 13,18 9,22 5,22 1,18\" fill=\"black\"/><polyline points=\"7,7 7,30\" style=\"stroke:black;stroke-width:2\"/><circle class=\"red\" cx=\"7\" cy=\"7\" r=\"4\" fill=\"darkgray\"/><circle class=\"green\" cx=\"7\" cy=\"16\" r=\"4\" fill=\"darkgray\"/>";
 				break;
 		}
-		div1.AddChildTag(HtmlTag().AddContent(image));
-		div1.AddChildTag(HtmlTag("span").AddClass("tooltip").AddContent(signalName + " (addr=" + to_string(signal->GetAddress()) + ")"));
-		div1.AddAttribute("onclick", "return onClickSignal(" + signalIdString + ");");
-		div1.AddAttribute("oncontextmenu", "return onContextLayoutItem(event, '" + id + "');");
-		AddChildTag(div1);
+		AddToolTip(signal->GetName() + " (addr=" + to_string(signal->GetAddress()) + ")");
+		imageDiv.AddAttribute("onclick", "return onClickSignal(" + to_string(signal->GetID()) + ");");
+		imageDiv.AddAttribute("oncontextmenu", "return onContextLayoutItem(event, '" + identifier + "');");
 
-		HtmlTag div2("div");
-		div2.AddClass("contextmenu");
-		div2.AddAttribute("id", id + "_context");
-		div2.AddAttribute("style", "left:" + to_string(layoutPosX + 5) + "px;top:" + to_string(layoutPosY + 30) + "px;");
-		div2.AddChildTag(HtmlTag("ul").AddClass("contextentries")
-			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(signalName))
-			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(Languages::TextReleaseSignal).AddAttribute("onClick", "fireRequestAndForget('/?cmd=signalrelease&signal=" + signalIdString + "');"))
-			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(Languages::TextEditSignal).AddAttribute("onClick", "loadPopup('/?cmd=signaledit&signal=" + signalIdString + "');"))
-			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(Languages::TextDeleteSignal).AddAttribute("onClick", "loadPopup('/?cmd=signalaskdelete&signal=" + signalIdString + "');"))
-			);
-		AddChildTag(div2);
+		AddContextMenuEntry(Languages::TextEditSignal, "loadPopup('/?cmd=signaledit&" + urlIdentifier + "');");
+		AddContextMenuEntry(Languages::TextDeleteSignal, "loadPopup('/?cmd=signalaskdelete&" + urlIdentifier + "');");
+		FinishInit();
 	}
 };

@@ -20,6 +20,7 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
+#include "DataModel/AccessoryBase.h"
 #include "HardwareInterface.h"
 #include "HardwareParams.h"
 #include "Logger/Logger.h"
@@ -42,36 +43,36 @@ namespace Hardware
 			bool CanHandleProgramMfx() const override { return true; }
 			bool CanHandleProgramDccDirect() const override { return true; }
 
-			void GetLocoProtocols(std::vector<protocol_t> &protocols) const override
+			void GetLocoProtocols(std::vector<Protocol> &protocols) const override
 			{
 				protocols.push_back(ProtocolMM);
 				protocols.push_back(ProtocolMFX);
 				protocols.push_back(ProtocolDCC);
 			}
 
-			bool LocoProtocolSupported(protocol_t protocol) const override
+			bool LocoProtocolSupported(Protocol protocol) const override
 			{
 				return (protocol == ProtocolMM || protocol == ProtocolMFX || protocol == ProtocolDCC);
 			}
 
-			void GetAccessoryProtocols(std::vector<protocol_t> &protocols) const override
+			void GetAccessoryProtocols(std::vector<Protocol> &protocols) const override
 			{
 				protocols.push_back(ProtocolMM);
 				protocols.push_back(ProtocolDCC);
 			}
 
-			bool AccessoryProtocolSupported(protocol_t protocol) const override
+			bool AccessoryProtocolSupported(Protocol protocol) const override
 			{
 				return (protocol == ProtocolMM || protocol == ProtocolDCC);
 			}
 
-			void Booster(const boosterState_t status) override;
-			void LocoSpeed(const protocol_t protocol, const address_t address, const locoSpeed_t speed) override;
-			void LocoDirection(const protocol_t protocol, const address_t address, const direction_t direction) override;
-			void LocoFunction(const protocol_t protocol, const address_t address, const function_t function, const bool on) override;
-			void AccessoryOnOrOff(const protocol_t protocol, const address_t address, const accessoryState_t state, const bool on) override;
-			void ProgramRead(const ProgramMode mode, const address_t address, const CvNumber cv) override;
-			void ProgramWrite(const ProgramMode mode, const address_t address, const CvNumber cv, const CvValue value) override;
+			void Booster(const BoosterState status) override;
+			void LocoSpeed(const Protocol protocol, const Address address, const Speed speed) override;
+			void LocoDirection(const Protocol protocol, const Address address, const Direction direction) override;
+			void LocoFunction(const Protocol protocol, const Address address, const Function function, const DataModel::LocoFunctions::FunctionState on) override;
+			void AccessoryOnOrOff(const Protocol protocol, const Address address, const DataModel::AccessoryState state, const bool on) override;
+			void ProgramRead(const ProgramMode mode, const Address address, const CvNumber cv) override;
+			void ProgramWrite(const ProgramMode mode, const Address address, const CvNumber cv, const CvValue value) override;
 
 		protected:
 
@@ -100,7 +101,7 @@ namespace Hardware
 			typedef unsigned char CanLength;
 			typedef uint32_t CanAddress;
 
-			ProtocolMaerklinCAN(Manager* manager, controlID_t controlID, Logger::Logger* logger, std::string name)
+			ProtocolMaerklinCAN(Manager* manager, ControlID controlID, Logger::Logger* logger, std::string name)
 			:	HardwareInterface(manager, controlID, name),
 			 	logger(logger)
 			{}
@@ -117,7 +118,7 @@ namespace Hardware
 			static const unsigned short hash = 0x7337;
 
 			void CreateCommandHeader(unsigned char* buffer, const CanCommand command, const CanResponse response, const CanLength length);
-			void ParseAddressProtocol(const unsigned char* buffer, CanAddress& address, protocol_t& protocol);
+			void ParseAddressProtocol(const unsigned char* buffer, CanAddress& address, Protocol& protocol);
 
 			CanPrio ParsePrio(const unsigned char* buffer)
 			{
@@ -149,8 +150,8 @@ namespace Hardware
 				return Utils::Utils::DataBigEndianToInt(buffer + 5);
 			}
 
-			void CreateLocalIDLoco(unsigned char* buffer, const protocol_t& protocol, const address_t& address);
-			void CreateLocalIDAccessory(unsigned char* buffer, const protocol_t& protocol, const address_t& address);
+			void CreateLocalIDLoco(unsigned char* buffer, const Protocol& protocol, const Address& address);
+			void CreateLocalIDAccessory(unsigned char* buffer, const Protocol& protocol, const Address& address);
 
 			virtual void Send(const unsigned char* buffer) = 0;
 	};

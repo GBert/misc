@@ -39,16 +39,16 @@ namespace Storage
 			~SQLite();
 
 			void SaveHardwareParams(const Hardware::HardwareParams& params) override;
-			void AllHardwareParams(std::map<controlID_t,Hardware::HardwareParams*>& hardwareParams) override;
-			void DeleteHardwareParams(const controlID_t controlID) override;
-			void SaveObject(const objectType_t objectType, const objectID_t objectID, const std::string& name, const std::string& object) override;
-			void DeleteObject(const objectType_t objectType, const objectID_t objectID) override;
-			void ObjectsOfType(const objectType_t objectType, std::vector<std::string>& objects) override;
-			void SaveRelation(const DataModel::Relation::type_t type, const objectID_t objectID1, const objectType_t objectType2, const objectID_t objectID2, const priority_t priority, const std::string& relation) override;
-			void DeleteRelationsFrom(const DataModel::Relation::type_t type, const objectID_t objectID) override;
-			void DeleteRelationsTo(const objectType_t objectType, const objectID_t objectID) override;
-			void RelationsFrom(const DataModel::Relation::type_t type, const objectID_t objectID, std::vector<std::string>& relations) override;
-			void RelationsTo(const objectType_t objectType, const objectID_t objectID, std::vector<std::string>& relations) override;
+			void AllHardwareParams(std::map<ControlID,Hardware::HardwareParams*>& hardwareParams) override;
+			void DeleteHardwareParams(const ControlID controlID) override;
+			void SaveObject(const ObjectType objectType, const ObjectID objectID, const std::string& name, const std::string& object) override;
+			void DeleteObject(const ObjectType objectType, const ObjectID objectID) override;
+			void ObjectsOfType(const ObjectType objectType, std::vector<std::string>& objects) override;
+			void SaveRelation(const DataModel::Relation::Type type, const ObjectID objectID1, const ObjectType objectType2, const ObjectID objectID2, const Priority priority, const std::string& relation) override;
+			void DeleteRelationsFrom(const DataModel::Relation::Type type, const ObjectID objectID) override;
+			void DeleteRelationsTo(const ObjectType objectType, const ObjectID objectID) override;
+			void RelationsFrom(const DataModel::Relation::Type type, const ObjectID objectID, std::vector<std::string>& relations) override;
+			void RelationsTo(const ObjectType objectType, const ObjectID objectID, std::vector<std::string>& relations) override;
 			void SaveSetting(const std::string& key, const std::string& value) override;
 			std::string GetSetting(const std::string& key) override;
 			void StartTransaction() override;

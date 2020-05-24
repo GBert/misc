@@ -41,34 +41,34 @@ namespace Storage
 			virtual void SaveHardwareParams(const Hardware::HardwareParams& hardwareParams) = 0;
 
 			// read controls
-			virtual void AllHardwareParams(std::map<controlID_t,Hardware::HardwareParams*>& hardwareParams) = 0;
+			virtual void AllHardwareParams(std::map<ControlID,Hardware::HardwareParams*>& hardwareParams) = 0;
 
 			// delete control
-			virtual void DeleteHardwareParams(const controlID_t controlID) = 0;
+			virtual void DeleteHardwareParams(const ControlID controlID) = 0;
 
 			// save datamodelobject
-			virtual void SaveObject(const objectType_t objectType, const objectID_t objectID, const std::string& name, const std::string& object) = 0;
+			virtual void SaveObject(const ObjectType objectType, const ObjectID objectID, const std::string& name, const std::string& object) = 0;
 
 			// delete datamodelobject
-			virtual void DeleteObject(const objectType_t objectType, const objectID_t objectID) = 0;
+			virtual void DeleteObject(const ObjectType objectType, const ObjectID objectID) = 0;
 
 			// read datamodelobject
-			virtual void ObjectsOfType(const objectType_t objectType, std::vector<std::string>& objects) = 0;
+			virtual void ObjectsOfType(const ObjectType objectType, std::vector<std::string>& objects) = 0;
 
 			// save datamodelrelation
-			virtual void SaveRelation(const DataModel::Relation::type_t type, const objectID_t objectID1, const objectType_t objectType2, const objectID_t objectID2, const priority_t priority, const std::string& relation) = 0;
+			virtual void SaveRelation(const DataModel::Relation::Type type, const ObjectID objectID1, const ObjectType objectType2, const ObjectID objectID2, const Priority priority, const std::string& relation) = 0;
 
 			// delete datamodelrelation
-			virtual void DeleteRelationsFrom(const DataModel::Relation::type_t type, const objectID_t objectID) = 0;
+			virtual void DeleteRelationsFrom(const DataModel::Relation::Type type, const ObjectID objectID) = 0;
 
 			// delete datamodelrelation
-			virtual void DeleteRelationsTo(const objectType_t objectType, const objectID_t objectID) = 0;
+			virtual void DeleteRelationsTo(const ObjectType objectType, const ObjectID objectID) = 0;
 
 			// read datamodelrelation
-			virtual void RelationsFrom(const DataModel::Relation::type_t type, const objectID_t objectID, std::vector<std::string>& relations) = 0;
+			virtual void RelationsFrom(const DataModel::Relation::Type type, const ObjectID objectID, std::vector<std::string>& relations) = 0;
 
 			// read datamodelrelation
-			virtual void RelationsTo(const objectType_t objectType, const objectID_t objectID, std::vector<std::string>& relations) = 0;
+			virtual void RelationsTo(const ObjectType objectType, const ObjectID objectID, std::vector<std::string>& relations) = 0;
 
 			// save setting
 			virtual void SaveSetting(const std::string& key, const std::string& value) = 0;

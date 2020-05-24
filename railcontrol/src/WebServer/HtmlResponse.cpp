@@ -24,7 +24,7 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace WebServer
 {
-	HtmlResponse::HtmlResponse(const responseCode_t responseCode, const std::string& title, const HtmlTag body)
+	HtmlResponse::HtmlResponse(const ResponseCode responseCode, const std::string& title, const HtmlTag body)
 	:	Response(responseCode, body),
 	 	title(title)
 	{

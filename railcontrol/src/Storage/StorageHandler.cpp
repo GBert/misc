@@ -69,7 +69,7 @@ namespace Storage
 
 		// look for symbol create_*
 		string createSymbol = "create_" + params->module;
-		createStorage_t* newCreateStorage = (createStorage_t*) dlsym(dlhandle, createSymbol.c_str());
+		CreateStorage* newCreateStorage = (CreateStorage*) dlsym(dlhandle, createSymbol.c_str());
 		error = dlerror();
 		if (error)
 		{
@@ -79,7 +79,7 @@ namespace Storage
 
 		// look for symbol destroy_*
 		string destroySymbol = "destroy_" + params->module;
-		destroyStorage_t* newDestroyStorage = (destroyStorage_t*) dlsym(dlhandle, destroySymbol.c_str());
+		DestroyStorage* newDestroyStorage = (DestroyStorage*) dlsym(dlhandle, destroySymbol.c_str());
 		error = dlerror();
 		if (error)
 		{
@@ -129,7 +129,7 @@ namespace Storage
 		CommitTransactionInternal();
 	}
 
-	void StorageHandler::AllHardwareParams(std::map<controlID_t,Hardware::HardwareParams*>& hardwareParams)
+	void StorageHandler::AllHardwareParams(std::map<ControlID,Hardware::HardwareParams*>& hardwareParams)
 	{
 		if (instance == nullptr)
 		{
@@ -138,7 +138,7 @@ namespace Storage
 		instance->AllHardwareParams(hardwareParams);
 	}
 
-	void StorageHandler::DeleteHardwareParams(const controlID_t controlID)
+	void StorageHandler::DeleteHardwareParams(const ControlID controlID)
 	{
 		if (instance == nullptr)
 		{
@@ -149,7 +149,7 @@ namespace Storage
 		CommitTransactionInternal();
 	}
 
-	void StorageHandler::AllLocos(map<locoID_t,DataModel::Loco*>& locos)
+	void StorageHandler::AllLocos(map<LocoID,DataModel::Loco*>& locos)
 	{
 		if (instance == nullptr)
 		{
@@ -161,7 +161,7 @@ namespace Storage
 		{
 			Loco* loco = new Loco(manager, object);
 			vector<string> slavesString;
-			const streetID_t locoID = loco->GetID();
+			const StreetID locoID = loco->GetID();
 			instance->RelationsFrom(DataModel::Relation::TypeLocoSlave, locoID, slavesString);
 			vector<Relation*> slaves;
 			for (auto slaveString : slavesString)
@@ -173,7 +173,7 @@ namespace Storage
 		}
 	}
 
-	void StorageHandler::DeleteLoco(const locoID_t locoID)
+	void StorageHandler::DeleteLoco(const LocoID locoID)
 	{
 		if (instance == nullptr)
 		{
@@ -185,7 +185,7 @@ namespace Storage
 		CommitTransactionInternal();
 	}
 
-	void StorageHandler::AllAccessories(std::map<accessoryID_t,DataModel::Accessory*>& accessories)
+	void StorageHandler::AllAccessories(std::map<AccessoryID,DataModel::Accessory*>& accessories)
 	{
 		if (instance == nullptr)
 		{
@@ -200,7 +200,7 @@ namespace Storage
 		}
 	}
 
-	void StorageHandler::DeleteAccessory(const accessoryID_t accessoryID)
+	void StorageHandler::DeleteAccessory(const AccessoryID accessoryID)
 	{
 		if (instance == nullptr)
 		{
@@ -211,7 +211,7 @@ namespace Storage
 		CommitTransactionInternal();
 	}
 
-	void StorageHandler::AllFeedbacks(std::map<feedbackID_t,DataModel::Feedback*>& feedbacks)
+	void StorageHandler::AllFeedbacks(std::map<FeedbackID,DataModel::Feedback*>& feedbacks)
 	{
 		if (instance == nullptr)
 		{
@@ -226,7 +226,7 @@ namespace Storage
 		}
 	}
 
-	void StorageHandler::DeleteFeedback(const feedbackID_t feedbackID)
+	void StorageHandler::DeleteFeedback(const FeedbackID feedbackID)
 	{
 		if (instance == nullptr)
 		{
@@ -237,7 +237,7 @@ namespace Storage
 		CommitTransactionInternal();
 	}
 
-	void StorageHandler::AllTracks(std::map<trackID_t,DataModel::Track*>& tracks)
+	void StorageHandler::AllTracks(std::map<TrackID,DataModel::Track*>& tracks)
 	{
 		if (instance == nullptr)
 		{
@@ -252,7 +252,7 @@ namespace Storage
 		}
 	}
 
-	void StorageHandler::DeleteTrack(const trackID_t trackID)
+	void StorageHandler::DeleteTrack(const TrackID trackID)
 	{
 		if (instance == nullptr)
 		{
@@ -263,7 +263,7 @@ namespace Storage
 		CommitTransactionInternal();
 	}
 
-	void StorageHandler::AllSwitches(std::map<switchID_t,DataModel::Switch*>& switches)
+	void StorageHandler::AllSwitches(std::map<SwitchID,DataModel::Switch*>& switches)
 	{
 		if (instance == nullptr)
 		{
@@ -278,7 +278,7 @@ namespace Storage
 		}
 	}
 
-	void StorageHandler::DeleteSwitch(const switchID_t switchID)
+	void StorageHandler::DeleteSwitch(const SwitchID switchID)
 	{
 		if (instance == nullptr)
 		{
@@ -297,7 +297,7 @@ namespace Storage
 		}
 		string serialized = street.Serialize();
 		StartTransactionInternal();
-		const streetID_t streetID = street.GetID();
+		const StreetID streetID = street.GetID();
 		instance->SaveObject(ObjectTypeStreet, streetID, street.GetName(), serialized);
 		instance->DeleteRelationsFrom(DataModel::Relation::TypeStreetAtLock, streetID);
 		SaveRelations(street.GetRelationsAtLock());
@@ -314,14 +314,14 @@ namespace Storage
 		}
 		string serialized = loco.Serialize();
 		StartTransactionInternal();
-		const locoID_t locoID = loco.GetID();
+		const LocoID locoID = loco.GetID();
 		instance->SaveObject(ObjectTypeLoco, locoID, loco.GetName(), serialized);
 		instance->DeleteRelationsFrom(DataModel::Relation::TypeLocoSlave, locoID);
 		SaveRelations(loco.GetSlaves());
 		CommitTransactionInternal();
 	}
 
-	void StorageHandler::AllStreets(std::map<streetID_t,DataModel::Street*>& streets)
+	void StorageHandler::AllStreets(std::map<StreetID,DataModel::Street*>& streets)
 	{
 		if (instance == nullptr)
 		{
@@ -331,14 +331,14 @@ namespace Storage
 		instance->ObjectsOfType(ObjectTypeStreet, objects);
 		for (auto object : objects) {
 			Street* street = new Street(manager, object);
-			const streetID_t streetID = street->GetID();
+			const StreetID streetID = street->GetID();
 			street->AssignRelationsAtLock(RelationsFrom(Relation::TypeStreetAtLock, streetID));
 			street->AssignRelationsAtUnlock(RelationsFrom(Relation::TypeStreetAtUnlock, streetID));
 			streets[streetID] = street;
 		}
 	}
 
-	void StorageHandler::DeleteStreet(const streetID_t streetID)
+	void StorageHandler::DeleteStreet(const StreetID streetID)
 	{
 		if (instance == nullptr)
 		{
@@ -351,7 +351,7 @@ namespace Storage
 		CommitTransactionInternal();
 	}
 
-	void StorageHandler::AllLayers(std::map<layerID_t,DataModel::Layer*>& layers)
+	void StorageHandler::AllLayers(std::map<LayerID,DataModel::Layer*>& layers)
 	{
 		if (instance == nullptr)
 		{
@@ -365,7 +365,7 @@ namespace Storage
 		}
 	}
 
-	void StorageHandler::DeleteLayer(const layerID_t layerID)
+	void StorageHandler::DeleteLayer(const LayerID layerID)
 	{
 		if (instance == nullptr)
 		{
@@ -376,7 +376,7 @@ namespace Storage
 		CommitTransactionInternal();
 	}
 
-	void StorageHandler::AllSignals(std::map<signalID_t,DataModel::Signal*>& signals)
+	void StorageHandler::AllSignals(std::map<SignalID,DataModel::Signal*>& signals)
 	{
 		if (instance == nullptr)
 		{
@@ -391,7 +391,7 @@ namespace Storage
 		}
 	}
 
-	void StorageHandler::DeleteSignal(const signalID_t signalID)
+	void StorageHandler::DeleteSignal(const SignalID signalID)
 	{
 		if (instance == nullptr)
 		{
@@ -465,11 +465,11 @@ namespace Storage
 		for (auto relation : relations)
 		{
 			string serializedRelation = relation->Serialize();
-			instance->SaveRelation(relation->Type(), relation->ObjectID1(), relation->ObjectType2(), relation->ObjectID2(), relation->Priority(), serializedRelation);
+			instance->SaveRelation(relation->GetType(), relation->ObjectID1(), relation->ObjectType2(), relation->ObjectID2(), relation->GetPriority(), serializedRelation);
 		}
 	}
 
-	vector<Relation*> StorageHandler::RelationsFrom(const DataModel::Relation::type_t type, const objectID_t objectID)
+	vector<Relation*> StorageHandler::RelationsFrom(const DataModel::Relation::Type type, const ObjectID objectID)
 	{
 		vector<string> relationStrings;
 		instance->RelationsFrom(type, objectID, relationStrings);

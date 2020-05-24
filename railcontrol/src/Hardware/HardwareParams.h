@@ -29,8 +29,8 @@ namespace Hardware
 	class HardwareParams
 	{
 		public:
-			HardwareParams(controlID_t controlID,
-				hardwareType_t hardwareType,
+			HardwareParams(ControlID controlID,
+				HardwareType hardwareType,
 				std::string name,
 				std::string arg1,
 				std::string arg2,
@@ -49,7 +49,7 @@ namespace Hardware
 			{
 			}
 
-			HardwareParams(Manager* manager, controlID_t controlID)
+			HardwareParams(Manager* manager, ControlID controlID)
 			:	manager(manager),
 				controlID(controlID)
 			{
@@ -57,11 +57,11 @@ namespace Hardware
 
 			void SetManager(const Manager* manager) { this->manager = const_cast<Manager*>(manager); }
 			Manager* GetManager() const { return manager; }
-			controlID_t GetControlID() const { return controlID; }
+			ControlID GetControlID() const { return controlID; }
 			void SetName(const std::string& name) { this->name = name; }
 			const std::string& GetName() const { return name; }
-			void SetHardwareType(const hardwareType_t hardwareType) { this->hardwareType = hardwareType; }
-			hardwareType_t GetHardwareType() const { return hardwareType; }
+			void SetHardwareType(const HardwareType hardwareType) { this->hardwareType = hardwareType; }
+			HardwareType GetHardwareType() const { return hardwareType; }
 			void SetArg1(const std::string& arg) { this->arg1 = arg; }
 			std::string GetArg1() const { return arg1; }
 			void SetArg2(const std::string& arg) { this->arg2 = arg; }
@@ -75,8 +75,8 @@ namespace Hardware
 
 		private:
 			Manager* manager;
-			controlID_t controlID;
-			hardwareType_t hardwareType;
+			ControlID controlID;
+			HardwareType hardwareType;
 			std::string name;
 			std::string arg1;
 			std::string arg2;

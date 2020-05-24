@@ -36,23 +36,23 @@ namespace Hardware
 			 	protocol(ProtocolNone)
 			{}
 
-			Z21LocoCacheEntry(const locoSpeed_t speed, const direction_t direction, const protocol_t protocol)
+			Z21LocoCacheEntry(const Speed speed, const Direction direction, const Protocol protocol)
 			:	speed(speed),
 			 	direction(direction),
 			 	functions(0),
 			 	protocol(protocol)
 			{}
 
-			locoSpeed_t speed;
-			direction_t direction;
+			Speed speed;
+			Direction direction;
 			uint32_t functions;
-			protocol_t protocol;
+			Protocol protocol;
 	};
 
 	class Z21LocoCache
 	{
 		public:
-			Z21LocoCacheEntry GetData(const address_t address)
+			Z21LocoCacheEntry GetData(const Address address)
 			{
 				if (cache.count(address) == 1)
 				{
@@ -62,14 +62,14 @@ namespace Hardware
 				return entry;
 			}
 
-			void SetSpeed(const address_t address, const locoSpeed_t speed)
+			void SetSpeed(const Address address, const Speed speed)
 			{
 				Z21LocoCacheEntry entry = GetData(address);
 				entry.speed = speed;
 				cache[address] = entry;
 			}
 
-			locoSpeed_t GetSpeed(const address_t address)
+			Speed GetSpeed(const Address address)
 			{
 				if (cache.count(address) == 0)
 				{
@@ -78,14 +78,14 @@ namespace Hardware
 				return cache[address].speed;
 			}
 
-			void SetDirection(const address_t address, const direction_t direction)
+			void SetDirection(const Address address, const Direction direction)
 			{
 				Z21LocoCacheEntry entry = GetData(address);
 				entry.direction = direction;
 				cache[address] = entry;
 			}
 
-			direction_t GetDirection(const address_t address)
+			Direction GetDirection(const Address address)
 			{
 				if (cache.count(address) == 0)
 				{
@@ -94,13 +94,13 @@ namespace Hardware
 				return cache[address].direction;
 			}
 
-			void SetSpeedDirectionProtocol(const address_t address, const locoSpeed_t speed, const direction_t direction, const protocol_t protocol)
+			void SetSpeedDirectionProtocol(const Address address, const Speed speed, const Direction direction, const Protocol protocol)
 			{
 				Z21LocoCacheEntry entry(speed, direction, protocol);
 				cache[address] = entry;
 			}
 
-			void SetFunction(const address_t address, const function_t function, const bool on)
+			void SetFunction(const Address address, const Function function, const bool on)
 			{
 				Z21LocoCacheEntry entry = GetData(address);
 				uint32_t mask = ~(1 << function);
@@ -109,7 +109,7 @@ namespace Hardware
 				cache[address] = entry;
 			}
 
-			uint32_t GetFunctions(const address_t address)
+			uint32_t GetFunctions(const Address address)
 			{
 				if (cache.count(address) == 0)
 				{
@@ -118,14 +118,14 @@ namespace Hardware
 				return cache[address].functions;
 			}
 
-			void SetProtocol(const address_t address, const protocol_t protocol)
+			void SetProtocol(const Address address, const Protocol protocol)
 			{
 				Z21LocoCacheEntry entry = GetData(address);
 				entry.protocol = protocol;
 				cache[address] = entry;
 			}
 
-			protocol_t GetProtocol(const address_t address)
+			Protocol GetProtocol(const Address address)
 			{
 				if (cache.count(address) == 0)
 				{
@@ -135,7 +135,7 @@ namespace Hardware
 			}
 
 		private:
-			std::map<address_t, Z21LocoCacheEntry> cache;
+			std::map<Address, Z21LocoCacheEntry> cache;
 	};
 } // namespace
 

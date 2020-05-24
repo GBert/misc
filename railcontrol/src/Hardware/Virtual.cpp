@@ -51,37 +51,37 @@ namespace Hardware
 	{}
 
 	// turn booster on or off
-	void Virtual::Booster(const boosterState_t status)
+	void Virtual::Booster(const BoosterState status)
 	{
 		logger->Info(status ? Languages::TextTurningBoosterOn : Languages::TextTurningBoosterOff);
 	}
 
 	// set loco speed
-	void Virtual::LocoSpeed(const protocol_t protocol, const address_t address, const locoSpeed_t speed)
+	void Virtual::LocoSpeed(const Protocol protocol, const Address address, const Speed speed)
 	{
 		logger->Info(Languages::TextSettingSpeedWithProtocol, protocol, address, speed);
 	}
 
 	// set the direction of a loco
-	void Virtual::LocoDirection(const protocol_t protocol, const address_t address, const direction_t direction)
+	void Virtual::LocoDirection(const Protocol protocol, const Address address, const Direction direction)
 	{
 		logger->Info(Languages::TextSettingDirectionWithProtocol, protocol, address, Languages::GetLeftRight(direction));
 	}
 
 	// set loco function
-	void Virtual::LocoFunction(const protocol_t protocol, const address_t address, const function_t function, const bool on)
+	void Virtual::LocoFunction(const Protocol protocol, const Address address, const Function function, const DataModel::LocoFunctions::FunctionState on)
 	{
 		logger->Info(Languages::TextSettingFunctionWithProtocol, static_cast<int>(function), static_cast<int>(protocol), address, Languages::GetOnOff(on));
 	}
 
 	// accessory command
-	void Virtual::AccessoryOnOrOff(const protocol_t protocol, const address_t address, const accessoryState_t state, const bool on)
+	void Virtual::AccessoryOnOrOff(const Protocol protocol, const Address address, const DataModel::AccessoryState state, const bool on)
 	{
 		logger->Info(Languages::TextSettingAccessoryWithProtocol, static_cast<int>(protocol), address, Languages::GetGreenRed(state), Languages::GetOnOff(on));
 	}
 
 	// read CV value
-	void Virtual::ProgramRead(const ProgramMode mode, const address_t address, const CvNumber cv)
+	void Virtual::ProgramRead(const ProgramMode mode, const Address address, const CvNumber cv)
 	{
 		switch (mode)
 		{
@@ -104,7 +104,7 @@ namespace Hardware
 	}
 
 	// write DCC CV value
-	void Virtual::ProgramWrite(const ProgramMode mode, const address_t address, const CvNumber cv, const CvValue value)
+	void Virtual::ProgramWrite(const ProgramMode mode, const Address address, const CvNumber cv, const CvValue value)
 	{
 		switch (mode)
 		{

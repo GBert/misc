@@ -19,7 +19,7 @@ along with RailControl; see the file LICENCE. If not see
 */
 
 #include <map>
-#include <sstream>
+#include <string>
 
 #include "DataModel/Loco.h"
 #include "DataModel/Relation.h"
@@ -28,8 +28,8 @@ along with RailControl; see the file LICENCE. If not see
 #include "Utils/Utils.h"
 
 using std::map;
-using std::stringstream;
 using std::string;
+using std::to_string;
 
 namespace DataModel
 {
@@ -39,7 +39,7 @@ namespace DataModel
 	 	executeAtUnlock(false)
 	{
 		Deserialize(serialized);
-		Track* track = manager->GetTrack(fromTrack);
+		TrackBase* track = manager->GetTrackBase(fromTrack);
 		if (track == nullptr)
 		{
 			return;
@@ -49,32 +49,34 @@ namespace DataModel
 
 	std::string Street::Serialize() const
 	{
-		stringstream ss;
-		ss << "objectType=Street;"
-			<< LayoutItem::Serialize()
-			<< ";" << LockableItem::Serialize()
-			<< ";delay=" << static_cast<int>(delay)
-			<< ";lastused=" << lastUsed
-			<< ";counter=" << counter
-			<< ";automode=" << static_cast<int>(automode);
+		std::string str;
+		str = "objectType=Street;";
+		str += LayoutItem::Serialize();
+		str += ";" + LockableItem::Serialize();
+		str += ";delay=" + to_string(delay);
+		str += ";lastused=" + to_string(lastUsed);
+		str += ";counter=" + to_string(counter);
+		str += ";automode=" + to_string(automode);
 		if (automode == AutomodeNo)
 		{
-			return ss.str();
+			return str;
 		}
-		ss << ";fromTrack=" << static_cast<int>(fromTrack)
-			<< ";fromDirection=" << static_cast<int>(fromDirection)
-			<< ";toTrack=" << static_cast<int>(toTrack)
-			<< ";toDirection=" << static_cast<int>(toDirection)
-			<< ";speed=" << static_cast<int>(speed)
-			<< ";feedbackIdReduced=" << static_cast<int>(feedbackIdReduced)
-			<< ";feedbackIdCreep=" << static_cast<int>(feedbackIdCreep)
-			<< ";feedbackIdStop=" << static_cast<int>(feedbackIdStop)
-			<< ";feedbackIdOver=" << static_cast<int>(feedbackIdOver)
-			<< ";pushpull=" << static_cast<int>(pushpull)
-			<< ";mintrainlength=" << static_cast<int>(minTrainLength)
-			<< ";maxtrainlength=" << static_cast<int>(maxTrainLength)
-			<< ";waitafterrelease=" << static_cast<int>(waitAfterRelease);
-		return ss.str();
+		str += ";fromTrack=";
+		str += fromTrack;
+		str += ";fromDirection=" + to_string(fromDirection);
+		str += ";toTrack=";
+		str += toTrack;
+		str += ";toDirection=" + string(toDirection == DirectionLeft ? "left" : "right"); // FIXME: change later to int (like fromDirection)
+		str += ";speed=" + to_string(speed);
+		str += ";feedbackIdReduced=" + to_string(feedbackIdReduced);
+		str += ";feedbackIdCreep=" + to_string(feedbackIdCreep);
+		str += ";feedbackIdStop=" + to_string(feedbackIdStop);
+		str += ";feedbackIdOver=" + to_string(feedbackIdOver);
+		str += ";pushpull=" + to_string(pushpull);
+		str += ";mintrainlength=" + to_string(minTrainLength);
+		str += ";maxtrainlength=" + to_string(maxTrainLength);
+		str += ";waitafterrelease=" + to_string(waitAfterRelease);
+		return str;
 	}
 
 	bool Street::Deserialize(const std::string& serialized)
@@ -90,10 +92,10 @@ namespace DataModel
 		LayoutItem::Deserialize(arguments);
 		LockableItem::Deserialize(arguments);
 
-		delay = static_cast<delay_t>(Utils::Utils::GetIntegerMapEntry(arguments, "delay", DefaultDelay));
+		delay = static_cast<Delay>(Utils::Utils::GetIntegerMapEntry(arguments, "delay", DefaultDelay));
 		lastUsed = Utils::Utils::GetIntegerMapEntry(arguments, "lastused", 0);
 		counter = Utils::Utils::GetIntegerMapEntry(arguments, "counter", 0);
-		automode = static_cast<automode_t>(Utils::Utils::GetBoolMapEntry(arguments, "automode", AutomodeNo));
+		automode = static_cast<Automode>(Utils::Utils::GetBoolMapEntry(arguments, "automode", AutomodeNo));
 		if (automode == AutomodeNo)
 		{
 			fromTrack = TrackNone;
@@ -111,10 +113,30 @@ namespace DataModel
 			waitAfterRelease = 0;
 			return true;
 		}
-		fromTrack = Utils::Utils::GetIntegerMapEntry(arguments, "fromTrack", TrackNone);
-		fromDirection = static_cast<direction_t>(Utils::Utils::GetBoolMapEntry(arguments, "fromDirection", DirectionRight));
-		toTrack = Utils::Utils::GetIntegerMapEntry(arguments, "toTrack", TrackNone);
-		toDirection = static_cast<direction_t>(Utils::Utils::GetBoolMapEntry(arguments, "toDirection", DirectionLeft));
+		fromTrack = Utils::Utils::GetStringMapEntry(arguments, "fromTrack");
+		fromDirection = static_cast<Direction>(Utils::Utils::GetBoolMapEntry(arguments, "fromDirection", DirectionRight));
+		toTrack = Utils::Utils::GetStringMapEntry(arguments, "toTrack");
+		std::string directionString = Utils::Utils::GetStringMapEntry(arguments, "toDirection");
+		if (directionString.compare("left") == 0)
+		{
+			toDirection = DirectionLeft;
+		}
+		else if (directionString.compare("right") == 0)
+		{
+			toDirection = DirectionRight;
+		}
+		else if (directionString.compare("0") == 0)
+		{
+			toDirection = DirectionRight; // FIXME: change later to left and serialize with int
+		}
+		else if (directionString.compare("1") == 0)
+		{
+			toDirection = DirectionLeft; // FIXME: change later to right and serialize with int
+		}
+		else
+		{
+			toDirection = DirectionRight;
+		}
 		speed = static_cast<Speed>(Utils::Utils::GetIntegerMapEntry(arguments, "speed", SpeedTravel));
 		feedbackIdReduced = Utils::Utils::GetIntegerMapEntry(arguments, "feedbackIdReduced", FeedbackNone);
 		feedbackIdCreep = Utils::Utils::GetIntegerMapEntry(arguments, "feedbackIdCreep", FeedbackNone);
@@ -122,8 +144,8 @@ namespace DataModel
 		feedbackIdOver = Utils::Utils::GetIntegerMapEntry(arguments, "feedbackIdOver", FeedbackNone);
 		pushpull = static_cast<PushpullType>(Utils::Utils::GetIntegerMapEntry(arguments, "commuter", PushpullTypeBoth)); // FIXME: remove later
 		pushpull = static_cast<PushpullType>(Utils::Utils::GetIntegerMapEntry(arguments, "pushpull", pushpull));
-		minTrainLength = static_cast<length_t>(Utils::Utils::GetIntegerMapEntry(arguments, "mintrainlength", 0));
-		maxTrainLength = static_cast<length_t>(Utils::Utils::GetIntegerMapEntry(arguments, "maxtrainlength", 0));
+		minTrainLength = static_cast<Length>(Utils::Utils::GetIntegerMapEntry(arguments, "mintrainlength", 0));
+		maxTrainLength = static_cast<Length>(Utils::Utils::GetIntegerMapEntry(arguments, "maxtrainlength", 0));
 		waitAfterRelease = Utils::Utils::GetIntegerMapEntry(arguments, "waitafterrelease", 0);
 		return true;
 	}
@@ -153,19 +175,19 @@ namespace DataModel
 		return true;
 	}
 
-	bool Street::FromTrackDirection(Logger::Logger* logger, const trackID_t trackID, const direction_t trackDirection, const Loco* loco, const bool allowLocoTurn)
+	bool Street::FromTrackDirection(Logger::Logger* logger, const ObjectIdentifier& identifier, const Direction trackDirection, const Loco* loco, const bool allowLocoTurn)
 	{
 		if (automode == false)
 		{
 			return false;
 		}
 
-		if (fromTrack != trackID)
+		if (fromTrack != identifier)
 		{
 			return false;
 		}
 
-		const length_t locoLength = loco->GetLength();
+		const Length locoLength = loco->GetLength();
 		if (locoLength < minTrainLength)
 		{
 			logger->Debug(Languages::TextTrainIsToShort, GetName());
@@ -194,15 +216,13 @@ namespace DataModel
 		{
 			return true;
 		}
-		else
-		{
-			logger->Debug(Languages::TextDifferentDirections, GetName());
-			return false;
-		}
+
+		logger->Debug(Languages::TextDifferentDirections, GetName());
+		return false;
 	}
 
 
-	bool Street::Execute(Logger::Logger* logger, const locoID_t locoID)
+	bool Street::Execute(Logger::Logger* logger, const LocoID locoID)
 	{
 		bool isInUse = IsInUse();
 		if (isInUse && locoID != GetLoco())
@@ -211,7 +231,7 @@ namespace DataModel
 			return false;
 		}
 
-		if (manager->Booster() == BoosterStop)
+		if (manager->Booster() == BoosterStateStop)
 		{
 			logger->Debug(Languages::TextBoosterIsTurnedOff);
 			return false;
@@ -232,12 +252,22 @@ namespace DataModel
 		{
 			executeAtUnlock = true;
 		}
+
+		if (fromTrack.GetObjectType() == ObjectTypeSignal)
+		{
+			Signal *signal = dynamic_cast<Signal*>(manager->GetTrackBase(fromTrack));
+			if (signal != nullptr && signal->GetLocoDirection() == DirectionRight)
+			{
+				return manager->SignalState(ControlTypeInternal, signal, SignalStateGreen, true);
+			}
+		}
+
 		return true;
 	}
 
-	bool Street::Reserve(Logger::Logger* logger, const locoID_t locoID)
+	bool Street::Reserve(Logger::Logger* logger, const LocoID locoID)
 	{
-		if (manager->Booster() == BoosterStop)
+		if (manager->Booster() == BoosterStateStop)
 		{
 			logger->Debug(Languages::TextBoosterIsTurnedOff);
 			return false;
@@ -252,13 +282,13 @@ namespace DataModel
 
 		if (automode == AutomodeYes)
 		{
-			Track* track = manager->GetTrack(toTrack);
+			TrackBase* track = manager->GetTrackBase(toTrack);
 			if (track == nullptr)
 			{
 				ReleaseInternal(logger, locoID);
 				return false;
 			}
-			if (track->Reserve(logger, locoID) == false)
+			if (track->BaseReserve(logger, locoID) == false)
 			{
 				ReleaseInternal(logger, locoID);
 				return false;
@@ -277,9 +307,9 @@ namespace DataModel
 		return true;
 	}
 
-	bool Street::Lock(Logger::Logger* logger, const locoID_t locoID)
+	bool Street::Lock(Logger::Logger* logger, const LocoID locoID)
 	{
-		if (manager->Booster() == BoosterStop)
+		if (manager->Booster() == BoosterStateStop)
 		{
 			logger->Debug(Languages::TextBoosterIsTurnedOff);
 			return false;
@@ -294,13 +324,13 @@ namespace DataModel
 
 		if (automode == AutomodeYes)
 		{
-			Track* track = manager->GetTrack(toTrack);
+			TrackBase* track = manager->GetTrackBase(toTrack);
 			if (track == nullptr)
 			{
 				ReleaseInternal(logger, locoID);
 				return false;
 			}
-			if (track->Lock(logger, locoID) == false)
+			if (track->BaseLock(logger, locoID) == false)
 			{
 				ReleaseInternal(logger, locoID);
 				return false;
@@ -319,13 +349,13 @@ namespace DataModel
 		return true;
 	}
 
-	bool Street::Release(Logger::Logger* logger, const locoID_t locoID)
+	bool Street::Release(Logger::Logger* logger, const LocoID locoID)
 	{
 		std::lock_guard<std::mutex> Guard(updateMutex);
 		return ReleaseInternal(logger, locoID);
 	}
 
-	bool Street::ReleaseInternal(Logger::Logger* logger, const locoID_t locoID)
+	bool Street::ReleaseInternal(Logger::Logger* logger, const LocoID locoID)
 	{
 		if (executeAtUnlock)
 		{
@@ -335,19 +365,30 @@ namespace DataModel
 			}
 			executeAtUnlock = false;
 		}
+
 		for (auto relation : relationsAtLock)
 		{
 			relation->Release(logger, locoID);
 		}
+
+		if (fromTrack.GetObjectType() == ObjectTypeSignal)
+		{
+			Signal *signal = dynamic_cast<Signal*>(manager->GetTrackBase(fromTrack));
+			if (signal != nullptr && signal->GetLocoDirection() == DirectionRight)
+			{
+				manager->SignalState(ControlTypeInternal, signal, SignalStateRed, true);
+			}
+		}
+
 		return LockableItem::Release(logger, locoID);
 	}
 
-	void Street::ReleaseInternalWithToTrack(Logger::Logger* logger, const locoID_t locoID)
+	void Street::ReleaseInternalWithToTrack(Logger::Logger* logger, const LocoID locoID)
 	{
-		Track* track = manager->GetTrack(toTrack);
+		TrackBase* track = manager->GetTrackBase(toTrack);
 		if (track != nullptr)
 		{
-			track->Release(logger, locoID);
+			track->BaseRelease(logger, locoID);
 		}
 		ReleaseInternal(logger, locoID);
 	}

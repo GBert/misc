@@ -25,6 +25,7 @@ along with RailControl; see the file LICENCE. If not see
 #include <string>
 #include <thread>
 
+#include "DataModel/AccessoryBase.h"
 #include "HardwareInterface.h"
 #include "HardwareParams.h"
 #include "Hardware/Z21LocoCache.h"
@@ -42,21 +43,21 @@ namespace Hardware
 			AccessoryQueueEntry()
 			:	protocol(ProtocolNone),
 			 	address(AddressNone),
-			 	state(false),
-			 	waitTime(0)
+			 	state(DataModel::DefaultState),
+			 	duration(DataModel::DefaultAccessoryPulseDuration)
 			{}
 
-			AccessoryQueueEntry(const protocol_t protocol, const address_t address, const accessoryState_t state, const waitTime_t waitTime)
+			AccessoryQueueEntry(const Protocol protocol, const Address address, const DataModel::AccessoryState state, const DataModel::AccessoryPulseDuration duration)
 			:	protocol(protocol),
 			 	address(address),
 			 	state(state),
-			 	waitTime(waitTime)
+			 	duration(duration)
 			{}
 
-			protocol_t protocol;
-			address_t address;
-			accessoryState_t state;
-			waitTime_t waitTime;
+			Protocol protocol;
+			Address address;
+			DataModel::AccessoryState state;
+			DataModel::AccessoryPulseDuration duration;
 	};
 
 	class Z21 : HardwareInterface
@@ -73,7 +74,7 @@ namespace Hardware
 			bool CanHandleProgramDccDirect() const override { return true; }
 			bool CanHandleProgramDccPom() const override { return true; }
 
-			void GetLocoProtocols(std::vector<protocol_t>& protocols) const override
+			void GetLocoProtocols(std::vector<Protocol>& protocols) const override
 			{
 				protocols.push_back(ProtocolMM1);
 				protocols.push_back(ProtocolMM15);
@@ -83,7 +84,7 @@ namespace Hardware
 				protocols.push_back(ProtocolDCC128);
 			}
 
-			bool LocoProtocolSupported(protocol_t protocol) const override
+			bool LocoProtocolSupported(Protocol protocol) const override
 			{
 				return (protocol == ProtocolMM1
 					|| protocol == ProtocolMM15
@@ -93,37 +94,37 @@ namespace Hardware
 					|| protocol == ProtocolDCC128);
 			}
 
-			void GetAccessoryProtocols(std::vector<protocol_t>& protocols) const override
+			void GetAccessoryProtocols(std::vector<Protocol>& protocols) const override
 			{
 				protocols.push_back(ProtocolMM);
 				protocols.push_back(ProtocolDCC);
 			}
 
-			bool AccessoryProtocolSupported(protocol_t protocol) const override
+			bool AccessoryProtocolSupported(Protocol protocol) const override
 			{
 				return (protocol == ProtocolMM || protocol == ProtocolDCC);
 			}
 
-			static void GetArgumentTypesAndHint(std::map<unsigned char,argumentType_t>& argumentTypes, std::string& hint)
+			static void GetArgumentTypesAndHint(std::map<unsigned char,ArgumentType>& argumentTypes, std::string& hint)
 			{
-				argumentTypes[1] = IpAddress;
+				argumentTypes[1] = ArgumentTypeIpAddress;
 				hint = Languages::GetText(Languages::TextHintZ21);
 			}
 
-			void Booster(const boosterState_t status) override;
-			void LocoSpeed(const protocol_t protocol, const address_t address, const locoSpeed_t speed) override;
-			void LocoDirection(const protocol_t protocol, const address_t address, const direction_t direction) override;
-			void LocoFunction(const protocol_t protocol, const address_t address, const function_t function, const bool on) override;
-			void LocoSpeedDirectionFunctions(const protocol_t protocol, const address_t address, const locoSpeed_t speed, const direction_t direction, std::vector<bool>& functions) override;
-			void Accessory(const protocol_t protocol, const address_t address, const accessoryState_t state, const waitTime_t waitTime) override;
-			void AccessoryOnOrOff(const protocol_t protocol, const address_t address, const accessoryState_t state, const bool on) override;
-			void ProgramRead(const ProgramMode mode, const address_t address, const CvNumber cv) override;
-			void ProgramWrite(const ProgramMode mode, const address_t address, const CvNumber cv, const CvValue value) override;
+			void Booster(const BoosterState status) override;
+			void LocoSpeed(const Protocol protocol, const Address address, const Speed speed) override;
+			void LocoDirection(const Protocol protocol, const Address address, const Direction direction) override;
+			void LocoFunction(const Protocol protocol, const Address address, const Function function, const DataModel::LocoFunctions::FunctionState on) override;
+			void LocoSpeedDirectionFunctions(const Protocol protocol, const Address address, const Speed speed, const Direction direction, std::vector<DataModel::LocoFunctions::FunctionState>& functions) override;
+			void Accessory(const Protocol protocol, const Address address, const DataModel::AccessoryState state, const DataModel::AccessoryPulseDuration duration) override;
+			void AccessoryOnOrOff(const Protocol protocol, const Address address, const DataModel::AccessoryState state, const bool on) override;
+			void ProgramRead(const ProgramMode mode, const Address address, const CvNumber cv) override;
+			void ProgramWrite(const ProgramMode mode, const Address address, const CvNumber cv, const CvValue value) override;
 
 		private:
 			static const unsigned short Z21Port = 21105;
 			static const unsigned int Z21CommandBufferLength = 1472; // = Max Ethernet MTU
-			static const address_t MaxMMAddress = 255;
+			static const Address MaxMMAddress = 255;
 
 			enum BroadCastFlag : uint32_t
 			{
@@ -234,9 +235,9 @@ namespace Hardware
 			void ProgramMm(const CvNumber cv, const CvValue value);
 			void ProgramDccRead(const CvNumber cv);
 			void ProgramDccWrite(const CvNumber cv, const CvValue value);
-			void ProgramDccPom(const PomDB0 db0, const PomOption option, const address_t address, const CvNumber cv, const CvValue value = 0);
+			void ProgramDccPom(const PomDB0 db0, const PomOption option, const Address address, const CvNumber cv, const CvValue value = 0);
 
-			void LocoSpeedDirection(const protocol_t protocol, const address_t address, const locoSpeed_t speed, const direction_t direction);
+			void LocoSpeedDirection(const Protocol protocol, const Address address, const Speed speed, const Direction direction);
 			void AccessorySender();
 			void HeartBeatSender();
 			void Receiver();
@@ -257,24 +258,24 @@ namespace Hardware
 			void SendLogOff();
 			void SendBroadcastFlags();
 			void SendBroadcastFlags(const BroadCastFlag flags);
-			void SendSetMode(const address_t address, const Command command, const ProtocolMode mode);
-			void SendSetLocoMode(const address_t address, const protocol_t protocol);
-			void SendSetLocoModeMM(const address_t address);
-			void SendSetLocoModeDCC(const address_t address);
-			void SendSetTurnoutMode(const address_t address, const protocol_t protocol);
-			void SendSetTurnoutModeMM(const address_t address);
-			void SendSetTurnoutModeDCC(const address_t address);
-			void AccessoryOn(const protocol_t protocol, const address_t address, const accessoryState_t state);
-			void AccessoryOff(const protocol_t protocol, const address_t address, const accessoryState_t state);
+			void SendSetMode(const Address address, const Command command, const ProtocolMode mode);
+			void SendSetLocoMode(const Address address, const Protocol protocol);
+			void SendSetLocoModeMM(const Address address);
+			void SendSetLocoModeDCC(const Address address);
+			void SendSetTurnoutMode(const Address address, const Protocol protocol);
+			void SendSetTurnoutModeMM(const Address address);
+			void SendSetTurnoutModeDCC(const Address address);
+			void AccessoryOn(const Protocol protocol, const Address address, const DataModel::AccessoryState state);
+			void AccessoryOff(const Protocol protocol, const Address address, const DataModel::AccessoryState state);
 			int Send(const unsigned char* buffer, const size_t bufferLength);
 			int Send(const char* buffer, const size_t bufferLength) { return Send(reinterpret_cast<const unsigned char*>(buffer), bufferLength); }
 
-			unsigned char EncodeSpeed14(const locoSpeed_t speed);
-			unsigned char EncodeSpeed28(const locoSpeed_t speed);
-			unsigned char EncodeSpeed128(const locoSpeed_t speed);
-			locoSpeed_t DecodeSpeed14(unsigned char data);
-			locoSpeed_t DecodeSpeed28(unsigned char data);
-			locoSpeed_t DecodeSpeed128(unsigned char data);
+			unsigned char EncodeSpeed14(const Speed speed);
+			unsigned char EncodeSpeed28(const Speed speed);
+			unsigned char EncodeSpeed128(const Speed speed);
+			Speed DecodeSpeed14(unsigned char data);
+			Speed DecodeSpeed28(unsigned char data);
+			Speed DecodeSpeed128(unsigned char data);
 	};
 
 	extern "C" Z21* create_Z21(const HardwareParams* params);

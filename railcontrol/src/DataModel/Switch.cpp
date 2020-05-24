@@ -31,7 +31,12 @@ namespace DataModel
 {
 	std::string Switch::Serialize() const
 	{
-		return "objectType=Switch;" + Accessory::SerializeWithoutType();
+		stringstream ss;
+		ss << "objectType=Switch;"
+			<< ";" << AccessoryBase::Serialize()
+			<< ";" << LayoutItem::Serialize()
+			<< ";" << LockableItem::Serialize();
+		return ss.str();
 	}
 
 	bool Switch::Deserialize(const std::string& serialized)
@@ -44,7 +49,13 @@ namespace DataModel
 			return false;
 		}
 
-		return Accessory::Deserialize(arguments);
+		AccessoryBase::Deserialize(arguments);
+		LayoutItem::Deserialize(arguments);
+		LockableItem::Deserialize(arguments);
+		SetWidth(Width1);
+		SetHeight(Height1);
+		SetVisible(VisibleYes);
+		return true;
 	}
 } // namespace DataModel
 

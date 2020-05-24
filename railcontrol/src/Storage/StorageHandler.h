@@ -32,32 +32,32 @@ along with RailControl; see the file LICENCE. If not see
 namespace Storage
 {
 	// the types of the class factories
-	typedef Storage::StorageInterface* createStorage_t(const StorageParams* params);
-	typedef void destroyStorage_t(Storage::StorageInterface*);
+	typedef Storage::StorageInterface* CreateStorage(const StorageParams* params);
+	typedef void DestroyStorage(Storage::StorageInterface*);
 
 	class StorageHandler
 	{
 		public:
 			StorageHandler(Manager* manager, const StorageParams* params);
 			~StorageHandler();
-			void AllHardwareParams(std::map<controlID_t,Hardware::HardwareParams*>& hardwareParams);
-			void DeleteHardwareParams(const controlID_t controlID);
-			void AllLocos(std::map<locoID_t,DataModel::Loco*>& locos);
-			void DeleteLoco(locoID_t locoID);
-			void AllAccessories(std::map<accessoryID_t,DataModel::Accessory*>& accessories);
-			void DeleteAccessory(accessoryID_t accessoryID);
-			void AllFeedbacks(std::map<feedbackID_t,DataModel::Feedback*>& feedbacks);
-			void DeleteFeedback(feedbackID_t feedbackID);
-			void AllTracks(std::map<trackID_t,DataModel::Track*>& tracks);
-			void DeleteTrack(trackID_t trackID);
-			void AllSwitches(std::map<switchID_t,DataModel::Switch*>& switches);
-			void DeleteSwitch(switchID_t switchID);
-			void AllStreets(std::map<streetID_t,DataModel::Street*>& streets);
-			void DeleteStreet(streetID_t streetID);
-			void AllLayers(std::map<layerID_t,DataModel::Layer*>& layers);
-			void DeleteLayer(layerID_t layerID);
-			void AllSignals(std::map<signalID_t,DataModel::Signal*>& signals);
-			void DeleteSignal(signalID_t signalID);
+			void AllHardwareParams(std::map<ControlID,Hardware::HardwareParams*>& hardwareParams);
+			void DeleteHardwareParams(const ControlID controlID);
+			void AllLocos(std::map<LocoID,DataModel::Loco*>& locos);
+			void DeleteLoco(LocoID locoID);
+			void AllAccessories(std::map<AccessoryID,DataModel::Accessory*>& accessories);
+			void DeleteAccessory(AccessoryID accessoryID);
+			void AllFeedbacks(std::map<FeedbackID,DataModel::Feedback*>& feedbacks);
+			void DeleteFeedback(FeedbackID feedbackID);
+			void AllTracks(std::map<TrackID,DataModel::Track*>& tracks);
+			void DeleteTrack(TrackID trackID);
+			void AllSwitches(std::map<SwitchID,DataModel::Switch*>& switches);
+			void DeleteSwitch(SwitchID switchID);
+			void AllStreets(std::map<StreetID,DataModel::Street*>& streets);
+			void DeleteStreet(StreetID streetID);
+			void AllLayers(std::map<LayerID,DataModel::Layer*>& layers);
+			void DeleteLayer(LayerID layerID);
+			void AllSignals(std::map<SignalID,DataModel::Signal*>& signals);
+			void DeleteSignal(SignalID signalID);
 			void Save(const Hardware::HardwareParams& hardwareParams);
 			void Save(const DataModel::Street& street);
 			void Save(const DataModel::Loco& loco);
@@ -83,12 +83,12 @@ namespace Storage
 			void StartTransactionInternal();
 			void CommitTransactionInternal();
 			void SaveRelations(const std::vector<DataModel::Relation*> relations);
-			std::vector<DataModel::Relation*> RelationsFrom(const DataModel::Relation::type_t type, const objectID_t objectID);
+			std::vector<DataModel::Relation*> RelationsFrom(const DataModel::Relation::Type type, const ObjectID objectID);
 
 
 			Manager* manager;
-			createStorage_t* createStorage;
-			destroyStorage_t* destroyStorage;
+			CreateStorage* createStorage;
+			DestroyStorage* destroyStorage;
 			Storage::StorageInterface* instance;
 			void* dlhandle;
 			bool transactionRunning;

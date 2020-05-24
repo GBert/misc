@@ -16,6 +16,7 @@ OBJ= \
 	ArgumentHandler.o \
 	Config.o \
 	DataModel/Accessory.o \
+	DataModel/AccessoryBase.o \
 	DataModel/Feedback.o \
 	DataModel/HardwareHandle.o \
 	DataModel/LayoutItem.o \
@@ -28,6 +29,7 @@ OBJ= \
 	DataModel/Street.o \
 	DataModel/Switch.o \
 	DataModel/Track.o \
+	DataModel/TrackBase.o \
 	Hardware/HardwareHandler.o \
 	Languages.o \
 	Logger/Logger.o \
@@ -62,7 +64,7 @@ OBJ= \
 	WebServer/HtmlTagSignal.o \
 	WebServer/HtmlTagStreet.o \
 	WebServer/HtmlTagSwitch.o \
-	WebServer/HtmlTagTrack.o \
+	WebServer/HtmlTagTrackBase.o \
 	WebServer/Response.o \
 	WebServer/WebServer.o
 

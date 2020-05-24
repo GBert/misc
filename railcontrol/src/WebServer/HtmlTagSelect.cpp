@@ -42,7 +42,7 @@ namespace WebServer
 		}
 	}
 
-	HtmlTagSelect::HtmlTagSelect(const std::string& name, const std::map<std::string,Languages::textSelector_t>& options, const std::string& defaultValue)
+	HtmlTagSelect::HtmlTagSelect(const std::string& name, const std::map<std::string,Languages::TextSelector>& options, const std::string& defaultValue)
 	:	HtmlTag("select"),
 	 	commandID("s_" + name)
 	{

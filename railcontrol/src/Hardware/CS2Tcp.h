@@ -33,9 +33,9 @@ namespace Hardware
 			CS2Tcp(const HardwareParams* params);
 			~CS2Tcp();
 
-			static void GetArgumentTypesAndHint(std::map<unsigned char,argumentType_t>& argumentTypes, std::string& hint)
+			static void GetArgumentTypesAndHint(std::map<unsigned char,ArgumentType>& argumentTypes, std::string& hint)
 			{
-				argumentTypes[1] = IpAddress;
+				argumentTypes[1] = ArgumentTypeIpAddress;
 				hint = Languages::GetText(Languages::TextHintCs2Tcp);
 			}
 

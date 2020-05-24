@@ -36,7 +36,7 @@ namespace WebServer
 		std::stringstream ss;
 		ss <<
 			"var on = !document.getElementById('" << commandID << "').classList.contains('button_on');"
-			"var theUrl = '/?cmd=" << parts[0] << "&on=' + on + '";
+			"var theUrl = '/?cmd=" << parts[0] << "&on=' + (on ? '1' : '0') + '";
 
 		for (auto argument : arguments) {
 

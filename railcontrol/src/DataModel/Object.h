@@ -36,24 +36,26 @@ namespace DataModel
 			 	name(std::to_string(objectID))
 			{}
 
-			Object(const objectID_t objectID)
+			Object(const ObjectID objectID)
 			:	objectID(objectID),
 				name(std::to_string(objectID))
 			{}
 
 			virtual ~Object() {}
 
+			virtual ObjectType GetObjectType() const = 0;
+
 			virtual std::string Serialize() const override;
 			virtual bool Deserialize(const std::string& serialized) override;
 
-			objectID_t GetID() const { return objectID; }
+			ObjectID GetID() const { return objectID; }
 			virtual void SetName(const std::string& name) { this->name = name; }
 			const std::string& GetName() const { return name; }
 
 		protected:
 			virtual bool Deserialize(const std::map<std::string,std::string>& arguments);
 
-			objectID_t objectID;
+			ObjectID objectID;
 			std::string name;
 	};
 } // namespace DataModel

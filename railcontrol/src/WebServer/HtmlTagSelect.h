@@ -23,6 +23,7 @@ along with RailControl; see the file LICENCE. If not see
 #include <map>
 #include <string>
 
+#include "DataModel/ObjectIdentifier.h"
 #include "Languages.h"
 #include "WebServer/HtmlTag.h"
 
@@ -37,7 +38,27 @@ namespace WebServer
 			HtmlTagSelect() = delete;
 
 			HtmlTagSelect(const std::string& name, const std::map<std::string,std::string>& options, const std::string& defaultValue = "");
-			HtmlTagSelect(const std::string& name, const std::map<std::string,Languages::textSelector_t>& options, const std::string& defaultValue = "");
+			HtmlTagSelect(const std::string& name, const std::map<std::string,Languages::TextSelector>& options, const std::string& defaultValue = "");
+
+			HtmlTagSelect(const std::string& name, const std::map<std::string,DataModel::ObjectIdentifier>& options, const DataModel::ObjectIdentifier& defaultValue = DataModel::ObjectIdentifier())
+			:	HtmlTag("select"),
+			 	commandID("s_" + name)
+			{
+				AddAttribute("name", name);
+				AddAttribute("id", commandID);
+
+				for (auto option : options)
+				{
+					HtmlTag optionTag("option");
+					optionTag.AddAttribute("value", option.second);
+					optionTag.AddContent(option.first);
+					if (option.second == defaultValue)
+					{
+						optionTag.AddAttribute("selected");
+					}
+					AddChildTag(optionTag);
+				}
+			}
 
 			template<typename T>
 			HtmlTagSelect(const std::string& name, const std::map<std::string,T>& options, const int defaultValue = 0)
@@ -61,7 +82,7 @@ namespace WebServer
 			}
 
 			template<typename T>
-			HtmlTagSelect(const std::string& name, const std::map<T,Languages::textSelector_t>& options, T defaultValue = 0)
+			HtmlTagSelect(const std::string& name, const std::map<T,Languages::TextSelector>& options, T defaultValue = 0)
 			:	HtmlTag("select"),
 			 	commandID("s_" + name)
 			{

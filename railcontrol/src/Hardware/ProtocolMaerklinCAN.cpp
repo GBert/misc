@@ -33,7 +33,7 @@ namespace Hardware
 		*data = 0L;
 	}
 
-	void ProtocolMaerklinCAN::ParseAddressProtocol(const unsigned char* buffer, CanAddress& address, protocol_t& protocol)
+	void ProtocolMaerklinCAN::ParseAddressProtocol(const unsigned char* buffer, CanAddress& address, Protocol& protocol)
 	{
 		address = Utils::Utils::DataBigEndianToInt(buffer + 5);
 		CanAddress maskedAddress = address & 0x0000FC00;
@@ -69,7 +69,7 @@ namespace Hardware
 		address = 0;
 	}
 
-	void ProtocolMaerklinCAN::CreateLocalIDLoco(unsigned char* buffer, const protocol_t& protocol, const address_t& address)
+	void ProtocolMaerklinCAN::CreateLocalIDLoco(unsigned char* buffer, const Protocol& protocol, const Address& address)
 	{
 		uint32_t localID = address;
 		if (protocol == ProtocolDCC)
@@ -84,7 +84,7 @@ namespace Hardware
 		Utils::Utils::IntToDataBigEndian(localID, buffer + 5);
 	}
 
-	void ProtocolMaerklinCAN::CreateLocalIDAccessory(unsigned char* buffer, const protocol_t& protocol, const address_t& address)
+	void ProtocolMaerklinCAN::CreateLocalIDAccessory(unsigned char* buffer, const Protocol& protocol, const Address& address)
 	{
 		uint32_t localID = address - 1; // GUI-address is 1-based, protocol-address is 0-based
 		if (protocol == ProtocolDCC)
@@ -98,7 +98,7 @@ namespace Hardware
 		Utils::Utils::IntToDataBigEndian(localID, buffer + 5);
 	}
 
-	void ProtocolMaerklinCAN::Booster(const boosterState_t status)
+	void ProtocolMaerklinCAN::Booster(const BoosterState status)
 	{
 		unsigned char buffer[CANCommandBufferLength];
 		logger->Info(status ? Languages::TextTurningBoosterOn : Languages::TextTurningBoosterOff);
@@ -107,7 +107,7 @@ namespace Hardware
 		Send(buffer);
 	}
 
-	void ProtocolMaerklinCAN::LocoSpeed(const protocol_t protocol, const address_t address, const locoSpeed_t speed)
+	void ProtocolMaerklinCAN::LocoSpeed(const Protocol protocol, const Address address, const Speed speed)
 	{
 		unsigned char buffer[CANCommandBufferLength];
 		logger->Info(Languages::TextSettingSpeedWithProtocol, protocol, address, speed);
@@ -117,7 +117,7 @@ namespace Hardware
 		Send(buffer);
 	}
 
-	void ProtocolMaerklinCAN::LocoDirection(const protocol_t protocol, const address_t address, const direction_t direction)
+	void ProtocolMaerklinCAN::LocoDirection(const Protocol protocol, const Address address, const Direction direction)
 	{
 		unsigned char buffer[CANCommandBufferLength];
 		logger->Info(Languages::TextSettingDirectionWithProtocol, protocol, address, Languages::GetLeftRight(direction));
@@ -127,18 +127,18 @@ namespace Hardware
 		Send(buffer);
 	}
 
-	void ProtocolMaerklinCAN::LocoFunction(const protocol_t protocol, const address_t address, const function_t function, const bool on)
+	void ProtocolMaerklinCAN::LocoFunction(const Protocol protocol, const Address address, const Function function, const DataModel::LocoFunctions::FunctionState on)
 	{
 		unsigned char buffer[CANCommandBufferLength];
 		logger->Info(Languages::TextSettingFunctionWithProtocol, static_cast<int>(function), static_cast<int>(protocol), address, Languages::GetOnOff(on));
 		CreateCommandHeader(buffer, CanCommandLocoFunction, CanResponseCommand, 6);
 		CreateLocalIDLoco(buffer, protocol, address);
 		buffer[9] = function;
-		buffer[10] = on;
+		buffer[10] = (on == DataModel::LocoFunctions::FunctionStateOn);
 		Send(buffer);
 	}
 
-	void ProtocolMaerklinCAN::AccessoryOnOrOff(const protocol_t protocol, const address_t address, const accessoryState_t state, const bool on)
+	void ProtocolMaerklinCAN::AccessoryOnOrOff(const Protocol protocol, const Address address, const DataModel::AccessoryState state, const bool on)
 	{
 		unsigned char buffer[CANCommandBufferLength];
 		logger->Info(Languages::TextSettingAccessoryWithProtocol, static_cast<int>(protocol), address, Languages::GetGreenRed(state), Languages::GetOnOff(on));
@@ -149,10 +149,10 @@ namespace Hardware
 		Send(buffer);
 	}
 
-	void ProtocolMaerklinCAN::ProgramRead(const ProgramMode mode, const address_t address, const CvNumber cv)
+	void ProtocolMaerklinCAN::ProgramRead(const ProgramMode mode, const Address address, const CvNumber cv)
 	{
-		address_t addressInternal = address;
-		protocol_t protocol = ProtocolNone;
+		Address addressInternal = address;
+		Protocol protocol = ProtocolNone;
 		switch (mode)
 		{
 			case ProgramModeDccDirect:
@@ -176,10 +176,10 @@ namespace Hardware
 		Send(buffer);
 	}
 
-	void ProtocolMaerklinCAN::ProgramWrite(const ProgramMode mode, const address_t address, const CvNumber cv, const CvValue value)
+	void ProtocolMaerklinCAN::ProgramWrite(const ProgramMode mode, const Address address, const CvNumber cv, const CvValue value)
 	{
-		address_t addressInternal = address;
-		protocol_t protocol = ProtocolNone;
+		Address addressInternal = address;
+		Protocol protocol = ProtocolNone;
 		unsigned char controlFlags = 0;
 		switch (mode)
 		{
@@ -238,7 +238,7 @@ namespace Hardware
 					{
 					// s88 event
 					const char *onOff;
-					DataModel::Feedback::feedbackState_t state;
+					DataModel::Feedback::FeedbackState state;
 					if (buffer[10])
 					{
 						onOff = Languages::GetText(Languages::TextOn);
@@ -280,12 +280,12 @@ namespace Hardware
 			{
 				case CanSubCommandStop:
 					// system stop
-					manager->Booster(ControlTypeHardware, BoosterStop);
+					manager->Booster(ControlTypeHardware, BoosterStateStop);
 					break;
 
 				case CanSubCommandGo:
 					// system go
-					manager->Booster(ControlTypeHardware, BoosterGo);
+					manager->Booster(ControlTypeHardware, BoosterStateGo);
 					break;
 			}
 			return;
@@ -295,11 +295,11 @@ namespace Hardware
 		{
 			// loco speed event
 			CanAddress address;
-			protocol_t protocol;
+			Protocol protocol;
 			ParseAddressProtocol(buffer, address, protocol);
-			locoSpeed_t speed = Utils::Utils::DataBigEndianToShort(buffer + 9);
+			Speed speed = Utils::Utils::DataBigEndianToShort(buffer + 9);
 			logger->Info(Languages::TextReceivedSpeedCommand, protocol, address, speed);
-			manager->LocoSpeed(ControlTypeHardware, controlID, protocol, static_cast<address_t>(address), speed);
+			manager->LocoSpeed(ControlTypeHardware, controlID, protocol, static_cast<Address>(address), speed);
 			return;
 		}
 
@@ -307,12 +307,12 @@ namespace Hardware
 		{
 			// loco direction event (implies speed=0)
 			CanAddress address;
-			protocol_t protocol;
+			Protocol protocol;
 			ParseAddressProtocol(buffer, address, protocol);
-			direction_t direction = (buffer[9] == 1 ? DirectionRight : DirectionLeft);
+			Direction direction = (buffer[9] == 1 ? DirectionRight : DirectionLeft);
 			logger->Info(Languages::TextReceivedDirectionCommand, protocol, address, direction);
-			manager->LocoSpeed(ControlTypeHardware, controlID, protocol, static_cast<address_t>(address), MinSpeed);
-			manager->LocoDirection(ControlTypeHardware, controlID, protocol, static_cast<address_t>(address), direction);
+			manager->LocoSpeed(ControlTypeHardware, controlID, protocol, static_cast<Address>(address), MinSpeed);
+			manager->LocoDirection(ControlTypeHardware, controlID, protocol, static_cast<Address>(address), direction);
 			return;
 		}
 
@@ -320,12 +320,12 @@ namespace Hardware
 		{
 			// loco function event
 			CanAddress address;
-			protocol_t protocol;
+			Protocol protocol;
 			ParseAddressProtocol(buffer, address, protocol);
-			function_t function = buffer[9];
-			bool on = buffer[10] != 0;
+			Function function = buffer[9];
+			DataModel::LocoFunctions::FunctionState on = (buffer[10] != 0 ? DataModel::LocoFunctions::FunctionStateOn : DataModel::LocoFunctions::FunctionStateOff);
 			logger->Info(Languages::TextReceivedFunctionCommand, protocol, address, function, on);
-			manager->LocoFunction(ControlTypeHardware, controlID, protocol, static_cast<address_t>(address), function, on);
+			manager->LocoFunction(ControlTypeHardware, controlID, protocol, static_cast<Address>(address), function, on);
 			return;
 		}
 
@@ -333,9 +333,9 @@ namespace Hardware
 		{
 			// accessory event
 			CanAddress address;
-			protocol_t protocol;
+			Protocol protocol;
 			ParseAddressProtocol(buffer, address, protocol);
-			accessoryState_t state = buffer[9];
+			DataModel::AccessoryState state = (buffer[9] ? DataModel::AccessoryStateOn : DataModel::AccessoryStateOff);
 			// GUI-address is 1-based, protocol-address is 0-based
 			++address;
 			logger->Info(Languages::TextReceivedAccessoryCommand, protocol, address, state);

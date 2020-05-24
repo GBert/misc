@@ -31,7 +31,7 @@ namespace Logger
 	class Logger
 	{
 		public:
-			enum logLevel_t : unsigned char
+			enum Level : unsigned char
 			{
 				LevelOff = 0,
 				LevelError,
@@ -62,8 +62,8 @@ namespace Logger
 				LoggerServer::Instance().AddConsoleLogger();
 			}
 
-			static void SetLogLevel(logLevel_t level) { logLevel = level; }
-			static logLevel_t GetLogLevel() { return logLevel; }
+			static void SetLogLevel(Level level) { logLevel = level; }
+			static Level GetLogLevel() { return logLevel; }
 
 			bool IsComponent(const std::string& component) { return component.compare(this->component) == 0; }
 
@@ -103,7 +103,7 @@ namespace Logger
 				return Format(std::string(input), args...);
 			}
 
-			template<typename... Args> void Error(const Languages::textSelector_t text, Args... args)
+			template<typename... Args> void Error(const Languages::TextSelector text, Args... args)
 			{
 				if (logLevel < LevelError)
 				{
@@ -112,7 +112,7 @@ namespace Logger
 				Log("Error", Languages::GetText(text), args...);
 			}
 
-			template<typename... Args> void Warning(const Languages::textSelector_t text, Args... args)
+			template<typename... Args> void Warning(const Languages::TextSelector text, Args... args)
 			{
 				if (logLevel < LevelWarning)
 				{
@@ -121,7 +121,7 @@ namespace Logger
 				Log("Warning", Languages::GetText(text), args...);
 			}
 
-			template<typename... Args> void Info(const Languages::textSelector_t text, Args... args)
+			template<typename... Args> void Info(const Languages::TextSelector text, Args... args)
 			{
 				if (logLevel < LevelInfo)
 				{
@@ -130,7 +130,7 @@ namespace Logger
 				Log("Info", Languages::GetText(text), args...);
 			}
 
-			template<typename... Args> void Debug(const Languages::textSelector_t text, Args... args)
+			template<typename... Args> void Debug(const Languages::TextSelector text, Args... args)
 			{
 				Debug(Languages::GetText(text), args...);
 			}
@@ -149,7 +149,7 @@ namespace Logger
 
 
 		private:
-			static logLevel_t logLevel;
+			static Level logLevel;
 			LoggerServer& server;
 			const std::string component;
 

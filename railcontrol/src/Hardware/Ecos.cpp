@@ -21,6 +21,7 @@ along with RailControl; see the file LICENCE. If not see
 #include <cstring>
 #include <vector>
 
+#include "DataModel/AccessoryBase.h"
 #include "Hardware/Ecos.h"
 #include "Utils/Utils.h"
 
@@ -80,7 +81,7 @@ namespace Hardware
 		logger->Info(Languages::TextTerminatingSenderSocket);
 	}
 
-	void Ecos::LocoSpeed(__attribute__((unused)) const protocol_t protocol, const address_t address, const locoSpeed_t speed)
+	void Ecos::LocoSpeed(__attribute__((unused)) const Protocol protocol, const Address address, const Speed speed)
 	{
 		const unsigned int locoId = address + OffsetLocoAddress;
 		SendGetHandle(locoId);
@@ -88,7 +89,7 @@ namespace Hardware
 		Send(command.c_str());
 	}
 
-	void Ecos::LocoDirection(__attribute__((unused)) const protocol_t protocol, const address_t address, const direction_t direction)
+	void Ecos::LocoDirection(__attribute__((unused)) const Protocol protocol, const Address address, const Direction direction)
 	{
 		const unsigned int locoId = address + OffsetLocoAddress;
 		SendGetHandle(locoId);
@@ -96,15 +97,15 @@ namespace Hardware
 		Send(command.c_str());
 	}
 
-	void Ecos::LocoFunction(__attribute__((unused)) const protocol_t protocol, const address_t address, const function_t function, const bool on)
+	void Ecos::LocoFunction(__attribute__((unused)) const Protocol protocol, const Address address, const Function function, const DataModel::LocoFunctions::FunctionState on)
 	{
 		const unsigned int locoId = address + OffsetLocoAddress;
 		SendGetHandle(locoId);
-		const string command = "set(" + to_string(locoId) + ",func[" + to_string(function) + "," + (on == true ? "1" : "0") + "])\n";
+		const string command = "set(" + to_string(locoId) + ",func[" + to_string(function) + "," + (on == DataModel::LocoFunctions::FunctionStateOn ? "1" : "0") + "])\n";
 		Send(command.c_str());
 	}
 
-	void Ecos::AccessoryOnOrOff(__attribute__((unused)) const protocol_t protocol, const address_t address, const accessoryState_t state, const bool on)
+	void Ecos::AccessoryOnOrOff(__attribute__((unused)) const Protocol protocol, const Address address, const DataModel::AccessoryState state, const bool on)
 	{
 		const unsigned int accessoryId = address + OffsetAccessoryAddress;
 		if (on == false)
@@ -288,7 +289,7 @@ namespace Hardware
 	void Ecos::ParseLocoData()
 	{
 		unsigned int locoId = ParseInt();
-		address_t address = locoId - OffsetLocoAddress;
+		Address address = locoId - OffsetLocoAddress;
 		string name;
 		while(true)
 		{
@@ -313,7 +314,7 @@ namespace Hardware
 	void Ecos::ParseAccessoryData()
 	{
 		unsigned int accessoryId = ParseInt();
-		address_t address = accessoryId - OffsetAccessoryAddress;
+		Address address = accessoryId - OffsetAccessoryAddress;
 		string name1;
 		string name2;
 		string name3;
@@ -348,7 +349,7 @@ namespace Hardware
 	void Ecos::ParseFeedbackData()
 	{
 		int feedbackId = ParseInt();
-		address_t address = feedbackId - OffsetFeedbackModuleAddress;
+		Address address = feedbackId - OffsetFeedbackModuleAddress;
 		SendActivateUpdates(feedbackId);
 		logger->Info(Languages::TextFoundFeedbackModuleInEcosDatabase, address);
 	}
@@ -447,31 +448,31 @@ namespace Hardware
 	{
 		if (Compare("status[GO]", 10))
 		{
-			manager->Booster(ControlTypeHardware, BoosterGo);
+			manager->Booster(ControlTypeHardware, BoosterStateGo);
 		}
 		else if (Compare("status[STOP]", 12))
 		{
-			manager->Booster(ControlTypeHardware, BoosterStop);
+			manager->Booster(ControlTypeHardware, BoosterStateStop);
 		}
 	}
 
 	void Ecos::ParseLocoEvent(int loco)
 	{
-		address_t address = loco - OffsetLocoAddress;
+		Address address = loco - OffsetLocoAddress;
 		string option;
 		string value;
 		ParseOption(option, value);
 
 		if (option.compare("speed") == 0)
 		{
-			locoSpeed_t speed = Utils::Utils::StringToInteger(value) << 3;
+			Speed speed = Utils::Utils::StringToInteger(value) << 3;
 			manager->LocoSpeed(ControlTypeHardware, controlID, ProtocolServer, address, speed);
 			return;
 		}
 
 		if (option.compare("dir") == 0)
 		{
-			direction_t direction = (Utils::Utils::StringToInteger(value) == 1 ? DirectionLeft : DirectionRight);
+			Direction direction = (Utils::Utils::StringToInteger(value) == 1 ? DirectionLeft : DirectionRight);
 			manager->LocoDirection(ControlTypeHardware, controlID, ProtocolServer, address, direction);
 			return;
 		}
@@ -485,8 +486,8 @@ namespace Hardware
 				logger->Error(Languages::TextInvalidDataReceived);
 				return;
 			}
-			function_t function = Utils::Utils::StringToInteger(valueList[0], 0);
-			bool on = Utils::Utils::StringToBool(valueList[1]);
+			Function function = Utils::Utils::StringToInteger(valueList[0], 0);
+			DataModel::LocoFunctions::FunctionState on = Utils::Utils::StringToBool(valueList[1]) ? DataModel::LocoFunctions::FunctionStateOn : DataModel::LocoFunctions::FunctionStateOff;
 			manager->LocoFunction(ControlTypeHardware, controlID, ProtocolServer, address, function, on);
 			return;
 		}
@@ -494,14 +495,14 @@ namespace Hardware
 
 	void Ecos::ParseAccessoryEvent(int accessory)
 	{
-		address_t address = accessory - OffsetAccessoryAddress;
+		Address address = accessory - OffsetAccessoryAddress;
 		string option;
 		int value;
 		ParseOptionInt(option, value);
 
 		if (option.compare("state") == 0)
 		{
-			accessoryState_t state = (value == 0);
+			DataModel::AccessoryState state = (value == 0 ? DataModel::AccessoryStateOn : DataModel::AccessoryStateOff);
 			manager->AccessoryState(ControlTypeHardware, controlID, ProtocolServer, address, state);
 			return;
 		}
@@ -542,7 +543,7 @@ namespace Hardware
 				continue;
 			}
 			const unsigned int address = (module << 3) + pin + 1;
-			const DataModel::Feedback::feedbackState_t state = pinData == 1 ? DataModel::Feedback::FeedbackStateOccupied : DataModel::Feedback::FeedbackStateFree;
+			const DataModel::Feedback::FeedbackState state = pinData == 1 ? DataModel::Feedback::FeedbackStateOccupied : DataModel::Feedback::FeedbackStateFree;
 			manager->FeedbackState(controlID, address, state);
 			logger->Info(Languages::TextFeedbackChange, address & 0x000F, address >> 4, state);
 		}

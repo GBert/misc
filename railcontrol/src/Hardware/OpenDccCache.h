@@ -46,7 +46,7 @@ namespace Hardware
 			OpenDccCache() {};
 			~OpenDccCache() {};
 
-			void SetSpeed(const address_t address, const locoSpeed_t speed)
+			void SetSpeed(const Address address, const Speed speed)
 			{
 				OpenDccCacheEntry entry = GetData(address);
 
@@ -66,7 +66,7 @@ namespace Hardware
 				cache[address] = entry;
 			}
 
-			void SetDirection(const address_t address, const direction_t direction)
+			void SetDirection(const Address address, const Direction direction)
 			{
 				OpenDccCacheEntry entry = GetData(address);
 
@@ -76,26 +76,27 @@ namespace Hardware
 				cache[address] = entry;
 			}
 
-			void SetFunction(const address_t address, const function_t function, const bool on)
+			void SetFunction(const Address address, const Function function, const DataModel::LocoFunctions::FunctionState on)
 			{
+				bool onInternal = static_cast<bool>(on);
 				OpenDccCacheEntry entry = GetData(address);
 
 				if (function == 0)
 				{
 					entry.directionF0 &= ~(1 << 4);
-					entry.directionF0 |= static_cast<unsigned char>(on) << 4;
+					entry.directionF0 |= static_cast<unsigned char>(onInternal) << 4;
 				}
 				else
 				{
 					unsigned char shift = function - 1;
 					entry.functions &= ~(1 << shift);
-					entry.functions |= static_cast<uint32_t>(on) << shift;
+					entry.functions |= static_cast<uint32_t>(onInternal) << shift;
 				}
 
 				cache[address] = entry;
 			}
 
-			OpenDccCacheEntry GetData(const address_t address) const
+			OpenDccCacheEntry GetData(const Address address) const
 			{
 				if (cache.count(address) == 0)
 				{
@@ -107,7 +108,7 @@ namespace Hardware
 			}
 
 		private:
-			std::map<address_t, OpenDccCacheEntry> cache;
+			std::map<Address, OpenDccCacheEntry> cache;
 	};
 } // namespace
 

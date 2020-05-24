@@ -29,10 +29,10 @@ namespace Network
 {
 	TcpConnection TcpClient::GetTcpClientConnection(Logger::Logger* logger, const std::string& host, const unsigned short port)
 	{
-	    struct sockaddr_in ecosAddress;
-	    ecosAddress.sin_family = AF_INET;
-	    ecosAddress.sin_port = htons(port);
-	    int ok = inet_pton(AF_INET, host.c_str(), &ecosAddress.sin_addr);
+	    struct sockaddr_in address;
+	    address.sin_family = AF_INET;
+	    address.sin_port = htons(port);
+	    int ok = inet_pton(AF_INET, host.c_str(), &address.sin_addr);
 	    if (ok <= 0)
 	    {
 			logger->Error(Languages::TextUnableToResolveAddress, host);
@@ -46,10 +46,10 @@ namespace Network
 	        return TcpConnection(0);
 	    }
 
-	    ok = connect(sock, (struct sockaddr *)&ecosAddress, sizeof(ecosAddress));
+	    ok = connect(sock, (struct sockaddr *)&address, sizeof(address));
 	    if (ok < 0)
 	    {
-	    	Languages::textSelector_t text;
+	    	Languages::TextSelector text;
 	    	switch (errno)
 	    	{
 	    		case ECONNREFUSED:

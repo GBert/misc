@@ -38,11 +38,19 @@ namespace Logger
 		run = false;
 
 		// delete all client memory
-		while (clients.size())
+		while (clients.size() > 0)
 		{
 			LoggerClient* client = clients.back();
 			clients.pop_back();
 			delete client;
+		}
+
+		// delete all logger memory
+		while (loggers.size() > 0)
+		{
+			Logger* logger = loggers.back();
+			loggers.pop_back();
+			delete logger;
 		}
 	}
 

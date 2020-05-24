@@ -33,23 +33,23 @@ namespace Hardware
 			:	protocol(ProtocolNone)
 			{}
 
-			Z21TurnoutCacheEntry(const protocol_t protocol)
+			Z21TurnoutCacheEntry(const Protocol protocol)
 			:	protocol(protocol)
 			{}
 
-			protocol_t protocol;
+			Protocol protocol;
 	};
 
 	class Z21TurnoutCache
 	{
 		public:
-			void SetProtocol(const address_t address, const protocol_t protocol)
+			void SetProtocol(const Address address, const Protocol protocol)
 			{
 				Z21TurnoutCacheEntry entry(protocol);
 				cache[address] = entry;
 			}
 
-			protocol_t GetProtocol(const address_t address)
+			Protocol GetProtocol(const Address address)
 			{
 				if (cache.count(address) == 0)
 				{
@@ -59,7 +59,7 @@ namespace Hardware
 			}
 
 		private:
-			std::map<address_t, Z21TurnoutCacheEntry> cache;
+			std::map<Address, Z21TurnoutCacheEntry> cache;
 	};
 } // namespace
 

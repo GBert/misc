@@ -25,12 +25,19 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace DataModel
 {
-	class LocoFunctions : Serializable
+	class LocoFunctions : private Serializable
 	{
 		public:
+			enum FunctionState : unsigned char
+			{
+				FunctionStateOff = 0,
+				FunctionStateOn,
+				FunctionStatePulse
+			};
+
 			LocoFunctions()
 			:	count(1),
-			 	states{0}
+			 	states{FunctionStateOff}
 			{
 			}
 
@@ -40,7 +47,7 @@ namespace DataModel
 				Deserialize(serialized);
 			}
 
-			void SetFunction(const function_t nr, const bool state)
+			void SetFunction(const Function nr, const FunctionState state)
 			{
 				if (nr >= MaxCount)
 				{
@@ -49,34 +56,34 @@ namespace DataModel
 				states[nr] = state;
 			}
 
-			bool GetFunction(const function_t nr) const
+			FunctionState GetFunction(const Function nr) const
 			{
 				if (nr >= MaxCount)
 				{
-					return false;
+					return FunctionStateOff;
 				}
-				bool out = states[nr];
+				FunctionState out = states[nr];
 				return out;
 			}
 
-			std::vector<bool> GetFunctions() const
+			std::vector<FunctionState> GetFunctions() const
 			{
-				std::vector<bool> out;
-				for (function_t i = 0; i < count; ++i)
+				std::vector<FunctionState> out;
+				for (Function i = 0; i < count; ++i)
 				{
 					out.push_back(states[i]);
 				}
 				return out;
 			}
 
-			void SetNrOfFunctions(const function_t nr)
+			void SetNrOfFunctions(const Function nr)
 			{
 				// externally we count the functions additional to F0
 				// internally we count all the functions including F0
 				count = nr + 1;
 			}
 
-			function_t GetNrOfFunctions() const
+			Function GetNrOfFunctions() const
 			{
 				return count - 1;
 			}
@@ -84,7 +91,7 @@ namespace DataModel
 			std::string Serialize() const override
 			{
 				std::string out;
-				for (function_t i = 0; i < count; ++i)
+				for (Function i = 0; i < count; ++i)
 				{
 					out += (states[i] ? "1" : "0");
 				}
@@ -98,24 +105,28 @@ namespace DataModel
 				{
 					count = MaxCount;
 				}
-				for (function_t i = 0; i < count; ++i)
+				for (Function i = 0; i < count; ++i)
 				{
-					states[i] = serialized[i] == '1';
+					switch(serialized[i])
+					{
+						case '1':
+							states[i] = FunctionStateOn;
+							break;
+
+						case '0':
+						default:
+							states[i] = FunctionStateOff;
+							break;
+					}
 				}
 				return true;
 			}
 
-			static const function_t MaxFunctions = 32;
-			enum locoFunctionTypes : unsigned char
-			{
-				Off = 0,
-				On,
-				Pulse
-			};
+			static const Function MaxFunctions = 32;
 
 		private:
-			static const function_t MaxCount = MaxFunctions + 1; // f0 - f32 = 33
-			function_t count;
-			bool states[MaxCount];
+			static const Function MaxCount = MaxFunctions + 1; // f0 - f32 = 33
+			Function count;
+			FunctionState states[MaxCount];
 	};
 } // namespace DataModel

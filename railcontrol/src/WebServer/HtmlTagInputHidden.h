@@ -22,6 +22,7 @@ along with RailControl; see the file LICENCE. If not see
 
 #include <string>
 
+#include "DataModel/ObjectIdentifier.h"
 #include "WebServer/HtmlTagInput.h"
 
 namespace WebServer
@@ -30,8 +31,14 @@ namespace WebServer
 	{
 		public:
 			HtmlTagInputHidden() = delete;
+
+			HtmlTagInputHidden(const DataModel::ObjectIdentifier& identifier)
+			:	HtmlTagInput("hidden", identifier.GetObjectTypeAsString(), identifier.GetObjectIdAsString())
+			{}
+
 			HtmlTagInputHidden(const std::string& name, const std::string& value)
-			: HtmlTagInput("hidden", name, value) {};
+			:	HtmlTagInput("hidden", name, value)
+			{};
 	};
 };
 
