@@ -9,4 +9,7 @@ Main Goal
 XpressNet with 62500
 Atomatically generating 9bit for adress and data bit
 
+Links
+-----
+https://stackoverflow.com/questions/30035776/how-to-add-poll-function-to-the-kernel-module-code
 
