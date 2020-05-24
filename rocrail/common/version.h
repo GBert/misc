@@ -1,11 +1,20 @@
 const int revisionnr = 
-746
+755
 ;
 const char* commithash = 
-"593ab728e2bfea385166d33c18a4fdd00e214c29";
+"fe5f31661ea803866669606209549b59a03fc906";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"755 2020-05-24 08:19:43 +0200 model: generate unregistered sensor option added\n" \
+"754 2020-05-23 12:21:54 +0200 cv: use default spinctrl size\n" \
+"753 2020-05-23 08:51:45 +0200 rocrailinidialog: service tab time units added\n" \
+"752 2020-05-23 08:45:45 +0200 rocrailinidialog: automatic tab time units added\n" \
+"751 2020-05-22 15:05:12 +0200 rocs userial: regard ENOTTY also as device error\n" \
+"750 2020-05-22 11:30:36 +0200 loc: isState extended with schedule ID\n" \
+"749 2020-05-22 09:39:16 +0200 textdialog: max slider range minimal value reduced\n" \
+"748 2020-05-22 08:10:32 +0200 wiodlg: railcom cutout option\n" \
+"747 2020-05-21 07:40:51 +0200 model: revert clean up prev_* attributes\n" \
 "746 2020-05-20 08:14:54 +0200 lieth: trace corrections\n" \
 "745 2020-05-20 08:06:06 +0200 lieth: trace fix at disconnect\n" \
 "744 2020-05-19 14:57:43 +0200 car: adjust function group in case of mapping\n" \
