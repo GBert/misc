@@ -1,11 +1,12 @@
 const int revisionnr = 
-755
+756
 ;
 const char* commithash = 
-"fe5f31661ea803866669606209549b59a03fc906";
+"53d6115ef490ce618b9816788ff840587ea8377c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"756 2020-05-25 08:52:18 +0200 text: fix for mvtrainlen variable\n" \
 "755 2020-05-24 08:19:43 +0200 model: generate unregistered sensor option added\n" \
 "754 2020-05-23 12:21:54 +0200 cv: use default spinctrl size\n" \
 "753 2020-05-23 08:51:45 +0200 rocrailinidialog: service tab time units added\n" \
