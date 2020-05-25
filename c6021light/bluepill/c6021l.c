@@ -233,7 +233,7 @@ static void i2c_slave_init(uint8_t ownaddress) {
 
     nvic_enable_irq(NVIC_I2C2_EV_IRQ);
 
-    // configure i2c pins
+    /* configure I2C2 pins */
     gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_ALTFN_OPENDRAIN, GPIO_I2C2_SDA);
     gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_ALTFN_OPENDRAIN, GPIO_I2C2_SCL);
 
