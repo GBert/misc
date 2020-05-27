@@ -1,11 +1,12 @@
 const int revisionnr = 
-756
+757
 ;
 const char* commithash = 
-"53d6115ef490ce618b9816788ff840587ea8377c";
+"53206f97d4a75b22916a9849a1741000913b1f94";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"757 2020-05-27 15:49:08 +0200 cbus: WIO support\n" \
 "756 2020-05-25 08:52:18 +0200 text: fix for mvtrainlen variable\n" \
 "755 2020-05-24 08:19:43 +0200 model: generate unregistered sensor option added\n" \
 "754 2020-05-23 12:21:54 +0200 cv: use default spinctrl size\n" \
