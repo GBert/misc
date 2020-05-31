@@ -1,11 +1,20 @@
 const int revisionnr = 
-757
+766
 ;
 const char* commithash = 
-"53206f97d4a75b22916a9849a1741000913b1f94";
+"0146038987b6f31c3270b605572428e706f18b5c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"766 2020-05-31 08:32:01 +0200 dialogs: time unit labels (wip)\n" \
+"765 2020-05-31 08:03:32 +0200 trackpicker: revert\n" \
+"764 2020-05-30 18:10:48 +0200 trackpickerdlg: block correction\n" \
+"763 2020-05-30 18:02:21 +0200 trackpickerdlg: block fix\n" \
+"762 2020-05-30 10:39:18 +0200 locdialog: time unit lables added\n" \
+"761 2020-05-30 10:08:17 +0200 car: 32 functions support\n" \
+"760 2020-05-30 08:07:35 +0200 model,loc: restore reservation after processing the occupancy file\n" \
+"759 2020-05-28 15:46:07 +0200 rocdigs make file: p50 added\n" \
+"758 2020-05-28 14:20:31 +0200 cbus: wio support (wip)\n" \
 "757 2020-05-27 15:49:08 +0200 cbus: WIO support\n" \
 "756 2020-05-25 08:52:18 +0200 text: fix for mvtrainlen variable\n" \
 "755 2020-05-24 08:19:43 +0200 model: generate unregistered sensor option added\n" \
