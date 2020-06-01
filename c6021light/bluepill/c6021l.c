@@ -42,9 +42,14 @@ CANTX B9                           C15
 extern struct ring output_ring;
 extern struct ring input_ring;
 volatile unsigned int counter;
+volatile uint32_t i2c_val;
+volatile uint32_t i2c_address;
 volatile uint8_t status;
 volatile uint8_t commands_pending;
 uint8_t d_data[8];
+volatile uint8_t i2c_data[8];
+uint32_t reading, writing;
+volatile uint8_t *write_p;
 
 static void gpio_setup(void) {
     /*  GPIOB & GPIOC clock */
@@ -212,7 +217,7 @@ static void can_setup(void) {
     can_enable_irq(CAN1, CAN_IER_FMPIE0);
 }
 
-static void send_can_data(void) {
+static void send_can_data(uint32_t val) {
     bool ext, rtr;
     uint8_t dlc, data[8] = {0};
     uint32_t id;
@@ -220,8 +225,12 @@ static void send_can_data(void) {
 
     rtr = 0; 
     ext = 1;
-    dlc = 8;
-    id = 0x00600300;
+    dlc = 6;
+    id = 0x00160300;
+    data[0] = (val >> 24) & 0xff;
+    data[1] = (val >> 16) & 0xff;
+    data[2] = (val >>  8) & 0xff;
+    data[3] = val & 0xff;
 
     ret = can_transmit(CAN1, id, ext, rtr, dlc, data);
     gpio_debug(ret);
@@ -261,7 +270,7 @@ void sys_tick_handler(void) {
     if (counter == 500) {
 	counter = 0;
 	gpio_toggle(GPIOC, GPIO13);	/* toggle green LED */
-        send_can_data();
+        //send_can_data();
     }
 }
 
@@ -279,20 +288,40 @@ void usb_lp_can_rx0_isr(void) {
 void i2c2_ev_isr(void) {
     uint32_t sr1, sr2;
 
+
     sr1 = I2C_SR1(I2C2);
+    i2c_val = sr1;
 
     // Address matched (Slave)
     if (sr1 & I2C_SR1_ADDR) {
+	reading = 0;
+	writing = 3;
+	write_p = i2c_data;
         //Clear the ADDR sequence by reading SR2.
         sr2 = I2C_SR2(I2C2);
         (void) sr2;
     }
     // Receive buffer not empty
     else if (sr1 & I2C_SR1_RxNE) {
-        //ignore more than 3 bytes reading
+	if (reading == 0) {
+	    i2c_data[0] = i2c_get_data(I2C2) >> 1; 
+	    i2c_data[1] = 0xFE;
+	}
+	if (reading == 1) {
+	    i2c_data[2] = i2c_get_data(I2C2);
+	    send_can_data((i2c_data[0] << 16) | (i2c_data[1] << 8) | (i2c_data[2]));
+	    /* TODO seems to be ignored */
+	    i2c_peripheral_enable(I2C2);
+	    i2c_send_data(I2C2, *write_p++);
+	}
+        //ignore more than 2 bytes reaing
+	if (reading >= 2)
+	    return;
+	reading++;
     }
     // Transmit buffer empty & Data byte transfer not finished
     else if ((sr1 & I2C_SR1_TxE) && !(sr1 & I2C_SR1_BTF)) {
+	 i2c_send_data(I2C2, *write_p++);
         //send data to master in MSB order
     }
     // done by master by sending STOP
@@ -303,23 +332,30 @@ void i2c2_ev_isr(void) {
     //this event happens when slave is in transmit mode at the end of communication
     else if (sr1 & I2C_SR1_AF) {
         //(void) I2C_SR1(I2C1);
-        I2C_SR1(I2C1) &= ~(I2C_SR1_AF);
+        I2C_SR1(I2C2) &= ~(I2C_SR1_AF);
     }
 }
 
 int main(void) {
+    uint32_t i2c_val_old;
     status = 0;
     commands_pending = 0;
+    i2c_val_old = 0;
 
     rcc_clock_setup_in_hse_8mhz_out_72mhz();
     gpio_setup();
     can_setup();
-    i2c_slave_init(0x7F);
+    i2c_slave_init(0x7f);
 
     systick_setup();
 
+
     /* endless loop */
     while (1) {
+	if (i2c_val_old != i2c_val) {
+	    send_can_data(i2c_val);
+	    i2c_val_old = i2c_val;
+	}
     }
     return 0;
 }
