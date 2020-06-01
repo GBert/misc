@@ -309,10 +309,6 @@ void i2c2_ev_isr(void) {
 	}
 	if (reading == 1) {
 	    i2c_data[2] = i2c_get_data(I2C2);
-	    send_can_data((i2c_data[0] << 16) | (i2c_data[1] << 8) | (i2c_data[2]));
-	    /* TODO seems to be ignored */
-	    i2c_peripheral_enable(I2C2);
-	    i2c_send_data(I2C2, *write_p++);
 	}
         //ignore more than 2 bytes reaing
 	if (reading >= 2)
@@ -327,7 +323,9 @@ void i2c2_ev_isr(void) {
     // done by master by sending STOP
     //this event happens when slave is in Recv mode at the end of communication
     else if (sr1 & I2C_SR1_STOPF) {
-        i2c_peripheral_enable(I2C2);
+	send_can_data((i2c_data[0] << 16) | (i2c_data[1] << 8) | (i2c_data[2]));
+	i2c_peripheral_enable(I2C2);
+	i2c_send_data(I2C2, *write_p++);
     }
     //this event happens when slave is in transmit mode at the end of communication
     else if (sr1 & I2C_SR1_AF) {
