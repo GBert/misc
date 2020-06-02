@@ -1,11 +1,12 @@
 const int revisionnr = 
-766
+767
 ;
 const char* commithash = 
-"0146038987b6f31c3270b605572428e706f18b5c";
+"6988054524da55b2ed76cf88dfe4940af41e5a58";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"767 2020-06-01 11:58:20 +0200 cardlg: fx range extended to 32\n" \
 "766 2020-05-31 08:32:01 +0200 dialogs: time unit labels (wip)\n" \
 "765 2020-05-31 08:03:32 +0200 trackpicker: revert\n" \
 "764 2020-05-30 18:10:48 +0200 trackpickerdlg: block correction\n" \
