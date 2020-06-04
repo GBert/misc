@@ -1,11 +1,18 @@
 const int revisionnr = 
-767
+774
 ;
 const char* commithash = 
-"6988054524da55b2ed76cf88dfe4940af41e5a58";
+"de953035e86e43d7084bc20bcdce38c37ca2c226";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"774 2020-06-04 15:21:06 +0200 guiframe: fix for looking up the loco block; skip reserved blocks\n" \
+"773 2020-06-04 10:08:57 +0200 rasciiutils: WIP\n" \
+"772 2020-06-03 15:30:18 +0200 guiframe: fix for mapping loco to block in case its also in a virtual block\n" \
+"771 2020-06-03 10:27:28 +0200 block: free action on reset block reservation\n" \
+"770 2020-06-03 10:12:23 +0200 renderer: fix for new SVG objects in case size > 32\n" \
+"769 2020-06-03 09:03:21 +0200 model: restore reservation after init blocks\n" \
+"768 2020-06-02 10:16:39 +0200 guiframe: fix for crash on right click train image\n" \
 "767 2020-06-01 11:58:20 +0200 cardlg: fx range extended to 32\n" \
 "766 2020-05-31 08:32:01 +0200 dialogs: time unit labels (wip)\n" \
 "765 2020-05-31 08:03:32 +0200 trackpicker: revert\n" \
