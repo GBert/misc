@@ -39,12 +39,12 @@
 				<?php
 					$dirname = "loco_icons/";
 					$images = scandir($dirname);
-					shuffle($images);
+//					shuffle($images);
 					$ignore = Array(".", "..", "default.png");
 					foreach($images as $curimg){
 						if(!in_array($curimg, $ignore) && (strpos($curimg, 'jpg') || strpos($curimg, 'png'))) {
 							$js_function = "setIcon(`".$curimg."`);";
-							echo "<img id=".$curimg." class='preview_icon' src=".$dirname.$curimg." onclick='setIcon(`".$curimg."`);'/>";
+							echo "<img id='$curimg' class='preview_icon' src='$dirname$curimg' onclick='setIcon(`".$curimg."`);'/>";
 						}
 					}                 
 				?>

@@ -207,7 +207,8 @@ function hex2a(hexx) {
 function configUpdate(config) { 
   // Config-Datei aktualisieren
 
-  fs.writeFile('./config.json', JSON.stringify(config, null, 2), console.log('Updated config.'));
+  fs.writeFile('./config.json', JSON.stringify(config, null, 2), function(){
+    console.log('Updated config.')  });
 }
 
 function crc16(s) {
@@ -1193,7 +1194,8 @@ wsServer.on('request', function(request){
         }
       }
   
-      fs.writeFile(devices_path, JSON.stringify(devices, null, 2), console.log("updating devices entry."));
+      fs.writeFile(devices_path, JSON.stringify(devices, null, 2), function(){
+        console.log("updating devices entry.")  });
       
     
     } else if (cmd == 'progCV') {
@@ -1210,7 +1212,8 @@ wsServer.on('request', function(request){
         }
       }
       
-      fs.writeFile(devices_path, JSON.stringify(devices, null, 2), console.log("Deleting device " + msg[1]));
+      fs.writeFile(devices_path, JSON.stringify(devices, null, 2), function(){
+        console.log("Deleting device " + msg[1]);   });
 
       ping();
     
@@ -1261,7 +1264,7 @@ udpServer.on('message', (udp_msg, rinfo) => {
   if (cmd == (SYSTEM_CMD + 1)) {
     var sub_cmd = parseInt(udp_msg[9]);
     
-  	if (sub_cmd == SYS_STOP) {
+	if ((sub_cmd == SYS_STOP) || (sub_cmd == SYS_OVERLOAD)) {
   		ws_msg = 'stop';
   		power = false;
     
@@ -1354,16 +1357,19 @@ udpServer.on('message', (udp_msg, rinfo) => {
       if (chanel > 0 && chanel <= device.status_chanels) {
         let status_chanel = buildStatusChanelInfo(config_buffer);
         device.status_chanels_info[chanel - 1] = status_chanel;
-        fs.writeFile(devices_path, JSON.stringify(devices, null, 2), console.log("updating devices entry."));
+        fs.writeFile(devices_path, JSON.stringify(devices, null, 2), function(){
+            console.log("updating devices entry."); });
       
       } else if (chanel == 0) {
         device = buildDeviceInfo(config_buffer, device);
-        fs.writeFile(devices_path, JSON.stringify(devices, null, 2), console.log("updating devices entry."));
+        fs.writeFile(devices_path, JSON.stringify(devices, null, 2), function(){
+            console.log("updating devices entry."); });
       
       } else if (chanel > 0 && chanel <= device.config_chanels && chanel >= device.status_chanels){
         let config_chanel = buildConfigChanelInfo(config_buffer);
         device.config_chanels_info[chanel - 1] = config_chanel;
-        fs.writeFile(devices_path, JSON.stringify(devices, null, 2), console.log("updating devices entry."));
+        fs.writeFile(devices_path, JSON.stringify(devices, null, 2), function(){
+            console.log("updating devices entry.")  });
       }
       bussy_fetching = false;
     }
@@ -1471,7 +1477,7 @@ setInterval(() => {
 }, 10000);
   // Alle 10 Sekunden einen Ping senden
 
-setInterval(function(){
+if (master) { setInterval(function(){
   let gbox_found = false;
   for (let i = 0; i < devices.length; i++) {
     if (devices[i].type == 10) {
@@ -1482,7 +1488,7 @@ setInterval(function(){
   if(!gbox_found) {
     sendDatagram([0,BOOTL_CAN,3,0,0,0,0,0,0,0,0,0,0]);
   }
-}, 1000);
+}, 1000);   }
 
 var data_fetcher = setInterval(function(){
   // Configdaten aus CAN-Geräten auslesen
