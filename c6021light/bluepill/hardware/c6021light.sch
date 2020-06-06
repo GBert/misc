@@ -117,19 +117,6 @@ Wire Wire Line
 Wire Wire Line
 	1850 2700 1850 2800
 $Comp
-L Connector_Generic:Conn_01x02 J2
-U 1 1 5ED7F86F
-P 2525 1625
-F 0 "J2" V 2443 1705 50  0000 L CNN
-F 1 "Conn_01x02" V 2488 1705 50  0001 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 2525 1625 50  0001 C CNN
-F 3 "~" H 2525 1625 50  0001 C CNN
-	1    2525 1625
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	2425 1425 2175 1425
-$Comp
 L power:GND #PWR0103
 U 1 1 5ED81973
 P 1850 2925
@@ -764,7 +751,7 @@ U 1 1 5F293D84
 P 5950 3875
 F 0 "D1" V 5989 3757 50  0000 R CNN
 F 1 "LED" V 5898 3757 50  0000 R CNN
-F 2 "LED_THT:LED_D5.0mm" H 5950 3875 50  0001 C CNN
+F 2 "LED_THT:LED_D3.0mm" H 5950 3875 50  0001 C CNN
 F 3 "~" H 5950 3875 50  0001 C CNN
 	1    5950 3875
 	0    -1   -1   0   
@@ -887,77 +874,47 @@ Wire Wire Line
 	1225 3550 1225 3650
 Connection ~ 1225 3550
 Wire Wire Line
-	1425 3550 1225 3550
-Wire Wire Line
 	1225 3650 1225 3750
 Connection ~ 1225 3650
-Wire Wire Line
-	1425 3650 1225 3650
 Wire Wire Line
 	1225 3750 1225 3850
 Connection ~ 1225 3750
 Wire Wire Line
-	1425 3750 1225 3750
-Wire Wire Line
 	1225 3850 1225 3950
 Connection ~ 1225 3850
-Wire Wire Line
-	1425 3850 1225 3850
 Wire Wire Line
 	1225 3950 1225 4050
 Connection ~ 1225 3950
 Wire Wire Line
-	1425 3950 1225 3950
-Wire Wire Line
 	1225 4050 1225 4150
 Connection ~ 1225 4050
-Wire Wire Line
-	1425 4050 1225 4050
 Wire Wire Line
 	1225 4150 1225 4250
 Connection ~ 1225 4150
 Wire Wire Line
-	1425 4150 1225 4150
-Wire Wire Line
 	1225 4250 1225 4350
 Connection ~ 1225 4250
-Wire Wire Line
-	1425 4250 1225 4250
 Wire Wire Line
 	1225 4350 1225 4450
 Connection ~ 1225 4350
 Wire Wire Line
-	1425 4350 1225 4350
-Wire Wire Line
 	1225 4450 1225 4550
 Connection ~ 1225 4450
-Wire Wire Line
-	1425 4450 1225 4450
 Wire Wire Line
 	1225 4550 1225 4650
 Connection ~ 1225 4550
 Wire Wire Line
-	1425 4550 1225 4550
-Wire Wire Line
 	1225 4650 1225 4750
 Connection ~ 1225 4650
-Wire Wire Line
-	1425 4650 1225 4650
 Wire Wire Line
 	1225 4750 1225 4850
 Connection ~ 1225 4750
 Wire Wire Line
-	1425 4750 1225 4750
-Wire Wire Line
 	1225 4850 1225 4950
 Connection ~ 1225 4850
 Wire Wire Line
-	1425 4850 1225 4850
-Wire Wire Line
 	1225 4950 1225 5100
 Connection ~ 1225 4950
-Wire Wire Line
-	1425 4950 1225 4950
 $Comp
 L power:GND #PWR0117
 U 1 1 5EE50DE0
@@ -971,8 +928,6 @@ F 3 "" H 1225 5100 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	1225 3450 1225 3550
-Wire Wire Line
-	1425 3450 1225 3450
 $Comp
 L Device:C C4
 U 1 1 5F6CD270
@@ -1607,7 +1562,7 @@ U 1 1 5FFBECB1
 P 7400 4825
 F 0 "D20" V 7425 5025 50  0000 R CNN
 F 1 "LED" V 7300 5025 50  0000 R CNN
-F 2 "LED_THT:LED_D5.0mm" H 7400 4825 50  0001 C CNN
+F 2 "LED_THT:LED_D3.0mm" H 7400 4825 50  0001 C CNN
 F 3 "~" H 7400 4825 50  0001 C CNN
 	1    7400 4825
 	0    -1   -1   0   
@@ -1695,7 +1650,7 @@ U 1 1 6019C61B
 P 7400 5850
 F 0 "D21" V 7450 6050 50  0000 R CNN
 F 1 "LED" V 7350 6050 50  0000 R CNN
-F 2 "LED_THT:LED_D5.0mm" H 7400 5850 50  0001 C CNN
+F 2 "LED_THT:LED_D3.0mm" H 7400 5850 50  0001 C CNN
 F 3 "~" H 7400 5850 50  0001 C CNN
 	1    7400 5850
 	0    -1   -1   0   
@@ -1779,7 +1734,7 @@ U 1 1 604CA6FE
 P 4725 6000
 F 0 "C51" H 4625 6100 50  0000 L CNN
 F 1 "100n" H 4575 5925 50  0000 L CNN
-F 2 "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm" H 4763 5850 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 4763 5850 50  0001 C CNN
 F 3 "~" H 4725 6000 50  0001 C CNN
 	1    4725 6000
 	1    0    0    -1  
@@ -1863,7 +1818,7 @@ U 1 1 605C1441
 P 6075 6800
 F 0 "J51" H 6025 6325 50  0000 L CNN
 F 1 "Conn_01x06" H 6155 6701 50  0001 L CNN
-F 2 "Connector_PinSocket_2.54mm:PinSocket_1x06_P2.54mm_Vertical" H 6075 6800 50  0001 C CNN
+F 2 "Connector_PinHeader_2.00mm:PinHeader_1x06_P2.00mm_Vertical" H 6075 6800 50  0001 C CNN
 F 3 "~" H 6075 6800 50  0001 C CNN
 	1    6075 6800
 	1    0    0    -1  
@@ -1891,7 +1846,7 @@ U 1 1 608B1BB2
 P 6675 6475
 F 0 "J52" H 6755 6467 50  0000 L CNN
 F 1 "Debug UART" H 6500 6075 50  0000 L CNN
-F 2 "Connector_PinSocket_2.54mm:PinSocket_1x06_P2.54mm_Vertical" H 6675 6475 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical" H 6675 6475 50  0001 C CNN
 F 3 "~" H 6675 6475 50  0001 C CNN
 	1    6675 6475
 	1    0    0    -1  
@@ -2048,7 +2003,7 @@ U 1 1 60F2C7E8
 P 5650 2925
 F 0 "JP1" H 5650 3018 50  0000 C CNN
 F 1 "Jumper_NO_Small" H 5650 3019 50  0001 C CNN
-F 2 "Connector_PinSocket_2.54mm:PinSocket_1x02_P2.54mm_Vertical" H 5650 2925 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 5650 2925 50  0001 C CNN
 F 3 "~" H 5650 2925 50  0001 C CNN
 	1    5650 2925
 	1    0    0    -1  
@@ -2059,7 +2014,7 @@ U 1 1 60F462F1
 P 5650 3025
 F 0 "JP2" H 5650 2950 50  0000 C CNN
 F 1 "Jumper_NO_Small" H 5650 3119 50  0001 C CNN
-F 2 "Connector_PinSocket_2.54mm:PinSocket_1x02_P2.54mm_Vertical" H 5650 3025 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 5650 3025 50  0001 C CNN
 F 3 "~" H 5650 3025 50  0001 C CNN
 	1    5650 3025
 	1    0    0    -1  
@@ -2176,17 +2131,6 @@ F 3 "http://www.ti.com/lit/ds/symlink/lm393.pdf" H 8100 6050 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L Connector_Generic:Conn_02x16_Row_Letter_First J3
-U 1 1 5EE1C5CE
-P 1625 4150
-F 0 "J3" H 1675 4975 50  0000 C CNN
-F 1 "Conn_02x16_Row_Letter_First" H 1675 4976 50  0001 C CNN
-F 2 "Connector_DIN:DIN41612_B2_2x16_Female_Vertical_THT" H 1625 4150 50  0001 C CNN
-F 3 "~" H 1625 4150 50  0001 C CNN
-	1    1625 4150
-	1    0    0    -1  
-$EndComp
-$Comp
 L Device:R R5
 U 1 1 5EE9C389
 P 7075 1825
@@ -2277,9 +2221,9 @@ $Comp
 L Switch:SW_Push SW1
 U 1 1 5F09E946
 P 5600 4225
-F 0 "SW1" H 5625 4150 50  0000 C CNN
-F 1 "SW_Push" H 5625 4325 50  0000 C CNN
-F 2 "" H 5600 4425 50  0001 C CNN
+F 0 "SW1" H 5600 4175 50  0000 C CNN
+F 1 "SW_Push" H 5625 4325 50  0001 C CNN
+F 2 "w_switch:PCB_PUSH" H 5600 4425 50  0001 C CNN
 F 3 "~" H 5600 4425 50  0001 C CNN
 	1    5600 4225
 	1    0    0    -1  
@@ -2317,4 +2261,49 @@ F 3 "" H 5950 4275 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	7000 1500 7225 1500
+Wire Wire Line
+	1425 4250 1225 4250
+Wire Wire Line
+	1425 4150 1225 4150
+Wire Wire Line
+	1425 4050 1225 4050
+Wire Wire Line
+	1425 3950 1225 3950
+Wire Wire Line
+	1425 3850 1225 3850
+Wire Wire Line
+	1425 3750 1225 3750
+Wire Wire Line
+	1425 3650 1225 3650
+Wire Wire Line
+	1425 3550 1225 3550
+Wire Wire Line
+	1425 4950 1225 4950
+Wire Wire Line
+	1425 4850 1225 4850
+Wire Wire Line
+	1425 4750 1225 4750
+Wire Wire Line
+	1425 4650 1225 4650
+Wire Wire Line
+	1425 4550 1225 4550
+Wire Wire Line
+	1425 4450 1225 4450
+Wire Wire Line
+	1425 4350 1225 4350
+Wire Wire Line
+	1425 3450 1225 3450
+$Comp
+L Connector_Generic:Conn_02x16_Row_Letter_First J3
+U 1 1 5EE1C5CE
+P 1625 4250
+F 0 "J3" H 1675 5075 50  0000 C CNN
+F 1 "Conn_02x16_Row_Letter_First" H 1675 5076 50  0001 C CNN
+F 2 "Connector_DIN:DIN41612_B2_2x16_Female_Vertical_THT" H 1625 4250 50  0001 C CNN
+F 3 "~" H 1625 4250 50  0001 C CNN
+	1    1625 4250
+	1    0    0    1   
+$EndComp
+Wire Wire Line
+	2175 1425 2525 1425
 $EndSCHEMATC
