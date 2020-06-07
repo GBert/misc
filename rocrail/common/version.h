@@ -1,11 +1,15 @@
 const int revisionnr = 
-774
+778
 ;
 const char* commithash = 
-"de953035e86e43d7084bc20bcdce38c37ca2c226";
+"746b7e6fac8487c0293c3d59da936cdaed35f8f3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"778 2020-06-07 13:23:13 +0200 easciiutils: added stdint header\n" \
+"777 2020-06-07 10:18:55 +0200 installwx: set version 3\n" \
+"776 2020-06-07 08:02:45 +0200 block: reject virtual slave block in case its defined as slave of itself\n" \
+"775 2020-06-07 07:50:20 +0200 mbus: trace level change for verify\n" \
 "774 2020-06-04 15:21:06 +0200 guiframe: fix for looking up the loco block; skip reserved blocks\n" \
 "773 2020-06-04 10:08:57 +0200 rasciiutils: WIP\n" \
 "772 2020-06-03 15:30:18 +0200 guiframe: fix for mapping loco to block in case its also in a virtual block\n" \
