@@ -159,7 +159,6 @@ F 3 "" H 3700 4625 50  0001 C CNN
 $EndComp
 NoConn ~ 5350 4425
 NoConn ~ 5350 4325
-NoConn ~ 5350 3125
 NoConn ~ 3800 3225
 NoConn ~ 3800 3325
 Wire Wire Line
@@ -210,7 +209,7 @@ U 1 1 5EDB2E8F
 P 9575 1200
 F 0 "J8" H 9245 1204 50  0000 R CNN
 F 1 "RJ45" H 9245 1295 50  0000 R CNN
-F 2 "w_conn_misc:8p8c" V 9575 1225 50  0001 C CNN
+F 2 "w_conn_pc:mebp8" V 9575 1225 50  0001 C CNN
 F 3 "~" V 9575 1225 50  0001 C CNN
 	1    9575 1200
 	-1   0    0    1   
@@ -456,7 +455,7 @@ U 1 1 5EFD069A
 P 1300 7275
 F 0 "C10" H 1415 7321 50  0000 L CNN
 F 1 "100nF" H 1415 7230 50  0000 L CNN
-F 2 "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm" H 1338 7125 50  0001 C CNN
+F 2 "Capacitor_THT:C_Disc_D3.0mm_W2.0mm_P2.50mm" H 1338 7125 50  0001 C CNN
 F 3 "~" H 1300 7275 50  0001 C CNN
 	1    1300 7275
 	1    0    0    -1  
@@ -945,7 +944,7 @@ U 1 1 5F769BE0
 P 2175 1625
 F 0 "C2" H 2225 1700 50  0000 L CNN
 F 1 "100n" H 2200 1550 50  0000 L CNN
-F 2 "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm" H 2213 1475 50  0001 C CNN
+F 2 "Capacitor_THT:C_Disc_D3.0mm_W1.6mm_P2.50mm" H 2213 1475 50  0001 C CNN
 F 3 "~" H 2175 1625 50  0001 C CNN
 	1    2175 1625
 	1    0    0    -1  
@@ -1271,7 +1270,7 @@ U 1 1 5FCB95F1
 P 9775 5475
 F 0 "C30" H 9800 5550 50  0000 L CNN
 F 1 "47p" H 9800 5375 50  0000 L CNN
-F 2 "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm" H 9813 5325 50  0001 C CNN
+F 2 "Capacitor_THT:C_Disc_D3.0mm_W1.6mm_P2.50mm" H 9813 5325 50  0001 C CNN
 F 3 "~" H 9775 5475 50  0001 C CNN
 	1    9775 5475
 	1    0    0    -1  
@@ -1438,7 +1437,7 @@ U 1 1 5FEBC69D
 P 8575 5625
 F 0 "C31" V 8525 5425 50  0000 L CNN
 F 1 "100n" V 8625 5375 50  0000 L CNN
-F 2 "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm" H 8613 5475 50  0001 C CNN
+F 2 "Capacitor_THT:C_Disc_D3.0mm_W1.6mm_P2.50mm" H 8613 5475 50  0001 C CNN
 F 3 "~" H 8575 5625 50  0001 C CNN
 	1    8575 5625
 	1    0    0    -1  
@@ -1590,7 +1589,7 @@ U 1 1 6008C60D
 P 8825 6400
 F 0 "C32" V 8750 6450 50  0000 L CNN
 F 1 "1n" V 8875 6475 50  0000 L CNN
-F 2 "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm" H 8863 6250 50  0001 C CNN
+F 2 "Capacitor_THT:C_Disc_D3.0mm_W1.6mm_P2.50mm" H 8863 6250 50  0001 C CNN
 F 3 "~" H 8825 6400 50  0001 C CNN
 	1    8825 6400
 	0    1    1    0   
@@ -2057,7 +2056,7 @@ Connection ~ 1500 1425
 Wire Wire Line
 	1150 1425 1200 1425
 Wire Wire Line
-	1200 1425 1200 2400
+	1200 1425 1200 2050
 Wire Wire Line
 	1200 2400 1500 2400
 Connection ~ 1200 1425
@@ -2069,7 +2068,7 @@ U 1 1 611B6D7B
 P 1500 1625
 F 0 "C1" H 1525 1700 50  0000 L CNN
 F 1 "100n" H 1525 1550 50  0000 L CNN
-F 2 "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm" H 1538 1475 50  0001 C CNN
+F 2 "Capacitor_THT:C_Disc_D3.0mm_W1.6mm_P2.50mm" H 1538 1475 50  0001 C CNN
 F 3 "~" H 1500 1625 50  0001 C CNN
 	1    1500 1625
 	1    0    0    -1  
@@ -2304,23 +2303,6 @@ $EndComp
 Wire Wire Line
 	7225 1600 7225 1900
 $Comp
-L Connector_Generic:Conn_02x03_Odd_Even J2
-U 1 1 5F033C47
-P 6050 3625
-F 0 "J2" H 6100 3425 50  0000 C CNN
-F 1 "Conn_02x03_Odd_Even" H 6100 3851 50  0001 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical" H 6050 3625 50  0001 C CNN
-F 3 "~" H 6050 3625 50  0001 C CNN
-	1    6050 3625
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	6450 3325 6450 3625
-Wire Wire Line
-	6450 3625 6350 3625
-Wire Wire Line
-	6350 3425 6350 3525
-$Comp
 L YAAJ_STM32:BluePill_1 BP1
 U 1 1 5ED69C35
 P 4000 2475
@@ -2331,15 +2313,10 @@ F 3 "" H 5250 525 50  0001 C CNN
 	1    4000 2475
 	1    0    0    -1  
 $EndComp
-NoConn ~ 5350 3225
 Wire Wire Line
 	5350 3525 5850 3525
 Wire Wire Line
 	5350 3625 5850 3625
-Wire Wire Line
-	5350 3425 6350 3425
-Wire Wire Line
-	5350 3325 6450 3325
 Wire Wire Line
 	6550 3725 6550 3325
 Wire Wire Line
@@ -2352,4 +2329,63 @@ Wire Wire Line
 Wire Wire Line
 	5850 3725 5850 4225
 Connection ~ 5850 4225
+$Comp
+L Connector_Generic:Conn_01x01 TP1
+U 1 1 5EE1214D
+P 1000 2050
+F 0 "TP1" H 918 1917 50  0000 C CNN
+F 1 "Conn_01x01" H 918 1916 50  0001 C CNN
+F 2 "TestPoint:Test_Point_NA" H 1000 2050 50  0001 C CNN
+F 3 "~" H 1000 2050 50  0001 C CNN
+	1    1000 2050
+	-1   0    0    1   
+$EndComp
+Connection ~ 1200 2050
+Wire Wire Line
+	1200 2050 1200 2300
+$Comp
+L Connector_Generic:Conn_01x01 TP2
+U 1 1 5EE12B1B
+P 1000 2300
+F 0 "TP2" H 918 2167 50  0000 C CNN
+F 1 "Conn_01x01" H 918 2166 50  0001 C CNN
+F 2 "TestPoint:Test_Point_NA" H 1000 2300 50  0001 C CNN
+F 3 "~" H 1000 2300 50  0001 C CNN
+	1    1000 2300
+	-1   0    0    1   
+$EndComp
+Connection ~ 1200 2300
+Wire Wire Line
+	1200 2300 1200 2400
+$Comp
+L Connector_Generic:Conn_02x04_Odd_Even J2
+U 1 1 5EE2DFC1
+P 6050 3525
+F 0 "J2" H 6100 3750 50  0000 C CNN
+F 1 "Conn_02x04_Odd_Even" H 6100 3751 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_2x04_P2.54mm_Vertical" H 6050 3525 50  0001 C CNN
+F 3 "~" H 6050 3525 50  0001 C CNN
+	1    6050 3525
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5350 3425 5850 3425
+Wire Wire Line
+	5350 3325 6400 3325
+Wire Wire Line
+	6400 3325 6400 3425
+Wire Wire Line
+	6400 3425 6350 3425
+Wire Wire Line
+	5350 3225 6450 3225
+Wire Wire Line
+	6450 3225 6450 3525
+Wire Wire Line
+	6450 3525 6350 3525
+Wire Wire Line
+	5350 3125 6500 3125
+Wire Wire Line
+	6500 3125 6500 3625
+Wire Wire Line
+	6500 3625 6350 3625
 $EndSCHEMATC
