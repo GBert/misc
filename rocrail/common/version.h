@@ -1,11 +1,13 @@
 const int revisionnr = 
-778
+780
 ;
 const char* commithash = 
-"746b7e6fac8487c0293c3d59da936cdaed35f8f3";
+"49d4df26e5a949fa4a2492d0e8428a831ae75c8f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"780 2020-06-08 10:35:42 +0200 time unit labels (WIP)\n" \
+"779 2020-06-08 08:42:32 +0200 rocnetnode: support for arm64\n" \
 "778 2020-06-07 13:23:13 +0200 easciiutils: added stdint header\n" \
 "777 2020-06-07 10:18:55 +0200 installwx: set version 3\n" \
 "776 2020-06-07 08:02:45 +0200 block: reject virtual slave block in case its defined as slave of itself\n" \
