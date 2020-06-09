@@ -5,9 +5,9 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "C6021 Light"
-Date "2020-06-05"
-Rev "0.9"
-Comp ""
+Date "2020-06-09"
+Rev "1.0"
+Comp "Damian Philipp / Gerhard Bertelsmann"
 Comment1 ""
 Comment2 ""
 Comment3 ""

@@ -1,12 +1,12 @@
 %TF.GenerationSoftware,KiCad,Pcbnew,5.1.6-c6e7f7d~86~ubuntu18.04.1*%
-%TF.CreationDate,2020-06-09T12:59:16+02:00*%
+%TF.CreationDate,2020-06-09T13:21:39+02:00*%
 %TF.ProjectId,c6021light,63363032-316c-4696-9768-742e6b696361,rev?*%
 %TF.SameCoordinates,Original*%
 %TF.FileFunction,Soldermask,Top*%
 %TF.FilePolarity,Negative*%
 %FSLAX46Y46*%
 G04 Gerber Fmt 4.6, Leading zero omitted, Abs format (unit mm)*
-G04 Created by KiCad (PCBNEW 5.1.6-c6e7f7d~86~ubuntu18.04.1) date 2020-06-09 12:59:16*
+G04 Created by KiCad (PCBNEW 5.1.6-c6e7f7d~86~ubuntu18.04.1) date 2020-06-09 13:21:39*
 %MOMM*%
 %LPD*%
 G01*
