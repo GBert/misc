@@ -831,7 +831,7 @@ NoConn ~ 1925 4450
 NoConn ~ 1925 4050
 NoConn ~ 1925 3850
 NoConn ~ 1925 3650
-NoConn ~ 1925 3450
+NoConn ~ 1925 5050
 Wire Wire Line
 	1925 3750 2200 3750
 Wire Wire Line
@@ -842,7 +842,6 @@ Wire Wire Line
 	1925 4950 2200 4950
 Wire Wire Line
 	1225 3550 1225 3650
-Connection ~ 1225 3550
 Wire Wire Line
 	1225 3650 1225 3750
 Connection ~ 1225 3650
@@ -883,21 +882,19 @@ Wire Wire Line
 	1225 4850 1225 4950
 Connection ~ 1225 4850
 Wire Wire Line
-	1225 4950 1225 5100
+	1225 4950 1225 5050
 Connection ~ 1225 4950
 $Comp
 L power:GND #PWR0117
 U 1 1 5EE50DE0
-P 1225 5100
-F 0 "#PWR0117" H 1225 4850 50  0001 C CNN
-F 1 "GND" H 1230 4927 50  0000 C CNN
-F 2 "" H 1225 5100 50  0001 C CNN
-F 3 "" H 1225 5100 50  0001 C CNN
-	1    1225 5100
+P 1225 5150
+F 0 "#PWR0117" H 1225 4900 50  0001 C CNN
+F 1 "GND" H 1230 4977 50  0000 C CNN
+F 2 "" H 1225 5150 50  0001 C CNN
+F 3 "" H 1225 5150 50  0001 C CNN
+	1    1225 5150
 	-1   0    0    -1  
 $EndComp
-Wire Wire Line
-	1225 3450 1225 3550
 $Comp
 L Device:C C4
 U 1 1 5F6CD270
@@ -2192,17 +2189,15 @@ Wire Wire Line
 	1425 4450 1225 4450
 Wire Wire Line
 	1425 4350 1225 4350
-Wire Wire Line
-	1425 3450 1225 3450
 $Comp
 L Connector_Generic:Conn_02x16_Row_Letter_First J3
 U 1 1 5EE1C5CE
-P 1625 4250
-F 0 "J3" H 1675 5075 50  0000 C CNN
-F 1 "Conn_02x16_Row_Letter_First" H 1675 5076 50  0001 C CNN
-F 2 "Connector_DIN:DIN41612_B2_2x16_Female_Vertical_THT" H 1625 4250 50  0001 C CNN
-F 3 "~" H 1625 4250 50  0001 C CNN
-	1    1625 4250
+P 1625 4350
+F 0 "J3" H 1675 5175 50  0000 C CNN
+F 1 "Conn_02x16_Row_Letter_First" H 1675 5176 50  0001 C CNN
+F 2 "Connector_DIN:DIN41612_B2_2x16_Female_Vertical_THT" H 1625 4350 50  0001 C CNN
+F 3 "~" H 1625 4350 50  0001 C CNN
+	1    1625 4350
 	1    0    0    1   
 $EndComp
 Wire Wire Line
@@ -2493,4 +2488,9 @@ Wire Notes Line
 	9825 2900 11225 2900
 Text Notes 9875 4025 0    50   ~ 0
 15mA\nStromquelle
+Wire Wire Line
+	1425 5050 1225 5050
+Connection ~ 1225 5050
+Wire Wire Line
+	1225 5050 1225 5150
 $EndSCHEMATC
