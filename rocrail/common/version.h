@@ -1,11 +1,14 @@
 const int revisionnr = 
-780
+783
 ;
 const char* commithash = 
-"49d4df26e5a949fa4a2492d0e8428a831ae75c8f";
+"82d967e0aef902482273c4ca94bdab1c3a60b70d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"783 2020-06-09 16:16:12 +0200 cbusdlg: option 500000 bps added\n" \
+"782 2020-06-09 15:49:20 +0200 cbus: added sublib LAWICEL / SLCAN\n" \
+"781 2020-06-09 10:33:43 +0200 guiframe: fix for selecting a loco from block by mouse pointer\n" \
 "780 2020-06-08 10:35:42 +0200 time unit labels (WIP)\n" \
 "779 2020-06-08 08:42:32 +0200 rocnetnode: support for arm64\n" \
 "778 2020-06-07 13:23:13 +0200 easciiutils: added stdint header\n" \
