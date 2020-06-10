@@ -1,9 +1,17 @@
 STM32 C6021Light
 ================
 
-using libopencm3 (real OpenSource - no questionable STMicroelectronics License) to build cheapest CAN Adapter ever:
+Universal Maerklin CAN to Maerklin I2C / RS485 / Loconet Board
+
+![3D Board](https://github.com/GBert/railroad/raw/master/c6021light/bluepill/hardware/c6021light.png)
+
+Based on Blue Pill
+
 
 ![STM32F103C8T6 microcontroller development board](https://github.com/GBert/misc/raw/master/stm32-slcan/pictures/stm32f103c8t6_dev_pinout.gif)
+
+using libopencm3 (real OpenSource - no questionable STMicroelectronics License)
+
 
 CAN-Interface
 -------------
@@ -12,8 +20,8 @@ CAN-Interface
 #define GPIO_CAN_PB_RX                  GPIO8           /* PB8 */
 #define GPIO_CAN_PB_TX                  GPIO9           /* PB9 */
 /* I2C2 / I2C GPIO */
-#define GPIO_I2C2_SCL2                  GPIO10          /* PB10 */
-#define GPIO_I2C2_SDA2                  GPIO11          /* PB11 */
+#define GPIO_I2C2_SCL1                  GPIO6           /* PB6 */
+#define GPIO_I2C2_SDA1                  GPIO7           /* PB7 */
 ```
 
 Flashing Serial
@@ -47,8 +55,6 @@ make # make stm32flash
 
 Links
 -----
-Schematic https://github.com/GBert/misc/raw/master/stm32-slcan/pictures/arduino_stm32f103c8t6_schematics.png
-https://github.com/GBert/misc/raw/master/stm32-slcan/pictures/STM32F103C8T6-DEV-BOARD-SCH.pdf
 
 more information here: https://wiki.kewl.org/dokuwiki/boards:vcc-gnd
 
