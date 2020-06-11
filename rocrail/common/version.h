@@ -1,11 +1,15 @@
 const int revisionnr = 
-783
+787
 ;
 const char* commithash = 
-"82d967e0aef902482273c4ca94bdab1c3a60b70d";
+"5baeabe6cd407fb5ca6b982d60ffde7d464b17ed";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"787 2020-06-11 14:26:26 +0200 stagedlg,seltabdlg: time unit labels\n" \
+"786 2020-06-11 10:46:32 +0200 item: show fromblock in destination block in the statusbar\n" \
+"785 2020-06-11 09:44:39 +0200 cbus: extcan support for WIO\n" \
+"784 2020-06-10 11:20:28 +0200 item: show loco destination in statusbar\n" \
 "783 2020-06-09 16:16:12 +0200 cbusdlg: option 500000 bps added\n" \
 "782 2020-06-09 15:49:20 +0200 cbus: added sublib LAWICEL / SLCAN\n" \
 "781 2020-06-09 10:33:43 +0200 guiframe: fix for selecting a loco from block by mouse pointer\n" \
