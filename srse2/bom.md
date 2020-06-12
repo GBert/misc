@@ -48,7 +48,7 @@ BOM CAN S88
 |U3		|MCP2562	|SO8		|
 |U4		|PIC18F25K80	|SOIC-28	|
 |U5		|HR911105A	|RJ45		|
-|U8		|CD4504		|SO16		|
+|U8		|CD4504BM		|SO16		|
 |U9		|MC7812		|TO-252-2Lead	|
 |Y1		|16MHz		|Crystal HC-49S	|
 |		|u.FL Pigtail  | RP SMA	|
