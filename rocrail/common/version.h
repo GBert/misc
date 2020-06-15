@@ -1,11 +1,22 @@
 const int revisionnr = 
-787
+798
 ;
 const char* commithash = 
-"5baeabe6cd407fb5ca6b982d60ffde7d464b17ed";
+"b1ef7ccc82d23f5eeda42f938470a3eb67cadf1b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"798 2020-06-15 10:07:35 +0200 actionsctrldlg: added time unit labels\n" \
+"797 2020-06-15 07:57:13 +0200 operatordlg: open car throttle with dispatching maps\n" \
+"796 2020-06-15 07:45:19 +0200 action: added missing loco state condition <stop>\n" \
+"795 2020-06-14 12:12:22 +0200 time unit label corrections\n" \
+"794 2020-06-14 10:41:49 +0200 loconet: extra trace for functions\n" \
+"793 2020-06-13 14:16:37 +0200 item: fix for status text for crossing blocks\n" \
+"792 2020-06-13 11:05:40 +0200 rocview: time labels\n" \
+"791 2020-06-13 10:27:26 +0200 guiapp: fix for merging operator events in case of child nodes\n" \
+"790 2020-06-12 21:33:25 +0200 guestlocodlg: wx assert fix\n" \
+"789 2020-06-12 14:55:37 +0200 cbus: fix for extcan switch commands\n" \
+"788 2020-06-12 10:13:48 +0200 cbus: ascii tracelevel corrections\n" \
 "787 2020-06-11 14:26:26 +0200 stagedlg,seltabdlg: time unit labels\n" \
 "786 2020-06-11 10:46:32 +0200 item: show fromblock in destination block in the statusbar\n" \
 "785 2020-06-11 09:44:39 +0200 cbus: extcan support for WIO\n" \
