@@ -1,11 +1,13 @@
 const int revisionnr = 
-798
+800
 ;
 const char* commithash = 
-"b1ef7ccc82d23f5eeda42f938470a3eb67cadf1b";
+"d0b0debd2b47baa75aa5fac7943b8dd094e6cd12";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"800 2020-06-15 16:00:49 +0200 actionsctrldlg: fix for time units\n" \
+"799 2020-06-15 15:59:56 +0200 wio: use revision number instead of version\n" \
 "798 2020-06-15 10:07:35 +0200 actionsctrldlg: added time unit labels\n" \
 "797 2020-06-15 07:57:13 +0200 operatordlg: open car throttle with dispatching maps\n" \
 "796 2020-06-15 07:45:19 +0200 action: added missing loco state condition <stop>\n" \
