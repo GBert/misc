@@ -1,11 +1,16 @@
 const int revisionnr = 
-800
+805
 ;
 const char* commithash = 
-"d0b0debd2b47baa75aa5fac7943b8dd094e6cd12";
+"e09d71858ef0380504bf746c874a9025595aba84";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"805 2020-06-18 10:13:49 +0200 z21: if addr == 0 use port value\n" \
+"804 2020-06-18 08:55:44 +0200 loconet: extra traces for function group 1 and 2\n" \
+"803 2020-06-18 08:53:52 +0200 cbusnodedlg: labe and description correction for WIO\n" \
+"802 2020-06-18 08:09:16 +0200 rocrailinidialog,z21: swap gates option\n" \
+"801 2020-06-17 19:27:05 +0200 z21: fix for BinState 28 border -> 32\n" \
 "800 2020-06-15 16:00:49 +0200 actionsctrldlg: fix for time units\n" \
 "799 2020-06-15 15:59:56 +0200 wio: use revision number instead of version\n" \
 "798 2020-06-15 10:07:35 +0200 actionsctrldlg: added time unit labels\n" \
