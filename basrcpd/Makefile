@@ -52,7 +52,9 @@ else
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/srcpd.conf $(1)/etc
 endif
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/srcpd.regcount $(1)/etc
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) files/srcpd.init $(1)/etc/init.d/srcpd
+	$(INSTALL_BIN) files/presume-ack.init $(1)/etc/init.d/presume-ack
 endef
-
 
 $(eval $(call BuildPackage,basrcpd))
