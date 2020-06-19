@@ -1,11 +1,12 @@
 const int revisionnr = 
-805
+806
 ;
 const char* commithash = 
-"e09d71858ef0380504bf746c874a9025595aba84";
+"4b4e6a02998437e2fa33e452a5518b5284118d98";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"806 2020-06-19 15:59:35 +0200 CANIO: WIP\n" \
 "805 2020-06-18 10:13:49 +0200 z21: if addr == 0 use port value\n" \
 "804 2020-06-18 08:55:44 +0200 loconet: extra traces for function group 1 and 2\n" \
 "803 2020-06-18 08:53:52 +0200 cbusnodedlg: labe and description correction for WIO\n" \
