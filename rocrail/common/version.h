@@ -1,11 +1,19 @@
 const int revisionnr = 
-806
+814
 ;
 const char* commithash = 
-"4b4e6a02998437e2fa33e452a5518b5284118d98";
+"82e0081d90a4b47b6020a3d00fa92e67dac8e869";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"814 2020-06-21 11:55:31 +0200 router: disabled minocc/numBlock error\n" \
+"813 2020-06-21 11:08:35 +0200 cbus,flim: trace correction for version\n" \
+"812 2020-06-21 10:25:19 +0200 cbus: allow lower bps for sublib type USB\n" \
+"811 2020-06-20 15:15:33 +0200 wiodlg: CAN-ID field added\n" \
+"810 2020-06-20 14:34:32 +0200 wiodlg: CANIO, reboot command after set and OK\n" \
+"809 2020-06-20 11:25:00 +0200 CANIO: set config\n" \
+"808 2020-06-20 08:10:53 +0200 throttle: debug trace\n" \
+"807 2020-06-20 08:09:58 +0200 car: broadcast the origin function before the mapped one\n" \
 "806 2020-06-19 15:59:35 +0200 CANIO: WIP\n" \
 "805 2020-06-18 10:13:49 +0200 z21: if addr == 0 use port value\n" \
 "804 2020-06-18 08:55:44 +0200 loconet: extra traces for function group 1 and 2\n" \
