@@ -79,4 +79,4 @@ namespace WebServer
 		stream << bodyString;
 		return stream;
 	}
-};
+} // namespace WebServer

@@ -44,5 +44,5 @@ namespace WebServer
 				return *this;
 			}
 	};
-}; // namespace webserver
+} // namespace WebServer
 

@@ -25,20 +25,23 @@ along with RailControl; see the file LICENCE. If not see
 #include "Utils/Utils.h"
 
 using std::map;
-using std::stringstream;
 using std::string;
 
 namespace DataModel
 {
 	std::string Signal::Serialize() const
 	{
-		stringstream ss;
-		ss << "objectType=Signal;"
-			<< AccessoryBase::Serialize()
-			<< ";" << TrackBase::Serialize()
-			<< ";" << LayoutItem::Serialize()
-			<< ";" << LockableItem::Serialize();
-		return ss.str();
+		string str = "objectType=Signal;";
+		str += AccessoryBase::Serialize();
+		str += ";";
+		str += TrackBase::Serialize();
+		str += ";";
+		str += LayoutItem::Serialize();
+		str += ";";
+		str += LockableItem::Serialize();
+		str += ";signalorientation=";
+		str += std::to_string(signalOrientation);
+		return str;
 	}
 
 	bool Signal::Deserialize(const std::string& serialized)
@@ -57,6 +60,7 @@ namespace DataModel
 		LockableItem::Deserialize(arguments);
 		SetWidth(Width1);
 		SetVisible(VisibleYes);
+		signalOrientation = static_cast<Orientation>(Utils::Utils::GetBoolMapEntry(arguments, "signalorientation", OrientationRight));
 		return true;
 	}
 

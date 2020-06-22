@@ -30,4 +30,4 @@ namespace WebServer
 		content.AddChildTag(HtmlTag("h1").AddContent("File not found"));
 		content.AddChildTag(HtmlTag("p").AddContent("File ").AddContent(file).AddContent(" not found"));
 	}
-};
+} // namespace WebServer

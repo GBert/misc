@@ -31,20 +31,20 @@ namespace Hardware
 		public:
 			Z21LocoCacheEntry()
 			:	speed(MinSpeed),
-			 	direction(DirectionRight),
+			 	orientation(OrientationRight),
 			 	functions(0),
 			 	protocol(ProtocolNone)
 			{}
 
-			Z21LocoCacheEntry(const Speed speed, const Direction direction, const Protocol protocol)
+			Z21LocoCacheEntry(const Speed speed, const Orientation orientation, const Protocol protocol)
 			:	speed(speed),
-			 	direction(direction),
+			 	orientation(orientation),
 			 	functions(0),
 			 	protocol(protocol)
 			{}
 
 			Speed speed;
-			Direction direction;
+			Orientation orientation;
 			uint32_t functions;
 			Protocol protocol;
 	};
@@ -78,25 +78,25 @@ namespace Hardware
 				return cache[address].speed;
 			}
 
-			void SetDirection(const Address address, const Direction direction)
+			void SetOrientation(const Address address, const Orientation orientation)
 			{
 				Z21LocoCacheEntry entry = GetData(address);
-				entry.direction = direction;
+				entry.orientation = orientation;
 				cache[address] = entry;
 			}
 
-			Direction GetDirection(const Address address)
+			Orientation GetOrientation(const Address address)
 			{
 				if (cache.count(address) == 0)
 				{
-					return DirectionRight;
+					return OrientationRight;
 				}
-				return cache[address].direction;
+				return cache[address].orientation;
 			}
 
-			void SetSpeedDirectionProtocol(const Address address, const Speed speed, const Direction direction, const Protocol protocol)
+			void SetSpeedOrientationProtocol(const Address address, const Speed speed, const Orientation orientation, const Protocol protocol)
 			{
-				Z21LocoCacheEntry entry(speed, direction, protocol);
+				Z21LocoCacheEntry entry(speed, orientation, protocol);
 				cache[address] = entry;
 			}
 

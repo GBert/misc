@@ -35,39 +35,44 @@ namespace WebServer
 			HtmlTagSelectWithLabel() = delete;
 
 			HtmlTagSelectWithLabel(const std::string& name, const Languages::TextSelector label, const std::map<std::string,Languages::TextSelector>& options, const std::string& defaultValue = "")
-			:	HtmlTag()
+			:	HtmlTag("div")
 			{
+				HtmlTag::AddClass("input_select_with_label");
 				AddChildTag(HtmlTagLabel(label, "s_" + name));
 				AddChildTag(HtmlTagSelect(name, options, defaultValue));
 			}
 
 			HtmlTagSelectWithLabel(const std::string& name, const Languages::TextSelector label, const std::map<std::string,DataModel::ObjectIdentifier>& options, const DataModel::ObjectIdentifier& defaultValue = DataModel::ObjectIdentifier())
-			:	HtmlTag()
+			:	HtmlTag("div")
 			{
+				HtmlTag::AddClass("input_select_with_label");
 				AddChildTag(HtmlTagLabel(label, "s_" + name));
 				AddChildTag(HtmlTagSelect(name, options, defaultValue));
 			}
 
 			template<typename T>
 			HtmlTagSelectWithLabel(const std::string& name, const Languages::TextSelector label, const std::map<std::string,T>& options, const int defaultValue = 0)
-			:	HtmlTag()
+			:	HtmlTag("div")
 			{
+				HtmlTag::AddClass("input_select_with_label");
 				AddChildTag(HtmlTagLabel(label, "s_" + name));
 				AddChildTag(HtmlTagSelect(name, options, defaultValue));
 			}
 
 			template<typename T>
 			HtmlTagSelectWithLabel(const std::string& name, const Languages::TextSelector label, const std::map<T,Languages::TextSelector>& options, const T defaultValue = 0)
-			:	HtmlTag()
+			:	HtmlTag("div")
 			{
+				HtmlTag::AddClass("input_select_with_label");
 				AddChildTag(HtmlTagLabel(label, "s_" + name));
 				AddChildTag(HtmlTagSelect(name, options, defaultValue));
 			}
 
 			template<typename T>
 			HtmlTagSelectWithLabel(const std::string& name, const Languages::TextSelector label, const std::map<T,std::string>& options, T defaultValue = 0)
-			:	HtmlTag()
+			:	HtmlTag("div")
 			{
+				HtmlTag::AddClass("input_select_with_label");
 				AddChildTag(HtmlTagLabel(label, "s_" + name));
 				AddChildTag(HtmlTagSelect(name, options, defaultValue));
 			}
@@ -86,5 +91,5 @@ namespace WebServer
 				return *this;
 			}
 	};
-};
+} // namespace WebServer
 

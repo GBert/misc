@@ -16,8 +16,8 @@
       B13                          GND
       B14                          3V3
       B15   RESET    GND    GND  RESET
-      A8    BUTTON  *BOOT1 *BOOT0  B11 I2C2 SDA
-      A9             3V3    3V3    B10 I2C2 SCL
+      A8    BUTTON  *BOOT1 *BOOT0  B11
+      A9             3V3    3V3    B10
       A10                           B1
       A11                           B0
       A12                           A7
@@ -25,8 +25,8 @@
       B3       STM32F103C8T6        A5
       B4                            A4
       B5                            A3
-      B6                            A2
-      B7              8M            A1
+SCL1  B6                            A2
+SDA1  B7              8M            A1
 CANRX B8           32768            A0
 CANTX B9                           C15
       5V       PC13     POWER      C14
@@ -52,6 +52,8 @@ uint32_t reading, writing;
 volatile uint8_t *write_p;
 
 static void gpio_setup(void) {
+
+    rcc_periph_clock_enable(RCC_GPIOA);
     /*  GPIOB & GPIOC clock */
     /* B8 & B9 CAN  - B10 & B11 I2C */
     rcc_periph_clock_enable(RCC_GPIOB);
@@ -60,17 +62,11 @@ static void gpio_setup(void) {
 
     /* Preconfigure LED */
     gpio_set(GPIOC, GPIO13);	/* LED green off */
-
-    /* Preconfigure Osci pin CAN */
-    gpio_clear(GPIOC, GPIO14);
-
-    /* Preconfigure Osci pin */
-    gpio_clear(GPIOC, GPIO15);
+    gpio_set(GPIOA, GPIO0);	/* LED green off */
 
     /* Configure LED&Osci GPIO */
     gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
-    gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO14);
-    gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO15);
+    gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO0);
 }
 
 static void systick_setup(void) {
@@ -85,28 +81,6 @@ static void systick_setup(void) {
 
     /* Start counting */
     systick_counter_enable();
-}
-
-static void gpio_debug(int n) {
-
-    switch(n) {
-    case 0:
-	gpio_clear(GPIOC, GPIO14);
-	gpio_clear(GPIOC, GPIO15);
-	break;
-    case 1:
-	gpio_set(GPIOC, GPIO14);
-	gpio_clear(GPIOC, GPIO15);
-	break;
-    case 2:
-	gpio_clear(GPIOC, GPIO14);
-	gpio_set(GPIOC, GPIO15);
-	break;
-    case -1:
-	gpio_set(GPIOC, GPIO14);
-	gpio_set(GPIOC, GPIO15);
-	break;
-    }
 }
 
 static int can_speed(int index) {
@@ -233,30 +207,29 @@ static void send_can_data(uint32_t val) {
     data[3] = val & 0xff;
 
     ret = can_transmit(CAN1, id, ext, rtr, dlc, data);
-    gpio_debug(ret);
 }
 
 static void i2c_slave_init(uint8_t ownaddress) {
-    rcc_periph_clock_enable(RCC_I2C2);
+    rcc_periph_clock_enable(RCC_I2C1);
     rcc_periph_clock_enable(RCC_AFIO);
 
-    nvic_enable_irq(NVIC_I2C2_EV_IRQ);
+    nvic_enable_irq(NVIC_I2C1_EV_IRQ);
 
-    /* configure I2C2 pins */
-    gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_ALTFN_OPENDRAIN, GPIO_I2C2_SDA);
-    gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_ALTFN_OPENDRAIN, GPIO_I2C2_SCL);
+    /* configure I2C1 pins */
+    gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_ALTFN_OPENDRAIN, GPIO_I2C1_SDA);
+    gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_ALTFN_OPENDRAIN, GPIO_I2C1_SCL);
 
-    i2c_reset(I2C2);
-    i2c_peripheral_disable(I2C2);
+    i2c_reset(I2C1);
+    i2c_peripheral_disable(I2C1);
 
-    i2c_set_speed(I2C2, i2c_speed_sm_100k, I2C_CR2_FREQ_36MHZ);
-    i2c_set_own_7bit_slave_address(I2C2, ownaddress);
-    i2c_enable_interrupt(I2C2, I2C_CR2_ITEVTEN | I2C_CR2_ITBUFEN);
-    i2c_peripheral_enable(I2C2);
+    i2c_set_speed(I2C1, i2c_speed_sm_100k, I2C_CR2_FREQ_36MHZ);
+    i2c_set_own_7bit_slave_address(I2C1, ownaddress);
+    i2c_enable_interrupt(I2C1, I2C_CR2_ITEVTEN | I2C_CR2_ITBUFEN);
+    i2c_peripheral_enable(I2C1);
 
     // slave needs to acknowledge on receiving bytes
     // set it after enabling Peripheral i.e. PE = 1
-    i2c_enable_ack(I2C2);
+    i2c_enable_ack(I2C1);
 }
 
 void sys_tick_handler(void) {
@@ -270,6 +243,7 @@ void sys_tick_handler(void) {
     if (counter == 500) {
 	counter = 0;
 	gpio_toggle(GPIOC, GPIO13);	/* toggle green LED */
+	gpio_toggle(GPIOA, GPIO0);	/* toggle LED */
         //send_can_data();
     }
 }
@@ -285,11 +259,11 @@ void usb_lp_can_rx0_isr(void) {
     can_fifo_release(CAN1, 0);
 }
 
-void i2c2_ev_isr(void) {
+void i2c1_ev_isr(void) {
     uint32_t sr1, sr2;
 
 
-    sr1 = I2C_SR1(I2C2);
+    sr1 = I2C_SR1(I2C1);
     i2c_val = sr1;
 
     // Address matched (Slave)
@@ -298,17 +272,17 @@ void i2c2_ev_isr(void) {
 	writing = 3;
 	write_p = i2c_data;
         //Clear the ADDR sequence by reading SR2.
-        sr2 = I2C_SR2(I2C2);
+        sr2 = I2C_SR2(I2C1);
         (void) sr2;
     }
     // Receive buffer not empty
     else if (sr1 & I2C_SR1_RxNE) {
 	if (reading == 0) {
-	    i2c_data[0] = i2c_get_data(I2C2) >> 1; 
+	    i2c_data[0] = i2c_get_data(I2C1) >> 1;
 	    i2c_data[1] = 0xFE;
 	}
 	if (reading == 1) {
-	    i2c_data[2] = i2c_get_data(I2C2);
+	    i2c_data[2] = i2c_get_data(I2C1);
 	}
         //ignore more than 2 bytes reaing
 	if (reading >= 2)
@@ -317,20 +291,20 @@ void i2c2_ev_isr(void) {
     }
     // Transmit buffer empty & Data byte transfer not finished
     else if ((sr1 & I2C_SR1_TxE) && !(sr1 & I2C_SR1_BTF)) {
-	 i2c_send_data(I2C2, *write_p++);
+	 i2c_send_data(I2C1, *write_p++);
         //send data to master in MSB order
     }
     // done by master by sending STOP
     //this event happens when slave is in Recv mode at the end of communication
     else if (sr1 & I2C_SR1_STOPF) {
 	send_can_data((i2c_data[0] << 16) | (i2c_data[1] << 8) | (i2c_data[2]));
-	i2c_peripheral_enable(I2C2);
-	i2c_send_data(I2C2, *write_p++);
+	i2c_peripheral_enable(I2C1);
+	i2c_send_data(I2C1, *write_p++);
     }
     //this event happens when slave is in transmit mode at the end of communication
     else if (sr1 & I2C_SR1_AF) {
         //(void) I2C_SR1(I2C1);
-        I2C_SR1(I2C2) &= ~(I2C_SR1_AF);
+        I2C_SR1(I2C1) &= ~(I2C_SR1_AF);
     }
 }
 

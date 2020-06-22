@@ -28,13 +28,14 @@ along with RailControl; see the file LICENCE. If not see
 #include "DataModel/Feedback.h"
 #include "DataModel/LocoFunctions.h"
 #include "DataTypes.h"
+#include "Hardware/Capabilities.h"
 
 namespace DataModel
 {
 	class Accessory;
 	class Loco;
 	class Signal;
-	class Street;
+	class Route;
 	class Switch;
 	class Track;
 }
@@ -56,25 +57,23 @@ class ControlInterface
 		virtual void AccessoryProtocols(__attribute__((unused)) std::vector<Protocol>& protocols) const {};
 		virtual bool AccessoryProtocolSupported(__attribute__((unused)) Protocol protocol) const { return false; };
 		virtual void AccessorySettings(__attribute__((unused)) const AccessoryID accessoryID, __attribute__((unused)) const std::string& name) {}
-		virtual void AccessoryState(__attribute__((unused)) const ControlType controlType, __attribute__((unused)) const DataModel::Accessory* accessory, __attribute__((unused)) const DataModel::AccessoryState state) {};
+		virtual void AccessoryState(__attribute__((unused)) const ControlType controlType, __attribute__((unused)) const DataModel::Accessory* accessory) {};
 		virtual void ArgumentTypes(__attribute__((unused)) std::map<unsigned char,ArgumentType>& argumentTypes) const {}
 		virtual void Booster(__attribute__((unused)) const ControlType controlType, __attribute__((unused)) const BoosterState state) {};
-		virtual bool CanHandleAccessories() const { return false; }
-		virtual bool CanHandleFeedbacks() const { return false; }
-		virtual bool CanHandleLocos() const { return false; }
-		virtual bool CanHandleProgram() const { return false; }
-		virtual bool CanHandleProgramMm() const { return false; }
-		virtual bool CanHandleProgramMfx() const { return false; }
-		virtual bool CanHandleProgramDccDirect() const { return false; }
-		virtual bool CanHandleProgramDccPom() const { return false; }
+		virtual Hardware::Capabilities GetCapabilities() const { return Hardware::CapabilityNone; }
+		inline bool CanHandle(const Hardware::Capabilities capability) const
+		{
+			Hardware::Capabilities hardwareCapabilities = GetCapabilities();
+			return capability == (hardwareCapabilities & capability);
+		}
 		virtual void FeedbackDelete(__attribute__((unused)) const FeedbackID feedbackID, __attribute__((unused)) const std::string& name) {}
 		virtual void FeedbackSettings(__attribute__((unused)) const FeedbackID feedbackID, __attribute__((unused)) const std::string& name) {}
 		virtual void FeedbackState(__attribute__((unused)) const std::string& name, __attribute__((unused)) const FeedbackID feedbackID, __attribute__((unused)) const DataModel::Feedback::FeedbackState state) {};
 		virtual void LayerDelete(__attribute__((unused)) const LayerID layerID, __attribute__((unused)) const std::string& name) {};
 		virtual void LayerSettings(__attribute__((unused)) const LayerID layerID, __attribute__((unused)) const std::string& name) {};
 		virtual void LocoDelete(__attribute__((unused)) const LocoID locoID, __attribute__((unused)) const std::string& name) {};
-		virtual void LocoDestinationReached(__attribute__((unused)) const DataModel::Loco* loco, __attribute__((unused)) const DataModel::Street* street, __attribute__((unused)) const DataModel::TrackBase* track) {};
-		virtual void LocoDirection(__attribute__((unused)) const ControlType controlType, __attribute__((unused)) const DataModel::Loco* loco, __attribute__((unused)) const Direction direction) {};
+		virtual void LocoDestinationReached(__attribute__((unused)) const DataModel::Loco* loco, __attribute__((unused)) const DataModel::Route* route, __attribute__((unused)) const DataModel::TrackBase* track) {};
+		virtual void LocoOrientation(__attribute__((unused)) const ControlType controlType, __attribute__((unused)) const DataModel::Loco* loco, __attribute__((unused)) const Orientation orientation) {};
 		virtual void LocoFunction(__attribute__((unused)) const ControlType controlType, __attribute__((unused)) const DataModel::Loco* loco, __attribute__((unused)) const Function function, __attribute__((unused)) const DataModel::LocoFunctions::FunctionState on) {};
 		virtual void LocoProtocols(__attribute__((unused)) std::vector<Protocol>& protocols) const {};
 		virtual bool LocoProtocolSupported(__attribute__((unused)) Protocol protocol) const { return false; };
@@ -83,12 +82,12 @@ class ControlInterface
 		virtual void LocoSpeed(__attribute__((unused)) const ControlType controlType, __attribute__((unused)) const DataModel::Loco* loco, __attribute__((unused)) const Speed speed) {};
 		virtual void LocoStart(__attribute__((unused)) const LocoID locoID, __attribute__((unused)) const std::string& name) {};
 		virtual void LocoStop(__attribute__((unused)) const LocoID locoID, __attribute__((unused)) const std::string& name) {};
-		virtual void StreetDelete(__attribute__((unused)) const StreetID streetID, __attribute__((unused)) const std::string& name) {};
-		virtual void StreetRelease(__attribute__((unused)) const StreetID streetID) {};
-		virtual void StreetSettings(__attribute__((unused)) const StreetID streetID, __attribute__((unused)) const std::string& name) {};
+		virtual void RouteDelete(__attribute__((unused)) const RouteID routeID, __attribute__((unused)) const std::string& name) {};
+		virtual void RouteRelease(__attribute__((unused)) const RouteID routeID) {};
+		virtual void RouteSettings(__attribute__((unused)) const RouteID routeID, __attribute__((unused)) const std::string& name) {};
 		virtual void SwitchDelete(__attribute__((unused)) const SwitchID switchID, __attribute__((unused)) const std::string& name) {};
 		virtual void SwitchSettings(__attribute__((unused)) const SwitchID switchID, __attribute__((unused)) const std::string& name) {};
-		virtual void SwitchState(__attribute__((unused)) const ControlType controlType, __attribute__((unused)) const DataModel::Switch* mySwitch, __attribute__((unused)) const DataModel::AccessoryState state) {};
+		virtual void SwitchState(__attribute__((unused)) const ControlType controlType, __attribute__((unused)) const DataModel::Switch* mySwitch) {};
 		virtual void TrackDelete(__attribute__((unused)) const TrackID trackID, __attribute__((unused)) const std::string& name) {};
 		virtual void TrackSettings(__attribute__((unused)) const TrackID trackID, __attribute__((unused)) const std::string& name) {};
 		virtual void TrackState(__attribute__((unused)) const DataModel::Track* track) {}
@@ -96,10 +95,10 @@ class ControlInterface
 		virtual void SignalSettings(__attribute__((unused)) const SignalID signalID, __attribute__((unused)) const std::string& name) {};
 		virtual void SignalState(__attribute__((unused)) const ControlType controlType, __attribute__((unused)) const DataModel::Signal* signal) {};
 
-		virtual void LocoSpeedDirectionFunctions(const DataModel::Loco* loco, const Speed speed, const Direction direction, std::vector<DataModel::LocoFunctions::FunctionState>& functions)
+		virtual void LocoSpeedOrientationFunctions(const DataModel::Loco* loco, const Speed speed, const Orientation orientation, std::vector<DataModel::LocoFunctions::FunctionState>& functions)
 		{
 			LocoSpeed(ControlTypeInternal, loco, speed);
-			LocoDirection(ControlTypeInternal, loco, direction);
+			LocoOrientation(ControlTypeInternal, loco, orientation);
 			for (size_t functionNr = 0; functionNr < functions.size(); ++functionNr)
 			{
 				LocoFunction(ControlTypeInternal, loco, functionNr, functions[functionNr]);

@@ -106,9 +106,9 @@ class Manager
 		bool LocoSpeed(const ControlType controlType, const LocoID locoID, const Speed speed, const bool withSlaves = true);
 		bool LocoSpeed(const ControlType controlType, DataModel::Loco* loco, const Speed speed, const bool withSlaves = true);
 		Speed LocoSpeed(const LocoID locoID) const;
-		void LocoDirection(const ControlType controlType, const ControlID controlID, const Protocol protocol, const Address address, const Direction direction);
-		void LocoDirection(const ControlType controlType, const LocoID locoID, const Direction direction);
-		void LocoDirection(const ControlType controlType, DataModel::Loco* loco, const Direction direction);
+		void LocoOrientation(const ControlType controlType, const ControlID controlID, const Protocol protocol, const Address address, const Orientation orientation);
+		void LocoOrientation(const ControlType controlType, const LocoID locoID, const Orientation orientation);
+		void LocoOrientation(const ControlType controlType, DataModel::Loco* loco, const Orientation orientation);
 		void LocoFunction(const ControlType controlType, const ControlID controlID, const Protocol protocol, const Address address, const Function function, const DataModel::LocoFunctions::FunctionState on);
 		void LocoFunction(const ControlType controlType, const LocoID locoID, const Function function, const DataModel::LocoFunctions::FunctionState on);
 
@@ -163,7 +163,7 @@ class Manager
 			const DataModel::LayoutItem::LayoutRotation rotation,
 			const DataModel::TrackType trackType,
 			const std::vector<FeedbackID>& feedbacks,
-			const DataModel::SelectStreetApproach selectStreetApproach,
+			const DataModel::SelectRouteApproach selectRouteApproach,
 			const bool releaseWhenFree,
 			std::string& result);
 		bool TrackDelete(const TrackID trackID);
@@ -190,17 +190,17 @@ class Manager
 		bool SwitchDelete(const SwitchID switchID);
 		bool SwitchRelease(const SwitchID switchID);
 
-		// street
-		bool StreetExecute(Logger::Logger* logger, const LocoID locoID, const StreetID streetID);
-		void StreetExecuteAsync(Logger::Logger* logger, const StreetID streetID);
-		DataModel::Street* GetStreet(const StreetID streetID) const;
-		const std::string& GetStreetName(const StreetID streetID) const;
-		const std::map<StreetID,DataModel::Street*>& StreetList() const { return streets; }
-		const std::map<std::string,DataModel::Street*> StreetListByName() const;
-		bool StreetSave(const StreetID streetID,
+		// route
+		bool RouteExecute(Logger::Logger* logger, const LocoID locoID, const RouteID routeID);
+		void RouteExecuteAsync(Logger::Logger* logger, const RouteID routeID);
+		DataModel::Route* GetRoute(const RouteID routeID) const;
+		const std::string& GetRouteName(const RouteID routeID) const;
+		const std::map<RouteID,DataModel::Route*>& RouteList() const { return routes; }
+		const std::map<std::string,DataModel::Route*> RouteListByName() const;
+		bool RouteSave(const RouteID routeID,
 			const std::string& name,
 			const Delay delay,
-			const DataModel::Street::PushpullType pushpull,
+			const DataModel::Route::PushpullType pushpull,
 			const Length minTrainLength,
 			const Length maxTrainLength,
 			const std::vector<DataModel::Relation*>& relationsAtLock,
@@ -211,17 +211,17 @@ class Manager
 			const DataModel::LayoutItem::LayoutPosition posZ,
 			const Automode automode,
 			const DataModel::ObjectIdentifier& fromTrack,
-			const Direction fromDirection,
+			const Orientation fromOrientation,
 			const DataModel::ObjectIdentifier& toTrack,
-			const Direction toDirection,
-			const DataModel::Street::Speed speed,
+			const Orientation toOrientation,
+			const DataModel::Route::Speed speed,
 			const FeedbackID feedbackIdReduced,
 			const FeedbackID feedbackIdCreep,
 			const FeedbackID feedbackIdStop,
 			const FeedbackID feedbackIdOver,
 			const Pause waitAfterRelease,
 			std::string& result);
-		bool StreetDelete(const StreetID streetID);
+		bool RouteDelete(const RouteID routeID);
 
 		// layer
 		DataModel::Layer* GetLayer(const LayerID layerID) const;
@@ -239,13 +239,14 @@ class Manager
 		const std::map<std::string,DataModel::Signal*> SignalListByName() const;
 		bool SignalSave(const SignalID signalID,
 			const std::string& name,
+			const Orientation signalOrientation,
 			const DataModel::LayoutItem::LayoutPosition x,
 			const DataModel::LayoutItem::LayoutPosition y,
 			const DataModel::LayoutItem::LayoutPosition z,
 			const DataModel::LayoutItem::LayoutItemSize height,
 			const DataModel::LayoutItem::LayoutRotation rotation,
 			const std::vector<FeedbackID>& newFeedbacks,
-			const DataModel::SelectStreetApproach selectStreetApproach,
+			const DataModel::SelectRouteApproach selectRouteApproach,
 			const bool releaseWhenFree,
 			const ControlID controlID,
 			const Protocol protocol,
@@ -255,26 +256,20 @@ class Manager
 			const bool inverted,
 			std::string& result);
 		bool SignalDelete(const SignalID signalID);
-		bool SignalRelease(const SignalID signalID);
-		void SignalBlock(const SignalID signalID, const bool blocked);
-		void SignalSetLocoDirection(const SignalID signalID, const Direction direction);
 		void SignalPublishState(const ControlType controlType, const DataModel::Signal* signal);
 
 		// automode
 		bool LocoIntoTrackBase(Logger::Logger* logger, const LocoID locoID, const DataModel::ObjectIdentifier& trackIdentifier);
 		bool LocoRelease(const LocoID locoID);
-		bool TrackRelease(const TrackID trackID);
-		bool LocoReleaseInTrack(const TrackID trackID);
-		bool LocoReleaseInSignal(const SignalID signalID);
-		bool TrackStartLoco(const TrackID trackID);
-		bool TrackStopLoco(const TrackID trackID);
-		bool SignalStartLoco(const TrackID trackID);
-		bool SignalStopLoco(const TrackID trackID);
-		void TrackBlock(const TrackID trackID, const bool blocked);
-		void TrackSetLocoDirection(const TrackID trackID, const Direction direction);
+		bool TrackBaseRelease(const DataModel::ObjectIdentifier& objectIdentifier);
+		bool LocoReleaseOnTrackBase(const DataModel::ObjectIdentifier& objectIdentifier);
+		bool TrackBaseStartLoco(const DataModel::ObjectIdentifier& objectIdentifier);
+		bool TrackBaseStopLoco(const DataModel::ObjectIdentifier& objectIdentifier);
+		void TrackBaseBlock(const DataModel::ObjectIdentifier& objectIdentifier, const bool blocked);
+		void TrackBaseSetLocoOrientation(const DataModel::ObjectIdentifier& objectIdentifier, const Orientation orientation);
 		void TrackPublishState(const DataModel::Track* track);
-		bool StreetRelease(const StreetID streetID);
-		bool LocoDestinationReached(const DataModel::Loco* loco, const DataModel::Street* street, const DataModel::TrackBase* track);
+		bool RouteRelease(const RouteID routeID);
+		bool LocoDestinationReached(const DataModel::Loco* loco, const DataModel::Route* route, const DataModel::TrackBase* track);
 		bool LocoStart(const LocoID locoID);
 		bool LocoStop(const LocoID locoID);
 		bool LocoStartAll();
@@ -284,11 +279,11 @@ class Manager
 		// settings
 		DataModel::AccessoryPulseDuration GetDefaultAccessoryDuration() const { return defaultAccessoryDuration; }
 		bool GetAutoAddFeedback() const { return autoAddFeedback; }
-		DataModel::SelectStreetApproach GetSelectStreetApproach() const { return selectStreetApproach; }
+		DataModel::SelectRouteApproach GetSelectRouteApproach() const { return selectRouteApproach; }
 		DataModel::Loco::NrOfTracksToReserve GetNrOfTracksToReserve() const { return nrOfTracksToReserve; }
 		bool SaveSettings(const DataModel::AccessoryPulseDuration duration,
 			const bool autoAddFeedback,
-			const DataModel::SelectStreetApproach selectStreetApproach,
+			const DataModel::SelectRouteApproach selectRouteApproach,
 			const DataModel::Loco::NrOfTracksToReserve nrOfTracksToReserve,
 			const Logger::Logger::Level logLevel,
 			const Languages::Language language);
@@ -305,10 +300,8 @@ class Manager
 			manager->ProgramValue(cv, value);
 		}
 
-		bool CanHandleProgram();
-		bool CanHandleProgramMm();
-		bool CanHandleProgramDccRead();
-		bool CanHandleProgramDccWrite();
+		bool CanHandle(const Hardware::Capabilities capability) const;
+		Hardware::Capabilities GetCapabilities(const ControlID controlID) const;
 
 	private:
 		bool ControlIsOfHardwareType(const ControlID controlID, const HardwareType hardwareType);
@@ -357,7 +350,7 @@ class Manager
 			const DataModel::LayoutItem::LayoutPosition posZ,
 			std::string& result) const;
 
-		bool CheckStreetPosition(const DataModel::Street* street,
+		bool CheckRoutePosition(const DataModel::Route* route,
 			const DataModel::LayoutItem::LayoutPosition posX,
 			const DataModel::LayoutItem::LayoutPosition posY,
 			const DataModel::LayoutItem::LayoutPosition posZ,
@@ -524,9 +517,9 @@ class Manager
 		std::map<SwitchID,DataModel::Switch*> switches;
 		mutable std::mutex switchMutex;
 
-		// street
-		std::map<StreetID,DataModel::Street*> streets;
-		mutable std::mutex streetMutex;
+		// route
+		std::map<RouteID,DataModel::Route*> routes;
+		mutable std::mutex routeMutex;
 
 		// layer
 		std::map<LayerID,DataModel::Layer*> layers;
@@ -541,7 +534,7 @@ class Manager
 
 		DataModel::AccessoryPulseDuration defaultAccessoryDuration;
 		bool autoAddFeedback;
-		DataModel::SelectStreetApproach selectStreetApproach;
+		DataModel::SelectRouteApproach selectRouteApproach;
 		DataModel::Loco::NrOfTracksToReserve nrOfTracksToReserve;
 
 		volatile bool run;
@@ -556,6 +549,6 @@ class Manager
 		const std::string unknownFeedback;
 		const std::string unknownTrack;
 		const std::string unknownSwitch;
-		const std::string unknownStreet;
+		const std::string unknownRoute;
 		const std::string unknownSignal;
 };

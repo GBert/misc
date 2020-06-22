@@ -161,14 +161,14 @@ namespace Hardware
 	}
 
 
-	void OpenDcc::LocoDirection(__attribute__((unused)) const Protocol protocol, const Address address, const Direction direction)
+	void OpenDcc::LocoOrientation(__attribute__((unused)) const Protocol protocol, const Address address, const Orientation orientation)
 	{
 		if (!serialLine.IsConnected() || !CheckLocoAddress(address))
 		{
 			return;
 		}
 
-		cache.SetDirection(address, direction);
+		cache.SetOrientation(address, orientation);
 		SendXLok(address);
 	}
 
@@ -205,7 +205,7 @@ namespace Hardware
 		SendXFunc34(address);
 	}
 
-	void OpenDcc::LocoSpeedDirectionFunctions(__attribute__((unused)) const Protocol protocol, const Address address, const Speed speed, const Direction direction, std::vector<DataModel::LocoFunctions::FunctionState>& functions)
+	void OpenDcc::LocoSpeedOrientationFunctions(__attribute__((unused)) const Protocol protocol, const Address address, const Speed speed, const Orientation orientation, std::vector<DataModel::LocoFunctions::FunctionState>& functions)
 	{
 		if (!serialLine.IsConnected() || !CheckLocoAddress(address))
 		{
@@ -213,7 +213,7 @@ namespace Hardware
 		}
 
 		cache.SetSpeed(address, speed);
-		cache.SetDirection(address, direction);
+		cache.SetOrientation(address, orientation);
 		unsigned char nrFunctions = functions.size();
 		for (unsigned char functionNr = 0; functionNr < nrFunctions; ++functionNr)
 		{
@@ -237,10 +237,10 @@ namespace Hardware
 	bool OpenDcc::SendXLok(const Address address) const
 	{
 		OpenDccCacheEntry entry = cache.GetData(address);
-		logger->Info(Languages::TextSettingSpeedDirectionLight, address, entry.speed, Languages::GetLeftRight(static_cast<Direction>((entry.directionF0 >> 5) & 0x01)), Languages::GetOnOff((entry.directionF0 >> 4) & 0x01));
+		logger->Info(Languages::TextSettingSpeedOrientationLight, address, entry.speed, Languages::GetLeftRight(static_cast<Orientation>((entry.orientationF0 >> 5) & 0x01)), Languages::GetOnOff((entry.orientationF0 >> 4) & 0x01));
 		const unsigned char addressLSB = (address & 0xFF);
 		const unsigned char addressMSB = (address >> 8);
-		const unsigned char data[5] = { XLok, addressLSB, addressMSB, entry.speed, entry.directionF0 };
+		const unsigned char data[5] = { XLok, addressLSB, addressMSB, entry.speed, entry.orientationF0 };
 
 		serialLine.Send(data, sizeof(data));
 		unsigned char input;

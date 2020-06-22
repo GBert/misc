@@ -52,7 +52,7 @@ Manager::Manager(Config& config)
 	storage(nullptr),
 	defaultAccessoryDuration(DataModel::DefaultAccessoryPulseDuration),
 	autoAddFeedback(false),
-	selectStreetApproach(DataModel::SelectStreetRandom),
+	selectRouteApproach(DataModel::SelectRouteRandom),
 	nrOfTracksToReserve(DataModel::Loco::ReserveOne),
 	run(false),
 	debounceRun(false),
@@ -63,7 +63,7 @@ Manager::Manager(Config& config)
 	unknownFeedback(Languages::GetText(Languages::TextFeedbackDoesNotExist)),
 	unknownTrack(Languages::GetText(Languages::TextTrackDoesNotExist)),
 	unknownSwitch(Languages::GetText(Languages::TextSwitchDoesNotExist)),
-	unknownStreet(Languages::GetText(Languages::TextStreetDoesNotExist)),
+	unknownRoute(Languages::GetText(Languages::TextRouteDoesNotExist)),
 	unknownSignal(Languages::GetText(Languages::TextSignalDoesNotExist))
 {
 	StorageParams storageParams;
@@ -81,7 +81,7 @@ Manager::Manager(Config& config)
 	Languages::SetDefaultLanguage(static_cast<Languages::Language>(Utils::Utils::StringToInteger(storage->GetSetting("Language"), Languages::EN)));
 	defaultAccessoryDuration = Utils::Utils::StringToInteger(storage->GetSetting("DefaultAccessoryDuration"), 250);
 	autoAddFeedback = Utils::Utils::StringToBool(storage->GetSetting("AutoAddFeedback"));
-	selectStreetApproach = static_cast<DataModel::SelectStreetApproach>(Utils::Utils::StringToInteger(storage->GetSetting("SelectStreetApproach")));
+	selectRouteApproach = static_cast<DataModel::SelectRouteApproach>(Utils::Utils::StringToInteger(storage->GetSetting("SelectRouteApproach")));
 	nrOfTracksToReserve = static_cast<DataModel::Loco::NrOfTracksToReserve>(Utils::Utils::StringToInteger(storage->GetSetting("NrOfTracksToReserve"), 2));
 
 
@@ -164,10 +164,10 @@ Manager::Manager(Config& config)
 		logger->Info(Languages::TextLoadedSignal, signal.second->GetID(), signal.second->GetName());
 	}
 
-	storage->AllStreets(streets);
-	for (auto street : streets)
+	storage->AllRoutes(routes);
+	for (auto route : routes)
 	{
-		logger->Info(Languages::TextLoadedStreet, street.second->GetID(), street.second->GetName());
+		logger->Info(Languages::TextLoadedRoute, route.second->GetID(), route.second->GetName());
 	}
 
 	storage->AllLocos(locos);
@@ -235,7 +235,7 @@ Manager::~Manager()
 	}
 
 	DeleteAllMapEntries(locos, locoMutex);
-	DeleteAllMapEntries(streets, streetMutex);
+	DeleteAllMapEntries(routes, routeMutex);
 	DeleteAllMapEntries(signals, signalMutex);
 	DeleteAllMapEntries(switches, switchMutex);
 	DeleteAllMapEntries(accessories, accessoryMutex);
@@ -291,7 +291,7 @@ void Manager::InitLocos()
 		for (auto control : controls)
 		{
 			std::vector<DataModel::LocoFunctions::FunctionState> functions = loco.second->GetFunctions();
-			control.second->LocoSpeedDirectionFunctions(loco.second, loco.second->GetSpeed(), loco.second->GetDirection(), functions);
+			control.second->LocoSpeedOrientationFunctions(loco.second, loco.second->GetSpeed(), loco.second->GetOrientation(), functions);
 		}
 	}
 }
@@ -507,7 +507,7 @@ const std::map<ControlID,std::string> Manager::LocoControlListNames() const
 			continue;
 		}
 		ControlInterface* c = controls.at(hardware.second->GetControlID());
-		if (c->CanHandleLocos() == false)
+		if (c->CanHandle(Hardware::CapabilityLoco) == false)
 		{
 			continue;
 		}
@@ -528,7 +528,7 @@ const std::map<ControlID,std::string> Manager::AccessoryControlListNames() const
 			continue;
 		}
 		ControlInterface* c = controls.at(hardware.second->GetControlID());
-		if (c->CanHandleAccessories() == false)
+		if (c->CanHandle(Hardware::CapabilityAccessory) == false)
 		{
 			continue;
 		}
@@ -543,7 +543,7 @@ const std::map<ControlID,std::string> Manager::FeedbackControlListNames() const
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto control : controls)
 	{
-		if (control.second->GetControlType() != ControlTypeHardware || control.second->CanHandleFeedbacks() == false)
+		if (control.second->GetControlType() != ControlTypeHardware || control.second->CanHandle(Hardware::CapabilityFeedback) == false)
 		{
 			continue;
 		}
@@ -558,7 +558,11 @@ const std::map<ControlID,std::string> Manager::ProgramControlListNames() const
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto control : controls)
 	{
-		if (control.second->GetControlType() != ControlTypeHardware || control.second->CanHandleProgram() == false)
+		if (control.second->GetControlType() != ControlTypeHardware)
+		{
+			continue;
+		}
+		if (control.second->CanHandle(Hardware::CapabilityProgram) == false)
 		{
 			continue;
 		}
@@ -838,34 +842,34 @@ Speed Manager::LocoSpeed(const LocoID locoID) const
 	return loco->GetSpeed();
 }
 
-void Manager::LocoDirection(const ControlType controlType, const ControlID controlID, const Protocol protocol, const Address address, const Direction direction)
+void Manager::LocoOrientation(const ControlType controlType, const ControlID controlID, const Protocol protocol, const Address address, const Orientation orientation)
 {
 	Loco* loco = GetLoco(controlID, protocol, address);
 	if (loco == nullptr)
 	{
 		return;
 	}
-	LocoDirection(controlType, loco, direction);
+	LocoOrientation(controlType, loco, orientation);
 }
 
-void Manager::LocoDirection(const ControlType controlType, const LocoID locoID, const Direction direction)
+void Manager::LocoOrientation(const ControlType controlType, const LocoID locoID, const Orientation orientation)
 {
 	Loco* loco = GetLoco(locoID);
-	LocoDirection(controlType, loco, direction);
+	LocoOrientation(controlType, loco, orientation);
 }
 
-void Manager::LocoDirection(const ControlType controlType, Loco* loco, const Direction direction)
+void Manager::LocoOrientation(const ControlType controlType, Loco* loco, const Orientation orientation)
 {
 	if (loco == nullptr)
 	{
 		return;
 	}
-	loco->SetDirection(direction);
-	logger->Info(direction ? Languages::TextLocoDirectionIsRight : Languages::TextLocoDirectionIsLeft, loco->GetName());
+	loco->SetOrientation(orientation);
+	logger->Info(orientation ? Languages::TextLocoDirectionOfTravelIsRight : Languages::TextLocoDirectionOfTravelIsLeft, loco->GetName());
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto control : controls)
 	{
-		control.second->LocoDirection(controlType, loco, direction);
+		control.second->LocoOrientation(controlType, loco, orientation);
 	}
 }
 
@@ -910,21 +914,21 @@ void Manager::AccessoryState(const ControlType controlType, const ControlID cont
 	Accessory* accessory = GetAccessory(controlID, protocol, address);
 	if (accessory != nullptr)
 	{
-		AccessoryState(controlType, accessory, state, true);
+		AccessoryState(controlType, accessory, accessory->CalculateInvertedAccessoryState(state), true);
 		return;
 	}
 
 	Switch* mySwitch = GetSwitch(controlID, protocol, address);
 	if (mySwitch != nullptr)
 	{
-		SwitchState(controlType, mySwitch, state, true);
+		SwitchState(controlType, mySwitch, mySwitch->CalculateInvertedAccessoryState(state), true);
 		return;
 	}
 
 	Signal* signal = GetSignal(controlID, protocol, address);
 	if (signal != nullptr)
 	{
-		SignalState(controlType, signal, state, true);
+		SignalState(controlType, signal, signal->CalculateInvertedAccessoryState(state), true);
 		return;
 	}
 }
@@ -954,21 +958,11 @@ void Manager::AccessoryState(const ControlType controlType, Accessory* accessory
 	}
 
 	accessory->SetAccessoryState(state);
-	const bool inverted = accessory->GetInverted();
 
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto control : controls)
 	{
-		DataModel::AccessoryState tempState;
-		if (control.first < ControlIdFirstHardware || inverted == false)
-		{
-			tempState = state;
-		}
-		else
-		{
-			tempState = (state == DataModel::AccessoryStateOn ? DataModel::AccessoryStateOff : DataModel::AccessoryStateOn);
-		}
-		control.second->AccessoryState(controlType, accessory, tempState);
+		control.second->AccessoryState(controlType, accessory);
 	}
 }
 
@@ -1526,7 +1520,7 @@ TrackID Manager::TrackSave(const TrackID trackID,
 	const LayoutRotation rotation,
 	const DataModel::TrackType trackType,
 	const std::vector<FeedbackID>& newFeedbacks,
-	const DataModel::SelectStreetApproach selectStreetApproach,
+	const DataModel::SelectRouteApproach selectRouteApproach,
 	const bool releaseWhenFree,
 	string& result)
 {
@@ -1556,7 +1550,7 @@ TrackID Manager::TrackSave(const TrackID trackID,
 	track->SetPosZ(posZ);
 	track->SetTrackType(trackType);
 	track->Feedbacks(CleanupAndCheckFeedbacksForTrack(ObjectIdentifier(ObjectTypeTrack, trackID), newFeedbacks));
-	track->SetSelectStreetApproach(selectStreetApproach);
+	track->SetSelectRouteApproach(selectRouteApproach);
 	track->SetReleaseWhenFree(releaseWhenFree);
 
 	// save in db
@@ -1636,21 +1630,11 @@ void Manager::SwitchState(const ControlType controlType, Switch* mySwitch, const
 	}
 
 	mySwitch->SetAccessoryState(state);
-	bool inverted = mySwitch->GetInverted();
 
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto control : controls)
 	{
-		DataModel::AccessoryState tempState;
-		if (control.first < ControlIdFirstHardware || inverted == false)
-		{
-			tempState = state;
-		}
-		else
-		{
-			tempState = (state == DataModel::SwitchStateStraight ? DataModel::SwitchStateTurnout : DataModel::SwitchStateStraight);
-		}
-		control.second->SwitchState(controlType, mySwitch, tempState);
+		control.second->SwitchState(controlType, mySwitch);
 	}
 }
 
@@ -1804,7 +1788,7 @@ const map<string,DataModel::Switch*> Manager::SwitchListByName() const
 	return out;
 }
 
-bool Manager::SwitchRelease(const StreetID switchID)
+bool Manager::SwitchRelease(const RouteID switchID)
 {
 	Switch* mySwitch = GetSwitch(switchID);
 	if (mySwitch == nullptr)
@@ -1816,72 +1800,72 @@ bool Manager::SwitchRelease(const StreetID switchID)
 }
 
 /***************************
-* Street                   *
+* Route                   *
 ***************************/
 
-bool Manager::StreetExecute(Logger::Logger* logger, const LocoID locoID, const StreetID streetID)
+bool Manager::RouteExecute(Logger::Logger* logger, const LocoID locoID, const RouteID routeID)
 {
-	Street* street = GetStreet(streetID);
-	if (street == nullptr)
+	Route* route = GetRoute(routeID);
+	if (route == nullptr)
 	{
 		return false;
 	}
-	return street->Execute(logger, locoID);
+	return route->Execute(logger, locoID);
 }
 
-void Manager::StreetExecuteAsync(Logger::Logger* logger, const StreetID streetID)
+void Manager::RouteExecuteAsync(Logger::Logger* logger, const RouteID routeID)
 {
-	Street* street = GetStreet(streetID);
-	if (street == nullptr)
+	Route* route = GetRoute(routeID);
+	if (route == nullptr)
 	{
 		return;
 	}
-	std::async(std::launch::async, Street::ExecuteStatic, logger, street);
+	std::async(std::launch::async, Route::ExecuteStatic, logger, route);
 }
 
-Street* Manager::GetStreet(const StreetID streetID) const
+Route* Manager::GetRoute(const RouteID routeID) const
 {
-	std::lock_guard<std::mutex> guard(streetMutex);
-	if (streets.count(streetID) != 1)
+	std::lock_guard<std::mutex> guard(routeMutex);
+	if (routes.count(routeID) != 1)
 	{
 		return nullptr;
 	}
-	return streets.at(streetID);
+	return routes.at(routeID);
 }
 
-const string& Manager::GetStreetName(const StreetID streetID) const
+const string& Manager::GetRouteName(const RouteID routeID) const
 {
-	std::lock_guard<std::mutex> guard(streetMutex);
-	if (streets.count(streetID) != 1)
+	std::lock_guard<std::mutex> guard(routeMutex);
+	if (routes.count(routeID) != 1)
 	{
-		return unknownStreet;
+		return unknownRoute;
 	}
-	return streets.at(streetID)->GetName();
+	return routes.at(routeID)->GetName();
 }
 
-bool Manager::CheckStreetPosition(const Street* street, const LayoutPosition posX, const LayoutPosition posY, const LayoutPosition posZ, string& result) const
+bool Manager::CheckRoutePosition(const Route* route, const LayoutPosition posX, const LayoutPosition posY, const LayoutPosition posZ, string& result) const
 {
-	if (street == nullptr)
+	if (route == nullptr)
 	{
 		return CheckPositionFree(posX, posY, posZ, DataModel::LayoutItem::Width1, DataModel::LayoutItem::Height1, DataModel::LayoutItem::Rotation0, result);
 	}
 
-	if (street->GetVisible() == DataModel::LayoutItem::VisibleNo)
+	if (route->GetVisible() == DataModel::LayoutItem::VisibleNo)
 	{
 		return true;
 	}
 
-	if (street->HasPosition(posX, posY, posZ))
+	if (route->HasPosition(posX, posY, posZ))
 	{
 		return true;
 	}
 	return CheckPositionFree(posX, posY, posZ, DataModel::LayoutItem::Width1, DataModel::LayoutItem::Height1, DataModel::LayoutItem::Rotation0, result);
 }
 
-bool Manager::StreetSave(const StreetID streetID,
+bool Manager::RouteSave(const RouteID routeID,
 	const std::string& name,
 	const Delay delay,
-	const Street::PushpullType pushpull,
+	const Route::PushpullType pushpull,
 	const Length minTrainLength,
 	const Length maxTrainLength,
 	const std::vector<DataModel::Relation*>& relationsAtLock,
@@ -1892,10 +1876,10 @@ bool Manager::StreetSave(const StreetID streetID,
 	const LayoutPosition posZ,
 	const Automode automode,
 	const ObjectIdentifier& fromTrack,
-	const Direction fromDirection,
+	const Orientation fromOrientation,
 	const ObjectIdentifier& toTrack,
-	const Direction toDirection,
-	const Street::Speed speed,
+	const Orientation toOrientation,
+	const Route::Speed speed,
 	const FeedbackID feedbackIdReduced,
 	const FeedbackID feedbackIdCreep,
 	const FeedbackID feedbackIdStop,
@@ -1904,29 +1888,29 @@ bool Manager::StreetSave(const StreetID streetID,
 	string& result)
 {
 
-	Street* street = GetStreet(streetID);
-	if (visible && !CheckStreetPosition(street, posX, posY, posZ, result))
+	Route* route = GetRoute(routeID);
+	if (visible && !CheckRoutePosition(route, posX, posY, posZ, result))
 	{
 		return false;
 	}
 
-	if (street == nullptr)
+	if (route == nullptr)
 	{
-		street = CreateAndAddObject(streets, streetMutex);
+		route = CreateAndAddObject(routes, routeMutex);
 	}
 
-	if (street == nullptr)
+	if (route == nullptr)
 	{
-		result = Languages::GetText(Languages::TextUnableToAddStreet);
+		result = Languages::GetText(Languages::TextUnableToAddRoute);
 		return false;
 	}
 
-	// remove street from old track
-	ObjectIdentifier oldFromTrack = street->GetFromTrack();
+	// remove route from old track
+	ObjectIdentifier oldFromTrack = route->GetFromTrack();
 	TrackBase* oldTrack = GetTrackBase(oldFromTrack);
 	if (oldTrack != nullptr)
 	{
-		oldTrack->RemoveStreet(street);
+		oldTrack->RemoveRoute(route);
 		if (storage == nullptr)
 		{
 			switch (oldFromTrack.GetObjectType())
@@ -1945,55 +1929,55 @@ bool Manager::StreetSave(const StreetID streetID,
 		}
 	}
 
-	// update existing street
-	street->SetName(CheckObjectName(streets, streetMutex, streetID, name.size() == 0 ? "S" : name));
-	street->SetDelay(delay);
-	street->AssignRelationsAtLock(relationsAtLock);
-	street->AssignRelationsAtUnlock(relationsAtUnlock);
-	street->SetVisible(visible);
-	street->SetPosX(posX);
-	street->SetPosY(posY);
-	street->SetPosZ(posZ);
-	street->SetAutomode(automode);
+	// update existing route
+	route->SetName(CheckObjectName(routes, routeMutex, routeID, name.size() == 0 ? "S" : name));
+	route->SetDelay(delay);
+	route->AssignRelationsAtLock(relationsAtLock);
+	route->AssignRelationsAtUnlock(relationsAtUnlock);
+	route->SetVisible(visible);
+	route->SetPosX(posX);
+	route->SetPosY(posY);
+	route->SetPosZ(posZ);
+	route->SetAutomode(automode);
 	if (automode == AutomodeYes)
 	{
-		street->SetFromTrack(fromTrack);
-		street->SetFromDirection(fromDirection);
-		street->SetToTrack(toTrack);
-		street->SetToDirection(toDirection);
-		street->SetSpeed(speed);
-		street->SetFeedbackIdReduced(feedbackIdReduced);
-		street->SetFeedbackIdCreep(feedbackIdCreep);
-		street->SetFeedbackIdStop(feedbackIdStop);
-		street->SetFeedbackIdOver(feedbackIdOver);
-		street->SetPushpull(pushpull);
-		street->SetMinTrainLength(minTrainLength);
-		street->SetMaxTrainLength(maxTrainLength);
-		street->SetWaitAfterRelease(waitAfterRelease);
+		route->SetFromTrack(fromTrack);
+		route->SetFromOrientation(fromOrientation);
+		route->SetToTrack(toTrack);
+		route->SetToOrientation(toOrientation);
+		route->SetSpeed(speed);
+		route->SetFeedbackIdReduced(feedbackIdReduced);
+		route->SetFeedbackIdCreep(feedbackIdCreep);
+		route->SetFeedbackIdStop(feedbackIdStop);
+		route->SetFeedbackIdOver(feedbackIdOver);
+		route->SetPushpull(pushpull);
+		route->SetMinTrainLength(minTrainLength);
+		route->SetMaxTrainLength(maxTrainLength);
+		route->SetWaitAfterRelease(waitAfterRelease);
 	}
 	else
 	{
-		street->SetFromTrack(ObjectIdentifier());
-		street->SetFromDirection(DirectionRight);
-		street->SetToTrack(ObjectIdentifier());
-		street->SetToDirection(DirectionLeft);
-		street->SetSpeed(Street::SpeedTravel);
-		street->SetFeedbackIdReduced(FeedbackNone);
-		street->SetFeedbackIdCreep(FeedbackNone);
-		street->SetFeedbackIdStop(FeedbackNone);
-		street->SetFeedbackIdOver(FeedbackNone);
-		street->SetPushpull(Street::PushpullTypeBoth);
-		street->SetMinTrainLength(0);
-		street->SetMaxTrainLength(0);
-		street->SetWaitAfterRelease(0);
+		route->SetFromTrack(ObjectIdentifier());
+		route->SetFromOrientation(OrientationRight);
+		route->SetToTrack(ObjectIdentifier());
+		route->SetToOrientation(OrientationLeft);
+		route->SetSpeed(Route::SpeedTravel);
+		route->SetFeedbackIdReduced(FeedbackNone);
+		route->SetFeedbackIdCreep(FeedbackNone);
+		route->SetFeedbackIdStop(FeedbackNone);
+		route->SetFeedbackIdOver(FeedbackNone);
+		route->SetPushpull(Route::PushpullTypeBoth);
+		route->SetMinTrainLength(0);
+		route->SetMaxTrainLength(0);
+		route->SetWaitAfterRelease(0);
 	}
 
-	//Add new street
-	ObjectIdentifier newFromTrack = street->GetFromTrack();
+	//Add new route
+	ObjectIdentifier newFromTrack = route->GetFromTrack();
 	TrackBase* newTrack = GetTrackBase(newFromTrack);
 	if (newTrack != nullptr)
 	{
-		newTrack->AddStreet(street);
+		newTrack->AddRoute(route);
 		if (storage == nullptr)
 		{
 			switch (newFromTrack.GetObjectType())
@@ -2015,53 +1999,53 @@ bool Manager::StreetSave(const StreetID streetID,
 	// save in db
 	if (storage)
 	{
-		storage->Save(*street);
+		storage->Save(*route);
 	}
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto control : controls)
 	{
-		control.second->StreetSettings(street->GetID(), name);
+		control.second->RouteSettings(route->GetID(), name);
 	}
 	return true;
 }
 
-const map<string,DataModel::Street*> Manager::StreetListByName() const
+const map<string,DataModel::Route*> Manager::RouteListByName() const
 {
-	map<string,DataModel::Street*> out;
-	std::lock_guard<std::mutex> guard(streetMutex);
-	for(auto street : streets)
+	map<string,DataModel::Route*> out;
+	std::lock_guard<std::mutex> guard(routeMutex);
+	for(auto route : routes)
 	{
-		out[street.second->GetName()] = street.second;
+		out[route.second->GetName()] = route.second;
 	}
 	return out;
 }
 
-bool Manager::StreetDelete(const StreetID streetID)
+bool Manager::RouteDelete(const RouteID routeID)
 {
-	Street* street = nullptr;
+	Route* route = nullptr;
 	{
-		std::lock_guard<std::mutex> guard(streetMutex);
-		if (streetID == StreetNone || streets.count(streetID) != 1)
+		std::lock_guard<std::mutex> guard(routeMutex);
+		if (routeID == RouteNone || routes.count(routeID) != 1)
 		{
 			return false;
 		}
 
-		street = streets.at(streetID);
-		streets.erase(streetID);
+		route = routes.at(routeID);
+		routes.erase(routeID);
 	}
 
 	if (storage)
 	{
-		storage->DeleteStreet(streetID);
+		storage->DeleteRoute(routeID);
 	}
 
-	const string& streetName = street->GetName();
+	const string& routeName = route->GetName();
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto control : controls)
 	{
-		control.second->StreetDelete(streetID, streetName);
+		control.second->RouteDelete(routeID, routeName);
 	}
-	delete street;
+	delete route;
 	return true;
 }
 
@@ -2092,7 +2076,7 @@ const map<string,LayerID> Manager::LayerListByNameWithFeedback() const
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto control : controls)
 	{
-		if (!control.second->CanHandleFeedbacks())
+		if (!control.second->CanHandle(Hardware::CapabilityFeedback))
 		{
 			continue;
 		}
@@ -2203,28 +2187,6 @@ bool Manager::SignalState(const ControlType controlType, Signal* signal, const D
 	return true;
 }
 
-void Manager::SignalBlock(const SignalID signalID, const bool blocked)
-{
-	Signal* signal = GetSignal(signalID);
-	if (signal == nullptr)
-	{
-		return;
-	}
-	signal->SetBlocked(blocked);
-	SignalPublishState(ControlTypeInternal, signal);
-}
-
-void Manager::SignalSetLocoDirection(const SignalID signalID, const Direction direction)
-{
-	Signal* signal = GetSignal(signalID);
-	if (signal == nullptr)
-	{
-		return;
-	}
-	signal->SetLocoDirection(direction);
-	SignalPublishState(ControlTypeInternal, signal);
-}
-
 void Manager::SignalPublishState(const ControlType controlType, const DataModel::Signal* signal)
 {
 	std::lock_guard<std::mutex> guard(controlMutex);
@@ -2285,13 +2247,14 @@ bool Manager::CheckSignalPosition(const Signal* signal, const LayoutPosition pos
 
 bool Manager::SignalSave(const SignalID signalID,
 	const string& name,
+	const Orientation signalOrientation,
 	const LayoutPosition posX,
 	const LayoutPosition posY,
 	const LayoutPosition posZ,
 	const LayoutItemSize height,
 	const LayoutRotation rotation,
 	const std::vector<FeedbackID>& newFeedbacks,
-	const DataModel::SelectStreetApproach selectStreetApproach,
+	const DataModel::SelectRouteApproach selectRouteApproach,
 	const bool releaseWhenFree,
 	const ControlID controlID,
 	const Protocol protocol,
@@ -2324,13 +2287,14 @@ bool Manager::SignalSave(const SignalID signalID,
 	}
 
 	signal->SetName(CheckObjectName(signals, signalMutex, signalID, name.size() == 0 ? "S" : name));
+	signal->SetSignalOrientation(signalOrientation);
 	signal->SetPosX(posX);
 	signal->SetPosY(posY);
 	signal->SetPosZ(posZ);
 	signal->SetHeight(height);
 	signal->SetRotation(rotation);
 	signal->Feedbacks(CleanupAndCheckFeedbacksForTrack(ObjectIdentifier(ObjectTypeSignal, signalID), newFeedbacks));
-	signal->SetSelectStreetApproach(selectStreetApproach);
+	signal->SetSelectRouteApproach(selectRouteApproach);
 	signal->SetReleaseWhenFree(releaseWhenFree);
 	signal->SetControlID(controlID);
 	signal->SetProtocol(protocol);
@@ -2391,17 +2355,6 @@ const map<string,DataModel::Signal*> Manager::SignalListByName() const
 		out[signal.second->GetName()] = signal.second;
 	}
 	return out;
-}
-
-bool Manager::SignalRelease(const StreetID signalID)
-{
-	Signal* signal = GetSignal(signalID);
-	if (signal == nullptr)
-	{
-		return false;
-	}
-	LocoID locoID = signal->GetLoco();
-	return signal->Release(logger, locoID);
 }
 
 /***************************
@@ -2479,25 +2432,25 @@ bool Manager::LocoReleaseInternal(Loco* loco)
 	return true;
 }
 
-bool Manager::TrackRelease(const TrackID trackID)
+bool Manager::TrackBaseRelease(const ObjectIdentifier& identifier)
 {
-	Track* track = GetTrack(trackID);
+	TrackBase* track = GetTrackBase(identifier);
 	if (track == nullptr)
 	{
 		return false;
 	}
-	return track->ReleaseForce(logger, LocoNone);
+	return track->BaseReleaseForce(logger, LocoNone);
 }
 
-bool Manager::LocoReleaseInTrack(const TrackID trackID)
+bool Manager::LocoReleaseOnTrackBase(const ObjectIdentifier& identifier)
 {
-	Track* track = GetTrack(trackID);
+	TrackBase* track = GetTrackBase(identifier);
 	if (track == nullptr)
 	{
 		return false;
 	}
-	LocoID locoID = track->GetLoco();
-	track->ReleaseForce(logger, locoID);
+	LocoID locoID = track->GetMyLoco();
+	track->BaseReleaseForce(logger, locoID);
 	Loco* loco = GetLoco(locoID);
 	if (loco == nullptr)
 	{
@@ -2506,83 +2459,46 @@ bool Manager::LocoReleaseInTrack(const TrackID trackID)
 	return LocoReleaseInternal(loco);
 }
 
-bool Manager::LocoReleaseInSignal(const SignalID signalID)
+bool Manager::TrackBaseStartLoco(const ObjectIdentifier& identifier)
 {
-	Signal* signal = GetSignal(signalID);
-	if (signal == nullptr)
-	{
-		return false;
-	}
-	LocoID locoID = signal->GetLoco();
-	signal->ReleaseForce(logger, locoID);
-	Loco* loco = GetLoco(locoID);
-	if (loco == nullptr)
-	{
-		return false;
-	}
-	return LocoReleaseInternal(loco);
-}
-
-bool Manager::TrackStartLoco(const TrackID trackID)
-{
-	Track* track = GetTrack(trackID);
+	TrackBase* track = GetTrackBase(identifier);
 	if (track == nullptr)
 	{
 		return false;
 	}
-	return LocoStart(track->GetLoco());
+	return LocoStart(track->GetMyLoco());
 }
 
-bool Manager::SignalStartLoco(const TrackID trackID)
+bool Manager::TrackBaseStopLoco(const ObjectIdentifier& identifier)
 {
-	Track* track = GetTrack(trackID);
+	TrackBase* track = GetTrackBase(identifier);
 	if (track == nullptr)
 	{
 		return false;
 	}
-	return LocoStart(track->GetLoco());
+	return LocoStop(track->GetMyLoco());
 }
 
-bool Manager::TrackStopLoco(const TrackID trackID)
+void Manager::TrackBaseBlock(const ObjectIdentifier& identifier, const bool blocked)
 {
-	Track* track = GetTrack(trackID);
-	if (track == nullptr)
-	{
-		return false;
-	}
-	return LocoStop(track->GetLoco());
-}
-
-bool Manager::SignalStopLoco(const TrackID trackID)
-{
-	Track* track = GetTrack(trackID);
-	if (track == nullptr)
-	{
-		return false;
-	}
-	return LocoStop(track->GetLoco());
-}
-
-void Manager::TrackBlock(const TrackID trackID, const bool blocked)
-{
-	Track* track = GetTrack(trackID);
+	TrackBase* track = GetTrackBase(identifier);
 	if (track == nullptr)
 	{
 		return;
 	}
 	track->SetBlocked(blocked);
-	TrackPublishState(track);
+	TrackBasePublishState(track);
 }
 
-void Manager::TrackSetLocoDirection(const TrackID trackID, const Direction direction)
+void Manager::TrackBaseSetLocoOrientation(const ObjectIdentifier& identifier, const Orientation orientation)
 {
-	Track* track = GetTrack(trackID);
+	TrackBase* track = GetTrackBase(identifier);
 	if (track == nullptr)
 	{
 		return;
 	}
-	track->SetLocoDirection(direction);
-	TrackPublishState(track);
+	track->SetLocoOrientation(orientation);
+	TrackBasePublishState(track);
 }
 
 void Manager::TrackBasePublishState(const DataModel::TrackBase* trackBase)
@@ -2611,23 +2527,23 @@ void Manager::TrackPublishState(const DataModel::Track* track)
 	}
 }
 
-bool Manager::StreetRelease(const StreetID streetID)
+bool Manager::RouteRelease(const RouteID routeID)
 {
-	Street* street = GetStreet(streetID);
-	if (street == nullptr)
+	Route* route = GetRoute(routeID);
+	if (route == nullptr)
 	{
 		return false;
 	}
-	LocoID locoID = street->GetLoco();
-	return street->Release(logger, locoID);
+	LocoID locoID = route->GetLoco();
+	return route->Release(logger, locoID);
 }
 
-bool Manager::LocoDestinationReached(const Loco* loco, const Street* street, const TrackBase* track)
+bool Manager::LocoDestinationReached(const Loco* loco, const Route* route, const TrackBase* track)
 {
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto control : controls)
 	{
-		control.second->LocoDestinationReached(loco, street, track);
+		control.second->LocoDestinationReached(loco, route, track);
 	}
 	return true;
 }
@@ -2757,7 +2673,7 @@ bool Manager::CheckPositionFree(const LayoutPosition posX, const LayoutPosition 
 		&& CheckLayoutPositionFree(posX, posY, posZ, result, tracks, trackMutex)
 		&& CheckLayoutPositionFree(posX, posY, posZ, result, feedbacks, feedbackMutex)
 		&& CheckLayoutPositionFree(posX, posY, posZ, result, switches, switchMutex)
-		&& CheckLayoutPositionFree(posX, posY, posZ, result, streets, streetMutex)
+		&& CheckLayoutPositionFree(posX, posY, posZ, result, routes, routeMutex)
 		&& CheckLayoutPositionFree(posX, posY, posZ, result, signals, signalMutex);
 }
 
@@ -2938,14 +2854,14 @@ bool Manager::CheckControlProtocolAddress(const AddressType type, const ControlI
 
 bool Manager::SaveSettings(const DataModel::AccessoryPulseDuration duration,
 	const bool autoAddFeedback,
-	const DataModel::SelectStreetApproach selectStreetApproach,
+	const DataModel::SelectRouteApproach selectRouteApproach,
 	const DataModel::Loco::NrOfTracksToReserve nrOfTracksToReserve,
 	const Logger::Logger::Level logLevel,
 	const Languages::Language language)
 {
 	this->defaultAccessoryDuration = duration;
 	this->autoAddFeedback = autoAddFeedback;
-	this->selectStreetApproach = selectStreetApproach;
+	this->selectRouteApproach = selectRouteApproach;
 	this->nrOfTracksToReserve = nrOfTracksToReserve;
 	Logger::Logger::SetLogLevel(logLevel);
 	Languages::SetDefaultLanguage(language);
@@ -2956,7 +2872,7 @@ bool Manager::SaveSettings(const DataModel::AccessoryPulseDuration duration,
 	}
 	storage->SaveSetting("DefaultAccessoryDuration", std::to_string(duration));
 	storage->SaveSetting("AutoAddFeedback", std::to_string(autoAddFeedback));
-	storage->SaveSetting("SelectStreetApproach", std::to_string(static_cast<int>(selectStreetApproach)));
+	storage->SaveSetting("SelectRouteApproach", std::to_string(static_cast<int>(selectRouteApproach)));
 	storage->SaveSetting("NrOfTracksToReserve", std::to_string(static_cast<int>(nrOfTracksToReserve)));
 	storage->SaveSetting("LogLevel", std::to_string(static_cast<int>(logLevel)));
 	storage->SaveSetting("Language", std::to_string(static_cast<int>(language)));
@@ -3007,7 +2923,7 @@ ControlID Manager::GetControlForLoco() const
 {
 	for (auto control : controls)
 	{
-		if (control.second->CanHandleLocos())
+		if (control.second->CanHandle(Hardware::CapabilityLoco))
 		{
 			return control.first;
 		}
@@ -3019,7 +2935,7 @@ ControlID Manager::GetControlForAccessory() const
 {
 	for (auto control : controls)
 	{
-		if (control.second->CanHandleAccessories())
+		if (control.second->CanHandle(Hardware::CapabilityAccessory))
 		{
 			return control.first;
 		}
@@ -3031,7 +2947,7 @@ ControlID Manager::GetControlForFeedback() const
 {
 	for (auto control : controls)
 	{
-		if (control.second->CanHandleFeedbacks())
+		if (control.second->CanHandle(Hardware::CapabilityFeedback))
 		{
 			return control.first;
 		}
@@ -3089,12 +3005,12 @@ void Manager::ProgramValue(const CvNumber cv, const CvValue value)
 	}
 }
 
-bool Manager::CanHandleProgram()
+bool Manager::CanHandle(const Hardware::Capabilities capability) const
 {
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto control : controls)
 	{
-		bool ret = control.second->CanHandleProgram();
+		bool ret = control.second->CanHandle(capability);
 		if (ret == true)
 		{
 			return true;
@@ -3103,47 +3019,16 @@ bool Manager::CanHandleProgram()
 	return false;
 }
 
-bool Manager::CanHandleProgramMm()
+Hardware::Capabilities Manager::GetCapabilities(const ControlID controlID) const
 {
-	std::lock_guard<std::mutex> guard(controlMutex);
-	for (auto control : controls)
+	ControlInterface* control = GetControl(controlID);
+	if (control == nullptr)
 	{
-		bool ret = control.second->CanHandleProgramMm();
-		if (ret == true)
-		{
-			return true;
-		}
+		return Hardware::CapabilityNone;
 	}
-	return false;
+	return control->GetCapabilities();
 }
 
-bool Manager::CanHandleProgramDccRead()
-{
-	std::lock_guard<std::mutex> guard(controlMutex);
-	for (auto control : controls)
-	{
-		bool ret = control.second->CanHandleProgramDccPom();
-		if (ret == true)
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
-bool Manager::CanHandleProgramDccWrite()
-{
-	std::lock_guard<std::mutex> guard(controlMutex);
-	for (auto control : controls)
-	{
-		bool ret = control.second->CanHandleProgramDccDirect();
-		if (ret == true)
-		{
-			return true;
-		}
-	}
-	return false;
-}
 
 Hardware::HardwareParams* Manager::CreateAndAddControl()
 {

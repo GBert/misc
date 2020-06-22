@@ -110,8 +110,10 @@ namespace Network
 
 	bool Serial::Receive(std::string& data, const size_t maxData, const unsigned int timeoutS, const unsigned int timeoutUS)
 	{
-		unsigned char dataBuffer[maxData];
-		ssize_t ret = Receive(dataBuffer, maxData, timeoutS, timeoutUS);
+		const size_t dataBufferSize = 1024;
+		unsigned char dataBuffer[dataBufferSize];
+		const size_t max = maxData > dataBufferSize ? dataBufferSize : maxData;
+		ssize_t ret = Receive(dataBuffer, max, timeoutS, timeoutUS);
 		if (ret <= 0)
 		{
 			return false;

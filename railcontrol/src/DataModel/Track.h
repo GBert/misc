@@ -35,7 +35,7 @@ class Manager;
 namespace DataModel
 {
 	class Loco;
-	class Street;
+	class Route;
 
 	class Track : public TrackBase, public LayoutItem, public LockableItem
 	{

@@ -36,7 +36,10 @@ namespace Hardware
 			Hsi88(const HardwareParams* params);
 			~Hsi88();
 
-			bool CanHandleFeedback() const override { return true; }
+			inline Hardware::Capabilities GetCapabilities() const override
+			{
+				return Hardware::CapabilityFeedback;
+			}
 
 			static void GetArgumentTypesAndHint(std::map<unsigned char,ArgumentType>& argumentTypes, std::string& hint)
 			{

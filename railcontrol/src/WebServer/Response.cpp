@@ -53,4 +53,4 @@ namespace WebServer
 		stream << response.content;
 		return stream;
 	}
-};
+} // namespace WebServer

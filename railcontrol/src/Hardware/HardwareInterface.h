@@ -26,6 +26,7 @@ along with RailControl; see the file LICENCE. If not see
 
 #include "DataModel/AccessoryBase.h"
 #include "DataTypes.h"
+#include "Hardware/Capabilities.h"
 #include "Manager.h"
 #include "Utils/Utils.h"
 
@@ -48,29 +49,8 @@ namespace Hardware
 			// get the name of the hardware
 			const std::string GetName() const { return name; }
 
-			// can this control handle locos
-			virtual bool CanHandleLocos() const { return false; }
-
-			// can this control handle accessories, switches, ...
-			virtual bool CanHandleAccessories() const { return false; }
-
-			// can this control handle feedback
-			virtual bool CanHandleFeedback() const { return false; }
-
-			// can this control handle program
-			virtual bool CanHandleProgram() const { return false; }
-
-			// can this control handle program Märklin Motorola
-			virtual bool CanHandleProgramMm() const { return false; }
-
-			// can this control handle program mfx
-			virtual bool CanHandleProgramMfx() const { return false; }
-
-			// can this control handle programming DCC CV
-			virtual bool CanHandleProgramDccDirect() const { return false; }
-
-			// can this control handle programming DCC CV POM
-			virtual bool CanHandleProgramDccPom() const { return false; }
+			// get hardware capabilities
+			virtual Hardware::Capabilities GetCapabilities() const = 0;
 
 			// get available loco protocols of this control
 			virtual void GetLocoProtocols(__attribute__((unused)) std::vector<Protocol>& protocols) const {};
@@ -90,19 +70,19 @@ namespace Hardware
 			// set loco speed
 			virtual void LocoSpeed(__attribute__((unused)) const Protocol protocol, __attribute__((unused)) const Address address, __attribute__((unused)) const Speed speed) {};
 
-			// set loco direction
-			virtual void LocoDirection(__attribute__((unused)) const Protocol protocol, __attribute__((unused)) const Address address, __attribute__((unused)) const Direction direction) {};
+			// set loco orientation
+			virtual void LocoOrientation(__attribute__((unused)) const Protocol protocol, __attribute__((unused)) const Address address, __attribute__((unused)) const Orientation orientation) {};
 
 			// set loco function
 			virtual void LocoFunction(__attribute__((unused)) const Protocol protocol, __attribute__((unused)) const Address address, __attribute__((unused)) const Function function, __attribute__((unused)) const DataModel::LocoFunctions::FunctionState on) {};
 
 			// set loco
-			virtual void LocoSpeedDirectionFunctions(const Protocol protocol, const Address address, const Speed speed, const Direction direction, std::vector<DataModel::LocoFunctions::FunctionState>& functions)
+			virtual void LocoSpeedOrientationFunctions(const Protocol protocol, const Address address, const Speed speed, const Orientation orientation, std::vector<DataModel::LocoFunctions::FunctionState>& functions)
 			{
 				// sleeps are necessary to prevent command overflow in command stations (especially Märklin Gleisbox)
 				LocoSpeed(protocol, address, speed);
 				Utils::Utils::SleepForMilliseconds(25);
-				LocoDirection(protocol, address, direction);
+				LocoOrientation(protocol, address, orientation);
 				Utils::Utils::SleepForMilliseconds(25);
 				for (size_t functionNr = 0; functionNr < functions.size(); ++functionNr)
 				{

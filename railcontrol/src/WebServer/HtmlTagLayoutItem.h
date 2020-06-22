@@ -35,5 +35,5 @@ namespace WebServer
 			static const unsigned char EdgeLength = 36;
 			const std::string EdgeLengthString = std::to_string(EdgeLength);
 	};
-}; // namespace WebServer
+} // namespace WebServer
 

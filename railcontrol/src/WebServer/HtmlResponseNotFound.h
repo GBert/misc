@@ -34,5 +34,5 @@ namespace WebServer
 			HtmlResponseNotFound(const std::string& file);
 			~HtmlResponseNotFound() {};
 	};
-}; // namespace WebServer
+} // namespace WebServer
 

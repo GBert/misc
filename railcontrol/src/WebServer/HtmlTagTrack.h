@@ -46,5 +46,5 @@ namespace WebServer
 
 			virtual ~HtmlTagTrack() {}
 	};
-}; // namespace WebServer
+} // namespace WebServer
 

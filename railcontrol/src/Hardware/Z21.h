@@ -28,6 +28,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "DataModel/AccessoryBase.h"
 #include "HardwareInterface.h"
 #include "HardwareParams.h"
+#include "Hardware/Z21FeedbackCache.h"
 #include "Hardware/Z21LocoCache.h"
 #include "Hardware/Z21TurnoutCache.h"
 #include "Logger/Logger.h"
@@ -66,13 +67,18 @@ namespace Hardware
 			Z21(const HardwareParams* params);
 			~Z21();
 
-			bool CanHandleLocos() const override { return true; }
-			bool CanHandleAccessories() const override { return true; }
-			bool CanHandleFeedback() const override { return true; }
-			bool CanHandleProgram() const override { return true; }
-			bool CanHandleProgramMm() const override { return true; }
-			bool CanHandleProgramDccDirect() const override { return true; }
-			bool CanHandleProgramDccPom() const override { return true; }
+			inline Hardware::Capabilities GetCapabilities() const override
+			{
+				return Hardware::CapabilityLoco
+					| Hardware::CapabilityAccessory
+					| Hardware::CapabilityFeedback
+					| Hardware::CapabilityProgram
+					| Hardware::CapabilityProgramMmWrite
+					| Hardware::CapabilityProgramDccDirectRead
+					| Hardware::CapabilityProgramDccDirectWrite
+					| Hardware::CapabilityProgramDccPomRead
+					| Hardware::CapabilityProgramDccPomWrite;
+			}
 
 			void GetLocoProtocols(std::vector<Protocol>& protocols) const override
 			{
@@ -113,9 +119,9 @@ namespace Hardware
 
 			void Booster(const BoosterState status) override;
 			void LocoSpeed(const Protocol protocol, const Address address, const Speed speed) override;
-			void LocoDirection(const Protocol protocol, const Address address, const Direction direction) override;
+			void LocoOrientation(const Protocol protocol, const Address address, const Orientation orientation) override;
 			void LocoFunction(const Protocol protocol, const Address address, const Function function, const DataModel::LocoFunctions::FunctionState on) override;
-			void LocoSpeedDirectionFunctions(const Protocol protocol, const Address address, const Speed speed, const Direction direction, std::vector<DataModel::LocoFunctions::FunctionState>& functions) override;
+			void LocoSpeedOrientationFunctions(const Protocol protocol, const Address address, const Speed speed, const Orientation orientation, std::vector<DataModel::LocoFunctions::FunctionState>& functions) override;
 			void Accessory(const Protocol protocol, const Address address, const DataModel::AccessoryState state, const DataModel::AccessoryPulseDuration duration) override;
 			void AccessoryOnOrOff(const Protocol protocol, const Address address, const DataModel::AccessoryState state, const bool on) override;
 			void ProgramRead(const ProgramMode mode, const Address address, const CvNumber cv) override;
@@ -227,6 +233,7 @@ namespace Hardware
 			std::thread accessorySenderThread;
 			Z21LocoCache locoCache;
 			Z21TurnoutCache turnoutCache;
+			Z21FeedbackCache feedbackCache;
 			ProgramMode lastProgramMode;
 			volatile bool connected;
 
@@ -237,7 +244,7 @@ namespace Hardware
 			void ProgramDccWrite(const CvNumber cv, const CvValue value);
 			void ProgramDccPom(const PomDB0 db0, const PomOption option, const Address address, const CvNumber cv, const CvValue value = 0);
 
-			void LocoSpeedDirection(const Protocol protocol, const Address address, const Speed speed, const Direction direction);
+			void LocoSpeedOrientation(const Protocol protocol, const Address address, const Speed speed, const Orientation orientation);
 			void AccessorySender();
 			void HeartBeatSender();
 			void Receiver();
@@ -247,6 +254,7 @@ namespace Hardware
 			void ParseTurnoutData(const unsigned char *buffer);
 			void ParseLocoData(const unsigned char* buffer);
 			void ParseCvData(const unsigned char* buffer);
+			void ParseRmBusData(const unsigned char* buffer);
 			void ParseDetectorData(const unsigned char* buffer);
 
 			void StartUpConnection();

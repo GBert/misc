@@ -23,14 +23,34 @@ along with RailControl; see the file LICENCE. If not see
 #include <string>
 
 #include "WebServer/HtmlTag.h"
+#include "WebServer/HtmlTagLabel.h"
+#include "WebServer/HtmlTagSelectOrientation.h"
 
 namespace WebServer
 {
-	class HtmlTagInputInteger : public HtmlTag
+	class HtmlTagSelectOrientationWithLabel : public HtmlTag
 	{
 		public:
-			HtmlTagInputInteger() = delete;
-			HtmlTagInputInteger(const std::string& name, const int value, const int min, const int max);
+			HtmlTagSelectOrientationWithLabel(const std::string& name, const Languages::TextSelector label, const Orientation defaultValue = OrientationRight)
+			:	HtmlTag()
+			{
+				AddChildTag(HtmlTagLabel(label, "s_" + name));
+				AddChildTag(HtmlTagSelectOrientation(name, defaultValue));
+			}
+
+			virtual ~HtmlTagSelectOrientationWithLabel() {}
+
+			virtual HtmlTag AddAttribute(const std::string& name, const std::string& value) override
+			{
+				childTags[1].AddAttribute(name, value);
+				return *this;
+			}
+
+			virtual HtmlTag AddClass(const std::string& _class) override
+			{
+				childTags[1].AddClass(_class);
+				return *this;
+			}
 	};
 } // namespace WebServer
 

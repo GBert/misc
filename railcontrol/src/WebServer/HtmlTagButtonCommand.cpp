@@ -26,8 +26,8 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace WebServer
 {
-	HtmlTagButtonCommand::HtmlTagButtonCommand(const std::string& value, const std::string& command, const std::map<std::string,std::string>& arguments, const std::string& additionalOnClick)
-	:	HtmlTagButton(value, command)
+	HtmlTagButtonCommand::HtmlTagButtonCommand(const std::string& value, const std::string& command, const std::map<std::string,std::string>& arguments, const std::string& tooltip, const std::string& additionalOnClick)
+	:	HtmlTagButton(value, command, tooltip)
 	{
 		std::vector<std::string> parts;
 		Utils::Utils::SplitString(command, "_", parts);
@@ -44,4 +44,4 @@ namespace WebServer
 		ss << "return false;";
 		AddAttribute("onclick", ss.str());
 	}
-};
+} // namespace WebServer

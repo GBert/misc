@@ -47,5 +47,5 @@ namespace WebServer
 		private:
 			const DataModel::Signal* signal;
 	};
-}; // namespace WebServer
+} // namespace WebServer
 

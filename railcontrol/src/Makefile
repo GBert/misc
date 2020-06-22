@@ -24,9 +24,9 @@ OBJ= \
 	DataModel/Loco.o \
 	DataModel/Object.o \
 	DataModel/Relation.o \
+	DataModel/Route.o \
 	DataModel/Serializable.o \
 	DataModel/Signal.o \
-	DataModel/Street.o \
 	DataModel/Switch.o \
 	DataModel/Track.o \
 	DataModel/TrackBase.o \
@@ -34,6 +34,7 @@ OBJ= \
 	Languages.o \
 	Logger/Logger.o \
 	Logger/LoggerServer.o \
+	Manager.o \
 	Network/Serial.o \
 	Network/TcpClient.o \
 	Network/TcpConnection.o \
@@ -60,12 +61,13 @@ OBJ= \
 	WebServer/HtmlTagInputInteger.o \
 	WebServer/HtmlTagInputSlider.o \
 	WebServer/HtmlTagInputSliderLocoSpeed.o \
+	WebServer/HtmlTagRoute.o \
 	WebServer/HtmlTagSelect.o \
 	WebServer/HtmlTagSignal.o \
-	WebServer/HtmlTagStreet.o \
 	WebServer/HtmlTagSwitch.o \
 	WebServer/HtmlTagTrackBase.o \
 	WebServer/Response.o \
+	WebServer/WebClient.o \
 	WebServer/WebServer.o
 
 all: $(OBJ)
@@ -113,6 +115,9 @@ clean-sqlite-shell:
 
 test:
 	make -C test
+
+tools:
+	make -C tools
 
 Timestamp.cpp:
 	echo "#include <ctime>" > Timestamp.cpp

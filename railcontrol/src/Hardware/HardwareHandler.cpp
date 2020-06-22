@@ -223,84 +223,14 @@ namespace Hardware
 		return instance->GetName();
 	}
 
-	bool HardwareHandler::CanHandleLocos() const
+	Hardware::Capabilities HardwareHandler::GetCapabilities() const
 	{
 		if (instance == nullptr)
 		{
-			return false;
+			return Hardware::CapabilityNone;
 		}
 
-		return instance->CanHandleLocos();
-	}
-
-	bool HardwareHandler::CanHandleAccessories() const
-	{
-		if (instance == nullptr)
-		{
-			return false;
-		}
-
-		return instance->CanHandleAccessories();
-	}
-
-	bool HardwareHandler::CanHandleFeedbacks() const
-	{
-		if (instance == nullptr)
-		{
-			return false;
-		}
-
-		return instance->CanHandleFeedback();
-	}
-
-	bool HardwareHandler::CanHandleProgram() const
-	{
-		if (instance == nullptr)
-		{
-			return false;
-		}
-
-		return instance->CanHandleProgram();
-	}
-
-	bool HardwareHandler::CanHandleProgramMm() const
-	{
-		if (instance == nullptr)
-		{
-			return false;
-		}
-
-		return instance->CanHandleProgramMm();
-	}
-
-	bool HardwareHandler::CanHandleProgramMfx() const
-	{
-		if (instance == nullptr)
-		{
-			return false;
-		}
-
-		return instance->CanHandleProgramMfx();
-	}
-
-	bool HardwareHandler::CanHandleProgramDccDirect() const
-	{
-		if (instance == nullptr)
-		{
-			return false;
-		}
-
-		return instance->CanHandleProgramDccDirect();
-	}
-
-	bool HardwareHandler::CanHandleProgramDccPom() const
-	{
-		if (instance == nullptr)
-		{
-			return false;
-		}
-
-		return instance->CanHandleProgramDccPom();
+		return instance->GetCapabilities();
 	}
 
 	void HardwareHandler::LocoProtocols(std::vector<Protocol>& protocols) const
@@ -361,13 +291,13 @@ namespace Hardware
 		instance->LocoSpeed(loco->GetProtocol(), loco->GetAddress(), speed);
 	}
 
-	void HardwareHandler::LocoDirection(const ControlType controlType, const DataModel::Loco* loco, const Direction direction)
+	void HardwareHandler::LocoOrientation(const ControlType controlType, const DataModel::Loco* loco, const Orientation orientation)
 	{
 		if (controlType == ControlTypeHardware || instance == nullptr || loco->GetControlID() != GetControlID())
 		{
 			return;
 		}
-		instance->LocoDirection(loco->GetProtocol(), loco->GetAddress(), direction);
+		instance->LocoOrientation(loco->GetProtocol(), loco->GetAddress(), orientation);
 	}
 
 	void HardwareHandler::LocoFunction(const ControlType controlType, const DataModel::Loco* loco, const Function function, const DataModel::LocoFunctions::FunctionState on)
@@ -379,16 +309,16 @@ namespace Hardware
 		instance->LocoFunction(loco->GetProtocol(), loco->GetAddress(), function, on);
 	}
 
-	void HardwareHandler::LocoSpeedDirectionFunctions(const DataModel::Loco* loco, const Speed speed, const Direction direction, std::vector<DataModel::LocoFunctions::FunctionState>& functions)
+	void HardwareHandler::LocoSpeedOrientationFunctions(const DataModel::Loco* loco, const Speed speed, const Orientation orientation, std::vector<DataModel::LocoFunctions::FunctionState>& functions)
 	{
 		if (instance == nullptr || loco->GetControlID() != GetControlID())
 		{
 			return;
 		}
-		instance->LocoSpeedDirectionFunctions(loco->GetProtocol(), loco->GetAddress(), speed, direction, functions);
+		instance->LocoSpeedOrientationFunctions(loco->GetProtocol(), loco->GetAddress(), speed, orientation, functions);
 	}
 
-	void HardwareHandler::AccessoryState(const ControlType controlType, const DataModel::Accessory* accessory, const DataModel::AccessoryState state)
+	void HardwareHandler::AccessoryState(const ControlType controlType, const DataModel::Accessory* accessory)
 	{
 		if (controlType == ControlTypeHardware
 			|| instance == nullptr
@@ -397,10 +327,10 @@ namespace Hardware
 		{
 			return;
 		}
-		instance->Accessory(accessory->GetProtocol(), accessory->GetAddress(), state, accessory->GetAccessoryPulseDuration());
+		instance->Accessory(accessory->GetProtocol(), accessory->GetAddress(), accessory->GetInvertedAccessoryState(), accessory->GetAccessoryPulseDuration());
 	}
 
-	void HardwareHandler::SwitchState(const ControlType controlType, const DataModel::Switch* mySwitch, const DataModel::AccessoryState state)
+	void HardwareHandler::SwitchState(const ControlType controlType, const DataModel::Switch* mySwitch)
 	{
 		if (controlType == ControlTypeHardware
 			|| instance == nullptr
@@ -409,7 +339,7 @@ namespace Hardware
 		{
 			return;
 		}
-		instance->Accessory(mySwitch->GetProtocol(), mySwitch->GetAddress(), state, mySwitch->GetAccessoryPulseDuration());
+		instance->Accessory(mySwitch->GetProtocol(), mySwitch->GetAddress(), mySwitch->GetInvertedAccessoryState(), mySwitch->GetAccessoryPulseDuration());
 	}
 
 	void HardwareHandler::SignalState(const ControlType controlType, const DataModel::Signal* signal)
@@ -421,13 +351,7 @@ namespace Hardware
 		{
 			return;
 		}
-		bool inverted = signal->GetInverted();
-		DataModel::AccessoryState state = signal->GetAccessoryState();
-		if (inverted)
-		{
-			state = (state == DataModel::SignalStateRed ? DataModel::SignalStateGreen : DataModel::SignalStateGreen);
-		}
-		instance->Accessory(signal->GetProtocol(), signal->GetAddress(), state, signal->GetAccessoryPulseDuration());
+		instance->Accessory(signal->GetProtocol(), signal->GetAddress(), signal->GetInvertedAccessoryState(), signal->GetAccessoryPulseDuration());
 	}
 
 	bool HardwareHandler::ProgramCheckValues(const ProgramMode mode, const CvNumber cv, const CvValue value)

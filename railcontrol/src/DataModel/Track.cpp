@@ -20,7 +20,6 @@ along with RailControl; see the file LICENCE. If not see
 
 #include <algorithm>
 #include <map>
-#include <sstream>
 #include <string>
 
 #include "DataModel/Feedback.h"
@@ -30,19 +29,23 @@ along with RailControl; see the file LICENCE. If not see
 
 using std::map;
 using std::string;
+using std::to_string;
 using std::vector;
 
 namespace DataModel
 {
 	std::string Track::Serialize() const
 	{
-		std::stringstream ss;
-		ss << "objectType=Track;"
-			<< TrackBase::Serialize()
-			<< ";" << LayoutItem::Serialize()
-			<< ";" << LockableItem::Serialize()
-			<< ";tracktype=" << static_cast<int>(trackType);
-		return ss.str();
+		std::string str;
+		str = "objectType=Track;";
+		str += TrackBase::Serialize();
+		str += ";";
+		str += LayoutItem::Serialize();
+		str += ";";
+		str += LockableItem::Serialize();
+		str += ";tracktype=";
+		str += to_string(trackType);
+		return str;
 	}
 
 	bool Track::Deserialize(const std::string& serialized)

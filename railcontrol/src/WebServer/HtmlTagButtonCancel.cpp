@@ -30,4 +30,4 @@ namespace WebServer
 		AddAttribute("onclick", "document.getElementById('popup').style.display = 'none'; return false;");
 		AddClass("wide_button");
 	}
-};
+} // namespace WebServer

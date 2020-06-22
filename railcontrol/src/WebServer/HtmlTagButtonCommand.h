@@ -31,9 +31,38 @@ namespace WebServer
 	{
 		public:
 			HtmlTagButtonCommand() = delete;
-			HtmlTagButtonCommand(const std::string& value, const std::string& command, const std::map<std::string,std::string>& arguments = std::map<std::string,std::string>(), const std::string& additionalOnClick = "");
-			HtmlTagButtonCommand(const Languages::TextSelector value, const std::string& command, const std::map<std::string,std::string>& arguments = std::map<std::string,std::string>(), const std::string& additionalOnClick = "")
-			:	HtmlTagButtonCommand(Languages::GetText(value), command, arguments, additionalOnClick)
+
+			HtmlTagButtonCommand(const std::string& value,
+				const std::string& command,
+				const std::map<std::string,std::string>& arguments = std::map<std::string,std::string>(),
+				const std::string& tooltip = "",
+				const std::string& additionalOnClick = "");
+
+			HtmlTagButtonCommand(const Languages::TextSelector value,
+				const std::string& command,
+				const std::map<std::string,std::string>& arguments = std::map<std::string,std::string>(),
+				const std::string& tooltip = "",
+				const std::string& additionalOnClick = "")
+			:	HtmlTagButtonCommand(Languages::GetText(value), command, arguments, tooltip, additionalOnClick)
+			{}
+
+			HtmlTagButtonCommand(const std::string& value,
+				const std::string& command,
+				const std::map<std::string,std::string>& arguments,
+				const Languages::TextSelector tooltip)
+			:	HtmlTagButtonCommand(value, command, arguments, Languages::GetText(tooltip))
+			{}
+
+			HtmlTagButtonCommand(const std::string& value,
+				const std::string& command,
+				const Languages::TextSelector tooltip)
+			:	HtmlTagButtonCommand(value, command, std::map<std::string,std::string>(), Languages::GetText(tooltip))
+			{}
+
+			HtmlTagButtonCommand(const std::string& value,
+				const std::string& command,
+				const std::string& tooltip)
+			:	HtmlTagButtonCommand(value, command, std::map<std::string,std::string>(), tooltip)
 			{}
 	};
-};
+} // namespace WebServer

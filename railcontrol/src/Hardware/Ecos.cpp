@@ -89,11 +89,11 @@ namespace Hardware
 		Send(command.c_str());
 	}
 
-	void Ecos::LocoDirection(__attribute__((unused)) const Protocol protocol, const Address address, const Direction direction)
+	void Ecos::LocoOrientation(__attribute__((unused)) const Protocol protocol, const Address address, const Orientation orientation)
 	{
 		const unsigned int locoId = address + OffsetLocoAddress;
 		SendGetHandle(locoId);
-		const string command = "set(" + to_string(locoId) + ",dir[" + (direction == DirectionRight ? "0" : "1") + "])\n";
+		const string command = "set(" + to_string(locoId) + ",dir[" + (orientation == OrientationRight ? "0" : "1") + "])\n";
 		Send(command.c_str());
 	}
 
@@ -472,8 +472,8 @@ namespace Hardware
 
 		if (option.compare("dir") == 0)
 		{
-			Direction direction = (Utils::Utils::StringToInteger(value) == 1 ? DirectionLeft : DirectionRight);
-			manager->LocoDirection(ControlTypeHardware, controlID, ProtocolServer, address, direction);
+			Orientation orientation = (Utils::Utils::StringToInteger(value) == 1 ? OrientationLeft : OrientationRight);
+			manager->LocoOrientation(ControlTypeHardware, controlID, ProtocolServer, address, orientation);
 			return;
 		}
 

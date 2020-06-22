@@ -34,7 +34,7 @@ along with RailControl; see the file LICENCE. If not see
 namespace DataModel
 {
 	class ObjectIdentifier;
-};
+}
 
 namespace WebServer
 {
@@ -113,14 +113,14 @@ namespace WebServer
 			HtmlTag HtmlTagPosition(const DataModel::LayoutItem::LayoutPosition posx, const DataModel::LayoutItem::LayoutPosition posy, const DataModel::LayoutItem::LayoutPosition posz);
 			HtmlTag HtmlTagPosition(const DataModel::LayoutItem::LayoutPosition posx, const DataModel::LayoutItem::LayoutPosition posy, const DataModel::LayoutItem::LayoutPosition posz, const DataModel::LayoutItem::Visible visible);
 			HtmlTag HtmlTagRotation(const DataModel::LayoutItem::LayoutRotation rotation) const;
-			HtmlTag HtmlTagSelectTrack(const std::string& name, const Languages::TextSelector label, const DataModel::ObjectIdentifier& identifier, const Direction direction, const std::string& onchange = "") const;
+			HtmlTag HtmlTagSelectTrack(const std::string& name, const Languages::TextSelector label, const DataModel::ObjectIdentifier& identifier, const Orientation orientation, const std::string& onchange = "") const;
 			HtmlTag HtmlTagSelectFeedbacksOfTrack(const DataModel::ObjectIdentifier& identifier, const FeedbackID feedbackIdReduced, const FeedbackID feedbackIdCreep, const FeedbackID feedbackIdStop, const FeedbackID feedbackIdOver) const;
 			HtmlTag HtmlTagRelation(const std::string& type, const std::string& priority, const ObjectType objectType = ObjectTypeSwitch, const ObjectID objectId = ObjectNone, const DataModel::Relation::Data = DataModel::Relation::DefaultData);
 			HtmlTag HtmlTagSlave(const std::string& priority, const ObjectID objectId = ObjectNone);
 			HtmlTag HtmlTagRelationObject(const std::string& name, const ObjectType objectType, const ObjectID objectId = ObjectNone, const DataModel::Relation::Data = DataModel::Relation::DefaultData);
 			HtmlTag HtmlTagTabMenuItem(const std::string& tabName, const Languages::TextSelector buttonValue, const bool selected = false) const;
 			HtmlTag HtmlTagSelectFeedbackForTrack(const unsigned int counter, const DataModel::ObjectIdentifier& identifier, const FeedbackID feedbackID = FeedbackNone);
-			static HtmlTag HtmlTagSelectSelectStreetApproach(const DataModel::SelectStreetApproach selectStreetApproach, const bool addDefault = true);
+			static HtmlTag HtmlTagSelectSelectRouteApproach(const DataModel::SelectRouteApproach selectRouteApproach, const bool addDefault = true);
 			static HtmlTag HtmlTagNrOfTracksToReserve(const DataModel::Loco::NrOfTracksToReserve nrOfTracksToReserve);
 			static HtmlTag HtmlTagLogLevel();
 			static HtmlTag HtmlTagLanguage();
@@ -131,7 +131,7 @@ namespace WebServer
 			HtmlTag HtmlTagControlLoco(const ControlID controlID, const std::string& objectType, const ObjectID objectID);
 			HtmlTag HtmlTagControlAccessory(const ControlID controlID, const std::string& objectType, const ObjectID objectID);
 			HtmlTag HtmlTagControlFeedback(const ControlID controlID, const std::string& objectType, const ObjectID objectID);
-			static HtmlTag HtmlTagTabTrackAutomode(DataModel::SelectStreetApproach selectStreetApproach, bool releaseWhenFree);
+			static HtmlTag HtmlTagTabTrackAutomode(DataModel::SelectRouteApproach selectRouteApproach, bool releaseWhenFree);
 			HtmlTag HtmlTagTabTrackFeedback(const std::vector<FeedbackID>& feedbacks, const DataModel::ObjectIdentifier& objectIdentifier);
 			HtmlTag HtmlTagTabPosition(const DataModel::LayoutItem::LayoutPosition posx,
 				const DataModel::LayoutItem::LayoutPosition posy,
@@ -145,6 +145,8 @@ namespace WebServer
 			{
 				return HtmlTagTabPosition(posx, posy, posz, DataModel::LayoutItem::RotationNotRelevant, visible);
 			}
+			HtmlTag HtmlTagProgramModeSelector(const ControlID controlID, ProgramMode& mode) const;
+			HtmlTag HtmlTagCvFields(const ControlID controlID, const ProgramMode programMode) const;
 			void HandleSelectLoco(const std::map<std::string, std::string>& arguments);
 			void HandleLayerEdit(const std::map<std::string, std::string>& arguments);
 			void HandleLayerSave(const std::map<std::string, std::string>& arguments);
@@ -158,7 +160,7 @@ namespace WebServer
 			void HandleControlAskDelete(const std::map<std::string, std::string>& arguments);
 			void HandleControlDelete(const std::map<std::string, std::string>& arguments);
 			void HandleLocoSpeed(const std::map<std::string,std::string>& arguments);
-			void HandleLocoDirection(const std::map<std::string,std::string>& arguments);
+			void HandleLocoOrientation(const std::map<std::string,std::string>& arguments);
 			void HandleLocoFunction(const std::map<std::string, std::string>& arguments);
 			void HandleLocoEdit(const std::map<std::string, std::string>& arguments);
 			void HandleLocoSave(const std::map<std::string, std::string>& arguments);
@@ -194,14 +196,14 @@ namespace WebServer
 			void HandleSignalDelete(const std::map<std::string,std::string>& arguments);
 			void HandleSignalGet(const std::map<std::string,std::string>& arguments);
 			void HandleSignalRelease(const std::map<std::string,std::string>& arguments);
-			void HandleStreetEdit(const std::map<std::string,std::string>& arguments);
-			void HandleStreetSave(const std::map<std::string,std::string>& arguments);
-			void HandleStreetList();
-			void HandleStreetAskDelete(const std::map<std::string,std::string>& arguments);
-			void HandleStreetDelete(const std::map<std::string,std::string>& arguments);
-			void HandleStreetGet(const std::map<std::string,std::string>& arguments);
-			void HandleStreetExecute(const std::map<std::string,std::string>& arguments);
-			void HandleStreetRelease(const std::map<std::string,std::string>& arguments);
+			void HandleRouteEdit(const std::map<std::string,std::string>& arguments);
+			void HandleRouteSave(const std::map<std::string,std::string>& arguments);
+			void HandleRouteList();
+			void HandleRouteAskDelete(const std::map<std::string,std::string>& arguments);
+			void HandleRouteDelete(const std::map<std::string,std::string>& arguments);
+			void HandleRouteGet(const std::map<std::string,std::string>& arguments);
+			void HandleRouteExecute(const std::map<std::string,std::string>& arguments);
+			void HandleRouteRelease(const std::map<std::string,std::string>& arguments);
 			void HandleTrackEdit(const std::map<std::string,std::string>& arguments);
 			void HandleTrackSave(const std::map<std::string,std::string>& arguments);
 			void HandleTrackList();
@@ -213,7 +215,7 @@ namespace WebServer
 			void HandleTrackStartLoco(const std::map<std::string, std::string>& arguments);
 			void HandleTrackStopLoco(const std::map<std::string, std::string>& arguments);
 			void HandleTrackBlock(const std::map<std::string, std::string>& arguments);
-			void HandleTrackDirection(const std::map<std::string, std::string>& arguments);
+			void HandleTrackOrientation(const std::map<std::string, std::string>& arguments);
 			void HandleFeedbackEdit(const std::map<std::string,std::string>& arguments);
 			void HandleFeedbackSave(const std::map<std::string,std::string>& arguments);
 			void HandleFeedbackState(const std::map<std::string,std::string>& arguments);
@@ -233,11 +235,13 @@ namespace WebServer
 			void HandleTimestamp(const std::map<std::string,std::string>& arguments);
 			void HandleControlArguments(const std::map<std::string,std::string>& arguments);
 			void HandleProgram();
+			void HandleProgramModeSelector(const std::map<std::string,std::string>& arguments);
 			void HandleProgramRead(const std::map<std::string,std::string>& arguments);
 			void HandleProgramWrite(const std::map<std::string,std::string>& arguments);
+			void HandleCvFields(const std::map<std::string,std::string>& arguments);
 			void HandleUpdater(const std::map<std::string,std::string>& headers);
-			void UrlDecode(std::string& argumentValue);
-			char ConvertHexToInt(char c);
+			static void UrlDecode(std::string& argumentValue);
+			static char ConvertHexToInt(char c);
 			void WorkerImpl();
 
 			Logger::Logger* logger;
@@ -251,5 +255,5 @@ namespace WebServer
 			unsigned int buttonID;
 	};
 
-}; // namespace webserver
+} // namespace WebServer
 

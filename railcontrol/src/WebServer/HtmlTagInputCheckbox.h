@@ -40,5 +40,5 @@ namespace WebServer
 				AddClass("checkbox");
 			};
 	};
-};
+} // namespace WebServer
 

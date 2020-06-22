@@ -39,14 +39,12 @@ namespace WebServer
 		if (tag.name.size() > 0)
 		{
 			stream << "<" << tag.name;
-			for (auto attribute : tag.attributes)
+
+			if (tag.id.size() > 0)
 			{
-				stream << " " << attribute.first;
-				if (attribute.second.size() > 0)
-				{
-					stream << "=" << "\"" << attribute.second << "\"";
-				}
+				stream << " id=\"" << tag.id << "\"";
 			}
+
 			if (tag.classes.size() > 0)
 			{
 				stream << " class=\"";
@@ -55,6 +53,15 @@ namespace WebServer
 					stream << " " << c;
 				}
 				stream << "\"";
+			}
+
+			for (auto attribute : tag.attributes)
+			{
+				stream << " " << attribute.first;
+				if (attribute.second.size() > 0)
+				{
+					stream << "=" << "\"" << attribute.second << "\"";
+				}
 			}
 
 			stream << ">";
@@ -82,4 +89,4 @@ namespace WebServer
 		}
 		return stream;
 	}
-};
+} // namespace WebServer

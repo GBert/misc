@@ -23,7 +23,7 @@ along with RailControl; see the file LICENCE. If not see
 #include <map>
 #include <string>
 
-#include "WebServer/HtmlTagJavascript.h"
+#include "WebServer/HtmlTag.h"
 
 namespace WebServer
 {
@@ -31,18 +31,17 @@ namespace WebServer
 	{
 		public:
 			HtmlTagButton() = delete;
-			HtmlTagButton(const std::string& value, const std::string& command);
+			HtmlTagButton(const std::string& value,
+				const std::string& command,
+				const std::string& tooltipText = "");
 
-			HtmlTagButton(const Languages::TextSelector value, const std::string& command)
-			:	HtmlTagButton(Languages::GetText(value), command)
+			HtmlTagButton(const Languages::TextSelector value,
+				const std::string& command,
+				const std::string& tooltipText = "")
+			:	HtmlTagButton(Languages::GetText(value), command, tooltipText)
 			{}
 
 			virtual ~HtmlTagButton() {}
-
-			HtmlTag AddJavaScript(const std::string& content)
-			{
-				return AddChildTag(HtmlTagJavascript(content));
-			}
 
 			virtual HtmlTag AddAttribute(const std::string& name, const std::string& value) override
 			{
@@ -59,4 +58,4 @@ namespace WebServer
 		protected:
 			const std::string commandID;
 	};
-};
+} // namespace WebServer

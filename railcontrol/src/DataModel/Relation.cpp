@@ -97,12 +97,12 @@ namespace DataModel
 			}
 
 			case ObjectTypeTrack:
-				manager->TrackSetLocoDirection(objectID2, static_cast<Direction>(data));
+				manager->TrackBaseSetLocoOrientation(ObjectIdentifier(ObjectTypeTrack, objectID2), static_cast<Orientation>(data));
 				return true;
 
 
-			case ObjectTypeStreet:
-				return manager->StreetExecute(logger, locoID, objectID2);
+			case ObjectTypeRoute:
+				return manager->RouteExecute(logger, locoID, objectID2);
 
 			case ObjectTypeLoco:
 				manager->LocoFunction(ControlTypeInternal, locoID, static_cast<Function>(objectID2), static_cast<LocoFunctions::FunctionState>(data));
@@ -131,8 +131,8 @@ namespace DataModel
 			case ObjectTypeSignal:
 				return manager->GetSignal(objectID2);
 
-			case ObjectTypeStreet:
-				return manager->GetStreet(objectID2);
+			case ObjectTypeRoute:
+				return manager->GetRoute(objectID2);
 
 			default:
 				return nullptr;
@@ -161,10 +161,10 @@ namespace DataModel
 			return false;
 		}
 
-		Street* street = dynamic_cast<Street*>(lockable);
-		if (street != nullptr)
+		Route* route = dynamic_cast<Route*>(lockable);
+		if (route != nullptr)
 		{
-			return street->Reserve(logger, locoID);
+			return route->Reserve(logger, locoID);
 		}
 
 		return lockable->Reserve(logger, locoID);
@@ -190,10 +190,10 @@ namespace DataModel
 			return false;
 		}
 
-		Street* street = dynamic_cast<Street*>(lockable);
-		if (street != nullptr)
+		Route* route = dynamic_cast<Route*>(lockable);
+		if (route != nullptr)
 		{
-			return street->Lock(logger, locoID);
+			return route->Lock(logger, locoID);
 		}
 
 		bool retLockable = lockable->Lock(logger, locoID);

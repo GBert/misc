@@ -20,17 +20,40 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
-#include <string>
+#include <map>
 
+#include "Languages.h"
 #include "WebServer/HtmlTag.h"
+#include "WebServer/HtmlTagSelect.h"
 
 namespace WebServer
 {
-	class HtmlTagInputInteger : public HtmlTag
+	class HtmlTagSelectOrientation : public HtmlTag
 	{
 		public:
-			HtmlTagInputInteger() = delete;
-			HtmlTagInputInteger(const std::string& name, const int value, const int min, const int max);
+			HtmlTagSelectOrientation() = delete;
+
+			HtmlTagSelectOrientation(const std::string& name, const Orientation defaultValue)
+			{
+				std::map<Orientation,Languages::TextSelector> orientations;
+				orientations[OrientationLeft] = Languages::TextLeft;
+				orientations[OrientationRight] = Languages::TextRight;
+				AddChildTag(HtmlTagSelect(name, orientations, defaultValue));
+			}
+
+			virtual ~HtmlTagSelectOrientation() {}
+
+			virtual HtmlTag AddAttribute(const std::string& name, const std::string& value) override
+			{
+				childTags[0].AddAttribute(name, value);
+				return *this;
+			}
+
+			virtual HtmlTag AddClass(const std::string& className) override
+			{
+				childTags[0].AddClass(className);
+				return *this;
+			}
 	};
 } // namespace WebServer
 

@@ -60,8 +60,8 @@ namespace DataModel
 		str += HardwareHandle::Serialize();
 		str += ";functions=";
 		str += functions.Serialize();
-		str += ";direction=";
-		str += (direction == DirectionRight ? "right" : "left");
+		str += ";orientation=";
+		str += to_string(orientation);
 		if (trackFrom != nullptr)
 		{
 			str += ";track=";
@@ -103,7 +103,8 @@ namespace DataModel
 		}
 		trackFrom = manager->GetTrackBase(trackIdentifier);
 		functions.Deserialize(Utils::Utils::GetStringMapEntry(arguments, "functions", "0"));
-		direction = (Utils::Utils::GetStringMapEntry(arguments, "direction", "right").compare("right") == 0 ? DirectionRight : DirectionLeft);
+		orientation = (Utils::Utils::GetStringMapEntry(arguments, "direction", "right").compare("right") == 0 ? OrientationRight : OrientationLeft); // FIXME: remove later
+		orientation = (static_cast<Orientation>(Utils::Utils::GetBoolMapEntry(arguments, "orientation", orientation)));
 		length = static_cast<Length>(Utils::Utils::GetIntegerMapEntry(arguments, "length", 0));
 		pushpull = Utils::Utils::GetBoolMapEntry(arguments, "commuter", false);  // FIXME: remove later
 		pushpull = Utils::Utils::GetBoolMapEntry(arguments, "pushpull", pushpull);
@@ -133,15 +134,15 @@ namespace DataModel
 		ForceManualMode();
 		std::lock_guard<std::mutex> Guard(stateMutex);
 
-		if (streetFirst != nullptr)
+		if (routeFirst != nullptr)
 		{
-			streetFirst->Release(logger, objectID);
-			streetFirst = nullptr;
+			routeFirst->Release(logger, objectID);
+			routeFirst = nullptr;
 		}
-		if (streetSecond != nullptr)
+		if (routeSecond != nullptr)
 		{
-			streetSecond->Release(logger, objectID);
-			streetSecond = nullptr;
+			routeSecond->Release(logger, objectID);
+			routeSecond = nullptr;
 		}
 		if (trackFrom != nullptr)
 		{
@@ -357,20 +358,20 @@ namespace DataModel
 
 	void Loco::SearchDestinationFirst()
 	{
-		if (streetFirst != nullptr)
+		if (routeFirst != nullptr)
 		{
 			state = LocoStateError;
-			logger->Error(Languages::TextHasAlreadyReservedStreet, name);
+			logger->Error(Languages::TextHasAlreadyReservedRoute, name);
 			return;
 		}
 
-		Street* usedStreet = SearchDestination(trackFrom, true);
-		if (usedStreet == nullptr)
+		Route* usedRoute = SearchDestination(trackFrom, true);
+		if (usedRoute == nullptr)
 		{
 			return;
 		}
 
-		const ObjectIdentifier& newTrackIdentifierFirst = usedStreet->GetToTrack();
+		const ObjectIdentifier& newTrackIdentifierFirst = usedRoute->GetToTrack();
 		TrackBase* newTrack = manager->GetTrackBase(newTrackIdentifierFirst);
 		if (newTrack == nullptr)
 		{
@@ -378,38 +379,38 @@ namespace DataModel
 		}
 
 		trackFirst = newTrack;
-		streetFirst = usedStreet;
+		routeFirst = usedRoute;
 		feedbackIdFirst = FeedbackNone;
-		feedbackIdReduced = streetFirst->GetFeedbackIdReduced();
-		feedbackIdCreep = streetFirst->GetFeedbackIdCreep();
-		feedbackIdStop = streetFirst->GetFeedbackIdStop();
-		feedbackIdOver = streetFirst->GetFeedbackIdOver();
-		wait = streetFirst->GetWaitAfterRelease();
-		bool turnLoco = (trackFrom->GetLocoDirection() != streetFirst->GetFromDirection());
-		Direction newLocoDirection = static_cast<Direction>(direction != turnLoco);
+		feedbackIdReduced = routeFirst->GetFeedbackIdReduced();
+		feedbackIdCreep = routeFirst->GetFeedbackIdCreep();
+		feedbackIdStop = routeFirst->GetFeedbackIdStop();
+		feedbackIdOver = routeFirst->GetFeedbackIdOver();
+		wait = routeFirst->GetWaitAfterRelease();
+		bool turnLoco = (trackFrom->GetLocoOrientation() != routeFirst->GetFromOrientation());
+		Orientation newLocoOrientation = static_cast<Orientation>(orientation != turnLoco);
 		if (turnLoco)
 		{
-			trackFrom->SetLocoDirection(streetFirst->GetFromDirection());
+			trackFrom->SetLocoOrientation(routeFirst->GetFromOrientation());
 			manager->TrackBasePublishState(trackFrom);
 		}
-		manager->LocoDirection(ControlTypeInternal, this, newLocoDirection);
-		newTrack->SetLocoDirection(static_cast<Direction>(streetFirst->GetToDirection()));
-		logger->Info(Languages::TextHeadingToVia, newTrack->GetMyName(), streetFirst->GetName());
+		manager->LocoOrientation(ControlTypeInternal, this, newLocoOrientation);
+		newTrack->SetLocoOrientation(static_cast<Orientation>(routeFirst->GetToOrientation()));
+		logger->Info(Languages::TextHeadingToVia, newTrack->GetMyName(), routeFirst->GetName());
 
 		// start loco
 		manager->TrackBasePublishState(newTrack);
 		Speed newSpeed;
-		switch (streetFirst->GetSpeed())
+		switch (routeFirst->GetSpeed())
 		{
-			case Street::SpeedTravel:
+			case Route::SpeedTravel:
 				newSpeed = travelSpeed;
 				break;
 
-			case Street::SpeedReduced:
+			case Route::SpeedReduced:
 				newSpeed = reducedSpeed;
 				break;
 
-			case Street::SpeedCreeping:
+			case Route::SpeedCreeping:
 			default:
 				newSpeed = creepingSpeed;
 				break;
@@ -420,13 +421,13 @@ namespace DataModel
 
 	void Loco::SearchDestinationSecond()
 	{
-		Street* usedStreet = SearchDestination(trackFirst, false);
-		if (usedStreet == nullptr)
+		Route* usedRoute = SearchDestination(trackFirst, false);
+		if (usedRoute == nullptr)
 		{
 			return;
 		}
 
-		const ObjectIdentifier& newTrackIdentifierSecond = usedStreet->GetToTrack();
+		const ObjectIdentifier& newTrackIdentifierSecond = usedRoute->GetToTrack();
 		TrackBase* newTrack = manager->GetTrackBase(newTrackIdentifierSecond);
 		if (newTrack == nullptr)
 		{
@@ -434,50 +435,50 @@ namespace DataModel
 		}
 
 		trackSecond = newTrack;
-		streetSecond = usedStreet;
+		routeSecond = usedRoute;
 		feedbackIdFirst = feedbackIdStop;
-		feedbackIdOver = streetSecond->GetFeedbackIdOver();
-		feedbackIdStop = streetSecond->GetFeedbackIdStop();
-		Street::Speed speedFirst = streetFirst->GetSpeed();
-		Street::Speed speedSecond = streetSecond->GetSpeed();
-		if (speedSecond == Street::SpeedTravel)
+		feedbackIdOver = routeSecond->GetFeedbackIdOver();
+		feedbackIdStop = routeSecond->GetFeedbackIdStop();
+		Route::Speed speedFirst = routeFirst->GetSpeed();
+		Route::Speed speedSecond = routeSecond->GetSpeed();
+		if (speedSecond == Route::SpeedTravel)
 		{
-			feedbackIdCreep = streetSecond->GetFeedbackIdCreep();
-			feedbackIdReduced = streetSecond->GetFeedbackIdReduced();
-			if (speedFirst == Street::SpeedTravel)
+			feedbackIdCreep = routeSecond->GetFeedbackIdCreep();
+			feedbackIdReduced = routeSecond->GetFeedbackIdReduced();
+			if (speedFirst == Route::SpeedTravel)
 			{
 				manager->LocoSpeed(ControlTypeInternal, this, travelSpeed);
 			}
 		}
-		else if (speedSecond == Street::SpeedReduced)
+		else if (speedSecond == Route::SpeedReduced)
 		{
-			feedbackIdCreep = streetSecond->GetFeedbackIdCreep();
-			if (speedFirst == Street::SpeedReduced)
+			feedbackIdCreep = routeSecond->GetFeedbackIdCreep();
+			if (speedFirst == Route::SpeedReduced)
 			{
 				manager->LocoSpeed(ControlTypeInternal, this, reducedSpeed);
 			}
 		}
 
-		wait = streetSecond->GetWaitAfterRelease();
-		newTrack->SetLocoDirection(static_cast<Direction>(streetSecond->GetToDirection()));
-		logger->Info(Languages::TextHeadingToViaVia, newTrack->GetMyName(), streetFirst->GetName(), streetSecond->GetName());
+		wait = routeSecond->GetWaitAfterRelease();
+		newTrack->SetLocoOrientation(static_cast<Orientation>(routeSecond->GetToOrientation()));
+		logger->Info(Languages::TextHeadingToViaVia, newTrack->GetMyName(), routeFirst->GetName(), routeSecond->GetName());
 
 		// start loco
 		manager->TrackBasePublishState(newTrack);
 		state = LocoStateRunning;
 	}
 
-	Street* Loco::SearchDestination(TrackBase* track, const bool allowLocoTurn)
+	Route* Loco::SearchDestination(TrackBase* track, const bool allowLocoTurn)
 	{
 		if (manager->Booster() == BoosterStateStop)
 		{
 			return nullptr;
 		}
 		logger->Debug(Languages::TextLookingForDestination, track->GetMyName());
-		if (streetSecond != nullptr)
+		if (routeSecond != nullptr)
 		{
 			state = LocoStateError;
-			logger->Error(Languages::TextHasAlreadyReservedStreet, name);
+			logger->Error(Languages::TextHasAlreadyReservedRoute, name);
 			return nullptr;
 		}
 
@@ -496,36 +497,36 @@ namespace DataModel
 			return nullptr;
 		}
 
-		vector<Street*> validStreets;
-		track->GetValidStreets(logger, this, allowLocoTurn, validStreets);
-		for (auto street : validStreets)
+		vector<Route*> validRoutes;
+		track->GetValidRoutes(logger, this, allowLocoTurn, validRoutes);
+		for (auto route : validRoutes)
 		{
-			logger->Debug(Languages::TextExecutingStreet, street->GetName());
-			if (street->Reserve(logger, objectID) == false)
+			logger->Debug(Languages::TextExecutingRoute, route->GetName());
+			if (route->Reserve(logger, objectID) == false)
 			{
 				continue;
 			}
 
-			if (street->Lock(logger, objectID) == false)
+			if (route->Lock(logger, objectID) == false)
 			{
-				street->Release(logger, objectID);
+				route->Release(logger, objectID);
 				continue;
 			}
 
-			if (street->Execute(logger, objectID) == false)
+			if (route->Execute(logger, objectID) == false)
 			{
-				street->Release(logger, objectID);
+				route->Release(logger, objectID);
 				continue;
 			}
 
-			if (!allowLocoTurn && track->GetLocoDirection() != street->GetFromDirection())
+			if (!allowLocoTurn && track->GetLocoOrientation() != route->GetFromOrientation())
 			{
 				continue;
 			}
 
-			return street;
+			return route;
 		}
-		logger->Debug(Languages::TextNoValidStreetFound, name);
+		logger->Debug(Languages::TextNoValidRouteFound, name);
 		return nullptr;
 	}
 
@@ -584,37 +585,37 @@ namespace DataModel
 		}
 	}
 
-	void Loco::SetDirection(const Direction direction)
+	void Loco::SetOrientation(const Orientation orientation)
 	{
-		this->direction = direction;
+		this->orientation = orientation;
 		for (auto slave : slaves)
 		{
-			manager->LocoDirection(ControlTypeInternal, slave->ObjectID2(), direction);
+			manager->LocoOrientation(ControlTypeInternal, slave->ObjectID2(), orientation);
 		}
 	}
 
 	void Loco::FeedbackIdFirstReached()
 	{
-		if (streetFirst == nullptr || trackFrom == nullptr)
+		if (routeFirst == nullptr || trackFrom == nullptr)
 		{
 			manager->LocoSpeed(ControlTypeInternal, this, MinSpeed);
 			state = LocoStateError;
-			logger->Error(Languages::TextIsInAutomodeWithoutStreetTrack, name);
+			logger->Error(Languages::TextIsInAutomodeWithoutRouteTrack, name);
 			return;
 		}
 
 		Speed newSpeed;
-		switch (streetFirst->GetSpeed())
+		switch (routeFirst->GetSpeed())
 		{
-			case Street::SpeedTravel:
+			case Route::SpeedTravel:
 				newSpeed = travelSpeed;
 				break;
 
-			case Street::SpeedReduced:
+			case Route::SpeedReduced:
 				newSpeed = reducedSpeed;
 				break;
 
-			case Street::SpeedCreeping:
+			case Route::SpeedCreeping:
 			default:
 				newSpeed = creepingSpeed;
 				break;
@@ -626,9 +627,9 @@ namespace DataModel
 		}
 
 
-		streetFirst->Release(logger, objectID);
-		streetFirst = streetSecond;
-		streetSecond = nullptr;
+		routeFirst->Release(logger, objectID);
+		routeFirst = routeSecond;
+		routeSecond = nullptr;
 
 		trackFrom->BaseRelease(logger, objectID);
 		trackFrom = trackFirst;
@@ -657,17 +658,17 @@ namespace DataModel
 
 	void Loco::FeedbackIdStopReached()
 	{
-		if (streetFirst == nullptr || trackFrom == nullptr)
+		if (routeFirst == nullptr || trackFrom == nullptr)
 		{
 			manager->LocoSpeed(ControlTypeInternal, this, MinSpeed);
 			state = LocoStateError;
-			logger->Error(Languages::TextIsInAutomodeWithoutStreetTrack, name);
+			logger->Error(Languages::TextIsInAutomodeWithoutRouteTrack, name);
 			return;
 		}
 
-		manager->LocoDestinationReached(this, streetFirst, trackFrom);
-		streetFirst->Release(logger, objectID);
-		streetFirst = nullptr;
+		manager->LocoDestinationReached(this, routeFirst, trackFrom);
+		routeFirst->Release(logger, objectID);
+		routeFirst = nullptr;
 
 		trackFrom->BaseRelease(logger, objectID);
 		trackFrom = trackFirst;

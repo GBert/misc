@@ -189,23 +189,23 @@ namespace Hardware
 		{
 			return;
 		}
-		Direction direction = locoCache.GetDirection(address);
+		Orientation orientation = locoCache.GetOrientation(address);
 		locoCache.SetSpeed(address, speed);
-		LocoSpeedDirection(protocol, address, speed, direction);
+		LocoSpeedOrientation(protocol, address, speed, orientation);
 	}
 
-	void Z21::LocoDirection(const Protocol protocol, const Address address, const Direction direction)
+	void Z21::LocoOrientation(const Protocol protocol, const Address address, const Orientation orientation)
 	{
 		if (!LocoProtocolSupported(protocol))
 		{
 			return;
 		}
 		Speed speed = locoCache.GetSpeed(address);
-		locoCache.SetDirection(address, direction);
-		LocoSpeedDirection(protocol, address, speed, direction);
+		locoCache.SetOrientation(address, orientation);
+		LocoSpeedOrientation(protocol, address, speed, orientation);
 	}
 
-	void Z21::LocoSpeedDirection(const Protocol protocol, const Address address, const Speed speed, const Direction direction)
+	void Z21::LocoSpeedOrientation(const Protocol protocol, const Address address, const Speed speed, const Orientation orientation)
 	{
 		if (!LocoProtocolSupported(protocol))
 		{
@@ -237,7 +237,7 @@ namespace Hardware
 		}
 		SendSetLocoMode(address, protocol);
 		Utils::Utils::ShortToDataBigEndian(address | 0xC000, buffer + 6);
-		buffer[8] |=  static_cast<unsigned char>(direction) << 7;
+		buffer[8] |=  static_cast<unsigned char>(orientation) << 7;
 		buffer[9] = buffer[4] ^ buffer[5] ^ buffer[6] ^ buffer[7] ^ buffer[8];
 		Send(buffer, sizeof(buffer));
 	}
@@ -256,14 +256,14 @@ namespace Hardware
 		Send(buffer, sizeof(buffer));
 	}
 
-	void Z21::LocoSpeedDirectionFunctions(const Protocol protocol, const Address address, const Speed speed, const Direction direction, std::vector<DataModel::LocoFunctions::FunctionState>& functions)
+	void Z21::LocoSpeedOrientationFunctions(const Protocol protocol, const Address address, const Speed speed, const Orientation orientation, std::vector<DataModel::LocoFunctions::FunctionState>& functions)
 	{
 		if (!LocoProtocolSupported(protocol))
 		{
 			return;
 		}
-		locoCache.SetSpeedDirectionProtocol(address, speed, direction, protocol);
-		LocoSpeedDirection(protocol, address, speed, direction);
+		locoCache.SetSpeedOrientationProtocol(address, speed, orientation, protocol);
+		LocoSpeedOrientation(protocol, address, speed, orientation);
 		for (size_t functionNr = 0; functionNr < functions.size(); ++functionNr)
 		{
 			LocoFunction(protocol, address, functionNr, functions[functionNr]);
@@ -595,7 +595,7 @@ namespace Hardware
 				break;
 
 			case HeaderRmBusData:
-				logger->Warning(Languages::TextNotImplemented, __FILE__, __LINE__);
+				ParseRmBusData(buffer);
 				break;
 
 			case HeaderSystemData:
@@ -831,12 +831,12 @@ namespace Hardware
 			locoCache.SetSpeed(address, newSpeed);
 			manager->LocoSpeed(ControlTypeHardware, controlID, protocol, address, newSpeed);
 		}
-		const Direction newDirection = (buffer[8] >> 7) ? DirectionRight : DirectionLeft;
-		const Direction oldDirection = locoCache.GetDirection(address);
-		if (newDirection != oldDirection)
+		const Orientation newOrientation = (buffer[8] >> 7) ? OrientationRight : OrientationLeft;
+		const Orientation oldOrientation = locoCache.GetOrientation(address);
+		if (newOrientation != oldOrientation)
 		{
-			locoCache.SetDirection(address, newDirection);
-			manager->LocoDirection(ControlTypeHardware, controlID, protocol, address, newDirection);
+			locoCache.SetOrientation(address, newOrientation);
+			manager->LocoOrientation(ControlTypeHardware, controlID, protocol, address, newOrientation);
 		}
 		const uint32_t oldFunctions = locoCache.GetFunctions(address);
 		const uint32_t f0 = (static_cast<uint32_t>(buffer[9]) >> 4) & 0x01;
@@ -880,7 +880,40 @@ namespace Hardware
 		manager->ProgramValue(cv, value);
 	}
 
-	void Z21::ParseDetectorData(const unsigned char* buffer)
+	void Z21::ParseRmBusData(const unsigned char* buffer)
+	{
+		if (buffer[4] > 1)
+		{
+			return;
+		}
+		unsigned char moduleShift = buffer[4] * 10;
+		for (unsigned char index = 0; index < 10; ++index)
+		{
+			const unsigned char module = index + moduleShift;
+			const unsigned char newData = buffer[5 + index];
+			const unsigned char oldData = feedbackCache.Get(module);
+			if (newData == oldData)
+			{
+				continue;
+			}
+			const unsigned char diff = newData ^ oldData;
+			for (unsigned char pinOnModule = 0; pinOnModule < 8; ++pinOnModule)
+			{
+				const unsigned char pinDiff = (diff >> pinOnModule) & 0x01;
+				if (pinDiff == 0)
+				{
+					continue;
+				}
+				const unsigned char pinData = newData >> pinOnModule;
+				const unsigned char pin = module * 8 + pinOnModule + 1;
+				logger->Info(Languages::TextFeedbackChange, pin, module, Languages::GetOnOff(static_cast<DataModel::Feedback::FeedbackState>(pinData)));
+				manager->FeedbackState(controlID, pin, static_cast<DataModel::Feedback::FeedbackState>(pinData));
+			}
+			feedbackCache.Set(module, newData);
+		}
+	}
+
+	void Z21::ParseDetectorData(const unsigned char *buffer)
 	{
 		FeedbackPin pin = Utils::Utils::DataLittleEndianToShort(buffer + 6);
 		uint8_t port = buffer[8];

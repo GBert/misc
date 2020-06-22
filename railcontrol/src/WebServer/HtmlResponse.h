@@ -54,5 +54,5 @@ namespace WebServer
 		protected:
 			std::string title;
 	};
-}; // namespace WebServer
+} // namespace WebServer
 

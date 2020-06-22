@@ -34,5 +34,5 @@ namespace WebServer
 			HtmlResponseNotImplemented(const std::string& method);
 			~HtmlResponseNotImplemented() {};
 	};
-}; // namespace WebServer
+} // namespace WebServer
 

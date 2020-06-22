@@ -42,7 +42,7 @@ using std::to_string;
 using std::vector;
 
 using DataModel::Loco;
-using DataModel::Street;
+using DataModel::Route;
 using DataModel::TrackBase;
 
 namespace WebServer {
@@ -117,11 +117,11 @@ namespace WebServer {
 		AddUpdate(command.str(), Languages::TextLocoSpeedIs, loco->GetName(), speed);
 	}
 
-	void WebServer::LocoDirection(__attribute__((unused)) const ControlType controlType, const DataModel::Loco* loco, const Direction direction)
+	void WebServer::LocoOrientation(__attribute__((unused)) const ControlType controlType, const DataModel::Loco* loco, const Orientation orientation)
 	{
 		stringstream command;
-		command << "locodirection;loco=" << loco->GetID() << ";direction=" << (direction ? "true" : "false");
-		AddUpdate(command.str(), direction ? Languages::TextLocoDirectionIsRight : Languages::TextLocoDirectionIsLeft, loco->GetName());
+		command << "locoorientation;loco=" << loco->GetID() << ";orientation=" << (orientation ? "true" : "false");
+		AddUpdate(command.str(), orientation ? Languages::TextLocoDirectionOfTravelIsRight : Languages::TextLocoDirectionOfTravelIsLeft, loco->GetName());
 	}
 
 	void WebServer::LocoFunction(__attribute__((unused)) const ControlType controlType, const DataModel::Loco* loco, const Function function, const DataModel::LocoFunctions::FunctionState state)
@@ -131,9 +131,10 @@ namespace WebServer {
 		AddUpdate(command.str(), state ? Languages::TextLocoFunctionIsOn : Languages::TextLocoFunctionIsOff, loco->GetName(), function);
 	}
 
-	void WebServer::AccessoryState(__attribute__((unused)) const ControlType controlType, const DataModel::Accessory* accessory, const DataModel::AccessoryState state)
+	void WebServer::AccessoryState(__attribute__((unused)) const ControlType controlType, const DataModel::Accessory* accessory)
 	{
 		stringstream command;
+		const DataModel::AccessoryState state = accessory->GetAccessoryState();
 		command << "accessory;accessory=" << accessory->GetID() << ";state=" << (state == DataModel::AccessoryStateOn ? "green" : "red");
 		AddUpdate(command.str(), state ? Languages::TextAccessoryStateIsGreen : Languages::TextAccessoryStateIsRed, accessory->GetName());
 	}
@@ -173,23 +174,24 @@ namespace WebServer {
 		AddUpdate(command.str(), Languages::TextFeedbackDeleted, name);
 	}
 
-	void WebServer::StreetSettings(const StreetID streetID, const std::string& name)
+	void WebServer::RouteSettings(const RouteID routeID, const std::string& name)
 	{
 		stringstream command;
-		command << "streetsettings;street=" << streetID;
-		AddUpdate(command.str(), Languages::TextStreetUpdated, name);
+		command << "routesettings;route=" << routeID;
+		AddUpdate(command.str(), Languages::TextRouteUpdated, name);
 	}
 
-	void WebServer::StreetDelete(const StreetID streetID, const std::string& name)
+	void WebServer::RouteDelete(const RouteID routeID, const std::string& name)
 	{
 		stringstream command;
-		command << "streetdelete;street=" << streetID;
-		AddUpdate(command.str(), Languages::TextStreetDeleted, name);
+		command << "routedelete;route=" << routeID;
+		AddUpdate(command.str(), Languages::TextRouteDeleted, name);
 	}
 
-	void WebServer::SwitchState(__attribute__((unused)) const ControlType controlType, const DataModel::Switch* mySwitch, const DataModel::AccessoryState state)
+	void WebServer::SwitchState(__attribute__((unused)) const ControlType controlType, const DataModel::Switch* mySwitch)
 	{
 		stringstream command;
+		const DataModel::AccessoryState state = mySwitch->GetAccessoryState();
 		command << "switch;switch=" << mySwitch->GetID() << ";state=" << (state ? "straight" : "turnout");
 		AddUpdate(command.str(), state ? Languages::TextSwitchStateIsStraight : Languages::TextSwitchStateIsTurnout, mySwitch->GetName());
 	}
@@ -223,15 +225,15 @@ namespace WebServer {
 		const string& locoName = reserved ? loco->GetName() : "";
 		const bool occupied = track->GetFeedbackStateDelayed() == DataModel::Feedback::FeedbackStateOccupied;
 		const bool blocked = track->GetBlocked();
-		const Direction direction = track->GetLocoDirection();
+		const Orientation orientation = track->GetLocoOrientation();
 		const string occupiedText = (occupied ? "true" : "false");
 		const string blockedText = (blocked ? "true" : "false");
 		const string reservedText = (reserved ? "true" : "false");
-		const string directionText = (direction ? "true" : "false");
+		const string orientationText = (orientation ? "true" : "false");
 		command << ";occupied=" << occupiedText
 			<< ";reserved=" << reservedText
 			<< ";blocked=" << blockedText
-			<< ";direction=" << directionText
+			<< ";orientation=" << orientationText
 			<< ";loconame=" << locoName;
 
 		if (blocked)
@@ -283,7 +285,7 @@ namespace WebServer {
 	void WebServer::SignalState(__attribute__((unused)) const ControlType controlType, const DataModel::Signal* signal)
 	{
 		stringstream command;
-		DataModel::AccessoryState state = signal->GetAccessoryState();
+		const DataModel::AccessoryState state = signal->GetAccessoryState();
 		command << "signal;signal=" << signal->GetID() << ";state=" << (state ? "green" : "red");
 		AddUpdate(command.str(), state ? Languages::TextSignalStateIsGreen : Languages::TextSignalStateIsRed, signal->GetName());
 		stringstream command2;
@@ -312,22 +314,22 @@ namespace WebServer {
 		AddUpdate(command.str(), Languages::TextLocoIsReleased, manager.GetLocoName(locoID));
 	}
 
-	void WebServer::StreetRelease(const StreetID streetID)
+	void WebServer::RouteRelease(const RouteID routeID)
 	{
 		stringstream command;
-		command << "streetRelease;street=" << streetID;
-		AddUpdate(command.str(), Languages::TextStreetIsReleased, manager.GetStreetName(streetID));
+		command << "routeRelease;route=" << routeID;
+		AddUpdate(command.str(), Languages::TextRouteIsReleased, manager.GetRouteName(routeID));
 	}
 
-	void WebServer::LocoDestinationReached(const Loco* loco, const Street* street, const TrackBase* track)
+	void WebServer::LocoDestinationReached(const Loco* loco, const Route* route, const TrackBase* track)
 	{
 		string command("locoDestinationReached;loco=");
 		command += to_string(loco->GetID());
-		command += ";street=";
-		command += to_string(street->GetID());
+		command += ";route=";
+		command += to_string(route->GetID());
 		command += ";";
 		command += track->GetObjectIdentifier();
-		AddUpdate(command, Languages::TextLocoHasReachedDestination, loco->GetName(), track->GetMyName(), street->GetName());
+		AddUpdate(command, Languages::TextLocoHasReachedDestination, loco->GetName(), track->GetMyName(), route->GetName());
 	}
 
 	void WebServer::LocoStart(const LocoID locoID, const std::string& name)
@@ -406,4 +408,4 @@ namespace WebServer {
 		return false;
 	}
 
-}; // namespace WebServer
+} // namespace WebServer

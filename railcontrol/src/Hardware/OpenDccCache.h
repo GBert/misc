@@ -27,12 +27,12 @@ namespace Hardware
 		public:
 			OpenDccCacheEntry()
 			:	speed(0),
-			 	directionF0(0),
+			 	orientationF0(0),
 			 	functions(0)
 			{}
 
 			unsigned char speed;
-			unsigned char directionF0;
+			unsigned char orientationF0;
 			union
 			{
 					uint32_t functions;
@@ -66,12 +66,12 @@ namespace Hardware
 				cache[address] = entry;
 			}
 
-			void SetDirection(const Address address, const Direction direction)
+			void SetOrientation(const Address address, const Orientation orientation)
 			{
 				OpenDccCacheEntry entry = GetData(address);
 
-				entry.directionF0 &= ~(1 << 5);
-				entry.directionF0 |= static_cast<unsigned char>(direction) << 5;
+				entry.orientationF0 &= ~(1 << 5);
+				entry.orientationF0 |= static_cast<unsigned char>(orientation) << 5;
 
 				cache[address] = entry;
 			}
@@ -83,8 +83,8 @@ namespace Hardware
 
 				if (function == 0)
 				{
-					entry.directionF0 &= ~(1 << 4);
-					entry.directionF0 |= static_cast<unsigned char>(onInternal) << 4;
+					entry.orientationF0 &= ~(1 << 4);
+					entry.orientationF0 |= static_cast<unsigned char>(onInternal) << 4;
 				}
 				else
 				{

@@ -33,5 +33,5 @@ namespace WebServer
 			HtmlTagInputText(const std::string& name, const std::string& value)
 			: HtmlTagInput("text", name, value) {};
 	};
-};
+} // namespace WebServer
 

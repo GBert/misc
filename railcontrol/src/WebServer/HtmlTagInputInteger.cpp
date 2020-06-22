@@ -47,4 +47,4 @@ namespace WebServer
 
 		AddChildTag(data);
 	}
-};
+} // namespace WebServer

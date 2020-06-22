@@ -25,11 +25,12 @@ namespace WebServer
 	HtmlTagInputSliderLocoSpeed::HtmlTagInputSliderLocoSpeed(const std::string& name, const unsigned int min, const unsigned int max, const unsigned int value, const LocoID locoID)
 	: HtmlTagInputSlider(name, min, max, value)
 	{
-		std::string locoIdString = std::to_string(locoID);
-		std::string reference = "locospeed_" + locoIdString;
-		AddAttribute("id", reference);
+		const std::string locoIdString = std::to_string(locoID);
+		const std::string reference = "locospeed_" + locoIdString;
+		AddId(reference);
 		AddClass("slider");
-		AddAttribute("onchange", "locoSpeedSliderChange(" + locoIdString + "); return false;");
-		AddAttribute("oninput", "locoSpeedSliderChange(" + locoIdString + "); return false;");
-	};
-};
+		const std::string script = "locoSpeedSliderChange(" + locoIdString + "); return false;";
+		AddAttribute("onchange", script);
+		AddAttribute("oninput", script);
+	}
+} // namespace WebServer

@@ -27,10 +27,10 @@ namespace WebServer
 	{
 		AddAttribute("type", type);
 		AddAttribute("name", name);
-		AddAttribute("id", name);
+		AddId(name);
 		if (value.size() > 0)
 		{
 			AddAttribute("value", value);
 		}
 	}
-};
+} // namespace WebServer

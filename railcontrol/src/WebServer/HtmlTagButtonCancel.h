@@ -32,4 +32,4 @@ namespace WebServer
 		public:
 			HtmlTagButtonCancel();
 	};
-};
+} // namespace WebServer

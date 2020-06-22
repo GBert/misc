@@ -105,13 +105,13 @@ namespace Hardware
 		SendTwoBytes(speedMM, addressMM);
 	}
 
-	void M6051::LocoDirection(__attribute__((unused)) const Protocol protocol, const Address address, __attribute__((unused)) const Direction direction)
+	void M6051::LocoOrientation(__attribute__((unused)) const Protocol protocol, const Address address, __attribute__((unused)) const Orientation orientation)
 	{
 		if (!serialLine.IsConnected())
 		{
 			return;
 		}
-		logger->Info(Languages::TextSettingDirection, address);
+		logger->Info(Languages::TextSettingDirectionOfTravel, address);
 		unsigned char speedMM = 15 + (GetSpeedMapEntry(address) & 16);
 		unsigned char addressMM = static_cast<unsigned char>(address);
 		SendTwoBytes(speedMM, addressMM);

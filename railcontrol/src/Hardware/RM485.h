@@ -99,7 +99,10 @@ namespace Hardware
 			RM485(const HardwareParams* params);
 			~RM485();
 
-			bool CanHandleFeedback() const override { return true; }
+			inline Hardware::Capabilities GetCapabilities() const override
+			{
+				return Hardware::CapabilityFeedback;
+			}
 
 			static void GetArgumentTypesAndHint(std::map<unsigned char,ArgumentType>& argumentTypes, std::string& hint)
 			{

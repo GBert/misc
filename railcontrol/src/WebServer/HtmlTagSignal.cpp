@@ -38,6 +38,14 @@ namespace WebServer
 
 		imageDiv.AddClass("signal_item");
 		imageDiv.AddClass(signalState == DataModel::SignalStateRed ? "signal_red" : "signal_green");
+		image += "<g";
+		if (signal->GetSignalOrientation() == OrientationLeft)
+		{
+			image += " transform=\"rotate(180 18 ";
+			image += to_string(EdgeLength * signal->GetHeight() / 2);
+			image += ")\"";
+		}
+		image += ">";
 		switch (type)
 		{
 			case DataModel::SignalTypeSimpleRight:
@@ -49,6 +57,7 @@ namespace WebServer
 				image += "<polygon points=\"1,5 5,1 9,1 13,5 13,18 9,22 5,22 1,18\" fill=\"black\"/><polyline points=\"7,7 7,30\" style=\"stroke:black;stroke-width:2\"/><circle class=\"red\" cx=\"7\" cy=\"7\" r=\"4\" fill=\"darkgray\"/><circle class=\"green\" cx=\"7\" cy=\"16\" r=\"4\" fill=\"darkgray\"/>";
 				break;
 		}
+		image += "</g>";
 		AddToolTip(signal->GetName() + " (addr=" + to_string(signal->GetAddress()) + ")");
 		imageDiv.AddAttribute("onclick", "return onClickSignal(" + to_string(signal->GetID()) + ");");
 		imageDiv.AddAttribute("oncontextmenu", "return onContextLayoutItem(event, '" + identifier + "');");
@@ -57,4 +66,4 @@ namespace WebServer
 		AddContextMenuEntry(Languages::TextDeleteSignal, "loadPopup('/?cmd=signalaskdelete&" + urlIdentifier + "');");
 		FinishInit();
 	}
-};
+} // namespace WebServer

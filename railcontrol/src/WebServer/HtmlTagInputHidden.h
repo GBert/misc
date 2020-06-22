@@ -40,5 +40,5 @@ namespace WebServer
 			:	HtmlTagInput("hidden", name, value)
 			{};
 	};
-};
+} // namespace WebServer
 

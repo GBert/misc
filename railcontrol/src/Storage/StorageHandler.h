@@ -52,14 +52,14 @@ namespace Storage
 			void DeleteTrack(TrackID trackID);
 			void AllSwitches(std::map<SwitchID,DataModel::Switch*>& switches);
 			void DeleteSwitch(SwitchID switchID);
-			void AllStreets(std::map<StreetID,DataModel::Street*>& streets);
-			void DeleteStreet(StreetID streetID);
+			void AllRoutes(std::map<RouteID,DataModel::Route*>& routes);
+			void DeleteRoute(RouteID routeID);
 			void AllLayers(std::map<LayerID,DataModel::Layer*>& layers);
 			void DeleteLayer(LayerID layerID);
 			void AllSignals(std::map<SignalID,DataModel::Signal*>& signals);
 			void DeleteSignal(SignalID signalID);
 			void Save(const Hardware::HardwareParams& hardwareParams);
-			void Save(const DataModel::Street& street);
+			void Save(const DataModel::Route& route);
 			void Save(const DataModel::Loco& loco);
 			template<class T> void Save(const T& t)
 			{

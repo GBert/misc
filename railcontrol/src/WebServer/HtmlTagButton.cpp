@@ -23,13 +23,22 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace WebServer
 {
-	HtmlTagButton::HtmlTagButton(const std::string& value, const std::string& command)
-	:	commandID("b_" + command)
+	HtmlTagButton::HtmlTagButton(const std::string& value, const std::string& command, const std::string& toolTipText)
+	:	HtmlTag(),
+		commandID("b_" + command)
 	{
 		HtmlTag buttonTag("button");
+		buttonTag.AddClass("button");
 		buttonTag.AddAttribute("name", commandID);
-		buttonTag.AddAttribute("id", commandID);
+		buttonTag.AddId(commandID);
 		buttonTag.AddContent(value);
+		if (toolTipText.length() > 0)
+		{
+			HtmlTag toolTip("span");
+			toolTip.AddClass("tooltip");
+			toolTip.AddContent(toolTipText);
+			buttonTag.AddChildTag(toolTip);
+		}
 		AddChildTag(buttonTag);
 	}
-};
+} // namespace WebServer

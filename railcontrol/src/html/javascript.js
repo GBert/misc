@@ -1,6 +1,6 @@
 function onClickProgramRead(cv)
 {
-	var controlElement = document.getElementById('controlraw');
+	var controlElement = document.getElementById('s_controlraw');
 	if (!controlElement)
 	{
 		return false;
@@ -21,12 +21,19 @@ function onClickProgramRead(cv)
 	}
 	var address = addressElement.value;
 
+	var indexElement = document.getElementById('indexraw');
+	if (!indexElement)
+	{
+		return false;
+	}
+	var index = indexElement.value;
+
 	var cvElement = document.getElementById('cvraw');
 	if (!cvElement)
 	{
 		return false;
 	}
-	var cv = cvElement.value;
+	var cv = parseInt(cvElement.value) + (parseInt(index) * 1024);
 
 	var url = '?cmd=programread&control=' + control + '&mode=' + mode + '&address=' + address + '&cv=' + cv;
 	fireRequestAndForget(url);
@@ -35,7 +42,7 @@ function onClickProgramRead(cv)
 
 function onClickProgramWrite()
 {
-	var controlElement = document.getElementById('controlraw');
+	var controlElement = document.getElementById('s_controlraw');
 	if (!controlElement)
 	{
 		return false;
@@ -56,12 +63,19 @@ function onClickProgramWrite()
 	}
 	var address = addressElement.value;
 
+	var indexElement = document.getElementById('indexraw');
+	if (!indexElement)
+	{
+		return false;
+	}
+	var index = indexElement.value;
+
 	var cvElement = document.getElementById('cvraw');
 	if (!cvElement)
 	{
 		return false;
 	}
-	var cv = cvElement.value;
+	var cv = parseInt(cvElement.value) + (parseInt(index) * 1024);
 
 	var valueElement = document.getElementById('valueraw');
 	if (!valueElement)
@@ -72,6 +86,52 @@ function onClickProgramWrite()
 	var url = '?cmd=programwrite&control=' + control + '&mode=' + mode + '&address=' + address + '&cv=' + cv + '&value=' + value;
 	fireRequestAndForget(url);
 	return false;
+}
+
+function loadProgramModeSelector()
+{
+	var selectControl = document.getElementById('s_controlraw');
+	if (!selectControl)
+	{
+		return;
+	}
+	var control = selectControl.value;
+
+	var modeElement = document.getElementById('s_moderaw');
+	if (!modeElement)
+	{
+		return false;
+	}
+	var mode = modeElement.value;
+
+	var elementName = 'program_mode_selector';
+	var url = '/?cmd=programmodeselector';
+	url += '&control=' + control;
+	url += '&mode=' + mode;
+	requestUpdateItem(elementName, url);
+}
+
+function onChangeProgramModeSelector()
+{
+	var selectControl = document.getElementById('s_controlraw');
+	if (!selectControl)
+	{
+		return;
+	}
+	var control = selectControl.value;
+
+	var modeElement = document.getElementById('s_moderaw');
+	if (!modeElement)
+	{
+		return false;
+	}
+	var mode = modeElement.value;
+
+	var elementName = 'cv_fields';
+	var url = '/?cmd=getcvfields';
+	url += '&control=' + control;
+	url += '&mode=' + mode;
+	requestUpdateItem(elementName, url);
 }
 
 function updateName()
@@ -167,14 +227,28 @@ function addFeedback()
 		return false;
 	}
 
+	var identifier = '';
 	var track = document.getElementById('track');
-	if (!track)
+	if (track)
+	{
+		identifier = '&track=' + track.value;
+	}
+	else
+	{
+		var signal = document.getElementById('signal');
+		if (signal)
+		{
+			identifier = '&signal=' + signal.value;
+		}
+	}
+
+	if (identifier.length == 0)
 	{
 		return false;
 	}
 
 	feedbackCounter.value++;
-	var url = '/?cmd=feedbackadd&counter=' + feedbackCounter.value + '&track=' + track.value;
+	var url = '/?cmd=feedbackadd&counter=' + feedbackCounter.value + identifier;
 	requestUpdateItem('div_feedback_' + feedbackCounter.value, url);
 	return false;
 }
@@ -268,11 +342,11 @@ function onClickAccessory(accessoryID)
 	return false;
 }
 
-function onClickStreet(streetID)
+function onClickRoute(routeID)
 {
-	var element = document.getElementById('st_' + streetID);
-	var url = '/?cmd=streetexecute';
-	url += '&street=' + streetID;
+	var element = document.getElementById('r_' + routeID);
+	var url = '/?cmd=routeexecute';
+	url += '&route=' + routeID;
 	fireRequestAndForget(url);
 	return false;
 }
@@ -368,8 +442,8 @@ function onChangeCheckboxShowHide(checkboxId, divId)
 
 function onChangeTrackType()
 {
-	var typeSelect = document.getElementById('s_type');
-	if (!typeSelect)
+	var trackType = document.getElementById('s_tracktype');
+	if (!trackType)
 	{
 		return;
 	}
@@ -378,8 +452,8 @@ function onChangeTrackType()
 	{
 		return;
 	}
-	var typeValue = typeSelect.value;
-	length.hidden = (typeValue == 1 || typeValue == 5)
+	var trackTypeValue = trackType.value;
+	length.hidden = (trackTypeValue == 1 || trackTypeValue == 5)
 }
 
 function updateLayoutItem(elementName, data)
@@ -450,6 +524,7 @@ function updateItem(elementName, data)
 
 function requestUpdateItem(elementName, url)
 {
+	updateItem(elementName, "Loading...");
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
 		if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
@@ -466,6 +541,139 @@ function updateTrack(trackID)
 	elementName = 't_' + trackID;
 	var url = '/?cmd=trackget';
 	url += '&track=' + trackID;
+	requestUpdateLayoutItem(elementName, url);
+}
+
+function updateTrackState(argumentMap)
+{
+	var trackID = argumentMap.get('track');
+	var signalID = argumentMap.get('signal');
+	if (trackID > 0)
+	{
+		elementName = 't_' + trackID;
+	}
+	else if (signalID > 0)
+	{
+		elementName = 'si_' + signalID;
+	}
+	var element = document.getElementById(elementName);
+	if (element)
+	{
+		var reserved = false;
+		var occupied = false;
+		var blocked = false;
+		var error = false;
+		var orientation = true;
+
+		if (argumentMap.has('occupied'))
+		{
+			occupied = argumentMap.get('occupied') == 'true';
+		}
+
+		if (argumentMap.has('reserved'))
+		{
+			reserved = argumentMap.get('reserved') == 'true';
+		}
+
+		if (argumentMap.has('blocked'))
+		{
+			blocked = argumentMap.get('blocked') == 'true';
+		}
+
+		element.classList.remove('track_free');
+		element.classList.remove('track_reserved');
+		element.classList.remove('track_reserved_occupied');
+		element.classList.remove('track_occupied');
+		element.classList.remove('track_error');
+		element.classList.remove('track_blocked');
+
+		if (reserved && occupied)
+		{
+			element.classList.add('track_reserved_occupied');
+		}
+		else if (reserved)
+		{
+			element.classList.add('track_reserved');
+		}
+		else if (occupied)
+		{
+			element.classList.add('track_occupied');
+		}
+		else if (blocked)
+		{
+			element.classList.add('track_blocked');
+		}
+		else
+		{
+			element.classList.add('track_free');
+		}
+
+		if (error)
+		{
+			element.classList.add('track_error');
+		}
+
+		if (argumentMap.has('orientation'))
+		{
+			orientation = argumentMap.get('orientation') == 'true';
+		}
+
+		var contextElement = document.getElementById(elementName + '_context');
+		if (contextElement)
+		{
+			if (reserved == true)
+			{
+				element.classList.remove('loco_unknown');
+				element.classList.add('loco_known');
+				contextElement.classList.remove('loco_unknown');
+				contextElement.classList.add('loco_known');
+			}
+			else
+			{
+				element.classList.remove('loco_known');
+				element.classList.add('loco_unknown');
+				contextElement.classList.remove('loco_known');
+				contextElement.classList.add('loco_unknown');
+			}
+
+			if (blocked == true)
+			{
+				contextElement.classList.remove('track_unblocked');
+				contextElement.classList.add('track_blocked');
+			}
+			else
+			{
+				contextElement.classList.remove('track_blocked');
+				contextElement.classList.add('track_unblocked');
+			}
+
+			if (orientation == true)
+			{
+				contextElement.classList.remove('orientation_left');
+				contextElement.classList.add('orientation_right');
+			}
+			else
+			{
+				contextElement.classList.remove('orientation_right');
+				contextElement.classList.add('orientation_left');
+			}
+		}
+
+		var locoElement = document.getElementById(elementName + '_text_loconame');
+		if (locoElement)
+		{
+			var orientationArrow = orientation ? '&rarr; ' : '&larr; ';
+			var locoName = argumentMap.has('loconame') ? argumentMap.get('loconame') : '';
+			locoElement.innerHTML = orientationArrow + locoName;
+		}
+	}
+}
+
+function updateSignal(signalID)
+{
+	elementName = 'si_' + signalID;
+	var url = '/?cmd=signalget';
+	url += '&signal=' + signalID;
 	requestUpdateLayoutItem(elementName, url);
 }
 
@@ -511,10 +719,10 @@ function dataUpdate(event)
 		var on = argumentMap.get('on');
 		setToggleButton(elementName, on);
 	}
-	else if (command == 'locodirection')
+	else if (command == 'locoorientation')
 	{
-		elementName = 'b_locodirection_' + argumentMap.get('loco');
-		var on = argumentMap.get('direction');
+		elementName = 'b_locoorientation_' + argumentMap.get('loco');
+		var on = argumentMap.get('orientation');
 		setToggleButton(elementName, on);
 	}
 	else if (command == 'accessory')
@@ -607,11 +815,7 @@ function dataUpdate(event)
 	}
 	else if (command == 'signalsettings')
 	{
-		var signalID = argumentMap.get('signal');
-		elementName = 'si_' + signalID;
-		var url = '/?cmd=signalget';
-		url += '&signal=' + signalID;
-		requestUpdateLayoutItem(elementName, url);
+		updateSignal(argumentMap.get('signal'));
 	}
 	else if (command == 'signaldelete')
 	{
@@ -619,138 +823,23 @@ function dataUpdate(event)
 		deleteElement(elementName);
 		deleteElement(elementName + '_context');
 	}
-	else if (command == 'streetsettings')
+	else if (command == 'routesettings')
 	{
-		var streetID = argumentMap.get('street');
-		elementName = 'st_' + streetID;
-		var url = '/?cmd=streetget';
-		url += '&street=' + streetID;
+		var routeID = argumentMap.get('route');
+		elementName = 'r_' + routeID;
+		var url = '/?cmd=routeget';
+		url += '&route=' + routeID;
 		requestUpdateLayoutItem(elementName, url);
 	}
-	else if (command == 'streetdelete')
+	else if (command == 'routedelete')
 	{
-		elementName = 'st_' + argumentMap.get('street');
+		elementName = 'r_' + argumentMap.get('route');
 		deleteElement(elementName);
 		deleteElement(elementName + '_context');
 	}
-	else if (command == 'locointotrack')
-	{
-		updateTrack(argumentMap.get('track'));
-	}
 	else if (command == 'trackstate')
 	{
-		elementName = 't_' + argumentMap.get('track');
-		var element = document.getElementById(elementName);
-		if (element)
-		{
-			var reserved = false;
-			var occupied = false;
-			var blocked = false;
-			var error = false;
-			var direction = true;
-
-			if (argumentMap.has('occupied'))
-			{
-				occupied = argumentMap.get('occupied') == 'true';
-			}
-
-			if (argumentMap.has('reserved'))
-			{
-				reserved = argumentMap.get('reserved') == 'true';
-			}
-
-			if (argumentMap.has('blocked'))
-			{
-				blocked = argumentMap.get('blocked') == 'true';
-			}
-
-			element.classList.remove('track_free');
-			element.classList.remove('track_reserved');
-			element.classList.remove('track_reserved_occupied');
-			element.classList.remove('track_occupied');
-			element.classList.remove('track_error');
-			element.classList.remove('track_blocked');
-
-			if (reserved && occupied)
-			{
-				element.classList.add('track_reserved_occupied');
-			}
-			else if (reserved)
-			{
-				element.classList.add('track_reserved');
-			}
-			else if (occupied)
-			{
-				element.classList.add('track_occupied');
-			}
-			else if (blocked)
-			{
-				element.classList.add('track_blocked');
-			}
-			else
-			{
-				element.classList.add('track_free');
-			}
-
-			if (error)
-			{
-				element.classList.add('track_error');
-			}
-
-			if (argumentMap.has('direction'))
-			{
-				direction = argumentMap.get('direction') == 'true';
-			}
-
-			var contextElement = document.getElementById(elementName + '_context');
-			if (contextElement)
-			{
-				if (reserved == true)
-				{
-					element.classList.remove('loco_unknown');
-					element.classList.add('loco_known');
-					contextElement.classList.remove('loco_unknown');
-					contextElement.classList.add('loco_known');
-				}
-				else
-				{
-					element.classList.remove('loco_known');
-					element.classList.add('loco_unknown');
-					contextElement.classList.remove('loco_known');
-					contextElement.classList.add('loco_unknown');
-				}
-
-				if (blocked == true)
-				{
-					contextElement.classList.remove('track_unblocked');
-					contextElement.classList.add('track_blocked');
-				}
-				else
-				{
-					contextElement.classList.remove('track_blocked');
-					contextElement.classList.add('track_unblocked');
-				}
-
-				if (direction == true)
-				{
-					contextElement.classList.remove('direction_left');
-					contextElement.classList.add('direction_right');
-				}
-				else
-				{
-					contextElement.classList.remove('direction_right');
-					contextElement.classList.add('direction_left');
-				}
-			}
-
-			var locoElement = document.getElementById(elementName + '_text_loconame');
-			if (locoElement)
-			{
-				var directionArrow = direction ? '&rarr; ' : '&larr; ';
-				var locoName = argumentMap.has('loconame') ? argumentMap.get('loconame') : '';
-				locoElement.innerHTML = directionArrow + locoName;
-			}
-		}
+		updateTrackState(argumentMap);
 	}
 	else if (command == 'tracksettings')
 	{

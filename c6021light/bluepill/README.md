@@ -34,6 +34,41 @@ using SWD interface with st-flash or serial loader stm32-flash (works only with 
 #define GPIO_USART1_RX                  GPIO10          /* PA10 */
 ```
 
+MP2315 Voltage Regulator module
+-------------------------------
+
+Chip Code IAGCJ
+
+The module is enabled by default with on board pull up. To disable output, put this pin to ground. To enable put this pin to 2-5V high level.
+Don't connect to board 12V!
+
+Resistors on board (may differ)
+
+| Marking | math | Value | Voltage |
+------------------------------------
+|02D| |102 * 1000| |102 kOhm|  |12 V|
+|753| |75 * 10^3|  |75 kOhm|   |9 V|
+|393| |39 * 10^3|  |39 kOhm|   |5 V|
+|36C| |232 * 100|  |23.2 kOhm| |3.3V|
+|20C| |158 * 100|  |15.8 kOhm| |2.5V|
+|94B| |931 * 10|   |9.31 kOhm| |2.5V|
+
+https://www.monolithicpower.com/en/mp2315.html#gallery
+
+R2 on module -> 84B -> 7.53 kOhm
+
+R2 = R1 / ((Vout / 0.8V) - 1)
+
+R1 = R2 * (Vout/0.8V - 1)
+
+We need 8V:
+R1 = 7.53kOhm * (8V/0.8V - 1) = 7.53 kOhm * 9 = 67.77 kOhm -> 68 kOhm
+
+Erratra PCB 2020/06
+-------------------
+- danger using MP2315 because Enable is connected to 12V
+- Debug UART connector DTR and CTS wrong
+
 Compile under Ubuntu/Raspbian
 -----------------------------
 ```

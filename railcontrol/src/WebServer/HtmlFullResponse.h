@@ -39,5 +39,5 @@ namespace WebServer
 
 			friend std::ostream& operator<<(std::ostream& stream, const HtmlFullResponse& response);
 	};
-}; // namespace WebServer
+} // namespace WebServer
 

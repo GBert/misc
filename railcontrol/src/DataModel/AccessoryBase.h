@@ -74,6 +74,20 @@ namespace DataModel
 			AccessoryType GetType() const { return accessoryType; }
 			void SetType(AccessoryType type) { this->accessoryType = type; }
 			AccessoryState GetAccessoryState() const { return accessoryState; }
+			AccessoryState CalculateInvertedAccessoryState(AccessoryState state) const
+			{
+				if (inverted == false)
+				{
+					return state;
+				}
+				return state == AccessoryStateOn ? AccessoryStateOff : AccessoryStateOn;
+			}
+
+			inline AccessoryState GetInvertedAccessoryState() const
+			{
+				return CalculateInvertedAccessoryState(accessoryState);
+			}
+
 			void SetAccessoryState(AccessoryState state) { this->accessoryState = state; lastUsed = time(nullptr); ++counter; }
 			AccessoryPulseDuration GetAccessoryPulseDuration() const { return duration; }
 			void SetAccessoryPulseDuration(AccessoryPulseDuration duration) { this->duration = duration; }

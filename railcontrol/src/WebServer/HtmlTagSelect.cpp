@@ -27,7 +27,7 @@ namespace WebServer
 	 	commandID("s_" + name)
 	{
 		AddAttribute("name", name);
-		AddAttribute("id", commandID);
+		AddId(commandID);
 
 		for (auto option : options)
 		{
@@ -47,7 +47,7 @@ namespace WebServer
 	 	commandID("s_" + name)
 	{
 		AddAttribute("name", name);
-		AddAttribute("id", commandID);
+		AddId(commandID);
 
 		for (auto option : options)
 		{
@@ -61,4 +61,4 @@ namespace WebServer
 			AddChildTag(optionTag);
 		}
 	}
-};
+} // namespace WebServer

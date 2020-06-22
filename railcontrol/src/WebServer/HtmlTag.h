@@ -40,31 +40,34 @@ namespace WebServer
 			std::map<std::string, std::string> attributes;
 			std::vector<std::string> classes;
 			std::string content;
+			std::string id;
 
 		public:
-			HtmlTag() {}
-			HtmlTag(const std::string& name) : name(name) {}
-			virtual ~HtmlTag() {};
+			inline HtmlTag() {}
+			inline HtmlTag(const std::string& name) : name(name) {}
+			inline virtual ~HtmlTag() {};
+
 			virtual HtmlTag AddAttribute(const std::string& name, const std::string& value = "");
-			virtual HtmlTag AddChildTag(const HtmlTag& child)
+
+			inline virtual HtmlTag AddChildTag(const HtmlTag& child)
 			{
 				this->childTags.push_back(child);
 				return *this;
 			}
 
-			virtual HtmlTag AddContent(const std::string& content)
+			inline virtual HtmlTag AddContent(const std::string& content)
 			{
 				this->content += content;
 				return *this;
 			}
 
 			template<typename... Args>
-			HtmlTag AddContent(const Languages::TextSelector text, Args... args)
+			inline HtmlTag AddContent(const Languages::TextSelector text, Args... args)
 			{
 				return AddContent(Logger::Logger::Format(Languages::GetText(text), args...));
 			}
 
-			virtual HtmlTag AddClass(const std::string& className)
+			inline virtual HtmlTag AddClass(const std::string& className)
 			{
 				if (className.length() > 0)
 				{
@@ -73,9 +76,15 @@ namespace WebServer
 				return *this;
 			}
 
-			virtual size_t ContentSize() const { return content.size(); }
+			inline virtual HtmlTag AddId(const std::string& id)
+			{
+				this->id = id;
+				return *this;
+			}
 
-			operator std::string () const
+			inline virtual size_t ContentSize() const { return content.size(); }
+
+			inline operator std::string () const
 			{
 				std::stringstream ss;
 				ss << *this;
@@ -84,5 +93,5 @@ namespace WebServer
 
 			friend std::ostream& operator<<(std::ostream& stream, const HtmlTag& tag);
 	};
-}; // namespace WebServer
+} // namespace WebServer
 

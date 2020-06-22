@@ -34,11 +34,6 @@ namespace WebServer
 		public:
 			HtmlTagInputSliderLocoSpeed() = delete;
 			HtmlTagInputSliderLocoSpeed(const std::string& name, const unsigned int min, const unsigned int max, const unsigned int value, const LocoID locoID);
-
-			void AddJavaScript(const std::string& content)
-			{
-				AddChildTag(HtmlTagJavascript(content));
-			}
 	};
-};
+} // namespace WebServer
 

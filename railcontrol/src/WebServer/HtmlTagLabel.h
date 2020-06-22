@@ -49,7 +49,7 @@ namespace WebServer
 				stringLabel.append(":");
 				AddContent(stringLabel);
 				AddAttribute("for", reference);
-			};
+			}
 	};
-};
+} // namespace WebServer
 

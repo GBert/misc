@@ -65,24 +65,17 @@ namespace Hardware
 
 			void AccessoryProtocols(std::vector<Protocol>& protocols) const override;
 			bool AccessoryProtocolSupported(Protocol protocol) const override;
-			void AccessoryState(const ControlType controlType, const DataModel::Accessory* accessory, const DataModel::AccessoryState state) override;
+			void AccessoryState(const ControlType controlType, const DataModel::Accessory* accessory) override;
 
 			void Booster(const ControlType controlType, BoosterState status) override;
-			bool CanHandleAccessories() const override;
-			bool CanHandleFeedbacks() const override;
-			bool CanHandleLocos() const override;
-			bool CanHandleProgram() const override;
-			bool CanHandleProgramMm() const override;
-			bool CanHandleProgramMfx() const override;
-			bool CanHandleProgramDccDirect() const override;
-			bool CanHandleProgramDccPom() const override;
-			void LocoDirection(const ControlType controlType, const DataModel::Loco* loco, const Direction direction) override;
+			Hardware::Capabilities GetCapabilities() const override;
+			void LocoOrientation(const ControlType controlType, const DataModel::Loco* loco, const Orientation orientation) override;
 			void LocoFunction(const ControlType controlType, const DataModel::Loco* loco, const Function function, const DataModel::LocoFunctions::FunctionState on) override;
 			void LocoProtocols(std::vector<Protocol>& protocols) const override;
 			bool LocoProtocolSupported(Protocol protocol) const override;
 			void LocoSpeed(const ControlType controlType, const DataModel::Loco* loco, const Speed speed) override;
-			void LocoSpeedDirectionFunctions(const DataModel::Loco* loco, const Speed speed, const Direction direction, std::vector<DataModel::LocoFunctions::FunctionState>& functions) override;
-			void SwitchState(const ControlType controlType, const DataModel::Switch* mySwitch, const DataModel::AccessoryState state) override;
+			void LocoSpeedOrientationFunctions(const DataModel::Loco* loco, const Speed speed, const Orientation orientation, std::vector<DataModel::LocoFunctions::FunctionState>& functions) override;
+			void SwitchState(const ControlType controlType, const DataModel::Switch* mySwitch) override;
 			void SignalState(const ControlType controlType, const DataModel::Signal* signal) override;
 			void ProgramRead(const ProgramMode mode, const Address address, const CvNumber cv) override;
 			void ProgramWrite(const ProgramMode mode, const Address address, const CvNumber cv, const CvValue value) override;
@@ -102,5 +95,5 @@ namespace Hardware
 			void Close();
 			bool ProgramCheckValues(const ProgramMode mode, const CvNumber cv, const CvValue value = 1);
 	};
-}; // namespace Hardware
+} // namespace Hardware
 

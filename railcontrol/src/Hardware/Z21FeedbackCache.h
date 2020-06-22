@@ -20,17 +20,40 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
-#include <string>
-
-#include "WebServer/HtmlTag.h"
-
-namespace WebServer
+namespace Hardware
 {
-	class HtmlTagInputInteger : public HtmlTag
+	class Z21FeedbackCache
 	{
 		public:
-			HtmlTagInputInteger() = delete;
-			HtmlTagInputInteger(const std::string& name, const int value, const int min, const int max);
+			inline Z21FeedbackCache()
+			{
+				for (unsigned char module = 0; module < MaxModules; ++module)
+				{
+					cache[module] = 0;
+				}
+			}
+
+			inline void Set(const unsigned char module, const unsigned char data)
+			{
+				if (module >= MaxModules)
+				{
+					return;
+				}
+				cache[module] = data;
+			}
+
+			inline unsigned char Get(unsigned char module)
+			{
+				if (module >= MaxModules)
+				{
+					return 0;
+				}
+				return cache[module];
+			}
+
+		private:
+			static const unsigned char MaxModules = 20;
+			unsigned char cache[MaxModules];
 	};
-} // namespace WebServer
+} // namespace
 

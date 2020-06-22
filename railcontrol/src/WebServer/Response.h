@@ -54,5 +54,5 @@ namespace WebServer
 			std::map<const std::string,std::string> headers;
 			HtmlTag content;
 	};
-}; // namespace WebServer
+} // namespace WebServer
 

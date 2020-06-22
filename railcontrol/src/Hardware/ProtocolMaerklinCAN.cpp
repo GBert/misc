@@ -117,13 +117,13 @@ namespace Hardware
 		Send(buffer);
 	}
 
-	void ProtocolMaerklinCAN::LocoDirection(const Protocol protocol, const Address address, const Direction direction)
+	void ProtocolMaerklinCAN::LocoOrientation(const Protocol protocol, const Address address, const Orientation orientation)
 	{
 		unsigned char buffer[CANCommandBufferLength];
-		logger->Info(Languages::TextSettingDirectionWithProtocol, protocol, address, Languages::GetLeftRight(direction));
+		logger->Info(Languages::TextSettingDirectionOfTravelWithProtocol, protocol, address, Languages::GetLeftRight(orientation));
 		CreateCommandHeader(buffer, CanCommandLocoDirection, CanResponseCommand, 5);
 		CreateLocalIDLoco(buffer, protocol, address);
-		buffer[9] = (direction ? 1 : 2);
+		buffer[9] = (orientation ? 1 : 2);
 		Send(buffer);
 	}
 
@@ -309,10 +309,10 @@ namespace Hardware
 			CanAddress address;
 			Protocol protocol;
 			ParseAddressProtocol(buffer, address, protocol);
-			Direction direction = (buffer[9] == 1 ? DirectionRight : DirectionLeft);
-			logger->Info(Languages::TextReceivedDirectionCommand, protocol, address, direction);
+			Orientation orientation = (buffer[9] == 1 ? OrientationRight : OrientationLeft);
+			logger->Info(Languages::TextReceivedDirectionCommand, protocol, address, orientation);
 			manager->LocoSpeed(ControlTypeHardware, controlID, protocol, static_cast<Address>(address), MinSpeed);
-			manager->LocoDirection(ControlTypeHardware, controlID, protocol, static_cast<Address>(address), direction);
+			manager->LocoOrientation(ControlTypeHardware, controlID, protocol, static_cast<Address>(address), orientation);
 			return;
 		}
 

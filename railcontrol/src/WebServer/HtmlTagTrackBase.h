@@ -69,5 +69,5 @@ namespace WebServer
 			std::string identifier;
 			std::string urlIdentifier;
 	};
-}; // namespace WebServer
+} // namespace WebServer
 

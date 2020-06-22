@@ -30,4 +30,4 @@ namespace WebServer
 		AddAttribute("onclick", "submitEditForm(); return false;");
 		AddClass("wide_button");
 	}
-};
+} // namespace WebServer

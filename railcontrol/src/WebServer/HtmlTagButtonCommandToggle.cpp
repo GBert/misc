@@ -26,8 +26,12 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace WebServer
 {
-	HtmlTagButtonCommandToggle::HtmlTagButtonCommandToggle(const std::string& value, const std::string& command, const bool on, const std::map<std::string,std::string>& arguments)
-	:	HtmlTagButton(value, command)
+	HtmlTagButtonCommandToggle::HtmlTagButtonCommandToggle(const std::string& value,
+		const std::string& command,
+		const bool on,
+		const std::map<std::string,std::string>& arguments,
+		const std::string& tooltip)
+	:	HtmlTagButton(value, command, tooltip)
 	{
 		AddClass(on == true ? "button_on" : "button_off");
 
@@ -47,4 +51,4 @@ namespace WebServer
 			"return false;";
 		AddAttribute("onclick", ss.str());
 	}
-};
+} // namespace WebServer

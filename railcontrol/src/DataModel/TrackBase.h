@@ -29,7 +29,7 @@ along with RailControl; see the file LICENCE. If not see
 namespace DataModel
 {
 	class Loco;
-	class Street;
+	class Route;
 
 	enum TrackType : unsigned char
 	{
@@ -42,13 +42,13 @@ namespace DataModel
 		TrackTypeLink = 6
 	};
 
-	enum SelectStreetApproach : unsigned char
+	enum SelectRouteApproach : unsigned char
 	{
-		SelectStreetSystemDefault = 0,
-		SelectStreetDoNotCare = 1,
-		SelectStreetRandom = 2,
-		SelectStreetMinTrackLength = 3,
-		SelectStreetLongestUnused = 4
+		SelectRouteSystemDefault = 0,
+		SelectRouteDoNotCare = 1,
+		SelectRouteRandom = 2,
+		SelectRouteMinTrackLength = 3,
+		SelectRouteLongestUnused = 4
 	};
 
 	class TrackBase
@@ -59,10 +59,10 @@ namespace DataModel
 
 			TrackBase(Manager* manager)
 			:	manager(manager),
-				selectStreetApproach(SelectStreetSystemDefault),
+				selectRouteApproach(SelectRouteSystemDefault),
 				trackState(DataModel::Feedback::FeedbackStateFree),
 				trackStateDelayed(DataModel::Feedback::FeedbackStateFree),
-				locoDirection(DirectionRight),
+				locoOrientation(OrientationRight),
 				blocked(false),
 				locoIdDelayed(LocoNone),
 				releaseWhenFree(false)
@@ -78,15 +78,15 @@ namespace DataModel
 			bool SetFeedbackState(const FeedbackID feedbackID, const DataModel::Feedback::FeedbackState state);
 			DataModel::Feedback::FeedbackState GetFeedbackStateDelayed() const { return trackStateDelayed; };
 
-			bool AddStreet(Street* street);
-			bool RemoveStreet(Street* street);
+			bool AddRoute(Route* route);
+			bool RemoveRoute(Route* route);
 
-			SelectStreetApproach GetSelectStreetApproach() const { return selectStreetApproach; }
-			void SetSelectStreetApproach(const SelectStreetApproach selectStreetApproach) { this->selectStreetApproach = selectStreetApproach; }
+			SelectRouteApproach GetSelectRouteApproach() const { return selectRouteApproach; }
+			void SetSelectRouteApproach(const SelectRouteApproach selectRouteApproach) { this->selectRouteApproach = selectRouteApproach; }
 
-			bool GetValidStreets(Logger::Logger* logger, const DataModel::Loco* loco, const bool allowLocoTurn, std::vector<Street*>& validStreets) const;
-			Direction GetLocoDirection() const { return locoDirection; }
-			void SetLocoDirection(const Direction direction) { locoDirection = direction; }
+			bool GetValidRoutes(Logger::Logger* logger, const DataModel::Loco* loco, const bool allowLocoTurn, std::vector<Route*>& validRoutes) const;
+			Orientation GetLocoOrientation() const { return locoOrientation; }
+			void SetLocoOrientation(const Orientation orientation) { locoOrientation = orientation; }
 			bool GetBlocked() const { return blocked; }
 			void SetBlocked(const bool blocked) { this->blocked = blocked; }
 			LocoID GetLocoDelayed() const { return this->locoIdDelayed; }
@@ -119,17 +119,17 @@ namespace DataModel
 
 		private:
 			bool FeedbackStateInternal(const FeedbackID feedbackID, const DataModel::Feedback::FeedbackState state);
-			void OrderValidStreets(std::vector<DataModel::Street*>& validStreets) const;
-			SelectStreetApproach GetSelectStreetApproachCalculated() const;
+			void OrderValidRoutes(std::vector<DataModel::Route*>& validRoutes) const;
+			SelectRouteApproach GetSelectRouteApproachCalculated() const;
 			bool BaseReleaseForceUnlocked(Logger::Logger* logger, const LocoID locoID);
 
 			mutable std::mutex updateMutex;
 			std::vector<FeedbackID> feedbacks;
-			SelectStreetApproach selectStreetApproach;
+			SelectRouteApproach selectRouteApproach;
 			DataModel::Feedback::FeedbackState trackState;
 			DataModel::Feedback::FeedbackState trackStateDelayed;
-			std::vector<Street*> streets;
-			Direction locoDirection;
+			std::vector<Route*> routes;
+			Orientation locoOrientation;
 			bool blocked;
 			LocoID locoIdDelayed;
 			bool releaseWhenFree;

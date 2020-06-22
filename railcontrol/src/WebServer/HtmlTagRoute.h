@@ -22,15 +22,28 @@ along with RailControl; see the file LICENCE. If not see
 
 #include <string>
 
-#include "WebServer/HtmlTag.h"
+#include "WebServer/HtmlTagLayoutItem.h"
+
+namespace DataModel
+{
+	class Route;
+}
 
 namespace WebServer
 {
-	class HtmlTagInputInteger : public HtmlTag
+	class HtmlTagRoute : public HtmlTagLayoutItem
 	{
 		public:
-			HtmlTagInputInteger() = delete;
-			HtmlTagInputInteger(const std::string& name, const int value, const int min, const int max);
+			HtmlTagRoute() = delete;
+			HtmlTagRoute(const DataModel::Route* route);
+
+			virtual ~HtmlTagRoute() {}
+
+			virtual HtmlTag AddAttribute(const std::string& name, const std::string& value) override
+			{
+				childTags[0].AddAttribute(name, value);
+				return *this;
+			}
 	};
 } // namespace WebServer
 

@@ -35,7 +35,7 @@ using DataModel::Layer;
 using DataModel::Loco;
 using DataModel::Relation;
 using DataModel::Signal;
-using DataModel::Street;
+using DataModel::Route;
 using DataModel::Switch;
 using std::map;
 using std::string;
@@ -161,7 +161,7 @@ namespace Storage
 		{
 			Loco* loco = new Loco(manager, object);
 			vector<string> slavesString;
-			const StreetID locoID = loco->GetID();
+			const RouteID locoID = loco->GetID();
 			instance->RelationsFrom(DataModel::Relation::TypeLocoSlave, locoID, slavesString);
 			vector<Relation*> slaves;
 			for (auto slaveString : slavesString)
@@ -289,20 +289,20 @@ namespace Storage
 		CommitTransactionInternal();
 	}
 
-	void StorageHandler::Save(const DataModel::Street& street)
+	void StorageHandler::Save(const DataModel::Route& route)
 	{
 		if (instance == nullptr)
 		{
 			return;
 		}
-		string serialized = street.Serialize();
+		string serialized = route.Serialize();
 		StartTransactionInternal();
-		const StreetID streetID = street.GetID();
-		instance->SaveObject(ObjectTypeStreet, streetID, street.GetName(), serialized);
-		instance->DeleteRelationsFrom(DataModel::Relation::TypeStreetAtLock, streetID);
-		SaveRelations(street.GetRelationsAtLock());
-		instance->DeleteRelationsFrom(DataModel::Relation::TypeStreetAtUnlock, streetID);
-		SaveRelations(street.GetRelationsAtUnlock());
+		const RouteID routeID = route.GetID();
+		instance->SaveObject(ObjectTypeRoute, routeID, route.GetName(), serialized);
+		instance->DeleteRelationsFrom(DataModel::Relation::TypeRouteAtLock, routeID);
+		SaveRelations(route.GetRelationsAtLock());
+		instance->DeleteRelationsFrom(DataModel::Relation::TypeRouteAtUnlock, routeID);
+		SaveRelations(route.GetRelationsAtUnlock());
 		CommitTransactionInternal();
 	}
 
@@ -321,33 +321,33 @@ namespace Storage
 		CommitTransactionInternal();
 	}
 
-	void StorageHandler::AllStreets(std::map<StreetID,DataModel::Street*>& streets)
+	void StorageHandler::AllRoutes(std::map<RouteID,DataModel::Route*>& routes)
 	{
 		if (instance == nullptr)
 		{
 			return;
 		}
 		vector<string> objects;
-		instance->ObjectsOfType(ObjectTypeStreet, objects);
+		instance->ObjectsOfType(ObjectTypeRoute, objects);
 		for (auto object : objects) {
-			Street* street = new Street(manager, object);
-			const StreetID streetID = street->GetID();
-			street->AssignRelationsAtLock(RelationsFrom(Relation::TypeStreetAtLock, streetID));
-			street->AssignRelationsAtUnlock(RelationsFrom(Relation::TypeStreetAtUnlock, streetID));
-			streets[streetID] = street;
+			Route* route = new Route(manager, object);
+			const RouteID routeID = route->GetID();
+			route->AssignRelationsAtLock(RelationsFrom(Relation::TypeRouteAtLock, routeID));
+			route->AssignRelationsAtUnlock(RelationsFrom(Relation::TypeRouteAtUnlock, routeID));
+			routes[routeID] = route;
 		}
 	}
 
-	void StorageHandler::DeleteStreet(const StreetID streetID)
+	void StorageHandler::DeleteRoute(const RouteID routeID)
 	{
 		if (instance == nullptr)
 		{
 			return;
 		}
 		StartTransactionInternal();
-		instance->DeleteRelationsFrom(DataModel::Relation::TypeStreetAtLock, streetID);
-		instance->DeleteRelationsFrom(DataModel::Relation::TypeStreetAtUnlock, streetID);
-		instance->DeleteObject(ObjectTypeStreet, streetID);
+		instance->DeleteRelationsFrom(DataModel::Relation::TypeRouteAtLock, routeID);
+		instance->DeleteRelationsFrom(DataModel::Relation::TypeRouteAtUnlock, routeID);
+		instance->DeleteObject(ObjectTypeRoute, routeID);
 		CommitTransactionInternal();
 	}
 

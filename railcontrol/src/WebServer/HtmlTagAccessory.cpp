@@ -40,7 +40,7 @@ namespace WebServer
 		HtmlTag div1("div");
 		string accessoryIdString = to_string(accessory->GetID());
 		string id("a_" + accessoryIdString);
-		div1.AddAttribute("id", id);
+		div1.AddId(id);
 		div1.AddClass("layout_item");
 		div1.AddClass("accessory_item");
 		div1.AddClass(state == DataModel::AccessoryStateOn ? "accessory_on" : "accessory_off");
@@ -53,7 +53,7 @@ namespace WebServer
 
 		HtmlTag div2("div");
 		div2.AddClass("contextmenu");
-		div2.AddAttribute("id", id + "_context");
+		div2.AddId(id + "_context");
 		div2.AddAttribute("style", "left:" + to_string(layoutPosX + 5) + "px;top:" + to_string(layoutPosY + 30) + "px;");
 		div2.AddChildTag(HtmlTag("ul").AddClass("contextentries")
 			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(accessoryName))
@@ -63,4 +63,4 @@ namespace WebServer
 			);
 		AddChildTag(div2);
 	}
-};
+} // namespace WebServer

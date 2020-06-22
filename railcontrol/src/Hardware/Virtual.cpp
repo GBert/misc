@@ -63,9 +63,9 @@ namespace Hardware
 	}
 
 	// set the direction of a loco
-	void Virtual::LocoDirection(const Protocol protocol, const Address address, const Direction direction)
+	void Virtual::LocoOrientation(const Protocol protocol, const Address address, const Orientation orientation)
 	{
-		logger->Info(Languages::TextSettingDirectionWithProtocol, protocol, address, Languages::GetLeftRight(direction));
+		logger->Info(Languages::TextSettingDirectionOfTravelWithProtocol, protocol, address, Languages::GetLeftRight(orientation));
 	}
 
 	// set loco function
@@ -85,6 +85,10 @@ namespace Hardware
 	{
 		switch (mode)
 		{
+			case ProgramModeMfx:
+				logger->Info(Languages::TextProgramMfxRead, address, cv);
+				break;
+
 			case ProgramModeDccDirect:
 				logger->Info(Languages::TextProgramDccRead, cv);
 				break;
@@ -110,6 +114,14 @@ namespace Hardware
 		{
 			case ProgramModeMm:
 				logger->Info(Languages::TextProgramMm, cv, value);
+				break;
+
+			case ProgramModeMmPom:
+				logger->Info(Languages::TextProgramMmPom, address, cv, value);
+				break;
+
+			case ProgramModeMfx:
+				logger->Info(Languages::TextProgramMfxWrite, address, cv, value);
 				break;
 
 			case ProgramModeDccDirect:

@@ -35,9 +35,12 @@ namespace Hardware
 			M6051(const HardwareParams* params);
 			~M6051();
 
-			bool CanHandleLocos() const override { return true; }
-			bool CanHandleAccessories() const override { return true; }
-			bool CanHandleFeedback() const override { return true; }
+			inline Hardware::Capabilities GetCapabilities() const override
+			{
+				return Hardware::CapabilityLoco
+					| Hardware::CapabilityAccessory
+					| Hardware::CapabilityFeedback;
+			}
 
 			void GetLocoProtocols(std::vector<Protocol>& protocols) const override { protocols.push_back(ProtocolMM2); }
 
@@ -56,7 +59,7 @@ namespace Hardware
 
 			void Booster(const BoosterState status) override;
 			void LocoSpeed(const Protocol protocol, const Address address, const Speed speed) override;
-			void LocoDirection(const Protocol protocol, const Address address, const Direction direction) override;
+			void LocoOrientation(const Protocol protocol, const Address address, const Orientation orientation) override;
 			void LocoFunction(const Protocol protocol, const Address address, const Function function, const DataModel::LocoFunctions::FunctionState on) override;
 			void AccessoryOnOrOff(const Protocol protocol, const Address address, const DataModel::AccessoryState state, const bool on) override;
 

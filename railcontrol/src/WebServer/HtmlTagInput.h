@@ -32,5 +32,5 @@ namespace WebServer
 			HtmlTagInput() = delete;
 			HtmlTagInput(const std::string& type, const std::string& name, const std::string& value = "");
 	};
-};
+} // namespace WebServer
 

@@ -41,5 +41,5 @@ namespace WebServer
 			:	HtmlTagFeedback(feedback, feedback->GetPosX(), feedback->GetPosY())
 			{}
 	};
-}; // namespace WebServer
+} // namespace WebServer
 
