@@ -34,7 +34,6 @@ OBJ= \
 	Languages.o \
 	Logger/Logger.o \
 	Logger/LoggerServer.o \
-	Manager.o \
 	Network/Serial.o \
 	Network/TcpClient.o \
 	Network/TcpConnection.o \
@@ -67,7 +66,6 @@ OBJ= \
 	WebServer/HtmlTagSwitch.o \
 	WebServer/HtmlTagTrackBase.o \
 	WebServer/Response.o \
-	WebServer/WebClient.o \
 	WebServer/WebServer.o
 
 all: $(OBJ)
