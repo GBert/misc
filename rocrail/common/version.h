@@ -1,11 +1,15 @@
 const int revisionnr = 
-814
+818
 ;
 const char* commithash = 
-"82e0081d90a4b47b6020a3d00fa92e67dac8e869";
+"9bd7c073149b8053b30e276e74b20cbfd97e9d5a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"818 2020-06-22 19:07:17 +0200 seltabtrackdlg: deocder tracknr added\n" \
+"817 2020-06-22 15:32:55 +0200 wio stepper: wip\n" \
+"816 2020-06-22 14:22:38 +0200 locdialog: search index field added\n" \
+"815 2020-06-22 10:25:52 +0200 cbus: wio event opc added\n" \
 "814 2020-06-21 11:55:31 +0200 router: disabled minocc/numBlock error\n" \
 "813 2020-06-21 11:08:35 +0200 cbus,flim: trace correction for version\n" \
 "812 2020-06-21 10:25:19 +0200 cbus: allow lower bps for sublib type USB\n" \
