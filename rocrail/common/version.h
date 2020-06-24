@@ -1,11 +1,19 @@
 const int revisionnr = 
-818
+826
 ;
 const char* commithash = 
-"9bd7c073149b8053b30e276e74b20cbfd97e9d5a";
+"090cf8b1b7f43c781e6e38960d2af35b27e473df";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"826 2020-06-24 16:03:02 +0200 posseldlg: dialog for positioning tracks\n" \
+"825 2020-06-23 22:01:33 +0200 roads: new symbols for ghost and closed blocks (Wolfgang)\n" \
+"824 2020-06-23 17:36:42 +0200 loc: fix for restoring gotoBlock -> bk type only\n" \
+"823 2020-06-23 16:57:42 +0200 WIO motor support: WIP\n" \
+"822 2020-06-23 12:14:46 +0200 acdecdlg,textdlg,variabledlg: index find added\n" \
+"821 2020-06-23 10:46:07 +0200 z21: wait until the network/z21 is available before proceed\n" \
+"820 2020-06-23 10:21:23 +0200 operatordlg: index filter added\n" \
+"819 2020-06-23 10:11:42 +0200 WIO motor support: WIP\n" \
 "818 2020-06-22 19:07:17 +0200 seltabtrackdlg: deocder tracknr added\n" \
 "817 2020-06-22 15:32:55 +0200 wio stepper: wip\n" \
 "816 2020-06-22 14:22:38 +0200 locdialog: search index field added\n" \
