@@ -1,11 +1,26 @@
 const int revisionnr = 
-826
+841
 ;
 const char* commithash = 
-"090cf8b1b7f43c781e6e38960d2af35b27e473df";
+"f4b1b59912b673b3d3a0e51ca97f9fff083f9b8d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"841 2020-06-29 16:34:52 +0200 zoomdlg: button size fix\n" \
+"840 2020-06-29 14:26:50 +0200 WIO-CAN: WIP\n" \
+"839 2020-06-28 15:53:04 +0200 signal: reset sensor added\n" \
+"838 2020-06-28 10:02:00 +0200 translation merge: en_GB, zh_CN, fr, hu, de, nl\n" \
+"837 2020-06-28 09:09:28 +0200 cbus: WIO programming and bidi support\n" \
+"836 2020-06-27 17:28:40 +0200 car: revert extra function broadcast\n" \
+"835 2020-06-27 14:34:07 +0200 cbus: extcan DCC support (WIP)\n" \
+"834 2020-06-26 15:30:32 +0200 seltab: show tracksensors in case of position event\n" \
+"833 2020-06-26 14:54:39 +0200 seltab: WIO-Step goto track support\n" \
+"832 2020-06-26 14:23:49 +0200 seltabdlg: decoder track column added\n" \
+"831 2020-06-26 13:19:55 +0200 seltab: WIO-Step support\n" \
+"830 2020-06-26 06:45:14 +0200 posseldlg: pause button for track picking\n" \
+"829 2020-06-25 16:53:12 +0200 posseldlg: load existing tracks\n" \
+"828 2020-06-25 15:51:37 +0200 item: clone new track nodes\n" \
+"827 2020-06-25 15:28:00 +0200 WIO-Step: calibration\n" \
 "826 2020-06-24 16:03:02 +0200 posseldlg: dialog for positioning tracks\n" \
 "825 2020-06-23 22:01:33 +0200 roads: new symbols for ghost and closed blocks (Wolfgang)\n" \
 "824 2020-06-23 17:36:42 +0200 loc: fix for restoring gotoBlock -> bk type only\n" \
