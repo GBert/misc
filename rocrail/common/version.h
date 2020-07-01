@@ -1,11 +1,21 @@
 const int revisionnr = 
-841
+851
 ;
 const char* commithash = 
-"f4b1b59912b673b3d3a0e51ca97f9fff083f9b8d";
+"0fbc58172aa6c701bc0a0173726ee6a6ffbae074";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"851 2020-07-01 09:05:51 +0200 importantchanges update\n" \
+"850 2020-07-01 07:53:59 +0200 naming corrections\n" \
+"849 2020-06-30 22:50:51 +0200 rcan: include correction\n" \
+"848 2020-06-30 22:44:24 +0200 naming corrections\n" \
+"847 2020-06-30 19:17:59 +0200 VSC tasks (WIP)\n" \
+"846 2020-06-30 17:52:25 +0200 VSC tasks (WIP)\n" \
+"845 2020-06-30 17:30:54 +0200 VSC files\n" \
+"844 2020-06-30 16:22:04 +0200 cbusdlg: enable fonfof\n" \
+"843 2020-06-30 11:09:16 +0200 signaldialog: new translation 'Reset by sensor' added\n" \
+"842 2020-06-30 09:06:09 +0200 installwx: use apt-get to allow wildcards\n" \
 "841 2020-06-29 16:34:52 +0200 zoomdlg: button size fix\n" \
 "840 2020-06-29 14:26:50 +0200 WIO-CAN: WIP\n" \
 "839 2020-06-28 15:53:04 +0200 signal: reset sensor added\n" \
