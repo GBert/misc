@@ -222,7 +222,6 @@ define Package/rocrail-cs-all-other/install
 	$(INSTALL_DIR) $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/barjut.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/bidib.so $(1)/opt/rocrail
-#	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/cbus.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/cti.so $(1)/opt/rocrail
 #	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/dcc232.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/dccar.so $(1)/opt/rocrail
@@ -253,6 +252,7 @@ define Package/rocrail-cs-all-other/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/perir.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/raptor.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/rascii.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/rbus.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/rfid12.so $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/rmx.so $(1)/opt/rocrail
 #	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/roco.so $(1)/opt/rocrail
