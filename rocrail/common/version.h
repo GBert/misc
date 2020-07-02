@@ -1,11 +1,12 @@
 const int revisionnr = 
-851
+852
 ;
 const char* commithash = 
-"0fbc58172aa6c701bc0a0173726ee6a6ffbae074";
+"8390ec646ff6c1440504dbbb5a293aded04541bc";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"852 2020-07-01 16:11:53 +0200 rcan: use extended frames for WIO-CAN\n" \
 "851 2020-07-01 09:05:51 +0200 importantchanges update\n" \
 "850 2020-07-01 07:53:59 +0200 naming corrections\n" \
 "849 2020-06-30 22:50:51 +0200 rcan: include correction\n" \
