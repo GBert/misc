@@ -1,11 +1,60 @@
 const int revisionnr = 
-852
+901
 ;
 const char* commithash = 
-"8390ec646ff6c1440504dbbb5a293aded04541bc";
+"db6e48a058ca5455a31a93b2cdadd8cacaff73ea";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"901 2020-07-14 10:08:45 +0200 uudp: save client ip:port\n" \
+"900 2020-07-14 08:25:06 +0200 UUDP library added\n" \
+"899 2020-07-14 07:17:22 +0200 operatordlg: fix for OK in case of modal\n" \
+"898 2020-07-14 06:58:20 +0200 RocControl removed\n" \
+"897 2020-07-13 16:49:47 +0200 extcan: dcc state event\n" \
+"896 2020-07-13 07:11:30 +0200 rcan: avoid cbus bootloader conflict\n" \
+"895 2020-07-12 19:30:55 +0200 wrapper: new canprot attribute\n" \
+"894 2020-07-12 19:29:56 +0200 rcan: protocol choise; default RCAN+CBUS\n" \
+"893 2020-07-12 19:15:42 +0200 trainpanel: open operator dialog read/write on properties\n" \
+"892 2020-07-12 14:16:30 +0200 cbusnodedlg: correction for WIO subtype\n" \
+"891 2020-07-12 11:10:59 +0200 tt: stop calibrate command support added\n" \
+"890 2020-07-11 17:26:42 +0200 rcan: support for environment events\n" \
+"889 2020-07-11 15:31:00 +0200 tt: wio lights support added\n" \
+"888 2020-07-11 14:54:37 +0200 tt: use one function for next/prev track\n" \
+"887 2020-07-11 14:37:14 +0200 tt: wio next/prev support added\n" \
+"886 2020-07-11 08:26:08 +0200 tt: fix for wio type\n" \
+"885 2020-07-10 18:29:39 +0200 car: fix for mapped function reporting\n" \
+"884 2020-07-10 15:46:04 +0200 extcan: rfid processing ack\n" \
+"883 2020-07-10 09:52:38 +0200 got: use sectionID+1 as seonsor addr\n" \
+"882 2020-07-09 07:09:14 +0200 car: added timed function support\n" \
+"881 2020-07-08 15:57:23 +0200 rcan: support for SYS_STATE events and responses\n" \
+"880 2020-07-08 09:16:29 +0200 vscode project settings\n" \
+"879 2020-07-08 08:53:41 +0200 vscode settings\n" \
+"878 2020-07-08 08:30:32 +0200 rcan: process mobile drive acks\n" \
+"877 2020-07-07 14:30:14 +0200 Rocweb: update function lables on shift\n" \
+"876 2020-07-07 13:49:30 +0200 Rocweb: Shift button added\n" \
+"875 2020-07-07 09:54:07 +0200 guiframe: programming menu reorg\n" \
+"874 2020-07-07 06:36:49 +0200 rcan: csnodeid added to redirect zero bus mobile commands to WIO-Prog2\n" \
+"873 2020-07-06 16:39:30 +0200 cbus: show loco session number in trace\n" \
+"872 2020-07-06 15:40:37 +0200 rcan: splitup cbus&rcan in separate files\n" \
+"871 2020-07-06 08:03:28 +0200 got: section mode support on port 29910\n" \
+"870 2020-07-05 15:30:27 +0200 tracelevel DEVELOP added, fix for cbusnodedlg include\n" \
+"869 2020-07-05 14:49:37 +0200 rocnetnode,rcan: include fix\n" \
+"868 2020-07-05 11:23:01 +0200 rcan: instruction codes structurred\n" \
+"867 2020-07-04 15:42:34 +0200 rcan,extcan: text and sound support\n" \
+"866 2020-07-04 10:17:24 +0200 extcan: dump CANFrame function\n" \
+"865 2020-07-04 09:57:09 +0200 rcan: fix for sending text\n" \
+"864 2020-07-04 09:01:48 +0200 rcan,extcan: text command added\n" \
+"863 2020-07-03 22:21:47 +0200 remove vscode from source tree\n" \
+"862 2020-07-03 18:04:49 +0200 extcan: filter out echo and ack\n" \
+"861 2020-07-03 13:02:19 +0200 rcan: ignore ack messages\n" \
+"860 2020-07-03 12:34:54 +0200 ignore CAN echo (socketCAN)\n" \
+"859 2020-07-03 12:23:02 +0200 rcan: acknowledge WIO sensor events\n" \
+"858 2020-07-03 10:55:27 +0200 wiodlg: type added\n" \
+"857 2020-07-02 18:00:04 +0200 rcan: cleanup codes\n" \
+"856 2020-07-02 17:22:38 +0200 rcan: removed bootloader opcode\n" \
+"855 2020-07-02 15:27:41 +0200 rcan: cleanup opcodes\n" \
+"854 2020-07-02 14:26:27 +0200 trace: fix for async file writing in case of no file\n" \
+"853 2020-07-02 11:46:21 +0200 rcan: fix for formatting extended frames with dlc=0\n" \
 "852 2020-07-01 16:11:53 +0200 rcan: use extended frames for WIO-CAN\n" \
 "851 2020-07-01 09:05:51 +0200 importantchanges update\n" \
 "850 2020-07-01 07:53:59 +0200 naming corrections\n" \
