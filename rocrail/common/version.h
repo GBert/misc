@@ -1,11 +1,21 @@
 const int revisionnr = 
-901
+911
 ;
 const char* commithash = 
-"db6e48a058ca5455a31a93b2cdadd8cacaff73ea";
+"432c18e145e68869dd8903812c6fb5f581b42d42";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"911 2020-07-19 10:45:53 +0200 WIO fixes\n" \
+"910 2020-07-18 22:37:14 +0200 translation merge: de, nl, fr\n" \
+"909 2020-07-18 16:39:13 +0200 rcan/tcp: fix for copy CAN EID\n" \
+"908 2020-07-16 16:18:29 +0200 wio: option 3 added\n" \
+"907 2020-07-16 16:13:58 +0200 zipper.sh: removed rocctrl\n" \
+"906 2020-07-16 14:32:51 +0200 wio: options byte 3 added\n" \
+"905 2020-07-16 09:20:41 +0200 wio/rcan: extended subtype added\n" \
+"904 2020-07-15 17:57:57 +0200 cbus: crash fix for double posting same frame (double free)\n" \
+"903 2020-07-15 09:51:44 +0200 rcan: tracelevel corrections\n" \
+"902 2020-07-14 12:11:45 +0200 rocrailinidialog: uudp added\n" \
 "901 2020-07-14 10:08:45 +0200 uudp: save client ip:port\n" \
 "900 2020-07-14 08:25:06 +0200 UUDP library added\n" \
 "899 2020-07-14 07:17:22 +0200 operatordlg: fix for OK in case of modal\n" \
