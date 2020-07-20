@@ -1,11 +1,13 @@
 const int revisionnr = 
-911
+913
 ;
 const char* commithash = 
-"432c18e145e68869dd8903812c6fb5f581b42d42";
+"cb2dd48e4b7c6264f266a4f6fc228786ae2920a8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"913 2020-07-20 08:00:46 +0200 tt: support rotation speed for WIO type\n" \
+"912 2020-07-19 15:42:29 +0200 canservice: reuse port\n" \
 "911 2020-07-19 10:45:53 +0200 WIO fixes\n" \
 "910 2020-07-18 22:37:14 +0200 translation merge: de, nl, fr\n" \
 "909 2020-07-18 16:39:13 +0200 rcan/tcp: fix for copy CAN EID\n" \
