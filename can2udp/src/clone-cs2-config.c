@@ -315,12 +315,12 @@ int main(int argc, char **argv) {
 		gbs_valid = 1;
 	    } else if (strstr(line, " .id=") == line) {
 		strcpy(gbs, gbs_site);
-		strncat(gbs, &line[5], strlen(&line[5]));
+		strncat(gbs, &line[5], strnlen(&line[5], sizeof(gbs) - strlen(" .id=")));
 		config_data.name = gbs;
 	    } else if (strstr(line, " .name=") == line) {
 		if (gbs_valid) {
 		    memset(gbs_name, 0, sizeof(gbs_name));
-		    strncpy(gbs_name, &line[7], strlen(&line[7]));
+		    strncpy(gbs_name, &line[7], sizeof(gbs_name) - 1);
 		    strcat(gbs_name, ".cs2");
 		    config_data.filename = gbs_name;
 		    get_data(&config_data, sockfd);

@@ -329,15 +329,13 @@ int main(int argc, char **argv) {
     }
 
     if (optind < argc) {
-	filename = (char *)calloc(strlen(argv[optind]) + 1, 1);
+	filename = strdup(argv[optind]);
 	if (filename == NULL)
 	    return EXIT_FAILURE;
-	strncpy(filename, argv[optind], strlen(argv[optind]));
     } else {
-	filename = (char *)calloc(strlen(I2C_DEF_PATH) + 1, 1);
+	filename = strdup(I2C_DEF_PATH);
 	if (filename == NULL)
 	    return EXIT_FAILURE;
-	strncpy(filename, I2C_DEF_PATH, strlen(I2C_DEF_PATH));
     }
 
     loco_config.filename = filename;

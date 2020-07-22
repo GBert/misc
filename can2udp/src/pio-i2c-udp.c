@@ -295,12 +295,11 @@ int main(int argc, char **argv) {
 	}
     }
 
-    i2c_dev_name = calloc((strlen(i2c_dev_def_name) + 2), 1);
+    i2c_dev_name  = strdup(i2c_dev_def_name);
     if (!i2c_dev_name) {
 	fprintf(stderr, "can't alloc memory for I2C device name: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
-    strncpy(i2c_dev_name, i2c_dev_def_name, (strlen(i2c_dev_def_name)));
     i2c_dev_name[strlen(i2c_dev_def_name)] = i2c_bus + 0x30;
 
     if (!pio_data.background && pio_data.verbose)

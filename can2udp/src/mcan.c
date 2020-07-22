@@ -144,7 +144,10 @@ void sendDeviceInfo(int canfd, CanDevice device, int configNum) {
     frameCounter++;
 
     memset(can_frame.data, 0, 8);
-    strncpy((char *)can_frame.data, device.artNum, 8);
+    if (strnlen(device.artNum, 8) == 8)
+	memcpy(can_frame.data, device.artNum, 8);
+    else
+	strncpy((char *)can_frame.data, device.artNum, 8 - 1);
 
     can_frame.hash++;
     sendCanFrame(canfd, can_frame);

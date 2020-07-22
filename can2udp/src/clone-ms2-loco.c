@@ -258,15 +258,23 @@ int get_ms2_locoinfo(struct trigger_t *trigger, char *loco_name) {
 	return (EXIT_FAILURE);
 
     memset(frame.data, 0, 8);
-    strncpy((char *)frame.data, loco_name, 8);
+    if (strnlen(loco_name , 16) == 8)
+	memcpy(frame.data, loco_name, 8);
+    else
+	strncpy((char *)frame.data, loco_name, 8 - 1);
+
     if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
 	return (EXIT_FAILURE);
 
     memset(frame.data, 0, 8);
-    if (strnlen(loco_name, 16) > 8)
-	strncpy((char *)frame.data, &loco_name[8], 8);
+    if (strnlen(loco_name, 16) == 16)
+	memcpy(frame.data, &loco_name[8], 8);
+    else
+	strncpy((char *)frame.data, &loco_name[8], 8 - 1);
+
     if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
 	return (EXIT_FAILURE);
+
     return 0;
 }
 
@@ -636,7 +644,7 @@ int main(int argc, char **argv) {
 	    }
 	    break;
 	case 'i':
-	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name));
+	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
 	    break;
 	case 't':
 	    trigger_data.interval = atoi(optarg);
