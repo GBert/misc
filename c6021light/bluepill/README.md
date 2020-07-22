@@ -55,14 +55,14 @@ Resistors on board (may differ)
 
 https://www.monolithicpower.com/en/mp2315.html#gallery
 
-R2 on module -> 84B -> 7.53 kOhm
+R2 on module -> 84B -> 7.32 kOhm
 
 R2 = R1 / ((Vout / 0.8V) - 1)
 
 R1 = R2 * (Vout/0.8V - 1)
 
 We need 8V:
-R1 = 7.53kOhm * (8V/0.8V - 1) = 7.53 kOhm * 9 = 67.77 kOhm -> 68 kOhm
+R1 = 7.32kOhm * (8V/0.8V - 1) = 7.32 kOhm * 9 = 65.88 kOhm -> 68 kOhm
 
 Erratra PCB 2020/06
 -------------------
