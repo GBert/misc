@@ -134,9 +134,8 @@ void sendDeviceInfo(int canfd, CanDevice device, int configNum) {
     can_frame.cmd = CONFIG;
     can_frame.resp_bit = 1;
     can_frame.dlc = 8;
-    for (int i = 0; i < 8; i++) {
-	can_frame.data[i] = 0;
-    }
+    memset(can_frame.data, 0, 8);
+
     can_frame.data[1] = configNum;
     can_frame.data[7] = device.boardNum;
     can_frame.hash = 0x0301;
@@ -144,9 +143,7 @@ void sendDeviceInfo(int canfd, CanDevice device, int configNum) {
     sendCanFrame(canfd, can_frame);
     frameCounter++;
 
-    for (int i = 0; i < 8; i++) {
-	can_frame.data[i] = 0;
-    }
+    memset(can_frame.data, 0, 8);
     strncpy((char *)can_frame.data, device.artNum, 8);
 
     can_frame.hash++;
@@ -198,9 +195,7 @@ void sendConfigInfoDropdown(int canfd, CanDevice device, uint8_t configChanel, u
     can_frame.data[1] = 1;
     can_frame.data[2] = numberOfOptions;
     can_frame.data[3] = defaultSetting;
-    for (int i = 4; i < 8; i++) {
-	can_frame.data[i] = 0;
-    }
+    memset(&can_frame.data[4], 0, 4);
 
     sendCanFrame(canfd, can_frame);
     can_frame.hash++;
