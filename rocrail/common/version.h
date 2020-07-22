@@ -1,11 +1,12 @@
 const int revisionnr = 
-913
+914
 ;
 const char* commithash = 
-"cb2dd48e4b7c6264f266a4f6fc228786ae2920a8";
+"bfedae4e37e5b9b81d38a9fd1f1d6cde31aa8f1d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"914 2020-07-21 11:35:03 +0200 control: fix for realtime clock\n" \
 "913 2020-07-20 08:00:46 +0200 tt: support rotation speed for WIO type\n" \
 "912 2020-07-19 15:42:29 +0200 canservice: reuse port\n" \
 "911 2020-07-19 10:45:53 +0200 WIO fixes\n" \
