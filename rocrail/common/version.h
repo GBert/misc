@@ -1,11 +1,20 @@
 const int revisionnr = 
-914
+923
 ;
 const char* commithash = 
-"bfedae4e37e5b9b81d38a9fd1f1d6cde31aa8f1d";
+"c5913616b1e3ad08e089f943860e63a21eec5738";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"923 2020-07-26 08:32:36 +0200 switch: new commands for channel tune test\n" \
+"922 2020-07-25 19:03:34 +0200 rcan: fix for renaming the cbus subnode in rcan\n" \
+"921 2020-07-24 15:01:17 +0200 desktoplink.cmd: create also shortcut in the Rocrail directory\n" \
+"920 2020-07-24 10:19:42 +0200 rcan: decoder check support added\n" \
+"919 2020-07-24 07:29:01 +0200 desktoplink.cmd: use the SpecialFolders command to retrieve the Desktop path\n" \
+"918 2020-07-23 17:49:03 +0200 desktoplink.sh: use temp. filename without the use of environment variables\n" \
+"917 2020-07-23 12:23:10 +0200 ecos: add view/get/query for the link manager 20\n" \
+"916 2020-07-23 12:11:47 +0200 ecos: add ecoslink view 20\n" \
+"915 2020-07-23 10:40:39 +0200 rcan: name config added\n" \
 "914 2020-07-21 11:35:03 +0200 control: fix for realtime clock\n" \
 "913 2020-07-20 08:00:46 +0200 tt: support rotation speed for WIO type\n" \
 "912 2020-07-19 15:42:29 +0200 canservice: reuse port\n" \
