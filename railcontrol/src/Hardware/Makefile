@@ -39,7 +39,7 @@ zlib: $(OBJZLIB)
 all: $(LIBS)
 
 zlib/%.o: zlib/%.c zlib/*.h
-	$(CC) $(CFLAGSZLIB) -c -o $@ $<
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 CS2Tcp.so: CS2Tcp.o ProtocolMaerklinCAN.o $(OBJZLIB) *.h ../Manager.h ../Languages.h
 	$(CXX) $(CPPFLAGS) $(LDFLAGS)$@ -o $@ ProtocolMaerklinCAN.o $<
