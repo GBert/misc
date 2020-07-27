@@ -36,8 +36,6 @@ all: $(LIBS)
 
 zlib: $(OBJZLIB)
 
-all: $(LIBS)
-
 zlib/%.o: zlib/%.c zlib/*.h
 	$(CC) $(CPPFLAGS) -c -o $@ $<
 
@@ -54,8 +52,8 @@ CcSchnitte.so: CcSchnitte.o ProtocolMaerklinCAN.o ZLib.o *.h ../Manager.h ../Lan
 	$(CXX) $(CPPFLAGS) $(LDFLAGS)$@ -o $@ $<
 
 %.o: %.cpp *.h ../*.h ../Logger/*.h ../Languages.h
-	$(CXX) $(CPPFLAGS) -c -o $@ $< 
+	$(CXX) $(CPPFLAGS) -c -o $@ $<
 
 clean:
-	rm -f *.so
+	rm -f *.so *.o zlib/*.o
 
