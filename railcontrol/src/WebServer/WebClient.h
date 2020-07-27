@@ -20,6 +20,7 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
+#include <deque>
 #include <map>
 #include <string>
 #include <thread>
@@ -88,7 +89,7 @@ namespace WebServer
 				ReplyResponse(s);
 			}
 
-			void InterpretClientRequest(const std::vector<std::string>& lines, std::string& method, std::string& uri, std::string& protocol, std::map<std::string,std::string>& arguments, std::map<std::string,std::string>& headers);
+			void InterpretClientRequest(const std::deque<std::string>& lines, std::string& method, std::string& uri, std::string& protocol, std::map<std::string,std::string>& arguments, std::map<std::string,std::string>& headers);
 			void PrintLoco(const std::map<std::string, std::string>& arguments);
 			void PrintMainHTML();
 			void ReplyHtmlWithHeader(const HtmlTag& tag);
@@ -168,9 +169,7 @@ namespace WebServer
 			void HandleLocoAskDelete(const std::map<std::string, std::string>& arguments);
 			void HandleLocoDelete(const std::map<std::string, std::string>& arguments);
 			void HandleLocoRelease(const std::map<std::string, std::string>& arguments);
-			void HandleProtocolLoco(const std::map<std::string, std::string>& arguments);
-			void HandleProtocolAccessory(const std::map<std::string, std::string>& arguments);
-			void HandleProtocolSwitch(const std::map<std::string, std::string>& arguments);
+			void HandleProtocol(const std::map<std::string, std::string>& arguments);
 			void HandleLayout(const std::map<std::string,std::string>& arguments);
 			void HandleAccessoryEdit(const std::map<std::string,std::string>& arguments);
 			void HandleAccessorySave(const std::map<std::string,std::string>& arguments);

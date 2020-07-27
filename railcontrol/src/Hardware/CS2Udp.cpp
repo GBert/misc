@@ -23,22 +23,20 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace Hardware
 {
-	extern "C" CS2Udp* create_CS2Udp(const HardwareParams* params)
+	extern "C" CS2Udp* create_CS2Udp(HardwareParams* const params)
 	{
 		return new CS2Udp(params);
 	}
 
-	extern "C" void destroy_CS2Udp(CS2Udp* cs2Udp)
+	extern "C" void destroy_CS2Udp(CS2Udp* const cs2Udp)
 	{
 		delete(cs2Udp);
 	}
 
-	CS2Udp::CS2Udp(const HardwareParams* params)
-	:	ProtocolMaerklinCAN(params->GetManager(),
-			params->GetControlID(),
+	CS2Udp::CS2Udp(HardwareParams* const params)
+	:	ProtocolMaerklinCAN(params,
 			Logger::Logger::GetLogger("CS2UDP " + params->GetName() + " " + params->GetArg1()),
 			"Maerklin Central Station 2 (CS2) UDP / " + params->GetName() + " at IP " + params->GetArg1()),
-	 	run(true),
 	 	senderConnection(logger, params->GetArg1(), CS2SenderPort),
 	 	receiverConnection(logger, "0.0.0.0", CS2ReceiverPort)
 	{
@@ -57,19 +55,12 @@ namespace Hardware
 
 	CS2Udp::~CS2Udp()
 	{
-		if (run == false)
-		{
-			return;
-		}
-		run = false;
 		receiverConnection.Terminate();
-		receiverThread.join();
 		logger->Info(Languages::TextTerminatingSenderSocket);
 	}
 
 	void CS2Udp::Send(const unsigned char* buffer)
 	{
-		logger->Hex(buffer, CANCommandBufferLength);
 		if (senderConnection.Send(buffer, CANCommandBufferLength) == -1)
 		{
 			logger->Error(Languages::TextUnableToSendDataToControl);
@@ -78,6 +69,7 @@ namespace Hardware
 
 	void CS2Udp::Receiver()
 	{
+		run = true;
 		Utils::Utils::SetThreadName("CS2Udp");
 		logger->Info(Languages::TextReceiverThreadStarted);
 		if (!receiverConnection.IsConnected())
@@ -112,7 +104,6 @@ namespace Hardware
 				logger->Error(Languages::TextInvalidDataReceived);
 				continue;
 			}
-			logger->Hex(buffer, datalen);
 			Parse(buffer);
 		}
 		receiverConnection.Terminate();

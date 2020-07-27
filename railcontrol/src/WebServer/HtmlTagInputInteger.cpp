@@ -26,25 +26,25 @@ along with RailControl; see the file LICENCE. If not see
 namespace WebServer
 {
 	HtmlTagInputInteger::HtmlTagInputInteger(const std::string& name, const int value, const int min, const int max)
+	:	HtmlTag("div")
 	{
 		std::string minString = std::to_string(min);
 		std::string maxString = std::to_string(max);
-		HtmlTag data;
+		AddId("d_" + name);
+		AddClass("div_integer");
 		HtmlTagInput input("text", name, std::to_string(value));
 		input.AddClass("integer");
 		input.AddAttribute("onchange", "checkIntegerValue('" + name + "', " + minString + ", " + maxString + ");");
-		data.AddChildTag(input);
+		AddChildTag(input);
 
 		HtmlTag minus("a");
 		minus.AddAttribute("onclick", "decrementIntegerValue('" + name + "', " + minString + ");");
 		minus.AddContent(" - ");
-		data.AddChildTag(minus);
+		AddChildTag(minus);
 
 		HtmlTag plus("a");
 		plus.AddAttribute("onclick", "incrementIntegerValue('" + name + "', " + maxString + ");");
 		plus.AddContent(" + ");
-		data.AddChildTag(plus);
-
-		AddChildTag(data);
+		AddChildTag(plus);
 	}
 } // namespace WebServer

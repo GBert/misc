@@ -1,3 +1,40 @@
+function onChangeLocoFunctionType(nr)
+{
+	var locoFunctionType = document.getElementById('s_f' + nr + '_type');
+	if (!locoFunctionType)
+	{
+		return false;
+	}
+	var locoFunctionIcon = document.getElementById('s_f' + nr + '_icon');
+	if (!locoFunctionIcon)
+	{
+		return false;
+	}
+	var locoFunctionTimer = document.getElementById('d_f' + nr + '_timer');
+	if (!locoFunctionTimer)
+	{
+		return false;
+	}
+	var type = locoFunctionType.value;
+	if (type == 0) // LocoFunctionTypeNone
+	{
+		locoFunctionIcon.classList.add('hidden');
+	}
+	else
+	{
+		locoFunctionIcon.classList.remove('hidden');
+	}
+	if (type == 4) // LocoFunctionTypeTimer
+	{
+		locoFunctionTimer.classList.remove('hidden');
+	}
+	else
+	{
+		locoFunctionTimer.classList.add('hidden');
+	}
+	return false;
+}
+
 function onClickProgramRead(cv)
 {
 	var controlElement = document.getElementById('s_controlraw');
@@ -897,12 +934,17 @@ function dataUpdate(event)
 	else if (command == 'dcccvvalue')
 	{
 		var cv = argumentMap.get('cv');
-		var value = argumentMap.get('value');
-		var elementName = 'valueraw';
-		var element = document.getElementById(elementName);
-		if (element)
+		var cvElementName = 'cvraw';
+		var cvElement = document.getElementById(cvElementName);
+		if (cvElement &&  cvElement.value == cv)
 		{
-			element.value = value;
+			var value = argumentMap.get('value');
+			var valueElementName = 'valueraw';
+			var valueElement = document.getElementById(valueElementName);
+			if (valueElement)
+			{
+				valueElement.value = value;
+			}
 		}
 	}
 }
@@ -1019,7 +1061,7 @@ function loadProtocol(type, ID)
 		return;
 	}
 	var elementName = 'select_protocol';
-	var url = '/?cmd=protocol' + type;
+	var url = '/?cmd=protocol';
 	url += '&control=' + controlID;
 	url += '&' + type + '=' + ID;
 	requestUpdateItem(elementName, url);

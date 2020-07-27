@@ -19,6 +19,7 @@ along with RailControl; see the file LICENCE. If not see
 */
 
 #include <algorithm>
+#include <deque>
 #include <map>
 #include <string>
 
@@ -27,6 +28,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "Manager.h"
 #include "Utils/Utils.h"
 
+using std::deque;
 using std::map;
 using std::string;
 using std::to_string;
@@ -68,7 +70,7 @@ namespace DataModel
 	bool TrackBase::Deserialize(const map<string, string> arguments)
 	{
 		string feedbackStrings = Utils::Utils::GetStringMapEntry(arguments, "feedbacks");
-		vector<string> feedbackStringVector;
+		deque<string> feedbackStringVector;
 		Utils::Utils::SplitString(feedbackStrings, ",", feedbackStringVector);
 		for (auto feedbackString : feedbackStringVector)
 		{

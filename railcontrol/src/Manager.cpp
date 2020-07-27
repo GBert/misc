@@ -225,6 +225,11 @@ Manager::~Manager()
 			logger->Info(Languages::TextUnloadingControl, controlID, params->GetName());
 			delete control.second;
 			hardwareParams.erase(controlID);
+			if (storage != nullptr)
+			{
+				logger->Info(Languages::TextSaving, params->GetName());
+				storage->Save(*params);
+			}
 			delete params;
 		}
 	}
@@ -290,7 +295,7 @@ void Manager::InitLocos()
 		std::lock_guard<std::mutex> guard(controlMutex);
 		for (auto control : controls)
 		{
-			std::vector<DataModel::LocoFunctions::FunctionState> functions = loco.second->GetFunctions();
+			std::vector<DataModel::LocoFunctionEntry> functions = loco.second->GetFunctionStates();
 			control.second->LocoSpeedOrientationFunctions(loco.second, loco.second->GetSpeed(), loco.second->GetOrientation(), functions);
 		}
 	}
@@ -686,13 +691,13 @@ bool Manager::LocoSave(const LocoID locoID,
 	const ControlID controlID,
 	const Protocol protocol,
 	const Address address,
-	const Function nrOfFunctions,
 	const Length length,
 	const bool pushpull,
 	const Speed maxSpeed,
 	const Speed travelSpeed,
 	const Speed reducedSpeed,
 	const Speed creepingSpeed,
+	const std::vector<DataModel::LocoFunctionEntry>& locoFunctions,
 	const std::vector<DataModel::Relation*>& slaves,
 	string& result)
 {
@@ -717,13 +722,13 @@ bool Manager::LocoSave(const LocoID locoID,
 	loco->SetControlID(controlID);
 	loco->SetProtocol(protocol);
 	loco->SetAddress(address);
-	loco->SetNrOfFunctions(nrOfFunctions);
 	loco->SetLength(length);
 	loco->SetPushpull(pushpull);
 	loco->SetMaxSpeed(maxSpeed);
 	loco->SetTravelSpeed(travelSpeed);
 	loco->SetReducedSpeed(reducedSpeed);
 	loco->SetCreepingSpeed(creepingSpeed);
+	loco->ConfigureFunctions(locoFunctions);
 	loco->AssignSlaves(slaves);
 
 	// save in db
@@ -873,30 +878,41 @@ void Manager::LocoOrientation(const ControlType controlType, Loco* loco, const O
 	}
 }
 
-void Manager::LocoFunction(const ControlType controlType, const ControlID controlID, const Protocol protocol, const Address address, const Function function, const DataModel::LocoFunctions::FunctionState on)
+void Manager::LocoFunctionState(const ControlType controlType,
+	const ControlID controlID,
+	const Protocol protocol,
+	const Address address,
+	const DataModel::LocoFunctionNr function,
+	const DataModel::LocoFunctionState on)
 {
 	Loco* loco = GetLoco(controlID, protocol, address);
 	if (loco == nullptr)
 	{
 		return;
 	}
-	LocoFunction(controlType, loco, function, on);
+	LocoFunctionState(controlType, loco, function, on);
 }
 
-void Manager::LocoFunction(const ControlType controlType, const LocoID locoID, const Function function, const DataModel::LocoFunctions::FunctionState on)
+void Manager::LocoFunctionState(const ControlType controlType,
+	const LocoID locoID,
+	const DataModel::LocoFunctionNr function,
+	const DataModel::LocoFunctionState on)
 {
 	Loco* loco = GetLoco(locoID);
-	LocoFunction(controlType, loco, function, on);
+	LocoFunctionState(controlType, loco, function, on);
 }
 
-void Manager::LocoFunction(const ControlType controlType, Loco* loco, const Function function, const DataModel::LocoFunctions::FunctionState on)
+void Manager::LocoFunctionState(const ControlType controlType,
+	Loco* loco,
+	const DataModel::LocoFunctionNr function,
+	const DataModel::LocoFunctionState on)
 {
 	if (loco == nullptr)
 	{
 		return;
 	}
 
-	loco->SetFunction(function, on);
+	loco->SetFunctionState(function, on);
 	logger->Info(on ? Languages::TextLocoFunctionIsOn : Languages::TextLocoFunctionIsOff, loco->GetName(), function);
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto control : controls)

@@ -242,7 +242,10 @@ namespace Hardware
 		Send(buffer, sizeof(buffer));
 	}
 
-	void Z21::LocoFunction(__attribute__ ((unused)) const Protocol protocol, const Address address, const Function function, const DataModel::LocoFunctions::FunctionState on)
+	void Z21::LocoFunction(__attribute__ ((unused)) const Protocol protocol,
+		const Address address,
+		const DataModel::LocoFunctionNr function,
+		const DataModel::LocoFunctionState on)
 	{
 		if (!LocoProtocolSupported(protocol))
 		{
@@ -251,12 +254,16 @@ namespace Hardware
 		locoCache.SetFunction(address, function, on);
 		unsigned char buffer[10] = { 0x0A, 0x00, 0x40, 0x00, 0xE4, 0xF8 };
 		Utils::Utils::ShortToDataBigEndian(address | 0xC000, buffer + 6);
-		buffer[8] = (static_cast<unsigned char>(on == DataModel::LocoFunctions::FunctionStateOn) << 6) | (function & 0x3F);
+		buffer[8] = (static_cast<unsigned char>(on == DataModel::LocoFunctionStateOn) << 6) | (function & 0x3F);
 		buffer[9] = buffer[4] ^ buffer[5] ^ buffer[6] ^ buffer[7] ^ buffer[8];
 		Send(buffer, sizeof(buffer));
 	}
 
-	void Z21::LocoSpeedOrientationFunctions(const Protocol protocol, const Address address, const Speed speed, const Orientation orientation, std::vector<DataModel::LocoFunctions::FunctionState>& functions)
+	void Z21::LocoSpeedOrientationFunctions(const Protocol protocol,
+		const Address address,
+		const Speed speed,
+		const Orientation orientation,
+		std::vector<DataModel::LocoFunctionEntry>& functions)
 	{
 		if (!LocoProtocolSupported(protocol))
 		{
@@ -264,9 +271,9 @@ namespace Hardware
 		}
 		locoCache.SetSpeedOrientationProtocol(address, speed, orientation, protocol);
 		LocoSpeedOrientation(protocol, address, speed, orientation);
-		for (size_t functionNr = 0; functionNr < functions.size(); ++functionNr)
+		for (const DataModel::LocoFunctionEntry& function : functions)
 		{
-			LocoFunction(protocol, address, functionNr, functions[functionNr]);
+			LocoFunction(protocol, address, function.nr, function.state);
 		}
 	}
 
@@ -850,16 +857,16 @@ namespace Hardware
 			return;
 		}
 		const uint32_t functionsDiff = newFunctions ^ oldFunctions;
-		for (Function function = 0; function <= 28; ++function)
+		for (DataModel::LocoFunctionNr function = 0; function <= 28; ++function)
 		{
 			const bool stateChange = (functionsDiff >> function) & 0x01;
 			if (stateChange == false)
 			{
 				continue;
 			}
-			const DataModel::LocoFunctions::FunctionState newState = ((newFunctions >> function) & 0x01 ? DataModel::LocoFunctions::FunctionStateOn : DataModel::LocoFunctions::FunctionStateOff);
+			const DataModel::LocoFunctionState newState = ((newFunctions >> function) & 0x01 ? DataModel::LocoFunctionStateOn : DataModel::LocoFunctionStateOff);
 			locoCache.SetFunction(address, function, newState);
-			manager->LocoFunction(ControlTypeHardware, controlID, protocol, address, function, newState);
+			manager->LocoFunctionState(ControlTypeHardware, controlID, protocol, address, function, newState);
 		}
 	}
 

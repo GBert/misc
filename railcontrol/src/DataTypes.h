@@ -23,24 +23,23 @@ along with RailControl; see the file LICENCE. If not see
 #include <string>
 
 // common
-typedef unsigned char ControlID;
+typedef uint8_t ControlID;
 
 // objects in db
-typedef unsigned short ObjectID;
+typedef uint16_t ObjectID;
 
 // loco
 typedef ObjectID LocoID;
-typedef unsigned short Address;
-typedef unsigned short Speed;
-typedef unsigned char Function;
-typedef unsigned int Length;
+typedef uint16_t Address;
+typedef uint16_t Speed;
+typedef uint32_t Length;
 
 // accessory
 typedef ObjectID AccessoryID;
 
 // feedback
 typedef ObjectID FeedbackID;
-typedef unsigned int FeedbackPin;
+typedef uint32_t FeedbackPin;
 
 // track
 typedef ObjectID TrackID;
@@ -53,15 +52,17 @@ typedef AccessoryID SignalID;
 
 // route
 typedef ObjectID RouteID;
-typedef unsigned short Delay;
+typedef uint16_t Delay;
 
 // layer
-typedef signed short LayerID;
+typedef int16_t LayerID;
 
 // relations
-typedef unsigned short Priority;
+typedef uint16_t Priority;
 
-typedef unsigned char Pause;
+typedef uint8_t Pause;
+
+typedef uint16_t ExternalID;
 
 static const Address AddressNone = 0;
 static const LocoID LocoNone = 0;
@@ -83,7 +84,7 @@ static const Speed DefaultReducedSpeed = 400;
 static const Speed DefaultCreepingSpeed = 100;
 static const Speed MinSpeed = 0;
 
-enum ControlType : unsigned char
+enum ControlType : uint8_t
 {
 	ControlTypeHardware = 0,
 	ControlTypeInternal,
@@ -103,7 +104,7 @@ enum BoosterState : bool
 	BoosterStateGo = true
 };
 
-enum Protocol : unsigned char
+enum Protocol : uint8_t
 {
 	ProtocolNone = 0,
 	ProtocolServer = 1,
@@ -138,20 +139,20 @@ static const std::string ProtocolSymbols[] =
 	"SX2"
 };
 
-enum AddressType : unsigned char
+enum AddressType : uint8_t
 {
 	AddressTypeLoco = 0,
 	AddressTypeAccessory
 };
 
-enum ArgumentType : unsigned char
+enum ArgumentType : uint8_t
 {
 	ArgumentTypeIpAddress = 1,
 	ArgumentTypeSerialPort = 2,
 	ArgumentTypeS88Modules = 3
 };
 
-enum HardwareType : unsigned char
+enum HardwareType : uint8_t
 {
 	HardwareTypeNone = 0,
 	HardwareTypeVirtual = 1,
@@ -173,7 +174,7 @@ enum Automode : bool
 	AutomodeYes = true
 };
 
-enum ObjectType : unsigned char
+enum ObjectType : uint8_t
 {
 	ObjectTypeNone = 0,
 	ObjectTypeLoco = 1,

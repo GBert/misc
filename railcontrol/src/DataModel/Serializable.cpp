@@ -18,20 +18,20 @@ along with RailControl; see the file LICENCE. If not see
 <http://www.gnu.org/licenses/>.
 */
 
-#include <vector>
+#include <deque>
 
 #include "DataModel/Serializable.h"
 #include "Utils/Utils.h"
 
+using std::deque;
 using std::string;
 using std::map;
-using std::vector;
 
 namespace DataModel
 {
 	void Serializable::ParseArguments(const string& serialized, map<string, string>& arguments)
 	{
-		vector<string> parts;
+		deque<string> parts;
 		Utils::Utils::SplitString(serialized, ";", parts);
 		for (auto part : parts)
 		{
@@ -39,7 +39,7 @@ namespace DataModel
 			{
 				continue;
 			}
-			vector<string> keyValue;
+			deque<string> keyValue;
 			Utils::Utils::SplitString(part, "=", keyValue);
 			if (keyValue.size() < 2)
 			{

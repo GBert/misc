@@ -19,7 +19,6 @@ along with RailControl; see the file LICENCE. If not see
 */
 
 #include <sstream>
-#include <vector>
 
 #include "Utils/Utils.h"
 #include "WebServer/HtmlTagButtonPopup.h"
@@ -33,10 +32,9 @@ namespace WebServer
 		const std::string& tooltip)
 	:	HtmlTagButton(value, command, tooltip)
 	{
-		std::vector<std::string> parts;
-		Utils::Utils::SplitString(command, "_", parts);
+		std::string cmd = Utils::Utils::StringBeforeDelimiter(command, "_");
 		std::stringstream ss;
-		ss << "var myUrl = '/?cmd=" << parts[0];
+		ss << "var myUrl = '/?cmd=" << cmd;
 		for (auto argument : arguments) {
 
 			ss << "&" << argument.first << "=" << argument.second;

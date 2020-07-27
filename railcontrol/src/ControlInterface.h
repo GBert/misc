@@ -74,7 +74,13 @@ class ControlInterface
 		virtual void LocoDelete(__attribute__((unused)) const LocoID locoID, __attribute__((unused)) const std::string& name) {};
 		virtual void LocoDestinationReached(__attribute__((unused)) const DataModel::Loco* loco, __attribute__((unused)) const DataModel::Route* route, __attribute__((unused)) const DataModel::TrackBase* track) {};
 		virtual void LocoOrientation(__attribute__((unused)) const ControlType controlType, __attribute__((unused)) const DataModel::Loco* loco, __attribute__((unused)) const Orientation orientation) {};
-		virtual void LocoFunction(__attribute__((unused)) const ControlType controlType, __attribute__((unused)) const DataModel::Loco* loco, __attribute__((unused)) const Function function, __attribute__((unused)) const DataModel::LocoFunctions::FunctionState on) {};
+
+		virtual void LocoFunction(__attribute__((unused)) const ControlType controlType,
+			__attribute__((unused)) const DataModel::Loco* loco,
+			__attribute__((unused)) const DataModel::LocoFunctionNr function,
+			__attribute__((unused)) const DataModel::LocoFunctionState on)
+		{}
+
 		virtual void LocoProtocols(__attribute__((unused)) std::vector<Protocol>& protocols) const {};
 		virtual bool LocoProtocolSupported(__attribute__((unused)) Protocol protocol) const { return false; };
 		virtual void LocoRelease(__attribute__((unused)) const LocoID locoID) {};
@@ -95,13 +101,16 @@ class ControlInterface
 		virtual void SignalSettings(__attribute__((unused)) const SignalID signalID, __attribute__((unused)) const std::string& name) {};
 		virtual void SignalState(__attribute__((unused)) const ControlType controlType, __attribute__((unused)) const DataModel::Signal* signal) {};
 
-		virtual void LocoSpeedOrientationFunctions(const DataModel::Loco* loco, const Speed speed, const Orientation orientation, std::vector<DataModel::LocoFunctions::FunctionState>& functions)
+		virtual void LocoSpeedOrientationFunctions(const DataModel::Loco* loco,
+			const Speed speed,
+			const Orientation orientation,
+			std::vector<DataModel::LocoFunctionEntry>& functions)
 		{
 			LocoSpeed(ControlTypeInternal, loco, speed);
 			LocoOrientation(ControlTypeInternal, loco, orientation);
-			for (size_t functionNr = 0; functionNr < functions.size(); ++functionNr)
+			for (const DataModel::LocoFunctionEntry& functionEntry : functions)
 			{
-				LocoFunction(ControlTypeInternal, loco, functionNr, functions[functionNr]);
+				LocoFunction(ControlTypeInternal, loco, functionEntry.nr, functionEntry.state);
 			}
 		}
 

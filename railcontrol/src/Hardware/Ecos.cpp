@@ -18,17 +18,17 @@ along with RailControl; see the file LICENCE. If not see
 <http://www.gnu.org/licenses/>.
 */
 
+#include <deque>
 #include <cstring>
-#include <vector>
 
 #include "DataModel/AccessoryBase.h"
 #include "Hardware/Ecos.h"
 #include "Utils/Utils.h"
 
+using std::deque;
 using std::string;
 using std::strlen;
 using std::to_string;
-using std::vector;
 
 namespace Hardware
 {
@@ -97,11 +97,14 @@ namespace Hardware
 		Send(command.c_str());
 	}
 
-	void Ecos::LocoFunction(__attribute__((unused)) const Protocol protocol, const Address address, const Function function, const DataModel::LocoFunctions::FunctionState on)
+	void Ecos::LocoFunction(__attribute__((unused)) const Protocol protocol,
+		const Address address,
+		const DataModel::LocoFunctionNr function,
+		const DataModel::LocoFunctionState on)
 	{
 		const unsigned int locoId = address + OffsetLocoAddress;
 		SendGetHandle(locoId);
-		const string command = "set(" + to_string(locoId) + ",func[" + to_string(function) + "," + (on == DataModel::LocoFunctions::FunctionStateOn ? "1" : "0") + "])\n";
+		const string command = "set(" + to_string(locoId) + ",func[" + to_string(function) + "," + (on == DataModel::LocoFunctionStateOn ? "1" : "0") + "])\n";
 		Send(command.c_str());
 	}
 
@@ -386,7 +389,7 @@ namespace Hardware
 	{
 		string stringValue;
 		ParseOption(option, stringValue);
-		value = Utils::Utils::StringToInteger(stringValue, 0, true);
+		value = Utils::Utils::HexToInteger(stringValue, 0);
 	}
 
 	void Ecos::ParseEvent()
@@ -479,16 +482,16 @@ namespace Hardware
 
 		if (option.compare("func") == 0)
 		{
-			vector<string> valueList;
+			deque<string> valueList;
 			Utils::Utils::SplitString(value, ",", valueList);
 			if (valueList.size() < 2)
 			{
 				logger->Error(Languages::TextInvalidDataReceived);
 				return;
 			}
-			Function function = Utils::Utils::StringToInteger(valueList[0], 0);
-			DataModel::LocoFunctions::FunctionState on = Utils::Utils::StringToBool(valueList[1]) ? DataModel::LocoFunctions::FunctionStateOn : DataModel::LocoFunctions::FunctionStateOff;
-			manager->LocoFunction(ControlTypeHardware, controlID, ProtocolServer, address, function, on);
+			DataModel::LocoFunctionNr function = Utils::Utils::StringToInteger(valueList[0], 0);
+			DataModel::LocoFunctionState on = Utils::Utils::StringToBool(valueList[1]) ? DataModel::LocoFunctionStateOn : DataModel::LocoFunctionStateOff;
+			manager->LocoFunctionState(ControlTypeHardware, controlID, ProtocolServer, address, function, on);
 			return;
 		}
 	}

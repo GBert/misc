@@ -335,6 +335,30 @@ label {
 	display: inline-block;
 }
 
+.div_integer {
+	display: inline-block;
+}
+
+.function_line label {
+	width: 40px;
+}
+
+.function_line select {
+	width: 200px;
+}
+
+.function_line input {
+	width: 30px;
+}
+
+.function_line .div_integer {
+	width: 80px;
+}
+
+.function_line .integer {
+	width: 30px;
+}
+
 .narrow_label label {
 	width: 120px;
 }
@@ -422,13 +446,9 @@ button:active {
 	background-color: red;
 }
 
-.button_orientation.button_on {
-	background-color: lightgray;
-}
-
+.button_orientation.button_on,
 .button_orientation.button_off {
 	background-color: lightgray;
-	transform: rotate(180deg);
 }
 
 .slider {
@@ -481,6 +501,10 @@ button:active {
 	padding: 3px;
 }
 
-.hidden {
+.hidden,
+.button_off .orientation_right,
+.button_on .orientation_left,
+.button_off .button_on,
+.button_on .button_off {
 	display: none;
 }

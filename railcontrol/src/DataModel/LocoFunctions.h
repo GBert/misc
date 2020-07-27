@@ -20,113 +20,232 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
-#include "DataTypes.h"
+#include <vector>
+
 #include "DataModel/Serializable.h"
 
 namespace DataModel
 {
+	typedef uint8_t LocoFunctionNr;
+
+	static const LocoFunctionNr MaxLocoFunctions = 32;
+
+	enum LocoFunctionState : uint8_t
+	{
+		LocoFunctionStateOff = 0,
+		LocoFunctionStateOn
+	};
+
+	enum LocoFunctionType : uint8_t
+	{
+		LocoFunctionTypeNone = 0,
+		LocoFunctionTypePermanent = 1,
+		LocoFunctionTypeMoment = 2,
+		LocoFunctionTypeFlashing = 3,
+		LocoFunctionTypeTimer = 4
+	};
+
+	enum LocoFunctionIcon : uint8_t
+	{
+		// Do not change numbers!
+		// Only add numbers!
+		// If you add numbers, add them also in ProtocolMaerklin.cpp too
+		LocoFunctionIconNone = 0,
+		LocoFunctionIconDefault = 1,
+		// logical functions
+		LocoFunctionIconShuntingMode = 2,
+		LocoFunctionIconInertia,
+		// light functions
+		LocoFunctionIconLight = 32,
+		LocoFunctionIconHeadlightLowBeamForward,
+		LocoFunctionIconHeadlightLowBeamReverse,
+		LocoFunctionIconHeadlightHighBeamForward,
+		LocoFunctionIconHeadlightHighBeamReverse,
+		LocoFunctionIconBackLightForward,
+		LocoFunctionIconBackLightReverse,
+		LocoFunctionIconBlinkingLight,
+		LocoFunctionIconInteriorLight1,
+		LocoFunctionIconInteriorLight2,
+		LocoFunctionIconTableLight1,
+		LocoFunctionIconTableLight2,
+		LocoFunctionIconTableLight3,
+		LocoFunctionIconCabLight1,
+		LocoFunctionIconCabLight2,
+		LocoFunctionIconCabLight12,
+		LocoFunctionIconDriversDeskLight,
+		LocoFunctionIconTrainDestinationIndicator,
+		LocoFunctionIconTrainNumberIndicator,
+		LocoFunctionIconEngineLight,
+		LocoFunctionIconFireBox,
+		LocoFunctionIconStairsLight,
+		// mechanical functions
+		LocoFunctionIconSmokeGenerator = 64,
+		LocoFunctionIconTelex1,
+		LocoFunctionIconTelex2,
+		LocoFunctionIconTelex12,
+		LocoFunctionIconPanto1,
+		LocoFunctionIconPanto2,
+		LocoFunctionIconPanto12,
+		LocoFunctionIconUp,
+		LocoFunctionIconDown,
+		LocoFunctionIconUpDown1,
+		LocoFunctionIconUpDown2,
+		LocoFunctionIconLeft,
+		LocoFunctionIconRight,
+		LocoFunctionIconLeftRight,
+		LocoFunctionIconTurnLeft,
+		LocoFunctionIconTurnRight,
+		LocoFunctionIconCrane,
+		LocoFunctionIconMagnet,
+		LocoFunctionIconCraneHook,
+		LocoFunctionIconFan,
+		// sound functions
+		LocoFunctionIconNoSound = 96,
+		LocoFunctionIconSoundGeneral,
+		LocoFunctionIconRunning1,
+		LocoFunctionIconRunning2,
+		LocoFunctionIconEngine1,
+		LocoFunctionIconEngine2,
+		LocoFunctionIconBreak1,
+		LocoFunctionIconBreak2,
+		LocoFunctionIconCurve,
+		LocoFunctionIconHorn1,
+		LocoFunctionIconHorn2,
+		LocoFunctionIconWhistle1,
+		LocoFunctionIconWhistle2,
+		LocoFunctionIconBell,
+		LocoFunctionIconGenerator,
+		LocoFunctionIconGearBox,
+		LocoFunctionIconGearUp,
+		LocoFunctionIconGearDown,
+		LocoFunctionIconStationAnnouncement1,
+		LocoFunctionIconStationAnnouncement2,
+		LocoFunctionIconStationAnnouncement3,
+		LocoFunctionIconShovelCoal,
+		LocoFunctionIconOpenDoor,
+		LocoFunctionIconCloseDoor,
+		LocoFunctionIconFan1,
+		LocoFunctionIconFan2,
+		LocoFunctionIconFan3,
+		LocoFunctionIconCompressedAir,
+		LocoFunctionIconReliefValve,
+		LocoFunctionIconSteamBlowOut,
+		LocoFunctionIconSteamBlow,
+		LocoFunctionIconDrainValve,
+		LocoFunctionIconAirPump,
+		LocoFunctionIconWaterPump,
+		LocoFunctionIconRailJoint,
+		LocoFunctionIconCoupler,
+		LocoFunctionIconBufferPush,
+		LocoFunctionIconFillWater,
+		LocoFunctionIconFillDiesel,
+		LocoFunctionIconFillGas,
+		LocoFunctionIconSpeak,
+		LocoFunctionIconShakingRust,
+		LocoFunctionIconSand,
+		LocoFunctionIconMusic1,
+		LocoFunctionIconMusic2,
+		LocoFunctionIconPanto,
+		LocoFunctionIconRadio,
+
+		MaxLocoFunctionIcons
+	};
+
+	typedef uint8_t LocoFunctionTimer;
+
+	class LocoFunctionEntry
+	{
+		public:
+			LocoFunctionEntry()
+			{
+				nr = 0;
+				state = LocoFunctionStateOff;
+				type = LocoFunctionTypeNone;
+				icon = LocoFunctionIconNone;
+				timer = 0;
+			}
+
+			LocoFunctionNr nr;
+			LocoFunctionState state;
+			LocoFunctionType type;
+			LocoFunctionIcon icon;
+			LocoFunctionTimer timer;
+	};
+
 	class LocoFunctions : private Serializable
 	{
 		public:
-			enum FunctionState : unsigned char
-			{
-				FunctionStateOff = 0,
-				FunctionStateOn,
-				FunctionStatePulse
-			};
+			LocoFunctions();
 
-			LocoFunctions()
-			:	count(1),
-			 	states{FunctionStateOff}
-			{
-			}
-
-			LocoFunctions(const std::string& serialized)
-			: LocoFunctions()
+			inline LocoFunctions(const std::string& serialized)
+			:	LocoFunctions()
 			{
 				Deserialize(serialized);
 			}
 
-			void SetFunction(const Function nr, const FunctionState state)
+			inline void SetFunctionState(const LocoFunctionNr nr, const LocoFunctionState state)
 			{
 				if (nr >= MaxCount)
 				{
 					return;
 				}
-				states[nr] = state;
+				entries[nr].state = state;
 			}
 
-			FunctionState GetFunction(const Function nr) const
+			inline LocoFunctionState GetFunctionState(const LocoFunctionNr nr) const
 			{
 				if (nr >= MaxCount)
 				{
-					return FunctionStateOff;
+					return LocoFunctionStateOff;
 				}
-				FunctionState out = states[nr];
-				return out;
+				return entries[nr].state;
 			}
 
-			std::vector<FunctionState> GetFunctions() const
+			inline std::vector<LocoFunctionEntry> GetFunctionStates() const
 			{
-				std::vector<FunctionState> out;
-				for (Function i = 0; i < count; ++i)
+				std::vector<LocoFunctionEntry> out;
+				for (LocoFunctionNr i = 0; i < MaxCount; ++i)
 				{
-					out.push_back(states[i]);
-				}
-				return out;
-			}
-
-			void SetNrOfFunctions(const Function nr)
-			{
-				// externally we count the functions additional to F0
-				// internally we count all the functions including F0
-				count = nr + 1;
-			}
-
-			Function GetNrOfFunctions() const
-			{
-				return count - 1;
-			}
-
-			std::string Serialize() const override
-			{
-				std::string out;
-				for (Function i = 0; i < count; ++i)
-				{
-					out += (states[i] ? "1" : "0");
-				}
-				return out;
-			}
-
-			bool Deserialize(const std::string& serialized) override
-			{
-				count = serialized.size();
-				if (count > MaxCount)
-				{
-					count = MaxCount;
-				}
-				for (Function i = 0; i < count; ++i)
-				{
-					switch(serialized[i])
+					if (entries[i].type == LocoFunctionTypeNone)
 					{
-						case '1':
-							states[i] = FunctionStateOn;
-							break;
-
-						case '0':
-						default:
-							states[i] = FunctionStateOff;
-							break;
+						continue;
 					}
+					out.push_back(entries[i]);
 				}
-				return true;
+				return out;
 			}
 
-			static const Function MaxFunctions = 32;
+			inline const LocoFunctionEntry* GetFunctions() const
+			{
+				return entries;
+			}
+
+			void ConfigureFunctions(const std::vector<LocoFunctionEntry>& newEntries)
+			{
+				for (LocoFunctionNr nr = 0; nr < MaxCount; ++nr)
+				{
+					entries[nr].type = LocoFunctionTypeNone;
+				}
+				for (const LocoFunctionEntry& newEntry : newEntries)
+				{
+					LocoFunctionNr nr = newEntry.nr;
+					entries[nr] = newEntry;
+				}
+			}
+
+			std::string Serialize() const override;
+
+			bool Deserialize(const std::string& serialized) override;
+
+			static std::string GetLocoFunctionIcon(const LocoFunctionNr nr, const LocoFunctionIcon icon);
 
 		private:
-			static const Function MaxCount = MaxFunctions + 1; // f0 - f32 = 33
-			Function count;
-			FunctionState states[MaxCount];
+			bool DeserializeNew(__attribute__((unused)) const std::string& serialized);
+
+			// FIXME: remove later
+			bool DeserializeOld(const std::string& serialized);
+
+			static const LocoFunctionNr MaxCount = MaxLocoFunctions + 1; // f0 - f32 = 33
+			LocoFunctionEntry entries[MaxCount];
 	};
 } // namespace DataModel

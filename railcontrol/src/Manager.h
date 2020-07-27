@@ -31,6 +31,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "ControlInterface.h"
 #include "DataModel/AccessoryBase.h"
 #include "DataModel/DataModel.h"
+#include "DataModel/LocoFunctions.h"
 #include "DataModel/ObjectIdentifier.h"
 #include "Hardware/HardwareParams.h"
 #include "Logger/Logger.h"
@@ -90,16 +91,17 @@ class Manager
 			const ControlID controlID,
 			const Protocol protocol,
 			const Address address,
-			const Function nrOfFunctions,
 			const Length length,
 			const bool pushpull,
 			const Speed maxSpeed,
 			const Speed travelSpeed,
 			const Speed reducedSpeed,
 			const Speed creepingSpeed,
+			const std::vector<DataModel::LocoFunctionEntry>& locoFunctions,
 			const std::vector<DataModel::Relation*>& slaves,
 			std::string& result
 		);
+
 		bool LocoDelete(const LocoID locoID);
 		bool LocoProtocolAddress(const LocoID locoID, ControlID& controlID, Protocol& protocol, Address& address) const;
 		void LocoSpeed(const ControlType controlType, const ControlID controlID, const Protocol protocol, const Address address, const Speed speed);
@@ -109,8 +111,18 @@ class Manager
 		void LocoOrientation(const ControlType controlType, const ControlID controlID, const Protocol protocol, const Address address, const Orientation orientation);
 		void LocoOrientation(const ControlType controlType, const LocoID locoID, const Orientation orientation);
 		void LocoOrientation(const ControlType controlType, DataModel::Loco* loco, const Orientation orientation);
-		void LocoFunction(const ControlType controlType, const ControlID controlID, const Protocol protocol, const Address address, const Function function, const DataModel::LocoFunctions::FunctionState on);
-		void LocoFunction(const ControlType controlType, const LocoID locoID, const Function function, const DataModel::LocoFunctions::FunctionState on);
+
+		void LocoFunctionState(const ControlType controlType,
+			const ControlID controlID,
+			const Protocol protocol,
+			const Address address,
+			const DataModel::LocoFunctionNr function,
+			const DataModel::LocoFunctionState on);
+
+		void LocoFunctionState(const ControlType controlType,
+			const LocoID locoID,
+			const DataModel::LocoFunctionNr function,
+			const DataModel::LocoFunctionState on);
 
 		// accessory
 		void AccessoryState(const ControlType controlType, const ControlID controlID, const Protocol protocol, const Address address, const DataModel::AccessoryState state);
@@ -313,7 +325,11 @@ class Manager
 		DataModel::Feedback* GetFeedback(const ControlID controlID, const FeedbackPin pin) const;
 		DataModel::Signal* GetSignal(const ControlID controlID, const Protocol protocol, const Address address) const;
 
-		void LocoFunction(const ControlType controlType, DataModel::Loco* loco, const Function function, const DataModel::LocoFunctions::FunctionState on);
+		void LocoFunctionState(const ControlType controlType,
+			DataModel::Loco* loco,
+			const DataModel::LocoFunctionNr function,
+			const DataModel::LocoFunctionState on);
+
 		void AccessoryState(const ControlType controlType, DataModel::Accessory* accessory, const DataModel::AccessoryState state, const bool force);
 		void SwitchState(const ControlType controlType, DataModel::Switch* mySwitch, const DataModel::AccessoryState state, const bool force);
 		void FeedbackState(DataModel::Feedback* feedback, const DataModel::Feedback::FeedbackState state)  { feedback->SetState(state); }

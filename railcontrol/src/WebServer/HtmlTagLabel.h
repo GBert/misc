@@ -33,13 +33,16 @@ namespace WebServer
 			HtmlTagLabel() = delete;
 
 			HtmlTagLabel(const Languages::TextSelector label, const std::string& reference)
+			: HtmlTagLabel(Languages::GetText(label), reference)
+			{
+			}
+
+			HtmlTagLabel(const std::string& label, const std::string& reference)
 			: HtmlTag("label")
 			{
-				std::string stringLabel = Languages::GetText(label);
-				stringLabel.append(":");
-				AddContent(stringLabel);
+				AddContent(label + ":");
 				AddAttribute("for", reference);
-			};
+			}
 
 			template<typename... Args>
 			HtmlTagLabel(const Languages::TextSelector label, const std::string& reference, Args... args)

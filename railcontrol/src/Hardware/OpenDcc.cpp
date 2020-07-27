@@ -172,7 +172,10 @@ namespace Hardware
 		SendXLok(address);
 	}
 
-	void OpenDcc::LocoFunction(__attribute__((unused)) const Protocol protocol, const Address address, const Function function, const DataModel::LocoFunctions::FunctionState on)
+	void OpenDcc::LocoFunction(__attribute__((unused)) const Protocol protocol,
+		const Address address,
+		const DataModel::LocoFunctionNr function,
+		const DataModel::LocoFunctionState on)
 	{
 		if (!serialLine.IsConnected() || !CheckLocoAddress(address))
 		{
@@ -205,7 +208,11 @@ namespace Hardware
 		SendXFunc34(address);
 	}
 
-	void OpenDcc::LocoSpeedOrientationFunctions(__attribute__((unused)) const Protocol protocol, const Address address, const Speed speed, const Orientation orientation, std::vector<DataModel::LocoFunctions::FunctionState>& functions)
+	void OpenDcc::LocoSpeedOrientationFunctions(__attribute__((unused)) const Protocol protocol,
+		const Address address,
+		const Speed speed,
+		const Orientation orientation,
+		std::vector<DataModel::LocoFunctionEntry>& functions)
 	{
 		if (!serialLine.IsConnected() || !CheckLocoAddress(address))
 		{
@@ -215,9 +222,9 @@ namespace Hardware
 		cache.SetSpeed(address, speed);
 		cache.SetOrientation(address, orientation);
 		unsigned char nrFunctions = functions.size();
-		for (unsigned char functionNr = 0; functionNr < nrFunctions; ++functionNr)
+		for (const DataModel::LocoFunctionEntry& function : functions)
 		{
-			cache.SetFunction(address, functionNr, functions[functionNr]);
+			cache.SetFunction(address, function.nr, function.state);
 		}
 		SendXLok(address);
 		if (nrFunctions > 1)

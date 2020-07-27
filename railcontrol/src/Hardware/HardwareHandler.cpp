@@ -300,7 +300,10 @@ namespace Hardware
 		instance->LocoOrientation(loco->GetProtocol(), loco->GetAddress(), orientation);
 	}
 
-	void HardwareHandler::LocoFunction(const ControlType controlType, const DataModel::Loco* loco, const Function function, const DataModel::LocoFunctions::FunctionState on)
+	void HardwareHandler::LocoFunction(const ControlType controlType,
+		const DataModel::Loco* loco,
+		const DataModel::LocoFunctionNr function,
+		const DataModel::LocoFunctionState on)
 	{
 		if (controlType == ControlTypeHardware || instance == nullptr || loco->GetControlID() != GetControlID())
 		{
@@ -309,7 +312,10 @@ namespace Hardware
 		instance->LocoFunction(loco->GetProtocol(), loco->GetAddress(), function, on);
 	}
 
-	void HardwareHandler::LocoSpeedOrientationFunctions(const DataModel::Loco* loco, const Speed speed, const Orientation orientation, std::vector<DataModel::LocoFunctions::FunctionState>& functions)
+	void HardwareHandler::LocoSpeedOrientationFunctions(const DataModel::Loco* loco,
+		const Speed speed,
+		const Orientation orientation,
+		std::vector<DataModel::LocoFunctionEntry>& functions)
 	{
 		if (instance == nullptr || loco->GetControlID() != GetControlID())
 		{

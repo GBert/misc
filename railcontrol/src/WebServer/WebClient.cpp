@@ -41,6 +41,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "WebServer/HtmlTagAccessory.h"
 #include "WebServer/HtmlTagButtonCancel.h"
 #include "WebServer/HtmlTagButtonCommand.h"
+#include "WebServer/HtmlTagButtonCommandPressRelease.h"
 #include "WebServer/HtmlTagButtonCommandToggle.h"
 #include "WebServer/HtmlTagButtonCommandWide.h"
 #include "WebServer/HtmlTagButtonOK.h"
@@ -67,6 +68,7 @@ using LayoutPosition = DataModel::LayoutItem::LayoutPosition;
 using LayoutItemSize = DataModel::LayoutItem::LayoutItemSize;
 using LayoutRotation = DataModel::LayoutItem::LayoutRotation;
 using Visible = DataModel::LayoutItem::Visible;
+using std::deque;
 using std::map;
 using std::string;
 using std::thread;
@@ -124,7 +126,7 @@ namespace WebServer
 				Utils::Utils::ReplaceString(s, string("\r"), string("\n"));
 			}
 
-			vector<string> lines;
+			deque<string> lines;
 			Utils::Utils::SplitString(s, string("\n"), lines);
 
 			if (lines.size() <= 1)
@@ -458,17 +460,9 @@ namespace WebServer
 			{
 				HandleFeedbacksOfTrack(arguments);
 			}
-			else if (arguments["cmd"].compare("protocolloco") == 0)
+			else if (arguments["cmd"].compare("protocol") == 0)
 			{
-				HandleProtocolLoco(arguments);
-			}
-			else if (arguments["cmd"].compare("protocolaccessory") == 0)
-			{
-				HandleProtocolAccessory(arguments);
-			}
-			else if (arguments["cmd"].compare("protocolswitch") == 0)
-			{
-				HandleProtocolSwitch(arguments);
+				HandleProtocol(arguments);
 			}
 			else if (arguments["cmd"].compare("feedbackadd") == 0)
 			{
@@ -606,7 +600,7 @@ namespace WebServer
 		}
 	}
 
-	void WebClient::InterpretClientRequest(const vector<string>& lines, string& method, string& uri, string& protocol, map<string,string>& arguments, map<string,string>& headers)
+	void WebClient::InterpretClientRequest(const deque<string>& lines, string& method, string& uri, string& protocol, map<string,string>& arguments, map<string,string>& headers)
 	{
 		if (lines.size() == 0)
 		{
@@ -617,7 +611,7 @@ namespace WebServer
 		{
 			if (line.find("HTTP/1.") == string::npos)
 			{
-				vector<string> list;
+				deque<string> list;
 				Utils::Utils::SplitString(line, string(": "), list);
 				if (list.size() == 2)
 				{
@@ -626,7 +620,7 @@ namespace WebServer
 				continue;
 			}
 
-			vector<string> list;
+			deque<string> list;
 			Utils::Utils::SplitString(line, string(" "), list);
 			if (list.size() != 3)
 			{
@@ -646,24 +640,25 @@ namespace WebServer
 			protocol = list[2];
 
 			// read GET-arguments from uri
-			vector<string> uri_parts;
-			Utils::Utils::SplitString(uri, "?", uri_parts);
-			if (uri_parts.size() != 2)
+			deque<string> uriParts;
+			Utils::Utils::SplitString(uri, "?", uriParts);
+			if (uriParts.size() != 2)
 			{
 				continue;
 			}
 
-			vector<string> argumentStrings;
-			Utils::Utils::SplitString(uri_parts[1], "&", argumentStrings);
+			deque<string> argumentStrings;
+			Utils::Utils::SplitString(uriParts[1], "&", argumentStrings);
 			for (auto argument : argumentStrings)
 			{
 				if (argument.length() == 0)
 				{
 					continue;
 				}
-				vector<string> argumentParts;
-				Utils::Utils::SplitString(argument, "=", argumentParts);
-				arguments[argumentParts[0]] = argumentParts[1];
+				string key;
+				string value;
+				Utils::Utils::SplitString(argument, "=", key, value);
+				arguments[key] = value;
 			}
 		}
 	}
@@ -1151,10 +1146,10 @@ namespace WebServer
 	void WebClient::HandleLocoFunction(const map<string, string>& arguments)
 	{
 		LocoID locoID = Utils::Utils::GetIntegerMapEntry(arguments, "loco", LocoNone);
-		Function function = Utils::Utils::GetIntegerMapEntry(arguments, "function", 0);
-		DataModel::LocoFunctions::FunctionState state = static_cast<DataModel::LocoFunctions::FunctionState>(Utils::Utils::GetBoolMapEntry(arguments, "on"));
+		DataModel::LocoFunctionNr function = Utils::Utils::GetIntegerMapEntry(arguments, "function", 0);
+		DataModel::LocoFunctionState state = static_cast<DataModel::LocoFunctionState>(Utils::Utils::GetBoolMapEntry(arguments, "on"));
 
-		manager.LocoFunction(ControlTypeWebserver, locoID, function, state);
+		manager.LocoFunctionState(ControlTypeWebserver, locoID, function, state);
 
 		ReplyHtmlWithHeaderAndParagraph(state ? Languages::TextLocoFunctionIsOn : Languages::TextLocoFunctionIsOff, manager.GetLocoName(locoID), function);
 	}
@@ -1197,7 +1192,13 @@ namespace WebServer
 		return HtmlTagProtocol(protocolMap, selectedProtocol);
 	}
 
-	void WebClient::HandleProtocolLoco(const map<string, string>& arguments)
+	HtmlTag WebClient::HtmlTagProtocolAccessory(const ControlID controlID, const Protocol selectedProtocol)
+	{
+		map<string,Protocol> protocolMap = manager.AccessoryProtocolsOfControl(controlID);
+		return HtmlTagProtocol(protocolMap, selectedProtocol);
+	}
+
+	void WebClient::HandleProtocol(const map<string, string>& arguments)
 	{
 		ControlID controlId = Utils::Utils::GetIntegerMapEntry(arguments, "control", ControlIdNone);
 		if (controlId == ControlIdNone)
@@ -1206,14 +1207,33 @@ namespace WebServer
 			return;
 		}
 		LocoID locoId = Utils::Utils::GetIntegerMapEntry(arguments, "loco", LocoNone);
-		Loco* loco = manager.GetLoco(locoId);
-		ReplyHtmlWithHeader(HtmlTagProtocolLoco(controlId, loco == nullptr ? ProtocolNone : loco->GetProtocol()));
-	}
-
-	HtmlTag WebClient::HtmlTagProtocolAccessory(const ControlID controlID, const Protocol selectedProtocol)
-	{
-		map<string,Protocol> protocolMap = manager.AccessoryProtocolsOfControl(controlID);
-		return HtmlTagProtocol(protocolMap, selectedProtocol);
+		if (locoId != LocoNone)
+		{
+			Loco *loco = manager.GetLoco(locoId);
+			ReplyHtmlWithHeader(HtmlTagProtocolLoco(controlId, loco == nullptr ? ProtocolNone : loco->GetProtocol()));
+			return;
+		}
+		AccessoryID accessoryId = Utils::Utils::GetIntegerMapEntry(arguments, "accessory", AccessoryNone);
+		if (accessoryId != AccessoryNone)
+		{
+			Accessory *accessory = manager.GetAccessory(accessoryId);
+			ReplyHtmlWithHeader(HtmlTagProtocolAccessory(controlId, accessory == nullptr ? ProtocolNone : accessory->GetProtocol()));
+			return;
+		}
+		SwitchID switchId = Utils::Utils::GetIntegerMapEntry(arguments, "switch", SwitchNone);
+		if (switchId != SwitchNone)
+		{
+			Switch *mySwitch = manager.GetSwitch(switchId);
+			ReplyHtmlWithHeader(HtmlTagProtocolAccessory(controlId, mySwitch == nullptr ? ProtocolNone : mySwitch->GetProtocol()));
+			return;
+		}
+		SignalID signalId = Utils::Utils::GetIntegerMapEntry(arguments, "signal", SignalNone);
+		if (signalId != SignalNone)
+		{
+			Signal *signal = manager.GetSignal(signalId);
+			ReplyHtmlWithHeader(HtmlTagProtocolAccessory(controlId, signal == nullptr ? ProtocolNone : signal->GetProtocol()));
+			return;
+		}
 	}
 
 	HtmlTag WebClient::HtmlTagDuration(const DataModel::AccessoryPulseDuration duration, const Languages::TextSelector label) const
@@ -1338,16 +1358,16 @@ namespace WebServer
 			case ObjectTypeLoco:
 			{
 				map<string,string> functionOptions;
-				for (Function function = 0; function <= DataModel::LocoFunctions::MaxFunctions; ++function)
+				for (DataModel::LocoFunctionNr function = 0; function <= DataModel::MaxLocoFunctions; ++function)
 				{
 					functionOptions[Utils::Utils::ToStringWithLeadingZeros(function, 2)] = "F" + to_string(function);
 				}
 				content.AddChildTag(HtmlTagSelect(name + "_id", functionOptions, Utils::Utils::ToStringWithLeadingZeros(objectId, 2)).AddClass("select_relation_id"));
 
-				map<DataModel::LocoFunctions::FunctionState,Languages::TextSelector> stateOptions;
-				stateOptions[DataModel::LocoFunctions::FunctionStateOff] = Languages::TextOff;
-				stateOptions[DataModel::LocoFunctions::FunctionStateOn] = Languages::TextOn;
-				content.AddChildTag(HtmlTagSelect(name + "_state", stateOptions, static_cast<DataModel::LocoFunctions::FunctionState>(data)).AddClass("select_relation_state"));
+				map<DataModel::LocoFunctionState,Languages::TextSelector> stateOptions;
+				stateOptions[DataModel::LocoFunctionStateOff] = Languages::TextOff;
+				stateOptions[DataModel::LocoFunctionStateOn] = Languages::TextOn;
+				content.AddChildTag(HtmlTagSelect(name + "_state", stateOptions, static_cast<DataModel::LocoFunctionState>(data)).AddClass("select_relation_state"));
 				return content;
 			}
 
@@ -1531,19 +1551,6 @@ namespace WebServer
 		return HtmlTagSelectWithLabel("language", Languages::TextLanguage, options, Languages::GetDefaultLanguage());
 	}
 
-	void WebClient::HandleProtocolAccessory(const map<string, string>& arguments)
-	{
-		ControlID controlId = Utils::Utils::GetIntegerMapEntry(arguments, "control", ControlIdNone);
-		if (controlId == ControlIdNone)
-		{
-			ReplyHtmlWithHeaderAndParagraph(Languages::TextControlDoesNotExist);
-			return;
-		}
-		AccessoryID accessoryId = Utils::Utils::GetIntegerMapEntry(arguments, "accessory", AccessoryNone);
-		Accessory* accessory = manager.GetAccessory(accessoryId);
-		ReplyHtmlWithHeader(HtmlTagProtocolAccessory(controlId, accessory == nullptr ? ProtocolNone : accessory->GetProtocol()));
-	}
-
 	void WebClient::HandleRelationAdd(const map<string, string>& arguments)
 	{
 		string priorityString = Utils::Utils::GetStringMapEntry(arguments, "priority", "1");
@@ -1588,19 +1595,6 @@ namespace WebServer
 		ReplyHtmlWithHeader(HtmlTagSelectFeedbackForTrack(counter, identifier));
 	}
 
-	void WebClient::HandleProtocolSwitch(const map<string, string>& arguments)
-	{
-		ControlID controlId = Utils::Utils::GetIntegerMapEntry(arguments, "control", ControlIdNone);
-		if (controlId == ControlIdNone)
-		{
-			ReplyHtmlWithHeaderAndParagraph(Languages::TextControlDoesNotExist);
-			return;
-		}
-		SwitchID switchId = Utils::Utils::GetIntegerMapEntry(arguments, "switch", SwitchNone);
-		Switch* mySwitch = manager.GetSwitch(switchId);
-		ReplyHtmlWithHeader(HtmlTagProtocolAccessory(controlId, mySwitch == nullptr ? ProtocolNone : mySwitch->GetProtocol()));
-	}
-
 	void WebClient::HandleRelationObject(const map<string, string>& arguments)
 	{
 		const string priority = Utils::Utils::GetStringMapEntry(arguments, "priority");
@@ -1618,13 +1612,13 @@ namespace WebServer
 		Protocol protocol = ProtocolNone;
 		Address address = 1;
 		string name = Languages::GetText(Languages::TextNew);
-		Function nrOfFunctions = 0;
 		bool pushpull = false;
 		Length length = 0;
 		Speed maxSpeed = MaxSpeed;
 		Speed travelSpeed = DefaultTravelSpeed;
 		Speed reducedSpeed = DefaultReducedSpeed;
 		Speed creepingSpeed = DefaultCreepingSpeed;
+		const LocoFunctionEntry* locoFunctions;
 		vector<Relation*> slaves;
 
 		if (locoID > LocoNone)
@@ -1636,13 +1630,13 @@ namespace WebServer
 				protocol = loco->GetProtocol();
 				address = loco->GetAddress();
 				name = loco->GetName();
-				nrOfFunctions = loco->GetNrOfFunctions();
 				pushpull = loco->GetPushpull();
 				length = loco->GetLength();
 				maxSpeed = loco->GetMaxSpeed();
 				travelSpeed = loco->GetTravelSpeed();
 				reducedSpeed = loco->GetReducedSpeed();
 				creepingSpeed = loco->GetCreepingSpeed();
+				locoFunctions = loco->GetFunctions();
 				slaves = loco->GetSlaves();
 			}
 		}
@@ -1650,6 +1644,7 @@ namespace WebServer
 		content.AddChildTag(HtmlTag("h1").AddContent(name).AddId("popup_title"));
 		HtmlTag tabMenu("div");
 		tabMenu.AddChildTag(HtmlTagTabMenuItem("basic", Languages::TextBasic, true));
+		tabMenu.AddChildTag(HtmlTagTabMenuItem("functions", Languages::TextFunctions));
 		tabMenu.AddChildTag(HtmlTagTabMenuItem("slaves", Languages::TextMultipleUnit));
 		tabMenu.AddChildTag(HtmlTagTabMenuItem("automode", Languages::TextAutomode));
 		content.AddChildTag(tabMenu);
@@ -1665,9 +1660,59 @@ namespace WebServer
 		basicContent.AddChildTag(HtmlTagControlLoco(controlID, "loco", locoID));
 		basicContent.AddChildTag(HtmlTag("div").AddId("select_protocol").AddChildTag(HtmlTagProtocolLoco(controlID, protocol)));
 		basicContent.AddChildTag(HtmlTagInputIntegerWithLabel("address", Languages::TextAddress, address, 1, 9999));
-		basicContent.AddChildTag(HtmlTagInputIntegerWithLabel("function", Languages::TextNrOfFunctions, nrOfFunctions, 0, DataModel::LocoFunctions::MaxFunctions));
 		basicContent.AddChildTag(HtmlTagInputIntegerWithLabel("length", Languages::TextTrainLength, length, 0, 99999));
 		formContent.AddChildTag(basicContent);
+
+		HtmlTag functionsContent("div");
+		functionsContent.AddId("tab_functions");
+		functionsContent.AddClass("tab_content");
+		functionsContent.AddClass("hidden");
+		map<DataModel::LocoFunctionType,Languages::TextSelector> functionTypes;
+		functionTypes[DataModel::LocoFunctionTypeNone] = Languages::TextLocoFunctionTypeNone;
+		functionTypes[DataModel::LocoFunctionTypePermanent] = Languages::TextLocoFunctionTypePermanent;
+		functionTypes[DataModel::LocoFunctionTypeMoment] = Languages::TextLocoFunctionTypeMoment;
+//		functionTypes[DataModel::LocoFunctionTypeFlashing] = Languages::TextLocoFunctionTypeFlashing;
+//		functionTypes[DataModel::LocoFunctionTypeTimer] = Languages::TextLocoFunctionTypeTimer;
+
+		map<DataModel::LocoFunctionIcon,Languages::TextSelector> functionIcons;
+		functionIcons[DataModel::LocoFunctionIconDefault] = Languages::TextLocoFunctionIconDefault;
+		functionIcons[DataModel::LocoFunctionIconShuntingMode] = Languages::TextLocoFunctionIconShuntingMode;
+		functionIcons[DataModel::LocoFunctionIconInertia] = Languages::TextLocoFunctionIconInertia;
+		functionIcons[DataModel::LocoFunctionIconLight] = Languages::TextLocoFunctionIconLight;
+		functionIcons[DataModel::LocoFunctionIconHeadlightLowBeamForward] = Languages::TextLocoFunctionIconHeadlightLowBeamForward;
+		functionIcons[DataModel::LocoFunctionIconHeadlightLowBeamReverse] = Languages::TextLocoFunctionIconHeadlightLowBeamReverse;
+		functionIcons[DataModel::LocoFunctionIconHeadlightHighBeamForward] = Languages::TextLocoFunctionIconHeadlightHighBeamForward;
+		functionIcons[DataModel::LocoFunctionIconHeadlightHighBeamReverse] = Languages::TextLocoFunctionIconHeadlightHighBeamReverse;
+		functionIcons[DataModel::LocoFunctionIconSoundGeneral] = Languages::TextLocoFunctionIconSoundGeneral;
+//		functionIcons[DataModel::LocoFunctionIcon] = Languages::TextLocoFunctionIcon;
+		for (unsigned int nr = 0; nr < DataModel::MaxLocoFunctions; ++nr)
+		{
+			HtmlTag fDiv("div");
+			fDiv.AddClass("function_line");
+			string nrString = to_string(nr);
+			string fNrString = "f" + nrString;
+			fDiv.AddChildTag(HtmlTagLabel(fNrString, fNrString + "_type"));
+			const DataModel::LocoFunctionType type = locoFunctions[nr].type;
+			const DataModel::LocoFunctionIcon icon = locoFunctions[nr].icon;
+			const DataModel::LocoFunctionTimer timer = locoFunctions[nr].timer;
+			fDiv.AddChildTag(HtmlTagSelect(fNrString + "_type", functionTypes, type).AddAttribute("onclick", "onChangeLocoFunctionType(" + nrString + ");return false;"));
+			HtmlTagSelect selectIcon(fNrString + "_icon", functionIcons, icon);
+			HtmlTagInputInteger inputTimer(fNrString + "_timer", timer, 1, 255);
+			if (type == LocoFunctionTypeNone)
+			{
+				selectIcon.AddClass("hidden");
+			}
+			if (type != LocoFunctionTypeTimer)
+			{
+				inputTimer.AddClass("hidden");
+			}
+			inputTimer.AddClass("function_line_integer");
+
+			fDiv.AddChildTag(selectIcon);
+			fDiv.AddChildTag(inputTimer);
+			functionsContent.AddChildTag(fDiv);
+		}
+		formContent.AddChildTag(functionsContent);
 
 		HtmlTag slavesDiv("div");
 		slavesDiv.AddChildTag(HtmlTagInputHidden("slavecounter", to_string(slaves.size())));
@@ -1720,7 +1765,6 @@ namespace WebServer
 		const ControlID controlId = Utils::Utils::GetIntegerMapEntry(arguments, "control", ControlIdNone);
 		const Protocol protocol = static_cast<Protocol>(Utils::Utils::GetIntegerMapEntry(arguments, "protocol", ProtocolNone));
 		const Address address = Utils::Utils::GetIntegerMapEntry(arguments, "address", AddressNone);
-		const Function nrOfFunctions = Utils::Utils::GetIntegerMapEntry(arguments, "function", 0);
 		const Length length = Utils::Utils::GetIntegerMapEntry(arguments, "length", 0);
 		const bool pushpull = Utils::Utils::GetBoolMapEntry(arguments, "pushpull", false);
 		const Speed maxSpeed = Utils::Utils::GetIntegerMapEntry(arguments, "maxspeed", MaxSpeed);
@@ -1739,6 +1783,34 @@ namespace WebServer
 		{
 			creepingSpeed = reducedSpeed;
 		}
+
+		vector<DataModel::LocoFunctionEntry> locoFunctions;
+		DataModel::LocoFunctionEntry locoFunctionEntry;
+		for (DataModel::LocoFunctionNr nr = 0; nr < DataModel::MaxLocoFunctions; ++nr)
+		{
+			string nrString = "f" + to_string(nr) + "_";
+			locoFunctionEntry.nr = nr;
+			locoFunctionEntry.type = static_cast<DataModel::LocoFunctionType>(Utils::Utils::GetIntegerMapEntry(arguments, nrString + "type", DataModel::LocoFunctionTypeNone));
+			if (locoFunctionEntry.type == DataModel::LocoFunctionTypeNone)
+			{
+				continue;
+			}
+			locoFunctionEntry.icon = static_cast<DataModel::LocoFunctionIcon>(Utils::Utils::GetIntegerMapEntry(arguments, nrString + "icon", DataModel::LocoFunctionIconNone));
+			if (locoFunctionEntry.type == DataModel::LocoFunctionTypeTimer)
+			{
+				locoFunctionEntry.timer = Utils::Utils::GetIntegerMapEntry(arguments, nrString + "timer", 1);
+				if (locoFunctionEntry.timer == 0)
+				{
+					locoFunctionEntry.timer = 1;
+				}
+			}
+			else
+			{
+				locoFunctionEntry.timer = 0;
+			}
+			locoFunctions.push_back(locoFunctionEntry);
+		}
+
 		vector<Relation*> slaves;
 		unsigned int slaveCount = Utils::Utils::GetIntegerMapEntry(arguments, "slavecounter", 0);
 		for (unsigned int index = 1; index <= slaveCount; ++index)
@@ -1759,13 +1831,13 @@ namespace WebServer
 			controlId,
 			protocol,
 			address,
-			nrOfFunctions,
 			length,
 			pushpull,
 			maxSpeed,
 			travelSpeed,
 			reducedSpeed,
 			creepingSpeed,
+			locoFunctions,
 			slaves,
 			result))
 		{
@@ -4027,15 +4099,28 @@ namespace WebServer
 		container.AddChildTag(HtmlTagButtonPopup("<svg width=\"36\" height=\"36\"><circle r=\"7\" cx=\"14\" cy=\"14\" fill=\"black\" /><line x1=\"14\" y1=\"5\" x2=\"14\" y2=\"23\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"9.5\" y1=\"6.2\" x2=\"18.5\" y2=\"21.8\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"6.2\" y1=\"9.5\" x2=\"21.8\" y2=\"18.5\" stroke-width=\"2\" stroke=\"black\" /><line y1=\"14\" x1=\"5\" y2=\"14\" x2=\"23\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"9.5\" y1=\"21.8\" x2=\"18.5\" y2=\"6.2\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"6.2\" y1=\"18.5\" x2=\"21.8\" y2=\"9.5\" stroke-width=\"2\" stroke=\"black\" /><circle r=\"5\" cx=\"14\" cy=\"14\" fill=\"white\" /><circle r=\"4\" cx=\"24\" cy=\"24\" fill=\"black\" /><line x1=\"18\" y1=\"24\" x2=\"30\" y2=\"24\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"28.2\" y1=\"28.2\" x2=\"19.8\" y2=\"19.8\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"24\" y1=\"18\" x2=\"24\" y2=\"30\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"19.8\" y1=\"28.2\" x2=\"28.2\" y2=\"19.8\" stroke-width=\"2\" stroke=\"black\" /><circle r=\"2\" cx=\"24\" cy=\"24\" fill=\"white\" /></svg>", id, buttonArguments));
 
 		id = "locoorientation_" + to_string(locoID);
-		container.AddChildTag(HtmlTagButtonCommandToggle("<svg width=\"36\" height=\"36\"><polyline points=\"3,14 20,14 20,3 36,19 20,35 20,23 3,23\" stroke=\"black\" stroke-width=\"1\" g></svg>", id, loco->GetOrientation(), buttonArguments).AddClass("button_orientation"));
+		container.AddChildTag(HtmlTagButtonCommandToggle("<svg width=\"36\" height=\"36\">"
+			"<polyline points=\"5,15 31,15 31,23 5,23\" stroke=\"black\" stroke-width=\"0\" fill=\"black\" />"
+			"<polyline points=\"16,8 0,19 16,30\" stroke=\"black\" stroke-width=\"0\" fill=\"black\" class=\"orientation_left\" />"
+			"<polyline points=\"20,8 36,19 20,30\" stroke=\"black\" stroke-width=\"0\" fill=\"black\" class=\"orientation_right\" />"
+			"</svg>", id, loco->GetOrientation(), buttonArguments).AddClass("button_orientation"));
 
 		id = "locofunction_" + to_string(locoID);
-		Function nrOfFunctions = loco->GetNrOfFunctions();
-		for (Function nr = 0; nr <= nrOfFunctions; ++nr)
+		std::vector<DataModel::LocoFunctionEntry> functions = loco->GetFunctionStates();
+		for (DataModel::LocoFunctionEntry& function : functions)
 		{
-			string nrText(to_string(nr));
+			string nrText(to_string(function.nr));
 			buttonArguments["function"] = nrText;
-			container.AddChildTag(HtmlTagButtonCommandToggle("<svg width=\"36\" height=\"36\"><text x=\"8\" y=\"24\" fill=\"black\" font-size=\"11\">f" + nrText + "</text>f", id + "_" + nrText, loco->GetFunction(nr), buttonArguments));
+			switch(function.type)
+			{
+				case DataModel::LocoFunctionTypeMoment:
+					container.AddChildTag(HtmlTagButtonCommandPressRelease(DataModel::LocoFunctions::GetLocoFunctionIcon(function.nr, function.icon), id + "_" + nrText, buttonArguments));
+					break;
+
+				default:
+					container.AddChildTag(HtmlTagButtonCommandToggle(DataModel::LocoFunctions::GetLocoFunctionIcon(function.nr, function.icon), id + "_" + nrText, function.state, buttonArguments));
+					break;
+			}
 		}
 		buttonArguments.erase("function");
 		ReplyHtmlWithHeaderAndParagraph(container);

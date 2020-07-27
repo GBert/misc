@@ -19,7 +19,6 @@ along with RailControl; see the file LICENCE. If not see
 */
 
 #include <sstream>
-#include <vector>
 
 #include "Utils/Utils.h"
 #include "WebServer/HtmlTagButtonCommandToggle.h"
@@ -35,12 +34,11 @@ namespace WebServer
 	{
 		AddClass(on == true ? "button_on" : "button_off");
 
-		std::vector<std::string> parts;
-		Utils::Utils::SplitString(command, "_", parts);
+		std::string cmd = Utils::Utils::StringBeforeDelimiter(command, "_");
 		std::stringstream ss;
 		ss <<
 			"var on = !document.getElementById('" << commandID << "').classList.contains('button_on');"
-			"var theUrl = '/?cmd=" << parts[0] << "&on=' + (on ? '1' : '0') + '";
+			"var theUrl = '/?cmd=" << cmd << "&on=' + (on ? '1' : '0') + '";
 
 		for (auto argument : arguments) {
 

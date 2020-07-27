@@ -1,8 +1,6 @@
 
 #CC=gcc
 #CPP=g++
-CCRASPI=aarch64-linux-gcc
-CPPRASPI=aarch64-linux-g++
 
 CPPFLAGS+=-I. -g -O2 -Wall -Wextra -Werror -std=c++11
 LDFLAGS+=-g -Wl,--export-dynamic

@@ -72,7 +72,6 @@ namespace DataModel
 				wait(0)
 			{
 				logger = Logger::Logger::GetLogger(GetName());
-				SetNrOfFunctions(0);
 			}
 
 			Loco(Manager* manager, const std::string& serialized)
@@ -128,11 +127,32 @@ namespace DataModel
 			void SetSpeed(const Speed speed, const bool withSlaves);
 			Speed GetSpeed() const { return speed; }
 
-			void SetFunction(const Function nr, const DataModel::LocoFunctions::FunctionState state) { functions.SetFunction(nr, state); }
-			DataModel::LocoFunctions::FunctionState GetFunction(const Function nr) const { return functions.GetFunction(nr); }
-			std::vector<DataModel::LocoFunctions::FunctionState> GetFunctions() const { return functions.GetFunctions(); }
-			void SetNrOfFunctions(const Function nr) { functions.SetNrOfFunctions(nr); }
-			Function GetNrOfFunctions() const { return functions.GetNrOfFunctions(); }
+			inline void SetFunctionState(const DataModel::LocoFunctionNr nr,
+				const DataModel::LocoFunctionState state)
+			{
+				functions.SetFunctionState(nr, state);
+			}
+
+			inline DataModel::LocoFunctionState GetFunctionState(const DataModel::LocoFunctionNr nr) const
+			{
+				return functions.GetFunctionState(nr);
+			}
+
+			inline std::vector<DataModel::LocoFunctionEntry> GetFunctionStates() const
+			{
+				return functions.GetFunctionStates();
+			}
+
+			inline const DataModel::LocoFunctionEntry* GetFunctions() const
+			{
+				return functions.GetFunctions();
+			}
+
+			inline void ConfigureFunctions(const std::vector<LocoFunctionEntry>& newEntries)
+			{
+				functions.ConfigureFunctions(newEntries);
+			}
+
 			void SetOrientation(const Orientation orientation);
 			Orientation GetOrientation() const { return orientation; }
 

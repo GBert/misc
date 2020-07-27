@@ -30,7 +30,7 @@ namespace Hardware
 	class CS2Udp : protected ProtocolMaerklinCAN
 	{
 		public:
-			CS2Udp(const HardwareParams* params);
+			CS2Udp(HardwareParams* const params);
 			~CS2Udp();
 
 			static void GetArgumentTypesAndHint(std::map<unsigned char,ArgumentType>& argumentTypes, std::string& hint)
@@ -40,20 +40,19 @@ namespace Hardware
 			}
 
 		private:
-			volatile bool run;
 			Network::UdpConnection senderConnection;
 			Network::UdpConnection receiverConnection;
 			std::thread receiverThread;
 
 			void Send(const unsigned char* buffer) override;
-			void Receiver();
+			void Receiver() override;
 
 			static const unsigned short CS2SenderPort = 15731;
 			static const unsigned short CS2ReceiverPort = 15730;
 	};
 
-	extern "C" CS2Udp* create_CS2Udp(const HardwareParams* params);
-	extern "C" void destroy_CS2Udp(CS2Udp* cs2Udp);
+	extern "C" CS2Udp* create_CS2Udp(HardwareParams* const params);
+	extern "C" void destroy_CS2Udp(CS2Udp* const cs2Udp);
 
 } // namespace
 

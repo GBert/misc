@@ -18,8 +18,8 @@ along with RailControl; see the file LICENCE. If not see
 <http://www.gnu.org/licenses/>.
 */
 
+#include <deque>
 #include <iostream>
-#include <vector>
 
 #include "ArgumentHandler.h"
 #include "Utils/Utils.h"
@@ -42,7 +42,7 @@ ArgumentHandler::ArgumentHandler(const int argc, char* argv[], const std::map<st
 		}
 
 		std::string argString = arg + 2;
-		std::vector<std::string> parts;
+		std::deque<std::string> parts;
 		Utils::Utils::SplitString(argString, "=", parts);
 		if (parts.size() < 1)
 		{
