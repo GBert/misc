@@ -20,6 +20,7 @@ OBJ= \
 	DataModel/LayoutItem.o \
 	DataModel/LockableItem.o \
 	DataModel/Loco.o \
+	DataModel/LocoFunctions.o \
 	DataModel/Object.o \
 	DataModel/Relation.o \
 	DataModel/Route.o \
@@ -50,6 +51,7 @@ OBJ= \
 	WebServer/HtmlTagButton.o \
 	WebServer/HtmlTagButtonCancel.o \
 	WebServer/HtmlTagButtonCommand.o \
+	WebServer/HtmlTagButtonCommandPressRelease.o \
 	WebServer/HtmlTagButtonCommandToggle.o \
 	WebServer/HtmlTagButtonOK.o \
 	WebServer/HtmlTagButtonPopup.o \
