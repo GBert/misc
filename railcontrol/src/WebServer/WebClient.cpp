@@ -1618,7 +1618,7 @@ namespace WebServer
 		Speed travelSpeed = DefaultTravelSpeed;
 		Speed reducedSpeed = DefaultReducedSpeed;
 		Speed creepingSpeed = DefaultCreepingSpeed;
-		const LocoFunctionEntry* locoFunctions;
+		const LocoFunctionEntry* locoFunctions = nullptr;
 		vector<Relation*> slaves;
 
 		if (locoID > LocoNone)
@@ -1684,6 +1684,8 @@ namespace WebServer
 		functionIcons[DataModel::LocoFunctionIconHeadlightHighBeamForward] = Languages::TextLocoFunctionIconHeadlightHighBeamForward;
 		functionIcons[DataModel::LocoFunctionIconHeadlightHighBeamReverse] = Languages::TextLocoFunctionIconHeadlightHighBeamReverse;
 		functionIcons[DataModel::LocoFunctionIconSoundGeneral] = Languages::TextLocoFunctionIconSoundGeneral;
+		functionIcons[DataModel::LocoFunctionIconBacklightForward] = Languages::TextLocoFunctionIconBacklightForward;
+		functionIcons[DataModel::LocoFunctionIconBacklightReverse] = Languages::TextLocoFunctionIconBacklightReverse;
 //		functionIcons[DataModel::LocoFunctionIcon] = Languages::TextLocoFunctionIcon;
 		for (unsigned int nr = 0; nr < DataModel::MaxLocoFunctions; ++nr)
 		{
@@ -1692,9 +1694,21 @@ namespace WebServer
 			string nrString = to_string(nr);
 			string fNrString = "f" + nrString;
 			fDiv.AddChildTag(HtmlTagLabel(fNrString, fNrString + "_type"));
-			const DataModel::LocoFunctionType type = locoFunctions[nr].type;
-			const DataModel::LocoFunctionIcon icon = locoFunctions[nr].icon;
-			const DataModel::LocoFunctionTimer timer = locoFunctions[nr].timer;
+			DataModel::LocoFunctionType type;
+			DataModel::LocoFunctionIcon icon;
+			DataModel::LocoFunctionTimer timer;
+			if (locoFunctions != nullptr)
+			{
+				type = locoFunctions[nr].type;
+				icon = locoFunctions[nr].icon;
+				timer = locoFunctions[nr].timer;
+			}
+			else
+			{
+				type = DataModel::LocoFunctionTypeNone;
+				icon = DataModel::LocoFunctionIconNone;
+				timer = 0;
+			}
 			fDiv.AddChildTag(HtmlTagSelect(fNrString + "_type", functionTypes, type).AddAttribute("onclick", "onChangeLocoFunctionType(" + nrString + ");return false;"));
 			HtmlTagSelect selectIcon(fNrString + "_icon", functionIcons, icon);
 			HtmlTagInputInteger inputTimer(fNrString + "_timer", timer, 1, 255);
@@ -2019,21 +2033,38 @@ namespace WebServer
 
 	HtmlTag WebClient::HtmlTagControl(const std::map<ControlID,string>& controls, const ControlID controlID, const string& objectType, const ObjectID objectID)
 	{
+		ControlID controlIdMutable = controlID;
+		if (controls.size() == 0)
+		{
+			return HtmlTagInputTextWithLabel("control", Languages::TextControl, Languages::GetText(Languages::TextConfigureControlFirst));
+		}
+		bool controlIdValid = false;
+		if (controlIdMutable != ControlIdNone)
+		{
+			for (auto control : controls)
+			{
+				if (control.first != controlIdMutable)
+				{
+					continue;
+				}
+				controlIdValid = true;
+				break;
+			}
+		}
+		if (!controlIdValid)
+		{
+			controlIdMutable = controls.begin()->first;
+		}
 		if (controls.size() == 1)
 		{
-			return HtmlTagInputHidden("control", to_string(controlID));
+			return HtmlTagInputHidden("control", to_string(controlIdMutable));
 		}
-		ControlID controlIDMutable = controlID;
 		std::map<string, string> controlOptions;
 		for(auto control : controls)
 		{
 			controlOptions[to_string(control.first)] = control.second;
-			if (controlIDMutable == ControlIdNone)
-			{
-				controlIDMutable = control.first;
-			}
 		}
-		return HtmlTagSelectWithLabel("control", Languages::TextControl, controlOptions, to_string(controlIDMutable)).AddAttribute("onchange", "loadProtocol('" + objectType + "', " + to_string(objectID) + ")");
+		return HtmlTagSelectWithLabel("control", Languages::TextControl, controlOptions, to_string(controlIdMutable)).AddAttribute("onchange", "loadProtocol('" + objectType + "', " + to_string(objectID) + ")");
 	}
 
 	HtmlTag WebClient::HtmlTagControl(const string& name, const std::map<ControlID,string>& controls)

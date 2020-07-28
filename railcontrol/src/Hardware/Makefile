@@ -40,13 +40,13 @@ zlib/%.o: zlib/%.c zlib/*.h
 	$(CC) $(CPPFLAGS) -c -o $@ $<
 
 CS2Tcp.so: CS2Tcp.o ProtocolMaerklinCAN.o $(OBJZLIB) *.h ../Manager.h ../Languages.h
-	$(CXX) $(CPPFLAGS) $(LDFLAGS)$@ -o $@ ProtocolMaerklinCAN.o $<
+	$(CXX) $(CPPFLAGS) $(LDFLAGS)$@ -o $@ ProtocolMaerklinCAN.o $(OBJZLIB) $<
 
 CS2Udp.so: CS2Udp.o ProtocolMaerklinCAN.o ZLib.o *.h ../Manager.h ../Languages.h
-	$(CXX) $(CPPFLAGS) $(LDFLAGS)$@ -o $@ ProtocolMaerklinCAN.o $<
+	$(CXX) $(CPPFLAGS) $(LDFLAGS)$@ -o $@ ProtocolMaerklinCAN.o $(OBJZLIB) $<
 
 CcSchnitte.so: CcSchnitte.o ProtocolMaerklinCAN.o ZLib.o *.h ../Manager.h ../Languages.h
-	$(CXX) $(CPPFLAGS) $(LDFLAGS)$@ -o $@ ProtocolMaerklinCAN.o $<
+	$(CXX) $(CPPFLAGS) $(LDFLAGS)$@ -o $@ ProtocolMaerklinCAN.o $(OBJZLIB) $<
 
 %.so: %.o *.h ../Manager.h ../Languages.h
 	$(CXX) $(CPPFLAGS) $(LDFLAGS)$@ -o $@ $<

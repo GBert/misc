@@ -508,3 +508,47 @@ button:active {
 .button_on .button_off {
 	display: none;
 }
+
+.sound1 {
+	animation-name: sound1;
+}
+
+.sound2 {
+	animation-name: sound2;
+}
+
+.sound3 {
+	animation-name: sound3;
+}
+
+.sound1,
+.sound2,
+.sound3 {
+	animation-duration: 1s;
+	animation-iteration-count: infinite;
+}
+
+@keyframes sound1 {
+	0% { opacity: 0.5; }
+	20% { opacity: 1; }
+	40% { opacity: 1; }
+	60% { opacity: 0.5; }
+	100% { opacity: 0.5; }
+}
+
+@keyframes sound2 {
+	0% { opacity: 0.5; }
+	20% { opacity: 0.5; }
+	40% { opacity: 1; }
+	60% { opacity: 1; }
+	80% { opacity: 0.5; }
+	100% { opacity: 0.5; }
+}
+
+@keyframes sound3 {
+	0% { opacity: 0.5; }
+	40% { opacity: 0.5; }
+	60% { opacity: 1; }
+	80% { opacity: 1; }
+	100% { opacity: 0.5; }
+}
