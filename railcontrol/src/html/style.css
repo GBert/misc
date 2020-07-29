@@ -70,7 +70,7 @@ body {
 		width: calc(100% - 2px);
 	}
 
-	@media (max-height: 909px) {
+	@media (max-height: 780px) {
 		.loco {
 			height: calc(100% - 204px);
 		}
@@ -80,7 +80,7 @@ body {
 		}
 	}
 
-	@media (min-height: 910px) {
+	@media (min-height: 781px) {
 		.loco {
 			height: calc(100% - 456px);
 		}
@@ -108,7 +108,7 @@ body {
 		width: calc(100% - 254px);
 	}
 
-	@media (max-height: 799px) {
+	@media (max-height: 669px) {
 		.loco {
 			height: calc(100% - 92px);
 		}
@@ -118,7 +118,7 @@ body {
 		}
 	}
 
-	@media (min-height: 800px) {
+	@media (min-height: 670px) {
 		.loco {
 			height: calc(100% - 344px);
 		}
@@ -469,12 +469,12 @@ button:active {
 
 .contextentry {
 	cursor: pointer;
-	background: lightgrey;
+	background: lightgray;
 	padding: 5px;
 }
 
 .contextentry:hover {
-	background: darkgrey;
+	background: darkgray;
 }
 
 .tab_button {
@@ -484,7 +484,7 @@ button:active {
 	text-align: center;
 	text-decoration: none;
 	display: inline-block;
-	background-color: lightgrey;
+	background-color: lightgray;
 	height: 28px;
 	width: auto;
 	border-radius: 0px;
@@ -521,34 +521,47 @@ button:active {
 	animation-name: sound3;
 }
 
+.blinking {
+	animation-name: blinking;
+}
+
 .sound1,
 .sound2,
-.sound3 {
+.sound3,
+.blinking {
 	animation-duration: 1s;
 	animation-iteration-count: infinite;
 }
 
 @keyframes sound1 {
-	0% { opacity: 0.5; }
-	20% { opacity: 1; }
+	0% { opacity: 1; }
+	10% { opacity: 0.3; }
+	30% { opacity: 0.3; }
 	40% { opacity: 1; }
-	60% { opacity: 0.5; }
-	100% { opacity: 0.5; }
+	100% { opacity: 1; }
 }
 
 @keyframes sound2 {
-	0% { opacity: 0.5; }
-	20% { opacity: 0.5; }
-	40% { opacity: 1; }
+	0% { opacity: 1; }
+	20% { opacity: 1; }
+	30% { opacity: 0.3; }
+	50% { opacity: 0.3; }
 	60% { opacity: 1; }
-	80% { opacity: 0.5; }
-	100% { opacity: 0.5; }
+	100% { opacity: 1; }
 }
 
 @keyframes sound3 {
-	0% { opacity: 0.5; }
-	40% { opacity: 0.5; }
-	60% { opacity: 1; }
+	0% { opacity: 1; }
+	40% { opacity: 1; }
+	60% { opacity: 0.3; }
+	70% { opacity: 0.3; }
 	80% { opacity: 1; }
-	100% { opacity: 0.5; }
+	100% { opacity: 1; }
+}
+
+@keyframes blinking {
+	0% { opacity: 1; }
+	40% { opacity: 1; }
+	60% { opacity: 0.3; }
+	100% { opacity: 0.3; }
 }
