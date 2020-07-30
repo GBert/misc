@@ -1519,4 +1519,4 @@ var data_fetcher = setInterval(function(){
       }
     }
   }
-}, 100);
+}, 250);
