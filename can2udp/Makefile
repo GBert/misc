@@ -1,4 +1,4 @@
-# Copyright (C) 2019 OpenWrt.org
+# Copyright (C) 2020 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=can2udp
-PKG_RELEASE:=1.95
+PKG_RELEASE:=1.96
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_BUILD_PARALLEL:=1
@@ -52,7 +52,6 @@ define Package/can2udp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/can2serial $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/clone-cs2-config $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/clone-cs2-trigger $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/clone-ms2-loco $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/cs2ping $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/gb2-update $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ir-tester $(1)/usr/bin/
@@ -104,6 +103,7 @@ ifneq (,$(findstring mt76x8,$(CONFIG_TARGET_SUBTARGET)))
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init_srse2_openwrt $(1)/etc/init.d/can2lan
 	$(INSTALL_BIN) ./files/maecanserver.init $(1)/etc/init.d/maecanserver
+	$(INSTALL_BIN) ./files/clone-ms2-loco.init $(1)/etc/init.d/clone-ms2-loco
 	$(INSTALL_DIR) $(1)/root
 	$(INSTALL_BIN) ./files/no-pic.sh $(1)/root
 endif
@@ -112,6 +112,7 @@ ifneq (,$(findstring mt7688,$(CONFIG_TARGET_SUBTARGET)))
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init_srse2 $(1)/etc/init.d/can2lan
 	$(INSTALL_BIN) ./files/maecanserver.init $(1)/etc/init.d/maecanserver
+	$(INSTALL_BIN) ./files/clone-ms2-loco.init $(1)/etc/init.d/clone-ms2-loco
 	$(INSTALL_DIR) $(1)/root
 	$(INSTALL_BIN) ./files/no-pic.sh $(1)/root
 endif
