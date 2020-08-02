@@ -55,7 +55,7 @@ namespace WebServer
 		body << "<!DOCTYPE html>";
 
 		HtmlTag head("head");
-		head.AddChildTag(HtmlTag("title").AddContent(response.title));
+		head.AddChildTag(HtmlTag("title").AddId("title").AddContent(response.title));
 		head.AddChildTag(HtmlTag("link").AddAttribute("rel", "stylesheet").AddAttribute("type", "text/css").AddAttribute("href", "/style.css"));
 		head.AddChildTag(HtmlTag("script").AddAttribute("type", "application/javascript").AddAttribute("src", "/javascript.js"));
 		head.AddChildTag(HtmlTag("meta").AddAttribute("name", "viewport").AddAttribute("content", "width=device-width, initial-scale=1.0"));

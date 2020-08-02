@@ -90,7 +90,7 @@ namespace WebServer
 			}
 
 			void InterpretClientRequest(const std::deque<std::string>& lines, std::string& method, std::string& uri, std::string& protocol, std::map<std::string,std::string>& arguments, std::map<std::string,std::string>& headers);
-			void PrintLoco(const std::map<std::string, std::string>& arguments);
+			void HandleLoco(const std::map<std::string, std::string>& arguments);
 			void PrintMainHTML();
 			void ReplyHtmlWithHeader(const HtmlTag& tag);
 			void ReplyHtmlWithHeaderAndParagraph(const std::string& content) { ReplyHtmlWithHeader(HtmlTag("p").AddContent(content)); }

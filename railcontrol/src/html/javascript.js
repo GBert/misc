@@ -559,18 +559,34 @@ function updateItem(elementName, data)
 	element.innerHTML = data;
 }
 
-function requestUpdateItem(elementName, url)
+function requestUpdateItem(elementName, url, followUpFunction)
 {
 	updateItem(elementName, "Loading...");
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
-		if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+		if (xmlHttp.readyState != 4 || xmlHttp.status != 200)
 		{
-			updateItem(elementName, xmlHttp.responseText);
+			return;
 		}
+		updateItem(elementName, xmlHttp.responseText);
+		if (followUpFunction === undefined)
+		{
+			return;
+		}
+		followUpFunction();
 	}
 	xmlHttp.open('GET', url, true);
 	xmlHttp.send(null);
+}
+
+function updateTitle()
+{
+	var locoName = document.getElementById("loconame");
+	if (!locoName)
+	{
+		return;
+	}
+	updateItem("title", locoName.innerHTML + " - RailControl");
 }
 
 function updateTrack(trackID)
@@ -1129,10 +1145,11 @@ function hideElement(name)
 function loadLoco()
 {
 	var loco = document.getElementById('s_loco');
-	if (loco)
+	if (!loco)
 	{
-		requestUpdateItem('loco', '/?cmd=loco&loco=' + loco.value);
+		return;
 	}
+	requestUpdateItem('loco', '/?cmd=loco&loco=' + loco.value, updateTitle);
 }
 
 function loadLayout()

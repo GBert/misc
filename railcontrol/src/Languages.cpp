@@ -335,7 +335,7 @@ const char* Languages::languages[MaxTexts][MaxLanguages] =
 /* TextProgramReadValue */ { "CV {0} has value {1}", "CV {0} hat den Wert {1}", "CV {0} tiene valor {1}" },
 /* TextProgrammer */ { "Programmer", "Programmierer", "Programador" },
 /* TextProgrammingMode */ { "Programming mode", "Programmiermodus", "Modo programador" },
-/* TextProtocol */ { "Protocol", "Protocol", "Protocolo" },
+/* TextProtocol */ { "Protocol", "Protokoll", "Protocolo" },
 /* TextProtocolNotSupported */ { "Protocol {0} is not supported by control. Please use one of: {1}", "Protokoll {0} wird nicht unterstützt von der Zentrale. Verwende eines aus {1}", "Protocolo {0} no está compatible con ese control. Utilisa uno de {1}" },
 /* TextPushPullOnly */ { "push-pull trains only", "nur Wendezüge", "solamente push-pull trenes" },
 /* TextPushPullTrain */ { "Push-Pull train", "Wendezug", "Tren push-pull" },

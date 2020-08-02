@@ -85,7 +85,7 @@ Manager::Manager(Config& config)
 	nrOfTracksToReserve = static_cast<DataModel::Loco::NrOfTracksToReserve>(Utils::Utils::StringToInteger(storage->GetSetting("NrOfTracksToReserve"), 2));
 
 
-	controls[ControlIdWebserver] = new WebServer::WebServer(*this, config.getValue("webserverport", 80));
+	controls[ControlIdWebserver] = new WebServer::WebServer(*this, config.getValue("webserverport", 8080));
 
 	storage->AllHardwareParams(hardwareParams);
 	for (auto hardwareParam : hardwareParams)

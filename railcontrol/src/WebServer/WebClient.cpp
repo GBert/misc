@@ -214,7 +214,7 @@ namespace WebServer
 			}
 			else if (arguments["cmd"].compare("loco") == 0)
 			{
-				PrintLoco(arguments);
+				HandleLoco(arguments);
 			}
 			else if (arguments["cmd"].compare("locospeed") == 0)
 			{
@@ -4103,7 +4103,7 @@ namespace WebServer
 		return HtmlTagSelect("loco", options).AddAttribute("onchange", "loadLoco();");
 	}
 
-	void WebClient::PrintLoco(const map<string, string>& arguments)
+	void WebClient::HandleLoco(const map<string, string>& arguments)
 	{
 		string content;
 		LocoID locoID = Utils::Utils::GetIntegerMapEntry(arguments, "loco", LocoNone);
@@ -4116,7 +4116,7 @@ namespace WebServer
 
 		HtmlTag container("div");
 		container.AddAttribute("class", "inner_loco");
-		container.AddChildTag(HtmlTag("p").AddContent(loco->GetName()));
+		container.AddChildTag(HtmlTag("p").AddId("loconame").AddContent(loco->GetName()));
 		unsigned int speed = loco->GetSpeed();
 		map<string, string> buttonArguments;
 		buttonArguments["loco"] = to_string(locoID);
