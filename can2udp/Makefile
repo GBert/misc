@@ -100,22 +100,18 @@ ifneq (,$(findstring carambola,$(CONFIG_TARGET_PROFILE)))
 	$(INSTALL_BIN) ./files/can2lan.init_carambola $(1)/etc/init.d/can2lan
 endif
 
-ifneq (,$(findstring DEVICE_onion_omega2p,$(CONFIG_TARGET_PROFILE)))
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/can2lan.init_srse2_openwrt $(1)/etc/init.d/can2lan
-	$(INSTALL_BIN) ./files/maecanserver.init $(1)/etc/init.d/maecanserver
-	$(INSTALL_BIN) ./files/clone-ms2-loco.init $(1)/etc/init.d/clone-ms2-loco
-	$(INSTALL_DIR) $(1)/root
-	$(INSTALL_BIN) ./files/no-pic.sh $(1)/root
-endif
-
-ifneq (,$(findstring DEVICE_omega2p,$(CONFIG_TARGET_SUBTARGET)))
+ifneq (,$(findstring mt76x8,$(CONFIG_TARGET_SUBTARGET)))
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/can2lan.init_srse2 $(1)/etc/init.d/can2lan
 	$(INSTALL_BIN) ./files/maecanserver.init $(1)/etc/init.d/maecanserver
 	$(INSTALL_BIN) ./files/clone-ms2-loco.init $(1)/etc/init.d/clone-ms2-loco
 	$(INSTALL_DIR) $(1)/root
 	$(INSTALL_BIN) ./files/no-pic.sh $(1)/root
+endif
+
+ifneq (,$(findstring onion_omega2p,$(CONFIG_TARGET_PROFILE)))
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/can2lan.init_srse2_openwrt $(1)/etc/init.d/can2lan
 endif
 
 ifneq (,$(findstring wr841,$(CONFIG_TARGET_PROFILE)))
