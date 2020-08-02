@@ -84,8 +84,14 @@ namespace Hardware
 		buffer[1] = (command << 1) | (response & 0x01);
 		Utils::Utils::ShortToDataBigEndian(hash, buffer + 2);
 		buffer[4] = length;
-		int64_t* data = (int64_t*) (buffer + 5);
-		*data = 0L;
+		buffer[5] = 0;
+		buffer[6] = 0;
+		buffer[7] = 0;
+		buffer[8] = 0;
+		buffer[9] = 0;
+		buffer[10] = 0;
+		buffer[11] = 0;
+		buffer[12] = 0;
 	}
 
 	void ProtocolMaerklinCAN::ParseAddressProtocol(const Address input, Address& address, Protocol& protocol)
@@ -1041,6 +1047,7 @@ namespace Hardware
 		LocoFunctionCs2IconHeadlightReverse,
 		LocoFunctionCs2IconBackLightForward,
 		LocoFunctionCs2IconBackLightReverse,
+		LocoFunctionCs2IconLight,
 		LocoFunctionCs2IconBlinkingLight,
 		LocoFunctionCs2IconInteriorLight1,
 		LocoFunctionCs2IconInteriorLight2,
@@ -1056,7 +1063,6 @@ namespace Hardware
 		LocoFunctionCs2IconEngineLight,
 		LocoFunctionCs2IconFireBox,
 		LocoFunctionCs2IconStairsLight,
-		LocoFunctionCs2IconDefault,
 		LocoFunctionCs2IconDefault,
 		LocoFunctionCs2IconDefault,
 		LocoFunctionCs2IconDefault,

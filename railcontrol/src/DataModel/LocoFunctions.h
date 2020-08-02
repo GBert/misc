@@ -49,7 +49,7 @@ namespace DataModel
 	{
 		// Do not change numbers!
 		// Only add numbers!
-		// If you add numbers, add them also in ProtocolMaerklin.cpp too
+		// If you add numbers, add them also in ProtocolMaerklin.cpp
 		LocoFunctionIconNone = 0,
 		LocoFunctionIconDefault = 1,
 		// logical functions
@@ -63,6 +63,7 @@ namespace DataModel
 		LocoFunctionIconHeadlightHighBeamReverse,
 		LocoFunctionIconBacklightForward,
 		LocoFunctionIconBacklightReverse,
+		LocoFunctionIconShuntingLight,
 		LocoFunctionIconBlinkingLight,
 		LocoFunctionIconInteriorLight1,
 		LocoFunctionIconInteriorLight2,

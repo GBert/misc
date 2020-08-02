@@ -1683,9 +1683,9 @@ namespace WebServer
 		functionIcons[DataModel::LocoFunctionIconHeadlightLowBeamReverse] = Languages::TextLocoFunctionIconHeadlightLowBeamReverse;
 		functionIcons[DataModel::LocoFunctionIconHeadlightHighBeamForward] = Languages::TextLocoFunctionIconHeadlightHighBeamForward;
 		functionIcons[DataModel::LocoFunctionIconHeadlightHighBeamReverse] = Languages::TextLocoFunctionIconHeadlightHighBeamReverse;
-		functionIcons[DataModel::LocoFunctionIconSoundGeneral] = Languages::TextLocoFunctionIconSoundGeneral;
 		functionIcons[DataModel::LocoFunctionIconBacklightForward] = Languages::TextLocoFunctionIconBacklightForward;
 		functionIcons[DataModel::LocoFunctionIconBacklightReverse] = Languages::TextLocoFunctionIconBacklightReverse;
+		functionIcons[DataModel::LocoFunctionIconShuntingLight] = Languages::TextLocoFunctionIconShuntingLight;
 		functionIcons[DataModel::LocoFunctionIconBlinkingLight] = Languages::TextLocoFunctionIconBlinkingLight;
 		functionIcons[DataModel::LocoFunctionIconInteriorLight1] = Languages::TextLocoFunctionIconInteriorLight1;
 		functionIcons[DataModel::LocoFunctionIconInteriorLight2] = Languages::TextLocoFunctionIconInteriorLight2;
@@ -1695,6 +1695,10 @@ namespace WebServer
 		functionIcons[DataModel::LocoFunctionIconCabLight1] = Languages::TextLocoFunctionIconCabLight1;
 		functionIcons[DataModel::LocoFunctionIconCabLight2] = Languages::TextLocoFunctionIconCabLight2;
 		functionIcons[DataModel::LocoFunctionIconCabLight12] = Languages::TextLocoFunctionIconCabLight12;
+		functionIcons[DataModel::LocoFunctionIconDriversDeskLight] = Languages::TextLocoFunctionIconDriversDeskLight;
+		functionIcons[DataModel::LocoFunctionIconTrainDestinationIndicator] = Languages::TextLocoFunctionIconTrainDestinationIndicator;
+		functionIcons[DataModel::LocoFunctionIconTrainNumberIndicator] = Languages::TextLocoFunctionIconTrainNumberIndicator;
+		functionIcons[DataModel::LocoFunctionIconSoundGeneral] = Languages::TextLocoFunctionIconSoundGeneral;
 //		functionIcons[DataModel::LocoFunctionIcon] = Languages::TextLocoFunctionIcon;
 		for (unsigned int nr = 0; nr < DataModel::MaxLocoFunctions; ++nr)
 		{
