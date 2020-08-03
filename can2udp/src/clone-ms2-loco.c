@@ -137,7 +137,7 @@ void signal_handler(int sig) {
 
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -kfv [-i <CAN int>][-t <sec>][-l <LED pin>][-p <push button pin>]\n", prg);
-    fprintf(stderr, "   Version 1.8\n\n");
+    fprintf(stderr, "   Version 1.9\n\n");
     fprintf(stderr, "         -c <loco_dir>        set the locomotive file dir - default %s\n", loco_dir);
     fprintf(stderr, "         -i <CAN interface>   using can interface\n");
     fprintf(stderr, "         -t <interval in sec> using timer in sec\n");
@@ -258,7 +258,7 @@ int get_ms2_locoinfo(struct trigger_t *trigger, char *loco_name) {
 	return (EXIT_FAILURE);
 
     memset(frame.data, 0, 8);
-    if (strnlen(loco_name , 16) == 8)
+    if (strnlen(loco_name , 16) >= 8)
 	memcpy(frame.data, loco_name, 8);
     else
 	strncpy((char *)frame.data, loco_name, 8 - 1);
@@ -269,7 +269,7 @@ int get_ms2_locoinfo(struct trigger_t *trigger, char *loco_name) {
     memset(frame.data, 0, 8);
     if (strnlen(loco_name, 16) == 16)
 	memcpy(frame.data, &loco_name[8], 8);
-    else
+    else if (strnlen(loco_name, 16) > 8)
 	strncpy((char *)frame.data, &loco_name[8], 8 - 1);
 
     if (send_can_frame(trigger->socket, &frame, trigger->verbose) < 0)
