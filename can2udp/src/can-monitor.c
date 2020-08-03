@@ -146,7 +146,7 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 3.7\n\n");
+    fprintf(stderr, "   Version 3.8\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
@@ -255,6 +255,19 @@ int print_can_frame(char *format_string, struct can_frame *frame) {
     printf("\n");
 #endif
     return 0;
+}
+
+void print_ascii_data(struct can_frame *frame) {
+    int i;
+
+    printf("  '");
+    for (i = 0; i < 8; i++) {
+	if (isprint(frame->data[i]))
+	    printf("%c", frame->data[i]);
+	else
+	    putchar(46);
+    }
+    printf("'\n");
 }
 
 #if 0
@@ -1214,7 +1227,8 @@ void decode_frame(struct can_frame *frame) {
 	printf("Debug\n");
 	break;
     case 0x84:
-	printf("Debug Text\n");
+	printf("Debug Text");
+	print_ascii_data(frame);
 	break;
     default:
 	printf("unknown\n");
