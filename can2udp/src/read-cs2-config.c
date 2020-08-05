@@ -349,7 +349,7 @@ int add_loco(struct loco_data_t *loco) {
 	l->mfxtype = loco->mfxtype;
 	l->intraction = loco->intraction;
 	HASH_ADD_STR(loco_data, name, l);
-	HASH_ADD(hha, loco_data_by_uid, uid, sizeof(int), l);
+	/* HASH_ADD(hha, loco_data_by_uid, uid, sizeof(unsigned int), l); */
     } else {
 	check_modify(loco->major, l->major);
 	check_modify(loco->minor, l->minor);

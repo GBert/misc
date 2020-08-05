@@ -137,7 +137,7 @@ void signal_handler(int sig) {
 
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -kfv [-i <CAN int>][-t <sec>][-l <LED pin>][-p <push button pin>]\n", prg);
-    fprintf(stderr, "   Version 1.9\n\n");
+    fprintf(stderr, "   Version 1.10\n\n");
     fprintf(stderr, "         -c <loco_dir>        set the locomotive file dir - default %s\n", loco_dir);
     fprintf(stderr, "         -i <CAN interface>   using can interface\n");
     fprintf(stderr, "         -t <interval in sec> using timer in sec\n");
@@ -552,7 +552,6 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 	    print_locos(stdout);
 	    printf("max locos : %d\n", get_loco_max());
 	} */
-
 	free(trigger->data);
     }
     return 0;
