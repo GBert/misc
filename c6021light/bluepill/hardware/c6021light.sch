@@ -5,8 +5,8 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "C6021 Light"
-Date "2020-06-09"
-Rev "1.0"
+Date "2020-08-03"
+Rev "1.1"
 Comp "Damian Philipp / Gerhard Bertelsmann"
 Comment1 ""
 Comment2 ""
@@ -204,17 +204,6 @@ $EndComp
 Wire Wire Line
 	7725 900  7725 1000
 $Comp
-L Connector:RJ45 J8
-U 1 1 5EDB2E8F
-P 9575 1200
-F 0 "J8" H 9245 1204 50  0000 R CNN
-F 1 "RJ45" H 9245 1295 50  0000 R CNN
-F 2 "w_conn_pc:mebp8" V 9575 1225 50  0001 C CNN
-F 3 "~" V 9575 1225 50  0001 C CNN
-	1    9575 1200
-	-1   0    0    1   
-$EndComp
-$Comp
 L Device:C C5
 U 1 1 5EDB8D27
 P 6075 1175
@@ -238,8 +227,6 @@ Wire Wire Line
 	8850 1600 9175 1600
 Wire Wire Line
 	9175 1200 9025 1200
-Wire Wire Line
-	9175 1300 9025 1300
 Wire Wire Line
 	9175 1400 8925 1400
 $Comp
@@ -1814,12 +1801,7 @@ optional\nLoconet
 Wire Wire Line
 	8925 1400 8925 1000
 Wire Wire Line
-	9025 1300 9025 1900
-Wire Wire Line
 	8325 1500 9175 1500
-Wire Wire Line
-	9025 1300 9025 1200
-Connection ~ 9025 1300
 Wire Notes Line
 	6975 2025 11200 2025
 Wire Notes Line
@@ -2013,8 +1995,6 @@ Connection ~ 925  6650
 Connection ~ 1500 1425
 Wire Wire Line
 	1150 1425 1200 1425
-Wire Wire Line
-	1200 1425 1200 2050
 Wire Wire Line
 	1200 2400 1500 2400
 Connection ~ 1200 1425
@@ -2286,33 +2266,16 @@ Wire Wire Line
 	5850 3725 5850 4225
 Connection ~ 5850 4225
 $Comp
-L Connector_Generic:Conn_01x01 TP1
-U 1 1 5EE1214D
-P 1000 2050
-F 0 "TP1" H 918 1917 50  0000 C CNN
-F 1 "Conn_01x01" H 918 1916 50  0001 C CNN
-F 2 "TestPoint:Test_Point_NA" H 1000 2050 50  0001 C CNN
-F 3 "~" H 1000 2050 50  0001 C CNN
-	1    1000 2050
-	-1   0    0    1   
-$EndComp
-Connection ~ 1200 2050
-Wire Wire Line
-	1200 2050 1200 2300
-$Comp
 L Connector_Generic:Conn_01x01 TP2
 U 1 1 5EE12B1B
-P 1000 2300
-F 0 "TP2" H 918 2167 50  0000 C CNN
-F 1 "Conn_01x01" H 918 2166 50  0001 C CNN
-F 2 "TestPoint:Test_Point_NA" H 1000 2300 50  0001 C CNN
-F 3 "~" H 1000 2300 50  0001 C CNN
-	1    1000 2300
+P 775 2300
+F 0 "TP2" H 693 2167 50  0000 C CNN
+F 1 "Conn_01x01" H 693 2166 50  0001 C CNN
+F 2 "TestPoint:Test_Point_NA" H 775 2300 50  0001 C CNN
+F 3 "~" H 775 2300 50  0001 C CNN
+	1    775  2300
 	-1   0    0    1   
 $EndComp
-Connection ~ 1200 2300
-Wire Wire Line
-	1200 2300 1200 2400
 $Comp
 L Connector_Generic:Conn_02x04_Odd_Even J2
 U 1 1 5EE2DFC1
@@ -2524,4 +2487,34 @@ Wire Wire Line
 Wire Wire Line
 	10375 4775 10375 5025
 Connection ~ 10375 5025
+$Comp
+L Connector:RJ45 J8
+U 1 1 5EDB2E8F
+P 9575 1200
+F 0 "J8" H 9245 1204 50  0000 R CNN
+F 1 "RJ45" H 9245 1295 50  0000 R CNN
+F 2 "w_conn_pc:mebp8" V 9575 1225 50  0001 C CNN
+F 3 "~" V 9575 1225 50  0001 C CNN
+	1    9575 1200
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	9025 1200 9025 1900
+NoConn ~ 9175 1300
+NoConn ~ 10250 8475
+$Comp
+L Connector_Generic:Conn_01x01 TP1
+U 1 1 5EE1214D
+P 775 2050
+F 0 "TP1" H 693 1917 50  0000 C CNN
+F 1 "Conn_01x01" H 693 1916 50  0001 C CNN
+F 2 "TestPoint:Test_Point_NA" H 775 2050 50  0001 C CNN
+F 3 "~" H 775 2050 50  0001 C CNN
+	1    775  2050
+	-1   0    0    1   
+$EndComp
+NoConn ~ 975  2050
+Wire Wire Line
+	1200 1425 1200 2400
+NoConn ~ 975  2300
 $EndSCHEMATC

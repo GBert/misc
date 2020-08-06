@@ -1,0 +1,9 @@
+Aenderungen
+===========
+
+1.0 Initiale Version
+
+1.1 CAN RJ45 Pin 5 getrennt um CdB konform zu bleiben
+    Buchse verschoben damit die gewinkelte Version besser passt
+    DCDC Enable 12V getrennt
+    Mehr Platz fuer DCDC Wandler
