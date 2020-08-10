@@ -510,27 +510,7 @@ button:active {
 }
 
 .sound1 {
-	animation-name: sound1;
-}
-
-.sound2 {
-	animation-name: sound2;
-}
-
-.sound3 {
-	animation-name: sound3;
-}
-
-.blinking {
-	animation-name: blinking;
-}
-
-.sound1,
-.sound2,
-.sound3,
-.blinking {
-	animation-duration: 1s;
-	animation-iteration-count: infinite;
+	animation: sound1 1s infinite linear;
 }
 
 @keyframes sound1 {
@@ -539,6 +519,10 @@ button:active {
 	30% { opacity: 0.3; }
 	40% { opacity: 1; }
 	100% { opacity: 1; }
+}
+
+.sound2 {
+	animation: sound2 1s infinite linear;
 }
 
 @keyframes sound2 {
@@ -550,6 +534,10 @@ button:active {
 	100% { opacity: 1; }
 }
 
+.sound3 {
+	animation: sound3 1s infinite linear;
+}
+
 @keyframes sound3 {
 	0% { opacity: 1; }
 	40% { opacity: 1; }
@@ -559,9 +547,128 @@ button:active {
 	100% { opacity: 1; }
 }
 
+.fire1 {
+	animation: fire1 1s infinite linear;
+}
+
+@keyframes fire1 {
+	0% { opacity: 1; }
+	10% { opacity: 0.1; }
+	20% { opacity: 0.5; }
+	30% { opacity: 0.2; }
+	40% { opacity: 0.7; }
+	50% { opacity: 0.3; }
+	60% { opacity: 0.9; }
+	70% { opacity: 0.8; }
+	80% { opacity: 0.6; }
+	90% { opacity: 0.4; }
+	100% { opacity: 1; }
+}
+
+.fire2 {
+	animation: fire2 1s infinite linear;
+}
+
+@keyframes fire2 {
+	0% { opacity: 1; }
+	10% { opacity: 0.7; }
+	20% { opacity: 0.3; }
+	30% { opacity: 0.9; }
+	40% { opacity: 0.8; }
+	50% { opacity: 0.4; }
+	60% { opacity: 0.6; }
+	70% { opacity: 0.1; }
+	80% { opacity: 0.5; }
+	90% { opacity: 0.2; }
+	100% { opacity: 1; }
+}
+
+.fire3 {
+	animation: fire3 1s infinite linear;
+}
+
+@keyframes fire3 {
+	0% { opacity: 1; }
+	10% { opacity: 0.9; }
+	20% { opacity: 0.8; }
+	30% { opacity: 0.4; }
+	40% { opacity: 0.6; }
+	50% { opacity: 0.1; }
+	60% { opacity: 0.5; }
+	70% { opacity: 0.2; }
+	80% { opacity: 0.7; }
+	90% { opacity: 0.3; }
+	100% { opacity: 1; }
+}
+
+.fire4 {
+	animation: fire4 1s infinite linear;
+}
+
+@keyframes fire4 {
+	0% { opacity: 1; }
+	10% { opacity: 0.4; }
+	20% { opacity: 0.6; }
+	30% { opacity: 0.1; }
+	40% { opacity: 0.5; }
+	50% { opacity: 0.2; }
+	60% { opacity: 0.7; }
+	70% { opacity: 0.3; }
+	80% { opacity: 0.9; }
+	90% { opacity: 0.3; }
+	100% { opacity: 1; }
+}
+
+.fire5 {
+	animation: fire5 1s infinite linear;
+}
+
+@keyframes fire5 {
+	0% { opacity: 1; }
+	10% { opacity: 0.8; }
+	20% { opacity: 0.3; }
+	30% { opacity: 0.5; }
+	40% { opacity: 0.9; }
+	50% { opacity: 0.1; }
+	60% { opacity: 0.2; }
+	70% { opacity: 0.4; }
+	80% { opacity: 0.7; }
+	90% { opacity: 0.6; }
+	100% { opacity: 1; }
+}
+
+.blinking {
+	animation: blinking 1s infinite linear;
+}
+
 @keyframes blinking {
 	0% { opacity: 1; }
 	40% { opacity: 1; }
 	60% { opacity: 0.3; }
 	100% { opacity: 0.3; }
+}
+
+.smoke1 {
+	animation: smoke 1s infinite linear;
+}
+
+.smoke2 {
+	animation: smoke 1s infinite linear;
+	animation-delay: 0.5s;
+}
+
+@keyframes smoke {
+	0% { transform: translate(0px, 3px);}
+	20% { transform: translate(0px, 0px); }
+	100% { transform: translate(-30px, -5px); }
+}
+
+.rotate {
+	animation: rotate 1s infinite linear;
+	transform-origin: 18px 18px;
+}
+
+@keyframes rotate {
+	0% { transform: rotate(360deg); }
+	100% { transform: rotate(0deg); }
 }

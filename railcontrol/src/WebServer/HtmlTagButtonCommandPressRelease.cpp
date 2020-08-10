@@ -31,6 +31,7 @@ namespace WebServer
 		const std::string& tooltip)
 	:	HtmlTagButton(value, command, tooltip)
 	{
+		AddClass("button_off");
 		std::string cmd = Utils::Utils::StringBeforeDelimiter(command, "_");
 		std::stringstream begin;
 		begin << "var url = '/?cmd=" << cmd << "&on=";

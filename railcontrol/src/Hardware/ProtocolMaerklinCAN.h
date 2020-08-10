@@ -230,7 +230,7 @@ namespace Hardware
 				LocoFunctionCs2IconTableLight1,
 				LocoFunctionCs2IconShakingRust,
 				LocoFunctionCs2IconRailJoint,
-				LocoFunctionCs2IconTrainNumberIndicator,
+				LocoFunctionCs2IconLocomotiveNumberIndicator,
 				LocoFunctionCs2IconMusic1,
 				LocoFunctionCs2IconTrainDestinationIndicator,
 				LocoFunctionCs2IconCabLight2,

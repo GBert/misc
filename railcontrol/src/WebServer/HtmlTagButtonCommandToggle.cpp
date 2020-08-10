@@ -38,14 +38,14 @@ namespace WebServer
 		std::stringstream ss;
 		ss <<
 			"var on = !document.getElementById('" << commandID << "').classList.contains('button_on');"
-			"var theUrl = '/?cmd=" << cmd << "&on=' + (on ? '1' : '0') + '";
+			"var url = '/?cmd=" << cmd << "&on=' + (on ? '1' : '0') + '";
 
 		for (auto argument : arguments) {
 
 			ss << "&" << argument.first << "=" << argument.second;
 		}
 		ss <<"';"
-			"fireRequestAndForget(theUrl);"
+			"fireRequestAndForget(url);"
 			"return false;";
 		AddAttribute("onclick", ss.str());
 	}
