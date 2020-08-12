@@ -1,11 +1,27 @@
 const int revisionnr = 
-923
+939
 ;
 const char* commithash = 
-"c5913616b1e3ad08e089f943860e63a21eec5738";
+"5aa67556fdd13ac608653898f72dc0b5fa2b0d03";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"939 2020-08-12 10:36:40 +0200 loc: disable secondnextblock in case of engine type automobile\n" \
+"938 2020-08-11 10:45:50 +0200 ucan: sleep 10ms in case write buffer full\n" \
+"937 2020-08-11 10:29:19 +0200 socketcan: 10 retries in case no buffer space left on write\n" \
+"936 2020-08-10 15:44:50 +0200 ledbutton: fix for scaling icon\n" \
+"935 2020-08-10 10:59:54 +0200 extcan: only dump CAN frames in case of trace level develop\n" \
+"934 2020-08-06 10:59:01 +0200 cbus: removed debug tracing\n" \
+"933 2020-08-06 10:39:09 +0200 model: fix for reset modular plan title\n" \
+"932 2020-08-05 08:04:00 +0200 feedbackdialog: show switch usage too\n" \
+"931 2020-08-04 08:11:38 +0200 loc: check if reverse Vmax > 0 before using it\n" \
+"930 2020-08-03 17:27:22 +0200 loc: send Rmax to the digint in case the loco runs reverse\n" \
+"929 2020-08-03 08:55:12 +0200 wio: fix for system commands\n" \
+"928 2020-08-01 08:12:52 +0200 wio: trace correction\n" \
+"927 2020-07-31 13:57:45 +0200 route,model: set locked route command added\n" \
+"926 2020-07-31 08:09:12 +0200 clock,meter: set time also in case of freeze status\n" \
+"925 2020-07-31 07:42:00 +0200 rcan: traces for sublibs added\n" \
+"924 2020-07-29 19:07:56 +0200 rcan/ascii: error parsing added\n" \
 "923 2020-07-26 08:32:36 +0200 switch: new commands for channel tune test\n" \
 "922 2020-07-25 19:03:34 +0200 rcan: fix for renaming the cbus subnode in rcan\n" \
 "921 2020-07-24 15:01:17 +0200 desktoplink.cmd: create also shortcut in the Rocrail directory\n" \
