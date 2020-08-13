@@ -1,11 +1,12 @@
 const int revisionnr = 
-939
+940
 ;
 const char* commithash = 
-"5aa67556fdd13ac608653898f72dc0b5fa2b0d03";
+"49a52ee584b6627365b416da0d20ced5e28f15f3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"940 2020-08-13 14:30:13 +0200 rcan/utils: fix for extended frame ID\n" \
 "939 2020-08-12 10:36:40 +0200 loc: disable secondnextblock in case of engine type automobile\n" \
 "938 2020-08-11 10:45:50 +0200 ucan: sleep 10ms in case write buffer full\n" \
 "937 2020-08-11 10:29:19 +0200 socketcan: 10 retries in case no buffer space left on write\n" \
