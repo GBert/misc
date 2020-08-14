@@ -1,11 +1,12 @@
 const int revisionnr = 
-940
+941
 ;
 const char* commithash = 
-"49a52ee584b6627365b416da0d20ced5e28f15f3";
+"09d50dfeaebec6734866a0b3c17222bcdd01bbb1";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"941 2020-08-14 08:01:49 +0200 mvtrack: convert kmh to mph if wanted\n" \
 "940 2020-08-13 14:30:13 +0200 rcan/utils: fix for extended frame ID\n" \
 "939 2020-08-12 10:36:40 +0200 loc: disable secondnextblock in case of engine type automobile\n" \
 "938 2020-08-11 10:45:50 +0200 ucan: sleep 10ms in case write buffer full\n" \
