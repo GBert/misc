@@ -1112,7 +1112,7 @@ void decode_frame(struct can_frame *frame) {
 	/* falls through */
     case 0x40:
 	memset(s, 0, sizeof(s));
-	memcpy(s, frame->data, 8);
+	memcpy(s, frame->data, frame->can_dlc);
 	/* WeichenChef Erweiterung */
 	if ((frame->can_id & 0x00FEFFFE) == 0x00404A80) {
 	    if (frame->can_dlc == 8) {
