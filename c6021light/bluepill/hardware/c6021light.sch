@@ -1638,24 +1638,11 @@ F 3 "" H 8175 5700 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	8175 5700 8175 5750
-$Comp
-L Device:R R50
-U 1 1 60480953
-P 4000 7200
-F 0 "R50" V 3900 7175 50  0000 L CNN
-F 1 "0" V 4000 7175 50  0000 L CNN
-F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 3930 7200 50  0001 C CNN
-F 3 "~" H 4000 7200 50  0001 C CNN
-	1    4000 7200
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	4000 7350 4100 7350
 Connection ~ 4100 7350
 Wire Wire Line
 	4100 7350 4100 7400
-Wire Wire Line
-	4000 7000 4000 7050
 $Comp
 L Device:C C51
 U 1 1 604CA6FE
@@ -1686,8 +1673,6 @@ Wire Wire Line
 	4525 5800 4525 5850
 Wire Wire Line
 	4625 5800 4625 5700
-Wire Wire Line
-	5300 5700 5300 5950
 Connection ~ 4625 5800
 Wire Wire Line
 	4625 5800 4525 5800
@@ -1725,19 +1710,6 @@ F 3 "" H 4625 6250 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	5200 6100 5200 5800
-$Comp
-L Device:R R51
-U 1 1 6058F371
-P 4225 6000
-F 0 "R51" V 4125 5975 50  0000 L CNN
-F 1 "0" V 4225 5975 50  0000 L CNN
-F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 4155 6000 50  0001 C CNN
-F 3 "~" H 4225 6000 50  0001 C CNN
-	1    4225 6000
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4225 5850 4225 5700
 Wire Wire Line
 	4225 5700 4625 5700
 $Comp
@@ -1785,12 +1757,8 @@ Text Label 5750 7000 0    50   ~ 0
 DTR
 Wire Wire Line
 	6475 6275 6275 6275
-Text Label 6275 6275 0    50   ~ 0
-DTR
 Wire Wire Line
 	6475 6675 6275 6675
-Text Label 6275 6675 0    50   ~ 0
-CTS
 NoConn ~ 6475 6575
 Wire Notes Line
 	250  5600 6975 5600
@@ -1808,8 +1776,6 @@ Wire Notes Line
 	6975 2025 6975 6525
 Text Notes 8950 2400 0    50   ~ 0
 optional\ngalvanische Trennung CAN
-Wire Wire Line
-	4225 6150 4225 6175
 Wire Wire Line
 	4225 6175 4400 6175
 Wire Wire Line
@@ -1832,24 +1798,6 @@ F 3 "" H 8175 3425 50  0001 C CNN
 	1    8175 3425
 	1    0    0    -1  
 $EndComp
-$Comp
-L power:PWR_FLAG #FLG0103
-U 1 1 60D33B68
-P 5500 5875
-F 0 "#FLG0103" H 5500 5950 50  0001 C CNN
-F 1 "PWR_FLAG" H 5500 6048 50  0000 C CNN
-F 2 "" H 5500 5875 50  0001 C CNN
-F 3 "~" H 5500 5875 50  0001 C CNN
-	1    5500 5875
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5300 5950 5500 5950
-Wire Wire Line
-	5500 5950 5500 5875
-Connection ~ 5300 5950
-Wire Wire Line
-	5300 5950 5300 6100
 $Comp
 L Connector_Generic:Conn_01x04 J5
 U 1 1 60D99557
@@ -2517,4 +2465,16 @@ NoConn ~ 975  2050
 Wire Wire Line
 	1200 1425 1200 2400
 NoConn ~ 975  2300
+Wire Wire Line
+	4000 7000 4000 7350
+Wire Wire Line
+	4225 5700 4225 6175
+Wire Wire Line
+	5300 5700 5300 6100
+Text Label 5750 7100 0    50   ~ 0
+RTS
+Text Label 6275 6675 0    50   ~ 0
+RTS
+Text Label 6275 6275 0    50   ~ 0
+CTS
 $EndSCHEMATC

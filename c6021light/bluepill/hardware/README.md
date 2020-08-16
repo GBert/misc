@@ -7,4 +7,5 @@ Aenderungen
     Buchse verschoben damit die gewinkelte Version besser passt
     DCDC Enable 12V getrennt
     Mehr Platz fuer DCDC Wandler
-    USB/Seriell Wandler: 0 Ohm Widerstaende entfern entfernt
+    USB/Seriell Wandler: 0 Ohm Widerstaende entfernt
+    UART Leiste angepasst
