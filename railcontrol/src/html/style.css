@@ -672,3 +672,42 @@ button:active {
 	0% { transform: rotate(360deg); }
 	100% { transform: rotate(0deg); }
 }
+
+.button_on .bell1 {
+	animation: bell 1s infinite ease-in-out;
+	transform-origin: 18px 13px;
+}
+
+.button_on .bell2 {
+	animation: bell 1s infinite linear;
+	animation-delay: 0.1s;
+	transform-origin: 18px 13px;
+}
+
+@keyframes bell {
+	0% { transform: rotate(30deg); }
+	50% { transform: rotate(-30deg); }
+	100% { transform: rotate(30deg); }
+}
+
+.button_on .door_left {
+	animation: door_left 2s infinite ease-in-out;
+}
+
+@keyframes door_left {
+	0% { transform: translate(0px, 0px); }
+	25% { transform: translate(0px, 0px); }
+	75% { transform: translate(-6px, 0px); }
+	100% { transform: translate(-6px, 0px); }
+}
+
+.button_on .door_right {
+	animation: door_right 2s infinite ease-in-out;
+}
+
+@keyframes door_right {
+	0% { transform: translate(0px, 0px); }
+	25% { transform: translate(0px, 0px); }
+	75% { transform: translate(6px, 0px); }
+	100% { transform: translate(6px, 0px); }
+}
