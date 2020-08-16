@@ -1,11 +1,12 @@
 const int revisionnr = 
-942
+943
 ;
 const char* commithash = 
-"f0c0c2291027c8ab0c67c71e1164f6b2ae95d572";
+"80fbc91f4922f4a53b2256e937f1f2fbbcc00df0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"943 2020-08-15 12:12:51 +0200 rcan: support for SoD of 32 I/O in one frame\n" \
 "942 2020-08-14 10:52:18 +0200 rcan/utils: trace fixes\n" \
 "941 2020-08-14 08:01:49 +0200 mvtrack: convert kmh to mph if wanted\n" \
 "940 2020-08-13 14:30:13 +0200 rcan/utils: fix for extended frame ID\n" \
