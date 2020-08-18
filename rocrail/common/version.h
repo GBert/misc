@@ -1,11 +1,13 @@
 const int revisionnr = 
-943
+945
 ;
 const char* commithash = 
-"80fbc91f4922f4a53b2256e937f1f2fbbcc00df0";
+"86e227380c740b7dfbd6ff641d99fc15107951a4";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"945 2020-08-17 10:05:10 +0200 tt: check animation under/overflow\n" \
+"944 2020-08-16 14:56:12 +0200 tt,extcan: support for tt animation\n" \
 "943 2020-08-15 12:12:51 +0200 rcan: support for SoD of 32 I/O in one frame\n" \
 "942 2020-08-14 10:52:18 +0200 rcan/utils: trace fixes\n" \
 "941 2020-08-14 08:01:49 +0200 mvtrack: convert kmh to mph if wanted\n" \
