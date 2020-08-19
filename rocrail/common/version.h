@@ -1,11 +1,12 @@
 const int revisionnr = 
-945
+946
 ;
 const char* commithash = 
-"86e227380c740b7dfbd6ff641d99fc15107951a4";
+"3a95404abb4dcb7abb0f6b59196cbe1e149f39af";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"946 2020-08-19 05:23:46 +0200 item: set tooltip in text slider\n" \
 "945 2020-08-17 10:05:10 +0200 tt: check animation under/overflow\n" \
 "944 2020-08-16 14:56:12 +0200 tt,extcan: support for tt animation\n" \
 "943 2020-08-15 12:12:51 +0200 rcan: support for SoD of 32 I/O in one frame\n" \
