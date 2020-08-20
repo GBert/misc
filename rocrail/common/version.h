@@ -1,11 +1,12 @@
 const int revisionnr = 
-946
+947
 ;
 const char* commithash = 
-"3a95404abb4dcb7abb0f6b59196cbe1e149f39af";
+"14e719e5418df95601fb0859351b40c5fe155805";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"947 2020-08-20 09:02:54 +0200 tt: support for stepcontrol\n" \
 "946 2020-08-19 05:23:46 +0200 item: set tooltip in text slider\n" \
 "945 2020-08-17 10:05:10 +0200 tt: check animation under/overflow\n" \
 "944 2020-08-16 14:56:12 +0200 tt,extcan: support for tt animation\n" \
