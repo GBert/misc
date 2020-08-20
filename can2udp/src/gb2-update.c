@@ -104,6 +104,14 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -v                  verbose output\n\n");
 }
 
+uint16_t be16(uint8_t *u) {
+    return (u[0] << 8) | u[1];
+}
+
+uint32_t be32(uint8_t *u) {
+    return (u[0] << 24) | (u[1] << 16) | (u[2] << 8) | u[3];
+}
+
 int time_stamp(char *timestamp) {
     struct timeval tv;
     struct tm *tm;
@@ -116,18 +124,16 @@ int time_stamp(char *timestamp) {
 }
 
 void print_can_frame(char *format_string, unsigned char *netframe, int verbose) {
-    uint32_t canid;
     int i, dlc;
     char timestamp[16];
 
     if (!verbose)
 	return;
 
-    memcpy(&canid, netframe, 4);
     dlc = netframe[4];
     time_stamp(timestamp);
     printf("%s   ", timestamp);
-    printf(format_string, ntohl(canid) & CAN_EFF_MASK, netframe[4]);
+    printf(format_string, be32(netframe) & CAN_EFF_MASK, netframe[4]);
     for (i = 5; i < 5 + dlc; i++) {
 	printf(" %02x", netframe[i]);
     }
@@ -169,14 +175,11 @@ int netframe_to_net(int net_socket, unsigned char *netframe, int length) {
 }
 
 int netframe_to_can(int can_socket, unsigned char *netframe) {
-    uint32_t canid;
     struct can_frame frame;
     struct timespec to_wait;
 
     memset(&frame, 0, sizeof(frame));
-    memcpy(&canid, netframe, 4);
-    /* CAN uses (network) big endian format */
-    frame.can_id = ntohl(canid);
+    frame.can_id = be32(netframe);
     frame.can_id &= CAN_EFF_MASK;
     frame.can_id |= CAN_EFF_FLAG;
     frame.can_dlc = netframe[4];
@@ -189,7 +192,7 @@ int netframe_to_can(int can_socket, unsigned char *netframe) {
     }
     /* TODO : it seems Gleisbox needs a short break after every CAN message -> 20ms */
     to_wait.tv_sec = 0;
-    to_wait.tv_nsec = 20*1000000;
+    to_wait.tv_nsec = 20 * 1000000;
     nanosleep(&to_wait, NULL);
     return 0;
 }
@@ -303,19 +306,17 @@ void fsm(unsigned char *netframe, struct update_config *device_config) {
     unsigned char next_frame[13];
     struct timespec to_wait;
 
-    memcpy(&canid, netframe, 4);
-    canid = ntohl(canid);
+    canid = be32(netframe);
     switch (canid & 0xFFFF0000UL) {
     case (0x00310000UL):
 	printf("received CAN Ping answer\n");
 	/* print_can_frame(" ", netframe, 1); */
 	if ((netframe[4] == 8) && (netframe[5] == device_config->id)) {
-	    memcpy(&device_id, &netframe[5], 4);
 	    memcpy(&version, &netframe[9], 2);
 	    if (netframe[5] == GB2_ID)
-		printf("found Gleisbox with ID 0x%08X  Version %u.%u\n", ntohl(device_id), netframe[9], netframe[10]);
+		printf("found Gleisbox with ID 0x%08X  Version %u.%u\n", be32(&netframe[5]), netframe[9], netframe[10]);
 	    if (netframe[5] == MS2_ID)
-		printf("found MS2 with ID 0x%08X  Version %u.%u\n", ntohl(device_id), netframe[9], netframe[10]);
+		printf("found MS2 with ID 0x%08X  Version %u.%u\n", be32(&netframe[5]), netframe[9], netframe[10]);
 	    if ((version == device_file_version) && (!force)) {
 		printf("file and device version are the same - use -f to force update\n");
 		exit(EXIT_FAILURE);
@@ -326,7 +327,7 @@ void fsm(unsigned char *netframe, struct update_config *device_config) {
 	    send_frame(next_frame);
 	    /* delay for boot ? */
 	    to_wait.tv_sec = 0;
-	    to_wait.tv_nsec = 500*1000000;
+	    to_wait.tv_nsec = 500 * 1000000;
 	    nanosleep(&to_wait, NULL);
 
 	    memcpy(next_frame, M_INIT_BOOTLOADER, 13);
@@ -381,7 +382,7 @@ void fsm(unsigned char *netframe, struct update_config *device_config) {
 			    if (device_config->id == MS2_ID) {
 				send_frame(M_MS2_MARK_END);
 				to_wait.tv_sec = 0;
-				to_wait.tv_nsec = 2*1000000;
+				to_wait.tv_nsec = 2 * 1000000;
 				nanosleep(&to_wait, NULL);
 				send_frame(M_MS2_SOFT_RESET);
 			    }
