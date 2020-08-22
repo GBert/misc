@@ -711,3 +711,36 @@ button:active {
 	75% { transform: translate(6px, 0px); }
 	100% { transform: translate(6px, 0px); }
 }
+
+.button_on .cylinder {
+	animation: cylinder 1s infinite ease-in-out;
+	animation-direction: alternate;
+}
+
+@keyframes cylinder {
+	0% { transform: translate(0px, 0px); }
+	100% { transform: translate(8px, 0px); }
+}
+
+.button_on .shake {
+	animation: shake 0.3s infinite linear;
+}
+
+@keyframes shake {
+	0% { transform: translate(0px, 0px); }
+	25% { transform: translate(-2px, 0px); }
+	75% { transform: translate(2px, 0px); }
+	100% { transform: translate(0px, 0px); }
+}
+
+.button_on .buffer_push {
+	animation: buffer_push 1s infinite ease-in;
+}
+
+@keyframes buffer_push {
+	0% { transform: translate(0px, 0px); }
+	15% { transform: translate(0px, 0px); }
+	50% { transform: translate(14px, 0px); }
+	100% { transform: translate(14px, 0px); }
+}
+

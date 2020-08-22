@@ -1148,7 +1148,11 @@ namespace Hardware
 		LocoFunctionCs2IconSoundGeneral,
 		LocoFunctionCs2IconRailJoint,
 		LocoFunctionCs2IconCoupler,
-		LocoFunctionCs2IconPanto
+		LocoFunctionCs2IconPanto,
+		LocoFunctionCs2IconSoundGeneral,
+		LocoFunctionCs2IconSoundGeneral,
+		LocoFunctionCs2IconNoSound,
+		LocoFunctionCs2IconNoSound
 	};
 
 } // namespace

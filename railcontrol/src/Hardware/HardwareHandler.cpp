@@ -143,7 +143,7 @@ namespace Hardware
 			logger->Info(Languages::TextLibraryLoaded, symbol);
 			if (!manager.HardwareLibraryAdd(type, dlhandle))
 			{
-				logger->Error(Languages::TextUnabelToStoreLibraryAddress, moduleName);
+				logger->Error(Languages::TextUnableToStoreLibraryAddress, moduleName);
 				return;
 			}
 		}

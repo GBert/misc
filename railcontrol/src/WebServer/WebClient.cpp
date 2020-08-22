@@ -1737,9 +1737,6 @@ namespace WebServer
 		functionIcons[DataModel::LocoFunctionIconHorn2] = Languages::TextLocoFunctionIconHorn2;
 		functionIcons[DataModel::LocoFunctionIconWhistle1] = Languages::TextLocoFunctionIconWhistle1;
 		functionIcons[DataModel::LocoFunctionIconWhistle2] = Languages::TextLocoFunctionIconWhistle2;
-		functionIcons[DataModel::LocoFunctionIconFan1] = Languages::TextLocoFunctionIconFan1;
-		functionIcons[DataModel::LocoFunctionIconFan2] = Languages::TextLocoFunctionIconFan2;
-		functionIcons[DataModel::LocoFunctionIconFan3] = Languages::TextLocoFunctionIconFan3;
 		functionIcons[DataModel::LocoFunctionIconBell] = Languages::TextLocoFunctionIconBell;
 		functionIcons[DataModel::LocoFunctionIconStationAnnouncement1] = Languages::TextLocoFunctionIconStationAnnouncement1;
 		functionIcons[DataModel::LocoFunctionIconStationAnnouncement2] = Languages::TextLocoFunctionIconStationAnnouncement2;
@@ -1750,7 +1747,34 @@ namespace WebServer
 		functionIcons[DataModel::LocoFunctionIconMusic2] = Languages::TextLocoFunctionIconMusic2;
 		functionIcons[DataModel::LocoFunctionIconOpenDoor] = Languages::TextLocoFunctionIconOpenDoor;
 		functionIcons[DataModel::LocoFunctionIconCloseDoor] = Languages::TextLocoFunctionIconCloseDoor;
-//		functionIcons[DataModel::LocoFunctionIcon] = Languages::TextLocoFunctionIcon;
+		functionIcons[DataModel::LocoFunctionIconFan1] = Languages::TextLocoFunctionIconFan1;
+		functionIcons[DataModel::LocoFunctionIconFan2] = Languages::TextLocoFunctionIconFan2;
+		functionIcons[DataModel::LocoFunctionIconFan3] = Languages::TextLocoFunctionIconFan3;
+		functionIcons[DataModel::LocoFunctionIconShovelCoal] = Languages::TextLocoFunctionIconShovelCoal;
+		functionIcons[DataModel::LocoFunctionIconCompressedAir] = Languages::TextLocoFunctionIconCompressedAir;
+		functionIcons[DataModel::LocoFunctionIconReliefValve] = Languages::TextLocoFunctionIconReliefValve;
+		functionIcons[DataModel::LocoFunctionIconSteamBlowOut] = Languages::TextLocoFunctionIconSteamBlowOut;
+		functionIcons[DataModel::LocoFunctionIconSteamBlow] = Languages::TextLocoFunctionIconSteamBlow;
+		functionIcons[DataModel::LocoFunctionIconDrainValve] = Languages::TextLocoFunctionIconDrainValve;
+		functionIcons[DataModel::LocoFunctionIconShakingRust] = Languages::TextLocoFunctionIconShakingRust;
+		functionIcons[DataModel::LocoFunctionIconAirPump] = Languages::TextLocoFunctionIconAirPump;
+		functionIcons[DataModel::LocoFunctionIconWaterPump] = Languages::TextLocoFunctionIconWaterPump;
+		functionIcons[DataModel::LocoFunctionIconBufferPush] = Languages::TextLocoFunctionIconBufferPush;
+		functionIcons[DataModel::LocoFunctionIconGenerator] = Languages::TextLocoFunctionIconGenerator;
+		functionIcons[DataModel::LocoFunctionIconGearBox] = Languages::TextLocoFunctionIconGearBox;
+		functionIcons[DataModel::LocoFunctionIconGearUp] = Languages::TextLocoFunctionIconGearUp;
+		functionIcons[DataModel::LocoFunctionIconGearDown] = Languages::TextLocoFunctionIconGearDown;
+		functionIcons[DataModel::LocoFunctionIconFillWater] = Languages::TextLocoFunctionIconFillWater;
+		functionIcons[DataModel::LocoFunctionIconFillDiesel] = Languages::TextLocoFunctionIconFillDiesel;
+		functionIcons[DataModel::LocoFunctionIconFillGas] = Languages::TextLocoFunctionIconFillGas;
+		functionIcons[DataModel::LocoFunctionIconSand] = Languages::TextLocoFunctionIconSand;
+		functionIcons[DataModel::LocoFunctionIconRailJoint] = Languages::TextLocoFunctionIconRailJoint;
+		functionIcons[DataModel::LocoFunctionIconCoupler] = Languages::TextLocoFunctionIconCoupler;
+		functionIcons[DataModel::LocoFunctionIconPanto] = Languages::TextLocoFunctionIconPanto;
+		functionIcons[DataModel::LocoFunctionIconMainSwitch] = Languages::TextLocoFunctionIconMainSwitch;
+		functionIcons[DataModel::LocoFunctionIconSoundLouder] = Languages::TextLocoFunctionIconSoundLouder;
+		functionIcons[DataModel::LocoFunctionIconSoundLower] = Languages::TextLocoFunctionIconSoundLower;
+		functionIcons[DataModel::LocoFunctionIconNoBreak] = Languages::TextLocoFunctionIconNoBreak;
 		for (unsigned int nr = 0; nr < DataModel::MaxLocoFunctions; ++nr)
 		{
 			HtmlTag fDiv("div");
@@ -4191,7 +4215,7 @@ namespace WebServer
 		buttonArguments.erase("speed");
 
 		id = "locoedit_" + to_string(locoID);
-		container.AddChildTag(HtmlTagButtonPopup("<svg width=\"36\" height=\"36\"><circle r=\"7\" cx=\"14\" cy=\"14\" fill=\"black\" /><line x1=\"14\" y1=\"5\" x2=\"14\" y2=\"23\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"9.5\" y1=\"6.2\" x2=\"18.5\" y2=\"21.8\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"6.2\" y1=\"9.5\" x2=\"21.8\" y2=\"18.5\" stroke-width=\"2\" stroke=\"black\" /><line y1=\"14\" x1=\"5\" y2=\"14\" x2=\"23\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"9.5\" y1=\"21.8\" x2=\"18.5\" y2=\"6.2\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"6.2\" y1=\"18.5\" x2=\"21.8\" y2=\"9.5\" stroke-width=\"2\" stroke=\"black\" /><circle r=\"5\" cx=\"14\" cy=\"14\" fill=\"white\" /><circle r=\"4\" cx=\"24\" cy=\"24\" fill=\"black\" /><line x1=\"18\" y1=\"24\" x2=\"30\" y2=\"24\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"28.2\" y1=\"28.2\" x2=\"19.8\" y2=\"19.8\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"24\" y1=\"18\" x2=\"24\" y2=\"30\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"19.8\" y1=\"28.2\" x2=\"28.2\" y2=\"19.8\" stroke-width=\"2\" stroke=\"black\" /><circle r=\"2\" cx=\"24\" cy=\"24\" fill=\"white\" /></svg>", id, buttonArguments));
+		container.AddChildTag(HtmlTagButtonPopup("<svg width=\"36\" height=\"36\"><circle r=\"7\" cx=\"14\" cy=\"14\" fill=\"black\" /><line x1=\"14\" y1=\"5\" x2=\"14\" y2=\"23\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"9.5\" y1=\"6.2\" x2=\"18.5\" y2=\"21.8\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"6.2\" y1=\"9.5\" x2=\"21.8\" y2=\"18.5\" stroke-width=\"2\" stroke=\"black\" /><line y1=\"14\" x1=\"5\" y2=\"14\" x2=\"23\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"9.5\" y1=\"21.8\" x2=\"18.5\" y2=\"6.2\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"6.2\" y1=\"18.5\" x2=\"21.8\" y2=\"9.5\" stroke-width=\"2\" stroke=\"black\" /><circle r=\"5\" cx=\"14\" cy=\"14\" fill=\"lightgray\" /><circle r=\"4\" cx=\"24\" cy=\"24\" fill=\"black\" /><line x1=\"18\" y1=\"24\" x2=\"30\" y2=\"24\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"28.2\" y1=\"28.2\" x2=\"19.8\" y2=\"19.8\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"24\" y1=\"18\" x2=\"24\" y2=\"30\" stroke-width=\"2\" stroke=\"black\" /><line x1=\"19.8\" y1=\"28.2\" x2=\"28.2\" y2=\"19.8\" stroke-width=\"2\" stroke=\"black\" /><circle r=\"2\" cx=\"24\" cy=\"24\" fill=\"lightgray\" /></svg>", id, buttonArguments));
 
 		id = "locoorientation_" + to_string(locoID);
 		container.AddChildTag(HtmlTagButtonCommandToggle("<svg width=\"36\" height=\"36\">"

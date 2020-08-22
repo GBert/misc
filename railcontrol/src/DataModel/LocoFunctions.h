@@ -149,6 +149,10 @@ namespace DataModel
 		LocoFunctionIconRailJoint,
 		LocoFunctionIconCoupler,
 		LocoFunctionIconPanto,
+		LocoFunctionIconMainSwitch,
+		LocoFunctionIconSoundLouder,
+		LocoFunctionIconSoundLower,
+		LocoFunctionIconNoBreak,
 
 		MaxLocoFunctionIcons
 	};
