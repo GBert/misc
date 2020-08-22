@@ -1,11 +1,14 @@
 const int revisionnr = 
-947
+950
 ;
 const char* commithash = 
-"14e719e5418df95601fb0859351b40c5fe155805";
+"20b198441b2329115a00f8ef95b7a01109bacbbf";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"950 2020-08-21 14:35:34 +0200 bidib,onestep: support for position events in 1.5 degrees\n" \
+"949 2020-08-21 07:59:38 +0200 tt,item,planpanel: fix for state change for unknown sensor events\n" \
+"948 2020-08-20 10:29:49 +0200 tt,bidib: stepcontrol report position support\n" \
 "947 2020-08-20 09:02:54 +0200 tt: support for stepcontrol\n" \
 "946 2020-08-19 05:23:46 +0200 item: set tooltip in text slider\n" \
 "945 2020-08-17 10:05:10 +0200 tt: check animation under/overflow\n" \
