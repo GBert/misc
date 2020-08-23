@@ -1,11 +1,13 @@
 const int revisionnr = 
-950
+952
 ;
 const char* commithash = 
-"20b198441b2329115a00f8ef95b7a01109bacbbf";
+"0b418d0d8765e6ac9326c0a8a9811e447b14648f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"952 2020-08-23 08:21:56 +0200 tt,bidib: fix for rotation direction\n" \
+"951 2020-08-22 07:42:11 +0200 tt: next/prev track onestep\n" \
 "950 2020-08-21 14:35:34 +0200 bidib,onestep: support for position events in 1.5 degrees\n" \
 "949 2020-08-21 07:59:38 +0200 tt,item,planpanel: fix for state change for unknown sensor events\n" \
 "948 2020-08-20 10:29:49 +0200 tt,bidib: stepcontrol report position support\n" \
