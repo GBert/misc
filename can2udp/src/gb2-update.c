@@ -58,6 +58,36 @@ struct update_config {
     char *filename;
 };
 
+struct updatefile {
+    char *name;
+    char *version_name;
+    char *filename;
+    int version_type;
+    int blocksize;
+    int bootblock;
+    int fill_upto;
+    uint8_t fill;
+};
+
+#define ACTUAL	0
+#define OLD	1
+
+struct updatefile gb2_update_data[] = {
+/*    name, version_name,	filename     , version type, blocksize,  bootblocks, fillupto,   fill */
+    {"gbs2",	   "gb2",	"016-gb2.bin",	ACTUAL,		 512, 		2,	512,	0xff},
+};
+
+struct updatefile ms2_update_data[] = {
+/*    name, version name,	filename    , version type, locksize,  bootblocks, fill upto,   fill */
+    {"ms2",	"ms2ver",	"050-ms2.bin",	ACTUAL,		1024, 		4,   1024,	0xff},
+    {"gb2",	"gb2ver",	"016-gb2.bin",	ACTUAL,		1024, 		0,	8,	0x00},
+    {"ldb",	"ldbver",	"flashdb.ms2",	OLD,		1024, 		0,	8,	0x00},
+    {"lang",	"langver",	"lang.ms2",	ACTUAL,		1024, 		0,	8,	0x00},
+    {"mfx",	"mfxver",	"mfxdefs.ms2",	ACTUAL,		1024, 		0,	8,	0x00},
+    {"mfxb",	"mfxbver",	"mfxdefs.bin",	ACTUAL,		1024, 		0,	8,	0x00},
+    {"ms2x",	"ms2xver",	"051-ms2.bin",	ACTUAL,		1024, 		0,	8,	0x00},
+};
+
 extern uint16_t CRCCCITT(uint8_t * data, size_t length, uint16_t seed);
 
 unsigned char netframe[MAXDG];
