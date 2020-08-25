@@ -1,11 +1,13 @@
 const int revisionnr = 
-952
+954
 ;
 const char* commithash = 
-"0b418d0d8765e6ac9326c0a8a9811e447b14648f";
+"b02868734931c600b5b75fc49dcebeb4457a98c0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"954 2020-08-25 08:35:49 +0200 ledbutton: fix for reset bitmap\n" \
+"953 2020-08-24 10:02:53 +0200 throttle: select train member on shift and select to show functions\n" \
 "952 2020-08-23 08:21:56 +0200 tt,bidib: fix for rotation direction\n" \
 "951 2020-08-22 07:42:11 +0200 tt: next/prev track onestep\n" \
 "950 2020-08-21 14:35:34 +0200 bidib,onestep: support for position events in 1.5 degrees\n" \
