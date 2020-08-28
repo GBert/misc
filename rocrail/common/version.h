@@ -1,11 +1,13 @@
 const int revisionnr = 
-954
+956
 ;
 const char* commithash = 
-"b02868734931c600b5b75fc49dcebeb4457a98c0";
+"4fd58bd70f8fd47d7a667f4cdfaef8fe9680409e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"956 2020-08-28 08:47:07 +0200 tt: set bridge position in regval on action\n" \
+"955 2020-08-26 15:04:32 +0200 planpanel: fix for rotating by dialog\n" \
 "954 2020-08-25 08:35:49 +0200 ledbutton: fix for reset bitmap\n" \
 "953 2020-08-24 10:02:53 +0200 throttle: select train member on shift and select to show functions\n" \
 "952 2020-08-23 08:21:56 +0200 tt,bidib: fix for rotation direction\n" \
