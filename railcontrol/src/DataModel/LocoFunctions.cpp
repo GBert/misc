@@ -149,11 +149,6 @@ namespace DataModel
 			case LocoFunctionIconNone:
 				return "<svg width=\"36\" height=\"36\" />";
 
-			default:
-				return "<svg width=\"36\" height=\"36\">"
-					"<text x=\"8\" y=\"24\" fill=\"black\" font-size=\"12\">F" + std::to_string(nr) + "</text>"
-					"</svg>";
-
 			case LocoFunctionIconShuntingMode:
 				return "<svg width=\"36\" height=\"36\">"
 					"<polyline points=\"5,24 5.2,21.9 5.7,19.9 6.6,18 7.8,16.3 9.3,14.8 11,13.6 12.9,12.7 14.9,12.2 17,12 19.1,12.2 21.1,12.7 23,13.6 24.7,14.8 26.2,16.3 27.4,18 28.3,19.9 28.8,21.9 29,24\" stroke=\"black\" stroke-width=\"0\" fill=\"black\"/>"
@@ -585,6 +580,16 @@ namespace DataModel
 					"<polyline points=\"20,16 24,15 26,15 27,16 28,19 27,22 26,23 24,23 22,21 20,20 21,18\" stroke=\"black\" stroke-width=\"0\" fill=\"black\" class=\"button_on rotate\"/>"
 					"<polyline points=\"20,20 21,24 21,26 20,27 17,28 14,27 13,26 13,24 15,22 16,20 18,21\" stroke=\"black\" stroke-width=\"0\" fill=\"black\" class=\"button_on rotate\"/>"
 					"<polyline points=\"16,20 12,21 10,21 9,20 8,17 9,14 10,13 12,13 14,15 16,16 15,18\" stroke=\"black\" stroke-width=\"0\" fill=\"black\" class=\"button_on rotate\"/>"
+					"</svg>";
+
+
+			case LocoFunctionIconBreak:
+				return "<svg width=\"36\" height=\"36\">"
+					"<circle r=\"6\" cx=\"18\" cy=\"18\" fill=\"black\" />"
+					"<circle r=\"4.5\" cx=\"18\" cy=\"18\" fill=\"none\" stroke-with=\"1\" stroke=\"darkgray\" />"
+					"<circle r=\"1\" cx=\"18\" cy=\"18\" fill=\"darkgray\" />"
+					"<polyline points=\"10.2,22.5 9.5,21.1 9.1,19.6 9,18 9.1,16.4 9.5,14.9 10.2,13.5 12.6,13.5 11.9,14.5 11.4,15.6 11.1,16.8 11,18 11.1,19.2 11.4,20.4 11.9,21.5 12.6,22.5\" stroke=\"black\" stroke-width=\"0\" fill=\"black\"\"/>"
+					"<polyline points=\"25.8,13.5 26.5,14.9 26.9,16.4 27,18 26.9,19.6 26.5,21.1 25.8,22.5 23.4,22.5 24.1,21.5 24.6,20.4 24.9,19.2 25,18 24.9,16.8 24.6,15.6 24.1,14.5 23.4,13.5\" stroke=\"black\" stroke-width=\"0\" fill=\"black\"\"/>"
 					"</svg>";
 
 			case LocoFunctionIconNoSound:
@@ -1188,9 +1193,9 @@ namespace DataModel
 					"<polyline points=\"25,13 35,23\" stroke=\"black\" stroke-width=\"2\" fill=\"none\" class=\"button_on\"/>"
 					"</svg>";
 
+			default:
 				return "<svg width=\"36\" height=\"36\">"
-					"<polyline points=\"0,0 36,36\" stroke=\"black\" stroke-width=\"2\" fill=\"none\"/>"
-					"<polyline points=\"0,36 36,0\" stroke=\"black\" stroke-width=\"2\" fill=\"none\"/>"
+					"<text x=\"8\" y=\"24\" fill=\"black\" font-size=\"12\">F" + std::to_string(nr) + "</text>"
 					"</svg>";
 		}
 	}

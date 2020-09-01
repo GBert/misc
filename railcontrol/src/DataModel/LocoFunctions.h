@@ -101,6 +101,7 @@ namespace DataModel
 		LocoFunctionIconMagnet,
 		LocoFunctionIconCraneHook,
 		LocoFunctionIconFan,
+		LocoFunctionIconBreak,
 		// sound functions
 		LocoFunctionIconNoSound = 96,
 		LocoFunctionIconSoundGeneral,

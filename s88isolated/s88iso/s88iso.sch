@@ -14,10 +14,10 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L Connector:RJ45 ZentraleS88
+L Connector:RJ45 Zentrale_S88
 U 1 1 5DEC0ABC
 P 9050 4275
-F 0 "ZentraleS88" H 8721 4279 50  0000 R CNN
+F 0 "Zentrale_S88" H 8721 4279 50  0000 R CNN
 F 1 "RJ45" H 8721 4370 50  0000 R CNN
 F 2 "w_conn_pc:megb8-8-Uni" V 9050 4300 50  0001 C CNN
 F 3 "~" V 9050 4300 50  0001 C CNN
@@ -25,10 +25,10 @@ F 3 "~" V 9050 4300 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L Connector:RJ45 InputS88
+L Connector:RJ45 Input_S88
 U 1 1 5DEC1D69
 P 2950 4175
-F 0 "InputS88" H 2620 4179 50  0000 R CNN
+F 0 "Input_S88" H 2620 4179 50  0000 R CNN
 F 1 "RJ45" H 2620 4270 50  0000 R CNN
 F 2 "w_conn_pc:megb8-8-Uni" V 2950 4200 50  0001 C CNN
 F 3 "~" V 2950 4200 50  0001 C CNN
@@ -93,7 +93,7 @@ L Isolator:Si8641BB-B-IS1 U3
 U 1 1 5DF06007
 P 6875 4250
 F 0 "U3" H 6875 4917 50  0000 C CNN
-F 1 "Si8641BB-B-IS1" H 6875 4826 50  0000 C CNN
+F 1 "Si8641BB-B" H 6875 4826 50  0000 C CNN
 F 2 "w_smd_dil:so-16" H 6875 3700 50  0001 C CIN
 F 3 "https://www.silabs.com/documents/public/data-sheets/si864x-datasheet.pdf" H 6875 4650 50  0001 C CNN
 	1    6875 4250

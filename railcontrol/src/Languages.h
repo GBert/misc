@@ -245,6 +245,7 @@ class Languages
 			TextLocoFunctionIconBacklightReverse,
 			TextLocoFunctionIconBell,
 			TextLocoFunctionIconBlinkingLight,
+			TextLocoFunctionIconBreak,
 			TextLocoFunctionIconBreak1,
 			TextLocoFunctionIconBreak2,
 			TextLocoFunctionIconBufferPush,

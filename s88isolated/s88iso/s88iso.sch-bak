@@ -7,7 +7,7 @@ Sheet 1 1
 Title "S88 Isolator"
 Date "2020-08-30"
 Rev "1.0"
-Comp ""
+Comp "Gerhard Bertelsmann"
 Comment1 ""
 Comment2 ""
 Comment3 ""
@@ -93,7 +93,7 @@ L Isolator:Si8641BB-B-IS1 U3
 U 1 1 5DF06007
 P 6875 4250
 F 0 "U3" H 6875 4917 50  0000 C CNN
-F 1 "Si8641BB-B-IS1" H 6875 4826 50  0000 C CNN
+F 1 "Si8641BB-B" H 6875 4826 50  0000 C CNN
 F 2 "w_smd_dil:so-16" H 6875 3700 50  0001 C CIN
 F 3 "https://www.silabs.com/documents/public/data-sheets/si864x-datasheet.pdf" H 6875 4650 50  0001 C CNN
 	1    6875 4250
