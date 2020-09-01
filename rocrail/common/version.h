@@ -1,11 +1,16 @@
 const int revisionnr = 
-956
+961
 ;
 const char* commithash = 
-"4fd58bd70f8fd47d7a667f4cdfaef8fe9680409e";
+"89be01713c4dafd12461db95d3cf2ac39378f6ac";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"961 2020-08-31 10:30:05 +0200 tt: reportedpos attribute added\n" \
+"960 2020-08-30 08:33:41 +0200 tt: reported position state support\n" \
+"959 2020-08-30 07:40:00 +0200 wiodlg: disable subtype in case of none RCAN modules\n" \
+"958 2020-08-29 09:51:27 +0200 cc: flush UART buffer after connect\n" \
+"957 2020-08-29 08:17:04 +0200 wiodlg: fix for setting I/O\n" \
 "956 2020-08-28 08:47:07 +0200 tt: set bridge position in regval on action\n" \
 "955 2020-08-26 15:04:32 +0200 planpanel: fix for rotating by dialog\n" \
 "954 2020-08-25 08:35:49 +0200 ledbutton: fix for reset bitmap\n" \
