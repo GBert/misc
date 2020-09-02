@@ -1,11 +1,12 @@
 const int revisionnr = 
-961
+962
 ;
 const char* commithash = 
-"89be01713c4dafd12461db95d3cf2ac39378f6ac";
+"76f64eab737aff7f069d1bc682824edfeeb5df85";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"962 2020-09-02 13:10:15 +0200 bidib: fix for query inputs only\n" \
 "961 2020-08-31 10:30:05 +0200 tt: reportedpos attribute added\n" \
 "960 2020-08-30 08:33:41 +0200 tt: reported position state support\n" \
 "959 2020-08-30 07:40:00 +0200 wiodlg: disable subtype in case of none RCAN modules\n" \
