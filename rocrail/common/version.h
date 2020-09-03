@@ -1,11 +1,15 @@
 const int revisionnr = 
-962
+966
 ;
 const char* commithash = 
-"76f64eab737aff7f069d1bc682824edfeeb5df85";
+"6369c6f8d74028d8a6fadc5faf921af12dca8cd5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"966 2020-09-03 15:56:22 +0200 rascii,serial: not set DSR to avoid resetting the Arduino\n" \
+"965 2020-09-03 10:56:40 +0200 bidib: query inputs option added\n" \
+"964 2020-09-03 10:29:48 +0200 bidib: only query input ports in case the node has flat addressing\n" \
+"963 2020-09-03 08:47:32 +0200 rascii: fix for Arduino reset waiting\n" \
 "962 2020-09-02 13:10:15 +0200 bidib: fix for query inputs only\n" \
 "961 2020-08-31 10:30:05 +0200 tt: reportedpos attribute added\n" \
 "960 2020-08-30 08:33:41 +0200 tt: reported position state support\n" \
