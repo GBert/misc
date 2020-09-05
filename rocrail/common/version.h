@@ -1,11 +1,16 @@
 const int revisionnr = 
-966
+971
 ;
 const char* commithash = 
-"6369c6f8d74028d8a6fadc5faf921af12dca8cd5";
+"289e1c621b18ec321f5f7381c87aeda930a2ee75";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"971 2020-09-04 15:26:10 +0200 aboxdlg: support for general URL links\n" \
+"970 2020-09-04 13:36:52 +0200 router: fix for checking functions\n" \
+"969 2020-09-04 10:18:36 +0200 bidib: only send wanted function group instead of all\n" \
+"968 2020-09-04 08:46:58 +0200 renderer: fix for semaphore shunting-shunt\n" \
+"967 2020-09-04 08:00:35 +0200 action: shift function option support by '!' prefix\n" \
 "966 2020-09-03 15:56:22 +0200 rascii,serial: not set DSR to avoid resetting the Arduino\n" \
 "965 2020-09-03 10:56:40 +0200 bidib: query inputs option added\n" \
 "964 2020-09-03 10:29:48 +0200 bidib: only query input ports in case the node has flat addressing\n" \
