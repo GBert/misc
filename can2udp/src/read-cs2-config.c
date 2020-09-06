@@ -907,6 +907,7 @@ int read_loco_data(char *config_file, int config_type) {
 	    l1_token_n = get_char_index(l1_token, line);
 	    switch (l1_token_n) {
 	    case L1_FCT:
+	    case L1_FCT2:
 		mfx_data = -1;
 		function++;
 		break;
