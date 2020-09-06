@@ -1,11 +1,15 @@
 const int revisionnr = 
-971
+975
 ;
 const char* commithash = 
-"289e1c621b18ec321f5f7381c87aeda930a2ee75";
+"26089f5b99ef581d122ade5dcf141ef7d8b8b40e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"975 2020-09-06 10:55:38 +0200 tt: reject movement events for detecting the wanted position\n" \
+"974 2020-09-06 10:27:14 +0200 vendors: FichtelBahn added\n" \
+"973 2020-09-05 08:51:23 +0200 DB-Signals: semaphores with shunting\n" \
+"972 2020-09-05 08:26:58 +0200 router: use long long to be able to check 33 functions on 32 bit systems\n" \
 "971 2020-09-04 15:26:10 +0200 aboxdlg: support for general URL links\n" \
 "970 2020-09-04 13:36:52 +0200 router: fix for checking functions\n" \
 "969 2020-09-04 10:18:36 +0200 bidib: only send wanted function group instead of all\n" \
