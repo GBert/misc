@@ -21,6 +21,8 @@
 #define CONFIG_STRING	0x00
 #define CONFIG_FILE	0x01
 
+#define MFXDEC		0x00000001
+
 int get_char_index(const char **list, char *str);
 int get_value(char *st, char *search);
 void delete_all_track_pages(void);
@@ -40,7 +42,7 @@ void sort_td_by_id(void);
 void print_pages(void);
 void print_gbstats(void);
 void print_tracks(void);
-void print_locos(FILE *file);
+void print_locos(FILE *file, unsigned int mask);
 void print_locos_short(FILE *file);
 void print_loco_names(FILE *file);
 int read_magnet_data(char *config_file, int config_type);

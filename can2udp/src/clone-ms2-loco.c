@@ -120,6 +120,7 @@ struct trigger_t {
     uint16_t length;
     uint16_t crc;
     int data_index;
+    int print_loco_mask;
     int v3x;
     uint8_t *data;
     char *loco_file;
@@ -137,13 +138,14 @@ void signal_handler(int sig) {
 
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -kfv [-i <CAN int>][-t <sec>][-l <LED pin>][-p <push button pin>]\n", prg);
-    fprintf(stderr, "   Version 1.10\n\n");
+    fprintf(stderr, "   Version 1.2\n\n");
     fprintf(stderr, "         -c <loco_dir>        set the locomotive file dir - default %s\n", loco_dir);
     fprintf(stderr, "         -i <CAN interface>   using can interface\n");
     fprintf(stderr, "         -t <interval in sec> using timer in sec\n");
     fprintf(stderr, "         -l <LED pin>         LED pin (e.g. BPi PI14 -> 270)\n");
     fprintf(stderr, "         -p <push button>     push button (e.g. BPi PI10 -> 266)\n");
     fprintf(stderr, "         -k                   use loco 'Lokliste' F0 as trigger\n");
+    fprintf(stderr, "         -m                   print mfx address decimal\n");
     fprintf(stderr, "         -n                   MS2 Version >=3.55\n");
     fprintf(stderr, "         -f                   run in foreground (for debugging)\n");
     fprintf(stderr, "         -v                   be verbose\n\n");
@@ -289,7 +291,7 @@ int get_locos(struct trigger_t *trigger, char *loco_file) {
 	fprintf(stderr, "%s: error writing locomotive file [%s]\n", __func__, loco_file);
 	return EXIT_FAILURE;
     } else {
-	/* print_locos(fp); */
+	/* print_locos(fp, trigger->print_loco_mask); */
     }
     fclose(fp);
     return ret;
@@ -531,8 +533,8 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 		    fprintf(stderr, "%s: error writing loco file [%s]\n", __func__, trigger->loco_file);
 		} else {
 		    if (!trigger->background && trigger->verbose)
-			printf("writing new loco file [%s]\n", trigger->loco_file);
-		    print_locos(fp);
+			printf("writing new loco file [%s] mask %d\n", trigger->loco_file, trigger->print_loco_mask);
+		    print_locos(fp, trigger->print_loco_mask);
 		    fclose(fp);
 		}
 		/* start over with a new list */
@@ -549,7 +551,7 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 	}
 
 	/* if (!trigger->background && trigger->verbose) {
-	    print_locos(stdout);
+	    print_locos(stdout, trigger->print_loco_mask);
 	    printf("max locos : %d\n", get_loco_max());
 	} */
 	free(trigger->data);
@@ -632,7 +634,7 @@ int main(int argc, char **argv) {
 
     trigger_data.background = 1;
 
-    while ((opt = getopt(argc, argv, "c:i:l:p:t:knfvh?")) != -1) {
+    while ((opt = getopt(argc, argv, "c:i:l:p:t:kmnfvh?")) != -1) {
 	switch (opt) {
 	case 'c':
 	    if (strnlen(optarg, MAXLINE) < MAXLINE) {
@@ -657,6 +659,9 @@ int main(int argc, char **argv) {
 	    break;
 	case 'k':
 	    trigger_data.loco_uid = 1;
+	    break;
+	case 'm':
+	    trigger_data.print_loco_mask = MFXDEC;
 	    break;
 	case 'n':
 	    trigger_data.v3x = 1;
@@ -750,7 +755,7 @@ int main(int argc, char **argv) {
     }
 
     read_loco_data(trigger_data.loco_file, CONFIG_FILE);
-    /* print_locos(stdout);
+    /* print_locos(stdout, trigger_data->print_loco_mask);
     printf("max locos : %d\n", get_loco_max()); */
 
     /* find trigger loco if requested */

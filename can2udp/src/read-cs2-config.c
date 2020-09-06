@@ -540,7 +540,7 @@ void print_tracks(void) {
     }
 }
 
-void print_locos(FILE *file) {
+void print_locos(FILE *file, unsigned int mask) {
     int i;
     struct loco_data_t *l;
 
@@ -557,10 +557,13 @@ void print_locos(FILE *file) {
 	fprintf(file, " .name=%s\n", l->name);
 	if (l->direction) fprintf(file, " .richtung=%u\n", l->direction);
 	fprintf(file, " .uid=0x%x\n", l->uid);
-	fprintf(file, " .adresse=0x%x\n", l->address);
+	if (mask & MFXDEC)
+	    fprintf(file, " .adresse=%u\n", l->uid & 0xff);
+	else
+	    fprintf(file, " .adresse=0x%x\n", l->address);
 	fprintf(file, " .typ=%s\n", l->type);
 	if (l->sid)	fprintf(file, " .sid=0x%x\n", l->sid);
-	if (l->mfxuid)	fprintf(file, " .mfxuid=0x%x\n", l->mfxuid);
+	if (l->mfxuid) fprintf(file, " .mfxuid=0x%x\n", l->mfxuid);
 	if (l->icon)	fprintf(file, " .icon=%s\n", l->icon);
 	if (l->symbol)	fprintf(file, " .symbol=%u\n", l->symbol);
 	if (l->acc_delay) fprintf(file, " .av=%u\n", l->acc_delay);
