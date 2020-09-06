@@ -1040,13 +1040,11 @@ int read_loco_data(char *config_file, int config_type) {
 		debug_print("match mfxtype:   >%u<\n", loco->mfxtype);
 		break;
 	    case L1_ADDRESS:
-		if (strcmp(&line[L1_ADDRESS_LENGTH], "0x")) {
-		    loco->address = strtoul(&line[L1_ADDRESS_LENGTH], NULL, 10);
+		loco->address = strtoul(&line[L1_ADDRESS_LENGTH], NULL, 0);
+		if (strcmp(&line[L1_ADDRESS_LENGTH], "0x"))
 		    debug_print("match address:   >%u<\n", loco->address);
-		} else {
-		    loco->address = strtoul(&line[L1_ADDRESS_LENGTH], NULL, 16);
+		else
 		    debug_print("match address:   >0x%x<\n", loco->address);
-		}
 		break;
 	    case L1_INTRACTION:
 		loco->intraction = strtoul(&line[L1_INTRACTION_LENGTH], NULL, 16);
