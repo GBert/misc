@@ -1235,6 +1235,29 @@ int read_loco_names(char *config_file) {
     return (EXIT_SUCCESS);
 }
 
+void show_loco_names(FILE *file, int low, int high) {
+    int i;
+    struct loco_data_t *l;
+
+    i = 0;
+    fprintf(file, "[lokomotive]\n");
+    for (l = loco_data; l != NULL; l = l->hh.next) {
+	if (i < low)
+	    continue;
+	if (i > high)
+	    continue;
+	fprintf(file, "lok\n");
+	if (l->number)
+	   fprintf(file, " .nr=%u\n", l->number);
+	else if (i)
+	   fprintf(file, " .nr=%u\n", i);
+	fprintf(file, " .name=%s\n", l->name);
+	i++;
+    }
+    fprintf(file, "numloks\n");
+    fprintf(file, " .wert=%d\n", i);
+}
+
 int read_magnet_data(char *config_file, int config_type) {
     int l0_token_n, l1_token_n, magnet_complete;
     FILE *fp = NULL;

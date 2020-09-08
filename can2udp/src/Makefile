@@ -1,6 +1,6 @@
 BINS := can-bounce-test can-monitor can-replay can2eth can2udp can4lnx2udp can2serial clone-cs2-config \
-        clone-cs2-trigger clone-ms2-loco config-tc read-cs2-ini gb2-update ir-tester cs2ping bpi-rs485 \
-        scan2lan can2lan config-tc ms2wifi virtual_canbuster virtual_gfp virtual_links88 virtual_ms2 \
+        clone-cs2-trigger clone-ms2-loco read-cs2-ini gb2-update ir-tester cs2ping bpi-rs485 scan2lan\
+        can2lan ms2wifi ms2-loco-list virtual_canbuster virtual_gfp virtual_links88 virtual_ms2 \
         get-cs-data get-cs-config pio-i2c-udp read_lococard s88udp-bpi s88udp-rpi s88test-bpi \
         wake-up-c6020 wake-up-links88 virtual_s88udp gpio-poll lan-schnitte xntcpd s88can spitest
 
@@ -67,9 +67,6 @@ clone-cs2-trigger: clone-cs2-trigger.o
 clone-ms2-loco: crc-ccitt.o read-cs2-config.o clone-ms2-loco.o
 	$(CC) $(CFLAGS) -o clone-ms2-loco crc-ccitt.o read-cs2-config.o clone-ms2-loco.o -lpthread
 
-config-tc: config-tc.o
-	$(CC) $(CFLAGS) -o config-tc config-tc.o
-
 gb2-update: crc-ccitt.o gb2-update.o
 	$(CC) $(CFLAGS) -o gb2-update crc-ccitt.o gb2-update.o
 
@@ -81,6 +78,9 @@ can2lan: crc-ccitt.o gio.o can2lan.o
 
 ms2wifi: ms2wifi.o
 	$(CC) $(CFLAGS) -o ms2wifi ms2wifi.o
+
+ms2-loco-list: crc-ccitt.o read-cs2-config.o ms2-loco-list.o
+	$(CC) $(CFLAGS) -o ms2-loco-list crc-ccitt.o read-cs2-config.o ms2-loco-list.o
 
 virtual_canbuster: virtual_canbuster.o
 	$(CC) $(CFLAGS) -o virtual_canbuster virtual_canbuster.o

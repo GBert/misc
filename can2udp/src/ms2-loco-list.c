@@ -8,6 +8,7 @@
  *
  */
 
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <libgen.h>
@@ -16,7 +17,6 @@
 #include <signal.h>
 #include <errno.h>
 #include <ctype.h>
-
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/socket.h>
@@ -28,7 +28,17 @@
 #include <time.h>
 #include <linux/can.h>
 
+#include "cs2-config.h"
+#include "read-cs2-config.h"
+
+#define MAXLINE	1024
+
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
+
+extern struct loco_data_t *loco_data;
+uint16_t CRCCCITT(uint8_t * data, size_t length, uint16_t seed);
+
+char loco_dir[MAXLINE];
 
 static char *F_CAN_FORMAT_STRG   = "      CAN->  CANID 0x%08X R [%d]";
 static char *F_S_CAN_FORMAT_STRG = "short CAN->  CANID 0x%08X R [%d]";
@@ -42,6 +52,7 @@ static unsigned char M_GET_LOCO_LIST[]	= { 0x6C, 0x6F, 0x6B, 0x6C, 0x69, 0x73, 0
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
     fprintf(stderr, "   Version 0.9\n\n");
+    fprintf(stderr, "         -c <loco_dir>        set the locomotive file dir - default %s\n", loco_dir);
     fprintf(stderr, "         -i <can int>        can interface - default vcan1\n");
     fprintf(stderr, "         -d                  daemonize\n\n");
 }
@@ -98,21 +109,30 @@ int main(int argc, char **argv) {
     int max_fds, opt;
     uint16_t hash;
     struct can_frame frame;
-
     int sc;
     struct sockaddr_can caddr;
     struct ifreq ifr;
     socklen_t caddrlen = sizeof(caddr);
-
     fd_set read_fds;
+    char *loco_file;
 
     hash = 0;
     int background = 0;
     int verbose = 1;
-    strcpy(ifr.ifr_name, "vcan1");
+    strcpy(ifr.ifr_name, "can0");
+    strcpy(loco_dir, "/www/config");
 
-    while ((opt = getopt(argc, argv, "i:dh?")) != -1) {
+
+    while ((opt = getopt(argc, argv, "c:i:dh?")) != -1) {
 	switch (opt) {
+        case 'c':
+            if (strnlen(optarg, MAXLINE) < MAXLINE) {
+                strncpy(loco_dir, optarg, sizeof(loco_dir) - 1);
+            } else {
+                fprintf(stderr, "config file dir to long\n");
+                exit(EXIT_FAILURE);
+            }
+            break;
 	case 'i':
 	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
 	    break;
@@ -132,9 +152,21 @@ int main(int argc, char **argv) {
 	}
     }
 
-    memset(&caddr, 0, sizeof(caddr));
+    /* prepare redaing lokomotive.cs */
+    if (asprintf(&loco_file, "%s/%s", loco_dir, "lokomotive.cs2") < 0) {
+	fprintf(stderr, "can't alloc buffer for loco_name: %s\n", strerror(errno));
+	exit(EXIT_FAILURE);
+    }
+    if (read_loco_data(loco_file, CONFIG_FILE))
+	fprintf(stderr, "can't read loco_file %s\n", loco_file);
+
+    if (verbose) {
+	printf("Loco list %s size: %d\n", loco_file, HASH_COUNT(loco_data));
+	show_loco_names(stdout, 0, 9999);
+    }
 
     /* prepare CAN socket */
+    memset(&caddr, 0, sizeof(caddr));
     if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
 	fprintf(stderr, "error creating CAN socket: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
@@ -179,13 +211,9 @@ int main(int argc, char **argv) {
 
 		switch ((frame.can_id & 0x00FF0000UL) >> 16) {
 		case 0x41:
-		    printf("check 1\n");
-		    if ((frame.can_dlc == 8) && (memcmp(&frame.data[0], M_GET_CONFIG, 8) == 0)) {
-			printf("check 2\n");
+		    if ((frame.can_dlc == 8) && (memcmp(&frame.data[0], M_GET_CONFIG, 8) == 0))
 			hash = frame.can_id & 0XFFFF;
-		    }
 		    if (((frame.can_id & 0xFFFF) == hash) && (frame.can_dlc == 4)) {
-			printf("check 3\n");
 			frame.can_id = hash | 0x00400000;
 			frame.can_dlc = 8;
 			memcpy(frame.data, M_GET_LOCO_LIST, 8);
