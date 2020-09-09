@@ -291,7 +291,7 @@ int get_locos(struct trigger_t *trigger, char *loco_file) {
 	fprintf(stderr, "%s: error writing locomotive file [%s]\n", __func__, loco_file);
 	return EXIT_FAILURE;
     } else {
-	/* print_locos(fp, trigger->print_loco_mask); */
+	/* print_all_locos(fp, trigger->print_loco_mask); */
     }
     fclose(fp);
     return ret;
@@ -534,7 +534,7 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 		} else {
 		    if (!trigger->background && trigger->verbose)
 			printf("writing new loco file [%s] mask %d\n", trigger->loco_file, trigger->print_loco_mask);
-		    print_locos(fp, trigger->print_loco_mask);
+		    print_all_locos(fp, trigger->print_loco_mask);
 		    fclose(fp);
 		}
 		/* start over with a new list */
@@ -551,7 +551,7 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 	}
 
 	/* if (!trigger->background && trigger->verbose) {
-	    print_locos(stdout, trigger->print_loco_mask);
+	    print_all_locos(stdout, trigger->print_loco_mask);
 	    printf("max locos : %d\n", get_loco_max());
 	} */
 	free(trigger->data);
@@ -755,7 +755,7 @@ int main(int argc, char **argv) {
     }
 
     read_loco_data(trigger_data.loco_file, CONFIG_FILE);
-    /* print_locos(stdout, trigger_data->print_loco_mask);
+    /* print_all_locos(stdout, trigger_data->print_loco_mask);
     printf("max locos : %d\n", get_loco_max()); */
 
     /* find trigger loco if requested */

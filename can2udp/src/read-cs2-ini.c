@@ -97,7 +97,7 @@ int main(int argc, char **argv) {
     printf("track data elements: %u\n", HASH_COUNT(track_data));
     printf("loco data: %u\n", HASH_COUNT(loco_data));
     printf("magnet data: %u\n", HASH_COUNT(magnet_data));
-    /* print_locos(stdout); */
+    /* print_all_locos(stdout); */
 
     delete_all_track_pages();
     delete_all_track_data();

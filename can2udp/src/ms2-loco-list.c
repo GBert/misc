@@ -27,22 +27,28 @@
 #include <sys/time.h>
 #include <time.h>
 #include <linux/can.h>
+#include <ifaddrs.h>
 
 #include "cs2-config.h"
 #include "read-cs2-config.h"
 
-#define MAX_LINE	1024
-#define MAX_BUFFER	4096
-
+#define MAX_LINE		1024
+#define MAX_BUFFER		4096
+#define CAN_ENCAP_SIZE		13	/* maximum datagram size */
+#define MAXIPLEN		40	/* maximum IP string length */
+#define MAX_UDP_BCAST_RETRY  	10
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
 
 struct ms2_data_t {
     char *loco_file;
     char *config_data;
+    char loco_name[32];
     int size;
+    int sb;
     int sc;
     int loco_list_low;
     int loco_list_high;
+    uint16_t hash;
     uint16_t crc;
     int verbose;
 };
@@ -57,11 +63,12 @@ static char *F_S_CAN_FORMAT_STRG = "short CAN->  CANID 0x%08X R [%d]";
 static char *T_CAN_FORMAT_STRG   = "      CAN<-  CANID 0x%08X   [%d]";
 
 static unsigned char M_GET_CONFIG[]	= { 0x6C, 0x6F, 0x6B, 0x6E, 0x61, 0x6D, 0x65, 0x6E}; /* "loknamen"; */
-static unsigned char M_GET_LOCO_LIST[]	= { 0x6C, 0x6F, 0x6B, 0x6C, 0x69, 0x73, 0x74, 0x65}; /* "lokliste"; */
+static char M_GET_LOCO_INFO[]	= "lokinfo";
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
     fprintf(stderr, "   Version 0.9\n\n");
+    fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -c <loco_dir>       set the locomotive file dir - default %s\n", loco_dir);
     fprintf(stderr, "         -i <can int>        can interface - default vcan1\n");
     fprintf(stderr, "         -d                  daemonize\n\n");
@@ -147,6 +154,25 @@ int send_can_frame(int can_socket, struct can_frame *frame, int verbose) {
     return 0;
 }
 
+int send_frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_frame *frame) {
+    int s;
+    uint8_t netframe[16];
+
+    memset(netframe, 0, sizeof(netframe));
+    frame->can_id &= CAN_EFF_MASK;
+    toc32(netframe, frame->can_id);
+    netframe[4] = frame->can_dlc;
+    memcpy(&netframe[5], &frame->data, frame->can_dlc);
+
+    /* send TCP/UDP frame */
+    s = sendto(net_socket, netframe, CAN_ENCAP_SIZE, 0, net_addr, sizeof(*net_addr));
+    if (s != CAN_ENCAP_SIZE) {
+	fprintf(stderr, "error sending TCP/UDP data: %s\n", strerror(errno));
+	return(EXIT_FAILURE);
+    }
+    return(EXIT_SUCCESS);
+}
+
 int send_config_data(struct ms2_data_t *ms2_data) {
     int i;
     struct can_frame frame;
@@ -201,8 +227,13 @@ int get_loco_list(struct ms2_data_t *ms2_data) {
 }
 
 int main(int argc, char **argv) {
-    int max_fds, opt;
-    uint16_t hash;
+    int i, max_fds, opt, s, timeout;
+    uint16_t hash1, hash2;
+    char *bcast_interface;
+    char *udp_dst_address;
+    struct ifaddrs *ifap, *ifa;
+    struct sockaddr_in *bsa;
+    struct sockaddr_in baddr;
     struct can_frame frame;
     struct sockaddr_can caddr;
     struct ifreq ifr;
@@ -210,18 +241,46 @@ int main(int argc, char **argv) {
     fd_set read_fds;
     struct ms2_data_t ms2_data;
 
-    hash = 0;
+    hash1 = hash2 = 0;
     int background = 0;
     strcpy(ifr.ifr_name, "can0");
     strcpy(loco_dir, "/www/config");
+    int destination_port = 15730;
 
     memset(&ms2_data, 0, sizeof(ms2_data));
 
     ms2_data.config_data = calloc(MAX_BUFFER, 1);
     ms2_data.verbose = 1;
+    timeout = MAX_UDP_BCAST_RETRY;
 
-    while ((opt = getopt(argc, argv, "c:i:dh?")) != -1) {
+    udp_dst_address = (char *)calloc(MAXIPLEN, 1);
+    if (!udp_dst_address) {
+        fprintf(stderr, "can't alloc memory for udp_dst_address: %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
+    };
+
+    bcast_interface = (char *)calloc(MAXIPLEN, 1);
+    if (!bcast_interface) {
+        fprintf(stderr, "can't alloc memory for bcast_interface: %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
+    };
+
+    while ((opt = getopt(argc, argv, "b:c:i:dh?")) != -1) {
 	switch (opt) {
+        case 'b':
+	    if (strnlen(optarg, MAXIPLEN) <= MAXIPLEN - 1) {
+		/* IP address begins with a number */
+		if ((optarg[0] >= '0') && (optarg[0] <= '9')) {
+		    strncpy(udp_dst_address, optarg, MAXIPLEN - 1);
+                } else {
+		    memset(udp_dst_address, 0, MAXIPLEN);
+		    strncpy(bcast_interface, optarg, MAXIPLEN - 1);
+		}
+	    } else {
+                fprintf(stderr, "UDP broadcast address or interface error: %s\n", optarg);
+                exit(EXIT_FAILURE);
+            }
+            break;
         case 'c':
             if (strnlen(optarg, MAX_LINE) < MAX_LINE) {
                 strncpy(loco_dir, optarg, sizeof(loco_dir) - 1);
@@ -249,7 +308,31 @@ int main(int argc, char **argv) {
 	}
     }
 
-    /* prepare redaing lokomotive.cs */
+    /* we are trying to setup a UDP socket */
+    for (i = 0; i < timeout; i++) {
+        /* trying to get the broadcast address */
+        getifaddrs(&ifap);
+        for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
+            if (ifa->ifa_addr) {
+                if (ifa->ifa_addr->sa_family == AF_INET) {
+                    bsa = (struct sockaddr_in *)ifa->ifa_broadaddr;
+                    if (strncmp(ifa->ifa_name, bcast_interface, strlen(bcast_interface)) == 0)
+                        udp_dst_address = inet_ntoa(bsa->sin_addr);
+                }
+            }
+        }
+        freeifaddrs(ifap);
+        /* try to prepare UDP sending socket struct */
+        memset(&baddr, 0, sizeof(baddr));
+        baddr.sin_family = AF_INET;
+        baddr.sin_port = htons(destination_port);
+        s = inet_pton(AF_INET, udp_dst_address, &baddr.sin_addr);
+        if (s > 0)
+            break;
+        sleep(1);
+    }
+
+    /* prepare reading lokomotive.cs */
     if (asprintf(&ms2_data.loco_file, "%s/%s", loco_dir, "lokomotive.cs2") < 0) {
 	fprintf(stderr, "can't alloc buffer for loco_name: %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
@@ -302,16 +385,31 @@ int main(int argc, char **argv) {
 		switch ((frame.can_id & 0x00FF0000UL) >> 16) {
 		case 0x41:
 		    if ((frame.can_dlc == 8) && (memcmp(&frame.data[0], M_GET_CONFIG, 8) == 0))
-			hash = frame.can_id & 0XFFFF;
-		    if (((frame.can_id & 0xFFFF) == hash) && (frame.can_dlc == 4)) {
+			hash1 = frame.can_id & 0XFFFF;
+		    if (((frame.can_id & 0xFFFF) == hash1) && (frame.can_dlc == 4)) {
 			sscanf((char *)frame.data, "%d %d", &ms2_data.loco_list_low, &ms2_data.loco_list_high);
 			if (ms2_data.verbose)
 			    printf("requesting locolist from %d to %d\n", ms2_data.loco_list_low, ms2_data.loco_list_high);
+			ms2_data.hash = hash1;
 			frame.can_id = 0x00410300;
 			send_can_frame(ms2_data.sc, &frame, ms2_data.verbose);
 			get_loco_list(&ms2_data);
 			send_config_data(&ms2_data);
-			hash = 0;	/* back to beginning */
+			hash1 = 0;	/* back to beginning */
+		    }
+		    if ((frame.can_dlc == strlen(M_GET_LOCO_INFO)) && (memcmp(&frame.data[0], M_GET_LOCO_INFO, strlen(M_GET_LOCO_INFO)) == 0)) {
+			hash2 = frame.can_id & 0XFFFF;
+			memset(ms2_data.loco_name, 0, sizeof(ms2_data.loco_name));
+			ms2_data.hash = hash2;
+		    } else if ((frame.can_id & 0xFFFF) == hash2) {
+			if (ms2_data.loco_name[0]) {
+			    memcpy(&ms2_data.loco_name[8], frame.data, frame.can_dlc);
+			    if (ms2_data.verbose)
+				printf("sending lokinfo >%s<\n", ms2_data.loco_name);
+			    hash2 = 0;
+			} else {
+			    memcpy(ms2_data.loco_name, frame.data, frame.can_dlc);
+			}
 		    }
 		    break;
 		default:

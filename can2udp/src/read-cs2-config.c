@@ -24,6 +24,7 @@
 
 #include "read-cs2-config.h"
 #include "cs2-token.h"
+#include "cs2-config.h"
 
 #define FRAME_SIZE	13
 #define MAXSIZE		16384
@@ -540,8 +541,57 @@ void print_tracks(void) {
     }
 }
 
-void print_locos(FILE *file, unsigned int mask) {
+void print_loco(FILE * file, struct loco_data_t *l, unsigned int mask) {
     int i;
+
+    fprintf(file, "lokomotive\n");
+    fprintf(file, " .name=%s\n", l->name);
+    if (l->direction) fprintf(file, " .richtung=%u\n", l->direction);
+    fprintf(file, " .uid=0x%x\n", l->uid);
+    if (mask & MFXDEC) fprintf(file, " .adresse=%u\n", l->uid & 0xff);
+    else
+	fprintf(file, " .adresse=0x%x\n", l->address);
+    fprintf(file, " .typ=%s\n", l->type);
+    if (l->sid)		fprintf(file, " .sid=0x%x\n", l->sid);
+    if (l->mfxuid)	fprintf(file, " .mfxuid=0x%x\n", l->mfxuid);
+    if (l->icon)	fprintf(file, " .icon=%s\n", l->icon);
+    if (l->symbol)	fprintf(file, " .symbol=%u\n", l->symbol);
+    if (l->acc_delay)	fprintf(file, " .av=%u\n", l->acc_delay);
+    if (l->slow_down_delay) fprintf(file, " .bv=%u\n", l->slow_down_delay);
+    if (l->volume)	fprintf(file, " .volume=%u\n", l->volume);
+    if (l->progmask)	fprintf(file, " .progmask=0x%x\n", l->progmask);
+    fprintf(file, " .tachomax=%u\n", l->tmax);
+    if (l->vmax)	fprintf(file, " .vmax=%u\n", l->vmax);
+    if (l->vmin)	fprintf(file, " .vmin=%u\n", l->vmin);
+    if (l->xprot)	fprintf(file, " .xprotokoll=%u\n", l->xprot);
+    fprintf(file, " .stand=%u\n", l->location);
+    fprintf(file, " .fahrt=%u\n", l->journey);
+    if (l->spm) fprintf(file, " .spm=%u\n", l->spm);
+    if (l->ft) fprintf(file, " .ft=0x%x\n", l->ft);
+    if (l->mfxtype) fprintf(file, " .mfxtyp=%u\n", l->mfxtype);
+    for (i = 0; i < MAX_LOCO_FUNCTIONS; i++) {
+	if (i < 16) {
+	    if (mask & MS2FKT)
+		fprintf(file, " .funktionen\n");
+	    else
+		fprintf(file, " .fkt\n");
+	} else {
+	    if (mask & MS2FKT)
+		fprintf(file, " .funktionen_2\n");
+	    else
+		fprintf(file, " .fkt2\n");
+	}
+	fprintf(file, " ..nr=%d\n", i);
+	if (l->function[i].type) fprintf(file, " ..typ=%u\n", l->function[i].type);
+	if (l->function[i].value) fprintf(file, " ..wert=%u\n", l->function[i].value);
+	if (l->function[i].duration) fprintf(file, " ..dauer=%u\n", l->function[i].duration);
+	if (l->function[i].forward) fprintf(file, " ..vorwaerts=0x%x\n", l->function[i].forward);
+	if (l->function[i].backward) fprintf(file, " ..rueckwaerts=0x%x\n", l->function[i].backward);
+    }
+    if (l->intraction) fprintf(file, " .inTraktion=0x%08x\n", l->intraction);
+}
+
+void print_all_locos(FILE *file, unsigned int mask) {
     struct loco_data_t *l;
 
     l = loco_data;
@@ -552,50 +602,8 @@ void print_locos(FILE *file, unsigned int mask) {
     fprintf(file, "session\n");
     fprintf(file, " .id=%u\n", l->id);
 
-    for (l = loco_data; l != NULL; l = l->hh.next) {
-	fprintf(file, "lokomotive\n");
-	fprintf(file, " .name=%s\n", l->name);
-	if (l->direction) fprintf(file, " .richtung=%u\n", l->direction);
-	fprintf(file, " .uid=0x%x\n", l->uid);
-	if (mask & MFXDEC)
-	    fprintf(file, " .adresse=%u\n", l->uid & 0xff);
-	else
-	    fprintf(file, " .adresse=0x%x\n", l->address);
-	fprintf(file, " .typ=%s\n", l->type);
-	if (l->sid)	fprintf(file, " .sid=0x%x\n", l->sid);
-	if (l->mfxuid) fprintf(file, " .mfxuid=0x%x\n", l->mfxuid);
-	if (l->icon)	fprintf(file, " .icon=%s\n", l->icon);
-	if (l->symbol)	fprintf(file, " .symbol=%u\n", l->symbol);
-	if (l->acc_delay) fprintf(file, " .av=%u\n", l->acc_delay);
-	if (l->slow_down_delay) fprintf(file, " .bv=%u\n", l->slow_down_delay);
-	if (l->volume)	fprintf(file, " .volume=%u\n", l->volume);
-	if (l->progmask) fprintf(file, " .progmask=0x%x\n", l->progmask);
-	fprintf(file, " .tachomax=%u\n", l->tmax);
-	if (l->vmax)	fprintf(file, " .vmax=%u\n", l->vmax);
-	if (l->vmin)	fprintf(file, " .vmin=%u\n", l->vmin);
-	if (l->xprot)	fprintf(file, " .xprotokoll=%u\n", l->xprot);
-	fprintf(file, " .stand=%u\n", l->location);
-	fprintf(file, " .fahrt=%u\n", l->journey);
-	if (l->spm)	fprintf(file, " .spm=%u\n", l->spm);
-	if (l->ft)	fprintf(file, " .ft=0x%x\n", l->ft);
-	if (l->mfxtype)	fprintf(file, " .mfxtyp=%u\n", l->mfxtype);
-	for (i = 0; i < MAX_LOCO_FUNCTIONS; i++) {
-	    if (i < 16) {
-		fprintf(file, " .funktionen\n");
-	    } else {
-		if (!l->function[i].type)
-		    continue;
-		fprintf(file, " .funktionen_2\n");
-	    }
-	    fprintf(file, " ..nr=%d\n", i);
-	    if (l->function[i].type)	fprintf(file, " ..typ=%u\n", l->function[i].type);
-	    if (l->function[i].value)	fprintf(file, " ..wert=%u\n", l->function[i].value);
-	    if (l->function[i].duration) fprintf(file, " ..dauer=%u\n", l->function[i].duration);
-	    if (l->function[i].forward)	fprintf(file, " ..vorwaerts=0x%x\n", l->function[i].forward);
-	    if (l->function[i].backward) fprintf(file, " ..rueckwaerts=0x%x\n", l->function[i].backward);
-	}
-	if (l->intraction) fprintf(file, " .inTraktion=0x%08x\n", l->intraction);
-    }
+    for (l = loco_data; l != NULL; l = l->hh.next)
+	print_loco(file, l, mask);
 }
 
 void print_loco_names(FILE *file) {
@@ -608,7 +616,7 @@ void print_loco_names(FILE *file) {
     }
 }
 
-void print_locos_short(FILE *file) {
+void print_ll_locos_short(FILE *file) {
     struct loco_data_t *l;
 
     for (l = loco_data; l != NULL; l = l->hh.next) {
@@ -1248,9 +1256,9 @@ void show_loco_names(FILE *file, int low, int high) {
 	    break;
 	fprintf(file, "lok\n");
 	if (l->number)
-	   fprintf(file, " .nr=%u\n", l->number);
+	    fprintf(file, " .nr=%u\n", l->number);
 	else if (i)
-	   fprintf(file, " .nr=%u\n", i);
+	    fprintf(file, " .nr=%u\n", i);
 	fprintf(file, " .name=%s\n", l->name);
 	i++;
     }
