@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=can2udp
-PKG_RELEASE:=2.02
+PKG_RELEASE:=2.03
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_BUILD_PARALLEL:=1
@@ -58,6 +58,7 @@ define Package/can2udp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ir-tester $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lan-schnitte $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ms2wifi $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ms2-loco-list $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/read-cs2-ini $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/read_lococard $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pio-i2c-udp $(1)/usr/bin/

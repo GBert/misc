@@ -543,7 +543,10 @@ void print_tracks(void) {
 void print_loco(FILE * file, struct loco_data_t *l, unsigned int mask) {
     int i;
 
-    fprintf(file, "lokomotive\n");
+    if (mask & MS2FKT)
+	fprintf(file, "lok\n");
+    else
+	fprintf(file, "lokomotive\n");
     fprintf(file, " .name=%s\n", l->name);
     if (l->direction) fprintf(file, " .richtung=%u\n", l->direction);
     fprintf(file, " .uid=0x%x\n", l->uid);
@@ -608,8 +611,11 @@ void print_all_locos(FILE *file, unsigned int mask) {
 void print_loco_by_name(FILE * file, char *name, unsigned int mask) {
     struct loco_data_t *l;
     HASH_FIND_STR(loco_data, name, l);
-    if (l)
+    if (l) {
+	if (mask & MS2FKT)
+	    fprintf(file, "[lokomotive]\n");
 	print_loco(file, l, mask);
+    }
 }
 
 void print_loco_names(FILE *file) {
