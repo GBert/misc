@@ -155,9 +155,7 @@ int send_config_data(struct ms2_data_t *ms2_data) {
     frame.can_dlc = 6;
     toc32(&frame.data[0], ms2_data->size);
     toc16(&frame.data[4], ms2_data->crc);
-    printf("#####\n");
     send_can_frame(ms2_data->sc, &frame, ms2_data->verbose);
-    printf("#####\n");
 
     frame.can_dlc = 8;
     for (i = 0; i <= ms2_data->size; i +=8) {
@@ -169,7 +167,7 @@ int send_config_data(struct ms2_data_t *ms2_data) {
 }
 
 int get_loco_list(struct ms2_data_t *ms2_data) {
-    int fdp[2];
+    int fdp[2], nframes;
     FILE *input_fd, *output_fd;
 
     if (read_loco_data(ms2_data->loco_file, CONFIG_FILE))
@@ -191,9 +189,12 @@ int get_loco_list(struct ms2_data_t *ms2_data) {
     fclose(input_fd);
 
     ms2_data->size = read_pipe(output_fd, ms2_data->config_data, MAX_BUFFER);
-    ms2_data->crc = CRCCCITT((unsigned char *)ms2_data->config_data, ms2_data->size, 0xffff);
+
+    nframes = (ms2_data->size + 7) / 8;
+    ms2_data->crc = CRCCCITT((unsigned char *)ms2_data->config_data, nframes*8, 0xffff);
+
     if (ms2_data->verbose)
-	printf("Length %d CRC 0x%4X\n", ms2_data->size, ms2_data->crc);
+	printf("Length %d CRC 0x%04X\n", ms2_data->size, ms2_data->crc);
 
     fclose(output_fd);
     return(EXIT_SUCCESS);
