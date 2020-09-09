@@ -184,9 +184,9 @@ int send_config_data(struct ms2_data_t *ms2_data) {
     send_can_frame(ms2_data->sc, &frame, ms2_data->verbose);
 
     frame.can_dlc = 8;
-    for (i = 0; i <= ms2_data->size; i +=8) {
+    for (i = 0; i < ms2_data->size; i +=8) {
 	memcpy(frame.data, &ms2_data->config_data[i], 8);
-	usleep(5000);
+	usleep(1000);
 	send_can_frame(ms2_data->sc, &frame, ms2_data->verbose);
     }
     return(EXIT_SUCCESS);
