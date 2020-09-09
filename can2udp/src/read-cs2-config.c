@@ -1245,7 +1245,7 @@ void show_loco_names(FILE *file, int low, int high) {
 	if (i < low)
 	    continue;
 	if (i > high)
-	    continue;
+	    break;
 	fprintf(file, "lok\n");
 	if (l->number)
 	   fprintf(file, " .nr=%u\n", l->number);
