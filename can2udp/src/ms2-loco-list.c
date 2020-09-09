@@ -177,7 +177,7 @@ int send_config_data(struct ms2_data_t *ms2_data) {
     int i;
     struct can_frame frame;
 
-    frame.can_id = 0x00420300;
+    frame.can_id = 0x00420300 | ms2_data->hash;
     frame.can_dlc = 6;
     toc32(&frame.data[0], ms2_data->size);
     toc16(&frame.data[4], ms2_data->crc);
@@ -225,6 +225,32 @@ int get_loco_list(struct ms2_data_t *ms2_data) {
     fclose(output_fd);
     return(EXIT_SUCCESS);
 }
+
+int get_loco_by_name(struct ms2_data_t *ms2_data) {
+    int fdp[2], nframes;
+    FILE *input_fd, *output_fd;
+
+    if ((pipe(fdp) == -1)) {
+	fprintf(stderr, "setup pipe error: %s\n", strerror(errno));
+	exit(EXIT_FAILURE);
+    }
+
+    input_fd = fdopen(fdp[1], "w");
+    output_fd = fdopen(fdp[0], "r");
+    print_loco_by_name(input_fd, ms2_data->loco_name, MS2FKT);
+    fclose(input_fd);
+
+    ms2_data->size = read_pipe(output_fd, ms2_data->config_data, MAX_BUFFER);
+
+    nframes = (ms2_data->size + 7) / 8;
+    ms2_data->crc = CRCCCITT((unsigned char *)ms2_data->config_data, nframes*8, 0xffff);
+
+    if (ms2_data->verbose)
+	printf("Length %d CRC 0x%04X\n", ms2_data->size, ms2_data->crc);
+    fclose(output_fd);
+    return(EXIT_SUCCESS);
+}
+
 
 int main(int argc, char **argv) {
     int i, max_fds, opt, s, timeout;
@@ -407,6 +433,10 @@ int main(int argc, char **argv) {
 			    if (ms2_data.verbose)
 				printf("sending lokinfo >%s<\n", ms2_data.loco_name);
 			    hash2 = 0;
+			    frame.can_id = 0x00410300;
+			    send_can_frame(ms2_data.sc, &frame, ms2_data.verbose);
+			    get_loco_by_name(&ms2_data);
+			    send_config_data(&ms2_data);
 			} else {
 			    memcpy(ms2_data.loco_name, frame.data, frame.can_dlc);
 			}

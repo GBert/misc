@@ -44,6 +44,7 @@ void print_pages(void);
 void print_gbstats(void);
 void print_tracks(void);
 void print_loco(FILE *file, struct loco_data_t *l, unsigned int mask);
+void print_loco_by_name(FILE * file, char *name, unsigned int mask);
 void print_all_locos(FILE *file, unsigned int mask);
 void print_all_locos_short(FILE *file);
 void print_loco_names(FILE *file);

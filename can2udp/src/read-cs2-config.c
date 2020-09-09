@@ -24,7 +24,6 @@
 
 #include "read-cs2-config.h"
 #include "cs2-token.h"
-#include "cs2-config.h"
 
 #define FRAME_SIZE	13
 #define MAXSIZE		16384
@@ -572,14 +571,14 @@ void print_loco(FILE * file, struct loco_data_t *l, unsigned int mask) {
     for (i = 0; i < MAX_LOCO_FUNCTIONS; i++) {
 	if (i < 16) {
 	    if (mask & MS2FKT)
-		fprintf(file, " .funktionen\n");
-	    else
 		fprintf(file, " .fkt\n");
+	    else
+		fprintf(file, " .funktionen\n");
 	} else {
 	    if (mask & MS2FKT)
-		fprintf(file, " .funktionen_2\n");
-	    else
 		fprintf(file, " .fkt2\n");
+	    else
+		fprintf(file, " .funktionen_2\n");
 	}
 	fprintf(file, " ..nr=%d\n", i);
 	if (l->function[i].type) fprintf(file, " ..typ=%u\n", l->function[i].type);
@@ -603,6 +602,13 @@ void print_all_locos(FILE *file, unsigned int mask) {
     fprintf(file, " .id=%u\n", l->id);
 
     for (l = loco_data; l != NULL; l = l->hh.next)
+	print_loco(file, l, mask);
+}
+
+void print_loco_by_name(FILE * file, char *name, unsigned int mask) {
+    struct loco_data_t *l;
+    HASH_FIND_STR(loco_data, name, l);
+    if (l)
 	print_loco(file, l, mask);
 }
 
