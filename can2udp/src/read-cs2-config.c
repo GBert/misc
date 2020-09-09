@@ -541,7 +541,7 @@ void print_tracks(void) {
 }
 
 void print_loco(FILE * file, struct loco_data_t *l, unsigned int mask) {
-    int i;
+    int extended_present, functions, i;
 
     if (mask & MS2FKT)
 	fprintf(file, "lok\n");
@@ -571,7 +571,17 @@ void print_loco(FILE * file, struct loco_data_t *l, unsigned int mask) {
     if (l->spm) fprintf(file, " .spm=%u\n", l->spm);
     if (l->ft) fprintf(file, " .ft=0x%x\n", l->ft);
     if (l->mfxtype) fprintf(file, " .mfxtyp=%u\n", l->mfxtype);
-    for (i = 0; i < MAX_LOCO_FUNCTIONS; i++) {
+
+    /* check for extended funktions */
+    extended_present = 0;
+    for (i = 16; i < MAX_LOCO_FUNCTIONS; i++)
+	extended_present |= l->function[i].type;
+
+    if (extended_present)
+	functions = MAX_LOCO_FUNCTIONS;
+    else
+	functions = 16;
+    for (i = 0; i < functions; i++) {
 	if (i < 16) {
 	    if (mask & MS2FKT)
 		fprintf(file, " .fkt\n");
