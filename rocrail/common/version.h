@@ -1,11 +1,19 @@
 const int revisionnr = 
-975
+983
 ;
 const char* commithash = 
-"26089f5b99ef581d122ade5dcf141ef7d8b8b40e";
+"5f1825ebc34133961695ee6a07402c8dfc57bd2e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"983 2020-09-09 12:21:17 +0200 action,xmlscript: add car properties\n" \
+"982 2020-09-09 11:11:37 +0200 action: use caller parameter as local\n" \
+"981 2020-09-09 10:30:48 +0200 action,xmlscript: parameter option added\n" \
+"980 2020-09-09 08:30:25 +0200 car: extended actions\n" \
+"979 2020-09-09 08:22:10 +0200 car: actions extended\n" \
+"978 2020-09-08 14:48:34 +0200 car: action support added (wip)\n" \
+"977 2020-09-08 10:19:49 +0200 SLIM-COLOR: small blocks symbol with shunt border\n" \
+"976 2020-09-08 10:15:53 +0200 small block shunting\n" \
 "975 2020-09-06 10:55:38 +0200 tt: reject movement events for detecting the wanted position\n" \
 "974 2020-09-06 10:27:14 +0200 vendors: FichtelBahn added\n" \
 "973 2020-09-05 08:51:23 +0200 DB-Signals: semaphores with shunting\n" \
