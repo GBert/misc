@@ -62,8 +62,8 @@ static char *F_CAN_FORMAT_STRG   = "      CAN->  CANID 0x%08X R [%d]";
 static char *F_S_CAN_FORMAT_STRG = "short CAN->  CANID 0x%08X R [%d]";
 static char *T_CAN_FORMAT_STRG   = "      CAN<-  CANID 0x%08X   [%d]";
 
-static unsigned char M_GET_CONFIG[]	= { 0x6C, 0x6F, 0x6B, 0x6E, 0x61, 0x6D, 0x65, 0x6E}; /* "loknamen"; */
-static char M_GET_LOCO_INFO[]	= "lokinfo";
+static unsigned char M_GET_CONFIG[] = "loknamen";
+static char M_GET_LOCO_INFO[]       = "lokinfo";
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
@@ -108,7 +108,7 @@ void toc16(uint8_t *data, uint16_t x) {
 unsigned int read_pipe(FILE *input, char *d, size_t n) {
     unsigned int i = 0;
 
-    while ((( *d++= fgetc(input)) !=  EOF) && (i < n))
+    while (((*d++ = fgetc(input)) != EOF) && (i < n))
 	i++;
     /* TODO */
     *--d = 0;
@@ -168,9 +168,9 @@ int send_frame_to_net(int net_socket, struct sockaddr *net_addr, struct can_fram
     s = sendto(net_socket, netframe, CAN_ENCAP_SIZE, 0, net_addr, sizeof(*net_addr));
     if (s != CAN_ENCAP_SIZE) {
 	fprintf(stderr, "error sending TCP/UDP data: %s\n", strerror(errno));
-	return(EXIT_FAILURE);
+	return (EXIT_FAILURE);
     }
-    return(EXIT_SUCCESS);
+    return (EXIT_SUCCESS);
 }
 
 int send_config_data(struct ms2_data_t *ms2_data) {
@@ -184,12 +184,12 @@ int send_config_data(struct ms2_data_t *ms2_data) {
     send_can_frame(ms2_data->sc, &frame, ms2_data->verbose);
 
     frame.can_dlc = 8;
-    for (i = 0; i < ms2_data->size; i +=8) {
+    for (i = 0; i < ms2_data->size; i += 8) {
 	memcpy(frame.data, &ms2_data->config_data[i], 8);
 	usleep(1000);
 	send_can_frame(ms2_data->sc, &frame, ms2_data->verbose);
     }
-    return(EXIT_SUCCESS);
+    return (EXIT_SUCCESS);
 }
 
 int get_loco_list(struct ms2_data_t *ms2_data) {
@@ -217,13 +217,13 @@ int get_loco_list(struct ms2_data_t *ms2_data) {
     ms2_data->size = read_pipe(output_fd, ms2_data->config_data, MAX_BUFFER);
 
     nframes = (ms2_data->size + 7) / 8;
-    ms2_data->crc = CRCCCITT((unsigned char *)ms2_data->config_data, nframes*8, 0xffff);
+    ms2_data->crc = CRCCCITT((unsigned char *)ms2_data->config_data, nframes * 8, 0xffff);
 
     if (ms2_data->verbose)
 	printf("Length %d CRC 0x%04X\n", ms2_data->size, ms2_data->crc);
 
     fclose(output_fd);
-    return(EXIT_SUCCESS);
+    return (EXIT_SUCCESS);
 }
 
 int get_loco_by_name(struct ms2_data_t *ms2_data) {
@@ -243,17 +243,16 @@ int get_loco_by_name(struct ms2_data_t *ms2_data) {
     ms2_data->size = read_pipe(output_fd, ms2_data->config_data, MAX_BUFFER);
 
     nframes = (ms2_data->size + 7) / 8;
-    ms2_data->crc = CRCCCITT((unsigned char *)ms2_data->config_data, nframes*8, 0xffff);
+    ms2_data->crc = CRCCCITT((unsigned char *)ms2_data->config_data, nframes * 8, 0xffff);
 
     if (ms2_data->verbose)
 	printf("Length %d CRC 0x%04X\n", ms2_data->size, ms2_data->crc);
     fclose(output_fd);
-    return(EXIT_SUCCESS);
+    return (EXIT_SUCCESS);
 }
 
-
 int main(int argc, char **argv) {
-    int i, max_fds, opt, s, timeout;
+    int max_fds, opt, s;
     uint16_t hash1, hash2;
     char *bcast_interface;
     char *udp_dst_address;
@@ -277,44 +276,43 @@ int main(int argc, char **argv) {
 
     ms2_data.config_data = calloc(MAX_BUFFER, 1);
     ms2_data.verbose = 1;
-    timeout = MAX_UDP_BCAST_RETRY;
 
     udp_dst_address = (char *)calloc(MAXIPLEN, 1);
     if (!udp_dst_address) {
-        fprintf(stderr, "can't alloc memory for udp_dst_address: %s\n", strerror(errno));
-        exit(EXIT_FAILURE);
+	fprintf(stderr, "can't alloc memory for udp_dst_address: %s\n", strerror(errno));
+	exit(EXIT_FAILURE);
     };
 
     bcast_interface = (char *)calloc(MAXIPLEN, 1);
     if (!bcast_interface) {
-        fprintf(stderr, "can't alloc memory for bcast_interface: %s\n", strerror(errno));
-        exit(EXIT_FAILURE);
+	fprintf(stderr, "can't alloc memory for bcast_interface: %s\n", strerror(errno));
+	exit(EXIT_FAILURE);
     };
 
     while ((opt = getopt(argc, argv, "b:c:i:dh?")) != -1) {
 	switch (opt) {
-        case 'b':
+	case 'b':
 	    if (strnlen(optarg, MAXIPLEN) <= MAXIPLEN - 1) {
 		/* IP address begins with a number */
 		if ((optarg[0] >= '0') && (optarg[0] <= '9')) {
 		    strncpy(udp_dst_address, optarg, MAXIPLEN - 1);
-                } else {
+		} else {
 		    memset(udp_dst_address, 0, MAXIPLEN);
 		    strncpy(bcast_interface, optarg, MAXIPLEN - 1);
 		}
 	    } else {
-                fprintf(stderr, "UDP broadcast address or interface error: %s\n", optarg);
-                exit(EXIT_FAILURE);
-            }
-            break;
-        case 'c':
-            if (strnlen(optarg, MAX_LINE) < MAX_LINE) {
-                strncpy(loco_dir, optarg, sizeof(loco_dir) - 1);
-            } else {
-                fprintf(stderr, "config file dir to long\n");
-                exit(EXIT_FAILURE);
-            }
-            break;
+		fprintf(stderr, "UDP broadcast address or interface error: %s\n", optarg);
+		exit(EXIT_FAILURE);
+	    }
+	    break;
+	case 'c':
+	    if (strnlen(optarg, MAX_LINE) < MAX_LINE) {
+		strncpy(loco_dir, optarg, sizeof(loco_dir) - 1);
+	    } else {
+		fprintf(stderr, "config file dir to long\n");
+		exit(EXIT_FAILURE);
+	    }
+	    break;
 	case 'i':
 	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
 	    break;
@@ -334,29 +332,23 @@ int main(int argc, char **argv) {
 	}
     }
 
-    /* we are trying to setup a UDP socket */
-    for (i = 0; i < timeout; i++) {
-        /* trying to get the broadcast address */
-        getifaddrs(&ifap);
-        for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
-            if (ifa->ifa_addr) {
-                if (ifa->ifa_addr->sa_family == AF_INET) {
-                    bsa = (struct sockaddr_in *)ifa->ifa_broadaddr;
-                    if (strncmp(ifa->ifa_name, bcast_interface, strlen(bcast_interface)) == 0)
-                        udp_dst_address = inet_ntoa(bsa->sin_addr);
-                }
-            }
-        }
-        freeifaddrs(ifap);
-        /* try to prepare UDP sending socket struct */
-        memset(&baddr, 0, sizeof(baddr));
-        baddr.sin_family = AF_INET;
-        baddr.sin_port = htons(destination_port);
-        s = inet_pton(AF_INET, udp_dst_address, &baddr.sin_addr);
-        if (s > 0)
-            break;
-        sleep(1);
+    /* trying to get the broadcast address */
+    getifaddrs(&ifap);
+    for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
+	if (ifa->ifa_addr) {
+	    if (ifa->ifa_addr->sa_family == AF_INET) {
+		bsa = (struct sockaddr_in *)ifa->ifa_broadaddr;
+		if (strncmp(ifa->ifa_name, bcast_interface, strlen(bcast_interface)) == 0)
+		    udp_dst_address = inet_ntoa(bsa->sin_addr);
+	    }
+	}
     }
+    freeifaddrs(ifap);
+    /* try to prepare UDP sending socket struct */
+    memset(&baddr, 0, sizeof(baddr));
+    baddr.sin_family = AF_INET;
+    baddr.sin_port = htons(destination_port);
+    s = inet_pton(AF_INET, udp_dst_address, &baddr.sin_addr);
 
     /* prepare reading lokomotive.cs */
     if (asprintf(&ms2_data.loco_file, "%s/%s", loco_dir, "lokomotive.cs2") < 0) {
