@@ -1,11 +1,13 @@
 const int revisionnr = 
-983
+985
 ;
 const char* commithash = 
-"5f1825ebc34133961695ee6a07402c8dfc57bd2e";
+"a5b35835691ccc3e0c60994baf2567671b2f8301";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"985 2020-09-10 15:08:40 +0200 operatordlg: added missing translation for assigned locomotive\n" \
+"984 2020-09-10 10:17:10 +0200 translation merge: cs, sl, fr, sr_latin, de, nl\n" \
 "983 2020-09-09 12:21:17 +0200 action,xmlscript: add car properties\n" \
 "982 2020-09-09 11:11:37 +0200 action: use caller parameter as local\n" \
 "981 2020-09-09 10:30:48 +0200 action,xmlscript: parameter option added\n" \
