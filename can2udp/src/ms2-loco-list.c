@@ -68,7 +68,6 @@ static char M_GET_LOCO_INFO[]       = "lokinfo";
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
     fprintf(stderr, "   Version 0.98\n\n");
-    fprintf(stderr, "         -b <bcast_addr/int> broadcast address or interface - default 255.255.255.255/br-lan\n");
     fprintf(stderr, "         -c <loco_dir>       set the locomotive file dir - default %s\n", loco_dir);
     fprintf(stderr, "         -i <can int>        can interface - default vcan1\n");
     fprintf(stderr, "         -d                  daemonize\n\n");
@@ -252,13 +251,10 @@ int get_loco_by_name(struct ms2_data_t *ms2_data) {
 }
 
 int main(int argc, char **argv) {
-    int max_fds, opt, s;
+    int max_fds, opt;
     uint16_t hash1, hash2;
     char *bcast_interface;
     char *udp_dst_address;
-    struct ifaddrs *ifap, *ifa;
-    struct sockaddr_in *bsa;
-    struct sockaddr_in baddr;
     struct can_frame frame;
     struct sockaddr_can caddr;
     struct ifreq ifr;
@@ -270,7 +266,6 @@ int main(int argc, char **argv) {
     int background = 0;
     strcpy(ifr.ifr_name, "can0");
     strcpy(loco_dir, "/www/config");
-    int destination_port = 15730;
 
     memset(&ms2_data, 0, sizeof(ms2_data));
 
@@ -289,22 +284,8 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     };
 
-    while ((opt = getopt(argc, argv, "b:c:i:dh?")) != -1) {
+    while ((opt = getopt(argc, argv, "c:i:dh?")) != -1) {
 	switch (opt) {
-	case 'b':
-	    if (strnlen(optarg, MAXIPLEN) <= MAXIPLEN - 1) {
-		/* IP address begins with a number */
-		if ((optarg[0] >= '0') && (optarg[0] <= '9')) {
-		    strncpy(udp_dst_address, optarg, MAXIPLEN - 1);
-		} else {
-		    memset(udp_dst_address, 0, MAXIPLEN);
-		    strncpy(bcast_interface, optarg, MAXIPLEN - 1);
-		}
-	    } else {
-		fprintf(stderr, "UDP broadcast address or interface error: %s\n", optarg);
-		exit(EXIT_FAILURE);
-	    }
-	    break;
 	case 'c':
 	    if (strnlen(optarg, MAX_LINE) < MAX_LINE) {
 		strncpy(loco_dir, optarg, sizeof(loco_dir) - 1);
@@ -331,24 +312,6 @@ int main(int argc, char **argv) {
 	    exit(EXIT_FAILURE);
 	}
     }
-
-    /* trying to get the broadcast address */
-    getifaddrs(&ifap);
-    for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
-	if (ifa->ifa_addr) {
-	    if (ifa->ifa_addr->sa_family == AF_INET) {
-		bsa = (struct sockaddr_in *)ifa->ifa_broadaddr;
-		if (strncmp(ifa->ifa_name, bcast_interface, strlen(bcast_interface)) == 0)
-		    udp_dst_address = inet_ntoa(bsa->sin_addr);
-	    }
-	}
-    }
-    freeifaddrs(ifap);
-    /* try to prepare UDP sending socket struct */
-    memset(&baddr, 0, sizeof(baddr));
-    baddr.sin_family = AF_INET;
-    baddr.sin_port = htons(destination_port);
-    s = inet_pton(AF_INET, udp_dst_address, &baddr.sin_addr);
 
     /* prepare reading lokomotive.cs */
     if (asprintf(&ms2_data.loco_file, "%s/%s", loco_dir, "lokomotive.cs2") < 0) {
