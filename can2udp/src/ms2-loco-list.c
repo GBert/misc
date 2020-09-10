@@ -67,7 +67,7 @@ static char M_GET_LOCO_INFO[]       = "lokinfo";
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 0.98\n\n");
+    fprintf(stderr, "   Version 0.99\n\n");
     fprintf(stderr, "         -c <loco_dir>       set the locomotive file dir - default %s\n", loco_dir);
     fprintf(stderr, "         -i <can int>        can interface - default vcan1\n");
     fprintf(stderr, "         -d                  daemonize\n\n");
@@ -185,7 +185,7 @@ int send_config_data(struct ms2_data_t *ms2_data) {
     frame.can_dlc = 8;
     for (i = 0; i < ms2_data->size; i += 8) {
 	memcpy(frame.data, &ms2_data->config_data[i], 8);
-	usleep(1000);
+	usleep(2000);
 	send_can_frame(ms2_data->sc, &frame, ms2_data->verbose);
     }
     return (EXIT_SUCCESS);
