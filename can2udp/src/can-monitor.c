@@ -58,6 +58,10 @@
 #define ETHER_TYPE_IP	 (0x0800)
 #define ETHER_TYPE_8021Q (0x8100)
 
+/* diff between CS1/CS2 */
+#define M_CS2_HASH_MASK   0x00000380U
+#define M_CS2_HASH_FLAG   0x00000300U
+
 unsigned char netframe[MAXDG];
 
 struct knoten *statusdaten = NULL;
@@ -146,7 +150,7 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 3.8\n\n");
+    fprintf(stderr, "   Version 3.9\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
@@ -1236,10 +1240,37 @@ void decode_frame(struct can_frame *frame) {
     }
 }
 
+int check_cs1_frame(uint32_t id) {
+    if ((id & M_CS2_HASH_MASK) == M_CS2_HASH_FLAG)
+	return 0;
+    if (!(id & 0x1C000000))
+	return 0;
+    return 1;
+}
+
+void decode_frame_cs1(struct can_frame *frame) {
+    uint8_t mid;
+    uint8_t stage;
+    uint8_t node;
+    uint16_t id;
+
+    id    = (frame->can_id >> 16) & 0x3ff;
+    stage = (frame->can_id >> 13) & 0x07;
+    mid   = (frame->can_id >>  8) & 0xff;
+    node  = frame->can_id & 0x7f;
+    if ((node == 126) || (node & 1))
+	printf("[MS1] Slave ID %u Node %u Stage %u MID %u\n", id, node, stage, mid);
+    else
+	printf("[MS1] Master ID %u Node %u Stage %u MID %u\n", id, node, stage, mid);
+}
+
 void analyze_frame(struct can_frame *frame) {
     if (frame->can_id & CAN_EFF_FLAG) {	/* decode only EFF frames */
 	print_can_frame(F_N_CAN_FORMAT_STRG, frame);
-	decode_frame(frame);
+	if (check_cs1_frame(frame->can_id))
+	    decode_frame_cs1(frame);
+	else
+	    decode_frame(frame);
     } else {
 	if (frame->can_id & CAN_ERR_FLAG) {
 	    print_can_frame(F_N_CAN_FORMAT_STRG, frame);
