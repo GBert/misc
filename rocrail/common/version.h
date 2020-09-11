@@ -1,11 +1,14 @@
 const int revisionnr = 
-985
+988
 ;
 const char* commithash = 
-"a5b35835691ccc3e0c60994baf2567671b2f8301";
+"38442741ca71369bfb0fea6b67d1153056bf7bd8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"988 2020-09-11 10:14:50 +0200 xmlscript: reslove function command\n" \
+"987 2020-09-11 08:36:01 +0200 basedlg: show cmd:param in case desc is empty\n" \
+"986 2020-09-11 07:55:37 +0200 text: find loco for car\n" \
 "985 2020-09-10 15:08:40 +0200 operatordlg: added missing translation for assigned locomotive\n" \
 "984 2020-09-10 10:17:10 +0200 translation merge: cs, sl, fr, sr_latin, de, nl\n" \
 "983 2020-09-09 12:21:17 +0200 action,xmlscript: add car properties\n" \
