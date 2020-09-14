@@ -1,11 +1,14 @@
 const int revisionnr = 
-988
+991
 ;
 const char* commithash = 
-"38442741ca71369bfb0fea6b67d1153056bf7bd8";
+"96edb55b9244b53e30136827dab0a8e05478cf8b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"991 2020-09-14 08:19:32 +0200 model: fix for checking the location for shortest block\n" \
+"990 2020-09-14 08:03:31 +0200 location: select shotest block option added\n" \
+"989 2020-09-12 11:19:26 +0200 actions: test parameter\n" \
 "988 2020-09-11 10:14:50 +0200 xmlscript: reslove function command\n" \
 "987 2020-09-11 08:36:01 +0200 basedlg: show cmd:param in case desc is empty\n" \
 "986 2020-09-11 07:55:37 +0200 text: find loco for car\n" \
