@@ -550,7 +550,10 @@ void print_loco(FILE * file, struct loco_data_t *l, unsigned int mask) {
     fprintf(file, " .name=%s\n", l->name);
     if (l->direction) fprintf(file, " .richtung=%u\n", l->direction);
     fprintf(file, " .uid=0x%x\n", l->uid);
-    if (mask & MFXDEC) fprintf(file, " .adresse=%u\n", l->uid & 0xff);
+    if (mask & MFXDEC)
+	fprintf(file, " .adresse=%u\n", l->uid & 0xff);
+    else if(mask & MFXHEX)
+	fprintf(file, " .adresse=0x%x\n", l->uid & 0xff);
     else
 	fprintf(file, " .adresse=0x%x\n", l->address);
     fprintf(file, " .typ=%s\n", l->type);

@@ -46,7 +46,6 @@ extern struct loco_names_t *loco_names;
 int do_loop;
 
 #define OUR_HASH	0x4712
-#define BIT(x)		(1<<x)
 #define MINDELAY	1000000	/* min delay in usec */
 #define MAXLEN		64	/* maximum string length */
 #define MAX_BUFFER	8
@@ -138,14 +137,14 @@ void signal_handler(int sig) {
 
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -kfv [-i <CAN int>][-t <sec>][-l <LED pin>][-p <push button pin>]\n", prg);
-    fprintf(stderr, "   Version 1.2\n\n");
+    fprintf(stderr, "   Version 1.3\n\n");
     fprintf(stderr, "         -c <loco_dir>        set the locomotive file dir - default %s\n", loco_dir);
     fprintf(stderr, "         -i <CAN interface>   using can interface\n");
     fprintf(stderr, "         -t <interval in sec> using timer in sec\n");
     fprintf(stderr, "         -l <LED pin>         LED pin (e.g. BPi PI14 -> 270)\n");
     fprintf(stderr, "         -p <push button>     push button (e.g. BPi PI10 -> 266)\n");
     fprintf(stderr, "         -k                   use loco 'Lokliste' F0 as trigger\n");
-    fprintf(stderr, "         -m                   print mfx address decimal\n");
+    fprintf(stderr, "         -m [dh]              print mfx address decimal/hex (max 255)\n");
     fprintf(stderr, "         -n                   MS2 Version >=3.55\n");
     fprintf(stderr, "         -f                   run in foreground (for debugging)\n");
     fprintf(stderr, "         -v                   be verbose\n\n");
@@ -634,7 +633,7 @@ int main(int argc, char **argv) {
 
     trigger_data.background = 1;
 
-    while ((opt = getopt(argc, argv, "c:i:l:p:t:kmnfvh?")) != -1) {
+    while ((opt = getopt(argc, argv, "c:i:l:p:t:km:nfvh?")) != -1) {
 	switch (opt) {
 	case 'c':
 	    if (strnlen(optarg, MAXLINE) < MAXLINE) {
@@ -661,7 +660,14 @@ int main(int argc, char **argv) {
 	    trigger_data.loco_uid = 1;
 	    break;
 	case 'm':
-	    trigger_data.print_loco_mask = MFXDEC;
+	    if (optarg[0] == 'd')
+		trigger_data.print_loco_mask = MFXDEC;
+	    else if (optarg[0] == 'h')
+		trigger_data.print_loco_mask = MFXHEX;
+	    else {
+		fprintf(stderr, "missing argument for option -m: either d or h\n");
+		exit(EXIT_FAILURE);
+	    }
 	    break;
 	case 'n':
 	    trigger_data.v3x = 1;

@@ -21,8 +21,10 @@
 #define CONFIG_STRING	0x00
 #define CONFIG_FILE	0x01
 
-#define MFXDEC		0x00000001
-#define MS2FKT		0x00000002
+#define BIT(x)		(1UL << (x))
+#define MFXDEC		BIT(1)
+#define MFXHEX		BIT(2)
+#define MS2FKT		BIT(3)
 
 int get_char_index(const char **list, char *str);
 int get_value(char *st, char *search);
