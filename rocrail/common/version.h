@@ -1,11 +1,14 @@
 const int revisionnr = 
-991
+994
 ;
 const char* commithash = 
-"96edb55b9244b53e30136827dab0a8e05478cf8b";
+"5ffc62566b009dc49d81eb31daaa87aab2a95987";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"994 2020-09-14 13:52:14 +0200 operator: headshunt option added\n" \
+"993 2020-09-14 11:17:09 +0200 xmlscript: check condition for NULL\n" \
+"992 2020-09-14 09:32:29 +0200 location: enable select shortest block added\n" \
 "991 2020-09-14 08:19:32 +0200 model: fix for checking the location for shortest block\n" \
 "990 2020-09-14 08:03:31 +0200 location: select shotest block option added\n" \
 "989 2020-09-12 11:19:26 +0200 actions: test parameter\n" \
