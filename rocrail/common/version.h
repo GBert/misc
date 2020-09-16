@@ -1,11 +1,14 @@
 const int revisionnr = 
-994
+997
 ;
 const char* commithash = 
-"5ffc62566b009dc49d81eb31daaa87aab2a95987";
+"04ba8291cffa160bd8f0bec90b1045a67857aba9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"997 2020-09-15 10:23:13 +0200 scheduledialog: layout fix\n" \
+"996 2020-09-15 10:04:08 +0200 fix for double translation 'run around'\n" \
+"995 2020-09-15 08:24:04 +0200 replaced headshunt with runaround\n" \
 "994 2020-09-14 13:52:14 +0200 operator: headshunt option added\n" \
 "993 2020-09-14 11:17:09 +0200 xmlscript: check condition for NULL\n" \
 "992 2020-09-14 09:32:29 +0200 location: enable select shortest block added\n" \
