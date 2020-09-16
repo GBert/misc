@@ -73,7 +73,7 @@ struct updatefile {
 #define OLD	1
 
 struct updatefile gb2_update_data[] = {
-/*    name, version_name,	filename     , version type, blocksize,  bootblocks, fillupto,   fill */
+/*    name, version_name,	filename     , version type, blocksize,  bootblocks, fill upto,   fill */
     {"gbs2",	   "gb2",	"016-gb2.bin",	ACTUAL,		 512, 		2,	512,	0xff},
 };
 
