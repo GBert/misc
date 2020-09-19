@@ -63,6 +63,7 @@ struct updatefile {
     char *version_name;
     char *filename;
     int version_type;
+    int version_storage;
     int blocksize;
     int bootblock;
     int fill_upto;
@@ -71,23 +72,30 @@ struct updatefile {
 
 #define ACTUAL	0
 #define OLD	1
+#define	BLOCK	1024
 
 struct updatefile gb2_update_data[] = {
-/*    name, version_name,	filename     , version type, blocksize,  bootblocks, fill upto,   fill */
-    {"gb2s",	   "gb2",	"016-gb2.bin",	ACTUAL,		 512, 		2,	512,	0xff},
+/*    name, version_name,	filename    , version type, version_storage, blocksize, bootblocks, fill upto,  fill */
+    {"gb2s",	   "gb2",	"016-gb2.bin",	ACTUAL,		  6,		 512, 		2,   512,	0xff},
+    {0},
 };
+#define GB2_UPDATE_DATA_SIZE ((sizeof(gb2_update_data) / sizeof(struct updatefile)) - 1)
 
 struct updatefile ms2_update_data[] = {
-/*    name, version name,	filename    , version type, locksize,  bootblocks, fill upto,   fill */
-    {"ms2s",	"",		"050-ms2.bin",	ACTUAL,		1024, 		4,   1024,	0xff},
-    {"ms2",	"ms2ver",	"050-ms2.bin",	ACTUAL,		1024, 		0,   	8,	0x00},
-    {"gb2",	"gb2ver",	"016-gb2.bin",	ACTUAL,		1024, 		0,	8,	0x00},
-    {"ldb",	"ldbver",	"flashdb.ms2",	OLD,		1024, 		0,	8,	0x00},
-    {"lang",	"langver",	"lang.ms2",	ACTUAL,		1024, 		0,	8,	0x00},
-    {"mfx",	"mfxver",	"mfxdefs.ms2",	ACTUAL,		1024, 		0,	8,	0x00},
-    {"mfxb",	"mfxbver",	"mfxdefs.bin",	ACTUAL,		1024, 		0,	8,	0x00},
-    {"ms2x",	"ms2xver",	"051-ms2.bin",	ACTUAL,		1024, 		0,	8,	0x00},
+/*    name, version name,	filename    , version type, version_storage, blocksize, bootblocks, fill upto,  fill */
+    {"ms2s",	"",		"050-ms2.bin",	ACTUAL,		252, 		1024, 		4,   1024,	0xff},
+    {"ms2",	"ms2ver",	"050-ms2.bin",	ACTUAL,		252,		1024, 		0,   	8,	0x00},
+    {"gb2",	"gb2ver",	"016-gb2.bin",	ACTUAL,		  6,		   0,		0,	8,	0x00},
+    {"gfp",	"gfpver",	"000-gfp.bin",	ACTUAL,		  6,		   0,		0,	8,	0x00},
+    {"ldb",	"ldbver",	"flashdb.ms2",	OLD,		  0, 		   0,		0,	8,	0x00},
+    {"lang",	"langver",	"lang.ms2",	ACTUAL,		  0, 		   0, 		0,	8,	0x00},
+    {"mfx",	"mfxver",	"mfxdefs.ms2",	ACTUAL,		  0, 		   0,		0,	8,	0x00},
+    {"mfxb",	"mfxbver",	"mfxdefs.bin",	ACTUAL,		  0, 	 	   0,		0,	8,	0x00},
+    {"ms2x",	"ms2xver",	"051-ms2.bin",	ACTUAL,		  0, 	 	   0,		0,	8,	0x00},
+    {0},
 };
+
+#define MS2_UPDATE_DATA_SIZE ((sizeof(ms2_update_data) / sizeof(struct updatefile)) - 1)
 
 extern uint16_t CRCCCITT(uint8_t * data, size_t length, uint16_t seed);
 
@@ -278,6 +286,59 @@ unsigned char *read_data(struct update_config *device_config) {
     }
     return data;
 }
+
+int print_versions(struct update_config *device_config) {
+    unsigned int i, read_data_size, version_major, version_minor;
+    FILE *fp;
+    uint8_t *data;
+
+    if ((data = malloc(BLOCK)) == NULL) {
+        fprintf(stderr, "%s: can't alloc %d bytes for data\n", __func__, BLOCK);
+        return(EXIT_FAILURE);
+    }
+
+    if (device_config->id == GB2_ID) {
+    } else if (device_config->id == MS2_ID) {
+	for (i = 0; i < MS2_UPDATE_DATA_SIZE; ++i) {
+	    fp = fopen(ms2_update_data[i].filename, "rb");
+	    if (fp == NULL) {
+		fprintf(stderr, "%s: error opening file [%s]\n", __func__, ms2_update_data[i].filename);
+		free(data);
+		return(EXIT_FAILURE);
+	    }
+	    fseek(fp, 0, SEEK_END);
+	    fsize = ftell(fp);
+	    fseek(fp, 0, SEEK_SET);
+	    read_data_size = fsize > BLOCK ? BLOCK : fsize;
+	    if ((fread((void *)data, 1, read_data_size, fp)) != read_data_size) {
+		fprintf(stderr, "%s: error: fread failed for [%s]\n", __func__, ms2_update_data[i].filename);
+		fclose(fp);
+		free(data);
+		return(EXIT_FAILURE);
+	    }
+	    version_major = data[ms2_update_data[i].version_storage];
+	    version_minor = data[ms2_update_data[i].version_storage+1];
+	    printf("[%s] Device File Version %u.%u\n", ms2_update_data[i].filename, version_major, version_minor);
+	    fclose(fp);
+	}
+    }
+    printf("\n");
+    free(data);
+    return(EXIT_SUCCESS);
+}
+
+/*
+ .version=14
+ .monat=5
+ .jahr=2014
+ .anzahl=1143
+*/
+
+/*
+ .vhigh=2
+ .vlow=7
+ .bytes=84192
+*/
 
 int send_next_block_id(int block, unsigned char *netframe) {
     memcpy(netframe, M_BLOCK, 13);
@@ -529,6 +590,8 @@ int main(int argc, char **argv) {
 	strncpy(filename, argv[optind], sizeof(*filename) - 1);
 	device_config.filename = filename;
     }
+
+    print_versions(&device_config);
 
     binfile = read_data(&device_config);
     if (binfile == NULL)
