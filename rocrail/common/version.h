@@ -1,11 +1,16 @@
 const int revisionnr = 
-997
+1002
 ;
 const char* commithash = 
-"04ba8291cffa160bd8f0bec90b1045a67857aba9";
+"6b95d16f95d182377a13b247cf13e6769e467ed4";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1002 2020-09-19 14:55:44 +0200 tt: compiler fix for leopard\n" \
+"1001 2020-09-18 15:23:40 +0200 basedlg: format rfid sensor address\n" \
+"1000 2020-09-18 11:10:27 +0200 wio: use also the 32bit RFID as number to identify sensors\n" \
+"999 2020-09-18 07:47:06 +0200 switch: fix for save protect ID pointer\n" \
+"998 2020-09-17 08:14:32 +0200 block: generateinatenter command added\n" \
 "997 2020-09-15 10:23:13 +0200 scheduledialog: layout fix\n" \
 "996 2020-09-15 10:04:08 +0200 fix for double translation 'run around'\n" \
 "995 2020-09-15 08:24:04 +0200 replaced headshunt with runaround\n" \
