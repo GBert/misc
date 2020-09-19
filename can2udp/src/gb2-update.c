@@ -74,12 +74,13 @@ struct updatefile {
 
 struct updatefile gb2_update_data[] = {
 /*    name, version_name,	filename     , version type, blocksize,  bootblocks, fill upto,   fill */
-    {"gbs2",	   "gb2",	"016-gb2.bin",	ACTUAL,		 512, 		2,	512,	0xff},
+    {"gb2s",	   "gb2",	"016-gb2.bin",	ACTUAL,		 512, 		2,	512,	0xff},
 };
 
 struct updatefile ms2_update_data[] = {
 /*    name, version name,	filename    , version type, locksize,  bootblocks, fill upto,   fill */
-    {"ms2",	"ms2ver",	"050-ms2.bin",	ACTUAL,		1024, 		4,   1024,	0xff},
+    {"ms2s",	"",		"050-ms2.bin",	ACTUAL,		1024, 		4,   1024,	0xff},
+    {"ms2",	"ms2ver",	"050-ms2.bin",	ACTUAL,		1024, 		0,   	8,	0x00},
     {"gb2",	"gb2ver",	"016-gb2.bin",	ACTUAL,		1024, 		0,	8,	0x00},
     {"ldb",	"ldbver",	"flashdb.ms2",	OLD,		1024, 		0,	8,	0x00},
     {"lang",	"langver",	"lang.ms2",	ACTUAL,		1024, 		0,	8,	0x00},
