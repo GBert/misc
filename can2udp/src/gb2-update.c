@@ -72,6 +72,7 @@ struct updatefile {
 
 #define ACTUAL	0
 #define OLD	1
+#define ASCII	2
 #define	BLOCK	1024
 
 struct updatefile gb2_update_data[] = {
@@ -89,7 +90,7 @@ struct updatefile ms2_update_data[] = {
     {"gfp",	"gfpver",	"000-gfp.bin",	ACTUAL,		  6,		   0,		0,	8,	0x00},
     {"ldb",	"ldbver",	"flashdb.ms2",	OLD,		  0, 		   0,		0,	8,	0x00},
     {"lang",	"langver",	"lang.ms2",	ACTUAL,		  0, 		   0, 		0,	8,	0x00},
-    {"mfx",	"mfxver",	"mfxdefs.ms2",	ACTUAL,		  0, 		   0,		0,	8,	0x00},
+    {"mfx",	"mfxver",	"mfxdefs.ms2",	ASCII,		  0, 		   0,		0,	8,	0x00},
     {"mfxb",	"mfxbver",	"mfxdefs.bin",	ACTUAL,		  0, 	 	   0,		0,	8,	0x00},
     {"ms2x",	"ms2xver",	"051-ms2.bin",	ACTUAL,		  0, 	 	   0,		0,	8,	0x00},
     {0},
@@ -145,6 +146,10 @@ void print_usage(char *prg) {
 
 uint16_t be16(uint8_t *u) {
     return (u[0] << 8) | u[1];
+}
+
+uint16_t le16(uint8_t *u) {
+    return (u[1] << 8) | u[0];
 }
 
 uint32_t be32(uint8_t *u) {
@@ -288,13 +293,13 @@ unsigned char *read_data(struct update_config *device_config) {
 }
 
 int print_versions(struct update_config *device_config) {
-    unsigned int i, read_data_size, version_major, version_minor;
+    unsigned int i, read_data_size, version_major, version_minor, version_month, version_year;
     FILE *fp;
     uint8_t *data;
 
     if ((data = malloc(BLOCK)) == NULL) {
         fprintf(stderr, "%s: can't alloc %d bytes for data\n", __func__, BLOCK);
-        return(EXIT_FAILURE);
+        return EXIT_FAILURE;
     }
 
     if (device_config->id == GB2_ID) {
@@ -304,7 +309,7 @@ int print_versions(struct update_config *device_config) {
 	    if (fp == NULL) {
 		fprintf(stderr, "%s: error opening file [%s]\n", __func__, ms2_update_data[i].filename);
 		free(data);
-		return(EXIT_FAILURE);
+		return EXIT_FAILURE;
 	    }
 	    fseek(fp, 0, SEEK_END);
 	    fsize = ftell(fp);
@@ -314,17 +319,26 @@ int print_versions(struct update_config *device_config) {
 		fprintf(stderr, "%s: error: fread failed for [%s]\n", __func__, ms2_update_data[i].filename);
 		fclose(fp);
 		free(data);
-		return(EXIT_FAILURE);
+		return EXIT_FAILURE;
 	    }
-	    version_major = data[ms2_update_data[i].version_storage];
-	    version_minor = data[ms2_update_data[i].version_storage+1];
-	    printf("[%s] Device File Version %u.%u\n", ms2_update_data[i].filename, version_major, version_minor);
+	    if (ms2_update_data[i].version_type == ACTUAL) {
+		version_major = data[ms2_update_data[i].version_storage];
+		version_minor = data[ms2_update_data[i].version_storage + 1];
+		printf("[%s] Device File Version %u.%u\n", ms2_update_data[i].filename, version_major, version_minor);
+	    } else if (ms2_update_data[i].version_type == OLD) {
+		version_major = le16(&data[ms2_update_data[i].version_storage]);
+		version_month = le16(&data[ms2_update_data[i].version_storage + 2]);
+		version_year = le16(&data[ms2_update_data[i].version_storage + 4]);
+		printf("[%s] Device File Version %u %u/%u\n", ms2_update_data[i].filename, version_major, version_month, version_year);
+	    } else if (ms2_update_data[i].version_type == ASCII) {
+		printf("[%s] Device File Version TODO\n", ms2_update_data[i].filename);
+	    }
 	    fclose(fp);
 	}
     }
     printf("\n");
     free(data);
-    return(EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
 /*
