@@ -119,7 +119,7 @@ unsigned char udpframe[MAXDG];
 
 unsigned char *binfile;
 int device_fsize, fsize;
-int force = 0, verbose = 0;
+int force = 0, verbose = 0, print_version = 0;
 uint16_t device_file_version, version = 0;
 unsigned int device_id = 0;
 int sc, sb;			/* CAN socket, UDP Broadcast Socket */
@@ -140,6 +140,7 @@ void print_usage(char *prg) {
     fprintf(stderr, "         -l <port>           listening UDP port   - default 15730\n");
     fprintf(stderr, "         -b <broacast_addr>  broadcast address - default 255.255.255.255\n");
     fprintf(stderr, "         -i <can int>        switch to can using interface <can int>\n");
+    fprintf(stderr, "         -p                  print file information an exit\n");
     fprintf(stderr, "         -f                  force update even if device has already the same version\n");
     fprintf(stderr, "         -v                  verbose output\n\n");
 }
@@ -324,14 +325,14 @@ int print_versions(struct update_config *device_config) {
 	    if (ms2_update_data[i].version_type == ACTUAL) {
 		version_major = data[ms2_update_data[i].version_storage];
 		version_minor = data[ms2_update_data[i].version_storage + 1];
-		printf("[%s] Device File Version %u.%u\n", ms2_update_data[i].filename, version_major, version_minor);
+		printf("[%s] Device File Version %u.%u size %u\n", ms2_update_data[i].filename, version_major, version_minor, fsize);
 	    } else if (ms2_update_data[i].version_type == OLD) {
 		version_major = le16(&data[ms2_update_data[i].version_storage]);
 		version_month = le16(&data[ms2_update_data[i].version_storage + 2]);
 		version_year = le16(&data[ms2_update_data[i].version_storage + 4]);
-		printf("[%s] Device File Version %u %u/%u\n", ms2_update_data[i].filename, version_major, version_month, version_year);
+		printf("[%s] Device File Version %u %u/%u size %u\n", ms2_update_data[i].filename, version_major, version_month, version_year, fsize);
 	    } else if (ms2_update_data[i].version_type == ASCII) {
-		printf("[%s] Device File Version TODO\n", ms2_update_data[i].filename);
+		printf("[%s] Device File Version TODO size %u\n", ms2_update_data[i].filename, fsize);
 	    }
 	    fclose(fp);
 	}
@@ -555,7 +556,7 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     }
 
-    while ((opt = getopt(argc, argv, "d:l:b:i:fvh?")) != -1) {
+    while ((opt = getopt(argc, argv, "d:l:b:i:fpvh?")) != -1) {
 	switch (opt) {
 	case 'l':
 	    local_port = strtoul(optarg, (char **)NULL, 10);
@@ -579,20 +580,19 @@ int main(int argc, char **argv) {
 	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
 	    can_mode = 1;
 	    break;
-
 	case 'f':
 	    force = 1;
 	    break;
-
+	case 'p':
+	    print_version = 1;
+	    break;
 	case 'v':
 	    verbose = 1;
 	    break;
-
 	case 'h':
 	case '?':
 	    print_usage(basename(argv[0]));
 	    exit(EXIT_SUCCESS);
-
 	default:
 	    fprintf(stderr, "Unknown option %c\n", opt);
 	    print_usage(basename(argv[0]));
@@ -605,7 +605,11 @@ int main(int argc, char **argv) {
 	device_config.filename = filename;
     }
 
-    print_versions(&device_config);
+    if ((verbose) | print_version)
+	print_versions(&device_config);
+    /* we wanted only the file information - exit */
+    if (print_version)
+	exit(EXIT_SUCCESS);
 
     binfile = read_data(&device_config);
     if (binfile == NULL)
