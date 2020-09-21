@@ -1251,17 +1251,39 @@ int check_cs1_frame(uint32_t id) {
 void decode_frame_cs1(struct can_frame *frame) {
     uint8_t mid;
     uint8_t stage;
-    uint8_t node;
-    uint16_t id;
+    uint8_t id;
+    uint16_t objhandle = (frame->can_id >> 10) & 0xffff;
+    uint8_t node = frame->can_id & 0x7f;
 
-    id    = (frame->can_id >> 16) & 0x3ff;
-    stage = (frame->can_id >> 13) & 0x07;
-    mid   = (frame->can_id >>  8) & 0xff;
-    node  = frame->can_id & 0x7f;
-    if ((node == 126) || (node & 1))
-	printf("[MS1] Slave ID %u Node %u Stage %u MID %u\n", id, node, stage, mid);
+    if (((node == 126) && !(frame->can_id & 0x80)) || (node & 1))
+	printf("[MS1] Slave  Node %u ", node);
     else
-	printf("[MS1] Master ID %u Node %u Stage %u MID %u\n", id, node, stage, mid);
+	printf("[MS1] Master Node %u ", node);
+
+    switch (frame->can_id & 0x1C000380) {
+    case 0x0C000380:
+	printf("Ping an Node %u", frame->data[3]);
+	break;
+    case 0x1C000000:
+    case 0x1C000080:
+	id    = (objhandle >> 8) & 0xff;
+	stage = (objhandle >> 5) & 0x07;
+	mid   = objhandle & 0x1f;
+	printf("Anmeldung MID %u Stage %u ID %x", mid, stage, id);
+	if (frame->can_dlc == 8) switch (stage) {
+	    case 4:
+		printf(" -> UID %x", be32(frame->data));
+		break;
+	    case 7:
+		if (frame->can_id & 0x80)
+		    printf(" -> UID %x Handle %u Node %u", be32(frame->data), be16(frame->data+4), (frame->data[6] & 0x7F));
+		break;
+	}
+        break;
+    default:
+	printf("<still undecoded> Object Handle %u", objhandle);
+    }
+    printf("\n");
 }
 
 void analyze_frame(struct can_frame *frame) {
