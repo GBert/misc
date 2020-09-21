@@ -68,6 +68,12 @@ struct updatefile {
     int bootblock;
     int fill_upto;
     uint8_t fill;
+    uint32_t size;
+    uint32_t rows;
+    int major;
+    int minor;
+    int month;
+    int year;
 };
 
 #define ACTUAL	0
@@ -77,22 +83,22 @@ struct updatefile {
 
 struct updatefile gb2_update_data[] = {
 /*    name, version_name,	filename    , version type, version_storage, blocksize, bootblocks, fill upto,  fill */
-    {"gb2s",	   "gb2",	"016-gb2.bin",	ACTUAL,		  6,		 512, 		2,   512,	0xff},
+    {"gb2s",	   "gb2",	"016-gb2.bin",	ACTUAL,		  6,		 512, 		2,   512,	0xff, 0,  0, 0, 0, 0, 0},
     {0},
 };
 #define GB2_UPDATE_DATA_SIZE ((sizeof(gb2_update_data) / sizeof(struct updatefile)) - 1)
 
 struct updatefile ms2_update_data[] = {
 /*    name, version name,	filename    , version type, version_storage, blocksize, bootblocks, fill upto,  fill */
-    {"ms2s",	"",		"050-ms2.bin",	ACTUAL,		252, 		1024, 		4,   1024,	0xff},
-    {"ms2",	"ms2ver",	"050-ms2.bin",	ACTUAL,		252,		1024, 		0,   	8,	0x00},
-    {"gb2",	"gb2ver",	"016-gb2.bin",	ACTUAL,		  6,		   0,		0,	8,	0x00},
-    {"gfp",	"gfpver",	"000-gfp.bin",	ACTUAL,		  6,		   0,		0,	8,	0x00},
-    {"ldb",	"ldbver",	"flashdb.ms2",	OLD,		  0, 		   0,		0,	8,	0x00},
-    {"lang",	"langver",	"lang.ms2",	ACTUAL,		  0, 		   0, 		0,	8,	0x00},
-    {"mfx",	"mfxver",	"mfxdefs.ms2",	ASCII,		  0, 		   0,		0,	8,	0x00},
-    {"mfxb",	"mfxbver",	"mfxdefs.bin",	ACTUAL,		  0, 	 	   0,		0,	8,	0x00},
-    {"ms2x",	"ms2xver",	"051-ms2.bin",	ACTUAL,		  0, 	 	   0,		0,	8,	0x00},
+    {"ms2s",	"",		"050-ms2.bin",	ACTUAL,		252, 		1024, 		4,   1024,	0xff, 0, 0, 0, 0, 0 ,0},
+    {"ms2",	"ms2ver",	"050-ms2.bin",	ACTUAL,		252,		1024, 		0,   	8,	0x00, 0, 0, 0, 0, 0, 0},
+    {"gb2",	"gb2ver",	"016-gb2.bin",	ACTUAL,		  6,		   0,		0,	8,	0x00, 0, 0, 0, 0, 0, 0},
+    {"gfp",	"gfpver",	"000-gfp.bin",	ACTUAL,		  6,		   0,		0,	8,	0x00, 0, 0, 0, 0, 0, 0},
+    {"ldb",	"ldbver",	"flashdb.ms2",	OLD,		  0, 		   0,		0,	8,	0x00, 0, 0, 0, 0, 0, 0},
+    {"lang",	"langver",	"lang.ms2",	ACTUAL,		  0, 		   0, 		0,	8,	0x00, 0, 0, 0, 0, 0, 0},
+    {"mfx",	"mfxver",	"mfxdefs.ms2",	ASCII,		  0, 		   0,		0,	8,	0x00, 0, 0, 0, 0, 0, 0},
+    {"mfxb",	"mfxbver",	"mfxdefs.bin",	ACTUAL,		  0, 	 	   0,		0,	8,	0x00, 0, 0, 0, 0, 0, 0},
+    {"ms2x",	"ms2xver",	"051-ms2.bin",	ACTUAL,		  0, 	 	   0,		0,	8,	0x00, 0, 0, 0, 0, 0, 0},
     {0},
 };
 
@@ -294,7 +300,7 @@ unsigned char *read_data(struct update_config *device_config) {
 }
 
 int print_versions(struct update_config *device_config) {
-    unsigned int i, read_data_size, version_major, version_minor, version_month, version_year;
+    unsigned int i, read_data_size;
     FILE *fp;
     uint8_t *data;
 
@@ -323,14 +329,17 @@ int print_versions(struct update_config *device_config) {
 		return EXIT_FAILURE;
 	    }
 	    if (ms2_update_data[i].version_type == ACTUAL) {
-		version_major = data[ms2_update_data[i].version_storage];
-		version_minor = data[ms2_update_data[i].version_storage + 1];
-		printf("[%s] Device File Version %u.%u size %u\n", ms2_update_data[i].filename, version_major, version_minor, fsize);
+		ms2_update_data[i].major = data[ms2_update_data[i].version_storage];
+		ms2_update_data[i].minor = data[ms2_update_data[i].version_storage + 1];
+		ms2_update_data[i].size = fsize;
+		printf("[%s] Device File Version %u.%u size %u\n", ms2_update_data[i].filename, ms2_update_data[i].major, ms2_update_data[i].minor, fsize);
 	    } else if (ms2_update_data[i].version_type == OLD) {
-		version_major = le16(&data[ms2_update_data[i].version_storage]);
-		version_month = le16(&data[ms2_update_data[i].version_storage + 2]);
-		version_year = le16(&data[ms2_update_data[i].version_storage + 4]);
-		printf("[%s] Device File Version %u %u/%u size %u\n", ms2_update_data[i].filename, version_major, version_month, version_year, fsize);
+		ms2_update_data[i].major = le16(&data[ms2_update_data[i].version_storage]);
+		ms2_update_data[i].month = le16(&data[ms2_update_data[i].version_storage + 2]);
+		ms2_update_data[i].year = le16(&data[ms2_update_data[i].version_storage + 4]);
+		ms2_update_data[i].rows = le16(&data[ms2_update_data[i].version_storage + 6]);
+		ms2_update_data[i].size = fsize;
+		printf("[%s] Device File Version %u %u/%u size %u\n", ms2_update_data[i].filename, ms2_update_data[i].major, ms2_update_data[i].month, ms2_update_data[i].year, fsize);
 	    } else if (ms2_update_data[i].version_type == ASCII) {
 		printf("[%s] Device File Version TODO size %u\n", ms2_update_data[i].filename, fsize);
 	    }
@@ -354,6 +363,14 @@ int print_versions(struct update_config *device_config) {
  .vlow=7
  .bytes=84192
 */
+
+int sprint_version(struct updatefile *udata, char *s) {
+    if (udata->version_type == OLD)
+	sprintf(s, " .version=%u\n .monat=%u\n .jahr=%u\n .anzahl=%u\n", udata->major, udata->month, udata->year, udata->rows);
+    else if (udata->version_type == ACTUAL)
+	sprintf(s, " .vhigh=%u\n .vlow=%u\n .bytes=%u\n", udata->major, udata->minor, udata->size);
+    return strlen(s);
+}
 
 int send_next_block_id(int block, unsigned char *netframe) {
     memcpy(netframe, M_BLOCK, 13);
