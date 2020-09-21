@@ -1248,6 +1248,11 @@ int check_cs1_frame(uint32_t id) {
     return 1;
 }
 
+/*  ID field for MS1, coding for normal operation and for detection:
+    28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
+    <-PRIO-> <------          OBJECTHANDLE           ------> <-CMND-> <---    NODE    --->
+    <-PRIO-> <---      UID      ---> <-STEP-> <--  MID   --> <-CMND-> <---    NODE    --->
+*/
 void decode_frame_cs1(struct can_frame *frame) {
     uint8_t mid;
     uint8_t stage;
