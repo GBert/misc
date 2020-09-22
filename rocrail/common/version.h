@@ -1,11 +1,13 @@
 const int revisionnr = 
-1002
+1004
 ;
 const char* commithash = 
-"6b95d16f95d182377a13b247cf13e6769e467ed4";
+"e7a0909f82241348aa27884e2ae3cd226ef5e52a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1004 2020-09-22 08:47:06 +0200 ahome: report all event childs\n" \
+"1003 2020-09-22 08:13:01 +0200 wio: stop loco in case of empty battery\n" \
 "1002 2020-09-19 14:55:44 +0200 tt: compiler fix for leopard\n" \
 "1001 2020-09-18 15:23:40 +0200 basedlg: format rfid sensor address\n" \
 "1000 2020-09-18 11:10:27 +0200 wio: use also the 32bit RFID as number to identify sensors\n" \
