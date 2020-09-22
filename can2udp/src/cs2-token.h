@@ -380,8 +380,11 @@ lok
 enum {
     L2_NUMBER = 0,
     L2_TYPE,
+    L2_TYPE2,
     L2_DURATION,
+    L2_DURATION2,
     L2_VALUE,
+    L2_VALUE2,
     L2_TARGET,
     L2_NAME,
     L2_ADDRESS,
@@ -397,8 +400,11 @@ enum {
 const char *l2_token [] = {
     " ..nr=",
     " ..typ=",
+    " ..typ2=",
     " ..dauer=",
+    " ..dauer2=",
     " ..wert=",
+    " ..wert2=",
     " ..target=",
     " ..name",
     " ..addr=",
@@ -414,9 +420,12 @@ const char *l2_token [] = {
 
 /* TODO : use strlen macro */
 #define L2_NUMBER_LENGTH	6
-#define L2_DURATION_LENGTH	9
 #define L2_TYPE_LENGTH		7
+#define L2_TYPE2_LENGTH		8
+#define L2_DURATION_LENGTH	9
+#define L2_DURATION2_LENGTH	10
 #define L2_VALUE_LENGTH		8
+#define L2_VALUE2_LENGTH	9
 #define L2_TARGET_LENGTH	10
 #define L2_NAME_LENGTH		7
 #define L2_ADDRESS_LENGTH	8

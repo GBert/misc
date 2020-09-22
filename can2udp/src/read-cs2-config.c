@@ -597,11 +597,19 @@ void print_loco(FILE * file, struct loco_data_t *l, unsigned int mask) {
 		fprintf(file, " .funktionen_2\n");
 	}
 	fprintf(file, " ..nr=%d\n", i);
-	if (l->function[i].type) fprintf(file, " ..typ=%u\n", l->function[i].type);
-	if (l->function[i].value) fprintf(file, " ..wert=%u\n", l->function[i].value);
-	if (l->function[i].duration) fprintf(file, " ..dauer=%u\n", l->function[i].duration);
-	if (l->function[i].forward) fprintf(file, " ..vorwaerts=0x%x\n", l->function[i].forward);
-	if (l->function[i].backward) fprintf(file, " ..rueckwaerts=0x%x\n", l->function[i].backward);
+	if ((mask & MS2FKT) && (i >= 16)) {
+	    if (l->function[i].type) fprintf(file, " ..typ2=%u\n", l->function[i].type);
+	    if (l->function[i].value) fprintf(file, " ..wert2=%u\n", l->function[i].value);
+	    if (l->function[i].duration) fprintf(file, " ..dauer2=%u\n", l->function[i].duration);
+	    if (l->function[i].forward) fprintf(file, " ..vorwaerts=0x%x\n", l->function[i].forward);
+	    if (l->function[i].backward) fprintf(file, " ..rueckwaerts=0x%x\n", l->function[i].backward);
+	} else {
+	    if (l->function[i].type) fprintf(file, " ..typ=%u\n", l->function[i].type);
+	    if (l->function[i].value) fprintf(file, " ..wert=%u\n", l->function[i].value);
+	    if (l->function[i].duration) fprintf(file, " ..dauer=%u\n", l->function[i].duration);
+	    if (l->function[i].forward) fprintf(file, " ..vorwaerts=0x%x\n", l->function[i].forward);
+	    if (l->function[i].backward) fprintf(file, " ..rueckwaerts=0x%x\n", l->function[i].backward);
+	}
     }
     if (l->intraction) fprintf(file, " .inTraktion=0x%08x\n", l->intraction);
 }
@@ -1106,6 +1114,13 @@ int read_loco_data(char *config_file, int config_type) {
 		    debug_print(" loco function %2d type %3d\n", function, temp);
 		}
 		break;
+	    case L2_TYPE2:
+		if (function >= 0) {
+		    temp = strtoul(&line[L2_TYPE2_LENGTH], NULL, 10);
+		    loco->function[function].type = temp;
+		    debug_print(" loco function %2d type %3d\n", function, temp);
+		}
+		break;
 	    case L2_DURATION:
 		if (function >= 0) {
 		    temp = strtoul(&line[L2_DURATION_LENGTH], NULL, 10);
@@ -1113,9 +1128,23 @@ int read_loco_data(char *config_file, int config_type) {
 		    debug_print(" loco function %2d duration %3d\n", function, temp);
 		}
 		break;
+	    case L2_DURATION2:
+		if (function >= 0) {
+		    temp = strtoul(&line[L2_DURATION2_LENGTH], NULL, 10);
+		    loco->function[function].duration = temp;
+		    debug_print(" loco function %2d duration %3d\n", function, temp);
+		}
+		break;
 	    case L2_VALUE:
 		if (function >= 0) {
 		    temp = strtoul(&line[L2_VALUE_LENGTH], NULL, 10);
+		    loco->function[function].value = temp;
+		    debug_print(" loco function %2d value %d\n", function, temp);
+		}
+		break;
+	    case L2_VALUE2:
+		if (function >= 0) {
+		    temp = strtoul(&line[L2_VALUE2_LENGTH], NULL, 10);
 		    loco->function[function].value = temp;
 		    debug_print(" loco function %2d value %d\n", function, temp);
 		}
