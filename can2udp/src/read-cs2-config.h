@@ -25,6 +25,7 @@
 #define MFXDEC		BIT(1)
 #define MFXHEX		BIT(2)
 #define MS2FKT		BIT(3)
+#define TCWA		BIT(4)
 
 int get_char_index(const char **list, char *str);
 int get_value(char *st, char *search);
