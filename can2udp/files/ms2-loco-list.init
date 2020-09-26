@@ -5,6 +5,8 @@ START=99
 
 start() {
 	ms2-loco-list -d
+	# use Traincontroller work around for loco list download F16-F31
+	# ms2-loco-list -dw
 }
 
 stop() {
