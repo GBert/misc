@@ -1,11 +1,12 @@
 const int revisionnr = 
-1006
+1007
 ;
 const char* commithash = 
-"32b68bee3c7c55ff7570524f555c6e8ce58e8026";
+"fdd967308f21a5510f4a6199dea00c358e330f97";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1007 2020-09-28 10:20:57 +0200 switch: action state fix\n" \
 "1006 2020-09-25 21:53:23 +0200 model: regard only active locos in case of checking restored\n" \
 "1005 2020-09-25 10:36:50 +0200 model: check if all locos did restore before starting the auto mode (optional, default off)\n" \
 "1004 2020-09-22 08:47:06 +0200 ahome: report all event childs\n" \
