@@ -585,7 +585,7 @@ void print_loco(FILE * file, struct loco_data_t *l, unsigned int mask) {
     else
 	functions = 16;
     for (i = 0; i < functions; i++) {
-	if (i < 16) {
+	if ((i < 16) || (mask & TCWA)) {
 	    if (mask & MS2FKT)
 		fprintf(file, " .fkt\n");
 	    else
@@ -597,7 +597,7 @@ void print_loco(FILE * file, struct loco_data_t *l, unsigned int mask) {
 		fprintf(file, " .funktionen_2\n");
 	}
 	fprintf(file, " ..nr=%d\n", i);
-	if ((mask & MS2FKT) && (i >= 16)) {
+	if ((mask & MS2FKT) && !(mask & TCWA) && (i >= 16)) {
 	    if (l->function[i].type) fprintf(file, " ..typ2=%u\n", l->function[i].type);
 	    if (l->function[i].value) fprintf(file, " ..wert2=%u\n", l->function[i].value);
 	    if (l->function[i].duration) fprintf(file, " ..dauer2=%u\n", l->function[i].duration);

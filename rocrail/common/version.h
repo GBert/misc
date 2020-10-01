@@ -1,11 +1,15 @@
 const int revisionnr = 
-1004
+1008
 ;
 const char* commithash = 
-"e7a0909f82241348aa27884e2ae3cd226ef5e52a";
+"cda781b7889c2cf728ef7d1bdbe9f0fd736f8359";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1008 2020-09-29 19:19:25 +0200 locdialog: CAM options for use in the throttle dialog\n" \
+"1007 2020-09-28 10:20:57 +0200 switch: action state fix\n" \
+"1006 2020-09-25 21:53:23 +0200 model: regard only active locos in case of checking restored\n" \
+"1005 2020-09-25 10:36:50 +0200 model: check if all locos did restore before starting the auto mode (optional, default off)\n" \
 "1004 2020-09-22 08:47:06 +0200 ahome: report all event childs\n" \
 "1003 2020-09-22 08:13:01 +0200 wio: stop loco in case of empty battery\n" \
 "1002 2020-09-19 14:55:44 +0200 tt: compiler fix for leopard\n" \

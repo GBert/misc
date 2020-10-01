@@ -50,6 +50,7 @@ struct ms2_data_t {
     int loco_list_high;
     uint16_t hash;
     uint16_t crc;
+    uint32_t mask;
     int verbose;
 };
 
@@ -67,10 +68,11 @@ static char M_GET_LOCO_INFO[]       = "lokinfo";
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 0.99\n\n");
+    fprintf(stderr, "   Version 1.0\n\n");
     fprintf(stderr, "         -c <loco_dir>       set the locomotive file dir - default %s\n", loco_dir);
-    fprintf(stderr, "         -i <can int>        can interface - default vcan1\n");
-    fprintf(stderr, "         -d                  daemonize\n\n");
+    fprintf(stderr, "         -i <can int>        can interface - default can0\n");
+    fprintf(stderr, "         -d                  daemonize\n");
+    fprintf(stderr, "         -w                  TrainController work around F16-F31\n\n");
 }
 
 void usec_sleep(int usec) {
@@ -236,7 +238,7 @@ int get_loco_by_name(struct ms2_data_t *ms2_data) {
 
     input_fd = fdopen(fdp[1], "w");
     output_fd = fdopen(fdp[0], "r");
-    print_loco_by_name(input_fd, ms2_data->loco_name, MS2FKT);
+    print_loco_by_name(input_fd, ms2_data->loco_name, MS2FKT | ms2_data->mask);
     fclose(input_fd);
 
     ms2_data->size = read_pipe(output_fd, ms2_data->config_data, MAX_BUFFER);
@@ -284,7 +286,7 @@ int main(int argc, char **argv) {
 	exit(EXIT_FAILURE);
     };
 
-    while ((opt = getopt(argc, argv, "c:i:dh?")) != -1) {
+    while ((opt = getopt(argc, argv, "c:i:dhw?")) != -1) {
 	switch (opt) {
 	case 'c':
 	    if (strnlen(optarg, MAX_LINE) < MAX_LINE) {
@@ -300,6 +302,9 @@ int main(int argc, char **argv) {
 	case 'd':
 	    ms2_data.verbose = 0;
 	    background = 1;
+	    break;
+	case 'w':
+	    ms2_data.mask = TCWA;
 	    break;
 	case 'h':
 	case '?':
