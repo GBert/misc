@@ -1,11 +1,12 @@
 const int revisionnr = 
-1007
+1008
 ;
 const char* commithash = 
-"fdd967308f21a5510f4a6199dea00c358e330f97";
+"cda781b7889c2cf728ef7d1bdbe9f0fd736f8359";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1008 2020-09-29 19:19:25 +0200 locdialog: CAM options for use in the throttle dialog\n" \
 "1007 2020-09-28 10:20:57 +0200 switch: action state fix\n" \
 "1006 2020-09-25 21:53:23 +0200 model: regard only active locos in case of checking restored\n" \
 "1005 2020-09-25 10:36:50 +0200 model: check if all locos did restore before starting the auto mode (optional, default off)\n" \
