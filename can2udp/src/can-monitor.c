@@ -150,7 +150,7 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 3.9\n\n");
+    fprintf(stderr, "   Version 3.10\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
@@ -212,16 +212,18 @@ void candump_to_can(char *s, struct can_frame *frame) {
 
     sscanf(s, "%08x", &frame->can_id);
     candata = strstr(s, "#");
-    i = candata - s;
+    i = (unsigned int)(candata - s);
     if ((i > 5) && ((frame->can_id & CAN_ERR_FLAG) == 0))
 	frame->can_id |= CAN_EFF_FLAG;
-    if (candata++ == NULL) return;
+    if (candata++ == NULL)
+	return;
     if (candata[0] == 'R') {
 	frame->can_id |= CAN_RTR_FLAG;
 	frame->can_dlc = candata[1] & 0xF;
     } else {
 	for (i = 0; i < 8; i++) {
-	    if (sscanf(&candata[i * 2], "%2X", &dat) < 1) break;
+	    if (sscanf(&candata[i * 2], "%2X", &dat) < 1)
+		break;
 	    frame->data[i] = dat;
 	}
 	frame->can_dlc = i;
@@ -1146,7 +1148,7 @@ void decode_frame(struct can_frame *frame) {
 	    config_data.crc = be16(&frame->data[4]);
 	    if (config_data.deflated_data)
 		free(config_data.deflated_data);
-	    config_data.deflated_data = malloc(config_data.deflated_size + 8);
+	    config_data.deflated_data = malloc((size_t)config_data.deflated_size + 8);
 	    config_data.deflated_size_counter = 0;
 	    printf("Config Data Stream: Länge 0x%08X CRC 0x%04X\n", config_data.deflated_size, config_data.crc);
 	    break;
@@ -1155,7 +1157,7 @@ void decode_frame(struct can_frame *frame) {
 	    config_data.crc = be16(&frame->data[4]);
 	    if (config_data.deflated_data)
 		free(config_data.deflated_data);
-	    config_data.deflated_data = malloc(config_data.deflated_size + 8);
+	    config_data.deflated_data = malloc((size_t)config_data.deflated_size + 8);
 	    config_data.deflated_size_counter = 0;
 	    printf("Config Data Stream: Länge 0x%08X CRC 0x%04X (unbekannt 0x%02X)\n",
 		   config_data.deflated_size, config_data.crc, frame->data[6]);
@@ -1264,29 +1266,95 @@ void decode_frame_cs1(struct can_frame *frame) {
 	printf("[MS1] Slave  Node %u ", node);
     else
 	printf("[MS1] Master Node %u ", node);
-
+    if ((frame->can_id & 0x1FFFFFFF) < 0x1C000000) printf("OH %u ", objhandle);
     switch (frame->can_id & 0x1C000380) {
-    case 0x0C000380:
+    case 0x0C000380:		// Prio 011, Cmd 111
 	printf("Ping an Node %u", frame->data[3]);
 	break;
-    case 0x1C000000:
+    case 0x10000100:		// Prio 100, Cmd 010
+	printf("Statusänderung");	// TODO: add parameter
+	break;
+    case 0x14000000:		// Prio 101, Cmd 000
+    case 0x18000000:		// Prio 110, Cmd 000
+	printf("Lok-Zuordnung");	// TODO: add parameter
+	break;
+    case 0x18000080:		// Prio 110, Cmd 001
+	switch (frame->data[0]) {
+	case 0x02:
+	    if (frame->can_dlc < 5)
+		printf("Abfrage Namesteil[%02u]", frame->data[3]);
+	    else {
+		printf("Namesteil[%02u]: ", frame->data[3]);
+		for (int i = 4; i < frame->can_dlc; i++) {
+		    if (isprint(frame->data[i]))
+			printf("%c", frame->data[i]);
+		    else
+			putchar(46);
+		}
+	    }
+	    break;
+	case 0x40:
+	    printf("Loktyp oder Schienenformat");	// TODO: add parameter
+	    break;
+	case 0x41:
+	    printf("Lokstackgröße");		// TODO: add parameter
+	    break;
+	}
+	break;
+    case 0x18000100:		// Prio 110, Cmd 010
+	printf("System-status, Funktion, ??");	// TODO: clarify whats behind
+	break;
+    case 0x18000180:		// Prio 110, Cmd 011
+	switch (frame->data[0]) {
+	case 0x03:
+	    if (frame->can_dlc < 8)
+		printf("System-Handle-Anforderung für Node %u", frame->data[1]);
+	    else
+		printf("System-Handle für Node %u ist %u", frame->data[1], be16(frame->data + 4));
+	    break;
+	case 0x40:
+	    printf("SH-handle");		// TODO: add parameter
+	    break;
+	case 0x80:
+	    printf("Lokstack-Austausch");	// TODO: add parameter
+	    break;
+	}
+	break;
+    case 0x18000200:		// Prio 110, Cmd 100
+	switch (frame->data[0]) {
+	case 0x40:
+	    if (frame->can_dlc < 8)
+		printf("SD-Handle-Anforderung für Node %u", frame->data[1]);
+	    else
+		printf("SD-Handle für Node %u ist %u", frame->data[1], be16(frame->data + 4));
+	    break;
+	case 0x80:
+	    printf("Lokstack erweitern für Node %u mit Index %u", frame->data[1], be16(frame->data + 4));
+	    break;
+	}
+	break;
+    case 0x18000280:		// Prio 110, Cmd 101
+	printf("Lokstackeintrag löschen mit Index %u", be16(frame->data + 4));
+	break;
+    case 0x1C000000:		// Prio 111, Cmd 00X
     case 0x1C000080:
 	id    = (objhandle >> 8) & 0xff;
 	stage = (objhandle >> 5) & 0x07;
 	mid   = objhandle & 0x1f;
-	printf("Anmeldung MID %u Stage %u ID %x", mid, stage, id);
-	if (frame->can_dlc == 8) switch (stage) {
+	printf("Anmeldung MID %u Stage %u ID %X", mid, stage, id);
+	if (frame->can_dlc == 8)
+	    switch (stage) {
 	    case 4:
-		printf(" -> UID %x", be32(frame->data));
+		printf(" -> UID %X", be32(frame->data));
 		break;
 	    case 7:
 		if (frame->can_id & 0x80)
-		    printf(" -> UID %x Handle %u Node %u", be32(frame->data), be16(frame->data+4), (frame->data[6] & 0x7F));
+		    printf(" -> UID %X Handle %u Node %u", be32(frame->data), be16(frame->data + 4), (frame->data[6] & 0x7F));
 		break;
-	}
-        break;
+	    }
+	break;
     default:
-	printf("<still undecoded> Object Handle %u", objhandle);
+	printf("<message is still not decoded>");
     }
     printf("\n");
 }
@@ -1304,7 +1372,7 @@ void analyze_frame(struct can_frame *frame) {
 	    printf(RED "*** ERRORFRAME ***" RESET);
 	    if (verbose) {
 		char buf[CL_LONGCFSZ];
-		snprintf_can_error_frame(buf, sizeof(buf), (struct canfd_frame *) frame, "\n\t");
+		snprintf_can_error_frame(buf, sizeof(buf), (struct canfd_frame *)frame, "\n\t");
 		printf("\n\t%s", buf);
 	    }
 	} else {
@@ -1404,6 +1472,7 @@ int main(int argc, char **argv) {
 		analyze_frame(&aframe);
 	    }
 	}
+	printf(RESET);
 	return (EXIT_SUCCESS);
     }
 
@@ -1558,7 +1627,10 @@ int main(int argc, char **argv) {
 		    printf("%s %.3d>", timestamp, (ip_hdr->ip_src.s_addr) >> 24);
 		    frame_to_can(dump + i, &frame);
 		    print_can_frame(F_N_UDP_FORMAT_STRG, &frame);
-		    decode_frame(&frame);
+		    if (check_cs1_frame(frame.can_id))
+			decode_frame_cs1(&frame);
+		    else
+			decode_frame(&frame);
 		    printf(RESET);
 		}
 	    }
@@ -1602,7 +1674,10 @@ int main(int argc, char **argv) {
 			printf("%s %.3d>", timestamp, (ip_hdr->ip_src.s_addr) >> 24);
 			frame_to_can(dump + i, &frame);
 			print_can_frame(F_N_TCP_FORMAT_STRG, &frame);
-			decode_frame(&frame);
+			if (check_cs1_frame(frame.can_id))
+			    decode_frame_cs1(&frame);
+			else
+			    decode_frame(&frame);
 			/* print_content(dump, size_payload); */
 			printf(RESET);
 		    }
