@@ -1,11 +1,12 @@
 const int revisionnr = 
-1009
+1010
 ;
 const char* commithash = 
-"de2825940cb205f0050845522790ff3409f70fe1";
+"898239c692c37a0ee470017c928f2a5d13eefc7f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1010 2020-10-03 10:03:33 +0200 xmlscript: condition comparator contains ~ added\n" \
 "1009 2020-10-01 08:05:09 +0200 clntcon,wio: use reported nodeid for targetting commands\n" \
 "1008 2020-09-29 19:19:25 +0200 locdialog: CAM options for use in the throttle dialog\n" \
 "1007 2020-09-28 10:20:57 +0200 switch: action state fix\n" \
