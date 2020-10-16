@@ -1,11 +1,33 @@
 const int revisionnr = 
-1010
+1032
 ;
 const char* commithash = 
-"898239c692c37a0ee470017c928f2a5d13eefc7f";
+"c6cab2d9b51cc8ab5e31f6773a5e410fe7ba55c8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1032 2020-10-16 22:16:22 +0200 cardlg: function LED color brightness added\n" \
+"1031 2020-10-16 12:13:49 +0200 car,wio: color function option\n" \
+"1030 2020-10-15 17:15:02 +0200 wiodlg: mobile car option added\n" \
+"1029 2020-10-15 16:47:54 +0200 wio: remove raw attribute before sending the VDirF command\n" \
+"1028 2020-10-14 21:23:31 +0200 stc: version correction from 2.0 to 2.1\n" \
+"1027 2020-10-14 17:00:46 +0200 wio: send loco a command on WIO Control events instead of field events\n" \
+"1026 2020-10-14 11:41:23 +0200 canservice: mbus namespace\n" \
+"1025 2020-10-14 11:35:33 +0200 rocnetnode: mbus namespace\n" \
+"1024 2020-10-14 09:04:03 +0200 mbus,rcan,bidib: namespace conflicts resolved\n" \
+"1023 2020-10-13 20:45:48 +0200 virtual: removed writehex emu\n" \
+"1022 2020-10-13 19:30:56 +0200 wio: fix for activation OTA\n" \
+"1021 2020-10-10 17:14:48 +0200 mbus: bps 57600 added\n" \
+"1020 2020-10-09 21:31:12 +0200 stc: serial tt control\n" \
+"1019 2020-10-09 19:28:53 +0200 cleanup old build scripts\n" \
+"1018 2020-10-09 17:48:20 +0200 removed un used files\n" \
+"1017 2020-10-09 17:40:52 +0200 zipper: removed obsolete startrocrail.sh\n" \
+"1016 2020-10-09 16:59:29 +0200 switch: default active switch time\n" \
+"1015 2020-10-09 09:04:23 +0200 desktoplink.sh: copy link also to /usr/share/applications in case of super user privilege\n" \
+"1014 2020-10-08 17:56:32 +0200 makefile correction for copy desktoplink.sh\n" \
+"1013 2020-10-08 15:36:17 +0200 rocview.sh: fix for server path\n" \
+"1012 2020-10-08 08:21:15 +0200 make install: use $HOME/Rocrail as target instead of /opt/rocrail\n" \
+"1011 2020-10-07 17:25:00 +0200 loc: decoupler flag added for query in XMLScript\n" \
 "1010 2020-10-03 10:03:33 +0200 xmlscript: condition comparator contains ~ added\n" \
 "1009 2020-10-01 08:05:09 +0200 clntcon,wio: use reported nodeid for targetting commands\n" \
 "1008 2020-09-29 19:19:25 +0200 locdialog: CAM options for use in the throttle dialog\n" \
