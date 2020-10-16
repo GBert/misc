@@ -196,8 +196,27 @@ namespace WebServer {
 	{
 		stringstream command;
 		const DataModel::AccessoryState state = mySwitch->GetAccessoryState();
-		command << "switch;switch=" << mySwitch->GetID() << ";state=" << (state ? "straight" : "turnout");
-		AddUpdate(command.str(), state ? Languages::TextSwitchStateIsStraight : Languages::TextSwitchStateIsTurnout, mySwitch->GetName());
+		command << "switch;switch=" << mySwitch->GetID() << ";state=";
+		Languages::TextSelector text;
+		switch (state)
+		{
+			case DataModel::AccessoryState::SwitchStateTurnout:
+				command << "turnout";
+				text = Languages::TextSwitchStateIsTurnout;
+				break;
+
+			case DataModel::AccessoryState::SwitchStateThird:
+				command << "third";
+				text = Languages::TextSwitchStateIsThird;
+				break;
+
+			case DataModel::AccessoryState::SwitchStateStraight:
+			default:
+				command << "straight";
+				text = Languages::TextSwitchStateIsStraight;
+				break;
+		}
+		AddUpdate(command.str(), text, mySwitch->GetName());
 	}
 
 	void WebServer::SwitchSettings(const SwitchID switchID, const std::string& name)
@@ -291,7 +310,7 @@ namespace WebServer {
 		stringstream command;
 		const DataModel::AccessoryState state = signal->GetAccessoryState();
 		command << "signal;signal=" << signal->GetID() << ";state=" << (state ? "green" : "red");
-		AddUpdate(command.str(), state ? Languages::TextSignalStateIsGreen : Languages::TextSignalStateIsRed, signal->GetName());
+		AddUpdate(command.str(), state ? Languages::TextSignalStateIsClear : Languages::TextSignalStateIsStop, signal->GetName());
 		stringstream command2;
 		command2 << "trackstate;signal=" << signal->GetID();
 		TrackBaseState(command2, dynamic_cast<const DataModel::TrackBase*>(signal));

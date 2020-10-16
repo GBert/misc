@@ -54,6 +54,8 @@ namespace DataModel
 
 			std::string Serialize() const override;
 			bool Deserialize(const std::string& serialized) override;
+
+			void SetAccessoryState(const AccessoryState state);
 	};
 
 } // namespace DataModel

@@ -57,5 +57,15 @@ namespace DataModel
 		SetVisible(VisibleYes);
 		return true;
 	}
+
+	void Switch::SetAccessoryState(const AccessoryState state)
+	{
+		AccessoryState checkedState = state;
+		if (accessoryType != SwitchTypeThreeWay && state == SwitchStateThird)
+		{
+			checkedState = SwitchStateTurnout;
+		}
+		AccessoryBase::SetAccessoryState(checkedState);
+	}
 } // namespace DataModel
 

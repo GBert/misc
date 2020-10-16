@@ -259,7 +259,7 @@ namespace DataModel
 			Signal *signal = dynamic_cast<Signal*>(manager->GetTrackBase(fromTrack));
 			if (signal != nullptr && signal->GetLocoOrientation() == signal->GetSignalOrientation())
 			{
-				return manager->SignalState(ControlTypeInternal, signal, SignalStateGreen, true);
+				return manager->SignalState(ControlTypeInternal, signal, SignalStateClear, true);
 			}
 		}
 
@@ -377,7 +377,7 @@ namespace DataModel
 			Signal *signal = dynamic_cast<Signal*>(manager->GetTrackBase(fromTrack));
 			if (signal != nullptr && signal->GetLocoOrientation() == signal->GetSignalOrientation())
 			{
-				manager->SignalState(ControlTypeInternal, signal, SignalStateRed, true);
+				manager->SignalState(ControlTypeInternal, signal, SignalStateStop, true);
 			}
 		}
 

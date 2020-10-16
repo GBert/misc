@@ -43,21 +43,64 @@ namespace WebServer
 		string id("sw_" + switchIdString);
 		div1.AddId(id);
 		div1.AddClass("layout_item");
-		div1.AddClass("switch_item");
-		div1.AddClass(state == DataModel::SwitchStateStraight ? "switch_straight" : "switch_turnout");
+		switch (type)
+		{
+			default:
+				div1.AddClass("switch_item");
+				div1.AddAttribute("onclick", "return onClickSwitch(" + switchIdString + ");");
+				break;
+		}
+		switch (state)
+		{
+			case DataModel::SwitchStateTurnout:
+				div1.AddClass("switch_turnout");
+				break;
+
+			case DataModel::SwitchStateStraight:
+				div1.AddClass("switch_straight");
+				break;
+
+			case DataModel::SwitchStateThird:
+				div1.AddClass("switch_third");
+				break;
+
+			default:
+				break;
+		}
 		div1.AddAttribute("style", "left:" + to_string(layoutPosX) + "px;top:" + to_string(layoutPosY) + "px;");
 		string image;
-		if (type == DataModel::SwitchTypeLeft)
+		switch (type)
 		{
-			image = "<svg width=\"" + EdgeLengthString + "\" height=\"" + EdgeLengthString + "\" id=\"" + id + "_img\" style=\"transform:rotate(" + DataModel::LayoutItem::Rotation(mySwitch->GetRotation()) + "deg);\"><polygon points=\"14,27 22,36 14,36\" fill=\"black\" /><polygon points=\"0,14 14,27 14,36 0,22\" fill=\"gray\" class=\"turnout\"/><polygon points=\"14,0 22,0 22,36 14,27\" fill=\"gray\" class=\"straight\"/></svg>";
+			case DataModel::SwitchTypeLeft:
+				image = "<svg width=\"" + EdgeLengthString + "\" height=\"" + EdgeLengthString + "\" id=\"" + id + "_img\" style=\"transform:rotate(" + DataModel::LayoutItem::Rotation(mySwitch->GetRotation()) + "deg);\">"
+					"<polygon points=\"14,28 22,36 14,36\" fill=\"black\" />"
+					"<polygon points=\"0,14 14,28 14,36 0,22\" fill=\"gray\" class=\"turnout\"/>"
+					"<polygon points=\"14,0 22,0 22,36 14,28\" fill=\"gray\" class=\"straight\"/>"
+					"</svg>";
+				break;
+
+			case DataModel::SwitchTypeRight:
+				image = "<svg width=\"" + EdgeLengthString + "\" height=\"" + EdgeLengthString + "\" id=\"" + id + "_img\" style=\"transform:rotate(" + DataModel::LayoutItem::Rotation(mySwitch->GetRotation()) + "deg);\">"
+					"<polygon points=\"22,28 22,36 14,36\" fill=\"black\" />"
+					"<polygon points=\"22,28 36,14 36,22 22,36\" fill=\"gray\" class=\"turnout\"/>"
+					"<polygon points=\"14,0 22,0 22,28 14,36\" fill=\"gray\" class=\"straight\"/>"
+					"</svg>";
+				break;
+
+			case DataModel::SwitchTypeThreeWay:
+				image = "<svg width=\"" + EdgeLengthString + "\" height=\"" + EdgeLengthString + "\" id=\"" + id + "_img\" style=\"transform:rotate(" + DataModel::LayoutItem::Rotation(mySwitch->GetRotation()) + "deg);\">"
+					"<polygon points=\"18,32 22,36 14,36\" fill=\"black\" />"
+					"<polygon points=\"0,14 14,28 14,36 0,22\" fill=\"gray\" class=\"turnout\"/>"
+					"<polygon points=\"14,36 14,28 18,32\" fill=\"gray\" class=\"turnout straight\"/>"
+					"<polygon points=\"14,0 22,0 22,28 18,32 14,28\" fill=\"gray\" class=\"straight\"/>"
+					"<polygon points=\"22,28 22,36 18,32\" fill=\"gray\" class=\"straight third\"/>"
+					"<polygon points=\"22,28 36,14 36,22 22,36\" fill=\"gray\" class=\"third\"/>"
+					"</svg>";
+				break;
 		}
-		else
-		{
-			image = "<svg width=\"" + EdgeLengthString + "\" height=\"" + EdgeLengthString + "\" id=\"" + id + "_img\" style=\"transform:rotate(" + DataModel::LayoutItem::Rotation(mySwitch->GetRotation()) + "deg);\"><polygon points=\"22,27 22,36 14,36\" fill=\"black\" /><polygon points=\"22,27 36,14 36,22 22,36\" fill=\"gray\" class=\"turnout\"/><polygon points=\"14,0 22,0 22,27 14,36\" fill=\"gray\" class=\"straight\"/></svg>";
-		}
+
 		div1.AddChildTag(HtmlTag().AddContent(image));
 		div1.AddChildTag(HtmlTag("span").AddClass("tooltip").AddContent(switchName + " (addr=" + to_string(mySwitch->GetAddress()) + ")"));
-		div1.AddAttribute("onclick", "return onClickSwitch(" + switchIdString + ");");
 		div1.AddAttribute("oncontextmenu", "return onContextLayoutItem(event, '" + id + "');");
 		AddChildTag(div1);
 

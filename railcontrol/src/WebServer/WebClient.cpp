@@ -1308,8 +1308,8 @@ namespace WebServer
 				content.AddChildTag(HtmlTagSelect(name + "_id", signalOptions, objectId).AddClass("select_relation_id"));
 
 				map<DataModel::AccessoryState,Languages::TextSelector> stateOptions;
-				stateOptions[DataModel::SignalStateGreen] = Languages::TextGreen;
-				stateOptions[DataModel::SignalStateRed] = Languages::TextRed;
+				stateOptions[DataModel::SignalStateClear] = Languages::TextGreen;
+				stateOptions[DataModel::SignalStateStop] = Languages::TextRed;
 				content.AddChildTag(HtmlTagSelect(name + "_state", stateOptions, static_cast<DataModel::AccessoryState>(data)).AddClass("select_relation_state"));
 				return content;
 			}
@@ -2409,6 +2409,7 @@ namespace WebServer
 		std::map<DataModel::AccessoryType,Languages::TextSelector> typeOptions;
 		typeOptions[DataModel::SwitchTypeLeft] = Languages::TextLeft;
 		typeOptions[DataModel::SwitchTypeRight] = Languages::TextRight;
+		typeOptions[DataModel::SwitchTypeThreeWay] = Languages::TextThreeWay;
 
 		content.AddChildTag(HtmlTag("h1").AddContent(name).AddId("popup_title"));
 		HtmlTag tabMenu("div");
@@ -2467,8 +2468,20 @@ namespace WebServer
 	void WebClient::HandleSwitchState(const map<string, string>& arguments)
 	{
 		SwitchID switchID = Utils::Utils::GetIntegerMapEntry(arguments, "switch", SwitchNone);
-		DataModel::AccessoryState switchState = (Utils::Utils::GetStringMapEntry(arguments, "state", "turnout").compare("turnout") == 0 ? DataModel::SwitchStateTurnout : DataModel::SwitchStateStraight);
-
+		string switchStateText = Utils::Utils::GetStringMapEntry(arguments, "state", "turnout");
+		DataModel::AccessoryState switchState;
+		if (switchStateText.compare("turnout") == 0)
+		{
+			switchState = DataModel::SwitchStateTurnout;
+		}
+		else if (switchStateText.compare("third") == 0)
+		{
+			switchState = DataModel::SwitchStateThird;
+		}
+		else
+		{
+			switchState = DataModel::SwitchStateStraight;
+		}
 		manager.SwitchState(ControlTypeWebserver, switchID, switchState, false);
 
 		ReplyHtmlWithHeaderAndParagraph(switchState ? Languages::TextSwitchStateIsStraight : Languages::TextSwitchStateIsTurnout, manager.GetSwitchName(switchID));
@@ -2715,11 +2728,11 @@ namespace WebServer
 	void WebClient::HandleSignalState(const map<string, string>& arguments)
 	{
 		SignalID signalID = Utils::Utils::GetIntegerMapEntry(arguments, "signal", SignalNone);
-		DataModel::AccessoryState signalState = (Utils::Utils::GetStringMapEntry(arguments, "state", "red").compare("red") == 0 ? DataModel::SignalStateRed : DataModel::SignalStateGreen);
+		DataModel::AccessoryState signalState = (Utils::Utils::GetStringMapEntry(arguments, "state", "red").compare("red") == 0 ? DataModel::SignalStateStop : DataModel::SignalStateClear);
 
 		manager.SignalState(ControlTypeWebserver, signalID, signalState, false);
 
-		ReplyHtmlWithHeaderAndParagraph(signalState ? Languages::TextSignalStateIsGreen : Languages::TextSignalStateIsRed, manager.GetSignalName(signalID));
+		ReplyHtmlWithHeaderAndParagraph(signalState ? Languages::TextSignalStateIsClear : Languages::TextSignalStateIsStop, manager.GetSignalName(signalID));
 	}
 
 	void WebClient::HandleSignalList()
@@ -3267,10 +3280,11 @@ namespace WebServer
 		HtmlTag content;
 		TrackID trackID = Utils::Utils::GetIntegerMapEntry(arguments, "track", TrackNone);
 		string name = Languages::GetText(Languages::TextNew);
+		bool showName = true;
 		LayoutPosition posx = Utils::Utils::GetIntegerMapEntry(arguments, "posx", 0);
 		LayoutPosition posy = Utils::Utils::GetIntegerMapEntry(arguments, "posy", 0);
 		LayoutPosition posz = Utils::Utils::GetIntegerMapEntry(arguments, "posz", 0);
-		LayoutItemSize height = Utils::Utils::GetIntegerMapEntry(arguments, "length", 1);
+		LayoutItemSize height = Utils::Utils::GetIntegerMapEntry(arguments, "length", DataModel::LayoutItem::Height1);
 		LayoutRotation rotation = static_cast<LayoutRotation>(Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0));
 		DataModel::TrackType type = DataModel::TrackTypeStraight;
 		std::vector<FeedbackID> feedbacks;
@@ -3282,6 +3296,7 @@ namespace WebServer
 			if (track != nullptr)
 			{
 				name = track->GetName();
+				showName = track->GetShowName();
 				posx = track->GetPosX();
 				posy = track->GetPosY();
 				posz = track->GetPosZ();
@@ -3297,7 +3312,13 @@ namespace WebServer
 		{
 			case DataModel::TrackTypeTurn:
 			case DataModel::TrackTypeTunnelEnd:
-				height = 1;
+				height = DataModel::LayoutItem::Height1;
+				break;
+
+			case DataModel::TrackTypeCrossingLeft:
+			case DataModel::TrackTypeCrossingRight:
+			case DataModel::TrackTypeCrossingSymetric:
+				height = DataModel::LayoutItem::Height2;
 				break;
 
 			default:
@@ -3325,11 +3346,27 @@ namespace WebServer
 		typeOptions[DataModel::TrackTypeTunnel] = Languages::TextTunnelTwoSides;
 		typeOptions[DataModel::TrackTypeTunnelEnd] = Languages::TextTunnelOneSide;
 		typeOptions[DataModel::TrackTypeLink] = Languages::TextLink;
+		typeOptions[DataModel::TrackTypeCrossingLeft] = Languages::TextCrossingLeft;
+		typeOptions[DataModel::TrackTypeCrossingRight] = Languages::TextCrossingRight;
+		typeOptions[DataModel::TrackTypeCrossingSymetric] = Languages::TextCrossingSymetric;
 
 		HtmlTag mainContent("div");
 		mainContent.AddId("tab_main");
 		mainContent.AddClass("tab_content");
 		mainContent.AddChildTag(HtmlTagInputTextWithLabel("name", Languages::TextName, name).AddAttribute("onkeyup", "updateName();"));
+		HtmlTag i_showName("div");
+		i_showName.AddId("i_showname");
+		i_showName.AddChildTag(HtmlTagInputCheckboxWithLabel("showname", Languages::TextShowName, "true", showName));
+		switch (type)
+		{
+			case DataModel::TrackTypeStraight:
+				break;
+
+			default:
+				i_showName.AddAttribute("hidden");
+				break;
+		}
+		mainContent.AddChildTag(i_showName);
 		mainContent.AddChildTag(HtmlTagSelectWithLabel("tracktype", Languages::TextType, typeOptions, type).AddAttribute("onchange", "onChangeTrackType();return false;"));
 		HtmlTag i_length("div");
 		i_length.AddId("i_length");
@@ -3363,10 +3400,11 @@ namespace WebServer
 	{
 		TrackID trackID = Utils::Utils::GetIntegerMapEntry(arguments, "track", TrackNone);
 		string name = Utils::Utils::GetStringMapEntry(arguments, "name");
+		bool showName = Utils::Utils::GetBoolMapEntry(arguments, "showname", true);
 		LayoutPosition posX = Utils::Utils::GetIntegerMapEntry(arguments, "posx", 0);
 		LayoutPosition posY = Utils::Utils::GetIntegerMapEntry(arguments, "posy", 0);
 		LayoutPosition posZ = Utils::Utils::GetIntegerMapEntry(arguments, "posz", 0);
-		LayoutItemSize height = 1;
+		LayoutItemSize height = DataModel::LayoutItem::Height1;
 		LayoutRotation rotation = static_cast<LayoutRotation>(Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0));
 		int typeInt = static_cast<DataModel::TrackType>(Utils::Utils::GetIntegerMapEntry(arguments, "type", DataModel::TrackTypeStraight)); // FIXME: remove later
 		DataModel::TrackType type = static_cast<DataModel::TrackType>(Utils::Utils::GetIntegerMapEntry(arguments, "tracktype", typeInt));
@@ -3374,6 +3412,13 @@ namespace WebServer
 		{
 			case DataModel::TrackTypeTurn:
 			case DataModel::TrackTypeTunnelEnd:
+				// height is already 1
+				break;
+
+			case DataModel::TrackTypeCrossingLeft:
+			case DataModel::TrackTypeCrossingRight:
+			case DataModel::TrackTypeCrossingSymetric:
+				height = DataModel::LayoutItem::Height2;
 				break;
 
 			default:
@@ -3395,6 +3440,7 @@ namespace WebServer
 		string result;
 		if (manager.TrackSave(trackID,
 			name,
+			showName,
 			posX,
 			posY,
 			posZ,

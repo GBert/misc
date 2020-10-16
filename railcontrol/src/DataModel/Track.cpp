@@ -71,6 +71,12 @@ namespace DataModel
 				SetHeight(Height1);
 				break;
 
+			case TrackTypeCrossingLeft:
+			case TrackTypeCrossingRight:
+			case TrackTypeCrossingSymetric:
+				SetHeight(Height2);
+				break;
+
 			default:
 				break;
 		}

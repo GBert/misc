@@ -52,6 +52,7 @@ namespace DataModel
 
 			static const LayoutItemSize Width1 = 1;
 			static const LayoutItemSize Height1 = 1;
+			static const LayoutItemSize Height2 = 2;
 
 			LayoutItem(const ObjectID objectID)
 			:	Object(objectID),

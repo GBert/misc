@@ -155,6 +155,7 @@ namespace WebServer
 				image = "<polygon class=\"track\" points=\"14,0 22,0 22,12 14,12\"/>";
 				image += "<polygon class=\"track\" points=\"5,1 10,1 10,10 12,12 24,12 26,10 26,1 31,1 31,3 28,3 28,11 25,14 11,14 8,11 8,3 5,3 \"/>";
 				#include "Fallthrough.h"
+				// no break
 
 			case DataModel::TrackTypeTunnelEnd:
 			{
@@ -175,6 +176,18 @@ namespace WebServer
 				image += "<polygon class=\"track\" points=\"18,1 4,22 32,22\"/>";
 				break;
 
+			case DataModel::TrackTypeCrossingLeft:
+				image = "<polygon class=\"track\" points=\"14,0 22,0 22,36 36,50, 36,58 22,44 22,72 14,72 14,36 0,22 0,14 14,28\"/>";
+				break;
+
+			case DataModel::TrackTypeCrossingRight:
+				image = "<polygon class=\"track\" points=\"14,0 22,0 22,28 36,14, 36,22 22,36 22,72 14,72 14,44 0,58 0,50 14,36\"/>";
+				break;
+
+			case DataModel::TrackTypeCrossingSymetric:
+				image = "<polygon class=\"track\" points=\"36,14 36,22 22,36 36,50, 36,58 18,40 0,58 0,50 14,36 0,22 0,14 18,32\"/>";
+				break;
+
 			case DataModel::TrackTypeStraight:
 			default:
 				const string& orientationSign = track->GetLocoOrientation() == OrientationRight ? "&rarr; " : "&larr; ";
@@ -182,7 +195,10 @@ namespace WebServer
 				const string textPositionX = to_string(EdgeLength * trackHeight - 1);
 				image = "<polygon class=\"track\" points=\"14,0 22,0 22," + layoutHeight + " 14," + layoutHeight + "\"/>";
 				image += "<text class=\"loconame\" x=\"-" + textPositionX + "\" y=\"11\" id=\"" + identifier + "_text_loconame\" transform=\"rotate(270 0,0)\" font-size=\"14\">" + locoName + "</text>";
-				image += "<text class=\"trackname\" x=\"-" + textPositionX + "\" y=\"33\" id=\"" + identifier + "_text_trackname\" transform=\"rotate(270 0,0)\" font-size=\"14\">" + track->GetMyName() + "</text>";
+				if (track->GetShowName())
+				{
+					image += "<text class=\"trackname\" x=\"-" + textPositionX + "\" y=\"33\" id=\"" + identifier + "_text_trackname\" transform=\"rotate(270 0,0)\" font-size=\"14\">" + track->GetMyName() + "</text>";
+				}
 				break;
 		}
 	}

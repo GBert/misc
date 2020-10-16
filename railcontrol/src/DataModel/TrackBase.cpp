@@ -64,6 +64,8 @@ namespace DataModel
 		str += to_string(locoIdDelayed);
 		str += ";releasewhenfree=";
 		str += to_string(releaseWhenFree);
+		str += ";showname=";
+		str += to_string(showName);
 		return str;
 	}
 
@@ -91,6 +93,7 @@ namespace DataModel
 		blocked = Utils::Utils::GetBoolMapEntry(arguments, "blocked", false);
 		locoIdDelayed = static_cast<LocoID>(Utils::Utils::GetIntegerMapEntry(arguments, "locodelayed", GetLockedLoco()));
 		releaseWhenFree = Utils::Utils::GetBoolMapEntry(arguments, "releasewhenfree", false);
+		showName = Utils::Utils::GetBoolMapEntry(arguments, "showname", true);
 		return true;
 	}
 

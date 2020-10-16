@@ -345,7 +345,36 @@ namespace Hardware
 		{
 			return;
 		}
-		instance->Accessory(mySwitch->GetProtocol(), mySwitch->GetAddress(), mySwitch->GetInvertedAccessoryState(), mySwitch->GetAccessoryPulseDuration());
+
+		Protocol protocol =  mySwitch->GetProtocol();
+		Address address =  mySwitch->GetAddress();
+		DataModel::AccessoryPulseDuration duration = mySwitch->GetAccessoryPulseDuration();
+		if (mySwitch->GetType() == DataModel::SwitchTypeThreeWay)
+		{
+			switch (mySwitch->GetAccessoryState())
+			{
+				case DataModel::SwitchStateTurnout:
+					instance->Accessory(protocol, address + 1, mySwitch->CalculateInvertedAccessoryState(DataModel::AccessoryStateOff), duration);
+					instance->Accessory(protocol, address, mySwitch->CalculateInvertedAccessoryState(DataModel::AccessoryStateOff), duration);
+					break;
+
+				case DataModel::SwitchStateStraight:
+					instance->Accessory(protocol, address, mySwitch->CalculateInvertedAccessoryState(DataModel::AccessoryStateOn), duration);
+					instance->Accessory(protocol, address + 1, mySwitch->CalculateInvertedAccessoryState(DataModel::AccessoryStateOff), duration);
+					break;
+
+				case DataModel::SwitchStateThird:
+					instance->Accessory(protocol, address, mySwitch->CalculateInvertedAccessoryState(DataModel::AccessoryStateOn), duration);
+					instance->Accessory(protocol, address + 1, mySwitch->CalculateInvertedAccessoryState(DataModel::AccessoryStateOn), duration);
+					break;
+
+				default:
+					break;
+			}
+			return;
+		}
+		// else left or right switch
+		instance->Accessory(protocol, address, mySwitch->GetInvertedAccessoryState(), duration);
 	}
 
 	void HardwareHandler::SignalState(const ControlType controlType, const DataModel::Signal* signal)

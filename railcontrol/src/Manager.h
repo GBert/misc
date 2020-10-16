@@ -168,6 +168,7 @@ class Manager
 		const std::map<std::string,TrackID> TrackListIdByName() const;
 		TrackID TrackSave(const TrackID trackID,
 			const std::string& name,
+			const bool showName,
 			const DataModel::LayoutItem::LayoutPosition posX,
 			const DataModel::LayoutItem::LayoutPosition posY,
 			const DataModel::LayoutItem::LayoutPosition posZ,

@@ -239,11 +239,9 @@ body {
 	color: green;
 }
 
-.switch_turnout .turnout {
-	fill: black;
-}
-
-.switch_straight .straight {
+.switch_turnout .turnout,
+.switch_straight .straight,
+.switch_third .third {
 	fill: black;
 }
 

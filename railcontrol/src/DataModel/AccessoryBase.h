@@ -35,21 +35,28 @@ namespace DataModel
 		SignalTypeSimpleRight = 1,
 
 		SwitchTypeLeft = 0,
-		SwitchTypeRight
+		SwitchTypeRight = 1,
+		SwitchTypeThreeWay = 2
 	};
 
-	enum AccessoryState : bool
+	enum AccessoryState : unsigned char
 	{
-		DefaultState = false,
+		DefaultState = 0,
 
-		AccessoryStateOff = false,
-		AccessoryStateOn = true,
+		AccessoryStateOff = 0,
+		AccessoryStateOn = 1,
 
-		SignalStateRed = false,
-		SignalStateGreen = true,
+		SignalStateStop = 0,
+		SignalStateClear = 1,
+		SignalStateAspect2 = 2,
+		SignalStateAspect3 = 3,
+		SignalStateAspect4 = 4,
+		SignalStateAspect5 = 5,
+		SignalStateAspect6 = 6,
 
-		SwitchStateTurnout = false,
-		SwitchStateStraight = true
+		SwitchStateTurnout = 0,
+		SwitchStateStraight = 1,
+		SwitchStateThird = 2,
 	};
 
 	typedef unsigned short AccessoryPulseDuration;
@@ -71,31 +78,59 @@ namespace DataModel
 
 			virtual ~AccessoryBase() {}
 
-			AccessoryType GetType() const { return accessoryType; }
-			void SetType(AccessoryType type) { this->accessoryType = type; }
-			AccessoryState GetAccessoryState() const { return accessoryState; }
-			AccessoryState CalculateInvertedAccessoryState(AccessoryState state) const
+			inline AccessoryType GetType() const
 			{
-				if (inverted == false)
-				{
-					return state;
-				}
-				return state == AccessoryStateOn ? AccessoryStateOff : AccessoryStateOn;
+				return accessoryType;
 			}
+
+			inline void SetType(AccessoryType type)
+			{
+				this->accessoryType = type;
+			}
+
+			inline AccessoryState GetAccessoryState() const
+			{
+				return accessoryState;
+			}
+
+			AccessoryState CalculateInvertedAccessoryState(AccessoryState state) const;
 
 			inline AccessoryState GetInvertedAccessoryState() const
 			{
 				return CalculateInvertedAccessoryState(accessoryState);
 			}
 
-			void SetAccessoryState(AccessoryState state) { this->accessoryState = state; lastUsed = time(nullptr); ++counter; }
-			AccessoryPulseDuration GetAccessoryPulseDuration() const { return duration; }
-			void SetAccessoryPulseDuration(AccessoryPulseDuration duration) { this->duration = duration; }
+			inline void SetAccessoryState(const AccessoryState state)
+			{
+				this->accessoryState = state;
+				lastUsed = time(nullptr);
+				++counter;
+			}
 
-			bool GetInverted() const { return inverted; }
-			void SetInverted(const bool inverted) { this->inverted = inverted; }
+			inline AccessoryPulseDuration GetAccessoryPulseDuration() const
+			{
+				return duration;
+			}
 
-			time_t GetLastUsed() const { return lastUsed; }
+			inline void SetAccessoryPulseDuration(const AccessoryPulseDuration duration)
+			{
+				this->duration = duration;
+			}
+
+			inline bool GetInverted() const
+			{
+				return inverted;
+			}
+
+			inline void SetInverted(const bool inverted)
+			{
+				this->inverted = inverted;
+			}
+
+			inline time_t GetLastUsed() const
+			{
+				return lastUsed;
+			}
 
 		protected:
 			virtual std::string Serialize() const;

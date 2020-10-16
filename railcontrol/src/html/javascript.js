@@ -392,7 +392,19 @@ function onClickSwitch(switchID)
 {
 	var element = document.getElementById('sw_' + switchID);
 	var url = '/?cmd=switchstate';
-	url += '&state=' + (element.classList.contains('switch_straight') ? 'turnout' : 'straight');
+	url += '&state='
+	if (element.classList.contains('switch_straight'))
+	{
+		url += 'third'
+	}
+	else if (element.classList.contains('switch_turnout'))
+	{
+		url += 'straight'
+	}
+	else
+	{
+		url += 'turnout'
+	}
 	url += '&switch=' + switchID;
 	fireRequestAndForget(url);
 	return false;
@@ -484,13 +496,20 @@ function onChangeTrackType()
 	{
 		return;
 	}
+	var trackTypeValue = trackType.value;
+	var showname = document.getElementById('i_showname');
+	if (!showname)
+	{
+		return;
+	}
+	showname.hidden = (trackTypeValue != 0)
 	var length = document.getElementById('i_length');
 	if (!length)
 	{
 		return;
 	}
 	var trackTypeValue = trackType.value;
-	length.hidden = (trackTypeValue == 1 || trackTypeValue == 5)
+	length.hidden = (trackTypeValue == 1 || trackTypeValue == 5 || trackTypeValue == 7 || trackTypeValue == 8 || trackTypeValue == 9)
 }
 
 function updateLayoutItem(elementName, data)
@@ -824,12 +843,20 @@ function dataUpdate(event)
 			if (state == 'straight')
 			{
 				element.classList.remove('switch_turnout');
+				element.classList.remove('switch_third');
 				element.classList.add('switch_straight');
 			}
-			else
+			else if (state == 'turnout')
 			{
 				element.classList.remove('switch_straight');
+				element.classList.remove('switch_third');
 				element.classList.add('switch_turnout');
+			}
+			else if (state == 'third')
+			{
+				element.classList.remove('switch_straight');
+				element.classList.remove('switch_turnout');
+				element.classList.add('switch_third');
 			}
 		}
 	}

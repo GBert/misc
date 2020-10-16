@@ -47,12 +47,32 @@ namespace DataModel
 	{
 		HardwareHandle::Deserialize(arguments);
 		accessoryType = static_cast<AccessoryType>(Utils::Utils::GetIntegerMapEntry(arguments, "type"));
-		accessoryState = static_cast<AccessoryState>(Utils::Utils::GetIntegerMapEntry(arguments, "state"));
+		accessoryState = static_cast<AccessoryState>(Utils::Utils::GetIntegerMapEntry(arguments, "state", AccessoryStateOff));
 		duration = static_cast<AccessoryPulseDuration>(Utils::Utils::GetIntegerMapEntry(arguments, "timeout", DefaultAccessoryPulseDuration)); // FIXME: remove in later versions, is only here for conversion
 		duration = static_cast<AccessoryPulseDuration>(Utils::Utils::GetIntegerMapEntry(arguments, "duration", DefaultAccessoryPulseDuration));
 		inverted = Utils::Utils::GetBoolMapEntry(arguments, "inverted");
 		lastUsed = Utils::Utils::GetIntegerMapEntry(arguments, "lastused", 0);
 		counter = Utils::Utils::GetIntegerMapEntry(arguments, "counter", 0);
 		return true;
+	}
+
+	AccessoryState AccessoryBase::CalculateInvertedAccessoryState(AccessoryState state) const
+	{
+		if (inverted == false)
+		{
+			return state;
+		}
+
+		switch(state)
+		{
+			case AccessoryStateOff:
+				return AccessoryStateOn;
+
+			case AccessoryStateOn:
+				return AccessoryStateOff;
+
+			default:
+				return state;
+		}
 	}
 } // namespace DataModel

@@ -1529,6 +1529,7 @@ const std::vector<FeedbackID> Manager::CleanupAndCheckFeedbacksForTrack(const Ob
 
 TrackID Manager::TrackSave(const TrackID trackID,
 	const std::string& name,
+	const bool showName,
 	const LayoutPosition posX,
 	const LayoutPosition posY,
 	const LayoutPosition posZ,
@@ -1559,6 +1560,7 @@ TrackID Manager::TrackSave(const TrackID trackID,
 
 	// update existing track
 	track->SetName(CheckObjectName(tracks, trackMutex, trackID, name.size() == 0 ? "T" : name));
+	track->SetShowName(showName);
 	track->SetHeight(height);
 	track->SetRotation(rotation);
 	track->SetPosX(posX);

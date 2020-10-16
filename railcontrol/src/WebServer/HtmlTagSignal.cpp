@@ -37,7 +37,7 @@ namespace WebServer
 		DataModel::AccessoryType type = signal->GetType();
 
 		imageDiv.AddClass("signal_item");
-		imageDiv.AddClass(signalState == DataModel::SignalStateRed ? "signal_red" : "signal_green");
+		imageDiv.AddClass(signalState == DataModel::SignalStateStop ? "signal_red" : "signal_green");
 		image += "<g";
 		if (signal->GetSignalOrientation() == OrientationLeft)
 		{

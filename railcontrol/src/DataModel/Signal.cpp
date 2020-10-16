@@ -72,7 +72,7 @@ namespace DataModel
 			return false;
 		}
 
-		SetAccessoryState(SignalStateRed);
+		SetAccessoryState(SignalStateStop);
 		PublishState();
 		return true;
 	}
