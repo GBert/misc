@@ -1,11 +1,14 @@
 const int revisionnr = 
-1035
+1038
 ;
 const char* commithash = 
-"02c7237234c389ce28f39dfabaf68850100a9f13";
+"93852f59c07bb213d1dd7f121915217849604e74";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1038 2020-10-18 18:54:27 +0200 cardlg,car: fix for function color in case of ledaddr == 0 and ledcount > 0\n" \
+"1037 2020-10-18 17:18:42 +0200 text: do not cat NULL variable strings\n" \
+"1036 2020-10-18 13:37:43 +0200 wio: LEDScript support\n" \
 "1035 2020-10-17 13:34:58 +0200 router: typo fix\n" \
 "1034 2020-10-17 13:28:59 +0200 car: add bus(node-id) to all commands\n" \
 "1033 2020-10-17 10:31:51 +0200 operator: shiftloco command added\n" \
