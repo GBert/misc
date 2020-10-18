@@ -1,11 +1,14 @@
 const int revisionnr = 
-1032
+1035
 ;
 const char* commithash = 
-"c6cab2d9b51cc8ab5e31f6773a5e410fe7ba55c8";
+"02c7237234c389ce28f39dfabaf68850100a9f13";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1035 2020-10-17 13:34:58 +0200 router: typo fix\n" \
+"1034 2020-10-17 13:28:59 +0200 car: add bus(node-id) to all commands\n" \
+"1033 2020-10-17 10:31:51 +0200 operator: shiftloco command added\n" \
 "1032 2020-10-16 22:16:22 +0200 cardlg: function LED color brightness added\n" \
 "1031 2020-10-16 12:13:49 +0200 car,wio: color function option\n" \
 "1030 2020-10-15 17:15:02 +0200 wiodlg: mobile car option added\n" \
