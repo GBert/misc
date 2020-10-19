@@ -1,11 +1,13 @@
 const int revisionnr = 
-1040
+1042
 ;
 const char* commithash = 
-"fe68de04eb3d41072d0b32c4e564e872833a01ee";
+"c2900b8fcf9e7af00803ca15025474414f9468c7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1042 2020-10-19 19:03:07 +0200 wio: fix for output and LEDScript\n" \
+"1041 2020-10-19 10:30:22 +0200 mbus: default auto switch delay active\n" \
 "1040 2020-10-19 07:43:52 +0200 wio: output bri to max. in case of LEDScript activation\n" \
 "1039 2020-10-19 07:35:53 +0200 wio: use output/carfun addr > 100 as trigger for LEDScript\n" \
 "1038 2020-10-18 18:54:27 +0200 cardlg,car: fix for function color in case of ledaddr == 0 and ledcount > 0\n" \
