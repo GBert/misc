@@ -1,11 +1,13 @@
 const int revisionnr = 
-1038
+1040
 ;
 const char* commithash = 
-"93852f59c07bb213d1dd7f121915217849604e74";
+"fe68de04eb3d41072d0b32c4e564e872833a01ee";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1040 2020-10-19 07:43:52 +0200 wio: output bri to max. in case of LEDScript activation\n" \
+"1039 2020-10-19 07:35:53 +0200 wio: use output/carfun addr > 100 as trigger for LEDScript\n" \
 "1038 2020-10-18 18:54:27 +0200 cardlg,car: fix for function color in case of ledaddr == 0 and ledcount > 0\n" \
 "1037 2020-10-18 17:18:42 +0200 text: do not cat NULL variable strings\n" \
 "1036 2020-10-18 13:37:43 +0200 wio: LEDScript support\n" \
