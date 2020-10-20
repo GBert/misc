@@ -1225,8 +1225,7 @@ void decode_frame(struct can_frame *frame) {
 	if (frame->can_dlc == 4)
 	    printf("Blocktext zuordnen: ID 0x%04X Funktion 0x%04X\n", kenner, function);
 	if (frame->can_dlc == 8)
-	    printf("Blocktext zuordnen: ID 0x%04X Funktion 0x%04X Lok %s\n", kenner, function,
-		   getLoco(&frame->data[4], s));
+	    printf("Blocktext zuordnen: ID 0x%04X Funktion 0x%04X Lok %s\n", kenner, function, getLoco(&frame->data[4], s));
 	break;
     case 0x64:
     case 0x65:
@@ -1245,9 +1244,9 @@ void decode_frame(struct can_frame *frame) {
 int check_cs1_frame(uint32_t id) {
     if ((id & M_CS2_HASH_MASK) == M_CS2_HASH_FLAG)
 	return 0;
-    if (!(id & 0x1C000000))
-	return 0;
-    return 1;
+    if (id & 0x1C000080)
+	return 1;
+    return 0;
 }
 
 /*  ID field for MS1, coding for normal operation and for detection:
@@ -1266,8 +1265,15 @@ void decode_frame_cs1(struct can_frame *frame) {
 	printf("[MS1] Slave  Node %u ", node);
     else
 	printf("[MS1] Master Node %u ", node);
-    if ((frame->can_id & 0x1FFFFFFF) < 0x1C000000) printf("OH %u ", objhandle);
+    if ((frame->can_id & 0x1FFFFFFF) < 0x1C000000)
+	printf("OH %u ", objhandle);
     switch (frame->can_id & 0x1C000380) {
+    case 0x00000380:		// Prio 000, Cmd 111
+	printf("Abfrage Bus belegt");
+	break;
+    case 0x08000100:		// Prio 010, Cmd 010
+	printf("Änderung FKT %u auf %u", frame->data[0], frame->data[2]);
+	break;
     case 0x0C000380:		// Prio 011, Cmd 111
 	printf("Ping an Node %u", frame->data[3]);
 	break;
@@ -1284,25 +1290,61 @@ void decode_frame_cs1(struct can_frame *frame) {
 	    if (frame->can_dlc < 5)
 		printf("Abfrage Namesteil[%02u]", frame->data[3]);
 	    else {
-		printf("Namesteil[%02u]: ", frame->data[3]);
+		printf("Namesteil[%02u]: " GRN, frame->data[3]);
 		for (int i = 4; i < frame->can_dlc; i++) {
 		    if (isprint(frame->data[i]))
 			printf("%c", frame->data[i]);
 		    else
 			putchar(46);
 		}
+		printf(RESET);
 	    }
 	    break;
 	case 0x40:
-	    printf("Loktyp oder Schienenformat");	// TODO: add parameter
+	    if (frame->data[1] == 3) {
+		printf("Loktyp");
+		if (frame->can_dlc < 6)
+		    printf("-Abfrage");
+		else
+		    printf(" ist %u", frame->data[5]);
+	    } else {
+		printf("Schienenformat %u", frame->data[2]);
+		if (frame->can_dlc < 6)
+		    printf(" Abfrage");
+		else
+		    printf(" ist %u", frame->data[5]);
+	    }
 	    break;
 	case 0x41:
-	    printf("Lokstackgröße");		// TODO: add parameter
+	    printf("Lokstackgröße");	// TODO: add parameter
 	    break;
 	}
 	break;
     case 0x18000100:		// Prio 110, Cmd 010
-	printf("System-status, Funktion, ??");	// TODO: clarify whats behind
+	switch (frame->can_dlc) {
+	case 2:
+	    if (frame->data[1])
+		printf("Typabfrage");
+	    else
+		printf("Zustandsabfrage");
+	    printf(" von FKT %u", frame->data[0]);
+	    break;
+	case 3:
+	    if (frame->data[1])
+		printf("Typ");
+	    else
+		printf("Zustand");
+	    printf(" von FKT %u ist %u", frame->data[0], frame->data[2]);
+	    break;
+	case 4:
+	    if (frame->data[1] == 2)
+		printf("Erw. Abfrage");
+	    else
+		printf("Typbeschreibung von FKT %u", frame->data[0]);
+	    break;
+	default:
+	    printf("Erw. Funktion");	// TODO: clarify whats behind
+	}
 	break;
     case 0x18000180:		// Prio 110, Cmd 011
 	switch (frame->data[0]) {
@@ -1313,11 +1355,16 @@ void decode_frame_cs1(struct can_frame *frame) {
 		printf("System-Handle für Node %u ist %u", frame->data[1], be16(frame->data + 4));
 	    break;
 	case 0x40:
-	    printf("SH-handle");		// TODO: add parameter
+	    printf("SH-handle");	// TODO: add parameter
 	    break;
 	case 0x80:
-	    printf("Lokstack-Austausch");	// TODO: add parameter
+	    if (frame->can_dlc < 8)
+		printf("Lokstack-Anfrage über %u", be16(frame->data + 2));
+	    else
+		printf("neuer Lokstack-Eintrag ist %u", be16(frame->data + 4));
 	    break;
+	default:
+	    printf("Data0 %02X unbekannt", frame->data[0]);
 	}
 	break;
     case 0x18000200:		// Prio 110, Cmd 100
@@ -1341,15 +1388,17 @@ void decode_frame_cs1(struct can_frame *frame) {
 	id    = (objhandle >> 8) & 0xff;
 	stage = (objhandle >> 5) & 0x07;
 	mid   = objhandle & 0x1f;
-	printf("Anmeldung MID %u Stage %u ID %X", mid, stage, id);
+	printf("Anmeldung MID %u Stage %u ID %02X", mid, stage, id);
 	if (frame->can_dlc == 8)
 	    switch (stage) {
 	    case 4:
-		printf(" -> UID %X", be32(frame->data));
+		printf(" -> UID %08X", be32(frame->data));
 		break;
 	    case 7:
 		if (frame->can_id & 0x80)
-		    printf(" -> UID %X Handle %u Node %u", be32(frame->data), be16(frame->data + 4), (frame->data[6] & 0x7F));
+		    printf(" -> UID %08X OH %u Node %u", be32(frame->data), be16(frame->data + 4), (frame->data[6] & 0x7F));
+		else
+		    printf(" -> AP Version %u.%u", frame->data[4], frame->data[5]);
 		break;
 	    }
 	break;
