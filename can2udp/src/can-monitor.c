@@ -150,7 +150,7 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 3.10\n\n");
+    fprintf(stderr, "   Version 3.11\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
