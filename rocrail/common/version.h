@@ -1,11 +1,20 @@
 const int revisionnr = 
-1042
+1051
 ;
 const char* commithash = 
-"c2900b8fcf9e7af00803ca15025474414f9468c7";
+"31bc1fd3b2a625b9ae864893988a040deafc14ac";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1051 2020-10-23 18:18:45 +0200 guiframe: fix for update train image\n" \
+"1050 2020-10-23 11:00:32 +0200 model: fix for looking up a car for zero length ID which results in NOP in XMLScript\n" \
+"1049 2020-10-22 12:47:12 +0200 fback: broadcast rfid to clients\n" \
+"1048 2020-10-22 10:55:35 +0200 item: show last read RFID in the status bar\n" \
+"1047 2020-10-22 07:45:36 +0200 desktoplink.sh: only copy it to applications incase parameter $1 is set\n" \
+"1046 2020-10-21 15:24:57 +0200 renderer: text ps adjust only in case text ps is set > 0\n" \
+"1045 2020-10-21 15:17:56 +0200 rocguiinidlg: text pointsize adjust range extended\n" \
+"1044 2020-10-21 15:13:29 +0200 renderer: pointsize adjust es percentage\n" \
+"1043 2020-10-21 11:14:22 +0200 svg text pointsize adjust added\n" \
 "1042 2020-10-19 19:03:07 +0200 wio: fix for output and LEDScript\n" \
 "1041 2020-10-19 10:30:22 +0200 mbus: default auto switch delay active\n" \
 "1040 2020-10-19 07:43:52 +0200 wio: output bri to max. in case of LEDScript activation\n" \
