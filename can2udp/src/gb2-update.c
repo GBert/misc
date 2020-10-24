@@ -34,8 +34,15 @@
 #define MAXUDP  16		/* maximum datagram size */
 #define TIMEOUT 5		/* wait seconds for response */
 
-static char *GB2_DEFAULT_FILENAME = "016-gb2.bin";
-static char *MS2_DEFAULT_FILENAME = "050-ms2.bin";
+
+/*
+ * MS2	MS2	60653	TI/LM	LM3S2414
+ * MS2	MS2X	60657	Renesas	R5F562TABDFM
+ */
+
+static char *GB2_DEFAULT_FILENAME  = "016-gb2.bin";
+static char *MS2_DEFAULT_FILENAME  = "050-ms2.bin";
+static char *MS2X_DEFAULT_FILENAME = "051-ms2.bin";
 
 #define GB2_BLOCK_SHIFT		9	/* 2^9 = 512 */
 #define GB2_BLOCK_SIZE		(1<<GB2_BLOCK_SHIFT)
