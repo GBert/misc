@@ -1,11 +1,14 @@
 const int revisionnr = 
-1051
+1054
 ;
 const char* commithash = 
-"31bc1fd3b2a625b9ae864893988a040deafc14ac";
+"683db27037deaaa02519da6f7dd5063db686c909";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1054 2020-10-25 17:50:05 +0100 item: regard showID in stage\n" \
+"1053 2020-10-25 11:17:53 +0100 wio: report node stop reason\n" \
+"1052 2020-10-24 19:28:13 +0200 app: replaced warning with info level for merging options\n" \
 "1051 2020-10-23 18:18:45 +0200 guiframe: fix for update train image\n" \
 "1050 2020-10-23 11:00:32 +0200 model: fix for looking up a car for zero length ID which results in NOP in XMLScript\n" \
 "1049 2020-10-22 12:47:12 +0200 fback: broadcast rfid to clients\n" \
