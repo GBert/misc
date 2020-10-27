@@ -1,11 +1,12 @@
 const int revisionnr = 
-1054
+1055
 ;
 const char* commithash = 
-"683db27037deaaa02519da6f7dd5063db686c909";
+"57f774e658b8bce7d812c0c49f28e357e6c5cdeb";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1055 2020-10-27 07:44:03 +0100 timedactions: usage button added to show usage in the index\n" \
 "1054 2020-10-25 17:50:05 +0100 item: regard showID in stage\n" \
 "1053 2020-10-25 11:17:53 +0100 wio: report node stop reason\n" \
 "1052 2020-10-24 19:28:13 +0200 app: replaced warning with info level for merging options\n" \
