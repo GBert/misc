@@ -1,11 +1,15 @@
 const int revisionnr = 
-1055
+1059
 ;
 const char* commithash = 
-"57f774e658b8bce7d812c0c49f28e357e6c5cdeb";
+"6579705b0e4664bdbac304466539856386877b98";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1059 2020-10-29 14:37:45 +0100 rocprodlg: save programming mode on OK\n" \
+"1058 2020-10-29 11:49:54 +0100 rocguiinidlg: fix for option resetspeeddir\n" \
+"1057 2020-10-29 07:34:23 +0100 app: support environment variables in the protpath\n" \
+"1056 2020-10-28 08:49:06 +0100 block: fix for slave action\n" \
 "1055 2020-10-27 07:44:03 +0100 timedactions: usage button added to show usage in the index\n" \
 "1054 2020-10-25 17:50:05 +0100 item: regard showID in stage\n" \
 "1053 2020-10-25 11:17:53 +0100 wio: report node stop reason\n" \
