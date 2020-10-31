@@ -1,11 +1,17 @@
 const int revisionnr = 
-1059
+1065
 ;
 const char* commithash = 
-"6579705b0e4664bdbac304466539856386877b98";
+"9ed711d4335c26b02a46c919acdebc50136c337c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1065 2020-10-30 22:29:06 +0100 zipper: start.html added\n" \
+"1064 2020-10-30 19:34:11 +0100 devices: list up first 10 devices in case of no device check\n" \
+"1063 2020-10-30 15:41:21 +0100 wio: support for A0 value on alive events\n" \
+"1062 2020-10-30 08:45:51 +0100 rocrailinidialog: disable properties and modify in case of wio lib\n" \
+"1061 2020-10-30 07:53:53 +0100 wio: support library added\n" \
+"1060 2020-10-29 21:16:28 +0100 mbus: show ID in case of commands\n" \
 "1059 2020-10-29 14:37:45 +0100 rocprodlg: save programming mode on OK\n" \
 "1058 2020-10-29 11:49:54 +0100 rocguiinidlg: fix for option resetspeeddir\n" \
 "1057 2020-10-29 07:34:23 +0100 app: support environment variables in the protpath\n" \
