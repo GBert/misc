@@ -1,25 +1,22 @@
-- Dreiwegweichen
-- Märklin DKW
+- Eingleisige Strecken im Gegenverkehr / Fahrtrichtung über mehrere Blöcke
+- Mehrfachtraktion als separate Lok anzeigen, einzelne Loks trotzdem separat steuerbar.
 - Mehrbegriffige Signale
+- Notaus bei Rückmelder an/aus
+- Wenden in einem Block erlauben/nicht erlauben
+- Fahrstrassen mit unverschlossenen Objekten
+- Text-Elemente im Layout
+- Aktionen ausführen bei Feedback an/aus
+- Masseträgheit von Zügen simulieren
+- Märklin DKW
 - Bahnübergänge
 - Automatisches Umfahren des Zuges an der Endstation
-- Eingleisige Strecken im Gegenverkehr / Fahrtrichtung über mehrere Blöcke
-- Masseträgheit von Zügen simulieren
 - Trotz freier Fahrt anhalten an Bahnsteigen
 - Mehrere Objekte gleichzeitig verschieben auf dem Layout
 - Lokbilder
 - Fahren nach Fahrplan bzw. Vorgabe des Zielortes
-- Auto-/Manual Mode: Im Manual-Mode darf der Strom wegen auslösenden Feedbacks nicht abstellen
-- Fahrstrassen mit unverschlossenen Objekten
-- Text-Elemente im Layout
-- Aktionen ausführen bei Feedback an/aus
 - Formulare als POST-Request senden um maximale URL-Länge zu umgehen
-- Notaus bei Rückmelder an/aus
 - Lokfunktionen mit konfigurierbaren Icons
-- Numerischen Lokfunktionen eine definierte Funktion zuordnen (Rangiergang, Innenbeleuchtung, Lokpfiff, ...)
 - Synchronisieren der ECoS / CS2 Lok-Datenbank
-- Anbinden der Z21
 - Anbinden des SPROG DCC
 - Anbinden der Zimo-Zentralen
 - Anbinden von LocoNet-Zentralen
-- Wenden in einem Block erlauben/nicht erlauben

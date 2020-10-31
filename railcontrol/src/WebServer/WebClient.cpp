@@ -3847,6 +3847,7 @@ namespace WebServer
 	{
 		const DataModel::AccessoryPulseDuration defaultAccessoryDuration = manager.GetDefaultAccessoryDuration();
 		const bool autoAddFeedback = manager.GetAutoAddFeedback();
+		const bool stopOnFeedbackInFreeTrack = manager.GetStopOnFeedbackInFreeTrack();
 		const DataModel::SelectRouteApproach selectRouteApproach = manager.GetSelectRouteApproach();
 		const DataModel::Loco::NrOfTracksToReserve nrOfTracksToReserve = manager.GetNrOfTracksToReserve();
 
@@ -3856,12 +3857,13 @@ namespace WebServer
 		HtmlTag formContent("form");
 		formContent.AddId("editform");
 		formContent.AddChildTag(HtmlTagInputHidden("cmd", "settingssave"));
+		formContent.AddChildTag(HtmlTagLanguage());
 		formContent.AddChildTag(HtmlTagDuration(defaultAccessoryDuration, Languages::TextDefaultSwitchingDuration));
 		formContent.AddChildTag(HtmlTagInputCheckboxWithLabel("autoaddfeedback", Languages::TextAutomaticallyAddUnknownFeedbacks, "autoaddfeedback", autoAddFeedback));
+		formContent.AddChildTag(HtmlTagInputCheckboxWithLabel("stoponfeedbackinfreetrack", Languages::TextStopOnFeedbackInFreeTrack, "stoponfeedbackinfreetrack", stopOnFeedbackInFreeTrack));
 		formContent.AddChildTag(HtmlTagSelectSelectRouteApproach(selectRouteApproach, false));
 		formContent.AddChildTag(HtmlTagNrOfTracksToReserve(nrOfTracksToReserve));
 		formContent.AddChildTag(HtmlTagLogLevel());
-		formContent.AddChildTag(HtmlTagLanguage());
 
 		content.AddChildTag(HtmlTag("div").AddClass("popup_content").AddChildTag(formContent));
 		content.AddChildTag(HtmlTagButtonCancel());
@@ -3871,13 +3873,14 @@ namespace WebServer
 
 	void WebClient::HandleSettingsSave(const map<string, string>& arguments)
 	{
+		const Languages::Language language = static_cast<Languages::Language>(Utils::Utils::GetIntegerMapEntry(arguments, "language", Languages::EN));
 		const DataModel::AccessoryPulseDuration defaultAccessoryDuration = Utils::Utils::GetIntegerMapEntry(arguments, "duration", manager.GetDefaultAccessoryDuration());
 		const bool autoAddFeedback = Utils::Utils::GetBoolMapEntry(arguments, "autoaddfeedback", manager.GetAutoAddFeedback());
+		const bool stopOnFeedbackInFreeTrack = Utils::Utils::GetBoolMapEntry(arguments, "stoponfeedbackinfreetrack", manager.GetStopOnFeedbackInFreeTrack());
 		const DataModel::SelectRouteApproach selectRouteApproach = static_cast<DataModel::SelectRouteApproach>(Utils::Utils::GetIntegerMapEntry(arguments, "selectrouteapproach", DataModel::SelectRouteRandom));
 		const DataModel::Loco::NrOfTracksToReserve nrOfTracksToReserve = static_cast<DataModel::Loco::NrOfTracksToReserve>(Utils::Utils::GetIntegerMapEntry(arguments, "nroftrackstoreserve", DataModel::Loco::ReserveOne));
 		const Logger::Logger::Level logLevel = static_cast<Logger::Logger::Level>(Utils::Utils::GetIntegerMapEntry(arguments, "loglevel", Logger::Logger::LevelInfo));
-		const Languages::Language language = static_cast<Languages::Language>(Utils::Utils::GetIntegerMapEntry(arguments, "language", Languages::EN));
-		manager.SaveSettings(defaultAccessoryDuration, autoAddFeedback, selectRouteApproach, nrOfTracksToReserve, logLevel, language);
+		manager.SaveSettings(language, defaultAccessoryDuration, autoAddFeedback, stopOnFeedbackInFreeTrack, selectRouteApproach, nrOfTracksToReserve, logLevel);
 		ReplyResponse(ResponseInfo, Languages::TextSettingsSaved);
 	}
 

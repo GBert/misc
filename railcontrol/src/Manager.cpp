@@ -52,6 +52,7 @@ Manager::Manager(Config& config)
 	storage(nullptr),
 	defaultAccessoryDuration(DataModel::DefaultAccessoryPulseDuration),
 	autoAddFeedback(false),
+	stopOnFeedbackInFreeTrack(true),
 	selectRouteApproach(DataModel::SelectRouteRandom),
 	nrOfTracksToReserve(DataModel::Loco::ReserveOne),
 	run(false),
@@ -81,9 +82,9 @@ Manager::Manager(Config& config)
 	Languages::SetDefaultLanguage(static_cast<Languages::Language>(Utils::Utils::StringToInteger(storage->GetSetting("Language"), Languages::EN)));
 	defaultAccessoryDuration = Utils::Utils::StringToInteger(storage->GetSetting("DefaultAccessoryDuration"), 250);
 	autoAddFeedback = Utils::Utils::StringToBool(storage->GetSetting("AutoAddFeedback"));
+	stopOnFeedbackInFreeTrack = Utils::Utils::StringToBool(storage->GetSetting("StopOnFeedbackInFreeTrack"), true);
 	selectRouteApproach = static_cast<DataModel::SelectRouteApproach>(Utils::Utils::StringToInteger(storage->GetSetting("SelectRouteApproach")));
 	nrOfTracksToReserve = static_cast<DataModel::Loco::NrOfTracksToReserve>(Utils::Utils::StringToInteger(storage->GetSetting("NrOfTracksToReserve"), 2));
-
 
 	controls[ControlIdWebserver] = new WebServer::WebServer(*this, config.getValue("webserverport", 8080));
 
@@ -1165,7 +1166,7 @@ void Manager::FeedbackState(const FeedbackID feedbackID, const DataModel::Feedba
 	FeedbackState(feedback, state);
 }
 
-void Manager::FeedbackPublishState(Feedback* feedback)
+void Manager::FeedbackPublishState(const Feedback* feedback)
 {
 	if (feedback == nullptr)
 	{
@@ -2870,30 +2871,34 @@ bool Manager::CheckControlProtocolAddress(const AddressType type, const ControlI
 	}
 }
 
-bool Manager::SaveSettings(const DataModel::AccessoryPulseDuration duration,
+bool Manager::SaveSettings(const Languages::Language language,
+	const DataModel::AccessoryPulseDuration duration,
 	const bool autoAddFeedback,
+	const bool stopOnFeedbackInFreeTrack,
 	const DataModel::SelectRouteApproach selectRouteApproach,
 	const DataModel::Loco::NrOfTracksToReserve nrOfTracksToReserve,
-	const Logger::Logger::Level logLevel,
-	const Languages::Language language)
+	const Logger::Logger::Level logLevel
+	)
 {
+	Languages::SetDefaultLanguage(language);
 	this->defaultAccessoryDuration = duration;
 	this->autoAddFeedback = autoAddFeedback;
+	this->stopOnFeedbackInFreeTrack = stopOnFeedbackInFreeTrack;
 	this->selectRouteApproach = selectRouteApproach;
 	this->nrOfTracksToReserve = nrOfTracksToReserve;
 	Logger::Logger::SetLogLevel(logLevel);
-	Languages::SetDefaultLanguage(language);
 
 	if (storage == nullptr)
 	{
 		return false;
 	}
+	storage->SaveSetting("Language", std::to_string(static_cast<int>(language)));
 	storage->SaveSetting("DefaultAccessoryDuration", std::to_string(duration));
 	storage->SaveSetting("AutoAddFeedback", std::to_string(autoAddFeedback));
+	storage->SaveSetting("StopOnFeedbackInFreeTrack", std::to_string(stopOnFeedbackInFreeTrack));
 	storage->SaveSetting("SelectRouteApproach", std::to_string(static_cast<int>(selectRouteApproach)));
 	storage->SaveSetting("NrOfTracksToReserve", std::to_string(static_cast<int>(nrOfTracksToReserve)));
 	storage->SaveSetting("LogLevel", std::to_string(static_cast<int>(logLevel)));
-	storage->SaveSetting("Language", std::to_string(static_cast<int>(language)));
 	return true;
 }
 

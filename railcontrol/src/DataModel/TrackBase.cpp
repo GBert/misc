@@ -206,7 +206,7 @@ namespace DataModel
 			Loco* loco = manager->GetLoco(GetLocoDelayed());
 			if (loco == nullptr)
 			{
-				if (blocked == false)
+				if (blocked == false && manager->GetStopOnFeedbackInFreeTrack())
 				{
 					manager->Booster(ControlTypeInternal, BoosterStateStop);
 					blocked = true;

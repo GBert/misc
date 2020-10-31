@@ -506,6 +506,7 @@ class Languages
 			TextStopAllLocos,
 			TextStopAt,
 			TextStopLoco,
+			TextStopOnFeedbackInFreeTrack,
 			TextStoppingRailControl,
 			TextStoppingRequestedBySignal,
 			TextStoppingRequestedByWebClient,
@@ -618,7 +619,6 @@ class Languages
 
 		enum Language : unsigned char
 		{
-			FirstLanguage = 0,
 			EN = 0,
 			DE,
 			ES,

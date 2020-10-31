@@ -186,9 +186,12 @@ namespace Utils
 		return longValue;
 	}
 
-	bool Utils::StringToBool(const std::string& value)
+	bool Utils::StringToBool(const std::string& value, const bool defaultValue)
 	{
-
+		if (value.size() == 0)
+		{
+			return defaultValue;
+		}
 		int intValue = StringToInteger(value);
 		return intValue != 0;
 	}

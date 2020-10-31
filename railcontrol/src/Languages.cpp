@@ -506,6 +506,7 @@ const char* Languages::languages[MaxTexts][MaxLanguages] =
 /* TextStopAllLocos */ { "Stop all locomotives", "Stoppe alle Lokomotiven", "Detener todas las locomotoras" },
 /* TextStopAt */ { "Stop at", "Anhalten bei", "Parar a" },
 /* TextStopLoco */ { "Stop locomotive", "Stoppe Lokomotive", "Parar locomotora" },
+/* TextStopOnFeedbackInFreeTrack */ { "Turn off current on feedback in free track", "Schalte Strom aus bei Rückmelder in freiem Gleis", "Apagar la corriente en una retroseñal en una vía libre" },
 /* TextStoppingRailControl */ { "Stopping RailControl", "Beende RailControl", "Apagando RailControl" },
 /* TextStoppingRequestedBySignal */ { "Stopping RailControl requested by signal {0}", "Beenden von RailControl angefordert mit Signal {0}", "Apagar RailControl pedido con señal {0}" },
 /* TextStoppingRequestedByWebClient */ { "Stopping RailControl requested by webclient", "Beenden von RailControl angefordert von Webclient", "Apagar RailControl pedido del webclient" },

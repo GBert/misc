@@ -149,7 +149,7 @@ class Manager
 		// feedback
 		void FeedbackState(const ControlID controlID, const FeedbackPin pin, const DataModel::Feedback::FeedbackState state);
 		void FeedbackState(const FeedbackID feedbackID, const DataModel::Feedback::FeedbackState state);
-		void FeedbackPublishState(DataModel::Feedback* feedback);
+		void FeedbackPublishState(const DataModel::Feedback* feedback);
 		DataModel::Feedback* GetFeedback(const FeedbackID feedbackID) const;
 		DataModel::Feedback* GetFeedbackUnlocked(const FeedbackID feedbackID) const;
 		const std::string& GetFeedbackName(const FeedbackID feedbackID) const;
@@ -290,16 +290,39 @@ class Manager
 		void StopAllLocosImmediately(const ControlType controlType);
 
 		// settings
-		DataModel::AccessoryPulseDuration GetDefaultAccessoryDuration() const { return defaultAccessoryDuration; }
-		bool GetAutoAddFeedback() const { return autoAddFeedback; }
-		DataModel::SelectRouteApproach GetSelectRouteApproach() const { return selectRouteApproach; }
-		DataModel::Loco::NrOfTracksToReserve GetNrOfTracksToReserve() const { return nrOfTracksToReserve; }
-		bool SaveSettings(const DataModel::AccessoryPulseDuration duration,
+		inline DataModel::AccessoryPulseDuration GetDefaultAccessoryDuration() const
+		{
+			return defaultAccessoryDuration;
+		}
+
+		inline bool GetAutoAddFeedback() const
+		{
+			return autoAddFeedback;
+		}
+
+		inline bool GetStopOnFeedbackInFreeTrack() const
+		{
+			return stopOnFeedbackInFreeTrack;
+		}
+
+		inline DataModel::SelectRouteApproach GetSelectRouteApproach() const
+		{
+			return selectRouteApproach;
+		}
+
+		inline DataModel::Loco::NrOfTracksToReserve GetNrOfTracksToReserve() const
+		{
+			return nrOfTracksToReserve;
+		}
+
+		bool SaveSettings(const Languages::Language language,
+			const DataModel::AccessoryPulseDuration duration,
 			const bool autoAddFeedback,
+			const bool stopOnFeedbackInFreeTrack,
 			const DataModel::SelectRouteApproach selectRouteApproach,
 			const DataModel::Loco::NrOfTracksToReserve nrOfTracksToReserve,
-			const Logger::Logger::Level logLevel,
-			const Languages::Language language);
+			const Logger::Logger::Level logLevel
+			);
 
 		ControlID GetControlForLoco() const;
 		ControlID GetControlForAccessory() const;
@@ -308,7 +331,8 @@ class Manager
 		void ProgramRead(const ControlID controlID, const ProgramMode mode, const Address address, const CvNumber cv);
 		void ProgramWrite(const ControlID controlID, const ProgramMode mode, const Address address, const CvNumber cv, const CvValue value);
 		void ProgramValue(const CvNumber cv, const CvValue value);
-		static void ProgramDccValueStatic(Manager* manager, const CvNumber cv, const CvValue value)
+
+		inline static void ProgramDccValueStatic(Manager* manager, const CvNumber cv, const CvValue value)
 		{
 			manager->ProgramValue(cv, value);
 		}
@@ -333,7 +357,11 @@ class Manager
 
 		void AccessoryState(const ControlType controlType, DataModel::Accessory* accessory, const DataModel::AccessoryState state, const bool force);
 		void SwitchState(const ControlType controlType, DataModel::Switch* mySwitch, const DataModel::AccessoryState state, const bool force);
-		void FeedbackState(DataModel::Feedback* feedback, const DataModel::Feedback::FeedbackState state)  { feedback->SetState(state); }
+
+		inline void FeedbackState(DataModel::Feedback* feedback, const DataModel::Feedback::FeedbackState state)
+		{
+			feedback->SetState(state);
+		}
 
 		// layout
 		bool CheckPositionFree(const DataModel::LayoutItem::LayoutPosition posX,
@@ -551,6 +579,7 @@ class Manager
 
 		DataModel::AccessoryPulseDuration defaultAccessoryDuration;
 		bool autoAddFeedback;
+		bool stopOnFeedbackInFreeTrack;
 		DataModel::SelectRouteApproach selectRouteApproach;
 		DataModel::Loco::NrOfTracksToReserve nrOfTracksToReserve;
 
