@@ -1,11 +1,34 @@
 const int revisionnr = 
-1042
+1065
 ;
 const char* commithash = 
-"c2900b8fcf9e7af00803ca15025474414f9468c7";
+"9ed711d4335c26b02a46c919acdebc50136c337c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1065 2020-10-30 22:29:06 +0100 zipper: start.html added\n" \
+"1064 2020-10-30 19:34:11 +0100 devices: list up first 10 devices in case of no device check\n" \
+"1063 2020-10-30 15:41:21 +0100 wio: support for A0 value on alive events\n" \
+"1062 2020-10-30 08:45:51 +0100 rocrailinidialog: disable properties and modify in case of wio lib\n" \
+"1061 2020-10-30 07:53:53 +0100 wio: support library added\n" \
+"1060 2020-10-29 21:16:28 +0100 mbus: show ID in case of commands\n" \
+"1059 2020-10-29 14:37:45 +0100 rocprodlg: save programming mode on OK\n" \
+"1058 2020-10-29 11:49:54 +0100 rocguiinidlg: fix for option resetspeeddir\n" \
+"1057 2020-10-29 07:34:23 +0100 app: support environment variables in the protpath\n" \
+"1056 2020-10-28 08:49:06 +0100 block: fix for slave action\n" \
+"1055 2020-10-27 07:44:03 +0100 timedactions: usage button added to show usage in the index\n" \
+"1054 2020-10-25 17:50:05 +0100 item: regard showID in stage\n" \
+"1053 2020-10-25 11:17:53 +0100 wio: report node stop reason\n" \
+"1052 2020-10-24 19:28:13 +0200 app: replaced warning with info level for merging options\n" \
+"1051 2020-10-23 18:18:45 +0200 guiframe: fix for update train image\n" \
+"1050 2020-10-23 11:00:32 +0200 model: fix for looking up a car for zero length ID which results in NOP in XMLScript\n" \
+"1049 2020-10-22 12:47:12 +0200 fback: broadcast rfid to clients\n" \
+"1048 2020-10-22 10:55:35 +0200 item: show last read RFID in the status bar\n" \
+"1047 2020-10-22 07:45:36 +0200 desktoplink.sh: only copy it to applications incase parameter $1 is set\n" \
+"1046 2020-10-21 15:24:57 +0200 renderer: text ps adjust only in case text ps is set > 0\n" \
+"1045 2020-10-21 15:17:56 +0200 rocguiinidlg: text pointsize adjust range extended\n" \
+"1044 2020-10-21 15:13:29 +0200 renderer: pointsize adjust es percentage\n" \
+"1043 2020-10-21 11:14:22 +0200 svg text pointsize adjust added\n" \
 "1042 2020-10-19 19:03:07 +0200 wio: fix for output and LEDScript\n" \
 "1041 2020-10-19 10:30:22 +0200 mbus: default auto switch delay active\n" \
 "1040 2020-10-19 07:43:52 +0200 wio: output bri to max. in case of LEDScript activation\n" \
