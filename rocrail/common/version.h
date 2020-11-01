@@ -1,11 +1,15 @@
 const int revisionnr = 
-1065
+1069
 ;
 const char* commithash = 
-"9ed711d4335c26b02a46c919acdebc50136c337c";
+"55214257cacb0b830ca2bdbf147b0a8a800ffb56";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1069 2020-10-31 19:06:22 +0100 start.html: FR correction\n" \
+"1068 2020-10-31 15:01:33 +0100 wiolib: reset simulated sensor\n" \
+"1067 2020-10-31 13:52:51 +0100 start.html update for IT and FR\n" \
+"1066 2020-10-31 13:38:12 +0100 control: support for environment variables in Rocweb/andRoc SVG paths\n" \
 "1065 2020-10-30 22:29:06 +0100 zipper: start.html added\n" \
 "1064 2020-10-30 19:34:11 +0100 devices: list up first 10 devices in case of no device check\n" \
 "1063 2020-10-30 15:41:21 +0100 wio: support for A0 value on alive events\n" \
