@@ -1,11 +1,13 @@
 const int revisionnr = 
-1069
+1071
 ;
 const char* commithash = 
-"55214257cacb0b830ca2bdbf147b0a8a800ffb56";
+"2bf8b2d6764e8b5ef8115dbe70148ce186526e41";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1071 2020-11-01 09:26:55 +0100 loc,wio: report with CALC level the read RFID\n" \
+"1070 2020-11-01 07:52:57 +0100 wio: type LED added for accessory events\n" \
 "1069 2020-10-31 19:06:22 +0100 start.html: FR correction\n" \
 "1068 2020-10-31 15:01:33 +0100 wiolib: reset simulated sensor\n" \
 "1067 2020-10-31 13:52:51 +0100 start.html update for IT and FR\n" \
