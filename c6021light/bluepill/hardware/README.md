@@ -1,6 +1,7 @@
 Aenderungen
 ===========
 
+```
 1.0 Initiale Version
 
 1.1 CAN RJ45 Pin 5 getrennt um CdB konform zu bleiben
@@ -9,3 +10,4 @@ Aenderungen
     Mehr Platz fuer DCDC Wandler
     USB/Seriell Wandler: 0 Ohm Widerstaende entfernt
     UART Leiste angepasst
+```
