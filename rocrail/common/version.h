@@ -1,11 +1,15 @@
 const int revisionnr = 
-1071
+1075
 ;
 const char* commithash = 
-"2bf8b2d6764e8b5ef8115dbe70148ce186526e41";
+"ecc91c310e42bdc8303d754f57fd61338fa5283b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1075 2020-11-07 14:32:34 +0100 revert\n" \
+"1074 2020-11-07 08:12:27 +0100 translation merge: nl, fr, de, sl\n" \
+"1073 2020-11-07 07:55:14 +0100 mvtrack: fix for using cm\n" \
+"1072 2020-11-03 16:07:08 +0100 loc: rfid history\n" \
 "1071 2020-11-01 09:26:55 +0100 loc,wio: report with CALC level the read RFID\n" \
 "1070 2020-11-01 07:52:57 +0100 wio: type LED added for accessory events\n" \
 "1069 2020-10-31 19:06:22 +0100 start.html: FR correction\n" \
