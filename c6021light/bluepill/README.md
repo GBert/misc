@@ -46,12 +46,12 @@ Resistors on board (may differ)
 
  Marking | math | Value | Voltage 
 ---------|------|-------|---------
-02D |102 * 1000 |102 kOhm  |12 V
-753 |75 * 1000  |75 kOhm   |9 V
-393 |39 * 1000  |39 kOhm   |5 V
-36C |232 * 100  |23.2 kOhm |3.3V
-20C |158 * 100  |15.8 kOhm |2.5V
-94B |931 * 10   |9.31 kOhm |2.5V
+02D |102 * 1000 |102 kOhm  |12V
+753 |75 * 1000  |75 kOhm   |9V
+393 |39 * 1000  |39 kOhm   |5V
+36C |232 * 100  |23.2 kOhm |3V3
+20C |158 * 100  |15.8 kOhm |2V5
+94B |931 * 10   |9.31 kOhm |1V8
 
 https://www.monolithicpower.com/en/mp2315.html#gallery
 
