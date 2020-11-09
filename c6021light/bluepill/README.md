@@ -40,7 +40,7 @@ MP2315 Voltage Regulator module
 Chip Code IAGCJ
 
 The module is enabled by default with on board pull up. To disable output, put this pin to ground. To enable put this pin to 2-5V high level.
-Don't connect to board 12V!
+Don't connect to board to 12V!
 
 Resistors on board (may differ)
 
