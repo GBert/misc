@@ -1,11 +1,14 @@
 const int revisionnr = 
-1075
+1078
 ;
 const char* commithash = 
-"ecc91c310e42bdc8303d754f57fd61338fa5283b";
+"e3ae568faa7330211b67e549d672d53907742206";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1078 2020-11-10 15:19:29 +0100 wiodlg: deep sleep command added\n" \
+"1077 2020-11-10 12:07:45 +0100 signaldialog: layout improvements\n" \
+"1076 2020-11-10 10:49:40 +0100 item: save enter state in stageblock\n" \
 "1075 2020-11-07 14:32:34 +0100 revert\n" \
 "1074 2020-11-07 08:12:27 +0100 translation merge: nl, fr, de, sl\n" \
 "1073 2020-11-07 07:55:14 +0100 mvtrack: fix for using cm\n" \
