@@ -4,7 +4,7 @@
 START=99
 
 start() {
-	ms1relay
+	ms1relay -d
 }
 
 stop() {
