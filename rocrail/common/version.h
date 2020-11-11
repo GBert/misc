@@ -1,11 +1,12 @@
 const int revisionnr = 
-1078
+1079
 ;
 const char* commithash = 
-"e3ae568faa7330211b67e549d672d53907742206";
+"49c44279f32d44a88b2739ba836bec4106bfa456";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1079 2020-11-11 07:43:21 +0100 dccpp: init sensors after receiving th <i> string\n" \
 "1078 2020-11-10 15:19:29 +0100 wiodlg: deep sleep command added\n" \
 "1077 2020-11-10 12:07:45 +0100 signaldialog: layout improvements\n" \
 "1076 2020-11-10 10:49:40 +0100 item: save enter state in stageblock\n" \
