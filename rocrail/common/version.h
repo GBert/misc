@@ -1,11 +1,15 @@
 const int revisionnr = 
-1079
+1083
 ;
 const char* commithash = 
-"49c44279f32d44a88b2739ba836bec4106bfa456";
+"204fadfc2bf31a76ae6fd5e568fd172af920806f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1083 2020-11-13 08:21:46 +0100 cardlg: import/export in csv format added\n" \
+"1082 2020-11-13 07:58:29 +0100 locdialog: import/export in csv format\n" \
+"1081 2020-11-11 14:57:01 +0100 item: force switch command in case ctrl is pressed\n" \
+"1080 2020-11-11 14:54:35 +0100 wio: fix for switch delay in case > 255\n" \
 "1079 2020-11-11 07:43:21 +0100 dccpp: init sensors after receiving th <i> string\n" \
 "1078 2020-11-10 15:19:29 +0100 wiodlg: deep sleep command added\n" \
 "1077 2020-11-10 12:07:45 +0100 signaldialog: layout improvements\n" \
