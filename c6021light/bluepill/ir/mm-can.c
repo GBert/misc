@@ -18,8 +18,8 @@
       A11                           B0
       A12                           A7
       A15                           A6
-MM    B3       STM32F103C8T6        A5
-      B4                            A4
+      B3       STM32F103C8T6        A5
+MM    B4                            A4
       B5                            A3
       B6                            A2
       B7              8M            A1
@@ -60,6 +60,7 @@ static void gpio_setup(void) {
     /* Configure LED&Osci GPIO */
     gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
     gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO0);
+
 }
 
 static void systick_setup(void) {
@@ -77,7 +78,7 @@ static void systick_setup(void) {
 }
 
 uint32_t micros(void) {
-    return ((systick_get_value() / 8 ) + milliseconds * 1000);
+    return (((9000 - systick_get_value()) / 8 ) + milliseconds * 1000);
 }
 
 void sys_tick_handler(void) {
@@ -93,7 +94,6 @@ void sys_tick_handler(void) {
 	counter = 0;
 	gpio_toggle(GPIOC, GPIO13);	/* toggle green LED */
 	gpio_toggle(GPIOA, GPIO0);	/* toggle LED */
-        send_can_data(micros());
     }
 }
 

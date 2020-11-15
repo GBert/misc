@@ -10,6 +10,7 @@
 
 #define MM_INPUT	GPIO3
 
+#include "can.h"
 #include "mm-can.h"
 #include "mm-decode.h"
 
@@ -44,32 +45,36 @@ void exti_setup(void) {
     /* Enable AFIO clock. */
     rcc_periph_clock_enable(RCC_AFIO);
 
-    /* Enable EXTI11 interrupt. */
-    nvic_enable_irq(NVIC_EXTI3_IRQ);
+    /* Enable EXTI3 interrupt. */
+    nvic_enable_irq(NVIC_EXTI4_IRQ);
 
     /* Set MM Input (in GPIO port B) to 'input open-drain'. */
-    gpio_set_mode(GPIOB, GPIO_MODE_INPUT, GPIO_CNF_INPUT_FLOAT, MM_INPUT);
+    gpio_primary_remap(AFIO_MAPR_SWJ_CFG_JTAG_OFF_SW_ON, 1);
+    gpio_set_mode(GPIOB, GPIO_MODE_INPUT, GPIO_CNF_INPUT_PULL_UPDOWN, GPIO4);
+    gpio_set(GPIOB, GPIO4);
 
     /* Configure the EXTI subsystem. */
-    exti_select_source(EXTI3, GPIOB);
+    exti_select_source(EXTI4, GPIOB);
     exti_direction = FALLING;
-    exti_set_trigger(EXTI3, EXTI_TRIGGER_BOTH);
-    exti_enable_request(EXTI3);
+    exti_set_trigger(EXTI4, EXTI_TRIGGER_BOTH);
+    exti_enable_request(EXTI4);
 }
 
-void exti3_isr(void) {
+void exti4_isr(void) {
     static char packet[18];
     uint8_t packet_ptr;
     static long last_rise_ts, last_fall_ts;
     static bool drop;
-
     long now = micros();
-    bool pin_val = gpio_get(GPIOB, MM_INPUT);
+    bool pin_val = gpio_get(GPIOB, GPIO4);
+
+    exti_reset_request(EXTI4);
+    send_can_data(micros());
+
     if (pin_val) {
 	last_rise_ts = now;
 	return;
     }
-
     if (now - last_fall_ts > 1000) {
 	// Quiet time between packets - resynchronize...
 	packet_ptr = 0;
