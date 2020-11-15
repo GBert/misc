@@ -14,8 +14,6 @@
 #include "mm-can.h"
 #include "mm-decode.h"
 
-uint16_t exti_direction = FALLING;
-
 struct TrackBusEntry_t {
     unsigned char id;
     bool function;
@@ -48,14 +46,13 @@ void exti_setup(void) {
     /* Enable EXTI3 interrupt. */
     nvic_enable_irq(NVIC_EXTI4_IRQ);
 
-    /* Set MM Input (in GPIO port B) to 'input open-drain'. */
+    /* Set MM Input (in GPIO port B) to 'input pull-down'. */
     gpio_primary_remap(AFIO_MAPR_SWJ_CFG_JTAG_OFF_SW_ON, 1);
     gpio_set_mode(GPIOB, GPIO_MODE_INPUT, GPIO_CNF_INPUT_PULL_UPDOWN, GPIO4);
     gpio_set(GPIOB, GPIO4);
 
     /* Configure the EXTI subsystem. */
     exti_select_source(EXTI4, GPIOB);
-    exti_direction = FALLING;
     exti_set_trigger(EXTI4, EXTI_TRIGGER_BOTH);
     exti_enable_request(EXTI4);
 }
