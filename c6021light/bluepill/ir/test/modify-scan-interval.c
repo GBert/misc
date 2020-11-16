@@ -66,6 +66,7 @@ int main(int argc, char **argv) {
 	    nbits++;
 	    if (c & in_mask)
 		n++;
+	    /* printf("nbits %d scans %d out_mask %d\n", nbits, scans, out_mask); */
 	    if (nbits == scans) {
 		if (n > (nbits / 2))
 		    out_c |= out_mask;
@@ -76,11 +77,11 @@ int main(int argc, char **argv) {
 		}
 		out_mask >>= 1;
 		n = 0;
+		nbits = 0;
 	    }
 	    in_mask >>= 1;
 	}
     }
-
     fclose(infile);
     fclose(outfile);
     return 0;
