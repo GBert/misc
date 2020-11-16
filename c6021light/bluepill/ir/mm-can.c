@@ -83,11 +83,7 @@ uint32_t micros(void) {
 
 void sys_tick_handler(void) {
 
-    /* We call this handler every 1ms so every 1ms = 0.001s
-     * resulting in 1Hz message rate.
-     */
-
-    /* Transmit CAN frame. */
+    /* We call this handler every 1ms so every 1ms = 0.001s */
     counter++;
     milliseconds++;
     if (counter == 500) {

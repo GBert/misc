@@ -171,8 +171,8 @@ flash: $(BINARY).flash
 
 clean:
 	@#printf "  CLEAN\n"
-#	$(Q)$(RM) *.o *.d *.elf *.bin *.hex *.srec *.list *.lst *.map
-	$(Q)$(RM) *.o *.d *.elf *.bin *.srec *.list *.lst *.map
+	$(Q)$(RM) *.o *.d *.elf *.bin *.hex *.srec *.list *.lst *.map
+#	$(Q)$(RM) *.o *.d *.elf *.bin *.srec *.list *.lst *.map
 
 stylecheck: $(STYLECHECKFILES:=.stylecheck)
 styleclean: $(STYLECHECKFILES:=.styleclean)
