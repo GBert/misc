@@ -91,8 +91,7 @@ void sys_tick_handler(void) {
     milliseconds++;
     if (counter == 500) {
 	counter = 0;
-	gpio_toggle(GPIOC, GPIO13);	/* toggle green LED */
-	gpio_toggle(GPIOA, GPIO0);	/* toggle LED */
+	gpio_toggle(GPIOC, GPIO13);	/* toggle onboard LED */
     }
 }
 
@@ -111,8 +110,9 @@ int main(void) {
     /* endless loop */
     while (1) {
 	if (pulse_duration) {
-	    printf("%d\n", pulse_duration);
-	    // analyzer(new_timestamp / 1000, pulse_duration);
+	    gpio_toggle(GPIOA, GPIO0);
+	    // printf("%d\n", pulse_duration);
+	    analyzer(new_timestamp / 1000, pulse_duration);
 	    pulse_duration = 0;
 	}
     }

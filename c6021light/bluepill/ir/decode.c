@@ -10,8 +10,7 @@
 #include "sniffer.h"
 #include "decode.h"
 
-volatile uint32_t pulse_duration;
-volatile uint32_t old_timestamp = 0, new_timestamp = 0;
+volatile uint32_t old_timestamp = 0, new_timestamp = 0, pulse_duration = 0;
 
 void exti_setup(void) {
     /* Enable GPIOB clock. */
@@ -35,8 +34,10 @@ void exti_setup(void) {
 }
 
 void exti4_isr(void) {
+    // gpio_set(GPIOA, GPIO0);
     exti_reset_request(EXTI4);
     new_timestamp = micros();
     pulse_duration = new_timestamp - old_timestamp;
-    old_timestamp = new_timestamp; 
+    old_timestamp = new_timestamp;
+    // gpio_clear(GPIOA, GPIO0);
 }
