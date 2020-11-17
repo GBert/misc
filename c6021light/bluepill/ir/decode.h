@@ -7,10 +7,10 @@
  * ----------------------------------------------------------------------------
  */
 
-#ifndef _MM_DECODE_H_
-#define _MM_DECODE_H_
+#ifndef _DECODE_H_
+#define _DECODE_H_
 
 void exti_setup(void);
 
-#endif  /*  _MM_CAN_H_ */
+#endif  /*  _DECODE_H_ */
 

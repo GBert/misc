@@ -4,7 +4,7 @@ Maerklin Motorla Decoder -> CS2 CAN
 Setup
 -----
 CAN on B8 & B9
-Motorola Input B3
+Sniffer on B4
 
 ```
 /*
@@ -18,8 +18,8 @@ Motorola Input B3
       A11                           B0
       A12                           A7
       A15                           A6
-MM    B3       STM32F103C8T6        A5
-      B4                            A4
+      B3       STM32F103C8T6        A5
+Snif  B4                            A4
       B5                            A3
       B6                            A2
       B7              8M            A1

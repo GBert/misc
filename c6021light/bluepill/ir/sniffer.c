@@ -33,14 +33,17 @@ CANTX B9                           C15
 
  */
 
-#include "mm-can.h"
-#include "mm-decode.h"
+#include "analyzer.h"
 #include "can.h"
+#include "decode.h"
+#include "sniffer.h"
+#include "usart.h"
 
 volatile uint32_t counter;
 volatile uint8_t commands_pending;
 volatile uint32_t milliseconds = 0;
 volatile uint8_t status;
+extern volatile uint32_t pulse_duration, old_timestamp, new_timestamp;
 
 uint8_t d_data[8];
 
@@ -99,6 +102,7 @@ int main(void) {
 
     rcc_clock_setup_in_hse_8mhz_out_72mhz();
     gpio_setup();
+    usart_setup();
     can_setup();
     exti_setup();
 
@@ -106,7 +110,11 @@ int main(void) {
 
     /* endless loop */
     while (1) {
-
+	if (pulse_duration) {
+	    printf("%d\n", pulse_duration);
+	    // analyzer(new_timestamp / 1000, pulse_duration);
+	    pulse_duration = 0;
+	}
     }
     return 0;
 }

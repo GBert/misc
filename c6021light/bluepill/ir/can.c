@@ -8,7 +8,7 @@
  */
 
 #include "can.h"
-#include "mm-can.h"
+#include "sniffer.h"
 #include <stdint.h>
 #include <stdbool.h>
 
