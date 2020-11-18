@@ -7,12 +7,15 @@
 #include <stdio.h>
 #include <string.h>
 #include "analyzer.h"
+#include "can.h"
 #include "mmadr.h"
 
 #define USE_PRINTF	0
 
 #define deb_printf(fmt, ...) \
             do { if (USE_PRINTF) printf(fmt, ##__VA_ARGS__); } while (0)
+
+uint8_t data[8] = {0};
 
 struct st_mm { int strt, pause, adr, fkt, dat, xdat; bool freq2; } mmdat, mmaltdat;
 struct st_dc { int strt, pre, daten[8]; } dcdat;
@@ -26,6 +29,7 @@ void mm_print(void) {
         if ((mmdat.adr == mmaltdat.adr) && (mmdat.freq2 == mmaltdat.freq2) &&
                 (mmdat.fkt == mmaltdat.fkt) && (mmdat.dat == mmaltdat.dat) &&
                 (mmdat.xdat == mmaltdat.xdat)) {
+		// send_can_debug(0x52455000);
 		deb_printf(" <REP>");
         } else {
                 mmaltdat = mmdat;
@@ -43,12 +47,15 @@ void mm_print(void) {
                 }
                 else if (mmdat.dat == mmdat.xdat) {
                         deb_printf("\n %6d ms: MM1 ", mmdat.strt);
-                        deb_printf("A=%3d, F=%1d, D=%2d ", mm_adrtab[mmdat.adr], mmdat.fkt, mmdat.dat);     }
-                else {
+                        deb_printf("A=%3d, F=%1d, D=%2d ", mm_adrtab[mmdat.adr], mmdat.fkt, mmdat.dat);
+                        data[3] = mm_adrtab[mmdat.adr];
+                        // send_can_data (0x00160000, 0x04, data);
+                } else {
                         if ((mmdat.fkt == 1) || (mmdat.fkt == 2)) half = '+';
                         deb_printf("\n %6d ms: MM2 ", mmdat.strt);
-                        deb_printf("A=%3d, F=%1d, D=%2d%c X=%2d ", 
-                                mm_adrtab[mmdat.adr], mmdat.fkt, mmdat.dat, half, mmdat.xdat);
+                        deb_printf("A=%3d, F=%1d, D=%2d%c X=%2d ", mm_adrtab[mmdat.adr], mmdat.fkt, mmdat.dat, half, mmdat.xdat);
+                        data[3] = mm_adrtab[mmdat.adr];
+                        // send_can_data (0x000c0000, 0x08, data);
                         if (((mmdat.xdat == 5) && (mmdat.dat < 8)) || ((mmdat.xdat == 10) && (mmdat.dat > 7)))
                                 mmdat.xdat = mmdat.dat;
                         switch (mmdat.xdat) {

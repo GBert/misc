@@ -119,7 +119,7 @@ void can_setup(void) {
     can_enable_irq(CAN1, CAN_IER_FMPIE0);
 }
 
-void send_can_data(uint32_t val) {
+void send_can_debug(uint32_t val) {
     bool ext, rtr;
     uint8_t dlc, data[8] = {0};
     uint32_t id;
@@ -135,6 +135,15 @@ void send_can_data(uint32_t val) {
 
     can_transmit(CAN1, id, ext, rtr, dlc, data);
 }
+
+void send_can_data(uint32_t command, uint8_t dlc, uint8_t *data) {
+
+    command &= 0xffff0000;
+    command |= 0x00000300;
+
+    can_transmit(CAN1, command, 1, 0, dlc, data);
+}
+
 
 void usb_lp_can_rx0_isr(void) {
     uint32_t id;

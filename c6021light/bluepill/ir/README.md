@@ -31,3 +31,16 @@ CANTX B9                           C15
              3V3 DIO  DCLK GND
                  PA13 PA14
 ```
+
+Typical sequence
+----------------
+```
+     56 ms: MM2 A= 60, F=0, D= 0, X= 7 F4 aus <REP> <REP> <REP>
+     83 ms: MM2 A= 60, F=0, D= 0, X=10 V      <REP> <REP> <REP>
+    109 ms: MM2 A= 24, F=0, D= 0, X= 7 F4 aus <REP> <REP> <REP>
+    135 ms: MM2 A= 24, F=0, D= 0, X=10 V      <REP> <REP> <REP>
+    161 ms: MM2 A= 78, F=0, D= 0, X= 3 F1 aus <REP> <REP> <REP>
+    188 ms: MM2 A= 78, F=0, D= 0, X=10 V      <REP> <REP> <REP>
+    214 ms: MM2 A= 72, F=0, D= 0, X= 3 F1 aus <REP> <REP> <REP>
+    240 ms: MM2 A= 72, F=0, D= 0, X=10 V      <REP> <REP> <REP>
+```
