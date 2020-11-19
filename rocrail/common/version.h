@@ -1,11 +1,29 @@
 const int revisionnr = 
-1083
+1101
 ;
 const char* commithash = 
-"204fadfc2bf31a76ae6fd5e568fd172af920806f";
+"3409d27e463cda38a9d1f48207160fe712d3d434";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1101 2020-11-19 10:26:59 +0100 dccpp: timing improvement at connect\n" \
+"1100 2020-11-19 08:59:33 +0100 dccpp: initial commands serialized\n" \
+"1099 2020-11-18 08:18:26 +0100 dccpp: wait until a befor setup\n" \
+"1098 2020-11-18 08:07:20 +0100 dccpp: wait until a befor setup\n" \
+"1097 2020-11-17 22:10:39 +0100 dccpp: forget the big sleep and run from start\n" \
+"1096 2020-11-17 14:53:49 +0100 dccpp: init sequence changes\n" \
+"1095 2020-11-17 09:51:58 +0100 rocdigs.xml: new data memeber for dccpp\n" \
+"1094 2020-11-17 08:26:58 +0100 dccpp: init sensors after the status is requested\n" \
+"1093 2020-11-16 07:41:39 +0100 dccpp: disable DTR in sublib serial\n" \
+"1092 2020-11-16 07:19:25 +0100 car,locdialog: purchased and value fix on export\n" \
+"1091 2020-11-15 09:47:35 +0100 guiapp: save and restore the client size instead of the system dependent frame size\n" \
+"1090 2020-11-15 08:24:33 +0100 car,locdialog: only import if the ID is not already in the table\n" \
+"1089 2020-11-14 14:43:07 +0100 car,loco: import/export as is with comman\n" \
+"1088 2020-11-14 14:34:28 +0100 cardlg,locdialog: remove ampersand on export\n" \
+"1087 2020-11-14 11:04:46 +0100 throttledlg: only show loco ID in titlebar\n" \
+"1086 2020-11-14 10:51:43 +0100 cardlg,locdialog: export purchased and value too\n" \
+"1085 2020-11-14 10:01:32 +0100 replaced makefile variable MACOSX with MACOS\n" \
+"1084 2020-11-14 08:43:50 +0100 locdialog,cardlg: flatten data on export\n" \
 "1083 2020-11-13 08:21:46 +0100 cardlg: import/export in csv format added\n" \
 "1082 2020-11-13 07:58:29 +0100 locdialog: import/export in csv format\n" \
 "1081 2020-11-11 14:57:01 +0100 item: force switch command in case ctrl is pressed\n" \
