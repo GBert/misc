@@ -22,6 +22,12 @@
 
 #define CAN_MAX_RETRY	10000
 
+/* Use GPIO A0 as debug pin */
+#define OSCI_PIN_TOGGLE	GPIOA_ODR ^= 1
+#define OSCI_PIN_ON	GPIOA_BSRR = 1
+#define OSCI_PIN_OFF	GPIOA_BSRR = 1 << 16
+
+
 /******************************************************************************
  * Simple ringbuffer implementation from open-bldc's libgovernor that
  * you can find at:

@@ -4,8 +4,9 @@
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/cm3/systick.h>
 
-#define MM_INPUT	GPIO3
+#define MM_INPUT	GPIO4
 
+#include "analyzer.h"
 #include "can.h"
 #include "sniffer.h"
 #include "decode.h"
@@ -34,10 +35,11 @@ void exti_setup(void) {
 }
 
 void exti4_isr(void) {
-    // gpio_set(GPIOA, GPIO0);
+//    OSCI_PIN_ON;
     exti_reset_request(EXTI4);
     new_timestamp = micros();
     pulse_duration = new_timestamp - old_timestamp;
     old_timestamp = new_timestamp;
-    // gpio_clear(GPIOA, GPIO0);
+    analyzer(new_timestamp/1000, pulse_duration);
+//    OSCI_PIN_OFF;
 }

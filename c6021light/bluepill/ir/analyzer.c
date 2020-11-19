@@ -5,9 +5,11 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
+#include <libopencm3/stm32/gpio.h>
 #include "analyzer.h"
 #include "can.h"
 #include "mmadr.h"
+#include "sniffer.h"
 
 #define USE_PRINTF	0
 
@@ -16,17 +18,65 @@
 
 uint8_t data[8] = { 0 };
 
-struct st_mm {
+volatile uint8_t printlock;
+
+volatile struct st_mm {
     int strt, pause, adr, fkt, dat, xdat;
     bool freq2;
-} mmdat, mmaltdat;
+} mmdat, mmaltdat, mmprint;
+
 struct st_dc {
     int strt, pre, daten[8];
 } dcdat;
 
 bool mfxdetail, mfxread = false;
-unsigned int altduration, dcccounter, mfxcounter, mfxbits, paar, prea, acounter;
+volatile unsigned int altduration, dcccounter, mfxcounter, mfxbits, paar, prea, acounter;
+volatile unsigned int adp, dp;
 char mfxdaten[128], mfxzeile[8192];
+
+void mm_do_print(void) {
+    char half = ',';
+
+    if (mmprint.freq2) {
+	int addr = mm_adrtab[mmprint.adr];
+	printf("\n %6d ms: MMD A=%3d ADP %u DP %u => ", mmprint.strt, addr, adp, dp);
+	if (mmprint.fkt == 0) {
+	    if (addr == 80)
+		addr = 0;
+	    addr = addr * 4 + ((mmprint.dat >> 1) & 3) + 1;
+	    printf("ACC %3d, P%d = %d ", addr, mmprint.dat & 1, mmprint.dat >> 3);
+	} else {
+	    printf("FKT F=%1d, D=%2d ", mmprint.fkt, mmprint.dat);
+	}
+    } else if (mmprint.dat == mmprint.xdat) {
+	printf("\n %6d ms: MM1 ", mmdat.strt);
+	printf("A=%3d, F=%1d, D=%2d ", mm_adrtab[mmdat.adr], mmdat.fkt, mmdat.dat);
+	// send_can_data (0x00160000, 0x04, data);
+    } else {
+	if ((mmprint.fkt == 1) || (mmprint.fkt == 2))
+	    half = '+';
+	printf("\n %6d ms: MM2 ", mmdat.strt);
+	printf("A=%3d, F=%1d, D=%2d%c X=%2d ", mm_adrtab[mmprint.adr], mmprint.fkt, mmprint.dat, half, mmprint.xdat);
+	data[3] = mm_adrtab[mmprint.adr];
+	// send_can_data (0x000c0000, 0x08, data);
+	if (((mmprint.xdat == 5) && (mmprint.dat < 8)) || ((mmprint.xdat == 10) && (mmprint.dat > 7)))
+	    mmprint.xdat = mmprint.dat;
+	switch (mmprint.xdat) {
+	case 2:
+	case 10: printf("V     "); break;
+	case 3: printf("F1 aus"); break;
+	case 4: printf("F2 aus"); break;
+	case 5:
+	case 13: printf("R     "); break;
+	case 6: printf("F3 aus"); break;
+	case 7: printf("F4 aus"); break;
+	case 11: printf("F1 ein"); break;
+	case 12: printf("F2 ein"); break;
+	case 14: printf("F3 ein"); break;
+	case 15: printf("F4 ein"); break;
+	}
+    }
+}
 
 void mm_print(void) {
     char half = ',';
@@ -499,9 +549,13 @@ void mfx_analyzer(int duration) {
 
 void analyzer(int start, int duration) {
     if (duration > 510) {
-	if (acounter == 37)
-	    mm_print();
-	else if (acounter) {
+	if (acounter == 37) {
+	    // mm_print();
+	    if (!printlock) {
+		mmprint = mmdat;
+		printlock = 2;
+	    }
+	} else if (acounter) {
 	    if (!mfx_print()) {
 		deb_printf("\n %6d ms: ??? mit %3d Wechseln !", mmdat.strt, acounter - 1);
 	    }
@@ -535,12 +589,21 @@ void analyzer(int start, int duration) {
 	dcc_analyzer();
     if (mfxcounter)
 	mfx_analyzer(duration);
-    altduration = duration;
 
     if (acounter == 0)
 	return;
-    if (acounter == 3)
-	mmdat.freq2 = (paar < 170);
+    if (acounter == 3) {
+	if (paar < 170) {
+	    OSCI_PIN_ON;
+	    mmdat.freq2 = true;
+	    adp = altduration;
+	    dp = duration;
+	} else {
+	    mmdat.freq2 = false;
+	    OSCI_PIN_OFF;
+	}
+    }
+    altduration = duration;
     if ((++acounter & 1) == 0)
 	return;
     if (acounter < 2)

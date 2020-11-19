@@ -43,7 +43,7 @@ volatile uint32_t counter;
 volatile uint8_t commands_pending;
 volatile uint32_t milliseconds = 0;
 volatile uint8_t status;
-extern volatile uint32_t pulse_duration, old_timestamp, new_timestamp;
+extern volatile uint32_t pulse_duration, old_timestamp, new_timestamp, printlock;
 
 uint8_t d_data[8];
 
@@ -81,7 +81,7 @@ static void systick_setup(void) {
 }
 
 uint32_t micros(void) {
-    return (((9000 - systick_get_value()) / 8 ) + milliseconds * 1000);
+    return (((9000 - systick_get_value()) / 9 ) + milliseconds * 1000);
 }
 
 void sys_tick_handler(void) {
@@ -109,11 +109,12 @@ int main(void) {
 
     /* endless loop */
     while (1) {
-	if (pulse_duration) {
-	    gpio_toggle(GPIOA, GPIO0);
-	    // printf("%d\n", pulse_duration);
-	    analyzer(new_timestamp / 1000, pulse_duration);
-	    pulse_duration = 0;
+	if (printlock == 2) {
+	    // OSCI_PIN_ON;
+	    printlock = 1;
+	    mm_do_print();
+	    printlock = 0;
+	    // OSCI_PIN_OFF;
 	}
     }
     return 0;
