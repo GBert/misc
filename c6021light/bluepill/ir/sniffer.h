@@ -7,8 +7,8 @@
  * ----------------------------------------------------------------------------
  */
 
-#ifndef _MM_CAN_H_
-#define _MM_CAN_H_
+#ifndef _SNIFFER_H_
+#define _SNIFFER_H_
 
 #include <libopencm3/cm3/nvic.h>
 #include <libopencm3/cm3/systick.h>
@@ -19,6 +19,8 @@
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/stm32/usart.h>
 #include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
 
 #define CAN_MAX_RETRY	10000
 
@@ -49,5 +51,5 @@ uint8_t hex2bin(char *s);
 
 uint32_t micros(void);
 
-#endif  /*  _MM_CAN_H_ */
+#endif  /*  _SNIFFER_H_ */
 

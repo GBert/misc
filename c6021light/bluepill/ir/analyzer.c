@@ -2,10 +2,6 @@
 // C 2005 - 2019 Rainer Müller 
 // Das Programm unterliegt den Bedingungen der GNU General Public License 3 (GPL3).
 
-#include <stdbool.h>
-#include <stdio.h>
-#include <string.h>
-#include <libopencm3/stm32/gpio.h>
 #include "analyzer.h"
 #include "can.h"
 #include "mmadr.h"

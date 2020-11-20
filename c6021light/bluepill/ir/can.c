@@ -9,22 +9,10 @@
 
 #include "can.h"
 #include "sniffer.h"
-#include <stdint.h>
-#include <stdbool.h>
 
 static int can_speed(int index) {
     int ret;
     /*
-	S0 = 10 kBaud
-	S1 = 20 kBaud
-	S2 = 50 kBaud
-	S3 = 100 kBaud
-	S4 = 125 kBaud
-	S5 = 250 kBaud
-	S6 = 500 kBaud
-	S7 = 800 kBaud
-	S8 = 1 MBaud
-
 	  10 kBaud Sample Point 75.0 % : 36MHZ / 180 = 200kHz -> TQ 20   SJW + TS1 15 TS2 5
 	  20 kBaud Sample Point 75.0 % : 36MHZ /  90 = 400kHz -> TQ 20   SJW + TS1 15 TS2 5
 	  50 kBaud Sample Point 75.0 % : 36MHZ /  36 = 1MHz   -> TQ 20   SJW + TS1 15 TS2 5
