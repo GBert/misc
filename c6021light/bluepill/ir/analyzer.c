@@ -21,7 +21,8 @@ uint8_t data[8] = { 0 };
 volatile uint8_t printlock;
 
 volatile struct st_mm {
-    int strt, pause, adr, fkt, dat, xdat;
+    int strt, pause;
+    int8_t adr, fkt, dat, xdat;
     bool freq2;
 } mmdat, mmaltdat, mmprint;
 
@@ -34,12 +35,12 @@ volatile unsigned int altduration, dcccounter, mfxcounter, mfxbits, paar, prea, 
 volatile unsigned int adp, dp;
 char mfxdaten[128], mfxzeile[8192];
 
-void mm_do_print(void) {
+void mm_print(void) {
     char half = ',';
 
     if (mmprint.freq2) {
 	int addr = mm_adrtab[mmprint.adr];
-	printf("\n %6d ms: MMD A=%3d ADP %u DP %u => ", mmprint.strt, addr, adp, dp);
+	printf("\n %6d ms: MMD A=%3d => ", mmprint.strt, addr);
 	if (mmprint.fkt == 0) {
 	    if (addr == 80)
 		addr = 0;
@@ -64,88 +65,16 @@ void mm_do_print(void) {
 	switch (mmprint.xdat) {
 	case 2:
 	case 10: printf("V     "); break;
-	case 3: printf("F1 aus"); break;
-	case 4: printf("F2 aus"); break;
+	case 3:			printf("F1 aus"); break;
+	case 4:			printf("F2 aus"); break;
 	case 5:
 	case 13: printf("R     "); break;
-	case 6: printf("F3 aus"); break;
-	case 7: printf("F4 aus"); break;
-	case 11: printf("F1 ein"); break;
-	case 12: printf("F2 ein"); break;
-	case 14: printf("F3 ein"); break;
-	case 15: printf("F4 ein"); break;
-	}
-    }
-}
-
-void mm_print(void) {
-    char half = ',';
-
-    if ((mmdat.adr == mmaltdat.adr) && (mmdat.freq2 == mmaltdat.freq2) &&
-	(mmdat.fkt == mmaltdat.fkt) && (mmdat.dat == mmaltdat.dat) && (mmdat.xdat == mmaltdat.xdat)) {
-	// send_can_debug(0x52455000);
-	deb_printf(" <REP>");
-    } else {
-	mmaltdat = mmdat;
-	if (mmdat.freq2) {
-	    int addr = mm_adrtab[mmdat.adr];
-	    deb_printf("\n %6d ms: MMD A=%3d => ", mmdat.strt, addr);
-	    if (mmdat.fkt == 0) {
-		if (addr == 80)
-		    addr = 0;
-		addr = addr * 4 + ((mmdat.dat >> 1) & 3) + 1;
-		deb_printf("ACC %3d, P%d = %d ", addr, mmdat.dat & 1, mmdat.dat >> 3);
-	    } else {
-		deb_printf("FKT F=%1d, D=%2d ", mmdat.fkt, mmdat.dat);
-	    }
-	} else if (mmdat.dat == mmdat.xdat) {
-	    deb_printf("\n %6d ms: MM1 ", mmdat.strt);
-	    deb_printf("A=%3d, F=%1d, D=%2d ", mm_adrtab[mmdat.adr], mmdat.fkt, mmdat.dat);
-	    data[3] = mm_adrtab[mmdat.adr];
-	    // send_can_data (0x00160000, 0x04, data);
-	} else {
-	    if ((mmdat.fkt == 1) || (mmdat.fkt == 2))
-		half = '+';
-	    deb_printf("\n %6d ms: MM2 ", mmdat.strt);
-	    deb_printf("A=%3d, F=%1d, D=%2d%c X=%2d ", mm_adrtab[mmdat.adr], mmdat.fkt, mmdat.dat, half, mmdat.xdat);
-	    data[3] = mm_adrtab[mmdat.adr];
-	    // send_can_data (0x000c0000, 0x08, data);
-	    if (((mmdat.xdat == 5) && (mmdat.dat < 8)) || ((mmdat.xdat == 10) && (mmdat.dat > 7)))
-		mmdat.xdat = mmdat.dat;
-	    switch (mmdat.xdat) {
-	    case 2:
-	    case 10:
-		deb_printf("V     ");
-		break;
-	    case 3:
-		deb_printf("F1 aus");
-		break;
-	    case 4:
-		deb_printf("F2 aus");
-		break;
-	    case 5:
-	    case 13:
-		deb_printf("R     ");
-		break;
-	    case 6:
-		deb_printf("F3 aus");
-		break;
-	    case 7:
-		deb_printf("F4 aus");
-		break;
-	    case 11:
-		deb_printf("F1 ein");
-		break;
-	    case 12:
-		deb_printf("F2 ein");
-		break;
-	    case 14:
-		deb_printf("F3 ein");
-		break;
-	    case 15:
-		deb_printf("F4 ein");
-		break;
-	    }
+	case 6:			printf("F3 aus"); break;
+	case 7:			printf("F4 aus"); break;
+	case 11:		printf("F1 ein"); break;
+	case 12:		printf("F2 ein"); break;
+	case 14:		printf("F3 ein"); break;
+	case 15:		printf("F4 ein"); break;
 	}
     }
 }
@@ -550,7 +479,6 @@ void mfx_analyzer(int duration) {
 void analyzer(int start, int duration) {
     if (duration > 510) {
 	if (acounter == 37) {
-	    // mm_print();
 	    if (!printlock) {
 		mmprint = mmdat;
 		printlock = 2;
@@ -594,13 +522,11 @@ void analyzer(int start, int duration) {
 	return;
     if (acounter == 3) {
 	if (paar < 170) {
-	    OSCI_PIN_ON;
+	    // OSCI_PIN_ON;
 	    mmdat.freq2 = true;
-	    adp = altduration;
-	    dp = duration;
 	} else {
 	    mmdat.freq2 = false;
-	    OSCI_PIN_OFF;
+	    // OSCI_PIN_OFF;
 	}
     }
     altduration = duration;

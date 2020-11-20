@@ -9,7 +9,6 @@ extern bool detail, mfxdetail;
 
 void analyzer(int start, int dauer);
 
-void mm_do_print(void);
 void mm_print(void);
 void dcc_analyzer(void);
 void mfx_analyzer(int duration);

@@ -63,16 +63,16 @@ static void gpio_setup(void) {
     /* Configure LED&Osci GPIO */
     gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
     gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO0);
-
 }
 
 static void systick_setup(void) {
+
     /* 72MHz / 8 => 9000000 counts per second */
     systick_set_clocksource(STK_CSR_CLKSOURCE_AHB_DIV8);
 
     /* 9000000/9000 = 1000 overflows per second - every 1ms one interrupt */
     /* SysTick interrupt every N clock pulses: set reload to N-1 */
-    systick_set_reload(8999);
+    systick_set_reload(44999);
 
     systick_interrupt_enable();
 
@@ -81,15 +81,15 @@ static void systick_setup(void) {
 }
 
 uint32_t micros(void) {
-    return (((9000 - systick_get_value()) / 9 ) + milliseconds * 1000);
+    return (((45000 - systick_get_value()) / 9 ) + milliseconds * 1000);
 }
 
 void sys_tick_handler(void) {
 
     /* We call this handler every 1ms so every 1ms = 0.001s */
     counter++;
-    milliseconds++;
-    if (counter == 500) {
+    milliseconds += 5;
+    if (counter == 100) {
 	counter = 0;
 	gpio_toggle(GPIOC, GPIO13);	/* toggle onboard LED */
     }
@@ -110,11 +110,11 @@ int main(void) {
     /* endless loop */
     while (1) {
 	if (printlock == 2) {
-	    // OSCI_PIN_ON;
+	    OSCI_PIN_ON;
 	    printlock = 1;
-	    mm_do_print();
+	    mm_print();
 	    printlock = 0;
-	    // OSCI_PIN_OFF;
+	    OSCI_PIN_OFF;
 	}
     }
     return 0;
