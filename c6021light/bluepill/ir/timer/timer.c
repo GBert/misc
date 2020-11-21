@@ -1,7 +1,10 @@
 /*
  * PC13		LED
+ * PA0		Osci pin
+ * PA9		TxD USART 115200
  * PB4		TIM3.CH1 in (5-volt tolerant)
  */
+
 #include <string.h>
 #include <stdio.h>
 
@@ -66,8 +69,8 @@ void sys_tick_handler(void) {
 
 void gpio_setup(void) {
 
-    rcc_periph_clock_enable(RCC_GPIOA);	// Need GPIOB clock
-    rcc_periph_clock_enable(RCC_GPIOC);	// Need GPIOB clock
+    rcc_periph_clock_enable(RCC_GPIOA);	// Need GPIOA clock
+    rcc_periph_clock_enable(RCC_GPIOC);	// Need GPIOC clock
     /* Configure LED&Osci pins */
     gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO0);
     gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
