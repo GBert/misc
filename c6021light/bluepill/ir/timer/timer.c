@@ -21,7 +21,7 @@
 #define OSCI_PIN_ON     GPIOA_BSRR = 1
 #define OSCI_PIN_OFF    GPIOA_BSRR = 1 << 16
 
-static volatile uint32_t counter = 0, cc1if = 0, cc2if = 0, c1count = 0, c2count = 0;
+static volatile uint32_t counter = 0, cc1if = 0, cc2if = 0;
 
 void timer_setup(void);
 void gpio_setup(void);
@@ -31,13 +31,11 @@ void tim3_isr(void) {
 
     OSCI_PIN_ON;
     if (sr & TIM_SR_CC1IF) {
-	cc1if = TIM_CCR1(TIM3);
-	++c1count;
+	cc1if = TIM_CCR1(TIM3) - cc2if;
 	timer_clear_flag(TIM3, TIM_SR_CC1IF);
     }
     if (sr & TIM_SR_CC2IF) {
 	cc2if = TIM_CCR2(TIM3);
-	++c2count;
 	timer_clear_flag(TIM3, TIM_SR_CC2IF);
     }
     OSCI_PIN_OFF;

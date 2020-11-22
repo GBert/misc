@@ -13,13 +13,13 @@
       B14                          3V3
       B15   RESET    GND    GND  RESET
       A8    BUTTON  *BOOT1 *BOOT0  B11
-      A9             3V3    3V3    B10
+TxD   A9             3V3    3V3    B10
       A10                           B1
       A11                           B0
       A12                           A7
       A15                           A6
       B3       STM32F103C8T6        A5
-MM    B4                            A4
+Sniff B4                            A4
       B5                            A3
       B6                            A2
       B7              8M            A1
@@ -35,8 +35,8 @@ CANTX B9                           C15
 
 #include "analyzer.h"
 #include "can.h"
-#include "decode.h"
 #include "sniffer.h"
+#include "timer.h"
 #include "usart.h"
 
 volatile uint32_t counter;
@@ -48,7 +48,6 @@ extern volatile uint32_t pulse_duration, old_timestamp, new_timestamp, printlock
 uint8_t d_data[8];
 
 static void gpio_setup(void) {
-
     rcc_periph_clock_enable(RCC_GPIOA);
     /*  GPIOB & GPIOC clock */
     /* B8 & B9 CAN */
@@ -66,13 +65,12 @@ static void gpio_setup(void) {
 }
 
 static void systick_setup(void) {
-
     /* 72MHz / 8 => 9000000 counts per second */
     systick_set_clocksource(STK_CSR_CLKSOURCE_AHB_DIV8);
 
     /* 9000000/9000 = 1000 overflows per second - every 1ms one interrupt */
     /* SysTick interrupt every N clock pulses: set reload to N-1 */
-    systick_set_reload(44999);
+    systick_set_reload(8999);
 
     systick_interrupt_enable();
 
@@ -80,16 +78,11 @@ static void systick_setup(void) {
     systick_counter_enable();
 }
 
-uint32_t micros(void) {
-    return (((45000 - systick_get_value()) / 9 ) + milliseconds * 1000);
-}
-
 void sys_tick_handler(void) {
-
     /* We call this handler every 1ms so every 1ms = 0.001s */
     counter++;
-    milliseconds += 5;
-    if (counter == 100) {
+    milliseconds++;
+    if (counter == 500) {
 	counter = 0;
 	gpio_toggle(GPIOC, GPIO13);	/* toggle onboard LED */
     }
@@ -103,7 +96,7 @@ int main(void) {
     gpio_setup();
     usart_setup();
     can_setup();
-    exti_setup();
+    timer_setup();
 
     systick_setup();
 

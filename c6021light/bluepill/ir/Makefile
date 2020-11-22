@@ -23,7 +23,7 @@ OPENCM3_DIR = /embedded/arm-cortex/src/libopencm3
 
 TTYISP = /dev/ttyUSB1
 
-OBJS = analyzer.o decode.o can.o usart.o
+OBJS = analyzer.o can.o timer.o usart.o
 BINARY = sniffer
 
 LDSCRIPT = STM32F103C8.ld
