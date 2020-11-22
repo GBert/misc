@@ -31,20 +31,15 @@ void tim3_isr(void) {
 }
 
 void timer_setup(void) {
-
     rcc_periph_clock_enable(RCC_TIM3);	// Need TIM3 clock
 
     rcc_periph_clock_enable(RCC_AFIO);	// Need AFIO clock
-    /* Disable JATG and set PB4 TIM3.CH1 */
+    /* Disable JTAG and set PB4 TIM3.CH1 */
     gpio_primary_remap(AFIO_MAPR_SWJ_CFG_JTAG_OFF_SW_ON, AFIO_MAPR_TIM3_REMAP_PARTIAL_REMAP);
-
-    // PB4 == TIM3.CH1
-    //gpio_set_af(GPIOB, GPIO_TIM3_PR_CH1, GPIO4);
 
     // TIM3:
     timer_disable_counter(TIM3);
     rcc_periph_reset_pulse(RST_TIM3);
-    //nvic_set_priority(NVIC_DMA1_CHANNEL3_IRQ, 2);
     nvic_enable_irq(NVIC_TIM3_IRQ);
     timer_set_mode(TIM3, TIM_CR1_CKD_CK_INT, TIM_CR1_CMS_EDGE, TIM_CR1_DIR_UP);
     // set 1us counter
