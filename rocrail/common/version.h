@@ -1,11 +1,14 @@
 const int revisionnr = 
-1101
+1104
 ;
 const char* commithash = 
-"3409d27e463cda38a9d1f48207160fe712d3d434";
+"efc49afc02262bf50cbaa04378c739e7b4c86896";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1104 2020-11-21 15:04:03 +0100 infodialog: show cpu arch\n" \
+"1103 2020-11-21 12:16:18 +0100 rocs makefile: security issue macOS\n" \
+"1102 2020-11-21 12:15:22 +0100 rocs makefile: security issue for macOS\n" \
 "1101 2020-11-19 10:26:59 +0100 dccpp: timing improvement at connect\n" \
 "1100 2020-11-19 08:59:33 +0100 dccpp: initial commands serialized\n" \
 "1099 2020-11-18 08:18:26 +0100 dccpp: wait until a befor setup\n" \
