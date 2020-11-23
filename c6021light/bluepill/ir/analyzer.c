@@ -46,13 +46,13 @@ void mm_print(void) {
 	    printf("FKT F=%1d, D=%2d ", mmprint.fkt, mmprint.dat);
 	}
     } else if (mmprint.dat == mmprint.xdat) {
-	printf("\n %6d ms: MM1 ", mmdat.strt);
-	printf("A=%3d, F=%1d, D=%2d ", mm_adrtab[mmdat.adr], mmdat.fkt, mmdat.dat);
+	printf("\n %6d ms: MM1 ", mmprint.strt);
+	printf("A=%3d, F=%1d, D=%2d ", mm_adrtab[mmprint.adr], mmprint.fkt, mmprint.dat);
 	// send_can_data (0x00160000, 0x04, data);
     } else {
 	if ((mmprint.fkt == 1) || (mmprint.fkt == 2))
 	    half = '+';
-	printf("\n %6d ms: MM2 ", mmdat.strt);
+	printf("\n %6d ms: MM2 ", mmprint.strt);
 	printf("A=%3d, F=%1d, D=%2d%c X=%2d ", mm_adrtab[mmprint.adr], mmprint.fkt, mmprint.dat, half, mmprint.xdat);
 	data[3] = mm_adrtab[mmprint.adr];
 	// send_can_data (0x000c0000, 0x08, data);

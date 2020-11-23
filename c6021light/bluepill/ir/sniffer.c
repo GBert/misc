@@ -44,7 +44,6 @@ volatile uint8_t commands_pending;
 volatile uint32_t milliseconds = 0;
 volatile uint8_t status;
 extern volatile uint32_t pulse_duration, old_timestamp, new_timestamp, printlock;
-
 uint8_t d_data[8];
 
 static void gpio_setup(void) {
