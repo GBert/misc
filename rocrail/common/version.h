@@ -1,11 +1,12 @@
 const int revisionnr = 
-1112
+1113
 ;
 const char* commithash = 
-"09be2a3c702abdb0160c93e972f9a0dcc851d8c6";
+"07d65fb9788af48e800e218d299978d0ab02f27f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1113 2020-11-26 11:04:36 +0100 block: ignore events in case the block is virtual\n" \
 "1112 2020-11-25 19:30:18 +0100 rocguiinidlg: fix for label\n" \
 "1111 2020-11-25 17:21:51 +0100 optional ARCH make parameter added\n" \
 "1110 2020-11-25 12:24:03 +0100 loc: debug trace correction\n" \
