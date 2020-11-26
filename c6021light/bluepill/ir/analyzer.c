@@ -16,11 +16,8 @@ uint8_t data[8] = { 0 };
 
 volatile uint8_t printlock;
 
-volatile struct st_mm {
-    int strt, pause;
-    int8_t adr, fkt, dat, xdat;
-    bool freq2;
-} mmdat, mmaltdat, mmprint;
+volatile struct st_mm mmdat, mmaltdat, mmprint;
+volatile struct loco_status loco_command;
 
 struct st_dc {
     int strt, pre, daten[8];
@@ -477,6 +474,8 @@ void analyzer(int start, int duration) {
 	if (acounter == 37) {
 	    if (!printlock) {
 		mmprint = mmdat;
+		loco_command.loco_address = mm_adrtab[mmprint.adr];
+		loco_command.speed = mmprint.dat;
 		printlock = 2;
 	    }
 	} else if (acounter) {
