@@ -1,11 +1,19 @@
 const int revisionnr = 
-1104
+1112
 ;
 const char* commithash = 
-"efc49afc02262bf50cbaa04378c739e7b4c86896";
+"09be2a3c702abdb0160c93e972f9a0dcc851d8c6";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1112 2020-11-25 19:30:18 +0100 rocguiinidlg: fix for label\n" \
+"1111 2020-11-25 17:21:51 +0100 optional ARCH make parameter added\n" \
+"1110 2020-11-25 12:24:03 +0100 loc: debug trace correction\n" \
+"1109 2020-11-25 11:14:48 +0100 loc: partial fix for sync events and commands\n" \
+"1108 2020-11-24 12:55:37 +0100 WIP rdp\n" \
+"1107 2020-11-24 11:48:38 +0100 item: disable close in case of virtual block\n" \
+"1106 2020-11-24 09:53:43 +0100 model: fix for deleteing closed routes and blocks\n" \
+"1105 2020-11-23 10:41:19 +0100 wiodlg: type s88 added\n" \
 "1104 2020-11-21 15:04:03 +0100 infodialog: show cpu arch\n" \
 "1103 2020-11-21 12:16:18 +0100 rocs makefile: security issue macOS\n" \
 "1102 2020-11-21 12:15:22 +0100 rocs makefile: security issue for macOS\n" \
