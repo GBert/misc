@@ -1,11 +1,23 @@
 const int revisionnr = 
-1113
+1125
 ;
 const char* commithash = 
-"07d65fb9788af48e800e218d299978d0ab02f27f";
+"8037f9919ddce4c6eadb259767b55c10e15584e2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1125 2020-11-29 13:16:56 +0100 router: reduceV option added to override the default value of routes\n" \
+"1124 2020-11-29 08:11:37 +0100 guiapp: replaced deprecated MacOpenFile\n" \
+"1123 2020-11-28 17:58:13 +0100 guiapp: revert removing MacOpenFile\n" \
+"1122 2020-11-28 13:15:31 +0100 xmlscript: resolve fndesc\n" \
+"1121 2020-11-28 11:47:42 +0100 dccpp: response flag in structure\n" \
+"1120 2020-11-28 11:36:10 +0100 dccpp: wait for response after init a sensor\n" \
+"1119 2020-11-28 11:24:10 +0100 rdp: removed from rocutils.xml\n" \
+"1118 2020-11-28 10:29:34 +0100 revert rdp: wrong level\n" \
+"1117 2020-11-28 08:10:11 +0100 guiapp: save and restore the client size instead of the system dependent frame size in case of Apple\n" \
+"1116 2020-11-26 21:27:57 +0100 rocs: free op loaded library on delete\n" \
+"1115 2020-11-26 21:27:09 +0100 control: use a structure to save loaded DigInt data\n" \
+"1114 2020-11-26 21:26:10 +0100 mjpeg: variable correction\n" \
 "1113 2020-11-26 11:04:36 +0100 block: ignore events in case the block is virtual\n" \
 "1112 2020-11-25 19:30:18 +0100 rocguiinidlg: fix for label\n" \
 "1111 2020-11-25 17:21:51 +0100 optional ARCH make parameter added\n" \
