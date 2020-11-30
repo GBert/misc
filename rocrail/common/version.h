@@ -1,11 +1,17 @@
 const int revisionnr = 
-1125
+1131
 ;
 const char* commithash = 
-"8037f9919ddce4c6eadb259767b55c10e15584e2";
+"f2ea150520f48aac3de394517bf78e6bc67de349";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1131 2020-11-30 09:53:22 +0100 control: crash fix on send declist to digints\n" \
+"1130 2020-11-30 09:13:19 +0100 socket: compiler warning\n" \
+"1129 2020-11-30 09:07:12 +0100 z21: check for hostname by ip addr.\n" \
+"1128 2020-11-30 08:18:55 +0100 control: container for digints\n" \
+"1127 2020-11-29 19:12:20 +0100 control: revert digint struct\n" \
+"1126 2020-11-29 15:34:44 +0100 dccpp: removed wait loop on init sensors\n" \
 "1125 2020-11-29 13:16:56 +0100 router: reduceV option added to override the default value of routes\n" \
 "1124 2020-11-29 08:11:37 +0100 guiapp: replaced deprecated MacOpenFile\n" \
 "1123 2020-11-28 17:58:13 +0100 guiapp: revert removing MacOpenFile\n" \

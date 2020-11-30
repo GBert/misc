@@ -7,13 +7,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rocrail
-PKG_REV:=8037f9919d
-PKG_VERSION:=n1125
+PKG_REV:=f2ea150520
+PKG_VERSION:=n1131
 PKG_RELEASE:=
 
-PKG_SOURCE_PROTO:=git
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://github.com/rocrail/Rocrail
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
@@ -188,7 +186,7 @@ define Package/rocweb/install
 	$(CP) $(PKG_BUILD_DIR)/rocrail/impl/web/html/* $(1)/opt/rocrail/web/html
 endef
 
-define Package/rccrail-mqtt/install
+define Package/rocrail-mqtt/install
 	$(INSTALL_DIR) $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/mqtt.so $(1)/opt/rocrail
 endef
