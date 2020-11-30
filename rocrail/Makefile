@@ -7,8 +7,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rocrail
-PKG_REV:=f2ea150520
-PKG_VERSION:=n1131
+PKG_REV:=75b83d65fd
+PKG_VERSION:=n1132
 PKG_RELEASE:=
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -188,7 +188,7 @@ endef
 
 define Package/rocrail-mqtt/install
 	$(INSTALL_DIR) $(1)/opt/rocrail
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/mqtt.so $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/rnet.so $(1)/opt/rocrail
 endef
 
 define Package/rocrail-cs-mbus/install

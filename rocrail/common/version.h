@@ -1,11 +1,12 @@
 const int revisionnr = 
-1131
+1132
 ;
 const char* commithash = 
-"f2ea150520f48aac3de394517bf78e6bc67de349";
+"75b83d65fdae71384e698e3cad5eefe843de81d0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1132 2020-11-30 12:33:18 +0100 z21,socket: get hostname by ip\n" \
 "1131 2020-11-30 09:53:22 +0100 control: crash fix on send declist to digints\n" \
 "1130 2020-11-30 09:13:19 +0100 socket: compiler warning\n" \
 "1129 2020-11-30 09:07:12 +0100 z21: check for hostname by ip addr.\n" \
