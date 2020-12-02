@@ -10,6 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=mrsystem
 PKG_VERSION:=2.7
 
+PKG_MD5SUM:=461d96195d67988eb38226d428470ec0
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
