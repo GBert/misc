@@ -10,12 +10,6 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=mrsystem
 PKG_VERSION:=2.7
 
-PKG_SOURCE_MIRROR:=0 
-PKG_SOURCE_VERSION:=$(PKG_REV)
-PKG_SOURCE_URL:=http://mbernstein.de/download/modellbahn/
-PKG_MD5SUM:=39d5453fb5a2ae9eeb9c1bfe097d8168
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)/
-PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
