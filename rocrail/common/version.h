@@ -1,11 +1,21 @@
 const int revisionnr = 
-1132
+1142
 ;
 const char* commithash = 
-"75b83d65fdae71384e698e3cad5eefe843de81d0";
+"51ca308a0b1a1c46960e9e90b5bf84124b522927";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1142 2020-12-02 14:35:24 +0100 wiopi: WIP\n" \
+"1141 2020-12-02 12:11:55 +0100 wiopi: WIP\n" \
+"1140 2020-12-02 12:11:16 +0100 wio: use strtobyte with initialized buffer\n" \
+"1139 2020-12-02 11:10:24 +0100 dir.svg: removed alt-g\n" \
+"1138 2020-12-01 10:34:39 +0100 guiapp: stay offline in case of local file\n" \
+"1137 2020-12-01 09:37:20 +0100 z21: disregard domain inhost name in case its not specified in the rocrail.ini\n" \
+"1136 2020-11-30 19:29:57 +0100 wsocket: workaround for win32 and getnameinfo\n" \
+"1135 2020-11-30 15:58:35 +0100 rocs makefile: adde missing library for win32\n" \
+"1134 2020-11-30 15:41:06 +0100 translations: type fix\n" \
+"1133 2020-11-30 13:09:12 +0100 z21: compare hostname none case sensitive\n" \
 "1132 2020-11-30 12:33:18 +0100 z21,socket: get hostname by ip\n" \
 "1131 2020-11-30 09:53:22 +0100 control: crash fix on send declist to digints\n" \
 "1130 2020-11-30 09:13:19 +0100 socket: compiler warning\n" \
