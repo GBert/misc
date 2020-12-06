@@ -593,7 +593,8 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	    check_data_lan_x_header(z21_data, &z21_data->udpframe[i], verbose);
 	    break;
 	case LAN_SYSTEMSTATE_GETDATA:
-	    vas_printf(verbose, &vchar, "LAN_SYSTEMSTATE_GETDATA\n");
+	    v_printf(verbose, "LAN_SYSTEMSTATE_GETDATA\n");
+	    vas_printf(verbose, &vchar, " LAN_SYSTEMSTATE_DATACHANGED\n");
 	    send_xpn_system_info(vchar);
 	    break;
 	case 0x12:
