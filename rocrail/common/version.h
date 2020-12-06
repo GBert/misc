@@ -1,11 +1,33 @@
 const int revisionnr = 
-1142
+1164
 ;
 const char* commithash = 
-"51ca308a0b1a1c46960e9e90b5bf84124b522927";
+"9462c0484e4fd5ac3351cfd73226f0f9e36eaeb3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1164 2020-12-06 15:54:42 +0100 wiopi: IO events\n" \
+"1163 2020-12-06 15:03:50 +0100 wiopi: alive thread added\n" \
+"1162 2020-12-06 12:30:17 +0100 wiopi: rascii struct correction\n" \
+"1161 2020-12-06 12:26:36 +0100 rocs: rascii struct member correction\n" \
+"1160 2020-12-06 12:14:37 +0100 wiopi: added missinf wiringpi setup\n" \
+"1159 2020-12-06 11:18:00 +0100 rocs: rascii include fix\n" \
+"1158 2020-12-06 11:16:18 +0100 rocs: rascii include fix\n" \
+"1157 2020-12-06 11:02:46 +0100 rocs: rascii added\n" \
+"1156 2020-12-06 09:10:33 +0100 node: not remove an attr in case the value is set to NULL\n" \
+"1155 2020-12-06 08:51:45 +0100 wio: added missing recipient id, 0=broadcast, in the clock command\n" \
+"1154 2020-12-06 08:29:21 +0100 wiopi: use internal rascii frame\n" \
+"1153 2020-12-05 16:39:02 +0100 tttrackdialog: grid connect value increased to 26\n" \
+"1152 2020-12-05 14:57:07 +0100 wiopi: WIP\n" \
+"1151 2020-12-04 23:02:03 +0100 attr: set simple type improvements\n" \
+"1150 2020-12-04 22:26:16 +0100 attr: memory usage optimisation\n" \
+"1149 2020-12-04 13:54:23 +0100 wiopi: scan IO\n" \
+"1148 2020-12-04 13:33:58 +0100 wiopi: servo pos fix\n" \
+"1147 2020-12-04 11:47:17 +0100 wiopi: WIP\n" \
+"1146 2020-12-03 15:46:59 +0100 wiopi: support for PCA9622\n" \
+"1145 2020-12-03 14:53:19 +0100 wiopi: PCA9785 support\n" \
+"1144 2020-12-03 12:26:10 +0100 wiopi: WIP\n" \
+"1143 2020-12-03 09:06:42 +0100 wiopi: WIP\n" \
 "1142 2020-12-02 14:35:24 +0100 wiopi: WIP\n" \
 "1141 2020-12-02 12:11:55 +0100 wiopi: WIP\n" \
 "1140 2020-12-02 12:11:16 +0100 wio: use strtobyte with initialized buffer\n" \
