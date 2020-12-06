@@ -23,6 +23,7 @@
 #include <libgen.h>
 
 #include "read-cs2-config.h"
+#include "z21.h"
 
 extern struct track_page_t *track_page;
 extern struct track_data_t *track_data;
@@ -48,7 +49,7 @@ struct loco_data_t *create_loco(unsigned int uid) {
     HASH_ADD_STR(loco_data, name, l);
     HASH_ADD(hha, loco_data_by_uid, uid, sizeof(int), l);
 
-    printf(" Loco added: %s %d\n", l->name, uid);
+    v_printf(" Loco added: %s %d\n", l->name, uid);
 
     return(l);
 }

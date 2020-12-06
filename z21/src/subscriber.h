@@ -26,7 +26,7 @@ struct subscriber_t {
     UT_hash_handle hh;
 };
 
-int add_z21c_ip(uint32_t ip);
+int add_z21c_ip(uint32_t ip, int verbose);
 int del_z21c_ip(uint32_t ip);
 int set_z21c_bcf(uint32_t ip, uint32_t broadcast_flags);
 

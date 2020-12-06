@@ -23,7 +23,7 @@
 struct subscriber_t *subscriber = NULL;
 pthread_mutex_t lock=PTHREAD_MUTEX_INITIALIZER;
 
-int add_z21c_ip(uint32_t ip) {
+int add_z21c_ip(uint32_t ip, int verbose) {
     struct subscriber_t *sub;
 
     pthread_mutex_lock(&lock);
@@ -51,7 +51,8 @@ int add_z21c_ip(uint32_t ip) {
 	}
 	gettimeofday(&(sub->last_seen), NULL);
 
-	printf("Client IP added %s\n", inet_ntoa(sub->client_addr.sin_addr));
+	if (verbose)
+	    printf("Client IP added %s\n", inet_ntoa(sub->client_addr.sin_addr));
 	HASH_ADD(hh, subscriber, ip, sizeof(uint32_t), sub);
     }
 

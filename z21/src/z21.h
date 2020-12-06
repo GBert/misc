@@ -19,6 +19,12 @@
 #define MAERKLIN_PORT		15731
 #define MAXSIZE			16384
 
+#define v_printf(verbose, ...) \
+	do { if ((verbose)) { printf(__VA_ARGS__);} } while (0)
+
+#define vas_printf(verbose, ...) \
+	do { if ((verbose)) { asprintf(__VA_ARGS__);} } while (0)
+
 struct z21data_t {
     int type;
     uint16_t length;
