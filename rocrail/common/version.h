@@ -1,11 +1,12 @@
 const int revisionnr = 
-1164
+1165
 ;
 const char* commithash = 
-"9462c0484e4fd5ac3351cfd73226f0f9e36eaeb3";
+"baede0f5d3b29b846d26e9385935988d7152d48f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1165 2020-12-06 18:21:52 +0100 cleanup unused decoder file format\n" \
 "1164 2020-12-06 15:54:42 +0100 wiopi: IO events\n" \
 "1163 2020-12-06 15:03:50 +0100 wiopi: alive thread added\n" \
 "1162 2020-12-06 12:30:17 +0100 wiopi: rascii struct correction\n" \
