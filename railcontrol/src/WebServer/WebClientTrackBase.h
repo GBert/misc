@@ -20,18 +20,33 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
-#include "DataModel/Accessory.h"
-#include "DataModel/AccessoryBase.h"
-#include "DataModel/Cluster.h"
-#include "DataModel/Feedback.h"
-#include "DataModel/Layer.h"
-#include "DataModel/Loco.h"
-#include "DataModel/LocoFunctions.h"
-#include "DataModel/ObjectIdentifier.h"
-#include "DataModel/Relation.h"
-#include "DataModel/Route.h"
-#include "DataModel/Signal.h"
-#include "DataModel/Switch.h"
-#include "DataModel/Track.h"
+#include <map>
+#include <string>
+
 #include "DataModel/TrackBase.h"
+
+namespace DataModel
+{
+	class Cluster;
+	class ObjectIdentifier;
+}
+namespace WebServer
+{
+	class HtmlTag;
+	class WebClient;
+
+	class WebClientTrackBase
+	{
+		public:
+			static HtmlTag HtmlTagTabTrackAutomode(DataModel::SelectRouteApproach selectRouteApproach,
+				const bool allowLocoTurn,
+				const bool releaseWhenFree,
+				const DataModel::Cluster* cluster);
+
+			static HtmlTag HtmlTagTabTrackFeedback(const WebClient& client,
+				const std::vector<FeedbackID>& feedbacks,
+				const DataModel::ObjectIdentifier& objectIdentifier);
+	};
+
+} // namespace WebServer
 

@@ -48,7 +48,7 @@ namespace DataModel
 		HardwareHandle::Deserialize(arguments);
 		accessoryType = static_cast<AccessoryType>(Utils::Utils::GetIntegerMapEntry(arguments, "type"));
 		accessoryState = static_cast<AccessoryState>(Utils::Utils::GetIntegerMapEntry(arguments, "state", AccessoryStateOff));
-		duration = static_cast<AccessoryPulseDuration>(Utils::Utils::GetIntegerMapEntry(arguments, "timeout", DefaultAccessoryPulseDuration)); // FIXME: remove in later versions, is only here for conversion
+		duration = static_cast<AccessoryPulseDuration>(Utils::Utils::GetIntegerMapEntry(arguments, "timeout", DefaultAccessoryPulseDuration)); // FIXME: remove in later versions, is only here for conversion 2020-10-27
 		duration = static_cast<AccessoryPulseDuration>(Utils::Utils::GetIntegerMapEntry(arguments, "duration", DefaultAccessoryPulseDuration));
 		inverted = Utils::Utils::GetBoolMapEntry(arguments, "inverted");
 		lastUsed = Utils::Utils::GetIntegerMapEntry(arguments, "lastused", 0);

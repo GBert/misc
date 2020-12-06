@@ -84,7 +84,7 @@ namespace DataModel
 		map<string,string> arguments;
 		ParseArguments(serialized, arguments);
 		string objectType = Utils::Utils::GetStringMapEntry(arguments, "objectType");
-		if (objectType.compare("Route") != 0 && objectType.compare("Street")) // FIXME: remove street later
+		if (objectType.compare("Route") != 0 && objectType.compare("Street")) // FIXME: remove street later 2020-10-27
 		{
 			return false;
 		}
@@ -128,11 +128,11 @@ namespace DataModel
 		}
 		else if (orientationString.compare("0") == 0)
 		{
-			toOrientation = OrientationRight; // FIXME: change later to left and serialize with int
+			toOrientation = OrientationRight; // FIXME: change later to left and serialize with int 2020-10-27
 		}
 		else if (orientationString.compare("1") == 0)
 		{
-			toOrientation = OrientationLeft; // FIXME: change later to right and serialize with int
+			toOrientation = OrientationLeft; // FIXME: change later to right and serialize with int 2020-10-27
 		}
 		else
 		{
@@ -144,7 +144,7 @@ namespace DataModel
 		feedbackIdCreep = Utils::Utils::GetIntegerMapEntry(arguments, "feedbackIdCreep", FeedbackNone);
 		feedbackIdStop = Utils::Utils::GetIntegerMapEntry(arguments, "feedbackIdStop", FeedbackNone);
 		feedbackIdOver = Utils::Utils::GetIntegerMapEntry(arguments, "feedbackIdOver", FeedbackNone);
-		pushpull = static_cast<PushpullType>(Utils::Utils::GetIntegerMapEntry(arguments, "commuter", PushpullTypeBoth)); // FIXME: remove later
+		pushpull = static_cast<PushpullType>(Utils::Utils::GetIntegerMapEntry(arguments, "commuter", PushpullTypeBoth)); // FIXME: remove later 2020-10-27
 		pushpull = static_cast<PushpullType>(Utils::Utils::GetIntegerMapEntry(arguments, "pushpull", pushpull));
 		minTrainLength = static_cast<Length>(Utils::Utils::GetIntegerMapEntry(arguments, "mintrainlength", 0));
 		maxTrainLength = static_cast<Length>(Utils::Utils::GetIntegerMapEntry(arguments, "maxtrainlength", 0));
@@ -172,12 +172,16 @@ namespace DataModel
 		relations = newRelations;
 		for (auto relation : relations)
 		{
-			relation->ObjectID1(objectID); // FIXME: remove later. In older versions the objectID has always been stored with value 0
+			relation->ObjectID1(objectID); // FIXME: remove later. In older versions the objectID has always been stored with value 0 2020-10-27
 		}
 		return true;
 	}
 
-	bool Route::FromTrackOrientation(Logger::Logger* logger, const ObjectIdentifier& identifier, const Orientation trackOrientation, const Loco* loco, const bool allowLocoTurn)
+	bool Route::FromTrackOrientation(Logger::Logger* logger,
+		const ObjectIdentifier& identifier,
+		const Orientation trackOrientation,
+		const Loco* loco,
+		const bool allowLocoTurn)
 	{
 		if (automode == false)
 		{
@@ -208,14 +212,22 @@ namespace DataModel
 			return false;
 		}
 
-		if (allowLocoTurn == true && locoPushpull == true)
+		if (fromOrientation == trackOrientation)
 		{
 			return true;
 		}
 
-		if (fromOrientation == trackOrientation)
+		if (allowLocoTurn == true && locoPushpull == true)
 		{
-			return true;
+			TrackBase* trackBase = manager->GetTrackBase(fromTrack);
+			if (trackBase != nullptr)
+			{
+				bool allowTrackTurn = trackBase->GetAllowLocoTurn();
+				if (allowTrackTurn == true)
+				{
+					return true;
+				}
+			}
 		}
 
 		logger->Debug(Languages::TextDifferentOrientations, GetName());

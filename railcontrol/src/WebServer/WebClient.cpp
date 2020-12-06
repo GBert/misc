@@ -53,12 +53,12 @@ along with RailControl; see the file LICENCE. If not see
 #include "WebServer/HtmlTagInputIntegerWithLabel.h"
 #include "WebServer/HtmlTagInputSliderLocoSpeed.h"
 #include "WebServer/HtmlTagInputTextWithLabel.h"
+#include "WebServer/HtmlTagRoute.h"
 #include "WebServer/HtmlTagSelectOrientation.h"
-#include "WebServer/HtmlTagSelectOrientationWithLabel.h"
 #include "WebServer/HtmlTagSelectWithLabel.h"
 #include "WebServer/HtmlTagSignal.h"
-#include "WebServer/HtmlTagRoute.h"
 #include "WebServer/HtmlTagSwitch.h"
+#include "WebServer/HtmlTagTextWithLabel.h"
 #include "WebServer/HtmlTagTrack.h"
 #include "WebServer/WebClient.h"
 #include "WebServer/WebServer.h"
@@ -318,35 +318,35 @@ namespace WebServer
 			}
 			else if (arguments["cmd"].compare("signaledit") == 0)
 			{
-				HandleSignalEdit(arguments);
+				signal.HandleSignalEdit(arguments);
 			}
 			else if (arguments["cmd"].compare("signalsave") == 0)
 			{
-				HandleSignalSave(arguments);
+				signal.HandleSignalSave(arguments);
 			}
 			else if (arguments["cmd"].compare("signalstate") == 0)
 			{
-				HandleSignalState(arguments);
+				signal.HandleSignalState(arguments);
 			}
 			else if (arguments["cmd"].compare("signallist") == 0)
 			{
-				HandleSignalList();
+				signal.HandleSignalList();
 			}
 			else if (arguments["cmd"].compare("signalaskdelete") == 0)
 			{
-				HandleSignalAskDelete(arguments);
+				signal.HandleSignalAskDelete(arguments);
 			}
 			else if (arguments["cmd"].compare("signaldelete") == 0)
 			{
-				HandleSignalDelete(arguments);
+				signal.HandleSignalDelete(arguments);
 			}
 			else if (arguments["cmd"].compare("signalget") == 0)
 			{
-				HandleSignalGet(arguments);
+				signal.HandleSignalGet(arguments);
 			}
 			else if (arguments["cmd"].compare("signalrelease") == 0)
 			{
-				HandleSignalRelease(arguments);
+				signal.HandleSignalRelease(arguments);
 			}
 			else if (arguments["cmd"].compare("routeedit") == 0)
 			{
@@ -382,51 +382,51 @@ namespace WebServer
 			}
 			else if (arguments["cmd"].compare("trackedit") == 0)
 			{
-				HandleTrackEdit(arguments);
+				track.HandleTrackEdit(arguments);
 			}
 			else if (arguments["cmd"].compare("tracksave") == 0)
 			{
-				HandleTrackSave(arguments);
+				track.HandleTrackSave(arguments);
 			}
 			else if (arguments["cmd"].compare("tracklist") == 0)
 			{
-				HandleTrackList();
+				track.HandleTrackList();
 			}
 			else if (arguments["cmd"].compare("trackaskdelete") == 0)
 			{
-				HandleTrackAskDelete(arguments);
+				track.HandleTrackAskDelete(arguments);
 			}
 			else if (arguments["cmd"].compare("trackdelete") == 0)
 			{
-				HandleTrackDelete(arguments);
+				track.HandleTrackDelete(arguments);
 			}
 			else if (arguments["cmd"].compare("trackget") == 0)
 			{
-				HandleTrackGet(arguments);
+				track.HandleTrackGet(arguments);
 			}
 			else if (arguments["cmd"].compare("tracksetloco") == 0)
 			{
-				HandleTrackSetLoco(arguments);
+				track.HandleTrackSetLoco(arguments);
 			}
 			else if (arguments["cmd"].compare("trackrelease") == 0)
 			{
-				HandleTrackRelease(arguments);
+				track.HandleTrackRelease(arguments);
 			}
 			else if (arguments["cmd"].compare("trackstartloco") == 0)
 			{
-				HandleTrackStartLoco(arguments);
+				track.HandleTrackStartLoco(arguments);
 			}
 			else if (arguments["cmd"].compare("trackstoploco") == 0)
 			{
-				HandleTrackStopLoco(arguments);
+				track.HandleTrackStopLoco(arguments);
 			}
 			else if (arguments["cmd"].compare("trackblock") == 0)
 			{
-				HandleTrackBlock(arguments);
+				track.HandleTrackBlock(arguments);
 			}
 			else if (arguments["cmd"].compare("trackorientation") == 0)
 			{
-				HandleTrackOrientation(arguments);
+				track.HandleTrackOrientation(arguments);
 			}
 			else if (arguments["cmd"].compare("feedbackedit") == 0)
 			{
@@ -540,6 +540,26 @@ namespace WebServer
 			{
 				HandleCvFields(arguments);
 			}
+			else if (arguments["cmd"].compare("clusterlist") == 0)
+			{
+				cluster.HandleClusterList();
+			}
+			else if (arguments["cmd"].compare("clusteredit") == 0)
+			{
+				cluster.HandleClusterEdit(arguments);
+			}
+			else if (arguments["cmd"].compare("clustersave") == 0)
+			{
+				cluster.HandleClusterSave(arguments);
+			}
+			else if (arguments["cmd"].compare("clusteraskdelete") == 0)
+			{
+				cluster.HandleClusterAskDelete(arguments);
+			}
+			else if (arguments["cmd"].compare("clusterdelete") == 0)
+			{
+				cluster.HandleClusterDelete(arguments);
+			}
 			else if (arguments["cmd"].compare("updater") == 0)
 			{
 				HandleUpdater(headers);
@@ -553,13 +573,6 @@ namespace WebServer
 				DeliverFile(uri);
 			}
 		}
-	}
-
-	int WebClient::Stop()
-	{
-		// inform working thread to stop
-		run = false;
-		return 0;
 	}
 
 	char WebClient::ConvertHexToInt(char c)
@@ -1248,7 +1261,9 @@ namespace WebServer
 		return HtmlTagSelectWithLabel("duration", label, durationOptions, Utils::Utils::ToStringWithLeadingZeros(duration, 4));
 	}
 
-	HtmlTag WebClient::HtmlTagPosition(const LayoutPosition posx, const LayoutPosition posy, const LayoutPosition posz)
+	HtmlTag WebClient::HtmlTagPosition(const LayoutPosition posx,
+		const LayoutPosition posy,
+		const LayoutPosition posz) const
 	{
 		HtmlTag content("div");
 		content.AddId("position");;
@@ -1259,7 +1274,10 @@ namespace WebServer
 		return content;
 	}
 
-	HtmlTag WebClient::HtmlTagPosition(const LayoutPosition posx, const LayoutPosition posy, const LayoutPosition posz, const Visible visible)
+	HtmlTag WebClient::HtmlTagPosition(const LayoutPosition posx,
+		const LayoutPosition posy,
+		const LayoutPosition posz,
+		const Visible visible) const
 	{
 		HtmlTag content;
 		HtmlTagInputCheckboxWithLabel checkboxVisible("visible", Languages::TextVisible, "visible", static_cast<bool>(visible));
@@ -1410,31 +1428,61 @@ namespace WebServer
 		return content;
 	}
 
-	HtmlTag WebClient::HtmlTagSlave(const string& priority, const ObjectID objectId)
+	HtmlTag WebClient::HtmlTagSlaveSelect(const string& prefix,
+		const vector<Relation*>& relations,
+		const map<string,ObjectID>& options) const
 	{
 		HtmlTag content("div");
-		content.AddId("priority_" + priority);
-		HtmlTagButton deleteButton(Languages::TextDelete, "delete_slave_" + priority);
-		deleteButton.AddAttribute("onclick", "deleteElement('priority_" + priority + "');return false;");
+		content.AddId("tab_" + prefix + "s");
+		content.AddClass("tab_content");
+		content.AddClass("hidden");
+
+		HtmlTag div("div");
+		div.AddChildTag(HtmlTagInputHidden(prefix + "counter", to_string(relations.size())));
+		div.AddId(prefix + "s");
+
+		unsigned int counter = 1;
+		for (auto relation : relations)
+		{
+			ObjectID objectID = relation->ObjectID2();
+			div.AddChildTag(HtmlTagSlaveEntry(prefix, to_string(counter), objectID, options));
+			++counter;
+		}
+		div.AddChildTag(HtmlTag("div").AddId(prefix + "_new_" + to_string(counter)));
+
+		content.AddChildTag(div);
+		HtmlTagButton newTrackButton(Languages::TextNew, "new" + prefix);
+		newTrackButton.AddAttribute("onclick", "addSlave('" + prefix + "');return false;");
+		newTrackButton.AddClass("wide_button");
+		content.AddChildTag(newTrackButton);
+		content.AddChildTag(HtmlTag("br"));
+		return content;
+	}
+
+	HtmlTag WebClient::HtmlTagSlaveEntry(const string& prefix,
+		const string& priority,
+		const ObjectID objectId,
+		const map<string,ObjectID>& options) const
+	{
+		HtmlTag content("div");
+		content.AddId(prefix + "_priority_" + priority);
+		HtmlTagButton deleteButton(Languages::TextDelete, prefix + "_delete_" + priority);
+		deleteButton.AddAttribute("onclick", "deleteElement('" + prefix + "_priority_" + priority + "');return false;");
 		deleteButton.AddClass("wide_button");
 		content.AddChildTag(deleteButton);
 
 		HtmlTag contentObject("div");
-		contentObject.AddId("slave_object_" + priority);
+		contentObject.AddId(prefix + "_object_" + priority);
 		contentObject.AddClass("inline-block");
 
-		std::map<string, Loco*> locos = manager.LocoListByName();
-		map<string, SwitchID> locoOptions;
-		for (auto loco : locos)
-		{
-			locoOptions[loco.first] = loco.second->GetID();
-		}
-		contentObject.AddChildTag(HtmlTagSelect("slave_id_" + priority, locoOptions, objectId).AddClass("select_slave_id"));
+		contentObject.AddChildTag(HtmlTagSelect(prefix + "_id_" + priority, options, objectId).AddClass("select_slave_id"));
 		content.AddChildTag(contentObject);
 		return content;
 	}
 
-	HtmlTag WebClient::HtmlTagSelectFeedbackForTrack(const unsigned int counter, const ObjectIdentifier& objectIdentifier, const FeedbackID feedbackID)
+	HtmlTag WebClient::HtmlTagSelectFeedbackForTrack(const unsigned int counter,
+		const ObjectIdentifier& objectIdentifier,
+		const FeedbackID feedbackID) const
 	{
 		string counterString = to_string(counter);
 		HtmlTag content("div");
@@ -1572,9 +1620,23 @@ namespace WebServer
 	{
 		string priorityString = Utils::Utils::GetStringMapEntry(arguments, "priority", "1");
 		Priority priority = Utils::Utils::StringToInteger(priorityString, 1);
+		string prefix = Utils::Utils::GetStringMapEntry(arguments, "prefix");
 		HtmlTag container;
-		container.AddChildTag(HtmlTagSlave(priorityString));
-		container.AddChildTag(HtmlTag("div").AddId("new_slave_" + to_string(priority + 1)));
+		std::map<std::string,ObjectID> options;
+		if (prefix.compare("track") == 0)
+		{
+			options = cluster.GetTrackOptions();
+		}
+		else if (prefix.compare("signal") == 0)
+		{
+			options = cluster.GetSignalOptions();
+		}
+		else if (prefix.compare("slave") == 0)
+		{
+			options = GetLocoOptions();
+		}
+		container.AddChildTag(HtmlTagSlaveEntry(prefix, priorityString, ObjectNone, options));
+		container.AddChildTag(HtmlTag("div").AddId(prefix + "_new_" + to_string(priority + 1)));
 		ReplyHtmlWithHeader(container);
 	}
 
@@ -1604,6 +1666,24 @@ namespace WebServer
 		const string name = "relation_" + type + "_" + priority;
 		const ObjectType objectType = static_cast<ObjectType>(Utils::Utils::GetIntegerMapEntry(arguments, "objecttype"));
 		ReplyHtmlWithHeader(HtmlTagRelationObject(name, objectType));
+	}
+
+	map<string,ObjectID> WebClient::GetLocoOptions(const LocoID locoID) const
+	{
+		map<string, ObjectID> locoOptions;
+
+		map<string, Loco*> allLocos = manager.LocoListByName();
+		for (auto loco : allLocos)
+		{
+			// FIXME: check if already has a master
+			LocoID slaveID = loco.second->GetID();
+			if (locoID == slaveID)
+			{
+				continue;
+			}
+			locoOptions[loco.first] = loco.second->GetID();
+		}
+		return locoOptions;
 	}
 
 	void WebClient::HandleLocoEdit(const map<string, string>& arguments)
@@ -1651,7 +1731,8 @@ namespace WebServer
 		tabMenu.AddChildTag(HtmlTagTabMenuItem("automode", Languages::TextAutomode));
 		content.AddChildTag(tabMenu);
 
-		HtmlTag formContent;
+		HtmlTag formContent("form");
+		formContent.AddId("editform");
 		formContent.AddChildTag(HtmlTagInputHidden("cmd", "locosave"));
 		formContent.AddChildTag(HtmlTagInputHidden("loco", to_string(locoID)));
 
@@ -1817,32 +1898,7 @@ namespace WebServer
 		}
 		formContent.AddChildTag(functionsContent);
 
-		HtmlTag slavesDiv("div");
-		slavesDiv.AddChildTag(HtmlTagInputHidden("slavecounter", to_string(slaves.size())));
-		slavesDiv.AddId("slaves");
-		unsigned int slavecounter = 1;
-		for (auto slave : slaves)
-		{
-			LocoID slaveID = slave->ObjectID2();
-			if (locoID == slaveID)
-			{
-				continue;
-			}
-			slavesDiv.AddChildTag(HtmlTagSlave(to_string(slavecounter), slaveID));
-			++slavecounter;
-		}
-		slavesDiv.AddChildTag(HtmlTag("div").AddId("new_slave_" + to_string(slavecounter)));
-		HtmlTag relationContent("div");
-		relationContent.AddId("tab_slaves");
-		relationContent.AddClass("tab_content");
-		relationContent.AddClass("hidden");
-		relationContent.AddChildTag(slavesDiv);
-		HtmlTagButton newButton(Languages::TextNew, "newslave");
-		newButton.AddAttribute("onclick", "addSlave();return false;");
-		newButton.AddClass("wide_button");
-		relationContent.AddChildTag(newButton);
-		relationContent.AddChildTag(HtmlTag("br"));
-		formContent.AddChildTag(relationContent);
+		formContent.AddChildTag(HtmlTagSlaveSelect("slave", slaves, GetLocoOptions(locoID)));
 
 		HtmlTag automodeContent("div");
 		automodeContent.AddId("tab_automode");
@@ -1855,7 +1911,7 @@ namespace WebServer
 		automodeContent.AddChildTag(HtmlTagInputIntegerWithLabel("creepingspeed", Languages::TextCreepingSpeed, creepingSpeed, 0, MaxSpeed));
 		formContent.AddChildTag(automodeContent);
 
-		content.AddChildTag(HtmlTag("div").AddClass("popup_content").AddChildTag(HtmlTag("form").AddId("editform").AddChildTag(formContent)));
+		content.AddChildTag(HtmlTag("div").AddClass("popup_content").AddChildTag(formContent));
 		content.AddChildTag(HtmlTagButtonCancel());
 		content.AddChildTag(HtmlTagButtonOK());
 		ReplyHtmlWithHeader(content);
@@ -1863,7 +1919,7 @@ namespace WebServer
 
 	void WebClient::HandleLocoSave(const map<string, string>& arguments)
 	{
-		const LocoID locoID = Utils::Utils::GetIntegerMapEntry(arguments, "loco", LocoNone);
+		const LocoID locoId = Utils::Utils::GetIntegerMapEntry(arguments, "loco", LocoNone);
 		const string name = Utils::Utils::GetStringMapEntry(arguments, "name");
 		const ControlID controlId = Utils::Utils::GetIntegerMapEntry(arguments, "control", ControlIdNone);
 		const Protocol protocol = static_cast<Protocol>(Utils::Utils::GetIntegerMapEntry(arguments, "protocol", ProtocolNone));
@@ -1915,21 +1971,17 @@ namespace WebServer
 		}
 
 		vector<Relation*> slaves;
-		unsigned int slaveCount = Utils::Utils::GetIntegerMapEntry(arguments, "slavecounter", 0);
-		for (unsigned int index = 1; index <= slaveCount; ++index)
 		{
-			string slaveString = to_string(index);
-			LocoID slaveId = Utils::Utils::GetIntegerMapEntry(arguments, "slave_id_" + slaveString, LocoNone);
-			if (slaveId == LocoNone)
+			vector<LocoID> slaveIds = InterpretSlaveData("slave", arguments);
+			for (auto slaveId : slaveIds)
 			{
-				continue;
+				slaves.push_back(new Relation(&manager, ObjectTypeLoco, locoId, ObjectTypeLoco, slaveId, Relation::TypeLocoSlave, 0, 0));
 			}
-			slaves.push_back(new Relation(&manager, ObjectTypeLoco, locoID, ObjectTypeLoco, slaveId, Relation::TypeLocoSlave, 0, 0));
 		}
 
 		string result;
 
-		if (!manager.LocoSave(locoID,
+		if (!manager.LocoSave(locoId,
 			name,
 			controlId,
 			protocol,
@@ -1963,7 +2015,7 @@ namespace WebServer
 			HtmlTag row("tr");
 			row.AddChildTag(HtmlTag("td").AddContent(loco.first));
 			row.AddChildTag(HtmlTag("td").AddContent(to_string(loco.second->GetAddress())));
-			string locoIdString = to_string(loco.second->GetID());
+			const string& locoIdString = to_string(loco.second->GetID());
 			locoArgument["loco"] = locoIdString;
 			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextEdit, "locoedit_list_" + locoIdString, locoArgument)));
 			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextDelete, "locoaskdelete_" + locoIdString, locoArgument)));
@@ -2019,14 +2071,14 @@ namespace WebServer
 			return;
 		}
 
-		string name = loco->GetName();
-
-		if (!manager.LocoDelete(locoID))
+		string result;
+		if (!manager.LocoDelete(locoID, result))
 		{
-			ReplyResponse(ResponseError, Languages::TextLocoDoesNotExist);
+			ReplyResponse(ResponseError, result);
 			return;
 		}
 
+		string name = loco->GetName();
 		ReplyResponse(ResponseInfo, Languages::TextLocoDeleted, name);
 	}
 
@@ -2298,7 +2350,7 @@ namespace WebServer
 		{
 			HtmlTag row("tr");
 			row.AddChildTag(HtmlTag("td").AddContent(accessory.first));
-			string accessoryIdString = to_string(accessory.second->GetID());
+			const string& accessoryIdString = to_string(accessory.second->GetID());
 			accessoryArgument["accessory"] = accessoryIdString;
 			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextEdit, "accessoryedit_list_" + accessoryIdString, accessoryArgument)));
 			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextDelete, "accessoryaskdelete_" + accessoryIdString, accessoryArgument)));
@@ -2498,7 +2550,7 @@ namespace WebServer
 		{
 			HtmlTag row("tr");
 			row.AddChildTag(HtmlTag("td").AddContent(mySwitch.first));
-			string switchIdString = to_string(mySwitch.second->GetID());
+			const string& switchIdString = to_string(mySwitch.second->GetID());
 			switchArgument["switch"] = switchIdString;
 			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextEdit, "switchedit_list_" + switchIdString, switchArgument)));
 			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextDelete, "switchaskdelete_" + switchIdString, switchArgument)));
@@ -2554,14 +2606,13 @@ namespace WebServer
 			return;
 		}
 
-		string name = mySwitch->GetName();
-
 		if (!manager.SwitchDelete(switchID))
 		{
 			ReplyResponse(ResponseError, Languages::TextSwitchDoesNotExist);
 			return;
 		}
 
+		string name = mySwitch->GetName();
 		ReplyResponse(ResponseInfo, Languages::TextSwitchDeleted, name);
 	}
 
@@ -2582,254 +2633,6 @@ namespace WebServer
 		SwitchID switchID = Utils::Utils::GetIntegerMapEntry(arguments, "switch");
 		bool ret = manager.SwitchRelease(switchID);
 		ReplyHtmlWithHeaderAndParagraph(ret ? "Switch released" : "Switch not released");
-	}
-
-	void WebClient::HandleSignalEdit(const map<string, string>& arguments)
-	{
-		HtmlTag content;
-		SignalID signalID = Utils::Utils::GetIntegerMapEntry(arguments, "signal", SignalNone);
-		ControlID controlID = manager.GetControlForAccessory();
-		Protocol protocol = ProtocolNone;
-		Address address = AddressNone;
-		string name = Languages::GetText(Languages::TextNew);
-		Orientation signalOrientation = static_cast<Orientation>(Utils::Utils::GetBoolMapEntry(arguments, "signalorientation", OrientationRight));
-		LayoutPosition posx = Utils::Utils::GetIntegerMapEntry(arguments, "posx", 0);
-		LayoutPosition posy = Utils::Utils::GetIntegerMapEntry(arguments, "posy", 0);
-		LayoutPosition posz = Utils::Utils::GetIntegerMapEntry(arguments, "posz", LayerUndeletable);
-		LayoutItemSize height = Utils::Utils::GetIntegerMapEntry(arguments, "length", 1);
-		LayoutRotation rotation = static_cast<LayoutRotation>(Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0));
-		DataModel::AccessoryType signalType = DataModel::SignalTypeSimpleLeft;
-		DataModel::AccessoryPulseDuration duration = manager.GetDefaultAccessoryDuration();
-		bool inverted = false;
-		std::vector<FeedbackID> feedbacks;
-		DataModel::SelectRouteApproach selectRouteApproach = static_cast<DataModel::SelectRouteApproach>(Utils::Utils::GetIntegerMapEntry(arguments, "selectrouteapproach", DataModel::SelectRouteSystemDefault));
-		bool releaseWhenFree = Utils::Utils::GetBoolMapEntry(arguments, "releasewhenfree", false);
-		if (signalID > SignalNone)
-		{
-			const DataModel::Signal* signal = manager.GetSignal(signalID);
-			if (signal != nullptr)
-			{
-				controlID = signal->GetControlID();
-				protocol = signal->GetProtocol();
-				address = signal->GetAddress();
-				name = signal->GetName();
-				signalOrientation = signal->GetSignalOrientation();
-				posx = signal->GetPosX();
-				posy = signal->GetPosY();
-				posz = signal->GetPosZ();
-				height = signal->GetHeight();
-				rotation = signal->GetRotation();
-				signalType = signal->GetType();
-				duration = signal->GetAccessoryPulseDuration();
-				inverted = signal->GetInverted();
-				feedbacks = signal->GetFeedbacks();
-				selectRouteApproach = signal->GetSelectRouteApproach();
-				releaseWhenFree = signal->GetReleaseWhenFree();
-			}
-		}
-
-		std::map<DataModel::AccessoryType, Languages::TextSelector> signalTypeOptions;
-		signalTypeOptions[DataModel::SignalTypeSimpleLeft] = Languages::TextSimpleLeft;
-		signalTypeOptions[DataModel::SignalTypeSimpleRight] = Languages::TextSimpleRight;
-
-		content.AddChildTag(HtmlTag("h1").AddContent(name).AddId("popup_title"));
-		HtmlTag tabMenu("div");
-		tabMenu.AddChildTag(HtmlTagTabMenuItem("main", Languages::TextBasic, true));
-		tabMenu.AddChildTag(HtmlTagTabMenuItem("position", Languages::TextPosition));
-		tabMenu.AddChildTag(HtmlTagTabMenuItem("feedback", Languages::TextFeedbacks));
-		tabMenu.AddChildTag(HtmlTagTabMenuItem("automode", Languages::TextAutomode));
-		content.AddChildTag(tabMenu);
-
-		HtmlTag formContent;
-		formContent.AddChildTag(HtmlTagInputHidden("cmd", "signalsave"));
-		formContent.AddChildTag(HtmlTagInputHidden("signal", to_string(signalID)));
-
-		HtmlTag mainContent("div");
-		mainContent.AddId("tab_main");
-		mainContent.AddClass("tab_content");
-		mainContent.AddChildTag(HtmlTagInputTextWithLabel("name", Languages::TextName, name).AddAttribute("onkeyup", "updateName();"));
-		mainContent.AddChildTag(HtmlTagSelectOrientationWithLabel("signalorientation", Languages::TextOrientation, signalOrientation));
-		mainContent.AddChildTag(HtmlTagSelectWithLabel("signaltype", Languages::TextType, signalTypeOptions, signalType));
-		mainContent.AddChildTag(HtmlTagInputIntegerWithLabel("length", Languages::TextLength, height, DataModel::Signal::MinLength, DataModel::Signal::MaxLength));
-		mainContent.AddChildTag(HtmlTagControlAccessory(controlID, "signal", signalID));
-		mainContent.AddChildTag(HtmlTag("div").AddId("select_protocol").AddChildTag(HtmlTagProtocolAccessory(controlID, protocol)));
-		mainContent.AddChildTag(HtmlTagInputIntegerWithLabel("address", Languages::TextAddress, address, 1, 2044));
-		mainContent.AddChildTag(HtmlTagDuration(duration));
-		mainContent.AddChildTag(HtmlTagInputCheckboxWithLabel("inverted", Languages::TextInverted, "true", inverted));
-		formContent.AddChildTag(mainContent);
-
-		formContent.AddChildTag(HtmlTagTabPosition(posx, posy, posz, rotation));
-
-		formContent.AddChildTag(HtmlTagTabTrackFeedback(feedbacks, ObjectIdentifier(ObjectTypeSignal, signalID)));
-
-		formContent.AddChildTag(HtmlTagTabTrackAutomode(selectRouteApproach, releaseWhenFree));
-
-		content.AddChildTag(HtmlTag("div").AddClass("popup_content").AddChildTag(HtmlTag("form").AddId("editform").AddChildTag(formContent)));
-		content.AddChildTag(HtmlTagButtonCancel());
-		content.AddChildTag(HtmlTagButtonOK());
-		ReplyHtmlWithHeader(content);
-	}
-
-	void WebClient::HandleSignalSave(const map<string, string>& arguments)
-	{
-		SignalID signalID = Utils::Utils::GetIntegerMapEntry(arguments, "signal", SignalNone);
-		string name = Utils::Utils::GetStringMapEntry(arguments, "name");
-		Orientation signalOrientation = static_cast<Orientation>(Utils::Utils::GetBoolMapEntry(arguments, "signalorientation", OrientationRight));
-		ControlID controlId = Utils::Utils::GetIntegerMapEntry(arguments, "control", ControlIdNone);
-		Protocol protocol = static_cast<Protocol>(Utils::Utils::GetIntegerMapEntry(arguments, "protocol", ProtocolNone));
-		Address address = Utils::Utils::GetIntegerMapEntry(arguments, "address", AddressNone);
-		LayoutPosition posX = Utils::Utils::GetIntegerMapEntry(arguments, "posx", 0);
-		LayoutPosition posY = Utils::Utils::GetIntegerMapEntry(arguments, "posy", 0);
-		LayoutPosition posZ = Utils::Utils::GetIntegerMapEntry(arguments, "posz", 0);
-		LayoutItemSize height = Utils::Utils::GetIntegerMapEntry(arguments, "length", 1);
-		LayoutRotation rotation = static_cast<LayoutRotation>(Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0));
-		vector<FeedbackID> feedbacks;
-		unsigned int feedbackCounter = Utils::Utils::GetIntegerMapEntry(arguments, "feedbackcounter", 1);
-		for (unsigned int feedback = 1; feedback <= feedbackCounter; ++feedback)
-		{
-			FeedbackID feedbackID = Utils::Utils::GetIntegerMapEntry(arguments, "feedback_" + to_string(feedback), FeedbackNone);
-			if (feedbackID != FeedbackNone)
-			{
-				feedbacks.push_back(feedbackID);
-			}
-		}
-		DataModel::SelectRouteApproach selectRouteApproach = static_cast<DataModel::SelectRouteApproach>(Utils::Utils::GetIntegerMapEntry(arguments, "selectrouteapproach", DataModel::SelectRouteSystemDefault));
-		bool releaseWhenFree = Utils::Utils::GetBoolMapEntry(arguments, "releasewhenfree", false);
-		DataModel::AccessoryType signalType = static_cast<DataModel::AccessoryType>(Utils::Utils::GetIntegerMapEntry(arguments, "signaltype", DataModel::SignalTypeSimpleLeft));
-		DataModel::AccessoryPulseDuration duration = Utils::Utils::GetIntegerMapEntry(arguments, "duration", manager.GetDefaultAccessoryDuration());
-		bool inverted = Utils::Utils::GetBoolMapEntry(arguments, "inverted");
-		string result;
-		if (!manager.SignalSave(signalID,
-			name,
-			signalOrientation,
-			posX,
-			posY,
-			posZ,
-			height,
-			rotation,
-			feedbacks,
-			selectRouteApproach,
-			releaseWhenFree,
-			controlId,
-			protocol,
-			address,
-			signalType,
-			duration,
-			inverted,
-			result))
-		{
-			ReplyResponse(ResponseError, result);
-			return;
-		}
-
-		ReplyResponse(ResponseInfo, Languages::TextSignalSaved, name);
-	}
-
-	void WebClient::HandleSignalState(const map<string, string>& arguments)
-	{
-		SignalID signalID = Utils::Utils::GetIntegerMapEntry(arguments, "signal", SignalNone);
-		DataModel::AccessoryState signalState = (Utils::Utils::GetStringMapEntry(arguments, "state", "red").compare("red") == 0 ? DataModel::SignalStateStop : DataModel::SignalStateClear);
-
-		manager.SignalState(ControlTypeWebserver, signalID, signalState, false);
-
-		ReplyHtmlWithHeaderAndParagraph(signalState ? Languages::TextSignalStateIsClear : Languages::TextSignalStateIsStop, manager.GetSignalName(signalID));
-	}
-
-	void WebClient::HandleSignalList()
-	{
-		HtmlTag content;
-		content.AddChildTag(HtmlTag("h1").AddContent(Languages::TextSignals));
-		HtmlTag table("table");
-		const map<string,DataModel::Signal*> signalList = manager.SignalListByName();
-		map<string,string> signalArgument;
-		for (auto signal : signalList)
-		{
-			HtmlTag row("tr");
-			row.AddChildTag(HtmlTag("td").AddContent(signal.first));
-			string signalIdString = to_string(signal.second->GetID());
-			signalArgument["signal"] = signalIdString;
-			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextEdit, "signaledit_list_" + signalIdString, signalArgument)));
-			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextDelete, "signalaskdelete_" + signalIdString, signalArgument)));
-			if (signal.second->IsInUse())
-			{
-				row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonCommandWide(Languages::TextRelease, "signalrelease_" + signalIdString, signalArgument, "hideElement('b_signalrelease_" + signalIdString + "');")));
-			}
-			table.AddChildTag(row);
-		}
-		content.AddChildTag(HtmlTag("div").AddClass("popup_content").AddChildTag(table));
-		content.AddChildTag(HtmlTagButtonCancel());
-		content.AddChildTag(HtmlTagButtonPopupWide(Languages::TextNew, "signaledit_0"));
-		ReplyHtmlWithHeader(content);
-	}
-
-	void WebClient::HandleSignalAskDelete(const map<string, string>& arguments)
-	{
-		SignalID signalID = Utils::Utils::GetIntegerMapEntry(arguments, "signal", SignalNone);
-
-		if (signalID == SignalNone)
-		{
-			ReplyHtmlWithHeaderAndParagraph(Languages::TextSignalDoesNotExist);
-			return;
-		}
-
-		const DataModel::Signal* signal = manager.GetSignal(signalID);
-		if (signal == nullptr)
-		{
-			ReplyHtmlWithHeaderAndParagraph(Languages::TextSignalDoesNotExist);
-			return;
-		}
-
-		HtmlTag content;
-		const string& signalName = signal->GetName();
-		content.AddContent(HtmlTag("h1").AddContent(Languages::TextDeleteSignal));
-		content.AddContent(HtmlTag("p").AddContent(Languages::TextAreYouSureToDelete, signalName));
-		content.AddContent(HtmlTag("form").AddId("editform")
-			.AddContent(HtmlTagInputHidden("cmd", "signaldelete"))
-			.AddContent(HtmlTagInputHidden("signal", to_string(signalID))
-			));
-		content.AddContent(HtmlTagButtonCancel());
-		content.AddContent(HtmlTagButtonOK());
-		ReplyHtmlWithHeader(content);
-	}
-
-	void WebClient::HandleSignalDelete(const map<string, string>& arguments)
-	{
-		SignalID signalID = Utils::Utils::GetIntegerMapEntry(arguments, "signal", SignalNone);
-		const DataModel::Signal* signal = manager.GetSignal(signalID);
-		if (signal == nullptr)
-		{
-			ReplyResponse(ResponseError, Languages::TextSignalDoesNotExist);
-			return;
-		}
-
-		string name = signal->GetName();
-
-		if (!manager.SignalDelete(signalID))
-		{
-			ReplyResponse(ResponseError, Languages::TextSignalDoesNotExist);
-			return;
-		}
-
-		ReplyResponse(ResponseInfo, Languages::TextSignalDeleted, name);
-	}
-
-	void WebClient::HandleSignalGet(const map<string, string>& arguments)
-	{
-		SignalID signalID = Utils::Utils::GetIntegerMapEntry(arguments, "signal");
-		const DataModel::Signal* signal = manager.GetSignal(signalID);
-		if (signal == nullptr)
-		{
-			ReplyHtmlWithHeader(HtmlTag());
-			return;
-		}
-		ReplyHtmlWithHeader(HtmlTagSignal(manager, signal));
-	}
-
-	void WebClient::HandleSignalRelease(const map<string, string>& arguments)
-	{
-		const ObjectIdentifier identifier(ObjectTypeSignal, Utils::Utils::GetIntegerMapEntry(arguments, "signal"));
-		bool ret = manager.TrackBaseRelease(identifier);
-		ReplyHtmlWithHeaderAndParagraph(ret ? "Signal released" : "Signal not released");
 	}
 
 	void WebClient::HandleRouteGet(const map<string, string>& arguments)
@@ -3166,14 +2969,14 @@ namespace WebServer
 			return;
 		}
 
-		string name = route->GetName();
-
-		if (!manager.RouteDelete(routeID))
+		string result;
+		if (!manager.RouteDelete(routeID, result))
 		{
-			ReplyResponse(ResponseError, Languages::TextRouteDoesNotExist);
+			ReplyResponse(ResponseError, result);
 			return;
 		}
 
+		string name = route->GetName();
 		ReplyResponse(ResponseInfo, Languages::TextRouteDeleted, name);
 	}
 
@@ -3188,7 +2991,7 @@ namespace WebServer
 		{
 			HtmlTag row("tr");
 			row.AddChildTag(HtmlTag("td").AddContent(route.first));
-			string routeIdString = to_string(route.second->GetID());
+			const string& routeIdString = to_string(route.second->GetID());
 			routeArgument["route"] = routeIdString;
 			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextEdit, "routeedit_list_" + routeIdString, routeArgument)));
 			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextDelete, "routeaskdelete_" + routeIdString, routeArgument)));
@@ -3218,7 +3021,11 @@ namespace WebServer
 		ReplyHtmlWithHeaderAndParagraph(ret ? "Route released" : "Route not released");
 	}
 
-	HtmlTag WebClient::HtmlTagTabPosition(const LayoutPosition posx, const LayoutPosition posy, const LayoutPosition posz, const LayoutRotation rotation, const Visible visible)
+	HtmlTag WebClient::HtmlTagTabPosition(const LayoutPosition posx,
+		const LayoutPosition posy,
+		const LayoutPosition posz,
+		const LayoutRotation rotation,
+		const Visible visible) const
 	{
 		HtmlTag positionContent("div");
 		positionContent.AddId("tab_position");
@@ -3237,392 +3044,6 @@ namespace WebServer
 			positionContent.AddChildTag(HtmlTagRotation(rotation));
 		}
 		return positionContent;
-	}
-
-	HtmlTag WebClient::HtmlTagTabTrackFeedback(const std::vector<FeedbackID>& feedbacks, const ObjectIdentifier& objectIdentifier)
-	{
-		unsigned int feedbackCounter = 0;
-		HtmlTag existingFeedbacks("div");
-		existingFeedbacks.AddId("feedbackcontent");
-		for (auto feedbackID : feedbacks)
-		{
-			existingFeedbacks.AddChildTag(HtmlTagSelectFeedbackForTrack(++feedbackCounter, objectIdentifier, feedbackID));
-		}
-		existingFeedbacks.AddChildTag(HtmlTag("div").AddId("div_feedback_" + to_string(feedbackCounter + 1)));
-
-		HtmlTag feedbackContent("div");
-		feedbackContent.AddId("tab_feedback");
-		feedbackContent.AddClass("tab_content");
-		feedbackContent.AddClass("hidden");
-		feedbackContent.AddChildTag(HtmlTagInputHidden("feedbackcounter", to_string(feedbackCounter)));
-		feedbackContent.AddChildTag(existingFeedbacks);
-		HtmlTagButton newButton(Languages::TextNew, "newfeedback");
-		newButton.AddAttribute("onclick", "addFeedback();return false;");
-		newButton.AddClass("wide_button");
-		feedbackContent.AddChildTag(newButton);
-		feedbackContent.AddChildTag(HtmlTag("br"));
-		return feedbackContent;
-	}
-
-	HtmlTag WebClient::HtmlTagTabTrackAutomode(DataModel::SelectRouteApproach selectRouteApproach, bool releaseWhenFree)
-	{
-		HtmlTag automodeContent("div");
-		automodeContent.AddId("tab_automode");
-		automodeContent.AddClass("tab_content");
-		automodeContent.AddClass("hidden");
-		automodeContent.AddChildTag(HtmlTagSelectSelectRouteApproach(selectRouteApproach));
-		automodeContent.AddChildTag(HtmlTagInputCheckboxWithLabel("releasewhenfree", Languages::TextReleaseWhenFree, "true", releaseWhenFree));
-		return automodeContent;
-	}
-
-	void WebClient::HandleTrackEdit(const map<string, string>& arguments)
-	{
-		HtmlTag content;
-		TrackID trackID = Utils::Utils::GetIntegerMapEntry(arguments, "track", TrackNone);
-		string name = Languages::GetText(Languages::TextNew);
-		bool showName = true;
-		LayoutPosition posx = Utils::Utils::GetIntegerMapEntry(arguments, "posx", 0);
-		LayoutPosition posy = Utils::Utils::GetIntegerMapEntry(arguments, "posy", 0);
-		LayoutPosition posz = Utils::Utils::GetIntegerMapEntry(arguments, "posz", 0);
-		LayoutItemSize height = Utils::Utils::GetIntegerMapEntry(arguments, "length", DataModel::LayoutItem::Height1);
-		LayoutRotation rotation = static_cast<LayoutRotation>(Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0));
-		DataModel::TrackType type = DataModel::TrackTypeStraight;
-		std::vector<FeedbackID> feedbacks;
-		DataModel::SelectRouteApproach selectRouteApproach = static_cast<DataModel::SelectRouteApproach>(Utils::Utils::GetIntegerMapEntry(arguments, "selectrouteapproach", DataModel::SelectRouteSystemDefault));
-		bool releaseWhenFree = Utils::Utils::GetBoolMapEntry(arguments, "releasewhenfree", false);
-		if (trackID > TrackNone)
-		{
-			const DataModel::Track* track = manager.GetTrack(trackID);
-			if (track != nullptr)
-			{
-				name = track->GetName();
-				showName = track->GetShowName();
-				posx = track->GetPosX();
-				posy = track->GetPosY();
-				posz = track->GetPosZ();
-				height = track->GetHeight();
-				rotation = track->GetRotation();
-				type = track->GetTrackType();
-				feedbacks = track->GetFeedbacks();
-				selectRouteApproach = track->GetSelectRouteApproach();
-				releaseWhenFree = track->GetReleaseWhenFree();
-			}
-		}
-		switch (type)
-		{
-			case DataModel::TrackTypeTurn:
-			case DataModel::TrackTypeTunnelEnd:
-				height = DataModel::LayoutItem::Height1;
-				break;
-
-			case DataModel::TrackTypeCrossingLeft:
-			case DataModel::TrackTypeCrossingRight:
-			case DataModel::TrackTypeCrossingSymetric:
-				height = DataModel::LayoutItem::Height2;
-				break;
-
-			default:
-				break;
-		}
-
-		content.AddChildTag(HtmlTag("h1").AddContent(name).AddId("popup_title"));
-		HtmlTag tabMenu("div");
-		tabMenu.AddChildTag(HtmlTagTabMenuItem("main", Languages::TextBasic, true));
-		tabMenu.AddChildTag(HtmlTagTabMenuItem("position", Languages::TextPosition));
-		tabMenu.AddChildTag(HtmlTagTabMenuItem("feedback", Languages::TextFeedbacks));
-		tabMenu.AddChildTag(HtmlTagTabMenuItem("automode", Languages::TextAutomode));
-		content.AddChildTag(tabMenu);
-
-		HtmlTag formContent("form");
-		formContent.AddId("editform");
-		formContent.AddChildTag(HtmlTagInputHidden("cmd", "tracksave"));
-		formContent.AddChildTag(HtmlTagInputHidden("track", to_string(trackID)));
-
-		std::map<DataModel::TrackType, Languages::TextSelector> typeOptions;
-		typeOptions[DataModel::TrackTypeStraight] = Languages::TextStraight;
-		typeOptions[DataModel::TrackTypeTurn] = Languages::TextTurn;
-		typeOptions[DataModel::TrackTypeEnd] = Languages::TextBufferStop;
-		typeOptions[DataModel::TrackTypeBridge] = Languages::TextBridge;
-		typeOptions[DataModel::TrackTypeTunnel] = Languages::TextTunnelTwoSides;
-		typeOptions[DataModel::TrackTypeTunnelEnd] = Languages::TextTunnelOneSide;
-		typeOptions[DataModel::TrackTypeLink] = Languages::TextLink;
-		typeOptions[DataModel::TrackTypeCrossingLeft] = Languages::TextCrossingLeft;
-		typeOptions[DataModel::TrackTypeCrossingRight] = Languages::TextCrossingRight;
-		typeOptions[DataModel::TrackTypeCrossingSymetric] = Languages::TextCrossingSymetric;
-
-		HtmlTag mainContent("div");
-		mainContent.AddId("tab_main");
-		mainContent.AddClass("tab_content");
-		mainContent.AddChildTag(HtmlTagInputTextWithLabel("name", Languages::TextName, name).AddAttribute("onkeyup", "updateName();"));
-		HtmlTag i_showName("div");
-		i_showName.AddId("i_showname");
-		i_showName.AddChildTag(HtmlTagInputCheckboxWithLabel("showname", Languages::TextShowName, "true", showName));
-		switch (type)
-		{
-			case DataModel::TrackTypeStraight:
-				break;
-
-			default:
-				i_showName.AddAttribute("hidden");
-				break;
-		}
-		mainContent.AddChildTag(i_showName);
-		mainContent.AddChildTag(HtmlTagSelectWithLabel("tracktype", Languages::TextType, typeOptions, type).AddAttribute("onchange", "onChangeTrackType();return false;"));
-		HtmlTag i_length("div");
-		i_length.AddId("i_length");
-		i_length.AddChildTag(HtmlTagInputIntegerWithLabel("length", Languages::TextLength, height, DataModel::Track::MinLength, DataModel::Track::MaxLength));
-		switch (type)
-		{
-			case DataModel::TrackTypeTurn:
-			case DataModel::TrackTypeTunnelEnd:
-				i_length.AddAttribute("hidden");
-				break;
-
-			default:
-				break;
-		}
-		mainContent.AddChildTag(i_length);
-		formContent.AddChildTag(mainContent);
-
-		formContent.AddChildTag(HtmlTagTabPosition(posx, posy, posz, rotation));
-
-		formContent.AddChildTag(HtmlTagTabTrackFeedback(feedbacks, ObjectIdentifier(ObjectTypeTrack, trackID)));
-
-		formContent.AddChildTag(HtmlTagTabTrackAutomode(selectRouteApproach, releaseWhenFree));
-
-		content.AddChildTag(HtmlTag("div").AddClass("popup_content").AddChildTag(formContent));
-		content.AddChildTag(HtmlTagButtonCancel());
-		content.AddChildTag(HtmlTagButtonOK());
-		ReplyHtmlWithHeader(content);
-	}
-
-	void WebClient::HandleTrackSave(const map<string, string>& arguments)
-	{
-		TrackID trackID = Utils::Utils::GetIntegerMapEntry(arguments, "track", TrackNone);
-		string name = Utils::Utils::GetStringMapEntry(arguments, "name");
-		bool showName = Utils::Utils::GetBoolMapEntry(arguments, "showname", true);
-		LayoutPosition posX = Utils::Utils::GetIntegerMapEntry(arguments, "posx", 0);
-		LayoutPosition posY = Utils::Utils::GetIntegerMapEntry(arguments, "posy", 0);
-		LayoutPosition posZ = Utils::Utils::GetIntegerMapEntry(arguments, "posz", 0);
-		LayoutItemSize height = DataModel::LayoutItem::Height1;
-		LayoutRotation rotation = static_cast<LayoutRotation>(Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0));
-		int typeInt = static_cast<DataModel::TrackType>(Utils::Utils::GetIntegerMapEntry(arguments, "type", DataModel::TrackTypeStraight)); // FIXME: remove later
-		DataModel::TrackType type = static_cast<DataModel::TrackType>(Utils::Utils::GetIntegerMapEntry(arguments, "tracktype", typeInt));
-		switch (type)
-		{
-			case DataModel::TrackTypeTurn:
-			case DataModel::TrackTypeTunnelEnd:
-				// height is already 1
-				break;
-
-			case DataModel::TrackTypeCrossingLeft:
-			case DataModel::TrackTypeCrossingRight:
-			case DataModel::TrackTypeCrossingSymetric:
-				height = DataModel::LayoutItem::Height2;
-				break;
-
-			default:
-				height = Utils::Utils::GetIntegerMapEntry(arguments, "length", 1);
-				break;
-		}
-		vector<FeedbackID> feedbacks;
-		unsigned int feedbackCounter = Utils::Utils::GetIntegerMapEntry(arguments, "feedbackcounter", 1);
-		for (unsigned int feedback = 1; feedback <= feedbackCounter; ++feedback)
-		{
-			FeedbackID feedbackID = Utils::Utils::GetIntegerMapEntry(arguments, "feedback_" + to_string(feedback), FeedbackNone);
-			if (feedbackID != FeedbackNone)
-			{
-				feedbacks.push_back(feedbackID);
-			}
-		}
-		DataModel::SelectRouteApproach selectRouteApproach = static_cast<DataModel::SelectRouteApproach>(Utils::Utils::GetIntegerMapEntry(arguments, "selectrouteapproach", DataModel::SelectRouteSystemDefault));
-		bool releaseWhenFree = Utils::Utils::GetBoolMapEntry(arguments, "releasewhenfree", false);
-		string result;
-		if (manager.TrackSave(trackID,
-			name,
-			showName,
-			posX,
-			posY,
-			posZ,
-			height,
-			rotation,
-			type,
-			feedbacks,
-			selectRouteApproach,
-			releaseWhenFree,
-			result) == TrackNone)
-		{
-			ReplyResponse(ResponseError, result);
-			return;
-		}
-
-		ReplyResponse(ResponseInfo, Languages::TextTrackSaved, name);
-	}
-
-	void WebClient::HandleTrackAskDelete(const map<string, string>& arguments)
-	{
-		TrackID trackID = Utils::Utils::GetIntegerMapEntry(arguments, "track", TrackNone);
-
-		if (trackID == TrackNone)
-		{
-			ReplyHtmlWithHeaderAndParagraph(Languages::TextTrackDoesNotExist);
-			return;
-		}
-
-		const DataModel::Track* track = manager.GetTrack(trackID);
-		if (track == nullptr)
-		{
-			ReplyHtmlWithHeaderAndParagraph(Languages::TextTrackDoesNotExist);
-			return;
-		}
-
-		HtmlTag content;
-		const string& trackName = track->GetName();
-		content.AddContent(HtmlTag("h1").AddContent(Languages::TextDeleteTrack));
-		content.AddContent(HtmlTag("p").AddContent(Languages::TextAreYouSureToDelete, trackName));
-		content.AddContent(HtmlTag("form").AddId("editform")
-			.AddContent(HtmlTagInputHidden("cmd", "trackdelete"))
-			.AddContent(HtmlTagInputHidden("track", to_string(trackID))
-			));
-		content.AddContent(HtmlTagButtonCancel());
-		content.AddContent(HtmlTagButtonOK());
-		ReplyHtmlWithHeader(content);
-	}
-
-	void WebClient::HandleTrackList()
-	{
-		HtmlTag content;
-		content.AddChildTag(HtmlTag("h1").AddContent(Languages::TextTracks));
-		HtmlTag table("table");
-		const map<string,DataModel::Track*> trackList = manager.TrackListByName();
-		map<string,string> trackArgument;
-		for (auto track : trackList)
-		{
-			HtmlTag row("tr");
-			row.AddChildTag(HtmlTag("td").AddContent(track.first));
-			string trackIdString = to_string(track.second->GetID());
-			trackArgument["track"] = trackIdString;
-			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextEdit, "trackedit_list_" + trackIdString, trackArgument)));
-			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextDelete, "trackaskdelete_" + trackIdString, trackArgument)));
-			if (track.second->IsInUse())
-			{
-				row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonCommandWide(Languages::TextRelease, "trackrelease_" + trackIdString, trackArgument, "hideElement('b_trackrelease_" + trackIdString + "');")));
-			}
-			table.AddChildTag(row);
-		}
-		content.AddChildTag(HtmlTag("div").AddClass("popup_content").AddChildTag(table));
-		content.AddChildTag(HtmlTagButtonCancel());
-		content.AddChildTag(HtmlTagButtonPopupWide(Languages::TextNew, "trackedit_0"));
-		ReplyHtmlWithHeader(content);
-	}
-
-	void WebClient::HandleTrackDelete(const map<string, string>& arguments)
-	{
-		TrackID trackID = Utils::Utils::GetIntegerMapEntry(arguments, "track", TrackNone);
-		const DataModel::Track* track = manager.GetTrack(trackID);
-		if (track == nullptr)
-		{
-			ReplyResponse(ResponseError, Languages::TextTrackDoesNotExist);
-			return;
-		}
-
-		string name = track->GetName();
-
-		if (!manager.TrackDelete(trackID))
-		{
-			ReplyResponse(ResponseError, Languages::TextTrackDoesNotExist);
-			return;
-		}
-
-		ReplyResponse(ResponseInfo, Languages::TextTrackDeleted, name);
-	}
-
-	void WebClient::HandleTrackGet(const map<string, string>& arguments)
-	{
-		TrackID trackID = Utils::Utils::GetIntegerMapEntry(arguments, "track");
-		const DataModel::Track* track = manager.GetTrack(trackID);
-		if (track == nullptr)
-		{
-			ReplyHtmlWithHeader(HtmlTag());
-			return;
-		}
-		ReplyHtmlWithHeader(HtmlTagTrack(manager, track));
-	}
-
-	void WebClient::HandleTrackSetLoco(const map<string, string>& arguments)
-	{
-		HtmlTag content;
-		ObjectIdentifier identifier(Utils::Utils::GetStringMapEntry(arguments, "track"), Utils::Utils::GetStringMapEntry(arguments, "signal"));
-		TrackBase* track = manager.GetTrackBase(identifier);
-		if (track == nullptr)
-		{
-			ReplyResponse(ResponseError, identifier.GetObjectType() == ObjectTypeTrack ? Languages::TextTrackDoesNotExist : Languages::TextSignalDoesNotExist);
-			return;
-		}
-
-
-		if (track->IsTrackInUse())
-		{
-			ReplyHtmlWithHeaderAndParagraph(Languages::TextTrackIsInUse, track->GetMyName());
-			return;
-		}
-
-		LocoID locoID = Utils::Utils::GetIntegerMapEntry(arguments, "loco", LocoNone);
-		if (locoID != LocoNone)
-		{
-			bool ret = manager.LocoIntoTrackBase(logger, locoID, identifier);
-			string trackName = track->GetMyName();
-			ret ? ReplyResponse(ResponseInfo, Languages::TextLocoIsOnTrack, manager.GetLocoName(locoID), trackName)
-				: ReplyResponse(ResponseError, Languages::TextUnableToAddLocoToTrack, manager.GetLocoName(locoID), trackName);
-			return;
-		}
-
-		map<string,LocoID> locos = manager.LocoListFree();
-		content.AddChildTag(HtmlTag("h1").AddContent(Languages::TextSelectLocoForTrack, track->GetMyName()));
-		content.AddChildTag(HtmlTagInputHidden("cmd", "tracksetloco"));
-		content.AddChildTag(HtmlTagInputHidden(identifier));
-		content.AddChildTag(HtmlTagSelectWithLabel("loco", Languages::TextLoco, locos));
-		content.AddChildTag(HtmlTag("br"));
-		content.AddChildTag(HtmlTagButtonCancel());
-		content.AddChildTag(HtmlTagButtonOK());
-		ReplyHtmlWithHeader(HtmlTag("form").AddId("editform").AddChildTag(content));
-	}
-
-	void WebClient::HandleTrackRelease(const map<string, string>& arguments)
-	{
-		ObjectIdentifier identifier(ObjectTypeTrack, Utils::Utils::GetIntegerMapEntry(arguments, "track"));
-		bool ret = manager.TrackBaseRelease(identifier);
-		ReplyHtmlWithHeaderAndParagraph(ret ? "Track released" : "Track not released");
-	}
-
-	void WebClient::HandleTrackStartLoco(const map<string, string>& arguments)
-	{
-		ObjectIdentifier identifier(Utils::Utils::GetStringMapEntry(arguments, "track"), Utils::Utils::GetStringMapEntry(arguments, "signal"));
-		bool ret = manager.TrackBaseStartLoco(identifier);
-		ReplyHtmlWithHeaderAndParagraph(ret ? "Loco started" : "Loco not started");
-	}
-
-	void WebClient::HandleTrackStopLoco(const map<string, string>& arguments)
-	{
-		ObjectIdentifier identifier(Utils::Utils::GetStringMapEntry(arguments, "track"), Utils::Utils::GetStringMapEntry(arguments, "signal"));
-		bool ret = manager.TrackBaseStopLoco(identifier);
-		ReplyHtmlWithHeaderAndParagraph(ret ? "Loco stopped" : "Loco not stopped");
-	}
-
-	void WebClient::HandleTrackBlock(const map<string, string>& arguments)
-	{
-		bool blocked = Utils::Utils::GetBoolMapEntry(arguments, "blocked");
-		ObjectIdentifier identifier(Utils::Utils::GetStringMapEntry(arguments, "track"), Utils::Utils::GetStringMapEntry(arguments, "signal"));
-		manager.TrackBaseBlock(identifier, blocked);
-		ReplyHtmlWithHeaderAndParagraph(blocked ? "Block received" : "Unblock received");
-	}
-
-	void WebClient::HandleTrackOrientation(const map<string, string>& arguments)
-	{
-		Orientation orientation = (Utils::Utils::GetBoolMapEntry(arguments, "orientation") ? OrientationRight : OrientationLeft);
-		ObjectIdentifier identifier(Utils::Utils::GetStringMapEntry(arguments, "track"), Utils::Utils::GetStringMapEntry(arguments, "signal"));
-		manager.TrackBaseSetLocoOrientation(identifier, orientation);
-		ReplyHtmlWithHeaderAndParagraph("Loco orientation of track set");
 	}
 
 	void WebClient::HandleFeedbackEdit(const map<string, string>& arguments)
@@ -3735,7 +3156,7 @@ namespace WebServer
 		{
 			HtmlTag row("tr");
 			row.AddChildTag(HtmlTag("td").AddContent(feedback.first));
-			string feedbackIdString = to_string(feedback.second->GetID());
+			const string& feedbackIdString = to_string(feedback.second->GetID());
 			feedbackArgument["feedback"] = feedbackIdString;
 			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextEdit, "feedbackedit_list_" + feedbackIdString, feedbackArgument)));
 			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextDelete, "feedbackaskdelete_" + feedbackIdString, feedbackArgument)));
@@ -3787,14 +3208,14 @@ namespace WebServer
 			return;
 		}
 
-		string name = feedback->GetName();
-
-		if (!manager.FeedbackDelete(feedbackID))
+		string result;
+		if (!manager.FeedbackDelete(feedbackID, result))
 		{
-			ReplyResponse(ResponseError, Languages::TextFeedbackDoesNotExist);
+			ReplyResponse(ResponseError, result);
 			return;
 		}
 
+		string name = feedback->GetName();
 		ReplyResponse(ResponseInfo, Languages::TextFeedbackDeleted, name);
 	}
 
@@ -4174,6 +3595,26 @@ namespace WebServer
 		ReplyHtmlWithHeaderAndParagraph(Languages::TextProgramDccWrite, cv, value);
 	}
 
+	vector<ObjectID> WebClient::InterpretSlaveData(const string& prefix, const map<string, string>& arguments)
+	{
+		vector<ObjectID> ids;
+		unsigned int count = Utils::Utils::GetIntegerMapEntry(arguments, prefix + "counter", 0);
+		for (unsigned int index = 1; index <= count; ++index)
+		{
+			string indexAsString = to_string(index);
+			ObjectID id = Utils::Utils::GetIntegerMapEntry(arguments, prefix + "_id_" + indexAsString, TrackNone);
+			if (id == TrackNone)
+			{
+				continue;
+			}
+			ids.push_back(id);
+		}
+
+		std::sort(ids.begin(), ids.end());
+		ids.erase(std::unique(ids.begin(), ids.end()), ids.end());
+		return ids;
+	}
+
 	void WebClient::HandleUpdater(const map<string, string>& headers)
 	{
 		Response response;
@@ -4323,6 +3764,7 @@ namespace WebServer
 		menuAdd.AddChildTag(HtmlTagButtonPopup("<svg width=\"36\" height=\"36\"><polygon points=\"1,11 6,11 6,1 11,1 11,11 26,11 26,1 36,1 36,6 31,6 31,11 36,11 36,26 1,26\" fill=\"black\"/><circle cx=\"6\" cy=\"31\" r=\"5\" fill=\"black\"/><circle cx=\"18.5\" cy=\"31\" r=\"5\" fill=\"black\"/><circle cx=\"31\" cy=\"31\" r=\"5\" fill=\"black\"/</svg>", "locolist", Languages::TextEditLocos));
 		menuAdd.AddChildTag(HtmlTagButtonPopup("<svg width=\"36\" height=\"36\"><polygon points=\"2,31 26,31 35,21 11,21\" fill=\"white\" stroke=\"black\"/><polygon points=\"2,26 26,26 35,16 11,16\" fill=\"white\" stroke=\"black\"/><polygon points=\"2,21 26,21 35,11 11,11\" fill=\"white\" stroke=\"black\"/><polygon points=\"2,16 26,16 35,6 11,6\" fill=\"white\" stroke=\"black\"/></svg>", "layerlist", Languages::TextEditLayers));
 		menuAdd.AddChildTag(HtmlTagButtonPopup("<svg width=\"36\" height=\"36\"><polyline points=\"1,12 35,12\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"1,23 35,23\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"3,10 3,25\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"6,10 6,25\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"9,10 9,25\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"12,10 12,25\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"15,10 15,25\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"18,10 18,25\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"21,10 21,25\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"24,10 24,25\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"27,10 27,25\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"30,10 30,25\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"33,10 33,25\" stroke=\"black\" stroke-width=\"1\"/></svg>", "tracklist", Languages::TextEditTracks));
+		menuAdd.AddChildTag(HtmlTagButtonPopup("<svg width=\"36\" height=\"36\"><polyline points=\"1,12 17,12\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"1,23 17,23\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"19,12 35,12\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"19,23 35,23\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"3,10 3,25\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"6,10 6,25\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"9,10 9,25\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"12,10 12,25\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"15,10 15,25\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"21,10 21,25\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"24,10 24,25\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"27,10 27,25\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"30,10 30,25\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"33,10 33,25\" stroke=\"black\" stroke-width=\"1\"/></svg>", "clusterlist", Languages::TextEditClusters));
 		menuAdd.AddChildTag(HtmlTagButtonPopup("<svg width=\"36\" height=\"36\"><polyline points=\"1,20 7.1,19.5 13,17.9 18.5,15.3 23.5,11.8 27.8,7.5\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/><polyline points=\"1,28 8.5,27.3 15.7,25.4 22.5,22.2 28.6,17.9 33.9,12.6\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/><polyline points=\"1,20 35,20\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"1,28 35,28\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"3,18 3,30\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"6,18 6,30\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"9,17 9,30\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"12,16 12,30\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"15,15 15,30\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"18,13 18,30\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"21,12 21,30\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"24,9 24,30\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"27,17 27,30\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"30,18 30,30\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"33,18 33,30\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"24,9 32,17\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"26,7 34,15\" stroke=\"black\" stroke-width=\"1\"/></svg>", "switchlist", Languages::TextEditSwitches));
 		menuAdd.AddChildTag(HtmlTagButtonPopup("<svg width=\"36\" height=\"36\"><polygon points=\"17,36 17,28 15,28 10,23 10,5 15,0 21,0 26,5 26,23 21,28 19,28 19,36\" fill=\"black\" /><circle cx=\"18\" cy=\"8\" r=\"4\" fill=\"red\" /><circle cx=\"18\" cy=\"20\" r=\"4\" fill=\"green\" /></svg>", "signallist", Languages::TextEditSignals));
 		menuAdd.AddChildTag(HtmlTagButtonPopup("<svg width=\"36\" height=\"36\"><polyline points=\"1,20 10,20 30,15\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/><polyline points=\"28,17 28,20 34,20\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/></svg>", "accessorylist", Languages::TextEditAccessories));

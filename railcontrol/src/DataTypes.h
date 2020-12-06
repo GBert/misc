@@ -43,6 +43,7 @@ typedef uint32_t FeedbackPin;
 
 // track
 typedef ObjectID TrackID;
+typedef ObjectID ClusterID;
 
 // switch
 typedef AccessoryID SwitchID;
@@ -77,6 +78,7 @@ static const ControlID ControlNone = 0;
 static const LayerID LayerNone = 0;
 static const LayerID LayerUndeletable = 1;
 static const SignalID SignalNone = 0;
+static const ClusterID ClusterNone = 0;
 
 static const Speed MaxSpeed = 1023;
 static const Speed DefaultTravelSpeed = 700;
@@ -184,7 +186,8 @@ enum ObjectType : uint8_t
 	ObjectTypeSwitch = 5,
 	ObjectTypeRoute = 6,
 	ObjectTypeLayer = 7,
-	ObjectTypeSignal = 8
+	ObjectTypeSignal = 8,
+	ObjectTypeCluster = 9
 };
 
 enum Orientation : bool

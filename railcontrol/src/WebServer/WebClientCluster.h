@@ -23,22 +23,34 @@ along with RailControl; see the file LICENCE. If not see
 #include <map>
 #include <string>
 
-#include "Languages.h"
-#include "WebServer/HtmlTagButtonPopup.h"
+#include "Manager.h"
 
 namespace WebServer
 {
-	class HtmlTagButtonPopupWide : public HtmlTagButtonPopup
+	class WebClient;
+
+	class WebClientCluster
 	{
 		public:
-			HtmlTagButtonPopupWide() = delete;
-			inline HtmlTagButtonPopupWide(const Languages::TextSelector value,
-				const std::string& command,
-				const std::map<std::string,std::string>& arguments = std::map<std::string,std::string>(),
-				const std::string& tooltip = "")
-			:	HtmlTagButtonPopup(value, command, arguments, tooltip)
-			{
-				AddClass("wide_button");
-			}
+			WebClientCluster() = delete;
+			WebClientCluster(Manager& manager, WebClient& client)
+			:	manager(manager),
+				client(client)
+			{}
+
+			void HandleClusterList();
+			void HandleClusterEdit(const std::map<std::string,std::string>& arguments);
+			void HandleClusterSave(const std::map<std::string,std::string>& arguments);
+			void HandleClusterAskDelete(const std::map<std::string,std::string>& arguments);
+			void HandleClusterDelete(const std::map<std::string,std::string>& arguments);
+			std::map<std::string,ObjectID> GetTrackOptions(const ClusterID clusterId = ClusterNone) const;
+			std::map<std::string,ObjectID> GetSignalOptions(const ClusterID clusterId = ClusterNone) const;
+
+		private:
+
+			Manager& manager;
+			WebClient& client;
 	};
+
 } // namespace WebServer
+

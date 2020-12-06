@@ -62,7 +62,7 @@ namespace DataModel
 		TrackBase::Deserialize(arguments);
 		SetWidth(Width1);
 		SetVisible(VisibleYes);
-		trackType = static_cast<TrackType>(Utils::Utils::GetIntegerMapEntry(arguments, "type", TrackTypeStraight)); // FIXME: remove later
+		trackType = static_cast<TrackType>(Utils::Utils::GetIntegerMapEntry(arguments, "type", TrackTypeStraight)); // FIXME: remove later 2020-10-27
 		trackType = static_cast<TrackType>(Utils::Utils::GetIntegerMapEntry(arguments, "tracktype", trackType));
 		switch (trackType)
 		{

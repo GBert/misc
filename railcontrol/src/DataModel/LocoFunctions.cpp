@@ -107,7 +107,7 @@ namespace DataModel
 		return true;
 	}
 
-	// FIXME: remove later
+	// FIXME: remove later 2020-10-27
 	bool LocoFunctions::DeserializeOld(const std::string& serialized)
 	{
 		size_t count = serialized.size();

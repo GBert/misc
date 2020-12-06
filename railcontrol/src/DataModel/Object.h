@@ -31,12 +31,12 @@ namespace DataModel
 	class Object : protected Serializable
 	{
 		public:
-			Object()
+			inline Object()
 			:	objectID(ObjectNone),
 			 	name(std::to_string(objectID))
 			{}
 
-			Object(const ObjectID objectID)
+			inline Object(const ObjectID objectID)
 			:	objectID(objectID),
 				name(std::to_string(objectID))
 			{}
@@ -48,9 +48,20 @@ namespace DataModel
 			virtual std::string Serialize() const override;
 			virtual bool Deserialize(const std::string& serialized) override;
 
-			ObjectID GetID() const { return objectID; }
-			virtual void SetName(const std::string& name) { this->name = name; }
-			const std::string& GetName() const { return name; }
+			inline ObjectID GetID() const
+			{
+				return objectID;
+			}
+
+			virtual inline void SetName(const std::string& name)
+			{
+				this->name = name;
+			}
+
+			inline const std::string& GetName() const
+			{
+				return name;
+			}
 
 		protected:
 			virtual bool Deserialize(const std::map<std::string,std::string>& arguments);

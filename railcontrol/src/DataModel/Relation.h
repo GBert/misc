@@ -25,6 +25,7 @@ along with RailControl; see the file LICENCE. If not see
 
 #include "DataModel/Accessory.h"
 #include "DataModel/LockableItem.h"
+#include "DataModel/ObjectIdentifier.h"
 #include "DataModel/Serializable.h"
 #include "DataTypes.h"
 #include "Logger/Logger.h"
@@ -44,12 +45,14 @@ namespace DataModel
 				TypeLocoSlave = ObjectTypeLoco << 3,
 				TypeFeedbackAtSet = ObjectTypeFeedback << 3,
 				TypeFeedbackAtUnset = (ObjectTypeFeedback << 3) + 1,
+				TypeClusterTrack = (ObjectTypeCluster << 3),
+				TypeClusterSignal = (ObjectTypeCluster << 3) + 1,
 			};
 
 			typedef unsigned char Data;
 			static const Data DefaultData = 0;
 
-			Relation(Manager* manager,
+			inline Relation(Manager* manager,
 				const ObjectType objectType1,
 				const ObjectID objectID1,
 				const ObjectType objectType2,
@@ -58,16 +61,14 @@ namespace DataModel
 				const Priority priority,
 				const unsigned char data)
 			:	manager(manager),
-				objectType1(objectType1),
-			 	objectID1(objectID1),
-				objectType2(objectType2),
-				objectID2(objectID2),
+			 	object1(objectType1, objectID1),
+			 	object2(objectType2, objectID2),
 				type(type),
 				priority(priority),
 				data(data)
 			{}
 
-			Relation(Manager* manager,
+			inline Relation(Manager* manager,
 				const std::string& serialized)
 			:	manager(manager),
 				data(0)
@@ -80,13 +81,42 @@ namespace DataModel
 			virtual std::string Serialize() const override;
 			virtual bool Deserialize(const std::string& serialized) override;
 
-			ObjectID ObjectID1() const { return objectID1; }
-			void ObjectID1(ObjectID objectID1) { this->objectID1 = objectID1; }
-			ObjectType ObjectType2() const { return objectType2; }
-			ObjectID ObjectID2() const { return objectID2; }
-			Type GetType() const { return type; }
-			Priority GetPriority() const { return priority; }
-			Data GetData() const { return data; }
+			inline ObjectID ObjectID1() const
+			{
+				return object1.GetObjectID();
+			}
+
+			inline void ObjectID1(ObjectID objectID1)
+			{
+				this->object1 = objectID1;
+			}
+
+			inline ObjectType ObjectType2() const
+			{
+				return object2.GetObjectType();
+			}
+
+			inline ObjectID ObjectID2() const
+			{
+				return object2.GetObjectID();
+			}
+
+			LockableItem* GetObject2();
+
+			inline Type GetType() const
+			{
+				return type;
+			}
+
+			inline Priority GetPriority() const
+			{
+				return priority;
+			}
+
+			inline Data GetData() const
+			{
+				return data;
+			}
 
 			bool Reserve(Logger::Logger* logger, const LocoID locoID) override;
 			bool Lock(Logger::Logger* logger, const LocoID locoID) override;
@@ -94,13 +124,14 @@ namespace DataModel
 			bool Execute(Logger::Logger* logger, const LocoID locoID, const Delay delay);
 
 		private:
-			LockableItem* GetObject2();
+			inline ObjectType ObjectType1() const
+			{
+				return object1.GetObjectType();
+			}
 
 			Manager* manager;
-			ObjectType objectType1;
-			ObjectID objectID1;
-			ObjectType objectType2;
-			ObjectID objectID2;
+			ObjectIdentifier object1;
+			ObjectIdentifier object2;
 			Type type;
 			Priority priority;
 			Data data;

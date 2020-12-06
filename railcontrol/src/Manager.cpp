@@ -115,7 +115,7 @@ Manager::Manager(Config& config)
 	for (auto accessory : accessories)
 	{
 		// We set the protocol MM2 to MM when control is a CS2 or CC-Schnitte
-		// FIXME: remove again later
+		// FIXME: remove again later 2020-10-27
 		if (accessory.second->GetProtocol() == ProtocolMM2
 			&& (ControlIsOfHardwareType(accessory.second->GetControlID(), HardwareTypeCS2Udp)
 				|| ControlIsOfHardwareType(accessory.second->GetControlID(), HardwareTypeCcSchnitte)))
@@ -141,7 +141,7 @@ Manager::Manager(Config& config)
 	for (auto mySwitch : switches)
 	{
 		// We set the protocol MM2 to MM when control is a CS2 or CC-Schnitte
-		// FIXME: remove again later
+		// FIXME: remove again later 2020-10-27
 		if (mySwitch.second->GetProtocol() == ProtocolMM2
 			&& (ControlIsOfHardwareType(mySwitch.second->GetControlID(), HardwareTypeCS2Udp)
 				|| ControlIsOfHardwareType(mySwitch.second->GetControlID(), HardwareTypeCcSchnitte)))
@@ -155,7 +155,7 @@ Manager::Manager(Config& config)
 	for (auto signal : signals)
 	{
 		// We set the protocol MM2 to MM when control is a CS2 or CC-Schnitte
-		// FIXME: remove again later
+		// FIXME: remove again later 2020-10-27
 		if (signal.second->GetProtocol() == ProtocolMM2
 			&& (ControlIsOfHardwareType(signal.second->GetControlID(), HardwareTypeCS2Udp)
 				|| ControlIsOfHardwareType(signal.second->GetControlID(), HardwareTypeCcSchnitte)))
@@ -163,6 +163,12 @@ Manager::Manager(Config& config)
 			signal.second->SetProtocol(ProtocolMM);
 		}
 		logger->Info(Languages::TextLoadedSignal, signal.second->GetID(), signal.second->GetName());
+	}
+
+	storage->AllClusters(clusters);
+	for (auto cluster : clusters)
+	{
+		logger->Info(Languages::TextLoadedCluster, cluster.second->GetID(), cluster.second->GetName());
 	}
 
 	storage->AllRoutes(routes);
@@ -175,7 +181,7 @@ Manager::Manager(Config& config)
 	for (auto loco : locos)
 	{
 		// We set the protocol MM2 to MM when control is a CS2 or CC-Schnitte
-		// FIXME: remove again later
+		// FIXME: remove again later 2020-10-27
 		if (loco.second->GetProtocol() == ProtocolMM2
 			&& (ControlIsOfHardwareType(loco.second->GetControlID(), HardwareTypeCS2Udp)
 				|| ControlIsOfHardwareType(loco.second->GetControlID(), HardwareTypeCcSchnitte)))
@@ -241,6 +247,7 @@ Manager::~Manager()
 	}
 
 	DeleteAllMapEntries(locos, locoMutex);
+	DeleteAllMapEntries(clusters, clusterMutex);
 	DeleteAllMapEntries(routes, routeMutex);
 	DeleteAllMapEntries(signals, signalMutex);
 	DeleteAllMapEntries(switches, switchMutex);
@@ -746,19 +753,21 @@ bool Manager::LocoSave(const LocoID locoID,
 	return true;
 }
 
-bool Manager::LocoDelete(const LocoID locoID)
+bool Manager::LocoDelete(const LocoID locoID, string& result)
 {
 	Loco* loco = nullptr;
 	{
 		std::lock_guard<std::mutex> guard(locoMutex);
 		if (locoID == LocoNone || locos.count(locoID) != 1)
 		{
+			result = Languages::GetText(Languages::TextLocoDoesNotExist);
 			return false;
 		}
 
 		loco = locos.at(locoID);
 		if (loco->IsInUse())
 		{
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextLocoIsInUse), loco->GetName());
 			return false;
 		}
 
@@ -1317,19 +1326,23 @@ const map<string,FeedbackID> Manager::FeedbacksOfTrack(const ObjectIdentifier& i
 	return out;
 }
 
-bool Manager::FeedbackDelete(const FeedbackID feedbackID)
+bool Manager::FeedbackDelete(const FeedbackID feedbackID,
+	string& result)
 {
 	Feedback* feedback = nullptr;
 	{
 		std::lock_guard<std::mutex> guard(feedbackMutex);
 		if (feedbackID == FeedbackNone || feedbacks.count(feedbackID) != 1)
 		{
+			result = Languages::GetText(Languages::TextFeedbackDoesNotExist);
 			return false;
 		}
 
 		feedback = feedbacks.at(feedbackID);
-		if (feedback == nullptr)
+		TrackBase* trackBase = feedback->GetTrack();
+		if (trackBase != nullptr)
 		{
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextFeedbackIsUsedByTrack), feedback->GetName(), trackBase->GetMyName());
 			return false;
 		}
 
@@ -1539,6 +1552,7 @@ TrackID Manager::TrackSave(const TrackID trackID,
 	const DataModel::TrackType trackType,
 	const std::vector<FeedbackID>& newFeedbacks,
 	const DataModel::SelectRouteApproach selectRouteApproach,
+	const bool allowLocoTurn,
 	const bool releaseWhenFree,
 	string& result)
 {
@@ -1570,6 +1584,7 @@ TrackID Manager::TrackSave(const TrackID trackID,
 	track->SetTrackType(trackType);
 	track->Feedbacks(CleanupAndCheckFeedbacksForTrack(ObjectIdentifier(ObjectTypeTrack, trackID), newFeedbacks));
 	track->SetSelectRouteApproach(selectRouteApproach);
+	track->SetAllowLocoTurn(allowLocoTurn);
 	track->SetReleaseWhenFree(releaseWhenFree);
 
 	// save in db
@@ -1586,19 +1601,49 @@ TrackID Manager::TrackSave(const TrackID trackID,
 	return trackIdSave;
 }
 
-bool Manager::TrackDelete(const TrackID trackID)
+bool Manager::TrackDelete(const TrackID trackID,
+	string& result)
 {
 	Track* track = nullptr;
 	{
 		std::lock_guard<std::mutex> guard(trackMutex);
 		if (trackID == TrackNone || tracks.count(trackID) != 1)
 		{
+			result = Languages::GetText(Languages::TextTrackDoesNotExist);
 			return false;
 		}
 
 		track = tracks.at(trackID);
-		if (track == nullptr || track->IsInUse())
+		if (track == nullptr)
 		{
+			result = Languages::GetText(Languages::TextTrackDoesNotExist);
+			return false;
+		}
+
+		if (track->IsInUse())
+		{
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextTrackIsUsedByLoco), track->GetName(), GetLocoName(track->GetLoco()));
+			return false;
+		}
+
+		Route* route = track->GetFirstRoute();
+		if (route != nullptr)
+		{
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextTrackHasAssociatedRoute), track->GetName(), route->GetName());
+			return false;
+		}
+
+		route = GetFirstRouteToTrackBase(ObjectIdentifier(ObjectTypeTrack, trackID));
+		if (route != nullptr)
+		{
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextTrackHasAssociatedRoute), track->GetName(), route->GetName());
+			return false;
+		}
+
+		FeedbackID feedbackId = track->GetFirstFeedbackId();
+		if (feedbackId != FeedbackNone)
+		{
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextTrackHasAssociatedFeedback), track->GetName(), GetFeedbackName(feedbackId));
 			return false;
 		}
 
@@ -1615,6 +1660,13 @@ bool Manager::TrackDelete(const TrackID trackID)
 	{
 		control.second->TrackDelete(trackID, name);
 	}
+
+	Cluster* cluster = track->GetCluster();
+	if (cluster != nullptr)
+	{
+		cluster->DeleteTrack(track);
+	}
+
 	delete track;
 	return true;
 }
@@ -2039,17 +2091,25 @@ const map<string,DataModel::Route*> Manager::RouteListByName() const
 	return out;
 }
 
-bool Manager::RouteDelete(const RouteID routeID)
+bool Manager::RouteDelete(const RouteID routeID,
+	string& result)
 {
 	Route* route = nullptr;
 	{
 		std::lock_guard<std::mutex> guard(routeMutex);
 		if (routeID == RouteNone || routes.count(routeID) != 1)
 		{
+			result = Languages::GetText(Languages::TextLocoDoesNotExist);
 			return false;
 		}
 
 		route = routes.at(routeID);
+		if (route->IsInUse())
+		{
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextRouteIsInUse), route->GetName());
+			return false;
+		}
+
 		routes.erase(routeID);
 	}
 
@@ -2066,6 +2126,19 @@ bool Manager::RouteDelete(const RouteID routeID)
 	}
 	delete route;
 	return true;
+}
+
+Route* Manager::GetFirstRouteToTrackBase(const ObjectIdentifier& identifier) const
+{
+	std::lock_guard<std::mutex> guard(routeMutex);
+	for (auto route : routes)
+	{
+		if (route.second->GetToTrack() == identifier)
+		{
+			return route.second;
+		}
+	}
+	return nullptr;
 }
 
 Layer* Manager::GetLayer(const LayerID layerID) const
@@ -2274,6 +2347,7 @@ bool Manager::SignalSave(const SignalID signalID,
 	const LayoutRotation rotation,
 	const std::vector<FeedbackID>& newFeedbacks,
 	const DataModel::SelectRouteApproach selectRouteApproach,
+	const bool allowLocoTurn,
 	const bool releaseWhenFree,
 	const ControlID controlID,
 	const Protocol protocol,
@@ -2314,6 +2388,7 @@ bool Manager::SignalSave(const SignalID signalID,
 	signal->SetRotation(rotation);
 	signal->Feedbacks(CleanupAndCheckFeedbacksForTrack(ObjectIdentifier(ObjectTypeSignal, signalID), newFeedbacks));
 	signal->SetSelectRouteApproach(selectRouteApproach);
+	signal->SetAllowLocoTurn(allowLocoTurn);
 	signal->SetReleaseWhenFree(releaseWhenFree);
 	signal->SetControlID(controlID);
 	signal->SetProtocol(protocol);
@@ -2336,13 +2411,49 @@ bool Manager::SignalSave(const SignalID signalID,
 	return true;
 }
 
-bool Manager::SignalDelete(const SignalID signalID)
+bool Manager::SignalDelete(const SignalID signalID,
+	string& result)
 {
 	Signal* signal = nullptr;
 	{
 		std::lock_guard<std::mutex> guard(signalMutex);
 		if (signalID == SignalNone || signals.count(signalID) != 1)
 		{
+			result = Languages::GetText(Languages::TextSignalDoesNotExist);
+			return false;
+		}
+
+		signal = signals.at(signalID);
+		if (signal == nullptr)
+		{
+			result = Languages::GetText(Languages::TextSignalDoesNotExist);
+			return false;
+		}
+
+		if (signal->IsInUse())
+		{
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextSignalIsUsedByLoco), signal->GetName(), GetLocoName(signal->GetLoco()));
+			return false;
+		}
+
+		Route* route = signal->GetFirstRoute();
+		if (route != nullptr)
+		{
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextSignalHasAssociatedRoute), signal->GetName(), route->GetName());
+			return false;
+		}
+
+		route = GetFirstRouteToTrackBase(ObjectIdentifier(ObjectTypeSignal, signalID));
+		if (route != nullptr)
+		{
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextTrackHasAssociatedRoute), signal->GetName(), route->GetName());
+			return false;
+		}
+
+		FeedbackID feedbackId = signal->GetFirstFeedbackId();
+		if (feedbackId != FeedbackNone)
+		{
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextSignalHasAssociatedFeedback), signal->GetName(), GetFeedbackName(feedbackId));
 			return false;
 		}
 
@@ -2361,6 +2472,13 @@ bool Manager::SignalDelete(const SignalID signalID)
 	{
 		control.second->SignalDelete(signalID, signalName);
 	}
+
+	Cluster* cluster = signal->GetCluster();
+	if (cluster != nullptr)
+	{
+		cluster->DeleteSignal(signal);
+	}
+
 	delete signal;
 	return true;
 }
@@ -2374,6 +2492,98 @@ const map<string,DataModel::Signal*> Manager::SignalListByName() const
 		out[signal.second->GetName()] = signal.second;
 	}
 	return out;
+}
+
+/***************************
+* Cluster                  *
+***************************/
+
+Cluster* Manager::GetCluster(const ClusterID clusterID) const
+{
+	std::lock_guard<std::mutex> guard(clusterMutex);
+	if (clusters.count(clusterID) != 1)
+	{
+		return nullptr;
+	}
+	return clusters.at(clusterID);
+}
+
+const map<string,DataModel::Cluster*> Manager::ClusterListByName() const
+{
+	map<string,DataModel::Cluster*> out;
+	std::lock_guard<std::mutex> guard(clusterMutex);
+	for(auto cluster : clusters)
+	{
+		out[cluster.second->GetName()] = cluster.second;
+	}
+	return out;
+}
+
+bool Manager::ClusterSave(const ClusterID clusterID,
+	const string& name,
+	__attribute__((unused)) const std::vector<DataModel::Relation*>& newTracks,
+	__attribute__((unused)) const std::vector<DataModel::Relation*>& newSignals,
+	string& result)
+{
+	Cluster* cluster = GetCluster(clusterID);
+	if (cluster == nullptr)
+	{
+		cluster = CreateAndAddObject(clusters, clusterMutex);
+	}
+
+	if (cluster == nullptr)
+	{
+		result = Languages::GetText(Languages::TextUnableToAddCluster);
+		return false;
+	}
+
+	// update existing cluster
+	cluster->SetName(CheckObjectName(clusters, clusterMutex, clusterID, name.size() == 0 ? "C" : name));
+	cluster->AssignTracks(newTracks);
+	cluster->AssignSignals(newSignals);
+
+	// save in db
+	if (storage)
+	{
+		storage->Save(*cluster);
+	}
+	return true;
+}
+
+bool Manager::ClusterDelete(const ClusterID clusterID)
+{
+	if (clusterID == ClusterNone)
+	{
+		return false;
+	}
+	Cluster* cluster = nullptr;
+	{
+		std::lock_guard<std::mutex> guard(clusterMutex);
+		if (clusters.count(clusterID) != 1)
+		{
+			return false;
+		}
+
+		cluster = clusters.at(clusterID);
+		clusters.erase(clusterID);
+	}
+
+	cluster->DeleteTracks();
+	cluster->DeleteSignals();
+
+	if (storage)
+	{
+		storage->DeleteCluster(clusterID);
+	}
+
+	const string& clusterName = cluster->GetName();
+	std::lock_guard<std::mutex> guard(controlMutex);
+	for (auto control : controls)
+	{
+		control.second->ClusterDelete(clusterID, clusterName);
+	}
+	delete cluster;
+	return true;
 }
 
 /***************************

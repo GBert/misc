@@ -330,6 +330,20 @@ namespace WebServer {
 		AddUpdate(command.str(), Languages::TextSignalDeleted, name);
 	}
 
+	void WebServer::ClusterSettings(const ClusterID clusterID, const std::string& name)
+	{
+		stringstream command;
+		command << "clustersettings;cluster=" << clusterID;
+		AddUpdate(command.str(), Languages::TextClusterUpdated, name);
+	}
+
+	void WebServer::ClusterDelete(const ClusterID clusterID, const std::string& name)
+	{
+		stringstream command;
+		command << "clusterdelete;cluster=" << clusterID;
+		AddUpdate(command.str(), Languages::TextClusterDeleted, name);
+	}
+
 	void WebServer::LocoRelease(const LocoID locoID)
 	{
 		stringstream command;
