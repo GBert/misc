@@ -391,7 +391,6 @@ int send_can_loco_drive(uint16_t loco_id, uint8_t direction, uint8_t step, uint8
 	netframe[9] = 1;
     if (netframe[9] != loco_get_direction(m_id(loco_id))) {
 	send_can(netframe, verbose);
-	v_printf(verbose, "\n");
     }
 
     memcpy(netframe, MS_LOCO_DRIVE, 13);
@@ -403,7 +402,7 @@ int send_can_loco_drive(uint16_t loco_id, uint8_t direction, uint8_t step, uint8
     netframe[9] = (mspeed >> 8) & 0x03;
     netframe[10] = mspeed & 0xFF;
     send_can(netframe, verbose);
-
+    v_printf(verbose, "\n");
     return (EXIT_SUCCESS);
 }
 
