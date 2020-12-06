@@ -249,7 +249,7 @@ namespace DataModel
 		private:
 			bool DeserializeNew(__attribute__((unused)) const std::string& serialized);
 
-			// FIXME: remove later
+			// FIXME: remove later 2020-10-27
 			bool DeserializeOld(const std::string& serialized);
 
 			static const LocoFunctionNr MaxCount = MaxLocoFunctions + 1; // f0 - f32 = 33

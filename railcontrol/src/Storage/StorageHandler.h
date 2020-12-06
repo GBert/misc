@@ -58,9 +58,12 @@ namespace Storage
 			void DeleteLayer(LayerID layerID);
 			void AllSignals(std::map<SignalID,DataModel::Signal*>& signals);
 			void DeleteSignal(SignalID signalID);
+			void AllClusters(std::map<ClusterID,DataModel::Cluster*>& clusters);
+			void DeleteCluster(ClusterID clusterID);
 			void Save(const Hardware::HardwareParams& hardwareParams);
 			void Save(const DataModel::Route& route);
 			void Save(const DataModel::Loco& loco);
+			void Save(const DataModel::Cluster& cluster);
 			template<class T> void Save(const T& t)
 			{
 				if (instance == nullptr)

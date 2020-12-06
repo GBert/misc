@@ -37,10 +37,10 @@ namespace DataModel
 		stringstream ss;
 		ss << LockableItem::Serialize()
 			<< ";type=" << static_cast<int>(type)
-			<< ";objectType1=" << static_cast<int>(objectType1)
-			<< ";objectID1=" << objectID1
-			<< ";objectType2=" << static_cast<int>(objectType2)
-			<< ";objectID2=" << objectID2
+			<< ";objectType1=" << static_cast<int>(ObjectType1())
+			<< ";objectID1=" << object1.GetObjectID()
+			<< ";objectType2=" << static_cast<int>(ObjectType2())
+			<< ";objectID2=" << object2.GetObjectID()
 			<< ";priority=" << static_cast<int>(priority)
 			<< ";data=" << static_cast<int>(data);
 		return ss.str();
@@ -51,24 +51,24 @@ namespace DataModel
 		map<string,string> arguments;
 		ParseArguments(serialized, arguments);
 		LockableItem::Deserialize(arguments);
-		objectType1 = static_cast<ObjectType>(Utils::Utils::GetIntegerMapEntry(arguments, "objectType1"));
-		type = static_cast<Type>(Utils::Utils::GetIntegerMapEntry(arguments, "type", objectType1 << 3));
-		objectID1 = Utils::Utils::GetIntegerMapEntry(arguments, "objectID1");
-		objectType2 = static_cast<ObjectType>(Utils::Utils::GetIntegerMapEntry(arguments, "objectType2"));
-		objectID2 = Utils::Utils::GetIntegerMapEntry(arguments, "objectID2");
+		object1 = static_cast<ObjectType>(Utils::Utils::GetIntegerMapEntry(arguments, "objectType1"));
+		type = static_cast<Type>(Utils::Utils::GetIntegerMapEntry(arguments, "type", ObjectType1() << 3)); // FIXME: remove default later and reorder 2020-10-27
+		object1 = static_cast<ObjectID>(Utils::Utils::GetIntegerMapEntry(arguments, "objectID1"));
+		object2 = static_cast<ObjectType>(Utils::Utils::GetIntegerMapEntry(arguments, "objectType2"));
+		object2 = static_cast<ObjectID>(Utils::Utils::GetIntegerMapEntry(arguments, "objectID2"));
 		priority = Utils::Utils::GetIntegerMapEntry(arguments, "priority");
-		data = Utils::Utils::GetIntegerMapEntry(arguments, "accessoryState"); // FIXME: remove later
+		data = Utils::Utils::GetIntegerMapEntry(arguments, "accessoryState"); // FIXME: remove later 2020-10-27
 		data = Utils::Utils::GetIntegerMapEntry(arguments, "data", data);
 		return true;
 	}
 
 	bool Relation::Execute(Logger::Logger* logger, const LocoID locoID, const Delay delay)
 	{
-		switch (objectType2)
+		switch (ObjectType2())
 		{
 			case ObjectTypeAccessory:
 			{
-				bool ret = manager->AccessoryState(ControlTypeInternal, objectID2, static_cast<AccessoryState>(data), true);
+				bool ret = manager->AccessoryState(ControlTypeInternal, ObjectID2(), static_cast<AccessoryState>(data), true);
 				if (ret == false)
 				{
 					return false;
@@ -78,7 +78,7 @@ namespace DataModel
 
 			case ObjectTypeSwitch:
 			{
-				bool ret = manager->SwitchState(ControlTypeInternal, objectID2, static_cast<AccessoryState>(data), true);
+				bool ret = manager->SwitchState(ControlTypeInternal, ObjectID2(), static_cast<AccessoryState>(data), true);
 				if (ret == false)
 				{
 					return false;
@@ -88,7 +88,7 @@ namespace DataModel
 
 			case ObjectTypeSignal:
 			{
-				bool ret = manager->SignalState(ControlTypeInternal, objectID2, static_cast<AccessoryState>(data), true);
+				bool ret = manager->SignalState(ControlTypeInternal, ObjectID2(), static_cast<AccessoryState>(data), true);
 				if (ret == false)
 				{
 					return false;
@@ -97,15 +97,15 @@ namespace DataModel
 			}
 
 			case ObjectTypeTrack:
-				manager->TrackBaseSetLocoOrientation(ObjectIdentifier(ObjectTypeTrack, objectID2), static_cast<Orientation>(data));
+				manager->TrackBaseSetLocoOrientation(ObjectIdentifier(ObjectTypeTrack, ObjectID2()), static_cast<Orientation>(data));
 				return true;
 
 
 			case ObjectTypeRoute:
-				return manager->RouteExecute(logger, locoID, objectID2);
+				return manager->RouteExecute(logger, locoID, ObjectID2());
 
 			case ObjectTypeLoco:
-				manager->LocoFunctionState(ControlTypeInternal, locoID, static_cast<DataModel::LocoFunctionNr>(objectID2), static_cast<DataModel::LocoFunctionState>(data));
+				manager->LocoFunctionState(ControlTypeInternal, locoID, static_cast<DataModel::LocoFunctionNr>(ObjectID2()), static_cast<DataModel::LocoFunctionState>(data));
 				return true;
 
 			default:
@@ -117,22 +117,22 @@ namespace DataModel
 
 	LockableItem* Relation::GetObject2()
 	{
-		switch (objectType2)
+		switch (ObjectType2())
 		{
 			case ObjectTypeAccessory:
-				return manager->GetAccessory(objectID2);
+				return manager->GetAccessory(ObjectID2());
 
 			case ObjectTypeSwitch:
-				return manager->GetSwitch(objectID2);
+				return manager->GetSwitch(ObjectID2());
 
 			case ObjectTypeTrack:
-				return manager->GetTrack(objectID2);
+				return manager->GetTrack(ObjectID2());
 
 			case ObjectTypeSignal:
-				return manager->GetSignal(objectID2);
+				return manager->GetSignal(ObjectID2());
 
 			case ObjectTypeRoute:
-				return manager->GetRoute(objectID2);
+				return manager->GetRoute(ObjectID2());
 
 			default:
 				return nullptr;

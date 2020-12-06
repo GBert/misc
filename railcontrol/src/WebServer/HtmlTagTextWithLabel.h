@@ -20,25 +20,39 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
-#include <map>
 #include <string>
 
 #include "Languages.h"
-#include "WebServer/HtmlTagButtonPopup.h"
+#include "WebServer/HtmlTag.h"
+#include "WebServer/HtmlTagText.h"
 
 namespace WebServer
 {
-	class HtmlTagButtonPopupWide : public HtmlTagButtonPopup
+	class HtmlTagTextWithLabel : public HtmlTag
 	{
 		public:
-			HtmlTagButtonPopupWide() = delete;
-			inline HtmlTagButtonPopupWide(const Languages::TextSelector value,
-				const std::string& command,
-				const std::map<std::string,std::string>& arguments = std::map<std::string,std::string>(),
-				const std::string& tooltip = "")
-			:	HtmlTagButtonPopup(value, command, arguments, tooltip)
+			HtmlTagTextWithLabel() = delete;
+
+			HtmlTagTextWithLabel(const std::string& name, const Languages::TextSelector label, const std::string& value)
+			:	HtmlTag()
 			{
-				AddClass("wide_button");
+				AddChildTag(HtmlTagLabel(label, name));
+				AddChildTag(HtmlTagText(name, value));
+			}
+
+			virtual ~HtmlTagTextWithLabel() {}
+
+			virtual HtmlTag AddAttribute(const std::string& name, const std::string& value) override
+			{
+				childTags[1].AddAttribute(name, value);
+				return *this;
+			}
+
+			virtual HtmlTag AddClass(const std::string& _class) override
+			{
+				childTags[1].AddClass(_class);
+				return *this;
 			}
 	};
 } // namespace WebServer
+

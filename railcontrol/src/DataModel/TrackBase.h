@@ -23,6 +23,7 @@ along with RailControl; see the file LICENCE. If not see
 #include <map>
 #include <string>
 
+#include "DataModel/Cluster.h"
 #include "DataModel/Feedback.h"
 #include "Logger/Logger.h"
 
@@ -60,44 +61,140 @@ namespace DataModel
 			static const LayoutItem::LayoutItemSize MinLength = 1;
 			static const LayoutItem::LayoutItemSize MaxLength = 100;
 
-			TrackBase(Manager* manager)
+			TrackBase() = delete;
+
+			inline TrackBase(Manager* manager)
 			:	manager(manager),
+				cluster(nullptr),
 				selectRouteApproach(SelectRouteSystemDefault),
 				trackState(DataModel::Feedback::FeedbackStateFree),
 				trackStateDelayed(DataModel::Feedback::FeedbackStateFree),
 				locoOrientation(OrientationRight),
 				blocked(false),
 				locoIdDelayed(LocoNone),
+				allowLocoTurn(true),
 				releaseWhenFree(false),
 				showName(true)
 			{}
 
 			virtual ~TrackBase() {}
 
-			ObjectType GetObjectType() const { return ObjectTypeTrack; }
+			inline ObjectType GetObjectType() const
+			{
+				return ObjectTypeTrack;
+			}
 
-			std::vector<FeedbackID> GetFeedbacks() const { return feedbacks; }
-			void Feedbacks(const std::vector<FeedbackID>& feedbacks) { this->feedbacks = feedbacks; }
+			inline std::vector<FeedbackID> GetFeedbacks() const
+			{
+				return feedbacks;
+			}
+
+			inline void Feedbacks(const std::vector<FeedbackID>& feedbacks)
+			{
+				this->feedbacks = feedbacks;
+			}
 
 			bool SetFeedbackState(const FeedbackID feedbackID, const DataModel::Feedback::FeedbackState state);
-			DataModel::Feedback::FeedbackState GetFeedbackStateDelayed() const { return trackStateDelayed; };
+
+			inline DataModel::Feedback::FeedbackState GetFeedbackStateDelayed() const
+			{
+				return trackStateDelayed;
+			}
 
 			bool AddRoute(Route* route);
 			bool RemoveRoute(Route* route);
 
-			SelectRouteApproach GetSelectRouteApproach() const { return selectRouteApproach; }
-			void SetSelectRouteApproach(const SelectRouteApproach selectRouteApproach) { this->selectRouteApproach = selectRouteApproach; }
+			inline SelectRouteApproach GetSelectRouteApproach() const
+			{
+				return selectRouteApproach;
+			}
 
-			bool GetValidRoutes(Logger::Logger* logger, const DataModel::Loco* loco, const bool allowLocoTurn, std::vector<Route*>& validRoutes) const;
-			Orientation GetLocoOrientation() const { return locoOrientation; }
-			void SetLocoOrientation(const Orientation orientation) { locoOrientation = orientation; }
-			bool GetBlocked() const { return blocked; }
-			void SetBlocked(const bool blocked) { this->blocked = blocked; }
-			LocoID GetLocoDelayed() const { return this->locoIdDelayed; }
-			bool GetReleaseWhenFree() const { return releaseWhenFree; }
-			void SetReleaseWhenFree(const bool releaseWhenFree) { this->releaseWhenFree = releaseWhenFree; }
-			bool GetShowName() const { return this->showName; }
-			void SetShowName(const bool showName) { this->showName = showName; }
+			inline void SetSelectRouteApproach(const SelectRouteApproach selectRouteApproach)
+			{
+				this->selectRouteApproach = selectRouteApproach;
+			}
+
+			bool GetValidRoutes(Logger::Logger* logger,
+				const DataModel::Loco* loco,
+				const bool allowLocoTurn,
+				std::vector<Route*>& validRoutes) const;
+
+			inline Orientation GetLocoOrientation() const
+			{
+				return locoOrientation;
+			}
+
+			inline bool CanSetLocoOrientation(const Orientation orientation, const LocoID locoId)
+			{
+				return cluster == nullptr ? true : cluster->CanSetLocoOrientation(orientation, locoId);
+			}
+
+			bool SetLocoOrientation(const Orientation orientation);
+
+			inline bool GetBlocked() const
+			{
+				return blocked;
+			}
+
+			inline void SetBlocked(const bool blocked)
+			{
+				this->blocked = blocked;
+			}
+
+			inline LocoID GetLocoDelayed() const
+			{
+				return this->locoIdDelayed;
+			}
+
+			inline bool GetReleaseWhenFree() const
+			{
+				return releaseWhenFree;
+			}
+
+			inline void SetReleaseWhenFree(const bool releaseWhenFree)
+			{
+				this->releaseWhenFree = releaseWhenFree;
+			}
+
+			inline bool GetShowName() const
+			{
+				return this->showName;
+			}
+
+			inline void SetShowName(const bool showName)
+			{
+				this->showName = showName;
+			}
+
+			inline Cluster* GetCluster() const
+			{
+				return cluster;
+			}
+
+			inline void SetCluster(Cluster* const cluster)
+			{
+				this->cluster = cluster;
+			}
+
+			inline bool GetAllowLocoTurn() const
+			{
+				return allowLocoTurn;
+			}
+
+			inline void SetAllowLocoTurn(bool allowLocoTurn)
+			{
+				this->allowLocoTurn = allowLocoTurn;
+			}
+
+			inline FeedbackID GetFirstFeedbackId()
+			{
+				return feedbacks.size() == 0 ? FeedbackNone : feedbacks[0];
+			}
+
+			inline Route* GetFirstRoute()
+			{
+				return routes.size() == 0 ? nullptr : routes[0];
+			}
 
 			virtual ObjectIdentifier GetObjectIdentifier() const = 0;
 			virtual ObjectID GetMyID() const = 0;
@@ -131,6 +228,7 @@ namespace DataModel
 
 			mutable std::mutex updateMutex;
 			std::vector<FeedbackID> feedbacks;
+			Cluster* cluster;
 			SelectRouteApproach selectRouteApproach;
 			DataModel::Feedback::FeedbackState trackState;
 			DataModel::Feedback::FeedbackState trackStateDelayed;
@@ -138,6 +236,7 @@ namespace DataModel
 			Orientation locoOrientation;
 			bool blocked;
 			LocoID locoIdDelayed;
+			bool allowLocoTurn;
 			bool releaseWhenFree;
 			bool showName;
 	};

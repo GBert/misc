@@ -43,7 +43,7 @@ namespace DataModel
 				FeedbackStateOccupied = true
 			};
 
-			Feedback(Manager* manager,
+			inline Feedback(Manager* manager,
 				const FeedbackID feedbackID)
 			:	LayoutItem(feedbackID),
 			 	controlID(ControlIdNone),
@@ -56,40 +56,105 @@ namespace DataModel
 			{
 			}
 
-			Feedback(Manager* manager, const std::string& serialized)
+			inline Feedback(Manager* manager, const std::string& serialized)
 			:	manager(manager),
 				track(nullptr)
 			{
 				Deserialize(serialized);
 			}
 
-			ObjectType GetObjectType() const { return ObjectTypeFeedback; }
+			inline ObjectType GetObjectType() const
+			{
+				return ObjectTypeFeedback;
+			}
 
 			std::string Serialize() const override;
-			bool Deserialize(const std::string& serialized) override;
-			std::string GetLayoutType() const override { return Languages::GetText(Languages::TextFeedback); };
 
-			void SetInverted(const bool inverted) { this->inverted = inverted; }
-			bool GetInverted() const { return inverted; }
+			bool Deserialize(const std::string& serialized) override;
+
+			inline std::string GetLayoutType() const override
+			{
+				return Languages::GetText(Languages::TextFeedback);
+			}
+
+			inline void SetInverted(const bool inverted)
+			{
+				this->inverted = inverted;
+			}
+
+			inline bool GetInverted() const
+			{
+				return inverted;
+			}
 
 			void SetState(const FeedbackState state);
-			FeedbackState GetState() const { return static_cast<FeedbackState>(stateCounter > 0); }
+
+			inline FeedbackState GetState() const
+			{
+				return static_cast<FeedbackState>(stateCounter > 0);
+			}
+
 			void Debounce();
-			void SetControlID(const ControlID controlID) { this->controlID = controlID; }
-			ControlID GetControlID() const { return controlID; }
-			void SetPin(const FeedbackPin pin) { this->pin = pin; }
-			FeedbackPin GetPin() const { return pin; }
-			inline void ClearRelatedObject() { relatedObject.Clear(); track = nullptr; }
-			inline bool IsRelatedObjectSet() const { return relatedObject.IsSet(); }
-			inline void SetRelatedObject(const ObjectIdentifier& relatedObject) { this->relatedObject = relatedObject; track = nullptr; }
-			inline ObjectIdentifier GetRelatedObject() const { return relatedObject; }
-			inline bool CompareRelatedObject(const ObjectIdentifier& compare) const { return relatedObject == compare; }
+
+			inline void SetControlID(const ControlID controlID)
+			{
+				this->controlID = controlID;
+			}
+
+			inline ControlID GetControlID() const
+			{
+				return controlID;
+			}
+
+			inline void SetPin(const FeedbackPin pin)
+			{
+				this->pin = pin;
+			}
+
+			inline FeedbackPin GetPin() const
+			{
+				return pin;
+			}
+
+			inline void ClearRelatedObject()
+			{
+				relatedObject.Clear();
+				track = nullptr;
+			}
+
+			inline bool IsRelatedObjectSet() const
+			{
+				return relatedObject.IsSet();
+			}
+
+			inline void SetRelatedObject(const ObjectIdentifier& relatedObject)
+			{
+				this->relatedObject = relatedObject;
+				track = nullptr;
+			}
+
+			inline ObjectIdentifier GetRelatedObject() const
+			{
+				return relatedObject;
+			}
+
+			inline bool CompareRelatedObject(const ObjectIdentifier& compare) const
+			{
+				return relatedObject == compare;
+			}
+
+			inline TrackBase* GetTrack()
+			{
+				UpdateTrack();
+				return track;
+			}
 
 		private:
+			void UpdateTrack();
+			void UpdateTrackState(const FeedbackState state);
+
 			ControlID controlID;
 			FeedbackPin pin;
-
-			void UpdateTrackState(const FeedbackState state);
 
 			Manager* manager;
 			bool inverted;

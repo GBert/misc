@@ -92,24 +92,31 @@ namespace DataModel
 		UpdateTrackState(FeedbackStateOccupied);
 	}
 
+	void Feedback::UpdateTrack()
+	{
+		if (track != nullptr)
+		{
+			return;
+		}
+
+		switch (relatedObject.GetObjectType())
+		{
+			case ObjectTypeTrack:
+				track = dynamic_cast<TrackBase*>(manager->GetTrack(relatedObject.GetObjectID()));
+				break;
+
+			case ObjectTypeSignal:
+				track = dynamic_cast<TrackBase*>(manager->GetSignal(relatedObject.GetObjectID()));
+				break;
+
+			default:
+				break;
+		}
+	}
+
 	void Feedback::UpdateTrackState(const FeedbackState state)
 	{
-		if (track == nullptr)
-		{
-			switch (relatedObject.GetObjectType())
-			{
-				case ObjectTypeTrack:
-					track = dynamic_cast<TrackBase*>(manager->GetTrack(relatedObject.GetObjectID()));
-					break;
-
-				case ObjectTypeSignal:
-					track = dynamic_cast<TrackBase*>(manager->GetSignal(relatedObject.GetObjectID()));
-					break;
-
-				default:
-					return;
-			}
-		}
+		UpdateTrack();
 		if (track == nullptr)
 		{
 			return;

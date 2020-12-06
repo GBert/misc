@@ -86,74 +86,235 @@ namespace DataModel
 
 			Route(Manager* manager, const std::string& serialized);
 
-			~Route()
+			inline ~Route()
 			{
 				DeleteRelations(relationsAtLock);
 				DeleteRelations(relationsAtUnlock);
 			}
 
-			ObjectType GetObjectType() const { return ObjectTypeRoute; }
+			inline ObjectType GetObjectType() const
+			{
+				return ObjectTypeRoute;
+			}
 
 			std::string Serialize() const override;
 			bool Deserialize(const std::string& serialized) override;
-			std::string GetLayoutType() const override { return Languages::GetText(Languages::TextRoute); };
 
-			void DeleteRelationsAtLock() { DeleteRelations(relationsAtLock); };
-			void DeleteRelationsAtUnlock() { DeleteRelations(relationsAtUnlock); };
-			bool AssignRelationsAtLock(const std::vector<DataModel::Relation*>& newRelations)
+			inline std::string GetLayoutType() const override
+			{
+				return Languages::GetText(Languages::TextRoute);
+			}
+
+			inline void DeleteRelationsAtLock()
+			{
+				DeleteRelations(relationsAtLock);
+			}
+
+			inline void DeleteRelationsAtUnlock()
+			{
+				DeleteRelations(relationsAtUnlock);
+			}
+
+			inline bool AssignRelationsAtLock(const std::vector<DataModel::Relation*>& newRelations)
 			{
 				return AssignRelations(relationsAtLock, newRelations);
 			}
-			bool AssignRelationsAtUnlock(const std::vector<DataModel::Relation*>& newRelations)
+
+			inline bool AssignRelationsAtUnlock(const std::vector<DataModel::Relation*>& newRelations)
 			{
 				return AssignRelations(relationsAtUnlock, newRelations);
 			}
-			const std::vector<DataModel::Relation*>& GetRelationsAtLock() const { return relationsAtLock; };
-			const std::vector<DataModel::Relation*>& GetRelationsAtUnlock() const { return relationsAtUnlock; };
 
-			bool FromTrackOrientation(Logger::Logger* logger, const DataModel::ObjectIdentifier& identifier, const Orientation trackOrientation, const DataModel::Loco* loco, const bool allowLocoTurn);
+			inline const std::vector<DataModel::Relation*>& GetRelationsAtLock() const
+			{
+				return relationsAtLock;
+			}
+
+			inline const std::vector<DataModel::Relation*>& GetRelationsAtUnlock() const
+			{
+				return relationsAtUnlock;
+			}
+
+			bool FromTrackOrientation(Logger::Logger* logger,
+				const DataModel::ObjectIdentifier& identifier,
+				const Orientation trackOrientation,
+				const DataModel::Loco* loco,
+				const bool allowLocoTurn);
 
 			bool Execute(Logger::Logger* logger, const LocoID locoID);
-			static bool ExecuteStatic(Logger::Logger* logger, Route* route) { return route->Execute(logger, LocoNone); }
+
+			inline static bool ExecuteStatic(Logger::Logger* logger, Route* route)
+			{
+				return route->Execute(logger, LocoNone);
+			}
 
 			bool Reserve(Logger::Logger* logger, const LocoID locoID) override;
 			bool Lock(Logger::Logger* logger, const LocoID locoID) override;
 			bool Release(Logger::Logger* logger, const LocoID locoID) override;
 
-			Delay GetDelay() const { return delay; }
-			void SetDelay(Delay delay) { this->delay = delay; }
-			PushpullType GetPushpull() const { return pushpull; }
-			void SetPushpull(const PushpullType pushpull) { this->pushpull = pushpull; }
-			Length GetMinTrainLength() const { return minTrainLength; }
-			void SetMinTrainLength(const Length length) { this->minTrainLength = length; }
-			Length GetMaxTrainLength() const { return maxTrainLength; }
-			void SetMaxTrainLength(const Length length) { this->maxTrainLength = length; }
-			time_t GetLastUsed() const { return lastUsed; }
-			void SetAutomode(const Automode automode) { this->automode = automode; }
-			Automode GetAutomode() const { return automode; }
-			void SetFromTrack(const ObjectIdentifier& fromTrack) { this->fromTrack = fromTrack; }
-			const ObjectIdentifier& GetFromTrack() const { return fromTrack; }
-			void SetFromOrientation(const Orientation fromOrientation) { this->fromOrientation = fromOrientation; }
-			Orientation GetFromOrientation() const { return fromOrientation; }
-			void SetToTrack(const ObjectIdentifier& toTrack) { this->toTrack = toTrack; }
-			const ObjectIdentifier& GetToTrack() const { return toTrack; };
-			void SetToOrientation(const Orientation toOrientation) { this->toOrientation = toOrientation; }
-			Orientation GetToOrientation() const { return toOrientation; }
-			void SetSpeed(Speed startSpeed) { this->speed = startSpeed; }
-			Speed GetSpeed() const { return speed; }
-			void SetFeedbackIdReduced(const FeedbackID feedbackIdReduced) { this->feedbackIdReduced = feedbackIdReduced; }
-			FeedbackID GetFeedbackIdReduced() const { return feedbackIdReduced; }
-			void SetFeedbackIdCreep(const FeedbackID feedbackIdCreep) { this->feedbackIdCreep = feedbackIdCreep; }
-			FeedbackID GetFeedbackIdCreep() const { return feedbackIdCreep; }
-			void SetFeedbackIdStop(const FeedbackID feedbackIdStop) { this->feedbackIdStop = feedbackIdStop; }
-			FeedbackID GetFeedbackIdStop() const { return feedbackIdStop; }
-			void SetFeedbackIdOver(const FeedbackID feedbackIdOver) { this->feedbackIdOver = feedbackIdOver; }
-			FeedbackID GetFeedbackIdOver() const { return feedbackIdOver; }
-			void SetWaitAfterRelease(const Pause wait) { this->waitAfterRelease = wait; }
-			Pause GetWaitAfterRelease() const { return waitAfterRelease; }
+			inline Delay GetDelay() const
+			{
+				return delay;
+			}
 
-			static bool CompareShortest(const Route* s1, const Route* s2) { return s1->GetMinTrainLength() < s2->GetMinTrainLength(); }
-			static bool CompareLastUsed(const Route* s1, const Route* s2) { return s1->GetLastUsed() < s2->GetLastUsed(); }
+			inline void SetDelay(Delay delay)
+			{
+				this->delay = delay;
+			}
+
+			inline PushpullType GetPushpull() const
+			{
+				return pushpull;
+			}
+
+			inline void SetPushpull(const PushpullType pushpull)
+			{
+				this->pushpull = pushpull;
+			}
+
+			inline Length GetMinTrainLength() const
+			{
+				return minTrainLength;
+			}
+
+			inline void SetMinTrainLength(const Length length)
+			{
+				this->minTrainLength = length;
+			}
+
+			inline Length GetMaxTrainLength() const
+			{
+				return maxTrainLength;
+			}
+
+			inline void SetMaxTrainLength(const Length length)
+			{
+				this->maxTrainLength = length;
+			}
+
+			inline time_t GetLastUsed() const
+			{
+				return lastUsed;
+			}
+
+			inline void SetAutomode(const Automode automode)
+			{
+				this->automode = automode;
+			}
+
+			inline Automode GetAutomode() const
+			{
+				return automode;
+			}
+
+			inline void SetFromTrack(const ObjectIdentifier& fromTrack)
+			{
+				this->fromTrack = fromTrack;
+			}
+
+			inline const ObjectIdentifier& GetFromTrack() const
+			{
+				return fromTrack;
+			}
+
+			inline void SetFromOrientation(const Orientation fromOrientation)
+			{
+				this->fromOrientation = fromOrientation;
+			}
+
+			inline Orientation GetFromOrientation() const
+			{
+				return fromOrientation;
+			}
+
+			inline void SetToTrack(const ObjectIdentifier& toTrack)
+			{
+				this->toTrack = toTrack;
+			}
+
+			inline const ObjectIdentifier& GetToTrack() const
+			{
+				return toTrack;
+			}
+
+			inline void SetToOrientation(const Orientation toOrientation)
+			{
+				this->toOrientation = toOrientation;
+			}
+
+			inline Orientation GetToOrientation() const
+			{
+				return toOrientation;
+			}
+
+			inline void SetSpeed(Speed startSpeed)
+			{
+				this->speed = startSpeed;
+			}
+
+			inline Speed GetSpeed() const
+			{
+				return speed;
+			}
+
+			inline void SetFeedbackIdReduced(const FeedbackID feedbackIdReduced)
+			{
+				this->feedbackIdReduced = feedbackIdReduced;
+			}
+
+			inline FeedbackID GetFeedbackIdReduced() const
+			{
+				return feedbackIdReduced;
+			}
+
+			inline void SetFeedbackIdCreep(const FeedbackID feedbackIdCreep)
+			{
+				this->feedbackIdCreep = feedbackIdCreep;
+			}
+
+			inline FeedbackID GetFeedbackIdCreep() const
+			{
+				return feedbackIdCreep;
+			}
+
+			inline void SetFeedbackIdStop(const FeedbackID feedbackIdStop)
+			{
+				this->feedbackIdStop = feedbackIdStop;
+			}
+
+			inline FeedbackID GetFeedbackIdStop() const
+			{
+				return feedbackIdStop;
+			}
+
+			inline void SetFeedbackIdOver(const FeedbackID feedbackIdOver)
+			{
+				this->feedbackIdOver = feedbackIdOver;
+			}
+
+			inline FeedbackID GetFeedbackIdOver() const
+			{
+				return feedbackIdOver;
+			}
+
+			inline void SetWaitAfterRelease(const Pause wait)
+			{
+				this->waitAfterRelease = wait;
+			}
+
+			inline Pause GetWaitAfterRelease() const
+			{
+				return waitAfterRelease;
+			}
+
+			static inline bool CompareShortest(const Route* s1, const Route* s2)
+			{
+				return s1->GetMinTrainLength() < s2->GetMinTrainLength();
+			}
+			static inline bool CompareLastUsed(const Route* s1, const Route* s2)
+			{
+				return s1->GetLastUsed() < s2->GetLastUsed();
+			}
 
 		private:
 			bool ReleaseInternal(Logger::Logger* logger, const LocoID locoID);

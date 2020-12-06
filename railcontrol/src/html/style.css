@@ -53,7 +53,7 @@ body {
 	width: 250px;
 }
 
-@media (max-width: 735px) {
+@media (max-width: 771px) {
 	.layer_selector,
 	.layout,
 	.menu_add {

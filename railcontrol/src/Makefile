@@ -15,6 +15,7 @@ OBJ= \
 	Config.o \
 	DataModel/Accessory.o \
 	DataModel/AccessoryBase.o \
+	DataModel/Cluster.o \
 	DataModel/Feedback.o \
 	DataModel/HardwareHandle.o \
 	DataModel/LayoutItem.o \
@@ -66,6 +67,10 @@ OBJ= \
 	WebServer/HtmlTagSwitch.o \
 	WebServer/HtmlTagTrackBase.o \
 	WebServer/Response.o \
+	WebServer/WebClientCluster.o \
+	WebServer/WebClientSignal.o \
+	WebServer/WebClientTrack.o \
+	WebServer/WebClientTrackBase.o \
 	WebServer/WebServer.o
 
 all: $(OBJ)

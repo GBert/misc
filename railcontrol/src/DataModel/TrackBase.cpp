@@ -62,6 +62,8 @@ namespace DataModel
 		str += to_string(blocked);
 		str += ";locodelayed=";
 		str += to_string(locoIdDelayed);
+		str += ";allowlocoturn=";
+		str += to_string(allowLocoTurn);
 		str += ";releasewhenfree=";
 		str += to_string(releaseWhenFree);
 		str += ";showname=";
@@ -84,17 +86,32 @@ namespace DataModel
 			feedbacks.push_back(feedbackID);
 		}
 		selectRouteApproach = static_cast<SelectRouteApproach>(Utils::Utils::GetIntegerMapEntry(arguments, "selectrouteapproach", SelectRouteSystemDefault));
-		trackState = static_cast<DataModel::Feedback::FeedbackState>(Utils::Utils::GetBoolMapEntry(arguments, "state", DataModel::Feedback::FeedbackStateFree)); // FIXME: remove later
+		trackState = static_cast<DataModel::Feedback::FeedbackState>(Utils::Utils::GetBoolMapEntry(arguments, "state", DataModel::Feedback::FeedbackStateFree)); // FIXME: remove later 2020-10-27
 		trackState = static_cast<DataModel::Feedback::FeedbackState>(Utils::Utils::GetBoolMapEntry(arguments, "trackstate", trackState));
-		trackStateDelayed = static_cast<DataModel::Feedback::FeedbackState>(Utils::Utils::GetBoolMapEntry(arguments, "statedelayed", trackState)); // FIXME: remove later
+		trackStateDelayed = static_cast<DataModel::Feedback::FeedbackState>(Utils::Utils::GetBoolMapEntry(arguments, "statedelayed", trackState)); // FIXME: remove later 2020-10-27
 		trackStateDelayed = static_cast<DataModel::Feedback::FeedbackState>(Utils::Utils::GetBoolMapEntry(arguments, "trackstatedelayed", trackStateDelayed));
-		locoOrientation = static_cast<Orientation>(Utils::Utils::GetBoolMapEntry(arguments, "locoDirection", OrientationRight)); // FIXME: remove later
+		locoOrientation = static_cast<Orientation>(Utils::Utils::GetBoolMapEntry(arguments, "locoDirection", OrientationRight)); // FIXME: remove later 2020-10-27
 		locoOrientation = static_cast<Orientation>(Utils::Utils::GetBoolMapEntry(arguments, "locoorientation", locoOrientation));
 		blocked = Utils::Utils::GetBoolMapEntry(arguments, "blocked", false);
 		locoIdDelayed = static_cast<LocoID>(Utils::Utils::GetIntegerMapEntry(arguments, "locodelayed", GetLockedLoco()));
+		allowLocoTurn = Utils::Utils::GetBoolMapEntry(arguments, "allowlocoturn", true);
 		releaseWhenFree = Utils::Utils::GetBoolMapEntry(arguments, "releasewhenfree", false);
 		showName = Utils::Utils::GetBoolMapEntry(arguments, "showname", true);
 		return true;
+	}
+
+	bool TrackBase::SetLocoOrientation(const Orientation orientation)
+	{
+		if (locoOrientation == orientation)
+		{
+			return true;
+		}
+		locoOrientation = orientation;
+		if (cluster == nullptr)
+		{
+			return true;
+		}
+		return cluster->SetLocoOrientation(orientation, GetMyLoco());
 	}
 
 	bool TrackBase::BaseReserve(Logger::Logger* logger, const LocoID locoID)
@@ -102,7 +119,7 @@ namespace DataModel
 		std::lock_guard<std::mutex> Guard(updateMutex);
 		if (this->locoIdDelayed != LocoNone && this->locoIdDelayed != locoID)
 		{
-			logger->Debug(Languages::TextTrackIsInUse, GetMyName());
+			logger->Debug(Languages::TextTrackIsUsedByLoco, GetMyName(), manager->GetLocoName(locoIdDelayed));
 			return false;
 		}
 		if (blocked == true)
@@ -261,9 +278,9 @@ namespace DataModel
 	bool TrackBase::AddRoute(Route* route)
 	{
 		std::lock_guard<std::mutex> Guard(updateMutex);
-		for (auto s : routes)
+		for (auto r : routes)
 		{
-			if (s == route)
+			if (r == route)
 			{
 				return false;
 			}
@@ -290,7 +307,10 @@ namespace DataModel
 		return selectRouteApproach;
 	}
 
-	bool TrackBase::GetValidRoutes(Logger::Logger* logger, const Loco* loco, const bool allowLocoTurn, std::vector<Route*>& validRoutes) const
+	bool TrackBase::GetValidRoutes(Logger::Logger* logger,
+		const Loco* loco,
+		const bool allowLocoTurn,
+		std::vector<Route*>& validRoutes) const
 	{
 		std::lock_guard<std::mutex> Guard(updateMutex);
 		for (auto route : routes)

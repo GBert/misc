@@ -218,22 +218,22 @@ function updateFeedbacksOfTrack()
 	return false;
 }
 
-function addSlave()
+function addSlave(prefix)
 {
-	var slaveCounter = document.getElementById('slavecounter');
-	if (!slaveCounter)
+	var counter = document.getElementById(prefix + 'counter');
+	if (!counter)
 	{
 		return false;
 	}
-	var slavesDiv = document.getElementById('slaves');
-	if (!slavesDiv)
+	var div = document.getElementById(prefix + 's');
+	if (!div)
 	{
 		return false;
 	}
 
-	slaveCounter.value++;
-	var url = '/?cmd=slaveadd&priority=' + slaveCounter.value;
-	requestAddItem('new_slave_' + slaveCounter.value, url);
+	counter.value++;
+	var url = '/?cmd=slaveadd&priority=' + counter.value + '&prefix=' + prefix;
+	requestAddItem(prefix + '_new_' + counter.value, url);
 	return false;
 }
 

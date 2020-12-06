@@ -40,98 +40,111 @@ namespace DataModel
 	class Track : public TrackBase, public LayoutItem, public LockableItem
 	{
 		public:
-			Track(Manager* manager, const TrackID trackID)
+			inline Track(Manager* manager, const TrackID trackID)
 			:	TrackBase(manager),
 				LayoutItem(trackID),
 				LockableItem(),
 				trackType(TrackTypeStraight)
 			{}
 
-			Track(Manager* manager, const std::string& serialized)
+			inline Track(Manager* manager, const std::string& serialized)
 			:	Track(manager, TrackNone)
 			{
 				Deserialize(serialized);
 			}
 
-			ObjectType GetObjectType() const { return ObjectTypeTrack; }
+			inline ObjectType GetObjectType() const
+			{
+				return ObjectTypeTrack;
+			}
 
 			std::string Serialize() const override;
 			bool Deserialize(const std::string& serialized) override;
 
-			std::string GetLayoutType() const override { return Languages::GetText(Languages::TextTrack); };
+			inline std::string GetLayoutType() const override
+			{
+				return Languages::GetText(Languages::TextTrack);
+			}
 
-			TrackType GetTrackType() const { return trackType; }
-			void SetTrackType(const TrackType type) { this->trackType = type; }
+			inline TrackType GetTrackType() const
+			{
+				return trackType;
+			}
 
-			bool Reserve(Logger::Logger* logger, const LocoID locoID) override
+			inline void SetTrackType(const TrackType type)
+			{
+				this->trackType = type;
+			}
+
+			inline bool Reserve(Logger::Logger* logger, const LocoID locoID) override
 			{
 				return BaseReserve(logger, locoID);
 			}
 
-			bool ReserveForce(Logger::Logger* logger, const LocoID locoID)
+			inline bool ReserveForce(Logger::Logger* logger, const LocoID locoID)
 			{
 				return BaseReserveForce(logger, locoID);
 			}
 
-			bool Lock(Logger::Logger* logger, const LocoID locoID) override
+			inline bool Lock(Logger::Logger* logger, const LocoID locoID) override
 			{
 				return BaseLock(logger, locoID);
 			}
 
-			bool Release(Logger::Logger* logger, const LocoID locoID) override
+			inline bool Release(Logger::Logger* logger, const LocoID locoID) override
 			{
 				return BaseRelease(logger, locoID);
 			}
 
-			bool ReleaseForce(Logger::Logger* logger, const LocoID locoID)
+			inline bool ReleaseForce(Logger::Logger* logger, const LocoID locoID)
 			{
 				return BaseReleaseForce(logger, locoID);
 			}
 
 		protected:
-			bool ReserveInternal(Logger::Logger* logger, const LocoID locoID) override
+			inline bool ReserveInternal(Logger::Logger* logger, const LocoID locoID) override
 			{
 				return LockableItem::Reserve(logger, locoID);
 			}
 
-			bool LockInternal(Logger::Logger* logger, const LocoID locoID) override
+			inline bool LockInternal(Logger::Logger* logger, const LocoID locoID) override
 			{
 				return LockableItem::Lock(logger, locoID);
 			}
 
-			bool ReleaseInternal(Logger::Logger* logger, const LocoID locoID) override
+			inline bool ReleaseInternal(Logger::Logger* logger, const LocoID locoID) override
 			{
 				return LockableItem::Release(logger, locoID);
 			}
 
 			void PublishState() const override;
 
-			ObjectIdentifier GetObjectIdentifier() const override
+			inline ObjectIdentifier GetObjectIdentifier() const override
 			{
 				return ObjectIdentifier(ObjectTypeTrack, GetID());
 			}
 
-			ObjectID GetMyID() const override
+			inline ObjectID GetMyID() const override
 			{
 				return GetID();
 			}
 
-			const std::string& GetMyName() const override
+			inline const std::string& GetMyName() const override
 			{
 				return GetName();
 			}
 
-			LocoID GetMyLoco() const override
+			inline LocoID GetMyLoco() const override
 			{
 				return GetLoco();
 			}
 
-			bool IsTrackInUse() const override
+			inline bool IsTrackInUse() const override
 			{
 				return IsInUse();
 			}
 
-			LocoID GetLockedLoco() const override
+			inline LocoID GetLockedLoco() const override
 			{
 				return GetLoco();
 			}

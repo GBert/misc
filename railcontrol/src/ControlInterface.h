@@ -100,6 +100,8 @@ class ControlInterface
 		virtual void SignalDelete(__attribute__((unused)) const SignalID signalID, __attribute__((unused)) const std::string& name) {};
 		virtual void SignalSettings(__attribute__((unused)) const SignalID signalID, __attribute__((unused)) const std::string& name) {};
 		virtual void SignalState(__attribute__((unused)) const ControlType controlType, __attribute__((unused)) const DataModel::Signal* signal) {};
+		virtual void ClusterDelete(__attribute__((unused)) const ClusterID signalID, __attribute__((unused)) const std::string& name) {};
+		virtual void ClusterSettings(__attribute__((unused)) const ClusterID signalID, __attribute__((unused)) const std::string& name) {};
 
 		virtual void LocoSpeedOrientationFunctions(const DataModel::Loco* loco,
 			const Speed speed,

@@ -103,10 +103,10 @@ namespace DataModel
 		}
 		trackFrom = manager->GetTrackBase(trackIdentifier);
 		functions.Deserialize(Utils::Utils::GetStringMapEntry(arguments, "functions", "0"));
-		orientation = (Utils::Utils::GetStringMapEntry(arguments, "direction", "right").compare("right") == 0 ? OrientationRight : OrientationLeft); // FIXME: remove later
+		orientation = (Utils::Utils::GetStringMapEntry(arguments, "direction", "right").compare("right") == 0 ? OrientationRight : OrientationLeft); // FIXME: remove later 2020-10-27
 		orientation = (static_cast<Orientation>(Utils::Utils::GetBoolMapEntry(arguments, "orientation", orientation)));
 		length = static_cast<Length>(Utils::Utils::GetIntegerMapEntry(arguments, "length", 0));
-		pushpull = Utils::Utils::GetBoolMapEntry(arguments, "commuter", false);  // FIXME: remove later
+		pushpull = Utils::Utils::GetBoolMapEntry(arguments, "commuter", false);  // FIXME: remove later 2020-10-27
 		pushpull = Utils::Utils::GetBoolMapEntry(arguments, "pushpull", pushpull);
 		maxSpeed = Utils::Utils::GetIntegerMapEntry(arguments, "maxspeed", MaxSpeed);
 		travelSpeed = Utils::Utils::GetIntegerMapEntry(arguments, "travelspeed", DefaultTravelSpeed);
@@ -378,6 +378,26 @@ namespace DataModel
 			return;
 		}
 
+		bool isOrientationSet = newTrack->SetLocoOrientation(static_cast<Orientation>(usedRoute->GetToOrientation()));
+		if (isOrientationSet == false)
+		{
+			return;
+		}
+
+		bool turnLoco = (trackFrom->GetLocoOrientation() != usedRoute->GetFromOrientation());
+		Orientation newLocoOrientation = static_cast<Orientation>(orientation != turnLoco);
+		if (turnLoco)
+		{
+			bool canTurnOrientation = trackFrom->SetLocoOrientation(usedRoute->GetFromOrientation());
+			if (canTurnOrientation == false)
+			{
+				return;
+			}
+			manager->TrackBasePublishState(trackFrom);
+		}
+		manager->LocoOrientation(ControlTypeInternal, this, newLocoOrientation);
+		logger->Info(Languages::TextHeadingToVia, newTrack->GetMyName(), usedRoute->GetName());
+
 		trackFirst = newTrack;
 		routeFirst = usedRoute;
 		feedbackIdFirst = FeedbackNone;
@@ -386,16 +406,6 @@ namespace DataModel
 		feedbackIdStop = routeFirst->GetFeedbackIdStop();
 		feedbackIdOver = routeFirst->GetFeedbackIdOver();
 		wait = routeFirst->GetWaitAfterRelease();
-		bool turnLoco = (trackFrom->GetLocoOrientation() != routeFirst->GetFromOrientation());
-		Orientation newLocoOrientation = static_cast<Orientation>(orientation != turnLoco);
-		if (turnLoco)
-		{
-			trackFrom->SetLocoOrientation(routeFirst->GetFromOrientation());
-			manager->TrackBasePublishState(trackFrom);
-		}
-		manager->LocoOrientation(ControlTypeInternal, this, newLocoOrientation);
-		newTrack->SetLocoOrientation(static_cast<Orientation>(routeFirst->GetToOrientation()));
-		logger->Info(Languages::TextHeadingToVia, newTrack->GetMyName(), routeFirst->GetName());
 
 		// start loco
 		manager->TrackBasePublishState(newTrack);
@@ -434,6 +444,13 @@ namespace DataModel
 			return;
 		}
 
+		bool isOrientationSet = newTrack->SetLocoOrientation(static_cast<Orientation>(usedRoute->GetToOrientation()));
+		if (isOrientationSet == false)
+		{
+			return;
+		}
+		logger->Info(Languages::TextHeadingToViaVia, newTrack->GetMyName(), routeFirst->GetName(), usedRoute->GetName());
+
 		trackSecond = newTrack;
 		routeSecond = usedRoute;
 		feedbackIdFirst = feedbackIdStop;
@@ -460,8 +477,6 @@ namespace DataModel
 		}
 
 		wait = routeSecond->GetWaitAfterRelease();
-		newTrack->SetLocoOrientation(static_cast<Orientation>(routeSecond->GetToOrientation()));
-		logger->Info(Languages::TextHeadingToViaVia, newTrack->GetMyName(), routeFirst->GetName(), routeSecond->GetName());
 
 		// start loco
 		manager->TrackBasePublishState(newTrack);
@@ -502,6 +517,7 @@ namespace DataModel
 		for (auto route : validRoutes)
 		{
 			logger->Debug(Languages::TextExecutingRoute, route->GetName());
+
 			if (route->Reserve(logger, objectID) == false)
 			{
 				continue;
@@ -513,14 +529,34 @@ namespace DataModel
 				continue;
 			}
 
-			if (route->Execute(logger, objectID) == false)
+			const ObjectIdentifier& identifier = route->GetToTrack();
+			TrackBase* newTrack = manager->GetTrackBase(identifier);
+
+			if (newTrack == nullptr)
 			{
 				route->Release(logger, objectID);
 				continue;
 			}
 
+			bool canSetOrientation = newTrack->CanSetLocoOrientation(route->GetToOrientation(), GetID());
+			if (canSetOrientation == false)
+			{
+				route->Release(logger, objectID);
+				newTrack->BaseRelease(logger, objectID);
+				continue;
+			}
+
 			if (!allowLocoTurn && track->GetLocoOrientation() != route->GetFromOrientation())
 			{
+				route->Release(logger, objectID);
+				newTrack->BaseRelease(logger, objectID);
+				continue;
+			}
+
+			if (route->Execute(logger, objectID) == false)
+			{
+				route->Release(logger, objectID);
+				newTrack->BaseRelease(logger, objectID);
 				continue;
 			}
 
