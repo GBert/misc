@@ -54,7 +54,7 @@ namespace DataModel
 			static const LayoutItemSize Height1 = 1;
 			static const LayoutItemSize Height2 = 2;
 
-			LayoutItem(const ObjectID objectID)
+			inline LayoutItem(const ObjectID objectID)
 			:	Object(objectID),
 				visible(VisibleYes),
 				posX(0),
@@ -66,7 +66,10 @@ namespace DataModel
 			{
 			}
 
-			LayoutItem() : LayoutItem(0) {};
+			inline LayoutItem()
+			:	LayoutItem(0)
+			{
+			}
 
 			virtual ~LayoutItem() {}
 
@@ -85,24 +88,93 @@ namespace DataModel
 			virtual bool Deserialize(const std::string& serialized) override;
 			virtual std::string GetLayoutType() const = 0;
 
-			void SetVisible(const Visible visible) { this->visible = visible; }
-			Visible GetVisible() const { return visible; }
-			void SetPosX(const LayoutPosition x) { this->posX = x; }
-			LayoutPosition GetPosX() const { return posX; }
-			void SetPosY(const LayoutPosition y) { this->posY = y; }
-			LayoutPosition GetPosY() const { return posY; }
-			void SetPosZ(const LayoutPosition z) { this->posZ = z; }
-			LayoutPosition GetPosZ() const { return posZ; }
-			bool HasPosition(const LayoutPosition x, const LayoutPosition y, const LayoutPosition z) const { return posX == x && posY == y && posZ == z; }
-			bool IsVisibleOnLayer(const LayoutPosition z) const { return posZ == z && visible == VisibleYes; }
-			void SetWidth(const LayoutItemSize width) { this->width = width; }
-			LayoutItemSize GetWidth() const { return width; }
-			void SetHeight(const LayoutItemSize height) { this->height = height; }
-			LayoutItemSize GetHeight() const { return height; }
-			void SetRotation(const LayoutRotation rotation) { this->rotation = rotation; }
-			LayoutRotation GetRotation() const { return rotation; }
+			inline void SetVisible(const Visible visible)
+			{
+				this->visible = visible;
+			}
 
-			virtual std::string Rotation() const { return Rotation(rotation); }
+			inline Visible GetVisible() const
+			{
+				return visible;
+			}
+
+			inline void SetPosX(const LayoutPosition x)
+			{
+				this->posX = x;
+			}
+
+			inline LayoutPosition GetPosX() const
+			{
+				return posX;
+			}
+
+			inline void SetPosY(const LayoutPosition y)
+			{
+				this->posY = y;
+			}
+
+			inline LayoutPosition GetPosY() const
+			{
+				return posY;
+			}
+
+			inline void SetPosZ(const LayoutPosition z)
+			{
+				this->posZ = z;
+			}
+
+			inline LayoutPosition GetPosZ() const
+			{
+				return posZ;
+			}
+
+			inline bool HasPosition(const LayoutPosition x,
+				const LayoutPosition y,
+				const LayoutPosition z) const
+			{
+				return posX == x && posY == y && posZ == z;
+			}
+
+			inline bool IsVisibleOnLayer(const LayoutPosition z) const
+			{
+				return posZ == z && visible == VisibleYes;
+			}
+
+			inline void SetWidth(const LayoutItemSize width)
+			{
+				this->width = width;
+			}
+
+			inline LayoutItemSize GetWidth() const
+			{
+				return width;
+			}
+
+			inline void SetHeight(const LayoutItemSize height)
+			{
+				this->height = height;
+			}
+
+			inline LayoutItemSize GetHeight() const
+			{
+				return height;
+			}
+
+			inline void SetRotation(const LayoutRotation rotation)
+			{
+				this->rotation = rotation;
+			}
+
+			inline LayoutRotation GetRotation() const
+			{
+				return rotation;
+			}
+
+			virtual std::string Rotation() const
+			{
+				return Rotation(rotation);
+			}
+
 			static std::string Rotation(LayoutRotation rotation);
 
 		protected:
