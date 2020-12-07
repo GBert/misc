@@ -1130,6 +1130,26 @@ function loadRelationObject(type, priority)
 	requestUpdateItem(elementName + "_object", url);
 }
 
+function loadRelationSwitchStates(name)
+{
+	var elementName = name + '_state';
+	var object = document.getElementById(elementName);
+	if (!object)
+	{
+		return;
+	}
+	var mySwitch = document.getElementById('s_' + name + '_id');
+	if (!mySwitch)
+	{
+		return;
+	}
+	var switchId = mySwitch.value;
+	var url = '/?cmd=switchstates';
+	url += '&switch=' + switchId;
+	url += '&name=' + name;
+	requestUpdateItem(elementName, url);
+}
+
 function loadLayoutContext(event)
 {
 	if (event.shiftKey)

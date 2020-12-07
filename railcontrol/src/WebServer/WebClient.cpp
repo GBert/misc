@@ -296,6 +296,10 @@ namespace WebServer
 			{
 				HandleSwitchState(arguments);
 			}
+			else if (arguments["cmd"].compare("switchstates") == 0)
+			{
+				HandleSwitchStates(arguments);
+			}
 			else if (arguments["cmd"].compare("switchlist") == 0)
 			{
 				HandleSwitchList();
@@ -905,15 +909,15 @@ namespace WebServer
 			return;
 		}
 
-		string name = layer->GetName();
-
-		if (!manager.LayerDelete(layerID))
+		string result;
+		if (!manager.LayerDelete(layerID, result))
 		{
-			ReplyResponse(ResponseError, Languages::TextLayerDoesNotExist);
+			ReplyResponse(ResponseError, result);
 			return;
 		}
 
-		ReplyResponse(ResponseInfo, Languages::TextLayerDeleted);
+		string name = layer->GetName();
+		ReplyResponse(ResponseInfo, Languages::TextLayerDeleted, name);
 	}
 
 	void WebClient::HandleLayerList()
@@ -1293,7 +1297,35 @@ namespace WebServer
 		return content;
 	}
 
-	HtmlTag WebClient::HtmlTagRelationObject(const string& name, const ObjectType objectType, const ObjectID objectId, const DataModel::Relation::Data data)
+	HtmlTag WebClient::HtmlTagRelationSwitchState(const string& name,
+		const SwitchID switchId,
+		const DataModel::Relation::Data data)
+	{
+		map<DataModel::AccessoryState,Languages::TextSelector> stateOptions;
+		DataModel::AccessoryType selectedSwitchType = SwitchTypeLeft;
+		Switch* mySwitch = manager.GetSwitch(switchId);
+		if (mySwitch != nullptr)
+		{
+			selectedSwitchType = mySwitch->GetType();
+		}
+
+		stateOptions[DataModel::SwitchStateStraight] = Languages::TextStraight;
+		if (selectedSwitchType == DataModel::SwitchTypeThreeWay)
+		{
+			stateOptions[DataModel::SwitchStateTurnout] = Languages::TextLeft;
+			stateOptions[DataModel::SwitchStateThird] = Languages::TextRight;
+		}
+		else
+		{
+			stateOptions[DataModel::SwitchStateTurnout] = Languages::TextTurnout;
+		}
+		return HtmlTagSelect(name + "_state", stateOptions, static_cast<DataModel::AccessoryState>(data)).AddClass("select_relation_state");
+	}
+
+	HtmlTag WebClient::HtmlTagRelationObject(const string& name,
+		const ObjectType objectType,
+		const ObjectID objectId,
+		const DataModel::Relation::Data data)
 	{
 		HtmlTag content;
 		switch (objectType)
@@ -1306,12 +1338,21 @@ namespace WebServer
 				{
 					switchOptions[mySwitch.first] = mySwitch.second->GetID();
 				}
-				content.AddChildTag(HtmlTagSelect(name + "_id", switchOptions, objectId).AddClass("select_relation_id"));
+				SwitchID switchId = objectId;
+				if (switchId == SwitchNone && switchOptions.size() > 0)
+				{
+					switchId = switchOptions.begin()->second;
+				}
+				HtmlTagSelect selectSwitch(name + "_id", switchOptions, switchId);
+				selectSwitch.AddClass("select_relation_switch");
+				selectSwitch.AddAttribute("onchange", "loadRelationSwitchStates('" + name + "', '" + to_string(switchId) + "');return false;");
+				content.AddChildTag(selectSwitch);
 
-				map<DataModel::AccessoryState,Languages::TextSelector> stateOptions;
-				stateOptions[DataModel::SwitchStateStraight] = Languages::TextStraight;
-				stateOptions[DataModel::SwitchStateTurnout] = Languages::TextTurnout;
-				content.AddChildTag(HtmlTagSelect(name + "_state", stateOptions, static_cast<DataModel::AccessoryState>(data)).AddClass("select_relation_state"));
+				HtmlTag contentState("div");
+				contentState.AddId(name + "_state");
+				contentState.AddClass("inline-block");
+				contentState.AddChildTag(HtmlTagRelationSwitchState(name, switchId, data));
+				content.AddChildTag(contentState);
 				return content;
 			}
 
@@ -1666,6 +1707,13 @@ namespace WebServer
 		const string name = "relation_" + type + "_" + priority;
 		const ObjectType objectType = static_cast<ObjectType>(Utils::Utils::GetIntegerMapEntry(arguments, "objecttype"));
 		ReplyHtmlWithHeader(HtmlTagRelationObject(name, objectType));
+	}
+
+	void WebClient::HandleSwitchStates(const map<string, string>& arguments)
+	{
+		const string name = Utils::Utils::GetStringMapEntry(arguments, "name");
+		const SwitchID switchId = static_cast<SwitchID>(Utils::Utils::GetIntegerMapEntry(arguments, "switch"));
+		ReplyHtmlWithHeader(HtmlTagRelationSwitchState(name, switchId));
 	}
 
 	map<string,ObjectID> WebClient::GetLocoOptions(const LocoID locoID) const

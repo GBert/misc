@@ -2208,10 +2208,73 @@ bool Manager::LayerSave(const LayerID layerID, const std::string&name, std::stri
 	return true;
 }
 
-bool Manager::LayerDelete(const LayerID layerID)
+bool Manager::LayerHasElements(const Layer* layer,
+	string& result)
 {
-	if (layerID == LayerUndeletable || layerID == LayerNone)
+	LayerID layerId = layer->GetID();
+	for (auto track : tracks)
 	{
+		if (track.second->IsVisibleOnLayer(layerId))
+		{
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextLayerIsUsedByTrack), layer->GetName(), track.second->GetName());
+			return true;
+		}
+	}
+	for (auto mySwitch : switches)
+	{
+		if (mySwitch.second->IsVisibleOnLayer(layerId))
+		{
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextLayerIsUsedBySwitch), layer->GetName(), mySwitch.second->GetName());
+			return true;
+		}
+	}
+	for (auto signal : signals)
+	{
+		if (signal.second->IsVisibleOnLayer(layerId))
+		{
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextLayerIsUsedBySignal), layer->GetName(), signal.second->GetName());
+			return true;
+		}
+	}
+	for (auto accessory : accessories)
+	{
+		if (accessory.second->IsVisibleOnLayer(layerId))
+		{
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextLayerIsUsedByAccessory), layer->GetName(), accessory.second->GetName());
+			return true;
+		}
+	}
+	for (auto route : routes)
+	{
+		if (route.second->IsVisibleOnLayer(layerId))
+		{
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextLayerIsUsedByRoute), layer->GetName(), route.second->GetName());
+			return true;
+		}
+	}
+	for (auto feedback : feedbacks)
+	{
+		if (feedback.second->IsVisibleOnLayer(layerId))
+		{
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextLayerIsUsedByFeedback), layer->GetName(), feedback.second->GetName());
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Manager::LayerDelete(const LayerID layerID,
+	string& result)
+{
+	if (layerID == LayerUndeletable)
+	{
+		result = Languages::GetText(Languages::TextLayer1IsUndeletable);
+		return false;
+	}
+
+	if (layerID == LayerNone)
+	{
+		result = Languages::GetText(Languages::TextLayerDoesNotExist);
 		return false;
 	}
 
@@ -2220,10 +2283,16 @@ bool Manager::LayerDelete(const LayerID layerID)
 		std::lock_guard<std::mutex> guard(layerMutex);
 		if (layers.count(layerID) != 1)
 		{
+			result = Languages::GetText(Languages::TextLayerDoesNotExist);
 			return false;
 		}
 
 		layer = layers.at(layerID);
+		if (LayerHasElements(layer, result))
+		{
+			return false;
+		}
+
 		layers.erase(layerID);
 	}
 

@@ -176,10 +176,34 @@ namespace WebServer
 				const DataModel::LayoutItem::Visible visible) const;
 
 			HtmlTag HtmlTagRotation(const DataModel::LayoutItem::LayoutRotation rotation) const;
-			HtmlTag HtmlTagSelectTrack(const std::string& name, const Languages::TextSelector label, const DataModel::ObjectIdentifier& identifier, const Orientation orientation, const std::string& onchange = "") const;
-			HtmlTag HtmlTagSelectFeedbacksOfTrack(const DataModel::ObjectIdentifier& identifier, const FeedbackID feedbackIdReduced, const FeedbackID feedbackIdCreep, const FeedbackID feedbackIdStop, const FeedbackID feedbackIdOver) const;
-			HtmlTag HtmlTagRelation(const std::string& type, const std::string& priority, const ObjectType objectType = ObjectTypeSwitch, const ObjectID objectId = ObjectNone, const DataModel::Relation::Data = DataModel::Relation::DefaultData);
-			HtmlTag HtmlTagRelationObject(const std::string& name, const ObjectType objectType, const ObjectID objectId = ObjectNone, const DataModel::Relation::Data = DataModel::Relation::DefaultData);
+
+			HtmlTag HtmlTagSelectTrack(const std::string& name,
+				const Languages::TextSelector label,
+				const DataModel::ObjectIdentifier& identifier,
+				const Orientation orientation,
+				const std::string& onchange = "") const;
+
+			HtmlTag HtmlTagSelectFeedbacksOfTrack(const DataModel::ObjectIdentifier& identifier,
+				const FeedbackID feedbackIdReduced,
+				const FeedbackID feedbackIdCreep,
+				const FeedbackID feedbackIdStop,
+				const FeedbackID feedbackIdOver) const;
+
+			HtmlTag HtmlTagRelation(const std::string& type,
+				const std::string& priority,
+				const ObjectType objectType = ObjectTypeSwitch,
+				const ObjectID objectId = ObjectNone,
+				const DataModel::Relation::Data = DataModel::Relation::DefaultData);
+
+			HtmlTag HtmlTagRelationObject(const std::string& name,
+				const ObjectType objectType,
+				const ObjectID objectId = ObjectNone,
+				const DataModel::Relation::Data = DataModel::Relation::DefaultData);
+
+			HtmlTag HtmlTagRelationSwitchState(const std::string& name,
+				const SwitchID switchId,
+				const DataModel::Relation::Data data = DataModel::SwitchStateStraight);
+
 			static HtmlTag HtmlTagNrOfTracksToReserve(const DataModel::Loco::NrOfTracksToReserve nrOfTracksToReserve);
 			static HtmlTag HtmlTagLogLevel();
 			static HtmlTag HtmlTagLanguage();
@@ -242,6 +266,7 @@ namespace WebServer
 			void HandleSwitchEdit(const std::map<std::string,std::string>& arguments);
 			void HandleSwitchSave(const std::map<std::string,std::string>& arguments);
 			void HandleSwitchState(const std::map<std::string,std::string>& arguments);
+			void HandleSwitchStates(const std::map<std::string,std::string>& arguments);
 			void HandleSwitchList();
 			void HandleSwitchAskDelete(const std::map<std::string,std::string>& arguments);
 			void HandleSwitchDelete(const std::map<std::string,std::string>& arguments);

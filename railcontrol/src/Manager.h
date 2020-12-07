@@ -298,7 +298,9 @@ class Manager
 		const std::map<std::string,LayerID> LayerListByName() const;
 		const std::map<std::string,LayerID> LayerListByNameWithFeedback() const;
 		bool LayerSave(const LayerID layerID, const std::string&name, std::string& result);
-		bool LayerDelete(const LayerID layerID);
+
+		bool LayerDelete(const LayerID layerID,
+			std::string& result);
 
 		// signal
 		bool SignalState(const ControlType controlType, const SignalID signalID, const DataModel::AccessoryState state, const bool force = false);
@@ -517,6 +519,9 @@ class Manager
 		const std::map<std::string,Protocol> ProtocolsOfControl(const AddressType type, const ControlID) const;
 
 		bool LocoReleaseInternal(DataModel::Loco* loco);
+
+		bool LayerHasElements(const DataModel::Layer* layer,
+			std::string& result);
 
 		template<class Key, class Value>
 		void DeleteAllMapEntries(std::map<Key,Value*>& m, std::mutex& x)
