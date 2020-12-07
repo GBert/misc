@@ -1,11 +1,13 @@
 const int revisionnr = 
-1165
+1167
 ;
 const char* commithash = 
-"baede0f5d3b29b846d26e9385935988d7152d48f";
+"e891cf477f68cb6e6b818a85bdebb36721b55537";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1167 2020-12-07 10:51:01 +0100 locdialog: added missing action states\n" \
+"1166 2020-12-07 09:05:41 +0100 wiopi: servo delay and reporting added\n" \
 "1165 2020-12-06 18:21:52 +0100 cleanup unused decoder file format\n" \
 "1164 2020-12-06 15:54:42 +0100 wiopi: IO events\n" \
 "1163 2020-12-06 15:03:50 +0100 wiopi: alive thread added\n" \
