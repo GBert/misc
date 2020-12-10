@@ -1,11 +1,22 @@
 const int revisionnr = 
-1167
+1178
 ;
 const char* commithash = 
-"e891cf477f68cb6e6b818a85bdebb36721b55537";
+"8c41843cbb4e8b050c9a3fdb8edb484e9ab2a213";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1178 2020-12-10 18:52:59 +0100 cbus: do SoD on startup also with address zero\n" \
+"1177 2020-12-10 12:53:42 +0100 wiopi: display analog clock\n" \
+"1176 2020-12-10 10:20:23 +0100 wiopi: display AMP support added\n" \
+"1175 2020-12-10 07:45:25 +0100 wio: typo fix\n" \
+"1174 2020-12-10 07:43:49 +0100 wio: text must also be escaped in HEXA\n" \
+"1173 2020-12-09 11:55:29 +0100 rocguiinidlg: label AUI fix\n" \
+"1172 2020-12-09 11:04:51 +0100 rocview: MDI removed\n" \
+"1171 2020-12-09 10:36:20 +0100 wiopi: ID12 added\n" \
+"1170 2020-12-08 19:30:13 +0100 guiframe: check AUI before MDI\n" \
+"1169 2020-12-08 15:03:02 +0100 wiopi: display refresh\n" \
+"1168 2020-12-08 12:17:52 +0100 wiopi: display (WIP)\n" \
 "1167 2020-12-07 10:51:01 +0100 locdialog: added missing action states\n" \
 "1166 2020-12-07 09:05:41 +0100 wiopi: servo delay and reporting added\n" \
 "1165 2020-12-06 18:21:52 +0100 cleanup unused decoder file format\n" \
