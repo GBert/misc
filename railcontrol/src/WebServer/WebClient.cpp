@@ -1344,7 +1344,7 @@ namespace WebServer
 					switchId = switchOptions.begin()->second;
 				}
 				HtmlTagSelect selectSwitch(name + "_id", switchOptions, switchId);
-				selectSwitch.AddClass("select_relation_switch");
+				selectSwitch.AddClass("select_relation_id");
 				selectSwitch.AddAttribute("onchange", "loadRelationSwitchStates('" + name + "', '" + to_string(switchId) + "');return false;");
 				content.AddChildTag(selectSwitch);
 
@@ -2023,7 +2023,10 @@ namespace WebServer
 			vector<LocoID> slaveIds = InterpretSlaveData("slave", arguments);
 			for (auto slaveId : slaveIds)
 			{
-				slaves.push_back(new Relation(&manager, ObjectTypeLoco, locoId, ObjectTypeLoco, slaveId, Relation::TypeLocoSlave, 0, 0));
+				slaves.push_back(new Relation(&manager,
+					ObjectIdentifier(ObjectTypeLoco, locoId),
+					ObjectIdentifier(ObjectTypeLoco, slaveId),
+					Relation::TypeLocoSlave));
 			}
 		}
 
@@ -2454,14 +2457,14 @@ namespace WebServer
 			return;
 		}
 
-		string name = accessory->GetName();
-
-		if (!manager.AccessoryDelete(accessoryID))
+		string result;
+		if (!manager.AccessoryDelete(accessoryID, result))
 		{
-			ReplyResponse(ResponseError, Languages::TextAccessoryDoesNotExist);
+			ReplyResponse(ResponseError, result);
 			return;
 		}
 
+		string name = accessory->GetName();
 		ReplyResponse(ResponseInfo, Languages::TextAccessoryDeleted, name);
 	}
 
@@ -2654,9 +2657,10 @@ namespace WebServer
 			return;
 		}
 
-		if (!manager.SwitchDelete(switchID))
+		string result;
+		if (!manager.SwitchDelete(switchID, result))
 		{
-			ReplyResponse(ResponseError, Languages::TextSwitchDoesNotExist);
+			ReplyResponse(ResponseError, result);
 			return;
 		}
 
@@ -2917,7 +2921,12 @@ namespace WebServer
 				continue;
 			}
 			unsigned char state = Utils::Utils::GetIntegerMapEntry(arguments, "relation_atlock_" + priorityString + "_state");
-			relationsAtLock.push_back(new Relation(&manager, ObjectTypeRoute, routeID, objectType, objectId, Relation::TypeRouteAtLock, priorityAtLock, state));
+			relationsAtLock.push_back(new Relation(&manager,
+				ObjectIdentifier(ObjectTypeRoute, routeID),
+				ObjectIdentifier(objectType, objectId),
+				Relation::TypeRouteAtLock,
+				priorityAtLock,
+				state));
 			++priorityAtLock;
 		}
 
@@ -2941,7 +2950,12 @@ namespace WebServer
 				continue;
 			}
 			unsigned char state = Utils::Utils::GetIntegerMapEntry(arguments, "relation_atunlock_" + priorityString + "_state");
-			relationsAtUnlock.push_back(new Relation(&manager, ObjectTypeRoute, routeID, objectType, objectId, Relation::TypeRouteAtUnlock, priorityAtUnlock, state));
+			relationsAtUnlock.push_back(new Relation(&manager,
+				ObjectIdentifier(ObjectTypeRoute, routeID),
+				ObjectIdentifier(objectType, objectId),
+				Relation::TypeRouteAtUnlock,
+				priorityAtUnlock,
+				state));
 			++priorityAtUnlock;
 		}
 

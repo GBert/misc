@@ -53,20 +53,19 @@ namespace DataModel
 			static const Data DefaultData = 0;
 
 			inline Relation(Manager* manager,
-				const ObjectType objectType1,
-				const ObjectID objectID1,
-				const ObjectType objectType2,
-				const ObjectID objectID2,
+				const ObjectIdentifier& object1,
+				const ObjectIdentifier& object2,
 				const Type type,
-				const Priority priority,
-				const unsigned char data)
+				const Priority priority = 0,
+				const unsigned char data = 0)
 			:	manager(manager),
-			 	object1(objectType1, objectID1),
-			 	object2(objectType2, objectID2),
+			 	object1(object1),
+			 	object2(object2),
 				type(type),
 				priority(priority),
 				data(data)
-			{}
+			{
+			}
 
 			inline Relation(Manager* manager,
 				const std::string& serialized)
@@ -116,6 +115,11 @@ namespace DataModel
 			inline Data GetData() const
 			{
 				return data;
+			}
+
+			inline bool CompareObject2(const ObjectIdentifier& identifier) const
+			{
+				return object2 == identifier;
 			}
 
 			bool Reserve(Logger::Logger* logger, const LocoID locoID) override;

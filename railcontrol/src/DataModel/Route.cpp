@@ -405,5 +405,24 @@ namespace DataModel
 		}
 		ReleaseInternal(logger, locoID);
 	}
+
+	bool Route::ObjectIsPartOfRoute(const ObjectIdentifier& identifier) const
+	{
+		for (auto relation : relationsAtLock)
+		{
+			if (relation->CompareObject2(identifier))
+			{
+				return true;
+			}
+		}
+		for (auto relation : relationsAtUnlock)
+		{
+			if (relation->CompareObject2(identifier))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 } // namespace DataModel
 

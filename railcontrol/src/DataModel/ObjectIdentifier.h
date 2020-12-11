@@ -34,7 +34,8 @@ namespace DataModel
 			inline ObjectIdentifier()
 			:	objectType(ObjectTypeNone),
 				objectID(ObjectNone)
-			{}
+			{
+			}
 
 			inline ObjectIdentifier(const std::string& text)
 			{
@@ -64,7 +65,8 @@ namespace DataModel
 			inline ObjectIdentifier(const ObjectType objectType, const ObjectID objectID)
 			:	objectType(objectType),
 				objectID(objectID)
-			{}
+			{
+			}
 
 			inline std::string Serialize() const
 			{
@@ -90,8 +92,18 @@ namespace DataModel
 			}
 
 			inline ObjectIdentifier& operator=(const ObjectIdentifier& other) = default;
-			inline ObjectIdentifier& operator=(const ObjectType& objectType) { this->objectType = objectType; return *this; }
-			inline ObjectIdentifier& operator=(const ObjectID& objectID) { this->objectID = objectID; return *this; }
+
+			inline ObjectIdentifier& operator=(const ObjectType& objectType)
+			{
+				this->objectType = objectType;
+				return *this;
+			}
+
+			inline ObjectIdentifier& operator=(const ObjectID& objectID)
+			{
+				this->objectID = objectID; return *this;
+			}
+
 			inline ObjectIdentifier& operator=(const std::string& text)
 			{
 				if (text.substr(0, 5).compare("track") == 0)
@@ -111,15 +123,41 @@ namespace DataModel
 				return *this;
 			}
 
-			inline bool operator==(const ObjectIdentifier& other) const { return this->objectType == other.objectType && this->objectID == other.objectID; }
-			inline bool operator!=(const ObjectIdentifier& other) const { return !(*this == other); }
+			inline bool operator==(const ObjectIdentifier& other) const
+			{
+				return this->objectType == other.objectType && this->objectID == other.objectID;
+			}
 
-			inline operator std::string() const { return GetObjectTypeAsString() + std::to_string(objectID); }
+			inline bool operator!=(const ObjectIdentifier& other) const
+				{
+				return !(*this == other);
+			}
 
-			inline void Clear() { objectType = ObjectTypeNone; objectID = ObjectNone; }
-			inline bool IsSet() const { return objectType != ObjectTypeNone; }
-			inline ObjectType GetObjectType() const { return objectType; }
-			inline ObjectID GetObjectID() const { return objectID; }
+			inline operator std::string() const
+			{
+				return GetObjectTypeAsString() + std::to_string(objectID);
+			}
+
+			inline void Clear()
+			{
+				objectType = ObjectTypeNone;
+				objectID = ObjectNone;
+			}
+
+			inline bool IsSet() const
+			{
+				return objectType != ObjectTypeNone;
+			}
+
+			inline ObjectType GetObjectType() const
+			{
+				return objectType;
+			}
+
+			inline ObjectID GetObjectID() const
+			{
+				return objectID;
+			}
 
 			inline std::string GetObjectTypeAsString() const
 			{

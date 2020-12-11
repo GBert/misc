@@ -765,6 +765,12 @@ bool Manager::LocoDelete(const LocoID locoID, string& result)
 		}
 
 		loco = locos.at(locoID);
+		if (loco == nullptr)
+		{
+			result = Languages::GetText(Languages::TextLocoDoesNotExist);
+			return false;
+		}
+
 		if (loco->IsInUse())
 		{
 			result = Logger::Logger::Format(Languages::GetText(Languages::TextLocoIsInUse), loco->GetName());
@@ -1102,17 +1108,31 @@ const map<string,DataModel::Accessory*> Manager::AccessoryListByName() const
 	return out;
 }
 
-bool Manager::AccessoryDelete(const AccessoryID accessoryID)
+bool Manager::AccessoryDelete(const AccessoryID accessoryID,
+	string& result)
 {
 	Accessory* accessory = nullptr;
 	{
 		std::lock_guard<std::mutex> guard(accessoryMutex);
 		if (accessoryID == AccessoryNone || accessories.count(accessoryID) != 1)
 		{
+			result = Languages::GetText(Languages::TextAccessoryDoesNotExist);
 			return false;
 		}
 
 		accessory = accessories.at(accessoryID);
+		if (accessory == nullptr)
+		{
+			result = Languages::GetText(Languages::TextAccessoryDoesNotExist);
+			return false;
+		}
+
+		ObjectIdentifier accessoryIdentifier(ObjectTypeAccessory, accessoryID);
+		if (ObjectIsPartOfRoute(accessoryIdentifier, accessory, result))
+		{
+			return false;
+		}
+
 		accessories.erase(accessoryID);
 	}
 
@@ -1629,14 +1649,20 @@ bool Manager::TrackDelete(const TrackID trackID,
 		Route* route = track->GetFirstRoute();
 		if (route != nullptr)
 		{
-			result = Logger::Logger::Format(Languages::GetText(Languages::TextTrackHasAssociatedRoute), track->GetName(), route->GetName());
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextTrackIsUsedByRoute), track->GetName(), route->GetName());
 			return false;
 		}
 
-		route = GetFirstRouteToTrackBase(ObjectIdentifier(ObjectTypeTrack, trackID));
+		ObjectIdentifier trackIdentifier(ObjectTypeTrack, trackID);
+		route = GetFirstRouteToTrackBase(trackIdentifier);
 		if (route != nullptr)
 		{
-			result = Logger::Logger::Format(Languages::GetText(Languages::TextTrackHasAssociatedRoute), track->GetName(), route->GetName());
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextTrackIsUsedByRoute), track->GetName(), route->GetName());
+			return false;
+		}
+
+		if (ObjectIsPartOfRoute(trackIdentifier, track, result))
+		{
 			return false;
 		}
 
@@ -1819,17 +1845,30 @@ bool Manager::SwitchSave(const SwitchID switchID,
 	return true;
 }
 
-bool Manager::SwitchDelete(const SwitchID switchID)
+bool Manager::SwitchDelete(const SwitchID switchID,
+	string& result)
 {
 	Switch* mySwitch = nullptr;
 	{
 		std::lock_guard<std::mutex> guard(switchMutex);
 		if (switchID == SwitchNone || switches.count(switchID) != 1)
 		{
+			result = Languages::GetText(Languages::TextSwitchDoesNotExist);
 			return false;
 		}
 
 		mySwitch = switches.at(switchID);
+		if (mySwitch == nullptr)
+		{
+			result = Languages::GetText(Languages::TextSwitchDoesNotExist);
+			return false;
+		}
+
+		ObjectIdentifier switchIdentifier(ObjectTypeSwitch, switchID);
+		if (ObjectIsPartOfRoute(switchIdentifier, mySwitch, result))
+		{
+			return false;
+		}
 		switches.erase(switchID);
 	}
 
@@ -2096,21 +2135,39 @@ bool Manager::RouteDelete(const RouteID routeID,
 {
 	Route* route = nullptr;
 	{
-		std::lock_guard<std::mutex> guard(routeMutex);
-		if (routeID == RouteNone || routes.count(routeID) != 1)
 		{
-			result = Languages::GetText(Languages::TextLocoDoesNotExist);
+			std::lock_guard<std::mutex> guard(routeMutex);
+			if (routeID == RouteNone || routes.count(routeID) != 1)
+			{
+				result = Languages::GetText(Languages::TextRouteDoesNotExist);
+				return false;
+			}
+
+			route = routes.at(routeID);
+			if (route == nullptr)
+			{
+				result = Languages::GetText(Languages::TextRouteDoesNotExist);
+				return false;
+			}
+
+			if (route->IsInUse())
+			{
+				result = Logger::Logger::Format(Languages::GetText(Languages::TextRouteIsInUse), route->GetName());
+				return false;
+			}
+		}
+
+		// this must not be in the lock_guard, it would be a deadlock.
+		ObjectIdentifier routeIdentifier(ObjectTypeRoute, routeID);
+		if (ObjectIsPartOfRoute(routeIdentifier, route, result))
+		{
 			return false;
 		}
 
-		route = routes.at(routeID);
-		if (route->IsInUse())
 		{
-			result = Logger::Logger::Format(Languages::GetText(Languages::TextRouteIsInUse), route->GetName());
-			return false;
+			std::lock_guard<std::mutex> guard(routeMutex);
+			routes.erase(routeID);
 		}
-
-		routes.erase(routeID);
 	}
 
 	if (storage)
@@ -2288,6 +2345,12 @@ bool Manager::LayerDelete(const LayerID layerID,
 		}
 
 		layer = layers.at(layerID);
+		if (layer == nullptr)
+		{
+			result = Languages::GetText(Languages::TextLayerDoesNotExist);
+			return false;
+		}
+
 		if (LayerHasElements(layer, result))
 		{
 			return false;
@@ -2508,21 +2571,27 @@ bool Manager::SignalDelete(const SignalID signalID,
 		Route* route = signal->GetFirstRoute();
 		if (route != nullptr)
 		{
-			result = Logger::Logger::Format(Languages::GetText(Languages::TextSignalHasAssociatedRoute), signal->GetName(), route->GetName());
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextSignalIsUsedByRoute), signal->GetName(), route->GetName());
 			return false;
 		}
 
-		route = GetFirstRouteToTrackBase(ObjectIdentifier(ObjectTypeSignal, signalID));
+		ObjectIdentifier signalIdentifier(ObjectTypeSignal, signalID);
+		route = GetFirstRouteToTrackBase(signalIdentifier);
 		if (route != nullptr)
 		{
-			result = Logger::Logger::Format(Languages::GetText(Languages::TextTrackHasAssociatedRoute), signal->GetName(), route->GetName());
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextSignalIsUsedByRoute), signal->GetName(), route->GetName());
+			return false;
+		}
+
+		if (ObjectIsPartOfRoute(signalIdentifier, signal, result))
+		{
 			return false;
 		}
 
 		FeedbackID feedbackId = signal->GetFirstFeedbackId();
 		if (feedbackId != FeedbackNone)
 		{
-			result = Logger::Logger::Format(Languages::GetText(Languages::TextSignalHasAssociatedFeedback), signal->GetName(), GetFeedbackName(feedbackId));
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextSignalIsUsedByRoute), signal->GetName(), GetFeedbackName(feedbackId));
 			return false;
 		}
 
@@ -3351,4 +3420,49 @@ Hardware::HardwareParams* Manager::CreateAndAddControl()
 	}
 	hardwareParams[newObjectID] = newParams;
 	return newParams;
+}
+
+bool Manager::ObjectIsPartOfRoute(const ObjectIdentifier& identifier,
+	const Object* object,
+	string& result)
+{
+	std::lock_guard<std::mutex> Guard(routeMutex);
+	for (auto route : routes)
+	{
+		if (!route.second->ObjectIsPartOfRoute(identifier))
+		{
+			continue;
+		}
+
+		Languages::TextSelector selector;
+		switch (identifier.GetObjectType())
+		{
+			case ObjectTypeTrack:
+				selector = Languages::TextTrackIsUsedByRoute;
+				break;
+
+			case ObjectTypeAccessory:
+				selector = Languages::TextAccessoryIsUsedByRoute;
+				break;
+
+			case ObjectTypeSwitch:
+				selector = Languages::TextSwitchIsUsedByRoute;
+				break;
+
+			case ObjectTypeRoute:
+				selector = Languages::TextRouteIsUsedByRoute;
+				break;
+
+			case ObjectTypeSignal:
+				selector = Languages::TextSignalIsUsedByRoute;
+				break;
+
+			default:
+				selector = Languages::TextObjectIsUsedByRoute;
+				break;
+		}
+		result = Logger::Logger::Format(Languages::GetText(selector), object->GetName(), route.second->GetName());
+		return true;
+	}
+	return false;
 }

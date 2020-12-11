@@ -316,6 +316,8 @@ namespace DataModel
 				return s1->GetLastUsed() < s2->GetLastUsed();
 			}
 
+			bool ObjectIsPartOfRoute(const ObjectIdentifier& identifier) const;
+
 		private:
 			bool ReleaseInternal(Logger::Logger* logger, const LocoID locoID);
 			void ReleaseInternalWithToTrack(Logger::Logger* logger, const LocoID locoID);

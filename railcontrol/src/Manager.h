@@ -165,7 +165,10 @@ class Manager
 			const DataModel::AccessoryType type,
 			const DataModel::AccessoryPulseDuration duration,
 			const bool inverted, std::string& result);
-		bool AccessoryDelete(const AccessoryID accessoryID);
+
+		bool AccessoryDelete(const AccessoryID accessoryID,
+			std::string& result);
+
 		bool AccessoryRelease(const AccessoryID accessoryID);
 
 		// feedback
@@ -247,8 +250,12 @@ class Manager
 			const Address address,
 			const DataModel::AccessoryType type,
 			const DataModel::AccessoryPulseDuration duration,
-			const bool inverted, std::string& result);
-		bool SwitchDelete(const SwitchID switchID);
+			const bool inverted,
+			std::string& result);
+
+		bool SwitchDelete(const SwitchID switchID,
+			std::string& result);
+
 		bool SwitchRelease(const SwitchID switchID);
 
 		// route
@@ -620,6 +627,10 @@ class Manager
 		}
 
 		void ProgramCheckBooster(const ProgramMode mode);
+
+		bool ObjectIsPartOfRoute(const DataModel::ObjectIdentifier& identifier,
+			const DataModel::Object* object,
+			std::string& result);
 
 		Logger::Logger* logger;
 		volatile BoosterState boosterState;

@@ -23,6 +23,7 @@ along with RailControl; see the file LICENCE. If not see
 #include <vector>
 
 #include "DataModel/Cluster.h"
+#include "DataModel/ObjectIdentifier.h"
 #include "DataModel/Relation.h"
 #include "DataModel/Signal.h"
 #include "DataModel/Track.h"
@@ -37,6 +38,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "WebServer/WebClientCluster.h"
 
 using DataModel::Cluster;
+using DataModel::ObjectIdentifier;
 using DataModel::Relation;
 using DataModel::Signal;
 using DataModel::Track;
@@ -126,7 +128,10 @@ namespace WebServer
 			vector<TrackID> trackIds = client.InterpretSlaveData("track", arguments);
 			for (auto trackId : trackIds)
 			{
-				tracks.push_back(new Relation(&manager, ObjectTypeCluster, clusterID, ObjectTypeTrack, trackId, Relation::TypeClusterTrack, 0, 0));
+				tracks.push_back(new Relation(&manager,
+					ObjectIdentifier(ObjectTypeCluster, clusterID),
+					ObjectIdentifier(ObjectTypeTrack, trackId),
+					Relation::TypeClusterTrack));
 			}
 		}
 
@@ -135,7 +140,10 @@ namespace WebServer
 			vector<SignalID> signalIds = client.InterpretSlaveData("signal", arguments);
 			for (auto signalId : signalIds)
 			{
-				signals.push_back(new Relation(&manager, ObjectTypeCluster, clusterID, ObjectTypeSignal, signalId, Relation::TypeClusterSignal, 0, 0));
+				signals.push_back(new Relation(&manager,
+					ObjectIdentifier(ObjectTypeCluster, clusterID),
+					ObjectIdentifier(ObjectTypeSignal, signalId),
+					Relation::TypeClusterSignal));
 			}
 		}
 
