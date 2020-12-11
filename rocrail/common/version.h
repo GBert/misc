@@ -1,11 +1,15 @@
 const int revisionnr = 
-1178
+1182
 ;
 const char* commithash = 
-"8c41843cbb4e8b050c9a3fdb8edb484e9ab2a213";
+"7649845eb56610fc2ecaf1eeed103fd91d323359";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1182 2020-12-11 17:56:09 +0100 wiopi: show connection speed on the statusbar 5G or 2G\n" \
+"1181 2020-12-11 16:11:08 +0100 wiopi: show added\n" \
+"1180 2020-12-11 15:03:38 +0100 wiopi: show status bar\n" \
+"1179 2020-12-11 08:58:34 +0100 wiopi: set options fix, show rfid on display\n" \
 "1178 2020-12-10 18:52:59 +0100 cbus: do SoD on startup also with address zero\n" \
 "1177 2020-12-10 12:53:42 +0100 wiopi: display analog clock\n" \
 "1176 2020-12-10 10:20:23 +0100 wiopi: display AMP support added\n" \
