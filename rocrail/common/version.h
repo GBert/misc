@@ -1,11 +1,21 @@
 const int revisionnr = 
-1182
+1192
 ;
 const char* commithash = 
-"7649845eb56610fc2ecaf1eeed103fd91d323359";
+"da21345621b276a928aff8ee7bc1091b186da15b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1192 2020-12-13 14:59:23 +0100 wiopi: IO signal support\n" \
+"1191 2020-12-13 13:21:33 +0100 wiopi: stepper reporting added\n" \
+"1190 2020-12-13 12:28:16 +0100 wiopi: stepper support (WIP)\n" \
+"1189 2020-12-13 10:14:08 +0100 wrapper: trace level find default off\n" \
+"1188 2020-12-13 08:39:50 +0100 wio: added missing stepper reporting parameter\n" \
+"1187 2020-12-12 16:12:40 +0100 wiopi: led signal support\n" \
+"1186 2020-12-12 15:39:08 +0100 wiopi: signal support\n" \
+"1185 2020-12-12 14:26:14 +0100 wiopi: crash fix in case WLAN is disconnected\n" \
+"1184 2020-12-12 13:14:11 +0100 wiopi: clock show alternating time, date, temp.\n" \
+"1183 2020-12-12 09:45:05 +0100 wiopi: clock added HT16K33\n" \
 "1182 2020-12-11 17:56:09 +0100 wiopi: show connection speed on the statusbar 5G or 2G\n" \
 "1181 2020-12-11 16:11:08 +0100 wiopi: show added\n" \
 "1180 2020-12-11 15:03:38 +0100 wiopi: show status bar\n" \
