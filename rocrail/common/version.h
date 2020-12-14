@@ -1,11 +1,13 @@
 const int revisionnr = 
-1194
+1196
 ;
 const char* commithash = 
-"eba5b6d2f61849cbe2cb2be90499ec2489a8e7ed";
+"645510ae57dc634bc5faf73ff448baa55d9cabe7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1196 2020-12-14 19:26:41 +0100 guiframe: added missing getItem from AUI panel\n" \
+"1195 2020-12-14 16:00:38 +0100 wiopi: RailCom added: no luck because 250000 baud is not available\n" \
 "1194 2020-12-14 12:12:26 +0100 rocs: serial speed 250000 check\n" \
 "1193 2020-12-14 08:32:56 +0100 wiopi: sensor added\n" \
 "1192 2020-12-13 14:59:23 +0100 wiopi: IO signal support\n" \
