@@ -150,7 +150,7 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 3.11\n\n");
+    fprintf(stderr, "   Version 3.12\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
@@ -1275,14 +1275,20 @@ void decode_frame_cs1(struct can_frame *frame) {
 	printf("Änderung FKT %u auf %u", frame->data[0], frame->data[2]);
 	break;
     case 0x0C000380:		// Prio 011, Cmd 111
-	printf("Ping an Node %u", frame->data[3]);
+	printf("Ping via Node %u", frame->data[3]);
 	break;
     case 0x10000100:		// Prio 100, Cmd 010
-	printf("Statusänderung");	// TODO: add parameter
+	printf("Statusänderung Typ %u auf %u", frame->data[0], frame->data[2]);
 	break;
     case 0x14000000:		// Prio 101, Cmd 000
+	printf("Lok-Auswahl");
+	if (frame->data[3] != 8)
+	    printf(" ungültig");
+	break;
     case 0x18000000:		// Prio 110, Cmd 000
-	printf("Lok-Zuordnung");	// TODO: add parameter
+	printf("Zuordnung zur MS");
+	if (frame->can_dlc > 3)
+	    printf((frame->data[3] == 8) ? " OK" : " NOT OK");
 	break;
     case 0x18000080:		// Prio 110, Cmd 001
 	switch (frame->data[0]) {
@@ -1316,7 +1322,9 @@ void decode_frame_cs1(struct can_frame *frame) {
 	    }
 	    break;
 	case 0x41:
-	    printf("Lokstackgröße");	// TODO: add parameter
+	    printf("Lokstackgröße");
+	    if (frame->can_dlc == 6)
+		printf(" ist %u", frame->data[5]);
 	    break;
 	}
 	break;
@@ -1355,11 +1363,11 @@ void decode_frame_cs1(struct can_frame *frame) {
 		printf("System-Handle für Node %u ist %u", frame->data[1], be16(frame->data + 4));
 	    break;
 	case 0x40:
-	    printf("SH-handle");	// TODO: add parameter
+	    printf("SH-handle");	// TODO: remove, assumed to be unused
 	    break;
 	case 0x80:
 	    if (frame->can_dlc < 8)
-		printf("Lokstack-Anfrage über %u", be16(frame->data + 2));
+		printf("Lokstack-Anfrage nach %u", be16(frame->data + 2));
 	    else
 		printf("neuer Lokstack-Eintrag ist %u", be16(frame->data + 4));
 	    break;
@@ -1376,12 +1384,12 @@ void decode_frame_cs1(struct can_frame *frame) {
 		printf("SD-Handle für Node %u ist %u", frame->data[1], be16(frame->data + 4));
 	    break;
 	case 0x80:
-	    printf("Lokstack erweitern für Node %u mit Index %u", frame->data[1], be16(frame->data + 4));
+	    printf("Lokstackeintrag mit Index %u hinzufügen", be16(frame->data + 4));
 	    break;
 	}
 	break;
     case 0x18000280:		// Prio 110, Cmd 101
-	printf("Lokstackeintrag löschen mit Index %u", be16(frame->data + 4));
+	printf("Lokstackeintrag mit Index %u löschen", be16(frame->data + 4));
 	break;
     case 0x1C000000:		// Prio 111, Cmd 00X
     case 0x1C000080:
