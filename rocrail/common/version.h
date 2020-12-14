@@ -1,11 +1,12 @@
 const int revisionnr = 
-1192
+1193
 ;
 const char* commithash = 
-"da21345621b276a928aff8ee7bc1091b186da15b";
+"32f07a4a3cdb132b9cc266a9bda017f28c9a46e9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1193 2020-12-14 08:32:56 +0100 wiopi: sensor added\n" \
 "1192 2020-12-13 14:59:23 +0100 wiopi: IO signal support\n" \
 "1191 2020-12-13 13:21:33 +0100 wiopi: stepper reporting added\n" \
 "1190 2020-12-13 12:28:16 +0100 wiopi: stepper support (WIP)\n" \
