@@ -1,8 +1,8 @@
-// ms1relay.c : MC1 adaption to MCS
+// ms1relay.c : MS1 adaption to MCS
 //
-// C 2020 Rainer Müller
+// C 2020 Rainer Mæller
 // Das Programm unterliegt den Bedingungen der GNU General Public License 3 (GPL3).
-// Teile übernommen aus SW von Gerhard Bertelsmann
+// Teile æbernommen aus SW von Gerhard Bertelsmann
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,26 +20,30 @@
 #include <linux/can/raw.h>
 #include <linux/can/error.h>
 
+#include "ms1relay.h"
+
 #define VPRT if (verbose) printf
 
 #define INVALID_SOCKET -1
 static int sc = INVALID_SOCKET;
 
-enum { OH_PING = 1, OH_ROOT, OH_SYST, OH_SDES = 8, OH_LOCO };   // predefined object handles
+#define DEF_CAN "can0"
+#define DEF_LOCODB "/www/config/lokomotive.cs2"
 
-unsigned char slaveuid[4];
-unsigned char slvversion[2];
-unsigned char slvname[18];
-unsigned char slvstackcnt;
-unsigned char direction;
 
 static unsigned char stage0reply[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, OH_PING};
 static unsigned char stage7reply[4] = {0x00, OH_ROOT, 0x01, 0x00};
 static unsigned char sdhandlerep[6] = {0x00, 0x00, 0x00, OH_SDES, 0x00, 0x01};
 static unsigned char syhandlerep[6] = {0x00, 0x00, 0x00, OH_SYST, 0x00, 0x01};
 static unsigned char querymsname[3] = {0x02, 0x00, 0x00};
+static unsigned char allowMScntl[6] = {0x03, 0x00, 0x00, 0x08, 0x00, 0x01};
 
-int verbose;
+// device specific data in NW order <------- UID ------->  <- vers ->  < device >
+static unsigned char M_DEV_ID[] = {0x76, 0x54, 0x4D, 0x01, 0x14, 0x0B, 0xFF, 0xF1};
+
+ms1dat_t ms1d;
+int     verbose;
+char    locodbname[128];
 
 uint16_t be16(uint8_t *u) {
     return (u[0] << 8) | u[1];
@@ -54,36 +58,13 @@ void fillid(uint8_t *u, uint32_t v)
     u[0] = v >> 24; u[1] = v >> 16; u[2] = v >> 8;  u[3] = v;
 }
 
-/******** substitution of loco database *********/
-typedef struct _locodat {
-    uint16_t    locoid;
-    uint8_t     locoicon;
-    uint8_t     funmbr;
-    uint8_t     futype[12];
-    unsigned char   loconame[16];
-} locodat_t;
-
-locodat_t locodat = {11, 2, 5, {1, 13, 1, 0x84, 7, 0, 0, 0, 0, 0, 0, 0},
-                    "VT 11.5\0\0\0\0\0\0\0\0" };
-
-uint16_t getNextOH(uint8_t node, uint16_t lastOH)
-{
-    if ((node == 1) && (lastOH == 0)) return OH_LOCO;
-    return 0;           // no more loco handles
-}
-
-locodat_t *getlocodat(uint16_t handle)
-{
-    if (handle == OH_LOCO) return &locodat;
-    return NULL;        // no valid data available
-}
-/***** end of substitution of loco database *****/
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 0.1\n\n");
-    fprintf(stderr, "         -i <can int>        can interface - default can0\n");
+    fprintf(stderr, "   Version 0.2\n\n");
+    fprintf(stderr, "         -i <can int>        can interface - default %s\n", DEF_CAN);
     fprintf(stderr, "         -d                  daemonize\n");
+    fprintf(stderr, "         -l <loco_db>        loco database file - default %s\n", DEF_LOCODB);
     fprintf(stderr, "         -v                  verbose output\n\n");
 }
 
@@ -91,19 +72,19 @@ void sendstatetoall(struct can_frame frame)
 {
     uint8_t node = 0;       // TODO: loop over all MS1, but actually there is only one
     frame.data[1] = 0;
-	frame.can_dlc = 3;
+    frame.can_dlc = 3;
     frame.can_id = 0x10000100 | CAN_EFF_FLAG | (OH_SYST << 10) | node;
     if (write(sc, &frame, sizeof(struct can_frame)) < 0)
-		fprintf(stderr, "error line %d writing CAN frame: %s\n", __LINE__, strerror(errno));
+        fprintf(stderr, "error line %d writing CAN frame: %s\n", __LINE__, strerror(errno));
 }
 
 void handleStdCAN(struct can_frame *frame)
 {
     switch ((frame->can_id & 0x01FF0000UL) >> 16) {
-		// System commands
-		case 0x01:	switch (frame->data[4]) {
-				// Stop
-    			case 0x00:  frame->data[0] = 1;
+        // System commands
+        case 0x01:	switch (frame->data[4]) {
+                // Stop
+                case 0x00:  frame->data[0] = 1;
                             frame->data[2] = 1;     // show STOP
                             sendstatetoall(*frame);
                             VPRT("Sending STOP to all MS1 nodes\n");
@@ -123,20 +104,19 @@ void handleStdCAN(struct can_frame *frame)
                             sendstatetoall(*frame);
                             VPRT("Sending OVERLOAD to all MS1 nodes\n");
                             break;
-    			// unhandled codes
-//		    	default:
-				}
-				frame->can_id = 0;      // no reply
-				break;
-/*
-		// Ping
-		case 0x30:  txframe.can_dlc = 8;
-				    memcpy(txframe.data, M_DEV_ID, 8);
-				    break;
-*/
-    	// unhandled codes
-		default:	frame->can_id = 0;      // no reply
-	}
+                // unhandled codes
+//              default:
+                }
+                frame->can_id = 0;      // no reply
+                break;
+        // Ping
+        case 0x30:  frame->can_id += 0x10000;
+                    frame->can_dlc = 8;
+                    memcpy(frame->data, M_DEV_ID, 8);
+                    break;
+        // unhandled codes
+        default:	frame->can_id = 0;      // no reply
+    }
 }
 
 void queryName(unsigned char node, unsigned char start)
@@ -162,57 +142,63 @@ int main(int argc, char **argv) {
 
     int background = 0;
     verbose = 0;
-    strcpy(ifr.ifr_name, "can0");
+    strcpy(ifr.ifr_name, DEF_CAN);
+    strcpy(locodbname, DEF_LOCODB);
 
-    while ((opt = getopt(argc, argv, "i:dvh?")) != -1) {
-	switch (opt) {
-	case 'i':
-	    strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
-	    break;
-	case 'd':
-	    verbose = 0;
-	    background = 1;
-	    break;
-	case 'v':
-	    verbose = 1;
-	    break;
-	case 'h':
-	case '?':
-	    print_usage(basename(argv[0]));
-	    exit(EXIT_SUCCESS);
-	    break;
-	default:
-	    fprintf(stderr, "Unknown option %c\n", opt);
-	    print_usage(basename(argv[0]));
-	    exit(EXIT_FAILURE);
-	}
+    while ((opt = getopt(argc, argv, "i:l:dvh?")) != -1) {
+    switch (opt) {
+    case 'i':
+        strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
+        break;
+    case 'd':
+        verbose = 0;
+        background = 1;
+        break;
+    case 'l':
+        strncpy(locodbname, optarg, sizeof(locodbname) - 1);
+        break;
+    case 'v':
+        verbose = 1;
+        break;
+    case 'h':
+    case '?':
+        print_usage(basename(argv[0]));
+        exit(EXIT_SUCCESS);
+        break;
+    default:
+        fprintf(stderr, "Unknown option %c\n", opt);
+        print_usage(basename(argv[0]));
+        exit(EXIT_FAILURE);
     }
+    }
+
+    if (readDBfile(locodbname, 10, verbose)) exit(EXIT_FAILURE);
 
     memset(&caddr, 0, sizeof(caddr));
 
     /* prepare CAN socket */
     if ((sc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
-	fprintf(stderr, "error creating CAN socket: %s\n", strerror(errno));
-	exit(EXIT_FAILURE);
+    fprintf(stderr, "error creating CAN socket: %s\n", strerror(errno));
+    exit(EXIT_FAILURE);
     }
     caddr.can_family = AF_CAN;
     if (ioctl(sc, SIOCGIFINDEX, &ifr) < 0) {
-	fprintf(stderr, "setup CAN socket error: %s\n", strerror(errno));
-	exit(EXIT_FAILURE);
+    fprintf(stderr, "setup CAN socket error: %s\n", strerror(errno));
+    exit(EXIT_FAILURE);
     }
     caddr.can_ifindex = ifr.ifr_ifindex;
 
     if (bind(sc, (struct sockaddr *)&caddr, caddrlen) < 0) {
-	fprintf(stderr, "error binding CAN socket: %s\n", strerror(errno));
-	exit(EXIT_FAILURE);
+    fprintf(stderr, "error binding CAN socket: %s\n", strerror(errno));
+    exit(EXIT_FAILURE);
     }
 
     /* daemonize the process if requested */
     if (background) {
-	if (daemon(0, 0) < 0) {
-	    fprintf(stderr, "Going into background failed: %s\n", strerror(errno));
-	    exit(EXIT_FAILURE);
-	}
+    if (daemon(0, 0) < 0) {
+        fprintf(stderr, "Going into background failed: %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
+    }
     }
 
     FD_ZERO(&read_fds);
@@ -220,16 +206,16 @@ int main(int argc, char **argv) {
     max_fds = sc;
 
     while (1) {
-	if (select(max_fds + 1, &read_fds, NULL, NULL, NULL) < 0) {
-	    fprintf(stderr, "select error: %s\n", strerror(errno));
-	    exit(EXIT_FAILURE);
-	}
-	/* received a CAN frame */
-	if (FD_ISSET(sc, &read_fds)) {
-	    if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
-		fprintf(stderr, "error reading CAN frame: %s\n", strerror(errno));
-	    }
-		else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
+    if (select(max_fds + 1, &read_fds, NULL, NULL, NULL) < 0) {
+        fprintf(stderr, "select error: %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+    /* received a CAN frame */
+    if (FD_ISSET(sc, &read_fds)) {
+        if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
+        fprintf(stderr, "error reading CAN frame: %s\n", strerror(errno));
+        }
+        else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
 
 /*  ID field for MS1, coding for normal operation and for detection:
     28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
@@ -266,14 +252,14 @@ int main(int argc, char **argv) {
                 frame.can_dlc = 6;
                 frame.data[4] = (frame.data[2] & 0x7F) >> 5;
                 frame.data[5] = frame.data[2] << 3;
-                if ((frame.data[2] >> 7) != direction) {
-                    direction = frame.data[2] >> 7;
+                if ((frame.data[2] >> 7) != ms1d.direction) {
+                    ms1d.direction = frame.data[2] >> 7;
                     fillid(frame.data,lid);
                     if (write(sc, &frame, sizeof(struct can_frame)) < 0)
                         fprintf(stderr, "error line %d writing CAN frame: %s\n", __LINE__, strerror(errno));
                     frame.can_id = 0x0A4711 | CAN_EFF_FLAG;     // direction
                     frame.can_dlc = 5;
-                    frame.data[4] = direction + 1;
+                    frame.data[4] = ms1d.direction + 1;
                 }
                 fillid(frame.data,lid);
             }
@@ -289,24 +275,27 @@ int main(int argc, char **argv) {
     case 0x0C000380:        // Prio 011, Cmd 111    => periodic supervision
         frame.can_id--;
         frame.can_dlc = 8;
-        memcpy(frame.data+4, slaveuid, 4);
+        memcpy(frame.data+4, ms1d.slaveuid, 4);
         frame.data[0] = 3;
         VPRT("Node %u gets Ping Answer from master node %u\n", node, frame.data[3]);
         break;
     case 0x14000000:        // Prio 101, Cmd 000    => control take-over
         frame.can_id--;
-        VPRT("Node %u controls loco with handle %u\n", node, objhandle);
+        ms1d.slvassignedOH = objhandle;
+        VPRT("Node %u has selected loco with handle %u\n", node, objhandle);
         break;
-    case 0x18000000:        // Prio 110, Cmd 000
+    case 0x18000000:        // Prio 110, Cmd 000    => allow MS1 to control
         frame.can_id--;
-        VPRT("Node %u controls loco with handle %u\n", node, objhandle);
+        frame.can_dlc = 6;
+        memcpy(frame.data, allowMScntl, 6);
+        VPRT("Node %u allows control loco with handle %u\n", node, objhandle);
         break;
     case 0x18000080:        // Prio 110, Cmd 001    => device and loco properties
         if (objhandle == OH_SDES) {
-            if (frame.data[3] <= 12) memcpy(slvname+frame.data[3], frame.data+4, 4);
+            if (frame.data[3] <= 12) memcpy(ms1d.slvname+frame.data[3], frame.data+4, 4);
             if (frame.data[3] <= 8) queryName(node-1, frame.data[3]+4);
             else
-                printf("Node %u told its name %s\n", node, slvname);
+                printf("Node %u told its name %s\n", node, ms1d.slvname);
             frame.can_id = 0;
         }
         else {
@@ -391,9 +380,9 @@ int main(int argc, char **argv) {
                     VPRT("Node %u requests loco stack (above %u)\n", node, be16(frame.data+2));
                     objhandle = getNextOH(node, be16(frame.data+2));
                     if (objhandle) {
-                        slvstackcnt++;
+                        ms1d.slvstackcnt++;
                         VPRT("Node %u gets loco stack entry %u Handle %u for ID %04X\n",
-                                node, slvstackcnt, objhandle, getlocodat(objhandle)->locoid);
+                                node, ms1d.slvstackcnt, objhandle, getlocodat(objhandle)->locoid);
                         frame.can_dlc = 8;
                         frame.data[4] = objhandle >> 8;
                         frame.data[5] = objhandle & 0xFF;
@@ -413,42 +402,42 @@ int main(int argc, char **argv) {
                     printf("Node %u gets SlaveDescriptionHandle %u\n",  node, be16(frame.data+4));
                     break;
         case 0x80:  frame.can_id = 0;      // not yet coded
-//                  printf("Lokstack erweitern für Node %u mit Index %u", frame.data[1], be16(frame.data+4));
+//                  printf("Lokstack erweitern fær Node %u mit Index %u", frame.data[1], be16(frame.data+4));
                     break;
         }
         break;
 /*
     case 0x18000280:		// Prio 110, Cmd 101
-        printf("Lokstackeintrag löschen mit Index %u", be16(frame->data + 4));
+        printf("Lokstackeintrag l�schen mit Index %u", be16(frame->data + 4));
         break;
 */
     case 0x1C000000:        // Prio 111, Cmd 00X    => MS1 discovery and startup
         stage = (frame.can_id >> 15) & 0x07;
-	    VPRT("MS1 Identification Stage %u\n", stage);
-	    switch (stage) {
-	    case 0: mid = 1;       // HACK: because only 1 MS1 we use always 1
+        VPRT("MS1 Identification Stage %u\n", stage);
+        switch (stage) {
+        case 0: mid = 1;       // HACK: because only 1 MS1 we use always 1
                 frame.can_id |= (0x80 | (mid << 10));
                 frame.can_dlc = 8;
                	memcpy(frame.data, stage0reply, 8);
                 break;
-        case 4: memcpy(slaveuid, frame.data, 4);
+        case 4: memcpy(ms1d.slaveuid, frame.data, 4);
                 /* fall thru */
         case 5:
         case 6: frame.can_id = 0;      // no reply
                 break;
-	    case 7: if (frame.can_dlc == 8) memcpy(slvversion, frame.data+4, 2);
+        case 7: if (frame.can_dlc == 8) memcpy(ms1d.slvversion, frame.data+4, 2);
                 frame.can_id |= 0x80;
                 frame.can_dlc = 8;
-               	memcpy(frame.data, slaveuid, 4);
+               	memcpy(frame.data, ms1d.slaveuid, 4);
                	memcpy(frame.data+4, stage7reply, 4);
                 printf("Node %u has UID %08X and AP Version %u.%u\n",
-                    frame.data[6], be32(slaveuid), slvversion[0], slvversion[1]);
-                slvstackcnt = 0;
+                    frame.data[6], be32(ms1d.slaveuid), ms1d.slvversion[0], ms1d.slvversion[1]);
+                ms1d.slvstackcnt = 0;
                 break;
         default:frame.can_id |= 0x80;   // stages 1, 2, and 3
                 frame.can_dlc = 8;
                	memset(frame.data, 0, 8);
-	    }
+        }
         break;
     default:
         frame.can_id = 0;           // no reply
@@ -458,8 +447,8 @@ int main(int argc, char **argv) {
         if (write(sc, &frame, sizeof(struct can_frame)) < 0)
             fprintf(stderr, "error line %d writing CAN frame: %s\n", __LINE__, strerror(errno));
     }
-	}
-	}
+    }
+    }
     }
     close(sc);
     return 0;
