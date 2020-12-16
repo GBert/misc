@@ -10,4 +10,6 @@ Aenderungen
     Mehr Platz fuer DCDC Wandler
     USB/Seriell Wandler: 0 Ohm Widerstaende entfernt
     UART Leiste angepasst
+
+1.2 Loconet C32 entfernt
 ```

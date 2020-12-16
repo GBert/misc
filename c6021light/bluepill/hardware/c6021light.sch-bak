@@ -1757,8 +1757,6 @@ Text Label 5750 7000 0    50   ~ 0
 DTR
 Wire Wire Line
 	6475 6275 6275 6275
-Text Label 6275 6675 0    50   ~ 0
-DTR
 Wire Wire Line
 	6475 6675 6275 6675
 NoConn ~ 6475 6575
@@ -2475,6 +2473,8 @@ Wire Wire Line
 	5300 5700 5300 6100
 Text Label 5750 7100 0    50   ~ 0
 RTS
-Text Label 6275 6275 0    50   ~ 0
+Text Label 6275 6675 0    50   ~ 0
 RTS
+Text Label 6275 6275 0    50   ~ 0
+CTS
 $EndSCHEMATC

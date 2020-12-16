@@ -5,8 +5,8 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "C6021 Light"
-Date "2020-08-03"
-Rev "1.1"
+Date "2020-12-16"
+Rev "1.2"
 Comp "Damian Philipp / Gerhard Bertelsmann"
 Comment1 ""
 Comment2 ""
@@ -941,7 +941,7 @@ F 3 "https://datasheet.lcsc.com/szlcsc/Jiangsu-Qin-Heng-CH340C_C84681.pdf" H 495
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:USB_B_Micro J50
+L c6021light-rescue:USB_B_Micro-Connector J50
 U 1 1 5F7EF982
 P 4100 6600
 F 0 "J50" H 4200 6225 50  0000 C CNN
@@ -1516,42 +1516,20 @@ Wire Wire Line
 $Comp
 L Device:R R40
 U 1 1 6000FEAA
-P 8825 6200
-F 0 "R40" V 8750 6125 50  0000 L CNN
-F 1 "1k5" V 8825 6125 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 8755 6200 50  0001 C CNN
-F 3 "~" H 8825 6200 50  0001 C CNN
-	1    8825 6200
+P 8825 6300
+F 0 "R40" V 8750 6225 50  0000 L CNN
+F 1 "1k5" V 8825 6225 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 8755 6300 50  0001 C CNN
+F 3 "~" H 8825 6300 50  0001 C CNN
+	1    8825 6300
 	0    1    1    0   
 $EndComp
 Wire Wire Line
 	9075 6025 9025 6025
 Wire Wire Line
-	9025 6025 9025 6200
-Wire Wire Line
-	9025 6200 8975 6200
-$Comp
-L Device:C C32
-U 1 1 6008C60D
-P 8825 6400
-F 0 "C32" V 8750 6450 50  0000 L CNN
-F 1 "1n" V 8875 6475 50  0000 L CNN
-F 2 "Capacitor_THT:C_Disc_D3.0mm_W1.6mm_P2.50mm" H 8863 6250 50  0001 C CNN
-F 3 "~" H 8825 6400 50  0001 C CNN
-	1    8825 6400
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	9025 6400 8975 6400
-Wire Wire Line
-	8675 6200 8675 6300
-Wire Wire Line
 	8675 6300 8425 6300
 Wire Wire Line
 	8425 6150 8400 6150
-Connection ~ 8675 6300
-Wire Wire Line
-	8675 6300 8675 6400
 Wire Wire Line
 	8425 5475 8425 5950
 Wire Wire Line
@@ -1609,9 +1587,6 @@ LN_RX
 Connection ~ 8425 6300
 Wire Wire Line
 	8425 6300 8425 6150
-Connection ~ 9025 6200
-Wire Wire Line
-	9025 6200 9025 6400
 $Comp
 L power:GND #PWR0152
 U 1 1 603DCEDA
@@ -2477,4 +2452,8 @@ Text Label 6275 6675 0    50   ~ 0
 RTS
 Text Label 6275 6275 0    50   ~ 0
 CTS
+Wire Wire Line
+	8975 6300 9025 6300
+Wire Wire Line
+	9025 6025 9025 6300
 $EndSCHEMATC
