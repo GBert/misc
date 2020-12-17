@@ -478,42 +478,42 @@ void new_mm_command(void) {
 	(mmdat.fkt == mmaltdat.fkt) && (mmdat.dat == mmaltdat.dat) &&
 	(mmdat.xdat == mmaltdat.xdat)) {
 	command_repeat++;
-    } else {
-	command_repeat = 0;
-	mmaltdat = mmdat;
-	loco_command.address = 0;
-	loco_command.speed = 0;
-	loco_command.function = 0;
-	loco_command.timestamp = 0;
-	if (!printlock) {
-	    if (mmprint.freq2) {
+	return;
+    }
+    command_repeat = 0;
+    mmaltdat = mmdat;
+    loco_command.address = 0;
+    loco_command.speed = 0;
+    loco_command.function = 0;
+    loco_command.timestamp = 0;
+    if (!printlock) {
+	if (mmaltdat.freq2) {
+	} else {
+	    loco_command.address = mm_adrtab[mmaltdat.adr];
+	    loco_command.speed = mmaltdat.dat;
+	    loco_command.timestamp = milliseconds;
+	    if (mmaltdat.fkt == 3)
+		bit_set(loco_command.function, 0);
+	    else
+		bit_clear(loco_command.function, 0);
+	    if (mmaltdat.dat == mmaltdat.xdat) {
+		// TODO
 	    } else {
-		loco_command.address = mm_adrtab[mmprint.adr];
-		loco_command.speed = mmprint.dat;
-		loco_command.timestamp = milliseconds;
-		if (mmprint.fkt == 3)
-		    bit_set(loco_command.function, 0);
-		else
-		    bit_clear(loco_command.function, 0);
-		if (mmprint.dat == mmprint.xdat) {
-		    // TODO
-		} else {
-		    if (((mmprint.xdat == 5) && (mmprint.dat < 8)) || ((mmprint.xdat == 10) && (mmprint.dat > 7)))
-			mmprint.xdat = mmprint.dat;
-		    switch (mmprint.xdat) {
-		    case 2:
-		    case 10: bit_clear(loco_command.speed, 15)	; break;
-		    case  3: bit_clear(loco_command.function, 1); break;
-		    case  4: bit_clear(loco_command.function, 2); break;
-		    case  5:
-		    case 13: bit_set(loco_command.speed, 15)	; break;
-		    case  6: bit_clear(loco_command.function, 3); break;
-		    case  7: bit_clear(loco_command.function, 4); break;
-		    case 11: bit_set(loco_command.function, 1)	; break;
-		    case 12: bit_set(loco_command.function, 2)	; break;
-		    case 14: bit_set(loco_command.function, 3)	; break;
-		    case 15: bit_set(loco_command.function, 4)	; break;
-		    }
+		if (((mmaltdat.xdat == 5) && (mmaltdat.dat < 8)) || ((mmaltdat.xdat == 10) && (mmaltdat.dat > 7)))
+		    mmaltdat.xdat = mmaltdat.dat;
+		switch (mmaltdat.xdat) {
+		case  2:
+		case 10: bit_clear(loco_command.speed, 15); 	break;
+		case  3: bit_clear(loco_command.function, 1); 	break;
+		case  4: bit_clear(loco_command.function, 2); 	break;
+		case  5:
+		case 13: bit_set(loco_command.speed, 15); 	break;
+		case  6: bit_clear(loco_command.function, 3); 	break;
+		case  7: bit_clear(loco_command.function, 4); 	break;
+		case 11: bit_set(loco_command.function, 1); 	break;
+		case 12: bit_set(loco_command.function, 2); 	break;
+		case 14: bit_set(loco_command.function, 3); 	break;
+		case 15: bit_set(loco_command.function, 4); 	break;
 		}
 	    }
 	}
