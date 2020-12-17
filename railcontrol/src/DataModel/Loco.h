@@ -50,10 +50,16 @@ namespace DataModel
 				ReserveTwo = 2
 			};
 
-			Loco(Manager* manager, const LocoID locoID)
+			inline Loco(Manager* manager, const LocoID locoID)
 			:	Object(locoID),
 				HardwareHandle(),
 				manager(manager),
+				length(0),
+				pushpull(false),
+				maxSpeed(0),
+				travelSpeed(0),
+				reducedSpeed(0),
+				creepingSpeed(0),
 				speed(MinSpeed),
 				orientation(OrientationRight),
 				state(LocoStateManual),
@@ -74,10 +80,16 @@ namespace DataModel
 				logger = Logger::Logger::GetLogger(GetName());
 			}
 
-			Loco(Manager* manager, const std::string& serialized)
+			inline Loco(Manager* manager, const std::string& serialized)
 			:	Object(LocoNone),
 				HardwareHandle(),
 			 	manager(manager),
+				length(0),
+				pushpull(false),
+				maxSpeed(0),
+				travelSpeed(0),
+				reducedSpeed(0),
+				creepingSpeed(0),
 				speed(MinSpeed),
 				orientation(OrientationRight),
 				state(LocoStateManual),
@@ -101,11 +113,18 @@ namespace DataModel
 
 			virtual ~Loco();
 
-			Logger::Logger* GetLogger() { return logger; }
+			inline Logger::Logger* GetLogger()
+			{
+				return logger;
+			}
 
-			ObjectType GetObjectType() const { return ObjectTypeLoco; }
+			inline ObjectType GetObjectType() const override
+			{
+				return ObjectTypeLoco;
+			}
 
 			std::string Serialize() const override;
+			using HardwareHandle::Deserialize;
 			bool Deserialize(const std::string& serialized) override;
 
 			virtual void SetName(const std::string& name) override
@@ -125,7 +144,11 @@ namespace DataModel
 			void LocationReached(const FeedbackID feedbackID);
 
 			void SetSpeed(const Speed speed, const bool withSlaves);
-			Speed GetSpeed() const { return speed; }
+
+			inline Speed GetSpeed() const
+			{
+				return speed;
+			}
 
 			inline void SetFunctionState(const DataModel::LocoFunctionNr nr,
 				const DataModel::LocoFunctionState state)
@@ -154,27 +177,97 @@ namespace DataModel
 			}
 
 			void SetOrientation(const Orientation orientation);
-			Orientation GetOrientation() const { return orientation; }
 
-			bool IsInManualMode() const { return this->state == LocoStateManual; }
-			bool IsInAutoMode() const { return this->state != LocoStateManual && this->state != LocoStateTerminated; }
-			bool IsInUse() const { return this->speed > 0 || this->state != LocoStateManual || this->trackFrom != nullptr || this->routeFirst != nullptr; }
+			inline Orientation GetOrientation() const
+			{
+				return orientation;
+			}
 
-			bool GetPushpull() const { return pushpull; }
-			Length GetLength() const { return length; }
-			void SetLength(const Length length) {  this->length = length; }
-			Speed GetMaxSpeed() const { return maxSpeed; }
-			Speed GetTravelSpeed() const { return travelSpeed; }
-			Speed GetReducedSpeed() const { return reducedSpeed; }
-			Speed GetCreepingSpeed() const { return creepingSpeed; }
-			void SetPushpull(bool pushpull) { this->pushpull = pushpull; }
-			void SetMaxSpeed(Speed speed) { maxSpeed = speed; }
-			void SetTravelSpeed(Speed speed) { travelSpeed = speed; }
-			void SetReducedSpeed(Speed speed) { reducedSpeed = speed; }
-			void SetCreepingSpeed(Speed speed) { creepingSpeed = speed; }
+			inline bool IsInManualMode() const
+			{
+				return this->state == LocoStateManual;
+			}
+
+			inline bool IsInAutoMode() const
+			{
+				return this->state != LocoStateManual
+					&& this->state != LocoStateTerminated;
+			}
+
+			inline bool IsInUse() const
+			{
+				return this->speed > 0
+					|| this->state != LocoStateManual
+					|| this->trackFrom != nullptr
+					|| this->routeFirst != nullptr;
+			}
+
+			inline bool GetPushpull() const
+			{
+				return pushpull;
+			}
+
+			inline Length GetLength() const
+			{
+				return length;
+			}
+
+			inline void SetLength(const Length length)
+			{
+				this->length = length;
+			}
+
+			inline Speed GetMaxSpeed() const
+			{
+				return maxSpeed;
+			}
+
+			inline Speed GetTravelSpeed() const
+			{
+				return travelSpeed;
+			}
+
+			inline Speed GetReducedSpeed() const
+			{
+				return reducedSpeed;
+			}
+
+			inline Speed GetCreepingSpeed() const
+			{
+				return creepingSpeed;
+			}
+
+			inline void SetPushpull(bool pushpull)
+			{
+				this->pushpull = pushpull;
+			}
+
+			inline void SetMaxSpeed(Speed speed)
+			{
+				maxSpeed = speed;
+			}
+
+			inline void SetTravelSpeed(Speed speed)
+			{
+				travelSpeed = speed;
+			}
+
+			inline void SetReducedSpeed(Speed speed)
+			{
+				reducedSpeed = speed;
+			}
+
+			inline void SetCreepingSpeed(Speed speed)
+			{
+				creepingSpeed = speed;
+			}
 
 			bool AssignSlaves(const std::vector<DataModel::Relation*>& newslaves);
-			const std::vector<DataModel::Relation*>& GetSlaves() const { return slaves; };
+
+			inline const std::vector<DataModel::Relation*>& GetSlaves() const
+			{
+				return slaves;
+			}
 
 		private:
 			void SetMinThreadPriorityAndThreadName();

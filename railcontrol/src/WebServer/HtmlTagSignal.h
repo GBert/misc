@@ -43,9 +43,6 @@ namespace WebServer
 			HtmlTagSignal(const Manager& manager, const DataModel::Signal* signal);
 
 			virtual ~HtmlTagSignal() {}
-
-		private:
-			const DataModel::Signal* signal;
 	};
 } // namespace WebServer
 

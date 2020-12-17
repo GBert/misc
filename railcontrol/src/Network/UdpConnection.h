@@ -53,7 +53,6 @@ namespace Network
 			int connectionSocket;
 			volatile bool connected;
 			struct sockaddr sockaddr;
-			volatile bool run;
 			const unsigned short port;
 	};
 }

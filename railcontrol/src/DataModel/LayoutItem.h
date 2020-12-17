@@ -178,7 +178,7 @@ namespace DataModel
 			static std::string Rotation(LayoutRotation rotation);
 
 		protected:
-			virtual bool Deserialize(const std::map<std::string,std::string>& arguments);
+			virtual bool Deserialize(const std::map<std::string,std::string>& arguments) override;
 			
 		private:
 			Visible visible;

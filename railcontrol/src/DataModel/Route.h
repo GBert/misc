@@ -92,7 +92,7 @@ namespace DataModel
 				DeleteRelations(relationsAtUnlock);
 			}
 
-			inline ObjectType GetObjectType() const
+			inline ObjectType GetObjectType() const override
 			{
 				return ObjectTypeRoute;
 			}

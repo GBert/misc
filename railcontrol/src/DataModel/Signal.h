@@ -61,6 +61,8 @@ namespace DataModel
 			}
 
 			std::string Serialize() const override;
+
+			using HardwareHandle::Deserialize;
 			bool Deserialize(const std::string& serialized) override;
 
 			inline Orientation GetSignalOrientation() const

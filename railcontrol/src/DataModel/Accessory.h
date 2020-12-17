@@ -60,6 +60,8 @@ namespace DataModel
 			virtual std::string GetLayoutType() const override { return Languages::GetText(Languages::TextAccessory); }
 
 			virtual std::string Serialize() const override;
+
+			using HardwareHandle::Deserialize;
 			virtual bool Deserialize(const std::string& serialized) override;
 	};
 } // namespace DataModel

@@ -54,7 +54,7 @@ namespace Hardware
 				Close();
 			}
 
-			void ReInit(const HardwareParams* params)
+			void ReInit(const HardwareParams* params) override
 			{
 				Close();
 				Init(params);

@@ -53,6 +53,8 @@ namespace DataModel
 			std::string GetLayoutType() const override { return Languages::GetText(Languages::TextSwitch); };
 
 			std::string Serialize() const override;
+
+			using HardwareHandle::Deserialize;
 			bool Deserialize(const std::string& serialized) override;
 
 			void SetAccessoryState(const AccessoryState state);
