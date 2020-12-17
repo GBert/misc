@@ -1,11 +1,24 @@
 const int revisionnr = 
-1196
+1209
 ;
 const char* commithash = 
-"645510ae57dc634bc5faf73ff448baa55d9cabe7";
+"ab67040f1cab93bc6a4dd16606999e8b638747e0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1209 2020-12-16 21:24:01 +0100 z21: call only get hostname ny address in case protver > 0\n" \
+"1208 2020-12-16 21:13:39 +0100 z21: revert check hostname only if protver > 0\n" \
+"1207 2020-12-16 12:01:19 +0100 wiopi: mobile (wip)\n" \
+"1206 2020-12-16 10:13:13 +0100 wiopi: cam script\n" \
+"1205 2020-12-15 20:51:34 +0100 z21: check ip with hostname only if protver > 0\n" \
+"1204 2020-12-15 16:29:46 +0100 wiopi: Sound added\n" \
+"1203 2020-12-15 13:40:35 +0100 wiopi: support for output pair\n" \
+"1202 2020-12-15 12:17:30 +0100 wiopi: show RailCom on display\n" \
+"1201 2020-12-15 11:23:50 +0100 wio: send CV commands to all nodes\n" \
+"1200 2020-12-15 11:00:36 +0100 userial: not available on aarch64\n" \
+"1199 2020-12-15 10:57:05 +0100 wio: broadcast CV commands\n" \
+"1198 2020-12-15 09:25:41 +0100 wiopi: RailCom reporting\n" \
+"1197 2020-12-15 08:20:05 +0100 rocs: userial baud rate aliasing added\n" \
 "1196 2020-12-14 19:26:41 +0100 guiframe: added missing getItem from AUI panel\n" \
 "1195 2020-12-14 16:00:38 +0100 wiopi: RailCom added: no luck because 250000 baud is not available\n" \
 "1194 2020-12-14 12:12:26 +0100 rocs: serial speed 250000 check\n" \
