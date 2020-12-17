@@ -12,12 +12,16 @@
 #define deb_printf(fmt, ...) \
             do { if (USE_PRINTF) printf(fmt, ##__VA_ARGS__); } while (0)
 
-uint8_t data[8] = { 0 };
+volatile uint8_t loco_table_head;
+volatile uint8_t loco_table_tail;
+
+struct loco_status loco_table_status[32];
 
 volatile uint8_t printlock;
 
 volatile struct st_mm mmdat, mmaltdat, mmprint;
 volatile struct loco_status loco_command;
+extern volatile uint32_t milliseconds;
 
 struct st_dc {
     int strt, pre, daten[8];
@@ -45,14 +49,11 @@ void mm_print(void) {
     } else if (mmprint.dat == mmprint.xdat) {
 	printf("\n %6d ms: MM1 ", mmprint.strt);
 	printf("A=%3d, F=%1d, D=%2d ", mm_adrtab[mmprint.adr], mmprint.fkt, mmprint.dat);
-	// send_can_data (0x00160000, 0x04, data);
     } else {
 	if ((mmprint.fkt == 1) || (mmprint.fkt == 2))
 	    half = '+';
 	printf("\n %6d ms: MM2 ", mmprint.strt);
 	printf("A=%3d, F=%1d, D=%2d%c X=%2d ", mm_adrtab[mmprint.adr], mmprint.fkt, mmprint.dat, half, mmprint.xdat);
-	data[3] = mm_adrtab[mmprint.adr];
-	// send_can_data (0x000c0000, 0x08, data);
 	if (((mmprint.xdat == 5) && (mmprint.dat < 8)) || ((mmprint.xdat == 10) && (mmprint.dat > 7)))
 	    mmprint.xdat = mmprint.dat;
 	switch (mmprint.xdat) {
@@ -469,15 +470,52 @@ void mfx_analyzer(int duration) {
 	mfxcounter++;
 }
 
+void new_mm_command(void) {
+    mmprint = mmdat;
+    loco_command.address = 0;
+    loco_command.speed = 0;
+    loco_command.function = 0;
+    loco_command.timestamp = 0;
+    if (!printlock) {
+	if (mmprint.freq2) {
+	} else {
+	    loco_command.address = mm_adrtab[mmprint.adr];
+	    loco_command.speed = mmprint.dat;
+	    loco_command.timestamp = milliseconds;
+	    if (mmprint.fkt == 3)
+		bit_set(loco_command.function, 0);
+	    else
+		bit_clear(loco_command.function, 0);
+	    if (mmprint.dat == mmprint.xdat) {
+		// TODO
+	    } else {
+		if (((mmprint.xdat == 5) && (mmprint.dat < 8)) || ((mmprint.xdat == 10) && (mmprint.dat > 7)))
+		    mmprint.xdat = mmprint.dat;
+		switch (mmprint.xdat) {
+		case 2:
+		case 10: bit_clear(loco_command.speed, 15);   break;
+		case 3:  bit_clear(loco_command.function, 1); break;
+		case 4:  bit_clear(loco_command.function, 2); break;
+		case 5:
+		case 13: bit_set(loco_command.speed, 15);     break;
+		case 6:  bit_clear(loco_command.function, 3); break;
+		case 7:  bit_clear(loco_command.function, 4); break;
+		case 11: bit_set(loco_command.function, 1);   break;
+		case 12: bit_set(loco_command.function, 2);   break;
+		case 14: bit_set(loco_command.function, 3);   break;
+		case 15: bit_set(loco_command.function, 4);   break;
+		}
+	    }
+	}
+	printlock = 2;
+    }
+}
+
+
 void analyzer(int start, int duration) {
     if (duration > 510) {
 	if (acounter == 37) {
-	    if (!printlock) {
-		mmprint = mmdat;
-		loco_command.loco_address = mm_adrtab[mmprint.adr];
-		loco_command.speed = mmprint.dat;
-		printlock = 2;
-	    }
+	    new_mm_command();
 	} else if (acounter) {
 	    if (!mfx_print()) {
 		deb_printf("\n %6d ms: ??? mit %3d Wechseln !", mmdat.strt, acounter - 1);
