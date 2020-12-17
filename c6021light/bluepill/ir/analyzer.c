@@ -22,6 +22,7 @@ volatile uint8_t printlock;
 volatile struct st_mm mmdat, mmaltdat, mmprint;
 volatile struct loco_status loco_command;
 extern volatile uint32_t milliseconds;
+volatile uint8_t command_repeat;
 
 struct st_dc {
     int strt, pre, daten[8];
@@ -472,45 +473,52 @@ void mfx_analyzer(int duration) {
 
 void new_mm_command(void) {
     mmprint = mmdat;
-    loco_command.address = 0;
-    loco_command.speed = 0;
-    loco_command.function = 0;
-    loco_command.timestamp = 0;
-    if (!printlock) {
-	if (mmprint.freq2) {
-	} else {
-	    loco_command.address = mm_adrtab[mmprint.adr];
-	    loco_command.speed = mmprint.dat;
-	    loco_command.timestamp = milliseconds;
-	    if (mmprint.fkt == 3)
-		bit_set(loco_command.function, 0);
-	    else
-		bit_clear(loco_command.function, 0);
-	    if (mmprint.dat == mmprint.xdat) {
-		// TODO
+    printlock = 2;
+    if ((mmdat.adr == mmaltdat.adr) && (mmdat.freq2 == mmaltdat.freq2) &&
+	(mmdat.fkt == mmaltdat.fkt) && (mmdat.dat == mmaltdat.dat) &&
+	(mmdat.xdat == mmaltdat.xdat)) {
+	command_repeat++;
+    } else {
+	command_repeat = 0;
+	mmaltdat = mmdat;
+	loco_command.address = 0;
+	loco_command.speed = 0;
+	loco_command.function = 0;
+	loco_command.timestamp = 0;
+	if (!printlock) {
+	    if (mmprint.freq2) {
 	    } else {
-		if (((mmprint.xdat == 5) && (mmprint.dat < 8)) || ((mmprint.xdat == 10) && (mmprint.dat > 7)))
-		    mmprint.xdat = mmprint.dat;
-		switch (mmprint.xdat) {
-		case 2:
-		case 10: bit_clear(loco_command.speed, 15);   break;
-		case 3:  bit_clear(loco_command.function, 1); break;
-		case 4:  bit_clear(loco_command.function, 2); break;
-		case 5:
-		case 13: bit_set(loco_command.speed, 15);     break;
-		case 6:  bit_clear(loco_command.function, 3); break;
-		case 7:  bit_clear(loco_command.function, 4); break;
-		case 11: bit_set(loco_command.function, 1);   break;
-		case 12: bit_set(loco_command.function, 2);   break;
-		case 14: bit_set(loco_command.function, 3);   break;
-		case 15: bit_set(loco_command.function, 4);   break;
+		loco_command.address = mm_adrtab[mmprint.adr];
+		loco_command.speed = mmprint.dat;
+		loco_command.timestamp = milliseconds;
+		if (mmprint.fkt == 3)
+		    bit_set(loco_command.function, 0);
+		else
+		    bit_clear(loco_command.function, 0);
+		if (mmprint.dat == mmprint.xdat) {
+		    // TODO
+		} else {
+		    if (((mmprint.xdat == 5) && (mmprint.dat < 8)) || ((mmprint.xdat == 10) && (mmprint.dat > 7)))
+			mmprint.xdat = mmprint.dat;
+		    switch (mmprint.xdat) {
+		    case 2:
+		    case 10: bit_clear(loco_command.speed, 15)	; break;
+		    case  3: bit_clear(loco_command.function, 1); break;
+		    case  4: bit_clear(loco_command.function, 2); break;
+		    case  5:
+		    case 13: bit_set(loco_command.speed, 15)	; break;
+		    case  6: bit_clear(loco_command.function, 3); break;
+		    case  7: bit_clear(loco_command.function, 4); break;
+		    case 11: bit_set(loco_command.function, 1)	; break;
+		    case 12: bit_set(loco_command.function, 2)	; break;
+		    case 14: bit_set(loco_command.function, 3)	; break;
+		    case 15: bit_set(loco_command.function, 4)	; break;
+		    }
 		}
 	    }
 	}
-	printlock = 2;
     }
 }
-
 
 void analyzer(int start, int duration) {
     if (duration > 510) {
@@ -576,14 +584,10 @@ void analyzer(int start, int duration) {
 	case 23:
 	case 27:
 	case 31:
-	case 35:
-	    mmdat.dat += ((duration > 56) << ((acounter - 23) / 4));
-	    break;
+	case 35: mmdat.dat += ((duration > 56) << ((acounter - 23) / 4)); break;
 	case 25:
 	case 29:
 	case 33:
-	case 37:
-	    mmdat.xdat += ((duration > 56) << ((acounter - 25) / 4));
-	    break;
+	case 37: mmdat.xdat += ((duration > 56) << ((acounter - 25) / 4)); break;
 	}
 }

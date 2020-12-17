@@ -47,6 +47,7 @@ extern volatile uint32_t pulse_duration, old_timestamp, new_timestamp, printlock
 uint8_t d_data[8];
 extern volatile uint8_t loco_table_head;
 extern volatile uint8_t loco_table_tail;
+extern volatile uint8_t command_repeat;
 
 extern struct loco_status loco_table_status[32];
 extern volatile struct loco_status loco_command;
@@ -97,12 +98,13 @@ static void send_mm_can(void) {
 }
 
 static void check_loco_command_table(void) {
-    printf("*NEW*\n");
+    printf("*VALID*\n");
 }
 
 int main(void) {
     status = 0;
     commands_pending = 0;
+    command_repeat = 0;
     memset(loco_table_status, 0, sizeof(loco_table_status));
     loco_table_head = 0;
     loco_table_tail = 0;
@@ -115,19 +117,16 @@ int main(void) {
 
     systick_setup();
 
-
     /* endless loop */
     while (1) {
 	if (printlock == 2) {
 	    OSCI_PIN_ON;
 	    printlock = 1;
 	    mm_print();
-	    if ((loco_command.address == loco_command_old.address) && 
-		(loco_command.speed == loco_command_old.speed) &&
-		(loco_command.function == loco_command_old.function))
+	    if (command_repeat == 1)
 		check_loco_command_table();
 	    printlock = 0;
-            loco_command_old = loco_command;
+	    loco_command_old = loco_command;
 	    OSCI_PIN_OFF;
 	}
     }
