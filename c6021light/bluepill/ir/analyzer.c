@@ -15,8 +15,6 @@
 volatile uint8_t loco_table_head;
 volatile uint8_t loco_table_tail;
 
-struct loco_status loco_table_status[32];
-
 volatile uint8_t printlock;
 
 volatile struct st_mm mmdat, mmaltdat, mmprint;
@@ -486,12 +484,14 @@ void new_mm_command(void) {
     loco_command.speed = 0;
     loco_command.function = 0;
     loco_command.timestamp = 0;
+    loco_command.mask = 0;
     if (mmaltdat.freq2) {
 	// TODO
     } else {
 	loco_command.address = mm_adrtab[mmaltdat.adr];
 	loco_command.speed = mmaltdat.dat;
 	loco_command.timestamp = milliseconds;
+	bit_set(loco_command.mask, 0);
 	if (mmaltdat.fkt == 3)
 	    bit_set(loco_command.function, 0);
 	else
@@ -503,17 +503,17 @@ void new_mm_command(void) {
 		mmaltdat.xdat = mmaltdat.dat;
 	    switch (mmaltdat.xdat) {
 	    case  2:
-	    case 10: bit_clear(loco_command.speed, 15);		break;
-	    case  3: bit_clear(loco_command.function, 1);	break;
-	    case  4: bit_clear(loco_command.function, 2);	break;
+	    case 10: bit_clear(loco_command.speed, 14); bit_set(loco_command.speed, 15); break;
+	    case  3: bit_clear(loco_command.function, 1); bit_set(loco_command.mask, 1); break;
+	    case  4: bit_clear(loco_command.function, 2); bit_set(loco_command.mask, 2); break;
 	    case  5:
-	    case 13: bit_set(loco_command.speed, 15);		break;
-	    case  6: bit_clear(loco_command.function, 3);	break;
-	    case  7: bit_clear(loco_command.function, 4);	break;
-	    case 11: bit_set(loco_command.function, 1);		break;
-	    case 12: bit_set(loco_command.function, 2);		break;
-	    case 14: bit_set(loco_command.function, 3);		break;
-	    case 15: bit_set(loco_command.function, 4);		break;
+	    case 13: bit_set(loco_command.speed, 14);	bit_set(loco_command.speed, 15); break;
+	    case  6: bit_clear(loco_command.function, 3); bit_set(loco_command.mask, 3); break;
+	    case  7: bit_clear(loco_command.function, 4); bit_set(loco_command.mask, 4); break;
+	    case 11: bit_set(loco_command.function, 1);	  bit_set(loco_command.mask, 1); break;
+	    case 12: bit_set(loco_command.function, 2);	  bit_set(loco_command.mask, 2); break;
+	    case 14: bit_set(loco_command.function, 3);	  bit_set(loco_command.mask, 3); break;
+	    case 15: bit_set(loco_command.function, 4);	  bit_set(loco_command.mask, 4); break;
 	    }
 	}
     }

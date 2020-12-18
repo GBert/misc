@@ -23,6 +23,7 @@ struct loco_status {
     uint16_t address;
     uint16_t speed;
     uint32_t function;
+    uint32_t mask;
     uint32_t timestamp;
 };
 
