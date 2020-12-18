@@ -1,11 +1,14 @@
 const int revisionnr = 
-1209
+1212
 ;
 const char* commithash = 
-"ab67040f1cab93bc6a4dd16606999e8b638747e0";
+"9c6600fb90d912e3a7b9f55c25081a6e68a12899";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1212 2020-12-17 18:59:29 +0100 wiopi: Mobile (wip)\n" \
+"1211 2020-12-17 16:39:52 +0100 z21dlg: check hostname option added -> protver 0 or 1\n" \
+"1210 2020-12-17 13:04:14 +0100 wiopi: WIP\n" \
 "1209 2020-12-16 21:24:01 +0100 z21: call only get hostname ny address in case protver > 0\n" \
 "1208 2020-12-16 21:13:39 +0100 z21: revert check hostname only if protver > 0\n" \
 "1207 2020-12-16 12:01:19 +0100 wiopi: mobile (wip)\n" \
