@@ -94,6 +94,29 @@ void sys_tick_handler(void) {
     }
 }
 
+static void send_mm_function(uint16_t address, uint8_t function, uint32_t value) {
+    bool ext, rtr;
+    uint8_t dlc, data[8];
+    uint32_t id;
+
+    rtr = 0;
+    ext = 1;
+
+    id = 0x000C0300;
+    dlc = 6;
+    data[0] = 0;
+    data[1] = 0;
+    data[2] = (address >> 8) & 0xff;
+    data[3] = address & 0xff;
+    data[4] = function;
+    if (value) {
+	data[5] = 1;
+    } else {
+	data[5] = 0;
+    }
+    can_transmit(CAN1, id, ext, rtr, dlc, data);
+}
+
 static void send_mm_can(uint16_t address, uint16_t speed, uint8_t direction) {
     bool ext, rtr;
     uint8_t dlc, data[8];
@@ -104,7 +127,7 @@ static void send_mm_can(uint16_t address, uint16_t speed, uint8_t direction) {
 
     data[0] = 0;
     data[1] = 0;
-    data[2] = (address >>  8) & 0xff;
+    data[2] = (address >> 8) & 0xff;
     data[3] = address & 0xff;
     if (direction) {
 	dlc = 5;
@@ -113,17 +136,18 @@ static void send_mm_can(uint16_t address, uint16_t speed, uint8_t direction) {
     } else {
 	dlc = 6;
 	id = 0x00080300;
-	data[4] = (speed >>  8) & 0xff;
+	data[4] = (speed >> 8) & 0xff;
 	data[5] = speed & 0xff;
     }
     can_transmit(CAN1, id, ext, rtr, dlc, data);
 }
 
 static void check_loco_command_table(void) {
-    uint8_t idx, m;
+    uint8_t idx, i;
     uint16_t speed;
+    uint32_t mask;
     // search loco address in table
-    for (idx = 0; idx <=31; idx++) {
+    for (idx = 0; idx <= 31; idx++) {
 	if (loco_table_status[idx].address == loco_command.address)
 	    break;
     }
@@ -136,34 +160,49 @@ static void check_loco_command_table(void) {
     // valid entry found if idx != max
     if (idx <= 31) {
 	// first check speed
-	    printf(" table 0x%04X actual 0x%04X ", loco_table_status[idx].speed, loco_command.speed);
-	    if (loco_table_status[idx].speed != (loco_command.speed & 0x7FFF)) {
-		if (loco_command.speed & 0x8000) {
-		    if ((loco_table_status[idx].speed & 0x4000) != (loco_command.speed & 0x4000)) {
-			if (loco_command.speed & 0x4000) {
-			    printf(" Richtungswechsel Rückwärts");
-			    send_mm_can(loco_command.address, 0, 2);
-			} else {
-			    printf(" Richtungswechsel Vorwärts");
-			    send_mm_can(loco_command.address, 0, 1);
-			}
-		    }
-		    loco_table_status[idx].speed = (loco_command.speed & 0x4000) | (loco_table_status[idx].speed & 0x3FFF);
-		}
-		if ((loco_table_status[idx].speed & 0x3FFF) != (loco_command.speed & 0x3FFF)) {
-		    if ((loco_command.speed & 0x3FFF) == 0) {
-			printf(" Loco stop");
-			send_mm_can(loco_command.address, 0, 0);
+	printf(" table 0x%04X actual 0x%04X ", loco_table_status[idx].speed, loco_command.speed);
+	if (loco_table_status[idx].speed != (loco_command.speed & 0x7FFF)) {
+	    if (loco_command.speed & 0x8000) {
+		if ((loco_table_status[idx].speed & 0x4000) != (loco_command.speed & 0x4000)) {
+		    if (loco_command.speed & 0x4000) {
+			printf(" Richtungswechsel Rückwärts");
+			send_mm_can(loco_command.address, 0, 2);
 		    } else {
-			printf(" Loco speed");
-			// MM2 has only 15 speed steps
-			speed = ((loco_command.speed & 0x0F) + 1) * 64 - 1;
-			send_mm_can(loco_command.address, speed, 0);
+			printf(" Richtungswechsel Vorwärts");
+			send_mm_can(loco_command.address, 0, 1);
 		    }
-		    loco_table_status[idx].speed = (loco_table_status[idx].speed & 0x4000) | (loco_command.speed & 0x3FFF);
 		}
+		loco_table_status[idx].speed = (loco_command.speed & 0x4000) | (loco_table_status[idx].speed & 0x3FFF);
+	    }
+	    if ((loco_table_status[idx].speed & 0x3FFF) != (loco_command.speed & 0x3FFF)) {
+		if ((loco_command.speed & 0x3FFF) == 0) {
+		    printf(" Loco stop");
+		    send_mm_can(loco_command.address, 0, 0);
+		} else {
+		    printf(" Loco speed");
+		    // MM2 has only 15 speed steps
+		    speed = ((loco_command.speed & 0x0F) + 1) * 64 - 1;
+		    send_mm_can(loco_command.address, speed, 0);
+		}
+		loco_table_status[idx].speed = (loco_table_status[idx].speed & 0x4000) | (loco_command.speed & 0x3FFF);
 	    }
 	}
+    }
+    if ((loco_table_status[idx].function & loco_command.mask) != (loco_command.function & loco_command.mask)) {
+	mask = 1;
+	for (i = 0; i < 32; i++) {
+	    if (mask & loco_command.mask) {
+		if ((loco_table_status[idx].function & mask) != (loco_command.function & mask)) {
+		    send_mm_function(loco_command.address, i, loco_command.function & mask);
+		    if (loco_command.function & mask)
+			bit_set(loco_table_status[idx].function, i);
+		    else
+			bit_clear(loco_table_status[idx].function, i);
+		}
+	    }
+	    mask <<= 1;
+	}
+    }
 }
 
 int main(void) {
