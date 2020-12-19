@@ -160,26 +160,20 @@ static void check_loco_command_table(void) {
     // valid entry found if idx != max
     if (idx <= 31) {
 	// first check speed
-	printf(" table 0x%04X actual 0x%04X ", loco_table_status[idx].speed, loco_command.speed);
 	if (loco_table_status[idx].speed != (loco_command.speed & 0x7FFF)) {
 	    if (loco_command.speed & 0x8000) {
 		if ((loco_table_status[idx].speed & 0x4000) != (loco_command.speed & 0x4000)) {
-		    if (loco_command.speed & 0x4000) {
-			printf(" Richtungswechsel Rückwärts");
+		    if (loco_command.speed & 0x4000)
 			send_mm_can(loco_command.address, 0, 2);
-		    } else {
-			printf(" Richtungswechsel Vorwärts");
+		    else
 			send_mm_can(loco_command.address, 0, 1);
-		    }
 		}
 		loco_table_status[idx].speed = (loco_command.speed & 0x4000) | (loco_table_status[idx].speed & 0x3FFF);
 	    }
 	    if ((loco_table_status[idx].speed & 0x3FFF) != (loco_command.speed & 0x3FFF)) {
 		if ((loco_command.speed & 0x3FFF) == 0) {
-		    printf(" Loco stop");
 		    send_mm_can(loco_command.address, 0, 0);
 		} else {
-		    printf(" Loco speed");
 		    // MM2 has only 15 speed steps
 		    speed = ((loco_command.speed & 0x0F) + 1) * 64 - 1;
 		    send_mm_can(loco_command.address, speed, 0);
