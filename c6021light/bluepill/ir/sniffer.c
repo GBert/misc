@@ -161,15 +161,6 @@ static void check_loco_command_table(void) {
     if (idx <= 31) {
 	// first check speed
 	if (loco_table_status[idx].speed != (loco_command.speed & 0x7FFF)) {
-	    if (loco_command.speed & 0x8000) {
-		if ((loco_table_status[idx].speed & 0x4000) != (loco_command.speed & 0x4000)) {
-		    if (loco_command.speed & 0x4000)
-			send_mm_can(loco_command.address, 0, 2);
-		    else
-			send_mm_can(loco_command.address, 0, 1);
-		}
-		loco_table_status[idx].speed = (loco_command.speed & 0x4000) | (loco_table_status[idx].speed & 0x3FFF);
-	    }
 	    if ((loco_table_status[idx].speed & 0x3FFF) != (loco_command.speed & 0x3FFF)) {
 		if ((loco_command.speed & 0x3FFF) == 0) {
 		    send_mm_can(loco_command.address, 0, 0);
@@ -180,21 +171,31 @@ static void check_loco_command_table(void) {
 		}
 		loco_table_status[idx].speed = (loco_table_status[idx].speed & 0x4000) | (loco_command.speed & 0x3FFF);
 	    }
-	}
-    }
-    if ((loco_table_status[idx].function & loco_command.mask) != (loco_command.function & loco_command.mask)) {
-	mask = 1;
-	for (i = 0; i < 32; i++) {
-	    if (mask & loco_command.mask) {
-		if ((loco_table_status[idx].function & mask) != (loco_command.function & mask)) {
-		    send_mm_function(loco_command.address, i, loco_command.function & mask);
-		    if (loco_command.function & mask)
-			bit_set(loco_table_status[idx].function, i);
+	    if (loco_command.speed & 0x8000) {
+		if ((loco_table_status[idx].speed & 0x4000) != (loco_command.speed & 0x4000)) {
+		    if (loco_command.speed & 0x4000)
+			send_mm_can(loco_command.address, 0, 2);
 		    else
-			bit_clear(loco_table_status[idx].function, i);
+			send_mm_can(loco_command.address, 0, 1);
 		}
+		loco_table_status[idx].speed = (loco_command.speed & 0x4000) | (loco_table_status[idx].speed & 0x3FFF);
 	    }
-	    mask <<= 1;
+	}
+	printf(" loco_command.function 0x%08lX loco_command.mask 0x%08lX", loco_command.function, loco_command.mask);
+	if ((loco_table_status[idx].function & loco_command.mask) != (loco_command.function & loco_command.mask)) {
+	    mask = 1;
+	    for (i = 0; i < 32; i++) {
+		if (mask & loco_command.mask) {
+		    if ((loco_table_status[idx].function & mask) != (loco_command.function & mask)) {
+			send_mm_function(loco_command.address, i, loco_command.function & mask);
+			if (loco_command.function & mask)
+			    bit_set(loco_table_status[idx].function, i);
+			else
+			    bit_clear(loco_table_status[idx].function, i);
+		    }
+		}
+		mask <<= 1;
+	    }
 	}
     }
 }
