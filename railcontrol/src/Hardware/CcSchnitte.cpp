@@ -21,6 +21,13 @@ along with RailControl; see the file LICENCE. If not see
 #include "Hardware/CcSchnitte.h"
 #include "Utils/Utils.h"
 
+// OS X does not define B500000
+#ifdef __APPLE__
+#ifndef B500000
+#define B500000 500000
+#endif
+#endif
+
 namespace Hardware
 {
 	extern "C" CcSchnitte* create_CcSchnitte(HardwareParams* const params)

@@ -49,7 +49,9 @@ namespace Storage
 		createStorage(nullptr),
 		destroyStorage(nullptr),
 		instance(nullptr),
+#ifndef AMALGAMATION
 		dlhandle(nullptr),
+#endif
 		transactionRunning(false)
 	{
 #ifdef AMALGAMATION

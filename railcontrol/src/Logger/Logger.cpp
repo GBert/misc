@@ -38,7 +38,7 @@ namespace Logger
 		struct tm tm;
 		gmtime_r(&timestamp.tv_sec, &tm);
 		strftime(buffer, sizeof(buffer), "%F %T.", &tm);
-		snprintf(buffer + 20, sizeof(buffer) - 20, "%06li", timestamp.tv_usec);
+		snprintf(buffer + 20, sizeof(buffer) - 20, "%06li", static_cast<long>(timestamp.tv_usec));
 		return string(buffer);
 	}
 

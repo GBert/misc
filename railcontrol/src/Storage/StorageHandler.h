@@ -93,7 +93,9 @@ namespace Storage
 			CreateStorage* createStorage;
 			DestroyStorage* destroyStorage;
 			Storage::StorageInterface* instance;
+#ifndef AMALGAMATION
 			void* dlhandle;
+#endif
 			bool transactionRunning;
 	};
 
