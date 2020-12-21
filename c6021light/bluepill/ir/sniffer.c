@@ -181,7 +181,6 @@ static void check_loco_command_table(void) {
 		loco_table_status[idx].speed = (loco_command.speed & 0x4000) | (loco_table_status[idx].speed & 0x3FFF);
 	    }
 	}
-	printf(" loco_command.function 0x%08lX loco_command.mask 0x%08lX", loco_command.function, loco_command.mask);
 	if ((loco_table_status[idx].function & loco_command.mask) != (loco_command.function & loco_command.mask)) {
 	    mask = 1;
 	    for (i = 0; i < 32; i++) {

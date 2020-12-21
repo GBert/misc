@@ -17,7 +17,7 @@ volatile uint8_t loco_table_tail;
 
 volatile uint8_t printlock;
 
-volatile struct st_mm mmdat, mmaltdat, mmprint;
+volatile struct st_mm mmdat, mmaltdat, mmlastdata, mmprint;
 volatile struct loco_status loco_command;
 extern volatile uint32_t milliseconds;
 volatile uint8_t command_repeat;
@@ -470,38 +470,37 @@ void mfx_analyzer(int duration) {
 }
 
 void new_mm_command(void) {
-    mmprint = mmdat;
     printlock = 2;
-    if ((mmdat.adr == mmaltdat.adr) && (mmdat.freq2 == mmaltdat.freq2) &&
-	(mmdat.fkt == mmaltdat.fkt) && (mmdat.dat == mmaltdat.dat) &&
-	(mmdat.xdat == mmaltdat.xdat)) {
+    if ((mmlastdata.adr == mmaltdat.adr) && (mmlastdata.freq2 == mmaltdat.freq2) &&
+	(mmlastdata.fkt == mmaltdat.fkt) && (mmlastdata.dat == mmaltdat.dat) &&
+	(mmlastdata.xdat == mmaltdat.xdat)) {
 	command_repeat++;
 	return;
     }
+    mmaltdat = mmlastdata;
     command_repeat = 0;
-    mmaltdat = mmdat;
     loco_command.address = 0;
     loco_command.speed = 0;
     loco_command.function = 0;
     loco_command.timestamp = 0;
     loco_command.mask = 0;
-    if (mmaltdat.freq2) {
+    if (mmlastdata.freq2) {
 	// TODO
     } else {
-	loco_command.address = mm_adrtab[mmaltdat.adr];
-	loco_command.speed = mmaltdat.dat;
+	loco_command.address = mm_adrtab[mmlastdata.adr];
+	loco_command.speed = mmlastdata.dat;
 	loco_command.timestamp = milliseconds;
 	bit_set(loco_command.mask, 0);
-	if (mmaltdat.fkt == 3)
+	if (mmlastdata.fkt == 3)
 	    bit_set(loco_command.function, 0);
 	else
 	    bit_clear(loco_command.function, 0);
-	if (mmaltdat.dat == mmaltdat.xdat) {
+	if (mmlastdata.dat == mmlastdata.xdat) {
 	    // TODO
 	} else {
-	    if (((mmaltdat.xdat == 5) && (mmaltdat.dat < 8)) || ((mmaltdat.xdat == 10) && (mmaltdat.dat > 7)))
-		mmaltdat.xdat = mmaltdat.dat;
-	    switch (mmaltdat.xdat) {
+	    if (((mmlastdata.xdat == 5) && (mmlastdata.dat < 8)) || ((mmlastdata.xdat == 10) && (mmlastdata.dat > 7)))
+		mmlastdata.xdat = mmlastdata.dat;
+	    switch (mmlastdata.xdat) {
 	    case  2:
 	    case 10: bit_clear(loco_command.speed, 14); bit_set(loco_command.speed, 15); break;
 	    case  3: bit_clear(loco_command.function, 1); bit_set(loco_command.mask, 1); break;
@@ -522,6 +521,8 @@ void new_mm_command(void) {
 void analyzer(int start, int duration) {
     if (duration > 510) {
 	if (acounter == 37) {
+	    mmlastdata = mmdat;
+	    mmprint = mmlastdata;
 	    new_mm_command();
 	} else if (acounter) {
 	    if (!mfx_print()) {
