@@ -94,6 +94,24 @@ void sys_tick_handler(void) {
     }
 }
 
+static void send_mm_emergency_stop(uint16_t address) {
+    bool ext, rtr;
+    uint8_t dlc, data[8];
+    uint32_t id;
+
+    rtr = 0;
+    ext = 1;
+    id = 0x00000300;
+    dlc = 5;
+    data[0] = 0;
+    data[1] = 0;
+    data[2] = (address >> 8) & 0xff;
+    data[3] = address & 0xff;
+    data[4] = 3;
+    can_transmit(CAN1, id, ext, rtr, dlc, data);
+}
+
+
 static void send_mm_function(uint16_t address, uint8_t function, uint32_t value) {
     bool ext, rtr;
     uint8_t dlc, data[8];
@@ -164,8 +182,10 @@ static void check_loco_command_table(void) {
 	    if ((loco_table_status[idx].speed & 0x3FFF) != (loco_command.speed & 0x3FFF)) {
 		if ((loco_command.speed & 0x3FFF) == 0) {
 		    send_mm_can(loco_command.address, 0, 0);
+		} else if ((loco_command.speed & 0x3FFF) == 1) {
+		    send_mm_emergency_stop(loco_command.address);
 		} else {
-		    // MM2 has only 15 speed steps
+		    // IR has only 14 speed steps
 		    speed = ((loco_command.speed & 0x0F) + 1) * 64 - 1;
 		    send_mm_can(loco_command.address, speed, 0);
 		}
@@ -220,9 +240,9 @@ int main(void) {
 	if (printlock == 2) {
 	    OSCI_PIN_ON;
 	    printlock = 1;
-	    mm_print();
 	    if (command_repeat == 1)
 		check_loco_command_table();
+	    mm_print();
 	    printlock = 0;
 	    loco_command_old = loco_command;
 	    OSCI_PIN_OFF;
