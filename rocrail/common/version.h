@@ -1,11 +1,20 @@
 const int revisionnr = 
-1212
+1221
 ;
 const char* commithash = 
-"9c6600fb90d912e3a7b9f55c25081a6e68a12899";
+"a4eee64bd22795c441221d32fb39b4b7034d382e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1221 2020-12-20 15:11:31 +0100 loc: workaround for linux semaphor lock on assigntrain\n" \
+"1220 2020-12-20 14:05:41 +0100 xmlscript: resolve text format attribute value\n" \
+"1219 2020-12-20 10:02:43 +0100 wiopi: support for two on board servos (sudo)\n" \
+"1218 2020-12-20 09:14:52 +0100 wiopi: S88 added\n" \
+"1217 2020-12-19 12:11:49 +0100 wiopi: pixel addressing\n" \
+"1216 2020-12-19 09:20:03 +0100 wiopi: pixel fix, mobile range implemented\n" \
+"1215 2020-12-18 21:36:42 +0100 wiopi: Pixel  (wip)\n" \
+"1214 2020-12-18 15:36:37 +0100 wiopi: alive response timeout to stop mobile running\n" \
+"1213 2020-12-18 13:28:47 +0100 dccpp: check for space <Q1...> or <Q 1...>\n" \
 "1212 2020-12-17 18:59:29 +0100 wiopi: Mobile (wip)\n" \
 "1211 2020-12-17 16:39:52 +0100 z21dlg: check hostname option added -> protver 0 or 1\n" \
 "1210 2020-12-17 13:04:14 +0100 wiopi: WIP\n" \
