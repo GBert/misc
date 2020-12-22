@@ -15,7 +15,8 @@ extern bool detail, mfxdetail;
 
 struct st_mm {
     int strt, pause;
-    int8_t adr, fkt, dat, xdat;
+    int16_t adr;
+    int8_t fkt, dat, xdat;
     bool freq2;
 };
 

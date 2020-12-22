@@ -35,7 +35,7 @@ void mm_print(void) {
     char half = ',';
 
     if (mmprint.freq2) {
-	int addr = mm_adrtab[mmprint.adr];
+	int addr = mm_adrtab[mmprint.adr & 0xff];
 	printf("\n %6d ms: MMD A=%3d => ", mmprint.strt, addr);
 	if (mmprint.fkt == 0) {
 	    if (addr == 80)
@@ -47,12 +47,12 @@ void mm_print(void) {
 	}
     } else if (mmprint.dat == mmprint.xdat) {
 	printf("\n %6d ms: MM1 ", mmprint.strt);
-	printf("A=%3d, F=%1d, D=%2d ", mm_adrtab[mmprint.adr], mmprint.fkt, mmprint.dat);
+	printf("A=%3d, F=%1d, D=%2d ", mm_adrtab[mmprint.adr & 0xff], mmprint.fkt, mmprint.dat);
     } else {
 	if ((mmprint.fkt == 1) || (mmprint.fkt == 2))
 	    half = '+';
 	printf("\n %6d ms: MM2 ", mmprint.strt);
-	printf("A=%3d, F=%1d, D=%2d%c X=%2d ", mm_adrtab[mmprint.adr], mmprint.fkt, mmprint.dat, half, mmprint.xdat);
+	printf("A=%3d, F=%1d, D=%2d%c X=%2d ", mm_adrtab[mmprint.adr & 0xff], mmprint.fkt, mmprint.dat, half, mmprint.xdat);
 	if (((mmprint.xdat == 5) && (mmprint.dat < 8)) || ((mmprint.xdat == 10) && (mmprint.dat > 7)))
 	    mmprint.xdat = mmprint.dat;
 	switch (mmprint.xdat) {
@@ -487,7 +487,7 @@ void new_mm_command(void) {
     if (mmlastdata.freq2) {
 	// TODO
     } else {
-	loco_command.address = mm_adrtab[mmlastdata.adr];
+	loco_command.address = mm_adrtab[mmlastdata.adr & 0xff];
 	loco_command.speed = mmlastdata.dat;
 	loco_command.timestamp = milliseconds;
 	bit_set(loco_command.mask, 0);
