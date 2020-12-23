@@ -25,6 +25,9 @@ along with RailControl; see the file LICENCE. If not see
 #include <vector>
 
 #include "Logger/Logger.h"
+#ifdef AMALGAMATION
+#include "Storage/Sqlite.h"
+#endif
 #include "Storage/StorageHandler.h"
 #include "Utils/Utils.h"
 
