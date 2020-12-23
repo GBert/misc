@@ -1,11 +1,13 @@
 const int revisionnr = 
-1228
+1230
 ;
 const char* commithash = 
-"24f7053c799ea79b7a2018d7830416ee8dfe5fbb";
+"7e4dc8bfd1c44a6484831d7ab50964c0b0f0a8c1";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1230 2020-12-23 17:18:03 +0100 str: fix for linux bug\n" \
+"1229 2020-12-23 16:35:50 +0100 wiopi: crash fixes\n" \
 "1228 2020-12-23 11:15:59 +0100 wiopi:pixel (wip)\n" \
 "1227 2020-12-23 10:46:42 +0100 z21: revert removing xnetgbm option\n" \
 "1226 2020-12-22 19:15:57 +0100 z21: removed xnetgbm option\n" \
