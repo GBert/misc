@@ -19,6 +19,7 @@ volatile uint8_t printlock;
 
 volatile struct st_mm mmdat, mmaltdat, mmlastdata, mmprint;
 volatile struct loco_status loco_command;
+extern volatile struct acc_status acc_command;
 extern volatile uint32_t milliseconds;
 volatile uint8_t command_repeat;
 
@@ -479,13 +480,23 @@ void new_mm_command(void) {
     }
     mmaltdat = mmlastdata;
     command_repeat = 0;
+    acc_command.address = 0;
     loco_command.address = 0;
     loco_command.speed = 0;
     loco_command.function = 0;
     loco_command.timestamp = 0;
     loco_command.mask = 0;
     if (mmlastdata.freq2) {
-	// TODO
+	int addr = mm_adrtab[mmlastdata.adr & 0xff];
+	if (mmlastdata.fkt == 0) {
+	    if (addr == 80)
+		addr = 0;
+	    acc_command.address = (addr -1) * 4 + ((mmprint.dat >> 1) & 3) + 1;
+	    acc_command.port =  mmprint.dat & 1;
+	    acc_command.value = mmprint.dat >> 3;
+	} else {
+	    // printf("FKT F=%1d, D=%2d ", mmprint.fkt, mmprint.dat);
+	}
     } else {
 	loco_command.address = mm_adrtab[mmlastdata.adr & 0xff];
 	loco_command.speed = mmlastdata.dat;

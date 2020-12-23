@@ -20,6 +20,13 @@ struct st_mm {
     bool freq2;
 };
 
+struct acc_status {
+    uint16_t address;
+    uint8_t port;
+    uint8_t value;
+    uint32_t timestamp;
+};
+
 struct loco_status {
     uint16_t address;
     uint16_t speed;

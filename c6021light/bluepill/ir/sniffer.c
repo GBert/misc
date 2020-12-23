@@ -52,6 +52,7 @@ extern volatile uint8_t command_repeat;
 struct loco_status loco_table_status[32];
 extern volatile struct loco_status loco_command;
 volatile struct loco_status loco_command_old;
+volatile struct acc_status acc_command;
 
 static void gpio_setup(void) {
     rcc_periph_clock_enable(RCC_GPIOA);
@@ -94,6 +95,26 @@ void sys_tick_handler(void) {
     }
 }
 
+static void send_mm_accessory(uint16_t address, uint8_t port, uint8_t value) {
+    bool ext, rtr;
+    uint8_t dlc, data[8];
+    uint32_t id;
+
+    rtr = 0;
+    ext = 1;
+    id = 0x00160300;
+    dlc = 6;
+    data[0] = 0;
+    data[1] = 0;
+    address--;
+    address |= 0x3000;
+    data[2] = (address >> 8) & 0xff;
+    data[3] = address & 0xff;
+    data[4] = port;
+    data[5] = value ? 1 : 0;
+    can_transmit(CAN1, id, ext, rtr, dlc, data);
+}
+
 static void send_mm_emergency_stop(uint16_t address) {
     bool ext, rtr;
     uint8_t dlc, data[8];
@@ -110,7 +131,6 @@ static void send_mm_emergency_stop(uint16_t address) {
     data[4] = 3;
     can_transmit(CAN1, id, ext, rtr, dlc, data);
 }
-
 
 static void send_mm_function(uint16_t address, uint8_t function, uint32_t value) {
     bool ext, rtr;
@@ -240,8 +260,12 @@ int main(void) {
 	if (printlock == 2) {
 	    OSCI_PIN_ON;
 	    printlock = 1;
-	    if (command_repeat == 1)
-		check_loco_command_table();
+	    if (command_repeat == 1) {
+		if (acc_command.address)
+		    send_mm_accessory(acc_command.address, acc_command.port, acc_command.value);
+		else
+		    check_loco_command_table();
+	    }
 	    mm_print();
 	    printlock = 0;
 	    loco_command_old = loco_command;
