@@ -48,8 +48,8 @@ BP1	STM32F103 Modul aka BluePill
 Galvanisch isolierte Variante
 ```
 C8	100nF RM2.54
-U4	ISO1050
-PS1	5V DCDC
+U4	ISO1050DUB
+PS1	5V DCDC SIL4 (RFM 0505S)
 ```
 Nicht galv isolierte Variante
 ```
