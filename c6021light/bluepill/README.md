@@ -34,6 +34,30 @@ using SWD interface with st-flash or serial loader stm32-flash (works only with 
 #define GPIO_USART1_RX                  GPIO10          /* PA10 */
 ```
 
+BOM
+---
+```
+C1-C4	100nF RM2.54
+R1,R2	3k3 Ohm
+U1	MC7805 (alt 5V DCDC)
+U2	MC7808 (alt 8V DCDC)
+BP1	STM32F103 Modul aka BluePill
+	2x Buchsenleiste 1x16 2.54mm
+	Messerleiste
+```
+Galvanisch isolierte Variante
+```
+C8	100nF RM2.54
+U4	ISO1050
+PS1	5V DCDC
+```
+Nicht galv isolierte Variante
+```
+C5	100nF RM2.54
+R4	Drahtbrücke
+U3	MCP2562
+```
+
 MP2315 Voltage Regulator module
 -------------------------------
 
