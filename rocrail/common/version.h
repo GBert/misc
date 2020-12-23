@@ -1,11 +1,18 @@
 const int revisionnr = 
-1221
+1228
 ;
 const char* commithash = 
-"a4eee64bd22795c441221d32fb39b4b7034d382e";
+"24f7053c799ea79b7a2018d7830416ee8dfe5fbb";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1228 2020-12-23 11:15:59 +0100 wiopi:pixel (wip)\n" \
+"1227 2020-12-23 10:46:42 +0100 z21: revert removing xnetgbm option\n" \
+"1226 2020-12-22 19:15:57 +0100 z21: removed xnetgbm option\n" \
+"1225 2020-12-22 17:56:43 +0100 z21: set unconditional LocoNet detectors broadcast flag\n" \
+"1224 2020-12-22 12:14:44 +0100 wiopi: Throttle (wip)\n" \
+"1223 2020-12-22 11:13:41 +0100 bidib: allow port numbers up to 255\n" \
+"1222 2020-12-21 09:37:18 +0100 wio: use new TT attribute stepdelay\n" \
 "1221 2020-12-20 15:11:31 +0100 loc: workaround for linux semaphor lock on assigntrain\n" \
 "1220 2020-12-20 14:05:41 +0100 xmlscript: resolve text format attribute value\n" \
 "1219 2020-12-20 10:02:43 +0100 wiopi: support for two on board servos (sudo)\n" \
