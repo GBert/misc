@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2018 OpenWrt.org
+# Copyright (C) 2020 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -25,7 +25,7 @@ define Package/$(PKG_NAME)
 endef
 
 define Package/mrsystem/description
-  MRSystem by Michael Bernstein http://mbernstein.de/modellbahn/bbb.htm
+  MRSystem by Michael Bernstein http://mbernstein.de/modellbahn/can/index.htm
 endef
 
 define Build/Prepare
