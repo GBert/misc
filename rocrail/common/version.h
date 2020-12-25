@@ -1,11 +1,15 @@
 const int revisionnr = 
-1230
+1234
 ;
 const char* commithash = 
-"7e4dc8bfd1c44a6484831d7ab50964c0b0f0a8c1";
+"09898a90c8c23b784eebd62499599016bd2ca68b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1234 2020-12-25 09:25:38 +0100 wiopi: global pinout\n" \
+"1233 2020-12-24 22:20:45 +0100 renderer: rotation fix for line (Lothar)\n" \
+"1232 2020-12-24 13:01:52 +0100 wiopi: moved all hardware interfacing in one object\n" \
+"1231 2020-12-23 20:15:07 +0100 z21: removed double, uncontrolled, gethostbyaddr\n" \
 "1230 2020-12-23 17:18:03 +0100 str: fix for linux bug\n" \
 "1229 2020-12-23 16:35:50 +0100 wiopi: crash fixes\n" \
 "1228 2020-12-23 11:15:59 +0100 wiopi:pixel (wip)\n" \
