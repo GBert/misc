@@ -1,11 +1,16 @@
 const int revisionnr = 
-1234
+1239
 ;
 const char* commithash = 
-"09898a90c8c23b784eebd62499599016bd2ca68b";
+"de3b479e87172114f2ca4f25e6a83bf4b71b3302";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1239 2020-12-26 09:16:07 +0100 wiopi: communication reorg\n" \
+"1238 2020-12-25 21:47:30 +0100 trace: type fix\n" \
+"1237 2020-12-25 18:08:29 +0100 textdialog: color labels added\n" \
+"1236 2020-12-25 14:12:17 +0100 wiopi: LEDScript support\n" \
+"1235 2020-12-25 11:57:32 +0100 wiopi: pinout documentation in the console\n" \
 "1234 2020-12-25 09:25:38 +0100 wiopi: global pinout\n" \
 "1233 2020-12-24 22:20:45 +0100 renderer: rotation fix for line (Lothar)\n" \
 "1232 2020-12-24 13:01:52 +0100 wiopi: moved all hardware interfacing in one object\n" \
