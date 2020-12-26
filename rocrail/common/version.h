@@ -1,11 +1,12 @@
 const int revisionnr = 
-1239
+1240
 ;
 const char* commithash = 
-"de3b479e87172114f2ca4f25e6a83bf4b71b3302";
+"58f75629e3fefc7b9931a826bee59da55ac82294";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1240 2020-12-26 14:28:30 +0100 wiopi: pointer fix\n" \
 "1239 2020-12-26 09:16:07 +0100 wiopi: communication reorg\n" \
 "1238 2020-12-25 21:47:30 +0100 trace: type fix\n" \
 "1237 2020-12-25 18:08:29 +0100 textdialog: color labels added\n" \
