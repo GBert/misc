@@ -104,7 +104,7 @@ LDFLAGS		+= --static -nostartfiles
 LDFLAGS		+= -L$(LIB_DIR)
 LDFLAGS		+= -T$(LDSCRIPT)
 LDFLAGS		+= -Wl,-Map=$(*).map
-LDFLAGS		+= -Wl,--gc-sections
+LDFLAGS		+= -Wl,--gc-sections,--print-memory-usage
 ifeq ($(V),99)
 LDFLAGS		+= -Wl,--print-gc-sections
 endif
