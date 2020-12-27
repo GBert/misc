@@ -1,11 +1,18 @@
 const int revisionnr = 
-1240
+1247
 ;
 const char* commithash = 
-"58f75629e3fefc7b9931a826bee59da55ac82294";
+"f31d716872f285971dabb45c7f6a5195c11cf421";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1247 2020-12-27 14:35:18 +0100 wiopi: fix for I2C read and IO restore\n" \
+"1246 2020-12-27 13:55:18 +0100 rocguiinidlg: check wx version >= 3.1.5 for geting the display scaling factor\n" \
+"1245 2020-12-27 12:24:52 +0100 rocguidialog: listup all monitors\n" \
+"1244 2020-12-27 12:17:17 +0100 rocguidialog: list up all connected monitors\n" \
+"1243 2020-12-27 11:40:55 +0100 rocguidialog: show scale factor\n" \
+"1242 2020-12-27 10:46:18 +0100 rocview: client size adjust for macOS\n" \
+"1241 2020-12-27 09:12:14 +0100 textdialog: fix for color labels\n" \
 "1240 2020-12-26 14:28:30 +0100 wiopi: pointer fix\n" \
 "1239 2020-12-26 09:16:07 +0100 wiopi: communication reorg\n" \
 "1238 2020-12-25 21:47:30 +0100 trace: type fix\n" \
