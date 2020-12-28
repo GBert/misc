@@ -1,11 +1,15 @@
 const int revisionnr = 
-1250
+1254
 ;
 const char* commithash = 
-"5111c3966fe6f6158b18350e13ca24c4fc978e52";
+"9c5e64a38b08a8335379741ac1ea841c0d59aa70";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1254 2020-12-28 21:37:39 +0100 wio: added missing zero termination on CMD_TEXT\n" \
+"1253 2020-12-28 17:17:07 +0100 wio: use fb register type for AIN events\n" \
+"1252 2020-12-28 16:03:53 +0100 wio: analog sensor type added\n" \
+"1251 2020-12-28 15:05:19 +0100 wiopi: adc added\n" \
 "1250 2020-12-28 10:53:24 +0100 stepper: accel/decel improvements\n" \
 "1249 2020-12-28 08:06:11 +0100 wiopi: improved socket broken detection\n" \
 "1248 2020-12-27 17:32:04 +0100 svgutils: rotation center correction\n" \
