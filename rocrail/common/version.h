@@ -1,11 +1,14 @@
 const int revisionnr = 
-1247
+1250
 ;
 const char* commithash = 
-"f31d716872f285971dabb45c7f6a5195c11cf421";
+"5111c3966fe6f6158b18350e13ca24c4fc978e52";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1250 2020-12-28 10:53:24 +0100 stepper: accel/decel improvements\n" \
+"1249 2020-12-28 08:06:11 +0100 wiopi: improved socket broken detection\n" \
+"1248 2020-12-27 17:32:04 +0100 svgutils: rotation center correction\n" \
 "1247 2020-12-27 14:35:18 +0100 wiopi: fix for I2C read and IO restore\n" \
 "1246 2020-12-27 13:55:18 +0100 rocguiinidlg: check wx version >= 3.1.5 for geting the display scaling factor\n" \
 "1245 2020-12-27 12:24:52 +0100 rocguidialog: listup all monitors\n" \
