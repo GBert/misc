@@ -1,11 +1,18 @@
 const int revisionnr = 
-1254
+1261
 ;
 const char* commithash = 
-"9c5e64a38b08a8335379741ac1ea841c0d59aa70";
+"c7de6aaf5e43e252bf083858e9f3fbddc627b65e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1261 2020-12-29 15:03:40 +0100 wiopi: update by tar.gz format\n" \
+"1260 2020-12-29 14:08:27 +0100 rocview: removed client size adjust option\n" \
+"1259 2020-12-29 13:52:42 +0100 guiapp: restore clientsize after initializing frame\n" \
+"1258 2020-12-29 13:49:18 +0100 wiopi/wio: cam start/stop\n" \
+"1257 2020-12-29 12:09:01 +0100 wiopi: stopcam.sh added\n" \
+"1256 2020-12-29 10:48:12 +0100 wiopi: get battery from ADC\n" \
+"1255 2020-12-29 07:34:06 +0100 textdialog: translation for active text added\n" \
 "1254 2020-12-28 21:37:39 +0100 wio: added missing zero termination on CMD_TEXT\n" \
 "1253 2020-12-28 17:17:07 +0100 wio: use fb register type for AIN events\n" \
 "1252 2020-12-28 16:03:53 +0100 wio: analog sensor type added\n" \
