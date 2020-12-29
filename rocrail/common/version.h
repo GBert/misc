@@ -1,11 +1,12 @@
 const int revisionnr = 
-1261
+1262
 ;
 const char* commithash = 
-"c7de6aaf5e43e252bf083858e9f3fbddc627b65e";
+"8e0e2ea4f39f10d731bb716c9eca66a18c0270c3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1262 2020-12-29 22:23:51 +0100 wiopi, pixel: wait until SPI device is ready\n" \
 "1261 2020-12-29 15:03:40 +0100 wiopi: update by tar.gz format\n" \
 "1260 2020-12-29 14:08:27 +0100 rocview: removed client size adjust option\n" \
 "1259 2020-12-29 13:52:42 +0100 guiapp: restore clientsize after initializing frame\n" \
