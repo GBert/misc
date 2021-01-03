@@ -1,11 +1,27 @@
 const int revisionnr = 
-1262
+1278
 ;
 const char* commithash = 
-"8e0e2ea4f39f10d731bb716c9eca66a18c0270c3";
+"a237e63cddfc01a52fd66f3c73ed8d2dbb4c59c6";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1278 2021-01-03 10:04:53 +0100 wiopi: support ADS1115\n" \
+"1277 2021-01-02 16:11:49 +0100 thread: added usleep\n" \
+"1276 2021-01-02 15:37:16 +0100 wiopi: check if a thread is needed, and use softservo\n" \
+"1275 2021-01-02 09:42:01 +0100 wiopi: removed the i2c object\n" \
+"1274 2021-01-02 07:33:21 +0100 userial: check if wanted bps is > 0\n" \
+"1273 2021-01-01 22:10:04 +0100 block: only activate rear protection in case V=0\n" \
+"1272 2021-01-01 16:09:19 +0100 wiopi: removed IO library from makefile\n" \
+"1271 2021-01-01 16:07:42 +0100 wiopi: hardware I/O\n" \
+"1270 2021-01-01 11:08:45 +0100 wiopi: replaced I2C and SPI with own code\n" \
+"1269 2021-01-01 08:45:10 +0100 copyright update\n" \
+"1268 2020-12-31 15:36:25 +0100 wiopi: use own hardware interface instead of 3part library (WIP)\n" \
+"1267 2020-12-31 13:39:16 +0100 wiopi: added scroll text, pin mapping for wPi and PiGPIO\n" \
+"1266 2020-12-31 08:32:38 +0100 wiopi: report low battery\n" \
+"1265 2020-12-30 16:35:38 +0100 wiopi: LiPo measurement added\n" \
+"1264 2020-12-30 10:54:25 +0100 wiopi,display: graphic instructions added\n" \
+"1263 2020-12-30 10:25:40 +0100 posseldlg: 24bit position field\n" \
 "1262 2020-12-29 22:23:51 +0100 wiopi, pixel: wait until SPI device is ready\n" \
 "1261 2020-12-29 15:03:40 +0100 wiopi: update by tar.gz format\n" \
 "1260 2020-12-29 14:08:27 +0100 rocview: removed client size adjust option\n" \
