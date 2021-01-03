@@ -2,7 +2,7 @@ Index: rocrail/rocnetnode/makefile
 ===================================================================
 --- rocrail/rocnetnode/makefile	2018-01-08 10:49:48.921731052 +0100
 +++ rocrail/rocnetnode/makefile	2018-01-08 11:01:27.575718120 +0100
-@@ -140,16 +140,16 @@
+@@ -142,16 +142,16 @@
  #	-cp -p package$(FS)rocnetnode.ini $(DESTDIR)
  
  version:
