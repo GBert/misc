@@ -432,7 +432,7 @@ function onClickSignal(signalID)
 
 function showContextMenu(elementName) {
 	var element = document.getElementById(elementName);
-	if (element === null)
+	if (!element)
 	{
 		return;
 	}
@@ -992,19 +992,6 @@ function dataUpdate(event)
 	}
 }
 
-var updater = new EventSource('/?cmd=updater');
-updater.onmessage = function(event) {
-	dataUpdate(event);
-};
-updater.onerror = function(event) {
-	setTimeout(function() {
-		location.reload();
-	}, 1000);
-};
-
-window.layoutPosX = 0;
-window.layoutPosY = 0;
-
 function loadPopup(url)
 {
 	url += '&posx=' + window.layoutPosX;
@@ -1393,9 +1380,29 @@ function fireRequestAndForget(url)
 
 function selectHasValue(selectId, value) {
 	obj = document.getElementById(selectId);
-	if (obj == null)
+	if (!obj)
 	{
 		return false;
 	}
 	return (obj.innerHTML.indexOf('value="' + value + '"') >= 0);
 }
+
+var noSleep = new NoSleep();
+document.addEventListener('click', function enableNoSleep() {
+	document.removeEventListener('click', enableNoSleep, false);
+	noSleep.enable();
+}, false);
+
+var updater = new EventSource('/?cmd=updater');
+updater.onmessage = function(event) {
+	dataUpdate(event);
+};
+updater.onerror = function(event) {
+	setTimeout(function() {
+		location.reload();
+	}, 1000);
+};
+
+window.layoutPosX = 0;
+window.layoutPosY = 0;
+

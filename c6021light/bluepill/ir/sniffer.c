@@ -184,6 +184,10 @@ static void check_loco_command_table(void) {
     uint8_t idx, i;
     uint16_t speed;
     uint32_t mask;
+
+    // loco address is 0 it's an empty frame
+    if (!loco_command.address)
+	return;
     // search loco address in table
     for (idx = 0; idx <= 31; idx++) {
 	if (loco_table_status[idx].address == loco_command.address)
@@ -206,7 +210,7 @@ static void check_loco_command_table(void) {
 		    send_mm_emergency_stop(loco_command.address);
 		} else {
 		    // IR has only 14 speed steps
-		    speed = ((loco_command.speed & 0x0F) + 1) * 64 - 1;
+		    speed = ((loco_command.speed & 0x0F) - 1) * 64 - 1;
 		    send_mm_can(loco_command.address, speed, 0);
 		}
 		loco_table_status[idx].speed = (loco_table_status[idx].speed & 0x4000) | (loco_command.speed & 0x3FFF);
@@ -266,7 +270,10 @@ int main(void) {
 		else
 		    check_loco_command_table();
 	    }
-	    mm_print();
+	    if (command_repeat)
+		printf(" <REP>");
+	    else
+		mm_print();
 	    printlock = 0;
 	    loco_command_old = loco_command;
 	    OSCI_PIN_OFF;
