@@ -2,7 +2,7 @@ diff --git a/rocnetnode/makefile b/rocnetnode/makefile
 index 3e533d8..7150b3d 100644
 --- a/rocnetnode/makefile
 +++ b/rocnetnode/makefile
-@@ -126,7 +126,7 @@ clean:
+@@ -128,7 +128,7 @@ clean:
 	-$(REMOVE) $(OUTDIR)$(FS)*.o
 	-$(REMOVE) $(GENDIR)$(FS)rocnetnode$(FS)bin$(FS)*
 	-$(REMOVE) $(GENDIR)$(FS)rocnetnode$(FS)public$(FS)*
