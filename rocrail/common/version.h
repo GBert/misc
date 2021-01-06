@@ -1,11 +1,12 @@
 const int revisionnr = 
-1289
+1290
 ;
 const char* commithash = 
-"9cb760f9418259e9c105690574c62252719988a8";
+"1183462b813906ea113769a40e615e390342ad85";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1290 2021-01-06 14:10:59 +0100 wiopi: write ini file on shutdown\n" \
 "1289 2021-01-06 12:06:44 +0100 wiopi,mobile: pulse time for direction relay 250ms\n" \
 "1288 2021-01-06 09:08:29 +0100 wiopi,mobile: changed motor control for relay and FET\n" \
 "1287 2021-01-05 18:02:05 +0100 loc: revert using V_Rmax/V_Rmin from revision 2.1.930/931\n" \
