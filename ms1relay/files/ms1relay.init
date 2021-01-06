@@ -4,7 +4,7 @@
 START=99
 
 start() {
-	ms1relay -d
+	ms1relay -d -l /www/config/lokomotive.ms1
 }
 
 stop() {
