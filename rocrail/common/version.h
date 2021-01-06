@@ -1,11 +1,22 @@
 const int revisionnr = 
-1278
+1289
 ;
 const char* commithash = 
-"a237e63cddfc01a52fd66f3c73ed8d2dbb4c59c6";
+"9cb760f9418259e9c105690574c62252719988a8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1289 2021-01-06 12:06:44 +0100 wiopi,mobile: pulse time for direction relay 250ms\n" \
+"1288 2021-01-06 09:08:29 +0100 wiopi,mobile: changed motor control for relay and FET\n" \
+"1287 2021-01-05 18:02:05 +0100 loc: revert using V_Rmax/V_Rmin from revision 2.1.930/931\n" \
+"1286 2021-01-05 12:19:40 +0100 translation merge: da, cs, fr, de, nl, sl\n" \
+"1285 2021-01-05 11:13:10 +0100 wiopi, manager: use request/release I2C access\n" \
+"1284 2021-01-05 09:43:03 +0100 output: set actdelay to false in case the asswitch option is set\n" \
+"1283 2021-01-05 08:40:11 +0100 wiopi: manager request 3 bytes on poll\n" \
+"1282 2021-01-04 16:00:44 +0100 wiopi: display fast 7seg clock added\n" \
+"1281 2021-01-04 14:37:49 +0100 wio: use port as I2C slave id\n" \
+"1280 2021-01-03 19:06:59 +0100 blockdialog: event sorting optimized\n" \
+"1279 2021-01-03 13:51:36 +0100 wiopi: use the ADS1115 for watching the LiPo\n" \
 "1278 2021-01-03 10:04:53 +0100 wiopi: support ADS1115\n" \
 "1277 2021-01-02 16:11:49 +0100 thread: added usleep\n" \
 "1276 2021-01-02 15:37:16 +0100 wiopi: check if a thread is needed, and use softservo\n" \
