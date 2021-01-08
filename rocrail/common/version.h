@@ -1,11 +1,17 @@
 const int revisionnr = 
-1290
+1296
 ;
 const char* commithash = 
-"1183462b813906ea113769a40e615e390342ad85";
+"01165beaff6ae599663c3ed5f14da24b5e47e107";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1296 2021-01-08 08:26:09 +0100 black list\n" \
+"1295 2021-01-08 08:23:45 +0100 system: check email\n" \
+"1294 2021-01-07 15:01:42 +0100 auipanel: workaround for panel refresh\n" \
+"1293 2021-01-07 12:05:28 +0100 item: fix for isMDI -> isAUI\n" \
+"1292 2021-01-07 11:49:44 +0100 planpanel: changed MDI into AUI flag\n" \
+"1291 2021-01-07 09:18:38 +0100 wiopi: max internal servos 4\n" \
 "1290 2021-01-06 14:10:59 +0100 wiopi: write ini file on shutdown\n" \
 "1289 2021-01-06 12:06:44 +0100 wiopi,mobile: pulse time for direction relay 250ms\n" \
 "1288 2021-01-06 09:08:29 +0100 wiopi,mobile: changed motor control for relay and FET\n" \
