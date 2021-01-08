@@ -14,4 +14,8 @@ Aenderungen
 
 1.2 2020/12
     Loconet C32 entfernt
+
+1.3 2021/01
+    TxD und RxD getauscht auf J52 Pin Header für Standard USB2Serial Module
+    
 ```

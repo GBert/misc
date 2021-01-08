@@ -5,8 +5,8 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "C6021 Light"
-Date "2020-12-16"
-Rev "1.2"
+Date "2021-01-08"
+Rev "1.3"
 Comp "Damian Philipp / Gerhard Bertelsmann"
 Comment1 ""
 Comment2 ""
@@ -685,11 +685,11 @@ F 3 "" H 6425 7025 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text Label 6275 6375 0    50   ~ 0
-RxD
+TxD
 Wire Wire Line
 	6475 6475 6275 6475
 Text Label 6275 6475 0    50   ~ 0
-TxD
+RxD
 Wire Wire Line
 	3800 3025 3625 3025
 Wire Wire Line
