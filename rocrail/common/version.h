@@ -1,11 +1,16 @@
 const int revisionnr = 
-1296
+1301
 ;
 const char* commithash = 
-"01165beaff6ae599663c3ed5f14da24b5e47e107";
+"577d2e6a8411b4388dcb41addc2cfbe6df125b7c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1301 2021-01-10 07:55:38 +0100 wiopi: PCB\n" \
+"1300 2021-01-09 11:41:55 +0100 mttmfcc: analog output support added\n" \
+"1299 2021-01-08 15:32:46 +0100 planpanel: prevent crash on switchen from AUI to Tab\n" \
+"1298 2021-01-08 15:10:13 +0100 wiopi,servo: support for hardware PWM in case of user 0\n" \
+"1297 2021-01-08 13:08:31 +0100 wiopi: hardware PWM\n" \
 "1296 2021-01-08 08:26:09 +0100 black list\n" \
 "1295 2021-01-08 08:23:45 +0100 system: check email\n" \
 "1294 2021-01-07 15:01:42 +0100 auipanel: workaround for panel refresh\n" \
