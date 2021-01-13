@@ -1,11 +1,14 @@
 const int revisionnr = 
-1301
+1304
 ;
 const char* commithash = 
-"577d2e6a8411b4388dcb41addc2cfbe6df125b7c";
+"c45a15db8c2e0791f223e2c8647ed42ecba6c2d0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1304 2021-01-12 11:50:33 +0100 wiopi: hardware update\n" \
+"1303 2021-01-12 10:12:46 +0100 wiopi: headless files\n" \
+"1302 2021-01-11 15:22:31 +0100 wiopi: hardware update and native IO support\n" \
 "1301 2021-01-10 07:55:38 +0100 wiopi: PCB\n" \
 "1300 2021-01-09 11:41:55 +0100 mttmfcc: analog output support added\n" \
 "1299 2021-01-08 15:32:46 +0100 planpanel: prevent crash on switchen from AUI to Tab\n" \
