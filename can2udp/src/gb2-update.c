@@ -454,6 +454,7 @@ void fsm(unsigned char *netframe, struct update_config *device_config) {
 	    }
 	    printf("Start update ...\n");
 	    memcpy(next_frame, M_RESET, 13);
+	    memcpy(&device_id, &netframe[5], 4);
 	    memcpy(&next_frame[5], &device_id, 4);
 	    send_frame(next_frame);
 	    /* delay for boot ? */
