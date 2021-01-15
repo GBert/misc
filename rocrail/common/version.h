@@ -1,11 +1,16 @@
 const int revisionnr = 
-1304
+1309
 ;
 const char* commithash = 
-"c45a15db8c2e0791f223e2c8647ed42ecba6c2d0";
+"e75d019fc382423cef302c0f8f2c363c7a20dce3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1309 2021-01-14 19:28:08 +0100 drcmd removed\n" \
+"1308 2021-01-14 16:22:33 +0100 wiodlg: label changes on select of wiopi\n" \
+"1307 2021-01-14 13:23:46 +0100 block: fix for min/max random wait\n" \
+"1306 2021-01-13 13:38:27 +0100 wiopi: fix for reading and ignoring XML\n" \
+"1305 2021-01-13 08:51:46 +0100 rocweb: use global image path if not found in the rocweb context\n" \
 "1304 2021-01-12 11:50:33 +0100 wiopi: hardware update\n" \
 "1303 2021-01-12 10:12:46 +0100 wiopi: headless files\n" \
 "1302 2021-01-11 15:22:31 +0100 wiopi: hardware update and native IO support\n" \
