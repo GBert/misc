@@ -147,7 +147,7 @@ int finished;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -l <port> -d <port> -b <broacast_addr> -i <can interface> <update file>\n", prg);
-    fprintf(stderr, "   Version 0.2\n");
+    fprintf(stderr, "   Version 0.3\n");
     fprintf(stderr, "\n");
     fprintf(stderr, "         -d <port>           destination UDP port - default 15731\n");
     fprintf(stderr, "         -l <port>           listening UDP port   - default 15730\n");
