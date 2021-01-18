@@ -1,11 +1,13 @@
 const int revisionnr = 
-1314
+1316
 ;
 const char* commithash = 
-"f670c8610238cbf53a7f1e28dad882113c3f704f";
+"a4cd1738d260bc55801e752ff65eb21433cde1dd";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1316 2021-01-18 10:50:18 +0100 tt: f6915 check for position sensor\n" \
+"1315 2021-01-18 08:53:59 +0100 loc: disable check2in in case of schedule/tour\n" \
 "1314 2021-01-17 13:46:00 +0100 wiopi,id12: fix for RFID event type\n" \
 "1313 2021-01-17 09:57:59 +0100 wiopi: use pin 12 for mobile PWM\n" \
 "1312 2021-01-17 08:48:08 +0100 mbusdlg: fix for portnumber field sizes\n" \
