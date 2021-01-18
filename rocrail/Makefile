@@ -202,6 +202,11 @@ define Package/rocrail-mqtt/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/rnet.so $(1)/opt/rocrail
 endef
 
+define Package/rocrail-wio/install
+	$(INSTALL_DIR) $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/wio.so $(1)/opt/rocrail
+endef
+
 define Package/rocrail-cs-mbus/install
 	$(INSTALL_DIR) $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/mbus.so $(1)/opt/rocrail
