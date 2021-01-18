@@ -65,6 +65,17 @@ define Package/rocrail-mqtt/description
  MQTT extension for Rocrail
 endef
 
+define Package/rocrail-wio
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=WioPi
+  DEPENDS:=rocrail
+endef
+
+define Package/rocrail-wio/description
+ WioPi
+endef
+
 define Package/rocrail-cs-mbus
   SECTION:=utils
   CATEGORY:=Utilities
