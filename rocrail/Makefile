@@ -7,8 +7,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rocrail
-PKG_REV:=a4cd1738d2
-PKG_VERSION:=n1316
+PKG_REV:=28f7f6866b
+PKG_VERSION:=n1317
 PKG_RELEASE:=
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -54,6 +54,17 @@ define Package/rocweb/description
  This package contains Rocweb, a WEB Browser based Rocrail client for all platforms including mobile devices
 endef
 
+define Package/rocrail-hue
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=Philips HUE Bridge
+  DEPENDS:=rocrail
+endef
+
+define Package/rocrail-hue/description
+  Philips HUE Bridge extension
+endef
+
 define Package/rocrail-mqtt
   SECTION:=utils
   CATEGORY:=Utilities
@@ -73,7 +84,7 @@ define Package/rocrail-wio
 endef
 
 define Package/rocrail-wio/description
- WioPi
+ Rob Versluis WioPi extension
 endef
 
 define Package/rocrail-cs-mbus
@@ -197,6 +208,11 @@ define Package/rocweb/install
 	$(CP) $(PKG_BUILD_DIR)/rocrail/impl/web/html/* $(1)/opt/rocrail/web/html
 endef
 
+define Package/rocrail-hue/install
+	$(INSTALL_DIR) $(1)/opt/rocrail
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/hue.so $(1)/opt/rocrail
+endef
+
 define Package/rocrail-mqtt/install
 	$(INSTALL_DIR) $(1)/opt/rocrail
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unxbin/rnet.so $(1)/opt/rocrail
@@ -286,6 +302,7 @@ endef
 $(eval $(call BuildPackage,rocrail))
 $(eval $(call BuildPackage,rocnetnode))
 $(eval $(call BuildPackage,rocweb))
+$(eval $(call BuildPackage,rocrail-hue))
 $(eval $(call BuildPackage,rocrail-mqtt))
 $(eval $(call BuildPackage,rocrail-wio))
 $(eval $(call BuildPackage,rocrail-cs-mbus))
