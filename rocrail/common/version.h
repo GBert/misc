@@ -1,11 +1,19 @@
 const int revisionnr = 
-1317
+1325
 ;
 const char* commithash = 
-"28f7f6866b6cf7bdda9a086da4ca9629b6a74ddd";
+"1a2349e4b79f36deee79bc34dbb84e9b97a3339b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1325 2021-01-21 15:29:08 +0100 wiopi: allow up to 16 char node name\n" \
+"1324 2021-01-21 12:18:57 +0100 wiopi: support for mosfet, esc and hbridge mobile\n" \
+"1323 2021-01-20 08:53:40 +0100 wiopi: stop ESC on shutdown\n" \
+"1322 2021-01-20 08:13:47 +0100 wait4event: ignore Check2In in case of last schedule entry\n" \
+"1321 2021-01-20 08:02:09 +0100 REVERT loc: disable check2in in case of schedule/tour\n" \
+"1320 2021-01-19 10:27:57 +0100 rocrail: releasename set to 'Iron'\n" \
+"1319 2021-01-19 09:05:14 +0100 tt: f6915 broadcast new position after position is confirmed\n" \
+"1318 2021-01-19 08:26:34 +0100 wiopi: added Pi01 to user pindefs\n" \
 "1317 2021-01-19 08:09:30 +0100 wiopi: user pindefs for stepper and mobile\n" \
 "1316 2021-01-18 10:50:18 +0100 tt: f6915 check for position sensor\n" \
 "1315 2021-01-18 08:53:59 +0100 loc: disable check2in in case of schedule/tour\n" \
