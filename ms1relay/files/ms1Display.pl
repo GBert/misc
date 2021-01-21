@@ -15,6 +15,7 @@
 #						Trigger "cansend can0 180002F0#" wird bei neuer Datei gesendet
 #	1.01	16.01.2021	neu ms1relay Restart-Button
 #	1.02	16.01.2021	Vorbelegung aus /www/config/lokomotive.ms1
+#	1.03	16.01.2021	ms1relay Restart-Button deaktiviert
 
 use strict;
 $|=1;            # Flush immediately.
@@ -24,7 +25,7 @@ my($tool, %Parameter, $xx, $version, $lokDat, $ms1Dat, $rtr, $trigger, @ms1Loks)
 $0 =~ s!.*/!!;
 $tool = $0;
 $tool =~ s/\.pl//;
-$version = "1.02";
+$version = "1.03";
 
 $lokDat = "/www/config/lokomotive.cs2";
 $ms1Dat = "/www/config/lokomotive.ms1";
@@ -144,7 +145,7 @@ sub lokliste4ms1{
 		}
 	}
 	print "<button type=\"submit\" class=\"btn action\" name=\"action\" value=\"\">Home</button>";
-	print "<button type=\"submit\" class=\"btn action\" name=\"action\" value=\"restart\">Restart ms1relay</button>";
+#	print "<button type=\"submit\" class=\"btn action\" name=\"action\" value=\"restart\">Restart ms1relay</button>";
 	print "</form>";
 	print"</div>";
 	close IN;
