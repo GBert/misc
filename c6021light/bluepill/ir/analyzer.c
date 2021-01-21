@@ -565,8 +565,9 @@ void analyzer(int start, int duration) {
     }
     paar = altduration + duration;
 
-    if (dcccounter)
+/*    if (dcccounter)
 	dcc_analyzer();
+*/
     if (mfxcounter)
 	mfx_analyzer(duration);
 

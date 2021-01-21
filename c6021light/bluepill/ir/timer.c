@@ -21,12 +21,16 @@ void tim3_isr(void) {
     uint32_t sr = TIM_SR(TIM3);
 
     if (sr & TIM_SR_CC1IF) {
+	OSCI_PIN_ON;
 	cc1if = TIM_CCR1(TIM3) - cc2if;
 	analyzer(milliseconds, cc1if);
+	OSCI_PIN_OFF;
     }
     if (sr & TIM_SR_CC2IF) {
+	OSCI_PIN_ON;
 	cc2if = TIM_CCR2(TIM3);
 	analyzer(milliseconds, cc2if);
+	OSCI_PIN_OFF;
     }
 }
 

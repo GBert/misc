@@ -262,7 +262,7 @@ int main(void) {
     /* endless loop */
     while (1) {
 	if (printlock == 2) {
-	    OSCI_PIN_ON;
+	    //OSCI_PIN_ON;
 	    printlock = 1;
 	    if (command_repeat == 1) {
 		if (acc_command.address)
@@ -276,7 +276,7 @@ int main(void) {
 		mm_print();
 	    printlock = 0;
 	    loco_command_old = loco_command;
-	    OSCI_PIN_OFF;
+	    //OSCI_PIN_OFF;
 	}
     }
     return 0;
