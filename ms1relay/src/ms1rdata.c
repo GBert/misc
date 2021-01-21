@@ -1,12 +1,13 @@
 // ms1rdata.c : MS1 adaption to MCS
 //
-// C 2020 Rainer Mæller
+// C 2020-2021 Rainer Müller
 // Das Programm unterliegt den Bedingungen der GNU General Public License 3 (GPL3).
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "ms1relay.h"
 
@@ -25,7 +26,7 @@ static uint8_t xl2to1[] = {
     LIGHT,  LIGHT2, LIGHT1, SOUNDX, SOUNDX, SOUNDX, FUSYM,  LIGHT,  LIGHT,    SOUNDX };
 
 
-locodat_t *pld;
+locodat_t *pld = NULL;
 int16_t loconum;
 
 
@@ -41,7 +42,7 @@ int readDBfile(char *filename, int entries, int verbose)
 {
     char *found, buffer[BUF];
 
-    pld = (locodat_t *) calloc(entries, sizeof(locodat_t));
+    if (pld == NULL) pld = (locodat_t *) calloc(entries, sizeof(locodat_t));
     if (pld == NULL) {
         fprintf(stderr, "memory allocation failed\n");
         return 12;
@@ -87,9 +88,9 @@ doclose:
         locodat_t *dp = pld;
         for (int l = 0; l < loconum; l++) {
             strncpy(name, dp->loconame, 16);
-            printf("UID: %04X, SYM: %u, Name: %s\n", dp->locoid, dp->locoicon, name);
+            printf("OH: %3u UID: %04X, SYM: %u, Name: %s\n  ", OH_LOCO + l, dp->locoid, dp->locoicon, name);
             for (int f = 0; f < dp->funmbr; f++) printf("FUNC%d:%2X  ", f, dp->futype[f]);
-            printf("\n\n");
+            printf("\n");
             dp++;
         }
     }
@@ -112,4 +113,20 @@ locodat_t *getlocodat(uint16_t handle)
         if (index < loconum) return (pld + index);
     }
     return NULL;        // no valid data available
+}
+
+int updatereadDB(char *filename, int entries, int verbose)
+{
+    uint8_t node = 0;           // we actually have only one MS1
+    int16_t oldlocos = loconum;
+    locostackRemove(node, OH_LOCO);             // remove first loco
+
+    int cc = readDBfile(filename, entries, verbose);
+    if (cc) return cc;          // exit on error
+    locostackAdd(node, OH_LOCO);                // add new locos
+    for (int l = 1; l < oldlocos; l++) {
+        usleep(5000);
+        locostackRemove(node, OH_LOCO + l);     // remove former locos
+    }
+    return 0;
 }

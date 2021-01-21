@@ -1,8 +1,8 @@
 // ms1relay.c : MS1 adaption to MCS
 //
-// C 2020 Rainer Mæller
+// C 2020-2021 Rainer Müller
 // Das Programm unterliegt den Bedingungen der GNU General Public License 3 (GPL3).
-// Teile æbernommen aus SW von Gerhard Bertelsmann
+// Teile übernommen aus SW von Gerhard Bertelsmann
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,6 +37,8 @@ static unsigned char sdhandlerep[6] = {0x00, 0x00, 0x00, OH_SDES, 0x00, 0x01};
 static unsigned char syhandlerep[6] = {0x00, 0x00, 0x00, OH_SYST, 0x00, 0x01};
 static unsigned char querymsname[3] = {0x02, 0x00, 0x00};
 static unsigned char allowMScntl[6] = {0x03, 0x00, 0x00, 0x08, 0x00, 0x01};
+static unsigned char locostackad[8] = {0x80, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x03};
+static unsigned char locostackrm[8] = {0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};
 
 // device specific data in NW order <------- UID ------->  <- vers ->  < device >
 static unsigned char M_DEV_ID[] = {0x76, 0x54, 0x4D, 0x01, 0x14, 0x0B, 0xFF, 0xF1};
@@ -61,11 +63,40 @@ void fillid(uint8_t *u, uint32_t v)
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 0.2\n\n");
+    fprintf(stderr, "   Version 0.3\n\n");
     fprintf(stderr, "         -i <can int>        can interface - default %s\n", DEF_CAN);
     fprintf(stderr, "         -d                  daemonize\n");
     fprintf(stderr, "         -l <loco_db>        loco database file - default %s\n", DEF_LOCODB);
     fprintf(stderr, "         -v                  verbose output\n\n");
+}
+
+void locostackAdd(uint8_t node, uint16_t objhandle)
+{
+    struct can_frame frame;
+    frame.can_id = 0x18000200 | CAN_EFF_FLAG | (OH_ROOT << 10) | node;
+    frame.can_dlc = 8;
+    memcpy(frame.data, locostackad, 8);
+    frame.data[4] = objhandle >> 8;
+    frame.data[5] = objhandle & 0xFF;
+    if (write(sc, &frame, sizeof(struct can_frame)) < 0)
+        fprintf(stderr, "error line %d writing CAN frame: %s\n", __LINE__, strerror(errno));
+    ms1d.multiadd++;
+    ms1d.slvstackcnt++;
+    VPRT("Add to stack of node %u OH %u, count is now %u\n", node, objhandle, ms1d.slvstackcnt);
+}
+
+void locostackRemove(uint8_t node, uint16_t objhandle)
+{
+    struct can_frame frame;
+    frame.can_id = 0x18000280 | CAN_EFF_FLAG | (OH_ROOT << 10) | node;
+    frame.can_dlc = 8;
+    memcpy(frame.data, locostackrm, 8);
+    frame.data[4] = objhandle >> 8;
+    frame.data[5] = objhandle & 0xFF;
+    if (write(sc, &frame, sizeof(struct can_frame)) < 0)
+        fprintf(stderr, "error line %d writing CAN frame: %s\n", __LINE__, strerror(errno));
+    ms1d.slvstackcnt--;
+    VPRT("Remove from stack of node %u OH %u, count is now %u\n", node, objhandle, ms1d.slvstackcnt);
 }
 
 void sendstatetoall(struct can_frame frame)
@@ -289,6 +320,13 @@ int main(int argc, char **argv) {
         frame.can_dlc = 6;
         memcpy(frame.data, allowMScntl, 6);
         VPRT("Node %u allows control loco with handle %u\n", node, objhandle);
+        if (ms1d.multiadd) {
+            objhandle = getNextOH(node, objhandle);
+            if (objhandle) {
+                locostackAdd(node - 1, objhandle);
+            }
+            else ms1d.multiadd = 0;
+        }
         break;
     case 0x18000080:        // Prio 110, Cmd 001    => device and loco properties
         if (objhandle == OH_SDES) {
@@ -402,15 +440,18 @@ int main(int argc, char **argv) {
                     printf("Node %u gets SlaveDescriptionHandle %u\n",  node, be16(frame.data+4));
                     break;
         case 0x80:  frame.can_id = 0;      // not yet coded
-//                  printf("Lokstack erweitern fær Node %u mit Index %u", frame.data[1], be16(frame.data+4));
+//                  printf("Lokstack erweitern für Node %u mit Index %u", frame.data[1], be16(frame.data+4));
                     break;
         }
         break;
-/*
     case 0x18000280:		// Prio 110, Cmd 101
-        printf("Lokstackeintrag l�schen mit Index %u", be16(frame->data + 4));
+        if (frame.can_id == (0x180002F0 | CAN_EFF_FLAG)) {
+            printf("Updating the loco database.\n");
+            updatereadDB(locodbname, 10, verbose);
+        }
+        frame.can_id = 0;
+//      printf("Lokstackeintrag löschen mit Index %u", be16(frame->data + 4));
         break;
-*/
     case 0x1C000000:        // Prio 111, Cmd 00X    => MS1 discovery and startup
         stage = (frame.can_id >> 15) & 0x07;
         VPRT("MS1 Identification Stage %u\n", stage);
@@ -440,8 +481,8 @@ int main(int argc, char **argv) {
         }
         break;
     default:
-        frame.can_id = 0;           // no reply
         printf("<message %08X is still not decoded>\n", frame.can_id);
+        frame.can_id = 0;           // no reply
     }
     if (frame.can_id) {
         if (write(sc, &frame, sizeof(struct can_frame)) < 0)
