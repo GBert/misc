@@ -1,8 +1,9 @@
-- Eingleisige Strecken im Gegenverkehr / Fahrtrichtung über mehrere Blöcke
-- Mehrfachtraktion als separate Lok anzeigen, einzelne Loks trotzdem separat steuerbar.
+- Bug: Erreichen des zweiten reservierten Blocks muss beide vorhergehende Blöcke freigeben
+- Mehrfachtraktion als separate Lok anzeigen, einzelne Loks trotzdem separat steuerbar
+- Zugkategorien für Fahrstrassen
+- Manuelle Wahl einer Fahrstrasse einer Lok im Automode
 - Mehrbegriffige Signale
 - Notaus bei Rückmelder an/aus
-- Wenden in einem Block erlauben/nicht erlauben
 - Fahrstrassen mit unverschlossenen Objekten
 - Text-Elemente im Layout
 - Aktionen ausführen bei Feedback an/aus
@@ -15,7 +16,6 @@
 - Lokbilder
 - Fahren nach Fahrplan bzw. Vorgabe des Zielortes
 - Formulare als POST-Request senden um maximale URL-Länge zu umgehen
-- Lokfunktionen mit konfigurierbaren Icons
 - Synchronisieren der ECoS / CS2 Lok-Datenbank
 - Anbinden des SPROG DCC
 - Anbinden der Zimo-Zentralen

@@ -5,5 +5,8 @@
 # Default dbfilename is railcontrol.sqlite
 dbfilename = railcontrol.sqlite
 
+# Default dbkeepbackups is 10
+# dbkeepbackups = 10
+
 # Default webserver port is 80, default alt webserver port is 8081
 webserverport = 8081
