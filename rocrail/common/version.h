@@ -1,11 +1,14 @@
 const int revisionnr = 
-1327
+1330
 ;
 const char* commithash = 
-"72f13b67d4719017c3c4d99a7fceed6b5afbaddf";
+"d8869f619c2b33831c51961d5f88a86fd9db07ac";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1330 2021-01-24 12:13:09 +0100 feedbackdialog: show usage of tt, seltab, sg\n" \
+"1329 2021-01-24 11:25:23 +0100 wiopi: normalized init/type\n" \
+"1328 2021-01-24 10:52:53 +0100 cv: fix for cv0 trace\n" \
 "1327 2021-01-23 16:33:38 +0100 wiopi: update.sh remove existing gz before download\n" \
 "1326 2021-01-23 15:01:00 +0100 mbus: disable reading config on discovery in case Rocrail is not master\n" \
 "1325 2021-01-21 15:29:08 +0100 wiopi: allow up to 16 char node name\n" \
