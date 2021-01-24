@@ -1,11 +1,13 @@
 const int revisionnr = 
-1325
+1327
 ;
 const char* commithash = 
-"1a2349e4b79f36deee79bc34dbb84e9b97a3339b";
+"72f13b67d4719017c3c4d99a7fceed6b5afbaddf";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1327 2021-01-23 16:33:38 +0100 wiopi: update.sh remove existing gz before download\n" \
+"1326 2021-01-23 15:01:00 +0100 mbus: disable reading config on discovery in case Rocrail is not master\n" \
 "1325 2021-01-21 15:29:08 +0100 wiopi: allow up to 16 char node name\n" \
 "1324 2021-01-21 12:18:57 +0100 wiopi: support for mosfet, esc and hbridge mobile\n" \
 "1323 2021-01-20 08:53:40 +0100 wiopi: stop ESC on shutdown\n" \
