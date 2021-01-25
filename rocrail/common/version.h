@@ -1,11 +1,13 @@
 const int revisionnr = 
-1330
+1332
 ;
 const char* commithash = 
-"d8869f619c2b33831c51961d5f88a86fd9db07ac";
+"d9e96d316a3340c639deb34f5f08c00c684ebd85";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1332 2021-01-24 16:42:59 +0100 feedbackdialog: usage added for tt bridge sensors\n" \
+"1331 2021-01-24 14:31:50 +0100 feedbackdialog: sblist added for checking usage\n" \
 "1330 2021-01-24 12:13:09 +0100 feedbackdialog: show usage of tt, seltab, sg\n" \
 "1329 2021-01-24 11:25:23 +0100 wiopi: normalized init/type\n" \
 "1328 2021-01-24 10:52:53 +0100 cv: fix for cv0 trace\n" \
