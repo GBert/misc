@@ -372,6 +372,13 @@ CAN_SWITCH_ACC_FAULT
 ;------------------------------------------------------------------------------
 
 S88_EVENT
+                ; test S88 bus length and return if 0
+                MOVFF	S88LENGTH,WREG
+                IORLW	0
+                ; return if 0
+                BTFSC	STATUS,Z
+                RETURN
+
                 MOVF	CANFRAME+4,W
                 XORLW	4
                 BTFSC	STATUS,Z
@@ -471,10 +478,10 @@ CAN_PING_CONT
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                ; Version 1.11
+                ; Version 1.12
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	11
+                MOVLW	12
                 MOVWF	POSTINC0
                 MOVLW	0
                 MOVWF	POSTINC0
@@ -531,10 +538,10 @@ CAN_BOOTLOADER_PING
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                ; Version 1.11
+                ; Version 1.12
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	11
+                MOVLW	12
                 MOVWF	POSTINC0
                 MOVLW	0
                 MOVWF	POSTINC0
