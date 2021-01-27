@@ -42,8 +42,6 @@
 #define MAERKLIN_PORT		15731
 #define MAXSIZE			16384
 
-#define MAXDG   256		/* maximum datagram size */
-
 uint16_t CRCCCITT(unsigned char *data, size_t length, unsigned short seed);
 
 extern struct z21_data_t z21_data;

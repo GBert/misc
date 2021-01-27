@@ -12,7 +12,7 @@
 #define _Z21_H_
 
 #define MAX(a,b)		((a) > (b) ? (a) : (b))
-#define MAXDG			256	/* maximum datagram size */
+#define MAXDG			1500	/* maximum datagram size */
 #define MAXIPLEN		40	/* maximum IP string length */
 #define PRIMARY_UDP_PORT	21105
 #define SECONDARY_UDP_PORT	21106
