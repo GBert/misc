@@ -1,11 +1,21 @@
 const int revisionnr = 
-1332
+1342
 ;
 const char* commithash = 
-"d9e96d316a3340c639deb34f5f08c00c684ebd85";
+"e72f51ff1adb87eaff4ca1d2c90601357a96a9db";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1342 2021-01-27 22:06:24 +0100 wiopi: commented out the auto server find (wip)\n" \
+"1341 2021-01-27 15:44:45 +0100 wiopi: auto detect server\n" \
+"1340 2021-01-27 11:08:37 +0100 control: crash fix if no default digint is available\n" \
+"1339 2021-01-27 10:24:38 +0100 wiopi: mobile stepper motor support\n" \
+"1338 2021-01-26 13:54:21 +0100 wiodlg: fix for update message in case of wiopi\n" \
+"1337 2021-01-26 11:36:09 +0100 wiopi: BLDC mobile type support added (wip)\n" \
+"1336 2021-01-25 15:39:10 +0100 wiopi: do not report servo position in case of ESC or wheel\n" \
+"1335 2021-01-25 12:15:06 +0100 wiopi: bridge sensor inputs added for type stepper\n" \
+"1334 2021-01-25 11:21:56 +0100 modbus: clock support added\n" \
+"1333 2021-01-25 08:29:51 +0100 feedbackdialog: open usage object on dclick\n" \
 "1332 2021-01-24 16:42:59 +0100 feedbackdialog: usage added for tt bridge sensors\n" \
 "1331 2021-01-24 14:31:50 +0100 feedbackdialog: sblist added for checking usage\n" \
 "1330 2021-01-24 12:13:09 +0100 feedbackdialog: show usage of tt, seltab, sg\n" \
