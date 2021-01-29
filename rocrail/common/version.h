@@ -1,11 +1,15 @@
 const int revisionnr = 
-1342
+1346
 ;
 const char* commithash = 
-"e72f51ff1adb87eaff4ca1d2c90601357a96a9db";
+"593a5e66183f3ebdfb49822f7d22db328feb158a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1346 2021-01-29 13:05:36 +0100 model: lookup block/location by RFID\n" \
+"1345 2021-01-28 14:46:13 +0100 wiopi: r2rnet wrapper option default true\n" \
+"1344 2021-01-28 10:10:07 +0100 wiopi: r2rnet fix for request\n" \
+"1343 2021-01-28 09:38:22 +0100 wiopi: r2rnet thread added for server scan\n" \
 "1342 2021-01-27 22:06:24 +0100 wiopi: commented out the auto server find (wip)\n" \
 "1341 2021-01-27 15:44:45 +0100 wiopi: auto detect server\n" \
 "1340 2021-01-27 11:08:37 +0100 control: crash fix if no default digint is available\n" \
