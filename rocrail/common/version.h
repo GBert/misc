@@ -1,11 +1,13 @@
 const int revisionnr = 
-1346
+1348
 ;
 const char* commithash = 
-"593a5e66183f3ebdfb49822f7d22db328feb158a";
+"6f6e5af6aa0755536ac6bd6e57baf6f28bf670d8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1348 2021-01-30 11:01:40 +0100 renderer: fix for output shunting\n" \
+"1347 2021-01-30 10:44:36 +0100 wio: inform loco and train of a tracking event\n" \
 "1346 2021-01-29 13:05:36 +0100 model: lookup block/location by RFID\n" \
 "1345 2021-01-28 14:46:13 +0100 wiopi: r2rnet wrapper option default true\n" \
 "1344 2021-01-28 10:10:07 +0100 wiopi: r2rnet fix for request\n" \
