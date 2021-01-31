@@ -1,11 +1,13 @@
 const int revisionnr = 
-1350
+1352
 ;
 const char* commithash = 
-"9ac03f1cb310ce483923c58b0108a73d900fbfc7";
+"762b817f46495826f54f82c44402cb36e211a8a4";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1352 2021-01-31 14:33:39 +0100 wiopi: fix for r2rnet timeout\n" \
+"1351 2021-01-31 12:10:23 +0100 tt: support the invert direction for type WIO\n" \
 "1350 2021-01-31 09:17:19 +0100 wiopi,model: tracking improved\n" \
 "1349 2021-01-31 09:16:51 +0100 route: skip finder option added\n" \
 "1348 2021-01-30 11:01:40 +0100 renderer: fix for output shunting\n" \
