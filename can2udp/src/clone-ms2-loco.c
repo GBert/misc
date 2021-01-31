@@ -137,10 +137,10 @@ void signal_handler(int sig) {
 
 void usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -kfv [-i <CAN int>][-t <sec>][-l <LED pin>][-p <push button pin>]\n", prg);
-    fprintf(stderr, "   Version 1.4\n\n");
+    fprintf(stderr, "   Version 1.5\n\n");
     fprintf(stderr, "         -c <loco_dir>        set the locomotive file dir - default %s\n", loco_dir);
     fprintf(stderr, "         -i <CAN interface>   using can interface\n");
-    fprintf(stderr, "         -t <interval in sec> using timer in sec\n");
+    fprintf(stderr, "         -t <interval in sec> using timer in sec - 0 only once and exit\n");
     fprintf(stderr, "         -l <LED pin>         LED pin (e.g. BPi PI14 -> 270)\n");
     fprintf(stderr, "         -p <push button>     push button (e.g. BPi PI10 -> 266)\n");
     fprintf(stderr, "         -k                   use loco 'Lokliste' F0 as trigger\n");
@@ -541,6 +541,9 @@ int get_data(struct trigger_t *trigger, struct can_frame *frame) {
 		set_led_pattern(trigger, LED_ST_HB_SLOW);
 		if (!trigger->background && trigger->verbose)
 		    printf("FSM_IDLE done\n");
+		/* check if we are done */
+		if (trigger->interval == 0)
+		    do_loop = 0;
 		trigger->fsm_state = FSM_IDLE;
 		trigger->loco_counter = 0;
 	    }
@@ -621,6 +624,7 @@ int main(int argc, char **argv) {
     memset(ifr.ifr_name, 0, sizeof(ifr.ifr_name));
     strcpy(ifr.ifr_name, "can0");
     do_loop = 1;
+    trigger_data.interval = -1;
     interval = 0;
     fsm_watchdog = FSM_WATCHDOG_T;
 
@@ -802,12 +806,16 @@ int main(int argc, char **argv) {
 	    /* periodic task check */
 	    ts.tv_sec = 1;
 	    ts.tv_nsec = 0;
-	    if (trigger_data.interval) {
+	    if (trigger_data.interval > 0) {
 		if (interval-- == 0) {
 		    trigger_data.fsm_state = FSM_START;
 		    get_ms2_dbsize(&trigger_data);
 		    interval = trigger_data.interval;
 		}
+	    } else if (trigger_data.interval == 0) {
+		/* just do only once */
+		trigger_data.fsm_state = FSM_START;
+		get_ms2_dbsize(&trigger_data);
 	    }
 	    if (trigger_data.fsm_state == FSM_IDLE) {
 		fsm_watchdog = FSM_WATCHDOG_T;
