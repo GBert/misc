@@ -1,11 +1,31 @@
 const int revisionnr = 
-1332
+1352
 ;
 const char* commithash = 
-"d9e96d316a3340c639deb34f5f08c00c684ebd85";
+"762b817f46495826f54f82c44402cb36e211a8a4";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1352 2021-01-31 14:33:39 +0100 wiopi: fix for r2rnet timeout\n" \
+"1351 2021-01-31 12:10:23 +0100 tt: support the invert direction for type WIO\n" \
+"1350 2021-01-31 09:17:19 +0100 wiopi,model: tracking improved\n" \
+"1349 2021-01-31 09:16:51 +0100 route: skip finder option added\n" \
+"1348 2021-01-30 11:01:40 +0100 renderer: fix for output shunting\n" \
+"1347 2021-01-30 10:44:36 +0100 wio: inform loco and train of a tracking event\n" \
+"1346 2021-01-29 13:05:36 +0100 model: lookup block/location by RFID\n" \
+"1345 2021-01-28 14:46:13 +0100 wiopi: r2rnet wrapper option default true\n" \
+"1344 2021-01-28 10:10:07 +0100 wiopi: r2rnet fix for request\n" \
+"1343 2021-01-28 09:38:22 +0100 wiopi: r2rnet thread added for server scan\n" \
+"1342 2021-01-27 22:06:24 +0100 wiopi: commented out the auto server find (wip)\n" \
+"1341 2021-01-27 15:44:45 +0100 wiopi: auto detect server\n" \
+"1340 2021-01-27 11:08:37 +0100 control: crash fix if no default digint is available\n" \
+"1339 2021-01-27 10:24:38 +0100 wiopi: mobile stepper motor support\n" \
+"1338 2021-01-26 13:54:21 +0100 wiodlg: fix for update message in case of wiopi\n" \
+"1337 2021-01-26 11:36:09 +0100 wiopi: BLDC mobile type support added (wip)\n" \
+"1336 2021-01-25 15:39:10 +0100 wiopi: do not report servo position in case of ESC or wheel\n" \
+"1335 2021-01-25 12:15:06 +0100 wiopi: bridge sensor inputs added for type stepper\n" \
+"1334 2021-01-25 11:21:56 +0100 modbus: clock support added\n" \
+"1333 2021-01-25 08:29:51 +0100 feedbackdialog: open usage object on dclick\n" \
 "1332 2021-01-24 16:42:59 +0100 feedbackdialog: usage added for tt bridge sensors\n" \
 "1331 2021-01-24 14:31:50 +0100 feedbackdialog: sblist added for checking usage\n" \
 "1330 2021-01-24 12:13:09 +0100 feedbackdialog: show usage of tt, seltab, sg\n" \
