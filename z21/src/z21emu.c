@@ -84,7 +84,7 @@ static unsigned char XPN_X_STORE2[]               = { 0x14, 0x00, 0x16, 0x00, 0x
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c config_dir -p <port> -s <port>\n", prg);
-    fprintf(stderr, "   Version 1.02\n\n");
+    fprintf(stderr, "   Version 1.03\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory - default %s\n", config_dir);
     fprintf(stderr, "         -p <port>           primary UDP port for the server - default %d\n", PRIMARY_UDP_PORT);
     fprintf(stderr, "         -s <port>           secondary UDP port for the server - default %d\n", SECONDARY_UDP_PORT);
@@ -533,7 +533,8 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, unsigned char *udpframe
 
 int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
     uint32_t flags, i;
-    uint16_t length, header;
+    uint16_t length, header, address;
+    uint8_t type;
     char *vchar;
 
     vchar = NULL;
@@ -606,6 +607,28 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	    break;
 	case 0x84:
 	    /* ignore self sent data */
+	    break;
+	case LAN_LOCONET_DETECTOR:
+	    if (length == 0x07) {
+		vas_printf(verbose, &vchar, "LAN_LOCONET_DETECTOR ");
+		type = z21_data->udpframe[i + 4];
+	        address = le16(&z21_data->udpframe[i + 5]);
+		switch (type) {
+		case (0x80):
+		    vas_printf(verbose, &vchar, "get SIC %u\n", address);
+		    break;
+		case (0x81):
+		    vas_printf(verbose, &vchar, "get ULB %u\n", address);
+		    break;
+		case (0x82):
+		    vas_printf(verbose, &vchar, "get LISSY %u\n", address);
+		    break;
+		default:
+		    vas_printf(verbose, &vchar, "0x%02x get %u\n", type, address);
+		    break;
+		}
+		z21_data->bcf = 0x00000000;
+	    }
 	    break;
 	default:
 	    v_printf(verbose, "XPN unknown\n");
