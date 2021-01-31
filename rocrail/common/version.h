@@ -1,11 +1,13 @@
 const int revisionnr = 
-1348
+1350
 ;
 const char* commithash = 
-"6f6e5af6aa0755536ac6bd6e57baf6f28bf670d8";
+"9ac03f1cb310ce483923c58b0108a73d900fbfc7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1350 2021-01-31 09:17:19 +0100 wiopi,model: tracking improved\n" \
+"1349 2021-01-31 09:16:51 +0100 route: skip finder option added\n" \
 "1348 2021-01-30 11:01:40 +0100 renderer: fix for output shunting\n" \
 "1347 2021-01-30 10:44:36 +0100 wio: inform loco and train of a tracking event\n" \
 "1346 2021-01-29 13:05:36 +0100 model: lookup block/location by RFID\n" \
