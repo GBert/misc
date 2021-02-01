@@ -84,7 +84,7 @@ static unsigned char XPN_X_STORE2[]               = { 0x14, 0x00, 0x16, 0x00, 0x
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c config_dir -p <port> -s <port>\n", prg);
-    fprintf(stderr, "   Version 1.03\n\n");
+    fprintf(stderr, "   Version 1.04\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory - default %s\n", config_dir);
     fprintf(stderr, "         -p <port>           primary UDP port for the server - default %d\n", PRIMARY_UDP_PORT);
     fprintf(stderr, "         -s <port>           secondary UDP port for the server - default %d\n", SECONDARY_UDP_PORT);
@@ -263,7 +263,7 @@ int send_xpn_loco_name(uint16_t loco_id, char *loco_name, uint8_t index, uint8_t
     memcpy(&xpnframe[10], loco_name, length);
     xpnframe[length + 10] = xor(&xpnframe[4], length + 6);
     z21_data.bcf = 0x00000000;
-    vas_printf(verbose, &vchar, " LAN_LOCO 0x%04X %s", loco_id, loco_name);
+    vas_printf(verbose, &vchar, " LAN_LOCO 0x%04X %s\n", loco_id, loco_name);
     send_xpn(xpnframe, vchar);
     check_free(vchar);
     return (EXIT_SUCCESS);
@@ -525,6 +525,7 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, unsigned char *udpframe
 	send_xpn(XPN_X_Z21_FIRMWARE_VERSION, vchar);
 	break;
     default:
+	v_printf(verbose, "\n");
 	break;
     }
     check_free(vchar);
@@ -612,21 +613,21 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 	    break;
 	case LAN_LOCONET_DETECTOR:
 	    if (length == 0x07) {
-		vas_printf(verbose, &vchar, "LAN_LOCONET_DETECTOR ");
+		v_printf(verbose, "LAN_LOCONET_DETECTOR ");
 		type = z21_data->udpframe[i + 4];
 	        address = le16(&z21_data->udpframe[i + 5]);
 		switch (type) {
 		case (0x80):
-		    vas_printf(verbose, &vchar, "get SIC %u\n", address);
+		    v_printf(verbose, "get SIC %u\n", address);
 		    break;
 		case (0x81):
-		    vas_printf(verbose, &vchar, "get ULB %u\n", address);
+		    v_printf(verbose, "get ULB %u\n", address);
 		    break;
 		case (0x82):
-		    vas_printf(verbose, &vchar, "get LISSY %u\n", address);
+		    v_printf(verbose, "get LISSY %u\n", address);
 		    break;
 		default:
-		    vas_printf(verbose, &vchar, "0x%02x get %u\n", type, address);
+		    v_printf(verbose, "0x%02x get %u\n", type, address);
 		    break;
 		}
 		z21_data->bcf = 0x00000000;
