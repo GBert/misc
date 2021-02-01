@@ -543,6 +543,8 @@ int check_data_xpn(struct z21_data_t *z21_data, int udplength, int verbose) {
 
     while (i + length <= udplength) {
 	length = le16(&z21_data->udpframe[i]);
+	if (length == 0)
+	   break;
 	header = le16(&z21_data->udpframe[i + 2]);
 	if (verbose)
 	    print_udp_frame(UDP_SRC_STRG, length, &z21_data->udpframe[i]);
