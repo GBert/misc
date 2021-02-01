@@ -1,11 +1,12 @@
 const int revisionnr = 
-1352
+1353
 ;
 const char* commithash = 
-"762b817f46495826f54f82c44402cb36e211a8a4";
+"ea6a47117b938dea42093f1384db9854ab81348a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1353 2021-02-01 15:23:47 +0100 r2rnet: crash fix in case the client connection is not yet initialized\n" \
 "1352 2021-01-31 14:33:39 +0100 wiopi: fix for r2rnet timeout\n" \
 "1351 2021-01-31 12:10:23 +0100 tt: support the invert direction for type WIO\n" \
 "1350 2021-01-31 09:17:19 +0100 wiopi,model: tracking improved\n" \
