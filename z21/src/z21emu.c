@@ -75,6 +75,7 @@ static unsigned char XPN_HWINFO_RESPONSE[]        = { 0x0C, 0x00, 0x1A, 0x00, 0x
 static unsigned char XPN_X_STATUS_CHANGED[]       = { 0x08, 0x00, 0x40, 0x00, 0x62, 0x22, 0x00, 0x40 };
 static unsigned char XPN_X_BC_TRACK_POWER_OFF[]   = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x00, 0x61 };
 static unsigned char XPN_X_BC_TRACK_POWER_ON[]    = { 0x07, 0x00, 0x40, 0x00, 0x61, 0x01, 0x60 };
+static unsigned char XPN_X_BC_STOPPED[]           = { 0x06, 0x00, 0x40, 0x00, 0x81, 0x81 };
 static unsigned char XPN_X_LOCO_INFO[]            = { 0x0E, 0x00, 0x40, 0x00, 0xEF, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static unsigned char XPN_X_TURNOUT_INFO[]         = { 0x09, 0x00, 0x40, 0x00, 0x43, 0x00, 0x00, 0x00, 0x00 };
 static unsigned char XPN_X_Z21_FIRMWARE_VERSION[] = { 0x09, 0x00, 0x40, 0x00, 0xF3, 0x0A, 0x01, 0x32, 0xCA };
@@ -84,7 +85,7 @@ static unsigned char XPN_X_STORE2[]               = { 0x14, 0x00, 0x16, 0x00, 0x
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -c config_dir -p <port> -s <port>\n", prg);
-    fprintf(stderr, "   Version 1.04\n\n");
+    fprintf(stderr, "   Version 1.05\n\n");
     fprintf(stderr, "         -c <config_dir>     set the config directory - default %s\n", config_dir);
     fprintf(stderr, "         -p <port>           primary UDP port for the server - default %d\n", PRIMARY_UDP_PORT);
     fprintf(stderr, "         -s <port>           secondary UDP port for the server - default %d\n", SECONDARY_UDP_PORT);
@@ -523,6 +524,15 @@ int check_data_lan_x_header(struct z21_data_t *z21_data, unsigned char *udpframe
 	vas_printf(verbose, &vchar, "LAN_X_FIRMWARE_VERSION %u.%u%u\n", XPN_X_Z21_FIRMWARE_VERSION[6],
 		   XPN_X_Z21_FIRMWARE_VERSION[7] >> 4, XPN_X_Z21_FIRMWARE_VERSION[7] & 0xF);
 	send_xpn(XPN_X_Z21_FIRMWARE_VERSION, vchar);
+	break;
+    case LAN_X_SET_STOP:
+	v_printf(verbose, "LAN_X_SET_STOP\n");
+	z21_data->power = 0;
+	send_can(MS_POWER_OFF, verbose);
+	v_printf(verbose, "\n");
+	memcpy(xpnframe, XPN_X_BC_STOPPED, sizeof(XPN_X_BC_STOPPED));
+	vas_printf(verbose, &vchar, "LAN_X_BC_STOPPED\n");
+	send_xpn(xpnframe, vchar);
 	break;
     default:
 	v_printf(verbose, "\n");
