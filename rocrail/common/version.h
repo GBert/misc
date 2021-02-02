@@ -1,11 +1,17 @@
 const int revisionnr = 
-1353
+1359
 ;
 const char* commithash = 
-"ea6a47117b938dea42093f1384db9854ab81348a";
+"36dd24ec76bed2397d10bdf452f62018645f94bc";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1359 2021-02-02 18:02:09 +0100 rocweb: help link corrected\n" \
+"1358 2021-02-02 12:09:12 +0100 wiopi,r2rnet: reject messages from self\n" \
+"1357 2021-02-02 10:40:29 +0100 base: timing fix for scan Servers on R2RNet\n" \
+"1356 2021-02-02 10:18:25 +0100 wiopi: r2rnet try IP if hostname does not connect\n" \
+"1355 2021-02-02 08:07:13 +0100 finder: location for final destination option added\n" \
+"1354 2021-02-02 07:35:44 +0100 srcp: simulate sensor support added\n" \
 "1353 2021-02-01 15:23:47 +0100 r2rnet: crash fix in case the client connection is not yet initialized\n" \
 "1352 2021-01-31 14:33:39 +0100 wiopi: fix for r2rnet timeout\n" \
 "1351 2021-01-31 12:10:23 +0100 tt: support the invert direction for type WIO\n" \
