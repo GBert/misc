@@ -2940,6 +2940,9 @@ bool Manager::LocoStartAll()
 	std::lock_guard<std::mutex> guard(locoMutex);
 	for (auto loco : locos)
 	{
+		loco.second->GoToAutoMode();
+		Utils::Utils::SleepForMilliseconds(50);
+		/*
 		bool ret = loco.second->GoToAutoMode();
 		if (ret == false)
 		{
@@ -2952,6 +2955,7 @@ bool Manager::LocoStartAll()
 				control.second->LocoStart(loco.first, loco.second->GetName());
 			}
 		}
+		*/
 	}
 	return true;
 }
@@ -3007,6 +3011,7 @@ bool Manager::LocoStopAll()
 			}
 			bool locoInManualMode = loco.second->GoToManualMode();
 			anyLocosInAutoMode |= !locoInManualMode;
+			/*
 			if (locoInManualMode)
 			{
 				const string& locoName = loco.second->GetName();
@@ -3016,6 +3021,7 @@ bool Manager::LocoStopAll()
 					control.second->LocoStop(loco.first, locoName);
 				}
 			}
+			*/
 		}
 	}
 	return true;
