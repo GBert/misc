@@ -1,11 +1,22 @@
 const int revisionnr = 
-1359
+1370
 ;
 const char* commithash = 
-"36dd24ec76bed2397d10bdf452f62018645f94bc";
+"1d8e4402c16c4b0c13c4e234c705362813b28e61";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1370 2021-02-05 16:31:27 +0100 guiframe: fix for LightControl in Table menu\n" \
+"1369 2021-02-05 15:27:21 +0100 wiopi: EoD option added\n" \
+"1368 2021-02-05 14:04:03 +0100 loc: provide light state in case of shunting command\n" \
+"1367 2021-02-05 11:17:49 +0100 lightctrl: go/stop command added\n" \
+"1366 2021-02-05 09:04:25 +0100 svgutils: fix for rotating south\n" \
+"1365 2021-02-05 08:06:56 +0100 r2rnet IP address correction: 224.0.0.1:8051\n" \
+"1364 2021-02-04 10:48:25 +0100 r2rnet: netroutes polling option added\n" \
+"1363 2021-02-04 10:18:39 +0100 wiopi: added const for user IO\n" \
+"1362 2021-02-03 22:05:43 +0100 wrapper: r2rnet default active\n" \
+"1361 2021-02-03 13:43:07 +0100 lightctrl: deactivate light if its in no record on\n" \
+"1360 2021-02-03 09:54:19 +0100 wiopi: user I/O\n" \
 "1359 2021-02-02 18:02:09 +0100 rocweb: help link corrected\n" \
 "1358 2021-02-02 12:09:12 +0100 wiopi,r2rnet: reject messages from self\n" \
 "1357 2021-02-02 10:40:29 +0100 base: timing fix for scan Servers on R2RNet\n" \
