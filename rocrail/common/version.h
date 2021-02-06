@@ -1,11 +1,12 @@
 const int revisionnr = 
-1370
+1371
 ;
 const char* commithash = 
-"1d8e4402c16c4b0c13c4e234c705362813b28e61";
+"ebb2f4db678baa80099d0ef3ab737aa88e899ecc";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1371 2021-02-06 16:30:01 +0100 block: check for nested virtual blocks\n" \
 "1370 2021-02-05 16:31:27 +0100 guiframe: fix for LightControl in Table menu\n" \
 "1369 2021-02-05 15:27:21 +0100 wiopi: EoD option added\n" \
 "1368 2021-02-05 14:04:03 +0100 loc: provide light state in case of shunting command\n" \
