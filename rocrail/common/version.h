@@ -1,11 +1,20 @@
 const int revisionnr = 
-1371
+1380
 ;
 const char* commithash = 
-"ebb2f4db678baa80099d0ef3ab737aa88e899ecc";
+"54e7d8d5ed599603a92daba2ccadb6916084c8ad";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1380 2021-02-09 15:07:45 +0100 wiopi: sysupdate script version from Lothar\n" \
+"1379 2021-02-09 10:50:40 +0100 wiopi: update symbol for statusbar\n" \
+"1378 2021-02-09 09:12:02 +0100 wiopi: signal sysupdate by battery 200\n" \
+"1377 2021-02-08 16:17:24 +0100 wiopi: sysupdate\n" \
+"1376 2021-02-08 15:00:45 +0100 wiopi: sysupdate command added\n" \
+"1375 2021-02-08 10:43:18 +0100 signal: blank distant signal support for aspect type\n" \
+"1374 2021-02-07 16:49:32 +0100 cardlg: description column added\n" \
+"1373 2021-02-07 13:44:44 +0100 wiopi: fix for get/set first 32 IOs\n" \
+"1372 2021-02-07 12:39:52 +0100 wiopi: fix for r2rnet socket recovering at reboot\n" \
 "1371 2021-02-06 16:30:01 +0100 block: check for nested virtual blocks\n" \
 "1370 2021-02-05 16:31:27 +0100 guiframe: fix for LightControl in Table menu\n" \
 "1369 2021-02-05 15:27:21 +0100 wiopi: EoD option added\n" \
