@@ -1,11 +1,14 @@
 const int revisionnr = 
-1380
+1383
 ;
 const char* commithash = 
-"54e7d8d5ed599603a92daba2ccadb6916084c8ad";
+"b46c12415adc8bfe9d2f18b45ec59a7a1f7f8df0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1383 2021-02-10 14:14:24 +0100 xmlscript: binstate support\n" \
+"1382 2021-02-10 12:26:36 +0100 auipanel: crash fix\n" \
+"1381 2021-02-10 11:03:18 +0100 wiodlg: fix for start WEB Browser for type WIOpi\n" \
 "1380 2021-02-09 15:07:45 +0100 wiopi: sysupdate script version from Lothar\n" \
 "1379 2021-02-09 10:50:40 +0100 wiopi: update symbol for statusbar\n" \
 "1378 2021-02-09 09:12:02 +0100 wiopi: signal sysupdate by battery 200\n" \
