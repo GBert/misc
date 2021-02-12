@@ -1,11 +1,13 @@
 const int revisionnr = 
-1383
+1385
 ;
 const char* commithash = 
-"b46c12415adc8bfe9d2f18b45ec59a7a1f7f8df0";
+"b3bb44a75cd121177be365e2faa087c17bfc2f24";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1385 2021-02-11 11:17:32 +0100 scheduledialog: crash fixes\n" \
+"1384 2021-02-11 10:26:39 +0100 var,xmlscript: crash fixes\n" \
 "1383 2021-02-10 14:14:24 +0100 xmlscript: binstate support\n" \
 "1382 2021-02-10 12:26:36 +0100 auipanel: crash fix\n" \
 "1381 2021-02-10 11:03:18 +0100 wiodlg: fix for start WEB Browser for type WIOpi\n" \
