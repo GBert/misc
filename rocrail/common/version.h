@@ -1,11 +1,19 @@
 const int revisionnr = 
-1385
+1393
 ;
 const char* commithash = 
-"b3bb44a75cd121177be365e2faa087c17bfc2f24";
+"e7e47bb3e1b4380b6edf2434b1555b53fcee39b2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1393 2021-02-14 12:31:46 +0100 block: regard timers on shortin events\n" \
+"1392 2021-02-14 10:54:39 +0100 toolbardlg: wio icon added\n" \
+"1391 2021-02-14 10:23:36 +0100 guiframe: wio icon added\n" \
+"1390 2021-02-12 15:04:19 +0100 gcode: file upload support\n" \
+"1389 2021-02-12 14:32:14 +0100 gcode: support added\n" \
+"1388 2021-02-12 09:06:34 +0100 loc: remove pending events on (soft) reset\n" \
+"1387 2021-02-12 08:04:02 +0100 seltab: crash fix in case a managed block does not exist\n" \
+"1386 2021-02-12 07:45:34 +0100 block: show loco image option\n" \
 "1385 2021-02-11 11:17:32 +0100 scheduledialog: crash fixes\n" \
 "1384 2021-02-11 10:26:39 +0100 var,xmlscript: crash fixes\n" \
 "1383 2021-02-10 14:14:24 +0100 xmlscript: binstate support\n" \
