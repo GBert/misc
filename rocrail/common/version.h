@@ -1,11 +1,16 @@
 const int revisionnr = 
-1393
+1398
 ;
 const char* commithash = 
-"e7e47bb3e1b4380b6edf2434b1555b53fcee39b2";
+"a28e8a359fc75583fe5f7646d1e9b270d3ca06f3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1398 2021-02-15 10:34:57 +0100 seltab: use saved position at startup\n" \
+"1397 2021-02-15 09:06:25 +0100 output: use own color if the command does not contain a color node\n" \
+"1396 2021-02-14 18:12:31 +0100 guiframe: removed double WIO from programming menu\n" \
+"1395 2021-02-14 16:14:37 +0100 wiodlg: show warning in case of deepsleep/shutdown all\n" \
+"1394 2021-02-14 15:03:33 +0100 wiopi,wiodlg: shutdown all option added\n" \
 "1393 2021-02-14 12:31:46 +0100 block: regard timers on shortin events\n" \
 "1392 2021-02-14 10:54:39 +0100 toolbardlg: wio icon added\n" \
 "1391 2021-02-14 10:23:36 +0100 guiframe: wio icon added\n" \
