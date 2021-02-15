@@ -1,11 +1,15 @@
 const int revisionnr = 
-1398
+1402
 ;
 const char* commithash = 
-"a28e8a359fc75583fe5f7646d1e9b270d3ca06f3";
+"ac1ce811007fa5858a495280d4275c4c21df9369";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1402 2021-02-15 12:58:06 +0100 signal: fix for CTC and reset ID\n" \
+"1401 2021-02-15 11:26:39 +0100 r2rnet: completely removed RASCII\n" \
+"1400 2021-02-15 11:25:35 +0100 r2rnet: removed RASCII loop\n" \
+"1399 2021-02-15 11:23:06 +0100 r2rnet: RASCII fix\n" \
 "1398 2021-02-15 10:34:57 +0100 seltab: use saved position at startup\n" \
 "1397 2021-02-15 09:06:25 +0100 output: use own color if the command does not contain a color node\n" \
 "1396 2021-02-14 18:12:31 +0100 guiframe: removed double WIO from programming menu\n" \
