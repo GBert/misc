@@ -1,11 +1,15 @@
 const int revisionnr = 
-1402
+1406
 ;
 const char* commithash = 
-"ac1ce811007fa5858a495280d4275c4c21df9369";
+"7b05aa6795a2b3f5932f181c9e8fa1b68bdc762e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1406 2021-02-16 22:03:49 +0100 loc: crash fix for removing queued commands\n" \
+"1405 2021-02-16 10:53:51 +0100 guiframe: start workspace with command line option -virtual in case 'issue' is found in the path\n" \
+"1404 2021-02-16 10:27:11 +0100 bidib: MAXDYN define for 64 dynstate values\n" \
+"1403 2021-02-16 08:55:50 +0100 bidib: support for dynstate 0...127\n" \
 "1402 2021-02-15 12:58:06 +0100 signal: fix for CTC and reset ID\n" \
 "1401 2021-02-15 11:26:39 +0100 r2rnet: completely removed RASCII\n" \
 "1400 2021-02-15 11:25:35 +0100 r2rnet: removed RASCII loop\n" \
