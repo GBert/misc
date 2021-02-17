@@ -147,7 +147,7 @@ int finished;
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -l <port> -d <port> -b <broacast_addr> -i <can interface> <update file>\n", prg);
-    fprintf(stderr, "   Version 0.3\n");
+    fprintf(stderr, "   Version 0.4\n");
     fprintf(stderr, "\n");
     fprintf(stderr, "         -d <port>           destination UDP port - default 15731\n");
     fprintf(stderr, "         -l <port>           listening UDP port   - default 15730\n");
@@ -469,7 +469,9 @@ void fsm(unsigned char *netframe, struct update_config *device_config) {
     case (0x00370000UL):
 	/* should always be true */
 	if (device_id != 0) {
-	    if ((netframe[4] == 8) && (memcmp(&netframe[5], &device_id, 4) == 0) && (netframe[12] == 0x10)) {
+	    if ((netframe[4] == 8) && (memcmp(&netframe[5], &device_id, 4) == 0) &&
+		/* the Gleisbox firmware variety of types seems to be growing ... */
+		((netframe[12] == 0x10) || (netframe[12] == 0x11) || (netframe[12] == 0x32 ))) {
 		/* prepare test frame for later use */
 		memcpy(checkframe, netframe, 10);
 		memset(&checkframe[10], 0, 3);
