@@ -1,11 +1,15 @@
 const int revisionnr = 
-1406
+1410
 ;
 const char* commithash = 
-"7b05aa6795a2b3f5932f181c9e8fa1b68bdc762e";
+"f743ff48de01287637938563c117f83779905865";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1410 2021-02-17 15:46:40 +0100 z21: booster support\n" \
+"1409 2021-02-17 08:44:07 +0100 accgroup: call outputs with the provided value(birghtness)\n" \
+"1408 2021-02-17 08:16:23 +0100 wrapper: boosterevents flag\n" \
+"1407 2021-02-17 08:14:43 +0100 z21: flag added for booster events -> not supported because of missing documentation\n" \
 "1406 2021-02-16 22:03:49 +0100 loc: crash fix for removing queued commands\n" \
 "1405 2021-02-16 10:53:51 +0100 guiframe: start workspace with command line option -virtual in case 'issue' is found in the path\n" \
 "1404 2021-02-16 10:27:11 +0100 bidib: MAXDYN define for 64 dynstate values\n" \
