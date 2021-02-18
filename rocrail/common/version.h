@@ -1,11 +1,14 @@
 const int revisionnr = 
-1410
+1413
 ;
 const char* commithash = 
-"f743ff48de01287637938563c117f83779905865";
+"a5b330d764230864638078db56b3d6e9ac4b4c78";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1413 2021-02-18 14:56:51 +0100 wiopi: sudo in startwiopi script\n" \
+"1412 2021-02-18 08:11:49 +0100 booster: subuid added for multiple port boosters\n" \
+"1411 2021-02-17 22:07:49 +0100 wiopi-01 schedule update\n" \
 "1410 2021-02-17 15:46:40 +0100 z21: booster support\n" \
 "1409 2021-02-17 08:44:07 +0100 accgroup: call outputs with the provided value(birghtness)\n" \
 "1408 2021-02-17 08:16:23 +0100 wrapper: boosterevents flag\n" \
