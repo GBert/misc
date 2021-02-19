@@ -1,11 +1,13 @@
 const int revisionnr = 
-1413
+1415
 ;
 const char* commithash = 
-"a5b330d764230864638078db56b3d6e9ac4b4c78";
+"7e0c38fe3b939fba3a078686a7f59bbc5c139b33";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1415 2021-02-19 14:07:31 +0100 powermandlg: fix for subuid\n" \
+"1414 2021-02-19 10:57:07 +0100 wiopi: options and modifications for the WIOpi-01 board\n" \
 "1413 2021-02-18 14:56:51 +0100 wiopi: sudo in startwiopi script\n" \
 "1412 2021-02-18 08:11:49 +0100 booster: subuid added for multiple port boosters\n" \
 "1411 2021-02-17 22:07:49 +0100 wiopi-01 schedule update\n" \
