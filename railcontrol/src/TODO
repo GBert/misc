@@ -1,4 +1,4 @@
-- Bug: Erreichen des zweiten reservierten Blocks muss beide vorhergehende Blöcke freigeben
+- Signal an Gleis assoziieren um bei einer Fahrstrasse als Startsignal zu verwenden
 - Mehrfachtraktion als separate Lok anzeigen, einzelne Loks trotzdem separat steuerbar
 - Zugkategorien für Fahrstrassen
 - Manuelle Wahl einer Fahrstrasse einer Lok im Automode

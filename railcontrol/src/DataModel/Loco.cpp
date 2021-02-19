@@ -266,14 +266,11 @@ namespace DataModel
 					{
 						FeedbackIdFirstReached();
 					}
-					if (feedbackId == feedbackIdStop)
+					else if (feedbackId == feedbackIdStop)
 					{
-						if (feedbackIdFirst != FeedbackNone)
-						{
-							FeedbackIdFirstReached();
-						}
 						FeedbackIdStopReached();
 					}
+					continue;
 				}
 
 				switch (state)
@@ -444,7 +441,7 @@ namespace DataModel
 			return;
 		}
 
-		bool isOrientationSet = newTrack->SetLocoOrientation(static_cast<Orientation>(usedRoute->GetToOrientation()));
+		const bool isOrientationSet = newTrack->SetLocoOrientation(static_cast<Orientation>(usedRoute->GetToOrientation()));
 		if (isOrientationSet == false)
 		{
 			return;
@@ -579,6 +576,10 @@ namespace DataModel
 		if (feedbackID == feedbackIdStop)
 		{
 			manager->LocoSpeed(ControlTypeInternal, this, MinSpeed);
+			if (feedbackIdFirst != 0)
+			{
+				feedbackIdsReached.Enqueue(feedbackIdFirst);
+			}
 			feedbackIdsReached.Enqueue(feedbackIdStop);
 			return;
 		}
@@ -589,6 +590,10 @@ namespace DataModel
 			{
 				manager->LocoSpeed(ControlTypeInternal, this, creepingSpeed);
 			}
+			if (feedbackIdFirst != 0)
+			{
+				feedbackIdsReached.Enqueue(feedbackIdFirst);
+			}
 			return;
 		}
 
@@ -597,6 +602,10 @@ namespace DataModel
 			if (speed > reducedSpeed)
 			{
 				manager->LocoSpeed(ControlTypeInternal, this, reducedSpeed);
+			}
+			if (feedbackIdFirst != 0)
+			{
+				feedbackIdsReached.Enqueue(feedbackIdFirst);
 			}
 			return;
 		}
