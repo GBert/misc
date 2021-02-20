@@ -1,11 +1,13 @@
 const int revisionnr = 
-1416
+1418
 ;
 const char* commithash = 
-"e68af400ba6e4396b059256057927ef3f4f3b2aa";
+"591d2f8e356816f1487cf652200cf24caf94d818";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1418 2021-02-20 08:22:53 +0100 wiopi: crash fix on shutdown\n" \
+"1417 2021-02-20 08:12:31 +0100 wiopi: scan for a Rocrail server in case a LAN connection is valid\n" \
 "1416 2021-02-19 15:51:04 +0100 wiopi: extra pins for H-Bridge-I\n" \
 "1415 2021-02-19 14:07:31 +0100 powermandlg: fix for subuid\n" \
 "1414 2021-02-19 10:57:07 +0100 wiopi: options and modifications for the WIOpi-01 board\n" \
