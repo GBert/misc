@@ -1,11 +1,16 @@
 const int revisionnr = 
-1422
+1427
 ;
 const char* commithash = 
-"ac960b68604a6df2df3d3b43d4995c4843d53bfb";
+"72e6aee4f63b142578ce5d3fb2e8f9878ad7e55e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1427 2021-02-22 15:55:14 +0100 Rocrail Logo in STL format: Thanks to Dagnall\n" \
+"1426 2021-02-22 15:22:08 +0100 wiopi: provide environment on query\n" \
+"1425 2021-02-22 14:58:43 +0100 wiopi: use also sudo in the reboot an update scripts\n" \
+"1424 2021-02-22 14:30:48 +0100 wiopi: hardware update\n" \
+"1423 2021-02-22 12:20:59 +0100 wiopi: hardware update\n" \
 "1422 2021-02-22 08:32:57 +0100 z21: keepm record of booster loadmax and voltmin\n" \
 "1421 2021-02-21 13:30:10 +0100 guiframe: regard selected booster UID also in the status bulbs\n" \
 "1420 2021-02-20 15:16:35 +0100 powerctrldlg: fix for selecting booster by uid and subuid\n" \
