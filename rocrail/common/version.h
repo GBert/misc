@@ -1,11 +1,15 @@
 const int revisionnr = 
-1418
+1422
 ;
 const char* commithash = 
-"591d2f8e356816f1487cf652200cf24caf94d818";
+"ac960b68604a6df2df3d3b43d4995c4843d53bfb";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1422 2021-02-22 08:32:57 +0100 z21: keepm record of booster loadmax and voltmin\n" \
+"1421 2021-02-21 13:30:10 +0100 guiframe: regard selected booster UID also in the status bulbs\n" \
+"1420 2021-02-20 15:16:35 +0100 powerctrldlg: fix for selecting booster by uid and subuid\n" \
+"1419 2021-02-20 11:46:52 +0100 wiopi: piprefix option added for scanning LAN connection\n" \
 "1418 2021-02-20 08:22:53 +0100 wiopi: crash fix on shutdown\n" \
 "1417 2021-02-20 08:12:31 +0100 wiopi: scan for a Rocrail server in case a LAN connection is valid\n" \
 "1416 2021-02-19 15:51:04 +0100 wiopi: extra pins for H-Bridge-I\n" \
