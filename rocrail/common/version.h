@@ -1,11 +1,12 @@
 const int revisionnr = 
-1427
+1428
 ;
 const char* commithash = 
-"72e6aee4f63b142578ce5d3fb2e8f9878ad7e55e";
+"f78ee5792787fb058df77179c104b535ca6942ff";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1428 2021-02-23 10:54:40 +0100 wio: options4 added\n" \
 "1427 2021-02-22 15:55:14 +0100 Rocrail Logo in STL format: Thanks to Dagnall\n" \
 "1426 2021-02-22 15:22:08 +0100 wiopi: provide environment on query\n" \
 "1425 2021-02-22 14:58:43 +0100 wiopi: use also sudo in the reboot an update scripts\n" \
