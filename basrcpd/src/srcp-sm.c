@@ -210,7 +210,7 @@ int infoSM(bus_t busnumber, sm_protocol_t protocol, sm_command_t command, sm_typ
                "SM - TYPE: %d, CV: %d, BIT: %d, VALUE: 0x%02x", type, typeaddr,
                bit_index, value);
     session_lock_wait(busnumber);
-    status = enqueueSM(busnumber, protocol, command, type, addr & 0x3fff,
+    status = enqueueSM(busnumber, protocol, command, type, addr,
 												typeaddr, bit_index, value);
 
     if (session_condt_wait(busnumber, 90, &result) == ETIMEDOUT) {
@@ -233,6 +233,19 @@ int infoSM(bus_t busnumber, sm_protocol_t protocol, sm_command_t command, sm_typ
                             "%lu.%.3lu 100 INFO %lu SM %d CV %d %d\n",
                             now.tv_sec, now.tv_usec / 1000, busnumber,
                             addr, typeaddr, result);
+                    if (addr < 0) addr = -addr;
+					minfo[0] = 3;
+					minfo[1] = typeaddr >> 8;
+					minfo[2] = typeaddr & 0xFF;
+					minfo[3] = result;
+                    if (command == SET) {
+                        minfo[0] = 4;
+                        minfo[4] = 0xC0;
+                        info_mcs(busnumber, 0x11, addr | 0xC000, minfo);
+                    }
+                    else {
+                        info_mcs(busnumber, 0x0F, addr | 0xC000, minfo);
+                    }
                     break;
                 case REGISTER:
                     snprintf(info, MAXSRCPLINELEN,
@@ -251,6 +264,11 @@ int infoSM(bus_t busnumber, sm_protocol_t protocol, sm_command_t command, sm_typ
                             "%lu.%.3lu 100 INFO %lu SM %d CVBIT %d %d %d\n",
                             now.tv_sec, now.tv_usec / 1000, busnumber,
                             addr, typeaddr, bit_index, result);
+                    break;
+                case MM_REG:
+                    minfo[0] = 1;	
+                    minfo[1] = 33;
+                    info_mcs(busnumber, 3, result, minfo);
                     break;
                 case BIND_MFX:
                     snprintf(info, MAXSRCPLINELEN,
@@ -312,11 +330,12 @@ void handle_mcs_config(bus_t bus, sm_command_t command,
 	char reply[MAXSRCPLINELEN];
 	sm_protocol_t protocol;
     sm_type_t type;
+    int addr = uid & 0x3fff;
 	
     switch(uid >> 14) {
 		case 0:	protocol = PROTO_MM;
 				if (command == GET) goto defmsg;
-				type = CV; 
+				type = MM_REG; 
 				break;
 		case 1:	protocol = PROTO_MFX;
 				type = CV_MFX;
@@ -333,12 +352,24 @@ void handle_mcs_config(bus_t bus, sm_command_t command,
 								break; 			
 					default:	goto defmsg;	
 				}
-				if ((ctrl & 0x80) == 0) uid = -uid;		// programming track
+				if ((ctrl & 0x80) == 0) addr = -addr;		// programming track
 				break;	
 		default:
 		defmsg:	syslog_bus(bus, DBG_WARN, 
 					"*** Config command for UID %x not supported.", uid);
 				return;		
 	}
-	infoSM(bus, protocol, command, type, uid, cvaddr, cvindex, value, reply);
+	infoSM(bus, protocol, command, type, addr, cvaddr, cvindex, value, reply);
+}
+
+void handle_mcs_discovery(bus_t bus, int proto, int uid)
+{
+	char reply[MAXSRCPLINELEN];
+
+    switch(proto) {
+        case 33:    infoSM(bus, PROTO_MM, GET, MM_REG, 0, -1, -1, -1, reply);
+                    break;
+        default:    syslog_bus(bus, DBG_WARN, 
+                            "*** MCS discovery for prot %d not supported.", proto);
+    }
 }

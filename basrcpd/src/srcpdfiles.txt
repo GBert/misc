@@ -29,6 +29,7 @@ config.h        erzeugt per config-Script, modifiziert
     1906    korrekte Versionsangabe
     1907    korrekte Versionsangabe
     2002    korrekte Versionsangabe
+    2102    korrekte Versionsangabe
 ddl.c           aus Sigg-srcpd Rev96, modifiziert BaPi, SPI-Timing
     1803    MCS-Anssteuerung eingebaut
     1806    Optimierungen
@@ -41,6 +42,7 @@ ddl.c           aus Sigg-srcpd Rev96, modifiziert BaPi, SPI-Timing
     1907    Vereinfachung der Threadstruktur zur Signalerzeugung
     1907    Zeitbegrenzung für Schaltdecoder überarbeitet
     2002    Abschalten bei Kommunikationsverlust
+    2102    Vorbereitung Programmiergleisunterstützung
     ** UART-Methoden entfernen
     ** Config-Variablen überarbeiten
 ddl.h           aus Sigg-srcpd Rev96, original
@@ -50,12 +52,14 @@ ddl.h           aus Sigg-srcpd Rev96, original
     1906    Stellen über MCS-Gateway eingebaut
     1907    Vereinfachung der Threadstruktur zur Signalerzeugung
     2002    Abschalten bei Kommunikationsverlust
+    2102    Vorbereitung Programmiergleisunterstützung
 ddl_maerklin.c  aus Sigg-srcpd Rev96, modifiziert -> Original
     1803    GL-Cachezugriff angepasst
     1809    erweiterte Lokadressierung
     1905    Optimierungen Signalerzeugung, Parameterprüfung
     1907    Vereinfachung der Threadstruktur zur Signalerzeugung
-    1907    Verwendung des alten Funktionsprotokolls ermöglicht 
+    1907    Verwendung des alten Funktionsprotokolls ermöglicht
+    2102    Verbesserung bei Notstop und Richtungswechsel 
 ddl_maerklin.h  aus Sigg-srcpd Rev96, original
     1711    Definitionen ergänzt, 1122 übernommen
     1809    erweiterte Lokadressierung
@@ -69,6 +73,7 @@ ddl_mfx.c       aus Sigg-srcpd Rev96, modifiziert -> Original + BaPi
     1907    Vereinfachung der Threadstruktur zur Signalerzeugung
     1907    Erweiterung auf 32 Funktionen
     2002    Wanungen reduziert
+    2102    Verbesserung bei Notstop und Richtungswechsel 
 ddl_mfx.h       aus Sigg-srcpd Rev96, modifiziert -> Original
     1806    Optimierungen
     1905    Optimierungen Signalerzeugung, Parameterprüfung
@@ -78,6 +83,8 @@ ddl_nmra.c      aus Sigg-srcpd Rev96, original
     1806    unbenutzen Code ausgeklammert
     1905    Optimierungen Signalerzeugung, Parameterprüfung
     1907    Vereinfachung der Threadstruktur zur Signalerzeugung
+    2102    Beseitigung von Compiler-Warnungen
+    2102    Verbesserung bei Notstop und Richtungswechsel 
     ** UART-Methoden entfernen
 ddl_nmra.h      aus Sigg-srcpd Rev96, original
     1905    Optimierungen Signalerzeugung, Parameterprüfung
@@ -90,6 +97,7 @@ loopback.c      aus Sigg-srcpd Rev96, modifiziert -> Original
     1809    erweiterte Lokadressierung
     1905    Optimierungen 
     2002    Wanungen reduziert
+    2102    Verbesserung bei Notstop und Richtungswechsel 
 loopback.h      aus Sigg-srcpd Rev96, modifiziert -> Original
     1905    Optimierungen 
 mcs-gateway.c   neu 180307
@@ -100,6 +108,8 @@ mcs-gateway.c   neu 180307
     1903    Fehlerbehandlung "select" verbessert
     1906    Stellen über MCS-Gateway eingebaut
     2002    Abschalten bei Kommunikationsverlust
+    2102    Vorbereitung Programmiergleisunterstützung
+    2102    Ignorieren von MS1-CAN-Meldungen
 netservice.c    unverändert aus Original-srcpd Stand 1710
 netservice.h    unverändert aus Original-srcpd Stand 1710
 platform.c      neu ab 1806
@@ -109,6 +119,7 @@ srcp-command.c  aus Sigg-srcpd Rev96, modifiziert -> Original
     1711    ugly musl workaround + devgrp, 1122 übernommen
     1806    Optimierungen, Anpassungen für mfx
     1906    Erweiterung auf 32 Funktionen
+    2102    Vorbereitung Programmiergleisunterstützung
 srcp-command.h  unverändert aus Original-srcpd Stand 1710
 srcp-descr.c    unverändert aus Original-srcpd Stand 1710
 srcp-descr.h    unverändert aus Original-srcpd Stand 1710
@@ -128,12 +139,14 @@ srcp-gl.c       aus Sigg-srcpd Rev96, modifiziert -> Original
     1902    verbesserte Datenübernahme bei mehreren Clients
     1905    Optimierungen 
     1907    cppcheck-Warnungen beseitigt
+    2102    Verbesserung bei Notstop und Richtungswechsel 
 srcp-gl.h       aus Sigg-srcpd Rev96, modifiziert -> Original
     1803    MCS-Anssteuerung eingebaut
     1806    aufgeräumt
     1809    erweiterte Lokadressierung
     1902    verbesserte Datenübernahme bei mehreren Clients
     1905    Optimierungen 
+    2102    Verbesserung bei Notstop und Richtungswechsel 
 srcp-gm.c       unverändert aus Original-srcpd Stand 1710
 srcp-gm.h       unverändert aus Original-srcpd Stand 1710
 srcp-info.c     unverändert aus Original-srcpd Stand 1710
@@ -154,9 +167,11 @@ srcp-sm.c       aus Sigg-srcpd Rev96, original
     1806    Anpassungen für mfx, aufräumen
     1809    Konfigurationsschnittstelle für MCS
     1902    Schreiben von mfx-CV
+    2102    Vorbereitung Programmiergleisunterstützung
 srcp-sm.h       aus Sigg-srcpd Rev96, original
     1806    Anpassungen für mfx
     1809    Konfigurationsschnittstelle für MCS
+    2102    Vorbereitung Programmiergleisunterstützung
 srcp-time.c     unverändert aus Original-srcpd Stand 1710
     1903   Unschönheiten beseitigt
 srcp-time.h     unverändert aus Original-srcpd Stand 1710

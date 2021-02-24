@@ -26,6 +26,10 @@
 #define MAXMMGL		256
 #define MAXSRCPGL	256
 
+#define SCSPEED     1       /* bit mask for speedchange */
+#define SCDIREC     2
+#define SCEMERG     4
+
 typedef struct _GLDIR {
 	uint16_t	mfxdir[MAXMFXGL];	/* list of used mfx addresses */
 	uint16_t	nmradir[MAXNMRAGL];	/* list of used DCC addresses */

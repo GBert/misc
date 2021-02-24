@@ -1,17 +1,17 @@
-// ddl.c - adapted for basrcpd project 2018 by Rainer Müller 
+// ddl.c - adapted for basrcpd project 2018 by Rainer Müller
 
 /* $Id: ddl.c 1456 2010-02-28 20:01:39Z gscholz $ */
 
 /*
  * DDL: Bus driver connected with a booster only without any special hardware.
- * 
+ *
  * SIG
  * 24.08.12:
  * RaspberryPI Portierung. Nicht ganz sauber, aber einfach:
  * Wenn __arm__ definiert ist wird RaspberryPI angenommen.
  * Für den GPIO Zugriff wird die lib bcm2835 (http://www.open.com.au/mikem/bcm2835/index.html) verwendet.
  * Diese muss installiert sein. Zum linken muss im makefile für "libs" "-l bcm2835" eingetragen sein.
- * 
+ *
  * 30.09.13:
  * RaspberryPI Erkennung über "configure" (CPU ARM und cpuinfo BCM2708).
  * Unterscheidung RaspberryPI Board Version 1 und 2.
@@ -24,7 +24,7 @@
  * Jedoch trotzdem nur auf diesem benutzbar, da auf dem PI die zusätzlichen Leitungen
  * zur Booster Steuerung über GPIO's realisiert werden. Wenn ich nicht auf dem PI
  * bin weiss ich dann nicht, was ich da anstelle der RS232 HW-Handshake Leitungen nehmen soll...
- * Da der RS232 Ruhepegel Logisch 1 ist, der von SPI jedoch logisch 0 brauchen wir für das 
+ * Da der RS232 Ruhepegel Logisch 1 ist, der von SPI jedoch logisch 0 brauchen wir für das
  * Märklin / Motorola Protokoll noch einen Inverter. Wer nur DCC/NMRA macht kann darauf
  * verzichten.
  *
@@ -126,10 +126,10 @@
 #include "srcp-server.h"
 #include "syslogmessage.h"
 //Header für SPI Ausgabe
-#include <stdint.h> 
+#include <stdint.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
-#include <linux/spi/spidev.h> 
+#include <linux/spi/spidev.h>
 
 
 #ifdef BANANAPI
@@ -249,11 +249,11 @@ int init_lineDDL(bus_t busnumber)
         syslog_bus(busnumber, DBG_FATAL, "SPI only on Raspberry PI supported!");
         /* there is no chance to continue */
         exit(1);
-#endif      
+#endif
     }
 
       // Set SPI parameters.
-    int mode = 1; 
+    int mode = 1;
     if (ioctl (dev, SPI_IOC_WR_MODE, &mode) < 0) {
         syslog_bus(busnumber, DBG_FATAL, "SPI Mode Change failure: %s", strerror(errno));
         return -1;
@@ -399,7 +399,7 @@ static void reset_NMRAPacketPool(bus_t busnumber)
 
     /* free idle package - this is needed because the idle packet is removed
        from the knownAdresses in the PacketPool after the first Loco is
-       refreshed -> TODO: a better place for this free would be in 
+       refreshed -> TODO: a better place for this free would be in
        update_NMRAPacketPool */
     free(__DDL->NMRAPacketPool.packets[128]);
 
@@ -444,7 +444,7 @@ static unsigned int convertNMRAPacketToSPIStream(bus_t busnumber, char *packet, 
       spiBuffer[len] = 0x00;
       len++;
     }
-  } 
+  }
   spiBuffer[len++] = 0xFF;  // RM: noch mindestens eine EINS dranhängen
   spiBuffer[len++] = 0x00;
   if (WRONGLEN) {
@@ -563,7 +563,7 @@ static void reset_MFXPacketPool(bus_t busnumber)
     if (stopMFXThreads() != 0) {
       syslog_bus(busnumber, DBG_ERROR, "stopMFXThreads failed.");
     }
-    
+
     result = pthread_mutex_lock(&__DDL->mfx_pktpool_mutex);
     if (result != 0) {
         syslog_bus(busnumber, DBG_ERROR,
@@ -583,7 +583,7 @@ static void reset_MFXPacketPool(bus_t busnumber)
                    "pthread_mutex_unlock() failed: %s (errno = %d).",
                    strerror(result), result);
     }
-    
+
     close(__DDL->rdsPipeNew[0]);
     close(__DDL->rdsPipeNew[1]);
 }
@@ -646,7 +646,7 @@ static void addMFX(bool value, char *spiBuffer, unsigned int *pos) {
  * @param spiBuffer Buffern in den eingefügt werden soll
  * @param pos Position, an die eingefügt werden soll, wird um eingefügte Bytes inkrementiert
  *        Muss > 0 sein.
- */ 
+ */
 static void addRDSSync(char *spiBuffer, unsigned int *pos) {
   //1 Bit Rückkmeldung -> 11 Sync, 0011, Pause, Sync, Pause, 2 Sync
   unsigned int i;
@@ -673,11 +673,11 @@ static void addRDSSync(char *spiBuffer, unsigned int *pos) {
  *                  QMFX64PKT : 2596
  * @param mfxTyp Eine MFX Typ aus QMFX?PKT (Keine bis 8 Byte Rückmeldung)
  * @param rdsPos Nur bei 1-Bit Rückmeldung (QMFX1PKT): Rückgabe der Position im SPI Buffer, ab der die Rückmeldung erwartet wird.
- *               Wenn nicht QMFX1PKT darf null übergeben werden. 
+ *               Wenn nicht QMFX1PKT darf null übergeben werden.
  * @param rdsLen Analog rdsPos, die Länge der Rückmeldefensters.
  * @return Länge des spiBuffer.
  */
-static unsigned int convertMFXPacketToSPIStream(bus_t busnumber, char *packet, char *spiBuffer, unsigned int mfxTyp, 
+static unsigned int convertMFXPacketToSPIStream(bus_t busnumber, char *packet, char *spiBuffer, unsigned int mfxTyp,
                                                 unsigned int *rdsPos, unsigned int *rdsLen) {
   // Ein Bit in 2 Bytes, Baudrate ist so, dass diese Ausgabe 100us dauert
   // 1 : 0xFF, 0x00 oder 0x00, 0xFF (je nach Pegel vorher)
@@ -760,7 +760,7 @@ static unsigned int convertMFXPacketToSPIStream(bus_t busnumber, char *packet, c
       unsigned int bitsPerRDSSyncPeriod = (MFX_RDS_SYNC_IMPULS_CLK_USEC * SPI_BAUDRATE_MFX_2 / 1000000) + 1;
       unsigned int bitsPerRDSSyncImp = MFX_RDS_SYNC_IMPULS_USEC * SPI_BAUDRATE_MFX_2 / 1000000;
       for (i = 0; i<MFX_RDS_SYNC_IMPULS_COUNT; i++) {
-        //Ruhepegel einfügen 
+        //Ruhepegel einfügen
         for (j = 0; j < (bitsPerRDSSyncPeriod - bitsPerRDSSyncImp); j++) {
           if ((bitPos % 8) == 0) {
             //Neues Byte
@@ -793,7 +793,7 @@ static unsigned int convertMFXPacketToSPIStream(bus_t busnumber, char *packet, c
       }
       //Mal zwei da mit halber Periode gearbeitet wird
       for (i = 0; i<(rdsBitCount * 2); i++) {
-        //Ruhepegel einfügen 
+        //Ruhepegel einfügen
         for (j = 0; j < (bitsPerRDSSyncPeriod / 2 - bitsPerRDSSyncImp); j++) {
           if ((bitPos % 8) == 0) {
             //Neues Byte
@@ -817,7 +817,7 @@ static unsigned int convertMFXPacketToSPIStream(bus_t busnumber, char *packet, c
       addMFXSync(spiBuffer, &len);
       break;
   }
-  
+
   if (WRONGLEN) {
     syslog_bus(busnumber, DBG_WARN, "SPI Transfer with %d Bytes -> wrong Timing", len);
   }
@@ -856,7 +856,7 @@ static void init_MFXPacketPool(bus_t busnumber)
                    "pthread_mutex_unlock() failed: %s (errno = %d).",
                    strerror(result), result);
     }
-    
+
     //Pipe zur MFX RDS Auftragsvergabe an RDS Thread
     result = pipe(__DDL->rdsPipeNew);
     if (result != 0) {
@@ -924,15 +924,15 @@ time_t timeSince(struct timeval tv)
 }
 
 /* checks shortcut situation for persistency */
-static int checkShortcut(bus_t busnumber) 
+static int checkShortcut(bus_t busnumber)
 {
     int arg;
     time_t short_now = 0;
     struct timeval tv_shortcut = { 0, 0 };
 
-    // read the CTS input 
+    // read the CTS input
 #if defined BANANAPI
-    arg = (a20_gpio_lev(BAPI_CTS) == LOW ? TIOCM_CTS : 0);    
+    arg = (a20_gpio_lev(BAPI_CTS) == LOW ? TIOCM_CTS : 0);
 #elif defined RASPBERRYPI
     arg = (bcm2835_gpio_lev(RPI_CTS) == LOW ? TIOCM_CTS : 0);
 #endif
@@ -983,14 +983,14 @@ void send_packet(bus_t busnumber, char *packet,
 //SID, 22.03.09: gemäss http://home.mnet-online.de/modelleisenbahn-digital/Dig-tutorial-start.html sind es 4.2ms .....
     /* arguments for nanosleep and Maerklin solenoids/function decoders (38KHz) */
 //SID, 04.01.08 : Wartezeit wäre theoretisch schon 850us, dies geht aber mit den LDT Dekodern nicht....
-    
+
     //Nur für MFX RDS 1-Bit Rückmeldung: Position und Länge im SPI Bytestream an der sich die Rückmeldung befinden muss.
     unsigned int mfxRdsLen, mfxRdsPos = 0;
-    
-    struct spi_ioc_transfer spi;	// tx_buf; rx_buf; len; speed_hz; delay_usecs; 
+
+    struct spi_ioc_transfer spi;	// tx_buf; rx_buf; len; speed_hz; delay_usecs;
 									// bits_per_word; cs_change; pad;
     char spiBuffer[2700]; //Worst Case wenn maximales MFX Paket
-    
+
     memset (&spi, 0, sizeof (spi)) ;
     spi.bits_per_word = 8;
     spi.tx_buf = (unsigned long)spiBuffer;
@@ -1013,7 +1013,7 @@ void send_packet(bus_t busnumber, char *packet,
           //  - 1 -> 0xFF, 0xFC
           //  -> 18 * 2 = 36 Bytes
           //- 0 Bytes für Pause zwischen Paketen: 3 * (t 2 Bit, 208us / 416us) -> wegen doppelter Baudrate also 2 * 3 * 2 = 12 Bytes 0x00
-          //- Paket Wiederholung 
+          //- Paket Wiederholung
           //- 0 Bytes für Pause nach Paket: 4.2ms (Lok), resp. 2.1ms (Schaltdekoder) -> wegen bei doppleter Baudrate 1 Byte 104us (Lok). 62us (Schalt) = 42 Bytes
           //Total also 36 + 12 + 36 + 42 = 126 Bytes -> DMA Mode!
 
@@ -1021,12 +1021,12 @@ void send_packet(bus_t busnumber, char *packet,
           unsigned int pause_end;
           if ((packet_type == QM1FUNCPKT) || (packet_type == QM1SOLEPKT)) {
             pause_btw = 12;     // for functions multiples of 52µs
-            pause_end = 59;    
+            pause_end = 59;
             spi.speed_hz = SPI_BAUDRATE_MAERKLIN_FUNC_2;
           }
           else {
             pause_btw = 12;     // for locos multiples of 104µs
-            pause_end = 42;     
+            pause_end = 42;
             spi.speed_hz = SPI_BAUDRATE_MAERKLIN_LOCO_2;
           }
           memset (spiBuffer, 0, sizeof (spiBuffer));
@@ -1250,7 +1250,7 @@ static bool refresh_loco_one(bus_t busnumber, bool fast) {
       busComplete = true;
   	}
   }
-    
+
   if (refreshInfo -> protocol_refresh & EP_MFX) {
     //MFX Refresh Cycle
     adr = __DDL->MFXPacketPool.knownAddresses[refreshInfo -> last_refreshed_mfx_loco];
@@ -1295,7 +1295,7 @@ static bool refresh_loco_one(bus_t busnumber, bool fast) {
 /**
  * Refresh Paket der nächsten Lok senden.
  * Es werden alle Loks jedes aktivierten Protokolles der Reihe nach berücksichtigt.
- * Wenn Loks vorhanden sind, die in den letzten FAST_REFRESH_TIMEOUT ein neues 
+ * Wenn Loks vorhanden sind, die in den letzten FAST_REFRESH_TIMEOUT ein neues
  * Kommando erhielten (Fast Refresh) werden diese jeden 2. Durchgang berücksichtigt.
  * Grund:
  * Bei Anlagen mit vielen Loks dauert ein ganzer Refresh Durchlauf relativ lange.
@@ -1362,7 +1362,7 @@ bool power_is_off(bus_t busnumber)
             syslog_bus(busnumber, DBG_INFO, "Rail signal generation started.");
         }
     	if (buses[busnumber].power_changed == 1) {
-        	info[0] = 1;	
+        	info[0] = 1;
 			info[1] = buses[busnumber].power_state;
         	info_mcs(busnumber, 1, __DDL->uid, info);
         	infoPower(busnumber, msg);
@@ -1371,6 +1371,22 @@ bool power_is_off(bus_t busnumber)
         buses[busnumber].power_changed = 0;
     }
     return (buses[busnumber].power_state == 0);
+}
+
+void use_pgtrack(bus_t busnumber, bool use)
+{
+    syslog_bus(busnumber, DBG_DEBUG,
+		"Programming track usage, actual %d, requested %d", __DDL->pgtrkonly, use);
+    // TODO: complete coding of this procedure, HW access
+    if (!__DDL->pgtrkonly && use) {
+        syslog_bus(busnumber, DBG_DEBUG, "*** Main Track suspended");
+        usleep(100000);
+    }
+    else if (!use && __DDL->pgtrkonly) {
+        syslog_bus(busnumber, DBG_DEBUG, "*** Main Track reactivated");
+        usleep(100000);
+    }
+    __DDL->pgtrkonly = use;
 }
 
 static int init_gl_DDL(gl_data_t * gl, char *optData)
@@ -1398,7 +1414,7 @@ static int init_gl_DDL(gl_data_t * gl, char *optData)
                                		SRCP_OK : SRCP_WRONGVALUE;
                // N2: long addresses, 28 or 128 drive steps
                case 2:  return (gl->n_fs == 28 || gl->n_fs == 128) ?
-                               		SRCP_OK : SRCP_WRONGVALUE;                               
+                               		SRCP_OK : SRCP_WRONGVALUE;
                default: return SRCP_WRONGVALUE;
             }
             break;
@@ -1409,7 +1425,7 @@ static int init_gl_DDL(gl_data_t * gl, char *optData)
             }
             // in case of MFX, UID could be appended optionally:
 			sscanf(optData, "%10u", &gl->decuid);
-/* 
+/*
 	TODO: brauchen wir Mitteilung an MFX damit ggf. neue Lokadresse gesetzt werden kann
             newGLInit(gl->id, gl->optData.mfx.uid);
 */
@@ -1478,7 +1494,7 @@ int readconfig_DDL(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
     __DDL->NMRA_GA_OFFSET = 0;  /* offset for ga base address 0 or 1  */
     __DDL->PROGRAM_TRACK = 1;   /* 0: suppress SM commands to PT address */
     __DDL->MCS_DEVNAME[0] = 0;	/* if empty you do not use such a device */
-   	__DDL->FWD_M_ACCESSORIES = busnumber;	/* default is own bus */ 
+   	__DDL->FWD_M_ACCESSORIES = busnumber;	/* default is own bus */
    	__DDL->FWD_N_ACCESSORIES = busnumber;	/* default is own bus */
 
     xmlNodePtr child = node->children;
@@ -1652,10 +1668,10 @@ int init_bus_DDL(bus_t busnumber)
 
     //GPIO In-Output für Boosterstuerung setzen:
     #if defined BANANAPI
-        /* TODO for BPi => complete this section */ 
+        /* TODO for BPi => complete this section */
         a20_gpio_write(BAPI_RTS, HIGH);     // Booster deaktiviert
-        a20_gpio_set_fsel(BAPI_RTS, A20_GPIO_FSEL_OUTP); 
-        a20_gpio_set_fsel(BAPI_CTS, A20_GPIO_FSEL_INPT); 
+        a20_gpio_set_fsel(BAPI_RTS, A20_GPIO_FSEL_OUTP);
+        a20_gpio_set_fsel(BAPI_CTS, A20_GPIO_FSEL_INPT);
     #elif defined RASPBERRYPI
         // RPI_DTR und RPI_RTS -> Output
         // RPI_CTS und RPI_DSR -> Input
@@ -1680,7 +1696,7 @@ int init_bus_DDL(bus_t busnumber)
     __DDL->refreshInfoFast.last_refreshed_mfx_loco = 0;
     __DDL->refreshInfoFast.protocol_refresh = 1;
     __DDL->lastRefreshFast = false;
-    
+
     if (__DDL->ENABLED_PROTOCOLS & EP_MAERKLIN) {
         init_MaerklinPacketPool(busnumber);
         protocols[protocol++] = 'M';
@@ -1697,7 +1713,7 @@ int init_bus_DDL(bus_t busnumber)
         protocols[protocol++] = 'X';
     }
 	if (__DDL->MCS_DEVNAME[0]) init_mcs_gateway(busnumber);
-	
+
     syslog_bus(busnumber, DBG_INFO, "DDL init done");
     buses[busnumber].protocols = protocols;
     return 0;
@@ -1725,7 +1741,7 @@ static void end_bus_thread(bus_thread_t * btd)
                    "pthread_cond_destroy() failed: %s (errno = %d).",
                    strerror(result), result);
     }
-    
+
 	if (__DDLt->MCS_DEVNAME[0]) term_mcs_gateway();
     syslog_bus(btd->bus, DBG_INFO, "DDL bus terminated.");
 
@@ -1744,8 +1760,8 @@ static void *thr_Manage_DDL(void *v)
     struct _SM smakt;
     gl_data_t *glp;
     ga_data_t gatmp;
-    int gastep = 0;	
-    int last_cancel_state, last_cancel_type;
+    int gastep = 0;
+    int last_cancel_state, last_cancel_type, progwin = 0;
     char * scmd, * sprot, * stype;
     time_t nextmfxman = 0;
 	struct timeval tv_ga, tv_mfx = { 0, 0 };
@@ -1769,7 +1785,7 @@ static void *thr_Manage_DDL(void *v)
 
     while (true) {
         pthread_testcancel();
-        
+
         /* Service Mode Handling */
         if (!queue_SM_isempty(btd->bus)) {
             dequeueNextSM(btd->bus, &smakt);
@@ -1778,9 +1794,9 @@ static void *thr_Manage_DDL(void *v)
     			case PROTO_MM:		sprot = "MM";   break;
     			case PROTO_MFX:		sprot = "MFX";	break;
     			default:			sprot = "??";
-			} 
+			}
 			switch(smakt.command) {
-    			case SET:		scmd = "SET";		break; 
+    			case SET:		scmd = "SET";		break;
     			case GET:		scmd = "GET";  		break;
     			case VERIFY:	scmd = "VERIFY";	break;
     			case INIT:		scmd = "INIT";   	break;
@@ -1792,24 +1808,26 @@ static void *thr_Manage_DDL(void *v)
     			case PAGE:		stype = "PAGE";    	break;
     			case CV:		stype = "CV";      	break;
     			case CV_BIT:	stype = "CVBIT";  	break;
+                case MM_REG:    stype = "MMREG";    break;
     			case BIND_MFX:	stype = "BIND";    	break;
     			case CV_MFX:	stype = "CVMFX";  	break;
     			default:		stype = "??";
 			}
             syslog_bus(btd->bus, DBG_DEBUG,
 				"Next SM: %s %s %d %d %s %d Index %d Val 0x%02x", scmd, sprot,
-				smakt.protocolversion, smakt.addr, stype, smakt.cvaddr, 
+				smakt.protocolversion, smakt.addr, stype, smakt.cvaddr,
 				smakt.index, smakt.value);
             int rc = -1;
             if (smakt.protocol == PROTO_NMRA) {
                 switch (smakt.command) {
                     case SET:
-                        /* addr 0 and -1 are considered as programming track */
+                        /* addr 0 and less are considered as programming track */
                         /* larger addresses will by considered as PoM */
                         if (smakt.addr <= 0 && (((DDL_DATA *)
                                                  buses[btd->bus].
                                                  driverdata)->
                                                 PROGRAM_TRACK)) {
+                            use_pgtrack(btd->bus, true);
                             switch (smakt.type) {
                                 case REGISTER:
                                     rc = protocol_nmra_sm_write_phregister
@@ -1833,6 +1851,7 @@ static void *thr_Manage_DDL(void *v)
                             }
                         }
                         else {
+                            use_pgtrack(btd->bus, false);
                             int mode = 1;
                             /* HACK protocolversion is not yet set in SM */
                             if (smakt.addr > 127)
@@ -1854,6 +1873,7 @@ static void *thr_Manage_DDL(void *v)
                         break;
                     case GET:
                         if (smakt.addr <= 0) {
+                            use_pgtrack(btd->bus, true);
                             switch (smakt.type) {
                                 case REGISTER:
                                     rc = protocol_nmra_sm_get_phregister
@@ -1878,6 +1898,7 @@ static void *thr_Manage_DDL(void *v)
                         break;
                     case VERIFY:
                         if (smakt.addr <= 0) {
+                            use_pgtrack(btd->bus, true);
                             int my_rc = 0;
                             switch (smakt.type) {
                                 case REGISTER:
@@ -1886,8 +1907,7 @@ static void *thr_Manage_DDL(void *v)
                                     break;
                                 case CV:
                                     my_rc = protocol_nmra_sm_verify_cvbyte
-                                        (btd->bus, smakt.cvaddr,
-                                         smakt.value);
+                                        (btd->bus, smakt.cvaddr, smakt.value);
                                     break;
                                 case CV_BIT:
                                     my_rc = protocol_nmra_sm_verify_cvbit(btd->bus,
@@ -1912,7 +1932,25 @@ static void *thr_Manage_DDL(void *v)
                         break;
                 }
             }
+            if (smakt.protocol == PROTO_MM) {
+                switch (smakt.command) {
+                    case SET:
+                        use_pgtrack(btd->bus, true);
+                        syslog_bus(btd->bus, DBG_DEBUG, "*** MM-PROG not yet implemented");
+                        rc = -1;        // error indication
+                        break;
+                    case GET:   case VERIFY:
+                        use_pgtrack(btd->bus, true);
+                        syslog_bus(btd->bus, DBG_DEBUG, "*** MM-SEARCH not yet implemented");
+                        rc = 79;        // faked search result
+                        break;
+                    case INIT:  case TERM:
+                        rc = 0;
+                        break;
+                }
+            }
             if (smakt.protocol == PROTO_MFX) {
+                use_pgtrack(btd->bus, false);
 //              if (buses[btd->bus].power_state) {
                 switch (smakt.command) {
                   case SET:
@@ -1949,13 +1987,22 @@ static void *thr_Manage_DDL(void *v)
                 }
             }
             session_endwait(btd->bus, rc);
+            progwin = 200;
         }
         buses[btd->bus].watchdog = 4;
-        
+
 		/* Power State Handling */
         if (power_is_off(btd->bus)) {
             usleep(10000);		// wait 10ms before re-test
             continue;
+        }
+        if (__DDLt->pgtrkonly) {
+            usleep(10000);
+            if (progwin) {
+                progwin--;
+                continue;    // combine tasks on programming track
+            }
+            use_pgtrack(btd->bus, false);
         }
 
 		/* Generic Loco Handling */
@@ -1988,14 +2035,14 @@ static void *thr_Manage_DDL(void *v)
         		((tv_mfx.tv_sec == 0) || (timeSince(tv_mfx) >= nextmfxman))) {
         	nextmfxman = mfxManagement(btd->bus);
 			gettimeofday(&tv_mfx, NULL);
-		}	
-	
+		}
+
 		/* Generic Accessory Handling */
 		switch (gastep) {
 			/* activate GA element */
 			case 0:	if (queue_GA_isempty(btd->bus)) break;
 			        dequeueNextGA(btd->bus, &gatmp);
-            		syslog_bus(btd->bus, DBG_DEBUG, 
+            		syslog_bus(btd->bus, DBG_DEBUG,
 							"Next GA command: %c %d Port %d activated for %d ms",
                        		gatmp.protocol, gatmp.id, gatmp.port, gatmp.activetime);
 			        gettimeofday(&tv_ga, NULL);
@@ -2015,7 +2062,7 @@ static void *thr_Manage_DDL(void *v)
                         if (gatmp.activetime <= 0)  gastep = 0;
                     }
 					break;
-			/* deactivate GA element */					
+			/* deactivate GA element */
 			case 2:	if (timeSince(tv_ga) < (gatmp.activetime * 1000)) break;
 					gatmp.action = 0;
                     syslog_bus(btd->bus, DBG_DEBUG, "Delayed GA command: %c %d",

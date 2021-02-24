@@ -44,6 +44,7 @@ typedef enum TYPE {
     PAGE,
     CV,
     CV_BIT,
+    MM_REG,
     BIND_MFX,
     CV_MFX
 } sm_type_t;
@@ -55,10 +56,10 @@ typedef struct _SM {
     sm_command_t command;
     int protocolversion;
     int addr;
-    //				REG		PAGE	CV		CVBIT	CVMFX	BIND	
-    int cvaddr;	//	regaddr	cvaddr	cvaddr	cvaddr	cvline  ----
-    int index;	//	----	----	----	bitnr	cvindex	----
-    int value; 	//	regval	cvval	cvval  	bitval	cvval	uid / regcnt
+    //				MMREG    REG      PAGE	  CV	  CVBIT	  CVMFX	  BIND	
+    int cvaddr;	//	regaddr  regaddr  cvaddr  cvaddr  cvaddr  cvline  ----
+    int index;	//	----	 ----	  ----	  ----	  bitnr	  cvindex ----
+    int value; 	//	regval	 regval	  cvval	  cvval   bitval  cvval	  uid / regcnt
     struct timeval tv;          /* time of change */
 } sm_t;
 
@@ -102,4 +103,6 @@ int infoSM(bus_t busnumber, sm_protocol_t protocol, sm_command_t command, sm_typ
 void handle_mfx_bind_verify(bus_t bus, sm_command_t cmnd, uint32_t val, int addr);
 void handle_mcs_config(bus_t bus, sm_command_t command, 
 						int uid, int cvaddr, int cvindex, int value, int ctrl);
+void handle_mcs_discovery(bus_t bus, int proto, int uid);
+
 #endif

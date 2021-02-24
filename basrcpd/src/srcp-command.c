@@ -1,4 +1,4 @@
-// srcp-command.c - adapted for basrcpd project 2018 by Rainer Müller 
+// srcp-command.c - adapted for basrcpd project 2018 by Rainer Müller
 /*
  * Vorliegende Software unterliegt der General Public License,
  * Version 2, 1991. (c) Matthias Trute, 2000-2001.
@@ -6,7 +6,7 @@
  */
 
 #include <errno.h>
-#include <string.h> 
+#include <string.h>
 #include <sys/socket.h>
 
 #include "config-srcpd.h"
@@ -40,9 +40,9 @@ static int handle_setcheck(sessionid_t sessionid, bus_t bus, char *device,
     if (bus_has_devicegroup(bus, DG_GL)
         	&& strncasecmp(device, "GL", 2) == 0) {
         char *paddr, *pdirection, *pspeed, *pmaxspeed, *pfuncs;
-        uint32_t func = 0, shift = 1;        
-		int nparms = ssplitstr(parameter, 5, 
-							&paddr, &pdirection, &pspeed, &pmaxspeed, &pfuncs);							
+        uint32_t func = 0, shift = 1;
+		int nparms = ssplitstr(parameter, 5,
+							&paddr, &pdirection, &pspeed, &pmaxspeed, &pfuncs);
 
 		do switch (*pfuncs++) {
 			case '1':	func |= shift;
@@ -51,7 +51,7 @@ static int handle_setcheck(sessionid_t sessionid, bus_t bus, char *device,
 		    default:	shift = 0;
 		} while (shift);
 
-        if (nparms >= 4) { 
+        if (nparms >= 4) {
             sessionid_t lockid = 0;
             /* Only if not locked or emergency stop !! */
             int addr = atoi(paddr);
@@ -111,10 +111,10 @@ static int handle_setcheck(sessionid_t sessionid, bus_t bus, char *device,
              && strncasecmp(device, "GM", 2) == 0) {
         sessionid_t sendto, replyto;
         char *psend, *preply, *msg;
-	    
+
 		int result = ssplitstr(parameter, 3, &psend, &preply, &msg);
 		if ((sscanf(psend, "%lu", &sendto) <= 0) ||
-				(sscanf(preply, "%lu", &replyto) <= 0)) rc = SRCP_WRONGVALUE; 
+				(sscanf(preply, "%lu", &replyto) <= 0)) rc = SRCP_WRONGVALUE;
         else if (result < 3)
             rc = SRCP_LISTTOOSHORT;
         else
@@ -134,40 +134,47 @@ static int handle_setcheck(sessionid_t sessionid, bus_t bus, char *device,
             rc = SRCP_LISTTOOSHORT;
         else {
             int type = -1;
-            if (strcasecmp(ctype, "REG") == 0) 
+            if (strcasecmp(ctype, "REG") == 0)
                 type = REGISTER;
             else if (strcasecmp(ctype, "CV") == 0)
                 type = CV;
-            else if (strcasecmp(ctype, "CVBIT") == 0) 
+            else if (strcasecmp(ctype, "CVBIT") == 0)
                 type = CV_BIT;
-            else if (strcasecmp(ctype, "PAGE") == 0) 
+            else if (strcasecmp(ctype, "PAGE") == 0)
                 type = PAGE;
-            else if (strcasecmp(ctype, "CVMFX") == 0) 
+            else if (strcasecmp(ctype, "MMREG") == 0)
+                type = MM_REG;
+            else if (strcasecmp(ctype, "CVMFX") == 0)
                 type = CV_MFX;
-            else if (strcasecmp(ctype, "BIND") == 0) 
+            else if (strcasecmp(ctype, "BIND") == 0)
                 type = BIND_MFX;
 
             switch (type) {
               case CV_BIT: 	//NMRA: CVNr BitNr Value
                   	if (result < 5) rc = SRCP_LISTTOOSHORT;
-                  	else 
+                  	else
                       	rc = infoSM(bus, PROTO_NMRA, SET, type, addr, value1, value2, value3, reply);
                   	break;
               case REGISTER:
               case CV:
               case PAGE: 	//NMRA: CVNr Value
                   	if (result < 4) rc = SRCP_LISTTOOSHORT;
-                  	else 
+                  	else
                 		rc = infoSM(bus, PROTO_NMRA, SET, type, addr, value1, -1, value2, reply);
+                	break;
+              case MM_REG: 	//MM: CVNr Value
+                	if (result < 4) rc = SRCP_LISTTOOSHORT;
+                	else
+                      	rc = infoSM(bus, PROTO_MM, SET, type, addr, value1, -1, value2, reply);
                 	break;
               case CV_MFX: 	//MFX: CVline Index Value
                 	if (result < 5) rc = SRCP_LISTTOOSHORT;
-                	else 
+                	else
                       	rc = infoSM(bus, PROTO_MFX, SET, type, addr, value1, value2, value3, reply);
                 	break;
               case BIND_MFX:
             		rc = infoSM(bus, PROTO_MFX, SET, type, addr, -1, -1, value1, reply);
-			  		break; 
+			  		break;
               default:
                 	rc = SRCP_WRONGVALUE;
             }
@@ -218,9 +225,9 @@ static int handle_setcheck(sessionid_t sessionid, bus_t bus, char *device,
     else if (bus_has_devicegroup(bus, DG_POWER)
              && strncasecmp(device, "POWER", 5) == 0) {
         char *state, *msg;
-        
+
 		int nelem = ssplitstr(parameter, 2, &state, &msg);
-        if (nelem >= 1) {	
+        if (nelem >= 1) {
             rc = SRCP_WRONGVALUE;
             if (strncasecmp(state, "OFF", 3) == 0) {
                 rc = SRCP_OK;
@@ -315,49 +322,57 @@ static int handleGET(sessionid_t sessionid, bus_t bus, char *device,
         char ctype[12];
 
         int nelem = sscanf(parameter, "%ld %10s %ld %ld %ld",
-							&addr, ctype, &value1, &value2, &value3);        
+							&addr, ctype, &value1, &value2, &value3);
         if (nelem < 2) {
           rc = SRCP_LISTTOOSHORT;
         }
         else {
           int type = -1;
-          if (strcasecmp(ctype, "REG") == 0) 
+          if (strcasecmp(ctype, "REG") == 0)
             type = REGISTER;
           else if (strcasecmp(ctype, "CVBIT") == 0)
             type = CV_BIT;
-          else if (strcasecmp(ctype, "PAGE") == 0) 
+          else if (strcasecmp(ctype, "PAGE") == 0)
             type = PAGE;
           else if (strcasecmp(ctype, "CV") == 0)
             type = CV;
+          else if (strcasecmp(ctype, "MMREG") == 0)
+            type = MM_REG;
           else if (strcasecmp(ctype, "CVMFX") == 0)
             type = CV_MFX;
-          else if (strcasecmp(ctype, "BIND") == 0) 
+          else if (strcasecmp(ctype, "BIND") == 0)
             type = BIND_MFX;
-              
+
           switch (type) {
             case CV_BIT: 	// NMRA: CVNr BitNr
-                if (nelem < 4) 
+                if (nelem < 4)
                     rc = SRCP_LISTTOOSHORT;
-                else 
+                else
                     rc = infoSM(bus, PROTO_NMRA, GET, type, addr, value1, value2, -1, reply);
               	break;
             case REGISTER:
             case CV:
             case PAGE: 		// NMRA: CVNr
-                if (nelem < 3) 
+                if (nelem < 3)
                     rc = SRCP_LISTTOOSHORT;
-                else 
+                else
               		rc = infoSM(bus, PROTO_NMRA, GET, type, addr, value1, -1, -1, reply);
               	break;
-            case CV_MFX: 	// MFX: CVline Index [Num]
-                if (nelem < 4) 
+            case MM_REG: 	// MM: CVNr
+                if (nelem < 3)
                     rc = SRCP_LISTTOOSHORT;
-                else 
+                else
+              		rc = infoSM(bus, PROTO_MM, GET, type, addr, value1, -1, -1, reply);
+              	break;
+            case CV_MFX: 	// MFX: CVline Index [Num]
+                if (nelem < 4)
+                    rc = SRCP_LISTTOOSHORT;
+                else
                     rc = infoSM(bus, PROTO_MFX, GET, type, addr, value1, value2, value3, reply);
               	break;
             case BIND_MFX:
             	rc = infoSM(bus, PROTO_MFX, GET, type, addr, -1, -1, value1, reply);
-			  	break; 
+			  	break;
             default:
               	rc = SRCP_WRONGVALUE;
           }
@@ -559,24 +574,24 @@ static int handleVERIFY(sessionid_t sessionid, bus_t bus, char *device,
             rc = SRCP_LISTTOOSHORT;
         else {
             int type = -1;
-            if (strcasecmp(ctype, "REG") == 0) 
+            if (strcasecmp(ctype, "REG") == 0)
                 type = REGISTER;
             else if (strcasecmp(ctype, "CV") == 0)
                 type = CV;
             else if (strcasecmp(ctype, "CVBIT") == 0)
                 type = CV_BIT;
-            else if (strcasecmp(ctype, "PAGE") == 0) 
+            else if (strcasecmp(ctype, "PAGE") == 0)
                 type = PAGE;
-            else if (strcasecmp(ctype, "CVMFX") == 0) 
+            else if (strcasecmp(ctype, "CVMFX") == 0)
                 type = CV_MFX;
-            else if (strcasecmp(ctype, "BIND") == 0) 
+            else if (strcasecmp(ctype, "BIND") == 0)
                 type = BIND_MFX;
 
             switch (type) {
               case CV_BIT: 	// NMRA: CVNr BitNr Value
                   	if (result < 5)
                       rc = SRCP_LISTTOOSHORT;
-                 	else 
+                 	else
                       rc = infoSM(bus, PROTO_NMRA, VERIFY, type, addr, value1, value2, value3, reply);
                 	break;
               case REGISTER:
@@ -584,18 +599,18 @@ static int handleVERIFY(sessionid_t sessionid, bus_t bus, char *device,
               case PAGE: 	// NMRA: CVNr Value
                   	if (result < 4)
                       rc = SRCP_LISTTOOSHORT;
-                 	else 
+                 	else
                 	  rc = infoSM(bus, PROTO_NMRA, VERIFY, type, addr, value1, -1, value2, reply);
                 	break;
               case CV_MFX: 	// MFX: CVline Index Value
-                  	if (result < 5) 
+                  	if (result < 5)
                       	rc = SRCP_LISTTOOSHORT;
-                  	else 
+                  	else
                       	rc = infoSM(bus, PROTO_MFX, VERIFY, type, addr, value1, value2, value3, reply);
                 	break;
               case BIND_MFX:
             		rc = infoSM(bus, PROTO_MFX, VERIFY, type, addr, -1, -1, value1, reply);
-			  		break; 
+			  		break;
               default:
                 rc = SRCP_WRONGVALUE;
             }
@@ -700,26 +715,24 @@ static int handleTERM(sessionid_t sessionid, bus_t bus, char *device,
 
     else if (bus_has_devicegroup(bus, DG_SM)
              && strncasecmp(device, "SM", 2) == 0) {
-        char *protocol;	
+        char *protocol;
 
 		rc = ssplitstr(parameter, 1, &protocol);
-        if (rc < 1) {
+        if (rc < 1)
             rc = SRCP_LISTTOOSHORT;
-        }
-        else if (strncasecmp(protocol, "NMRA", 4) == 0) {
-          rc = infoSM(bus, PROTO_NMRA, TERM, -1, -1, -1, -1, -1, reply);
-        }
-        else if (strncasecmp(protocol, "MFX", 4) == 0) {
-          rc = infoSM(bus, PROTO_MFX, TERM, -1, -1, -1, -1, -1, reply);
-        }
-        else {
-          rc = SRCP_WRONGVALUE;
-        }
+        else if (strncasecmp(protocol, "NMRA", 4) == 0)
+            rc = infoSM(bus, PROTO_NMRA, TERM, -1, -1, -1, -1, -1, reply);
+        else if (strncasecmp(protocol, "MFX", 3) == 0)
+            rc = infoSM(bus, PROTO_MFX, TERM, -1, -1, -1, -1, -1, reply);
+        else if (strncasecmp(protocol, "MM", 2) == 0)
+            rc = infoSM(bus, PROTO_MM, INIT, -1, -1, -1, -1, -1, reply);
+        else
+            rc = SRCP_WRONGVALUE;
     }
 
     else if (bus_has_devicegroup(bus, DG_TIME)
-             && strncasecmp(device, "TIME", 4) == 0) {
-        rc = termTIME();
+                && strncasecmp(device, "TIME", 4) == 0) {
+            rc = termTIME();
     }
 
     gettimeofday(&akt_time, NULL);
@@ -796,16 +809,18 @@ static int handleINIT(sessionid_t sessionid, bus_t bus, char *device,
     /* INIT <bus> SM "<protocol>" */
     else if (bus_has_devicegroup(bus, DG_SM)
              && strncasecmp(device, "SM", 2) == 0) {
-        char *protocol;	
+        char *protocol;
 
         int result = ssplitstr(parameter, 1, &protocol);
         if (result < 1)
             rc = SRCP_LISTTOOSHORT;
         else if (strncasecmp(protocol, "NMRA", 4) == 0)
             rc = infoSM(bus, PROTO_NMRA, INIT, -1, -1, -1, -1, -1, reply);
-        else if (strncasecmp(protocol, "MFX", 3) == 0) 
+        else if (strncasecmp(protocol, "MFX", 3) == 0)
             rc = infoSM(bus, PROTO_MFX, INIT, -1, -1, -1, -1, -1, reply);
-        else 
+        else if (strncasecmp(protocol, "MM", 2) == 0)
+            rc = infoSM(bus, PROTO_MM, INIT, -1, -1, -1, -1, -1, reply);
+        else
             rc = SRCP_WRONGVALUE;
     }
 
@@ -825,7 +840,7 @@ static int handleRESET(sessionid_t sessionid, bus_t bus, char *device,
     *reply = 0x00;
 
 	if (bus_has_devicegroup(bus, DG_SERVER)
-             && strncasecmp(device, "SERVER", 6) == 0) { 
+             && strncasecmp(device, "SERVER", 6) == 0) {
         rc = SRCP_OK;
         server_reset();
 	}
@@ -844,7 +859,7 @@ int doCmdClient(session_node_t * sn)
      */
     char line[MAXSRCPLINELEN];
     char reply[MAXSRCPLINELEN];
-    char *cbus, *command, *devicegroup, *parameter;	
+    char *cbus, *command, *devicegroup, *parameter;
     int rc;
     struct timeval akt_time;
 
@@ -879,7 +894,7 @@ int doCmdClient(session_node_t * sn)
         bus_t bus = atoi(cbus);
         reply[0] = 0x00;
 
-        if (nelem >= 3) { 		
+        if (nelem >= 3) {
             if (bus <= num_buses) {
                 rc = SRCP_UNKNOWNCOMMAND;
                 if (strncasecmp(command, "SET", 3) == 0) {

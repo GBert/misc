@@ -116,6 +116,8 @@ typedef struct _DDL_DATA {
     tRefreshInfo refreshInfoFast;
     //Alternierende Ausgabe "fast" und "normaler" Refresh.
     bool lastRefreshFast;
+    
+    bool pgtrkonly;             /* only programming track will be feed */
 
     pthread_mutex_t nmra_pktpool_mutex;
     tNMRAPacketPool NMRAPacketPool;

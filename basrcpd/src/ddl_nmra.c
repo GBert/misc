@@ -124,7 +124,7 @@ static void calc_single_byte(char *byte, int value)
     int i;
     int bit = 0x1;
 
-    strncpy(byte, "00000000", 8);
+    strncpy(byte, "00000000", 9);
     byte[8] = 0;
 
     for (i = 7; i >= 0; i--) {
@@ -342,7 +342,7 @@ static void calc_function_stream(char *bitstream, char *bitstream2,
             strcat(bitstream2, "1");
             if (nfuncs > 12) {
                 char funcbyte2[9];
-                strncpy(funcbyte2, "11011110", 8);
+                strncpy(funcbyte2, "11011110", 9);
                 funcbyte2[8] = 0;
                 calc_single_byte(funcbyte, func >> 13);
                 xor_two_bytes(errdbyte, addrerrbyte, funcbyte2);
@@ -554,13 +554,17 @@ void comp_nmra_multi_func(bus_t busnumber, gl_data_t *glp)
     uint32_t func = glp->funcs;
     uint8_t nspeed = glp->n_fs;
     uint8_t	nfuncs = glp->n_func;
-	
-	if (speed) speed++;                 /* Never send FS1 */
-	if (direction == 2) {				/* Emergency Stop */
-		speed = 1;
-		direction = 0;
-	}
 
+    if (glp->speedchange & SCEMERG) {   // Emergency Stop
+        speed = 1;
+        direction = glp->cacheddirection;
+        glp->speedchange &= ~SCEMERG;
+    }
+    else if (speed) speed++;        	// Never send FS1
+
+  	if (speed > 127) speed = 127;
+    glp->speedchange &= ~(SCSPEED | SCDIREC);   // handled now
+    
     syslog_bus(busnumber, DBG_DEBUG,
                "command for NMRA protocol (N%d) received addr:%d "
                "dir:%d speed:%d nspeeds:%d nfunc:%d funcs %x",
@@ -576,9 +580,6 @@ void comp_nmra_multi_func(bus_t busnumber, gl_data_t *glp)
         speed < 0 || speed > (nspeed + 1) || (address > 127 && mode == 1))
         return;
 
-    if (speed > 127) {
-        speed = 127;
-    }
     calc_address_stream(addrstream, addrerrbyte, address, mode);
     if (speed < 2 || nspeed < 15) {
         /* commands for stop and emergency stop are identical for
@@ -1188,7 +1189,7 @@ static int protocol_nmra_sm_direct_cvbyte(bus_t busnumber, int cv,
     if (!sm_initialized)
         sm_init(busnumber);
     /* putting all together in a 'bitstream' (char array) */
-    strncpy(progerrbyte, "00000000", 8);
+    strncpy(progerrbyte, "00000000", 9);
     progerrbyte[8] = 0;
     calc_byte_program_stream(progstream, progerrbyte, cv, value, verify,
                              false);
@@ -1294,7 +1295,7 @@ static int protocol_nmra_sm_direct_cvbit(bus_t bus, int cv, int bit,
     if (!sm_initialized)
         sm_init(bus);
 
-    strncpy(progerrbyte, "00000000", 8);
+    strncpy(progerrbyte, "00000000", 9);
     progerrbyte[8] = 0;
     calc_bit_program_stream(progstream, progerrbyte, cv, bit, value,
                             verify, false);

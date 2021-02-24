@@ -1,4 +1,4 @@
-// ddl_maerklin.c - adapted for basrcpd project 2018 by Rainer Müller 
+// ddl_maerklin.c - adapted for basrcpd project 2018 by Rainer Müller
 //
 /* +----------------------------------------------------------------------+ */
 /* | DDL - Digital Direct for Linux                                       | */
@@ -90,26 +90,20 @@ char getMaerklinHI() {
 }
 
 int comp_maerklin_1(bus_t busnumber, int address, int direction,
-                    		int speed, int func, char cacheddirection)
+                    		int speed, int funcs)         //, char cacheddirection)
 {
     char packet[18];
     int i;
 
-    /* no special error handling, it's job of the clients */
-    if (address < 0 || address > 80 || func < 0 || func > 1 || speed < 0 || speed > 15)
-        return 1;
-    if (direction == 2) direction = cacheddirection;	/* Emergency Stop */
-    if (direction != cacheddirection) {
-        speed = 1;
-    }
+    if (address < 0 || address > 80 || speed < 0 || speed > 15) return 1;
 
     /* compute address part */
     for (i = 0; i < 8; i++)
         packet[i] = (mmadr_cod[address] >> i) & 1;
 
     /* compute func part */
-    packet[8] = packet[9] = func & 1;
-    
+    packet[8] = packet[9] = funcs & 1;
+
     /* compute speed part */
     for (i = 5; i < 9; i++) {
         packet[2 * i] = packet[2 * i + 1] = speed & 1;
@@ -118,7 +112,7 @@ int comp_maerklin_1(bus_t busnumber, int address, int direction,
 
     update_MaerklinPacketPool(busnumber, address, packet, packet, packet,
                               packet, packet);
-    send_packet(busnumber, packet, 18, QM1LOCOPKT, 2);    
+    send_packet(busnumber, packet, 18, QM1LOCOPKT, 2);
     return 0;
 }
 
@@ -154,7 +148,7 @@ int comp_maerklin_2(bus_t busnumber, int address, int direction,
 
     /* compute func part */
     packet[8] = packet[9] = func & 1;
-    
+
     /* so far the same procedure as by Maerklin type 1, but now ... */
     /* compute speed trits   */
     if (speed < -7)
@@ -168,8 +162,6 @@ int comp_maerklin_2(bus_t busnumber, int address, int direction,
     speed = abs(speed);
     mspeed = speed;
 
-    if (speed == 1)
-        speed = 0;              /* speed  1 is obsolete */
     for (i = 5; i < 9; i++) {
         j = speed % 2;
         speed = speed / 2;
@@ -274,7 +266,7 @@ int comp_maerklin_2(bus_t busnumber, int address, int direction,
     update_MaerklinPacketPool(busnumber, address, packet, f_packets[0],
                               f_packets[1], f_packets[2], f_packets[3]);
 
-    //Ausgabe Geschwindigkeitsbefehl erfolgt immer    
+    //Ausgabe Geschwindigkeitsbefehl erfolgt immer
     send_packet(busnumber, packet, 18, QM2LOCOPKT, 2);
     if (fx_changed) {
     	send_packet(busnumber, f_packets[fx], 18, QM2FXPKT, 1);
@@ -346,8 +338,6 @@ int comp_maerklin_28(bus_t busnumber, int address, int direction,
     speed = abs(speed);
     mspeed = speed;
 
-    if (speed == 1)
-        speed = 0;              /* speed  1 is obsolete */
     for (i = 5; i < 9; i++) {
         j = speed % 2;
         speed = speed / 2;
@@ -452,7 +442,7 @@ int comp_maerklin_28(bus_t busnumber, int address, int direction,
     update_MaerklinPacketPool(busnumber, adr, packet, f_packets[0],
                               f_packets[1], f_packets[2], f_packets[3]);
 
-    //Ausgabe Geschwindigkeitsbefehl erfolgt immer    
+    //Ausgabe Geschwindigkeitsbefehl erfolgt immer
     send_packet(busnumber, packet, 18, QM2LOCOPKT, 2);
     if (fx_changed) {
     	send_packet(busnumber, f_packets[fx], 18, QM2FXPKT, 1);
@@ -549,7 +539,7 @@ int comp_maerklin_27(bus_t busnumber, int address, int direction,
 
 int comp_maerklin_ms(bus_t busnumber, int address, int port, int action)
 {
-    char packet[18]; 
+    char packet[18];
     int i, j;
     int id, subid;
 
@@ -599,9 +589,8 @@ int comp_maerklin_ms(bus_t busnumber, int address, int port, int action)
 int comp_maerklin_mf(bus_t busnumber, int address, int f1, int f2,
                      int f3, int f4)
 {
-
     char trits[9];
-    char packet[18]; 
+    char packet[18];
     int i;
 
     syslog_bus(busnumber, DBG_DEBUG,
@@ -663,16 +652,23 @@ void comp_maerklin_loco(bus_t bus, gl_data_t *glp)
     int addr = glp->id;
     int speed = glp->speed;
     int direction = glp->direction;
- 
-    if (speed) speed++;        		/* Never send FS1 */
-	if (direction == 2) speed = 0;  /* Emergency Stop */
+
+    if (glp->speedchange & SCEMERG) {   // Emergency Stop
+        speed = 0;
+        direction = glp->cacheddirection;
+        glp->speedchange &= ~SCEMERG;
+    }
+    else if (glp->speedchange & SCDIREC) {
+        speed = 1;                      // change direction
+        glp->speedchange &= ~SCDIREC;
+    }
+    else if (speed) speed++;        	// Never send FS1
 
     syslog_bus(bus, DBG_DEBUG,
-    	"command for M%d protocol received addr:%d dir:%d speed:%d of %d funcs:%x",
-        pv, addr, direction, speed, glp->n_fs, glp->funcs);
-                    
-	if (pv == 1) {	comp_maerklin_1(bus, addr, direction, speed,
-                                glp->funcs & 0x01, glp->cacheddirection);
+    	"command for M%d protocol received addr:%d dir:%d (%d) speed:%d of %d chg %d funcs:%x",
+        pv, addr, direction, glp->cacheddirection, speed, glp->n_fs, glp->speedchange, glp->funcs);
+
+	if (pv == 1) {	comp_maerklin_1(bus, addr, direction, speed, glp->funcs);
                 	if (glp->n_func > 1)
                 		comp_maerklin_mf(bus, addr, ((glp->funcs >> 1) & 0x01),
                                 ((glp->funcs >> 2) & 0x01), ((glp->funcs >> 3) & 0x01),
@@ -695,4 +691,5 @@ void comp_maerklin_loco(bus_t bus, gl_data_t *glp)
                                 ((glp->funcs >> 4) & 0x01));
                     break;
     }
+    glp->speedchange &= ~SCSPEED;       // handled now
 }

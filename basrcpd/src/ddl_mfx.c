@@ -300,14 +300,18 @@ void comp_mfx_loco(bus_t bus, gl_data_t *glp)
 	uint32_t funcs = glp->funcs;
     uint8_t nspeed = glp->n_fs;
     uint8_t	nfuncs = glp->n_func;
- 
-	if (direction == 2) speed = 1;		/* Emergency Stop */
-	else {
-		if (speed == 1) speed++;		/* Never send FS1 */
-        if (direction == -1) direction = 0;	
-	}
-  	if (speed > 127) speed = 127;
 
+    if (glp->speedchange & SCEMERG) {   // Emergency Stop
+        speed = 1;
+        direction = glp->cacheddirection;
+        glp->speedchange &= ~SCEMERG;
+    }
+    else if (speed) speed++;        	// Never send FS1
+
+    if (direction == -1) direction = 0; // mfx loco TERM	
+  	if (speed > 127) speed = 127;
+    glp->speedchange &= ~(SCSPEED | SCDIREC);   // handled now
+    
 	syslog_bus(bus, DBG_DEBUG,
              "command for MFX protocol received addr:%d "
              "dir:%d speed:%d nspeeds:%d nfunc:%d funcs %x",

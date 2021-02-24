@@ -1,4 +1,4 @@
-// loopback.c - adapted for basrcpd project 2018 by Rainer Müller 
+// loopback.c - adapted for basrcpd project 2018 by Rainer Müller
 
 /* $Id: loopback.c 1456 2010-02-28 20:01:39Z gscholz $ */
 
@@ -364,17 +364,16 @@ static void handle_sm_command(bus_t bus)
 
 static void handle_gl_command(bus_t bus)
 {
-    gl_data_t gltmp, *glp;	
+    gl_data_t gltmp, *glp;
 
     glp = dequeueNextGL(bus);
 	if (glp) {
-	  gltmp = *glp;
-
-      if (gltmp.direction == 2) {
-        gltmp.speed = 0;
-        gltmp.direction = !gltmp.cacheddirection;
-      }
-      cacheSetGL(bus, glp, &gltmp);
+	   gltmp = *glp;
+        if (glp->speedchange & SCEMERG) {   // Emergency Stop
+            gltmp.speed = 0;
+        }
+        glp->speedchange = 0;
+        cacheSetGL(bus, glp, &gltmp);
     }
     buses[bus].watchdog++;
 }

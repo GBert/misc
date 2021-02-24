@@ -1,4 +1,4 @@
-// srcp-gl.c - adapted for basrcpd project 2018 by Rainer Müller 
+// srcp-gl.c - adapted for basrcpd project 2018 by Rainer Müller
 
 /* $Id: srcp-gl.c 1740 2016-04-24 12:36:36Z gscholz $ */
 
@@ -95,7 +95,7 @@ uint16_t * getGLIndex(bus_t bus, uint32_t locid, char prot)
 {
 	if ((bus <= num_buses) && (gl[bus].gldir != NULL)) {
 		if ((locid < MAXSRCPGL) && prot) gl[bus].gldir->proto[locid] = prot;
-		
+
 		uint32_t id = locid & 0x3FFF;
         if (id) switch(locid >> 14) {
         	case 0:	// srcp all protocols
@@ -116,7 +116,7 @@ uint16_t * getGLIndex(bus_t bus, uint32_t locid, char prot)
 					if (prot && (prot != 'X')) break;	// else fallthru
 			case 5:	// mfx via MCS
 					if (id < MAXMFXGL) return &(gl[bus].gldir->mfxdir[id]);
-		}  
+		}
 	}
 	return NULL;	// invalid parameters
 }
@@ -131,22 +131,22 @@ uint16_t addGLEntry(bus_t bus, uint32_t id)
 			syslog_bus(bus, DBG_WARN, "No free entry available for id %x", id);
 			return 0;
 		}
-	} while (gl[bus].glstate[entry].state != glsNone); 
-	
+	} while (gl[bus].glstate[entry].state != glsNone);
+
 	syslog_bus(bus, DBG_DEBUG, "New GL entry %d added for id %x", entry, id);
 	return entry;	//(id & 0x3FFF);
 }
 
 /* checks whether a GL is already initialized or not
- * returns loc-id if OK, or 0 if it is an invalid address! 
+ * returns loc-id if OK, or 0 if it is an invalid address!
 */
 uint16_t isInitializedGL(bus_t busnumber, int index)
 {
-    if (busnumber <= num_buses && gl[busnumber].numberOfGl > 0 && 
-		index > 0 && index <= gl[busnumber].numberOfGl && 
+    if (busnumber <= num_buses && gl[busnumber].numberOfGl > 0 &&
+		index > 0 && index <= gl[busnumber].numberOfGl &&
         (gl[busnumber].glstate[index].state != glsNone)) {
         	uint16_t i = gl[busnumber].glstate[index].id;	// check kind of locid
-   			if ((i >= MAXSRCPGL) || (gl[busnumber].gldir->proto[i] != 
+   			if ((i >= MAXSRCPGL) || (gl[busnumber].gldir->proto[i] !=
 			   				gl[busnumber].glstate[index].protocol)) {
         		if (gl[busnumber].glstate[index].protocol == 'X') i += 0x4000;
 			}
@@ -165,9 +165,9 @@ static void gl_enqueue(bus_t busnumber, gl_data_t * p)
 {
     syslog_bus(busnumber, DBG_DEBUG, "gl_info enqueued for addr %d", p->id);
 	if (buses[busnumber].debuglevel >= DBG_DEBUG)
-			debugGL(busnumber, p); 	
+			debugGL(busnumber, p);
 
-    int result;  
+    int result;
 	int addr = p->id;
 
     if (p->state == glsNone) {
@@ -189,19 +189,19 @@ static void gl_enqueue(bus_t busnumber, gl_data_t * p)
                        strerror(result), result);
     }
 
-	/* avoid double queue entries */        
+	/* avoid double queue entries */
     int i = out[busnumber];
     while (i != in[busnumber]) {
       	if (queue[busnumber][i] == p) goto enqueue_unlock;
        	i++;
         if (i == QUEUELEN) i = 0;
     }
-        
+
     /* copy pointer to new values to queue */
     queue[busnumber][in[busnumber]] = p;
     in[busnumber]++;
     if (in[busnumber] == QUEUELEN) in[busnumber] = 0;
-        
+
 enqueue_unlock:
     result = pthread_mutex_unlock(&queue_mutex[busnumber]);
     if (result != 0) {
@@ -239,7 +239,7 @@ gl_data_t * dequeueNextGL(bus_t busnumber)
 {
     if (in[busnumber] == out[busnumber])
         return NULL;
- 
+
     gl_data_t *p  = queue[busnumber][out[busnumber]];
     out[busnumber]++;
     if (out[busnumber] == QUEUELEN)
@@ -263,38 +263,32 @@ int cacheGetGL(bus_t busnumber, int addr, gl_data_t *gld)
  * cacheSetGL is called from the hardware drivers to keep the
  * the data and the info mode informed. It is called from
  * within the SRCP SET Command code.
- * It respects the TERM function.    						
+ * It respects the TERM function.
 */
 void cacheSetGL(bus_t busnumber, gl_data_t *glp, gl_data_t *l)
 {
-    uint16_t *gli = getGLIndex(busnumber, getglid(glp), 0);
-    int i = gli ? *gli : 0;
-    if (i) {
-    	char msg[1000];
-    	int rc = SRCP_WRONGVALUE;
-    	int addr = isInitializedGL(busnumber, i);
-      	gl[busnumber].glstate[i].cacheddirection = l->direction;
-      	gl[busnumber].glstate[i].cachedspeed = l->speed;
-//      gl[busnumber].glstate[addr].funcs = l.funcs;
-//      gl[busnumber].glstate[addr].n_fs = l.n_fs;
-//      gl[busnumber].glstate[addr].n_func = l.n_func;
-        gettimeofday(&gl[busnumber].glstate[i].tv, NULL);
-        if (gl[busnumber].glstate[i].state == glsTerm) {
-        	rc = SRCP_INFO;
-            snprintf(msg, sizeof(msg), "%lu.%.3lu 102 INFO %lu GL %d\n",
-                     gl[busnumber].glstate[i].tv.tv_sec,
-                     gl[busnumber].glstate[i].tv.tv_usec / 1000,
-                     busnumber, addr);
-            // delete all data of terminated entry
-            bzero(&gl[busnumber].glstate[i], sizeof(gl_data_t));
-            *gli = 0;
-			if (addr < MAXSRCPGL) gl[busnumber].gldir->proto[addr] = 0;
-        }
-        else {
-            rc = cacheInfoGL(busnumber, addr, msg);
-        }
-        if (rc == SRCP_INFO) enqueueInfoMessage(msg);
+   	char msg[1000];
+   	int rc = SRCP_WRONGVALUE;
+   	int addr = glp->id; // getglid(glp);     //isInitializedGL(busnumber, i);
+    if ((addr >= MAXSRCPGL) || (gl[busnumber].gldir->proto[addr] == 0)) addr = getglid(glp);
+   	glp->cacheddirection = l->direction;
+    glp->cachedspeed = l->speed;
+    gettimeofday(&glp->tv, NULL);
+    if (glp->state == glsTerm) {
+       	rc = SRCP_INFO;
+        snprintf(msg, sizeof(msg), "%lu.%.3lu 102 INFO %lu GL %d\n",
+                glp->tv.tv_sec, glp->tv.tv_usec / 1000, busnumber, addr);
+        // delete all data of terminated entry
+        uint16_t *gli = getGLIndex(busnumber, getglid(glp) | MCSADDRINDICATOR, 0);
+        *gli = 0;
+        bzero(glp, sizeof(gl_data_t));
+		if (addr < MAXSRCPGL) gl[busnumber].gldir->proto[addr] = 0;
     }
+    else {
+        rc = cacheInfoGL(busnumber, addr, msg);
+        if (glp->speedchange) gl_enqueue(busnumber, glp);   // remaining action
+    }
+    if (rc == SRCP_INFO) enqueueInfoMessage(msg);
 }
 
 int cacheInitGL(bus_t busnumber, uint32_t locid, const char protocol,
@@ -318,7 +312,7 @@ int cacheInitGL(bus_t busnumber, uint32_t locid, const char protocol,
         		p->protocolversion = protoversion;
         		p->protocol = protocol;
         		p->id = locid & 0x3FFF;
-        		if (buses[busnumber].init_gl_func) 
+        		if (buses[busnumber].init_gl_func)
             		rc = (*buses[busnumber].init_gl_func) (p, optData);
 		        if (rc == SRCP_OK) {
 					p->state = glsInit;
@@ -326,7 +320,7 @@ int cacheInitGL(bus_t busnumber, uint32_t locid, const char protocol,
 				}
             }
             else rc = SRCP_DEVICEREINITIALIZED;
-            
+
             if (cacheDescribeGL(busnumber, p->id, msg) == SRCP_INFO)
             		enqueueInfoMessage(msg);
         }
@@ -345,7 +339,7 @@ int cacheTermGL(bus_t busnumber, uint32_t locid)
           enqueueGL(busnumber, locid, -1, 0, 1, 0); //Direction -1 -> Info Term
         }
         else {
-          enqueueGL(busnumber, locid, 0, 0, 1, 0); //Direction -1 -> Info Term
+          enqueueGL(busnumber, locid, 0, 0, 1, 0);
         }
         return SRCP_OK;
     }
@@ -569,7 +563,7 @@ void startup_GL(void)
         gl[i].numberOfGl = 0;
         gl[i].glstate = NULL;
         gl[i].gldir = NULL;
-        
+
         int result = pthread_mutex_init(&queue_mutex[i], NULL);
         if (result != 0) {
             syslog_bus(0, DBG_ERROR,
@@ -620,13 +614,13 @@ int init_GL(bus_t busnumber, unsigned int count)
 
 void debugGL(bus_t busnumber, gl_data_t *glp)
 {
-	syslog_bus(busnumber, DBG_WARN, 
+	syslog_bus(busnumber, DBG_WARN,
 		"*** GLSTATE for %d/%x: state %d, protocol %c, protocolversion %d",
 		busnumber, glp->id, glp->state, glp->protocol, glp->protocolversion);
-    syslog_bus(busnumber, DBG_WARN, 
+    syslog_bus(busnumber, DBG_WARN,
 		"* n_func %d, n_fs %d speed %d, direction %d, funcs %x, UID %x",
 		glp->n_func, glp->n_fs, glp->speed, glp->direction, glp->funcs, glp->decuid);
-						
+
 //      syslog_bus(busnumber, DBG_WARN, "lockduration %ld",
 //                 glp->lockduration);
 //      syslog_bus(busnumber, DBG_WARN, "locked_by %ld", glp->locked_by);
@@ -662,20 +656,22 @@ static gl_data_t * get_gldata_ptr(bus_t bus, uint32_t locid)
         					p->protocolversion = 1;
 							p->n_fs = 28;
             				p->n_func = 16;
-							break;			
+							break;
 				}
 				// TODO: was muss sonst noch initialisiert werden ?    z.B.
 				gettimeofday(&p->inittime, NULL);
 				p->tv = p->inittime;
         		if (bus_supports_protocol(bus, p->protocol) == SRCP_OK) {
         			if (buses[bus].init_gl_func) {
-    					if ((*buses[bus].init_gl_func) (p, "") == SRCP_OK)
+    					if ((*buses[bus].init_gl_func) (p, "") == SRCP_OK) {
+                            p->cacheddirection = p->direction;
 							p->state = glsActive;
+                        }
         			}
             	}
             	if (p->state == glsNone) p = NULL;	// init failed
-    			else syslog_bus(bus, DBG_INFO, "data initialized for %x to %c %d NFS %d",
-						locid, p->protocol, p->protocolversion, p->n_fs);
+    			else syslog_bus(bus, DBG_INFO, "data initialized for %x to %c %d NFS %d at %p",
+						locid, p->protocol, p->protocolversion, p->n_fs, p);
 			}
 		}
     }
@@ -688,7 +684,7 @@ static gl_data_t * get_gldata_ptr(bus_t bus, uint32_t locid)
 int handle_mcs_prot(bus_t bus, uint32_t locid, int val)
 {
     syslog_bus(bus, DBG_DEBUG, "mcs_prot for %d set to %d", locid, val);
-    gl_data_t *p = get_gldata_ptr(bus, locid | MCSADDRINDICATOR);  
+    gl_data_t *p = get_gldata_ptr(bus, locid | MCSADDRINDICATOR);
     if (p == NULL) return -1;
     switch (p->protocol) {
     	case 'N':	switch (val) {
@@ -715,8 +711,8 @@ int handle_mcs_speed(bus_t bus, uint32_t locid, int val)
     	uint8_t oldspeed = p->speed;
 		p->speed = calcspeed(val, 1000, p->n_fs);
 		if (p->speed != oldspeed) {
-        	p->speedchange |= 1;
-			gl_enqueue(bus, p); 
+        	p->speedchange |= SCSPEED;
+			gl_enqueue(bus, p);
 		}
 	}
     else val = (p->speed * 1000) / p->n_fs;	// TODO: mal irgendwas: calcspeed umgekehrt!
@@ -727,16 +723,20 @@ int handle_mcs_speed(bus_t bus, uint32_t locid, int val)
 int handle_mcs_dir(bus_t bus, uint32_t locid, int val)
 {
 //  syslog_bus(bus, DBG_DEBUG, "mcs_dir for %d set to %d", locid, val);
-    gl_data_t *p = get_gldata_ptr(bus, locid | MCSADDRINDICATOR);  
+    gl_data_t *p = get_gldata_ptr(bus, locid | MCSADDRINDICATOR);
     if (p == NULL) return -1;
     if (val >= 0) {
 		switch (val) {
 			case 1:	p->direction = 1;	break;	// forward
 			case 2:	p->direction = 0;	break;	// backward
 			case 3: p->direction ^= 1;	break;	// change
-			case 4:	p->direction = 2;	break;	// emergency
+			case 4:	p->direction = 2;
+                    p->speedchange |= SCEMERG; break;	// emergency
 		}
-		if (p->direction != p->cacheddirection) p->speed = 0;
+		if (p->direction != p->cacheddirection) {
+            p->speed = 0;
+            p->speedchange |= SCDIREC;
+        }
 		gl_enqueue(bus, p);
 	}
 	val = 2 - p->direction;
@@ -764,28 +764,33 @@ int handle_mcs_func(bus_t bus, uint32_t locid, int funr, int val)
 
 int enqueueGL(bus_t bus, uint32_t locid, int dir, int speed, int maxspeed, const int f)
 {
-	int i, olddir, oldspeed, oldfuncs;
+	int i, oldspeed, oldfuncs;
 	uint32_t itemid;
 	char sync[5];
-	
+
 	syslog_bus(bus, DBG_DEBUG, "srcp_info for %d set", locid);
     gl_data_t *p = get_gldata_ptr(bus, locid);
     if (p == NULL) return SRCP_WRONGVALUE;
 
-    olddir = p->direction;
-	p->direction = dir;
-	if (p->direction != olddir) p->speedchange |= 2;
-	
+	if (p->direction != dir) {
+        p->direction = dir;
+        p->speedchange |= SCDIREC;
+        if (dir == 2) p->speedchange |= SCEMERG;  // emergency
+    }
+
    	oldspeed = p->speed;
 	p->speed = calcspeed(speed, maxspeed, p->n_fs);
-	if (p->speed != oldspeed)  	p->speedchange |= 1;
+	if (p->speed != oldspeed)  	p->speedchange |= SCSPEED;
 
     oldfuncs = p->funcs;
     p->funcs = f;
     oldfuncs ^= f;				// changed funcs
-    p->funcschange |= oldfuncs;    
-        
-   	if (p->state == glsInit)  p->state = glsActive;
+    p->funcschange |= oldfuncs;
+
+   	if (p->state == glsInit) {
+        p->cacheddirection = p->direction;
+        p->state = glsActive;
+    }
 	gl_enqueue(bus, p);
 
     itemid = getglid(p);
@@ -797,7 +802,7 @@ int enqueueGL(bus_t bus, uint32_t locid, int dir, int speed, int maxspeed, const
 		if (info_mcs(bus, 0x01, itemid, sync) < 0) return SRCP_OK;
 	}
 
-	i = (p->speed * 1000) / p->n_fs;	
+	i = (p->speed * 1000) / p->n_fs;
 	sync[0] = 2;	sync[1] = i >> 8; 	sync[2] = i & 0xFF;
 	info_mcs(bus, 0x09, itemid, sync);
 
@@ -806,6 +811,6 @@ int enqueueGL(bus_t bus, uint32_t locid, int dir, int speed, int maxspeed, const
 			sync[1] = i;	sync[2] = (f >> i) & 1;
 			info_mcs(bus, 0x0D, itemid, sync);
 		}
-	}	
+	}
 	return SRCP_OK;
 }

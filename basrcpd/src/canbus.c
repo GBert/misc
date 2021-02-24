@@ -1,7 +1,7 @@
 // canbus.c : new bus type CANBUS for the srcpd project
 // allows communication srcp <-> canbus
 //
-// C 2015 Rainer Müller 
+// C 2015 Rainer Müller
 
 /***************************************************************************
  *                                                                         *
@@ -133,13 +133,13 @@ int readconfig_CANBUS(xmlDocPtr doc, xmlNodePtr node, bus_t busnumber)
 
 
 // Initialize socket. Returns false if socket could not be opened.
-static bool initSocketCan(bus_t bus)		
+static bool initSocketCan(bus_t bus)
 {
     struct sockaddr_can addr;
     struct ifreq ifr;
     int ret;
-    
-	// Configure the socket can layer to report errors, see /linux/can/error.h 
+
+	// Configure the socket can layer to report errors, see /linux/can/error.h
     can_err_mask_t err_mask = ( CAN_ERR_TX_TIMEOUT | CAN_ERR_BUSOFF );
 
     buses[bus].device.file.fd = socket(PF_CAN, SOCK_RAW, CAN_RAW);
@@ -184,7 +184,7 @@ void closeSocketCan(bus_t bus)
 }
 
 
-// Send a message on the CAN-bus. Returns true if ok, false if not. 
+// Send a message on the CAN-bus. Returns true if ok, false if not.
 // Parameters:
 // msg - the can message to send
 // extended - set to true to send an extended frame
@@ -209,7 +209,7 @@ bool sendCanMsg(bus_t bus, struct can_frame msg, bool extended, bool rtr)
 }
 
 
-// Check if a CAN message available. If socket is blocking (default) - 
+// Check if a CAN message available. If socket is blocking (default) -
 // this call will block until data is received or until 1ms timeout period has expired.
 // If socket is non blocking, it will return false if there is no data or if there is any error.
 // If socket is blocking, it will return false if there is an error or at timeout.
@@ -225,11 +225,11 @@ bool checkCanMsg(bus_t bus)
     unsigned int type;
     fd_set rfds;
   	struct can_frame msg;
-    
+
 	struct timeval tv;
     tv.tv_sec = 0;
     tv.tv_usec = 1000;
-    
+
     // Set up a file descriptor set only containing one socket
     FD_ZERO(&rfds);
     FD_SET(buses[bus].device.file.fd, &rfds);
@@ -240,7 +240,7 @@ bool checkCanMsg(bus_t bus)
 
     if(ret > 0) {
         bytesRead = read(buses[bus].device.file.fd, &msg, sizeof(msg));
-        
+
         if(bytesRead == sizeof(msg)) {
             if (msg.can_id & CAN_ERR_FLAG) printf("ERR ");
             if (msg.can_id & CAN_EFF_FLAG) printf("EXT ");
@@ -248,17 +248,17 @@ bool checkCanMsg(bus_t bus)
     		printf("recvd: %x, DLC %i", msg.can_id & CAN_EFF_MASK, msg.can_dlc);
     		for(j = 0; j < msg.can_dlc; j++) printf(" %x", msg.data[j]);
     		printf("\n");
-    		
+
     		type = (msg.can_id & 0x1FFFFF00) + (msg.can_dlc ? msg.data[0] : 0);
     		switch (type) {
-    			case 0x1A1:	case 0x1A2:	
+    			case 0x1A1:	case 0x1A2:
     				setFB(bus, (msg.can_id & 0xFF) * 16 + msg.data[1] + 1, type & 1);
     				break;
     		}
     	}
         return true;
     }
-    
+
     return false;
 }
 
@@ -297,7 +297,7 @@ int init_bus_CANBUS(bus_t i)
 	// nur zum Test
     int	j;
     struct can_frame msg;
-    msg.can_id = 0x100; 
+    msg.can_id = 0x100;
     msg.can_dlc = 8;
     for(j = 0; j < 8; j++) msg.data[j] = j * 10;
 	// sendCanMsg(bus_t bus, struct can_frame msg, bool extended, bool rtr, int *errorCode)
@@ -334,11 +334,11 @@ static void handle_ga_command(bus_t busnumber)
     printf("Nr. %i Port %i auf %i\n", addr, gatmp.port, gatmp.action);
 
     switch (gatmp.port) {
-    	case 0:		msg.data[0] = 0x31;	break;	// Stellung R 
+    	case 0:		msg.data[0] = 0x31;	break;	// Stellung R
     	case 1:		msg.data[0] = 0x32;	break;	// Stellung G
-    	default:	return; 
+    	default:	return;
     }
-    msg.can_id = 0x200 + addr / 8; 
+    msg.can_id = 0x200 + addr / 8;
     msg.can_dlc = 2;
     msg.data[1] = addr & 7;
 	sendCanMsg(busnumber, msg, false, false);
