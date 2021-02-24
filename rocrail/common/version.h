@@ -1,11 +1,13 @@
 const int revisionnr = 
-1428
+1430
 ;
 const char* commithash = 
-"f78ee5792787fb058df77179c104b535ca6942ff";
+"ff9a76dacaf4f6c5bfa5dfd8b2a2e4ad1ad8e534";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1430 2021-02-24 15:02:40 +0100 wiopi: set serial device to ttyAMA0 in case of ZeroW (if not set)\n" \
+"1429 2021-02-24 15:00:09 +0100 wio: support for option byte 4\n" \
 "1428 2021-02-23 10:54:40 +0100 wio: options4 added\n" \
 "1427 2021-02-22 15:55:14 +0100 Rocrail Logo in STL format: Thanks to Dagnall\n" \
 "1426 2021-02-22 15:22:08 +0100 wiopi: provide environment on query\n" \
