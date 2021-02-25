@@ -151,7 +151,7 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 3.14\n\n");
+    fprintf(stderr, "   Version 3.15\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
@@ -731,7 +731,7 @@ void decode_frame(struct can_frame *frame) {
     else
 	printf(YEL);
 
-    switch ((frame->can_id & 0x00FF0000UL) >> 16) {
+    switch ((frame->can_id & 0x01FF0000UL) >> 16) {
     /* System Befehle */
     case 0x00:
     case 0x01:
@@ -803,7 +803,7 @@ void decode_frame(struct can_frame *frame) {
 
 	printf("Lok %s ", getLoco(frame->data, s));
 	if (frame->can_dlc == 4) {
-	    printf(" wird abgefragt\n");
+	    printf("Richtung wird abgefragt\n");
 	} else if (frame->can_dlc == 5) {
 	    switch (frame->data[4]) {
 	    case 0:
@@ -1391,7 +1391,7 @@ void decode_frame(struct can_frame *frame) {
 int check_cs1_frame(uint32_t id) {
     if ((id & M_CS2_HASH_MASK) == M_CS2_HASH_FLAG)
 	return 0;
-    if (id & 0x1C000000)
+    if (id & 0x1C000080)
 	return 1;
     return 0;
 }
