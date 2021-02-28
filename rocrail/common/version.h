@@ -1,11 +1,18 @@
 const int revisionnr = 
-1430
+1437
 ;
 const char* commithash = 
-"ff9a76dacaf4f6c5bfa5dfd8b2a2e4ad1ad8e534";
+"dd03e7cf1cfb15f1aca31d09fd3c0cb2f467a62e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1437 2021-02-27 16:19:57 +0100 wio: options set/get added (wip)\n" \
+"1436 2021-02-27 14:28:20 +0100 modplan: work around for linking a module define mvtrack\n" \
+"1435 2021-02-26 11:23:46 +0100 wiopi: cv show mobile functions\n" \
+"1434 2021-02-26 11:10:58 +0100 wiopi: mobile f1...f8 added\n" \
+"1433 2021-02-26 10:44:30 +0100 wiopi: mobile function support\n" \
+"1432 2021-02-26 08:25:29 +0100 rascii: disable clock broadcast in case protver=1\n" \
+"1431 2021-02-25 12:28:22 +0100 wiopi: hardware update\n" \
 "1430 2021-02-24 15:02:40 +0100 wiopi: set serial device to ttyAMA0 in case of ZeroW (if not set)\n" \
 "1429 2021-02-24 15:00:09 +0100 wio: support for option byte 4\n" \
 "1428 2021-02-23 10:54:40 +0100 wio: options4 added\n" \
