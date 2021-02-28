@@ -151,7 +151,7 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 3.15\n\n");
+    fprintf(stderr, "   Version 3.16\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
@@ -1391,7 +1391,8 @@ void decode_frame(struct can_frame *frame) {
 int check_cs1_frame(uint32_t id) {
     if ((id & M_CS2_HASH_MASK) == M_CS2_HASH_FLAG)
 	return 0;
-    if (id & 0x1C000080)
+    /* sometimes the match doesn't work as described by Maerklin - workaround */
+    if ((id & 0x1C000000) || ((id & 0x1FFF0080) == 0x80))
 	return 1;
     return 0;
 }
