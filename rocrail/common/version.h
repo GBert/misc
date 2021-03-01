@@ -1,11 +1,15 @@
 const int revisionnr = 
-1437
+1441
 ;
 const char* commithash = 
-"dd03e7cf1cfb15f1aca31d09fd3c0cb2f467a62e";
+"a5060f5362acb0b5fca00c27e7b7378972e7cbc8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1441 2021-03-01 17:27:32 +0100 guiframe: disconnect lightcontrol toolbar icon from state events\n" \
+"1440 2021-03-01 15:03:42 +0100 reserve: fix for reset follow up routes\n" \
+"1439 2021-03-01 10:52:11 +0100 loc function: on/off pos parameter added\n" \
+"1438 2021-03-01 08:10:56 +0100 wiodlg: hide the options tab\n" \
 "1437 2021-02-27 16:19:57 +0100 wio: options set/get added (wip)\n" \
 "1436 2021-02-27 14:28:20 +0100 modplan: work around for linking a module define mvtrack\n" \
 "1435 2021-02-26 11:23:46 +0100 wiopi: cv show mobile functions\n" \
