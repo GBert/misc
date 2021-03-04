@@ -9,8 +9,6 @@ LIBS=-lpthread -ldl
 TMPDIR=RailControl
 
 OBJ= \
-	WebServer/WebClient.o \
-	Manager.o \
 	ArgumentHandler.o \
 	Config.o \
 	DataModel/Accessory.o \
@@ -45,6 +43,7 @@ OBJ= \
 	Languages.o \
 	Logger/Logger.o \
 	Logger/LoggerServer.o \
+	Manager.o \
 	Network/Serial.o \
 	Network/TcpClient.o \
 	Network/TcpConnection.o \
@@ -53,7 +52,6 @@ OBJ= \
 	RailControl.o \
 	Storage/Sqlite.o \
 	Storage/StorageHandler.o \
-	Timestamp.o \
 	Utils/Utils.o \
 	WebServer/HtmlFullResponse.o \
 	WebServer/HtmlResponse.o \
@@ -79,6 +77,7 @@ OBJ= \
 	WebServer/HtmlTagSwitch.o \
 	WebServer/HtmlTagTrackBase.o \
 	WebServer/Response.o \
+	WebServer/WebClient.o \
 	WebServer/WebClientCluster.o \
 	WebServer/WebClientSignal.o \
 	WebServer/WebClientTrack.o \
@@ -102,10 +101,15 @@ OBJZLIB=Hardware/zlib/adler32.o \
 	Hardware/zlib/zutil.o \
 	Hardware/ZLib.o
 
-all: $(OBJ)
-	+make -C Hardware
-	+make -C Storage
+
+CXXUNSORTED= $(subst .o,.cpp,$(OBJ))
+CXXSORTED= $(shell ls -S $(CXXUNSORTED))
+OBJSORTED= Timestamp.o Storage/sqlite/sqlite3.o $(subst .cpp,.o,$(CXXSORTED)) $(OBJZLIB)
+
+all: $(OBJSORTED)
 	$(CXX) $(LDFLAGS) $(OBJ) -o railcontrol $(LIBS)
+
+
 	rm Timestamp.cpp
 	rm Timestamp.o
 
