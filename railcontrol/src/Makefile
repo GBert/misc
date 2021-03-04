@@ -107,7 +107,7 @@ CXXSORTED= $(shell ls -S $(CXXUNSORTED))
 OBJSORTED= Timestamp.o Storage/sqlite/sqlite3.o $(subst .cpp,.o,$(CXXSORTED)) $(OBJZLIB)
 
 all: $(OBJSORTED)
-	$(CXX) $(LDFLAGS) $(OBJ) -o railcontrol $(LIBS)
+	$(CXX) $(LDFLAGS) $(OBJSORTED) -o railcontrol $(LIBS)
 
 
 	rm Timestamp.cpp
