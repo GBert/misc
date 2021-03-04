@@ -30,7 +30,18 @@ OBJ= \
 	DataModel/Switch.o \
 	DataModel/Track.o \
 	DataModel/TrackBase.o \
+	Hardware/CS2Tcp.o \
+	Hardware/CS2Udp.o \
+	Hardware/CcSchnitte.o \
+	Hardware/Ecos.o \
 	Hardware/HardwareHandler.o \
+	Hardware/Hsi88.o \
+	Hardware/M6051.o \
+	Hardware/OpenDcc.o \
+	Hardware/ProtocolMaerklinCAN.o \
+	Hardware/RM485.o \
+	Hardware/Virtual.o \
+	Hardware/Z21.o \
 	Languages.o \
 	Logger/Logger.o \
 	Logger/LoggerServer.o \
@@ -40,6 +51,7 @@ OBJ= \
 	Network/TcpServer.o \
 	Network/UdpConnection.o \
 	RailControl.o \
+	Storage/Sqlite.o \
 	Storage/StorageHandler.o \
 	Timestamp.o \
 	Utils/Utils.o \
@@ -72,6 +84,23 @@ OBJ= \
 	WebServer/WebClientTrack.o \
 	WebServer/WebClientTrackBase.o \
 	WebServer/WebServer.o
+
+OBJZLIB=Hardware/zlib/adler32.o \
+	Hardware/zlib/compress.o \
+	Hardware/zlib/crc32.o \
+	Hardware/zlib/deflate.o \
+	Hardware/zlib/gzclose.o \
+	Hardware/zlib/gzlib.o \
+	Hardware/zlib/gzread.o \
+	Hardware/zlib/gzwrite.o \
+	Hardware/zlib/infback.o \
+	Hardware/zlib/inffast.o \
+	Hardware/zlib/inflate.o \
+	Hardware/zlib/inftrees.o \
+	Hardware/zlib/trees.o \
+	Hardware/zlib/uncompr.o \
+	Hardware/zlib/zutil.o \
+	Hardware/ZLib.o
 
 all: $(OBJ)
 	+make -C Hardware
