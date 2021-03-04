@@ -1,11 +1,13 @@
 const int revisionnr = 
-1442
+1444
 ;
 const char* commithash = 
-"a3c5bcba6b2b852137bff20c8fd78083f305dfe1";
+"3b00a801b4b6cf4f1062801b5e79c5ac1c8468d9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1444 2021-03-03 08:02:25 +0100 default info level trace deactivated\n" \
+"1443 2021-03-03 07:51:04 +0100 z21dlg: loconet detectors option added\n" \
 "1442 2021-03-02 15:38:23 +0100 r2rnet default address set to 224.0.1.20\n" \
 "1441 2021-03-01 17:27:32 +0100 guiframe: disconnect lightcontrol toolbar icon from state events\n" \
 "1440 2021-03-01 15:03:42 +0100 reserve: fix for reset follow up routes\n" \
