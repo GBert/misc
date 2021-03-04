@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -39,19 +39,6 @@ using std::to_string;
 
 namespace Storage
 {
-
-	// create instance of sqlite
-	extern "C" SQLite* create_Sqlite(const StorageParams* params)
-	{
-		return new SQLite(params);
-	}
-
-	// delete instance of sqlite
-	extern "C" void destroy_Sqlite(SQLite* sqlite)
-	{
-		delete (sqlite);
-	}
-
 	SQLite::SQLite(const StorageParams* params)
 	:	filename(params->filename),
 	 	logger(Logger::Logger::GetLogger("SQLite")),

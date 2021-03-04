@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -225,7 +225,7 @@ namespace DataModel
 	{
 		DeleteSignals();
 		signals = newSignals;
-		for (auto signalRelation : tracks)
+		for (auto signalRelation : signals)
 		{
 			Signal* signal = dynamic_cast<Signal*>(signalRelation->GetObject2());
 			if (signal != nullptr)

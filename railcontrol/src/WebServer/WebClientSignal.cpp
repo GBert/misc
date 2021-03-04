@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -56,7 +56,7 @@ namespace WebServer
 	{
 		HtmlTag content;
 		SignalID signalID = Utils::Utils::GetIntegerMapEntry(arguments, "signal", SignalNone);
-		ControlID controlID = manager.GetControlForAccessory();
+		ControlID controlID = manager.GetPossibleControlForAccessory();
 		Protocol protocol = ProtocolNone;
 		Address address = AddressNone;
 		string name = Languages::GetText(Languages::TextNew);
@@ -218,13 +218,16 @@ namespace WebServer
 		map<string,string> signalArgument;
 		for (auto signal : signalList)
 		{
+			Signal* signalConfig = signal.second;
 			HtmlTag row("tr");
 			row.AddChildTag(HtmlTag("td").AddContent(signal.first));
-			const string& signalIdString = to_string(signal.second->GetID());
+			row.AddChildTag(HtmlTag("td").AddContent(client.ProtocolName(signalConfig->GetProtocol())));
+			row.AddChildTag(HtmlTag("td").AddContent(to_string(signalConfig->GetAddress())));
+			const string& signalIdString = to_string(signalConfig->GetID());
 			signalArgument["signal"] = signalIdString;
 			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextEdit, "signaledit_list_" + signalIdString, signalArgument)));
 			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextDelete, "signalaskdelete_" + signalIdString, signalArgument)));
-			if (signal.second->IsInUse())
+			if (signalConfig->IsInUse())
 			{
 				row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonCommandWide(Languages::TextRelease, "signalrelease_" + signalIdString, signalArgument, "hideElement('b_signalrelease_" + signalIdString + "');")));
 			}

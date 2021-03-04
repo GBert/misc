@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -25,8 +25,10 @@ along with RailControl; see the file LICENCE. If not see
 #include <vector>
 
 #include "DataModel/AccessoryBase.h"
+#include "DataModel/Loco.h"
 #include "DataTypes.h"
 #include "Hardware/Capabilities.h"
+#include "Hardware/LocoCache.h"
 #include "Manager.h"
 #include "Utils/Utils.h"
 
@@ -37,48 +39,85 @@ namespace Hardware
 	{
 		public:
 			// non virtual default constructor is needed to prevent polymorphism
-			HardwareInterface(Manager* manager, const ControlID controlID, const std::string& name)
+			inline HardwareInterface(Manager* manager,
+				const ControlID controlID,
+				const std::string& fullName,
+				const std::string& shortName)
 			:	manager(manager),
 			 	controlID(controlID),
-			 	name(name)
-			{};
+			 	fullName(fullName),
+			 	shortName(shortName)
+			{
+			}
 
 			// pure virtual destructor prevents polymorphism in derived class
-			virtual ~HardwareInterface() {};
+			virtual ~HardwareInterface()
+			{
+			}
 
-			// get the name of the hardware
-			const std::string GetName() const { return name; }
+			// get the full name of the hardware
+			inline const std::string& GetFullName() const
+			{
+				return fullName;
+			}
+
+			// get the short name of the hardware
+			inline const std::string& GetShortName() const
+			{
+				return shortName;
+			}
 
 			// get hardware capabilities
 			virtual Hardware::Capabilities GetCapabilities() const = 0;
 
 			// get available loco protocols of this control
-			virtual void GetLocoProtocols(__attribute__((unused)) std::vector<Protocol>& protocols) const {};
+			virtual void GetLocoProtocols(__attribute__((unused)) std::vector<Protocol>& protocols) const
+			{
+			}
 
 			// is given loco protocol supported
-			virtual bool LocoProtocolSupported(__attribute__((unused)) const Protocol protocol) const { return false; }
+			virtual bool LocoProtocolSupported(__attribute__((unused)) const Protocol protocol) const
+			{
+				return false;
+			}
 
 			// get available accessory protocols of this control
-			virtual void GetAccessoryProtocols(__attribute__((unused)) std::vector<Protocol>& protocols) const {}
+			virtual void GetAccessoryProtocols(__attribute__((unused)) std::vector<Protocol>& protocols) const
+			{
+			}
 
 			// is given accessory protocol supported
-			virtual bool AccessoryProtocolSupported(__attribute__((unused)) const Protocol protocol) const { return false; }
+			virtual bool AccessoryProtocolSupported(__attribute__((unused)) const Protocol protocol) const
+			{
+				return false;
+			}
 
 			// turn booster on or off
-			virtual void Booster(__attribute__((unused)) const BoosterState status) {};
+			virtual void Booster(__attribute__((unused)) const BoosterState status)
+			{
+			}
 
 			// set loco speed
-			virtual void LocoSpeed(__attribute__((unused)) const Protocol protocol, __attribute__((unused)) const Address address, __attribute__((unused)) const Speed speed) {};
+			virtual void LocoSpeed(__attribute__((unused)) const Protocol protocol,
+				__attribute__((unused)) const Address address,
+				__attribute__((unused)) const Speed speed)
+			{
+			}
 
 			// set loco orientation
-			virtual void LocoOrientation(__attribute__((unused)) const Protocol protocol, __attribute__((unused)) const Address address, __attribute__((unused)) const Orientation orientation) {};
+			virtual void LocoOrientation(__attribute__((unused)) const Protocol protocol,
+				__attribute__((unused)) const Address address,
+				__attribute__((unused)) const Orientation orientation)
+			{
+			}
 
 			// set loco function
 			virtual void LocoFunction(__attribute__((unused)) const Protocol protocol,
 				__attribute__((unused)) const Address address,
 				__attribute__((unused)) const DataModel::LocoFunctionNr function,
 				__attribute__((unused)) const DataModel::LocoFunctionState on)
-			{}
+			{
+			}
 
 			// set loco
 			virtual void LocoSpeedOrientationFunctions(const Protocol protocol,
@@ -100,31 +139,70 @@ namespace Hardware
 			}
 
 			// accessory command
-			virtual void Accessory(const Protocol protocol, const Address address, const DataModel::AccessoryState state, const DataModel::AccessoryPulseDuration duration)
+			virtual void Accessory(const Protocol protocol,
+				const Address address,
+				const DataModel::AccessoryState state,
+				const DataModel::AccessoryPulseDuration duration)
 			{
 				AccessoryOnOrOff(protocol, address, state, true);
 				std::async(std::launch::async, AccessoryOnOrOffStatic, this, protocol, address, state, duration);
-			};
+			}
 
 			// read CV value
-			virtual void ProgramRead(__attribute__((unused)) const ProgramMode mode, __attribute__((unused)) const Address address, __attribute__((unused)) const CvNumber cv) {}
+			virtual void ProgramRead(__attribute__((unused)) const ProgramMode mode,
+				__attribute__((unused)) const Address address,
+				__attribute__((unused)) const CvNumber cv)
+			{
+			}
 
 			// write CV value
-			virtual void ProgramWrite(__attribute__((unused)) const ProgramMode mode, __attribute__((unused)) const Address address, __attribute__((unused)) const CvNumber cv, __attribute__((unused)) const CvValue value) {}
+			virtual void ProgramWrite(__attribute__((unused)) const ProgramMode mode,
+				__attribute__((unused)) const Address address,
+				__attribute__((unused)) const CvNumber cv,
+				__attribute__((unused)) const CvValue value)
+			{
+			}
+
+			virtual const std::map<std::string,Hardware::LocoCacheEntry>& GetLocoDatabase() const
+			{
+				return emptyLocoDatabase;
+			}
+
+			virtual DataModel::LocoConfig GetLocoByMatch(__attribute__((unused)) const std::string& match) const
+			{
+				return DataModel::LocoConfig();
+			}
+
+			virtual void SetLocoIdOfMatch(__attribute__((unused)) const LocoID locoId,
+				__attribute__((unused)) const std::string& match)
+			{
+			}
 
 		protected:
-			Manager* manager;
+			Manager* const manager;
 			const ControlID controlID;
-			const std::string name;
 
-			virtual void AccessoryOnOrOff(__attribute__((unused)) const Protocol protocol, __attribute__((unused)) const Address address, __attribute__((unused)) const DataModel::AccessoryState state, __attribute__((unused)) const bool on) {}
+			virtual void AccessoryOnOrOff(__attribute__((unused)) const Protocol protocol,
+				__attribute__((unused)) const Address address,
+				__attribute__((unused)) const DataModel::AccessoryState state,
+				__attribute__((unused)) const bool on)
+			{
+			}
 
 		private:
-			static void AccessoryOnOrOffStatic(HardwareInterface* hardware, const Protocol protocol, const Address address, const DataModel::AccessoryState state, const DataModel::AccessoryPulseDuration duration)
+			static void AccessoryOnOrOffStatic(HardwareInterface* hardware,
+				const Protocol protocol,
+				const Address address,
+				const DataModel::AccessoryState state,
+				const DataModel::AccessoryPulseDuration duration)
 			{
 				Utils::Utils::SleepForMilliseconds(duration);
 				hardware->AccessoryOnOrOff(protocol, address, state, false);
 			}
+
+			const std::string fullName;
+			const std::string shortName;
+			std::map<std::string,Hardware::LocoCacheEntry> emptyLocoDatabase;
 	};
 
 } // namespace

@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -205,6 +205,7 @@ class Languages
 			TextHttpConnectionOpen,
 			TextHttpConnectionRequest,
 			TextIPAddress,
+			TextImport,
 			TextIndex,
 			TextInfo,
 			TextInvalidControlID,
@@ -389,6 +390,7 @@ class Languages
 			TextMultipleUnit,
 			TextMyUidHash,
 			TextName,
+			TextNameInControl,
 			TextNetworkUnreachable,
 			TextNew,
 			TextNoAnswerFromDecoder,

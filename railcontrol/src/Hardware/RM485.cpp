@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -32,27 +32,18 @@ using std::string;
 
 namespace Hardware
 {
-	// create instance of RM485
-	extern "C" RM485* create_RM485(const HardwareParams* params)
-	{
-		return new RM485(params);
-	}
-
-	// delete instance of RM485
-	extern "C" void destroy_RM485(RM485* RM485)
-	{
-		delete(RM485);
-	}
-
 	RM485::RM485(const HardwareParams* params)
-	:	HardwareInterface(params->GetManager(), params->GetControlID(), "RM485 / " + params->GetName() + " at serial port " + params->GetArg1()),
+	:	HardwareInterface(params->GetManager(),
+			params->GetControlID(),
+			"RM485 / " + params->GetName() + " at serial port " + params->GetArg1(),
+			params->GetName()),
 		logger(Logger::Logger::GetLogger("RM485 " + params->GetName() + " " + params->GetArg1())),
 		communication(params->GetArg1()),
 		run(true),
 		rescanAddress(0),
 		rescanCount(RescanCountStart)
 	{
-		logger->Info(Languages::TextStarting, name);
+		logger->Info(Languages::TextStarting, GetFullName());
 
 		memset(data, 0, sizeof(data));
 

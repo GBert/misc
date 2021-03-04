@@ -1,7 +1,7 @@
 /*
  RailControl - Model Railway Control Software
 
- Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+ Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
  RailControl is free software; you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the
@@ -30,7 +30,7 @@ namespace Hardware
 	class CcSchnitte : ProtocolMaerklinCAN
 	{
 		public:
-			CcSchnitte(HardwareParams* const params);
+			CcSchnitte(const HardwareParams* params);
 
 			static void GetArgumentTypesAndHint(std::map<unsigned char,ArgumentType>& argumentTypes, std::string& hint)
 			{
@@ -44,9 +44,6 @@ namespace Hardware
 			void Send(const unsigned char* buffer) override;
 			void Receiver() override;
 	};
-
-	extern "C" CcSchnitte* create_CcSchnitte(HardwareParams* const params);
-	extern "C" void destroy_CcSchnitte(CcSchnitte* const ccSchnitte);
 
 } // namespace
 

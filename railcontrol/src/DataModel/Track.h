@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -101,6 +101,15 @@ namespace DataModel
 				return BaseReleaseForce(logger, locoID);
 			}
 
+			inline const std::vector<DataModel::Relation*>& GetSignals() const
+			{
+				return signals;
+			}
+
+			void DeleteSignals();
+			void DeleteSignal(DataModel::Signal* signalToDelete);
+			void AssignSignals(const std::vector<DataModel::Relation*>& newSignals);
+
 		protected:
 			inline bool ReserveInternal(Logger::Logger* logger, const LocoID locoID) override
 			{
@@ -149,7 +158,10 @@ namespace DataModel
 				return GetLoco();
 			}
 
+			void StopAllSignals(const LocoID locoId) override;
+
 		private:
 			TrackType trackType;
+			std::vector<DataModel::Relation*> signals;
 	};
 } // namespace DataModel

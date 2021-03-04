@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -156,11 +156,12 @@ namespace DataModel
 		return ret;
 	}
 
-	bool TrackBase::BaseRelease(Logger::Logger* logger, const LocoID locoID)
+	bool TrackBase::BaseRelease(Logger::Logger* logger, const LocoID locoId)
 	{
+		StopAllSignals(locoId);
 		{
 			std::lock_guard<std::mutex> Guard(updateMutex);
-			bool ret = ReleaseInternal(logger, locoID);
+			bool ret = ReleaseInternal(logger, locoId);
 			if (ret == false)
 			{
 				return false;
@@ -176,12 +177,13 @@ namespace DataModel
 		return true;
 	}
 
-	bool TrackBase::BaseReleaseForce(Logger::Logger* logger, const LocoID locoID)
+	bool TrackBase::BaseReleaseForce(Logger::Logger* logger, const LocoID locoId)
 	{
+		StopAllSignals(locoId);
 		bool ret;
 		{
 			std::lock_guard<std::mutex> Guard(updateMutex);
-			ret = BaseReleaseForceUnlocked(logger, locoID);
+			ret = BaseReleaseForceUnlocked(logger, locoId);
 		}
 		PublishState();
 		return ret;
@@ -253,19 +255,20 @@ namespace DataModel
 		}
 		this->trackState = DataModel::Feedback::FeedbackStateFree;
 
+		LocoID locoId = GetLockedLoco();
 		if (releaseWhenFree)
 		{
-			LocoID locoID = GetLockedLoco();
-			Loco* loco = manager->GetLoco(locoID);
+			Loco* loco = manager->GetLoco(locoId);
 			if (loco != nullptr && loco->IsRunningFromTrack(GetMyID()))
 			{
-				bool ret = BaseReleaseForceUnlocked(loco->GetLogger(), locoID);
+				StopAllSignals(locoId);
+				bool ret = BaseReleaseForceUnlocked(loco->GetLogger(), locoId);
 				PublishState();
 				return ret;
 			}
 		}
 
-		if (this->GetLockedLoco() != LocoNone)
+		if (locoId != LocoNone)
 		{
 			return true;
 		}

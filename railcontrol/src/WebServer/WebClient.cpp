@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -29,6 +29,7 @@ along with RailControl; see the file LICENCE. If not see
 #include <unistd.h>
 
 #include "DataModel/DataModel.h"
+#include "DataModel/LocoConfig.h"
 #include "DataModel/ObjectIdentifier.h"
 #include "Hardware/HardwareHandler.h"
 #include "RailControl.h"
@@ -1189,26 +1190,49 @@ namespace WebServer
 		ReplyHtmlWithHeaderAndParagraph(ret ? "Loco released" : "Loco not released");
 	}
 
-	HtmlTag WebClient::HtmlTagProtocol(const map<string,Protocol>& protocolMap, const Protocol selectedProtocol)
+	HtmlTag WebClient::HtmlTagMatchKey(const map<string,LocoConfig>& matchKeyMap, const string& selectedMatchKey)
 	{
+		if (matchKeyMap.size() == 0)
+		{
+			return HtmlTagInputHidden("matchkey", "");
+		}
+
+		map<string,string> options;
+		for (auto matchKey : matchKeyMap)
+		{
+			options[matchKey.first] = matchKey.second.GetName();
+		}
 		HtmlTag content;
-		if (protocolMap.size() > 1)
-		{
-			content.AddChildTag(HtmlTagLabel(Languages::TextProtocol, "protocol"));
-			content.AddChildTag(HtmlTagSelect("protocol", protocolMap, selectedProtocol));
-		}
-		else
-		{
-			auto entry = protocolMap.begin();
-			content.AddChildTag(HtmlTagInputHidden("protocol", std::to_string(entry->second)));
-		}
+		content.AddChildTag(HtmlTagLabel(Languages::TextNameInControl, "matchkey"));
+		content.AddChildTag(HtmlTagSelect("matchkey", options, selectedMatchKey));
 		return content;
 	}
 
-	HtmlTag WebClient::HtmlTagProtocolLoco(const ControlID controlID, const Protocol selectedProtocol)
+	HtmlTag WebClient::HtmlTagProtocol(const map<string,Protocol>& protocolMap, const Protocol selectedProtocol)
 	{
-		map<string,Protocol> protocolMap = manager.LocoProtocolsOfControl(controlID);
-		return HtmlTagProtocol(protocolMap, selectedProtocol);
+		if (protocolMap.size() == 0)
+		{
+			return HtmlTagInputHidden("protocol", std::to_string(ProtocolNone));
+		}
+
+		HtmlTag content;
+		content.AddChildTag(HtmlTagLabel(Languages::TextProtocol, "protocol"));
+		content.AddChildTag(HtmlTagSelect("protocol", protocolMap, selectedProtocol));
+		return content;
+	}
+
+	HtmlTag WebClient::HtmlTagMatchKeyProtocolLoco(const ControlID controlId, const string& selectedMatchKey, const Protocol selectedProtocol)
+	{
+		HtmlTag content;
+		map<string,LocoConfig> matchKeyMap = manager.GetUnmatchedLocosOfControl(controlId);
+		if ((matchKeyMap.size() > 0) && (selectedMatchKey.size() > 0))
+		{
+			matchKeyMap[selectedMatchKey].SetName(selectedMatchKey);
+		}
+		content.AddChildTag(HtmlTagMatchKey(matchKeyMap, selectedMatchKey));
+		map<string,Protocol> protocolMap = manager.LocoProtocolsOfControl(controlId);
+		content.AddChildTag(HtmlTagProtocol(protocolMap, selectedProtocol));
+		return content;
 	}
 
 	HtmlTag WebClient::HtmlTagProtocolAccessory(const ControlID controlID, const Protocol selectedProtocol)
@@ -1228,8 +1252,15 @@ namespace WebServer
 		LocoID locoId = Utils::Utils::GetIntegerMapEntry(arguments, "loco", LocoNone);
 		if (locoId != LocoNone)
 		{
+			string matchKey;
+			Protocol protocol = ProtocolNone;
 			Loco *loco = manager.GetLoco(locoId);
-			ReplyHtmlWithHeader(HtmlTagProtocolLoco(controlId, loco == nullptr ? ProtocolNone : loco->GetProtocol()));
+			if (loco != nullptr)
+			{
+				matchKey = loco->GetMatchKey();
+				protocol = loco->GetProtocol();
+			}
+			ReplyHtmlWithHeader(HtmlTagMatchKeyProtocolLoco(controlId, matchKey, protocol));
 			return;
 		}
 		AccessoryID accessoryId = Utils::Utils::GetIntegerMapEntry(arguments, "accessory", AccessoryNone);
@@ -1471,7 +1502,8 @@ namespace WebServer
 
 	HtmlTag WebClient::HtmlTagSlaveSelect(const string& prefix,
 		const vector<Relation*>& relations,
-		const map<string,ObjectID>& options) const
+		const map<string,ObjectID>& options,
+		const bool allowNew) const
 	{
 		HtmlTag content("div");
 		content.AddId("tab_" + prefix + "s");
@@ -1492,10 +1524,13 @@ namespace WebServer
 		div.AddChildTag(HtmlTag("div").AddId(prefix + "_new_" + to_string(counter)));
 
 		content.AddChildTag(div);
-		HtmlTagButton newTrackButton(Languages::TextNew, "new" + prefix);
-		newTrackButton.AddAttribute("onclick", "addSlave('" + prefix + "');return false;");
-		newTrackButton.AddClass("wide_button");
-		content.AddChildTag(newTrackButton);
+		if (allowNew)
+		{
+			HtmlTagButton newTrackButton(Languages::TextNew, "new" + prefix);
+			newTrackButton.AddAttribute("onclick", "addSlave('" + prefix + "');return false;");
+			newTrackButton.AddClass("wide_button");
+			content.AddChildTag(newTrackButton);
+		}
 		content.AddChildTag(HtmlTag("br"));
 		return content;
 	}
@@ -1562,6 +1597,12 @@ namespace WebServer
 	{
 		HtmlTag tag;
 		map<string,ObjectIdentifier> tracks = manager.TrackBaseListIdentifierByName();
+		// FIXME: remove signal later and also remove Manager::TrackBaseListIdentifierByName() 2021-02-10
+		if (identifier.GetObjectType() == ObjectTypeSignal)
+		{
+			Signal* signal = manager.GetSignal(identifier.GetObjectID());
+			tracks[signal->GetName()] = ObjectIdentifier(ObjectTypeSignal, signal->GetID());
+		}
 		HtmlTagSelectWithLabel selectTrack(name + "track", label, tracks, identifier);
 		selectTrack.AddClass("select_track");
 		if (onchange.size() > 0)
@@ -1670,11 +1711,11 @@ namespace WebServer
 		}
 		else if (prefix.compare("signal") == 0)
 		{
-			options = cluster.GetSignalOptions();
+			options = track.GetSignalOptions();
 		}
 		else if (prefix.compare("slave") == 0)
 		{
-			options = GetLocoOptions();
+			options = GetLocoSlaveOptions();
 		}
 		container.AddChildTag(HtmlTagSlaveEntry(prefix, priorityString, ObjectNone, options));
 		container.AddChildTag(HtmlTag("div").AddId(prefix + "_new_" + to_string(priority + 1)));
@@ -1716,20 +1757,20 @@ namespace WebServer
 		ReplyHtmlWithHeader(HtmlTagRelationSwitchState(name, switchId));
 	}
 
-	map<string,ObjectID> WebClient::GetLocoOptions(const LocoID locoID) const
+	map<string,ObjectID> WebClient::GetLocoSlaveOptions(const LocoID locoID) const
 	{
 		map<string, ObjectID> locoOptions;
 
-		map<string, Loco*> allLocos = manager.LocoListByName();
+		map<string, LocoConfig> allLocos = manager.LocoListByName();
 		for (auto loco : allLocos)
 		{
 			// FIXME: check if already has a master
-			LocoID slaveID = loco.second->GetID();
+			LocoID slaveID = loco.second.GetLocoId();
 			if (locoID == slaveID)
 			{
 				continue;
 			}
-			locoOptions[loco.first] = loco.second->GetID();
+			locoOptions[loco.first] = slaveID;
 		}
 		return locoOptions;
 	}
@@ -1737,10 +1778,15 @@ namespace WebServer
 	void WebClient::HandleLocoEdit(const map<string, string>& arguments)
 	{
 		HtmlTag content;
-		LocoID locoID = Utils::Utils::GetIntegerMapEntry(arguments, "loco", LocoNone);
-		ControlID controlID = manager.GetControlForLoco();
+		LocoID locoId = Utils::Utils::GetIntegerMapEntry(arguments, "loco", LocoNone);
+		ControlID controlId = Utils::Utils::GetIntegerMapEntry(arguments, "control", ControlNone);
+		if (controlId == ControlNone)
+		{
+			controlId = manager.GetPossibleControlForLoco();
+		}
+		string matchKey = Utils::Utils::GetStringMapEntry(arguments, "matchkey");
 		Protocol protocol = ProtocolNone;
-		Address address = 1;
+		Address address = 3;
 		string name = Languages::GetText(Languages::TextNew);
 		bool pushpull = false;
 		Length length = 0;
@@ -1751,12 +1797,14 @@ namespace WebServer
 		const LocoFunctionEntry* locoFunctions = nullptr;
 		vector<Relation*> slaves;
 
-		if (locoID > LocoNone)
+		if (locoId > LocoNone)
 		{
-			const DataModel::Loco* loco = manager.GetLoco(locoID);
+			// existing loco
+			const DataModel::Loco* loco = manager.GetLoco(locoId);
 			if (loco != nullptr)
 			{
-				controlID = loco->GetControlID();
+				controlId = loco->GetControlID();
+				matchKey = loco->GetMatchKey();
 				protocol = loco->GetProtocol();
 				address = loco->GetAddress();
 				name = loco->GetName();
@@ -1770,6 +1818,18 @@ namespace WebServer
 				slaves = loco->GetSlaves();
 			}
 		}
+		else if (controlId > ControlNone)
+		{
+			// loco from hardware database
+			const DataModel::LocoConfig loco = manager.GetLocoByMatchKey(controlId, matchKey);
+			if (loco.GetControlId() == controlId && loco.GetMatchKey() == matchKey)
+			{
+				protocol = loco.GetProtocol();
+				address = loco.GetAddress();
+				name = loco.GetName();
+			}
+		}
+		// else new loco
 
 		content.AddChildTag(HtmlTag("h1").AddContent(name).AddId("popup_title"));
 		HtmlTag tabMenu("div");
@@ -1782,14 +1842,14 @@ namespace WebServer
 		HtmlTag formContent("form");
 		formContent.AddId("editform");
 		formContent.AddChildTag(HtmlTagInputHidden("cmd", "locosave"));
-		formContent.AddChildTag(HtmlTagInputHidden("loco", to_string(locoID)));
+		formContent.AddChildTag(HtmlTagInputHidden("loco", to_string(locoId)));
 
 		HtmlTag basicContent("div");
 		basicContent.AddId("tab_basic");
 		basicContent.AddClass("tab_content");
 		basicContent.AddChildTag(HtmlTagInputTextWithLabel("name", Languages::TextName, name).AddAttribute("onkeyup", "updateName();"));
-		basicContent.AddChildTag(HtmlTagControlLoco(controlID, "loco", locoID));
-		basicContent.AddChildTag(HtmlTag("div").AddId("select_protocol").AddChildTag(HtmlTagProtocolLoco(controlID, protocol)));
+		basicContent.AddChildTag(HtmlTagControlLoco(controlId, "loco", locoId));
+		basicContent.AddChildTag(HtmlTag("div").AddId("select_protocol").AddChildTag(HtmlTagMatchKeyProtocolLoco(controlId, matchKey, protocol)));
 		basicContent.AddChildTag(HtmlTagInputIntegerWithLabel("address", Languages::TextAddress, address, 1, 9999));
 		basicContent.AddChildTag(HtmlTagInputIntegerWithLabel("length", Languages::TextTrainLength, length, 0, 99999));
 		formContent.AddChildTag(basicContent);
@@ -1946,7 +2006,7 @@ namespace WebServer
 		}
 		formContent.AddChildTag(functionsContent);
 
-		formContent.AddChildTag(HtmlTagSlaveSelect("slave", slaves, GetLocoOptions(locoID)));
+		formContent.AddChildTag(HtmlTagSlaveSelect("slave", slaves, GetLocoSlaveOptions(locoId)));
 
 		HtmlTag automodeContent("div");
 		automodeContent.AddId("tab_automode");
@@ -1970,6 +2030,7 @@ namespace WebServer
 		const LocoID locoId = Utils::Utils::GetIntegerMapEntry(arguments, "loco", LocoNone);
 		const string name = Utils::Utils::GetStringMapEntry(arguments, "name");
 		const ControlID controlId = Utils::Utils::GetIntegerMapEntry(arguments, "control", ControlIdNone);
+		const string matchKey = Utils::Utils::GetStringMapEntry(arguments, "matchkey");
 		const Protocol protocol = static_cast<Protocol>(Utils::Utils::GetIntegerMapEntry(arguments, "protocol", ProtocolNone));
 		const Address address = Utils::Utils::GetIntegerMapEntry(arguments, "address", AddressNone);
 		const Length length = Utils::Utils::GetIntegerMapEntry(arguments, "length", 0);
@@ -2035,6 +2096,7 @@ namespace WebServer
 		if (!manager.LocoSave(locoId,
 			name,
 			controlId,
+			matchKey,
 			protocol,
 			address,
 			length,
@@ -2059,20 +2121,32 @@ namespace WebServer
 		HtmlTag content;
 		content.AddChildTag(HtmlTag("h1").AddContent(Languages::TextLocos));
 		HtmlTag table("table");
-		const map<string,DataModel::Loco*> locoList = manager.LocoListByName();
+		const map<string,LocoConfig> locoList = manager.LocoListByName();
 		map<string,string> locoArgument;
-		for (auto loco : locoList)
+		for (auto& loco : locoList)
 		{
+			const LocoConfig& locoConfig = loco.second;
 			HtmlTag row("tr");
 			row.AddChildTag(HtmlTag("td").AddContent(loco.first));
-			row.AddChildTag(HtmlTag("td").AddContent(to_string(loco.second->GetAddress())));
-			const string& locoIdString = to_string(loco.second->GetID());
+			row.AddChildTag(HtmlTag("td").AddContent(ProtocolName(locoConfig.GetProtocol())));
+			row.AddChildTag(HtmlTag("td").AddContent(to_string(locoConfig.GetAddress())));
+			const LocoID locoId = locoConfig.GetLocoId();
+			const string& locoIdString = to_string(locoId);
 			locoArgument["loco"] = locoIdString;
-			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextEdit, "locoedit_list_" + locoIdString, locoArgument)));
-			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextDelete, "locoaskdelete_" + locoIdString, locoArgument)));
-			if (loco.second->IsInUse())
+			if (locoId == LocoNone)
 			{
-				row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonCommandWide(Languages::TextRelease, "locorelease_" + locoIdString, locoArgument, "hideElement('b_locorelease_" + locoIdString + "');")));
+				locoArgument["control"] = to_string(locoConfig.GetControlId());
+				locoArgument["matchkey"] = locoConfig.GetMatchKey();
+				row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextImport, "locoedit_list_" + locoIdString, locoArgument)));
+			}
+			else
+			{
+				row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextEdit, "locoedit_list_" + locoIdString, locoArgument)));
+				row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextDelete, "locoaskdelete_" + locoIdString, locoArgument)));
+				if (loco.second.IsInUse())
+				{
+					row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonCommandWide(Languages::TextRelease, "locorelease_" + locoIdString, locoArgument, "hideElement('b_locorelease_" + locoIdString + "');")));
+				}
 			}
 			table.AddChildTag(row);
 		}
@@ -2291,7 +2365,7 @@ namespace WebServer
 	{
 		HtmlTag content;
 		AccessoryID accessoryID = Utils::Utils::GetIntegerMapEntry(arguments, "accessory", AccessoryNone);
-		ControlID controlID = manager.GetControlForAccessory();
+		ControlID controlID = manager.GetPossibleControlForAccessory();
 		Protocol protocol = ProtocolNone;
 		Address address = AddressNone;
 		string name = Languages::GetText(Languages::TextNew);
@@ -2399,13 +2473,16 @@ namespace WebServer
 		map<string,string> accessoryArgument;
 		for (auto accessory : accessoryList)
 		{
+			Accessory* accessoryConfig = accessory.second;
 			HtmlTag row("tr");
 			row.AddChildTag(HtmlTag("td").AddContent(accessory.first));
-			const string& accessoryIdString = to_string(accessory.second->GetID());
+			row.AddChildTag(HtmlTag("td").AddContent(ProtocolName(accessoryConfig->GetProtocol())));
+			row.AddChildTag(HtmlTag("td").AddContent(to_string(accessoryConfig->GetAddress())));
+			const string& accessoryIdString = to_string(accessoryConfig->GetID());
 			accessoryArgument["accessory"] = accessoryIdString;
 			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextEdit, "accessoryedit_list_" + accessoryIdString, accessoryArgument)));
 			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextDelete, "accessoryaskdelete_" + accessoryIdString, accessoryArgument)));
-			if (accessory.second->IsInUse())
+			if (accessoryConfig->IsInUse())
 			{
 				row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonCommandWide(Languages::TextRelease, "accessoryrelease_" + accessoryIdString, accessoryArgument, "hideElement('b_accessoryrelease_" + accessoryIdString + "');")));
 			}
@@ -2479,7 +2556,7 @@ namespace WebServer
 	{
 		HtmlTag content;
 		SwitchID switchID = Utils::Utils::GetIntegerMapEntry(arguments, "switch", SwitchNone);
-		ControlID controlID = manager.GetControlForAccessory();
+		ControlID controlID = manager.GetPossibleControlForAccessory();
 		Protocol protocol = ProtocolNone;
 		Address address = AddressNone;
 		string name = Languages::GetText(Languages::TextNew);
@@ -2599,13 +2676,16 @@ namespace WebServer
 		map<string,string> switchArgument;
 		for (auto mySwitch : switchList)
 		{
+			Switch* switchConfig = mySwitch.second;
 			HtmlTag row("tr");
 			row.AddChildTag(HtmlTag("td").AddContent(mySwitch.first));
-			const string& switchIdString = to_string(mySwitch.second->GetID());
+			row.AddChildTag(HtmlTag("td").AddContent(ProtocolName(switchConfig->GetProtocol())));
+			row.AddChildTag(HtmlTag("td").AddContent(to_string(switchConfig->GetAddress())));
+			const string& switchIdString = to_string(switchConfig->GetID());
 			switchArgument["switch"] = switchIdString;
 			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextEdit, "switchedit_list_" + switchIdString, switchArgument)));
 			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextDelete, "switchaskdelete_" + switchIdString, switchArgument)));
-			if (mySwitch.second->IsInUse())
+			if (switchConfig->IsInUse())
 			{
 				row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonCommandWide(Languages::TextRelease, "switchrelease_" + switchIdString, switchArgument, "hideElement('b_switchrelease_" + switchIdString + "');")));
 			}
@@ -3113,7 +3193,7 @@ namespace WebServer
 		HtmlTag content;
 		FeedbackID feedbackID = Utils::Utils::GetIntegerMapEntry(arguments, "feedback", FeedbackNone);
 		string name = Languages::GetText(Languages::TextNew);
-		ControlID controlId = Utils::Utils::GetIntegerMapEntry(arguments, "controlid", manager.GetControlForFeedback());
+		ControlID controlId = Utils::Utils::GetIntegerMapEntry(arguments, "controlid", manager.GetPossibleControlForFeedback());
 		FeedbackPin pin = Utils::Utils::GetIntegerMapEntry(arguments, "pin", 0);
 		LayoutPosition posx = Utils::Utils::GetIntegerMapEntry(arguments, "posx", 0);
 		LayoutPosition posy = Utils::Utils::GetIntegerMapEntry(arguments, "posy", 0);
@@ -3188,7 +3268,7 @@ namespace WebServer
 		LayoutPosition posY = Utils::Utils::GetIntegerMapEntry(arguments, "posy", 0);
 		LayoutPosition posZ = Utils::Utils::GetIntegerMapEntry(arguments, "posz", 0);
 		string result;
-		if (manager.FeedbackSave(feedbackID, name, visible, posX, posY, posZ, controlId, pin, inverted, result) == FeedbackNone)
+		if (!manager.FeedbackSave(feedbackID, name, visible, posX, posY, posZ, controlId, pin, inverted, result))
 		{
 			ReplyResponse(ResponseError, result);
 			return;
@@ -3725,13 +3805,7 @@ namespace WebServer
 
 	HtmlTag WebClient::HtmlTagLocoSelector() const
 	{
-		const map<LocoID, Loco*>& locos = manager.locoList();
-		map<string,LocoID> options;
-		for (auto locoTMP : locos)
-		{
-			Loco* loco = locoTMP.second;
-			options[loco->GetName()] = loco->GetID();
-		}
+		map<string,LocoID> options = manager.LocoIdsByName();
 		return HtmlTagSelect("loco", options).AddAttribute("onchange", "loadLoco();");
 	}
 

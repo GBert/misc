@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -217,6 +217,7 @@ namespace DataModel
 			virtual bool ReleaseInternal(Logger::Logger* logger, const LocoID locoID) = 0;
 			virtual void PublishState() const = 0;
 			virtual LocoID GetLockedLoco() const = 0;
+			virtual void StopAllSignals(__attribute__((unused)) const LocoID locoId) {}
 
 			Manager* manager;
 

@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -221,7 +221,4 @@ namespace Hardware
 			static const int OffsetAccessoryAddress = 19999;
 			static const int OffsetFeedbackModuleAddress = 100;
 	};
-
-	extern "C" Ecos* create_Ecos(const HardwareParams* params);
-	extern "C" void destroy_Ecos(Ecos* ecos);
 } // namespace

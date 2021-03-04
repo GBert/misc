@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -30,26 +30,16 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace Hardware
 {
-
-	// create instance of Hsi88
-	extern "C" Hsi88* create_Hsi88(const HardwareParams* params)
-	{
-		return new Hsi88(params);
-	}
-
-	// delete instance of Hsi88
-	extern "C" void destroy_Hsi88(Hsi88* hsi88)
-	{
-		delete(hsi88);
-	}
-
 	Hsi88::Hsi88(const HardwareParams* params)
-	:	HardwareInterface(params->GetManager(), params->GetControlID(), "HSI-88 / " + params->GetName() + " at serial port " + params->GetArg1()),
+	:	HardwareInterface(params->GetManager(),
+			params->GetControlID(),
+			"HSI-88 / " + params->GetName() + " at serial port " + params->GetArg1(),
+			params->GetName()),
 	 	logger(Logger::Logger::GetLogger("HSI-88 " + params->GetName() + " " + params->GetArg1())),
 	 	serialLine(logger, params->GetArg1(), B9600, 8, 'N', 1),
 		run(false)
 	{
-		logger->Info(Languages::TextStarting, name);
+		logger->Info(Languages::TextStarting, GetFullName());
 
 		memset(s88Init, 0xFF, sizeof(s88Memory));
 		memset(s88Memory, 0x00, sizeof(s88Memory));

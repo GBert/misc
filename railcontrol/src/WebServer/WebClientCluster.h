@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -22,6 +22,7 @@ along with RailControl; see the file LICENCE. If not see
 
 #include <map>
 #include <string>
+#include <vector>
 
 #include "Manager.h"
 
@@ -44,10 +45,9 @@ namespace WebServer
 			void HandleClusterAskDelete(const std::map<std::string,std::string>& arguments);
 			void HandleClusterDelete(const std::map<std::string,std::string>& arguments);
 			std::map<std::string,ObjectID> GetTrackOptions(const ClusterID clusterId = ClusterNone) const;
-			std::map<std::string,ObjectID> GetSignalOptions(const ClusterID clusterId = ClusterNone) const;
+			std::map<std::string,ObjectID> GetSignalOptions(const std::vector<DataModel::Relation*>&) const;
 
 		private:
-
 			Manager& manager;
 			WebClient& client;
 	};

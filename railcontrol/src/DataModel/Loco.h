@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -50,6 +50,8 @@ namespace DataModel
 				ReserveTwo = 2
 			};
 
+			Loco() = delete;
+
 			inline Loco(Manager* manager, const LocoID locoID)
 			:	Object(locoID),
 				HardwareHandle(),
@@ -75,40 +77,16 @@ namespace DataModel
 				feedbackIdStop(FeedbackNone),
 				feedbackIdOver(FeedbackNone),
 				feedbackIdsReached(),
-				wait(0)
+				wait(0),
+				matchKey("")
 			{
 				logger = Logger::Logger::GetLogger(GetName());
 			}
 
 			inline Loco(Manager* manager, const std::string& serialized)
-			:	Object(LocoNone),
-				HardwareHandle(),
-			 	manager(manager),
-				length(0),
-				pushpull(false),
-				maxSpeed(0),
-				travelSpeed(0),
-				reducedSpeed(0),
-				creepingSpeed(0),
-				speed(MinSpeed),
-				orientation(OrientationRight),
-				state(LocoStateManual),
-				requestManualMode(false),
-				trackFrom(nullptr),
-				trackFirst(nullptr),
-				trackSecond(nullptr),
-				routeFirst(nullptr),
-				routeSecond(nullptr),
-				feedbackIdFirst(FeedbackNone),
-				feedbackIdReduced(FeedbackNone),
-				feedbackIdCreep(FeedbackNone),
-				feedbackIdStop(FeedbackNone),
-				feedbackIdOver(FeedbackNone),
-				feedbackIdsReached(),
-				wait(0)
+			:	Loco(manager, LocoNone)
 			{
 				Deserialize(serialized);
-				logger = Logger::Logger::GetLogger(GetName());
 			}
 
 			virtual ~Loco();
@@ -269,6 +247,21 @@ namespace DataModel
 				return slaves;
 			}
 
+			inline void SetMatchKey(const std::string& matchKey)
+			{
+				this->matchKey = matchKey;
+			}
+
+			inline void ClearMatchKey()
+			{
+				matchKey.clear();
+			}
+
+			inline std::string GetMatchKey() const
+			{
+				return matchKey;
+			}
+
 		private:
 			void SetMinThreadPriorityAndThreadName();
 			void AutoMode();
@@ -322,6 +315,7 @@ namespace DataModel
 			volatile FeedbackID feedbackIdOver;
 			Utils::ThreadSafeQueue<FeedbackID> feedbackIdsReached;
 			Pause wait;
+			std::string matchKey;
 
 			LocoFunctions functions;
 

@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -23,23 +23,14 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace Hardware
 {
-	extern "C" CS2Tcp* create_CS2Tcp(HardwareParams* const params)
-	{
-		return new CS2Tcp(params);
-	}
-
-	extern "C" void destroy_CS2Tcp(CS2Tcp* const cs2Tcp)
-	{
-		delete(cs2Tcp);
-	}
-
-	CS2Tcp::CS2Tcp(HardwareParams* const params)
+	CS2Tcp::CS2Tcp(const HardwareParams* params)
 	:	ProtocolMaerklinCAN(params,
 			Logger::Logger::GetLogger("CS2TCP " + params->GetName() + " " + params->GetArg1()),
-			"Maerklin Central Station 2 (CS2) TCP / " + params->GetName() + " at IP " + params->GetArg1()),
+			"Maerklin Central Station 2 (CS2) TCP / " + params->GetName() + " at IP " + params->GetArg1(),
+			params->GetName()),
 	 	connection(Network::TcpClient::GetTcpClientConnection(logger, params->GetArg1(), CS2Port))
 	{
-		logger->Info(Languages::TextStarting, name);
+		logger->Info(Languages::TextStarting, GetFullName());
 
 		if (connection.IsConnected() == false)
 		{

@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -46,7 +46,10 @@ using DataModel::Loco;
 using DataModel::Route;
 using DataModel::TrackBase;
 
-namespace WebServer {
+namespace WebServer
+{
+	const std::string WebServer::UpdateStatus = "data: status=";
+	const std::string WebServer::Webserver = "Webserver";
 
 	WebServer::WebServer(Manager& manager, const unsigned short port)
 	:	ControlInterface(ControlTypeWebserver),
@@ -383,7 +386,9 @@ namespace WebServer {
 		AddUpdate(command.str(), Languages::TextLocoIsInManualMode, name);
 	}
 
-	void WebServer::LocoSettings(const LocoID locoID, const std::string& name)
+	void WebServer::LocoSettings(const LocoID locoID,
+		const std::string& name,
+		__attribute__((unused)) const std::string& matchKey)
 	{
 		stringstream command;
 		command << "locosettings;loco=" << locoID;

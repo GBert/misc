@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -31,20 +31,46 @@ namespace DataModel
 	class HardwareHandle
 	{
 		public:
-			HardwareHandle()
+			inline HardwareHandle()
 			:	controlID(ControlNone),
 			 	protocol(ProtocolNone),
 			 	address(AddressNone)
-			{}
+			{
+			}
 
-			virtual ~HardwareHandle() {}
+			virtual ~HardwareHandle()
+			{
+			}
 
-			void SetControlID(ControlID controlID) { this->controlID = controlID; }
-			ControlID GetControlID() const { return controlID; }
-			void SetProtocol(Protocol protocol) { this->protocol = protocol; }
-			Protocol GetProtocol() const { return protocol; }
-			void SetAddress(Address address) { this->address = address; }
-			Address GetAddress() const { return address; }
+			inline void SetControlID(ControlID controlID)
+			{
+				this->controlID = controlID;
+			}
+
+			inline ControlID GetControlID() const
+			{
+				return controlID;
+			}
+
+			inline void SetProtocol(Protocol protocol)
+			{
+				this->protocol = protocol;
+			}
+
+			inline Protocol GetProtocol() const
+			{
+				return protocol;
+			}
+
+			inline void SetAddress(Address address)
+			{
+				this->address = address;
+			}
+
+			inline Address GetAddress() const
+			{
+				return address;
+			}
 
 		protected:
 			virtual std::string Serialize() const;

@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -205,6 +205,7 @@ const char* Languages::languages[MaxTexts][MaxLanguages] =
 /* TextHttpConnectionOpen */ { "HTTP connection {0}: open", "HTTP Verbindung {0}: geöffnet", "HTTP connectión {0}: abierto" },
 /* TextHttpConnectionRequest */ { "HTTP connection {0}: Request: {1} {2}", "HTTP Verbindung {0}: Anfrage {1} {2}", "HTTP connectión {0}: solicitud: {1} {2}" },
 /* TextIPAddress */ { "IP address", "IP Adresse", "Dirección IP" },
+/* TextImport */ { "Import", "Importieren", "Importar" },
 /* TextIndex */ { "Index", "Index", "Index" },
 /* TextInfo */ { "info", "Informationen", "informaciones" },
 /* TextInvalidControlID */ { "Invalid controlID {0}", "Ungültige Control ID {0}", "Control ID {0} no valido" },
@@ -389,6 +390,7 @@ const char* Languages::languages[MaxTexts][MaxLanguages] =
 /* TextMultipleUnit */ { "Multiple unit", "Mehrfachtraktion", "Unidad múltiple" },
 /* TextMyUidHash */ { "My UID: {0} my hash: {1}", "Meine UID: {0} mein hash: {1}", "Mi UID: {0} mi hash: {1}" },
 /* TextName */ { "Name", "Name", "Nombre" },
+/* TextNameInControl */ { "Name in control's database", "Name in der Datenbank der Zentrale", "Nombre en el control" },
 /* TextNetworkUnreachable */ { "Network of {0}:{1} unreachable", "Netzwerk von {0}:{1} nicht erreichbar", "Red de {0}:{1} inaccesible" },
 /* TextNew */ { "New", "Neu", "Nuevo" },
 /* TextNoAnswerFromDecoder */ { "No answer from decoder", "Keine Antwort vom Decoder", "Ninguna respuesta del decoder" },

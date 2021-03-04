@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -30,23 +30,14 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace Hardware
 {
-	extern "C" CcSchnitte* create_CcSchnitte(HardwareParams* const params)
-	{
-		return new CcSchnitte(params);
-	}
-
-	extern "C" void destroy_CcSchnitte(CcSchnitte* const ccSchnitte)
-	{
-		delete(ccSchnitte);
-	}
-
-	CcSchnitte::CcSchnitte(HardwareParams* const params)
+	CcSchnitte::CcSchnitte(const HardwareParams* params)
 	:	ProtocolMaerklinCAN(params,
 			Logger::Logger::GetLogger("CC-Schnitte " + params->GetName() + " " + params->GetArg1()),
-			"CC-Schnitte / " + params->GetName() + " at serial port " + params->GetArg1()),
+			"CC-Schnitte / " + params->GetName() + " at serial port " + params->GetArg1(),
+			params->GetName()),
 	 	serialLine(logger, params->GetArg1(), B500000, 8, 'N', 1, true)
 	{
-		logger->Info(Languages::TextStarting, name);
+		logger->Info(Languages::TextStarting, GetFullName());
 
 		if (!serialLine.IsConnected())
 		{

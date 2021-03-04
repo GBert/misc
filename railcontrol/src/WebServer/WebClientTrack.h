@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -54,6 +54,8 @@ namespace WebServer
 			void HandleTrackStopLoco(const std::map<std::string, std::string>& arguments);
 			void HandleTrackBlock(const std::map<std::string, std::string>& arguments);
 			void HandleTrackOrientation(const std::map<std::string, std::string>& arguments);
+
+			std::map<std::string,ObjectID> GetSignalOptions(const TrackID trackId = TrackNone) const;
 
 		private:
 			Manager& manager;

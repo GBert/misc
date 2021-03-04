@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -142,7 +142,7 @@ namespace Hardware
 	{
 		uid = Utils::Utils::RandInt();
 		string uidString = Utils::Utils::IntegerToHex(uid);
-		params->SetArg5(uidString);
+		// FIXME: params->SetArg5(uidString);
 		hash = CalcHash(uid);
 		logger->Info(Languages::TextMyUidHash, uidString, Utils::Utils::IntegerToHex(hash));
 	}
@@ -729,7 +729,8 @@ namespace Hardware
 	void ProtocolMaerklinCAN::ParseCs2FileLocomotive(deque<string>& lines)
 	{
 		lines.pop_front();
-		LocoCacheEntry cacheEntry;
+		LocoCacheEntry cacheEntry(locoCache.GetControlId());
+		std::string name;
 		std::string oldName;
 		bool remove = false;
 		while (lines.size())
@@ -744,6 +745,7 @@ namespace Hardware
 			ParseCs2FileKeyValue(line, key, value);
 			if (key.compare("name") == 0)
 			{
+				name = value;
 				cacheEntry.SetName(value);
 				logger->Info(Languages::TextCs2MasterLocoName, value);
 			}
@@ -776,15 +778,17 @@ namespace Hardware
 		if (remove)
 		{
 			logger->Info(Languages::TextCs2MasterLocoRemove, name);
-			locoCache.Delete(name);
+			manager->LocoRemoveMatchKey(locoCache.GetByName(name).GetLocoID());
+			locoCache.DeleteByName(name);
 		}
 		else if (oldName.size() > 0)
 		{
-			locoCache.Replace(cacheEntry, oldName);
+			locoCache.ReplaceByName(cacheEntry, oldName);
+			manager->LocoReplaceMatchKey(locoCache.GetByName(name).GetLocoID(), name);
 		}
 		else
 		{
-			locoCache.Insert(cacheEntry);
+			locoCache.InsertByName(cacheEntry);
 		}
 	}
 

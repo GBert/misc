@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -32,16 +32,6 @@ using std::to_string;
 
 namespace Hardware
 {
-	extern "C" Ecos* create_Ecos(const HardwareParams* params)
-	{
-		return new Ecos(params);
-	}
-
-	extern "C" void destroy_Ecos(Ecos* ecos)
-	{
-		delete(ecos);
-	}
-
 	const char* const Ecos::CommandActivateBoosterUpdates = "request(1,view)\n";
 	const char* const Ecos::CommandQueryLocos = "queryObjects(10,name)\n";
 	const char* const Ecos::CommandQueryAccessories = "queryObjects(11,name1,name2,name3)\n";
@@ -50,14 +40,15 @@ namespace Hardware
 	Ecos::Ecos(const HardwareParams* params)
 	:	HardwareInterface(params->GetManager(),
 			params->GetControlID(),
-			"ESU ECoS / " + params->GetName() + " at IP " + params->GetArg1()),
+			"ESU ECoS / " + params->GetName() + " at IP " + params->GetArg1(),
+			params->GetName()),
 		logger(Logger::Logger::GetLogger("ECoS " + params->GetName() + " " + params->GetArg1())),
 	 	run(false),
 	 	tcp(Network::TcpClient::GetTcpClientConnection(logger, params->GetArg1(), EcosPort)),
 	 	readBufferLength(0),
 		readBufferPosition(0)
 	{
-		logger->Info(Languages::TextStarting, name);
+		logger->Info(Languages::TextStarting, GetFullName());
 		if (!tcp.IsConnected())
 		{
 			return;

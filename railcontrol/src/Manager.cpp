@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -92,7 +92,7 @@ Manager::Manager(Config& config)
 	for (auto hardwareParam : hardwareParams)
 	{
 		hardwareParam.second->SetManager(this);
-		controls[hardwareParam.second->GetControlID()] = new HardwareHandler(*this, hardwareParam.second);
+		controls[hardwareParam.second->GetControlID()] = new HardwareHandler(hardwareParam.second);
 		logger->Info(Languages::TextLoadedControl, hardwareParam.first, hardwareParam.second->GetName());
 	}
 
@@ -131,6 +131,20 @@ Manager::Manager(Config& config)
 		logger->Info(Languages::TextLoadedFeedback, feedback.second->GetID(), feedback.second->GetName());
 	}
 
+	storage->AllSignals(signals);
+	for (auto signal : signals)
+	{
+		// We set the protocol MM2 to MM when control is a CS2 or CC-Schnitte
+		// FIXME: remove again later 2020-10-27
+		if (signal.second->GetProtocol() == ProtocolMM2
+			&& (ControlIsOfHardwareType(signal.second->GetControlID(), HardwareTypeCS2Udp)
+				|| ControlIsOfHardwareType(signal.second->GetControlID(), HardwareTypeCcSchnitte)))
+		{
+			signal.second->SetProtocol(ProtocolMM);
+		}
+		logger->Info(Languages::TextLoadedSignal, signal.second->GetID(), signal.second->GetName());
+	}
+
 	storage->AllTracks(tracks);
 	for (auto track : tracks)
 	{
@@ -149,20 +163,6 @@ Manager::Manager(Config& config)
 			mySwitch.second->SetProtocol(ProtocolMM);
 		}
 		logger->Info(Languages::TextLoadedSwitch, mySwitch.second->GetID(), mySwitch.second->GetName());
-	}
-
-	storage->AllSignals(signals);
-	for (auto signal : signals)
-	{
-		// We set the protocol MM2 to MM when control is a CS2 or CC-Schnitte
-		// FIXME: remove again later 2020-10-27
-		if (signal.second->GetProtocol() == ProtocolMM2
-			&& (ControlIsOfHardwareType(signal.second->GetControlID(), HardwareTypeCS2Udp)
-				|| ControlIsOfHardwareType(signal.second->GetControlID(), HardwareTypeCcSchnitte)))
-		{
-			signal.second->SetProtocol(ProtocolMM);
-		}
-		logger->Info(Languages::TextLoadedSignal, signal.second->GetID(), signal.second->GetName());
 	}
 
 	storage->AllClusters(clusters);
@@ -247,13 +247,13 @@ Manager::~Manager()
 	}
 
 	DeleteAllMapEntries(locos, locoMutex);
-	DeleteAllMapEntries(clusters, clusterMutex);
 	DeleteAllMapEntries(routes, routeMutex);
-	DeleteAllMapEntries(signals, signalMutex);
+	DeleteAllMapEntries(clusters, clusterMutex);
 	DeleteAllMapEntries(switches, switchMutex);
-	DeleteAllMapEntries(accessories, accessoryMutex);
-	DeleteAllMapEntries(feedbacks, feedbackMutex);
 	DeleteAllMapEntries(tracks, trackMutex);
+	DeleteAllMapEntries(signals, signalMutex);
+	DeleteAllMapEntries(feedbacks, feedbackMutex);
+	DeleteAllMapEntries(accessories, accessoryMutex);
 	DeleteAllMapEntries(layers, layerMutex);
 
 	if (storage == nullptr)
@@ -313,7 +313,7 @@ void Manager::InitLocos()
 * Control                  *
 ***************************/
 
-bool Manager::ControlSave(const ControlID& controlID,
+bool Manager::ControlSave(ControlID controlID,
 	const HardwareType& hardwareType,
 	const std::string& name,
 	const std::string& arg1,
@@ -343,6 +343,9 @@ bool Manager::ControlSave(const ControlID& controlID,
 		return false;
 	}
 
+	// if we have a new object we have to update controlID
+	controlID = params->GetControlID();
+
 	params->SetName(CheckObjectName(hardwareParams, hardwareMutex, controlID, name.size() == 0 ? "C" : name));
 	params->SetHardwareType(hardwareType);
 	params->SetArg1(arg1);
@@ -359,12 +362,12 @@ bool Manager::ControlSave(const ControlID& controlID,
 	if (newControl == true)
 	{
 		std::lock_guard<std::mutex> Guard(controlMutex);
-		ControlInterface* control = new HardwareHandler(*this, params);
+		ControlInterface* control = new HardwareHandler(params);
 		if (control == nullptr)
 		{
 			return false;
 		}
-		controls[params->GetControlID()] = control;
+		controls[controlID] = control;
 		return true;
 	}
 
@@ -455,38 +458,6 @@ bool Manager::ControlIsOfHardwareType(const ControlID controlID, const HardwareT
 	return false;
 }
 
-bool Manager::HardwareLibraryAdd(const HardwareType hardwareType, void* libraryHandle)
-{
-	std::lock_guard<std::mutex> guard(hardwareLibrariesMutex);
-	if (hardwareLibraries.count(hardwareType) == 1)
-	{
-		return false;
-	}
-	hardwareLibraries[hardwareType] = libraryHandle;
-	return true;
-}
-
-void* Manager::HardwareLibraryGet(const HardwareType hardwareType) const
-{
-	std::lock_guard<std::mutex> guard(hardwareLibrariesMutex);
-	if (hardwareLibraries.count(hardwareType) != 1)
-	{
-		return nullptr;
-	}
-	return hardwareLibraries.at(hardwareType);
-}
-
-bool Manager::HardwareLibraryRemove(const HardwareType hardwareType)
-{
-	std::lock_guard<std::mutex> guard(hardwareLibrariesMutex);
-	if (hardwareLibraries.count(hardwareType) != 1)
-	{
-		return false;
-	}
-	hardwareLibraries.erase(hardwareType);
-	return true;
-}
-
 ControlInterface* Manager::GetControl(const ControlID controlID) const
 {
 	std::lock_guard<std::mutex> guard(controlMutex);
@@ -560,7 +531,7 @@ const std::map<ControlID,std::string> Manager::FeedbackControlListNames() const
 		{
 			continue;
 		}
-		ret[control.first] = control.second->GetName();
+		ret[control.first] = control.second->GetShortName();
 	}
 	return ret;
 }
@@ -579,7 +550,7 @@ const std::map<ControlID,std::string> Manager::ProgramControlListNames() const
 		{
 			continue;
 		}
-		ret[control.first] = control.second->GetName();
+		ret[control.first] = control.second->GetShortName();
 	}
 	return ret;
 }
@@ -634,7 +605,7 @@ const std::map<std::string, Protocol> Manager::ProtocolsOfControl(const AddressT
 * Loco                     *
 ***************************/
 
-DataModel::Loco* Manager::GetLoco(const LocoID locoID) const
+Loco* Manager::GetLoco(const LocoID locoID) const
 {
 	std::lock_guard<std::mutex> guard(locoMutex);
 	if (locos.count(locoID) != 1)
@@ -642,6 +613,49 @@ DataModel::Loco* Manager::GetLoco(const LocoID locoID) const
 		return nullptr;
 	}
 	return locos.at(locoID);
+}
+
+LocoConfig Manager::GetLocoByMatchKey(const ControlID controlId, const string& matchKey) const
+{
+	ControlInterface* control = GetControl(controlId);
+	if (control == nullptr)
+	{
+		return LocoConfig();
+	}
+	return control->GetLocoByMatch(matchKey);
+}
+
+void Manager::LocoRemoveMatchKey(const LocoID locoId)
+{
+	Loco* loco = GetLoco(locoId);
+	if (loco == nullptr)
+	{
+		return;
+	}
+	loco->ClearMatchKey();
+}
+
+void Manager::LocoReplaceMatchKey(const LocoID locoId, const std::string& newMatchKey)
+{
+	Loco* loco = GetLoco(locoId);
+	if (loco == nullptr)
+	{
+		return;
+	}
+	loco->SetMatchKey(newMatchKey);
+}
+
+const map<string,LocoConfig> Manager::GetUnmatchedLocosOfControl(const ControlID controlId) const
+{
+	ControlInterface* control = GetControl(controlId);
+	map<string,LocoConfig> out;
+	if (control == nullptr || !control->CanHandle(Hardware::CapabilityLocoDatabase))
+	{
+		return out;
+	}
+	out = control->GetUnmatchedLocos();
+	out[""].SetName("");
+	return out;
 }
 
 Loco* Manager::GetLoco(const ControlID controlID, const Protocol protocol, const Address address) const
@@ -683,20 +697,43 @@ const map<string,LocoID> Manager::LocoListFree() const
 	return out;
 }
 
-const map<string,DataModel::Loco*> Manager::LocoListByName() const
+const map<string,DataModel::LocoConfig> Manager::LocoListByName() const
 {
-	map<string,DataModel::Loco*> out;
-	std::lock_guard<std::mutex> guard(locoMutex);
-	for(auto loco : locos)
+	map<string,DataModel::LocoConfig> out;
 	{
-		out[loco.second->GetName()] = loco.second;
+		std::lock_guard<std::mutex> guard(locoMutex);
+		for (auto loco : locos)
+		{
+			out[loco.second->GetName()] = *(loco.second);
+		}
+	}
+	std::lock_guard<std::mutex> guard(controlMutex);
+	for (auto control : controls)
+	{
+		control.second->AddUnmatchedLocos(out);
+	}
+
+	return out;
+}
+
+const map<string,LocoID> Manager::LocoIdsByName() const
+{
+	map<string,LocoID> out;
+	{
+		std::lock_guard<std::mutex> guard(locoMutex);
+		for (auto loco : locos)
+		{
+			Loco* locoEntry = loco.second;
+			out[locoEntry->GetName()] = locoEntry->GetID();
+		}
 	}
 	return out;
 }
 
-bool Manager::LocoSave(const LocoID locoID,
+bool Manager::LocoSave(LocoID locoID,
 	const string& name,
 	const ControlID controlID,
+	const std::string& matchKey,
 	const Protocol protocol,
 	const Address address,
 	const Length length,
@@ -726,8 +763,12 @@ bool Manager::LocoSave(const LocoID locoID,
 		return false;
 	}
 
+	// if we have a new object we have to update locoID
+	locoID = loco->GetID();
+
 	loco->SetName(CheckObjectName(locos, locoMutex, locoID, name.size() == 0 ? "L" : name));
 	loco->SetControlID(controlID);
+	loco->SetMatchKey(matchKey);
 	loco->SetProtocol(protocol);
 	loco->SetAddress(address);
 	loco->SetLength(length);
@@ -744,11 +785,10 @@ bool Manager::LocoSave(const LocoID locoID,
 	{
 		storage->Save(*loco);
 	}
-	const LocoID locoIdSave = loco->GetID();
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto control : controls)
 	{
-		control.second->LocoSettings(locoIdSave, name);
+		control.second->LocoSettings(locoID, name, matchKey);
 	}
 	return true;
 }
@@ -1047,7 +1087,7 @@ bool Manager::CheckAccessoryPosition(const Accessory* accessory, const LayoutPos
 	return CheckPositionFree(posX, posY, posZ, DataModel::LayoutItem::Width1, DataModel::LayoutItem::Height1, DataModel::LayoutItem::Rotation0, result);
 }
 
-bool Manager::AccessorySave(const AccessoryID accessoryID, const string& name, const LayoutPosition posX, const LayoutPosition posY, const LayoutPosition posZ, const ControlID controlID, const Protocol protocol, const Address address, const DataModel::AccessoryType type, const DataModel::AccessoryPulseDuration duration, const bool inverted, string& result)
+bool Manager::AccessorySave(AccessoryID accessoryID, const string& name, const LayoutPosition posX, const LayoutPosition posY, const LayoutPosition posZ, const ControlID controlID, const Protocol protocol, const Address address, const DataModel::AccessoryType type, const DataModel::AccessoryPulseDuration duration, const bool inverted, string& result)
 {
 	if (!CheckControlAccessoryProtocolAddress(controlID, protocol, address, result))
 	{
@@ -1071,6 +1111,9 @@ bool Manager::AccessorySave(const AccessoryID accessoryID, const string& name, c
 		return false;
 	}
 
+	// if we have a new object we have to update accessoryID
+	accessoryID = accessory->GetID();
+
 	// update existing accessory
 	accessory->SetName(CheckObjectName(accessories, accessoryMutex, accessoryID, name.size() == 0 ? "A" : name));
 	accessory->SetPosX(posX);
@@ -1088,11 +1131,11 @@ bool Manager::AccessorySave(const AccessoryID accessoryID, const string& name, c
 	{
 		storage->Save(*accessory);
 	}
-	AccessoryID accessoryIdSave = accessory->GetID();
+
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto control : controls)
 	{
-		control.second->AccessorySettings(accessoryIdSave, name);
+		control.second->AccessorySettings(accessoryID, name);
 	}
 	return true;
 }
@@ -1272,12 +1315,12 @@ bool Manager::CheckFeedbackPosition(const Feedback* feedback, const LayoutPositi
 	return CheckPositionFree(posX, posY, posZ, DataModel::LayoutItem::Width1, DataModel::LayoutItem::Height1, DataModel::LayoutItem::Rotation0, result);
 }
 
-FeedbackID Manager::FeedbackSave(const FeedbackID feedbackID, const std::string& name, const Visible visible, const LayoutPosition posX, const LayoutPosition posY, const LayoutPosition posZ, const ControlID controlID, const FeedbackPin pin, const bool inverted, string& result)
+bool Manager::FeedbackSave(FeedbackID feedbackID, const std::string& name, const Visible visible, const LayoutPosition posX, const LayoutPosition posY, const LayoutPosition posZ, const ControlID controlID, const FeedbackPin pin, const bool inverted, string& result)
 {
 	Feedback* feedback = GetFeedback(feedbackID);
 	if (visible && !CheckFeedbackPosition(feedback, posX, posY, posZ, result))
 	{
-		return FeedbackNone;
+		return false;
 	}
 
 	if (feedback == nullptr)
@@ -1290,6 +1333,9 @@ FeedbackID Manager::FeedbackSave(const FeedbackID feedbackID, const std::string&
 		result = Languages::GetText(Languages::TextUnableToAddFeedback);
 		return false;
 	}
+
+	// if we have a new object we have to update feedbackID
+	feedbackID = feedback->GetID();
 
 	feedback->SetName(CheckObjectName(feedbacks, feedbackMutex, feedbackID, name.size() == 0 ? "F" : name));
 	feedback->SetVisible(visible);
@@ -1305,13 +1351,12 @@ FeedbackID Manager::FeedbackSave(const FeedbackID feedbackID, const std::string&
 	{
 		storage->Save(*feedback);
 	}
-	FeedbackID feedbackIdSave = feedback->GetID();
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto control : controls)
 	{
-		control.second->FeedbackSettings(feedbackIdSave, name);
+		control.second->FeedbackSettings(feedbackID, name);
 	}
-	return feedbackIdSave;
+	return true;
 }
 
 const map<string,DataModel::Feedback*> Manager::FeedbackListByName() const
@@ -1443,6 +1488,7 @@ const map<string,TrackID> Manager::TrackListIdByName() const
 	return out;
 }
 
+// FIXME: replace with TrackListByName later. 2021-02-10
 const map<string,ObjectIdentifier> Manager::TrackBaseListIdentifierByName() const
 {
 	map<string,ObjectIdentifier> out;
@@ -1451,13 +1497,6 @@ const map<string,ObjectIdentifier> Manager::TrackBaseListIdentifierByName() cons
 		for (auto track : tracks)
 		{
 			out[track.second->GetName()] = ObjectIdentifier(ObjectTypeTrack, track.second->GetID());
-		}
-	}
-	{
-		std::lock_guard<std::mutex> guard(signalMutex);
-		for (auto signal : signals)
-		{
-			out[signal.second->GetName()] = ObjectIdentifier(ObjectTypeSignal, signal.second->GetID());
 		}
 	}
 	return out;
@@ -1561,7 +1600,7 @@ const std::vector<FeedbackID> Manager::CleanupAndCheckFeedbacksForTrack(const Ob
 	return checkedFeedbacks;
 }
 
-TrackID Manager::TrackSave(const TrackID trackID,
+bool Manager::TrackSave(TrackID trackID,
 	const std::string& name,
 	const bool showName,
 	const LayoutPosition posX,
@@ -1570,7 +1609,8 @@ TrackID Manager::TrackSave(const TrackID trackID,
 	const LayoutItemSize height,
 	const LayoutRotation rotation,
 	const DataModel::TrackType trackType,
-	const std::vector<FeedbackID>& newFeedbacks,
+	const vector<FeedbackID>& newFeedbacks,
+	const vector<Relation*>& newSignals,
 	const DataModel::SelectRouteApproach selectRouteApproach,
 	const bool allowLocoTurn,
 	const bool releaseWhenFree,
@@ -1579,7 +1619,7 @@ TrackID Manager::TrackSave(const TrackID trackID,
 	Track* track = GetTrack(trackID);
 	if (!CheckTrackPosition(track, posX, posY, posZ, height, rotation, result))
 	{
-		return TrackNone;
+		return false;
 	}
 
 	if (track == nullptr)
@@ -1593,6 +1633,9 @@ TrackID Manager::TrackSave(const TrackID trackID,
 		return false;
 	}
 
+	// if we have a new object we have to update trackID
+	trackID = track->GetID();
+
 	// update existing track
 	track->SetName(CheckObjectName(tracks, trackMutex, trackID, name.size() == 0 ? "T" : name));
 	track->SetShowName(showName);
@@ -1603,6 +1646,7 @@ TrackID Manager::TrackSave(const TrackID trackID,
 	track->SetPosZ(posZ);
 	track->SetTrackType(trackType);
 	track->Feedbacks(CleanupAndCheckFeedbacksForTrack(ObjectIdentifier(ObjectTypeTrack, trackID), newFeedbacks));
+	track->AssignSignals(newSignals);
 	track->SetSelectRouteApproach(selectRouteApproach);
 	track->SetAllowLocoTurn(allowLocoTurn);
 	track->SetReleaseWhenFree(releaseWhenFree);
@@ -1612,13 +1656,13 @@ TrackID Manager::TrackSave(const TrackID trackID,
 	{
 		storage->Save(*track);
 	}
+
 	std::lock_guard<std::mutex> guard(controlMutex);
-	TrackID trackIdSave = track->GetID();
 	for (auto control : controls)
 	{
-		control.second->TrackSettings(trackIdSave, name);
+		control.second->TrackSettings(trackID, name);
 	}
-	return trackIdSave;
+	return true;
 }
 
 bool Manager::TrackDelete(const TrackID trackID,
@@ -1783,7 +1827,7 @@ bool Manager::CheckSwitchPosition(const Switch* mySwitch, const LayoutPosition p
 	return CheckPositionFree(posX, posY, posZ, DataModel::LayoutItem::Width1, DataModel::LayoutItem::Height1, DataModel::LayoutItem::Rotation0, result);
 }
 
-bool Manager::SwitchSave(const SwitchID switchID,
+bool Manager::SwitchSave(SwitchID switchID,
 	const string& name,
 	const LayoutPosition posX,
 	const LayoutPosition posY,
@@ -1818,6 +1862,9 @@ bool Manager::SwitchSave(const SwitchID switchID,
 		return false;
 	}
 
+	// if we have a new object we have to update switchID
+	switchID = mySwitch->GetID();
+
 	// update existing switch
 	mySwitch->SetName(CheckObjectName(switches, switchMutex, switchID, name.size() == 0 ? "S" : name));
 	mySwitch->SetPosX(posX);
@@ -1836,11 +1883,11 @@ bool Manager::SwitchSave(const SwitchID switchID,
 	{
 		storage->Save(*mySwitch);
 	}
-	const SwitchID switchIdSave = mySwitch->GetID();
+
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto control : controls)
 	{
-		control.second->SwitchSettings(switchIdSave, name);
+		control.second->SwitchSettings(switchID, name);
 	}
 	return true;
 }
@@ -1972,7 +2019,7 @@ bool Manager::CheckRoutePosition(const Route* route, const LayoutPosition posX, 
 	return CheckPositionFree(posX, posY, posZ, DataModel::LayoutItem::Width1, DataModel::LayoutItem::Height1, DataModel::LayoutItem::Rotation0, result);
 }
 
-bool Manager::RouteSave(const RouteID routeID,
+bool Manager::RouteSave(RouteID routeID,
 	const std::string& name,
 	const Delay delay,
 	const Route::PushpullType pushpull,
@@ -2039,6 +2086,9 @@ bool Manager::RouteSave(const RouteID routeID,
 		}
 	}
 
+	// if we have a new object we have to update routeID
+	routeID = route->GetID();
+
 	// update existing route
 	route->SetName(CheckObjectName(routes, routeMutex, routeID, name.size() == 0 ? "S" : name));
 	route->SetDelay(delay);
@@ -2088,7 +2138,7 @@ bool Manager::RouteSave(const RouteID routeID,
 	if (newTrack != nullptr)
 	{
 		newTrack->AddRoute(route);
-		if (storage == nullptr)
+		if (storage != nullptr)
 		{
 			switch (newFromTrack.GetObjectType())
 			{
@@ -2114,7 +2164,7 @@ bool Manager::RouteSave(const RouteID routeID,
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto control : controls)
 	{
-		control.second->RouteSettings(route->GetID(), name);
+		control.second->RouteSettings(routeID, name);
 	}
 	return true;
 }
@@ -2229,12 +2279,12 @@ const map<string,LayerID> Manager::LayerListByNameWithFeedback() const
 		{
 			continue;
 		}
-		list["| Feedbacks of " + control.second->GetName()] = -control.first;
+		list["| Feedbacks of " + control.second->GetShortName()] = -control.first;
 	}
 	return list;
 }
 
-bool Manager::LayerSave(const LayerID layerID, const std::string&name, std::string& result)
+bool Manager::LayerSave(LayerID layerID, const std::string&name, std::string& result)
 {
 	Layer* layer = GetLayer(layerID);
 	if (layer == nullptr)
@@ -2248,6 +2298,9 @@ bool Manager::LayerSave(const LayerID layerID, const std::string&name, std::stri
 		return false;
 	}
 
+	// if we have a new object we have to update layerID
+	layerID = layer->GetID();
+
 	// update existing layer
 	layer->SetName(CheckObjectName(layers, layerMutex, layerID, name.size() == 0 ? "L" : name));
 
@@ -2256,11 +2309,10 @@ bool Manager::LayerSave(const LayerID layerID, const std::string&name, std::stri
 	{
 		storage->Save(*layer);
 	}
-	const LayerID layerIdSave = layer->GetID();
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto control : controls)
 	{
-		control.second->LayerSettings(layerIdSave, name);
+		control.second->LayerSettings(layerID, name);
 	}
 	return true;
 }
@@ -2469,7 +2521,7 @@ bool Manager::CheckSignalPosition(const Signal* signal, const LayoutPosition pos
 
 }
 
-bool Manager::SignalSave(const SignalID signalID,
+bool Manager::SignalSave(SignalID signalID,
 	const string& name,
 	const Orientation signalOrientation,
 	const LayoutPosition posX,
@@ -2511,6 +2563,9 @@ bool Manager::SignalSave(const SignalID signalID,
 		return false;
 	}
 
+	// if we have a new object we have to update locoID
+	signalID = signal->GetID();
+
 	signal->SetName(CheckObjectName(signals, signalMutex, signalID, name.size() == 0 ? "S" : name));
 	signal->SetSignalOrientation(signalOrientation);
 	signal->SetPosX(posX);
@@ -2534,11 +2589,11 @@ bool Manager::SignalSave(const SignalID signalID,
 	{
 		storage->Save(*signal);
 	}
-	const SignalID signalIdSave = signal->GetID();
+
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto control : controls)
 	{
-		control.second->SignalSettings(signalIdSave, name);
+		control.second->SignalSettings(signalID, name);
 	}
 	return true;
 }
@@ -2657,10 +2712,10 @@ const map<string,DataModel::Cluster*> Manager::ClusterListByName() const
 	return out;
 }
 
-bool Manager::ClusterSave(const ClusterID clusterID,
+bool Manager::ClusterSave(ClusterID clusterID,
 	const string& name,
-	__attribute__((unused)) const std::vector<DataModel::Relation*>& newTracks,
-	__attribute__((unused)) const std::vector<DataModel::Relation*>& newSignals,
+	const vector<Relation*>& newTracks,
+	const vector<Relation*>& newSignals,
 	string& result)
 {
 	Cluster* cluster = GetCluster(clusterID);
@@ -2674,6 +2729,9 @@ bool Manager::ClusterSave(const ClusterID clusterID,
 		result = Languages::GetText(Languages::TextUnableToAddCluster);
 		return false;
 	}
+
+	// if we have a new object we have to update clusterID
+	clusterID = cluster->GetID();
 
 	// update existing cluster
 	cluster->SetName(CheckObjectName(clusters, clusterMutex, clusterID, name.size() == 0 ? "C" : name));
@@ -3181,7 +3239,7 @@ bool Manager::CheckControlProtocolAddress(const AddressType type, const ControlI
 		if (!ret)
 		{
 			string protocolText;
-			if (protocol > ProtocolNone && protocol <= ProtocolEnd)
+			if (protocol <= ProtocolEnd)
 			{
 				protocolText = ProtocolSymbols[protocol] + " ";
 			}
@@ -3296,7 +3354,7 @@ T* Manager::CreateAndAddObject(std::map<ID,T*>& objects, std::mutex& mutex)
 	return newObject;
 }
 
-ControlID Manager::GetControlForLoco() const
+ControlID Manager::GetPossibleControlForLoco() const
 {
 	for (auto control : controls)
 	{
@@ -3308,7 +3366,7 @@ ControlID Manager::GetControlForLoco() const
 	return ControlIdNone;
 }
 
-ControlID Manager::GetControlForAccessory() const
+ControlID Manager::GetPossibleControlForAccessory() const
 {
 	for (auto control : controls)
 	{
@@ -3320,7 +3378,7 @@ ControlID Manager::GetControlForAccessory() const
 	return ControlIdNone;
 }
 
-ControlID Manager::GetControlForFeedback() const
+ControlID Manager::GetPossibleControlForFeedback() const
 {
 	for (auto control : controls)
 	{
@@ -3394,6 +3452,16 @@ bool Manager::CanHandle(const Hardware::Capabilities capability) const
 		}
 	}
 	return false;
+}
+
+bool Manager::CanHandle(const ControlID controlId, const Hardware::Capabilities capability) const
+{
+	ControlInterface* control = GetControl(controlId);
+	if (control == nullptr)
+	{
+		return false;
+	}
+	return control->CanHandle(capability);
 }
 
 Hardware::Capabilities Manager::GetCapabilities(const ControlID controlID) const

@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -78,9 +78,5 @@ namespace Storage
 			static int CallbackStringVector(void* v, int argc, char **argv, char **colName);
 			static std::string EscapeString(const std::string& input);
 	};
-
-	extern "C" SQLite* create_Sqlite(const StorageParams* params);
-	extern "C" void destroy_Sqlite(SQLite* sqlite);
-
 } // namespace Storage
 

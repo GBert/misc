@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -95,7 +95,10 @@ namespace WebServer
 		HtmlTag tabMenu("div");
 		tabMenu.AddChildTag(client.HtmlTagTabMenuItem("basic", Languages::TextBasic, true));
 		tabMenu.AddChildTag(client.HtmlTagTabMenuItem("tracks", Languages::TextTracks));
-		tabMenu.AddChildTag(client.HtmlTagTabMenuItem("signals", Languages::TextSignals));
+		if (signals.size() > 0)
+		{
+			tabMenu.AddChildTag(client.HtmlTagTabMenuItem("signals", Languages::TextSignals));
+		}
 		content.AddChildTag(tabMenu);
 
 		HtmlTag formContent("form");
@@ -110,7 +113,12 @@ namespace WebServer
 		formContent.AddChildTag(basicContent);
 
 		formContent.AddChildTag(client.HtmlTagSlaveSelect("track", tracks, GetTrackOptions(clusterID)));
-		formContent.AddChildTag(client.HtmlTagSlaveSelect("signal", signals, GetSignalOptions(clusterID)));
+
+		// FIXME: remove again later 2021-02-10
+		if (signals.size() > 0)
+		{
+			formContent.AddChildTag(client.HtmlTagSlaveSelect("signal", signals, GetSignalOptions(signals), false));
+		}
 
 		content.AddChildTag(HtmlTag("div").AddClass("popup_content").AddChildTag(formContent));
 		content.AddChildTag(HtmlTagButtonCancel());
@@ -224,19 +232,19 @@ namespace WebServer
 		return trackOptions;
 	}
 
-	map<string,ObjectID> WebClientCluster::GetSignalOptions(const ClusterID clusterId) const
+	// FIXME: remove again later 2021-02-10
+	map<string,ObjectID> WebClientCluster::GetSignalOptions(const vector<Relation*>& signals) const
 	{
 		map<string, ObjectID> signalOptions;
 
-		map<string, Signal*> allSignals = manager.SignalListByName();
-		for (auto signal : allSignals)
+		for (auto signalRelation : signals)
 		{
-			Cluster* clusterOfSignal = signal.second->GetCluster();
-			if (clusterOfSignal != nullptr && clusterOfSignal->GetID() != clusterId)
+			Signal* signal = dynamic_cast<Signal*>(signalRelation->GetObject2());
+			if (signal == nullptr)
 			{
 				continue;
 			}
-			signalOptions[signal.first] = signal.second->GetID();
+			signalOptions[signal->GetName()] = signal->GetID();
 		}
 		return signalOptions;
 	}

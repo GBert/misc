@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -79,6 +79,8 @@ namespace DataModel
 		str += to_string(reducedSpeed);
 		str += ";creepingspeed=";
 		str += to_string(creepingSpeed);
+		str += ";matchkey=";
+		str += matchKey;
 		return str;
 	}
 
@@ -113,6 +115,7 @@ namespace DataModel
 		reducedSpeed = Utils::Utils::GetIntegerMapEntry(arguments, "reducedspeed", DefaultReducedSpeed);
 		creepingSpeed = Utils::Utils::GetIntegerMapEntry(arguments, "creepspeed", DefaultCreepingSpeed);
 		creepingSpeed = Utils::Utils::GetIntegerMapEntry(arguments, "creepingspeed", creepingSpeed);
+		matchKey = Utils::Utils::GetStringMapEntry(arguments, "matchkey");
 		return true;
 	}
 

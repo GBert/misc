@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -46,7 +46,7 @@ namespace WebServer
 
 			bool NextUpdate(unsigned int& updateIDClient, std::string& s);
 
-			const std::string GetName() const override { return "Webserver"; }
+			const std::string& GetName() const override { return Webserver; }
 			void AccessoryDelete(const AccessoryID accessoryID, const std::string& name) override;
 			void AccessorySettings(const AccessoryID accessoryID, const std::string& name) override;
 			void AccessoryState(const ControlType controlType, const DataModel::Accessory* accessory) override;
@@ -66,7 +66,7 @@ namespace WebServer
 				const DataModel::LocoFunctionState on) override;
 
 			void LocoRelease(const LocoID locoID) override;
-			void LocoSettings(const LocoID locoID, const std::string& name) override;
+			void LocoSettings(const LocoID locoID, const std::string& name, const std::string& matchKey) override;
 			void LocoSpeed(const ControlType controlType, const DataModel::Loco* loco, const Speed speed) override;
 			void LocoStart(const LocoID locoID, const std::string& name) override;
 			void LocoStop(const LocoID locoID, const std::string& name) override;
@@ -92,7 +92,7 @@ namespace WebServer
 				AddUpdate(command, Logger::Logger::Format(Languages::GetText(text), args...));
 			}
 			void AddUpdate(const std::string& command, const std::string& status);
-			std::string GetStatus(Languages::TextSelector status) { return updateStatus + Languages::GetText(status); }
+			std::string GetStatus(Languages::TextSelector status) { return UpdateStatus + Languages::GetText(status); }
 
 			void TrackBaseState(std::stringstream& command, const DataModel::TrackBase* track);
 
@@ -104,8 +104,10 @@ namespace WebServer
 			std::map<unsigned int,std::string> updates;
 			std::mutex updateMutex;
 			unsigned int updateID;
-			const unsigned int MaxUpdates = 10;
-			const std::string updateStatus = "data: status=";
+
+			static const unsigned int MaxUpdates = 10;
+			static const std::string UpdateStatus;
+			static const std::string Webserver;
 	};
 } // namespace WebServer
 

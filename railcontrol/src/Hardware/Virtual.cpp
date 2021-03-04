@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -28,27 +28,14 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace Hardware
 {
-
-	// create_virt and destroy_virt are used to instantiate
-	// and delete the command station in main program
-
-	// create instance of virtual
-	extern "C" Virtual* create_Virtual(const HardwareParams* params)
-	{
-		return new Virtual(params);
-	}
-
-	// delete instance of virtual
-	extern "C" void destroy_Virtual(Virtual* virt)
-	{
-		delete(virt);
-	}
-
-
 	Virtual::Virtual(const HardwareParams* params)
-	:	HardwareInterface(params->GetManager(), params->GetControlID(), "Virtual Command Station / " + params->GetName()),
+	:	HardwareInterface(params->GetManager(),
+			params->GetControlID(),
+			"Virtual Command Station / " + params->GetName(),
+			params->GetName()),
 	 	logger(Logger::Logger::GetLogger("Virtual " + params->GetName()))
-	{}
+	{
+	}
 
 	// turn booster on or off
 	void Virtual::Booster(const BoosterState status)

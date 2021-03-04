@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -31,28 +31,18 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace Hardware
 {
-
-	// create instance of Z21
-	extern "C" Z21* create_Z21(const HardwareParams* params)
-	{
-		return new Z21(params);
-	}
-
-	// delete instance of Z21
-	extern "C" void destroy_Z21(Z21* z21)
-	{
-		delete(z21);
-	}
-
 	Z21::Z21(const HardwareParams* params)
-	:	HardwareInterface(params->GetManager(), params->GetControlID(), "Z21 / " + params->GetName() + " at IP " + params->GetArg1()),
+	:	HardwareInterface(params->GetManager(),
+			params->GetControlID(),
+			"Z21 / " + params->GetName() + " at IP " + params->GetArg1(),
+			params->GetName()),
 	 	logger(Logger::Logger::GetLogger("Z21 " + params->GetName() + " " + params->GetArg1())),
 	 	run(true),
 	 	connection(logger, params->GetArg1(), Z21Port),
 	 	lastProgramMode(ProgramModeMm),
 	 	connected(false)
 	{
-		logger->Info(Languages::TextStarting, name);
+		logger->Info(Languages::TextStarting, GetFullName());
 
 		if (connection.IsConnected())
 		{

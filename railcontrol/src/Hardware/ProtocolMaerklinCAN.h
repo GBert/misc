@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -49,7 +49,8 @@ namespace Hardware
 					| Hardware::CapabilityProgramMfxWrite
 					| Hardware::CapabilityProgramDccDirectRead
 					| Hardware::CapabilityProgramDccDirectWrite
-					| Hardware::CapabilityProgramDccPomWrite;
+					| Hardware::CapabilityProgramDccPomWrite
+					| Hardware::CapabilityLocoDatabase;
 			}
 
 			void GetLocoProtocols(std::vector<Protocol>& protocols) const override
@@ -88,18 +89,38 @@ namespace Hardware
 			void ProgramRead(const ProgramMode mode, const Address address, const CvNumber cv) override;
 			void ProgramWrite(const ProgramMode mode, const Address address, const CvNumber cv, const CvValue value) override;
 
+			inline virtual const std::map<std::string,Hardware::LocoCacheEntry>& GetLocoDatabase() const override
+			{
+				return locoCache.GetAll();
+			}
+
+			inline virtual DataModel::LocoConfig GetLocoByMatch(const std::string& match) const override
+			{
+				return DataModel::LocoConfig(locoCache.GetByName(match));
+			}
+
+			inline virtual void SetLocoIdOfMatch(const LocoID locoId, const std::string& match) override
+			{
+				locoCache.SetLocoIdByName(locoId, match);
+			}
+
 		protected:
-			ProtocolMaerklinCAN(HardwareParams* const params, Logger::Logger* logger, std::string name)
+			inline ProtocolMaerklinCAN(const HardwareParams* params,
+				Logger::Logger* logger,
+				const std::string& fullName,
+				const std::string& shortName)
 			:	HardwareInterface(params->GetManager(),
-				params->GetControlID(), name),
+					params->GetControlID(),
+					fullName,
+					shortName),
 				logger(logger),
 				run(false),
-				params(params),
 				uid(Utils::Utils::HexToInteger(params->GetArg5(), 0)),
 				hasCs2Master(false),
 				canFileDataSize(0),
 				canFileData(nullptr),
-				canFileDataPointer(nullptr)
+				canFileDataPointer(nullptr),
+				locoCache(params->GetControlID())
 			{
 				if (uid == 0)
 				{
@@ -385,7 +406,6 @@ namespace Hardware
 				return icon;
 			}
 
-			HardwareParams* const params;
 			CanUid uid;
 			CanHash hash;
 			bool hasCs2Master;

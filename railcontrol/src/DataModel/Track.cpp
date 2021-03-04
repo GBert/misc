@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -86,5 +86,66 @@ namespace DataModel
 	void Track::PublishState() const
 	{
 		manager->TrackPublishState(this);
+	}
+
+	void Track::DeleteSignals()
+	{
+		while (signals.size() > 0)
+		{
+			Relation* signalRelation = signals.back();
+			Signal* signal = dynamic_cast<Signal*>(signalRelation->GetObject2());
+			if (signal != nullptr)
+			{
+				signal->SetTrack(nullptr);
+			}
+			signals.pop_back();
+			delete signalRelation;
+		}
+	}
+
+	void Track::DeleteSignal(Signal* signalToDelete)
+	{
+		for (unsigned int index = 0; index < signals.size(); ++index)
+		{
+			if (signals[index]->GetObject2() != signalToDelete)
+			{
+				continue;
+			}
+			delete signals[index];
+			signals.erase(signals.begin() + index);
+			signalToDelete->SetTrack(nullptr);
+			return;
+		}
+	}
+
+	void Track::AssignSignals(const std::vector<DataModel::Relation*>& newSignals)
+	{
+		DeleteSignals();
+		signals = newSignals;
+		for (auto signalRelation : signals)
+		{
+			Signal* signal = dynamic_cast<Signal*>(signalRelation->GetObject2());
+			if (signal != nullptr)
+			{
+				signal->SetTrack(this);
+			}
+		}
+	}
+
+	void Track::StopAllSignals(const LocoID locoId)
+	{
+		for (auto signalRelation : signals)
+		{
+			Signal* signal = dynamic_cast<Signal*>(signalRelation->GetObject2());
+			if (signal == nullptr)
+			{
+				continue;
+			}
+			if (locoId != signal->GetLoco())
+			{
+				continue;
+			}
+			manager->SignalState(ControlTypeInternal, signal, SignalStateStop, true);
+		}
 	}
 } // namespace DataModel

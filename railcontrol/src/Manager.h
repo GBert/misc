@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -30,7 +30,9 @@ along with RailControl; see the file LICENCE. If not see
 #include "Config.h"
 #include "ControlInterface.h"
 #include "DataModel/DataModel.h"
+#include "DataModel/LocoConfig.h"
 #include "Hardware/HardwareParams.h"
+#include "Hardware/LocoCache.h"
 #include "Logger/Logger.h"
 #include "Storage/StorageHandler.h"
 
@@ -50,7 +52,7 @@ class Manager
 		void Booster(const ControlType controlType, const BoosterState status);
 
 		// hardware (virt, CS2, ...)
-		bool ControlSave(const ControlID& controlID,
+		bool ControlSave(ControlID controlID,
 			const HardwareType& hardwareType,
 			const std::string& name,
 			const std::string& arg1,
@@ -63,9 +65,6 @@ class Manager
 		bool ControlDelete(ControlID controlID);
 		Hardware::HardwareParams* GetHardware(const ControlID controlID);
 		unsigned int ControlsOfHardwareType(const HardwareType hardwareType);
-		bool HardwareLibraryAdd(const HardwareType hardwareType, void* libraryHandle);
-		void* HardwareLibraryGet(const HardwareType hardwareType) const;
-		bool HardwareLibraryRemove(const HardwareType hardwareType);
 
 		// control (console, web, ...)
 		const std::string GetControlName(const ControlID controlID);
@@ -90,20 +89,29 @@ class Manager
 
 		// loco
 		DataModel::Loco* GetLoco(const LocoID locoID) const;
+
+		DataModel::LocoConfig GetLocoByMatchKey(const ControlID controlId, const std::string& matchKey) const;
+
+		void LocoRemoveMatchKey(const LocoID locoId);
+
+		void LocoReplaceMatchKey(const LocoID locoId, const std::string& newMatchKey);
+
+		const std::map<std::string,DataModel::LocoConfig> GetUnmatchedLocosOfControl(const ControlID controlId) const;
+
 		const std::string& GetLocoName(const LocoID locoID) const;
 
-		inline const std::map<LocoID,DataModel::Loco*>& locoList() const
-		{
-			return locos;
-		}
-
 		const std::map<std::string,LocoID> LocoListFree() const;
-		const std::map<std::string,DataModel::Loco*> LocoListByName() const;
+
+		const std::map<std::string,DataModel::LocoConfig> LocoListByName() const;
+
+		const std::map<std::string,LocoID> LocoIdsByName() const;
+
 		bool LocoSave
 		(
-			const LocoID locoID,
+			LocoID locoID,
 			const std::string& name,
 			const ControlID controlID,
+			const std::string& matchKey,
 			const Protocol protocol,
 			const Address address,
 			const Length length,
@@ -154,7 +162,8 @@ class Manager
 		}
 
 		const std::map<std::string,DataModel::Accessory*> AccessoryListByName() const;
-		bool AccessorySave(const AccessoryID accessoryID,
+
+		bool AccessorySave(AccessoryID accessoryID,
 			const std::string& name,
 			const DataModel::LayoutItem::LayoutPosition x,
 			const DataModel::LayoutItem::LayoutPosition y,
@@ -186,7 +195,17 @@ class Manager
 
 		const std::map<std::string,DataModel::Feedback*> FeedbackListByName() const;
 		const std::map<std::string,FeedbackID> FeedbacksOfTrack(const DataModel::ObjectIdentifier& identifier) const;
-		FeedbackID FeedbackSave(const FeedbackID feedbackID, const std::string& name, const DataModel::LayoutItem::Visible visible, const DataModel::LayoutItem::LayoutPosition posX, const DataModel::LayoutItem::LayoutPosition posY, const DataModel::LayoutItem::LayoutPosition posZ, const ControlID controlID, const FeedbackPin pin, const bool inverted,  std::string& result);
+
+		bool FeedbackSave(FeedbackID feedbackID,
+			const std::string& name,
+			const DataModel::LayoutItem::Visible visible,
+			const DataModel::LayoutItem::LayoutPosition posX,
+			const DataModel::LayoutItem::LayoutPosition posY,
+			const DataModel::LayoutItem::LayoutPosition posZ,
+			const ControlID controlID,
+			const FeedbackPin pin,
+			const bool inverted,
+			std::string& result);
 
 		bool FeedbackDelete(const FeedbackID feedbackID,
 			std::string& result);
@@ -208,7 +227,7 @@ class Manager
 		const std::map<std::string,DataModel::Track*> TrackListByName() const;
 		const std::map<std::string,TrackID> TrackListIdByName() const;
 
-		TrackID TrackSave(const TrackID trackID,
+		bool TrackSave(const TrackID trackID,
 			const std::string& name,
 			const bool showName,
 			const DataModel::LayoutItem::LayoutPosition posX,
@@ -218,6 +237,7 @@ class Manager
 			const DataModel::LayoutItem::LayoutRotation rotation,
 			const DataModel::TrackType trackType,
 			const std::vector<FeedbackID>& feedbacks,
+			const std::vector<DataModel::Relation*>& newSignals,
 			const DataModel::SelectRouteApproach selectRouteApproach,
 			const bool allowLocoTurn,
 			const bool releaseWhenFree,
@@ -239,7 +259,8 @@ class Manager
 		}
 
 		const std::map<std::string,DataModel::Switch*> SwitchListByName() const;
-		bool SwitchSave(const SwitchID switchID,
+
+		bool SwitchSave(SwitchID switchID,
 			const std::string& name,
 			const DataModel::LayoutItem::LayoutPosition x,
 			const DataModel::LayoutItem::LayoutPosition y,
@@ -270,7 +291,7 @@ class Manager
 		}
 
 		const std::map<std::string,DataModel::Route*> RouteListByName() const;
-		bool RouteSave(const RouteID routeID,
+		bool RouteSave(RouteID routeID,
 			const std::string& name,
 			const Delay delay,
 			const DataModel::Route::PushpullType pushpull,
@@ -322,7 +343,7 @@ class Manager
 
 		const std::map<std::string,DataModel::Signal*> SignalListByName() const;
 
-		bool SignalSave(const SignalID signalID,
+		bool SignalSave(SignalID signalID,
 			const std::string& name,
 			const Orientation signalOrientation,
 			const DataModel::LayoutItem::LayoutPosition x,
@@ -351,7 +372,7 @@ class Manager
 		DataModel::Cluster* GetCluster(const ClusterID clusterID) const;
 		const std::map<std::string,DataModel::Cluster*> ClusterListByName() const;
 
-		bool ClusterSave(const ClusterID clusterID,
+		bool ClusterSave(ClusterID clusterID,
 			const std::string& name,
 			const std::vector<DataModel::Relation*>& newTracks,
 			const std::vector<DataModel::Relation*>& newSignals,
@@ -412,9 +433,9 @@ class Manager
 			const Logger::Logger::Level logLevel
 			);
 
-		ControlID GetControlForLoco() const;
-		ControlID GetControlForAccessory() const;
-		ControlID GetControlForFeedback() const;
+		ControlID GetPossibleControlForLoco() const;
+		ControlID GetPossibleControlForAccessory() const;
+		ControlID GetPossibleControlForFeedback() const;
 
 		void ProgramRead(const ControlID controlID, const ProgramMode mode, const Address address, const CvNumber cv);
 		void ProgramWrite(const ControlID controlID, const ProgramMode mode, const Address address, const CvNumber cv, const CvValue value);
@@ -426,6 +447,7 @@ class Manager
 		}
 
 		bool CanHandle(const Hardware::Capabilities capability) const;
+		bool CanHandle(const ControlID controlId, const Hardware::Capabilities capability) const;
 		Hardware::Capabilities GetCapabilities(const ControlID controlID) const;
 
 	private:
@@ -644,9 +666,6 @@ class Manager
 		// hardware (virt, CS2, ...)
 		std::map<ControlID,Hardware::HardwareParams*> hardwareParams;
 		mutable std::mutex hardwareMutex;
-
-		std::map<HardwareType,void*> hardwareLibraries;
-		mutable std::mutex hardwareLibrariesMutex;
 
 		// loco
 		std::map<LocoID,DataModel::Loco*> locos;

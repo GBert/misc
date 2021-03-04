@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -23,26 +23,16 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace Hardware
 {
-
-	// create instance of OpenDcc
-	extern "C" OpenDcc* create_OpenDcc(const HardwareParams* params)
-	{
-		return new OpenDcc(params);
-	}
-
-	// delete instance of OpenDcc
-	extern "C" void destroy_OpenDcc(OpenDcc* opendcc)
-	{
-		delete(opendcc);
-	}
-
 	OpenDcc::OpenDcc(const HardwareParams* params)
-	:	HardwareInterface(params->GetManager(), params->GetControlID(), "OpenDCC / " + params->GetName() + " at serial port " + params->GetArg1()),
+	:	HardwareInterface(params->GetManager(),
+			params->GetControlID(),
+			"OpenDCC / " + params->GetName() + " at serial port " + params->GetArg1(),
+			params->GetName()),
 	 	logger(Logger::Logger::GetLogger("OpenDCC " + params->GetName() + " " + params->GetArg1())),
 	 	serialLine(logger, params->GetArg1(), B19200, 8, 'N', 2),
 		run(false)
 	{
-		logger->Info(Languages::TextStarting, name);
+		logger->Info(Languages::TextStarting, GetFullName());
 
 		SendP50XOnly();
 		bool ok = SendNop();

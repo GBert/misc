@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -128,7 +128,8 @@ namespace WebServer
 
 			HtmlTag HtmlTagSlaveSelect(const std::string& prefix,
 				const std::vector<DataModel::Relation*>& relations,
-				const std::map<std::string,ObjectID>& options) const;
+				const std::map<std::string,ObjectID>& options,
+				const bool allowNew = true) const;
 
 			std::vector<ObjectID> InterpretSlaveData(const std::string& prefix, const std::map<std::string,std::string>& arguments);
 
@@ -153,6 +154,11 @@ namespace WebServer
 			static HtmlTag HtmlTagSelectSelectRouteApproach(const DataModel::SelectRouteApproach selectRouteApproach,
 				const bool addDefault = true);
 
+			static std::string ProtocolName(const Protocol protocol)
+			{
+				return ProtocolSymbols[protocol <= ProtocolEnd ? protocol : ProtocolNone];
+			}
+
 		private:
 			void InterpretClientRequest(const std::deque<std::string>& lines, std::string& method, std::string& uri, std::string& protocol, std::map<std::string,std::string>& arguments, std::map<std::string,std::string>& headers);
 			void HandleLoco(const std::map<std::string, std::string>& arguments);
@@ -162,8 +168,17 @@ namespace WebServer
 			HtmlTag HtmlTagLocoSelector() const;
 			HtmlTag HtmlTagLayerSelector() const;
 			static HtmlTag HtmlTagControlArgument(const unsigned char argNr, const ArgumentType type, const std::string& value);
-			HtmlTag HtmlTagProtocol(const std::map<std::string,Protocol>& protocolMap, const Protocol selectedProtocol);
-			HtmlTag HtmlTagProtocolLoco(const ControlID controlID, const Protocol selectedProtocol);
+
+			static HtmlTag HtmlTagMatchKey(const std::map<std::string,DataModel::LocoConfig>& matchKeyMap,
+				const std::string& selectedMatchKey);
+
+			static HtmlTag HtmlTagProtocol(const std::map<std::string,Protocol>& protocolMap,
+				const Protocol selectedProtocol);
+
+			HtmlTag HtmlTagMatchKeyProtocolLoco(const ControlID controlID,
+				const std::string& selectedMatchKey,
+				const Protocol selectedProtocol);
+
 			HtmlTag HtmlTagDuration(const DataModel::AccessoryPulseDuration duration, const Languages::TextSelector label) const;
 
 			HtmlTag HtmlTagPosition(const DataModel::LayoutItem::LayoutPosition posx,
@@ -230,7 +245,7 @@ namespace WebServer
 				const ObjectID objectId,
 				const std::map<std::string,ObjectID>& options) const;
 
-			std::map<std::string,ObjectID> GetLocoOptions(const LocoID locoID = LocoNone) const;
+			std::map<std::string,ObjectID> GetLocoSlaveOptions(const LocoID locoID = LocoNone) const;
 
 			void HandleSelectLoco(const std::map<std::string, std::string>& arguments);
 			void HandleLayerEdit(const std::map<std::string, std::string>& arguments);

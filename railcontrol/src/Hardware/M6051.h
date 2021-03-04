@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -100,9 +100,5 @@ namespace Hardware
 
 			void S88Worker();
 	};
-
-	extern "C" M6051* create_M6051(const HardwareParams* params);
-	extern "C" void destroy_M6051(M6051* m6051);
-
 } // namespace
 

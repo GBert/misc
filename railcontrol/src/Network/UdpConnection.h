@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -31,25 +31,44 @@ namespace Network
 	{
 		public:
 			UdpConnection() = delete;
+
 			UdpConnection(Logger::Logger* logger, const std::string& server, const unsigned short port);
 
-			~UdpConnection() { Terminate(); }
+			inline ~UdpConnection()
+			{
+				Terminate();
+			}
 
 			void Terminate();
 
 			bool Bind();
 
-			bool IsConnected() { return connected; }
+			inline bool IsConnected()
+			{
+				return connected;
+			}
 
 			int Send(const char* buffer, const size_t bufferLength);
-			int Send(const unsigned char* buffer, const size_t bufferLength) { return Send(reinterpret_cast<const char*>(buffer), bufferLength); }
-			int Send(const std::string& string) { return Send(string.c_str(), string.size()); }
+
+			inline int Send(const unsigned char* buffer, const size_t bufferLength)
+			{
+				return Send(reinterpret_cast<const char*>(buffer), bufferLength);
+			}
+
+			inline int Send(const std::string& string)
+			{
+				return Send(string.c_str(), string.size());
+			}
 
 			int Receive(char* buffer, const size_t bufferLength);
-			int Receive(unsigned char* buffer, const size_t bufferLength) { return Receive(reinterpret_cast<char*>(buffer), bufferLength); }
+
+			inline int Receive(unsigned char* buffer, const size_t bufferLength)
+			{
+				return Receive(reinterpret_cast<char*>(buffer), bufferLength);
+			}
 
 		private:
-			Logger::Logger* logger;
+			Logger::Logger* const logger;
 			int connectionSocket;
 			volatile bool connected;
 			struct sockaddr sockaddr;

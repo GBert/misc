@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -27,48 +27,41 @@ along with RailControl; see the file LICENCE. If not see
 #include "DataTypes.h"
 #include "Hardware/HardwareInterface.h"
 #include "Hardware/HardwareParams.h"
+#include "Hardware/LocoCache.h"
 #include "Manager.h"
 
 namespace Hardware
 {
-	// the types of the class factories
-	typedef Hardware::HardwareInterface* createHardware_t(const Hardware::HardwareParams* params);
-	typedef void destroyHardware_t(Hardware::HardwareInterface*);
-
 	class HardwareHandler: public ControlInterface
 	{
 		public:
-			HardwareHandler(
-#ifdef AMALGAMATION
-				__attribute__((unused))
-#endif
-				Manager& manager,
-				const HardwareParams* params)
+			inline HardwareHandler(const HardwareParams* params)
 			:	ControlInterface(ControlTypeHardware),
-#ifndef AMALGAMATION
-				manager(manager),
-#endif
-				createHardware(nullptr),
-				destroyHardware(nullptr),
 				instance(nullptr),
 				params(nullptr)
 			{
 				Init(params);
 			}
 
-			~HardwareHandler()
+			inline ~HardwareHandler()
 			{
 				Close();
 			}
 
-			void ReInit(const HardwareParams* params) override
+			inline void ReInit(const HardwareParams* params) override
 			{
 				Close();
 				Init(params);
 			}
 
-			ControlID GetControlID() const { return params->GetControlID(); }
-			const std::string GetName() const override;
+			inline ControlID GetControlID() const
+			{
+				return params->GetControlID();
+			}
+
+			const std::string& GetName() const override;
+
+			const std::string& GetShortName() const override;
 
 			void AccessoryProtocols(std::vector<Protocol>& protocols) const override;
 			bool AccessoryProtocolSupported(Protocol protocol) const override;
@@ -76,7 +69,9 @@ namespace Hardware
 
 			void Booster(const ControlType controlType, BoosterState status) override;
 			Hardware::Capabilities GetCapabilities() const override;
-			void LocoOrientation(const ControlType controlType, const DataModel::Loco* loco, const Orientation orientation) override;
+			void LocoOrientation(const ControlType controlType,
+				const DataModel::Loco* loco,
+				const Orientation orientation) override;
 
 			void LocoFunction(const ControlType controlType,
 				const DataModel::Loco* loco,
@@ -92,23 +87,30 @@ namespace Hardware
 				const Orientation orientation,
 				std::vector<DataModel::LocoFunctionEntry>& functions) override;
 
+			void LocoSettings(const LocoID locoId,
+				__attribute__((unused)) const std::string& name,
+				const std::string& matchKey) override;
+
 			void SwitchState(const ControlType controlType, const DataModel::Switch* mySwitch) override;
 			void SignalState(const ControlType controlType, const DataModel::Signal* signal) override;
 			void ProgramRead(const ProgramMode mode, const Address address, const CvNumber cv) override;
 			void ProgramWrite(const ProgramMode mode, const Address address, const CvNumber cv, const CvValue value) override;
 
+			void AddUnmatchedLocos(std::map<std::string,DataModel::LocoConfig>& list) const override;
+
+			std::map<std::string,DataModel::LocoConfig> GetUnmatchedLocos() const override;
+
+			std::map<std::string,DataModel::LocoConfig> GetAllLocos() const override;
+
+			DataModel::LocoConfig GetLocoByMatch(__attribute__((unused)) const std::string& match) const override;
+
 			static void ArgumentTypesOfHardwareTypeAndHint(const HardwareType hardwareType, std::map<unsigned char,ArgumentType>& arguments, std::string& hint);
 
 		private:
-#ifndef AMALGAMATION
-			Manager& manager;
-#endif
-			createHardware_t* createHardware;
-			destroyHardware_t* destroyHardware;
 			Hardware::HardwareInterface* instance;
 			const HardwareParams* params;
 
-			static const std::string hardwareSymbols[];
+			static const std::string Unknown;
 
 			void Init(const HardwareParams* params);
 			void Close();

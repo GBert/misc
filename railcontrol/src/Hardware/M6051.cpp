@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -30,26 +30,16 @@ using std::string;
 
 namespace Hardware
 {
-
-	// create instance of m6051
-	extern "C" M6051* create_M6051(const HardwareParams* params)
-	{
-		return new M6051(params);
-	}
-
-	// delete instance of m6051
-	extern "C" void destroy_M6051(M6051* m6051)
-	{
-		delete(m6051);
-	}
-
 	M6051::M6051(const HardwareParams* params)
-	:	HardwareInterface(params->GetManager(), params->GetControlID(), "Maerklin Interface (6050/6051) / " + params->GetName() + " at serial port " + params->GetArg1()),
+	:	HardwareInterface(params->GetManager(),
+			params->GetControlID(),
+			"Maerklin Interface (6050/6051) / " + params->GetName() + " at serial port " + params->GetArg1(),
+			params->GetName()),
 	 	logger(Logger::Logger::GetLogger("M6051 " + params->GetName() + " " + params->GetArg1())),
 	 	serialLine(logger, params->GetArg1(), B2400, 8, 'N', 2),
 		run(true)
 	{
-		logger->Info(Languages::TextStarting, name);
+		logger->Info(Languages::TextStarting, GetFullName());
 
 		s88Modules = Utils::Utils::StringToInteger(params->GetArg2(), 0, MaxS88Modules);
 		if (s88Modules == 0)

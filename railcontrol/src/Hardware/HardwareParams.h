@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -29,7 +29,7 @@ namespace Hardware
 	class HardwareParams
 	{
 		public:
-			HardwareParams(ControlID controlID,
+			inline HardwareParams(ControlID controlID,
 				HardwareType hardwareType,
 				std::string name,
 				std::string arg1,
@@ -49,29 +49,98 @@ namespace Hardware
 			{
 			}
 
-			HardwareParams(Manager* manager, ControlID controlID)
+			inline HardwareParams(Manager* manager,
+				ControlID controlID)
 			:	manager(manager),
-				controlID(controlID)
+				controlID(controlID),
+				hardwareType(HardwareTypeNone)
 			{
 			}
 
-			void SetManager(const Manager* manager) { this->manager = const_cast<Manager*>(manager); }
-			Manager* GetManager() const { return manager; }
-			ControlID GetControlID() const { return controlID; }
-			void SetName(const std::string& name) { this->name = name; }
-			const std::string& GetName() const { return name; }
-			void SetHardwareType(const HardwareType hardwareType) { this->hardwareType = hardwareType; }
-			HardwareType GetHardwareType() const { return hardwareType; }
-			void SetArg1(const std::string& arg) { this->arg1 = arg; }
-			std::string GetArg1() const { return arg1; }
-			void SetArg2(const std::string& arg) { this->arg2 = arg; }
-			std::string GetArg2() const { return arg2; }
-			void SetArg3(const std::string& arg) { this->arg3 = arg; }
-			std::string GetArg3() const { return arg3; }
-			void SetArg4(const std::string& arg) { this->arg4 = arg; }
-			std::string GetArg4() const { return arg4; }
-			void SetArg5(const std::string& arg) { this->arg5 = arg; }
-			std::string GetArg5() const { return arg5; }
+			inline void SetManager(Manager* manager)
+			{
+				this->manager = manager;
+			}
+
+			inline Manager* GetManager() const
+			{
+				return manager;
+			}
+
+			inline ControlID GetControlID() const
+			{
+				return controlID;
+			}
+
+			inline void SetName(const std::string& name)
+			{
+				this->name = name;
+			}
+
+			inline const std::string& GetName() const
+			{
+				return name;
+			}
+
+			inline void SetHardwareType(const HardwareType hardwareType)
+			{
+				this->hardwareType = hardwareType;
+			}
+
+			inline HardwareType GetHardwareType() const
+			{
+				return hardwareType;
+			}
+
+			inline void SetArg1(const std::string& arg)
+			{
+				this->arg1 = arg;
+			}
+
+			inline std::string GetArg1() const
+			{
+				return arg1;
+			}
+
+			inline void SetArg2(const std::string& arg)
+			{
+				this->arg2 = arg;
+			}
+
+			inline std::string GetArg2() const
+			{
+				return arg2;
+			}
+
+			inline void SetArg3(const std::string& arg)
+			{
+				this->arg3 = arg;
+			}
+
+			inline std::string GetArg3() const
+			{
+				return arg3;
+			}
+
+			inline void SetArg4(const std::string& arg)
+			{
+				this->arg4 = arg;
+			}
+
+			inline std::string GetArg4() const
+			{
+				return arg4;
+			}
+
+			inline void SetArg5(const std::string& arg)
+			{
+				this->arg5 = arg;
+			}
+
+			inline std::string GetArg5() const
+			{
+				return arg5;
+			}
 
 		private:
 			Manager* manager;

@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -26,6 +26,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "DataModel/DataModel.h"
 #include "DataTypes.h"
 #include "Hardware/HardwareParams.h"
+#include "Storage/Sqlite.h"
 #include "Storage/StorageInterface.h"
 #include "Storage/StorageParams.h"
 
@@ -38,9 +39,22 @@ namespace Storage
 	class StorageHandler
 	{
 		public:
-			StorageHandler(Manager* manager, const StorageParams* params);
-			~StorageHandler();
-			void AllHardwareParams(std::map<ControlID,Hardware::HardwareParams*>& hardwareParams);
+			inline StorageHandler(Manager* manager, const StorageParams* params)
+			:	manager(manager),
+				sqlite(params),
+				transactionRunning(false)
+			{
+			}
+
+			inline ~StorageHandler()
+			{
+			}
+
+			inline void AllHardwareParams(std::map<ControlID,Hardware::HardwareParams*>& hardwareParams)
+			{
+				sqlite.AllHardwareParams(hardwareParams);
+			}
+
 			void DeleteHardwareParams(const ControlID controlID);
 			void AllLocos(std::map<LocoID,DataModel::Loco*>& locos);
 			void DeleteLoco(LocoID locoID);
@@ -64,38 +78,57 @@ namespace Storage
 			void Save(const DataModel::Route& route);
 			void Save(const DataModel::Loco& loco);
 			void Save(const DataModel::Cluster& cluster);
+			void Save(const DataModel::Track& track);
+
 			template<class T> void Save(const T& t)
 			{
-				if (instance == nullptr)
-				{
-					return;
-				}
 				const std::string serialized = t.Serialize();
 				StartTransactionInternal();
-				instance->SaveObject(t.GetObjectType(), t.GetID(), t.GetName(), serialized);
+				sqlite.SaveObject(t.GetObjectType(), t.GetID(), t.GetName(), serialized);
 				CommitTransactionInternal();
 			}
 
-			template <class T> static void Save(StorageHandler* storageHandler, const T* t) { storageHandler->Save(*t); }
+			template <class T> static void Save(StorageHandler* storageHandler, const T* t)
+			{
+				storageHandler->Save(*t);
+			}
+
 			void SaveSetting(const std::string& key, const std::string& value);
-			std::string GetSetting(const std::string& key) ;
-			void StartTransaction();
-			void CommitTransaction();
+
+			inline std::string GetSetting(const std::string& key)
+			{
+				return sqlite.GetSetting(key);
+			}
+
+			inline void StartTransaction()
+			{
+				transactionRunning = true;
+				sqlite.StartTransaction();
+			}
+
+			inline void CommitTransaction()
+			{
+				transactionRunning = false;
+				sqlite.CommitTransaction();
+			}
 
 		private:
-			void StartTransactionInternal();
-			void CommitTransactionInternal();
+			inline void StartTransactionInternal()
+			{
+				sqlite.StartTransaction();
+			}
+
+			inline void CommitTransactionInternal()
+			{
+				sqlite.CommitTransaction();
+			}
+
 			void SaveRelations(const std::vector<DataModel::Relation*> relations);
 			std::vector<DataModel::Relation*> RelationsFrom(const DataModel::Relation::Type type, const ObjectID objectID);
 
 
 			Manager* manager;
-			CreateStorage* createStorage;
-			DestroyStorage* destroyStorage;
-			Storage::StorageInterface* instance;
-#ifndef AMALGAMATION
-			void* dlhandle;
-#endif
+			Storage::SQLite sqlite;
 			bool transactionRunning;
 	};
 

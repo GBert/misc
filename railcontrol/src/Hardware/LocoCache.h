@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -32,8 +32,11 @@ namespace Hardware
 	class LocoCacheEntry
 	{
 		public:
-			inline LocoCacheEntry()
-			:	locoID(LocoNone),
+			LocoCacheEntry() = delete;
+
+			inline LocoCacheEntry(const ControlID controlId)
+			:	controlId(controlId),
+				locoId(LocoNone),
 				name(""),
 				protocol(ProtocolNone),
 				address(AddressNone)
@@ -43,14 +46,19 @@ namespace Hardware
 				memset(&functionTimers, 0, sizeof(functionTimers));
 			}
 
-			inline LocoID GetLocoID() const
+			inline ControlID GetControlID() const
 			{
-				return locoID;
+				return controlId;
 			}
 
-			inline void SetLocoID(const LocoID locoID)
+			inline LocoID GetLocoID() const
 			{
-				this->locoID = locoID;
+				return locoId;
+			}
+
+			inline void SetLocoID(const LocoID locoId)
+			{
+				this->locoId = locoId;
 			}
 
 			inline const std::string& GetName() const
@@ -135,10 +143,17 @@ namespace Hardware
 				return functionTimers[nr];
 			}
 
+			inline const std::string& GetMatchKey() const
+			{
+				return name;
+			}
+
 		private:
 			static const uint8_t MaxFunctions = 32;
 			static const uint8_t MaxFunctionsIncludingZero = MaxFunctions + 1;
-			LocoID locoID;
+
+			const ControlID controlId;
+			LocoID locoId;
 			std::string name;
 			Protocol protocol;
 			Address address;
@@ -150,32 +165,68 @@ namespace Hardware
 	class LocoCache
 	{
 		public:
-			inline LocoCache() {}
+			inline LocoCache(const ControlID controlId)
+			:	controlId(controlId)
+			{
+			}
+
+			LocoCache() = delete;
+
 			LocoCache(const LocoCache& rhs) = delete;
+
 			LocoCache& operator= (const LocoCache& rhs) = delete;
 
-			inline void Insert(const LocoCacheEntry& entry)
+			inline ControlID GetControlId() const
 			{
-				entries[entry.GetName()] = entry;
+				return controlId;
 			}
 
-			inline void Replace(const LocoCacheEntry& entry, const std::string& oldName)
+			inline void InsertByName(const LocoCacheEntry& entry)
 			{
-				Delete(oldName);
-				Insert(entry);
+				entries.emplace(entry.GetName(), entry);
 			}
 
-			inline LocoCacheEntry Get(const std::string& name)
+			inline void ReplaceByName(const LocoCacheEntry& entry, const std::string& oldName)
 			{
-				return entries.count(name) == 0 ? LocoCacheEntry() : entries.at(name);
+				DeleteByName(oldName);
+				InsertByName(entry);
 			}
 
-			inline void Delete(const std::string& name)
+			inline const LocoCacheEntry GetByName(const std::string& name) const
+			{
+				return entries.count(name) == 0 ? LocoCacheEntry(controlId) : entries.at(name);
+			}
+
+			inline void DeleteByName(const std::string& name)
 			{
 				entries.erase(name);
 			}
 
+			inline const std::map<std::string,LocoCacheEntry>& GetAll() const
+			{
+				return entries;
+			}
+
+			void SetLocoIdByName(const LocoID locoId, const std::string& name)
+			{
+				for (auto& locoCacheEntry : entries)
+				{
+					LocoCacheEntry& entry = locoCacheEntry.second;
+					if (entry.GetLocoID() == locoId)
+					{
+						entry.SetLocoID(LocoNone);
+					}
+				}
+				auto entry = entries.find(name);
+				if (entry == entries.end())
+				{
+					return;
+				}
+				entry->second.SetLocoID(locoId);
+			}
+
 		private:
+			const ControlID controlId;
 			std::map<std::string,LocoCacheEntry> entries;
 	};
 } // namespace Hardware

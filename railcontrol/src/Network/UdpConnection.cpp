@@ -1,7 +1,7 @@
 /*
 RailControl - Model Railway Control Software
 
-Copyright (c) 2017-2020 Dominik (Teddy) Mahrer - www.railcontrol.org
+Copyright (c) 2017-2021 Dominik (Teddy) Mahrer - www.railcontrol.org
 
 RailControl is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -28,7 +28,9 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace Network
 {
-	UdpConnection::UdpConnection(Logger::Logger* logger, const std::string& server, const unsigned short port)
+	UdpConnection::UdpConnection(Logger::Logger* logger,
+		const std::string& server,
+		const unsigned short port)
 	:	logger(logger),
 	 	connected(false),
 	 	port(port)
