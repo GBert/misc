@@ -1,11 +1,12 @@
 const int revisionnr = 
-1444
+1445
 ;
 const char* commithash = 
-"3b00a801b4b6cf4f1062801b5e79c5ac1c8468d9";
+"eb32bdc7ac22668ca118216ab8f67915ef4ca528";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1445 2021-03-04 17:48:54 +0100 loc: action correction for function substate\n" \
 "1444 2021-03-03 08:02:25 +0100 default info level trace deactivated\n" \
 "1443 2021-03-03 07:51:04 +0100 z21dlg: loconet detectors option added\n" \
 "1442 2021-03-02 15:38:23 +0100 r2rnet default address set to 224.0.1.20\n" \
