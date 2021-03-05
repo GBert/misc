@@ -11,7 +11,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=railcontrol
-PKG_VERSION:=20210303
+PKG_VERSION:=20210304
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_PARALLEL:=1
@@ -50,15 +50,10 @@ define Package/railcontrol/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/railcontrol $(1)/opt/railcontrol
 	$(INSTALL_BIN) ./files/railcontrol.sqlite $(1)/opt/railcontrol
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/railcontrol.conf.dist $(1)/opt/railcontrol/railcontrol.conf
-	$(INSTALL_DIR) $(1)/opt/railcontrol/Hardware
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/Hardware/*.so $(1)/opt/railcontrol/Hardware
-	$(INSTALL_DIR) $(1)/opt/railcontrol/Storage
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/Storage/*.so $(1)/opt/railcontrol/Storage
 	$(INSTALL_DIR) $(1)/opt/railcontrol/html
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/html/* $(1)/opt/railcontrol/html/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/railcontrol.init $(1)/etc/init.d/railcontrol
-
 endef
 
 
