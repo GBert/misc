@@ -14,7 +14,7 @@ COBJ= $(patsubst %.c,%.o,$(wildcard Hardware/zlib/*.c))
 OBJ=Timestamp.o Storage/sqlite/sqlite3.o $(CXXOBJ) $(COBJ)
 
 all: $(OBJ)
-	$(CXX) $(LDFLAGS) $(OBJSORTED) -o railcontrol $(LIBS)
+	$(CXX) $(LDFLAGS) $(OBJ) -o railcontrol $(LIBS)
 	rm Timestamp.cpp
 	rm Timestamp.o
 
