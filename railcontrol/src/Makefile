@@ -1,4 +1,3 @@
-
 #CC=gcc
 #CPP=g++
 
@@ -7,7 +6,6 @@ LDFLAGS+=-g -Wl,--export-dynamic
 LIBS=-lpthread -ldl
 
 TMPDIR=RailControl
-
 
 CXXOBJ= $(patsubst %.cpp,%.o,$(wildcard *.cpp WebServer/*.cpp DataModel/*.cpp Hardware/*.cpp Logger/*.cpp Network/*.cpp Storage/*.cpp Utils/*.cpp))
 COBJ= $(patsubst %.c,%.o,$(wildcard Hardware/zlib/*.c))
@@ -36,7 +34,7 @@ sqlite-shell:
 Timestamp.o: Timestamp.cpp Timestamp.h
 	$(CXX) $(CPPFLAGS) -c -o $@ $<
 
-%.o: %.cpp *.h DataModel/*.h Hardware/HardwareHandler.h Logger/*.h Network/*.h Storage/StorageHandler.h Utils/*.h WebServer/*.h
+%.o: %.cpp *.h DataModel/*.h Hardware/*.h Logger/*.h Network/*.h Storage/*.h Utils/*.h WebServer/*.h
 	$(CXX) $(CPPFLAGS) -c -o $@ $<
 
 clean:
