@@ -14,25 +14,19 @@ COBJ= $(patsubst %.c,%.o,$(wildcard Hardware/zlib/*.c))
 OBJ=Timestamp.o Storage/sqlite/sqlite3.o $(CXXOBJ) $(COBJ)
 
 all: $(OBJ)
-	rm Timestamp.cpp
 	$(CXX) $(LDFLAGS) $(OBJ) -o railcontrol $(LIBS)
+	rm Timestamp.cpp
 	rm Timestamp.o
 
 dist: all
 	strip railcontrol
-	strip Hardware/*.so
-	strip Storage/*.so
 	tar cvJf railcontrol.tar.xz Hardware/*.so Storage/*.so railcontrol railcontrol.conf.dist html/*
 	mkdir $(TMPDIR)
-	mkdir $(TMPDIR)/Hardware
-	mkdir $(TMPDIR)/Storage
 	cp -r \
 		html \
 		railcontrol.conf.dist \
 		railcontrol \
 		$(TMPDIR)
-	cp -r Hardware/*.so $(TMPDIR)/Hardware
-	cp -r Storage/*.so $(TMPDIR)/Storage
 	tar cvJf railcontrol.`date +"%Y%m%d"`.tar.xz $(TMPDIR)/* $(TMPDIR)/html/*
 	rm -r $(TMPDIR)
 
