@@ -8,108 +8,13 @@ LIBS=-lpthread -ldl
 
 TMPDIR=RailControl
 
-OBJ= \
-	ArgumentHandler.o \
-	Config.o \
-	DataModel/Accessory.o \
-	DataModel/AccessoryBase.o \
-	DataModel/Cluster.o \
-	DataModel/Feedback.o \
-	DataModel/HardwareHandle.o \
-	DataModel/LayoutItem.o \
-	DataModel/LockableItem.o \
-	DataModel/Loco.o \
-	DataModel/LocoFunctions.o \
-	DataModel/Object.o \
-	DataModel/Relation.o \
-	DataModel/Route.o \
-	DataModel/Serializable.o \
-	DataModel/Signal.o \
-	DataModel/Switch.o \
-	DataModel/Track.o \
-	DataModel/TrackBase.o \
-	Hardware/CS2Tcp.o \
-	Hardware/CS2Udp.o \
-	Hardware/CcSchnitte.o \
-	Hardware/Ecos.o \
-	Hardware/HardwareHandler.o \
-	Hardware/Hsi88.o \
-	Hardware/M6051.o \
-	Hardware/OpenDcc.o \
-	Hardware/ProtocolMaerklinCAN.o \
-	Hardware/RM485.o \
-	Hardware/Virtual.o \
-	Hardware/Z21.o \
-	Languages.o \
-	Logger/Logger.o \
-	Logger/LoggerServer.o \
-	Manager.o \
-	Network/Serial.o \
-	Network/TcpClient.o \
-	Network/TcpConnection.o \
-	Network/TcpServer.o \
-	Network/UdpConnection.o \
-	RailControl.o \
-	Storage/Sqlite.o \
-	Storage/StorageHandler.o \
-	Utils/Utils.o \
-	WebServer/HtmlFullResponse.o \
-	WebServer/HtmlResponse.o \
-	WebServer/HtmlResponseNotFound.o \
-	WebServer/HtmlResponseNotImplemented.o \
-	WebServer/HtmlTag.o \
-	WebServer/HtmlTagAccessory.o \
-	WebServer/HtmlTagButton.o \
-	WebServer/HtmlTagButtonCancel.o \
-	WebServer/HtmlTagButtonCommand.o \
-	WebServer/HtmlTagButtonCommandPressRelease.o \
-	WebServer/HtmlTagButtonCommandToggle.o \
-	WebServer/HtmlTagButtonOK.o \
-	WebServer/HtmlTagButtonPopup.o \
-	WebServer/HtmlTagFeedback.o \
-	WebServer/HtmlTagInput.o \
-	WebServer/HtmlTagInputInteger.o \
-	WebServer/HtmlTagInputSlider.o \
-	WebServer/HtmlTagInputSliderLocoSpeed.o \
-	WebServer/HtmlTagRoute.o \
-	WebServer/HtmlTagSelect.o \
-	WebServer/HtmlTagSignal.o \
-	WebServer/HtmlTagSwitch.o \
-	WebServer/HtmlTagTrackBase.o \
-	WebServer/Response.o \
-	WebServer/WebClient.o \
-	WebServer/WebClientCluster.o \
-	WebServer/WebClientSignal.o \
-	WebServer/WebClientTrack.o \
-	WebServer/WebClientTrackBase.o \
-	WebServer/WebServer.o
 
-OBJZLIB=Hardware/zlib/adler32.o \
-	Hardware/zlib/compress.o \
-	Hardware/zlib/crc32.o \
-	Hardware/zlib/deflate.o \
-	Hardware/zlib/gzclose.o \
-	Hardware/zlib/gzlib.o \
-	Hardware/zlib/gzread.o \
-	Hardware/zlib/gzwrite.o \
-	Hardware/zlib/infback.o \
-	Hardware/zlib/inffast.o \
-	Hardware/zlib/inflate.o \
-	Hardware/zlib/inftrees.o \
-	Hardware/zlib/trees.o \
-	Hardware/zlib/uncompr.o \
-	Hardware/zlib/zutil.o \
-	Hardware/ZLib.o
+CXXOBJ= $(patsubst %.cpp,%.o,$(wildcard *.cpp WebServer/*.cpp DataModel/*.cpp Hardware/*.cpp Logger/*.cpp Network/*.cpp Storage/*.cpp Utils/*.cpp))
+COBJ= $(patsubst %.c,%.o,$(wildcard Hardware/zlib/*.c))
+OBJ=Timestamp.o Storage/sqlite/sqlite3.o $(CXXOBJ) $(COBJ)
 
-
-CXXUNSORTED= $(subst .o,.cpp,$(OBJ))
-CXXSORTED= $(shell ls -S $(CXXUNSORTED))
-OBJSORTED= Timestamp.o Storage/sqlite/sqlite3.o $(subst .cpp,.o,$(CXXSORTED)) $(OBJZLIB)
-
-all: $(OBJSORTED)
+all: $(OBJ)
 	$(CXX) $(LDFLAGS) $(OBJSORTED) -o railcontrol $(LIBS)
-
-
 	rm Timestamp.cpp
 	rm Timestamp.o
 

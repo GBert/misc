@@ -30,6 +30,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "Utils/Utils.h"
 
 // CAN protocol specification at http://streaming.maerklin.de/public-media/cs2/cs2CAN-Protokoll-2_0.pdf
+// Very interesting is also http://www.mbernstein.de/modellbahn/can/bem.htm
 
 namespace Hardware
 {
@@ -120,7 +121,7 @@ namespace Hardware
 				canFileDataSize(0),
 				canFileData(nullptr),
 				canFileDataPointer(nullptr),
-				locoCache(params->GetControlID())
+				locoCache(params->GetControlID(), params->GetManager())
 			{
 				if (uid == 0)
 				{
@@ -180,15 +181,17 @@ namespace Hardware
 
 			enum CanDeviceType : uint16_t
 			{
-				CanDeviceGfp = 0x0000,
-				CanDeviceGleisbox = 0x0010,
+				CanDeviceGfp         = 0x0000,
+				CanDeviceGleisbox    = 0x0010,
+				CanDeviceGleisbox_2  = 0x0011, // undocumented
 				CanDeviceConnect6021 = 0x0020,
-				CanDeviceMs2 = 0x0030,
-				CanDeviceMs2_2 = 0x0032,
-				CanDeviceCs2Slave_2 = 0xeeee,
-				CanDeviceWireless = 0xffe0,
-				CanDeviceCs2Slave = 0xfff0,
-				CanDeviceCs2Master = 0xffff
+				CanDeviceMs2         = 0x0030,
+				CanDeviceMs2_2       = 0x0032, // undocumented
+				CanDeviceSRSEII      = 0x0040, // SRSEII project
+				CanDeviceCs2Slave_2  = 0xeeee, // undocumented
+				CanDeviceWireless    = 0xffe0,
+				CanDeviceCs2Slave    = 0xfff0, // undocumented
+				CanDeviceCs2Master   = 0xffff
 			};
 
 //			enum CanFileType : uint8_t

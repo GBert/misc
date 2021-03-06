@@ -27,6 +27,8 @@ along with RailControl; see the file LICENCE. If not see
 #include "DataTypes.h"
 #include "DataModel/LocoFunctions.h"
 
+class Manager;
+
 namespace Hardware
 {
 	class LocoCacheEntry
@@ -165,8 +167,10 @@ namespace Hardware
 	class LocoCache
 	{
 		public:
-			inline LocoCache(const ControlID controlId)
-			:	controlId(controlId)
+			inline LocoCache(const ControlID controlId,
+				Manager* const manager)
+			:	controlId(controlId),
+				manager(manager)
 			{
 			}
 
@@ -181,12 +185,9 @@ namespace Hardware
 				return controlId;
 			}
 
-			inline void InsertByName(const LocoCacheEntry& entry)
-			{
-				entries.emplace(entry.GetName(), entry);
-			}
+			void InsertByName(LocoCacheEntry& entry);
 
-			inline void ReplaceByName(const LocoCacheEntry& entry, const std::string& oldName)
+			inline void ReplaceByName(LocoCacheEntry& entry, const std::string& oldName)
 			{
 				DeleteByName(oldName);
 				InsertByName(entry);
@@ -197,36 +198,18 @@ namespace Hardware
 				return entries.count(name) == 0 ? LocoCacheEntry(controlId) : entries.at(name);
 			}
 
-			inline void DeleteByName(const std::string& name)
-			{
-				entries.erase(name);
-			}
+			void DeleteByName(const std::string& name);
 
 			inline const std::map<std::string,LocoCacheEntry>& GetAll() const
 			{
 				return entries;
 			}
 
-			void SetLocoIdByName(const LocoID locoId, const std::string& name)
-			{
-				for (auto& locoCacheEntry : entries)
-				{
-					LocoCacheEntry& entry = locoCacheEntry.second;
-					if (entry.GetLocoID() == locoId)
-					{
-						entry.SetLocoID(LocoNone);
-					}
-				}
-				auto entry = entries.find(name);
-				if (entry == entries.end())
-				{
-					return;
-				}
-				entry->second.SetLocoID(locoId);
-			}
+			void SetLocoIdByName(const LocoID locoId, const std::string& name);
 
 		private:
 			const ControlID controlId;
+			Manager* const manager;
 			std::map<std::string,LocoCacheEntry> entries;
 	};
 } // namespace Hardware

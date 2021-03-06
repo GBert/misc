@@ -1821,7 +1821,7 @@ namespace WebServer
 		else if (controlId > ControlNone)
 		{
 			// loco from hardware database
-			const DataModel::LocoConfig loco = manager.GetLocoByMatchKey(controlId, matchKey);
+			const DataModel::LocoConfig loco = manager.GetLocoOfConfigByMatchKey(controlId, matchKey);
 			if (loco.GetControlId() == controlId && loco.GetMatchKey() == matchKey)
 			{
 				protocol = loco.GetProtocol();

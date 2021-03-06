@@ -90,7 +90,9 @@ class Manager
 		// loco
 		DataModel::Loco* GetLoco(const LocoID locoID) const;
 
-		DataModel::LocoConfig GetLocoByMatchKey(const ControlID controlId, const std::string& matchKey) const;
+		DataModel::LocoConfig GetLocoOfConfigByMatchKey(const ControlID controlId, const std::string& matchKey) const;
+
+		LocoID GetLocoIdByMatchKey(const ControlID controlId, const std::string& matchKey) const;
 
 		void LocoRemoveMatchKey(const LocoID locoId);
 
