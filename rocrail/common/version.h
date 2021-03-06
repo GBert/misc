@@ -1,11 +1,12 @@
 const int revisionnr = 
-1445
+1446
 ;
 const char* commithash = 
-"eb32bdc7ac22668ca118216ab8f67915ef4ca528";
+"fbfcdfdc879d99405f8ab315a0cce867e61f1b69";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1446 2021-03-05 11:08:30 +0100 switch: action by description support added\n" \
 "1445 2021-03-04 17:48:54 +0100 loc: action correction for function substate\n" \
 "1444 2021-03-03 08:02:25 +0100 default info level trace deactivated\n" \
 "1443 2021-03-03 07:51:04 +0100 z21dlg: loconet detectors option added\n" \
