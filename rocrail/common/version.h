@@ -1,11 +1,12 @@
 const int revisionnr = 
-1446
+1447
 ;
 const char* commithash = 
-"fbfcdfdc879d99405f8ab315a0cce867e61f1b69";
+"45ff7e2ecd068420f49653f5b2473eabd83cfc5c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1447 2021-03-07 07:35:56 +0100 switch: lookup action by description by ID if description did not match\n" \
 "1446 2021-03-05 11:08:30 +0100 switch: action by description support added\n" \
 "1445 2021-03-04 17:48:54 +0100 loc: action correction for function substate\n" \
 "1444 2021-03-03 08:02:25 +0100 default info level trace deactivated\n" \
