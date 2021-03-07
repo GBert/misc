@@ -209,7 +209,7 @@ const char* Languages::languages[MaxTexts][MaxLanguages] =
 /* TextIndex */ { "Index", "Index", "Index" },
 /* TextInfo */ { "info", "Informationen", "informaciones" },
 /* TextInvalidControlID */ { "Invalid controlID {0}", "Ungültige Control ID {0}", "Control ID {0} no valido" },
-/* TextInvalidDataReceived */ { "Invalid data received", "Ungültige Daten empfangen", "Recibido datos no validos" },
+/* TextInvalidDataReceived */ { "Invalid data received", "Ungültige Daten empfangen", "Datos recibidos no validos" },
 /* TextInverted */ { "Inverted", "Invertiert", "Invertido" },
 /* TextIsInAutomodeWithoutRouteTrack */ { "{0} is in automode without a route or track set. Setting error state.", "{0} ist im Automodus ohne Fahrstrasse oder Gleis. Setze Fehlerstatus.", "{0} está en modo auto sin itinerario o vía. Poniando estado error." },
 /* TextIsInErrorState */ { "{0} is in error state", "{0} ist im Fehlerstatus", "{0} está en estado error" },

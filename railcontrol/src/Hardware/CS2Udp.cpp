@@ -41,7 +41,8 @@ namespace Hardware
 		{
 			logger->Error(Languages::TextUnableToCreateUdpSocketForSendingData);
 		}
-		receiverThread = std::thread(&Hardware::CS2Udp::Receiver, this);
+
+		Init();
 	}
 
 	CS2Udp::~CS2Udp()
@@ -60,7 +61,6 @@ namespace Hardware
 
 	void CS2Udp::Receiver()
 	{
-		run = true;
 		Utils::Utils::SetThreadName("CS2Udp");
 		logger->Info(Languages::TextReceiverThreadStarted);
 		if (!receiverConnection.IsConnected())

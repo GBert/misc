@@ -42,7 +42,6 @@ namespace Hardware
 		private:
 			Network::UdpConnection senderConnection;
 			Network::UdpConnection receiverConnection;
-			std::thread receiverThread;
 
 			void Send(const unsigned char* buffer) override;
 			void Receiver() override;

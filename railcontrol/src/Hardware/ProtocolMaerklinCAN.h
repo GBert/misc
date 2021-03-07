@@ -115,7 +115,7 @@ namespace Hardware
 					fullName,
 					shortName),
 				logger(logger),
-				run(false),
+				run(true),
 				uid(Utils::Utils::HexToInteger(params->GetArg5(), 0)),
 				hasCs2Master(false),
 				canFileDataSize(0),

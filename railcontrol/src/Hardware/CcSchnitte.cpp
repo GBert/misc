@@ -61,7 +61,6 @@ namespace Hardware
 
 	void CcSchnitte::Receiver()
 	{
-		run = true;
 		Utils::Utils::SetThreadName("CC-Schnitte");
 		logger->Info(Languages::TextReceiverThreadStarted);
 

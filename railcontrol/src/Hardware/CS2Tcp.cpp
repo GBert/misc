@@ -50,7 +50,6 @@ namespace Hardware
 
 	void CS2Tcp::Receiver()
 	{
-		run = true;
 		Utils::Utils::SetThreadName("CS2Tcp");
 		logger->Info(Languages::TextReceiverThreadStarted);
 		if (connection.IsConnected() == false)

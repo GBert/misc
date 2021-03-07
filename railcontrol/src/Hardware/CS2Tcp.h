@@ -40,7 +40,6 @@ namespace Hardware
 
 		private:
 			Network::TcpConnection connection;
-			std::thread receiverThread;
 
 			void Send(const unsigned char* buffer) override;
 			void Receiver() override;
