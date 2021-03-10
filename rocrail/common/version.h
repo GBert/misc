@@ -1,11 +1,13 @@
 const int revisionnr = 
-1447
+1449
 ;
 const char* commithash = 
-"45ff7e2ecd068420f49653f5b2473eabd83cfc5c";
+"57862b05514354399d159e5b823103f060ff00ff";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1449 2021-03-09 08:20:08 +0100 wio: provide nr of steps on shortid\n" \
+"1448 2021-03-08 13:32:45 +0100 text: add lchomedesc\n" \
 "1447 2021-03-07 07:35:56 +0100 switch: lookup action by description by ID if description did not match\n" \
 "1446 2021-03-05 11:08:30 +0100 switch: action by description support added\n" \
 "1445 2021-03-04 17:48:54 +0100 loc: action correction for function substate\n" \
