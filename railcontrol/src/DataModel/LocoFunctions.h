@@ -28,7 +28,8 @@ namespace DataModel
 {
 	typedef uint8_t LocoFunctionNr;
 
-	static const LocoFunctionNr MaxLocoFunctions = 32;
+	static const LocoFunctionNr MaxLocoFunctionNumber = 32;
+	static const LocoFunctionNr NumberOfLocoFunctions = MaxLocoFunctionNumber + 1; // f0 - f32 = 33
 
 	enum LocoFunctionState : uint8_t
 	{
@@ -41,8 +42,8 @@ namespace DataModel
 		LocoFunctionTypeNone = 0,
 		LocoFunctionTypePermanent = 1,
 		LocoFunctionTypeMoment = 2,
-		LocoFunctionTypeFlashing = 3,
-		LocoFunctionTypeTimer = 4
+		LocoFunctionTypeFlashing = 3, // actually not implemented
+		LocoFunctionTypeTimer = 4 // actually not implemented
 	};
 
 	enum LocoFunctionIcon : uint8_t
@@ -192,51 +193,61 @@ namespace DataModel
 
 			inline void SetFunctionState(const LocoFunctionNr nr, const LocoFunctionState state)
 			{
-				if (nr >= MaxCount)
+				if (nr >= NumberOfLocoFunctions)
 				{
 					return;
 				}
 				entries[nr].state = state;
 			}
 
+			inline void SetFunction(const DataModel::LocoFunctionNr nr,
+				const DataModel::LocoFunctionType type,
+				const DataModel::LocoFunctionIcon icon,
+				const DataModel::LocoFunctionTimer timer)
+			{
+				if (nr >= NumberOfLocoFunctions)
+				{
+					return;
+				}
+				LocoFunctionEntry& entry = entries[nr];
+				entry.type = type;
+				entry.icon = icon;
+				entry.timer = timer;
+			}
+
+			inline void ClearFunction(const DataModel::LocoFunctionNr nr)
+			{
+				if (nr >= NumberOfLocoFunctions)
+				{
+					return;
+				}
+				LocoFunctionEntry& entry = entries[nr];
+				entry.state = LocoFunctionStateOff;
+				entry.type = LocoFunctionTypeNone;
+				entry.icon = LocoFunctionIconNone;
+				entry.timer = 0;
+			}
+
+			void ConfigureFunctions(const std::vector<LocoFunctionEntry>& newEntries);
+
+			void SetFunctionStates(const std::vector<LocoFunctionEntry>& newEntries);
+
 			inline LocoFunctionState GetFunctionState(const LocoFunctionNr nr) const
 			{
-				if (nr >= MaxCount)
+				if (nr >= NumberOfLocoFunctions)
 				{
 					return LocoFunctionStateOff;
 				}
 				return entries[nr].state;
 			}
 
-			inline std::vector<LocoFunctionEntry> GetFunctionStates() const
-			{
-				std::vector<LocoFunctionEntry> out;
-				for (LocoFunctionNr i = 0; i < MaxCount; ++i)
-				{
-					if (entries[i].type == LocoFunctionTypeNone)
-					{
-						continue;
-					}
-					out.push_back(entries[i]);
-				}
-				return out;
-			}
+			std::vector<LocoFunctionEntry> GetFunctionStates() const;
 
-			inline const LocoFunctionEntry* GetFunctions() const
+			inline void GetFunctions(LocoFunctionEntry* out) const
 			{
-				return entries;
-			}
-
-			void ConfigureFunctions(const std::vector<LocoFunctionEntry>& newEntries)
-			{
-				for (LocoFunctionNr nr = 0; nr < MaxCount; ++nr)
+				for (int nr = 0; nr < NumberOfLocoFunctions; ++nr)
 				{
-					entries[nr].type = LocoFunctionTypeNone;
-				}
-				for (const LocoFunctionEntry& newEntry : newEntries)
-				{
-					LocoFunctionNr nr = newEntry.nr;
-					entries[nr] = newEntry;
+					out[nr] = entries[nr];
 				}
 			}
 
@@ -247,12 +258,11 @@ namespace DataModel
 			static std::string GetLocoFunctionIcon(const LocoFunctionNr nr, const LocoFunctionIcon icon);
 
 		private:
-			bool DeserializeNew(__attribute__((unused)) const std::string& serialized);
+			bool DeserializeNew(const std::string& serialized);
 
 			// FIXME: remove later 2020-10-27
 			bool DeserializeOld(const std::string& serialized);
 
-			static const LocoFunctionNr MaxCount = MaxLocoFunctions + 1; // f0 - f32 = 33
-			LocoFunctionEntry entries[MaxCount];
+			LocoFunctionEntry entries[NumberOfLocoFunctions];
 	};
 } // namespace DataModel

@@ -48,6 +48,7 @@ namespace DataModel
 				matchKey(loco.GetMatchKey()),
 				isInUse(loco.IsInUse())
 			{
+				ConfigureFunctions(loco.GetFunctionStates());
 			}
 
 			inline LocoConfig(const Hardware::LocoCacheEntry& loco)
@@ -59,6 +60,7 @@ namespace DataModel
 				matchKey(loco.GetMatchKey()),
 				isInUse(false)
 			{
+				ConfigureFunctions(loco.GetFunctionStates());
 			}
 
 			inline LocoConfig& operator=(const DataModel::Loco& loco)
@@ -69,6 +71,7 @@ namespace DataModel
 				protocol = loco.GetProtocol();
 				name = loco.GetName();
 				matchKey = loco.GetMatchKey();
+				ConfigureFunctions(loco.GetFunctionStates());
 				return *this;
 			}
 
@@ -80,6 +83,7 @@ namespace DataModel
 				protocol = loco.GetProtocol();
 				name = loco.GetName();
 				matchKey = loco.GetMatchKey();
+				ConfigureFunctions(loco.GetFunctionStates());
 				return *this;
 			}
 
@@ -123,6 +127,16 @@ namespace DataModel
 				return isInUse;
 			}
 
+			inline void GetFunctions(LocoFunctionEntry* out) const
+			{
+				functions.GetFunctions(out);
+			}
+
+			inline void ConfigureFunctions(const std::vector<LocoFunctionEntry>& newEntries)
+			{
+				functions.ConfigureFunctions(newEntries);
+			}
+
 		private:
 			ControlID controlId;
 			LocoID locoId;
@@ -131,5 +145,6 @@ namespace DataModel
 			std::string name;
 			std::string matchKey;
 			bool isInUse;
+			LocoFunctions functions;
 	};
 } // namespace DataModel

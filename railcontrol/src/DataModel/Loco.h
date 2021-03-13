@@ -144,9 +144,9 @@ namespace DataModel
 				return functions.GetFunctionStates();
 			}
 
-			inline const DataModel::LocoFunctionEntry* GetFunctions() const
+			inline void GetFunctions(LocoFunctionEntry* out) const
 			{
-				return functions.GetFunctions();
+				functions.GetFunctions(out);
 			}
 
 			inline void ConfigureFunctions(const std::vector<LocoFunctionEntry>& newEntries)

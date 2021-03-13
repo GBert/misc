@@ -39,13 +39,9 @@ namespace Hardware
 			inline LocoCacheEntry(const ControlID controlId)
 			:	controlId(controlId),
 				locoId(LocoNone),
-				name(""),
 				protocol(ProtocolNone),
 				address(AddressNone)
 			{
-				memset(&functionTypes, 0, sizeof(functionTypes));
-				memset(&functionIcons, 0, sizeof(functionIcons));
-				memset(&functionTimers, 0, sizeof(functionTimers));
 			}
 
 			inline ControlID GetControlID() const
@@ -98,51 +94,17 @@ namespace Hardware
 				const DataModel::LocoFunctionIcon icon,
 				const DataModel::LocoFunctionTimer timer)
 			{
-				if (nr >= MaxFunctionsIncludingZero)
-				{
-					return;
-				}
-				functionTypes[nr] = type;
-				functionIcons[nr] = icon;
-				functionTimers[nr] = timer;
+				functions.SetFunction(nr, type, icon, timer);
 			}
 
 			inline void ClearFunction(const DataModel::LocoFunctionNr nr)
 			{
-				if (nr >= MaxFunctionsIncludingZero)
-				{
-					return;
-				}
-				functionTypes[nr] = DataModel::LocoFunctionTypeNone;
-				functionIcons[nr] = DataModel::LocoFunctionIconNone;
-				functionTimers[nr] = 0;
+				functions.ClearFunction(nr);
 			}
 
-			inline DataModel::LocoFunctionType GetFunctionType(const DataModel::LocoFunctionNr nr)
+			inline std::vector<DataModel::LocoFunctionEntry> GetFunctionStates() const
 			{
-				if (nr >= MaxFunctionsIncludingZero)
-				{
-					return DataModel::LocoFunctionTypeNone;
-				}
-				return functionTypes[nr];
-			}
-
-			inline DataModel::LocoFunctionIcon GetFunctionIcon(const DataModel::LocoFunctionNr nr)
-			{
-				if (nr >= MaxFunctionsIncludingZero)
-				{
-					return DataModel::LocoFunctionIconNone;
-				}
-				return functionIcons[nr];
-			}
-
-			inline DataModel::LocoFunctionTimer GetFunctionTimer(const DataModel::LocoFunctionNr nr)
-			{
-				if (nr >= MaxFunctionsIncludingZero)
-				{
-					return 0;
-				}
-				return functionTimers[nr];
+				return functions.GetFunctionStates();
 			}
 
 			inline const std::string& GetMatchKey() const
@@ -159,9 +121,7 @@ namespace Hardware
 			std::string name;
 			Protocol protocol;
 			Address address;
-			DataModel::LocoFunctionType functionTypes[MaxFunctionsIncludingZero];
-			DataModel::LocoFunctionIcon functionIcons[MaxFunctionsIncludingZero];
-			DataModel::LocoFunctionTimer functionTimers[MaxFunctionsIncludingZero];
+			DataModel::LocoFunctions functions;
 	};
 
 	class LocoCache

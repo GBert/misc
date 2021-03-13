@@ -115,7 +115,7 @@ class Languages
 			TextCs2MasterLocoName,
 			TextCs2MasterLocoOldName,
 			TextCs2MasterLocoRemove,
-			TextCs2MinorVersionIsNot4,
+			TextCs2MinorVersionIsUnknown,
 			TextDcc,
 			TextDebounceThreadStarted,
 			TextDebounceThreadTerminated,

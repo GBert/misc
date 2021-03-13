@@ -1450,7 +1450,7 @@ namespace WebServer
 			case ObjectTypeLoco:
 			{
 				map<string,string> functionOptions;
-				for (DataModel::LocoFunctionNr function = 0; function <= DataModel::MaxLocoFunctions; ++function)
+				for (DataModel::LocoFunctionNr function = 0; function <= DataModel::MaxLocoFunctionNumber; ++function)
 				{
 					functionOptions[Utils::Utils::ToStringWithLeadingZeros(function, 2)] = "F" + to_string(function);
 				}
@@ -1794,7 +1794,7 @@ namespace WebServer
 		Speed travelSpeed = DefaultTravelSpeed;
 		Speed reducedSpeed = DefaultReducedSpeed;
 		Speed creepingSpeed = DefaultCreepingSpeed;
-		const LocoFunctionEntry* locoFunctions = nullptr;
+		LocoFunctionEntry locoFunctions[NumberOfLocoFunctions];
 		vector<Relation*> slaves;
 
 		if (locoId > LocoNone)
@@ -1814,7 +1814,7 @@ namespace WebServer
 				travelSpeed = loco->GetTravelSpeed();
 				reducedSpeed = loco->GetReducedSpeed();
 				creepingSpeed = loco->GetCreepingSpeed();
-				locoFunctions = loco->GetFunctions();
+				loco->GetFunctions(locoFunctions);
 				slaves = loco->GetSlaves();
 			}
 		}
@@ -1827,6 +1827,7 @@ namespace WebServer
 				protocol = loco.GetProtocol();
 				address = loco.GetAddress();
 				name = loco.GetName();
+				loco.GetFunctions(locoFunctions);
 			}
 		}
 		// else new loco
@@ -1965,7 +1966,7 @@ namespace WebServer
 		functionIcons[DataModel::LocoFunctionIconSoundLouder] = Languages::TextLocoFunctionIconSoundLouder;
 		functionIcons[DataModel::LocoFunctionIconSoundLower] = Languages::TextLocoFunctionIconSoundLower;
 		functionIcons[DataModel::LocoFunctionIconNoBreak] = Languages::TextLocoFunctionIconNoBreak;
-		for (unsigned int nr = 0; nr < DataModel::MaxLocoFunctions; ++nr)
+		for (unsigned int nr = 0; nr < DataModel::MaxLocoFunctionNumber; ++nr)
 		{
 			HtmlTag fDiv("div");
 			fDiv.AddClass("function_line");
@@ -2054,7 +2055,7 @@ namespace WebServer
 
 		vector<DataModel::LocoFunctionEntry> locoFunctions;
 		DataModel::LocoFunctionEntry locoFunctionEntry;
-		for (DataModel::LocoFunctionNr nr = 0; nr < DataModel::MaxLocoFunctions; ++nr)
+		for (DataModel::LocoFunctionNr nr = 0; nr < DataModel::MaxLocoFunctionNumber; ++nr)
 		{
 			string nrString = "f" + to_string(nr) + "_";
 			locoFunctionEntry.nr = nr;

@@ -377,9 +377,20 @@ namespace Hardware
 			void ParseCs2FileLocomotives(std::deque<std::string>& lines);
 			void ParseCs2File(std::deque<std::string>& lines);
 
-			static inline DataModel::LocoFunctionIcon MapLocoFunctionCs2ToRailControl(const DataModel::LocoFunctionIcon input)
+			static inline DataModel::LocoFunctionIcon MapLocoFunctionCs2ToRailControl(const LocoFunctionCs2Icon input)
 			{
 				return LocoFunctionMapCs2ToRailControl[input];
+			}
+
+			static inline LocoFunctionCs2Icon MapLocofunctionRailControlToCs2(const DataModel::LocoFunctionNr nr,
+				const DataModel::LocoFunctionIcon railcontrolIcon)
+			{
+				LocoFunctionCs2Icon icon = LocoFunctionMapRailControlToCs2[railcontrolIcon];
+				if (icon == LocoFunctionCs2IconDefault)
+				{
+					icon = static_cast<LocoFunctionCs2Icon>(icon + nr);
+				}
+				return icon;
 			}
 
 			static CanHash CalcHash(const CanUid uid);
@@ -397,17 +408,6 @@ namespace Hardware
 				Send(buffer);
 			}
 			virtual void Send(const unsigned char* buffer) = 0;
-
-			static inline LocoFunctionCs2Icon CalculateCs2Icon(const DataModel::LocoFunctionNr nr,
-				const DataModel::LocoFunctionIcon railcontrolIcon)
-			{
-				LocoFunctionCs2Icon icon = LocoFunctionMapRailControlToCs2[railcontrolIcon];
-				if (icon == LocoFunctionCs2IconDefault)
-				{
-					icon = static_cast<LocoFunctionCs2Icon>(icon + nr);
-				}
-				return icon;
-			}
 
 			CanUid uid;
 			CanHash hash;

@@ -39,11 +39,6 @@ namespace Hardware
 	{
 		logger->Info(Languages::TextStarting, GetFullName());
 
-		if (!serialLine.IsConnected())
-		{
-			return;
-		}
-
 		Init();
 	}
 

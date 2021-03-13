@@ -28,7 +28,7 @@ namespace DataModel
 {
 	LocoFunctions::LocoFunctions()
 	{
-		for (LocoFunctionNr nr = 0; nr < MaxCount; ++nr)
+		for (LocoFunctionNr nr = 0; nr < NumberOfLocoFunctions; ++nr)
 		{
 			entries[nr].nr = nr;
 			entries[nr].type = LocoFunctionTypeNone;
@@ -37,10 +37,52 @@ namespace DataModel
 		}
 	}
 
+	std::vector<LocoFunctionEntry> LocoFunctions::GetFunctionStates() const
+	{
+		std::vector<LocoFunctionEntry> out;
+		for (LocoFunctionNr i = 0; i < NumberOfLocoFunctions; ++i)
+		{
+			if (entries[i].type == LocoFunctionTypeNone)
+			{
+				continue;
+			}
+			out.push_back(entries[i]);
+		}
+		return out;
+	}
+
+	void LocoFunctions::ConfigureFunctions(const std::vector<LocoFunctionEntry>& newEntries)
+	{
+		for (LocoFunctionNr nr = 0; nr < NumberOfLocoFunctions; ++nr)
+		{
+			entries[nr].type = LocoFunctionTypeNone;
+		}
+		for (const LocoFunctionEntry& newEntry : newEntries)
+		{
+			LocoFunctionNr nr = newEntry.nr;
+			LocoFunctionState state = entries[nr].state;
+			entries[nr] = newEntry;
+			entries[nr].state = state;
+		}
+	}
+
+	void LocoFunctions::SetFunctionStates(const std::vector<LocoFunctionEntry>& newEntries)
+	{
+		for (LocoFunctionNr nr = 0; nr < NumberOfLocoFunctions; ++nr)
+		{
+			entries[nr].type = LocoFunctionTypeNone;
+		}
+		for (const LocoFunctionEntry& newEntry : newEntries)
+		{
+			LocoFunctionNr nr = newEntry.nr;
+			entries[nr] = newEntry;
+		}
+	}
+
 	std::string LocoFunctions::Serialize() const
 	{
 		std::string out;
-		for (LocoFunctionNr nr = 0; nr < MaxCount; ++nr)
+		for (LocoFunctionNr nr = 0; nr < NumberOfLocoFunctions; ++nr)
 		{
 			if (entries[nr].type == LocoFunctionTypeNone)
 			{
@@ -71,7 +113,7 @@ namespace DataModel
 		return true;
 	}
 
-	bool LocoFunctions::DeserializeNew(__attribute__((unused))  const std::string& serialized)
+	bool LocoFunctions::DeserializeNew(const std::string& serialized)
 	{
 		std::deque<std::string> functionsSerialized;
 		Utils::Utils::SplitString(serialized, "f", functionsSerialized);
@@ -111,11 +153,11 @@ namespace DataModel
 	bool LocoFunctions::DeserializeOld(const std::string& serialized)
 	{
 		size_t count = serialized.size();
-		if (count > MaxCount)
+		if (count > NumberOfLocoFunctions)
 		{
-			count = MaxCount;
+			count = NumberOfLocoFunctions;
 		}
-		for (LocoFunctionNr nr = 0; nr < MaxCount; ++nr)
+		for (LocoFunctionNr nr = 0; nr < NumberOfLocoFunctions; ++nr)
 		{
 			if (nr >= count)
 			{

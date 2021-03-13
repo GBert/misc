@@ -59,7 +59,7 @@ namespace Hardware
 
 	void ProtocolMaerklinCAN::Cs2MasterThread()
 	{
-		Wait(30);
+		Wait(1);
 
 		while (run && !hasCs2Master)
 		{
@@ -699,7 +699,7 @@ namespace Hardware
 			else if (key.compare("typ") == 0)
 			{
 				uint8_t valueInt = Utils::Utils::StringToInteger(value);
-				icon = static_cast<DataModel::LocoFunctionIcon>(valueInt & 0x7F);
+				icon = MapLocoFunctionCs2ToRailControl(static_cast<LocoFunctionCs2Icon>(valueInt & 0x7F));
 				type = static_cast<DataModel::LocoFunctionType>((valueInt >> 7) + 1); // CS2: 1 = permanent, 2 = once
 			}
 			else if (key.compare("dauer") == 0)
@@ -822,9 +822,9 @@ namespace Hardware
 			{
 				return;
 			}
-			if (key.compare("minor") == 0 && value.compare("4") != 0)
+			if (key.compare("minor") == 0 && value.compare("3") != 0 && value.compare("4"))
 			{
-				logger->Warning(Languages::TextCs2MinorVersionIsNot4);
+				logger->Warning(Languages::TextCs2MinorVersionIsUnknown);
 			}
 			lines.pop_front();
 		}
@@ -877,7 +877,8 @@ namespace Hardware
 		}
 	}
 
-	const DataModel::LocoFunctionIcon ProtocolMaerklinCAN::LocoFunctionMapCs2ToRailControl[MaxNrOfCs2FunctionIcons] = {
+	const DataModel::LocoFunctionIcon ProtocolMaerklinCAN::LocoFunctionMapCs2ToRailControl[MaxNrOfCs2FunctionIcons] =
+	{
 		DataModel::LocoFunctionIconNone,
 		DataModel::LocoFunctionIconLight,
 		DataModel::LocoFunctionIconInteriorLight1,
@@ -1008,7 +1009,8 @@ namespace Hardware
 		DataModel::LocoFunctionIconDefault
 	};
 
-	const ProtocolMaerklinCAN::LocoFunctionCs2Icon ProtocolMaerklinCAN::LocoFunctionMapRailControlToCs2[DataModel::MaxLocoFunctionIcons] = {
+	const ProtocolMaerklinCAN::LocoFunctionCs2Icon ProtocolMaerklinCAN::LocoFunctionMapRailControlToCs2[DataModel::MaxLocoFunctionIcons] =
+	{
 		LocoFunctionCs2IconNone,
 		LocoFunctionCs2IconDefault,
 		LocoFunctionCs2IconShuntingMode,

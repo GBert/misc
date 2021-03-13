@@ -7,14 +7,12 @@ LIBS=-lpthread -ldl
 
 TMPDIR=RailControl
 
-CXXOBJ= $(patsubst %.cpp,%.o,$(wildcard *.cpp WebServer/*.cpp DataModel/*.cpp Hardware/*.cpp Logger/*.cpp Network/*.cpp Storage/*.cpp Utils/*.cpp))
+CXXOBJ= $(patsubst %.cpp,%.o,$(sort Timestamp.cpp $(wildcard *.cpp)) $(wildcard WebServer/*.cpp DataModel/*.cpp Hardware/*.cpp Logger/*.cpp Network/*.cpp Storage/*.cpp Utils/*.cpp))
 COBJ= $(patsubst %.c,%.o,$(wildcard Hardware/zlib/*.c))
-OBJ=Timestamp.o Storage/sqlite/sqlite3.o $(CXXOBJ) $(COBJ)
+OBJ=Storage/sqlite/sqlite3.o $(CXXOBJ) $(COBJ)
 
 all: $(OBJ)
 	$(CXX) $(LDFLAGS) $(OBJ) -o railcontrol $(LIBS)
-	rm Timestamp.cpp
-	rm Timestamp.o
 
 dist: all
 	strip railcontrol

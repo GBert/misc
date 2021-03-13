@@ -115,7 +115,7 @@ const char* Languages::languages[MaxTexts][MaxLanguages] =
 /* TextCs2MasterLocoName */ { "CS2 Master has locomotive with name {0}", "CS2 Master hat eine Lokomotive mit dem Namen {0}", "CS2 master tiene una locomotora con el nombre {0}" },
 /* TextCs2MasterLocoOldName */ { "CS2 Master has locomotive with former name {0}", "CS2 Master hat eine Lokomotive mit dem bisherigen Namen {0}", "CS2 master tiene una locomotora con el nombre antiguo {0}" },
 /* TextCs2MasterLocoRemove */ { "CS2 Master has removed locomotive with name {0}", "CS2 Master hat eine Lokomotive mit dem Namen {0} gelöscht", "CS2 master ha eliminado la locomotora con el nombre {0}" },
-/* TextCs2MinorVersionIsNot4 */ { "Minor version of received file is not 4", "Minor Version des erhaltenen files ist nicht 4", "La versión menor no es 4" },
+/* TextCs2MinorVersionIsUnknown */ { "Minor version of received file unknown", "Minor Version des erhaltenen files ist nicht bekannt", "La versión menor del archivo recibido no está conocido" },
 /* TextDcc */ { "DCC", "DCC", "DCC" },
 /* TextDebounceThreadStarted */ { "Debounce thread started", "Entprellthread gestartet", "Antirebote thread encendido" },
 /* TextDebounceThreadTerminated */ { "Debounce thread terminated", "Entprellthread beedet", "Antirebote thread apagado" },
