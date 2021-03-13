@@ -910,6 +910,7 @@ namespace WebServer
 			return;
 		}
 
+		string name = layer->GetName();
 		string result;
 		if (!manager.LayerDelete(layerID, result))
 		{
@@ -917,7 +918,6 @@ namespace WebServer
 			return;
 		}
 
-		string name = layer->GetName();
 		ReplyResponse(ResponseInfo, Languages::TextLayerDeleted, name);
 	}
 
@@ -2196,6 +2196,7 @@ namespace WebServer
 			return;
 		}
 
+		string name = loco->GetName();
 		string result;
 		if (!manager.LocoDelete(locoID, result))
 		{
@@ -2203,7 +2204,6 @@ namespace WebServer
 			return;
 		}
 
-		string name = loco->GetName();
 		ReplyResponse(ResponseInfo, Languages::TextLocoDeleted, name);
 	}
 
@@ -2534,6 +2534,7 @@ namespace WebServer
 			return;
 		}
 
+		string name = accessory->GetName();
 		string result;
 		if (!manager.AccessoryDelete(accessoryID, result))
 		{
@@ -2541,7 +2542,6 @@ namespace WebServer
 			return;
 		}
 
-		string name = accessory->GetName();
 		ReplyResponse(ResponseInfo, Languages::TextAccessoryDeleted, name);
 	}
 
@@ -2737,6 +2737,7 @@ namespace WebServer
 			return;
 		}
 
+		string name = mySwitch->GetName();
 		string result;
 		if (!manager.SwitchDelete(switchID, result))
 		{
@@ -2744,7 +2745,6 @@ namespace WebServer
 			return;
 		}
 
-		string name = mySwitch->GetName();
 		ReplyResponse(ResponseInfo, Languages::TextSwitchDeleted, name);
 	}
 
@@ -3111,6 +3111,7 @@ namespace WebServer
 			return;
 		}
 
+		string name = route->GetName();
 		string result;
 		if (!manager.RouteDelete(routeID, result))
 		{
@@ -3118,7 +3119,6 @@ namespace WebServer
 			return;
 		}
 
-		string name = route->GetName();
 		ReplyResponse(ResponseInfo, Languages::TextRouteDeleted, name);
 	}
 
@@ -3350,6 +3350,7 @@ namespace WebServer
 			return;
 		}
 
+		string name = feedback->GetName();
 		string result;
 		if (!manager.FeedbackDelete(feedbackID, result))
 		{
@@ -3357,7 +3358,6 @@ namespace WebServer
 			return;
 		}
 
-		string name = feedback->GetName();
 		ReplyResponse(ResponseInfo, Languages::TextFeedbackDeleted, name);
 	}
 

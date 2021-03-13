@@ -34,8 +34,7 @@ namespace Hardware
 
 		if (connection.IsConnected() == false)
 		{
-			logger->Error(Languages::TextUnableToCreateTcpSocket);
-			return;
+			logger->Error(Languages::TextUnableToCreateTcpSocket, params->GetArg1(), CS2Port);
 		}
 		Init();
 	}
@@ -54,7 +53,6 @@ namespace Hardware
 		logger->Info(Languages::TextReceiverThreadStarted);
 		if (connection.IsConnected() == false)
 		{
-			logger->Error(Languages::TextUnableToCreateUdpSocketForReceivingData);
 			return;
 		}
 

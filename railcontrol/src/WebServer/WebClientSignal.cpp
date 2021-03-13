@@ -279,6 +279,7 @@ namespace WebServer
 			return;
 		}
 
+		string name = signal->GetName();
 		string result;
 		if (!manager.SignalDelete(signalID, result))
 		{
@@ -286,7 +287,6 @@ namespace WebServer
 			return;
 		}
 
-		string name = signal->GetName();
 		client.ReplyResponse(WebClient::ResponseInfo, Languages::TextSignalDeleted, name);
 	}
 

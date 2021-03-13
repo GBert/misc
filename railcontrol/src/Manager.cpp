@@ -2664,7 +2664,6 @@ bool Manager::SignalDelete(const SignalID signalID,
 			return false;
 		}
 
-		signal = signals.at(signalID);
 		signals.erase(signalID);
 	}
 
