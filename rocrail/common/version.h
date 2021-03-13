@@ -1,11 +1,18 @@
 const int revisionnr = 
-1455
+1462
 ;
 const char* commithash = 
-"a9bf3a9d4134de4cf307cf987fb449673ef1df1f";
+"a4bdbdcdda94253e763a8824b1d5ffb1f2314e9e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1462 2021-03-13 17:46:53 +0100 wiopi: 2s values added\n" \
+"1461 2021-03-13 17:13:36 +0100 wiopi: batterytype 4s/3s added\n" \
+"1460 2021-03-13 08:45:18 +0100 wiopi: send goodbye on shutdown\n" \
+"1459 2021-03-13 08:23:07 +0100 planpanel: trace level for gestures changed to develop\n" \
+"1458 2021-03-13 08:01:07 +0100 wiopi: check the pending RFID acknowledge\n" \
+"1457 2021-03-12 18:29:48 +0100 wiopi: ebreak and stop command mobile to halt\n" \
+"1456 2021-03-12 15:14:33 +0100 wiopi: reset read RFID after ack\n" \
 "1455 2021-03-12 10:58:06 +0100 wiopi: fix for lights2 and function 1/2\n" \
 "1454 2021-03-12 07:22:53 +0100 wiopi: pixel random C added\n" \
 "1453 2021-03-11 16:59:09 +0100 wiopi: battery limit corrections for LiFePO4\n" \
