@@ -1,11 +1,17 @@
 const int revisionnr = 
-1449
+1455
 ;
 const char* commithash = 
-"57862b05514354399d159e5b823103f060ff00ff";
+"a9bf3a9d4134de4cf307cf987fb449673ef1df1f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1455 2021-03-12 10:58:06 +0100 wiopi: fix for lights2 and function 1/2\n" \
+"1454 2021-03-12 07:22:53 +0100 wiopi: pixel random C added\n" \
+"1453 2021-03-11 16:59:09 +0100 wiopi: battery limit corrections for LiFePO4\n" \
+"1452 2021-03-11 11:10:09 +0100 xmlscriptdlg: fix for statement and command switch\n" \
+"1451 2021-03-11 11:04:09 +0100 xmlscriptdlg: added model and trace\n" \
+"1450 2021-03-11 09:48:48 +0100 planpanel: gesture support added for pan, zoom and longclick\n" \
 "1449 2021-03-09 08:20:08 +0100 wio: provide nr of steps on shortid\n" \
 "1448 2021-03-08 13:32:45 +0100 text: add lchomedesc\n" \
 "1447 2021-03-07 07:35:56 +0100 switch: lookup action by description by ID if description did not match\n" \
