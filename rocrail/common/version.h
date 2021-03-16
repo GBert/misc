@@ -1,11 +1,30 @@
 const int revisionnr = 
-1462
+1481
 ;
 const char* commithash = 
-"a4bdbdcdda94253e763a8824b1d5ffb1f2314e9e";
+"507481bd477f309a3cddd46d5a17740beb45b28a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1481 2021-03-16 15:36:31 +0100 wiopi: pixel LEDScript addressing fix\n" \
+"1480 2021-03-16 14:55:48 +0100 wiopi: pixel LEDScript off command correction\n" \
+"1479 2021-03-16 13:58:40 +0100 block: CTC LEDs added\n" \
+"1478 2021-03-16 10:29:08 +0100 wiopi: removed s88 type and implementation\n" \
+"1477 2021-03-16 09:25:22 +0100 planpanel: disable multi touch on edit mode\n" \
+"1476 2021-03-16 07:33:42 +0100 wiopi: fix for pixel LEDScript\n" \
+"1475 2021-03-16 07:22:22 +0100 stage: fix for reset\n" \
+"1474 2021-03-15 14:52:40 +0100 xmlscriptdlg: weather added\n" \
+"1473 2021-03-15 14:48:33 +0100 xmlscriptdlg: fix for 'case switch'\n" \
+"1472 2021-03-15 11:54:38 +0100 services: allow to reuse tcp ports\n" \
+"1471 2021-03-15 09:12:43 +0100 signal,switch: use weather brightness for CTC LEDs\n" \
+"1470 2021-03-15 07:55:41 +0100 switch: CTC color option added\n" \
+"1469 2021-03-14 22:37:03 +0100 pixel: brightness increas and decrease added\n" \
+"1468 2021-03-14 22:28:32 +0100 car: action correction for function substate\n" \
+"1467 2021-03-14 17:54:24 +0100 signal: color support CTC LEDs\n" \
+"1466 2021-03-14 10:52:54 +0100 wiopi: 2s/3s corrections\n" \
+"1465 2021-03-14 10:10:36 +0100 wiopi: 2s/3s correction\n" \
+"1464 2021-03-14 08:50:39 +0100 wiopi: pixel prevoff LEDScript option added\n" \
+"1463 2021-03-14 07:29:18 +0100 wiopi: pixel auto increase added\n" \
 "1462 2021-03-13 17:46:53 +0100 wiopi: 2s values added\n" \
 "1461 2021-03-13 17:13:36 +0100 wiopi: batterytype 4s/3s added\n" \
 "1460 2021-03-13 08:45:18 +0100 wiopi: send goodbye on shutdown\n" \
