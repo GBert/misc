@@ -1416,7 +1416,7 @@ int read_magnet_data(char *config_file, int config_type) {
 		break;
 	    case L1_DECODER_TYPE:
 		magnet->decoder_type = get_char_index(magnet_decoder_type, &line[L1_DECODER_TYPE_LENGTH]);
-		debug_print("decoder type:    >%d<\n", magnet->decoder);
+		debug_print("decoder type:    >%d<\n", magnet->decoder_type);
 		break;
 	    case L1_POSITION:
 		magnet->position = strtoul(&line[L1_POSITION_LENGTH], NULL, 16);
