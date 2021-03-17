@@ -46,6 +46,7 @@ extern pthread_mutex_t lock;
 
 struct z21_data_t z21_data;
 extern struct loco_data_t *loco_data, *loco_data_by_uid;
+extern struct magnet_data_t *magnet_data;
 extern struct subscriber_t *subscriber;
 
 static char *UDP_SRC_STRG	= "->UDP    len 0x%04x ID 0x%04x";
@@ -791,6 +792,7 @@ int main(int argc, char **argv) {
     unsigned char recvline[MAXSIZE];
     char timestamp[16];
     char *loco_file;
+    char *magnet_file;
 
 #ifndef NO_CAN
     socklen_t caddrlen = sizeof(caddr);
@@ -938,6 +940,14 @@ int main(int argc, char **argv) {
 	print_locos_by_uid();
 	printf("\n");
     }
+    if (asprintf(&magnet_file, "%s/%s", config_dir, magnet_name) < 0) {
+	fprintf(stderr, "can't alloc buffer for magnet_name: %s\n", strerror(errno));
+	exit(EXIT_FAILURE);
+    }
+    read_magnet_data(magnet_file, CONFIG_FILE);
+    z21_data.magnet_number = HASH_COUNT(magnet_data);
+    v_printf(z21_data.foreground, "magnet data: %u\n", z21_data.magnet_number);
+
     /* send_xpn_locos(&z21_data, loco_data,z21_data.foreground); */
 
     if (!z21_data.foreground) {
