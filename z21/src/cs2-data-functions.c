@@ -29,6 +29,7 @@ extern struct track_page_t *track_page;
 extern struct track_data_t *track_data;
 extern struct loco_data_t *loco_data, *loco_data_by_uid;
 extern struct loco_names_t *loco_names;
+extern struct magnet_data_t *magnet_data;
 
 struct loco_data_t *create_loco(unsigned int uid) {
     struct loco_data_t *l;
@@ -154,3 +155,13 @@ void print_locos_by_uid(void) {
     }
 }
 
+unsigned int get_magnet_type(unsigned int id) {
+    struct magnet_data_t *m;
+    HASH_FIND(hh, magnet_data, &id, sizeof(unsigned int), m);
+    if (m) {
+	/* TODO mm2 -> 0 */
+	if (m->decoder_type == 0)
+	    return(0x3000);
+    }
+    return(0);
+}

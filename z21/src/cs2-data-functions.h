@@ -18,6 +18,7 @@ unsigned int loco_get_func_summary(unsigned int uid);
 uint8_t loco_get_function(unsigned int uid, uint8_t function);
 int loco_save_function(unsigned int uid, uint8_t function, uint8_t value);
 int loco_toggle_function(unsigned int uid, uint8_t function);
+unsigned int get_magnet_type(unsigned int id);
 void print_locos_by_uid(void);
 unsigned int loco_get_speed(unsigned int uid);
 int loco_save_speed(unsigned int uid, unsigned int speed);
