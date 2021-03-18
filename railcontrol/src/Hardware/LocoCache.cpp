@@ -23,20 +23,45 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace Hardware
 {
-	void LocoCache::InsertByName(LocoCacheEntry& entry)
+	void LocoCache::Save(LocoCacheEntry& entry, const std::string& oldMatchKey)
 	{
-		const std::string& name = entry.GetName();
-		entry.SetLocoID(manager->GetLocoIdByMatchKey(GetControlId(), name));
-		entries.emplace(name, entry);
+		const std::string& matchKey = entry.GetMatchKey();
+		DataModel::Loco* loco = nullptr;
+
+		bool matchKeyChanged = matchKey.compare(oldMatchKey) != 0;
+		if (matchKeyChanged)
+		{
+			LocoID locoId = Delete(oldMatchKey);
+			loco = manager->GetLoco(locoId);
+		}
+
+		if (loco == nullptr)
+		{
+			loco = manager->GetLocoByMatchKey(GetControlId(), oldMatchKey);
+		}
+
+		if (loco == nullptr && matchKeyChanged)
+		{
+			loco = manager->GetLocoByMatchKey(GetControlId(), matchKey);
+		}
+
+		if (loco != nullptr)
+		{
+			entry.SetLocoID(loco->GetID());
+			*loco = entry;
+		}
+		entries.emplace(matchKey, entry);
 	}
 
-	void LocoCache::DeleteByName(const std::string& name)
+	LocoID LocoCache::Delete(const std::string& matchKey)
 	{
-		manager->LocoRemoveMatchKey(GetByName(name).GetLocoID());
-		entries.erase(name);
+		LocoID locoId = Get(matchKey).GetLocoID();
+		manager->LocoRemoveMatchKey(locoId);
+		entries.erase(matchKey);
+		return locoId;
 	}
 
-	void LocoCache::SetLocoIdByName(const LocoID locoId, const std::string& name)
+	void LocoCache::SetLocoId(const LocoID locoId, const std::string& matchKey)
 	{
 		for (auto& locoCacheEntry : entries)
 		{
@@ -46,7 +71,7 @@ namespace Hardware
 				entry.SetLocoID(LocoNone);
 			}
 		}
-		auto entry = entries.find(name);
+		auto entry = entries.find(matchKey);
 		if (entry == entries.end())
 		{
 			return;

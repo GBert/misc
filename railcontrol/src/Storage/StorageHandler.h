@@ -115,11 +115,19 @@ namespace Storage
 		private:
 			inline void StartTransactionInternal()
 			{
+				if (transactionRunning)
+				{
+					return;
+				}
 				sqlite.StartTransaction();
 			}
 
 			inline void CommitTransactionInternal()
 			{
+				if (transactionRunning)
+				{
+					return;
+				}
 				sqlite.CommitTransaction();
 			}
 

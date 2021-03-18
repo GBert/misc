@@ -109,18 +109,21 @@ namespace Hardware
 
 			inline const std::string& GetMatchKey() const
 			{
-				return name;
+				return matchKey;
+			}
+
+			inline void SetMatchKey(const std::string& matchKey)
+			{
+				this->matchKey = matchKey;
 			}
 
 		private:
-			static const uint8_t MaxFunctions = 32;
-			static const uint8_t MaxFunctionsIncludingZero = MaxFunctions + 1;
-
 			const ControlID controlId;
 			LocoID locoId;
 			std::string name;
 			Protocol protocol;
 			Address address;
+			std::string matchKey;
 			DataModel::LocoFunctions functions;
 	};
 
@@ -145,27 +148,27 @@ namespace Hardware
 				return controlId;
 			}
 
-			void InsertByName(LocoCacheEntry& entry);
-
-			inline void ReplaceByName(LocoCacheEntry& entry, const std::string& oldName)
+			inline void Save(LocoCacheEntry& entry)
 			{
-				DeleteByName(oldName);
-				InsertByName(entry);
+				const std::string& matchKey = entry.GetMatchKey();
+				Save(entry, matchKey);
 			}
 
-			inline const LocoCacheEntry GetByName(const std::string& name) const
-			{
-				return entries.count(name) == 0 ? LocoCacheEntry(controlId) : entries.at(name);
-			}
+			void Save(LocoCacheEntry& entry, const std::string& oldMatchKey);
 
-			void DeleteByName(const std::string& name);
+			LocoID Delete(const std::string& matchKey);
+
+			inline const LocoCacheEntry Get(const std::string& matchKey) const
+			{
+				return entries.count(matchKey) == 0 ? LocoCacheEntry(controlId) : entries.at(matchKey);
+			}
 
 			inline const std::map<std::string,LocoCacheEntry>& GetAll() const
 			{
 				return entries;
 			}
 
-			void SetLocoIdByName(const LocoID locoId, const std::string& name);
+			void SetLocoId(const LocoID locoId, const std::string& matckKey);
 
 		private:
 			const ControlID controlId;

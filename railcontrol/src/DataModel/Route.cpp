@@ -172,7 +172,7 @@ namespace DataModel
 		relations = newRelations;
 		for (auto relation : relations)
 		{
-			relation->ObjectID1(objectID); // FIXME: remove later. In older versions the objectID has always been stored with value 0 2020-10-27
+			relation->ObjectID1(GetID()); // FIXME: remove later. In older versions the objectID has always been stored with value 0 2020-10-27
 		}
 		return true;
 	}

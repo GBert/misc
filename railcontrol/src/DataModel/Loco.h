@@ -35,6 +35,11 @@ along with RailControl; see the file LICENCE. If not see
 
 class Manager;
 
+namespace Hardware
+{
+		class LocoCacheEntry;
+}
+
 namespace DataModel
 {
 	class ObjectIdentifier;
@@ -261,6 +266,8 @@ namespace DataModel
 			{
 				return matchKey;
 			}
+
+			Loco& operator=(const Hardware::LocoCacheEntry& loco);
 
 		private:
 			void SetMinThreadPriorityAndThreadName();

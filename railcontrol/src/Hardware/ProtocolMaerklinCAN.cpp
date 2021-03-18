@@ -748,6 +748,7 @@ namespace Hardware
 			{
 				name = value;
 				cacheEntry.SetName(value);
+				cacheEntry.SetMatchKey(value);
 				logger->Info(Languages::TextCs2MasterLocoName, value);
 			}
 			else if (key.compare("vorname") == 0)
@@ -779,15 +780,16 @@ namespace Hardware
 		if (remove)
 		{
 			logger->Info(Languages::TextCs2MasterLocoRemove, name);
-			locoCache.DeleteByName(name);
+			LocoID locoId = locoCache.Delete(name);
+			manager->LocoDelete(locoId);
 		}
 		else if (oldName.size() > 0)
 		{
-			locoCache.ReplaceByName(cacheEntry, oldName);
+			locoCache.Save(cacheEntry, oldName);
 		}
 		else
 		{
-			locoCache.InsertByName(cacheEntry);
+			locoCache.Save(cacheEntry);
 		}
 	}
 

@@ -92,7 +92,7 @@ class Manager
 
 		DataModel::LocoConfig GetLocoOfConfigByMatchKey(const ControlID controlId, const std::string& matchKey) const;
 
-		LocoID GetLocoIdByMatchKey(const ControlID controlId, const std::string& matchKey) const;
+		DataModel::Loco* GetLocoByMatchKey(const ControlID controlId, const std::string& matchKey) const;
 
 		void LocoRemoveMatchKey(const LocoID locoId);
 
@@ -129,6 +129,12 @@ class Manager
 
 		bool LocoDelete(const LocoID locoID,
 			std::string& result);
+
+		inline bool LocoDelete(const LocoID locoId)
+		{
+			std::string result;
+			return LocoDelete(locoId, result);
+		}
 
 		bool LocoProtocolAddress(const LocoID locoID, ControlID& controlID, Protocol& protocol, Address& address) const;
 		void LocoSpeed(const ControlType controlType, const ControlID controlID, const Protocol protocol, const Address address, const Speed speed);

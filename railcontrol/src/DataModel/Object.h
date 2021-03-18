@@ -66,6 +66,7 @@ namespace DataModel
 		protected:
 			virtual bool Deserialize(const std::map<std::string,std::string>& arguments);
 
+		private:
 			ObjectID objectID;
 			std::string name;
 	};
