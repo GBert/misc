@@ -1,11 +1,13 @@
 const int revisionnr = 
-1481
+1483
 ;
 const char* commithash = 
-"507481bd477f309a3cddd46d5a17740beb45b28a";
+"71f5ff18c63bf2333ef7b2017a70dd4dfb23a7c1";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1483 2021-03-17 12:20:29 +0100 model: fix memory leak on save with external loco file\n" \
+"1482 2021-03-17 10:59:28 +0100 text: regard move command and not replace child nodes\n" \
 "1481 2021-03-16 15:36:31 +0100 wiopi: pixel LEDScript addressing fix\n" \
 "1480 2021-03-16 14:55:48 +0100 wiopi: pixel LEDScript off command correction\n" \
 "1479 2021-03-16 13:58:40 +0100 block: CTC LEDs added\n" \
