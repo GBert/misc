@@ -44,16 +44,14 @@ namespace Storage
 {
 	void StorageHandler::Save(const Hardware::HardwareParams& hardwareParams)
 	{
-		StartTransactionInternal();
+		TransactionGuard guard(this);
 		sqlite.SaveHardwareParams(hardwareParams);
-		CommitTransactionInternal();
 	}
 
 	void StorageHandler::DeleteHardwareParams(const ControlID controlID)
 	{
-		StartTransactionInternal();
+		TransactionGuard guard(this);
 		sqlite.DeleteHardwareParams(controlID);
-		CommitTransactionInternal();
 	}
 
 	void StorageHandler::AllLocos(map<LocoID,DataModel::Loco*>& locos)
@@ -71,11 +69,10 @@ namespace Storage
 
 	void StorageHandler::DeleteLoco(const LocoID locoID)
 	{
-		StartTransactionInternal();
+		TransactionGuard guard(this);
 		sqlite.DeleteRelationsFrom(DataModel::Relation::TypeLocoSlave, locoID);
 		sqlite.DeleteRelationsTo(ObjectTypeLoco, locoID);
 		sqlite.DeleteObject(ObjectTypeLoco, locoID);
-		CommitTransactionInternal();
 	}
 
 	void StorageHandler::AllAccessories(std::map<AccessoryID,DataModel::Accessory*>& accessories)
@@ -95,9 +92,8 @@ namespace Storage
 
 	void StorageHandler::DeleteAccessory(const AccessoryID accessoryID)
 	{
-		StartTransactionInternal();
+		TransactionGuard guard(this);
 		sqlite.DeleteObject(ObjectTypeAccessory, accessoryID);
-		CommitTransactionInternal();
 	}
 
 	void StorageHandler::AllFeedbacks(std::map<FeedbackID,DataModel::Feedback*>& feedbacks)
@@ -117,9 +113,8 @@ namespace Storage
 
 	void StorageHandler::DeleteFeedback(const FeedbackID feedbackID)
 	{
-		StartTransactionInternal();
+		TransactionGuard guard(this);
 		sqlite.DeleteObject(ObjectTypeFeedback, feedbackID);
-		CommitTransactionInternal();
 	}
 
 	void StorageHandler::AllTracks(std::map<TrackID,DataModel::Track*>& tracks)
@@ -141,10 +136,9 @@ namespace Storage
 
 	void StorageHandler::DeleteTrack(const TrackID trackID)
 	{
-		StartTransactionInternal();
+		Storage::TransactionGuard guard(this);
 		sqlite.DeleteRelationsTo(ObjectTypeTrack, trackID);
 		sqlite.DeleteObject(ObjectTypeTrack, trackID);
-		CommitTransactionInternal();
 	}
 
 	void StorageHandler::AllSwitches(std::map<SwitchID,DataModel::Switch*>& switches)
@@ -164,57 +158,52 @@ namespace Storage
 
 	void StorageHandler::DeleteSwitch(const SwitchID switchID)
 	{
-		StartTransactionInternal();
+		TransactionGuard guard(this);
 		sqlite.DeleteObject(ObjectTypeSwitch, switchID);
-		CommitTransactionInternal();
 	}
 
 	void StorageHandler::Save(const DataModel::Route& route)
 	{
 		string serialized = route.Serialize();
-		StartTransactionInternal();
+		TransactionGuard guard(this);
 		const RouteID routeID = route.GetID();
 		sqlite.SaveObject(ObjectTypeRoute, routeID, route.GetName(), serialized);
 		sqlite.DeleteRelationsFrom(DataModel::Relation::TypeRouteAtLock, routeID);
 		SaveRelations(route.GetRelationsAtLock());
 		sqlite.DeleteRelationsFrom(DataModel::Relation::TypeRouteAtUnlock, routeID);
 		SaveRelations(route.GetRelationsAtUnlock());
-		CommitTransactionInternal();
 	}
 
 	void StorageHandler::Save(const DataModel::Loco& loco)
 	{
 		string serialized = loco.Serialize();
-		StartTransactionInternal();
+		TransactionGuard guard(this);
 		const LocoID locoID = loco.GetID();
 		sqlite.SaveObject(ObjectTypeLoco, locoID, loco.GetName(), serialized);
 		sqlite.DeleteRelationsFrom(DataModel::Relation::TypeLocoSlave, locoID);
 		SaveRelations(loco.GetSlaves());
-		CommitTransactionInternal();
 	}
 
 	void StorageHandler::Save(const DataModel::Cluster& cluster)
 	{
 		string serialized = cluster.Serialize();
-		StartTransactionInternal();
+		TransactionGuard guard(this);
 		const ClusterID clusterID = cluster.GetID();
 		sqlite.SaveObject(ObjectTypeCluster, clusterID, cluster.GetName(), serialized);
 		sqlite.DeleteRelationsFrom(DataModel::Relation::TypeClusterTrack, clusterID);
 		SaveRelations(cluster.GetTracks());
 		sqlite.DeleteRelationsFrom(DataModel::Relation::TypeClusterSignal, clusterID);
 		SaveRelations(cluster.GetSignals());
-		CommitTransactionInternal();
 	}
 
 	void StorageHandler::Save(const DataModel::Track& track)
 	{
 		string serialized = track.Serialize();
-		StartTransactionInternal();
+		TransactionGuard guard(this);
 		const TrackID trackId = track.GetID();
 		sqlite.SaveObject(ObjectTypeTrack, trackId, track.GetName(), serialized);
 		sqlite.DeleteRelationsFrom(DataModel::Relation::TypeTrackSignal, trackId);
 		SaveRelations(track.GetSignals());
-		CommitTransactionInternal();
 	}
 
 	void StorageHandler::AllRoutes(std::map<RouteID,DataModel::Route*>& routes)
@@ -236,11 +225,10 @@ namespace Storage
 
 	void StorageHandler::DeleteRoute(const RouteID routeID)
 	{
-		StartTransactionInternal();
+		TransactionGuard guard(this);
 		sqlite.DeleteRelationsFrom(DataModel::Relation::TypeRouteAtLock, routeID);
 		sqlite.DeleteRelationsFrom(DataModel::Relation::TypeRouteAtUnlock, routeID);
 		sqlite.DeleteObject(ObjectTypeRoute, routeID);
-		CommitTransactionInternal();
 	}
 
 	void StorageHandler::AllLayers(std::map<LayerID,DataModel::Layer*>& layers)
@@ -259,9 +247,8 @@ namespace Storage
 
 	void StorageHandler::DeleteLayer(const LayerID layerID)
 	{
-		StartTransactionInternal();
+		TransactionGuard guard(this);
 		sqlite.DeleteObject(ObjectTypeLayer, layerID);
-		CommitTransactionInternal();
 	}
 
 	void StorageHandler::AllSignals(std::map<SignalID,DataModel::Signal*>& signals)
@@ -281,10 +268,9 @@ namespace Storage
 
 	void StorageHandler::DeleteSignal(const SignalID signalID)
 	{
-		StartTransactionInternal();
+		TransactionGuard guard(this);
 		sqlite.DeleteRelationsTo(ObjectTypeSignal, signalID);
 		sqlite.DeleteObject(ObjectTypeSignal, signalID);
-		CommitTransactionInternal();
 	}
 
 	void StorageHandler::AllClusters(std::map<ClusterID,DataModel::Cluster*>& clusters)
@@ -307,20 +293,19 @@ namespace Storage
 
 	void StorageHandler::DeleteCluster(const ClusterID clusterID)
 	{
-		StartTransactionInternal();
+		TransactionGuard guard(this);
 		sqlite.DeleteObject(ObjectTypeCluster, clusterID);
-		CommitTransactionInternal();
 	}
 
 	void StorageHandler::SaveSetting(const std::string& key, const std::string& value)
 	{
-		StartTransactionInternal();
+		TransactionGuard guard(this);
 		sqlite.SaveSetting(key, value);
-		CommitTransactionInternal();
 	}
 
 	void StorageHandler::SaveRelations(const vector<DataModel::Relation*> relations)
 	{
+		Storage::TransactionGuard guard(this);
 		for (auto relation : relations)
 		{
 			string serializedRelation = relation->Serialize();

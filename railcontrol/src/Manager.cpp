@@ -29,6 +29,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "Hardware/HardwareParams.h"
 #include "Manager.h"
 #include "RailControl.h"
+#include "Storage/TransactionGuard.h"
 #include "Utils/Utils.h"
 #include "WebServer/WebServer.h"
 
@@ -209,6 +210,7 @@ Manager::~Manager()
 
 	Booster(ControlTypeInternal, BoosterStateStop);
 
+	Storage::TransactionGuard guard(storage);
 	run = false;
 	{
 		std::lock_guard<std::mutex> guard(controlMutex);
@@ -241,11 +243,6 @@ Manager::~Manager()
 		}
 	}
 
-	if (storage != nullptr)
-	{
-		storage->StartTransaction();
-	}
-
 	DeleteAllMapEntries(locos, locoMutex);
 	DeleteAllMapEntries(routes, routeMutex);
 	DeleteAllMapEntries(clusters, clusterMutex);
@@ -261,7 +258,6 @@ Manager::~Manager()
 		return;
 	}
 
-	storage->CommitTransaction();
 	delete storage;
 	storage = nullptr;
 }
@@ -1575,6 +1571,7 @@ bool Manager::CheckTrackPosition(const Track* track,
 
 const std::vector<FeedbackID> Manager::CleanupAndCheckFeedbacksForTrack(const ObjectIdentifier& identifier, const std::vector<FeedbackID>& newFeedbacks)
 {
+	Storage::TransactionGuard guard(storage);
 	{
 		std::lock_guard<std::mutex> feedbackguard(feedbackMutex);
 		for (auto feedback : feedbacks)
@@ -3310,6 +3307,7 @@ bool Manager::SaveSettings(const Languages::Language language,
 	{
 		return false;
 	}
+	Storage::TransactionGuard guard(storage);
 	storage->SaveSetting("Language", std::to_string(static_cast<int>(language)));
 	storage->SaveSetting("DefaultAccessoryDuration", std::to_string(duration));
 	storage->SaveSetting("AutoAddFeedback", std::to_string(autoAddFeedback));

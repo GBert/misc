@@ -121,6 +121,8 @@ Storage/StorageHandler.cpp
 Storage/StorageHandler.h
 Storage/StorageInterface.h
 Storage/StorageParams.h
+Storage/TransactionGuard.cpp
+Storage/TransactionGuard.h
 Utils/ThreadSafeQueue.h
 Utils/Utils.cpp
 Utils/Utils.h

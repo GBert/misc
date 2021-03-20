@@ -28,14 +28,11 @@ along with RailControl; see the file LICENCE. If not see
 #include "Hardware/HardwareParams.h"
 #include "Storage/Sqlite.h"
 #include "Storage/StorageInterface.h"
+#include "Storage/TransactionGuard.h"
 #include "Storage/StorageParams.h"
 
 namespace Storage
 {
-	// the types of the class factories
-	typedef Storage::StorageInterface* CreateStorage(const StorageParams* params);
-	typedef void DestroyStorage(Storage::StorageInterface*);
-
 	class StorageHandler
 	{
 		public:
@@ -83,9 +80,8 @@ namespace Storage
 			template<class T> void Save(const T& t)
 			{
 				const std::string serialized = t.Serialize();
-				StartTransactionInternal();
+				TransactionGuard guard(this);
 				sqlite.SaveObject(t.GetObjectType(), t.GetID(), t.GetName(), serialized);
-				CommitTransactionInternal();
 			}
 
 			template <class T> static void Save(StorageHandler* storageHandler, const T* t)
@@ -112,33 +108,18 @@ namespace Storage
 				sqlite.CommitTransaction();
 			}
 
+			inline bool IsTransactionRunning()
+			{
+				return transactionRunning;
+			}
+
 		private:
-			inline void StartTransactionInternal()
-			{
-				if (transactionRunning)
-				{
-					return;
-				}
-				sqlite.StartTransaction();
-			}
-
-			inline void CommitTransactionInternal()
-			{
-				if (transactionRunning)
-				{
-					return;
-				}
-				sqlite.CommitTransaction();
-			}
-
 			void SaveRelations(const std::vector<DataModel::Relation*> relations);
 			std::vector<DataModel::Relation*> RelationsFrom(const DataModel::Relation::Type type, const ObjectID objectID);
-
 
 			Manager* manager;
 			Storage::SQLite sqlite;
 			bool transactionRunning;
 	};
-
 } // namespace Storage
 

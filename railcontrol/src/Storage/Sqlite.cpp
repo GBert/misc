@@ -478,12 +478,12 @@ namespace Storage
 
 	void SQLite::StartTransaction()
 	{
-		Execute("BEGIN TRANSACTION");
+		Execute("BEGIN TRANSACTION;");
 	}
 
 	void SQLite::CommitTransaction()
 	{
-		Execute("COMMIT");
+		Execute("COMMIT;");
 	}
 
 	bool SQLite::Execute(const char* query, sqlite3_callback callback = nullptr, void* result = nullptr)
@@ -499,7 +499,14 @@ namespace Storage
 		{
 			int affected = sqlite3_changes(db);
 
-			logger->Debug(Languages::TextQuery, query, affected);
+			if (affected)
+			{
+				logger->Debug(Languages::TextQueryAffected, query, affected);
+			}
+			else
+			{
+				logger->Debug(Languages::TextQuery, query);
+			}
 			return true;
 		}
 

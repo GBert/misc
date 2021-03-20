@@ -61,7 +61,11 @@ namespace Storage
 			unsigned int keepBackups;
 
 			void RemoveOldBackupFiles();
-			bool Execute(const std::string& query, sqlite3_callback callback = nullptr, void* result = nullptr) { return Execute(query.c_str(), callback, result); }
+			inline bool Execute(const std::string& query, sqlite3_callback callback = nullptr, void* result = nullptr)
+			{
+				return Execute(query.c_str(), callback, result);
+			}
+
 			bool Execute(const char* query, sqlite3_callback callback, void* result);
 			bool DropTable(const std::string table);
 			bool CreateTableHardware();

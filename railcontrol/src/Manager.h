@@ -40,6 +40,9 @@ class Manager
 {
 	public:
 		Manager() = delete;
+		Manager(const Manager&) = delete;
+		Manager& operator=(const Manager&) = delete;
+
 		Manager(Config& config);
 		~Manager();
 

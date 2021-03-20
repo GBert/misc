@@ -447,6 +447,7 @@ class Languages
 			TextPushPullOnly,
 			TextPushPullTrain,
 			TextQuery,
+			TextQueryAffected,
 			TextRM485ModuleFound,
 			TextRailControlStarted,
 			TextRandom,
