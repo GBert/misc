@@ -58,3 +58,19 @@ ArgumentHandler::ArgumentHandler(const int argc, char* argv[], const std::map<st
 		argumentMap[argumentShort] = (parts.size() == 1 ? "" : parts[1]);
 	}
 }
+
+std::string ArgumentHandler::GetArgumentString(const char argument, const std::string& defaultValue)
+{
+	if (GetArgumentBool(argument) == false)
+	{
+		return defaultValue;
+	}
+	std::string& value = argumentMap.at(argument);
+	if (value.size() == 0)
+	{
+		return defaultValue;
+	}
+
+	return value;
+}
+

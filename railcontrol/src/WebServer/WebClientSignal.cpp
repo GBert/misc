@@ -58,12 +58,13 @@ namespace WebServer
 		SignalID signalID = Utils::Utils::GetIntegerMapEntry(arguments, "signal", SignalNone);
 		ControlID controlID = manager.GetPossibleControlForAccessory();
 		Protocol protocol = ProtocolNone;
-		Address address = AddressNone;
+		Address address = AddressDefault;
 		string name = Languages::GetText(Languages::TextNew);
 		Orientation signalOrientation = static_cast<Orientation>(Utils::Utils::GetBoolMapEntry(arguments, "signalorientation", OrientationRight));
 		LayoutPosition posx = Utils::Utils::GetIntegerMapEntry(arguments, "posx", 0);
 		LayoutPosition posy = Utils::Utils::GetIntegerMapEntry(arguments, "posy", 0);
 		LayoutPosition posz = Utils::Utils::GetIntegerMapEntry(arguments, "posz", LayerUndeletable);
+		// FIXME: Remove later: 2021-03-18
 		LayoutItemSize height = Utils::Utils::GetIntegerMapEntry(arguments, "length", 1);
 		LayoutRotation rotation = static_cast<LayoutRotation>(Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0));
 		DataModel::AccessoryType signalType = DataModel::SignalTypeSimpleLeft;
@@ -74,6 +75,10 @@ namespace WebServer
 		bool allowLocoTurn = Utils::Utils::GetBoolMapEntry(arguments, "allowlocoturn", false);
 		bool releaseWhenFree = Utils::Utils::GetBoolMapEntry(arguments, "releasewhenfree", false);
 		Cluster* cluster = nullptr;
+
+		// FIXME: Remove later: 2021-03-18
+		bool automodeNeeded = false;
+
 		if (signalID > SignalNone)
 		{
 			const DataModel::Signal* signal = manager.GetSignal(signalID);
@@ -97,6 +102,8 @@ namespace WebServer
 				selectRouteApproach = signal->GetSelectRouteApproach();
 				allowLocoTurn = signal->GetAllowLocoTurn();
 				releaseWhenFree = signal->GetReleaseWhenFree();
+				// FIXME: Remove later: 2021-03-18
+				automodeNeeded = manager.HasRouteFromOrToTrackBase(ObjectIdentifier(ObjectTypeSignal, signalID));
 			}
 		}
 
@@ -108,8 +115,16 @@ namespace WebServer
 		HtmlTag tabMenu("div");
 		tabMenu.AddChildTag(client.HtmlTagTabMenuItem("main", Languages::TextBasic, true));
 		tabMenu.AddChildTag(client.HtmlTagTabMenuItem("position", Languages::TextPosition));
-		tabMenu.AddChildTag(client.HtmlTagTabMenuItem("feedback", Languages::TextFeedbacks));
-		tabMenu.AddChildTag(client.HtmlTagTabMenuItem("automode", Languages::TextAutomode));
+		// FIXME: Remove later: 2021-03-18
+		if (feedbacks.size())
+		{
+			tabMenu.AddChildTag(client.HtmlTagTabMenuItem("feedback", Languages::TextFeedbacks));
+		}
+		if (automodeNeeded)
+		{
+			tabMenu.AddChildTag(client.HtmlTagTabMenuItem("automode", Languages::TextAutomode));
+		}
+
 		content.AddChildTag(tabMenu);
 
 		HtmlTag formContent;
@@ -120,9 +135,19 @@ namespace WebServer
 		mainContent.AddId("tab_main");
 		mainContent.AddClass("tab_content");
 		mainContent.AddChildTag(HtmlTagInputTextWithLabel("name", Languages::TextName, name).AddAttribute("onkeyup", "updateName();"));
-		mainContent.AddChildTag(HtmlTagSelectOrientationWithLabel("signalorientation", Languages::TextOrientation, signalOrientation));
+		if (automodeNeeded)
+		{
+			mainContent.AddChildTag(HtmlTagSelectOrientationWithLabel("signalorientation", Languages::TextOrientation, signalOrientation));
+		}
 		mainContent.AddChildTag(HtmlTagSelectWithLabel("signaltype", Languages::TextType, signalTypeOptions, signalType));
-		mainContent.AddChildTag(HtmlTagInputIntegerWithLabel("length", Languages::TextLength, height, DataModel::Signal::MinLength, DataModel::Signal::MaxLength));
+		if (automodeNeeded)
+		{
+			mainContent.AddChildTag(HtmlTagInputIntegerWithLabel("length", Languages::TextLength, height, DataModel::Signal::MinLength, DataModel::Signal::MaxLength));
+		}
+		else
+		{
+			mainContent.AddChildTag(HtmlTagInputHidden("length", "1"));
+		}
 		mainContent.AddChildTag(client.HtmlTagControlAccessory(controlID, "signal", signalID));
 		mainContent.AddChildTag(HtmlTag("div").AddId("select_protocol").AddChildTag(client.HtmlTagProtocolAccessory(controlID, protocol)));
 		mainContent.AddChildTag(HtmlTagInputIntegerWithLabel("address", Languages::TextAddress, address, 1, 2044));
@@ -132,9 +157,16 @@ namespace WebServer
 
 		formContent.AddChildTag(client.HtmlTagTabPosition(posx, posy, posz, rotation));
 
-		formContent.AddChildTag(HtmlTagTabTrackFeedback(client, feedbacks, ObjectIdentifier(ObjectTypeSignal, signalID)));
+		// FIXME: Remove later: 2021-03-18
+		if (feedbacks.size())
+		{
+			formContent.AddChildTag(HtmlTagTabTrackFeedback(client, feedbacks, ObjectIdentifier(ObjectTypeSignal, signalID)));
+		}
 
-		formContent.AddChildTag(HtmlTagTabTrackAutomode(selectRouteApproach, allowLocoTurn, releaseWhenFree, cluster));
+		if (automodeNeeded)
+		{
+			formContent.AddChildTag(HtmlTagTabTrackAutomode(selectRouteApproach, allowLocoTurn, releaseWhenFree, cluster));
+		}
 
 		content.AddChildTag(HtmlTag("div").AddClass("popup_content").AddChildTag(HtmlTag("form").AddId("editform").AddChildTag(formContent)));
 		content.AddChildTag(HtmlTagButtonCancel());
@@ -149,7 +181,7 @@ namespace WebServer
 		Orientation signalOrientation = static_cast<Orientation>(Utils::Utils::GetBoolMapEntry(arguments, "signalorientation", OrientationRight));
 		ControlID controlId = Utils::Utils::GetIntegerMapEntry(arguments, "control", ControlIdNone);
 		Protocol protocol = static_cast<Protocol>(Utils::Utils::GetIntegerMapEntry(arguments, "protocol", ProtocolNone));
-		Address address = Utils::Utils::GetIntegerMapEntry(arguments, "address", AddressNone);
+		Address address = Utils::Utils::GetIntegerMapEntry(arguments, "address", AddressDefault);
 		LayoutPosition posX = Utils::Utils::GetIntegerMapEntry(arguments, "posx", 0);
 		LayoutPosition posY = Utils::Utils::GetIntegerMapEntry(arguments, "posy", 0);
 		LayoutPosition posZ = Utils::Utils::GetIntegerMapEntry(arguments, "posz", 0);

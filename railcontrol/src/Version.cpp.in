@@ -18,31 +18,27 @@ along with RailControl; see the file LICENCE. If not see
 <http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "Version.h"
 
-#include <map>
-#include <string>
-
-#include "Utils/Utils.h"
-
-class ArgumentHandler
+const std::string& GetVersionInfoGitHash()
 {
-	public:
-		ArgumentHandler() = delete;
-		ArgumentHandler(const int argc, char* argv[], const std::map<std::string,char>& linkMap, const char defaultSwitch);
+	static const std::string gitHash = "@GIT_HASH@";
+	return gitHash;
+}
 
-		inline bool GetArgumentBool(const char argument)
-		{
-			return (argumentMap.count(argument) == 1);
-		}
+time_t GetVersionInfoGitTimestamp()
+{
+	return @GIT_TIMESTAMP@;
+}
 
-		std::string GetArgumentString(const char argument, const std::string& defaultValue = "");
+time_t GetVersionInfoCompileTimestamp()
+{
+	return @COMPILE_TIMESTAMP@;
+}
 
-		inline int GetArgumentInt(const char argument, const int defaultValue = 0)
-		{
-			return Utils::Utils::StringToInteger(GetArgumentString(argument, std::to_string(defaultValue)));
-		}
+const std::string& GetVersionInfoRailControlVersion()
+{
+	static const std::string railControlVersion = "@RAILCONTROL_VERSION@";
+	return railControlVersion;
+}
 
-	private:
-		std::map<char,std::string> argumentMap;
-};

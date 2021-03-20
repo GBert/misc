@@ -33,7 +33,7 @@ namespace DataModel
 			inline LocoConfig()
 			:	controlId(ControlNone),
 				locoId(LocoNone),
-				address(AddressNone),
+				address(AddressDefault),
 				protocol(ProtocolNone),
 				isInUse(false)
 			{

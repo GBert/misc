@@ -38,29 +38,6 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace Hardware
 {
-	class AccessoryQueueEntry
-	{
-		public:
-			AccessoryQueueEntry()
-			:	protocol(ProtocolNone),
-			 	address(AddressNone),
-			 	state(DataModel::DefaultState),
-			 	duration(DataModel::DefaultAccessoryPulseDuration)
-			{}
-
-			AccessoryQueueEntry(const Protocol protocol, const Address address, const DataModel::AccessoryState state, const DataModel::AccessoryPulseDuration duration)
-			:	protocol(protocol),
-			 	address(address),
-			 	state(state),
-			 	duration(duration)
-			{}
-
-			Protocol protocol;
-			Address address;
-			DataModel::AccessoryState state;
-			DataModel::AccessoryPulseDuration duration;
-	};
-
 	class Z21 : HardwareInterface
 	{
 		public:
@@ -141,6 +118,31 @@ namespace Hardware
 			static const unsigned short Z21Port = 21105;
 			static const unsigned int Z21CommandBufferLength = 1472; // = Max Ethernet MTU
 			static const Address MaxMMAddress = 255;
+
+			class AccessoryQueueEntry
+			{
+				public:
+					inline AccessoryQueueEntry()
+					:	protocol(ProtocolNone),
+						address(AddressNone),
+						state(DataModel::DefaultState),
+						duration(DataModel::DefaultAccessoryPulseDuration)
+					{
+					}
+
+					inline AccessoryQueueEntry(const Protocol protocol, const Address address, const DataModel::AccessoryState state, const DataModel::AccessoryPulseDuration duration)
+					:	protocol(protocol),
+					 	address(address),
+					 	state(state),
+					 	duration(duration)
+					{
+					}
+
+					Protocol protocol;
+					Address address;
+					DataModel::AccessoryState state;
+					DataModel::AccessoryPulseDuration duration;
+			};
 
 			enum BroadCastFlag : uint32_t
 			{

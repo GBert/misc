@@ -191,11 +191,6 @@ namespace DataModel
 				return feedbacks.size() == 0 ? FeedbackNone : feedbacks[0];
 			}
 
-			inline Route* GetFirstRoute()
-			{
-				return routes.size() == 0 ? nullptr : routes[0];
-			}
-
 			virtual ObjectIdentifier GetObjectIdentifier() const = 0;
 			virtual ObjectID GetMyID() const = 0;
 			virtual const std::string& GetMyName() const = 0;

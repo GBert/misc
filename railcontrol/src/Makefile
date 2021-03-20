@@ -29,16 +29,21 @@ dist: all
 sqlite-shell:
 	make -C Storage/sqlite
 
-Timestamp.o: Timestamp.cpp Timestamp.h
+Version.o: Version.cpp Version.h
 	$(CXX) $(CPPFLAGS) -c -o $@ $<
+
+Hardware/zlib/%.o: Hardware/zlib/%.c Hardware/zlib/*.h
+	$(CC) $(CFLAGSZLIB) -c -o $@ $<
+
+Storage/sqlite/sqlite3.o: Storage/sqlite/sqlite3.c Storage/sqlite/sqlite3.h
+	$(CC) $(CFLAGSSQLITE) -c -o $@ $<
 
 %.o: %.cpp *.h DataModel/*.h Hardware/*.h Logger/*.h Network/*.h Storage/*.h Utils/*.h WebServer/*.h
 	$(CXX) $(CPPFLAGS) -c -o $@ $<
 
+.PHONY: clean
 clean:
-	make -C Hardware clean
-	make -C Storage clean
-	rm -f *.o DataModel/*.o Hardware/*.o Hardware/zlib/*.o Logger/*.o Network/*.o Storage/*.o Utils/*.o WebServer/*.o
+	rm -f *.o DataModel/*.o Hardware/*.o Hardware/zlib/*.o Logger/*.o Network/*.o Storage/*.o Storage/sqlite/*.o Utils/*.o WebServer/*.o
 	rm -f railcontrol
 
 clean-sqlite-shell:
@@ -50,8 +55,7 @@ test:
 tools:
 	make -C tools
 
-Timestamp.cpp:
-	echo "#include <ctime>" > Timestamp.cpp
-	echo "#include \"Timestamp.h\"" >> Timestamp.cpp
-	echo "time_t GetCompileTime() { return `date +%s`; }" >> Timestamp.cpp
+.PHONY: Version.cpp
+Version.cpp: Version.cpp.in
+	sed s/@COMPILE_TIMESTAMP@/`date +%s`/ < Version.cpp.in | sed s/@GIT_HASH@/`git log -1 --format=%H`/ | sed s/@GIT_TIMESTAMP@/`git log -1 --format=%at`/ | sed s/@RAILCONTROL_VERSION@/$(RAILCONTROL_VERSION)/ > Version.cpp
 

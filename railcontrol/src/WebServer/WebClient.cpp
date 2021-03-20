@@ -33,7 +33,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "DataModel/ObjectIdentifier.h"
 #include "Hardware/HardwareHandler.h"
 #include "RailControl.h"
-#include "Timestamp.h"
+#include "Version.h"
 #include "Utils/Utils.h"
 #include "WebServer/HtmlFullResponse.h"
 #include "WebServer/HtmlResponse.h"
@@ -1210,15 +1210,21 @@ namespace WebServer
 
 	HtmlTag WebClient::HtmlTagProtocol(const map<string,Protocol>& protocolMap, const Protocol selectedProtocol)
 	{
-		if (protocolMap.size() == 0)
+		size_t mapSize = protocolMap.size();
+		switch (mapSize)
 		{
-			return HtmlTagInputHidden("protocol", std::to_string(ProtocolNone));
-		}
+			case 0:
+				return HtmlTagInputHidden("protocol", std::to_string(ProtocolNone));
 
-		HtmlTag content;
-		content.AddChildTag(HtmlTagLabel(Languages::TextProtocol, "protocol"));
-		content.AddChildTag(HtmlTagSelect("protocol", protocolMap, selectedProtocol));
-		return content;
+			case 1:
+				return HtmlTagInputHidden("protocol", std::to_string(protocolMap.begin()->second));
+
+			default:
+				HtmlTag content;
+				content.AddChildTag(HtmlTagLabel(Languages::TextProtocol, "protocol"));
+				content.AddChildTag(HtmlTagSelect("protocol", protocolMap, selectedProtocol));
+				return content;
+		}
 	}
 
 	HtmlTag WebClient::HtmlTagMatchKeyProtocolLoco(const ControlID controlId, const string& selectedMatchKey, const Protocol selectedProtocol)
@@ -1249,12 +1255,13 @@ namespace WebServer
 			ReplyHtmlWithHeaderAndParagraph(Languages::TextControlDoesNotExist);
 			return;
 		}
-		LocoID locoId = Utils::Utils::GetIntegerMapEntry(arguments, "loco", LocoNone);
-		if (locoId != LocoNone)
+
+		if (Utils::Utils::IsMapEntrySet(arguments, "loco"))
 		{
+			LocoID locoId = Utils::Utils::GetIntegerMapEntry(arguments, "loco", LocoNone);
 			string matchKey;
 			Protocol protocol = ProtocolNone;
-			Loco *loco = manager.GetLoco(locoId);
+			Loco* loco = manager.GetLoco(locoId);
 			if (loco != nullptr)
 			{
 				matchKey = loco->GetMatchKey();
@@ -1284,6 +1291,8 @@ namespace WebServer
 			ReplyHtmlWithHeader(HtmlTagProtocolAccessory(controlId, signal == nullptr ? ProtocolNone : signal->GetProtocol()));
 			return;
 		}
+
+		ReplyHtmlWithHeader(HtmlTagProtocolAccessory(controlId, ProtocolNone));
 	}
 
 	HtmlTag WebClient::HtmlTagDuration(const DataModel::AccessoryPulseDuration duration, const Languages::TextSelector label) const
@@ -1786,7 +1795,7 @@ namespace WebServer
 		}
 		string matchKey = Utils::Utils::GetStringMapEntry(arguments, "matchkey");
 		Protocol protocol = ProtocolNone;
-		Address address = 3;
+		Address address = AddressDefault;
 		string name = Languages::GetText(Languages::TextNew);
 		bool pushpull = false;
 		Length length = 0;
@@ -2033,7 +2042,7 @@ namespace WebServer
 		const ControlID controlId = Utils::Utils::GetIntegerMapEntry(arguments, "control", ControlIdNone);
 		const string matchKey = Utils::Utils::GetStringMapEntry(arguments, "matchkey");
 		const Protocol protocol = static_cast<Protocol>(Utils::Utils::GetIntegerMapEntry(arguments, "protocol", ProtocolNone));
-		const Address address = Utils::Utils::GetIntegerMapEntry(arguments, "address", AddressNone);
+		const Address address = Utils::Utils::GetIntegerMapEntry(arguments, "address", AddressDefault);
 		const Length length = Utils::Utils::GetIntegerMapEntry(arguments, "length", 0);
 		const bool pushpull = Utils::Utils::GetBoolMapEntry(arguments, "pushpull", false);
 		const Speed maxSpeed = Utils::Utils::GetIntegerMapEntry(arguments, "maxspeed", MaxSpeed);
@@ -2368,7 +2377,7 @@ namespace WebServer
 		AccessoryID accessoryID = Utils::Utils::GetIntegerMapEntry(arguments, "accessory", AccessoryNone);
 		ControlID controlID = manager.GetPossibleControlForAccessory();
 		Protocol protocol = ProtocolNone;
-		Address address = AddressNone;
+		Address address = AddressDefault;
 		string name = Languages::GetText(Languages::TextNew);
 		LayoutPosition posx = Utils::Utils::GetIntegerMapEntry(arguments, "posx", 0);
 		LayoutPosition posy = Utils::Utils::GetIntegerMapEntry(arguments, "posy", 0);
@@ -2439,7 +2448,7 @@ namespace WebServer
 		string name = Utils::Utils::GetStringMapEntry(arguments, "name");
 		ControlID controlId = Utils::Utils::GetIntegerMapEntry(arguments, "control", ControlIdNone);
 		Protocol protocol = static_cast<Protocol>(Utils::Utils::GetIntegerMapEntry(arguments, "protocol", ProtocolNone));
-		Address address = Utils::Utils::GetIntegerMapEntry(arguments, "address", AddressNone);
+		Address address = Utils::Utils::GetIntegerMapEntry(arguments, "address", AddressDefault);
 		LayoutPosition posX = Utils::Utils::GetIntegerMapEntry(arguments, "posx", 0);
 		LayoutPosition posY = Utils::Utils::GetIntegerMapEntry(arguments, "posy", 0);
 		LayoutPosition posZ = Utils::Utils::GetIntegerMapEntry(arguments, "posz", 0);
@@ -2559,7 +2568,7 @@ namespace WebServer
 		SwitchID switchID = Utils::Utils::GetIntegerMapEntry(arguments, "switch", SwitchNone);
 		ControlID controlID = manager.GetPossibleControlForAccessory();
 		Protocol protocol = ProtocolNone;
-		Address address = AddressNone;
+		Address address = AddressDefault;
 		string name = Languages::GetText(Languages::TextNew);
 		LayoutPosition posx = Utils::Utils::GetIntegerMapEntry(arguments, "posx", 0);
 		LayoutPosition posy = Utils::Utils::GetIntegerMapEntry(arguments, "posy", 0);
@@ -2628,7 +2637,7 @@ namespace WebServer
 		string name = Utils::Utils::GetStringMapEntry(arguments, "name");
 		ControlID controlId = Utils::Utils::GetIntegerMapEntry(arguments, "control", ControlIdNone);
 		Protocol protocol = static_cast<Protocol>(Utils::Utils::GetIntegerMapEntry(arguments, "protocol", ProtocolNone));
-		Address address = Utils::Utils::GetIntegerMapEntry(arguments, "address", AddressNone);
+		Address address = Utils::Utils::GetIntegerMapEntry(arguments, "address", AddressDefault);
 		LayoutPosition posX = Utils::Utils::GetIntegerMapEntry(arguments, "posx", 0);
 		LayoutPosition posY = Utils::Utils::GetIntegerMapEntry(arguments, "posy", 0);
 		LayoutPosition posZ = Utils::Utils::GetIntegerMapEntry(arguments, "posz", 0);
@@ -2921,8 +2930,8 @@ namespace WebServer
 		{
 			tracksDiv.AddAttribute("hidden");
 		}
-		tracksDiv.AddChildTag(HtmlTagSelectTrack("from", Languages::TextStartSignalTrack, fromTrack, fromOrientation));
-		tracksDiv.AddChildTag(HtmlTagSelectTrack("to", Languages::TextDestinationSignalTrack, toTrack, toOrientation, "updateFeedbacksOfTrack(); return false;"));
+		tracksDiv.AddChildTag(HtmlTagSelectTrack("from", Languages::TextStartTrack, fromTrack, fromOrientation));
+		tracksDiv.AddChildTag(HtmlTagSelectTrack("to", Languages::TextDestinationTrack, toTrack, toOrientation, "updateFeedbacksOfTrack(); return false;"));
 		map<Route::Speed,Languages::TextSelector> speedOptions;
 		speedOptions[Route::SpeedTravel] = Languages::TextTravelSpeed;
 		speedOptions[Route::SpeedReduced] = Languages::TextReducedSpeed;
@@ -3461,7 +3470,7 @@ namespace WebServer
 		}
 		struct timeval tv;
 		int ret = gettimeofday(&tv, nullptr);
-		if (ret != 0 || tv.tv_sec > GetCompileTime())
+		if (ret != 0 || tv.tv_sec > GetVersionInfoCompileTimestamp())
 		{
 			ReplyHtmlWithHeaderAndParagraph(Languages::TextTimestampAlreadySet);
 			return;

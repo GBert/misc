@@ -18,7 +18,7 @@ gmon.out
 amalgamation.cpp
 .*.swp
 svg/*
-Timestamp.cpp
+Version.cpp
 .settings/
 CMakeCache.txt
 CMakeFiles/*

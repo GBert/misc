@@ -327,7 +327,12 @@ class Manager
 		bool RouteDelete(const RouteID routeID,
 			std::string& result);
 
-		DataModel::Route* GetFirstRouteToTrackBase(const DataModel::ObjectIdentifier& identifier) const;
+		DataModel::Route* GetFirstRouteFromOrToTrackBase(const DataModel::ObjectIdentifier& identifier) const;
+
+		inline bool HasRouteFromOrToTrackBase(const DataModel::ObjectIdentifier& identifier) const
+		{
+			return (GetFirstRouteFromOrToTrackBase(identifier) != nullptr);
+		}
 
 		// layer
 		DataModel::Layer* GetLayer(const LayerID layerID) const;

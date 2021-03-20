@@ -1704,15 +1704,8 @@ bool Manager::TrackDelete(const TrackID trackID,
 			return false;
 		}
 
-		Route* route = track->GetFirstRoute();
-		if (route != nullptr)
-		{
-			result = Logger::Logger::Format(Languages::GetText(Languages::TextTrackIsUsedByRoute), track->GetName(), route->GetName());
-			return false;
-		}
-
 		ObjectIdentifier trackIdentifier(ObjectTypeTrack, trackID);
-		route = GetFirstRouteToTrackBase(trackIdentifier);
+		Route* route = GetFirstRouteFromOrToTrackBase(trackIdentifier);
 		if (route != nullptr)
 		{
 			result = Logger::Logger::Format(Languages::GetText(Languages::TextTrackIsUsedByRoute), track->GetName(), route->GetName());
@@ -2249,12 +2242,12 @@ bool Manager::RouteDelete(const RouteID routeID,
 	return true;
 }
 
-Route* Manager::GetFirstRouteToTrackBase(const ObjectIdentifier& identifier) const
+Route* Manager::GetFirstRouteFromOrToTrackBase(const ObjectIdentifier& identifier) const
 {
 	std::lock_guard<std::mutex> guard(routeMutex);
 	for (auto route : routes)
 	{
-		if (route.second->GetToTrack() == identifier)
+		if (route.second->GetToTrack() == identifier || route.second->GetFromTrack() == identifier)
 		{
 			return route.second;
 		}
@@ -2637,15 +2630,15 @@ bool Manager::SignalDelete(const SignalID signalID,
 			return false;
 		}
 
-		Route* route = signal->GetFirstRoute();
-		if (route != nullptr)
+		Track* track = signal->GetTrack();
+		if (track)
 		{
-			result = Logger::Logger::Format(Languages::GetText(Languages::TextSignalIsUsedByRoute), signal->GetName(), route->GetName());
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextSignalIsUsedByTrack), signal->GetName(), track->GetName());
 			return false;
 		}
 
 		ObjectIdentifier signalIdentifier(ObjectTypeSignal, signalID);
-		route = GetFirstRouteToTrackBase(signalIdentifier);
+		Route* route = GetFirstRouteFromOrToTrackBase(signalIdentifier);
 		if (route != nullptr)
 		{
 			result = Logger::Logger::Format(Languages::GetText(Languages::TextSignalIsUsedByRoute), signal->GetName(), route->GetName());

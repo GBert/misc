@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 
+set(RAILCONTROL_VERSION "26")
+
 project(CMakeTest)
 
 add_executable(railcontrol
@@ -119,8 +121,6 @@ Storage/StorageHandler.cpp
 Storage/StorageHandler.h
 Storage/StorageInterface.h
 Storage/StorageParams.h
-Timestamp.cpp
-Timestamp.h
 Utils/ThreadSafeQueue.h
 Utils/Utils.cpp
 Utils/Utils.h
@@ -198,6 +198,8 @@ WebServer/WebClientTrackBase.cpp
 WebServer/WebClientTrackBase.h
 WebServer/WebServer.cpp
 WebServer/WebServer.h
+Version.cpp
+Version.h
 Hardware/zlib/adler32.c
 Hardware/zlib/compress.c
 Hardware/zlib/crc32.c
@@ -235,3 +237,11 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 target_link_libraries(railcontrol PRIVATE Threads::Threads dl)
 target_include_directories(railcontrol PRIVATE .)
+
+# git infos
+execute_process(COMMAND git log -1 --format=%H WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_VARIABLE GIT_HASH OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process(COMMAND git log -1 --format=%ad --date=unix WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_VARIABLE GIT_TIMESTAMP OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process(COMMAND date +%s WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_VARIABLE COMPILE_TIMESTAMP OUTPUT_STRIP_TRAILING_WHITESPACE)
+add_definitions("-DGIT_HASH=\"${GIT_HASH}\" -DGIT_TIMESTAMP=\"${GIT_TIMESTAMP}\" -DCOMPILE_TIMESTAMP=\"${COMPILE_TIMESTAMP}\" -DRAILCONTROL_VERSION=\"${RAILCONTROL_VERSION}\"")
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/Version.cpp.in" "${CMAKE_CURRENT_BINARY_DIR}/Version.cpp" @ONLY)
+
