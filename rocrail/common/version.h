@@ -1,11 +1,21 @@
 const int revisionnr = 
-1483
+1493
 ;
 const char* commithash = 
-"71f5ff18c63bf2333ef7b2017a70dd4dfb23a7c1";
+"6a95dbd3d8358df1928307a6d9631856856be2b2";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1493 2021-03-20 12:03:39 +0100 wiopi,hardware: removed prototype WIOpi-01\n" \
+"1492 2021-03-20 12:00:23 +0100 wiopi,hardware: WIOpi-01 mounting board\n" \
+"1491 2021-03-19 17:10:41 +0100 wiopi,mobile: not start the PWM thread in case of car option set\n" \
+"1490 2021-03-19 10:43:48 +0100 switch: CTC color\n" \
+"1489 2021-03-19 08:53:20 +0100 translation merge: de, fr, nl, sv\n" \
+"1488 2021-03-18 17:08:06 +0100 wiopi: mobikle moderate servo speed for couplers\n" \
+"1487 2021-03-18 15:45:46 +0100 route: CTC color\n" \
+"1486 2021-03-18 15:07:58 +0100 block: CTC color on free\n" \
+"1485 2021-03-18 14:38:27 +0100 block: CTC color\n" \
+"1484 2021-03-18 13:34:49 +0100 switch,signal: color CTC\n" \
 "1483 2021-03-17 12:20:29 +0100 model: fix memory leak on save with external loco file\n" \
 "1482 2021-03-17 10:59:28 +0100 text: regard move command and not replace child nodes\n" \
 "1481 2021-03-16 15:36:31 +0100 wiopi: pixel LEDScript addressing fix\n" \
