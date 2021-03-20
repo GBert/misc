@@ -124,7 +124,10 @@ int main (int argc, char* argv[])
 	}
 
 	logger->Info(Languages::TextStarting, RailControl);
-	logger->Info(Languages::TextVersion, GetVersionInfoRailControlVersion(), Utils::Utils::TimestampToDate(GetVersionInfoCompileTimestamp()), GetVersionInfoGitHash(), Utils::Utils::TimestampToDate(GetVersionInfoGitTimestamp()));
+	logger->Info(Languages::TextVersion, GetVersionInfoRailControlVersion());
+	logger->Info(Languages::TextCompileDate, Utils::Utils::TimestampToDate(GetVersionInfoCompileTimestamp()));
+	logger->Info(Languages::TextGitHash, GetVersionInfoGitHash());
+	logger->Info(Languages::TextGitDate, Utils::Utils::TimestampToDate(GetVersionInfoGitTimestamp()));
 
 	const string configFileDefaultName("railcontrol.conf");
 	const string configFileName = argumentHandler.GetArgumentString('c', configFileDefaultName);

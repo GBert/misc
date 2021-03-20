@@ -39,6 +39,9 @@ namespace WebServer
 	{
 		public:
 			WebServer() = delete;
+			WebServer(const WebServer&) = delete;
+			WebServer& operator=(const WebServer&) = delete;
+
 			WebServer(Manager& manager, const unsigned short port);
 			~WebServer();
 
@@ -46,7 +49,11 @@ namespace WebServer
 
 			bool NextUpdate(unsigned int& updateIDClient, std::string& s);
 
-			const std::string& GetName() const override { return Webserver; }
+			inline const std::string& GetName() const override
+			{
+				return Webserver;
+			}
+
 			void AccessoryDelete(const AccessoryID accessoryID, const std::string& name) override;
 			void AccessorySettings(const AccessoryID accessoryID, const std::string& name) override;
 			void AccessoryState(const ControlType controlType, const DataModel::Accessory* accessory) override;
@@ -87,15 +94,24 @@ namespace WebServer
 			void ProgramValue(const CvNumber cv, const CvValue value) override;
 
 		private:
-			template<typename... Args> void AddUpdate(const std::string& command, const Languages::TextSelector text, Args... args)
+			template<typename... Args>
+			inline void AddUpdate(const std::string& command, const Languages::TextSelector text, Args... args)
 			{
 				AddUpdate(command, Logger::Logger::Format(Languages::GetText(text), args...));
 			}
+
 			void AddUpdate(const std::string& command, const std::string& status);
-			std::string GetStatus(Languages::TextSelector status) { return UpdateStatus + Languages::GetText(status); }
+
+			inline std::string GetStatus(Languages::TextSelector status)
+			{
+				return UpdateStatus + Languages::GetText(status);
+			}
 
 			void TrackBaseState(std::stringstream& command, const DataModel::TrackBase* track);
 
+			void LogBrowserInfo(const unsigned short port);
+
+			Logger::Logger* logger;
 			volatile bool run;
 			unsigned int lastClientID;
 			std::vector<WebClient*> clients;

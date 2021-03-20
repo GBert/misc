@@ -41,16 +41,18 @@ namespace Logger
 			void operator=(LoggerServer const &) = delete;
 
 			Logger* GetLogger(const std::string& component);
+
 			void Send(const std::string& text);
 
 			static const unsigned short defaultLoggerPort = 2223;
-			static LoggerServer& Instance()
+
+			static inline LoggerServer& Instance()
 			{
 				static LoggerServer server;
 				return server;
 			}
 
-			void AddFileLogger(const std::string& fileName)
+			inline void AddFileLogger(const std::string& fileName)
 			{
 				if (fileLoggerStarted == true)
 				{
@@ -60,7 +62,7 @@ namespace Logger
 				fileLoggerStarted = true;
 			}
 
-			void AddConsoleLogger()
+			inline void AddConsoleLogger()
 			{
 				if (consoleLoggerStarted == true)
 				{
@@ -71,7 +73,7 @@ namespace Logger
 			}
 
 		private:
-			LoggerServer()
+			inline LoggerServer()
 			:	Network::TcpServer(defaultLoggerPort, "Logger"),
 			 	run(true),
 			 	fileLoggerStarted(false),
@@ -81,7 +83,7 @@ namespace Logger
 
 			~LoggerServer();
 
-			void Work(Network::TcpConnection* connection) override
+			inline void Work(Network::TcpConnection* connection) override
 			{
 				clients.push_back(new LoggerClientTcp(connection));
 			}

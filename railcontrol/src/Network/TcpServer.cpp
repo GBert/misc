@@ -18,8 +18,8 @@ along with RailControl; see the file LICENCE. If not see
 <http://www.gnu.org/licenses/>.
 */
 
-#include <cstring>		//memset
 #include <arpa/inet.h>
+#include <cstring>		//memset
 #include <netdb.h>
 #include <netinet/in.h>
 #include <sys/socket.h>

@@ -34,6 +34,8 @@ namespace Network
 	{
 		public:
 			TcpServer() = delete;
+			TcpServer(const TcpServer&) = delete;
+			TcpServer& operator=(const TcpServer&) = delete;
 
 		protected:
 			TcpServer(const unsigned short port, const std::string& threadName);
