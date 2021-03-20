@@ -1,11 +1,12 @@
 const int revisionnr = 
-1493
+1494
 ;
 const char* commithash = 
-"6a95dbd3d8358df1928307a6d9631856856be2b2";
+"c1c20f804b9187943c310c9e6932599321297a9a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1494 2021-03-20 16:52:19 +0100 wiopi,hardware: measurment correction\n" \
 "1493 2021-03-20 12:03:39 +0100 wiopi,hardware: removed prototype WIOpi-01\n" \
 "1492 2021-03-20 12:00:23 +0100 wiopi,hardware: WIOpi-01 mounting board\n" \
 "1491 2021-03-19 17:10:41 +0100 wiopi,mobile: not start the PWM thread in case of car option set\n" \
