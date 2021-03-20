@@ -7,7 +7,7 @@ LIBS=-lpthread -ldl
 
 TMPDIR=RailControl
 
-CXXOBJ= $(patsubst %.cpp,%.o,$(sort Timestamp.cpp $(wildcard *.cpp)) $(wildcard WebServer/*.cpp DataModel/*.cpp Hardware/*.cpp Logger/*.cpp Network/*.cpp Storage/*.cpp Utils/*.cpp))
+CXXOBJ= $(patsubst %.cpp,%.o,$(sort Version.cpp $(wildcard *.cpp)) $(wildcard WebServer/*.cpp DataModel/*.cpp Hardware/*.cpp Logger/*.cpp Network/*.cpp Storage/*.cpp Utils/*.cpp))
 COBJ= $(patsubst %.c,%.o,$(wildcard Hardware/zlib/*.c))
 OBJ=Storage/sqlite/sqlite3.o $(CXXOBJ) $(COBJ)
 
@@ -16,14 +16,13 @@ all: $(OBJ)
 
 dist: all
 	strip railcontrol
-	tar cvJf railcontrol.tar.xz Hardware/*.so Storage/*.so railcontrol railcontrol.conf.dist html/*
 	mkdir $(TMPDIR)
 	cp -r \
 		html \
 		railcontrol.conf.dist \
 		railcontrol \
 		$(TMPDIR)
-	tar cvJf railcontrol.`date +"%Y%m%d"`.tar.xz $(TMPDIR)/* $(TMPDIR)/html/*
+	( cd $(TMPDIR)/.. && tar cvJf railcontrol.`date +"%Y%m%d"`.tar.xz RailControl/* RailControl/html/* )
 	rm -r $(TMPDIR)
 
 sqlite-shell:
