@@ -1,11 +1,19 @@
 const int revisionnr = 
-1494
+1502
 ;
 const char* commithash = 
-"c1c20f804b9187943c310c9e6932599321297a9a";
+"3f5318f658b144179b74a75d6718e3cc0836b16f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1502 2021-03-21 16:56:34 +0100 dinamodlg: removed adjust minsize\n" \
+"1501 2021-03-21 15:25:48 +0100 dinamo: hfi option added\n" \
+"1500 2021-03-21 13:57:57 +0100 switch: correction for CTC poit LED\n" \
+"1499 2021-03-21 12:17:59 +0100 wio: fix for simulating sensor state in WIOlib\n" \
+"1498 2021-03-21 09:06:24 +0100 wiopi,hardware: update\n" \
+"1497 2021-03-21 09:05:55 +0100 cardlg: LED lables\n" \
+"1496 2021-03-21 09:05:18 +0100 wiopi: mobile car option\n" \
+"1495 2021-03-21 07:25:37 +0100 switch: CTC color\n" \
 "1494 2021-03-20 16:52:19 +0100 wiopi,hardware: measurment correction\n" \
 "1493 2021-03-20 12:03:39 +0100 wiopi,hardware: removed prototype WIOpi-01\n" \
 "1492 2021-03-20 12:00:23 +0100 wiopi,hardware: WIOpi-01 mounting board\n" \
