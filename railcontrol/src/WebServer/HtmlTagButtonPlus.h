@@ -20,20 +20,25 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
+#include <map>
 #include <string>
 
 #include "WebServer/HtmlTagButton.h"
 
 namespace WebServer
 {
-	class HtmlTagButtonCancel : public HtmlTagButton
+	class HtmlTagButtonPlus : public HtmlTagButton
 	{
 		public:
-			inline HtmlTagButtonCancel()
-			:	HtmlTagButton(HtmlTag("span").AddContent("&#x2718;"), "popup_cancel")
+			HtmlTagButtonPlus() = delete;
+			HtmlTagButtonPlus(HtmlTagButtonPlus&) = delete;
+			HtmlTagButtonPlus& operator=(HtmlTagButtonPlus&) = delete;
+
+			inline HtmlTagButtonPlus(const std::string& field, const int max)
+			:	HtmlTagButton(HtmlTag("span").AddContent("+"), field + "_plus")
 			{
-				AddAttribute("onclick", "document.getElementById('popup').style.display = 'none'; return false;");
-				AddClass("wide_button");
+				AddAttribute("onclick", "incrementIntegerValue('" + field + "', " + std::to_string(max) + "); return false;");
+				AddClass("small_button");
 			}
 	};
 } // namespace WebServer

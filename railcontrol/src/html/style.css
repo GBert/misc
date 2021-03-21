@@ -423,6 +423,11 @@ button:active {
 	width: 90px;
 }
 
+.small_button {
+	height: 25px;
+	width: 25px;
+}
+
 .button_on {
 	background-color: darkgray;
 }

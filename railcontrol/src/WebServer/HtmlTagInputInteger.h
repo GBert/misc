@@ -30,6 +30,9 @@ namespace WebServer
 	{
 		public:
 			HtmlTagInputInteger() = delete;
+			HtmlTagInputInteger(HtmlTagInputInteger&) = delete;
+			HtmlTagInputInteger& operator=(HtmlTagInputInteger&) = delete;
+
 			HtmlTagInputInteger(const std::string& name, const int value, const int min, const int max);
 	};
 } // namespace WebServer

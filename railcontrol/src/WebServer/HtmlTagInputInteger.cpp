@@ -20,6 +20,8 @@ along with RailControl; see the file LICENCE. If not see
 
 #include <string>
 
+#include "WebServer/HtmlTagButtonMinus.h"
+#include "WebServer/HtmlTagButtonPlus.h"
 #include "WebServer/HtmlTagInput.h"
 #include "WebServer/HtmlTagInputInteger.h"
 
@@ -37,14 +39,7 @@ namespace WebServer
 		input.AddAttribute("onchange", "checkIntegerValue('" + name + "', " + minString + ", " + maxString + ");");
 		AddChildTag(input);
 
-		HtmlTag minus("a");
-		minus.AddAttribute("onclick", "decrementIntegerValue('" + name + "', " + minString + ");");
-		minus.AddContent(" - ");
-		AddChildTag(minus);
-
-		HtmlTag plus("a");
-		plus.AddAttribute("onclick", "incrementIntegerValue('" + name + "', " + maxString + ");");
-		plus.AddContent(" + ");
-		AddChildTag(plus);
+		AddChildTag(HtmlTagButtonMinus(name, min));
+		AddChildTag(HtmlTagButtonPlus(name, max));
 	}
 } // namespace WebServer

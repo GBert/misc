@@ -30,6 +30,7 @@ namespace WebServer
 		HtmlTag buttonTag("button");
 		buttonTag.AddClass("button");
 		buttonTag.AddAttribute("name", commandID);
+		buttonTag.AddAttribute("type", "button");
 		buttonTag.AddId(commandID);
 		buttonTag.AddContent(value);
 		if (toolTipText.length() > 0)

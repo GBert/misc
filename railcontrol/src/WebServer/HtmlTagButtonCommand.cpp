@@ -25,7 +25,11 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace WebServer
 {
-	HtmlTagButtonCommand::HtmlTagButtonCommand(const std::string& value, const std::string& command, const std::map<std::string,std::string>& arguments, const std::string& tooltip, const std::string& additionalOnClick)
+	HtmlTagButtonCommand::HtmlTagButtonCommand(const std::string& value,
+		const std::string& command,
+		const std::map<std::string,std::string>& arguments,
+		const std::string& tooltip,
+		const std::string& additionalOnClick)
 	:	HtmlTagButton(value, command, tooltip)
 	{
 		std::string cmd = Utils::Utils::StringBeforeDelimiter(command, "_");
