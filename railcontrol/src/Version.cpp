@@ -33,7 +33,7 @@ time_t GetVersionInfoGitTimestamp()
 
 time_t GetVersionInfoCompileTimestamp()
 {
-	return 1616337848;
+	return 1616342686;
 }
 
 const std::string& GetVersionInfoRailControlVersion()
