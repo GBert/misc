@@ -22,5 +22,6 @@ along with RailControl; see the file LICENCE. If not see
 
 const std::string& GetVersionInfoGitHash();
 time_t GetVersionInfoGitTimestamp();
+unsigned int GetVersionInfoGitDirty();
 time_t GetVersionInfoCompileTimestamp();
 const std::string& GetVersionInfoRailControlVersion();

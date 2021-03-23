@@ -127,6 +127,15 @@ namespace WebServer
 				void* tmpAddrPtr = &((struct sockaddr_in*) ifa->ifa_addr)->sin_addr;
 				char addressBuffer[INET_ADDRSTRLEN];
 				inet_ntop(AF_INET, tmpAddrPtr, addressBuffer, INET_ADDRSTRLEN);
+				string address(addressBuffer);
+				if (address.compare("0.0.0.0") == 0)
+				{
+					continue;
+				}
+				if (address.substr(0, 8).compare("169.254.") == 0)
+				{
+					continue;
+				}
 				ipv4Info += Http + addressBuffer + ":" + Port + "/";
 			}
 			else if (ifa->ifa_addr->sa_family == AF_INET6)

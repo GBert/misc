@@ -181,6 +181,7 @@ const char* Languages::languages[MaxTexts][MaxLanguages] =
 /* TextFunctions */ { "Functions", "Funktionen", "Functiones" },
 /* TextGerman */ { "German", "Deutsch", "Aleman" },
 /* TextGitDate */ { "Last GIT commit date: {0}", "Letztes GIT Commit Datum: {0}", "Último GIT commit fetcha: {0}" },
+/* TextGitDirty */ { "GIT working directory has {0} changed files since last commit.", "Im GIT Arbeitsverzeichnis wurden seit dem letzten commit {0} Dateien geändert.", "En el directorio de trabajo de GIT han cambiado {0} archivos deste el último commit." },
 /* TextGitHash */ { "Last GIT commit hash: {0}", "Letzter GIT Commit Hash: {0}", "Último GIT commit hash: {0};" },
 /* TextGreen */ { "green", "grün", "verde" },
 /* TextHasAlreadyReservedRoute */ { "{0} has already reserved a route. Setting error state.", "{0} hat schon eine Fahrstrasse reserviert. Setze Fehlerstatus.", "{0} ya ha reservado un itinerario. Poniando estado error." },

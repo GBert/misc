@@ -140,7 +140,6 @@ WebServer/HtmlTagAccessory.cpp
 WebServer/HtmlTagAccessory.h
 WebServer/HtmlTagButton.cpp
 WebServer/HtmlTagButton.h
-WebServer/HtmlTagButtonCancel.cpp
 WebServer/HtmlTagButtonCancel.h
 WebServer/HtmlTagButtonCommand.cpp
 WebServer/HtmlTagButtonCommand.h
@@ -149,8 +148,9 @@ WebServer/HtmlTagButtonCommandPressRelease.h
 WebServer/HtmlTagButtonCommandToggle.cpp
 WebServer/HtmlTagButtonCommandToggle.h
 WebServer/HtmlTagButtonCommandWide.h
-WebServer/HtmlTagButtonOK.cpp
+WebServer/HtmlTagButtonMinus.h
 WebServer/HtmlTagButtonOK.h
+WebServer/HtmlTagButtonPlus.h
 WebServer/HtmlTagButtonPopup.cpp
 WebServer/HtmlTagButtonPopup.h
 WebServer/HtmlTagButtonPopupWide.h
@@ -243,7 +243,10 @@ target_include_directories(railcontrol PRIVATE .)
 # git infos
 execute_process(COMMAND git log -1 --format=%H WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_VARIABLE GIT_HASH OUTPUT_STRIP_TRAILING_WHITESPACE)
 execute_process(COMMAND git log -1 --format=%ad --date=unix WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_VARIABLE GIT_TIMESTAMP OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process(COMMAND git status -s WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_FILE /tmp/git_status.txt OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process(COMMAND wc -l WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} INPUT_FILE /tmp/git_status.txt OUTPUT_VARIABLE GIT_DIRTY OUTPUT_STRIP_TRAILING_WHITESPACE)
 execute_process(COMMAND date +%s WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_VARIABLE COMPILE_TIMESTAMP OUTPUT_STRIP_TRAILING_WHITESPACE)
-add_definitions("-DGIT_HASH=\"${GIT_HASH}\" -DGIT_TIMESTAMP=\"${GIT_TIMESTAMP}\" -DCOMPILE_TIMESTAMP=\"${COMPILE_TIMESTAMP}\" -DRAILCONTROL_VERSION=\"${RAILCONTROL_VERSION}\"")
+add_definitions("-DGIT_HASH=\"${GIT_HASH}\" -DGIT_TIMESTAMP=\"${GIT_TIMESTAMP}\" -DGIT_DIRTY=\"${GIT_DIRTY}\" -DCOMPILE_TIMESTAMP=\"${COMPILE_TIMESTAMP}\" -DRAILCONTROL_VERSION=\"${RAILCONTROL_VERSION}\"")
+# FIXME: is only executed by "cmake ."
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/Version.cpp.in" "${CMAKE_CURRENT_BINARY_DIR}/Version.cpp" @ONLY)
 

@@ -128,6 +128,11 @@ int main (int argc, char* argv[])
 	logger->Info(Languages::TextCompileDate, Utils::Utils::TimestampToDate(GetVersionInfoCompileTimestamp()));
 	logger->Info(Languages::TextGitHash, GetVersionInfoGitHash());
 	logger->Info(Languages::TextGitDate, Utils::Utils::TimestampToDate(GetVersionInfoGitTimestamp()));
+	unsigned int changedFiles = GetVersionInfoGitDirty();
+	if (changedFiles)
+	{
+		logger->Info(Languages::TextGitDirty, changedFiles);
+	}
 
 	const string configFileDefaultName("railcontrol.conf");
 	const string configFileName = argumentHandler.GetArgumentString('c', configFileDefaultName);

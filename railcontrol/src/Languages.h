@@ -181,6 +181,7 @@ class Languages
 			TextFunctions,
 			TextGerman,
 			TextGitDate,
+			TextGitDirty,
 			TextGitHash,
 			TextGreen,
 			TextHasAlreadyReservedRoute,
