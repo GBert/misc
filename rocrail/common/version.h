@@ -1,11 +1,17 @@
 const int revisionnr = 
-1502
+1508
 ;
 const char* commithash = 
-"3f5318f658b144179b74a75d6718e3cc0836b16f";
+"7a1cc8e9060835d45e9080d9bb955ae020c50476";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1508 2021-03-22 19:24:17 +0100 wiopi: Throttle case update\n" \
+"1507 2021-03-22 14:17:11 +0100 wiopi: throttle case bottom\n" \
+"1506 2021-03-22 13:43:39 +0100 wiopi: throttle case\n" \
+"1505 2021-03-22 10:54:18 +0100 wiopi: scad throttle top update\n" \
+"1504 2021-03-22 08:10:07 +0100 wiopi: throttle case (WIP)\n" \
+"1503 2021-03-21 22:26:20 +0100 wiopi: CAD update\n" \
 "1502 2021-03-21 16:56:34 +0100 dinamodlg: removed adjust minsize\n" \
 "1501 2021-03-21 15:25:48 +0100 dinamo: hfi option added\n" \
 "1500 2021-03-21 13:57:57 +0100 switch: correction for CTC poit LED\n" \
