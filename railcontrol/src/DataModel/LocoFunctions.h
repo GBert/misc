@@ -28,8 +28,7 @@ namespace DataModel
 {
 	typedef uint8_t LocoFunctionNr;
 
-	static const LocoFunctionNr MaxLocoFunctionNumber = 32;
-	static const LocoFunctionNr NumberOfLocoFunctions = MaxLocoFunctionNumber + 1; // f0 - f32 = 33
+	static const LocoFunctionNr NumberOfLocoFunctions = 33; // f0 - f32 = 33
 
 	enum LocoFunctionState : uint8_t
 	{

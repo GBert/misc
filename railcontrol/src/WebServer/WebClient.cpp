@@ -1459,7 +1459,7 @@ namespace WebServer
 			case ObjectTypeLoco:
 			{
 				map<string,string> functionOptions;
-				for (DataModel::LocoFunctionNr function = 0; function <= DataModel::MaxLocoFunctionNumber; ++function)
+				for (DataModel::LocoFunctionNr function = 0; function < NumberOfLocoFunctions; ++function)
 				{
 					functionOptions[Utils::Utils::ToStringWithLeadingZeros(function, 2)] = "F" + to_string(function);
 				}
@@ -1975,28 +1975,18 @@ namespace WebServer
 		functionIcons[DataModel::LocoFunctionIconSoundLouder] = Languages::TextLocoFunctionIconSoundLouder;
 		functionIcons[DataModel::LocoFunctionIconSoundLower] = Languages::TextLocoFunctionIconSoundLower;
 		functionIcons[DataModel::LocoFunctionIconNoBreak] = Languages::TextLocoFunctionIconNoBreak;
-		for (unsigned int nr = 0; nr < DataModel::MaxLocoFunctionNumber; ++nr)
+		for (unsigned int nr = 0; nr < NumberOfLocoFunctions; ++nr)
 		{
 			HtmlTag fDiv("div");
 			fDiv.AddClass("function_line");
 			string nrString = to_string(nr);
 			string fNrString = "f" + nrString;
 			fDiv.AddChildTag(HtmlTagLabel("F" + nrString, fNrString + "_type"));
-			DataModel::LocoFunctionType type;
-			DataModel::LocoFunctionIcon icon;
-			DataModel::LocoFunctionTimer timer;
-			if (locoFunctions != nullptr)
-			{
-				type = locoFunctions[nr].type;
-				icon = locoFunctions[nr].icon;
-				timer = locoFunctions[nr].timer;
-			}
-			else
-			{
-				type = DataModel::LocoFunctionTypeNone;
-				icon = DataModel::LocoFunctionIconNone;
-				timer = 0;
-			}
+
+			DataModel::LocoFunctionType type = locoFunctions[nr].type;
+			DataModel::LocoFunctionIcon icon = locoFunctions[nr].icon;
+			DataModel::LocoFunctionTimer timer = locoFunctions[nr].timer;
+
 			fDiv.AddChildTag(HtmlTagSelect(fNrString + "_type", functionTypes, type).AddAttribute("onclick", "onChangeLocoFunctionType(" + nrString + ");return false;"));
 			HtmlTagSelect selectIcon(fNrString + "_icon", functionIcons, icon);
 			HtmlTagInputInteger inputTimer(fNrString + "_timer", timer, 1, 255);
@@ -2064,7 +2054,7 @@ namespace WebServer
 
 		vector<DataModel::LocoFunctionEntry> locoFunctions;
 		DataModel::LocoFunctionEntry locoFunctionEntry;
-		for (DataModel::LocoFunctionNr nr = 0; nr < DataModel::MaxLocoFunctionNumber; ++nr)
+		for (DataModel::LocoFunctionNr nr = 0; nr < NumberOfLocoFunctions; ++nr)
 		{
 			string nrString = "f" + to_string(nr) + "_";
 			locoFunctionEntry.nr = nr;
