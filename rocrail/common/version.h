@@ -1,11 +1,15 @@
 const int revisionnr = 
-1508
+1512
 ;
 const char* commithash = 
-"7a1cc8e9060835d45e9080d9bb955ae020c50476";
+"b2b09df1cdaad53861f1a9aa5cb7a9f5c880aea0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1512 2021-03-24 17:24:54 +0100 wiopi: ID12LA case\n" \
+"1511 2021-03-24 08:21:49 +0100 cardlg: on/off pos function attributes added\n" \
+"1510 2021-03-23 14:19:24 +0100 wiopi: throttle case update\n" \
+"1509 2021-03-23 11:06:11 +0100 bidib: process lights on loco drive command too\n" \
 "1508 2021-03-22 19:24:17 +0100 wiopi: Throttle case update\n" \
 "1507 2021-03-22 14:17:11 +0100 wiopi: throttle case bottom\n" \
 "1506 2021-03-22 13:43:39 +0100 wiopi: throttle case\n" \
