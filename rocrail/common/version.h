@@ -1,11 +1,13 @@
 const int revisionnr = 
-1512
+1514
 ;
 const char* commithash = 
-"b2b09df1cdaad53861f1a9aa5cb7a9f5c880aea0";
+"ab279da6eff5a89bc54c3774c5e03c3f271ad7e1";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1514 2021-03-25 17:38:14 +0100 wiopi: moved SCAD files to repository Rocrail3D\n" \
+"1513 2021-03-25 09:08:55 +0100 wiopi: battery board\n" \
 "1512 2021-03-24 17:24:54 +0100 wiopi: ID12LA case\n" \
 "1511 2021-03-24 08:21:49 +0100 cardlg: on/off pos function attributes added\n" \
 "1510 2021-03-23 14:19:24 +0100 wiopi: throttle case update\n" \
