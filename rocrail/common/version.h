@@ -1,11 +1,13 @@
 const int revisionnr = 
-1514
+1516
 ;
 const char* commithash = 
-"ab279da6eff5a89bc54c3774c5e03c3f271ad7e1";
+"28d7b3a6b2eb821d06e0ca99f9a76778765a3f50";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1516 2021-03-28 11:24:30 +0200 loc,locdialog: added LED parameters to the functions\n" \
+"1515 2021-03-26 14:41:48 +0100 wiopi: LED and script commands are default for mobile type with offset zero\n" \
 "1514 2021-03-25 17:38:14 +0100 wiopi: moved SCAD files to repository Rocrail3D\n" \
 "1513 2021-03-25 09:08:55 +0100 wiopi: battery board\n" \
 "1512 2021-03-24 17:24:54 +0100 wiopi: ID12LA case\n" \
