@@ -87,7 +87,7 @@ Manager::Manager(Config& config)
 	selectRouteApproach = static_cast<DataModel::SelectRouteApproach>(Utils::Utils::StringToInteger(storage->GetSetting("SelectRouteApproach")));
 	nrOfTracksToReserve = static_cast<DataModel::Loco::NrOfTracksToReserve>(Utils::Utils::StringToInteger(storage->GetSetting("NrOfTracksToReserve"), 2));
 
-	controls[ControlIdWebserver] = new WebServer::WebServer(*this, config.getValue("webserverport", 8080));
+	controls[ControlIdWebserver] = new WebServer::WebServer(*this, config.getValue("webserverport", 8082));
 
 	storage->AllHardwareParams(hardwareParams);
 	for (auto hardwareParam : hardwareParams)

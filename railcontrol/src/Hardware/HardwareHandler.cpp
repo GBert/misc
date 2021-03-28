@@ -261,18 +261,18 @@ namespace Hardware
 			switch (mySwitch->GetAccessoryState())
 			{
 				case DataModel::SwitchStateTurnout:
-					instance->Accessory(protocol, address + 1, mySwitch->CalculateInvertedAccessoryState(DataModel::AccessoryStateOff), duration);
+					instance->Accessory(protocol, address + 1, mySwitch->CalculateInvertedAccessoryState(DataModel::AccessoryStateOn), duration);
 					instance->Accessory(protocol, address, mySwitch->CalculateInvertedAccessoryState(DataModel::AccessoryStateOff), duration);
 					break;
 
 				case DataModel::SwitchStateStraight:
 					instance->Accessory(protocol, address, mySwitch->CalculateInvertedAccessoryState(DataModel::AccessoryStateOn), duration);
-					instance->Accessory(protocol, address + 1, mySwitch->CalculateInvertedAccessoryState(DataModel::AccessoryStateOff), duration);
+					instance->Accessory(protocol, address + 1, mySwitch->CalculateInvertedAccessoryState(DataModel::AccessoryStateOn), duration);
 					break;
 
 				case DataModel::SwitchStateThird:
 					instance->Accessory(protocol, address, mySwitch->CalculateInvertedAccessoryState(DataModel::AccessoryStateOn), duration);
-					instance->Accessory(protocol, address + 1, mySwitch->CalculateInvertedAccessoryState(DataModel::AccessoryStateOn), duration);
+					instance->Accessory(protocol, address + 1, mySwitch->CalculateInvertedAccessoryState(DataModel::AccessoryStateOff), duration);
 					break;
 
 				default:
