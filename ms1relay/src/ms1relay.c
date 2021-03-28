@@ -30,7 +30,6 @@ static int sc = INVALID_SOCKET;
 #define DEF_CAN "can0"
 #define DEF_LOCODB "/www/config/lokomotive.cs2"
 
-
 static unsigned char stage0reply[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, OH_PING};
 static unsigned char stage7reply[4] = {0x00, OH_ROOT, 0x01, 0x00};
 static unsigned char sdhandlerep[6] = {0x00, 0x00, 0x00, OH_SDES, 0x00, 0x01};
@@ -41,10 +40,17 @@ static unsigned char locostackad[8] = {0x80, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x00,
 static unsigned char locostackrm[8] = {0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};
 
 // device specific data in NW order <------- UID ------->  <- vers ->  < device >
-static unsigned char M_DEV_ID[] = {0x76, 0x54, 0x4D, 0x01, 0x14, 0x0B, 0xFF, 0xF1};
+static unsigned char M_DEV_ID[] = {0x76, 0x54, 0x4D, 0x01, 0x15, 0x03, 0xFF, 0xF1};
+
+// device description (index 0)
+static unsigned char M_DEV_STAT[][8] = {
+    {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, {"04731\0\0"},
+    {0x6D, 0x73, 0x31, 0x72, 0x65, 0x6C, 0x61, 0x79},  // ms1relay
+    {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}   };
 
 ms1dat_t ms1d;
-int     verbose;
+int     powsync, verbose;
+int     querystep = 0;
 char    locodbname[128];
 
 uint16_t be16(uint8_t *u) {
@@ -60,13 +66,13 @@ void fillid(uint8_t *u, uint32_t v)
     u[0] = v >> 24; u[1] = v >> 16; u[2] = v >> 8;  u[3] = v;
 }
 
-
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 0.3\n\n");
+    fprintf(stderr, "   Version %u.%u\n\n", M_DEV_ID[4], M_DEV_ID[5]);
     fprintf(stderr, "         -i <can int>        can interface - default %s\n", DEF_CAN);
     fprintf(stderr, "         -d                  daemonize\n");
     fprintf(stderr, "         -l <loco_db>        loco database file - default %s\n", DEF_LOCODB);
+    fprintf(stderr, "         -p                  power state synchronisation\n");
     fprintf(stderr, "         -v                  verbose output\n\n");
 }
 
@@ -99,6 +105,52 @@ void locostackRemove(uint8_t node, uint16_t objhandle)
     VPRT("Remove from stack of node %u OH %u, count is now %u\n", node, objhandle, ms1d.slvstackcnt);
 }
 
+void queryPowerState()
+{
+    struct can_frame frame;
+    frame.can_id = 0x004711 | CAN_EFF_FLAG;
+    frame.can_dlc = 4;
+    memset(frame.data, 0, 4);
+    if (write(sc, &frame, sizeof(struct can_frame)) < 0)
+        fprintf(stderr, "error line %d writing CAN frame: %s\n", __LINE__, strerror(errno));
+}
+
+// send data blocks via CAN
+static void send_datablock(unsigned char (*info)[8], int nmbr)
+{
+    struct can_frame frame;
+    frame.can_dlc = 8;
+
+    for (int pkts = 0; pkts < nmbr; pkts++) {
+        memcpy(frame.data, info[pkts], 8);
+        frame.can_id = (0x003B0301 + pkts) | CAN_EFF_FLAG;
+        // send data block frame
+        if (write(sc, &frame, sizeof(struct can_frame)) < 0)
+            fprintf(stderr, "error line %d writing CAN frame: %s\n", __LINE__, strerror(errno));
+    }
+}
+
+void queryLocoState()
+{
+    struct can_frame frame;
+    switch (querystep) {
+        case 1:     frame.can_id = 0x084711 | CAN_EFF_FLAG;     // speed
+                    frame.can_dlc = 4;
+                    break;
+        case 2:     frame.can_id = 0x0A4711 | CAN_EFF_FLAG;     // direction
+                    frame.can_dlc = 4;
+                    break;
+        default:    frame.can_id = 0x0C4711 | CAN_EFF_FLAG;     // function
+                    frame.can_dlc = 5;
+                    frame.data[4] = querystep - 3;
+                    break;
+    }
+    fillid(frame.data, ms1d.slvassignedLID);
+    if (write(sc, &frame, sizeof(struct can_frame)) < 0)
+        fprintf(stderr, "error line %d writing CAN frame: %s\n", __LINE__, strerror(errno));
+    querystep--;
+}
+
 void sendstatetoall(struct can_frame frame)
 {
     uint8_t node = 0;       // TODO: loop over all MS1, but actually there is only one
@@ -111,9 +163,10 @@ void sendstatetoall(struct can_frame frame)
 
 void handleStdCAN(struct can_frame *frame)
 {
+    uint16_t v;
     switch ((frame->can_id & 0x01FF0000UL) >> 16) {
         // System commands
-        case 0x01:	switch (frame->data[4]) {
+        case 0x01:  switch (frame->data[4]) {
                 // Stop
                 case 0x00:  frame->data[0] = 1;
                             frame->data[2] = 1;     // show STOP
@@ -130,7 +183,7 @@ void handleStdCAN(struct can_frame *frame)
                             VPRT("Sending GO to all MS1 nodes\n");
                             break;
                 // Overload
-                case 0X0A:  frame->data[0] = 2;
+                case 0x0A:  frame->data[0] = 2;
                             frame->data[2] = 1;     // show OVERLOAD
                             sendstatetoall(*frame);
                             VPRT("Sending OVERLOAD to all MS1 nodes\n");
@@ -140,13 +193,53 @@ void handleStdCAN(struct can_frame *frame)
                 }
                 frame->can_id = 0;      // no reply
                 break;
+        // loco speed
+        case 0x09:  if (be16(&frame->data[2]) == ms1d.slvassignedLID) {
+                        v = be16(&frame->data[4]) >> 3;
+                        if (ms1d.direction) v += 0x80;
+                        frame->data[0] = 1;
+                        frame->data[1] = 0;
+                        frame->data[2] = v;
+                        frame->can_dlc = 3;
+                        frame->can_id = 0x18000100 | CAN_EFF_FLAG | (ms1d.slvassignedOH << 10);
+                        VPRT("Change of FKT %u to %u\n", frame->data[0], frame->data[2]);
+                    }
+                    else frame->can_id = 0; // no reply
+                    break;
+        // loco direction
+        case 0x0B:  if (be16(&frame->data[2]) == ms1d.slvassignedLID) {
+                        ms1d.direction = frame->data[4] - 1;
+                    }
+                    frame->can_id = 0;      // no reply
+                    break;
+        // loco function
+        case 0x0D:  if (be16(&frame->data[2]) == ms1d.slvassignedLID) {
+                        frame->data[0] = frame->data[4] + 2;
+                        frame->data[1] = 0;
+                        frame->data[2] = frame->data[5];
+                        frame->can_dlc = 3;
+                        frame->can_id = 0x18000100 | CAN_EFF_FLAG | (ms1d.slvassignedOH << 10);
+                        VPRT("Change of FKT %u to %u\n", frame->data[0], frame->data[2]);
+                    }
+                    else frame->can_id = 0; // no reply
+                    break;
         // Ping
         case 0x30:  frame->can_id += 0x10000;
                     frame->can_dlc = 8;
                     memcpy(frame->data, M_DEV_ID, 8);
                     break;
+        // status data config
+        case 0x3A:  if ((memcmp(frame->data, M_DEV_ID, 4)) || (frame->data[4]))
+                        frame->can_id = 0;  // no reply
+                    else {
+                        send_datablock(M_DEV_STAT, sizeof(M_DEV_STAT)/8);
+                        frame->can_id += 0x10000;
+                        frame->can_dlc = 6;
+                        frame->data[5] = sizeof(M_DEV_STAT)/8;
+                    }
+                    break;
         // unhandled codes
-        default:	frame->can_id = 0;      // no reply
+        default:    frame->can_id = 0;      // no reply
     }
 }
 
@@ -158,7 +251,7 @@ void queryName(unsigned char node, unsigned char start)
     memcpy(frame.data, querymsname, 3);
     frame.data[3] = start;
     if (write(sc, &frame, sizeof(struct can_frame)) < 0)
-		fprintf(stderr, "error line %d writing CAN frame: %s\n", __LINE__, strerror(errno));
+        fprintf(stderr, "error line %d writing CAN frame: %s\n", __LINE__, strerror(errno));
 }
 
 int main(int argc, char **argv) {
@@ -173,10 +266,11 @@ int main(int argc, char **argv) {
 
     int background = 0;
     verbose = 0;
+    powsync = 0;
     strcpy(ifr.ifr_name, DEF_CAN);
     strcpy(locodbname, DEF_LOCODB);
 
-    while ((opt = getopt(argc, argv, "i:l:dvh?")) != -1) {
+    while ((opt = getopt(argc, argv, "i:l:dpvh?")) != -1) {
     switch (opt) {
     case 'i':
         strncpy(ifr.ifr_name, optarg, sizeof(ifr.ifr_name) - 1);
@@ -187,6 +281,9 @@ int main(int argc, char **argv) {
         break;
     case 'l':
         strncpy(locodbname, optarg, sizeof(locodbname) - 1);
+        break;
+    case 'p':
+        powsync = 1;
         break;
     case 'v':
         verbose = 1;
@@ -246,7 +343,7 @@ int main(int argc, char **argv) {
         if (read(sc, &frame, sizeof(struct can_frame)) < 0) {
         fprintf(stderr, "error reading CAN frame: %s\n", strerror(errno));
         }
-        else if (frame.can_id & CAN_EFF_FLAG) {	/* only EFF frames are valid */
+        else if (frame.can_id & CAN_EFF_FLAG) { /* only EFF frames are valid */
 
 /*  ID field for MS1, coding for normal operation and for detection:
     28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
@@ -277,6 +374,7 @@ int main(int argc, char **argv) {
         }
         else if (locodatptr) {
             lid = locodatptr->locoid;
+            if (lid == 0) frame.data[0] = 0;                    // dummy loco
             VPRT("Node %u reports change of FKT %u to %u\n", node, frame.data[0], frame.data[2]);
             if (frame.data[0] == 1) {
                 frame.can_id = 0x084711 | CAN_EFF_FLAG;         // speed
@@ -285,21 +383,21 @@ int main(int argc, char **argv) {
                 frame.data[5] = frame.data[2] << 3;
                 if ((frame.data[2] >> 7) != ms1d.direction) {
                     ms1d.direction = frame.data[2] >> 7;
-                    fillid(frame.data,lid);
+                    fillid(frame.data, lid);
                     if (write(sc, &frame, sizeof(struct can_frame)) < 0)
                         fprintf(stderr, "error line %d writing CAN frame: %s\n", __LINE__, strerror(errno));
                     frame.can_id = 0x0A4711 | CAN_EFF_FLAG;     // direction
                     frame.can_dlc = 5;
                     frame.data[4] = ms1d.direction + 1;
                 }
-                fillid(frame.data,lid);
+                fillid(frame.data, lid);
             }
             else if (frame.data[0] > 1) {
                 frame.can_id = 0x0C4711 | CAN_EFF_FLAG;         // function
                 frame.can_dlc = 6;
                 frame.data[4] = frame.data[0] - 2;
                 frame.data[5] = frame.data[2];
-                fillid(frame.data,lid);
+                fillid(frame.data, lid);
             }
         }
         break;
@@ -312,8 +410,12 @@ int main(int argc, char **argv) {
         break;
     case 0x14000000:        // Prio 101, Cmd 000    => control take-over
         frame.can_id--;
-        ms1d.slvassignedOH = objhandle;
-        VPRT("Node %u has selected loco with handle %u\n", node, objhandle);
+        if (locodatptr) {
+            ms1d.slvassignedOH = objhandle;
+            ms1d.slvassignedLID = locodatptr->locoid;
+            if (locodatptr->locoid) querystep = locodatptr->funmbr + 2;
+        }
+        VPRT("Node %u has selected loco with handle %u and ID %u\n", node, objhandle, ms1d.slvassignedLID);
         break;
     case 0x18000000:        // Prio 110, Cmd 000    => allow MS1 to control
         frame.can_id--;
@@ -379,6 +481,9 @@ int main(int argc, char **argv) {
             case 3: frame.data[2] = 4;              // mfx
                     frame.can_dlc = 3;
                     break;
+            case 4: if (powsync)
+                        queryPowerState();  // trigger power state synchronisation
+                    break;
             }
         }
         else {
@@ -395,8 +500,10 @@ int main(int argc, char **argv) {
                     } else if ((locodatptr) && (frame.data[0] < (locodatptr->funmbr + 2))) {
                         lid = locodatptr->futype[frame.data[0] - 2];
                         frame.can_dlc = 4;
-                        frame.data[2] = (lid & 0x80) ? 2 : 2;   // mode	// TODO: insert correct values
-                        frame.data[3] = lid & 0x7F;             // icon
+                        // HACK: workaround because momentary mode does not work like specified
+                        frame.data[2] = (lid & 0x80) ? 2 : 2;       // mode
+                        // HACK: icon type 0 not accepted, so use 0x10 for no icon
+                        frame.data[3] = lid ? (lid & 0x7F) : 0x10;  // icon
                     }
                     break;
             case 2: frame.can_id--;     // ???
@@ -444,7 +551,7 @@ int main(int argc, char **argv) {
                     break;
         }
         break;
-    case 0x18000280:		// Prio 110, Cmd 101
+    case 0x18000280:        // Prio 110, Cmd 101
         if (frame.can_id == (0x180002F0 | CAN_EFF_FLAG)) {
             printf("Updating the loco database.\n");
             updatereadDB(locodbname, 10, verbose);
@@ -459,7 +566,7 @@ int main(int argc, char **argv) {
         case 0: mid = 1;       // HACK: because only 1 MS1 we use always 1
                 frame.can_id |= (0x80 | (mid << 10));
                 frame.can_dlc = 8;
-               	memcpy(frame.data, stage0reply, 8);
+                memcpy(frame.data, stage0reply, 8);
                 break;
         case 4: memcpy(ms1d.slaveuid, frame.data, 4);
                 /* fall thru */
@@ -469,15 +576,15 @@ int main(int argc, char **argv) {
         case 7: if (frame.can_dlc == 8) memcpy(ms1d.slvversion, frame.data+4, 2);
                 frame.can_id |= 0x80;
                 frame.can_dlc = 8;
-               	memcpy(frame.data, ms1d.slaveuid, 4);
-               	memcpy(frame.data+4, stage7reply, 4);
+                memcpy(frame.data, ms1d.slaveuid, 4);
+                memcpy(frame.data+4, stage7reply, 4);
                 printf("Node %u has UID %08X and AP Version %u.%u\n",
                     frame.data[6], be32(ms1d.slaveuid), ms1d.slvversion[0], ms1d.slvversion[1]);
                 ms1d.slvstackcnt = 0;
                 break;
         default:frame.can_id |= 0x80;   // stages 1, 2, and 3
                 frame.can_dlc = 8;
-               	memset(frame.data, 0, 8);
+                memset(frame.data, 0, 8);
         }
         break;
     default:
@@ -487,6 +594,8 @@ int main(int argc, char **argv) {
     if (frame.can_id) {
         if (write(sc, &frame, sizeof(struct can_frame)) < 0)
             fprintf(stderr, "error line %d writing CAN frame: %s\n", __LINE__, strerror(errno));
+    if (querystep && (ms1d.multiadd == 0))
+        queryLocoState();
     }
     }
     }

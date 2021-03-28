@@ -17,6 +17,7 @@ typedef struct _ms1dat {
     uint8_t  slvstackcnt;
     uint16_t slvstack[10];
     uint16_t slvassignedOH;
+    uint16_t slvassignedLID;
     uint8_t  multiadd;
     uint8_t  direction;
 } ms1dat_t;
