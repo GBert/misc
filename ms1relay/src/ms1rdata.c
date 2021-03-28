@@ -25,6 +25,8 @@ static uint8_t xl2to1[] = {
     SOUNDX, FUSYM,  LIGHT,  LIGHT,  LIGHT,  LIGHT,  SOUNDX, SOUNDX, LIGHT,    SOUND,
     LIGHT,  LIGHT2, LIGHT1, SOUNDX, SOUNDX, SOUNDX, FUSYM,  LIGHT,  LIGHT,    SOUNDX };
 
+// prevent from empty display if no loco available
+locodat_t noloco = {0, 0, 0, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, "ms1relay\0\0\0\0\0\0\0" };
 
 locodat_t *pld = NULL;
 int16_t loconum;
@@ -88,11 +90,19 @@ doclose:
         locodat_t *dp = pld;
         for (int l = 0; l < loconum; l++) {
             strncpy(name, dp->loconame, 16);
-            printf("OH: %3u UID: %04X, SYM: %u, Name: %s\n  ", OH_LOCO + l, dp->locoid, dp->locoicon, name);
+            printf("OH: %3d UID: %04X, SYM: %u, Name: %s\n  ", OH_LOCO + l, dp->locoid, dp->locoicon, name);
             for (int f = 0; f < dp->funmbr; f++) printf("FUNC%d:%2X  ", f, dp->futype[f]);
             printf("\n");
             dp++;
         }
+    }
+    if (loconum == 0) {     // first HACK: prevent from empty list
+        pld[0] = noloco;
+        loconum = 1;
+    }
+    if (loconum == 1) {     // second HACK: minimum should be two
+        pld[1] = pld[0];
+        loconum = 2;
     }
     return 0;
 }
