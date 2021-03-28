@@ -1,11 +1,12 @@
 const int revisionnr = 
-1516
+1517
 ;
 const char* commithash = 
-"28d7b3a6b2eb821d06e0ca99f9a76778765a3f50";
+"3e19847d5e563e3a7962589f05d2ffbe237c0310";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1517 2021-03-28 13:25:18 +0200 cbusnodedlg: new ArduCAN modules added\n" \
 "1516 2021-03-28 11:24:30 +0200 loc,locdialog: added LED parameters to the functions\n" \
 "1515 2021-03-26 14:41:48 +0100 wiopi: LED and script commands are default for mobile type with offset zero\n" \
 "1514 2021-03-25 17:38:14 +0100 wiopi: moved SCAD files to repository Rocrail3D\n" \
