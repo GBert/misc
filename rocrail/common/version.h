@@ -1,11 +1,16 @@
 const int revisionnr = 
-1517
+1522
 ;
 const char* commithash = 
-"3e19847d5e563e3a7962589f05d2ffbe237c0310";
+"0f1abe634820867acaf3e92abf87eb85f70dabae";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1522 2021-03-30 09:19:02 +0200 makefile target install without sudo in $Home/Rocrail\n" \
+"1521 2021-03-29 22:57:19 +0200 removed makefile install targets\n" \
+"1520 2021-03-29 19:26:02 +0200 hsi88dlg: removed obsolete adjust minsize attributes\n" \
+"1519 2021-03-29 16:52:01 +0200 hsi88dlg: type option removed\n" \
+"1518 2021-03-29 09:32:22 +0200 cbusnodedlg: arducan description\n" \
 "1517 2021-03-28 13:25:18 +0200 cbusnodedlg: new ArduCAN modules added\n" \
 "1516 2021-03-28 11:24:30 +0200 loc,locdialog: added LED parameters to the functions\n" \
 "1515 2021-03-26 14:41:48 +0100 wiopi: LED and script commands are default for mobile type with offset zero\n" \
