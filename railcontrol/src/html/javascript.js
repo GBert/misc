@@ -424,7 +424,7 @@ function onClickSignal(signalID)
 {
 	var element = document.getElementById('si_' + signalID);
 	var url = '/?cmd=signalstate';
-	url += '&state=' + (element.classList.contains('signal_green') ? 'red' : 'green');
+	url += '&state=' + (element.classList.contains('signal_clear') ? 'stop' : 'clear');
 	url += '&signal=' + signalID;
 	fireRequestAndForget(url);
 	return false;
@@ -741,6 +741,70 @@ function updateTrackState(argumentMap)
 	}
 }
 
+function updateSignalState(argumentMap)
+{
+	if (!argumentMap.has('signal') || !argumentMap.has('state'))
+	{
+		return;
+	}
+	var elementName = 'si_' + argumentMap.get('signal');
+	var element = document.getElementById(elementName);
+	if (!element)
+	{
+		return;
+	}
+	var state = argumentMap.get('state');
+	updateSignalStateDiv(element, state);
+	elementName += '_onclick';
+	element = document.getElementById(elementName);
+	if (!element)
+	{
+		return;
+	}
+	updateSignalStateDiv(element, state);
+}
+
+function updateSignalStateDiv(element, state)
+{
+	element.classList.remove('signal_stop');
+	element.classList.remove('signal_clear');
+	element.classList.remove('signal_aspect2');
+	element.classList.remove('signal_aspect3');
+	element.classList.remove('signal_aspect4');
+	element.classList.remove('signal_aspect5');
+	element.classList.remove('signal_aspect6');
+	switch (state)
+	{
+		case 'stop':
+			element.classList.add('signal_stop');
+			break;
+
+		case 'clear':
+			element.classList.add('signal_clear');
+			break;
+
+		case 'aspect2':
+			element.classList.add('signal_aspect2');
+			break;
+
+		case 'aspect3':
+			element.classList.add('signal_aspect3');
+			break;
+
+		case 'aspect4':
+			element.classList.add('signal_aspect4');
+			break;
+
+		case 'aspect5':
+			element.classList.add('signal_aspect5');
+			break;
+
+		case 'aspect6':
+			element.classList.add('signal_aspect6');
+			break;
+	}
+}
+
 function updateSignal(signalID)
 {
 	elementName = 'si_' + signalID;
@@ -876,22 +940,7 @@ function dataUpdate(event)
 	}
 	else if (command == 'signal')
 	{
-		elementName = 'si_' + argumentMap.get('signal');
-		var element = document.getElementById(elementName);
-		if (element && argumentMap.has('state'))
-		{
-			var state = argumentMap.get('state');
-			if (state == 'green')
-			{
-				element.classList.remove('signal_red');
-				element.classList.add('signal_green');
-			}
-			else
-			{
-				element.classList.remove('signal_green');
-				element.classList.add('signal_red');
-			}
-		}
+		updateSignalState(argumentMap);
 	}
 	else if (command == 'signalsettings')
 	{
@@ -1117,7 +1166,7 @@ function loadRelationObject(type, priority)
 	requestUpdateItem(elementName + "_object", url);
 }
 
-function loadRelationSwitchStates(name)
+function loadRelationObjectStates(type, name)
 {
 	var elementName = name + '_state';
 	var object = document.getElementById(elementName);
@@ -1125,14 +1174,14 @@ function loadRelationSwitchStates(name)
 	{
 		return;
 	}
-	var mySwitch = document.getElementById('s_' + name + '_id');
-	if (!mySwitch)
+	var object = document.getElementById('s_' + name + '_id');
+	if (!object)
 	{
 		return;
 	}
-	var switchId = mySwitch.value;
-	var url = '/?cmd=switchstates';
-	url += '&switch=' + switchId;
+	var objectId = object.value;
+	var url = '/?cmd=' + type + 'states';
+	url += '&' + type + '=' + objectId;
 	url += '&name=' + name;
 	requestUpdateItem(elementName, url);
 }
@@ -1217,14 +1266,14 @@ function startUp()
 	var body = document.getElementById('body');
 	if (body)
 	{
-		body.onclick = function(event) {
+		body.addEventListener('click', function(event) {
 			if (event.button == 2)
 			{
 				return false;
 			}
 			hideAllContextMenus();
 			return true;
-		};
+		}, true);
 	}
 	loadLoco();
 	loadLayout();

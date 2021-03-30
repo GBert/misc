@@ -31,10 +31,10 @@ namespace WebServer
 	HtmlTagFeedback::HtmlTagFeedback(const DataModel::Feedback* feedback, DataModel::LayoutItem::LayoutPosition posX, DataModel::LayoutItem::LayoutPosition posY)
 	:	HtmlTagLayoutItem()
 	{
-		DataModel::Feedback::FeedbackState state = feedback->GetState();
+		const DataModel::Feedback::FeedbackState state = feedback->GetState();
 
-		unsigned int layoutPosX = posX * EdgeLength;
-		unsigned int layoutPosY = posY * EdgeLength;
+		const unsigned int layoutPosX = posX * EdgeLength;
+		const unsigned int layoutPosY = posY * EdgeLength;
 		const string& feedbackName = feedback->GetName();
 
 		HtmlTag div1("div");

@@ -33,6 +33,12 @@ namespace DataModel
 
 		SignalTypeSimpleLeft = 0,
 		SignalTypeSimpleRight = 1,
+		SignalTypeChDwarf = 2,
+		SignalTypeChLMain = 3,
+		SignalTypeChLDistant = 4,
+		SignalTypeChLCombined = 5,
+		SignalTypeChNMain = 6,
+		SignalTypeChNDistant = 7,
 
 		SwitchTypeLeft = 0,
 		SwitchTypeRight = 1,
@@ -53,6 +59,14 @@ namespace DataModel
 		SignalStateAspect4 = 4,
 		SignalStateAspect5 = 5,
 		SignalStateAspect6 = 6,
+		SignalStateDistantStop = 20,
+		SignalStateDistantClear = 21,
+		SignalStateDistantAspect2 = 22,
+		SignalStateDistantAspect3 = 23,
+		SignalStateDistantAspect4 = 24,
+		SignalStateDistantAspect5 = 25,
+		SignalStateDistantAspect6 = 26,
+		SignalStateDark = 50,
 
 		SwitchStateTurnout = 0,
 		SwitchStateStraight = 1,

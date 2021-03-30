@@ -333,6 +333,10 @@ namespace WebServer
 			{
 				signal.HandleSignalState(arguments);
 			}
+			else if (arguments["cmd"].compare("signalstates") == 0)
+			{
+				signal.HandleSignalStates(arguments);
+			}
 			else if (arguments["cmd"].compare("signallist") == 0)
 			{
 				signal.HandleSignalList();
@@ -1385,7 +1389,7 @@ namespace WebServer
 				}
 				HtmlTagSelect selectSwitch(name + "_id", switchOptions, switchId);
 				selectSwitch.AddClass("select_relation_id");
-				selectSwitch.AddAttribute("onchange", "loadRelationSwitchStates('" + name + "', '" + to_string(switchId) + "');return false;");
+				selectSwitch.AddAttribute("onchange", "loadRelationObjectStates('switch', '" + name + "', '" + to_string(switchId) + "');return false;");
 				content.AddChildTag(selectSwitch);
 
 				HtmlTag contentState("div");
@@ -1404,12 +1408,21 @@ namespace WebServer
 				{
 					signalOptions[signal.first] = signal.second->GetID();
 				}
-				content.AddChildTag(HtmlTagSelect(name + "_id", signalOptions, objectId).AddClass("select_relation_id"));
+				SignalID signalId = objectId;
+				if (signalId == SignalNone && signalOptions.size() > 0)
+				{
+					signalId = signalOptions.begin()->second;
+				}
+				HtmlTagSelect selectSignal(name + "_id", signalOptions, signalId);
+				selectSignal.AddClass("select_relation_id");
+				selectSignal.AddAttribute("onchange", "loadRelationObjectStates('signal', '" + name + "', '" + to_string(signalId) + "');return false;");
+				content.AddChildTag(selectSignal);
 
-				map<DataModel::AccessoryState,Languages::TextSelector> stateOptions;
-				stateOptions[DataModel::SignalStateClear] = Languages::TextGreen;
-				stateOptions[DataModel::SignalStateStop] = Languages::TextRed;
-				content.AddChildTag(HtmlTagSelect(name + "_state", stateOptions, static_cast<DataModel::AccessoryState>(data)).AddClass("select_relation_state"));
+				HtmlTag contentState("div");
+				contentState.AddId(name + "_state");
+				contentState.AddClass("inline-block");
+				contentState.AddChildTag(this->signal.HtmlTagRelationSignalState(name, signalId, data));
+				content.AddChildTag(contentState);
 				return content;
 			}
 
@@ -1465,6 +1478,7 @@ namespace WebServer
 				}
 				content.AddChildTag(HtmlTagSelect(name + "_id", functionOptions, Utils::Utils::ToStringWithLeadingZeros(objectId, 2)).AddClass("select_relation_id"));
 
+				// FIXME: load available functions of loco
 				map<DataModel::LocoFunctionState,Languages::TextSelector> stateOptions;
 				stateOptions[DataModel::LocoFunctionStateOff] = Languages::TextOff;
 				stateOptions[DataModel::LocoFunctionStateOn] = Languages::TextOn;

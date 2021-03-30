@@ -240,12 +240,14 @@ body {
 	fill: black;
 }
 
-.signal_red .red {
-	fill: red;
-}
-
-.signal_green .green {
-	fill: lightgreen;
+.signal_stop .stop,
+.signal_clear .clear,
+.signal_aspect2 .aspect2,
+.signal_aspect3 .aspect3,
+.signal_aspect4 .aspect4,
+.signal_aspect5 .aspect5,
+.signal_aspect6 .aspect6 {
+	opacity: 1;
 }
 
 .feedback_free .feedback {
@@ -291,7 +293,23 @@ body {
 .track_error .loconame,
 .orientation_left .track_left,
 .orientation_right .track_right,
-.feedback_layer .real_layer_only {
+.feedback_layer .real_layer_only,
+.signal_stop .state_stop,
+.signal_clear .state_clear,
+.signal_aspect1 .state_aspect1,
+.signal_aspect2 .state_aspect2,
+.signal_aspect3 .state_aspect3,
+.signal_aspect4 .state_aspect4,
+.signal_aspect5 .state_aspect5,
+.signal_aspect6 .state_aspect6,
+.signal_stop .menu_stop,
+.signal_clear .menu_clear,
+.signal_aspect1 .menu_aspect1,
+.signal_aspect2 .menu_aspect2,
+.signal_aspect3 .menu_aspect3,
+.signal_aspect4 .menu_aspect4,
+.signal_aspect5 .menu_aspect5,
+.signal_aspect6 .menu_aspect6 {
 	display: none;
 }
 

@@ -31,11 +31,11 @@ namespace WebServer
 	HtmlTagSwitch::HtmlTagSwitch(const DataModel::Switch* mySwitch)
 	:	HtmlTagLayoutItem()
 	{
-		DataModel::AccessoryState state = mySwitch->GetAccessoryState();
-		DataModel::AccessoryType type = mySwitch->GetType();
+		const DataModel::AccessoryState state = mySwitch->GetAccessoryState();
+		const DataModel::AccessoryType type = mySwitch->GetType();
 
-		unsigned int layoutPosX = mySwitch->GetPosX() * EdgeLength;
-		unsigned int layoutPosY = mySwitch->GetPosY() * EdgeLength;
+		const unsigned int layoutPosX = mySwitch->GetPosX() * EdgeLength;
+		const unsigned int layoutPosY = mySwitch->GetPosY() * EdgeLength;
 		const string& switchName = mySwitch->GetName();
 
 		HtmlTag div1("div");
@@ -96,6 +96,9 @@ namespace WebServer
 					"<polygon points=\"22,28 22,36 18,32\" fill=\"gray\" class=\"straight third\"/>"
 					"<polygon points=\"22,28 36,14 36,22 22,36\" fill=\"gray\" class=\"third\"/>"
 					"</svg>";
+				break;
+
+			default:
 				break;
 		}
 

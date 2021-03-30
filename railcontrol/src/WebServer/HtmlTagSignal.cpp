@@ -36,11 +36,48 @@ namespace WebServer
 		dynamic_cast<const DataModel::TrackBase*>(signal),
 		dynamic_cast<const DataModel::LayoutItem*>(signal))
 	{
-		DataModel::AccessoryState signalState = signal->GetAccessoryState();
-		DataModel::AccessoryType type = signal->GetType();
+		const DataModel::AccessoryState signalState = signal->GetAccessoryState();
+		const DataModel::AccessoryType type = signal->GetType();
+		const string idText = to_string(signal->GetID());
 
 		imageDiv.AddClass("signal_item");
-		imageDiv.AddClass(signalState == DataModel::SignalStateStop ? "signal_red" : "signal_green");
+		string stateClassText;
+		switch (signalState)
+		{
+			case DataModel::SignalStateStop:
+				stateClassText = "signal_stop";
+				break;
+
+			case DataModel::SignalStateClear:
+				stateClassText = "signal_clear";
+				break;
+
+			case DataModel::SignalStateAspect2:
+				stateClassText = "signal_aspect2";
+				break;
+
+			case DataModel::SignalStateAspect3:
+				stateClassText = "signal_aspect3";
+				break;
+
+			case DataModel::SignalStateAspect4:
+				stateClassText = "signal_aspect4";
+				break;
+
+			case DataModel::SignalStateAspect5:
+				stateClassText = "signal_aspect5";
+				break;
+
+			case DataModel::SignalStateAspect6:
+				stateClassText = "signal_aspect6";
+				break;
+
+			default:
+				stateClassText = "signal_dark";
+				break;
+		}
+		imageDiv.AddClass(stateClassText);
+		onClickMenuDiv.AddClass(stateClassText);
 		image += "<g";
 		if (signal->GetSignalOrientation() == OrientationLeft)
 		{
@@ -51,18 +88,72 @@ namespace WebServer
 		image += ">";
 		switch (type)
 		{
+			case DataModel::SignalTypeChLDistant:
+				image += "<polygon points=\"0,13.5 2.5,11 11.5,11 14,13.5 14,25.5 11.5,28 2.5,28 0,25.5\" fill=\"black\"/>"
+					"<polyline points=\"7,30 7,34\" style=\"stroke:black;stroke-width:2\"/>"
+					"<polyline points=\"4,34 10,34\" style=\"stroke:black;stroke-width:2\"/>"
+					"<circle class=\"stop aspect2 aspect3 aspect6\" cx=\"3.5\" cy=\"14.5\" r=\"2.5\" fill=\"orange\" opacity=\"0\"/>"
+					"<circle class=\"stop\" cx=\"10.5\" cy=\"14.5\" r=\"2.5\" fill=\"orange\" opacity=\"0\"/>"
+					"<circle class=\"clear aspect3 aspect5\" cx=\"3.5\" cy=\"24.5\" r=\"2.5\" fill=\"lightgreen\" opacity=\"0\"/>"
+					"<circle class=\"clear aspect2 aspect3 aspect5 aspect6\" cx=\"10.5\" cy=\"18.5\" r=\"2.5\" fill=\"lightgreen\" opacity=\"0\"/>"
+					"<circle class=\"aspect5\" cx=\"10.5\" cy=\"24.5\" r=\"2.5\" fill=\"orange\" opacity=\"0\"/>";
+				break;
+
+			case DataModel::SignalTypeChLMain:
+				image += "<polygon points=\"3,3.5 5.5,1 8.5,1 11,3.5 11,27.5 8.5,30 5.5,30 3,27.5\" fill=\"black\"/>"
+					"<polyline points=\"7,30 7,34\" style=\"stroke:black;stroke-width:2\"/>"
+					"<polyline points=\"4,34 10,34\" style=\"stroke:black;stroke-width:2\"/>"
+					"<circle class=\"clear aspect2 aspect3 aspect5\" cx=\"7\" cy=\"4.5\" r=\"2.5\" fill=\"lightgreen\" opacity=\"0\"/>"
+					"<circle class=\"stop\" cx=\"7\" cy=\"10\" r=\"2.5\" fill=\"red\" opacity=\"0\"/>"
+					"<circle class=\"aspect6\" cx=\"7\" cy=\"10\" r=\"2.5\" fill=\"orange\" opacity=\"0\"/>"
+					"<circle class=\"aspect3 aspect5\" cx=\"7\" cy=\"15.5\" r=\"2.5\" fill=\"lightgreen\" opacity=\"0\"/>"
+					"<circle class=\"aspect2 aspect6\" cx=\"7\" cy=\"21\" r=\"2.5\" fill=\"orange\" opacity=\"0\"/>"
+					"<circle class=\"aspect5\" cx=\"7\" cy=\"26.5\" r=\"2.5\" fill=\"lightgreen\" opacity=\"0\"/>";
+				AddOnClickMenuEntry(Languages::TextSignalStateStop, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=stop');", "menu_stop");
+				AddOnClickMenuEntry(Languages::TextSignalStateClear, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=clear');", "menu_clear");
+				AddOnClickMenuEntry(Languages::TextSignalStateClear40, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect2');", "menu_aspect2");
+				AddOnClickMenuEntry(Languages::TextSignalStateClear60, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect3');", "menu_aspect3");
+				AddOnClickMenuEntry(Languages::TextSignalStateClear90, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect5');", "menu_aspect5");
+				AddOnClickMenuEntry(Languages::TextSignalStateShortClear, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect6');", "menu_aspect6");
+				imageDiv.AddAttribute("onclick", "return showContextMenu('si_" + idText + "_onclick');");
+				break;
+
+			case DataModel::SignalTypeChDwarf:
+				image += "<polygon points=\"1,14 5,14 13,22 13,26 1,26\" fill=\"black\"/>"
+					"<polyline points=\"7,26 7,30\" style=\"stroke:black;stroke-width:2\"/>"
+					"<polyline points=\"4,30 10,30\" style=\"stroke:black;stroke-width:2\"/>"
+					"<circle class=\"clear aspect2\" cx=\"4\" cy=\"17\" r=\"2\" fill=\"white\" opacity=\"0\"/>"
+					"<circle class=\"stop clear\" cx=\"4\" cy=\"23\" r=\"2\" fill=\"white\" opacity=\"0\"/>"
+					"<circle class=\"stop aspect2\" cx=\"10\" cy=\"23\" r=\"2\" fill=\"white\" opacity=\"0\"/>";
+				AddOnClickMenuEntry(Languages::TextSignalStateStop, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=stop');", "menu_stop");
+				AddOnClickMenuEntry(Languages::TextSignalStateClear, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=clear');", "menu_clear");
+				AddOnClickMenuEntry(Languages::TextSignalStateCaution, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect2');", "menu_aspect2");
+				imageDiv.AddAttribute("onclick", "return showContextMenu('si_" + idText + "_onclick');");
+				break;
+
 			case DataModel::SignalTypeSimpleRight:
-				image += "<polygon points=\"23,5 27,1 31,1 35,5 35,18 31,22 27,22 23,18\" fill=\"black\"/><polyline points=\"29,7 29,30\" style=\"stroke:black;stroke-width:2\"/><circle class=\"red\" cx=\"29\" cy=\"7\" r=\"4\" fill=\"darkgray\"/><circle class=\"green\" cx=\"29\" cy=\"16\" r=\"4\" fill=\"darkgray\"/>";
+				image += "<polygon points=\"23,5 27,1 31,1 35,5 35,18 31,22 27,22 23,18\" fill=\"black\"/>"
+					"<polyline points=\"29,22 29,30\" style=\"stroke:black;stroke-width:2\"/>"
+					"<polyline points=\"26,30 32,30\" style=\"stroke:black;stroke-width:2\"/>"
+					"<circle class=\"stop\" cx=\"29\" cy=\"7\" r=\"4\" fill=\"red\" opacity=\"0\"/>"
+					"<circle class=\"clear\" cx=\"29\" cy=\"16\" r=\"4\" fill=\"lightgreen\" opacity=\"0\"/>";
+				imageDiv.AddAttribute("onclick", "return onClickSignal(" + idText + ");");
 				break;
 
 			case DataModel::SignalTypeSimpleLeft:
+				image += "<polygon points=\"1,5 5,1 9,1 13,5 13,18 9,22 5,22 1,18\" fill=\"black\"/>"
+					"<polyline points=\"7,22 7,30\" style=\"stroke:black;stroke-width:2\"/>"
+					"<polyline points=\"4,30 10,30\" style=\"stroke:black;stroke-width:2\"/>"
+					"<circle class=\"stop\" cx=\"7\" cy=\"7\" r=\"4\" fill=\"red\" opacity=\"0\"/>"
+					"<circle class=\"clear\" cx=\"7\" cy=\"16\" r=\"4\" fill=\"lightgreen\" opacity=\"0\"/>";
+				imageDiv.AddAttribute("onclick", "return onClickSignal(" + idText + ");");
+				break;
+
 			default:
-				image += "<polygon points=\"1,5 5,1 9,1 13,5 13,18 9,22 5,22 1,18\" fill=\"black\"/><polyline points=\"7,7 7,30\" style=\"stroke:black;stroke-width:2\"/><circle class=\"red\" cx=\"7\" cy=\"7\" r=\"4\" fill=\"darkgray\"/><circle class=\"green\" cx=\"7\" cy=\"16\" r=\"4\" fill=\"darkgray\"/>";
 				break;
 		}
 		image += "</g>";
 		AddToolTip(signal->GetName() + " (addr=" + to_string(signal->GetAddress()) + ")");
-		imageDiv.AddAttribute("onclick", "return onClickSignal(" + to_string(signal->GetID()) + ");");
 		imageDiv.AddAttribute("oncontextmenu", "return onContextLayoutItem(event, '" + identifier + "');");
 
 		AddContextMenuEntry(Languages::TextEditSignal, "loadPopup('/?cmd=signaledit&" + urlIdentifier + "');");

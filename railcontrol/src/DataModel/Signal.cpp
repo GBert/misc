@@ -81,5 +81,31 @@ namespace DataModel
 	{
 		manager->SignalPublishState(ControlTypeInternal, this);
 	}
+
+	std::map<DataModel::AccessoryState,Languages::TextSelector> Signal::GetStateOptions() const
+	{
+		std::map<DataModel::AccessoryState,Languages::TextSelector> out;
+		out[SignalStateStop] = Languages::TextSignalStateStop;
+		out[SignalStateClear] = Languages::TextSignalStateClear;
+		switch(accessoryType)
+		{
+			case SignalTypeChDwarf:
+				out[SignalStateAspect2] = Languages::TextSignalStateCaution;
+				break;
+
+			case SignalTypeChLMain:
+				out[SignalStateAspect2] = Languages::TextSignalStateClear40;
+				out[SignalStateAspect3] = Languages::TextSignalStateClear60;
+				out[SignalStateAspect5] = Languages::TextSignalStateClear90;
+				out[SignalStateAspect6] = Languages::TextSignalStateShortClear;
+				break;
+
+			case SignalTypeSimpleLeft:
+			case SignalTypeSimpleRight:
+			default:
+				break;
+		}
+		return out;
+	}
 } // namespace DataModel
 

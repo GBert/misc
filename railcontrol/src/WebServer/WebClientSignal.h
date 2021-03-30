@@ -35,6 +35,8 @@ namespace WebServer
 	{
 		public:
 			WebClientSignal() = delete;
+			WebClientSignal(const WebClientSignal&) = delete;
+			WebClientSignal& operator=(const WebClientSignal&) = delete;
 
 			inline WebClientSignal(Manager& manager, WebClient& client, Logger::Logger* logger)
 			:	manager(manager),
@@ -51,6 +53,11 @@ namespace WebServer
 			void HandleSignalSetLoco(const std::map<std::string, std::string>& arguments);
 			void HandleSignalRelease(const std::map<std::string, std::string>& arguments);
 			void HandleSignalState(const std::map<std::string, std::string>& arguments);
+			void HandleSignalStates(const std::map<std::string, std::string>& arguments);
+
+			HtmlTag HtmlTagRelationSignalState(const std::string& name,
+				const SignalID signalId,
+				const DataModel::Relation::Data data = DataModel::SignalStateStop);
 
 		private:
 			Manager& manager;

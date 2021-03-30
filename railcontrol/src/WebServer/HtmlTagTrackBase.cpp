@@ -40,8 +40,10 @@ namespace WebServer
 		track(track),
 		layout(layout),
 		imageDiv("div"),
-		menuDiv("div"),
-		menuContentDiv("ul")
+		onClickMenuDiv("div"),
+		onClickMenuContentDiv("ul"),
+		contextMenuDiv("div"),
+		contextMenuContentDiv("ul")
 	{
 		DataModel::LayoutItem::LayoutPosition posX;
 		DataModel::LayoutItem::LayoutPosition posY;
@@ -79,15 +81,21 @@ namespace WebServer
 		const string idString = to_string(id);
 		identifier += idString;
 
-		menuDiv.AddClass("contextmenu");
-		menuDiv.AddClass(reserved ? "loco_known" : "loco_unknown");
-		menuDiv.AddClass(blocked ? "track_blocked" : "track_unblocked");
-		menuDiv.AddClass(track->GetLocoOrientation() == OrientationRight ? "orientation_right" : "orientation_left");
-		menuDiv.AddId(identifier + "_context");
-		menuDiv.AddAttribute("style", "left:" + to_string(layoutPosX + 5) + "px;top:" + to_string(layoutPosY + 30) + "px;");
+		string position = "left:" + to_string(layoutPosX + 5) + "px;top:" + to_string(layoutPosY + 30) + "px;";
+		onClickMenuDiv.AddClass("contextmenu");
+		onClickMenuDiv.AddId(identifier + "_onclick");
+		onClickMenuDiv.AddAttribute("style", position);
+		onClickMenuContentDiv.AddClass("contextentries");
+
+		contextMenuDiv.AddClass("contextmenu");
+		contextMenuDiv.AddClass(reserved ? "loco_known" : "loco_unknown");
+		contextMenuDiv.AddClass(blocked ? "track_blocked" : "track_unblocked");
+		contextMenuDiv.AddClass(track->GetLocoOrientation() == OrientationRight ? "orientation_right" : "orientation_left");
+		contextMenuDiv.AddId(identifier + "_context");
+		contextMenuDiv.AddAttribute("style", position);
+		contextMenuContentDiv.AddClass("contextentries");
 
 		const string& trackName = track->GetMyName();
-		menuContentDiv.AddClass("contextentries");
 		AddContextMenuEntry(trackName);
 		urlIdentifier = typeString + "=" + idString;
 		AddContextMenuEntry(Languages::TextBlockTrack, "fireRequestAndForget('/?cmd=trackblock&" + urlIdentifier + "&blocked=true');", "track_block");
@@ -190,10 +198,14 @@ namespace WebServer
 
 			case DataModel::TrackTypeStraight:
 			default:
+				image = "<polygon class=\"track\" points=\"14,0 22,0 22," + layoutHeight + " 14," + layoutHeight + "\"/>";
+				if (objectType != ObjectTypeTrack)
+				{
+					break;
+				}
 				const string& orientationSign = track->GetLocoOrientation() == OrientationRight ? "&rarr; " : "&larr; ";
 				const string& locoName = reserved ? orientationSign + manager.GetLocoName(locoID) : "";
 				const string textPositionX = to_string(EdgeLength * trackHeight - 1);
-				image = "<polygon class=\"track\" points=\"14,0 22,0 22," + layoutHeight + " 14," + layoutHeight + "\"/>";
 				image += "<text class=\"loconame\" x=\"-" + textPositionX + "\" y=\"11\" id=\"" + identifier + "_text_loconame\" transform=\"rotate(270 0,0)\" font-size=\"14\">" + locoName + "</text>";
 				if (track->GetShowName())
 				{
@@ -226,19 +238,28 @@ namespace WebServer
 		imageDiv.AddAttribute("oncontextmenu", "return onContextLayoutItem(event, '" + identifier + "');");
 		AddChildTag(imageDiv);
 
-		menuDiv.AddChildTag(menuContentDiv);
-		AddChildTag(menuDiv);
+		if (onClickMenuContentDiv.ChildCount())
+		{
+			onClickMenuDiv.AddChildTag(onClickMenuContentDiv);
+			AddChildTag(onClickMenuDiv);
+		}
+		contextMenuDiv.AddChildTag(contextMenuContentDiv);
+		AddChildTag(contextMenuDiv);
 	}
 
-	void HtmlTagTrackBase::AddContextMenuEntry(const std::string& text)
+	void HtmlTagTrackBase::AddMenuEntry(HtmlTag& menu,
+		const std::string& text)
 	{
 		HtmlTag li("li");
 		li.AddClass("contextentry");
 		li.AddContent(text);
-		menuContentDiv.AddChildTag(li);
+		menu.AddChildTag(li);
 	}
 
-	void HtmlTagTrackBase::AddContextMenuEntry(const Languages::TextSelector text, const std::string& onClick, const std::string& className)
+	void HtmlTagTrackBase::AddMenuEntry(HtmlTag& menu,
+		const Languages::TextSelector text,
+		const std::string& onClick,
+		const std::string& className)
 	{
 		HtmlTag li("li");
 		li.AddClass("contextentry");
@@ -251,7 +272,7 @@ namespace WebServer
 		{
 			li.AddClass(className);
 		}
-		menuContentDiv.AddChildTag(li);
+		menu.AddChildTag(li);
 	}
 
 } // namespace WebServer

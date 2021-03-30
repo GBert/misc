@@ -32,6 +32,10 @@ namespace WebServer
 	class HtmlTagTrackBase : public HtmlTagLayoutItem
 	{
 		public:
+			HtmlTagTrackBase() = delete;
+			HtmlTagTrackBase(const HtmlTagTrackBase&) = delete;
+			HtmlTagTrackBase& operator=(const HtmlTagTrackBase&) = delete;
+
 			virtual HtmlTag AddAttribute(const std::string& name, const std::string& value) override
 			{
 				childTags[0].AddAttribute(name, value);
@@ -39,7 +43,6 @@ namespace WebServer
 			}
 
 		protected:
-			HtmlTagTrackBase() = delete;
 			HtmlTagTrackBase(const Manager& manager,
 				const ObjectType objectType,
 				const DataModel::TrackType trackType,
@@ -49,8 +52,39 @@ namespace WebServer
 			virtual ~HtmlTagTrackBase() {}
 
 			void FinishInit();
-			void AddContextMenuEntry(const std::string& text);
-			void AddContextMenuEntry(const Languages::TextSelector text, const std::string& onClick, const std::string& className = "");
+
+			inline void AddOnClickMenuEntry(const std::string& text)
+			{
+				AddMenuEntry(onClickMenuContentDiv, text);
+			}
+
+			// FIXME: move to HtmlTagLayoutItem and use code for Accessory, Switch, Feedback and Route too.
+			inline void AddOnClickMenuEntry(const Languages::TextSelector text, const std::string& onClick, const std::string& className = "")
+			{
+				AddMenuEntry(onClickMenuContentDiv, text, onClick, className);
+			}
+
+			// FIXME: move to HtmlTagLayoutItem and use code for Accessory, Switch, Feedback and Route too.
+			inline void AddContextMenuEntry(const std::string& text)
+			{
+				AddMenuEntry(contextMenuContentDiv, text);
+			}
+
+			// FIXME: move to HtmlTagLayoutItem and use code for Accessory, Switch, Feedback and Route too.
+			inline void AddContextMenuEntry(const Languages::TextSelector text, const std::string& onClick, const std::string& className = "")
+			{
+				AddMenuEntry(contextMenuContentDiv, text, onClick, className);
+			}
+
+			// FIXME: move to HtmlTagLayoutItem and use code for Accessory, Switch, Feedback and Route too.
+			static void AddMenuEntry(HtmlTag& menu,
+				const std::string& text);
+
+			// FIXME: move to HtmlTagLayoutItem and use code for Accessory, Switch, Feedback and Route too.
+			static void AddMenuEntry(HtmlTag& menu,
+				const Languages::TextSelector text,
+				const std::string& onClick,
+				const std::string& className = "");
 
 			void AddToolTip(const std::string& toolTip)
 			{
@@ -64,8 +98,11 @@ namespace WebServer
 
 			std::string image;
 			HtmlTag imageDiv;
-			HtmlTag menuDiv;
-			HtmlTag menuContentDiv;
+			// FIXME: move to HtmlTagLayoutItem and use code for Accessory, Switch, Feedback and Route too.
+			HtmlTag onClickMenuDiv;
+			HtmlTag onClickMenuContentDiv;
+			HtmlTag contextMenuDiv;
+			HtmlTag contextMenuContentDiv;
 			std::string identifier;
 			std::string urlIdentifier;
 	};

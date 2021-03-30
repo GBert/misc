@@ -210,7 +210,6 @@ Manager::~Manager()
 
 	Booster(ControlTypeInternal, BoosterStateStop);
 
-	Storage::TransactionGuard guard(storage);
 	run = false;
 	{
 		std::lock_guard<std::mutex> guard(controlMutex);
@@ -243,15 +242,18 @@ Manager::~Manager()
 		}
 	}
 
-	DeleteAllMapEntries(locos, locoMutex);
-	DeleteAllMapEntries(routes, routeMutex);
-	DeleteAllMapEntries(clusters, clusterMutex);
-	DeleteAllMapEntries(switches, switchMutex);
-	DeleteAllMapEntries(tracks, trackMutex);
-	DeleteAllMapEntries(signals, signalMutex);
-	DeleteAllMapEntries(feedbacks, feedbackMutex);
-	DeleteAllMapEntries(accessories, accessoryMutex);
-	DeleteAllMapEntries(layers, layerMutex);
+	{
+		Storage::TransactionGuard guard(storage);
+		DeleteAllMapEntries(locos, locoMutex);
+		DeleteAllMapEntries(routes, routeMutex);
+		DeleteAllMapEntries(clusters, clusterMutex);
+		DeleteAllMapEntries(switches, switchMutex);
+		DeleteAllMapEntries(tracks, trackMutex);
+		DeleteAllMapEntries(signals, signalMutex);
+		DeleteAllMapEntries(feedbacks, feedbackMutex);
+		DeleteAllMapEntries(accessories, accessoryMutex);
+		DeleteAllMapEntries(layers, layerMutex);
+	}
 
 	if (storage == nullptr)
 	{

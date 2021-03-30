@@ -31,10 +31,10 @@ namespace WebServer
 	HtmlTagAccessory::HtmlTagAccessory(const DataModel::Accessory* accessory)
 	:	HtmlTagLayoutItem()
 	{
-		DataModel::AccessoryState state = accessory->GetAccessoryState();
+		const DataModel::AccessoryState state = accessory->GetAccessoryState();
 
-		unsigned int layoutPosX = accessory->GetPosX() * EdgeLength;
-		unsigned int layoutPosY = accessory->GetPosY() * EdgeLength;
+		const unsigned int layoutPosX = accessory->GetPosX() * EdgeLength;
+		const unsigned int layoutPosY = accessory->GetPosY() * EdgeLength;
 		const string& accessoryName = accessory->GetName();
 
 		HtmlTag div1("div");

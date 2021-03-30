@@ -293,7 +293,43 @@ namespace Hardware
 		{
 			return;
 		}
-		instance->Accessory(signal->GetProtocol(), signal->GetAddress(), signal->GetInvertedAccessoryState(), signal->GetAccessoryPulseDuration());
+		Address address = signal->GetAddress();
+		DataModel::AccessoryState state = signal->GetAccessoryState();
+		switch (state)
+		{
+			case DataModel::SignalStateStop:
+			case DataModel::SignalStateClear:
+				break;
+
+			case DataModel::SignalStateAspect2:
+				++address;
+				state = DataModel::AccessoryStateOff;
+				break;
+
+			case DataModel::SignalStateAspect3:
+				++address;
+				state = DataModel::AccessoryStateOn;
+				break;
+
+			case DataModel::SignalStateAspect4:
+				address += 2;
+				state = DataModel::AccessoryStateOff;
+				break;
+
+			case DataModel::SignalStateAspect5:
+				address += 2;
+				state = DataModel::AccessoryStateOn;
+				break;
+
+			case DataModel::SignalStateAspect6:
+				address += 3;
+				state = DataModel::AccessoryStateOff;
+				break;
+
+			default:
+				break;
+		}
+		instance->Accessory(signal->GetProtocol(), address, state, signal->GetAccessoryPulseDuration());
 	}
 
 	bool HardwareHandler::ProgramCheckValues(const ProgramMode mode, const CvNumber cv, const CvValue value)

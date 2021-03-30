@@ -107,7 +107,7 @@ namespace WebServer
 				return UpdateStatus + Languages::GetText(status);
 			}
 
-			void TrackBaseState(std::stringstream& command, const DataModel::TrackBase* track);
+			void TrackBaseState(std::string& command, const DataModel::TrackBase* track);
 
 			void LogBrowserInfo(const unsigned short port);
 

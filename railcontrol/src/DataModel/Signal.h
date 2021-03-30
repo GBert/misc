@@ -20,6 +20,7 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
+#include <map>
 #include <string>
 
 #include "DataModel/AccessoryBase.h"
@@ -27,6 +28,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "DataModel/LockableItem.h"
 #include "DataModel/TrackBase.h"
 #include "DataTypes.h"
+#include "Languages.h"
 
 class Manager;
 
@@ -35,6 +37,10 @@ namespace DataModel
 	class Signal : public AccessoryBase, public TrackBase, public LayoutItem, public LockableItem
 	{
 		public:
+			Signal() = delete;
+			Signal(const Signal&) = delete;
+			Signal& operator=(const Signal&) = delete;
+
 			inline Signal(Manager* manager, const SignalID signalID)
 			:	AccessoryBase(),
 				TrackBase(manager),
@@ -107,6 +113,8 @@ namespace DataModel
 			{
 				this->track = track;
 			}
+
+			std::map<DataModel::AccessoryState,Languages::TextSelector> GetStateOptions() const;
 
 		protected:
 			inline bool ReserveInternal(Logger::Logger* logger, const LocoID locoID) override

@@ -34,15 +34,21 @@ namespace DataModel
 	class Switch : public AccessoryBase, public LayoutItem, public LockableItem
 	{
 		public:
+			Switch() = delete;
+			Switch(const Switch&) = delete;
+			Switch& operator=(const Switch&) = delete;
+
 			Switch(const SwitchID switchID)
 			:	AccessoryBase(),
 				LayoutItem(switchID),
 				LockableItem()
-			{}
+			{
+			}
 
 			Switch(__attribute__((unused)) Manager* manager, const SwitchID switchID)
 			:	Switch(switchID)
-			{}
+			{
+			}
 
 			Switch(const std::string& serialized)
 			{

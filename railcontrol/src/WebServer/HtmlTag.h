@@ -33,19 +33,21 @@ namespace WebServer
 {
 	class HtmlTag
 	{
-
-		protected:
-			std::string name;
-			std::vector<HtmlTag> childTags;
-			std::map<std::string, std::string> attributes;
-			std::vector<std::string> classes;
-			std::string content;
-			std::string id;
-
 		public:
-			inline HtmlTag() {}
-			inline HtmlTag(const std::string& name) : name(name) {}
-			inline virtual ~HtmlTag() {};
+			inline HtmlTag()
+			{
+			}
+
+			inline HtmlTag(const std::string& name)
+			:	name(name)
+			{
+			}
+
+			HtmlTag& operator=(const HtmlTag&) = delete;
+
+			inline virtual ~HtmlTag()
+			{
+			}
 
 			virtual HtmlTag AddAttribute(const std::string& name, const std::string& value = "");
 
@@ -82,7 +84,15 @@ namespace WebServer
 				return *this;
 			}
 
-			inline virtual size_t ContentSize() const { return content.size(); }
+			inline virtual size_t ContentSize() const
+			{
+				return content.size();
+			}
+
+			inline size_t ChildCount() const
+			{
+				return childTags.size();
+			}
 
 			inline operator std::string () const
 			{
@@ -92,6 +102,14 @@ namespace WebServer
 			}
 
 			friend std::ostream& operator<<(std::ostream& stream, const HtmlTag& tag);
+
+		protected:
+			std::string name;
+			std::vector<HtmlTag> childTags;
+			std::map<std::string, std::string> attributes;
+			std::vector<std::string> classes;
+			std::string content;
+			std::string id;
 	};
 } // namespace WebServer
 

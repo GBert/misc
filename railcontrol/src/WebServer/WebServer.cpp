@@ -295,12 +295,11 @@ namespace WebServer
 
 	void WebServer::TrackState(const DataModel::Track* track)
 	{
-		stringstream command;
-		command << "trackstate;track=" << track->GetID();
+		string command = "trackstate;track=" + to_string(track->GetID());
 		TrackBaseState(command, dynamic_cast<const DataModel::TrackBase*>(track));
 	}
 
-	void WebServer::TrackBaseState(stringstream& command, const DataModel::TrackBase* track)
+	void WebServer::TrackBaseState(string& command, const DataModel::TrackBase* track)
 	{
 		const DataModel::Loco* loco = manager.GetLoco(track->GetLocoDelayed());
 		const bool reserved = loco != nullptr;
@@ -313,40 +312,40 @@ namespace WebServer
 		const string blockedText = (blocked ? "true" : "false");
 		const string reservedText = (reserved ? "true" : "false");
 		const string orientationText = (orientation ? "true" : "false");
-		command << ";occupied=" << occupiedText
-			<< ";reserved=" << reservedText
-			<< ";blocked=" << blockedText
-			<< ";orientation=" << orientationText
-			<< ";loconame=" << locoName;
+		command += ";occupied=" + occupiedText
+			+ ";reserved=" + reservedText
+			+ ";blocked=" + blockedText
+			+ ";orientation=" + orientationText
+			+ ";loconame=" + locoName;
 
 		if (blocked)
 		{
 			if (reserved)
 			{
-				AddUpdate(command.str(), Languages::TextTrackStatusIsBlockedAndReserved, trackName, locoName);
+				AddUpdate(command, Languages::TextTrackStatusIsBlockedAndReserved, trackName, locoName);
 			}
 			else if (occupied)
 			{
-				AddUpdate(command.str(), Languages::TextTrackStatusIsBlockedAndOccupied, trackName);
+				AddUpdate(command, Languages::TextTrackStatusIsBlockedAndOccupied, trackName);
 			}
 			else
 			{
-				AddUpdate(command.str(), Languages::TextTrackStatusIsBlocked, trackName);
+				AddUpdate(command, Languages::TextTrackStatusIsBlocked, trackName);
 			}
 		}
 		else
 		{
 			if (reserved)
 			{
-				AddUpdate(command.str(), Languages::TextTrackStatusIsReserved, trackName, locoName);;
+				AddUpdate(command, Languages::TextTrackStatusIsReserved, trackName, locoName);;
 			}
 			else if (occupied)
 			{
-				AddUpdate(command.str(), Languages::TextTrackStatusIsOccupied, trackName);
+				AddUpdate(command, Languages::TextTrackStatusIsOccupied, trackName);
 			}
 			else
 			{
-				AddUpdate(command.str(), Languages::TextTrackStatusIsFree, trackName);
+				AddUpdate(command, Languages::TextTrackStatusIsFree, trackName);
 			}
 		}
 	}
@@ -367,12 +366,51 @@ namespace WebServer
 
 	void WebServer::SignalState(__attribute__((unused)) const ControlType controlType, const DataModel::Signal* signal)
 	{
-		stringstream command;
 		const DataModel::AccessoryState state = signal->GetAccessoryState();
-		command << "signal;signal=" << signal->GetID() << ";state=" << (state ? "green" : "red");
-		AddUpdate(command.str(), state ? Languages::TextSignalStateIsClear : Languages::TextSignalStateIsStop, signal->GetName());
-		stringstream command2;
-		command2 << "trackstate;signal=" << signal->GetID();
+		string stateText;
+		Languages::TextSelector text;
+		switch(state)
+		{
+			case DataModel::SignalStateStop:
+			default:
+				stateText = "stop";
+				text = Languages::TextSignalStateIsStop;
+				break;
+
+			case DataModel::SignalStateClear:
+				stateText = "clear";
+				text = Languages::TextSignalStateIsClear;
+				break;
+
+			case DataModel::SignalStateAspect2:
+				stateText = "aspect2";
+				text = Languages::TextSignalStateIsAspect2;
+				break;
+
+			case DataModel::SignalStateAspect3:
+				stateText = "aspect3";
+				text = Languages::TextSignalStateIsAspect3;
+				break;
+
+			case DataModel::SignalStateAspect4:
+				stateText = "aspect4";
+				text = Languages::TextSignalStateIsAspect4;
+				break;
+
+			case DataModel::SignalStateAspect5:
+				stateText = "aspect5";
+				text = Languages::TextSignalStateIsAspect5;
+				break;
+
+			case DataModel::SignalStateAspect6:
+				stateText = "aspect6";
+				text = Languages::TextSignalStateIsAspect6;
+				break;
+		}
+		string signalIdText(to_string(signal->GetID()));
+		string command = "signal;signal=" + signalIdText + ";state=" + stateText;
+		AddUpdate(command, text, signal->GetName());
+		string command2 = "trackstate;signal=" + signalIdText;
 		TrackBaseState(command2, dynamic_cast<const DataModel::TrackBase*>(signal));
 	}
 

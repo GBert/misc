@@ -64,13 +64,18 @@ namespace WebServer
 		LayoutPosition posx = Utils::Utils::GetIntegerMapEntry(arguments, "posx", 0);
 		LayoutPosition posy = Utils::Utils::GetIntegerMapEntry(arguments, "posy", 0);
 		LayoutPosition posz = Utils::Utils::GetIntegerMapEntry(arguments, "posz", LayerUndeletable);
+
 		// FIXME: Remove later: 2021-03-18
 		LayoutItemSize height = Utils::Utils::GetIntegerMapEntry(arguments, "length", 1);
+
 		LayoutRotation rotation = static_cast<LayoutRotation>(Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0));
 		DataModel::AccessoryType signalType = DataModel::SignalTypeSimpleLeft;
 		DataModel::AccessoryPulseDuration duration = manager.GetDefaultAccessoryDuration();
 		bool inverted = false;
+
+		// FIXME: Remove later: 2021-03-18
 		std::vector<FeedbackID> feedbacks;
+
 		DataModel::SelectRouteApproach selectRouteApproach = static_cast<DataModel::SelectRouteApproach>(Utils::Utils::GetIntegerMapEntry(arguments, "selectrouteapproach", DataModel::SelectRouteSystemDefault));
 		bool allowLocoTurn = Utils::Utils::GetBoolMapEntry(arguments, "allowlocoturn", false);
 		bool releaseWhenFree = Utils::Utils::GetBoolMapEntry(arguments, "releasewhenfree", false);
@@ -110,6 +115,9 @@ namespace WebServer
 		std::map<DataModel::AccessoryType, Languages::TextSelector> signalTypeOptions;
 		signalTypeOptions[DataModel::SignalTypeSimpleLeft] = Languages::TextSimpleLeft;
 		signalTypeOptions[DataModel::SignalTypeSimpleRight] = Languages::TextSimpleRight;
+		signalTypeOptions[DataModel::SignalTypeChLMain] = Languages::TextChLMain;
+		//signalTypeOptions[DataModel::SignalTypeChLDistant] = Languages::TextChLDistant;
+		signalTypeOptions[DataModel::SignalTypeChDwarf] = Languages::TextChDwarf;
 
 		content.AddChildTag(HtmlTag("h1").AddContent(name).AddId("popup_title"));
 		HtmlTag tabMenu("div");
@@ -234,7 +242,32 @@ namespace WebServer
 	void WebClientSignal::HandleSignalState(const map<string, string>& arguments)
 	{
 		SignalID signalID = Utils::Utils::GetIntegerMapEntry(arguments, "signal", SignalNone);
-		DataModel::AccessoryState signalState = (Utils::Utils::GetStringMapEntry(arguments, "state", "red").compare("red") == 0 ? DataModel::SignalStateStop : DataModel::SignalStateClear);
+		string signalStateText = Utils::Utils::GetStringMapEntry(arguments, "state", "stop");
+		DataModel::AccessoryState signalState = DataModel::SignalStateStop;
+		if (signalStateText.compare("clear") == 0)
+		{
+			signalState = DataModel::SignalStateClear;
+		}
+		else if (signalStateText.compare("aspect2") == 0)
+		{
+			signalState = DataModel::SignalStateAspect2;
+		}
+		else if (signalStateText.compare("aspect3") == 0)
+		{
+			signalState = DataModel::SignalStateAspect3;
+		}
+		else if (signalStateText.compare("aspect4") == 0)
+		{
+			signalState = DataModel::SignalStateAspect4;
+		}
+		else if (signalStateText.compare("aspect5") == 0)
+		{
+			signalState = DataModel::SignalStateAspect5;
+		}
+		else if (signalStateText.compare("aspect6") == 0)
+		{
+			signalState = DataModel::SignalStateAspect6;
+		}
 
 		manager.SignalState(ControlTypeWebserver, signalID, signalState, false);
 
@@ -339,5 +372,26 @@ namespace WebServer
 		const ObjectIdentifier identifier(ObjectTypeSignal, Utils::Utils::GetIntegerMapEntry(arguments, "signal"));
 		bool ret = manager.TrackBaseRelease(identifier);
 		client.ReplyHtmlWithHeaderAndParagraph(ret ? "Signal released" : "Signal not released");
+	}
+
+	void WebClientSignal::HandleSignalStates(const map<string, string>& arguments)
+	{
+		const string name = Utils::Utils::GetStringMapEntry(arguments, "name");
+		const SignalID signalId = static_cast<SwitchID>(Utils::Utils::GetIntegerMapEntry(arguments, "signal"));
+		client.ReplyHtmlWithHeader(HtmlTagRelationSignalState(name, signalId));
+	}
+
+	HtmlTag WebClientSignal::HtmlTagRelationSignalState(const string& name,
+		const SignalID signalId,
+		const DataModel::Relation::Data data)
+	{
+		map<DataModel::AccessoryState,Languages::TextSelector> stateOptions;
+		Signal* signal = manager.GetSignal(signalId);
+		if (signal != nullptr)
+		{
+			stateOptions = signal->GetStateOptions();
+		}
+
+		return HtmlTagSelect(name + "_state", stateOptions, static_cast<DataModel::AccessoryState>(data)).AddClass("select_relation_state");
 	}
 } // namespace WebServer

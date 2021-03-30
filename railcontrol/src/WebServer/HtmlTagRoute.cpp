@@ -31,8 +31,8 @@ namespace WebServer
 	HtmlTagRoute::HtmlTagRoute(const DataModel::Route* route)
 	:	HtmlTagLayoutItem()
 	{
-		unsigned int layoutPosX = route->GetPosX() * EdgeLength;
-		unsigned int layoutPosY = route->GetPosY() * EdgeLength;
+		const unsigned int layoutPosX = route->GetPosX() * EdgeLength;
+		const unsigned int layoutPosY = route->GetPosY() * EdgeLength;
 		const string& routeName = route->GetName();
 
 		HtmlTag div1("div");
@@ -55,7 +55,7 @@ namespace WebServer
 		div2.AddAttribute("style", "left:" + to_string(layoutPosX + 5) + "px;top:" + to_string(layoutPosY + 30) + "px;");
 		div2.AddChildTag(HtmlTag("ul").AddClass("contextentries")
 			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(routeName))
-			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(Languages::TextReleaseRoute).AddAttribute("onClick", "fireRequestAndForget('/?cmd=routerelease&switch=" + routeIdString + "');"))
+			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(Languages::TextReleaseRoute).AddAttribute("onClick", "fireRequestAndForget('/?cmd=routerelease&route=" + routeIdString + "');"))
 			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(Languages::TextEditRoute).AddAttribute("onClick", "loadPopup('/?cmd=routeedit&route=" + routeIdString + "');"))
 			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(Languages::TextDeleteRoute).AddAttribute("onClick", "loadPopup('/?cmd=routeaskdelete&route=" + routeIdString + "');"))
 			);
