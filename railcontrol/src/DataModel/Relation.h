@@ -50,7 +50,7 @@ namespace DataModel
 				TypeClusterSignal = (ObjectTypeCluster << 3) + 1, // FIXME: remove again later 2021-02-10
 			};
 
-			typedef unsigned char Data;
+			typedef unsigned short Data;
 			static const Data DefaultData = 0;
 
 			inline Relation(Manager* manager,
@@ -58,7 +58,7 @@ namespace DataModel
 				const ObjectIdentifier& object2,
 				const Type type,
 				const Priority priority = 0,
-				const unsigned char data = 0)
+				const unsigned short data = 0)
 			:	manager(manager),
 			 	object1(object1),
 			 	object2(object2),

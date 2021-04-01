@@ -64,6 +64,8 @@ namespace DataModel
 			bool Deserialize(const std::string& serialized) override;
 
 			void SetAccessoryState(const AccessoryState state);
+
+			std::map<DataModel::AccessoryState,Languages::TextSelector> GetStateOptions() const;
 	};
 
 } // namespace DataModel

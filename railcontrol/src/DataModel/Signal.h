@@ -161,6 +161,7 @@ namespace DataModel
 				return GetLoco();
 			}
 
+			// FIXME: Remove later: 2021-03-18
 			Orientation signalOrientation;
 			Track* track;
 	};

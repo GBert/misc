@@ -967,7 +967,17 @@ void Manager::LocoFunctionState(const ControlType controlType,
 	const DataModel::LocoFunctionState on)
 {
 	Loco* loco = GetLoco(locoID);
-	LocoFunctionState(controlType, loco, function, on);
+	if (loco == nullptr)
+	{
+		return;
+	}
+
+	DataModel::LocoFunctionNr functionInternal = function;
+	if (function >= NumberOfLocoFunctions)
+	{
+		functionInternal = loco->GetFunctionNumberFromFunctionIcon(static_cast<DataModel::LocoFunctionIcon>(function - 256));
+	}
+	LocoFunctionState(controlType, loco, functionInternal, on);
 }
 
 void Manager::LocoFunctionState(const ControlType controlType,

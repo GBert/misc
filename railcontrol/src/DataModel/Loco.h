@@ -267,6 +267,8 @@ namespace DataModel
 				return matchKey;
 			}
 
+			DataModel::LocoFunctionNr GetFunctionNumberFromFunctionIcon(DataModel::LocoFunctionIcon icon) const;
+
 			Loco& operator=(const Hardware::LocoCacheEntry& loco);
 
 		private:

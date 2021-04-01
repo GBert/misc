@@ -26,7 +26,8 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace DataModel
 {
-	typedef uint8_t LocoFunctionNr;
+	typedef uint16_t LocoFunctionNr;
+	// 16 bit because icon is added with 256 to select f number and icon in same select dropdown box in relation.
 
 	static const LocoFunctionNr NumberOfLocoFunctions = 33; // f0 - f32 = 33
 
@@ -45,11 +46,15 @@ namespace DataModel
 		LocoFunctionTypeTimer = 4 // actually not implemented
 	};
 
-	enum LocoFunctionIcon : uint8_t
+	enum LocoFunctionIcon : uint16_t
+	// 16 bit because icon is added with 256 to select f number and icon in same select dropdown box in relation.
 	{
 		// Do not change numbers!
 		// Only add numbers!
-		// If you add numbers, add them also in ProtocolMaerklin.cpp
+		// If you add numbers, add them also in
+		// - ProtocolMaerklin.cpp
+		// - WebServer::WebClient::HtmlTagRelationObject
+		// - WebServer::WebClient::HandleLocoEdit
 		LocoFunctionIconNone = 0,
 		LocoFunctionIconDefault = 1,
 		// logical functions
@@ -253,6 +258,15 @@ namespace DataModel
 			std::string Serialize() const override;
 
 			bool Deserialize(const std::string& serialized) override;
+
+			inline LocoFunctionIcon GetFunctionIcon(const LocoFunctionNr nr) const
+			{
+				if (nr >= NumberOfLocoFunctions)
+				{
+					return LocoFunctionIconNone;
+				}
+				return entries[nr].icon;
+			}
 
 			static std::string GetLocoFunctionIcon(const LocoFunctionNr nr, const LocoFunctionIcon icon);
 

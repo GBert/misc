@@ -31,12 +31,13 @@ namespace DataModel
 {
 	std::string Switch::Serialize() const
 	{
-		stringstream ss;
-		ss << "objectType=Switch;"
-			<< ";" << AccessoryBase::Serialize()
-			<< ";" << LayoutItem::Serialize()
-			<< ";" << LockableItem::Serialize();
-		return ss.str();
+		string str = "objectType=Switch;";
+		str += ";";
+		str += AccessoryBase::Serialize();
+		str += ";";
+		str += LayoutItem::Serialize();
+		str += LockableItem::Serialize();
+		return str;
 	}
 
 	bool Switch::Deserialize(const std::string& serialized)
@@ -66,6 +67,24 @@ namespace DataModel
 			checkedState = SwitchStateTurnout;
 		}
 		AccessoryBase::SetAccessoryState(checkedState);
+	}
+
+	std::map<DataModel::AccessoryState, Languages::TextSelector> Switch::GetStateOptions() const
+	{
+		std::map<DataModel::AccessoryState,Languages::TextSelector> out;
+		out[DataModel::SwitchStateStraight] = Languages::TextStraight;
+		switch(accessoryType)
+		{
+			case DataModel::SwitchTypeThreeWay:
+				out[DataModel::SwitchStateTurnout] = Languages::TextLeft;
+				out[DataModel::SwitchStateThird] = Languages::TextRight;
+				break;
+
+			default:
+				out[DataModel::SwitchStateTurnout] = Languages::TextTurnout;
+				break;
+		}
+		return out;
 	}
 } // namespace DataModel
 

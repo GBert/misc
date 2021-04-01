@@ -1346,23 +1346,12 @@ namespace WebServer
 		const DataModel::Relation::Data data)
 	{
 		map<DataModel::AccessoryState,Languages::TextSelector> stateOptions;
-		DataModel::AccessoryType selectedSwitchType = SwitchTypeLeft;
 		Switch* mySwitch = manager.GetSwitch(switchId);
 		if (mySwitch != nullptr)
 		{
-			selectedSwitchType = mySwitch->GetType();
+			stateOptions = mySwitch->GetStateOptions();
 		}
 
-		stateOptions[DataModel::SwitchStateStraight] = Languages::TextStraight;
-		if (selectedSwitchType == DataModel::SwitchTypeThreeWay)
-		{
-			stateOptions[DataModel::SwitchStateTurnout] = Languages::TextLeft;
-			stateOptions[DataModel::SwitchStateThird] = Languages::TextRight;
-		}
-		else
-		{
-			stateOptions[DataModel::SwitchStateTurnout] = Languages::TextTurnout;
-		}
 		return HtmlTagSelect(name + "_state", stateOptions, static_cast<DataModel::AccessoryState>(data)).AddClass("select_relation_state");
 	}
 
@@ -1474,9 +1463,109 @@ namespace WebServer
 				map<string,string> functionOptions;
 				for (DataModel::LocoFunctionNr function = 0; function < NumberOfLocoFunctions; ++function)
 				{
-					functionOptions[Utils::Utils::ToStringWithLeadingZeros(function, 2)] = "F" + to_string(function);
+					functionOptions[Utils::Utils::ToStringWithLeadingZeros(function, 3)] = "F" + to_string(function);
 				}
-				content.AddChildTag(HtmlTagSelect(name + "_id", functionOptions, Utils::Utils::ToStringWithLeadingZeros(objectId, 2)).AddClass("select_relation_id"));
+
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconShuntingMode, 3)] = Languages::GetText(Languages::TextLocoFunctionIconShuntingMode);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconInertia, 3)] = Languages::GetText(Languages::TextLocoFunctionIconInertia);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconLight, 3)] = Languages::GetText(Languages::TextLocoFunctionIconLight);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconHeadlightLowBeamForward, 3)] = Languages::GetText(Languages::TextLocoFunctionIconHeadlightLowBeamForward);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconHeadlightLowBeamReverse, 3)] = Languages::GetText(Languages::TextLocoFunctionIconHeadlightLowBeamReverse);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconHeadlightHighBeamForward, 3)] = Languages::GetText(Languages::TextLocoFunctionIconHeadlightHighBeamForward);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconHeadlightHighBeamReverse, 3)] = Languages::GetText(Languages::TextLocoFunctionIconHeadlightHighBeamReverse);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconBacklightForward, 3)] = Languages::GetText(Languages::TextLocoFunctionIconBacklightForward);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconBacklightReverse, 3)] = Languages::GetText(Languages::TextLocoFunctionIconBacklightReverse);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconShuntingLight, 3)] = Languages::GetText(Languages::TextLocoFunctionIconShuntingLight);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconBlinkingLight, 3)] = Languages::GetText(Languages::TextLocoFunctionIconBlinkingLight);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconInteriorLight1, 3)] = Languages::GetText(Languages::TextLocoFunctionIconInteriorLight1);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconInteriorLight2, 3)] = Languages::GetText(Languages::TextLocoFunctionIconInteriorLight2);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconTableLight1, 3)] = Languages::GetText(Languages::TextLocoFunctionIconTableLight1);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconTableLight2, 3)] = Languages::GetText(Languages::TextLocoFunctionIconTableLight2);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconTableLight3, 3)] = Languages::GetText(Languages::TextLocoFunctionIconTableLight3);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconCabLight1, 3)] = Languages::GetText(Languages::TextLocoFunctionIconCabLight1);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconCabLight2, 3)] = Languages::GetText(Languages::TextLocoFunctionIconCabLight2);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconCabLight12, 3)] = Languages::GetText(Languages::TextLocoFunctionIconCabLight12);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconDriversDeskLight, 3)] = Languages::GetText(Languages::TextLocoFunctionIconDriversDeskLight);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconTrainDestinationIndicator, 3)] = Languages::GetText(Languages::TextLocoFunctionIconTrainDestinationIndicator);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconLocomotiveNumberIndicator, 3)] = Languages::GetText(Languages::TextLocoFunctionIconLocomotiveNumberIndicator);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconEngineLight, 3)] = Languages::GetText(Languages::TextLocoFunctionIconEngineLight);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconFireBox, 3)] = Languages::GetText(Languages::TextLocoFunctionIconFireBox);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconStairsLight, 3)] = Languages::GetText(Languages::TextLocoFunctionIconStairsLight);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconSmokeGenerator, 3)] = Languages::GetText(Languages::TextLocoFunctionIconSmokeGenerator);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconTelex1, 3)] = Languages::GetText(Languages::TextLocoFunctionIconTelex1);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconTelex2, 3)] = Languages::GetText(Languages::TextLocoFunctionIconTelex2);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconTelex12, 3)] = Languages::GetText(Languages::TextLocoFunctionIconTelex12);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconPanto1, 3)] = Languages::GetText(Languages::TextLocoFunctionIconPanto1);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconPanto2, 3)] = Languages::GetText(Languages::TextLocoFunctionIconPanto2);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconPanto12, 3)] = Languages::GetText(Languages::TextLocoFunctionIconPanto12);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconUp, 3)] = Languages::GetText(Languages::TextLocoFunctionIconUp);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconDown, 3)] = Languages::GetText(Languages::TextLocoFunctionIconDown);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconUpDown1, 3)] = Languages::GetText(Languages::TextLocoFunctionIconUpDown1);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconUpDown2, 3)] = Languages::GetText(Languages::TextLocoFunctionIconUpDown2);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconLeft, 3)] = Languages::GetText(Languages::TextLocoFunctionIconLeft);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconRight, 3)] = Languages::GetText(Languages::TextLocoFunctionIconRight);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconLeftRight, 3)] = Languages::GetText(Languages::TextLocoFunctionIconLeftRight);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconTurnLeft, 3)] = Languages::GetText(Languages::TextLocoFunctionIconTurnLeft);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconTurnRight, 3)] = Languages::GetText(Languages::TextLocoFunctionIconTurnRight);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconTurn, 3)] = Languages::GetText(Languages::TextLocoFunctionIconTurn);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconCrane, 3)] = Languages::GetText(Languages::TextLocoFunctionIconCrane);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconMagnet, 3)] = Languages::GetText(Languages::TextLocoFunctionIconMagnet);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconCraneHook, 3)] = Languages::GetText(Languages::TextLocoFunctionIconCraneHook);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconFan, 3)] = Languages::GetText(Languages::TextLocoFunctionIconFan);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconBreak, 3)] = Languages::GetText(Languages::TextLocoFunctionIconBreak);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconNoSound, 3)] = Languages::GetText(Languages::TextLocoFunctionIconNoSound);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconSoundGeneral, 3)] = Languages::GetText(Languages::TextLocoFunctionIconSoundGeneral);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconRunning1, 3)] = Languages::GetText(Languages::TextLocoFunctionIconRunning1);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconRunning2, 3)] = Languages::GetText(Languages::TextLocoFunctionIconRunning2);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconEngine1, 3)] = Languages::GetText(Languages::TextLocoFunctionIconEngine1);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconEngine2, 3)] = Languages::GetText(Languages::TextLocoFunctionIconEngine2);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconBreak1, 3)] = Languages::GetText(Languages::TextLocoFunctionIconBreak1);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconBreak2, 3)] = Languages::GetText(Languages::TextLocoFunctionIconBreak2);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconCurve, 3)] = Languages::GetText(Languages::TextLocoFunctionIconCurve);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconHorn1, 3)] = Languages::GetText(Languages::TextLocoFunctionIconHorn1);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconHorn2, 3)] = Languages::GetText(Languages::TextLocoFunctionIconHorn2);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconWhistle1, 3)] = Languages::GetText(Languages::TextLocoFunctionIconWhistle1);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconWhistle2, 3)] = Languages::GetText(Languages::TextLocoFunctionIconWhistle2);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconBell, 3)] = Languages::GetText(Languages::TextLocoFunctionIconBell);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconStationAnnouncement1, 3)] = Languages::GetText(Languages::TextLocoFunctionIconStationAnnouncement1);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconStationAnnouncement2, 3)] = Languages::GetText(Languages::TextLocoFunctionIconStationAnnouncement2);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconStationAnnouncement3, 3)] = Languages::GetText(Languages::TextLocoFunctionIconStationAnnouncement3);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconSpeak, 3)] = Languages::GetText(Languages::TextLocoFunctionIconSpeak);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconRadio, 3)] = Languages::GetText(Languages::TextLocoFunctionIconRadio);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconMusic1, 3)] = Languages::GetText(Languages::TextLocoFunctionIconMusic1);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconMusic2, 3)] = Languages::GetText(Languages::TextLocoFunctionIconMusic2);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconOpenDoor, 3)] = Languages::GetText(Languages::TextLocoFunctionIconOpenDoor);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconCloseDoor, 3)] = Languages::GetText(Languages::TextLocoFunctionIconCloseDoor);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconFan1, 3)] = Languages::GetText(Languages::TextLocoFunctionIconFan1);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconFan2, 3)] = Languages::GetText(Languages::TextLocoFunctionIconFan2);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconFan3, 3)] = Languages::GetText(Languages::TextLocoFunctionIconFan3);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconShovelCoal, 3)] = Languages::GetText(Languages::TextLocoFunctionIconShovelCoal);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconCompressedAir, 3)] = Languages::GetText(Languages::TextLocoFunctionIconCompressedAir);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconReliefValve, 3)] = Languages::GetText(Languages::TextLocoFunctionIconReliefValve);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconSteamBlowOut, 3)] = Languages::GetText(Languages::TextLocoFunctionIconSteamBlowOut);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconSteamBlow, 3)] = Languages::GetText(Languages::TextLocoFunctionIconSteamBlow);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconDrainValve, 3)] = Languages::GetText(Languages::TextLocoFunctionIconDrainValve);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconShakingRust, 3)] = Languages::GetText(Languages::TextLocoFunctionIconShakingRust);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconAirPump, 3)] = Languages::GetText(Languages::TextLocoFunctionIconAirPump);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconWaterPump, 3)] = Languages::GetText(Languages::TextLocoFunctionIconWaterPump);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconBufferPush, 3)] = Languages::GetText(Languages::TextLocoFunctionIconBufferPush);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconGenerator, 3)] = Languages::GetText(Languages::TextLocoFunctionIconGenerator);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconGearBox, 3)] = Languages::GetText(Languages::TextLocoFunctionIconGearBox);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconGearUp, 3)] = Languages::GetText(Languages::TextLocoFunctionIconGearUp);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconGearDown, 3)] = Languages::GetText(Languages::TextLocoFunctionIconGearDown);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconFillWater, 3)] = Languages::GetText(Languages::TextLocoFunctionIconFillWater);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconFillDiesel, 3)] = Languages::GetText(Languages::TextLocoFunctionIconFillDiesel);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconFillGas, 3)] = Languages::GetText(Languages::TextLocoFunctionIconFillGas);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconSand, 3)] = Languages::GetText(Languages::TextLocoFunctionIconSand);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconRailJoint, 3)] = Languages::GetText(Languages::TextLocoFunctionIconRailJoint);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconCoupler, 3)] = Languages::GetText(Languages::TextLocoFunctionIconCoupler);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconPanto, 3)] = Languages::GetText(Languages::TextLocoFunctionIconPanto);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconMainSwitch, 3)] = Languages::GetText(Languages::TextLocoFunctionIconMainSwitch);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconSoundLouder, 3)] = Languages::GetText(Languages::TextLocoFunctionIconSoundLouder);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconSoundLower, 3)] = Languages::GetText(Languages::TextLocoFunctionIconSoundLower);
+				functionOptions[Utils::Utils::ToStringWithLeadingZeros(256 + LocoFunctionIconNoBreak, 3)] = Languages::GetText(Languages::TextLocoFunctionIconNoBreak);
+
+				content.AddChildTag(HtmlTagSelect(name + "_id", functionOptions, Utils::Utils::ToStringWithLeadingZeros(objectId, 3)).AddClass("select_relation_id"));
 
 				// FIXME: load available functions of loco
 				map<DataModel::LocoFunctionState,Languages::TextSelector> stateOptions;
@@ -3014,7 +3103,7 @@ namespace WebServer
 			{
 				continue;
 			}
-			unsigned char state = Utils::Utils::GetIntegerMapEntry(arguments, "relation_atlock_" + priorityString + "_state");
+			unsigned short state = Utils::Utils::GetIntegerMapEntry(arguments, "relation_atlock_" + priorityString + "_state");
 			relationsAtLock.push_back(new Relation(&manager,
 				ObjectIdentifier(ObjectTypeRoute, routeID),
 				ObjectIdentifier(objectType, objectId),

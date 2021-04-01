@@ -22,18 +22,17 @@ along with RailControl; see the file LICENCE. If not see
 #include "Utils/Utils.h"
 
 using std::map;
-using std::stringstream;
 using std::string;
+using std::to_string;
 
 namespace DataModel
 {
 	std::string HardwareHandle::Serialize() const
 	{
-		stringstream ss;
-		ss << "controlID=" << static_cast<int>(controlID)
-			<< ";protocol=" << static_cast<int>(protocol)
-			<< ";address=" << static_cast<int>(address);
-		return ss.str();
+		string str = "controlID=" + to_string(controlID);
+		str += ";protocol=" + to_string(protocol);
+		str += ";address=" + to_string(address);
+		return str;
 	}
 
 	bool HardwareHandle::Deserialize(const map<string,string>& arguments)

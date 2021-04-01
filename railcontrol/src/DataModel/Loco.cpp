@@ -764,6 +764,18 @@ namespace DataModel
 		return true;
 	}
 
+	DataModel::LocoFunctionNr Loco::GetFunctionNumberFromFunctionIcon(DataModel::LocoFunctionIcon icon) const
+	{
+		for (DataModel::LocoFunctionNr nr = 0; nr < NumberOfLocoFunctions; ++nr)
+		{
+			if (icon == functions.GetFunctionIcon(nr))
+			{
+				return nr;
+			}
+		}
+		return NumberOfLocoFunctions;
+	}
+
 	Loco& Loco::operator=(const Hardware::LocoCacheEntry& loco)
 	{
 		SetControlID(loco.GetControlID());

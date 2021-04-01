@@ -21,7 +21,7 @@ along with RailControl; see the file LICENCE. If not see
 #pragma once
 
 #include <map>
-#include <sstream>
+#include <string>
 
 #include "DataTypes.h"
 #include "DataModel/Serializable.h"
