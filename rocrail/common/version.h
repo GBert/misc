@@ -1,11 +1,13 @@
 const int revisionnr = 
-1522
+1524
 ;
 const char* commithash = 
-"0f1abe634820867acaf3e92abf87eb85f70dabae";
+"4f88951dd5d1772e97d20a4ab7bf9aa0c110f9a0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1524 2021-04-01 16:10:41 +0200 p50x: tcp sublib added for Tams MC2\n" \
+"1523 2021-03-30 22:17:33 +0200 makefile: install target fix for rocrail.sh and rocview.sh\n" \
 "1522 2021-03-30 09:19:02 +0200 makefile target install without sudo in $Home/Rocrail\n" \
 "1521 2021-03-29 22:57:19 +0200 removed makefile install targets\n" \
 "1520 2021-03-29 19:26:02 +0200 hsi88dlg: removed obsolete adjust minsize attributes\n" \
