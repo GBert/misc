@@ -1,11 +1,12 @@
 const int revisionnr = 
-1524
+1525
 ;
 const char* commithash = 
-"4f88951dd5d1772e97d20a4ab7bf9aa0c110f9a0";
+"b8a12abe81dd40a16f1a0796e9d78ae9ba848a41";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1525 2021-04-01 17:25:42 +0200 gendlg: removes obsolete adjust minsize attributes\n" \
 "1524 2021-04-01 16:10:41 +0200 p50x: tcp sublib added for Tams MC2\n" \
 "1523 2021-03-30 22:17:33 +0200 makefile: install target fix for rocrail.sh and rocview.sh\n" \
 "1522 2021-03-30 09:19:02 +0200 makefile target install without sudo in $Home/Rocrail\n" \
