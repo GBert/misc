@@ -1,11 +1,13 @@
 const int revisionnr = 
-1525
+1527
 ;
 const char* commithash = 
-"b8a12abe81dd40a16f1a0796e9d78ae9ba848a41";
+"b23232e54e1e4ce2929c812b61f07c4242d966f6";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1527 2021-04-03 12:25:14 +0200 rocweb: removed supportkey dependencies\n" \
+"1526 2021-04-02 18:03:30 +0200 bidib: netbidib (wip)\n" \
 "1525 2021-04-01 17:25:42 +0200 gendlg: removes obsolete adjust minsize attributes\n" \
 "1524 2021-04-01 16:10:41 +0200 p50x: tcp sublib added for Tams MC2\n" \
 "1523 2021-03-30 22:17:33 +0200 makefile: install target fix for rocrail.sh and rocview.sh\n" \
