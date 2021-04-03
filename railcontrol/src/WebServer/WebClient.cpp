@@ -154,7 +154,11 @@ namespace WebServer
 			}
 
 			// handle requests
-			if (arguments["cmd"].compare("quit") == 0)
+			if (uri.compare("/") == 0)
+			{
+				PrintMainHTML();
+			}
+			else if (arguments["cmd"].compare("quit") == 0)
 			{
 				ReplyHtmlWithHeaderAndParagraph(Languages::TextStoppingRailControl);
 				stopRailControlWebserver();
@@ -252,6 +256,10 @@ namespace WebServer
 			else if (arguments["cmd"].compare("locorelease") == 0)
 			{
 				HandleLocoRelease(arguments);
+			}
+			else if (arguments["cmd"].compare("locoaddtimetable") == 0)
+			{
+				HandleLocoAddTimeTable(arguments);
 			}
 			else if (arguments["cmd"].compare("accessoryedit") == 0)
 			{
@@ -569,13 +577,19 @@ namespace WebServer
 			{
 				cluster.HandleClusterDelete(arguments);
 			}
+			else if (arguments["cmd"].compare("getlocolist") == 0)
+			{
+				string s = manager.GetLocoList();
+				connection->Send(s);
+			}
+			else if (arguments["cmd"].compare("getroutelist") == 0)
+			{
+				string s = manager.GetRouteList();
+				connection->Send(s);
+			}
 			else if (arguments["cmd"].compare("updater") == 0)
 			{
 				HandleUpdater(headers);
-			}
-			else if (uri.compare("/") == 0)
-			{
-				PrintMainHTML();
 			}
 			else
 			{
@@ -1192,6 +1206,14 @@ namespace WebServer
 			ret = manager.LocoReleaseOnTrackBase(identifier);
 		}
 		ReplyHtmlWithHeaderAndParagraph(ret ? "Loco released" : "Loco not released");
+	}
+
+	void WebClient::HandleLocoAddTimeTable(const map<string, string>& arguments)
+	{
+		LocoID locoId = Utils::Utils::GetIntegerMapEntry(arguments, "loco", LocoNone);
+		ObjectIdentifier identifier = Utils::Utils::GetStringMapEntry(arguments, "timetable");
+		bool ret = manager.LocoAddTimeTable(locoId, identifier);
+		ReplyHtmlWithHeaderAndParagraph(ret ? "Timetable added" : "Timetable not added");
 	}
 
 	HtmlTag WebClient::HtmlTagMatchKey(const map<string,LocoConfig>& matchKeyMap, const string& selectedMatchKey)

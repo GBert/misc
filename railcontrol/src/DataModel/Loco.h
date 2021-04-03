@@ -55,7 +55,15 @@ namespace DataModel
 				ReserveTwo = 2
 			};
 
+			enum AutoModeType : unsigned char
+			{
+				AutoModeTypeFull = 0,
+				AutoModeTypeTimetable
+			};
+
 			Loco() = delete;
+			Loco(const Loco&) = delete;
+			Loco& operator=(const Loco&) = delete;
 
 			inline Loco(Manager* manager, const LocoID locoID)
 			:	Object(locoID),
@@ -116,11 +124,14 @@ namespace DataModel
 				logger = Logger::Logger::GetLogger(name);
 			}
 
-			bool GoToAutoMode();
+			bool GoToAutoMode(const AutoModeType type = AutoModeTypeFull);
 			void RequestManualMode();
 			bool GoToManualMode();
 
+			bool AddTimeTable(ObjectIdentifier& identifier);
+
 			bool SetTrack(const DataModel::ObjectIdentifier& identifier);
+			TrackID GetTrackId();
 			bool Release();
 			bool IsRunningFromTrack(const TrackID trackID) const;
 
@@ -272,27 +283,37 @@ namespace DataModel
 			Loco& operator=(const Hardware::LocoCacheEntry& loco);
 
 		private:
-			void SetMinThreadPriorityAndThreadName();
-			void AutoMode();
-			void SearchDestinationFirst();
-			void SearchDestinationSecond();
-			DataModel::Route* SearchDestination(DataModel::TrackBase* oldToTrack, const bool allowLocoTurn);
-			void FeedbackIdFirstReached();
-			void FeedbackIdStopReached();
-			void DeleteSlaves();
-			void ForceManualMode();
-
 			enum LocoState : unsigned char
 			{
 				LocoStateManual = 0,
 				LocoStateTerminated,
 				LocoStateOff,
-				LocoStateSearchingFirst,
-				LocoStateSearchingSecond,
-				LocoStateRunning,
+				LocoStateAutomodeGetFirst,
+				LocoStateAutomodeGetSecond,
+				LocoStateAutomodeRunning,
+				LocoStateTimetableGetFirst,
+				LocoStateTimetableGetSecond,
+				LocoStateTimetableRunning,
 				LocoStateStopping,
 				LocoStateError
 			};
+
+			void SetMinThreadPriorityAndThreadName();
+			void AutoMode();
+			void SearchDestinationFirst();
+			void GetDestinationFirst();
+			void PrepareDestinationFirst(Route* const route, const LocoState newState);
+			void SearchDestinationSecond();
+			void GetDestinationSecond();
+			DataModel::Route* GetDestinationFromTimeTable(const TrackBase* const track, const bool allowLocoTurn);
+			void PrepareDestinationSecond(Route* const route, const LocoState newState);
+			DataModel::Route* SearchDestination(const DataModel::TrackBase* const oldToTrack, const bool allowLocoTurn);
+			bool ReserveRoute(const TrackBase* const track, const bool allowLocoTurn, Route* const route);
+			void FeedbackIdFirstReached();
+			void FeedbackIdStopReached();
+			void DeleteSlaves();
+			void ForceManualMode();
+			bool GoToAutoModeInternal(const LocoState newState);
 
 			Manager* manager;
 			mutable std::mutex stateMutex;
@@ -324,9 +345,11 @@ namespace DataModel
 			volatile FeedbackID feedbackIdOver;
 			Utils::ThreadSafeQueue<FeedbackID> feedbackIdsReached;
 			Pause wait;
+			Utils::ThreadSafeQueue<RouteID> timeTableQueue;
 			std::string matchKey;
 
 			LocoFunctions functions;
+
 
 			Logger::Logger* logger;
 	};

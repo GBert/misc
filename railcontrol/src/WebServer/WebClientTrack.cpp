@@ -417,7 +417,8 @@ namespace WebServer
 	void WebClientTrack::HandleTrackStartLoco(const map<string, string>& arguments)
 	{
 		ObjectIdentifier identifier(Utils::Utils::GetStringMapEntry(arguments, "track"), Utils::Utils::GetStringMapEntry(arguments, "signal"));
-		bool ret = manager.TrackBaseStartLoco(identifier);
+		Loco::AutoModeType type = static_cast<Loco::AutoModeType>(Utils::Utils::GetIntegerMapEntry(arguments, "automodetype", Loco::AutoModeTypeFull));
+		bool ret = manager.TrackBaseStartLoco(identifier, type);
 		client.ReplyHtmlWithHeaderAndParagraph(ret ? "Loco started" : "Loco not started");
 	}
 
