@@ -41,6 +41,7 @@ using Visible = DataModel::LayoutItem::Visible;
 using Hardware::HardwareHandler;
 using Hardware::HardwareParams;
 using std::map;
+using std::to_string;
 using std::string;
 using std::stringstream;
 using std::vector;
@@ -602,6 +603,39 @@ const std::map<std::string, Protocol> Manager::ProtocolsOfControl(const AddressT
 /***************************
 * Loco                     *
 ***************************/
+
+string Manager::GetLocoList() const
+{
+	string out;
+	std::lock_guard<std::mutex> guard(locoMutex);
+	for (auto loco : locos)
+	{
+		Loco* l = loco.second;
+		out += to_string(l->GetID()) + ";";
+		out += to_string(l->GetSpeed()) + ";";
+		out += to_string(l->GetOrientation()) + ";";
+		out += to_string(l->GetTrackId()) + ";";
+		out += l->GetName() + "\n";
+	}
+	return out;
+}
+
+string Manager::GetRouteList() const
+{
+	string out;
+	std::lock_guard<std::mutex> guard(routeMutex);
+	for (auto route : routes)
+	{
+		Route* r = route.second;
+		out += to_string(r->GetID()) + ";";
+		out += to_string(r->GetFromTrack().GetObjectID()) + ";";
+		out += to_string(r->GetFromOrientation()) + ";";
+		out += to_string(r->GetToTrack().GetObjectID()) + ";";
+		out += to_string(r->GetToOrientation()) + ";";
+		out += r->GetName() + "\n";
+	}
+	return out;
+}
 
 Loco* Manager::GetLoco(const LocoID locoID) const
 {
@@ -2899,14 +2933,14 @@ bool Manager::LocoReleaseOnTrackBase(const ObjectIdentifier& identifier)
 	return LocoReleaseInternal(loco);
 }
 
-bool Manager::TrackBaseStartLoco(const ObjectIdentifier& identifier)
+bool Manager::TrackBaseStartLoco(const ObjectIdentifier& identifier, const DataModel::Loco::AutoModeType type)
 {
 	TrackBase* track = GetTrackBase(identifier);
 	if (track == nullptr)
 	{
 		return false;
 	}
-	return LocoStart(track->GetMyLoco());
+	return LocoStart(track->GetMyLoco(), type);
 }
 
 bool Manager::TrackBaseStopLoco(const ObjectIdentifier& identifier)
@@ -2988,14 +3022,14 @@ bool Manager::LocoDestinationReached(const Loco* loco, const Route* route, const
 	return true;
 }
 
-bool Manager::LocoStart(const LocoID locoID)
+bool Manager::LocoStart(const LocoID locoID, const DataModel::Loco::AutoModeType type)
 {
 	Loco* loco = GetLoco(locoID);
 	if (loco == nullptr)
 	{
 		return false;
 	}
-	bool ret = loco->GoToAutoMode();
+	bool ret = loco->GoToAutoMode(type);
 	if (ret == false)
 	{
 		return false;
@@ -3107,6 +3141,16 @@ void Manager::StopAllLocosImmediately(const ControlType controlType)
 	{
 		LocoSpeed(controlType, loco.second, MinSpeed, false);
 	}
+}
+
+bool Manager::LocoAddTimeTable(const LocoID locoId, ObjectIdentifier& identifier)
+{
+	Loco* loco = GetLoco(locoId);
+	if (loco == nullptr)
+	{
+		return false;
+	}
+	return loco->AddTimeTable(identifier);
 }
 
 /***************************

@@ -118,6 +118,12 @@ namespace DataModel
 					objectID = Utils::Utils::StringToInteger(text.substr(6), ObjectNone);
 					return *this;
 				}
+				if (text.substr(0, 5).compare("route") == 0)
+				{
+					objectType = ObjectTypeRoute;
+					objectID = Utils::Utils::StringToInteger(text.substr(5), ObjectNone);
+					return *this;
+				}
 				objectType = ObjectTypeTrack;
 				objectID = Utils::Utils::StringToInteger(text, ObjectNone);;
 				return *this;

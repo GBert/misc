@@ -268,6 +268,7 @@ namespace WebServer
 			void HandleLocoAskDelete(const std::map<std::string, std::string>& arguments);
 			void HandleLocoDelete(const std::map<std::string, std::string>& arguments);
 			void HandleLocoRelease(const std::map<std::string, std::string>& arguments);
+			void HandleLocoAddTimeTable(const std::map<std::string, std::string>& arguments);
 			void HandleProtocol(const std::map<std::string, std::string>& arguments);
 			void HandleLayout(const std::map<std::string,std::string>& arguments);
 			void HandleAccessoryEdit(const std::map<std::string,std::string>& arguments);
