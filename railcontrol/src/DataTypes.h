@@ -188,7 +188,8 @@ enum ObjectType : uint8_t
 	ObjectTypeRoute = 6,
 	ObjectTypeLayer = 7,
 	ObjectTypeSignal = 8,
-	ObjectTypeCluster = 9
+	ObjectTypeCluster = 9,
+	ObjectTypeTimeTable = 10
 };
 
 enum Orientation : bool
