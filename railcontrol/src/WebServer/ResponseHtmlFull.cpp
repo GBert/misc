@@ -20,32 +20,20 @@ along with RailControl; see the file LICENCE. If not see
 
 #include <sstream>
 
-#include "WebServer/HtmlFullResponse.h"
+#include "WebServer/ResponseHtmlFull.h"
 
 namespace WebServer
 {
-	HtmlFullResponse::HtmlFullResponse(const ResponseCode responseCode)
-	:	HtmlResponse(responseCode)
-	{}
-
-	HtmlFullResponse::HtmlFullResponse(const std::string& title, const HtmlTag body)
-	:	HtmlResponse(title, body)
-	{}
-
-	HtmlFullResponse::HtmlFullResponse(const ResponseCode responseCode, const std::string& title, const HtmlTag body)
-	:	HtmlResponse(responseCode, title, body)
-	{}
-
-	HtmlFullResponse::operator std::string()
+	ResponseHtmlFull::operator std::string()
 	{
 		std::stringstream reply;
 		reply << *this;
 		return reply.str();
 	}
 
-	std::ostream& operator<<(std::ostream& stream, const HtmlFullResponse& response)
+	std::ostream& operator<<(std::ostream& stream, const ResponseHtmlFull& response)
 	{
-		stream << "HTTP/1.1 " << response.responseCode << " " << HtmlResponse::responseTexts.at(response.responseCode) << "\r\n";
+		stream << "HTTP/1.1 " << response.responseCode << " " << ResponseHtml::responseTexts.at(response.responseCode) << "\r\n";
 		for(auto header : response.headers)
 		{
 			stream << header.first << ": " << header.second << "\r\n";

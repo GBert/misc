@@ -18,14 +18,14 @@ along with RailControl; see the file LICENCE. If not see
 <http://www.gnu.org/licenses/>.
 */
 
-#include "WebServer/HtmlResponseNotFound.h"
+#include "WebServer/ResponseHtmlNotFound.h"
 
 namespace WebServer
 {
 	using std::string;
 
-	HtmlResponseNotFound::HtmlResponseNotFound(const string& file)
-	: HtmlResponse(HtmlResponse::NotFound)
+	ResponseHtmlNotFound::ResponseHtmlNotFound(const string& file)
+	: ResponseHtml(ResponseHtml::NotFound)
 	{
 		content.AddChildTag(HtmlTag("h1").AddContent("File not found"));
 		content.AddChildTag(HtmlTag("p").AddContent("File ").AddContent(file).AddContent(" not found"));

@@ -23,16 +23,22 @@ along with RailControl; see the file LICENCE. If not see
 #include <ostream>
 #include <string>
 
-#include "WebServer/HtmlResponse.h"
+#include "WebServer/ResponseHtml.h"
 
 namespace WebServer
 {
-	class HtmlResponseNotImplemented : public HtmlResponse
+	class ResponseHtmlNotFound : public ResponseHtml
 	{
 		public:
-			HtmlResponseNotImplemented() = delete;
-			HtmlResponseNotImplemented(const std::string& method);
-			~HtmlResponseNotImplemented() {};
+			ResponseHtmlNotFound() = delete;
+			ResponseHtmlNotFound(const ResponseHtmlNotFound&) = delete;
+			ResponseHtmlNotFound& operator=(const ResponseHtmlNotFound&) = delete;
+
+			ResponseHtmlNotFound(const std::string& file);
+
+			virtual ~ResponseHtmlNotFound()
+			{
+			}
 	};
 } // namespace WebServer
 

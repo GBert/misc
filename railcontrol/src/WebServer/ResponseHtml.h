@@ -27,29 +27,39 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace WebServer
 {
-	class HtmlResponse : public Response
+	class ResponseHtml : public Response
 	{
 		public:
-			HtmlResponse() = delete;
-			HtmlResponse(const ResponseCode responseCode)
-			:	HtmlResponse(responseCode, std::to_string(responseCode) + " " + HtmlResponse::responseTexts.at(responseCode), HtmlTag("body"))
-			{}
+			ResponseHtml() = delete;
+			ResponseHtml(const ResponseHtml&) = delete;
+			ResponseHtml& operator=(const ResponseHtml&) = delete;
 
-			HtmlResponse(const HtmlTag body)
-			:	HtmlResponse("", body)
-			{}
+			inline ResponseHtml(const ResponseCode responseCode)
+			:	ResponseHtml(responseCode, std::to_string(responseCode) + " " + ResponseHtml::responseTexts.at(responseCode), HtmlTag("body"))
+			{
+			}
 
-			HtmlResponse(const std::string& title, const HtmlTag body)
-			:	HtmlResponse(Response::OK, title, body)
-			{}
+			inline ResponseHtml(const HtmlTag body)
+			:	ResponseHtml("", body)
+			{
+			}
 
-			HtmlResponse(const ResponseCode responseCode, const std::string& title, const HtmlTag body);
-			virtual ~HtmlResponse() {};
+			inline ResponseHtml(const std::string& title, const HtmlTag body)
+			:	ResponseHtml(Response::OK, title, body)
+			{
+			}
+
+			ResponseHtml(const ResponseCode responseCode, const std::string& title, const HtmlTag body);
+
+			virtual ~ResponseHtml()
+			{
+			}
+
 			void AddAttribute(const std::string name, const std::string value);
 			void AddChildTag(HtmlTag content);
 			operator std::string();
 
-			friend std::ostream& operator<<(std::ostream& stream, const HtmlResponse& response);
+			friend std::ostream& operator<<(std::ostream& stream, const ResponseHtml& response);
 
 		protected:
 			std::string title;
