@@ -35,10 +35,6 @@ along with RailControl; see the file LICENCE. If not see
 #include "RailControl.h"
 #include "Version.h"
 #include "Utils/Utils.h"
-#include "WebServer/HtmlFullResponse.h"
-#include "WebServer/HtmlResponse.h"
-#include "WebServer/HtmlResponseNotFound.h"
-#include "WebServer/HtmlResponseNotImplemented.h"
 #include "WebServer/HtmlTagAccessory.h"
 #include "WebServer/HtmlTagButtonCancel.h"
 #include "WebServer/HtmlTagButtonCommand.h"
@@ -61,6 +57,11 @@ along with RailControl; see the file LICENCE. If not see
 #include "WebServer/HtmlTagSwitch.h"
 #include "WebServer/HtmlTagTextWithLabel.h"
 #include "WebServer/HtmlTagTrack.h"
+#include "WebServer/ResponseCsv.h"
+#include "WebServer/ResponseHtml.h"
+#include "WebServer/ResponseHtmlFull.h"
+#include "WebServer/ResponseHtmlNotFound.h"
+#include "WebServer/ResponseHtmlNotImplemented.h"
 #include "WebServer/WebClient.h"
 #include "WebServer/WebServer.h"
 
@@ -148,7 +149,7 @@ namespace WebServer
 			if ((method.compare("GET") != 0) && (method.compare("HEAD") != 0))
 			{
 				logger->Info(Languages::TextHttpConnectionNotImplemented, id, method);
-				HtmlResponseNotImplemented response(method);
+				ResponseHtmlNotImplemented response(method);
 				connection->Send(response);
 				return;
 			}
@@ -580,12 +581,12 @@ namespace WebServer
 			else if (arguments["cmd"].compare("getlocolist") == 0)
 			{
 				string s = manager.GetLocoList();
-				connection->Send(s);
+				connection->Send(ResponseCsv(s));
 			}
 			else if (arguments["cmd"].compare("getroutelist") == 0)
 			{
 				string s = manager.GetRouteList();
-				connection->Send(s);
+				connection->Send(ResponseCsv(s));
 			}
 			else if (arguments["cmd"].compare("updater") == 0)
 			{
@@ -712,7 +713,7 @@ namespace WebServer
 		FILE* f = fopen(realFile, "r");
 		if (f == nullptr)
 		{
-			HtmlResponseNotFound response(virtualFile);
+			ResponseHtmlNotFound response(virtualFile);
 			connection->Send(response);
 			logger->Info(Languages::TextHttpConnectionNotFound, id, virtualFile);
 			return;
@@ -3925,7 +3926,7 @@ namespace WebServer
 
 	void WebClient::ReplyHtmlWithHeader(const HtmlTag& tag)
 	{
-		connection->Send(HtmlResponse(tag));
+		connection->Send(ResponseHtml(tag));
 	}
 
 	HtmlTag WebClient::HtmlTagLocoSelector() const
@@ -4059,6 +4060,6 @@ namespace WebServer
 			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(Languages::GetText(Languages::TextAddFeedback)).AddAttribute("onClick", "loadPopup('/?cmd=feedbackedit&feedback=0');"))
 			));
 
-		connection->Send(HtmlFullResponse("RailControl", body));
+		connection->Send(ResponseHtmlFull("RailControl", body));
 	}
 } // namespace WebServer
