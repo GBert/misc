@@ -20,11 +20,11 @@ along with RailControl; see the file LICENCE. If not see
 
 #include <sstream>
 
-#include "WebServer/HtmlResponse.h"
+#include "WebServer/ResponseHtml.h"
 
 namespace WebServer
 {
-	HtmlResponse::HtmlResponse(const ResponseCode responseCode, const std::string& title, const HtmlTag body)
+	ResponseHtml::ResponseHtml(const ResponseCode responseCode, const std::string& title, const HtmlTag body)
 	:	Response(responseCode, body),
 	 	title(title)
 	{
@@ -35,26 +35,26 @@ namespace WebServer
 		AddHeader("Connection", "keep-alive");
 	}
 
-	void HtmlResponse::AddAttribute(const std::string name, const std::string value)
+	void ResponseHtml::AddAttribute(const std::string name, const std::string value)
 	{
 		this->content.AddAttribute(name, value);
 	}
 
-	void HtmlResponse::AddChildTag(HtmlTag content)
+	void ResponseHtml::AddChildTag(HtmlTag content)
 	{
 		this->content.AddChildTag(content);
 	}
 
-	HtmlResponse::operator std::string()
+	ResponseHtml::operator std::string()
 	{
 		std::stringstream reply;
 		reply << *this;
 		return reply.str();
 	}
 
-	std::ostream& operator<<(std::ostream& stream, const HtmlResponse& response)
+	std::ostream& operator<<(std::ostream& stream, const ResponseHtml& response)
 	{
-		stream << "HTTP/1.1 " << response.responseCode << " " << HtmlResponse::responseTexts.at(response.responseCode) << "\r\n";
+		stream << "HTTP/1.1 " << response.responseCode << " " << ResponseHtml::responseTexts.at(response.responseCode) << "\r\n";
 		for(auto header : response.headers)
 		{
 			stream << header.first << ": " << header.second << "\r\n";

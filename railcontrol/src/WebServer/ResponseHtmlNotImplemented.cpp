@@ -18,14 +18,14 @@ along with RailControl; see the file LICENCE. If not see
 <http://www.gnu.org/licenses/>.
 */
 
-#include "WebServer/HtmlResponseNotImplemented.h"
+#include "WebServer/ResponseHtmlNotImplemented.h"
 
 namespace WebServer
 {
 	using std::string;
 
-	HtmlResponseNotImplemented::HtmlResponseNotImplemented(const string& method)
-	: HtmlResponse(HtmlResponse::NotImplemented)
+	ResponseHtmlNotImplemented::ResponseHtmlNotImplemented(const string& method)
+	: ResponseHtml(ResponseHtml::NotImplemented)
 	{
 		content.AddChildTag(HtmlTag("h1").AddContent("Method not implemented"));
 		content.AddChildTag(HtmlTag("p").AddContent("Method ").AddContent(method).AddContent(" not implemented"));
