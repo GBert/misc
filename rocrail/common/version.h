@@ -1,11 +1,12 @@
 const int revisionnr = 
-1527
+1528
 ;
 const char* commithash = 
-"b23232e54e1e4ce2929c812b61f07c4242d966f6";
+"424452c33b96382a71517bfca67f071753d2ca28";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1528 2021-04-04 13:20:21 +0200 netbidib: wip\n" \
 "1527 2021-04-03 12:25:14 +0200 rocweb: removed supportkey dependencies\n" \
 "1526 2021-04-02 18:03:30 +0200 bidib: netbidib (wip)\n" \
 "1525 2021-04-01 17:25:42 +0200 gendlg: removes obsolete adjust minsize attributes\n" \
