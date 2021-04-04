@@ -30,7 +30,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "DataModel/ObjectIdentifier.h"
 #include "Manager.h"
 #include "Network/TcpConnection.h"
-#include "WebServer/HtmlResponse.h"
+#include "ResponseHtml.h"
 #include "WebServer/WebClientCluster.h"
 #include "WebServer/WebClientSignal.h"
 #include "WebServer/WebClientTrack.h"
@@ -56,6 +56,8 @@ namespace WebServer
 			};
 
 			WebClient() = delete;
+			WebClient(const WebClient&) = delete;
+			WebClient& operator=(const WebClient&) = delete;
 
 			inline WebClient(const unsigned int id,
 				Network::TcpConnection* connection,
@@ -88,7 +90,7 @@ namespace WebServer
 
 			inline void ReplyResponse(std::string& text)
 			{
-				connection->Send(HtmlResponse(HtmlTag().AddContent(text)));
+				connection->Send(ResponseHtml(HtmlTag().AddContent(text)));
 			}
 
 			void ReplyResponse(ResponseType type, std::string& text)

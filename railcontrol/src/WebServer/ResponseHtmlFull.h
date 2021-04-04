@@ -20,51 +20,42 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
-#include <map>
 #include <ostream>
 #include <string>
 
-#include "WebServer/HtmlTag.h"
+#include "WebServer/ResponseHtml.h"
 
 namespace WebServer
 {
-	class Response
+	class ResponseHtmlFull : public ResponseHtml
 	{
 		public:
-			enum ResponseCode : unsigned short
-			{
-				OK = 200,
-				NotFound = 404,
-				NotImplemented = 501
-			};
+			ResponseHtmlFull() = delete;
+			ResponseHtmlFull(const ResponseHtmlFull&) = delete;
+			ResponseHtmlFull& operator=(const ResponseHtmlFull&) = delete;
 
-			inline Response()
-			:	responseCode(OK)
+			inline ResponseHtmlFull(const ResponseCode responseCode)
+			:	ResponseHtml(responseCode)
 			{
 			}
 
-			inline Response(const ResponseCode responseCode, const HtmlTag& content)
-			:	responseCode(responseCode),
-				content(content)
+			inline ResponseHtmlFull(const std::string& title, const HtmlTag body)
+			:	ResponseHtml(title, body)
 			{
 			}
 
-			virtual ~Response()
+			ResponseHtmlFull(const ResponseCode responseCode, const std::string& title, const HtmlTag body)
+			:	ResponseHtml(responseCode, title, body)
 			{
 			}
 
-			void AddHeader(const std::string& key, const std::string& value);
+			virtual ~ResponseHtmlFull()
+			{
+			}
+
 			operator std::string();
 
-			friend std::ostream& operator<<(std::ostream& stream, const Response& response);
-
-			ResponseCode responseCode;
-
-			typedef std::map<Response::ResponseCode,std::string> responseCodeMap;
-			static const responseCodeMap responseTexts;
-
-			std::map<const std::string,std::string> headers;
-			HtmlTag content;
+			friend std::ostream& operator<<(std::ostream& stream, const ResponseHtmlFull& response);
 	};
 } // namespace WebServer
 
