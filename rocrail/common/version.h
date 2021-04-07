@@ -1,11 +1,16 @@
 const int revisionnr = 
-1528
+1533
 ;
 const char* commithash = 
-"424452c33b96382a71517bfca67f071753d2ca28";
+"300a6ebf9caf157b75c52d553f393da1bb63a819";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1533 2021-04-06 10:49:48 +0200 trainpanel,trainimage: reset fix\n" \
+"1532 2021-04-06 09:23:23 +0200 ttrainpanel,item: update grid fixes\n" \
+"1531 2021-04-06 08:14:43 +0200 trainpanel,item: set location by D&D\n" \
+"1530 2021-04-05 12:15:14 +0200 model: check for a car by address if no loco was found\n" \
+"1529 2021-04-04 16:48:12 +0200 item: fix for use aspectnumbers (Lothar)\n" \
 "1528 2021-04-04 13:20:21 +0200 netbidib: wip\n" \
 "1527 2021-04-03 12:25:14 +0200 rocweb: removed supportkey dependencies\n" \
 "1526 2021-04-02 18:03:30 +0200 bidib: netbidib (wip)\n" \
