@@ -1,11 +1,13 @@
 const int revisionnr = 
-1533
+1535
 ;
 const char* commithash = 
-"300a6ebf9caf157b75c52d553f393da1bb63a819";
+"8372bba60cb12e53803de50b26d80fc64e7778e0";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1535 2021-04-10 16:33:52 +0200 guiframe: set lightcontrol toolbar icon at state event\n" \
+"1534 2021-04-10 11:33:33 +0200 cbus: POM write by opc 0xc1\n" \
 "1533 2021-04-06 10:49:48 +0200 trainpanel,trainimage: reset fix\n" \
 "1532 2021-04-06 09:23:23 +0200 ttrainpanel,item: update grid fixes\n" \
 "1531 2021-04-06 08:14:43 +0200 trainpanel,item: set location by D&D\n" \
