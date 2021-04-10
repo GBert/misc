@@ -50,7 +50,6 @@ namespace Network
 
 			volatile bool run;
 			std::vector<std::thread> serverThreads;
-			std::vector<TcpConnection*> connections;
 			std::string error;
 			const std::string threadName;
 	};

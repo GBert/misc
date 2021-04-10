@@ -33,8 +33,8 @@ along with RailControl; see the file LICENCE. If not see
 #include "DataModel/ObjectIdentifier.h"
 #include "Hardware/HardwareHandler.h"
 #include "RailControl.h"
-#include "Version.h"
 #include "Utils/Utils.h"
+#include "Version.h"
 #include "WebServer/HtmlTagAccessory.h"
 #include "WebServer/HtmlTagButtonCancel.h"
 #include "WebServer/HtmlTagButtonCommand.h"
@@ -83,7 +83,7 @@ namespace WebServer
 	{
 		run = false;
 		clientThread.join();
-		connection->Terminate();
+		delete connection;
 	}
 
 	// worker is the thread that handles client requests
@@ -93,6 +93,7 @@ namespace WebServer
 		logger->Info(Languages::TextHttpConnectionOpen, id);
 		WorkerImpl();
 		logger->Info(Languages::TextHttpConnectionClose, id);
+		terminated = true;
 	}
 
 	void WebClient::WorkerImpl()

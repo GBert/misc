@@ -157,6 +157,21 @@ namespace WebServer
 	void WebServer::Work(Network::TcpConnection* connection)
 	{
 		clients.push_back(new WebClient(++lastClientID, connection, *this, manager));
+
+		// clean up unused clients
+		for(auto iterator = clients.begin(); iterator != clients.end();)
+		{
+			WebClient* client = *iterator;
+			if (client->IsTerminated())
+			{
+				iterator = clients.erase(iterator);
+				delete client;
+			}
+			else
+			{
+				++iterator;
+			}
+		}
 	}
 
 	void WebServer::Booster(__attribute__((unused)) const ControlType controlType, const BoosterState status)

@@ -58,13 +58,6 @@ namespace Network
 	TcpServer::~TcpServer()
 	{
 		TerminateTcpServer();
-
-		while (connections.size())
-		{
-			TcpConnection* client = connections.back();
-			connections.pop_back();
-			delete client;
-		}
 	}
 
 	void TcpServer::SocketCreateBindListen(int family, struct sockaddr* address)
@@ -158,10 +151,9 @@ namespace Network
 				continue;
 			}
 
-			// create client and fill into vector
-			auto con = new TcpConnection(socketClient);
-			connections.push_back(con);
-			Work(con);
+			// create client
+			TcpConnection* connection = new TcpConnection(socketClient);
+			Work(connection);
 		}
 	}
 }

@@ -60,13 +60,14 @@ namespace WebServer
 			WebClient& operator=(const WebClient&) = delete;
 
 			inline WebClient(const unsigned int id,
-				Network::TcpConnection* connection,
+				Network::TcpConnection* connection, // connection must be deleted after using!
 				WebServer &webserver,
 				Manager& manager)
 			:	logger(Logger::Logger::GetLogger("Webserver")),
 				id(id),
 				connection(connection),
 				run(false),
+				terminated(false),
 				server(webserver),
 				clientThread(&WebClient::Worker, this),
 				manager(manager),
@@ -84,6 +85,11 @@ namespace WebServer
 			inline void Stop()
 			{
 				run = false;
+			}
+
+			inline bool IsTerminated()
+			{
+				return terminated;
 			}
 
 			void ReplyHtmlWithHeader(const HtmlTag& tag);
@@ -329,7 +335,8 @@ namespace WebServer
 			Logger::Logger* logger;
 			unsigned int id;
 			Network::TcpConnection* connection;
-			volatile unsigned char run;
+			volatile bool run;
+			bool terminated;
 			WebServer& server;
 			std::thread clientThread;
 			Manager& manager;

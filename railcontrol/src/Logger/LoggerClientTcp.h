@@ -30,13 +30,14 @@ namespace Logger
 	class LoggerClientTcp : public LoggerClient
 	{
 		public:
+			// connection must be deleted after using!
 			LoggerClientTcp(Network::TcpConnection* connection)
 			:	connection(connection)
 			{}
 
 			~LoggerClientTcp()
 			{
-				connection->Terminate();
+				delete connection;
 			}
 
 			void Send(const std::string& s) override

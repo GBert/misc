@@ -37,8 +37,8 @@ namespace Logger
 	class LoggerServer: private Network::TcpServer
 	{
 		public:
-			LoggerServer(LoggerServer const &) = delete;
-			void operator=(LoggerServer const &) = delete;
+			LoggerServer(const LoggerServer&) = delete;
+			LoggerServer& operator=(const LoggerServer&) = delete;
 
 			Logger* GetLogger(const std::string& component);
 
@@ -86,6 +86,7 @@ namespace Logger
 			inline void Work(Network::TcpConnection* connection) override
 			{
 				clients.push_back(new LoggerClientTcp(connection));
+				// FIXME: clean up unused LoggerClientTcp clients
 			}
 
 
