@@ -31,6 +31,11 @@ time_t GetVersionInfoGitTimestamp()
 	return @GIT_TIMESTAMP@;
 }
 
+unsigned int GetVersionInfoGitDirty()
+{
+	return @GIT_DIRTY@;
+}
+
 time_t GetVersionInfoCompileTimestamp()
 {
 	return @COMPILE_TIMESTAMP@;

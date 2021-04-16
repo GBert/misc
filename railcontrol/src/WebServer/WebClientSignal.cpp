@@ -118,6 +118,7 @@ namespace WebServer
 		signalTypeOptions[DataModel::SignalTypeChLMain] = Languages::TextChLMain;
 		//signalTypeOptions[DataModel::SignalTypeChLDistant] = Languages::TextChLDistant;
 		signalTypeOptions[DataModel::SignalTypeChDwarf] = Languages::TextChDwarf;
+		signalTypeOptions[DataModel::SignalTypeDeCombined] = Languages::TextDeCombined;
 
 		content.AddChildTag(HtmlTag("h1").AddContent(name).AddId("popup_title"));
 		HtmlTag tabMenu("div");
@@ -267,6 +268,22 @@ namespace WebServer
 		else if (signalStateText.compare("aspect6") == 0)
 		{
 			signalState = DataModel::SignalStateAspect6;
+		}
+		else if (signalStateText.compare("aspect7") == 0)
+		{
+			signalState = DataModel::SignalStateAspect7;
+		}
+		else if (signalStateText.compare("aspect8") == 0)
+		{
+			signalState = DataModel::SignalStateAspect8;
+		}
+		else if (signalStateText.compare("aspect9") == 0)
+		{
+			signalState = DataModel::SignalStateAspect9;
+		}
+		else if (signalStateText.compare("aspect10") == 0)
+		{
+			signalState = DataModel::SignalStateAspect10;
 		}
 
 		manager.SignalState(ControlTypeWebserver, signalID, signalState, false);

@@ -89,6 +89,10 @@ namespace DataModel
 		out[SignalStateClear] = Languages::TextSignalStateClear;
 		switch(accessoryType)
 		{
+			case SignalTypeDeCombined:
+				out[SignalStateAspect2] = Languages::TextSignalStateStopExpected;
+				break;
+
 			case SignalTypeChDwarf:
 				out[SignalStateAspect2] = Languages::TextSignalStateCaution;
 				break;

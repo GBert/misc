@@ -30,6 +30,8 @@ namespace DataModel
 {
 	class HardwareHandle
 	{
+			// simply stores controlID, protocol and base address of an object
+			// this is only to prevent copying code and use a base class instead
 		public:
 			inline HardwareHandle()
 			:	controlID(ControlNone),

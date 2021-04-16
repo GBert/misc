@@ -105,6 +105,10 @@ namespace DataModel
 			}
 		}
 		trackFrom = manager->GetTrackBase(trackIdentifier);
+		if (trackFrom == nullptr)
+		{
+			trackIdentifier.Clear();
+		}
 		functions.Deserialize(Utils::Utils::GetStringMapEntry(arguments, "functions", "0"));
 		orientation = (Utils::Utils::GetStringMapEntry(arguments, "direction", "right").compare("right") == 0 ? OrientationRight : OrientationLeft); // FIXME: remove later 2020-10-27
 		orientation = (static_cast<Orientation>(Utils::Utils::GetBoolMapEntry(arguments, "orientation", orientation)));

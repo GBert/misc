@@ -88,6 +88,19 @@ namespace WebServer
 		image += ">";
 		switch (type)
 		{
+			case DataModel::SignalTypeDeCombined:
+				image += "<polygon points=\"1,1 13,1 13,30 1,30\" fill=\"black\"/>"
+					"<polyline points=\"7,30 7,34\" style=\"stroke:black;stroke-width:2\"/>"
+					"<polyline points=\"4,34 10,34\" style=\"stroke:black;stroke-width:2\"/>"
+					"<circle class=\"stop\" cx=\"7\" cy=\"10\" r=\"2.5\" fill=\"red\" opacity=\"0\"/>"
+					"<circle class=\"clear\" cx=\"5\" cy=\"15\" r=\"2.5\" fill=\"lightgreen\" opacity=\"0\"/>"
+					"<circle class=\"aspect2\" cx=\"9\" cy=\"15\" r=\"2.5\" fill=\"orange\" opacity=\"0\"/>";
+				AddOnClickMenuEntry(Languages::TextSignalStateStop, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=stop');", "menu_stop");
+				AddOnClickMenuEntry(Languages::TextSignalStateClear, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=clear');", "menu_clear");
+				AddOnClickMenuEntry(Languages::TextSignalStateStopExpected, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect2');", "menu_aspect2");
+				imageDiv.AddAttribute("onclick", "return showContextMenu('si_" + idText + "_onclick');");
+				break;
+
 			case DataModel::SignalTypeChLDistant:
 				image += "<polygon points=\"0,13.5 2.5,11 11.5,11 14,13.5 14,25.5 11.5,28 2.5,28 0,25.5\" fill=\"black\"/>"
 					"<polyline points=\"7,30 7,34\" style=\"stroke:black;stroke-width:2\"/>"

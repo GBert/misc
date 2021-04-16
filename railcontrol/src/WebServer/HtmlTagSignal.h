@@ -22,16 +22,13 @@ along with RailControl; see the file LICENCE. If not see
 
 #include <string>
 
-#include "DataModel/TrackBase.h"
 #include "WebServer/HtmlTagTrackBase.h"
 
 class Manager;
 
 namespace DataModel
 {
-	class LayoutItem;
 	class Signal;
-	class TrackBase;
 }
 
 namespace WebServer
@@ -40,6 +37,9 @@ namespace WebServer
 	{
 		public:
 			HtmlTagSignal() = delete;
+			HtmlTagSignal(const HtmlTagSignal&) = delete;
+			HtmlTagSignal& operator=(const HtmlTagSignal&) = delete;
+
 			HtmlTagSignal(const Manager& manager, const DataModel::Signal* signal);
 
 			virtual ~HtmlTagSignal() {}
