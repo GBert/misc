@@ -1,11 +1,23 @@
 const int revisionnr = 
-1535
+1547
 ;
 const char* commithash = 
-"8372bba60cb12e53803de50b26d80fc64e7778e0";
+"c2a6b317ea00080e856a648eb351bb536ec429f3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1547 2021-04-15 14:39:06 +0200 user svg theme: button 27 and 28 by Wolfgang (hobbyman)\n" \
+"1546 2021-04-15 07:48:50 +0200 netbidib: added NMRA ID to the UID\n" \
+"1545 2021-04-15 07:29:11 +0200 netbidib: Rocrail pairing UID = IANA-PEN << 16 + IANA-Port\n" \
+"1544 2021-04-14 16:59:51 +0200 bidibdlg: layout fixes and sublib enable correction\n" \
+"1543 2021-04-14 14:52:35 +0200 bidibdlg: discover option added (for future use)\n" \
+"1542 2021-04-14 14:30:28 +0200 bidib: removed bus reset because the mc2 disconnect on this message\n" \
+"1541 2021-04-14 14:10:31 +0200 netbidib: WIP\n" \
+"1540 2021-04-14 11:36:52 +0200 netbidib: WIP\n" \
+"1539 2021-04-14 08:02:36 +0200 translation for wiring color outputs\n" \
+"1538 2021-04-13 19:38:03 +0200 netbidib: WIP\n" \
+"1537 2021-04-12 16:33:18 +0200 item: added route context commands lock and test\n" \
+"1536 2021-04-11 07:56:10 +0200 lightctrl: save stop/go state\n" \
 "1535 2021-04-10 16:33:52 +0200 guiframe: set lightcontrol toolbar icon at state event\n" \
 "1534 2021-04-10 11:33:33 +0200 cbus: POM write by opc 0xc1\n" \
 "1533 2021-04-06 10:49:48 +0200 trainpanel,trainimage: reset fix\n" \
