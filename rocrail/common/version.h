@@ -1,11 +1,15 @@
 const int revisionnr = 
-1547
+1551
 ;
 const char* commithash = 
-"c2a6b317ea00080e856a648eb351bb536ec429f3";
+"422c9b667eda6102f9cc74c96025cfc53aebba1d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1551 2021-04-18 11:50:54 +0200 action: skip action in case system is not ready\n" \
+"1550 2021-04-18 11:44:16 +0200 xmlscript: only start script in case the system is ready\n" \
+"1549 2021-04-18 11:34:00 +0200 control: check valid instance on getState\n" \
+"1548 2021-04-17 10:33:22 +0200 gcode: use bps from ini\n" \
 "1547 2021-04-15 14:39:06 +0200 user svg theme: button 27 and 28 by Wolfgang (hobbyman)\n" \
 "1546 2021-04-15 07:48:50 +0200 netbidib: added NMRA ID to the UID\n" \
 "1545 2021-04-15 07:29:11 +0200 netbidib: Rocrail pairing UID = IANA-PEN << 16 + IANA-Port\n" \
