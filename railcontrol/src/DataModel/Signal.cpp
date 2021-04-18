@@ -41,6 +41,13 @@ namespace DataModel
 		str += LockableItem::Serialize();
 		str += ";signalorientation=";
 		str += std::to_string(signalOrientation);
+		for (auto& stateAddress : stateAddressMap)
+		{
+			str += ";address";
+			str += std::to_string(stateAddress.first);
+			str += "=";
+			str += std::to_string(stateAddress.second);
+		}
 		return str;
 	}
 
@@ -61,6 +68,15 @@ namespace DataModel
 		SetWidth(Width1);
 		SetVisible(VisibleYes);
 		signalOrientation = static_cast<Orientation>(Utils::Utils::GetBoolMapEntry(arguments, "signalorientation", OrientationRight));
+		for (int i = 0; i < SignalStateMax; ++i)
+		{
+			int address = Utils::Utils::GetIntegerMapEntry(arguments, "address" + std::to_string(i), -1);
+			if (address == -1)
+			{
+				continue;
+			}
+			SetStateAddressOffset(static_cast<AccessoryState>(i), address);
+		}
 		return true;
 	}
 
@@ -82,26 +98,55 @@ namespace DataModel
 		manager->SignalPublishState(ControlTypeInternal, this);
 	}
 
-	std::map<DataModel::AccessoryState,Languages::TextSelector> Signal::GetStateOptions() const
+	void Signal::ResetStateAddressMap()
 	{
-		std::map<DataModel::AccessoryState,Languages::TextSelector> out;
-		out[SignalStateStop] = Languages::TextSignalStateStop;
-		out[SignalStateClear] = Languages::TextSignalStateClear;
+		stateAddressMap.clear();
+		SetStateAddressOffset(SignalStateStop, 0);
+		SetStateAddressOffset(SignalStateClear, 1);
 		switch(accessoryType)
 		{
 			case SignalTypeDeCombined:
-				out[SignalStateAspect2] = Languages::TextSignalStateStopExpected;
+				SetStateAddressOffset(SignalStateAspect2, 2);
 				break;
 
 			case SignalTypeChDwarf:
-				out[SignalStateAspect2] = Languages::TextSignalStateCaution;
+				SetStateAddressOffset(SignalStateAspect2, 2);
 				break;
 
 			case SignalTypeChLMain:
-				out[SignalStateAspect2] = Languages::TextSignalStateClear40;
-				out[SignalStateAspect3] = Languages::TextSignalStateClear60;
-				out[SignalStateAspect5] = Languages::TextSignalStateClear90;
-				out[SignalStateAspect6] = Languages::TextSignalStateShortClear;
+				SetStateAddressOffset(SignalStateAspect2, 2);
+				SetStateAddressOffset(SignalStateAspect3, 3);
+				SetStateAddressOffset(SignalStateAspect5, 4);
+				SetStateAddressOffset(SignalStateAspect6, 5);
+				break;
+
+			case SignalTypeSimpleLeft:
+			case SignalTypeSimpleRight:
+			default:
+				break;
+		}
+	}
+
+	std::map<DataModel::AccessoryState,Signal::StateOption> Signal::GetStateOptions() const
+	{
+		std::map<DataModel::AccessoryState,Signal::StateOption> out;
+		out.emplace(SignalStateStop, StateOption(Languages::TextSignalStateStop, GetStateAddressOffset(SignalStateStop)));
+		out.emplace(SignalStateClear, StateOption(Languages::TextSignalStateClear, GetStateAddressOffset(SignalStateClear)));
+		switch(accessoryType)
+		{
+			case SignalTypeDeCombined:
+				out.emplace(SignalStateAspect2, StateOption(Languages::TextSignalStateStopExpected, GetStateAddressOffset(SignalStateAspect2)));
+				break;
+
+			case SignalTypeChDwarf:
+				out.emplace(SignalStateAspect2, StateOption(Languages::TextSignalStateCaution, GetStateAddressOffset(SignalStateAspect2)));
+				break;
+
+			case SignalTypeChLMain:
+				out.emplace(SignalStateAspect2, StateOption(Languages::TextSignalStateClear40, GetStateAddressOffset(SignalStateAspect2)));
+				out.emplace(SignalStateAspect3, StateOption(Languages::TextSignalStateClear60, GetStateAddressOffset(SignalStateAspect3)));
+				out.emplace(SignalStateAspect5, StateOption(Languages::TextSignalStateClear90, GetStateAddressOffset(SignalStateAspect5)));
+				out.emplace(SignalStateAspect6, StateOption(Languages::TextSignalStateShortClear, GetStateAddressOffset(SignalStateAspect6)));
 				break;
 
 			case SignalTypeSimpleLeft:

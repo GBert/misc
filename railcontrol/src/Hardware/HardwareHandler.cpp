@@ -293,8 +293,8 @@ namespace Hardware
 		{
 			return;
 		}
-		Address address = signal->GetAddress();
-		DataModel::AccessoryState state = signal->GetAccessoryState();
+		Address address = signal->GetMappedAddress();
+		DataModel::AccessoryState state = signal->GetMappedAccessoryState();
 		switch (state)
 		{
 			case DataModel::SignalStateStop:

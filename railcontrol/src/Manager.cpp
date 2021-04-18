@@ -2587,6 +2587,7 @@ bool Manager::SignalSave(SignalID signalID,
 	const Protocol protocol,
 	const Address address,
 	const DataModel::AccessoryType type,
+	const std::map<DataModel::AccessoryState,unsigned char>& offsets,
 	const DataModel::AccessoryPulseDuration duration,
 	const bool inverted,
 	string& result)
@@ -2631,6 +2632,7 @@ bool Manager::SignalSave(SignalID signalID,
 	signal->SetProtocol(protocol);
 	signal->SetAddress(address);
 	signal->SetType(type);
+	signal->SetStateAddressOffsets(offsets);
 	signal->SetAccessoryPulseDuration(duration);
 	signal->SetInverted(inverted);
 

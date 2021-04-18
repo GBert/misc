@@ -378,6 +378,7 @@ class Manager
 			const Protocol protocol,
 			const Address address,
 			const DataModel::AccessoryType type,
+			const std::map<DataModel::AccessoryState,unsigned char>& offsets,
 			const DataModel::AccessoryPulseDuration duration,
 			const bool inverted,
 			std::string& result);

@@ -331,6 +331,10 @@ namespace WebServer
 			{
 				HandleSwitchRelease(arguments);
 			}
+			else if (arguments["cmd"].compare("signaladdresses") == 0)
+			{
+				signal.HandleSignalAddresses(arguments);
+			}
 			else if (arguments["cmd"].compare("signaledit") == 0)
 			{
 				signal.HandleSignalEdit(arguments);
@@ -3923,11 +3927,6 @@ namespace WebServer
 				return;
 			}
 		}
-	}
-
-	void WebClient::ReplyHtmlWithHeader(const HtmlTag& tag)
-	{
-		connection->Send(ResponseHtml(tag));
 	}
 
 	HtmlTag WebClient::HtmlTagLocoSelector() const

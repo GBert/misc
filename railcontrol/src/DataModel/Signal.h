@@ -37,6 +37,27 @@ namespace DataModel
 	class Signal : public AccessoryBase, public TrackBase, public LayoutItem, public LockableItem
 	{
 		public:
+			class StateOption
+			{
+				public:
+					StateOption() = delete;
+					StateOption& operator=(const StateOption&) = delete;
+
+					inline StateOption(const Languages::TextSelector text, const unsigned char addressOffset)
+					:	text(text),
+						addressOffset(addressOffset)
+					{
+					}
+
+					inline operator Languages::TextSelector() const
+					{
+						return text;
+					}
+
+					const Languages::TextSelector text;
+					const unsigned char addressOffset;
+			};
+
 			Signal() = delete;
 			Signal(const Signal&) = delete;
 			Signal& operator=(const Signal&) = delete;
@@ -55,6 +76,12 @@ namespace DataModel
 			:	Signal(manager, SignalNone)
 			{
 				Deserialize(serialized);
+			}
+
+			inline void SetType(AccessoryType type) override
+			{
+				accessoryType = type;
+				ResetStateAddressMap();
 			}
 
 			inline ObjectType GetObjectType() const override
@@ -77,7 +104,10 @@ namespace DataModel
 				return signalOrientation;
 			}
 
-			inline void SetSignalOrientation(const Orientation orientation) { signalOrientation = orientation; }
+			inline void SetSignalOrientation(const Orientation orientation)
+			{
+				signalOrientation = orientation;
+			}
 
 			inline bool Reserve(Logger::Logger* logger, const LocoID locoID) override
 			{
@@ -114,7 +144,41 @@ namespace DataModel
 				this->track = track;
 			}
 
-			std::map<DataModel::AccessoryState,Languages::TextSelector> GetStateOptions() const;
+			std::map<DataModel::AccessoryState,StateOption> GetStateOptions() const;
+
+			inline unsigned int GetStateAddressMappingEntry() const
+			{
+				const AccessoryState state = GetAccessoryState();
+				if (stateAddressMap.count(state) != 1)
+				{
+					return 0;
+				}
+				return stateAddressMap.at(state);
+			}
+			inline Address GetMappedAddress() const
+			{
+				return GetAddress() + ((GetStateAddressMappingEntry()) >> 1);
+			}
+
+			inline AccessoryState GetMappedAccessoryState() const
+			{
+				return static_cast<AccessoryState>(GetStateAddressMappingEntry() & 0x01);
+			}
+
+			inline void SetStateAddressOffset(const AccessoryState state, const unsigned char addressOffset)
+			{
+				stateAddressMap[state] = addressOffset;
+			}
+
+			inline void SetStateAddressOffsets(const std::map<AccessoryState,unsigned char>& newOffsets)
+			{
+				stateAddressMap = newOffsets;
+			}
+
+			inline unsigned char GetStateAddressOffset(const AccessoryState state) const
+			{
+				return (stateAddressMap.count(state) == 1 ? stateAddressMap.at(state) : 0);
+			}
 
 		protected:
 			inline bool ReserveInternal(Logger::Logger* logger, const LocoID locoID) override
@@ -160,6 +224,11 @@ namespace DataModel
 			{
 				return GetLoco();
 			}
+
+		private:
+			void ResetStateAddressMap();
+
+			std::map<AccessoryState,unsigned char> stateAddressMap;
 
 			// FIXME: Remove later: 2021-03-18
 			Orientation signalOrientation;

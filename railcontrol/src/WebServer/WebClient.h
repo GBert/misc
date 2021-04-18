@@ -92,14 +92,17 @@ namespace WebServer
 				return terminated;
 			}
 
-			void ReplyHtmlWithHeader(const HtmlTag& tag);
-
-			inline void ReplyResponse(std::string& text)
+			inline void ReplyHtmlWithHeader(const HtmlTag& tag)
 			{
-				connection->Send(ResponseHtml(HtmlTag().AddContent(text)));
+				connection->Send(ResponseHtml(tag));
 			}
 
-			void ReplyResponse(ResponseType type, std::string& text)
+			inline void ReplyResponse(const std::string& text)
+			{
+				ReplyHtmlWithHeader(HtmlTag().AddContent(text));
+			}
+
+			void ReplyResponse(ResponseType type, const std::string& text)
 			{
 				std::string s(1, static_cast<unsigned char>(type));
 				s.append(text);

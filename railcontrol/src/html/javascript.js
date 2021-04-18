@@ -35,6 +35,27 @@ function onChangeLocoFunctionType(nr)
 	return false;
 }
 
+function onClickAddresses(signal)
+{
+	var addressElement = document.getElementById('address');
+	if (!addressElement)
+	{
+		return false;
+	}
+	var address = addressElement.value;
+
+	var typeElement = document.getElementById('s_signaltype');
+	if (!typeElement)
+	{
+		return false;
+	}
+	var type = typeElement.value;
+
+	var url = '?cmd=signaladdresses&address=' + address + '&type=' + type + '&signal=' + signal;
+
+	requestUpdateItem('addresses', url);
+}
+
 function onClickProgramRead(cv)
 {
 	var controlElement = document.getElementById('s_controlraw');
@@ -517,8 +538,10 @@ function updateLayoutItem(elementName, data)
 	var parentElement = document.getElementById('layout');
 	if (parentElement)
 	{
-		var elementContextName = elementName + '_context';
 		deleteElement(elementName);
+		var elementOnClickName = elementName + '_onclick';
+		deleteElement(elementOnClickName);
+		var elementContextName = elementName + '_context';
 		deleteElement(elementContextName);
 		parentElement.innerHTML += data;
 		var i;
@@ -950,6 +973,7 @@ function dataUpdate(event)
 	{
 		elementName = 'si_' + argumentMap.get('signal');
 		deleteElement(elementName);
+		deleteElement(elementName + '_onclick');
 		deleteElement(elementName + '_context');
 	}
 	else if (command == 'routesettings')

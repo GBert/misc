@@ -81,15 +81,16 @@ namespace WebServer
 				}
 			}
 
-			template<typename T>
-			HtmlTagSelect(const std::string& name, const std::map<T,Languages::TextSelector>& options, T defaultValue = 0)
+			// T2 must by implicitly convertible to Languages::TextSelector
+			template<typename T1, typename T2>
+			HtmlTagSelect(const std::string& name, const std::map<T1,T2>& options, T1 defaultValue = 0)
 			:	HtmlTag("select"),
 			 	commandID("s_" + name)
 			{
 				AddAttribute("name", name);
 				AddId(commandID);
 
-				for (auto option : options)
+				for (auto& option : options)
 				{
 					HtmlTag optionTag("option");
 					optionTag.AddAttribute("value", std::to_string(option.first));

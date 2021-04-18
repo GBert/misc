@@ -76,6 +76,7 @@ namespace DataModel
 		SignalStateDistantAspect9 = 29,
 		SignalStateDistantAspect10 = 30,
 		SignalStateDark = 50,
+		SignalStateMax = SignalStateDark,
 
 		SwitchStateTurnout = 0,
 		SwitchStateStraight = 1,
@@ -106,7 +107,7 @@ namespace DataModel
 				return accessoryType;
 			}
 
-			inline void SetType(AccessoryType type)
+			virtual inline void SetType(AccessoryType type)
 			{
 				this->accessoryType = type;
 			}

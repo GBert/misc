@@ -123,7 +123,9 @@ namespace WebServer
 		content.AddChildTag(HtmlTag("h1").AddContent(name).AddId("popup_title"));
 		HtmlTag tabMenu("div");
 		tabMenu.AddChildTag(client.HtmlTagTabMenuItem("main", Languages::TextBasic, true));
+		tabMenu.AddChildTag(client.HtmlTagTabMenuItem("address", Languages::TextAddresses).AddAttribute("onclick", "onClickAddresses(" + to_string(signalID) + ");"));
 		tabMenu.AddChildTag(client.HtmlTagTabMenuItem("position", Languages::TextPosition));
+
 		// FIXME: Remove later: 2021-03-18
 		if (feedbacks.size())
 		{
@@ -159,12 +161,19 @@ namespace WebServer
 		}
 		mainContent.AddChildTag(client.HtmlTagControlAccessory(controlID, "signal", signalID));
 		mainContent.AddChildTag(HtmlTag("div").AddId("select_protocol").AddChildTag(client.HtmlTagProtocolAccessory(controlID, protocol)));
-		mainContent.AddChildTag(HtmlTagInputIntegerWithLabel("address", Languages::TextAddress, address, 1, 2044));
+		mainContent.AddChildTag(HtmlTagInputIntegerWithLabel("address", Languages::TextBaseAddress, address, 1, 2044));
 		mainContent.AddChildTag(client.HtmlTagDuration(duration));
 		mainContent.AddChildTag(HtmlTagInputCheckboxWithLabel("inverted", Languages::TextInverted, "true", inverted));
 		formContent.AddChildTag(mainContent);
 
 		formContent.AddChildTag(client.HtmlTagTabPosition(posx, posy, posz, rotation));
+
+		HtmlTag addressContent("div");
+		addressContent.AddId("tab_address");
+		addressContent.AddClass("tab_content");
+		addressContent.AddClass("hidden");
+		addressContent.AddChildTag(HtmlTag("div").AddId("addresses"));
+		formContent.AddChildTag(addressContent);
 
 		// FIXME: Remove later: 2021-03-18
 		if (feedbacks.size())
@@ -181,6 +190,38 @@ namespace WebServer
 		content.AddChildTag(HtmlTagButtonCancel());
 		content.AddChildTag(HtmlTagButtonOK());
 		client.ReplyHtmlWithHeader(content);
+	}
+
+	void WebClientSignal::HandleSignalAddresses(const map<string, string>& arguments)
+	{
+		Signal signalDummy(&manager, SignalNone);
+		AccessoryType type = static_cast<AccessoryType>(Utils::Utils::GetIntegerMapEntry(arguments, "type"));
+		SignalID signalId = Utils::Utils::GetIntegerMapEntry(arguments, "signal", SignalNone);
+		Signal* signal = manager.GetSignal(signalId);
+		if (signal == nullptr || signal->GetType() != type)
+		{
+			signalDummy.SetType(type);
+			signal = &signalDummy;
+		}
+
+		Address address = Utils::Utils::GetIntegerMapEntry(arguments, "address", AddressNone);
+
+		std::map<DataModel::AccessoryState,DataModel::Signal::StateOption> stateOptions = signal->GetStateOptions();
+
+		map<unsigned char,string> selectAddressOptions;
+		for (unsigned char i = 0; i < stateOptions.size(); ++i)
+		{
+			selectAddressOptions[i] = to_string(address + (i >> 1)) + " " + Languages::GetText(i & 0x01 ? Languages::TextGreen : Languages::TextRed);
+		}
+
+		unsigned char i = 0;
+		HtmlTag addressContent;
+		for (auto& stateOption : stateOptions)
+		{
+			addressContent.AddChildTag(HtmlTagSelectWithLabel("address" + to_string(stateOption.first), stateOption.second.text, selectAddressOptions, signal->GetStateAddressOffset(stateOption.first)));
+			++i;
+		}
+		client.ReplyHtmlWithHeader(addressContent);
 	}
 
 	void WebClientSignal::HandleSignalSave(const map<string, string>& arguments)
@@ -210,6 +251,16 @@ namespace WebServer
 		bool allowLocoTurn = Utils::Utils::GetBoolMapEntry(arguments, "allowlocoturn", false);
 		bool releaseWhenFree = Utils::Utils::GetBoolMapEntry(arguments, "releasewhenfree", false);
 		DataModel::AccessoryType signalType = static_cast<DataModel::AccessoryType>(Utils::Utils::GetIntegerMapEntry(arguments, "signaltype", DataModel::SignalTypeSimpleLeft));
+		std::map<AccessoryState,unsigned char> offsets;
+		for (unsigned char i = 0; i < 10; ++i)
+		{
+			char address = Utils::Utils::GetIntegerMapEntry(arguments, "address" + to_string(i), -1);
+			if (address == -1)
+			{
+				continue;
+			}
+			offsets[static_cast<AccessoryState>(i)] = static_cast<unsigned char>(address);
+		}
 		DataModel::AccessoryPulseDuration duration = Utils::Utils::GetIntegerMapEntry(arguments, "duration", manager.GetDefaultAccessoryDuration());
 		bool inverted = Utils::Utils::GetBoolMapEntry(arguments, "inverted");
 		string result;
@@ -229,6 +280,7 @@ namespace WebServer
 			protocol,
 			address,
 			signalType,
+			offsets,
 			duration,
 			inverted,
 			result))
@@ -402,7 +454,7 @@ namespace WebServer
 		const SignalID signalId,
 		const DataModel::Relation::Data data)
 	{
-		map<DataModel::AccessoryState,Languages::TextSelector> stateOptions;
+		map<DataModel::AccessoryState,DataModel::Signal::StateOption> stateOptions;
 		Signal* signal = manager.GetSignal(signalId);
 		if (signal != nullptr)
 		{

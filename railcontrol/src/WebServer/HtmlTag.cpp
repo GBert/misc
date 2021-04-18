@@ -30,7 +30,7 @@ namespace WebServer
 		{
 			return *this;
 		}
-		this->attributes[name] = value;
+		this->attributes[name] += value;
 		return *this;
 	}
 

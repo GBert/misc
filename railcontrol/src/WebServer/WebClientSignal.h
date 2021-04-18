@@ -54,6 +54,7 @@ namespace WebServer
 			void HandleSignalRelease(const std::map<std::string, std::string>& arguments);
 			void HandleSignalState(const std::map<std::string, std::string>& arguments);
 			void HandleSignalStates(const std::map<std::string, std::string>& arguments);
+			void HandleSignalAddresses(const std::map<std::string, std::string>& arguments);
 
 			HtmlTag HtmlTagRelationSignalState(const std::string& name,
 				const SignalID signalId,
