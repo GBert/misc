@@ -77,6 +77,15 @@ namespace WebServer
 				AddChildTag(HtmlTagSelect(name, options, defaultValue));
 			}
 
+			template<typename T>
+			HtmlTagSelectWithLabel(const std::string& name, const std::string& label, const std::map<T,std::string>& options, T defaultValue = 0)
+			:	HtmlTag("div")
+			{
+				HtmlTag::AddClass("input_select_with_label");
+				AddChildTag(HtmlTagLabel(label, "s_" + name));
+				AddChildTag(HtmlTagSelect(name, options, defaultValue));
+			}
+
 			virtual ~HtmlTagSelectWithLabel() {}
 
 			virtual HtmlTag AddAttribute(const std::string& name, const std::string& value) override

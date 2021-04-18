@@ -218,7 +218,12 @@ namespace WebServer
 		HtmlTag addressContent;
 		for (auto& stateOption : stateOptions)
 		{
-			addressContent.AddChildTag(HtmlTagSelectWithLabel("address" + to_string(stateOption.first), stateOption.second.text, selectAddressOptions, signal->GetStateAddressOffset(stateOption.first)));
+			AccessoryState state = stateOption.first;
+			addressContent.AddChildTag(HtmlTagSelectWithLabel("address" + to_string(state),
+				HtmlTagSignal::GetSignalImage(state, signal) + Languages::GetText(stateOption.second),
+				selectAddressOptions,
+				signal->GetStateAddressOffset(state)
+			));
 			++i;
 		}
 		client.ReplyHtmlWithHeader(addressContent);
@@ -254,7 +259,7 @@ namespace WebServer
 		std::map<AccessoryState,unsigned char> offsets;
 		for (unsigned char i = 0; i < 10; ++i)
 		{
-			char address = Utils::Utils::GetIntegerMapEntry(arguments, "address" + to_string(i), -1);
+			signed char address = Utils::Utils::GetIntegerMapEntry(arguments, "address" + to_string(i), -1);
 			if (address == -1)
 			{
 				continue;

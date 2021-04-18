@@ -31,54 +31,78 @@ namespace WebServer
 {
 	HtmlTagSignal::HtmlTagSignal(const Manager& manager, const DataModel::Signal* signal)
 	:	HtmlTagTrackBase(manager,
-		ObjectTypeSignal,
-		DataModel::TrackTypeStraight,
-		dynamic_cast<const DataModel::TrackBase*>(signal),
-		dynamic_cast<const DataModel::LayoutItem*>(signal))
+			ObjectTypeSignal,
+			DataModel::TrackTypeStraight,
+			dynamic_cast<const DataModel::TrackBase*>(signal),
+			dynamic_cast<const DataModel::LayoutItem*>(signal)
+		)
 	{
+		image += GetSignalImagePlain(signal);
 		const DataModel::AccessoryState signalState = signal->GetAccessoryState();
 		const DataModel::AccessoryType type = signal->GetType();
 		const string idText = to_string(signal->GetID());
 
 		imageDiv.AddClass("signal_item");
-		string stateClassText;
-		switch (signalState)
+		string stateClassText = GetStateClassText(signalState);
+		imageDiv.AddClass(stateClassText);
+		onClickMenuDiv.AddClass(stateClassText);
+		switch (type)
 		{
-			case DataModel::SignalStateStop:
-				stateClassText = "signal_stop";
+			case DataModel::SignalTypeDeCombined:
+				AddOnClickMenuEntry(Languages::TextSignalStateStop, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=stop');", "menu_stop");
+				AddOnClickMenuEntry(Languages::TextSignalStateClear, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=clear');", "menu_clear");
+				AddOnClickMenuEntry(Languages::TextSignalStateStopExpected, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect2');", "menu_aspect2");
+				imageDiv.AddAttribute("onclick", "return showContextMenu('si_" + idText + "_onclick');");
 				break;
 
-			case DataModel::SignalStateClear:
-				stateClassText = "signal_clear";
+			case DataModel::SignalTypeChLDistant:
 				break;
 
-			case DataModel::SignalStateAspect2:
-				stateClassText = "signal_aspect2";
+			case DataModel::SignalTypeChLMain:
+				AddOnClickMenuEntry(Languages::TextSignalStateStop, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=stop');", "menu_stop");
+				AddOnClickMenuEntry(Languages::TextSignalStateClear, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=clear');", "menu_clear");
+				AddOnClickMenuEntry(Languages::TextSignalStateClear40, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect2');", "menu_aspect2");
+				AddOnClickMenuEntry(Languages::TextSignalStateClear60, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect3');", "menu_aspect3");
+				AddOnClickMenuEntry(Languages::TextSignalStateClear90, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect5');", "menu_aspect5");
+				AddOnClickMenuEntry(Languages::TextSignalStateShortClear, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect6');", "menu_aspect6");
+				imageDiv.AddAttribute("onclick", "return showContextMenu('si_" + idText + "_onclick');");
 				break;
 
-			case DataModel::SignalStateAspect3:
-				stateClassText = "signal_aspect3";
+			case DataModel::SignalTypeChDwarf:
+				AddOnClickMenuEntry(Languages::TextSignalStateStop, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=stop');", "menu_stop");
+				AddOnClickMenuEntry(Languages::TextSignalStateClear, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=clear');", "menu_clear");
+				AddOnClickMenuEntry(Languages::TextSignalStateCaution, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect2');", "menu_aspect2");
+				imageDiv.AddAttribute("onclick", "return showContextMenu('si_" + idText + "_onclick');");
 				break;
 
-			case DataModel::SignalStateAspect4:
-				stateClassText = "signal_aspect4";
-				break;
-
-			case DataModel::SignalStateAspect5:
-				stateClassText = "signal_aspect5";
-				break;
-
-			case DataModel::SignalStateAspect6:
-				stateClassText = "signal_aspect6";
+			case DataModel::SignalTypeSimpleRight:
+			case DataModel::SignalTypeSimpleLeft:
+				imageDiv.AddAttribute("onclick", "return onClickSignal(" + idText + ");");
 				break;
 
 			default:
-				stateClassText = "signal_dark";
 				break;
 		}
-		imageDiv.AddClass(stateClassText);
-		onClickMenuDiv.AddClass(stateClassText);
-		image += "<g";
+		AddToolTip(signal->GetName() + " (addr=" + to_string(signal->GetAddress()) + ")");
+		imageDiv.AddAttribute("oncontextmenu", "return onContextLayoutItem(event, '" + identifier + "');");
+
+		AddContextMenuEntry(Languages::TextEditSignal, "loadPopup('/?cmd=signaledit&" + urlIdentifier + "');");
+		AddContextMenuEntry(Languages::TextDeleteSignal, "loadPopup('/?cmd=signalaskdelete&" + urlIdentifier + "');");
+		FinishInit();
+	}
+
+	string HtmlTagSignal::GetSignalImage(const DataModel::AccessoryState state,
+		const DataModel::Signal* signal)
+	{
+		string out = "<div class=\"inline-block " + GetStateClassText(state) + "\">";
+		out += "<svg height=\"36\" width=\"36\">" + GetSignalImagePlain(signal) + "</svg>";
+		out += "</div>";
+		return out;
+	}
+
+	string HtmlTagSignal::GetSignalImagePlain(const DataModel::Signal* signal)
+	{
+		string image = "<g";
 		if (signal->GetSignalOrientation() == OrientationLeft)
 		{
 			image += " transform=\"rotate(180 18 ";
@@ -86,7 +110,7 @@ namespace WebServer
 			image += ")\"";
 		}
 		image += ">";
-		switch (type)
+		switch (signal->GetType())
 		{
 			case DataModel::SignalTypeDeCombined:
 				image += "<polygon points=\"1,1 13,1 13,30 1,30\" fill=\"black\"/>"
@@ -95,10 +119,6 @@ namespace WebServer
 					"<circle class=\"stop\" cx=\"7\" cy=\"10\" r=\"2.5\" fill=\"red\" opacity=\"0\"/>"
 					"<circle class=\"clear\" cx=\"5\" cy=\"15\" r=\"2.5\" fill=\"lightgreen\" opacity=\"0\"/>"
 					"<circle class=\"aspect2\" cx=\"9\" cy=\"15\" r=\"2.5\" fill=\"orange\" opacity=\"0\"/>";
-				AddOnClickMenuEntry(Languages::TextSignalStateStop, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=stop');", "menu_stop");
-				AddOnClickMenuEntry(Languages::TextSignalStateClear, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=clear');", "menu_clear");
-				AddOnClickMenuEntry(Languages::TextSignalStateStopExpected, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect2');", "menu_aspect2");
-				imageDiv.AddAttribute("onclick", "return showContextMenu('si_" + idText + "_onclick');");
 				break;
 
 			case DataModel::SignalTypeChLDistant:
@@ -122,13 +142,6 @@ namespace WebServer
 					"<circle class=\"aspect3 aspect5\" cx=\"7\" cy=\"15.5\" r=\"2.5\" fill=\"lightgreen\" opacity=\"0\"/>"
 					"<circle class=\"aspect2 aspect6\" cx=\"7\" cy=\"21\" r=\"2.5\" fill=\"orange\" opacity=\"0\"/>"
 					"<circle class=\"aspect5\" cx=\"7\" cy=\"26.5\" r=\"2.5\" fill=\"lightgreen\" opacity=\"0\"/>";
-				AddOnClickMenuEntry(Languages::TextSignalStateStop, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=stop');", "menu_stop");
-				AddOnClickMenuEntry(Languages::TextSignalStateClear, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=clear');", "menu_clear");
-				AddOnClickMenuEntry(Languages::TextSignalStateClear40, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect2');", "menu_aspect2");
-				AddOnClickMenuEntry(Languages::TextSignalStateClear60, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect3');", "menu_aspect3");
-				AddOnClickMenuEntry(Languages::TextSignalStateClear90, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect5');", "menu_aspect5");
-				AddOnClickMenuEntry(Languages::TextSignalStateShortClear, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect6');", "menu_aspect6");
-				imageDiv.AddAttribute("onclick", "return showContextMenu('si_" + idText + "_onclick');");
 				break;
 
 			case DataModel::SignalTypeChDwarf:
@@ -138,10 +151,6 @@ namespace WebServer
 					"<circle class=\"clear aspect2\" cx=\"4\" cy=\"17\" r=\"2\" fill=\"white\" opacity=\"0\"/>"
 					"<circle class=\"stop clear\" cx=\"4\" cy=\"23\" r=\"2\" fill=\"white\" opacity=\"0\"/>"
 					"<circle class=\"stop aspect2\" cx=\"10\" cy=\"23\" r=\"2\" fill=\"white\" opacity=\"0\"/>";
-				AddOnClickMenuEntry(Languages::TextSignalStateStop, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=stop');", "menu_stop");
-				AddOnClickMenuEntry(Languages::TextSignalStateClear, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=clear');", "menu_clear");
-				AddOnClickMenuEntry(Languages::TextSignalStateCaution, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect2');", "menu_aspect2");
-				imageDiv.AddAttribute("onclick", "return showContextMenu('si_" + idText + "_onclick');");
 				break;
 
 			case DataModel::SignalTypeSimpleRight:
@@ -150,7 +159,6 @@ namespace WebServer
 					"<polyline points=\"26,30 32,30\" style=\"stroke:black;stroke-width:2\"/>"
 					"<circle class=\"stop\" cx=\"29\" cy=\"7\" r=\"4\" fill=\"red\" opacity=\"0\"/>"
 					"<circle class=\"clear\" cx=\"29\" cy=\"16\" r=\"4\" fill=\"lightgreen\" opacity=\"0\"/>";
-				imageDiv.AddAttribute("onclick", "return onClickSignal(" + idText + ");");
 				break;
 
 			case DataModel::SignalTypeSimpleLeft:
@@ -159,18 +167,42 @@ namespace WebServer
 					"<polyline points=\"4,30 10,30\" style=\"stroke:black;stroke-width:2\"/>"
 					"<circle class=\"stop\" cx=\"7\" cy=\"7\" r=\"4\" fill=\"red\" opacity=\"0\"/>"
 					"<circle class=\"clear\" cx=\"7\" cy=\"16\" r=\"4\" fill=\"lightgreen\" opacity=\"0\"/>";
-				imageDiv.AddAttribute("onclick", "return onClickSignal(" + idText + ");");
 				break;
 
 			default:
 				break;
 		}
 		image += "</g>";
-		AddToolTip(signal->GetName() + " (addr=" + to_string(signal->GetAddress()) + ")");
-		imageDiv.AddAttribute("oncontextmenu", "return onContextLayoutItem(event, '" + identifier + "');");
+		return image;
+	}
 
-		AddContextMenuEntry(Languages::TextEditSignal, "loadPopup('/?cmd=signaledit&" + urlIdentifier + "');");
-		AddContextMenuEntry(Languages::TextDeleteSignal, "loadPopup('/?cmd=signalaskdelete&" + urlIdentifier + "');");
-		FinishInit();
+	string HtmlTagSignal::GetStateClassText(const DataModel::AccessoryState state)
+	{
+		switch (state)
+		{
+			case DataModel::SignalStateStop:
+				return "signal_stop";
+
+			case DataModel::SignalStateClear:
+				return "signal_clear";
+
+			case DataModel::SignalStateAspect2:
+				return "signal_aspect2";
+
+			case DataModel::SignalStateAspect3:
+				return "signal_aspect3";
+
+			case DataModel::SignalStateAspect4:
+				return "signal_aspect4";
+
+			case DataModel::SignalStateAspect5:
+				return "signal_aspect5";
+
+			case DataModel::SignalStateAspect6:
+				return "signal_aspect6";
+
+			default:
+				return "signal_dark";
+		}
 	}
 } // namespace WebServer

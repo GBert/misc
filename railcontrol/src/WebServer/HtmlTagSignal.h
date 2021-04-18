@@ -42,7 +42,16 @@ namespace WebServer
 
 			HtmlTagSignal(const Manager& manager, const DataModel::Signal* signal);
 
-			virtual ~HtmlTagSignal() {}
+			virtual ~HtmlTagSignal()
+			{
+			}
+
+			static std::string GetSignalImage(const DataModel::AccessoryState state,
+				const DataModel::Signal* signal);
+
+		private:
+			static std::string GetSignalImagePlain(const DataModel::Signal* signal);
+			static std::string GetStateClassText(const DataModel::AccessoryState state);
 	};
 } // namespace WebServer
 
