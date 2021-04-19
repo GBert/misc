@@ -226,14 +226,6 @@ body {
 	color: green;
 }
 
-.switch_turnout {
-	color: red;
-}
-
-.switch_straight {
-	color: green;
-}
-
 .switch_turnout .turnout,
 .switch_straight .straight,
 .switch_third .third {
@@ -309,7 +301,10 @@ body {
 .signal_aspect3 .menu_aspect3,
 .signal_aspect4 .menu_aspect4,
 .signal_aspect5 .menu_aspect5,
-.signal_aspect6 .menu_aspect6 {
+.signal_aspect6 .menu_aspect6,
+.switch_turnout .menu_turnout,
+.switch_straight .menu_straight,
+.switch_third .menu_third {
 	display: none;
 }
 

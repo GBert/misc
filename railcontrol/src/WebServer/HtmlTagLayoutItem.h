@@ -22,18 +22,79 @@ along with RailControl; see the file LICENCE. If not see
 
 #include <string>
 
+#include "DataModel/LayoutItem.h"
+#include "DataModel/ObjectIdentifier.h"
 #include "WebServer/HtmlTag.h"
+
+using std::string;
+using std::to_string;
 
 namespace WebServer
 {
 	class HtmlTagLayoutItem : public HtmlTag
 	{
 		protected:
-			HtmlTagLayoutItem() {};
-			virtual ~HtmlTagLayoutItem() {};
+			HtmlTagLayoutItem() = delete;
+			HtmlTagLayoutItem(const HtmlTagLayoutItem&) = delete;
+			HtmlTagLayoutItem& operator=(const HtmlTagLayoutItem&) = delete;
+
+			HtmlTagLayoutItem(const DataModel::LayoutItem* layout);
+
+			virtual ~HtmlTagLayoutItem()
+			{
+			}
+
+			void FinishInit();
+
+			inline void AddOnClickMenuEntry(const std::string& text)
+			{
+				AddMenuEntry(onClickMenuContentDiv, text);
+			}
+
+			inline void AddOnClickMenuEntry(const Languages::TextSelector text, const std::string& onClick, const std::string& className = "")
+			{
+				AddMenuEntry(onClickMenuContentDiv, text, onClick, className);
+			}
+
+			inline void AddContextMenuEntry(const std::string& text)
+			{
+				AddMenuEntry(contextMenuContentDiv, text);
+			}
+
+			inline void AddContextMenuEntry(const Languages::TextSelector text, const std::string& onClick, const std::string& className = "")
+			{
+				AddMenuEntry(contextMenuContentDiv, text, onClick, className);
+			}
+
+			void AddToolTip(const std::string& toolTip)
+			{
+				imageDiv.AddChildTag(HtmlTag("span").AddClass("tooltip").AddContent(toolTip));
+			}
 
 			static const unsigned char EdgeLength = 36;
-			const std::string EdgeLengthString = std::to_string(EdgeLength);
+			static const std::string EdgeLengthString;
+
+			const DataModel::LayoutItem* layout;
+
+			string identifier;
+			std::string image;
+			HtmlTag imageDiv;
+			HtmlTag onClickMenuDiv;
+			HtmlTag onClickMenuContentDiv;
+			HtmlTag contextMenuDiv;
+			HtmlTag contextMenuContentDiv;
+
+			unsigned int layoutPosX;
+			unsigned int layoutPosY;
+
+		private:
+			static void AddMenuEntry(HtmlTag& menu,
+				const std::string& text);
+
+			static void AddMenuEntry(HtmlTag& menu,
+				const Languages::TextSelector text,
+				const std::string& onClick,
+				const std::string& className = "");
 	};
 } // namespace WebServer
 

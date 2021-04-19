@@ -36,10 +36,17 @@ namespace WebServer
 	{
 		public:
 			HtmlTagFeedback() = delete;
-			HtmlTagFeedback(const DataModel::Feedback* feedback, DataModel::LayoutItem::LayoutPosition posX, DataModel::LayoutItem::LayoutPosition posY);
+			HtmlTagFeedback(const HtmlTagFeedback&) = delete;
+			HtmlTagFeedback& operator=(const HtmlTagFeedback&) = delete;
+
+			HtmlTagFeedback(const DataModel::Feedback* feedback,
+				DataModel::LayoutItem::LayoutPosition posX,
+				DataModel::LayoutItem::LayoutPosition posY);
+
 			HtmlTagFeedback(const DataModel::Feedback* feedback)
 			:	HtmlTagFeedback(feedback, feedback->GetPosX(), feedback->GetPosY())
-			{}
+			{
+			}
 	};
 } // namespace WebServer
 

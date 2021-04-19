@@ -30,30 +30,11 @@ using std::to_string;
 namespace WebServer
 {
 	HtmlTagTrackBase::HtmlTagTrackBase(const Manager& manager,
-		const ObjectType objectType,
-		const DataModel::TrackType trackType,
 		const DataModel::TrackBase* track,
 		const DataModel::LayoutItem* layout)
-	:	HtmlTagLayoutItem(),
-		objectType(objectType),
-		id(track->GetMyID()),
-		track(track),
-		layout(layout),
-		imageDiv("div"),
-		onClickMenuDiv("div"),
-		onClickMenuContentDiv("ul"),
-		contextMenuDiv("div"),
-		contextMenuContentDiv("ul")
+	:	HtmlTagLayoutItem(layout),
+		track(track)
 	{
-		DataModel::LayoutItem::LayoutPosition posX;
-		DataModel::LayoutItem::LayoutPosition posY;
-		DataModel::LayoutItem::LayoutPosition posZ;
-		DataModel::LayoutItem::LayoutItemSize w;
-		DataModel::LayoutItem::LayoutItemSize h;
-		DataModel::LayoutItem::LayoutRotation r;
-		layout->Position(posX, posY, posZ, w, h, r);
-		const unsigned int layoutPosX = posX * EdgeLength;
-		const unsigned int layoutPosY = posY * EdgeLength;
 
 		const bool occupied = track->GetFeedbackStateDelayed() == DataModel::Feedback::FeedbackStateOccupied;
 
@@ -63,53 +44,29 @@ namespace WebServer
 		const bool blocked = track->GetBlocked();
 
 		string typeString;
+		ObjectType objectType = track->GetObjectType();
 		switch (objectType)
 		{
 			case ObjectTypeTrack:
-				identifier = "t_";
 				typeString = "track";
 				break;
 
 			case ObjectTypeSignal:
-				identifier = "si_";
 				typeString = "signal";
 				break;
 
 			default:
 				return;
 		}
-		const string idString = to_string(id);
-		identifier += idString;
-
-		string position = "left:" + to_string(layoutPosX + 5) + "px;top:" + to_string(layoutPosY + 30) + "px;";
-		onClickMenuDiv.AddClass("contextmenu");
-		onClickMenuDiv.AddId(identifier + "_onclick");
-		onClickMenuDiv.AddAttribute("style", position);
-		onClickMenuContentDiv.AddClass("contextentries");
-
-		contextMenuDiv.AddClass("contextmenu");
 		contextMenuDiv.AddClass(reserved ? "loco_known" : "loco_unknown");
 		contextMenuDiv.AddClass(blocked ? "track_blocked" : "track_unblocked");
 		contextMenuDiv.AddClass(track->GetLocoOrientation() == OrientationRight ? "orientation_right" : "orientation_left");
-		contextMenuDiv.AddId(identifier + "_context");
-		contextMenuDiv.AddAttribute("style", position);
-		contextMenuContentDiv.AddClass("contextentries");
 
 		const string& trackName = track->GetMyName();
+		AddOnClickMenuEntry(trackName);
 		AddContextMenuEntry(trackName);
-		urlIdentifier = typeString + "=" + idString;
-		AddContextMenuEntry(Languages::TextBlockTrack, "fireRequestAndForget('/?cmd=trackblock&" + urlIdentifier + "&blocked=true');", "track_block");
-		AddContextMenuEntry(Languages::TextUnblockTrack, "fireRequestAndForget('/?cmd=trackblock&" + urlIdentifier + "&blocked=false');", "track_unblock");
-		AddContextMenuEntry(Languages::TextTurnDirectionOfTravelToLeft, "fireRequestAndForget('/?cmd=trackorientation&orientation=false&" + urlIdentifier + "');", "track_left");
-		AddContextMenuEntry(Languages::TextTurnDirectionOfTravelToRight, "fireRequestAndForget('/?cmd=trackorientation&orientation=true&" + urlIdentifier + "');", "track_right");
-		AddContextMenuEntry(Languages::TextReleaseTrack, "fireRequestAndForget('/?cmd=trackrelease&" + urlIdentifier + "');", "track_release");
-		AddContextMenuEntry(Languages::TextReleaseTrackAndLoco, "fireRequestAndForget('/?cmd=locorelease&" + urlIdentifier + "');", "track_loco_release");
-		AddContextMenuEntry(Languages::TextSetLoco, "loadPopup('/?cmd=tracksetloco&" + urlIdentifier + "');", "track_set");
-		AddContextMenuEntry(Languages::TextStartLoco, "fireRequestAndForget('/?cmd=trackstartloco&" + urlIdentifier + "');", "track_start_loco");
-		AddContextMenuEntry(Languages::TextStopLoco, "fireRequestAndForget('/?cmd=trackstoploco&" + urlIdentifier + "');", "track_stop_loco");
+		urlIdentifier = typeString + "=" + to_string(layout->GetID());
 
-		imageDiv.AddId(identifier);
-		imageDiv.AddClass("layout_item");
 		imageDiv.AddClass("track_item");
 		string trackClass;
 		if (reserved && occupied)
@@ -134,11 +91,10 @@ namespace WebServer
 		}
 
 		imageDiv.AddClass(trackClass);
-		imageDiv.AddAttribute("style", "left:" + to_string(layoutPosX) + "px;top:" + to_string(layoutPosY) + "px;");
 		const DataModel::LayoutItem::LayoutItemSize trackHeight = layout->GetHeight();
 		const string layoutHeight = to_string(EdgeLength * trackHeight);
 
-		switch (trackType)
+		switch (track->GetTrackType())
 		{
 			case DataModel::TrackTypeTurn:
 				image = "<polygon class=\"track\" points=\"0,22 0,14 22,36 14,36\"/>";
@@ -214,65 +170,4 @@ namespace WebServer
 				break;
 		}
 	}
-
-	void HtmlTagTrackBase::FinishInit()
-	{
-		const DataModel::LayoutItem::LayoutItemSize trackHeight = layout->GetHeight();
-		const string layoutHeight = to_string(EdgeLength * trackHeight);
-
-		int translate = 0;
-		if (trackHeight > DataModel::LayoutItem::Height1)
-		{
-			DataModel::LayoutItem::LayoutRotation trackRotation = layout->GetRotation();
-			if (trackRotation == DataModel::LayoutItem::Rotation90 || trackRotation == DataModel::LayoutItem::Rotation270)
-			{
-				translate = (((trackHeight - 1) * EdgeLength) / 2);
-			}
-			if (trackRotation == DataModel::LayoutItem::Rotation90)
-			{
-				translate = -translate;
-			}
-		}
-
-		imageDiv.AddChildTag(HtmlTag().AddContent("<svg width=\"" + EdgeLengthString + "\" height=\"" + layoutHeight + "\" id=\"" + identifier + "_img\" style=\"transform:rotate(" + DataModel::LayoutItem::Rotation(layout->GetRotation()) + "deg) translate(" + to_string(translate) + "px," + to_string(translate) + "px);\">" + image + "</svg>"));
-		imageDiv.AddAttribute("oncontextmenu", "return onContextLayoutItem(event, '" + identifier + "');");
-		AddChildTag(imageDiv);
-
-		if (onClickMenuContentDiv.ChildCount())
-		{
-			onClickMenuDiv.AddChildTag(onClickMenuContentDiv);
-			AddChildTag(onClickMenuDiv);
-		}
-		contextMenuDiv.AddChildTag(contextMenuContentDiv);
-		AddChildTag(contextMenuDiv);
-	}
-
-	void HtmlTagTrackBase::AddMenuEntry(HtmlTag& menu,
-		const std::string& text)
-	{
-		HtmlTag li("li");
-		li.AddClass("contextentry");
-		li.AddContent(text);
-		menu.AddChildTag(li);
-	}
-
-	void HtmlTagTrackBase::AddMenuEntry(HtmlTag& menu,
-		const Languages::TextSelector text,
-		const std::string& onClick,
-		const std::string& className)
-	{
-		HtmlTag li("li");
-		li.AddClass("contextentry");
-		li.AddContent(text);
-		if (onClick.length() > 0)
-		{
-			li.AddAttribute("onClick", onClick);
-		}
-		if (className.length() > 0)
-		{
-			li.AddClass(className);
-		}
-		menu.AddChildTag(li);
-	}
-
 } // namespace WebServer

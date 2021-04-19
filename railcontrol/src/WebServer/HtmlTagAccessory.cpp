@@ -29,7 +29,7 @@ using std::to_string;
 namespace WebServer
 {
 	HtmlTagAccessory::HtmlTagAccessory(const DataModel::Accessory* accessory)
-	:	HtmlTagLayoutItem()
+	:	HtmlTagLayoutItem(dynamic_cast<const DataModel::LayoutItem*>(accessory))
 	{
 		const DataModel::AccessoryState state = accessory->GetAccessoryState();
 
@@ -48,7 +48,7 @@ namespace WebServer
 		div1.AddChildTag(HtmlTag("span").AddContent("&#x25A0;"));
 		div1.AddChildTag(HtmlTag("span").AddClass("tooltip").AddContent(accessoryName + " (addr=" + to_string(accessory->GetAddress()) + ")"));
 		div1.AddAttribute("onclick", "return onClickAccessory(" + accessoryIdString + ");");
-		div1.AddAttribute("oncontextmenu", "return onContextLayoutItem(event, '" + id + "');");
+		div1.AddAttribute("oncontextmenu", "return showContextMenu(event, '" + id + "');");
 		AddChildTag(div1);
 
 		HtmlTag div2("div");

@@ -163,6 +163,7 @@ WebServer/HtmlTagInputSliderLocoSpeed.h
 WebServer/HtmlTagInputText.h
 WebServer/HtmlTagInputTextWithLabel.h
 WebServer/HtmlTagLabel.h
+WebServer/HtmlTagLayoutItem.cpp
 WebServer/HtmlTagLayoutItem.h
 WebServer/HtmlTagRoute.cpp
 WebServer/HtmlTagRoute.h
@@ -177,6 +178,7 @@ WebServer/HtmlTagSwitch.cpp
 WebServer/HtmlTagSwitch.h
 WebServer/HtmlTagText.h
 WebServer/HtmlTagTextWithLabel.h
+WebServer/HtmlTagTrack.cpp
 WebServer/HtmlTagTrack.h
 WebServer/HtmlTagTrackBase.cpp
 WebServer/HtmlTagTrackBase.h

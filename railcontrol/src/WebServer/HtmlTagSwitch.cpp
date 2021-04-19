@@ -18,8 +18,6 @@ along with RailControl; see the file LICENCE. If not see
 <http://www.gnu.org/licenses/>.
 */
 
-#include <sstream>
-
 #include "DataModel/Switch.h"
 #include "WebServer/HtmlTagSwitch.h"
 
@@ -29,94 +27,75 @@ using std::to_string;
 namespace WebServer
 {
 	HtmlTagSwitch::HtmlTagSwitch(const DataModel::Switch* mySwitch)
-	:	HtmlTagLayoutItem()
+	:	HtmlTagLayoutItem(dynamic_cast<const DataModel::LayoutItem*>(mySwitch))
 	{
-		const DataModel::AccessoryState state = mySwitch->GetAccessoryState();
-		const DataModel::AccessoryType type = mySwitch->GetType();
-
-		const unsigned int layoutPosX = mySwitch->GetPosX() * EdgeLength;
-		const unsigned int layoutPosY = mySwitch->GetPosY() * EdgeLength;
 		const string& switchName = mySwitch->GetName();
 
-		HtmlTag div1("div");
-		string switchIdString = to_string(mySwitch->GetID());
-		string id("sw_" + switchIdString);
-		div1.AddId(id);
-		div1.AddClass("layout_item");
-		switch (type)
-		{
-			default:
-				div1.AddClass("switch_item");
-				div1.AddAttribute("onclick", "return onClickSwitch(" + switchIdString + ");");
-				break;
-		}
-		switch (state)
-		{
-			case DataModel::SwitchStateTurnout:
-				div1.AddClass("switch_turnout");
-				break;
+		string idText = to_string(mySwitch->GetID());
 
-			case DataModel::SwitchStateStraight:
-				div1.AddClass("switch_straight");
-				break;
+		imageDiv.AddClass("switch_item");
 
-			case DataModel::SwitchStateThird:
-				div1.AddClass("switch_third");
-				break;
-
-			default:
-				break;
-		}
-		div1.AddAttribute("style", "left:" + to_string(layoutPosX) + "px;top:" + to_string(layoutPosY) + "px;");
-		string image;
+		const DataModel::AccessoryType type = mySwitch->GetType();
 		switch (type)
 		{
 			case DataModel::SwitchTypeLeft:
-				image = "<svg width=\"" + EdgeLengthString + "\" height=\"" + EdgeLengthString + "\" id=\"" + id + "_img\" style=\"transform:rotate(" + DataModel::LayoutItem::Rotation(mySwitch->GetRotation()) + "deg);\">"
-					"<polygon points=\"14,28 22,36 14,36\" fill=\"black\" />"
+				image += "<polygon points=\"14,28 22,36 14,36\" fill=\"black\" />"
 					"<polygon points=\"0,14 14,28 14,36 0,22\" fill=\"gray\" class=\"turnout\"/>"
-					"<polygon points=\"14,0 22,0 22,36 14,28\" fill=\"gray\" class=\"straight\"/>"
-					"</svg>";
+					"<polygon points=\"14,0 22,0 22,36 14,28\" fill=\"gray\" class=\"straight\"/>";
+				imageDiv.AddAttribute("onclick", "return onClickSwitch(" + idText + ");");
 				break;
 
 			case DataModel::SwitchTypeRight:
-				image = "<svg width=\"" + EdgeLengthString + "\" height=\"" + EdgeLengthString + "\" id=\"" + id + "_img\" style=\"transform:rotate(" + DataModel::LayoutItem::Rotation(mySwitch->GetRotation()) + "deg);\">"
-					"<polygon points=\"22,28 22,36 14,36\" fill=\"black\" />"
+				image += "<polygon points=\"22,28 22,36 14,36\" fill=\"black\" />"
 					"<polygon points=\"22,28 36,14 36,22 22,36\" fill=\"gray\" class=\"turnout\"/>"
-					"<polygon points=\"14,0 22,0 22,28 14,36\" fill=\"gray\" class=\"straight\"/>"
-					"</svg>";
+					"<polygon points=\"14,0 22,0 22,28 14,36\" fill=\"gray\" class=\"straight\"/>";
+				imageDiv.AddAttribute("onclick", "return onClickSwitch(" + idText + ");");
 				break;
 
 			case DataModel::SwitchTypeThreeWay:
-				image = "<svg width=\"" + EdgeLengthString + "\" height=\"" + EdgeLengthString + "\" id=\"" + id + "_img\" style=\"transform:rotate(" + DataModel::LayoutItem::Rotation(mySwitch->GetRotation()) + "deg);\">"
-					"<polygon points=\"18,32 22,36 14,36\" fill=\"black\" />"
+				image += "<polygon points=\"18,32 22,36 14,36\" fill=\"black\" />"
 					"<polygon points=\"0,14 14,28 14,36 0,22\" fill=\"gray\" class=\"turnout\"/>"
 					"<polygon points=\"14,36 14,28 18,32\" fill=\"gray\" class=\"turnout straight\"/>"
 					"<polygon points=\"14,0 22,0 22,28 18,32 14,28\" fill=\"gray\" class=\"straight\"/>"
 					"<polygon points=\"22,28 22,36 18,32\" fill=\"gray\" class=\"straight third\"/>"
-					"<polygon points=\"22,28 36,14 36,22 22,36\" fill=\"gray\" class=\"third\"/>"
-					"</svg>";
+					"<polygon points=\"22,28 36,14 36,22 22,36\" fill=\"gray\" class=\"third\"/>";
+				AddOnClickMenuEntry(switchName);
+				AddOnClickMenuEntry(Languages::TextSwitchStateLeft, "fireRequestAndForget('/?cmd=switchstate&switch=" + idText + "&state=turnout');", "menu_turnout");
+				AddOnClickMenuEntry(Languages::TextSwitchStateStraight, "fireRequestAndForget('/?cmd=switchstate&switch=" + idText + "&state=straight');", "menu_straight");
+				AddOnClickMenuEntry(Languages::TextSwitchStateRight, "fireRequestAndForget('/?cmd=switchstate&switch=" + idText + "&state=third');", "menu_third");
 				break;
 
 			default:
 				break;
 		}
 
-		div1.AddChildTag(HtmlTag().AddContent(image));
-		div1.AddChildTag(HtmlTag("span").AddClass("tooltip").AddContent(switchName + " (addr=" + to_string(mySwitch->GetAddress()) + ")"));
-		div1.AddAttribute("oncontextmenu", "return onContextLayoutItem(event, '" + id + "');");
-		AddChildTag(div1);
+		string stateClass;
+		const DataModel::AccessoryState state = mySwitch->GetAccessoryState();
+		switch (state)
+		{
+			case DataModel::SwitchStateTurnout:
+				stateClass = "switch_turnout";
+				break;
 
-		HtmlTag div2("div");
-		div2.AddClass("contextmenu");
-		div2.AddId(id + "_context");
-		div2.AddAttribute("style", "left:" + to_string(layoutPosX + 5) + "px;top:" + to_string(layoutPosY + 30) + "px;");
-		div2.AddChildTag(HtmlTag("ul").AddClass("contextentries")
-			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(switchName))
-			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(Languages::TextReleaseSwitch).AddAttribute("onClick", "fireRequestAndForget('/?cmd=switchrelease&switch=" + switchIdString + "');"))
-			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(Languages::TextEditSwitch).AddAttribute("onClick", "loadPopup('/?cmd=switchedit&switch=" + switchIdString + "');"))
-			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(Languages::TextDeleteSwitch).AddAttribute("onClick", "loadPopup('/?cmd=switchaskdelete&switch=" + switchIdString + "');"))
-			);
-		AddChildTag(div2);
+			case DataModel::SwitchStateStraight:
+				stateClass = "switch_straight";
+				break;
+
+			case DataModel::SwitchStateThird:
+				stateClass = "switch_third";
+				break;
+
+			default:
+				break;
+		}
+		imageDiv.AddClass(stateClass);
+		onClickMenuDiv.AddClass(stateClass);
+
+		AddToolTip(switchName + " (addr=" + to_string(mySwitch->GetAddress()) + ")");
+		AddContextMenuEntry(switchName);
+		AddContextMenuEntry(Languages::TextReleaseSwitch, "fireRequestAndForget('/?cmd=switchrelease&switch=" + idText + "');");
+		AddContextMenuEntry(Languages::TextEditSwitch, "loadPopup('/?cmd=switchedit&switch=" + idText + "');");
+		AddContextMenuEntry(Languages::TextDeleteSwitch, "loadPopup('/?cmd=switchaskdelete&switch=" + idText + "');");
+		FinishInit();
 	}
 } // namespace WebServer

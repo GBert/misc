@@ -29,7 +29,7 @@ using std::to_string;
 namespace WebServer
 {
 	HtmlTagRoute::HtmlTagRoute(const DataModel::Route* route)
-	:	HtmlTagLayoutItem()
+	:	HtmlTagLayoutItem(dynamic_cast<const DataModel::LayoutItem*>(route))
 	{
 		const unsigned int layoutPosX = route->GetPosX() * EdgeLength;
 		const unsigned int layoutPosY = route->GetPosY() * EdgeLength;
@@ -46,7 +46,7 @@ namespace WebServer
 		div1.AddChildTag(HtmlTag().AddContent(image));
 		div1.AddChildTag(HtmlTag("span").AddClass("tooltip").AddContent(routeName));
 		div1.AddAttribute("onclick", "return onClickRoute(" + routeIdString + ");");
-		div1.AddAttribute("oncontextmenu", "return onContextLayoutItem(event, '" + id + "');");
+		div1.AddAttribute("oncontextmenu", "return showContextMenu(event, '" + id + "');");
 		AddChildTag(div1);
 
 		HtmlTag div2("div");

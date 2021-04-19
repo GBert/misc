@@ -43,8 +43,7 @@ namespace DataModel
 			inline Track(Manager* manager, const TrackID trackID)
 			:	TrackBase(manager),
 				LayoutItem(trackID),
-				LockableItem(),
-				trackType(TrackTypeStraight)
+				LockableItem()
 			{}
 
 			inline Track(Manager* manager, const std::string& serialized)
@@ -64,16 +63,6 @@ namespace DataModel
 			inline std::string GetLayoutType() const override
 			{
 				return Languages::GetText(Languages::TextTrack);
-			}
-
-			inline TrackType GetTrackType() const
-			{
-				return trackType;
-			}
-
-			inline void SetTrackType(const TrackType type)
-			{
-				this->trackType = type;
 			}
 
 			inline bool Reserve(Logger::Logger* logger, const LocoID locoID) override
@@ -161,7 +150,6 @@ namespace DataModel
 			void StopAllSignals(const LocoID locoId) override;
 
 		private:
-			TrackType trackType;
 			std::vector<DataModel::Relation*> signals;
 	};
 } // namespace DataModel

@@ -451,7 +451,7 @@ function onClickSignal(signalID)
 	return false;
 }
 
-function showContextMenu(elementName) {
+function showMenu(elementName) {
 	var element = document.getElementById(elementName);
 	if (!element)
 	{
@@ -483,7 +483,7 @@ function showContextMenu(elementName) {
 	element.style.display = 'block';
 }
 
-function onContextLayoutItem(event, ID)
+function showOnClickMenu(event, ID)
 {
 	if (event.shiftKey)
 	{
@@ -491,7 +491,19 @@ function onContextLayoutItem(event, ID)
 	}
 	event.stopPropagation();
 	hideAllContextMenus();
-	showContextMenu(ID + '_context');
+	showMenu(ID + '_onclick');
+	return false;
+}
+
+function showContextMenu(event, ID)
+{
+	if (event.shiftKey)
+	{
+		return true;
+	}
+	event.stopPropagation();
+	hideAllContextMenus();
+	showMenu(ID + '_context');
 	return false;
 }
 
@@ -764,6 +776,50 @@ function updateTrackState(argumentMap)
 	}
 }
 
+function updateSwitchState(argumentMap)
+{
+	if (!argumentMap.has('switch') || !argumentMap.has('state'))
+	{
+		return;
+	}
+	var elementName = 'sw_' + argumentMap.get('switch');
+	var element = document.getElementById(elementName);
+	if (!element)
+	{
+		return;
+	}
+	var state = argumentMap.get('state');
+	updateSwitchStateDiv(element, state);
+	elementName += '_onclick';
+	element = document.getElementById(elementName);
+	if (!element)
+	{
+		return;
+	}
+	updateSwitchStateDiv(element, state);
+}
+
+function updateSwitchStateDiv(element, state)
+{
+	element.classList.remove('switch_turnout');
+	element.classList.remove('switch_straight');
+	element.classList.remove('switch_third');
+	switch (state)
+	{
+		case 'turnout':
+			element.classList.add('switch_turnout');
+			break;
+
+		case 'straight':
+			element.classList.add('switch_straight');
+			break;
+
+		case 'third':
+			element.classList.add('switch_third');
+			break;
+	}
+}
+
 function updateSignalState(argumentMap)
 {
 	if (!argumentMap.has('signal') || !argumentMap.has('state'))
@@ -922,30 +978,7 @@ function dataUpdate(event)
 	}
 	else if (command == 'switch')
 	{
-		elementName = 'sw_' + argumentMap.get('switch');
-		var element = document.getElementById(elementName);
-		if (element && argumentMap.has('state'))
-		{
-			var state = argumentMap.get('state');
-			if (state == 'straight')
-			{
-				element.classList.remove('switch_turnout');
-				element.classList.remove('switch_third');
-				element.classList.add('switch_straight');
-			}
-			else if (state == 'turnout')
-			{
-				element.classList.remove('switch_straight');
-				element.classList.remove('switch_third');
-				element.classList.add('switch_turnout');
-			}
-			else if (state == 'third')
-			{
-				element.classList.remove('switch_straight');
-				element.classList.remove('switch_turnout');
-				element.classList.add('switch_third');
-			}
-		}
+		updateSwitchState(argumentMap);
 	}
 	else if (command == 'switchsettings')
 	{
@@ -1218,7 +1251,7 @@ function loadLayoutContext(event)
 	}
 	event.preventDefault();
 	hideAllContextMenus();
-	showContextMenu('layout_context');
+	showMenu('layout_context');
 	window.layoutPosX = Math.floor((event.pageX - 254) / 36);
 	window.layoutPosY = Math.floor((event.pageY - 92) / 36);
 	return true;

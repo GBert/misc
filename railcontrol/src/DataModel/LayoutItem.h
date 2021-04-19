@@ -75,7 +75,12 @@ namespace DataModel
 
 			static bool MapPosition(const LayoutPosition posX, const LayoutPosition posY, const LayoutItemSize width, const LayoutItemSize height, const LayoutRotation rotation, LayoutPosition& x, LayoutPosition& y, LayoutItemSize& w, LayoutItemSize& h);
 
-			virtual bool Position(LayoutPosition& x, LayoutPosition& y, LayoutPosition& z, LayoutItemSize& w, LayoutItemSize& h, LayoutRotation& r) const
+			virtual bool Position(LayoutPosition& x,
+				LayoutPosition& y,
+				LayoutPosition& z,
+				LayoutItemSize& w,
+				LayoutItemSize& h,
+				LayoutRotation& r) const
 			{
 				z = posZ;
 				r = rotation;

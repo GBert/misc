@@ -31,28 +31,28 @@ namespace WebServer
 {
 	HtmlTagSignal::HtmlTagSignal(const Manager& manager, const DataModel::Signal* signal)
 	:	HtmlTagTrackBase(manager,
-			ObjectTypeSignal,
-			DataModel::TrackTypeStraight,
 			dynamic_cast<const DataModel::TrackBase*>(signal),
 			dynamic_cast<const DataModel::LayoutItem*>(signal)
 		)
 	{
 		image += GetSignalImagePlain(signal);
-		const DataModel::AccessoryState signalState = signal->GetAccessoryState();
-		const DataModel::AccessoryType type = signal->GetType();
 		const string idText = to_string(signal->GetID());
 
 		imageDiv.AddClass("signal_item");
+
+		const DataModel::AccessoryState signalState = signal->GetAccessoryState();
 		string stateClassText = GetStateClassText(signalState);
 		imageDiv.AddClass(stateClassText);
 		onClickMenuDiv.AddClass(stateClassText);
+
+		const DataModel::AccessoryType type = signal->GetType();
 		switch (type)
 		{
 			case DataModel::SignalTypeDeCombined:
 				AddOnClickMenuEntry(Languages::TextSignalStateStop, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=stop');", "menu_stop");
 				AddOnClickMenuEntry(Languages::TextSignalStateClear, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=clear');", "menu_clear");
 				AddOnClickMenuEntry(Languages::TextSignalStateStopExpected, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect2');", "menu_aspect2");
-				imageDiv.AddAttribute("onclick", "return showContextMenu('si_" + idText + "_onclick');");
+				imageDiv.AddAttribute("onclick", "return showOnClickMenu(event, '" + identifier + "');");
 				break;
 
 			case DataModel::SignalTypeChLDistant:
@@ -65,14 +65,14 @@ namespace WebServer
 				AddOnClickMenuEntry(Languages::TextSignalStateClear60, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect3');", "menu_aspect3");
 				AddOnClickMenuEntry(Languages::TextSignalStateClear90, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect5');", "menu_aspect5");
 				AddOnClickMenuEntry(Languages::TextSignalStateShortClear, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect6');", "menu_aspect6");
-				imageDiv.AddAttribute("onclick", "return showContextMenu('si_" + idText + "_onclick');");
+				imageDiv.AddAttribute("onclick", "return showOnClickMenu(event, '" + identifier + "');");
 				break;
 
 			case DataModel::SignalTypeChDwarf:
 				AddOnClickMenuEntry(Languages::TextSignalStateStop, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=stop');", "menu_stop");
 				AddOnClickMenuEntry(Languages::TextSignalStateClear, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=clear');", "menu_clear");
 				AddOnClickMenuEntry(Languages::TextSignalStateCaution, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect2');", "menu_aspect2");
-				imageDiv.AddAttribute("onclick", "return showContextMenu('si_" + idText + "_onclick');");
+				imageDiv.AddAttribute("onclick", "return showOnClickMenu(event, '" + identifier + "');");
 				break;
 
 			case DataModel::SignalTypeSimpleRight:
@@ -84,8 +84,11 @@ namespace WebServer
 				break;
 		}
 		AddToolTip(signal->GetName() + " (addr=" + to_string(signal->GetAddress()) + ")");
-		imageDiv.AddAttribute("oncontextmenu", "return onContextLayoutItem(event, '" + identifier + "');");
 
+		AddContextMenuEntry(Languages::TextBlockTrack, "fireRequestAndForget('/?cmd=trackblock&" + urlIdentifier + "&blocked=true');", "track_block");
+		AddContextMenuEntry(Languages::TextUnblockTrack, "fireRequestAndForget('/?cmd=trackblock&" + urlIdentifier + "&blocked=false');", "track_unblock");
+		AddContextMenuEntry(Languages::TextReleaseTrack, "fireRequestAndForget('/?cmd=trackrelease&" + urlIdentifier + "');", "track_release");
+		AddContextMenuEntry(Languages::TextReleaseTrackAndLoco, "fireRequestAndForget('/?cmd=locorelease&" + urlIdentifier + "');", "track_loco_release");
 		AddContextMenuEntry(Languages::TextEditSignal, "loadPopup('/?cmd=signaledit&" + urlIdentifier + "');");
 		AddContextMenuEntry(Languages::TextDeleteSignal, "loadPopup('/?cmd=signalaskdelete&" + urlIdentifier + "');");
 		FinishInit();
@@ -102,6 +105,7 @@ namespace WebServer
 
 	string HtmlTagSignal::GetSignalImagePlain(const DataModel::Signal* signal)
 	{
+		// FIXME: <g> not needed anymore when signal is only on one side 2021-03-21
 		string image = "<g";
 		if (signal->GetSignalOrientation() == OrientationLeft)
 		{
@@ -110,6 +114,7 @@ namespace WebServer
 			image += ")\"";
 		}
 		image += ">";
+
 		switch (signal->GetType())
 		{
 			case DataModel::SignalTypeDeCombined:

@@ -62,9 +62,12 @@ namespace DataModel
 			static const LayoutItem::LayoutItemSize MaxLength = 100;
 
 			TrackBase() = delete;
+			TrackBase(const TrackBase&) = delete;
+			TrackBase& operator=(const TrackBase&) = delete;
 
 			inline TrackBase(Manager* manager)
 			:	manager(manager),
+				trackType(TrackTypeStraight),
 				cluster(nullptr),
 				selectRouteApproach(SelectRouteSystemDefault),
 				trackState(DataModel::Feedback::FeedbackStateFree),
@@ -75,13 +78,26 @@ namespace DataModel
 				allowLocoTurn(true),
 				releaseWhenFree(false),
 				showName(true)
-			{}
+			{
+			}
 
-			virtual ~TrackBase() {}
+			virtual ~TrackBase()
+			{
+			}
 
 			inline ObjectType GetObjectType() const
 			{
 				return ObjectTypeTrack;
+			}
+
+			inline TrackType GetTrackType() const
+			{
+				return trackType;
+			}
+
+			inline void SetTrackType(const TrackType type)
+			{
+				this->trackType = type;
 			}
 
 			inline std::vector<FeedbackID> GetFeedbacks() const
@@ -215,6 +231,7 @@ namespace DataModel
 			virtual void StopAllSignals(__attribute__((unused)) const LocoID locoId) {}
 
 			Manager* manager;
+			TrackType trackType;
 
 		private:
 			bool FeedbackStateInternal(const FeedbackID feedbackID, const DataModel::Feedback::FeedbackState state);
