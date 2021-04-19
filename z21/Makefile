@@ -1,4 +1,4 @@
-# Copyright (C) 2015 OpenWrt.org
+# Copyright (C) 2021 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -22,7 +22,7 @@ define Package/z21emu
 endef
 
 define Package/z21emu/description
-  Roc/Fleischmann z21 Emulator
+  Roco/Fleischmann z21 Emulator
 endef
 
 define Build/Prepare
