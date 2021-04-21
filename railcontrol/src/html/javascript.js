@@ -725,54 +725,61 @@ function updateTrackState(argumentMap)
 			orientation = argumentMap.get('orientation') == 'true';
 		}
 
-		var contextElement = document.getElementById(elementName + '_context');
-		if (contextElement)
+		if (reserved)
 		{
-			if (reserved == true)
-			{
-				element.classList.remove('loco_unknown');
-				element.classList.add('loco_known');
-				contextElement.classList.remove('loco_unknown');
-				contextElement.classList.add('loco_known');
-			}
-			else
-			{
-				element.classList.remove('loco_known');
-				element.classList.add('loco_unknown');
-				contextElement.classList.remove('loco_known');
-				contextElement.classList.add('loco_unknown');
-			}
+			element.classList.remove('loco_unknown');
+			element.classList.add('loco_known');
+		}
+		else
+		{
+			element.classList.remove('loco_known');
+			element.classList.add('loco_unknown');
+		}
+	}
 
-			if (blocked == true)
-			{
-				contextElement.classList.remove('track_unblocked');
-				contextElement.classList.add('track_blocked');
-			}
-			else
-			{
-				contextElement.classList.remove('track_blocked');
-				contextElement.classList.add('track_unblocked');
-			}
-
-			if (orientation == true)
-			{
-				contextElement.classList.remove('orientation_left');
-				contextElement.classList.add('orientation_right');
-			}
-			else
-			{
-				contextElement.classList.remove('orientation_right');
-				contextElement.classList.add('orientation_left');
-			}
+	var onClickElement = document.getElementById(elementName + '_onclick');
+	if (onClickElement)
+	{
+		if (reserved)
+		{
+			onClickElement.classList.remove('loco_unknown');
+			onClickElement.classList.add('loco_known');
+		}
+		else
+		{
+			onClickElement.classList.remove('loco_known');
+			onClickElement.classList.add('loco_unknown');
 		}
 
-		var locoElement = document.getElementById(elementName + '_text_loconame');
-		if (locoElement)
+		if (blocked)
 		{
-			var orientationArrow = orientation ? '&rarr; ' : '&larr; ';
-			var locoName = argumentMap.has('loconame') ? argumentMap.get('loconame') : '';
-			locoElement.innerHTML = orientationArrow + locoName;
+			onClickElement.classList.remove('track_unblocked');
+			onClickElement.classList.add('track_blocked');
 		}
+		else
+		{
+			onClickElement.classList.remove('track_blocked');
+			onClickElement.classList.add('track_unblocked');
+		}
+
+		if (orientation)
+		{
+			onClickElement.classList.remove('orientation_left');
+			onClickElement.classList.add('orientation_right');
+		}
+		else
+		{
+			onClickElement.classList.remove('orientation_right');
+			onClickElement.classList.add('orientation_left');
+		}
+	}
+
+	var locoElement = document.getElementById(elementName + '_text_loconame');
+	if (locoElement)
+	{
+		var orientationArrow = orientation ? '&rarr; ' : '&larr; ';
+		var locoName = argumentMap.has('loconame') ? argumentMap.get('loconame') : '';
+		locoElement.innerHTML = orientationArrow + locoName;
 	}
 }
 

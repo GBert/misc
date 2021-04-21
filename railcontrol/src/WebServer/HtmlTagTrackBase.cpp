@@ -58,9 +58,9 @@ namespace WebServer
 			default:
 				return;
 		}
-		contextMenuDiv.AddClass(reserved ? "loco_known" : "loco_unknown");
-		contextMenuDiv.AddClass(blocked ? "track_blocked" : "track_unblocked");
-		contextMenuDiv.AddClass(track->GetLocoOrientation() == OrientationRight ? "orientation_right" : "orientation_left");
+		onClickMenuDiv.AddClass(reserved ? "loco_known" : "loco_unknown");
+		onClickMenuDiv.AddClass(blocked ? "track_blocked" : "track_unblocked");
+		onClickMenuDiv.AddClass(track->GetLocoOrientation() == OrientationRight ? "orientation_right" : "orientation_left");
 
 		const string& trackName = track->GetMyName();
 		AddOnClickMenuEntry(trackName);

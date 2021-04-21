@@ -204,7 +204,9 @@ WebServer/WebClientTrackBase.cpp
 WebServer/WebClientTrackBase.h
 WebServer/WebServer.cpp
 WebServer/WebServer.h
+Version.cpp.in
 Version.cpp
+Version.cpp.dummy
 Version.h
 Hardware/zlib/adler32.c
 Hardware/zlib/compress.c
@@ -239,18 +241,17 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_FLAGS "-g -O2 -Wall -Wextra -pedantic -Werror")
 set(CMAKE_C_FLAGS "-g -O2 -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_JSON1 -DSQLITE_ENABLE_RTREE -DHAVE_USLEEP -Wno-implicit-function-declaration -Wno-return-local-addr")
+
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 target_link_libraries(railcontrol PRIVATE Threads::Threads dl)
+
 target_include_directories(railcontrol PRIVATE .)
 
-# git infos
-execute_process(COMMAND git log -1 --format=%H WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_VARIABLE GIT_HASH OUTPUT_STRIP_TRAILING_WHITESPACE)
-execute_process(COMMAND git log -1 --format=%ad --date=unix WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_VARIABLE GIT_TIMESTAMP OUTPUT_STRIP_TRAILING_WHITESPACE)
-execute_process(COMMAND git status -s WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_FILE /tmp/git_status.txt OUTPUT_STRIP_TRAILING_WHITESPACE)
-execute_process(COMMAND wc -l WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} INPUT_FILE /tmp/git_status.txt OUTPUT_VARIABLE GIT_DIRTY OUTPUT_STRIP_TRAILING_WHITESPACE)
-execute_process(COMMAND date +%s WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_VARIABLE COMPILE_TIMESTAMP OUTPUT_STRIP_TRAILING_WHITESPACE)
-add_definitions("-DGIT_HASH=\"${GIT_HASH}\" -DGIT_TIMESTAMP=\"${GIT_TIMESTAMP}\" -DGIT_DIRTY=\"${GIT_DIRTY}\" -DCOMPILE_TIMESTAMP=\"${COMPILE_TIMESTAMP}\" -DRAILCONTROL_VERSION=\"${RAILCONTROL_VERSION}\"")
-# FIXME: is only executed by "cmake ."
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/Version.cpp.in" "${CMAKE_CURRENT_BINARY_DIR}/Version.cpp" @ONLY)
+add_custom_command(OUTPUT Version.cpp Version.cpp.dummy
+	DEPENDS Version.cpp.in
+	COMMAND git status -s| wc -l > ${CMAKE_CURRENT_SOURCE_DIR}/git_dirty.txt
+	COMMAND sed s/@COMPILE_TIMESTAMP@/`date +%s`/ < ${CMAKE_CURRENT_SOURCE_DIR}/Version.cpp.in | sed s/@GIT_HASH@/`git log -1 --format=%H`/ | sed s/@GIT_TIMESTAMP@/`git log -1 --format=%at`/ | sed s,@GIT_DIRTY@,`cat ${CMAKE_CURRENT_SOURCE_DIR}/git_dirty.txt`, | sed s/@RAILCONTROL_VERSION@/${RAILCONTROL_VERSION}/ > ${CMAKE_CURRENT_SOURCE_DIR}/Version.cpp
+	COMMAND rm ${CMAKE_CURRENT_SOURCE_DIR}/git_dirty.txt
+	COMMENT "Creating Version.cpp")
 
