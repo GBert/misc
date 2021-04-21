@@ -1,11 +1,13 @@
 const int revisionnr = 
-1551
+1553
 ;
 const char* commithash = 
-"422c9b667eda6102f9cc74c96025cfc53aebba1d";
+"9af955a9f865c4c3e44150ec41a5ac9264c6d007";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1553 2021-04-21 07:48:19 +0200 mbus: set power events product related\n" \
+"1552 2021-04-20 08:06:57 +0200 block: broadcast cleaning stamp on IN\n" \
 "1551 2021-04-18 11:50:54 +0200 action: skip action in case system is not ready\n" \
 "1550 2021-04-18 11:44:16 +0200 xmlscript: only start script in case the system is ready\n" \
 "1549 2021-04-18 11:34:00 +0200 control: check valid instance on getState\n" \
