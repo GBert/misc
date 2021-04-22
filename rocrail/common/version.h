@@ -1,11 +1,12 @@
 const int revisionnr = 
-1553
+1554
 ;
 const char* commithash = 
-"9af955a9f865c4c3e44150ec41a5ac9264c6d007";
+"63160869fcc542cc389df47f78c811684157581a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1554 2021-04-21 10:25:37 +0200 stage: set cleanstamp before broadcast to clients\n" \
 "1553 2021-04-21 07:48:19 +0200 mbus: set power events product related\n" \
 "1552 2021-04-20 08:06:57 +0200 block: broadcast cleaning stamp on IN\n" \
 "1551 2021-04-18 11:50:54 +0200 action: skip action in case system is not ready\n" \
