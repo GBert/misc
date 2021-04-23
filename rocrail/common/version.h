@@ -1,11 +1,14 @@
 const int revisionnr = 
-1554
+1557
 ;
 const char* commithash = 
-"63160869fcc542cc389df47f78c811684157581a";
+"57d44a154c93948172f2cc46f97f018f384b033e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1557 2021-04-23 12:03:29 +0200 stage: set cleanstamp on enter\n" \
+"1556 2021-04-22 21:51:44 +0200 mbus: revert power by product\n" \
+"1555 2021-04-22 15:17:08 +0200 mbus: global power filter correction\n" \
 "1554 2021-04-21 10:25:37 +0200 stage: set cleanstamp before broadcast to clients\n" \
 "1553 2021-04-21 07:48:19 +0200 mbus: set power events product related\n" \
 "1552 2021-04-20 08:06:57 +0200 block: broadcast cleaning stamp on IN\n" \
