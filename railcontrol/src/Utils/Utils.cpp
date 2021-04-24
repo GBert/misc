@@ -365,7 +365,7 @@ namespace Utils
 		{
 			return false;
 		}
-		for (auto file : filesFound)
+		for (auto& file : filesFound)
 		{
 			string comPortString = file.substr(4);
 			unsigned char comPort = StringToInteger(comPortString);

@@ -56,7 +56,7 @@ namespace WebServer
 		HtmlTag table("table");
 		map<string,string> clusterArgument;
 		const map<string,Cluster*> clusterList = manager.ClusterListByName();
-		for (auto cluster : clusterList)
+		for (auto& cluster : clusterList)
 		{
 			HtmlTag row("tr");
 			row.AddChildTag(HtmlTag("td").AddContent(cluster.first));
@@ -220,7 +220,7 @@ namespace WebServer
 		map<string, ObjectID> trackOptions;
 
 		map<string, Track*> allTracks = manager.TrackListByName();
-		for (auto track : allTracks)
+		for (auto& track : allTracks)
 		{
 			Cluster* clusterOfTrack = track.second->GetCluster();
 			if (clusterOfTrack != nullptr && clusterOfTrack->GetID() != clusterId)

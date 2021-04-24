@@ -108,7 +108,7 @@ namespace Network
 
 		run = false;
 
-		for(std::thread& serverThread : serverThreads)
+		for (std::thread& serverThread : serverThreads)
 		{
 			serverThread.join();
 		}

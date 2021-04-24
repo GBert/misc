@@ -649,7 +649,7 @@ namespace WebServer
 			return;
 		}
 
-		for (auto line : lines)
+		for (auto& line : lines)
 		{
 			if (line.find("HTTP/1.") == string::npos)
 			{
@@ -691,7 +691,7 @@ namespace WebServer
 
 			deque<string> argumentStrings;
 			Utils::Utils::SplitString(uriParts[1], "&", argumentStrings);
-			for (auto argument : argumentStrings)
+			for (auto& argument : argumentStrings)
 			{
 				if (argument.length() == 0)
 				{
@@ -952,7 +952,7 @@ namespace WebServer
 		HtmlTag table("table");
 		const map<string,LayerID> layerList = manager.LayerListByName();
 		map<string,string> layerArgument;
-		for (auto layer : layerList)
+		for (auto& layer : layerList)
 		{
 			HtmlTag row("tr");
 			row.AddChildTag(HtmlTag("td").AddContent(layer.first));
@@ -1151,7 +1151,7 @@ namespace WebServer
 		HtmlTag table("table");
 		const map<string,Hardware::HardwareParams*> hardwareList = manager.ControlListByName();
 		map<string,string> hardwareArgument;
-		for (auto hardware : hardwareList)
+		for (auto& hardware : hardwareList)
 		{
 			HtmlTag row("tr");
 			row.AddChildTag(HtmlTag("td").AddContent(hardware.first));
@@ -1230,7 +1230,7 @@ namespace WebServer
 		}
 
 		map<string,string> options;
-		for (auto matchKey : matchKeyMap)
+		for (auto& matchKey : matchKeyMap)
 		{
 			options[matchKey.first] = matchKey.second.GetName();
 		}
@@ -1395,7 +1395,7 @@ namespace WebServer
 			{
 				std::map<string, Switch*> switches = manager.SwitchListByName();
 				map<string, SwitchID> switchOptions;
-				for (auto mySwitch : switches)
+				for (auto& mySwitch : switches)
 				{
 					switchOptions[mySwitch.first] = mySwitch.second->GetID();
 				}
@@ -1421,7 +1421,7 @@ namespace WebServer
 			{
 				std::map<string, Signal*> signals = manager.SignalListByName();
 				map<string, SignalID> signalOptions;
-				for (auto signal : signals)
+				for (auto& signal : signals)
 				{
 					signalOptions[signal.first] = signal.second->GetID();
 				}
@@ -1447,7 +1447,7 @@ namespace WebServer
 			{
 				std::map<string, Accessory*> accessories = manager.AccessoryListByName();
 				map<string, AccessoryID> accessoryOptions;
-				for (auto accessory : accessories)
+				for (auto& accessory : accessories)
 				{
 					accessoryOptions[accessory.first] = accessory.second->GetID();
 				}
@@ -1464,7 +1464,7 @@ namespace WebServer
 			{
 				std::map<string, Track*> tracks = manager.TrackListByName();
 				map<string, TrackID> trackOptions;
-				for (auto track : tracks)
+				for (auto& track : tracks)
 				{
 					trackOptions[track.first] = track.second->GetID();
 				}
@@ -1478,7 +1478,7 @@ namespace WebServer
 			{
 				std::map<string, Route*> routes = manager.RouteListByName();
 				map<string, RouteID> routeOptions;
-				for (auto track : routes)
+				for (auto& track : routes)
 				{
 					routeOptions[track.first] = track.second->GetID();
 				}
@@ -1710,7 +1710,7 @@ namespace WebServer
 
 		map<string, Feedback*> feedbacks = manager.FeedbackListByName();
 		map<string, FeedbackID> feedbackOptions;
-		for (auto feedback : feedbacks)
+		for (auto& feedback : feedbacks)
 		{
 			if (feedback.second->IsRelatedObjectSet() && !feedback.second->CompareRelatedObject(objectIdentifier))
 			{
@@ -1902,7 +1902,7 @@ namespace WebServer
 		map<string, ObjectID> locoOptions;
 
 		map<string, LocoConfig> allLocos = manager.LocoListByName();
-		for (auto loco : allLocos)
+		for (auto& loco : allLocos)
 		{
 			// FIXME: check if already has a master
 			LocoID slaveID = loco.second.GetLocoId();
@@ -2352,7 +2352,7 @@ namespace WebServer
 		if (layer < LayerUndeletable)
 		{
 			const map<FeedbackID,Feedback*>& feedbacks = manager.FeedbackList();
-			for (auto feedback : feedbacks)
+			for (auto& feedback : feedbacks)
 			{
 				if (feedback.second->GetControlID() != -layer)
 				{
@@ -2366,7 +2366,7 @@ namespace WebServer
 		}
 
 		const map<AccessoryID,DataModel::Accessory*>& accessories = manager.AccessoryList();
-		for (auto accessory : accessories)
+		for (auto& accessory : accessories)
 		{
 			if (accessory.second->IsVisibleOnLayer(layer) == false)
 			{
@@ -2376,7 +2376,7 @@ namespace WebServer
 		}
 
 		const map<SwitchID,DataModel::Switch*>& switches = manager.SwitchList();
-		for (auto mySwitch : switches)
+		for (auto& mySwitch : switches)
 		{
 			if (mySwitch.second->IsVisibleOnLayer(layer) == false)
 			{
@@ -2386,7 +2386,7 @@ namespace WebServer
 		}
 
 		const map<SwitchID,DataModel::Track*>& tracks = manager.TrackList();
-		for (auto track : tracks)
+		for (auto& track : tracks)
 		{
 			if (track.second->IsVisibleOnLayer(layer) == false)
 			{
@@ -2396,7 +2396,7 @@ namespace WebServer
 		}
 
 		const map<RouteID,DataModel::Route*>& routes = manager.RouteList();
-		for (auto route : routes)
+		for (auto& route : routes)
 		{
 			if (route.second->IsVisibleOnLayer(layer) == false)
 			{
@@ -2406,7 +2406,7 @@ namespace WebServer
 		}
 
 		const map<FeedbackID,Feedback*>& feedbacks = manager.FeedbackList();
-		for (auto feedback : feedbacks)
+		for (auto& feedback : feedbacks)
 		{
 			if (feedback.second->IsVisibleOnLayer(layer) == false)
 			{
@@ -2416,7 +2416,7 @@ namespace WebServer
 		}
 
 		const map<SignalID,DataModel::Signal*>& signals = manager.SignalList();
-		for (auto signal : signals)
+		for (auto& signal : signals)
 		{
 			if (signal.second->IsVisibleOnLayer(layer) == false)
 			{
@@ -2438,7 +2438,7 @@ namespace WebServer
 		bool controlIdValid = false;
 		if (controlIdMutable != ControlIdNone)
 		{
-			for (auto control : controls)
+			for (auto& control : controls)
 			{
 				if (control.first != controlIdMutable)
 				{
@@ -2457,7 +2457,7 @@ namespace WebServer
 			return HtmlTagInputHidden("control", to_string(controlIdMutable));
 		}
 		std::map<string, string> controlOptions;
-		for(auto control : controls)
+		for (auto& control : controls)
 		{
 			controlOptions[to_string(control.first)] = control.second;
 		}
@@ -2602,7 +2602,7 @@ namespace WebServer
 		HtmlTag table("table");
 		const map<string,DataModel::Accessory*> accessoryList = manager.AccessoryListByName();
 		map<string,string> accessoryArgument;
-		for (auto accessory : accessoryList)
+		for (auto& accessory : accessoryList)
 		{
 			Accessory* accessoryConfig = accessory.second;
 			HtmlTag row("tr");
@@ -2805,7 +2805,7 @@ namespace WebServer
 		HtmlTag table("table");
 		const map<string,DataModel::Switch*> switchList = manager.SwitchListByName();
 		map<string,string> switchArgument;
-		for (auto mySwitch : switchList)
+		for (auto& mySwitch : switchList)
 		{
 			Switch* switchConfig = mySwitch.second;
 			HtmlTag row("tr");
@@ -3260,7 +3260,7 @@ namespace WebServer
 		HtmlTag table("table");
 		const map<string,DataModel::Route*> routeList = manager.RouteListByName();
 		map<string,string> routeArgument;
-		for (auto route : routeList)
+		for (auto& route : routeList)
 		{
 			HtmlTag row("tr");
 			row.AddChildTag(HtmlTag("td").AddContent(route.first));
@@ -3425,7 +3425,7 @@ namespace WebServer
 		HtmlTag table("table");
 		const map<string,DataModel::Feedback*> feedbackList = manager.FeedbackListByName();
 		map<string,string> feedbackArgument;
-		for (auto feedback : feedbackList)
+		for (auto& feedback : feedbackList)
 		{
 			HtmlTag row("tr");
 			row.AddChildTag(HtmlTag("td").AddContent(feedback.first));

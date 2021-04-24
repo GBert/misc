@@ -33,7 +33,7 @@ namespace DataModel
 	{
 		deque<string> parts;
 		Utils::Utils::SplitString(serialized, ";", parts);
-		for (auto part : parts)
+		for (auto& part : parts)
 		{
 			if (part.length() == 0)
 			{

@@ -84,9 +84,9 @@ namespace DataModel
 			return false;
 		}
 
-		for(LayoutPosition ix = x; ix < x + w; ix++)
+		for (LayoutPosition ix = x; ix < x + w; ix++)
 		{
-			for(LayoutPosition iy = y; iy < y + h; iy++)
+			for (LayoutPosition iy = y; iy < y + h; iy++)
 			{
 				if (ix == posX && iy == posY)
 				{

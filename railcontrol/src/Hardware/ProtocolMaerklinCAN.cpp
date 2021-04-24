@@ -553,7 +553,7 @@ namespace Hardware
 		string file = ZLib::UnCompress(reinterpret_cast<char*>(canFileData + 4), canFileDataSize, canFileUncompressedSize);
 		deque<string> lines;
 		Utils::Utils::SplitString(file, "\n", lines);
-		for(std::string& line : lines)
+		for (std::string& line : lines)
 		{
 			logger->Debug(line);
 		}

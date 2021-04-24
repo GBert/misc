@@ -35,7 +35,7 @@ namespace WebServer
 		std::string cmd = Utils::Utils::StringBeforeDelimiter(command, "_");
 		std::stringstream ss;
 		ss << "var myUrl = '/?cmd=" << cmd;
-		for (auto argument : arguments) {
+		for (auto& argument : arguments) {
 
 			ss << "&" << argument.first << "=" << argument.second;
 		}

@@ -48,14 +48,14 @@ namespace WebServer
 			if (tag.classes.size() > 0)
 			{
 				stream << " class=\"";
-				for(auto c : tag.classes)
+				for (auto& c : tag.classes)
 				{
 					stream << " " << c;
 				}
 				stream << "\"";
 			}
 
-			for (auto attribute : tag.attributes)
+			for (auto& attribute : tag.attributes)
 			{
 				stream << " " << attribute.first;
 				if (attribute.second.size() > 0)
@@ -76,7 +76,7 @@ namespace WebServer
 			}
 		}
 
-		for (auto child : tag.childTags)
+		for (auto& child : tag.childTags)
 		{
 			stream << child;
 		}

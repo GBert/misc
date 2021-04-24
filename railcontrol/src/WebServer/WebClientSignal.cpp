@@ -355,7 +355,7 @@ namespace WebServer
 		HtmlTag table("table");
 		const map<string,DataModel::Signal*> signalList = manager.SignalListByName();
 		map<string,string> signalArgument;
-		for (auto signal : signalList)
+		for (auto& signal : signalList)
 		{
 			Signal* signalConfig = signal.second;
 			HtmlTag row("tr");

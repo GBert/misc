@@ -56,7 +56,7 @@ namespace WebServer
 		map<string, ObjectID> signalOptions;
 
 		map<string, Signal*> allSignals = manager.SignalListByName();
-		for (auto signal : allSignals)
+		for (auto& signal : allSignals)
 		{
 			Track* trackOfSignal = signal.second->GetTrack();
 			if (trackOfSignal != nullptr && trackOfSignal->GetID() != trackId)
@@ -315,7 +315,7 @@ namespace WebServer
 		HtmlTag table("table");
 		const map<string,DataModel::Track*> trackList = manager.TrackListByName();
 		map<string,string> trackArgument;
-		for (auto track : trackList)
+		for (auto& track : trackList)
 		{
 			HtmlTag row("tr");
 			row.AddChildTag(HtmlTag("td").AddContent(track.first));

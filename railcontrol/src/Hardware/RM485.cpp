@@ -358,7 +358,7 @@ namespace Hardware
 	uint8_t RM485::CRC8::calcString(const uint8_t* const s, const uint8_t size)
 	{
 		CRC8 crc8;
-		for(uint8_t pos = 0; pos < size; ++pos)
+		for (uint8_t pos = 0; pos < size; ++pos)
 		{
 			crc8.calcChar(s[pos]);
 		}

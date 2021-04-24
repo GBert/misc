@@ -58,7 +58,7 @@ namespace Storage
 	{
 		vector<string> objects;
 		sqlite.ObjectsOfType(ObjectTypeLoco, objects);
-		for(auto object : objects)
+		for (auto& object : objects)
 		{
 			Loco* loco = new Loco(manager, object);
 			const RouteID locoID = loco->GetID();
@@ -79,7 +79,7 @@ namespace Storage
 	{
 		vector<string> objects;
 		sqlite.ObjectsOfType(ObjectTypeAccessory, objects);
-		for(auto object : objects)
+		for (auto& object : objects)
 		{
 			Accessory* accessory = new Accessory(object);
 			if (accessory == nullptr)
@@ -100,7 +100,7 @@ namespace Storage
 	{
 		vector<string> objects;
 		sqlite.ObjectsOfType(ObjectTypeFeedback, objects);
-		for(auto object : objects)
+		for (auto& object : objects)
 		{
 			Feedback* feedback = new Feedback(manager, object);
 			if (feedback == nullptr)
@@ -121,7 +121,7 @@ namespace Storage
 	{
 		vector<string> objects;
 		sqlite.ObjectsOfType(ObjectTypeTrack, objects);
-		for(auto object : objects)
+		for (auto& object : objects)
 		{
 			Track* track = new Track(manager, object);
 			if (track == nullptr)
@@ -145,7 +145,7 @@ namespace Storage
 	{
 		vector<string> objects;
 		sqlite.ObjectsOfType(ObjectTypeSwitch, objects);
-		for(auto object : objects)
+		for (auto& object : objects)
 		{
 			Switch* mySwitch = new Switch(object);
 			if (mySwitch == nullptr)
@@ -210,7 +210,8 @@ namespace Storage
 	{
 		vector<string> objects;
 		sqlite.ObjectsOfType(ObjectTypeRoute, objects);
-		for (auto object : objects) {
+		for (auto& object : objects)
+		{
 			Route* route = new Route(manager, object);
 			if (route == nullptr)
 			{
@@ -235,7 +236,8 @@ namespace Storage
 	{
 		vector<string> objects;
 		sqlite.ObjectsOfType(ObjectTypeLayer, objects);
-		for(auto object : objects) {
+		for (auto& object : objects)
+		{
 			Layer* layer = new Layer(object);
 			if (layer == nullptr)
 			{
@@ -255,7 +257,7 @@ namespace Storage
 	{
 		vector<string> serializedObjects;
 		sqlite.ObjectsOfType(ObjectTypeSignal, serializedObjects);
-		for(auto serializedObject : serializedObjects)
+		for (auto& serializedObject : serializedObjects)
 		{
 			Signal* signal = new Signal(manager, serializedObject);
 			if (signal == nullptr)
@@ -277,7 +279,7 @@ namespace Storage
 	{
 		vector<string> serializedObjects;
 		sqlite.ObjectsOfType(ObjectTypeCluster, serializedObjects);
-		for(auto serializedObject : serializedObjects)
+		for (auto& serializedObject : serializedObjects)
 		{
 			Cluster* cluster = new Cluster(serializedObject);
 			if (cluster == nullptr)
@@ -318,7 +320,7 @@ namespace Storage
 		vector<string> relationStrings;
 		sqlite.RelationsFrom(type, objectID, relationStrings);
 		vector<Relation*> output;
-		for (auto relationString : relationStrings)
+		for (auto& relationString : relationStrings)
 		{
 			Relation* relation = new Relation(manager, relationString);
 			if (relation == nullptr)

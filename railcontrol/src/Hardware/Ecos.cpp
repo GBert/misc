@@ -528,7 +528,7 @@ namespace Hardware
 			return;
 		}
 
-		for(unsigned int pin = 0; pin < 8; ++pin)
+		for (unsigned int pin = 0; pin < 8; ++pin)
 		{
 			uint8_t oldPinData = (oldData >> pin) & 0x01;
 			uint8_t pinData = (data >> pin) & 0x01;

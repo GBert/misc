@@ -70,7 +70,7 @@ namespace Logger
 
 	void LoggerServer::Send(const std::string& text)
 	{
-		for(auto client : clients)
+		for (auto client : clients)
 		{
 			client->Send(text);
 		}

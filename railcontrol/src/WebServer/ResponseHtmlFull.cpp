@@ -34,7 +34,7 @@ namespace WebServer
 	std::ostream& operator<<(std::ostream& stream, const ResponseHtmlFull& response)
 	{
 		stream << "HTTP/1.1 " << response.responseCode << " " << ResponseHtml::responseTexts.at(response.responseCode) << "\r\n";
-		for(auto header : response.headers)
+		for (auto& header : response.headers)
 		{
 			stream << header.first << ": " << header.second << "\r\n";
 		}

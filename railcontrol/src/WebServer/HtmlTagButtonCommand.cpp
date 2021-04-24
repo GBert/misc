@@ -36,7 +36,7 @@ namespace WebServer
 		std::stringstream ss;
 		ss <<
 			"var theUrl = '/?cmd=" << cmd;
-		for (auto argument : arguments) {
+		for (auto& argument : arguments) {
 
 			ss << "&" << argument.first << "=" << argument.second;
 		}

@@ -40,7 +40,7 @@ namespace WebServer
 			"var on = !document.getElementById('" << commandID << "').classList.contains('button_on');"
 			"var url = '/?cmd=" << cmd << "&on=' + (on ? '1' : '0') + '";
 
-		for (auto argument : arguments) {
+		for (auto& argument : arguments) {
 
 			ss << "&" << argument.first << "=" << argument.second;
 		}

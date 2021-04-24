@@ -36,7 +36,7 @@ namespace WebServer
 		std::stringstream begin;
 		begin << "var url = '/?cmd=" << cmd << "&on=";
 		std::stringstream end;
-		for (auto argument : arguments) {
+		for (auto& argument : arguments) {
 
 			end << "&" << argument.first << "=" << argument.second;
 		}

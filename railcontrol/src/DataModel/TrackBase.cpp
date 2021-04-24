@@ -76,7 +76,7 @@ namespace DataModel
 		string feedbackStrings = Utils::Utils::GetStringMapEntry(arguments, "feedbacks");
 		deque<string> feedbackStringVector;
 		Utils::Utils::SplitString(feedbackStrings, ",", feedbackStringVector);
-		for (auto feedbackString : feedbackStringVector)
+		for (auto& feedbackString : feedbackStringVector)
 		{
 			FeedbackID feedbackID = Utils::Utils::StringToInteger(feedbackString);
 			if (!manager->FeedbackExists(feedbackID))

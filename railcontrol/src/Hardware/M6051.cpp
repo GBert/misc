@@ -178,7 +178,7 @@ namespace Hardware
 				if (byte != s88Memory[module])
 				{
 					unsigned char xorByte = byte ^ s88Memory[module];
-					for(unsigned char pin = 1; pin <= 8; ++pin)
+					for (unsigned char pin = 1; pin <= 8; ++pin)
 					{
 						unsigned char shift = 8 - pin;
 						if (((xorByte >> shift) & 0x01) == 0)

@@ -159,7 +159,7 @@ namespace WebServer
 		clients.push_back(new WebClient(++lastClientID, connection, *this, manager));
 
 		// clean up unused clients
-		for(auto iterator = clients.begin(); iterator != clients.end();)
+		for (auto iterator = clients.begin(); iterator != clients.end();)
 		{
 			WebClient* client = *iterator;
 			if (client->IsTerminated())

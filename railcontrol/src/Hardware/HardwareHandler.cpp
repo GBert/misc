@@ -401,9 +401,9 @@ namespace Hardware
 		}
 
 		const std::map<std::string,Hardware::LocoCacheEntry>& database = instance->GetLocoDatabase();
-		for (auto entry : database)
+		for (auto& entry : database)
 		{
-			Hardware::LocoCacheEntry& loco = entry.second;
+			const Hardware::LocoCacheEntry& loco = entry.second;
 			if (loco.GetLocoID() != LocoNone)
 			{
 				continue;
@@ -421,9 +421,9 @@ namespace Hardware
 		}
 
 		const std::map<std::string,Hardware::LocoCacheEntry>& database = instance->GetLocoDatabase();
-		for (auto entry : database)
+		for (auto& entry : database)
 		{
-			Hardware::LocoCacheEntry& loco = entry.second;
+			const Hardware::LocoCacheEntry& loco = entry.second;
 			if (loco.GetLocoID() != LocoNone)
 			{
 				continue;
@@ -442,9 +442,9 @@ namespace Hardware
 		}
 
 		const std::map<std::string,Hardware::LocoCacheEntry>& database = instance->GetLocoDatabase();
-		for (auto entry : database)
+		for (auto& entry : database)
 		{
-			Hardware::LocoCacheEntry& loco = entry.second;
+			const Hardware::LocoCacheEntry& loco = entry.second;
 			out[loco.GetName()] = loco;
 		}
 		return out;

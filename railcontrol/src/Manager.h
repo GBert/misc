@@ -612,7 +612,7 @@ class Manager
 		template<class ID, class T>
 		bool CheckObjectName(std::map<ID,T*>& objects, const std::string& name)
 		{
-			for (auto object : objects)
+			for (auto& object : objects)
 			{
 				if (object.second->GetName().compare(name) == 0)
 				{

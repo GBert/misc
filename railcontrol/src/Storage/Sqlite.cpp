@@ -164,7 +164,7 @@ namespace Storage
 
 		unsigned int removeBackups = fileNames.size() - keepBackups;
 		++removeBackups; // at shutdown we create another backupfile
-		for (auto fileName : fileNames)
+		for (auto& fileName : fileNames)
 		{
 			if (removeBackups == 0)
 			{
