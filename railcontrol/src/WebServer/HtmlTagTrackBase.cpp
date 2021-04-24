@@ -97,64 +97,63 @@ namespace WebServer
 		switch (track->GetTrackType())
 		{
 			case DataModel::TrackTypeTurn:
-				image = "<polygon class=\"track\" points=\"0,22 0,14 22,36 14,36\"/>";
+				image = "<polygon class=\"track\" points=\"0,21 0,15 21,36 15,36\"/>";
 				break;
 
 			case DataModel::TrackTypeEnd:
-				image = "<polygon class=\"track\" points=\"14,5 22,5 22," + layoutHeight + " 14," + layoutHeight + "\"/>";
-				image += "<polygon class=\"track\" points=\"4,10 4,5 32,5 32,10\"/>";
+				image = "<polygon class=\"track\" points=\"15,5 21,5 21," + layoutHeight + " 15," + layoutHeight + "\"/>"
+					"<polygon class=\"track\" points=\"4,10 4,5 32,5 32,10\"/>";
 				break;
 
 			case DataModel::TrackTypeBridge:
 			{
 				const string l1 = to_string(EdgeLength * trackHeight - 5);
 				const string l2 = to_string(EdgeLength * trackHeight - 3);
-				image = "<polygon class=\"track\" points=\"14,0 22,0 22," + layoutHeight + " 14," + layoutHeight + "\"/>";
-				image += "<polygon class=\"track\" points=\"10,3 12,5 12," + l1 + " 10," + l2 + "\"/>";
-				image += "<polygon class=\"track\" points=\"26,3 24,5 24," + l1 + " 26," + l2 + "\"/>";
+				image = "<polygon class=\"track\" points=\"15,0 21,0 21," + layoutHeight + " 15," + layoutHeight + "\"/>"
+					"<polygon class=\"track\" points=\"10,3 12,5 12," + l1 + " 10," + l2 + "\"/>"
+					"<polygon class=\"track\" points=\"26,3 24,5 24," + l1 + " 26," + l2 + "\"/>";
 				break;
 			}
 
 			case DataModel::TrackTypeTunnel:
-				image = "<polygon class=\"track\" points=\"14,0 22,0 22,12 14,12\"/>";
-				image += "<polygon class=\"track\" points=\"5,1 10,1 10,10 12,12 24,12 26,10 26,1 31,1 31,3 28,3 28,11 25,14 11,14 8,11 8,3 5,3 \"/>";
+				image = "<polygon class=\"track\" points=\"15,0 21,0 21,12 15,12\"/>"
+					"<polygon class=\"track\" points=\"5,1 10,1 10,10 12,12 24,12 26,10 26,1 31,1 31,3 28,3 28,11 25,14 11,14 8,11 8,3 5,3 \"/>";
 				#include "Fallthrough.h"
 				// no break
 
 			case DataModel::TrackTypeTunnelEnd:
 			{
-				const string l0 = to_string(EdgeLength * trackHeight - 14);
-				const string l1 = to_string(EdgeLength * trackHeight - 12);
-				const string l2 = to_string(EdgeLength * trackHeight - 11);
-				const string l3 = to_string(EdgeLength * trackHeight - 10);
-				const string l4 = to_string(EdgeLength * trackHeight - 8);
-				const string l5 = to_string(EdgeLength * trackHeight - 3);
-				const string l6 = to_string(EdgeLength * trackHeight - 1);
-				image += "<polygon class=\"track\" points=\"14," + l1 + " 22," + l1 + " 22," + layoutHeight + " 14," + layoutHeight + "\"/>";
-				image += "<polygon class=\"track\" points=\"5," + l6 + " 10," + l6 + " 10," + l4 + " 12," + l1 + " 24," + l1 + " 26," + l4 + " 26," + l6 + " 31," + l6 + " 31," + l5 + " 28," + l5 + " 28," + l3 + " 25," + l0 + " 11," + l0 + " 8," + l3 + " 8," + l5 + " 5," + l5 + "\"/>";
+				const string l14 = to_string(EdgeLength * trackHeight - 14);
+				const string l12 = to_string(EdgeLength * trackHeight - 12);
+				const string l11 = to_string(EdgeLength * trackHeight - 11);
+				const string l10 = to_string(EdgeLength * trackHeight - 10);
+				const string l3 = to_string(EdgeLength * trackHeight - 3);
+				const string l1 = to_string(EdgeLength * trackHeight - 1);
+				image += "<polygon class=\"track\" points=\"15," + l12 + " 21," + l12 + " 21," + layoutHeight + " 15," + layoutHeight + "\"/>"
+					"<polygon class=\"track\" points=\"5," + l1 + " 10," + l1 + " 10," + l10 + " 12," + l12 + " 24," + l12 + " 26," + l10 + " 26," + l1 + " 31," + l1 + " 31," + l3 + " 28," + l3 + " 28," + l11 + " 25," + l14 + " 11," + l14 + " 8," + l11 + " 8," + l3 + " 5," + l3 + "\"/>";
 				break;
 			}
 
 			case DataModel::TrackTypeLink:
-				image = "<polygon class=\"track\" points=\"14,22 22,22 22," + layoutHeight + " 14," + layoutHeight + "\"/>";
-				image += "<polygon class=\"track\" points=\"18,1 4,22 32,22\"/>";
+				image = "<polygon class=\"track\" points=\"15,22 21,22 21," + layoutHeight + " 15," + layoutHeight + "\"/>"
+					"<polygon class=\"track\" points=\"18,1 6,22 30,22\"/>";
 				break;
 
 			case DataModel::TrackTypeCrossingLeft:
-				image = "<polygon class=\"track\" points=\"14,0 22,0 22,36 36,50, 36,58 22,44 22,72 14,72 14,36 0,22 0,14 14,28\"/>";
+				image = "<polygon class=\"track\" points=\"15,0 21,0 21,36 36,51 36,57 21,42 21,72 15,72 15,36 0,21 0,15 15,30\"/>";
 				break;
 
 			case DataModel::TrackTypeCrossingRight:
-				image = "<polygon class=\"track\" points=\"14,0 22,0 22,28 36,14, 36,22 22,36 22,72 14,72 14,44 0,58 0,50 14,36\"/>";
+				image = "<polygon class=\"track\" points=\"15,0 21,0 21,30 36,15 36,21 21,36 21,72 15,72 15,42 0,57 0,51 15,36\"/>";
 				break;
 
 			case DataModel::TrackTypeCrossingSymetric:
-				image = "<polygon class=\"track\" points=\"36,14 36,22 22,36 36,50, 36,58 18,40 0,58 0,50 14,36 0,22 0,14 18,32\"/>";
+				image = "<polygon class=\"track\" points=\"36,15 36,21 21,36 36,51 36,57 18,39 0,57 0,51 15,36 0,21 0,15 18,33\"/>";
 				break;
 
 			case DataModel::TrackTypeStraight:
 			default:
-				image = "<polygon class=\"track\" points=\"14,0 22,0 22," + layoutHeight + " 14," + layoutHeight + "\"/>";
+				image = "<polygon class=\"track\" points=\"15,0 21,0 21," + layoutHeight + " 15," + layoutHeight + "\"/>";
 				if (objectType != ObjectTypeTrack)
 				{
 					break;

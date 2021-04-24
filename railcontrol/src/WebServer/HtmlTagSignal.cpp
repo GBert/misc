@@ -118,9 +118,10 @@ namespace WebServer
 		switch (signal->GetType())
 		{
 			case DataModel::SignalTypeDeCombined:
-				image += "<polygon points=\"1,1 13,1 13,30 1,30\" fill=\"black\"/>"
-					"<polyline points=\"7,30 7,34\" style=\"stroke:black;stroke-width:2\"/>"
-					"<polyline points=\"4,34 10,34\" style=\"stroke:black;stroke-width:2\"/>"
+				image += "<polygon points=\"0,0 14,0 14,31 0,31\" fill=\"white\"/>"
+					"<polygon points=\"1,1 13,1 13,30 1,30\" fill=\"black\"/>"
+					"<polyline points=\"7,31 7,34\" style=\"stroke:gray;stroke-width:2\"/>"
+					"<polyline points=\"4,34 10,34\" style=\"stroke:gray;stroke-width:2\"/>"
 					"<circle class=\"stop\" cx=\"7\" cy=\"10\" r=\"2.5\" fill=\"red\" opacity=\"0\"/>"
 					"<circle class=\"clear\" cx=\"5\" cy=\"15\" r=\"2.5\" fill=\"lightgreen\" opacity=\"0\"/>"
 					"<circle class=\"aspect2\" cx=\"9\" cy=\"15\" r=\"2.5\" fill=\"orange\" opacity=\"0\"/>";
@@ -128,8 +129,8 @@ namespace WebServer
 
 			case DataModel::SignalTypeChLDistant:
 				image += "<polygon points=\"0,13.5 2.5,11 11.5,11 14,13.5 14,25.5 11.5,28 2.5,28 0,25.5\" fill=\"black\"/>"
-					"<polyline points=\"7,30 7,34\" style=\"stroke:black;stroke-width:2\"/>"
-					"<polyline points=\"4,34 10,34\" style=\"stroke:black;stroke-width:2\"/>"
+					"<polyline points=\"7,31 7,34\" style=\"stroke:gray;stroke-width:2\"/>"
+					"<polyline points=\"4,34 10,34\" style=\"stroke:gray;stroke-width:2\"/>"
 					"<circle class=\"stop aspect2 aspect3 aspect6\" cx=\"3.5\" cy=\"14.5\" r=\"2.5\" fill=\"orange\" opacity=\"0\"/>"
 					"<circle class=\"stop\" cx=\"10.5\" cy=\"14.5\" r=\"2.5\" fill=\"orange\" opacity=\"0\"/>"
 					"<circle class=\"clear aspect3 aspect5\" cx=\"3.5\" cy=\"24.5\" r=\"2.5\" fill=\"lightgreen\" opacity=\"0\"/>"
@@ -138,9 +139,10 @@ namespace WebServer
 				break;
 
 			case DataModel::SignalTypeChLMain:
-				image += "<polygon points=\"3,3.5 5.5,1 8.5,1 11,3.5 11,27.5 8.5,30 5.5,30 3,27.5\" fill=\"black\"/>"
-					"<polyline points=\"7,30 7,34\" style=\"stroke:black;stroke-width:2\"/>"
-					"<polyline points=\"4,34 10,34\" style=\"stroke:black;stroke-width:2\"/>"
+				image += "<polygon points=\"2,2.5 4.5,0 9.5,0 12,2.5 12,28.5 9.5,31 4.5,31 2,28.5\" fill=\"white\"/>"
+					"<polygon points=\"3,3.5 5.5,1 8.5,1 11,3.5 11,27.5 8.5,30 5.5,30 3,27.5\" fill=\"black\"/>"
+					"<polyline points=\"7,31 7,34\" style=\"stroke:gray;stroke-width:2\"/>"
+					"<polyline points=\"4,34 10,34\" style=\"stroke:gray;stroke-width:2\"/>"
 					"<circle class=\"clear aspect2 aspect3 aspect5\" cx=\"7\" cy=\"4.5\" r=\"2.5\" fill=\"lightgreen\" opacity=\"0\"/>"
 					"<circle class=\"stop\" cx=\"7\" cy=\"10\" r=\"2.5\" fill=\"red\" opacity=\"0\"/>"
 					"<circle class=\"aspect6\" cx=\"7\" cy=\"10\" r=\"2.5\" fill=\"orange\" opacity=\"0\"/>"
@@ -150,26 +152,29 @@ namespace WebServer
 				break;
 
 			case DataModel::SignalTypeChDwarf:
-				image += "<polygon points=\"1,14 5,14 13,22 13,26 1,26\" fill=\"black\"/>"
-					"<polyline points=\"7,26 7,30\" style=\"stroke:black;stroke-width:2\"/>"
-					"<polyline points=\"4,30 10,30\" style=\"stroke:black;stroke-width:2\"/>"
+				image += "<polygon points=\"0,13 6,13 14,21 14,27 0,27\" fill=\"white\"/>"
+					"<polygon points=\"1,14 5,14 13,22 13,26 1,26\" fill=\"black\"/>"
+					"<polyline points=\"7,27 7,30\" style=\"stroke:gray;stroke-width:2\"/>"
+					"<polyline points=\"4,30 10,30\" style=\"stroke:gray;stroke-width:2\"/>"
 					"<circle class=\"clear aspect2\" cx=\"4\" cy=\"17\" r=\"2\" fill=\"white\" opacity=\"0\"/>"
 					"<circle class=\"stop clear\" cx=\"4\" cy=\"23\" r=\"2\" fill=\"white\" opacity=\"0\"/>"
 					"<circle class=\"stop aspect2\" cx=\"10\" cy=\"23\" r=\"2\" fill=\"white\" opacity=\"0\"/>";
 				break;
 
 			case DataModel::SignalTypeSimpleRight:
-				image += "<polygon points=\"23,5 27,1 31,1 35,5 35,18 31,22 27,22 23,18\" fill=\"black\"/>"
-					"<polyline points=\"29,22 29,30\" style=\"stroke:black;stroke-width:2\"/>"
-					"<polyline points=\"26,30 32,30\" style=\"stroke:black;stroke-width:2\"/>"
+				image += "<polygon points=\"22,4 26,0 32,0 36,4 36,19 32,23 26,23 22,19\" fill=\"white\"/>"
+					"<polygon points=\"23,5 27,1 31,1 35,5 35,18 31,22 27,22 23,18\" fill=\"black\"/>"
+					"<polyline points=\"29,23 29,30\" style=\"stroke:gray;stroke-width:2\"/>"
+					"<polyline points=\"26,30 32,30\" style=\"stroke:gray;stroke-width:2\"/>"
 					"<circle class=\"stop\" cx=\"29\" cy=\"7\" r=\"4\" fill=\"red\" opacity=\"0\"/>"
 					"<circle class=\"clear\" cx=\"29\" cy=\"16\" r=\"4\" fill=\"lightgreen\" opacity=\"0\"/>";
 				break;
 
 			case DataModel::SignalTypeSimpleLeft:
-				image += "<polygon points=\"1,5 5,1 9,1 13,5 13,18 9,22 5,22 1,18\" fill=\"black\"/>"
-					"<polyline points=\"7,22 7,30\" style=\"stroke:black;stroke-width:2\"/>"
-					"<polyline points=\"4,30 10,30\" style=\"stroke:black;stroke-width:2\"/>"
+				image += "<polygon points=\"0,4 4,0 10,0 14,4 14,19 10,23 4,23 0,19\" fill=\"white\"/>"
+					"<polygon points=\"1,5 5,1 9,1 13,5 13,18 9,22 5,22 1,18\" fill=\"black\"/>"
+					"<polyline points=\"7,23 7,30\" style=\"stroke:gray;stroke-width:2\"/>"
+					"<polyline points=\"4,30 10,30\" style=\"stroke:gray;stroke-width:2\"/>"
 					"<circle class=\"stop\" cx=\"7\" cy=\"7\" r=\"4\" fill=\"red\" opacity=\"0\"/>"
 					"<circle class=\"clear\" cx=\"7\" cy=\"16\" r=\"4\" fill=\"lightgreen\" opacity=\"0\"/>";
 				break;

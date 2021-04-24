@@ -1,5 +1,6 @@
 body {
-	background-color: white;
+	background-color: black;
+	color: white;
 	font-family: verdana, sans-serif;
 	font-size: 15px;
 	margin: 0px;
@@ -30,7 +31,7 @@ body {
 	position: fixed;
 	top: 90px;
 	left: 0px;
-	border: solid 1px;
+	border: solid 1px gray;
 	overflow-x: hidden;
 	overflow-y: auto;
 }
@@ -43,7 +44,7 @@ body {
 	height: 250px;
 	position: fixed;
 	left: 0px;
-	border: solid 1px;
+	border: solid 1px gray;
 	overflow-x: hidden;
 	overflow-y: hidden;
 }
@@ -127,7 +128,7 @@ body {
 .layout {
 	height: calc(100% - 204px);
 	width: calc(100% - 254px);
-	border: solid 1px;
+	border: solid 1px gray;
 	overflow: auto;
 	position: fixed;
 	right: 0px;
@@ -206,6 +207,7 @@ body {
 	white-space: nowrap;
 	visibility: hidden;
 	background-color: yellow;
+	color: black;
 	border: solid 1px black;
 	border-radius: 0px 10px 10px 10px;
 	padding: 5px;
@@ -223,13 +225,13 @@ body {
 }
 
 .accessory_on {
-	color: green;
+	color: lightgreen;
 }
 
 .switch_turnout .turnout,
 .switch_straight .straight,
 .switch_third .third {
-	fill: black;
+	fill: white;
 }
 
 .signal_stop .stop,
@@ -251,7 +253,7 @@ body {
 }
 
 .track_free .track {
-	fill: black;
+	fill: white;
 }
 
 .track_occupied .track,
@@ -262,7 +264,7 @@ body {
 
 .track_reserved .track,
 .track_reserved .loconame {
-	fill: green;
+	fill: lightgreen;
 }
 
 .track_blocked .track {
@@ -319,6 +321,7 @@ body {
 	border: solid 3px black;
 	border-radius: 10px;
 	background-color: lightgray;
+	color: black;
 	padding: 10px;
 }
 
@@ -408,10 +411,9 @@ select {
 	bottom: 0px;
 	right: 0px;
 	height: 110px;
-	border: solid 1px;
+	border: solid 1px gray;
 	overflow-x: hidden;
 	overflow-y: scroll;
-	background: white;
 }
 
 button {
@@ -470,6 +472,7 @@ button:active {
 	position: fixed;
 	display: none;
 	z-index: 1;
+	color: black;
 }
 
 .contextentries {

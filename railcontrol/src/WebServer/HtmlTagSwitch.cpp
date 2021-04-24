@@ -39,26 +39,26 @@ namespace WebServer
 		switch (type)
 		{
 			case DataModel::SwitchTypeLeft:
-				image += "<polygon points=\"14,28 22,36 14,36\" fill=\"black\" />"
-					"<polygon points=\"0,14 14,28 14,36 0,22\" fill=\"gray\" class=\"turnout\"/>"
-					"<polygon points=\"14,0 22,0 22,36 14,28\" fill=\"gray\" class=\"straight\"/>";
+				image += "<polygon points=\"15,30 21,36 15,36\" fill=\"white\" />"
+					"<polygon points=\"0,15 15,30 15,36 0,21\" fill=\"gray\" class=\"turnout\"/>"
+					"<polygon points=\"15,0 21,0 21,36 15,30\" fill=\"gray\" class=\"straight\"/>";
 				imageDiv.AddAttribute("onclick", "return onClickSwitch(" + idText + ");");
 				break;
 
 			case DataModel::SwitchTypeRight:
-				image += "<polygon points=\"22,28 22,36 14,36\" fill=\"black\" />"
-					"<polygon points=\"22,28 36,14 36,22 22,36\" fill=\"gray\" class=\"turnout\"/>"
-					"<polygon points=\"14,0 22,0 22,28 14,36\" fill=\"gray\" class=\"straight\"/>";
+				image += "<polygon points=\"21,30 21,36 15,36\" fill=\"white\" />"
+					"<polygon points=\"21,30 36,15 36,21 21,36\" fill=\"gray\" class=\"turnout\"/>"
+					"<polygon points=\"15,0 21,0 21,30 15,36\" fill=\"gray\" class=\"straight\"/>";
 				imageDiv.AddAttribute("onclick", "return onClickSwitch(" + idText + ");");
 				break;
 
 			case DataModel::SwitchTypeThreeWay:
-				image += "<polygon points=\"18,32 22,36 14,36\" fill=\"black\" />"
-					"<polygon points=\"0,14 14,28 14,36 0,22\" fill=\"gray\" class=\"turnout\"/>"
-					"<polygon points=\"14,36 14,28 18,32\" fill=\"gray\" class=\"turnout straight\"/>"
-					"<polygon points=\"14,0 22,0 22,28 18,32 14,28\" fill=\"gray\" class=\"straight\"/>"
-					"<polygon points=\"22,28 22,36 18,32\" fill=\"gray\" class=\"straight third\"/>"
-					"<polygon points=\"22,28 36,14 36,22 22,36\" fill=\"gray\" class=\"third\"/>";
+				image += "<polygon points=\"18,33 21,36 15,36\" fill=\"white\" />"
+					"<polygon points=\"0,15 15,30 15,36 0,21\" fill=\"gray\" class=\"turnout\"/>"
+					"<polygon points=\"15,36 15,30 18,33\" fill=\"gray\" class=\"turnout straight\"/>"
+					"<polygon points=\"15,0 21,0 21,30 18,33 15,30\" fill=\"gray\" class=\"straight\"/>"
+					"<polygon points=\"21,30 21,36 18,33\" fill=\"gray\" class=\"straight third\"/>"
+					"<polygon points=\"21,30 36,15 36,21 21,36\" fill=\"gray\" class=\"third\"/>";
 				AddOnClickMenuEntry(switchName);
 				AddOnClickMenuEntry(Languages::TextSwitchStateLeft, "fireRequestAndForget('/?cmd=switchstate&switch=" + idText + "&state=turnout');", "menu_turnout");
 				AddOnClickMenuEntry(Languages::TextSwitchStateStraight, "fireRequestAndForget('/?cmd=switchstate&switch=" + idText + "&state=straight');", "menu_straight");
