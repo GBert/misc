@@ -31,6 +31,9 @@ namespace WebServer
 	{
 		public:
 			HtmlTagButton() = delete;
+			HtmlTagButton(const HtmlTagButton&) = delete;
+			HtmlTagButton& operator=(const HtmlTagButton&) = delete;
+
 			HtmlTagButton(const std::string& value,
 				const std::string& command,
 				const std::string& tooltipText = "");

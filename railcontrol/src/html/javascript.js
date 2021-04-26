@@ -1,3 +1,32 @@
+function activateFullScreen()
+{
+	var element = document.documentElement;
+	if (element.requestFullscreen)
+	{
+		element.requestFullscreen();
+	}
+}
+
+function closeFullScreen()
+{
+	if (document.exitFullscreen)
+	{
+		document.exitFullscreen();
+	}
+}
+
+function fullScreen()
+{
+	if (document.fullscreen)
+	{
+		closeFullScreen();
+	}
+	else
+	{
+		activateFullScreen();
+	}
+}
+
 function onChangeLocoFunctionType(nr)
 {
 	var locoFunctionType = document.getElementById('s_f' + nr + '_type');

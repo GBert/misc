@@ -135,6 +135,8 @@ WebServer/HtmlTagButton.h
 WebServer/HtmlTagButtonCancel.h
 WebServer/HtmlTagButtonCommand.cpp
 WebServer/HtmlTagButtonCommand.h
+WebServer/HtmlTagButtonCommandFullScreen.cpp
+WebServer/HtmlTagButtonCommandFullScreen.h
 WebServer/HtmlTagButtonCommandPressRelease.cpp
 WebServer/HtmlTagButtonCommandPressRelease.h
 WebServer/HtmlTagButtonCommandToggle.cpp

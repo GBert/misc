@@ -406,6 +406,12 @@ select {
 	width: 250px;
 }
 
+select,
+option {
+	background-color: #555;
+	color: white;
+}
+
 .status {
 	position: fixed;
 	bottom: 0px;
@@ -419,7 +425,7 @@ select {
 button {
 	height: 45px;
 	width: 45px;
-	background-color: lightgray;
+	background-color: #aaa;
 	border-radius: 5px;
 	margin: 1px;
 	display: inline-block;
@@ -429,7 +435,7 @@ button {
 }
 
 button:active {
-	background-color: darkgray;
+	background-color: #ccc;
 	transform: translateY(1px);
 }
 
@@ -444,11 +450,11 @@ button:active {
 }
 
 .button_on {
-	background-color: darkgray;
+	background-color: #ddd;
 }
 
 .button_off {
-	background-color: lightgray;
+	background-color: #aaa;
 }
 
 .button_booster.button_on {
@@ -461,7 +467,7 @@ button:active {
 
 .button_orientation.button_on,
 .button_orientation.button_off {
-	background-color: lightgray;
+	background-color: #aaa;
 }
 
 .slider {

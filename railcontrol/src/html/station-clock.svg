@@ -209,14 +209,14 @@
     </g>
 
     <!-- hour hand -->
-    <g id="hourHand" style="fill:#fff">
+    <g id="hourHand" style="fill:#eee">
       <g id="hourHandSwiss">
         <polygon points="95,33 105,33 106,125 94,125" style="stroke:none"/>
       </g>
     </g>
 
     <!-- minute hand -->
-    <g id="minuteHand" style="fill:#fff">
+    <g id="minuteHand" style="fill:#eee">
       <g id="minuteHandSwiss">
         <polygon points="96,5 104,5 105,125 95,125" style="stroke:none"/>
       </g>
