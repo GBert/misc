@@ -1,11 +1,12 @@
 const int revisionnr = 
-1557
+1558
 ;
 const char* commithash = 
-"57d44a154c93948172f2cc46f97f018f384b033e";
+"a01e016e8f6f50af68b5ab5e273453f9ff99638b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1558 2021-04-27 07:58:07 +0200 carpanel: sorting fix for location column\n" \
 "1557 2021-04-23 12:03:29 +0200 stage: set cleanstamp on enter\n" \
 "1556 2021-04-22 21:51:44 +0200 mbus: revert power by product\n" \
 "1555 2021-04-22 15:17:08 +0200 mbus: global power filter correction\n" \
