@@ -1,11 +1,12 @@
 const int revisionnr = 
-1558
+1559
 ;
 const char* commithash = 
-"a01e016e8f6f50af68b5ab5e273453f9ff99638b";
+"b2794741626260fcb34b3f420a34f5428de45024";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1559 2021-04-28 07:49:37 +0200 route: shunting permission added\n" \
 "1558 2021-04-27 07:58:07 +0200 carpanel: sorting fix for location column\n" \
 "1557 2021-04-23 12:03:29 +0200 stage: set cleanstamp on enter\n" \
 "1556 2021-04-22 21:51:44 +0200 mbus: revert power by product\n" \
