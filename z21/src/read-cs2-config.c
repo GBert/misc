@@ -247,7 +247,6 @@ int add_magnet(struct magnet_data_t *magnet) {
 	    }
 	    strcpy(m->name, magnet->name);
 	}
-
 	m->major = magnet->major;
 	m->minor = magnet->minor;
 	m->id = magnet->id;
@@ -1274,7 +1273,7 @@ int read_magnet_data(char *config_file, int config_type) {
 		if (magnet_complete) {
 		    add_magnet(magnet);
 		    memset(magnet, 0, sizeof(struct magnet_data_t));
-		    check_free(name);
+		    check_free(magnet->name);
 		} else {
 		    magnet_complete = 1;
 		}
