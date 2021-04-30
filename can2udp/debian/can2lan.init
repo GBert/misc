@@ -15,7 +15,7 @@
 
 PATH=/bin:/usr/bin:/sbin:/usr/sbin
 DAEMON=/usr/sbin/can2lan
-OPTIONS="-c /var/www/html -i can0 -b eth0"
+OPTIONS="-c /var/www/html/config -i can0 -b eth0"
 NAME=can2lan
 DESC="M*rklin CAN to LAN gateway"
 test -x $DAEMON || exit 0
