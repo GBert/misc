@@ -903,6 +903,7 @@ int read_loco_data(char *config_file, int config_type) {
 	    l1_token_n = get_char_index(l1_token, line);
 	    switch (l1_token_n) {
 	    case L1_FCT:
+	    case L1_FCT2:
 		mfx_data = -1;
 		function++;
 		break;
@@ -1065,6 +1066,13 @@ int read_loco_data(char *config_file, int config_type) {
 		    debug_print(" loco function %2d type %3d\n", function, temp);
 		}
 		break;
+	    case L2_TYPE2:
+		if (function >= 0) {
+		    temp = strtoul(&line[L2_TYPE2_LENGTH], NULL, 10);
+		    loco->function[function].type = temp;
+		    debug_print(" loco function %2d type %3d\n", function, temp);
+		}
+		break;
 	    case L2_DURATION:
 		if (function >= 0) {
 		    temp = strtoul(&line[L2_DURATION_LENGTH], NULL, 10);
@@ -1072,9 +1080,23 @@ int read_loco_data(char *config_file, int config_type) {
 		    debug_print(" loco function %2d duration %3d\n", function, temp);
 		}
 		break;
+	    case L2_DURATION2:
+		if (function >= 0) {
+		    temp = strtoul(&line[L2_DURATION2_LENGTH], NULL, 10);
+		    loco->function[function].duration = temp;
+		    debug_print(" loco function %2d duration %3d\n", function, temp);
+		}
+		break;
 	    case L2_VALUE:
 		if (function >= 0) {
 		    temp = strtoul(&line[L2_VALUE_LENGTH], NULL, 10);
+		    loco->function[function].value = temp;
+		    debug_print(" loco function %2d value %d\n", function, temp);
+		}
+		break;
+	    case L2_VALUE2:
+		if (function >= 0) {
+		    temp = strtoul(&line[L2_VALUE2_LENGTH], NULL, 10);
 		    loco->function[function].value = temp;
 		    debug_print(" loco function %2d value %d\n", function, temp);
 		}
