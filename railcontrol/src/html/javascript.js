@@ -1155,7 +1155,8 @@ function loadPopup(url)
 
 function loadLocoSelector()
 {
-	var loco = document.getElementById('s_loco').value;
+	var selector = 1;
+	var locoValue = document.getElementById('s_loco_' + selector).value;
 	var url = '/?cmd=locoselector';
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
@@ -1163,21 +1164,21 @@ function loadLocoSelector()
 		{
 			return;
 		}
-		var element = document.getElementById('loco_selector');
+		var element = document.getElementById('loco_selector_' + selector);
 		element.innerHTML = xmlHttp.responseText;
-		var selector = document.getElementById('s_loco');
-		if (selectHasValue('s_loco', loco))
+		var selectorElement = document.getElementById('s_loco_' + selector);
+		if (selectHasValue('s_loco_' + selector, locoValue))
 		{
-			selector.value = loco;
-			loadLoco();
+			selectorElement.value = locoValue;
+			loadLoco(selector);
 			return;
 		}
 		for (var i = 1; i < 255; ++i)
 		{
-			if (selectHasValue('s_loco', i))
+			if (selectHasValue('s_loco_' + selector, i))
 			{
-				selector.value = i;
-				loadLoco();
+				selectorElement.value = i;
+				loadLoco(selector);
 				return;
 			}
 		}
@@ -1318,14 +1319,14 @@ function hideElement(name)
 	element.style.display = 'none';
 }
 
-function loadLoco()
+function loadLoco(selector)
 {
-	var loco = document.getElementById('s_loco');
+	var loco = document.getElementById('s_loco_' + selector);
 	if (!loco)
 	{
 		return;
 	}
-	requestUpdateItem('loco', '/?cmd=loco&loco=' + loco.value, updateTitle);
+	requestUpdateItem('loco_' + selector, '/?cmd=loco&loco=' + loco.value, updateTitle);
 }
 
 function loadLayout()
@@ -1368,7 +1369,7 @@ function startUp()
 			return true;
 		}, true);
 	}
-	loadLoco();
+	loadLoco(1);
 	loadLayout();
 	sendTimestamp();
 }

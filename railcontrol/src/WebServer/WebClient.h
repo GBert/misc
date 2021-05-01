@@ -176,7 +176,7 @@ namespace WebServer
 			void PrintMainHTML();
 			void DeliverFile(const std::string& file);
 			void DeliverFileInternal(FILE* f, const char* realFile, const std::string& file);
-			HtmlTag HtmlTagLocoSelector() const;
+			HtmlTag HtmlTagLocoSelector(const unsigned int selector) const;
 			HtmlTag HtmlTagLayerSelector() const;
 			static HtmlTag HtmlTagControlArgument(const unsigned char argNr, const ArgumentType type, const std::string& value);
 
@@ -315,7 +315,7 @@ namespace WebServer
 			void HandleFeedbackDelete(const std::map<std::string,std::string>& arguments);
 			void HandleFeedbackGet(const std::map<std::string,std::string>& arguments);
 			void HandleFeedbacksOfTrack(const std::map<std::string,std::string>& arguments);
-			void HandleLocoSelector();
+			void HandleLocoSelector(const std::map<std::string,std::string>& arguments);
 			void HandleLayerSelector();
 			void HandleRelationAdd(const std::map<std::string,std::string>& arguments);
 			void HandleFeedbackAdd(const std::map<std::string,std::string>& arguments);

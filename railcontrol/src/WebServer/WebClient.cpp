@@ -506,7 +506,7 @@ namespace WebServer
 			}
 			else if (arguments["cmd"].compare("locoselector") == 0)
 			{
-				HandleLocoSelector();
+				HandleLocoSelector(arguments);
 			}
 			else if (arguments["cmd"].compare("layerselector") == 0)
 			{
@@ -3528,9 +3528,10 @@ namespace WebServer
 		ReplyHtmlWithHeader(HtmlTagFeedback(feedback));
 	}
 
-	void WebClient::HandleLocoSelector()
+	void WebClient::HandleLocoSelector(const map<string,string>& arguments)
 	{
-		ReplyHtmlWithHeader(HtmlTagLocoSelector());
+		const unsigned int selector = Utils::Utils::GetIntegerMapEntry(arguments, "selector", 1);
+		ReplyHtmlWithHeader(HtmlTagLocoSelector(selector));
 	}
 
 	void WebClient::HandleLayerSelector()
@@ -3930,14 +3931,15 @@ namespace WebServer
 		}
 	}
 
-	HtmlTag WebClient::HtmlTagLocoSelector() const
+	HtmlTag WebClient::HtmlTagLocoSelector(const unsigned int selector) const
 	{
 		map<string,LocoID> options = manager.LocoIdsByName();
 		if (options.size() != 1)
 		{
 			options["-"] = LocoNone;
 		}
-		return HtmlTagSelect("loco", options).AddAttribute("onchange", "loadLoco();");
+		const string selectorText = to_string(selector);
+		return HtmlTagSelect("loco_" + selectorText, options).AddAttribute("onchange", "loadLoco(" + selectorText + ");");
 	}
 
 	void WebClient::HandleLoco(const map<string, string>& arguments)
@@ -4053,9 +4055,9 @@ namespace WebServer
 		menu.AddChildTag(menuAdd);
 		body.AddChildTag(menu);
 
-		body.AddChildTag(HtmlTag("div").AddClass("loco_selector").AddId("loco_selector").AddChildTag(HtmlTagLocoSelector()));
+		body.AddChildTag(HtmlTag("div").AddClass("loco_selector").AddId("loco_selector_1").AddChildTag(HtmlTagLocoSelector(1)));
 		body.AddChildTag(HtmlTag("div").AddClass("layer_selector").AddId("layer_selector").AddChildTag(HtmlTagLayerSelector()));
-		body.AddChildTag(HtmlTag("div").AddClass("loco").AddId("loco"));
+		body.AddChildTag(HtmlTag("div").AddClass("loco").AddId("loco_1"));
 		body.AddChildTag(HtmlTag("div").AddClass("clock").AddId("clock").AddContent("<object data=\"/station-clock.svg\" class=\"clock2\" type=\"image/svg+xml\"><param name=\"secondHand\" value=\"din 41071.1\"/><param name=\"minuteHandBehavior\" value=\"sweeping\"/><param name=\"secondHandBehavior\" value=\"steeping\"/><param name=\"axisCoverRadius\" value=\"0\"/><param name=\"updateInterval\" value=\"250\"/></object>"));
 		body.AddChildTag(HtmlTag("div").AddClass("layout").AddId("layout").AddAttribute("oncontextmenu", "return loadLayoutContext(event);"));
 		body.AddChildTag(HtmlTag("div").AddClass("popup").AddId("popup"));

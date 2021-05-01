@@ -310,6 +310,10 @@ body {
 	display: none;
 }
 
+.trackname {
+	fill: white;
+}
+
 .popup {
 	position: fixed;
 	display: none;
