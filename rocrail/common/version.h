@@ -1,11 +1,12 @@
 const int revisionnr = 
-1559
+1560
 ;
 const char* commithash = 
-"b2794741626260fcb34b3f420a34f5428de45024";
+"eaf0329b43d9b1b716ae90b65ed3234cf6cb8758";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1560 2021-05-02 15:53:31 +0200 locationsdlg: fix on selecting last block in list\n" \
 "1559 2021-04-28 07:49:37 +0200 route: shunting permission added\n" \
 "1558 2021-04-27 07:58:07 +0200 carpanel: sorting fix for location column\n" \
 "1557 2021-04-23 12:03:29 +0200 stage: set cleanstamp on enter\n" \
