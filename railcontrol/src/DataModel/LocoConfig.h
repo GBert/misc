@@ -71,6 +71,7 @@ namespace DataModel
 				protocol = loco.GetProtocol();
 				name = loco.GetName();
 				matchKey = loco.GetMatchKey();
+				isInUse = loco.IsInUse();
 				ConfigureFunctions(loco.GetFunctionStates());
 				return *this;
 			}

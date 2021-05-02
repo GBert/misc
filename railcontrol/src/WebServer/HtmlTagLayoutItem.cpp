@@ -29,18 +29,32 @@ namespace WebServer
 {
 	const string HtmlTagLayoutItem::EdgeLengthString = std::to_string(HtmlTagLayoutItem::EdgeLength);
 
-	HtmlTagLayoutItem::HtmlTagLayoutItem(const DataModel::LayoutItem* layout)
+	HtmlTagLayoutItem::HtmlTagLayoutItem(const DataModel::LayoutItem* layout,
+		const DataModel::LayoutItem::LayoutPosition posX,
+		const DataModel::LayoutItem::LayoutPosition posY)
 	:	layout(layout),
 		imageDiv("div"),
 		onClickMenuDiv("div"),
 		onClickMenuContentDiv("ul"),
 		contextMenuDiv("div"),
 		contextMenuContentDiv("ul"),
-		layoutPosX(layout->GetPosX() * EdgeLength),
-		layoutPosY(layout->GetPosY() * EdgeLength)
+		layoutPosX(posX * EdgeLength),
+		layoutPosY(posY * EdgeLength)
 	{
 		switch (layout->GetObjectType())
 		{
+			case ObjectTypeAccessory:
+				identifier = "a_";
+				break;
+
+			case ObjectTypeFeedback:
+				identifier = "f_";
+				break;
+
+			case ObjectTypeRoute:
+				identifier = "r_";
+				break;
+
 			case ObjectTypeTrack:
 				identifier = "t_";
 				break;
@@ -111,7 +125,7 @@ namespace WebServer
 		const string& text)
 	{
 		HtmlTag li("li");
-		li.AddClass("contextentry");
+		li.AddClass("contexttitle");
 		li.AddContent(text);
 		menu.AddChildTag(li);
 	}

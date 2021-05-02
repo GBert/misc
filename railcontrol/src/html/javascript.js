@@ -1,3 +1,21 @@
+function showMenuConfig()
+{
+	var menuConfig = document.getElementById('menu_config');
+	if (!menuConfig)
+	{
+		return;
+	}
+
+	if (menuConfig.classList.contains('menu_config'))
+	{
+		menuConfig.classList.replace('menu_config', 'menu_config_visible');
+	}
+	else
+	{
+		menuConfig.classList.replace('menu_config_visible', 'menu_config');
+	}
+}
+
 function activateFullScreen()
 {
 	var element = document.documentElement;

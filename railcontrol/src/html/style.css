@@ -7,7 +7,7 @@ body {
 }
 
 .loco_selector {
-	position: fixed;
+	position: absolute;
 	left: 0px;
 	top: 55px;
 	height: 50px;
@@ -15,7 +15,7 @@ body {
 }
 
 .layer_selector {
-	position: fixed;
+	position: absolute;
 	right: 0px;
 	top: 55px;
 	height: 50px;
@@ -28,7 +28,7 @@ body {
 }
 
 .loco {
-	position: fixed;
+	position: absolute;
 	top: 90px;
 	left: 0px;
 	border: solid 1px gray;
@@ -42,7 +42,7 @@ body {
 
 .clock {
 	height: 250px;
-	position: fixed;
+	position: absolute;
 	left: 0px;
 	border: solid 1px gray;
 	overflow-x: hidden;
@@ -54,10 +54,51 @@ body {
 	width: 250px;
 }
 
-@media (max-width: 771px) {
+@media (max-width: 649px) {
+	.menu_config,
+	.menu_config_visible,
+	.menu_add,
+	.menu_configbutton {
+		display: none;
+	}
+}
+
+@media (min-width: 650px) and (max-width: 849px) {
+	.menu_config {
+		display: none;
+	}
+
+	.menu_config_visible {
+		position: absolute;
+		top: 50px;
+		left: 0;
+		z-index: 3;
+		background-color: black;
+		display: block;
+		padding: 0 5px 5px 0;
+	}
+
+	.menu_add,
+	.menu_configbutton {
+		display: inline-block;
+	}
+}
+
+@media (min-width: 850px) {
+	.menu_add,
+	.menu_config,
+	.menu_config_visible {
+		display: inline-block;
+	}
+
+	.menu_configbutton {
+		display: none;
+	}
+}
+
+@media (max-width: 735px) {
 	.layer_selector,
-	.layout,
-	.menu_add {
+	.layout {
 		display: none;
 	}
 
@@ -90,8 +131,7 @@ body {
 
 @media (min-width: 736px) {
 	.layer_selector,
-	.layout,
-	.menu_add {
+	.layout {
 		display: inline-block;
 	}
 
@@ -130,7 +170,7 @@ body {
 	width: calc(100% - 254px);
 	border: solid 1px gray;
 	overflow: auto;
-	position: fixed;
+	position: absolute;
 	right: 0px;
 	top: 90px;
 	background-image: url("/layout_background.png");
@@ -142,7 +182,7 @@ body {
 	top: 0px;
 	right: 0px;
 	z-index: 3;
-	position: fixed;
+	position: absolute;
 	border: 0px;
 	margin: 0px;
 	text-align: right;
@@ -159,14 +199,17 @@ body {
 
 .responseinfo {
 	background-color: lightgreen;
+	color: black;
 }
 
 .responsewarning {
 	background-color: orange;
+	color: black;
 }
 
 .responseerror {
 	background-color: red;
+	color: black;
 }
 
 .menu {
@@ -175,7 +218,7 @@ body {
 	top: 0px;
 	left: 0px;
 	border: 1px;
-	position: fixed;
+	position: absolute;
 }
 
 .menu_main,
@@ -212,7 +255,7 @@ body {
 	border-radius: 0px 10px 10px 10px;
 	padding: 5px;
 	position: absolute;
-	z-index: 1;
+	z-index: 15;
 }
 
 .button:hover .tooltip,
@@ -221,11 +264,15 @@ body {
 }
 
 .accessory_off {
-	color: red;
+	stroke: white;
+	stroke-width: 2px;
+	fill: red;
 }
 
 .accessory_on {
-	color: lightgreen;
+	stroke: white;
+	stroke-width: 2px;
+	fill: lightgreen;
 }
 
 .switch_turnout .turnout,
@@ -315,13 +362,13 @@ body {
 }
 
 .popup {
-	position: fixed;
+	position: absolute;
 	display: none;
 	height: 600px;
 	width: 600px;
 	top: 20px;
 	left: 20px;
-	z-index: 2;
+	z-index: 5;
 	border: solid 3px black;
 	border-radius: 10px;
 	background-color: lightgray;
@@ -417,7 +464,7 @@ option {
 }
 
 .status {
-	position: fixed;
+	position: absolute;
 	bottom: 0px;
 	right: 0px;
 	height: 110px;
@@ -489,6 +536,11 @@ button:active {
 	list-style: none;
 	padding: 0;
 	margin: 0;
+}
+
+.contexttitle {
+	background: darkgray;
+	padding: 5px;
 }
 
 .contextentry {

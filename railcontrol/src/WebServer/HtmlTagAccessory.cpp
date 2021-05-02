@@ -31,36 +31,21 @@ namespace WebServer
 	HtmlTagAccessory::HtmlTagAccessory(const DataModel::Accessory* accessory)
 	:	HtmlTagLayoutItem(dynamic_cast<const DataModel::LayoutItem*>(accessory))
 	{
+		image += "<polygon points=\"10,10 26,10 26,26 10,26\" />";
+
 		const DataModel::AccessoryState state = accessory->GetAccessoryState();
 
-		const unsigned int layoutPosX = accessory->GetPosX() * EdgeLength;
-		const unsigned int layoutPosY = accessory->GetPosY() * EdgeLength;
-		const string& accessoryName = accessory->GetName();
-
-		HtmlTag div1("div");
 		string accessoryIdString = to_string(accessory->GetID());
-		string id("a_" + accessoryIdString);
-		div1.AddId(id);
-		div1.AddClass("layout_item");
-		div1.AddClass("accessory_item");
-		div1.AddClass(state == DataModel::AccessoryStateOn ? "accessory_on" : "accessory_off");
-		div1.AddAttribute("style", "left:" + to_string(layoutPosX) + "px;top:" + to_string(layoutPosY) + "px;");
-		div1.AddChildTag(HtmlTag("span").AddContent("&#x25A0;"));
-		div1.AddChildTag(HtmlTag("span").AddClass("tooltip").AddContent(accessoryName + " (addr=" + to_string(accessory->GetAddress()) + ")"));
-		div1.AddAttribute("onclick", "return onClickAccessory(" + accessoryIdString + ");");
-		div1.AddAttribute("oncontextmenu", "return showContextMenu(event, '" + id + "');");
-		AddChildTag(div1);
+		imageDiv.AddClass("accessory_item");
+		imageDiv.AddClass(state == DataModel::AccessoryStateOn ? "accessory_on" : "accessory_off");
+		imageDiv.AddAttribute("onclick", "return onClickAccessory(" + accessoryIdString + ");");
 
-		HtmlTag div2("div");
-		div2.AddClass("contextmenu");
-		div2.AddId(id + "_context");
-		div2.AddAttribute("style", "left:" + to_string(layoutPosX + 5) + "px;top:" + to_string(layoutPosY + 30) + "px;");
-		div2.AddChildTag(HtmlTag("ul").AddClass("contextentries")
-			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(accessoryName))
-			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(Languages::TextReleaseAccessory).AddAttribute("onClick", "fireRequestAndForget('/?cmd=accessoryrelease&accessory=" + accessoryIdString + "');"))
-			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(Languages::TextEditAccessory).AddAttribute("onClick", "loadPopup('/?cmd=accessoryedit&accessory=" + accessoryIdString + "');"))
-			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(Languages::TextDeleteAccessory).AddAttribute("onClick", "loadPopup('/?cmd=accessoryaskdelete&accessory=" + accessoryIdString + "');"))
-			);
-		AddChildTag(div2);
+		const string& accessoryName = accessory->GetName();
+		AddToolTip(accessoryName + " (addr=" + to_string(accessory->GetAddress()) + ")");
+		AddContextMenuEntry(accessoryName);
+		AddContextMenuEntry(Languages::TextReleaseAccessory, "fireRequestAndForget('/?cmd=accessoryrelease&accessory=" + accessoryIdString + "');");
+		AddContextMenuEntry(Languages::TextEditAccessory, "loadPopup('/?cmd=accessoryedit&accessory=" + accessoryIdString + "');");
+		AddContextMenuEntry(Languages::TextDeleteAccessory, "loadPopup('/?cmd=accessoryaskdelete&accessory=" + accessoryIdString + "');");
+		FinishInit();
 	}
 } // namespace WebServer

@@ -91,6 +91,7 @@ const char* Languages::languages[MaxTexts][MaxLanguages] =
 /* TextClusters */ { "Clusters", "Gruppen", "Grupos" },
 /* TextCompileDate */ { "Compile date: {0}", "Kompilierdatum: 01}", "Fetcha compilada: {0}" },
 /* TextConfigFileReceivedWithSize */ { "Configuration file with {0} bytes received", "Konfigurationsdatei mit {0} Bytes empfangen", "Archivo de configuración recibido con {0} bytes" },
+/* TextConfigMenu */ { "Configuration menu", "Konfigurationsmenu", "Navegación de configuración" },
 /* TextConfigureControlFirst */ { "Please configure a control first", "Bitte zuerst eine Zentrale konfigurieren", "Por favor configura un control antes" },
 /* TextConnectionFailed */ { "Connection to {0}:{1} failed", "Verbindung zu {0}:{1} nicht möglich", "Imposible conectar a {0}:{1}" },
 /* TextConnectionRefused */ { "Connection to {0}:{1} refused", "Verbindung zu {0}:{1} zurückgewiesen", "Falló intento de conectar a {0}:{1}" },

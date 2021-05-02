@@ -38,7 +38,14 @@ namespace WebServer
 			HtmlTagLayoutItem(const HtmlTagLayoutItem&) = delete;
 			HtmlTagLayoutItem& operator=(const HtmlTagLayoutItem&) = delete;
 
-			HtmlTagLayoutItem(const DataModel::LayoutItem* layout);
+			inline HtmlTagLayoutItem(const DataModel::LayoutItem* layout)
+			:	HtmlTagLayoutItem(layout, layout->GetPosX(), layout->GetPosY())
+			{
+			}
+
+			HtmlTagLayoutItem(const DataModel::LayoutItem* layout,
+				const DataModel::LayoutItem::LayoutPosition posX,
+				const DataModel::LayoutItem::LayoutPosition posY);
 
 			virtual ~HtmlTagLayoutItem()
 			{

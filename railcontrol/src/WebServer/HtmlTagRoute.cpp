@@ -31,34 +31,18 @@ namespace WebServer
 	HtmlTagRoute::HtmlTagRoute(const DataModel::Route* route)
 	:	HtmlTagLayoutItem(dynamic_cast<const DataModel::LayoutItem*>(route))
 	{
-		const unsigned int layoutPosX = route->GetPosX() * EdgeLength;
-		const unsigned int layoutPosY = route->GetPosY() * EdgeLength;
-		const string& routeName = route->GetName();
+		image += "<svg width=\"" + EdgeLengthString + "\" height=\"" + EdgeLengthString + "\" id=\"_img\"><polygon points=\"1,21 7,21 7,29 1,29\" fill=\"none\" stroke=\"white\"/><polygon points=\"35,7 29,7 29,15 35,15\" fill=\"none\" stroke=\"white\"/><polyline points=\"7,25 15,25 21,11 29,11\" stroke=\"white\" fill=\"none\"/></svg>";
 
-		HtmlTag div1("div");
 		string routeIdString = to_string(route->GetID());
-		string id("r_" + routeIdString);
-		div1.AddId(id);
-		div1.AddClass("layout_item");
-		div1.AddClass("route_item");
-		div1.AddAttribute("style", "left:" + to_string(layoutPosX) + "px;top:" + to_string(layoutPosY) + "px;");
-		string image = "<svg width=\"" + EdgeLengthString + "\" height=\"" + EdgeLengthString + "\" id=\"_img\"><polygon points=\"1,21 7,21 7,29 1,29\" fill=\"none\" stroke=\"white\"/><polygon points=\"35,7 29,7 29,15 35,15\" fill=\"none\" stroke=\"white\"/><polyline points=\"7,25 15,25 21,11 29,11\" stroke=\"white\" fill=\"none\"/></svg>";
-		div1.AddChildTag(HtmlTag().AddContent(image));
-		div1.AddChildTag(HtmlTag("span").AddClass("tooltip").AddContent(routeName));
-		div1.AddAttribute("onclick", "return onClickRoute(" + routeIdString + ");");
-		div1.AddAttribute("oncontextmenu", "return showContextMenu(event, '" + id + "');");
-		AddChildTag(div1);
+		imageDiv.AddClass("route_item");
+		imageDiv.AddAttribute("onclick", "return onClickRoute(" + routeIdString + ");");
 
-		HtmlTag div2("div");
-		div2.AddClass("contextmenu");
-		div2.AddId(id + "_context");
-		div2.AddAttribute("style", "left:" + to_string(layoutPosX + 5) + "px;top:" + to_string(layoutPosY + 30) + "px;");
-		div2.AddChildTag(HtmlTag("ul").AddClass("contextentries")
-			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(routeName))
-			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(Languages::TextReleaseRoute).AddAttribute("onClick", "fireRequestAndForget('/?cmd=routerelease&route=" + routeIdString + "');"))
-			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(Languages::TextEditRoute).AddAttribute("onClick", "loadPopup('/?cmd=routeedit&route=" + routeIdString + "');"))
-			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(Languages::TextDeleteRoute).AddAttribute("onClick", "loadPopup('/?cmd=routeaskdelete&route=" + routeIdString + "');"))
-			);
-		AddChildTag(div2);
+		const string& routeName = route->GetName();
+		AddToolTip(routeName);
+		AddContextMenuEntry(routeName);
+		AddContextMenuEntry(Languages::TextReleaseRoute, "fireRequestAndForget('/?cmd=routerelease&route=" + routeIdString + "');");
+		AddContextMenuEntry(Languages::TextEditRoute, "loadPopup('/?cmd=routeedit&route=" + routeIdString + "');");
+		AddContextMenuEntry(Languages::TextDeleteRoute, "loadPopup('/?cmd=routeaskdelete&route=" + routeIdString + "');");
+		FinishInit();
 	}
 } // namespace WebServer

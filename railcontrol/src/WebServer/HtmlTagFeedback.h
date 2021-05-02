@@ -39,14 +39,21 @@ namespace WebServer
 			HtmlTagFeedback(const HtmlTagFeedback&) = delete;
 			HtmlTagFeedback& operator=(const HtmlTagFeedback&) = delete;
 
-			HtmlTagFeedback(const DataModel::Feedback* feedback,
-				DataModel::LayoutItem::LayoutPosition posX,
-				DataModel::LayoutItem::LayoutPosition posY);
-
-			HtmlTagFeedback(const DataModel::Feedback* feedback)
-			:	HtmlTagFeedback(feedback, feedback->GetPosX(), feedback->GetPosY())
+			inline HtmlTagFeedback(const DataModel::Feedback* feedback, const bool onControlLayer = false)
+			:	HtmlTagFeedback(feedback,
+					onControlLayer ?
+						((feedback->GetPin() - 1) & 0x0F) + (((feedback->GetPin() - 1) & 0x0F) >> 3):
+						feedback->GetPosX(),
+					onControlLayer ?
+						(feedback->GetPin() - 1) >> 4 :
+						feedback->GetPosY())
 			{
 			}
+
+		private:
+			HtmlTagFeedback(const DataModel::Feedback* feedback,
+				const DataModel::LayoutItem::LayoutPosition posX,
+				const DataModel::LayoutItem::LayoutPosition posY);
 	};
 } // namespace WebServer
 

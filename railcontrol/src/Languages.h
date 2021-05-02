@@ -91,6 +91,7 @@ class Languages
 			TextClusters,
 			TextCompileDate,
 			TextConfigFileReceivedWithSize,
+			TextConfigMenu,
 			TextConfigureControlFirst,
 			TextConnectionFailed,
 			TextConnectionRefused,

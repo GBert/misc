@@ -30,41 +30,25 @@ using std::to_string;
 namespace WebServer
 {
 	HtmlTagFeedback::HtmlTagFeedback(const DataModel::Feedback* feedback,
-		DataModel::LayoutItem::LayoutPosition posX,
-		DataModel::LayoutItem::LayoutPosition posY)
-	:	HtmlTagLayoutItem(dynamic_cast<const DataModel::LayoutItem*>(feedback))
+		const DataModel::LayoutItem::LayoutPosition posX,
+		const DataModel::LayoutItem::LayoutPosition posY)
+	:	HtmlTagLayoutItem(dynamic_cast<const DataModel::LayoutItem*>(feedback), posX, posY)
 	{
+		image += "<svg width=\"" + EdgeLengthString + "\" height=\"" + EdgeLengthString + "\" id=\"" + id + "_img\"><circle r=\"12\" cx=\"18\" cy=\"18\" stroke=\"white\" stroke-width=\"2\" class=\"feedback\"/></svg>";
+
 		const DataModel::Feedback::FeedbackState state = feedback->GetState();
 
-		const unsigned int layoutPosX = posX * EdgeLength;
-		const unsigned int layoutPosY = posY * EdgeLength;
 		const string& feedbackName = feedback->GetName();
 
-		HtmlTag div1("div");
 		string feedbackIdString = to_string(feedback->GetID());
-		string id("f_" + feedbackIdString);
-		div1.AddId(id);
-		div1.AddClass("layout_item");
-		div1.AddClass("feedback_item");
-		div1.AddClass(state == DataModel::Feedback::FeedbackStateOccupied ? "feedback_occupied" : "feedback_free");
-		div1.AddAttribute("style", "left:" + to_string(layoutPosX) + "px;top:" + to_string(layoutPosY) + "px;");
-		string image;
-		image = "<svg width=\"" + EdgeLengthString + "\" height=\"" + EdgeLengthString + "\" id=\"" + id + "_img\"><circle r=\"12\" cx=\"18\" cy=\"18\" stroke=\"white\" stroke-width=\"2\" class=\"feedback\"/></svg>";
-		div1.AddChildTag(HtmlTag().AddContent(image));
-		div1.AddChildTag(HtmlTag("span").AddClass("tooltip").AddContent(feedbackName + " (pin=" + to_string(feedback->GetPin()) + ")"));
-		div1.AddAttribute("onclick", "return onClickFeedback(" + feedbackIdString + ");");
-		div1.AddAttribute("oncontextmenu", "return showContextMenu(event, '" + id + "');");
-		AddChildTag(div1);
+		imageDiv.AddClass("feedback_item");
+		imageDiv.AddClass(state == DataModel::Feedback::FeedbackStateOccupied ? "feedback_occupied" : "feedback_free");
+		imageDiv.AddAttribute("onclick", "return onClickFeedback(" + feedbackIdString + ");");
 
-		HtmlTag div2("div");
-		div2.AddClass("contextmenu");
-		div2.AddId(id + "_context");
-		div2.AddAttribute("style", "left:" + to_string(layoutPosX + 5) + "px;top:" + to_string(layoutPosY + 30) + "px;");
-		div2.AddChildTag(HtmlTag("ul").AddClass("contextentries")
-			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(feedbackName))
-			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(Languages::TextEditFeedback).AddAttribute("onClick", "loadPopup('/?cmd=feedbackedit&feedback=" + feedbackIdString + "');"))
-			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(Languages::TextDeleteFeedback).AddAttribute("onClick", "loadPopup('/?cmd=feedbackaskdelete&feedback=" + feedbackIdString + "');"))
-			);
-		AddChildTag(div2);
+		AddToolTip(feedbackName + " (pin=" + to_string(feedback->GetPin()) + ")");
+		AddContextMenuEntry(feedbackName);
+		AddContextMenuEntry(Languages::TextEditFeedback, "loadPopup('/?cmd=feedbackedit&feedback=" + feedbackIdString + "');");
+		AddContextMenuEntry(Languages::TextDeleteFeedback, "loadPopup('/?cmd=feedbackaskdelete&feedback=" + feedbackIdString + "');");
+		FinishInit();
 	}
 } // namespace WebServer

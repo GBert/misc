@@ -38,15 +38,25 @@ namespace WebServer
 				const std::string& command,
 				const std::string& tooltipText = "");
 
-			HtmlTagButton(const Languages::TextSelector value,
+			inline HtmlTagButton(const Languages::TextSelector value,
 				const std::string& command,
 				const std::string& tooltipText = "")
 			:	HtmlTagButton(Languages::GetText(value), command, tooltipText)
-			{}
+			{
+			}
 
-			virtual ~HtmlTagButton() {}
+			inline HtmlTagButton(const std::string& value,
+				const std::string& command,
+				const Languages::TextSelector tooltipText)
+			:	HtmlTagButton(value, command, Languages::GetText(tooltipText))
+			{
+			}
 
-			virtual HtmlTag AddAttribute(const std::string& name, const std::string& value) override
+			virtual ~HtmlTagButton()
+			{
+			}
+
+			virtual HtmlTag AddAttribute(const std::string& name, const std::string& value = "") override
 			{
 				childTags[0].AddAttribute(name, value);
 				return *this;

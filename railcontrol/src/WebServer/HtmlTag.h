@@ -34,6 +34,8 @@ namespace WebServer
 	class HtmlTag
 	{
 		public:
+			HtmlTag& operator=(const HtmlTag&) = delete;
+
 			inline HtmlTag()
 			{
 			}
@@ -42,8 +44,6 @@ namespace WebServer
 			:	name(name)
 			{
 			}
-
-			HtmlTag& operator=(const HtmlTag&) = delete;
 
 			inline virtual ~HtmlTag()
 			{
