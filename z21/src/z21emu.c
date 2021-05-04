@@ -804,6 +804,7 @@ int main(int argc, char **argv) {
     socklen_t slen = sizeof(src_addr);
 
     memset(&z21_data, 0, sizeof(z21_data));
+    memset(&ifr, 0, sizeof(ifr));
 
     while ((opt = getopt(argc, argv, "c:p:s:b:g:i:xhf?")) != -1) {
 	switch (opt) {
