@@ -1,11 +1,14 @@
 const int revisionnr = 
-1560
+1563
 ;
 const char* commithash = 
-"eaf0329b43d9b1b716ae90b65ed3234cf6cb8758";
+"9634b3c68f3b2d7e453d059d2e33666b966549e4";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1563 2021-05-04 10:50:49 +0200 signal: regard linear signal type on testing state\n" \
+"1562 2021-05-03 08:29:19 +0200 trainpanel: use freeze/autoresizecolumns/thaw on updates\n" \
+"1561 2021-05-03 07:47:56 +0200 output: fix for delayed off\n" \
 "1560 2021-05-02 15:53:31 +0200 locationsdlg: fix on selecting last block in list\n" \
 "1559 2021-04-28 07:49:37 +0200 route: shunting permission added\n" \
 "1558 2021-04-27 07:58:07 +0200 carpanel: sorting fix for location column\n" \
