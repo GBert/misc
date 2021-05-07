@@ -1,11 +1,12 @@
 const int revisionnr = 
-1564
+1565
 ;
 const char* commithash = 
-"40d2ddb99bd18fdd1bdc09727476794dd2f84462";
+"37a9dd2417c2334d55efaf70a1563dcfa34f8941";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1565 2021-05-05 15:31:58 +0200 seltab: disable actdelay\n" \
 "1564 2021-05-05 09:05:06 +0200 trainimage: D&D init fix\n" \
 "1563 2021-05-04 10:50:49 +0200 signal: regard linear signal type on testing state\n" \
 "1562 2021-05-03 08:29:19 +0200 trainpanel: use freeze/autoresizecolumns/thaw on updates\n" \
