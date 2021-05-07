@@ -32,7 +32,11 @@ namespace Network
 	class Serial
 	{
 		public:
-			Serial(Logger::Logger* logger,
+			Serial() = delete;
+			Serial(const Serial&) = delete;
+			Serial& operator=(const Serial&) = delete;
+
+			inline Serial(Logger::Logger* logger,
 				const std::string& tty,
 				const unsigned int dataSpeed, // from termio (ex. B9600)
 				const unsigned char dataBits,
@@ -55,23 +59,33 @@ namespace Network
 				Close();
 			}
 
-			void ReInit() { Close(); Init(); }
+			inline void ReInit()
+			{
+				Close();
+				Init();
+			}
 
-			bool IsConnected() const { return fileHandle != -1; }
+			inline bool IsConnected() const
+			{
+				return fileHandle != -1;
+			}
 
-			void ClearBuffers() { tcflush(fileHandle, TCIOFLUSH); }
+			inline void ClearBuffers()
+			{
+				tcflush(fileHandle, TCIOFLUSH);
+			}
 
-			ssize_t Send(const std::string& data)
+			inline ssize_t Send(const std::string& data)
 			{
 				return Send(reinterpret_cast<const unsigned char*>(data.c_str()), data.length());
 			}
 
-			ssize_t Send(const unsigned char data)
+			inline ssize_t Send(const unsigned char data)
 			{
 				return Send(&data, 1);
 			}
 
-			ssize_t Send(const unsigned char* data, const size_t size)
+			inline ssize_t Send(const unsigned char* data, const size_t size)
 			{
 				if (IsConnected() == false)
 				{

@@ -204,6 +204,7 @@ class Languages
 			TextHintCs2Udp,
 			TextHintEcos,
 			TextHintHsi88,
+			TextHintIntellibox,
 			TextHintM6051,
 			TextHintOpenDcc,
 			TextHintRM485,

@@ -1019,6 +1019,7 @@ namespace WebServer
 		hardwareList["OpenDCC Z1"] = HardwareTypeOpenDcc;
 		hardwareList["RM485"] = HardwareTypeRM485;
 		hardwareList["Roco Z21"] = HardwareTypeZ21;
+		hardwareList["Uhlenbrock Intellibox (beta)"] = HardwareTypeIntellibox;
 		hardwareList["Virtual Command Station"] = HardwareTypeVirtual;
 		return hardwareList;
 	}

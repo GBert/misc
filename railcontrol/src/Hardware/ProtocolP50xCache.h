@@ -22,14 +22,17 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace Hardware
 {
-	class OpenDccCacheEntry
+	class ProtocolP50xCacheEntry
 	{
 		public:
-			OpenDccCacheEntry()
+			ProtocolP50xCacheEntry& operator=(const ProtocolP50xCacheEntry&) = delete;
+
+			inline ProtocolP50xCacheEntry()
 			:	speed(0),
 			 	orientationF0(0),
 			 	functions(0)
-			{}
+			{
+			}
 
 			unsigned char speed;
 			unsigned char orientationF0;
@@ -40,15 +43,19 @@ namespace Hardware
 			};
 	};
 
-	class OpenDccCache
+	class ProtocolP50xCache
 	{
 		public:
-			OpenDccCache() {};
-			~OpenDccCache() {};
+			ProtocolP50xCache(const ProtocolP50xCache&) = delete;
+			ProtocolP50xCache& operator=(const ProtocolP50xCache&) = delete;
+
+			ProtocolP50xCache()
+			{
+			}
 
 			void SetSpeed(const Address address, const Speed speed)
 			{
-				OpenDccCacheEntry entry = GetData(address);
+				ProtocolP50xCacheEntry entry = GetData(address);
 
 				if (speed == 0)
 				{
@@ -63,17 +70,17 @@ namespace Hardware
 					entry.speed = (speed >> 3) + 2;
 				}
 
-				cache[address] = entry;
+				cache.emplace(address, entry);
 			}
 
 			void SetOrientation(const Address address, const Orientation orientation)
 			{
-				OpenDccCacheEntry entry = GetData(address);
+				ProtocolP50xCacheEntry entry = GetData(address);
 
 				entry.orientationF0 &= ~(1 << 5);
 				entry.orientationF0 |= static_cast<unsigned char>(orientation) << 5;
 
-				cache[address] = entry;
+				cache.emplace(address, entry);
 			}
 
 			void SetFunction(const Address address,
@@ -81,7 +88,7 @@ namespace Hardware
 				const DataModel::LocoFunctionState on)
 			{
 				bool onInternal = static_cast<bool>(on);
-				OpenDccCacheEntry entry = GetData(address);
+				ProtocolP50xCacheEntry entry = GetData(address);
 
 				if (function == 0)
 				{
@@ -95,14 +102,14 @@ namespace Hardware
 					entry.functions |= static_cast<uint32_t>(onInternal) << shift;
 				}
 
-				cache[address] = entry;
+				cache.emplace(address, entry);
 			}
 
-			OpenDccCacheEntry GetData(const Address address) const
+			ProtocolP50xCacheEntry GetData(const Address address) const
 			{
 				if (cache.count(address) == 0)
 				{
-					OpenDccCacheEntry entry;
+					ProtocolP50xCacheEntry entry;
 					return entry;
 				}
 
@@ -110,7 +117,7 @@ namespace Hardware
 			}
 
 		private:
-			std::map<Address, OpenDccCacheEntry> cache;
+			std::map<Address, ProtocolP50xCacheEntry> cache;
 	};
 } // namespace
 

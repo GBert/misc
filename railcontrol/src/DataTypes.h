@@ -168,6 +168,7 @@ enum HardwareType : uint8_t
 	HardwareTypeCcSchnitte = 8,
 	HardwareTypeEcos = 9,
 	HardwareTypeCS2Tcp = 10,
+	HardwareTypeIntellibox = 11,
 	HardwareTypeNumbers
 };
 

@@ -81,7 +81,7 @@ namespace WebServer
 				}
 			}
 
-			// T2 must by implicitly convertible to Languages::TextSelector
+			// T2 must be implicitly convertible to Languages::TextSelector
 			template<typename T1, typename T2>
 			HtmlTagSelect(const std::string& name, const std::map<T1,T2>& options, T1 defaultValue = 0)
 			:	HtmlTag("select"),

@@ -28,6 +28,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "Hardware/Ecos.h"
 #include "Hardware/HardwareHandler.h"
 #include "Hardware/Hsi88.h"
+#include "Hardware/Intellibox.h"
 #include "Hardware/M6051.h"
 #include "Hardware/OpenDcc.h"
 #include "Hardware/RM485.h"
@@ -86,6 +87,10 @@ namespace Hardware
 
 			case HardwareTypeEcos:
 				instance = reinterpret_cast<Hardware::HardwareInterface*>(new Ecos(params));
+				break;
+
+			case HardwareTypeIntellibox:
+				instance = reinterpret_cast<Hardware::HardwareInterface*>(new Intellibox(params));
 				break;
 
 			default:
@@ -497,6 +502,10 @@ namespace Hardware
 
 			case HardwareTypeEcos:
 				Hardware::Ecos::GetArgumentTypesAndHint(arguments, hint);
+				return;
+
+			case HardwareTypeIntellibox:
+				Hardware::Intellibox::GetArgumentTypesAndHint(arguments, hint);
 				return;
 
 			case HardwareTypeVirtual:
