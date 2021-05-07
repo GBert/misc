@@ -1,11 +1,12 @@
 const int revisionnr = 
-1565
+1566
 ;
 const char* commithash = 
-"37a9dd2417c2334d55efaf70a1563dcfa34f8941";
+"e9997e091fe3650d32dc13543eeb880494a6c63e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1566 2021-05-07 15:52:48 +0200 item: add color and value on pushbutton output type\n" \
 "1565 2021-05-05 15:31:58 +0200 seltab: disable actdelay\n" \
 "1564 2021-05-05 09:05:06 +0200 trainimage: D&D init fix\n" \
 "1563 2021-05-04 10:50:49 +0200 signal: regard linear signal type on testing state\n" \
