@@ -25,7 +25,6 @@ namespace Hardware
 {
 	CS2Tcp::CS2Tcp(const HardwareParams* params)
 	:	ProtocolMaerklinCAN(params,
-			Logger::Logger::GetLogger("CS2TCP " + params->GetName() + " " + params->GetArg1()),
 			"Maerklin Central Station 2 (CS2) TCP / " + params->GetName() + " at IP " + params->GetArg1(),
 			params->GetName()),
 	 	connection(Network::TcpClient::GetTcpClientConnection(logger, params->GetArg1(), CS2Port))

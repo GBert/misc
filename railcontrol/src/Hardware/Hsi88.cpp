@@ -35,7 +35,6 @@ namespace Hardware
 			params->GetControlID(),
 			"HSI-88 / " + params->GetName() + " at serial port " + params->GetArg1(),
 			params->GetName()),
-	 	logger(Logger::Logger::GetLogger("HSI-88 " + params->GetName() + " " + params->GetArg1())),
 	 	serialLine(logger, params->GetArg1(), B9600, 8, 'N', 1),
 		run(false)
 	{

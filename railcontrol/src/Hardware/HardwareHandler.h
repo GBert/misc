@@ -35,6 +35,10 @@ namespace Hardware
 	class HardwareHandler: public ControlInterface
 	{
 		public:
+			HardwareHandler() = delete;
+			HardwareHandler(const HardwareHandler&) = delete;
+			HardwareHandler& operator=(const HardwareHandler&) = delete;
+
 			inline HardwareHandler(const HardwareParams* params)
 			:	ControlInterface(ControlTypeHardware),
 				instance(nullptr),

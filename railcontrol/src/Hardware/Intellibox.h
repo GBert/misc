@@ -52,8 +52,6 @@ namespace Hardware
 
 		private:
 			static const unsigned char MaxS88ModulesIntellibox = 104;
-
-
 	};
 } // namespace
 

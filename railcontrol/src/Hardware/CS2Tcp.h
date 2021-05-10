@@ -30,6 +30,10 @@ namespace Hardware
 	class CS2Tcp : protected ProtocolMaerklinCAN
 	{
 		public:
+			CS2Tcp() = delete;
+			CS2Tcp(const CS2Tcp&) = delete;
+			CS2Tcp& operator=(const CS2Tcp&) = delete;
+
 			CS2Tcp(const HardwareParams* params);
 
 			static void GetArgumentTypesAndHint(std::map<unsigned char,ArgumentType>& argumentTypes, std::string& hint)

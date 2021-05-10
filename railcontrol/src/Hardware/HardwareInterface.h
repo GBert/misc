@@ -34,23 +34,26 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace Hardware
 {
-
 	class HardwareInterface
 	{
 		public:
-			// non virtual default constructor is needed to prevent polymorphism
+			HardwareInterface() = delete;
+			HardwareInterface(const HardwareInterface&) = delete;
+			HardwareInterface& operator=(const HardwareInterface&) = delete;
+
+			// non virtual constructor is needed to prevent polymorphism
 			inline HardwareInterface(Manager* manager,
 				const ControlID controlID,
 				const std::string& fullName,
 				const std::string& shortName)
 			:	manager(manager),
 			 	controlID(controlID),
+			 	logger(Logger::Logger::GetLogger(shortName)),
 			 	fullName(fullName),
 			 	shortName(shortName)
 			{
 			}
 
-			// pure virtual destructor prevents polymorphism in derived class
 			virtual ~HardwareInterface()
 			{
 			}
@@ -68,7 +71,10 @@ namespace Hardware
 			}
 
 			// get hardware capabilities
-			virtual Hardware::Capabilities GetCapabilities() const = 0;
+			virtual Hardware::Capabilities GetCapabilities() const
+			{
+				return Hardware::CapabilityNone;
+			}
 
 			// get available loco protocols of this control
 			virtual void GetLocoProtocols(__attribute__((unused)) std::vector<Protocol>& protocols) const
@@ -179,15 +185,16 @@ namespace Hardware
 			}
 
 		protected:
-			Manager* const manager;
-			const ControlID controlID;
-
 			virtual void AccessoryOnOrOff(__attribute__((unused)) const Protocol protocol,
 				__attribute__((unused)) const Address address,
 				__attribute__((unused)) const DataModel::AccessoryState state,
 				__attribute__((unused)) const bool on)
 			{
 			}
+
+			Manager* const manager;
+			const ControlID controlID;
+			Logger::Logger* const logger;
 
 		private:
 			static void AccessoryOnOrOffStatic(HardwareInterface* hardware,
@@ -203,6 +210,21 @@ namespace Hardware
 			const std::string fullName;
 			const std::string shortName;
 			std::map<std::string,Hardware::LocoCacheEntry> emptyLocoDatabase;
+	};
+
+	class UnknownHardware : HardwareInterface
+	{
+		public:
+			UnknownHardware(const HardwareParams* params)
+			:	HardwareInterface(params->GetManager(), params->GetControlID(), "Unknown", "Unknown")
+			{
+				logger->Error(Languages::TextUnknownHardware);
+			}
+
+			static inline void GetArgumentTypesAndHint(__attribute__((unused)) std::map<unsigned char,ArgumentType>& argumentTypes, std::string& hint)
+			{
+				hint = Languages::GetText(Languages::TextUnknownHardware);
+			}
 	};
 
 } // namespace

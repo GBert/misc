@@ -38,6 +38,9 @@ namespace Hardware
 	{
 		public:
 			ProtocolMaerklinCAN() = delete;
+			ProtocolMaerklinCAN(const ProtocolMaerklinCAN&) = delete;
+			ProtocolMaerklinCAN& operator=(const ProtocolMaerklinCAN&) = delete;
+
 
 			inline Hardware::Capabilities GetCapabilities() const override
 			{
@@ -107,14 +110,12 @@ namespace Hardware
 
 		protected:
 			inline ProtocolMaerklinCAN(const HardwareParams* params,
-				Logger::Logger* logger,
 				const std::string& fullName,
 				const std::string& shortName)
 			:	HardwareInterface(params->GetManager(),
 					params->GetControlID(),
 					fullName,
 					shortName),
-				logger(logger),
 				run(true),
 				uid(Utils::Utils::HexToInteger(params->GetArg5(), 0)),
 				hasCs2Master(false),
@@ -147,7 +148,6 @@ namespace Hardware
 
 			static const unsigned char CANCommandBufferLength = 13;
 
-			Logger::Logger* logger;
 			volatile bool run;
 
 		private:

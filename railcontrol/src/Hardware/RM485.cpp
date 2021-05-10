@@ -37,7 +37,6 @@ namespace Hardware
 			params->GetControlID(),
 			"RM485 / " + params->GetName() + " at serial port " + params->GetArg1(),
 			params->GetName()),
-		logger(Logger::Logger::GetLogger("RM485 " + params->GetName() + " " + params->GetArg1())),
 		communication(params->GetArg1()),
 		run(true),
 		rescanAddress(0),

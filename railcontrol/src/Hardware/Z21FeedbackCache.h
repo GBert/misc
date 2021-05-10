@@ -25,6 +25,9 @@ namespace Hardware
 	class Z21FeedbackCache
 	{
 		public:
+			Z21FeedbackCache(const Z21FeedbackCache&) = delete;
+			Z21FeedbackCache& operator=(const Z21FeedbackCache&) = delete;
+
 			inline Z21FeedbackCache()
 			{
 				for (unsigned char module = 0; module < MaxModules; ++module)

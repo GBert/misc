@@ -42,7 +42,6 @@ namespace Hardware
 			params->GetControlID(),
 			"ESU ECoS / " + params->GetName() + " at IP " + params->GetArg1(),
 			params->GetName()),
-		logger(Logger::Logger::GetLogger("ECoS " + params->GetName() + " " + params->GetArg1())),
 	 	run(false),
 	 	tcp(Network::TcpClient::GetTcpClientConnection(logger, params->GetArg1(), EcosPort)),
 	 	readBufferLength(0),

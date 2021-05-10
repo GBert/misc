@@ -20,6 +20,7 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
+#include <mutex>
 #include <string>
 
 #include "Hardware/HardwareInterface.h"
@@ -29,7 +30,7 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace Hardware
 {
-	class ProtocolP50x : HardwareInterface
+	class ProtocolP50x : protected HardwareInterface
 	{
 		public:
 			ProtocolP50x() = delete;
@@ -37,8 +38,7 @@ namespace Hardware
 			ProtocolP50x& operator=(const ProtocolP50x&) = delete;
 
 			ProtocolP50x(const HardwareParams* const params,
-				const std::string& controlName,
-				const std::string& loggerName);
+				const std::string& controlName);
 
 			virtual ~ProtocolP50x();
 
@@ -93,8 +93,6 @@ namespace Hardware
 			virtual ssize_t Receive(unsigned char* data, const size_t length) const = 0;
 			virtual ssize_t ReceiveExact(unsigned char* data, const size_t length) const = 0;
 
-			Logger::Logger* logger;
-
 			bool SendP50XOnly() const;
 			bool SendRestart() const;
 			unsigned char SendXP88Get(unsigned char param) const;
@@ -105,9 +103,35 @@ namespace Hardware
 				return SendOneByteCommand(XNop);
 			}
 
-			inline ssize_t Send(const unsigned char data) const
+			inline ssize_t SendInternal(const unsigned char data) const
 			{
-				return Send(&data, 1);
+				return SendInternal(&data, 1);
+			}
+
+			inline ssize_t SendInternal(const unsigned char* data, const size_t dataLength) const
+			{
+				logger->Hex(data, dataLength);
+				return Send(data, dataLength);
+			}
+
+			inline ssize_t ReceiveInternal(unsigned char* data, const size_t length) const
+			{
+				const ssize_t ret = Receive(data, length);
+				if (ret > 0)
+				{
+					logger->Hex(data, ret);
+				}
+				return ret;
+			}
+
+			inline ssize_t ReceiveExactInternal(unsigned char* data, const size_t length) const
+			{
+				const ssize_t ret = ReceiveExact(data, length);
+				if (ret > 0)
+				{
+					logger->Hex(data, ret);
+				}
+				return ret;
 			}
 
 			static const unsigned char MaxS88Modules = 128;
@@ -150,13 +174,6 @@ namespace Hardware
 			static const unsigned short MaxLocoAddress = 10239;
 			static const unsigned short MaxAccessoryAddress = 2043;
 
-			const HardwareParams* const params;
-			volatile bool run;
-
-			mutable unsigned char s88Memory[MaxS88Modules];
-
-			Hardware::ProtocolP50xCache cache;
-
 			static inline bool CheckLocoAddress(const Address address)
 			{
 				return 0 < address && address <= MaxLocoAddress;
@@ -187,6 +204,15 @@ namespace Hardware
 			void CheckSensorData(const unsigned char module, const unsigned char data) const;
 			void SendXEvtSen() const;
 			void SendXEvent() const;
+
+			const HardwareParams* const params;
+			volatile bool run;
+
+			mutable unsigned char s88Memory[MaxS88Modules];
+
+			Hardware::ProtocolP50xCache cache;
+
+			mutable std::mutex communicationLock;
 	};
 } // namespace
 

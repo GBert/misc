@@ -41,6 +41,10 @@ namespace Hardware
 	class Z21 : HardwareInterface
 	{
 		public:
+			Z21() = delete;
+			Z21(const Z21&) = delete;
+			Z21& operator=(const Z21&) = delete;
+
 			Z21(const HardwareParams* params);
 			~Z21();
 
@@ -237,7 +241,6 @@ namespace Hardware
 				PomReadByte = 0xE400
 			};
 
-			Logger::Logger* logger;
 			volatile bool run;
 			Network::UdpConnection connection;
 			std::thread receiverThread;

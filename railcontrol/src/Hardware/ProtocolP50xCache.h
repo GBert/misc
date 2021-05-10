@@ -25,8 +25,6 @@ namespace Hardware
 	class ProtocolP50xCacheEntry
 	{
 		public:
-			ProtocolP50xCacheEntry& operator=(const ProtocolP50xCacheEntry&) = delete;
-
 			inline ProtocolP50xCacheEntry()
 			:	speed(0),
 			 	orientationF0(0),
@@ -49,7 +47,7 @@ namespace Hardware
 			ProtocolP50xCache(const ProtocolP50xCache&) = delete;
 			ProtocolP50xCache& operator=(const ProtocolP50xCache&) = delete;
 
-			ProtocolP50xCache()
+			inline ProtocolP50xCache()
 			{
 			}
 
@@ -70,7 +68,7 @@ namespace Hardware
 					entry.speed = (speed >> 3) + 2;
 				}
 
-				cache.emplace(address, entry);
+				cache[address] = entry;
 			}
 
 			void SetOrientation(const Address address, const Orientation orientation)
@@ -80,7 +78,7 @@ namespace Hardware
 				entry.orientationF0 &= ~(1 << 5);
 				entry.orientationF0 |= static_cast<unsigned char>(orientation) << 5;
 
-				cache.emplace(address, entry);
+				cache[address] = entry;
 			}
 
 			void SetFunction(const Address address,
@@ -102,7 +100,7 @@ namespace Hardware
 					entry.functions |= static_cast<uint32_t>(onInternal) << shift;
 				}
 
-				cache.emplace(address, entry);
+				cache[address] = entry;
 			}
 
 			ProtocolP50xCacheEntry GetData(const Address address) const

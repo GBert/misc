@@ -29,6 +29,10 @@ namespace Hardware
 	class HardwareParams
 	{
 		public:
+			HardwareParams() = delete;
+			HardwareParams(const HardwareParams&) = delete;
+			HardwareParams& operator=(const HardwareParams&) = delete;
+
 			inline HardwareParams(ControlID controlID,
 				HardwareType hardwareType,
 				std::string name,

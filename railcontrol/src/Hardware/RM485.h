@@ -39,12 +39,25 @@ namespace Hardware
 			class CRC8
 			{
 				public:
+					CRC8(const CRC8&) = delete;
+					CRC8& operator=(const CRC8&) = delete;
+
+					inline CRC8()
+					:	actualValue(0x07)
+					{
+					}
+
+					inline void calcChar(const uint8_t c)
+					{
+						actualValue = crcTable[actualValue ^ c];
+					}
+
+					inline uint8_t value() const
+					{
+						return actualValue;
+					}
+
 					static uint8_t calcString(const uint8_t* const s, const uint8_t size);
-
-					CRC8() : actualValue(0x07) {};
-
-					void calcChar(const uint8_t c) { actualValue = crcTable[actualValue ^ c]; }
-					uint8_t value() const { return actualValue; }
 
 				private:
 					static const uint8_t crcTable[256];
@@ -54,6 +67,10 @@ namespace Hardware
 			class RS485
 			{
 				public:
+					RS485() = delete;
+					RS485(const RS485&) = delete;
+					RS485& operator=(const RS485&) = delete;
+
 					RS485(const std::string& tty);
 					~RS485();
 					bool Send(const uint8_t address, const uint8_t command, const uint8_t* c = nullptr, const size_t length = 0);
@@ -73,6 +90,10 @@ namespace Hardware
 				public:
 					static const uint8_t MaxInputBytesPerModule = 16;
 				
+					Communication() = delete;
+					Communication(const Communication&) = delete;
+					Communication& operator=(const Communication&) = delete;
+
 					Communication(const std::string& tty) : rs485(tty) {}
 
 					uint8_t Version(const uint8_t address);
@@ -96,6 +117,10 @@ namespace Hardware
 			};
 
 		public:
+			RM485() = delete;
+			RM485(const RM485&) = delete;
+			RM485& operator=(const RM485&) = delete;
+
 			RM485(const HardwareParams* params);
 			~RM485();
 
@@ -111,7 +136,6 @@ namespace Hardware
 			}
 
 		private:
-			Logger::Logger* logger;
 			int ttyFileDescriptor;
 			Communication communication;
 			volatile bool run;

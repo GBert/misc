@@ -25,7 +25,6 @@ namespace Hardware
 {
 	CS2Udp::CS2Udp(const HardwareParams* params)
 	:	ProtocolMaerklinCAN(params,
-			Logger::Logger::GetLogger("CS2UDP " + params->GetName() + " " + params->GetArg1()),
 			"Maerklin Central Station 2 (CS2) UDP / " + params->GetName() + " at IP " + params->GetArg1(),
 			params->GetName()),
 	 	senderConnection(logger, params->GetArg1(), CS2SenderPort),

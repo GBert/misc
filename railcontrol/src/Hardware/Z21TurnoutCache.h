@@ -31,11 +31,13 @@ namespace Hardware
 		public:
 			Z21TurnoutCacheEntry()
 			:	protocol(ProtocolNone)
-			{}
+			{
+			}
 
 			Z21TurnoutCacheEntry(const Protocol protocol)
 			:	protocol(protocol)
-			{}
+			{
+			}
 
 			Protocol protocol;
 	};

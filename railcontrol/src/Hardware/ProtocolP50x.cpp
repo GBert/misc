@@ -25,13 +25,11 @@ along with RailControl; see the file LICENCE. If not see
 namespace Hardware
 {
 	ProtocolP50x::ProtocolP50x(const HardwareParams* const params,
-		const std::string& controlName,
-		const std::string& loggerName)
+		const std::string& controlName)
 	:	HardwareInterface(params->GetManager(),
 			params->GetControlID(),
 			controlName,
 			params->GetName()),
-	 	logger(Logger::Logger::GetLogger(loggerName)),
 	 	params(params),
 		run(false)
 	{
@@ -100,6 +98,7 @@ namespace Hardware
 			return;
 		}
 		cache.SetFunction(address, function, on);
+		std::lock_guard<std::mutex> guard(communicationLock);
 		if (function == 0)
 		{
 			SendXLok(address);
@@ -139,6 +138,7 @@ namespace Hardware
 		{
 			cache.SetFunction(address, function.nr, function.state);
 		}
+		std::lock_guard<std::mutex> guard(communicationLock);
 		SendXLok(address);
 		if (nrFunctions > 1)
 		{
@@ -162,9 +162,9 @@ namespace Hardware
 		const unsigned char addressMSB = (address >> 8);
 		const unsigned char data[5] = { XLok, addressLSB, addressMSB, entry.speed, entry.orientationF0 };
 
-		Send(data, sizeof(data));
+		SendInternal(data, sizeof(data));
 		unsigned char input;
-		bool ret = ReceiveExact(&input, 1);
+		bool ret = ReceiveExactInternal(&input, 1);
 		if (ret != 1)
 		{
 			logger->Warning(Languages::TextControlDoesNotAnswer);
@@ -200,7 +200,7 @@ namespace Hardware
 		const unsigned char addressLSB = (address & 0xFF);
 		const unsigned char addressMSB = (address >> 8);
 		const unsigned char data[4] = { XFunc, addressLSB, addressMSB, entry.function[0] };
-		Send(data, sizeof(data));
+		SendInternal(data, sizeof(data));
 		return ReceiveFunctionCommandAnswer();
 	}
 
@@ -211,7 +211,7 @@ namespace Hardware
 		const unsigned char addressLSB = (address & 0xFF);
 		const unsigned char addressMSB = (address >> 8);
 		const unsigned char data[4] = { XFunc2, addressLSB, addressMSB, entry.function[1] };
-		Send(data, sizeof(data));
+		SendInternal(data, sizeof(data));
 		return ReceiveFunctionCommandAnswer();
 	}
 
@@ -222,14 +222,14 @@ namespace Hardware
 		const unsigned char addressLSB = (address & 0xFF);
 		const unsigned char addressMSB = (address >> 8);
 		const unsigned char data[5] = { XFunc34, addressLSB, addressMSB, entry.function[2], entry.function[3] };
-		Send(data, sizeof(data));
+		SendInternal(data, sizeof(data));
 		return ReceiveFunctionCommandAnswer();
 	}
 
 	bool ProtocolP50x::ReceiveFunctionCommandAnswer() const
 	{
 		unsigned char input;
-		bool ret = ReceiveExact(&input, 1);
+		bool ret = ReceiveExactInternal(&input, 1);
 		if (ret != 1)
 		{
 			logger->Warning(Languages::TextControlDoesNotAnswer);
@@ -266,9 +266,10 @@ namespace Hardware
 		const unsigned char statusBits = ((state == DataModel::AccessoryStateOn) << 7) | (on << 6);
 		const unsigned char addressStatus = addressMSB | statusBits;
 		const unsigned char data[3] = { XTrnt, addressLSB, addressStatus };
-		Send(data, sizeof(data));
+		std::lock_guard<std::mutex> guard(communicationLock);
+		SendInternal(data, sizeof(data));
 		unsigned char input;
-		bool ret = ReceiveExact(&input, 1);
+		bool ret = ReceiveExactInternal(&input, 1);
 		if (ret != 1)
 		{
 			logger->Warning(Languages::TextControlDoesNotAnswer);
@@ -295,41 +296,44 @@ namespace Hardware
 
 	bool ProtocolP50x::SendP50XOnly() const
 	{
-		unsigned char data[6] = { 'X', 'Z', 'Z', 'A', '1', 0x0D };
-		Send(data, sizeof(data));
+		unsigned char data[6] = { 'X', 'Z', 'z', 'A', '1', 0x0D };
+		SendInternal(data, sizeof(data));
 		const unsigned char dataLengthRead = 34;
 		unsigned char input[dataLengthRead];
-		ReceiveExact(input, dataLengthRead);
+		ReceiveExactInternal(input, dataLengthRead);
 		return true;
 	}
 
 	bool ProtocolP50x::SendOneByteCommand(const unsigned char data) const
 	{
-		Send(data);
-		unsigned char input[1];
-		int ret = Receive(input, sizeof(input));
-		return ret > 0 && input[0] == OK;
+		std::lock_guard<std::mutex> guard(communicationLock);
+		SendInternal(data);
+		unsigned char input;
+		int ret = ReceiveInternal(&input, 1);
+		return ret > 0 && input == OK;
 	}
 
 	bool ProtocolP50x::SendRestart() const
 	{
 		unsigned char data[3] = { '@', '@', 0x0D };
 		logger->Info(Languages::TextRestarting);
-		Send(data, sizeof(data));
+		std::lock_guard<std::mutex> guard(communicationLock);
+		SendInternal(data, sizeof(data));
 		return true;
 	}
 
 	unsigned char ProtocolP50x::SendXP88Get(unsigned char param) const
 	{
 		unsigned char data[2] = { XP88Get, param };
-		Send(data, sizeof(data));
+		std::lock_guard<std::mutex> guard(communicationLock);
+		SendInternal(data, sizeof(data));
 		unsigned char input;
-		size_t ret = ReceiveExact(&input, 1);
+		size_t ret = ReceiveExactInternal(&input, 1);
 		if (ret == 0 || input != OK)
 		{
 			return 0xFF;
 		}
-		ret = ReceiveExact(&input, 1);
+		ret = ReceiveExactInternal(&input, 1);
 		if (ret == 0)
 		{
 			return 0xFF;
@@ -340,9 +344,10 @@ namespace Hardware
 	bool ProtocolP50x::SendXP88Set(unsigned char param, unsigned char value) const
 	{
 		unsigned char data[3] = { XP88Set, param, value };
-		Send(data, sizeof(data));
+		std::lock_guard<std::mutex> guard(communicationLock);
+		SendInternal(data, sizeof(data));
 		unsigned char input;
-		size_t ret = ReceiveExact(&input, 1);
+		size_t ret = ReceiveExactInternal(&input, 1);
 		if (ret == 0)
 		{
 			return false;
@@ -369,12 +374,13 @@ namespace Hardware
 
 	void ProtocolP50x::SendXEvtSen() const
 	{
+		std::lock_guard<std::mutex> guard(communicationLock);
 		unsigned char data[1] = { XEvtSen };
-		Send(data, sizeof(data));
+		SendInternal(data, sizeof(data));
 		while (true)
 		{
 			unsigned char module;
-			size_t ret = ReceiveExact(&module, 1);
+			size_t ret = ReceiveExactInternal(&module, 1);
 			if (ret == 0 || module == 0)
 			{
 				return;
@@ -384,7 +390,7 @@ namespace Hardware
 			module <<= 1;
 
 			unsigned char data[2];
-			ret = ReceiveExact(data, sizeof(data));
+			ret = ReceiveExactInternal(data, sizeof(data));
 			if (ret == 0)
 			{
 				return;
@@ -406,48 +412,51 @@ namespace Hardware
 
 	void ProtocolP50x::SendXEvent() const
 	{
-		unsigned char data[1] = { XEvent };
-		Send(data, sizeof(data));
 		unsigned char input;
-		size_t ret = ReceiveExact(&input, 1);
-		if (ret == 0)
 		{
-			return;
-		}
-		bool locoEvent = input & 0x01;
-		bool sensorEvent = (input >> 2) & 0x01;
-		bool powerEvent = (input >> 3) & 0x01;
-		bool switchEvent = (input >> 5) & 0x01;
-
-		while (true)
-		{
-			bool moreData = (input >> 7) & 0x01;
-			if (!moreData)
-			{
-				break;
-			}
-			ret = ReceiveExact(&input, 1);
+			std::lock_guard<std::mutex> guard(communicationLock);
+			unsigned char data[1] = { XEvent };
+			SendInternal(data, sizeof(data));
+			size_t ret = ReceiveExactInternal(&input, 1);
 			if (ret == 0)
 			{
-				break;
+				return;
+			}
+			while (true)
+			{
+				bool moreData = (input >> 7) & 0x01;
+				if (!moreData)
+				{
+					break;
+				}
+
+				size_t ret = ReceiveExactInternal(&input, 1);
+				if (ret == 0)
+				{
+					break;
+				}
 			}
 		}
 
+		bool sensorEvent = (input >> 2) & 0x01;
 		if (sensorEvent)
 		{
 			SendXEvtSen();
 		}
 
+		bool locoEvent = input & 0x01;
 		if (locoEvent)
 		{
 			logger->Debug(Languages::TextLocoEventDetected);
 		}
 
+		bool powerEvent = (input >> 3) & 0x01;
 		if (powerEvent)
 		{
 			manager->Booster(ControlTypeHardware, BoosterStateStop);
 		}
 
+		bool switchEvent = (input >> 5) & 0x01;
 		if (switchEvent)
 		{
 			logger->Debug(Languages::TextSwitchEventDetected);

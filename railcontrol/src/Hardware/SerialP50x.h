@@ -39,8 +39,7 @@ namespace Hardware
 
 			inline SerialP50x(const HardwareParams* params, const std::string& controlName)
 			:	ProtocolP50x(params,
-					controlName + " / " + params->GetName() + " at serial port " + params->GetArg1(),
-					controlName + " " + params->GetName() + " " + params->GetArg1()),
+					controlName + " / " + params->GetName() + " at serial port " + params->GetArg1()),
 			 	serialLine(logger, params->GetArg1(), B19200, 8, 'N', 2)
 			{
 			}

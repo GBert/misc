@@ -30,6 +30,10 @@ namespace Hardware
 	class CcSchnitte : ProtocolMaerklinCAN
 	{
 		public:
+			CcSchnitte() = delete;
+			CcSchnitte(const CcSchnitte&) = delete;
+			CcSchnitte& operator=(const CcSchnitte&) = delete;
+
 			CcSchnitte(const HardwareParams* params);
 
 			static void GetArgumentTypesAndHint(std::map<unsigned char,ArgumentType>& argumentTypes, std::string& hint)

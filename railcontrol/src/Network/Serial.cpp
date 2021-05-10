@@ -141,7 +141,7 @@ namespace Network
 			return -1;
 		}
 		ret = read(fileHandle, data, maxData);
-		if (ret <= 0)
+		if (ret <= 0) // FIXME: why not (ret < 0)?
 		{
 			return -1;
 		}

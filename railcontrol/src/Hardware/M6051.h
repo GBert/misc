@@ -32,6 +32,10 @@ namespace Hardware
 	class M6051 : HardwareInterface
 	{
 		public:
+			M6051() = delete;
+			M6051(const M6051&) = delete;
+			M6051& operator=(const M6051&) = delete;
+
 			M6051(const HardwareParams* params);
 			~M6051();
 
@@ -69,7 +73,6 @@ namespace Hardware
 			void AccessoryOnOrOff(const Protocol protocol, const Address address, const DataModel::AccessoryState state, const bool on) override;
 
 		private:
-			Logger::Logger* logger;
 			static const unsigned char MaxS88Modules = 62;
 			Network::Serial serialLine;
 			volatile bool run;

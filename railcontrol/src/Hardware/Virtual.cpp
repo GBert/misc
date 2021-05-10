@@ -32,8 +32,7 @@ namespace Hardware
 	:	HardwareInterface(params->GetManager(),
 			params->GetControlID(),
 			"Virtual Command Station / " + params->GetName(),
-			params->GetName()),
-	 	logger(Logger::Logger::GetLogger("Virtual " + params->GetName()))
+			params->GetName())
 	{
 	}
 

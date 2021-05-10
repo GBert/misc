@@ -22,7 +22,6 @@ along with RailControl; see the file LICENCE. If not see
 
 #include "HardwareInterface.h"
 #include "HardwareParams.h"
-#include "Logger/Logger.h"
 #include "Network/TcpClient.h"
 
 namespace Hardware
@@ -30,7 +29,12 @@ namespace Hardware
 	class Ecos : protected HardwareInterface
 	{
 		public:
+			Ecos() = delete;
+			Ecos(const Ecos&) = delete;
+			Ecos& operator=(const Ecos&) = delete;
+
 			Ecos(const HardwareParams* params);
+
 			~Ecos();
 
 			inline Hardware::Capabilities GetCapabilities() const override
@@ -117,39 +121,39 @@ namespace Hardware
 			std::string ReadUntilChar(const char c);
 			std::string ReadUntilLineEnd();
 
-			void SendActivateBoosterUpdates()
+			inline void SendActivateBoosterUpdates()
 			{
 				Send(CommandActivateBoosterUpdates);
 			}
 
-			void SendQueryLocos()
+			inline void SendQueryLocos()
 			{
 				Send(CommandQueryLocos);
 			}
 
-			void SendQueryAccessories()
+			inline void SendQueryAccessories()
 			{
 				Send(CommandQueryAccessories);
 			}
 
-			void SendQueryFeedbacks()
+			inline void SendQueryFeedbacks()
 			{
 				Send(CommandQueryFeedbacks);
 			}
 
-			void SendActivateUpdates(const int id)
+			inline void SendActivateUpdates(const int id)
 			{
 				std::string command = "request(" + std::to_string(id) + ",view)\n";
 				Send(command.c_str());
 			}
 
-			void SendGetHandle(const int id)
+			inline void SendGetHandle(const int id)
 			{
 				std::string command = "request(" + std::to_string(id) + ",control,force)\n";
 				Send(command.c_str());
 			}
 
-			char GetChar(const size_t offset = 0) const
+			inline char GetChar(const size_t offset = 0) const
 			{
 				size_t position = readBufferPosition + offset;
 				if (position >= MaxMessageSize)
@@ -159,7 +163,7 @@ namespace Hardware
 				return readBuffer[position];
 			}
 
-			char ReadAndConsumeChar()
+			inline char ReadAndConsumeChar()
 			{
 				if (readBufferPosition >= MaxMessageSize)
 				{
@@ -168,7 +172,7 @@ namespace Hardware
 				return readBuffer[readBufferPosition++];
 			}
 
-			bool CheckAndConsumeChar(const char charToCheck)
+			inline bool CheckAndConsumeChar(const char charToCheck)
 			{
 				if (readBufferPosition >= MaxMessageSize)
 				{
@@ -177,7 +181,7 @@ namespace Hardware
 				return charToCheck == readBuffer[readBufferPosition++];
 			}
 
-			bool CheckChar(const char charToCheck)
+			inline bool CheckChar(const char charToCheck)
 			{
 				if (readBufferPosition >= MaxMessageSize)
 				{
@@ -188,7 +192,7 @@ namespace Hardware
 
 			bool SkipOptionalChar(const char charToSkip);
 
-			void SkipWhiteSpace()
+			inline void SkipWhiteSpace()
 			{
 				while(SkipOptionalChar(' '));
 			}
@@ -198,13 +202,12 @@ namespace Hardware
 			bool IsNumber() const;
 			int ParseInt();
 
-			bool CheckGraterThenAtLineEnd()
+			inline bool CheckGraterThenAtLineEnd()
 			{
 				SkipWhiteSpace();
 				return CompareAndConsume(">\n", 2);
 			}
 
-			Logger::Logger* logger;
 			volatile bool run;
 			std::thread receiverThread;
 

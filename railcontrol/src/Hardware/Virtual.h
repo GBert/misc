@@ -32,6 +32,10 @@ namespace Hardware
 	class Virtual : HardwareInterface
 	{
 		public:
+			Virtual() = delete;
+			Virtual(const Virtual&) = delete;
+			Virtual& operator=(const Virtual&) = delete;
+
 			Virtual(const HardwareParams* params);
 
 			inline Hardware::Capabilities GetCapabilities() const override
@@ -72,9 +76,6 @@ namespace Hardware
 			void AccessoryOnOrOff(const Protocol protocol, const Address address, const DataModel::AccessoryState state, const bool on) override;
 			void ProgramRead(const ProgramMode mode, const Address address, const CvNumber cv) override;
 			void ProgramWrite(const ProgramMode mode, const Address address, const CvNumber cv, const CvValue value) override;
-
-		private:
-			Logger::Logger* logger;
 	};
 } // namespace
 

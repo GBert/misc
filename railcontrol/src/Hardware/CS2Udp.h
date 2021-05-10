@@ -30,7 +30,12 @@ namespace Hardware
 	class CS2Udp : protected ProtocolMaerklinCAN
 	{
 		public:
+			CS2Udp() = delete;
+			CS2Udp(const CS2Udp&) = delete;
+			CS2Udp& operator=(const CS2Udp&) = delete;
+
 			CS2Udp(const HardwareParams* params);
+
 			~CS2Udp();
 
 			static void GetArgumentTypesAndHint(std::map<unsigned char,ArgumentType>& argumentTypes, std::string& hint)

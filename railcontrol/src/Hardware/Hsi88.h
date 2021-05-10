@@ -33,6 +33,10 @@ namespace Hardware
 	class Hsi88 : HardwareInterface
 	{
 		public:
+			Hsi88() = delete;
+			Hsi88(const Hsi88&) = delete;
+			Hsi88& operator=(const Hsi88&) = delete;
+
 			Hsi88(const HardwareParams* params);
 			~Hsi88();
 
@@ -53,7 +57,6 @@ namespace Hardware
 		private:
 			static const unsigned char MaxS88Modules = 62;
 
-			Logger::Logger* logger;
 			Network::Serial serialLine;
 			volatile bool run;
 			unsigned char s88Modules1;

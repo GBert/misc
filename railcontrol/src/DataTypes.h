@@ -169,7 +169,7 @@ enum HardwareType : uint8_t
 	HardwareTypeEcos = 9,
 	HardwareTypeCS2Tcp = 10,
 	HardwareTypeIntellibox = 11,
-	HardwareTypeNumbers
+	HardwareTypeMasterControl = 12
 };
 
 enum Automode : bool

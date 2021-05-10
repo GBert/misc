@@ -78,6 +78,8 @@ Hardware/LocoCache.cpp
 Hardware/LocoCache.h
 Hardware/M6051.cpp
 Hardware/M6051.h
+Hardware/MasterControl.cpp
+Hardware/MasterControl.h
 Hardware/OpenDcc.cpp
 Hardware/OpenDcc.h
 Hardware/ProtocolMaerklinCAN.cpp
