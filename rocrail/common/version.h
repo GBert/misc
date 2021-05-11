@@ -1,11 +1,21 @@
 const int revisionnr = 
-1566
+1576
 ;
 const char* commithash = 
-"e9997e091fe3650d32dc13543eeb880494a6c63e";
+"9f1c0b685f2a6a8b9c3f5949a1ad08312a2077b7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1576 2021-05-11 08:25:24 +0200 location: check state !free too\n" \
+"1575 2021-05-11 08:15:56 +0200 action: location state condition added\n" \
+"1574 2021-05-11 08:00:05 +0200 location: extended is state free by checking for a free block\n" \
+"1573 2021-05-10 17:15:43 +0200 tt: accdec fix:: set IID also for the direction command\n" \
+"1572 2021-05-10 16:17:04 +0200 xmlscript,location: state query added\n" \
+"1571 2021-05-10 08:25:47 +0200 messages: type fix\n" \
+"1570 2021-05-09 10:34:13 +0200 tt: accdec default switch activation delay\n" \
+"1569 2021-05-09 10:24:08 +0200 switch: trace crash fix\n" \
+"1568 2021-05-09 08:12:04 +0200 wiopi: option BMS added\n" \
+"1567 2021-05-08 10:04:10 +0200 tt: deactivate active delay in case of accdec\n" \
 "1566 2021-05-07 15:52:48 +0200 item: add color and value on pushbutton output type\n" \
 "1565 2021-05-05 15:31:58 +0200 seltab: disable actdelay\n" \
 "1564 2021-05-05 09:05:06 +0200 trainimage: D&D init fix\n" \
