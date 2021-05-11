@@ -1,11 +1,14 @@
 const int revisionnr = 
-1573
+1576
 ;
 const char* commithash = 
-"4dcef42d7fc2542c4f34a81e8a44d29afedebde9";
+"9f1c0b685f2a6a8b9c3f5949a1ad08312a2077b7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1576 2021-05-11 08:25:24 +0200 location: check state !free too\n" \
+"1575 2021-05-11 08:15:56 +0200 action: location state condition added\n" \
+"1574 2021-05-11 08:00:05 +0200 location: extended is state free by checking for a free block\n" \
 "1573 2021-05-10 17:15:43 +0200 tt: accdec fix:: set IID also for the direction command\n" \
 "1572 2021-05-10 16:17:04 +0200 xmlscript,location: state query added\n" \
 "1571 2021-05-10 08:25:47 +0200 messages: type fix\n" \
