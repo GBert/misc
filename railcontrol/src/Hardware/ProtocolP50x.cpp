@@ -30,7 +30,6 @@ namespace Hardware
 			params->GetControlID(),
 			controlName,
 			params->GetName()),
-	 	params(params),
 		run(false)
 	{
 		logger->Info(Languages::TextStarting, GetFullName());

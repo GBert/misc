@@ -205,7 +205,6 @@ namespace Hardware
 			void SendXEvtSen() const;
 			void SendXEvent() const;
 
-			const HardwareParams* const params;
 			volatile bool run;
 
 			mutable unsigned char s88Memory[MaxS88Modules];
