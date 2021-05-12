@@ -1,11 +1,12 @@
 const int revisionnr = 
-1576
+1577
 ;
 const char* commithash = 
-"9f1c0b685f2a6a8b9c3f5949a1ad08312a2077b7";
+"18a96fe57931aed4006234370ca2dafcaf111370";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1577 2021-05-11 22:08:38 +0200 z21: MADA support for switch commands\n" \
 "1576 2021-05-11 08:25:24 +0200 location: check state !free too\n" \
 "1575 2021-05-11 08:15:56 +0200 action: location state condition added\n" \
 "1574 2021-05-11 08:00:05 +0200 location: extended is state free by checking for a free block\n" \
