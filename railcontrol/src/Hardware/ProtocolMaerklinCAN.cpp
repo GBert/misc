@@ -346,7 +346,8 @@ namespace Hardware
 				GenerateUidHash();
 			}
 		}
-		if (response == true)
+
+		if (response)
 		{
 			switch (command)
 			{
@@ -358,43 +359,47 @@ namespace Hardware
 					ParseResponseReadConfig(buffer);
 					return;
 
-				case CanCommandPing:
-					ParseResponsePing(buffer);
+				case CanCommandLocoSpeed:
+					ParseCommandLocoSpeed(buffer);
+					return;
+
+				case CanCommandLocoDirection:
+					ParseCommandLocoDirection(buffer);
+					return;
+
+				case CanCommandLocoFunction:
+					ParseCommandLocoFunction(buffer);
+					return;
+
+				case CanCommandAccessory:
+					ParseCommandAccessory(buffer);
 					return;
 
 				default:
+					break;
+			}
+		}
+		else // (!response)
+		{
+			switch (command)
+			{
+				case CanCommandSystem:
+					ParseCommandSystem(buffer);
 					return;
+
+				case CanCommandConfigData:
+					ParseCommandConfigData(buffer);
+					return;
+
+				default:
+					break;
 			}
 		}
 
 		switch (command)
 		{
-			case CanCommandSystem:
-				ParseCommandSystem(buffer);
-				return;
-
-			case CanCommandLocoSpeed:
-				ParseCommandLocoSpeed(buffer);
-				return;
-
-			case CanCommandLocoDirection:
-				ParseCommandLocoDirection(buffer);
-				return;
-
-			case CanCommandLocoFunction:
-				ParseCommandLocoFunction(buffer);
-				return;
-
-			case CanCommandAccessory:
-				ParseCommandAccessory(buffer);
-				return;
-
 			case CanCommandPing:
 				ParseCommandPing(buffer);
-				return;
-
-			case CanCommandConfigData:
-				ParseCommandConfigData(buffer);
 				return;
 
 			default:

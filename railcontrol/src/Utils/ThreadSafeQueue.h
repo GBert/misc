@@ -30,18 +30,19 @@ namespace Utils
 	class ThreadSafeQueue
 	{
 		public:
-			ThreadSafeQueue(void)
+			inline ThreadSafeQueue(void)
 			:	queue(),
 				mutex(),
 				run(true)
-			{}
+			{
+			}
 
-			~ThreadSafeQueue(void)
+			inline ~ThreadSafeQueue(void)
 			{
 				Terminate();
 			}
 
-			void Enqueue(T t)
+			inline void Enqueue(T t)
 			{
 				std::unique_lock<std::mutex> lock(mutex);
 				queue.push(t);
@@ -53,7 +54,7 @@ namespace Utils
 				std::unique_lock<std::mutex> lock(mutex);
 				while (true)
 				{
-					if (queue.empty() == false)
+					if (!queue.empty())
 					{
 						break;
 					}
@@ -68,13 +69,13 @@ namespace Utils
 				return val;
 			}
 
-			bool IsEmpty()
+			inline bool IsEmpty()
 			{
 				std::unique_lock<std::mutex> lock(mutex);
 				return queue.empty();
 			}
 
-			void Terminate()
+			inline void Terminate()
 			{
 				run = false;
 				cv.notify_all();

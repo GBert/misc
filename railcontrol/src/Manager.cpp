@@ -923,18 +923,23 @@ bool Manager::LocoSpeed(const ControlType controlType, Loco* loco, const Speed s
 	{
 		return false;
 	}
-	Speed s = speed;
+	Speed newSpeed = speed;
 	if (speed > MaxSpeed)
 	{
-		s = MaxSpeed;
+		newSpeed = MaxSpeed;
 	}
 	const string& locoName = loco->GetName();
-	logger->Info(Languages::TextLocoSpeedIs, locoName, s);
-	loco->SetSpeed(s, withSlaves);
+	logger->Info(Languages::TextLocoSpeedIs, locoName, newSpeed);
+	const Speed oldSpeed = loco->GetSpeed();
+	if (oldSpeed == newSpeed)
+	{
+		return true;
+	}
+	loco->SetSpeed(newSpeed, withSlaves);
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto& control : controls)
 	{
-		control.second->LocoSpeed(controlType, loco, s);
+		control.second->LocoSpeed(controlType, loco, newSpeed);
 	}
 	return true;
 }
@@ -971,8 +976,13 @@ void Manager::LocoOrientation(const ControlType controlType, Loco* loco, const O
 	{
 		return;
 	}
-	loco->SetOrientation(orientation);
 	logger->Info(orientation ? Languages::TextLocoDirectionOfTravelIsRight : Languages::TextLocoDirectionOfTravelIsLeft, loco->GetName());
+	const Orientation oldOrientation = loco->GetOrientation();
+	if (oldOrientation == orientation)
+	{
+		return;
+	}
+	loco->SetOrientation(orientation);
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto& control : controls)
 	{
@@ -1024,8 +1034,13 @@ void Manager::LocoFunctionState(const ControlType controlType,
 		return;
 	}
 
-	loco->SetFunctionState(function, on);
 	logger->Info(on ? Languages::TextLocoFunctionIsOn : Languages::TextLocoFunctionIsOff, loco->GetName(), function);
+	const DataModel::LocoFunctionState oldOn = loco->GetFunctionState(function);
+	if (oldOn == on)
+	{
+		return;
+	}
+	loco->SetFunctionState(function, on);
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto& control : controls)
 	{
@@ -1085,6 +1100,11 @@ void Manager::AccessoryState(const ControlType controlType, Accessory* accessory
 		return;
 	}
 
+	const DataModel::AccessoryState oldState = accessory->GetAccessoryState();
+	if (oldState == state)
+	{
+		return;
+	}
 	accessory->SetAccessoryState(state);
 
 	std::lock_guard<std::mutex> guard(controlMutex);
@@ -1820,6 +1840,11 @@ void Manager::SwitchState(const ControlType controlType, Switch* mySwitch, const
 		return;
 	}
 
+	const DataModel::AccessoryState oldState = mySwitch->GetAccessoryState();
+	if (oldState == state)
+	{
+		return;
+	}
 	mySwitch->SetAccessoryState(state);
 
 	std::lock_guard<std::mutex> guard(controlMutex);
@@ -2507,6 +2532,11 @@ bool Manager::SignalState(const ControlType controlType, Signal* signal, const D
 		return false;
 	}
 
+	const DataModel::AccessoryState oldState = signal->GetAccessoryState();
+	if (oldState == state)
+	{
+		return true;
+	}
 	signal->SetAccessoryState(state);
 
 	SignalPublishState(controlType, signal);
