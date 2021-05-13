@@ -85,11 +85,6 @@ namespace DataModel
 			{
 			}
 
-			inline ObjectType GetObjectType() const
-			{
-				return ObjectTypeTrack;
-			}
-
 			inline TrackType GetTrackType() const
 			{
 				return trackType;

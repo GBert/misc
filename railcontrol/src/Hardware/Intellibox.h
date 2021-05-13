@@ -23,21 +23,24 @@ along with RailControl; see the file LICENCE. If not see
 #include <map>
 #include <string>
 
-#include "Hardware/SerialP50x.h"
+#include "Hardware/IntelliboxBase.h"
 #include "Languages.h"
 
 namespace Hardware
 {
 	class HardwareParams;
 
-	class Intellibox : public SerialP50x
+	class Intellibox : public IntelliboxBase
 	{
 		public:
 			Intellibox() = delete;
 			Intellibox(const Intellibox&) = delete;
 			Intellibox& operator=(const Intellibox&) = delete;
 
-			Intellibox(const HardwareParams* params);
+			inline Intellibox(const HardwareParams* params)
+			:	IntelliboxBase(params, "Intellibox")
+			{
+			}
 
 			virtual ~Intellibox()
 			{
@@ -49,9 +52,6 @@ namespace Hardware
 				argumentTypes[2] = ArgumentTypeS88Modules;
 				hint = Languages::GetText(Languages::TextHintIntellibox);
 			}
-
-		private:
-			static const unsigned char MaxS88ModulesIntellibox = 104;
 	};
 } // namespace
 

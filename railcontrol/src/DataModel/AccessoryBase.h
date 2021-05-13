@@ -83,6 +83,8 @@ namespace DataModel
 		SwitchStateThird = 2,
 	};
 
+	typedef signed char AddressOffset;
+
 	typedef unsigned short AccessoryPulseDuration;
 	static const AccessoryPulseDuration DefaultAccessoryPulseDuration = 100;
 

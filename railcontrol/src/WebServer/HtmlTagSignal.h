@@ -40,7 +40,7 @@ namespace WebServer
 			HtmlTagSignal(const HtmlTagSignal&) = delete;
 			HtmlTagSignal& operator=(const HtmlTagSignal&) = delete;
 
-			HtmlTagSignal(const Manager& manager, const DataModel::Signal* signal);
+			HtmlTagSignal(const Manager& manager, const DataModel::Signal* const signal);
 
 			virtual ~HtmlTagSignal()
 			{
@@ -50,8 +50,15 @@ namespace WebServer
 				const DataModel::Signal* signal);
 
 		private:
-			static std::string GetSignalImagePlain(const DataModel::Signal* signal);
+			void MenuEntry(const Languages::TextSelector text,
+				const string& id,
+				const DataModel::AccessoryState state,
+				const string& aspect);
+
+			static std::string GetSignalImagePlain(const DataModel::Signal* const signal);
 			static std::string GetStateClassText(const DataModel::AccessoryState state);
+
+			const DataModel::Signal* const signal;
 	};
 } // namespace WebServer
 

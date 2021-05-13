@@ -43,7 +43,7 @@ namespace DataModel
 					StateOption() = delete;
 					StateOption& operator=(const StateOption&) = delete;
 
-					inline StateOption(const Languages::TextSelector text, const unsigned char addressOffset)
+					inline StateOption(const Languages::TextSelector text, const AddressOffset addressOffset)
 					:	text(text),
 						addressOffset(addressOffset)
 					{
@@ -55,7 +55,7 @@ namespace DataModel
 					}
 
 					const Languages::TextSelector text;
-					const unsigned char addressOffset;
+					const AddressOffset addressOffset;
 			};
 
 			Signal() = delete;
@@ -146,38 +146,35 @@ namespace DataModel
 
 			std::map<DataModel::AccessoryState,StateOption> GetStateOptions() const;
 
-			inline unsigned int GetStateAddressMappingEntry() const
-			{
-				const AccessoryState state = GetAccessoryState();
-				if (stateAddressMap.count(state) != 1)
-				{
-					return 0;
-				}
-				return stateAddressMap.at(state);
-			}
 			inline Address GetMappedAddress() const
 			{
-				return GetAddress() + ((GetStateAddressMappingEntry()) >> 1);
+				AddressOffset offset = GetStateAddressOffset();
+				return offset < 0 ? 0 : GetAddress() + ((offset) >> 1);
 			}
 
 			inline AccessoryState GetMappedAccessoryState() const
 			{
-				return static_cast<AccessoryState>(GetStateAddressMappingEntry() & 0x01);
+				return static_cast<AccessoryState>(GetStateAddressOffset() & 0x01);
 			}
 
-			inline void SetStateAddressOffset(const AccessoryState state, const unsigned char addressOffset)
+			inline void SetStateAddressOffset(const AccessoryState state, const AddressOffset addressOffset)
 			{
 				stateAddressMap[state] = addressOffset;
 			}
 
-			inline void SetStateAddressOffsets(const std::map<AccessoryState,unsigned char>& newOffsets)
+			inline void SetStateAddressOffsets(const std::map<AccessoryState,AddressOffset>& newOffsets)
 			{
 				stateAddressMap = newOffsets;
 			}
 
-			inline unsigned char GetStateAddressOffset(const AccessoryState state) const
+			inline DataModel::AddressOffset GetStateAddressOffset() const
 			{
-				return (stateAddressMap.count(state) == 1 ? stateAddressMap.at(state) : 0);
+				return GetStateAddressOffset(GetAccessoryState());
+			}
+
+			inline AddressOffset GetStateAddressOffset(const AccessoryState state) const
+			{
+				return stateAddressMap.count(state) != 1 ? -1 : stateAddressMap.at(state);
 			}
 
 		protected:
@@ -228,7 +225,7 @@ namespace DataModel
 		private:
 			void ResetStateAddressMap();
 
-			std::map<AccessoryState,unsigned char> stateAddressMap;
+			std::map<AccessoryState,AddressOffset> stateAddressMap;
 
 			// FIXME: Remove later: 2021-03-18
 			Orientation signalOrientation;

@@ -122,7 +122,8 @@ enum Protocol : uint8_t
 	ProtocolMM15 = 10,
 	ProtocolSX1 = 11,
 	ProtocolSX2 = 12,
-	ProtocolEnd = ProtocolSX2
+	ProtocolFMZ = 13,
+	ProtocolEnd = ProtocolFMZ
 };
 
 static const std::string ProtocolSymbols[] =
@@ -139,7 +140,8 @@ static const std::string ProtocolSymbols[] =
 	"MM",
 	"MM 1.5",
 	"SX1",
-	"SX2"
+	"SX2",
+	"FMZ"
 };
 
 enum AddressType : uint8_t
@@ -169,7 +171,8 @@ enum HardwareType : uint8_t
 	HardwareTypeEcos = 9,
 	HardwareTypeCS2Tcp = 10,
 	HardwareTypeIntellibox = 11,
-	HardwareTypeMasterControl = 12
+	HardwareTypeMasterControl = 12,
+	HardwareTypeTwinCenter = 13
 };
 
 enum Automode : bool

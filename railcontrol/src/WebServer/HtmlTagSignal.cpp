@@ -29,11 +29,12 @@ using std::to_string;
 
 namespace WebServer
 {
-	HtmlTagSignal::HtmlTagSignal(const Manager& manager, const DataModel::Signal* signal)
+	HtmlTagSignal::HtmlTagSignal(const Manager& manager, const DataModel::Signal* const signal)
 	:	HtmlTagTrackBase(manager,
 			dynamic_cast<const DataModel::TrackBase*>(signal),
 			dynamic_cast<const DataModel::LayoutItem*>(signal)
-		)
+		),
+		signal(signal)
 	{
 		image += GetSignalImagePlain(signal);
 		const string idText = to_string(signal->GetID());
@@ -49,9 +50,9 @@ namespace WebServer
 		switch (type)
 		{
 			case DataModel::SignalTypeDeCombined:
-				AddOnClickMenuEntry(Languages::TextSignalStateStop, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=stop');", "menu_stop");
-				AddOnClickMenuEntry(Languages::TextSignalStateClear, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=clear');", "menu_clear");
-				AddOnClickMenuEntry(Languages::TextSignalStateStopExpected, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect2');", "menu_aspect2");
+				MenuEntry(Languages::TextSignalStateStop, idText, DataModel::SignalStateStop, "stop");
+				MenuEntry(Languages::TextSignalStateClear, idText, DataModel::SignalStateClear, "clear");
+				MenuEntry(Languages::TextSignalStateStopExpected, idText, DataModel::SignalStateAspect2, "aspect2");
 				imageDiv.AddAttribute("onclick", "return showOnClickMenu(event, '" + identifier + "');");
 				break;
 
@@ -59,19 +60,19 @@ namespace WebServer
 				break;
 
 			case DataModel::SignalTypeChLMain:
-				AddOnClickMenuEntry(Languages::TextSignalStateStop, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=stop');", "menu_stop");
-				AddOnClickMenuEntry(Languages::TextSignalStateClear, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=clear');", "menu_clear");
-				AddOnClickMenuEntry(Languages::TextSignalStateClear40, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect2');", "menu_aspect2");
-				AddOnClickMenuEntry(Languages::TextSignalStateClear60, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect3');", "menu_aspect3");
-				AddOnClickMenuEntry(Languages::TextSignalStateClear90, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect5');", "menu_aspect5");
-				AddOnClickMenuEntry(Languages::TextSignalStateShortClear, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect6');", "menu_aspect6");
+				MenuEntry(Languages::TextSignalStateStop, idText, DataModel::SignalStateStop, "stop");
+				MenuEntry(Languages::TextSignalStateClear, idText, DataModel::SignalStateClear, "clear");
+				MenuEntry(Languages::TextSignalStateClear40, idText, DataModel::SignalStateAspect2, "aspect2");
+				MenuEntry(Languages::TextSignalStateClear60, idText, DataModel::SignalStateAspect3, "aspect3");
+				MenuEntry(Languages::TextSignalStateClear90, idText, DataModel::SignalStateAspect5, "aspect5");
+				MenuEntry(Languages::TextSignalStateShortClear, idText, DataModel::SignalStateAspect6, "aspect6");
 				imageDiv.AddAttribute("onclick", "return showOnClickMenu(event, '" + identifier + "');");
 				break;
 
 			case DataModel::SignalTypeChDwarf:
-				AddOnClickMenuEntry(Languages::TextSignalStateStop, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=stop');", "menu_stop");
-				AddOnClickMenuEntry(Languages::TextSignalStateClear, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=clear');", "menu_clear");
-				AddOnClickMenuEntry(Languages::TextSignalStateCaution, "fireRequestAndForget('/?cmd=signalstate&signal=" + idText + "&state=aspect2');", "menu_aspect2");
+				MenuEntry(Languages::TextSignalStateStop, idText, DataModel::SignalStateStop, "stop");
+				MenuEntry(Languages::TextSignalStateClear, idText, DataModel::SignalStateClear, "clear");
+				MenuEntry(Languages::TextSignalStateCaution, idText, DataModel::SignalStateAspect2, "aspect2");
 				imageDiv.AddAttribute("onclick", "return showOnClickMenu(event, '" + identifier + "');");
 				break;
 
@@ -94,6 +95,22 @@ namespace WebServer
 		FinishInit();
 	}
 
+	void HtmlTagSignal::MenuEntry(const Languages::TextSelector text,
+		const string& id,
+		const DataModel::AccessoryState state,
+		const string& aspect)
+	{
+		const DataModel::AddressOffset offset = signal->GetStateAddressOffset(state);
+		if (offset < 0)
+		{
+			return;
+		}
+
+		AddOnClickMenuEntry(text,
+			"fireRequestAndForget('/?cmd=signalstate&signal=" + id + "&state=" + aspect + "');",
+			"menu_" + aspect);
+	}
+
 	string HtmlTagSignal::GetSignalImage(const DataModel::AccessoryState state,
 		const DataModel::Signal* signal)
 	{
@@ -103,7 +120,7 @@ namespace WebServer
 		return out;
 	}
 
-	string HtmlTagSignal::GetSignalImagePlain(const DataModel::Signal* signal)
+	string HtmlTagSignal::GetSignalImagePlain(const DataModel::Signal* const signal)
 	{
 		// FIXME: <g> not needed anymore when signal is only on one side 2021-03-21
 		string image = "<g";

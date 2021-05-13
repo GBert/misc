@@ -44,7 +44,7 @@ namespace WebServer
 		const bool blocked = track->GetBlocked();
 
 		string typeString;
-		ObjectType objectType = track->GetObjectType();
+		ObjectType objectType = layout->GetObjectType();
 		switch (objectType)
 		{
 			case ObjectTypeTrack:

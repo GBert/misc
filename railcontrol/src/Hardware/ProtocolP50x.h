@@ -51,22 +51,22 @@ namespace Hardware
 
 			inline void GetLocoProtocols(std::vector<Protocol>& protocols) const override
 			{
-				protocols.push_back(ProtocolDCC);
+				protocols.push_back(ProtocolServer);
 			}
 
 			inline bool LocoProtocolSupported(Protocol protocol) const override
 			{
-				return (protocol == ProtocolDCC);
+				return (protocol == ProtocolServer);
 			}
 
 			inline void GetAccessoryProtocols(std::vector<Protocol>& protocols) const override
 			{
-				protocols.push_back(ProtocolDCC);
+				protocols.push_back(ProtocolServer);
 			}
 
 			inline bool AccessoryProtocolSupported(Protocol protocol) const override
 			{
-				return (protocol == ProtocolDCC);
+				return (protocol == ProtocolServer);
 			}
 
 			void Booster(const BoosterState status) override;
@@ -203,6 +203,8 @@ namespace Hardware
 			bool ReceiveFunctionCommandAnswer() const;
 			void CheckSensorData(const unsigned char module, const unsigned char data) const;
 			void SendXEvtSen() const;
+			void SendXEvtLok() const;
+			void SendXEvtTrn() const;
 			void SendXEvent() const;
 
 			volatile bool run;

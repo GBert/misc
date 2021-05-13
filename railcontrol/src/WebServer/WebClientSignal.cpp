@@ -208,13 +208,13 @@ namespace WebServer
 
 		std::map<DataModel::AccessoryState,DataModel::Signal::StateOption> stateOptions = signal->GetStateOptions();
 
-		map<unsigned char,string> selectAddressOptions;
-		for (unsigned char i = 0; i < stateOptions.size(); ++i)
+		map<AddressOffset,string> selectAddressOptions;
+		selectAddressOptions[-1] = "-";
+		for (AddressOffset i = 0; i < static_cast<AddressOffset>(stateOptions.size()); ++i)
 		{
 			selectAddressOptions[i] = to_string(address + (i >> 1)) + " " + Languages::GetText(i & 0x01 ? Languages::TextGreen : Languages::TextRed);
 		}
 
-		unsigned char i = 0;
 		HtmlTag addressContent;
 		for (auto& stateOption : stateOptions)
 		{
@@ -224,7 +224,6 @@ namespace WebServer
 				selectAddressOptions,
 				signal->GetStateAddressOffset(state)
 			));
-			++i;
 		}
 		client.ReplyHtmlWithHeader(addressContent);
 	}
@@ -256,15 +255,11 @@ namespace WebServer
 		bool allowLocoTurn = Utils::Utils::GetBoolMapEntry(arguments, "allowlocoturn", false);
 		bool releaseWhenFree = Utils::Utils::GetBoolMapEntry(arguments, "releasewhenfree", false);
 		DataModel::AccessoryType signalType = static_cast<DataModel::AccessoryType>(Utils::Utils::GetIntegerMapEntry(arguments, "signaltype", DataModel::SignalTypeSimpleLeft));
-		std::map<AccessoryState,unsigned char> offsets;
-		for (unsigned char i = 0; i < 10; ++i)
+		std::map<AccessoryState,AddressOffset> offsets;
+		for (AddressOffset i = 0; i < 10; ++i)
 		{
-			signed char address = Utils::Utils::GetIntegerMapEntry(arguments, "address" + to_string(i), -1);
-			if (address == -1)
-			{
-				continue;
-			}
-			offsets[static_cast<AccessoryState>(i)] = static_cast<unsigned char>(address);
+			AddressOffset address = Utils::Utils::GetIntegerMapEntry(arguments, "address" + to_string(i), -1);
+			offsets[static_cast<AccessoryState>(i)] = address;
 		}
 		DataModel::AccessoryPulseDuration duration = Utils::Utils::GetIntegerMapEntry(arguments, "duration", manager.GetDefaultAccessoryDuration());
 		bool inverted = Utils::Utils::GetBoolMapEntry(arguments, "inverted");

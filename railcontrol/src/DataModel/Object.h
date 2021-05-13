@@ -31,17 +31,24 @@ namespace DataModel
 	class Object : protected Serializable
 	{
 		public:
+			Object(const Object&) = delete;
+			Object& operator=(const Object&) = delete;
+
 			inline Object()
 			:	objectID(ObjectNone),
 			 	name(std::to_string(objectID))
-			{}
+			{
+			}
 
 			inline Object(const ObjectID objectID)
 			:	objectID(objectID),
 				name(std::to_string(objectID))
-			{}
+			{
+			}
 
-			virtual ~Object() {}
+			virtual ~Object()
+			{
+			}
 
 			virtual ObjectType GetObjectType() const = 0;
 

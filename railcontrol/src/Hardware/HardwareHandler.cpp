@@ -33,6 +33,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "Hardware/MasterControl.h"
 #include "Hardware/OpenDcc.h"
 #include "Hardware/RM485.h"
+#include "Hardware/TwinCenter.h"
 #include "Hardware/Virtual.h"
 #include "Hardware/Z21.h"
 #include "Utils/Utils.h"
@@ -41,7 +42,7 @@ using std::string;
 
 namespace Hardware
 {
-	const std::string HardwareHandler::Unknown = "Unknown, not running";
+	const std::string HardwareHandler::Unknown = Languages::GetText(Languages::TextUnknownHardware);
 
 	void HardwareHandler::Init(const HardwareParams* params)
 	{
@@ -100,6 +101,10 @@ namespace Hardware
 
 			case HardwareTypeMasterControl:
 				instance = reinterpret_cast<Hardware::HardwareInterface*>(new MasterControl(params));
+				break;
+
+			case HardwareTypeTwinCenter:
+				instance = reinterpret_cast<Hardware::HardwareInterface*>(new TwinCenter(params));
 				break;
 		}
 	}
@@ -304,6 +309,10 @@ namespace Hardware
 			return;
 		}
 		Address address = signal->GetMappedAddress();
+		if (address == 0)
+		{
+			return;
+		}
 		DataModel::AccessoryState state = signal->GetMappedAccessoryState();
 		switch (state)
 		{
@@ -523,6 +532,10 @@ namespace Hardware
 
 			case HardwareTypeMasterControl:
 				Hardware::MasterControl::GetArgumentTypesAndHint(arguments, hint);
+				return;
+
+			case HardwareTypeTwinCenter:
+				Hardware::TwinCenter::GetArgumentTypesAndHint(arguments, hint);
 				return;
 		}
 	}

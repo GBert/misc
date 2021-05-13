@@ -1011,6 +1011,7 @@ namespace WebServer
 		hardwareList["CC-Schnitte"] = HardwareTypeCcSchnitte;
 		hardwareList["Digikeijs DR5000"] = HardwareTypeZ21;
 		hardwareList["ESU Ecos &amp; Märklin CS1"] = HardwareTypeEcos;
+		hardwareList["Fleischmann TwinCenter"] = HardwareTypeTwinCenter;
 		hardwareList["LDT HSI-88 RS-232"] = HardwareTypeHsi88;
 		hardwareList["Märklin Central Station 1 (CS1)"] = HardwareTypeEcos;
 		hardwareList["Märklin Central Station 2/3 (CS2/CS3) TCP"] = HardwareTypeCS2Tcp;

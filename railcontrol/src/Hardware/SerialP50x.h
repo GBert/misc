@@ -56,12 +56,12 @@ namespace Hardware
 
 			inline ssize_t Receive(unsigned char* data, const size_t length) const override
 			{
-				return serialLine.Receive(data, length);
+				return serialLine.Receive(data, length, 1, 0);
 			}
 
 			inline ssize_t ReceiveExact(unsigned char* data, const size_t length) const override
 			{
-				return serialLine.ReceiveExact(data, length);
+				return serialLine.ReceiveExact(data, length, 1, 0);
 			}
 
 		private:

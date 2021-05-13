@@ -211,21 +211,5 @@ namespace Hardware
 			const std::string shortName;
 			std::map<std::string,Hardware::LocoCacheEntry> emptyLocoDatabase;
 	};
-
-	class UnknownHardware : HardwareInterface
-	{
-		public:
-			UnknownHardware(const HardwareParams* params)
-			:	HardwareInterface(params->GetManager(), params->GetControlID(), "Unknown", "Unknown")
-			{
-				logger->Error(Languages::TextUnknownHardware);
-			}
-
-			static inline void GetArgumentTypesAndHint(__attribute__((unused)) std::map<unsigned char,ArgumentType>& argumentTypes, std::string& hint)
-			{
-				hint = Languages::GetText(Languages::TextUnknownHardware);
-			}
-	};
-
 } // namespace
 

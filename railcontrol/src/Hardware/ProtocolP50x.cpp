@@ -379,8 +379,8 @@ namespace Hardware
 		while (true)
 		{
 			unsigned char module;
-			size_t ret = ReceiveExactInternal(&module, 1);
-			if (ret == 0 || module == 0)
+			ssize_t ret = ReceiveExactInternal(&module, 1);
+			if (ret != 1 || module == 0)
 			{
 				return;
 			}
@@ -388,24 +388,98 @@ namespace Hardware
 			--module;
 			module <<= 1;
 
-			unsigned char data[2];
-			ret = ReceiveExactInternal(data, sizeof(data));
-			if (ret == 0)
+			unsigned char input[2];
+			ret = ReceiveExactInternal(input, sizeof(input));
+			if (ret < 2)
 			{
 				return;
 			}
 
-			if (s88Memory[module] != data[0])
+			if (s88Memory[module] != input[0])
 			{
-				CheckSensorData(module, data[0]);
+				CheckSensorData(module, input[0]);
 			}
 
 			++module;
 
-			if (s88Memory[module] != data[1])
+			if (s88Memory[module] != input[1])
 			{
-				CheckSensorData(module, data[1]);
+				CheckSensorData(module, input[1]);
 			}
+		}
+	}
+
+	void ProtocolP50x::SendXEvtLok() const
+	{
+		std::lock_guard<std::mutex> guard(communicationLock);
+		unsigned char data[1] = { XEvtLok };
+		SendInternal(data, sizeof(data));
+		while (true)
+		{
+			unsigned char input[5];
+			ssize_t ret = ReceiveExactInternal(input, sizeof(input));
+			if (ret < 1 || input[0] == 0x80)
+			{
+				return;
+			}
+
+			Address address = (input[3] & 0x3F);
+			address <<= 8;
+			address += input[2];
+
+			Speed speed = input[0];
+			if (speed == 1)
+			{
+				speed = 0;
+			}
+			else if (speed > 1)
+			{
+				--speed;
+			}
+			speed <<= 3;
+			manager->LocoSpeed(ControlTypeHardware, controlID, ProtocolServer, address, speed);
+
+			Orientation orientation = static_cast<Orientation>(input[3] >> 7);
+			manager->LocoOrientation(ControlTypeHardware, controlID, ProtocolServer, address, orientation);
+
+			uint16_t functions = input[1];
+			functions <<= 1;
+			functions += (input[3] >> 6) & 0x01;
+			for (DataModel::LocoFunctionNr nr = 0; nr <= 8; ++nr)
+			{
+				DataModel::LocoFunctionState state = static_cast<DataModel::LocoFunctionState>((functions >> nr) & 0x01);
+				manager->LocoFunctionState(ControlTypeHardware, controlID, ProtocolServer, address, nr, state);
+			}
+		}
+	}
+
+	void ProtocolP50x::SendXEvtTrn() const
+	{
+		std::lock_guard<std::mutex> guard(communicationLock);
+		unsigned char data[1] = { XEvtTrnt };
+		SendInternal(data, sizeof(data));
+		while (true)
+		{
+			unsigned char input[2];
+			ssize_t ret = ReceiveExactInternal(input, sizeof(input));
+			if (ret < 1 || input[0] == 0x00)
+			{
+				return;
+			}
+
+			bool on = static_cast<bool>((input[1] >> 6) & 0x01);
+			if (!on)
+			{
+				continue;
+			}
+
+			Address address = (input[1] & 0x07);
+			address <<= 8;
+			address += input[0];
+
+			DataModel::AccessoryState state = static_cast<DataModel::AccessoryState>((input[1] >> 7) & 0x01);
+
+			manager->AccessoryState(ControlTypeHardware, controlID, ProtocolServer, address, state);
 		}
 	}
 
@@ -417,23 +491,25 @@ namespace Hardware
 			unsigned char data[1] = { XEvent };
 			SendInternal(data, sizeof(data));
 			size_t ret = ReceiveExactInternal(&input, 1);
-			if (ret == 0)
+			if (ret != 1)
 			{
 				return;
 			}
+
+			bool moreData = (input >> 7) & 0x01;
 			while (true)
 			{
-				bool moreData = (input >> 7) & 0x01;
 				if (!moreData)
 				{
 					break;
 				}
-
-				size_t ret = ReceiveExactInternal(&input, 1);
-				if (ret == 0)
+				unsigned char input2;
+				size_t ret = ReceiveExactInternal(&input2, 1);
+				if (ret != 1)
 				{
 					break;
 				}
+				moreData = (input2 >> 7) & 0x01;
 			}
 		}
 
@@ -446,7 +522,7 @@ namespace Hardware
 		bool locoEvent = input & 0x01;
 		if (locoEvent)
 		{
-			logger->Debug(Languages::TextLocoEventDetected);
+			SendXEvtLok();
 		}
 
 		bool powerEvent = (input >> 3) & 0x01;
@@ -458,7 +534,7 @@ namespace Hardware
 		bool switchEvent = (input >> 5) & 0x01;
 		if (switchEvent)
 		{
-			logger->Debug(Languages::TextSwitchEventDetected);
+			SendXEvtTrn();
 		}
 	}
 
