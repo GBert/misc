@@ -16,4 +16,8 @@ Geeignete &Uuml;bertrager:
 Murata 53040C
 Pulse Electronics PA1005.040QNL
 ```
-
+Changelog
+---------
+062017 erste Version
+052021 überarbeitete Version für SMT Fertigung bei JLCPCB
+062021 R17 gegen Masse nicht gegen VCC
