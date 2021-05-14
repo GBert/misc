@@ -21,3 +21,4 @@ Changelog
 062017 erste Version
 052021 überarbeitete Version für SMT Fertigung bei JLCPCB
 062021 R17 gegen Masse nicht gegen VCC
+       1N4148 Pads vergrössert

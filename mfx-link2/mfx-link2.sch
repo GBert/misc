@@ -5,8 +5,8 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "mfx-Booster/Link II"
-Date "2021-05-10"
-Rev "1.0"
+Date "2021-05-14"
+Rev "1.01"
 Comp "GBe"
 Comment1 ""
 Comment2 ""
@@ -1197,17 +1197,6 @@ F 3 "" H 8750 1425 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:VCC #PWR025
-U 1 1 590A1627
-P 10200 1775
-F 0 "#PWR025" H 10200 1625 50  0001 C CNN
-F 1 "VCC" H 10200 1925 50  0000 C CNN
-F 2 "" H 10200 1775 50  0000 C CNN
-F 3 "" H 10200 1775 50  0000 C CNN
-	1    10200 1775
-	1    0    0    -1  
-$EndComp
-$Comp
 L mfx-link2-rescue:VCC #PWR026
 U 1 1 590A3FCB
 P 9400 2250
@@ -1763,4 +1752,19 @@ Wire Wire Line
 	6600 3100 6650 3100
 Wire Wire Line
 	6650 3100 6650 3150
+$Comp
+L mfx-link2-rescue:GND #PWR?
+U 1 1 60BE0708
+P 10400 1875
+F 0 "#PWR?" H 10400 1625 50  0001 C CNN
+F 1 "GND" H 10400 1725 50  0000 C CNN
+F 2 "" H 10400 1875 50  0000 C CNN
+F 3 "" H 10400 1875 50  0000 C CNN
+	1    10400 1875
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10400 1875 10400 1775
+Wire Wire Line
+	10400 1775 10200 1775
 $EndSCHEMATC

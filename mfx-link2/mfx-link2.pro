@@ -1,4 +1,4 @@
-update=Mo 10 Mai 2021 20:52:51 CEST
+update=Fr 14 Mai 2021 12:43:17 CEST
 version=1
 last_client=kicad
 [cvpcb]
@@ -6,16 +6,6 @@ version=1
 NetIExt=net
 [general]
 version=1
-[schematic_editor]
-version=1
-PageLayoutDescrFile=
-PlotDirectoryName=
-SubpartIdSeparator=0
-SubpartFirstId=65
-NetFmtName=
-SpiceForceRefPrefix=0
-SpiceUseNetNumbers=0
-LabSize=60
 [eeschema]
 version=1
 LibDir=
@@ -265,3 +255,13 @@ uViaDrill=0.1
 dPairWidth=0.2
 dPairGap=0.25
 dPairViaGap=0.25
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=
+SpiceAjustPassiveValues=0
+LabSize=60
+ERC_TestSimilarLabels=1
