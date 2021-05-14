@@ -1,11 +1,13 @@
 const int revisionnr = 
-1577
+1579
 ;
 const char* commithash = 
-"18a96fe57931aed4006234370ca2dafcaf111370";
+"919f9eb456f0b557cfb0ed2a0533d70d34f23707";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1579 2021-05-14 15:11:10 +0200 output: crash fix\n" \
+"1578 2021-05-14 07:51:48 +0200 action: every/timed fixed\n" \
 "1577 2021-05-11 22:08:38 +0200 z21: MADA support for switch commands\n" \
 "1576 2021-05-11 08:25:24 +0200 location: check state !free too\n" \
 "1575 2021-05-11 08:15:56 +0200 action: location state condition added\n" \
