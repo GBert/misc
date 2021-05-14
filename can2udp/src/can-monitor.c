@@ -151,7 +151,7 @@ void writeYellow(const char *s) {
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <can interface>\n", prg);
-    fprintf(stderr, "   Version 3.16\n\n");
+    fprintf(stderr, "   Version 3.17\n\n");
     fprintf(stderr, "         -i <can int>      CAN interface - default can0\n");
     fprintf(stderr, "         -r <pcap file>    read PCAP file instead from CAN socket\n");
     fprintf(stderr, "         -s                select only network internal frames\n");
@@ -433,7 +433,27 @@ void command_system(struct can_frame *frame) {
 	       uid, frame->data[5], frame->data[6], frame->data[7]);
 	break;
     case 0x30:
-	printf("System: mfx Seek 0x%08X", uid);
+	printf("System: mfx Seek von 0x%08X:", uid);
+	if (frame->can_dlc > 5)
+	    switch (frame->data[5]) {
+	    case 0x00:
+		printf(" Warten beenden");
+		break;
+	    case 0x01:
+		printf(" auf 1-Bit-Antwort warten");
+		break;
+	    case 0x02:
+		printf(" auf %d-Byte-Antwort warten", frame->data[6]);
+		break;
+	    case 0x82:
+		printf(GRN " Antwortbyte %d mit Wert 0x%02X", frame->data[6], frame->data[7]);
+		break;
+	    case 0x83:
+		printf(GRN " 1-Bit-Antwort mit ASK %d", frame->data[6]);
+		break;
+	    default:
+		printf(" unbekannter Code");
+	    }
 	break;
     case 0x80:
 	printf("System: System Reset UID 0x%08X Ziel 0x%02X", uid, frame->data[5]);
@@ -920,7 +940,7 @@ void decode_frame(struct can_frame *frame) {
 	uid = be32(frame->data);
 	if (frame->can_dlc == 5)
 	    printf("SX1 Event UID 0x%08X SX1-Adresse %d", uid, frame->data[4]);
-	if (frame->can_dlc == 5)
+	if (frame->can_dlc == 6)
 	    printf("SX1 Event UID 0x%08X SX1-Adresse %d Zustand %d", uid, frame->data[4], frame->data[5]);
 	printf("\n");
 	break;
