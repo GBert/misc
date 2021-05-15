@@ -690,6 +690,14 @@ function updateTitle()
 	updateItem("title", locoName.innerHTML + " - RailControl");
 }
 
+function updateText(textID)
+{
+	elementName = 'tx_' + textID;
+	var url = '/?cmd=textget';
+	url += '&text=' + textID;
+	requestUpdateLayoutItem(elementName, url);
+}
+
 function updateTrack(trackID)
 {
 	elementName = 't_' + trackID;
@@ -1046,6 +1054,7 @@ function dataUpdate(event)
 	{
 		elementName = 'sw_' + argumentMap.get('switch');
 		deleteElement(elementName);
+		deleteElement(elementName + '_onclick');
 		deleteElement(elementName + '_context');
 	}
 	else if (command == 'signal')
@@ -1077,6 +1086,16 @@ function dataUpdate(event)
 		deleteElement(elementName);
 		deleteElement(elementName + '_context');
 	}
+	else if (command == 'textsettings')
+	{
+		updateText(argumentMap.get('text'));
+	}
+	else if (command == 'textdelete')
+	{
+		elementName = 'tx_' + argumentMap.get('text');
+		deleteElement(elementName);
+		deleteElement(elementName + '_context');
+	}
 	else if (command == 'trackstate')
 	{
 		updateTrackState(argumentMap);
@@ -1089,6 +1108,7 @@ function dataUpdate(event)
 	{
 		elementName = 't_' + argumentMap.get('track');
 		deleteElement(elementName);
+		deleteElement(elementName + '_onclick');
 		deleteElement(elementName + '_context');
 	}
 	else if (command == 'feedback')

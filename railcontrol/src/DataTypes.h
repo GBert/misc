@@ -63,6 +63,8 @@ typedef uint16_t Priority;
 
 typedef uint8_t Pause;
 
+// text
+typedef ObjectID TextID;
 
 static const Address AddressNone = 0;
 static const Address AddressDefault = 3;
@@ -79,6 +81,7 @@ static const LayerID LayerNone = 0;
 static const LayerID LayerUndeletable = 1;
 static const SignalID SignalNone = 0;
 static const ClusterID ClusterNone = 0;
+static const TextID TextNone = 0;
 
 static const Speed MaxSpeed = 1023;
 static const Speed DefaultTravelSpeed = 700;
@@ -192,7 +195,8 @@ enum ObjectType : uint8_t
 	ObjectTypeLayer = 7,
 	ObjectTypeSignal = 8,
 	ObjectTypeCluster = 9,
-	ObjectTypeTimeTable = 10
+	ObjectTypeTimeTable = 10,
+	ObjectTypeText = 11
 };
 
 enum Orientation : bool

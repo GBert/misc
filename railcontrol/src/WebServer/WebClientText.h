@@ -20,40 +20,39 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
+#include <map>
 #include <string>
 
-#include "DataModel/TrackBase.h"
-#include "WebServer/HtmlTagLayoutItem.h"
-
-class Manager;
+#include "Logger/Logger.h"
+#include "Manager.h"
 
 namespace WebServer
 {
-	class HtmlTagTrackBase : public HtmlTagLayoutItem
+	class WebClient;
+
+	class WebClientText
 	{
 		public:
-			HtmlTagTrackBase() = delete;
-			HtmlTagTrackBase(const HtmlTagTrackBase&) = delete;
-			HtmlTagTrackBase& operator=(const HtmlTagTrackBase&) = delete;
+			WebClientText() = delete;
+			WebClientText(const WebClientText&) = delete;
+			WebClientText& operator=(const WebClientText&) = delete;
 
-			virtual HtmlTag AddAttribute(const std::string& name, const std::string& value) override
-			{
-				childTags[0].AddAttribute(name, value);
-				return *this;
-			}
-
-		protected:
-			HtmlTagTrackBase(const Manager& manager,
-				const DataModel::TrackBase* track,
-				const DataModel::LayoutItem* layout);
-
-			virtual ~HtmlTagTrackBase()
+			inline WebClientText(Manager& manager, WebClient& client)
+			:	manager(manager),
+				client(client)
 			{
 			}
 
-			const DataModel::TrackBase* track;
+			void HandleTextEdit(const std::map<std::string,std::string>& arguments);
+			void HandleTextSave(const std::map<std::string,std::string>& arguments);
+			void HandleTextList();
+			void HandleTextAskDelete(const std::map<std::string,std::string>& arguments);
+			void HandleTextDelete(const std::map<std::string,std::string>& arguments);
+			void HandleTextGet(const std::map<std::string, std::string>& arguments);
 
-			std::string urlIdentifier;
+		private:
+			Manager& manager;
+			WebClient& client;
 	};
 } // namespace WebServer
 

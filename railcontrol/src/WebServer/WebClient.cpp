@@ -56,6 +56,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "WebServer/HtmlTagSelectWithLabel.h"
 #include "WebServer/HtmlTagSignal.h"
 #include "WebServer/HtmlTagSwitch.h"
+#include "WebServer/HtmlTagText.h"
 #include "WebServer/HtmlTagTrack.h"
 #include "WebServer/ResponseCsv.h"
 #include "WebServer/ResponseHtml.h"
@@ -103,15 +104,16 @@ namespace WebServer
 
 		while (run && keepalive)
 		{
-			char buffer_in[4096];
-			memset(buffer_in, 0, sizeof(buffer_in));
+			const int BufferSize = 4096;
+			char buffer[BufferSize];
+			memset(buffer, 0, BufferSize);
 
-			size_t pos = 0;
+			int pos = 0;
 			string s;
-			while (pos < sizeof(buffer_in) - 1 && s.find("\n\n") == string::npos && run)
+			while (pos < BufferSize - 1 && s.find("\n\n") == string::npos && run)
 			{
-				size_t ret = connection->Receive(buffer_in + pos, sizeof(buffer_in) - 1 - pos, 0);
-				if (ret == static_cast<size_t>(-1))
+				int ret = connection->Receive(buffer + pos, BufferSize - 1 - pos, 0);
+				if (ret == -1)
 				{
 					if (errno != ETIMEDOUT)
 					{
@@ -124,7 +126,7 @@ namespace WebServer
 					continue;
 				}
 				pos += ret;
-				s = string(buffer_in);
+				s = string(buffer);
 				Utils::Utils::ReplaceString(s, string("\r\n"), string("\n"));
 				Utils::Utils::ReplaceString(s, string("\r"), string("\n"));
 			}
@@ -402,6 +404,30 @@ namespace WebServer
 			else if (arguments["cmd"].compare("routerelease") == 0)
 			{
 				HandleRouteRelease(arguments);
+			}
+			else if (arguments["cmd"].compare("textedit") == 0)
+			{
+				text.HandleTextEdit(arguments);
+			}
+			else if (arguments["cmd"].compare("textsave") == 0)
+			{
+				text.HandleTextSave(arguments);
+			}
+			else if (arguments["cmd"].compare("textlist") == 0)
+			{
+				text.HandleTextList();
+			}
+			else if (arguments["cmd"].compare("textaskdelete") == 0)
+			{
+				text.HandleTextAskDelete(arguments);
+			}
+			else if (arguments["cmd"].compare("textdelete") == 0)
+			{
+				text.HandleTextDelete(arguments);
+			}
+			else if (arguments["cmd"].compare("textget") == 0)
+			{
+				text.HandleTextGet(arguments);
 			}
 			else if (arguments["cmd"].compare("trackedit") == 0)
 			{
@@ -2368,6 +2394,16 @@ namespace WebServer
 			return;
 		}
 
+		const map<TextID,DataModel::Text*>& texts = manager.TextList();
+		for (auto& text : texts)
+		{
+			if (text.second->IsVisibleOnLayer(layer) == false)
+			{
+				continue;
+			}
+			content.AddChildTag(HtmlTagText(text.second));
+		}
+
 		const map<AccessoryID,DataModel::Accessory*>& accessories = manager.AccessoryList();
 		for (auto& accessory : accessories)
 		{
@@ -4054,8 +4090,9 @@ namespace WebServer
 		menuConfig.AddChildTag(HtmlTagButtonPopup("<svg width=\"36\" height=\"36\"><polyline points=\"1,20 7.1,19.5 13,17.9 18.5,15.3 23.5,11.8 27.8,7.5\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/><polyline points=\"1,28 8.5,27.3 15.7,25.4 22.5,22.2 28.6,17.9 33.9,12.6\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/><polyline points=\"1,20 35,20\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"1,28 35,28\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"3,18 3,30\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"6,18 6,30\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"9,17 9,30\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"12,16 12,30\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"15,15 15,30\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"18,13 18,30\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"21,12 21,30\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"24,9 24,30\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"27,17 27,30\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"30,18 30,30\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"33,18 33,30\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"24,9 32,17\" stroke=\"black\" stroke-width=\"1\"/><polyline points=\"26,7 34,15\" stroke=\"black\" stroke-width=\"1\"/></svg>", "switchlist", Languages::TextEditSwitches));
 		menuConfig.AddChildTag(HtmlTagButtonPopup("<svg width=\"36\" height=\"36\"><polygon points=\"17,36 17,28 15,28 10,23 10,5 15,0 21,0 26,5 26,23 21,28 19,28 19,36\" fill=\"black\" /><circle cx=\"18\" cy=\"8\" r=\"4\" fill=\"red\" /><circle cx=\"18\" cy=\"20\" r=\"4\" fill=\"green\" /></svg>", "signallist", Languages::TextEditSignals));
 		menuConfig.AddChildTag(HtmlTagButtonPopup("<svg width=\"36\" height=\"36\"><polyline points=\"1,20 10,20 30,15\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/><polyline points=\"28,17 28,20 34,20\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/></svg>", "accessorylist", Languages::TextEditAccessories));
-		menuConfig.AddChildTag(HtmlTagButtonPopup("<svg width=\"36\" height=\"36\"><polyline points=\"5,34 15,1\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/><polyline points=\"31,34 21,1\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/><polyline points=\"18,34 18,30\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/><polyline points=\"18,24 18,20\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/><polyline points=\"18,14 18,10\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/><polyline points=\"18,4 18,1\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/></svg>", "routelist", Languages::TextEditRoutes));
 		menuConfig.AddChildTag(HtmlTagButtonPopup("<svg width=\"36\" height=\"36\"><polyline points=\"1,25 35,25\" fill=\"none\" stroke=\"black\"/><polygon points=\"4,25 4,23 8,23 8,25\" fill=\"black\" stroke=\"black\"/><polygon points=\"35,22 16,22 15,19 18,10 35,10\" stroke=\"black\" fill=\"black\"/><polygon points=\"20,12 25,12 25,15 19,15\" fill=\"white\"/><polyline points=\"26,10 30,8 26,6\" stroke=\"black\" fill=\"none\"/><circle cx=\"22\" cy=\"22\" r=\"3\"/><circle cx=\"30\" cy=\"22\" r=\"3\"/></svg>", "feedbacklist", Languages::TextEditFeedbacks));
+		menuConfig.AddChildTag(HtmlTagButtonPopup("<svg width=\"36\" height=\"36\"><polyline points=\"5,34 15,1\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/><polyline points=\"31,34 21,1\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/><polyline points=\"18,34 18,30\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/><polyline points=\"18,24 18,20\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/><polyline points=\"18,14 18,10\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/><polyline points=\"18,4 18,1\" stroke=\"black\" stroke-width=\"1\" fill=\"none\"/></svg>", "routelist", Languages::TextEditRoutes));
+		menuConfig.AddChildTag(HtmlTagButtonPopup("<svg width=\"36\" height=\"36\"><text x=\"4\" y=\"22\" fill=\"black\" font-size=\"15\">Text</text></svg>", "textlist", Languages::TextEditTexts));
 		menu.AddChildTag(menuConfig);
 
 		body.AddChildTag(menu);
@@ -4075,8 +4112,9 @@ namespace WebServer
 			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddClass("real_layer_only").AddContent(Languages::GetText(Languages::TextAddSwitch)).AddAttribute("onClick", "loadPopup('/?cmd=switchedit&switch=0');"))
 			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddClass("real_layer_only").AddContent(Languages::GetText(Languages::TextAddSignal)).AddAttribute("onClick", "loadPopup('/?cmd=signaledit&signal=0');"))
 			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddClass("real_layer_only").AddContent(Languages::GetText(Languages::TextAddAccessory)).AddAttribute("onClick", "loadPopup('/?cmd=accessoryedit&accessory=0');"))
-			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddClass("real_layer_only").AddContent(Languages::GetText(Languages::TextAddRoute)).AddAttribute("onClick", "loadPopup('/?cmd=routeedit&route=0');"))
 			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddContent(Languages::GetText(Languages::TextAddFeedback)).AddAttribute("onClick", "loadPopup('/?cmd=feedbackedit&feedback=0');"))
+			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddClass("real_layer_only").AddContent(Languages::GetText(Languages::TextAddRoute)).AddAttribute("onClick", "loadPopup('/?cmd=routeedit&route=0');"))
+			.AddChildTag(HtmlTag("li").AddClass("contextentry").AddClass("real_layer_only").AddContent(Languages::GetText(Languages::TextAddText)).AddAttribute("onClick", "loadPopup('/?cmd=textedit&text=0');"))
 			));
 
 		connection->Send(ResponseHtmlFull("RailControl", body));

@@ -71,6 +71,8 @@ namespace Storage
 			void DeleteSignal(SignalID signalID);
 			void AllClusters(std::map<ClusterID,DataModel::Cluster*>& clusters);
 			void DeleteCluster(ClusterID clusterID);
+			void AllTexts(std::map<TextID,DataModel::Text*>& texts);
+			void DeleteText(TextID textID);
 			void Save(const Hardware::HardwareParams& hardwareParams);
 			void Save(const DataModel::Route& route);
 			void Save(const DataModel::Loco& loco);

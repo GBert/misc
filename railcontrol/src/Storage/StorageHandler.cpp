@@ -35,6 +35,7 @@ using DataModel::Relation;
 using DataModel::Route;
 using DataModel::Signal;
 using DataModel::Switch;
+using DataModel::Text;
 using DataModel::Track;
 using std::map;
 using std::string;
@@ -297,6 +298,27 @@ namespace Storage
 	{
 		TransactionGuard guard(this);
 		sqlite.DeleteObject(ObjectTypeCluster, clusterID);
+	}
+
+	void StorageHandler::AllTexts(std::map<TextID,DataModel::Text*>& texts)
+	{
+		vector<string> serializedObjects;
+		sqlite.ObjectsOfType(ObjectTypeText, serializedObjects);
+		for (auto& serializedObject : serializedObjects)
+		{
+			Text* text = new Text(serializedObject);
+			if (text == nullptr)
+			{
+				continue;
+			}
+			texts[text->GetID()] = text;
+		}
+	}
+
+	void StorageHandler::DeleteText(const TextID textID)
+	{
+		TransactionGuard guard(this);
+		sqlite.DeleteObject(ObjectTypeText, textID);
 	}
 
 	void StorageHandler::SaveSetting(const std::string& key, const std::string& value)

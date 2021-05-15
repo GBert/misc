@@ -18,42 +18,29 @@ along with RailControl; see the file LICENCE. If not see
 <http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include <sstream>
 
-#include <string>
+#include "DataModel/Text.h"
+#include "WebServer/HtmlTagText.h"
 
-#include "DataModel/TrackBase.h"
-#include "WebServer/HtmlTagLayoutItem.h"
-
-class Manager;
+using std::string;
+using std::to_string;
 
 namespace WebServer
 {
-	class HtmlTagTrackBase : public HtmlTagLayoutItem
+	HtmlTagText::HtmlTagText(const DataModel::Text* text)
+	:	HtmlTagLayoutItem(dynamic_cast<const DataModel::LayoutItem*>(text))
 	{
-		public:
-			HtmlTagTrackBase() = delete;
-			HtmlTagTrackBase(const HtmlTagTrackBase&) = delete;
-			HtmlTagTrackBase& operator=(const HtmlTagTrackBase&) = delete;
+		const string& name = text->GetName();
+		image += "<text x=\"3\" y=\"22\">" + name + "</text>";
 
-			virtual HtmlTag AddAttribute(const std::string& name, const std::string& value) override
-			{
-				childTags[0].AddAttribute(name, value);
-				return *this;
-			}
+		imageDiv.AddClass("text_item");
 
-		protected:
-			HtmlTagTrackBase(const Manager& manager,
-				const DataModel::TrackBase* track,
-				const DataModel::LayoutItem* layout);
+		const string urlIdentifier = "text=" + to_string(text->GetID());
 
-			virtual ~HtmlTagTrackBase()
-			{
-			}
-
-			const DataModel::TrackBase* track;
-
-			std::string urlIdentifier;
-	};
+		AddContextMenuEntry(name);
+		AddContextMenuEntry(Languages::TextEditText, "loadPopup('/?cmd=textedit&" + urlIdentifier + "');");
+		AddContextMenuEntry(Languages::TextDeleteText, "loadPopup('/?cmd=textaskdelete&" + urlIdentifier + "');");
+		FinishInit();
+	}
 } // namespace WebServer
-

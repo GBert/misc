@@ -51,6 +51,8 @@ DataModel/Signal.cpp
 DataModel/Signal.h
 DataModel/Switch.cpp
 DataModel/Switch.h
+DataModel/Text.cpp
+DataModel/Text.h
 DataModel/Track.cpp
 DataModel/Track.h
 DataModel/TrackBase.cpp
@@ -186,6 +188,8 @@ WebServer/HtmlTagSignal.cpp
 WebServer/HtmlTagSignal.h
 WebServer/HtmlTagSwitch.cpp
 WebServer/HtmlTagSwitch.h
+WebServer/HtmlTagText.cpp
+WebServer/HtmlTagText.h
 WebServer/HtmlTagTrack.cpp
 WebServer/HtmlTagTrack.h
 WebServer/HtmlTagTrackBase.cpp
@@ -206,6 +210,8 @@ WebServer/WebClientCluster.cpp
 WebServer/WebClientCluster.h
 WebServer/WebClientSignal.cpp
 WebServer/WebClientSignal.h
+WebServer/WebClientText.cpp
+WebServer/WebClientText.h
 WebServer/WebClientTrack.cpp
 WebServer/WebClientTrack.h
 WebServer/WebClientTrackBase.cpp

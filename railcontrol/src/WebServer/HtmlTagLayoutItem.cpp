@@ -67,6 +67,10 @@ namespace WebServer
 				identifier = "sw_";
 				break;
 
+			case ObjectTypeText:
+				identifier = "tx_";
+				break;
+
 			default:
 				identifier = "unknown_";
 				return;
@@ -84,23 +88,26 @@ namespace WebServer
 	void HtmlTagLayoutItem::FinishInit()
 	{
 		const DataModel::LayoutItem::LayoutItemSize trackHeight = layout->GetHeight();
-		const string layoutHeight = to_string(EdgeLength * trackHeight);
+		const DataModel::LayoutItem::LayoutItemSize trackWidth = layout->GetWidth();
 
 		int translate = 0;
-		if (trackHeight > DataModel::LayoutItem::Height1)
+		if (trackHeight > DataModel::LayoutItem::Height1 || trackWidth > DataModel::LayoutItem::Width1)
 		{
-			DataModel::LayoutItem::LayoutRotation trackRotation = layout->GetRotation();
-			if (trackRotation == DataModel::LayoutItem::Rotation90 || trackRotation == DataModel::LayoutItem::Rotation270)
+			DataModel::LayoutItem::LayoutRotation rotation = layout->GetRotation();
+			if (rotation == DataModel::LayoutItem::Rotation90 || rotation == DataModel::LayoutItem::Rotation270)
 			{
-				translate = (((trackHeight - 1) * EdgeLength) / 2);
+				translate = (((trackHeight - trackWidth) * EdgeLength) / 2);
 			}
-			if (trackRotation == DataModel::LayoutItem::Rotation90)
+			if (rotation == DataModel::LayoutItem::Rotation90)
 			{
 				translate = -translate;
 			}
 		}
 
-		imageDiv.AddChildTag(HtmlTag().AddContent("<svg width=\"" + EdgeLengthString + "\" height=\"" + layoutHeight + "\" id=\"" + identifier + "_img\" style=\"transform:rotate(" + DataModel::LayoutItem::Rotation(layout->GetRotation()) + "deg) translate(" + to_string(translate) + "px," + to_string(translate) + "px);\">" + image + "</svg>"));
+		const string layoutHeight = to_string(EdgeLength * trackHeight);
+		const string layoutWidth = to_string(EdgeLength * trackWidth);
+		const string translateText = to_string(translate);
+		imageDiv.AddChildTag(HtmlTag().AddContent("<svg width=\"" + layoutWidth + "\" height=\"" + layoutHeight + "\" id=\"" + identifier + "_img\" style=\"transform:rotate(" + DataModel::LayoutItem::Rotation(layout->GetRotation()) + "deg) translate(" + translateText + "px," + translateText + "px);\">" + image + "</svg>"));
 
 		if (onClickMenuContentDiv.ChildCount())
 		{

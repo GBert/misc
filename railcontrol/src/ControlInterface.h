@@ -271,6 +271,15 @@ class ControlInterface
 		{
 		}
 
+		virtual void TextDelete(__attribute__((unused)) const TextID textID,
+			__attribute__((unused)) const std::string& name)
+		{
+		}
+
+		virtual void TextSettings(__attribute__((unused)) const TextID textID,
+			__attribute__((unused)) const std::string& name)
+		{
+		}
 
 		virtual void LocoSpeedOrientationFunctions(const DataModel::Loco* loco,
 			const Speed speed,

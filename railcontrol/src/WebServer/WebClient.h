@@ -33,6 +33,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "ResponseHtml.h"
 #include "WebServer/WebClientCluster.h"
 #include "WebServer/WebClientSignal.h"
+#include "WebServer/WebClientText.h"
 #include "WebServer/WebClientTrack.h"
 
 namespace DataModel
@@ -74,9 +75,11 @@ namespace WebServer
 				cluster(manager, *this),
 				track(manager, *this, logger),
 				signal(manager, *this, logger),
+				text(manager, *this),
 				headOnly(false),
 				buttonID(0)
-			{}
+			{
+			}
 
 			~WebClient();
 
@@ -148,7 +151,7 @@ namespace WebServer
 				const DataModel::LayoutItem::LayoutPosition posy,
 				const DataModel::LayoutItem::LayoutPosition posz,
 				const DataModel::LayoutItem::LayoutRotation rotation = DataModel::LayoutItem::RotationNotRelevant,
-				const DataModel::LayoutItem::Visible visible = DataModel::LayoutItem::VisibleNotRelevant) const;
+				const DataModel::LayoutItem::Visible visible = DataModel::LayoutItem::VisibleNotRelevant) const ;
 
 			HtmlTag HtmlTagControlAccessory(const ControlID controlID, const std::string& objectType, const ObjectID objectID);
 			HtmlTag HtmlTagProtocolAccessory(const ControlID controlID, const Protocol selectedProtocol);
@@ -190,7 +193,8 @@ namespace WebServer
 				const std::string& selectedMatchKey,
 				const Protocol selectedProtocol);
 
-			HtmlTag HtmlTagDuration(const DataModel::AccessoryPulseDuration duration, const Languages::TextSelector label) const;
+			HtmlTag HtmlTagDuration(const DataModel::AccessoryPulseDuration duration,
+				const Languages::TextSelector label) const;
 
 			HtmlTag HtmlTagPosition(const DataModel::LayoutItem::LayoutPosition posx,
 				const DataModel::LayoutItem::LayoutPosition posy,
@@ -345,6 +349,7 @@ namespace WebServer
 			WebClientCluster cluster;
 			WebClientTrack track;
 			WebClientSignal signal;
+			WebClientText text;
 			bool headOnly;
 			unsigned int buttonID;
 	};

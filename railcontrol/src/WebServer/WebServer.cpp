@@ -457,6 +457,18 @@ namespace WebServer
 		AddUpdate(command.str(), Languages::TextClusterDeleted, name);
 	}
 
+	void WebServer::TextSettings(const TextID textID, const std::string& name)
+	{
+		string command = "textsettings;text=" + to_string(textID);
+		AddUpdate(command, Languages::TextTextUpdated, name);
+	}
+
+	void WebServer::TextDelete(const TextID textID, const std::string& name)
+	{
+		string command = "textdelete;text=" + to_string(textID);
+		AddUpdate(command, Languages::TextTextDeleted, name);
+	}
+
 	void WebServer::LocoRelease(const LocoID locoID)
 	{
 		stringstream command;

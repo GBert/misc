@@ -187,7 +187,8 @@ class Manager
 			const Address address,
 			const DataModel::AccessoryType type,
 			const DataModel::AccessoryPulseDuration duration,
-			const bool inverted, std::string& result);
+			const bool inverted,
+			std::string& result);
 
 		bool AccessoryDelete(const AccessoryID accessoryID,
 			std::string& result);
@@ -399,6 +400,28 @@ class Manager
 			std::string& result);
 
 		bool ClusterDelete(const ClusterID clusterID);
+
+		// text
+		DataModel::Text* GetText(const TextID textID) const;
+
+		inline const std::map<TextID,DataModel::Text*>& TextList() const
+		{
+			return texts;
+		}
+
+		const std::map<std::string,DataModel::Text*> TextListByName() const;
+
+		bool TextSave(TextID textID,
+			const std::string& name,
+			const DataModel::LayoutItem::LayoutPosition x,
+			const DataModel::LayoutItem::LayoutPosition y,
+			const DataModel::LayoutItem::LayoutPosition z,
+			const DataModel::LayoutItem::LayoutItemSize width,
+			const DataModel::LayoutItem::LayoutRotation rotation,
+			std::string& result);
+
+		bool TextDelete(const TextID textID,
+			std::string& result);
 
 		// automode
 		bool LocoIntoTrackBase(Logger::Logger* logger, const LocoID locoID, const DataModel::ObjectIdentifier& trackIdentifier);
@@ -710,6 +733,10 @@ class Manager
 		// cluster
 		std::map<SignalID,DataModel::Cluster*> clusters;
 		mutable std::mutex clusterMutex;
+
+		// text
+		std::map<TextID,DataModel::Text*> texts;
+		mutable std::mutex textMutex;
 
 		// storage
 		Storage::StorageHandler* storage;

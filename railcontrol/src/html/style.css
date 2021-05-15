@@ -63,7 +63,7 @@ body {
 	}
 }
 
-@media (min-width: 650px) and (max-width: 849px) {
+@media (min-width: 650px) and (max-width: 889px) {
 	.menu_config {
 		display: none;
 	}
@@ -84,7 +84,7 @@ body {
 	}
 }
 
-@media (min-width: 850px) {
+@media (min-width: 890px) {
 	.menu_add,
 	.menu_config,
 	.menu_config_visible {
@@ -357,6 +357,7 @@ body {
 	display: none;
 }
 
+.text_item,
 .trackname {
 	fill: white;
 }

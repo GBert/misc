@@ -32,6 +32,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "DataModel/Route.h"
 #include "DataModel/Signal.h"
 #include "DataModel/Switch.h"
+#include "DataModel/Text.h"
 #include "DataModel/Track.h"
 #include "DataModel/TrackBase.h"
 

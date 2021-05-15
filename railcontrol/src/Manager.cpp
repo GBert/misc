@@ -113,6 +113,12 @@ Manager::Manager(Config& config)
 		}
 	}
 
+	storage->AllTexts(texts);
+	for (auto& text : texts)
+	{
+		logger->Info(Languages::TextLoadedText, text.second->GetID(), text.second->GetName());
+	}
+
 	storage->AllAccessories(accessories);
 	for (auto& accessory : accessories)
 	{
@@ -264,6 +270,7 @@ Manager::~Manager()
 		DeleteAllMapEntries(signals, signalMutex);
 		DeleteAllMapEntries(feedbacks, feedbackMutex);
 		DeleteAllMapEntries(accessories, accessoryMutex);
+		DeleteAllMapEntries(texts, textMutex);
 		DeleteAllMapEntries(layers, layerMutex);
 	}
 
@@ -2737,6 +2744,118 @@ bool Manager::ClusterDelete(const ClusterID clusterID)
 }
 
 /***************************
+* Text                  *
+***************************/
+
+Text* Manager::GetText(const TextID textID) const
+{
+	std::lock_guard<std::mutex> guard(textMutex);
+	if (texts.count(textID) != 1)
+	{
+		return nullptr;
+	}
+	return texts.at(textID);
+}
+
+const map<string,DataModel::Text*> Manager::TextListByName() const
+{
+	map<string,DataModel::Text*> out;
+	std::lock_guard<std::mutex> guard(textMutex);
+	for (auto& text : texts)
+	{
+		out[text.second->GetName()] = text.second;
+	}
+	return out;
+}
+
+bool Manager::TextSave(TextID textID,
+	const string& name,
+	const LayoutPosition posX,
+	const LayoutPosition posY,
+	const LayoutPosition posZ,
+	const LayoutItemSize width,
+	const LayoutRotation rotation,
+	string& result)
+{
+	Text* text = GetText(textID);
+	if (!CheckLayoutItemPosition(text, posX, posY, posZ, width, LayoutItem::Height1, rotation, result))
+	{
+		return false;
+	}
+
+	if (text == nullptr)
+	{
+		text = CreateAndAddObject(texts, textMutex);
+	}
+
+	if (text == nullptr)
+	{
+		result = Languages::GetText(Languages::TextUnableToAddText);
+		return false;
+	}
+
+	// if we have a new object we have to update textID
+	textID = text->GetID();
+
+	// update existing text
+	text->SetName(CheckObjectName(texts, textMutex, textID, name.size() == 0 ? "T" : name));
+	text->SetPosX(posX);
+	text->SetPosY(posY);
+	text->SetPosZ(posZ);
+	text->SetWidth(width);
+	text->SetHeight(LayoutItem::Height1);
+	text->SetRotation(rotation);
+
+	// save in db
+	if (storage)
+	{
+		storage->Save(*text);
+	}
+
+	std::lock_guard<std::mutex> guard(controlMutex);
+	for (auto& control : controls)
+	{
+		control.second->TextSettings(textID, name);
+	}
+return true;
+}
+
+bool Manager::TextDelete(const TextID textID, string& result)
+{
+	if (textID == TextNone)
+	{
+		result = Languages::GetText(Languages::TextTextDoesNotExist);
+		return false;
+	}
+	Text* text = nullptr;
+	{
+		std::lock_guard<std::mutex> guard(textMutex);
+		if (texts.count(textID) != 1)
+		{
+			result = Languages::GetText(Languages::TextTextDoesNotExist);
+			return false;
+		}
+
+		text = texts.at(textID);
+		texts.erase(textID);
+	}
+
+	if (storage)
+	{
+		storage->DeleteText(textID);
+	}
+
+	const string& textName = text->GetName();
+	std::lock_guard<std::mutex> guard(controlMutex);
+	for (auto& control : controls)
+	{
+		control.second->TextDelete(textID, textName);
+	}
+	delete text;
+	return true;
+}
+
+/***************************
 * Automode                 *
 ***************************/
 
@@ -3044,7 +3163,8 @@ bool Manager::CheckPositionFree(const LayoutPosition posX, const LayoutPosition 
 		&& CheckLayoutPositionFree(posX, posY, posZ, result, feedbacks, feedbackMutex)
 		&& CheckLayoutPositionFree(posX, posY, posZ, result, switches, switchMutex)
 		&& CheckLayoutPositionFree(posX, posY, posZ, result, routes, routeMutex)
-		&& CheckLayoutPositionFree(posX, posY, posZ, result, signals, signalMutex);
+		&& CheckLayoutPositionFree(posX, posY, posZ, result, signals, signalMutex)
+		&& CheckLayoutPositionFree(posX, posY, posZ, result, texts, textMutex);
 }
 
 bool Manager::CheckPositionFree(const LayoutPosition posX,

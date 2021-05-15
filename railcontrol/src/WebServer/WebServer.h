@@ -91,6 +91,8 @@ namespace WebServer
 			void SignalState(const ControlType controlType, const DataModel::Signal* signal) override;
 			void ClusterDelete(const ClusterID clusterID, const std::string& name) override;
 			void ClusterSettings(const ClusterID clusterID, const std::string& name) override;
+			void TextDelete(const ClusterID clusterID, const std::string& name) override;
+			void TextSettings(const ClusterID clusterID, const std::string& name) override;
 			void ProgramValue(const CvNumber cv, const CvValue value) override;
 
 		private:

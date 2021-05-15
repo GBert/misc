@@ -18,32 +18,37 @@ along with RailControl; see the file LICENCE. If not see
 <http://www.gnu.org/licenses/>.
 */
 
-#include "Version.h"
+#include <map>
+#include <string>
 
-const std::string& GetVersionInfoGitHash()
+#include "DataModel/Text.h"
+#include "Utils/Utils.h"
+
+using std::map;
+using std::string;
+
+namespace DataModel
 {
-	static const std::string gitHash = "c9f61583575e1b10f587a8af3e791dd07da4c598";
-	return gitHash;
-}
+	string Text::Serialize() const
+	{
+		string str;
+		str = "objectType=Text;";
+		str += LayoutItem::Serialize();
+		return str;
+	}
 
-time_t GetVersionInfoGitTimestamp()
-{
-	return 1621100249;
-}
-
-unsigned int GetVersionInfoGitDirty()
-{
-	return 4;
-}
-
-time_t GetVersionInfoCompileTimestamp()
-{
-	return 1621100302;
-}
-
-const std::string& GetVersionInfoRailControlVersion()
-{
-	static const std::string railControlVersion = "19";
-	return railControlVersion;
-}
-
+	bool Text::Deserialize(const string& serialized)
+	{
+		map<string, string> arguments;
+		ParseArguments(serialized, arguments);
+		string objectType = Utils::Utils::GetStringMapEntry(arguments, "objectType");
+		if (objectType.compare("Text") != 0)
+		{
+			return false;
+		}
+		LayoutItem::Deserialize(arguments);
+		SetHeight(Height1);
+		SetVisible(VisibleYes);
+		return true;
+	}
+} // namespace DataModel
