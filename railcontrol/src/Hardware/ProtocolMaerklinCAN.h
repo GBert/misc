@@ -187,6 +187,7 @@ namespace Hardware
 				CanDeviceConnect6021 = 0x0020,
 				CanDeviceMs2         = 0x0030,
 				CanDeviceMs2_2       = 0x0032, // undocumented
+				CanDeviceMs2_3       = 0x0033, // undocumented
 				CanDeviceSRSEII      = 0x0040, // SRSEII project
 				CanDeviceCs2Slave_2  = 0xeeee, // undocumented
 				CanDeviceWireless    = 0xffe0,
