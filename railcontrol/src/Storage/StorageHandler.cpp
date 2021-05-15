@@ -56,11 +56,11 @@ namespace Storage
 
 	void StorageHandler::AllLocos(map<LocoID,DataModel::Loco*>& locos)
 	{
-		vector<string> objects;
-		sqlite.ObjectsOfType(ObjectTypeLoco, objects);
-		for (auto& object : objects)
+		vector<string> serializedObjects;
+		sqlite.ObjectsOfType(ObjectTypeLoco, serializedObjects);
+		for (auto& serializedObject : serializedObjects)
 		{
-			Loco* loco = new Loco(manager, object);
+			Loco* loco = new Loco(manager, serializedObject);
 			const RouteID locoID = loco->GetID();
 			loco->AssignSlaves(RelationsFrom(DataModel::Relation::TypeLocoSlave, locoID));
 			locos[locoID] = loco;
@@ -77,11 +77,11 @@ namespace Storage
 
 	void StorageHandler::AllAccessories(std::map<AccessoryID,DataModel::Accessory*>& accessories)
 	{
-		vector<string> objects;
-		sqlite.ObjectsOfType(ObjectTypeAccessory, objects);
-		for (auto& object : objects)
+		vector<string> serializedObjects;
+		sqlite.ObjectsOfType(ObjectTypeAccessory, serializedObjects);
+		for (auto& serializedObject : serializedObjects)
 		{
-			Accessory* accessory = new Accessory(object);
+			Accessory* accessory = new Accessory(serializedObject);
 			if (accessory == nullptr)
 			{
 				continue;
@@ -98,11 +98,11 @@ namespace Storage
 
 	void StorageHandler::AllFeedbacks(std::map<FeedbackID,DataModel::Feedback*>& feedbacks)
 	{
-		vector<string> objects;
-		sqlite.ObjectsOfType(ObjectTypeFeedback, objects);
-		for (auto& object : objects)
+		vector<string> serializedObjects;
+		sqlite.ObjectsOfType(ObjectTypeFeedback, serializedObjects);
+		for (auto& serializedObject : serializedObjects)
 		{
-			Feedback* feedback = new Feedback(manager, object);
+			Feedback* feedback = new Feedback(manager, serializedObject);
 			if (feedback == nullptr)
 			{
 				continue;
@@ -119,11 +119,11 @@ namespace Storage
 
 	void StorageHandler::AllTracks(std::map<TrackID,DataModel::Track*>& tracks)
 	{
-		vector<string> objects;
-		sqlite.ObjectsOfType(ObjectTypeTrack, objects);
-		for (auto& object : objects)
+		vector<string> serializedObjects;
+		sqlite.ObjectsOfType(ObjectTypeTrack, serializedObjects);
+		for (auto& serializedObject : serializedObjects)
 		{
-			Track* track = new Track(manager, object);
+			Track* track = new Track(manager, serializedObject);
 			if (track == nullptr)
 			{
 				continue;
@@ -143,11 +143,11 @@ namespace Storage
 
 	void StorageHandler::AllSwitches(std::map<SwitchID,DataModel::Switch*>& switches)
 	{
-		vector<string> objects;
-		sqlite.ObjectsOfType(ObjectTypeSwitch, objects);
-		for (auto& object : objects)
+		vector<string> serializedObjects;
+		sqlite.ObjectsOfType(ObjectTypeSwitch, serializedObjects);
+		for (auto& serializedObject : serializedObjects)
 		{
-			Switch* mySwitch = new Switch(object);
+			Switch* mySwitch = new Switch(serializedObject);
 			if (mySwitch == nullptr)
 			{
 				continue;
@@ -208,11 +208,11 @@ namespace Storage
 
 	void StorageHandler::AllRoutes(std::map<RouteID,DataModel::Route*>& routes)
 	{
-		vector<string> objects;
-		sqlite.ObjectsOfType(ObjectTypeRoute, objects);
-		for (auto& object : objects)
+		vector<string> serializedObjects;
+		sqlite.ObjectsOfType(ObjectTypeRoute, serializedObjects);
+		for (auto& serializedObject : serializedObjects)
 		{
-			Route* route = new Route(manager, object);
+			Route* route = new Route(manager, serializedObject);
 			if (route == nullptr)
 			{
 				continue;
@@ -234,11 +234,11 @@ namespace Storage
 
 	void StorageHandler::AllLayers(std::map<LayerID,DataModel::Layer*>& layers)
 	{
-		vector<string> objects;
-		sqlite.ObjectsOfType(ObjectTypeLayer, objects);
-		for (auto& object : objects)
+		vector<string> serializedObjects;
+		sqlite.ObjectsOfType(ObjectTypeLayer, serializedObjects);
+		for (auto& serializedObject : serializedObjects)
 		{
-			Layer* layer = new Layer(object);
+			Layer* layer = new Layer(serializedObject);
 			if (layer == nullptr)
 			{
 				continue;

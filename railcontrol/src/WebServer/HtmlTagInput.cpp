@@ -22,7 +22,10 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace WebServer
 {
-	HtmlTagInput::HtmlTagInput(const std::string& type, const std::string& name, const std::string& value)
+	HtmlTagInput::HtmlTagInput(const std::string& type,
+		const std::string& name,
+		const std::string& value,
+		const bool disabled)
 	:	HtmlTag("input")
 	{
 		AddAttribute("type", type);
@@ -31,6 +34,10 @@ namespace WebServer
 		if (value.size() > 0)
 		{
 			AddAttribute("value", value);
+		}
+		if (disabled)
+		{
+			AddAttribute("disabled");
 		}
 	}
 } // namespace WebServer

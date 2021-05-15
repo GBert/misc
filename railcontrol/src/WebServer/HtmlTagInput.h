@@ -30,7 +30,13 @@ namespace WebServer
 	{
 		public:
 			HtmlTagInput() = delete;
-			HtmlTagInput(const std::string& type, const std::string& name, const std::string& value = "");
+			HtmlTagInput(const HtmlTagInput&) = delete;
+			HtmlTagInput& operator=(const HtmlTagInput&) = delete;
+
+			HtmlTagInput(const std::string& type,
+				const std::string& name,
+				const std::string& value = "",
+				const bool disabled = false);
 	};
 } // namespace WebServer
 

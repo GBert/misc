@@ -72,8 +72,9 @@ Hardware/HardwareInterface.h
 Hardware/HardwareParams.h
 Hardware/Hsi88.cpp
 Hardware/Hsi88.h
-Hardware/Intellibox.cpp
 Hardware/Intellibox.h
+Hardware/IntelliboxBase.cpp
+Hardware/IntelliboxBase.h
 Hardware/LocoCache.cpp
 Hardware/LocoCache.h
 Hardware/M6051.cpp
@@ -185,8 +186,6 @@ WebServer/HtmlTagSignal.cpp
 WebServer/HtmlTagSignal.h
 WebServer/HtmlTagSwitch.cpp
 WebServer/HtmlTagSwitch.h
-WebServer/HtmlTagText.h
-WebServer/HtmlTagTextWithLabel.h
 WebServer/HtmlTagTrack.cpp
 WebServer/HtmlTagTrack.h
 WebServer/HtmlTagTrackBase.cpp

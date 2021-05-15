@@ -524,42 +524,19 @@ class Manager
 			std::string& result,
 			const std::map<ObjectID, Type*>& layoutVector, std::mutex& mutex) const;
 
-		bool CheckAccessoryPosition(const DataModel::Accessory* accessory,
+		bool CheckLayoutItemPosition(const DataModel::LayoutItem* layoutItem,
 			const DataModel::LayoutItem::LayoutPosition posX,
 			const DataModel::LayoutItem::LayoutPosition posY,
 			const DataModel::LayoutItem::LayoutPosition posZ,
 			std::string& result) const;
 
-		bool CheckSwitchPosition(const DataModel::Switch* mySwitch,
+		bool CheckLayoutItemPosition(const DataModel::LayoutItem* item,
 			const DataModel::LayoutItem::LayoutPosition posX,
 			const DataModel::LayoutItem::LayoutPosition posY,
 			const DataModel::LayoutItem::LayoutPosition posZ,
-			std::string& result) const;
-
-		bool CheckRoutePosition(const DataModel::Route* route,
-			const DataModel::LayoutItem::LayoutPosition posX,
-			const DataModel::LayoutItem::LayoutPosition posY,
-			const DataModel::LayoutItem::LayoutPosition posZ,
-			std::string& result) const;
-
-		bool CheckTrackPosition(const DataModel::Track* track,
-			const DataModel::LayoutItem::LayoutPosition posX,
-			const DataModel::LayoutItem::LayoutPosition posY,
-			const DataModel::LayoutItem::LayoutPosition posZ,
+			const DataModel::LayoutItem::LayoutItemSize width,
 			const DataModel::LayoutItem::LayoutItemSize height,
 			const DataModel::LayoutItem::LayoutRotation rotation,
-			std::string& result) const;
-
-		bool CheckFeedbackPosition(const DataModel::Feedback* feedback,
-			const DataModel::LayoutItem::LayoutPosition posX,
-			const DataModel::LayoutItem::LayoutPosition posY,
-			const DataModel::LayoutItem::LayoutPosition posZ,
-			std::string& result) const;
-
-		bool CheckSignalPosition(const DataModel::Signal* signal,
-			const DataModel::LayoutItem::LayoutPosition posX,
-			const DataModel::LayoutItem::LayoutPosition posY,
-			const DataModel::LayoutItem::LayoutPosition posZ,
 			std::string& result) const;
 
 		bool CheckAddressLoco(const Protocol protocol, const Address address, std::string& result);

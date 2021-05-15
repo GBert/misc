@@ -30,7 +30,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "WebServer/HtmlTagButton.h"
 #include "WebServer/HtmlTagInputCheckboxWithLabel.h"
 #include "WebServer/HtmlTagInputHidden.h"
-#include "WebServer/HtmlTagTextWithLabel.h"
+#include "WebServer/HtmlTagInputTextWithLabel.h"
 #include "WebServer/WebClient.h"
 #include "WebServer/WebClientTrackBase.h"
 
@@ -84,7 +84,7 @@ namespace WebServer
 
 		if (cluster != nullptr)
 		{
-			automodeContent.AddChildTag(HtmlTagTextWithLabel("cluster", Languages::TextCluster, cluster->GetName()));
+			automodeContent.AddChildTag(HtmlTagInputTextWithLabel("cluster", Languages::TextCluster, cluster->GetName(), true));
 		}
 		return automodeContent;
 	}

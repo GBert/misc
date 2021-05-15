@@ -63,7 +63,6 @@ typedef uint16_t Priority;
 
 typedef uint8_t Pause;
 
-typedef uint16_t ExternalID;
 
 static const Address AddressNone = 0;
 static const Address AddressDefault = 3;

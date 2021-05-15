@@ -261,12 +261,12 @@ class ControlInterface
 		{
 		}
 
-		virtual void ClusterDelete(__attribute__((unused)) const ClusterID signalID,
+		virtual void ClusterDelete(__attribute__((unused)) const ClusterID clusterID,
 			__attribute__((unused)) const std::string& name)
 		{
 		}
-		;
-		virtual void ClusterSettings(__attribute__((unused)) const ClusterID signalID,
+
+		virtual void ClusterSettings(__attribute__((unused)) const ClusterID clusterID,
 			__attribute__((unused)) const std::string& name)
 		{
 		}

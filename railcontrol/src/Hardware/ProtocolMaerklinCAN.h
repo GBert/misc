@@ -357,10 +357,10 @@ namespace Hardware
 			}
 
 			void ParseCommandSystem(const unsigned char* const buffer);
-			void ParseCommandLocoSpeed(const unsigned char* const buffer);
-			void ParseCommandLocoDirection(const unsigned char* const buffer);
-			void ParseCommandLocoFunction(const unsigned char* const buffer);
-			void ParseCommandAccessory(const unsigned char* const buffer);
+			void ParseResponseLocoSpeed(const unsigned char* const buffer);
+			void ParseResponseLocoDirection(const unsigned char* const buffer);
+			void ParseResponseLocoFunction(const unsigned char* const buffer);
+			void ParseResponseAccessory(const unsigned char* const buffer);
 			void ParseCommandPing(const unsigned char* const buffer);
 			void ParseCommandConfigData(const unsigned char* const buffer);
 			void ParseCommandConfigDataFirst(const unsigned char* const buffer);

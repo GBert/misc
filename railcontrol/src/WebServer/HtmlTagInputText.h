@@ -30,8 +30,15 @@ namespace WebServer
 	{
 		public:
 			HtmlTagInputText() = delete;
-			HtmlTagInputText(const std::string& name, const std::string& value)
-			: HtmlTagInput("text", name, value) {};
+			HtmlTagInputText(const HtmlTagInputText&) = delete;
+			HtmlTagInputText& operator=(const HtmlTagInputText&) = delete;
+
+			HtmlTagInputText(const std::string& name,
+				const std::string& value,
+				const bool disabled)
+			:	HtmlTagInput("text", name, value, disabled)
+			{
+			}
 	};
 } // namespace WebServer
 

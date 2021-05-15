@@ -33,12 +33,17 @@ namespace WebServer
 	{
 		public:
 			HtmlTagInputTextWithLabel() = delete;
+			HtmlTagInputTextWithLabel(const HtmlTagInputTextWithLabel&) = delete;
+			HtmlTagInputTextWithLabel& operator=(const HtmlTagInputTextWithLabel&) = delete;
 
-			HtmlTagInputTextWithLabel(const std::string& name, const Languages::TextSelector label, const std::string& value = "")
+			inline HtmlTagInputTextWithLabel(const std::string& name,
+				const Languages::TextSelector label,
+				const std::string& value = "",
+				const bool disabled = false)
 			:	HtmlTag()
 			{
 				AddChildTag(HtmlTagLabel(label, name));
-				AddChildTag(HtmlTagInputText(name, value));
+				AddChildTag(HtmlTagInputText(name, value, disabled));
 			}
 
 			virtual ~HtmlTagInputTextWithLabel() {}

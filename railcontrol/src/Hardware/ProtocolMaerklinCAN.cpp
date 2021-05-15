@@ -359,45 +359,41 @@ namespace Hardware
 					ParseResponseReadConfig(buffer);
 					return;
 
+				case CanCommandPing:
+					ParseResponsePing(buffer);
+					return;
+
 				case CanCommandLocoSpeed:
-					ParseCommandLocoSpeed(buffer);
+					ParseResponseLocoSpeed(buffer);
 					return;
 
 				case CanCommandLocoDirection:
-					ParseCommandLocoDirection(buffer);
+					ParseResponseLocoDirection(buffer);
 					return;
 
 				case CanCommandLocoFunction:
-					ParseCommandLocoFunction(buffer);
+					ParseResponseLocoFunction(buffer);
 					return;
 
 				case CanCommandAccessory:
-					ParseCommandAccessory(buffer);
+					ParseResponseAccessory(buffer);
 					return;
 
 				default:
-					break;
-			}
-		}
-		else // (!response)
-		{
-			switch (command)
-			{
-				case CanCommandSystem:
-					ParseCommandSystem(buffer);
 					return;
-
-				case CanCommandConfigData:
-					ParseCommandConfigData(buffer);
-					return;
-
-				default:
-					break;
 			}
 		}
 
 		switch (command)
 		{
+			case CanCommandSystem:
+				ParseCommandSystem(buffer);
+				return;
+
+			case CanCommandConfigData:
+				ParseCommandConfigData(buffer);
+				return;
+
 			case CanCommandPing:
 				ParseCommandPing(buffer);
 				return;
@@ -428,7 +424,7 @@ namespace Hardware
 		}
 	}
 
-	void ProtocolMaerklinCAN::ParseCommandLocoSpeed(const unsigned char* const buffer)
+	void ProtocolMaerklinCAN::ParseResponseLocoSpeed(const unsigned char* const buffer)
 	{
 		if (ParseLength(buffer) != 6)
 		{
@@ -442,7 +438,7 @@ namespace Hardware
 		manager->LocoSpeed(ControlTypeHardware, controlID, protocol, address, speed);
 	}
 
-	void ProtocolMaerklinCAN::ParseCommandLocoDirection(const unsigned char* const buffer)
+	void ProtocolMaerklinCAN::ParseResponseLocoDirection(const unsigned char* const buffer)
 	{
 		if (ParseLength(buffer) != 5)
 		{
@@ -458,7 +454,7 @@ namespace Hardware
 		manager->LocoOrientation(ControlTypeHardware, controlID, protocol, address, orientation);
 	}
 
-	void ProtocolMaerklinCAN::ParseCommandLocoFunction(const unsigned char* const buffer)
+	void ProtocolMaerklinCAN::ParseResponseLocoFunction(const unsigned char* const buffer)
 	{
 		if (ParseLength(buffer) != 6)
 		{
@@ -473,7 +469,7 @@ namespace Hardware
 		manager->LocoFunctionState(ControlTypeHardware, controlID, protocol, address, function, on);
 	}
 
-	void ProtocolMaerklinCAN::ParseCommandAccessory(const unsigned char* const buffer)
+	void ProtocolMaerklinCAN::ParseResponseAccessory(const unsigned char* const buffer)
 	{
 		if (ParseLength(buffer) != 6 || buffer[10] != 1)
 		{

@@ -77,15 +77,8 @@ namespace WebServer
 		imageDiv.AddAttribute("style", "left:" + to_string(layoutPosX) + "px;top:" + to_string(layoutPosY) + "px;");
 
 		string menuPosition = "left:" + to_string(layoutPosX + 5) + "px;top:" + to_string(layoutPosY + 30) + "px;";
-		onClickMenuDiv.AddClass("contextmenu");
-		onClickMenuDiv.AddId(identifier + "_onclick");
 		onClickMenuDiv.AddAttribute("style", menuPosition);
-		onClickMenuContentDiv.AddClass("contextentries");
-
-		contextMenuDiv.AddClass("contextmenu");
-		contextMenuDiv.AddId(identifier + "_context");
 		contextMenuDiv.AddAttribute("style", menuPosition);
-		contextMenuContentDiv.AddClass("contextentries");
 	}
 
 	void HtmlTagLayoutItem::FinishInit()
@@ -108,16 +101,25 @@ namespace WebServer
 		}
 
 		imageDiv.AddChildTag(HtmlTag().AddContent("<svg width=\"" + EdgeLengthString + "\" height=\"" + layoutHeight + "\" id=\"" + identifier + "_img\" style=\"transform:rotate(" + DataModel::LayoutItem::Rotation(layout->GetRotation()) + "deg) translate(" + to_string(translate) + "px," + to_string(translate) + "px);\">" + image + "</svg>"));
-		imageDiv.AddAttribute("oncontextmenu", "return showContextMenu(event, '" + identifier + "');");
 
 		if (onClickMenuContentDiv.ChildCount())
 		{
 			imageDiv.AddAttribute("onclick", "return showOnClickMenu(event, '" + identifier + "');");
+			onClickMenuContentDiv.AddClass("contextentries");
 			onClickMenuDiv.AddChildTag(onClickMenuContentDiv);
+			onClickMenuDiv.AddClass("contextmenu");
+			onClickMenuDiv.AddId(identifier + "_onclick");
 			AddChildTag(onClickMenuDiv);
 		}
-		contextMenuDiv.AddChildTag(contextMenuContentDiv);
-		AddChildTag(contextMenuDiv);
+		if (contextMenuContentDiv.ChildCount())
+		{
+			imageDiv.AddAttribute("oncontextmenu", "return showContextMenu(event, '" + identifier + "');");
+			contextMenuContentDiv.AddClass("contextentries");
+			contextMenuDiv.AddChildTag(contextMenuContentDiv);
+			contextMenuDiv.AddClass("contextmenu");
+			contextMenuDiv.AddId(identifier + "_context");
+			AddChildTag(contextMenuDiv);
+		}
 		AddChildTag(imageDiv);
 	}
 

@@ -56,7 +56,6 @@ along with RailControl; see the file LICENCE. If not see
 #include "WebServer/HtmlTagSelectWithLabel.h"
 #include "WebServer/HtmlTagSignal.h"
 #include "WebServer/HtmlTagSwitch.h"
-#include "WebServer/HtmlTagTextWithLabel.h"
 #include "WebServer/HtmlTagTrack.h"
 #include "WebServer/ResponseCsv.h"
 #include "WebServer/ResponseHtml.h"
