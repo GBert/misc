@@ -1,11 +1,12 @@
 const int revisionnr = 
-1580
+1581
 ;
 const char* commithash = 
-"2c9b9492a0da1d05670611f8a8f5dd3e873f49f6";
+"36e9ab4f3e304c655921119ffe329f60203f7e29";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1581 2021-05-15 16:17:56 +0200 action: every fix revert\n" \
 "1580 2021-05-15 08:17:48 +0200 lightctrl: two extra parameter for random range\n" \
 "1579 2021-05-14 15:11:10 +0200 output: crash fix\n" \
 "1578 2021-05-14 07:51:48 +0200 action: every/timed fixed\n" \
