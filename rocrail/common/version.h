@@ -1,11 +1,13 @@
 const int revisionnr = 
-1579
+1581
 ;
 const char* commithash = 
-"919f9eb456f0b557cfb0ed2a0533d70d34f23707";
+"36e9ab4f3e304c655921119ffe329f60203f7e29";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1581 2021-05-15 16:17:56 +0200 action: every fix revert\n" \
+"1580 2021-05-15 08:17:48 +0200 lightctrl: two extra parameter for random range\n" \
 "1579 2021-05-14 15:11:10 +0200 output: crash fix\n" \
 "1578 2021-05-14 07:51:48 +0200 action: every/timed fixed\n" \
 "1577 2021-05-11 22:08:38 +0200 z21: MADA support for switch commands\n" \
