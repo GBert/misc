@@ -38,6 +38,8 @@ body {
 
 .inner_loco {
 	width: 250px;
+	display: inline-block;
+	text-align: left;
 }
 
 .clock {
@@ -106,6 +108,10 @@ body {
 	.status,
 	.clock {
 		width: calc(100% - 2px);
+	}
+
+	.loco {
+		text-align: center;
 	}
 
 	@media (max-height: 780px) {
