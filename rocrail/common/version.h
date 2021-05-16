@@ -1,11 +1,14 @@
 const int revisionnr = 
-1581
+1584
 ;
 const char* commithash = 
-"36e9ab4f3e304c655921119ffe329f60203f7e29";
+"d9467ed65a745953388c63ca7c5b555d8986245a";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1584 2021-05-16 09:09:18 +0200 lightctrl: fix for new random\n" \
+"1583 2021-05-16 09:04:18 +0200 wiopi: io fix for port > 16\n" \
+"1582 2021-05-16 08:56:14 +0200 wiopi: io fix for port > 16\n" \
 "1581 2021-05-15 16:17:56 +0200 action: every fix revert\n" \
 "1580 2021-05-15 08:17:48 +0200 lightctrl: two extra parameter for random range\n" \
 "1579 2021-05-14 15:11:10 +0200 output: crash fix\n" \
