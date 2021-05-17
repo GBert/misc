@@ -31,16 +31,6 @@ volatile uint16_t adc_poti;
 volatile uint16_t adc_sense;
 
 void isr(void) __interrupt(0) {
-    if (CCP1IF) {
-	CCP1IF = 0;
-	if (CCP1M0) {
-	    CCP1M0 = 0;
-	    CCPR1 += pulse_high;
-	} else {
-	    CCP1M0 = 1;
-	    CCPR1 += pulse_low;
-	}
-    }
     if (TMR0IF && TMR0IE) {
 	TMR0IF = 0;
 	TMR0 = TIMER0_VAL;
@@ -194,23 +184,6 @@ void timer0_init(void) {
     TMR0IE = 1;
 }
 
-void timer1_init(void) {
-    T1CON = 0b00110001;
-          /*  00------ FOSC/4 as counting source
-              --11---- prescaler 1:8 (counting every us)
-              -------1 timer on */
-    TMR1GE = 0;			// timer is not controlled by gate.
-    TMR1H = 0;			// reset timer1 high
-    TMR1L = 0;			// and low bytes - prescaler automatic reset
-    CCP1CON = 0b00001000;	// set up capture and compare
-    //----1000   Compare mode: set output on compare match (set CCPxIF)
-    // set ccp1 register to the highest value to avoid useless interrupt
-    CCPR1H = 0xFF;
-    CCPR1L = 0xFF;
-    // don't use yet
-    // CCP1IE = 1;
-}
-
 void timer2_init(void) {
     // default (FOSC/4)
     T2CON = 0b00000100;
@@ -298,7 +271,6 @@ void main(void) {
     ad_init();
     timer0_init();
     cog_init();
-    //timer1_init();
 
     /* empty circular buffers */
     tx_fifo.head = 0;

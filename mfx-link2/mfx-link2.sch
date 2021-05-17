@@ -5,7 +5,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "mfx-Booster/Link II"
-Date "2021-05-14"
+Date "2021-05-16"
 Rev "1.01"
 Comp "GBe"
 Comment1 ""
@@ -1135,8 +1135,6 @@ Connection ~ 2200 3150
 Wire Wire Line
 	3000 5150 3700 5150
 Wire Wire Line
-	2125 5600 3200 5600
-Wire Wire Line
 	3000 3100 3100 3100
 Wire Wire Line
 	3100 3100 3100 3200
@@ -1370,20 +1368,6 @@ F 4 "C7955" H 1350 5475 50  0001 C CNN "LCSC"
 	2    1350 5475
 	1    0    0    -1  
 $EndComp
-$Comp
-L mfx-link2-rescue:PWR_FLAG #FLG032
-U 1 1 593A5E46
-P 3200 5550
-F 0 "#FLG032" H 3200 5645 50  0001 C CNN
-F 1 "PWR_FLAG" H 3200 5730 50  0000 C CNN
-F 2 "" H 3200 5550 50  0000 C CNN
-F 3 "" H 3200 5550 50  0000 C CNN
-	1    3200 5550
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3200 5550 3200 5600
-Connection ~ 3200 5600
 Connection ~ 950  5575
 NoConn ~ 1800 5475
 $Comp
@@ -1611,8 +1595,6 @@ Wire Wire Line
 Wire Wire Line
 	5825 2575 5900 2575
 Wire Wire Line
-	3200 5600 3700 5600
-Wire Wire Line
 	950  5575 950  5725
 Wire Wire Line
 	4450 6750 4950 6750
@@ -1753,10 +1735,10 @@ Wire Wire Line
 Wire Wire Line
 	6650 3100 6650 3150
 $Comp
-L mfx-link2-rescue:GND #PWR?
+L mfx-link2-rescue:GND #PWR0102
 U 1 1 60BE0708
 P 10400 1875
-F 0 "#PWR?" H 10400 1625 50  0001 C CNN
+F 0 "#PWR0102" H 10400 1625 50  0001 C CNN
 F 1 "GND" H 10400 1725 50  0000 C CNN
 F 2 "" H 10400 1875 50  0000 C CNN
 F 3 "" H 10400 1875 50  0000 C CNN
@@ -1767,4 +1749,17 @@ Wire Wire Line
 	10400 1875 10400 1775
 Wire Wire Line
 	10400 1775 10200 1775
+$Comp
+L mfx-link2-rescue:GNDA #PWR0103
+U 1 1 60C5FB9B
+P 4175 5600
+F 0 "#PWR0103" H 4175 5350 50  0001 C CNN
+F 1 "GNDA" H 4175 5450 50  0000 C CNN
+F 2 "" H 4175 5600 50  0000 C CNN
+F 3 "" H 4175 5600 50  0000 C CNN
+	1    4175 5600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2125 5600 3700 5600
 $EndSCHEMATC
