@@ -1,11 +1,15 @@
 const int revisionnr = 
-1584
+1588
 ;
 const char* commithash = 
-"d9467ed65a745953388c63ca7c5b555d8986245a";
+"51c0288c9a70ce18d9e5cf02a8f5275b7aa50b46";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1588 2021-05-17 08:03:54 +0200 action: fix for every and clock turns to zero\n" \
+"1587 2021-05-17 07:22:55 +0200 output: fix for value and delayed off\n" \
+"1586 2021-05-16 17:11:57 +0200 bidib: discover disabled\n" \
+"1585 2021-05-16 11:44:07 +0200 WIO: fix for scanning r2rnet hostname\n" \
 "1584 2021-05-16 09:09:18 +0200 lightctrl: fix for new random\n" \
 "1583 2021-05-16 09:04:18 +0200 wiopi: io fix for port > 16\n" \
 "1582 2021-05-16 08:56:14 +0200 wiopi: io fix for port > 16\n" \
