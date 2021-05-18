@@ -698,13 +698,13 @@ namespace Hardware
 			{
 				nr = Utils::Utils::StringToInteger(value);
 			}
-			else if (key.compare("typ") == 0)
+			else if (key.compare("typ") == 0 || key.compare("typ2") == 0)
 			{
 				uint8_t valueInt = Utils::Utils::StringToInteger(value);
 				icon = MapLocoFunctionCs2ToRailControl(static_cast<LocoFunctionCs2Icon>(valueInt & 0x7F));
 				type = static_cast<DataModel::LocoFunctionType>((valueInt >> 7) + 1); // CS2: 1 = permanent, 2 = once
 			}
-			else if (key.compare("dauer") == 0)
+			else if (key.compare("dauer") == 0 || key.compare("dauer2") == 0)
 			{
 				type = DataModel::LocoFunctionTypeTimer;
 				timer = Utils::Utils::StringToInteger(value);
@@ -772,7 +772,10 @@ namespace Hardware
 				cacheEntry.SetProtocol(protocol);
 				logger->Info(Languages::TextCs2MasterLocoAddressProtocol, address, protocol);
 			}
-			else if (key.compare("funktionen") == 0)
+			else if (key.compare("funktionen") == 0
+				|| key.compare("funktionen_2") == 0
+				|| key.compare("fkt") == 0
+				|| key.compare("fkt2") == 0)
 			{
 				ParseCs2FileLocomotiveFunction(lines, cacheEntry);
 				continue;
