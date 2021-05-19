@@ -609,6 +609,10 @@ namespace WebServer
 			{
 				cluster.HandleClusterDelete(arguments);
 			}
+			else if (arguments["cmd"].compare("newposition") == 0)
+			{
+				HandleNewPosition(arguments);
+			}
 			else if (arguments["cmd"].compare("getlocolist") == 0)
 			{
 				string s = manager.GetLocoList();
@@ -1237,7 +1241,7 @@ namespace WebServer
 		}
 		else
 		{
-			ObjectIdentifier identifier(Utils::Utils::GetStringMapEntry(arguments, "track"), Utils::Utils::GetStringMapEntry(arguments, "signal"));
+			ObjectIdentifier identifier(arguments);
 			ret = manager.LocoReleaseOnTrackBase(identifier);
 		}
 		ReplyHtmlWithHeaderAndParagraph(ret ? "Loco released" : "Loco not released");
@@ -1894,19 +1898,7 @@ namespace WebServer
 	void WebClient::HandleFeedbackAdd(const map<string, string>& arguments)
 	{
 		unsigned int counter = Utils::Utils::GetIntegerMapEntry(arguments, "counter", 1);
-		TrackID trackID = static_cast<TrackID>(Utils::Utils::GetIntegerMapEntry(arguments, "track", TrackNone));
-		SignalID signalID = static_cast<SignalID>(Utils::Utils::GetIntegerMapEntry(arguments, "signal", SignalNone));
-		ObjectIdentifier identifier;
-		if (trackID != TrackNone)
-		{
-			identifier = ObjectTypeTrack;
-			identifier = static_cast<ObjectID>(trackID);
-		}
-		else if (signalID != SignalNone)
-		{
-			identifier = ObjectTypeSignal;
-			identifier = static_cast<ObjectID>(signalID);
-		}
+		ObjectIdentifier identifier(arguments);
 		ReplyHtmlWithHeader(HtmlTagSelectFeedbackForTrack(counter, identifier));
 	}
 
@@ -4039,6 +4031,30 @@ namespace WebServer
 		ReplyHtmlWithHeaderAndParagraph(container);
 	}
 
+	void WebClient::HandleNewPosition(const map<string, string>& arguments)
+	{
+		HandleNewPositionInternal(arguments);
+		ReplyHtmlWithHeaderAndParagraph("Text");
+	}
+
+	void WebClient::HandleNewPositionInternal(const map<string, string>& arguments)
+	{
+		string result;
+		const LayoutPosition posX = static_cast<LayoutPosition>(Utils::Utils::GetIntegerMapEntry(arguments, "x", -1));
+		if (posX == -1)
+		{
+			return;
+		}
+
+		const LayoutPosition posY = static_cast<LayoutPosition>(Utils::Utils::GetIntegerMapEntry(arguments, "y", -1));
+		if (posY == -1)
+		{
+			return;
+		}
+
+		manager.NewPosition(ObjectIdentifier(arguments), posX, posY, result);
+	}
+
 	void WebClient::PrintMainHTML() {
 		// handle base request
 		HtmlTag body("body");
@@ -4101,7 +4117,11 @@ namespace WebServer
 		body.AddChildTag(HtmlTag("div").AddClass("layer_selector").AddId("layer_selector").AddChildTag(HtmlTagLayerSelector()));
 		body.AddChildTag(HtmlTag("div").AddClass("loco").AddId("loco_1"));
 		body.AddChildTag(HtmlTag("div").AddClass("clock").AddId("clock").AddContent("<object data=\"/station-clock.svg\" class=\"clock2\" type=\"image/svg+xml\"><param name=\"secondHand\" value=\"din 41071.1\"/><param name=\"minuteHandBehavior\" value=\"sweeping\"/><param name=\"secondHandBehavior\" value=\"steeping\"/><param name=\"axisCoverRadius\" value=\"0\"/><param name=\"updateInterval\" value=\"250\"/></object>"));
-		body.AddChildTag(HtmlTag("div").AddClass("layout").AddId("layout").AddAttribute("oncontextmenu", "return loadLayoutContext(event);"));
+		body.AddChildTag(HtmlTag("div").AddClass("layout").AddId("layout")
+			.AddAttribute("oncontextmenu", "loadLayoutContext(event);")
+			.AddAttribute("ondragover", "allowDrop(event);")
+			.AddAttribute("ondrop", "drop(event);")
+			);
 		body.AddChildTag(HtmlTag("div").AddClass("popup").AddId("popup"));
 		body.AddChildTag(HtmlTag("div").AddClass("status").AddId("status"));
 		body.AddChildTag(HtmlTag("div").AddClass("responses").AddId("responses"));

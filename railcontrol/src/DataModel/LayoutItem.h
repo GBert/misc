@@ -41,7 +41,7 @@ namespace DataModel
 			};
 
 			typedef unsigned char LayoutItemSize;
-			typedef char LayoutPosition;
+			typedef signed char LayoutPosition;
 
 			enum Visible : unsigned char
 			{

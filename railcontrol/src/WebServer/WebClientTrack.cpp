@@ -371,7 +371,7 @@ namespace WebServer
 	void WebClientTrack::HandleTrackSetLoco(const map<string, string>& arguments)
 	{
 		HtmlTag content;
-		ObjectIdentifier identifier(Utils::Utils::GetStringMapEntry(arguments, "track"), Utils::Utils::GetStringMapEntry(arguments, "signal"));
+		ObjectIdentifier identifier(arguments);
 		TrackBase* track = manager.GetTrackBase(identifier);
 		if (track == nullptr)
 		{
@@ -416,7 +416,7 @@ namespace WebServer
 
 	void WebClientTrack::HandleTrackStartLoco(const map<string, string>& arguments)
 	{
-		ObjectIdentifier identifier(Utils::Utils::GetStringMapEntry(arguments, "track"), Utils::Utils::GetStringMapEntry(arguments, "signal"));
+		ObjectIdentifier identifier(arguments);
 		Loco::AutoModeType type = static_cast<Loco::AutoModeType>(Utils::Utils::GetIntegerMapEntry(arguments, "automodetype", Loco::AutoModeTypeFull));
 		bool ret = manager.TrackBaseStartLoco(identifier, type);
 		client.ReplyHtmlWithHeaderAndParagraph(ret ? "Loco started" : "Loco not started");
@@ -424,7 +424,7 @@ namespace WebServer
 
 	void WebClientTrack::HandleTrackStopLoco(const map<string, string>& arguments)
 	{
-		ObjectIdentifier identifier(Utils::Utils::GetStringMapEntry(arguments, "track"), Utils::Utils::GetStringMapEntry(arguments, "signal"));
+		ObjectIdentifier identifier(arguments);
 		bool ret = manager.TrackBaseStopLoco(identifier);
 		client.ReplyHtmlWithHeaderAndParagraph(ret ? "Loco stopped" : "Loco not stopped");
 	}
@@ -432,7 +432,7 @@ namespace WebServer
 	void WebClientTrack::HandleTrackBlock(const map<string, string>& arguments)
 	{
 		bool blocked = Utils::Utils::GetBoolMapEntry(arguments, "blocked");
-		ObjectIdentifier identifier(Utils::Utils::GetStringMapEntry(arguments, "track"), Utils::Utils::GetStringMapEntry(arguments, "signal"));
+		ObjectIdentifier identifier(arguments);
 		manager.TrackBaseBlock(identifier, blocked);
 		client.ReplyHtmlWithHeaderAndParagraph(blocked ? "Block received" : "Unblock received");
 	}
@@ -440,7 +440,7 @@ namespace WebServer
 	void WebClientTrack::HandleTrackOrientation(const map<string, string>& arguments)
 	{
 		Orientation orientation = (Utils::Utils::GetBoolMapEntry(arguments, "orientation") ? OrientationRight : OrientationLeft);
-		ObjectIdentifier identifier(Utils::Utils::GetStringMapEntry(arguments, "track"), Utils::Utils::GetStringMapEntry(arguments, "signal"));
+		ObjectIdentifier identifier(arguments);
 		manager.TrackBaseSetLocoOrientation(identifier, orientation);
 		client.ReplyHtmlWithHeaderAndParagraph("Loco orientation of track set");
 	}

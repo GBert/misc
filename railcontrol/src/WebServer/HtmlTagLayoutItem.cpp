@@ -79,6 +79,8 @@ namespace WebServer
 		imageDiv.AddId(identifier);
 		imageDiv.AddClass("layout_item");
 		imageDiv.AddAttribute("style", "left:" + to_string(layoutPosX) + "px;top:" + to_string(layoutPosY) + "px;");
+		imageDiv.AddAttribute("draggable", "true");
+		imageDiv.AddAttribute("ondragstart", "drag(event);");
 
 		string menuPosition = "left:" + to_string(layoutPosX + 5) + "px;top:" + to_string(layoutPosY + 30) + "px;";
 		onClickMenuDiv.AddAttribute("style", menuPosition);

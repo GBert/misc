@@ -1,3 +1,61 @@
+function drag(event)
+{
+	if (event.ctrlKey != true)
+	{
+		event.dataTransfer.setData("Text", "");
+		return;
+	}
+	event.dataTransfer.setData("Text", event.target.id);
+}
+
+function allowDrop(event)
+{
+	event.preventDefault();
+}
+
+function drop(event) {
+	if (event.ctrlKey != true)
+	{
+		return;
+	}
+	event.preventDefault();
+	var data = event.dataTransfer.getData("Text");
+	var dataArray = data.split('_');
+	var type;
+	switch(dataArray[0])
+	{
+		case "t":
+			type = "track";
+			break;
+
+		case "sw":
+			type = "switch";
+			break;
+
+		case "si":
+			type = "signal";
+			break;
+
+		case "f":
+			type = "feedback";
+			break;
+
+		case "a":
+			type = "accessory";
+			break;
+
+		case "r":
+			type = "route";
+			break;
+
+		case "tx":
+			type = "text";
+			break;
+	}
+	var url = "/?cmd=newposition&" + type + "=" + dataArray[1] + "&x=" + Math.floor(event.offsetX / 36) + "&y=" + Math.floor(event.offsetY / 36);
+	fireRequestAndForget(url);
+}
+
 function showMenuConfig()
 {
 	var menuConfig = document.getElementById('menu_config');

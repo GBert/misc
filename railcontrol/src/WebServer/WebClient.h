@@ -333,6 +333,8 @@ namespace WebServer
 			void HandleProgramRead(const std::map<std::string,std::string>& arguments);
 			void HandleProgramWrite(const std::map<std::string,std::string>& arguments);
 			void HandleCvFields(const std::map<std::string,std::string>& arguments);
+			void HandleNewPosition(const std::map<std::string,std::string>& arguments);
+			void HandleNewPositionInternal(const std::map<std::string,std::string>& arguments);
 			void HandleUpdater(const std::map<std::string,std::string>& headers);
 			static void UrlDecode(std::string& argumentValue);
 			static char ConvertHexToInt(char c);

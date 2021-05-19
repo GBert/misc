@@ -98,9 +98,9 @@ namespace DataModel
 		automode = static_cast<Automode>(Utils::Utils::GetBoolMapEntry(arguments, "automode", AutomodeNo));
 		if (automode == AutomodeNo)
 		{
-			fromTrack = TrackNone;
+			fromTrack.Clear();
 			fromOrientation = OrientationRight;
-			toTrack = TrackNone;
+			toTrack.Clear();
 			toOrientation = OrientationLeft;
 			speed = SpeedTravel;
 			feedbackIdReduced = FeedbackNone;

@@ -504,6 +504,11 @@ class Manager
 		bool CanHandle(const ControlID controlId, const Hardware::Capabilities capability) const;
 		Hardware::Capabilities GetCapabilities(const ControlID controlID) const;
 
+		bool NewPosition(const DataModel::ObjectIdentifier& identifier,
+			const DataModel::LayoutItem::LayoutItemSize posX,
+			const DataModel::LayoutItem::LayoutItemSize posY,
+			std::string& result);
+
 	private:
 		bool ControlIsOfHardwareType(const ControlID controlID, const HardwareType hardwareType);
 
@@ -526,6 +531,13 @@ class Manager
 		{
 			feedback->SetState(state);
 		}
+
+		bool TextNewPosition(TextID textID,
+			const DataModel::LayoutItem::LayoutPosition posX,
+			const DataModel::LayoutItem::LayoutPosition posY,
+			std::string& result);
+
+		void TextSaveAndPublishSettings(const DataModel::Text* const text);
 
 		// layout
 		bool CheckPositionFree(const DataModel::LayoutItem::LayoutPosition posX,

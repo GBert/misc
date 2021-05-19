@@ -2806,6 +2806,36 @@ bool Manager::TextSave(TextID textID,
 	text->SetHeight(LayoutItem::Height1);
 	text->SetRotation(rotation);
 
+	TextSaveAndPublishSettings(text);
+	return true;
+}
+
+bool Manager::TextNewPosition(TextID textID,
+	const LayoutPosition posX,
+	const LayoutPosition posY,
+	string& result)
+{
+	Text* text = GetText(textID);
+	if (!text)
+	{
+		result = Languages::GetText(Languages::TextTextDoesNotExist);
+		return false;
+	}
+
+	if (!CheckLayoutItemPosition(text, posX, posY, text->GetPosZ(), text->GetWidth(), LayoutItem::Height1, text->GetRotation(), result))
+	{
+		return false;
+	}
+
+	text->SetPosX(posX);
+	text->SetPosY(posY);
+
+	TextSaveAndPublishSettings(text);
+	return true;
+}
+
+void Manager::TextSaveAndPublishSettings(const Text* const text)
+{
 	// save in db
 	if (storage)
 	{
@@ -2815,9 +2845,8 @@ bool Manager::TextSave(TextID textID,
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto& control : controls)
 	{
-		control.second->TextSettings(textID, name);
+		control.second->TextSettings(text->GetID(), text->GetName());
 	}
-return true;
 }
 
 bool Manager::TextDelete(const TextID textID, string& result)
@@ -3609,6 +3638,23 @@ Hardware::Capabilities Manager::GetCapabilities(const ControlID controlID) const
 	return control->GetCapabilities();
 }
 
+bool Manager::NewPosition(const DataModel::ObjectIdentifier& identifier,
+	const DataModel::LayoutItem::LayoutItemSize posX,
+	const DataModel::LayoutItem::LayoutItemSize posY,
+	string& result)
+{
+	ObjectType type = identifier.GetObjectType();
+	ObjectID id = identifier.GetObjectID();
+	switch (type)
+	{
+		case ObjectTypeText:
+			TextNewPosition(id, posX, posY, result);
+			return true;;
+
+		default:
+			return false;
+	}
+}
 
 Hardware::HardwareParams* Manager::CreateAndAddControl()
 {

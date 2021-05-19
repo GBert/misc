@@ -40,6 +40,7 @@ DataModel/LocoFunctions.cpp
 DataModel/LocoFunctions.h
 DataModel/Object.cpp
 DataModel/Object.h
+DataModel/ObjectIdentifier.cpp
 DataModel/ObjectIdentifier.h
 DataModel/Relation.cpp
 DataModel/Relation.h

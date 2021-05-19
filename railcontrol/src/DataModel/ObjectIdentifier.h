@@ -42,30 +42,15 @@ namespace DataModel
 				*this = text;
 			}
 
-			inline ObjectIdentifier(const std::string& track, const std::string& signal)
-			{
-				ObjectID trackID = Utils::Utils::StringToInteger(track);
-				if (trackID > TrackNone)
-				{
-					objectType = ObjectTypeTrack;
-					objectID = trackID;
-					return;
-				}
-				ObjectID signalID = Utils::Utils::StringToInteger(signal);
-				if (signalID > SignalNone)
-				{
-					objectType = ObjectTypeSignal;
-					objectID = signalID;
-					return;
-				}
-				objectType = ObjectTypeNone;
-				objectID = ObjectNone;
-			}
-
 			inline ObjectIdentifier(const ObjectType objectType, const ObjectID objectID)
 			:	objectType(objectType),
 				objectID(objectID)
 			{
+			}
+
+			inline ObjectIdentifier(const std::map<std::string,std::string>& arguments)
+			{
+				Deserialize(arguments);
 			}
 
 			inline std::string Serialize() const
@@ -73,61 +58,25 @@ namespace DataModel
 				return GetObjectTypeAsString() + "=" + std::to_string(objectID);
 			}
 
-			inline bool Deserialize(const std::map<std::string,std::string>& arguments)
-			{
-				objectID = static_cast<TrackID>(Utils::Utils::GetIntegerMapEntry(arguments, "track", ObjectNone));
-				if (objectID != ObjectNone)
-				{
-					objectType = ObjectTypeTrack;
-					return true;
-				}
-				objectID = static_cast<ObjectID>(Utils::Utils::GetIntegerMapEntry(arguments, "signal", ObjectNone));
-				if (objectID != ObjectNone)
-				{
-					objectType = ObjectTypeSignal;
-					return true;
-				}
-				objectType = ObjectTypeNone;
-				return false;
-			}
+			bool Deserialize(const std::map<std::string,std::string>& arguments);
 
 			inline ObjectIdentifier& operator=(const ObjectIdentifier& other) = default;
 
+			// FIXME: replace with SetObjectType
 			inline ObjectIdentifier& operator=(const ObjectType& objectType)
 			{
 				this->objectType = objectType;
 				return *this;
 			}
 
+			// FIXME: replace with SetObjectID
 			inline ObjectIdentifier& operator=(const ObjectID& objectID)
 			{
-				this->objectID = objectID; return *this;
-			}
-
-			inline ObjectIdentifier& operator=(const std::string& text)
-			{
-				if (text.substr(0, 5).compare("track") == 0)
-				{
-					objectType = ObjectTypeTrack;
-					objectID = Utils::Utils::StringToInteger(text.substr(5), ObjectNone);
-					return *this;
-				}
-				if (text.substr(0, 6).compare("signal") == 0)
-				{
-					objectType = ObjectTypeSignal;
-					objectID = Utils::Utils::StringToInteger(text.substr(6), ObjectNone);
-					return *this;
-				}
-				if (text.substr(0, 5).compare("route") == 0)
-				{
-					objectType = ObjectTypeRoute;
-					objectID = Utils::Utils::StringToInteger(text.substr(5), ObjectNone);
-					return *this;
-				}
-				objectType = ObjectTypeTrack;
-				objectID = Utils::Utils::StringToInteger(text, ObjectNone);;
+				this->objectID = objectID;
 				return *this;
 			}
+
+			ObjectIdentifier& operator=(const std::string& text);
 
 			inline bool operator==(const ObjectIdentifier& other) const
 			{
@@ -165,20 +114,7 @@ namespace DataModel
 				return objectID;
 			}
 
-			inline std::string GetObjectTypeAsString() const
-			{
-				switch (objectType)
-				{
-					case ObjectTypeTrack:
-						return "track";
-
-					case ObjectTypeSignal:
-						return "signal";
-
-					default:
-						return "object";
-				}
-			}
+			std::string GetObjectTypeAsString() const;
 
 			inline std::string GetObjectIdAsString() const
 			{
