@@ -47,7 +47,7 @@ namespace WebServer
 				AddAttribute("name", name);
 				AddId(commandID);
 
-				for (auto option : options)
+				for (auto& option : options)
 				{
 					HtmlTag optionTag("option");
 					optionTag.AddAttribute("value", option.second);

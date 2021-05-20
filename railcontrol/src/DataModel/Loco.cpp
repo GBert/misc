@@ -98,10 +98,11 @@ namespace DataModel
 		ObjectIdentifier trackIdentifier = Utils::Utils::GetStringMapEntry(arguments, "track");
 		if (trackIdentifier.GetObjectID() == ObjectNone)
 		{
-			trackIdentifier = static_cast<ObjectID>(Utils::Utils::GetIntegerMapEntry(arguments, "trackID", TrackNone));
+			// FIXME: check if really needed 2021-05-19
+			trackIdentifier.SetObjectID(static_cast<ObjectID>(Utils::Utils::GetIntegerMapEntry(arguments, "trackID", TrackNone)));
 			if (trackIdentifier.GetObjectID() != ObjectNone)
 			{
-				trackIdentifier = ObjectTypeTrack;
+				trackIdentifier.SetObjectType(ObjectTypeTrack);
 			}
 		}
 		trackFrom = manager->GetTrackBase(trackIdentifier);

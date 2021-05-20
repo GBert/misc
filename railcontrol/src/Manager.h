@@ -532,12 +532,48 @@ class Manager
 			feedback->SetState(state);
 		}
 
-		bool TextNewPosition(TextID textID,
+		bool AccessoryNewPosition(const AccessoryID accessoryID,
 			const DataModel::LayoutItem::LayoutPosition posX,
 			const DataModel::LayoutItem::LayoutPosition posY,
 			std::string& result);
 
+		bool FeedbackNewPosition(const FeedbackID feedbackID,
+			const DataModel::LayoutItem::LayoutPosition posX,
+			const DataModel::LayoutItem::LayoutPosition posY,
+			std::string& result);
+
+		bool RouteNewPosition(const RouteID routeID,
+			const DataModel::LayoutItem::LayoutPosition posX,
+			const DataModel::LayoutItem::LayoutPosition posY,
+			std::string& result);
+
+		bool SignalNewPosition(const SignalID signalID,
+			const DataModel::LayoutItem::LayoutPosition posX,
+			const DataModel::LayoutItem::LayoutPosition posY,
+			std::string& result);
+
+		bool SwitchNewPosition(const SwitchID switchID,
+			const DataModel::LayoutItem::LayoutPosition posX,
+			const DataModel::LayoutItem::LayoutPosition posY,
+			std::string& result);
+
+		bool TextNewPosition(const TextID textID,
+			const DataModel::LayoutItem::LayoutPosition posX,
+			const DataModel::LayoutItem::LayoutPosition posY,
+			std::string& result);
+
+		bool TrackNewPosition(const TrackID trackID,
+			const DataModel::LayoutItem::LayoutPosition posX,
+			const DataModel::LayoutItem::LayoutPosition posY,
+			std::string& result);
+
+		void AccessorySaveAndPublishSettings(const DataModel::Accessory* const accessory);
+		void FeedbackSaveAndPublishSettings(const DataModel::Feedback* const feedback);
+		void RouteSaveAndPublishSettings(const DataModel::Route* const route);
+		void SignalSaveAndPublishSettings(const DataModel::Signal* const signal);
+		void SwitchSaveAndPublishSettings(const DataModel::Switch* const mySwitch);
 		void TextSaveAndPublishSettings(const DataModel::Text* const text);
+		void TrackSaveAndPublishSettings(const DataModel::Track* const track);
 
 		// layout
 		bool CheckPositionFree(const DataModel::LayoutItem::LayoutPosition posX,

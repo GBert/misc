@@ -88,7 +88,7 @@ namespace DataModel
 
 			inline void ObjectID1(ObjectID objectID1)
 			{
-				this->object1 = objectID1;
+				object1.SetObjectID(objectID1);
 			}
 
 			inline ObjectType ObjectType2() const

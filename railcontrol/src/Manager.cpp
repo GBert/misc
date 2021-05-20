@@ -1167,7 +1167,18 @@ const std::string& Manager::GetAccessoryName(const AccessoryID accessoryID) cons
 	return accessories.at(accessoryID)->GetName();
 }
 
-bool Manager::AccessorySave(AccessoryID accessoryID, const string& name, const LayoutPosition posX, const LayoutPosition posY, const LayoutPosition posZ, const ControlID controlID, const Protocol protocol, const Address address, const DataModel::AccessoryType type, const DataModel::AccessoryPulseDuration duration, const bool inverted, string& result)
+bool Manager::AccessorySave(AccessoryID accessoryID,
+	const string& name,
+	const LayoutPosition posX,
+	const LayoutPosition posY,
+	const LayoutPosition posZ,
+	const ControlID controlID,
+	const Protocol protocol,
+	const Address address,
+	const DataModel::AccessoryType type,
+	const DataModel::AccessoryPulseDuration duration,
+	const bool inverted,
+	string& result)
 {
 	if (!CheckControlAccessoryProtocolAddress(controlID, protocol, address, result))
 	{
@@ -1206,6 +1217,36 @@ bool Manager::AccessorySave(AccessoryID accessoryID, const string& name, const L
 	accessory->SetAccessoryPulseDuration(duration);
 	accessory->SetInverted(inverted);
 
+	AccessorySaveAndPublishSettings(accessory);
+	return true;
+}
+
+bool Manager::AccessoryNewPosition(const AccessoryID accessoryID,
+	const LayoutPosition posX,
+	const LayoutPosition posY,
+	string& result)
+{
+	Accessory* accessory = GetAccessory(accessoryID);
+	if (accessory == nullptr)
+	{
+		result = Languages::GetText(Languages::TextAccessoryDoesNotExist);
+		return false;
+	}
+
+	if (!CheckLayoutItemPosition(accessory, posX, posY, accessory->GetPosZ(), result))
+	{
+		return false;
+	}
+
+	accessory->SetPosX(posX);
+	accessory->SetPosY(posY);
+
+	AccessorySaveAndPublishSettings(accessory);
+	return true;
+}
+
+void Manager::AccessorySaveAndPublishSettings(const Accessory* const accessory)
+{
 	// save in db
 	if (storage)
 	{
@@ -1215,9 +1256,8 @@ bool Manager::AccessorySave(AccessoryID accessoryID, const string& name, const L
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto& control : controls)
 	{
-		control.second->AccessorySettings(accessoryID, name);
+		control.second->AccessorySettings(accessory->GetID(), accessory->GetName());
 	}
-	return true;
 }
 
 const map<string,DataModel::Accessory*> Manager::AccessoryListByName() const
@@ -1376,7 +1416,16 @@ const std::string& Manager::GetFeedbackName(const FeedbackID feedbackID) const
 	return feedbacks.at(feedbackID)->GetName();
 }
 
-bool Manager::FeedbackSave(FeedbackID feedbackID, const std::string& name, const Visible visible, const LayoutPosition posX, const LayoutPosition posY, const LayoutPosition posZ, const ControlID controlID, const FeedbackPin pin, const bool inverted, string& result)
+bool Manager::FeedbackSave(FeedbackID feedbackID,
+	const std::string& name,
+	const Visible visible,
+	const LayoutPosition posX,
+	const LayoutPosition posY,
+	const LayoutPosition posZ,
+	const ControlID controlID,
+	const FeedbackPin pin,
+	const bool inverted,
+	string& result)
 {
 	Feedback* feedback = GetFeedback(feedbackID);
 	if (visible && !CheckLayoutItemPosition(feedback, posX, posY, posZ, result))
@@ -1407,6 +1456,41 @@ bool Manager::FeedbackSave(FeedbackID feedbackID, const std::string& name, const
 	feedback->SetPin(pin);
 	feedback->SetInverted(inverted);
 
+	FeedbackSaveAndPublishSettings(feedback);
+	return true;
+}
+
+bool Manager::FeedbackNewPosition(const FeedbackID feedbackID,
+	const LayoutPosition posX,
+	const LayoutPosition posY,
+	string& result)
+{
+	Feedback* feedback = GetFeedback(feedbackID);
+	if (feedback == nullptr)
+	{
+		result = Languages::GetText(Languages::TextFeedbackDoesNotExist);
+		return false;
+	}
+
+	if (!feedback->GetVisible())
+	{
+		return false;
+	}
+
+	if (!CheckLayoutItemPosition(feedback, posX, posY, feedback->GetPosZ(), result))
+	{
+		return false;
+	}
+
+	feedback->SetPosX(posX);
+	feedback->SetPosY(posY);
+
+	FeedbackSaveAndPublishSettings(feedback);
+	return true;
+}
+
+void Manager::FeedbackSaveAndPublishSettings(const Feedback* const feedback)
+{
 	// save in db
 	if (storage)
 	{
@@ -1415,9 +1499,8 @@ bool Manager::FeedbackSave(FeedbackID feedbackID, const std::string& name, const
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto& control : controls)
 	{
-		control.second->FeedbackSettings(feedbackID, name);
+		control.second->FeedbackSettings(feedback->GetID(), feedback->GetName());
 	}
-	return true;
 }
 
 const map<string,DataModel::Feedback*> Manager::FeedbackListByName() const
@@ -1656,7 +1739,36 @@ bool Manager::TrackSave(TrackID trackID,
 	track->SetAllowLocoTurn(allowLocoTurn);
 	track->SetReleaseWhenFree(releaseWhenFree);
 
-	// save in db
+	TrackSaveAndPublishSettings(track);
+	return true;
+}
+
+bool Manager::TrackNewPosition(const TrackID trackID,
+	const LayoutPosition posX,
+	const LayoutPosition posY,
+	string& result)
+{
+	Track* track = GetTrack(trackID);
+	if (track == nullptr)
+	{
+		result = Languages::GetText(Languages::TextTrackDoesNotExist);
+		return false;
+	}
+
+	if (!CheckLayoutItemPosition(track, posX, posY, track->GetPosZ(), LayoutItem::Width1, track->GetHeight(), track->GetRotation(), result))
+	{
+		return false;
+	}
+
+	track->SetPosX(posX);
+	track->SetPosY(posY);
+
+	TrackSaveAndPublishSettings(track);
+	return true;
+}
+
+void Manager::TrackSaveAndPublishSettings(const Track* const track)
+{
 	if (storage)
 	{
 		storage->Save(*track);
@@ -1665,9 +1777,8 @@ bool Manager::TrackSave(TrackID trackID,
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto& control : controls)
 	{
-		control.second->TrackSettings(trackID, name);
+		control.second->TrackSettings(track->GetID(), track->GetName());
 	}
-	return true;
 }
 
 bool Manager::TrackDelete(const TrackID trackID,
@@ -1827,7 +1938,8 @@ bool Manager::SwitchSave(SwitchID switchID,
 	const Address address,
 	const DataModel::AccessoryType type,
 	const DataModel::AccessoryPulseDuration duration,
-	const bool inverted, string& result)
+	const bool inverted,
+	string& result)
 {
 	if (!CheckControlAccessoryProtocolAddress(controlID, protocol, address, result))
 	{
@@ -1867,7 +1979,36 @@ bool Manager::SwitchSave(SwitchID switchID,
 	mySwitch->SetAccessoryPulseDuration(duration);
 	mySwitch->SetInverted(inverted);
 
-	// save in db
+	SwitchSaveAndPublishSettings(mySwitch);
+	return true;
+}
+
+bool Manager::SwitchNewPosition(const SwitchID switchID,
+	const LayoutPosition posX,
+	const LayoutPosition posY,
+	string& result)
+{
+	Switch* mySwitch = GetSwitch(switchID);
+	if (mySwitch == nullptr)
+	{
+		result = Languages::GetText(Languages::TextSwitchDoesNotExist);
+		return false;
+	}
+
+	if (!CheckLayoutItemPosition(mySwitch, posX, posY, mySwitch->GetPosZ(), result))
+	{
+		return false;
+	}
+
+	mySwitch->SetPosX(posX);
+	mySwitch->SetPosY(posY);
+
+	SwitchSaveAndPublishSettings(mySwitch);
+	return true;
+}
+
+void Manager::SwitchSaveAndPublishSettings(const Switch* const mySwitch)
+{
 	if (storage)
 	{
 		storage->Save(*mySwitch);
@@ -1876,9 +2017,8 @@ bool Manager::SwitchSave(SwitchID switchID,
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto& control : controls)
 	{
-		control.second->SwitchSettings(switchID, name);
+		control.second->SwitchSettings(mySwitch->GetID(), mySwitch->GetName());
 	}
-	return true;
 }
 
 bool Manager::SwitchDelete(const SwitchID switchID,
@@ -2126,7 +2266,41 @@ bool Manager::RouteSave(RouteID routeID,
 		}
 	}
 
-	// save in db
+	RouteSaveAndPublishSettings(route);
+	return true;
+}
+
+bool Manager::RouteNewPosition(const RouteID routeID,
+	const LayoutPosition posX,
+	const LayoutPosition posY,
+	string& result)
+{
+	Route* route = GetRoute(routeID);
+	if (route == nullptr)
+	{
+		result = Languages::GetText(Languages::TextRouteDoesNotExist);
+		return false;
+	}
+
+	if (!route->GetVisible())
+	{
+		return false;
+	}
+
+	if (!CheckLayoutItemPosition(route, posX, posY, route->GetPosZ(), result))
+	{
+		return false;
+	}
+
+	route->SetPosX(posX);
+	route->SetPosY(posY);
+
+	RouteSaveAndPublishSettings(route);
+	return true;
+}
+
+void Manager::RouteSaveAndPublishSettings(const Route* const route)
+{
 	if (storage)
 	{
 		storage->Save(*route);
@@ -2134,9 +2308,8 @@ bool Manager::RouteSave(RouteID routeID,
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto& control : controls)
 	{
-		control.second->RouteSettings(routeID, name);
+		control.second->RouteSettings(route->GetID(), route->GetName());
 	}
-	return true;
 }
 
 const map<string,DataModel::Route*> Manager::RouteListByName() const
@@ -2546,6 +2719,36 @@ bool Manager::SignalSave(SignalID signalID,
 	signal->SetAccessoryPulseDuration(duration);
 	signal->SetInverted(inverted);
 
+	SignalSaveAndPublishSettings(signal);
+	return true;
+}
+
+bool Manager::SignalNewPosition(const SignalID signalID,
+	const LayoutPosition posX,
+	const LayoutPosition posY,
+	string& result)
+{
+	Signal* signal = GetSignal(signalID);
+	if (signal == nullptr)
+	{
+		result = Languages::GetText(Languages::TextSignalDoesNotExist);
+		return false;
+	}
+
+	if (!CheckLayoutItemPosition(signal, posX, posY, signal->GetPosZ(), result))
+	{
+		return false;
+	}
+
+	signal->SetPosX(posX);
+	signal->SetPosY(posY);
+
+	SignalSaveAndPublishSettings(signal);
+	return true;
+}
+
+void Manager::SignalSaveAndPublishSettings(const Signal* const signal)
+{
 	// save in db
 	if (storage)
 	{
@@ -2555,9 +2758,8 @@ bool Manager::SignalSave(SignalID signalID,
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto& control : controls)
 	{
-		control.second->SignalSettings(signalID, name);
+		control.second->SignalSettings(signal->GetID(), signal->GetName());
 	}
-	return true;
 }
 
 bool Manager::SignalDelete(const SignalID signalID,
@@ -3647,8 +3849,32 @@ bool Manager::NewPosition(const DataModel::ObjectIdentifier& identifier,
 	ObjectID id = identifier.GetObjectID();
 	switch (type)
 	{
+		case ObjectTypeAccessory:
+			AccessoryNewPosition(id, posX, posY, result);
+			return true;;
+
+		case ObjectTypeFeedback:
+			FeedbackNewPosition(id, posX, posY, result);
+			return true;;
+
+		case ObjectTypeRoute:
+			RouteNewPosition(id, posX, posY, result);
+			return true;;
+
+		case ObjectTypeSignal:
+			SignalNewPosition(id, posX, posY, result);
+			return true;;
+
+		case ObjectTypeSwitch:
+			SwitchNewPosition(id, posX, posY, result);
+			return true;;
+
 		case ObjectTypeText:
 			TextNewPosition(id, posX, posY, result);
+			return true;;
+
+		case ObjectTypeTrack:
+			TrackNewPosition(id, posX, posY, result);
 			return true;;
 
 		default:

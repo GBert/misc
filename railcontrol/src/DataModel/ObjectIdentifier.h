@@ -62,18 +62,14 @@ namespace DataModel
 
 			inline ObjectIdentifier& operator=(const ObjectIdentifier& other) = default;
 
-			// FIXME: replace with SetObjectType
-			inline ObjectIdentifier& operator=(const ObjectType& objectType)
+			inline void SetObjectType(const ObjectType objectType)
 			{
 				this->objectType = objectType;
-				return *this;
 			}
 
-			// FIXME: replace with SetObjectID
-			inline ObjectIdentifier& operator=(const ObjectID& objectID)
+			inline void SetObjectID(const ObjectID objectID)
 			{
 				this->objectID = objectID;
-				return *this;
 			}
 
 			ObjectIdentifier& operator=(const std::string& text);
