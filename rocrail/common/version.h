@@ -1,11 +1,12 @@
 const int revisionnr = 
-1590
+1591
 ;
 const char* commithash = 
-"c766535dfa7efcc690594fda8824a99297516200";
+"cb21533d113cc9c811efbad47910c0706f708c85";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1591 2021-05-20 07:33:35 +0200 bidibdlg: removed discover\n" \
 "1590 2021-05-19 08:14:21 +0200 wiopi: softpwm option on commandline temp.\n" \
 "1589 2021-05-19 07:57:17 +0200 wiopi: softpwm option added to enable sound under super user\n" \
 "1588 2021-05-17 08:03:54 +0200 action: fix for every and clock turns to zero\n" \
