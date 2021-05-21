@@ -17,24 +17,29 @@ static __code uint16_t __at(_CONFIG2) configword2 = _LVP_ON & _CLKOUTEN_OFF;
 // #pragma config FOSC=INTOSC, PLLEN=OFF, MCLRE=ON, WDTE=OFF
 // #pragma config LVP=ON, CLKOUTEN=OFF
 
-  /* DCC    58us */
-  /* MM1    26us */
-  /* MM2    52us */
-  /* mfx    50us */
-
 struct serial_buffer tx_fifo, rx_fifo;
 
-volatile unsigned int pulse_high = 25;
-volatile unsigned int pulse_low = 75;
+volatile uint8_t rail_data;
 volatile uint8_t timer0_counter;
 volatile uint16_t adc_poti;
 volatile uint16_t adc_sense;
 
 void isr(void) __interrupt(0) {
+    if (IOCIF) {
+	TMR2 = 0;
+	T2CON = 0x67; // FOSC/4 Postscaler 1:8 Prescaler 1:64 -> 1/8 * 8 * 64 * 256 = 16384us
+	LATB4 = 1;
+	rail_data = 1;
+	IOCCF = 0;
+    }
+    if (TMR2IF) {
+	LATB4 = 0;
+	rail_data = 0;
+	TMR2IF = 0;
+    }
     if (TMR0IF && TMR0IE) {
 	TMR0IF = 0;
 	TMR0 = TIMER0_VAL;
-	LATC4 ^= 1;
 
 	timer0_counter++;
 	/* kind of state machine
@@ -70,7 +75,6 @@ void isr(void) __interrupt(0) {
  * RC3 Rail Signal
  * RB5 RPWM
  * RB6 LPWM
- * // RC3 CCP1
  */
 
 void pps_init(void) {
@@ -134,8 +138,11 @@ void system_init(void) {
     SSP1IF = 0;
     TMR1IF = 0;
     CCP1IF = 0;
+    // activate IOC on Rail Data
+    IOCCP3 = 1;
+    IOCCN3 = 1;
     //activate interrupt bits
-    CCP1IE = 1;			// disable interrupt on CCP1 will be check by polling as of today
+    IOCIE = 1;
     PEIE = 1;
     GIE = 1;
 }
@@ -186,10 +193,12 @@ void timer0_init(void) {
 
 void timer2_init(void) {
     // default (FOSC/4)
-    T2CON = 0b00000100;
-    //-----1-- timer on
-    //------00 prescaler 1:1 (overflow every 32us)
+    T2CON = 0b00111111;
+    //        -0111--- postscaler 1:8
+    //        -----1-- timer on
+    //        ------11 prescaler 1:64 (overflow every 16ms)
     TMR2 = 0;			// reset timer2
+    TMR2IE = 1;
 }
 
 void clc_init(void) {
@@ -270,6 +279,7 @@ void main(void) {
     i2c_init();
     ad_init();
     timer0_init();
+    timer2_init();
     cog_init();
 
     /* empty circular buffers */
@@ -278,7 +288,7 @@ void main(void) {
     rx_fifo.head = 0;
     rx_fifo.tail = 0;
 
-    LATB4 = 1;		/* enable	*/
+    rail_data = 0;
     GIE = 1;
     LCD_init(LCD_01_ADDRESS);
 
@@ -295,13 +305,16 @@ void main(void) {
 	    LCD_goto(LCD_01_ADDRESS, 2, 1);
 	    LCD_putch(LCD_01_ADDRESS, nibble_to_hex(temp >> 4));
 	    LCD_putch(LCD_01_ADDRESS, nibble_to_hex(temp));
-	    LCD_puts(LCD_01_ADDRESS, "  On      0.0%\0");
+	    if (rail_data)
+		LCD_puts(LCD_01_ADDRESS, "  On      0.0%\0");
+	    else
+		LCD_puts(LCD_01_ADDRESS, "  Off\0");
 	    //LATCbits.LATC0 = 1;
 	    //LATCbits.LATC0 ^= 1;
 	    putchar_wait(0x55);
 	    LATC5 ^= 1;
 	}
-	delay_ms(4);
+	delay_ms(2);
 
 	counter++;
     }
