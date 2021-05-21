@@ -613,6 +613,10 @@ namespace WebServer
 			{
 				HandleNewPosition(arguments);
 			}
+			else if (arguments["cmd"].compare("rotate") == 0)
+			{
+				HandleRotate(arguments);
+			}
 			else if (arguments["cmd"].compare("getlocolist") == 0)
 			{
 				string s = manager.GetLocoList();
@@ -2725,7 +2729,7 @@ namespace WebServer
 		LayoutPosition posx = Utils::Utils::GetIntegerMapEntry(arguments, "posx", 0);
 		LayoutPosition posy = Utils::Utils::GetIntegerMapEntry(arguments, "posy", 0);
 		LayoutPosition posz = Utils::Utils::GetIntegerMapEntry(arguments, "posz", LayerUndeletable);
-		LayoutRotation rotation = static_cast<LayoutRotation>(Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0));
+		LayoutRotation rotation = Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0);
 		DataModel::AccessoryType type = DataModel::SwitchTypeLeft;
 		DataModel::AccessoryPulseDuration duration = manager.GetDefaultAccessoryDuration();
 		bool inverted = false;
@@ -2793,7 +2797,7 @@ namespace WebServer
 		LayoutPosition posX = Utils::Utils::GetIntegerMapEntry(arguments, "posx", 0);
 		LayoutPosition posY = Utils::Utils::GetIntegerMapEntry(arguments, "posy", 0);
 		LayoutPosition posZ = Utils::Utils::GetIntegerMapEntry(arguments, "posz", 0);
-		LayoutRotation rotation = static_cast<LayoutRotation>(Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0));
+		LayoutRotation rotation = Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0);
 		DataModel::AccessoryType type = static_cast<DataModel::AccessoryType>(Utils::Utils::GetIntegerMapEntry(arguments, "type", DataModel::SwitchTypeLeft));
 		DataModel::AccessoryPulseDuration duration = Utils::Utils::GetIntegerMapEntry(arguments, "duration", manager.GetDefaultAccessoryDuration());
 		bool inverted = Utils::Utils::GetBoolMapEntry(arguments, "inverted");
@@ -4033,13 +4037,13 @@ namespace WebServer
 
 	void WebClient::HandleNewPosition(const map<string, string>& arguments)
 	{
-		HandleNewPositionInternal(arguments);
-		ReplyHtmlWithHeaderAndParagraph("Text");
+		string result;
+		HandleNewPositionInternal(arguments, result);
+		ReplyHtmlWithHeaderAndParagraph(result);
 	}
 
-	void WebClient::HandleNewPositionInternal(const map<string, string>& arguments)
+	void WebClient::HandleNewPositionInternal(const map<string, string>& arguments, string& result)
 	{
-		string result;
 		const LayoutPosition posX = static_cast<LayoutPosition>(Utils::Utils::GetIntegerMapEntry(arguments, "x", -1));
 		if (posX == -1)
 		{
@@ -4052,7 +4056,14 @@ namespace WebServer
 			return;
 		}
 
-		manager.NewPosition(ObjectIdentifier(arguments), posX, posY, result);
+		manager.LayoutItemNewPosition(ObjectIdentifier(arguments), posX, posY, result);
+	}
+
+	void WebClient::HandleRotate(const map<string, string>& arguments)
+	{
+		string result;
+		manager.LayoutItemRotate(ObjectIdentifier(arguments), result);
+		ReplyHtmlWithHeaderAndParagraph(result);
 	}
 
 	void WebClient::PrintMainHTML() {

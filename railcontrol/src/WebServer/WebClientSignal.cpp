@@ -68,7 +68,7 @@ namespace WebServer
 		// FIXME: Remove later: 2021-03-18
 		LayoutItemSize height = Utils::Utils::GetIntegerMapEntry(arguments, "length", 1);
 
-		LayoutRotation rotation = static_cast<LayoutRotation>(Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0));
+		LayoutRotation rotation = Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0);
 		DataModel::AccessoryType signalType = DataModel::SignalTypeSimpleLeft;
 		DataModel::AccessoryPulseDuration duration = manager.GetDefaultAccessoryDuration();
 		bool inverted = false;
@@ -240,7 +240,7 @@ namespace WebServer
 		LayoutPosition posY = Utils::Utils::GetIntegerMapEntry(arguments, "posy", 0);
 		LayoutPosition posZ = Utils::Utils::GetIntegerMapEntry(arguments, "posz", 0);
 		LayoutItemSize height = Utils::Utils::GetIntegerMapEntry(arguments, "length", 1);
-		LayoutRotation rotation = static_cast<LayoutRotation>(Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0));
+		LayoutRotation rotation = Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0);
 		vector<FeedbackID> feedbacks;
 		unsigned int feedbackCounter = Utils::Utils::GetIntegerMapEntry(arguments, "feedbackcounter", 1);
 		for (unsigned int feedback = 1; feedback <= feedbackCounter; ++feedback)

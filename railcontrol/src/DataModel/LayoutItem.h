@@ -31,13 +31,71 @@ namespace DataModel
 	class LayoutItem : public Object
 	{
 		public:
-			enum LayoutRotation : unsigned char
+			enum LayoutRotationEnum : unsigned char
 			{
 				Rotation0 = 0,
 				Rotation90,
 				Rotation180,
 				Rotation270,
 				RotationNotRelevant
+			};
+
+			class LayoutRotation
+			{
+				public:
+					inline LayoutRotation()
+					:	rotation(Rotation0)
+					{
+					}
+
+					inline LayoutRotation(const LayoutRotationEnum rotation)
+					:	rotation(rotation)
+					{
+					}
+
+					inline LayoutRotation(const int rotation)
+					{
+						*this = rotation;
+					}
+
+					inline LayoutRotation& operator=(const int rotation)
+					{
+						this->rotation = (rotation > RotationNotRelevant || rotation < Rotation0) ? Rotation0 : static_cast<LayoutRotationEnum>(rotation);
+						return *this;
+					}
+
+					inline LayoutRotation& operator=(const LayoutRotationEnum rotation)
+					{
+						this->rotation = rotation;
+						return *this;
+					}
+
+					inline bool operator==(const LayoutRotationEnum rotation) const
+					{
+						return this->rotation == rotation;
+					}
+
+					inline bool operator!=(const LayoutRotationEnum rotation) const
+					{
+						return this->rotation != rotation;
+					}
+
+					inline LayoutRotation& operator++()
+					{
+						unsigned char r = static_cast<unsigned char>(rotation);
+						++r;
+						r &= 0x03;
+						rotation = static_cast<LayoutRotationEnum>(r);
+						return *this;
+					}
+
+					inline operator LayoutRotationEnum() const
+					{
+						return rotation;
+					}
+
+				private:
+					LayoutRotationEnum rotation;
 			};
 
 			typedef unsigned char LayoutItemSize;
@@ -178,6 +236,11 @@ namespace DataModel
 			virtual std::string Rotation() const
 			{
 				return Rotation(rotation);
+			}
+
+			inline void Rotate()
+			{
+				++rotation;
 			}
 
 			static std::string Rotation(LayoutRotation rotation);

@@ -78,7 +78,7 @@ namespace WebServer
 		LayoutPosition posy = Utils::Utils::GetIntegerMapEntry(arguments, "posy", 0);
 		LayoutPosition posz = Utils::Utils::GetIntegerMapEntry(arguments, "posz", 0);
 		LayoutItemSize height = Utils::Utils::GetIntegerMapEntry(arguments, "length", DataModel::LayoutItem::Height1);
-		LayoutRotation rotation = static_cast<LayoutRotation>(Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0));
+		LayoutRotation rotation = Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0);
 		DataModel::TrackType type = DataModel::TrackTypeStraight;
 		vector<FeedbackID> feedbacks;
 		vector<Relation*> signals;
@@ -207,7 +207,7 @@ namespace WebServer
 		const LayoutPosition posY = Utils::Utils::GetIntegerMapEntry(arguments, "posy", 0);
 		const LayoutPosition posZ = Utils::Utils::GetIntegerMapEntry(arguments, "posz", 0);
 		LayoutItemSize height = DataModel::LayoutItem::Height1;
-		const LayoutRotation rotation = static_cast<LayoutRotation>(Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0));
+		const LayoutRotation rotation = Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0);
 		const int typeInt = static_cast<DataModel::TrackType>(Utils::Utils::GetIntegerMapEntry(arguments, "type", DataModel::TrackTypeStraight)); // FIXME: remove later 2020-10-27
 		const DataModel::TrackType type = static_cast<DataModel::TrackType>(Utils::Utils::GetIntegerMapEntry(arguments, "tracktype", typeInt));
 		switch (type)

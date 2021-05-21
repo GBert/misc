@@ -131,7 +131,7 @@ namespace DataModel
 		posZ = Utils::Utils::GetIntegerMapEntry(arguments, "posZ", 0);
 		width = Utils::Utils::GetIntegerMapEntry(arguments, "width", Width1);
 		height = Utils::Utils::GetIntegerMapEntry(arguments, "height", Height1);
-		rotation = static_cast<LayoutRotation>(Utils::Utils::GetIntegerMapEntry(arguments, "rotation", Rotation0));
+		rotation = Utils::Utils::GetIntegerMapEntry(arguments, "rotation", Rotation0);
 		if (rotation > Rotation270)
 		{
 			rotation = Rotation0;

@@ -504,7 +504,10 @@ class Manager
 		bool CanHandle(const ControlID controlId, const Hardware::Capabilities capability) const;
 		Hardware::Capabilities GetCapabilities(const ControlID controlID) const;
 
-		bool NewPosition(const DataModel::ObjectIdentifier& identifier,
+		bool LayoutItemRotate(const DataModel::ObjectIdentifier& identifier,
+			std::string& result);
+
+		bool LayoutItemNewPosition(const DataModel::ObjectIdentifier& identifier,
 			const DataModel::LayoutItem::LayoutItemSize posX,
 			const DataModel::LayoutItem::LayoutItemSize posY,
 			std::string& result);
@@ -532,39 +535,51 @@ class Manager
 			feedback->SetState(state);
 		}
 
-		bool AccessoryNewPosition(const AccessoryID accessoryID,
+		bool AccessoryPosition(const AccessoryID accessoryID,
 			const DataModel::LayoutItem::LayoutPosition posX,
 			const DataModel::LayoutItem::LayoutPosition posY,
 			std::string& result);
 
-		bool FeedbackNewPosition(const FeedbackID feedbackID,
+		bool FeedbackPosition(const FeedbackID feedbackID,
 			const DataModel::LayoutItem::LayoutPosition posX,
 			const DataModel::LayoutItem::LayoutPosition posY,
 			std::string& result);
 
-		bool RouteNewPosition(const RouteID routeID,
+		bool RoutePosition(const RouteID routeID,
 			const DataModel::LayoutItem::LayoutPosition posX,
 			const DataModel::LayoutItem::LayoutPosition posY,
 			std::string& result);
 
-		bool SignalNewPosition(const SignalID signalID,
+		bool SignalPosition(const SignalID signalID,
 			const DataModel::LayoutItem::LayoutPosition posX,
 			const DataModel::LayoutItem::LayoutPosition posY,
 			std::string& result);
 
-		bool SwitchNewPosition(const SwitchID switchID,
+		bool SwitchPosition(const SwitchID switchID,
 			const DataModel::LayoutItem::LayoutPosition posX,
 			const DataModel::LayoutItem::LayoutPosition posY,
 			std::string& result);
 
-		bool TextNewPosition(const TextID textID,
+		bool TextPosition(const TextID textID,
 			const DataModel::LayoutItem::LayoutPosition posX,
 			const DataModel::LayoutItem::LayoutPosition posY,
 			std::string& result);
 
-		bool TrackNewPosition(const TrackID trackID,
+		bool TrackPosition(const TrackID trackID,
 			const DataModel::LayoutItem::LayoutPosition posX,
 			const DataModel::LayoutItem::LayoutPosition posY,
+			std::string& result);
+
+		bool SignalRotate(const SignalID signalID,
+			std::string& result);
+
+		bool SwitchRotate(const SwitchID switchID,
+			std::string& result);
+
+		bool TextRotate(const TextID textID,
+			std::string& result);
+
+		bool TrackRotate(const TrackID trackID,
 			std::string& result);
 
 		void AccessorySaveAndPublishSettings(const DataModel::Accessory* const accessory);

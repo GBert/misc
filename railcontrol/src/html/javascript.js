@@ -1,3 +1,18 @@
+function onClickText(event, identifier)
+{
+	if (event.ctrlKey != true)
+	{
+		return;
+	}
+	rotateObject(identifier);
+}
+
+function rotateObject(identifier)
+{
+	var url = "/?cmd=rotate&" + parseObjectIdentifier(identifier);
+	fireRequestAndForget(url);
+}
+
 function drag(event)
 {
 	if (event.ctrlKey != true)
@@ -20,7 +35,13 @@ function drop(event) {
 	}
 	event.preventDefault();
 	var data = event.dataTransfer.getData("Text");
-	var dataArray = data.split('_');
+	var url = "/?cmd=newposition&" + parseObjectIdentifier(data) + "&x=" + Math.floor(event.offsetX / 36) + "&y=" + Math.floor(event.offsetY / 36);
+	fireRequestAndForget(url);
+}
+
+function parseObjectIdentifier(identifier)
+{
+	var dataArray = identifier.split('_');
 	var type;
 	switch(dataArray[0])
 	{
@@ -51,9 +72,12 @@ function drop(event) {
 		case "tx":
 			type = "text";
 			break;
+
+		default:
+			type = "object";
+			break;
 	}
-	var url = "/?cmd=newposition&" + type + "=" + dataArray[1] + "&x=" + Math.floor(event.offsetX / 36) + "&y=" + Math.floor(event.offsetY / 36);
-	fireRequestAndForget(url);
+	return type + "=" + dataArray[1];
 }
 
 function showMenuConfig()

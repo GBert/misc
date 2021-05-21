@@ -56,7 +56,7 @@ namespace WebServer
 
 		LayoutItemSize width = Utils::Utils::GetIntegerMapEntry(arguments, "width", 1);
 
-		LayoutRotation rotation = static_cast<LayoutRotation>(Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0));
+		LayoutRotation rotation = Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0);
 
 		if (textID > TextNone)
 		{
@@ -106,7 +106,7 @@ namespace WebServer
 		LayoutPosition posY = Utils::Utils::GetIntegerMapEntry(arguments, "posy", 0);
 		LayoutPosition posZ = Utils::Utils::GetIntegerMapEntry(arguments, "posz", 0);
 		LayoutItemSize width = Utils::Utils::GetIntegerMapEntry(arguments, "width", 1);
-		LayoutRotation rotation = static_cast<LayoutRotation>(Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0));
+		LayoutRotation rotation = Utils::Utils::GetIntegerMapEntry(arguments, "rotation", DataModel::LayoutItem::Rotation0);
 		string result;
 		if (!manager.TextSave(textID,
 			name,
