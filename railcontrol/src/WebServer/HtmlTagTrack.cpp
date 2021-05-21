@@ -31,6 +31,7 @@ namespace WebServer
 		dynamic_cast<const DataModel::TrackBase*>(track),
 		dynamic_cast<const DataModel::LayoutItem*>(track))
 	{
+		imageDiv.AddAttribute("onclick", "return onClickWithMenu(event, '" + identifier + "');");
 		AddOnClickMenuEntry(Languages::TextBlockTrack, "fireRequestAndForget('/?cmd=trackblock&" + urlIdentifier + "&blocked=true');", "track_block");
 		AddOnClickMenuEntry(Languages::TextUnblockTrack, "fireRequestAndForget('/?cmd=trackblock&" + urlIdentifier + "&blocked=false');", "track_unblock");
 		AddOnClickMenuEntry(Languages::TextTurnDirectionOfTravelToLeft, "fireRequestAndForget('/?cmd=trackorientation&orientation=false&" + urlIdentifier + "');", "track_left");

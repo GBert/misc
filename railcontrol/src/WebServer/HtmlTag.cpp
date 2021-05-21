@@ -26,11 +26,10 @@ namespace WebServer
 {
 	HtmlTag HtmlTag::AddAttribute(const std::string& name, const std::string& value)
 	{
-		if (name.size() == 0)
+		if (name.size() > 0)
 		{
-			return *this;
+			this->attributes[name] += value;
 		}
-		this->attributes[name] += value;
 		return *this;
 	}
 
@@ -60,7 +59,7 @@ namespace WebServer
 				stream << " " << attribute.first;
 				if (attribute.second.size() > 0)
 				{
-					stream << "=" << "\"" << attribute.second << "\"";
+					stream << "=\"" << attribute.second << "\"";
 				}
 			}
 

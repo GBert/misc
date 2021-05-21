@@ -42,14 +42,14 @@ namespace WebServer
 				image += "<polygon points=\"15,30 21,36 15,36\" fill=\"white\" />"
 					"<polygon points=\"0,15 15,30 15,36 0,21\" fill=\"gray\" class=\"turnout\"/>"
 					"<polygon points=\"15,0 21,0 21,36 15,30\" fill=\"gray\" class=\"straight\"/>";
-				imageDiv.AddAttribute("onclick", "return onClickSwitch(" + idText + ");");
+				imageDiv.AddAttribute("onclick", "return onClickSwitch(event, " + idText + ");");
 				break;
 
 			case DataModel::SwitchTypeRight:
 				image += "<polygon points=\"21,30 21,36 15,36\" fill=\"white\" />"
 					"<polygon points=\"21,30 36,15 36,21 21,36\" fill=\"gray\" class=\"turnout\"/>"
 					"<polygon points=\"15,0 21,0 21,30 15,36\" fill=\"gray\" class=\"straight\"/>";
-				imageDiv.AddAttribute("onclick", "return onClickSwitch(" + idText + ");");
+				imageDiv.AddAttribute("onclick", "return onClickSwitch(event, " + idText + ");");
 				break;
 
 			case DataModel::SwitchTypeThreeWay:

@@ -53,7 +53,7 @@ namespace WebServer
 				MenuEntry(Languages::TextSignalStateStop, idText, DataModel::SignalStateStop, "stop");
 				MenuEntry(Languages::TextSignalStateClear, idText, DataModel::SignalStateClear, "clear");
 				MenuEntry(Languages::TextSignalStateStopExpected, idText, DataModel::SignalStateAspect2, "aspect2");
-				imageDiv.AddAttribute("onclick", "return showOnClickMenu(event, '" + identifier + "');");
+				imageDiv.AddAttribute("onclick", "return onClickWithMenu(event, '" + identifier + "');");
 				break;
 
 			case DataModel::SignalTypeChLDistant:
@@ -66,14 +66,14 @@ namespace WebServer
 				MenuEntry(Languages::TextSignalStateClear60, idText, DataModel::SignalStateAspect3, "aspect3");
 				MenuEntry(Languages::TextSignalStateClear90, idText, DataModel::SignalStateAspect5, "aspect5");
 				MenuEntry(Languages::TextSignalStateShortClear, idText, DataModel::SignalStateAspect6, "aspect6");
-				imageDiv.AddAttribute("onclick", "return showOnClickMenu(event, '" + identifier + "');");
+				imageDiv.AddAttribute("onclick", "return onClickWithMenu(event, '" + identifier + "');");
 				break;
 
 			case DataModel::SignalTypeChDwarf:
 				MenuEntry(Languages::TextSignalStateStop, idText, DataModel::SignalStateStop, "stop");
 				MenuEntry(Languages::TextSignalStateClear, idText, DataModel::SignalStateClear, "clear");
 				MenuEntry(Languages::TextSignalStateCaution, idText, DataModel::SignalStateAspect2, "aspect2");
-				imageDiv.AddAttribute("onclick", "return showOnClickMenu(event, '" + identifier + "');");
+				imageDiv.AddAttribute("onclick", "return onClickWithMenu(event, '" + identifier + "');");
 				break;
 
 			case DataModel::SignalTypeSimpleRight:

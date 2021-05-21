@@ -1,10 +1,21 @@
-function onClickText(event, identifier)
+function onClickWithoutMenu(event, identifier)
 {
 	if (event.ctrlKey != true)
 	{
-		return;
+		return false;
 	}
 	rotateObject(identifier);
+	return false;
+}
+
+function onClickWithMenu(event, identifier)
+{
+	if (event.ctrlKey != true)
+	{
+		return showOnClickMenu(event, identifier);
+	}
+	rotateObject(identifier);
+	return false;
 }
 
 function rotateObject(identifier)
@@ -538,22 +549,23 @@ function onClickRoute(routeID)
 	return false;
 }
 
-function onClickSwitch(switchID)
+function onClickSwitch(event, switchID)
 {
-	var element = document.getElementById('sw_' + switchID);
-	var url = '/?cmd=switchstate';
-	url += '&state='
+	var identifier = 'sw_' + switchID;
+	if (event.ctrlKey)
+	{
+		rotateObject(identifier);
+		return;
+	}
+	var element = document.getElementById(identifier);
+	var url = '/?cmd=switchstate&state='
 	if (element.classList.contains('switch_straight'))
 	{
-		url += 'third'
-	}
-	else if (element.classList.contains('switch_turnout'))
-	{
-		url += 'straight'
+		url += 'turnout'
 	}
 	else
 	{
-		url += 'turnout'
+		url += 'straight'
 	}
 	url += '&switch=' + switchID;
 	fireRequestAndForget(url);
@@ -572,6 +584,11 @@ function onClickFeedback(feedbackID)
 
 function onClickSignal(signalID)
 {
+	if (event.ctrlKey)
+	{
+		rotateObject(identifier);
+		return;
+	}
 	var element = document.getElementById('si_' + signalID);
 	var url = '/?cmd=signalstate';
 	url += '&state=' + (element.classList.contains('signal_clear') ? 'stop' : 'clear');
@@ -1602,7 +1619,7 @@ function submitEditForm()
 		}
 		else
 		{
-			url += formElement.value;
+			url += encodeURIComponent(formElement.value);
 		}
 		++i;
 	}

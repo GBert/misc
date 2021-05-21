@@ -672,6 +672,11 @@ namespace WebServer
 				break;
 			}
 			char c = ConvertHexToInt(argumentValue[pos + 1]) * 16 + ConvertHexToInt(argumentValue[pos + 2]);
+			if (c == '%')
+			{
+				// % is our character to search for, so we replace it with a space
+				c = ' ';
+			}
 			argumentValue.replace(pos, 3, 1, c);
 		}
 	}
@@ -712,7 +717,6 @@ namespace WebServer
 
 			// set uri and protocol
 			uri = list[1];
-			UrlDecode(uri);
 			protocol = list[2];
 
 			// read GET-arguments from uri
@@ -734,6 +738,7 @@ namespace WebServer
 				string key;
 				string value;
 				Utils::Utils::SplitString(argument, "=", key, value);
+				UrlDecode(value);
 				arguments[key] = value;
 			}
 		}

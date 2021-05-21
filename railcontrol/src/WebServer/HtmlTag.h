@@ -51,6 +51,11 @@ namespace WebServer
 
 			virtual HtmlTag AddAttribute(const std::string& name, const std::string& value = "");
 
+			inline bool IsAttributeSet(const std::string& name)
+			{
+				return attributes.count(name) == 1;
+			}
+
 			inline virtual HtmlTag AddChildTag(const HtmlTag& child)
 			{
 				this->childTags.push_back(child);

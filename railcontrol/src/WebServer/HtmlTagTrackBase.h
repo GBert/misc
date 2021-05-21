@@ -42,6 +42,11 @@ namespace WebServer
 				return *this;
 			}
 
+			inline bool IsAttributeSet(const std::string& name)
+			{
+				return childTags[0].IsAttributeSet(name);
+			}
+
 		protected:
 			HtmlTagTrackBase(const Manager& manager,
 				const DataModel::TrackBase* track,

@@ -43,6 +43,11 @@ namespace WebServer
 				childTags[0].AddAttribute(name, value);
 				return *this;
 			}
+
+			inline bool IsAttributeSet(const std::string& name)
+			{
+				return childTags[0].IsAttributeSet(name);
+			}
 	};
 } // namespace WebServer
 

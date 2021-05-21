@@ -35,7 +35,7 @@ namespace WebServer
 		image += "<text x=\"3\" y=\"22\">" + name + "</text>";
 
 		imageDiv.AddClass("text_item");
-		imageDiv.AddAttribute("onclick", "return onClickText(event, '" + identifier + "');");
+		imageDiv.AddAttribute("onclick", "return onClickWithoutMenu(event, '" + identifier + "');");
 
 		const string urlIdentifier = "text=" + to_string(text->GetID());
 
