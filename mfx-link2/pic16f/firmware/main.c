@@ -40,6 +40,9 @@ void isr(void) __interrupt(0) {
 	rail_data = 0;
 	TMR2IF = 0;
     }
+    if (ADIF) {
+	ADIF = 0;
+    }
     if (TMR0IF && TMR0IE) {
 	TMR0IF = 0;
 	TMR0 = TIMER0_VAL;
