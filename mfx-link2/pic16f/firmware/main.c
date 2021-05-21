@@ -27,12 +27,15 @@ volatile uint16_t adc_sense;
 void isr(void) __interrupt(0) {
     if (IOCIF) {
 	TMR2 = 0;
+	// according to 40001729C.pdf it is needed to set post and pre scaler if TMR2 is modified
 	T2CON = 0x67; // FOSC/4 Postscaler 1:8 Prescaler 1:64 -> 1/8 * 8 * 64 * 256 = 16384us
+	// enable H-Bridge
 	LATB4 = 1;
 	rail_data = 1;
 	IOCCF = 0;
     }
     if (TMR2IF) {
+	// disable H-Bridge
 	LATB4 = 0;
 	rail_data = 0;
 	TMR2IF = 0;
@@ -104,9 +107,9 @@ void pps_init(void) {
 void system_init(void) {
     // switch off analog
     OSCCON = 0b11110000;	// Configure oscillator
-    //1------- use PLL to get 4x8 Mhz (system clock)
-    //-1110--- 8 MHz internal oscillator (instruction clock)
-    //------00 oscillator selected with INTOSC
+    //         1------- use PLL to get 4x8 Mhz (system clock)
+    //         -1110--- 8 MHz internal oscillator (instruction clock)
+    //         ------00 oscillator selected with INTOSC
     ANSELA = 0;
     ANSELB = 0;
     ANSELC = 0;
