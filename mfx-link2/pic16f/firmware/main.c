@@ -40,7 +40,14 @@ void isr(void) __interrupt(0) {
 	rail_data = 0;
 	TMR2IF = 0;
     }
-    if (ADIF) {
+    if (ADIE && ADIF) {
+	if (ADCON0 >> 2 == AD_POTI) {
+	    adc_poti += ADRESL;
+	    adc_poti >>= 1;
+	} else {
+	    adc_sense += ADRESL;
+	    adc_sense >>= 1;
+	}
 	ADIF = 0;
     }
     if (TMR0IF && TMR0IE) {
