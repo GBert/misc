@@ -28,7 +28,7 @@ void isr(void) __interrupt(0) {
     if (IOCIF) {
 	TMR2 = 0;
 	// according to 40001729C.pdf it is needed to set post and pre scaler if TMR2 is modified
-	T2CON = 0x67; // FOSC/4 Postscaler 1:8 Prescaler 1:64 -> 1/8 * 8 * 64 * 256 = 16384us
+	T2CON = 0x3f; // FOSC/4 Postscaler 1:8 Prescaler 1:64 -> 1/8 * 8 * 64 * 256 = 16384us
 	// enable H-Bridge
 	LATB4 = 1;
 	rail_data = 1;
