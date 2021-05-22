@@ -1,11 +1,13 @@
 const int revisionnr = 
-1591
+1593
 ;
 const char* commithash = 
-"cb21533d113cc9c811efbad47910c0706f708c85";
+"7ec9d912a75264e872f219b9d2ae6fff33ef39bc";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1593 2021-05-21 14:44:03 +0200 router: removed deprecated symbol support\n" \
+"1592 2021-05-21 08:20:10 +0200 trackpicker: removed tracknr 2\n" \
 "1591 2021-05-20 07:33:35 +0200 bidibdlg: removed discover\n" \
 "1590 2021-05-19 08:14:21 +0200 wiopi: softpwm option on commandline temp.\n" \
 "1589 2021-05-19 07:57:17 +0200 wiopi: softpwm option added to enable sound under super user\n" \
