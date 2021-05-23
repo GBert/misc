@@ -19,16 +19,20 @@ Pulse Electronics PA1005.040QNL
 
 JLCPB SMT Assembly
 ------------------
-PCB gerber/mfx-link2_062021.ZIP
-BOM mfx-link2.csv
-CPL gerber/mfx-link2-top-pos.csv
+
+|Art      | Datei |
+|---------|-------|
+|PCB      |gerber/mfx-link2_062021.ZIP|
+|BOM      |mfx-link2.csv|
+|CPL      |gerber/mfx-link2-top-pos.csv|
 
 Changelog
 ---------
-062017 erste Version
-
-052021 überarbeitete Version für SMT Fertigung bei JLCPCB
-
-062021 R17 gegen Masse nicht gegen VCC
-
-       1N4148 Pads vergrössert
+| Version | Anmerkung |
+|---------|-----------|
+|062017   |erste Version|
+|052021   |überarbeitete Version für SMT Fertigung bei JLCPCB|
+|062021   |R17 gegen Masse nicht gegen VCC|
+|         |1N4148 Pads vergrössert|
+|         |1nF Kondensator hinzugefügt|
+|         |R18 vergrössert von 270 auf 560 Ohm wegen LED Stärke|
