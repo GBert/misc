@@ -638,49 +638,6 @@ namespace WebServer
 		}
 	}
 
-	char WebClient::ConvertHexToInt(char c)
-	{
-		if (c >= 'a')
-		{
-			c -= 'a' - 10;
-		}
-		else if (c >= 'A')
-		{
-			c -= 'A' - 10;
-		}
-		else if (c >= '0')
-		{
-			c -= '0';
-		}
-
-		if (c > 15)
-		{
-			return 0;
-		}
-
-		return c;
-	}
-
-	void WebClient::UrlDecode(string& argumentValue)
-	{
-		// decode %20 and similar
-		while (true)
-		{
-			size_t pos = argumentValue.find('%');
-			if (pos == string::npos || pos + 3 > argumentValue.length())
-			{
-				break;
-			}
-			char c = ConvertHexToInt(argumentValue[pos + 1]) * 16 + ConvertHexToInt(argumentValue[pos + 2]);
-			if (c == '%')
-			{
-				// % is our character to search for, so we replace it with a space
-				c = ' ';
-			}
-			argumentValue.replace(pos, 3, 1, c);
-		}
-	}
-
 	void WebClient::InterpretClientRequest(const deque<string>& lines, string& method, string& uri, string& protocol, map<string,string>& arguments, map<string,string>& headers)
 	{
 		if (lines.size() == 0)
@@ -738,8 +695,7 @@ namespace WebServer
 				string key;
 				string value;
 				Utils::Utils::SplitString(argument, "=", key, value);
-				UrlDecode(value);
-				arguments[key] = value;
+				arguments[key] = Utils::Utils::UrlDecode(value);
 			}
 		}
 	}

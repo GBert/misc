@@ -19,7 +19,6 @@ along with RailControl; see the file LICENCE. If not see
 */
 
 #include <map>
-#include <sstream>
 #include <string>
 
 #include "DataModel/Object.h"
@@ -33,9 +32,7 @@ namespace DataModel
 {
 	std::string Object::Serialize() const
 	{
-		stringstream ss;
-		ss << "objectID=" << (int) objectID << ";name=" << name;
-		return ss.str();
+		return "objectID=" + std::to_string(objectID) + ";name=" + Utils::Utils::UrlEncode(name);
 	}
 
 	bool Object::Deserialize(const std::string& serialized)
@@ -48,7 +45,7 @@ namespace DataModel
 	bool Object::Deserialize(const map<string, string>& arguments)
 	{
 		objectID = Utils::Utils::GetIntegerMapEntry(arguments, "objectID", ObjectNone);
-		name = Utils::Utils::GetStringMapEntry(arguments, "name");
+		name = Utils::Utils::UrlDecode(Utils::Utils::GetStringMapEntry(arguments, "name"));
 		return true;
 	}
 

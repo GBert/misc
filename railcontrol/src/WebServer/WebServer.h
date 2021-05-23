@@ -42,7 +42,7 @@ namespace WebServer
 			WebServer(const WebServer&) = delete;
 			WebServer& operator=(const WebServer&) = delete;
 
-			WebServer(Manager& manager, const unsigned short port);
+			WebServer(Manager& manager, const std::string& webserveraddress, const unsigned short port);
 			~WebServer();
 
 			void Work(Network::TcpConnection* connection) override;
@@ -111,7 +111,7 @@ namespace WebServer
 
 			void TrackBaseState(std::string& command, const DataModel::TrackBase* track);
 
-			void LogBrowserInfo(const unsigned short port);
+			void LogBrowserInfo(const std::string& webserveraddress, const unsigned short port);
 
 			Logger::Logger* logger;
 			volatile bool run;

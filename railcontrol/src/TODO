@@ -11,8 +11,6 @@
 - Bahnübergänge
 - Automatisches Umfahren des Zuges an der Endstation
 - Trotz freier Fahrt anhalten an Bahnsteigen
-- Mehrere Objekte gleichzeitig verschieben auf dem Layout
-- Objekte mit Maus verschieben
 - Lokbilder
 - Fahren nach Fahrplan bzw. Vorgabe des Zielortes
 - Formulare als POST-Request senden um maximale URL-Länge zu umgehen

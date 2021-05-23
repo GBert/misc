@@ -54,9 +54,9 @@ namespace WebServer
 	const std::string WebServer::UpdateStatus = "data: status=";
 	const std::string WebServer::Webserver = "Webserver";
 
-	WebServer::WebServer(Manager& manager, const unsigned short port)
+	WebServer::WebServer(Manager& manager, const std::string& webserveraddress, const unsigned short port)
 	:	ControlInterface(ControlTypeWebserver),
-		Network::TcpServer(port, "WebServer"),
+		Network::TcpServer(webserveraddress, port, "WebServer"),
 		logger(Logger::Logger::GetLogger("WebServer")),
 		run(false),
 		lastClientID(0),
@@ -69,7 +69,7 @@ namespace WebServer
 			updates[updateID] = GetStatus(Languages::TextRailControlStarted);
 		}
 		run = true;
-		LogBrowserInfo(port);
+		LogBrowserInfo(webserveraddress, port);
 	}
 
 	WebServer::~WebServer()
@@ -102,10 +102,11 @@ namespace WebServer
 		logger->Info(Languages::TextWebServerStopped);
 	}
 
-	void WebServer::LogBrowserInfo(const unsigned short port)
+	void WebServer::LogBrowserInfo(const std::string& webserveraddress, const unsigned short port)
 	{
 		static const string Http("\n   http://");
 		static const string Port(to_string(port));
+
 		string localhostInfo(Http);
 		localhostInfo += "localhost:" + Port + "/";
 		string ipv4Info;
@@ -115,43 +116,44 @@ namespace WebServer
 		struct ifaddrs* ifa = nullptr;
 		getifaddrs(&ifAddrStruct);
 
-		for (ifa = ifAddrStruct; ifa != nullptr; ifa = ifa->ifa_next)
-		{
-			if (!ifa->ifa_addr)
-			{
-				continue;
-			}
-			if (ifa->ifa_addr->sa_family == AF_INET)
-			{ // check it is IP4
-				// is a valid IP4 Address
-				void* tmpAddrPtr = &((struct sockaddr_in*) ifa->ifa_addr)->sin_addr;
-				char addressBuffer[INET_ADDRSTRLEN];
-				inet_ntop(AF_INET, tmpAddrPtr, addressBuffer, INET_ADDRSTRLEN);
-				string address(addressBuffer);
-				if (address.compare("0.0.0.0") == 0)
-				{
+		if(webserveraddress != "localhost") {
+
+			for (ifa = ifAddrStruct; ifa != nullptr; ifa = ifa->ifa_next) {
+				if (!ifa->ifa_addr) {
 					continue;
 				}
-				if (address.substr(0, 8).compare("169.254.") == 0)
-				{
-					continue;
+				if (ifa->ifa_addr->sa_family == AF_INET) { // check it is IP4
+					// is a valid IP4 Address
+					void *tmpAddrPtr = &((struct sockaddr_in *) ifa->ifa_addr)->sin_addr;
+					char addressBuffer[INET_ADDRSTRLEN];
+					inet_ntop(AF_INET, tmpAddrPtr, addressBuffer, INET_ADDRSTRLEN);
+					string address(addressBuffer);
+					if (address.compare("0.0.0.0") == 0) {
+						continue;
+					}
+					if (address.substr(0, 8).compare("169.254.") == 0) {
+						continue;
+					}
+					ipv4Info += Http + addressBuffer + ":" + Port + "/";
 				}
-				ipv4Info += Http + addressBuffer + ":" + Port + "/";
+				if (ifa->ifa_addr->sa_family == AF_INET6) { // check it is IP6
+					// is a valid IP6 Address
+					void *tmpAddrPtr = &((struct sockaddr_in6 *) ifa->ifa_addr)->sin6_addr;
+					char addressBuffer[INET6_ADDRSTRLEN];
+					inet_ntop(AF_INET6, tmpAddrPtr, addressBuffer, INET6_ADDRSTRLEN);
+					ipv4Info += Http + "[" + addressBuffer + "]:" + Port + "/";
+				}
 			}
-			else if (ifa->ifa_addr->sa_family == AF_INET6)
-			{ // check it is IP6
-				// is a valid IP6 Address
-				void* tmpAddrPtr = &((struct sockaddr_in6*) ifa->ifa_addr)->sin6_addr;
-				char addressBuffer[INET6_ADDRSTRLEN];
-				inet_ntop(AF_INET6, tmpAddrPtr, addressBuffer, INET6_ADDRSTRLEN);
-				ipv4Info += Http + "[" + addressBuffer + "]:" + Port + "/";
-			}
+
 		}
+
 		if (ifAddrStruct != NULL)
 		{
 			freeifaddrs(ifAddrStruct);
 		}
+
 		logger->Info(Languages::TextBrowserInfo, localhostInfo, ipv4Info, ipv6Info);
+
 	}
 
 	void WebServer::Work(Network::TcpConnection* connection)

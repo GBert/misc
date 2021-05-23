@@ -1,6 +1,6 @@
 function onClickWithoutMenu(event, identifier)
 {
-	if (event.ctrlKey != true)
+	if (!event.shiftKey)
 	{
 		return false;
 	}
@@ -10,7 +10,7 @@ function onClickWithoutMenu(event, identifier)
 
 function onClickWithMenu(event, identifier)
 {
-	if (event.ctrlKey != true)
+	if (!event.shiftKey)
 	{
 		return showOnClickMenu(event, identifier);
 	}
@@ -26,7 +26,7 @@ function rotateObject(identifier)
 
 function drag(event)
 {
-	if (event.ctrlKey != true)
+	if (!event.shiftKey)
 	{
 		event.dataTransfer.setData("Text", "");
 		return;
@@ -40,7 +40,7 @@ function allowDrop(event)
 }
 
 function drop(event) {
-	if (event.ctrlKey != true)
+	if (!event.shiftKey)
 	{
 		return;
 	}
@@ -552,7 +552,7 @@ function onClickRoute(routeID)
 function onClickSwitch(event, switchID)
 {
 	var identifier = 'sw_' + switchID;
-	if (event.ctrlKey)
+	if (event.shiftKey)
 	{
 		rotateObject(identifier);
 		return;
@@ -584,7 +584,7 @@ function onClickFeedback(feedbackID)
 
 function onClickSignal(signalID)
 {
-	if (event.ctrlKey)
+	if (event.shiftKey)
 	{
 		rotateObject(identifier);
 		return;

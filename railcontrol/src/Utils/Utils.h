@@ -42,6 +42,8 @@ namespace Utils
 			static void SplitString(const std::string& str, const std::string& delimiter, std::deque<std::string>& list);
 			static void SplitString(const std::string& input, const std::string& delimiter, std::string& first, std::string& second);
 			static std::string StringBeforeDelimiter(const std::string& input, const std::string& delimiter);
+			static std::string UrlDecode(const std::string& value);
+			static std::string UrlEncode(const std::string& value);
 
 			static inline bool IsMapEntrySet(const std::map<std::string,std::string>& map, const std::string& key)
 			{
@@ -61,6 +63,7 @@ namespace Utils
 			static int StringToInteger(const std::string& value, const int defaultValue);
 			static int StringToInteger(const std::string& value, const int min, const int max);
 			static long HexToInteger(const std::string& value, const long defaultValue = 0);
+			static signed char HexToChar(signed char c);
 			static bool StringToBool(const std::string& value, const bool defaultValue = false);
 
 			static void StringToUpper(std::string& s)

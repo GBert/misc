@@ -33,7 +33,7 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace Network
 {
-	TcpServer::TcpServer(const unsigned short port, const std::string& threadName)
+	TcpServer::TcpServer(const std::string& address, const unsigned short port, const std::string& threadName)
 	:	run(false),
 	 	error(""),
 	 	threadName(threadName)
@@ -41,7 +41,12 @@ namespace Network
 		struct sockaddr_in6 serverAddr6;
 		memset(reinterpret_cast<char*>(&serverAddr6), 0, sizeof(serverAddr6));
 		serverAddr6.sin6_family = AF_INET6;
-		serverAddr6.sin6_addr = in6addr_any;
+
+		if(address == "localhost") {
+            serverAddr6.sin6_addr = IN6ADDR_LOOPBACK_INIT;
+        } else {
+            serverAddr6.sin6_addr = in6addr_any;
+		}
 		serverAddr6.sin6_port = htons(port);
 		SocketCreateBindListen(serverAddr6.sin6_family, reinterpret_cast<struct sockaddr*>(&serverAddr6));
 

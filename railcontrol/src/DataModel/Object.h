@@ -53,6 +53,7 @@ namespace DataModel
 			virtual ObjectType GetObjectType() const = 0;
 
 			virtual std::string Serialize() const override;
+
 			virtual bool Deserialize(const std::string& serialized) override;
 
 			inline ObjectID GetID() const

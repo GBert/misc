@@ -38,7 +38,7 @@ namespace Network
 			TcpServer& operator=(const TcpServer&) = delete;
 
 		protected:
-			TcpServer(const unsigned short port, const std::string& threadName);
+			TcpServer(const std::string& address, const unsigned short port, const std::string& threadName);
 			virtual ~TcpServer();
 			void TerminateTcpServer();
 

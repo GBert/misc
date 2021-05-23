@@ -33,7 +33,13 @@ namespace WebServer
 		AddId(name);
 		if (value.size() > 0)
 		{
-			AddAttribute("value", value);
+			std::string modifiedValue = value;
+			Utils::Utils::ReplaceString(modifiedValue, "\"", "&quot;");
+			Utils::Utils::ReplaceString(modifiedValue, "'", "&apos;");
+			Utils::Utils::ReplaceString(modifiedValue, "&", "&amp;");
+			Utils::Utils::ReplaceString(modifiedValue, "<", "&lt;");
+			Utils::Utils::ReplaceString(modifiedValue, ">", "&gt;");
+			AddAttribute("value", modifiedValue);
 		}
 		if (disabled)
 		{

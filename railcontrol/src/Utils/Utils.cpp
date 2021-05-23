@@ -48,14 +48,16 @@ namespace Utils
 {
 	void Utils::ReplaceString(std::string& str, const std::string& from, const std::string& to)
 	{
+		size_t lastOccurrence = 0;
 		while (true)
 		{
-			size_t start_pos = str.find(from);
-			if (start_pos == string::npos)
+			size_t startPos = str.find(from, lastOccurrence);
+			if (startPos == string::npos)
 			{
 				return;
 			}
-			str.replace(start_pos, from.length(), to);
+			str.replace(startPos, from.length(), to);
+			lastOccurrence = startPos + to.length();
 		}
 	}
 
@@ -83,12 +85,41 @@ namespace Utils
 		second = input.substr(pos + delimiterLength);
 	}
 
-	std::string Utils::StringBeforeDelimiter(const std::string& input, const std::string& delimiter)
+	string Utils::StringBeforeDelimiter(const std::string& input, const std::string& delimiter)
 	{
-		std::string ret;
-		std::string unused;
+		string ret;
+		string unused;
 		SplitString(input, delimiter, ret, unused);
 		return ret;
+	}
+
+	string Utils::UrlDecode(const string& value)
+	{
+		string output = value;
+		size_t startSearch = 0;
+		while (true)
+		{
+			size_t pos = output.find('%', startSearch);
+			if (pos == string::npos || pos + 3 > output.length())
+			{
+				break;
+			}
+			const unsigned char highNibble = HexToChar(output[pos + 1]);
+			const unsigned char lowNibble = HexToChar(output[pos + 2]);
+			const unsigned char c = (highNibble << 4) + lowNibble;
+			output.replace(pos, 3, 1, c);
+			startSearch = pos + 1;
+		}
+		return output;
+	}
+
+	string Utils::UrlEncode(const string& value)
+	{
+		string output = value;
+		ReplaceString(output, "%", "%25");
+		ReplaceString(output, "&", "%26");
+		ReplaceString(output, "=", "%3d");
+		return output;
 	}
 
 	const std::string& Utils::GetStringMapEntry(const std::map<std::string, std::string>& map, const std::string& key, const std::string& defaultValue)
@@ -184,6 +215,24 @@ namespace Utils
 			return defaultValue;
 		}
 		return longValue;
+	}
+
+	signed char Utils::HexToChar(signed char c)
+	{
+		if (c >= 'a')
+		{
+			c -= 'a' - 10;
+		}
+		else if (c >= 'A')
+		{
+			c -= 'A' - 10;
+		}
+		else if (c >= '0')
+		{
+			c -= '0';
+		}
+
+		return c > 15 ? 0 : c;
 	}
 
 	bool Utils::StringToBool(const std::string& value, const bool defaultValue)
