@@ -1,6 +1,11 @@
+function modifierKeyPressed(event)
+{
+	return (event.shiftKey || event.ctrlKey);
+}
+
 function onClickWithoutMenu(event, identifier)
 {
-	if (!event.shiftKey)
+	if (!modifierKeyPressed(event))
 	{
 		return false;
 	}
@@ -10,7 +15,7 @@ function onClickWithoutMenu(event, identifier)
 
 function onClickWithMenu(event, identifier)
 {
-	if (!event.shiftKey)
+	if (!modifierKeyPressed(event))
 	{
 		return showOnClickMenu(event, identifier);
 	}
@@ -26,7 +31,7 @@ function rotateObject(identifier)
 
 function drag(event)
 {
-	if (!event.shiftKey)
+	if (!modifierKeyPressed(event))
 	{
 		event.dataTransfer.setData("Text", "");
 		return;
@@ -40,7 +45,7 @@ function allowDrop(event)
 }
 
 function drop(event) {
-	if (!event.shiftKey)
+	if (!modifierKeyPressed(event))
 	{
 		return;
 	}
@@ -552,7 +557,7 @@ function onClickRoute(routeID)
 function onClickSwitch(event, switchID)
 {
 	var identifier = 'sw_' + switchID;
-	if (event.shiftKey)
+	if (modifierKeyPressed(event))
 	{
 		rotateObject(identifier);
 		return;
@@ -584,7 +589,7 @@ function onClickFeedback(feedbackID)
 
 function onClickSignal(signalID)
 {
-	if (event.shiftKey)
+	if (modifierKeyPressed(event))
 	{
 		rotateObject(identifier);
 		return;
@@ -631,7 +636,7 @@ function showMenu(elementName) {
 
 function showOnClickMenu(event, ID)
 {
-	if (event.shiftKey)
+	if (modifierKeyPressed(event))
 	{
 		return true;
 	}
@@ -643,7 +648,7 @@ function showOnClickMenu(event, ID)
 
 function showContextMenu(event, ID)
 {
-	if (event.shiftKey)
+	if (modifierKeyPressed(event))
 	{
 		return true;
 	}
@@ -1419,7 +1424,7 @@ function loadRelationObjectStates(type, name)
 
 function loadLayoutContext(event)
 {
-	if (event.shiftKey)
+	if (modifierKeyPressed(event))
 	{
 		return true;
 	}
