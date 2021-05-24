@@ -1,11 +1,13 @@
 const int revisionnr = 
-1593
+1595
 ;
 const char* commithash = 
-"7ec9d912a75264e872f219b9d2ae6fff33ef39bc";
+"ecda159ed3b9ef0745858972327dd82735269541";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1595 2021-05-24 08:43:27 +0200 app: disable routing trace level at startup\n" \
+"1594 2021-05-23 15:51:04 +0200 svg track 2 and 3 moved to user\n" \
 "1593 2021-05-21 14:44:03 +0200 router: removed deprecated symbol support\n" \
 "1592 2021-05-21 08:20:10 +0200 trackpicker: removed tracknr 2\n" \
 "1591 2021-05-20 07:33:35 +0200 bidibdlg: removed discover\n" \
