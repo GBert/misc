@@ -1,6 +1,6 @@
 function modifierKeyPressed(event)
 {
-	return (event.shiftKey || event.ctrlKey);
+	return (event.shiftKey || event.ctrlKey || event.altKey);
 }
 
 function onClickWithoutMenu(event, identifier)

@@ -1345,6 +1345,7 @@ namespace WebServer
 		content.AddChildTag(HtmlTagInputIntegerWithLabel("posy", Languages::TextPosY, posy, 0, 255));
 		map<string,LayerID> layerList = manager.LayerListByName();
 		content.AddChildTag(HtmlTagSelectWithLabel("posz", Languages::TextPosZ, layerList, posz));
+		content.AddChildTag(HtmlTag("p").AddContent(Languages::GetText(Languages::TextHint)).AddContent(HtmlTag("br")).AddContent(Languages::GetText(Languages::TextHintPositionMove)));
 		return content;
 	}
 
@@ -1723,12 +1724,15 @@ namespace WebServer
 
 	HtmlTag WebClient::HtmlTagRotation(const LayoutRotation rotation) const
 	{
+		HtmlTag content;
 		std::map<LayoutRotation, Languages::TextSelector> rotationOptions;
 		rotationOptions[DataModel::LayoutItem::Rotation0] = Languages::TextNoRotation;
 		rotationOptions[DataModel::LayoutItem::Rotation90] = Languages::Text90DegClockwise;
 		rotationOptions[DataModel::LayoutItem::Rotation180] = Languages::Text180Deg;
 		rotationOptions[DataModel::LayoutItem::Rotation270] = Languages::Text90DegAntiClockwise;
-		return HtmlTagSelectWithLabel("rotation", Languages::TextRotation, rotationOptions, rotation);
+		content.AddChildTag(HtmlTagSelectWithLabel("rotation", Languages::TextRotation, rotationOptions, rotation));
+		content.AddChildTag(HtmlTag("p").AddContent(Languages::GetText(Languages::TextHint)).AddContent(HtmlTag("br")).AddContent(Languages::GetText(Languages::TextHintPositionRotate)));
+		return content;
 	}
 
 	HtmlTag WebClient::HtmlTagSelectTrack(const std::string& name, const Languages::TextSelector label, const ObjectIdentifier& identifier, const Orientation orientation, const string& onchange) const

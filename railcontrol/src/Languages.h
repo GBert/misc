@@ -212,6 +212,8 @@ class Languages
 			TextHintM6051,
 			TextHintMasterControl,
 			TextHintOpenDcc,
+			TextHintPositionMove,
+			TextHintPositionRotate,
 			TextHintRM485,
 			TextHintTwinCenter,
 			TextHintVirtual,
