@@ -26,6 +26,15 @@ JLCPB SMT Assembly
 |BOM      |mfx-link2.csv|
 |CPL      |gerber/mfx-link2-top-pos.csv|
 
+Reichelt Listen
+---------------
+
+SMD Teile (entspricht JLCPCB Bestückung)
+[mfx-booster-link2-smd](https://www.reichelt.de/my/1850634)
+
+Rest (ohne IBT-2 und ohne LCD)
+[mfx-booster-link2](https://www.reichelt.de/my/1850613)
+
 Changelog
 ---------
 | Version | Anmerkung |
