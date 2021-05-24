@@ -1,11 +1,13 @@
 const int revisionnr = 
-1595
+1597
 ;
 const char* commithash = 
-"ecda159ed3b9ef0745858972327dd82735269541";
+"43004a47ab977793d858d338b61546c00cc5b7f3";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1597 2021-05-24 11:36:33 +0200 app: disable find level at startup\n" \
+"1596 2021-05-24 10:48:38 +0200 trace: do not dispatch router tracing\n" \
 "1595 2021-05-24 08:43:27 +0200 app: disable routing trace level at startup\n" \
 "1594 2021-05-23 15:51:04 +0200 svg track 2 and 3 moved to user\n" \
 "1593 2021-05-21 14:44:03 +0200 router: removed deprecated symbol support\n" \
