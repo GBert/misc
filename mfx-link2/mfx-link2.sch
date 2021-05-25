@@ -5,7 +5,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "mfx-Booster/Link II"
-Date "2021-05-23"
+Date "2021-05-25"
 Rev "1.02"
 Comp "GBe"
 Comment1 ""
@@ -13,18 +13,6 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-$Comp
-L mfx-link2-rescue:PIC16F1709 U5
-U 1 1 58FE1162
-P 7450 2550
-F 0 "U5" H 7450 2100 50  0000 C CNN
-F 1 "PIC16F1709" H 7450 2000 50  0000 C CNN
-F 2 "w_smd_dil:soic-20" H 7450 3100 50  0001 C CNN
-F 3 "" H 7450 1850 50  0001 C CNN
-F 4 "" H 7450 2550 50  0001 C CNN "LCSC"
-	1    7450 2550
-	1    0    0    -1  
-$EndComp
 $Comp
 L Device:R R3
 U 1 1 58FE11BC
@@ -38,7 +26,7 @@ F 4 "C17521" V 3300 6550 50  0001 C CNN "LCSC"
 	0    1    1    0   
 $EndComp
 $Comp
-L mfx-link2-rescue:C C6
+L Device:C C6
 U 1 1 58FE132A
 P 7200 1325
 F 0 "C6" H 7225 1425 50  0000 L CNN
@@ -121,7 +109,7 @@ F 4 "C58069" H 4100 1300 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:C C3
+L Device:C C3
 U 1 1 58FE3358
 P 3550 1600
 F 0 "C3" H 3575 1700 50  0000 L CNN
@@ -133,7 +121,7 @@ F 4 "C49678" H 3550 1600 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:PWR_FLAG #FLG01
+L power:PWR_FLAG #FLG01
 U 1 1 58FE3ABA
 P 4950 1775
 F 0 "#FLG01" H 4950 1870 50  0001 C CNN
@@ -192,7 +180,7 @@ F 4 "C17673" V 3525 6300 50  0001 C CNN "LCSC"
 	-1   0    0    1   
 $EndComp
 $Comp
-L mfx-link2-rescue:+5V #PWR02
+L power:+5V #PWR02
 U 1 1 58FE4D35
 P 3950 6350
 F 0 "#PWR02" H 3950 6200 50  0001 C CNN
@@ -217,7 +205,7 @@ $EndComp
 Text Label 9800 2350 0    60   ~ 0
 ENABLE
 $Comp
-L mfx-link2-rescue:GND #PWR03
+L power:GND #PWR03
 U 1 1 58FE66BD
 P 10325 3075
 F 0 "#PWR03" H 10325 2825 50  0001 C CNN
@@ -258,7 +246,7 @@ SENSE
 Text Label 8475 2500 2    60   ~ 0
 SENSE
 $Comp
-L mfx-link2-rescue:GND #PWR04
+L power:GND #PWR04
 U 1 1 58FE942D
 P 8475 2200
 F 0 "#PWR04" H 8475 1950 50  0001 C CNN
@@ -337,7 +325,7 @@ F 4 "" H 9000 1675 50  0001 C CNN "LCSC"
 	1    0    0    1   
 $EndComp
 $Comp
-L mfx-link2-rescue:GND #PWR05
+L power:GND #PWR05
 U 1 1 58FFB153
 P 8750 1925
 F 0 "#PWR05" H 8750 1675 50  0001 C CNN
@@ -481,7 +469,7 @@ $EndComp
 Text Label 4575 6750 0    60   ~ 0
 _GB_OUT
 $Comp
-L mfx-link2-rescue:GNDA #PWR06
+L power:GNDA #PWR06
 U 1 1 59001DF4
 P 5625 7000
 F 0 "#PWR06" H 5625 6750 50  0001 C CNN
@@ -551,7 +539,7 @@ F 4 "C49678" H 3700 5400 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:CP C4
+L Device:CP C4
 U 1 1 5909BE09
 P 4650 5375
 F 0 "C4" H 4675 5475 50  0000 L CNN
@@ -563,7 +551,7 @@ F 4 "" H 4650 5375 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:+5V #PWR07
+L power:+5V #PWR07
 U 1 1 5909C148
 P 4650 4725
 F 0 "#PWR07" H 4650 4575 50  0001 C CNN
@@ -582,7 +570,7 @@ brown
 Text Label 1225 2850 0    60   ~ 0
 red
 $Comp
-L mfx-link2-rescue:+5V #PWR08
+L power:+5V #PWR08
 U 1 1 5908A86E
 P 3525 6075
 F 0 "#PWR08" H 3525 5925 50  0001 C CNN
@@ -593,7 +581,7 @@ F 3 "" H 3525 6075 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:GND #PWR09
+L power:GND #PWR09
 U 1 1 58FE372A
 P 4100 1925
 F 0 "#PWR09" H 4100 1675 50  0001 C CNN
@@ -604,7 +592,7 @@ F 3 "" H 4100 1925 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:GND #PWR010
+L power:GND #PWR010
 U 1 1 58FE38A1
 P 7200 1575
 F 0 "#PWR010" H 7200 1325 50  0001 C CNN
@@ -615,7 +603,7 @@ F 3 "" H 7200 1575 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:GND #PWR011
+L power:GND #PWR011
 U 1 1 58FF775E
 P 5450 3275
 F 0 "#PWR011" H 5450 3025 50  0001 C CNN
@@ -626,7 +614,7 @@ F 3 "" H 5450 3275 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:GND #PWR012
+L power:GND #PWR012
 U 1 1 58FF8516
 P 4450 3275
 F 0 "#PWR012" H 4450 3025 50  0001 C CNN
@@ -637,7 +625,7 @@ F 3 "" H 4450 3275 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:GND #PWR013
+L power:GND #PWR013
 U 1 1 5909205E
 P 3100 3200
 F 0 "#PWR013" H 3100 2950 50  0001 C CNN
@@ -648,7 +636,7 @@ F 3 "" H 3100 3200 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:GNDA #PWR014
+L power:GNDA #PWR014
 U 1 1 59092D00
 P 3950 7150
 F 0 "#PWR014" H 3950 6900 50  0001 C CNN
@@ -659,7 +647,7 @@ F 3 "" H 3950 7150 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:GNDA #PWR015
+L power:GNDA #PWR015
 U 1 1 59092E5B
 P 3525 7425
 F 0 "#PWR015" H 3525 7175 50  0001 C CNN
@@ -670,7 +658,7 @@ F 3 "" H 3525 7425 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:VCC #PWR016
+L power:VCC #PWR016
 U 1 1 59094284
 P 4975 1200
 F 0 "#PWR016" H 4975 1050 50  0001 C CNN
@@ -681,7 +669,7 @@ F 3 "" H 4975 1200 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:VCC #PWR017
+L power:VCC #PWR017
 U 1 1 590943B0
 P 7200 1075
 F 0 "#PWR017" H 7200 925 50  0001 C CNN
@@ -692,7 +680,7 @@ F 3 "" H 7200 1075 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:VCC #PWR018
+L power:VCC #PWR018
 U 1 1 590944D7
 P 6250 1075
 F 0 "#PWR018" H 6250 925 50  0001 C CNN
@@ -703,7 +691,7 @@ F 3 "" H 6250 1075 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:VCC #PWR019
+L power:VCC #PWR019
 U 1 1 5909459E
 P 6450 1075
 F 0 "#PWR019" H 6450 925 50  0001 C CNN
@@ -714,7 +702,7 @@ F 3 "" H 6450 1075 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:VCC #PWR020
+L power:VCC #PWR020
 U 1 1 5909516C
 P 6675 1875
 F 0 "#PWR020" H 6675 1725 50  0001 C CNN
@@ -745,7 +733,7 @@ F 4 "C17655" V 3175 2675 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:VCC #PWR021
+L power:VCC #PWR021
 U 1 1 5909A87E
 P 3000 2425
 F 0 "#PWR021" H 3000 2275 50  0001 C CNN
@@ -761,7 +749,7 @@ Text Label 6475 2700 0    60   ~ 0
 PULSE
 NoConn ~ 6700 2600
 $Comp
-L mfx-link2-rescue:CP C5
+L Device:CP C5
 U 1 1 5909C601
 P 4650 1600
 F 0 "C5" H 4675 1700 50  0000 L CNN
@@ -773,7 +761,7 @@ F 4 "" H 4650 1600 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:VCC #PWR022
+L power:VCC #PWR022
 U 1 1 5909D6E9
 P 5450 2800
 F 0 "#PWR022" H 5450 2650 50  0001 C CNN
@@ -784,7 +772,7 @@ F 3 "" H 5450 2800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:VCC #PWR023
+L power:VCC #PWR023
 U 1 1 5909D844
 P 4450 2775
 F 0 "#PWR023" H 4450 2625 50  0001 C CNN
@@ -818,16 +806,16 @@ F 4 "" H 9300 5100 50  0001 C CNN "LCSC"
 	1    9300 5100
 	1    0    0    -1  
 $EndComp
-NoConn ~ 8550 5350
-Text Label 8200 5250 0    60   ~ 0
+NoConn ~ 8650 5350
+Text Label 8300 5250 0    60   ~ 0
 PGC
-Text Label 8200 5150 0    60   ~ 0
+Text Label 8300 5150 0    60   ~ 0
 PGD
-Text Label 8200 5050 0    60   ~ 0
+Text Label 8300 5050 0    60   ~ 0
 GND
-Text Label 8200 4950 0    60   ~ 0
+Text Label 8300 4950 0    60   ~ 0
 VCC
-Text Label 8200 4850 0    60   ~ 0
+Text Label 8300 4850 0    60   ~ 0
 MCLR
 Wire Wire Line
 	2350 6550 2425 6550
@@ -1172,19 +1160,19 @@ Wire Wire Line
 Wire Bus Line
 	7000 3800 7000 6350
 Wire Wire Line
-	8550 4850 8200 4850
+	8650 4850 8300 4850
 Wire Wire Line
-	8550 4950 8200 4950
+	8650 4950 8300 4950
 Wire Wire Line
-	8550 5050 8200 5050
+	8650 5050 8300 5050
 Wire Wire Line
-	8550 5150 8200 5150
+	8650 5150 8300 5150
 Wire Wire Line
-	8550 5250 8200 5250
+	8650 5250 8300 5250
 Wire Wire Line
 	4650 1450 4650 1300
 $Comp
-L mfx-link2-rescue:VCC #PWR024
+L power:VCC #PWR024
 U 1 1 590A14EA
 P 8750 1425
 F 0 "#PWR024" H 8750 1275 50  0001 C CNN
@@ -1195,7 +1183,7 @@ F 3 "" H 8750 1425 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:VCC #PWR026
+L power:VCC #PWR026
 U 1 1 590A3FCB
 P 9400 2250
 F 0 "#PWR026" H 9400 2100 50  0001 C CNN
@@ -1214,14 +1202,14 @@ Text Label 2975 1300 0    60   ~ 0
 Text Label 2975 1400 0    60   ~ 0
 18V-
 $Comp
-L mfx-link2-rescue:CONN_01X02 P2
+L Connector_Generic:Conn_01x02 P2
 U 1 1 592E55CE
-P 1500 4450
-F 0 "P2" H 1500 4600 50  0000 C CNN
-F 1 "Gleisbox" V 1600 4450 50  0000 C CNN
-F 2 "w_conn_pt-1,5:pt_1,5-2-3,5-h" V 1500 4450 50  0001 C CNN
-F 3 "" H 1500 4450 50  0000 C CNN
-	1    1500 4450
+P 1500 4500
+F 0 "P2" H 1500 4650 50  0000 C CNN
+F 1 "Gleisbox" V 1600 4500 50  0000 C CNN
+F 2 "w_conn_pt-1,5:pt_1,5-2-3,5-h" V 1500 4500 50  0001 C CNN
+F 3 "" H 1500 4500 50  0000 C CNN
+	1    1500 4500
 	-1   0    0    1   
 $EndComp
 Text Notes 1250 6800 0    60   ~ 0
@@ -1241,7 +1229,7 @@ Connection ~ 6450 2025
 Wire Wire Line
 	5325 2025 5325 2325
 $Comp
-L mfx-link2-rescue:GND #PWR027
+L power:GND #PWR027
 U 1 1 59358A73
 P 5325 2325
 F 0 "#PWR027" H 5325 2075 50  0001 C CNN
@@ -1296,7 +1284,7 @@ F 4 "C26010" V 5750 2775 50  0001 C CNN "LCSC"
 	-1   0    0    1   
 $EndComp
 $Comp
-L mfx-link2-rescue:VCC #PWR028
+L power:VCC #PWR028
 U 1 1 593A49AD
 P 5825 2575
 F 0 "#PWR028" H 5825 2425 50  0001 C CNN
@@ -1318,7 +1306,7 @@ Wire Wire Line
 Wire Wire Line
 	950  5375 1050 5375
 $Comp
-L mfx-link2-rescue:+5V #PWR029
+L power:+5V #PWR029
 U 1 1 593A5D98
 P 1250 5175
 F 0 "#PWR029" H 1250 5025 50  0001 C CNN
@@ -1329,7 +1317,7 @@ F 3 "" H 1250 5175 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:GNDA #PWR030
+L power:GNDA #PWR030
 U 1 1 593A5FA4
 P 1250 5775
 F 0 "#PWR030" H 1250 5525 50  0001 C CNN
@@ -1340,7 +1328,7 @@ F 3 "" H 1250 5775 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:GNDA #PWR031
+L power:GNDA #PWR031
 U 1 1 593A61E9
 P 950 5775
 F 0 "#PWR031" H 950 5525 50  0001 C CNN
@@ -1383,7 +1371,7 @@ F 4 "C17673" V 4450 6450 50  0001 C CNN "LCSC"
 	-1   0    0    1   
 $EndComp
 $Comp
-L mfx-link2-rescue:+5V #PWR033
+L power:+5V #PWR033
 U 1 1 5965C0C7
 P 4450 6225
 F 0 "#PWR033" H 4450 6075 50  0001 C CNN
@@ -1423,7 +1411,7 @@ F 4 "C4410" V 5175 6125 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L mfx-link2-rescue:Conn_01x04 P1
+L Connector_Generic:Conn_01x04 P1
 U 1 1 5A11BCEB
 P 1050 1950
 F 0 "P1" H 1050 2150 50  0000 C CNN
@@ -1461,7 +1449,7 @@ Connection ~ 4175 5600
 Wire Wire Line
 	4175 5450 4175 5600
 $Comp
-L mfx-link2-rescue:PWR_FLAG #FLG034
+L power:PWR_FLAG #FLG034
 U 1 1 5A11FF2E
 P 700 5725
 F 0 "#FLG034" H 700 5800 50  0001 C CNN
@@ -1655,7 +1643,7 @@ Wire Wire Line
 	3000 2900 3175 2900
 Connection ~ 3175 2900
 $Comp
-L mfx-link2-rescue:PWR_FLAG #FLG0101
+L power:PWR_FLAG #FLG0101
 U 1 1 60BD523D
 P 3550 1300
 F 0 "#FLG0101" H 3550 1395 50  0001 C CNN
@@ -1674,7 +1662,7 @@ Wire Wire Line
 Wire Wire Line
 	4475 5150 4650 5150
 $Comp
-L mfx-link2-rescue:PWR_FLAG #FLG0102
+L power:PWR_FLAG #FLG0102
 U 1 1 60C24B8E
 P 3700 5150
 F 0 "#FLG0102" H 3700 5245 50  0001 C CNN
@@ -1716,7 +1704,7 @@ $EndComp
 Wire Wire Line
 	6700 2800 6600 2800
 $Comp
-L mfx-link2-rescue:GND #PWR0101
+L power:GND #PWR0101
 U 1 1 60ABD380
 P 6650 3150
 F 0 "#PWR0101" H 6650 2900 50  0001 C CNN
@@ -1735,7 +1723,7 @@ Wire Wire Line
 Wire Wire Line
 	6650 3100 6650 3150
 $Comp
-L mfx-link2-rescue:GND #PWR0102
+L power:GND #PWR0102
 U 1 1 60BE0708
 P 10400 1875
 F 0 "#PWR0102" H 10400 1625 50  0001 C CNN
@@ -1750,7 +1738,7 @@ Wire Wire Line
 Wire Wire Line
 	10400 1775 10200 1775
 $Comp
-L mfx-link2-rescue:GNDA #PWR0103
+L power:GNDA #PWR0103
 U 1 1 60C5FB9B
 P 4175 5600
 F 0 "#PWR0103" H 4175 5350 50  0001 C CNN
@@ -1763,7 +1751,7 @@ $EndComp
 Wire Wire Line
 	2125 5600 3700 5600
 $Comp
-L mfx-link2-rescue:C C7
+L Device:C C7
 U 1 1 60ACFCE1
 P 9975 2025
 F 0 "C7" H 9875 2125 50  0000 L CNN
@@ -1788,4 +1776,16 @@ Text Notes 6650 1325 1    50   ~ 0
 or BAT43
 Text Notes 6075 6875 2    50   ~ 0
 or BC817
+$Comp
+L mfx-link2-rescue:PIC16F1709 U5
+U 1 1 58FE1162
+P 7450 2550
+F 0 "U5" H 7450 2100 50  0000 C CNN
+F 1 "PIC16F1709" H 7450 2000 50  0000 C CNN
+F 2 "MODULE" H 7450 3100 50  0001 C CNN
+F 3 "" H 7450 1850 50  0001 C CNN
+F 4 "" H 7450 2550 50  0001 C CNN "LCSC"
+	1    7450 2550
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
