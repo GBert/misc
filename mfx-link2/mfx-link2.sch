@@ -1784,4 +1784,8 @@ Wire Wire Line
 Wire Wire Line
 	9975 1775 10200 1775
 Connection ~ 10200 1775
+Text Notes 6650 1325 1    50   ~ 0
+or BAT43
+Text Notes 6075 6875 2    50   ~ 0
+or BC817
 $EndSCHEMATC

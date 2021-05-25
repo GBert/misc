@@ -42,12 +42,16 @@ BOM
 |R17|10k|0805|C17414|
 |R18|560|0805|C28636|
 |R20,R21|3k3|0805|C26010|
+|SW1|Micro Taster|||
 |T1|Murata 53040C|||
 |U1|6N137|DIL8||
 |U2|7805|TO-252-2 DPAK|C58069|
 |U3|LM393|SOIC-8|C7955|
 |U4|78L05|SOT-89-3|C71137|
-|P4,P9|Grove Soscket|||
+|U5|PIC16F1709|SO-20||
+|P1|AKL-101-04|4 RM5.08||
+|P1|AKL-059-02|2 RM3.5||
+|P4,P5|Grove Socket|GRV CONNEC4PIN||
 
 JLCPB SMT Assembly
 ------------------
@@ -74,6 +78,6 @@ Changelog
 |062017   |erste Version|
 |052021   |überarbeitete Version für SMT Fertigung bei JLCPCB|
 |062021   |R17 gegen Masse nicht gegen VCC|
+|         |C7 1nF Kondensator hinzugefügt|
 |         |1N4148 Pads vergrössert|
-|         |1nF Kondensator hinzugefügt|
 |         |R18 vergrössert von 270 auf 560 Ohm wegen LED Stärke|
