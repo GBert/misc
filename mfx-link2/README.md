@@ -21,7 +21,7 @@ BOM
 ---
 
 |Part|Value|Footprint|LCSC Part Number|
-|-------|----------|---------|----------------|
+|----|-----|---------|----------------|
 |C1,C2,C3,C6|100nF|0805|C49678|
 |C4,C5|10uf Elko|||
 |C7|1nF|0805|C46653|
@@ -49,8 +49,8 @@ BOM
 |U3|LM393|SOIC-8|C7955|
 |U4|78L05|SOT-89-3|C71137|
 |U5|PIC16F1709|SO-20||
-|P1|AKL-101-04|4 RM5.08||
-|P1|AKL-059-02|2 RM3.5||
+|P1|AKL-101-04|4pin RM5.08||
+|P1|AKL-059-02|2pin RM3.5||
 |P4,P5|Grove Socket|GRV CONNEC4PIN||
 
 JLCPB SMT Assembly
