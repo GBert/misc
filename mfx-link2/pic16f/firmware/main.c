@@ -42,12 +42,13 @@ void isr(void) __interrupt(0) {
     }
     if (ADIE && ADIF) {
 	if (ADCON0 >> 2 == AD_POTI) {
-	    adc_poti += ADRESL;
+	    adc_poti += (ADRESH << 8) + ADRESL;
 	    adc_poti >>= 1;
 	} else {
-	    adc_sense += ADRESL;
+	    adc_sense += (ADRESH << 8) + ADRESL;
 	    adc_sense >>= 1;
 	}
+	TMR4ON = 0;
 	ADIF = 0;
     }
     if (TMR0IF && TMR0IE) {
@@ -57,27 +58,17 @@ void isr(void) __interrupt(0) {
 	timer0_counter++;
 	/* kind of state machine
 	   to sample two pins */
-	if (timer0_counter & 0x02) {
-	    if (timer0_counter & 0x01) {
-		ADCON0 = (AD_POTI << 2) | 1;
-		ADGO = 1;
-	    /* check if ADC completed) */
-	    } else if (!ADGO) {
-		/* use sliding average */
-		adc_poti += ADRESL;
-		adc_poti >>= 1;
-	    }
+	if (timer0_counter & 0x01) {
+	    ADCON0 = (AD_POTI << 2) | 1;
 	} else {
-	    if (timer0_counter & 0x01) {
-		ADCON0 = (AD_SENSE << 2) | 1;
-		ADGO = 1;
-	    /* check if ADC completed) */
-	    } else if (!ADGO) {
-		/* use sliding average */
-		adc_sense += ADRESL;
-		adc_sense >>= 1;
-	    }
+	    ADCON0 = (AD_SENSE << 2) | 1;
 	}
+	// we must delay the start to charge ADC capacitor
+	// use Timer 4 to start after 13us
+	TMR4 = 0;
+	PR4 = 8 * 13;	// FOSC/4 * 13 = 13us
+	TMR4ON = 1;
+	ADCON2 = 0b11000000;
     }
 }
 
@@ -178,6 +169,7 @@ void ad_init(void) {
     ANSELC = 1 << 0;
     /* right justified ; FOSC/64 ;VREF- GND & VREF+ VDD */
     ADCON1 = 0b11100000;
+    ADIE = 1;
 }
 
 void uart_init(void) {
@@ -283,8 +275,8 @@ char nibble_to_hex(uint8_t c) {
 
 void main(void) {
     uint8_t counter = 0;
-    uint8_t temp;
-    uint16_t ad_value;
+    uint8_t temp1, temp2;
+    //uint16_t ad_value;
 
     pps_init();
     system_init();
@@ -310,18 +302,21 @@ void main(void) {
 	    // temp = ad(AD_SENSE);
 	    /* 14mA per digit / atomic read */
 	    GIE = 0;
-	    ad_value = adc_sense * 14;
-	    temp = adc_poti;
+	    temp1 = adc_sense >> 2;
+	    temp2 = adc_poti >> 2;
 	    GIE = 1;
 	    LCD_putcmd(LCD_01_ADDRESS, LCD_CLEAR, 1);
 	    LCD_puts(LCD_01_ADDRESS, "Booster Max=8.0A\0");
 	    LCD_goto(LCD_01_ADDRESS, 2, 1);
-	    LCD_putch(LCD_01_ADDRESS, nibble_to_hex(temp >> 4));
-	    LCD_putch(LCD_01_ADDRESS, nibble_to_hex(temp));
+	    LCD_putch(LCD_01_ADDRESS, nibble_to_hex(temp1 >> 4));
+	    LCD_putch(LCD_01_ADDRESS, nibble_to_hex(temp1));
+	    LCD_putch(LCD_01_ADDRESS, 0x20);
+	    LCD_putch(LCD_01_ADDRESS, nibble_to_hex(temp2 >> 4));
+	    LCD_putch(LCD_01_ADDRESS, nibble_to_hex(temp2));
 	    if (rail_data)
-		LCD_puts(LCD_01_ADDRESS, "  On      0.0%\0");
+		LCD_puts(LCD_01_ADDRESS, " On   0.0%\0");
 	    else
-		LCD_puts(LCD_01_ADDRESS, "  Off\0");
+		LCD_puts(LCD_01_ADDRESS, " Off\0");
 	    //LATCbits.LATC0 = 1;
 	    //LATCbits.LATC0 ^= 1;
 	    putchar_wait(0x55);
