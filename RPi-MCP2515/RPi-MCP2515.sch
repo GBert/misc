@@ -5,8 +5,8 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "RPiCAN"
-Date "2019-11-28"
-Rev "V1.0"
+Date "2021-05-27"
+Rev "V1.2"
 Comp "Gerhard Bertelsmann"
 Comment1 ""
 Comment2 ""
@@ -14,7 +14,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L RPi-MCP2515-rescue:MCP2562 U2
+L RPi-MCP2515-rescue:MCP2562-RPi-MCP2515-rescue U2
 U 1 1 5873A752
 P 7500 3050
 F 0 "U2" H 7150 3500 60  0000 C CNN
@@ -306,7 +306,7 @@ F 3 "" H 3400 1850 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L RPi-MCP2515-rescue:MCP2515 U1
+L RPi-MCP2515-rescue:MCP2515-RPi-MCP2515-rescue U1
 U 1 1 5873A6EF
 P 5650 3300
 F 0 "U1" H 6100 4100 60  0000 C CNN
@@ -754,17 +754,6 @@ F 3 "" H 2050 5550 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR038
-U 1 1 5898E873
-P 2550 7400
-F 0 "#PWR038" H 2550 7150 50  0001 C CNN
-F 1 "GND" H 2550 7250 50  0000 C CNN
-F 2 "" H 2550 7400 50  0000 C CNN
-F 3 "" H 2550 7400 50  0000 C CNN
-	1    2550 7400
-	1    0    0    -1  
-$EndComp
-$Comp
 L Connector_Generic:Conn_02x08_Odd_Even P13
 U 1 1 58992500
 P 3500 6750
@@ -773,17 +762,6 @@ F 1 "CONN_02X08" V 3500 6750 50  0001 C CNN
 F 2 "Socket_Strips:Socket_Strip_Straight_2x08" H 3500 5550 50  0001 C CNN
 F 3 "" H 3500 5550 50  0000 C CNN
 	1    3500 6750
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GNDA #PWR039
-U 1 1 58992960
-P 3100 7400
-F 0 "#PWR039" H 3100 7150 50  0001 C CNN
-F 1 "GNDA" H 3100 7250 50  0000 C CNN
-F 2 "" H 3100 7400 50  0000 C CNN
-F 3 "" H 3100 7400 50  0000 C CNN
-	1    3100 7400
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -796,17 +774,6 @@ F 2 "Socket_Strips:Socket_Strip_Straight_1x06" H 5375 6825 50  0001 C CNN
 F 3 "" H 5375 6825 50  0000 C CNN
 	1    5375 6825
 	1    0    0    1   
-$EndComp
-$Comp
-L power:GNDA #PWR040
-U 1 1 58993FD2
-P 5125 7100
-F 0 "#PWR040" H 5125 6850 50  0001 C CNN
-F 1 "GNDA" H 5125 6950 50  0000 C CNN
-F 2 "" H 5125 7100 50  0000 C CNN
-F 3 "" H 5125 7100 50  0000 C CNN
-	1    5125 7100
-	1    0    0    -1  
 $EndComp
 Text Label 4975 6625 0    60   ~ 0
 IO4
@@ -1010,17 +977,6 @@ RxD
 Text Label 4025 5250 2    60   ~ 0
 TxD
 $Comp
-L power:+5VA #PWR049
-U 1 1 58ACB34C
-P 4650 6000
-F 0 "#PWR049" H 4650 5850 50  0001 C CNN
-F 1 "+5VA" H 4650 6140 50  0000 C CNN
-F 2 "" H 4650 6000 50  0000 C CNN
-F 3 "" H 4650 6000 50  0000 C CNN
-	1    4650 6000
-	1    0    0    -1  
-$EndComp
-$Comp
 L Connector_Generic:Conn_01x04 P16
 U 1 1 58AD123C
 P 10125 4375
@@ -1122,7 +1078,7 @@ $EndComp
 Text Label 8950 5500 0    60   ~ 0
 VCOM
 $Comp
-L RPi-MCP2515-rescue:P82B715 U3
+L RPi-MCP2515-rescue:P82B715-RPi-MCP2515-rescue U3
 U 1 1 5950C44B
 P 9300 1550
 F 0 "U3" H 8850 2200 50  0000 L CNN
@@ -1496,8 +1452,6 @@ Wire Wire Line
 Wire Wire Line
 	5175 7025 5125 7025
 Wire Wire Line
-	5125 7025 5125 7100
-Wire Wire Line
 	5175 6925 4975 6925
 Wire Wire Line
 	4975 6825 5175 6825
@@ -1507,8 +1461,6 @@ Wire Wire Line
 	4975 6625 5175 6625
 Wire Wire Line
 	5125 6525 5175 6525
-Wire Wire Line
-	5125 6300 5125 6525
 Wire Wire Line
 	8100 850  8100 950 
 Wire Wire Line
@@ -1627,15 +1579,12 @@ Wire Wire Line
 	4650 7050 4550 7050
 Wire Wire Line
 	4650 7150 4550 7150
-Wire Wire Line
-	4650 6150 4650 6300
 Connection ~ 4650 7050
 Connection ~ 4650 6950
 Connection ~ 4650 6850
 Connection ~ 4650 6750
 Connection ~ 4650 6650
 Connection ~ 4650 6550
-Connection ~ 4650 6450
 Wire Wire Line
 	10500 1450 10700 1450
 Wire Wire Line
@@ -1666,26 +1615,6 @@ Wire Bus Line
 	9675 4950 10950 4950
 Wire Wire Line
 	9175 5500 8950 5500
-$Comp
-L Connector_Generic:Conn_01x02 P17
-U 1 1 5950F822
-P 4400 6050
-F 0 "P17" H 4400 6150 50  0000 C CNN
-F 1 "PWR" V 4500 6000 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x02" H 4400 6050 50  0001 C CNN
-F 3 "" H 4400 6050 50  0000 C CNN
-	1    4400 6050
-	-1   0    0    -1  
-$EndComp
-Wire Wire Line
-	4600 6050 4650 6050
-Wire Wire Line
-	4650 6050 4650 6000
-Wire Wire Line
-	4600 6150 4650 6150
-Wire Wire Line
-	4650 6300 5125 6300
-Connection ~ 4650 6300
 Wire Wire Line
 	8350 2950 8750 2950
 Wire Wire Line
@@ -1747,8 +1676,6 @@ Wire Wire Line
 Wire Wire Line
 	2550 6850 2550 7050
 Wire Wire Line
-	2550 7050 2550 7400
-Wire Wire Line
 	1800 7150 1850 7150
 Wire Wire Line
 	1750 6950 1850 6950
@@ -1760,8 +1687,6 @@ Wire Wire Line
 	3100 6750 3100 6950
 Wire Wire Line
 	3100 6950 3100 7150
-Wire Wire Line
-	3100 7150 3100 7400
 Wire Wire Line
 	3850 7050 4050 7050
 Wire Wire Line
@@ -1798,8 +1723,6 @@ Wire Wire Line
 	4650 6550 4650 6650
 Wire Wire Line
 	4650 6450 4650 6550
-Wire Wire Line
-	4650 6300 4650 6450
 Wire Wire Line
 	8450 2500 8450 3050
 Wire Wire Line
@@ -1859,4 +1782,28 @@ Wire Wire Line
 	10550 5500 10700 5500
 Wire Wire Line
 	9750 5500 9950 5500
+Wire Wire Line
+	2550 7050 2550 7400
+$Comp
+L power:GND #PWR038
+U 1 1 5898E873
+P 2550 7400
+F 0 "#PWR038" H 2550 7150 50  0001 C CNN
+F 1 "GND" H 2550 7250 50  0000 C CNN
+F 2 "" H 2550 7400 50  0000 C CNN
+F 3 "" H 2550 7400 50  0000 C CNN
+	1    2550 7400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3100 7550 5125 7550
+Wire Wire Line
+	3100 7150 3100 7550
+Wire Wire Line
+	5125 7025 5125 7550
+Wire Wire Line
+	4650 6450 5125 6450
+Wire Wire Line
+	5125 6450 5125 6525
+Connection ~ 4650 6450
 $EndSCHEMATC
