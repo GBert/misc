@@ -167,8 +167,8 @@ void ad_init(void) {
     /* RA2&RC0 analog */
     ANSELA = 1 << 2;
     ANSELC = 1 << 0;
-    /* right justified ; FOSC/64 ;VREF- GND & VREF+ VDD */
-    ADCON1 = 0b11100000;
+    /* right justified ; FOSC/32 ;VREF- GND & VREF+ VDD */
+    ADCON1 = 0b10100000;
     ADIE = 1;
 }
 
