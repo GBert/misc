@@ -15,7 +15,7 @@ MMBT5551,Q1,TO_SOT_Packages_SMD:SOT-23,C2145
 560,R18,Resistor_SMD:R_0805_HandSolderingII,C28636
 390,R2,Resistor_SMD:R_0805_HandSolderingII,C17655
 3k3,"R20,R21",Resistor_SMD:R_0805_HandSolderingII,C26010
-22,R3,Resistor_SMD:R_0805_HandSolderingII,C17521
+22,R3,Resistor_SMD:R_0805_HandSolderingII,C17561
 82,R5,Resistor_SMD:R_0805_HandSolderingII,C17841
 1k,R7,Resistor_SMD:R_0805_HandSolderingII,C17513
 1K,"R8,R9",Resistor_SMD:R_1206_HandSolderingII,C4410
