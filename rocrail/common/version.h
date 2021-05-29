@@ -1,11 +1,12 @@
 const int revisionnr = 
-1599
+1600
 ;
 const char* commithash = 
-"fd0ed1840c1a1b5bc6bbcc05a5caa4ca068bc44b";
+"ce4388f08aeb540c83cd434f53c6637346cd2651";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1600 2021-05-29 10:01:38 +0200 actionctrldlg: condition train added\n" \
 "1599 2021-05-29 10:00:00 +0200 action: condition (!)train added\n" \
 "1598 2021-05-29 07:56:14 +0200 location: train only option added\n" \
 "1597 2021-05-24 11:36:33 +0200 app: disable find level at startup\n" \
