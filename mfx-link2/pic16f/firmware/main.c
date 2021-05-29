@@ -22,7 +22,8 @@ struct serial_buffer tx_fifo, rx_fifo;
 volatile uint8_t rail_data;
 volatile uint8_t timer0_counter;
 volatile uint16_t adc_poti;
-volatile uint16_t adc_sense;
+volatile uint16_t adc_sense_left;
+volatile uint16_t adc_sense_right;
 
 void isr(void) __interrupt(0) {
     if (IOCIF) {
@@ -45,8 +46,13 @@ void isr(void) __interrupt(0) {
 	    adc_poti += (ADRESH << 8) + ADRESL;
 	    adc_poti >>= 1;
 	} else {
-	    adc_sense += (ADRESH << 8) + ADRESL;
-	    adc_sense >>= 1;
+	    if (PORTC & 0b00001000) {
+		adc_sense_left += (ADRESH << 8) + ADRESL;
+		adc_sense_left >>= 1;
+	    } else {
+		adc_sense_right += (ADRESH << 8) + ADRESL;
+		adc_sense_right >>= 1;
+	    }
 	}
 	TMR4ON = 0;
 	ADIF = 0;
@@ -275,7 +281,7 @@ char nibble_to_hex(uint8_t c) {
 
 void main(void) {
     uint8_t counter = 0;
-    uint8_t temp1, temp2;
+    uint8_t temp1l_left, temp1h_left, temp1l_right, temp1h_right, temp2;
     //uint16_t ad_value;
 
     pps_init();
@@ -302,19 +308,27 @@ void main(void) {
 	    // temp = ad(AD_SENSE);
 	    /* 14mA per digit / atomic read */
 	    GIE = 0;
-	    temp1 = adc_sense >> 2;
+	    temp1l_left = adc_sense_left & 0xff ;
+	    temp1h_left = adc_sense_left >> 8;
+	    temp1l_right = adc_sense_right& 0xff ;
+	    temp1h_right= adc_sense_right>> 8;
 	    temp2 = adc_poti >> 2;
 	    GIE = 1;
 	    LCD_putcmd(LCD_01_ADDRESS, LCD_CLEAR, 1);
 	    LCD_puts(LCD_01_ADDRESS, "Booster Max=8.0A\0");
 	    LCD_goto(LCD_01_ADDRESS, 2, 1);
-	    LCD_putch(LCD_01_ADDRESS, nibble_to_hex(temp1 >> 4));
-	    LCD_putch(LCD_01_ADDRESS, nibble_to_hex(temp1));
+	    LCD_putch(LCD_01_ADDRESS, nibble_to_hex(temp1h_right));
+	    LCD_putch(LCD_01_ADDRESS, nibble_to_hex(temp1l_right >> 4));
+	    LCD_putch(LCD_01_ADDRESS, nibble_to_hex(temp1l_right));
+	    LCD_putch(LCD_01_ADDRESS, 0x20);
+	    LCD_putch(LCD_01_ADDRESS, nibble_to_hex(temp1h_left));
+	    LCD_putch(LCD_01_ADDRESS, nibble_to_hex(temp1l_left >> 4));
+	    LCD_putch(LCD_01_ADDRESS, nibble_to_hex(temp1l_left));
 	    LCD_putch(LCD_01_ADDRESS, 0x20);
 	    LCD_putch(LCD_01_ADDRESS, nibble_to_hex(temp2 >> 4));
 	    LCD_putch(LCD_01_ADDRESS, nibble_to_hex(temp2));
 	    if (rail_data)
-		LCD_puts(LCD_01_ADDRESS, " On   0.0%\0");
+		LCD_puts(LCD_01_ADDRESS, " 0.0%\0");
 	    else
 		LCD_puts(LCD_01_ADDRESS, " Off\0");
 	    //LATCbits.LATC0 = 1;
