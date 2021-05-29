@@ -1,11 +1,13 @@
 const int revisionnr = 
-1597
+1599
 ;
 const char* commithash = 
-"43004a47ab977793d858d338b61546c00cc5b7f3";
+"fd0ed1840c1a1b5bc6bbcc05a5caa4ca068bc44b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1599 2021-05-29 10:00:00 +0200 action: condition (!)train added\n" \
+"1598 2021-05-29 07:56:14 +0200 location: train only option added\n" \
 "1597 2021-05-24 11:36:33 +0200 app: disable find level at startup\n" \
 "1596 2021-05-24 10:48:38 +0200 trace: do not dispatch router tracing\n" \
 "1595 2021-05-24 08:43:27 +0200 app: disable routing trace level at startup\n" \
