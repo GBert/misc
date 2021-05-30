@@ -23,7 +23,7 @@ BOM
 |Part|Value|Footprint|LCSC Part Number|
 |----|-----|---------|----------------|
 |C1,C2,C3,C6|100nF|0805|C49678|
-|C4,C5|10uf Elko|||
+|C4,C5|10uf Elko|SMD||
 |C7|1nF|0805|C46653|
 |D1,D2,D3,D4,D5|US1M|SMA|C412437|
 |D6,D7,D8|1N4148WS|SOD-323F|C2128|
@@ -31,17 +31,18 @@ BOM
 |D10|LED red|LED 0805|C84256|
 |D13|LED white|LED 0805|C34499|
 |Q1|MMBT5551 or BC817|SOT-23|C2145|
-|R0,R1|820|0805|C17837|
-|R2|390|0805|C17655|
-|R3|22|0805|C17521|
-|R4,R6,R16,R19|4k7|0805|C17673|
-|R5|82|0805|C17841|
-|R7|1k|0805|C17513|
-|R8,R9,R10,R11,R12,R13,R14|1k|1206|C4410|
-|R15|1k5|0805|C4310|
-|R17|10k|0805|C17414|
-|R18|560|0805|C28636|
-|R20,R21|3k3|0805|C26010|
+|R0,R1|820 Ohm|0805|C17837|
+|R2|390 Ohm|0805|C17655|
+|R3|22 Ohm|0805|C17561|
+|R4,R6,R16,R19|4k7 Ohm|0805|C17673|
+|R5|82 Ohm|0805|C17841|
+|R7|1k Ohm|0805|C17513|
+|R8,R9,R10,R11,R12,R13,R14|1k Ohm|1206|C4410|
+|R15|1k5 Ohm|0805|C4310|
+|R17,23|10k Ohm|0805|C17414|
+|R18|560 Ohm|0805|C28636|
+|R20,R21|3k3 Ohm|0805|C26010|
+|R22|39k Ohm|0805|C25826|
 |SW1|Micro Taster|||
 |T1|Murata 53040C|||
 |U1|6N137|DIL8||
@@ -81,3 +82,4 @@ Changelog
 |         |C7 1nF Kondensator hinzugefügt|
 |         |1N4148 Pads vergrössert|
 |         |R18 vergrössert von 270 auf 560 Ohm wegen LED Stärke|
+|072021   |Spannungsteilier R22/23 zur Messung der Versorgungsspannung|
