@@ -1,11 +1,15 @@
 const int revisionnr = 
-1600
+1604
 ;
 const char* commithash = 
-"ce4388f08aeb540c83cd434f53c6637346cd2651";
+"bb72ae2b63c81107c30748f45b51608c52308d9b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1604 2021-05-31 09:10:54 +0200 location: init random option\n" \
+"1603 2021-05-30 15:36:32 +0200 loc: train state added for XMLScript\n" \
+"1602 2021-05-30 10:42:54 +0200 turntabledialog: increased multiport addressing to 16bit\n" \
+"1601 2021-05-30 10:33:36 +0200 operator: option freeblockonenter added which will overwrite the loco option\n" \
 "1600 2021-05-29 10:01:38 +0200 actionctrldlg: condition train added\n" \
 "1599 2021-05-29 10:00:00 +0200 action: condition (!)train added\n" \
 "1598 2021-05-29 07:56:14 +0200 location: train only option added\n" \
