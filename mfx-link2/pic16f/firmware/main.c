@@ -36,6 +36,7 @@ void isr(void) __interrupt(0) {
 	IOCCF = 0;
     }
     if (TMR2IF) {
+	// we got a 16ms timeout
 	// disable H-Bridge
 	LATB4 = 0;
 	rail_data = 0;
