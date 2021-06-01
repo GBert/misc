@@ -40,6 +40,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "WebServer/WebClient.h"
 #include "WebServer/WebClientCluster.h"
 #include "WebServer/WebClientSignal.h"
+#include "WebServer/WebClientStatic.h"
 
 using namespace DataModel;
 using LayoutPosition = DataModel::LayoutItem::LayoutPosition;
@@ -162,7 +163,7 @@ namespace WebServer
 		mainContent.AddChildTag(client.HtmlTagControlAccessory(controlID, "signal", signalID));
 		mainContent.AddChildTag(HtmlTag("div").AddId("select_protocol").AddChildTag(client.HtmlTagProtocolAccessory(controlID, protocol)));
 		mainContent.AddChildTag(HtmlTagInputIntegerWithLabel("address", Languages::TextBaseAddress, address, 1, 2044));
-		mainContent.AddChildTag(client.HtmlTagDuration(duration));
+		mainContent.AddChildTag(WebClientStatic::HtmlTagDuration(duration));
 		mainContent.AddChildTag(HtmlTagInputCheckboxWithLabel("inverted", Languages::TextInverted, "true", inverted));
 		formContent.AddChildTag(mainContent);
 

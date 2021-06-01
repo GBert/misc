@@ -28,11 +28,13 @@ along with RailControl; see the file LICENCE. If not see
 
 #include "DataModel/AccessoryBase.h"
 #include "DataModel/ObjectIdentifier.h"
+#include "Languages.h"
 #include "Manager.h"
 #include "Network/TcpConnection.h"
 #include "ResponseHtml.h"
 #include "WebServer/WebClientCluster.h"
 #include "WebServer/WebClientSignal.h"
+#include "WebServer/WebClientStatic.h"
 #include "WebServer/WebClientText.h"
 #include "WebServer/WebClientTrack.h"
 
@@ -105,7 +107,7 @@ namespace WebServer
 				ReplyHtmlWithHeader(HtmlTag().AddContent(text));
 			}
 
-			void ReplyResponse(ResponseType type, const std::string& text)
+			inline void ReplyResponse(ResponseType type, const std::string& text)
 			{
 				std::string s(1, static_cast<unsigned char>(type));
 				s.append(text);
@@ -145,8 +147,6 @@ namespace WebServer
 				const std::map<std::string,ObjectID>& options,
 				const bool allowNew = true) const;
 
-			std::vector<ObjectID> InterpretSlaveData(const std::string& prefix, const std::map<std::string,std::string>& arguments);
-
 			HtmlTag HtmlTagTabPosition(const DataModel::LayoutItem::LayoutPosition posx,
 				const DataModel::LayoutItem::LayoutPosition posy,
 				const DataModel::LayoutItem::LayoutPosition posz,
@@ -159,14 +159,6 @@ namespace WebServer
 			HtmlTag HtmlTagSelectFeedbackForTrack(const unsigned int counter,
 				const DataModel::ObjectIdentifier& identifier,
 				const FeedbackID feedbackID = FeedbackNone) const;
-
-			inline HtmlTag HtmlTagDuration(const DataModel::AccessoryPulseDuration duration) const
-			{
-				return HtmlTagDuration(duration, Languages::TextDuration);
-			}
-
-			static HtmlTag HtmlTagSelectSelectRouteApproach(const DataModel::SelectRouteApproach selectRouteApproach,
-				const bool addDefault = true);
 
 			static std::string ProtocolName(const Protocol protocol)
 			{
@@ -181,20 +173,9 @@ namespace WebServer
 			void DeliverFileInternal(FILE* f, const char* realFile, const std::string& file);
 			HtmlTag HtmlTagLocoSelector(const unsigned int selector) const;
 			HtmlTag HtmlTagLayerSelector() const;
-			static HtmlTag HtmlTagControlArgument(const unsigned char argNr, const ArgumentType type, const std::string& value);
-
-			static HtmlTag HtmlTagMatchKey(const std::map<std::string,DataModel::LocoConfig>& matchKeyMap,
-				const std::string& selectedMatchKey);
-
-			static HtmlTag HtmlTagProtocol(const std::map<std::string,Protocol>& protocolMap,
-				const Protocol selectedProtocol);
-
 			HtmlTag HtmlTagMatchKeyProtocolLoco(const ControlID controlID,
 				const std::string& selectedMatchKey,
 				const Protocol selectedProtocol);
-
-			HtmlTag HtmlTagDuration(const DataModel::AccessoryPulseDuration duration,
-				const Languages::TextSelector label) const;
 
 			HtmlTag HtmlTagPosition(const DataModel::LayoutItem::LayoutPosition posx,
 				const DataModel::LayoutItem::LayoutPosition posy,
@@ -204,8 +185,6 @@ namespace WebServer
 				const DataModel::LayoutItem::LayoutPosition posy,
 				const DataModel::LayoutItem::LayoutPosition posz,
 				const DataModel::LayoutItem::Visible visible) const;
-
-			HtmlTag HtmlTagRotation(const DataModel::LayoutItem::LayoutRotation rotation) const;
 
 			HtmlTag HtmlTagSelectTrack(const std::string& name,
 				const Languages::TextSelector label,
@@ -234,12 +213,6 @@ namespace WebServer
 				const SwitchID switchId,
 				const DataModel::Relation::Data data = DataModel::SwitchStateStraight);
 
-			static HtmlTag HtmlTagNrOfTracksToReserve(const DataModel::Loco::NrOfTracksToReserve nrOfTracksToReserve);
-			static HtmlTag HtmlTagLogLevel();
-			static HtmlTag HtmlTagLanguage();
-			static HtmlTag HtmlTagControlArguments(const HardwareType hardwareType, const std::string& arg1 = "", const std::string& arg2 = "", const std::string& arg3 = "", const std::string& arg4 = "", const std::string& arg5 = "");
-			static HtmlTag HtmlTagControl(const std::map<ControlID,std::string>& controls, const ControlID controlID, const std::string& objectType, const ObjectID objectID);
-			static HtmlTag HtmlTagControl(const std::string& name, const std::map<ControlID,std::string>& controls);
 			HtmlTag HtmlTagControlLoco(const ControlID controlID, const std::string& objectType, const ObjectID objectID);
 			HtmlTag HtmlTagControlFeedback(const ControlID controlID, const std::string& objectType, const ObjectID objectID);
 
@@ -254,11 +227,6 @@ namespace WebServer
 			HtmlTag HtmlTagProgramModeSelector(const ControlID controlID, ProgramMode& mode) const;
 			HtmlTag HtmlTagCvFields(const ControlID controlID, const ProgramMode programMode) const;
 
-			HtmlTag HtmlTagSlaveEntry(const std::string& prefix,
-				const std::string& priority,
-				const ObjectID objectId,
-				const std::map<std::string,ObjectID>& options) const;
-
 			std::map<std::string,ObjectID> GetLocoSlaveOptions(const LocoID locoID = LocoNone) const;
 
 			void HandleSelectLoco(const std::map<std::string, std::string>& arguments);
@@ -267,7 +235,6 @@ namespace WebServer
 			void HandleLayerList();
 			void HandleLayerAskDelete(const std::map<std::string, std::string>& arguments);
 			void HandleLayerDelete(const std::map<std::string, std::string>& arguments);
-			static const std::map<std::string,HardwareType> ListHardwareNames();
 			void HandleControlEdit(const std::map<std::string, std::string>& arguments);
 			void HandleControlSave(const std::map<std::string, std::string>& arguments);
 			void HandleControlList();

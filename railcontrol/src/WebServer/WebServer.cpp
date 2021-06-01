@@ -35,6 +35,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "Languages.h"
 #include "RailControl.h"
 #include "Utils/Utils.h"
+#include "Version.h"
 #include "WebServer/WebClient.h"
 #include "WebServer/WebServer.h"
 
@@ -61,7 +62,8 @@ namespace WebServer
 		run(false),
 		lastClientID(0),
 		manager(manager),
-		updateID(1)
+		updateID(1),
+		updateAvailable(false)
 	{
 		logger->Info(Languages::TextWebServerStarted);
 		{
@@ -70,6 +72,7 @@ namespace WebServer
 		}
 		run = true;
 		LogBrowserInfo(webserveraddress, port);
+		updateAvailable = Utils::Utils::HostResolves(GetVersionInfoGitHash() + ".hash.railcontrol.org");
 	}
 
 	WebServer::~WebServer()
@@ -116,35 +119,40 @@ namespace WebServer
 		struct ifaddrs* ifa = nullptr;
 		getifaddrs(&ifAddrStruct);
 
-		if(webserveraddress != "localhost") {
-
-			for (ifa = ifAddrStruct; ifa != nullptr; ifa = ifa->ifa_next) {
-				if (!ifa->ifa_addr) {
+		if (webserveraddress.compare("localhost") != 0)
+		{
+			for (ifa = ifAddrStruct; ifa != nullptr; ifa = ifa->ifa_next)
+			{
+				if (!ifa->ifa_addr)
+				{
 					continue;
 				}
-				if (ifa->ifa_addr->sa_family == AF_INET) { // check it is IP4
+				if (ifa->ifa_addr->sa_family == AF_INET)
+				{
 					// is a valid IP4 Address
-					void *tmpAddrPtr = &((struct sockaddr_in *) ifa->ifa_addr)->sin_addr;
+					void* tmpAddrPtr = &((struct sockaddr_in*) ifa->ifa_addr)->sin_addr;
 					char addressBuffer[INET_ADDRSTRLEN];
 					inet_ntop(AF_INET, tmpAddrPtr, addressBuffer, INET_ADDRSTRLEN);
 					string address(addressBuffer);
-					if (address.compare("0.0.0.0") == 0) {
+					if (address.compare("0.0.0.0") == 0)
+					{
 						continue;
 					}
-					if (address.substr(0, 8).compare("169.254.") == 0) {
+					if (address.substr(0, 8).compare("169.254.") == 0)
+					{
 						continue;
 					}
 					ipv4Info += Http + addressBuffer + ":" + Port + "/";
 				}
-				if (ifa->ifa_addr->sa_family == AF_INET6) { // check it is IP6
+				else if (ifa->ifa_addr->sa_family == AF_INET6)
+				{
 					// is a valid IP6 Address
-					void *tmpAddrPtr = &((struct sockaddr_in6 *) ifa->ifa_addr)->sin6_addr;
+					void* tmpAddrPtr = &((struct sockaddr_in6*) ifa->ifa_addr)->sin6_addr;
 					char addressBuffer[INET6_ADDRSTRLEN];
 					inet_ntop(AF_INET6, tmpAddrPtr, addressBuffer, INET6_ADDRSTRLEN);
-					ipv4Info += Http + "[" + addressBuffer + "]:" + Port + "/";
+					ipv6Info += Http + "[" + addressBuffer + "]:" + Port + "/";
 				}
 			}
-
 		}
 
 		if (ifAddrStruct != NULL)

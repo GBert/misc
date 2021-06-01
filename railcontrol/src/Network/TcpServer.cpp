@@ -42,10 +42,13 @@ namespace Network
 		memset(reinterpret_cast<char*>(&serverAddr6), 0, sizeof(serverAddr6));
 		serverAddr6.sin6_family = AF_INET6;
 
-		if(address == "localhost") {
-            serverAddr6.sin6_addr = IN6ADDR_LOOPBACK_INIT;
-        } else {
-            serverAddr6.sin6_addr = in6addr_any;
+		if (address.compare("localhost") == 0)
+		{
+			serverAddr6.sin6_addr = IN6ADDR_LOOPBACK_INIT;
+		}
+		else
+		{
+			serverAddr6.sin6_addr = in6addr_any;
 		}
 		serverAddr6.sin6_port = htons(port);
 		SocketCreateBindListen(serverAddr6.sin6_family, reinterpret_cast<struct sockaddr*>(&serverAddr6));
@@ -54,7 +57,14 @@ namespace Network
 		struct sockaddr_in serverAddr4;
 		memset(reinterpret_cast<char*>(&serverAddr4), 0, sizeof(serverAddr4));
 		serverAddr4.sin_family = AF_INET;
-		serverAddr4.sin_addr.s_addr = htonl(INADDR_ANY);
+		if (address.compare("localhost") == 0)
+		{
+			serverAddr4.sin_addr.s_addr = inet_addr("127.0.0.1");
+		}
+		else
+		{
+			serverAddr4.sin_addr.s_addr = htonl(INADDR_ANY);
+		}
 		serverAddr4.sin_port = htons(port);
 		SocketCreateBindListen(serverAddr4.sin_family, reinterpret_cast<struct sockaddr*>(&serverAddr4));
 #endif

@@ -79,7 +79,7 @@ const char* Languages::languages[MaxTexts][MaxLanguages] =
 /* TextCanNotOpenLibrary */ { "Can not open library {0}: {1}", "Kann Bibliothek {0} nicht öffenen: {1}", "Imposible abrir biblioteca {0}: {1}" },
 /* TextCanNotStartAlreadyRunning */ { "Can not start {0} because it is already running", "Unmöglich {0} zu starten weil schon gestartet", "Imposible poner {0} en marcha porque ya está en marcha" },
 /* TextCanNotStartInErrorState */ { "Can not start {0} because it is in error state", "Unmöglich {0} zu startein weil sie im Fehlerstatus ist", "Imposible poner {0} en marcha perque está en estado error" },
-/* TextCanNotStartNotOnTrack */ { "Can not start {0} because it is not on a track", "Unmöglich {0} zu starten weil sie nicht auf einem Gleis ist", "Imposible poner {0} en marcha porque no está sobre un vía" },
+/* TextCanNotStartNotOnTrack */ { "Can not start {0} because it is not on a track", "Unmöglich {0} zu starten weil sie nicht auf einem Gleis ist", "Imposible poner {0} en marcha porque no está sobre una vía" },
 /* TextChDwarf */ { "Swiss dwarf", "Schwiezer Zwergsignal", "Suiza señal enana" },
 /* TextChLDistant */ { "Swiss type L distant", "Schweizer Typ L Vorsignal", "Suiza typo L avanzada" },
 /* TextChLMain */ { "Swiss type L main", "Schweizer Typ L Hauptsignal", "Suiza typo L principal" },

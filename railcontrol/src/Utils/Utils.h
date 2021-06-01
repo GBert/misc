@@ -131,5 +131,7 @@ namespace Utils
 			{
 				*(reinterpret_cast<uint64_t*>(to)) = *(reinterpret_cast<const uint64_t*>(from));
 			}
+
+			static bool HostResolves(const std::string& host);
 	};
 }

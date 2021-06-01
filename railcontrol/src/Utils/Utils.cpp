@@ -27,6 +27,7 @@ along with RailControl; see the file LICENCE. If not see
 #include <fstream>
 #include <iomanip>
 #include <iostream>   // cout
+#include <netdb.h>
 #include <sstream>
 #include <string>
 #include <sys/time.h> // gettimeofday
@@ -429,5 +430,45 @@ namespace Utils
 		struct timeval timestamp;
 		gettimeofday(&timestamp, NULL);
 		return static_cast<unsigned int>((timestamp.tv_sec << 20) | (timestamp.tv_usec & 0xFFFFF));
+	}
+
+	bool Utils::HostResolves(const string& host)
+	{
+		struct addrinfo hints;
+		memset(&hints, 0, sizeof(hints));
+		hints.ai_family = PF_UNSPEC;
+		hints.ai_socktype = SOCK_STREAM;
+		hints.ai_flags |= AI_CANONNAME;
+
+		struct addrinfo* res;
+		struct addrinfo* result;
+		int errcode = getaddrinfo(host.c_str(), NULL, &hints, &result);
+		if (errcode != 0)
+		{
+			return false;
+		}
+
+		res = result;
+
+		while (res)
+		{
+			char addrstr[100];
+			inet_ntop(res->ai_family, res->ai_addr->sa_data, addrstr, sizeof(addrstr));
+
+			switch (res->ai_family)
+			{
+				case AF_INET:
+				case AF_INET6:
+					freeaddrinfo(result);
+					return true;
+
+				default:
+					res = res->ai_next;
+					break;
+			}
+		}
+
+		freeaddrinfo(result);
+		return false;
 	}
 }

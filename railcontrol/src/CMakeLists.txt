@@ -211,6 +211,8 @@ WebServer/WebClientCluster.cpp
 WebServer/WebClientCluster.h
 WebServer/WebClientSignal.cpp
 WebServer/WebClientSignal.h
+WebServer/WebClientStatic.cpp
+WebServer/WebClientStatic.h
 WebServer/WebClientText.cpp
 WebServer/WebClientText.h
 WebServer/WebClientTrack.cpp

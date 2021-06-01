@@ -33,6 +33,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "WebServer/HtmlTagInputTextWithLabel.h"
 #include "WebServer/WebClient.h"
 #include "WebServer/WebClientTrackBase.h"
+#include "WebServer/WebClientSignal.h"
 
 using namespace DataModel;
 using std::to_string;
@@ -76,7 +77,7 @@ namespace WebServer
 		automodeContent.AddClass("tab_content");
 		automodeContent.AddClass("hidden");
 
-		automodeContent.AddChildTag(WebClient::HtmlTagSelectSelectRouteApproach(selectRouteApproach));
+		automodeContent.AddChildTag(WebClientStatic::HtmlTagSelectSelectRouteApproach(selectRouteApproach));
 
 		automodeContent.AddChildTag(HtmlTagInputCheckboxWithLabel("allowlocoturn", Languages::TextAllowLocoTurn, "false", allowLocoTurn));
 

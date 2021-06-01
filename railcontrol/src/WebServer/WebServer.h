@@ -122,6 +122,7 @@ namespace WebServer
 			std::map<unsigned int,std::string> updates;
 			std::mutex updateMutex;
 			unsigned int updateID;
+			bool updateAvailable;
 
 			static const unsigned int MaxUpdates = 10;
 			static const std::string UpdateStatus;

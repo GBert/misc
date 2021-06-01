@@ -36,6 +36,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "WebServer/HtmlTagSelect.h"
 #include "WebServer/WebClient.h"
 #include "WebServer/WebClientCluster.h"
+#include "WebServer/WebClientStatic.h"
 
 using DataModel::Cluster;
 using DataModel::ObjectIdentifier;
@@ -133,7 +134,7 @@ namespace WebServer
 
 		vector<Relation*> tracks;
 		{
-			vector<TrackID> trackIds = client.InterpretSlaveData("track", arguments);
+			vector<TrackID> trackIds = WebClientStatic::InterpretSlaveData("track", arguments);
 			for (auto trackId : trackIds)
 			{
 				tracks.push_back(new Relation(&manager,
@@ -145,7 +146,7 @@ namespace WebServer
 
 		vector<Relation*> signals;
 		{
-			vector<SignalID> signalIds = client.InterpretSlaveData("signal", arguments);
+			vector<SignalID> signalIds = WebClientStatic::InterpretSlaveData("signal", arguments);
 			for (auto signalId : signalIds)
 			{
 				signals.push_back(new Relation(&manager,
