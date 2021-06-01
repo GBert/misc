@@ -1,11 +1,12 @@
 const int revisionnr = 
-1604
+1605
 ;
 const char* commithash = 
-"bb72ae2b63c81107c30748f45b51608c52308d9b";
+"2b731c8714d469dd449ce26fc1c79ae767af72ad";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1605 2021-06-01 11:19:49 +0200 location: use last arrive time for init location fifo\n" \
 "1604 2021-05-31 09:10:54 +0200 location: init random option\n" \
 "1603 2021-05-30 15:36:32 +0200 loc: train state added for XMLScript\n" \
 "1602 2021-05-30 10:42:54 +0200 turntabledialog: increased multiport addressing to 16bit\n" \
