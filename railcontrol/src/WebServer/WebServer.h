@@ -51,7 +51,8 @@ namespace WebServer
 
 			inline const std::string& GetName() const override
 			{
-				return Webserver;
+				static const std::string WebserverName("Webserver");
+				return WebserverName;
 			}
 
 			void AccessoryDelete(const AccessoryID accessoryID, const std::string& name) override;
@@ -95,6 +96,16 @@ namespace WebServer
 			void TextSettings(const ClusterID clusterID, const std::string& name) override;
 			void ProgramValue(const CvNumber cv, const CvValue value) override;
 
+			inline bool UpdateAvailable()
+			{
+				return updateAvailable;
+			}
+
+			inline void AddUpdate(const std::string& command, const Languages::TextSelector status)
+			{
+				AddUpdate(command, Languages::GetText(status));
+			}
+
 		private:
 			template<typename... Args>
 			inline void AddUpdate(const std::string& command, const Languages::TextSelector text, Args... args)
@@ -104,10 +115,7 @@ namespace WebServer
 
 			void AddUpdate(const std::string& command, const std::string& status);
 
-			inline std::string GetStatus(Languages::TextSelector status)
-			{
-				return UpdateStatus + Languages::GetText(status);
-			}
+			void AddUpdate(const Languages::TextSelector status);
 
 			void TrackBaseState(std::string& command, const DataModel::TrackBase* track);
 
@@ -125,8 +133,6 @@ namespace WebServer
 			bool updateAvailable;
 
 			static const unsigned int MaxUpdates = 10;
-			static const std::string UpdateStatus;
-			static const std::string Webserver;
 	};
 } // namespace WebServer
 

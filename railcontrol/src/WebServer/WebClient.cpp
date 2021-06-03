@@ -162,6 +162,10 @@ namespace WebServer
 			if (uri.compare("/") == 0)
 			{
 				PrintMainHTML();
+				if (server.UpdateAvailable())
+				{
+					server.AddUpdate("warning", Languages::TextRailControlUpdateAvailable);
+				}
 			}
 			else if (arguments["cmd"].compare("quit") == 0)
 			{
@@ -3814,7 +3818,7 @@ namespace WebServer
 			);
 		body.AddChildTag(HtmlTag("div").AddClass("popup").AddId("popup"));
 		body.AddChildTag(HtmlTag("div").AddClass("status").AddId("status"));
-		body.AddChildTag(HtmlTag("div").AddClass("responses").AddId("responses"));
+		body.AddChildTag(HtmlTag("div").AddClass("infobox").AddId("infobox"));
 
 		body.AddChildTag(HtmlTag("div").AddClass("contextmenu").AddId("layout_context")
 			.AddChildTag(HtmlTag("ul").AddClass("contextentries")

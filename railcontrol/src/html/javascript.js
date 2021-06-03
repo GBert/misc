@@ -1071,15 +1071,17 @@ function dataUpdate(event)
 			status.innerHTML = statusData.substring(statusData.length - 2500);
 			status.scrollTop = status.scrollHeight - status.clientHeight;
 		}
-		else
-		{
-			argumentMap.set(parts[0], parts[1]);
-		}
+		argumentMap.set(parts[0], parts[1]);
 	});
 
 	var elementName = "";
 	var command = argumentMap.get('command');
-	if (command == 'booster')
+	if (command == 'warning')
+	{
+		var state = argumentMap.get('status');
+		addInfoBox('w', state);
+	}
+	else if (command == 'booster')
 	{
 		elementName = 'b_booster';
 		var on = argumentMap.get('on');
@@ -1563,19 +1565,19 @@ function hidePopup()
 	popup.style.display = 'none';
 }
 
-var responseID = 0;
+var infoID = 0;
 
-function addResponse(response)
+function addInfoBox(type, info)
 {
-	var id = 'res_' + ++responseID;
+	var id = 'res_' + ++infoID;
 
 	var className;
 
-	switch (response[21])
+	switch (type)
 	{
 		case 'i': // info
 			hidePopup();
-			className = 'responseinfo';
+			className = 'infoboxinfo';
 			setTimeout(function()
 			{
 				deleteElement(id);
@@ -1584,20 +1586,20 @@ function addResponse(response)
 
 		case 'w': // warning
 			hidePopup();
-			className = 'responsewarning';
+			className = 'infoboxwarning';
 			break;
 
 		case 'e': // error
-			className = 'responseerror';
+			className = 'infoboxerror';
 			break;
 
 		default:
-			className  = 'responseunknown';
+			className  = 'infoboxunknown';
 	}
 
-	var preparedResponse = '<div id="' + id + '" class="' + className + '" onClick="deleteElement(\'' + id + '\');">' + response.substring(22, response.length - 7) + '</div>';
-	var responses = document.getElementById('responses');
-	responses.innerHTML += preparedResponse;
+	var preparedInfo = '<div id="' + id + '" class="' + className + '" onClick="deleteElement(\'' + id + '\');">' + info + '</div>';
+	var infobox = document.getElementById('infobox');
+	infobox.innerHTML += preparedInfo;
 }
 
 function submitEditForm()
@@ -1634,7 +1636,8 @@ function submitEditForm()
 		{
 			return;
 		}
-		addResponse(xmlHttp.responseText);
+		var response = xmlHttp.responseText;
+		addInfoBox(response[21], response.substring(22, response.length - 7));
 	}
 	xmlHttp.open('GET', url, true);
 	xmlHttp.send(null);

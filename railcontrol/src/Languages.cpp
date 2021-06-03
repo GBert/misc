@@ -469,6 +469,7 @@ const char* Languages::languages[MaxTexts][MaxLanguages] =
 /* TextQueryAffected */ { "Query: {0} Rows affected {1}", "Abfrage: {0} Geänderte Datensätze: {1}", "Consulta: {0} Líneas afectados: {1}" },
 /* TextRM485ModuleFound */ { "RM485 module {0} found", "RM485 Modul {0} gefunden", "Modulo RM485 {0} encontrado" },
 /* TextRailControlStarted */ { "RailControl started", "RailControl wurde gestartet", "RailControl encendido" },
+/* TextRailControlUpdateAvailable */ { "A new version of RailControl is available", "Eine neue Version von RailControl ist verfügbar", "Una nueva versión de RailControl es disponible" },
 /* TextRandom */ { "Random", "Zufall", "Aleatorio" },
 /* TextReachedItsDestination */ { "{0} reached its destination", "{0} erreichte ihr Ziel", "{0} llegó su destino" },
 /* TextRead */ { "read", "lesen", "leer" },

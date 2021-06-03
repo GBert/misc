@@ -469,6 +469,7 @@ class Languages
 			TextQueryAffected,
 			TextRM485ModuleFound,
 			TextRailControlStarted,
+			TextRailControlUpdateAvailable,
 			TextRandom,
 			TextReachedItsDestination,
 			TextRead,

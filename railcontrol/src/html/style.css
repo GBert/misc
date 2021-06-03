@@ -184,7 +184,7 @@ body {
 	background-attachment: local;
 }
 
-.responses {
+.infobox {
 	top: 0px;
 	right: 0px;
 	z-index: 3;
@@ -194,26 +194,26 @@ body {
 	text-align: right;
 }
 
-.responseinfo,
-.responsewarning,
-.responseerror {
+.infoboxinfo,
+.infoboxwarning,
+.infoboxerror {
 	margin: 5px;
 	padding: 10px;
 	border: solid 2px black;
 	border-radius: 5px;
 }
 
-.responseinfo {
+.infoboxinfo {
 	background-color: lightgreen;
 	color: black;
 }
 
-.responsewarning {
+.infoboxwarning {
 	background-color: orange;
 	color: black;
 }
 
-.responseerror {
+.infoboxerror {
 	background-color: red;
 	color: black;
 }

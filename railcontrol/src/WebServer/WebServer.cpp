@@ -52,9 +52,6 @@ using DataModel::TrackBase;
 
 namespace WebServer
 {
-	const std::string WebServer::UpdateStatus = "data: status=";
-	const std::string WebServer::Webserver = "Webserver";
-
 	WebServer::WebServer(Manager& manager, const std::string& webserveraddress, const unsigned short port)
 	:	ControlInterface(ControlTypeWebserver),
 		Network::TcpServer(webserveraddress, port, "WebServer"),
@@ -66,10 +63,8 @@ namespace WebServer
 		updateAvailable(false)
 	{
 		logger->Info(Languages::TextWebServerStarted);
-		{
-			std::lock_guard<std::mutex> lock(updateMutex);
-			updates[updateID] = GetStatus(Languages::TextRailControlStarted);
-		}
+		AddUpdate(Languages::TextRailControlStarted);
+
 		run = true;
 		LogBrowserInfo(webserveraddress, port);
 		updateAvailable = Utils::Utils::HostResolves(GetVersionInfoGitHash() + ".hash.railcontrol.org");
@@ -81,10 +76,8 @@ namespace WebServer
 		{
 			return;
 		}
-		{
-			std::lock_guard<std::mutex> lock(updateMutex);
-			updates[++updateID] = GetStatus(Languages::TextStoppingRailControl);
-		}
+
+		AddUpdate(Languages::TextStoppingRailControl);
 		TerminateTcpServer();
 		Utils::Utils::SleepForSeconds(1);
 		run = false;
@@ -557,10 +550,17 @@ namespace WebServer
 
 	void WebServer::AddUpdate(const string& command, const string& status)
 	{
-		stringstream ss;
-		ss << "data: command=" << command << ";status=" << status << "\r\n\r\n";
 		std::lock_guard<std::mutex> lock(updateMutex);
-		updates[++updateID] = ss.str();
+		updates[updateID] = "data: command=" + command + ";status=" + status + "\r\n\r\n";
+		++updateID;
+		updates.erase(updateID - MaxUpdates);
+	}
+
+	void WebServer::AddUpdate(const Languages::TextSelector status)
+	{
+		std::lock_guard<std::mutex> lock(updateMutex);
+		updates[updateID] = std::string("data: status=") + Languages::GetText(status) + "\r\n\r\n";
+		++updateID;
 		updates.erase(updateID - MaxUpdates);
 	}
 
