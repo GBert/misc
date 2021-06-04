@@ -65,7 +65,7 @@ body {
 	}
 }
 
-@media (min-width: 650px) and (max-width: 889px) {
+@media (min-width: 650px) and (max-width: 951px) {
 	.menu_config {
 		display: none;
 	}
@@ -86,7 +86,7 @@ body {
 	}
 }
 
-@media (min-width: 890px) {
+@media (min-width: 952px) {
 	.menu_add,
 	.menu_config,
 	.menu_config_visible {
