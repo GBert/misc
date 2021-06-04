@@ -75,12 +75,12 @@ Rest (ohne IBT-2 und ohne LCD)
 IBT-Mod
 -------
 
-[!["IBT-2 Mod"](https://raw.githubusercontent.com/GBert/misc/master/mfx-link2/pictures/mfx-link-current-sense.jpg)](https://raw.githubusercontent.com/GBert/misc/master/mfx-link2/pictures/mfx-link-current-sense.jpg)
+[!["IBT-2 Mod"](https://raw.githubusercontent.com/GBert/misc/master/mfx-link2/pictures/mfx-link-current-sense_s.jpg)](https://raw.githubusercontent.com/GBert/misc/master/mfx-link2/pictures/mfx-link-current-sense.jpg)
 
 Beschaltung
 -----------
 
-[!["IBT-2 Mod"](https://raw.githubusercontent.com/GBert/misc/master/mfx-link2/pictures/mfxlb_wire.jpg)](https://raw.githubusercontent.com/GBert/misc/master/mfx-link2/pictures/mfxlb_wire_s.jpg)
+[!["IBT-2 Mod"](https://raw.githubusercontent.com/GBert/misc/master/mfx-link2/pictures/mfxlb_wire_s.jpg)](https://raw.githubusercontent.com/GBert/misc/master/mfx-link2/pictures/mfxlb_wire.jpg)
 
 Changelog
 ---------
