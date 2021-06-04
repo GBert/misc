@@ -72,6 +72,16 @@ SMD Teile (entspricht JLCPCB Bestückung)
 Rest (ohne IBT-2 und ohne LCD)
 [mfx-booster-link2](https://www.reichelt.de/my/1850613)
 
+IBT-Mod
+-------
+
+[!["IBT-2 Mod"](https://raw.githubusercontent.com/GBert/misc/master/mfx-link2/pictures/mfx-link-current-sense.jpg)](https://raw.githubusercontent.com/GBert/misc/master/mfx-link2/pictures/mfx-link-current-sense.jpg)
+
+Beschaltung
+-----------
+
+[!["IBT-2 Mod"](https://raw.githubusercontent.com/GBert/misc/master/mfx-link2/pictures/mfxlb_wire.jpg)](https://raw.githubusercontent.com/GBert/misc/master/mfx-link2/pictures/mfxlb_wire_s.jpg)
+
 Changelog
 ---------
 | Version | Anmerkung |
