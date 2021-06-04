@@ -59,7 +59,7 @@ JLCPB SMT Assembly
 
 |Art      | Datei |
 |---------|-------|
-|PCB      |gerber/mfx-link2_062021.ZIP|
+|PCB      |gerber/mfx-link2_072021.ZIP|
 |BOM      |mfx-link2.csv|
 |CPL      |gerber/mfx-link2-top-pos.csv|
 
