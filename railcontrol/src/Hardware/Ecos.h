@@ -213,7 +213,7 @@ namespace Hardware
 
 			Network::TcpConnection tcp;
 
-			char readBuffer[MaxMessageSize];
+			unsigned char readBuffer[MaxMessageSize];
 			ssize_t readBufferLength;
 			size_t readBufferPosition;
 

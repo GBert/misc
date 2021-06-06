@@ -18,14 +18,14 @@ along with RailControl; see the file LICENCE. If not see
 <http://www.gnu.org/licenses/>.
 */
 
-#include "Hardware/MasterControl.h"
+#include "Hardware/MasterControl2.h"
 #include "Languages.h"
 #include "Utils/Utils.h"
 
 namespace Hardware
 {
-	MasterControl::MasterControl(const HardwareParams* params)
-	:	ProtocolP50xSerial(params, "MasterControl")
+	MasterControl2::MasterControl2(const HardwareParams* params)
+	:	ProtocolP50xEthernet(params, "MasterControl2")
 	{
 		SendP50XOnly();
 		const bool ok = SendNop();

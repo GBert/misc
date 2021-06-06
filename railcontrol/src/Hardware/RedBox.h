@@ -29,16 +29,16 @@ namespace Hardware
 {
 	class HardwareParams;
 
-	class MasterControl : public ProtocolP50xSerial
+	class RedBox : public ProtocolP50xSerial
 	{
 		public:
-			MasterControl() = delete;
-			MasterControl(const MasterControl&) = delete;
-			MasterControl& operator=(const MasterControl&) = delete;
+			RedBox() = delete;
+			RedBox(const RedBox&) = delete;
+			RedBox& operator=(const RedBox&) = delete;
 
-			MasterControl(const HardwareParams* params);
+			RedBox(const HardwareParams* params);
 
-			virtual ~MasterControl()
+			virtual ~RedBox()
 			{
 			}
 
@@ -46,11 +46,11 @@ namespace Hardware
 			{
 				argumentTypes[1] = ArgumentTypeSerialPort;
 				argumentTypes[2] = ArgumentTypeS88Modules;
-				hint = Languages::GetText(Languages::TextHintMasterControl);
+				hint = Languages::GetText(Languages::TextHintRedBox);
 			}
 
 		private:
-			static const unsigned char MaxS88ModulesMasterControl = 104;
+			static const unsigned char MaxS88ModulesRedBox = 104;
 	};
 } // namespace
 

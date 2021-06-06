@@ -42,7 +42,8 @@ namespace WebServer
 			:	manager(manager),
 				client(client),
 				logger(logger)
-			{}
+			{
+			}
 
 			void HandleSignalEdit(const std::map<std::string,std::string>& arguments);
 			void HandleSignalSave(const std::map<std::string,std::string>& arguments);
@@ -55,10 +56,6 @@ namespace WebServer
 			void HandleSignalState(const std::map<std::string, std::string>& arguments);
 			void HandleSignalStates(const std::map<std::string, std::string>& arguments);
 			void HandleSignalAddresses(const std::map<std::string, std::string>& arguments);
-
-			HtmlTag HtmlTagRelationSignalState(const std::string& name,
-				const SignalID signalId,
-				const DataModel::Relation::Data data = DataModel::SignalStateStop);
 
 		private:
 			Manager& manager;

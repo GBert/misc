@@ -24,48 +24,50 @@ along with RailControl; see the file LICENCE. If not see
 
 #include "Hardware/ProtocolP50x.h"
 #include "Logger/Logger.h"
-#include "Network/Serial.h"
+#include "Network/TcpClient.h"
 
 namespace Hardware
 {
 	class HardwareParams;
 
-	class SerialP50x : public ProtocolP50x
+	class ProtocolP50xEthernet : public ProtocolP50x
 	{
 		public:
-			SerialP50x() = delete;
-			SerialP50x(const SerialP50x&) = delete;
-			SerialP50x& operator=(const SerialP50x&) = delete;
+			ProtocolP50xEthernet() = delete;
+			ProtocolP50xEthernet(const ProtocolP50xEthernet&) = delete;
+			ProtocolP50xEthernet& operator=(const ProtocolP50xEthernet&) = delete;
 
-			inline SerialP50x(const HardwareParams* params, const std::string& controlName)
+			inline ProtocolP50xEthernet(const HardwareParams* params, const std::string& controlName)
 			:	ProtocolP50x(params,
 					controlName + " / " + params->GetName() + " at serial port " + params->GetArg1()),
-			 	serialLine(logger, params->GetArg1(), B19200, 8, 'N', 2)
+				connection(Network::TcpClient::GetTcpClientConnection(logger, params->GetArg1(), MasterControl2Port))
 			{
 			}
 
-			virtual ~SerialP50x()
+			virtual ~ProtocolP50xEthernet()
 			{
 			}
 
 		protected:
 			inline int Send(const unsigned char* data, const size_t length) const override
 			{
-				return serialLine.Send(data, length);
+				return connection.Send(data, length);
 			}
 
 			inline ssize_t Receive(unsigned char* data, const size_t length) const override
 			{
-				return serialLine.Receive(data, length, 1, 0);
+				return connection.Receive(data, length);
 			}
 
 			inline ssize_t ReceiveExact(unsigned char* data, const size_t length) const override
 			{
-				return serialLine.ReceiveExact(data, length, 1, 0);
+				return connection.ReceiveExact(data, length);
 			}
 
 		private:
-			mutable Network::Serial serialLine;
+			static const unsigned short MasterControl2Port = 8050;
+
+			Network::TcpConnection connection;
 	};
 } // namespace
 

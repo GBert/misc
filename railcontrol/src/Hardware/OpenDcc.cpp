@@ -25,7 +25,7 @@ along with RailControl; see the file LICENCE. If not see
 namespace Hardware
 {
 	OpenDcc::OpenDcc(const HardwareParams* params)
-	:	SerialP50x(params, "OpenDCC")
+	:	ProtocolP50xSerial(params, "OpenDCC")
 	{
 		SendP50XOnly();
 		bool ok = SendNop();

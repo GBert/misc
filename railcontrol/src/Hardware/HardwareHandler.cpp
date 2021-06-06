@@ -31,7 +31,9 @@ along with RailControl; see the file LICENCE. If not see
 #include "Hardware/Intellibox.h"
 #include "Hardware/M6051.h"
 #include "Hardware/MasterControl.h"
+#include "Hardware/MasterControl2.h"
 #include "Hardware/OpenDcc.h"
+#include "Hardware/RedBox.h"
 #include "Hardware/RM485.h"
 #include "Hardware/TwinCenter.h"
 #include "Hardware/Virtual.h"
@@ -105,6 +107,14 @@ namespace Hardware
 
 			case HardwareTypeTwinCenter:
 				instance = reinterpret_cast<Hardware::HardwareInterface*>(new TwinCenter(params));
+				break;
+
+			case HardwareTypeMasterControl2:
+				instance = reinterpret_cast<Hardware::HardwareInterface*>(new MasterControl2(params));
+				break;
+
+			case HardwareTypeRedBox:
+				instance = reinterpret_cast<Hardware::HardwareInterface*>(new RedBox(params));
 				break;
 		}
 	}
@@ -536,6 +546,14 @@ namespace Hardware
 
 			case HardwareTypeTwinCenter:
 				Hardware::TwinCenter::GetArgumentTypesAndHint(arguments, hint);
+				return;
+
+			case HardwareTypeMasterControl2:
+				Hardware::MasterControl2::GetArgumentTypesAndHint(arguments, hint);
+				return;
+
+			case HardwareTypeRedBox:
+				Hardware::RedBox::GetArgumentTypesAndHint(arguments, hint);
 				return;
 		}
 	}

@@ -84,6 +84,8 @@ Hardware/M6051.cpp
 Hardware/M6051.h
 Hardware/MasterControl.cpp
 Hardware/MasterControl.h
+Hardware/MasterControl2.cpp
+Hardware/MasterControl2.h
 Hardware/OpenDcc.cpp
 Hardware/OpenDcc.h
 Hardware/ProtocolMaerklinCAN.cpp
@@ -91,9 +93,12 @@ Hardware/ProtocolMaerklinCAN.h
 Hardware/ProtocolP50x.cpp
 Hardware/ProtocolP50x.h
 Hardware/ProtocolP50xCache.h
+Hardware/ProtocolP50xEthernet.h
+Hardware/ProtocolP50xSerial.h
+Hardware/RedBox.cpp
+Hardware/RedBox.h
 Hardware/RM485.cpp
 Hardware/RM485.h
-Hardware/SerialP50x.h
 Hardware/Virtual.cpp
 Hardware/Virtual.h
 Hardware/Z21.cpp
@@ -209,6 +214,8 @@ WebServer/ResponseHtmlNotImplemented.cpp
 WebServer/ResponseHtmlNotImplemented.h
 WebServer/WebClientCluster.cpp
 WebServer/WebClientCluster.h
+WebServer/WebClientRoute.cpp
+WebServer/WebClientRoute.h
 WebServer/WebClientSignal.cpp
 WebServer/WebClientSignal.h
 WebServer/WebClientStatic.cpp

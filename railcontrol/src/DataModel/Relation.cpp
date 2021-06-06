@@ -100,12 +100,15 @@ namespace DataModel
 				manager->TrackBaseSetLocoOrientation(ObjectIdentifier(ObjectTypeTrack, ObjectID2()), static_cast<Orientation>(data));
 				return true;
 
-
 			case ObjectTypeRoute:
 				return manager->RouteExecute(logger, locoID, ObjectID2());
 
 			case ObjectTypeLoco:
 				manager->LocoFunctionState(ControlTypeInternal, locoID, static_cast<DataModel::LocoFunctionNr>(ObjectID2()), static_cast<DataModel::LocoFunctionState>(data));
+				return true;
+
+			case ObjectTypePause:
+				Utils::Utils::SleepForMilliseconds(static_cast<unsigned int>(data) * 100);
 				return true;
 
 			default:

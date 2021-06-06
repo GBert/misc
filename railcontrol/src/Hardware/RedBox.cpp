@@ -18,14 +18,14 @@ along with RailControl; see the file LICENCE. If not see
 <http://www.gnu.org/licenses/>.
 */
 
-#include "Hardware/MasterControl.h"
+#include "Hardware/RedBox.h"
 #include "Languages.h"
 #include "Utils/Utils.h"
 
 namespace Hardware
 {
-	MasterControl::MasterControl(const HardwareParams* params)
-	:	ProtocolP50xSerial(params, "MasterControl")
+	RedBox::RedBox(const HardwareParams* params)
+	:	ProtocolP50xSerial(params, "RedBox")
 	{
 		SendP50XOnly();
 		const bool ok = SendNop();
@@ -37,9 +37,9 @@ namespace Hardware
 
 		s88Modules = Utils::Utils::StringToInteger(params->GetArg2(), 0);
 
-		if (s88Modules > MaxS88ModulesMasterControl)
+		if (s88Modules > MaxS88ModulesRedBox)
 		{
-			logger->Error(Languages::TextTooManyS88Modules, s88Modules, MaxS88ModulesMasterControl);
+			logger->Error(Languages::TextTooManyS88Modules, s88Modules, MaxS88ModulesRedBox);
 			return;
 		}
 

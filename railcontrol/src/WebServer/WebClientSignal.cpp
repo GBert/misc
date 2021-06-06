@@ -448,20 +448,6 @@ namespace WebServer
 	{
 		const string name = Utils::Utils::GetStringMapEntry(arguments, "name");
 		const SignalID signalId = static_cast<SwitchID>(Utils::Utils::GetIntegerMapEntry(arguments, "signal"));
-		client.ReplyHtmlWithHeader(HtmlTagRelationSignalState(name, signalId));
-	}
-
-	HtmlTag WebClientSignal::HtmlTagRelationSignalState(const string& name,
-		const SignalID signalId,
-		const DataModel::Relation::Data data)
-	{
-		map<DataModel::AccessoryState,DataModel::Signal::StateOption> stateOptions;
-		Signal* signal = manager.GetSignal(signalId);
-		if (signal != nullptr)
-		{
-			stateOptions = signal->GetStateOptions();
-		}
-
-		return HtmlTagSelect(name + "_state", stateOptions, static_cast<DataModel::AccessoryState>(data)).AddClass("select_relation_state");
+		client.ReplyHtmlWithHeader(client.HtmlTagRelationSignalState(name, signalId));
 	}
 } // namespace WebServer

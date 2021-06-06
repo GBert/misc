@@ -25,7 +25,7 @@ along with RailControl; see the file LICENCE. If not see
 namespace Hardware
 {
 	IntelliboxBase::IntelliboxBase(const HardwareParams* params, const std::string& controlName)
-	:	SerialP50x(params, controlName)
+	:	ProtocolP50xSerial(params, controlName)
 	{
 		SendP50XOnly();
 		const bool ok = SendNop();

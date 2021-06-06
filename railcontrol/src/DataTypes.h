@@ -174,7 +174,9 @@ enum HardwareType : uint8_t
 	HardwareTypeCS2Tcp = 10,
 	HardwareTypeIntellibox = 11,
 	HardwareTypeMasterControl = 12,
-	HardwareTypeTwinCenter = 13
+	HardwareTypeTwinCenter = 13,
+	HardwareTypeMasterControl2 = 14,
+	HardwareTypeRedBox = 15
 };
 
 enum Automode : bool
@@ -196,7 +198,8 @@ enum ObjectType : uint8_t
 	ObjectTypeSignal = 8,
 	ObjectTypeCluster = 9,
 	ObjectTypeTimeTable = 10,
-	ObjectTypeText = 11
+	ObjectTypeText = 11,
+	ObjectTypePause = 12
 };
 
 enum Orientation : bool

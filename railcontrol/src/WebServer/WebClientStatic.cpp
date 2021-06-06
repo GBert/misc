@@ -133,6 +133,8 @@ namespace WebServer
 		hardwareList["RM485"] = HardwareTypeRM485;
 		hardwareList["Roco Z21"] = HardwareTypeZ21;
 		hardwareList["Tams MasterControl (beta)"] = HardwareTypeMasterControl;
+		hardwareList["Tams MasterControl 2 (beta)"] = HardwareTypeMasterControl2;
+		hardwareList["Tams RedBox (beta)"] = HardwareTypeRedBox;
 		hardwareList["Uhlenbrock Intellibox (beta)"] = HardwareTypeIntellibox;
 		hardwareList["Virtual Command Station"] = HardwareTypeVirtual;
 		return hardwareList;

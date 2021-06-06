@@ -22,31 +22,31 @@ along with RailControl; see the file LICENCE. If not see
 
 #include <string>
 
-#include "Hardware/ProtocolP50xSerial.h"
+#include "Hardware/ProtocolP50xEthernet.h"
 #include "Languages.h"
 
 namespace Hardware
 {
 	class HardwareParams;
 
-	class MasterControl : public ProtocolP50xSerial
+	class MasterControl2 : public ProtocolP50xEthernet
 	{
 		public:
-			MasterControl() = delete;
-			MasterControl(const MasterControl&) = delete;
-			MasterControl& operator=(const MasterControl&) = delete;
+			MasterControl2() = delete;
+			MasterControl2(const MasterControl2&) = delete;
+			MasterControl2& operator=(const MasterControl2&) = delete;
 
-			MasterControl(const HardwareParams* params);
+			MasterControl2(const HardwareParams* params);
 
-			virtual ~MasterControl()
+			virtual ~MasterControl2()
 			{
 			}
 
 			static inline void GetArgumentTypesAndHint(std::map<unsigned char,ArgumentType>& argumentTypes, std::string& hint)
 			{
-				argumentTypes[1] = ArgumentTypeSerialPort;
+				argumentTypes[1] = ArgumentTypeIpAddress;
 				argumentTypes[2] = ArgumentTypeS88Modules;
-				hint = Languages::GetText(Languages::TextHintMasterControl);
+				hint = Languages::GetText(Languages::TextHintMasterControl2);
 			}
 
 		private:

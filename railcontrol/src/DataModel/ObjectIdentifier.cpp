@@ -190,6 +190,9 @@ namespace DataModel
 
 			case ObjectTypeText:
 				return "text";
+
+			case ObjectTypePause:
+				return "pause";
 		}
 		return "object";
 	}

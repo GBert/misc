@@ -108,12 +108,12 @@ namespace Utils
 			static void SetMinThreadPriority();
 			static std::string TimestampToDate(const time_t timestamp);
 
-			static inline void SleepForSeconds(int seconds)
+			static inline void SleepForSeconds(unsigned int seconds)
 			{
 				std::this_thread::sleep_for(std::chrono::seconds(seconds));
 			}
 
-			static inline void SleepForMilliseconds(int milliSeconds)
+			static inline void SleepForMilliseconds(unsigned int milliSeconds)
 			{
 				std::this_thread::sleep_for(std::chrono::milliseconds(milliSeconds));
 			}

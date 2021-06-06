@@ -28,6 +28,7 @@ namespace Network
 	{
 		public:
 			TcpConnection() = delete;
+			TcpConnection& operator=(const TcpConnection&) = delete;
 
 			inline TcpConnection(int socket)
 			:	connectionSocket(socket),
@@ -35,31 +36,33 @@ namespace Network
 			{
 			}
 
-			~TcpConnection()
+			inline ~TcpConnection()
 			{
 				Terminate();
 			}
 
-			void Terminate();
+			void Terminate() const;
 
-			int Send(const char* buffer, const size_t bufferLength, const int flags = 0);
+			int Send(const unsigned char* buffer, const size_t bufferLength, const int flags = 0) const;
 
-			inline int Send(const unsigned char* buffer, const size_t bufferLength, const int flags = 0)
+			inline int Send(const char* buffer, const size_t bufferLength, const int flags = 0) const
 			{
-				return Send(reinterpret_cast<const char*>(buffer), bufferLength, flags);
+				return Send(reinterpret_cast<const unsigned char*>(buffer), bufferLength, flags);
 			}
 
-			inline int Send(const std::string& string, const int flags = 0)
+			inline int Send(const std::string& string, const int flags = 0) const
 			{
 				return Send(string.c_str(), string.size(), flags);
 			}
 
-			int Receive(char* buf, const size_t buflen, const int flags = 0);
+			int Receive(unsigned char* buffer, const size_t bufferLength, const int flags = 0) const;
 
-			inline int Receive(unsigned char* buffer, const size_t bufferLength, const int flags = 0)
+			inline int Receive(char* buffer, const size_t bufferLength, const int flags = 0) const
 			{
-				return Receive(reinterpret_cast<char*>(buffer), bufferLength, flags);
+				return Receive(reinterpret_cast<unsigned char*>(buffer), bufferLength, flags);
 			}
+
+			int ReceiveExact(unsigned char* buffer, const size_t bufferLength, const int flags = 0) const;
 
 			inline bool IsConnected() const
 			{
@@ -67,7 +70,7 @@ namespace Network
 			}
 
 		private:
-			int connectionSocket;
-			volatile bool connected;
+			mutable int connectionSocket;
+			mutable volatile bool connected;
 	};
 }

@@ -2551,6 +2551,14 @@ bool Manager::LayerHasElements(const Layer* layer,
 			return true;
 		}
 	}
+	for (auto& text : texts)
+	{
+		if (text.second->IsVisibleOnLayer(layerId))
+		{
+			result = Logger::Logger::Format(Languages::GetText(Languages::TextLayerIsUsedByText), layer->GetName(), text.second->GetName());
+			return true;
+		}
+	}
 	return false;
 }
 

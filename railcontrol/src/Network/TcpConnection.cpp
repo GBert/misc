@@ -27,7 +27,7 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace Network
 {
-	void TcpConnection::Terminate()
+	void TcpConnection::Terminate() const
 	{
 		if (connected)
 		{
@@ -36,7 +36,7 @@ namespace Network
 		}
 	}
 
-	int TcpConnection::Send(const char* buffer, const size_t bufferLength, const int flags)
+	int TcpConnection::Send(const unsigned char* buffer, const size_t bufferLength, const int flags) const
 	{
 		if (connectionSocket == 0 || connected == false)
 		{
@@ -71,7 +71,7 @@ namespace Network
 		return ret;
 	}
 
-	int TcpConnection::Receive(char* buf, const size_t buflen, const int flags)
+	int TcpConnection::Receive(unsigned char* buffer, const size_t buffferLength, const int flags) const
 	{
 		if (connectionSocket == 0 || connected == false)
 		{
@@ -96,7 +96,7 @@ namespace Network
 			errno = ETIMEDOUT;
 			return -1;
 		}
-		ret = recv(connectionSocket, buf, buflen, flags);
+		ret = recv(connectionSocket, buffer, buffferLength, flags);
 		if (ret <= 0)
 		{
 			errno = ECONNRESET;
@@ -104,5 +104,21 @@ namespace Network
 			return -1;
 		}
 		return ret;
+	}
+
+	int TcpConnection::ReceiveExact(unsigned char* data, const size_t length, const int flags) const
+	{
+		int actualSize = 0;
+		int endSize = length;
+		while (actualSize < endSize)
+		{
+			int ret = Receive(data + actualSize, endSize - actualSize, flags);
+			if (ret <= 0)
+			{
+				return actualSize;
+			}
+			actualSize += ret;
+		}
+		return actualSize;
 	}
 }
