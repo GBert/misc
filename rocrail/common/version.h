@@ -1,11 +1,13 @@
 const int revisionnr = 
-1607
+1609
 ;
 const char* commithash = 
-"08704b1b079e3a40edf5aec28e2c7bff469c1fb8";
+"7af115de9d5b2901de9c099ea6f7818996efad85";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1609 2021-06-07 08:37:54 +0200 xmlscript: trace flag added\n" \
+"1608 2021-06-07 07:32:24 +0200 block: shunting locos should not wait\n" \
 "1607 2021-06-03 07:57:23 +0200 location: divide by zero fix\n" \
 "1606 2021-06-02 10:42:14 +0200 location: trace correction for loco arrivetime\n" \
 "1605 2021-06-01 11:19:49 +0200 location: use last arrive time for init location fifo\n" \
