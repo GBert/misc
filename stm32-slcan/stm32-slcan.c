@@ -372,8 +372,8 @@ static int slcan_command(void) {
 
     /* consume chars until eol reached */
     do {
-	ret = ring_read_ch(&input_ring, NULL);
-    } while (ret == '\r');
+        ret = ring_read_ch(&input_ring, NULL);
+    } while (ret != '\r' && ret !=-1);
 
 #if 1
     if (send) {
@@ -404,7 +404,7 @@ int main(void) {
     status = 0;
     commands_pending = 0;
 
-    rcc_clock_setup_in_hse_8mhz_out_72mhz();
+    rcc_clock_setup_pll(&rcc_hse_configs[RCC_CLOCK_HSE8_72MHZ]);
     gpio_setup();
     can_setup();
     usart_setup();
