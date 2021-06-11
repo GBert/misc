@@ -19,13 +19,17 @@ static __code uint16_t __at(_CONFIG2) configword2 = _LVP_ON & _CLKOUTEN_OFF;
 
 struct serial_buffer tx_fifo, rx_fifo;
 
+volatile uint8_t adc_channel;
 volatile uint8_t rail_data;
 volatile uint8_t timer0_counter;
 volatile uint16_t adc_poti;
+volatile uint16_t adc_temperature;
+volatile uint16_t adc_v;
 volatile uint16_t adc_sense_left;
 volatile uint16_t adc_sense_right;
 
 void isr(void) __interrupt(0) {
+    LATB7 = 1;
     if (IOCIF) {
 	TMR2 = 0;
 	// according to 40001729C.pdf it is needed to set post and pre scaler if TMR2 is modified
@@ -33,6 +37,12 @@ void isr(void) __interrupt(0) {
 	// enable H-Bridge
 	LATB4 = 1;
 	rail_data = 1;
+	if ((adc_channel < 2) && (TMR4ON == 0)) {
+	    TMR4 = 0;
+	    PR4 = 8 * 20;	// FOSC/4 * 20 = 20us
+	    TMR4IE = 1;
+	    TMR4ON = 1;
+	}
 	IOCCF = 0;
     }
     if (TMR2IF) {
@@ -40,13 +50,26 @@ void isr(void) __interrupt(0) {
 	// disable H-Bridge
 	LATB4 = 0;
 	rail_data = 0;
+	// left and right leg are off
+	adc_sense_left = 0;
+	adc_sense_right = 0;
+
+	if ((adc_channel < 2) && (TMR4ON == 0)) {
+	    TMR4 = 0;
+	    PR4 = 8 * 30;	// FOSC/4 * 30 = 30us
+	    TMR4IE = 1;
+	    TMR4ON = 1;
+	}
 	TMR2IF = 0;
     }
     if (ADIE && ADIF) {
-	if (ADCON0 >> 2 == AD_POTI) {
-	    adc_poti += (ADRESH << 8) + ADRESL;
-	    adc_poti >>= 1;
-	} else {
+	TMR4ON = 0;
+	TMR4IF = 0;
+	LATC7 = 0;
+	switch (adc_channel) {
+	// sense left or right
+	case 0:
+	case 1:
 	    if (PORTC & 0b00001000) {
 		adc_sense_left += (ADRESH << 8) + ADRESL;
 		adc_sense_left >>= 1;
@@ -54,29 +77,77 @@ void isr(void) __interrupt(0) {
 		adc_sense_right += (ADRESH << 8) + ADRESL;
 		adc_sense_right >>= 1;
 	    }
+	    break;
+	// poti
+	case 2:
+	    adc_poti += (ADRESH << 8) + ADRESL;
+	    adc_poti >>= 1;
+	    break;
+	// power supply
+	case 3:
+	    adc_v += (ADRESH << 8) + ADRESL;
+	    adc_v >>=1;
+	    break;
+	// temperature
+	case 4:
+	    adc_temperature += (ADRESH << 8) + ADRESL;
+	    adc_temperature >>=1;
+	    break;
 	}
-	TMR4ON = 0;
+	adc_channel++;
+	if (adc_channel > 4) {	// only channel 0 - 4
+	   if (rail_data)
+		adc_channel = 0;
+	   else
+		adc_channel = 2;
+	}
+
+	if (adc_channel > 1) {
+	    TMR4 = 0;
+	    PR4 = 8 * 30;	// FOSC/4 * 30 = 30us
+	    TMR4IE = 1;
+	    TMR4ON = 1;
+	}
 	ADIF = 0;
     }
     if (TMR0IF && TMR0IE) {
-	TMR0IF = 0;
 	TMR0 = TIMER0_VAL;
-
 	timer0_counter++;
-	/* kind of state machine
-	   to sample two pins */
-	if (timer0_counter & 0x01) {
-	    ADCON0 = (AD_POTI << 2) | 1;
-	} else {
+	TMR0IF = 0;
+    }
+    if (TMR4IF && TMR4IE) {
+	LATC7 = 1;
+	TMR4ON = 0;
+	switch (adc_channel) {
+	case 0:
+	case 1:
 	    ADCON0 = (AD_SENSE << 2) | 1;
+	    break;
+	case 2:
+	    ADCON0 = (AD_POTI << 2) | 1;
+	    break;
+	case 3:
+	    ADCON0 = (AD_V << 2) | 1;
+	    break;
+	case 4:
+	    ADCON0 = (AD_TEMPERATURE << 2) | 1;
+	    break;
+	default:
+	    adc_channel = 0;
+	    break;
 	}
-	// we must delay the start to charge ADC capacitor
-	// use Timer 4 to start after 13us
+	LATC7 = 0;
+	LATC7 = 1;
+	// we need to wait Tacq = 5us - use Timer4 again w/o interrupt
+	TMR4IF = 0;
+	TMR4IE = 0;
 	TMR4 = 0;
-	PR4 = 8 * 13;	// FOSC/4 * 13 = 13us
+	PR4 = 8 * 5;	// FOSC/4 * 5 = 5us
 	TMR4ON = 1;
+	// ADC will start automatically after Timer4 match
 	ADCON2 = 0b11000000;
     }
+    LATB7 = 0;
 }
 
 /* RA4 SDA I2C
@@ -132,7 +203,6 @@ void system_init(void) {
     /* I2C MSSP 40001729B.pdf page 302 */
     TRISA4 = 1;
     TRISA5 = 1;
-    TRISC0 = 0;
     /* USART */
     TRISC1 = 1;
     TRISC2 = 0;
@@ -141,9 +211,13 @@ void system_init(void) {
     TRISB5 = 0;
     TRISB6 = 0;
     TRISC0 = 1;
+    TRISC6 = 1;
     TRISC3 = 1;		/* Rail Data */
     TRISB4 = 0;		/* Enable */
     TRISC5 = 0;		/* LED */
+    // debug
+    TRISB7 = 0;
+    TRISC7 = 0;
     // setup interrupt events
     //clear all relevant interrupt flags
     SSP1IF = 0;
@@ -171,9 +245,9 @@ void i2c_init(void) {
 }
 
 void ad_init(void) {
-    /* RA2&RC0 analog */
+    /* RA2&RC0&RC6 analog */
     ANSELA = 1 << 2;
-    ANSELC = 1 << 0;
+    ANSELC = 0b01000001;
     /* right justified ; FOSC/32 ;VREF- GND & VREF+ VDD */
     ADCON1 = 0b10100000;
     ADIE = 1;
@@ -301,6 +375,7 @@ void main(void) {
     rx_fifo.tail = 0;
 
     rail_data = 0;
+    adc_channel = 0;
     GIE = 1;
     LCD_init(LCD_01_ADDRESS);
 
@@ -314,6 +389,7 @@ void main(void) {
 	    temp1l_right = adc_sense_right& 0xff ;
 	    temp1h_right= adc_sense_right>> 8;
 	    temp2 = adc_poti >> 2;
+	    //temp2 = adc_temperature >> 2;
 	    GIE = 1;
 	    LCD_putcmd(LCD_01_ADDRESS, LCD_CLEAR, 1);
 	    LCD_puts(LCD_01_ADDRESS, "Booster Max=8.0A\0");
@@ -332,8 +408,6 @@ void main(void) {
 		LCD_puts(LCD_01_ADDRESS, " 0.0%\0");
 	    else
 		LCD_puts(LCD_01_ADDRESS, " Off\0");
-	    //LATCbits.LATC0 = 1;
-	    //LATCbits.LATC0 ^= 1;
 	    putchar_wait(0x55);
 	    LATC5 ^= 1;
 	}

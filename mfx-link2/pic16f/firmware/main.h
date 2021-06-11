@@ -16,6 +16,8 @@
 #define LCD_01_ADDRESS  0x27
 #define AD_POTI		2
 #define AD_SENSE	4
+#define AD_V		8
+#define AD_TEMPERATURE	29	// 0b11101
 
 #define _XTAL_FREQ	32000000
 #define XTAL_FREQ	(_XTAL_FREQ)
