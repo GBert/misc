@@ -10,6 +10,7 @@
 #include "main.h"
 #include "i2c_lcd.h"
 #include "lcd.h"
+#include <pic16f1709.h>
 
 static __code uint16_t __at(_CONFIG1) configword1 = _FOSC_INTOSC & _PLLEN_OFF & _MCLRE_ON & _WDTE_OFF;
 static __code uint16_t __at(_CONFIG2) configword2 = _LVP_ON & _CLKOUTEN_OFF;
@@ -43,54 +44,54 @@ volatile uint16_t adc_sense_left_count;
 volatile uint16_t adc_sense_right_count;
 
 void isr(void) __interrupt(0) {
-    LATB7 = 1;
-    if (IOCIF) {
+    LATBbits.LATB7 = 1;
+    if (INTCONbits.IOCIF) {
 	TMR2 = 0;
 	// according to 40001729C.pdf it is needed to set post and pre scaler if TMR2 is modified
 	T2CON = 0x3f; // FOSC/4 Postscaler 1:8 Prescaler 1:64 -> 1/8 * 8 * 64 * 256 = 16384us
 	// enable H-Bridge
-	LATB4 = 1;
+	LATBbits.LATB4 = 1;
 	rail_data = 1;
-	if ((adc_channel < 2) && (TMR4ON == 0)) {
-	    //LATB7 = 0;
-	    //LATB7 = 1;
+	if ((adc_channel < 2) && (T4CONbits.TMR4ON == 0)) {
+	    //LATBbits.RB7 = 0;
+	    //LATBbits.RB7 = 1;
 	    TMR4 = 0;
 	    PR4 = 8 * 20;	// FOSC/4 * 20 = 20us
-	    TMR4IE = 1;
-	    TMR4ON = 1;
+	    PIE2bits.TMR4IE = 1;
+	    T4CONbits.TMR4ON = 1;
 	}
 	IOCCF = 0;
     }
-    if (TMR2IF) {
+    if (PIR1bits.TMR2IF) {
 	// we got a 16ms timeout
 	// disable H-Bridge
-	LATB4 = 0;
+	LATBbits.LATB4 = 0;
 	rail_data = 0;
 	// left and right leg are off
 	adc_sense_left_average = 0;
 	adc_sense_right_average = 0;
 
-	if ((adc_channel < 2) && (TMR4ON == 0)) {
+	if ((adc_channel < 2) && (T4CONbits.TMR4ON == 0)) {
 	    TMR4 = 0;
 	    PR4 = 8 * 30;	// FOSC/4 * 30 = 30us
-	    TMR4IE = 1;
-	    TMR4ON = 1;
+	    PIE2bits.TMR4IE = 1;
+	    T4CONbits.TMR4ON = 1;
 	}
-	TMR2IF = 0;
+	PIR1bits.TMR2IF = 0;
     }
-    if (ADIE && ADIF) {
+    if (PIE1bits.ADIE && PIR1bits.ADIF) {
 	ADCON0 = 0;
 	ADCON2 = 0;
 	adc_value.bt[0] = ADRESL;
 	adc_value.bt[1] = ADRESH;
-	TMR4ON = 0;
-	TMR4IF = 0;
-	LATC7 = 0;
+	T4CONbits.TMR4ON = 0;
+	PIR2bits.TMR4IF = 0;
+	LATCbits.LATC7 = 0;
 	switch (adc_channel) {
 	// sense left or right
 	case 0:
 	case 1:
-	    if (PORTC & 0b00001000) {
+	    if (PORTCbits.RC3) {
 		adc_sense_left_count++;
 		adc_sense_left += adc_value.c;
 		if (adc_sense_left_count > 63) {
@@ -135,19 +136,19 @@ void isr(void) __interrupt(0) {
 	if (adc_channel > 1) {
 	    TMR4 = 0;
 	    PR4 = 8 * 30;	// FOSC/4 * 30 = 30us
-	    TMR4IE = 1;
-	    TMR4ON = 1;
+	    PIE2bits.TMR4IE = 1;
+	    T4CONbits.TMR4ON = 1;
 	}
-	ADIF = 0;
+	PIR1bits.ADIF = 0;
     }
-    if (TMR0IF && TMR0IE) {
+    if (INTCONbits.TMR0IF && INTCONbits.TMR0IE) {
 	TMR0 = TIMER0_VAL;
 	timer0_counter++;
-	TMR0IF = 0;
+	INTCONbits.TMR0IF = 0;
     }
-    if (TMR4IF && TMR4IE) {
-	LATC7 = 1;
-	TMR4ON = 0;
+    if (PIR2bits.TMR4IF && PIE2bits.TMR4IE) {
+	LATCbits.LATC7 = 1;
+	T4CONbits.TMR4ON = 0;
 	switch (adc_channel) {
 	case 0:
 	case 1:
@@ -166,18 +167,18 @@ void isr(void) __interrupt(0) {
 	    adc_channel = 0;
 	    break;
 	}
-	LATC7 = 0;
-	LATC7 = 1;
+	LATCbits.LATC7 = 0;
+	LATCbits.LATC7 = 1;
 	// we need to wait Tacq = 5us - use Timer4 again w/o interrupt to trigger ADC
-	TMR4IF = 0;
-	TMR4IE = 0;
+	PIR2bits.TMR4IF = 0;
+	PIE2bits.TMR4IE = 0;
 	TMR4 = 0;
 	PR4 = 8 * 5;	// FOSC/4 * 5 = 5us
-	TMR4ON = 1;
+	T4CONbits.TMR4ON = 1;
 	// ADC will start automatically after Timer4 match
 	ADCON2 = 0b11000000;
     }
-    LATB7 = 0;
+    LATBbits.LATB7 = 0;
 }
 
 /* RA4 SDA I2C
@@ -231,35 +232,35 @@ void system_init(void) {
     CM2CON1 = 0;
 
     /* I2C MSSP 40001729B.pdf page 302 */
-    TRISA4 = 1;
-    TRISA5 = 1;
+    TRISAbits.TRISA4 = 1;
+    TRISAbits.TRISA5 = 1;
     /* USART */
-    TRISC1 = 1;
-    TRISC2 = 0;
+    TRISCbits.TRISC1 = 1;
+    TRISCbits.TRISC2 = 0;
     /* RA2&RC0 analog input */
-    TRISA2 = 1;
-    TRISB5 = 0;
-    TRISB6 = 0;
-    TRISC0 = 1;
-    TRISC6 = 1;
-    TRISC3 = 1;		/* Rail Data */
-    TRISB4 = 0;		/* Enable */
-    TRISC5 = 0;		/* LED */
+    TRISAbits.TRISA2 = 1;
+    TRISBbits.TRISB5 = 0;
+    TRISBbits.TRISB6 = 0;
+    TRISCbits.TRISC0 = 1;
+    TRISCbits.TRISC6 = 1;
+    TRISCbits.TRISC3 = 1;		/* Rail Data */
+    TRISBbits.TRISB4 = 0;		/* Enable */
+    TRISCbits.TRISC5 = 0;		/* LED */
     // debug
-    TRISB7 = 0;
-    TRISC7 = 0;
+    TRISBbits.TRISB7 = 0;
+    TRISCbits.TRISC7 = 0;
     // setup interrupt events
     //clear all relevant interrupt flags
-    SSP1IF = 0;
-    TMR1IF = 0;
-    CCP1IF = 0;
+    PIR1bits.SSP1IF = 0;
+    PIR1bits.TMR1IF = 0;
+    PIR1bits.CCP1IF = 0;
     // activate IOC on Rail Data
-    IOCCP3 = 1;
-    IOCCN3 = 1;
+    IOCCPbits.IOCCP3 = 1;
+    IOCCNbits.IOCCN3 = 1;
     //activate interrupt bits
-    IOCIE = 1;
-    PEIE = 1;
-    GIE = 1;
+    INTCONbits.IOCIE = 1;
+    INTCONbits.PEIE = 1;
+    INTCONbits.GIE = 1;
 }
 
 void i2c_init(void) {
@@ -280,31 +281,31 @@ void ad_init(void) {
     ANSELC = 0b01000001;
     /* right justified ; FOSC/32 ;VREF- GND & VREF+ VDD */
     ADCON1 = 0b10100000;
-    ADIE = 1;
+    PIE1bits.ADIE = 1;
 }
 
 void uart_init(void) {
-    TX9 = 1;			// 8-bit transmission
-    TX9D = 1;			//  one extra stop bit
-    TXEN = 1;			// transmit enabled
-    SYNC = 0;			// asynchronous mode
-    BRGH = 1;			// high speed
-    SPEN = 1;			// enable serial port (configures RX/DT and TX/CK pins as serial port pins)
-    RX9 = 0;			// 8-bit reception
-    CREN = 1;			// enable receiver
-    BRG16 = USE_BRG16;		// 8-bit baud rate generator
+    TX1STAbits.TX9 = 1;		// 8-bit transmission
+    TX1STAbits.TX9D = 1;	//  one extra stop bit
+    TX1STAbits.TXEN = 1;	// transmit enabled
+    TX1STAbits.SYNC = 0;	// asynchronous mode
+    TX1STAbits.BRGH = 1;	// high speed
+    RC1STAbits.SPEN = 1;	// enable serial port (configures RX/DT and TX/CK pins as serial port pins)
+    RC1STAbits.RX9 = 0;		// 8-bit reception
+    RC1STAbits.CREN = 1;	// enable receiver
+    BAUDCON1bits.BRG16 = USE_BRG16;	// 8-bit baud rate generator
 
     SPBRG = SBRG_VAL;		// calculated by defines
 
-    RCIF = 0;
+    PIR1bits.RCIF = 0;
 }
 
 void timer0_init(void) {
-    TMR0CS = 0;			// FOSC / 4
-    PSA = 0;			// use prescaler
-    PS1 = 1;			// prescaler 1:8
+    OPTION_REGbits.TMR0CS = 0;	// FOSC / 4
+    OPTION_REGbits.PSA = 0;	// use prescaler
+    OPTION_REGbits.PS1 = 1;	// prescaler 1:8
     TMR0 = TIMER0_VAL;
-    TMR0IE = 1;
+    INTCONbits.TMR0IE = 1;
 }
 
 void timer2_init(void) {
@@ -314,7 +315,7 @@ void timer2_init(void) {
     //        -----1-- timer on
     //        ------11 prescaler 1:64 (overflow every 16ms)
     TMR2 = 0;			// reset timer2
-    TMR2IE = 1;
+    PIE1bits.TMR2IE = 1;
 }
 
 void clc_init(void) {
@@ -368,14 +369,6 @@ void delay_ms(uint16_t ms) {
     }
 }
 
-uint8_t ad(uint8_t channel) {
-    ADCON0 = (channel << 2) | 1;
-    ADGO = 1;
-    delay_ms(1);
-    while (ADGO) ;
-    return (ADRESH);
-}
-
 char nibble_to_hex(uint8_t c) {
     char nibble;
     nibble = (c & 0x0f) + '0';
@@ -407,21 +400,22 @@ void main(void) {
 
     rail_data = 0;
     adc_channel = 0;
-    GIE = 1;
+    INTCONbits.GIE = 1;
     LCD_init(LCD_01_ADDRESS);
 
     while (1) {
 	if (counter == 0) {
 	    /* 14mA per digit / atomic read */
-	    GIE = 0;
+	    INTCONbits.GIE = 0;
 	    leg_left = adc_sense_left_average;
 	    leg_right = adc_sense_right_average;
 	    temp2 = adc_poti;
 	    //temp2 = adc_temperature >> 2;
-	    GIE = 1;
+	    INTCONbits.GIE = 1;
 
-	    leg_left = leg_left >> 6;
-	    leg_right = leg_right >> 6;
+	    // used 64 values / devide by 64
+	    leg_left >>= 6;
+	    leg_right >>= 6;
 	    temp1l_left = leg_left & 0xff;
 	    temp1h_left = leg_left >> 8;
 	    temp1l_right = leg_right & 0xff ;
@@ -446,7 +440,7 @@ void main(void) {
 	    else
 		LCD_puts(LCD_01_ADDRESS, " Off\0");
 	    putchar_wait(0x55);
-	    LATC5 ^= 1;
+	    LATCbits.LATC5 ^= 1;
 	}
 	delay_ms(2);
 

@@ -32,7 +32,7 @@ int8_t I2C_PCF8574_Write(uint8_t addr, uint8_t value) {
     s = i2c_write(addr << 1);
     if (s < 0) {		//bus collision ?
 	dummy = SSPBUF;		// clear the buffer,
-	WCOL = 0;	// clear collision status bit
+	SSP1CON1bits.WCOL = 0;	// clear collision status bit
     }
     s = i2c_write(value);
     i2c_stop();

@@ -18,35 +18,35 @@ void i2c_wait(void) {
 
 void i2c_start(void) {
     i2c_wait();
-    SEN = 1;
+    SSP1CON2bits.SEN = 1;
 }
 
 void i2c_restart(void) {
     i2c_wait();
-    RSEN = 1;
+    SSP1CON2bits.RSEN = 1;
 }
 
 void i2c_stop(void) {
     i2c_wait();
-    PEN = 1;
+    SSP1CON2bits.PEN = 1;
 }
 
 void i2c_sendACK(void) {
     i2c_wait();
-    ACKDT = 0;
-    ACKEN = 1;
+    SSP1CON2bits.ACKDT = 0;
+    SSP1CON2bits.ACKEN = 1;
 }
 
 void i2c_sendNACK(void) {
     i2c_wait();
-    ACKDT = 1;
-    ACKEN = 1;
+    SSP1CON2bits.ACKDT = 1;
+    SSP1CON2bits.ACKEN = 1;
 }
 
 int8_t i2c_write(volatile uint8_t data) {
     i2c_wait();
     SSPBUF = data;
-    if (WCOL)
+    if (SSP1CON1bits.WCOL)
 	return -1;
     return 0;
 }

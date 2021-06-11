@@ -1,6 +1,6 @@
 MCU=16f1709
 CC=sdcc
-CFLAGS=--use-non-free --stack-size 8 -mpic14 -p$(MCU) #-DDEBUG=1
+CFLAGS=--use-non-free --stack-size 8 -mpic14 -DNO_BIT_DEFINES -p$(MCU) #-DDEBUG=1
 CLIB=
 
 MAIN==main

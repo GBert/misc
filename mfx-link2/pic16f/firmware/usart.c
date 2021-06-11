@@ -13,7 +13,7 @@ const char *sData = " Data: ";
 
 /* prints char on USART if pssible */
 char putchar(unsigned char c) {
-    if (TRMT) {
+    if (TX1STAbits.TRMT) {
 	TXREG1 = c;
 	return 1;
     }
@@ -22,7 +22,7 @@ char putchar(unsigned char c) {
 
 /* prints char on USART */
 void putchar_wait(unsigned char c) {
-    while (!TRMT) ;
+    while (!TX1STAbits.TRMT) ;
     TXREG1 = c;
 }
 
