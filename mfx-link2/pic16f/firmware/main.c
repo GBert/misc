@@ -19,14 +19,28 @@ static __code uint16_t __at(_CONFIG2) configword2 = _LVP_ON & _CLKOUTEN_OFF;
 
 struct serial_buffer tx_fifo, rx_fifo;
 
+union adc_value_u {
+    uint16_t c;
+    uint8_t bt[2];
+};
+
+volatile union adc_value_u adc_value;
+
 volatile uint8_t adc_channel;
 volatile uint8_t rail_data;
 volatile uint8_t timer0_counter;
+
 volatile uint16_t adc_poti;
 volatile uint16_t adc_temperature;
 volatile uint16_t adc_v;
 volatile uint16_t adc_sense_left;
 volatile uint16_t adc_sense_right;
+
+volatile uint16_t adc_sense_left_average;
+volatile uint16_t adc_sense_right_average;
+
+volatile uint16_t adc_sense_left_count;
+volatile uint16_t adc_sense_right_count;
 
 void isr(void) __interrupt(0) {
     LATB7 = 1;
@@ -38,6 +52,8 @@ void isr(void) __interrupt(0) {
 	LATB4 = 1;
 	rail_data = 1;
 	if ((adc_channel < 2) && (TMR4ON == 0)) {
+	    //LATB7 = 0;
+	    //LATB7 = 1;
 	    TMR4 = 0;
 	    PR4 = 8 * 20;	// FOSC/4 * 20 = 20us
 	    TMR4IE = 1;
@@ -51,8 +67,8 @@ void isr(void) __interrupt(0) {
 	LATB4 = 0;
 	rail_data = 0;
 	// left and right leg are off
-	adc_sense_left = 0;
-	adc_sense_right = 0;
+	adc_sense_left_average = 0;
+	adc_sense_right_average = 0;
 
 	if ((adc_channel < 2) && (TMR4ON == 0)) {
 	    TMR4 = 0;
@@ -63,6 +79,10 @@ void isr(void) __interrupt(0) {
 	TMR2IF = 0;
     }
     if (ADIE && ADIF) {
+	ADCON0 = 0;
+	ADCON2 = 0;
+	adc_value.bt[0] = ADRESL;
+	adc_value.bt[1] = ADRESH;
 	TMR4ON = 0;
 	TMR4IF = 0;
 	LATC7 = 0;
@@ -71,26 +91,36 @@ void isr(void) __interrupt(0) {
 	case 0:
 	case 1:
 	    if (PORTC & 0b00001000) {
-		adc_sense_left += (ADRESH << 8) + ADRESL;
-		adc_sense_left >>= 1;
+		adc_sense_left_count++;
+		adc_sense_left += adc_value.c;
+		if (adc_sense_left_count > 63) {
+		    adc_sense_left_count = 0;
+		    adc_sense_left_average = adc_sense_left;
+		    adc_sense_left = 0;
+		}
 	    } else {
-		adc_sense_right += (ADRESH << 8) + ADRESL;
-		adc_sense_right >>= 1;
+		adc_sense_right_count++;
+		adc_sense_right += adc_value.c;
+		if (adc_sense_right_count > 63) {
+		    adc_sense_right_count = 0;
+		    adc_sense_right_average = adc_sense_right;
+		    adc_sense_right = 0;
+		}
 	    }
 	    break;
 	// poti
 	case 2:
-	    adc_poti += (ADRESH << 8) + ADRESL;
+	    adc_poti += adc_value.c;
 	    adc_poti >>= 1;
 	    break;
 	// power supply
 	case 3:
-	    adc_v += (ADRESH << 8) + ADRESL;
+	    adc_v += adc_value.c;
 	    adc_v >>=1;
 	    break;
 	// temperature
 	case 4:
-	    adc_temperature += (ADRESH << 8) + ADRESL;
+	    adc_temperature += adc_value.c;
 	    adc_temperature >>=1;
 	    break;
 	}
@@ -138,7 +168,7 @@ void isr(void) __interrupt(0) {
 	}
 	LATC7 = 0;
 	LATC7 = 1;
-	// we need to wait Tacq = 5us - use Timer4 again w/o interrupt
+	// we need to wait Tacq = 5us - use Timer4 again w/o interrupt to trigger ADC
 	TMR4IF = 0;
 	TMR4IE = 0;
 	TMR4 = 0;
@@ -357,6 +387,7 @@ char nibble_to_hex(uint8_t c) {
 void main(void) {
     uint8_t counter = 0;
     uint8_t temp1l_left, temp1h_left, temp1l_right, temp1h_right, temp2;
+    uint16_t leg_left, leg_right;
     //uint16_t ad_value;
 
     pps_init();
@@ -381,16 +412,22 @@ void main(void) {
 
     while (1) {
 	if (counter == 0) {
-	    // temp = ad(AD_SENSE);
 	    /* 14mA per digit / atomic read */
 	    GIE = 0;
-	    temp1l_left = adc_sense_left & 0xff ;
-	    temp1h_left = adc_sense_left >> 8;
-	    temp1l_right = adc_sense_right& 0xff ;
-	    temp1h_right= adc_sense_right>> 8;
-	    temp2 = adc_poti >> 2;
+	    leg_left = adc_sense_left_average;
+	    leg_right = adc_sense_right_average;
+	    temp2 = adc_poti;
 	    //temp2 = adc_temperature >> 2;
 	    GIE = 1;
+
+	    leg_left = leg_left >> 6;
+	    leg_right = leg_right >> 6;
+	    temp1l_left = leg_left & 0xff;
+	    temp1h_left = leg_left >> 8;
+	    temp1l_right = leg_right & 0xff ;
+	    temp1h_right= leg_right >> 8;
+	    temp2 = adc_poti >> 2;
+
 	    LCD_putcmd(LCD_01_ADDRESS, LCD_CLEAR, 1);
 	    LCD_puts(LCD_01_ADDRESS, "Booster Max=8.0A\0");
 	    LCD_goto(LCD_01_ADDRESS, 2, 1);
