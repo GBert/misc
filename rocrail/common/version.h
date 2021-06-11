@@ -1,11 +1,16 @@
 const int revisionnr = 
-1609
+1614
 ;
 const char* commithash = 
-"7af115de9d5b2901de9c099ea6f7818996efad85";
+"76ffaa456186fed901ec70c926cf6ff9fd377aef";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1614 2021-06-11 09:18:15 +0200 train D&D fixes\n" \
+"1613 2021-06-10 09:19:28 +0200 block: fix for reset fifo\n" \
+"1612 2021-06-10 07:52:06 +0200 wiopi: use ip of r2rnet response if host is not set\n" \
+"1611 2021-06-08 07:19:55 +0200 guiframe: evaluate only attribute light if its provided in the state event\n" \
+"1610 2021-06-07 17:40:51 +0200 wrapper: light default on\n" \
 "1609 2021-06-07 08:37:54 +0200 xmlscript: trace flag added\n" \
 "1608 2021-06-07 07:32:24 +0200 block: shunting locos should not wait\n" \
 "1607 2021-06-03 07:57:23 +0200 location: divide by zero fix\n" \
