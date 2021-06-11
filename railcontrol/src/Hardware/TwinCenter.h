@@ -23,14 +23,14 @@ along with RailControl; see the file LICENCE. If not see
 #include <map>
 #include <string>
 
-#include "Hardware/IntelliboxBase.h"
 #include "Languages.h"
+#include "Hardware/ProtocolP50xUhlenbrock.h"
 
 namespace Hardware
 {
 	class HardwareParams;
 
-	class TwinCenter : public IntelliboxBase
+	class TwinCenter : public ProtocolP50xUhlenbrock
 	{
 		public:
 			TwinCenter() = delete;
@@ -38,8 +38,9 @@ namespace Hardware
 			TwinCenter& operator=(const TwinCenter&) = delete;
 
 			inline TwinCenter(const HardwareParams* params)
-			:	IntelliboxBase(params, "TwinCenter")
+			:	ProtocolP50xUhlenbrock(params, "TwinCenter")
 			{
+				Init();
 			}
 
 			virtual ~TwinCenter()

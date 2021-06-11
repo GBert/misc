@@ -37,7 +37,11 @@ namespace Hardware
 			OpenDcc(const OpenDcc&) = delete;
 			OpenDcc& operator=(const OpenDcc&) = delete;
 
-			OpenDcc(const HardwareParams* params);
+			inline OpenDcc(const HardwareParams* params)
+			:	ProtocolP50xSerial(params, "OpenDCC", TypeOpenDcc)
+			{
+				Init();
+			}
 
 			virtual ~OpenDcc()
 			{
@@ -51,11 +55,6 @@ namespace Hardware
 				argumentTypes[4] = ArgumentTypeS88Modules;
 				hint = Languages::GetText(Languages::TextHintOpenDcc);
 			}
-
-		private:
-			unsigned char s88Modules1;
-			unsigned char s88Modules2;
-			unsigned char s88Modules3;
 	};
 } // namespace
 

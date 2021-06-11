@@ -23,14 +23,14 @@ along with RailControl; see the file LICENCE. If not see
 #include <map>
 #include <string>
 
-#include "Hardware/IntelliboxBase.h"
 #include "Languages.h"
+#include "Hardware/ProtocolP50xUhlenbrock.h"
 
 namespace Hardware
 {
 	class HardwareParams;
 
-	class Intellibox : public IntelliboxBase
+	class Intellibox : public ProtocolP50xUhlenbrock
 	{
 		public:
 			Intellibox() = delete;
@@ -38,8 +38,9 @@ namespace Hardware
 			Intellibox& operator=(const Intellibox&) = delete;
 
 			inline Intellibox(const HardwareParams* params)
-			:	IntelliboxBase(params, "Intellibox")
+			:	ProtocolP50xUhlenbrock(params, "Intellibox")
 			{
+				Init();
 			}
 
 			virtual ~Intellibox()

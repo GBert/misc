@@ -37,9 +37,12 @@ namespace Hardware
 			ProtocolP50xEthernet(const ProtocolP50xEthernet&) = delete;
 			ProtocolP50xEthernet& operator=(const ProtocolP50xEthernet&) = delete;
 
-			inline ProtocolP50xEthernet(const HardwareParams* params, const std::string& controlName)
+			inline ProtocolP50xEthernet(const HardwareParams* params,
+				const std::string& controlName,
+				const ProtocolP50xType type)
 			:	ProtocolP50x(params,
-					controlName + " / " + params->GetName() + " at serial port " + params->GetArg1()),
+					controlName + " / " + params->GetName() + " at serial port " + params->GetArg1(),
+					type),
 				connection(Network::TcpClient::GetTcpClientConnection(logger, params->GetArg1(), MasterControl2Port))
 			{
 			}

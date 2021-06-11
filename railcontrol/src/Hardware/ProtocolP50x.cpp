@@ -25,11 +25,14 @@ along with RailControl; see the file LICENCE. If not see
 namespace Hardware
 {
 	ProtocolP50x::ProtocolP50x(const HardwareParams* const params,
-		const std::string& controlName)
+		const std::string& controlName,
+		const ProtocolP50xType type)
 	:	HardwareInterface(params->GetManager(),
 			params->GetControlID(),
 			controlName,
 			params->GetName()),
+		params(params),
+		type(type),
 		run(false)
 	{
 		logger->Info(Languages::TextStarting, GetFullName());
@@ -43,6 +46,133 @@ namespace Hardware
 		}
 		run = false;
 		checkEventsThread.join();
+	}
+
+	void ProtocolP50x::Init()
+	{
+		switch(type)
+		{
+			case TypeOpenDcc:
+				InitOpenDcc();
+				break;
+
+			case TypeUhlenbrock:
+			case TypeTams:
+				InitUhlenbrockTams();
+				break;
+		}
+		checkEventsThread = std::thread(&Hardware::ProtocolP50x::CheckEventsWorker, this);
+	}
+
+	void ProtocolP50x::InitOpenDcc()
+	{
+		static const unsigned char MaxS88Modules = 128;
+
+		SendP50XOnly();
+		bool ok = SendNop();
+		if (!ok)
+		{
+			logger->Error(Languages::TextControlDoesNotAnswer);
+			return;
+		}
+
+		unsigned char s88Modules1 = Utils::Utils::StringToInteger(params->GetArg2(), 0);
+		unsigned char s88Modules2 = Utils::Utils::StringToInteger(params->GetArg3(), 0);
+		unsigned char s88Modules3 = Utils::Utils::StringToInteger(params->GetArg4(), 0);
+		s88Modules = s88Modules1 + s88Modules2 + s88Modules3;
+
+		if (s88Modules > MaxS88Modules)
+		{
+			logger->Error(Languages::TextTooManyS88Modules, s88Modules, MaxS88Modules);
+			return;
+		}
+
+		if (s88Modules == 0)
+		{
+			logger->Info(Languages::TextNoS88Modules);
+			return;
+		}
+
+		logger->Info(Languages::TextHsi88Configured, s88Modules, s88Modules1, s88Modules2, s88Modules3);
+		bool restart = false;
+		unsigned char modules = SendXP88Get(0);
+		if (modules != s88Modules)
+		{
+			logger->Info(Languages::TextNrOfS88Modules, s88Modules);
+			SendXP88Set(0, s88Modules);
+			restart = true;
+		}
+
+		modules = SendXP88Get(1);
+		if (modules != s88Modules1)
+		{
+			logger->Info(Languages::TextNrOfS88ModulesOnBus, s88Modules1, 1);
+			SendXP88Set(1, s88Modules1);
+			restart = true;
+		}
+
+		modules = SendXP88Get(2);
+		if (modules != s88Modules2)
+		{
+			logger->Info(Languages::TextNrOfS88ModulesOnBus, s88Modules2, 2);
+			SendXP88Set(2, s88Modules2);
+			restart = true;
+		}
+
+		modules = SendXP88Get(3);
+		if (modules != s88Modules3)
+		{
+			logger->Info(Languages::TextNrOfS88ModulesOnBus, s88Modules3, 3);
+			SendXP88Set(3, s88Modules3);
+			restart = true;
+		}
+
+		if (restart)
+		{
+			SendXP88Set(4, 0);
+			SendRestart();
+			Utils::Utils::SleepForMilliseconds(100);
+			SendP50XOnly();
+			ok = SendNop();
+			if (!ok)
+			{
+				logger->Error(Languages::TextControlDoesNotAnswer);
+				return;
+			}
+		}
+	}
+
+	void ProtocolP50x::InitUhlenbrockTams()
+	{
+		static const unsigned char MaxS88Modules = 104;
+		SendP50XOnly();
+		const bool ok = SendNop();
+		if (!ok)
+		{
+			logger->Error(Languages::TextControlDoesNotAnswer);
+			return;
+		}
+
+		s88Modules = Utils::Utils::StringToInteger(params->GetArg2(), 0);
+
+		if (s88Modules > MaxS88Modules)
+		{
+			logger->Error(Languages::TextTooManyS88Modules, s88Modules, MaxS88Modules);
+			return;
+		}
+
+		if (s88Modules == 0)
+		{
+			logger->Info(Languages::TextNoS88Modules);
+			return;
+		}
+
+		logger->Info(Languages::TextNrOfS88Modules, s88Modules);
+		unsigned char modules = SendXP88Get(0);
+		if (modules != s88Modules)
+		{
+			SendXP88Set(0, s88Modules);
+		}
 	}
 
 	void ProtocolP50x::Booster(const BoosterState status)
@@ -458,11 +588,17 @@ namespace Hardware
 		std::lock_guard<std::mutex> guard(communicationLock);
 		unsigned char data[1] = { XEvtTrnt };
 		SendInternal(data, sizeof(data));
-		while (true)
+		unsigned char number;
+		ssize_t ret = ReceiveExactInternal(&number, 1);
+		if (ret < 1)
+		{
+			return;
+		}
+		while (number)
 		{
 			unsigned char input[2];
 			ssize_t ret = ReceiveExactInternal(input, sizeof(input));
-			if (ret < 1 || input[0] == 0x00)
+			if (ret != 2)
 			{
 				return;
 			}
@@ -480,12 +616,38 @@ namespace Hardware
 			DataModel::AccessoryState state = static_cast<DataModel::AccessoryState>((input[1] >> 7) & 0x01);
 
 			manager->AccessoryState(ControlTypeHardware, controlID, ProtocolServer, address, state);
+			--number;
+		}
+	}
+
+	void ProtocolP50x::SendXStatus() const
+	{
+		std::lock_guard<std::mutex> guard(communicationLock);
+		unsigned char data[1] = { XStatus };
+		SendInternal(data, sizeof(data));
+		while (true)
+		{
+			unsigned char input[1];
+			ssize_t ret = ReceiveExactInternal(input, sizeof(input));
+			if (ret < 1)
+			{
+				return;
+			}
+
+			BoosterState booster = static_cast<BoosterState>((input[0] >> 3) & 0x01);
+			manager->Booster(ControlTypeHardware, booster);
+
+			if ((input[0] & 0x80) == 0x00)
+			{
+				return;
+			}
 		}
 	}
 
 	void ProtocolP50x::SendXEvent() const
 	{
 		unsigned char input;
+		bool statusEvent = false;
 		{
 			std::lock_guard<std::mutex> guard(communicationLock);
 			unsigned char data[1] = { XEvent };
@@ -497,6 +659,7 @@ namespace Hardware
 			}
 
 			bool moreData = (input >> 7) & 0x01;
+			unsigned char byte = 1;
 			while (true)
 			{
 				if (!moreData)
@@ -509,6 +672,14 @@ namespace Hardware
 				{
 					break;
 				}
+				if (byte == 1)
+				{
+					if ((input2 >> 6) & 0x01)
+					{
+						statusEvent = true;
+					}
+				}
+				++byte;
 				moreData = (input2 >> 7) & 0x01;
 			}
 		}
@@ -536,6 +707,11 @@ namespace Hardware
 		{
 			SendXEvtTrn();
 		}
+
+		if (statusEvent)
+		{
+			SendXStatus();
+		}
 	}
 
 	void ProtocolP50x::CheckEventsWorker()
@@ -545,7 +721,7 @@ namespace Hardware
 		while (run)
 		{
 			SendXEvent();
-			std::this_thread::yield();
+			Utils::Utils::SleepForMilliseconds(50);
 		}
 	}
 } // namespace

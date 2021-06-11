@@ -33,12 +33,20 @@ namespace Hardware
 	class ProtocolP50x : protected HardwareInterface
 	{
 		public:
+			enum ProtocolP50xType : unsigned char
+			{
+				TypeOpenDcc,
+				TypeUhlenbrock,
+				TypeTams
+			};
+
 			ProtocolP50x() = delete;
 			ProtocolP50x(const ProtocolP50x&) = delete;
 			ProtocolP50x& operator=(const ProtocolP50x&) = delete;
 
 			ProtocolP50x(const HardwareParams* const params,
-				const std::string& controlName);
+				const std::string& controlName,
+				const ProtocolP50xType type);
 
 			virtual ~ProtocolP50x();
 
@@ -93,6 +101,50 @@ namespace Hardware
 			virtual ssize_t Receive(unsigned char* data, const size_t length) const = 0;
 			virtual ssize_t ReceiveExact(unsigned char* data, const size_t length) const = 0;
 
+			void Init();
+
+			unsigned short s88Modules;
+			std::thread checkEventsThread;
+
+		private:
+			enum Commands : unsigned char
+			{
+				XNop = 0xC4,
+				XPwrOn = 0xA7,
+				XPwrOff = 0xA6,
+				XLok = 0x80,
+				XFunc = 0x88,
+				XFunc2 = 0x89,
+				XFunc34 = 0x8A,
+				XTrnt = 0x90,
+				XP88Get = 0x9C,
+				XP88Set = 0x9D,
+				XStatus = 0xA2,
+				XEvent = 0xC8,
+				XEvtLok = 0xC9,
+				XEvtTrnt = 0xCA,
+				XEvtSen = 0xCB
+			};
+
+			enum Answers : unsigned char
+			{
+				OK = 0x00,
+				XBADPRM = 0x02,
+				XPWOFF = 0x06,
+				XNODATA = 0x0A,
+				XNOSLOT = 0x0B,
+				XLOWTSP = 0x40,
+				XLKHALT = 0x41,
+				XLKPOFF = 0x42
+			};
+
+			static const unsigned char MaxLocoFunctions = 28;
+			static const unsigned short MaxLocoAddress = 10239;
+			static const unsigned short MaxAccessoryAddress = 2043;
+
+			void InitOpenDcc();
+			void InitUhlenbrockTams();
+
 			bool SendP50XOnly() const;
 			bool SendRestart() const;
 			unsigned char SendXP88Get(unsigned char param) const;
@@ -134,46 +186,6 @@ namespace Hardware
 				return ret;
 			}
 
-			static const unsigned char MaxS88Modules = 128;
-
-			unsigned short s88Modules;
-			std::thread checkEventsThread;
-
-		private:
-			enum Commands : unsigned char
-			{
-				XNop = 0xC4,
-				XPwrOn = 0xA7,
-				XPwrOff = 0xA6,
-				XLok = 0x80,
-				XFunc = 0x88,
-				XFunc2 = 0x89,
-				XFunc34 = 0x8A,
-				XTrnt = 0x90,
-				XP88Get = 0x9C,
-				XP88Set = 0x9D,
-				XEvent = 0xC8,
-				XEvtLok = 0xC9,
-				XEvtTrnt = 0xCA,
-				XEvtSen = 0xCB
-			};
-
-			enum Answers : unsigned char
-			{
-				OK = 0x00,
-				XBADPRM = 0x02,
-				XPWOFF = 0x06,
-				XNODATA = 0x0A,
-				XNOSLOT = 0x0B,
-				XLOWTSP = 0x40,
-				XLKHALT = 0x41,
-				XLKPOFF = 0x42
-			};
-
-			static const unsigned char MaxLocoFunctions = 28;
-			static const unsigned short MaxLocoAddress = 10239;
-			static const unsigned short MaxAccessoryAddress = 2043;
-
 			static inline bool CheckLocoAddress(const Address address)
 			{
 				return 0 < address && address <= MaxLocoAddress;
@@ -206,10 +218,14 @@ namespace Hardware
 			void SendXEvtLok() const;
 			void SendXEvtTrn() const;
 			void SendXEvent() const;
+			void SendXStatus() const;
+
+			const HardwareParams* const params;
+			const ProtocolP50xType type;
 
 			volatile bool run;
 
-			mutable unsigned char s88Memory[MaxS88Modules];
+			mutable unsigned char s88Memory[128];
 
 			Hardware::ProtocolP50xCache cache;
 

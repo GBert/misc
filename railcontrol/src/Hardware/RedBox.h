@@ -36,7 +36,11 @@ namespace Hardware
 			RedBox(const RedBox&) = delete;
 			RedBox& operator=(const RedBox&) = delete;
 
-			RedBox(const HardwareParams* params);
+			inline RedBox(const HardwareParams* const params)
+			:	ProtocolP50xSerial(params, "RedBox", TypeTams)
+			{
+				Init();
+			}
 
 			virtual ~RedBox()
 			{

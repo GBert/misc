@@ -36,7 +36,11 @@ namespace Hardware
 			MasterControl2(const MasterControl2&) = delete;
 			MasterControl2& operator=(const MasterControl2&) = delete;
 
-			MasterControl2(const HardwareParams* params);
+			inline MasterControl2(const HardwareParams* params)
+			:	ProtocolP50xEthernet(params, "MasterControl2", TypeTams)
+			{
+				Init();
+			}
 
 			virtual ~MasterControl2()
 			{

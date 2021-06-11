@@ -36,7 +36,11 @@ namespace Hardware
 			MasterControl(const MasterControl&) = delete;
 			MasterControl& operator=(const MasterControl&) = delete;
 
-			MasterControl(const HardwareParams* params);
+			inline MasterControl(const HardwareParams* const params)
+			:	ProtocolP50xSerial(params, "MasterControl", TypeTams)
+			{
+				Init();
+			}
 
 			virtual ~MasterControl()
 			{
