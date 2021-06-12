@@ -1,11 +1,12 @@
 const int revisionnr = 
-1614
+1615
 ;
 const char* commithash = 
-"76ffaa456186fed901ec70c926cf6ff9fd377aef";
+"293f2f77b0558230db83bf170df03e0a0ca95d7b";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1615 2021-06-12 10:55:23 +0200 switch: servo range command added for andRoc\n" \
 "1614 2021-06-11 09:18:15 +0200 train D&D fixes\n" \
 "1613 2021-06-10 09:19:28 +0200 block: fix for reset fifo\n" \
 "1612 2021-06-10 07:52:06 +0200 wiopi: use ip of r2rnet response if host is not set\n" \
