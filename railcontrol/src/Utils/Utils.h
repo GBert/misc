@@ -20,12 +20,14 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
+#include <chrono>
 #include <climits>
 #include <deque>
 #include <future>
 #include <map>
 #include <string>
 #include <sys/stat.h>
+#include <thread>
 #include <vector>
 
 namespace Logger

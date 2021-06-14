@@ -2217,17 +2217,31 @@ bool Manager::RouteSave(RouteID routeID,
 	if (oldTrack != nullptr)
 	{
 		oldTrack->RemoveRoute(route);
-		if (storage == nullptr)
+		if (storage != nullptr)
 		{
 			switch (oldFromTrack.GetObjectType())
 			{
 				case ObjectTypeTrack:
-					storage->Save(*dynamic_cast<Track*>(oldTrack));
+				{
+					Track* track = dynamic_cast<Track*>(oldTrack);
+					if (track == nullptr)
+					{
+						break;
+					}
+					storage->Save(*track);
 					break;
+				}
 
 				case ObjectTypeSignal:
-					storage->Save(*dynamic_cast<Signal*>(oldTrack));
+				{
+					Signal* signal = dynamic_cast<Signal*>(oldTrack);
+					if (signal == nullptr)
+					{
+						break;
+					}
+					storage->Save(*signal);
 					break;
+				}
 
 				default:
 					break;
