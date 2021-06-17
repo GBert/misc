@@ -1,11 +1,12 @@
 const int revisionnr = 
-1615
+1616
 ;
 const char* commithash = 
-"293f2f77b0558230db83bf170df03e0a0ca95d7b";
+"ecd80e43041c7aa117a5069bc01ef75576e744c1";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1616 2021-06-16 08:28:37 +0200 switch: check for inv attribute in case of tune range command\n" \
 "1615 2021-06-12 10:55:23 +0200 switch: servo range command added for andRoc\n" \
 "1614 2021-06-11 09:18:15 +0200 train D&D fixes\n" \
 "1613 2021-06-10 09:19:28 +0200 block: fix for reset fifo\n" \
