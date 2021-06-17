@@ -93,3 +93,11 @@ Changelog
 |         |1N4148 Pads vergrössert|
 |         |R18 vergrössert von 270 auf 560 Ohm wegen LED Stärke|
 |072021   |Spannungsteilier R22/23 zur Messung der Versorgungsspannung|
+
+Backup
+------
+
+The latency for synchronous interrupts is three or four
+instruction cycles. For asynchronous interrupts, the
+latency is three to five instruction cycles, depending
+on when the interrupt occurs.

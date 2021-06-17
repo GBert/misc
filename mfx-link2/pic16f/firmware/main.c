@@ -21,8 +21,8 @@ static __code uint16_t __at(_CONFIG2) configword2 = _LVP_ON & _CLKOUTEN_OFF;
 struct serial_buffer tx_fifo, rx_fifo;
 
 union adc_value_u {
-    uint16_t c;
     uint8_t bt[2];
+    uint16_t c;
 };
 
 volatile union adc_value_u adc_value;
