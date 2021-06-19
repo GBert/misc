@@ -1,11 +1,15 @@
 const int revisionnr = 
-1616
+1620
 ;
 const char* commithash = 
-"ecd80e43041c7aa117a5069bc01ef75576e744c1";
+"1baa698b966b8648a4037e125869cd073f1520a7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1620 2021-06-19 10:07:59 +0200 wiopi: dual motor support\n" \
+"1619 2021-06-18 08:53:59 +0200 rcan,extcan: fix for programming\n" \
+"1618 2021-06-18 08:27:49 +0200 rcan,extcan: fix cv index\n" \
+"1617 2021-06-18 08:22:24 +0200 rcan,extcan: fix for PT index\n" \
 "1616 2021-06-16 08:28:37 +0200 switch: check for inv attribute in case of tune range command\n" \
 "1615 2021-06-12 10:55:23 +0200 switch: servo range command added for andRoc\n" \
 "1614 2021-06-11 09:18:15 +0200 train D&D fixes\n" \
