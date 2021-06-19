@@ -18,6 +18,8 @@ along with RailControl; see the file LICENCE. If not see
 <http://www.gnu.org/licenses/>.
 */
 
+#include <queue>
+
 #include "Hardware/ProtocolP50x.h"
 #include "Languages.h"
 #include "Utils/Utils.h"
@@ -31,6 +33,7 @@ namespace Hardware
 			params->GetControlID(),
 			controlName,
 			params->GetName()),
+		s88Modules(0),
 		params(params),
 		type(type),
 		run(false)
@@ -622,26 +625,39 @@ namespace Hardware
 
 	void ProtocolP50x::SendXStatus() const
 	{
-		std::lock_guard<std::mutex> guard(communicationLock);
-		unsigned char data[1] = { XStatus };
-		SendInternal(data, sizeof(data));
-		while (true)
+		std::queue<BoosterState> queue;
 		{
-			unsigned char input[1];
-			ssize_t ret = ReceiveExactInternal(input, sizeof(input));
-			if (ret < 1)
+			std::lock_guard<std::mutex> guard(communicationLock);
+			unsigned char data[1] = { XStatus };
+			SendInternal(data, sizeof(data));
+			unsigned char byte = 1;
+			while (true)
 			{
-				return;
-			}
+				unsigned char input;
+				ssize_t ret = ReceiveExactInternal(&input, sizeof(input));
+				if (ret < 1)
+				{
+					return;
+				}
 
-			BoosterState booster = static_cast<BoosterState>((input[0] >> 3) & 0x01);
-			manager->Booster(ControlTypeHardware, booster);
+				if (byte == 1)
+				{
+					queue.push(static_cast<BoosterState>((input >> 3) & 0x01));
+				}
 
-			if ((input[0] & 0x80) == 0x00)
-			{
-				return;
+				if ((input & 0x80) == 0x00)
+				{
+					break;
+				}
+				++byte;
 			}
 		}
+		while (!queue.empty())
+		{
+			manager->Booster(ControlTypeHardware, queue.front());
+			queue.pop();
+		}
+
 	}
 
 	void ProtocolP50x::SendXEvent() const
