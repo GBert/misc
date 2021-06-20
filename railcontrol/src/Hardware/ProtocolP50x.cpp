@@ -544,82 +544,125 @@ namespace Hardware
 
 	void ProtocolP50x::SendXEvtLok() const
 	{
-		std::lock_guard<std::mutex> guard(communicationLock);
-		unsigned char data[1] = { XEvtLok };
-		SendInternal(data, sizeof(data));
-		while (true)
+		std::queue<struct LocoCommand> commandQueue;
+		std::queue<struct LocoFunction> functionQueue;
 		{
-			unsigned char input[5];
-			ssize_t ret = ReceiveExactInternal(input, sizeof(input));
-			if (ret < 1 || input[0] == 0x80)
+			std::lock_guard<std::mutex> guard(communicationLock);
+			unsigned char data[1] = { XEvtLok };
+			SendInternal(data, sizeof(data));
+			while (true)
 			{
-				return;
-			}
+				unsigned char input[5];
+				ssize_t ret = ReceiveExactInternal(input, 1);
+				if (ret < 1 || input[0] == 0x80)
+				{
+					break;
+				}
 
-			Address address = (input[3] & 0x3F);
-			address <<= 8;
-			address += input[2];
+				ret = ReceiveExactInternal(input + 1, sizeof(input) - 1);
+				if (ret < 1)
+				{
+					break;
+				}
 
-			Speed speed = input[0];
-			if (speed == 1)
-			{
-				speed = 0;
-			}
-			else if (speed > 1)
-			{
-				--speed;
-			}
-			speed <<= 3;
-			manager->LocoSpeed(ControlTypeHardware, controlID, ProtocolServer, address, speed);
+				struct LocoCommand command;
+				command.address = (input[3] & 0x3F);
+				command.address <<= 8;
+				command.address += input[2];
 
-			Orientation orientation = static_cast<Orientation>(input[3] >> 7);
-			manager->LocoOrientation(ControlTypeHardware, controlID, ProtocolServer, address, orientation);
+				command.speed = input[0];
+				if (command.speed == 1)
+				{
+					command.speed = 0;
+				}
+				else if (command.speed > 1)
+				{
+					--command.speed;
+				}
+				command.speed <<= 3;
 
-			uint16_t functions = input[1];
-			functions <<= 1;
-			functions += (input[3] >> 6) & 0x01;
-			for (DataModel::LocoFunctionNr nr = 0; nr <= 8; ++nr)
-			{
-				DataModel::LocoFunctionState state = static_cast<DataModel::LocoFunctionState>((functions >> nr) & 0x01);
-				manager->LocoFunctionState(ControlTypeHardware, controlID, ProtocolServer, address, nr, state);
+				command.orientation = static_cast<Orientation>(input[3] >> 7);
+
+				commandQueue.push(command);
+
+				struct LocoFunction function;
+				function.address = command.address;
+
+				uint16_t functions = input[1];
+				functions <<= 1;
+				functions += (input[3] >> 6) & 0x01;
+
+				for (DataModel::LocoFunctionNr nr = 0; nr <= 8; ++nr)
+				{
+					function.nr = nr;
+					function.state = static_cast<DataModel::LocoFunctionState>((functions >> nr) & 0x01);
+					functionQueue.push(function);
+				}
 			}
+		}
+
+		while(commandQueue.size())
+		{
+			struct LocoCommand command = commandQueue.front();
+			commandQueue.pop();
+			manager->LocoSpeed(ControlTypeHardware, controlID, ProtocolServer, command.address, command.speed);
+			manager->LocoOrientation(ControlTypeHardware, controlID, ProtocolServer, command.address, command.orientation);
+		}
+
+		while(functionQueue.size())
+		{
+			struct LocoFunction function = functionQueue.front();
+			functionQueue.pop();
+			manager->LocoFunctionState(ControlTypeHardware, controlID, ProtocolServer, function.address, function.nr, function.state);
 		}
 	}
 
 	void ProtocolP50x::SendXEvtTrn() const
 	{
-		std::lock_guard<std::mutex> guard(communicationLock);
-		unsigned char data[1] = { XEvtTrnt };
-		SendInternal(data, sizeof(data));
-		unsigned char number;
-		ssize_t ret = ReceiveExactInternal(&number, 1);
-		if (ret < 1)
+		std::queue<struct TurnoutCommand> commandQueue;
 		{
-			return;
-		}
-		while (number)
-		{
-			unsigned char input[2];
-			ssize_t ret = ReceiveExactInternal(input, sizeof(input));
-			if (ret != 2)
+			std::lock_guard<std::mutex> guard(communicationLock);
+			unsigned char data[1] = { XEvtTrnt };
+			SendInternal(data, sizeof(data));
+			unsigned char number;
+			ssize_t ret = ReceiveExactInternal(&number, 1);
+			if (ret < 1)
 			{
 				return;
 			}
-
-			bool on = static_cast<bool>((input[1] >> 6) & 0x01);
-			if (!on)
+			while (number)
 			{
-				continue;
+				unsigned char input[2];
+				ssize_t ret = ReceiveExactInternal(input, sizeof(input));
+				if (ret != sizeof(input))
+				{
+					break;
+				}
+
+				--number;
+
+				bool on = static_cast<bool>((input[1] >> 6) & 0x01);
+				if (!on)
+				{
+					continue;
+				}
+
+				struct TurnoutCommand command;
+				command.address = (input[1] & 0x07);
+				command.address <<= 8;
+				command.address += input[0];
+
+				command.state = static_cast<DataModel::AccessoryState>((input[1] >> 7) & 0x01);
+
+				commandQueue.push(command);
 			}
+		}
 
-			Address address = (input[1] & 0x07);
-			address <<= 8;
-			address += input[0];
-
-			DataModel::AccessoryState state = static_cast<DataModel::AccessoryState>((input[1] >> 7) & 0x01);
-
-			manager->AccessoryState(ControlTypeHardware, controlID, ProtocolServer, address, state);
-			--number;
+		while(commandQueue.size())
+		{
+			struct TurnoutCommand command = commandQueue.front();
+			commandQueue.pop();
+			manager->AccessoryState(ControlTypeHardware, controlID, ProtocolServer, command.address, command.state);
 		}
 	}
 
@@ -652,12 +695,12 @@ namespace Hardware
 				++byte;
 			}
 		}
-		while (!queue.empty())
+
+		while (queue.size())
 		{
 			manager->Booster(ControlTypeHardware, queue.front());
 			queue.pop();
 		}
-
 	}
 
 	void ProtocolP50x::SendXEvent() const

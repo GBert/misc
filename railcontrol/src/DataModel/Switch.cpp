@@ -32,10 +32,10 @@ namespace DataModel
 	std::string Switch::Serialize() const
 	{
 		string str = "objectType=Switch;";
-		str += ";";
 		str += AccessoryBase::Serialize();
 		str += ";";
 		str += LayoutItem::Serialize();
+		str += ";";
 		str += LockableItem::Serialize();
 		return str;
 	}
@@ -53,8 +53,7 @@ namespace DataModel
 		AccessoryBase::Deserialize(arguments);
 		LayoutItem::Deserialize(arguments);
 		LockableItem::Deserialize(arguments);
-		SetWidth(Width1);
-		SetHeight(Height1);
+		SetSizeFromType();
 		SetVisible(VisibleYes);
 		return true;
 	}
@@ -85,6 +84,19 @@ namespace DataModel
 				break;
 		}
 		return out;
+	}
+
+	DataModel::LayoutItem::LayoutItemSize Switch::CalculateHeightFromType(AccessoryType type)
+	{
+		switch (type)
+		{
+			case SwitchTypeMaerklinLeft:
+			case SwitchTypeMaerklinRight:
+				return 2;
+
+			default:
+				return Height1;
+		}
 	}
 } // namespace DataModel
 

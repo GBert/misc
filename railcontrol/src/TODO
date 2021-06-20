@@ -7,7 +7,6 @@
 - Fahrstrassen mit unverschlossenen Objekten
 - Aktionen ausführen bei Feedback an/aus
 - Masseträgheit von Zügen simulieren
-- Märklin DKW
 - Bahnübergänge
 - Automatisches Umfahren des Zuges an der Endstation
 - Trotz freier Fahrt anhalten an Bahnsteigen
@@ -15,6 +14,9 @@
 - Fahren nach Fahrplan bzw. Vorgabe des Zielortes
 - Formulare als POST-Request senden um maximale URL-Länge zu umgehen
 - Synchronisieren der ECoS / CS2 Lok-Datenbank
-- Anbinden des SPROG DCC
-- Anbinden der Zimo-Zentralen
+- Anbinden von SPROG DCC
+- Anbinden von Zimo-Zentralen
 - Anbinden von LocoNet-Zentralen
+- Anbinden von BidiB-Zentralen
+- Anbinden von uCon-Zentralen
+- Fixen der Anbindung von ESU-Zentralen

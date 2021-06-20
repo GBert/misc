@@ -138,6 +138,26 @@ namespace Hardware
 				XLKPOFF = 0x42
 			};
 
+			struct LocoCommand
+			{
+					Address address;
+					Speed speed;
+					Orientation orientation;
+			};
+
+			struct LocoFunction
+			{
+					Address address;
+					DataModel::LocoFunctionNr nr;
+					DataModel::LocoFunctionState state;
+			};
+
+			struct TurnoutCommand
+			{
+					Address address;
+					DataModel::AccessoryState state;
+			};
+
 			static const unsigned char MaxLocoFunctions = 28;
 			static const unsigned short MaxLocoAddress = 10239;
 			static const unsigned short MaxAccessoryAddress = 2043;

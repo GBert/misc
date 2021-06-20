@@ -65,7 +65,23 @@ namespace DataModel
 
 			void SetAccessoryState(const AccessoryState state);
 
+			virtual inline void SetType(AccessoryType type) override
+			{
+				AccessoryBase::SetType(type);
+				SetSizeFromType();
+			}
+
 			std::map<DataModel::AccessoryState,Languages::TextSelector> GetStateOptions() const;
+
+			static DataModel::LayoutItem::LayoutItemSize CalculateHeightFromType(AccessoryType type);
+
+		private:
+			inline void SetSizeFromType()
+			{
+				SetWidth(Width1);
+				SetHeight(CalculateHeightFromType(GetType()));
+			}
+
 	};
 
 } // namespace DataModel

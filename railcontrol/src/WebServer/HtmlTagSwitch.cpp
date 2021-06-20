@@ -65,6 +65,28 @@ namespace WebServer
 				AddOnClickMenuEntry(Languages::TextSwitchStateRight, "fireRequestAndForget('/?cmd=switchstate&switch=" + idText + "&state=third');", "menu_third");
 				break;
 
+			case DataModel::SwitchTypeMaerklinLeft:
+				image += "<polygon points=\"0,15 9,24 9,30 0,21\" fill=\"white\" />"
+					"<polygon points=\"15,0 21,0 21,24 15,18\" fill=\"white\" />"
+					"<polygon points=\"27,42 36,51 36,57 27,48\" fill=\"white\" />"
+					"<polygon points=\"15,48 21,54 21,72 15,72\" fill=\"white\" />"
+					"<polygon points=\"3,24 9,30 9,42 15,48 15,54 3,42\" fill=\"gray\" class=\"turnout\" />"
+					"<polygon points=\"21,18 33,30 33,48 27,42 27,30 21,24\" fill=\"gray\" class=\"turnout\" />"
+					"<polygon points=\"9,24 15,30 15,18 21,24 21,36 27,42 27,48 21,42 21,54 15,48 15,36 9,30\" fill=\"gray\" class=\"straight\" />";
+				imageDiv.AddAttribute("onclick", "return onClickSwitch(event, " + idText + ");");
+				break;
+
+			case DataModel::SwitchTypeMaerklinRight:
+				image += "<polygon points=\"0,51 9,42 9,48 0,57\" fill=\"white\" />"
+					"<polygon points=\"15,0 21,0 21,18 15,24\" fill=\"white\" />"
+					"<polygon points=\"27,24 36,15 36,21 27,30\" fill=\"white\" />"
+					"<polygon points=\"15,54 21,48 21,72 15,72\" fill=\"white\" />"
+					"<polygon points=\"3,48 3,30 15,18 15,24 9,30 9,42\" fill=\"gray\" class=\"turnout\" />"
+					"<polygon points=\"21,48 27,42 27,30 33,24 33,42 21,54\" fill=\"gray\" class=\"turnout\" />"
+					"<polygon points=\"9,42 15,36 15,24 21,18 21,30 27,24 27,30 21,36 21,48 15,54 15,42 9,48\" fill=\"gray\" class=\"straight\" />";
+				imageDiv.AddAttribute("onclick", "return onClickSwitch(event, " + idText + ");");
+				break;
+
 			default:
 				break;
 		}

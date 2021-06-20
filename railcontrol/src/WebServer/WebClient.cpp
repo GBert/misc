@@ -2123,6 +2123,8 @@ namespace WebServer
 		typeOptions[DataModel::SwitchTypeLeft] = Languages::TextLeft;
 		typeOptions[DataModel::SwitchTypeRight] = Languages::TextRight;
 		typeOptions[DataModel::SwitchTypeThreeWay] = Languages::TextThreeWay;
+		typeOptions[DataModel::SwitchTypeMaerklinLeft] = Languages::TextMaerklinLeft;
+		typeOptions[DataModel::SwitchTypeMaerklinRight] = Languages::TextMaerklinRight;
 
 		content.AddChildTag(HtmlTag("h1").AddContent(name).AddId("popup_title"));
 		HtmlTag tabMenu("div");

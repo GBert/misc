@@ -1970,7 +1970,7 @@ bool Manager::SwitchSave(SwitchID switchID,
 	}
 
 	Switch* mySwitch = GetSwitch(switchID);
-	if (!CheckLayoutItemPosition(mySwitch, posX, posY, posZ, result))
+	if (!CheckLayoutItemPosition(mySwitch, posX, posY, posZ, LayoutItem::Width1, Switch::CalculateHeightFromType(type), rotation, result))
 	{
 		return false;
 	}
@@ -2018,7 +2018,7 @@ bool Manager::SwitchPosition(const SwitchID switchID,
 		return false;
 	}
 
-	if (!CheckLayoutItemPosition(mySwitch, posX, posY, mySwitch->GetPosZ(), result))
+	if (!CheckLayoutItemPosition(mySwitch, posX, posY, mySwitch->GetPosZ(), LayoutItem::Width1, mySwitch->GetHeight(), mySwitch->GetRotation(), result))
 	{
 		return false;
 	}
@@ -2037,6 +2037,13 @@ bool Manager::SwitchRotate(const SwitchID switchID,
 	if (mySwitch == nullptr)
 	{
 		result = Languages::GetText(Languages::TextSwitchDoesNotExist);
+		return false;
+	}
+
+	LayoutRotation newRotation = mySwitch->GetRotation();
+	++newRotation;
+	if (!CheckLayoutItemPosition(mySwitch, mySwitch->GetPosX(), mySwitch->GetPosY(), mySwitch->GetPosZ(), LayoutItem::Width1, mySwitch->GetHeight(), newRotation, result))
+	{
 		return false;
 	}
 

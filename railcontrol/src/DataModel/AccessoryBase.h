@@ -43,7 +43,9 @@ namespace DataModel
 
 		SwitchTypeLeft = 0,
 		SwitchTypeRight = 1,
-		SwitchTypeThreeWay = 2
+		SwitchTypeThreeWay = 2,
+		SwitchTypeMaerklinLeft = 3,
+		SwitchTypeMaerklinRight = 4
 	};
 
 	enum AccessoryState : unsigned char
