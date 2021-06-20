@@ -28,7 +28,6 @@ union adc_value_u {
 volatile union adc_value_u adc_value;
 
 volatile uint8_t adc_channel;
-volatile uint8_t rail_data;
 volatile uint8_t timer0_counter;
 
 volatile uint16_t adc_poti;
@@ -43,15 +42,18 @@ volatile uint16_t adc_sense_right_average;
 volatile uint16_t adc_sense_left_count;
 volatile uint16_t adc_sense_right_count;
 
+volatile uint16_t bias;
+volatile uint8_t bias_cont;
+
+
 void isr(void) __interrupt(0) {
-    LATBbits.LATB7 = 1;
+    // LATBbits.LATB7 = 1;
     if (INTCONbits.IOCIF) {
 	TMR2 = 0;
 	// according to 40001729C.pdf it is needed to set post and pre scaler if TMR2 is modified
 	T2CON = 0x3f; // FOSC/4 Postscaler 1:8 Prescaler 1:64 -> 1/8 * 8 * 64 * 256 = 16384us
 	// enable H-Bridge
 	LATBbits.LATB4 = 1;
-	rail_data = 1;
 	if ((adc_channel < 2) && (T4CONbits.TMR4ON == 0)) {
 	    //LATBbits.RB7 = 0;
 	    //LATBbits.RB7 = 1;
@@ -66,7 +68,6 @@ void isr(void) __interrupt(0) {
 	// we got a 16ms timeout
 	// disable H-Bridge
 	LATBbits.LATB4 = 0;
-	rail_data = 0;
 	// left and right leg are off
 	adc_sense_left_average = 0;
 	adc_sense_right_average = 0;
@@ -127,7 +128,7 @@ void isr(void) __interrupt(0) {
 	}
 	adc_channel++;
 	if (adc_channel > 4) {	// only channel 0 - 4
-	   if (rail_data)
+	   if (LATBbits.LATB4)
 		adc_channel = 0;
 	   else
 		adc_channel = 2;
@@ -142,6 +143,9 @@ void isr(void) __interrupt(0) {
 	PIR1bits.ADIF = 0;
     }
     if (INTCONbits.TMR0IF && INTCONbits.TMR0IE) {
+	__asm__ ("MOVLW 0x80");
+	__asm__ ("BANKSEL PORTB");
+	__asm__ ("XORWF PORTB");
 	TMR0 = TIMER0_VAL;
 	timer0_counter++;
 	INTCONbits.TMR0IF = 0;
@@ -178,7 +182,7 @@ void isr(void) __interrupt(0) {
 	// ADC will start automatically after Timer4 match
 	ADCON2 = 0b11000000;
     }
-    LATBbits.LATB7 = 0;
+    //LATBbits.LATB7 = 0;
 }
 
 /* RA4 SDA I2C
@@ -301,10 +305,10 @@ void uart_init(void) {
 }
 
 void timer0_init(void) {
-    OPTION_REGbits.TMR0CS = 0;	// FOSC / 4
-    OPTION_REGbits.PSA = 0;	// use prescaler
-    OPTION_REGbits.PS1 = 1;	// prescaler 1:8
-    TMR0 = TIMER0_VAL;
+    OPTION_REG = 0b11010110;
+    //             1101---- don't care about T0CKI use FOSC/4
+    //             ----0--- use prescaler
+    //		   -----110 prescaler 1:128
     INTCONbits.TMR0IE = 1;
 }
 
@@ -378,7 +382,6 @@ char nibble_to_hex(uint8_t c) {
 }
 
 void main(void) {
-    uint8_t counter = 0;
     uint8_t temp1l_left, temp1h_left, temp1l_right, temp1h_right, temp2;
     uint16_t leg_left, leg_right;
     //uint16_t ad_value;
@@ -398,18 +401,19 @@ void main(void) {
     rx_fifo.head = 0;
     rx_fifo.tail = 0;
 
-    rail_data = 0;
     adc_channel = 0;
     INTCONbits.GIE = 1;
     LCD_init(LCD_01_ADDRESS);
+    bias = 0;
 
     while (1) {
-	if (counter == 0) {
+	if (timer0_counter >= 125) {
 	    /* 14mA per digit / atomic read */
 	    INTCONbits.GIE = 0;
 	    leg_left = adc_sense_left_average;
 	    leg_right = adc_sense_right_average;
 	    temp2 = adc_poti;
+	    timer0_counter = 0;
 	    //temp2 = adc_temperature >> 2;
 	    INTCONbits.GIE = 1;
 
@@ -435,15 +439,15 @@ void main(void) {
 	    LCD_putch(LCD_01_ADDRESS, 0x20);
 	    LCD_putch(LCD_01_ADDRESS, nibble_to_hex(temp2 >> 4));
 	    LCD_putch(LCD_01_ADDRESS, nibble_to_hex(temp2));
-	    if (rail_data)
+	    if (LATBbits.LATB4)
 		LCD_puts(LCD_01_ADDRESS, " 0.0%\0");
 	    else
 		LCD_puts(LCD_01_ADDRESS, " Off\0");
 	    putchar_wait(0x55);
-	    LATCbits.LATC5 ^= 1;
+	    // LATCbits.LATC5 ^= 1;
+	    __asm__ ("MOVLW 0x20");
+	    __asm__ ("BANKSEL PORTC");
+	    __asm__ ("XORWF PORTC");
 	}
-	delay_ms(2);
-
-	counter++;
     }
 }

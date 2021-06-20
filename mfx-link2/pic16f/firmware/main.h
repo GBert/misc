@@ -49,7 +49,7 @@
 #define SERIAL_BUFFER_SIZE      32
 #define SERIAL_BUFFER_SIZE_MASK (SERIAL_BUFFER_SIZE -1)
 
-// timer interval in microseconds
+// timer interval in 32 microseconds steps
 #define INTERVAL        250
 #define TIMER0_VAL      (255 - (INTERVAL-1))
 
