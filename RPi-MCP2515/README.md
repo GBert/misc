@@ -49,7 +49,6 @@ Nutzung MS2 Kabel E146781
 |braun	  |    CANL|	
 |orange   |    CANH|	
 |rot      | 18V Vcc|
-```
 
 Nutzung
 -------
