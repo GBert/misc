@@ -38,7 +38,16 @@ Die CAN-Anbindung erfolgt bei der Nutzung des ISO1050 über P7 mit VCOM (7-24V),
 
 Wird ein galv. getrennter DCDC Konverter verwendet so sind nur GND, CANL und CANH zu verbinden. 
 
-Sollte ein MCP2562 eingesetzt werden erfolgt die Anbindung über P3. 
+Sollte ein MCP2562 eingesetzt werden erfolgt die Anbindung über P3.
+
+Nutzung MS2 Kabel E146781
+-------------------------
+```
+schwarz	GND	
+braun	CANL	
+orange	CANH	
+rot	18V Vcc
+```
 
 Nutzung
 -------
