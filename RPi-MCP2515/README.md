@@ -42,11 +42,13 @@ Sollte ein MCP2562 eingesetzt werden erfolgt die Anbindung über P3.
 
 Nutzung MS2 Kabel E146781
 -------------------------
-```
-schwarz	GND	
-braun	CANL	
-orange	CANH	
-rot	18V Vcc
+
+|Farbe	  |Funktion|
+|---------|--------|
+|schwarz  |	GND|	
+|braun	  |    CANL|	
+|orange   |    CANH|	
+|rot      | 18V Vcc|
 ```
 
 Nutzung
