@@ -314,15 +314,28 @@ void Manager::Booster(const ControlType controlType, const BoosterState state)
 void Manager::InitLocos()
 {
 	Utils::Utils::SleepForSeconds(1);
-	std::lock_guard<std::mutex> guard(locoMutex);
-	for (auto& loco : locos)
+	map<string,LocoID> locoIds = LocoIdsByName();
+	for (auto locoId : locoIds)
 	{
-		std::lock_guard<std::mutex> guard(controlMutex);
-		for (auto& control : controls)
+		if (!run)
 		{
-			std::vector<DataModel::LocoFunctionEntry> functions = loco.second->GetFunctionStates();
-			control.second->LocoSpeedOrientationFunctions(loco.second, loco.second->GetSpeed(), loco.second->GetOrientation(), functions);
+			return;
 		}
+		Loco* loco = GetLoco(locoId.second);
+		if (!loco)
+		{
+			continue;
+		}
+		{
+			std::lock_guard<std::mutex> guard(controlMutex);
+			for (auto& control : controls)
+			{
+				std::vector<DataModel::LocoFunctionEntry> functions = loco->GetFunctionStates();
+				control.second->LocoSpeedOrientationFunctions(loco, loco->GetSpeed(), loco->GetOrientation(),
+				    functions);
+			}
+		}
+		Utils::Utils::SleepForMilliseconds(10);
 	}
 }
 

@@ -1666,7 +1666,8 @@ function fireRequestAndForget(url)
 	xmlHttp.send(null);
 }
 
-function selectHasValue(selectId, value) {
+function selectHasValue(selectId, value)
+{
 	obj = document.getElementById(selectId);
 	if (!obj)
 	{
@@ -1675,20 +1676,38 @@ function selectHasValue(selectId, value) {
 	return (obj.innerHTML.indexOf('value="' + value + '"') >= 0);
 }
 
+function checkAvailability()
+{
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onerror = function()
+	{
+		setTimeout(function() { checkAvailability(); }, 3000);
+	}
+	xmlHttp.onload = function()
+	{
+		setTimeout(function() { location.reload(); }, 3000);
+	}
+	xmlHttp.open('GET', '/', true);
+	xmlHttp.send(null);
+}
+
 var noSleep = new NoSleep();
-document.addEventListener('click', function enableNoSleep() {
+document.addEventListener('click', function enableNoSleep()
+{
 	document.removeEventListener('click', enableNoSleep, false);
 	noSleep.enable();
 }, false);
 
 var updater = new EventSource('/?cmd=updater');
-updater.onmessage = function(event) {
+updater.onmessage = function(event)
+{
 	dataUpdate(event);
 };
-updater.onerror = function(event) {
-	setTimeout(function() {
-		location.reload();
-	}, 1000);
+updater.onerror = function()
+{
+	var body = document.getElementById("body");
+	body.innerHTML = '<h1>RailControl shut down</h2><p>Please start RailControl server again.</p><hr><h1>RailControl wurde heruntergefahren</h1><p>Bitte starte den RailControl server wieder.</p><hr><h1>RailControl se ha apagado</h2><p>Por favor reinicie el servidor RailControl otra vez.</p>';
+	checkAvailability();
 };
 
 window.layoutPosX = 0;
