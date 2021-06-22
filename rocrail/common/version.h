@@ -1,11 +1,12 @@
 const int revisionnr = 
-1620
+1621
 ;
 const char* commithash = 
-"1baa698b966b8648a4037e125869cd073f1520a7";
+"843a2b9deeb47a7221eced94df6be049fa921cba";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1621 2021-06-20 07:57:22 +0200 loconet: trace level correction\n" \
 "1620 2021-06-19 10:07:59 +0200 wiopi: dual motor support\n" \
 "1619 2021-06-18 08:53:59 +0200 rcan,extcan: fix for programming\n" \
 "1618 2021-06-18 08:27:49 +0200 rcan,extcan: fix cv index\n" \
