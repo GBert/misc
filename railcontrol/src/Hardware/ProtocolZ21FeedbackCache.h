@@ -20,21 +20,43 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
-#include "Hardware/ProtocolZ21.h"
-
 namespace Hardware
 {
-	class Z21 : ProtocolZ21
+	class ProtocolZ21FeedbackCache
 	{
 		public:
-			Z21() = delete;
-			Z21(const Z21&) = delete;
-			Z21& operator=(const Z21&) = delete;
+			ProtocolZ21FeedbackCache(const ProtocolZ21FeedbackCache&) = delete;
+			ProtocolZ21FeedbackCache& operator=(const ProtocolZ21FeedbackCache&) = delete;
 
-			Z21(const HardwareParams* params)
-			:	ProtocolZ21(params, "Z21")
+			inline ProtocolZ21FeedbackCache()
 			{
+				for (unsigned char module = 0; module < MaxModules; ++module)
+				{
+					cache[module] = 0;
+				}
 			}
+
+			inline void Set(const unsigned char module, const unsigned char data)
+			{
+				if (module >= MaxModules)
+				{
+					return;
+				}
+				cache[module] = data;
+			}
+
+			inline unsigned char Get(unsigned char module)
+			{
+				if (module >= MaxModules)
+				{
+					return 0;
+				}
+				return cache[module];
+			}
+
+		private:
+			static const unsigned char MaxModules = 20;
+			unsigned char cache[MaxModules];
 	};
 } // namespace
 

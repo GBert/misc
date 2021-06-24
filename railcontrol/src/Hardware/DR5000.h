@@ -20,48 +20,21 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
-#include <map>
-
-#include "DataTypes.h"
+#include "Hardware/ProtocolZ21.h"
 
 namespace Hardware
 {
-	class Z21TurnoutCacheEntry
+	class DR5000 : ProtocolZ21
 	{
 		public:
-			Z21TurnoutCacheEntry()
-			:	protocol(ProtocolNone)
+			DR5000() = delete;
+			DR5000(const DR5000&) = delete;
+			DR5000& operator=(const DR5000&) = delete;
+
+			DR5000(const HardwareParams* params)
+			:	ProtocolZ21(params, "DR5000")
 			{
 			}
-
-			Z21TurnoutCacheEntry(const Protocol protocol)
-			:	protocol(protocol)
-			{
-			}
-
-			Protocol protocol;
-	};
-
-	class Z21TurnoutCache
-	{
-		public:
-			void SetProtocol(const Address address, const Protocol protocol)
-			{
-				Z21TurnoutCacheEntry entry(protocol);
-				cache[address] = entry;
-			}
-
-			Protocol GetProtocol(const Address address)
-			{
-				if (cache.count(address) == 0)
-				{
-					return ProtocolDCC;
-				}
-				return cache[address].protocol;
-			}
-
-		private:
-			std::map<Address, Z21TurnoutCacheEntry> cache;
 	};
 } // namespace
 

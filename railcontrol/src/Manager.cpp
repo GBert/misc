@@ -331,8 +331,7 @@ void Manager::InitLocos()
 			for (auto& control : controls)
 			{
 				std::vector<DataModel::LocoFunctionEntry> functions = loco->GetFunctionStates();
-				control.second->LocoSpeedOrientationFunctions(loco, loco->GetSpeed(), loco->GetOrientation(),
-				    functions);
+				control.second->LocoSpeedOrientationFunctions(loco, loco->GetSpeed(), loco->GetOrientation(), functions);
 			}
 		}
 		Utils::Utils::SleepForMilliseconds(10);

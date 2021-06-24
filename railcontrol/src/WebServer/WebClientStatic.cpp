@@ -121,10 +121,11 @@ namespace WebServer
 	{
 		std::map<string,HardwareType> hardwareList;
 		hardwareList["CC-Schnitte"] = HardwareTypeCcSchnitte;
-		hardwareList["Digikeijs DR5000"] = HardwareTypeZ21;
+		hardwareList["Digikeijs DR5000"] = HardwareTypeDR5000;
 		hardwareList["ESU Ecos &amp; Märklin CS1"] = HardwareTypeEcos;
 		hardwareList["Fleischmann TwinCenter"] = HardwareTypeTwinCenter;
 		hardwareList["LDT HSI-88 RS-232"] = HardwareTypeHsi88;
+		hardwareList["LokStoreDigital LoDi-Rektor (beta)"] = HardwareTypeRektor;
 		hardwareList["Märklin Central Station 1 (CS1)"] = HardwareTypeEcos;
 		hardwareList["Märklin Central Station 2/3 (CS2/CS3) TCP"] = HardwareTypeCS2Tcp;
 		hardwareList["Märklin Central Station 2/3 (CS2/CS3) UDP"] = HardwareTypeCS2Udp;

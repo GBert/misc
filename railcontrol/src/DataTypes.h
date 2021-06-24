@@ -176,7 +176,9 @@ enum HardwareType : uint8_t
 	HardwareTypeMasterControl = 12,
 	HardwareTypeTwinCenter = 13,
 	HardwareTypeMasterControl2 = 14,
-	HardwareTypeRedBox = 15
+	HardwareTypeRedBox = 15,
+	HardwareTypeRektor = 16,
+	HardwareTypeDR5000 = 17
 };
 
 enum Automode : bool

@@ -25,6 +25,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "Hardware/CS2Udp.h"
 #include "Hardware/CS2Tcp.h"
 #include "Hardware/CcSchnitte.h"
+#include "Hardware/DR5000.h"
 #include "Hardware/Ecos.h"
 #include "Hardware/HardwareHandler.h"
 #include "Hardware/Hsi88.h"
@@ -34,6 +35,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "Hardware/MasterControl2.h"
 #include "Hardware/OpenDcc.h"
 #include "Hardware/RedBox.h"
+#include "Hardware/Rektor.h"
 #include "Hardware/RM485.h"
 #include "Hardware/TwinCenter.h"
 #include "Hardware/Virtual.h"
@@ -116,6 +118,14 @@ namespace Hardware
 			case HardwareTypeRedBox:
 				instance = reinterpret_cast<Hardware::HardwareInterface*>(new RedBox(params));
 				break;
+
+			case HardwareTypeRektor:
+				instance = reinterpret_cast<Hardware::HardwareInterface*>(new Rektor(params));
+				return;
+
+			case HardwareTypeDR5000:
+				instance = reinterpret_cast<Hardware::HardwareInterface*>(new DR5000(params));
+				return;
 		}
 	}
 
@@ -520,8 +530,10 @@ namespace Hardware
 				Hardware::Hsi88::GetArgumentTypesAndHint(arguments, hint);
 				return;
 
+			case HardwareTypeDR5000:
+			case HardwareTypeRektor:
 			case HardwareTypeZ21:
-				Hardware::Z21::GetArgumentTypesAndHint(arguments, hint);
+				Hardware::ProtocolZ21::GetArgumentTypesAndHint(arguments, hint);
 				return;
 
 			case HardwareTypeCcSchnitte:

@@ -26,22 +26,24 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace Hardware
 {
-	class Z21LocoCacheEntry
+	class ProtocolZ21LocoCacheEntry
 	{
 		public:
-			Z21LocoCacheEntry()
+			ProtocolZ21LocoCacheEntry()
 			:	speed(MinSpeed),
 			 	orientation(OrientationRight),
 			 	functions(0),
 			 	protocol(ProtocolNone)
-			{}
+			{
+			}
 
-			Z21LocoCacheEntry(const Speed speed, const Orientation orientation, const Protocol protocol)
+			ProtocolZ21LocoCacheEntry(const Speed speed, const Orientation orientation, const Protocol protocol)
 			:	speed(speed),
 			 	orientation(orientation),
 			 	functions(0),
 			 	protocol(protocol)
-			{}
+			{
+			}
 
 			Speed speed;
 			Orientation orientation;
@@ -49,22 +51,24 @@ namespace Hardware
 			Protocol protocol;
 	};
 
-	class Z21LocoCache
+	class ProtocolZ21LocoCache
 	{
 		public:
-			Z21LocoCacheEntry GetData(const Address address)
+			ProtocolZ21LocoCache& operator=(const ProtocolZ21LocoCache&) = delete;
+
+			ProtocolZ21LocoCacheEntry GetData(const Address address)
 			{
 				if (cache.count(address) == 1)
 				{
 					return cache[address];
 				}
-				Z21LocoCacheEntry entry;
+				ProtocolZ21LocoCacheEntry entry;
 				return entry;
 			}
 
 			void SetSpeed(const Address address, const Speed speed)
 			{
-				Z21LocoCacheEntry entry = GetData(address);
+				ProtocolZ21LocoCacheEntry entry = GetData(address);
 				entry.speed = speed;
 				cache[address] = entry;
 			}
@@ -80,7 +84,7 @@ namespace Hardware
 
 			void SetOrientation(const Address address, const Orientation orientation)
 			{
-				Z21LocoCacheEntry entry = GetData(address);
+				ProtocolZ21LocoCacheEntry entry = GetData(address);
 				entry.orientation = orientation;
 				cache[address] = entry;
 			}
@@ -96,7 +100,7 @@ namespace Hardware
 
 			void SetSpeedOrientationProtocol(const Address address, const Speed speed, const Orientation orientation, const Protocol protocol)
 			{
-				Z21LocoCacheEntry entry(speed, orientation, protocol);
+				ProtocolZ21LocoCacheEntry entry(speed, orientation, protocol);
 				cache[address] = entry;
 			}
 
@@ -104,7 +108,7 @@ namespace Hardware
 				const DataModel::LocoFunctionNr function,
 				const bool on)
 			{
-				Z21LocoCacheEntry entry = GetData(address);
+				ProtocolZ21LocoCacheEntry entry = GetData(address);
 				uint32_t mask = ~(1 << function);
 				entry.functions &= mask;
 				entry.functions |= on << function;
@@ -122,7 +126,7 @@ namespace Hardware
 
 			void SetProtocol(const Address address, const Protocol protocol)
 			{
-				Z21LocoCacheEntry entry = GetData(address);
+				ProtocolZ21LocoCacheEntry entry = GetData(address);
 				entry.protocol = protocol;
 				cache[address] = entry;
 			}
@@ -137,7 +141,7 @@ namespace Hardware
 			}
 
 		private:
-			std::map<Address, Z21LocoCacheEntry> cache;
+			std::map<Address, ProtocolZ21LocoCacheEntry> cache;
 	};
 } // namespace
 
