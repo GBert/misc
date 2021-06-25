@@ -7,7 +7,7 @@ LIBS=-lpthread -ldl
 
 TMPDIR=RailControl
 
-CXXOBJ= $(patsubst %.cpp,%.o,$(sort $(wildcard *.cpp)) $(wildcard WebServer/*.cpp DataModel/*.cpp Hardware/*.cpp Logger/*.cpp Network/*.cpp Storage/*.cpp Utils/*.cpp))
+CXXOBJ= $(patsubst %.cpp,%.o,$(sort $(wildcard *.cpp)) $(wildcard WebServer/*.cpp DataModel/*.cpp Hardware/*.cpp Hardware/Protocols/*.cpp Logger/*.cpp Network/*.cpp Storage/*.cpp Utils/*.cpp))
 COBJ= $(patsubst %.c,%.o,$(wildcard Hardware/zlib/*.c))
 OBJ=Storage/sqlite/sqlite3.o $(CXXOBJ) $(COBJ)
 
