@@ -31,7 +31,7 @@ along with RailControl; see the file LICENCE. If not see
 namespace Hardware
 {
 	CcSchnitte::CcSchnitte(const HardwareParams* params)
-	:	ProtocolMaerklinCAN(params,
+	:	MaerklinCAN(params,
 			"CC-Schnitte / " + params->GetName() + " at serial port " + params->GetArg1(),
 			params->GetName()),
 	 	serialLine(logger, params->GetArg1(), B500000, 8, 'N', 1, true)

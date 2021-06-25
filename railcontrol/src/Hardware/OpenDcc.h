@@ -23,14 +23,14 @@ along with RailControl; see the file LICENCE. If not see
 #include <map>
 #include <string>
 
-#include "Hardware/ProtocolP50xSerial.h"
+#include "Hardware/Protocols/P50xSerial.h"
 #include "Languages.h"
 
 namespace Hardware
 {
 	class HardwareParams;
 
-	class OpenDcc : public ProtocolP50xSerial
+	class OpenDcc : public Protocols::P50xSerial
 	{
 		public:
 			OpenDcc() = delete;
@@ -38,7 +38,7 @@ namespace Hardware
 			OpenDcc& operator=(const OpenDcc&) = delete;
 
 			inline OpenDcc(const HardwareParams* params)
-			:	ProtocolP50xSerial(params, "OpenDCC", TypeOpenDcc)
+			:	Protocols::P50xSerial(params, "OpenDCC", TypeOpenDcc)
 			{
 				Init();
 			}

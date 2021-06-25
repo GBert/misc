@@ -22,14 +22,14 @@ along with RailControl; see the file LICENCE. If not see
 
 #include <string>
 
-#include "Hardware/ProtocolP50xSerial.h"
+#include "Hardware/Protocols/P50xSerial.h"
 #include "Languages.h"
 
 namespace Hardware
 {
 	class HardwareParams;
 
-	class RedBox : public ProtocolP50xSerial
+	class RedBox : public Protocols::P50xSerial
 	{
 		public:
 			RedBox() = delete;
@@ -37,7 +37,7 @@ namespace Hardware
 			RedBox& operator=(const RedBox&) = delete;
 
 			inline RedBox(const HardwareParams* const params)
-			:	ProtocolP50xSerial(params, "RedBox", TypeTams)
+			:	Protocols::P50xSerial(params, "RedBox", TypeTams)
 			{
 				Init();
 			}

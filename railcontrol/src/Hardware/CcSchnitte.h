@@ -21,13 +21,13 @@
 #pragma once
 
 #include "Hardware/HardwareParams.h"
-#include "Hardware/ProtocolMaerklinCAN.h"
+#include "Hardware/Protocols/MaerklinCAN.h"
 #include "Logger/Logger.h"
 #include "Network/Serial.h"
 
 namespace Hardware
 {
-	class CcSchnitte : ProtocolMaerklinCAN
+	class CcSchnitte : Protocols::MaerklinCAN
 	{
 		public:
 			CcSchnitte() = delete;
@@ -48,6 +48,4 @@ namespace Hardware
 			void Send(const unsigned char* buffer) override;
 			void Receiver() override;
 	};
-
 } // namespace
-

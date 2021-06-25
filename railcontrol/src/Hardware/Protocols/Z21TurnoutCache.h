@@ -26,46 +26,49 @@ along with RailControl; see the file LICENCE. If not see
 
 namespace Hardware
 {
-	class ProtocolZ21TurnoutCacheEntry
+	namespace Protocols
 	{
-		public:
-			ProtocolZ21TurnoutCacheEntry(const ProtocolZ21TurnoutCacheEntry&) = delete;
+		class Z21TurnoutCacheEntry
+		{
+			public:
+				Z21TurnoutCacheEntry(const Z21TurnoutCacheEntry&) = delete;
 
-			ProtocolZ21TurnoutCacheEntry()
-			:	protocol(ProtocolNone)
-			{
-			}
-
-			ProtocolZ21TurnoutCacheEntry(const Protocol protocol)
-			:	protocol(protocol)
-			{
-			}
-
-			Protocol protocol;
-	};
-
-	class ProtocolZ21TurnoutCache
-	{
-		public:
-			ProtocolZ21TurnoutCache& operator=(const ProtocolZ21TurnoutCache&) = delete;
-
-			void SetProtocol(const Address address, const Protocol protocol)
-			{
-				ProtocolZ21TurnoutCacheEntry entry(protocol);
-				cache[address] = entry;
-			}
-
-			Protocol GetProtocol(const Address address)
-			{
-				if (cache.count(address) == 0)
+				Z21TurnoutCacheEntry()
+					: protocol(ProtocolNone)
 				{
-					return ProtocolDCC;
 				}
-				return cache[address].protocol;
-			}
 
-		private:
-			std::map<Address, ProtocolZ21TurnoutCacheEntry> cache;
-	};
+				Z21TurnoutCacheEntry(const Protocol protocol)
+					: protocol(protocol)
+				{
+				}
+
+				Protocol protocol;
+		};
+
+		class Z21TurnoutCache
+		{
+			public:
+				Z21TurnoutCache& operator=(const Z21TurnoutCache&) = delete;
+
+				void SetProtocol(const Address address, const Protocol protocol)
+				{
+					Z21TurnoutCacheEntry entry(protocol);
+					cache[address] = entry;
+				}
+
+				Protocol GetProtocol(const Address address)
+				{
+					if (cache.count(address) == 0)
+					{
+						return ProtocolDCC;
+					}
+					return cache[address].protocol;
+				}
+
+			private:
+				std::map<Address, Z21TurnoutCacheEntry> cache;
+		};
+	} // namespace
 } // namespace
 

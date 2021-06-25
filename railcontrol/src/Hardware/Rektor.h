@@ -20,11 +20,11 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
-#include "Hardware/ProtocolZ21.h"
+#include "Hardware/Protocols/Z21.h"
 
 namespace Hardware
 {
-	class Rektor : ProtocolZ21
+	class Rektor : Protocols::Z21
 	{
 		public:
 			Rektor() = delete;
@@ -32,7 +32,7 @@ namespace Hardware
 			Rektor& operator=(const Rektor&) = delete;
 
 			Rektor(const HardwareParams* params)
-			:	ProtocolZ21(params, "Rektor")
+			:	Protocols::Z21(params, "Rektor")
 			{
 			}
 	};

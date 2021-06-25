@@ -20,31 +20,46 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
-#include <map>
-#include <string>
-
-#include "Hardware/ProtocolP50xSerial.h"
-#include "Languages.h"
-
 namespace Hardware
 {
-	class HardwareParams;
-
-	class ProtocolP50xUhlenbrock : public ProtocolP50xSerial
+	namespace Protocols
 	{
-		public:
-			ProtocolP50xUhlenbrock() = delete;
-			ProtocolP50xUhlenbrock(const ProtocolP50xUhlenbrock&) = delete;
-			ProtocolP50xUhlenbrock& operator=(const ProtocolP50xUhlenbrock&) = delete;
+		class Z21FeedbackCache
+		{
+			public:
+				Z21FeedbackCache(const Z21FeedbackCache&) = delete;
+				Z21FeedbackCache& operator=(const Z21FeedbackCache&) = delete;
 
-			ProtocolP50xUhlenbrock(const HardwareParams* params, const std::string& controlName)
-			:	ProtocolP50xSerial(params, controlName, TypeUhlenbrock)
-			{
-			}
+				inline Z21FeedbackCache()
+				{
+					for (unsigned char module = 0; module < MaxModules; ++module)
+					{
+						cache[module] = 0;
+					}
+				}
 
-			virtual ~ProtocolP50xUhlenbrock()
-			{
-			}
-	};
+				inline void Set(const unsigned char module, const unsigned char data)
+				{
+					if (module >= MaxModules)
+					{
+						return;
+					}
+					cache[module] = data;
+				}
+
+				inline unsigned char Get(unsigned char module)
+				{
+					if (module >= MaxModules)
+					{
+						return 0;
+					}
+					return cache[module];
+				}
+
+			private:
+				static const unsigned char MaxModules = 20;
+				unsigned char cache[MaxModules];
+		};
+	} // namespace
 } // namespace
 

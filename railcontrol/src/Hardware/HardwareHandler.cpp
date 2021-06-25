@@ -533,7 +533,7 @@ namespace Hardware
 			case HardwareTypeDR5000:
 			case HardwareTypeRektor:
 			case HardwareTypeZ21:
-				Hardware::ProtocolZ21::GetArgumentTypesAndHint(arguments, hint);
+				Hardware::Protocols::Z21::GetArgumentTypesAndHint(arguments, hint);
 				return;
 
 			case HardwareTypeCcSchnitte:

@@ -21,13 +21,13 @@ along with RailControl; see the file LICENCE. If not see
 #pragma once
 
 #include "Hardware/HardwareParams.h"
-#include "Hardware/ProtocolMaerklinCAN.h"
+#include "Hardware/Protocols/MaerklinCAN.h"
 #include "Logger/Logger.h"
 #include "Network/TcpClient.h"
 
 namespace Hardware
 {
-	class CS2Tcp : protected ProtocolMaerklinCAN
+	class CS2Tcp : protected Protocols::MaerklinCAN
 	{
 		public:
 			CS2Tcp() = delete;

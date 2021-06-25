@@ -22,14 +22,14 @@ along with RailControl; see the file LICENCE. If not see
 
 #include <string>
 
-#include "Hardware/ProtocolP50xSerial.h"
+#include "Hardware/Protocols/P50xSerial.h"
 #include "Languages.h"
 
 namespace Hardware
 {
 	class HardwareParams;
 
-	class MasterControl : public ProtocolP50xSerial
+	class MasterControl : public Protocols::P50xSerial
 	{
 		public:
 			MasterControl() = delete;
@@ -37,7 +37,7 @@ namespace Hardware
 			MasterControl& operator=(const MasterControl&) = delete;
 
 			inline MasterControl(const HardwareParams* const params)
-			:	ProtocolP50xSerial(params, "MasterControl", TypeTams)
+			:	Protocols::P50xSerial(params, "MasterControl", TypeTams)
 			{
 				Init();
 			}

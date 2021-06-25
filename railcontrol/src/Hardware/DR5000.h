@@ -20,11 +20,11 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
-#include "Hardware/ProtocolZ21.h"
+#include "Hardware/Protocols/Z21.h"
 
 namespace Hardware
 {
-	class DR5000 : ProtocolZ21
+	class DR5000 : Protocols::Z21
 	{
 		public:
 			DR5000() = delete;
@@ -32,7 +32,7 @@ namespace Hardware
 			DR5000& operator=(const DR5000&) = delete;
 
 			DR5000(const HardwareParams* params)
-			:	ProtocolZ21(params, "DR5000")
+			:	Protocols::Z21(params, "DR5000")
 			{
 			}
 	};

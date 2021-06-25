@@ -24,7 +24,7 @@ along with RailControl; see the file LICENCE. If not see
 namespace Hardware
 {
 	CS2Udp::CS2Udp(const HardwareParams* params)
-	:	ProtocolMaerklinCAN(params,
+	:	MaerklinCAN(params,
 			"Maerklin Central Station 2 (CS2) UDP / " + params->GetName() + " at IP " + params->GetArg1(),
 			params->GetName()),
 	 	senderConnection(logger, params->GetArg1(), CS2SenderPort),
