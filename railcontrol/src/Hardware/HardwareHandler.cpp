@@ -22,6 +22,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "DataModel/LocoFunctions.h"
 #include "DataTypes.h"
 #include "Logger/Logger.h"
+#include "Hardware/CS1.h"
 #include "Hardware/CS2Udp.h"
 #include "Hardware/CS2Tcp.h"
 #include "Hardware/CcSchnitte.h"
@@ -125,6 +126,10 @@ namespace Hardware
 
 			case HardwareTypeDR5000:
 				instance = reinterpret_cast<Hardware::HardwareInterface*>(new DR5000(params));
+				return;
+
+			case HardwareTypeCS1:
+				instance = reinterpret_cast<Hardware::HardwareInterface*>(new CS1(params));
 				return;
 		}
 	}
@@ -541,7 +546,7 @@ namespace Hardware
 				return;
 
 			case HardwareTypeEcos:
-				Hardware::Ecos::GetArgumentTypesAndHint(arguments, hint);
+				Hardware::Protocols::EsuCAN::GetArgumentTypesAndHint(arguments, hint);
 				return;
 
 			case HardwareTypeCS2Tcp:
@@ -566,6 +571,10 @@ namespace Hardware
 
 			case HardwareTypeRedBox:
 				Hardware::RedBox::GetArgumentTypesAndHint(arguments, hint);
+				return;
+
+			case HardwareTypeCS1:
+				Hardware::Protocols::EsuCAN::GetArgumentTypesAndHint(arguments, hint);
 				return;
 		}
 	}

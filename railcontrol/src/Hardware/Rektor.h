@@ -31,7 +31,7 @@ namespace Hardware
 			Rektor(const Rektor&) = delete;
 			Rektor& operator=(const Rektor&) = delete;
 
-			Rektor(const HardwareParams* params)
+			inline Rektor(const HardwareParams* params)
 			:	Protocols::Z21(params, "Rektor")
 			{
 			}

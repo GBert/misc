@@ -31,7 +31,7 @@ namespace Hardware
 			DR5000(const DR5000&) = delete;
 			DR5000& operator=(const DR5000&) = delete;
 
-			DR5000(const HardwareParams* params)
+			inline DR5000(const HardwareParams* params)
 			:	Protocols::Z21(params, "DR5000")
 			{
 			}

@@ -31,7 +31,7 @@ namespace Hardware
 			Z21(const Z21&) = delete;
 			Z21& operator=(const Z21&) = delete;
 
-			Z21(const HardwareParams* params)
+			inline Z21(const HardwareParams* params)
 			:	Protocols::Z21(params, "Z21")
 			{
 			}

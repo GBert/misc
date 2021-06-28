@@ -122,21 +122,21 @@ namespace WebServer
 		std::map<string,HardwareType> hardwareList;
 		hardwareList["CC-Schnitte"] = HardwareTypeCcSchnitte;
 		hardwareList["Digikeijs DR5000"] = HardwareTypeDR5000;
-		hardwareList["ESU Ecos &amp; Märklin CS1"] = HardwareTypeEcos;
+		hardwareList["ESU Ecos (beta)"] = HardwareTypeEcos;
 		hardwareList["Fleischmann TwinCenter"] = HardwareTypeTwinCenter;
 		hardwareList["LDT HSI-88 RS-232"] = HardwareTypeHsi88;
 		hardwareList["LokStoreDigital LoDi-Rektor (beta)"] = HardwareTypeRektor;
-		hardwareList["Märklin Central Station 1 (CS1)"] = HardwareTypeEcos;
+		hardwareList["Märklin Central Station 1 (CS1) (beta)"] = HardwareTypeCS1;
 		hardwareList["Märklin Central Station 2/3 (CS2/CS3) TCP"] = HardwareTypeCS2Tcp;
 		hardwareList["Märklin Central Station 2/3 (CS2/CS3) UDP"] = HardwareTypeCS2Udp;
 		hardwareList["Märklin Interface 6050/6051"] = HardwareTypeM6051;
 		hardwareList["OpenDCC Z1"] = HardwareTypeOpenDcc;
 		hardwareList["RM485"] = HardwareTypeRM485;
 		hardwareList["Roco Z21"] = HardwareTypeZ21;
-		hardwareList["Tams MasterControl (beta)"] = HardwareTypeMasterControl;
-		hardwareList["Tams MasterControl 2 (beta)"] = HardwareTypeMasterControl2;
-		hardwareList["Tams RedBox (beta)"] = HardwareTypeRedBox;
-		hardwareList["Uhlenbrock Intellibox (beta)"] = HardwareTypeIntellibox;
+		hardwareList["Tams MasterControl"] = HardwareTypeMasterControl;
+		hardwareList["Tams MasterControl 2"] = HardwareTypeMasterControl2;
+		hardwareList["Tams RedBox"] = HardwareTypeRedBox;
+		hardwareList["Uhlenbrock Intellibox"] = HardwareTypeIntellibox;
 		hardwareList["Virtual Command Station"] = HardwareTypeVirtual;
 		return hardwareList;
 	}

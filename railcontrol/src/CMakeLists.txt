@@ -60,6 +60,7 @@ DataModel/TrackBase.cpp
 DataModel/TrackBase.h
 DataTypes.h
 Fallthrough.h
+Hardware/CS1.h
 Hardware/CS2Tcp.cpp
 Hardware/CS2Tcp.h
 Hardware/CS2Udp.cpp
@@ -68,7 +69,6 @@ Hardware/Capabilities.h
 Hardware/CcSchnitte.cpp
 Hardware/CcSchnitte.h
 Hardware/DR5000.h
-Hardware/Ecos.cpp
 Hardware/Ecos.h
 Hardware/HardwareHandler.cpp
 Hardware/HardwareHandler.h
@@ -84,6 +84,8 @@ Hardware/M6051.h
 Hardware/MasterControl.h
 Hardware/MasterControl2.h
 Hardware/OpenDcc.h
+Hardware/Protocols/EsuCAN.cpp
+Hardware/Protocols/EsuCAN.h
 Hardware/Protocols/MaerklinCAN.cpp
 Hardware/Protocols/MaerklinCAN.h
 Hardware/Protocols/P50x.cpp

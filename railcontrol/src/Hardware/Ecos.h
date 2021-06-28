@@ -20,208 +20,21 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
-#include "HardwareInterface.h"
-#include "HardwareParams.h"
-#include "Network/TcpClient.h"
+#include "Hardware/Protocols/EsuCAN.h"
 
 namespace Hardware
 {
-	class Ecos : protected HardwareInterface
+	class Ecos : Protocols::EsuCAN
 	{
 		public:
 			Ecos() = delete;
 			Ecos(const Ecos&) = delete;
 			Ecos& operator=(const Ecos&) = delete;
 
-			Ecos(const HardwareParams* params);
-
-			~Ecos();
-
-			inline Hardware::Capabilities GetCapabilities() const override
+			inline Ecos(const HardwareParams* params)
+			:	Protocols::EsuCAN(params, "ECoS")
 			{
-				return Hardware::CapabilityLoco
-					| Hardware::CapabilityAccessory
-					| Hardware::CapabilityFeedback;
 			}
-
-			void GetLocoProtocols(std::vector<Protocol>& protocols) const override
-			{
-				protocols.push_back(ProtocolServer);
-			}
-
-			bool LocoProtocolSupported(Protocol protocol) const override
-			{
-				return (protocol == ProtocolServer);
-			}
-
-			void GetAccessoryProtocols(std::vector<Protocol>& protocols) const override
-			{
-				protocols.push_back(ProtocolServer);
-			}
-
-			bool AccessoryProtocolSupported(Protocol protocol) const override
-			{
-				return (protocol == ProtocolServer);
-			}
-
-			static void GetArgumentTypesAndHint(std::map<unsigned char,ArgumentType>& argumentTypes, std::string& hint)
-			{
-				argumentTypes[1] = ArgumentTypeIpAddress;
-				hint = Languages::GetText(Languages::TextHintEcos);
-			}
-
-			void Booster(const BoosterState status) override
-			{
-				Send(status == BoosterStateGo ? "set(1,go)\n" : "set(1,stop)\n");
-			}
-
-			void LocoSpeed(const Protocol protocol, const Address address, const Speed speed) override;
-			void LocoOrientation(const Protocol protocol, const Address address, const Orientation orientation) override;
-
-			void LocoFunction(const Protocol protocol,
-				const Address address,
-				const DataModel::LocoFunctionNr function,
-				const DataModel::LocoFunctionState on) override;
-
-			void AccessoryOnOrOff(const Protocol protocol, const Address address, const DataModel::AccessoryState state, const bool on) override;
-
-			static const char* const CommandActivateBoosterUpdates;
-			static const char* const CommandQueryLocos;
-			static const char* const CommandQueryAccessories;
-			static const char* const CommandQueryFeedbacks;
-
-		private:
-			static const unsigned short MaxMessageSize = 1024;
-			static const unsigned short EcosPort = 15471;
-
-			void Send(const char* data);
-			void Receiver();
-			void ReadLine();
-			void Parser();
-			void ParseReply();
-			void ParseQueryLocos();
-			void ParseQueryAccessories();
-			void ParseQueryFeedbacks();
-			void ParseLocoData();
-			void ParseAccessoryData();
-			void ParseFeedbackData();
-
-			void ParseEvent();
-			void ParseEventLine();
-			void ParseBoosterEvent();
-			void ParseLocoEvent(int loco);
-			void ParseAccessoryEvent(int accessory);
-			void ParseFeedbackEvent(int feedback);
-			void CheckFeedbackDiff(unsigned int module, uint8_t data);
-
-			void ParseOption(std::string& option, std::string& value);
-			void ParseOptionInt(std::string& option, int& value);
-			void ParseOptionHex(std::string& option, int& value);
-			void ParseEndLine();
-			std::string ReadUntilChar(const char c);
-			std::string ReadUntilLineEnd();
-
-			inline void SendActivateBoosterUpdates()
-			{
-				Send(CommandActivateBoosterUpdates);
-			}
-
-			inline void SendQueryLocos()
-			{
-				Send(CommandQueryLocos);
-			}
-
-			inline void SendQueryAccessories()
-			{
-				Send(CommandQueryAccessories);
-			}
-
-			inline void SendQueryFeedbacks()
-			{
-				Send(CommandQueryFeedbacks);
-			}
-
-			inline void SendActivateUpdates(const int id)
-			{
-				std::string command = "request(" + std::to_string(id) + ",view)\n";
-				Send(command.c_str());
-			}
-
-			inline void SendGetHandle(const int id)
-			{
-				std::string command = "request(" + std::to_string(id) + ",control,force)\n";
-				Send(command.c_str());
-			}
-
-			inline char GetChar(const size_t offset = 0) const
-			{
-				size_t position = readBufferPosition + offset;
-				if (position >= MaxMessageSize)
-				{
-					return 0;
-				}
-				return readBuffer[position];
-			}
-
-			inline char ReadAndConsumeChar()
-			{
-				if (readBufferPosition >= MaxMessageSize)
-				{
-					return 0;
-				}
-				return readBuffer[readBufferPosition++];
-			}
-
-			inline bool CheckAndConsumeChar(const char charToCheck)
-			{
-				if (readBufferPosition >= MaxMessageSize)
-				{
-					return false;
-				}
-				return charToCheck == readBuffer[readBufferPosition++];
-			}
-
-			inline bool CheckChar(const char charToCheck)
-			{
-				if (readBufferPosition >= MaxMessageSize)
-				{
-					return false;
-				}
-				return charToCheck == readBuffer[readBufferPosition];
-			}
-
-			bool SkipOptionalChar(const char charToSkip);
-
-			inline void SkipWhiteSpace()
-			{
-				while(SkipOptionalChar(' '));
-			}
-
-			bool Compare(const char* reference, const size_t size) const;
-			bool CompareAndConsume(const char* reference, const size_t size);
-			bool IsNumber() const;
-			int ParseInt();
-
-			inline bool CheckGraterThenAtLineEnd()
-			{
-				SkipWhiteSpace();
-				return CompareAndConsume(">\n", 2);
-			}
-
-			volatile bool run;
-			std::thread receiverThread;
-
-			Network::TcpConnection tcp;
-
-			unsigned char readBuffer[MaxMessageSize];
-			ssize_t readBufferLength;
-			size_t readBufferPosition;
-
-			static const unsigned int MaxFeedbackModules = 128;
-			uint8_t feedbackMemory[MaxFeedbackModules];
-
-			static const int OffsetLocoAddress = 999;
-			static const int OffsetAccessoryAddress = 19999;
-			static const int OffsetFeedbackModuleAddress = 100;
 	};
 } // namespace
+
