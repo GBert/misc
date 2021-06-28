@@ -1,11 +1,16 @@
 const int revisionnr = 
-1622
+1627
 ;
 const char* commithash = 
-"b58cc0d48957d6d837c1b247d033d5d42a09f5d3";
+"12e6ce1a025dfaac0da2f3ca279f4f6ad8784f1e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1627 2021-06-28 07:55:38 +0200 wio: inform car in case of RFID event\n" \
+"1626 2021-06-28 07:54:52 +0200 location: check for reserved block which are not occupied\n" \
+"1625 2021-06-27 10:49:14 +0200 lcdriver: trigger event timeout only once between events\n" \
+"1624 2021-06-25 16:47:11 +0200 wio,loc: provide led brightness also incase of servo\n" \
+"1623 2021-06-25 15:11:30 +0200 wiopi: use function brightness for servo speed\n" \
 "1622 2021-06-24 17:21:24 +0200 blacklist\n" \
 "1621 2021-06-20 07:57:22 +0200 loconet: trace level correction\n" \
 "1620 2021-06-19 10:07:59 +0200 wiopi: dual motor support\n" \
