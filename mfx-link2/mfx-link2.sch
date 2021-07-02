@@ -5,7 +5,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "mfx-Booster/Link II"
-Date "2021-05-29"
+Date "2021-07-01"
 Rev "1.1"
 Comp "GBe"
 Comment1 ""
