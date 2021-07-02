@@ -1,11 +1,14 @@
 const int revisionnr = 
-1628
+1631
 ;
 const char* commithash = 
-"a95f0df167817f21c15adaea75953039496f1972";
+"1e1ff4e23fcf3f3e8e594b1f13c3d4cea46b45aa";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1631 2021-07-02 07:58:27 +0200 translation merge: nl, de, fr, sr_lation, sl\n" \
+"1630 2021-07-02 07:47:41 +0200 operator: center option locomotive added\n" \
+"1629 2021-07-01 09:02:15 +0200 output,xnet: set fromoutput flag to regard the actdelay in the xnet library\n" \
 "1628 2021-06-30 08:07:01 +0200 model: option locationprio added\n" \
 "1627 2021-06-28 07:55:38 +0200 wio: inform car in case of RFID event\n" \
 "1626 2021-06-28 07:54:52 +0200 location: check for reserved block which are not occupied\n" \
