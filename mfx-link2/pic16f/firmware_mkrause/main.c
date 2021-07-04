@@ -157,6 +157,7 @@ struct
     unsigned BOOSTER_IMAX_WARNING:1;
     unsigned BOOSTER_UMAX_DETECT:1;
     unsigned BOOSTER_UMIN_DETECT:1;
+    unsigned BOOSTER_FORCE_ICALC:1;
     
 } bits;
 uint8_t byteval;
@@ -219,6 +220,9 @@ uint8_t draw_settings_count;
 
 void ADC_DelayStart(void);
 void Calc_Imax_ADC(void);
+void ImaxOff(void);
+void Calc_Ineg(void);
+void Calc_Ipos(void);
 
 void __interrupt() isr(void)
 //void isr(void) __interrupt(0) 
@@ -240,6 +244,7 @@ void __interrupt() isr(void)
     {
         adc_value = ADRES;
         ADCON2 = 0x00; //TMR4 Match auto conversion start
+        ADIF = 0;
         if(ADCON0 == ADCON_ISENSE)
         {
             if(IOC_PORT)
@@ -262,8 +267,9 @@ void __interrupt() isr(void)
                         else
                         {
                             LATB4 = 0;
-                            booster_status.bits.BOOSTER_IMAX_DETECT = 1;
-                            led_blink = BLINK_FAST;
+                            ImaxOff();
+//                            booster_status.bits.BOOSTER_IMAX_DETECT = 1;
+//                            led_blink = BLINK_FAST;
                         }
                     }
                     if(imax_poscount < 4)
@@ -312,8 +318,9 @@ void __interrupt() isr(void)
                         else
                         {
                             LATB4 = 0;
-                            booster_status.bits.BOOSTER_IMAX_DETECT = 1;
-                            led_blink = BLINK_FAST;
+                            ImaxOff();
+//                            booster_status.bits.BOOSTER_IMAX_DETECT = 1;
+//                            led_blink = BLINK_FAST;
                         }
                     }
                     if(imax_negcount < 4)
@@ -373,7 +380,6 @@ void __interrupt() isr(void)
         }
         TMR4 = 0;
         ADCON2 = 0b11000000; //TMR4 Match auto conversion start
-        ADIF = 0;
     }
     if(RCIF && RCIE)
     {
@@ -395,11 +401,12 @@ void __interrupt() isr(void)
         if(imax_Toffcount == 0)
         {
             LATB4 = 0;
-            booster_status.bits.BOOSTER_IMAX_DETECT = 1;
-            booster_status.bits.BOOSTER_IMAX_WARNING = 0;
-            TMR6IE = 0;
-            T6CONbits.TMR6ON = 0;
-            led_blink = BLINK_FAST;
+            ImaxOff();
+//            booster_status.bits.BOOSTER_IMAX_DETECT = 1;
+//            booster_status.bits.BOOSTER_IMAX_WARNING = 0;
+//            TMR6IE = 0;
+//            T6CONbits.TMR6ON = 0;
+//            led_blink = BLINK_FAST;
         }
         else
         {
@@ -408,6 +415,20 @@ void __interrupt() isr(void)
     }
 
 }
+
+void ImaxOff(void)
+{
+    booster_status.bits.BOOSTER_IMAX_DETECT = 1;
+    booster_status.bits.BOOSTER_IMAX_WARNING = 0;
+    TMR6IE = 0;
+    T6CONbits.TMR6ON = 0;
+    led_blink = BLINK_FAST;
+    ADCON0 = ADCON_UIN;
+    adc_uin_summ = 0;
+    adc_uin_ctr = 0;
+    booster_status.bits.BOOSTER_FORCE_ICALC=1;
+}
+
 
 /* RA4 SDA I2C
  * RA5 SCL I2C
@@ -1503,12 +1524,13 @@ void Draw_Isense(void)
         {
             if((count1s & 0x01) == 0)
             {
-                LCD_gotobufxy(13, 1);
+                LCD_gotobufxy(12, 1);
+                LCD_putchbuf(c);
                 Draw_IsenseVal(senseval8);
             }
             else
             {
-                LCD_putsbufxy(13, 1, "    ");
+                LCD_putsbufxy(12, 1, "     ");
             }
         }
     }
@@ -1591,6 +1613,20 @@ void Draw_Settings(void)
 
 void Draw_LCD(void)
 {
+    if(booster_status.bits.BOOSTER_FORCE_ICALC)
+    {
+        if(adc_sense_posctr)
+        {
+            adc_sense_possummmain= (uint16_t) (adc_sense_possumm/adc_sense_posctr)<<5;
+        }
+        if(adc_sense_negctr)
+        {
+            adc_sense_negsummmain= (uint16_t) (adc_sense_negsumm/adc_sense_negctr)<<5;
+        }
+        booster_status.bits.BOOSTER_FORCE_ICALC=0;
+        Calc_Ipos();
+        Calc_Ineg();
+    }
     DrawOnOff();
     Draw_Settings();
     Draw_Isense();
