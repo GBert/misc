@@ -1,11 +1,17 @@
 const int revisionnr = 
-1631
+1637
 ;
 const char* commithash = 
-"1e1ff4e23fcf3f3e8e594b1f13c3d4cea46b45aa";
+"d7644e27ccba928c45d246821d6185aefe49d243";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1637 2021-07-05 07:38:44 +0200 xmlscript: lightctrl support added\n" \
+"1636 2021-07-04 08:22:58 +0200 xmlscript: call car function by description with resolved parameter\n" \
+"1635 2021-07-03 11:27:06 +0200 carpanel: not reset train image on sort\n" \
+"1634 2021-07-03 08:18:33 +0200 car: fix for saving V for none speed commands\n" \
+"1633 2021-07-02 10:22:40 +0200 operatordlg: translation correction\n" \
+"1632 2021-07-02 10:22:05 +0200 translation merge: nl\n" \
 "1631 2021-07-02 07:58:27 +0200 translation merge: nl, de, fr, sr_lation, sl\n" \
 "1630 2021-07-02 07:47:41 +0200 operator: center option locomotive added\n" \
 "1629 2021-07-01 09:02:15 +0200 output,xnet: set fromoutput flag to regard the actdelay in the xnet library\n" \
