@@ -1,11 +1,12 @@
 const int revisionnr = 
-1637
+1638
 ;
 const char* commithash = 
-"d7644e27ccba928c45d246821d6185aefe49d243";
+"3a5ee1056cb2a65cd010b1af5fcc328acfb02b4c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1638 2021-07-06 07:52:19 +0200 xmlscript: resolve car function command\n" \
 "1637 2021-07-05 07:38:44 +0200 xmlscript: lightctrl support added\n" \
 "1636 2021-07-04 08:22:58 +0200 xmlscript: call car function by description with resolved parameter\n" \
 "1635 2021-07-03 11:27:06 +0200 carpanel: not reset train image on sort\n" \
