@@ -102,8 +102,7 @@ namespace Hardware
 
 			void AddUnmatchedLocos(std::map<std::string,DataModel::LocoConfig>& list) const override;
 
-			std::map<std::string,DataModel::LocoConfig> GetUnmatchedLocos() const override;
-
+			std::map<std::string,DataModel::LocoConfig> GetUnmatchedLocos(const std::string& matchKey) const override;
 			std::map<std::string,DataModel::LocoConfig> GetAllLocos() const override;
 
 			DataModel::LocoConfig GetLocoByMatch(__attribute__((unused)) const std::string& match) const override;

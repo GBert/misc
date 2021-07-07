@@ -24,6 +24,7 @@ along with RailControl; see the file LICENCE. If not see
 #include <string>
 
 #include "DataModel/HardwareHandle.h"
+#include "Hardware/AccessoryCache.h"
 
 namespace DataModel
 {
@@ -100,7 +101,8 @@ namespace DataModel
 				duration(0),
 				inverted(false),
 				lastUsed(0),
-				counter(0)
+				counter(0),
+			 	matchKey("")
 			{
 			}
 
@@ -160,10 +162,27 @@ namespace DataModel
 				return lastUsed;
 			}
 
+
+			inline void SetMatchKey(const std::string& matchKey)
+			{
+				this->matchKey = matchKey;
+			}
+
+			inline void ClearMatchKey()
+			{
+				matchKey.clear();
+			}
+
+			inline std::string GetMatchKey() const
+			{
+				return matchKey;
+			}
+
 		protected:
 			virtual std::string Serialize() const;
 			virtual bool Deserialize(const std::map<std::string,std::string>& arguments);
 
+		private:
 			AccessoryType accessoryType;
 			AccessoryState accessoryState;
 			AccessoryPulseDuration duration; // duration in ms after which the accessory command will be turned off on rails. 0 = no turn off / turn off must be made manually
@@ -171,6 +190,8 @@ namespace DataModel
 
 			time_t lastUsed;
 			unsigned int counter;
+
+			std::string matchKey;
 	};
 } // namespace DataModel
 

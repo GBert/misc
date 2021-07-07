@@ -456,7 +456,7 @@ namespace Hardware
 		}
 	}
 
-	std::map<std::string,DataModel::LocoConfig> HardwareHandler::GetUnmatchedLocos() const
+	std::map<std::string,DataModel::LocoConfig> HardwareHandler::GetUnmatchedLocos(const std::string& matchKey) const
 	{
 		std::map<std::string,DataModel::LocoConfig> out;
 		if (instance == nullptr)
@@ -468,7 +468,7 @@ namespace Hardware
 		for (auto& entry : database)
 		{
 			const Hardware::LocoCacheEntry& loco = entry.second;
-			if (loco.GetLocoID() != LocoNone)
+			if (loco.GetLocoID() != LocoNone && loco.GetMatchKey().size() && loco.GetMatchKey() != matchKey)
 			{
 				continue;
 			}

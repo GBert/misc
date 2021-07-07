@@ -21,6 +21,7 @@ DataModel/Accessory.cpp
 DataModel/Accessory.h
 DataModel/AccessoryBase.cpp
 DataModel/AccessoryBase.h
+DataModel/AccessoryConfig.h
 DataModel/Cluster.cpp
 DataModel/Cluster.h
 DataModel/DataModel.h
@@ -60,6 +61,8 @@ DataModel/TrackBase.cpp
 DataModel/TrackBase.h
 DataTypes.h
 Fallthrough.h
+Hardware/AccessoryCache.cpp
+Hardware/AccessoryCache.h
 Hardware/CS1.h
 Hardware/CS2Tcp.cpp
 Hardware/CS2Tcp.h

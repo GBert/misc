@@ -583,11 +583,11 @@ namespace WebServer
 
 			case ObjectTypeAccessory:
 			{
-				std::map<string, Accessory*> accessories = manager.AccessoryListByName();
+				std::map<string, AccessoryConfig> accessories = manager.AccessoryListByName();
 				map<string, AccessoryID> accessoryOptions;
 				for (auto& accessory : accessories)
 				{
-					accessoryOptions[accessory.first] = accessory.second->GetID();
+					accessoryOptions[accessory.first] = accessory.second.GetAccessoryId();
 				}
 				content.AddChildTag(HtmlTagSelect(name + "_id", accessoryOptions, objectId).AddClass("select_relation_id"));
 

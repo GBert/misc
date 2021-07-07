@@ -20,8 +20,11 @@ along with RailControl; see the file LICENCE. If not see
 
 #pragma once
 
+#include "Hardware/Capabilities.h"
+#include "Hardware/AccessoryCache.h"
 #include "Hardware/HardwareInterface.h"
 #include "Hardware/HardwareParams.h"
+#include "Hardware/LocoCache.h"
 #include "Network/TcpClient.h"
 
 namespace Hardware
@@ -37,13 +40,15 @@ namespace Hardware
 
 				EsuCAN(const HardwareParams* params, const std::string& controlName);
 
-				~EsuCAN();
+				virtual ~EsuCAN();
 
 				inline Hardware::Capabilities GetCapabilities() const override
 				{
 					return Hardware::CapabilityLoco
-					    | Hardware::CapabilityAccessory
-					    | Hardware::CapabilityFeedback;
+						| Hardware::CapabilityAccessory
+						| Hardware::CapabilityFeedback
+						| Hardware::CapabilityLocoDatabase
+					;
 				}
 
 				void GetLocoProtocols(std::vector<Protocol>& protocols) const override
@@ -89,6 +94,21 @@ namespace Hardware
 
 				void AccessoryOnOrOff(const Protocol protocol, const Address address,
 				    const DataModel::AccessoryState state, const bool on) override;
+
+				inline virtual const std::map<std::string, Hardware::LocoCacheEntry>& GetLocoDatabase() const override
+				{
+					return locoCache.GetAll();
+				}
+
+				inline virtual DataModel::LocoConfig GetLocoByMatch(const std::string& matchKey) const override
+				{
+					return DataModel::LocoConfig(locoCache.Get(matchKey));
+				}
+
+				inline virtual void SetLocoIdOfMatch(const LocoID locoId, const std::string& matchKey) override
+				{
+					locoCache.SetLocoId(locoId, matchKey);
+				}
 
 				static const char* const CommandActivateBoosterUpdates;
 				static const char* const CommandQueryLocos;
@@ -225,8 +245,14 @@ namespace Hardware
 				static const unsigned int MaxFeedbackModules = 128;
 				uint8_t feedbackMemory[MaxFeedbackModules];
 
+				LocoCache locoCache;
+				AccessoryCache accessoryCache;
+
+				static const int MinLocoId = 1000;
 				static const int OffsetLocoAddress = 999;
+				static const int MinAccessoryId = 20000;
 				static const int OffsetAccessoryAddress = 19999;
+				static const int MinFeedbackModuleId = 100;
 				static const int OffsetFeedbackModuleAddress = 100;
 		};
 	} // namespace

@@ -25,20 +25,19 @@ along with RailControl; see the file LICENCE. If not see
 #include <map>
 
 #include "DataTypes.h"
-#include "DataModel/LocoFunctions.h"
 
 class Manager;
 
 namespace Hardware
 {
-	class LocoCacheEntry
+	class AccessoryCacheEntry
 	{
-		public:
-			LocoCacheEntry() = delete;
+			AccessoryCacheEntry() = delete;
 
-			inline LocoCacheEntry(const ControlID controlId)
+		public:
+			inline AccessoryCacheEntry(const ControlID controlId)
 			:	controlId(controlId),
-				locoId(LocoNone),
+				accessoryId(AccessoryNone),
 				protocol(ProtocolNone),
 				address(AddressNone),
 				matchKey("")
@@ -50,14 +49,14 @@ namespace Hardware
 				return controlId;
 			}
 
-			inline LocoID GetLocoID() const
+			inline AccessoryID GetAccessoryID() const
 			{
-				return locoId;
+				return accessoryId;
 			}
 
-			inline void SetLocoID(const LocoID locoId)
+			inline void SetAccessoryID(const AccessoryID accessoryId)
 			{
-				this->locoId = locoId;
+				this->accessoryId = accessoryId;
 			}
 
 			inline const std::string& GetName() const
@@ -90,24 +89,6 @@ namespace Hardware
 				this->address = address;
 			}
 
-			inline void SetFunction(const DataModel::LocoFunctionNr nr,
-				const DataModel::LocoFunctionType type,
-				const DataModel::LocoFunctionIcon icon,
-				const DataModel::LocoFunctionTimer timer)
-			{
-				functions.SetFunction(nr, type, icon, timer);
-			}
-
-			inline void ClearFunction(const DataModel::LocoFunctionNr nr)
-			{
-				functions.ClearFunction(nr);
-			}
-
-			inline std::vector<DataModel::LocoFunctionEntry> GetFunctionStates() const
-			{
-				return functions.GetFunctionStates();
-			}
-
 			inline const std::string& GetMatchKey() const
 			{
 				return matchKey;
@@ -125,61 +106,52 @@ namespace Hardware
 
 		private:
 			const ControlID controlId;
-			LocoID locoId;
+			AccessoryID accessoryId;
 			std::string name;
 			Protocol protocol;
 			Address address;
 			std::string matchKey;
-			DataModel::LocoFunctions functions;
 	};
 
-	class LocoCache
+	class AccessoryCache
 	{
+			AccessoryCache() = delete;
+			AccessoryCache(const AccessoryCache& rhs) = delete;
+			AccessoryCache& operator= (const AccessoryCache& rhs) = delete;
+
 		public:
-			inline LocoCache(const ControlID controlId,
+			inline AccessoryCache(const ControlID controlId,
 				Manager* const manager)
 			:	controlId(controlId),
 				manager(manager)
 			{
 			}
 
-			LocoCache() = delete;
-
-			LocoCache(const LocoCache& rhs) = delete;
-
-			LocoCache& operator= (const LocoCache& rhs) = delete;
-
 			inline ControlID GetControlId() const
 			{
 				return controlId;
 			}
 
-			inline void Save(LocoCacheEntry& entry)
+			void Save(AccessoryCacheEntry& entry);
+
+			AccessoryID Delete(const std::string& matchKey);
+
+			inline const AccessoryCacheEntry Get(const std::string& matchKey) const
 			{
-				const std::string& matchKey = entry.GetMatchKey();
-				Save(entry, matchKey);
+				return entries.count(matchKey) == 0 ? AccessoryCacheEntry(controlId) : entries.at(matchKey);
 			}
 
-			void Save(LocoCacheEntry& entry, const std::string& oldMatchKey);
-
-			LocoID Delete(const std::string& matchKey);
-
-			inline const LocoCacheEntry Get(const std::string& matchKey) const
-			{
-				return entries.count(matchKey) == 0 ? LocoCacheEntry(controlId) : entries.at(matchKey);
-			}
-
-			inline const std::map<std::string,LocoCacheEntry>& GetAll() const
+			inline const std::map<std::string,AccessoryCacheEntry>& GetAll() const
 			{
 				return entries;
 			}
 
-			void SetLocoId(const LocoID locoId, const std::string& matckKey);
+			void SetAccessoryId(const AccessoryID accessoryId, const std::string& matckKey);
 
 		private:
 			const ControlID controlId;
 			Manager* const manager;
-			std::map<std::string,LocoCacheEntry> entries;
+			std::map<std::string,AccessoryCacheEntry> entries;
 	};
 } // namespace Hardware
 

@@ -314,7 +314,7 @@ class ControlInterface
 		{
 		}
 
-		virtual std::map<std::string,DataModel::LocoConfig> GetUnmatchedLocos() const
+		virtual std::map<std::string,DataModel::LocoConfig> GetUnmatchedLocos(__attribute__((unused)) const std::string& matchKey) const
 		{
 			std::map<std::string,DataModel::LocoConfig> out;
 			return out;

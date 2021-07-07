@@ -29,6 +29,7 @@ along with RailControl; see the file LICENCE. If not see
 
 #include "Config.h"
 #include "ControlInterface.h"
+#include "DataModel/AccessoryConfig.h"
 #include "DataModel/DataModel.h"
 #include "DataModel/LocoConfig.h"
 #include "Hardware/HardwareParams.h"
@@ -104,7 +105,8 @@ class Manager
 
 		void LocoReplaceMatchKey(const LocoID locoId, const std::string& newMatchKey);
 
-		const std::map<std::string,DataModel::LocoConfig> GetUnmatchedLocosOfControl(const ControlID controlId) const;
+		const std::map<std::string,DataModel::LocoConfig> GetUnmatchedLocosOfControl(const ControlID controlId,
+			const std::string& matchKey) const;
 
 		const std::string& GetLocoName(const LocoID locoID) const;
 
@@ -128,6 +130,8 @@ class Manager
 			const Speed travelSpeed,
 			const Speed reducedSpeed,
 			const Speed creepingSpeed,
+			const Propulsion propulsion,
+			const TrainType type,
 			const std::vector<DataModel::LocoFunctionEntry>& locoFunctions,
 			const std::vector<DataModel::Relation*>& slaves,
 			std::string& result
@@ -175,7 +179,7 @@ class Manager
 			return accessories;
 		}
 
-		const std::map<std::string,DataModel::Accessory*> AccessoryListByName() const;
+		const std::map<std::string,DataModel::AccessoryConfig> AccessoryListByName() const;
 
 		bool AccessorySave(AccessoryID accessoryID,
 			const std::string& name,
@@ -194,6 +198,10 @@ class Manager
 			std::string& result);
 
 		bool AccessoryRelease(const AccessoryID accessoryID);
+
+		DataModel::Accessory* GetAccessoryByMatchKey(const ControlID controlId, const std::string& matchKey) const;
+
+		void AccessoryRemoveMatchKey(const AccessoryID accessoryId);
 
 		// feedback
 		void FeedbackState(const ControlID controlID, const FeedbackPin pin, const DataModel::Feedback::FeedbackState state);

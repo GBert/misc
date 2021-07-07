@@ -151,7 +151,9 @@ namespace WebServer
 		map<string,string> options;
 		for (auto& matchKey : matchKeyMap)
 		{
-			options[matchKey.first] = matchKey.second.GetName();
+			const string& nameOfLoco = matchKey.second.GetName();
+			const string& keyOfLoco = matchKey.second.GetMatchKey();
+			options[keyOfLoco] = nameOfLoco + (nameOfLoco != keyOfLoco ? (" (" + keyOfLoco + ")") : "");
 		}
 		HtmlTag content;
 		content.AddChildTag(HtmlTagLabel(Languages::TextNameInControl, "matchkey"));

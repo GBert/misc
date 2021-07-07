@@ -29,8 +29,7 @@ namespace WebServer
 		const std::string reference = "locospeed_" + locoIdString;
 		AddId(reference);
 		AddClass("slider");
-		const std::string script = "locoSpeedSliderChange(" + locoIdString + "); return false;";
-		AddAttribute("onchange", script);
-		AddAttribute("oninput", script);
+		AddAttribute("onchange", "return locoSpeedSliderOnChange(" + locoIdString + ");");
+		AddAttribute("oninput", "return locoSpeedSliderOnInput(" + locoIdString + ");");
 	}
 } // namespace WebServer

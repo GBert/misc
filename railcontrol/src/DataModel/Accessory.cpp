@@ -57,4 +57,14 @@ namespace DataModel
 		SetVisible(VisibleYes);
 		return true;
 	}
+
+	Accessory& Accessory::operator=(const Hardware::AccessoryCacheEntry& accessory)
+	{
+		SetControlID(accessory.GetControlID());
+		SetName(accessory.GetName());
+		SetAddress(accessory.GetAddress());
+		SetProtocol(accessory.GetProtocol());
+		SetMatchKey(accessory.GetMatchKey());
+		return *this;
+	}
 } // namespace DataModel

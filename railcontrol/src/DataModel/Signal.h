@@ -80,7 +80,7 @@ namespace DataModel
 
 			inline void SetType(AccessoryType type) override
 			{
-				accessoryType = type;
+				AccessoryBase::SetType(type);
 				ResetStateAddressMap();
 			}
 
@@ -176,6 +176,8 @@ namespace DataModel
 			{
 				return stateAddressMap.count(state) != 1 ? -1 : stateAddressMap.at(state);
 			}
+
+			Signal& operator=(const Hardware::AccessoryCacheEntry& accessory);
 
 		protected:
 			inline bool ReserveInternal(Logger::Logger* logger, const LocoID locoID) override

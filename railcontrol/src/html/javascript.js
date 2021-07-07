@@ -1644,7 +1644,24 @@ function submitEditForm()
 	return false;
 }
 
-function locoSpeedSliderChange(locoId)
+var updateSliderAllowed = true;
+
+function locoSpeedSliderOnInput(locoId)
+{
+	if (!updateSliderAllowed)
+	{
+		return false;
+	}
+	setTimeout(function()
+	{
+		updateSliderAllowed = true;
+	}, 200);
+	locoSpeedSliderOnChange(locoId);
+	updateSliderAllowed = false;
+	return false;
+}
+
+function locoSpeedSliderOnChange(locoId)
 {
 	var slider = document.getElementById('locospeed_' + locoId);
 	if (!slider)
@@ -1656,6 +1673,7 @@ function locoSpeedSliderChange(locoId)
 	url += '&speed=';
 	url += slider.value;
 	fireRequestAndForget(url);
+	updateSliderAllowed = true;
 	return false;
 }
 

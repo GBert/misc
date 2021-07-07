@@ -49,15 +49,17 @@ namespace Hardware
 			run(false),
 			tcp(Network::TcpClient::GetTcpClientConnection(logger, params->GetArg1(), EsuCANPort)),
 			readBufferLength(0),
-			readBufferPosition(0)
+			readBufferPosition(0),
+			locoCache(params->GetControlID(), params->GetManager()),
+			accessoryCache(params->GetControlID(), params->GetManager())
 		{
 			logger->Info(Languages::TextStarting, GetFullName());
+			std::memset(feedbackMemory, 0, MaxFeedbackModules);
+			receiverThread = std::thread(&Hardware::Protocols::EsuCAN::Receiver, this);
 			if (!tcp.IsConnected())
 			{
 				return;
 			}
-			std::memset(feedbackMemory, 0, MaxFeedbackModules);
-			receiverThread = std::thread(&Hardware::Protocols::EsuCAN::Receiver, this);
 			SendActivateBoosterUpdates();
 			SendQueryLocos();
 			SendQueryAccessories();
@@ -66,16 +68,14 @@ namespace Hardware
 
 		EsuCAN::~EsuCAN()
 		{
-			if (run == false)
-			{
-				return;
-			}
 			run = false;
 			receiverThread.join();
 			logger->Info(Languages::TextTerminatingSenderSocket);
 		}
 
-		void EsuCAN::LocoSpeed(__attribute__((unused))  const Protocol protocol, const Address address, const Speed speed)
+		void EsuCAN::LocoSpeed(__attribute__((unused)) const Protocol protocol,
+			const Address address,
+			const Speed speed)
 		{
 			const unsigned int locoId = address + OffsetLocoAddress;
 			SendGetHandle(locoId);
@@ -83,25 +83,24 @@ namespace Hardware
 			Send(command.c_str());
 		}
 
-		void EsuCAN::LocoOrientation(__attribute__((unused))  const Protocol protocol, const Address address,
+		void EsuCAN::LocoOrientation(__attribute__((unused)) const Protocol protocol,
+			const Address address,
 		    const Orientation orientation)
 		{
 			const unsigned int locoId = address + OffsetLocoAddress;
 			SendGetHandle(locoId);
-			const string command = "set(" + to_string(locoId) + ",dir[" + (orientation == OrientationRight ? "0" : "1")
-			    + "])\n";
+			const string command = "set(" + to_string(locoId) + ",dir[" + (orientation == OrientationRight ? "0" : "1") + "])\n";
 			Send(command.c_str());
 		}
 
-		void EsuCAN::LocoFunction(__attribute__((unused))  const Protocol protocol,
+		void EsuCAN::LocoFunction(__attribute__((unused)) const Protocol protocol,
 		    const Address address,
 		    const DataModel::LocoFunctionNr function,
 		    const DataModel::LocoFunctionState on)
 		{
 			const unsigned int locoId = address + OffsetLocoAddress;
 			SendGetHandle(locoId);
-			const string command = "set(" + to_string(locoId) + ",func[" + to_string(function) + ","
-			    + (on == DataModel::LocoFunctionStateOn ? "1" : "0") + "])\n";
+			const string command = "set(" + to_string(locoId) + ",func[" + to_string(function) + "," + (on == DataModel::LocoFunctionStateOn ? "1" : "0") + "])\n";
 			Send(command.c_str());
 		}
 
@@ -130,6 +129,10 @@ namespace Hardware
 		void EsuCAN::Receiver()
 		{
 			Utils::Utils::SetThreadName("EsuCAN");
+			if (!tcp.IsConnected())
+			{
+				return;
+			}
 			logger->Info(Languages::TextReceiverThreadStarted);
 
 			run = true;
@@ -289,8 +292,8 @@ namespace Hardware
 
 		void EsuCAN::ParseLocoData()
 		{
-			unsigned int locoId = ParseInt();
-			Address address = locoId - OffsetLocoAddress;
+			const unsigned int locoId = ParseInt();
+			const Address address = locoId - OffsetLocoAddress;
 			string name;
 			while (true)
 			{
@@ -309,13 +312,20 @@ namespace Hardware
 			}
 			SendActivateUpdates(locoId);
 
+			LocoCacheEntry cacheEntry(locoCache.GetControlId());
+			cacheEntry.SetMatchKey(locoId);
+			cacheEntry.SetProtocol(ProtocolServer);
+			cacheEntry.SetAddress(address);
+			cacheEntry.SetName(name);
+			locoCache.Save(cacheEntry);
+
 			logger->Info(Languages::TextFoundLocoInEcosDatabase, address, name);
 		}
 
 		void EsuCAN::ParseAccessoryData()
 		{
-			unsigned int accessoryId = ParseInt();
-			Address address = accessoryId - OffsetAccessoryAddress;
+			const unsigned int accessoryId = ParseInt();
+			const Address address = accessoryId - OffsetAccessoryAddress;
 			string name1;
 			string name2;
 			string name3;
@@ -350,7 +360,7 @@ namespace Hardware
 		void EsuCAN::ParseFeedbackData()
 		{
 			int feedbackId = ParseInt();
-			Address address = feedbackId - OffsetFeedbackModuleAddress;
+			Address address = feedbackId - MinFeedbackModuleId;
 			SendActivateUpdates(feedbackId);
 			logger->Info(Languages::TextFoundFeedbackModuleInEcosDatabase, address);
 		}
@@ -403,13 +413,16 @@ namespace Hardware
 				logger->Error(Languages::TextInvalidDataReceived);
 				return;
 			}
-			ReadLine();
-			while (GetChar() != '<')
+			while (true)
 			{
-				ParseEventLine();
 				ReadLine();
+				if (GetChar() == '<')
+				{
+					ParseEndLine();
+					return;
+				}
+				ParseEventLine();
 			}
-			ParseEndLine();
 		}
 
 		void EsuCAN::ParseEventLine()
@@ -417,19 +430,19 @@ namespace Hardware
 			int object = ParseInt();
 			SkipWhiteSpace();
 
-			if (object > OffsetAccessoryAddress)
+			if (object >= MinAccessoryId)
 			{
 				ParseAccessoryEvent(object);
 				return;
 			}
 
-			if (object > OffsetLocoAddress)
+			if (object >= MinLocoId)
 			{
 				ParseLocoEvent(object);
 				return;
 			}
 
-			if (object >= OffsetFeedbackModuleAddress)
+			if (object >= MinFeedbackModuleId)
 			{
 				ParseFeedbackEvent(object);
 				return;
@@ -459,7 +472,7 @@ namespace Hardware
 
 		void EsuCAN::ParseLocoEvent(int loco)
 		{
-			Address address = loco - OffsetLocoAddress;
+			const Address address = loco - OffsetLocoAddress;
 			string option;
 			string value;
 			ParseOption(option, value);
@@ -473,8 +486,7 @@ namespace Hardware
 
 			if (option.compare("dir") == 0)
 			{
-				Orientation orientation = (
-				    Utils::Utils::StringToInteger(value) == 1 ? OrientationLeft : OrientationRight);
+				Orientation orientation = (Utils::Utils::StringToInteger(value) == 1 ? OrientationLeft : OrientationRight);
 				manager->LocoOrientation(ControlTypeHardware, controlID, ProtocolServer, address, orientation);
 				return;
 			}
@@ -489,9 +501,8 @@ namespace Hardware
 					return;
 				}
 				DataModel::LocoFunctionNr function = Utils::Utils::StringToInteger(valueList[0], 0);
-				DataModel::LocoFunctionState on =
-				    Utils::Utils::StringToBool(valueList[1]) ? DataModel::LocoFunctionStateOn :
-				                                               DataModel::LocoFunctionStateOff;
+				DataModel::LocoFunctionState on = Utils::Utils::StringToBool(valueList[1])
+					? DataModel::LocoFunctionStateOn : DataModel::LocoFunctionStateOff;
 				manager->LocoFunctionState(ControlTypeHardware, controlID, ProtocolServer, address, function, on);
 				return;
 			}
@@ -499,7 +510,7 @@ namespace Hardware
 
 		void EsuCAN::ParseAccessoryEvent(int accessory)
 		{
-			Address address = accessory - OffsetAccessoryAddress;
+			const Address address = accessory - OffsetAccessoryAddress;
 			string option;
 			int value;
 			ParseOptionInt(option, value);
@@ -521,7 +532,7 @@ namespace Hardware
 
 			if (option.compare("state") == 0)
 			{
-				unsigned int module1 = (feedback - OffsetFeedbackModuleAddress) << 1;
+				unsigned int module1 = (feedback - MinFeedbackModuleId) << 1;
 				unsigned int module2 = module1 + 1;
 				uint8_t moduleData1 = value & 0xFF;
 				uint8_t moduleData2 = (value >> 8) & 0xFF;

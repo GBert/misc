@@ -35,29 +35,32 @@ namespace DataModel
 {
 	class Accessory : public AccessoryBase, public LayoutItem, public LockableItem
 	{
-		public:
+			Accessory() = delete;
 			Accessory(const Accessory&) = delete;
 			Accessory& operator=(const Accessory&) = delete;
 
-			Accessory(const AccessoryID accessoryID)
+		public:
+			inline Accessory(const AccessoryID accessoryID)
 			:	AccessoryBase(),
 			 	LayoutItem(accessoryID),
 			 	LockableItem()
 			{
 			}
 
-			Accessory(__attribute__((unused)) Manager* manager, const AccessoryID accessoryID)
+			inline Accessory(__attribute__((unused)) Manager* manager, const AccessoryID accessoryID)
 			:	Accessory(accessoryID)
 			{
 			}
 
-			Accessory(const std::string& serialized)
+			inline Accessory(const std::string& serialized)
 			:	Accessory(AccessoryNone)
 			{
 				Deserialize(serialized);
 			}
 
-			virtual ~Accessory() {}
+			virtual ~Accessory()
+			{
+			}
 
 			virtual ObjectType GetObjectType() const override
 			{
@@ -74,10 +77,7 @@ namespace DataModel
 			using HardwareHandle::Deserialize;
 			virtual bool Deserialize(const std::string& serialized) override;
 
-		private:
-			inline Accessory() : Accessory(AccessoryNone)
-			{
-			}
+			Accessory& operator=(const Hardware::AccessoryCacheEntry& accessory);
 	};
 } // namespace DataModel
 

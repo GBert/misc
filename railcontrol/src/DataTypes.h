@@ -225,3 +225,42 @@ enum ProgramMode : uint8_t
 
 typedef uint16_t CvNumber;
 typedef uint8_t CvValue;
+
+enum Propulsion : uint8_t
+{
+	PropulsionUnknown  = 0x00,
+	PropulsionSteam    = 0x01,
+	PropulsionDiesel   = 0x02,
+	PropulsionGas      = 0x04,
+	PropulsionElectric = 0x08,
+	PropulsionHydrogen = 0x10,
+	PropulsionOther    = 0x80
+};
+
+enum TrainType : uint32_t
+{
+	TrainTypeUnknown                   = 0x00000000,
+	TrainTypeInternationalHighSpeed    = 0x00000001,
+	TrainTypeNationalHighSpeed         = 0x00000002,
+	TrainTypeInternationalLongDistance = 0x00000004,
+	TrainTypeNationalLongDistance      = 0x00000008,
+	TrainTypeInternationalNight        = 0x00000010,
+	TrainTypeNationalNight             = 0x00000020,
+	TrainTypeLongDistanceFastLocal     = 0x00000040,
+	TrainTypeFastLocal                 = 0x00000080,
+	TrainTypeLocal                     = 0x00000100,
+	TrainTypeSuburban                  = 0x00000200,
+	TrainTypeUnderground               = 0x00000400,
+	TrainTypeHistoric                  = 0x00001000,
+	TrainTypeExtra                     = 0x00002000,
+	TrainTypePassengerWithCargo        = 0x00010000,
+	TrainTypeCargoWithPassenger        = 0x00020000,
+	TrainTypeCargoLongDistance         = 0x00100000,
+	TrainTypeCargoBlock                = 0x00200000,
+	TrainTypeCargoLocal                = 0x00400000,
+	TrainTypeRescue                    = 0x08000000,
+	TrainTypeConstruction              = 0x20000000,
+	TrainTypeCleaning                  = 0x30000000,
+	TrainTypeOther                     = 0x40000000
+	// Bit 32 can not be used because of conversion functions that handle with signed int32_t
+};

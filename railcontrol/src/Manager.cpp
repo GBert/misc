@@ -689,7 +689,7 @@ LocoConfig Manager::GetLocoOfConfigByMatchKey(const ControlID controlId, const s
 
 Loco* Manager::GetLocoByMatchKey(const ControlID controlId, const string& matchKey) const
 {
-	std::lock_guard<std::mutex> guard(controlMutex);
+	std::lock_guard<std::mutex> guard(locoMutex);
 	for (auto& loco : locos)
 	{
 		Loco* locoConfig = loco.second;
@@ -721,7 +721,8 @@ void Manager::LocoReplaceMatchKey(const LocoID locoId, const std::string& newMat
 	loco->SetMatchKey(newMatchKey);
 }
 
-const map<string,LocoConfig> Manager::GetUnmatchedLocosOfControl(const ControlID controlId) const
+const map<string,LocoConfig> Manager::GetUnmatchedLocosOfControl(const ControlID controlId,
+	const std::string& matchKey) const
 {
 	ControlInterface* control = GetControl(controlId);
 	map<string,LocoConfig> out;
@@ -729,7 +730,7 @@ const map<string,LocoConfig> Manager::GetUnmatchedLocosOfControl(const ControlID
 	{
 		return out;
 	}
-	out = control->GetUnmatchedLocos();
+	out = control->GetUnmatchedLocos(matchKey);
 	out[""].SetName("");
 	return out;
 }
@@ -818,6 +819,8 @@ bool Manager::LocoSave(LocoID locoID,
 	const Speed travelSpeed,
 	const Speed reducedSpeed,
 	const Speed creepingSpeed,
+	const Propulsion propulsion,
+	const TrainType type,
 	const std::vector<DataModel::LocoFunctionEntry>& locoFunctions,
 	const std::vector<DataModel::Relation*>& slaves,
 	string& result)
@@ -853,6 +856,8 @@ bool Manager::LocoSave(LocoID locoID,
 	loco->SetTravelSpeed(travelSpeed);
 	loco->SetReducedSpeed(reducedSpeed);
 	loco->SetCreepingSpeed(creepingSpeed);
+	loco->SetPropulsion(propulsion);
+	loco->SetType(type);
 	loco->ConfigureFunctions(locoFunctions);
 	loco->AssignSlaves(slaves);
 
@@ -934,16 +939,14 @@ bool Manager::LocoProtocolAddress(const LocoID locoID, ControlID& controlID, Pro
 void Manager::LocoSpeed(const ControlType controlType, const ControlID controlID, const Protocol protocol, const Address address, const Speed speed)
 {
 	Loco* loco = GetLoco(controlID, protocol, address);
-	if (loco == nullptr)
-	{
-		return;
-	}
+	// nullptr check is done within submethod
 	LocoSpeed(controlType, loco, speed);
 }
 
 bool Manager::LocoSpeed(const ControlType controlType, const LocoID locoID, const Speed speed, const bool withSlaves)
 {
 	Loco* loco = GetLoco(locoID);
+	// nullptr check is done within submethod
 	return LocoSpeed(controlType, loco, speed, withSlaves);
 }
 
@@ -1272,14 +1275,24 @@ void Manager::AccessorySaveAndPublishSettings(const Accessory* const accessory)
 	}
 }
 
-const map<string,DataModel::Accessory*> Manager::AccessoryListByName() const
+const map<string,DataModel::AccessoryConfig> Manager::AccessoryListByName() const
 {
-	map<string,DataModel::Accessory*> out;
-	std::lock_guard<std::mutex> guard(accessoryMutex);
-	for (auto& accessory : accessories)
+	map<string,DataModel::AccessoryConfig> out;
 	{
-		out[accessory.second->GetName()] = accessory.second;
+		std::lock_guard<std::mutex> guard(accessoryMutex);
+		for (auto& accessory : accessories)
+		{
+			out[accessory.second->GetName()] = *(accessory.second);
+		}
 	}
+	/* FIXME: not yet implemented
+	std::lock_guard<std::mutex> guard(controlMutex);
+	for (auto& control : controls)
+	{
+		control.second->AddUnmatchedAccessories(out);
+	}
+	*/
+
 	return out;
 }
 
@@ -1333,6 +1346,30 @@ bool Manager::AccessoryRelease(const AccessoryID accessoryID)
 	}
 	LocoID locoID = accessory->GetLoco();
 	return accessory->Release(logger, locoID);
+}
+
+Accessory* Manager::GetAccessoryByMatchKey(const ControlID controlId, const string& matchKey) const
+{
+	std::lock_guard<std::mutex> guard(accessoryMutex);
+	for (auto& accessory : accessories)
+	{
+		Accessory* accessoryConfig = accessory.second;
+		if (accessoryConfig->GetControlID() == controlId && accessoryConfig->GetMatchKey().compare(matchKey) == 0)
+		{
+			return accessory.second;
+		}
+	}
+	return nullptr;
+}
+
+void Manager::AccessoryRemoveMatchKey(const AccessoryID accessoryId)
+{
+	Accessory* accessory = GetAccessory(accessoryId);
+	if (accessory == nullptr)
+	{
+		return;
+	}
+	accessory->ClearMatchKey();
 }
 
 /***************************

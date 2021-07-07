@@ -80,6 +80,16 @@ namespace DataModel
 		return true;
 	}
 
+	Signal& Signal::operator=(const Hardware::AccessoryCacheEntry& accessory)
+	{
+		SetControlID(accessory.GetControlID());
+		SetName(accessory.GetName());
+		SetAddress(accessory.GetAddress());
+		SetProtocol(accessory.GetProtocol());
+		SetMatchKey(accessory.GetMatchKey());
+		return *this;
+	}
+
 	bool Signal::ReleaseInternal(Logger::Logger* logger, const LocoID locoID)
 	{
 		bool ret = LockableItem::Release(logger, locoID);
@@ -103,7 +113,7 @@ namespace DataModel
 		stateAddressMap.clear();
 		SetStateAddressOffset(SignalStateStop, 0);
 		SetStateAddressOffset(SignalStateClear, 1);
-		switch(accessoryType)
+		switch(GetType())
 		{
 			case SignalTypeDeCombined:
 				SetStateAddressOffset(SignalStateAspect2, 2);
@@ -132,7 +142,7 @@ namespace DataModel
 		std::map<DataModel::AccessoryState,Signal::StateOption> out;
 		out.emplace(SignalStateStop, StateOption(Languages::TextSignalStateStop, GetStateAddressOffset(SignalStateStop)));
 		out.emplace(SignalStateClear, StateOption(Languages::TextSignalStateClear, GetStateAddressOffset(SignalStateClear)));
-		switch(accessoryType)
+		switch(GetType())
 		{
 			case SignalTypeDeCombined:
 				out.emplace(SignalStateAspect2, StateOption(Languages::TextSignalStateStopExpected, GetStateAddressOffset(SignalStateAspect2)));
