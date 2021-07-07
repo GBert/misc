@@ -1,11 +1,12 @@
 const int revisionnr = 
-1638
+1639
 ;
 const char* commithash = 
-"3a5ee1056cb2a65cd010b1af5fcc328acfb02b4c";
+"0c1c2b4b8f7666db47f58e51a43c6720c3b9684e";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1639 2021-07-07 07:50:58 +0200 block: reset fix for fifo\n" \
 "1638 2021-07-06 07:52:19 +0200 xmlscript: resolve car function command\n" \
 "1637 2021-07-05 07:38:44 +0200 xmlscript: lightctrl support added\n" \
 "1636 2021-07-04 08:22:58 +0200 xmlscript: call car function by description with resolved parameter\n" \
