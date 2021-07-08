@@ -1,11 +1,13 @@
 const int revisionnr = 
-1639
+1641
 ;
 const char* commithash = 
-"0c1c2b4b8f7666db47f58e51a43c6720c3b9684e";
+"d00414c6d21248655d0827df8bf05520b025a6de";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1641 2021-07-08 11:24:09 +0200 modbus: use port as unitID\n" \
+"1640 2021-07-08 10:06:28 +0200 block: fix for reset fifo pending arrival\n" \
 "1639 2021-07-07 07:50:58 +0200 block: reset fix for fifo\n" \
 "1638 2021-07-06 07:52:19 +0200 xmlscript: resolve car function command\n" \
 "1637 2021-07-05 07:38:44 +0200 xmlscript: lightctrl support added\n" \
