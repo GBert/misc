@@ -684,7 +684,7 @@ LocoConfig Manager::GetLocoOfConfigByMatchKey(const ControlID controlId, const s
 	{
 		return LocoConfig();
 	}
-	return control->GetLocoByMatch(matchKey);
+	return control->GetLocoByMatchKey(matchKey);
 }
 
 Loco* Manager::GetLocoByMatchKey(const ControlID controlId, const string& matchKey) const
@@ -1147,6 +1147,20 @@ void Manager::AccessoryState(const ControlType controlType, Accessory* accessory
 	}
 }
 
+const map<string,AccessoryConfig> Manager::GetUnmatchedAccessoriesOfControl(const ControlID controlId,
+	const std::string& matchKey) const
+{
+	ControlInterface* control = GetControl(controlId);
+	map<string,AccessoryConfig> out;
+	if (control == nullptr || !control->CanHandle(Hardware::CapabilityAccessoryDatabase))
+	{
+		return out;
+	}
+	out = control->GetUnmatchedAccessories(matchKey);
+	out[""].SetName("");
+	return out;
+}
+
 Accessory* Manager::GetAccessory(const AccessoryID accessoryID) const
 {
 	std::lock_guard<std::mutex> guard(accessoryMutex);
@@ -1188,6 +1202,7 @@ bool Manager::AccessorySave(AccessoryID accessoryID,
 	const LayoutPosition posY,
 	const LayoutPosition posZ,
 	const ControlID controlID,
+	const std::string& matchKey,
 	const Protocol protocol,
 	const Address address,
 	const DataModel::AccessoryType type,
@@ -1226,6 +1241,7 @@ bool Manager::AccessorySave(AccessoryID accessoryID,
 	accessory->SetPosY(posY);
 	accessory->SetPosZ(posZ);
 	accessory->SetControlID(controlID);
+	accessory->SetMatchKey(matchKey);
 	accessory->SetProtocol(protocol);
 	accessory->SetAddress(address);
 	accessory->SetType(type);
@@ -1271,7 +1287,7 @@ void Manager::AccessorySaveAndPublishSettings(const Accessory* const accessory)
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto& control : controls)
 	{
-		control.second->AccessorySettings(accessory->GetID(), accessory->GetName());
+		control.second->AccessorySettings(accessory->GetID(), accessory->GetName(), accessory->GetMatchKey());
 	}
 }
 
@@ -1285,13 +1301,11 @@ const map<string,DataModel::AccessoryConfig> Manager::AccessoryListByName() cons
 			out[accessory.second->GetName()] = *(accessory.second);
 		}
 	}
-	/* FIXME: not yet implemented
 	std::lock_guard<std::mutex> guard(controlMutex);
 	for (auto& control : controls)
 	{
 		control.second->AddUnmatchedAccessories(out);
 	}
-	*/
 
 	return out;
 }
@@ -1346,6 +1360,16 @@ bool Manager::AccessoryRelease(const AccessoryID accessoryID)
 	}
 	LocoID locoID = accessory->GetLoco();
 	return accessory->Release(logger, locoID);
+}
+
+AccessoryConfig Manager::GetAccessoryOfConfigByMatchKey(const ControlID controlId, const string& matchKey) const
+{
+	ControlInterface* control = GetControl(controlId);
+	if (control == nullptr)
+	{
+		return AccessoryConfig();
+	}
+	return control->GetAccessoryByMatchKey(matchKey);
 }
 
 Accessory* Manager::GetAccessoryByMatchKey(const ControlID controlId, const string& matchKey) const

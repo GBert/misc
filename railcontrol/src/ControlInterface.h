@@ -25,6 +25,7 @@ along with RailControl; see the file LICENCE. If not see
 #include <vector>
 
 #include "DataModel/AccessoryBase.h"
+#include "DataModel/AccessoryConfig.h"
 #include "DataModel/Feedback.h"
 #include "DataModel/LocoConfig.h"
 #include "DataModel/LocoFunctions.h"
@@ -89,7 +90,8 @@ class ControlInterface
 		}
 
 		virtual void AccessorySettings(__attribute__((unused)) const AccessoryID accessoryID,
-			__attribute__((unused)) const std::string& name)
+			__attribute__((unused)) const std::string& name,
+			__attribute__((unused)) const std::string& matchKey)
 		{
 		}
 
@@ -326,14 +328,24 @@ class ControlInterface
 			return out;
 		}
 
-		virtual DataModel::LocoConfig GetLocoByMatch(__attribute__((unused)) const std::string& match) const
+		virtual DataModel::LocoConfig GetLocoByMatchKey(__attribute__((unused)) const std::string& matchKey) const
 		{
 			return DataModel::LocoConfig();
 		}
 
-		virtual void SetLocoIdOfMatch(__attribute__((unused)) const LocoID locoId,
-			__attribute__((unused)) const std::string& matchKey)
+		virtual void AddUnmatchedAccessories(__attribute__((unused)) std::map<std::string,DataModel::AccessoryConfig>& list) const
 		{
+		}
+
+		virtual std::map<std::string,DataModel::AccessoryConfig> GetUnmatchedAccessories(__attribute__((unused)) const std::string& matchKey) const
+		{
+			std::map<std::string,DataModel::AccessoryConfig> out;
+			return out;
+		}
+
+		virtual DataModel::AccessoryConfig GetAccessoryByMatchKey(__attribute__((unused)) const std::string& matchKey) const
+		{
+			return DataModel::AccessoryConfig();
 		}
 
 	private:

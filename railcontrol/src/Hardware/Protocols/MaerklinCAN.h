@@ -102,12 +102,12 @@ namespace Hardware
 					return locoCache.GetAll();
 				}
 
-				inline virtual DataModel::LocoConfig GetLocoByMatch(const std::string& matchKey) const override
+				inline virtual DataModel::LocoConfig GetLocoByMatchKey(const std::string& matchKey) const override
 				{
 					return DataModel::LocoConfig(locoCache.Get(matchKey));
 				}
 
-				inline virtual void SetLocoIdOfMatch(const LocoID locoId, const std::string& matchKey) override
+				inline virtual void SetLocoIdOfMatchKey(const LocoID locoId, const std::string& matchKey) override
 				{
 					locoCache.SetLocoId(locoId, matchKey);
 				}

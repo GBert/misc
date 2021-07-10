@@ -1139,6 +1139,18 @@ namespace WebServer
 		return content;
 	}
 
+	HtmlTag WebClient::HtmlTagMatchKeyProtocolAccessory(const ControlID controlId,
+		const string& selectedMatchKey,
+		const Protocol selectedProtocol)
+	{
+		HtmlTag content;
+		map<string,AccessoryConfig> matchKeyMap = manager.GetUnmatchedAccessoriesOfControl(controlId, selectedMatchKey);
+		content.AddChildTag(WebClientStatic::HtmlTagMatchKey(matchKeyMap, selectedMatchKey));
+		map<string,Protocol> protocolMap = manager.AccessoryProtocolsOfControl(controlId);
+		content.AddChildTag(WebClientStatic::HtmlTagProtocol(protocolMap, selectedProtocol));
+		return content;
+	}
+
 	HtmlTag WebClient::HtmlTagProtocolAccessory(const ControlID controlID, const Protocol selectedProtocol)
 	{
 		map<string,Protocol> protocolMap = manager.AccessoryProtocolsOfControl(controlID);
@@ -1941,7 +1953,12 @@ namespace WebServer
 	{
 		HtmlTag content;
 		AccessoryID accessoryID = Utils::Utils::GetIntegerMapEntry(arguments, "accessory", AccessoryNone);
-		ControlID controlID = manager.GetPossibleControlForAccessory();
+		ControlID controlId = Utils::Utils::GetIntegerMapEntry(arguments, "control", ControlNone);
+		if (controlId == ControlNone)
+		{
+			controlId = manager.GetPossibleControlForAccessory();
+		}
+		string matchKey = Utils::Utils::GetStringMapEntry(arguments, "matchkey");
 		Protocol protocol = ProtocolNone;
 		Address address = AddressDefault;
 		string name = Languages::GetText(Languages::TextNew);
@@ -1955,7 +1972,8 @@ namespace WebServer
 			const DataModel::Accessory* accessory = manager.GetAccessory(accessoryID);
 			if (accessory != nullptr)
 			{
-				controlID = accessory->GetControlID();
+				controlId = accessory->GetControlID();
+				matchKey = accessory->GetMatchKey();
 				protocol = accessory->GetProtocol();
 				address = accessory->GetAddress();
 				name = accessory->GetName();
@@ -1966,6 +1984,18 @@ namespace WebServer
 				inverted = accessory->GetInverted();
 			}
 		}
+		else if (controlId > ControlNone)
+		{
+			// accessory from hardware database
+			const DataModel::AccessoryConfig accessory = manager.GetAccessoryOfConfigByMatchKey(controlId, matchKey);
+			if (accessory.GetControlId() == controlId && accessory.GetMatchKey() == matchKey)
+			{
+				protocol = accessory.GetProtocol();
+				address = accessory.GetAddress();
+				name = accessory.GetName();
+			}
+		}
+		// else new accessory
 
 		content.AddChildTag(HtmlTag("h1").AddContent(name).AddId("popup_title"));
 		HtmlTag tabMenu("div");
@@ -1981,8 +2011,8 @@ namespace WebServer
 		mainContent.AddId("tab_main");
 		mainContent.AddClass("tab_content");
 		mainContent.AddChildTag(HtmlTagInputTextWithLabel("name", Languages::TextName, name).AddAttribute("onkeyup", "updateName();"));
-		mainContent.AddChildTag(HtmlTagControlAccessory(controlID, "accessory", accessoryID));
-		mainContent.AddChildTag(HtmlTag("div").AddId("select_protocol").AddChildTag(HtmlTagProtocolAccessory(controlID, protocol)));
+		mainContent.AddChildTag(HtmlTagControlAccessory(controlId, "accessory", accessoryID));
+		mainContent.AddChildTag(HtmlTag("div").AddId("select_protocol").AddChildTag(HtmlTagMatchKeyProtocolAccessory(controlId, matchKey, protocol)));
 		mainContent.AddChildTag(HtmlTagInputIntegerWithLabel("address", Languages::TextAddress, address, 1, 2044));
 		mainContent.AddChildTag(WebClientStatic::HtmlTagDuration(duration));
 		mainContent.AddChildTag(HtmlTagInputCheckboxWithLabel("inverted", Languages::TextInverted, "true", inverted));
@@ -2013,6 +2043,7 @@ namespace WebServer
 		AccessoryID accessoryID = Utils::Utils::GetIntegerMapEntry(arguments, "accessory", AccessoryNone);
 		string name = Utils::Utils::GetStringMapEntry(arguments, "name");
 		ControlID controlId = Utils::Utils::GetIntegerMapEntry(arguments, "control", ControlIdNone);
+		string matchKey = Utils::Utils::GetStringMapEntry(arguments, "matchkey");
 		Protocol protocol = static_cast<Protocol>(Utils::Utils::GetIntegerMapEntry(arguments, "protocol", ProtocolNone));
 		Address address = Utils::Utils::GetIntegerMapEntry(arguments, "address", AddressDefault);
 		LayoutPosition posX = Utils::Utils::GetIntegerMapEntry(arguments, "posx", 0);
@@ -2021,7 +2052,19 @@ namespace WebServer
 		DataModel::AccessoryPulseDuration duration = Utils::Utils::GetIntegerMapEntry(arguments, "duration", manager.GetDefaultAccessoryDuration());
 		bool inverted = Utils::Utils::GetBoolMapEntry(arguments, "inverted");
 		string result;
-		if (!manager.AccessorySave(accessoryID, name, posX, posY, posZ, controlId, protocol, address, DataModel::AccessoryTypeDefault, duration, inverted, result))
+		if (!manager.AccessorySave(accessoryID,
+			name,
+			posX,
+			posY,
+			posZ,
+			controlId,
+			matchKey,
+			protocol,
+			address,
+			DataModel::AccessoryTypeDefault,
+			duration,
+			inverted,
+			result))
 		{
 			ReplyResponse(ResponseError, result);
 			return;
@@ -2054,7 +2097,7 @@ namespace WebServer
 			row.AddChildTag(HtmlTag("td").AddContent(accessory.first));
 			row.AddChildTag(HtmlTag("td").AddContent(ProtocolName(accessoryConfig.GetProtocol())));
 			row.AddChildTag(HtmlTag("td").AddContent(to_string(accessoryConfig.GetAddress())));
-			AccessoryID accessoryId = accessoryConfig.GetAccessoryId();
+			AccessoryID accessoryId = accessoryConfig.GetObjectIdentifier().GetObjectID();
 			const string& accessoryIdString = to_string(accessoryId);
 			accessoryArgument["accessory"] = accessoryIdString;
 			if (accessoryId == AccessoryNone)

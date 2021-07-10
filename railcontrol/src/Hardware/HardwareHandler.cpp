@@ -268,7 +268,18 @@ namespace Hardware
 		{
 			return;
 		}
-		instance->SetLocoIdOfMatch(locoId, matchKey);
+		instance->SetLocoIdOfMatchKey(locoId, matchKey);
+	}
+
+	void HardwareHandler::AccessorySettings(const AccessoryID accessoryId,
+		__attribute__((unused)) const std::string& name,
+		const std::string& matchKey)
+	{
+		if (instance == nullptr)
+		{
+			return;
+		}
+		instance->SetAccessoryIdOfMatchKey(DataModel::ObjectIdentifier(ObjectTypeAccessory, accessoryId), matchKey);
 	}
 
 	void HardwareHandler::AccessoryState(const ControlType controlType, const DataModel::Accessory* accessory)
@@ -494,13 +505,65 @@ namespace Hardware
 		return out;
 	}
 
-	DataModel::LocoConfig HardwareHandler::GetLocoByMatch(const std::string& match) const
+	DataModel::LocoConfig HardwareHandler::GetLocoByMatchKey(const std::string& match) const
 	{
 		if (instance == nullptr)
 		{
 			return DataModel::LocoConfig();
 		}
-		return instance->GetLocoByMatch(match);
+		return instance->GetLocoByMatchKey(match);
+	}
+
+	void HardwareHandler::AddUnmatchedAccessories(std::map<std::string,DataModel::AccessoryConfig>& list) const
+	{
+		if (instance == nullptr)
+		{
+			return;
+		}
+
+		const std::map<std::string,Hardware::AccessoryCacheEntry>& database = instance->GetAccessoryDatabase();
+		for (auto& entry : database)
+		{
+			const Hardware::AccessoryCacheEntry& accessory = entry.second;
+			const DataModel::ObjectIdentifier objectIdentifier = accessory.GetObjectIdentifier();
+			if (objectIdentifier.GetObjectType() != ObjectTypeNone)
+			{
+				continue;
+			}
+			list[accessory.GetName() + " (" + instance->GetShortName() + ")"] = accessory;
+		}
+	}
+
+	std::map<std::string,DataModel::AccessoryConfig> HardwareHandler::GetUnmatchedAccessories(const std::string& matchKey) const
+	{
+		std::map<std::string,DataModel::AccessoryConfig> out;
+		if (instance == nullptr)
+		{
+			return out;
+		}
+
+		const std::map<std::string,Hardware::AccessoryCacheEntry>& database = instance->GetAccessoryDatabase();
+		for (auto& entry : database)
+		{
+			const Hardware::AccessoryCacheEntry& accessory = entry.second;
+			if (accessory.GetObjectIdentifier().GetObjectID() != ObjectNone
+				&& accessory.GetMatchKey().size()
+				&& accessory.GetMatchKey() != matchKey)
+			{
+				continue;
+			}
+			out[accessory.GetName()] = accessory;
+		}
+		return out;
+	}
+
+	DataModel::AccessoryConfig HardwareHandler::GetAccessoryByMatchKey(const std::string& match) const
+	{
+		if (instance == nullptr)
+		{
+			return DataModel::AccessoryConfig();
+		}
+		return instance->GetAccessoryByMatchKey(match);
 	}
 
 	void HardwareHandler::ArgumentTypesOfHardwareTypeAndHint(const HardwareType hardwareType, std::map<unsigned char,ArgumentType>& arguments, std::string& hint)

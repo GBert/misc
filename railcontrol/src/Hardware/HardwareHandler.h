@@ -95,17 +95,23 @@ namespace Hardware
 				__attribute__((unused)) const std::string& name,
 				const std::string& matchKey) override;
 
+			void AccessorySettings(const AccessoryID accessoryId,
+				__attribute__((unused)) const std::string& name,
+				const std::string& matchKey) override;
+
 			void SwitchState(const ControlType controlType, const DataModel::Switch* mySwitch) override;
 			void SignalState(const ControlType controlType, const DataModel::Signal* signal) override;
 			void ProgramRead(const ProgramMode mode, const Address address, const CvNumber cv) override;
 			void ProgramWrite(const ProgramMode mode, const Address address, const CvNumber cv, const CvValue value) override;
 
 			void AddUnmatchedLocos(std::map<std::string,DataModel::LocoConfig>& list) const override;
-
 			std::map<std::string,DataModel::LocoConfig> GetUnmatchedLocos(const std::string& matchKey) const override;
 			std::map<std::string,DataModel::LocoConfig> GetAllLocos() const override;
+			DataModel::LocoConfig GetLocoByMatchKey(__attribute__((unused)) const std::string& match) const override;
 
-			DataModel::LocoConfig GetLocoByMatch(__attribute__((unused)) const std::string& match) const override;
+			void AddUnmatchedAccessories(std::map<std::string,DataModel::AccessoryConfig>& list) const override;
+			std::map<std::string,DataModel::AccessoryConfig> GetUnmatchedAccessories(const std::string& matchKey) const override;
+			DataModel::AccessoryConfig GetAccessoryByMatchKey(__attribute__((unused)) const std::string& match) const override;
 
 			static void ArgumentTypesOfHardwareTypeAndHint(const HardwareType hardwareType, std::map<unsigned char,ArgumentType>& arguments, std::string& hint);
 

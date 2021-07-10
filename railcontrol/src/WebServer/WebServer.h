@@ -56,7 +56,7 @@ namespace WebServer
 			}
 
 			void AccessoryDelete(const AccessoryID accessoryID, const std::string& name) override;
-			void AccessorySettings(const AccessoryID accessoryID, const std::string& name) override;
+			void AccessorySettings(const AccessoryID accessoryID, const std::string& name, const std::string& matchkey) override;
 			void AccessoryState(const ControlType controlType, const DataModel::Accessory* accessory) override;
 			void Booster(const ControlType controlType, const BoosterState status) override;
 			void FeedbackDelete(const FeedbackID feedbackID, const std::string& name) override;

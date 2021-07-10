@@ -587,7 +587,7 @@ namespace WebServer
 				map<string, AccessoryID> accessoryOptions;
 				for (auto& accessory : accessories)
 				{
-					accessoryOptions[accessory.first] = accessory.second.GetAccessoryId();
+					accessoryOptions[accessory.first] = accessory.second.GetObjectIdentifier().GetObjectID();
 				}
 				content.AddChildTag(HtmlTagSelect(name + "_id", accessoryOptions, objectId).AddClass("select_relation_id"));
 

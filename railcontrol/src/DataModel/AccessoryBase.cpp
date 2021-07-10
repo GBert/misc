@@ -25,22 +25,21 @@ along with RailControl; see the file LICENCE. If not see
 #include "Utils/Utils.h"
 
 using std::map;
-using std::stringstream;
 using std::string;
 
 namespace DataModel
 {
 	std::string AccessoryBase::Serialize() const
 	{
-		stringstream ss;
-		ss << HardwareHandle::Serialize()
-			<< ";type=" << static_cast<int>(accessoryType)
-			<< ";state=" << static_cast<int>(accessoryState)
-			<< ";duration=" << static_cast<int>(duration)
-			<< ";inverted=" << static_cast<int>(inverted)
-			<< ";lastused=" << lastUsed
-			<< ";counter=" << counter;
-		return ss.str();
+		string str = HardwareHandle::Serialize();
+		str += ";type=" + static_cast<int>(accessoryType);
+		str += ";state=" + static_cast<int>(accessoryState);
+		str += ";duration=" + static_cast<int>(duration);
+		str += ";inverted=" + static_cast<int>(inverted);
+		str += ";lastused=" + lastUsed;
+		str += ";counter=" + counter;
+		str += ";matchkey=" + matchKey;
+		return str;
 	}
 
 	bool AccessoryBase::Deserialize(const map<string,string>& arguments)
@@ -53,6 +52,7 @@ namespace DataModel
 		inverted = Utils::Utils::GetBoolMapEntry(arguments, "inverted");
 		lastUsed = Utils::Utils::GetIntegerMapEntry(arguments, "lastused", 0);
 		counter = Utils::Utils::GetIntegerMapEntry(arguments, "counter", 0);
+		matchKey = Utils::Utils::GetStringMapEntry(arguments, "matchkey");
 		return true;
 	}
 

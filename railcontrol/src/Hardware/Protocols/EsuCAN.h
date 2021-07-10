@@ -48,6 +48,7 @@ namespace Hardware
 						| Hardware::CapabilityAccessory
 						| Hardware::CapabilityFeedback
 						| Hardware::CapabilityLocoDatabase
+						| Hardware::CapabilityAccessoryDatabase
 					;
 				}
 
@@ -100,14 +101,29 @@ namespace Hardware
 					return locoCache.GetAll();
 				}
 
-				inline virtual DataModel::LocoConfig GetLocoByMatch(const std::string& matchKey) const override
+				inline virtual DataModel::LocoConfig GetLocoByMatchKey(const std::string& matchKey) const override
 				{
 					return DataModel::LocoConfig(locoCache.Get(matchKey));
 				}
 
-				inline virtual void SetLocoIdOfMatch(const LocoID locoId, const std::string& matchKey) override
+				inline virtual void SetLocoIdOfMatchKey(const LocoID locoId, const std::string& matchKey) override
 				{
 					locoCache.SetLocoId(locoId, matchKey);
+				}
+
+				inline virtual const std::map<std::string, Hardware::AccessoryCacheEntry>& GetAccessoryDatabase() const override
+				{
+					return accessoryCache.GetAll();
+				}
+
+				inline virtual DataModel::AccessoryConfig GetAccessoryByMatchKey(const std::string& matchKey) const override
+				{
+					return DataModel::AccessoryConfig(accessoryCache.Get(matchKey));
+				}
+
+				inline virtual void SetAccessoryIdOfMatchKey(const DataModel::ObjectIdentifier objectIdentifier, const std::string& matchKey) override
+				{
+					accessoryCache.SetObjectIdentifier(objectIdentifier, matchKey);
 				}
 
 				static const char* const CommandActivateBoosterUpdates;

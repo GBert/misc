@@ -354,6 +354,22 @@ namespace Hardware
 			}
 			SendActivateUpdates(accessoryId);
 
+			AccessoryCacheEntry cacheEntry(accessoryCache.GetControlId());
+			cacheEntry.SetMatchKey(accessoryId);
+			cacheEntry.SetProtocol(ProtocolServer);
+			cacheEntry.SetAddress(address);
+			string name = name1;
+			if (name2.size())
+			{
+				name += " " + name2;
+			}
+			if (name3.size())
+			{
+				name += " " + name3;
+			}
+			cacheEntry.SetName(name);
+			accessoryCache.Save(cacheEntry);
+
 			logger->Info(Languages::TextFoundAccessoryInEcosDatabase, address, name1, name2, name3);
 		}
 

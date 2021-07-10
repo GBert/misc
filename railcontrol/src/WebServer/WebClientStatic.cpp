@@ -28,7 +28,6 @@ along with RailControl; see the file LICENCE. If not see
 #include "WebServer/HtmlTagInputHidden.h"
 #include "WebServer/HtmlTagInputIntegerWithLabel.h"
 #include "WebServer/HtmlTagInputTextWithLabel.h"
-#include "WebServer/HtmlTagSelectWithLabel.h"
 #include "WebServer/WebClientStatic.h"
 
 using namespace DataModel;
@@ -139,26 +138,6 @@ namespace WebServer
 		hardwareList["Uhlenbrock Intellibox"] = HardwareTypeIntellibox;
 		hardwareList["Virtual Command Station"] = HardwareTypeVirtual;
 		return hardwareList;
-	}
-
-	HtmlTag WebClientStatic::HtmlTagMatchKey(const map<string,LocoConfig>& matchKeyMap, const string& selectedMatchKey)
-	{
-		if (matchKeyMap.size() == 0)
-		{
-			return HtmlTagInputHidden("matchkey", "");
-		}
-
-		map<string,string> options;
-		for (auto& matchKey : matchKeyMap)
-		{
-			const string& nameOfLoco = matchKey.second.GetName();
-			const string& keyOfLoco = matchKey.second.GetMatchKey();
-			options[keyOfLoco] = nameOfLoco + (nameOfLoco != keyOfLoco ? (" (" + keyOfLoco + ")") : "");
-		}
-		HtmlTag content;
-		content.AddChildTag(HtmlTagLabel(Languages::TextNameInControl, "matchkey"));
-		content.AddChildTag(HtmlTagSelect("matchkey", options, selectedMatchKey));
-		return content;
 	}
 
 	HtmlTag WebClientStatic::HtmlTagProtocol(const map<string,Protocol>& protocolMap, const Protocol selectedProtocol)

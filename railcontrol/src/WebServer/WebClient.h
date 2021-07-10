@@ -191,6 +191,10 @@ namespace WebServer
 				const std::string& selectedMatchKey,
 				const Protocol selectedProtocol);
 
+			HtmlTag HtmlTagMatchKeyProtocolAccessory(const ControlID controlID,
+				const std::string& selectedMatchKey,
+				const Protocol selectedProtocol);
+
 			HtmlTag HtmlTagPosition(const DataModel::LayoutItem::LayoutPosition posx,
 				const DataModel::LayoutItem::LayoutPosition posy,
 				const DataModel::LayoutItem::LayoutPosition posz) const;

@@ -32,7 +32,6 @@ namespace DataModel
 		public:
 			inline AccessoryConfig()
 			:	controlId(ControlNone),
-				accessoryId(AccessoryNone),
 				address(AddressDefault),
 				protocol(ProtocolNone),
 				isInUse(false)
@@ -41,7 +40,7 @@ namespace DataModel
 
 			inline AccessoryConfig(const DataModel::Accessory& accessory)
 			:	controlId(accessory.GetControlID()),
-				accessoryId(accessory.GetID()),
+				objectIdentifier(ObjectTypeAccessory, accessory.GetID()),
 				address(accessory.GetAddress()),
 				protocol(accessory.GetProtocol()),
 				name(accessory.GetName()),
@@ -52,7 +51,7 @@ namespace DataModel
 
 			inline AccessoryConfig(const Hardware::AccessoryCacheEntry& accessory)
 			:	controlId(accessory.GetControlID()),
-				accessoryId(accessory.GetAccessoryID()),
+				objectIdentifier(accessory.GetObjectIdentifier()),
 				address(accessory.GetAddress()),
 				protocol(accessory.GetProtocol()),
 				name(accessory.GetName()),
@@ -64,7 +63,7 @@ namespace DataModel
 			inline AccessoryConfig& operator=(const DataModel::Accessory& accessory)
 			{
 				controlId = accessory.GetControlID();
-				accessoryId = accessory.GetID();
+				objectIdentifier = ObjectIdentifier(ObjectTypeAccessory, accessory.GetID());
 				address = accessory.GetAddress();
 				protocol = accessory.GetProtocol();
 				name = accessory.GetName();
@@ -76,7 +75,7 @@ namespace DataModel
 			inline AccessoryConfig& operator=(const Hardware::AccessoryCacheEntry& accessory)
 			{
 				controlId = accessory.GetControlID();
-				accessoryId = accessory.GetAccessoryID();
+				objectIdentifier = accessory.GetObjectIdentifier();
 				address = accessory.GetAddress();
 				protocol = accessory.GetProtocol();
 				name = accessory.GetName();
@@ -89,9 +88,9 @@ namespace DataModel
 				return controlId;
 			}
 
-			inline AccessoryID GetAccessoryId() const
+			inline ObjectIdentifier GetObjectIdentifier() const
 			{
-				return accessoryId;
+				return objectIdentifier;
 			}
 
 			inline Address GetAddress() const
@@ -126,7 +125,7 @@ namespace DataModel
 
 		private:
 			ControlID controlId;
-			AccessoryID accessoryId;
+			ObjectIdentifier objectIdentifier;
 			Address address;
 			Protocol protocol;
 			std::string name;

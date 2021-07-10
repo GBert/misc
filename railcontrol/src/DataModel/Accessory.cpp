@@ -25,19 +25,17 @@ along with RailControl; see the file LICENCE. If not see
 #include "Utils/Utils.h"
 
 using std::map;
-using std::stringstream;
 using std::string;
 
 namespace DataModel
 {
 	std::string Accessory::Serialize() const
 	{
-		stringstream ss;
-		ss << "objectType=Accessory;"
-			<< ";" << AccessoryBase::Serialize()
-			<< ";" << LayoutItem::Serialize()
-			<< ";" << LockableItem::Serialize();
-		return ss.str();
+		string str = "objectType=Accessory;";
+		str += AccessoryBase::Serialize();
+		str += ";" + LayoutItem::Serialize();
+		str += ";" + LockableItem::Serialize();
+		return str;
 	}
 
 	bool Accessory::Deserialize(const std::string& serialized)

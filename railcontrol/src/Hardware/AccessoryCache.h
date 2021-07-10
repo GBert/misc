@@ -25,6 +25,7 @@ along with RailControl; see the file LICENCE. If not see
 #include <map>
 
 #include "DataTypes.h"
+#include "DataModel/ObjectIdentifier.h"
 
 class Manager;
 
@@ -37,7 +38,6 @@ namespace Hardware
 		public:
 			inline AccessoryCacheEntry(const ControlID controlId)
 			:	controlId(controlId),
-				accessoryId(AccessoryNone),
 				protocol(ProtocolNone),
 				address(AddressNone),
 				matchKey("")
@@ -49,14 +49,19 @@ namespace Hardware
 				return controlId;
 			}
 
-			inline AccessoryID GetAccessoryID() const
+			inline DataModel::ObjectIdentifier GetObjectIdentifier() const
 			{
-				return accessoryId;
+				return objectIdentifier;
 			}
 
-			inline void SetAccessoryID(const AccessoryID accessoryId)
+			inline void SetObjectIdentifier(const DataModel::ObjectIdentifier objectIdentifier)
 			{
-				this->accessoryId = accessoryId;
+				this->objectIdentifier = objectIdentifier;
+			}
+
+			inline void ClearObjectIdentifier()
+			{
+				this->objectIdentifier = DataModel::ObjectIdentifier();
 			}
 
 			inline const std::string& GetName() const
@@ -106,7 +111,7 @@ namespace Hardware
 
 		private:
 			const ControlID controlId;
-			AccessoryID accessoryId;
+			DataModel::ObjectIdentifier objectIdentifier;
 			std::string name;
 			Protocol protocol;
 			Address address;
@@ -146,7 +151,7 @@ namespace Hardware
 				return entries;
 			}
 
-			void SetAccessoryId(const AccessoryID accessoryId, const std::string& matckKey);
+			void SetObjectIdentifier(const DataModel::ObjectIdentifier objectIdentifier, const std::string& matchKey);
 
 		private:
 			const ControlID controlId;

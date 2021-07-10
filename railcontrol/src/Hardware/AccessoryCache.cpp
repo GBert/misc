@@ -29,7 +29,7 @@ namespace Hardware
 		DataModel::Accessory* accessory = manager->GetAccessoryByMatchKey(GetControlId(), matchKey);
 		if (accessory != nullptr)
 		{
-			entry.SetAccessoryID(accessory->GetID());
+			entry.SetObjectIdentifier(DataModel::ObjectIdentifier(ObjectTypeAccessory, accessory->GetID()));
 			*accessory = entry;
 		}
 		entries.emplace(matchKey, entry);
@@ -37,20 +37,21 @@ namespace Hardware
 
 	AccessoryID AccessoryCache::Delete(const std::string& matchKey)
 	{
-		AccessoryID accessoryId = Get(matchKey).GetAccessoryID();
+		const DataModel::ObjectIdentifier objectIdentifier = Get(matchKey).GetObjectIdentifier();
+		const AccessoryID accessoryId = objectIdentifier.GetObjectID();
 		manager->AccessoryRemoveMatchKey(accessoryId);
 		entries.erase(matchKey);
 		return accessoryId;
 	}
 
-	void AccessoryCache::SetAccessoryId(const AccessoryID accessoryId, const std::string& matchKey)
+	void AccessoryCache::SetObjectIdentifier(const DataModel::ObjectIdentifier objectIdentifier, const std::string& matchKey)
 	{
 		for (auto& accessoryCacheEntry : entries)
 		{
 			AccessoryCacheEntry& entry = accessoryCacheEntry.second;
-			if (entry.GetAccessoryID() == accessoryId)
+			if (entry.GetObjectIdentifier() == objectIdentifier)
 			{
-				entry.SetAccessoryID(AccessoryNone);
+				entry.ClearObjectIdentifier();
 			}
 		}
 		auto entry = entries.find(matchKey);
@@ -58,7 +59,7 @@ namespace Hardware
 		{
 			return;
 		}
-		entry->second.SetAccessoryID(accessoryId);
+		entry->second.SetObjectIdentifier(objectIdentifier);
 	}
 } // namespace Hardware
 

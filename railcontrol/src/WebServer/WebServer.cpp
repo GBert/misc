@@ -221,7 +221,9 @@ namespace WebServer
 		AddUpdate(command.str(), state ? Languages::TextAccessoryStateIsGreen : Languages::TextAccessoryStateIsRed, accessory->GetName());
 	}
 
-	void WebServer::AccessorySettings(const AccessoryID accessoryID, const std::string& name)
+	void WebServer::AccessorySettings(const AccessoryID accessoryID,
+		const std::string& name,
+		__attribute__((unused)) const std::string& matchkey)
 	{
 		stringstream command;
 		command << "accessorysettings;accessory=" << accessoryID;

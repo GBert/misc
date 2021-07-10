@@ -27,6 +27,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "DataModel/AccessoryBase.h"
 #include "DataModel/Loco.h"
 #include "DataTypes.h"
+#include "Hardware/AccessoryCache.h"
 #include "Hardware/Capabilities.h"
 #include "Hardware/LocoCache.h"
 #include "Manager.h"
@@ -174,13 +175,28 @@ namespace Hardware
 				return emptyLocoDatabase;
 			}
 
-			virtual DataModel::LocoConfig GetLocoByMatch(__attribute__((unused)) const std::string& match) const
+			virtual DataModel::LocoConfig GetLocoByMatchKey(__attribute__((unused)) const std::string& matchKey) const
 			{
 				return DataModel::LocoConfig();
 			}
 
-			virtual void SetLocoIdOfMatch(__attribute__((unused)) const LocoID locoId,
-				__attribute__((unused)) const std::string& match)
+			virtual void SetLocoIdOfMatchKey(__attribute__((unused)) const LocoID locoId,
+				__attribute__((unused)) const std::string& matchKey)
+			{
+			}
+
+			virtual const std::map<std::string,Hardware::AccessoryCacheEntry>& GetAccessoryDatabase() const
+			{
+				return emptyAccessoryDatabase;
+			}
+
+			virtual DataModel::AccessoryConfig GetAccessoryByMatchKey(__attribute__((unused)) const std::string& matchKey) const
+			{
+				return DataModel::AccessoryConfig();
+			}
+
+			virtual void SetAccessoryIdOfMatchKey(__attribute__((unused)) const DataModel::ObjectIdentifier objectIdentifier,
+				__attribute__((unused)) const std::string& matchKey)
 			{
 			}
 
@@ -210,6 +226,7 @@ namespace Hardware
 			const std::string fullName;
 			const std::string shortName;
 			std::map<std::string,Hardware::LocoCacheEntry> emptyLocoDatabase;
+			std::map<std::string,Hardware::AccessoryCacheEntry> emptyAccessoryDatabase;
 	};
 } // namespace
 

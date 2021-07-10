@@ -172,6 +172,10 @@ class Manager
 		bool AccessoryState(const ControlType controlType, const AccessoryID accessoryID, const DataModel::AccessoryState state, const bool force);
 		void AccessoryState(const ControlType controlType, const AccessoryID accessoryID, const DataModel::AccessoryState state, const bool inverted, const bool on);
 		DataModel::Accessory* GetAccessory(const AccessoryID accessoryID) const;
+
+		const std::map<std::string,DataModel::AccessoryConfig> GetUnmatchedAccessoriesOfControl(const ControlID controlId,
+			const std::string& matchKey) const;
+
 		const std::string& GetAccessoryName(const AccessoryID accessoryID) const;
 
 		inline const std::map<AccessoryID,DataModel::Accessory*>& AccessoryList() const
@@ -187,6 +191,7 @@ class Manager
 			const DataModel::LayoutItem::LayoutPosition y,
 			const DataModel::LayoutItem::LayoutPosition z,
 			const ControlID controlID,
+			const std::string& matchKey,
 			const Protocol protocol,
 			const Address address,
 			const DataModel::AccessoryType type,
@@ -198,6 +203,8 @@ class Manager
 			std::string& result);
 
 		bool AccessoryRelease(const AccessoryID accessoryID);
+
+		DataModel::AccessoryConfig GetAccessoryOfConfigByMatchKey(const ControlID controlId, const std::string& matchKey) const;
 
 		DataModel::Accessory* GetAccessoryByMatchKey(const ControlID controlId, const std::string& matchKey) const;
 

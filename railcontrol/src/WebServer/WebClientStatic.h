@@ -24,23 +24,10 @@ along with RailControl; see the file LICENCE. If not see
 #include <map>
 #include <string>
 #include <vector>
-//
-//#include "DataModel/AccessoryBase.h"
-//#include "DataModel/ObjectIdentifier.h"
-//#include "Manager.h"
-//#include "Network/TcpConnection.h"
-//#include "ResponseHtml.h"
-//#include "WebServer/WebClientCluster.h"
-//#include "WebServer/WebClientSignal.h"
-//#include "WebServer/WebClientText.h"
-//#include "WebServer/WebClientTrack.h"
+
 #include "WebServer/HtmlTag.h"
-//
-//namespace DataModel
-//{
-//	class ObjectIdentifier;
-//	class Cluster;
-//}
+#include "WebServer/HtmlTagInputHidden.h"
+#include "WebServer/HtmlTagSelectWithLabel.h"
 
 namespace WebServer
 {
@@ -56,8 +43,25 @@ namespace WebServer
 
 			static HtmlTag HtmlTagControlArgument(const unsigned char argNr, const ArgumentType type, const std::string& value);
 
-			static HtmlTag HtmlTagMatchKey(const std::map<std::string,DataModel::LocoConfig>& matchKeyMap,
-				const std::string& selectedMatchKey);
+			template<class T>
+			static HtmlTag HtmlTagMatchKey(const std::map<std::string,T>& matchKeyMap,
+				const std::string& selectedMatchKey)
+			{
+				if (matchKeyMap.size() == 0)
+				{
+					return HtmlTagInputHidden("matchkey", "");
+				}
+
+				std::map<std::string,std::string> options;
+				for (auto& matchKey : matchKeyMap)
+				{
+					const std::string& name = matchKey.second.GetName();
+					const std::string& key = matchKey.second.GetMatchKey();
+					options[key] = name + (name != key ? (" (" + key + ")") : "");
+				}
+				return HtmlTagSelectWithLabel("matchkey", Languages::TextNameInControl, options, selectedMatchKey);
+			}
+
 
 			static HtmlTag HtmlTagProtocol(const std::map<std::string,Protocol>& protocolMap,
 				const Protocol selectedProtocol);
