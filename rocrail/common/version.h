@@ -1,11 +1,13 @@
 const int revisionnr = 
-1641
+1643
 ;
 const char* commithash = 
-"d00414c6d21248655d0827df8bf05520b025a6de";
+"337e6826c8311c9520256dafa581eea86ffb2047";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1643 2021-07-11 07:40:34 +0200 modbus: set socket receive timeout at poll sleep\n" \
+"1642 2021-07-11 07:35:46 +0200 modbus: stop polling in case the queue size > 1000\n" \
 "1641 2021-07-08 11:24:09 +0200 modbus: use port as unitID\n" \
 "1640 2021-07-08 10:06:28 +0200 block: fix for reset fifo pending arrival\n" \
 "1639 2021-07-07 07:50:58 +0200 block: reset fix for fifo\n" \
