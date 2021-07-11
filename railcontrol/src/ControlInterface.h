@@ -63,6 +63,10 @@ class ControlInterface
 		{
 		}
 
+		virtual void Stop()
+		{
+		}
+
 		ControlType GetControlType() const
 		{
 			return controlType;

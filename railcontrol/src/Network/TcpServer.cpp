@@ -34,7 +34,7 @@ along with RailControl; see the file LICENCE. If not see
 namespace Network
 {
 	TcpServer::TcpServer(const std::string& address, const unsigned short port, const std::string& threadName)
-	:	run(false),
+	:	run(true),
 	 	error(""),
 	 	threadName(threadName)
 	{
@@ -110,22 +110,23 @@ namespace Network
 			return;
 		}
 
-		run = true;
+		if (!run)
+		{
+			close(serverSocket);
+			return;
+		}
 		serverThreads.push_back(std::thread(&Network::TcpServer::Worker, this, serverSocket));
 	}
 
 	void TcpServer::TerminateTcpServer()
 	{
-		if (run == false)
-		{
-			return;
-		}
-
 		run = false;
 
-		for (std::thread& serverThread : serverThreads)
+		while (serverThreads.size())
 		{
+			std::thread& serverThread = serverThreads.back();
 			serverThread.join();
+			serverThreads.pop_back();
 		}
 	}
 

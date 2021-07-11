@@ -45,6 +45,8 @@ namespace WebServer
 			WebServer(Manager& manager, const std::string& webserveraddress, const unsigned short port);
 			~WebServer();
 
+			void Stop() override;
+
 			void Work(Network::TcpConnection* connection) override;
 
 			bool NextUpdate(unsigned int& updateIDClient, std::string& s);
@@ -122,7 +124,6 @@ namespace WebServer
 			void LogBrowserInfo(const std::string& webserveraddress, const unsigned short port);
 
 			Logger::Logger* logger;
-			volatile bool run;
 			unsigned int lastClientID;
 			std::vector<WebClient*> clients;
 			Manager& manager;

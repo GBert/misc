@@ -233,6 +233,14 @@ Manager::~Manager()
 		std::lock_guard<std::mutex> guard(controlMutex);
 		for (auto& control : controls)
 		{
+			control.second->Stop();
+		}
+	}
+	Utils::Utils::SleepForSeconds(1);
+	{
+		std::lock_guard<std::mutex> guard(controlMutex);
+		for (auto& control : controls)
+		{
 			ControlID controlID = control.first;
 			if (controlID < ControlIdFirstHardware)
 			{

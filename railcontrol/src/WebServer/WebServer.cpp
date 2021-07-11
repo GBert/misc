@@ -56,7 +56,6 @@ namespace WebServer
 	:	ControlInterface(ControlTypeWebserver),
 		Network::TcpServer(webserveraddress, port, "WebServer"),
 		logger(Logger::Logger::GetLogger("WebServer")),
-		run(false),
 		lastClientID(0),
 		manager(manager),
 		updateID(1),
@@ -65,29 +64,12 @@ namespace WebServer
 		logger->Info(Languages::TextWebServerStarted);
 		AddUpdate(Languages::TextRailControlStarted);
 
-		run = true;
 		LogBrowserInfo(webserveraddress, port);
 		updateAvailable = Utils::Utils::HostResolves(GetVersionInfoGitHash() + ".hash.railcontrol.org");
 	}
 
 	WebServer::~WebServer()
 	{
-		if (run == false)
-		{
-			return;
-		}
-
-		AddUpdate(Languages::TextStoppingRailControl);
-		TerminateTcpServer();
-		Utils::Utils::SleepForSeconds(1);
-		run = false;
-
-		// stopping all clients
-		for (auto client : clients)
-		{
-			client->Stop();
-		}
-
 		// delete all client memory
 		while (clients.size())
 		{
@@ -96,6 +78,17 @@ namespace WebServer
 			delete client;
 		}
 		logger->Info(Languages::TextWebServerStopped);
+	}
+
+	void WebServer::Stop()
+	{
+		AddUpdate(Languages::TextStoppingRailControl);
+		TerminateTcpServer();
+		// stopping all clients
+		for (auto client : clients)
+		{
+			client->Stop();
+		}
 	}
 
 	void WebServer::LogBrowserInfo(const std::string& webserveraddress, const unsigned short port)
