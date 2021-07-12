@@ -32,12 +32,12 @@ namespace DataModel
 	std::string AccessoryBase::Serialize() const
 	{
 		string str = HardwareHandle::Serialize();
-		str += ";type=" + static_cast<int>(accessoryType);
-		str += ";state=" + static_cast<int>(accessoryState);
-		str += ";duration=" + static_cast<int>(duration);
-		str += ";inverted=" + static_cast<int>(inverted);
-		str += ";lastused=" + lastUsed;
-		str += ";counter=" + counter;
+		str += ";type=" + std::to_string(accessoryType);
+		str += ";state=" + std::to_string(accessoryState);
+		str += ";duration=" + std::to_string(duration);
+		str += ";inverted=" + std::to_string(inverted);
+		str += ";lastused=" + std::to_string(lastUsed);
+		str += ";counter=" + std::to_string(counter);
 		str += ";matchkey=" + matchKey;
 		return str;
 	}

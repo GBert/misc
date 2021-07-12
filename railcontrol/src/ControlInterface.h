@@ -80,7 +80,8 @@ class ControlInterface
 		}
 
 		virtual void AccessoryDelete(__attribute__((unused)) const AccessoryID accessoryID,
-			__attribute__((unused)) const std::string& name)
+			__attribute__((unused)) const std::string& name,
+			__attribute__((unused)) const std::string& matchKey)
 		{
 		}
 
@@ -151,7 +152,8 @@ class ControlInterface
 		}
 
 		virtual void LocoDelete(__attribute__((unused)) const LocoID locoID,
-			__attribute__((unused)) const std::string& name)
+			__attribute__((unused)) const std::string& name,
+			__attribute__((unused)) const std::string& matchKey)
 		{
 		}
 
@@ -224,12 +226,14 @@ class ControlInterface
 		}
 
 		virtual void SwitchDelete(__attribute__((unused)) const SwitchID switchID,
-			__attribute__((unused)) const std::string& name)
+			__attribute__((unused)) const std::string& name,
+			__attribute__((unused)) const std::string& matchKey)
 		{
 		}
 
 		virtual void SwitchSettings(__attribute__((unused)) const SwitchID switchID,
-			__attribute__((unused)) const std::string& name)
+			__attribute__((unused)) const std::string& name,
+			__attribute__((unused)) const std::string& matchKey)
 		{
 		}
 
@@ -253,12 +257,14 @@ class ControlInterface
 		}
 
 		virtual void SignalDelete(__attribute__((unused)) const SignalID signalID,
-			__attribute__((unused)) const std::string& name)
+			__attribute__((unused)) const std::string& name,
+			__attribute__((unused)) const std::string& matchKey)
 		{
 		}
 
 		virtual void SignalSettings(__attribute__((unused)) const SignalID signalID,
-			__attribute__((unused)) const std::string& name)
+			__attribute__((unused)) const std::string& name,
+			__attribute__((unused)) const std::string& matchKey)
 		{
 		}
 

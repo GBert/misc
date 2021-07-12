@@ -75,7 +75,7 @@ namespace DataModel
 
 			static DataModel::LayoutItem::LayoutItemSize CalculateHeightFromType(AccessoryType type);
 
-			inline Switch& operator=(const Hardware::AccessoryCacheEntry& accessory);
+			Switch& operator=(const Hardware::AccessoryCacheEntry& accessory);
 
 		private:
 			inline void SetSizeFromType()

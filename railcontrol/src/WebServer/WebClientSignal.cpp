@@ -57,7 +57,12 @@ namespace WebServer
 	{
 		HtmlTag content;
 		SignalID signalID = Utils::Utils::GetIntegerMapEntry(arguments, "signal", SignalNone);
-		ControlID controlID = manager.GetPossibleControlForAccessory();
+		ControlID controlId = manager.GetPossibleControlForAccessory();
+		if (controlId == ControlNone)
+		{
+			controlId = manager.GetPossibleControlForAccessory();
+		}
+		string matchKey = Utils::Utils::GetStringMapEntry(arguments, "matchkey");
 		Protocol protocol = ProtocolNone;
 		Address address = AddressDefault;
 		string name = Languages::GetText(Languages::TextNew);
@@ -90,7 +95,8 @@ namespace WebServer
 			const DataModel::Signal* signal = manager.GetSignal(signalID);
 			if (signal != nullptr)
 			{
-				controlID = signal->GetControlID();
+				controlId = signal->GetControlID();
+				matchKey = signal->GetMatchKey();
 				protocol = signal->GetProtocol();
 				address = signal->GetAddress();
 				name = signal->GetName();
@@ -112,6 +118,18 @@ namespace WebServer
 				automodeNeeded = manager.HasRouteFromOrToTrackBase(ObjectIdentifier(ObjectTypeSignal, signalID));
 			}
 		}
+		else if (controlId > ControlNone)
+		{
+			// signal from hardware database
+			const DataModel::AccessoryConfig signalConfig = manager.GetAccessoryOfConfigByMatchKey(controlId, matchKey);
+			if (signalConfig.GetControlId() == controlId && signalConfig.GetMatchKey() == matchKey)
+			{
+				protocol = signalConfig.GetProtocol();
+				address = signalConfig.GetAddress();
+				name = signalConfig.GetName();
+			}
+		}
+		// else new signal
 
 		std::map<DataModel::AccessoryType, Languages::TextSelector> signalTypeOptions;
 		signalTypeOptions[DataModel::SignalTypeSimpleLeft] = Languages::TextSimpleLeft;
@@ -160,8 +178,8 @@ namespace WebServer
 		{
 			mainContent.AddChildTag(HtmlTagInputHidden("length", "1"));
 		}
-		mainContent.AddChildTag(client.HtmlTagControlAccessory(controlID, "signal", signalID));
-		mainContent.AddChildTag(HtmlTag("div").AddId("select_protocol").AddChildTag(client.HtmlTagProtocolAccessory(controlID, protocol)));
+		mainContent.AddChildTag(client.HtmlTagControlAccessory(controlId, "signal", signalID));
+		mainContent.AddChildTag(HtmlTag("div").AddId("select_protocol").AddChildTag(client.HtmlTagMatchKeyProtocolAccessory(controlId, matchKey, protocol)));
 		mainContent.AddChildTag(HtmlTagInputIntegerWithLabel("address", Languages::TextBaseAddress, address, 1, 2044));
 		mainContent.AddChildTag(WebClientStatic::HtmlTagDuration(duration));
 		mainContent.AddChildTag(HtmlTagInputCheckboxWithLabel("inverted", Languages::TextInverted, "true", inverted));
@@ -235,6 +253,7 @@ namespace WebServer
 		string name = Utils::Utils::GetStringMapEntry(arguments, "name");
 		Orientation signalOrientation = static_cast<Orientation>(Utils::Utils::GetBoolMapEntry(arguments, "signalorientation", OrientationRight));
 		ControlID controlId = Utils::Utils::GetIntegerMapEntry(arguments, "control", ControlIdNone);
+		string matchKey = Utils::Utils::GetStringMapEntry(arguments, "matchkey");
 		Protocol protocol = static_cast<Protocol>(Utils::Utils::GetIntegerMapEntry(arguments, "protocol", ProtocolNone));
 		Address address = Utils::Utils::GetIntegerMapEntry(arguments, "address", AddressDefault);
 		LayoutPosition posX = Utils::Utils::GetIntegerMapEntry(arguments, "posx", 0);
@@ -278,6 +297,7 @@ namespace WebServer
 			allowLocoTurn,
 			releaseWhenFree,
 			controlId,
+			matchKey,
 			protocol,
 			address,
 			signalType,
@@ -349,22 +369,32 @@ namespace WebServer
 		HtmlTag content;
 		content.AddChildTag(HtmlTag("h1").AddContent(Languages::TextSignals));
 		HtmlTag table("table");
-		const map<string,DataModel::Signal*> signalList = manager.SignalListByName();
+		const map<string,DataModel::AccessoryConfig> signalList = manager.SignalConfigByName();
 		map<string,string> signalArgument;
 		for (auto& signal : signalList)
 		{
-			Signal* signalConfig = signal.second;
+			const AccessoryConfig& signalConfig = signal.second;
 			HtmlTag row("tr");
 			row.AddChildTag(HtmlTag("td").AddContent(signal.first));
-			row.AddChildTag(HtmlTag("td").AddContent(client.ProtocolName(signalConfig->GetProtocol())));
-			row.AddChildTag(HtmlTag("td").AddContent(to_string(signalConfig->GetAddress())));
-			const string& signalIdString = to_string(signalConfig->GetID());
+			row.AddChildTag(HtmlTag("td").AddContent(client.ProtocolName(signalConfig.GetProtocol())));
+			row.AddChildTag(HtmlTag("td").AddContent(to_string(signalConfig.GetAddress())));
+			const SignalID signalId = signalConfig.GetObjectIdentifier().GetObjectID();
+			const string& signalIdString = to_string(signalId);
 			signalArgument["signal"] = signalIdString;
-			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextEdit, "signaledit_list_" + signalIdString, signalArgument)));
-			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextDelete, "signalaskdelete_" + signalIdString, signalArgument)));
-			if (signalConfig->IsInUse())
+			if (signalId == SwitchNone)
 			{
-				row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonCommandWide(Languages::TextRelease, "signalrelease_" + signalIdString, signalArgument, "hideElement('b_signalrelease_" + signalIdString + "');")));
+				signalArgument["control"] = to_string(signalConfig.GetControlId());
+				signalArgument["matchkey"] = signalConfig.GetMatchKey();
+				row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextImport, "signaledit_list_" + signalIdString, signalArgument)));
+			}
+			else
+			{
+				row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextEdit, "signaledit_list_" + signalIdString, signalArgument)));
+				row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextDelete, "signalaskdelete_" + signalIdString, signalArgument)));
+				if (signalConfig.IsInUse())
+				{
+					row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonCommandWide(Languages::TextRelease, "signalrelease_" + signalIdString, signalArgument, "hideElement('b_signalrelease_" + signalIdString + "');")));
+				}
 			}
 			table.AddChildTag(row);
 		}

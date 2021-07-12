@@ -195,7 +195,7 @@ namespace Hardware
 				return DataModel::AccessoryConfig();
 			}
 
-			virtual void SetAccessoryIdOfMatchKey(__attribute__((unused)) const DataModel::ObjectIdentifier objectIdentifier,
+			virtual void SetAccessoryIdentifierOfMatchKey(__attribute__((unused)) const DataModel::ObjectIdentifier objectIdentifier,
 				__attribute__((unused)) const std::string& matchKey)
 			{
 			}

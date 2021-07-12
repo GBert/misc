@@ -179,6 +179,10 @@ namespace WebServer
 				return ProtocolSymbols[protocol <= ProtocolEnd ? protocol : ProtocolNone];
 			}
 
+			HtmlTag HtmlTagMatchKeyProtocolAccessory(const ControlID controlID,
+				const std::string& selectedMatchKey,
+				const Protocol selectedProtocol);
+
 		private:
 			void InterpretClientRequest(const std::deque<std::string>& lines, std::string& method, std::string& uri, std::string& protocol, std::map<std::string,std::string>& arguments, std::map<std::string,std::string>& headers);
 			void HandleLoco(const std::map<std::string, std::string>& arguments);
@@ -188,10 +192,6 @@ namespace WebServer
 			HtmlTag HtmlTagLocoSelector(const unsigned int selector) const;
 			HtmlTag HtmlTagLayerSelector() const;
 			HtmlTag HtmlTagMatchKeyProtocolLoco(const ControlID controlID,
-				const std::string& selectedMatchKey,
-				const Protocol selectedProtocol);
-
-			HtmlTag HtmlTagMatchKeyProtocolAccessory(const ControlID controlID,
 				const std::string& selectedMatchKey,
 				const Protocol selectedProtocol);
 

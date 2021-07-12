@@ -29,6 +29,7 @@ along with RailControl; see the file LICENCE. If not see
 #include <unistd.h>
 
 #include "DataModel/DataModel.h"
+#include "DataModel/AccessoryConfig.h"
 #include "DataModel/LocoConfig.h"
 #include "DataModel/ObjectIdentifier.h"
 #include "Hardware/HardwareHandler.h"
@@ -1349,7 +1350,7 @@ namespace WebServer
 	{
 		map<string, ObjectID> locoOptions;
 
-		map<string, LocoConfig> allLocos = manager.LocoListByName();
+		map<string, LocoConfig> allLocos = manager.LocoConfigByName();
 		for (auto& loco : allLocos)
 		{
 			// FIXME: check if already has a master
@@ -1745,7 +1746,7 @@ namespace WebServer
 		HtmlTag content;
 		content.AddChildTag(HtmlTag("h1").AddContent(Languages::TextLocos));
 		HtmlTag table("table");
-		const map<string,LocoConfig> locoList = manager.LocoListByName();
+		const map<string,LocoConfig> locoList = manager.LocoConfigByName();
 		map<string,string> locoArgument;
 		for (auto& loco : locoList)
 		{
@@ -2088,7 +2089,7 @@ namespace WebServer
 		HtmlTag content;
 		content.AddChildTag(HtmlTag("h1").AddContent(Languages::TextAccessories));
 		HtmlTag table("table");
-		const map<string,DataModel::AccessoryConfig> accessoryList = manager.AccessoryListByName();
+		const map<string,DataModel::AccessoryConfig> accessoryList = manager.AccessoryConfigByName();
 		map<string,string> accessoryArgument;
 		for (auto& accessory : accessoryList)
 		{
@@ -2185,7 +2186,12 @@ namespace WebServer
 	{
 		HtmlTag content;
 		SwitchID switchID = Utils::Utils::GetIntegerMapEntry(arguments, "switch", SwitchNone);
-		ControlID controlID = manager.GetPossibleControlForAccessory();
+		ControlID controlId = manager.GetPossibleControlForAccessory();
+		if (controlId == ControlNone)
+		{
+			controlId = manager.GetPossibleControlForAccessory();
+		}
+		string matchKey = Utils::Utils::GetStringMapEntry(arguments, "matchkey");
 		Protocol protocol = ProtocolNone;
 		Address address = AddressDefault;
 		string name = Languages::GetText(Languages::TextNew);
@@ -2201,7 +2207,8 @@ namespace WebServer
 			const DataModel::Switch* mySwitch = manager.GetSwitch(switchID);
 			if (mySwitch != nullptr)
 			{
-				controlID = mySwitch->GetControlID();
+				controlId = mySwitch->GetControlID();
+				matchKey = mySwitch->GetMatchKey();
 				protocol = mySwitch->GetProtocol();
 				address = mySwitch->GetAddress();
 				name = mySwitch->GetName();
@@ -2214,6 +2221,18 @@ namespace WebServer
 				inverted = mySwitch->GetInverted();
 			}
 		}
+		else if (controlId > ControlNone)
+		{
+			// switch from hardware database
+			const DataModel::AccessoryConfig switchConfig = manager.GetAccessoryOfConfigByMatchKey(controlId, matchKey);
+			if (switchConfig.GetControlId() == controlId && switchConfig.GetMatchKey() == matchKey)
+			{
+				protocol = switchConfig.GetProtocol();
+				address = switchConfig.GetAddress();
+				name = switchConfig.GetName();
+			}
+		}
+		// else new switch
 
 		std::map<DataModel::AccessoryType,Languages::TextSelector> typeOptions;
 		typeOptions[DataModel::SwitchTypeLeft] = Languages::TextLeft;
@@ -2237,8 +2256,8 @@ namespace WebServer
 		mainContent.AddClass("tab_content");
 		mainContent.AddChildTag(HtmlTagInputTextWithLabel("name", Languages::TextName, name).AddAttribute("onkeyup", "updateName();"));
 		mainContent.AddChildTag(HtmlTagSelectWithLabel("type", Languages::TextType, typeOptions, type));
-		mainContent.AddChildTag(HtmlTagControlAccessory(controlID, "switch", switchID));
-		mainContent.AddChildTag(HtmlTag("div").AddId("select_protocol").AddChildTag(HtmlTagProtocolAccessory(controlID, protocol)));
+		mainContent.AddChildTag(HtmlTagControlAccessory(controlId, "switch", switchID));
+		mainContent.AddChildTag(HtmlTag("div").AddId("select_protocol").AddChildTag(HtmlTagMatchKeyProtocolAccessory(controlId, matchKey, protocol)));
 		mainContent.AddChildTag(HtmlTagInputIntegerWithLabel("address", Languages::TextAddress, address, 1, 2044));
 		mainContent.AddChildTag(WebClientStatic::HtmlTagDuration(duration));
 		mainContent.AddChildTag(HtmlTagInputCheckboxWithLabel("inverted", Languages::TextInverted, "true", inverted));
@@ -2257,6 +2276,7 @@ namespace WebServer
 		SwitchID switchID = Utils::Utils::GetIntegerMapEntry(arguments, "switch", SwitchNone);
 		string name = Utils::Utils::GetStringMapEntry(arguments, "name");
 		ControlID controlId = Utils::Utils::GetIntegerMapEntry(arguments, "control", ControlIdNone);
+		string matchKey = Utils::Utils::GetStringMapEntry(arguments, "matchkey");
 		Protocol protocol = static_cast<Protocol>(Utils::Utils::GetIntegerMapEntry(arguments, "protocol", ProtocolNone));
 		Address address = Utils::Utils::GetIntegerMapEntry(arguments, "address", AddressDefault);
 		LayoutPosition posX = Utils::Utils::GetIntegerMapEntry(arguments, "posx", 0);
@@ -2267,7 +2287,20 @@ namespace WebServer
 		DataModel::AccessoryPulseDuration duration = Utils::Utils::GetIntegerMapEntry(arguments, "duration", manager.GetDefaultAccessoryDuration());
 		bool inverted = Utils::Utils::GetBoolMapEntry(arguments, "inverted");
 		string result;
-		if (!manager.SwitchSave(switchID, name, posX, posY, posZ, rotation, controlId, protocol, address, type, duration, inverted, result))
+		if (!manager.SwitchSave(switchID,
+			name,
+			posX,
+			posY,
+			posZ,
+			rotation,
+			controlId,
+			matchKey,
+			protocol,
+			address,
+			type,
+			duration,
+			inverted,
+			result))
 		{
 			ReplyResponse(ResponseError, result);
 			return;
@@ -2303,22 +2336,32 @@ namespace WebServer
 		HtmlTag content;
 		content.AddChildTag(HtmlTag("h1").AddContent(Languages::TextSwitches));
 		HtmlTag table("table");
-		const map<string,DataModel::Switch*> switchList = manager.SwitchListByName();
+		const map<string,AccessoryConfig> switchList = manager.SwitchConfigByName();
 		map<string,string> switchArgument;
 		for (auto& mySwitch : switchList)
 		{
-			Switch* switchConfig = mySwitch.second;
+			const AccessoryConfig& switchConfig = mySwitch.second;
 			HtmlTag row("tr");
 			row.AddChildTag(HtmlTag("td").AddContent(mySwitch.first));
-			row.AddChildTag(HtmlTag("td").AddContent(ProtocolName(switchConfig->GetProtocol())));
-			row.AddChildTag(HtmlTag("td").AddContent(to_string(switchConfig->GetAddress())));
-			const string& switchIdString = to_string(switchConfig->GetID());
+			row.AddChildTag(HtmlTag("td").AddContent(ProtocolName(switchConfig.GetProtocol())));
+			row.AddChildTag(HtmlTag("td").AddContent(to_string(switchConfig.GetAddress())));
+			SwitchID switchId = switchConfig.GetObjectIdentifier().GetObjectID();
+			const string& switchIdString = to_string(switchId);
 			switchArgument["switch"] = switchIdString;
-			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextEdit, "switchedit_list_" + switchIdString, switchArgument)));
-			row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextDelete, "switchaskdelete_" + switchIdString, switchArgument)));
-			if (switchConfig->IsInUse())
+			if (switchId == SwitchNone)
 			{
-				row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonCommandWide(Languages::TextRelease, "switchrelease_" + switchIdString, switchArgument, "hideElement('b_switchrelease_" + switchIdString + "');")));
+				switchArgument["control"] = to_string(switchConfig.GetControlId());
+				switchArgument["matchkey"] = switchConfig.GetMatchKey();
+				row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextImport, "switchedit_list_" + switchIdString, switchArgument)));
+			}
+			else
+			{
+				row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextEdit, "switchedit_list_" + switchIdString, switchArgument)));
+				row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonPopupWide(Languages::TextDelete, "switchaskdelete_" + switchIdString, switchArgument)));
+				if (switchConfig.IsInUse())
+				{
+					row.AddChildTag(HtmlTag("td").AddChildTag(HtmlTagButtonCommandWide(Languages::TextRelease, "switchrelease_" + switchIdString, switchArgument, "hideElement('b_switchrelease_" + switchIdString + "');")));
+				}
 			}
 			table.AddChildTag(row);
 		}

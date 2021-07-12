@@ -112,7 +112,7 @@ class Manager
 
 		const std::map<std::string,LocoID> LocoListFree() const;
 
-		const std::map<std::string,DataModel::LocoConfig> LocoListByName() const;
+		const std::map<std::string,DataModel::LocoConfig> LocoConfigByName() const;
 
 		const std::map<std::string,LocoID> LocoIdsByName() const;
 
@@ -183,7 +183,7 @@ class Manager
 			return accessories;
 		}
 
-		const std::map<std::string,DataModel::AccessoryConfig> AccessoryListByName() const;
+		const std::map<std::string,DataModel::AccessoryConfig> AccessoryConfigByName() const;
 
 		bool AccessorySave(AccessoryID accessoryID,
 			const std::string& name,
@@ -288,7 +288,7 @@ class Manager
 			return switches;
 		}
 
-		const std::map<std::string,DataModel::Switch*> SwitchListByName() const;
+		const std::map<std::string,DataModel::AccessoryConfig> SwitchConfigByName() const;
 
 		bool SwitchSave(SwitchID switchID,
 			const std::string& name,
@@ -297,6 +297,7 @@ class Manager
 			const DataModel::LayoutItem::LayoutPosition z,
 			const DataModel::LayoutItem::LayoutRotation rotation,
 			const ControlID controlID,
+			const std::string& matchKey,
 			const Protocol protocol,
 			const Address address,
 			const DataModel::AccessoryType type,
@@ -308,6 +309,9 @@ class Manager
 			std::string& result);
 
 		bool SwitchRelease(const SwitchID switchID);
+
+		DataModel::Switch* GetSwitchByMatchKey(const ControlID controlId, const std::string& matchKey) const;
+		void SwitchRemoveMatchKey(const SwitchID switchId);
 
 		// route
 		bool RouteExecute(Logger::Logger* logger, const LocoID locoID, const RouteID routeID);
@@ -377,6 +381,7 @@ class Manager
 		}
 
 		const std::map<std::string,DataModel::Signal*> SignalListByName() const;
+		const std::map<std::string,DataModel::AccessoryConfig> SignalConfigByName() const;
 
 		bool SignalSave(SignalID signalID,
 			const std::string& name,
@@ -391,6 +396,7 @@ class Manager
 			const bool allowLocoTurn,
 			const bool releaseWhenFree,
 			const ControlID controlID,
+			const std::string& matchKey,
 			const Protocol protocol,
 			const Address address,
 			const DataModel::AccessoryType type,
@@ -403,6 +409,9 @@ class Manager
 			std::string& result);
 
 		void SignalPublishState(const ControlType controlType, const DataModel::Signal* signal);
+
+		DataModel::Signal* GetSignalByMatchKey(const ControlID controlId, const std::string& matchKey) const;
+		void SignalRemoveMatchKey(const SignalID signalId);
 
 		// cluster
 		DataModel::Cluster* GetCluster(const ClusterID clusterID) const;

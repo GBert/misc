@@ -223,7 +223,9 @@ namespace WebServer
 		AddUpdate(command.str(), Languages::TextAccessoryUpdated, name);
 	}
 
-	void WebServer::AccessoryDelete(const AccessoryID accessoryID, const std::string& name)
+	void WebServer::AccessoryDelete(const AccessoryID accessoryID,
+		const std::string& name,
+		__attribute__((unused)) const std::string& matchkey)
 	{
 		stringstream command;
 		command << "accessorydelete;accessory=" << accessoryID;
@@ -292,14 +294,18 @@ namespace WebServer
 		AddUpdate(command.str(), text, mySwitch->GetName());
 	}
 
-	void WebServer::SwitchSettings(const SwitchID switchID, const std::string& name)
+	void WebServer::SwitchSettings(const SwitchID switchID,
+		const std::string& name,
+		__attribute__((unused)) const std::string& matchKey)
 	{
 		stringstream command;
 		command << "switchsettings;switch=" << switchID;
 		AddUpdate(command.str(), Languages::TextSwitchUpdated, name);
 	}
 
-	void WebServer::SwitchDelete(const SwitchID switchID, const std::string& name)
+	void WebServer::SwitchDelete(const SwitchID switchID,
+		const std::string& name,
+		__attribute__((unused)) const std::string& matchkey)
 	{
 		stringstream command;
 		command << "switchdelete;switch=" << switchID;
@@ -427,14 +433,18 @@ namespace WebServer
 		TrackBaseState(command2, dynamic_cast<const DataModel::TrackBase*>(signal));
 	}
 
-	void WebServer::SignalSettings(const SignalID signalID, const std::string& name)
+	void WebServer::SignalSettings(const SignalID signalID,
+		const std::string& name,
+		__attribute__((unused)) const std::string& matchKey)
 	{
 		stringstream command;
 		command << "signalsettings;signal=" << signalID;
 		AddUpdate(command.str(), Languages::TextSignalUpdated, name);
 	}
 
-	void WebServer::SignalDelete(const SignalID signalID, const std::string& name)
+	void WebServer::SignalDelete(const SignalID signalID,
+		const std::string& name,
+		__attribute__((unused)) const std::string& matchkey)
 	{
 		stringstream command;
 		command << "signaldelete;signal=" << signalID;
@@ -515,7 +525,9 @@ namespace WebServer
 		AddUpdate(command.str(), Languages::TextLocoUpdated, name);
 	}
 
-	void WebServer::LocoDelete(const LocoID locoID, const std::string& name)
+	void WebServer::LocoDelete(const LocoID locoID,
+		const std::string& name,
+		__attribute__((unused)) const std::string& matchkey)
 	{
 		stringstream command;
 		command << "locodelete;loco=" << locoID;

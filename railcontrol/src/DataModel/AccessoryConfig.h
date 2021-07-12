@@ -23,6 +23,8 @@ along with RailControl; see the file LICENCE. If not see
 #include <string>
 
 #include "DataModel/Accessory.h"
+#include "DataModel/Signal.h"
+#include "DataModel/Switch.h"
 #include "Hardware/AccessoryCache.h"
 
 namespace DataModel
@@ -49,13 +51,35 @@ namespace DataModel
 			{
 			}
 
-			inline AccessoryConfig(const Hardware::AccessoryCacheEntry& accessory)
-			:	controlId(accessory.GetControlID()),
-				objectIdentifier(accessory.GetObjectIdentifier()),
-				address(accessory.GetAddress()),
-				protocol(accessory.GetProtocol()),
-				name(accessory.GetName()),
-				matchKey(accessory.GetMatchKey()),
+			inline AccessoryConfig(const DataModel::Signal& signal)
+			:	controlId(signal.GetControlID()),
+				objectIdentifier(ObjectTypeSignal, signal.GetID()),
+				address(signal.GetAddress()),
+				protocol(signal.GetProtocol()),
+				name(signal.GetName()),
+				matchKey(signal.GetMatchKey()),
+				isInUse(signal.IsInUse())
+			{
+			}
+
+			inline AccessoryConfig(const DataModel::Switch& mySwitch)
+			:	controlId(mySwitch.GetControlID()),
+				objectIdentifier(ObjectTypeSwitch, mySwitch.GetID()),
+				address(mySwitch.GetAddress()),
+				protocol(mySwitch.GetProtocol()),
+				name(mySwitch.GetName()),
+				matchKey(mySwitch.GetMatchKey()),
+				isInUse(mySwitch.IsInUse())
+			{
+			}
+
+			inline AccessoryConfig(const Hardware::AccessoryCacheEntry& entry)
+			:	controlId(entry.GetControlID()),
+				objectIdentifier(entry.GetObjectIdentifier()),
+				address(entry.GetAddress()),
+				protocol(entry.GetProtocol()),
+				name(entry.GetName()),
+				matchKey(entry.GetMatchKey()),
 				isInUse(false)
 			{
 			}
@@ -72,14 +96,38 @@ namespace DataModel
 				return *this;
 			}
 
-			inline AccessoryConfig& operator=(const Hardware::AccessoryCacheEntry& accessory)
+			inline AccessoryConfig& operator=(const DataModel::Signal& signal)
+			{
+				controlId = signal.GetControlID();
+				objectIdentifier = ObjectIdentifier(ObjectTypeSignal, signal.GetID());
+				address = signal.GetAddress();
+				protocol = signal.GetProtocol();
+				name = signal.GetName();
+				matchKey = signal.GetMatchKey();
+				isInUse = signal.IsInUse();
+				return *this;
+			}
+
+			inline AccessoryConfig& operator=(const DataModel::Switch& accessory)
 			{
 				controlId = accessory.GetControlID();
-				objectIdentifier = accessory.GetObjectIdentifier();
+				objectIdentifier = ObjectIdentifier(ObjectTypeSwitch, accessory.GetID());
 				address = accessory.GetAddress();
 				protocol = accessory.GetProtocol();
 				name = accessory.GetName();
 				matchKey = accessory.GetMatchKey();
+				isInUse = accessory.IsInUse();
+				return *this;
+			}
+
+			inline AccessoryConfig& operator=(const Hardware::AccessoryCacheEntry& entry)
+			{
+				controlId = entry.GetControlID();
+				objectIdentifier = entry.GetObjectIdentifier();
+				address = entry.GetAddress();
+				protocol = entry.GetProtocol();
+				name = entry.GetName();
+				matchKey = entry.GetMatchKey();
 				return *this;
 			}
 

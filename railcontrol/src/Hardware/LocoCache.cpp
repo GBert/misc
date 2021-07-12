@@ -63,14 +63,18 @@ namespace Hardware
 
 	void LocoCache::SetLocoId(const LocoID locoId, const std::string& matchKey)
 	{
-		for (auto& locoCacheEntry : entries)
+		if (locoId != LocoNone)
 		{
-			LocoCacheEntry& entry = locoCacheEntry.second;
-			if (entry.GetLocoID() == locoId)
+			for (auto& locoCacheEntry : entries)
 			{
-				entry.SetLocoID(LocoNone);
+				LocoCacheEntry& entry = locoCacheEntry.second;
+				if (entry.GetLocoID() == locoId)
+				{
+					entry.SetLocoID(LocoNone);
+				}
 			}
 		}
+
 		auto entry = entries.find(matchKey);
 		if (entry == entries.end())
 		{

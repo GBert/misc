@@ -531,11 +531,11 @@ namespace WebServer
 		{
 			case ObjectTypeSwitch:
 			{
-				std::map<string, Switch*> switches = manager.SwitchListByName();
+				std::map<string, AccessoryConfig> switches = manager.SwitchConfigByName();
 				map<string, SwitchID> switchOptions;
 				for (auto& mySwitch : switches)
 				{
-					switchOptions[mySwitch.first] = mySwitch.second->GetID();
+					switchOptions[mySwitch.first] = mySwitch.second.GetObjectIdentifier().GetObjectID();
 				}
 				SwitchID switchId = objectId;
 				if (switchId == SwitchNone && switchOptions.size() > 0)
@@ -557,11 +557,11 @@ namespace WebServer
 
 			case ObjectTypeSignal:
 			{
-				std::map<string, Signal*> signals = manager.SignalListByName();
+				std::map<string, AccessoryConfig> signals = manager.SignalConfigByName();
 				map<string, SignalID> signalOptions;
 				for (auto& signal : signals)
 				{
-					signalOptions[signal.first] = signal.second->GetID();
+					signalOptions[signal.first] = signal.second.GetObjectIdentifier().GetObjectID();
 				}
 				SignalID signalId = objectId;
 				if (signalId == SignalNone && signalOptions.size() > 0)
@@ -583,7 +583,7 @@ namespace WebServer
 
 			case ObjectTypeAccessory:
 			{
-				std::map<string, AccessoryConfig> accessories = manager.AccessoryListByName();
+				std::map<string, AccessoryConfig> accessories = manager.AccessoryConfigByName();
 				map<string, AccessoryID> accessoryOptions;
 				for (auto& accessory : accessories)
 				{

@@ -26,32 +26,79 @@ namespace Hardware
 	void AccessoryCache::Save(AccessoryCacheEntry& entry)
 	{
 		const std::string& matchKey = entry.GetMatchKey();
+		UpdateData(entry, matchKey);
+		entries.emplace(matchKey, entry);
+	}
+
+	void AccessoryCache::UpdateData(AccessoryCacheEntry& entry, const std::string& matchKey)
+	{
 		DataModel::Accessory* accessory = manager->GetAccessoryByMatchKey(GetControlId(), matchKey);
 		if (accessory != nullptr)
 		{
 			entry.SetObjectIdentifier(DataModel::ObjectIdentifier(ObjectTypeAccessory, accessory->GetID()));
 			*accessory = entry;
+			return;
 		}
-		entries.emplace(matchKey, entry);
+		DataModel::Signal* signal = manager->GetSignalByMatchKey(GetControlId(), matchKey);
+		if (signal != nullptr)
+		{
+			entry.SetObjectIdentifier(DataModel::ObjectIdentifier(ObjectTypeSignal, signal->GetID()));
+			*signal = entry;
+			return;
+		}
+		DataModel::Switch* mySwitch = manager->GetSwitchByMatchKey(GetControlId(), matchKey);
+		if (mySwitch != nullptr)
+		{
+			entry.SetObjectIdentifier(DataModel::ObjectIdentifier(ObjectTypeSwitch, mySwitch->GetID()));
+			*mySwitch = entry;
+			return;
+		}
 	}
 
-	AccessoryID AccessoryCache::Delete(const std::string& matchKey)
+	DataModel::ObjectIdentifier AccessoryCache::Delete(const std::string& matchKey)
 	{
 		const DataModel::ObjectIdentifier objectIdentifier = Get(matchKey).GetObjectIdentifier();
-		const AccessoryID accessoryId = objectIdentifier.GetObjectID();
-		manager->AccessoryRemoveMatchKey(accessoryId);
 		entries.erase(matchKey);
-		return accessoryId;
+		const ObjectType objectType = objectIdentifier.GetObjectType();
+		switch (objectType)
+		{
+			case ObjectTypeAccessory:
+			{
+				const AccessoryID accessoryId = objectIdentifier.GetObjectID();
+				manager->AccessoryRemoveMatchKey(accessoryId);
+				return DataModel::ObjectIdentifier(ObjectTypeAccessory, accessoryId);
+			}
+
+			case ObjectTypeSignal:
+			{
+				const SignalID signalId = objectIdentifier.GetObjectID();
+				manager->SignalRemoveMatchKey(signalId);
+				return DataModel::ObjectIdentifier(ObjectTypeSignal, signalId);
+			}
+
+			case ObjectTypeSwitch:
+			{
+				const SwitchID switchId = objectIdentifier.GetObjectID();
+				manager->SwitchRemoveMatchKey(switchId);
+				return DataModel::ObjectIdentifier(ObjectTypeSwitch, switchId);
+			}
+
+			default:
+				return DataModel::ObjectIdentifier();
+		}
 	}
 
 	void AccessoryCache::SetObjectIdentifier(const DataModel::ObjectIdentifier objectIdentifier, const std::string& matchKey)
 	{
-		for (auto& accessoryCacheEntry : entries)
+		if (objectIdentifier.IsSet())
 		{
-			AccessoryCacheEntry& entry = accessoryCacheEntry.second;
-			if (entry.GetObjectIdentifier() == objectIdentifier)
+			for (auto& accessoryCacheEntry : entries)
 			{
-				entry.ClearObjectIdentifier();
+				AccessoryCacheEntry& entry = accessoryCacheEntry.second;
+				if (entry.GetObjectIdentifier() == objectIdentifier)
+				{
+					entry.ClearObjectIdentifier();
+				}
 			}
 		}
 		auto entry = entries.find(matchKey);

@@ -121,7 +121,7 @@ namespace Hardware
 					return DataModel::AccessoryConfig(accessoryCache.Get(matchKey));
 				}
 
-				inline virtual void SetAccessoryIdOfMatchKey(const DataModel::ObjectIdentifier objectIdentifier, const std::string& matchKey) override
+				inline virtual void SetAccessoryIdentifierOfMatchKey(const DataModel::ObjectIdentifier objectIdentifier, const std::string& matchKey) override
 				{
 					accessoryCache.SetObjectIdentifier(objectIdentifier, matchKey);
 				}

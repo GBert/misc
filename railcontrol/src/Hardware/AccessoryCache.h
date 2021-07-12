@@ -61,7 +61,7 @@ namespace Hardware
 
 			inline void ClearObjectIdentifier()
 			{
-				this->objectIdentifier = DataModel::ObjectIdentifier();
+				this->objectIdentifier.Clear();
 			}
 
 			inline const std::string& GetName() const
@@ -139,7 +139,7 @@ namespace Hardware
 
 			void Save(AccessoryCacheEntry& entry);
 
-			AccessoryID Delete(const std::string& matchKey);
+			DataModel::ObjectIdentifier Delete(const std::string& matchKey);
 
 			inline const AccessoryCacheEntry Get(const std::string& matchKey) const
 			{
@@ -154,6 +154,8 @@ namespace Hardware
 			void SetObjectIdentifier(const DataModel::ObjectIdentifier objectIdentifier, const std::string& matchKey);
 
 		private:
+			void UpdateData(AccessoryCacheEntry& entry, const std::string& matchKey);
+
 			const ControlID controlId;
 			Manager* const manager;
 			std::map<std::string,AccessoryCacheEntry> entries;
