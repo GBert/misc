@@ -1,11 +1,14 @@
 const int revisionnr = 
-1645
+1648
 ;
 const char* commithash = 
-"389f0a5cb88b0c25ebf2d4f10a150b0e27915df3";
+"5a3c15b73049158f565b4af8b52d797aa0f87705";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1648 2021-07-13 11:01:33 +0200 block: check on isfree if pending arrival is the same locoID as reserved\n" \
+"1647 2021-07-12 22:17:10 +0200 editspro: address mapping corrections\n" \
+"1646 2021-07-12 10:02:39 +0200 modbus: analog loco support\n" \
 "1645 2021-07-11 13:51:59 +0200 modbusdlg: title correction\n" \
 "1644 2021-07-11 13:48:10 +0200 modbus: unitid added for polling\n" \
 "1643 2021-07-11 07:40:34 +0200 modbus: set socket receive timeout at poll sleep\n" \
