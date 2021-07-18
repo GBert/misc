@@ -1,11 +1,14 @@
 const int revisionnr = 
-1648
+1651
 ;
 const char* commithash = 
-"5a3c15b73049158f565b4af8b52d797aa0f87705";
+"e80f0a55c5a009ba7e1261688feb361f08529669";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1651 2021-07-18 08:55:49 +0200 guiframe: show master loco in consist column\n" \
+"1650 2021-07-17 10:27:50 +0200 editspro: fix for saving last s88 state\n" \
+"1649 2021-07-13 12:33:40 +0200 modbus: trace correction\n" \
 "1648 2021-07-13 11:01:33 +0200 block: check on isfree if pending arrival is the same locoID as reserved\n" \
 "1647 2021-07-12 22:17:10 +0200 editspro: address mapping corrections\n" \
 "1646 2021-07-12 10:02:39 +0200 modbus: analog loco support\n" \
