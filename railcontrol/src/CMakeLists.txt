@@ -72,6 +72,10 @@ Hardware/Capabilities.h
 Hardware/CcSchnitte.cpp
 Hardware/CcSchnitte.h
 Hardware/DR5000.h
+Hardware/DccPpExSerial.cpp
+Hardware/DccPpExSerial.h
+Hardware/DccPpExTcp.cpp
+Hardware/DccPpExTcp.h
 Hardware/Ecos.h
 Hardware/HardwareHandler.cpp
 Hardware/HardwareHandler.h
@@ -87,6 +91,8 @@ Hardware/M6051.h
 Hardware/MasterControl.h
 Hardware/MasterControl2.h
 Hardware/OpenDcc.h
+Hardware/Protocols/DccPpEx.cpp
+Hardware/Protocols/DccPpEx.h
 Hardware/Protocols/EsuCAN.cpp
 Hardware/Protocols/EsuCAN.h
 Hardware/Protocols/MaerklinCAN.cpp

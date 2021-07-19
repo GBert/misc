@@ -28,10 +28,10 @@ namespace Hardware
 		const std::string& matchKey = entry.GetMatchKey();
 		DataModel::Loco* loco = nullptr;
 
-		bool matchKeyChanged = matchKey.compare(oldMatchKey) != 0;
+		const bool matchKeyChanged = matchKey.compare(oldMatchKey) != 0;
 		if (matchKeyChanged)
 		{
-			LocoID locoId = Delete(oldMatchKey);
+			const LocoID locoId = Delete(oldMatchKey);
 			loco = manager->GetLoco(locoId);
 		}
 

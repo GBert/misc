@@ -27,6 +27,8 @@ along with RailControl; see the file LICENCE. If not see
 #include "Hardware/CS2Tcp.h"
 #include "Hardware/CcSchnitte.h"
 #include "Hardware/DR5000.h"
+#include "Hardware/DccPpExSerial.h"
+#include "Hardware/DccPpExTcp.h"
 #include "Hardware/Ecos.h"
 #include "Hardware/HardwareHandler.h"
 #include "Hardware/Hsi88.h"
@@ -130,6 +132,14 @@ namespace Hardware
 
 			case HardwareTypeCS1:
 				instance = reinterpret_cast<Hardware::HardwareInterface*>(new CS1(params));
+				return;
+
+			case HardwareTypeDccPpExTcp:
+				instance = reinterpret_cast<Hardware::HardwareInterface*>(new DccPpExTcp(params));
+				return;
+
+			case HardwareTypeDccPpExSerial:
+				instance = reinterpret_cast<Hardware::HardwareInterface*>(new DccPpExSerial(params));
 				return;
 		}
 	}
@@ -704,6 +714,14 @@ namespace Hardware
 
 			case HardwareTypeCS1:
 				Hardware::Protocols::EsuCAN::GetArgumentTypesAndHint(arguments, hint);
+				return;
+
+			case HardwareTypeDccPpExTcp:
+				Hardware::DccPpExTcp::GetArgumentTypesAndHint(arguments, hint);
+				return;
+
+			case HardwareTypeDccPpExSerial:
+				Hardware::DccPpExSerial::GetArgumentTypesAndHint(arguments, hint);
 				return;
 		}
 	}

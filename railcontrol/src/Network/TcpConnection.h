@@ -62,6 +62,8 @@ namespace Network
 				return Receive(reinterpret_cast<unsigned char*>(buffer), bufferLength, flags);
 			}
 
+			bool Receive(std::string& data, const size_t maxData = 1024, const int flags = 0);
+
 			int ReceiveExact(unsigned char* buffer, const size_t bufferLength, const int flags = 0) const;
 
 			inline bool IsConnected() const

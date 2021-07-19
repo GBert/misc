@@ -121,6 +121,8 @@ namespace WebServer
 		std::map<string,HardwareType> hardwareList;
 		hardwareList["CC-Schnitte"] = HardwareTypeCcSchnitte;
 		hardwareList["Digikeijs DR5000"] = HardwareTypeDR5000;
+		hardwareList["DCC++EX Serial (testing)"] = HardwareTypeDccPpExSerial;
+		hardwareList["DCC++EX TCP (testing)"] = HardwareTypeDccPpExTcp;
 		hardwareList["ESU Ecos (beta)"] = HardwareTypeEcos;
 		hardwareList["Fleischmann TwinCenter"] = HardwareTypeTwinCenter;
 		hardwareList["LDT HSI-88 RS-232"] = HardwareTypeHsi88;

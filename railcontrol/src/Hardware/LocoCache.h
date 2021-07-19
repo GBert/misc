@@ -156,8 +156,8 @@ namespace Hardware
 
 			inline void Save(LocoCacheEntry& entry)
 			{
-				const std::string& matchKey = entry.GetMatchKey();
-				Save(entry, matchKey);
+				const std::string& oldMatchKey = entry.GetMatchKey();
+				Save(entry, oldMatchKey);
 			}
 
 			void Save(LocoCacheEntry& entry, const std::string& oldMatchKey);

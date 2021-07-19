@@ -137,7 +137,13 @@ namespace Hardware
 				return controlId;
 			}
 
-			void Save(AccessoryCacheEntry& entry);
+			inline void Save(AccessoryCacheEntry& entry)
+			{
+				const std::string& oldMatchKey = entry.GetMatchKey();
+				Save(entry, oldMatchKey);
+			}
+
+			void Save(AccessoryCacheEntry& entry, const std::string& oldMatchKey);
 
 			DataModel::ObjectIdentifier Delete(const std::string& matchKey);
 
@@ -154,7 +160,8 @@ namespace Hardware
 			void SetObjectIdentifier(const DataModel::ObjectIdentifier objectIdentifier, const std::string& matchKey);
 
 		private:
-			void UpdateData(AccessoryCacheEntry& entry, const std::string& matchKey);
+			bool UpdateData1(AccessoryCacheEntry& entry, const std::string& matchKey);
+			bool UpdateData2(AccessoryCacheEntry& entry, const std::string& matchKey);
 
 			const ControlID controlId;
 			Manager* const manager;

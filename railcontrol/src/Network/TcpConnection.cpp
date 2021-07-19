@@ -71,7 +71,7 @@ namespace Network
 		return ret;
 	}
 
-	int TcpConnection::Receive(unsigned char* buffer, const size_t buffferLength, const int flags) const
+	int TcpConnection::Receive(unsigned char* buffer, const size_t bufferLength, const int flags) const
 	{
 		if (connectionSocket == 0 || connected == false)
 		{
@@ -96,7 +96,7 @@ namespace Network
 			errno = ETIMEDOUT;
 			return -1;
 		}
-		ret = recv(connectionSocket, buffer, buffferLength, flags);
+		ret = recv(connectionSocket, buffer, bufferLength, flags);
 		if (ret <= 0)
 		{
 			errno = ECONNRESET;
@@ -105,6 +105,21 @@ namespace Network
 		}
 		return ret;
 	}
+
+	bool TcpConnection::Receive(std::string& data, const size_t maxData, const int flags)
+	{
+		const size_t dataBufferSize = 1024;
+		unsigned char dataBuffer[dataBufferSize];
+		const size_t max = maxData > dataBufferSize ? dataBufferSize : maxData;
+		ssize_t ret = Receive(dataBuffer, max, flags);
+		if (ret <= 0)
+		{
+			return false;
+		}
+		data.append(reinterpret_cast<char*>(dataBuffer), ret);
+		return true;
+	}
+
 
 	int TcpConnection::ReceiveExact(unsigned char* data, const size_t length, const int flags) const
 	{

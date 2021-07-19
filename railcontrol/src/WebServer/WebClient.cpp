@@ -1454,6 +1454,7 @@ namespace WebServer
 		propulsions[PropulsionGas] = Languages::TextPropulsionGas;
 		propulsions[PropulsionElectric] = Languages::TextPropulsionElectric;
 		propulsions[PropulsionHydrogen] = Languages::TextPropulsionHydrogen;
+		propulsions[PropulsionAccu] = Languages::TextPropulsionAccu;
 		propulsions[PropulsionOther] = Languages::TextPropulsionOther;
 		basicContent.AddChildTag(HtmlTagSelectWithLabel("propulsion", Languages::TextPropulsion, propulsions, propulsion));
 
@@ -1473,12 +1474,16 @@ namespace WebServer
 		types[TrainTypeHistoric] = Languages::TextTrainTypeHistoric;
 		types[TrainTypeExtra] = Languages::TextTrainTypeExtra;
 		types[TrainTypePassengerWithCargo] = Languages::TextTrainTypePassengerWithCargo;
-		types[TrainTypeCargoWithPassenger] = Languages::TextTrainTypeCargoWithPassenger;
 		types[TrainTypeCargoLongDistance] = Languages::TextTrainTypeCargoLongDistance;
 		types[TrainTypeCargoLocal] = Languages::TextTrainTypeCargoLocal;
 		types[TrainTypeCargoBlock] = Languages::TextTrainTypeCargoBlock;
+		types[TrainTypeCargoTractor] = Languages::TextTrainTypeCargoTractor;
+		types[TrainTypeCargoExpress] = Languages::TextTrainTypeCargoExpress;
+		types[TrainTypeCargoWithPassenger] = Languages::TextTrainTypeCargoWithPassenger;
 		types[TrainTypeRescue] = Languages::TextTrainTypeRescue;
 		types[TrainTypeConstruction] = Languages::TextTrainTypeConstruction;
+		types[TrainTypeEmpty] = Languages::TextTrainTypeEmpty;
+		types[TrainTypeLoco] = Languages::TextTrainTypeLoco;
 		types[TrainTypeCleaning] = Languages::TextTrainTypeCleaning;
 		types[TrainTypeOther] = Languages::TextTrainTypeOther;
 		basicContent.AddChildTag(HtmlTagSelectWithLabel("type", Languages::TextTrainType, types, type));

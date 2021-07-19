@@ -179,7 +179,9 @@ enum HardwareType : uint8_t
 	HardwareTypeRedBox = 15,
 	HardwareTypeRektor = 16,
 	HardwareTypeDR5000 = 17,
-	HardwareTypeCS1 = 18
+	HardwareTypeCS1 = 18,
+	HardwareTypeDccPpExTcp = 19,
+	HardwareTypeDccPpExSerial = 20
 };
 
 enum Automode : bool
@@ -234,12 +236,14 @@ enum Propulsion : uint8_t
 	PropulsionGas      = 0x04,
 	PropulsionElectric = 0x08,
 	PropulsionHydrogen = 0x10,
+	PropulsionAccu     = 0x20,
 	PropulsionOther    = 0x80
 };
 
 enum TrainType : uint32_t
 {
 	TrainTypeUnknown                   = 0x00000000,
+
 	TrainTypeInternationalHighSpeed    = 0x00000001,
 	TrainTypeNationalHighSpeed         = 0x00000002,
 	TrainTypeInternationalLongDistance = 0x00000004,
@@ -253,14 +257,22 @@ enum TrainType : uint32_t
 	TrainTypeUnderground               = 0x00000400,
 	TrainTypeHistoric                  = 0x00001000,
 	TrainTypeExtra                     = 0x00002000,
-	TrainTypePassengerWithCargo        = 0x00010000,
-	TrainTypeCargoWithPassenger        = 0x00020000,
-	TrainTypeCargoLongDistance         = 0x00100000,
-	TrainTypeCargoBlock                = 0x00200000,
-	TrainTypeCargoLocal                = 0x00400000,
-	TrainTypeRescue                    = 0x08000000,
-	TrainTypeConstruction              = 0x20000000,
-	TrainTypeCleaning                  = 0x30000000,
+
+ 	TrainTypePassengerWithCargo        = 0x00008000,
+
+	TrainTypeCargoLongDistance         = 0x00010000,
+	TrainTypeCargoLocal                = 0x00020000,
+	TrainTypeCargoBlock                = 0x00040000,
+	TrainTypeCargoTractor              = 0x00080000,
+	TrainTypeCargoExpress              = 0x00100000,
+
+	TrainTypeCargoWithPassenger        = 0x00800000,
+
+	TrainTypeRescue                    = 0x02000000,
+	TrainTypeConstruction              = 0x04000000,
+	TrainTypeEmpty                     = 0x08000000,
+	TrainTypeLoco                      = 0x10000000,
+	TrainTypeCleaning                  = 0x20000000,
 	TrainTypeOther                     = 0x40000000
-	// Bit 32 can not be used because of conversion functions that handle with signed int32_t
+	// Bit 32 (0x80000000) can not be used because of conversion functions that handle with signed int32_t
 };
