@@ -1,5 +1,5 @@
-BOM CAN S88
-===========
+BOM SRSEII v1.5
+===============
 
 
 |Reference	| Value		| Footprint	|
