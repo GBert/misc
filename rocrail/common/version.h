@@ -1,11 +1,13 @@
 const int revisionnr = 
-1651
+1653
 ;
 const char* commithash = 
-"e80f0a55c5a009ba7e1261688feb361f08529669";
+"a2e74ab6d508707e29cc137fe2e04a3e11fdaa26";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1653 2021-07-21 08:17:12 +0200 in: do not free route in case wheelcount does not match at in\n" \
+"1652 2021-07-20 16:55:25 +0200 modbus: analog loco register range set to max 1000 fpr 100% velocity\n" \
 "1651 2021-07-18 08:55:49 +0200 guiframe: show master loco in consist column\n" \
 "1650 2021-07-17 10:27:50 +0200 editspro: fix for saving last s88 state\n" \
 "1649 2021-07-13 12:33:40 +0200 modbus: trace correction\n" \
