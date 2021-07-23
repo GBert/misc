@@ -50,8 +50,10 @@ namespace Hardware
 					| Hardware::CapabilityProgramMfxWrite
 					| Hardware::CapabilityProgramDccDirectRead
 					| Hardware::CapabilityProgramDccDirectWrite
-					| Hardware::CapabilityProgramDccPomRead
-					| Hardware::CapabilityProgramDccPomWrite;
+					| Hardware::CapabilityProgramDccPomLocoRead
+					| Hardware::CapabilityProgramDccPomLocoWrite
+					| Hardware::CapabilityProgramDccPomAccessoryRead
+					| Hardware::CapabilityProgramDccPomAccessoryWrite;
 			}
 
 			static void GetHint(std::string& hint)

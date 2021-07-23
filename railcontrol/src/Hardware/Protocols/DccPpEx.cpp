@@ -23,6 +23,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "Hardware/Protocols/DccPpEx.h"
 
 using std::string;
+using std::to_string;
 
 namespace Hardware
 {
@@ -32,42 +33,114 @@ namespace Hardware
 		{
 			string buffer("<");
 			logger->Info(status ? Languages::TextTurningBoosterOn : Languages::TextTurningBoosterOff);
-			buffer += std::to_string(static_cast<unsigned char>(status));
+			buffer += to_string(static_cast<unsigned char>(status));
 			buffer += ">";
 			SendInternal(buffer);
 		}
 
 		void DccPpEx::LocoSpeed(__attribute__((unused)) const Protocol protocol,
-			__attribute__((unused)) const Address address,
-			__attribute__((unused)) const Speed speed)
+			const Address address,
+			const Speed speed)
 		{
+			locoCache.SetSpeed(address, speed);
+			Orientation orientation = locoCache.GetOrientation(address);
+			LocoSpeedOrientation(address, speed, orientation);
 		}
 
 		void DccPpEx::LocoOrientation(__attribute__((unused)) const Protocol protocol,
-			__attribute__((unused)) const Address address,
-			__attribute__((unused)) const Orientation orientation)
+			const Address address,
+			const Orientation orientation)
 		{
+			Speed speed = locoCache.GetSpeed(address);
+			locoCache.SetOrientation(address, orientation);
+			LocoSpeedOrientation(address, speed, orientation);
 		}
 
 		void DccPpEx::LocoFunction(__attribute__((unused)) const Protocol protocol,
-			__attribute__((unused)) const Address address,
-			__attribute__((unused)) const DataModel::LocoFunctionNr function,
-			__attribute__((unused)) const DataModel::LocoFunctionState on)
+			const Address address,
+			const DataModel::LocoFunctionNr function,
+			const DataModel::LocoFunctionState on)
 		{
+			string buffer("<F ");
+			buffer += to_string(address);
+			buffer += " ";
+			buffer += to_string(function);
+			buffer += " ";
+			buffer += on ? "1" : "0";
+			buffer += ">";
+			SendInternal(buffer);
 		}
 
 		void DccPpEx::AccessoryOnOrOff(__attribute__((unused)) const Protocol protocol,
-			__attribute__((unused)) const Address address,
-			__attribute__((unused)) const DataModel::AccessoryState state,
+			const Address address,
+			const DataModel::AccessoryState state,
 			__attribute__((unused)) const bool on)
 		{
+			string buffer("<a ");
+			buffer += to_string(address);
+			buffer += " ";
+			buffer += state == DataModel::AccessoryStateOff ? "0" : "1";
+			buffer += ">";
+			SendInternal(buffer);
 		}
 
-		void DccPpEx::ProgramWrite(__attribute__((unused)) const ProgramMode mode,
-			__attribute__((unused)) const Address address,
-			__attribute__((unused)) const CvNumber cv,
-			__attribute__((unused)) const CvValue value)
+		void DccPpEx::ProgramWrite(const ProgramMode mode,
+			const Address address,
+			const CvNumber cv,
+			const CvValue value)
 		{
+			switch(mode)
+			{
+				case ProgramModeDccDirect:
+					ProgramWriteProgram(cv, value);
+					return;
+
+				case ProgramModeDccPomLoco:
+					ProgramWriteMain(address, cv, value);
+					return;
+
+				default:
+					return;
+			}
+		}
+
+		void DccPpEx::ProgramWriteMain(const Address address,
+			const CvNumber cv,
+			const CvValue value)
+		{
+			string buffer("<w ");
+			buffer += to_string(address);
+			buffer += " ";
+			buffer += to_string(cv);
+			buffer += " ";
+			buffer += to_string(value);
+			buffer += ">";
+			SendInternal(buffer);
+		}
+
+		void DccPpEx::ProgramWriteProgram(const CvNumber cv,
+			const CvValue value)
+		{
+			string buffer("<W ");
+			buffer += to_string(cv);
+			buffer += " ";
+			buffer += to_string(value);
+			buffer += " 8 9>";
+			SendInternal(buffer);
+		}
+
+		void DccPpEx::LocoSpeedOrientation(const Address address,
+			const Speed speed,
+			const Orientation orientation)
+		{
+			string buffer("<t 1 ");
+			buffer += to_string(address);
+			buffer += " ";
+			buffer += to_string(speed >= 1008 ? 126 : speed >> 3);
+			buffer += " ";
+			buffer += to_string(orientation);
+			buffer += ">";
+			SendInternal(buffer);
 		}
 	} // namespace
 } // namespace

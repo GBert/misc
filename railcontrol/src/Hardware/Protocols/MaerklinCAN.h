@@ -54,7 +54,8 @@ namespace Hardware
 					    | Hardware::CapabilityProgramMfxWrite
 					    | Hardware::CapabilityProgramDccDirectRead
 					    | Hardware::CapabilityProgramDccDirectWrite
-					    | Hardware::CapabilityProgramDccPomWrite
+					    | Hardware::CapabilityProgramDccPomLocoWrite
+					    | Hardware::CapabilityProgramDccPomAccessoryWrite
 					    | Hardware::CapabilityLocoDatabase;
 				}
 

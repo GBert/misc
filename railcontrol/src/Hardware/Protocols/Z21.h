@@ -53,14 +53,16 @@ namespace Hardware
 				inline Hardware::Capabilities GetCapabilities() const override
 				{
 					return Hardware::CapabilityLoco
-					    | Hardware::CapabilityAccessory
-					    | Hardware::CapabilityFeedback
-					    | Hardware::CapabilityProgram
-					    | Hardware::CapabilityProgramMmWrite
-					    | Hardware::CapabilityProgramDccDirectRead
-					    | Hardware::CapabilityProgramDccDirectWrite
-					    | Hardware::CapabilityProgramDccPomRead
-					    | Hardware::CapabilityProgramDccPomWrite;
+						| Hardware::CapabilityAccessory
+						| Hardware::CapabilityFeedback
+						| Hardware::CapabilityProgram
+						| Hardware::CapabilityProgramMmWrite
+						| Hardware::CapabilityProgramDccDirectRead
+						| Hardware::CapabilityProgramDccDirectWrite
+						| Hardware::CapabilityProgramDccPomLocoRead
+						| Hardware::CapabilityProgramDccPomLocoWrite
+						| Hardware::CapabilityProgramDccPomAccessoryRead
+						| Hardware::CapabilityProgramDccPomAccessoryWrite;
 				}
 
 				void GetLocoProtocols(std::vector<Protocol>& protocols) const override

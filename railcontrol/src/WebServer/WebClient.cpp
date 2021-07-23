@@ -2808,13 +2808,20 @@ namespace WebServer
 				mode = ProgramModeDccDirect;
 			}
 		}
-		if (capabilities & (Hardware::CapabilityProgramDccPomRead | Hardware::CapabilityProgramDccPomWrite))
+		if (capabilities & (Hardware::CapabilityProgramDccPomLocoRead | Hardware::CapabilityProgramDccPomLocoWrite))
 		{
 			programModeOptions[ProgramModeDccPomLoco] = Languages::TextProgramModeDccPomLoco;
-			programModeOptions[ProgramModeDccPomAccessory] = Languages::TextProgramModeDccPomAccessory;
 			if (mode == ProgramModeNone)
 			{
 				mode = ProgramModeDccPomLoco;
+			}
+		}
+		if (capabilities & (Hardware::CapabilityProgramDccPomAccessoryRead | Hardware::CapabilityProgramDccPomAccessoryWrite))
+		{
+			programModeOptions[ProgramModeDccPomAccessory] = Languages::TextProgramModeDccPomAccessory;
+			if (mode == ProgramModeNone)
+			{
+				mode = ProgramModeDccPomAccessory;
 			}
 		}
 		return HtmlTagSelectWithLabel("moderaw", Languages::TextProgramMode, programModeOptions, mode).AddAttribute("onchange", "onChangeProgramModeSelector();");
@@ -2868,8 +2875,8 @@ namespace WebServer
 		if (((programMode == ProgramModeMfx) && (capabilities & Hardware::CapabilityProgramMfxRead))
 			|| ((programMode == ProgramModeDccRegister) && (capabilities & Hardware::CapabilityProgramDccRegisterRead))
 			|| ((programMode == ProgramModeDccDirect) && (capabilities & Hardware::CapabilityProgramDccDirectRead))
-			|| ((programMode == ProgramModeDccPomLoco) && (capabilities & Hardware::CapabilityProgramDccPomRead))
-			|| ((programMode == ProgramModeDccPomAccessory) && (capabilities & Hardware::CapabilityProgramDccPomRead)))
+			|| ((programMode == ProgramModeDccPomLoco) && (capabilities & Hardware::CapabilityProgramDccPomLocoRead))
+			|| ((programMode == ProgramModeDccPomAccessory) && (capabilities & Hardware::CapabilityProgramDccPomAccessoryRead)))
 		{
 			HtmlTagButton readButton(Languages::TextRead, "programread");
 			readButton.AddAttribute("onclick", "onClickProgramRead();return false;");
@@ -2884,8 +2891,8 @@ namespace WebServer
 			|| ((programMode == ProgramModeMfx) && (capabilities & Hardware::CapabilityProgramMfxWrite))
 			|| ((programMode == ProgramModeDccRegister) && (capabilities & Hardware::CapabilityProgramDccRegisterWrite))
 			|| ((programMode == ProgramModeDccDirect) && (capabilities & Hardware::CapabilityProgramDccDirectWrite))
-			|| ((programMode == ProgramModeDccPomLoco) && (capabilities & Hardware::CapabilityProgramDccPomWrite))
-			|| ((programMode == ProgramModeDccPomAccessory) && (capabilities & Hardware::CapabilityProgramDccPomWrite)))
+			|| ((programMode == ProgramModeDccPomLoco) && (capabilities & Hardware::CapabilityProgramDccPomLocoWrite))
+			|| ((programMode == ProgramModeDccPomAccessory) && (capabilities & Hardware::CapabilityProgramDccPomAccessoryWrite)))
 		{
 			HtmlTagButton writeButton(Languages::TextWrite, "programwrite");
 			writeButton.AddAttribute("onclick", "onClickProgramWrite();return false;");

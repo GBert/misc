@@ -23,6 +23,7 @@ along with RailControl; see the file LICENCE. If not see
 #include "Hardware/Capabilities.h"
 #include "Hardware/HardwareInterface.h"
 #include "Hardware/HardwareParams.h"
+#include "Hardware/Protocols/DccPpExLocoCache.h"
 #include "Logger/Logger.h"
 
 namespace Hardware
@@ -38,18 +39,21 @@ namespace Hardware
 
 				inline Hardware::Capabilities GetCapabilities() const override
 				{
-					return CapabilityNone;
+					return CapabilityLoco
+						| CapabilityAccessory
+						| CapabilityProgram
+						| CapabilityProgramDccDirectWrite
+						| CapabilityProgramDccPomLocoWrite;
 				}
 
 				void GetLocoProtocols(std::vector<Protocol>& protocols) const override
 				{
-					protocols.push_back(ProtocolDCC28);
 					protocols.push_back(ProtocolDCC128);
 				}
 
 				inline bool LocoProtocolSupported(Protocol protocol) const override
 				{
-					return (protocol == ProtocolDCC28 || protocol == ProtocolDCC128);
+					return (protocol == ProtocolDCC128);
 				}
 
 				inline void GetAccessoryProtocols(std::vector<Protocol>& protocols) const override
@@ -104,12 +108,25 @@ namespace Hardware
 				}
 
 			private:
+				void LocoSpeedOrientation(const Address address,
+					const Speed speed,
+					const Orientation orientation);
+
+				void ProgramWriteMain(const Address address,
+					const CvNumber cv,
+					const CvValue value);
+
+				void ProgramWriteProgram(const CvNumber cv,
+					const CvValue value);
+
 				inline void SendInternal(const std::string& buffer)
 				{
 					logger->Hex(buffer);
 					Send(buffer);
 				}
 				virtual void Send(const std::string& buffer) = 0;
+
+				DccPpExLocoCache locoCache;
 		};
 	} // namespace
 } // namespace
