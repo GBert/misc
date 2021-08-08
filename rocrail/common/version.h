@@ -1,11 +1,47 @@
 const int revisionnr = 
-1654
+1690
 ;
 const char* commithash = 
-"724f17d6363f2a2f79be0b857259cbda5cebe34b";
+"b16353dacd4b138326d021d41dd9128c389f4edb";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1690 2021-08-08 08:48:51 +0200 guiframe: adjust monitor fontsize added\n" \
+"1689 2021-08-07 07:53:56 +0200 cbusnodedlg: fix for setting GC6 SoD address\n" \
+"1688 2021-08-07 07:47:53 +0200 wait4event: fix for restoring speed after checking all route commands\n" \
+"1687 2021-08-06 08:58:51 +0200 modbus: report coils as inputs option added\n" \
+"1686 2021-08-05 09:02:33 +0200 loc: calculate the length in the runner thread to make sure all objects are initialised\n" \
+"1685 2021-08-04 15:07:31 +0200 code\n" \
+"1684 2021-08-04 07:54:47 +0200 cbusnodedlg: type fix\n" \
+"1683 2021-08-03 21:55:32 +0200 modbus: analog loco direction coil address correction\n" \
+"1682 2021-08-03 08:32:38 +0200 lc,throttledlg: provide label in the function command\n" \
+"1681 2021-08-03 08:08:07 +0200 throttledlg,loc: longclick action support\n" \
+"1680 2021-08-03 07:34:01 +0200 car: isState extended with function check\n" \
+"1679 2021-08-02 10:32:20 +0200 action,loc: check fndesc at slave locos\n" \
+"1678 2021-08-02 08:13:54 +0200 rcan,cbus: SoD sleep option added\n" \
+"1677 2021-08-02 07:48:11 +0200 rcan,cbus: SoD range added\n" \
+"1676 2021-08-01 08:15:50 +0200 throttledlg,loc: longclick support added\n" \
+"1675 2021-07-31 10:37:49 +0200 rocdigs: added missing __properties implementation\n" \
+"1674 2021-07-31 10:20:45 +0200 mbus: get properties implemented to get the controller flags\n" \
+"1673 2021-07-31 08:14:18 +0200 loconetdlg: label command station added\n" \
+"1672 2021-07-30 08:28:04 +0200 loconetdlg,wrapper: removed unused dr5000 CS option\n" \
+"1671 2021-07-29 14:50:56 +0200 car: group calculation fix for timed off functions\n" \
+"1670 2021-07-29 11:09:20 +0200 wio: support for EVT_STATE added\n" \
+"1669 2021-07-29 08:53:56 +0200 routedialog: modify speedconditions only on modify button\n" \
+"1668 2021-07-29 08:29:42 +0200 rcan,cbus: SoD only for one address\n" \
+"1667 2021-07-29 07:58:27 +0200 rcan: tcp initOK initializing added\n" \
+"1666 2021-07-29 07:30:47 +0200 cbus: sleep between the two sensor SoD commands\n" \
+"1665 2021-07-29 07:26:43 +0200 rcan,cbus: sleep between SoD sensors and CS\n" \
+"1664 2021-07-28 10:15:20 +0200 car: timedoff function group offset correction\n" \
+"1663 2021-07-28 08:58:53 +0200 lc,throttledlg: set also V_hint incase of speed buttons\n" \
+"1662 2021-07-28 08:20:17 +0200 cbus: fix for long/short events at startup\n" \
+"1661 2021-07-27 18:03:17 +0200 car: set group for timed functions\n" \
+"1660 2021-07-27 10:54:51 +0200 item: brightness/alpha in colorpicker for output macOS only\n" \
+"1659 2021-07-27 07:40:08 +0200 routedialog: change label group to class\n" \
+"1658 2021-07-26 17:17:02 +0200 modbus: analog direction\n" \
+"1657 2021-07-26 14:43:48 +0200 modbus: add nodeID*256 to the reported coils and registers\n" \
+"1656 2021-07-24 14:03:21 +0200 wrapper: car dir attribute\n" \
+"1655 2021-07-24 09:23:18 +0200 car: save direction for function commands\n" \
 "1654 2021-07-23 09:08:35 +0200 modbus: direction coil analog loco command\n" \
 "1653 2021-07-21 08:17:12 +0200 in: do not free route in case wheelcount does not match at in\n" \
 "1652 2021-07-20 16:55:25 +0200 modbus: analog loco register range set to max 1000 fpr 100% velocity\n" \
