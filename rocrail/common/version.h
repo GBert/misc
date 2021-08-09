@@ -1,11 +1,17 @@
 const int revisionnr = 
-1690
+1696
 ;
 const char* commithash = 
-"b16353dacd4b138326d021d41dd9128c389f4edb";
+"353b8c47ca6c519012156936a69829f8a47ed8e7";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1696 2021-08-09 11:40:22 +0200 block: revert\n" \
+"1695 2021-08-09 10:55:51 +0200 block: only allow BBT in case of wait\n" \
+"1694 2021-08-09 10:40:17 +0200 wrapper: block bbt default off\n" \
+"1693 2021-08-09 08:18:21 +0200 queue: commented out the printf trace\n" \
+"1692 2021-08-09 07:40:21 +0200 operator: try to use the function description for cars\n" \
+"1691 2021-08-09 07:22:28 +0200 throttledlg: set label too in case of icon\n" \
 "1690 2021-08-08 08:48:51 +0200 guiframe: adjust monitor fontsize added\n" \
 "1689 2021-08-07 07:53:56 +0200 cbusnodedlg: fix for setting GC6 SoD address\n" \
 "1688 2021-08-07 07:47:53 +0200 wait4event: fix for restoring speed after checking all route commands\n" \
