@@ -1,11 +1,12 @@
 const int revisionnr = 
-1696
+1697
 ;
 const char* commithash = 
-"353b8c47ca6c519012156936a69829f8a47ed8e7";
+"c419d25a61d52838e63f34efcbba5512a280add9";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1697 2021-08-10 10:16:35 +0200 lcdriver: check for red automatic signal in case of secondnext\n" \
 "1696 2021-08-09 11:40:22 +0200 block: revert\n" \
 "1695 2021-08-09 10:55:51 +0200 block: only allow BBT in case of wait\n" \
 "1694 2021-08-09 10:40:17 +0200 wrapper: block bbt default off\n" \
