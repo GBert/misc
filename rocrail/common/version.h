@@ -1,11 +1,12 @@
 const int revisionnr = 
-1698
+1699
 ;
 const char* commithash = 
-"add8da43258eda6f5bda1e7009313ad23a34d1fd";
+"fe12c37ca3651d2f03581b0f4a19a77dd59217b1";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1699 2021-08-11 07:56:58 +0200 loc,control: read/write CV record with nr:index key\n" \
 "1698 2021-08-10 16:30:47 +0200 operatur: function processing -> all,shift,fdesc\n" \
 "1697 2021-08-10 10:16:35 +0200 lcdriver: check for red automatic signal in case of secondnext\n" \
 "1696 2021-08-09 11:40:22 +0200 block: revert\n" \
