@@ -1,11 +1,12 @@
 const int revisionnr = 
-1702
+1703
 ;
 const char* commithash = 
-"ff7496451cb0ded137c5857ee7a3f16f65f7b87f";
+"fb65f73fd0ec1a336759d6d6706fde6681847169";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1703 2021-08-13 16:55:04 +0200 rocpro: support for cv list with index -> cv:idx,cv:idx\n" \
 "1702 2021-08-13 14:59:50 +0200 rocdigs.xml\n" \
 "1701 2021-08-13 12:04:49 +0200 guiframe: update car fx in case no throttle is active\n" \
 "1700 2021-08-13 08:19:32 +0200 z21: new booster event/command added\n" \
