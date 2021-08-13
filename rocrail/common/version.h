@@ -1,11 +1,14 @@
 const int revisionnr = 
-1699
+1702
 ;
 const char* commithash = 
-"fe12c37ca3651d2f03581b0f4a19a77dd59217b1";
+"ff7496451cb0ded137c5857ee7a3f16f65f7b87f";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1702 2021-08-13 14:59:50 +0200 rocdigs.xml\n" \
+"1701 2021-08-13 12:04:49 +0200 guiframe: update car fx in case no throttle is active\n" \
+"1700 2021-08-13 08:19:32 +0200 z21: new booster event/command added\n" \
 "1699 2021-08-11 07:56:58 +0200 loc,control: read/write CV record with nr:index key\n" \
 "1698 2021-08-10 16:30:47 +0200 operatur: function processing -> all,shift,fdesc\n" \
 "1697 2021-08-10 10:16:35 +0200 lcdriver: check for red automatic signal in case of secondnext\n" \
