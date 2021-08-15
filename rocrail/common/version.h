@@ -1,11 +1,15 @@
 const int revisionnr = 
-1703
+1707
 ;
 const char* commithash = 
-"fb65f73fd0ec1a336759d6d6706fde6681847169";
+"672a497f08d41061a478f0539befec91b04856a6";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1707 2021-08-15 08:10:46 +0200 rocpro: readall with index fixes\n" \
+"1706 2021-08-14 17:38:25 +0200 modbus: block link corrections\n" \
+"1705 2021-08-14 17:05:30 +0200 modbus: moved register change trace level from MONITOR to BYTE\n" \
+"1704 2021-08-14 07:27:30 +0200 modbus: link/unlink analog block support added\n" \
 "1703 2021-08-13 16:55:04 +0200 rocpro: support for cv list with index -> cv:idx,cv:idx\n" \
 "1702 2021-08-13 14:59:50 +0200 rocdigs.xml\n" \
 "1701 2021-08-13 12:04:49 +0200 guiframe: update car fx in case no throttle is active\n" \
