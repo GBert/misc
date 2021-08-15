@@ -1,11 +1,12 @@
 const int revisionnr = 
-1707
+1708
 ;
 const char* commithash = 
-"672a497f08d41061a478f0539befec91b04856a6";
+"6cdf837d18a50ee5981ef6a1b1489ede64616c59";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1708 2021-08-15 11:08:53 +0200 modbus: ulink\n" \
 "1707 2021-08-15 08:10:46 +0200 rocpro: readall with index fixes\n" \
 "1706 2021-08-14 17:38:25 +0200 modbus: block link corrections\n" \
 "1705 2021-08-14 17:05:30 +0200 modbus: moved register change trace level from MONITOR to BYTE\n" \
