@@ -1,11 +1,12 @@
 const int revisionnr = 
-1708
+1709
 ;
 const char* commithash = 
-"6cdf837d18a50ee5981ef6a1b1489ede64616c59";
+"112205f8d4530e3a0839762c76b2c04c7040ba3d";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1709 2021-08-16 16:29:15 +0200 car: fx attribute added for sync clients\n" \
 "1708 2021-08-15 11:08:53 +0200 modbus: ulink\n" \
 "1707 2021-08-15 08:10:46 +0200 rocpro: readall with index fixes\n" \
 "1706 2021-08-14 17:38:25 +0200 modbus: block link corrections\n" \
