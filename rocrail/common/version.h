@@ -1,11 +1,13 @@
 const int revisionnr = 
-1715
+1717
 ;
 const char* commithash = 
-"2aa0042ddc4a23331a15974b841be53552e150bd";
+"c2c1ee8b4e8a54395a16993336bbf17bf05531b5";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1717 2021-08-18 18:36:11 +0200 mbus,virtual: set index in response in case of write\n" \
+"1716 2021-08-18 18:10:52 +0200 mfx decspecs from Stephan\n" \
 "1715 2021-08-18 08:02:24 +0200 translation merge: de, fr, nl, sl\n" \
 "1714 2021-08-18 07:28:08 +0200 print: pre select landscape\n" \
 "1713 2021-08-17 18:54:20 +0200 mfx3: update (Stephan)\n" \
