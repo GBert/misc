@@ -1,11 +1,12 @@
 const int revisionnr = 
-1712
+1713
 ;
 const char* commithash = 
-"a1257c3b9a57793577a14fe202c6524952f98dea";
+"930e69a3818397bfbe587647302ce5708aa06c07";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1713 2021-08-17 18:54:20 +0200 mfx3: update (Stephan)\n" \
 "1712 2021-08-17 08:31:20 +0200 locdialog: sort CV table regarding index\n" \
 "1711 2021-08-16 22:07:56 +0200 decspec: mfx by Stephan\n" \
 "1710 2021-08-16 18:14:33 +0200 rocpro: set CV description on save\n" \
