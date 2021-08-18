@@ -1,11 +1,13 @@
 const int revisionnr = 
-1713
+1715
 ;
 const char* commithash = 
-"930e69a3818397bfbe587647302ce5708aa06c07";
+"2aa0042ddc4a23331a15974b841be53552e150bd";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1715 2021-08-18 08:02:24 +0200 translation merge: de, fr, nl, sl\n" \
+"1714 2021-08-18 07:28:08 +0200 print: pre select landscape\n" \
 "1713 2021-08-17 18:54:20 +0200 mfx3: update (Stephan)\n" \
 "1712 2021-08-17 08:31:20 +0200 locdialog: sort CV table regarding index\n" \
 "1711 2021-08-16 22:07:56 +0200 decspec: mfx by Stephan\n" \
