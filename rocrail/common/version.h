@@ -1,11 +1,17 @@
 const int revisionnr = 
-1717
+1723
 ;
 const char* commithash = 
-"c2c1ee8b4e8a54395a16993336bbf17bf05531b5";
+"85ead0b70911810b84582915e483a0e3c52ec1f8";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1723 2021-08-22 08:09:33 +0200 modbus: extended link/unlink traces\n" \
+"1722 2021-08-21 11:46:24 +0200 base: gray correction\n" \
+"1721 2021-08-21 11:09:41 +0200 guiframe: loco grid default text color in case of dark background\n" \
+"1720 2021-08-21 08:46:38 +0200 ledbutton: check gray background option\n" \
+"1719 2021-08-21 08:21:52 +0200 rocview: gray background more dark\n" \
+"1718 2021-08-20 16:10:09 +0200 model: loop over all outputs on event to find same addresses\n" \
 "1717 2021-08-18 18:36:11 +0200 mbus,virtual: set index in response in case of write\n" \
 "1716 2021-08-18 18:10:52 +0200 mfx decspecs from Stephan\n" \
 "1715 2021-08-18 08:02:24 +0200 translation merge: de, fr, nl, sl\n" \
