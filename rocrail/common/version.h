@@ -1,11 +1,12 @@
 const int revisionnr = 
-1726
+1727
 ;
 const char* commithash = 
-"8a52c07fc109b12c05f12df9b8d2706af772633c";
+"eabdd19c0bc379f9dcdf13d94ff68d0915f03707";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1727 2021-08-23 14:18:22 +0200 guiframe: set default loco grid cell text color to black in case of gray background\n" \
 "1726 2021-08-23 12:01:51 +0200 switch: tunerange delay parameter added\n" \
 "1725 2021-08-22 18:06:38 +0200 locdialog: column number correction for changing CV value and description\n" \
 "1724 2021-08-22 17:15:30 +0200 mfx decspes from Stephan\n" \
