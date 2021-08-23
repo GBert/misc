@@ -1,11 +1,12 @@
 const int revisionnr = 
-1725
+1726
 ;
 const char* commithash = 
-"38b48ff3fe67beddf384aea449bdaba6d32cfcc5";
+"8a52c07fc109b12c05f12df9b8d2706af772633c";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1726 2021-08-23 12:01:51 +0200 switch: tunerange delay parameter added\n" \
 "1725 2021-08-22 18:06:38 +0200 locdialog: column number correction for changing CV value and description\n" \
 "1724 2021-08-22 17:15:30 +0200 mfx decspes from Stephan\n" \
 "1723 2021-08-22 08:09:33 +0200 modbus: extended link/unlink traces\n" \
