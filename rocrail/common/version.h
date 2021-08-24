@@ -1,11 +1,12 @@
 const int revisionnr = 
-1727
+1728
 ;
 const char* commithash = 
-"eabdd19c0bc379f9dcdf13d94ff68d0915f03707";
+"bcff8170dffaa158eb26980cb8c5e5cd1cec96fe";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1728 2021-08-24 09:57:19 +0200 wiopi: f8 for CAM on/off, servo onboard init\n" \
 "1727 2021-08-23 14:18:22 +0200 guiframe: set default loco grid cell text color to black in case of gray background\n" \
 "1726 2021-08-23 12:01:51 +0200 switch: tunerange delay parameter added\n" \
 "1725 2021-08-22 18:06:38 +0200 locdialog: column number correction for changing CV value and description\n" \
