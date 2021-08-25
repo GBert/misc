@@ -1,11 +1,12 @@
 const int revisionnr = 
-1728
+1729
 ;
 const char* commithash = 
-"bcff8170dffaa158eb26980cb8c5e5cd1cec96fe";
+"d527538a53fd0476e49b801aeb280f754deb64dc";
 const char* origin = "LOCAL"
 ;
 const char* revlog = 
+"1729 2021-08-25 08:33:34 +0200 cam.py: center mjpg image in html\n" \
 "1728 2021-08-24 09:57:19 +0200 wiopi: f8 for CAM on/off, servo onboard init\n" \
 "1727 2021-08-23 14:18:22 +0200 guiframe: set default loco grid cell text color to black in case of gray background\n" \
 "1726 2021-08-23 12:01:51 +0200 switch: tunerange delay parameter added\n" \
