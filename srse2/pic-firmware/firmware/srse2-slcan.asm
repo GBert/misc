@@ -47,6 +47,9 @@
 ; UART Baud Rate
 #DEFINE         BAUDRATE    500000
 
+; XpreeeNet Baud Rate
+#DEFINE         XPNBAUDRATE    62500
+
 ; I2C Rate
 #DEFINE         I2CRATE     100000
 

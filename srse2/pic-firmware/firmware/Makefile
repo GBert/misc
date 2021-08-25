@@ -19,7 +19,8 @@ ifeq ($(strip $(GPASM)),)
 $(error gputils unavailable)
 endif
 
-AS:=gpasm -a inhx32 -e on -I ../include/
+AS:=gpasm -f -a inhx32 -e on -I ../include/
+LN:=gplink --map -c -s $(SCRIPT) -o $(OUTPUT) $(OBJECTS)
 
 ASOURCE:=$(filter-out template.asm, $(wildcard *.asm))
 AHEADER:=$(wildcard ../include/*.inc)
@@ -34,6 +35,7 @@ $(AOBJECT):$(AHEADER) Makefile
 %.hex:%.asm
 	@echo -n "[AS] "
 	$(AS) $< -o $@
+#	$(LN) $< -o $@
 
 install:build
 

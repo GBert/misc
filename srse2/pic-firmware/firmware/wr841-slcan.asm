@@ -46,6 +46,9 @@
 ; UART Baud Rate
 #DEFINE         BAUDRATE    500000
 
+; XpressNet Baud Rate
+#DEFINE         XPNBAUDRATE 62500
+
 ; I2C Rate
 #DEFINE         I2CRATE     400000
 

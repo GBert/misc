@@ -185,6 +185,7 @@ MAIN
 #INCLUDE        "event-ring.inc"            ; Event ring
 #INCLUDE        "can-inspect.inc"           ; CAN Inspector
 #INCLUDE        "bindecascii.inc"           ; 16 binary to decimal converter
+#INCLUDE        "xpn.inc"                   ; XpressNet routines
 
 ;------------------------------------------------------------------------------
 ;
