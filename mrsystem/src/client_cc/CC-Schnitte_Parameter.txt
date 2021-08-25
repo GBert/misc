@@ -1,3 +1,0 @@
-Die Einstellung der seriellen Schnittstelle für die CC-Schnitte-2 lautet:
-
-500000 Baud, 8 Datenbits, keine Parität, 1 Stopp-Bit, CTS-Kontrolle "ein"

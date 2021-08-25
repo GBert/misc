@@ -1,6 +1,0 @@
-In the folder hardware are all the classes used for command control
-specific belongings. The classes are loaded dynamically if they are
-used.
-
-To create your own command control copy the virtual.cpp and virtual.h
-and modify to your needs.

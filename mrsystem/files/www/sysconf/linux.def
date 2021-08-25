@@ -1,9 +1,0 @@
-//linux.def
-//System-Parameter fuer Linux: definitions
-//last change: 06.02.2016
-//put type in quotes here if value has to quoted in config file
-//name type range description
-linux-dhcp rb "off on" "IP Adresse per DHCP beziehen"
-linux-ipadress ip "statische IP Adresse"
-linux-netmask ip "statische Netzmaske"
-linux-gateway ip "Default-Gateway"
